@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.26 2006-10-12 12:52:58 moy Exp $ i*)
+(*i $Id: coptions.mli,v 1.27 2006-10-31 13:42:10 hubert Exp $ i*)
 
 (*s environment variables *)
 
@@ -25,6 +25,7 @@ val libfile : string (* depends on the command-line option --arith-mem *)
 (*s command-line options *)
 
 val zones : bool
+val show_time : bool
 val no_zone_type : bool
 val parse_only : bool
 val type_only : bool

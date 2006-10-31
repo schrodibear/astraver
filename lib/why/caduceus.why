@@ -12,6 +12,9 @@ logic lsl : int,int -> int
 
 logic lsr : int,int -> int
 
+(* neg symbole on int logique *)
+logic non_int : int -> int
+
 (* default variable initialisation *)
 
 type 'z pointer

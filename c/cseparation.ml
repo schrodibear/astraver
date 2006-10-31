@@ -69,6 +69,7 @@ let make_forall_range loc t b f =
   then f t nzero
   else
     let i = default_var_info (fresh_index ()) in
+    set_var_type (Var_info i) c_int false;
     let vari = { nterm_node = NTvar i; 
 		 nterm_loc = loc;
 		 nterm_type = c_int;} in
@@ -408,7 +409,7 @@ and unifier_type_why tw1 tw2 =
 	and _,t2 = output_why_type tw2
 	in
 	Format.eprintf "anomaly: unify why types `%s' and `%s'@." t1 t2;
-	assert false
+	raise Not_found
 	  
 
 and unifier_zone z1 z2 =
@@ -427,6 +428,20 @@ and unifier_zone z1 z2 =
 	      else z1'.repr <- Some z2' 
 	| _ -> assert false
     end
+
+let loc_name (b,e) =
+  let l = b.Lexing.pos_lnum in
+  let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol + 1 in
+  let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol + 1 in
+  Format.sprintf "line %d, characters %d-%d" l fc lc
+
+let unifier_type_why ?(var_name="?") tw1 tw2 =
+  try
+    unifier_type_why tw1 tw2
+  with
+      e ->
+	Format.eprintf "Anomaly in unifier_type_why for var '%s'@." var_name;
+	raise e
 
 let assoctype  ty assoc = 
   match ty with 
@@ -452,7 +467,8 @@ let rec term tyf t =
   match t.nterm_node with
     | NTconstant _ -> () 
     | NTvar v -> 
-	if v.var_name = "result" then unifier_type_why v.var_why_type tyf
+	if v.var_name = "result" then 
+	  unifier_type_why ~var_name:v.var_name v.var_why_type tyf
     | NTapp ({napp_pred = f;napp_args = l} as call) ->
       List.iter (term tyf) l;
       let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
@@ -463,6 +479,7 @@ let rec term tyf t =
       let li =  
 	List.map 
 	  (fun v ->
+	     let t =
 	     match v.var_why_type with
 	       | Pointer z as ty -> 
 		   begin
@@ -471,14 +488,15 @@ let rec term tyf t =
 		     with
 			 Not_found -> ty
 		   end
-	       | ty -> ty)
+	       | ty -> ty in v,t)
 	    f.logic_args in
 
       assert (List.length li = List.length l || 
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
       List.iter2 
-	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
+	(fun (v,ty) e -> 
+	   unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
   | NTunop (_,t) -> term tyf t 
   | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
   | NTarrow (t,_,_) -> term tyf t
@@ -510,26 +528,27 @@ let rec predicate tyf p =
       let li =  
 	List.map 
 	  (fun v ->
-	     match v.var_why_type with
-	       | Pointer z as ty -> 
-		   begin
-		     try
-		       Pointer (assoc_zone z assoc)
-		     with
-			 Not_found -> ty
-		   end
-	       | ty -> ty)
+	     let t =
+	       match v.var_why_type with
+		 | Pointer z as ty -> 
+		     begin
+		       try
+			 Pointer (assoc_zone z assoc)
+		       with
+			   Not_found -> ty
+		     end
+		 | ty -> ty in v,t )
 	    f.logic_args in
 
       assert (List.length li = List.length l || 
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
       List.iter2 
-	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
+	(fun (v,ty) e -> unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
   | NPrel (t1,op,t2) ->      
       term tyf t1; 
       term tyf t2;
-      unifier_type_why (type_why_for_term t1) (type_why_for_term t2)      
+      unifier_type_why ~var_name:(loc_name t1.nterm_loc) (type_why_for_term t1) (type_why_for_term t2)      
   | NPand (p1,p2) 
   | NPor (p1,p2) 
   | NPimplies (p1,p2) 
@@ -559,7 +578,7 @@ let rec calcul_zones expr =
     | NEassign (lv,e) -> calcul_zones lv; calcul_zones e;
 	let tw1 = type_why lv in
 	let tw2 = type_why e in
-	unifier_type_why tw1 tw2
+	unifier_type_why ~var_name:(loc_name lv.nexpr_loc) tw1 tw2
     | NEunary (_,e) -> calcul_zones e
     | NEincr (_,e) -> calcul_zones e
     | NEbinary (e1,Bsub_pointer,e2) | NEbinary (e1,Blt_pointer,e2) 
@@ -568,7 +587,7 @@ let rec calcul_zones expr =
     | NEbinary (e1,Bneq_pointer,e2)   -> calcul_zones e1; calcul_zones e2;
 	let tw1 = type_why e1 in
 	let tw2 = type_why e2 in
-	unifier_type_why tw1 tw2
+	unifier_type_why ~var_name:(loc_name e1.nexpr_loc) tw1 tw2
     | NEbinary (e1,_,e2) -> calcul_zones e1; calcul_zones e2
     | NEcall ({ncall_fun = e;ncall_args = l} as call) -> 
 	List.iter calcul_zones l;
@@ -584,6 +603,7 @@ let rec calcul_zones expr =
 	let arg_types =
 	  List.map 
 	    (fun v ->
+	       let t =
 	       match v.var_why_type with
 		 | Pointer z as ty -> 
 		     begin
@@ -593,10 +613,11 @@ let rec calcul_zones expr =
 		       with
 			   Not_found -> ty
 		     end
-		 | ty -> ty)
+		 | ty -> ty in v,t)
 	    f.args 
 	in
-	List.iter2 (fun ty e -> unifier_type_why ty (type_why e))
+	List.iter2 (fun (v,ty) e -> unifier_type_why ~var_name:v.var_name ty 
+			(type_why e))
 	  arg_types l
     | NEcond (e1,e2,e3)->  calcul_zones e1; calcul_zones e2; calcul_zones e3
     | NEcast (_,e) -> calcul_zones e
@@ -608,7 +629,7 @@ let rec c_initializer ty tw init =
 	calcul_zones e; 
 	Coptions.lprintf "initializer: unifying types %s and %s@."
 	  (snd (output_why_type tw)) (snd (output_why_type (type_why e)));
-	unifier_type_why tw (type_why e)
+	unifier_type_why ~var_name:(loc_name e.nexpr_loc) tw (type_why e)
     | Ilist l -> 
 	match ty.ctype_node with  
 	  | Tstruct tag  ->
@@ -684,7 +705,7 @@ let rec statement twf st =
 	calcul_zones e1; calcul_zones e2; 
 	calcul_zones e3; statement twf st
     | NSblock ls -> List.iter (statement twf) ls
-    | NSreturn (Some e) -> calcul_zones e ;unifier_type_why twf (type_why e)
+    | NSreturn (Some e) -> calcul_zones e ;unifier_type_why ~var_name:(loc_name e.nexpr_loc) twf (type_why e)
     | NSlabel (_,st) -> statement twf st
     | NSswitch (e1, e2, l) -> calcul_zones e1;
 	List.iter (fun (x, y) -> List.iter (statement twf) y) l

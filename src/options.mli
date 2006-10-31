@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.60 2006-10-12 12:24:07 couchot Exp $ i*)
+(*i $Id: options.mli,v 1.61 2006-10-31 13:42:11 hubert Exp $ i*)
 
 (*s General options *)
 
@@ -87,6 +87,7 @@ val no_zenon_prelude : bool
 val no_cvcl_prelude : bool
 
 val floats : bool
+val show_time : bool
 val gappa_rnd : string
 
 (*s [file f] appends [f] to the directory specified with [-dir], if any *)

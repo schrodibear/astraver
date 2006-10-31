@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.78 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cnorm.ml,v 1.79 2006-10-31 13:42:10 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -141,10 +141,10 @@ let why_type_for_float t = match t.Ctypes.ctype_node with
 let rec type_why e =
   match e.nexpr_node with
     | NEvar e -> 
-	begin match e with
-	  | Var_info v -> v.var_why_type
-	  | Fun_info f -> f.type_why_fun
-	end
+	let t = get_why_type e in
+	if env_name e = "i" then
+	  Coptions.lprintf "type why for i is %s@." (snd (output_why_type t));
+	t
     | NEarrow (_,z,f) -> 
 	begin
 	  try
@@ -207,7 +207,8 @@ let rec type_why_for_term t =
     | NTvar v -> v.var_why_type
     | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
 	rename_zone assoc f.logic_why_type
-    | NTunop (Clogic.Uminus,t) | NTunop (Clogic.Utilde,t) -> 
+    | NTunop (Clogic.Uminus,t) | NTunop (Clogic.Utilde,t) 
+    | NTunop (Clogic.Uplus,t) | NTunop (Clogic.Unot,t) -> 
 	type_why_for_term t
     | NTunop (Clogic.Ustar,_) | NTunop (Clogic.Uamp,_) -> assert false
     | NTunop ((Clogic.Ufloat_of_int | Clogic.Ufloat_conversion),_) -> 
@@ -316,6 +317,7 @@ and expr_node loc ty t =
       | TEconstant constant -> NEconstant constant
       | TEstring_literal string -> NEstring_literal string
       | TEvar env_info ->
+	  Coptions.lprintf "TEvar@.";
 	  (match env_info with
 	    | Var_info v ->
 		let t' = NEvar env_info in
@@ -330,7 +332,8 @@ and expr_node loc ty t =
 		   ne_arrow loc Valid ty t' zone info)
 		else t'
 	    | Fun_info _  -> NEvar env_info)
-      | TEdot (lvalue,var_info) -> 
+      | TEdot (lvalue,var_info) ->
+	  Coptions.lprintf "TEdot@.";
 	  begin    
 	    match lvalue.Cast.texpr_node with
 	      | TEunary(Ustar, e) -> 
@@ -344,23 +347,8 @@ and expr_node loc ty t =
 	      dot_translate (expr a) var_info ty loc
 	      | _ -> dot_translate (expr lvalue) var_info ty loc
 	  end 
-(*	    
-	  let t' =
-	    match lvalue.texpr_node with
-	      | TEunary (Ustar ,texpr) -> expr texpr
-	      | _ -> expr lvalue
-	  in
-	  let zone = find_zone t' in
-	  let () = type_why_new_zone zone var_info in 
-	  let t' = NEarrow (t', zone, var_info) in
-	  if var_requires_indirection var_info then
-	    let info = make_field ty in
-	    let info = declare_arrow_var info in
-	    let zone = find_zone (noattr2 loc ty t') in
-	    ne_arrow loc Valid ty t' zone info
-	  else t'
-*)
     | TEarrow (lvalue,var_info) ->
+	Coptions.lprintf "TEarrow@.";
 	  let expr = expr lvalue in
 	  let zone = find_zone expr in
 	  let () = type_why_new_zone zone var_info in
@@ -372,6 +360,7 @@ and expr_node loc ty t =
 	    ne_arrow loc Valid ty t' zone info
 	  else t'
       | TEarrget (lvalue,texpr) -> 
+	  Coptions.lprintf "TEarrget@.";
 	  (* t[e] -> *(t+e) *)
 	  let is_valid =
 	    match lvalue.texpr_type.Ctypes.ctype_node with
@@ -400,19 +389,19 @@ and expr_node loc ty t =
 	      nexpr_loc = loc;
 	    },
 	    zone, info)
-      | TEseq (texpr1,texpr2) -> NEseq ((expr texpr1) , (expr texpr2))
-      | TEassign (lvalue ,texpr) -> 
+      | TEseq (texpr1,texpr2) -> Coptions.lprintf "TEseq@.";NEseq ((expr texpr1) , (expr texpr2))
+      | TEassign (lvalue ,texpr) -> Coptions.lprintf "TEassign@.";
 	  NEassign ((expr lvalue) , (expr texpr))
-      | TEassign_op (lvalue ,binary_operator, texpr) ->
+      | TEassign_op (lvalue ,binary_operator, texpr) ->	 Coptions.lprintf "TEassign_op@.";
 	  NEassign_op ((expr lvalue),binary_operator , (expr texpr))
-      | TEunary (Ustar ,texpr) ->
+      | TEunary (Ustar ,texpr) -> Coptions.lprintf "TEunary star@.";
 	  let info = make_field ty in
 	  let info = declare_arrow_var info in
 	  let expr = expr texpr in
 	  let zone = find_zone expr in
 	  let () = type_why_new_zone zone info in
 	  NEarrow (expr, zone, info)
-      | TEunary (Uamp ,texpr) ->
+      | TEunary (Uamp ,texpr) ->	 Coptions.lprintf "TEunary &@.";
 	  (match texpr.texpr_node with
 	     | TEvar v -> NEvar v
 	     | TEunary (Ustar, texpr)-> expr_node loc ty texpr.texpr_node
@@ -441,14 +430,6 @@ and expr_node loc ty t =
 			 let () = type_why_new_zone zone var_info in 
 			 NEarrow (t', zone, var_info)
 		 end 
-	   (*let t' =
-		    match lvalue.texpr_node with
-		      | TEunary (Ustar ,texpr) -> expr texpr
-		      | _ -> expr lvalue
-		  in
-		  let zone = find_zone t' in
-		  let () = type_why_new_zone zone var_info in
-		  NEarrow (t', zone, var_info)*)
 	     | TEarrow(lvalue,var_info) ->
 		 let t' = expr lvalue in
 		 let zone = find_zone t' in 
@@ -459,28 +440,27 @@ and expr_node loc ty t =
 	     | _ -> 
 		 warning loc "this & cannot be normalized";
 		 NEunary (Uamp,expr texpr))
-      | TEunary (unary_operator ,texpr) ->
+      | TEunary (unary_operator ,texpr) ->  Coptions.lprintf "TEunary@.";
 	  NEunary(unary_operator, expr texpr)
-      | TEincr (incr_operator,texpr) -> NEincr(incr_operator, expr texpr)
-      | TEbinary (texpr1 , binary_operator , texpr2) ->
+      | TEincr (incr_operator,texpr) ->	 Coptions.lprintf "TEincr@."; NEincr(incr_operator, expr texpr)
+      | TEbinary (texpr1 , binary_operator , texpr2) ->	 Coptions.lprintf "TEbinary@.";
 	  NEbinary ((expr texpr1), binary_operator , (expr texpr2))
-      | TEcall (texpr ,list) -> 
+      | TEcall (texpr ,list) -> 	 Coptions.lprintf "TEcall@.";
 	  NEcall { ncall_fun = expr texpr ;
 		   ncall_args = List.map expr list;
 		   ncall_zones_assoc = [] }
-      | TEcond (texpr1, texpr2, texpr3) -> NEcond ((expr texpr1),
-						   (expr texpr2),
-						   (expr texpr3))
-      | TEsizeof (tctype,n) ->
+      | TEcond (texpr1, texpr2, texpr3) -> 	 Coptions.lprintf "TEcond@.";
+	  NEcond ((expr texpr1), (expr texpr2), (expr texpr3))
+      | TEsizeof (tctype,n) ->	 Coptions.lprintf "TEsizeof@.";
 	  NEconstant (IntConstant (Int64.to_string n))
       | TEcast({Ctypes.ctype_node = Tpointer _}as ty, 
-	       {texpr_node = TEconstant (IntConstant "0")}) ->
+	       {texpr_node = TEconstant (IntConstant "0")}) -> 	 Coptions.lprintf "TEcast 0@.";
 	  let info = default_var_info "null" in 
 	  Cenv.set_var_type (Var_info info) ty false;
 	  NEvar (Var_info info)    
-      | TEcast (tctype ,texpr) -> 
+      | TEcast (tctype ,texpr) -> 	 Coptions.lprintf "TEcast@.";
 	  NEcast (tctype, expr texpr)
-      | TEmalloc (tctype, texpr) ->
+      | TEmalloc (tctype, texpr) -> 	 Coptions.lprintf "TEmalloc@.";
 	  NEmalloc (tctype, expr texpr)
 
 let nt_arrow loc valid ty e z f =
@@ -657,6 +637,7 @@ let rec term_node loc t ty =
   | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
 	    {term_node = Tconstant (IntConstant "0")}) ->      
       let info = default_var_info "null" in 
+      Format.eprintf " Cast : %s " info.var_name;
       Cenv.set_var_type (Var_info info) ty false;
       NTvar info
   | Tcast (ty, t) -> NTcast (ty, term t)
@@ -715,44 +696,8 @@ and predicate_node = function
     | Pold p -> NPold (predicate p)
     | Pat (p, s) -> NPat ((predicate p),s)
     | Pseparated (t1,t2) ->
-(*
-	let loc = t1.term_loc in
-	let t1 =
-	  match t1.term_node with
-	    | Tvar t -> 	  
-		set_var_type (Var_info t) (c_array_size t.var_type Int64.one);
-		t
-	    | _ -> assert false 
-	in
-	let t2 =
-	  match t2.term_node with
-	    | Tvar t -> 	  
-		set_var_type (Var_info t) (c_array_size t.var_type Int64.one);
-		t 
-	    | _ -> assert false
-	in
-	(separation loc t1 t2).npred_node
-*)
 	assert false (* TODO *)
     | Pfullseparated (t1,t2) ->
-(*
-	let loc = t1.term_loc in
-	let t1 =
-	  match t1.term_node with
-	    | Tvar t -> 	  
-		set_var_type (Var_info t) (c_array_size t.var_type Int64.one);
-		t
-	    | _ -> assert false 
-	in
-	let t2 =
-	  match t2.term_node with
-	    | Tvar t -> 	  
-		set_var_type (Var_info t) (c_array_size t.var_type Int64.one);
-		t 
-	    | _ -> assert false
-	in
-	(fullseparation loc t1 t2).npred_node
-	*)
 	assert false (* TODO *)
     | Pvalid (t) -> NPvalid (term t) 
     | Pvalid_index (t1 , t2) -> NPvalid_index (term t1 , term t2) 
@@ -977,6 +922,8 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      "logic function can't be used with ghost variables"
 	| NTunop (t , term) -> NEunary(
 	    begin  match t with 
+	      | Clogic.Uplus -> Uplus
+	      | Clogic.Unot -> Unot
 	      | Clogic.Uminus -> Uminus 
 	      | Clogic.Utilde -> Utilde 
 	      | Clogic.Ustar -> assert false
@@ -1133,6 +1080,7 @@ and statement s =
 	     (expr texpr3),
 	      (statement tstatement))
   | TSblock (l1,l2) -> 
+      Coptions.lprintf "Tsblock@.";
       local_decl s l1 l2
   | TSreturn option -> NSreturn (noption expr option)
   | TSbreak -> NSbreak
@@ -1162,7 +1110,8 @@ and statement s =
 
 and local_decl s l l2 = 
   match l with 
-    | [] -> NSblock (List.map statement l2)
+    | [] -> Coptions.lprintf "taille de la liste : %d@." (List.length l2);
+	NSblock (List.map statement l2)
     | {node = Tdecl (t,v,init); loc = l}::decl -> 
 	if var_is_referenced_or_struct_or_union v then
 	  set_var_type (Var_info v) (c_array_size Valid v.var_type Int64.one) true;
@@ -1173,6 +1122,7 @@ and local_decl s l l2 =
 	  | Some c ->
 	      match v.var_type.Ctypes.ctype_node with
 		| Tenum _ | Tint _ | Tfloat _ | Tpointer _ -> 
+		    Coptions.lprintf "%s.var_type = int enum float ou pointer@." v.var_name;
 		    let declar = local_decl s decl l2 in
 		    begin match c with
 		      | Iexpr e ->
@@ -1180,7 +1130,8 @@ and local_decl s l l2 =
 				 copyattr s declar)
 		      | _ -> assert false
 		    end
-		| Tarray (_,_, Some length) -> 
+		| Tarray (_,_, Some length) ->
+		    Coptions.lprintf "%s.var_type = array@." v.var_name; 
 		    let lvalue = noattr l v.var_type (TEvar (Var_info v)) in
 		    let declar,_ = 
 		      without_dereference v
@@ -1289,6 +1240,7 @@ let global_decl e1 loc =
       List.iter (fun arg -> 
 		   set_var_type (Var_info arg) (arg.var_type) true) f.args;
       (*Nfundef (spec ~add:validity_for_struct s,t,f,statement st)*)
+      Coptions.lprintf "Tfundef var : %s@." f.fun_name;
       add_c_function (spec ~add:validity_for_struct s) t f 
 	(Some (statement st)) loc;
       raise Exit
@@ -1312,7 +1264,8 @@ let rec map_succeed f = function
       try let y = f x in y :: map_succeed f r 
       with Exit -> map_succeed f r
 	
-let file = map_succeed (fun d -> { node = global_decl d.node d.loc ; loc = d.loc})
+let file = map_succeed (fun d -> { node = global_decl d.node d.loc ; 
+				   loc = d.loc})
 
 
 

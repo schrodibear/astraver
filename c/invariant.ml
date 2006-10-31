@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: invariant.ml,v 1.38 2006-09-26 11:39:17 hubert Exp $ i*)
+(*i $Id: invariant.ml,v 1.39 2006-10-31 13:42:11 hubert Exp $ i*)
 
 open Coptions
 open Creport
@@ -67,6 +67,7 @@ let rec predicate_for name t =
 	error Loc.dummy_position ("array size missing in `" ^ name ^ "'")
     | Tarray (_,ty, Some s) ->
 	  let i = default_var_info "counter" in
+	  set_var_type (Var_info i) c_int false; 
 	  let vari = noattr_term c_int (NTvar i) in
 	  let ineq = npand
 		       (nprel (nzero, Le, vari),

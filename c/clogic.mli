@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.59 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: clogic.mli,v 1.60 2006-10-31 13:42:09 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -39,11 +39,11 @@ type term_binop =
   | Badd | Bsub | Bmul | Bdiv | Bmod | Bpow_real
 
 type term_unop = 
-  | Uminus | Utilde | Ustar | Uamp
+  | Uminus | Utilde | Ustar | Uamp |Uplus
   | Uabs_real | Usqrt_real | Uround_error | Utotal_error
-  | Uexact | Umodel
+  | Uexact | Umodel | Unot
   (* introduced during typing *)
-  | Ufloat_of_int | Uint_of_float | Ufloat_conversion
+  | Ufloat_of_int | Uint_of_float | Ufloat_conversion 
 
 type 'ctype quantifiers = ('ctype * string) list
 type 'ctype typed_quantifiers = ('ctype * Info.var_info) list

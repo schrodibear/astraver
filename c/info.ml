@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.36 2006-09-25 14:34:46 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.37 2006-10-31 13:42:10 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -123,7 +123,7 @@ let default_var_info x =
     var_is_a_formal_param = false;
     enum_constant_value = Int64.zero;
     var_type = c_void;
-    var_why_type = Int;
+    var_why_type = Unit;
   }
 
 let set_assigned v = v.var_is_assigned <- true
@@ -222,7 +222,7 @@ let default_fun_info x =
     args = [];
     args_zones = [];
     graph = [];
-    type_why_fun = Int;
+    type_why_fun = Unit;
     has_body = false;
   }
 
@@ -266,3 +266,7 @@ let set_var_type_why d whyty = match d with
   | Fun_info f -> 
       f.type_why_fun <- whyty
 
+let get_why_type env =
+  match env with
+    | Var_info v -> v.var_why_type
+    | Fun_info f -> f.type_why_fun

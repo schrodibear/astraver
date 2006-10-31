@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.110 2006-10-27 14:15:22 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.111 2006-10-31 13:42:11 hubert Exp $ i*)
 
 open Options
 open Ptree
@@ -373,6 +373,7 @@ let deal_file f =
 
 
 let main () =
+  let t0 = Unix.times () in
   load_prelude ();
   if files = [] then begin
     deal_channel (why_parser "standard input") stdin;
@@ -390,8 +391,12 @@ let main () =
     else if single_file () then 
       let lf = Filename.chop_extension (last files) in
       output (Options.out_file lf)
-  end
-
-
+  end;
+    if show_time then
+      let t1 = Unix.times () in
+      printf "Why execution time : %3.2f@." (t1.Unix.tms_utime -. 
+					       t0.Unix.tms_utime)
+    else
+      ()
 
 

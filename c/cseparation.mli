@@ -48,7 +48,6 @@ val separation :
 
 val in_struct :  nterm -> Info.var_info -> nterm 
 
-val unifier_type_why : why_type -> why_type -> unit
 
 val assoctype : why_type -> (zone *zone) list -> why_type
 

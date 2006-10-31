@@ -24,6 +24,9 @@ Admitted.
 
 Set Implicit Arguments.
 
+(*Why logic*) Definition non_int : Z -> Z.
+Admitted.
+
 (*Why type*) Definition pointer: Set ->Set.
 Admitted.
 

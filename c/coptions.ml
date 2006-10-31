@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.34 2006-10-31 08:25:16 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.35 2006-10-31 13:42:10 hubert Exp $ i*)
 
 open Format
 
@@ -55,6 +55,7 @@ let whylib =
 (*s command-line options *)
 
 let zones = ref false
+let show_time = ref false
 let parse_only = ref false
 let type_only = ref false
 let print_norm = ref false
@@ -181,7 +182,10 @@ let _ =
 	  "  assumes a closed program";
 	"-separation", 
 	  Arg.Unit(fun () -> zones := true; closed_program := true),
-	  "  separates pointers into several zones (implies -closed)";
+	  "  separates pointers into several zones (implies -closed)";	
+	"-show-time", 
+	  Arg.Unit(fun () -> show_time := true;),
+	  " prints execution time ";
 	"-no-zone-type", 
 	  Arg.Set no_zone_type,
 	  "  zones do not generate different why types";
@@ -217,6 +221,7 @@ let _ =
       add_file "caduceus [options] file..."
 
 let zones = !zones
+let show_time = !show_time
 let no_zone_type = !no_zone_type
 let parse_only = !parse_only
 let type_only = !type_only

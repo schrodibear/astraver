@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.76 2006-10-12 12:23:49 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.77 2006-10-31 13:42:11 hubert Exp $ i*)
 
 open Format
 
@@ -50,7 +50,7 @@ let floats_ = ref false
 let pruning_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
-
+let show_time_ = ref false
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph | SortedStratified
 let types_encoding_ = ref NoEncoding (* ne pas changer svp! *)
@@ -143,6 +143,7 @@ Generic Options:
   -v, --version  prints version and exits
   --warranty     prints license and exits
   --where        prints library path and exits
+  --show-time    prints execution time
 
 Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
@@ -256,6 +257,7 @@ let files =
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-fp" | "--fp") :: args -> floats_ := true; parse args
+    | ("--show-time") :: args -> show_time_ := true; parse args
     | ("-lib-file" | "--lib-file") :: f :: args -> 
 	lib_files_to_load_ := f :: !lib_files_to_load_; parse args
     | ("-lib-file" | "--lib-file") :: [] -> usage (); exit 1
@@ -416,6 +418,7 @@ let set_types_encoding ec = types_encoding_ := ec
 
 let arrays = !arrays_
 let floats = !floats_
+let show_time = !show_time_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.38 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.39 2006-10-31 13:42:10 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -50,6 +50,9 @@ let term_unop = function
   | Clogic.Utotal_error -> "total_error"
   | Clogic.Uexact -> "exact"
   | Clogic.Umodel -> "model"
+  | Clogic.Unot -> "!"
+  | Clogic.Uplus -> "+"
+
 
 let term_binop = function
   | Clogic.Badd -> "+"

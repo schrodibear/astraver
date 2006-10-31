@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.216 2006-10-25 14:15:46 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.217 2006-10-31 13:42:09 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -261,6 +261,9 @@ let rec interp_term label old_label t =
 	interp_term_address label old_label t1
     | NTunop (Uminus | Uabs_real | Usqrt_real as op, t1) -> 
 	interp_term_un_op t1.nterm_type op (f t1)
+    | NTunop (Uplus, t1) ->
+	(f t1)
+    | NTunop (Unot, t1) -> LApp ("non_int", [f t])
     | NTunop (Ufloat_of_int, t1) ->
 	let e = LApp ("real_of_int", [f t1]) in
 	begin match t.nterm_type.ctype_node with

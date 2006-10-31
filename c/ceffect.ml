@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.147 2006-10-24 15:37:50 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.148 2006-10-31 13:42:09 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -223,14 +223,15 @@ let rec term t = match t.nterm_node with
       else ef_empty
   | NTarrow (t1,z,f) -> 
       let z = repr z in
-     (* eprintf "tw1: %s , tw2 : %s loc : %a@." (snd (output_why_type (Cnorm.type_why_for_term t1))) (snd (output_why_type (Pointer z)))  Loc.report_position t.nterm_loc;*)
       assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
       (* [alloc] not used with the arithmetic memory model *)
       let ef = reads_add_field_var f (Pointer z) (term t1) in
       if arith_memory_model then ef else reads_add_alloc ef
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
+  | NTunop (Uplus, t) -> term t
   | NTunop (Uminus, t) -> term t
+  | NTunop (Unot, t) -> term t
   | NTunop (Utilde, t) -> term t
   | NTunop (( Ufloat_of_int | Uint_of_float | Ufloat_conversion 
 	    | Uabs_real | Usqrt_real 
@@ -304,11 +305,11 @@ let rec assign_location t = match t.nterm_node with
       if arith_memory_model then ef else reads_add_alloc ef
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
-  | NTunop (Uminus, _)  
+  | NTunop (Uminus, _)  | NTunop (Uplus, _)    | NTunop (Unot, _)  
   | NTunop (Utilde, _)  
-  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion
-	    |Uabs_real | Usqrt_real | Uround_error | Utotal_error
-	    |Uexact | Umodel), _)  
+  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion 
+	    |Uabs_real | Usqrt_real | Uround_error 
+	    | Utotal_error |Uexact | Umodel), _)  
   | NTbase_addr _  
   | NToffset _  
   | NTblock_length _  
@@ -1034,6 +1035,7 @@ let rec validity x ty size =
   match ty.Ctypes.ctype_node with
     | Tarray (_,ty', Some size') ->
 	let i = default_var_info "counter" in
+	set_var_type (Var_info i) c_int false;
 	let vari = { nterm_node = NTvar i; 
 		     nterm_loc = x.nterm_loc;
 		     nterm_type = c_int;
@@ -1077,15 +1079,6 @@ let rec validity x ty size =
 			(noattr x.nterm_loc ty 
 			   (NTbinop (x,Clogic.Badd,varj))),
 		      pre2))))
-(*    | Tstruct (n) ->
-	let term_sup = { nterm_node = NTconstant (IntConstant 
-						    (Int64.to_string size)); 
-			 nterm_loc = x.nterm_loc;
-			 nterm_type = c_int } in
-	let name = "internal_separation_" ^ n in
-	NPvalid_range (x, Cnorm.nzero,term_sup), 
-	NPapp (snd (find_pred name), [x])
-*)			
     | _ ->  
 	let term_sup = { nterm_node = 
 	                   NTconstant 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.31 2006-06-30 12:22:19 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.32 2006-10-31 13:42:10 hubert Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -125,6 +125,8 @@ val env_name : env_info -> string
 val set_unique_name : env_info -> string -> unit
 
 val var_type : env_info -> Ctypes.ctype
+
+val get_why_type : env_info -> why_type
 
 val set_var_type : env_info -> Ctypes.ctype -> why_type -> unit
 

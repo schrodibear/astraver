@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.80 2006-10-25 14:15:47 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.81 2006-10-31 13:42:10 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -34,6 +34,7 @@ let type_file (f,p) =
 
 
 let main () = 
+  let t0 = Unix.times () in
   (* parsing *)
   let input_files = files () in
   let pfiles = List.map parse_file input_files in
@@ -49,8 +50,8 @@ let main () =
   if print_graph then Cprint_graph.print_graph ();
   let tab_comp = Cgraph.find_comp tfiles in
   (* normalisation *)
-  lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
+  lprintf "starting normalization of programs.@.";  
   let nfiles = on_all_files Cnorm.file tfiles in
   (* local aliasing analysis *)
   if local_aliasing then Cptr.local_aliasing_transform ();
@@ -63,7 +64,8 @@ let main () =
     else
       nfiles
   in
-  (* separation *)
+  (* separation *)  
+  lprintf "starting separation of variables.@.";
   List.iter (fun (_,p) -> Cseparation.file p)  nfiles;
   Array.iter (fun l -> 
 		Cseparation.funct l ) 
@@ -163,7 +165,14 @@ let main () =
     Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why")
   end;
   (* makefile *)
-  Cmake.makefile first_file
+  Cmake.makefile first_file;
+  if show_time then
+    let t1 = Unix.times () in
+    printf "Caduceus execution time : %3.2f@." (t1.Unix.tms_utime -. 
+					     t0.Unix.tms_utime)
+  else
+    ()
+
        
        
  

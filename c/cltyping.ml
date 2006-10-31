@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.102 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cltyping.ml,v 1.103 2006-10-31 13:42:10 hubert Exp $ i*)
 
 open Coptions
 open Format
@@ -165,6 +165,13 @@ and type_term_node loc env = function
 	| Tenum _ | Tint _ -> Tunop (Uminus, t), t.term_type
 	| Tfloat _ -> Tunop (Ufloat_conversion, coerce c_real t), c_real
 	| _ -> assert false
+      end  
+  | PLunop (Uplus, t) -> 
+      let t = type_num_term env t in
+      begin match t.term_type.ctype_node with
+	| Tenum _ | Tint _ -> Tunop (Uplus, t), t.term_type
+	| Tfloat _ -> Tunop (Ufloat_conversion, coerce c_real t), c_real
+	| _ -> assert false
       end
   | PLunop (Uabs_real | Usqrt_real as op, t) -> 
       let t = type_real_term env t in
@@ -179,11 +186,14 @@ and type_term_node loc env = function
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
       set_referenced t;
-      Tunop (Uamp, t), noattr (Tpointer(Valid, t.term_type)) 
+      Tunop (Uamp, t), noattr (Tpointer(Valid, t.term_type))   
+  | PLunop (Unot, t) -> 
+      let t = type_term env t in
+      Tunop (Unot, t), t.term_type   
   | PLunop (Uround_error | Utotal_error | Uexact | Umodel as op, t) ->
       let t = type_float_term env t in
       Tunop (op, t), c_real
-  | PLunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion), _) ->
+  | PLunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion ), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
       let t1 = type_term env t1 in
