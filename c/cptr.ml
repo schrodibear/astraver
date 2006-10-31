@@ -487,15 +487,6 @@ end = struct
 	  get_rhs_var e
       | _ -> failwith ("[assign_get_rhs_var] should be called on assignment")
 
-  let skip_casts node = 
-    let e = get_e node in
-    let rec skip e = match e.nexpr_node with
-      | NEcast (_,e1) -> skip e1
-      | _ -> e
-    in
-    let new_e = skip e in
-    create_tmp_node (Nexpr new_e)
-
   let rec get_intptr_add_on_var_opt node =
     if debug_more then Coptions.lprintf 
       "[get_intptr_add_on_var_opt] %a@." Node.pretty node;

@@ -1,4 +1,10 @@
 
+(* TO DO:
+
+   - implement [rewrite_pred_wrt_var]
+
+*)
+
 open Clogic
 open Cabsint
 
@@ -39,6 +45,187 @@ type 'v int_predicate =
        a surrounding predicate, we will translate [IPany] to top. *)
   | IPany
 
+module type TERM = sig
+  type var
+  include ELEMENT_OF_CONTAINER with type t = var int_term
+  val collect_term_vars : t -> var list
+end
+
+module type PREDICATE = sig
+  type var
+  include ELEMENT_OF_CONTAINER with type t = var int_predicate
+  val explicit_pred : t -> t
+  val rewrite_pred_wrt_var : t -> var -> int -> t
+  val collect_predicate_vars : t -> var list
+  val make_conjunct : t list -> t
+  val get_conjuncts : t -> t list
+  val make_implication : t -> t -> t
+  val get_implicants : t -> t * t
+end
+
+module TermOfVariable (V : ELEMENT_OF_CONTAINER) 
+  : TERM with type var = V.t =
+struct
+  
+  type var = V.t
+  type t = var int_term
+
+  let equal = ( = )
+  let compare = Pervasives.compare
+  let hash = Hashtbl.hash
+
+  let rec pretty fmt = function
+    | ITconstant (IntConstant c | RealConstant c) -> 
+	Format.fprintf fmt "%s" c
+    | ITvar v            -> Format.fprintf fmt "%a" V.pretty v
+    | ITunop (op,t)      -> Format.fprintf fmt "%s %a" 
+	(Cprint.term_unop op) pretty t
+    | ITbinop (t1,op,t2) ->  Format.fprintf fmt "%a %s %a" 
+	pretty t1 (Cprint.term_binop op) pretty t2
+    | ITany              -> Format.fprintf fmt "_"
+
+  (* takes as input a term
+     returns a list of variables occurring in this term, in the order 
+     they appear, with possible repetitions
+  *)
+  let rec collect_term_vars t = match t with
+    | ITconstant _ -> []
+    | ITvar v -> [v]
+    | ITunop (_,t1) -> collect_term_vars t1
+    | ITbinop (t1,_,t2) -> collect_term_vars t1 @ (collect_term_vars t2)
+    | ITany -> []
+end
+
+module PredicateOfVariable (V : ELEMENT_OF_CONTAINER) 
+  (T : TERM with type var = V.t)
+  : PREDICATE with type var = V.t =
+struct
+  
+  type var = V.t
+  type t = var int_predicate
+
+  let equal = ( = )
+  let compare = Pervasives.compare
+  let hash = Hashtbl.hash
+
+  let rec pretty fmt = function
+    | IPfalse -> Format.fprintf fmt "false"
+    | IPtrue -> Format.fprintf fmt "true"
+    | IPrel (t1,rel,t2) -> Format.fprintf fmt "%a %s %a"
+	T.pretty t1 (Cprint.relation rel) T.pretty t2
+    | IPand (p1,p2) -> Format.fprintf fmt "%a && %a"
+	pretty p1 pretty p2
+    | IPor (p1,p2) -> Format.fprintf fmt "%a || %a"
+	pretty p1 pretty p2
+    | IPimplies (p1,p2) -> Format.fprintf fmt "%a => %a"
+	pretty p1 pretty p2
+    | IPiff (p1,p2) -> Format.fprintf fmt "%a <=> %a"
+	pretty p1 pretty p2
+    | IPnot p -> Format.fprintf fmt "! %a" pretty p
+    | IPseparated (t1,t2) -> Format.fprintf fmt "separated(%a,%a)"
+	T.pretty t1 T.pretty t2
+    | IPnull_pointer t1 -> Format.fprintf fmt "%a == 0"
+	T.pretty t1
+    | IPnot_null_pointer t1 -> Format.fprintf fmt "%a != 0"
+	T.pretty t1
+    | IPnull_char_pointed (t1,t2) -> Format.fprintf fmt "%a[%a] == 0"
+	T.pretty t1 T.pretty t2
+    | IPnot_null_char_pointed (t1,t2) -> Format.fprintf fmt "%a[%a] != 0"
+	T.pretty t1 T.pretty t2
+    | IPany -> Format.fprintf fmt "_"
+
+  (* explicit the more complex predicates for an easier treatment from
+     the integer analysis: 
+     - implication and equivalence are translated in more basic
+     conjunction and disjunction (using the next item on negation)
+     - negation is pushed inside sub-predicates
+  *)
+  let rec explicit_pred p = match p with
+    | IPfalse | IPtrue | IPrel _ | IPany | IPseparated _ | IPnull_pointer _ 
+    | IPnot_null_pointer _ | IPnull_char_pointed _ | IPnot_null_char_pointed _
+	-> p
+    | IPand (p1,p2) -> 
+	let ep1 = explicit_pred p1 in
+	let ep2 = explicit_pred p2 in
+	IPand (ep1,ep2)
+    | IPor (p1,p2) -> 
+	let ep1 = explicit_pred p1 in
+	let ep2 = explicit_pred p2 in
+	IPor (ep1,ep2)
+    | IPimplies (p1,p2) ->
+	explicit_pred (IPor(IPnot p1,p2))
+    | IPiff (p1,p2) ->
+	explicit_pred (IPand(IPimplies(p1,p2),IPimplies(p2,p1)))
+    | IPnot p1 ->
+	begin match explicit_pred p1 with
+          | IPfalse -> IPtrue
+          | IPtrue -> IPfalse
+          | IPand (p3,p4) ->
+	      let ep3 = explicit_pred (IPnot p3) in
+	      let ep4 = explicit_pred (IPnot p4) in
+	      IPor (ep3,ep4)
+          | IPor (p3,p4) ->
+	      let ep3 = explicit_pred (IPnot p3) in
+	      let ep4 = explicit_pred (IPnot p4) in
+	      IPand (ep3,ep4)
+	  | IPnot p3 ->
+	      p3
+	  | IPrel (t3,op,t4) ->
+	      let new_op = match op with
+		| Lt -> Ge
+		| Gt -> Le
+		| Le -> Gt
+		| Ge -> Lt
+		| Eq -> Neq
+		| Neq -> Eq
+	      in
+	      IPrel (t3,new_op,t4)
+	  | IPimplies _ | IPiff _ -> 
+	      (* those cases should not be returned by a call 
+		 to [explicit_pred] *)
+	      assert false
+	  | IPany -> IPany
+	  | IPseparated _ as psep -> psep
+	  | IPnull_pointer t1 -> IPnot_null_pointer t1
+	  | IPnot_null_pointer t1 -> IPnull_pointer t1
+	  | IPnull_char_pointed (t1,t2) -> IPnot_null_char_pointed (t1,t2)
+	  | IPnot_null_char_pointed (t1,t2) -> IPnull_char_pointed (t1,t2)
+	end
+
+  let rewrite_pred_wrt_var p v noccur = p	
+
+  let rec collect_predicate_vars p = match p with
+    | IPfalse | IPtrue | IPany -> 
+	[]
+    | IPnull_pointer t1 | IPnot_null_pointer t1 ->
+	T.collect_term_vars t1
+    | IPrel (t1,_,t2) | IPseparated (t1,t2) | IPnull_char_pointed (t1,t2)
+    | IPnot_null_char_pointed (t1,t2) ->
+	T.collect_term_vars t1 @ (T.collect_term_vars t2)
+    | IPand (p1,p2) | IPor (p1,p2) | IPimplies (p1,p2) | IPiff (p1,p2) ->
+	collect_predicate_vars p1 @ (collect_predicate_vars p2)
+    | IPnot p1 -> 
+	collect_predicate_vars p1
+
+  let make_conjunct plist = 
+    let rec make_sub p_acc plist = match p_acc,plist with
+      | p_acc,[] -> p_acc
+      | IPtrue,p :: plist | p,IPtrue :: plist -> make_sub p plist
+      | p_acc,p :: plist -> make_sub (IPand (p_acc,p)) plist
+    in
+    make_sub IPtrue plist 
+
+  let rec get_conjuncts p = match p with
+    | IPand (p1,p2) -> get_conjuncts p1 @ (get_conjuncts p2)
+    | _ -> [p]
+
+  let make_implication lhs_p rhs_p = IPimplies (lhs_p,rhs_p)
+
+  let get_implicants p = match p with
+    | IPimplies (p1,p2) -> p1,p2
+    | _ -> failwith "[get_implicants] expecting an implication"
+
+end
 
 (* predicate variable interface. Same as VARIABLE, plus [translate_predicate]
    whose aim is to translate generic predicates such as [IPnull_pointer] in
@@ -46,47 +233,32 @@ type 'v int_predicate =
 
 module type PVARIABLE = sig
   include VARIABLE
-  (* local term and predicate, where the variable type is [t] *)
-  type iterm = t int_term
-  type ipredicate = t int_predicate
-  val translate_predicate : ipredicate -> ipredicate
+
+  (* containers based on [t] *)
+  module S : Set.S with type elt = t
+  module M : Map.S with type key = t
+  module H : Hashtbl.S with type key = t
+
+  (* modules for terms and predicates *)
+  module T : TERM with type var = t
+  module P : PREDICATE with type var = t
+
+  (* containers based on terms *)
+  module TS : Set.S with type elt = T.t
+  module TM : Map.S with type key = T.t
+  module TH : Hashtbl.S with type key = T.t
+
+  (* containers based on predicates *)
+  module PS : Set.S with type elt = P.t
+  module PM : Map.S with type key = P.t
+  module PH : Hashtbl.S with type key = P.t
+
+  val translate_predicate : P.t -> P.t
 end
 
-(* takes as input a term
-   returns a list of variables occurring in this term, in the order 
-   they appear, with possible repetitions
-*)
-let rec collect_term_vars t = match t with
-  | ITconstant _ -> []
-  | ITvar v -> [v]
-  | ITunop (_,t1) -> collect_term_vars t1
-  | ITbinop (t1,_,t2) -> collect_term_vars t1 @ (collect_term_vars t2)
-  | ITany -> []
 
-let rec collect_predicate_vars p = match p with
-  | IPfalse | IPtrue | IPany -> 
-      []
-  | IPnull_pointer t1 | IPnot_null_pointer t1 ->
-      collect_term_vars t1
-  | IPrel (t1,_,t2) | IPseparated (t1,t2) | IPnull_char_pointed (t1,t2)
-  | IPnot_null_char_pointed (t1,t2) ->
-      collect_term_vars t1 @ (collect_term_vars t2)
-  | IPand (p1,p2) | IPor (p1,p2) | IPimplies (p1,p2) | IPiff (p1,p2) ->
-      collect_predicate_vars p1 @ (collect_predicate_vars p2)
-  | IPnot p1 -> 
-      collect_predicate_vars p1
-
-module VarElimination (V : VARIABLE) =
+module VarElimination (V : PVARIABLE) =
 struct
-
-  module Term = 
-  struct
-    type t = V.t int_term
-    let compare = Pervasives.compare
-  end
-
-  module TSet = Set.Make (Term)
-
   exception Not_Representable
 
   let rec destruct v p = match p with
@@ -113,21 +285,21 @@ struct
     | IPand (p1,p2) ->
 	let min_p1,max_p1 = min_max v p1 in
 	let min_p2,max_p2 = min_max v p2 in
-	TSet.union min_p1 min_p2,TSet.union max_p1 max_p2
+	V.TS.union min_p1 min_p2,V.TS.union max_p1 max_p2
     | IPrel (t1,Le,t2) ->
 	begin try
 	  let lhs_vfact,lhs_term = destruct v t1 in
 	  let rhs_vfact,rhs_term = destruct v t2 in
 	  match lhs_vfact - rhs_vfact with
 	    | 1 -> 
-		TSet.empty,
-		TSet.add (ITbinop(rhs_term,Bsub,lhs_term)) TSet.empty
+		V.TS.empty,
+		V.TS.add (ITbinop(rhs_term,Bsub,lhs_term)) V.TS.empty
 	    | -1 -> 
-		TSet.add (ITbinop(lhs_term,Bsub,rhs_term)) TSet.empty,
-		TSet.empty
+		V.TS.add (ITbinop(lhs_term,Bsub,rhs_term)) V.TS.empty,
+		V.TS.empty
 	    | _ ->
-		TSet.empty,TSet.empty
-	with Not_Representable -> TSet.empty,TSet.empty end
+		V.TS.empty,V.TS.empty
+	with Not_Representable -> V.TS.empty,V.TS.empty end
     | IPrel (t1,Ge,t2) ->
 	min_max v (IPrel (t2,Le,t1))
     | IPrel (t1,Lt,t2) ->
@@ -143,28 +315,47 @@ struct
     | IPrel (t1,Eq,t2) ->
 	min_max v (IPand (IPrel (t1,Le,t2), IPrel (t1,Ge,t2)))
     | IPrel (_,Neq,_) ->
-	TSet.empty,TSet.empty
+	V.TS.empty,V.TS.empty
     | _ -> failwith "[min_max] expecting conjunct"
+
+  let relate_individual_bounds min_t max_t =
+    IPrel (min_t,Le,max_t)    
+
+  let relate_bounds min_set max_set =
+    V.TS.fold (fun min_t acc_l ->
+		 V.TS.fold (fun max_t acc_l -> 
+			      relate_individual_bounds min_t max_t :: acc_l
+			   ) max_set acc_l
+	      ) min_set []
 
   let transitivity v p = match p with
     | IPimplies (lhs_p,rhs_p) ->
-	let min_lhs_pset,max_lhs_pset = min_max v lhs_p in
-	let min_rhs_pset,max_rhs_pset = min_max v rhs_p in
+	let min_lhs_tset,max_lhs_tset = min_max v lhs_p in
+	let min_rhs_tset,max_rhs_tset = min_max v rhs_p in
 	let trans1 =
-	  TSet.fold (fun min_t acc_p ->
-		       TSet.fold (fun max_t acc_p -> 
+	  V.TS.fold (fun min_t acc_p ->
+		       V.TS.fold (fun max_t acc_p -> 
 				    IPand (acc_p,IPrel (min_t,Le,max_t)))
-			 max_lhs_pset acc_p 
-		    ) min_rhs_pset IPtrue
+			 max_lhs_tset acc_p 
+		    ) min_rhs_tset IPtrue
 	in
 	let trans2 =
-	  TSet.fold (fun min_t acc_p ->
-		       TSet.fold (fun max_t acc_p -> 
+	  V.TS.fold (fun min_t acc_p ->
+		       V.TS.fold (fun max_t acc_p -> 
 				    IPand (acc_p,IPrel (min_t,Le,max_t)))
-			 max_rhs_pset acc_p 
-		    ) min_lhs_pset IPtrue
+			 max_rhs_tset acc_p 
+		    ) min_lhs_tset IPtrue
 	in
 	IPand (trans1,trans2)
     | _ -> failwith "[transitivity] expecting implication"
+
+  let fourier_motzkin v p = match p with
+    | IPimplies (lhs_p,rhs_p) ->
+	let min_lhs_tset,max_lhs_tset = min_max v lhs_p in
+	let min_rhs_tset,max_rhs_tset = min_max v rhs_p in
+	let min_plist = relate_bounds min_rhs_tset min_lhs_tset in
+	let max_plist = relate_bounds max_lhs_tset max_rhs_tset in
+	V.P.make_conjunct (min_plist @ max_plist)
+    | _ -> failwith "[fourier_motzkin] expecting implication"
 
 end

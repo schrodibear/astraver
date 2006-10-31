@@ -1,4 +1,3 @@
-
 (* TO DO:
 
    - document that inequalities like [x > 1 => x > 2] are not representable
@@ -29,8 +28,6 @@
    - see if adding +/- infty make things simpler
   
    - [transform] introduces blocks. remove them.
-
-   - implement [rewrite_pred_wrt_var]
 
    - identify how true and false are encoded: 1 == 1 ? 0 == 1 ?
    This could improve on the analysis.
@@ -134,7 +131,7 @@ end
 module type ATOMIC_SEMI_LATTICE = sig
   include INT_SEMI_LATTICE with type dim_t = unit
   include ATOMIC_DELTA with type tt = t and type int_t = I.t 
-  and type var_t = V.t and type ipred_t = V.ipredicate
+  and type var_t = V.t and type ipred_t = V.P.t
 end
 
 (* general interface of an atomic integer lattice *)
@@ -142,7 +139,7 @@ end
 module type ATOMIC_LATTICE = sig
   include INT_LATTICE with type dim_t = unit
   include ATOMIC_DELTA with type tt = t and type int_t = I.t
-  and type var_t = V.t and type ipred_t = V.ipredicate
+  and type var_t = V.t and type ipred_t = V.P.t
 end
 
 (* type of dimension used for a cluster lattice. 
@@ -157,12 +154,12 @@ module type CLUSTER_LATTICE_NODIM = sig
   (* transfer functions *)
 
       (* transfer function of assignment *)
-  val eval_assign : backward:bool -> V.t -> V.iterm -> t -> t
+  val eval_assign : backward:bool -> V.t -> V.T.t -> t -> t
       (* transfer function of test *)
-  val eval_test : backward:bool -> V.ipredicate -> t -> t
+  val eval_test : backward:bool -> V.P.t -> t -> t
       (* returns [true] if the abstract value passed as argument guarantees
-	 the success of the test [ipredicate] *)
-  val guarantee_test : V.ipredicate -> t -> bool
+	 the success of the test *)
+  val guarantee_test : V.P.t -> t -> bool
       (* remove the variable passed as argument from the abstract value *)
   val remove_variable : V.t -> t -> t
 
@@ -180,7 +177,7 @@ module type CLUSTER_LATTICE_NODIM = sig
     
       (* conversion to an equivalent (or closer under-approximation) 
 	 predicate *)
-  val to_pred : t -> V.ipredicate option
+  val to_pred : t -> V.P.t option
       (* variables whose domain is restrained by the abstract value *)
   val restrained_variables : t -> V.t list
       (* abstract value represents no concrete individual element *)
@@ -228,10 +225,10 @@ module type CONSTRAINED_LATTICE_NODIM = sig
 	 Cannot be simply using some "forget" operator. *)
   val eliminate : V.t list -> t -> t      
       (* returns a new abstract value based on the abstract value passed
-	 as argument, with the additional constraint [ipredicate].
+	 as argument, with the additional constraint.
 	 Similar to [eval_test] except that here the constraint is tagged 
 	 so that we can follow it. *)
-  val eval_constraint : V.ipredicate -> t -> t
+  val eval_constraint : V.P.t -> t -> t
       (* is this a constrained abstract value (with tags for constraints) ? *)
   val is_constrained : t -> bool
       (* get the unconstrained part of the abstract value. 
@@ -333,110 +330,12 @@ end
  *                                                                           *
  *****************************************************************************)
 
-let rec print_term print_var fmt = function
-  | ITconstant (IntConstant c | RealConstant c) -> 
-      Format.fprintf fmt "%s" c
-  | ITvar v            -> Format.fprintf fmt "%a" print_var v
-  | ITunop (op,t)      -> Format.fprintf fmt "%s %a" 
-	(Cprint.term_unop op) (print_term print_var) t
-  | ITbinop (t1,op,t2) ->  Format.fprintf fmt "%a %s %a" 
-	(print_term print_var) t1 (Cprint.term_binop op) 
-	(print_term print_var) t2
-  | ITany              -> Format.fprintf fmt "_"
-
-let rec print_predicate print_var fmt = function
-  | IPfalse -> Format.fprintf fmt "false"
-  | IPtrue -> Format.fprintf fmt "true"
-  | IPrel (t1,rel,t2) -> Format.fprintf fmt "%a %s %a"
-	(print_term print_var) t1 (Cprint.relation rel)
-	(print_term print_var) t2
-  | IPand (p1,p2) -> Format.fprintf fmt "%a && %a"
-	(print_predicate print_var) p1 (print_predicate print_var) p2
-  | IPor (p1,p2) -> Format.fprintf fmt "%a || %a"
-	(print_predicate print_var) p1 (print_predicate print_var) p2
-  | IPimplies (p1,p2) -> Format.fprintf fmt "%a => %a"
-	(print_predicate print_var) p1 (print_predicate print_var) p2
-  | IPiff (p1,p2) -> Format.fprintf fmt "%a <=> %a"
-	(print_predicate print_var) p1 (print_predicate print_var) p2
-  | IPnot p -> Format.fprintf fmt "! %a" (print_predicate print_var) p
-  | IPseparated (t1,t2) -> Format.fprintf fmt "separated(%a,%a)"
-	(print_term print_var) t1 (print_term print_var) t2
-  | IPnull_pointer t1 -> Format.fprintf fmt "%a == 0"
-      (print_term print_var) t1
-  | IPnot_null_pointer t1 -> Format.fprintf fmt "%a != 0"
-      (print_term print_var) t1
-  | IPnull_char_pointed (t1,t2) -> Format.fprintf fmt "%a[%a] == 0"
-      (print_term print_var) t1 (print_term print_var) t2
-  | IPnot_null_char_pointed (t1,t2) -> Format.fprintf fmt "%a[%a] != 0"
-      (print_term print_var) t1 (print_term print_var) t2
-  | IPany -> Format.fprintf fmt "_"
-
-(* explicit the more complex predicates for an easier treatment from
-   the integer analysis: 
-   - implication and equivalence are translated in more basic
-   conjunction and disjunction (using the next item on negation)
-   - negation is pushed inside sub-predicates
-*)
-let rec explicit_pred p = match p with
-  | IPfalse | IPtrue | IPrel _ | IPany | IPseparated _ | IPnull_pointer _ 
-  | IPnot_null_pointer _ | IPnull_char_pointed _ | IPnot_null_char_pointed _
-      -> p
-  | IPand (p1,p2) -> 
-      let ep1 = explicit_pred p1 in
-      let ep2 = explicit_pred p2 in
-      IPand (ep1,ep2)
-  | IPor (p1,p2) -> 
-      let ep1 = explicit_pred p1 in
-      let ep2 = explicit_pred p2 in
-      IPor (ep1,ep2)
-  | IPimplies (p1,p2) ->
-      explicit_pred (IPor(IPnot p1,p2))
-  | IPiff (p1,p2) ->
-      explicit_pred (IPand(IPimplies(p1,p2),IPimplies(p2,p1)))
-  | IPnot p1 ->
-      begin match explicit_pred p1 with
-        | IPfalse -> IPtrue
-        | IPtrue -> IPfalse
-        | IPand (p3,p4) ->
-	    let ep3 = explicit_pred (IPnot p3) in
-	    let ep4 = explicit_pred (IPnot p4) in
-	    IPor (ep3,ep4)
-        | IPor (p3,p4) ->
-	    let ep3 = explicit_pred (IPnot p3) in
-	    let ep4 = explicit_pred (IPnot p4) in
-	    IPand (ep3,ep4)
-	| IPnot p3 ->
-	    p3
-	| IPrel (t3,op,t4) ->
-	    let new_op = match op with
-	      | Lt -> Ge
-	      | Gt -> Le
-	      | Le -> Gt
-	      | Ge -> Lt
-	      | Eq -> Neq
-	      | Neq -> Eq
-	    in
-	    IPrel (t3,new_op,t4)
-	| IPimplies _ | IPiff _ -> 
-	    (* those cases should not be returned by a call 
-	       to [explicit_pred] *)
-	    assert false
-	| IPany -> IPany
-	| IPseparated _ as psep -> psep
-	| IPnull_pointer t1 -> IPnot_null_pointer t1
-	| IPnot_null_pointer t1 -> IPnull_pointer t1
-	| IPnull_char_pointed (t1,t2) -> IPnot_null_char_pointed (t1,t2)
-	| IPnot_null_char_pointed (t1,t2) -> IPnull_char_pointed (t1,t2)
-      end
-
-let rewrite_pred_wrt_var p v noccur = p	
-
 module Make_IntervalLattice (V : PVARIABLE) (I : INT_VALUE) 
     : ATOMIC_LATTICE with module V = V and module I = I =
 struct
   module V = V     module I = I      type int_t = I.t     type var_t = V.t
 
-  type ipred_t = V.ipredicate
+  type ipred_t = V.P.t
   type t = 
         (* full range *)
     | IKfull
@@ -660,10 +559,10 @@ struct
 	| IKempty -> IKempty
 	| _ -> IKfull
 
-  let widening ws i1 i2 =
-    if has_bounds i1 && (has_bounds i2) then
-      let lb1,rb1 = get_bounds i1 in
-      let lb2,rb2 = get_bounds i2 in
+  let widening ws ~old_value ~new_value =
+    if has_bounds old_value && (has_bounds new_value) then
+      let lb1,rb1 = get_bounds old_value in
+      let lb2,rb2 = get_bounds new_value in
       let rec first_match comp b l = match l with
         | [] -> None
 	| thres :: r ->
@@ -696,12 +595,12 @@ struct
       in
       make_from_bounds lb rb
     else
-      match i1,i2 with
-        | IKempty,i2 -> i2
+      match old_value,new_value with
+        | IKempty,new_value -> new_value
 	| _,IKfull -> IKfull
 	| _ ->
-	    (* the stored value [i1] is less precise than the new 
-	       computed value [i2], which should not be the case *)
+	    (* the stored value [old_value] is less precise than the new 
+	       computed value [new_value], which should not be the case *)
 	    assert false
 end
 
@@ -733,10 +632,12 @@ struct
 	begin match op with
 	  | Clogic.Uminus -> 
 	      L.neg v1
+	  | Clogic.Uplus ->
+	      v1
 	  | Clogic.Utilde | Clogic.Ustar | Clogic.Uamp | Clogic.Uexact 
 	  | Clogic.Umodel | Clogic.Uabs_real | Clogic.Usqrt_real 
 	  | Clogic.Uround_error | Clogic.Utotal_error | Clogic.Ufloat_of_int
-	  | Clogic.Uint_of_float | Clogic.Ufloat_conversion ->
+	  | Clogic.Uint_of_float | Clogic.Ufloat_conversion | Clogic.Unot ->
 	      L.top ()
 	end
     | ITbinop (t1,op,t2) ->
@@ -826,7 +727,7 @@ struct
 	-> assert false
 
   let rec eval_test ~backward pred pw = 
-    let pred = V.translate_predicate (explicit_pred pred) in
+    let pred = V.translate_predicate (V.P.explicit_pred pred) in
     match pred with
       | IPfalse -> 
 	  bottom ()
@@ -845,7 +746,7 @@ struct
 	     [explicit_pred] *)
           assert false
       | IPrel (t1,op,t2) ->
-          let vars = (collect_term_vars t1) @ (collect_term_vars t2) in
+          let vars = (V.T.collect_term_vars t1) @ (V.T.collect_term_vars t2) in
 	  let init_occur_map =
 	    List.fold_left (fun m v -> VMap.add v 1 m) VMap.empty vars 
 	  in
@@ -853,7 +754,7 @@ struct
 	    List.fold_left 
 	      (fun (pl,m) v -> 
 		let noccur = VMap.find v m in
-		let vpred = rewrite_pred_wrt_var pred v noccur in
+		let vpred = V.P.rewrite_pred_wrt_var pred v noccur in
 		let updm = VMap.add v (noccur + 1) m in
 		vpred :: pl,updm
 	      ) ([],init_occur_map) vars
@@ -979,12 +880,11 @@ struct
 	VMap.add v elt m
       ) rep_to_dim_and_pack VMap.empty
 
-  (* the stored value is [pack1] and the new computed value is [pack2] *)
-  let widening ws pack1 pack2 =
+  let widening ws ~old_value ~new_value =
     Hashtbl.fold
       (fun v _ m ->
-	let elt1 = VMap.find v pack1 and elt2 = VMap.find v pack2 in
-	let elt = L.widening ws elt1 elt2 in
+	let elt1 = VMap.find v old_value and elt2 = VMap.find v new_value in
+	let elt = L.widening ws ~old_value:elt1 ~new_value:elt2 in
 	VMap.add v elt m
       ) rep_to_dim_and_pack VMap.empty
 
@@ -1009,7 +909,7 @@ struct
     match pred with
       | IPfalse -> bottom ()
       | _ -> 
-	  let test_vars = collect_predicate_vars pred in
+	  let test_vars = V.P.collect_predicate_vars pred in
 	  let packed_vars = List.filter is_packed_variable test_vars in
 	  let rep_vars = List.map (Hashtbl.find variable_to_rep) packed_vars in
 	  let rep_set = List.fold_right VSet.add rep_vars VSet.empty in
@@ -1025,7 +925,7 @@ struct
     match pred with
       | IPtrue -> true
       | _ -> 
-	  let test_vars = collect_predicate_vars pred in
+	  let test_vars = V.P.collect_predicate_vars pred in
 	  let packed_vars = List.filter is_packed_variable test_vars in
 	  let rep_vars = List.map (Hashtbl.find variable_to_rep) packed_vars in
 	  let rep_set = List.fold_right VSet.add rep_vars VSet.empty in
@@ -1086,7 +986,7 @@ struct
     match pred with
       | IPfalse -> bottom ()
       | _ -> 
-	  let test_vars = collect_predicate_vars pred in
+	  let test_vars = V.P.collect_predicate_vars pred in
 	  let packed_vars = List.filter is_packed_variable test_vars in
 	  let rep_vars = List.map (Hashtbl.find variable_to_rep) packed_vars in
 	  let rep_set = List.fold_right VSet.add rep_vars VSet.empty in
@@ -1186,9 +1086,10 @@ struct
 	Oct.WidenSteps (Oct.vnum_of_float va)
 
   (* the stored value is [oct1] and the new computed value is [oct2] *)
-  let widening ws oct1 oct2 =
+  let widening ws ~old_value ~new_value =
     let ws = get_widening_strategy ws in
-    { oct1 with octogon = Oct.widening oct1.octogon oct2.octogon ws }
+    { old_value with octogon = 
+	Oct.widening old_value.octogon new_value.octogon ws }
 
   (* interfacing *)
 
@@ -1255,9 +1156,17 @@ struct
 	    IPand (p1,p2)
 	| [<>] -> p1
       and parse_predicate = parser
-	| [< 'Genlex.Kwd "{"; p = parse_relation_list; 'Genlex.Kwd "}" >] ->
-	    p
+	| [< 'Genlex.Kwd "{"; p = parse_predicate_rest; >] -> p
 	| [<>] -> failwith "[to_pred] predicate parsing error"
+      and parse_predicate_rest = parser
+	| [< 'Genlex.Kwd "}" >] -> 
+	    (* allow here an empty left-hand side of an implication.
+	       It is useful if the context is not only determined by
+	       the octogon but also by another lattice.
+	    *)
+	    IPtrue
+	| [< p = parse_relation_list; 'Genlex.Kwd "}" >] -> p
+	| [<>] -> failwith "[to_pred] rest of predicate parsing error"
       and parse_octogon = parser
 	| [< p1 = parse_predicate; p2 = parse_octogon_rest p1 >] -> p2
 	| [<>] -> failwith "[to_pred] octogon parsing error"
@@ -1322,10 +1231,12 @@ struct
 		      for i=0 to n do a.(i) <- (-. a1.(i)) done;
 		      FIlinear a
 		end
+	    | Clogic.Uplus ->
+		randup t1
 	    | Clogic.Utilde | Clogic.Ustar | Clogic.Uamp | Clogic.Uexact 
 	    | Clogic.Umodel | Clogic.Uabs_real | Clogic.Usqrt_real 
 	    | Clogic.Uround_error | Clogic.Utotal_error | Clogic.Ufloat_of_int
-	    | Clogic.Uint_of_float | Clogic.Ufloat_conversion ->
+	    | Clogic.Uint_of_float | Clogic.Ufloat_conversion | Clogic.Unot ->
 		FIrand
 	  end
       | ITbinop (t1,op,t2) ->
@@ -1374,7 +1285,7 @@ struct
 
   let flatify_predicate ?(guarantee=false) p oct =
     let n = oct.dimension in
-    let p = V.translate_predicate (explicit_pred p) in
+    let p = V.translate_predicate (V.P.explicit_pred p) in
     let rec simpl = function
       | IPfalse -> FBfalse
       | IPtrue -> FBtrue
@@ -1741,7 +1652,8 @@ struct
      left part if it is full. If reapplied, it would return the empty octogon.
      Used for printing or other queries not returning the resulting octogon.
    *)
-  let normalize_only_once = internal_normalize ~remove_left_full:true
+(* CHANGE DUE TO ADDED CONTEXT OUTSIDE OF OCTOGON *)
+  let normalize_only_once = internal_normalize ~remove_left_full:false
 
   (* minimal form of an octogon *)
   let minimize oct = 
@@ -1789,13 +1701,8 @@ struct
   let unconstrained_variables oct = followed_variables ~untagged:true oct
 
   let eliminate remove_vars oct =
-    (* keep only minimal relations to increase the chance of finding 
-       the adequate necessary inequality with Fourier-Motzkin *)
     if debug then Coptions.lprintf 
       "[eliminate] initial oct %a@." pretty oct;
-    let oct = minimize oct in
-    if debug then Coptions.lprintf 
-      "[eliminate] minimal oct %a@." pretty oct;
     (* get those variables from [remove_vars] that are in the current pack *)
     let remove_vars =
       List.filter (fun v -> is_targetted_variable oct v) remove_vars
@@ -1808,6 +1715,11 @@ struct
     in
 
     let rec elim oct =
+      (* keep only minimal relations to increase the chance of finding 
+	 the adequate necessary inequality with Fourier-Motzkin *)
+      let oct = minimize oct in
+      if debug then Coptions.lprintf 
+	"[eliminate] minimal oct %a@." pretty oct;
       let cstr_vars = constrained_variables oct in
       if debug then Coptions.lprintf 
 	"[eliminate] list of constrained variables %a@."
@@ -1826,13 +1738,22 @@ struct
 	    (* Fourier-Motzkin captured the constraint, continue. *)
 	    new_oct
 	  else
-	    (* try transitivity instead of Fourier-Motzkin *)
+	    (* Fourier-Motzkin with constants *)
 	    let p_oct = match to_pred cur_oct with
 		(* constrained octogon must have an associate predicate *)
 	      | Some p -> p | None -> assert false
 	    in
-	    let p_trans = VarElim.transitivity cstr_var p_oct in
-	    remove_variable cstr_var (eval_constraint p_trans cur_oct)
+	    let p_fm = VarElim.fourier_motzkin cstr_var p_oct in
+	    let new_oct = 
+	      remove_variable cstr_var (eval_constraint p_fm cur_oct)
+	    in
+	    if is_constrained new_oct then
+	      (* Fourier-Motzkin captured the constraint, continue. *)
+	      new_oct
+	    else
+	      (* try transitivity instead of Fourier-Motzkin *)
+	      let p_trans = VarElim.transitivity cstr_var p_oct in
+	      remove_variable cstr_var (eval_constraint p_trans cur_oct)
 	else cur_oct
       ) oct cstr_vars 
       in
@@ -2072,12 +1993,13 @@ struct
     in
     { main_context = new_main; conditionals = new_cond; }
 
-  let widening ws ctxt1 ctxt2 = 
+  let widening ws ~old_value ~new_value = 
     (* widening has a meaning only for main context *)
-    assert (Int31Map.is_empty ctxt1.conditionals);
-    assert (Int31Map.is_empty ctxt2.conditionals);
-    let new_main = Contxt.widening ws ctxt1.main_context ctxt2.main_context in
-    { ctxt1 with main_context = new_main }
+    assert (Int31Map.is_empty old_value.conditionals);
+    assert (Int31Map.is_empty new_value.conditionals);
+    let new_main = 
+      Contxt.widening ws old_value.main_context new_value.main_context in
+    { old_value with main_context = new_main }
 
   let to_pred ctxt =
     let pred_main = Contxt.to_pred ctxt.main_context in
@@ -2262,14 +2184,14 @@ struct
 
   let meet = VPSet.union
 
-  let widening ws = join
+  let widening ws ~old_value ~new_value = join old_value new_value
 
   (* not used here *)
   let pack_variables _ = ()
   let is_packed_variable _ = false
   let guarantee_test _ _ = false
 
-  let rec eval_test ~backward pred seps = seps
+  let eval_test ~backward pred seps = seps
     
   let sep_to_pred sep = Some (IPseparated (ITvar (fst sep),ITvar (snd sep)))
 
@@ -2306,6 +2228,332 @@ struct
   let separated v1 v2 seps =
     VPSet.exists (fun sep -> (V.equal (fst sep) v1 && V.equal (snd sep) v2)
     || (V.equal (fst sep) v2 && V.equal (snd sep) v1)) seps
+end
+
+module Make_PredicateLattice (V : PVARIABLE) (I : INT_VALUE) 
+  : PACKED_CLUSTER_LATTICE with module V = V and module I = I =
+struct
+  module V = V         module I = I         type var_t = V.t
+  
+  type state_t = {
+    (* abstract state captured by the current predicate abstraction *)
+    state : bool V.PM.t;
+    (* dependencies between variables and the predicates they appear in *)
+    deps : V.PS.t V.M.t;
+  }
+
+  type t = NORMAL of state_t | EMPTY
+
+  type dim_t = unit
+
+  let bottom () = EMPTY
+  let top () = NORMAL { state = V.PM.empty; deps = V.M.empty; }
+  let init = top
+
+  let is_full = function
+    | EMPTY -> false
+    | NORMAL ps -> V.PM.is_empty ps.state
+
+  let is_empty = function
+    | EMPTY -> true
+    | NORMAL _ -> false
+
+  (* [state] field captures all relevant information for 
+     an external description *)
+  let equal ps1 ps2 = match ps1,ps2 with
+    | EMPTY,EMPTY -> true
+    | EMPTY,_ | _,EMPTY -> false
+    | NORMAL ps1,NORMAL ps2 -> V.PM.equal ( = ) ps1.state ps2.state
+
+  let norm_predicate p = match p with
+    | IPrel (t1,Eq,t2) -> Some (p,true)
+    | IPrel (t1,Neq,t2) -> Some (IPrel (t1,Eq,t2),false)
+    | IPnull_pointer t1 -> Some (p,true)
+    | IPnot_null_pointer t1 -> Some (IPnull_pointer t1,false)
+    | IPnull_char_pointed (t1,t2) -> Some (p,true)
+    | IPnot_null_char_pointed (t1,t2) -> 
+	Some (IPnull_char_pointed (t1,t2),false)
+    | IPimplies _ | IPiff _ | IPnot _ ->
+	(* these constructs should have been removed by the call to
+	   [explicit_pred] *)
+        assert false
+    | IPand _ ->
+	(* these constructs should have been removed by the call to
+	   [get_conjuncts] *)
+	assert false
+    | IPfalse | IPtrue | IPrel _ | IPor _ | IPseparated _ | IPany -> None
+
+  let denorm_predicate p = function
+    | true -> p
+    | false -> IPnot p
+
+  let pretty fmt = function
+    | EMPTY -> Format.fprintf fmt "EMPTY"
+    | NORMAL ps ->
+	let pl = 
+	  V.PM.fold (fun p b acc_l -> denorm_predicate p b :: acc_l) ps.state []
+	in
+	Format.fprintf fmt "NORMAL(%a)"
+	  (print_list (fun fmt () -> Format.fprintf fmt " && ") V.P.pretty) pl
+
+  let join ps1 ps2 = match ps1,ps2 with
+    | EMPTY,ps | ps,EMPTY -> ps
+    | NORMAL ps1,NORMAL ps2 ->
+	let new_state = 
+	  V.PM.fold (fun p b1 acc_m ->
+		       try
+			 let b2 = V.PM.find p ps2.state in
+			 if b1 = b2 then
+			   (* [ps1] and [ps2] agree on the predicate [p] *)
+			   V.PM.add p b1 acc_m
+			 else acc_m
+		       with Not_found -> acc_m
+  		    ) ps1.state V.PM.empty
+	in
+	(* do not recompute exact dependencies, rather compute a superset of
+	   the current dependencies *)
+	let new_deps = 
+	  V.M.fold (fun v ps1 acc_m ->
+		      try 
+			let ps2 = V.M.find v ps2.deps in
+			V.M.add v (V.PS.union ps1 ps2) acc_m
+		      with Not_found ->
+			V.M.add v ps1 acc_m
+		   ) ps1.deps ps2.deps
+	in
+	NORMAL { state = new_state; deps = new_deps; }
+	  
+  let meet ps1 ps2 = match ps1,ps2 with
+    | EMPTY,ps | ps,EMPTY -> EMPTY
+    | NORMAL ps1,NORMAL ps2 ->
+	try
+	  let new_state = 
+	    V.PM.fold (fun p b1 acc_m ->
+			 try
+			   let b2 = V.PM.find p ps2.state in
+			   if b1 = b2 then
+			     (* [ps1] and [ps2] agree on the predicate [p] *)
+			     V.PM.add p b1 acc_m
+			   else 
+			     failwith "No agreement"
+			 with Not_found -> V.PM.add p b1 acc_m
+  		      ) ps1.state ps2.state
+	  in
+	  (* exact dependencies are here the sum of [ps1] and [ps2] current
+	     dependencies *)
+	  let new_deps = 
+	    V.M.fold (fun v ps1 acc_m ->
+			try 
+			  let ps2 = V.M.find v ps2.deps in
+			  V.M.add v (V.PS.union ps1 ps2) acc_m
+			with Not_found ->
+			  V.M.add v ps1 acc_m
+		     ) ps1.deps ps2.deps
+	  in
+	  NORMAL { state = new_state; deps = new_deps; }
+
+	with Failure "No agreement" -> EMPTY
+
+  let widening ws ~old_value ~new_value = old_value
+
+  let is_packed_variable v = true
+  let pack_variables _ = ()
+
+  let normalize = function
+    | EMPTY -> EMPTY
+    | NORMAL ps ->
+	(* compute the most accurate dependencies *)
+	let new_deps =
+	  V.PM.fold (fun p _ acc_m ->
+		       let p_vars = V.P.collect_predicate_vars p in
+		       List.fold_left (fun m v ->
+					 try
+					   let pset = V.M.find v m in
+					   let new_pset = V.PS.add p pset in
+					   V.M.add v new_pset m
+					 with Not_found ->
+					   let new_pset = V.PS.singleton p in
+					   V.M.add v new_pset m
+				      ) acc_m p_vars
+		    ) ps.state V.M.empty
+	in
+	NORMAL { state = ps.state; deps = new_deps; }
+	
+  let finalize = normalize
+
+  let restrained_variables ps = match normalize ps with
+    | EMPTY -> []
+    | NORMAL ps ->
+	V.M.fold (fun v _ acc_l -> v :: acc_l) ps.deps []
+	  
+  let to_pred = function
+    | EMPTY -> None
+    | NORMAL ps ->
+	let plist = 
+	  V.PM.fold (fun p b acc_l -> denorm_predicate p b :: acc_l) ps.state []
+	in
+	match V.P.make_conjunct plist with
+	  | IPtrue -> None
+	  | p -> Some p
+
+  let subtract ps1 ps2 = match ps1,ps2 with
+    | EMPTY,_ -> EMPTY
+    | ps1,EMPTY -> ps1
+    | NORMAL ps1,NORMAL ps2 ->
+	let new_state = 
+	  V.PM.fold (fun p b1 acc_m ->
+		       try
+			 let b2 = V.PM.find p ps2.state in
+			 if b1 = b2 then
+			   (* [ps1] and [ps2] agree on the predicate [p] *)
+			   acc_m
+			 else 
+			   V.PM.add p b1 acc_m
+		       with Not_found -> V.PM.add p b1 acc_m
+  		    ) ps1.state V.PM.empty
+	in
+	NORMAL { state = new_state; deps = ps1.deps; }	
+
+  let remove_variable var = function
+    | EMPTY -> EMPTY
+    | NORMAL ps ->
+	begin try 
+	  let pset = V.M.find var ps.deps in
+	  let new_state = 
+	    V.PM.fold (fun p b acc_m ->
+			 if V.PS.mem p pset then acc_m
+			 else V.PM.add p b acc_m
+		      ) ps.state V.PM.empty
+	  in
+	  (* do not recompute exact dependencies, rather compute 
+	     a superset of the current dependencies *)
+	  let new_deps = V.M.remove var ps.deps in
+	  NORMAL { state = new_state; deps = new_deps; }
+	with Not_found ->
+	  NORMAL ps
+	end
+
+  let guarantee_test _ _ = false
+
+  let singleton p = 
+    let p = V.translate_predicate (V.P.explicit_pred p) in
+    if debug then Coptions.lprintf
+      "[singleton] translated predicate %a@." V.P.pretty p;
+    match norm_predicate p with
+      | None -> top ()
+      | Some (p,b) -> 
+	  let p_vars = V.P.collect_predicate_vars p in
+	  let singl_state = V.PM.add p b V.PM.empty in
+	  let p_singl = V.PS.singleton p in
+	  let singl_deps =
+	    List.fold_left (fun acc_m v -> V.M.add v p_singl acc_m)
+	      V.M.empty p_vars
+	  in
+	  if debug then Coptions.lprintf
+	    "[singleton] norm predicate (%a,%B)@." V.P.pretty p b;
+	  NORMAL { state = singl_state; deps = singl_deps; }
+
+  let eval_test ~backward pred = function
+    | EMPTY -> EMPTY
+    | NORMAL _ as ps -> 
+	let plist = V.P.get_conjuncts pred in
+	let pslist = List.map singleton plist in
+	List.fold_left meet ps pslist
+
+  let eval_assign ~backward var term ps = remove_variable var ps
+
+end
+
+module Make_InternalPairLattice (V : PVARIABLE) (I : INT_VALUE) 
+  (L1 : PACKED_CLUSTER_LATTICE with module V = V and module I = I)
+  (L2 : PACKED_CLUSTER_LATTICE with module V = V and module I = I) 
+(*  : PACKED_CLUSTER_LATTICE with module V = V and module I = I 
+			   and type t = L1.t * L2.t *) =
+struct
+  module V = V         module I = I         type var_t = V.t
+
+  include Make_PairLattice(L1)(L2)
+
+  let eval_assign ~backward var term (v1,v2) =
+    (L1.eval_assign ~backward var term v1, L2.eval_assign ~backward var term v2)
+
+  let eval_test ~backward pred (v1,v2) =
+    (L1.eval_test ~backward pred v1, L2.eval_test ~backward pred v2)
+
+  let guarantee_test pred (v1,v2) =
+    L1.guarantee_test pred v1 || (L2.guarantee_test pred v2)
+
+  let remove_variable var (v1,v2) =
+    (L1.remove_variable var v1, L2.remove_variable var v2)
+
+  let normalize (v1,v2) = (L1.normalize v1, L2.normalize v2)
+
+  let finalize (v1,v2) = (L1.finalize v1, L2.finalize v2)
+
+  let subtract (v1,v2) (v3,v4) = (L1.subtract v1 v3, L2.subtract v2 v4)
+
+  let restrained_variables (v1,v2) =
+    L1.restrained_variables v1 @ (L2.restrained_variables v2)
+
+  let is_empty (v1,v2) = L1.is_empty v1 || (L2.is_empty v2)
+
+  let is_full (v1,v2) = L1.is_full v1 || (L2.is_full v2)
+    
+  let pack_variables vllist = L1.pack_variables vllist; L2.pack_variables vllist
+
+  let is_packed_variable var =
+    L1.is_packed_variable var || L2.is_packed_variable var
+
+end
+
+module Make_ClusterPairLattice (V : PVARIABLE) (I : INT_VALUE) 
+  (L1 : PACKED_CLUSTER_LATTICE with module V = V and module I = I)
+  (L2 : PACKED_CLUSTER_LATTICE with module V = V and module I = I) 
+  : PACKED_CLUSTER_LATTICE with module V = V and module I = I 
+			   and type t = L1.t * L2.t =
+struct
+  
+  include Make_InternalPairLattice(V)(I)(L1)(L2)
+
+  let to_pred (v1,v2) = 
+    match L1.to_pred v1,L2.to_pred v2 with
+      | None,p | p,None -> p
+      | Some p1,Some p2 -> Some (V.P.make_conjunct [p1;p2])
+
+end
+
+module Make_ConstrainedPairLattice (V : PVARIABLE) (I : INT_VALUE) 
+  (L1 : PACKED_CLUSTER_LATTICE with module V = V and module I = I)
+  (L2 : PACKED_CONSTRAINED_LATTICE with module V = V and module I = I) 
+  : PACKED_CONSTRAINED_LATTICE with module V = V and module I = I 
+			       and type t = L1.t * L2.t =
+struct
+  
+  include Make_InternalPairLattice(V)(I)(L1)(L2)
+
+  let eliminate vlist (v1,v2) = (v1,L2.eliminate vlist v2)
+
+  let eval_constraint pred (v1,v2) = (v1,L2.eval_constraint pred v2)
+
+  let is_constrained (v1,v2) = L2.is_constrained v2
+
+  let get_unconstrained (v1,v2) = (v1,L2.get_unconstrained v2)
+
+  let get_constrained (v1,v2) = (L1.bottom(),L2.get_constrained v2)
+
+  let make_unconstrained (v1,v2) = (v1,L2.make_unconstrained v2)
+
+  let unconstrained_variables (v1,v2) = 
+    L1.restrained_variables v1 @ (L2.unconstrained_variables v2)
+
+  let to_pred (v1,v2) =
+    match L1.to_pred v1,L2.to_pred v2 with
+      | None,p | p,None -> p
+      | Some p1,Some p2 -> 
+	  let lhs_p2,rhs_p2 = V.P.get_implicants p2 in
+	  let new_lhs = V.P.make_conjunct [p1;lhs_p2] in
+	  Some (V.P.make_implication new_lhs rhs_p2)
+    
 end
 
 
@@ -2347,35 +2595,43 @@ end = struct
     | Vvar of var_info
     | Varrlen of var_info
     | Vstrlen of var_info
-  type t = var_t
+
+  module Self : ELEMENT_OF_CONTAINER with type t = var_t = 
+  struct
+    type t = var_t
+    let compare = Pervasives.compare
+    let equal = ( = )
+    let hash = Hashtbl.hash
+    let pretty fmt v = match v with
+      | Vvar v -> Format.fprintf fmt "%s" v.var_name
+      | Varrlen v -> Format.fprintf fmt "\\arrlen(%s)" v.var_name
+      | Vstrlen v -> Format.fprintf fmt "\\strlen(%s)" v.var_name
+  end
+
+  include Self
+
+  module S = Set.Make (Self)
+  module M = Map.Make (Self)
+  module H = Hashtbl.Make (Self)
 
   type iterm = t int_term
   type ipredicate = t int_predicate
 
-  let pretty fmt v = match v with
-    | Vvar v -> Format.fprintf fmt "%s" v.var_name
-    | Varrlen v -> Format.fprintf fmt "\\arrlen(%s)" v.var_name
-    | Vstrlen v -> Format.fprintf fmt "\\strlen(%s)" v.var_name
+  module T = TermOfVariable (Self)
+  module P = PredicateOfVariable (Self) (T)
+
+  module TS = Set.Make (T)
+  module TM = Map.Make (T)
+  module TH = Hashtbl.Make (T)
+
+  module PS = Set.Make (P)
+  module PM = Map.Make (P)
+  module PH = Hashtbl.Make (P)
+
   let to_string v = match v with
     | Vvar v -> v.var_name
     | Varrlen v -> "\\arrlen(" ^ v.var_name ^ ")"
     | Vstrlen v -> "\\strlen(" ^ v.var_name ^ ")"
-  let enum = function
-    | Vvar _ -> 0
-    | Varrlen _ -> 1
-    | Vstrlen _ -> 2
-  let compare v1 v2 = 
-    let e1 = enum v1 and e2 = enum v2 in
-    if e1 = e2 then
-      match v1,v2 with
-        | Vvar v1,Vvar v2 | Varrlen v1,Varrlen v2 | Vstrlen v1,Vstrlen v2 ->
-	    Pervasives.compare v1.var_uniq_tag v2.var_uniq_tag
-	| _ -> assert false (* should have [e1 <> e2] in that case *)
-    else
-      Pervasives.compare e1 e2
-  let equal v1 v2 = compare v1 v2 = 0
-  let hash = function
-    | Vvar v | Varrlen v | Vstrlen v -> v.var_uniq_tag
 
   let get_variable = function
     | Vvar v | Varrlen v | Vstrlen v -> v
@@ -2427,13 +2683,9 @@ end = struct
     IPrel (zero,op,arrlen)
 
   let rec translate_predicate = function
-    | IPnull_pointer (ITvar (Vvar v)) -> 
-	(* [p == 0] translated by [arrlen(p) == 0] *)
-	IPrel (ITvar (Varrlen v), Eq, ITconstant (IntConstant "0"))
+    | IPnull_pointer (ITvar (Vvar v)) -> IPany
     | IPnull_pointer _ -> IPany
-    | IPnot_null_pointer (ITvar (Vvar v)) -> 
-	(* [p != 0] translated by [arrlen(p) > 0] *)
-	IPrel (ITvar (Varrlen v), Gt, ITconstant (IntConstant "0"))
+    | IPnot_null_pointer (ITvar (Vvar v)) -> IPany
     | IPnot_null_pointer _ -> IPany
     | IPnull_char_pointed (ITvar (Vvar v), off) -> 
 	(* [p[offset] == 0] translated by [strlen(p) == offset] *)
@@ -2453,7 +2705,16 @@ end = struct
 
 end
 
-module VarAsPVARIABLE : PVARIABLE with type t = Var.t = Var
+module VarAsPVARIABLE : PVARIABLE 
+  with type t = Var.t and type S.t = Var.S.t and type 'a M.t = 'a Var.M.t
+  and type 'a H.t = 'a Var.H.t 
+
+  and type PS.t = Var.PS.t and type 'a PM.t = 'a Var.PM.t
+  and type 'a PH.t = 'a Var.PH.t
+
+  and type TS.t = Var.TS.t and type 'a TM.t = 'a Var.TM.t
+  and type 'a TH.t = 'a Var.TH.t
+= Var
 
 module VarMap = Map.Make (Var)
 module VarSet = Set.Make (Var)
@@ -2537,25 +2798,25 @@ module IntLangFromNormalized : sig
   val expand_equal : Node.t -> Node.t
     (* takes as input a node and a term corresponding to the same assignment.
        In case it is an increment/decrement, patch it to add/subtract 1. *)
-  val patch_term_for_incr_decr : Node.t -> Var.iterm -> Var.iterm
+  val patch_term_for_incr_decr : Node.t -> Var.T.t -> Var.T.t
     (* translate an expression into a side-effect free term *)
-  val from_expr : Node.t -> Var.iterm
+  val from_expr : Node.t -> Var.T.t
     (* translate an test into a side-effect free predicate *)
-  val from_test : Node.t -> Var.ipredicate
+  val from_test : Node.t -> Var.P.t
     (* translate a normalized predicate into an integer predicate *)
-  val from_pred : Node.t -> Var.ipredicate
+  val from_pred : Node.t -> Var.P.t
 
   (* constructors *)
 
     (* create a new assume statement *)
-  val change_in_assume_stat : Node.t -> Var.ipredicate -> Node.t
+  val change_in_assume_stat : Node.t -> Var.P.t -> Node.t
     (* modify an existing assume/assert predicate *)
-  val grow_predicate : Node.t -> Var.ipredicate -> Node.t
+  val grow_predicate : Node.t -> Var.P.t -> Node.t
     (* create a predicate that expresses a safe access, if given a node
        targetted by the analysis. The first argument tells whether a given
        variable is to be considered or not. *)
   val memory_access_safe_predicate : 
-    (Var.t -> bool) -> Node.t -> Var.ipredicate option
+    (Var.t -> bool) -> Node.t -> Var.P.t option
     (* returns [Some v] if reading string [v] *)
   val string_read_access : (Var.t -> bool) -> Node.t -> Var.t option
     (* change type of dereference expression to make it a safe access *)
@@ -3247,7 +3508,20 @@ struct
     let cur_ctxt_val,cur_sep_val = cur_val in
     let forward = not backward in
     match get_node_kind node with
-      | NKnone | NKstat -> cur_val
+      | NKnone -> cur_val
+
+      | NKstat -> 
+	  if backward && stat_is_decl node then 
+	    (* ignore information on variable before its declaration *)
+	    let var = decl_stat_get_var node in
+	    let new_ctxt_val = 
+	      CL.remove_variable (Var.Vvar var) cur_ctxt_val in
+	    let new_ctxt_val = 
+	      CL.remove_variable (Var.Varrlen var) new_ctxt_val in
+	    let new_ctxt_val = 
+	      CL.remove_variable (Var.Vstrlen var) new_ctxt_val in
+	    new_ctxt_val,cur_sep_val
+	  else cur_val
 
       | NKdecl ->
 	  if backward then
@@ -3334,7 +3608,7 @@ struct
 		| Some p_safe ->
 		    if debug_more then Coptions.lprintf
 		      "[transfer] adding assertion %a@." 
-		      (print_predicate Var.pretty) p_safe;
+		      Var.P.pretty p_safe;
 		    (* access is guaranteed to be safe for the following *)
 		    let res = 
 		      CL.eval_test ~backward p_safe expr_ctxt_val in
@@ -3528,7 +3802,8 @@ struct
 	      raise Rec_transform
 	    
 	| NKexpr | NKtest | NKlvalue ->
-	    if NodeSet.mem node trans_params.safe_access_nodes then
+	    if Coptions.absint_as_proof && 
+	      NodeSet.mem node trans_params.safe_access_nodes then
 	      (* change type of dereference expression to make it a 
 		 safe access *)
 	      begin
@@ -3554,12 +3829,12 @@ end
 module IdentTypeBridge (Ctxt : PACKED_CLUSTER_LATTICE) 
     (Cstr : PACKED_CONSTRAINED_LATTICE with type t = Ctxt.t) 
     : CONTEXTUAL_BRIDGE with module Contxt = Ctxt and module Constr = Cstr
-    and type ipredicate = Cstr.V.ipredicate =
+    and type ipredicate = Cstr.V.P.t =
 struct
   module Contxt = Ctxt
   module Constr = Cstr
 
-  type ipredicate = Constr.V.ipredicate
+  type ipredicate = Constr.V.P.t
 
   let get_unconstrained = Constr.get_unconstrained
   let get_constrained cond = 
@@ -3587,12 +3862,22 @@ module OctLattice =
 module ConstrOctLattice = 
   Make_PackedFromConstrained(Var)(Make_ConstrainedOctogonLattice(Var)(Int))
 
+(* module for predicate abstraction *)
+
+module PredLattice = Make_PredicateLattice(Var)(Int)
+
 (* modules for the analysis *)
+
+module OctPredLattice = 
+  Make_ClusterPairLattice(Var)(Int)(PredLattice)(OctLattice)
+
+module ConstrOctPredLattice = 
+  Make_ConstrainedPairLattice(Var)(Int)(PredLattice)(ConstrOctLattice)
 
 module ContextLattice = 
   Make_ContextualLattice
-    (Var)(Int)(OctLattice)(ConstrOctLattice)
-    (IdentTypeBridge(OctLattice)(ConstrOctLattice))
+    (Var)(Int)(OctPredLattice)(ConstrOctPredLattice)
+    (IdentTypeBridge(OctPredLattice)(ConstrOctPredLattice))
 
 module ConnectCFGtoOct = Make_ConnectCFGtoInt(ContextLattice)(SepLattice)
 
@@ -3640,7 +3925,7 @@ struct
     | Some p_safe ->
 	if debug_more then Coptions.lprintf
 	    "[memory_access_select] safe pred %a@." 
-	    (print_predicate Var.pretty) p_safe;
+	    Var.P.pretty p_safe;
 	(* is the access already guaranteed to be safe ? *)
 	let res =
 	  not (ContextLattice.guarantee_test p_safe pre_ctxt_val)
@@ -3721,6 +4006,9 @@ struct
   let keep_node_select node =
     merge_node_select node || is_assume_invariant_node node
     || is_loop_backward_source_node node 
+(*
+  USED AS A HACK TO IMPROVE PRECONDITION ON ARRLEN/STRLEN, SHOULD BE MADE
+  USELESS BY CURRENT DEVELOPMENTS
 
   let normalize_info cur_ctxt_val =
     let norm_oct ~constrained oct main_oct =
@@ -3781,7 +4069,7 @@ struct
 	cur_ctxt_val (ContextLattice.get_context cur_ctxt_val)
     in
     ContextLattice.set_context cur_ctxt_val new_main_context
-
+*)
   (* [cur_val] is the current contextual abstract value, obtained by repeated
      forward/backward propagation.
      [new_val] is the conditional information obtained through a unique 
@@ -3805,7 +4093,7 @@ struct
       else cur_ctxt_val
     in
     (* add invariants on strings and pointers *)
-    let new_ctxt_val = normalize_info new_ctxt_val in
+    (* let new_ctxt_val = normalize_info new_ctxt_val in *)
     (* renormalize resulting contextual value *)
     let new_ctxt_val = ContextLattice.normalize new_ctxt_val in
     if debug_more then Coptions.lprintf
@@ -4090,7 +4378,7 @@ let local_int_analysis fundecl =
     List.filter IntLangFromNormalized.var_is_pointer il_pack_vars in
   let arrlen_vars = List.map (fun v -> Var.Varrlen v) ptr_vars in
   let strlen_vars = List.map (fun v -> Var.Vstrlen v) ptr_vars in
-  let normal_vars = List.map (fun v -> Var.Vvar v) (int_vars @ ptr_vars) in
+  let normal_vars = List.map (fun v -> Var.Vvar v) int_vars in
   let pack_vars = arrlen_vars @ strlen_vars @ normal_vars in
   (* only one pack for now *)
   ContextLattice.pack_variables [pack_vars];

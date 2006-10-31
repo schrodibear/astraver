@@ -68,14 +68,18 @@ let debug_more = Coptions.debug
    Taken from Miné's example analysis.
  *)
 type widening_t = WidenFast | WidenZero | WidenUnit | WidenSteps of int list
- 
-module type VARIABLE = sig
+
+module type ELEMENT_OF_CONTAINER = sig
   type t
   val pretty : Format.formatter -> t -> unit
-  val to_string : t -> string
   val compare : t -> t -> int
   val equal : t -> t -> bool
   val hash : t -> int
+end
+ 
+module type VARIABLE = sig
+  include ELEMENT_OF_CONTAINER
+  val to_string : t -> string
 end
 
 (* general interface of any module representing integers *)
@@ -133,7 +137,7 @@ module type SEMI_LATTICE = sig
        The new value should always be above the stored value in the lattice
        (or less precise), which should always be the case with monotone
        transfer functions. *)
-  val widening : widening_t -> t -> t -> t
+  val widening : widening_t -> old_value:t -> new_value:t -> t
 end
 
 module type LATTICE = sig
@@ -192,8 +196,9 @@ struct
 
   let join p1 p2 = L1.join (fst p1) (fst p2),L2.join (snd p1) (snd p2)
 
-  let widening ws p1 p2 =
-    L1.widening ws (fst p1) (fst p2),L2.widening ws (snd p1) (snd p2)
+  let widening ws ~old_value ~new_value =
+    L1.widening ws (fst old_value) (fst new_value),
+    L2.widening ws (snd old_value) (snd new_value)
 end
 
 module Make_PairLattice (L1 : LATTICE with type dim_t = unit)
@@ -296,8 +301,8 @@ struct
     | PWmap m -> PWmap (VMap.mapi f m)
     | PWall -> PWall
 
-  let widening ws pw1 pw2 = match pw1,pw2 with
-    | PWempty,pw2 -> pw2
+  let widening ws ~old_value ~new_value = match old_value,new_value with
+    | PWempty,new_value -> new_value
     | PWmap m1,PWmap m2 -> 
 	VMap.fold 
 	  (fun v a2 m -> 
@@ -306,8 +311,8 @@ struct
 	       let a = L.widening ws a1 a2 in
 	       replace v a m
 	     with Not_found -> 
-	       m (* keep current binding from [pw2] *)
-	  ) m2 pw2 (* yes, both from [pw2] *)
+	       m (* keep current binding from [new_value] *)
+	  ) m2 new_value (* yes, both from [new_value] *)
     | _,PWall -> PWall
     | _ -> 
 	(* the stored value [pw1] is less precise than the new computed value
@@ -364,14 +369,7 @@ module type INTER_LANG = sig
   type decl_t
 
   (* type of declaration/statement/expression in the intermediate language *)
-  module Node : sig
-    type t
-    val compare : t -> t -> int
-    val hash : t -> int
-    val equal : t -> t -> bool
-    val pretty : Format.formatter -> t -> unit
-  end
-
+  module Node : ELEMENT_OF_CONTAINER
   module NodeSet : Set.S with type elt = Node.t
   module NodeMap : Map.S with type key = Node.t
   module NodeHash : sig
@@ -513,7 +511,7 @@ module type DATA_FLOW_ANALYSIS = sig
 	  (* join function *)
 	join : 'a -> 'a -> 'a;
 	  (* widening function (if any) *)
-	widening : widening_t -> 'a -> 'a -> 'a;
+	widening : widening_t -> old_value:'a -> new_value:'a -> 'a;
 	  (* additional action after propagation *)
 	action : node_t -> 'a -> unit;
       }
@@ -611,7 +609,7 @@ module Make_DataFlowAnalysis
 	  (* join function *)
 	join : 'a -> 'a -> 'a;
 	  (* widening function (if any) *)
-	widening : widening_t -> 'a -> 'a -> 'a;
+	widening : widening_t -> old_value:'a -> new_value:'a -> 'a;
 	  (* additional action after propagation *)
 	action : node_t -> 'a -> unit;
       }
@@ -770,7 +768,7 @@ module Make_DataFlowAnalysis
 			    if debug then Coptions.lprintf 
 			      "[propagate] perform widening@.";
 			    Some (params.widening C.widening_strategy 
-				    to_val cur_val)
+				    ~old_value:to_val ~new_value:cur_val)
 		    else if cur_count > threshold then
 		      (* needed ???????? *)
 		      to_val
@@ -1354,6 +1352,8 @@ module type CFG_LANG_EXTERNAL = sig
   val var_is_pointer : ilvar_t -> bool
     (* is the type of this expression a pointer type ? *)
   val expr_type_is_ptr : Node.t -> bool
+    (* remove casts on top of the expression *)
+  val skip_casts : Node.t -> Node.t
     (* is this term/expression a -local- variable ? *)
   val termexpr_is_local_var : Node.t -> bool
     (* is this expression a pointer assignment ? *)
@@ -1816,9 +1816,6 @@ end = struct
     | Ctypes.Tstruct _ | Ctypes.Tunion _ | Ctypes.Tenum _ ->
 	false
 
-  let var_is_pointer var =
-    is_pointer_type var.var_type
-
   let var_is_local var =
     not var.var_is_static
 
@@ -1863,6 +1860,15 @@ end = struct
   let var_is_pointer var = is_pointer_type var.var_type
   let sub_expr_type_is_ptr e = is_pointer_type e.nexpr_type
   let expr_type_is_ptr node = sub_expr_type_is_ptr (get_e node)
+
+  let rec sub_skip_casts e = match e.nexpr_node with
+    | NEcast (_,e1) -> sub_skip_casts e1
+    | _ -> e
+    
+  let skip_casts node = 
+    let e = get_e node in
+    let new_e = sub_skip_casts e in
+    create_tmp_node (Nexpr new_e)
 
   let termexpr_is_local_var node =
     match get_node_kind node with
@@ -3223,9 +3229,25 @@ end = struct
 	  { e with nexpr_node = NEassign (e1,e12) }
       | _ -> e
     in
+    let make_test_to_zero e = 
+      let sub_e = sub_skip_casts e in
+      match sub_e.nexpr_node with
+	| NEvar (Var_info v) -> 
+	    if var_is_pointer v then
+	      let null_var = Info.default_var_info "null" in 
+	      (* Info.set_assigned null_var; *)
+	      Cenv.set_var_type (Var_info null_var) v.var_type false;
+	      let null_expr =
+		{ sub_e with nexpr_node = NEvar (Var_info null_var) } in
+	      { e with nexpr_node = NEbinary (e,Bneq_pointer,null_expr) }
+	    else e
+	| _ -> e
+    in
     let e = 
-      if is_test && neg_test then
-        { e with nexpr_node = NEunary (Unot, e) }
+      if is_test then
+	if neg_test then
+          { e with nexpr_node = NEunary (Unot, make_test_to_zero e) }
+	else make_test_to_zero e
       else e
     in
     let enode =
@@ -3721,6 +3743,9 @@ end = struct
   let rec from_decl d =
     if debug then Coptions.lprintf 
       "[from_decl] treating function %s@." d.name;
+    (* clear all heap variables to avoid name clash between 
+       different fucntions *)
+    Hashtbl.clear Ceffect.heap_vars;
     let dnode = create_node (Ndecl d) in 
     begin match d.s with
       | Some s ->

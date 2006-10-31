@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.129 2006-10-27 14:10:56 moy Exp $ i*)
+(*i $Id: ctyping.ml,v 1.130 2006-10-31 16:31:40 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -738,7 +738,9 @@ and type_expr_node loc env = function
 	    let rec check_args i el' = function
 	      | [], [] -> 
 		  TEcall (e, List.rev el'), ty
-	      | e :: el, t :: tl when compatible_type e.texpr_type t ->
+	      | e :: el, t :: tl 
+		  when compatible_type e.texpr_type t 
+		    || (pointer_type t && is_null e) ->
 		  check_args (i+1) (coerce t e :: el') (el, tl)
 	      | e :: _, _ :: _ ->
 		  error loc ("incompatible type for argument " ^ 
