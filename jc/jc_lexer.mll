@@ -1,4 +1,4 @@
-(*i $Id: jc_lexer.mll,v 1.3 2006-10-31 13:18:29 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.4 2006-10-31 15:34:04 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -62,6 +62,7 @@ rule token = parse
   | "double"                { DOUBLE }
 *)
   | "else"                  { ELSE }
+  | "ensures"               { ENSURES }
 (*
   | "enum"                  { ENUM }
   | "float"                 { FLOAT }
@@ -84,6 +85,10 @@ rule token = parse
   | "void"                  { VOID }
   | "while"                 { WHILE }
 *)
+  | "\\result"              { BSRESULT }
+  | "\\forall"              { BSFORALL }
+  | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
+
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
         ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?
         [^ '\010' '\013'] * '\n'
@@ -120,9 +125,12 @@ rule token = parse
   | "++"                    { INC_OP }
   | "--"                    { DEC_OP }
   | "->"                    { PTR_OP }
-  | "&&"                    { AND_OP }
+*)
+  | "&&"                    { AMPAMP }
+(*
   | "||"                    { OR_OP }
 *)
+  | "=>"                    { EQGT }
   | "<="                    { LTEQ }
   | ">="                    { GTEQ }
 (*
@@ -133,9 +141,7 @@ rule token = parse
   | "{"                     { LBRACE }
   | "}"                     { RBRACE }
   | ","                     { COMMA }
-(*
   | ":"                     { COLON }
-*)
   | "="                     { EQ }
   | "("                     { LPAR }
   | ")"                     { RPAR }
@@ -159,7 +165,7 @@ rule token = parse
 *)
   | eof { EOF }
   | '"' { lex_error lexbuf "Unterminated string" }
-  | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }
+  | _   { lex_error lexbuf ("Illegal character " ^ lexeme lexbuf) }
 
 and comment = parse
   | "*)" { () }

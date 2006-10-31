@@ -11,7 +11,7 @@ type const =
   | JCCreal of string
 
 type bin_op =
-  [ `Ble | `Bge ]
+  [ `Ble | `Bge | `Bland | `Bimplies ]
 
 type label = string
 
@@ -28,11 +28,21 @@ type pexpr_node =
   | JCPEapp of string * pexpr list
   | JCPEassign of pexpr * pexpr
   | JCPEbinary of pexpr * bin_op * pexpr
+  | JCPEforall of jc_type * string * pexpr
 
 and pexpr =
     {
       jc_pexpr_node : pexpr_node;
       jc_pexpr_loc : Loc.position;
+    }
+
+type pclause_node =
+  | JCPCensures of string * pexpr
+
+and pclause =
+    {
+      jc_pclause_node : pclause_node;
+      jc_pclause_loc : Loc.position;
     }
 
 type pstatement_node =
@@ -57,15 +67,6 @@ and pstatement =
     }
 
 
-type pclause_node =
-  | JCPCensures of pexpr
-
-and pclause =
-    {
-      jc_pclause_node : pclause_node;
-      jc_pclause_loc : Loc.position;
-    }
-
 
 type pdecl_node =
   | JCPDfun of jc_type * string * (jc_type * string) list * pclause list * pstatement list
@@ -82,6 +83,7 @@ and pdecl =
 
 type term_node =
   | JCTconst of const
+  | JCTvar of var_info
   | JCTshift of term * term
   | JCTderef of term * field_info
   | JCTapp of logic_info * term list
@@ -93,7 +95,11 @@ and term =
     }
 
 type assertion_node =
+  | JCAtrue
+  | JCAand of assertion list
+  | JCAimplies of assertion * assertion
   | JCAapp of logic_info * term list
+  | JCAforall of var_info * assertion
 
 and assertion =
     {
@@ -144,13 +150,11 @@ and statement =
     }
 
 
-type spec_clause_node =
-  | JCCensures of assertion
-
-and spec_clause =
+type fun_spec =
     {
-      jc_spec_clause_node : spec_clause_node;
-      jc_spec_clause_loc : Loc.position;
+      jc_fun_requires : assertion;
+      jc_fun_ensures : (string * assertion) list;
     }
+
 
 

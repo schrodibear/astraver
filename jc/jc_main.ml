@@ -25,8 +25,8 @@ let main () =
 	List.iter Jc_typing.decl ast;
 	let d = 
 	  Hashtbl.fold 
-	    (fun id (f,b) acc ->
-	       Jc_interp.tr_fun f b acc)
+	    (fun id (f,s,b) acc ->
+	       Jc_interp.tr_fun f s b acc)
 	    Jc_typing.functions_table
 	    []
 	in	       

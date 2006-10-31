@@ -40,11 +40,14 @@
 %token <Jc_ast.const> CONSTANT
 %token <string> STRING_LITERAL 
 
-/* ( ) { } ; , */
-%token LPAR RPAR LBRACE RBRACE SEMICOLON COMMA 
+/* ( ) { } ; , : */
+%token LPAR RPAR LBRACE RBRACE SEMICOLON COMMA COLON 
 
 /* = <= >= */
 %token EQ LTEQ GTEQ
+
+/* && => */
+%token AMPAMP EQGT
 
 /* if else return */
 %token IF ELSE RETURN
@@ -55,10 +58,13 @@
 /* ensures */
 %token ENSURES
 
+/* \result \forall */
+%token BSRESULT BSFORALL
+
 /*
 
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP EQ_OP NE_OP
-%token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
+%token OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
 %token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
 %token XOR_ASSIGN OR_ASSIGN
 
@@ -69,16 +75,21 @@
 %token CASE DEFAULT SWITCH WHILE DO FOR GOTO CONTINUE BREAK  
 %token TRY CATCH FINALLY THROW
 
-%token COLON LSQUARE RSQUARE
+%token LSQUARE RSQUARE
 %token DOT AMP EXL TILDE MINUS PLUS STAR SLASH PERCENT LT GT HAT PIPE
 %token QUESTION
 
-%token ENSURES
 */
 
 %token EOF
 %type <Jc_ast.pdecl list> file
 %start file
+
+
+%right EQGT
+%nonassoc BSFORALL
+
+
 %%
 
 file: 
@@ -91,6 +102,8 @@ file:
 primary_expression: 
 | IDENTIFIER 
     { locate_expr (JCPEvar $1) }
+| BSRESULT
+    { locate_expr (JCPEvar "\\result") }
 | CONSTANT 
     { locate_expr (JCPEconst $1) }
 /*
@@ -249,10 +262,8 @@ inclusive_or_expression:
 logical_and_expression: 
 | inclusive_or_expression 
     { $1 }
-/*
-| logical_and_expression AND_OP inclusive_or_expression 
-    { locate (CEbinary ($1, Band, $3)) }
-*/
+| logical_and_expression AMPAMP inclusive_or_expression 
+    { locate_expr (JCPEbinary($1, `Bland, $3)) }
 ;
 
 logical_or_expression: 
@@ -316,6 +327,10 @@ assignment_operator:
 expression: 
 | assignment_expression 
     { $1 }
+| BSFORALL type_expr IDENTIFIER SEMICOLON expression
+    { locate_expr (JCPEforall($2,$3,$5)) }
+| expression EQGT expression
+    { locate_expr (JCPEbinary($1,`Bimplies,$3)) }
 /*
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
 */
@@ -738,6 +753,6 @@ function_specification:
 ;
 
 spec_clause:
-| ENSURES expression
-    { locate_clause (JCPCensures $2) }
+| ENSURES IDENTIFIER COLON expression
+    { locate_clause (JCPCensures($2,$4)) }
 ;

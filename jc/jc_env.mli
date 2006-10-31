@@ -14,6 +14,7 @@ type logic_info =
 type var_info =
     {
       jc_var_info_name : string;
+      jc_var_info_final_name : string;
       jc_var_info_type : jc_type;
     }
 
