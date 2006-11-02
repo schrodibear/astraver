@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.1 2006-10-25 14:15:47 marche Exp $ i*)
+(*i $Id: output.ml,v 1.2 2006-11-02 16:39:53 marche Exp $ i*)
 
 open Format;;
 open Pp;;
@@ -67,8 +67,16 @@ let rec fprintf_term form t =
   | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
 ;;
 
-type base_type = string list * string       (*r int, float, int list, ... *)
+type logic_type = 
+    { logic_type_name : string;
+      logic_type_args : logic_type list;
+    }
+(*r int, float, int list, ... *)
 
+let rec iter_logic_type f t =
+  f t.logic_type_name;
+  List.iter (iter_logic_type f) t.logic_type_args
+  
 type assertion = 
   | LTrue | LFalse
   | LAnd of assertion * assertion
@@ -79,9 +87,9 @@ type assertion =
   | LIf of term * assertion * assertion
   | LLet of string * term * assertion
       (*r warning: only for Coq assertions *)
-  | LForall of string * base_type * assertion
+  | LForall of string * logic_type * assertion
       (*r forall x:t.a *)
-  | LExists of string * base_type * assertion
+  | LExists of string * logic_type * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
   | LNamed of string * assertion
@@ -139,21 +147,21 @@ let rec iter_assertion f a =
   | LIf(t,a1,a2) -> 
       iter_term f t; iter_assertion f a1; iter_assertion f a2 
   | LLet(id,t,a) -> iter_term f t; iter_assertion f a
-  | LForall(id,(l,t),a) -> List.iter f l;f t; iter_assertion f a
-  | LExists(id,(l,t),a) -> List.iter f l;f t; iter_assertion f a
+  | LForall(id,t,a) -> iter_logic_type f t; iter_assertion f a
+  | LExists(id,t,a) -> iter_logic_type f t; iter_assertion f a
   | LPred(id,l) -> f id; List.iter (iter_term f) l
   | LNamed (_, a) -> iter_assertion f a
 ;;
 
-let fprintf_base_type form (l,t) =
-  match l with
-    | [] -> fprintf form "%s" t
+let rec fprintf_logic_type form t =
+  match t.logic_type_args with
+    | [] -> fprintf form "%s" t.logic_type_name
     | [x] ->
-	fprintf form "%s %s" x t
-    | x::l ->
-	fprintf form "(%s" x;
-	List.iter (fun t -> fprintf form ",%s" t) l;
-	fprintf form ") %s" t
+	fprintf form "%a %s" fprintf_logic_type x t.logic_type_name
+    | l ->
+	fprintf form "(%a) %s" 
+	  (print_list comma fprintf_logic_type) l
+	  t.logic_type_name
 
 let rec fprintf_assertion form a =
   match a with
@@ -185,10 +193,10 @@ let rec fprintf_assertion form a =
 	fprintf_term t fprintf_assertion a
   | LForall(id,t,a) -> 
       fprintf form "@[<hv 1>(forall %s:%a.@ %a)@]" 
-	id fprintf_base_type t fprintf_assertion a
+	id fprintf_logic_type t fprintf_assertion a
   | LExists(id,t,a) -> 
       fprintf form "@[<hv 1>(exists %s:%a.@ %a)@]" 
-	id fprintf_base_type t fprintf_assertion a
+	id fprintf_logic_type t fprintf_assertion a
   | LPred("eq",[t1;t2]) ->
       fprintf form "@[(%a = %a)@]" 
 	fprintf_term t1
@@ -212,7 +220,7 @@ let rec fprintf_assertion form a =
 
 type why_type = 
   | Prod_type of string * why_type * why_type      (*r (x:t1)->t2 *)
-  | Base_type of base_type
+  | Base_type of logic_type
   | Ref_type of why_type
   | Annot_type of 
       assertion * why_type * 
@@ -220,10 +228,10 @@ type why_type =
 	(*r { P } t reads r writes w { Q | E => R } *)
 ;;
 
-let base_type s = Base_type([],s);;
-let int_type = base_type "int";;
-let bool_type = base_type "bool";;
-let unit_type = base_type "unit";;
+let base_type s = Base_type { logic_type_name = s ; logic_type_args = [] }
+let int_type = base_type "int"
+let bool_type = base_type "bool"
+let unit_type = base_type "unit"
 
 let option_iter f x =
   match x with
@@ -231,13 +239,12 @@ let option_iter f x =
     | Some y -> f y
 ;;
 
-let rec iter_base_type f (tl,id) = List.iter f tl; f id
 
 let rec iter_why_type f t =
   match t with
     | Prod_type(_,t1,t2) ->
 	iter_why_type f t1; iter_why_type f t2
-    | Base_type b -> iter_base_type f b
+    | Base_type b -> iter_logic_type f b
     | Ref_type(t) -> iter_why_type f t 
     | Annot_type (pre,t,reads,writes,post,signals) ->
 	iter_assertion f pre;
@@ -267,7 +274,7 @@ let rec fprintf_type anon form t =
 	  fprintf form "@[<hv 1>%s:%a ->@ %a@]" id
 	    (fprintf_type anon) t1 (fprintf_type anon) t2
     | Base_type t  -> 
-	fprintf_base_type form t
+	fprintf_logic_type form t
     | Ref_type(t) -> 
 	fprintf form "%a ref" (fprintf_type anon) t
     | Annot_type(p,t,reads,writes,q,signals) ->
@@ -307,37 +314,6 @@ let rec fprintf_type anon form t =
 	end
 ;;
 
-(*
-let fprint_base_type form b =
-  match b with
-    | ([],s) -> fprintf form " -> %s" s
-    | (t::tl,s) -> 
-	fprintf form " -> (%s" t;
-	List.iter (fun t -> fprintf form ",%s" t) tl;
-	fprintf form ") %s" s 
-*)
-
-let rec fprint_logic_type sep form t = 
-  match t with
-    | Prod_type(_,Base_type(l,s),t2) ->
-	fprintf form "%s@,%a%a" sep fprintf_base_type (l,s)
-	(fprint_logic_type ", ")  t2
-(*
-    | Prod_type(_,Base_type([],s),t2) ->
-	fprintf form "%s@,%s%a" sep s (fprint_logic_type ", ") t2
-    | Prod_type(_,Base_type(t::tl,s),t2) ->
-	fprintf form "%s@,(%s" sep t;
-	List.iter (fun t -> fprintf form ",%s" t) tl;
-	fprintf form ") %s %a" s (fprint_logic_type ", ") t2
-*)
-    | Base_type b -> fprintf form " -> %a" fprintf_base_type b 
-    | Ref_type _ -> assert false (* should never happen *)
-    | Prod_type _ -> assert false (* should never happen *)
-    | Annot_type _ -> assert false (* should never happen *)
-;;
-
-let fprint_logic_type fmt t = 
-  fprintf fmt "@[<hov 2>%a@]" (fprint_logic_type "") t
 
 (*s expressions *)
 
@@ -408,17 +384,8 @@ let make_while cond inv var e =
       | Block(l) -> l
       | _ -> [e]
   in While(cond,inv,var,body)
-;;
 
 let make_label label e = Label (label, e)
-(*
-  let body = 
-    match e with
-      | Block(l) -> l
-      | _ -> [e]
-  in Block(Label label::body)
-*)
-;;
 
 let make_pre pre e =  Triple(false,pre,e,LTrue,[])
 
@@ -605,20 +572,13 @@ and fprintf_expr_end_list form l =
 type why_decl =
   | Param of bool * string * why_type         (*r parameter in why *)
   | Def of string * expr               (*r global let in why *)
-  | Logic of bool * string * (string * base_type) list * base_type    (*r logic decl in why *)
+  | Logic of bool * string * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Axiom of string * assertion         (*r Axiom *)
-  | Predicate of bool * string * (string * base_type) list * assertion  
-  | Function of bool * string * (string * base_type) list * base_type * term
+  | Predicate of bool * string * (string * logic_type) list * assertion  
+  | Function of bool * string * (string * logic_type) list * logic_type * term
   | Type of string * string list
   | Exception of string
 
-type prover_decl =
-  | Parameter  of string * why_type    (*r Parameter *)
-  | Definition of string * expr        (*r Definition *) 
-(*
-  | Predicate of string * (string * why_type) list * assertion  (*r Predicate *) 
-*)
-  | CoqVerbatim of string                 (*r Text in Coq *)
 
 
 let get_why_id d =
@@ -637,30 +597,19 @@ let iter_why_decl f d =
     | Param(_,_,t) -> iter_why_type f t
     | Def(id,t) -> iter_expr f t
     | Logic(_,id,args,t) -> 
-	List.iter (fun (_,t) -> iter_base_type f t) args;
-	iter_base_type f t
+	List.iter (fun (_,t) -> iter_logic_type f t) args;
+	iter_logic_type f t
     | Axiom(id,t) -> iter_assertion f t
     | Predicate(_,id,args,p) -> 
-	List.iter (fun (_,t) -> iter_base_type f t) args;
+	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_assertion f p
     | Function(_,id,args,t,p) -> 
-	List.iter (fun (_,t) -> iter_base_type f t) args;
-	iter_base_type f t;
+	List.iter (fun (_,t) -> iter_logic_type f t) args;
+	iter_logic_type f t;
 	iter_term f p
     | Type(t,args) -> List.iter f args
     | Exception id -> ()
 
-let get_prover_id d =
-  match d with
-    | Parameter(id,_) -> id
-(*
-    | Axiom(id,_) -> id
-*)
-    | Definition(id,_) -> id
-(*
-    | Predicate(id,_,_) -> id
-*)
-    | CoqVerbatim(s) -> assert false
 
 
 type state = [`TODO | `RUNNING | `DONE ];;
@@ -703,7 +652,7 @@ let build_map get_id decl_list =
 ;;
 
 let fprint_logic_arg form (id,t) =
-  fprintf form "%s:%a" id fprintf_base_type t
+  fprintf form "%s:%a" id fprintf_logic_type t
 
 let fprintf_why_decl form d =
   match d with
@@ -714,8 +663,8 @@ let fprintf_why_decl form d =
     | Logic(b,id,args,t) ->
 	fprintf form "@[<hv 1>%slogic %s: %a -> %a@.@."
 	  (if b then "external " else "") id 
-	  (print_list comma (fun fmt (id,t) -> fprintf_base_type fmt t)) args
-	  fprintf_base_type t 
+	  (print_list comma (fun fmt (id,t) -> fprintf_logic_type fmt t)) args
+	  fprintf_logic_type t 
     | Axiom(id,p) ->
 	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 
 	  fprintf_assertion p
@@ -734,7 +683,7 @@ let fprintf_why_decl form d =
 	  (if b then "external " else "") id 
 	  fprint_logic_arg a;
 	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
-	fprintf form ") : %a =@ %a@]@.@." fprintf_base_type t 
+	fprintf form ") : %a =@ %a@]@.@." fprintf_logic_type t 
 	  fprintf_term e
     | Type (id, []) ->
 	fprintf form "@[type %s@]@." id
@@ -747,37 +696,6 @@ let fprintf_why_decl form d =
     | Exception id ->
 	fprintf form "@[exception %s@]@.@." id
 	
-let iter_prover_decl f d =
-  match d with
-    | Parameter(id,t) -> iter_why_type f t
-(*
-    | Axiom(id,t) -> iter_assertion f t
-*)
-    | Definition(id,e) -> iter_expr f e
-(*
-    | Predicate(id,args,a) -> iter_assertion f a
-*)
-    | CoqVerbatim (s) -> assert false
-
-(*
-let fprint_coq_decl form d =
-  match d with
-    | Parameter(id,t) -> 
-	fprintf form "@[<hv 1>Parameter %s :@ %a.@]@.@." id 
-	  (fprint_coq_type true) t
-    | Axiom(id,t) -> 
-	fprintf form "@[<hv 1>Axiom %s :@ %a.@]@.@." id 
-	  (fprint_coq_type false) t
-    | Definition(id,e) ->
-	fprintf form "@[<hv 1>Definition %s :=@ %a.@]@.@." id fprintf_expr e
-    | Predicate(id,args,a) ->
-	fprintf form "@[<hv 1>Definition %s := fun@ " id;
-	List.iter 
-	  (fun (x,t) -> fprintf form "(%s : %a)@ " x (fprint_coq_type true) t) 
-	  args;
-	fprintf form "=> %a.@]@.@." (fprint_assertion true) a
-    | Verbatim (s) -> fprintf form "%s@." s
-*)
 
 let output_decls get_id iter_decl output_decl decls =
   let map = build_map get_id decls in
@@ -801,29 +719,6 @@ let fprintf_why_decls form decls =
      - Claude, 03 apr 2004
   *)
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) decls;
-(***
-  let (logic,other) = 
-    List.partition
-      (function Logic _ | Predicate _ -> true | _ -> false) 
-      decls
-  in
-  output_decls get_why_id iter_why_decl (fprintf_why_decl form) logic;
-  output_decls get_why_id iter_why_decl (fprintf_why_decl form) other
-***)
-;;
-
-(*
-let output_coq_decls form decls =
-  let (coqdef,other) =
-    List.partition
-      (function CoqVerbatim _ -> false 
-	 | _ -> true) 
-      decls
-  in
-  output_decls get_coq_id iter_coq_decl (fprint_coq_decl form) coqdef;
-  List.iter (fprint_coq_decl form) other;
-;;
-*)
 
 
 

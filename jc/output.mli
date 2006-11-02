@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.2 2006-10-30 14:01:17 marche Exp $ i*)
+(*i $Id: output.mli,v 1.3 2006-11-02 16:39:53 marche Exp $ i*)
 
 type constant =
   | Prim_int of string
@@ -31,7 +31,10 @@ type term =
 
 val fprintf_term : Format.formatter -> term -> unit
 
-type base_type = string list * string       (*r int, float, int list, ... *)
+type logic_type = 
+    { logic_type_name : string;
+      logic_type_args : logic_type list;
+    }
 
 type assertion = 
   | LTrue | LFalse
@@ -42,9 +45,9 @@ type assertion =
   | LImpl of assertion * assertion
   | LIf of term * assertion * assertion
   | LLet of string * term * assertion
-  | LForall of string * base_type * assertion
+  | LForall of string * logic_type * assertion
       (*r forall x:t.a *)
-  | LExists of string * base_type * assertion
+  | LExists of string * logic_type * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
   | LNamed of string * assertion
@@ -61,7 +64,7 @@ val fprintf_assertion : Format.formatter -> assertion -> unit
 
 type why_type = 
   | Prod_type of string * why_type * why_type (*r (x:t1)->t2 *)
-  | Base_type of base_type
+  | Base_type of logic_type
   | Ref_type of why_type
   | Annot_type of 
       assertion * why_type * 
@@ -153,10 +156,10 @@ val append : expr -> expr -> expr
 type why_decl =
   | Param of bool * string * why_type  (*r parameter in why *)
   | Def of string * expr               (*r global let in why *)
-  | Logic of bool * string * (string * base_type) list * base_type  (*r logic decl in why *)
+  | Logic of bool * string * (string * logic_type) list * logic_type  (*r logic decl in why *)
   | Axiom of string * assertion            (*r Axiom *)
-  | Predicate of bool * string * (string * base_type) list * assertion  
-  | Function of bool * string * (string * base_type) list * base_type * term
+  | Predicate of bool * string * (string * logic_type) list * assertion  
+  | Function of bool * string * (string * logic_type) list * logic_type * term
   | Type of string * string list
   | Exception of string
 

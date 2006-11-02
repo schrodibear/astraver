@@ -287,6 +287,14 @@ let assertion_true =
   { jc_assertion_node = JCAtrue;
     jc_assertion_loc = Loc.dummy_position }
 
+let field (t,id) =
+  let ty = type_type t in
+  let fi = {
+    jc_field_info_name = id;
+    jc_field_info_type = ty;
+  }
+  in fi
+
 let decl d =
   match d.jc_pdecl_node with
     | JCPDfun(ty,id,pl,specs,body) -> 
@@ -313,7 +321,7 @@ let decl d =
 	let b = List.map (statement param_env) body in
 	Hashtbl.add functions_table id (fi,s,b)
     | JCPDtype(id,fields) ->
-	Hashtbl.add structs_table id fields
+	Hashtbl.add structs_table id (List.map field fields)
 
 
 

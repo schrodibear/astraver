@@ -19,9 +19,15 @@ let tr_native_type t =
 
 let tr_base_type t =
   match t with
-    | JCTnative t -> ([],tr_native_type t)
-    | JCTlogic s -> ([],s)
-    | JCTvalidpointer (id, a, b) -> ([],id)
+    | JCTnative t -> 
+	{ logic_type_name = tr_native_type t;
+	  logic_type_args = [] }
+    | JCTlogic s -> 
+	{ logic_type_name = s;
+	  logic_type_args = [] }
+    | JCTvalidpointer (id, a, b) -> 
+	{ logic_type_name = "pointer";
+	  logic_type_args = [id] }
     | JCTpointer _ -> assert false
 
 let tr_type t =
@@ -159,6 +165,26 @@ and statement_list l =
     | [] -> Void
     | [i] -> statement i
     | i::r -> append (statement i) (statement_list r)
+
+(******************
+ structures
+******************)
+
+let tr_struct id fl acc =
+  let acc = 
+    List.fold_left
+      (fun acc fi ->
+	 Param(false,
+	       fi.jc_field_info_name,
+	       Ref_type(Base_type([id;tr_type fi.jc_field_info_type],"memory")))::acc)
+      acc fl
+  in (Type(id,[]))::acc
+
+       
+
+(*****************
+ functions
+**************)
 
 let parameter v =
   (v.jc_var_info_final_name,tr_type v.jc_var_info_type)
