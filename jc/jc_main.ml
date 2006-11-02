@@ -19,7 +19,8 @@ let parse_file f =
 
 let main () =
   let files = Jc_options.files () in
-  match files with
+  try
+    match files with
     | [f] ->
 	let ast = parse_file f in
 	List.iter Jc_typing.decl ast;
@@ -38,8 +39,14 @@ let main () =
 	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d)
 	  (Lib.file "why" (f ^ ".why"));
 	Jc_make.makefile f
+
+
     | _ -> Jc_options.usage ()
     
+  with
+    | Jc_typing.Typing_error(l,s) ->
+	eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
+	exit 1
 
 
 let _ = Printexc.catch main ()

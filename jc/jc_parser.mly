@@ -1,4 +1,4 @@
-/* $Id */
+/* $Id: jc_parser.mly,v 1.6 2006-11-02 09:20:41 marche Exp $ */
 
 %{
 
@@ -20,8 +20,6 @@
   let locate_decl d =
     { jc_pdecl_node = d ; jc_pdecl_loc = loc () }
 
-  let locate_clause c =
-    { jc_pclause_node = c ; jc_pclause_loc = loc () }
 
 (*
   let locate x = { node = x; loc = loc() }
@@ -40,11 +38,20 @@
 %token <Jc_ast.const> CONSTANT
 %token <string> STRING_LITERAL 
 
-/* ( ) { } ; , : */
-%token LPAR RPAR LBRACE RBRACE SEMICOLON COMMA COLON 
+/* ( ) { } [ ] */
+%token LPAR RPAR LBRACE RBRACE LSQUARE RSQUARE
 
-/* = <= >= */
-%token EQ LTEQ GTEQ
+/* ; , : . */
+%token SEMICOLON COMMA COLON DOT
+
+/* - -- + ++ */
+%token MINUS MINUSMINUS PLUS PLUSPLUS
+ 
+/* = <= >= == != */
+%token EQ LTEQ GTEQ EQEQ BANGEQ
+
+/* += -= */
+%token PLUSEQ MINUSEQ
 
 /* && => */
 %token AMPAMP EQGT
@@ -52,31 +59,32 @@
 /* if else return */
 %token IF ELSE RETURN
 
-/* int */
-%token INT
+/* type */
+%token TYPE 
 
-/* ensures */
-%token ENSURES
+/* integer unit */
+%token INTEGER UNIT
 
-/* \result \forall */
-%token BSRESULT BSFORALL
+/* behavior ensures requires */
+%token ASSIGNS BEHAVIOR ENSURES REQUIRES 
+
+/* \forall \old \result  */
+%token BSFORALL BSOLD BSRESULT 
 
 /*
 
-%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP EQ_OP NE_OP
-%token OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
-%token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
+%token LEFT_OP RIGHT_OP 
+%token OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN 
+%token LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
 %token XOR_ASSIGN OR_ASSIGN
 
-%token TYPEDEF 
-%token CHAR SHORT LONG SIGNED UNSIGNED FLOAT DOUBLE VOID
+%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE VOID
 %token STRUCT ENUM 
 
 %token CASE DEFAULT SWITCH WHILE DO FOR GOTO CONTINUE BREAK  
 %token TRY CATCH FINALLY THROW
 
-%token LSQUARE RSQUARE
-%token DOT AMP EXL TILDE MINUS PLUS STAR SLASH PERCENT LT GT HAT PIPE
+%token AMP EXL TILDE STAR SLASH PERCENT LT GT HAT PIPE
 %token QUESTION
 
 */
@@ -85,19 +93,21 @@
 %type <Jc_ast.pdecl list> file
 %start file
 
-
+/* precedences on expressions */
 %right EQGT
-%nonassoc BSFORALL
+%nonassoc PRECFORALL
+
+/* precedences on statements */
+
+%nonassoc ELSE
+%nonassoc PRECIF
 
 
 %%
 
-file: 
-| decl file 
-    { $1::$2 }
-| EOF 
-    { [] }
-;
+/***************/
+/* expressions */
+/***************/
 
 primary_expression: 
 | IDENTIFIER 
@@ -116,37 +126,36 @@ primary_expression:
 postfix_expression: 
 | primary_expression 
     { $1 }
-/*
 | postfix_expression LPAR RPAR 
-    { locate (CEcall ($1, [])) }
+    { locate_expr (JCPEapp($1, [])) }
 | postfix_expression LPAR argument_expression_list RPAR 
-    { locate (CEcall ($1, $3)) }
-| postfix_expression PTR_OP identifier
-    { locate (CEarrow ($1, $3)) }
-| postfix_expression INC_OP 
+    { locate_expr (JCPEapp($1, $3)) }
+| BSOLD LPAR expression RPAR 
+    { locate_expr (JCPEold($3)) }
+| postfix_expression DOT IDENTIFIER
+    { locate_expr (JCPEderef ($1, $3)) }
+/*
+| postfix_expression PLUSPLUS 
     { locate (CEincr (Upostfix_inc, $1)) }
-| postfix_expression DEC_OP
+| postfix_expression MINUSMINUS
     { locate (CEincr (Upostfix_dec, $1)) }
 */
 ;
 
-/*
 argument_expression_list: 
 | assignment_expression 
     { [$1] }
-| argument_expression COMMA assignment_expression_list 
+| assignment_expression COMMA argument_expression_list 
     { $1::$3 }
 ;
-
-*/
 
 unary_expression: 
 | postfix_expression 
     { $1 }
 /*
-| INC_OP unary_expression 
+| PLUSPLUS unary_expression 
     { locate (CEincr (Uprefix_inc, $2)) }
-| DEC_OP unary_expression 
+| MINUSMINUS unary_expression 
     { locate (CEincr (Uprefix_dec, $2)) }
 | unary_operator cast_expression 
     { locate (CEunary ($1, $2)) }
@@ -187,12 +196,10 @@ multiplicative_expression:
 additive_expression: 
 | multiplicative_expression 
     { $1 }
-/*
 | additive_expression PLUS multiplicative_expression 
-    { locate (CEbinary ($1, Badd, $3)) }
+    { locate_expr (JCPEbinary ($1, `Badd, $3)) }
 | additive_expression MINUS multiplicative_expression 
-    { locate (CEbinary ($1, Bsub, $3)) }
-*/
+    { locate_expr (JCPEbinary ($1, `Bsub, $3)) }
 ;
 
 shift_expression: 
@@ -224,12 +231,10 @@ relational_expression:
 equality_expression: 
 | relational_expression 
     { $1 }
-/*
-| equality_expression EQ_OP relational_expression 
-    { locate (CEbinary ($1, Beq, $3)) }
-| equality_expression NE_OP relational_expression 
-    { locate (CEbinary ($1, Bneq, $3)) }
-*/
+| equality_expression EQEQ relational_expression 
+    { locate_expr (JCPEbinary ($1, `Beq, $3)) }
+| equality_expression BANGEQ relational_expression 
+    { locate_expr (JCPEbinary ($1, `Bneq, $3)) }
 ;
 
 and_expression: 
@@ -292,12 +297,12 @@ assignment_expression:
     { let a  =
 	match $2 with
 		| `Aeq -> JCPEassign ($1, $3)
+		| `Aadd -> JCPEassign_op ($1, `Badd, $3)
+		| `Asub -> JCPEassign_op ($1, `Bsub, $3)
 (*
 		| Amul -> CEassign_op ($1, Bmul, $3)
 		| Adiv -> CEassign_op ($1, Bdiv, $3)
 		| Amod -> CEassign_op ($1, Bmod, $3)
-		| Aadd -> CEassign_op ($1, Badd, $3)
-		| Asub -> CEassign_op ($1, Bsub, $3)
 		| Aleft -> CEassign_op ($1, Bshift_left, $3)
 		| Aright -> CEassign_op ($1, Bshift_right, $3)
 		| Aand -> CEassign_op ($1, Bbw_and, $3)
@@ -309,12 +314,12 @@ assignment_expression:
 
 assignment_operator: 
 | EQ { `Aeq }
+| PLUSEQ { `Aadd }
+| MINUSEQ { `Asub }
 /*
 | MUL_ASSIGN { Amul }
 | DIV_ASSIGN { Adiv }
 | MOD_ASSIGN { Amod }
-| ADD_ASSIGN { Aadd }
-| SUB_ASSIGN { Asub }
 | LEFT_ASSIGN { Aleft }
 | RIGHT_ASSIGN { Aright }
 | AND_ASSIGN { Aand }
@@ -327,7 +332,8 @@ assignment_operator:
 expression: 
 | assignment_expression 
     { $1 }
-| BSFORALL type_expr IDENTIFIER SEMICOLON expression
+| BSFORALL type_expr IDENTIFIER SEMICOLON expression 
+    %prec PRECFORALL
     { locate_expr (JCPEforall($2,$3,$5)) }
 | expression EQGT expression
     { locate_expr (JCPEbinary($1,`Bimplies,$3)) }
@@ -335,6 +341,12 @@ expression:
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
 */
 ;
+
+/****************/
+/* declarations */
+/****************/
+
+
 
 /*
 constant_expression: 
@@ -602,20 +614,9 @@ c_initializer_list
 
 */
 
-statement: 
-/*
-| labeled_statement { $1 }
-| compound_statement { locate (CSblock $1) }
-| expression_statement { $1 }
-*/
-| selection_statement { $1 }
-/*
-| iteration_statement { $1 }
-*/
-| jump_statement { $1 }
-/*
-| SPEC statement { locate (CSspec ($1,$2)) }
-;
+/**************/
+/* statements */
+/**************/
 
 /*
 
@@ -659,6 +660,7 @@ expression_statement:
 
 selection_statement: 
 | IF LPAR expression RPAR statement 
+    %prec PRECIF
     { let skip = locate_statement JCPSskip in
       locate_statement (JCPSif($3, $5, skip)) }
 | IF LPAR expression RPAR statement ELSE statement 
@@ -699,26 +701,28 @@ jump_statement:
 | RETURN expression SEMICOLON { locate_statement (JCPSreturn $2) }
 ;
 
-/*
-translation_unit
-        : external_declaration { $1 }
-        | translation_unit external_declaration { $1 @ $2 }
-        ;
 
-*/
-
-decl: 
-| function_definition { $1 }
+statement: 
 /*
-| declaration { $1 }
+| labeled_statement { $1 }
+| compound_statement { locate (CSblock $1) }
 */
+| expression_statement { $1 }
+| selection_statement { $1 }
+/*
+| iteration_statement { $1 }
+*/
+| jump_statement { $1 }
+/*
+| SPEC statement { locate (CSspec ($1,$2)) }
 ;
 
-function_definition: 
-| type_expr IDENTIFIER parameters function_specification compound_statement
-    { locate_decl (JCPDfun($1, $2, $3, $4, $5)) }
-;
-	      
+
+
+/***********************/
+/* Function definition */
+/***********************/
+
 
 parameters:
 | LPAR RPAR
@@ -741,8 +745,14 @@ parameter_declaration:
 
 
 type_expr:
-| INT
-    { JCTlogic "int" }
+| INTEGER
+    { JCPTnative `Tinteger }
+| UNIT
+    { JCPT "unit" }
+| IDENTIFIER
+    { JCPTidentifier $1 }
+| IDENTIFIER LSQUARE CONSTANT RSQUARE
+    { JCPTvalidpointer($1,$3,$3) }
 ;
 
 function_specification:
@@ -753,6 +763,68 @@ function_specification:
 ;
 
 spec_clause:
-| ENSURES IDENTIFIER COLON expression
-    { locate_clause (JCPCensures($2,$4)) }
+| REQUIRES expression
+    { JCPCrequires($2) }
+| BEHAVIOR IDENTIFIER COLON assigns ENSURES expression
+    { JCPCbehavior($2,$4,$6) }
+	
 ;
+
+assigns:
+| /* epsilon */
+    { None }
+| ASSIGNS expression
+    { Some $2 }
+;
+
+function_definition: 
+| type_expr IDENTIFIER parameters function_specification compound_statement
+    { locate_decl (JCPDfun($1, $2, $3, $4, $5)) }
+;
+
+
+/*******************/
+/* type definition */	      
+/*******************/
+
+type_definition:
+| TYPE IDENTIFIER EQ struct_declaration
+    { locate_decl (JCPDtype($2,$4)) }
+; 
+
+struct_declaration:
+| LBRACE field_declaration_list RBRACE
+    { $2 }
+;
+
+field_declaration_list:
+| /* epsilon */
+    { [] }
+| field_declaration field_declaration_list
+    { $1::$2 }
+;
+
+field_declaration:
+| type_expr IDENTIFIER SEMICOLON
+    { ($1,$2) }
+;
+
+/****************************************/
+/* a file is a sequence of declarations */
+/****************************************/
+
+file: 
+| decl file 
+    { $1::$2 }
+| EOF 
+    { [] }
+;
+
+decl: 
+| function_definition 
+    { $1 }
+| type_definition 
+    { $1 }
+;
+
+

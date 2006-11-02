@@ -1,14 +1,82 @@
 
+(* Jessie sample file #2 : electronic purse toy example *)
 
+type purse = {		
+  int balance;
+}	
+(* invariant balance >= 0 *)
+
+unit credit(purse[0] this, integer s) 
+  requires s >= 0
+  behavior amount_credited:
+    assigns this.balance
+    ensures this.balance == \old(this.balance)+s
+{
+  this.balance += s;
+}
+
+unit withdraw(purse[0] this, integer s) 
+  requires s >= 0 && s <= this.balance
+  behavior amount_withdrawn:
+    assigns this.balance
+    ensures this.balance == \old(this.balance) - s
+{
+  this.balance -= s;
+}
+
+int test1(purse[0] p1, purse[0] p2) 
+  behavior result_is_nul:
+    (* assigns p1.balance,p2.balance *)
+    ensures \result == 0
+{	
+    p1.balance = 0;
+    credit(p2,100);
+    return p1.balance;
+}
+
+
+(* introducing exceptions *)
+    
+(*
 exception NoCreditException of unit
 
-type purse = 
- {		
-   int balance;
- }
- invariant balance >= 0; 
+unit withdraw2(purse this, int s) 
+  requires s >= 0;
+  behavior normal_case:
+     assigns this.balance;
+     ensures s <= \old(this.balance) && balance == \old(this.balance) - s
+  behavior exceptional_case:
+     assigns \nothing
+     throws NoCreditException s 
+     exsures s > \old(this.balance)
+{
+    if (balance >= s) {
+	balance -= s;
+    }
+    else {
+	throw NoCreditException();
+    }
+}	
+ 
+boolean test2(purse p) 
+  requires p != null
+  behavior
+    assigns p.balance 
+    ensures \result <==> \old(p.balance) >= 1000
+{
+    try {
+	withdraw2(p,1000);
+        return true;
+    }
+    catch (NoCreditException e) { 
+	return false; 
+    }
+}
+*)
 
+(* introducing dynamic memory allocation *)
 
+(*
 purse new_purse () 
   allocates \result
   assigns \result.balance 
@@ -19,95 +87,19 @@ purse new_purse ()
     return this;
   }
 
-void credit(purse this, int s) 
-  requires s >= 0
-  assigns this.balance
-  ensures this.balance == \old(this.balance)+s
-  {
-    balance += s;
-  }
-
-void withdraw(purse this, int s) 
-  requires s >= 0 && s <= this.balance
-  assigns this.balance
-  ensures this.balance == \old(this.balance) - s
-  {
-    balance -= s;
-  }
-    
-void withdraw2(purse this, int s) 
-  requires s >= 0;
-  behavior normal_case:
-     assigns this.balance;
-     ensures s <= \old(this.balance) && balance == \old(this.balance) - s
-  behavior exceptional_case:
-     assigns \nothing
-     throws NoCreditException s 
-     exsures s > \old(this.balance)
-  {
-	if (balance >= s) {
-	    balance -= s;
-	}
-	else {
-	    throw NoCreditException();
-	}
-  }	
-
-    /*@ public normal_behavior
-      @   requires p1 != null && p2 != null && p1 != p2;
-      @   modifies p1.balance,p2.balance;
-      @   ensures \result == 0;
-      @*/
-    public static int test(Purse p1, Purse p2) {
-	p1.balance = 0;
-	p2.credit(100);
-	return p1.balance;
-    }
-
-    /*@ public normal_behavior
-      @   modifies \nothing;
-      @   ensures \result == 150;
-      @*/
-    public static int test2() {
-	Purse p1 = new Purse();
-	Purse p2 = new Purse();
-	p1.credit(100);
-	p2.credit(200);
-	p1.withdraw(50);
-	p2.withdraw(100);
-	return p1.balance+p2.balance;
-    }
-
-    /*@ public normal_behavior
-      @   requires p1 != null && p2 != null && p1 != p2;
-      @   modifies p2.balance; 
-      @   ensures \result == \old(p1.balance);
-      @*/
-    public static int test3(Purse p1,Purse p2) {
-	p2.credit(100);
-	return p1.balance;
-    }
-
-    /*@ public normal_behavior
-      @   requires p != null;
-      @   modifies p.balance; 
-      @   ensures \result <==> \old(p.balance) >= 1000;
-      @*/
-    public static boolean test4(Purse p) {
-	try {
-	    p.withdraw2(1000);
-	    return true;
-	}
-	catch (NoCreditException e) { return false; 
-	}
-    }
-
-    
-    public static void main(String argv[]) {
-	Purse p = new Purse();
-	/* erroneous p.withdraw(10); */
-	p.credit(10);
-    }
-    
-
+int test2() 
+  behavior result_is_150:
+    ensures \result == 150
+{    
+    purse p1 = new_purse();
+    purse p2 = new_purse();
+    credit(p1,100);
+    credit(p2,200);
+    withdraw(p1,50);
+    withdraw(p2,100);
+    return p1.balance+p2.balance;
 }
+
+ *)
+
+    

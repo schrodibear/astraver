@@ -2,13 +2,48 @@
 open Jc_env
 open Jc_ast
 
+let unit_type = JCTlogic "unit"
+let integer_type = JCTlogic "int"
+let boolean_type = JCTlogic "bool"
+
 let functions_table = Hashtbl.create 97
+
+let structs_table = Hashtbl.create 97
+
+exception Typing_error of Loc.position * string
+
+let typing_error l f = 
+  Format.ksprintf (fun s -> raise (Typing_error(l, s))) f
+
+
+let find_field ty f =
+  {
+	 jc_field_info_name = f;
+	    jc_field_info_type = unit_type
+	  }
+
+
+(* terms *)
+
+let make_term_op name ty =
+  { jc_logic_info_name = name;
+    jc_logic_info_result_type = Some ty;
+  }
+
+let eq_int_bool = make_term_op "eq_int_bool" boolean_type
+let neq_int_bool = make_term_op "neq_int" boolean_type
+let add_int = make_term_op "add_int" integer_type
+let sub_int = make_term_op "sub_int" integer_type
 
 let logic_bin_op op =
   match op with
-    | `Bge -> assert false
-    | `Ble -> assert false
-    | `Bland -> assert false
+    | `Bge -> assert false (* TODO *)
+    | `Ble -> assert false (* TODO *)
+    | `Beq -> eq_int_bool
+    | `Bneq -> neq_int_bool
+    | `Badd -> add_int
+    | `Bsub -> sub_int
+    | `Bland -> assert false (* TODO *)
     | `Bimplies -> assert false
 
 let rec term env e =
@@ -19,34 +54,51 @@ let rec term env e =
 	    try
 	      let vi = List.assoc id env
 	      in JCTvar vi
-	    with Not_found -> assert false
+	    with Not_found -> 
+	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
+
 	  end
       | JCPEbinary (e1, op, e2) -> 
 	  JCTapp(logic_bin_op op,[term env e1 ; term env e2])
-      | JCPEassign (_, _) -> assert false
       | JCPEapp (_, _) -> assert false
-      | JCPEderef (_, _) -> assert false
+      | JCPEderef (e, f) -> 
+	  let t = term env e in
+	  let fi = find_field unit_type f in
+	  JCTderef(t,fi)	  
       | JCPEshift (_, _) -> assert false
-      | JCPEconst _ -> assert false
-      | JCPEforall _ -> failwith "not allowed in this context"
+      | JCPEconst c -> JCTconst c
+      | JCPEold e -> JCTold(term env e)
+	  (* non-pure expressions *)
+      | JCPEassign_op _ 
+      | JCPEassign _ -> failwith "assignment not allowed as logic term"
+	  (* propositional (non-boolean) expressions *)
+      | JCPEforall _ -> failwith "quantification not allowed as logic term"
 
   in { jc_term_node = te;
        jc_term_loc = e.jc_pexpr_loc }
 
   
-let rel_ge =
-  { jc_logic_info_name = "ge_int";
+let make_rel name =
+  { jc_logic_info_name = name;
     jc_logic_info_result_type = None }
-    
-let rel_le =
-  { jc_logic_info_name = "le_int";
-    jc_logic_info_result_type = None }
+
+let ge_int = make_rel "ge_int"
+let le_int = make_rel "le_int"
+let eq_int = make_rel "eq_int"
+let neq_int = make_rel "neq_int"
     
 let tr_rel_op op =
   match op with
-    | `Bge -> rel_ge
-    | `Ble -> rel_le
-    | _ -> assert false
+    | `Bge -> ge_int
+    | `Ble -> le_int
+    | `Beq -> eq_int
+    | `Bneq -> neq_int
+	(* non propositional operators *)
+    | `Badd -> assert false
+    | `Bsub -> assert false
+	(* already recognized as connectives *)
+    | `Bland -> assert false 
+    | `Bimplies -> assert false
 
 let make_and a1 a2 =
   match (a1.jc_assertion_node,a2.jc_assertion_node) with
@@ -71,7 +123,6 @@ let rec assertion env e =
 	  JCAimplies(assertion env e1,assertion env e2)
       | JCPEbinary (e1, op, e2) -> 
 	  JCAapp(tr_rel_op op,[term env e1 ; term env e2])
-      | JCPEassign (_, _) -> assert false
       | JCPEapp (_, _) -> assert false
       | JCPEderef (_, _) -> assert false
       | JCPEshift (_, _) -> assert false
@@ -83,9 +134,40 @@ let rec assertion env e =
 	    jc_var_info_type = ty;
 	  }
 	  in JCAforall(vi,assertion ((id,vi)::env) e)
+      | JCPEold e -> JCAold(assertion env e)
+	  (* non-pure expressions *)
+      | JCPEassign_op _ 
+      | JCPEassign _ -> failwith "assignment not allowed as logic term"
+
 
   in { jc_assertion_node = te;
        jc_assertion_loc = e.jc_pexpr_loc }
+
+(* expressions *)
+
+let make_bin_op name ty =
+ { jc_fun_info_name = name;
+   jc_fun_info_parameters = [];
+   jc_fun_info_return_type = ty }
+ 
+let ge_int = make_bin_op "ge_int_" boolean_type
+let le_int = make_bin_op "le_int_" boolean_type 
+let eq_int = make_bin_op "eq_int_" integer_type
+let neq_int = make_bin_op "neq_int_" integer_type
+let add_int = make_bin_op "add_int_" integer_type
+let sub_int = make_bin_op "sub_int_" integer_type
+    
+let tr_bin_op op =
+  match op with
+    | `Bge -> ge_int
+    | `Ble -> le_int
+    | `Beq -> eq_int
+    | `Bneq -> neq_int
+    | `Badd -> add_int
+    | `Bsub -> sub_int
+    | `Bland -> assert false (* TODO *)
+	(* not allowed as expression op *)
+    | `Bimplies -> assert false
 
 let rec expr env e =
   let te =
@@ -95,16 +177,23 @@ let rec expr env e =
 	    try
 	      let vi = List.assoc id env
 	      in JCEvar vi
-	    with Not_found -> assert false
+	    with Not_found -> 
+	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEbinary (e1, op, e2) -> 
-	  JCEbinary(expr env e1, op, expr env e2)
+	  JCEcall(tr_bin_op op, [expr env e1 ; expr env e2])
       | JCPEassign (_, _) -> assert false
+      | JCPEassign_op (e1, op, e2) -> 
+	  JCEassign_op(expr env e1, tr_bin_op op, expr env e2)
       | JCPEapp (_, _) -> assert false
-      | JCPEderef (_, _) -> assert false
+      | JCPEderef (e, f) -> 
+	  let fi = find_field unit_type f in
+	  JCEderef(expr env e,fi)
       | JCPEshift (_, _) -> assert false
       | JCPEconst _ -> assert false
-      | JCPEforall _ -> failwith "not allowed in this context"
+	  (* logic expressions, not allowed as program expressions *)
+      | JCPEforall _ 
+      | JCPEold _ -> failwith "not allowed in this context"
 
   in { jc_expr_node = te;
        jc_expr_loc = e.jc_pexpr_loc }
@@ -134,10 +223,21 @@ let rec statement env s =
        jc_statement_loc = s.jc_pstatement_loc }
 
 let clause env c acc =
-  match c.jc_pclause_node with
-    | JCPCensures(id,e) ->
+  match c with
+    | JCPCrequires(e) ->
 	{ acc with 
-	    jc_fun_ensures = (id,assertion env e)::acc.jc_fun_ensures }
+	    jc_fun_requires = assertion env e }
+    | JCPCbehavior(id,assigns,ensures) ->
+	let assigns =
+	  match assigns with
+	    | None -> None
+	    | Some a -> Some(term env a)
+	in
+	let b = {
+	  jc_behavior_assigns = assigns;
+	  jc_behavior_ensures = assertion env ensures }
+	in
+	{ acc with jc_fun_behavior = (id,b)::acc.jc_fun_behavior }
 	  
 
   
@@ -173,10 +273,12 @@ let decl d =
 	let s = List.fold_right 
 		  (clause param_env_result) specs 
 		  { jc_fun_requires = assertion_true;
-		    jc_fun_ensures = [] }
+		    jc_fun_behavior = [] }
 	in
 	let b = List.map (statement param_env) body in
 	Hashtbl.add functions_table id (fi,s,b)
-	  
+    | JCPDtype(id,fields) ->
+	Hashtbl.add structs_table id fields
+
 
 

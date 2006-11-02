@@ -10,25 +10,28 @@ type const =
   | JCCinteger of string
   | JCCreal of string
 
-type bin_op =
-  [ `Ble | `Bge | `Bland | `Bimplies ]
-
 type label = string
 
 (***************)
 (* parse trees *)
 (***************)
 
+type pbin_op =
+  [ `Ble | `Bge | `Beq | `Bneq 
+  | `Badd | `Bsub
+  | `Bland | `Bimplies ]
 
 type pexpr_node =
   | JCPEconst of const
   | JCPEvar of string
   | JCPEshift of pexpr * pexpr
   | JCPEderef of pexpr * string
-  | JCPEapp of string * pexpr list
+  | JCPEapp of pexpr * pexpr list
   | JCPEassign of pexpr * pexpr
-  | JCPEbinary of pexpr * bin_op * pexpr
+  | JCPEassign_op of pexpr * pbin_op * pexpr
+  | JCPEbinary of pexpr * pbin_op * pexpr
   | JCPEforall of jc_type * string * pexpr
+  | JCPEold of pexpr
 
 and pexpr =
     {
@@ -36,14 +39,11 @@ and pexpr =
       jc_pexpr_loc : Loc.position;
     }
 
-type pclause_node =
-  | JCPCensures of string * pexpr
+     
+type pclause =
+  | JCPCrequires of pexpr
+  | JCPCbehavior of string * pexpr option * pexpr
 
-and pclause =
-    {
-      jc_pclause_node : pclause_node;
-      jc_pclause_loc : Loc.position;
-    }
 
 type pstatement_node =
   | JCPSskip
@@ -67,9 +67,9 @@ and pstatement =
     }
 
 
-
 type pdecl_node =
   | JCPDfun of jc_type * string * (jc_type * string) list * pclause list * pstatement list
+  | JCPDtype of string * (jc_type * string) list
 
 and pdecl =
     {
@@ -87,6 +87,7 @@ type term_node =
   | JCTshift of term * term
   | JCTderef of term * field_info
   | JCTapp of logic_info * term list
+  | JCTold of term
 
 and term =
     {
@@ -100,12 +101,23 @@ type assertion_node =
   | JCAimplies of assertion * assertion
   | JCAapp of logic_info * term list
   | JCAforall of var_info * assertion
+  | JCAold of assertion
 
 and assertion =
     {
       jc_assertion_node : assertion_node;
       jc_assertion_loc : Loc.position;
     }
+
+(*
+type assign_op =
+  [ `Badd_int | `Bsub_int ]
+
+type bin_op =
+  [ `Ble_int | `Bge_int | `Beq_int | `Bneq_int 
+  | `Badd | `Bsub 
+  | `Bland ]
+*)
 
 type expr_node =
   | JCEconst of const
@@ -114,7 +126,10 @@ type expr_node =
   | JCEderef of expr * field_info
   | JCEcall of fun_info * expr list
   | JCEassign of expr * expr
+  | JCEassign_op of expr * fun_info * expr
+(*
   | JCEbinary of expr * bin_op * expr
+*)
 
 and expr =
    {
@@ -150,10 +165,16 @@ and statement =
     }
 
 
+type behavior =
+    { 
+      jc_behavior_assigns : term option;
+      jc_behavior_ensures : assertion;
+    }
+
 type fun_spec =
     {
       jc_fun_requires : assertion;
-      jc_fun_ensures : (string * assertion) list;
+      jc_fun_behavior : (string * behavior) list;
     }
 
 

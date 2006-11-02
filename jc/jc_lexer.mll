@@ -1,4 +1,4 @@
-(*i $Id: jc_lexer.mll,v 1.4 2006-10-31 15:34:04 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.5 2006-11-02 09:20:41 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -52,6 +52,8 @@ rule token = parse
   | [' ' '\t' '\012' '\r']+ { token lexbuf }
   | '\n'                    { newline lexbuf; token lexbuf }
   | "(*"                    { comment lexbuf; token lexbuf }
+  | "assigns"               { ASSIGNS }
+  | "behavior"              { BEHAVIOR }
 (*
   | "break"                 { BREAK }
   | "case"                  { CASE }
@@ -71,22 +73,28 @@ rule token = parse
 *)
   | "if"                    { IF }
 
-  | "int"                   { INT }
+  | "integer"               { INTEGER }
 (*
+  | "int"                   { INT }
   | "long"                  { LONG }
 *)
+  | "requires"              { REQUIRES }
   | "return"                { RETURN }
 (*
   | "short"                 { SHORT }
   | "signed"                { SIGNED }
   | "struct"                { STRUCT }
   | "switch"                { SWITCH }
+*)
+  | "type"                  { TYPE }
+  | "unit"                  { UNIT }
+(*
   | "unsigned"              { UNSIGNED }
-  | "void"                  { VOID }
   | "while"                 { WHILE }
 *)
-  | "\\result"              { BSRESULT }
   | "\\forall"              { BSFORALL }
+  | "\\old"                 { BSOLD }
+  | "\\result"              { BSRESULT }
   | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
 
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
@@ -112,8 +120,10 @@ rule token = parse
 (*
   | ">>="                   { RIGHT_ASSIGN }
   | "<<="                   { LEFT_ASSIGN }
-  | "+="                    { ADD_ASSIGN }
-  | "-="                    { SUB_ASSIGN }
+*)
+  | "+="                    { PLUSEQ }
+  | "-="                    { MINUSEQ }
+(*
   | "*="                    { MUL_ASSIGN }
   | "/="                    { DIV_ASSIGN }
   | "%="                    { MOD_ASSIGN }
@@ -122,10 +132,9 @@ rule token = parse
   | "|="                    { OR_ASSIGN }
   | ">>"                    { RIGHT_OP }
   | "<<"                    { LEFT_OP }
-  | "++"                    { INC_OP }
-  | "--"                    { DEC_OP }
-  | "->"                    { PTR_OP }
 *)
+  | "++"                    { PLUSPLUS }
+  | "--"                    { MINUSMINUS }
   | "&&"                    { AMPAMP }
 (*
   | "||"                    { OR_OP }
@@ -133,10 +142,8 @@ rule token = parse
   | "=>"                    { EQGT }
   | "<="                    { LTEQ }
   | ">="                    { GTEQ }
-(*
-  | "=="                    { EQ_OP }
-  | "!="                    { NE_OP }
-*)
+  | "=="                    { EQEQ }
+  | "!="                    { BANGEQ }
   | ";"                     { SEMICOLON }
   | "{"                     { LBRACE }
   | "}"                     { RBRACE }
@@ -145,15 +152,17 @@ rule token = parse
   | "="                     { EQ }
   | "("                     { LPAR }
   | ")"                     { RPAR }
-(*
   | "["                     { LSQUARE }
   | "]"                     { RSQUARE }
   | "."                     { DOT }
+(*
   | "&"                     { AMP }
   | "!"                     { EXL }
   | "~"                     { TILDE }
+*)
   | "-"                     { MINUS }
   | "+"                     { PLUS }
+(*
   | "*"                     { STAR }
   | "/"                     { SLASH }
   | "%"                     { PERCENT }
@@ -164,13 +173,13 @@ rule token = parse
   | "?"                     { QUESTION }
 *)
   | eof { EOF }
-  | '"' { lex_error lexbuf "Unterminated string" }
-  | _   { lex_error lexbuf ("Illegal character " ^ lexeme lexbuf) }
+  | '"' { lex_error lexbuf "unterminated string" }
+  | _   { lex_error lexbuf ("illegal character " ^ lexeme lexbuf) }
 
 and comment = parse
   | "*)" { () }
   | "(*" { comment lexbuf ; comment lexbuf }
-  | eof  { lex_error lexbuf "Unterminated_comment" }
+  | eof  { lex_error lexbuf "unterminated comment" }
   | '\n' { newline lexbuf; comment lexbuf }
   | _    { comment lexbuf }
 
