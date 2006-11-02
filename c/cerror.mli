@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cerror.mli,v 1.5 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: cerror.mli,v 1.6 2006-11-02 09:18:18 hubert Exp $ i*)
 
 type t = 
   | AnyMessage of string

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.16 2006-04-06 14:26:45 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.17 2006-11-02 09:18:25 hubert Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 

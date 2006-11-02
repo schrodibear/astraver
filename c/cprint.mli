@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.mli,v 1.6 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cprint.mli,v 1.7 2006-11-02 09:18:19 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 

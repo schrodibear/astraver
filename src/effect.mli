@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: effect.mli,v 1.13 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: effect.mli,v 1.14 2006-11-02 09:18:22 hubert Exp $ i*)
 
 (*s The abstract type of effects. *)
 

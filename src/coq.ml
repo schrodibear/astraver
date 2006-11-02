@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.152 2006-06-28 14:31:56 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.153 2006-11-02 09:18:22 hubert Exp $ i*)
 
 open Options
 open Logic

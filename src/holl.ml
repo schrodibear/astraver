@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.36 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.37 2006-11-02 09:18:23 hubert Exp $ i*)
 
 (*s HOL Light output *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.mli,v 1.11 2006-10-11 08:44:28 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.12 2006-11-02 09:18:22 hubert Exp $ i*)
 
 open Cc
 

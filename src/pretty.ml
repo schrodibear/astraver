@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pretty.ml,v 1.5 2006-10-06 08:28:09 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.6 2006-11-02 09:18:24 hubert Exp $ i*)
 
 open Format
 open Pp

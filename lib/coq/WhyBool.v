@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyBool.v,v 1.11 2003-09-25 13:55:01 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.12 2006-11-02 09:18:20 hubert Exp $ *)
 
 Require Import ZArith.
 Require Import Sumbool.

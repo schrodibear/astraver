@@ -14,7 +14,7 @@
  * (enclosed in the file LGPL).
  *)
 
-(*i $Id: bitv.mli,v 1.1 2006-07-12 14:38:31 filliatr Exp $ i*)
+(*i $Id: bitv.mli,v 1.2 2006-11-02 09:18:21 hubert Exp $ i*)
 
 (*s {\bf Module Bitv}.
     This module implements bit vectors, as an abstract datatype [t]. 

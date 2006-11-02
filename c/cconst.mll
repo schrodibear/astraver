@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cconst.mll,v 1.3 2004-11-30 14:31:22 hubert Exp $ i*)
+(*i $Id: cconst.mll,v 1.4 2006-11-02 09:18:18 hubert Exp $ i*)
 
 (* evaluation of integer literals *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.17 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: cc.mli,v 1.18 2006-11-02 09:18:22 hubert Exp $ i*)
 
 (*s Intermediate CC terms. *)
 

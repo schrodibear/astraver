@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.mli,v 1.26 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.27 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)

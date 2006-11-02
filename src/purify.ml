@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: purify.ml,v 1.3 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: purify.ml,v 1.4 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Ident
 open Logic

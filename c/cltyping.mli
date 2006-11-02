@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.31 2006-10-31 13:42:10 hubert Exp $ i*)
+(*i $Id: cltyping.mli,v 1.32 2006-11-02 09:18:19 hubert Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -31,3 +31,4 @@ val type_spec : tctype option -> Env.t -> parsed_spec -> Cast.spec
 val type_loop_annot : Env.t -> parsed_loop_annot -> Cast.loop_annot
 val type_logic_type : Loc.position -> Env.t -> parsed_logic_type -> tctype
 val int_constant : string -> tterm
+val zero : tterm

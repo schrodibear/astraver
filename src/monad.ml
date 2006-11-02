@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.71 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.72 2006-11-02 09:18:24 hubert Exp $ i*)
 
 open Format
 open Misc

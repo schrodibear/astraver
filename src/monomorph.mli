@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.mli,v 1.7 2006-09-25 11:02:23 filliatr Exp $ i*)
+(*i $Id: monomorph.mli,v 1.8 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (* make a monorphic output for provers not supporting polymorphism
    (e.g. PVS or CVC Lite) *)

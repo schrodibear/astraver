@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.32 2005-11-03 14:11:35 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.33 2006-11-02 09:18:22 hubert Exp $ i*)
 
 open Options
 open Ident

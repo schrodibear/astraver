@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.mli,v 1.4 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: hol4.mli,v 1.5 2006-11-02 09:18:23 hubert Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 

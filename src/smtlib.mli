@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.mli,v 1.5 2006-10-12 12:57:25 couchot Exp $ i*)
+(*i $Id: smtlib.mli,v 1.6 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Cc
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: rename.ml,v 1.9 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: rename.ml,v 1.10 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Ident
 open Misc

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.21 2006-06-19 14:37:51 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.22 2006-11-02 09:18:18 hubert Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 

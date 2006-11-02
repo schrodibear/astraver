@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.2 2003-09-26 10:53:31 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.3 2006-11-02 09:18:20 hubert Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)

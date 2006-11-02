@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ast.mli,v 1.51 2006-02-03 13:11:28 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.52 2006-11-02 09:18:22 hubert Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: lib.mli,v 1.5 2005-01-03 09:26:55 marche Exp $ i*)
+(*i $Id: lib.mli,v 1.6 2006-11-02 09:18:23 hubert Exp $ i*)
 
 module Sset : Set.S with type elt = string
 

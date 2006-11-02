@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.74 2006-09-25 11:02:23 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.75 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Logic
 open Logic_decl

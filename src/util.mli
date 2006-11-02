@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.50 2006-06-09 13:40:02 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.51 2006-11-02 09:18:26 hubert Exp $ i*)
 
 open Logic
 open Misc

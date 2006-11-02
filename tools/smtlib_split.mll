@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib_split.mll,v 1.2 2006-09-20 13:44:45 marche Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.3 2006-11-02 09:18:26 hubert Exp $ i*)
 
 {
 

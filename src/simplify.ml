@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.60 2006-09-19 17:34:49 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.61 2006-11-02 09:18:25 hubert Exp $ i*)
 
 (*s Simplify's output *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.mli,v 1.22 2006-03-07 11:12:49 filliatr Exp $ i*)
+(*i $Id: coq.mli,v 1.23 2006-11-02 09:18:22 hubert Exp $ i*)
 
 open Cc
 open Vcg

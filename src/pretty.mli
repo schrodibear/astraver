@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pretty.mli,v 1.3 2006-09-25 11:02:23 filliatr Exp $ i*)
+(*i $Id: pretty.mli,v 1.4 2006-11-02 09:18:25 hubert Exp $ i*)
 
 (* Why pretty-printer *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.14 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: report.ml,v 1.15 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Ident
 open Logic

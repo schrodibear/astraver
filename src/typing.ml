@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.122 2006-10-04 20:07:26 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.123 2006-11-02 09:18:25 hubert Exp $ i*)
 
 (*s Typing. *)
 

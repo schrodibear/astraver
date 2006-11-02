@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: encoding_rec.mli,v 1.2 2006-06-21 09:19:45 filliatr Exp $ i*)
+(*i $Id: encoding_rec.mli,v 1.3 2006-11-02 09:18:22 hubert Exp $ i*)
 
 open Cc
 

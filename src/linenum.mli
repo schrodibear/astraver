@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: linenum.mli,v 1.2 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: linenum.mli,v 1.3 2006-11-02 09:18:23 hubert Exp $ i*)
 
 (* [from_char f n] gives the actual source file, line number, position of the
    beginning of the line. *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.20 2006-07-04 11:19:15 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.21 2006-11-02 09:18:20 hubert Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 

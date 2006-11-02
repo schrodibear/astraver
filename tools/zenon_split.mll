@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon_split.mll,v 1.1 2006-03-07 15:12:02 filliatr Exp $ i*)
+(*i $Id: zenon_split.mll,v 1.2 2006-11-02 09:18:26 hubert Exp $ i*)
 
 {
 

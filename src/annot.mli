@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.mli,v 1.7 2005-11-03 14:11:35 filliatr Exp $ i*)
+(*i $Id: annot.mli,v 1.8 2006-11-02 09:18:22 hubert Exp $ i*)
 
 open Env
 open Types

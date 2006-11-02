@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.39 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.40 2006-11-02 09:18:23 hubert Exp $ i*)
 
 (*s Harvey's output *)
 

@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.1 2003-09-22 12:22:37 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.2 2006-11-02 09:18:21 hubert Exp $ *)
 
 Require Export WhyArrays.
 Require WhyPermut.

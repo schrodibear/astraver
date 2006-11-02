@@ -15,7 +15,7 @@
  * (enclosed in the file LGPL).
  *)
 
-(* $Id: topological.mli,v 1.1 2006-10-10 12:23:52 moy Exp $ *)
+(* $Id: topological.mli,v 1.2 2006-11-02 09:18:21 hubert Exp $ *)
 
 (** Topological order.
 

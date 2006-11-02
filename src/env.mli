@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.40 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: env.mli,v 1.41 2006-11-02 09:18:23 hubert Exp $ i*)
 
 (*s Environment for imperative programs.
  

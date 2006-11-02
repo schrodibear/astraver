@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic_decl.mli,v 1.4 2006-10-02 09:08:37 couchot Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.5 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers

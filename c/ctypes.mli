@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.13 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: ctypes.mli,v 1.14 2006-11-02 09:18:19 hubert Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during

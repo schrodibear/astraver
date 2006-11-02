@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint_annot.ml,v 1.5 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: cprint_annot.ml,v 1.6 2006-11-02 09:18:19 hubert Exp $ i*)
 
 (* Pretty-printer for typed AST *)
 

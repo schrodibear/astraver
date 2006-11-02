@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: types.mli,v 1.18 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.19 2006-11-02 09:18:25 hubert Exp $ i*)
 
 (*s Types for programs.
     Types of values ([type_v]) and computations ([type_c]) *)

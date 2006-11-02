@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyTuples.v,v 1.5 2003-09-25 13:55:01 filliatr Exp $ *)
+(* $Id: WhyTuples.v,v 1.6 2006-11-02 09:18:20 hubert Exp $ *)
 
 (* Tuples *)
 

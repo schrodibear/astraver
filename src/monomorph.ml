@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.25 2006-10-02 09:08:37 couchot Exp $ i*)
+(*i $Id: monomorph.ml,v 1.26 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (* monomorphic output *)
 

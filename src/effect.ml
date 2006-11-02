@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: effect.ml,v 1.18 2002-11-12 14:35:02 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.19 2006-11-02 09:18:22 hubert Exp $ i*)
 
 (*s Effects. *)
 

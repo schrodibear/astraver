@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.116 2006-06-15 09:58:31 lescuyer Exp $ i*)
+(*i $Id: util.ml,v 1.117 2006-11-02 09:18:26 hubert Exp $ i*)
 
 open Logic
 open Ident

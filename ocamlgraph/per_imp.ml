@@ -15,7 +15,7 @@
  * (enclosed in the file LGPL).
  *)
 
-(* $Id: per_imp.ml,v 1.1 2006-07-12 14:38:31 filliatr Exp $ *)
+(* $Id: per_imp.ml,v 1.2 2006-11-02 09:18:21 hubert Exp $ *)
 
 (* Common implementation to persistent and imperative graphs. *)
 

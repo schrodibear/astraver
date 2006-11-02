@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.mli,v 1.3 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: zenon.mli,v 1.4 2006-11-02 09:18:26 hubert Exp $ i*)
 
 open Cc
 

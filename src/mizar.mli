@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.mli,v 1.8 2006-03-23 10:41:01 filliatr Exp $ i*)
+(*i $Id: mizar.mli,v 1.9 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (*s Mizar output *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.16 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cnorm.mli,v 1.17 2006-11-02 09:18:19 hubert Exp $ i*)
 
 open Cast
 

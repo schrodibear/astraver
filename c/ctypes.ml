@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.18 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: ctypes.ml,v 1.19 2006-11-02 09:18:19 hubert Exp $ i*)
 
 open Format
 open Coptions

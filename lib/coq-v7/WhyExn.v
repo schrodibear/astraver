@@ -16,7 +16,7 @@
 
 (* This file is a contribution by Christine Paulin *)
 
-(* $Id: WhyExn.v,v 1.1 2003-09-22 12:22:36 filliatr Exp $ *)
+(* $Id: WhyExn.v,v 1.2 2006-11-02 09:18:21 hubert Exp $ *)
 
 Implicit Arguments On.
 

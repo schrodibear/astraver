@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.49 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: ltyping.ml,v 1.50 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (*s Typing on the logical side *)
 

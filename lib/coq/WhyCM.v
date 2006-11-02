@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyCM.v,v 1.9 2005-11-03 14:11:35 filliatr Exp $ *)
+(* $Id: WhyCM.v,v 1.10 2006-11-02 09:18:20 hubert Exp $ *)
 
 Require Export WhyArrays.
 

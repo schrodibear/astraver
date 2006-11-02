@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.74 2006-02-03 13:11:28 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.75 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 

@@ -134,6 +134,21 @@ let rec pop_initializer loc t i =
     | (Ilist l)::l' -> 
 	let e,r = pop_initializer loc t l in e,r@l'
 
+let make_and p1 p2 = match p1.pred_node, p2.pred_node with
+  | Ptrue, _ -> p2
+  | _, Ptrue -> p1
+  | _ -> { p1 with pred_node = Pand (p1, p2) }
+
+let prel (t1, r, t2) = dummy_pred (Prel (t1, r, t2))
+
+let make_implies p1 p2 = match p2.pred_node with
+  | Ptrue -> { p1 with pred_node = Ptrue }
+  | _ -> { p1 with pred_node = Pimplies (p1, p2) }
+
+let make_forall q p = match p.pred_node with
+  | Ptrue -> { p with pred_node = Ptrue }
+  | _ -> { p with pred_node = Pforall (q, p) }
+
 let rec init_expr loc t lvalue initializers =
   match t.ctype_node with
     | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
@@ -164,23 +179,50 @@ let rec init_expr loc t lvalue initializers =
 	      assert false
 	end
     | Tarray (_,ty,Some t) ->
-	let rec init_cells i (block,init) =
-	  if i >= t then (block,init)
-	  else
-	    let ts = Cltyping.int_constant (Int64.to_string i) in
-	    let (b,init') = 
-	      match ty.ctype_node with 
-		| Tstruct _ |  Tunion _ ->
-		    init_expr loc ty 
-		      (noattr loc ty 
-			 (Tbinop(lvalue,Badd,ts))) init
-		| _ ->
-		    init_expr loc ty (noattr loc ty (Tarrget(lvalue,ts))) init
-	    in
-	    init_cells (Int64.add i Int64.one) 
-	      ({ block with pred_node = Pand (block,b)},init')
-	in
-	init_cells Int64.zero (dummy_pred Ptrue,initializers)
+	begin
+	  match initializers with
+	    | [] ->	
+		let i = default_var_info "counter" in
+		Cenv.set_var_type (Var_info i) c_int false;
+		let vari = { term_node = Clogic.Tvar i; 
+			     term_loc = Loc.dummy_position;
+			     term_type = c_int;
+			   } in
+		let ts = Cltyping.int_constant (Int64.to_string t) in
+		let ineq = make_and 
+			     (prel (Cltyping.zero, Le, vari))
+			     (prel (vari, Lt,ts)) in
+		let (b,init') = 
+		  match ty.ctype_node with 
+		    | Tstruct _ |  Tunion _ ->
+			init_expr loc ty 
+			  (noattr loc ty 
+			     (Tbinop(lvalue,Badd,ts))) initializers
+		    | _ ->
+			init_expr loc ty 
+			  (noattr loc ty (Tarrget(lvalue,ts))) initializers
+		  in
+		((make_forall [c_int,i] (make_implies ineq b)), init')
+	    | _ ->
+		let rec init_cells i (block,init) =
+		if i >= t then (block,init)
+		else
+		  let ts = Cltyping.int_constant (Int64.to_string i) in
+		  let (b,init') = 
+		    match ty.ctype_node with 
+		      | Tstruct _ |  Tunion _ ->
+			  init_expr loc ty 
+			    (noattr loc ty 
+			       (Tbinop(lvalue,Badd,ts))) init
+		      | _ ->
+			  init_expr loc ty 
+			    (noattr loc ty (Tarrget(lvalue,ts))) init
+		  in
+		  init_cells (Int64.add i Int64.one) 
+		    ({ block with pred_node = Pand (block,b)},init')
+		in	
+		init_cells Int64.zero (dummy_pred Ptrue,initializers)
+	end
     | Tarray (_,ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: purify.mli,v 1.2 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: purify.mli,v 1.3 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Env
 

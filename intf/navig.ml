@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: navig.ml,v 1.5 2003-06-20 12:47:08 filliatr Exp $ i*)
+(*i $Id: navig.ml,v 1.6 2006-11-02 09:18:19 hubert Exp $ i*)
 
 module type Tree = sig
 

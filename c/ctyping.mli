@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.mli,v 1.11 2006-06-27 11:27:59 filliatr Exp $ i*)
+(*i $Id: ctyping.mli,v 1.12 2006-11-02 09:18:19 hubert Exp $ i*)
 
 (* Typing C programs *)
 val tezero : Cast.texpr

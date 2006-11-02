@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.37 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.38 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Ast
 open Logic

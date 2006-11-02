@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.mli,v 1.15 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.16 2006-11-02 09:18:26 hubert Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 

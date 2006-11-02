@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.mli,v 1.6 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: cvcl.mli,v 1.7 2006-11-02 09:18:22 hubert Exp $ i*)
 
 open Cc
 

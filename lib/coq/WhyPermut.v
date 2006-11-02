@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.14 2005-11-03 14:11:35 filliatr Exp $ *)
+(* $Id: WhyPermut.v,v 1.15 2006-11-02 09:18:20 hubert Exp $ *)
 
 Require Import WhyArrays.
 Require Import Omega.

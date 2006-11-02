@@ -16,7 +16,7 @@
 
 (* This file is a contribution by Christine Paulin *)
 
-(* $Id: WhyExn.v,v 1.7 2004-03-30 15:19:42 urbain Exp $ *)
+(* $Id: WhyExn.v,v 1.8 2006-11-02 09:18:20 hubert Exp $ *)
 
 Set Implicit Arguments.
 Unset Strict Implicit.

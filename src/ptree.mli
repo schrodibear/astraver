@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.32 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.33 2006-11-02 09:18:25 hubert Exp $ i*)
 
 (*s Parse trees. *)
 

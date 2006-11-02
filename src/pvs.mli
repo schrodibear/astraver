@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.mli,v 1.19 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: pvs.mli,v 1.20 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Vcg
 open Cc

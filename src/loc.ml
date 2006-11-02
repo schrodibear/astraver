@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.16 2006-03-15 08:57:08 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.17 2006-11-02 09:18:24 hubert Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 

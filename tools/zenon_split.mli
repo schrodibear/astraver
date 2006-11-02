@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon_split.mli,v 1.1 2006-03-07 15:12:01 filliatr Exp $ i*)
+(*i $Id: zenon_split.mli,v 1.2 2006-11-02 09:18:26 hubert Exp $ i*)
 
 (* Split a Zenon input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)

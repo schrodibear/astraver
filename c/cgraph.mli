@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cgraph.mli,v 1.2 2006-06-22 13:07:16 hubert Exp $ i*)
+(*i $Id: cgraph.mli,v 1.3 2006-11-02 09:18:18 hubert Exp $ i*)
 
 open Cast
 

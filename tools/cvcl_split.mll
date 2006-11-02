@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl_split.mll,v 1.3 2004-07-20 09:55:39 filliatr Exp $ i*)
+(*i $Id: cvcl_split.mll,v 1.4 2006-11-02 09:18:26 hubert Exp $ i*)
 
 {
 

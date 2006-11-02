@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: error.mli,v 1.24 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: error.mli,v 1.25 2006-11-02 09:18:23 hubert Exp $ i*)
 
 (*s Errors. *)
 

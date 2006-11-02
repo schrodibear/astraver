@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.mli,v 1.8 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: simplify.mli,v 1.9 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Cc
 

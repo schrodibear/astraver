@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: gappa.ml,v 1.7 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.8 2006-11-02 09:18:23 hubert Exp $ i*)
 
 (*s Gappa's output *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: why2html.mll,v 1.2 2003-09-17 07:40:31 filliatr Exp $ i*)
+(*i $Id: why2html.mll,v 1.3 2006-11-02 09:18:26 hubert Exp $ i*)
 
 {
   open Arg

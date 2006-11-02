@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.41 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: cllexer.mll,v 1.42 2006-11-02 09:18:19 hubert Exp $ i*)
 
 (* tokens for the C annotations *)
 

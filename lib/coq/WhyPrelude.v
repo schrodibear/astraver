@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPrelude.v,v 1.3 2006-04-24 14:28:45 filliatr Exp $ *)
+(* $Id: WhyPrelude.v,v 1.4 2006-11-02 09:18:20 hubert Exp $ *)
 
 Require Export WhyCoqCompat.
 

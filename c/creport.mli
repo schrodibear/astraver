@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.mli,v 1.11 2006-07-19 15:27:37 marche Exp $ i*)
+(*i $Id: creport.mli,v 1.12 2006-11-02 09:18:19 hubert Exp $ i*)
 
 open Format
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.mli,v 1.3 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: ocaml.mli,v 1.4 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (*s Ocaml code output *)
 

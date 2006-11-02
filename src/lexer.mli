@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: lexer.mli,v 1.2 2005-11-03 14:11:36 filliatr Exp $ *)
+(* $Id: lexer.mli,v 1.3 2006-11-02 09:18:23 hubert Exp $ *)
 
 exception Lexical_error of string
 

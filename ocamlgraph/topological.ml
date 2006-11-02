@@ -15,7 +15,7 @@
  * (enclosed in the file LGPL).
  *)
 
-(*i $Id: topological.ml,v 1.1 2006-10-10 12:23:52 moy Exp $ i*)
+(*i $Id: topological.ml,v 1.2 2006-11-02 09:18:21 hubert Exp $ i*)
 
 module type G = sig
   type t

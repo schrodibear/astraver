@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: lexer.mll,v 1.5 2006-03-27 09:49:56 filliatr Exp $ *)
+(* $Id: lexer.mll,v 1.6 2006-11-02 09:18:23 hubert Exp $ *)
 
 {
   open Lexing

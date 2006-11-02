@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.73 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cast.mli,v 1.74 2006-11-02 09:18:18 hubert Exp $ i*)
 
 (*s C types *)
 

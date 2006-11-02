@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl_split.mli,v 1.2 2004-07-20 09:55:39 filliatr Exp $ i*)
+(*i $Id: cvcl_split.mli,v 1.3 2006-11-02 09:18:26 hubert Exp $ i*)
 
 (* Split a CVC Lite input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)

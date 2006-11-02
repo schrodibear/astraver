@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.mli,v 1.1 2004-11-08 16:10:01 filliatr Exp $ i*)
+(*i $Id: cmake.mli,v 1.2 2006-11-02 09:18:19 hubert Exp $ i*)
 
 (* Makefile generation *)
 

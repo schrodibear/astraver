@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: linenum.mll,v 1.2 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: linenum.mll,v 1.3 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (* code from Ocaml sources *)
 

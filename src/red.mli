@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.mli,v 1.6 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: red.mli,v 1.7 2006-11-02 09:18:25 hubert Exp $ i*)
 
 open Cc
 open Logic 

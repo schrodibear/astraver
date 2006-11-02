@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.35 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: logic.mli,v 1.36 2006-11-02 09:18:24 hubert Exp $ i*)
 
 (*s Logic. *)
 

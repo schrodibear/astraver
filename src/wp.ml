@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.95 2006-05-23 12:19:58 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.96 2006-11-02 09:18:26 hubert Exp $ i*)
 
 (*s Weakest preconditions *)
 

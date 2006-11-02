@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: encoding_strat.ml,v 1.7 2006-06-24 11:01:06 lescuyer Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.8 2006-11-02 09:18:23 hubert Exp $ i*)
 
 open Cc
 open Logic

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: rename.mli,v 1.4 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: rename.mli,v 1.5 2006-11-02 09:18:25 hubert Exp $ i*)
 
 (* Abstract type for renamings 
  * 

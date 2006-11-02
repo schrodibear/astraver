@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyInt.v,v 1.1 2003-09-22 12:22:36 filliatr Exp $ *)
+(* $Id: WhyInt.v,v 1.2 2006-11-02 09:18:21 hubert Exp $ *)
 
 Require Export ZArith.
 Require Export ZArith_dec.
