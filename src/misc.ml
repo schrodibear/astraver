@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.108 2006-10-27 14:15:22 couchot Exp $ i*)
+(*i $Id: misc.ml,v 1.109 2006-11-02 15:13:48 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -498,7 +498,9 @@ let pnot a =
   if a = Ptrue then Pfalse else if a = Pfalse then Ptrue else Pnot a
 
 let pimplies ?(is_wp=false) p1 p2 = 
-  if p2 = Ptrue then Ptrue else Pimplies (is_wp, p1, p2)
+  if p2 = Ptrue then Ptrue 
+  else if p1 = Ptrue then p2 
+  else Pimplies (is_wp, p1, p2)
 
 let wpimplies = pimplies ~is_wp:true
 

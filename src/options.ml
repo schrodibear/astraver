@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.77 2006-10-31 13:42:11 hubert Exp $ i*)
+(*i $Id: options.ml,v 1.78 2006-11-02 15:13:48 filliatr Exp $ i*)
 
 open Format
 
@@ -38,6 +38,7 @@ let no_harvey_prelude_ = ref false
 let no_zenon_prelude_ = ref false
 let werror_ = ref false
 let dir_ = ref ""
+let fast_wp_ = ref false
 let white_ = ref false
 let black_ = ref true
 let wbb_ = ref false
@@ -149,6 +150,7 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
+  --fast-wp          uses quadratic WP calculus (instead of traditional one)
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
@@ -331,6 +333,8 @@ let files =
 	dir_ := d; parse args
     | ("-dir" | "--dir") :: [] ->
 	usage (); exit 1
+    | ("-fast-wp" | "--fast-wp") :: args ->
+	fast_wp_ := true; parse args
     | ("-white" | "--white") :: args ->
 	white_ := true; black_ := false; parse args
     | ("-black" | "--black") :: args ->
@@ -403,6 +407,7 @@ let no_zenon_prelude = !no_zenon_prelude_
 let wol = !wol_
 let werror = !werror_
 let dir = !dir_
+let fast_wp = !fast_wp_
 let white = !white_
 let black = !black_
 let wbb = !wbb_

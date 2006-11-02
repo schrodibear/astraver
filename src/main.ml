@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.111 2006-10-31 13:42:11 hubert Exp $ i*)
+(*i $Id: main.ml,v 1.112 2006-11-02 15:13:47 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -174,9 +174,15 @@ let interp_program id p =
   if type_only then raise Exit;
 
   if_debug eprintf "* weakest preconditions@.";
-  let p,wp = Wp.wp p in
+  let p,wp = 
+    if fast_wp then
+      let w = Fastwp.wp p in
+      p, Some (wp_named p.info.t_loc w)
+    else
+      Wp.wp p 
+  in
   print_if_debug print_wp wp;
-  (* print_if_debug print_expr p; *)
+
   if wp_only then raise Exit;
 
   if ocaml then begin Ocaml.push_program id p; raise Exit end;

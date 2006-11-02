@@ -14,13 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ast.mli,v 1.52 2006-11-02 09:18:22 hubert Exp $ i*)
+(*i $Id: ast.mli,v 1.53 2006-11-02 15:13:47 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
 open Logic
 open Types
-open Ptree
 
 type variable = Ident.t
 

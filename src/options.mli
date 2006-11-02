@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.61 2006-10-31 13:42:11 hubert Exp $ i*)
+(*i $Id: options.mli,v 1.62 2006-11-02 15:13:48 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -45,6 +45,7 @@ val parse_only : bool
 val type_only : bool
 val wp_only : bool
 
+val fast_wp : bool
 val black : bool
 val white : bool
 val wbb : bool
