@@ -1,4 +1,4 @@
-(*i $Id: jc_lexer.mll,v 1.5 2006-11-02 09:20:41 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.6 2006-11-02 13:04:31 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -191,6 +191,6 @@ and comment = parse
     try
       Jc_parser.file token lb
     with Parsing.Parse_error ->
-      raise (Syntax_error(loc lb))
+      Jc_options.parsing_error (loc lb) ""
 
 }

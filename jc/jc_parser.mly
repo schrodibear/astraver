@@ -1,4 +1,4 @@
-/* $Id: jc_parser.mly,v 1.6 2006-11-02 09:20:41 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.7 2006-11-02 13:04:31 marche Exp $ */
 
 %{
 
@@ -20,6 +20,14 @@
   let locate_decl d =
     { jc_pdecl_node = d ; jc_pdecl_loc = loc () }
 
+  let int_of_constant loc c =
+    try
+      match c with
+	| JCCinteger n -> int_of_string n
+	| _ -> invalid_arg ""
+    with
+	Invalid_argument _ ->
+	  Jc_options.parsing_error loc "invalid integer constant"
 
 (*
   let locate x = { node = x; loc = loc() }
@@ -27,10 +35,6 @@
   let with_loc l x = { node = x; loc = l }
 *)
 
-(*
-  let error s = 
-    Report.raise_located (loc ()) (AnyMessage ("Syntax error: " ^ s))
-*)
 
 %}
 
@@ -93,14 +97,16 @@
 %type <Jc_ast.pdecl list> file
 %start file
 
-/* precedences on expressions */
-%right EQGT
+/* precedences on expressions (from lowest to highest) */
+
 %nonassoc PRECFORALL
+%right EQGT
 
 /* precedences on statements */
 
-%nonassoc ELSE
 %nonassoc PRECIF
+%nonassoc ELSE
+
 
 
 %%
@@ -660,7 +666,7 @@ expression_statement:
 
 selection_statement: 
 | IF LPAR expression RPAR statement 
-    %prec PRECIF
+    %prec PRECIF 
     { let skip = locate_statement JCPSskip in
       locate_statement (JCPSif($3, $5, skip)) }
 | IF LPAR expression RPAR statement ELSE statement 
@@ -748,11 +754,12 @@ type_expr:
 | INTEGER
     { JCPTnative `Tinteger }
 | UNIT
-    { JCPT "unit" }
+    { JCPTnative `Tunit }
 | IDENTIFIER
     { JCPTidentifier $1 }
 | IDENTIFIER LSQUARE CONSTANT RSQUARE
-    { JCPTvalidpointer($1,$3,$3) }
+    { let n = int_of_constant (loc_i 3) $3 in
+      JCPTvalidpointer($1,n,n) }
 ;
 
 function_specification:
@@ -825,6 +832,8 @@ decl:
     { $1 }
 | type_definition 
     { $1 }
+| error
+    { Jc_options.parsing_error (loc ()) "'type' or type expression expected" }
 ;
 
 

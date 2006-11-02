@@ -16,6 +16,11 @@ type label = string
 (* parse trees *)
 (***************)
 
+type ptype = 
+  | JCPTnative of native_type
+  | JCPTidentifier of string
+  | JCPTvalidpointer of string * int * int
+
 type pbin_op =
   [ `Ble | `Bge | `Beq | `Bneq 
   | `Badd | `Bsub
@@ -30,7 +35,7 @@ type pexpr_node =
   | JCPEassign of pexpr * pexpr
   | JCPEassign_op of pexpr * pbin_op * pexpr
   | JCPEbinary of pexpr * pbin_op * pexpr
-  | JCPEforall of jc_type * string * pexpr
+  | JCPEforall of ptype * string * pexpr
   | JCPEold of pexpr
 
 and pexpr =
@@ -50,7 +55,7 @@ type pstatement_node =
   | JCPSblock of pstatement list
   | JCPSexpr of pexpr
   | JCPSassert of pexpr
-  | JCPSdecl of jc_type * string * pexpr
+  | JCPSdecl of ptype * string * pexpr
   | JCPSif of pexpr * pstatement * pstatement
   | JCPSwhile of pexpr * pstatement
   | JCPSreturn of pexpr
@@ -68,8 +73,8 @@ and pstatement =
 
 
 type pdecl_node =
-  | JCPDfun of jc_type * string * (jc_type * string) list * pclause list * pstatement list
-  | JCPDtype of string * (jc_type * string) list
+  | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
+  | JCPDtype of string * (ptype * string) list
 
 and pdecl =
     {

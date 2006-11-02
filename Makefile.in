@@ -86,6 +86,7 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
 
 BINARY=bin/why.$(OCAMLBEST)
 CADUCEUS=bin/caduceus.$(OCAMLBEST)
+JESSIE=bin/jessie.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 WHY2HTML=bin/why2html.$(OCAMLBEST)
 RVMERGE=bin/rv_merge.$(OCAMLBEST)
@@ -363,6 +364,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) g
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
+	#cp -f $(JESSIE) $(JESSIE)/jessie$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)

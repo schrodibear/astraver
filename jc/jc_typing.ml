@@ -17,11 +17,25 @@ let typing_error l f =
 
 
 let find_field ty f =
+  (* TODO *)
   {
-	 jc_field_info_name = f;
-	    jc_field_info_type = unit_type
-	  }
+    jc_field_info_name = f;
+    jc_field_info_type = unit_type
+  }
 
+let find_fun_info id =
+  let (fi,_,_) = Hashtbl.find functions_table id in fi
+    
+(* types *)
+
+let type_type t =
+  match t with
+    | JCPTnative n -> JCTnative n
+    | JCPTvalidpointer (id, a, b) -> 
+	JCTvalidpointer(id, a, b)
+    | JCPTidentifier id -> 
+	(* TODO *)
+	JCTlogic id
 
 (* terms *)
 
@@ -70,9 +84,11 @@ let rec term env e =
       | JCPEold e -> JCTold(term env e)
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
-      | JCPEassign _ -> failwith "assignment not allowed as logic term"
+      | JCPEassign _ -> 
+	  typing_error e.jc_pexpr_loc "assignment not allowed as logic term"
 	  (* propositional (non-boolean) expressions *)
-      | JCPEforall _ -> failwith "quantification not allowed as logic term"
+      | JCPEforall _ -> 
+	  typing_error e.jc_pexpr_loc "quantification not allowed as logic term"
 
   in { jc_term_node = te;
        jc_term_loc = e.jc_pexpr_loc }
@@ -128,6 +144,7 @@ let rec assertion env e =
       | JCPEshift (_, _) -> assert false
       | JCPEconst _ -> assert false
       | JCPEforall(ty,id,e) -> 
+	  let ty = type_type ty in
 	  let vi = {
 	    jc_var_info_name = id;
 	    jc_var_info_final_name = id;
@@ -137,7 +154,8 @@ let rec assertion env e =
       | JCPEold e -> JCAold(assertion env e)
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
-      | JCPEassign _ -> failwith "assignment not allowed as logic term"
+      | JCPEassign _ -> 
+	  typing_error e.jc_pexpr_loc "assignment not allowed as logic term"
 
 
   in { jc_assertion_node = te;
@@ -182,18 +200,33 @@ let rec expr env e =
 	  end
       | JCPEbinary (e1, op, e2) -> 
 	  JCEcall(tr_bin_op op, [expr env e1 ; expr env e2])
-      | JCPEassign (_, _) -> assert false
+      | JCPEassign (e1, e2) -> 
+	  JCEassign(expr env e1, expr env e2)
       | JCPEassign_op (e1, op, e2) -> 
 	  JCEassign_op(expr env e1, tr_bin_op op, expr env e2)
-      | JCPEapp (_, _) -> assert false
+      | JCPEapp (e1, l) -> 
+	  begin
+	    match e1.jc_pexpr_node with
+	      | JCPEvar id ->
+		  begin
+		    try
+		      let fi = find_fun_info id in
+		      JCEcall(fi, List.map (expr env) l)
+		    with Not_found ->
+		      typing_error e.jc_pexpr_loc "unbound function identifier %s" id
+		  end
+	      | _ -> 
+		  typing_error e.jc_pexpr_loc "unsupported function call"
+	  end
       | JCPEderef (e, f) -> 
 	  let fi = find_field unit_type f in
 	  JCEderef(expr env e,fi)
       | JCPEshift (_, _) -> assert false
-      | JCPEconst _ -> assert false
+      | JCPEconst c -> JCEconst c
 	  (* logic expressions, not allowed as program expressions *)
       | JCPEforall _ 
-      | JCPEold _ -> failwith "not allowed in this context"
+      | JCPEold _ -> 
+	  typing_error e.jc_pexpr_loc "not allowed in this context"
 
   in { jc_expr_node = te;
        jc_expr_loc = e.jc_pexpr_loc }
@@ -242,10 +275,11 @@ let clause env c acc =
 
   
 let param (t,id) =
+  let ty = type_type t in
   let vi = {
     jc_var_info_name = id;
     jc_var_info_final_name = id;
-    jc_var_info_type = t;
+    jc_var_info_type = ty;
   }
   in (id,vi)
 
@@ -257,6 +291,7 @@ let decl d =
   match d.jc_pdecl_node with
     | JCPDfun(ty,id,pl,specs,body) -> 
 	let param_env = List.map param pl in
+	let ty = type_type ty in
 	let fi = { 
 	  jc_fun_info_name = id;
 	  jc_fun_info_parameters = List.map snd param_env;

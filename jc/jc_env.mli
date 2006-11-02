@@ -1,9 +1,13 @@
 
 
+type native_type =
+  [ `Tunit | `Tboolean | `Tinteger | `Treal ]
+
 type jc_type =
+  | JCTnative of native_type
   | JCTlogic of string
-  | JCTpointer of jc_type
-  | JCTvalidpointer of jc_type * int * int
+  | JCTpointer of string
+  | JCTvalidpointer of string * int * int
 
 type logic_info =
     {

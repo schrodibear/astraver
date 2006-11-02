@@ -25,3 +25,10 @@ val log : Format.formatter
 val lprintf : ('a, Format.formatter, unit) format -> 'a
 val close_log : unit -> unit
 
+(*s error handling *)
+
+exception Jc_error of Loc.position * string
+
+val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
+
+

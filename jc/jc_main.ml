@@ -9,9 +9,6 @@ let parse_file f =
     let d = Jc_lexer.parse f c in
     close_in c; d
   with
-    | Jc_lexer.Syntax_error l ->
-	eprintf "%a: syntax error@." Loc.gen_report_position l;
-	exit 1
     | Jc_lexer.Lexical_error(l,s) ->
 	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
 	exit 1
@@ -46,6 +43,9 @@ let main () =
   with
     | Jc_typing.Typing_error(l,s) ->
 	eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
+	exit 1
+    | Jc_options.Jc_error(l,s) ->
+	eprintf "%a: %s@." Loc.gen_report_position l s;
 	exit 1
 
 

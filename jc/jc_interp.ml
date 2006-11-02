@@ -10,18 +10,24 @@ let const c =
     | JCCinteger s -> Prim_int s
     | JCCbool b -> Prim_bool b
 
+let tr_native_type t =
+  match t with
+    | `Tunit -> "unit"
+    | `Tboolean -> "bool"
+    | `Tinteger -> "int"
+    | `Treal -> "real"
 
 let tr_base_type t =
   match t with
-    | JCTlogic "integer" -> ([],"int")
+    | JCTnative t -> ([],tr_native_type t)
     | JCTlogic s -> ([],s)
-    | JCTvalidpointer (_, _, _) -> assert false
+    | JCTvalidpointer (id, a, b) -> ([],id)
     | JCTpointer _ -> assert false
 
 let tr_type t =
   match t with
-    | JCTlogic s -> Base_type(tr_base_type t)
-    | JCTvalidpointer (_, _, _) -> assert false
+    | JCTnative _ | JCTlogic _ -> Base_type(tr_base_type t)
+    | JCTvalidpointer _ -> Base_type(tr_base_type t)	
     | JCTpointer _ -> assert false
 
 let lvar label v =
@@ -37,7 +43,8 @@ let rec term label oldlabel t =
     | JCTconst c -> LConst(const c)
     | JCTshift(t1,t2) -> LApp("shift",[ft t1; ft t2])
     | JCTderef(t,f) -> LApp("select",[ft t; lvar label f.jc_field_info_name])
-    | JCTapp(f,l) -> assert false
+    | JCTapp(f,l) -> 
+	LApp(f.jc_logic_info_name,List.map ft l)
     | JCTold(t) -> term (Some oldlabel) oldlabel t
 
 let rec assertion label oldlabel a =
@@ -55,6 +62,14 @@ let rec assertion label oldlabel a =
 		fa p)
     | JCAold a -> assertion (Some oldlabel) oldlabel a
 
+type interp_lvalue =
+  | LocalRef of var_info
+  | HeapRef of field_info * expr
+
+let tempvar_count = ref 0
+let reset_tmp_var () = tempvar_count := 0
+let tmp_why_var () = incr tempvar_count; "jessie_" ^ string_of_int !tempvar_count
+
 let rec expr e =
   match e.jc_expr_node with
     | JCEconst JCCnull -> Var "null"
@@ -62,10 +77,64 @@ let rec expr e =
     | JCEvar v -> Var v.jc_var_info_final_name
     | JCEshift(e1,e2) -> make_app "shift" [expr e1; expr e2]
     | JCEderef(e,f) -> make_app "select" [expr e; Var f.jc_field_info_name]
-    | JCEassign (_, _) -> assert false
-    | JCEassign_op (e1, op, e2) -> assert false
+    | JCEassign (e1, e2) -> 
+	begin match interp_lvalue e1 with
+	  | LocalRef(vi) -> assert false
+		(*
+	      let n = v.var_unique_name in
+	      append
+	        (Assign(n, bin_op op (Deref n) (interp_expr e2)))
+	        (Deref n)
+		  *)
+	  | HeapRef(fi,e1) -> 
+	      let tmp1 = tmp_why_var () in
+	      let tmp2 = tmp_why_var () in
+	      let memory = fi.jc_field_info_name in
+	      Let(tmp1, e1,
+		  Let(tmp2, expr e2,
+		      append
+			(make_app "safe_upd_"
+			   [Var memory; Var tmp1; Var tmp2])
+			(Var tmp2))) 
+	end 
+
+    | JCEassign_op (e1, op, e2) -> 
+	begin match interp_lvalue e1 with
+	  | LocalRef(vi) -> assert false
+		(*
+	      let n = v.var_unique_name in
+	      append
+	        (Assign(n, bin_op op (Deref n) (interp_expr e2)))
+	        (Deref n)
+		  *)
+	  | HeapRef(fi,e1) -> 
+	      let tmp1 = tmp_why_var () in
+	      let tmp2 = tmp_why_var () in
+	      let memory = fi.jc_field_info_name in
+	      Let(tmp1, e1,
+		  Let(tmp2, 
+		      make_app op.jc_fun_info_name
+			[ make_app "acc_" [Var memory; Var tmp1] ;
+			  expr e2 ],
+			append
+			  (make_app "safe_upd_"
+			     [Var memory; Var tmp1; Var tmp2])
+			  (Var tmp2))) 
+	end 
     | JCEcall(f,l) -> 
 	make_app f.jc_fun_info_name (List.map expr l)
+
+and interp_lvalue e =
+  match e.jc_expr_node with
+    | JCEvar v -> LocalRef(v)
+    | JCEderef (e1, f) ->
+	HeapRef(f, expr e1)
+    | JCEassign_op _ 
+    | JCEassign _
+    | JCEshift _
+    | JCEconst _ -> assert false (* not an lvalue *)
+    | JCEcall _ -> assert false (* TODO ? *)
+
 
 let rec statement s = 
   match s.jc_statement_node with
@@ -89,7 +158,7 @@ and statement_list l =
   match l with
     | [] -> Void
     | [i] -> statement i
-    | i::r -> assert false
+    | i::r -> append (statement i) (statement_list r)
 
 let parameter v =
   (v.jc_var_info_final_name,tr_type v.jc_var_info_type)

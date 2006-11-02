@@ -1,4 +1,4 @@
-(*i $Id: jc_options.ml,v 1.2 2006-10-31 13:18:29 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.3 2006-11-02 13:04:31 marche Exp $ i*)
 
 open Format
 
@@ -90,3 +90,15 @@ let debug = !debug
 let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
+
+
+(*s error handling *)
+
+exception Jc_error of Loc.position * string
+
+let parsing_error l f = 
+  Format.ksprintf 
+    (fun s -> 
+       let s = if s="" then s else " ("^s^")" in
+       raise (Jc_error(l, "syntax error" ^ s))) f
+
