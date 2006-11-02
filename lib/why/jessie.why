@@ -1,1 +1,7 @@
 
+
+type 't pointer
+
+type ('t,'v) memory
+
+logic select : ('t,'v) memory, 't pointer -> 'v 
