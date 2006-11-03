@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.82 2006-11-03 12:48:57 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.83 2006-11-03 14:51:13 moy Exp $ i*)
 
 open Creport
 open Cconst
@@ -705,8 +705,7 @@ and predicate_node = function
 	(predicate p)) 
     | Pold p -> NPold (predicate p)
     | Pat (p, s) -> NPat ((predicate p),s)
-    | Pseparated (t1,t2) ->
-	assert false (* TODO *)
+    | Pseparated (t1,t2) -> NPseparated (term t1, term t2)
     | Pfullseparated (t1,t2) ->
 	assert false (* TODO *)
     | Pvalid (t) -> NPvalid (term t) 
@@ -906,6 +905,34 @@ let rec init_expr loc t lvalue initializers =
 	      assert false
 	end
     | Tarray (_,ty, Some t) ->
+	let int_to_init loc ty i=
+	  let e = 
+	    { texpr_node = TEconstant (IntConstant (Format.sprintf "%d" i));
+	      texpr_type = c_int; texpr_loc = loc; }
+	  in
+	  Iexpr (Ctyping.coerce ty e)
+	in
+	let rec expand_initializer = function
+	  | Iexpr e -> 	      
+	      begin
+		match e.texpr_node with
+		  | TEstring_literal s ->
+		      let ty = 
+			match e.texpr_type.Ctypes.ctype_node with
+			  | Tpointer (_,ty) | Tarray (_,ty,_) -> ty
+			  | _ ->  ty
+		      in
+		      let l = ref [int_to_init e.texpr_loc ty 0] in 
+		      let n = (String.length s) -1 in
+		      for i = 1 to n-1  do
+			l := int_to_init e.texpr_loc ty 
+			  (Char.code (String.get s (n-i)))::!l
+		      done; 
+		      Ilist !l
+		  | _ -> Iexpr e
+	      end
+	  | Ilist el -> Ilist el
+	in
 	let rec init_cells i (block,init) =
 	  if i >= t then (block,init)
 	  else
@@ -915,6 +942,7 @@ let rec init_expr loc t lvalue initializers =
 	    in
 	    init_cells (Int64.add i Int64.one) (block@b,init')
 	in
+	let initializers = List.map expand_initializer initializers in
 	init_cells Int64.zero ([],initializers)
     | Tarray (_,ty,None) -> assert false
     | Tfun (_, _) -> assert false

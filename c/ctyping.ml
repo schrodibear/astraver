@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.132 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.133 2006-11-03 14:51:13 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -868,26 +868,9 @@ let int_to_init loc env ty i=
 (*s Typing of initializers *)
 
 let rec type_initializer loc env ty = function
-  | Iexpr e -> 	      
-      begin
-	match e.node with
-	  | CEstring_literal s ->
-	      let ty = 
-		match ty.ctype_node with
-		  | Tpointer (_,ty) | Tarray (_,ty,_) -> ty
-		  | _ ->  ty
-	      in
-	      let l = ref [int_to_init e.loc env ty 0] in 
-	      let n = (String.length s) -1 in
-	      for i = 1 to n-1  do
-		l := int_to_init e.loc env ty 
-		  (Char.code (String.get s (n-i)))::!l
-	      done; 
-	      Ilist !l
-	  | _ -> 
-	      let e = type_expr env e in
-	      Iexpr (coerce ty e)
-      end
+  | Iexpr e -> 
+      let e = type_expr env e in
+      Iexpr (coerce ty e)
   | Ilist el -> 
       (match ty.ctype_node with
 	 | Tarray (_,ty,_) ->   
@@ -931,7 +914,18 @@ let array_size_from_initializer loc ty i = match ty.ctype_node, i with
       { ty with ctype_node = Tarray (Valid,ety, Some s) }
 
   | Tarray (_,ety, None), None -> error loc "array size missing"  
-      	
+
+  | Tarray (_,ety, None), Some (Iexpr e) ->
+      (* since string literals in initializers are no longer transformed
+	 in [Ilist] during typing, we need to add a special case here to
+	 compute the length of the array. *)
+      begin match e.texpr_node with
+	| TEstring_literal s ->
+	    let s = of_int (String.length s - 1) in
+	    { ty with ctype_node = Tarray (Valid,ety, Some s) }
+	| _ -> ty
+      end
+
   | _ -> 
       ty
 

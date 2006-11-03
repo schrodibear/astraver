@@ -22,6 +22,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: cptr.ml,v 1.16 2006-11-03 14:51:13 moy Exp $ *)
+
 (* TO DO:
 
    - treat correctly variables whose address is taken (probably do not treat

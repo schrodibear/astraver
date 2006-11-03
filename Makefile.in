@@ -356,6 +356,10 @@ bench-c:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
 	cp -f c/cversion.ml $(BENCHLOG)
 	(cd bench/c; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
 
+bench-absint:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
+	cp -f c/cversion.ml $(BENCHLOG)
+	(cd bench/c/absint; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
+
 bench-pvs:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid" pvs
 

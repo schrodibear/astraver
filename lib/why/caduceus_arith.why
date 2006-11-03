@@ -36,6 +36,10 @@ logic arrlen: 'z pointer -> int
    i.e. the number of non-null elements that can be accessed before 
    some null element (usually a byte). *)
 logic strlen: ('a, 'z) memory, 'z pointer -> int
+(* [separated(p,q)] is true when memory zones for pointers [p] and [q] are
+   disjoint. *)
+predicate separated(p:'z pointer,q:'z pointer) =
+  base_addr(p) <> base_addr(q)
 
 predicate lt_pointer(p1:'z pointer,p2: 'z pointer) =
   base_addr(p1) = base_addr(p2) and offset(p1) < offset(p2)
@@ -209,6 +213,12 @@ axiom strlen_create :
   forall i:int [strlen(upd(m,shift(p,i),0),p)].
     i >= 0 -> 0 <= strlen(upd(m,shift(p,i),0),p) <= i
 
+axiom strlen_init :
+  forall m : ('a,'z) memory. forall p: 'z pointer. 
+  forall i:int [strlen(upd(m,shift(p,i),0),p)]. 
+    i >= 0 and (forall j:int. 0 <= j < i -> acc(m,shift(p,j)) <> 0)
+    -> strlen(upd(m,shift(p,i),0),p) = i
+
 axiom strlen_zero :
   forall m : ('a,'z) memory. 
   forall p: 'z pointer [acc(m,shift(p,strlen(m,p)))]. 
@@ -222,27 +232,34 @@ axiom strlen_not_zero :
 axiom strlen_shift :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
   forall i:int [strlen(m,shift(p,i))].
-  i >= 0 -> strlen(m,shift(p,i)) = strlen(m,p)-i
+  0 <= i <= strlen(m,p) -> strlen(m,shift(p,i)) = strlen(m,p)-i
 
 axiom strlen_update_before :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
   forall v:'a. forall i:int [strlen(upd(m,shift(p,i),v),p)]. 
     0 <= i < strlen(m,p) -> strlen(upd(m,shift(p,i),v),p) <= strlen(m,p)
 
+axiom strlen_update_before_not_zero :
+  forall m : ('a,'z) memory. forall p: 'z pointer. 
+  forall v:'a. forall i:int [strlen(upd(m,shift(p,i),v),p)]. 
+    0 <= i < strlen(m,p) and v <> 0 
+      -> strlen(upd(m,shift(p,i),v),p) = strlen(m,p)
+
 axiom strlen_update_zero :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
   forall i:int [strlen(upd(m,shift(p,i),0),p)]. 
-    i = strlen(m,p) -> strlen(upd(m,shift(p,i),0),p) = strlen(m,p)
-
-axiom strlen_update_not_zero :
-  forall m : ('a,'z) memory. forall p: 'z pointer. 
-  forall v:'a. forall i:int [strlen(upd(m,shift(p,i),v),p)]. 
-    0 <= i <= strlen(m,p) and v <> 0 -> i < strlen(upd(m,shift(p,i),v),p)
+    0 <= i <= strlen(m,p) -> strlen(upd(m,shift(p,i),0),p) = i
 
 (* axiom linking [arrlen] and [strlen] *)
 axiom arrlen_strlen :
   forall m : ('a,'z) memory. forall p: 'z pointer [strlen(m,p)]. 
-    arrlen(p) > 0 -> strlen(m,p) >= 0
+    strlen(m,p) >= 0 -> strlen(m,p) < arrlen(p)
+
+(* axioms only to help automatic proof *)
+axiom separated_strlen_upd :
+  forall m : ('a,'z) memory. forall p: 'z pointer. forall q : 'z pointer.
+    forall v:'z. forall i:int [strlen(upd(m,shift(p,i),v),q)]. 
+      separated(p,q) -> strlen(upd(m,shift(p,i),v),q) = strlen(m,q)
 
 (* exceptions *)
 exception Break

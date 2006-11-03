@@ -22,6 +22,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: cabsint.ml,v 1.14 2006-11-03 14:51:13 moy Exp $ *)
+
 (* TO DO:
 
    - call to [Ceffect] functions to compute effects of loops expects
@@ -722,11 +724,11 @@ module Make_DataFlowAnalysis
 	  begin try 
 	    let init_val = NodeMap.find node params.init in
 	    begin match params.direction with
-	    | Forward -> Some init_val,None
-	    | Backward -> None,Some init_val
+	    | Forward -> Some init_val,None,true
+	    | Backward -> None,Some init_val,true
 	    end
-	  with Not_found -> None,None end
-      | pre_val,post_val -> pre_val,post_val
+	  with Not_found -> None,None,false end
+      | pre_val,post_val -> pre_val,post_val,false
     in
 
     let treat_node cur_node =
@@ -739,13 +741,13 @@ module Make_DataFlowAnalysis
 	end;
 
       (* find value associated to [cur_node] *)
-      let pre_val,post_val = res_val cur_node in
+      let pre_val,post_val,is_init = res_val cur_node in
       let pre_val =
 	if params.one_pass && is_loop_backward_destination_node cur_node then
 	  match params.direction with
 	    | Forward -> 
 		let sce_node = looping_source cur_node in
-		let _,sce_val = res_val sce_node in
+		let _,sce_val,_ = res_val sce_node in
 		begin match pre_val,sce_val with
 		  | None,_ -> pre_val
 		  | Some _,None -> pre_val
@@ -763,13 +765,22 @@ module Make_DataFlowAnalysis
 	"[propagate] take node in working list %a from val %a@."
 	Node.pretty cur_node (Option.pretty params.pretty) from_val;
 
+      let backward = match params.direction with
+	| Backward -> true | Forward -> false
+      in
+
       (* compute next value and replace existing one *)
-      let cur_val = match to_val with
-	| None -> 
-	    Option.app (params.transfer cur_node) from_val
-	| Some to_val ->
-	    Option.app (params.transfer ~previous_value:to_val cur_node) 
-	      from_val
+      let cur_val = 
+	(* do not call transfer function on init node in backward mode
+	   (useful for access that is also a test, e.g. "if (t[i])") *)
+	if backward && is_init then
+	  from_val
+	else match to_val with
+	  | None -> 
+	      Option.app (params.transfer cur_node) from_val
+	  | Some to_val ->
+	      Option.app (params.transfer ~previous_value:to_val cur_node) 
+		from_val
       in
       (* perform widening if necessary *)
       let cur_val = match cur_val with
@@ -847,7 +858,7 @@ module Make_DataFlowAnalysis
 				(Coptions.lprintf "%a " Node.pretty))
 	    next_nodes;
 	  List.iter (fun nx_node ->
-		       let nx_pre,nx_post = res_val nx_node in
+		       let nx_pre,nx_post,_ = res_val nx_node in
 		       let nx_from,nx_to = match params.direction with
 			 | Forward -> nx_pre,nx_post
 			 | Backward -> nx_post,nx_pre
@@ -1041,12 +1052,12 @@ module Make_DataFlowAnalysis
 	let pre_fwd_val,post_fwd_val =
 	  match NodeHash.find_both fwd_analysis node with
 	  | None,None -> 
-	      (* use here bottom value, as usual *)
-	      L.bottom (),L.bottom ()
+	      (* use here top value to allow [meet] below *)
+	      L.top (),L.top ()
 	  | Some pre_val,None ->
-	      pre_val,L.bottom ()
+	      pre_val,L.top ()
 	  | None,Some post_val ->
-	      L.bottom (),post_val
+	      L.top (),post_val
 	  | Some pre_val,Some post_val ->
 	      pre_val,post_val
 	in
@@ -3266,13 +3277,51 @@ end = struct
 	    else e
 	| _ -> e
     in
+    let push_not_inside = match e.nexpr_node with
+      | NEunary (Unot,e1) when is_test ->
+	  begin match e1.nexpr_node with
+	    | NEunary (Unot,_) -> true
+	    | NEbinary (_,(Band | Bor),_) -> true
+	    | _ -> false
+	  end
+      | _ -> false
+    in
+    let negative_lazy = match e.nexpr_node with
+      | NEbinary (_,(Band | Bor),_) when neg_test -> true
+      | _ -> false
+    in
+    let negative_not = match e.nexpr_node with
+      | NEunary (Unot,_) when neg_test -> true
+      | _ -> false
+    in
     let e = 
-      if is_test then
-	if neg_test then
-          { e with nexpr_node = NEunary (Unot, make_test_to_zero e) }
-	else make_test_to_zero e
+      if push_not_inside then
+	e (* code for [Unot] below takes care of the negation *)
+      else if negative_lazy then
+	match e.nexpr_node with
+	  | NEbinary (e1,(Band | Bor as op),e2) ->
+	      let not_e1 = { e1 with nexpr_node = NEunary (Unot, e1) } in
+	      let not_e2 = { e2 with nexpr_node = NEunary (Unot, e2) } in
+	      let opp =
+		match op with 
+		  | Band -> Bor 
+		  | Bor -> Band 
+		  | _ -> assert false 
+	      in
+	      { e with nexpr_node = NEbinary (not_e1,opp,not_e2) }
+	  | _ -> assert false
+      else if negative_not then
+	match e.nexpr_node with
+	  | NEunary (Unot,e1) -> make_test_to_zero e1
+	  | _ -> assert false
+      else if neg_test then
+        { e with nexpr_node = NEunary (Unot, make_test_to_zero e) }
+      else if is_test then
+	make_test_to_zero e
       else e
     in
+    (* effect of [neg_test] taken into account at this point,
+       ignore it, except for [Unot] *)
     let enode =
       if is_test then Ntest e
       else if is_lvalue then
@@ -3286,6 +3335,12 @@ end = struct
       match e.nexpr_node with
 	| NEnop | NEconstant _ | NEstring_literal _ | NEvar _ ->
 	    (* oper *) add_opedge start_node enode
+	| NEunary (Unot,e1) when push_not_inside ->
+	    assert is_test;
+	    let e1node = 
+	      from_expr ~is_test ~neg_test:(not neg_test) start_node e1 in
+	    (* oper *) add_opedge e1node enode;
+	    (* struct *) add_stedge enode [e1node]
 	| NEarrow (e1,_,_) | NEunary (_,e1) 
 	| NEcast (_,e1) | NEmalloc (_,e1) ->
 	    let e1node = from_expr start_node e1 in
@@ -3317,6 +3372,23 @@ end = struct
 	    (* struct *) add_stedge enode [e1node; e2node]
 	| NEassign_op (e1,op,e2) ->
 	    assert false (* expression should have been modified above *)
+	| NEbinary (e1,Band,e2) when is_test ->
+	    (* do not take [neg_test] into account, already done *)
+	    (* AND succeeds only when both [e1] and [e2] succeed *)
+	    let e1node = from_expr ~is_test start_node e1 in
+	    let e2node = from_expr ~is_test e1node e2 in
+	    (* oper *) add_opedge e2node enode;
+	    (* struct *) add_stedge enode [e1node; e2node]
+	| NEbinary (e1,Bor,e2) when is_test ->
+	    (* do not take [neg_test] into account, already done *)
+	    (* OR succeeds whenever [e1] succeeds, 
+	       or [e1] fails and [e2] succeeds *)
+	    let e1node = from_expr ~is_test start_node e1 in
+	    let nege1node = from_expr ~is_test ~neg_test:true start_node e1 in
+	    let e2node = from_expr ~is_test nege1node e2 in
+	    (* oper *) add_opedge e1node enode;
+	    (* oper *) add_opedge e2node enode;
+	    (* struct *) add_stedge enode [e1node; e2node]
 	| NEbinary (e1,_,e2) ->
 	    let e1node,e2node =
 	      if Coptions.evaluation_order.Coptions.binary_left_to_right then
@@ -3391,40 +3463,52 @@ end = struct
       lab_node
 
   let rec from_stat (ctxt : context_descr) start_node (s : nstatement) =
-    let snode = create_node (Nstat s) in 
+    (* structural statement node, for statement [s] *)
+    let stsnode = create_node (Nstat s) in
+    (* operational statement node for [s]. It is equal to [stsnode] in the cases
+       where the control flow ends up in the node representing the statement. *)
+    let opsnode = match s.nst_node with
+      | NSdecl _ -> 
+	  (* A declaration should be put in the operational graph before 
+	     the statements that follow it. Since these statements are
+	     a sub-field of the declaration, we create an internal node 
+	     to serve in place of the declaration as end-node. *)
+	  create_node (Nintern InternOperational)
+      | _ -> stsnode
+    in 
     begin
       match s.nst_node with
 	| NSnop | NSlogic_label _ ->
-	    (* oper *) add_opedge start_node snode
+	    (* oper *) add_opedge start_node opsnode
 	| NSassert p ->
 	    let pnode = from_pred ~is_assert:true p in
 	    (* oper *) add_opedge start_node pnode;
-	    (* oper *) add_opedge pnode snode;
-	    (* logic *) add_logedge snode [pnode];
+	    (* oper *) add_opedge pnode opsnode;
+	    (* logic *) add_logedge stsnode [pnode];
 	    (* assert node is -only- its self-end *)
-	    (* logic *) add_begedge snode ctxt.function_begin;
-	    (* logic *) add_endedge snode snode
+	    (* logic *) add_begedge stsnode ctxt.function_begin;
+	    (* logic *) add_endedge stsnode opsnode
 	| NSassume p ->
 	    let pnode = from_pred ~is_assume:true p in
 	    (* oper *) add_opedge start_node pnode;
-	    (* oper *) add_opedge pnode snode;
-	    (* logic *) add_logedge snode [pnode];
+	    (* oper *) add_opedge pnode opsnode;
+	    (* logic *) add_logedge stsnode [pnode];
 	    (* assume node is -only- its self-end *)
-	    (* logic *) add_begedge snode ctxt.function_begin;
-	    (* logic *) add_endedge snode snode
+	    (* logic *) add_begedge stsnode ctxt.function_begin;
+	    (* logic *) add_endedge stsnode opsnode
 	| NSexpr e -> 
 	    let enode = from_expr start_node e in
-	    (* oper *) add_opedge enode snode;
-	    (* struct *) add_stedge snode [enode]
+	    (* oper *) add_opedge enode opsnode;
+	    (* struct *) add_stedge stsnode [enode]
 	| NSif (e,s1,s2) ->
 	    let then_node = from_expr ~is_test:true start_node e in
 	    let else_node =
 	      from_expr ~is_test:true ~neg_test:true start_node e in
-	    let s1node = from_stat ctxt then_node s1 in
-	    let s2node = from_stat ctxt else_node s2 in
-	    (* oper *) add_opedge s1node snode;
-	    (* oper *) add_opedge s2node snode;
-	    (* struct *) add_stedge snode [then_node; s1node; s2node]
+	    let sts1node,ops1node = from_stat ctxt then_node s1 in
+	    let sts2node,ops2node = from_stat ctxt else_node s2 in
+	    (* oper *) add_opedge ops1node opsnode;
+	    (* oper *) add_opedge ops2node opsnode;
+	    (* struct *) add_stedge stsnode [then_node; sts1node; sts2node]
 	| NSwhile (a,e,s1) ->
 	    (* source of backward edge in loop *)
 	    let bwd_node = create_node (Nintern InternOperationalBwdSrc) in
@@ -3463,15 +3547,15 @@ end = struct
 	    let upd_ctxt =
 	      { ctxt with 
 		  loop_starts = bwd_node :: ctxt.loop_starts;
-		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
+		  loop_switch_ends = opsnode :: ctxt.loop_switch_ends } in
             (* widening node is first node -in- the loop *)
             let widen_node = create_node (Nwiden { count = 0 }) in 
             (* oper *) add_opedge test_node widen_node;
-	    let s1node = from_stat upd_ctxt widen_node s1 in
-	    (* oper *) add_opedge s1node bwd_node; (* before [e]'s eval *)
-	    (* oper *) add_opedge stop_node snode; (* after [e]'s eval *)
-	    (* struct *) add_stedge snode [test_node; s1node];
-	    (* logic *) add_logedge snode [anode];
+	    let sts1node,ops1node = from_stat upd_ctxt widen_node s1 in
+	    (* oper *) add_opedge ops1node bwd_node; (* before [e]'s eval *)
+	    (* oper *) add_opedge stop_node opsnode; (* after [e]'s eval *)
+	    (* struct *) add_stedge stsnode [test_node; sts1node];
+	    (* logic *) add_logedge stsnode [anode];
 	    (* the logical "annot" node is linked to the start and end nodes *)
 	    (* [bwd_node] is the end node of the loop *)
 	    (* logic *) add_begedge anode ctxt.function_begin;
@@ -3488,11 +3572,11 @@ end = struct
 	    let upd_ctxt =
 	      { ctxt with 
 		  loop_starts = fwd_node :: ctxt.loop_starts;
-		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
+		  loop_switch_ends = opsnode :: ctxt.loop_switch_ends } in
             (* widening node is first node -in- the loop *)
             let widen_node = create_node (Nwiden { count = 0 }) in 
             (* oper *) add_opedge mrg_node widen_node;
-	    let s1node = from_stat upd_ctxt widen_node s1 in
+	    let sts1node,ops1node = from_stat upd_ctxt widen_node s1 in
 	    let loop_effect = 
 	      Ceffect.ef_union (Ceffect.statement ~with_local:true s1)
 		(Ceffect.expr ~with_local:true e) in
@@ -3520,11 +3604,11 @@ end = struct
 	    let test_node = from_expr ~is_test:true loop_node e in
 	    let stop_node = 
 	      from_expr ~is_test:true ~neg_test:true loop_node e in
-	    (* oper *) add_opedge s1node fwd_node;
+	    (* oper *) add_opedge ops1node fwd_node;
 	    (* oper *) add_opedge test_node bwd_node;(* before [s1]'s eval *)
-	    (* oper *) add_opedge stop_node snode;
-	    (* struct *) add_stedge snode [s1node; test_node];
-	    (* logic *) add_logedge snode [anode];
+	    (* oper *) add_opedge stop_node opsnode;
+	    (* struct *) add_stedge stsnode [sts1node; test_node];
+	    (* logic *) add_logedge stsnode [anode];
 	    (* the logical "annot" node is linked to the start and end nodes *)
 	    (* [bwd_node] is the end node of the loop *)
 	    (* logic *) add_begedge anode ctxt.function_begin;
@@ -3571,84 +3655,88 @@ end = struct
 	    let upd_ctxt =
 	      { ctxt with 
 		  loop_starts = fwd_node :: ctxt.loop_starts;
-		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
+		  loop_switch_ends = opsnode :: ctxt.loop_switch_ends } in
             (* widening node is first node -in- the loop *)
             let widen_node = create_node (Nwiden { count = 0 }) in 
             (* oper *) add_opedge test_node widen_node;
-	    let s1node = from_stat upd_ctxt widen_node s1 in
+	    let sts1node,ops1node = from_stat upd_ctxt widen_node s1 in
 	    let eincr_node = from_expr fwd_node eincr in
-	    (* oper *) add_opedge s1node fwd_node;
+	    (* oper *) add_opedge ops1node fwd_node;
 	    (* oper *) add_opedge eincr_node bwd_node; (* before [etest] *)
-	    (* oper *) add_opedge stop_node snode; (* after [etest]'s eval *)
-	    (* struct *) add_stedge snode [einit_node; test_node;
-					   eincr_node; s1node];
-	    (* logic *) add_logedge snode [anode];
+	    (* oper *) add_opedge stop_node opsnode; (* after [etest]'s eval *)
+	    (* struct *) add_stedge stsnode [einit_node; test_node;
+					     eincr_node; sts1node];
+	    (* logic *) add_logedge stsnode [anode];
 	    (* the logical "annot" node is linked to the start and end nodes *)
 	    (* [bwd_node] is the end node of the loop *)
 	    (* logic *) add_begedge anode ctxt.function_begin;
 	    (* logic *) add_endedge anode bwd_node
 	| NSblock sl ->
-	    let (bnode,snodes) = 
+	    let (opbnode,stsnodes) = 
 	      List.fold_left 
-		(fun (stnode,s1nodes) s1 -> 
-		   let s1node = from_stat ctxt stnode s1 in
-		   s1node,s1node::s1nodes
+		(fun (startopnode,sts1nodes) s1 -> 
+		   let sts1node,ops1node = from_stat ctxt startopnode s1 in
+		   ops1node,sts1node::sts1nodes
 		) (start_node,[]) sl in
-	    let snodes = List.rev snodes in
-	    (* oper *) add_opedge bnode snode;
-	    (* struct *) add_stedge snode snodes
+	    let stsnodes = List.rev stsnodes in
+	    (* oper *) add_opedge opbnode opsnode;
+	    (* struct *) add_stedge stsnode stsnodes
 	| NSreturn None ->
-	    (* oper *) add_opedge start_node snode;
+	    (* oper *) add_opedge start_node opsnode;
 	    begin match ctxt.function_end with
 	      | Some function_end ->
-		  (* logic *) force_add_opedge snode function_end
+		  (* logic *) force_add_opedge stsnode function_end
 	      | None -> ()
 	    end
 	| NSreturn (Some e) -> 
 	    let enode = from_expr start_node e in
-	    (* oper *) add_opedge enode snode;
-	    (* struct *) add_stedge snode [enode];
+	    (* oper *) add_opedge enode opsnode;
+	    (* struct *) add_stedge stsnode [enode];
 	    begin match ctxt.function_end with
 	      | Some function_end ->
-		  (* logic *) force_add_opedge snode function_end
+		  (* logic *) force_add_opedge stsnode function_end
 	      | None -> ()
 	    end
 	| NSbreak -> 
-	    (* oper *) add_opedge start_node snode;
-	    (* oper *) force_add_opedge snode (List.hd ctxt.loop_switch_ends);
+	    (* oper *) add_opedge start_node opsnode;
+	    (* oper *) force_add_opedge opsnode (List.hd ctxt.loop_switch_ends);
 	| NScontinue -> 
-	    (* oper *) add_opedge start_node snode;
+	    (* oper *) add_opedge start_node opsnode;
 	    (* Originally this edge was a backward one, crucial to make 
 	       the topological walk work properly. Not the case anymore since
 	       loops have 2 special nodes for the back edge. *)
-	    (* oper *) add_opedge snode (List.hd ctxt.loop_starts)
+	    (* oper *) add_opedge opsnode (List.hd ctxt.loop_starts)
 	| NSgoto (_,lab) ->
             (* no problem of widening here since only forward gotos are 
 	       accepted. Otherwise we should add a widening node in the induced
 	       loop. *)
-	    (* oper *) add_opedge start_node snode;
+	    (* oper *) add_opedge start_node opsnode;
 	    let label_node = update_context_for_label ctxt lab in
-	    (* oper *) force_add_opedge snode label_node
+	    (* oper *) force_add_opedge opsnode label_node
 	| NSspec (spc,s1) ->
-	    let s1node = from_stat ctxt start_node s1 in
-	    (* oper *) add_opedge s1node snode;
-	    (* struct *) add_stedge snode [s1node];
+	    let sts1node,ops1node = from_stat ctxt start_node s1 in
+	    (* oper *) add_opedge ops1node opsnode;
+	    (* struct *) add_stedge stsnode [sts1node];
 	    (* ignore precondition for the moment *)
 	    let spcnode,_ = from_spec spc in
-	    (* logic *) add_logedge snode [spcnode];
+	    (* logic *) add_logedge stsnode [spcnode];
 	    (* the logical "spec" node is linked to the start and end nodes *)
 	    (* logic *) add_begedge spcnode start_node;
-	    (* logic *) add_endedge spcnode snode
+	    (* logic *) add_endedge spcnode stsnode
 	| NSlabel (lab,s1) ->
 	    let label_node = update_context_for_label ctxt lab in
 	    (* oper *) add_opedge start_node label_node;
-	    let s1node = from_stat ctxt label_node s1 in
-	    (* oper *) add_opedge s1node snode;
-	    (* struct *) add_stedge snode [s1node]
+	    let sts1node,ops1node = from_stat ctxt label_node s1 in
+	    (* oper *) add_opedge ops1node opsnode;
+	    (* struct *) add_stedge stsnode [sts1node]
 	| NSdecl (_,_,None,s1) ->
-	    let s1node = from_stat ctxt start_node s1 in
-	    (* oper *) add_opedge s1node snode;
-	    (* struct *) add_stedge snode [s1node]
+	    (* here structural statement node and operational statement node
+	       are not the same. [stsnode] is used in the operational graph
+	       before nodes for [s1]. *)
+	    (* oper *) add_opedge start_node stsnode;
+	    let sts1node,ops1node = from_stat ctxt stsnode s1 in
+	    (* oper *) add_opedge ops1node opsnode;
+	    (* struct *) add_stedge stsnode [sts1node]
 	| NSdecl (_,var,Some cinit,s1) ->
 	    (* create an assignment expression node so that the treatment
 	       of this initialization is shared with normal assignment *)
@@ -3696,30 +3784,35 @@ end = struct
 	    let explicit_assign = NEassign (var_expr,encoded_expr) in
 	    let explicit_assign = 
 	      { base_expr with nexpr_node = explicit_assign } in
-	    let enode = from_expr start_node explicit_assign in
-	    let s1node = from_stat ctxt enode s1 in
-	    (* oper *) add_opedge s1node snode;
-	    (* struct *) add_stedge snode [enode;s1node]
+	    (* here structural statement node and operational statement node
+	       are not the same. [stsnode] is used in the operational graph
+	       before nodes for [s1]. *)
+	    (* oper *) add_opedge start_node stsnode;
+	    let enode = from_expr stsnode explicit_assign in
+	    let sts1node,ops1node = from_stat ctxt enode s1 in
+	    (* oper *) add_opedge ops1node opsnode;
+	    (* struct *) add_stedge stsnode [enode;sts1node]
 	| NSswitch (e,_,cases) -> 
 	    let enode = from_expr start_node e in
 	    let upd_ctxt =
 	      { ctxt with 
 		  loop_starts = ctxt.loop_starts;
-		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
+		  loop_switch_ends = opsnode :: ctxt.loop_switch_ends } in
 	    let cnodes = List.map
 	      (fun (_,sl) -> 
-		 let cnode,clnodes =
+		 let opcnode,stclnodes =
 		   List.fold_left 
-		     (fun (stnode,s1nodes) s1 -> 
-			let s1node = from_stat upd_ctxt stnode s1 in
-			s1node,s1node::s1nodes
+		     (fun (startopnode,s1nodes) s1 -> 
+			let sts1node,ops1node = 
+			  from_stat upd_ctxt startopnode s1 in
+			ops1node,sts1node::s1nodes
 		     ) (enode,[]) sl
 		 in
 		 (* [cnode] is the node representing this [case], which is 
 		    the same as the last statement in the list of statements
 		    for this [case], when this list is not empty.
 		    [clnodes] is the list of statements in this [case]. *)
-		 cnode,List.rev clnodes
+		 opcnode,List.rev stclnodes
 	      ) cases
 	    in
 	    let last_cnode =
@@ -3739,12 +3832,12 @@ end = struct
 		   end) enode cnodes
 	    in
 	    (* control flows from end of last case to end of switch *)
-	    (* oper *) add_opedge last_cnode snode;
+	    (* oper *) add_opedge last_cnode opsnode;
 	    (* in absence of stable way of recognizing presence of [default]
 	       case in switch (emptiness of integer map is not stable),
 	       we consider the control always flows from start to end
 	       of switch *)
-	    (* oper *) add_opedge start_node snode;
+	    (* oper *) add_opedge start_node opsnode;
 	    let first_nodes = 
 	      List.map (fun (_,clnodes) ->
 			  (* special encoding so that [switch] can be seen as
@@ -3759,9 +3852,9 @@ end = struct
 			  end;
 			  fnode) cnodes
 	    in
-	    (* struct *) add_stedge snode (enode::first_nodes)
+	    (* struct *) add_stedge stsnode (enode::first_nodes)
     end;
-    snode
+    stsnode,opsnode
 
   let rec from_decl d =
     if debug then Coptions.lprintf 
@@ -3802,9 +3895,9 @@ end = struct
 		(* oper *) add_opedge dnode reqnode;
 		reqnode
 	  in
-	  let snode = from_stat start_ctxt func_node s in
-	  (* oper *) add_opedge snode end_node;
-	  (* struct *) add_stedge dnode [snode];
+	  let stsnode,opsnode = from_stat start_ctxt func_node s in
+	  (* oper *) add_opedge opsnode end_node;
+	  (* struct *) add_stedge dnode [stsnode];
 	  (* logic *) add_logedge dnode [spcnode];
 	  (* the logical "spec" node is linked to the start and end nodes *)
 	  (* logic *) add_begedge spcnode dnode; (* begin of decl is itself *)

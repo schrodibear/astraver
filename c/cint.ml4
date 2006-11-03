@@ -22,6 +22,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: cint.ml4,v 1.13 2006-11-03 14:51:13 moy Exp $ *)
+
 (* TO DO:
 
    - document that inequalities like [x > 1 => x > 2] are not representable
@@ -2504,9 +2506,6 @@ struct
   let eval_test ~backward pred (v1,v2) =
     (L1.eval_test ~backward pred v1, L2.eval_test ~backward pred v2)
 
-  let guarantee_test pred (v1,v2) =
-    L1.guarantee_test pred v1 || (L2.guarantee_test pred v2)
-
   let remove_variable var (v1,v2) =
     (L1.remove_variable var v1, L2.remove_variable var v2)
 
@@ -2539,6 +2538,9 @@ struct
   
   include Make_InternalPairLattice(V)(I)(L1)(L2)
 
+  let guarantee_test pred (v1,v2) =
+    L1.guarantee_test pred v1 || (L2.guarantee_test pred v2)
+
   let to_pred (v1,v2) = 
     match L1.to_pred v1,L2.to_pred v2 with
       | None,p | p,None -> p
@@ -2555,6 +2557,18 @@ struct
   
   include Make_InternalPairLattice(V)(I)(L1)(L2)
 
+  let guarantee_test pred (v1,v2) =
+    L1.guarantee_test pred v1 || 
+      (L1.is_full v1 && L2.guarantee_test pred v2)
+
+  let to_pred (v1,v2) =
+    match L1.to_pred v1,L2.to_pred v2 with
+      | None,p | p,None -> p
+      | Some p1,Some p2 -> 
+	  let lhs_p2,rhs_p2 = V.P.get_implicants p2 in
+	  let new_lhs = V.P.make_conjunct [p1;lhs_p2] in
+	  Some (V.P.make_implication new_lhs rhs_p2)
+    
   let eliminate vlist (v1,v2) = (v1,L2.eliminate vlist v2)
 
   let eval_constraint pred (v1,v2) = (v1,L2.eval_constraint pred v2)
@@ -2570,14 +2584,6 @@ struct
   let unconstrained_variables (v1,v2) = 
     L1.restrained_variables v1 @ (L2.unconstrained_variables v2)
 
-  let to_pred (v1,v2) =
-    match L1.to_pred v1,L2.to_pred v2 with
-      | None,p | p,None -> p
-      | Some p1,Some p2 -> 
-	  let lhs_p2,rhs_p2 = V.P.get_implicants p2 in
-	  let new_lhs = V.P.make_conjunct [p1;lhs_p2] in
-	  Some (V.P.make_implication new_lhs rhs_p2)
-    
 end
 
 
@@ -2845,6 +2851,8 @@ module IntLangFromNormalized : sig
   val string_read_access : (Var.t -> bool) -> Node.t -> Var.t option
     (* change type of dereference expression to make it a safe access *)
   val make_safe_access : Node.t -> Node.t
+    (* derefence is safe by construction (e.g. array initialization) *)
+  val is_safe_access : Node.t -> bool
 
 end = struct
   
@@ -3385,6 +3393,20 @@ end = struct
   let string_read_access is_packed_var =
     internal_access ~string_read:(fun v _ -> Var.Vvar v) is_packed_var
 
+  let is_safe_access node =
+    let e = get_e node in
+    match e.nexpr_node with
+      | NEarrow (e1,zone,field) ->
+	  let typ = e1.nexpr_type in
+	  begin match typ.Ctypes.ctype_node with
+	    | Ctypes.Tpointer (Ctypes.Valid,_)
+	    | Ctypes.Tarray (Ctypes.Valid,_,_) -> true
+	    | _ -> false
+	  end
+      | _ ->
+	  (* should be called only on dereference *)
+	  assert false
+
   (* change type of dereference expression to make it a safe access *)
   let make_safe_access node =
     let e = get_e node in
@@ -3491,7 +3513,7 @@ struct
   let strlen_var_followed = ref None
   let set_strlen_var_followed v = strlen_var_followed := v
 
-  let keep_invariant_value node previous_value cur_ctxt_val =
+  let keep_invariant_value node previous_value cur_val =
 (*
     (* ignore variables written in loop *)
     let write_vars = get_loop_write_vars node in
@@ -3499,42 +3521,51 @@ struct
     let fwd_val = List.fold_right CL.remove_variable write_vars cur_ctxt_val
     in
 *)
-    let fwd_val = cur_ctxt_val in
+    let fwd_val = cur_val in
+    let fwd_ctxt_val,fwd_sep_val = fwd_val in
     if debug then Coptions.lprintf 
       "[transfer] (assume) invariant current value %a@."
-      CL.pretty fwd_val;
+      CL.pretty fwd_ctxt_val;
     match previous_value with
       | None -> fwd_val
-      | Some (prev_ctxt_val,_) ->
+      | Some (prev_ctxt_val,prev_sep_val) ->
 	  if debug then Coptions.lprintf 
 	    "[transfer] (assume) invariant previous value %a@."
 	    CL.pretty prev_ctxt_val;
 	  if debug then Coptions.lprintf 
 	    "[transfer] (assume) invariant current value %a@."
-	    CL.pretty fwd_val;
+	    CL.pretty fwd_ctxt_val;
 	  (* [meet] justified here because used between
 	     - [prev_ctxt_val] previous value of assumed invariant,
 	     - [fwd_val], result of current propagation, from which
 	     variables that are assigned in the loop are removed
 	  *)
-	  let res = CL.normalize (CL.meet prev_ctxt_val fwd_val) in
+	  let res1 = CL.normalize (CL.meet prev_ctxt_val fwd_ctxt_val) in
+	  let res2 = SL.normalize (SL.meet prev_sep_val fwd_sep_val) in
 	  if debug then Coptions.lprintf 
 	    "[transfer] (assume) invariant result value %a@."
-	    CL.pretty res;
-	  res
+	    CL.pretty res1;
+	  res1,res2
 
   let transfer ?(backward=false) ?(with_assert=false) ?(one_pass=false) 
       ?(final=false) ?previous_value node cur_val =
 
     if debug_more then Coptions.lprintf 
 	"[transfer] %a@." Node.pretty node;
+    begin match previous_value with
+      | None -> ()
+      | Some (prev_ctxt_val,prev_sep_val) -> 
+	  if debug_more then Coptions.lprintf 
+	    "[transfer] with previous value %a %a@." CL.pretty prev_ctxt_val
+	    SL.pretty prev_sep_val
+    end;
 
     let cur_ctxt_val,cur_sep_val = cur_val in
     let forward = not backward in
     match get_node_kind node with
       | NKnone -> cur_val
 
-      | NKstat -> 
+      | NKstat ->
 	  if backward && stat_is_decl node then 
 	    (* ignore information on variable before its declaration *)
 	    let var = decl_stat_get_var node in
@@ -3544,6 +3575,8 @@ struct
 	      CL.remove_variable (Var.Varrlen var) new_ctxt_val in
 	    let new_ctxt_val = 
 	      CL.remove_variable (Var.Vstrlen var) new_ctxt_val in
+	    if debug_more then Coptions.lprintf
+	      "[transfer] removing info on %a@." Var.pretty (Var.Vvar var);
 	    new_ctxt_val,cur_sep_val
 	  else cur_val
 
@@ -3643,16 +3676,16 @@ struct
 	    else expr_ctxt_val
 	  in
 	  
-	  let expr_ctxt_val =
+	  let expr_ctxt_val,expr_sep_val =
 	    if forward && one_pass 
 	      && (is_assume_invariant_node node 
 		  || is_function_precondition_node node) then
 		(* keep last value computed (either forward or backward) *)
 		match previous_value with
-		  | None -> expr_ctxt_val
-		  | Some (prev_ctxt_val,_) -> prev_ctxt_val
+		  | None -> expr_ctxt_val,expr_sep_val
+		  | Some prev_val -> prev_val
 	    else
-	      expr_ctxt_val
+	      expr_ctxt_val,expr_sep_val
 	  in
 	  begin match get_node_kind node with
 	  | NKtest | NKassume ->
@@ -3665,43 +3698,86 @@ struct
 	  end
 
       | NKassert ->
-	  if backward && is_invariant_node node then
-	    (* eliminate variables written in the loop *)
-	    let write_vars = get_loop_write_vars node in
-	    let write_vars = List.map (fun v -> Var.Vvar v) write_vars in
-	    if debug then Coptions.lprintf 
-	      "[transfer] invariant with written vars %a@."
-	      (print_list comma Var.pretty) write_vars;
-	    let new_ctxt_val = CL.eliminate write_vars cur_ctxt_val in
-	    (* when in [final] mode, generate the separation conditions
-	       that should guarantee proper use of [strlen] variables *)
-	    let new_sep_val =
-	      if final then
-		match !strlen_var_followed with
-		  | Some strlen_var ->
-		      let write_under_pointers = 
-			get_loop_write_under_pointers node in
-		      let write_under_pointers = 
-			List.map (fun v -> Var.Vvar v) write_under_pointers in
-		      if debug then Coptions.lprintf 
-			"[transfer] invariant with write under pointers %a@."
-			(print_list comma Var.pretty) write_under_pointers;
-		      let restr_vars = CL.restrained_variables new_ctxt_val in
-		      if List.mem strlen_var restr_vars then
-			let v = Var.get_variable strlen_var in
-			List.fold_right (SL.add_separated_pair (Var.Vvar v))
-			  write_under_pointers cur_sep_val
+	  if is_invariant_node node then
+	    if backward then
+	      (* eliminate variables written in the loop *)
+	      let write_vars = get_loop_write_vars node in
+	      let write_vars = List.map (fun v -> Var.Vvar v) write_vars in
+	      if debug then Coptions.lprintf 
+		"[transfer] invariant with written vars %a@."
+		(print_list comma Var.pretty) write_vars;
+	      let new_ctxt_val = CL.eliminate write_vars cur_ctxt_val in
+	      (* when in [final] mode, generate the separation conditions
+		 that should guarantee proper use of [strlen] variables *)
+	      let new_sep_val =
+		if final then
+		  match !strlen_var_followed with
+		    | Some strlen_var ->
+			let write_under_pointers = 
+			  get_loop_write_under_pointers node in
+			let write_under_pointers = 
+			  List.map (fun v -> Var.Vvar v) write_under_pointers in
+			let restr_vars = CL.restrained_variables new_ctxt_val in
+			if debug then Coptions.lprintf 
+			  "[transfer] invariant with write under pointers %a@."
+			  (print_list comma Var.pretty) write_under_pointers;
+			if debug then Coptions.lprintf 
+			  "[transfer] invariant with restrained variables %a@."
+			  (print_list comma Var.pretty) restr_vars;
+			if List.mem strlen_var restr_vars then
+			  let v = Var.get_variable strlen_var in
+			  List.fold_right (SL.add_separated_pair (Var.Vvar v))
+			    write_under_pointers cur_sep_val
 		      else cur_sep_val
-		  | None -> cur_sep_val
-	      else cur_sep_val
-	    in
-	    new_ctxt_val,new_sep_val
+		    | None -> cur_sep_val
+		else cur_sep_val
+	      in
+	      new_ctxt_val,new_sep_val
 
-	  else if forward && one_pass && is_invariant_node node then
-	    let new_ctxt_val =
-	      keep_invariant_value node previous_value cur_ctxt_val
-	    in
-	    new_ctxt_val,cur_sep_val
+	    else if forward && one_pass then
+	      let new_ctxt_val,new_sep_val =
+		keep_invariant_value node previous_value cur_val
+	      in
+	      let new_ctxt_val =
+		if final && Coptions.absint_as_proof then
+		  (* when in [final] mode, only the proper separation conditions
+		     should allow proper use of [strlen] variables *)
+		  let write_under_pointers = 
+		    get_loop_write_under_pointers node in
+		  let write_under_pointers = 
+		    List.map (fun v -> Var.Vvar v) write_under_pointers in
+		  let restr_vars = 
+		    CL.restrained_variables new_ctxt_val in
+		  let strlen_vars = List.filter Var.is_strlen restr_vars in
+		  if debug then Coptions.lprintf 
+		    "[transfer] fwd invariant with write under pointers %a@."
+		    (print_list comma Var.pretty) write_under_pointers;
+		  if debug then Coptions.lprintf 
+		    "[transfer] fwd invariant with restrained variables %a@."
+		    (print_list comma Var.pretty) restr_vars;
+		  if debug then Coptions.lprintf 
+		    "[transfer] fwd invariant with strlen variables %a@."
+		    (print_list comma Var.pretty) strlen_vars;
+		  let not_written_under var =
+		    List.fold_left (fun acc_b v -> acc_b 
+				      && SL.separated var v new_sep_val
+				   ) true write_under_pointers
+		  in
+		  List.fold_left 
+		    (fun ctxt_val strlen_var ->
+		       let v = Var.get_variable strlen_var in
+		       if not_written_under (Var.Vvar v) then
+			 ctxt_val
+		       else
+			 CL.remove_variable strlen_var ctxt_val
+		    ) new_ctxt_val strlen_vars
+		else
+		  new_ctxt_val
+	      in
+	      new_ctxt_val,new_sep_val
+
+	    else (* forward && not one_pass *)
+	      cur_val
 
 	  else
 	    begin
@@ -3937,6 +4013,7 @@ struct
      a safety property. This excludes:
      - memory accesses already analyzed as safe by the forward analysis
      - memory accesses not of the form that can be analyzed
+     - memory accesses safe by construction (e.g. array initialization)
    *)
   let memory_access_select node pre_val =
     if debug_more then Coptions.lprintf
@@ -3947,12 +4024,12 @@ struct
     with
     | None -> false
     | Some p_safe ->
-	if debug_more then Coptions.lprintf
-	    "[memory_access_select] safe pred %a@." 
-	    Var.P.pretty p_safe;
-	(* is the access already guaranteed to be safe ? *)
-	let res =
-	  not (ContextLattice.guarantee_test p_safe pre_ctxt_val)
+	if is_safe_access node then 
+	  false
+	else
+	  (* is the access already guaranteed to be safe ? *)
+	  let res =
+	    not (ContextLattice.guarantee_test p_safe pre_ctxt_val)
 (*
 	  if needing_strlen then
 	    (* select here tests guaranteed to be true only by using
@@ -3964,10 +4041,13 @@ struct
 	    (* test already guaranteed to be true. No propagation needed. *)
 	    false
 *)
-	in
-	if debug_more then Coptions.lprintf
-	  "[memory_access_select] selected ? %B@." res;
-	res
+	  in
+	  if debug_more then Coptions.lprintf
+	    "[memory_access_select] safe pred %a@." 
+	    Var.P.pretty p_safe;
+	  if debug_more then Coptions.lprintf
+	    "[memory_access_select] selected ? %B@." res;
+	  res
 
   let string_access_select node pre_val =
     if debug_more then Coptions.lprintf
@@ -4014,8 +4094,10 @@ struct
       | None ->
 	  ConnectCFGtoOct.set_strlen_var_followed None
       | Some v ->
-	  ConnectCFGtoOct.set_strlen_var_followed 
-	    (Some (Var.Vstrlen (Var.get_variable v)))
+	  let strlen_var = Var.Vstrlen (Var.get_variable v) in
+	  if debug_more then Coptions.lprintf
+	    "[build_strlen_context] following %a@." Var.pretty strlen_var;
+	  ConnectCFGtoOct.set_strlen_var_followed (Some strlen_var)
     end;
     init_val,pre_sep_val
     
@@ -4030,6 +4112,7 @@ struct
   let keep_node_select node =
     merge_node_select node || is_assume_invariant_node node
     || is_loop_backward_source_node node 
+
 (*
   USED AS A HACK TO IMPROVE PRECONDITION ON ARRLEN/STRLEN, SHOULD BE MADE
   USELESS BY CURRENT DEVELOPMENTS

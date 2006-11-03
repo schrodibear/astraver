@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.105 2006-11-03 12:48:56 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.106 2006-11-03 14:51:13 moy Exp $ i*)
 
 open Coptions
 open Format
@@ -575,10 +575,10 @@ and type_predicate_node env p0 = match p0.lexpr_node with
       let t2 = type_term env t2 in
       Pseparated (
       (match t1.term_type.ctype_node with
-	 | Tstruct _ -> t1
+	 | Tstruct _ | Tarray _ | Tpointer _ -> t1
 	 | _ -> error t1loc "subscripted value is neither array nor pointer"),
 	(match t2.term_type.ctype_node with
-	 | Tstruct _ -> t2
+	 | Tstruct _ | Tarray _ | Tpointer _ -> t2
 	 | _ -> error t2loc "subscripted value is neither array nor pointer"))
   | PLfullseparated (t1,t2) ->
       let t1loc = t1.lexpr_loc in
