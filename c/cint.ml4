@@ -2,6 +2,8 @@
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)

@@ -2,6 +2,8 @@
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
@@ -20,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.4 2006-11-03 11:55:26 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.5 2006-11-03 12:49:00 marche Exp $ i*)
 
 open Format
 

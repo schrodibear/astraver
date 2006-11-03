@@ -2,6 +2,8 @@
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
@@ -20,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_lexer.mli,v 1.4 2006-11-03 11:55:26 marche Exp $ *)
+(* $Id: jc_lexer.mli,v 1.5 2006-11-03 12:49:00 marche Exp $ *)
 
 exception Lexical_error of Loc.position * string
 

@@ -2,6 +2,8 @@
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
@@ -20,27 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*
- * The Caduceus certification tool
- * Copyright (C) 2003 Jean-Christophe Filliâtre - Claude Marché
- * 
- * This software is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License version 2, as published by the Free Software Foundation.
- * 
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License version 2 for more details
- * (enclosed in the file GPL).
- *)
-
-(*i $Id: ceffect.mli,v 1.32 2006-11-03 11:55:22 marche Exp $ i*)
-
-(*
-val interp_type : Cast.nctype -> string
-*)
+(*i $Id: ceffect.mli,v 1.33 2006-11-03 12:48:56 marche Exp $ i*)
 
 open Info
 
@@ -69,21 +51,9 @@ val assigns_alloc : effect -> bool
 (* all heap vars and their associated types *)
 val heap_vars : (string, Info.var_info) Hashtbl.t
 
-(*
-val zone_type : (string, Info.zone) Hashtbl.t
-*)
-
 val print_heap_vars : Format.formatter -> unit -> unit
 
-
-(*
-val heap_var_type : var_info -> Info.why_type
-*)
-(*val memorycell_name : Info.why_type -> string*)
-
 val is_memory_var : var_info -> bool
-
-(*val location : Cast.nterm Clogic.location -> HeapVarSet.t*)
 
 val locations : Cast.nterm Clogic.location list -> effect
 
@@ -95,10 +65,6 @@ val statement : ?with_local:bool -> Cast.nstatement -> effect
 
 (* computes effects for logical symbols only *)
 val file : Cast.nfile -> unit
-
-(* computes functions effects; 
-   return [true] when fixpoint is reached (no more modification) 
-val functions : Cast.nfile -> bool*)
 
 (* Compute functions effects *)
 val effect : ('a * Cast.ndecl Cast.located list) list -> fun_info list -> unit

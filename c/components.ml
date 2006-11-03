@@ -2,6 +2,8 @@
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
@@ -37,7 +39,7 @@
  * (enclosed in the file LGPL).
  *)
 
-(* $Id: components.ml,v 1.3 2006-11-03 11:55:23 marche Exp $ *)
+(* $Id: components.ml,v 1.4 2006-11-03 12:48:57 marche Exp $ *)
 
 module type COMPARABLE = sig 
   type t 

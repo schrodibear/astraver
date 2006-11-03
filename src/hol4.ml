@@ -2,6 +2,8 @@
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
@@ -20,23 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*
- * The Why certification tool
- * Copyright (C) 2002 Jean-Christophe FILLIATRE
- * 
- * This software is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License version 2, as published by the Free Software Foundation.
- * 
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
- * See the GNU General Public License version 2 for more details
- * (enclosed in the file GPL).
- *)
-
-(*i $Id: hol4.ml,v 1.15 2006-11-03 11:55:29 marche Exp $ i*)
+(*i $Id: hol4.ml,v 1.16 2006-11-03 12:49:03 marche Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 

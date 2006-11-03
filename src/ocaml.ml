@@ -2,6 +2,8 @@
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
@@ -20,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ocaml.ml,v 1.19 2006-11-03 11:55:31 marche Exp $ i*)
+(*i $Id: ocaml.ml,v 1.20 2006-11-03 12:49:04 marche Exp $ i*)
 
 (*s Ocaml code output *)
 
