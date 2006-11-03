@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.50 2006-11-02 09:18:24 hubert Exp $ i*)
+(*i $Id: ltyping.ml,v 1.51 2006-11-03 11:30:51 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -431,7 +431,7 @@ let rec type_v loc lab env = function
       Ref (pure_type env v)
   | PVarrow (bl, c) -> 
       let bl',env' = binders loc lab env bl in 
-      make_arrow bl' (type_c loc lab env' c)
+      Arrow (bl', type_c loc lab env' c)
 
 and pure_type_v loc lab env = function
   | PVpure pt ->
@@ -464,6 +464,9 @@ and binders loc lab env = function
 	  (Env.add id v (add_logic_if_pure id v env)) bl 
       in
       (id, v) :: bl', env'
+
+let type_v loc lab env v = make_binders_type_v (type_v loc lab env v)
+let type_c loc lab env c = make_binders_type_c (type_c loc lab env c)
 
 let logic_type lt = 
   let env = Env.empty_logic () in

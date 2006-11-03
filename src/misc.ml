@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.109 2006-11-02 15:13:48 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.110 2006-11-03 11:30:51 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -451,6 +451,28 @@ let make_arrow bl c = match bl with
       in
       let bl',s = List.fold_right rename bl ([], Idmap.empty) in
       Arrow (bl', type_c_subst s c)
+
+let rec make_binders_type_c s c =
+  let {c_result_name=id; c_result_type=t; c_effect=e; c_pre=p; c_post=q} = c in
+  { c_result_name = id;
+    c_result_type = make_binders_type_v s t;
+    c_effect = Effect.subst s e;
+    c_pre = List.map (subst_in_predicate s) p;
+    c_post = option_app (post_app (subst_in_predicate s)) q }
+
+and make_binders_type_v s = function
+  | Ref _ | PureType _ as v -> v
+  | Arrow (bl,c) -> 
+      let rename (id,v) (bl,s) = 
+	let id' = Ident.bound id in 
+	(id',v) :: bl, 
+	Idmap.add id id' (Idmap.add (at_id id "") (at_id id' "") s)
+      in
+      let bl',s = List.fold_right rename bl ([], s) in
+      Arrow (bl', make_binders_type_c s c)
+
+let make_binders_type_v = make_binders_type_v Idmap.empty
+let make_binders_type_c = make_binders_type_c Idmap.empty
 
 (*s Smart constructors. *)
 

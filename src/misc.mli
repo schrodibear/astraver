@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.81 2006-10-27 14:15:22 couchot Exp $ i*)
+(*i $Id: misc.mli,v 1.82 2006-11-03 11:30:51 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -170,6 +170,9 @@ val type_c_rsubst : substitution -> type_c -> type_c
 
 val type_c_of_v : type_v -> type_c
 val make_arrow : type_v binder list -> type_c -> type_v
+
+val make_binders_type_v : type_v -> type_v
+val make_binders_type_c : type_c -> type_c
 
 val unref_term : term -> term
 
