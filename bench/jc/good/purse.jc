@@ -24,7 +24,8 @@ unit withdraw(purse[0] this, integer s)
   this.balance -= s;
 }
 
-int test1(purse[0] p1, purse[0] p2) 
+int test1(purse[0] p1, purse[0] p2)
+  requires p1 != p2
   behavior result_is_nul:
     /* assigns p1.balance,p2.balance */
     ensures \result == 0
@@ -42,10 +43,10 @@ exception NoCreditException of unit
 
 unit withdraw2(purse this, int s) 
   requires s >= 0;
-  behavior normal_case:
+  behavior amount_withdrawn:
      assigns this.balance;
      ensures s <= \old(this.balance) && balance == \old(this.balance) - s
-  behavior exceptional_case:
+  behavior amount_too_large:
      assigns \nothing
      throws NoCreditException s 
      exsures s > \old(this.balance)
@@ -60,7 +61,7 @@ unit withdraw2(purse this, int s)
  
 boolean test2(purse p) 
   requires p != null
-  behavior
+  behavior ok_if_enough_balance:
     assigns p.balance 
     ensures \result <==> \old(p.balance) >= 1000
 {
@@ -79,8 +80,9 @@ boolean test2(purse p)
 /*
 purse new_purse () 
   allocates \result
-  assigns \result.balance 
-  ensures \result.balance == 0
+  behavior balance_is_zero:
+    assigns \result.balance 
+    ensures \result.balance == 0
   {     
     purse this = new purse[0];
     this.balance = 0;	
