@@ -190,7 +190,10 @@ let rec assertion env e =
 let make_bin_op name ty =
  { jc_fun_info_name = name;
    jc_fun_info_parameters = [];
-   jc_fun_info_return_type = ty }
+   jc_fun_info_return_type = ty;
+   jc_fun_info_calls = [];
+   jc_fun_info_logic_apps = [];
+ }
  
 let ge_int = make_bin_op "ge_int_" boolean_type
 let le_int = make_bin_op "le_int_" boolean_type 
@@ -343,6 +346,8 @@ let decl d =
 	  jc_fun_info_name = id;
 	  jc_fun_info_parameters = List.map snd param_env;
 	  jc_fun_info_return_type = ty;
+	  jc_fun_info_calls = [];
+	  jc_fun_info_logic_apps = [];
 	}
 	in
 	let param_env_result =

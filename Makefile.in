@@ -177,7 +177,7 @@ CCMO = ocamlgraph/graph.cmo \
 	c/cversion.cmo c/coptions.cmo c/cutil.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
 	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo c/cprint_graph.cmo \
-	c/components.cmo c/cgraph.cmo c/cinit.cmo \
+	ocamlgraph/components.cmo c/cgraph.cmo c/cinit.cmo \
 	c/cast_misc.cmo c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
@@ -207,6 +207,7 @@ JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo \
 	jc/jc_version.cmo jc/jc_options.cmo \
 	jc/output.cmo jc/jc_interp.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo jc/jc_typing.cmo \
+	ocamlgraph/components.cmo jc/jc_callgraph.cmo \
 	jc/jc_make.cmo jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 

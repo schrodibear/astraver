@@ -39,7 +39,7 @@
  * (enclosed in the file LGPL).
  *)
 
-(* $Id: components.ml,v 1.4 2006-11-03 12:48:57 marche Exp $ *)
+(* $Id: components.ml,v 1.1 2006-11-03 14:51:17 marche Exp $ *)
 
 module type COMPARABLE = sig 
   type t 

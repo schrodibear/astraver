@@ -51,6 +51,8 @@ type fun_info =
       jc_fun_info_name : string;
       jc_fun_info_return_type : jc_type;
       jc_fun_info_parameters : var_info list;
+      mutable jc_fun_info_calls : fun_info list;
+      mutable jc_fun_info_logic_apps : logic_info list;
     }
 
 type field_info =

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.83 2006-11-03 12:48:57 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.84 2006-11-03 14:51:16 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -53,7 +53,7 @@ let main () =
   let on_all_files g = List.map (fun (f, dl) -> (f, g dl)) in
   (* initialisation of global variables *)
   let tfiles = on_all_files Cinit.add_init tfiles in
-  (* function graph *)
+  (* call graph *)
   List.iter (fun (_,p) -> Cgraph.file p) tfiles ;
   if print_graph then Cprint_graph.print_graph ();
   let tab_comp = Cgraph.find_comp tfiles in

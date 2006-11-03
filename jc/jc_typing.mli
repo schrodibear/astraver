@@ -24,71 +24,12 @@
 
 open Jc_env
 open Jc_ast
-open Format
 
-let parse_file f = 
-  try
-    let c = open_in f in
-    let d = Jc_lexer.parse f c in
-    close_in c; d
-  with
-    | Jc_lexer.Lexical_error(l,s) ->
-	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
-	exit 1
+val functions_table : 
+  (string, fun_info * fun_spec * statement list) Hashtbl.t
 
+val structs_table : (string, field_info list) Hashtbl.t
 
-let main () =
-  let files = Jc_options.files () in
-  try
-    match files with
-    | [f] ->
-	(* phase 1 : parsing *)
-	let ast = parse_file f in
-	(* phase 2 : typing *)
-	List.iter Jc_typing.decl ast;
-	(* phase 3 : computation of call graph *)
-	Hashtbl.iter 
-	  (fun _ (f,s,b) -> Jc_callgraph.compute_calls f s b)
-	  Jc_typing.functions_table;
-	let components = 
-	  Jc_callgraph.compute_components Jc_typing.functions_table
-	in
-	(* phase x : generation of Why memories *)
-	let d_memories =
-	  Hashtbl.fold 
-	    (fun id fl acc ->
-	       Jc_interp.tr_struct id fl acc)
-	    Jc_typing.structs_table
-	    []
-	in	       	  
-	(* phase x : generation of Why functions *)
-	let d_funs = 
-	  Hashtbl.fold 
-	    (fun _ (f,s,b) acc ->
-	       Jc_interp.tr_fun f s b acc)
-	    Jc_typing.functions_table
-	    d_memories
-	in	       
-	(* phase x : produce Why file *)
-	let f = Filename.chop_extension f in
-	Pp.print_in_file 
-	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_funs)
-	  (Lib.file "why" (f ^ ".why"));
-	(* phase x : produce makefile *)
-	Jc_make.makefile f
+exception Typing_error of Loc.position * string
 
-
-    | _ -> Jc_options.usage ()
-    
-  with
-    | Jc_typing.Typing_error(l,s) ->
-	eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
-	exit 1
-    | Jc_options.Jc_error(l,s) ->
-	eprintf "%a: %s@." Loc.gen_report_position l s;
-	exit 1
-
-
-let _ = Printexc.catch main ()
-
-  
+val decl : pdecl -> unit
