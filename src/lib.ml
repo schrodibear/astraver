@@ -1,3 +1,25 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
+(*  Copyright (C) 2002-2006                                               *)
+(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Thierry HUBERT                                                      *)
+(*    Claude MARCHÉ                                                       *)
+(*    Yannick MOY                                                         *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU General Public                   *)
+(*  License version 2, as published by the Free Software Foundation.      *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(*  See the GNU General Public License version 2 for more details         *)
+(*  (enclosed in the file GPL).                                           *)
+(*                                                                        *)
+(**************************************************************************)
+
 (*
  * The Why and Caduceus certification tools
  * Copyright (C) 2003 Jean-Christophe Filliâtre - Claude Marché
@@ -14,7 +36,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: lib.ml,v 1.6 2006-11-02 09:18:23 hubert Exp $ i*)
+(*i $Id: lib.ml,v 1.7 2006-11-03 11:55:30 marche Exp $ i*)
 
 module Sset = Set.Make(String)
 

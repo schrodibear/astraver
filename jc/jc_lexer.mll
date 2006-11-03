@@ -1,4 +1,26 @@
-(*i $Id: jc_lexer.mll,v 1.6 2006-11-02 13:04:31 marche Exp $ i*)
+(**************************************************************************)
+(*                                                                        *)
+(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
+(*  Copyright (C) 2002-2006                                               *)
+(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Thierry HUBERT                                                      *)
+(*    Claude MARCHÉ                                                       *)
+(*    Yannick MOY                                                         *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU General Public                   *)
+(*  License version 2, as published by the Free Software Foundation.      *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(*  See the GNU General Public License version 2 for more details         *)
+(*  (enclosed in the file GPL).                                           *)
+(*                                                                        *)
+(**************************************************************************)
+
+(*i $Id: jc_lexer.mll,v 1.7 2006-11-03 11:55:26 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -51,7 +73,7 @@ let rIS = ('u'|'U'|'l'|'L')*
 rule token = parse
   | [' ' '\t' '\012' '\r']+ { token lexbuf }
   | '\n'                    { newline lexbuf; token lexbuf }
-  | "(*"                    { comment lexbuf; token lexbuf }
+  | "/*"                    { comment lexbuf; token lexbuf }
   | "assigns"               { ASSIGNS }
   | "behavior"              { BEHAVIOR }
 (*
@@ -177,8 +199,8 @@ rule token = parse
   | _   { lex_error lexbuf ("illegal character " ^ lexeme lexbuf) }
 
 and comment = parse
-  | "*)" { () }
-  | "(*" { comment lexbuf ; comment lexbuf }
+  | "*/" { () }
+  | "/*" { comment lexbuf ; comment lexbuf }
   | eof  { lex_error lexbuf "unterminated comment" }
   | '\n' { newline lexbuf; comment lexbuf }
   | _    { comment lexbuf }

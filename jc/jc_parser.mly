@@ -1,11 +1,11 @@
 /**************************************************************************/
 /*                                                                        */
-/*  The Why/Caduceus/Krakatoa tool suite for programm certification       */
+/*  The Why/Caduceus/Krakatoa tool suite for program certification        */
 /*  Copyright (C) 2002-2006                                               */
-/*    Jean-Christophe FILLIÃ‚TRE                                          */
+/*    Jean-Christophe FILLIÂTRE                                           */
 /*    Thierry HUBERT                                                      */
-/*    Claude MARCHÃ‰                                                      */
-/*    YANNICK MOY                                                         */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
 /*  modify it under the terms of the GNU General Public                   */
@@ -18,10 +18,9 @@
 /*  See the GNU General Public License version 2 for more details         */
 /*  (enclosed in the file GPL).                                           */
 /*                                                                        */
-/*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.8 2006-11-02 16:39:52 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.9 2006-11-03 11:55:27 marche Exp $ */
 
 %{
 

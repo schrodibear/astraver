@@ -1,3 +1,25 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
+(*  Copyright (C) 2002-2006                                               *)
+(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Thierry HUBERT                                                      *)
+(*    Claude MARCHÉ                                                       *)
+(*    Yannick MOY                                                         *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU General Public                   *)
+(*  License version 2, as published by the Free Software Foundation.      *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(*  See the GNU General Public License version 2 for more details         *)
+(*  (enclosed in the file GPL).                                           *)
+(*                                                                        *)
+(**************************************************************************)
+
 (*
  * The Caduceus certification tool
  * Copyright (C) 2003 Jean-Christophe Filliâtre - Claude Marché
@@ -14,7 +36,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.4 2006-11-03 08:29:27 marche Exp $ i*)
+(*i $Id: output.mli,v 1.5 2006-11-03 11:55:27 marche Exp $ i*)
 
 type constant =
   | Prim_int of string
