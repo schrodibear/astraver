@@ -23,6 +23,7 @@
 (**************************************************************************)
 
 open Jc_env
+open Jc_fenv
 open Jc_ast
 
 let rec term acc t =
@@ -123,12 +124,12 @@ let compute_calls f s b =
   (*f.jc_fun_info_logic_apps <- assertion a s*)
 
       
-module G = struct 
-  type t = (string, (fun_info * fun_spec * statement list)) Hashtbl.t
+module CallGraph = struct 
+  type t = (int, (fun_info * fun_spec * statement list)) Hashtbl.t
   module V = struct
     type t = fun_info
-    let compare f1 f2 = Pervasives.compare f1.jc_fun_info_name f2.jc_fun_info_name
-    let hash f = Hashtbl.hash f.jc_fun_info_name
+    let compare f1 f2 = Pervasives.compare f1.jc_fun_info_tag f2.jc_fun_info_tag
+    let hash f = f.jc_fun_info_tag
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
@@ -138,15 +139,15 @@ module G = struct
     List.iter iter f.jc_fun_info_calls 
   end
 
-module SCC = Components.Make(G)
+module CallComponents = Components.Make(CallGraph)
 
 open Format
 open Pp
 
 let compute_components table =  
-  let (scc,numcomp) = SCC.scc table in
+  let (scc,numcomp) = CallComponents.scc table in
   let tab_comp = Array.make numcomp [] in
-  G.iter_vertex 
+  CallGraph.iter_vertex 
     (fun f ->
        let i = scc f in 
        Array.set tab_comp i (f::(Array.get tab_comp i))) table ;

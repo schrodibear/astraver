@@ -23,10 +23,11 @@
 (**************************************************************************)
 
 open Jc_env
+open Jc_fenv
 open Jc_ast
 
 val functions_table : 
-  (string, fun_info * fun_spec * statement list) Hashtbl.t
+  (int, fun_info * fun_spec * statement list) Hashtbl.t
 
 val structs_table : (string, field_info list) Hashtbl.t
 

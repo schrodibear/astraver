@@ -23,6 +23,8 @@
 (**************************************************************************)
 
 open Jc_env
+open Jc_envset
+open Jc_fenv
 open Jc_ast
 
 let unit_type = JCTlogic "unit"
@@ -30,6 +32,7 @@ let integer_type = JCTlogic "int"
 let boolean_type = JCTlogic "bool"
 
 let functions_table = Hashtbl.create 97
+let functions_env = Hashtbl.create 97
 
 let structs_table = Hashtbl.create 97
 
@@ -42,12 +45,12 @@ let typing_error l f =
 let find_field ty f =
   (* TODO *)
   {
+    jc_field_info_tag = 0;
     jc_field_info_name = f;
     jc_field_info_type = unit_type
   }
 
-let find_fun_info id =
-  let (fi,_,_) = Hashtbl.find functions_table id in fi
+let find_fun_info id = Hashtbl.find functions_env id
     
 (* types *)
 
@@ -187,20 +190,25 @@ let rec assertion env e =
 
 (* expressions *)
 
-let make_bin_op name ty =
- { jc_fun_info_name = name;
-   jc_fun_info_parameters = [];
-   jc_fun_info_return_type = ty;
-   jc_fun_info_calls = [];
-   jc_fun_info_logic_apps = [];
+let fun_info_counter = ref 0
+
+let make_fun_info name ty =
+  incr fun_info_counter;
+  { jc_fun_info_tag = !fun_info_counter;
+    jc_fun_info_name = name;
+    jc_fun_info_parameters = [];
+    jc_fun_info_return_type = ty;
+    jc_fun_info_calls = [];
+    jc_fun_info_logic_apps = [];
+    jc_fun_info_effects = { jc_writes_fields = FieldSet.empty } 
  }
- 
-let ge_int = make_bin_op "ge_int_" boolean_type
-let le_int = make_bin_op "le_int_" boolean_type 
-let eq_int = make_bin_op "eq_int_" integer_type
-let neq_int = make_bin_op "neq_int_" integer_type
-let add_int = make_bin_op "add_int" integer_type
-let sub_int = make_bin_op "sub_int" integer_type
+
+let ge_int = make_fun_info "ge_int_" boolean_type
+let le_int = make_fun_info "le_int_" boolean_type 
+let eq_int = make_fun_info "eq_int_" integer_type
+let neq_int = make_fun_info "neq_int_" integer_type
+let add_int = make_fun_info "add_int" integer_type
+let sub_int = make_fun_info "sub_int" integer_type
     
 let tr_bin_op op =
   match op with
@@ -332,6 +340,7 @@ let assertion_true =
 let field (t,id) =
   let ty = type_type t in
   let fi = {
+    jc_field_info_tag = 0;
     jc_field_info_name = id;
     jc_field_info_type = ty;
   }
@@ -342,14 +351,8 @@ let decl d =
     | JCPDfun(ty,id,pl,specs,body) -> 
 	let param_env = List.map param pl in
 	let ty = type_type ty in
-	let fi = { 
-	  jc_fun_info_name = id;
-	  jc_fun_info_parameters = List.map snd param_env;
-	  jc_fun_info_return_type = ty;
-	  jc_fun_info_calls = [];
-	  jc_fun_info_logic_apps = [];
-	}
-	in
+	let fi = make_fun_info id ty in
+	fi.jc_fun_info_parameters <- List.map snd param_env;
 	let param_env_result =
 	  ("\\result",{
 	     jc_var_info_name = "\\result";
@@ -364,7 +367,8 @@ let decl d =
 		    jc_fun_behavior = [] }
 	in
 	let b = List.map (statement param_env) body in
-	Hashtbl.add functions_table id (fi,s,b)
+	Hashtbl.add functions_env id fi;
+	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDtype(id,fields) ->
 	Hashtbl.add structs_table id (List.map field fields)
 

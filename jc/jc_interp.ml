@@ -23,6 +23,8 @@
 (**************************************************************************)
 
 open Jc_env
+open Jc_envset
+open Jc_fenv
 open Jc_ast
 open Output
 
@@ -255,10 +257,16 @@ let tr_fun f spec body acc =
       (fun (id,e) acc -> make_and (assertion None "" e.jc_behavior_ensures) acc)
       spec.jc_fun_behavior LTrue
   in
+  let writes =
+    FieldSet.fold
+      (fun f acc -> f.jc_field_info_name::acc)
+      f.jc_fun_info_effects.jc_writes_fields
+      []
+  in
   let why_param = 
     let annot_type =
       Annot_type(requires,tr_type f.jc_fun_info_return_type,
-		 [],[], global_ensures,[])
+		 [],writes, global_ensures,[])
     in
     let fun_type =
       List.fold_right

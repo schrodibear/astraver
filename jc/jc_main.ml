@@ -53,6 +53,9 @@ let main () =
 	let components = 
 	  Jc_callgraph.compute_components Jc_typing.functions_table
 	in
+	(* phase 4 : computation of effects *)
+	Jc_options.lprintf "\nstarting computation of effects.@.";
+	Array.iter Jc_effect.function_effects components;
 	(* phase x : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 

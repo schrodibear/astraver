@@ -46,17 +46,9 @@ type var_info =
       mutable jc_var_info_assigned : bool;
     }
 
-type fun_info =
-    {
-      jc_fun_info_name : string;
-      jc_fun_info_return_type : jc_type;
-      jc_fun_info_parameters : var_info list;
-      mutable jc_fun_info_calls : fun_info list;
-      mutable jc_fun_info_logic_apps : logic_info list;
-    }
-
 type field_info =
     {
+      jc_field_info_tag : int;
       jc_field_info_name : string;
       jc_field_info_type : jc_type;
     }
@@ -66,3 +58,6 @@ type exception_info =
       jc_exception_info_name : string;
       jc_exception_info_type : jc_type;
     }
+
+
+
