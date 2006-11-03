@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.53 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.54 2006-11-03 12:57:08 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -441,12 +441,6 @@ let rec type_v loc lab env = function
       let bl',env' = binders loc lab env bl in 
       Arrow (bl', type_c loc lab env' c)
 
-and pure_type_v loc lab env = function
-  | PVpure pt ->
-      PureType (pure_type env pt)
-  | _ ->
-      raise_located loc MutableMutable
-
 and type_c loc lab env c =
   let ef = effect c.pc_effect in
   check_effect loc env ef;
@@ -474,6 +468,7 @@ and binders loc lab env = function
       (id, v) :: bl', env'
 
 let type_v loc lab env v = make_binders_type_v (type_v loc lab env v)
+
 let type_c loc lab env c = make_binders_type_c (type_c loc lab env c)
 
 let logic_type lt = 

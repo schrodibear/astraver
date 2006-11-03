@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.112 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: misc.ml,v 1.113 2006-11-03 12:57:08 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -293,22 +293,6 @@ let gen_post_vars assertion_vars (q,al) =
 let post_vars = gen_post_vars predicate_vars
 let apost_vars = gen_post_vars assertion_vars
 
-let rec tsubst_in_term s = function
-  | Tvar x as t -> 
-      (try Idmap.find x s 
-       with Not_found -> 
-	 t)
-  | Tderef x as t ->
-      (try Idmap.find x s with Not_found -> t)
-  | Tapp (x,l,i) -> 
-      Tapp (x, List.map (tsubst_in_term s) l, i)
-(*i***EXP
-      let l' = List.map (tsubst_in_term s) l in
-      (try applist (Idmap.find x s) l' with Not_found -> Tapp (x,l'))
-***i*)
-  | Tconst _ as t -> 
-      t
-
 let rec map_predicate f = function
   | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
   | Pif (a, b, c) -> Pif (a, f b, f c)
@@ -321,6 +305,14 @@ let rec map_predicate f = function
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Pnamed (n, a) -> Pnamed (n, f a)
   | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
+
+let rec tsubst_in_term s = function
+  | Tvar x | Tderef x as t -> 
+      (try Idmap.find x s with Not_found -> t)
+  | Tapp (x,l,i) -> 
+      Tapp (x, List.map (tsubst_in_term s) l, i)
+  | Tconst _ as t -> 
+      t
 
 let rec tsubst_in_predicate s = function
   | Papp (id, l, i) -> Papp (id, List.map (tsubst_in_term s) l, i)
@@ -337,14 +329,39 @@ and tsubst_in_pattern s = function
   | TPat t -> TPat (tsubst_in_term s t)
   | PPat p -> PPat (tsubst_in_predicate s p)
 
+(***
 let subst_in_term s = 
   tsubst_in_term (Idmap.map (fun id -> Tvar id) s)
+***)
+let rec subst_in_term s = function
+  | Tvar x | Tderef x as t ->
+      (try Tvar (Idmap.find x s) with Not_found -> t)
+  | Tapp (x,l,i) -> 
+      Tapp (x, List.map (subst_in_term s) l, i)
+  | Tconst _ as t -> 
+      t
 
+(***
 let subst_in_predicate s = 
   tsubst_in_predicate (Idmap.map (fun id -> Tvar id) s)
-
 let subst_in_pattern s =
   tsubst_in_pattern (Idmap.map (fun id -> Tvar id) s)
+***)
+
+let rec subst_in_predicate s = function
+  | Papp (id, l, i) -> Papp (id, List.map (subst_in_term s) l, i)
+  | Pif (a, b ,c) -> Pif (subst_in_term s a, 
+			  subst_in_predicate s b, 
+			  subst_in_predicate s c)
+  | Pfpi (t, f1, f2) -> Pfpi (subst_in_term s t, f1, f2)
+  | Forall (w, id, b, v, tl, p) -> 
+      Forall (w, id, b, v, List.map (List.map (subst_in_pattern s)) tl,
+	      subst_in_predicate s p)
+  | p -> map_predicate (subst_in_predicate s) p
+
+and subst_in_pattern s = function
+  | TPat t -> TPat (subst_in_term s t)
+  | PPat p -> PPat (subst_in_predicate s p)
 
 let subst_in_triggers s =
   List.map (List.map (subst_in_pattern s))

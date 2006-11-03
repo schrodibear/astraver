@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.114 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: main.ml,v 1.115 2006-11-03 12:57:08 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -252,7 +252,6 @@ let interp_decl ?(prelude=false) d =
 	if Env.is_global id then raise_located p.ploc (Clash id);
 	(try interp_program id p with Exit -> ())
     | Parameter (loc, ext, ids, v) ->
-	(*List.iter (fun p -> Printf.printf " %s " (Ident.string p)) ids;*)
 	let env = Env.empty_progs () in
 	let v = Ltyping.type_v loc lab env v in
 	if ext && is_mutable v then raise_located loc MutableExternal;
@@ -262,10 +261,12 @@ let interp_decl ?(prelude=false) d =
 	then
 	  raise_located loc CannotGeneralize;
 	List.iter (add_external loc gv) ids;
-	if ext && ocaml_externals || ocaml then Ocaml.push_parameters ids v_spec;
-	if not ext && not (is_mutable v_spec) then
+	if ext && ocaml_externals || ocaml then 
+	  Ocaml.push_parameters ids v_spec;
+	if valid && not ext && not (is_mutable v_spec) then begin
 	  let tv = Monad.trad_scheme_v (initial_renaming env) env gv in
 	  List.iter (add_parameter gv tv) ids
+	end
     | Exception (loc, id, v) ->
 	let env = Env.empty_progs () in
 	if is_exception id then raise_located loc (ClashExn id);

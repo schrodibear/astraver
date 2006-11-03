@@ -231,8 +231,8 @@
 ;; call_swap3_y_x_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
 (FORALL (y)
-(FORALL (y0)
-(FORALL (x0) (IMPLIES (AND (EQ y0 x) (EQ x0 y)) (AND (EQ x0 y) (EQ y0 x)))))))
+(FORALL (x0)
+(FORALL (y0) (IMPLIES (AND (EQ y0 x) (EQ x0 y)) (AND (EQ x0 y) (EQ y0 x)))))))
 
 ;; swap4_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
@@ -253,5 +253,5 @@
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (EQ x 3)
-(FORALL (y0) (FORALL (x0) (IMPLIES (AND (EQ y0 x) (EQ x0 y)) (EQ y0 3)))))))
+(FORALL (x0) (FORALL (y0) (IMPLIES (AND (EQ y0 x) (EQ x0 y)) (EQ y0 3)))))))
 

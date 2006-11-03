@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: effect.ml,v 1.21 2006-11-03 12:49:01 marche Exp $ i*)
+(*i $Id: effect.ml,v 1.22 2006-11-03 12:57:08 filliatr Exp $ i*)
 
 (*s Effects. *)
 
@@ -43,13 +43,13 @@ open Ident
     lists are preferred *)
 
 type t = { 
-  input : Ident.t list;
-  output : Ident.t list;
+  input : Ident.set;
+  output : Ident.set;
   exns : Ident.set }
 
 (*s the empty effect *)
 
-let bottom = { input = []; output = []; exns = Idset.empty }
+let bottom = { input = Idset.empty; output = Idset.empty; exns = Idset.empty }
 
 (*s basic operations *)
 
@@ -81,12 +81,12 @@ let list_union l1 l2 =
 
 (*s adds reads and writes variables *)
 
-let add_read x e = { e with input = list_add x e.input }
+let add_read x e = { e with input = Idset.add x e.input }
 
 let add_reads = Idset.fold add_read
 
 let add_write x e = 
-  { input = list_add x e.input; output = list_add x e.output; exns = e.exns }
+  { input = Idset.add x e.input; output = Idset.add x e.output; exns = e.exns }
 
 let add_writes = Idset.fold add_write
 
@@ -96,15 +96,16 @@ let add_exns = Idset.fold add_exn
 
 (*s access *)
 
-let get_reads e = e.input
-let get_writes e = e.output
+let get_reads e = Idset.elements e.input
+let get_writes e = Idset.elements e.output
 let get_exns e = Idset.elements e.exns
-let get_repr e = e.input, e.output, Idset.elements e.exns
+let get_repr e = 
+  Idset.elements e.input, Idset.elements e.output, Idset.elements e.exns
 
 (*s tests *)
 
-let is_read  e id = List.mem id e.input
-let is_write e id = List.mem id e.output
+let is_read  e id = Idset.mem id e.input
+let is_write e id = Idset.mem id e.output
 let is_exn e id = Idset.mem id e.exns
 
 let keep_writes e = { e with input = e.output }
@@ -112,8 +113,8 @@ let keep_writes e = { e with input = e.output }
 (*s union and disjunction *)
 
 let union e1 e2 =
-  { input = list_union e1.input e2.input;
-    output = list_union e1.output e2.output;
+  { input = Idset.union e1.input e2.input;
+    output = Idset.union e1.output e2.output;
     exns = Idset.union e1.exns e2.exns }
 
 (*s comparison relation *)
@@ -126,8 +127,8 @@ let inf e1 e2 = failwith "effects: inf: not yet implemented"
 
 let remove x e = 
   { e with 
-      input = list_remove x e.input;
-      output = list_remove x e.output }
+      input = Idset.remove x e.input;
+      output = Idset.remove x e.output }
 
 let remove_exn x e = { e with exns = Idset.remove x e.exns }
 
@@ -135,10 +136,11 @@ let erase_exns e = { e with exns = Idset.empty }
 
 (*s occurrence *)
 
-let occur x e = List.mem x e.input || List.mem x e.output
+let occur x e = Idset.mem x e.input || Idset.mem x e.output
 
 (*s substitution *)
 
+(***
 let list_subst x x' l =
   let rec subst = function
     | [] -> []
@@ -150,6 +152,16 @@ let subst_one x x' e =
   { e with input = list_subst x x' e.input; output = list_subst x x' e.output }
 
 let subst = Idmap.fold subst_one
+***)
+
+let subst subst e =
+  let subst_set s =
+    Idset.fold (fun x acc -> 
+		  let x' = try Idmap.find x subst with Not_found -> x in
+		  Idset.add x' acc)
+      s Idset.empty
+  in
+  { e with input = subst_set e.input; output = subst_set e.output }
 
 (*s pretty-print *)
 
@@ -162,6 +174,8 @@ let rec print_list sep print fmt = function
   | x :: r -> print fmt x; sep fmt (); print_list sep print fmt r
 
 let print fmt { input = r; output = w; exns = e } =
+  let r = Idset.elements r in
+  let w = Idset.elements w in
   fprintf fmt "@[";
   if r <> [] then begin
     fprintf fmt "reads ";
