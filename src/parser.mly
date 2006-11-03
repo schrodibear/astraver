@@ -175,9 +175,9 @@ decl:
 | EXCEPTION ident OF primitive_type
    { Exception (loc (), $2, Some $4) }
 | external_ PARAMETER list1_ident_sep_comma COLON type_v
-   { Parameter (loc (), $1, $3, $5) }
+   { Parameter (loc_i 3, $1, $3, $5) }
 | external_ LOGIC list1_ident_sep_comma COLON logic_type
-   { Logic (loc (), $1, $3, $5) }
+   { Logic (loc_i 3, $1, $3, $5) }
 | AXIOM ident COLON lexpr
    { Axiom (loc (), $2, $4) }
 | PREDICATE ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR EQUAL lexpr
@@ -190,9 +190,9 @@ decl:
 | external_ TYPE ident
    { TypeDecl (loc_i 3, $1, [], $3) }
 | external_ TYPE type_var ident
-   { TypeDecl (loc_ij 2 3, $1, [$3], $4) }
+   { TypeDecl (loc_i 4, $1, [$3], $4) }
 | external_ TYPE LEFTPAR list1_type_var_sep_comma RIGHTPAR ident
-   { TypeDecl (loc_ij 3 6, $1, $4, $6) }
+   { TypeDecl (loc_i 6, $1, $4, $6) }
 ;
 
 type_v:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: fastwp.ml,v 1.1 2006-11-02 15:13:47 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.2 2006-11-03 09:23:51 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -73,10 +73,14 @@ module Subst = struct
   let term s = Misc.subst_in_term s.sigma
   let predicate s = Misc.subst_in_predicate s.sigma
 
-  (* we cross the label l *)
+  (* we cross the label l => 
+     the values at label l are mapped to the current values of references *)
   let label l s =
     { s with sigma =
-	Idmap.fold (fun x x' m -> Idmap.add (at_id x l) x' m) s.sigma s.sigma }
+	Idmap.fold 
+	  (fun x x' m -> 
+	     if not (is_at x) then Idmap.add (at_id x l) x' m else m)
+	  s.sigma s.sigma }
 
   (* debug *)
   open Format

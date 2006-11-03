@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.41 2006-11-02 09:18:23 hubert Exp $ i*)
+(*i $Id: env.mli,v 1.42 2006-11-03 09:25:15 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -59,9 +59,6 @@ val add_global : Ident.t -> type_v -> typed_expr option -> unit
 val add_global_gen : Ident.t -> type_v scheme -> typed_expr option -> unit
 val is_global : Ident.t -> bool
 val lookup_global : Ident.t -> type_v
-
-val all_vars : unit -> Ident.set
-val all_refs : unit -> Ident.set
 
 (*s types (only global) *)
 

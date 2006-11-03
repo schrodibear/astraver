@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.63 2006-11-03 09:23:51 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.64 2006-11-03 09:25:15 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -531,21 +531,6 @@ let lookup_global id =
   snd (specialize_type_scheme s)
 
 let find_pgm id = Idmap.find id !pgm_table
-
-
-let all_vars () =
-  let add_var (id,v) s = match v.scheme_type with
-    | Arrow _ | PureType _ -> Idset.add id s 
-    | _ -> s
-  in
-  Penv.fold add_var !env (Idset.add t_eq (Idset.singleton t_neq))
-
-let all_refs () =
-  let add_ref (id,v) s = match v.scheme_type with
-    | Ref _ -> Idset.add id s 
-    | _ -> s
-  in
-  Penv.fold add_ref !env Idset.empty
 
 (* exceptions *)
 
