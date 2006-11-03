@@ -78,8 +78,8 @@ test:
 fwp: fastwp.simplify
 
 fastwp.simplify:
-	$(WHY) --simplify -d -V --fast-wp test.mlw
-	../bin/dp.opt test_why.sx
+	$(BWHY) --why -d -V --fast-wp test.mlw
+	$(BWHY) --simplify --fast-wp test.mlw && ../bin/dp.opt test_why.sx
 
 fastwp.ergo:
 	$(WHY) --why -d -V --fast-wp test.mlw
