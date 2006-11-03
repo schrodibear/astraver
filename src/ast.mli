@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ast.mli,v 1.55 2006-11-03 12:49:01 marche Exp $ i*)
+(*i $Id: ast.mli,v 1.56 2006-11-03 14:50:22 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -79,6 +79,4 @@ and 'a t_desc =
   | AppTerm of 'a t * term * 'a
   (* undeterministic expression *)
   | Any of type_c
-  (* proof term *)
-  | Proof of type_c * (Cc.proof_term list -> Cc.proof_term)
 

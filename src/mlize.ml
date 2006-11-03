@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.ml,v 1.77 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: mlize.ml,v 1.78 2006-11-03 14:50:22 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -200,9 +200,6 @@ and trad_desc info d ren = match d with
 	info_c (fun ren -> CC_any (Monad.trad_type_c ren info.t_env c)) 
 	info (fun v -> Monad.unit info (Value (Tvar v)))
 	ren
-
-  | Proof _ ->
-      assert false (*TODO*)
 
   | Label (s, e) ->
       cross_label s (trad e) ren

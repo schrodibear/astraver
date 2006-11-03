@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.98 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: wp.ml,v 1.99 2006-11-03 14:50:23 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -356,8 +356,6 @@ and wp_desc info d q =
 	let pre = List.map (pre_named info.t_loc) k.c_pre in
 	let w = add_to_wp info.t_loc pre w in
 	d, w
-    | Proof _ ->
-	assert false
     | Post (e, qe, Transparent) ->
 	let lab = e.info.t_label in
 	let qe' = Typing.conj (Some qe) q in

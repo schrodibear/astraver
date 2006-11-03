@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.119 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: util.ml,v 1.120 2006-11-03 14:50:23 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -663,8 +663,6 @@ and print_desc fmt = function
   | Assertion (l, p) ->
       fprintf fmt "@[{%a}@ %a@]" 
 	(print_pre print_assertion) l print_expr p
-  | Proof (k, _) ->
-      fprintf fmt "proof[%a]" print_type_c k
   | Post (e, q, Transparent) ->
       fprintf fmt "@[(%a@ { %a })@]" 
 	print_expr e (print_post print_assertion) (Some q)

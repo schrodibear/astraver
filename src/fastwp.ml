@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.4 2006-11-03 14:45:32 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.5 2006-11-03 14:50:22 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -254,8 +254,6 @@ let rec wp e s =
       assert false (*TODO*)
   | Any _ ->
       assert false (*TODO*)
-  | Proof _ -> 
-      assert false (*TODO*)
 (***
   | Loop of assertion option * variant option * 'a t (* infinite loop *)
   | LetRef of variable * 'a t * 'a t
@@ -267,8 +265,6 @@ let rec wp e s =
       precondition list * 'a t
   (* undeterministic expression *)
   | Any of type_c
-  (* proof term *)
-  | Proof of type_c * (Cc.proof_term list -> Cc.proof_term)
 ***)
 
 let wp e =
