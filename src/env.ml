@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.62 2006-11-02 09:18:23 hubert Exp $ i*)
+(*i $Id: env.ml,v 1.63 2006-11-03 09:23:51 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -436,6 +436,7 @@ end
  *)
 
 let (env : type_v scheme Penv.t ref) = ref (Penv.empty ())
+let (global_refs : pure_type Idmap.t ref) = ref Idmap.empty
 
 (* Local environments *)
 
@@ -459,10 +460,11 @@ let add_logic_ref id v env = match v with
   | PureType _ | Arrow _ -> env
 
 let empty_progs () = 
-  { progs = Penv.empty (); 
-    logic = 
+  { progs = Penv.empty (); logic = !global_refs }
+(*
       Idmap.fold (fun id v e -> add_logic_ref id v.scheme_type e) 
 	!env.Penv.map Idmap.empty }
+*)
 
 let empty_logic () =
   { progs = Penv.empty (); logic = Idmap.empty }
@@ -514,6 +516,7 @@ let add_global_gen id v p =
     raise_unlocated (Clash id)
   with Not_found -> begin
     env := Penv.add id v !env; 
+    global_refs := add_logic_ref id v.scheme_type !global_refs;
     pgm_table := Idmap.add id p !pgm_table
   end
 

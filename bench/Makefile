@@ -75,6 +75,16 @@ test:
 	coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
 	coqc -I ../lib/coq test_valid.v
 
+fwp: fastwp.simplify
+
+fastwp.simplify:
+	$(WHY) --simplify -d -V --fast-wp test.mlw
+	../bin/dp.opt test_why.sx
+
+fastwp.ergo:
+	$(WHY) --why -d -V --fast-wp test.mlw
+	$(WHY) -no-prelude -tc test_why.why && ergo test_why.why
+
 partial:
 	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic magic test.mlw
 	coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
