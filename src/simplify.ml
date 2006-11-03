@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.63 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.64 2006-11-03 16:21:03 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -252,7 +252,8 @@ let rec print_predicate pos fmt p =
       fprintf fmt "@[(EXISTS (%a)@ %a)@]" ident id' pp p'
   | Pfpi _ ->
       failwith "fpi not supported with Simplify"
-  | Pnamed (_, p) ->
+  | Pnamed (n, p) ->
+      (*fprintf fmt "@[;;%s@\n%a@]" n pp p*) 
       pp fmt p
   (** BUG Simplify
   | Pnamed (n, p) when pos ->

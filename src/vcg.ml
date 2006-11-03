@@ -301,8 +301,9 @@ let rec intros ctx = function
       let ctx', concl', f = intros (Spred (h, a) :: ctx) b in
       ctx', concl', 
       (fun pr -> ProofTerm (cc_lam [h, CC_pred_binder a] (CC_hole (f pr))))
-  | Pnamed (_, p) ->
-      intros ctx p
+  | Pnamed (n, p) ->
+      let ctx,p,v = intros ctx p in
+      ctx, Pnamed (n, p), v
   | c -> 
       ctx, c, (fun pr -> pr)
 
@@ -661,10 +662,10 @@ let rec split lvl ctx = function
       let ctx',concl',pr_intros = intros ctx concl in
       let ol,prl = split (succ lvl) ctx' concl' in
       ol, (fun pl -> pr_intros (prl pl))
-  | Pnamed (_, p1) as concl ->
+  | Pnamed (n, p1) as concl ->
       begin match split lvl ctx p1 with
 	| [_],_ -> [ctx,concl], (function [pr] -> pr | _ -> assert false)
-	| gl -> gl
+	| gl,v -> List.map (fun (ctx,c) -> ctx, Pnamed (n,c)) gl, v
       end
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)
@@ -763,13 +764,19 @@ let vcg base t =
   List.rev !po, cc'
 ***)
 
+let rec loc_for_pred = function
+  | Pnamed (s, _) -> begin try Loc.parse s with _ -> Loc.dummy_position end
+  | Forall (_,_,_,_,_,p)
+  | Pimplies (_,_,p)  -> loc_for_pred p
+  | _ -> Loc.dummy_position
+
 (* Proof obligations from the WP *)
 
 let vcg_from_wp base w =
-  let loc = Loc.dummy_position in (* TODO *)
   let po = ref [] in
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
+    let loc = loc_for_pred concl in
     try
       discharge loc ctx concl
     with Exit -> begin
@@ -778,6 +785,7 @@ let vcg_from_wp base w =
       let ctx' = clean_sequent (List.rev ctx) concl in
       let sq = (ctx', concl) in
       log (snd loc) sq (Some id);
+      (*Format.eprintf "Vcg.push_one: %a@." Loc.report_position loc;*)
       po := (loc, id, sq) :: !po;
       Lemma (id, hyps_names ctx')
     end

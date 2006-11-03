@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.mli,v 1.17 2006-11-03 12:49:03 marche Exp $ i*)
+(*i $Id: loc.mli,v 1.18 2006-11-03 16:21:03 filliatr Exp $ i*)
 
 open Format
 
@@ -37,6 +37,7 @@ type position = Lexing.position * Lexing.position
 exception Located of position * exn
 
 val string : position -> string
+val parse : string -> position
 
 val dummy_position : position
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.ml,v 1.19 2006-11-03 12:49:03 marche Exp $ i*)
+(*i $Id: loc.ml,v 1.20 2006-11-03 16:21:03 filliatr Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -79,6 +79,15 @@ let string =
     let s = Buffer.contents buf in
     Buffer.reset buf;
     s
+
+let parse s =
+  Scanf.sscanf s "File %S, line %d, characters %d-%d"
+    (fun f l c1 c2 -> 
+       (*Format.eprintf "Loc.parse %S %d %d %d@." f l c1 c2;*)
+       let p = 
+	 { Lexing.dummy_pos with pos_fname = f; pos_lnum = l; pos_bol = 0 }
+       in
+       { p with pos_cnum = c1 }, { p with pos_cnum = c2 })
 
 let report_obligation_position fmt (b,e) =
   fprintf fmt "Why obligation from file \"%s\", " b.pos_fname;
