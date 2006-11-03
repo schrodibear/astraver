@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.78 2006-11-02 15:13:48 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.79 2006-11-03 08:29:28 marche Exp $ i*)
 
 open Format
 
@@ -259,7 +259,7 @@ let files =
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-fp" | "--fp") :: args -> floats_ := true; parse args
-    | ("--show-time") :: args -> show_time_ := true; parse args
+    | ("-show-time" | "--show-time") :: args -> show_time_ := true; parse args
     | ("-lib-file" | "--lib-file") :: f :: args -> 
 	lib_files_to_load_ := f :: !lib_files_to_load_; parse args
     | ("-lib-file" | "--lib-file") :: [] -> usage (); exit 1

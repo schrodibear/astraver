@@ -405,10 +405,11 @@ and unifier_type_why tw1 tw2 =
     | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
     | Memory _, _ | _, Memory _ -> assert false
     | _ ->
-	let _,t1 = output_why_type tw1 
-	and _,t2 = output_why_type tw2
+	let t1 = output_why_type tw1 
+	and t2 = output_why_type tw2
 	in
-	Format.eprintf "anomaly: unify why types `%s' and `%s'@." t1 t2;
+	Format.eprintf "anomaly: unify why types `%a' and `%a'@."
+	  Output.fprintf_logic_type t1 Output. fprintf_logic_type t2;
 	raise Not_found
 	  
 
@@ -627,8 +628,9 @@ let rec c_initializer ty tw init =
   match init with 
     | Iexpr e -> 
 	calcul_zones e; 
-	Coptions.lprintf "initializer: unifying types %s and %s@."
-	  (snd (output_why_type tw)) (snd (output_why_type (type_why e)));
+	Coptions.lprintf "initializer: unifying types %a and %a@."
+	  Output.fprintf_logic_type (output_why_type tw) 
+	  Output.fprintf_logic_type (output_why_type (type_why e));
 	unifier_type_why ~var_name:(loc_name e.nexpr_loc) tw (type_why e)
     | Ilist l -> 
 	match ty.ctype_node with  

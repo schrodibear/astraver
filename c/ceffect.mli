@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.30 2006-10-24 15:37:50 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.31 2006-11-03 08:29:27 marche Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string
@@ -89,7 +89,7 @@ val strong_invariants :
   (string, (Cast.npredicate * effect * effect)) Hashtbl.t
 
 val strong_invariants_2 : 
-  (string, Cast.npredicate * effect * (string * Output.base_type) list ) 
+  (string, Cast.npredicate * effect * (string * Output.logic_type) list ) 
   Hashtbl.t
 
 val invariants_for_struct : 

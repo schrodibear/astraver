@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.37 2006-10-31 13:42:10 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.38 2006-11-03 08:29:27 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -80,21 +80,29 @@ let found_repr ?(quote_var=true) z =
     if quote_var && z.zone_is_var then "'"^z.name else z.name
 
 let output_zone_name ?(quote_var=true) z =
-  if Coptions.no_zone_type then
-    "global"
-  else found_repr ~quote_var:quote_var z
+  let name =
+    if Coptions.no_zone_type then
+      "global"
+    else found_repr ~quote_var z
+  in
+  { Output.logic_type_name = name;
+    Output.logic_type_args = [] }
 
-let rec output_why_type ?(quote_var=true) ty =
+
+let rec output_why_type ?(quote_var=true) ty=
+  let rec output ty =
     match ty with
     | Int -> [], "int"
-    | Pointer z -> [] , output_zone_name ~quote_var:quote_var z ^ " pointer"    
-    | Addr z -> [] , output_zone_name ~quote_var:quote_var z ^ " addr"
+    | Pointer z -> [output_zone_name ~quote_var z] , "pointer"    
+    | Addr z -> [output_zone_name ~quote_var z] , "addr"
     | Memory(t,z) -> 
-	(snd (output_why_type ~quote_var:quote_var t))::
-	[output_zone_name ~quote_var:quote_var z], " memory"
+	[output_why_type ~quote_var t; output_zone_name ~quote_var z], "memory"
     | Unit -> [], "unit" 
     | Why_Logic v -> [], v
-
+  in
+  let l,s = output ty in
+  { Output.logic_type_name = s;
+    Output.logic_type_args = l }
 
 type var_info =
     {

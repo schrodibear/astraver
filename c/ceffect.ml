@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.148 2006-10-31 13:42:09 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.149 2006-11-03 08:29:27 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -36,14 +36,16 @@ let heap_vars = Hashtbl.create 97
 let heap_vars2 = Hashtbl.create 97
 
 let print_heap_vars fmt () =
+(*
   let base_type fmt = function
     | [], s -> fprintf fmt "%s" s
     | [x], s -> fprintf fmt "%s %s" x s
     | l, s -> fprintf fmt "(%a) %s" (print_list comma pp_print_string) l s
   in
+*)
   fprintf fmt "@[";
   Hashtbl.iter 
-    (fun s t -> fprintf fmt "(%s:%a)" s base_type 
+    (fun s t -> fprintf fmt "(%s:%a)" s Output.fprintf_logic_type
        (Info.output_why_type t.var_why_type)) 
     heap_vars;
   fprintf fmt "@]"
@@ -94,7 +96,8 @@ try  let info' = Hashtbl.find heap_vars name in
     then
       let ty' = Info.output_why_type info'.var_why_type in
       let ty =  Info.output_why_type info.var_why_type in
-	eprintf "declare_heap_var : %s ; oldtype = (%a)%s ; newtype = (%a)%s \n" name (print_list comma pp_print_string) (fst ty') (snd ty') (print_list comma pp_print_string) (fst ty) (snd ty) ; flush stderr;
+	Format.eprintf "declare_heap_var : %s ; oldtype = %a ; newtype = %a@." 
+	  name Output.fprintf_logic_type ty' Output.fprintf_logic_type ty ;
       assert false
     else
       info'

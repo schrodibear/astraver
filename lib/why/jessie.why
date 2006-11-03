@@ -5,3 +5,23 @@ type 't pointer
 type ('t,'v) memory
 
 logic select : ('t,'v) memory, 't pointer -> 'v 
+logic store : ('t,'v) memory, 't pointer, 'v -> ('t,'v) memory
+
+type alloc_table
+
+parameter alloc : alloc_table ref
+
+logic offset_max : alloc_table, 't pointer -> int
+logic offset_min : alloc_table, 't pointer -> int
+
+parameter acc_ : m : ('t,'v) memory ref -> p:'t pointer ->
+	{ offset_min(alloc,p) <= 0 and offset_max(alloc,p) >= 0 }
+	'v 
+	reads alloc,m
+	{ result = select(m,p) }
+
+parameter safe_upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+	{ }
+	unit
+	reads alloc writes m
+	{ m = store(m@,p,v) }

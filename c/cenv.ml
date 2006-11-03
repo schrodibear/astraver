@@ -391,10 +391,10 @@ module Env = struct
   let add x t info env = 
     let n = unique_name ~local_names:env.used_names x in
     set_unique_name info n;
-    fprintf Coptions.log "local %s renamed into %s\n" x n;
+    Coptions.lprintf "local %s renamed into %s\n" x n;
     set_var_type info t true;
-    fprintf Coptions.log "local %s has why type %s\n" x 
-      (snd(output_why_type (get_why_type info)));
+    Coptions.lprintf "local %s has why type %a\n" x 
+      Output.fprintf_logic_type (Info.output_why_type (get_why_type info));
     { env with used_names = Lib.Sset.add n env.used_names;
 	vars = M.add x info env.vars }
 

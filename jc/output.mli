@@ -14,13 +14,21 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.3 2006-11-02 16:39:53 marche Exp $ i*)
+(*i $Id: output.mli,v 1.4 2006-11-03 08:29:27 marche Exp $ i*)
 
 type constant =
   | Prim_int of string
   | Prim_real of string
   | Prim_bool of bool
 ;;
+
+type logic_type = 
+    { logic_type_name : string;
+      logic_type_args : logic_type list;
+    }
+
+val fprintf_logic_type : Format.formatter -> logic_type -> unit
+
 
 type term = 
   | LConst of constant
@@ -30,11 +38,6 @@ type term =
 ;;
 
 val fprintf_term : Format.formatter -> term -> unit
-
-type logic_type = 
-    { logic_type_name : string;
-      logic_type_args : logic_type list;
-    }
 
 type assertion = 
   | LTrue | LFalse

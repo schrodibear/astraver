@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.217 2006-10-31 13:42:09 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.218 2006-11-03 08:29:27 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -665,9 +665,12 @@ let int_op_check op =
     Hashtbl.add int_ops_with_check op name;
     name
 
+let simple_logic_type s =
+  { logic_type_args = [] ; logic_type_name = s}
+
 (* buils the parameter declarations for arithmetic operations with checks *)
 let make_int_ops_decls () =
-  let int = Base_type ([], "int") in
+  let int = Base_type (simple_logic_type "int") in
   let make_one op name =
     let ope,i = match op with
       | Badd_int i -> "add_int",i | Bsub_int i -> "sub_int",i
@@ -2000,6 +2003,7 @@ let cinterp_logic_symbol id ls =
   match ls with
     | NPredicate_reads(args,locs) -> 
 	let args = interp_predicate_args id args in
+(*
 	let _ty = 
 	  List.fold_right 
 	    (fun (x,t) ty -> 
@@ -2007,7 +2011,8 @@ let cinterp_logic_symbol id ls =
 	    args 
 	    (Base_type ([],"prop"))
 	in
-	Logic(false, id.logic_name, args, ([],"prop"))
+*)
+	Logic(false, id.logic_name, args, simple_logic_type "prop")
     | NPredicate_def(args,p) -> 
 	let a = interp_predicate None "" p in
 	let args = interp_predicate_args id args in
@@ -2039,18 +2044,18 @@ let cinterp_logic_symbol id ls =
             (fun (z,_,ty) t ->
                ("",Info.output_why_type (Info.Memory(ty,z)))::t)
             id.logic_heap_zone args in
-	Logic(false,id.logic_name,args,([],ret_type))
+	Logic(false,id.logic_name,args,simple_logic_type ret_type)
     | NFunction_def(args,ret,e) ->
 	let e = interp_term None "" e in
 	let ret_type = 
 	  match ret.Ctypes.ctype_node with
-	    | Tvar s -> [], s
-	    | Tint _ -> [], "int"
-	    | Tfloat fk -> [], Cnorm.why_type_for_float_kind fk
+	    | Tvar s -> s
+	    | Tint _ -> "int"
+	    | Tfloat fk -> Cnorm.why_type_for_float_kind fk
 	    | _ -> assert false
 	in
 	let args = interp_predicate_args id args in
-	Output.Function(false,id.logic_name,args,ret_type,e)
+	Output.Function(false,id.logic_name,args,simple_logic_type ret_type,e)
 	  
 let interp_axiom p =
   let a = interp_predicate None "" p
@@ -2135,7 +2140,7 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
 		    let x = info.var_unique_name in
 		    let v = Int64.to_string v in
 		    let a = LPred ("eq_int", [LVar x; LConst(Prim_int v)]) in
-		    [Logic (false,x,[],([], "int"));
+		    [Logic (false,x,[],simple_logic_type "int");
 		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])
 		 el)
 	| _ -> assert false

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.79 2006-10-31 13:42:10 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.80 2006-11-03 08:29:27 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -143,7 +143,8 @@ let rec type_why e =
     | NEvar e -> 
 	let t = get_why_type e in
 	if env_name e = "i" then
-	  Coptions.lprintf "type why for i is %s@." (snd (output_why_type t));
+	  Coptions.lprintf "type why for i is %a@." 
+	    Output.fprintf_logic_type (output_why_type t);
 	t
     | NEarrow (_,z,f) -> 
 	begin
@@ -258,8 +259,9 @@ let find_zone_for_term e =
   match type_why_for_term e with
     | Pointer z -> repr z
     | ty -> 
-	let l,n = output_why_type ty in
-	Format.eprintf "type of term %a : %s@." Cprint.nterm e n; 
+	let wt = output_why_type ty in
+	Format.eprintf "type of term %a : %a@." 
+	  Cprint.nterm e Output.fprintf_logic_type wt; 
 	assert false 
 
 let type_why_new_zone zone field_info =

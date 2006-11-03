@@ -149,6 +149,7 @@ let rec assertion env e =
 	    jc_var_info_name = id;
 	    jc_var_info_final_name = id;
 	    jc_var_info_type = ty;
+	    jc_var_info_assigned = false;
 	  }
 	  in JCAforall(vi,assertion ((id,vi)::env) e)
       | JCPEold e -> JCAold(assertion env e)
@@ -172,8 +173,8 @@ let ge_int = make_bin_op "ge_int_" boolean_type
 let le_int = make_bin_op "le_int_" boolean_type 
 let eq_int = make_bin_op "eq_int_" integer_type
 let neq_int = make_bin_op "neq_int_" integer_type
-let add_int = make_bin_op "add_int_" integer_type
-let sub_int = make_bin_op "sub_int_" integer_type
+let add_int = make_bin_op "add_int" integer_type
+let sub_int = make_bin_op "sub_int" integer_type
     
 let tr_bin_op op =
   match op with
@@ -201,9 +202,23 @@ let rec expr env e =
       | JCPEbinary (e1, op, e2) -> 
 	  JCEcall(tr_bin_op op, [expr env e1 ; expr env e2])
       | JCPEassign (e1, e2) -> 
-	  JCEassign(expr env e1, expr env e2)
+	  begin
+	    match (expr env e1).jc_expr_node with
+	      | JCEvar v ->
+		  JCEassign_local(v, expr env e2)
+	      | JCEderef(e,f) ->
+		  JCEassign_heap(e, f, expr env e2)
+	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	  end
       | JCPEassign_op (e1, op, e2) -> 
-	  JCEassign_op(expr env e1, tr_bin_op op, expr env e2)
+	  begin
+	    match (expr env e1).jc_expr_node with
+	      | JCEvar v ->
+		  JCEassign_op_local(v, tr_bin_op op, expr env e2)
+	      | JCEderef(e,f) ->
+		  JCEassign_op_heap(e, f, tr_bin_op op, expr env e2)
+	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	  end
       | JCPEapp (e1, l) -> 
 	  begin
 	    match e1.jc_pexpr_node with
@@ -280,6 +295,7 @@ let param (t,id) =
     jc_var_info_name = id;
     jc_var_info_final_name = id;
     jc_var_info_type = ty;
+    jc_var_info_assigned = false;
   }
   in (id,vi)
 
@@ -311,6 +327,7 @@ let decl d =
 	     jc_var_info_name = "\\result";
 	     jc_var_info_final_name = "result";
 	     jc_var_info_type = ty;
+	     jc_var_info_assigned = false;
 	  })::param_env
 	in
 	let s = List.fold_right 

@@ -114,27 +114,16 @@ and assertion =
       jc_assertion_loc : Loc.position;
     }
 
-(*
-type assign_op =
-  [ `Badd_int | `Bsub_int ]
-
-type bin_op =
-  [ `Ble_int | `Bge_int | `Beq_int | `Bneq_int 
-  | `Badd | `Bsub 
-  | `Bland ]
-*)
-
 type expr_node =
   | JCEconst of const
   | JCEvar of var_info
   | JCEshift of expr * expr
   | JCEderef of expr * field_info
   | JCEcall of fun_info * expr list
-  | JCEassign of expr * expr
-  | JCEassign_op of expr * fun_info * expr
-(*
-  | JCEbinary of expr * bin_op * expr
-*)
+  | JCEassign_local of var_info * expr
+  | JCEassign_heap of expr * field_info * expr
+  | JCEassign_op_local of var_info * fun_info * expr
+  | JCEassign_op_heap of expr * field_info * fun_info * expr
 
 and expr =
    {
