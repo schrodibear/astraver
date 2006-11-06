@@ -28,8 +28,9 @@ open Jc_fenv
 open Jc_ast
 
 let unit_type = JCTlogic "unit"
-let integer_type = JCTlogic "int"
 let boolean_type = JCTlogic "bool"
+let integer_type = JCTlogic "integer"
+let real_type = JCTlogic "real"
 
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
@@ -63,6 +64,15 @@ let type_type t =
 	(* TODO *)
 	JCTlogic id
 
+(* constants *)
+
+let const c =
+  match c with
+    | JCCinteger _ -> integer_type,c
+    | JCCreal _ -> real_type,c
+    | JCCbool _ -> boolean_type,c
+    | JCCnull -> assert false
+
 (* terms *)
 
 let make_term_op name ty =
@@ -71,43 +81,61 @@ let make_term_op name ty =
   }
 
 let eq_int_bool = make_term_op "eq_int_bool" boolean_type
-let neq_int_bool = make_term_op "neq_int" boolean_type
+let neq_int_bool = make_term_op "neq_int_bool" boolean_type
+let neq_pointer_bool = make_term_op "neq_pointer_bool" boolean_type
 let add_int = make_term_op "add_int" integer_type
 let sub_int = make_term_op "sub_int" integer_type
 
-let logic_bin_op op =
-  match op with
-    | `Bge -> assert false (* TODO *)
-    | `Ble -> assert false (* TODO *)
-    | `Beq -> eq_int_bool
-    | `Bneq -> neq_int_bool
-    | `Badd -> add_int
-    | `Bsub -> sub_int
-    | `Bland -> assert false (* TODO *)
-    | `Bimplies -> assert false
+let logic_bin_op loc op t1 e1 t2 e2 =
+  let t,op =
+    match op with
+      | `Bge -> assert false (* TODO *)
+      | `Ble -> assert false (* TODO *)
+      | `Beq -> boolean_type,eq_int_bool
+      | `Bneq ->
+	  if t1=t2
+	  then
+	    begin
+	      match t1 with
+		| JCTlogic "integer" -> boolean_type,neq_int_bool
+		| JCTpointer _ -> boolean_type,neq_pointer_bool
+		| _ -> assert false (* TODO *)
+	    end
+	  else
+	    typing_error loc "terms should have the same type"
+      | `Badd -> integer_type,add_int
+      | `Bsub -> integer_type,sub_int
+      | `Bland -> assert false (* TODO *)
+      | `Bimplies -> assert false
+  in
+  t,JCTapp(op,[e1;e2])
 
 let rec term env e =
-  let te =
+  let t,te =
     match e.jc_pexpr_node with
       | JCPEvar id ->
 	  begin
 	    try
 	      let vi = List.assoc id env
-	      in JCTvar vi
+	      in vi.jc_var_info_type,JCTvar vi
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
-
 	  end
       | JCPEbinary (e1, op, e2) -> 
-	  JCTapp(logic_bin_op op,[term env e1 ; term env e2])
+	  let t1,e1 = term env e1
+	  and t2,e2 = term env e2
+	  in
+	  logic_bin_op e.jc_pexpr_loc op t1 e1 t2 e2
       | JCPEapp (_, _) -> assert false
       | JCPEderef (e, f) -> 
-	  let t = term env e in
-	  let fi = find_field unit_type f in
-	  JCTderef(t,fi)	  
+	  let t,e = term env e in
+	  let fi = find_field t f in
+	  fi.jc_field_info_type, JCTderef(e,fi)	  
       | JCPEshift (_, _) -> assert false
-      | JCPEconst c -> JCTconst c
-      | JCPEold e -> JCTold(term env e)
+      | JCPEconst c -> 
+	  let t,c = const c in t,JCTconst c
+      | JCPEold e -> 
+	  let t,e = term env e in t,JCTold(e)
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
       | JCPEassign _ -> 
@@ -116,8 +144,8 @@ let rec term env e =
       | JCPEforall _ -> 
 	  typing_error e.jc_pexpr_loc "quantification not allowed as logic term"
 
-  in { jc_term_node = te;
-       jc_term_loc = e.jc_pexpr_loc }
+  in t,{ jc_term_node = te;
+	 jc_term_loc = e.jc_pexpr_loc }
 
   
 let make_rel name =
@@ -127,14 +155,26 @@ let make_rel name =
 let ge_int = make_rel "ge_int"
 let le_int = make_rel "le_int"
 let eq_int = make_rel "eq_int"
-let neq_int = make_rel "neq_int"
+let neq_int = make_rel "neq"
+let neq_pointer = make_rel "neq"
     
-let tr_rel_op op =
+let tr_rel_op loc op t1 t2 =
   match op with
     | `Bge -> ge_int
     | `Ble -> le_int
     | `Beq -> eq_int
-    | `Bneq -> neq_int
+    | `Bneq -> 
+	if t1=t2 then 
+	  begin
+	    match t1 with
+	      | JCTlogic "integer" -> neq_int
+	      | JCTlogic _ -> assert false
+	      | JCTvalidpointer (_, _, _) 
+	      | JCTpointer _ -> neq_pointer
+	      | JCTnative _ -> assert false
+	  end
+	else
+	  typing_error loc "terms should have the same type"
 	(* non propositional operators *)
     | `Badd -> assert false
     | `Bsub -> assert false
@@ -164,7 +204,10 @@ let rec assertion env e =
       | JCPEbinary (e1, `Bimplies, e2) -> 
 	  JCAimplies(assertion env e1,assertion env e2)
       | JCPEbinary (e1, op, e2) -> 
-	  JCAapp(tr_rel_op op,[term env e1 ; term env e2])
+	  let t1,e1 = term env e1
+	  and t2,e2 = term env e2
+	  in
+	  JCAapp(tr_rel_op e.jc_pexpr_loc op t1 t2,[e1;e2])
       | JCPEapp (_, _) -> assert false
       | JCPEderef (_, _) -> assert false
       | JCPEshift (_, _) -> assert false
@@ -313,7 +356,9 @@ let clause env c acc =
 	let assigns =
 	  match assigns with
 	    | None -> None
-	    | Some a -> Some(term env a)
+	    | Some a -> 
+		let t,e = term env a in
+		Some(e)
 	in
 	let b = {
 	  jc_behavior_assigns = assigns;

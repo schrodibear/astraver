@@ -12,3 +12,11 @@ integer max(integer x, integer y)
   if (x >= y) return x; else return y;
 } 
 
+
+   
+/*
+Local Variables: 
+mode: java
+compile-command: "make max"
+End: 
+*/
