@@ -22,19 +22,19 @@ void g (){
   /*@ set t[0] = u[1]*/
 }
 
-/*
-struct S {
+
+typedef struct S {
   int a;
   int b;
-}
+} S;
 
- ghost struct S tab[6] 
+/*@ ghost S tab*/
 
 
- ensures tab[0].a == 1  
+/*@ ensures tab.a == 1*/
 void h (){
   struct S a ;
   a.a = 1;
-   set tab[0] = a
+  /* @  set tab = a*/
 }
-*/
+

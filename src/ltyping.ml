@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.54 2006-11-03 12:57:08 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.55 2006-11-06 09:28:03 hubert Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -428,9 +428,12 @@ let warn_refs loc env p =
     (predicate_refs env p)
 
 let effect e =
-  List.fold_right Effect.add_write e.pe_writes
-    (List.fold_right Effect.add_read e.pe_reads
-       (List.fold_right Effect.add_exn e.pe_raises Effect.bottom))
+  let ef = 
+    List.fold_left (fun e x -> Effect.add_write x e) Effect.bottom e.pe_writes 
+  in
+  let ef = List.fold_left (fun e x -> Effect.add_read x e ) ef e.pe_reads in
+  List.fold_left (fun e x -> Effect.add_exn x e) ef e.pe_raises
+    
 
 let rec type_v loc lab env = function
   | PVpure pt -> 

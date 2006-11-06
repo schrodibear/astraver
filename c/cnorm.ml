@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.83 2006-11-03 14:51:13 moy Exp $ i*)
+(*i $Id: cnorm.ml,v 1.84 2006-11-06 09:28:02 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -148,12 +148,7 @@ let why_type_for_float t = match t.Ctypes.ctype_node with
 
 let rec type_why e =
   match e.nexpr_node with
-    | NEvar e -> 
-	let t = get_why_type e in
-	if env_name e = "i" then
-	  Coptions.lprintf "type why for i is %a@." 
-	    Output.fprintf_logic_type (output_why_type t);
-	t
+    | NEvar e -> get_why_type e 
     | NEarrow (_,z,f) -> 
 	begin
 	  try
@@ -327,7 +322,6 @@ and expr_node loc ty t =
       | TEconstant constant -> NEconstant constant
       | TEstring_literal string -> NEstring_literal string
       | TEvar env_info ->
-	  Coptions.lprintf "TEvar@.";
 	  (match env_info with
 	    | Var_info v ->
 		let t' = NEvar env_info in
@@ -343,7 +337,6 @@ and expr_node loc ty t =
 		else t'
 	    | Fun_info _  -> NEvar env_info)
       | TEdot (lvalue,var_info) ->
-	  Coptions.lprintf "TEdot@.";
 	  begin    
 	    match lvalue.Cast.texpr_node with
 	      | TEunary(Ustar, e) -> 
@@ -358,7 +351,6 @@ and expr_node loc ty t =
 	      | _ -> dot_translate (expr lvalue) var_info ty loc
 	  end 
     | TEarrow (lvalue,var_info) ->
-	Coptions.lprintf "TEarrow@.";
 	  let expr = expr lvalue in
 	  let zone = find_zone expr in
 	  let () = type_why_new_zone zone var_info in
@@ -370,7 +362,6 @@ and expr_node loc ty t =
 	    ne_arrow loc Valid ty t' zone info
 	  else t'
       | TEarrget (lvalue,texpr) -> 
-	  Coptions.lprintf "TEarrget@.";
 	  (* t[e] -> *(t+e) *)
 	  let is_valid =
 	    match lvalue.texpr_type.Ctypes.ctype_node with
@@ -399,19 +390,18 @@ and expr_node loc ty t =
 	      nexpr_loc = loc;
 	    },
 	    zone, info)
-      | TEseq (texpr1,texpr2) -> Coptions.lprintf "TEseq@.";NEseq ((expr texpr1) , (expr texpr2))
-      | TEassign (lvalue ,texpr) -> Coptions.lprintf "TEassign@.";
-	  NEassign ((expr lvalue) , (expr texpr))
-      | TEassign_op (lvalue ,binary_operator, texpr) ->	 Coptions.lprintf "TEassign_op@.";
+      | TEseq (texpr1,texpr2) -> NEseq ((expr texpr1) , (expr texpr2))
+      | TEassign (lvalue ,texpr) -> NEassign ((expr lvalue) , (expr texpr))
+      | TEassign_op (lvalue ,binary_operator, texpr) ->
 	  NEassign_op ((expr lvalue),binary_operator , (expr texpr))
-      | TEunary (Ustar ,texpr) -> Coptions.lprintf "TEunary star@.";
+      | TEunary (Ustar ,texpr) -> 
 	  let info = make_field ty in
 	  let info = declare_arrow_var info in
 	  let expr = expr texpr in
 	  let zone = find_zone expr in
 	  let () = type_why_new_zone zone info in
 	  NEarrow (expr, zone, info)
-      | TEunary (Uamp ,texpr) ->	 Coptions.lprintf "TEunary &@.";
+      | TEunary (Uamp ,texpr) ->
 	  (match texpr.texpr_node with
 	     | TEvar v -> NEvar v
 	     | TEunary (Ustar, texpr)-> expr_node loc ty texpr.texpr_node
@@ -450,28 +440,26 @@ and expr_node loc ty t =
 	     | _ -> 
 		 warning loc "this & cannot be normalized";
 		 NEunary (Uamp,expr texpr))
-      | TEunary (unary_operator ,texpr) ->  Coptions.lprintf "TEunary@.";
+      | TEunary (unary_operator ,texpr) ->
 	  NEunary(unary_operator, expr texpr)
-      | TEincr (incr_operator,texpr) ->	 Coptions.lprintf "TEincr@."; NEincr(incr_operator, expr texpr)
-      | TEbinary (texpr1 , binary_operator , texpr2) ->	 Coptions.lprintf "TEbinary@.";
+      | TEincr (incr_operator,texpr) ->	NEincr(incr_operator, expr texpr)
+      | TEbinary (texpr1 , binary_operator , texpr2) ->	
 	  NEbinary ((expr texpr1), binary_operator , (expr texpr2))
-      | TEcall (texpr ,list) -> 	 Coptions.lprintf "TEcall@.";
+      | TEcall (texpr ,list) -> 
 	  NEcall { ncall_fun = expr texpr ;
 		   ncall_args = List.map expr list;
 		   ncall_zones_assoc = [] }
-      | TEcond (texpr1, texpr2, texpr3) -> 	 Coptions.lprintf "TEcond@.";
+      | TEcond (texpr1, texpr2, texpr3) ->
 	  NEcond ((expr texpr1), (expr texpr2), (expr texpr3))
-      | TEsizeof (tctype,n) ->	 Coptions.lprintf "TEsizeof@.";
+      | TEsizeof (tctype,n) ->
 	  NEconstant (IntConstant (Int64.to_string n))
       | TEcast({Ctypes.ctype_node = Tpointer _}as ty, 
-	       {texpr_node = TEconstant (IntConstant "0")}) -> 	 Coptions.lprintf "TEcast 0@.";
+	       {texpr_node = TEconstant (IntConstant "0")}) -> 
 	  let info = default_var_info "null" in 
 	  Cenv.set_var_type (Var_info info) ty false;
 	  NEvar (Var_info info)    
-      | TEcast (tctype ,texpr) -> 	 Coptions.lprintf "TEcast@.";
-	  NEcast (tctype, expr texpr)
-      | TEmalloc (tctype, texpr) -> 	 Coptions.lprintf "TEmalloc@.";
-	  NEmalloc (tctype, expr texpr)
+      | TEcast (tctype ,texpr) -> NEcast (tctype, expr texpr)
+      | TEmalloc (tctype, texpr) -> NEmalloc (tctype, expr texpr)
 
 let nt_arrow loc valid ty e z f =
   let () = type_why_new_zone z f in
@@ -1118,7 +1106,6 @@ and statement s =
 	     (expr texpr3),
 	      (statement tstatement))
   | TSblock (l1,l2) -> 
-      Coptions.lprintf "Tsblock@.";
       local_decl s l1 l2
   | TSreturn option -> NSreturn (noption expr option)
   | TSbreak -> NSbreak
@@ -1148,8 +1135,7 @@ and statement s =
 
 and local_decl s l l2 = 
   match l with 
-    | [] -> Coptions.lprintf "taille de la liste : %d@." (List.length l2);
-	NSblock (List.map statement l2)
+    | [] -> NSblock (List.map statement l2)
     | {node = Tdecl (t,v,init); loc = l}::decl -> 
 	if var_is_referenced_or_struct_or_union v then
 	  set_var_type (Var_info v) (c_array_size Valid v.var_type Int64.one) true;
@@ -1160,7 +1146,6 @@ and local_decl s l l2 =
 	  | Some c ->
 	      match v.var_type.Ctypes.ctype_node with
 		| Tenum _ | Tint _ | Tfloat _ | Tpointer _ -> 
-		    Coptions.lprintf "%s.var_type = int enum float ou pointer@." v.var_name;
 		    let declar = local_decl s decl l2 in
 		    begin match c with
 		      | Iexpr e ->
@@ -1169,7 +1154,6 @@ and local_decl s l l2 =
 		      | _ -> assert false
 		    end
 		| Tarray (_,_, Some length) ->
-		    Coptions.lprintf "%s.var_type = array@." v.var_name; 
 		    let lvalue = noattr l v.var_type (TEvar (Var_info v)) in
 		    let declar,_ = 
 		      without_dereference v
@@ -1278,7 +1262,6 @@ let global_decl e1 loc =
       List.iter (fun arg -> 
 		   set_var_type (Var_info arg) (arg.var_type) true) f.args;
       (*Nfundef (spec ~add:validity_for_struct s,t,f,statement st)*)
-      Coptions.lprintf "Tfundef var : %s@." f.fun_name;
       add_c_function (spec ~add:validity_for_struct s) t f 
 	(Some (statement st)) loc;
       raise Exit
