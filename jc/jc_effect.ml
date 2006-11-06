@@ -18,7 +18,7 @@ let same_effects ef1 ef2 =
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.1 2006-11-03 16:27:06 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.2 2006-11-06 15:14:35 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -35,7 +35,7 @@ let rec expr ef e =
     | JCEshift (_, _) -> assert false
     | JCEvar _ -> ef (* TODO *)
 
-let statement ef s =
+let rec statement ef s =
   match s.jc_statement_node with
     | JCSexpr e -> expr ef e
     | JCSthrow (_, _) -> assert false
@@ -45,7 +45,8 @@ let statement ef s =
     | JCSbreak _ -> assert false
     | JCSreturn e -> expr ef e
     | JCSwhile (_, _, _) -> assert false
-    | JCSif (_, _, _) -> assert false
+    | JCSif (e, s1, s2) -> 
+	statement (statement (expr ef e) s1) s2
     | JCSdecl _ -> assert false
     | JCSassert _ -> assert false
     | JCSblock _ -> assert false
@@ -59,7 +60,6 @@ let spec ef s = ef (* TODO *)
 let fixpoint_reached = ref false
 
 let fun_effects fi =
-  fixpoint_reached := true;
   let (f,s,b) = 
     Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag 
   in
@@ -79,8 +79,11 @@ open Pp
 let function_effects funs =
   fixpoint_reached := false;
   while not !fixpoint_reached do
+    fixpoint_reached := true;
+    Jc_options.lprintf "Effects: doing one iteration...@.";
     List.iter fun_effects funs
   done;
+  Jc_options.lprintf "Effects: fixpoint reached@.";
   List.iter
     (fun f ->
        Jc_options.lprintf

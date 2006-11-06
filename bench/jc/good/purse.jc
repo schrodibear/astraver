@@ -49,7 +49,7 @@ unit withdraw2(purse this, int s)
   behavior amount_too_large:
      assigns \nothing
      throws NoCreditException s 
-     exsures s > \old(this.balance)
+     ensures s > \old(this.balance)
 {
     if (balance >= s) {
 	balance -= s;
