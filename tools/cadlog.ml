@@ -23,23 +23,49 @@
 (**************************************************************************)
 
 open Format
-open Cversion
 open Unix
 
-let c = match Sys.argv with
-  | [| _; f |] -> open_out f
-  | _ -> eprintf "usage: cadlog file@."; exit 1
+let usage_string = "cadlog [options] file"
+
+let usage () =
+  eprintf "usage: %s@." usage_string;
+  exit 1
+
+let file = ref ""
+
+let def_file s =
+  if !file="" then file := s
+  else usage () 
+  
+let jessie = ref false
+
+let _ = 
+  Arg.parse 
+      [ "-jc", Arg.Set jessie, 
+	  "  Jessie bench";
+      ]
+      def_file usage_string
+
+let file = if !file ="" then usage() else !file
+
+let c = open_out file
 
 let fmt = formatter_of_out_channel c
 
+let tool = if !jessie then "Jessie" else "Caduceus"
+
+let version,date =
+  if !jessie then Jc_version.version, Jc_version.date
+  else Cversion.version, Cversion.date
+
 let d,m,y =
   let tm = localtime (time ()) in
-    tm.tm_mday, 1+tm.tm_mon, tm.tm_year
+    tm.tm_mday, 1+tm.tm_mon, 1900+tm.tm_year
 
 let () =
-  fprintf fmt "Caduceus version: %s@." version;
-  fprintf fmt "Caduceus compilation date: %s@." date;
-  fprintf fmt "Caduceus compilation date: %d/%d/%d@." d m y;
+  fprintf fmt "%8s version         : %s@." tool version;
+  fprintf fmt "%8s compilation date: %s@." tool date;
+  fprintf fmt "Bench execution date     : %d/%d/%d@." d m y;
   try
     while true do
       let s = read_line () in

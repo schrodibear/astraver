@@ -32,6 +32,32 @@ let boolean_type = JCTlogic "bool"
 let integer_type = JCTlogic "integer"
 let real_type = JCTlogic "real"
 
+let same_type t1 t2 =
+  match t1,t2 with
+    | JCTnative t1, JCTnative t2 -> t1=t2
+    | JCTlogic s1, JCTlogic s2 -> s1=s2
+    | (JCTpointer(s1) | JCTvalidpointer(s1,_,_)),
+	(JCTpointer(s2) | JCTvalidpointer(s2,_,_)) -> s1=s2
+    | _ -> false
+	
+open Format
+
+let string_of_native t =
+  match t with
+    | `Tunit -> "unit"
+    | `Tinteger -> "integer"
+    | `Treal -> "real"
+    | `Tboolean -> "boolean"
+
+
+let print_type fmt t =
+  match t with
+    | JCTnative n -> fprintf fmt "%s" (string_of_native n)
+    | JCTlogic s
+    | JCTpointer s 
+    | JCTvalidpointer (s,_,_) -> fprintf fmt "%s" s
+
+
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
 
@@ -39,17 +65,29 @@ let structs_table = Hashtbl.create 97
 
 exception Typing_error of Loc.position * string
 
-let typing_error l f = 
-  Format.ksprintf (fun s -> raise (Typing_error(l, s))) f
+let typing_error l = 
+  Format.kfprintf 
+    (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
+    str_formatter
 
 
-let find_field ty f =
-  (* TODO *)
-  {
-    jc_field_info_tag = 0;
-    jc_field_info_name = f;
-    jc_field_info_type = unit_type
-  }
+let find_field loc ty f =
+  match ty with
+    | JCTpointer id
+    | JCTvalidpointer(id,_,_) ->
+	begin
+	  try
+	    let st = Hashtbl.find structs_table id in
+	    try
+	      List.assoc f st
+	    with Not_found ->
+	      typing_error loc "no field %s in structure %s" f id
+	  with Not_found ->
+	    typing_error loc "undeclared structure %s" id
+	end
+    | JCTnative _ 
+    | JCTlogic _ ->
+	typing_error loc "not a structure type"
 
 let find_fun_info id = Hashtbl.find functions_env id
     
@@ -127,10 +165,10 @@ let rec term env e =
 	  in
 	  logic_bin_op e.jc_pexpr_loc op t1 e1 t2 e2
       | JCPEapp (_, _) -> assert false
-      | JCPEderef (e, f) -> 
-	  let t,e = term env e in
-	  let fi = find_field t f in
-	  fi.jc_field_info_type, JCTderef(e,fi)	  
+      | JCPEderef (e1, f) -> 
+	  let t,te = term env e1 in
+	  let fi = find_field e.jc_pexpr_loc t f in
+	  fi.jc_field_info_type, JCTderef(te,fi)	  
       | JCPEshift (_, _) -> assert false
       | JCPEconst c -> 
 	  let t,c = const c in t,JCTconst c
@@ -158,7 +196,7 @@ let eq_int = make_rel "eq_int"
 let neq_int = make_rel "neq"
 let neq_pointer = make_rel "neq"
     
-let tr_rel_op loc op t1 t2 =
+let rel_bin_op loc op t1 t2 =
   match op with
     | `Bge -> ge_int
     | `Ble -> le_int
@@ -207,7 +245,7 @@ let rec assertion env e =
 	  let t1,e1 = term env e1
 	  and t2,e2 = term env e2
 	  in
-	  JCAapp(tr_rel_op e.jc_pexpr_loc op t1 t2,[e1;e2])
+	  JCAapp(rel_bin_op e.jc_pexpr_loc op t1 t2,[e1;e2])
       | JCPEapp (_, _) -> assert false
       | JCPEderef (_, _) -> assert false
       | JCPEshift (_, _) -> assert false
@@ -253,7 +291,7 @@ let neq_int = make_fun_info "neq_int_" integer_type
 let add_int = make_fun_info "add_int" integer_type
 let sub_int = make_fun_info "sub_int" integer_type
     
-let tr_bin_op op =
+let bin_op op =
   match op with
     | `Bge -> ge_int
     | `Ble -> le_int
@@ -265,36 +303,82 @@ let tr_bin_op op =
 	(* not allowed as expression op *)
     | `Bimplies -> assert false
 
+let make_bin_app loc op t1 e1 t2 e2 =
+  match op with
+    | `Bge | `Ble | `Beq | `Bneq ->
+	let t=
+	  match (t1,t2) with
+	    | JCTnative t1, JCTnative t2 ->
+		begin
+		  match (t1,t2) with
+		    | `Tinteger,`Tinteger -> ()
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "numeric types expected"
+	in JCTnative `Tboolean,JCEcall(bin_op op,[e1;e2])
+
+    | `Badd | `Bsub ->
+	let t=
+	  match (t1,t2) with
+	    | JCTnative t1, JCTnative t2 ->
+		begin
+		  match (t1,t2) with
+		    | `Tinteger,`Tinteger -> `Tinteger
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "numeric types expected"
+	in JCTnative t,JCEcall(bin_op op,[e1;e2])
+    | `Bland -> assert false (* TODO *)
+	(* not allowed as expression op *)
+    | `Bimplies -> assert false
+
 let rec expr env e =
-  let te =
+  let t,te =
     match e.jc_pexpr_node with
       | JCPEvar id ->
 	  begin
 	    try
 	      let vi = List.assoc id env
-	      in JCEvar vi
+	      in vi.jc_var_info_type,JCEvar vi
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEbinary (e1, op, e2) -> 
-	  JCEcall(tr_bin_op op, [expr env e1 ; expr env e2])
+	  let t1,e1 = expr env e1
+	  and t2,e2 = expr env e2
+	  in
+	  make_bin_app e.jc_pexpr_loc op t1 e1 t2 e2
       | JCPEassign (e1, e2) -> 
 	  begin
-	    match (expr env e1).jc_expr_node with
-	      | JCEvar v ->
-		  JCEassign_local(v, expr env e2)
-	      | JCEderef(e,f) ->
-		  JCEassign_heap(e, f, expr env e2)
-	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	    let t1,te1 = expr env e1
+	    and t2,te2 = expr env e2
+	    in
+	    if same_type t1 t2 then
+	      match te1.jc_expr_node with
+		| JCEvar v ->
+		    t1,JCEassign_local(v,te2)
+		| JCEderef(e,f) ->
+		    t1,JCEassign_heap(e, f, te2)
+		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	    else
+	      typing_error e.jc_pexpr_loc "same type expected"
 	  end
       | JCPEassign_op (e1, op, e2) -> 
 	  begin
-	    match (expr env e1).jc_expr_node with
+	    let t1,te1 = expr env e1
+	    and t2,te2 = expr env e2
+	    in
+	    if same_type t1 t2 then
+	    match te1.jc_expr_node with
 	      | JCEvar v ->
-		  JCEassign_op_local(v, tr_bin_op op, expr env e2)
+		  t1,JCEassign_op_local(v, bin_op op, te2)
 	      | JCEderef(e,f) ->
-		  JCEassign_op_heap(e, f, tr_bin_op op, expr env e2)
+		  t1,JCEassign_op_heap(e, f, bin_op op, te2)
 	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	    else
+	      typing_error e.jc_pexpr_loc "same type expected"
 	  end
       | JCPEapp (e1, l) -> 
 	  begin
@@ -303,25 +387,42 @@ let rec expr env e =
 		  begin
 		    try
 		      let fi = find_fun_info id in
-		      JCEcall(fi, List.map (expr env) l)
+		      let tl =
+			try
+			  List.map2
+			    (fun vi e ->
+			       let ty = vi.jc_var_info_type in
+			       let t,te = expr env e in
+			       if same_type ty t then te
+			       else
+				 typing_error e.jc_pexpr_loc 
+				   "type %a expected" 
+				   print_type ty) 
+			    fi.jc_fun_info_parameters l
+			with  Invalid_argument _ ->
+			  typing_error e.jc_pexpr_loc 
+			    "wrong number of arguments for %s" id
+		      in
+		      fi.jc_fun_info_return_type,JCEcall(fi, tl)
 		    with Not_found ->
-		      typing_error e.jc_pexpr_loc "unbound function identifier %s" id
+		      typing_error e.jc_pexpr_loc 
+			"unbound function identifier %s" id
 		  end
 	      | _ -> 
 		  typing_error e.jc_pexpr_loc "unsupported function call"
 	  end
-      | JCPEderef (e, f) -> 
-	  let fi = find_field unit_type f in
-	  JCEderef(expr env e,fi)
+      | JCPEderef (e1, f) -> 
+	  let t,te = expr env e1 in
+	  let fi = find_field e.jc_pexpr_loc t f in
+	  fi.jc_field_info_type,JCEderef(te,fi)
       | JCPEshift (_, _) -> assert false
-      | JCPEconst c -> JCEconst c
+      | JCPEconst c -> let t,tc = const c in t,JCEconst tc
 	  (* logic expressions, not allowed as program expressions *)
       | JCPEforall _ 
       | JCPEold _ -> 
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
 
-  in { jc_expr_node = te;
-       jc_expr_loc = e.jc_pexpr_loc }
+  in t,{ jc_expr_node = te; jc_expr_loc = e.jc_pexpr_loc }
 
   
 
@@ -334,13 +435,22 @@ let rec statement env s =
       | JCPSgoto _ -> assert false
       | JCPScontinue _ -> assert false
       | JCPSbreak _ -> assert false
-      | JCPSreturn e -> JCSreturn(expr env e)
+      | JCPSreturn e -> 
+	  let t,te = expr env e in 
+	  (* TODO *)
+	  JCSreturn te
       | JCPSwhile (_, _) -> assert false
-      | JCPSif (e, s1, s2) -> 
-	  JCSif(expr env e,statement env s1,statement env s2)
+      | JCPSif (c, s1, s2) -> 
+	  let t,tc = expr env c in
+	  if same_type t (JCTnative `Tboolean) then
+	    JCSif(tc,statement env s1,statement env s2)
+	  else 
+	    typing_error s.jc_pstatement_loc "boolean expected"
       | JCPSdecl (_, _, _) -> assert false
       | JCPSassert _ -> assert false
-      | JCPSexpr e -> JCSexpr (expr env e)
+      | JCPSexpr e -> 
+	  let t,te = expr env e in 
+	  JCSexpr (te)
       | JCPSblock l -> JCSblock (List.map (statement env) l)
 
 
@@ -389,7 +499,7 @@ let field (t,id) =
     jc_field_info_name = id;
     jc_field_info_type = ty;
   }
-  in fi
+  in (id,fi)
 
 let decl d =
   match d.jc_pdecl_node with
@@ -414,8 +524,14 @@ let decl d =
 	let b = List.map (statement param_env) body in
 	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
-    | JCPDtype(id,fields) ->
-	Hashtbl.add structs_table id (List.map field fields)
+    | JCPDtype(id,fields,inv) ->
+	let env = List.map field fields in
+(*	let i =
+	  match inv with
+	    | None -> assertion_true
+	    | Some e -> assertion env e
+	in
+*)	Hashtbl.add structs_table id env
 
 
 

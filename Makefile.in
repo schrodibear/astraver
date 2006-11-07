@@ -96,7 +96,7 @@ PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
-            jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
+            jc/jc_version.ml jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    c/cint.ml \
@@ -306,7 +306,7 @@ bin/why-obfuscator.byte: $(OBFCMO)
 bin/why-obfuscator.opt: $(OBFCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
-bin/cadlog.opt: c/cversion.cmx tools/cadlog.cmx
+bin/cadlog.opt: c/cversion.cmx jc/jc_version.cmx tools/cadlog.cmx
 	$(OCAMLOPT) unix.cmxa -o $@ $^
 
 static:: $(STATICBINARY)
@@ -354,14 +354,17 @@ bench:: $(BINARY) $(WHYVO)
 	make -C examples simplify
 	cd bench/provers; sh ./bench "../../$(BINARY)"
 
+JCBENCHLOG=jessie-bench-`date +%d-%m-%y`.log
+
+jc-bench:: $(JESSIE) bin/cadlog.opt
+	(cd bench/jc; sh ./bench 2>&1) | bin/cadlog.opt -jc $(JCBENCHLOG)
+
 BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log
 
 bench-c:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
-	cp -f c/cversion.ml $(BENCHLOG)
 	(cd bench/c; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
 
 bench-absint:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
-	cp -f c/cversion.ml $(BENCHLOG)
 	(cd bench/c/absint; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
 
 bench-pvs:: $(BINARY) $(WHYVO)
@@ -491,6 +494,7 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 doc/version.tex: Version
 	echo "\newcommand{\whyversion}{$(VERSION)}" > $@
 	echo "\newcommand{\caduceusversion}{$(CVERSION)}" >> $@
+	echo "\newcommand{\jessieversion}{$(JCVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
@@ -628,6 +632,7 @@ source: doc/manual.ps export/$(NAME).tar.gz
 	cp CHANGES CHANGES.caduceus export/$(NAME).tar.gz $(FTP)
 	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
 	echo "<#def cversion>$(CVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
+	echo "<#def jcversion>$(JCVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
 
 export/$(NAME).tar.gz:
 	mkdir -p $(EXPORT)/bin

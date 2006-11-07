@@ -229,7 +229,7 @@ and statement_list l =
 let tr_struct id fl acc =
   let acc = 
     List.fold_left
-      (fun acc fi ->
+      (fun acc (_,fi) ->
 	 let mem =
 	   { logic_type_name = "memory";
 	     logic_type_args = [simple_logic_type id;

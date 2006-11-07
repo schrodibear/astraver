@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.28 2006-11-03 12:49:07 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.29 2006-11-07 08:35:16 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -134,10 +134,22 @@ let split f =
   printf 
     " (%d/%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!nunknown - oldu) (!ntimeout - oldt)
     
+let print_time fmt f =
+  if f < 60.0 then fprintf fmt "%.2f sec" f else 
+    let t = int_of_float f in
+    let m = t / 60 in
+    let s = t mod 60 in
+    if f < 3600.0 then fprintf fmt "%d m %02d sec" m s else 
+      let h = m / 60 in
+      let m = m mod 60 in
+      fprintf fmt "%d h %02d m %02d sec" h m s  
+
 let main () = 
   if Queue.is_empty files then begin Arg.usage spec usage; exit 1 end;
+  let wctime0 = Unix.gettimeofday() in
   printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
   Queue.iter split files;
+  let wctime = Unix.gettimeofday() -. wctime0 in
   let n = !nvalid + !ninvalid + !ntimeout + !nunknown in
   if n = 0 then exit 0;
   let pvalid = 100. *. float !nvalid /. float n in
@@ -153,14 +165,19 @@ timeout/failure : %3d (%3.0f%%)\n"
     (!nvalid + !ninvalid + !nunknown + !ntimeout)
     !nvalid pvalid !ninvalid pinvalid !nunknown punknown !ntimeout ptimeout;
   printf
-"total time           : %3.2f
-valid average time   : %3.2f
-valid max time       : %3.2f
-invalid average time : %3.2f
-invalid max time     : %3.2f
-unknown average time : %3.2f
-unknown max time     : %3.2f\n"
-    (!tvalid +. !tinvalid +. !ttimeout)
+"total wallclock time : %a
+total CPU time       : %a
+valid VCs:
+    max CPU time     : %.2f
+    average CPU time : %.2f
+invalid VCs:
+    average CPU time : %.2f
+    max CPU time     : %.2f
+unknown VCs:
+    average CPU time : %.2f
+    max CPU time     : %.2f\n"
+    print_time wctime
+    print_time  (!tvalid +. !tinvalid +. !ttimeout)
     (!tvalid /. float !nvalid)
     !tmaxvalid
     (!tinvalid /. float !ninvalid)

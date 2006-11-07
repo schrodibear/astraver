@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.10 2006-11-03 12:49:00 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.11 2006-11-07 08:35:16 marche Exp $ */
 
 %{
 
@@ -88,7 +88,7 @@
 %token IF ELSE RETURN
 
 /* type */
-%token TYPE 
+%token TYPE INVARIANT 
 
 /* integer unit */
 %token INTEGER UNIT
@@ -819,8 +819,8 @@ function_definition:
 /*******************/
 
 type_definition:
-| TYPE IDENTIFIER EQ struct_declaration
-    { locate_decl (JCPDtype($2,$4)) }
+| TYPE IDENTIFIER EQ struct_declaration invariant
+    { locate_decl (JCPDtype($2,$4,$5)) }
 ; 
 
 struct_declaration:
@@ -838,6 +838,13 @@ field_declaration_list:
 field_declaration:
 | type_expr IDENTIFIER SEMICOLON
     { ($1,$2) }
+;
+
+invariant:
+| /* epsilon */ 
+    { None }
+| INVARIANT expression
+    { Some $2 }
 ;
 
 /****************************************/

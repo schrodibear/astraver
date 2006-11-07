@@ -98,7 +98,7 @@ and pstatement =
 
 type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
-  | JCPDtype of string * (ptype * string) list
+  | JCPDtype of string * (ptype * string) list * pexpr option
 
 and pdecl =
     {

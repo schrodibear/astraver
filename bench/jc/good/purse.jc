@@ -2,9 +2,9 @@
 /* Jessie sample file #2 : electronic purse toy example */
 
 type purse = {		
-  int balance;
+  integer balance;
 }	
-/* invariant balance >= 0 */
+/* invariant balance_non_negative: balance >= 0 */
 
 unit credit(purse[0] this, integer s) 
   requires s >= 0
@@ -24,7 +24,7 @@ unit withdraw(purse[0] this, integer s)
   this.balance -= s;
 }
 
-int test1(purse[0] p1, purse[0] p2)
+integer test1(purse[0] p1, purse[0] p2)
   requires p1 != p2
   behavior result_is_nul:
     /* assigns p1.balance,p2.balance */
