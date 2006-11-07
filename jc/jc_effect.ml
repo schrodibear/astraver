@@ -18,7 +18,7 @@ let same_effects ef1 ef2 =
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.2 2006-11-06 15:14:35 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.3 2006-11-07 12:14:22 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -53,7 +53,17 @@ let rec statement ef s =
     | JCSskip -> assert false
 
 
-let spec ef s = ef (* TODO *)
+let location ef l =
+  match l with
+    | JCLderef(t,fi) ->
+	add_field_writes ef fi
+    | JCLvar _ -> assert false (* TODO *)
+
+let behavior ef (_,b) =
+  List.fold_left location ef b.jc_behavior_assigns
+
+let spec ef s = 
+  List.fold_left behavior ef s.jc_fun_behavior
 
 (* computing the fixpoint *)
 

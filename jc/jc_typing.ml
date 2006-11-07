@@ -27,10 +27,10 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 
-let unit_type = JCTlogic "unit"
-let boolean_type = JCTlogic "bool"
-let integer_type = JCTlogic "integer"
-let real_type = JCTlogic "real"
+let unit_type = JCTnative `Tunit
+let boolean_type = JCTnative `Tboolean
+let integer_type = JCTnative `Tinteger
+let real_type = JCTnative `Treal
 
 let same_type t1 t2 =
   match t1,t2 with
@@ -135,7 +135,7 @@ let logic_bin_op loc op t1 e1 t2 e2 =
 	  then
 	    begin
 	      match t1 with
-		| JCTlogic "integer" -> boolean_type,neq_int_bool
+		| JCTnative `Tinteger -> boolean_type,neq_int_bool
 		| JCTpointer _ -> boolean_type,neq_pointer_bool
 		| _ -> assert false (* TODO *)
 	    end
@@ -192,24 +192,27 @@ let make_rel name =
 
 let ge_int = make_rel "ge_int"
 let le_int = make_rel "le_int"
-let eq_int = make_rel "eq_int"
-let neq_int = make_rel "neq"
-let neq_pointer = make_rel "neq"
+let eq = make_rel "eq"
+let neq = make_rel "neq"
+
     
 let rel_bin_op loc op t1 t2 =
   match op with
     | `Bge -> ge_int
     | `Ble -> le_int
-    | `Beq -> eq_int
-    | `Bneq -> 
+    | `Beq | `Bneq -> 
+	let op = match op with
+	  | `Beq -> eq
+	  | `Bneq -> neq
+	  | _ -> assert false
+	in
 	if t1=t2 then 
 	  begin
 	    match t1 with
-	      | JCTlogic "integer" -> neq_int
+	      | JCTnative _ -> op
 	      | JCTlogic _ -> assert false
 	      | JCTvalidpointer (_, _, _) 
-	      | JCTpointer _ -> neq_pointer
-	      | JCTnative _ -> assert false
+	      | JCTpointer _ -> op
 	  end
 	else
 	  typing_error loc "terms should have the same type"
@@ -317,7 +320,6 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	    | _ ->
 		typing_error loc "numeric types expected"
 	in JCTnative `Tboolean,JCEcall(bin_op op,[e1;e2])
-
     | `Badd | `Bsub ->
 	let t=
 	  match (t1,t2) with
@@ -457,19 +459,37 @@ let rec statement env s =
   in { jc_statement_node = ts;
        jc_statement_loc = s.jc_pstatement_loc }
 
+let rec location env e =
+  match e.jc_pexpr_node with
+    | JCPEvar id ->
+	begin
+	  try
+	    let vi = List.assoc id env
+	    in vi.jc_var_info_type,JCLvar vi
+	  with Not_found -> 
+	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	  end
+    | JCPEderef(e1,f) ->
+	let t,te = location env e1 in
+	let fi = find_field e.jc_pexpr_loc t f in
+	fi.jc_field_info_type, JCLderef(te,fi)	  
+    | JCPEshift (_, _)  -> assert false (* TODO *)
+    | JCPEold _ 
+    | JCPEforall (_, _, _)
+    | JCPEbinary (_, _, _)
+    | JCPEassign_op (_, _, _)
+    | JCPEassign (_, _)
+    | JCPEapp (_, _)
+    | JCPEconst _ -> 
+	typing_error e.jc_pexpr_loc "invalid memory location"
+
 let clause env c acc =
   match c with
     | JCPCrequires(e) ->
 	{ acc with 
 	    jc_fun_requires = assertion env e }
     | JCPCbehavior(id,assigns,ensures) ->
-	let assigns =
-	  match assigns with
-	    | None -> None
-	    | Some a -> 
-		let t,e = term env a in
-		Some(e)
-	in
+	let assigns = List.map (fun a -> snd (location env a)) assigns in
 	let b = {
 	  jc_behavior_assigns = assigns;
 	  jc_behavior_ensures = assertion env ensures }

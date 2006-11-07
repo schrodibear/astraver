@@ -71,7 +71,7 @@ and pexpr =
      
 type pclause =
   | JCPCrequires of pexpr
-  | JCPCbehavior of string * pexpr option * pexpr
+  | JCPCbehavior of string * pexpr list * pexpr
 
 
 type pstatement_node =
@@ -183,9 +183,13 @@ and statement =
     }
 
 
+type location =
+  | JCLvar of var_info
+  | JCLderef of location * field_info
+
 type behavior =
     { 
-      jc_behavior_assigns : term option;
+      jc_behavior_assigns : location list;
       jc_behavior_ensures : assertion;
     }
 

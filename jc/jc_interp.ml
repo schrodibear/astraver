@@ -68,12 +68,14 @@ let lvar ?(assigned=true) label v =
       | Some l -> LVarAtLabel(v,l)
   else LVar v
 
+let lvar_info label v = 
+  lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
+
 let rec term label oldlabel t =
   let ft = term label oldlabel in
   match t.jc_term_node with
     | JCTconst JCCnull -> LVar "null"
-    | JCTvar v -> 
-	lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
+    | JCTvar v -> lvar_info label v
     | JCTconst c -> LConst(const c)
     | JCTshift(t1,t2) -> LApp("shift",[ft t1; ft t2])
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
@@ -126,7 +128,7 @@ let rec expr e =
 	Let(tmp1, expr e1,
 	    Let(tmp2, expr e2,
 		append
-		  (make_app "safe_upd_"
+		  (make_app "upd_"
 		     [Var memory; Var tmp1; Var tmp2])
 		  (Var tmp2))) 
     | JCEassign_op_local (vi, op, e2) -> 
@@ -174,7 +176,7 @@ let statement_expr e =
 	let memory = fi.jc_field_info_name in
 	Let(tmp1, expr e1,
 	    Let(tmp2, expr e2,
-		make_app "safe_upd_"
+		make_app "upd_"
 		   [Var memory; Var tmp1; Var tmp2]))
     | JCEassign_op_local (vi, op, e2) -> 
 	assert false
@@ -242,6 +244,83 @@ let tr_struct id fl acc =
   in (Type(id,[]))::acc
 
        
+(*************
+locations
+*********)
+
+let rec pset before loc = 
+  match loc with
+    | JCLderef(e,fi) ->
+	let m = lvar before fi.jc_field_info_name in
+	LApp("pset_deref", [pset before e; m])
+    | JCLvar vi -> 
+	let m = lvar_info before vi in
+	LApp("pset_singleton", [m])
+
+module StringMap = Map.Make(String)
+
+
+type mem_or_ref = 
+  | Reference of bool 
+      (* a global reference, boolean indicates whether it 
+	 is given in assigns ckause, thus is modified ;
+	 or not given, thus is not modified. *)
+  | Memory of term list
+      (* a memory heap reference, argument is the set of pointers 
+	 to parts which are given in assigns clause *)
+
+let collect_locations before acc loc =
+  let var,iloc = match loc with
+    | JCLderef(e,fi) -> fi.jc_field_info_name, Some (pset before e)
+    | JCLvar vi -> vi.jc_var_info_final_name, None
+  in
+  try
+    let p = StringMap.find var acc in
+    match p, iloc with
+       | Reference _, None -> StringMap.add var (Reference true) acc
+       | Memory l, Some iloc -> StringMap.add var (Memory (iloc::l)) acc
+       | Reference _,Some n -> assert false
+       | Memory _,None -> assert false
+  with Not_found -> 
+    (match iloc with
+       | None -> StringMap.add var (Reference true) acc
+       | Some l -> StringMap.add var (Memory [l]) acc)
+
+let rec make_union_loc = function
+  | [] -> LVar "pset_empty"
+  | [l] -> l
+  | l::r -> LApp("pset_union",[l;make_union_loc r])
+
+let assigns before ef locs =
+  let m = 
+    (* HeapVarSet.fold
+	    (fun v m -> 
+	       if Ceffect.is_alloc v then m 
+	       else StringMap.add (heap_var_name v) (Reference false) m)
+	    assigns.Ceffect.assigns_var 
+    *) StringMap.empty 
+  in
+  let m = 
+    FieldSet.fold
+      (fun fi m -> 
+	 StringMap.add fi.jc_field_info_name (Memory []) m)
+      ef.jc_writes_fields m 
+  in
+  let l = 
+    List.fold_left (collect_locations (Some before)) m locs
+  in
+  StringMap.fold
+    (fun v p acc -> match p with
+       | Memory p ->
+	   make_and acc
+	     (LPred("not_assigns",
+		    [LVarAtLabel("alloc",before); 
+		     LVarAtLabel(v,before);
+		     LVar v; make_union_loc p]))
+       | Reference false ->
+	   make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)]))
+       | Reference true -> acc)
+    l LTrue
 
 (*****************
  functions
@@ -252,10 +331,18 @@ let parameter v =
 
 let tr_fun f spec body acc = 
   let requires = assertion None "" spec.jc_fun_requires in
+  let all_behaviors =
+    List.map
+      (fun (id,b) ->
+	 (id,b,make_and 
+	   (assertion None "" b.jc_behavior_ensures)
+	   (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)))
+      spec.jc_fun_behavior
+  in
   let global_ensures =
     List.fold_right
-      (fun (id,e) acc -> make_and (assertion None "" e.jc_behavior_ensures) acc)
-      spec.jc_fun_behavior LTrue
+      (fun (_,_,e) acc -> make_and e acc)
+      all_behaviors LTrue
   in
   let writes =
     FieldSet.fold
@@ -280,14 +367,14 @@ let tr_fun f spec body acc =
   let params = List.map parameter f.jc_fun_info_parameters in
   let acc =
     List.fold_right
-      (fun (id,b) acc ->
+      (fun (id,b,e) acc ->
 	 let d =
 	   Def(f.jc_fun_info_name ^ "_ensures_" ^ id,
 	       Fun(params,
 		   requires,statement_list body,
-		   assertion None "" b.jc_behavior_ensures,[]))
+		   e,[]))
 	 in d::acc)
-      spec.jc_fun_behavior acc
+      all_behaviors acc
   in why_param::acc
 
   

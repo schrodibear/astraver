@@ -20,8 +20,59 @@ parameter acc_ : m : ('t,'v) memory ref -> p:'t pointer ->
 	reads alloc,m
 	{ result = select(m,p) }
 
+parameter upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+	{ offset_min(alloc,p) <= 0 and offset_max(alloc,p) >= 0 }
+	unit
+	reads alloc writes m
+	{ m = store(m@,p,v) }
+
 parameter safe_upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
 	{ }
 	unit
 	reads alloc writes m
 	{ m = store(m@,p,v) }
+
+
+
+
+(*************
+
+ locations 
+
+***************)
+
+
+type 't pset
+
+logic pset_empty : 't pset
+logic pset_singleton : 't pointer -> 't pset
+logic pset_union : 't pset, 't pset -> 't pset
+
+
+logic in_pset : 't pointer, 't pset -> prop
+
+axiom in_pset_empty:
+  forall p:'t pointer. not in_pset(p,pset_empty)
+
+axiom in_pset_singleton:
+  forall p:'t pointer. 
+  forall q:'t pointer.
+    in_pset(p,pset_singleton(q)) <-> p=q
+
+ axiom in_pset_union:
+  forall p:'t pointer. 
+  forall s1:'t pset.
+  forall s2:'t pset.
+    in_pset(p,pset_union(s1,s2)) <-> in_pset(p,s1) or in_pset(p,s2)
+ 
+logic not_assigns : 
+	alloc_table, ('t,'v) memory, ('t,'v) memory, 't pset -> prop
+
+axiom not_assigned_unchanged :
+ forall a:alloc_table.
+ forall m1:('a,'z) memory.
+ forall m2:('a,'z) memory. 
+ forall l:'z pset.
+ forall p:'z pointer.
+   offset_min(a,p) <= 0 and offset_max(a,p) >= 0 -> 
+	in_pset(p,l) or select(m2,p)=select(m1,p)

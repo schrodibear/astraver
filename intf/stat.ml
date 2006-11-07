@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.45 2006-11-03 12:48:59 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.46 2006-11-07 12:14:22 marche Exp $ i*)
 
 open Printf
 open Options
@@ -247,7 +247,7 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
 	    Cache.add seq p.Model.pr_name;
 	    model#set ~row ~column:column_p `YES ; 1
 	| Calldp.Timeout _ -> model#set ~row ~column:column_p `CUT; 0
-	| Calldp.CannotDecide _ -> model#set ~row ~column:column_p `MISSING_IMAGE; 0
+	| Calldp.CannotDecide _ -> model#set ~row ~column:column_p `DIALOG_QUESTION; 0
 	| Calldp.Invalid(_,so) -> 
 	    begin
 	      (match so with

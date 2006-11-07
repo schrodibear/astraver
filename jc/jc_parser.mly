@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.11 2006-11-07 08:35:16 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.12 2006-11-07 12:14:22 marche Exp $ */
 
 %{
 
@@ -803,10 +803,11 @@ spec_clause:
 
 assigns:
 | /* epsilon */
-    { None }
-| ASSIGNS expression
-    { Some $2 }
+    { [] }
+| ASSIGNS argument_expression_list
+    { $2 }
 ;
+
 
 function_definition: 
 | type_expr IDENTIFIER parameters function_specification compound_statement
