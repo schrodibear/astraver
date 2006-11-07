@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.46 2006-11-07 12:14:22 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.47 2006-11-07 16:12:13 marche Exp $ i*)
 
 open Printf
 open Options
@@ -64,8 +64,6 @@ let _ =
  * let window_width = Gdk.Screen.width ~screen:default_screen ()
  * let window_height = Gdk.Screen.height ~screen:default_screen ()
  *)
-let window_width = 1024
-let window_height = 700
 
 let monospace_font = ref (Pango.Font.from_string "Monospace 10")
 let general_font = ref (Pango.Font.from_string "Monospace 10")
@@ -342,9 +340,21 @@ let run_prover_all p (view:GTree.view) (model:GTree.tree_store) bench () =
 let main () = 
   let w = GWindow.window 
 	    ~allow_grow:true ~allow_shrink:true
-	    ~width:window_width ~height:window_height 
+	    ~width:!Colors.window_width ~height:!Colors.window_height 
 	    ~title:"gWhy : Easy proof with easy tool" ()
   in
+  ignore (w#misc#connect#size_allocate 
+	    (let old_w = ref 0 
+	     and old_h = ref 0 in
+	     fun {Gtk.width=w;Gtk.height=h} -> 
+	       if !old_w <> w or !old_h <> h then
+		 begin
+		   old_h := h;
+		   old_w := w;
+		   Colors.window_height := h;
+		   Colors.window_width := w;
+		 end
+	    ));
   w#misc#modify_font !general_font;
   let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
   let vbox = GPack.vbox ~homogeneous:false ~packing:w#add () in
@@ -406,7 +416,7 @@ let main () =
   
   (* left tree of proof obligations *)
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:400 () in
+    ~width:(!Colors.window_width / 2) () in
   let _ = vtable#attach ~left:0 ~top:1 ~expand:`BOTH scrollview#coerce in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
@@ -611,8 +621,8 @@ let main () =
   (* vertical paned *)
   let hb = GPack.paned `VERTICAL  ~border_width:3 ~packing:hp#add2 () in
   let _ = hb#misc#connect#realize
-	  ~callback:(fun _ ->hb#set_position (window_height*6/10 ) ) in
-  let _ = hb#set_position (window_height*9/10 ) in
+	  ~callback:(fun _ ->hb#set_position (!Colors.window_height*6/10 ) ) in
+  let _ = hb#set_position (!Colors.window_height*9/10 ) in
 
   (* upper frame *)
   let fr1 = GBin.frame ~shadow_type:`ETCHED_OUT ~packing:hb#add1 () in 
@@ -877,6 +887,19 @@ let set_loaded_config () =
 	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
 	List.hd (Model.get_provers ())
       end);
+  List.iter
+    (fun (k,f,def) ->
+       let v = 
+	 try int_of_string (Config.get_value k)
+	 with _ -> begin
+	   prerr_endline ("     [...] .gwhyrc : invalid value for " ^ k); 
+	   def
+	 end
+       in
+       f := v)
+    [("window_width", Colors.window_width, 1024) ;
+     ("window_height", Colors.window_height, 768) ];
+
   Colors.set_all_colors (Config.get_colors ())
 
 (* Main *)

@@ -22,6 +22,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
+
+val window_width : int ref
+val window_height : int ref
+
 type color = {
   key : string;
   name : string;

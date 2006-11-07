@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.4 2006-11-03 12:49:00 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.5 2006-11-07 16:12:14 marche Exp $ i*)
 
 open Format
 open Pp
@@ -66,8 +66,8 @@ let generic f targets =
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
 
        fprintf fmt "coq/%%_why.v: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export Jessie.\" -coq-tactic \"$(COQTACTIC)\" $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
-
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n";
+       fprintf fmt "\t@@rm coq/jessie_why.v@\n@\n";
        fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
        
        fprintf fmt "pvs: %a@\n@\n" (print_files pvs) targets;

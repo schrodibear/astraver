@@ -22,6 +22,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
+
+
+let window_width = ref 1024
+let window_height = ref 768
+
 type color = {
   key : string;
   name : string;

@@ -83,6 +83,15 @@
     List.iter 
       (fun p -> output_string out_channel ("\""^p.Model.pr_name^"\" "))
       (Model.get_provers_s ());
+
+
+    output_string out_channel "\n\n# window parameters\n";
+    List.iter 
+      (fun (k,v) -> 
+	 output_string out_channel (k^" = \"" ^ string_of_int(v) ^ "\"\n"))
+      [ "window_width", !window_width ;
+	"window_height", !window_height ];
+	   
     output_string out_channel "\n\n# Colors : color_key = \"forecolor\" \"backcolor\" \n";
     output_string out_channel "# key = {title, comment, keyword, var, ";
     output_string out_channel " predicate, lpredicate, pr_hilight, separator, ";
@@ -114,7 +123,7 @@
     let h = Hashtbl.create 97 in
     List.iter 
       (fun s -> Hashtbl.add h s ())
-      [ "provers" ; "prover"; "cache"; "hard_proof"; "timeout"; "live_update"];
+      [ "provers" ; "prover"; "cache"; "hard_proof"; "timeout"; "live_update"; "window_width"; "window_height"];
     fun s -> 
       Hashtbl.mem h s
 

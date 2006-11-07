@@ -88,7 +88,8 @@ VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
      lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo \
      @WHYFLOATS@ \
      lib/coq/caduceus_why.vo     lib/coq/caduceus_tactics.vo \
-     lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo
+     lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo \
+     lib/coq/jessie_why.vo
 V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs
@@ -268,7 +269,7 @@ bin/gwhy.opt: $(GCMX)
 	strip    $@
 
 bin/gwhy.byte: $(GCMO)
-	$(if $(QUIET),@echo 'Linking caduceus.byte' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma lablgtk.cma threads.cma gtkThread.cmo $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma lablgtk.cma threads.cma gtkThread.cmo $^
 
 # tools
 bin/why2html.byte: tools/why2html.ml
@@ -343,6 +344,9 @@ lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
 
+lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
+	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/jessie.why
+
 # bench
 
 .PHONY: bench test
@@ -412,13 +416,17 @@ install-lib:
 	mkdir -p $(LIBDIR)/why
 	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
+	mkdir -p $(LIBDIR)/jessie/why
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
+	cp -f lib/why/jessie.why $(LIBDIR)/jessie/why
 	mkdir -p $(LIBDIR)/caduceus/coq
+	mkdir -p $(LIBDIR)/jessie/coq
 	if test "@COQVER@" = "v7"; then \
 	  cp -f lib/coq-v7/caduceus_why.v lib/coq-v7/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
 	else \
 	  cp -f lib/coq/caduceus_why.v lib/coq/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
+	  cp -f lib/coq/jessie_why.v $(LIBDIR)/jessie/coq; \
 	fi
 	mkdir -p $(LIBDIR)/caduceus/isabelle
 	cp -f lib/isabelle/caduceus_why.thy $(LIBDIR)/caduceus/isabelle
