@@ -292,6 +292,9 @@ let rec make_union_loc = function
   | l::r -> LApp("pset_union",[l;make_union_loc r])
 
 let assigns before ef locs =
+  match locs with
+    | None -> LTrue	
+    | Some locs ->
   let m = 
     (* HeapVarSet.fold
 	    (fun v m -> 

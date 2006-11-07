@@ -489,7 +489,8 @@ let clause env c acc =
 	{ acc with 
 	    jc_fun_requires = assertion env e }
     | JCPCbehavior(id,assigns,ensures) ->
-	let assigns = List.map (fun a -> snd (location env a)) assigns in
+	let assigns = 
+	  Option_misc.map (List.map (fun a -> snd (location env a))) assigns in
 	let b = {
 	  jc_behavior_assigns = assigns;
 	  jc_behavior_ensures = assertion env ensures }

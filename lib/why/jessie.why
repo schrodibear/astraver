@@ -14,14 +14,17 @@ parameter alloc : alloc_table ref
 logic offset_max : alloc_table, 't pointer -> int
 logic offset_min : alloc_table, 't pointer -> int
 
+predicate valid (a:alloc_table,p:'t pointer) = 
+  offset_min(a,p) <= 0 and offset_max(a,p) >= 0
+
 parameter acc_ : m : ('t,'v) memory ref -> p:'t pointer ->
-	{ offset_min(alloc,p) <= 0 and offset_max(alloc,p) >= 0 }
+	{ valid(alloc,p) }
 	'v 
 	reads alloc,m
 	{ result = select(m,p) }
 
 parameter upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
-	{ offset_min(alloc,p) <= 0 and offset_max(alloc,p) >= 0 }
+	{ valid(alloc,p) }
 	unit
 	reads alloc writes m
 	{ m = store(m@,p,v) }
@@ -74,5 +77,14 @@ axiom not_assigned_unchanged :
  forall m2:('a,'z) memory. 
  forall l:'z pset.
  forall p:'z pointer.
-   offset_min(a,p) <= 0 and offset_max(a,p) >= 0 -> 
-	in_pset(p,l) or select(m2,p)=select(m1,p)
+   not_assigns(a,m1,m2,l) and valid(a,p) 
+   -> in_pset(p,l) or select(m2,p)=select(m1,p)
+
+axiom unchanged_not_assigned :
+ forall a:alloc_table.
+ forall m1:('a,'z) memory.
+ forall m2:('a,'z) memory. 
+ forall l:'z pset.
+ (forall p:'z pointer. valid(a,p)
+    -> in_pset(p,l) or select(m2,p)=select(m1,p))
+ -> not_assigns(a,m1,m2,l) 

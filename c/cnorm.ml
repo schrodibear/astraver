@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.84 2006-11-06 09:28:02 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.85 2006-11-07 13:25:28 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -49,11 +49,6 @@ let eval_array_size e =
     nterm_type = c_int }
 *)
 
-
-let noption f o =
-  match o with
-    | None -> None
-    | Some x -> Some (f x)
 
 
 let var_requires_indirection v =
@@ -654,7 +649,7 @@ and term t =
   nterm_type = t.term_type
 }
 
-and term_option = function None -> None | Some t -> Some (term t)
+and term_option t = Option_misc.map term t
 
 let nlocation = term
 (***
@@ -704,11 +699,11 @@ and predicate_node = function
 
 let loop_annot a =
   {
-    invariant = noption predicate a.invariant;
-    assume_invariant = noption predicate a.assume_invariant;
+    invariant = Option_misc.map predicate a.invariant;
+    assume_invariant = Option_misc.map predicate a.assume_invariant;
     loop_assigns = 
-     noption (List.map nlocation) a.loop_assigns;
-    variant = noption nvariant a.variant;
+     Option_misc.map (List.map nlocation) a.loop_assigns;
+    variant = Option_misc.map nvariant a.variant;
   }
 
 let logic_symbol l =
@@ -730,9 +725,7 @@ let rec c_initializer c = match c with
   | Iexpr e ->  Iexpr (expr e)
   | Ilist l -> Ilist (List.map (fun x -> (c_initializer x))l)
 
-let c_initializer_option = function
-  | None -> None
-  | Some i -> Some (c_initializer i)
+let c_initializer_option = Option_misc.map c_initializer
 
 let ilist = function
   | None -> None
@@ -780,9 +773,9 @@ let spec ?(add=nptrue) s =
   let pred = if pred = nptrue then None else Some pred in
   { 
     requires = pred;
-    assigns  = noption (List.map (fun x -> nlocation x)) s.assigns;
-    ensures = noption predicate s.ensures;
-    decreases = noption variant s.decreases;
+    assigns  = Option_misc.map (List.map (fun x -> nlocation x)) s.assigns;
+    ensures = Option_misc.map predicate s.ensures;
+    decreases = Option_misc.map variant s.decreases;
   }
 
 
@@ -1107,7 +1100,7 @@ and statement s =
 	      (statement tstatement))
   | TSblock (l1,l2) -> 
       local_decl s l1 l2
-  | TSreturn option -> NSreturn (noption expr option)
+  | TSreturn option -> NSreturn (Option_misc.map expr option)
   | TSbreak -> NSbreak
   | TScontinue -> NScontinue
   | TSlabel (string, tstatement) -> NSlabel (string, (statement tstatement)) 

@@ -139,7 +139,7 @@ check: $(BINARY) $(PRELUDE)
 CMO = src/lib.cmo \
       src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 	   src/ident.cmo src/float_lexer.cmo  \
-	   src/effect.cmo src/pp.cmo src/misc.cmo 	\
+	   src/effect.cmo src/pp.cmo src/option_misc.cmo src/misc.cmo 	\
 	   src/parser.cmo src/lexer.cmo src/report.cmo \
            src/env.cmo src/rename.cmo src/util.cmo 	\
            src/ltyping.cmo src/typing.cmo src/wp.cmo src/fastwp.cmo \
@@ -172,7 +172,7 @@ bin/top: $(CMO)
 # caduceus
 CCMO = ocamlgraph/graph.cmo \
 	src/lib.cmo src/linenum.cmo \
-	src/loc.cmo src/pp.cmo \
+	src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	src/version.cmo jc/output.cmo \
 	c/cversion.cmo c/coptions.cmo c/cutil.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
@@ -203,7 +203,7 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 
 
 # jessie
-JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo \
+JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_options.cmo \
 	jc/jc_envset.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \

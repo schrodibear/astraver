@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.113 2006-11-03 12:57:08 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.114 2006-11-07 13:25:28 marche Exp $ i*)
 
 open Options
 open Ident
@@ -41,11 +41,11 @@ let map_succeed f =
   in 
   map_f 
 
-let option_app f = function None -> None | Some x -> Some (f x)
+let option_app = Option_misc.map
 
-let option_iter f = function None -> () | Some x -> f x
+let option_iter = Option_misc.iter
 
-let option_fold f x c = match x with None -> c | Some x -> f x c 
+let option_fold = Option_misc.fold
 
 let a_value a = a.a_value
 let a_values = List.map a_value

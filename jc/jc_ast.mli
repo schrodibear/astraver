@@ -71,7 +71,7 @@ and pexpr =
      
 type pclause =
   | JCPCrequires of pexpr
-  | JCPCbehavior of string * pexpr list * pexpr
+  | JCPCbehavior of string * pexpr list option * pexpr
 
 
 type pstatement_node =
@@ -189,7 +189,7 @@ type location =
 
 type behavior =
     { 
-      jc_behavior_assigns : location list;
+      jc_behavior_assigns : location list option ;
       jc_behavior_ensures : assertion;
     }
 

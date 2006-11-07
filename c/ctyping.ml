@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.133 2006-11-03 14:51:13 moy Exp $ i*)
+(*i $Id: ctyping.ml,v 1.134 2006-11-07 13:25:28 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -140,8 +140,6 @@ and eval_const_expr (e : texpr) =
 (* Typing C programs *)
 
 let located_app f x = { node = f x.node; loc = x.loc }
-
-let option_app f = function Some x -> Some (f x) | None -> None
 
 let type_spec ?result env s = type_spec result env s
 
@@ -801,7 +799,7 @@ and check_lvalue loc e = match e.texpr_node with
   | _ -> 
       error loc "invalid lvalue"
 
-and type_expr_option env eo = option_app (type_expr env) eo
+and type_expr_option env eo = Option_misc.map (type_expr env) eo
 
 and type_field n loc env (ty, x, bf) = 
   let ty = type_type loc env ty in
@@ -834,7 +832,7 @@ and type_field n loc env (ty, x, bf) =
 (*s Typing of integers expressions: to be used when coercion is not allowed
     (array subscript, array size, enum value, etc.) *)
 
-and type_int_expr_option env eo = option_app (type_int_expr env) eo
+and type_int_expr_option env eo = Option_misc.map (type_int_expr env) eo
 
 and type_int_expr env e = match type_expr env e with
   | { texpr_type = { ctype_node = Tint _ | Tenum _ } } as te -> te
@@ -900,13 +898,14 @@ and type_struct_initializer loc env fl el = match fl, el with
   | [], _ ->
       error loc "excess elements in struct initializer"
 
-and type_initializer_option loc env ty = function
-  | None -> None
-  | Some i -> Some (type_initializer loc env ty i)
+and type_initializer_option loc env ty = 
+  Option_misc.map (type_initializer loc env ty)
 
+(*
 let type_initializer_option loc env ty = function
   | None -> None
   | Some i -> Some (type_initializer loc env ty i)
+*)
 
 let array_size_from_initializer loc ty i = match ty.ctype_node, i with
   | Tarray (_,ety, None), Some (Ilist l) -> 
@@ -1402,7 +1401,7 @@ let type_decl d = match d.node with
       let info,ty,env = type_prototype d.loc pl ty f in
       let et = if eq_type ty c_void then None else Some ty in
       info.has_body <- true;
-      let s = option_app (type_spec ~result:ty env) s in
+      let s = Option_misc.map (type_spec ~result:ty env) s in
       let s = function_spec d.loc f s in
       info.has_assigns <- (s.assigns <> None);
       let lz = build_label_tree bl [] in

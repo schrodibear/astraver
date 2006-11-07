@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.12 2006-11-07 12:14:22 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.13 2006-11-07 13:25:28 marche Exp $ */
 
 %{
 
@@ -803,9 +803,9 @@ spec_clause:
 
 assigns:
 | /* epsilon */
-    { [] }
+    { None }
 | ASSIGNS argument_expression_list
-    { $2 }
+    { Some $2 }
 ;
 
 
