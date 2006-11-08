@@ -73,6 +73,12 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	make why/$*.why
 	make -f $*.makefile gui
 
+%.goals: %.jc
+	rm -f why/$*.why
+	make why/$*.why
+	make -f $*.makefile goals
+	gwhy -no-prelude why/$*_why.why
+
 %.coq: %.jc
 	rm -f why/$*.why
 	make why/$*.why

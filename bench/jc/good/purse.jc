@@ -3,8 +3,8 @@
 
 type purse = {		
   integer balance;
+  invariant balance_non_negative(this) = this.balance >= 0;
 }	
-/* invariant balance_non_negative: balance >= 0 */
 
 unit credit(purse[0] this, integer s) 
   requires s >= 0
@@ -27,14 +27,13 @@ unit withdraw(purse[0] this, integer s)
 integer test1(purse[0] p1, purse[0] p2)
   requires p1 != p2
   behavior result_is_nul:
-    /* assigns p1.balance,p2.balance */
+    assigns p1.balance,p2.balance
     ensures \result == 0
 {	
     p1.balance = 0;
     credit(p2,100);
     return p1.balance;
 }
-
 
 /* introducing exceptions */
     

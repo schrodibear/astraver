@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.13 2006-11-07 13:25:28 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.14 2006-11-08 09:29:58 marche Exp $ */
 
 %{
 
@@ -820,14 +820,10 @@ function_definition:
 /*******************/
 
 type_definition:
-| TYPE IDENTIFIER EQ struct_declaration invariant
-    { locate_decl (JCPDtype($2,$4,$5)) }
+| TYPE IDENTIFIER EQ LBRACE field_declaration_list invariant RBRACE
+    { locate_decl (JCPDtype($2,$5,$6)) }
 ; 
 
-struct_declaration:
-| LBRACE field_declaration_list RBRACE
-    { $2 }
-;
 
 field_declaration_list:
 | /* epsilon */
@@ -844,8 +840,8 @@ field_declaration:
 invariant:
 | /* epsilon */ 
     { None }
-| INVARIANT expression
-    { Some $2 }
+| INVARIANT IDENTIFIER LPAR IDENTIFIER RPAR EQ expression SEMICOLON
+    { Some ($2,$4,$7) }
 ;
 
 /****************************************/
@@ -864,8 +860,10 @@ decl:
     { $1 }
 | type_definition 
     { $1 }
+/*
 | error
     { Jc_options.parsing_error (loc ()) "'type' or type expression expected" }
+*/
 ;
 
 

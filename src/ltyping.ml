@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.55 2006-11-06 09:28:03 hubert Exp $ i*)
+(*i $Id: ltyping.ml,v 1.56 2006-11-08 09:29:58 marche Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -152,7 +152,7 @@ let make_arith loc = function
       Tapp (int_arith r, [a; b], []), PTint
   | (a,PTreal), (PPadd|PPsub|PPmul|PPdiv as r), (b,PTreal) ->
       Tapp (real_arith r, [a; b], []), PTreal
-  | _ ->
+  | (_,t1),op,(_,t2) ->
       expected_num loc
 
 let predicate_expected loc =
@@ -165,7 +165,7 @@ let instance x i =
   let l = 
     Vmap.fold 
       (fun _ v l -> 
-	 (match v.type_val with None -> PTvar v | Some pt -> pt) :: l) i []
+	 (match v.type_val with None -> PTvar v | Some pt -> normalize_pure_type pt) :: l) i []
   in 
   (*
     eprintf "instance %a[@[%a@]]@." 
@@ -255,7 +255,7 @@ and type_papp loc env x tl =
 
 
 and term lab env t =
-  desc_term t.pp_loc lab env t.pp_desc
+    desc_term t.pp_loc lab env t.pp_desc
 
 and desc_term loc lab env = function
   | PPvar x | PPapp (x, []) ->
@@ -273,7 +273,7 @@ and desc_term loc lab env = function
   | PPconst c ->
       Tconst c, type_const c
   | PPinfix (a, (PPadd|PPsub|PPmul|PPdiv|PPmod as r), b) ->
-      make_arith loc (term lab env a, r, term lab env b)
+	make_arith loc (term lab env a, r, term lab env b)
   | PPinfix (_, (PPand|PPor|PPiff|PPimplies
 		|PPlt|PPle|PPgt|PPge|PPeq|PPneq), _) ->
       term_expected loc
@@ -317,7 +317,7 @@ and type_tvar loc lab env x =
 and type_tapp loc env x tl =
   try match find_global_logic x with
     | vars, Function (at, t) -> 
-	check_type_args loc at tl; t, instance x vars
+	check_type_args loc at tl; normalize_pure_type t, instance x vars
     | _ -> 
 	raise_located loc AppNonFunction
   with Not_found -> 
