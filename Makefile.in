@@ -737,7 +737,7 @@ coq-clean::
 
 .depend depend:: $(GENERATED)
 	rm -f .depend
-	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml > .depend
+	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml > .depend
 
 .depend.coq: #lib/coq*/*.v
 	if test @COQ@ = yes; then \

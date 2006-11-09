@@ -97,3 +97,33 @@ predicate not_assigns
     forall p:'t pointer. 
       valid(a,p) and not in_pset(p,l) -> select(m2,p)=select(m1,p)
 
+(*******************
+
+  lattice of structures
+
+
+**********************)
+
+
+type struct_id
+
+logic instanceof : alloc_table, 't pointer, struct_id -> prop
+
+parameter instanceof_ : 
+  a:alloc_table -> p:'t pointer -> s:struct_id ->
+  { } bool 
+  { if result then instanceof(a,p,s) else not(instanceof(a,p,s)) }
+
+logic downcast : alloc_table, 't pointer, struct_id -> 't pointer
+
+axiom downcast_instanceof :
+  forall a:alloc_table.
+  forall p:'t pointer.
+  forall s:struct_id.
+   instanceof(a,p,s) -> downcast(a,p,s)=p
+
+parameter downcast_ : 
+  a:alloc_table -> p:'t pointer -> s:struct_id ->
+  { instanceof(a,p,s) } 't pointer 
+  { result=p }
+

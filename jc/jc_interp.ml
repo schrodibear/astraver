@@ -50,7 +50,7 @@ let tr_base_type t =
     | JCTnative t -> simple_logic_type (tr_native_type t)
     | JCTlogic s -> simple_logic_type s
     | JCTvalidpointer (st, a, b) -> 
-	let ti = simple_logic_type st.jc_struct_info_root in
+	let ti = simple_logic_type (st.jc_struct_info_root ^ "_struct") in
 	{ logic_type_name = "pointer";
 	  logic_type_args = [ti] }
     | JCTpointer _ -> assert false
@@ -83,9 +83,11 @@ let rec term label oldlabel t =
 	LApp(f.jc_logic_info_name,List.map ft l)
     | JCTold(t) -> term (Some oldlabel) oldlabel t
     | JCTinstanceof(t,ty) ->
-	LApp("instanceof_bool",[ft t;LVar ty.jc_struct_info_name])
+	LApp("instanceof_bool",
+	     [lvar label "alloc"; ft t;LVar ty.jc_struct_info_name])
     | JCTcast(t,ty) ->
-	LApp("downcast",[ft t;LVar ty.jc_struct_info_name])
+	LApp("downcast",
+	     [lvar label "alloc"; ft t;LVar ty.jc_struct_info_name])
 
 let rec assertion label oldlabel a =
   let fa = assertion label oldlabel 
@@ -102,7 +104,8 @@ let rec assertion label oldlabel a =
 		fa p)
     | JCAold a -> assertion (Some oldlabel) oldlabel a
     | JCAinstanceof(t,ty) -> 
-	LPred("instanceof",[ft t; LVar ty.jc_struct_info_name])
+	LPred("instanceof",
+	      [lvar label "alloc"; ft t; LVar ty.jc_struct_info_name])
 
 type interp_lvalue =
   | LocalRef of var_info
@@ -119,9 +122,9 @@ let rec expr e =
     | JCEvar v -> Var v.jc_var_info_final_name
     | JCEshift(e1,e2) -> make_app "shift" [expr e1; expr e2]
     | JCEinstanceof(e,t) ->
-	make_app "instanceof" [expr e; Var t.jc_struct_info_name]
+	make_app "instanceof_" [Deref "alloc"; expr e; Var t.jc_struct_info_name]
     | JCEcast(e,t) ->
-	make_app "downcast_" [expr e; Var t.jc_struct_info_name]
+	make_app "downcast_" [Deref "alloc"; expr e; Var t.jc_struct_info_name]
     | JCEderef(e,f) -> make_app "acc_" [Var f.jc_field_info_name; expr e]
     | JCEassign_local (vi, e2) -> 
 	assert false
@@ -240,20 +243,30 @@ and statement_list l =
  structures
 ******************)
 
-let tr_struct id fl acc =
+let tr_struct st acc =
   let acc = 
     List.fold_left
       (fun acc (_,fi) ->
 	 let mem =
 	   { logic_type_name = "memory";
-	     logic_type_args = [simple_logic_type id;
-				tr_base_type fi.jc_field_info_type] }
+	     logic_type_args = 
+	       [simple_logic_type (st.jc_struct_info_root ^ "_struct");
+		tr_base_type fi.jc_field_info_type] }
 	 in
 	 Param(false,
 	       fi.jc_field_info_name,
 	       Ref_type(Base_type mem))::acc)
-      acc fl
-  in (Type(id,[]))::acc
+      acc st.jc_struct_info_fields
+  in 
+  let acc =
+    Logic(false,st.jc_struct_info_name,[],simple_logic_type "struct_id")::acc
+  in
+  match st.jc_struct_info_parent with
+    | None ->
+	Type(st.jc_struct_info_name ^ "_struct",[])::acc
+    | Some p ->
+	(* TODO: instanceof axiom *)
+	acc
 
        
 (*************

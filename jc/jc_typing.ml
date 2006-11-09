@@ -101,17 +101,21 @@ let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
 
 
+let rec find_field_struct loc st f =
+  try
+    List.assoc f st.jc_struct_info_fields
+  with Not_found ->
+    match st.jc_struct_info_parent with
+      | None -> 
+	  typing_error loc "no field %s in structure %s" 
+	    f st.jc_struct_info_name
+      | Some st -> find_field_struct loc st f
+
+  
 let find_field loc ty f =
   match ty with
     | JCTpointer st
-    | JCTvalidpointer(st,_,_) ->
-	begin
-	  try
-	    List.assoc f st.jc_struct_info_fields
-	  with Not_found ->
-	    typing_error loc "no field %s in structure %s" 
-	      f st.jc_struct_info_name
-	end
+    | JCTvalidpointer(st,_,_) -> find_field_struct loc st f
     | JCTnative _ 
     | JCTlogic _ ->
 	typing_error loc "not a structure type"
