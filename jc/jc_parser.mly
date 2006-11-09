@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.14 2006-11-08 09:29:58 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.15 2006-11-09 14:15:29 marche Exp $ */
 
 %{
 
@@ -34,6 +34,9 @@
 
   let loc () = (symbol_start_pos (), symbol_end_pos ())
   let loc_i i = (rhs_start_pos i, rhs_end_pos i)
+
+  let locate_type e =
+    { jc_ptype_node = e ; jc_ptype_loc = loc () }
 
   let locate_expr e =
     { jc_pexpr_node = e ; jc_pexpr_loc = loc () }
@@ -72,23 +75,23 @@
 /* ; , : . */
 %token SEMICOLON COMMA COLON DOT
 
-/* - -- + ++ */
-%token MINUS MINUSMINUS PLUS PLUSPLUS
+/* - -- + ++ * / % */
+%token MINUS MINUSMINUS PLUS PLUSPLUS STAR SLASH PERCENT
  
-/* = <= >= == != */
-%token EQ LTEQ GTEQ EQEQ BANGEQ
+/* = <= >= == != <: :> */
+%token EQ LTEQ GTEQ EQEQ BANGEQ LTCOLON COLONGT
 
-/* += -= */
-%token PLUSEQ MINUSEQ
+/* += -= *= /= %= */
+%token PLUSEQ MINUSEQ STAREQ SLASHEQ PERCENTEQ
 
-/* && => */
-%token AMPAMP EQGT
+/* && || => */
+%token AMPAMP BARBAR EQGT
 
 /* if else return */
 %token IF ELSE RETURN
 
-/* type */
-%token TYPE INVARIANT 
+/* type invariant with */
+%token TYPE INVARIANT WITH
 
 /* integer unit */
 %token INTEGER UNIT
@@ -213,14 +216,12 @@ cast_expression:
 multiplicative_expression: 
 | cast_expression 
     { $1 }
-/*
 | multiplicative_expression STAR cast_expression 
-    { locate (CEbinary ($1, Bmul, $3)) }
+    { locate_expr (JCPEbinary ($1, `Bmul, $3)) }
 | multiplicative_expression SLASH cast_expression 
-    { locate (CEbinary ($1, Bdiv, $3)) }
+    { locate_expr (JCPEbinary ($1, `Bdiv, $3)) }
 | multiplicative_expression PERCENT cast_expression 
-    { locate (CEbinary ($1, Bmod, $3)) }
-*/
+    { locate_expr (JCPEbinary ($1, `Bmod, $3)) }
 ;
 
 additive_expression: 
@@ -256,6 +257,10 @@ relational_expression:
     { locate_expr (JCPEbinary ($1, `Ble, $3)) }
 | relational_expression GTEQ shift_expression
     { locate_expr (JCPEbinary ($1, `Bge, $3)) }
+| relational_expression LTCOLON IDENTIFIER
+    { locate_expr (JCPEinstanceof($1, $3)) }
+| relational_expression COLONGT IDENTIFIER
+    { locate_expr (JCPEcast($1, $3)) }
 ;
 
 equality_expression: 
@@ -304,10 +309,8 @@ logical_and_expression:
 logical_or_expression: 
 | logical_and_expression 
     { $1 }
-/*
-| logical_or_expression OR_OP logical_and_expression 
-    { locate (CEbinary ($1, Bor, $3)) }
-*/
+| logical_or_expression BARBAR logical_and_expression 
+    { locate_expr (JCPEbinary($1, `Blor, $3)) }
 ;
 
 conditional_expression: 
@@ -329,10 +332,10 @@ assignment_expression:
 		| `Aeq -> JCPEassign ($1, $3)
 		| `Aadd -> JCPEassign_op ($1, `Badd, $3)
 		| `Asub -> JCPEassign_op ($1, `Bsub, $3)
+		| `Amul -> JCPEassign_op ($1, `Bmul, $3)
+		| `Adiv -> JCPEassign_op ($1, `Bdiv, $3)
+		| `Amod -> JCPEassign_op ($1, `Bmod, $3)
 (*
-		| Amul -> CEassign_op ($1, Bmul, $3)
-		| Adiv -> CEassign_op ($1, Bdiv, $3)
-		| Amod -> CEassign_op ($1, Bmod, $3)
 		| Aleft -> CEassign_op ($1, Bshift_left, $3)
 		| Aright -> CEassign_op ($1, Bshift_right, $3)
 		| Aand -> CEassign_op ($1, Bbw_and, $3)
@@ -346,10 +349,10 @@ assignment_operator:
 | EQ { `Aeq }
 | PLUSEQ { `Aadd }
 | MINUSEQ { `Asub }
+| STAREQ { `Amul }
+| SLASHEQ { `Adiv }
+| PERCENTEQ { `Amod }
 /*
-| MUL_ASSIGN { Amul }
-| DIV_ASSIGN { Adiv }
-| MOD_ASSIGN { Amod }
 | LEFT_ASSIGN { Aleft }
 | RIGHT_ASSIGN { Aright }
 | AND_ASSIGN { Aand }
@@ -776,14 +779,14 @@ parameter_declaration:
 
 type_expr:
 | INTEGER
-    { JCPTnative `Tinteger }
+    { locate_type (JCPTnative `Tinteger) }
 | UNIT
-    { JCPTnative `Tunit }
+    { locate_type (JCPTnative `Tunit) }
 | IDENTIFIER
-    { JCPTidentifier $1 }
+    { locate_type (JCPTidentifier $1) }
 | IDENTIFIER LSQUARE CONSTANT RSQUARE
     { let n = int_of_constant (loc_i 3) $3 in
-      JCPTvalidpointer($1,n,n) }
+      locate_type (JCPTvalidpointer($1,n,n)) }
 ;
 
 function_specification:
@@ -820,10 +823,16 @@ function_definition:
 /*******************/
 
 type_definition:
-| TYPE IDENTIFIER EQ LBRACE field_declaration_list invariant RBRACE
-    { locate_decl (JCPDtype($2,$5,$6)) }
+| TYPE IDENTIFIER EQ extends LBRACE field_declaration_list invariant RBRACE
+    { locate_decl (JCPDtype($2,$4,$6,$7)) }
 ; 
 
+extends:
+| /* epsilon */
+    { None }
+| IDENTIFIER WITH
+    { Some $1 }
+;
 
 field_declaration_list:
 | /* epsilon */

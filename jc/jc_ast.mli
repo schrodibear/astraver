@@ -40,15 +40,22 @@ type label = string
 (* parse trees *)
 (***************)
 
-type ptype = 
+type ptype_node = 
   | JCPTnative of native_type
   | JCPTidentifier of string
   | JCPTvalidpointer of string * int * int
 
+and ptype =
+    {
+      jc_ptype_loc : Loc.position;
+      jc_ptype_node : ptype_node;
+    }
+
 type pbin_op =
   [ `Ble | `Bge | `Beq | `Bneq 
-  | `Badd | `Bsub
-  | `Bland | `Bimplies ]
+  | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod
+  | `Bland | `Blor | `Bimplies 
+  ]
 
 type pexpr_node =
   | JCPEconst of const
@@ -59,6 +66,8 @@ type pexpr_node =
   | JCPEassign of pexpr * pexpr
   | JCPEassign_op of pexpr * pbin_op * pexpr
   | JCPEbinary of pexpr * pbin_op * pexpr
+  | JCPEinstanceof of pexpr * string
+  | JCPEcast of pexpr * string
   | JCPEforall of ptype * string * pexpr
   | JCPEold of pexpr
 
@@ -98,7 +107,7 @@ and pstatement =
 
 type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
-  | JCPDtype of string * (ptype * string) list * (string * string * pexpr) option
+  | JCPDtype of string * string option * (ptype * string) list * (string * string * pexpr) option
 
 and pdecl =
     {
@@ -117,6 +126,8 @@ type term_node =
   | JCTderef of term * field_info
   | JCTapp of logic_info * term list
   | JCTold of term
+  | JCTinstanceof of term * struct_info
+  | JCTcast of term * struct_info
 
 and term =
     {
@@ -131,6 +142,7 @@ type assertion_node =
   | JCAapp of logic_info * term list
   | JCAforall of var_info * assertion
   | JCAold of assertion
+  | JCAinstanceof of term * struct_info
 
 and assertion =
     {
@@ -144,6 +156,8 @@ type expr_node =
   | JCEshift of expr * expr
   | JCEderef of expr * field_info
   | JCEcall of fun_info * expr list
+  | JCEinstanceof of expr * struct_info
+  | JCEcast of expr * struct_info
   | JCEassign_local of var_info * expr
   | JCEassign_heap of expr * field_info * expr
   | JCEassign_op_local of var_info * fun_info * expr
@@ -201,3 +215,9 @@ type fun_spec =
 
 
 
+    
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

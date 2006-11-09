@@ -29,7 +29,8 @@ open Jc_ast
 val functions_table : 
   (int, fun_info * fun_spec * statement list) Hashtbl.t
 
-val structs_table : (string, (string * field_info) list) Hashtbl.t
+val structs_table : 
+  (string, struct_info) Hashtbl.t
 
 exception Typing_error of Loc.position * string
 

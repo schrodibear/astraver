@@ -26,12 +26,28 @@ open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_ast
+open Format
+
+exception Typing_error of Loc.position * string
+
+let typing_error l = 
+  Format.kfprintf 
+    (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
+    str_formatter
+
+
+
 
 let unit_type = JCTnative `Tunit
 let boolean_type = JCTnative `Tboolean
 let integer_type = JCTnative `Tinteger
 let real_type = JCTnative `Treal
 
+
+
+let structs_table = Hashtbl.create 97
+
+(*
 let same_type t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
@@ -39,8 +55,31 @@ let same_type t1 t2 =
     | (JCTpointer(s1) | JCTvalidpointer(s1,_,_)),
 	(JCTpointer(s2) | JCTvalidpointer(s2,_,_)) -> s1=s2
     | _ -> false
-	
-open Format
+*)
+
+let rec substruct s1 s2 =
+  if s1=s2 then true else
+    try
+      eprintf "looking for parent of %s:@." s1.jc_struct_info_name; 
+      let st = Hashtbl.find structs_table s1.jc_struct_info_name in
+      match st.jc_struct_info_parent with 
+	| None -> 
+	    eprintf "it has no parent@."; 
+	    false
+	| Some s -> 
+	    eprintf "it is %s:@." s.jc_struct_info_name; 
+	    substruct s s2
+    with Not_found -> assert false
+
+let subtype t1 t2 =
+  match t1,t2 with
+    | JCTnative t1, JCTnative t2 -> t1=t2
+    | JCTlogic s1, JCTlogic s2 -> s1=s2
+    | (JCTpointer(s1) | JCTvalidpointer(s1,_,_)),
+	(JCTpointer(s2) | JCTvalidpointer(s2,_,_)) -> 
+	  substruct s1 s2
+    | _ -> false
+  
 
 let string_of_native t =
   match t with
@@ -53,37 +92,25 @@ let string_of_native t =
 let print_type fmt t =
   match t with
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
-    | JCTlogic s
+    | JCTlogic s -> fprintf fmt "%s" s
     | JCTpointer s 
-    | JCTvalidpointer (s,_,_) -> fprintf fmt "%s" s
+    | JCTvalidpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
 
 
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
 
-let structs_table = Hashtbl.create 97
-
-exception Typing_error of Loc.position * string
-
-let typing_error l = 
-  Format.kfprintf 
-    (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
-    str_formatter
-
 
 let find_field loc ty f =
   match ty with
-    | JCTpointer id
-    | JCTvalidpointer(id,_,_) ->
+    | JCTpointer st
+    | JCTvalidpointer(st,_,_) ->
 	begin
 	  try
-	    let st = Hashtbl.find structs_table id in
-	    try
-	      List.assoc f st
-	    with Not_found ->
-	      typing_error loc "no field %s in structure %s" f id
+	    List.assoc f st.jc_struct_info_fields
 	  with Not_found ->
-	    typing_error loc "undeclared structure %s" id
+	    typing_error loc "no field %s in structure %s" 
+	      f st.jc_struct_info_name
 	end
     | JCTnative _ 
     | JCTlogic _ ->
@@ -94,13 +121,20 @@ let find_fun_info id = Hashtbl.find functions_env id
 (* types *)
 
 let type_type t =
-  match t with
+  match t.jc_ptype_node with
     | JCPTnative n -> JCTnative n
     | JCPTvalidpointer (id, a, b) -> 
-	JCTvalidpointer(id, a, b)
+	begin
+	  try
+	    let st = Hashtbl.find structs_table id in
+	    JCTvalidpointer(st, a, b)
+	  with Not_found ->
+	    typing_error t.jc_ptype_loc "undeclared structure %s" id
+	end
     | JCPTidentifier id -> 
 	(* TODO *)
-	JCTlogic id
+	assert false
+
 
 (* constants *)
 
@@ -123,31 +157,56 @@ let neq_int_bool = make_term_op "neq_int_bool" boolean_type
 let neq_pointer_bool = make_term_op "neq_pointer_bool" boolean_type
 let add_int = make_term_op "add_int" integer_type
 let sub_int = make_term_op "sub_int" integer_type
+let mul_int = make_term_op "mul_int" integer_type
+let div_int = make_term_op "div_int" integer_type
+let mod_int = make_term_op "mod_int" integer_type
 
-let logic_bin_op loc op t1 e1 t2 e2 =
-  let t,op =
-    match op with
-      | `Bge -> assert false (* TODO *)
-      | `Ble -> assert false (* TODO *)
-      | `Beq -> boolean_type,eq_int_bool
-      | `Bneq ->
-	  if t1=t2
-	  then
-	    begin
-	      match t1 with
-		| JCTnative `Tinteger -> boolean_type,neq_int_bool
-		| JCTpointer _ -> boolean_type,neq_pointer_bool
-		| _ -> assert false (* TODO *)
-	    end
-	  else
-	    typing_error loc "terms should have the same type"
-      | `Badd -> integer_type,add_int
-      | `Bsub -> integer_type,sub_int
-      | `Bland -> assert false (* TODO *)
-      | `Bimplies -> assert false
-  in
-  t,JCTapp(op,[e1;e2])
+let num_op op =
+  match op with
+    | `Badd -> add_int
+    | `Bsub -> sub_int
+    | `Bmul -> mul_int
+    | `Bdiv -> div_int
+    | `Bmod -> mod_int
+    | _ -> assert false
 
+let eq_op op arg_type  =
+  match (op,arg_type) with
+    | (`Beq,`Tinteger) -> eq_int_bool
+    | (`Bneq,`Tinteger) -> neq_int_bool
+    | _ -> assert false
+
+let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
+  match op with
+    | `Bge -> assert false (* TODO *)
+    | `Ble -> assert false (* TODO *)
+    | `Beq | `Bneq ->
+	let t =
+	  match t1,t2 with
+	    | JCTnative t1, JCTnative t2 ->
+		begin
+		  match (t1,t2) with
+		    | `Tinteger,`Tinteger -> `Tinteger
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ -> assert false
+	in
+	JCTnative t,JCTapp(eq_op op t,[e1;e2])
+    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ->
+	let t =
+	  match (t1,t2) with
+	    | JCTnative t1, JCTnative t2 ->
+		begin
+		  match (t1,t2) with
+		    | `Tinteger,`Tinteger -> `Tinteger
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "numeric types expected"
+	in JCTnative t,JCTapp(num_op op,[e1;e2])
+    | `Bland | `Blor -> assert false (* TODO *)
+    | `Bimplies -> assert false
+	  
 let rec term env e =
   let t,te =
     match e.jc_pexpr_node with
@@ -159,6 +218,24 @@ let rec term env e =
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
+      | JCPEinstanceof(e1,t) -> 
+	  let t1,te1 = term env e1 in
+	  begin
+	    try
+	      let st = Hashtbl.find structs_table t in
+	      JCTnative `Tboolean, JCTinstanceof(te1,st)
+	    with Not_found ->
+	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
+	    end
+      | JCPEcast(e1, t) -> 
+	  let t1,te1 = term env e1 in
+	  begin
+	    try
+	      let st = Hashtbl.find structs_table t in
+	      JCTpointer(st), JCTcast(te1,st)
+	    with Not_found ->
+	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
+	    end
       | JCPEbinary (e1, op, e2) -> 
 	  let t1,e1 = term env e1
 	  and t2,e2 = term env e2
@@ -217,11 +294,12 @@ let rel_bin_op loc op t1 t2 =
 	else
 	  typing_error loc "terms should have the same type"
 	(* non propositional operators *)
-    | `Badd -> assert false
-    | `Bsub -> assert false
+    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod -> assert false
 	(* already recognized as connectives *)
-    | `Bland -> assert false 
+    | `Bland | `Blor -> assert false 
     | `Bimplies -> assert false
+    | `Binstanceof -> assert false
+
 
 let make_and a1 a2 =
   match (a1.jc_assertion_node,a2.jc_assertion_node) with
@@ -240,6 +318,16 @@ let rec assertion env e =
   let te =
     match e.jc_pexpr_node with
       | JCPEvar id -> assert false
+      | JCPEinstanceof(e1, t) -> 
+	  let t1,te1 = term env e1 in
+	  begin
+	    try
+	      let st = Hashtbl.find structs_table t in
+	      JCAinstanceof(te1,st)
+	    with Not_found ->
+	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
+	    end
+      | JCPEcast(e, t) -> assert false
       | JCPEbinary (e1, `Bland, e2) -> 
 	  make_and (assertion env e1) (assertion env e2)
       | JCPEbinary (e1, `Bimplies, e2) -> 
@@ -253,7 +341,7 @@ let rec assertion env e =
       | JCPEderef (_, _) -> assert false
       | JCPEshift (_, _) -> assert false
       | JCPEconst _ -> assert false
-      | JCPEforall(ty,id,e) -> 
+      | JCPEforall(ty,id,e1) -> 
 	  let ty = type_type ty in
 	  let vi = {
 	    jc_var_info_name = id;
@@ -261,7 +349,7 @@ let rec assertion env e =
 	    jc_var_info_type = ty;
 	    jc_var_info_assigned = false;
 	  }
-	  in JCAforall(vi,assertion ((id,vi)::env) e)
+	  in JCAforall(vi,assertion ((id,vi)::env) e1)
       | JCPEold e -> JCAold(assertion env e)
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
@@ -293,6 +381,9 @@ let eq_int = make_fun_info "eq_int_" integer_type
 let neq_int = make_fun_info "neq_int_" integer_type
 let add_int = make_fun_info "add_int" integer_type
 let sub_int = make_fun_info "sub_int" integer_type
+let mul_int = make_fun_info "mul_int" integer_type
+let div_int = make_fun_info "div_int" integer_type
+let mod_int = make_fun_info "mod_int" integer_type
     
 let bin_op op =
   match op with
@@ -302,14 +393,18 @@ let bin_op op =
     | `Bneq -> neq_int
     | `Badd -> add_int
     | `Bsub -> sub_int
-    | `Bland -> assert false (* TODO *)
+    | `Bmul -> mul_int
+    | `Bdiv -> div_int
+    | `Bmod -> mod_int
+    | `Bland | `Blor -> assert false (* TODO *)
 	(* not allowed as expression op *)
     | `Bimplies -> assert false
+    | `Binstanceof -> assert false
 
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
     | `Bge | `Ble | `Beq | `Bneq ->
-	let t=
+	begin
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
 		begin
@@ -319,8 +414,9 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "numeric types expected"
-	in JCTnative `Tboolean,JCEcall(bin_op op,[e1;e2])
-    | `Badd | `Bsub ->
+	end;
+	JCTnative `Tboolean,JCEcall(bin_op op,[e1;e2])
+    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ->
 	let t=
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -332,9 +428,11 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	    | _ ->
 		typing_error loc "numeric types expected"
 	in JCTnative t,JCEcall(bin_op op,[e1;e2])
-    | `Bland -> assert false (* TODO *)
+    | `Bland | `Blor -> assert false (* TODO *)
 	(* not allowed as expression op *)
     | `Bimplies -> assert false
+    | `Binstanceof -> assert false
+
 
 let rec expr env e =
   let t,te =
@@ -347,6 +445,24 @@ let rec expr env e =
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
+      | JCPEinstanceof(e1, t) -> 
+	  let t1,te1 = expr env e1 in
+	  begin
+	    try
+	      let st = Hashtbl.find structs_table t in
+	      JCTnative `Tboolean, JCEinstanceof(te1,st)
+	    with Not_found ->
+	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
+	    end
+      | JCPEcast(e1, t) -> 
+	  let t1,te1 = expr env e1 in
+	  begin
+	    try
+	      let st = Hashtbl.find structs_table t in
+	      JCTpointer(st), JCEcast(te1,st)
+	    with Not_found ->
+	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
+	    end
       | JCPEbinary (e1, op, e2) -> 
 	  let t1,e1 = expr env e1
 	  and t2,e2 = expr env e2
@@ -357,7 +473,7 @@ let rec expr env e =
 	    let t1,te1 = expr env e1
 	    and t2,te2 = expr env e2
 	    in
-	    if same_type t1 t2 then
+	    if subtype t2 t1 then
 	      match te1.jc_expr_node with
 		| JCEvar v ->
 		    t1,JCEassign_local(v,te2)
@@ -372,7 +488,7 @@ let rec expr env e =
 	    let t1,te1 = expr env e1
 	    and t2,te2 = expr env e2
 	    in
-	    if same_type t1 t2 then
+	    if subtype t2 t1 then
 	    match te1.jc_expr_node with
 	      | JCEvar v ->
 		  t1,JCEassign_op_local(v, bin_op op, te2)
@@ -395,7 +511,7 @@ let rec expr env e =
 			    (fun vi e ->
 			       let ty = vi.jc_var_info_type in
 			       let t,te = expr env e in
-			       if same_type ty t then te
+			       if subtype t ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
 				   "type %a expected" 
@@ -444,7 +560,7 @@ let rec statement env s =
       | JCPSwhile (_, _) -> assert false
       | JCPSif (c, s1, s2) -> 
 	  let t,tc = expr env c in
-	  if same_type t (JCTnative `Tboolean) then
+	  if subtype t (JCTnative `Tboolean) then
 	    JCSif(tc,statement env s1,statement env s2)
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
@@ -474,6 +590,8 @@ let rec location env e =
 	let fi = find_field e.jc_pexpr_loc t f in
 	fi.jc_field_info_type, JCLderef(te,fi)	  
     | JCPEshift (_, _)  -> assert false (* TODO *)
+    | JCPEcast _
+    | JCPEinstanceof _
     | JCPEold _ 
     | JCPEforall (_, _, _)
     | JCPEbinary (_, _, _)
@@ -545,14 +663,37 @@ let decl d =
 	let b = List.map (statement param_env) body in
 	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
-    | JCPDtype(id,fields,inv) ->
+    | JCPDtype(id,parent,fields,inv) ->
 	let env = List.map field fields in
-(*	let i =
-	  match inv with
-	    | None -> assertion_true
-	    | Some e -> assertion env e
+	let root,par = 
+	  match parent with
+	    | None -> (id,None)
+	    | Some p ->
+		try
+		  let st = Hashtbl.find structs_table p in
+		  (st.jc_struct_info_root,Some st)
+		with
+		    Not_found ->
+		      typing_error d.jc_pdecl_loc "Undefined type '%s'" p
 	in
-*)	Hashtbl.add structs_table id env
+	(*	
+		let i =
+		match inv with
+		| None -> assertion_true
+		| Some e -> assertion env e
+		in
+	*)	
+	Hashtbl.add structs_table id 
+	  { jc_struct_info_name = id;
+	    jc_struct_info_fields = env;
+	    jc_struct_info_parent = par;
+	    jc_struct_info_root = root;
+	  }
 
 
 
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

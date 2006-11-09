@@ -25,7 +25,7 @@ unit withdraw(purse[0] this, integer s)
 }
 
 integer test1(purse[0] p1, purse[0] p2)
-  requires p1 != p2
+    /* requires p1 != p2 */
   behavior result_is_nul:
     assigns p1.balance,p2.balance
     ensures \result == 0
@@ -46,8 +46,8 @@ unit withdraw2(purse this, int s)
      assigns this.balance;
      ensures s <= \old(this.balance) && balance == \old(this.balance) - s
   behavior amount_too_large:
-     assigns \nothing
      throws NoCreditException s 
+     assigns \nothing
      ensures s > \old(this.balance)
 {
     if (balance >= s) {
@@ -60,7 +60,7 @@ unit withdraw2(purse this, int s)
  
 boolean test2(purse p) 
   requires p != null
-  behavior ok_if_enough_balance:
+  behavior ok_iff_enough_balance:
     assigns p.balance 
     ensures \result <==> \old(p.balance) >= 1000
 {

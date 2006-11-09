@@ -33,6 +33,8 @@ let rec term acc t =
     | JCTapp (f,lt) -> f::(List.fold_left term acc lt)
     | JCTold t | JCTderef (t,_) -> term acc t
     | JCTshift (t1,t2) -> term (term acc t1) t2
+    | JCTcast(t,_)
+    | JCTinstanceof(t,_) -> term acc t
 
 let rec assertion acc p =
   match p.jc_assertion_node with
@@ -42,6 +44,7 @@ let rec assertion acc p =
   | JCAimplies (p1,p2) -> 
       assertion (assertion acc p1) p2
   | JCAold p | JCAforall (_,p) -> assertion acc p
+  | JCAinstanceof(t,_) -> term acc t
 
 (*
 let spec s = 
@@ -91,6 +94,8 @@ let rec expr acc e =
   match e.jc_expr_node with 
     | JCEconst _ | JCEvar _  -> acc
     | JCEderef(e, _) 
+    | JCEinstanceof(e,_)
+    | JCEcast(e,_)
     | JCEassign_local (_, e) | JCEassign_op_local(_, _, e) -> expr acc e
     | JCEshift (e1,e2) 
     | JCEassign_heap (e1,_, e2)

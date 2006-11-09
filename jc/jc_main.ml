@@ -59,8 +59,8 @@ let main () =
 	(* phase x : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
-	    (fun id fl acc ->
-	       Jc_interp.tr_struct id fl acc)
+	    (fun id st acc ->
+	       Jc_interp.tr_struct id st.jc_struct_info_fields acc)
 	    Jc_typing.structs_table
 	    []
 	in	       	  

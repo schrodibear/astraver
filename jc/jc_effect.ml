@@ -41,7 +41,7 @@ let same_effects ef1 ef2 =
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.5 2006-11-07 16:12:13 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.6 2006-11-09 14:15:29 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -54,6 +54,8 @@ let rec expr ef e =
     | JCEcall (fi, le) -> 
 	ef_union fi.jc_fun_info_effects
 	  (List.fold_left expr ef le)
+    | JCEcast(e,_)
+    | JCEinstanceof(e,_) -> expr ef e
     | JCEderef (e, f) -> expr ef e (* TODO *)
     | JCEshift (_, _) -> assert false
     | JCEvar _ -> ef (* TODO *)

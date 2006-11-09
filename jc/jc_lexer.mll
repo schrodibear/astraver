@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.9 2006-11-07 08:35:16 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.10 2006-11-09 14:15:29 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -119,6 +119,7 @@ rule token = parse
   | "unsigned"              { UNSIGNED }
   | "while"                 { WHILE }
 *)
+  | "with"                  { WITH }
   | "\\forall"              { BSFORALL }
   | "\\old"                 { BSOLD }
   | "\\result"              { BSRESULT }
@@ -150,10 +151,10 @@ rule token = parse
 *)
   | "+="                    { PLUSEQ }
   | "-="                    { MINUSEQ }
+  | "*="                    { STAREQ }
+  | "/="                    { SLASHEQ }
+  | "%="                    { PERCENTEQ }
 (*
-  | "*="                    { MUL_ASSIGN }
-  | "/="                    { DIV_ASSIGN }
-  | "%="                    { MOD_ASSIGN }
   | "&="                    { AND_ASSIGN }
   | "^="                    { XOR_ASSIGN }
   | "|="                    { OR_ASSIGN }
@@ -163,9 +164,7 @@ rule token = parse
   | "++"                    { PLUSPLUS }
   | "--"                    { MINUSMINUS }
   | "&&"                    { AMPAMP }
-(*
-  | "||"                    { OR_OP }
-*)
+  | "||"                    { BARBAR }
   | "=>"                    { EQGT }
   | "<="                    { LTEQ }
   | ">="                    { GTEQ }
@@ -182,6 +181,8 @@ rule token = parse
   | "["                     { LSQUARE }
   | "]"                     { RSQUARE }
   | "."                     { DOT }
+  | "<:"                    { LTCOLON } 
+  | ":>"                    { COLONGT } 
 (*
   | "&"                     { AMP }
   | "!"                     { EXL }
@@ -189,10 +190,10 @@ rule token = parse
 *)
   | "-"                     { MINUS }
   | "+"                     { PLUS }
-(*
   | "*"                     { STAR }
   | "/"                     { SLASH }
   | "%"                     { PERCENT }
+(*
   | "<"                     { LT }
   | ">"                     { GT }
   | "^"                     { HAT }
@@ -221,3 +222,10 @@ and comment = parse
       Jc_options.parsing_error (loc lb) ""
 
 }
+
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

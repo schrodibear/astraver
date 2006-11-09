@@ -94,6 +94,6 @@ axiom in_pset_singleton:
  
 predicate not_assigns 
   (a:alloc_table, m1:('t,'v) memory, m2:('t,'v) memory, l:'t pset) =
-    forall p:'z pointer. 
+    forall p:'t pointer. 
       valid(a,p) and not in_pset(p,l) -> select(m2,p)=select(m1,p)
 

@@ -49,8 +49,8 @@ let tr_base_type t =
   match t with
     | JCTnative t -> simple_logic_type (tr_native_type t)
     | JCTlogic s -> simple_logic_type s
-    | JCTvalidpointer (id, a, b) -> 
-	let ti = simple_logic_type id in
+    | JCTvalidpointer (st, a, b) -> 
+	let ti = simple_logic_type st.jc_struct_info_root in
 	{ logic_type_name = "pointer";
 	  logic_type_args = [ti] }
     | JCTpointer _ -> assert false
@@ -82,6 +82,10 @@ let rec term label oldlabel t =
     | JCTapp(f,l) -> 
 	LApp(f.jc_logic_info_name,List.map ft l)
     | JCTold(t) -> term (Some oldlabel) oldlabel t
+    | JCTinstanceof(t,ty) ->
+	LApp("instanceof_bool",[ft t;LVar ty.jc_struct_info_name])
+    | JCTcast(t,ty) ->
+	LApp("downcast",[ft t;LVar ty.jc_struct_info_name])
 
 let rec assertion label oldlabel a =
   let fa = assertion label oldlabel 
@@ -97,6 +101,8 @@ let rec assertion label oldlabel a =
 		tr_base_type v.jc_var_info_type,
 		fa p)
     | JCAold a -> assertion (Some oldlabel) oldlabel a
+    | JCAinstanceof(t,ty) -> 
+	LPred("instanceof",[ft t; LVar ty.jc_struct_info_name])
 
 type interp_lvalue =
   | LocalRef of var_info
@@ -112,6 +118,10 @@ let rec expr e =
     | JCEconst c -> Cte(const c)
     | JCEvar v -> Var v.jc_var_info_final_name
     | JCEshift(e1,e2) -> make_app "shift" [expr e1; expr e2]
+    | JCEinstanceof(e,t) ->
+	make_app "instanceof" [expr e; Var t.jc_struct_info_name]
+    | JCEcast(e,t) ->
+	make_app "downcast_" [expr e; Var t.jc_struct_info_name]
     | JCEderef(e,f) -> make_app "acc_" [Var f.jc_field_info_name; expr e]
     | JCEassign_local (vi, e2) -> 
 	assert false
@@ -162,6 +172,8 @@ let statement_expr e =
     | JCEvar v -> assert false
     | JCEshift(e1,e2) -> assert false
     | JCEderef(e,f) -> assert false
+    | JCEinstanceof _ -> assert false
+    | JCEcast _ -> assert false
     | JCEassign_local (vi, e2) -> 
 	assert false
 	  (*

@@ -29,8 +29,24 @@ type native_type =
 type jc_type =
   | JCTnative of native_type
   | JCTlogic of string
-  | JCTpointer of string
-  | JCTvalidpointer of string * int * int
+  | JCTpointer of struct_info
+  | JCTvalidpointer of struct_info * int * int
+
+and struct_info =
+    { 
+      jc_struct_info_name : string;
+      jc_struct_info_parent : struct_info option;
+      jc_struct_info_root : string;
+      jc_struct_info_fields : (string * field_info) list;
+    }
+
+and field_info =
+    {
+      jc_field_info_tag : int;
+      jc_field_info_name : string;
+      jc_field_info_type : jc_type;
+    }
+
 
 type logic_info =
     {
@@ -46,12 +62,6 @@ type var_info =
       mutable jc_var_info_assigned : bool;
     }
 
-type field_info =
-    {
-      jc_field_info_tag : int;
-      jc_field_info_name : string;
-      jc_field_info_type : jc_type;
-    }
 
 type exception_info =
     {

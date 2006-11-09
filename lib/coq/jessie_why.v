@@ -19,8 +19,8 @@ Admitted.
   forall (A1:Set), alloc_table -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why predicate*) Definition valid (A138:Set) (a:alloc_table)
-  (p:((pointer) A138)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A137:Set) (a:alloc_table)
+  (p:((pointer) A137)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why type*) Definition memory: Set -> Set ->Set.
 Admitted.
@@ -94,9 +94,9 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A155:Set)
-  (A154:Set) (a:alloc_table) (m1:((memory) A155 A154)) (m2:((memory) A155
-  A154)) (l:((pset) A155))
-  := (forall (p:((pointer) A155)),
+(*Why predicate*) Definition not_assigns (A154:Set)
+  (A153:Set) (a:alloc_table) (m1:((memory) A153 A154)) (m2:((memory) A153
+  A154)) (l:((pset) A153))
+  := (forall (p:((pointer) A153)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
