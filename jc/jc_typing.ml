@@ -366,11 +366,11 @@ let rec assertion env e =
 
 (* expressions *)
 
-let fun_info_counter = ref 0
+let fun_tag_counter = ref 0
 
 let make_fun_info name ty =
-  incr fun_info_counter;
-  { jc_fun_info_tag = !fun_info_counter;
+  incr fun_tag_counter;
+  { jc_fun_info_tag = !fun_tag_counter;
     jc_fun_info_name = name;
     jc_fun_info_parameters = [];
     jc_fun_info_return_type = ty;
@@ -635,10 +635,13 @@ let assertion_true =
   { jc_assertion_node = JCAtrue;
     jc_assertion_loc = Loc.dummy_position }
 
+let field_tag_counter = ref 0
+
 let field (t,id) =
   let ty = type_type t in
+  incr field_tag_counter;
   let fi = {
-    jc_field_info_tag = 0;
+    jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = id;
     jc_field_info_type = ty;
   }

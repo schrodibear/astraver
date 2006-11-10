@@ -19,8 +19,8 @@ Admitted.
   forall (A1:Set), alloc_table -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why predicate*) Definition valid (A137:Set) (a:alloc_table)
-  (p:((pointer) A137)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A149:Set) (a:alloc_table)
+  (p:((pointer) A149)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why type*) Definition memory: Set -> Set ->Set.
 Admitted.
@@ -94,9 +94,28 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A154:Set)
-  (A153:Set) (a:alloc_table) (m1:((memory) A153 A154)) (m2:((memory) A153
-  A154)) (l:((pset) A153))
-  := (forall (p:((pointer) A153)),
+(*Why predicate*) Definition not_assigns (A166:Set)
+  (A165:Set) (a:alloc_table) (m1:((memory) A165 A166)) (m2:((memory) A165
+  A166)) (l:((pset) A165))
+  := (forall (p:((pointer) A165)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
+
+(*Why type*) Definition struct_id: Set.
+Admitted.
+
+(*Why logic*) Definition instanceof :
+  forall (A1:Set), alloc_table -> ((pointer) A1) -> struct_id -> Prop.
+Admitted.
+
+(*Why logic*) Definition downcast :
+  forall (A1:Set), alloc_table -> ((pointer) A1)
+  -> struct_id -> ((pointer) A1).
+Admitted.
+
+(*Why axiom*) Lemma downcast_instanceof :
+  forall (A1:Set),
+  (forall (a:alloc_table),
+   (forall (p:((pointer) A1)),
+    (forall (s:struct_id), ((instanceof a p s) -> (downcast a p s) = p)))).
+Admitted.
 
