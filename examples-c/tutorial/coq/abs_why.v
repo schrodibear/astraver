@@ -12,7 +12,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "abs.c", line 3, characters 14-21: *)
 (*Why goal*) Lemma abs1_impl_po_2 : 
   forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -27,13 +27,13 @@ Admitted.
   forall (HW_6: (valid alloc p)),
   forall (intM_global0: ((memory) Z global)),
   forall (HW_7: intM_global0 = (upd intM_global p (Zopp result0))),
-  (acc intM_global0 p) >= 0.
+  (* File "abs.c", line 3, characters 13-20 *) (acc intM_global0 p) >= 0.
 Proof.
 intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "abs.c", line 3, characters 14-21: *)
 (*Why goal*) Lemma abs1_impl_po_3 : 
   forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -42,13 +42,13 @@ Save.
   forall (result: Z),
   forall (HW_2: result = (acc intM_global p)),
   forall (HW_8: result >= 0),
-  (acc intM_global p) >= 0.
+  (* File "abs.c", line 3, characters 13-20 *) (acc intM_global p) >= 0.
 Proof.
 intuition.
 Save.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "abs.c", line 9, characters 14-21: *)
 (*Why goal*) Lemma abs2_impl_po_1 : 
   forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -64,14 +64,14 @@ Save.
   forall (HW_7: (valid alloc p)),
   forall (intM_global0: ((memory) Z global)),
   forall (HW_8: intM_global0 = (upd intM_global p (Zopp result0))),
-  (acc intM_global0 p) >= 0.
+  (* File "abs.c", line 9, characters 13-20 *) (acc intM_global0 p) >= 0.
 Proof.
 intuition.
 subst intM_global0.
 caduceus.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "abs.c", line 9, characters 14-21: *)
 (*Why goal*) Lemma abs2_impl_po_2 : 
   forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -81,7 +81,7 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (acc intM_global p)),
   forall (HW_9: result >= 0),
-  (acc intM_global p) >= 0.
+  (* File "abs.c", line 9, characters 13-20 *) (acc intM_global p) >= 0.
 Proof.
 intuition.
 Save.

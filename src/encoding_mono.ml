@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.4 2006-11-06 14:01:15 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.5 2006-11-10 16:11:50 couchot Exp $ i*)
 
 open Cc
 open Logic
@@ -47,6 +47,7 @@ let u2Real = "u2Real"
 let bool2U = "bool2U"
 let u2Bool = "u2Bool"
 let arities = ref []
+
 
 let int = Tapp (Ident.create (prefix^"int"), [], []) 
 let real = Tapp (Ident.create (prefix^"real"), [], [])
@@ -104,7 +105,7 @@ let utButBuiltIn  pt = match pt with
     PTint as k -> k 
   | PTreal as k -> k
   | PTbool as k -> k
-  (*| PTvar _ -> PTexternal ([], Ident.create (prefix^"type"))*)
+      (*| PTvar _ -> PTexternal ([], Ident.create (prefix^"type"))*)
   | _ -> PTexternal ([], Ident.create (prefix^"unique"))
 
 
@@ -227,29 +228,29 @@ let prelude =
 	     let sort_int_int2U_x_ = Tapp (Ident.create (prefix^"sort"),
 					   [int; int2u_x_], []) in 
 	     let u2Intsort_int_int2U_x_ = Tapp (Ident.create u2Int,
-						  [sort_int_int2U_x_], []) in
+						[sort_int_int2U_x_], []) in
 	     let peq = Papp (Ident.t_eq,[u2Intsort_int_int2U_x_;Tvar x], []) in 
              Env.empty_scheme (newForall false  x  PTint [[TPat sort_int_int2U_x_]]peq )))::
     (** \forall x:Real .  u2Real(sort(real, real2U(x))) = x  (b) **)
     (Daxiom (loc, axiomR "eq_"^u2Real^"_"^real2U,
 	     let x = Ident.create "x" in 
 	     let real2u_x_ = Tapp (Ident.create real2U,
-				  [Tvar x], []) in 
+				   [Tvar x], []) in 
 	     let sort_real_real2U_x_ = Tapp (Ident.create (prefix^"sort"),
-					   [real; real2u_x_], []) in 
+					     [real; real2u_x_], []) in 
 	     let u2Realsort_real_real2U_x_ = Tapp (Ident.create u2Real,
-						  [sort_real_real2U_x_], []) in
+						   [sort_real_real2U_x_], []) in
 	     let peq = Papp (Ident.t_eq,[u2Realsort_real_real2U_x_;Tvar x], []) in 
              Env.empty_scheme (newForall false  x  PTreal [[TPat sort_real_real2U_x_]]peq )))::
     (** \forall x:Bool .  u2Bool(sort(bool, bool2U(x))) = x  **)
     (Daxiom (loc, axiomR "eq_"^u2Bool^"_"^bool2U,
 	     let x = Ident.create "x" in 
 	     let bool2u_x_ = Tapp (Ident.create bool2U,
-				  [Tvar x], []) in 
+				   [Tvar x], []) in 
 	     let sort_bool_bool2U_x_ = Tapp (Ident.create (prefix^"sort"),
-					   [bool; bool2u_x_], []) in 
+					     [bool; bool2u_x_], []) in 
 	     let u2Boolsort_bool_bool2U_x_ = Tapp (Ident.create u2Bool,
-						  [sort_bool_bool2U_x_], []) in
+						   [sort_bool_bool2U_x_], []) in
 	     let peq = Papp (Ident.t_eq,[u2Boolsort_bool_bool2U_x_;Tvar x], []) in 
              Env.empty_scheme (newForall false  x  PTbool [[TPat sort_bool_bool2U_x_]]peq )))::
     (** \forall x. U  int2U(u2Int(sort(int,x))) = sort(int,x) **)
@@ -269,11 +270,11 @@ let prelude =
     (Daxiom (loc, axiomR "eq_"^real2U^"_"^u2Real,
 	     let x = Ident.create "x" in 
 	     let sort_real_x_ = Tapp (Ident.create (prefix^"sort"),
-				     [real; Tvar x], []) in
+				      [real; Tvar x], []) in
 	     let u2Real_sort_real_x_ = Tapp (Ident.create u2Real,
-					   [sort_real_x_], []) in 
+					     [sort_real_x_], []) in 
 	     let real2U_u2Real_sort_real_x_ = Tapp (Ident.create real2U,
-						 [u2Real_sort_real_x_], []) in
+						    [u2Real_sort_real_x_], []) in
 	     let peq = Papp (Ident.t_eq,
 			     [real2U_u2Real_sort_real_x_;sort_real_x_], [])
 	     in
@@ -282,18 +283,18 @@ let prelude =
     (Daxiom (loc, axiomR "eq_"^bool2U^"_"^u2Bool,
 	     let x = Ident.create "x" in 
 	     let sort_bool_x_ = Tapp (Ident.create (prefix^"sort"),
-				     [bool; Tvar x], []) in
+				      [bool; Tvar x], []) in
 	     let u2Bool_sort_bool_x_ = Tapp (Ident.create u2Bool,
-					   [sort_bool_x_], []) in 
+					     [sort_bool_x_], []) in 
 	     let bool2U_u2Bool_sort_bool_x_ = Tapp (Ident.create bool2U,
-						 [u2Bool_sort_bool_x_], []) in
+						    [u2Bool_sort_bool_x_], []) in
 	     let peq = Papp (Ident.t_eq,
 			     [bool2U_u2Bool_sort_bool_x_;sort_bool_x_], [])
 	     in
 	     Env.empty_scheme (newForall false  x ut [[TPat bool2U_u2Bool_sort_bool_x_]]peq )))::
     (** \forall alpha : Type, \forall x, y : Int sort(alpha,x) = sort(alpha, y) 
-	     \Rightarrow 
-	     x = y **)
+	\Rightarrow 
+	x = y **)
     (Daxiom (loc, axiomR "peq",
 	     let alpha = Ident.create "alpha" in
 	     let x = Ident.create "x" in
@@ -304,13 +305,13 @@ let prelude =
 		     (newForallTriggerFree false y ut 
 			(Pimplies (false, 
 				   (Papp (Ident.t_eq,
-					 [Tapp (Ident.create (prefix^"sort"),
+					  [Tapp (Ident.create (prefix^"sort"),
 						 [Tvar alpha; Tvar x], []);
 					   Tapp (Ident.create (prefix^"sort"),
 						 [Tvar alpha; Tvar y], [])], 
 					  [])),
 				   (Papp (Ident.t_eq, [Tvar x; Tvar y], [])))
-		     ))))))::
+			))))))::
     []
 
 
@@ -383,20 +384,21 @@ let getTermType term lv = match term with
       let associatedType = 
 	(try List.assoc id lv with e ->  raise e) in
       associatedType
-  | Tapp (id, l, inst) -> if (Ident.is_arith id) then
-      (*(Printf.printf "is_arith : %s \n" (Ident.string id);*)
-      (* TODO : update this *)
-       PTint
-    else
-      (*(Printf.printf "is_not_rith : %s \n" (Ident.string id);*)
-       instantiate_arity id inst
+  | Tapp (id, l, inst) when (Ident.is_int_arith id) ->
+      PTint
+  | Tapp (id, l, inst) when (Ident.is_real_arith id) ->
+      PTreal
+  | Tapp (id, l, inst)  ->  instantiate_arity id inst
   | Tconst (ConstInt _)  ->  PTint
   | Tconst (ConstBool _)  -> PTbool
   | Tconst (ConstUnit)  ->  PTunit
   | Tconst (ConstFloat f) ->  PTreal
   | _ -> assert false
-
       
+
+let isBuiltInType t= match t with 
+    PTint | PTreal | PTbool  -> true
+  | _ -> false
 
 
 
@@ -408,44 +410,39 @@ let getTermType term lv = match term with
     @param pt is the type of the term
     
 **)
-let rec translate_term fv lv term isArith= 
+let rec translate_term fv lv term doTheCast= 
   let translate fv lv term = match term with 
     | Tvar id as t -> 
         typedPlunge fv  (Tvar id) (getTermType t lv)
     | Tapp (id, tl, inst) when Ident.is_simplify_arith id ->
 	(** This function yields a numeric parameter 
-	we have to cast the result into the u type **)
-	(*Printf.printf "translate_term : %s \n" (Ident.string id);*)
-	let outermostCast = if Ident.is_real_arith id then  real2U 
-	    else int2U in
+	    we have to cast the result into the u type **)
+ 	let outermostCast = if Ident.is_real_arith id then  real2U 
+	else int2U in
 	let inner = Tapp(Ident.create outermostCast, 
 			 [Tapp(id, List.map 
-				 (** each parameter of this function is numeric. 
+				 (** each parameter of this function is a built-in
 				     We cast it to respect this constraint **)
-				 (fun t -> translateNumericParam  fv lv t true ) tl, [])], 
+				 (fun t -> translateParam  fv lv t true) tl, [])], 
 			 []) in 
 	let innerCast = if ( outermostCast= real2U) then real else int in 
 	Tapp(Ident.create (prefix^"sort"), [innerCast; inner],[])
     | Tapp (id, tl, inst) ->
-	(*Printf.printf "transTermApp : %s \n" (Ident.string id); *)
 	(** it is not a arithmetic function **)
 	(** retrieves the  function signature **)
 	let paramList = ref (getParamTypeList id) in
-	(** translates the paramter wrt the function signature **)
-	let translateParam t  = match !paramList with 
-	    PTint::tl | PTreal::tl ->
+	(** translates the parameter wrt the function signature **)
+	let translateParameter t  = match !paramList with 
+	    pt::tl ->
 	      paramList := tl ;
-	      translateNumericParam fv lv t true 
-	  | _ ::tl ->
-	      paramList := tl;
-	      translate_term fv lv t false
+	      translateParam fv lv t (isBuiltInType pt) 
 	  | [] -> assert false
 	in
-	(** envetually encapsulates the function **)
+	(** eventually encapsulates the function **)
 	typedPlunge fv (Tapp (id, 
-			 List.map 
-			   (fun t -> translateParam t) tl, 
-			 []))
+			      List.map 
+				(fun t -> translateParameter t) tl, 
+			      []))
 	  (instantiate_arity id inst)
     | Tconst (ConstInt _) as t -> typedPlunge fv  t PTint
     | Tconst (ConstBool _) as t -> typedPlunge fv t PTbool
@@ -453,10 +450,38 @@ let rec translate_term fv lv term isArith=
     | Tconst (ConstFloat f) as t -> typedPlunge fv t PTreal
     | Tderef id as t -> print_endline ("id in Tderef : "^(Ident.string id)); t 
   in
-  if isArith then 
-    Tapp(Ident.create u2Int, [translate fv lv term],[])
-  else 
-    translate fv lv term
+  if doTheCast then   
+    match (getTermType term lv) with 
+	PTint  ->
+ 	  Tapp(Ident.create u2Int, [translate fv lv term],[])
+      | PTreal  ->
+ 	  Tapp(Ident.create u2Real, [translate fv lv term],[])
+      | PTbool -> 
+	  Tapp(Ident.create u2Bool, [translate fv lv term],[])
+      | _   ->
+	  (** if the type is not pure, i.e. it is deduced syntactically **)
+	  let term'= translate fv lv term  in 
+	    match term' with 
+		Tapp (id, [sortTerm;_], _) when 
+		  Ident.string id = prefix^"sort" -> 
+		    begin
+		      match sortTerm with       
+			  Tapp (k, [], [])  when 
+			    Ident.string k = prefix^"int" ->  
+			      Tapp(Ident.create u2Int, [term'],[])
+		      	| Tapp (k, [], [])  when 
+			    Ident.string k = prefix^"real" -> 
+			    Tapp(Ident.create u2Real, [term'],[])
+			| Tapp (k, [], [])  when 
+			    Ident.string k = prefix^"bool"->  
+			    Tapp(Ident.create u2Bool, [term'],[])
+			| _ -> 
+			    assert false
+		    end
+	      | _ -> 
+		  assert false
+  else
+    translate fv lv term 
 
 (**
    @return a term generated by a classical translation  
@@ -468,8 +493,8 @@ let rec translate_term fv lv term isArith=
    @param isArith the a boolean flag used in the clasical translate_term 
    function 
 **)
-and translateNumericParam fv lv t isArith =
-  let tp = translate_term fv lv t isArith in
+and translateParam fv lv t doTheCast =
+  let tp = translate_term fv lv t doTheCast in
   match tp with 
       Tapp(id1, [ti],_) when 
 	Ident.string id1 = u2Int ->
@@ -488,21 +513,37 @@ and translateNumericParam fv lv t isArith =
 	  end
     | Tapp(id1, [ti],_) when 
 	Ident.string id1 = u2Real ->
-	  begin 
-	    match ti with       
-		Tapp(id2, [_;tk],_) when 
-		  Ident.string id2 = prefix^"sort" -> 
-		    begin
-		      match tk with       
-			  Tapp(id3, [tl],_) when 
-			    Ident.string id3 = real2U -> 
-			      tl
-			| _ -> tp
-		    end
-	      | _ -> tp 
-	  end
+	begin 
+	  match ti with       
+	      Tapp(id2, [_;tk],_) when 
+		Ident.string id2 = prefix^"sort" -> 
+		  begin
+		    match tk with       
+			Tapp(id3, [tl],_) when 
+			  Ident.string id3 = real2U -> 
+			    tl
+		      | _ -> tp
+		  end
+	    | _ -> tp 
+	end
+    | Tapp(id1, [ti],_) when 
+	Ident.string id1 = u2Bool ->
+	begin 
+	  match ti with       
+	      Tapp(id2, [_;tk],_) when 
+		Ident.string id2 = prefix^"sort" -> 
+		  begin
+		    match tk with       
+			Tapp(id3, [tl],_) when 
+			  Ident.string id3 = bool2U -> 
+			    tl
+		      | _ -> tp
+		  end
+	    | _ -> tp 
+	end
     | _ -> tp
-	
+
+
 (**
    @return a predicate that is universally quantified 
    with the top most variable present in the list l. 
@@ -544,39 +585,73 @@ let lifted_ctxt l cel =
   (List.map (fun (pt,s) -> Svar(s, ut)) l)@cel
 
 
+
+
+
+
 (** 
     @return true if all the element of tl are of sort Int or Real
-    (and not sort (int,...) that is of sort u)
+    (and not sort (int,...) i.e. of sort u)
     @param tl is the list of terms we analyse
     @param lv is the list of free varaiables in the terms list
 **)
-let rec isNumericalEquality tl lv =
+let rec getEqualityType tl lv =
+  let ret = ref PTbool in 
   (fun tl -> match tl with 
-      [] -> true 
-    | hd::l -> 
-	begin 
-	  match hd with 
-	      Tapp (id, _, _) when Ident.is_simplify_arith id -> 
-		isNumericalEquality l lv 
-	    | Tapp (id, _, inst) ->
-		begin
-		  (*Printf.printf "isMumEq : %s \n" (Ident.string id);*)
-		  match (instantiate_arity id inst) with 
-		    PTint | PTreal -> isNumericalEquality l lv 
-		  | _ ->  false 
-		end
-	    | Tconst (ConstInt _) 
-            | Tconst (ConstFloat _) -> isNumericalEquality l lv 
-	    | Tvar id -> 
-		begin 
-		  match (try List.assoc id lv
-			 with e ->  raise e)  with 
-		      PTint | PTreal -> isNumericalEquality l lv 
-		    | _ ->  false 
-		end
-	    | _ -> false 
-	end) tl  
-
+       [] -> !ret 
+     | hd::l -> 
+	 begin 
+	   match hd with 
+	       Tapp (id, _, _) when Ident.is_int_arith id -> 
+		 ret:= PTint ; 
+		 getEqualityType l lv 
+	     | Tapp (id, _, _) when Ident.is_real_arith id -> 
+		 ret:= PTint ; 
+		 getEqualityType l lv 
+	     | Tapp (id, _, inst) ->
+		 begin
+		   let pt = (instantiate_arity id inst) in
+		   match pt  with 
+		       PTint  ->
+			 ret:= PTint ;
+			 getEqualityType l lv 
+		     | PTreal -> 
+			 ret:= PTreal ; 
+			 getEqualityType l lv 
+		     | PTbool -> 
+			 ret:= PTbool ; 
+			 getEqualityType l lv 
+		     | _ ->  pt
+		 end
+	     | Tconst (ConstInt _) ->
+		 ret:= PTint ; 
+		 getEqualityType l lv 
+             | Tconst (ConstFloat _) -> 
+		 ret:= PTreal ; 
+		 getEqualityType l lv 
+	     | Tconst (ConstBool _) ->
+		 ret:= PTbool ; 
+		 getEqualityType l lv 
+	     | Tvar id -> 
+		 begin 
+		   let pt = (try List.assoc id lv
+			     with e ->  raise e) in 
+		   match pt  with 
+		       PTint  ->
+			 ret:= PTint ; 
+			 getEqualityType l lv 
+		     | PTreal -> 
+			 ret:= PTreal ; 
+			 getEqualityType l lv 
+		     | PTbool -> 
+			 ret:= PTbool ; 
+			 getEqualityType l lv 
+		     | _ ->  pt
+			 
+		 end
+	     | _ -> assert false (* est-ce vrai ?*)
+	 end) tl  
+    
 
 (** 
     @param fv is the list of type variables of the problem 
@@ -585,34 +660,31 @@ let rec isNumericalEquality tl lv =
 **)
 let rec translate_pred fv lv p  = match p with
   | Papp (id, tl, inst) when  
-      Ident.is_simplify_arith id ->
-      Papp (id, List.map (fun t-> translateNumericParam fv lv t true) tl, []) 
+      Ident.is_int_arith id ->
+      Papp (id, List.map (fun t-> translateParam fv lv t true) tl, []) 
   | Papp (id, tl, inst) when  
-      ((Ident.is_eq id || Ident.is_neq id)  &&  isNumericalEquality tl lv )->
-      Papp (id, List.map (fun t-> translateNumericParam fv lv t true) tl, [])
+      Ident.is_real_arith id ->
+      Papp (id, List.map (fun t-> translateParam fv lv t true) tl, [])   
   | Papp (id, tl, inst) when  
-      (Ident.is_eq id || Ident.is_neq id)   ->
-      Papp (id, List.map (fun t-> translate_term fv lv t false) tl, []) 
+      (Ident.is_eq id || Ident.is_neq id) ->
+      Papp (id, List.map (fun t-> translateParam fv lv t false) tl, [])
   | Papp (id, tl, inst) ->
       (** retrieves the predicate signature **) 
       let paramList = ref (getParamTypeList id) in
-      let translateParam t  = match !paramList with 
-	  PTint::tl | PTreal::tl ->
+      let translateParameter t  = match !paramList with 
+	  pType::tl  ->
 	    paramList := tl ;
-	    translateNumericParam fv lv t true 
-	| _ ::tl ->
-	    paramList := tl;
-	    translate_term fv lv t false
-	  | [] -> assert false
+	    translateParam fv lv t (isBuiltInType pType) 
+	| [] -> assert false
       in	
       Papp (id, 
 	    List.map 
-	      (fun t -> translateParam t) tl, 
+	      (fun t -> translateParameter t) tl, 
 	    [])
   | Pimplies (iswp, p1, p2) ->
       Pimplies (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
   | Pif (t, p1, p2) ->
-      Pif (translate_term fv lv t false, translate_pred fv lv p1, translate_pred fv lv p2)
+      Pif (translate_term fv lv t true, translate_pred fv lv p1, translate_pred fv lv p2)
   | Pand (iswp, issym, p1, p2) ->
       Pand (iswp, issym, translate_pred fv lv p1, translate_pred fv lv p2)
   | Por (p1, p2) ->

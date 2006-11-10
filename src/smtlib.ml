@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.24 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.25 2006-11-10 16:11:50 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -117,7 +117,7 @@ let rec print_term fmt = function
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
       if (Options.get_types_encoding() = SortedStratified) then
 	fprintf fmt 
-	  "@[(ite@ (= %a (c_sort c_bool (bool2U c_Boolean_true))) @ %a@ %a)@]" 
+	  "@[(ite@ (= %a c_Boolean_true) @ %a@ %a)@]" 
 	  print_term a print_term b print_term c 
       else
 	fprintf fmt "@[(ite@ (= %a c_Boolean_true) @ %a@ %a)@]" 

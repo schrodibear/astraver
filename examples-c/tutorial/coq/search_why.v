@@ -3,7 +3,7 @@
 
 Require Export search_spec_why.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "search.c", line 8, characters 18-66: *)
 (*Why goal*) Lemma index_impl_po_1 : 
   forall (t: ((pointer) global)),
   forall (n: Z),
@@ -42,7 +42,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "search.c", line 3, characters 6-107: *)
 (*Why goal*) Lemma index_impl_po_3 : 
   forall (t: ((pointer) global)),
   forall (n: Z),
@@ -65,9 +65,10 @@ Save.
   forall (result0: Z),
   forall (HW_7: result0 = (acc intM_global result)),
   forall (HW_8: result0 = v),
-  ((0 <= i /\ i < n -> (acc intM_global (shift t i)) = v)) /\
+  (* File "search.c", line 3, characters 5-106 *)
+  (((0 <= i /\ i < n -> (acc intM_global (shift t i)) = v)) /\
   ((i = n ->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc intM_global (shift t i)) <> v)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc intM_global (shift t i)) <> v))))).
 Proof.
 intuition.
 subst;auto.
@@ -110,7 +111,7 @@ apply (H2 k); auto.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "search.c", line 3, characters 6-107: *)
 (*Why goal*) Lemma index_impl_po_5 : 
   forall (t: ((pointer) global)),
   forall (n: Z),
@@ -127,9 +128,10 @@ Save.
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc intM_global (shift t k)) <> v)))),
   forall (HW_11: i >= n),
-  ((0 <= i /\ i < n -> (acc intM_global (shift t i)) = v)) /\
+  (* File "search.c", line 3, characters 5-106 *)
+  (((0 <= i /\ i < n -> (acc intM_global (shift t i)) = v)) /\
   ((i = n ->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc intM_global (shift t i)) <> v)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc intM_global (shift t i)) <> v))))).
 Proof.
 intuition.
 apply H2 with i0; auto with *.

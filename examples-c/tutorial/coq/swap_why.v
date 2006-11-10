@@ -100,7 +100,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "swap.c", line 2, characters 14-54: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
   forall (t: ((pointer) global)),
   forall (i: Z),
@@ -129,8 +129,9 @@ Save.
   forall (HW_12: (valid alloc result4)),
   forall (intM_global1: ((memory) Z global)),
   forall (HW_13: intM_global1 = (upd intM_global0 result4 result0)),
-  (acc intM_global1 (shift t i)) = (acc intM_global (shift t j)) /\
-  (acc intM_global1 (shift t j)) = (acc intM_global (shift t i)).
+  (* File "swap.c", line 2, characters 13-53 *)
+  ((acc intM_global1 (shift t i)) = (acc intM_global (shift t j)) /\
+  (acc intM_global1 (shift t j)) = (acc intM_global (shift t i))).
 Proof.
 (*
 intuition.
