@@ -42,7 +42,7 @@ char pop() {
   return r;
 }
 
-/*@ requires \valid(q1) && q1 != &q && !q.empty
+/*@ requires \valid(q1) && !q.empty
   @ ensures \result == \old(q1->empty) 
   @*/
 int test(struct queue *q1) {

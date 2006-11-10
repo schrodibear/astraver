@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.134 2006-11-07 13:25:28 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.135 2006-11-10 12:16:59 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -719,8 +719,7 @@ and type_expr_node loc env = function
 	    in
 	    let e = type_int_expr env e in
 	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (Valid, ty) }
-	| _ -> 
-	    error loc "incompatible types"
+	| _ -> error loc "incompatible types"
       end
   | CEcast (typ, 
 	    { node = 
