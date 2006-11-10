@@ -65,6 +65,13 @@ let simplify_strat = {
   pr_id = Dispatcher.Simplify;
   pr_enc = Stratified;
   }
+let simplify_sstrat = {
+  pr_name = "Simplify(SS)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Simplify;
+  pr_enc = SortedStratified;
+  }
 let simplify_rec = {
   pr_name = "Simplify(R)";
   pr_result = cols#add int;
@@ -129,7 +136,7 @@ let yices = {
   pr_enc = Monomorph;
   }
 let yicesSSTrat = {
-  pr_name = "Yices";
+  pr_name = "Yices(SS)";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Yices;
@@ -143,7 +150,7 @@ let ergo = {
   pr_enc = Monomorph;
   }
 
-let provers = [simplify; yices; yicesSSTrat ; ergo; rvsat; simplify_strat;
+let provers = [simplify; simplify_sstrat; simplify_strat; yices; yicesSSTrat ; ergo; rvsat; simplify_strat;
 	       zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
 	       harvey; cvcl]
 let provers_selected = ref provers
