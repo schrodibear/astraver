@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.19 2006-11-03 12:49:07 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.20 2006-11-13 12:32:04 couchot Exp $ i*)
 
 open Printf
 
@@ -72,9 +72,23 @@ let cvcl ?debug ?(timeout=10) ~filename:f () =
     ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
   else
     let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
-    remove_file ?debug out;
-    if c = 0 then Valid t else Invalid(t,None)
-
+    if c = 0 then 
+      begin
+	remove_file ?debug out;
+	Valid t
+      end 
+    else 
+      let c = Sys.command (sprintf "grep -q -w Unknown %s" out)  in
+      if c= 0 then 
+	begin
+	  remove_file ?debug out;
+	  CannotDecide t 
+	end
+      else
+	begin
+	  remove_file ?debug out;
+	  Invalid (t, None)
+	end
 let simplify ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
   let cmd = sprintf "cpulimit %d Simplify %s > %s 2>&1" timeout f out in
@@ -121,8 +135,7 @@ let yices ?debug ?(timeout=10) ~filename:f () =
   if c = 152 then
     Timeout t
   else 
-    let c =  (Sys.command (sprintf "grep -q -w Unexpected %s" out)) *
-	      (Sys.command (sprintf "grep -q -w Error %s" out)) in
+    let c =  Sys.command (sprintf "grep -q -w Unexpected %s" out) in
     if c = 0 then 
       begin
 	remove_file ?debug out; 
@@ -136,20 +149,11 @@ let yices ?debug ?(timeout=10) ~filename:f () =
 	    Valid t
 	  end
 	else 
-	  let c = Sys.command (sprintf "grep -q -w unknown %s" out) in
+	  let c = (Sys.command (sprintf "grep -q -w unknown %s" out)) * 
+	    (Sys.command (sprintf "grep -q -w feature\ not\ supported  %s" out))  in
 	  remove_file ?debug out;
 	  if c= 0 then CannotDecide t else
 	  Invalid (t, None)
-(*=======
-    let c = Sys.command (sprintf "grep -q -w Error %s" out) in
-    if c = 0 then begin 
-      remove_file ?debug out; 
-      ProverFailure ("command failed: " ^ cmd)
-    end else begin
-      let c = Sys.command (sprintf "grep -q -w unsat %s" out) in
-      remove_file ?debug out;
-      if c = 0 then Valid t else Invalid(t, None)
->>>>>>> 1.16 *)
     end
       
 let ergo ?debug ?(timeout=10) ~filename:f () =

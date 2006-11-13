@@ -119,7 +119,7 @@ let cvcl = {
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Cvcl;
-  pr_enc = NoEncoding;
+  pr_enc = SortedStratified;
 }
 let rvsat = {
   pr_name = "rv-sat";

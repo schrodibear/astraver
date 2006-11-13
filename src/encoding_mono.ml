@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.5 2006-11-10 16:11:50 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.6 2006-11-13 12:32:03 couchot Exp $ i*)
 
 open Cc
 open Logic
@@ -475,11 +475,11 @@ let rec translate_term fv lv term doTheCast=
 			| Tapp (k, [], [])  when 
 			    Ident.string k = prefix^"bool"->  
 			    Tapp(Ident.create u2Bool, [term'],[])
-			| _ -> 
+			| _ as t ->
+			    Format.printf ("tt :  %a \n ") print_term t ; 
 			    assert false
 		    end
-	      | _ -> 
-		  assert false
+	      | _ -> assert false
   else
     translate fv lv term 
 
@@ -649,7 +649,7 @@ let rec getEqualityType tl lv =
 		     | _ ->  pt
 			 
 		 end
-	     | _ -> assert false (* est-ce vrai ?*)
+	     | _ -> assert false 
 	 end) tl  
     
 
@@ -668,6 +668,18 @@ let rec translate_pred fv lv p  = match p with
   | Papp (id, tl, inst) when  
       (Ident.is_eq id || Ident.is_neq id) ->
       Papp (id, List.map (fun t-> translateParam fv lv t false) tl, [])
+  | Papp (id, [a;b], _) when id==Ident.t_zwf_zero ->  
+      (*Format.printf "tzwf : %a \n" print_predicate t ;  *)
+      (* 0 <= a *)
+      let aLeftBound = (Papp (Ident.t_le_int,
+			      [Tconst(ConstInt("0"));
+			       (translateParam fv lv a true)],[PTint;PTint])) in 
+      (* a < b *)
+      let aRightBound = Papp (Ident.t_lt_int,
+			      [(translateParam fv lv a true);
+			       (translateParam fv lv b true)],[PTint;PTint]) in  
+      (* 0 <= a  &  a < b *)
+      Pand(false, false, aLeftBound,aRightBound)
   | Papp (id, tl, inst) ->
       (** retrieves the predicate signature **) 
       let paramList = ref (getParamTypeList id) in
