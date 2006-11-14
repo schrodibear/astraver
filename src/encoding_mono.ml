@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.6 2006-11-13 12:32:03 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.7 2006-11-14 14:47:11 couchot Exp $ i*)
 
 open Cc
 open Logic
@@ -660,17 +660,14 @@ let rec getEqualityType tl lv =
 **)
 let rec translate_pred fv lv p  = match p with
   | Papp (id, tl, inst) when  
-      Ident.is_int_arith id ->
-      Papp (id, List.map (fun t-> translateParam fv lv t true) tl, []) 
-  | Papp (id, tl, inst) when  
-      Ident.is_real_arith id ->
+      ( Ident.is_int_comparison id ||
+	  Ident.is_real_comparison id )->
       Papp (id, List.map (fun t-> translateParam fv lv t true) tl, [])   
   | Papp (id, tl, inst) when  
       (Ident.is_eq id || Ident.is_neq id) ->
       Papp (id, List.map (fun t-> translateParam fv lv t false) tl, [])
   | Papp (id, [a;b], _) when id==Ident.t_zwf_zero ->  
-      (*Format.printf "tzwf : %a \n" print_predicate t ;  *)
-      (* 0 <= a *)
+       (* 0 <= a *)
       let aLeftBound = (Papp (Ident.t_le_int,
 			      [Tconst(ConstInt("0"));
 			       (translateParam fv lv a true)],[PTint;PTint])) in 
