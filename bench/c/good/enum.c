@@ -15,3 +15,15 @@ typedef enum { BLUE, WHITE, RED } color;
 void h(color *t) { 
   t[2] = t[0];
 }
+
+// enum used as array index
+
+enum I { U, V, W };
+
+/*@ requires \valid_range(t, U, W)
+  @ ensures  t[V] == 0
+  @*/
+void enum_as_array_index(int *t) {
+  t[V] = 0;
+}
+
