@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.106 2006-11-03 14:51:13 moy Exp $ i*)
+(*i $Id: cltyping.ml,v 1.107 2006-11-15 07:33:10 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -89,7 +89,7 @@ let expected_num_pointer loc t = match t.term_type.ctype_node with
       error loc "invalid operand (expected integer, float or pointer)"
 
 let expected_int loc t = match t.term_type.ctype_node with
-  | Tint _ -> ()
+  | Tenum _ | Tint _ -> ()
   | _ -> error loc "invalid operand (expected integer)"
 
 let coerce ty e = match e.term_type.ctype_node, ty.ctype_node with
@@ -348,7 +348,7 @@ and type_term_node loc env = function
 	| LTvoid, Tvoid -> 
 	    t.term_node, tt
 	| (LTint | LTfloat | LTdouble | LTlongdouble | LTreal), 
-	  (Tint _ | Tfloat _) -> 
+	  (Tenum _ | Tint _ | Tfloat _) -> 
 	    let t = coerce (type_logic_type loc env ty) t in
 	    t.term_node, t.term_type
 	| _ -> 
