@@ -1,0 +1,2 @@
+
+predicate p(x:'a) = x=0

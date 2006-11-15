@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.56 2006-11-08 09:29:58 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.57 2006-11-15 09:30:17 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -165,7 +165,10 @@ let instance x i =
   let l = 
     Vmap.fold 
       (fun _ v l -> 
-	 (match v.type_val with None -> PTvar v | Some pt -> normalize_pure_type pt) :: l) i []
+	 (match v.type_val with 
+	    | None -> PTvar v 
+	    | Some pt -> normalize_pure_type pt) :: l) 
+      i []
   in 
   (*
     eprintf "instance %a[@[%a@]]@." 

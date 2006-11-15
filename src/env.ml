@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.66 2006-11-03 12:49:02 marche Exp $ i*)
+(*i $Id: env.ml,v 1.67 2006-11-15 09:30:17 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -126,7 +126,7 @@ let generalize_predicate p =
 
 let generalize_predicate_def (bl,p) = 
   let l = 
-    List.fold_left (fun acc (_,pt) -> find_pure_type_vars acc pt) Vset.empty bl 
+    List.fold_left (fun acc (_,pt) -> find_pure_type_vars acc pt) Vset.empty bl
   in
   let l = find_predicate_vars l p in
   { scheme_vars = l; scheme_type = (bl,p) }
