@@ -147,13 +147,22 @@ let rec pop_initializer loc t i =
 	       (match t.ctype_node with
 		  | Tint _ | Tenum _-> Tconstant (IntConstant "0")
 		  | Tfloat _ -> Tconstant (RealConstant "0.0")
-		  | Tpointer _ -> let null = default_var_info "null" in 
+		  | Tpointer _ -> let null = default_var_info "null" in       
+		    Cenv.set_var_type (Var_info null) t false;
 		    Clogic.Tvar (null)
 		  | _ -> assert false);
 	     term_type = t;
 	     term_loc  = loc
 	    },[]
-    | (Iexpr e)::l -> (term_of_expr e),l
+    | (Iexpr e)::l -> 
+	let term = term_of_expr e in
+	let term =
+	  { term with term_node = 
+	      if t.ctype_node <> term.term_type.ctype_node then
+		Tcast (t,term)
+	      else
+		term.term_node} in
+	term,l
     | (Ilist [])::l -> pop_initializer loc t l
     | (Ilist l)::l' -> 
 	let e,r = pop_initializer loc t l in e,r@l'

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.85 2006-11-07 13:25:28 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.86 2006-11-15 14:29:36 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -242,7 +242,7 @@ let rec type_why_for_term t =
     | NTblock_length t -> Info.Int
     | NTarrlen _ -> Info.Int
     | NTstrlen _ -> Info.Int
-    | NTcast (_,t) -> assert false (* type_why_for_term t *)
+    | NTcast (_,t) -> (*assert false*)  type_why_for_term t 
     | NTrange (_,_,_,z,f) ->
 	begin
 	  let z = repr z in
@@ -630,7 +630,6 @@ let rec term_node loc t ty =
   | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
 	    {term_node = Tconstant (IntConstant "0")}) ->      
       let info = default_var_info "null" in 
-      Format.eprintf " Cast : %s " info.var_name;
       Cenv.set_var_type (Var_info info) ty false;
       NTvar info
   | Tcast (ty, t) -> NTcast (ty, term t)

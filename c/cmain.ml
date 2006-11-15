@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.85 2006-11-10 12:16:58 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.86 2006-11-15 14:29:36 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -78,7 +78,8 @@ let main () =
   Cseparation.funct [Cinit.invariants_initially_established_info];
   Array.iter (fun l -> 
 		Cseparation.funct l ) 
-    tab_comp;
+    tab_comp;  
+  (* typing predicates *)  
   let nfiles = 
     if typing_predicates then 
       nfiles 
