@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_towhy.ml,v 1.2 2006-11-16 21:52:42 filliatr Exp $ i*)
+(*i $Id: simplify_towhy.ml,v 1.3 2006-11-16 22:22:43 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -51,8 +51,62 @@ let add_axiom =
   let r = ref 0 in
   fun p -> incr r; Queue.add (Axiom ("axiom_" ^ string_of_int !r, p)) decls
 
+(* debug *)
+let print_atom fmt = function
+  | DEFPRED -> fprintf fmt "DEFPRED"
+  | BG_PUSH -> fprintf fmt "BG_PUSH"
+  | AT_TRUE -> fprintf fmt "AT_TRUE"
+  | TRUE -> fprintf fmt "TRUE"
+  | FALSE -> fprintf fmt "FALSE"
+  | IMPLIES -> fprintf fmt "IMPLIES"
+  | IFF -> fprintf fmt "IFF"
+  | FORALL -> fprintf fmt "FORALL"
+  | MPAT -> fprintf fmt "MPAT"
+  | PATS -> fprintf fmt "PATS"
+  | AND -> fprintf fmt "AND"
+  | OR -> fprintf fmt "OR"
+  | NOT -> fprintf fmt "NOT"
+  | EQ -> fprintf fmt "EQ"
+  | NEQ -> fprintf fmt "NEQ"
+  | DISTINCT -> fprintf fmt "DISTINCT"
+  | LBLPOS -> fprintf fmt "LBLPOS"
+  | LBLNEG -> fprintf fmt "LBLNEG"
+  | INTEGER d -> fprintf fmt "%s" d
+  | IDENT s -> fprintf fmt "%s" s
+
+let rec print_sexp fmt = function
+  | Satom a -> print_atom fmt a
+  | Slist l -> fprintf fmt "@[(%a)@]" (print_list space print_sexp) l
+
+let at_true = Ident.create "at_true"
+
 let rec translate_term = function
-  | _ -> assert false
+  | Slist [s] ->
+      translate_term s
+  | Satom (IDENT s) -> 
+      let id = Ident.create s in
+      declare_fun id 0;
+      Tapp (id, [], [])
+  | Slist (Satom (IDENT s) :: l) ->
+      let id = Ident.create s in
+      declare_fun id (List.length l);
+      Tapp (id, List.map translate_term l, [])
+  | Satom (INTEGER s) ->
+      Tconst (ConstInt s)
+  | Satom AT_TRUE ->
+      Tapp (at_true, [], [])
+  | Slist []
+  | Slist (Slist _::_::_)
+  | Slist
+      (Satom
+	 (LBLNEG|LBLPOS|DISTINCT|NEQ|EQ|OR|AND|PATS|MPAT|FORALL|IFF|IMPLIES|
+	      FALSE|TRUE|AT_TRUE|BG_PUSH|DEFPRED|NOT)::_::_)
+  | Satom
+      (LBLNEG|LBLPOS|DISTINCT|NEQ|EQ|OR|AND|PATS|MPAT|FORALL|IFF|IMPLIES|FALSE|
+	   TRUE|BG_PUSH|DEFPRED|NOT)
+  | Slist (Satom (INTEGER _) :: _) as s ->
+      Format.eprintf "%a@." print_sexp s;
+      assert false
 
 let pand p1 p2 = match p1, p2 with
   | Ptrue, p | p, Ptrue -> p
@@ -85,6 +139,10 @@ let rec translate_predicate = function
       List.fold_right (fun s acc -> pand (translate_predicate s) acc) l Ptrue
   | Slist (Satom OR :: l) ->	
       List.fold_right (fun s acc -> por (translate_predicate s) acc) l Pfalse
+  | Slist [Satom NOT; s] ->	
+      Pnot (translate_predicate s)
+  | Slist (Satom NOT :: _) ->
+      assert false
   | Slist [Satom EQ; s; Satom AT_TRUE] ->
       translate_predicate s
   | Slist [Satom EQ; s1; s2] ->
@@ -135,9 +193,9 @@ let rec translate_predicate = function
   | Slist ([] | 
            Slist _ :: _ | 
            Satom (PATS | MPAT | BG_PUSH | DEFPRED | AT_TRUE) :: _) 
-  | Slist (Satom (FALSE|TRUE)::_::_)
-  | Satom (PATS | MPAT | BG_PUSH | DEFPRED | AT_TRUE)
-  | Satom (LBLNEG|LBLPOS|DISTINCT|NEQ|EQ|OR|AND|FORALL|IFF|IMPLIES) ->
+  | Slist (Satom (FALSE|TRUE | INTEGER _)::_::_)
+  | Satom (PATS | MPAT | BG_PUSH | DEFPRED | AT_TRUE | INTEGER _)
+  | Satom (LBLNEG|LBLPOS|DISTINCT|NEQ|EQ|OR|AND|FORALL|IFF|IMPLIES|NOT) ->
       assert false
 
 let translate_axiom s = add_axiom (translate_predicate s)
@@ -200,20 +258,20 @@ let rec print_predicate fmt = function
   | Pfalse ->
       fprintf fmt "false"
   | Pimplies (_, a, b) -> 
-      fprintf fmt "(@[%a ->@ %a@])" print_predicate a print_predicate b
+      fprintf fmt "@[(%a ->@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) -> 
-      fprintf fmt "(@[%a <->@ %a@])" print_predicate a print_predicate b
+      fprintf fmt "@[(%a <->@ %a)@]" print_predicate a print_predicate b
   | Pand (_, _, a, b) ->
-      fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
+      fprintf fmt "@[(%a and@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
-      fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b
+      fprintf fmt "@[(%a or@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
-      fprintf fmt "(not %a)" print_predicate a
+      fprintf fmt "@[(not@ %a)@]" print_predicate a
   | Forall (_,_,b,v,tl,p) ->
-      fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]"
+      fprintf fmt "@[<hov 2>(forall@ %a:%a%a.@ %a)@]"
 	Ident.print b pure_type v print_triggers tl print_predicate p
   | Exists (_,b,v,p) ->
-      fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
+      fprintf fmt "@[<hov 2>(exists@ %a:%a.@ %a)@]" 
 	Ident.print b pure_type v print_predicate p
   | Pnamed (n, p) ->
       fprintf fmt "@[(%S:@ %a)@]" n print_predicate p
@@ -228,7 +286,7 @@ and print_triggers fmt = function
   | [] -> 
       ()
   | tl -> 
-      fprintf fmt " [%a]" (print_list alt (print_list comma print_pattern)) tl
+      fprintf fmt "@ [%a]" (print_list alt (print_list comma print_pattern)) tl
 
 
 let print_decl fmt = function

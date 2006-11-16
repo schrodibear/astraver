@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_lexer.mll,v 1.3 2006-11-16 21:52:42 filliatr Exp $ i*)
+(*i $Id: simplify_lexer.mll,v 1.4 2006-11-16 22:22:43 filliatr Exp $ i*)
 
 {
 
@@ -47,6 +47,7 @@
     "PATS", PATS;
     "AND", AND;
     "OR", OR;
+    "NOT", NOT;
     "LBLPOS", LBLPOS;
     "LBLNEG", LBLNEG;
     "DISTINCT", DISTINCT;
@@ -97,6 +98,8 @@ rule token = parse
       { RPAR }
   | eof 
       { EOF }
+  | ['0'-'9']+ as s
+      { ATOM (INTEGER s) }
   | '|' ([^ '|']+ as s) '|'
       { ATOM (atom s) }
   | [^' ' '\t' '\n' '\r' ';' '(' ')']+ as s

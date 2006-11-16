@@ -12,11 +12,13 @@ type atom =
   | PATS
   | AND
   | OR
+  | NOT
   | EQ
   | NEQ
   | DISTINCT
   | LBLPOS
   | LBLNEG
+  | INTEGER of string
   | IDENT of string
 
 type sexp =
