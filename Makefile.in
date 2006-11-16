@@ -121,11 +121,11 @@ WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
 
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR)
 
-all: $(BINARY) check $(CADUCEUS) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
+all: $(BINARY) check $(CADUCEUS) $(JESSIE) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
-opt: bin/why.opt bin/caduceus.opt
+opt: bin/why.opt bin/caduceus.opt bin/jessie.opt
 
-byte : bin/why.byte bin/caduceus.byte
+byte : bin/why.byte bin/caduceus.byte bin/jessie.byte
 
 .PHONY: check
 
@@ -207,7 +207,7 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 # jessie
 JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_options.cmo \
-	jc/jc_envset.cmo \
+	jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_typing.cmo \
 	ocamlgraph/components.cmo jc/jc_callgraph.cmo \
@@ -408,11 +408,11 @@ db debug: bin/why.byte src/logic.cmo
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@
+install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
-	#cp -f $(JESSIE) $(JESSIE)/jessie$(EXE)
+	cp -f $(JESSIE) $(JESSIE)/jessie$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)
@@ -471,9 +471,10 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local-install: $(BINARY) $(CADUCEUS) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte 
+local-install: $(BINARY) $(CADUCEUS) $(JESSIE) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte 
 	cp $(BINARY) $$HOME/bin/why
 	cp $(CADUCEUS) $$HOME/bin/caduceus
+	cp $(JESSIE) $$HOME/bin/jessie
 	if test -f bin/gwhy.$(OCAMLBEST); then \
 	  cp -f bin/gwhy.$(OCAMLBEST) $$HOME/bin/gwhy; \
 	fi

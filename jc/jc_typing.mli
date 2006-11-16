@@ -35,3 +35,9 @@ val structs_table :
 exception Typing_error of Loc.position * string
 
 val decl : pdecl -> unit
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

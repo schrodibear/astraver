@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.10 2006-11-09 14:15:29 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.11 2006-11-16 16:42:45 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -78,6 +78,7 @@ rule token = parse
   | "/*"                    { comment lexbuf; token lexbuf }
   | "assigns"               { ASSIGNS }
   | "behavior"              { BEHAVIOR }
+  | "boolean"               { BOOLEAN }
 (*
   | "break"                 { BREAK }
   | "case"                  { CASE }
@@ -105,6 +106,7 @@ rule token = parse
 (*
   | "long"                  { LONG }
 *)
+  | "real"                  { REAL}
   | "requires"              { REQUIRES }
   | "return"                { RETURN }
 (*
@@ -193,13 +195,13 @@ rule token = parse
   | "*"                     { STAR }
   | "/"                     { SLASH }
   | "%"                     { PERCENT }
-(*
   | "<"                     { LT }
   | ">"                     { GT }
+(*
   | "^"                     { HAT }
   | "|"                     { PIPE }
-  | "?"                     { QUESTION }
 *)
+  | "?"                     { QUESTION }
   | eof { EOF }
   | '"' { lex_error lexbuf "unterminated string" }
   | _   { lex_error lexbuf ("illegal character " ^ lexeme lexbuf) }

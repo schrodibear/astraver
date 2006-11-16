@@ -25,8 +25,10 @@
 open Jc_env
 open Jc_envset
 open Jc_fenv
+open Jc_pervasives
 open Jc_ast
 open Output
+
 
 let const c =
   match c with
@@ -50,7 +52,7 @@ let tr_base_type t =
     | JCTnative t -> simple_logic_type (tr_native_type t)
     | JCTlogic s -> simple_logic_type s
     | JCTvalidpointer (st, a, b) -> 
-	let ti = simple_logic_type (st.jc_struct_info_root ^ "_struct") in
+	let ti = simple_logic_type (st.jc_struct_info_root) in
 	{ logic_type_name = "pointer";
 	  logic_type_args = [ti] }
     | JCTpointer _ -> assert false
@@ -78,6 +80,7 @@ let rec term label oldlabel t =
     | JCTvar v -> lvar_info label v
     | JCTconst c -> LConst(const c)
     | JCTshift(t1,t2) -> LApp("shift",[ft t1; ft t2])
+    | JCTif(t1,t2,t3) -> assert false
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
     | JCTapp(f,l) -> 
 	LApp(f.jc_logic_info_name,List.map ft l)
@@ -95,6 +98,7 @@ let rec assertion label oldlabel a =
   in
   match a.jc_assertion_node with
     | JCAtrue -> LTrue
+    | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
     | JCAand l -> make_and_list (List.map fa l)
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
     | JCAapp(f,l) -> LPred(f.jc_logic_info_name,List.map ft l)
@@ -120,6 +124,7 @@ let rec expr e =
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
     | JCEvar v -> Var v.jc_var_info_final_name
+    | JCEif(e1,e2,e3) -> If(expr e1,expr e2,expr e3)
     | JCEshift(e1,e2) -> make_app "shift" [expr e1; expr e2]
     | JCEinstanceof(e,t) ->
 	make_app "instanceof_" [Deref "alloc"; expr e; Var t.jc_struct_info_name]
@@ -172,6 +177,7 @@ let statement_expr e =
   match e.jc_expr_node with
     | JCEconst JCCnull -> assert false
     | JCEconst c -> assert false
+    | JCEif(e1,e2,e3) -> assert false (* If(expr e1,expr e2,expr e3) *)
     | JCEvar v -> assert false
     | JCEshift(e1,e2) -> assert false
     | JCEderef(e,f) -> assert false
@@ -250,7 +256,7 @@ let tr_struct st acc =
 	 let mem =
 	   { logic_type_name = "memory";
 	     logic_type_args = 
-	       [simple_logic_type (st.jc_struct_info_root ^ "_struct");
+	       [simple_logic_type (st.jc_struct_info_root);
 		tr_base_type fi.jc_field_info_type] }
 	 in
 	 Param(false,
@@ -263,10 +269,28 @@ let tr_struct st acc =
   in
   match st.jc_struct_info_parent with
     | None ->
-	Type(st.jc_struct_info_name ^ "_struct",[])::acc
+	Type(st.jc_struct_info_name,[])::acc
     | Some p ->
-	(* TODO: instanceof axiom *)
-	acc
+	let name = 
+	  st.jc_struct_info_name ^ "_instanceof_" ^ p.jc_struct_info_name
+	in
+	let root = 
+	  { logic_type_name = "pointer";
+	    logic_type_args = [simple_logic_type (st.jc_struct_info_root)] }
+	in
+	let f =
+	  LForall("a",simple_logic_type "alloc_table",
+		  LForall("p",root,
+			  LImpl(LPred("instanceof",
+				      [LVar "a";
+				       LVar "p";
+				       LVar st.jc_struct_info_name]),
+				LPred("instanceof",
+				      [LVar "a";
+				       LVar "p";
+				       LVar p.jc_struct_info_name]))))
+	in
+	Axiom(name,f)::acc
 
        
 (*************
@@ -358,7 +382,37 @@ let parameter v =
   (v.jc_var_info_final_name,tr_type v.jc_var_info_type)
 
 let tr_fun f spec body acc = 
-  let requires = assertion None "" spec.jc_fun_requires in
+  let requires = 
+    List.fold_right
+      (fun v acc ->
+	 match v.jc_var_info_type with
+	   | JCTvalidpointer(t,a,b) ->
+	       let validity = 
+		 make_and 
+		   (LPred("le_int",
+			  [LApp("offset_min",
+				[LVar "alloc";
+				 LVar v.jc_var_info_final_name]);
+			   LConst (Prim_int (string_of_int a))]))
+		   (LPred("ge_int",
+			  [LApp("offset_max",
+				[LVar "alloc";
+				 LVar v.jc_var_info_final_name]);
+			   LConst (Prim_int (string_of_int b))]))
+	       in
+	       make_and 
+		 (make_and validity 
+		    (LPred("instanceof",
+			   [LVar "alloc";
+			    LVar v.jc_var_info_final_name;
+			    LVar t.jc_struct_info_name])))
+		 acc
+	   | JCTnative _ -> acc
+	   | _ -> assert false
+      )
+      f.jc_fun_info_parameters
+      (assertion None "" spec.jc_fun_requires)
+  in
   let all_behaviors =
     List.map
       (fun (id,b) ->
@@ -406,3 +460,8 @@ let tr_fun f spec body acc =
   in why_param::acc
 
   
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

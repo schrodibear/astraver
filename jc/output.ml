@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.5 2006-11-16 10:09:36 hubert Exp $ i*)
+(*i $Id: output.ml,v 1.6 2006-11-16 16:42:46 marche Exp $ i*)
 
 open Format;;
 open Pp;;
@@ -698,13 +698,13 @@ let fprintf_why_decl form d =
 	fprintf form ") : %a =@ %a@]@.@." fprintf_logic_type t 
 	  fprintf_term e
     | Type (id, []) ->
-	fprintf form "@[type %s@]@." id
+	fprintf form "@[type %s@]@.@." id
     | Type (id, [t]) ->
-	fprintf form "@[type '%s %s@]@." t id
+	fprintf form "@[type '%s %s@]@.@." t id
     | Type (id, t::l) ->
 	fprintf form "@[type ('%s" t;
 	List.iter (fun t -> fprintf form ", '%s" t) l;
-	fprintf form ") %s@]@." id
+	fprintf form ") %s@]@.@." id
     | Exception id ->
 	fprintf form "@[exception %s@]@.@." id
 	
@@ -719,18 +719,28 @@ let output_decls get_id iter_decl output_decl decls =
 
 let fprintf_why_decls form decls =
   (* Why do we need a partition ?
-     because one may have a logic and a parameter with the same name, 
+     because one may have a type and a logic/parameter with the same name, 
      and the computation of dependencies is confused in that case
 
-     Logic may not depend on anything
-     Predicate may depend on other Predicate and Logic
-     Axiom may depend on Predicate and Logic
-     Parameter may depend on Predicate and Logic
-     Def may depend on Predicate, Logic, Parameter and Def
+     Type may depend on nothing 
+     Logic may depend on Type, Logic and Predicate
+     Predicate may depend on Type, Predicate and Logic
+     Axiom may depend on Type, Predicate and Logic
+     Parameter may depend on Type, Predicate and Logic
+     Def may depend on Type, Parameter, Predicate, Logic, and Def
 
-     - Claude, 03 apr 2004
+     - Claude, 16 nov 2006
   *)
-  output_decls get_why_id iter_why_decl (fprintf_why_decl form) decls;
+  let (types,others) =
+    List.fold_left
+    (fun (t,o) d ->
+       match d with
+	 | Type _ -> (d::t,o)
+	 | _ -> (t,d::o))
+    ([],[]) decls
+  in
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
 
 
 

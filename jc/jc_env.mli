@@ -71,3 +71,8 @@ type exception_info =
 
 
 
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

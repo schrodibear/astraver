@@ -52,7 +52,7 @@ and ptype =
     }
 
 type pbin_op =
-  [ `Ble | `Bge | `Beq | `Bneq 
+  [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq 
   | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod
   | `Bland | `Blor | `Bimplies 
   ]
@@ -70,6 +70,7 @@ type pexpr_node =
   | JCPEcast of pexpr * string
   | JCPEforall of ptype * string * pexpr
   | JCPEold of pexpr
+  | JCPEif of pexpr * pexpr * pexpr
 
 and pexpr =
     {
@@ -107,7 +108,7 @@ and pstatement =
 
 type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
-  | JCPDtype of string * string option * (ptype * string) list * (string * string * pexpr) option
+  | JCPDtype of string * string option * (ptype * string) list * (string * string * pexpr) list
 
 and pdecl =
     {
@@ -128,6 +129,7 @@ type term_node =
   | JCTold of term
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
+  | JCTif of term * term * term
 
 and term =
     {
@@ -143,6 +145,7 @@ type assertion_node =
   | JCAforall of var_info * assertion
   | JCAold of assertion
   | JCAinstanceof of term * struct_info
+  | JCAif of term * assertion * assertion
 
 and assertion =
     {
@@ -162,6 +165,7 @@ type expr_node =
   | JCEassign_heap of expr * field_info * expr
   | JCEassign_op_local of var_info * fun_info * expr
   | JCEassign_op_heap of expr * field_info * fun_info * expr
+  | JCEif of expr * expr * expr
 
 and expr =
    {

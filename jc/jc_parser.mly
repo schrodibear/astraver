@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.15 2006-11-09 14:15:29 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.16 2006-11-16 16:42:45 marche Exp $ */
 
 %{
 
@@ -72,14 +72,14 @@
 /* ( ) { } [ ] */
 %token LPAR RPAR LBRACE RBRACE LSQUARE RSQUARE
 
-/* ; , : . */
-%token SEMICOLON COMMA COLON DOT
+/* ; , : . ? */
+%token SEMICOLON COMMA COLON DOT QUESTION
 
 /* - -- + ++ * / % */
 %token MINUS MINUSMINUS PLUS PLUSPLUS STAR SLASH PERCENT
  
-/* = <= >= == != <: :> */
-%token EQ LTEQ GTEQ EQEQ BANGEQ LTCOLON COLONGT
+/* = <= >= > < == != <: :> */
+%token EQ LTEQ GTEQ GT LT EQEQ BANGEQ LTCOLON COLONGT
 
 /* += -= *= /= %= */
 %token PLUSEQ MINUSEQ STAREQ SLASHEQ PERCENTEQ
@@ -93,8 +93,8 @@
 /* type invariant with */
 %token TYPE INVARIANT WITH
 
-/* integer unit */
-%token INTEGER UNIT
+/* integer boolean real unit */
+%token INTEGER BOOLEAN REAL UNIT
 
 /* behavior ensures requires */
 %token ASSIGNS BEHAVIOR ENSURES REQUIRES 
@@ -247,12 +247,10 @@ shift_expression:
 relational_expression: 
 | shift_expression 
     { $1 }
-/*
 | relational_expression LT shift_expression 
-    { locate (CEbinary ($1, Blt, $3)) }
+    { locate_expr (JCPEbinary ($1, `Blt, $3)) }
 | relational_expression GT shift_expression
-    { locate (CEbinary ($1, Bgt, $3)) }
-*/
+    { locate_expr (JCPEbinary ($1, `Bgt, $3)) }
 | relational_expression LTEQ shift_expression
     { locate_expr (JCPEbinary ($1, `Ble, $3)) }
 | relational_expression GTEQ shift_expression
@@ -316,10 +314,8 @@ logical_or_expression:
 conditional_expression: 
 | logical_or_expression 
     { $1 }
-/*
 | logical_or_expression QUESTION expression COLON conditional_expression 
-    { locate (CEcond ($1, $3, $5)) }
-*/
+    { locate_expr (JCPEif ($1, $3, $5)) }
 ;
 
 
@@ -738,8 +734,8 @@ jump_statement:
 statement: 
 /*
 | labeled_statement { $1 }
-| compound_statement { locate (CSblock $1) }
 */
+| compound_statement { locate_statement (JCPSblock $1) }
 | expression_statement { $1 }
 | selection_statement { $1 }
 /*
@@ -780,6 +776,10 @@ parameter_declaration:
 type_expr:
 | INTEGER
     { locate_type (JCPTnative `Tinteger) }
+| BOOLEAN
+    { locate_type (JCPTnative `Tboolean) }
+| REAL
+    { locate_type (JCPTnative `Treal) }
 | UNIT
     { locate_type (JCPTnative `Tunit) }
 | IDENTIFIER
@@ -823,8 +823,8 @@ function_definition:
 /*******************/
 
 type_definition:
-| TYPE IDENTIFIER EQ extends LBRACE field_declaration_list invariant RBRACE
-    { locate_decl (JCPDtype($2,$4,$6,$7)) }
+| TYPE IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
+    { let (f,i) = $6 in locate_decl (JCPDtype($2,$4,f,i)) }
 ; 
 
 extends:
@@ -836,9 +836,11 @@ extends:
 
 field_declaration_list:
 | /* epsilon */
-    { [] }
+    { ([],[]) }
 | field_declaration field_declaration_list
-    { $1::$2 }
+    { let (f,i) = $2 in ($1::f,i) }
+| invariant field_declaration_list
+    { let (f,i) = $2 in (f,$1::i) }
 ;
 
 field_declaration:
@@ -847,10 +849,8 @@ field_declaration:
 ;
 
 invariant:
-| /* epsilon */ 
-    { None }
 | INVARIANT IDENTIFIER LPAR IDENTIFIER RPAR EQ expression SEMICOLON
-    { Some ($2,$4,$7) }
+    { ($2,$4,$7) }
 ;
 
 /****************************************/
@@ -876,3 +876,8 @@ decl:
 ;
 
 
+/*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*/

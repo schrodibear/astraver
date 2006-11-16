@@ -33,6 +33,7 @@ let rec term acc t =
     | JCTapp (f,lt) -> f::(List.fold_left term acc lt)
     | JCTold t | JCTderef (t,_) -> term acc t
     | JCTshift (t1,t2) -> term (term acc t1) t2
+    | JCTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
     | JCTcast(t,_)
     | JCTinstanceof(t,_) -> term acc t
 
@@ -43,6 +44,8 @@ let rec assertion acc p =
   | JCAand(pl) -> List.fold_left assertion acc pl
   | JCAimplies (p1,p2) -> 
       assertion (assertion acc p1) p2
+  | JCAif(t1,p2,p3) -> 
+      assertion (assertion (term acc t1) p2) p3
   | JCAold p | JCAforall (_,p) -> assertion acc p
   | JCAinstanceof(t,_) -> term acc t
 
@@ -100,6 +103,7 @@ let rec expr acc e =
     | JCEshift (e1,e2) 
     | JCEassign_heap (e1,_, e2)
     | JCEassign_op_heap(e1,_, _, e2) -> expr (expr acc e1) e2
+    | JCEif(e1,e2,e3) -> expr (expr (expr acc e1) e2) e3
     | JCEcall (f, le) -> 
 	f::(List.fold_left expr acc le)
 
@@ -170,3 +174,12 @@ let compute_components table =
 	 l)
     tab_comp;
   tab_comp
+
+
+
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

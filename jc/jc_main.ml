@@ -95,3 +95,8 @@ let main () =
 let _ = Printexc.catch main ()
 
   
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

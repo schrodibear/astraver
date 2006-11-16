@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.2 2006-11-07 16:12:14 marche Exp $ *)
+(* $Id: jc_fenv.mli,v 1.3 2006-11-16 16:42:45 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -42,3 +42,10 @@ type fun_info =
       mutable jc_fun_info_logic_apps : logic_info list;
       mutable jc_fun_info_effects : effects;
     }
+
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

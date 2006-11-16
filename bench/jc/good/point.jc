@@ -15,7 +15,7 @@ class ColoredPoint extends Point {
   int col; 
 
   void move(int dx, int dy) {
-    col /= 2;
+    col = col > 0 ? col-1 : 0;
     super.move(dx,dy);
   }
 
@@ -43,10 +43,10 @@ unit ColoredPoint_move(ColoredPoint[0] this, integer dx, integer dy)
     ensures this.x == \old(this.x)+dx
   behavior y_moved:
     ensures this.y == \old(this.y)+dy
-  behavior col_decreased:
-    ensures this.col == \old(this.col) / 2
+  behavior col_decreased_if_positive:
+    ensures \old(this.col) > 0 => this.col == \old(this.col) - 1
 {
-    this.col /= 2;
+    this.col = this.col > 0 ? this.col-1 : 0;
     Point_move(this,dx,dy);
 }
 
@@ -56,8 +56,9 @@ unit move(Point[0] this, integer dx, integer dy)
   behavior y_moved:
     ensures this.y == \old(this.y)+dy
   behavior col_decreased:
-    ensures this <: ColoredPoint => 
-       (this :> ColoredPoint).col == \old((this :> ColoredPoint).col) / 2
+    ensures this <: ColoredPoint =>
+        \old((this :> ColoredPoint).col) > 0 =>
+       (this :> ColoredPoint).col == \old((this :> ColoredPoint).col) - 1
 {
     if (this <: ColoredPoint) 
 	ColoredPoint_move(this :> ColoredPoint,dx,dy);
@@ -66,7 +67,7 @@ unit move(Point[0] this, integer dx, integer dy)
 	
 unit test1(ColoredPoint[0] p) 
     behavior ok:
-      ensures p.x == 10 && p.y == 20 && p.col == 50
+      ensures p.x == 10 && p.y == 20 && p.col == 99
 {
     p.x = 0;
     p.y = 0;

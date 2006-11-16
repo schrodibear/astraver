@@ -25,6 +25,7 @@
 open Jc_env
 open Jc_envset
 open Jc_fenv
+open Jc_pervasives
 open Jc_ast
 open Format
 
@@ -36,12 +37,6 @@ let typing_error l =
     str_formatter
 
 
-
-
-let unit_type = JCTnative `Tunit
-let boolean_type = JCTnative `Tboolean
-let integer_type = JCTnative `Tinteger
-let real_type = JCTnative `Treal
 
 
 
@@ -137,7 +132,7 @@ let type_type t =
 	end
     | JCPTidentifier id -> 
 	(* TODO *)
-	assert false
+	typing_error t.jc_ptype_loc "unknown type %s" id
 
 
 (* constants *)
@@ -150,20 +145,6 @@ let const c =
     | JCCnull -> assert false
 
 (* terms *)
-
-let make_term_op name ty =
-  { jc_logic_info_name = name;
-    jc_logic_info_result_type = Some ty;
-  }
-
-let eq_int_bool = make_term_op "eq_int_bool" boolean_type
-let neq_int_bool = make_term_op "neq_int_bool" boolean_type
-let neq_pointer_bool = make_term_op "neq_pointer_bool" boolean_type
-let add_int = make_term_op "add_int" integer_type
-let sub_int = make_term_op "sub_int" integer_type
-let mul_int = make_term_op "mul_int" integer_type
-let div_int = make_term_op "div_int" integer_type
-let mod_int = make_term_op "mod_int" integer_type
 
 let num_op op =
   match op with
@@ -182,6 +163,8 @@ let eq_op op arg_type  =
 
 let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
   match op with
+    | `Bgt -> assert false (* TODO *)
+    | `Blt -> assert false (* TODO *)
     | `Bge -> assert false (* TODO *)
     | `Ble -> assert false (* TODO *)
     | `Beq | `Bneq ->
@@ -255,30 +238,43 @@ let rec term env e =
 	  let t,c = const c in t,JCTconst c
       | JCPEold e -> 
 	  let t,e = term env e in t,JCTold(e)
+      | JCPEif(e1,e2,e3) ->
+	  let t1,te1 = term env e1 
+	  and t2,te2 = term env e2
+	  and t3,te3 = term env e3 
+	  in
+	  begin
+	    match t1 with
+	      | JCTnative `Tboolean ->
+		  let t =
+		    if subtype t2 t3 then t3 else
+		      if subtype t3 t2 then t2 else
+			typing_error e.jc_pexpr_loc 
+			  "imcompatible result types"
+		  in
+		  t, JCTif(te1,te2,te3)
+	      | _ ->
+		  typing_error e1.jc_pexpr_loc 
+		    "boolean expression expected"
+	  end
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
       | JCPEassign _ -> 
-	  typing_error e.jc_pexpr_loc "assignment not allowed as logic term"
-	  (* propositional (non-boolean) expressions *)
+	  typing_error e.jc_pexpr_loc 
+	    "assignment not allowed as logic term"
+	    (* propositional (non-boolean) expressions *)
       | JCPEforall _ -> 
-	  typing_error e.jc_pexpr_loc "quantification not allowed as logic term"
+	  typing_error e.jc_pexpr_loc 
+	    "quantification not allowed as logic term"
 
   in t,{ jc_term_node = te;
 	 jc_term_loc = e.jc_pexpr_loc }
 
   
-let make_rel name =
-  { jc_logic_info_name = name;
-    jc_logic_info_result_type = None }
-
-let ge_int = make_rel "ge_int"
-let le_int = make_rel "le_int"
-let eq = make_rel "eq"
-let neq = make_rel "neq"
-
-    
 let rel_bin_op loc op t1 t2 =
   match op with
+    | `Bgt -> gt_int
+    | `Blt -> lt_int
     | `Bge -> ge_int
     | `Ble -> le_int
     | `Beq | `Bneq -> 
@@ -355,6 +351,19 @@ let rec assertion env e =
 	  }
 	  in JCAforall(vi,assertion ((id,vi)::env) e1)
       | JCPEold e -> JCAold(assertion env e)
+      | JCPEif(e1,e2,e3) ->
+	  let t1,te1 = term env e1 
+	  and te2 = assertion env e2
+	  and te3 = assertion env e3 
+	  in
+	  begin
+	    match t1 with
+	      | JCTnative `Tboolean ->
+		  JCAif(te1,te2,te3)
+	      | _ ->
+		  typing_error e1.jc_pexpr_loc 
+		    "boolean expression expected"
+	  end
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
       | JCPEassign _ -> 
@@ -366,48 +375,28 @@ let rec assertion env e =
 
 (* expressions *)
 
-let fun_tag_counter = ref 0
-
-let make_fun_info name ty =
-  incr fun_tag_counter;
-  { jc_fun_info_tag = !fun_tag_counter;
-    jc_fun_info_name = name;
-    jc_fun_info_parameters = [];
-    jc_fun_info_return_type = ty;
-    jc_fun_info_calls = [];
-    jc_fun_info_logic_apps = [];
-    jc_fun_info_effects = { jc_writes_fields = FieldSet.empty } 
- }
-
-let ge_int = make_fun_info "ge_int_" boolean_type
-let le_int = make_fun_info "le_int_" boolean_type 
-let eq_int = make_fun_info "eq_int_" integer_type
-let neq_int = make_fun_info "neq_int_" integer_type
-let add_int = make_fun_info "add_int" integer_type
-let sub_int = make_fun_info "sub_int" integer_type
-let mul_int = make_fun_info "mul_int" integer_type
-let div_int = make_fun_info "div_int" integer_type
-let mod_int = make_fun_info "mod_int" integer_type
-    
 let bin_op op =
   match op with
-    | `Bge -> ge_int
-    | `Ble -> le_int
-    | `Beq -> eq_int
-    | `Bneq -> neq_int
-    | `Badd -> add_int
-    | `Bsub -> sub_int
-    | `Bmul -> mul_int
-    | `Bdiv -> div_int
-    | `Bmod -> mod_int
-    | `Bland | `Blor -> assert false (* TODO *)
+    | `Bgt -> gt_int_
+    | `Blt -> lt_int_
+    | `Bge -> ge_int_
+    | `Ble -> le_int_
+    | `Beq -> eq_int_
+    | `Bneq -> neq_int_
+    | `Badd -> add_int_
+    | `Bsub -> sub_int_
+    | `Bmul -> mul_int_
+    | `Bdiv -> div_int_
+    | `Bmod -> mod_int_
+    | `Bland -> and_ 
+    | `Blor -> or_
 	(* not allowed as expression op *)
     | `Bimplies -> assert false
     | `Binstanceof -> assert false
 
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
-    | `Bge | `Ble | `Beq | `Bneq ->
+    | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq ->
 	begin
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -432,7 +421,19 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	    | _ ->
 		typing_error loc "numeric types expected"
 	in JCTnative t,JCEcall(bin_op op,[e1;e2])
-    | `Bland | `Blor -> assert false (* TODO *)
+    | `Bland | `Blor -> 
+	let t=
+	  match (t1,t2) with
+	    | JCTnative t1, JCTnative t2 ->
+		begin
+		  match (t1,t2) with
+		    | `Tboolean,`Tboolean -> `Tboolean
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "booleans expected"
+	in JCTnative t,JCEcall(bin_op op,[e1;e2])
+
 	(* not allowed as expression op *)
     | `Bimplies -> assert false
     | `Binstanceof -> assert false
@@ -539,6 +540,25 @@ let rec expr env e =
 	  fi.jc_field_info_type,JCEderef(te,fi)
       | JCPEshift (_, _) -> assert false
       | JCPEconst c -> let t,tc = const c in t,JCEconst tc
+      | JCPEif(e1,e2,e3) ->
+	  let t1,te1 = expr env e1 
+	  and t2,te2 = expr env e2
+	  and t3,te3 = expr env e3 
+	  in
+	  begin
+	    match t1 with
+	      | JCTnative `Tboolean ->
+		  let t =
+		    if subtype t2 t3 then t3 else
+		      if subtype t3 t2 then t2 else
+			typing_error e.jc_pexpr_loc 
+			  "imcompatible result types"
+		  in
+		  t, JCEif(te1,te2,te3)
+	      | _ ->
+		  typing_error e1.jc_pexpr_loc 
+		    "boolean expression expected"
+	  end
 	  (* logic expressions, not allowed as program expressions *)
       | JCPEforall _ 
       | JCPEold _ -> 
@@ -594,6 +614,7 @@ let rec location env e =
 	let fi = find_field e.jc_pexpr_loc t f in
 	fi.jc_field_info_type, JCLderef(te,fi)	  
     | JCPEshift (_, _)  -> assert false (* TODO *)
+    | JCPEif _ 
     | JCPEcast _
     | JCPEinstanceof _
     | JCPEold _ 

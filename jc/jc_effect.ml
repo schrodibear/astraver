@@ -41,7 +41,7 @@ let same_effects ef1 ef2 =
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.6 2006-11-09 14:15:29 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.7 2006-11-16 16:42:45 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -58,6 +58,7 @@ let rec expr ef e =
     | JCEinstanceof(e,_) -> expr ef e
     | JCEderef (e, f) -> expr ef e (* TODO *)
     | JCEshift (_, _) -> assert false
+    | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
     | JCEvar _ -> ef (* TODO *)
 
 let rec statement ef s =
@@ -133,3 +134,10 @@ let function_effects funs =
        
 
   
+
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)
