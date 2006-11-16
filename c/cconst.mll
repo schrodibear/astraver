@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cconst.mll,v 1.6 2006-11-03 12:48:55 marche Exp $ i*)
+(*i $Id: cconst.mll,v 1.7 2006-11-16 20:23:52 filliatr Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -70,7 +70,7 @@
 	      warning loc
 		"this constant is valid only on >= 32-bit architectures";
 	  accu 
-      | "u" ->
+      | "u" | "U" ->
 	  if accu > 0xFFFFFFFFL then raise Constant_too_large;
 	  if accu > 0xFFFFL then 
 	    warning loc
