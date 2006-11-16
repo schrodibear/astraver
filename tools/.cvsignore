@@ -4,3 +4,4 @@ simplify_split.ml
 zenon_split.ml
 *.annot
 smtlib_split.ml
+simplify_lexer.ml
