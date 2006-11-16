@@ -2,7 +2,9 @@
 type atom = 
   | DEFPRED
   | BG_PUSH
+  | AT_TRUE
   | TRUE
+  | FALSE
   | IMPLIES
   | IFF
   | FORALL

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_towhy.ml,v 1.1 2006-11-16 21:14:30 filliatr Exp $ i*)
+(*i $Id: simplify_towhy.ml,v 1.2 2006-11-16 21:52:42 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -33,6 +33,12 @@ open Simplify_ast
 type decl = 
   | Goal of string * predicate
   | Axiom of string * predicate
+
+let funs : (Ident.t, int) Hashtbl.t = Hashtbl.create 97
+let preds = Hashtbl.create 97
+
+let declare_fun = Hashtbl.add funs
+let declare_pred = Hashtbl.add preds
 
 let decls = Queue.create ()
 let reset () = Queue.clear decls
@@ -48,15 +54,102 @@ let add_axiom =
 let rec translate_term = function
   | _ -> assert false
 
-let rec translate_predicate = function
+let pand p1 p2 = match p1, p2 with
+  | Ptrue, p | p, Ptrue -> p
+  | _ -> Pand (false, false, p1, p2)
+
+let por p1 p2 = match p1, p2 with
+  | Pfalse, p | p, Pfalse -> p
+  | _ -> Por (p1, p2)
+
+let t_distinct = Ident.create "distinct"
+
+let foralls vl tl p =
+  let rec mk_forall = function
+    | [] -> assert false
+    | [x] -> Forall (false, x, x, PTint, tl, p)
+    | x :: xl -> Forall (false, x, x, PTint, [], mk_forall xl)
+  in
+  mk_forall vl
+
+let trigger = function
+  | Slist (Satom MPAT :: l) -> List.map (fun s -> TPat (translate_term s)) l
+  | s -> [TPat (translate_term s)]
+
+let variable = function
+  | Satom (IDENT id) -> Ident.create id
   | _ -> assert false
+
+let rec translate_predicate = function
+  | Slist (Satom AND :: l) -> 
+      List.fold_right (fun s acc -> pand (translate_predicate s) acc) l Ptrue
+  | Slist (Satom OR :: l) ->	
+      List.fold_right (fun s acc -> por (translate_predicate s) acc) l Pfalse
+  | Slist [Satom EQ; s; Satom AT_TRUE] ->
+      translate_predicate s
+  | Slist [Satom EQ; s1; s2] ->
+      Papp (t_eq, [translate_term s1; translate_term s2], [])
+  | Slist (Satom EQ :: _) ->
+      assert false
+  | Slist [Satom NEQ; s1; s2] ->
+      Papp (t_neq, [translate_term s1; translate_term s2], [])
+  | Slist (Satom NEQ :: _) ->
+      assert false
+  | Slist (Satom (IDENT s) :: l) ->
+      let id = Ident.create s in
+      declare_pred id (List.length l);
+      Papp (id, List.map translate_term l, [])
+  | Slist [Satom IMPLIES; s1; s2] ->
+      Pimplies (false, translate_predicate s1, translate_predicate s2)
+  | Slist (Satom IMPLIES :: _) ->
+      assert false
+  | Slist [Satom IFF; s1; s2] ->
+      Piff (translate_predicate s1, translate_predicate s2)
+  | Slist (Satom IFF :: _) ->
+      assert false
+  | Slist [s] ->
+      translate_predicate s
+  | Slist (Satom DISTINCT :: l) ->
+      Papp (t_distinct, List.map translate_term l, [])
+  | Slist [Satom FORALL; Slist vl; Slist (Satom PATS :: tl); s] ->
+      let vl = List.map variable vl in
+      let tl = List.map trigger tl in
+      foralls vl tl (translate_predicate s)
+  | Slist [Satom FORALL; Slist vl; s] ->
+      let vl = List.map variable vl in
+      foralls vl [] (translate_predicate s)
+  | Slist (Satom FORALL :: _ ) ->
+      assert false
+  | Slist [Satom (LBLPOS | LBLNEG); _; s] ->
+      translate_predicate s
+  | Slist (Satom (LBLPOS | LBLNEG) :: _) ->
+      assert false
+  | Satom TRUE ->
+      Ptrue
+  | Satom FALSE ->
+      Pfalse
+  | Satom (IDENT s) ->
+      let id = Ident.create s in
+      declare_pred id 0;
+      Papp (id, [], [])
+  | Slist ([] | 
+           Slist _ :: _ | 
+           Satom (PATS | MPAT | BG_PUSH | DEFPRED | AT_TRUE) :: _) 
+  | Slist (Satom (FALSE|TRUE)::_::_)
+  | Satom (PATS | MPAT | BG_PUSH | DEFPRED | AT_TRUE)
+  | Satom (LBLNEG|LBLPOS|DISTINCT|NEQ|EQ|OR|AND|FORALL|IFF|IMPLIES) ->
+      assert false
 
 let translate_axiom s = add_axiom (translate_predicate s)
 
 let translate_decl = function
-  | Slist (Satom BG_PUSH :: l) -> List.iter translate_axiom l
-  | Slist [Satom DEFPRED; _] -> ()
-  | s -> add_goal (translate_predicate s)
+  | Slist [Satom BG_PUSH; Slist (Satom AND :: l)]
+  | Slist (Satom BG_PUSH :: l) -> 
+      List.iter translate_axiom l
+  | Slist [Satom DEFPRED; _] -> 
+      ()
+  | s -> 
+      add_goal (translate_predicate s)
 
 let translate = List.iter translate_decl
 

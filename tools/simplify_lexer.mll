@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_lexer.mll,v 1.2 2006-11-16 21:14:30 filliatr Exp $ i*)
+(*i $Id: simplify_lexer.mll,v 1.3 2006-11-16 21:52:42 filliatr Exp $ i*)
 
 {
 
@@ -36,7 +36,9 @@
       [
     "DEFPRED", DEFPRED;
     "BG_PUSH", BG_PUSH;
-    "@true", TRUE;
+    "@true", AT_TRUE;
+    "TRUE", TRUE;
+    "FALSE", FALSE;
     "AND", AND;
     "IMPLIES", IMPLIES;
     "IFF", IFF;
