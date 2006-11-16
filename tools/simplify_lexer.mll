@@ -22,36 +22,35 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_lexer.mll,v 1.1 2006-11-16 15:03:12 filliatr Exp $ i*)
+(*i $Id: simplify_lexer.mll,v 1.2 2006-11-16 21:14:30 filliatr Exp $ i*)
 
 {
 
   open Lexing 
   open Simplify_ast
+  open Simplify_parser
 
   let atoms = Hashtbl.create 1021
   let () = 
     List.iter (fun (s,a) -> Hashtbl.add atoms s a)
       [
-    "DEFPRED", Defpred;
-    "BG_PUSH", Bg_push;
-    "@true", True;
-    "AND", And;
-    "IMPLIES", Implies;
-    "IFF", Iff;
-    "FORALL", Forall;
-    "MPAT", Mpat;
-    "PATS", Pats;
-    "AND", And;
-    "OR", Or;
-    "LBLPOS", Lblpos;
-    "LBLNEG", Lblneg;
-    "DISTINCT", Distinct;
-    "EQ", Eq;
-    "NEQ", Neq;
+    "DEFPRED", DEFPRED;
+    "BG_PUSH", BG_PUSH;
+    "@true", TRUE;
+    "AND", AND;
+    "IMPLIES", IMPLIES;
+    "IFF", IFF;
+    "FORALL", FORALL;
+    "MPAT", MPAT;
+    "PATS", PATS;
+    "AND", AND;
+    "OR", OR;
+    "LBLPOS", LBLPOS;
+    "LBLNEG", LBLNEG;
+    "DISTINCT", DISTINCT;
+    "EQ", EQ;
+    "NEQ", NEQ;
       ]
-
-  type token = LPAR | RPAR | ATOM of atom | EOF
 
   let mk_ident s =
     let is_char_ok i = function
@@ -77,7 +76,7 @@
     with Not_found ->
       let s' = mk_ident (String.copy s) in
       Format.eprintf "atom %s -> %s@." s s';
-      let a = Ident s' in 
+      let a = IDENT s' in 
       Hashtbl.add atoms s a; a
 
 }
@@ -104,10 +103,6 @@ rule token = parse
       { Format.eprintf  "simplify_lexer: illegal character %c@." c; exit 1 }
 
 {
-
-  let () =
-    let lb = from_channel stdin in
-    try while true do token lb done with End_of_file -> ()
 
 }
 

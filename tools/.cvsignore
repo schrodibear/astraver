@@ -5,3 +5,6 @@ zenon_split.ml
 *.annot
 smtlib_split.ml
 simplify_lexer.ml
+*.output
+simplify_parser.ml
+simplify_parser.mli

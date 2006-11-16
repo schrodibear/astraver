@@ -1,3 +1,6 @@
+%{
+  open Simplify_ast
+%}
 
 %token <Simplify_ast.atom> ATOM
 %token LPAR RPAR EOF
