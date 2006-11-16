@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.220 2006-11-03 12:48:56 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.221 2006-11-16 10:09:35 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -1672,7 +1672,7 @@ let catch_return e = match !abrupt_return with
       Try (e, "Return", None, Void)
   | Some r ->
       let tmp = tmp_var () in
-      Try (e, r, Some tmp, Var tmp)
+      Try (append e Absurd, r, Some tmp, Var tmp)
 
 let unreachable_block = function
   | [] -> ()
@@ -1823,7 +1823,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       let switch_may_break = ref false in
       let res = 
 	Output.Let(tmp, interp_expr e,
-		   interp_switch tmp ab switch_may_break l 
+		   interp_switch tmp (*ab*) true switch_may_break l 
 		     IntMap.empty used_cases false)
       in
       if !switch_may_break then
@@ -2184,63 +2184,10 @@ let interp_located_tdecl why_spec decl =
   | Ndecl(ctype,v,init) -> 
       (* global initialisations already handled in cinit.ml *)
       why_spec
-(*  | Nfunspec(spec,ctype,id) -> 
-      let tparams,_,_,spec = interp_function_spec id spec ctype id.args in
-      (why_code, spec :: why_spec)
-  | Nfundef(spec,ctype,id,block) ->
-      if (id = Cinit.invariants_initially_established_info &&  
-	  not !Cinit.user_invariants)
-      then
-	(why_code, why_spec)
-      else
-	(reset_tmp_var ();
-	 let tparams,pre,post,tspec = 
-	   interp_function_spec id spec ctype id.args in
-	 let f = id.fun_unique_name in
-	 if Coptions.verify id.fun_name then begin try
-	   lprintf "translating function %s@." f;
-	   abrupt_return := None;
-	   let may_break = ref false in
-	   let list_of_refs =
-	     List.fold_right
-	       (fun id bl ->
-		  if id.var_is_assigned
-		  then 
-		 let n = id.var_unique_name in
-		 set_unique_name (Var_info id) ("mutable_" ^ n); 
-		 unset_formal_param id;
-		 (id.var_unique_name,n) :: bl
-		  else bl) 
-	       id.args [] 
-	in
-	   let tblock = catch_return 
-	     (interp_statement false may_break block) in
-	   assert (not !may_break);
-	   let tblock = make_label "init" tblock in
-	   let tblock =
-	     List.fold_right
-	       (fun (mut_id,id) bl ->
-		  Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
-	   printf "generating Why code for function %s@." f;
-	   ((f, Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
-	    tspec :: why_spec)
-	 with Error (_, Cerror.Unsupported s) ->
-	   lprintf "unsupported feature (%s); skipping function %s@." s f;
-	   eprintf "unsupported feature (%s); skipping function %s@." s f;
-	   (why_code,
-	    tspec :: why_spec)
-	 end else begin
-	   lprintf "assuming function %s@." f;
-	   (why_code, tspec :: why_spec)
-	 end
-	)
-*)
+
 
 let interp_c_fun fun_name (spec, ctype, id, block, loc) 
     (why_code,why_spec)   =
-(*      let tparams,_,_,spec = interp_function_spec id spec ctype id.args in
-      (why_code, spec :: why_spec,
-       prover_decl)*)
   if (id = Cinit.invariants_initially_established_info &&  
       not !Cinit.user_invariants)
   then
@@ -2270,7 +2217,7 @@ let interp_c_fun fun_name (spec, ctype, id, block, loc)
 		 id.args [] 
 	     in
 	     let tblock = catch_return 
-	       (interp_statement false may_break block) in
+	       (interp_statement true may_break block) in
 	     assert (not !may_break);
 	     let tblock = make_label "init" tblock in
 	     let tblock =

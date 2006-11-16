@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.4 2006-11-03 12:49:00 marche Exp $ i*)
+(*i $Id: output.ml,v 1.5 2006-11-16 10:09:36 hubert Exp $ i*)
 
 open Format;;
 open Pp;;
@@ -357,6 +357,7 @@ type expr =
   | Assert of assertion * expr
   | Label of string * expr
   | BlackBox of why_type
+  | Absurd
 ;;
 
 let make_or_expr a1 a2 =
@@ -444,6 +445,7 @@ let rec iter_expr f e =
     | Assert(p, e) -> iter_assertion f p; iter_expr f e
     | Label (_,e) -> iter_expr f e
     | BlackBox(ty) -> iter_why_type f ty
+    | Absurd -> ()
 
 
 let fprintf_variant form = function
@@ -559,6 +561,8 @@ let rec fprintf_expr form e =
     | BlackBox(t) ->
 	fprintf form "@[<hv 0>[ %a ]@]" 
 	  (fprintf_type false) t
+    | Absurd ->
+	fprintf form "@[<hv 0>absurd@ @]" 
 
 	  
 

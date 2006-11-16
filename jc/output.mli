@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.6 2006-11-03 12:49:00 marche Exp $ i*)
+(*i $Id: output.mli,v 1.7 2006-11-16 10:09:36 hubert Exp $ i*)
 
 type constant =
   | Prim_int of string
@@ -120,6 +120,7 @@ type expr =
   | Assert of assertion * expr
   | Label of string * expr
   | BlackBox of why_type
+  | Absurd 
 ;;
 
 val make_or_expr : expr -> expr -> expr
