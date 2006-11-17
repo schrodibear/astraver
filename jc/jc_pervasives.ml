@@ -63,11 +63,18 @@ let ge_int_ = make_fun_info "ge_int_" boolean_type
 let le_int_ = make_fun_info "le_int_" boolean_type 
 let eq_int_ = make_fun_info "eq_int_" integer_type
 let neq_int_ = make_fun_info "neq_int_" integer_type
+
 let add_int_ = make_fun_info "add_int" integer_type
 let sub_int_ = make_fun_info "sub_int" integer_type
 let mul_int_ = make_fun_info "mul_int" integer_type
 let div_int_ = make_fun_info "div_int" integer_type
 let mod_int_ = make_fun_info "mod_int" integer_type
+
+let add_real_ = make_fun_info "add_real" real_type
+let sub_real_ = make_fun_info "sub_real" real_type
+let mul_real_ = make_fun_info "mul_real" real_type
+let div_real_ = make_fun_info "div_real" real_type
+
 let and_ = make_fun_info "and" boolean_type
 let or_ = make_fun_info "or" boolean_type
     

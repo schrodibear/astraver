@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.14 2006-11-03 12:49:01 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.15 2006-11-17 13:48:48 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -142,9 +142,7 @@ let prover_name = function
 let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
   let filename = output_file ?encoding p so in
-  if debug then begin
-    eprintf "calling %s on %s@." (prover_name p) filename; flush stderr;
-  end;
+  if debug then eprintf "calling %s on %s@." (prover_name p) filename;
   let r = match p with
     | Simplify -> 
 	Calldp.simplify ~debug ?timeout ~filename () 

@@ -41,7 +41,7 @@ let same_effects ef1 ef2 =
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.7 2006-11-16 16:42:45 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.8 2006-11-17 13:48:48 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -75,7 +75,7 @@ let rec statement ef s =
 	statement (statement (expr ef e) s1) s2
     | JCSdecl _ -> assert false
     | JCSassert _ -> assert false
-    | JCSblock _ -> assert false
+    | JCSblock l -> List.fold_left statement ef l
     | JCSskip -> assert false
 
 

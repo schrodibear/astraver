@@ -56,7 +56,7 @@ let main () =
 	(* phase 4 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects.@.";
 	Array.iter Jc_effect.function_effects components;
-	(* phase x : generation of Why memories *)
+	(* phase 5 : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
 	    (fun _ st acc ->
@@ -64,15 +64,17 @@ let main () =
 	    Jc_typing.structs_table
 	    []
 	in	       	  
-	(* phase x : generation of Why functions *)
+	(* phase 6 : generation of Why functions *)
 	let d_funs = 
 	  Hashtbl.fold 
 	    (fun _ (f,s,b) acc ->
+	       printf "Generating Why function %s@." 
+		 f.Jc_fenv.jc_fun_info_name;
 	       Jc_interp.tr_fun f s b acc)
 	    Jc_typing.functions_table
 	    d_memories
 	in	       
-	(* phase x : produce Why file *)
+	(* phase 7 : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
 	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_funs)

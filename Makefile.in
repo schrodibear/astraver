@@ -415,7 +415,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(WHY2HTML) $(DP) $(CPULIMIT) $(
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
-	cp -f $(JESSIE) $(JESSIE)/jessie$(EXE)
+	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)

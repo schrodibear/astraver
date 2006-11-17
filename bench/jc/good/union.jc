@@ -29,15 +29,17 @@ type T = {
 }
 
 
-unit add(T[0] result, T[0] n1, T[0] n2) 
+unit add(T[0] res, T[0] n1, T[0] n2) 
+    behavior default:
+      ensures true
 {
     if (n1.tag == 0 && n2.tag == 0) {
-	result.tag = 0;
-	result.v.x = n1.v.x + n2.v.x;
+	res.tag = 0;
+	(res.v :> U_x).x = (n1.v :> U_x).x + (n2.v :> U_x).x;
     }
     else {
-	result.tag = 1;
-	result.v.y = n1.v.y + n2.v.y;
+	res.tag = 1;
+	(res.v :> U_y).y = (n1.v :> U_y).y + (n2.v :> U_y).y;
     }
 }
     

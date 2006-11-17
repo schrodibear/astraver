@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.11 2006-11-16 16:42:45 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.12 2006-11-17 13:48:48 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -92,12 +92,14 @@ rule token = parse
   | "ensures"               { ENSURES }
 (*
   | "enum"                  { ENUM }
+*)
+  | "false"                 { CONSTANT (JCCboolean false) }
+(*
   | "float"                 { FLOAT }
   | "for"                   { FOR }
   | "goto"                  { GOTO }
 *)
   | "if"                    { IF }
-
   | "integer"               { INTEGER }
 (*
   | "int"                   { INT }
@@ -112,9 +114,9 @@ rule token = parse
 (*
   | "short"                 { SHORT }
   | "signed"                { SIGNED }
-  | "struct"                { STRUCT }
   | "switch"                { SWITCH }
 *)
+  | "true"                  { CONSTANT (JCCboolean true) }
   | "type"                  { TYPE }
   | "unit"                  { UNIT }
 (*

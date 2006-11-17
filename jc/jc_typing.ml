@@ -141,7 +141,7 @@ let const c =
   match c with
     | JCCinteger _ -> integer_type,c
     | JCCreal _ -> real_type,c
-    | JCCbool _ -> boolean_type,c
+    | JCCboolean _ -> boolean_type,c
     | JCCnull -> assert false
 
 (* terms *)
@@ -340,7 +340,14 @@ let rec assertion env e =
       | JCPEapp (_, _) -> assert false
       | JCPEderef (_, _) -> assert false
       | JCPEshift (_, _) -> assert false
-      | JCPEconst _ -> assert false
+      | JCPEconst c -> 
+	  begin
+	    match c with
+	      | JCCboolean true -> JCAtrue
+	      | JCCboolean false -> JCAfalse
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "non propositional constant"
+	  end
       | JCPEforall(ty,id,e1) -> 
 	  let ty = type_type ty in
 	  let vi = {
@@ -375,24 +382,26 @@ let rec assertion env e =
 
 (* expressions *)
 
-let bin_op op =
-  match op with
-    | `Bgt -> gt_int_
-    | `Blt -> lt_int_
-    | `Bge -> ge_int_
-    | `Ble -> le_int_
-    | `Beq -> eq_int_
-    | `Bneq -> neq_int_
-    | `Badd -> add_int_
-    | `Bsub -> sub_int_
-    | `Bmul -> mul_int_
-    | `Bdiv -> div_int_
-    | `Bmod -> mod_int_
-    | `Bland -> and_ 
-    | `Blor -> or_
+let bin_op t op =
+  match t,op with
+    | _, `Bgt -> gt_int_
+    | _, `Blt -> lt_int_
+    | _, `Bge -> ge_int_
+    | _, `Ble -> le_int_
+    | _, `Beq -> eq_int_
+    | _, `Bneq -> neq_int_
+    | `Tinteger, `Badd -> add_int_
+    | `Treal, `Badd -> add_real_
+    | _, `Bsub -> sub_int_
+    | _, `Bmul -> mul_int_
+    | _, `Bdiv -> div_int_
+    | _, `Bmod -> mod_int_
+    | `Tboolean, `Bland -> and_ 
+    | `Tboolean, `Blor -> or_
 	(* not allowed as expression op *)
-    | `Bimplies -> assert false
-    | `Binstanceof -> assert false
+    | _,`Bimplies -> assert false
+    | _,`Binstanceof -> assert false
+    | `Tunit,_ -> assert false
 
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
@@ -408,7 +417,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	    | _ ->
 		typing_error loc "numeric types expected"
 	end;
-	JCTnative `Tboolean,JCEcall(bin_op op,[e1;e2])
+	JCTnative `Tboolean,JCEcall(bin_op `Tboolean op,[e1;e2])
     | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ->
 	let t=
 	  match (t1,t2) with
@@ -416,11 +425,12 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		begin
 		  match (t1,t2) with
 		    | `Tinteger,`Tinteger -> `Tinteger
+		    | `Treal,`Treal -> `Treal
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
 		typing_error loc "numeric types expected"
-	in JCTnative t,JCEcall(bin_op op,[e1;e2])
+	in JCTnative t,JCEcall(bin_op t op,[e1;e2])
     | `Bland | `Blor -> 
 	let t=
 	  match (t1,t2) with
@@ -432,7 +442,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "booleans expected"
-	in JCTnative t,JCEcall(bin_op op,[e1;e2])
+	in JCTnative t,JCEcall(bin_op t op,[e1;e2])
 
 	(* not allowed as expression op *)
     | `Bimplies -> assert false
@@ -494,14 +504,20 @@ let rec expr env e =
 	    and t2,te2 = expr env e2
 	    in
 	    if subtype t2 t1 then
-	    match te1.jc_expr_node with
-	      | JCEvar v ->
-		  t1,JCEassign_op_local(v, bin_op op, te2)
-	      | JCEderef(e,f) ->
-		  t1,JCEassign_op_heap(e, f, bin_op op, te2)
-	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	      match t1 with
+		| JCTnative t ->
+		    begin
+		      match te1.jc_expr_node with
+			| JCEvar v ->
+			    t1,JCEassign_op_local(v, bin_op t op, te2)
+			| JCEderef(e,f) ->
+			    t1,JCEassign_op_heap(e, f, bin_op t op, te2)
+			| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+		    end
+		| _ ->
+		    typing_error e.jc_pexpr_loc "incompatible type"
 	    else
-	      typing_error e.jc_pexpr_loc "same type expected"
+	      typing_error e.jc_pexpr_loc "incompatible types"
 	  end
       | JCPEapp (e1, l) -> 
 	  begin
@@ -585,7 +601,10 @@ let rec statement env s =
       | JCPSif (c, s1, s2) -> 
 	  let t,tc = expr env c in
 	  if subtype t (JCTnative `Tboolean) then
-	    JCSif(tc,statement env s1,statement env s2)
+	    let ts1 = statement env s1
+	    and ts2 = statement env s2
+	    in
+	    JCSif(tc,ts1,ts2)
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
       | JCPSdecl (_, _, _) -> assert false

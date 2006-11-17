@@ -30,7 +30,7 @@ open Jc_fenv
 
 type const =
   | JCCnull
-  | JCCbool of bool
+  | JCCboolean of bool
   | JCCinteger of string
   | JCCreal of string
 
@@ -139,6 +139,7 @@ and term =
 
 type assertion_node =
   | JCAtrue
+  | JCAfalse
   | JCAand of assertion list
   | JCAimplies of assertion * assertion
   | JCAapp of logic_info * term list

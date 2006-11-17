@@ -35,7 +35,7 @@ let const c =
     | JCCnull -> assert false
     | JCCreal s -> Prim_real s
     | JCCinteger s -> Prim_int s
-    | JCCbool b -> Prim_bool b
+    | JCCboolean b -> Prim_bool b
 
 let tr_native_type t =
   match t with
@@ -98,6 +98,7 @@ let rec assertion label oldlabel a =
   in
   match a.jc_assertion_node with
     | JCAtrue -> LTrue
+    | JCAfalse -> LFalse
     | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
     | JCAand l -> make_and_list (List.map fa l)
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
@@ -171,7 +172,14 @@ let rec expr e =
 		     [Var memory; Var tmp1; Var tmp2])
 		  (Var tmp2))) 
     | JCEcall(f,l) -> 
-	make_app f.jc_fun_info_name (List.map expr l)
+	if f==Jc_pervasives.and_ then
+	  begin
+	    match l with
+	      | [e1;e2] -> And(expr e1, expr e2)
+	      | _ -> assert false
+	  end
+	else
+	  make_app f.jc_fun_info_name (List.map expr l)
 
 let statement_expr e =
   match e.jc_expr_node with

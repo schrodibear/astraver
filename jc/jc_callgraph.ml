@@ -39,7 +39,8 @@ let rec term acc t =
 
 let rec assertion acc p =
   match p.jc_assertion_node with
-  | JCAtrue -> acc
+  | JCAtrue 
+  | JCAfalse -> acc
   | JCAapp(f,lt) -> f::(List.fold_left term acc lt)
   | JCAand(pl) -> List.fold_left assertion acc pl
   | JCAimplies (p1,p2) -> 
