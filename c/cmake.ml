@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.37 2006-11-03 12:48:57 marche Exp $ i*)
+(*i $Id: cmake.ml,v 1.38 2006-11-17 12:24:10 couchot Exp $ i*)
 
 open Format
 open Pp
@@ -98,7 +98,7 @@ let generic f targets =
        fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir  simplify $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
        fprintf fmt "why/%%_why.why: why/%s_spec.why why/%%.why@\n" f;
@@ -122,7 +122,7 @@ let generic f targets =
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding mono -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");

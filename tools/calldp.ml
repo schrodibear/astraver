@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.20 2006-11-13 12:32:04 couchot Exp $ i*)
+(*i $Id: calldp.ml,v 1.21 2006-11-17 12:24:12 couchot Exp $ i*)
 
 open Printf
 
@@ -150,7 +150,7 @@ let yices ?debug ?(timeout=10) ~filename:f () =
 	  end
 	else 
 	  let c = (Sys.command (sprintf "grep -q -w unknown %s" out)) * 
-	    (Sys.command (sprintf "grep -q -w feature\ not\ supported  %s" out))  in
+	    (Sys.command (sprintf "grep -q -w supported  %s" out))  in
 	  remove_file ?debug out;
 	  if c= 0 then CannotDecide t else
 	  Invalid (t, None)

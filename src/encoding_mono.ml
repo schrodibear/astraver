@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.7 2006-11-14 14:47:11 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.8 2006-11-17 12:24:12 couchot Exp $ i*)
 
 open Cc
 open Logic
@@ -231,6 +231,106 @@ let prelude =
 						[sort_int_int2U_x_], []) in
 	     let peq = Papp (Ident.t_eq,[u2Intsort_int_int2U_x_;Tvar x], []) in 
              Env.empty_scheme (newForall false  x  PTint [[TPat sort_int_int2U_x_]]peq )))::
+    (** \forall x,y: Int .  int2U(x) = int2U(y) => x = y   **)
+    (Daxiom (loc, axiomR int2U^"_is_injective",
+ 	     let x = Ident.create "x" in 
+	     let int2u_x_ = Tapp (Ident.create int2U,
+				  [Tvar x], []) in 
+ 	     let y = Ident.create "y" in 
+	     let int2u_y_ = Tapp (Ident.create int2U,
+				  [Tvar y], []) in 
+	     let int2u_x_Eq_int2u_y_ = Papp (Ident.t_eq, [int2u_x_; int2u_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false,   int2u_x_Eq_int2u_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  PTint  implication in 
+	     let outerForall =  newForallTriggerFree false  x  PTint  innerForall in 
+             Env.empty_scheme outerForall))::
+(** \forall x,y: Real .  real2U(x) = real2U(y) => x = y   **)
+    (Daxiom (loc, axiomR real2U^"_is_injective",
+ 	     let x = Ident.create "x" in 
+	     let real2u_x_ = Tapp (Ident.create real2U,
+				  [Tvar x], []) in 
+ 	     let y = Ident.create "y" in 
+	     let real2u_y_ = Tapp (Ident.create real2U,
+				  [Tvar y], []) in 
+	     let real2u_x_Eq_real2u_y_ = Papp (Ident.t_eq, [real2u_x_; real2u_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false,   real2u_x_Eq_real2u_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  PTreal  implication in 
+	     let outerForall =  newForallTriggerFree false  x  PTreal  innerForall in 
+             Env.empty_scheme outerForall))::
+    (** \forall x,y: Bool .  bool2U(x) = bool2U(y) => x = y   **)
+    (Daxiom (loc, axiomR bool2U^"_is_injective",
+ 	     let x = Ident.create "x" in 
+	     let bool2u_x_ = Tapp (Ident.create bool2U,
+				  [Tvar x], []) in 
+ 	     let y = Ident.create "y" in 
+	     let bool2u_y_ = Tapp (Ident.create bool2U,
+				  [Tvar y], []) in 
+	     let bool2u_x_Eq_bool2u_y_ = Papp (Ident.t_eq, [bool2u_x_; bool2u_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false,   bool2u_x_Eq_bool2u_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  PTbool  implication in 
+	     let outerForall =  newForallTriggerFree false  x  PTbool  innerForall in 
+             Env.empty_scheme outerForall))::
+    (** \forall x,y: U .  u2Int(x) = u2Int(y) => x = y   **)
+    (Daxiom (loc, axiomR u2Int^"_is_injective",
+ 	     let x = Ident.create "x" in 
+	     let u2int_x_ = Tapp (Ident.create u2Int,
+				  [Tvar x], []) in 
+ 	     let y = Ident.create "y" in 
+	     let u2int_y_ = Tapp (Ident.create u2Int,
+				  [Tvar y], []) in 
+	     let u2int_x_Eq_u2int_y_ = Papp (Ident.t_eq, [u2int_x_; u2int_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false,   u2int_x_Eq_u2int_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  ut  implication in 
+	     let outerForall =  newForallTriggerFree false  x  ut  innerForall in 
+             Env.empty_scheme outerForall))::
+    (** \forall x,y: U .  u2Real(x) = u2Real(y) => x = y   **)
+    (Daxiom (loc, axiomR u2Real^"_is_injective",
+ 	     let x = Ident.create "x" in 
+	     let u2real_x_ = Tapp (Ident.create u2Real,
+				  [Tvar x], []) in 
+ 	     let y = Ident.create "y" in 
+	     let u2real_y_ = Tapp (Ident.create u2Real,
+				  [Tvar y], []) in 
+	     let u2real_x_Eq_u2real_y_ = Papp (Ident.t_eq, [u2real_x_; u2real_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false,   u2real_x_Eq_u2real_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  ut  implication in 
+	     let outerForall =  newForallTriggerFree false  x  ut  innerForall in 
+             Env.empty_scheme outerForall))::
+    (** \forall x,y: U .  u2Bool(x) = u2Bool(y) => x = y   **)
+    (Daxiom (loc, axiomR u2Bool^"_is_injective",
+ 	     let x = Ident.create "x" in 
+	     let u2bool_x_ = Tapp (Ident.create u2Bool,
+				  [Tvar x], []) in 
+ 	     let y = Ident.create "y" in 
+	     let u2bool_y_ = Tapp (Ident.create u2Bool,
+				  [Tvar y], []) in 
+	     let u2bool_x_Eq_u2bool_y_ = Papp (Ident.t_eq, [u2bool_x_; u2bool_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false,   u2bool_x_Eq_u2bool_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  ut  implication in 
+	     let outerForall =  newForallTriggerFree false  x  ut  innerForall in 
+             Env.empty_scheme outerForall))::
+    (** \forall x,y: U, t : Typz .  sort(t,x) = sort(t,y) => x = y   **)
+    (Daxiom (loc, axiomR prefix^"sort_is_injective",
+	     let t = Ident.create "t" in 
+ 	     let x = Ident.create "x" in 
+ 	     let y = Ident.create "y" in 
+	     let sort_t_x_ = Tapp (Ident.create (prefix^"sort"),
+				  [Tvar t;Tvar x], []) in 
+	     let sort_t_y_ = Tapp (Ident.create (prefix^"sort"),
+				  [Tvar t;Tvar y], []) in 
+	     let sort_t_x_Eq_sort_t_y = Papp (Ident.t_eq, [sort_t_x_; sort_t_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false, sort_t_x_Eq_sort_t_y, x_Eq_y) in 
+	     let innerForally =  newForallTriggerFree false  y  ut  implication in 
+	     let innerForallx =  newForallTriggerFree false  x  ut  innerForally in 
+	     let outerForall =  newForallTriggerFree false  t  (utButBuiltInString "type") innerForallx in 
+             Env.empty_scheme outerForall))::
     (** \forall x:Real .  u2Real(sort(real, real2U(x))) = x  (b) **)
     (Daxiom (loc, axiomR "eq_"^u2Real^"_"^real2U,
 	     let x = Ident.create "x" in 
@@ -483,6 +583,9 @@ let rec translate_term fv lv term doTheCast=
   else
     translate fv lv term 
 
+
+
+
 (**
    @return a term generated by a classical translation  
    composed with a reduction that  directly applies the axioms 
@@ -543,6 +646,19 @@ and translateParam fv lv t doTheCast =
 	end
     | _ -> tp
 
+
+(**
+   @param fv is the list of type variables of the problem 
+   @param lv is the list of variables of the term
+   @param t is the term we have to translate
+
+**)
+and literalParam fv lv t =
+  let tp = translate_term fv lv t false in
+  match tp with 
+      Tapp(id, [_;tk],_) when 
+	Ident.string id = prefix^"sort" ->  tk
+    | _ -> tp 
 
 (**
    @return a predicate that is universally quantified 
@@ -665,7 +781,7 @@ let rec translate_pred fv lv p  = match p with
       Papp (id, List.map (fun t-> translateParam fv lv t true) tl, [])   
   | Papp (id, tl, inst) when  
       (Ident.is_eq id || Ident.is_neq id) ->
-      Papp (id, List.map (fun t-> translateParam fv lv t false) tl, [])
+      Papp (id, List.map (fun t-> literalParam fv lv t) tl, [])
   | Papp (id, [a;b], _) when id==Ident.t_zwf_zero ->  
        (* 0 <= a *)
       let aLeftBound = (Papp (Ident.t_le_int,

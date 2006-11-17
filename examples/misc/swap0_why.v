@@ -51,8 +51,8 @@ intuition.
 Qed.
 
 (*Why*) Parameter swap3_valid :
-  forall (a: Z), forall (b: Z),
-  (sig_3 Z Z unit (fun (a0: Z) (b0: Z) (result: unit)  => (a0 = b /\ b0 = a))).
+  forall (b: Z), forall (a: Z),
+  (sig_3 Z Z unit (fun (b0: Z) (a0: Z) (result: unit)  => (a0 = b /\ b0 = a))).
 
 (*Why*) Parameter test_swap3_valid :
   forall (_: unit), (sig_1 unit (fun (result: unit)  => (True))).
@@ -65,8 +65,8 @@ Qed.
 (*Why goal*) Lemma call_swap3_y_x_po_1 : 
   forall (x: Z),
   forall (y: Z),
-  forall (y0: Z),
   forall (x0: Z),
+  forall (y0: Z),
   forall (HW_1: y0 = x /\ x0 = y),
   x0 = y /\ y0 = x.
  (* call_swap3_y_x_po_1 *)
@@ -96,9 +96,9 @@ Qed.
 
 
 (*Why*) Parameter swap4_valid :
-  forall (a: Z), forall (b: Z), forall (tmp: Z),
+  forall (tmp: Z), forall (b: Z), forall (a: Z),
   (sig_4 Z Z Z unit
-   (fun (a0: Z) (b0: Z) (tmp0: Z) (result: unit)  => (a0 = b /\ b0 = a))).
+   (fun (tmp0: Z) (b0: Z) (a0: Z) (result: unit)  => (a0 = b /\ b0 = a))).
 
 (*Why*) Parameter test_swap4_valid :
   forall (_: unit), forall (tmp: Z),
@@ -129,8 +129,8 @@ Qed.
   forall (x: Z),
   forall (y: Z),
   forall (HW_1: x = 3),
-  forall (y0: Z),
   forall (x0: Z),
+  forall (y0: Z),
   forall (HW_2: y0 = x /\ x0 = y),
   y0 = 3.
 Proof.

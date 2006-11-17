@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.25 2006-11-10 16:11:50 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.26 2006-11-17 12:24:12 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -88,7 +88,7 @@ let is_smtlib_keyword =
      "assumption";"axioms";"defintion";"extensions";"formula";
      "funs";"extrafuns";"extrasorts";"extrapreds";"language";
      "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool";
-     "Array"];
+     "Array";"U"];
   Hashtbl.mem ht
 
 let idents fmt s = 
