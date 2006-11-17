@@ -47,5 +47,6 @@ int main(int argc, char *argv[]) {
     
   /* exec the command */
   execvp(argv[2],argv+2);
+  fprintf(stderr,"%s: %s:command not found",argv[0],argv[2]);
   return errno;
 }

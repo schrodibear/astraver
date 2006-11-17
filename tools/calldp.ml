@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.22 2006-11-17 13:48:49 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.23 2006-11-17 15:16:11 marche Exp $ i*)
 
 open Printf
 
@@ -53,24 +53,25 @@ let file_contents f =
   with _ -> 
     sprintf "(cannot open %s)" f
 
-let timed_sys_command ~debug cmd =
+let timed_sys_command ~debug timeout cmd =
   let t0 = Unix.times () in
   if debug then Format.eprintf "command line: %s@." cmd;
   let out = Filename.temp_file "out" "" in
-  let cmd = cmd ^ " > " ^ out ^ " 2>&1" in
+  let cmd = sprintf "cpulimit %d %s > %s 2>&1" timeout cmd out in
   let ret = Sys.command cmd in
   let t1 = Unix.times () in
   let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in
   if debug then Format.eprintf "Output file %s:@.%s@." out (file_contents out);
   (cpu_time,ret,out)
 
+let error c t cmd =
+  if c = 152 then Timeout t 
+  else ProverFailure ("command failed: " ^ cmd) 
+
 let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "cpulimit %d cvcl < %s" timeout f in
-  let t,c,out = timed_sys_command debug cmd in
-  if c = 152 then 
-    Timeout t
-  else if c <> 0 then (* e.g. timeout missing *)
-    ProverFailure ("command failed: " ^ cmd)
+  let cmd = sprintf "cvcl < %s" f in
+  let t,c,out = timed_sys_command debug timeout cmd in
+  if c <> 0 then error c t cmd
   else if Sys.command (sprintf "grep -q -w -i Error %s" out) = 0 then
     ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
   else
@@ -94,87 +95,68 @@ let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
 	end
 
 let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "cpulimit %d Simplify %s" timeout f in
-  let t,c,out = timed_sys_command ~debug cmd in
-  if c = 152 then 
-    Timeout t
-  else if c <> 0 then (* e.g. timeout missing *)
-    ProverFailure ("command failed: " ^ cmd)
-  else if Sys.command (sprintf "grep -q -w ReadError %s" out) = 0 then
-    ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
-  else
-    let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
-    let r = if c = 0 then Valid t else Invalid (t,Some (file_contents out)) in
+  let cmd = sprintf "Simplify %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c <> 0 then error c t cmd
+  else 
+    let r =
+      if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
+	Valid t
+      else
+	if Sys.command (sprintf "grep -q -w Invalid %s" out) = 0 then
+	  Invalid (t,Some (file_contents out)) 
+	else
+	  ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
+    in
     remove_file ~debug out;
     r
 
 let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
   (*let cmd = sprintf "rv-sat %s" f in*)
-  let cmd = sprintf "cpulimit %d rv-sat %s" timeout f in
-  let t,c,out = timed_sys_command ~debug cmd in
-  if c = 152 then 
-    Timeout t
+  let cmd = sprintf "rv-sat %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c <> 0 then error c t cmd
   else 
-    let c = Sys.command (sprintf "grep -q -w error %s" out) in
-    if c =  0 then  
-      begin 
-	remove_file ~debug out; 
+    let r =
+      if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
+	Valid t
+      else
 	ProverFailure ("command failed: " ^ cmd)
-      end
-      (*
-	else if Sys.command (sprintf "grep -q -w ReadError %s" out) = 0 then
-	ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
-      *)
-    else
-      let c = Sys.command (sprintf "grep -q -w unsat %s" out) in
-      remove_file ~debug out;
-      if c = 0 then Valid t else Invalid(t,None)
+    in
+    remove_file ~debug out;
+    r
 
 let yices ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "cpulimit %d yices -tc -smt < %s" timeout f in
-  let t,c,out = timed_sys_command ~debug cmd in
-  if c = 152 then
-    Timeout t
+  let cmd = sprintf "yices -tc -smt < %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c <> 0 then error c t cmd
   else 
-    let c =  Sys.command (sprintf "grep -q -w Unexpected %s" out) in
-    if c = 0 then 
-      begin
-	remove_file ~debug out; 
-	ProverFailure ("command failed: " ^ cmd)
-      end 
-    else begin
-	let c = Sys.command (sprintf "grep -q -w unsat %s" out) in
-	if c = 0 then 
-	  begin
-	    remove_file ~debug out;
-	    Valid t
-	  end
-	else 
-	  let c = 
-	    (Sys.command (sprintf "grep -q -w unknown %s" out)) *
-	    (Sys.command (sprintf "grep -q -w 'feature not supported'  %s" out))
-	  in
-	  remove_file ~debug out;
-	  if c= 0 then CannotDecide t else
-	  Invalid (t, None)
-    end
-      
-let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "cpulimit %d ergo %s" timeout f in
-  let t,c,out = timed_sys_command ~debug cmd in
-  if c = 152 then
-    Timeout t
-  else 
-    let c = Sys.command (sprintf "grep -q -w Error %s" out) in
-    if c = 0 then begin 
-      remove_file ~debug out; 
-      ProverFailure ("command failed: " ^ cmd)
-    end else begin
-      let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
-      remove_file ~debug out;
-      if c = 0 then Valid t else Invalid(t, None)
-    end
+    let r = 
+      if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
+	Valid t
+      else
+	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
+	  CannotDecide t
+	else
+	  ProverFailure ("command failed: " ^ cmd)
+    in
+    remove_file ~debug out;
+    r
 
+let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
+  let cmd = sprintf "ergo %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c <> 0 then error c t cmd
+  else 
+    let r =
+      if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
+	Valid t
+      else	
+	ProverFailure ("command failed: " ^ cmd)
+    in
+    remove_file ~debug out;
+    r
+    
 let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
   let out = Sys.command (sprintf "rvc  %s > /dev/null 2>&1" f) in
   if out = 0 then begin 
@@ -185,10 +167,12 @@ let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
       let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
       if Sys.file_exists fi then begin
 	(* *)
-	let cmd = sprintf "timeout %d rv --dpll %s" timeout fi in
-	let t,c,out = timed_sys_command ~debug cmd in
-	if c = 152 then
+	let cmd = sprintf "rv --dpll %s" fi in
+	let t,c,out = timed_sys_command ~debug timeout cmd in
+	if c = 152 then 
 	  add (Timeout t)
+	else if c <> 0 then 
+	  add (ProverFailure ("command failed: " ^ cmd))
 	else 
 	  let c = Sys.command (sprintf 
 				   "grep  -q -w \"is valid\" %s " out) in 
@@ -203,15 +187,15 @@ let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
       
 
 let zenon ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "cpulimit %d zenon %s" timeout f in
-  let t,c,out = timed_sys_command ~debug cmd in
-  if c = 152 then 
-    Timeout t
-  else if c <> 0 then (* e.g. timeout missing *)
-    ProverFailure ("command failed: " ^ cmd)
-  else if Sys.command (sprintf "grep -q -w Error %s" out) = 0 then
-    ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
-  else
-    let c = Sys.command (sprintf "grep -q PROOF-FOUND %s" out) in
+  let cmd = sprintf "zenon %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c <> 0 then error c t cmd
+  else 
+    let r =
+      if Sys.command (sprintf "grep -q PROOF-FOUND %s" out) = 0 then
+	Valid t
+      else
+	ProverFailure ("command failed: " ^ cmd)
+    in
     remove_file ~debug out;
-    if c = 0 then Valid t else Invalid(t, None)
+    r
