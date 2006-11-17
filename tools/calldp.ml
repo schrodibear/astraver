@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.23 2006-11-17 15:16:11 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.24 2006-11-17 16:16:15 marche Exp $ i*)
 
 open Printf
 
@@ -158,8 +158,12 @@ let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
     r
     
 let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
-  let out = Sys.command (sprintf "rvc  %s > /dev/null 2>&1" f) in
-  if out = 0 then begin 
+  if debug then Format.eprintf "Calling rvc@.";
+  let cmd = sprintf "rvc %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if debug then Format.eprintf "rvc done@.";
+  if c <> 0 then [error c t cmd]
+  else
     let results = ref [] in
     let add r = results := r :: !results in
     let f = Filename.chop_suffix f ".rv" in
@@ -171,19 +175,24 @@ let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
 	let t,c,out = timed_sys_command ~debug timeout cmd in
 	if c = 152 then 
 	  add (Timeout t)
-	else if c <> 0 then 
-	  add (ProverFailure ("command failed: " ^ cmd))
 	else 
-	  let c = Sys.command (sprintf 
-				   "grep  -q -w \"is valid\" %s " out) in 
+	  let r =
+	    if Sys.command 
+	      (sprintf "grep  -q -w \"is valid\" %s " out) = 0 then
+		Valid t
+	    else
+	      if Sys.command 
+		(sprintf "grep  -q -w \"Cannot decide\" %s " out) = 0 then
+		  CannotDecide t
+	      else
+		ProverFailure ("command failed: " ^ cmd)
+	  in
 	  remove_file ~debug out;
-	  add (if c = 0 then Valid t else Invalid(t, None))
+	  add r
       end	   	
     in
     iter 0;
     List.rev !results
-  end else 
-    [ProverFailure "rvc failed"]
       
 
 let zenon ?(debug=false) ?(timeout=10) ~filename:f () =

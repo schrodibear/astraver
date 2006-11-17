@@ -150,9 +150,12 @@ let ergo = {
   pr_enc = Monomorph;
   }
 
-let provers = [simplify; simplify_sstrat; simplify_strat; yices; yicesSSTrat ; ergo; rvsat; simplify_strat;
-	       zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
-	       harvey; cvcl]
+let provers = [
+  simplify; simplify_sstrat; simplify_strat; 
+  yices; yicesSSTrat ; 
+  ergo; rvsat; 
+  zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
+  harvey; cvcl]
 let provers_selected = ref provers
 let provers_s = Hashtbl.create 17
 let get_provers () = !provers_selected

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.15 2006-11-17 13:48:48 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.16 2006-11-17 16:16:15 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -147,7 +147,7 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
     | Simplify -> 
 	Calldp.simplify ~debug ?timeout ~filename () 
     | Harvey -> 
-	(match Calldp.harvey ?timeout ~filename () with 
+	(match Calldp.harvey ~debug ?timeout ~filename () with 
 	   | [r] -> r | _ -> assert false)
     | Cvcl ->
 	Calldp.cvcl ~debug ?timeout ~filename ()
