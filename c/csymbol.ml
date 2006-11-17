@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: csymbol.ml,v 1.5 2006-11-03 14:41:38 moy Exp $ *)
+(* $Id: csymbol.ml,v 1.6 2006-11-17 17:13:28 moy Exp $ *)
 
 (* TO DO:
 
@@ -178,7 +178,9 @@ struct
 	let ep2 = explicit_pred p2 in
 	IPor (ep1,ep2)
     | IPimplies (p1,p2) ->
-	explicit_pred (IPor(IPnot p1,p2))
+	(* strengthen the formula here, by stating that either [p1] does not
+	   hold, or [p1] AND [p2] hold together *)
+	explicit_pred (IPor(IPnot p1,IPand(p1,p2)))
     | IPiff (p1,p2) ->
 	explicit_pred (IPand(IPimplies(p1,p2),IPimplies(p2,p1)))
     | IPnot p1 ->
@@ -278,9 +280,55 @@ module type PVARIABLE = sig
   module PM : Map.S with type key = P.t
   module PH : Hashtbl.S with type key = P.t
 
-  val translate_predicate : P.t -> P.t
+  (* list of restrained variables may be used to better translate 
+     the predicate *)
+  val translate_predicate : t list -> P.t -> P.t
 end
 
+module NPredicate =
+struct
+
+  module Self =  
+  struct
+    type t = Ctypes.ctype npredicate
+    let equal = ( = )
+    let compare = Pervasives.compare
+    let hash = Hashtbl.hash
+  end
+
+  include Self 
+
+  module S = Set.Make (Self)
+
+  let rec get_conjuncts p = match p.npred_node with
+    | NPand (p1,p2) -> get_conjuncts p1 @ (get_conjuncts p2)
+    | _ -> [p]
+
+  let make_conjunct plist = 
+    let rec make_sub p_acc plist = match p_acc,plist with
+      | p_acc,[] -> p_acc
+      | {npred_node=NPtrue},p :: plist | p,{npred_node=NPtrue} :: plist ->
+	  make_sub p plist
+      | p_acc,p :: plist -> 
+	  make_sub {p_acc with npred_node = NPand (p_acc,p)} plist
+    in
+    let plist = List.flatten (List.map get_conjuncts plist) in
+    let pset = List.fold_right S.add plist S.empty in
+    (* list without duplicates *)
+    let plist = S.fold (fun e l -> e::l) pset [] in
+    match plist with 
+      | [] -> failwith "[make_conjunct] expecting non-empty list"
+      | p :: prest as plist -> make_sub {p with npred_node=NPtrue} plist 
+
+  let subtract p1 p2 =
+    let p1list = get_conjuncts p1 in
+    let p2list = get_conjuncts p2 in
+    let plist = List.filter (fun p -> not (List.mem p p2list)) p1list in
+    match plist with
+      | [] -> { p1 with npred_node = NPtrue }
+      | _ -> make_conjunct plist
+
+end
 
 module VarElimination (V : PVARIABLE) =
 struct

@@ -4,10 +4,13 @@ imperative.cmo: sig.cmi per_imp.cmo bitv.cmi imperative.cmi
 imperative.cmx: sig.cmi per_imp.cmx bitv.cmx imperative.cmi 
 per_imp.cmo: util.cmi sig.cmi 
 per_imp.cmx: util.cmx sig.cmi 
+persistent.cmo: util.cmi sig.cmi per_imp.cmo persistent.cmi 
+persistent.cmx: util.cmx sig.cmi per_imp.cmx persistent.cmi 
 topological.cmo: sig.cmi topological.cmi 
 topological.cmx: sig.cmi topological.cmi 
 util.cmo: sig.cmi util.cmi 
 util.cmx: sig.cmi util.cmi 
 imperative.cmi: sig.cmi 
+persistent.cmi: sig.cmi 
 topological.cmi: sig.cmi 
 util.cmi: sig.cmi 

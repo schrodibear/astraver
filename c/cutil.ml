@@ -34,6 +34,7 @@ module Option = struct
     | None,x | x,None -> x
     | _ -> None
   let app f x = match x with None -> None | Some s -> Some (f s)
+  let fold f x y = match x with None -> y | Some s -> f s y
   let binapp f x1 x2 = match x1,x2 with
     | None,_ | _,None -> None
     | Some y1,Some y2 -> Some (f y1 y2)

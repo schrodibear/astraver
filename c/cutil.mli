@@ -26,6 +26,7 @@ module Option : sig
   val equal : ('a -> 'a -> bool) -> 'a option -> 'a option -> bool
   val some : 'a option -> 'a option -> 'a option
   val app : ('a -> 'b) -> 'a option -> 'b option
+  val fold : ('a -> 'b -> 'b) -> 'a option -> 'b -> 'b
   val binapp : ('a -> 'a -> 'b) -> 'a option -> 'a option -> 'b option
   val transform : ('a -> 'a -> 'a) -> 'a option -> 'a option -> 'a option
   val pretty :

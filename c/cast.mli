@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cast.mli,v 1.76 2006-11-03 12:48:55 marche Exp $ i*)
+(*i $Id: cast.mli,v 1.77 2006-11-17 17:13:27 moy Exp $ i*)
 
 (*s C types *)
 
@@ -150,10 +150,9 @@ type ghost_lvalue = lexpr
 
 type parsed_code_annot = 
   | Assert of parsed_predicate 
+  | Assume of parsed_predicate 
   | Label of string
   | GhostSet of ghost_lvalue * lexpr 
-
-
 
 type parsed_annot = 
   | Adecl of parsed_decl list
@@ -267,6 +266,7 @@ and tstatement_node =
   | TSdefault of tstatement
   | TSgoto of goto_status * string
   | TSassert of predicate
+  | TSassume of predicate
   | TSlogic_label of string
   | TSspec of spec * tstatement
   | TSset of (tterm * tterm)

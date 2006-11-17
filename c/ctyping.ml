@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.135 2006-11-10 12:16:59 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.136 2006-11-17 17:13:28 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -1163,6 +1163,9 @@ and type_statement_node loc env et lz = function
   | CSannot (Assert p) ->
       let p = type_predicate env p in
       TSassert p, mt_status, lz
+  | CSannot (Assume p) ->
+      let p = type_predicate env p in
+      TSassume p, mt_status, lz
   | CSannot (Label l) ->
       TSlogic_label l, mt_status, lz
   | CSannot (GhostSet(x,t)) ->

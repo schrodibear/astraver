@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.16 2006-11-03 14:51:13 moy Exp $ *)
+(* $Id: cptr.ml,v 1.17 2006-11-17 17:13:28 moy Exp $ *)
 
 (* TO DO:
 
@@ -1209,7 +1209,7 @@ end = struct
      in which case we discriminate on the form of the right-hand side.
   *)
   let transfer ?(backward=false) ?(with_assert=false) ?(one_pass=false) 
-      ?(final=false) ?previous_value node cur_val =
+      ?previous_value node cur_val =
 
     if debug_more then Coptions.lprintf 
       "[transfer] %a@." Node.pretty node;
@@ -1297,7 +1297,9 @@ end = struct
 		      match assign_get_rhs_var node with
 			| None,None -> 
 			    if expr_is_int_assign node then
-			      let rhs_node = assign_get_rhs_operand node in
+			      let rhs_node = 
+				skip_casts (assign_get_rhs_operand node) 
+			      in
 			      if expr_is_int_constant rhs_node then
 				(* avoid creating a self-offset variable for
 				   an integer variable that is initialized
@@ -2244,6 +2246,7 @@ let local_aliasing fundecl =
 
   (* build control-flow graph *)
   let decls = PtrLangFromNormalized.from_file [fundecl] in
+  let decls = List.map fst decls in
   (* perform local pointer analysis *)
   let raw_analysis = LocalPtrAnalysis.compute decls in
   (* format results of the analysis *)
@@ -2255,6 +2258,7 @@ let local_aliasing fundecl =
 
   (* rebuild control-flow graph *)
   let decls = PtrLangFromNormalized.from_file file in
+  let decls = List.map fst decls in
   (* collect the local variables used/declared *)
   let used_vars,decl_vars = PtrLangFromNormalized.collect_vars () in
   if debug then Coptions.lprintf

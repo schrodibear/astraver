@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.221 2006-11-16 10:09:35 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.222 2006-11-17 17:13:28 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -2117,6 +2117,7 @@ let interp_function_spec id sp ty pl =
 	Ceffect.reads_var = id.function_reads_var; 
 	Ceffect.assigns_var = id.function_writes_var;
 	(* TODO: consider pointer arguments written by function *)
+	Ceffect.reads_under_pointer = HeapVarSet.empty;
 	Ceffect.assigns_under_pointer = HeapVarSet.empty; } 
       sp 
   in

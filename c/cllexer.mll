@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.44 2006-11-03 12:48:56 marche Exp $ i*)
+(*i $Id: cllexer.mll,v 1.45 2006-11-17 17:13:28 moy Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -51,6 +51,7 @@
 	"decreases", DECREASES;
 	"for", FOR;
 	"assert", ASSERT;
+	"assume", ASSUME;
 	"label", LABEL;
 	"requires", REQUIRES;
 	"ensures", ENSURES ;

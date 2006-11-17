@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.86 2006-11-15 14:29:36 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.87 2006-11-17 17:13:28 moy Exp $ i*)
 
 open Creport
 open Cconst
@@ -1110,6 +1110,7 @@ and statement s =
   | TSdefault tstatement -> assert false
   | TSgoto(status,l) -> NSgoto(status,l)
   | TSassert p -> NSassert (predicate p)
+  | TSassume p -> NSassume (predicate p)
   | TSlogic_label  string -> NSlogic_label string
   | TSspec (s, tstatement) -> NSspec (spec s, statement tstatement)
   | TSset (x, t) -> 

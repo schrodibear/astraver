@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.14 2006-11-03 14:51:13 moy Exp $ *)
+(* $Id: cabsint.ml,v 1.15 2006-11-17 17:13:27 moy Exp $ *)
 
 (* TO DO:
 
@@ -484,7 +484,7 @@ module type CONNECTION = sig
   val widening_threshold : int option
     (* transfer function *)
   val transfer : 
-      ?backward:bool -> ?with_assert:bool -> ?one_pass:bool -> ?final:bool
+      ?backward:bool -> ?with_assert:bool -> ?one_pass:bool
 	-> ?previous_value:absval_t -> node_t -> absval_t -> absval_t
     (* takes the initial program and the formatted analysis, as well as 
        additional information if necessary.
@@ -503,7 +503,6 @@ module type DATA_FLOW_ANALYSIS = sig
   type absval_pair_t = absval_t * absval_t
   type 'a analysis_t
   type absint_analysis_t
-  type search_t = DepthFirstSearch | BreadthFirstSearch
     (* 
        core propagation function.
        It takes as 1st argument a record of type ['a propagate_t] that gives
@@ -519,8 +518,6 @@ module type DATA_FLOW_ANALYSIS = sig
       { 
 	  (* direction *)
 	direction : direction_t;
-	  (* working-list algorithm *)
-	search : search_t;
 	  (* one-pass or until convergence *)
 	one_pass : bool;
 	  (* initialization points *)
@@ -535,6 +532,8 @@ module type DATA_FLOW_ANALYSIS = sig
 	pretty : Format.formatter -> 'a -> unit;
 	  (* join function *)
 	join : 'a -> 'a -> 'a;
+          (* join function on contexts *)
+	join_ctxt : 'a -> 'a -> 'a;
 	  (* widening function (if any) *)
 	widening : widening_t -> old_value:'a -> new_value:'a -> 'a;
 	  (* additional action after propagation *)
@@ -548,6 +547,8 @@ module type DATA_FLOW_ANALYSIS = sig
        It is based on [propagate]. 
      *)
   val compute : node_t list -> absint_analysis_t
+    (* compute backward from exit nodes *)
+  val compute_back : node_t list -> absint_analysis_t
     (*
        same as compute, with additional assertion propagation.
        Takes as input the function that selects nodes to keep before assertion
@@ -566,6 +567,8 @@ module type DATA_FLOW_ANALYSIS = sig
      {
          (* initial computation before back-and-forth propagation *)
        compute : node_t list -> absint_analysis_t;
+         (* joins contexts and add conditionals, or default join otherwise *)
+       join_context : absval_t -> absval_t -> absval_t;
          (* select nodes on which to propagate backward *)
        backward_select : node_t -> absval_t -> bool;
 	 (* modifier to apply before initiating backward propagation *)
@@ -576,8 +579,6 @@ module type DATA_FLOW_ANALYSIS = sig
        merge_select : node_t -> bool;
 	 (* do merge forward and backward informations *)
        merge_analyses : absval_t -> absval_t -> absval_t;
-         (* use final transfer function or not *)
-       final : bool;
      }
   val compute_back_and_forth :
     compute_bnf_t -> node_t list -> absint_analysis_t
@@ -611,14 +612,11 @@ module Make_DataFlowAnalysis
   type absval_pair_t = absval_t * absval_t
   type 'a analysis_t = 'a C.analysis_t
   type absint_analysis_t = C.absint_analysis_t
-  type search_t = DepthFirstSearch | BreadthFirstSearch
 
   type 'a propagate_t =
       { 
 	  (* direction *)
 	direction : direction_t;
-	  (* working-list algorithm *)
-	search : search_t;
 	  (* one-pass or until convergence *)
 	one_pass : bool;
 	  (* initialization points *)
@@ -633,6 +631,8 @@ module Make_DataFlowAnalysis
 	pretty : Format.formatter -> 'a -> unit;
 	  (* join function *)
 	join : 'a -> 'a -> 'a;
+          (* join function on contexts *)
+	join_ctxt : 'a -> 'a -> 'a;
 	  (* widening function (if any) *)
 	widening : widening_t -> old_value:'a -> new_value:'a -> 'a;
 	  (* additional action after propagation *)
@@ -643,6 +643,8 @@ module Make_DataFlowAnalysis
      {
          (* initial computation before back-and-forth propagation *)
        compute : node_t list -> absint_analysis_t;
+         (* joins contexts and add conditionals, or default join otherwise *)
+       join_context : absval_t -> absval_t -> absval_t;
          (* select nodes on which to propagate backward *)
        backward_select : node_t -> absval_t -> bool;
 	 (* modifier to apply before initiating backward propagation *)
@@ -657,8 +659,6 @@ module Make_DataFlowAnalysis
 	    the node is the identity.
 	 *)
        merge_analyses : absval_t -> absval_t -> absval_t;
-         (* use final transfer function or not *)
-       final : bool;
      }
 
   let propagate ?analysis ?(roots=[]) params =
@@ -667,47 +667,7 @@ module Make_DataFlowAnalysis
       "[propagate] %s@." (match params.direction with
       | Forward -> "forward"
       | Backward -> "backward");
-(*
-    if debug then Coptions.lprintf 
-      "[propagate] begin with %i nodes in working list@." (List.length nodes);
-    (* working list/set of nodes to treat *)
-    let work_list = ref [] in
-    let pending_work_list = ref [] in (* used in breadth-first search *)
-    let work_set = ref NodeSet.empty in
-    let visited_set = ref NodeSet.empty in
 
-    (* add/remove node in working list/set -- only at top of list *)
-    let add_node node = 
-      if not (NodeSet.mem node (!work_set)) then
-	begin
-	  work_set := NodeSet.add node (!work_set);
-	  match params.search with
-            | DepthFirstSearch ->
-		work_list := node :: (!work_list)
-	    | BreadthFirstSearch ->
-		pending_work_list := node :: (!pending_work_list)
-	end;
-      if not (NodeSet.mem node (!visited_set)) then
-	if IL.is_widening_node node then
-	  (* reset the counter for widening *)
-	  IL.reset_widening_count node
-    in
-    let has_node () = not (NodeSet.is_empty !work_set) in 
-    let take_node () = 
-      begin match !work_list with
-        | [] -> work_list := (!pending_work_list); pending_work_list := []
-	| _ -> ()
-      end;
-      let node = List.hd (!work_list) in
-      work_list := List.tl (!work_list);
-      work_set := NodeSet.remove node (!work_set);
-      visited_set := NodeSet.add node (!visited_set);
-      node
-    in
-
-    (* initialize the working list *)
-    List.iter add_node nodes;
-*)
     let change = ref true in
     let visited_set = ref NodeSet.empty in
 
@@ -742,6 +702,7 @@ module Make_DataFlowAnalysis
 
       (* find value associated to [cur_node] *)
       let pre_val,post_val,is_init = res_val cur_node in
+
       let pre_val =
 	if params.one_pass && is_loop_backward_destination_node cur_node then
 	  match params.direction with
@@ -752,11 +713,12 @@ module Make_DataFlowAnalysis
 		  | None,_ -> pre_val
 		  | Some _,None -> pre_val
 		  | Some pre_val,Some sce_val ->
-		      Some (params.join pre_val sce_val)
+		      Some (params.join_ctxt pre_val sce_val)
 		end
 	    | Backward -> pre_val
 	else pre_val
       in
+
       let from_val,to_val = match params.direction with
         | Forward -> pre_val,post_val
 	| Backward -> post_val,pre_val
@@ -926,19 +888,17 @@ module Make_DataFlowAnalysis
     done;
     res
 
-  let forward_params 
-      ?(one_pass=false) ?(with_assert=false) ?(final=false) init =
+  let forward_params ?join_context
+      ?(one_pass=false) ?(with_assert=false) init =
     { 
         (* direction *)
       direction = Forward;
-        (* working-list algorithm *)
-      search = DepthFirstSearch;
         (* one-pass or until convergence *)
       one_pass = one_pass;
         (* initialization points *)
       init = init;
         (* transfer function *)
-      transfer = C.transfer ~backward:false ~with_assert ~one_pass ~final;
+      transfer = C.transfer ~backward:false ~with_assert ~one_pass;
         (* default initial value *)
       bottom = L.bottom;
         (* test of equality *)
@@ -947,25 +907,27 @@ module Make_DataFlowAnalysis
       pretty = L.pretty;
         (* join function *)
       join = L.join;
+        (* join function on contexts *)
+      join_ctxt = 
+	begin match join_context with None -> L.join | Some f -> f end;
         (* widening function (if any) *)
       widening = L.widening;
         (* additional action after propagation *)
       action = fun _ _ -> ();
     }
 
-  let backward_params ?(final=false) node cstr action =
+  let backward_params ?join_context nodes cstr action =
     { 
         (* direction *)
       direction = Backward;
-        (* working-list algorithm *)
-      search = BreadthFirstSearch;
         (* one-pass or until convergence *)
       one_pass = true;
         (* initialization points *)
-      init = NodeMap.add node cstr NodeMap.empty;
+      init = List.fold_left (fun map node -> NodeMap.add node cstr map)
+	NodeMap.empty nodes;
         (* transfer function *)
       transfer = C.transfer
-	~backward:true ~with_assert:false ~one_pass:true ~final;
+	~backward:true ~with_assert:false ~one_pass:true;
         (* default initial value *)
       bottom = L.bottom;
         (* test of equality *)
@@ -974,6 +936,9 @@ module Make_DataFlowAnalysis
       pretty = L.pretty;
         (* join function *)
       join = L.join;
+        (* join function on contexts *)
+      join_ctxt = 
+	begin match join_context with None -> L.join | Some f -> f end;
         (* widening function (if any) *)
       widening = L.widening;
         (* additional action after propagation *)
@@ -992,6 +957,9 @@ module Make_DataFlowAnalysis
     let init = List.fold_left (fun m decl -> NodeMap.add decl (L.init ()) m) 
       NodeMap.empty decls in
     propagate (forward_params init)
+
+  let compute_back nodes =
+    propagate (backward_params nodes (L.init()) (fun _ _ -> ()))
 
   (* propagation of assertions (e.g. resulting from verification conditions)
      should be done in one pass, without going through back edges in loops.
@@ -1090,8 +1058,7 @@ module Make_DataFlowAnalysis
 	  else ()
 	in
 	(* propagate backward on the path that leads to this node *)
-	let bwd_params = 
-	  backward_params ~final:params.final node pre_val bwd_action in
+	let bwd_params = backward_params [node] pre_val bwd_action in
 	let bwd_analysis = propagate bwd_params ~roots:[node] in
 	ignore (bwd_analysis);
 	(* add appropriate assume invariant when "forgotten" by last
@@ -1108,8 +1075,8 @@ module Make_DataFlowAnalysis
 	let init =
 	  List.fold_left (fun m decl -> NodeMap.add decl (L.init ()) m)
 	    NodeMap.empty decls in
-	let fwd_params = forward_params 
-	  ~with_assert:true ~one_pass:true ~final:params.final init in
+	let fwd_params = forward_params ~join_context:params.join_context 
+	  ~with_assert:true ~one_pass:true init in
 	propagate fwd_params ~analysis:mix_analysis
 
       else cur_analysis
@@ -1173,6 +1140,8 @@ module type CFG_LANG_INTERNAL = sig
       { 
 	(* list of variables written variables in the loop *)
 	write_vars : var_tt list; 
+	(* list of pointers whose content is read in the loop *)
+	read_under_pointers : var_tt list; 
 	(* list of pointers whose content is modified in the loop *)
 	write_under_pointers : var_tt list; 
       }
@@ -1259,6 +1228,8 @@ module type CFG_LANG_INTERNAL = sig
   val sub_expr_is_assign : nexpr -> bool
     (* if the left-hand side of this assignment is a variable, return it *)
   val sub_assign_get_lhs_var : nexpr -> var_tt option
+    (* remove casts on top of the expression *)
+  val sub_skip_casts : nexpr -> nexpr
 
   val decode_decl_list : nexpr -> nexpr c_initializer
   val change_sub_components_in_stat : node_t -> node_t list -> node_t
@@ -1326,6 +1297,8 @@ module type CFG_LANG_EXTERNAL = sig
   val is_loop_backward_destination_node : Node.t -> bool
     (* get the list of variables modified in this loop *) 
   val get_loop_write_vars : Node.t -> ilvar_t list
+    (* get the list of pointers whose content is read in this loop *) 
+  val get_loop_read_under_pointers : Node.t -> ilvar_t list
     (* get the list of pointers whose content is modified in this loop *) 
   val get_loop_write_under_pointers : Node.t -> ilvar_t list
     (* returns the function's parameters *)
@@ -1441,7 +1414,7 @@ module type CFG_LANG_EXTERNAL = sig
 
   (* language interface *)
   (* returns the list of roots *)
-  val from_file : decl_t list -> Node.t list
+  val from_file : decl_t list -> (Node.t * Node.t) list
   val to_file : Node.t list -> decl_t list
     (* collect variables used and declared in the code *)
   val collect_vars : unit -> ILVarSet.t * ILVarSet.t
@@ -1480,9 +1453,13 @@ end = struct
   type count_t = { mutable count : int }
   type lvalue_t = Assign | OpAssign | IncrDecr
   type write_t = 
-      { write_vars : ILVar.t list; write_under_pointers : ILVar.t list; }
+      { write_vars : ILVar.t list; 
+	read_under_pointers : ILVar.t list;
+	write_under_pointers : ILVar.t list; }
 
-  let w_empty = { write_vars = []; write_under_pointers = []; }
+  let w_empty = { write_vars = []; 
+		  read_under_pointers = [];
+		  write_under_pointers = []; }
 
   type norm_node = 
       (* coding constructs *)
@@ -1810,6 +1787,10 @@ end = struct
     | Ninv (_,w) | Nassinv (_,w) -> w.write_vars
     | _ -> assert false
 
+  let get_loop_read_under_pointers node = match Node.label node with
+    | Ninv (_,w) | Nassinv (_,w) -> w.read_under_pointers
+    | _ -> assert false
+
   let get_loop_write_under_pointers node = match Node.label node with
     | Ninv (_,w) | Nassinv (_,w) -> w.write_under_pointers
     | _ -> assert false
@@ -1897,6 +1878,8 @@ end = struct
 
   let rec sub_skip_casts e = match e.nexpr_node with
     | NEcast (_,e1) -> sub_skip_casts e1
+    | NEunary ((Ufloat_of_int | Uint_of_float
+	       | Ufloat_conversion | Uint_conversion),e1) -> sub_skip_casts e1
     | _ -> e
     
   let skip_casts node = 
@@ -3277,15 +3260,6 @@ end = struct
 	    else e
 	| _ -> e
     in
-    let push_not_inside = match e.nexpr_node with
-      | NEunary (Unot,e1) when is_test ->
-	  begin match e1.nexpr_node with
-	    | NEunary (Unot,_) -> true
-	    | NEbinary (_,(Band | Bor),_) -> true
-	    | _ -> false
-	  end
-      | _ -> false
-    in
     let negative_lazy = match e.nexpr_node with
       | NEbinary (_,(Band | Bor),_) when neg_test -> true
       | _ -> false
@@ -3294,26 +3268,35 @@ end = struct
       | NEunary (Unot,_) when neg_test -> true
       | _ -> false
     in
+    let push_not_inside = match e.nexpr_node with
+      | NEunary (Unot,e1) when is_test && not neg_test ->
+	  begin match e1.nexpr_node with
+	    | NEunary (Unot,_) -> true
+	    | NEbinary (_,(Band | Bor),_) -> true
+	    | _ -> false
+	  end
+      | _ -> false
+    in
     let e = 
-      if push_not_inside then
-	e (* code for [Unot] below takes care of the negation *)
-      else if negative_lazy then
+      if negative_lazy then
 	match e.nexpr_node with
 	  | NEbinary (e1,(Band | Bor as op),e2) ->
 	      let not_e1 = { e1 with nexpr_node = NEunary (Unot, e1) } in
 	      let not_e2 = { e2 with nexpr_node = NEunary (Unot, e2) } in
-	      let opp =
-		match op with 
-		  | Band -> Bor 
-		  | Bor -> Band 
-		  | _ -> assert false 
-	      in
-	      { e with nexpr_node = NEbinary (not_e1,opp,not_e2) }
+	      begin match op with
+		| Bor -> 
+		    { e with nexpr_node = NEbinary (not_e1,Band,not_e2) }
+		| Band ->
+		    { e with nexpr_node = NEbinary (not_e1,Bor,not_e2) }
+		| _ -> assert false
+	      end
 	  | _ -> assert false
       else if negative_not then
 	match e.nexpr_node with
 	  | NEunary (Unot,e1) -> make_test_to_zero e1
 	  | _ -> assert false
+      else if push_not_inside then
+	e (* code for [Unot] below takes care of the negation *)
       else if neg_test then
         { e with nexpr_node = NEunary (Unot, make_test_to_zero e) }
       else if is_test then
@@ -3321,7 +3304,7 @@ end = struct
       else e
     in
     (* effect of [neg_test] taken into account at this point,
-       ignore it, except for [Unot] *)
+       ignore it, except for [Unot], when not in [negative_lazy] mode *)
     let enode =
       if is_test then Ntest e
       else if is_lvalue then
@@ -3336,7 +3319,7 @@ end = struct
 	| NEnop | NEconstant _ | NEstring_literal _ | NEvar _ ->
 	    (* oper *) add_opedge start_node enode
 	| NEunary (Unot,e1) when push_not_inside ->
-	    assert is_test;
+	    assert (is_test && not neg_test);
 	    let e1node = 
 	      from_expr ~is_test ~neg_test:(not neg_test) start_node e1 in
 	    (* oper *) add_opedge e1node enode;
@@ -3525,7 +3508,11 @@ end = struct
 	    let write_under_pointers =
 	      HeapVarSet.elements (loop_effect.Ceffect.assigns_under_pointer)
 	    in
+	    let read_under_pointers =
+	      HeapVarSet.elements (loop_effect.Ceffect.reads_under_pointer)
+	    in
 	    let writes = { write_vars = write_vars; 
+			   read_under_pointers = read_under_pointers;
 			   write_under_pointers = write_under_pointers; } in
 	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
@@ -3585,7 +3572,11 @@ end = struct
 	    let write_under_pointers =
 	      HeapVarSet.elements (loop_effect.Ceffect.assigns_under_pointer)
 	    in
+	    let read_under_pointers =
+	      HeapVarSet.elements (loop_effect.Ceffect.reads_under_pointer)
+	    in
 	    let writes = { write_vars = write_vars; 
+			   read_under_pointers = read_under_pointers;
 			   write_under_pointers = write_under_pointers; } in
 	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
@@ -3632,7 +3623,11 @@ end = struct
 	    let write_under_pointers =
 	      HeapVarSet.elements (loop_effect.Ceffect.assigns_under_pointer)
 	    in
+	    let read_under_pointers =
+	      HeapVarSet.elements (loop_effect.Ceffect.reads_under_pointer)
+	    in
 	    let writes = { write_vars = write_vars; 
+			   read_under_pointers = read_under_pointers;
 			   write_under_pointers = write_under_pointers; } in
 	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
@@ -3863,29 +3858,27 @@ end = struct
        different fucntions *)
     Hashtbl.clear Ceffect.heap_vars;
     let dnode = create_node (Ndecl d) in 
+    (* In order to be able to transform any [ensures] part of 
+       a function, we must create an end node for the function body,
+       so that all parts of information are known under the same name 
+       at that point. It is also used to provide a single entry point
+       for backward propagation.
+       All return statements and the last statement should be linked
+       to this end node.
+       This transformation may lead to a less precise analysis. 
+       Maybe it could be restricted to functions that have an [ensures]
+       part. It could be restricted further to functions that need it 
+       to translate their [ensures] part.
+    *)
+    let end_node = create_node (Nintern InternOperational) in
     begin match d.s with
       | Some s ->
-	  (* In order to be able to transform any [ensures] part of 
-	     a function, we must create an end node for the function body,
-	     so that all pointers are known under the same name at that point.
-	     All return statements and the last statement should be linked
-	     to this end node.
-	     This transformation may lead to a less precise analysis. 
-	     It is currently restricted to functions that have an [ensures]
-	     part. It could be restricted further to functions that need it 
-	     to translate their [ensures] part.
-	  *)
-	  let end_node = create_node (Nintern InternOperational) in
-	  let has_ensure = match d.spec.ensures with
-	    | None -> false
-	    | Some _ -> true
-	  in
 	  let start_ctxt = 
 	    { 
 	      loop_starts = []; 
 	      loop_switch_ends = [];
 	      function_begin = dnode;
-	      function_end = if has_ensure then Some end_node else None;
+	      function_end = Some end_node;
 	      label_aliases = ref StringMap.empty
 	    } in
 	  let spcnode,reqnode_opt = from_spec ~is_function:true d.spec in
@@ -3904,7 +3897,7 @@ end = struct
 	  (* logic *) add_endedge spcnode end_node
       | None -> ()
     end;
-    dnode
+    dnode,end_node
 
   let from_file file =
     internal_graph := Some (Self.create ());

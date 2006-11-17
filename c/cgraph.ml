@@ -148,7 +148,7 @@ let rec statement s =
 	(expr e)@a,b
     | TSdefault s -> statement s
     | TSgoto _ -> [] ,[]
-    | TSassert _ -> [],[]
+    | TSassert _ | TSassume _ -> [],[]
     | TSlogic_label _ -> [],[]
     | TSspec (sp, s) -> 
 	let (a,b) = statement s in
