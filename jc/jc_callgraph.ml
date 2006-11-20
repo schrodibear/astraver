@@ -47,7 +47,7 @@ let rec assertion acc p =
       assertion (assertion acc p1) p2
   | JCAif(t1,p2,p3) -> 
       assertion (assertion (term acc t1) p2) p3
-  | JCAold p | JCAforall (_,p) -> assertion acc p
+  | JCAnot p | JCAold p | JCAforall (_,p) -> assertion acc p
   | JCAinstanceof(t,_) -> term acc t
 
 (*
@@ -75,32 +75,18 @@ let spec s =
   end
 *)
 
-let loop_annot acc la = assert false (* TODO *)
-(*
-  begin
-    match la.invariant with
-    | None -> []
-    | Some p -> predicate p
-  end @
-  begin
-  match la.loop_assigns with
-    | None -> []
-    | Some l -> List.fold_left (fun acc t -> (term t) @acc)  [] l
-  end @
-  begin
-    match la.variant with
-      | None -> []
-      | Some (t,_) -> term t
-  end 
-*)
+let loop_annot acc la = 
+  term (assertion acc la.jc_loop_invariant) la.jc_loop_variant
 
 let rec expr acc e =
   match e.jc_expr_node with 
-    | JCEconst _ | JCEvar _  -> acc
+    | JCEconst _ | JCEvar _ | JCEincr_local _ -> acc
     | JCEderef(e, _) 
     | JCEinstanceof(e,_)
     | JCEcast(e,_)
-    | JCEassign_local (_, e) | JCEassign_op_local(_, _, e) -> expr acc e
+    | JCEassign_local (_, e) 
+    | JCEassign_op_local(_, _, e) 
+    | JCEincr_heap (_, _, e) -> expr acc e
     | JCEshift (e1,e2) 
     | JCEassign_heap (e1,_, e2)
     | JCEassign_op_heap(e1,_, _, e2) -> expr (expr acc e1) e2
@@ -110,7 +96,6 @@ let rec expr acc e =
 
 let rec statement acc s = 
   match s.jc_statement_node with  
-    | JCSskip -> acc
     | JCSreturn e 
     | JCSexpr e -> let (a,b)=acc in (a,expr b e)
     | JCSif(e, s1, s2) ->
@@ -124,7 +109,8 @@ let rec statement acc s =
     | JCSgoto _ -> assert false (* TODO *)
     | JCScontinue _ -> assert false (* TODO *)
     | JCSbreak _  -> assert false (* TODO *)
-    | JCSdecl _ -> assert false (* TODO *)
+    | JCSdecl(vi,e,s) -> 
+	let (a,b)=acc in statement (a,Option_misc.fold_left expr b e) s
     | JCSassert _ -> assert false (* TODO *)
 
 

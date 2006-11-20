@@ -41,7 +41,7 @@ let same_effects ef1 ef2 =
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.8 2006-11-17 13:48:48 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.9 2006-11-20 14:07:24 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -50,7 +50,9 @@ let rec expr ef e =
     | JCEassign_op_heap(e1,fi,_,e2) ->
 	expr (expr (add_field_writes ef fi) e1) e2
     | JCEassign_op_local (_, _, _) -> assert false
-    | JCEassign_local (_, _) -> assert false
+    | JCEassign_local (vi, e) -> expr ef e
+    | JCEincr_local(op,vi) -> ef
+    | JCEincr_heap _ -> assert false
     | JCEcall (fi, le) -> 
 	ef_union fi.jc_fun_info_effects
 	  (List.fold_left expr ef le)
@@ -61,6 +63,11 @@ let rec expr ef e =
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
     | JCEvar _ -> ef (* TODO *)
 
+let rec loop_annot ef la = ef 
+(*
+  assertion (term ef la.jc_loop_variant) la.jc_loop_invariant
+*)
+
 let rec statement ef s =
   match s.jc_statement_node with
     | JCSexpr e -> expr ef e
@@ -70,13 +77,14 @@ let rec statement ef s =
     | JCScontinue _ -> assert false
     | JCSbreak _ -> assert false
     | JCSreturn e -> expr ef e
-    | JCSwhile (_, _, _) -> assert false
+    | JCSwhile (c, la, s) -> 
+	statement (loop_annot (expr ef c) la) s
     | JCSif (e, s1, s2) -> 
 	statement (statement (expr ef e) s1) s2
-    | JCSdecl _ -> assert false
+    | JCSdecl(vi,e,s) -> 
+	statement (Option_misc.fold_left expr ef e) s
     | JCSassert _ -> assert false
     | JCSblock l -> List.fold_left statement ef l
-    | JCSskip -> assert false
 
 
 let location ef l =

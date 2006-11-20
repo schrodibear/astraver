@@ -1,0 +1,64 @@
+
+type char = {
+  integer i;
+  invariant is_char(i) = 0 <= i && i <= 255;
+}
+
+type queue = {
+  char contents[];
+  integer length;
+  integer first;	
+  integer last;
+  boolean empty;
+  boolean full;
+  invariant is_queue(q) = 
+     \offset_min(q.contents) == 0 && 
+     q.length <= \offset_max(q.contents) + 1 &&
+     0 <= q.first && q.first < q.length &&
+     0 <= q.last && q.last < q.length &&
+     q.full <=> q.last == q.first;
+}
+
+unit push(queue q[0], char c) 
+  requires !q.full
+  behavior correct_push:
+    assigns q.empty, q.full, q.last, q.contents[q.last]
+    ensures !q.empty && q.contents[\old(q.last)] == c
+{
+  q.contents[q.last++] = c;
+  if (q.last == q.length) q.last = 0;
+  q.empty = false;
+  q.full = q.first == q.last;
+}
+
+char pop(queue q[0]) 
+  requires !q.empty
+  behavior correct_pop:
+    assigns q.empty, q.full, q.first
+    ensures !q.full && \result == q.contents[\old(q.first)]
+{
+  char r = q.contents[q.first++];
+  if (q.first == q.length) q.first = 0;
+  q.full = false;
+  q.empty = q.first == q.last;
+  return r;
+}
+
+boolean test(queue q[0], queue q1[0]) 
+  requires !q.empty
+  ensures \result == \old(q1.empty) 
+{
+  pop(q);
+  return q1.empty;
+}
+
+
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make queue"
+End: 
+*/
+
+

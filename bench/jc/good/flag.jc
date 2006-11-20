@@ -1,6 +1,7 @@
 
 /* Dijkstra's dutch flag */
 
+/*
 
 type color = enum { BLUE, WHITE, RED }
    
@@ -69,6 +70,7 @@ unit flag(flag f[0])
 	}
 }
 
+*/
 
 
 /*

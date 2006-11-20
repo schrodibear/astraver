@@ -318,7 +318,7 @@ let rel_bin_op loc op t1 t2 =
 	(* already recognized as connectives *)
     | `Bland | `Blor -> assert false 
     | `Bimplies -> assert false
-    | `Binstanceof -> assert false
+
 
 
 let make_and a1 a2 =
@@ -376,7 +376,7 @@ let rec assertion env e =
 	  end
       | JCPEforall(ty,idl,e1) -> 
 	  let ty = type_type ty in
-	  (make_forall e.jc_pexpr_loc ty idl [] e1).jc_assertion_node
+	  (make_forall e.jc_pexpr_loc ty idl env e1).jc_assertion_node
       | JCPEold e -> JCAold(assertion env e)
       | JCPEif(e1,e2,e3) ->
 	  let t1,te1 = term env e1 
@@ -416,6 +416,70 @@ and make_forall loc ty idl env e : assertion =
 
 (* expressions *)
 
+let unary_op t op =
+  match t,op with
+    | _, `Upostfix_inc -> assert false
+    | _, `Upostfix_dec -> assert false
+    | _, `Uprefix_inc -> assert false
+    | _, `Uprefix_dec -> assert false
+    | `Tinteger, `Uplus -> uplus_int
+    | `Tinteger, `Uminus -> uminus_int
+    | `Treal, `Uplus -> uplus_real
+    | `Treal, `Uminus -> uminus_real
+    | `Tboolean, `Unot -> not_
+    | `Tunit,_ -> assert false
+    | _ -> assert false
+
+let incr_op op =
+  match op with
+    | `Upostfix_inc -> Postfix_inc
+    | `Upostfix_dec -> Postfix_dec
+    | `Uprefix_inc -> Prefix_inc
+    | `Uprefix_dec -> Prefix_dec
+    | _ -> assert false
+
+let set_assigned v =
+  Jc_options.lprintf "Local var %s is assigned@." v.jc_var_info_name;
+  v.jc_var_info_assigned <- true
+
+let make_unary_app loc (op : Jc_ast.punary_op) t2 e2 =
+  match op with
+    | `Uprefix_inc | `Upostfix_inc | `Uprefix_dec | `Upostfix_dec ->
+	begin
+	  match e2.jc_expr_node with
+	    | JCEvar v ->
+		set_assigned v;
+		t2,JCEincr_local(incr_op op,v)
+	    | JCEderef(e,f) ->
+		t2,JCEincr_heap(incr_op op, f, e)
+	    | _ -> typing_error e2.jc_expr_loc "not an lvalue"
+	end
+    | `Unot -> 
+	let t=
+	  match t2 with
+	    | JCTnative t2 ->
+		begin
+		  match t2 with
+		    | `Tboolean -> `Tboolean
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "boolean expected"
+	in JCTnative t,JCEcall(unary_op t op,[e2])
+    | `Uplus | `Uminus -> 
+	let t=
+	  match t2 with
+	    | JCTnative t2 ->
+		begin
+		  match t2 with
+		    | `Tinteger -> `Tinteger
+		    | `Treal -> `Treal
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "numeric type expected"
+	in JCTnative t,JCEcall(unary_op t op,[e2])
+
 let bin_op t op =
   match t,op with
     | _, `Bgt -> gt_int_
@@ -434,8 +498,8 @@ let bin_op t op =
     | `Tboolean, `Blor -> or_
 	(* not allowed as expression op *)
     | _,`Bimplies -> assert false
-    | _,`Binstanceof -> assert false
     | `Tunit,_ -> assert false
+    | _ -> assert false
 
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
@@ -517,6 +581,10 @@ let rec expr env e =
 	  and t2,e2 = expr env e2
 	  in
 	  make_bin_app e.jc_pexpr_loc op t1 e1 t2 e2
+      | JCPEunary (op, e2) -> 
+	  let t2,e2 = expr env e2
+	  in
+	  make_unary_app e.jc_pexpr_loc op t2 e2
       | JCPEassign (e1, e2) -> 
 	  begin
 	    let t1,te1 = expr env e1
@@ -525,6 +593,7 @@ let rec expr env e =
 	    if subtype t2 t1 then
 	      match te1.jc_expr_node with
 		| JCEvar v ->
+		    set_assigned v;
 		    t1,JCEassign_local(v,te2)
 		| JCEderef(e,f) ->
 		    t1,JCEassign_heap(e, f, te2)
@@ -543,6 +612,7 @@ let rec expr env e =
 		    begin
 		      match te1.jc_expr_node with
 			| JCEvar v ->
+			    set_assigned v;
 			    t1,JCEassign_op_local(v, bin_op t op, te2)
 			| JCEderef(e,f) ->
 			    t1,JCEassign_op_heap(e, f, bin_op t op, te2)
@@ -627,10 +697,16 @@ let loop_annot env i v =
     jc_loop_variant = tv;
   }
 
+
+let make_block (l:statement list) : statement_node =
+  match l with
+    | [s] -> s.jc_statement_node
+    | _ -> JCSblock l
+
 let rec statement env s =
   let ts =
     match s.jc_pstatement_node with
-      | JCPSskip -> JCSskip
+      | JCPSskip -> assert false
       | JCPSthrow (_, _) -> assert false
       | JCPStry (_, _, _) -> assert false
       | JCPSgoto _ -> assert false
@@ -659,16 +735,49 @@ let rec statement env s =
 	    JCSif(tc,ts1,ts2)
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
-      | JCPSdecl (_, _, _) -> assert false
+      | JCPSdecl (ty, id, e) -> assert false
       | JCPSassert _ -> assert false
       | JCPSexpr e -> 
 	  let t,te = expr env e in 
 	  JCSexpr (te)
-      | JCPSblock l -> JCSblock (List.map (statement env) l)
+      | JCPSblock l -> make_block (statement_list env l)
 
 
   in { jc_statement_node = ts;
        jc_statement_loc = s.jc_pstatement_loc }
+
+and statement_list env l : statement list =
+    match l with
+      | [] -> []
+      | s :: r -> 
+	  match s.jc_pstatement_node with
+	    | JCPSskip -> statement_list env r
+	    | JCPSdecl (ty, id, e) ->
+		let ty = type_type ty in
+		let vi = {
+		  jc_var_info_name = id;
+		  jc_var_info_final_name = id;
+		  jc_var_info_type = ty;
+		  jc_var_info_assigned = false;
+		}
+		in
+		let te = 
+		  Option_misc.map
+		    (fun e ->
+		       let t,te = expr env e in
+		       if subtype t ty then te
+		       else
+			 typing_error e.jc_pexpr_loc "incompatible type")
+		    e
+		in
+		let tr = statement_list ((id,vi)::env) r in
+		let tr = { jc_statement_loc = s.jc_pstatement_loc;
+			   jc_statement_node = make_block tr } 
+		in
+		[ { jc_statement_loc = s.jc_pstatement_loc;
+		    jc_statement_node = JCSdecl(vi, te, tr); } ]
+	    | _ -> (statement env s)::(statement_list env r)
+  
 
 let rec location env e =
   match e.jc_pexpr_node with
@@ -690,6 +799,7 @@ let rec location env e =
     | JCPEinstanceof _
     | JCPEold _ 
     | JCPEforall (_, _, _)
+    | JCPEunary _
     | JCPEbinary (_, _, _)
     | JCPEassign_op (_, _, _)
     | JCPEassign (_, _)
@@ -762,7 +872,7 @@ let decl d =
 		  { jc_fun_requires = assertion_true;
 		    jc_fun_behavior = [] }
 	in
-	let b = List.map (statement param_env) body in
+	let b = statement_list param_env body in
 	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDtype(id,parent,fields,inv) ->

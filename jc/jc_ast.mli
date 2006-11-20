@@ -162,6 +162,8 @@ and assertion =
       jc_assertion_loc : Loc.position;
     }
 
+type incr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
+
 type expr_node =
   | JCEconst of const
   | JCEvar of var_info
@@ -174,6 +176,8 @@ type expr_node =
   | JCEassign_heap of expr * field_info * expr
   | JCEassign_op_local of var_info * fun_info * expr
   | JCEassign_op_heap of expr * field_info * fun_info * expr
+  | JCEincr_local of incr_op * var_info 
+  | JCEincr_heap of incr_op * field_info * expr
   | JCEif of expr * expr * expr
 
 and expr =
@@ -189,11 +193,10 @@ type loop_annot =
     }
 
 type statement_node =
-  | JCSskip
   | JCSblock of statement list
   | JCSexpr of expr
   | JCSassert of assertion
-  | JCSdecl of var_info
+  | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement
   | JCSwhile of expr * loop_annot * statement
   | JCSreturn of expr

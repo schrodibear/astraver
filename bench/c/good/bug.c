@@ -1,3 +1,27 @@
+/**************************************************************************/
+/*                                                                        */
+/*  The Why/Caduceus/Krakatoa tool suite for program certification        */
+/*  Copyright (C) 2002-2006                                               */
+/*    Jean-François COUCHOT                                               */
+/*    Mehdi DOGGUY                                                        */
+/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Thierry HUBERT                                                      */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU General Public                   */
+/*  License version 2, as published by the Free Software Foundation.      */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/*  See the GNU General Public License version 2 for more details         */
+/*  (enclosed in the file GPL).                                           */
+/*                                                                        */
+/**************************************************************************/
+
 typedef struct U { int t2[5]; int t2bis[5]; int *p2; } las2;
 typedef struct V { int t1[5]; int t1bis[5]; int *p1; las2 * pp; } las;
 las u,v,w;

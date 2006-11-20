@@ -1,3 +1,26 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
+(*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
+(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Thierry HUBERT                                                      *)
+(*    Claude MARCHÉ                                                       *)
+(*    Yannick MOY                                                         *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU General Public                   *)
+(*  License version 2, as published by the Free Software Foundation.      *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(*  See the GNU General Public License version 2 for more details         *)
+(*  (enclosed in the file GPL).                                           *)
+(*                                                                        *)
+(**************************************************************************)
 
 open Jc_env
 open Jc_envset
@@ -75,8 +98,14 @@ let sub_real_ = make_fun_info "sub_real" real_type
 let mul_real_ = make_fun_info "mul_real" real_type
 let div_real_ = make_fun_info "div_real" real_type
 
+let uplus_int = make_fun_info "uplus_int" integer_type
+let uminus_int = make_fun_info "uminus_int" integer_type
+let uplus_real = make_fun_info "uplus_real" integer_type
+let uminus_real = make_fun_info "uminus_real" integer_type
+
 let and_ = make_fun_info "and" boolean_type
 let or_ = make_fun_info "or" boolean_type
+let not_ = make_fun_info "not" boolean_type
     
 
 

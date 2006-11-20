@@ -710,7 +710,7 @@ binary: $(BINARYFILES)
 headers:
 	headache -c doc/headache_config.txt -h doc/header.txt \
 		Makefile.in configure.in README \
-		*/*.ml */*.ml[ily4] tools/*.c
+		*/*.ml */*.ml[ily4] tools/*.c bench/c/good/*.c
 
 # myself
 ########

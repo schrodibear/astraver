@@ -26,6 +26,7 @@ integer isqrt(integer x)
     return count;
 }   
 
+/*
 
 logic integer sqr(integer x) = x * x
 
@@ -48,8 +49,8 @@ integer isqrt2(integer x)
     return count;
 }   
 
-
-    
+*/
+  
 
 /*
 Local Variables: 

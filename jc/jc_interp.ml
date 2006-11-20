@@ -102,6 +102,7 @@ let rec assertion label oldlabel a =
     | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
     | JCAand l -> make_and_list (List.map fa l)
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
+    | JCAnot(a) -> LNot(fa a)
     | JCAapp(f,l) -> LPred(f.jc_logic_info_name,List.map ft l)
     | JCAforall(v,p) -> 
 	LForall(v.jc_var_info_final_name,
@@ -120,11 +121,22 @@ let tempvar_count = ref 0
 let reset_tmp_var () = tempvar_count := 0
 let tmp_why_var () = incr tempvar_count; "jessie_" ^ string_of_int !tempvar_count
 
+let const_un = Cte(Prim_int "1")
+let incr_call op =
+  match op with
+    | Prefix_inc | Postfix_inc -> Jc_pervasives.add_int_.jc_fun_info_name
+    | Prefix_dec | Postfix_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
+
 let rec expr e =
   match e.jc_expr_node with
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
-    | JCEvar v -> Var v.jc_var_info_final_name
+    | JCEvar v ->
+	Jc_options.lprintf "translating var %s (assigned = %b)@."
+	  v.jc_var_info_name v.jc_var_info_assigned;
+	if v.jc_var_info_assigned 
+	then Deref v.jc_var_info_final_name
+	else Var v.jc_var_info_final_name
     | JCEif(e1,e2,e3) -> If(expr e1,expr e2,expr e3)
     | JCEshift(e1,e2) -> make_app "shift" [expr e1; expr e2]
     | JCEinstanceof(e,t) ->
@@ -132,6 +144,8 @@ let rec expr e =
     | JCEcast(e,t) ->
 	make_app "downcast_" [Deref "alloc"; expr e; Var t.jc_struct_info_name]
     | JCEderef(e,f) -> make_app "acc_" [Var f.jc_field_info_name; expr e]
+    | JCEincr_local(op, vi) -> assert false
+    | JCEincr_heap _ -> assert false
     | JCEassign_local (vi, e2) -> 
 	assert false
 	  (*
@@ -191,14 +205,16 @@ let statement_expr e =
     | JCEderef(e,f) -> assert false
     | JCEinstanceof _ -> assert false
     | JCEcast _ -> assert false
+    | JCEincr_local(op, vi) ->
+	(* let tmp = !v in v <- tmp+-1 *)
+	let tmp = tmp_why_var () in
+	let v = vi.jc_var_info_name in
+	Let(tmp, Deref(v), 
+	    Assign(v,make_app (incr_call op) [Var tmp; const_un]))
+    | JCEincr_heap _ -> assert false
     | JCEassign_local (vi, e2) -> 
-	assert false
-	  (*
-	    let n = v.var_unique_name in
-	    append
-	    (Assign(n, bin_op op (Deref n) (interp_expr e2)))
-	    (Deref n)
-	  *)
+	let n = vi.jc_var_info_final_name in
+	Assign(n, expr e2)
     | JCEassign_heap(e1,fi,e2) -> 
 	let tmp1 = tmp_why_var () in
 	let tmp2 = tmp_why_var () in
@@ -231,14 +247,25 @@ let statement_expr e =
 
 let rec statement s = 
   match s.jc_statement_node with
-    | JCSskip -> Void
     | JCSblock l -> statement_list l
     | JCSexpr e -> statement_expr e
     | JCSif (e, s1, s2) -> 
 	If(expr e, statement s1, statement s2)
-    | JCSwhile (_, _, _) -> assert false
+    | JCSwhile (e, la, s) -> 
+	While(expr e, assertion None "" la.jc_loop_invariant,
+	      Some (term None "" la.jc_loop_variant,None), [statement s])
+	
     | JCSassert _ -> assert false
-    | JCSdecl _ -> assert false
+    | JCSdecl(vi,e,s) -> 
+	begin
+	  match e with
+	    | None -> assert false
+	    | Some e ->
+		if vi.jc_var_info_assigned then 
+		  Let_ref(vi.jc_var_info_final_name,expr e, statement s)
+		else 
+		  Let(vi.jc_var_info_final_name,expr e, statement s)
+	end
     | JCSreturn e -> 
 	expr e
     | JCSbreak l -> assert false
