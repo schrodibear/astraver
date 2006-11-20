@@ -64,7 +64,15 @@ let main () =
 	    Jc_typing.structs_table
 	    []
 	in	       	  
-	(* phase 6 : generation of Why functions *)
+	(* phase 6 : generation of Why axioms *)
+	let d_axioms = 
+	  Hashtbl.fold 
+	    (fun id p acc ->
+	       Jc_interp.tr_axiom id p acc)
+	    Jc_typing.axioms_table
+	    d_memories
+	in	       
+	(* phase 7 : generation of Why functions *)
 	let d_funs = 
 	  Hashtbl.fold 
 	    (fun _ (f,s,b) acc ->
@@ -72,9 +80,9 @@ let main () =
 		 f.Jc_fenv.jc_fun_info_name;
 	       Jc_interp.tr_fun f s b acc)
 	    Jc_typing.functions_table
-	    d_memories
+	    d_axioms
 	in	       
-	(* phase 7 : produce Why file *)
+	(* end phase : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
 	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_funs)

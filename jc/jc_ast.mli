@@ -57,6 +57,11 @@ type pbin_op =
   | `Bland | `Blor | `Bimplies 
   ]
 
+type punary_op =
+  [ `Uplus | `Uminus | `Unot 
+  | `Upostfix_inc | `Upostfix_dec | `Uprefix_inc | `Uprefix_dec
+  ]
+
 type pexpr_node =
   | JCPEconst of const
   | JCPEvar of string
@@ -66,9 +71,10 @@ type pexpr_node =
   | JCPEassign of pexpr * pexpr
   | JCPEassign_op of pexpr * pbin_op * pexpr
   | JCPEbinary of pexpr * pbin_op * pexpr
+  | JCPEunary of punary_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * string
-  | JCPEforall of ptype * string * pexpr
+  | JCPEforall of ptype * string list * pexpr
   | JCPEold of pexpr
   | JCPEif of pexpr * pexpr * pexpr
 
@@ -89,9 +95,9 @@ type pstatement_node =
   | JCPSblock of pstatement list
   | JCPSexpr of pexpr
   | JCPSassert of pexpr
-  | JCPSdecl of ptype * string * pexpr
+  | JCPSdecl of ptype * string * pexpr option
   | JCPSif of pexpr * pstatement * pstatement
-  | JCPSwhile of pexpr * pstatement
+  | JCPSwhile of pexpr * pexpr * pexpr * pstatement
   | JCPSreturn of pexpr
   | JCPSbreak of label
   | JCPScontinue of label
@@ -109,6 +115,7 @@ and pstatement =
 type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
   | JCPDtype of string * string option * (ptype * string) list * (string * string * pexpr) list
+  | JCPDaxiom of string * pexpr
 
 and pdecl =
     {
@@ -142,6 +149,7 @@ type assertion_node =
   | JCAfalse
   | JCAand of assertion list
   | JCAimplies of assertion * assertion
+  | JCAnot of assertion
   | JCAapp of logic_info * term list
   | JCAforall of var_info * assertion
   | JCAold of assertion

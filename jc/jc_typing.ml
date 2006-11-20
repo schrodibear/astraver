@@ -161,6 +161,13 @@ let eq_op op arg_type  =
     | (`Bneq,`Tinteger) -> neq_int_bool
     | _ -> assert false
 
+let logic_unary_op loc (op : Jc_ast.punary_op) t e =
+  match op with
+    | `Unot -> assert false
+    | `Uminus | `Uplus -> assert false (* TODO *)
+    | `Upostfix_dec | `Upostfix_inc | `Uprefix_dec | `Uprefix_inc ->
+	typing_error loc "pre/post incr/decr not allowed as logical term"
+
 let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
   match op with
     | `Bgt -> assert false (* TODO *)
@@ -228,6 +235,10 @@ let rec term env e =
 	  and t2,e2 = term env e2
 	  in
 	  logic_bin_op e.jc_pexpr_loc op t1 e1 t2 e2
+      | JCPEunary(op, e2) -> 
+	  let t2,e2 = term env e2
+	  in
+	  logic_unary_op e.jc_pexpr_loc op t2 e2
       | JCPEapp (_, _) -> assert false
       | JCPEderef (e1, f) -> 
 	  let t,te = term env e1 in
@@ -271,6 +282,15 @@ let rec term env e =
 	 jc_term_loc = e.jc_pexpr_loc }
 
   
+let rel_unary_op loc op t =
+  match op with
+    | `Unot -> assert false
+    | `Uminus | `Uplus -> 
+	typing_error loc "not a proposition"
+    | `Upostfix_dec | `Upostfix_inc | `Uprefix_dec | `Uprefix_inc ->
+	typing_error loc "pre/post incr/decr not allowed as logical term"
+
+
 let rel_bin_op loc op t1 t2 =
   match op with
     | `Bgt -> gt_int
@@ -332,11 +352,17 @@ let rec assertion env e =
 	  make_and (assertion env e1) (assertion env e2)
       | JCPEbinary (e1, `Bimplies, e2) -> 
 	  JCAimplies(assertion env e1,assertion env e2)
+      | JCPEunary (`Unot, e2) -> 
+	  JCAnot(assertion env e2)
       | JCPEbinary (e1, op, e2) -> 
 	  let t1,e1 = term env e1
 	  and t2,e2 = term env e2
 	  in
 	  JCAapp(rel_bin_op e.jc_pexpr_loc op t1 t2,[e1;e2])
+      | JCPEunary(op, e2) -> 
+	  let t2,e2 = term env e2
+	  in
+	  JCAapp(rel_unary_op e.jc_pexpr_loc op t2,[e2])
       | JCPEapp (_, _) -> assert false
       | JCPEderef (_, _) -> assert false
       | JCPEshift (_, _) -> assert false
@@ -348,15 +374,9 @@ let rec assertion env e =
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non propositional constant"
 	  end
-      | JCPEforall(ty,id,e1) -> 
+      | JCPEforall(ty,idl,e1) -> 
 	  let ty = type_type ty in
-	  let vi = {
-	    jc_var_info_name = id;
-	    jc_var_info_final_name = id;
-	    jc_var_info_type = ty;
-	    jc_var_info_assigned = false;
-	  }
-	  in JCAforall(vi,assertion ((id,vi)::env) e1)
+	  (make_forall e.jc_pexpr_loc ty idl [] e1).jc_assertion_node
       | JCPEold e -> JCAold(assertion env e)
       | JCPEif(e1,e2,e3) ->
 	  let t1,te1 = term env e1 
@@ -379,6 +399,20 @@ let rec assertion env e =
 
   in { jc_assertion_node = te;
        jc_assertion_loc = e.jc_pexpr_loc }
+
+and make_forall loc ty idl env e : assertion =
+  match idl with
+    | [] -> assertion env e
+    | id::r ->
+	let vi = {
+	  jc_var_info_name = id;
+	  jc_var_info_final_name = id;
+	  jc_var_info_type = ty;
+	  jc_var_info_assigned = false;
+	}
+	in
+	let f = JCAforall(vi,make_forall loc ty r ((id,vi)::env) e) in
+	{jc_assertion_loc = loc ; jc_assertion_node = f }
 
 (* expressions *)
 
@@ -584,6 +618,15 @@ let rec expr env e =
 
   
 
+let loop_annot env i v =
+  let ti = assertion env i
+  and ttv,tv = term env v
+  in
+  (* TODO: check variant is integer, or other order ? *) 
+  { jc_loop_invariant = ti ;
+    jc_loop_variant = tv;
+  }
+
 let rec statement env s =
   let ts =
     match s.jc_pstatement_node with
@@ -597,7 +640,16 @@ let rec statement env s =
 	  let t,te = expr env e in 
 	  (* TODO *)
 	  JCSreturn te
-      | JCPSwhile (_, _) -> assert false
+      | JCPSwhile(c,i,v,s) -> 
+	  let t,tc = expr env c in
+	  if subtype t (JCTnative `Tboolean) then
+	    let ts = statement env s
+	    and lo = loop_annot env i v
+	    in
+	    JCSwhile(tc,lo,ts)
+	  else 
+	    typing_error s.jc_pstatement_loc "boolean expected"
+	  
       | JCPSif (c, s1, s2) -> 
 	  let t,tc = expr env c in
 	  if subtype t (JCTnative `Tboolean) then
@@ -687,6 +739,9 @@ let field (t,id) =
   }
   in (id,fi)
 
+
+let axioms_table = Hashtbl.create 17
+
 let decl d =
   match d.jc_pdecl_node with
     | JCPDfun(ty,id,pl,specs,body) -> 
@@ -736,7 +791,9 @@ let decl d =
 	    jc_struct_info_parent = par;
 	    jc_struct_info_root = root;
 	  }
-
+    | JCPDaxiom(id,e) ->
+	let te = assertion [] e in
+	Hashtbl.add axioms_table id te
 
 
 (*

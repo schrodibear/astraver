@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.12 2006-11-17 13:48:48 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.13 2006-11-20 10:28:34 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -77,6 +77,7 @@ rule token = parse
   | '\n'                    { newline lexbuf; token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
   | "assigns"               { ASSIGNS }
+  | "axiom"                 { AXIOM }
   | "behavior"              { BEHAVIOR }
   | "boolean"               { BOOLEAN }
 (*
@@ -121,8 +122,9 @@ rule token = parse
   | "unit"                  { UNIT }
 (*
   | "unsigned"              { UNSIGNED }
-  | "while"                 { WHILE }
 *)
+  | "variant"               { VARIANT }
+  | "while"                 { WHILE }
   | "with"                  { WITH }
   | "\\forall"              { BSFORALL }
   | "\\old"                 { BSOLD }
@@ -189,7 +191,9 @@ rule token = parse
   | ":>"                    { COLONGT } 
 (*
   | "&"                     { AMP }
-  | "!"                     { EXL }
+*)
+  | "!"                     { EXCLAM }
+(*
   | "~"                     { TILDE }
 *)
   | "-"                     { MINUS }

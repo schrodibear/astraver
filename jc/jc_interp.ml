@@ -467,6 +467,8 @@ let tr_fun f spec body acc =
       all_behaviors acc
   in why_param::acc
 
+
+let tr_axiom id p acc = Axiom(id,assertion None "" p)::acc
   
 (*
 Local Variables: 
