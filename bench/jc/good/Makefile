@@ -57,6 +57,9 @@ type-all:
 
 # rules ##################################################
 
+$(JESSIE):
+	make -C ../../.. bin/jessie.byte
+
 why/%.why: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	$(EXECJESSIE) $<
 
