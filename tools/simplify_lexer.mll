@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_lexer.mll,v 1.4 2006-11-16 22:22:43 filliatr Exp $ i*)
+(*i $Id: simplify_lexer.mll,v 1.5 2006-11-21 15:36:43 filliatr Exp $ i*)
 
 {
 
@@ -53,6 +53,13 @@
     "DISTINCT", DISTINCT;
     "EQ", EQ;
     "NEQ", NEQ;
+    "+", IDENT "+";
+    "-", IDENT "-";
+    "*", IDENT "*";
+    ">", GT;
+    ">=", GE;
+    "<", LT;
+    "<=", LE;
       ]
 
   let mk_ident s =
@@ -99,11 +106,11 @@ rule token = parse
   | eof 
       { EOF }
   | ['0'-'9']+ as s
-      { ATOM (INTEGER s) }
+      { INTEGER s }
   | '|' ([^ '|']+ as s) '|'
-      { ATOM (atom s) }
+      { atom s }
   | [^' ' '\t' '\n' '\r' ';' '(' ')']+ as s
-      { ATOM (atom s) }
+      { atom s }
   | _ as c 
       { Format.eprintf  "simplify_lexer: illegal character %c@." c; exit 1 }
 

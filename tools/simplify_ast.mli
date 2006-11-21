@@ -22,30 +22,31 @@
 (*                                                                        *)
 (**************************************************************************)
 
-type atom = 
-  | DEFPRED
-  | BG_PUSH
-  | AT_TRUE
-  | TRUE
-  | FALSE
-  | IMPLIES
-  | IFF
-  | FORALL
-  | MPAT
-  | PATS
-  | AND
-  | OR
-  | NOT
-  | EQ
-  | NEQ
-  | DISTINCT
-  | LBLPOS
-  | LBLNEG
-  | INTEGER of string
-  | IDENT of string
+type term = 
+  | Tconst of string (* int constant *)
+  | Tapp of string * term list
 
-type sexp =
-  | Satom of atom
-  | Slist of sexp list
+type trigger = term list
 
-type t = sexp list
+type rel = Eq | Neq | Lt | Le | Gt | Ge
+
+type predicate = 
+  | Ptrue
+  | Pfalse
+  | Prel of term * rel * term
+  | Pnot of predicate
+  | Pand of predicate list
+  | Por of predicate list
+  | Pimplies of predicate * predicate
+  | Piff of predicate * predicate
+  | Pdistinct of term list
+  | Pforall of string list * trigger list * predicate
+  | Pexists of string list * trigger list * predicate
+  | Plblpos of string * predicate
+  | Plblneg of string * predicate
+
+type decl =
+  | Axiom of predicate
+  | Goal of predicate
+
+type t = decl list
