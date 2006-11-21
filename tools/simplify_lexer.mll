@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_lexer.mll,v 1.5 2006-11-21 15:36:43 filliatr Exp $ i*)
+(*i $Id: simplify_lexer.mll,v 1.6 2006-11-21 22:02:01 filliatr Exp $ i*)
 
 {
 
@@ -85,7 +85,7 @@
       Hashtbl.find atoms s
     with Not_found ->
       let s' = mk_ident (String.copy s) in
-      Format.eprintf "atom %s -> %s@." s s';
+      (* Format.eprintf "atom %s -> %s@." s s'; *)
       let a = IDENT s' in 
       Hashtbl.add atoms s a; a
 

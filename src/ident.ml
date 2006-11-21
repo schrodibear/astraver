@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.61 2006-11-03 12:49:03 marche Exp $ i*)
+(*i $Id: ident.ml,v 1.62 2006-11-21 22:02:24 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -144,6 +144,8 @@ let t_div_real_ = create "div_real_"
 let t_div_int_ = create "div_int_"
 let t_mod_int_ = create "mod_int_"
 let t_sqrt_real_ = create "sqrt_real_"
+
+let t_distinct = create "distinct"
 
 let t_lt = create "%lt"
 let t_le = create "%le"

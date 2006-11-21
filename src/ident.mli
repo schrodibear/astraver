@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.53 2006-11-03 12:49:03 marche Exp $ i*)
+(*i $Id: ident.mli,v 1.54 2006-11-21 22:02:26 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -159,6 +159,8 @@ val t_lt_real_ : t
 val t_le_real_ : t
 val t_gt_real_ : t
 val t_ge_real_ : t
+
+val t_distinct : t
 
 val t_zwf_zero : t
 val result : t

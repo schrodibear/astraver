@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_towhy.ml,v 1.4 2006-11-21 15:36:43 filliatr Exp $ i*)
+(*i $Id: simplify_towhy.ml,v 1.5 2006-11-21 22:02:01 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -38,7 +38,8 @@ let reset () =
 
 let declare_funs =
   let rec term = function
-    | Tconst _ -> ()
+    | Tconst _ 
+    | Tapp (("+"|"*"|"-"), _) -> ()
     | Tapp (f, l) -> declare_fun f (List.length l); List.iter term l
   in
   let rec predicate = function
@@ -59,26 +60,6 @@ let declare_funs =
 let new_goal = let r = ref 0 in fun () -> incr r; "goal_" ^ string_of_int !r
 let new_axiom = let r = ref 0 in fun () -> incr r; "axiom_" ^ string_of_int !r
 
-(***
-let pand p1 p2 = match p1, p2 with
-  | Ptrue, p | p, Ptrue -> p
-  | _ -> Pand (p1, p2)
-
-let por p1 p2 = match p1, p2 with
-  | Pfalse, p | p, Pfalse -> p
-  | _ -> Por (p1, p2)
-
-let t_distinct = Ident.create "distinct"
-
-let foralls vl tl p =
-  let rec mk_forall = function
-    | [] -> assert false
-    | [x] -> Forall (false, x, x, PTint, tl, p)
-    | x :: xl -> Forall (false, x, x, PTint, [], mk_forall xl)
-  in
-  mk_forall vl
-***)
-
 let rec print_term fmt = function
   | Tconst n -> 
       fprintf fmt "%s" n
@@ -94,6 +75,12 @@ let rec print_term fmt = function
       fprintf fmt "(-%a)" print_term t1
   | Tapp (id, tl) -> 
       fprintf fmt "%s(%a)" id (print_list comma print_term) tl
+
+let triggers fmt = function
+  | [] -> 
+      ()
+  | tl -> 
+      fprintf fmt " @[[%a]@]" (print_list alt (print_list comma print_term)) tl
 
 let rec print_predicate fmt = function
   | Prel (t1, Eq, t2) ->
@@ -124,26 +111,26 @@ let rec print_predicate fmt = function
       fprintf fmt "@[%a@]" (print_list sep print_predicate) l
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
-(***
-  | Forall (vl,tl,p) ->
-      fprintf fmt "@[<hov 2>(forall@ %a:%a%a.@ %a)@]"
-	Ident.print b pure_type v print_triggers tl print_predicate p
-  | Exists (_,b,v,p) ->
-      fprintf fmt "@[<hov 2>(exists@ %a:%a.@ %a)@]" 
-	Ident.print b pure_type v print_predicate p
-  | Pnamed (n, p) ->
-      fprintf fmt "@[(%S:@ %a)@]" n print_predicate p
-***)
+  | Pforall (vl,tl,p) ->
+      fprintf fmt "@[<hov 2>("; 
+      print_quantifier fmt "forall" vl tl p; 
+      fprintf fmt ")@]"
+  | Pexists (vl,tl,p) ->
+      fprintf fmt "@[<hov 2>("; 
+      print_quantifier fmt "exists" vl tl p; 
+      fprintf fmt ")@]"
   | Plblneg (_, p)
   | Plblpos (_, p) -> print_predicate fmt p (* TODO *)
   | Pdistinct l ->
       fprintf fmt "@[distinct(%a)@]" (print_list comma print_term) l
 
-and print_triggers fmt = function
-  | [] -> 
-      ()
-  | tl -> 
-      fprintf fmt "@ [%a]" (print_list alt (print_list comma print_term)) tl
+and print_quantifier fmt q vl tl p =
+  let rec mk_quant = function
+    | [] -> assert false
+    | [x] -> fprintf fmt "%s %s:int%a.@ %a" q x triggers tl print_predicate p
+    | x :: xl -> fprintf fmt "%s %s:int.@ " q x; mk_quant xl
+  in
+  mk_quant vl
 
 let print_decl fmt = function
   | Axiom p -> 
