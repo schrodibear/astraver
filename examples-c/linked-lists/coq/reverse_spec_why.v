@@ -3,27 +3,15 @@
 
 Require Export Caduceus.
 
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
 (*Why type*) Definition global: Set.
 Admitted.
 
 (*Why type*) Definition plist: Set.
-exact (plist Z23).
+exact (plist global).
 Defined.
 
 (*Why type*) Definition Length: Set.
-exact (Length Z23).
+exact (Length global).
 Defined.
 
 (*Why logic*) Definition lpath :
@@ -127,13 +115,16 @@ Admitted.
 (*Why logic*) Definition length :
   ((memory) ((pointer) global) global) -> alloc_table
   -> ((pointer) global) -> Length.
-Admitted.
+exact (fun tl a p => length global a tl p). 
+Defined.
 
 (*Why logic*) Definition length_order : Length -> Length -> Prop.
-Admitted.
+exact (length_order global).
+Defined.
 
 (*Why logic*) Definition list_length : plist -> Z.
-Admitted.
+exact (fun l => Z_of_nat (List.length l)).
+Defined.
 
 (*Why axiom*) Lemma llist_function_ax :
   (forall (tl_global:((memory) ((pointer) global) global)),
@@ -156,7 +147,8 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition rev : plist -> plist.
-Admitted.
+exact (fun l => rev l).
+Defined.
 
 (*Why axiom*) Lemma rev_nil_ax :
   (* File "list.h", line 23, characters 24-43 *) (rev nil) = nil.

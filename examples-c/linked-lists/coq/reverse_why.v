@@ -14,8 +14,6 @@ Qed.
 
 Require Export reverse_spec_why.
 
-Definition length_order := length_order Z23.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma rev_impl_po_1 : 
   forall (p0: ((pointer) global)),
@@ -26,13 +24,13 @@ Definition length_order := length_order Z23.
   (well_founded length_order).
 Proof.
 unfold length_order; intuition.
-apply length_order_wf.
+apply (length_order_wf global). 
 Qed.
 
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "reverse.c", line 14, characters 10-195: *)
 (*Why goal*) Lemma rev_impl_po_2 : 
   forall (p0: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -80,7 +78,7 @@ Qed.
                  (exists lr:plist, (((llist tl_global0 alloc p lp) /\
                   (llist tl_global0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global0 alloc p0 l) ->
+                   ((llist tl_global alloc p0 l) ->
                     (app (rev lr) lp) = (rev l)))))),
   forall (HW_4: ~(r = null)),
   (valid alloc r).
@@ -116,7 +114,7 @@ Qed.
                  (exists lr:plist, (((llist tl_global0 alloc p lp) /\
                   (llist tl_global0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global0 alloc p0 l) ->
+                   ((llist tl_global alloc p0 l) ->
                     (app (rev lr) lp) = (rev l)))))),
   forall (HW_4: ~(r = null)),
   forall (HW_5: (valid alloc r)),
@@ -134,14 +132,46 @@ Qed.
    (exists lr:plist, (((llist tl_global1 alloc p1 lp) /\
     (llist tl_global1 alloc r0 lr)) /\ (disjoint lp lr)) /\
     (forall (l:plist),
-     ((llist tl_global1 alloc p0 l) -> (app (rev lr) lp) = (rev l))))) /\
+     ((llist tl_global alloc p0 l) -> (app (rev lr) lp) = (rev l))))) /\
   (length_order (length tl_global1 alloc r0) (length tl_global0 alloc r)).
 Proof.
 intros; subst; intuition.
+(* case 1 : preservation of loop invariant *)
+elim HW_3; clear HW_3; intuition.
+elim H; clear H; intuition.
+inversion H3.
+absurd (r = null); intuition.
+exists (r :: x); exists l; subst; intuition.
+(* subgoal 1.1 *)
+unfold llist,lpath; apply Path_cons; intuition.
+ rewrite acc_upd_eq; auto.
+apply llist_pset_same; auto.
+unfold disjoint,caduceus_lists.disjoint in H2; intuition.
+apply (H7 r); auto.
+auto with *.
+(* subgoal 1.2 *)
+unfold llist,lpath; apply llist_pset_same; auto.
+apply llist_not_starting with alloc (acc tl_global0); auto.
+(* subgoal 1.3 *)
+unfold disjoint; apply disjoint_cons; auto.
+apply llist_not_starting with alloc (acc tl_global0); auto.
+(* subgoal 1.4 *)
+unfold rev,app in *|-*; rewrite app_rev_cons.
+apply H1; auto.
+(* case 2 : variant decreases *)
+unfold length_order, length.
+exists alloc.
+elim HW_3; clear HW_3; intuition.
+elim H; clear H; intuition.
+inversion H3; intuition.
+exists l; exists x0; intuition.
+apply llist_pset_same; auto.
+apply llist_not_starting with alloc (acc tl_global0); auto.
+rewrite <- H7; simpl; omega.
 Qed.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "reverse.c", line 8, characters 14-78: *)
 (*Why goal*) Lemma rev_impl_po_5 : 
   forall (p0: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -163,87 +193,20 @@ Qed.
                  (exists lr:plist, (((llist tl_global0 alloc p lp) /\
                   (llist tl_global0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global0 alloc p0 l) ->
+                   ((llist tl_global alloc p0 l) ->
                     (app (rev lr) lp) = (rev l)))))),
   forall (HW_11: r = null),
   forall (l0: plist),
-  forall (HW_12: (llist tl_global0 alloc p0 l0)),
+  forall (HW_12: (llist tl_global alloc p0 l0)),
+  (* File "reverse.c", line 8, characters 13-77 *)
   (llist tl_global0 alloc p (rev l0)).
 Proof.
-(*
-elim Pre8; clear Pre8; intuition.
-elim H1; clear H1; intuition.
-elim (is_list_llist alloc tl p0 Pre10); intros l1 Hl1.
-subst.
-assert (x0 = nil).
-inversion_clear H5; intuition.
-inversion_clear H. elim H5; auto.
-subst x0.
-generalize (H3 l0 H0); simpl; intro.
-rewrite <- H; auto.
-Save.
-
-Proof.
-*)
 intros; subst; intuition.
-exists nil.
-elim (is_list_llist alloc tl p0 Pre10); intros l Hl; exists l.
-intuition.
-rewrite <- app_nil_end; auto.
-rewrite (llist_function _ _ _ _ _ _ Hl H); auto.
-Save.
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(*
-intuition.
-elim Pre8; clear Pre8; intuition.
+(* post-condition *)
+elim HW_3; clear HW_3; intuition.
 elim H; clear H; intuition.
-inversion H3; intuition.
-Save.
-*)
-(*
-elim Pre8; clear Pre8; intuition.
-elim H; clear H; intuition.
-inversion H3; intuition.
-*)
-(*
-elim Pre8;intros;elim H;intros;elim H0;intuition.
-inversion H7;auto.
-elim Test2;auto.
-*)
-Save.
-
-intuition.
-elim Pre8; clear Pre8; intuition.
-elim H; clear H; intuition.
-inversion H3.
-absurd (r1 = null); intuition.
-exists (cons r1 x); exists l; subst; intuition.
-unfold llist; apply Path_cons; intuition.
- rewrite acc_upd_eq; auto.
-apply llist_pset_same; auto.
-unfold disjoint in H2; intuition.
-apply (H7 r1); auto.
-auto with *.
-apply llist_pset_same; auto.
-apply llist_not_starting with alloc tl0; auto.
-apply disjoint_cons.
-auto.
-apply llist_not_starting with alloc tl0; auto.
-rewrite app_rev_cons.
-apply H1; auto.
-unfold length_order, length.
-exists alloc.
-elim Pre8; clear Pre8; intuition.
-elim H; clear H; intuition.
+inversion H3; clear H3; intuition.
 subst.
-inversion H3; intuition.
-exists l; exists x0; intuition.
-apply llist_pset_same; auto.
-apply llist_not_starting with alloc tl0; auto.
-rewrite <- H6; simpl; omega.
-Save.
+rewrite <- H1; auto.
+Qed.
 

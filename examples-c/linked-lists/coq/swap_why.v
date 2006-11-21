@@ -75,7 +75,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "swap.c", line 4, characters 14-147: *)
 (*Why goal*) Lemma swap_impl_po_4 : 
   forall (c: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -103,13 +103,14 @@ Save.
   forall (l: plist),
   forall (c1: ((pointer) global)),
   forall (c2: ((pointer) global)),
-  forall (HW_14: (llist tl_global1 alloc c (cons c1 (cons c2 l)))),
+  forall (HW_14: (llist tl_global alloc c (cons c1 (cons c2 l)))),
+  (* File "swap.c", line 4, characters 13-146 *)
   (llist tl_global1 alloc mutable_c (cons c2 (cons c1 l))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "swap.c", line 4, characters 14-147: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
   forall (c: ((pointer) global)),
   forall (alloc: alloc_table),
@@ -122,6 +123,7 @@ Save.
   forall (c1: ((pointer) global)),
   forall (c2: ((pointer) global)),
   forall (HW_16: (llist tl_global alloc c (cons c1 (cons c2 l)))),
+  (* File "swap.c", line 4, characters 13-146 *)
   (llist tl_global alloc c (cons c2 (cons c1 l))).
 Proof.
 unfold cons ,llist, lpath; intuition; subst; auto.
