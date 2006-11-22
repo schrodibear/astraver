@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.152 2006-11-17 17:13:28 moy Exp $ i*)
+(*i $Id: ceffect.ml,v 1.153 2006-11-22 08:48:47 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -244,7 +244,7 @@ let rec term t = match t.nterm_node with
       assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
       (* [alloc] not used with the arithmetic memory model *)
       let ef = reads_add_field_var f (Pointer z) (term t1) in
-      if arith_memory_model then ef else reads_add_alloc ef
+      ef (* if arith_memory_model then ef else reads_add_alloc ef *)
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uplus, t) -> term t
