@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.116 2006-11-23 15:44:38 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.117 2006-11-23 21:28:25 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -235,18 +235,18 @@ let add_external loc v id =
 let add_parameter v tv id =
   push_parameter (Ident.string id) v tv
 
-let rec is_a_var = function
+let rec is_a_type_var = function
   | PTvar { type_val = None } -> true
-  | PTvar { type_val = Some t } -> is_a_var t
+  | PTvar { type_val = Some t } -> is_a_type_var t
   | _ -> false
 
 let cannot_be_generalized = function
   | Ref _ -> true
-  | PureType pt -> is_a_var pt
+  | PureType pt -> is_a_type_var pt
   | Arrow _ -> false
 
 let logic_type_is_var = function
-  | Function ([], pt) -> is_a_var pt
+  | Function ([], pt) -> is_a_type_var pt
   | Function _ | Predicate _ -> false
 
 let interp_decl ?(prelude=false) d = 
@@ -301,10 +301,11 @@ let interp_decl ?(prelude=false) d =
 	if is_global_logic id then raise_located loc (Clash id);
 	let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
 	let t = Predicate (List.map snd pl) in
-	let t = generalize_logic_type t in
-	add_global_logic id t;
 	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
 	let p = Ltyping.predicate lab env' p in
+	if Ltyping.logic_type_cannot_be_generalized t then
+	  raise_located loc CannotGeneralize;
+	add_global_logic id (generalize_logic_type t);
 	let p = generalize_predicate_def (pl,p) in
 	push_decl (Dpredicate_def (loc, Ident.string id, p))
     | Function_def (loc, id, pl, ty, e) ->
@@ -313,12 +314,13 @@ let interp_decl ?(prelude=false) d =
 	let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
 	let ty = Ltyping.pure_type env ty in
 	let t = Function (List.map snd pl, ty) in
-	let t = generalize_logic_type t in
-	add_global_logic id t;
 	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
 	let e,ty' = Ltyping.term lab env' e in
 	if not (eq_pure_type ty ty') then 
 	  Ltyping.expected_type loc (PureType ty);
+	if Ltyping.logic_type_cannot_be_generalized t then 
+	  raise_located loc CannotGeneralize;
+	add_global_logic id (generalize_logic_type t);
 	let f = generalize_function_def (pl,ty,e) in
 	push_decl (Dfunction_def (loc, Ident.string id, f))
     | Axiom (loc, id, p) ->

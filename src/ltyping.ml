@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.58 2006-11-23 21:28:25 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.59 2006-11-23 21:31:46 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -180,8 +180,13 @@ let instance x i =
 
 (* generalization *)
 
+let rec is_a_type_var = function
+  | PTvar { type_val = None } -> true
+  | PTvar { type_val = Some t } -> is_a_type_var t
+  | _ -> false
+
 let rec pure_type_cannot_be_generalized = function
-  | PTvar { type_val = Some _ } -> true
+  | PTvar { type_val = Some pt } -> not (is_a_type_var pt)
   | PTexternal (ptl, _) -> pure_types_cannot_be_generalized ptl
   | PTint | PTbool | PTreal | PTunit | PTvar { type_val = None } -> false
 
