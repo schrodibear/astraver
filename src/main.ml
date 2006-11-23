@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.115 2006-11-03 12:57:08 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.116 2006-11-23 15:44:38 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -245,6 +245,10 @@ let cannot_be_generalized = function
   | PureType pt -> is_a_var pt
   | Arrow _ -> false
 
+let logic_type_is_var = function
+  | Function ([], pt) -> is_a_var pt
+  | Function _ | Predicate _ -> false
+
 let interp_decl ?(prelude=false) d = 
   let lab = Label.empty in
   match d with 
@@ -277,6 +281,7 @@ let interp_decl ?(prelude=false) d =
 	  (*Printf.printf  "%s " (Ident.string id);*)
 	  if is_global_logic id then raise_located loc (Clash id);
 	  let t = Ltyping.logic_type t in
+	  if logic_type_is_var t then raise_located loc CannotGeneralize;
 	  let t = generalize_logic_type t in
 	  add_global_logic id t;
 	  if ext then 
