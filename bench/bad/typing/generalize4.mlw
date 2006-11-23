@@ -1,0 +1,2 @@
+
+goal test : forall x:'a. x=1 
