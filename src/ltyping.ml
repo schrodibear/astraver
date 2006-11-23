@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.59 2006-11-23 21:31:46 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.60 2006-11-23 21:40:33 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -205,6 +205,15 @@ let rec predicate lab env p =
 and desc_predicate loc lab env = function
   | PPvar x ->
       type_pvar loc env x
+  | PPapp (x, pl) when x == t_distinct ->
+      let ty = PTvar (Env.new_type_var ()) in
+      let each_term a =
+	let t,tt = term lab env a in
+	if not (unify tt ty) then expected_type a.pp_loc (PureType ty);
+	t,tt
+      in
+      let tl = List.map each_term pl in
+      Papp (x, List.map fst tl, List.map snd tl)
   | PPapp (x, pl) ->
       type_papp loc env x (List.map (term lab env) pl)
   | PPtrue ->
