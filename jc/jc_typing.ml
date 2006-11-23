@@ -122,7 +122,7 @@ let find_fun_info id = Hashtbl.find functions_env id
 let type_type t =
   match t.jc_ptype_node with
     | JCPTnative n -> JCTnative n
-    | JCPTvalidpointer (id, a, b) -> 
+    | JCPTpointer (id, a, b) -> 
 	begin
 	  try
 	    let st = Hashtbl.find structs_table id in

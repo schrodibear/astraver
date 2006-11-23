@@ -5,14 +5,14 @@ type char = {
 }
 
 type queue = {
-  char contents[];
+  char[0..] contents;
   integer length;
   integer first;	
   integer last;
   boolean empty;
   boolean full;
   invariant is_queue(q) = 
-     \offset_min(q.contents) == 0 && 
+     /* \offset_min(q.contents) == 0 && redondant with type of q.contents */
      q.length <= \offset_max(q.contents) + 1 &&
      0 <= q.first && q.first < q.length &&
      0 <= q.last && q.last < q.length &&

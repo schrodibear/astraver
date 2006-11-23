@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.17 2006-11-20 10:28:34 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.18 2006-11-23 09:41:02 marche Exp $ */
 
 %{
 
@@ -69,8 +69,8 @@
 %token <Jc_ast.const> CONSTANT
 %token <string> STRING_LITERAL 
 
-/* ( ) { } [ ] */
-%token LPAR RPAR LBRACE RBRACE LSQUARE RSQUARE
+/* ( ) { } [ ] .. */
+%token LPAR RPAR LBRACE RBRACE LSQUARE RSQUARE DOTDOT
 
 /* ; , : . ? */
 %token SEMICOLON COMMA COLON DOT QUESTION
@@ -243,7 +243,12 @@ type_expr:
     { locate_type (JCPTidentifier $1) }
 | IDENTIFIER LSQUARE CONSTANT RSQUARE
     { let n = int_of_constant (loc_i 3) $3 in
-      locate_type (JCPTvalidpointer($1,n,n)) }
+      locate_type (JCPTpointer($1,n,n)) }
+| IDENTIFIER LSQUARE CONSTANT RSQUARE
+    { let n = int_of_constant (loc_i 3) $3 in
+      locate_type (JCPTpointer($1,n,n)) }
+| IDENTIFIER LSQUARE DOTDOT RSQUARE
+    { locate_type (JCPTpointer($1,0,-1)) }
 ;
 
 function_specification:

@@ -43,7 +43,7 @@ type label = string
 type ptype_node = 
   | JCPTnative of native_type
   | JCPTidentifier of string
-  | JCPTvalidpointer of string * int * int
+  | JCPTpointer of string * int * int
 
 and ptype =
     {
