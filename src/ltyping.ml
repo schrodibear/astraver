@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.57 2006-11-15 09:30:17 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.58 2006-11-23 21:28:25 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -148,9 +148,11 @@ let real_arith = function
   | _ -> assert false
 
 let make_arith loc = function
-  | (a,PTint), (PPadd|PPsub|PPmul|PPdiv|PPmod as r), (b,PTint) ->
+  | (a,t1), (PPadd|PPsub|PPmul|PPdiv|PPmod as r), (b,t2) 
+    when unify t1 PTint && unify t2 PTint ->
       Tapp (int_arith r, [a; b], []), PTint
-  | (a,PTreal), (PPadd|PPsub|PPmul|PPdiv as r), (b,PTreal) ->
+  | (a,t1), (PPadd|PPsub|PPmul|PPdiv as r), (b,t2) 
+    when unify t1 PTreal && unify t2 PTreal ->
       Tapp (real_arith r, [a; b], []), PTreal
   | (_,t1),op,(_,t2) ->
       expected_num loc
@@ -175,6 +177,20 @@ let instance x i =
     Ident.print x (Pp.print_list Pp.comma print_pure_type) l;
   *)
   l
+
+(* generalization *)
+
+let rec pure_type_cannot_be_generalized = function
+  | PTvar { type_val = Some _ } -> true
+  | PTexternal (ptl, _) -> pure_types_cannot_be_generalized ptl
+  | PTint | PTbool | PTreal | PTunit | PTvar { type_val = None } -> false
+
+and pure_types_cannot_be_generalized l = 
+  List.exists pure_type_cannot_be_generalized l
+
+let logic_type_cannot_be_generalized = function
+  | Function (ptl, pt) -> pure_types_cannot_be_generalized (pt :: ptl)
+  | Predicate ptl -> pure_types_cannot_be_generalized ptl
 
 (* typing predicates *)
 
@@ -224,10 +240,16 @@ and desc_predicate loc lab env = function
       let v = pure_type env pt in
       let env' = Env.add_logic id v env in
       let tl' = triggers lab env' tl in
-      forall id (PureType v) ~triggers:tl' (predicate lab env' a)
+      let p' = predicate lab env' a in
+      if pure_type_cannot_be_generalized v then 
+	raise_located loc CannotGeneralize;
+      forall id (PureType v) ~triggers:tl' p'
   | PPexists (id, pt, a) ->
       let v = pure_type env pt in
-      exists id (PureType v) (predicate lab (Env.add_logic id v env) a)
+      let p = predicate lab (Env.add_logic id v env) a in
+      if pure_type_cannot_be_generalized v then 
+	raise_located loc CannotGeneralize;
+      exists id (PureType v) p
   | PPfpi (e, f1, f2) ->
       (match term lab env e with
 	 | te, PTreal -> Pfpi (te, f1, f2)
@@ -282,8 +304,8 @@ and desc_term loc lab env = function
       term_expected loc
   | PPprefix (PPneg, a) ->
       (match term lab env a with
-	 | ta, PTint -> Tapp (t_neg_int, [ta], []), PTint
-	 | ta, PTreal -> Tapp (t_neg_real, [ta], []), PTreal
+	 | ta, ty when unify ty PTint -> Tapp (t_neg_int, [ta], []), PTint
+	 | ta, ty when unify ty PTreal -> Tapp (t_neg_real, [ta], []), PTreal
 	 | _ -> expected_num loc)
   | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ | PPnamed _ ->
       term_expected loc

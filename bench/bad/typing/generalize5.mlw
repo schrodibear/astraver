@@ -1,0 +1,2 @@
+
+goal test : exists x:'a. x=1 

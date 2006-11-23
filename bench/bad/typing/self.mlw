@@ -1,0 +1,4 @@
+
+(* self reference *)
+
+function f(x:int) : int = f(x)
