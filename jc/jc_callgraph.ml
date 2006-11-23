@@ -31,6 +31,7 @@ let rec term acc t =
     | JCTconst _ 
     | JCTvar _ -> acc
     | JCTapp (f,lt) -> f::(List.fold_left term acc lt)
+    | JCToffset_max t | JCToffset_min t
     | JCTold t | JCTderef (t,_) -> term acc t
     | JCTshift (t1,t2) -> term (term acc t1) t2
     | JCTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
@@ -43,7 +44,7 @@ let rec assertion acc p =
   | JCAfalse -> acc
   | JCAapp(f,lt) -> f::(List.fold_left term acc lt)
   | JCAand(pl) -> List.fold_left assertion acc pl
-  | JCAimplies (p1,p2) -> 
+  | JCAimplies (p1,p2) | JCAiff(p1,p2) -> 
       assertion (assertion acc p1) p2
   | JCAif(t1,p2,p3) -> 
       assertion (assertion (term acc t1) p2) p3

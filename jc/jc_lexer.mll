@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.14 2006-11-23 09:41:02 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.15 2006-11-23 10:35:15 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -60,6 +60,9 @@
 	  pos_lnum = if absolute then line else pos.pos_lnum + line;
 	  pos_bol = pos.pos_cnum - chars;
       }
+
+
+  exception Dotdot of string
 
 }
 
@@ -127,6 +130,8 @@ rule token = parse
   | "while"                 { WHILE }
   | "with"                  { WITH }
   | "\\forall"              { BSFORALL }
+  | "\\offset_max"          { BSOFFSET_MAX }
+  | "\\offset_min"          { BSOFFSET_MIN }
   | "\\old"                 { BSOLD }
   | "\\result"              { BSRESULT }
   | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
@@ -148,6 +153,12 @@ rule token = parse
   | rD+ rE rFS?             { CONSTANT (JCCreal (lexeme lexbuf)) }
   | rD* "." rD+ (rE)? rFS?  { CONSTANT (JCCreal (lexeme lexbuf)) }
   | rD+ "." rD* (rE)? rFS?  { CONSTANT (JCCreal (lexeme lexbuf)) }
+
+      (* trick to deal with intervals like 0..10 *)
+
+  | (rD+ as n) ".."         { raise (Dotdot n) }
+
+      (* character constants *)
 
   | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
 
@@ -172,6 +183,7 @@ rule token = parse
   | "&&"                    { AMPAMP }
   | "||"                    { BARBAR }
   | "=>"                    { EQGT }
+  | "<=>"                   { LTEQGT }
   | "<="                    { LTEQ }
   | ">="                    { GTEQ }
   | "=="                    { EQEQ }
@@ -222,11 +234,29 @@ and comment = parse
 
 {
 
+let dotdot_mem = ref false
+ 
+let next_token lexbuf =
+  if !dotdot_mem then
+    begin
+      dotdot_mem := false;
+      DOTDOT
+    end
+  else
+    begin
+      try
+	token lexbuf
+      with
+	Dotdot(n) ->
+	  dotdot_mem := true;
+	  CONSTANT(JCCinteger n)
+    end
+
   let parse f c =
     let lb = from_channel c in
     lb.lex_curr_p <- { lb.lex_curr_p with pos_fname = f };
     try
-      Jc_parser.file token lb
+      Jc_parser.file next_token lb
     with Parsing.Parse_error ->
       Jc_options.parsing_error (loc lb) ""
 

@@ -13,40 +13,42 @@ type queue = {
   boolean full;
   invariant is_queue(q) = 
      /* \offset_min(q.contents) == 0 && redondant with type of q.contents */
-     q.length <= \offset_max(q.contents) + 1 &&
+     q.length == \offset_max(q.contents) + 1 &&
      0 <= q.first && q.first < q.length &&
      0 <= q.last && q.last < q.length &&
-     q.full <=> q.last == q.first;
+     q.full <=> q.last == q.first &&
+     q.empty <=> q.last == (q.first + 1) % q.length;
 }
 
-unit push(queue q[0], char c) 
+unit push(queue[0] q, char[0] c) 
   requires !q.full
   behavior correct_push:
-    assigns q.empty, q.full, q.last, q.contents[q.last]
-    ensures !q.empty && q.contents[\old(q.last)] == c
+    assigns q.empty, q.full, q.last, (q.contents+q.last).i
+    ensures !q.empty && (q.contents+\old(q.last)).i == c
 {
-  q.contents[q.last++] = c;
+  (q.contents+q.last++).i = c.i;
   if (q.last == q.length) q.last = 0;
   q.empty = false;
   q.full = q.first == q.last;
 }
 
-char pop(queue q[0]) 
+char pop(queue[0] q) 
   requires !q.empty
   behavior correct_pop:
     assigns q.empty, q.full, q.first
-    ensures !q.full && \result == q.contents[\old(q.first)]
+    ensures !q.full && \result == (q.contents+\old(q.first)).i
 {
-  char r = q.contents[q.first++];
+  char r = (q.contents+q.first++).i;
   if (q.first == q.length) q.first = 0;
   q.full = false;
-  q.empty = q.first == q.last;
+  q.empty = q.last == (q.first + 1) % q.length;
   return r;
 }
 
-boolean test(queue q[0], queue q1[0]) 
+boolean test(queue[0] q, queue[0] q1) 
   requires !q.empty
-  ensures \result == \old(q1.empty) 
+  behavior q1_unchanged:
+    ensures \result == \old(q1.empty) 
 {
   pop(q);
   return q1.empty;

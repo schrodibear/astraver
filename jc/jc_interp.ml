@@ -85,6 +85,8 @@ let rec term label oldlabel t =
     | JCTapp(f,l) -> 
 	LApp(f.jc_logic_info_name,List.map ft l)
     | JCTold(t) -> term (Some oldlabel) oldlabel t
+    | JCToffset_max(t) -> LApp("offset_max",[ft t])
+    | JCToffset_min(t) -> LApp("offset_min",[ft t])
     | JCTinstanceof(t,ty) ->
 	LApp("instanceof_bool",
 	     [lvar label "alloc"; ft t;LVar ty.jc_struct_info_name])
@@ -102,6 +104,7 @@ let rec assertion label oldlabel a =
     | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
     | JCAand l -> make_and_list (List.map fa l)
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
+    | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
     | JCAnot(a) -> LNot(fa a)
     | JCAapp(f,l) -> LPred(f.jc_logic_info_name,List.map ft l)
     | JCAforall(v,p) -> 

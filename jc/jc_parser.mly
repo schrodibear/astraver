@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.18 2006-11-23 09:41:02 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.19 2006-11-23 10:35:15 marche Exp $ */
 
 %{
 
@@ -84,8 +84,8 @@
 /* += -= *= /= %= */
 %token PLUSEQ MINUSEQ STAREQ SLASHEQ PERCENTEQ
 
-/* && || => ! */
-%token AMPAMP BARBAR EQGT EXCLAM
+/* && || => <=> ! */
+%token AMPAMP BARBAR EQGT LTEQGT EXCLAM
 
 /* if else return while */
 %token IF ELSE RETURN WHILE
@@ -99,8 +99,8 @@
 /* behavior ensures requires */
 %token ASSIGNS BEHAVIOR ENSURES REQUIRES 
 
-/* \forall \old \result  */
-%token BSFORALL BSOLD BSRESULT 
+/* \forall \offset_max \offset_min \old \result  */
+%token BSFORALL BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT 
 
 /* axiom */
 %token AXIOM
@@ -135,8 +135,13 @@
 /* precedences on expressions  */
 
 %nonassoc PRECFORALL
-%right EQGT
+/* <=> */
+%right LTEQGT
+/* => */
+%right EQGT 
+/* unary -, unary +, ++, --, ! */
 %nonassoc UMINUS UPLUS PLUSPLUS MINUSMINUS EXCLAM
+/* . */
 %nonassoc DOT
 
 
@@ -241,14 +246,21 @@ type_expr:
     { locate_type (JCPTnative `Tunit) }
 | IDENTIFIER
     { locate_type (JCPTidentifier $1) }
-| IDENTIFIER LSQUARE CONSTANT RSQUARE
-    { let n = int_of_constant (loc_i 3) $3 in
-      locate_type (JCPTpointer($1,n,n)) }
-| IDENTIFIER LSQUARE CONSTANT RSQUARE
-    { let n = int_of_constant (loc_i 3) $3 in
-      locate_type (JCPTpointer($1,n,n)) }
 | IDENTIFIER LSQUARE DOTDOT RSQUARE
     { locate_type (JCPTpointer($1,0,-1)) }
+| IDENTIFIER LSQUARE CONSTANT RSQUARE
+    { let n = int_of_constant (loc_i 3) $3 in
+      locate_type (JCPTpointer($1,n,n)) }
+| IDENTIFIER LSQUARE CONSTANT DOTDOT RSQUARE
+    { let n = int_of_constant (loc_i 3) $3 in
+      locate_type (JCPTpointer($1,n,n-1)) }
+| IDENTIFIER LSQUARE CONSTANT DOTDOT CONSTANT RSQUARE
+    { let n = int_of_constant (loc_i 3) $3 in
+      let m = int_of_constant (loc_i 5) $5 in
+      locate_type (JCPTpointer($1,n,m)) }
+| IDENTIFIER LSQUARE DOTDOT CONSTANT RSQUARE
+    { let m = int_of_constant (loc_i 4) $4 in
+      locate_type (JCPTpointer($1,m+1,m)) }
 ;
 
 function_specification:
@@ -316,6 +328,10 @@ postfix_expression:
     { locate_expr (JCPEapp($1, $3)) }
 | BSOLD LPAR expression RPAR 
     { locate_expr (JCPEold($3)) }
+| BSOFFSET_MAX LPAR expression RPAR 
+    { locate_expr (JCPEoffset_max($3)) }
+| BSOFFSET_MIN LPAR expression RPAR 
+    { locate_expr (JCPEoffset_min($3)) }
 | postfix_expression DOT IDENTIFIER
     { locate_expr (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 
@@ -350,20 +366,20 @@ multiplicative_expression:
 | postfix_expression 
     { $1 }
 | multiplicative_expression STAR postfix_expression 
-    { locate_expr (JCPEbinary ($1, `Bmul, $3)) }
+    { locate_expr (JCPEbinary ($1, Bmul, $3)) }
 | multiplicative_expression SLASH postfix_expression 
-    { locate_expr (JCPEbinary ($1, `Bdiv, $3)) }
+    { locate_expr (JCPEbinary ($1, Bdiv, $3)) }
 | multiplicative_expression PERCENT postfix_expression 
-    { locate_expr (JCPEbinary ($1, `Bmod, $3)) }
+    { locate_expr (JCPEbinary ($1, Bmod, $3)) }
 ;
 
 additive_expression: 
 | multiplicative_expression 
     { $1 }
 | additive_expression PLUS multiplicative_expression 
-    { locate_expr (JCPEbinary ($1, `Badd, $3)) }
+    { locate_expr (JCPEbinary ($1, Badd, $3)) }
 | additive_expression MINUS multiplicative_expression 
-    { locate_expr (JCPEbinary ($1, `Bsub, $3)) }
+    { locate_expr (JCPEbinary ($1, Bsub, $3)) }
 ;
 
 shift_expression: 
@@ -381,13 +397,13 @@ relational_expression:
 | shift_expression 
     { $1 }
 | relational_expression LT shift_expression 
-    { locate_expr (JCPEbinary ($1, `Blt, $3)) }
+    { locate_expr (JCPEbinary ($1, Blt, $3)) }
 | relational_expression GT shift_expression
-    { locate_expr (JCPEbinary ($1, `Bgt, $3)) }
+    { locate_expr (JCPEbinary ($1, Bgt, $3)) }
 | relational_expression LTEQ shift_expression
-    { locate_expr (JCPEbinary ($1, `Ble, $3)) }
+    { locate_expr (JCPEbinary ($1, Ble, $3)) }
 | relational_expression GTEQ shift_expression
-    { locate_expr (JCPEbinary ($1, `Bge, $3)) }
+    { locate_expr (JCPEbinary ($1, Bge, $3)) }
 | relational_expression LTCOLON IDENTIFIER
     { locate_expr (JCPEinstanceof($1, $3)) }
 | relational_expression COLONGT IDENTIFIER
@@ -398,9 +414,9 @@ equality_expression:
 | relational_expression 
     { $1 }
 | equality_expression EQEQ relational_expression 
-    { locate_expr (JCPEbinary ($1, `Beq, $3)) }
+    { locate_expr (JCPEbinary ($1, Beq, $3)) }
 | equality_expression BANGEQ relational_expression 
-    { locate_expr (JCPEbinary ($1, `Bneq, $3)) }
+    { locate_expr (JCPEbinary ($1, Bneq, $3)) }
 ;
 
 and_expression: 
@@ -434,14 +450,14 @@ logical_and_expression:
 | inclusive_or_expression 
     { $1 }
 | logical_and_expression AMPAMP inclusive_or_expression 
-    { locate_expr (JCPEbinary($1, `Bland, $3)) }
+    { locate_expr (JCPEbinary($1, Bland, $3)) }
 ;
 
 logical_or_expression: 
 | logical_and_expression 
     { $1 }
 | logical_or_expression BARBAR logical_and_expression 
-    { locate_expr (JCPEbinary($1, `Blor, $3)) }
+    { locate_expr (JCPEbinary($1, Blor, $3)) }
 ;
 
 conditional_expression: 
@@ -459,11 +475,11 @@ assignment_expression:
     { let a  =
 	match $2 with
 		| `Aeq -> JCPEassign ($1, $3)
-		| `Aadd -> JCPEassign_op ($1, `Badd, $3)
-		| `Asub -> JCPEassign_op ($1, `Bsub, $3)
-		| `Amul -> JCPEassign_op ($1, `Bmul, $3)
-		| `Adiv -> JCPEassign_op ($1, `Bdiv, $3)
-		| `Amod -> JCPEassign_op ($1, `Bmod, $3)
+		| `Aadd -> JCPEassign_op ($1, Badd, $3)
+		| `Asub -> JCPEassign_op ($1, Bsub, $3)
+		| `Amul -> JCPEassign_op ($1, Bmul, $3)
+		| `Adiv -> JCPEassign_op ($1, Bdiv, $3)
+		| `Amod -> JCPEassign_op ($1, Bmod, $3)
 (*
 		| Aleft -> CEassign_op ($1, Bshift_left, $3)
 		| Aright -> CEassign_op ($1, Bshift_right, $3)
@@ -498,7 +514,9 @@ expression:
     %prec PRECFORALL
     { locate_expr (JCPEforall($2,$3,$5)) }
 | expression EQGT expression
-    { locate_expr (JCPEbinary($1,`Bimplies,$3)) }
+    { locate_expr (JCPEbinary($1,Bimplies,$3)) }
+| expression LTEQGT expression
+    { locate_expr (JCPEbinary($1,Biff,$3)) }
 /*
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
 */

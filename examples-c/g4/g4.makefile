@@ -53,7 +53,7 @@ simplify: simplify/g4_why.sx
 	@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)
 
 simplify/%_why.sx: why/g4_spec.why why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir  simplify $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
 
 goals: why/g4_why.why
 
@@ -83,7 +83,7 @@ smtlib: smtlib/g4_why.smt
 	@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)
 
 smtlib/%_why.smt: why/g4_spec.why why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding mono -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
 
 gui stat: g4.stat
 

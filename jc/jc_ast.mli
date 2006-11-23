@@ -52,10 +52,10 @@ and ptype =
     }
 
 type pbin_op =
-  [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq 
-  | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod
-  | `Bland | `Blor | `Bimplies 
-  ]
+  | Blt | Bgt | Ble | Bge | Beq | Bneq 
+  | Badd | Bsub | Bmul | Bdiv | Bmod
+  | Bland | Blor | Bimplies | Biff
+  
 
 type punary_op =
   [ `Uplus | `Uminus | `Unot 
@@ -76,6 +76,8 @@ type pexpr_node =
   | JCPEcast of pexpr * string
   | JCPEforall of ptype * string list * pexpr
   | JCPEold of pexpr
+  | JCPEoffset_max of pexpr
+  | JCPEoffset_min of pexpr
   | JCPEif of pexpr * pexpr * pexpr
 
 and pexpr =
@@ -134,6 +136,8 @@ type term_node =
   | JCTderef of term * field_info
   | JCTapp of logic_info * term list
   | JCTold of term
+  | JCToffset_max of term
+  | JCToffset_min of term
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
   | JCTif of term * term * term
@@ -149,6 +153,7 @@ type assertion_node =
   | JCAfalse
   | JCAand of assertion list
   | JCAimplies of assertion * assertion
+  | JCAiff of assertion * assertion
   | JCAnot of assertion
   | JCAapp of logic_info * term list
   | JCAforall of var_info * assertion

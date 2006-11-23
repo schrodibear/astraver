@@ -148,17 +148,17 @@ let const c =
 
 let num_op op =
   match op with
-    | `Badd -> add_int
-    | `Bsub -> sub_int
-    | `Bmul -> mul_int
-    | `Bdiv -> div_int
-    | `Bmod -> mod_int
+    | Badd -> add_int
+    | Bsub -> sub_int
+    | Bmul -> mul_int
+    | Bdiv -> div_int
+    | Bmod -> mod_int
     | _ -> assert false
 
 let eq_op op arg_type  =
   match (op,arg_type) with
-    | (`Beq,`Tinteger) -> eq_int_bool
-    | (`Bneq,`Tinteger) -> neq_int_bool
+    | (Beq,`Tinteger) -> eq_int_bool
+    | (Bneq,`Tinteger) -> neq_int_bool
     | _ -> assert false
 
 let logic_unary_op loc (op : Jc_ast.punary_op) t e =
@@ -170,11 +170,11 @@ let logic_unary_op loc (op : Jc_ast.punary_op) t e =
 
 let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
   match op with
-    | `Bgt -> assert false (* TODO *)
-    | `Blt -> assert false (* TODO *)
-    | `Bge -> assert false (* TODO *)
-    | `Ble -> assert false (* TODO *)
-    | `Beq | `Bneq ->
+    | Bgt -> assert false (* TODO *)
+    | Blt -> assert false (* TODO *)
+    | Bge -> assert false (* TODO *)
+    | Ble -> assert false (* TODO *)
+    | Beq | Bneq ->
 	let t =
 	  match t1,t2 with
 	    | JCTnative t1, JCTnative t2 ->
@@ -186,7 +186,7 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 	    | _ -> assert false
 	in
 	JCTnative t,JCTapp(eq_op op t,[e1;e2])
-    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ->
+    | Badd | Bsub | Bmul | Bdiv | Bmod ->
 	let t =
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -198,8 +198,9 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 	    | _ ->
 		typing_error loc "numeric types expected"
 	in JCTnative t,JCTapp(num_op op,[e1;e2])
-    | `Bland | `Blor -> assert false (* TODO *)
-    | `Bimplies -> assert false
+    | Bland | Blor -> assert false (* TODO *)
+    | Bimplies -> assert false
+    | Biff -> assert false
 	  
 let rec term env e =
   let t,te =
@@ -249,6 +250,14 @@ let rec term env e =
 	  let t,c = const c in t,JCTconst c
       | JCPEold e -> 
 	  let t,e = term env e in t,JCTold(e)
+      | JCPEoffset_max e -> 
+	  let t,e = term env e in 
+	  (* TODO : check t is a pointer *)
+	  integer_type,JCToffset_max(e)
+      | JCPEoffset_min e -> 
+	  let t,e = term env e in 
+	  (* TODO : check t is a pointer *)
+	  integer_type,JCToffset_min(e)
       | JCPEif(e1,e2,e3) ->
 	  let t1,te1 = term env e1 
 	  and t2,te2 = term env e2
@@ -293,14 +302,14 @@ let rel_unary_op loc op t =
 
 let rel_bin_op loc op t1 t2 =
   match op with
-    | `Bgt -> gt_int
-    | `Blt -> lt_int
-    | `Bge -> ge_int
-    | `Ble -> le_int
-    | `Beq | `Bneq -> 
+    | Bgt -> gt_int
+    | Blt -> lt_int
+    | Bge -> ge_int
+    | Ble -> le_int
+    | Beq | Bneq -> 
 	let op = match op with
-	  | `Beq -> eq
-	  | `Bneq -> neq
+	  | Beq -> eq
+	  | Bneq -> neq
 	  | _ -> assert false
 	in
 	if t1=t2 then 
@@ -314,10 +323,11 @@ let rel_bin_op loc op t1 t2 =
 	else
 	  typing_error loc "terms should have the same type"
 	(* non propositional operators *)
-    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod -> assert false
+    | Badd | Bsub | Bmul | Bdiv | Bmod -> assert false
 	(* already recognized as connectives *)
-    | `Bland | `Blor -> assert false 
-    | `Bimplies -> assert false
+    | Bland | Blor -> assert false 
+    | Bimplies -> assert false
+    | Biff -> assert false
 
 
 
@@ -348,10 +358,12 @@ let rec assertion env e =
 	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
 	    end
       | JCPEcast(e, t) -> assert false
-      | JCPEbinary (e1, `Bland, e2) -> 
+      | JCPEbinary (e1, Bland, e2) -> 
 	  make_and (assertion env e1) (assertion env e2)
-      | JCPEbinary (e1, `Bimplies, e2) -> 
+      | JCPEbinary (e1, Bimplies, e2) -> 
 	  JCAimplies(assertion env e1,assertion env e2)
+      | JCPEbinary (e1, Biff, e2) -> 
+	  JCAiff(assertion env e1,assertion env e2)
       | JCPEunary (`Unot, e2) -> 
 	  JCAnot(assertion env e2)
       | JCPEbinary (e1, op, e2) -> 
@@ -391,6 +403,9 @@ let rec assertion env e =
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
 	  end
+	  (* non propositional expressions *)
+      | JCPEoffset_max _ | JCPEoffset_min _ ->
+	  typing_error e.jc_pexpr_loc "offsets are not propositions"
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
       | JCPEassign _ -> 
@@ -482,28 +497,28 @@ let make_unary_app loc (op : Jc_ast.punary_op) t2 e2 =
 
 let bin_op t op =
   match t,op with
-    | _, `Bgt -> gt_int_
-    | _, `Blt -> lt_int_
-    | _, `Bge -> ge_int_
-    | _, `Ble -> le_int_
-    | _, `Beq -> eq_int_
-    | _, `Bneq -> neq_int_
-    | `Tinteger, `Badd -> add_int_
-    | `Treal, `Badd -> add_real_
-    | _, `Bsub -> sub_int_
-    | _, `Bmul -> mul_int_
-    | _, `Bdiv -> div_int_
-    | _, `Bmod -> mod_int_
-    | `Tboolean, `Bland -> and_ 
-    | `Tboolean, `Blor -> or_
+    | _, Bgt -> gt_int_
+    | _, Blt -> lt_int_
+    | _, Bge -> ge_int_
+    | _, Ble -> le_int_
+    | _, Beq -> eq_int_
+    | _, Bneq -> neq_int_
+    | `Tinteger, Badd -> add_int_
+    | `Treal, Badd -> add_real_
+    | _, Bsub -> sub_int_
+    | _, Bmul -> mul_int_
+    | _, Bdiv -> div_int_
+    | _, Bmod -> mod_int_
+    | `Tboolean, Bland -> and_ 
+    | `Tboolean, Blor -> or_
 	(* not allowed as expression op *)
-    | _,`Bimplies -> assert false
+    | _,Bimplies -> assert false
     | `Tunit,_ -> assert false
     | _ -> assert false
 
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
-    | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq ->
+    | Bgt | Blt | Bge | Ble | Beq | Bneq ->
 	begin
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -516,7 +531,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		typing_error loc "numeric types expected"
 	end;
 	JCTnative `Tboolean,JCEcall(bin_op `Tboolean op,[e1;e2])
-    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ->
+    | Badd | Bsub | Bmul | Bdiv | Bmod ->
 	let t=
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -529,7 +544,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	    | _ ->
 		typing_error loc "numeric types expected"
 	in JCTnative t,JCEcall(bin_op t op,[e1;e2])
-    | `Bland | `Blor -> 
+    | Bland | Blor -> 
 	let t=
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -543,8 +558,8 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	in JCTnative t,JCEcall(bin_op t op,[e1;e2])
 
 	(* not allowed as expression op *)
-    | `Bimplies -> assert false
-    | `Binstanceof -> assert false
+    | Bimplies | Biff -> assert false
+
 
 
 let rec expr env e =
@@ -681,7 +696,9 @@ let rec expr env e =
 	  end
 	  (* logic expressions, not allowed as program expressions *)
       | JCPEforall _ 
-      | JCPEold _ -> 
+      | JCPEold _ 
+      | JCPEoffset_max _ 
+      | JCPEoffset_min _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
 
   in t,{ jc_expr_node = te; jc_expr_loc = e.jc_pexpr_loc }
@@ -798,6 +815,8 @@ let rec location env e =
     | JCPEcast _
     | JCPEinstanceof _
     | JCPEold _ 
+    | JCPEoffset_max _ 
+    | JCPEoffset_min _
     | JCPEforall (_, _, _)
     | JCPEunary _
     | JCPEbinary (_, _, _)

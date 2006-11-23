@@ -75,7 +75,8 @@
 
 %right prec_named
 %nonassoc prec_forall prec_exists
-%right IMPLIES IFF
+%right IFF
+%right IMPLIES
 %left OR
 %left AND
 %nonassoc prec_not

@@ -40,13 +40,13 @@ void m(int t[], int length) {
     if (t[i] > 0) count++;
   }
   // USELESS @ assert count == num_of_pos(0,length-1,t)
-  //@ label L
+  // @ label L
   u = (int *)calloc(count,sizeof(int));
   count = 0;
   
   /*@ invariant
     @    0 <= i && i <= length && 
-    @    0 <= count && count <= i && count <= \at(count,L) &&  
+    @    0 <= count && count <= i && (* count <= \at(count,L) &&  *)
     @    count == num_of_pos(0,i-1,t)
     @ (* USELESS loop_assigns u[..] *)
     @ variant length - i
@@ -55,8 +55,7 @@ void m(int t[], int length) {
     if (t[i] > 0) {
       /* USELESS @ assert count == num_of_pos(0,i,t)-1 && count < \at(count,L)
       */
-      u[count] = t[i];
-      count++;
+      u[count++] = t[i];
     }
   }
 }
