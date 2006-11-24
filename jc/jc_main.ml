@@ -56,15 +56,20 @@ let main () =
 	(* phase 4 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects.@.";
 	Array.iter Jc_effect.function_effects components;
-	(* phase 5 : generation of Why memories *)
+	(* phase 5 : checking structure invariants *)
+	Jc_options.lprintf "\nstarting checking structure invariants.@.";
+	Hashtbl.iter 
+	  (fun _ (_,invs) -> Jc_invariants.check invs)
+	  Jc_typing.structs_table;
+	(* production phase 1 : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
-	    (fun _ st acc ->
-	       Jc_interp.tr_struct st acc)
+	    (fun _ (st,invs) acc ->
+	       Jc_interp.tr_struct st invs acc)
 	    Jc_typing.structs_table
 	    []
 	in	       	  
-	(* phase 6 : generation of Why axioms *)
+	(* production phase 2 : generation of Why axioms *)
 	let d_axioms = 
 	  Hashtbl.fold 
 	    (fun id p acc ->
@@ -72,7 +77,7 @@ let main () =
 	    Jc_typing.axioms_table
 	    d_memories
 	in	       
-	(* phase 7 : generation of Why functions *)
+	(* production phase 3 : generation of Why functions *)
 	let d_funs = 
 	  Hashtbl.fold 
 	    (fun _ (f,s,b) acc ->
@@ -82,7 +87,7 @@ let main () =
 	    Jc_typing.functions_table
 	    d_axioms
 	in	       
-	(* end phase : produce Why file *)
+	(* production phase 4 : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
 	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_funs)

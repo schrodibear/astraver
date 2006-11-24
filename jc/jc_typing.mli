@@ -26,11 +26,14 @@ open Jc_env
 open Jc_fenv
 open Jc_ast
 
+val typing_error : 
+    Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
+
 val functions_table : 
   (int, fun_info * fun_spec * statement list) Hashtbl.t
 
 val structs_table : 
-  (string, struct_info) Hashtbl.t
+  (string, (struct_info * (string * var_info * assertion) list)) Hashtbl.t
 
 val axioms_table : 
   (string, assertion) Hashtbl.t

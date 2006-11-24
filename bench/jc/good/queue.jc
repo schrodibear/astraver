@@ -1,7 +1,7 @@
 
 type char = {
   integer i;
-  invariant is_char(i) = 0 <= i && i <= 255;
+  //  invariant is_char(c) = 0 <= c.i && c.i <= 255;
 }
 
 type queue = {
@@ -11,49 +11,51 @@ type queue = {
   integer last;
   boolean empty;
   boolean full;
+  /*
   invariant is_queue(q) = 
      /* \offset_min(q.contents) == 0 && redondant with type of q.contents */
      q.length == \offset_max(q.contents) + 1 &&
      0 <= q.first && q.first < q.length &&
      0 <= q.last && q.last < q.length &&
-     q.full <=> q.last == q.first &&
-     q.empty <=> q.last == (q.first + 1) % q.length;
+     q.full <=> q.last == (q.first-1) % q.length &&
+     q.empty <=> q.last == q.first ;
+*/
 }
 
 unit push(queue[0] q, char[0] c) 
-  requires !q.full
+  requires !q.full;
   behavior correct_push:
-    assigns q.empty, q.full, q.last, (q.contents+q.last).i
-    ensures !q.empty && (q.contents+\old(q.last)).i == c
+    assigns q.empty, q.full, q.last; // , (q.contents+q.last).i;
+    ensures !q.empty; // && (q.contents+\old(q.last)).i == c.i;
 {
-  (q.contents+q.last++).i = c.i;
+    // (q.contents+q.last++).i = c.i;
   if (q.last == q.length) q.last = 0;
   q.empty = false;
   q.full = q.first == q.last;
 }
 
-char pop(queue[0] q) 
-  requires !q.empty
+// char[0] 
+unit pop(queue[0] q) 
+  requires !q.empty;
   behavior correct_pop:
-    assigns q.empty, q.full, q.first
-    ensures !q.full && \result == (q.contents+\old(q.first)).i
+    assigns q.empty, q.full, q.first;
+    ensures !q.full ; // && \result == (q.contents+\old(q.first)).i;
 {
-  char r = (q.contents+q.first++).i;
+    // integer r = (q.contents+q.first++).i;
   if (q.first == q.length) q.first = 0;
   q.full = false;
   q.empty = q.last == (q.first + 1) % q.length;
-  return r;
+  // return r;
 }
 
 boolean test(queue[0] q, queue[0] q1) 
-  requires !q.empty
+  requires !q.empty;
   behavior q1_unchanged:
-    ensures \result == \old(q1.empty) 
+   ensures \result == \old(q1.empty); 
 {
   pop(q);
   return q1.empty;
 }
-
 
 
 /*

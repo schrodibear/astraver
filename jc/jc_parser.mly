@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.19 2006-11-23 10:35:15 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.20 2006-11-24 09:16:51 marche Exp $ */
 
 %{
 
@@ -90,6 +90,9 @@
 /* if else return while */
 %token IF ELSE RETURN WHILE
 
+/* pack unpack */
+%token PACK UNPACK
+
 /* type invariant with variant */
 %token TYPE INVARIANT WITH VARIANT
 
@@ -116,7 +119,7 @@
 %token STRUCT ENUM 
 
 %token CASE DEFAULT SWITCH DO FOR GOTO CONTINUE BREAK  
-%token TRY CATCH FINALLY THROW
+%token TRY CATCH FINALLY THROW 
 
 %token AMP EXL TILDE STAR SLASH PERCENT LT GT HAT PIPE
 %token QUESTION
@@ -271,9 +274,9 @@ function_specification:
 ;
 
 spec_clause:
-| REQUIRES expression
+| REQUIRES expression SEMICOLON
     { JCPCrequires($2) }
-| BEHAVIOR IDENTIFIER COLON assigns ENSURES expression
+| BEHAVIOR IDENTIFIER COLON assigns ENSURES expression SEMICOLON
     { JCPCbehavior($2,$4,$6) }
 	
 ;
@@ -281,7 +284,7 @@ spec_clause:
 assigns:
 | /* epsilon */
     { None }
-| ASSIGNS argument_expression_list
+| ASSIGNS argument_expression_list SEMICOLON
     { Some $2 }
 ;
 
@@ -627,6 +630,12 @@ jump_statement:
 | RETURN expression SEMICOLON { locate_statement (JCPSreturn $2) }
 ;
 
+pack_statement:
+| PACK LPAR expression RPAR SEMICOLON
+    { locate_statement (JCPSpack $3 ) }
+| UNPACK LPAR expression RPAR SEMICOLON
+    { locate_statement (JCPSunpack $3 ) }
+;
 
 statement: 
 /*
@@ -648,6 +657,7 @@ statement:
 /*
 | SPEC statement { locate (CSspec ($1,$2)) }
 */
+| pack_statement { $1 }
 ;
 
 

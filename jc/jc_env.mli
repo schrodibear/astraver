@@ -29,8 +29,7 @@ type native_type =
 type jc_type =
   | JCTnative of native_type
   | JCTlogic of string
-  | JCTpointer of struct_info
-  | JCTvalidpointer of struct_info * int * int
+  | JCTpointer of struct_info * int * int
 
 and struct_info =
     { 
@@ -47,12 +46,6 @@ and field_info =
       jc_field_info_type : jc_type;
     }
 
-
-type logic_info =
-    {
-      jc_logic_info_name : string;
-      jc_logic_info_result_type : jc_type option (*r None for predicates *)
-    }
 
 type var_info =
     {

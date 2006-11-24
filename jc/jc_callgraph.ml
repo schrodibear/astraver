@@ -49,7 +49,8 @@ let rec assertion acc p =
   | JCAif(t1,p2,p3) -> 
       assertion (assertion (term acc t1) p2) p3
   | JCAnot p | JCAold p | JCAforall (_,p) -> assertion acc p
-  | JCAinstanceof(t,_) -> term acc t
+  | JCAinstanceof(t,_)
+  | JCAbool_term t -> term acc t
 
 (*
 let spec s = 
@@ -98,6 +99,7 @@ let rec expr acc e =
 let rec statement acc s = 
   match s.jc_statement_node with  
     | JCSreturn e 
+    | JCSpack(_,e) | JCSunpack(_,e)
     | JCSexpr e -> let (a,b)=acc in (a,expr b e)
     | JCSif(e, s1, s2) ->
 	let (a,b) = statement (statement acc s1) s2 in (a,expr b e)

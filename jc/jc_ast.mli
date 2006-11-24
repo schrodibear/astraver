@@ -106,6 +106,8 @@ type pstatement_node =
   | JCPSgoto of label
   | JCPStry of pstatement * (string * string * pstatement) list * pstatement
   | JCPSthrow of string * pexpr
+  | JCPSpack of pexpr
+  | JCPSunpack of pexpr
 
 and pstatement = 
     {
@@ -159,6 +161,7 @@ type assertion_node =
   | JCAforall of var_info * assertion
   | JCAold of assertion
   | JCAinstanceof of term * struct_info
+  | JCAbool_term of term
   | JCAif of term * assertion * assertion
 
 and assertion =
@@ -210,6 +213,8 @@ type statement_node =
   | JCSgoto of label
   | JCStry of statement * (exception_info * var_info * statement) list * statement
   | JCSthrow of exception_info * expr
+  | JCSpack of struct_info * expr
+  | JCSunpack of struct_info * expr
 
 and statement = 
     {

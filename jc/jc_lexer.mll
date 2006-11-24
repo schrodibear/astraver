@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.15 2006-11-23 10:35:15 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.16 2006-11-24 09:16:51 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -79,6 +79,7 @@ rule token = parse
   | [' ' '\t' '\012' '\r']+ { token lexbuf }
   | '\n'                    { newline lexbuf; token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
+  | "//" [^ '\n']* '\n'     { newline lexbuf; token lexbuf }
   | "assigns"               { ASSIGNS }
   | "axiom"                 { AXIOM }
   | "behavior"              { BEHAVIOR }
@@ -112,6 +113,7 @@ rule token = parse
 (*
   | "long"                  { LONG }
 *)
+  | "pack"                  { PACK }
   | "real"                  { REAL}
   | "requires"              { REQUIRES }
   | "return"                { RETURN }
@@ -123,6 +125,7 @@ rule token = parse
   | "true"                  { CONSTANT (JCCboolean true) }
   | "type"                  { TYPE }
   | "unit"                  { UNIT }
+  | "unpack"                { UNPACK }
 (*
   | "unsigned"              { UNSIGNED }
 *)

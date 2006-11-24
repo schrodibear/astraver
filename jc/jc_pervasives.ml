@@ -36,10 +36,15 @@ let real_type = JCTnative `Treal
 
 (* logic functions *)
 
+let empty_effects = 
+  { jc_reads_fields = FieldSet.empty ;
+    jc_writes_fields = FieldSet.empty ;
+  }
 
 let make_term_op name ty =
   { jc_logic_info_name = name;
     jc_logic_info_result_type = Some ty;
+    jc_logic_info_effects = empty_effects;
   }
 
 let eq_int_bool = make_term_op "eq_int_bool" boolean_type
@@ -55,7 +60,9 @@ let mod_int = make_term_op "mod_int" integer_type
 
 let make_rel name =
   { jc_logic_info_name = name;
-    jc_logic_info_result_type = None }
+    jc_logic_info_result_type = None;
+    jc_logic_info_effects = empty_effects;
+  }
 
 let gt_int = make_rel "gt_int"
 let lt_int = make_rel "lt_int"
@@ -77,7 +84,7 @@ let make_fun_info name ty =
     jc_fun_info_return_type = ty;
     jc_fun_info_calls = [];
     jc_fun_info_logic_apps = [];
-    jc_fun_info_effects = { jc_writes_fields = FieldSet.empty } 
+    jc_fun_info_effects = empty_effects; 
  }
 
 let gt_int_ = make_fun_info "gt_int_" boolean_type

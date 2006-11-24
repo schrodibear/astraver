@@ -29,19 +29,25 @@ open Jc_fenv
 open Jc_ast
 
 
+let add_field_reads ef fi =
+  { ef with jc_reads_fields = FieldSet.add fi ef.jc_writes_fields }
+
 let add_field_writes ef fi =
-  { (* ef with *) jc_writes_fields = FieldSet.add fi ef.jc_writes_fields }
+  { ef with jc_writes_fields = FieldSet.add fi ef.jc_writes_fields }
  
 let ef_union ef1 ef2 =
-  { 
+  { jc_reads_fields = FieldSet.union 
+			 ef1.jc_reads_fields ef2.jc_reads_fields ;
     jc_writes_fields = FieldSet.union 
 			 ef1.jc_writes_fields ef2.jc_writes_fields ;
   }
+
 let same_effects ef1 ef2 =
+  FieldSet.equal ef1.jc_reads_fields ef2.jc_reads_fields &&
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.9 2006-11-20 14:07:24 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.10 2006-11-24 09:16:51 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -70,13 +76,14 @@ let rec loop_annot ef la = ef
 
 let rec statement ef s =
   match s.jc_statement_node with
+    | JCSreturn e 
+    | JCSpack(_,e) | JCSunpack(_,e)
     | JCSexpr e -> expr ef e
     | JCSthrow (_, _) -> assert false
     | JCStry (_, _, _) -> assert false
     | JCSgoto _ -> assert false
     | JCScontinue _ -> assert false
     | JCSbreak _ -> assert false
-    | JCSreturn e -> expr ef e
     | JCSwhile (c, la, s) -> 
 	statement (loop_annot (expr ef c) la) s
     | JCSif (e, s1, s2) -> 

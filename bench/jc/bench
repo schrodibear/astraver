@@ -81,7 +81,7 @@ cd good
 export JESSIELIB=`pwd`/../../../lib
 
 bench_jc_good () {
-    options="$* " # -why-opt -split-user-conj " # -why-opt -show-time"  # --typing-predicates"
+    options="$* -why-opt -split-user-conj -why-opt -show-time"
     echo "-------------------------------------------------------------------"
     echo "Bench Jessie+Simplify/Yices with options: $options"
     parsing="../../../bin/jessie.opt $options"

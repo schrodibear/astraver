@@ -42,6 +42,12 @@ let typing_error l =
 
 let structs_table = Hashtbl.create 97
 
+let find_struct_info loc id =
+  try
+    let st,_ = Hashtbl.find structs_table id in st
+  with Not_found ->
+    typing_error loc "undeclared structure %s" id
+
 (*
 let same_type t1 t2 =
   match t1,t2 with
@@ -54,24 +60,16 @@ let same_type t1 t2 =
 
 let rec substruct s1 s2 =
   if s1=s2 then true else
-    try
-      eprintf "looking for parent of %s:@." s1.jc_struct_info_name; 
-      let st = Hashtbl.find structs_table s1.jc_struct_info_name in
-      match st.jc_struct_info_parent with 
-	| None -> 
-	    eprintf "it has no parent@."; 
-	    false
-	| Some s -> 
-	    eprintf "it is %s:@." s.jc_struct_info_name; 
-	    substruct s s2
-    with Not_found -> assert false
+    let st = find_struct_info Loc.dummy_position s1.jc_struct_info_name in
+    match st.jc_struct_info_parent with 
+      | None -> false
+      | Some s -> substruct s s2
 
 let subtype t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
     | JCTlogic s1, JCTlogic s2 -> s1=s2
-    | (JCTpointer(s1) | JCTvalidpointer(s1,_,_)),
-	(JCTpointer(s2) | JCTvalidpointer(s2,_,_)) -> 
+    | JCTpointer(s1,_,_),JCTpointer(s2,_,_) -> 
 	  substruct s1 s2
     | _ -> false
   
@@ -88,8 +86,7 @@ let print_type fmt t =
   match t with
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
-    | JCTpointer s 
-    | JCTvalidpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
+    | JCTpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
 
 
 let functions_table = Hashtbl.create 97
@@ -109,8 +106,7 @@ let rec find_field_struct loc st f =
   
 let find_field loc ty f =
   match ty with
-    | JCTpointer st
-    | JCTvalidpointer(st,_,_) -> find_field_struct loc st f
+    | JCTpointer(st,_,_) -> find_field_struct loc st f
     | JCTnative _ 
     | JCTlogic _ ->
 	typing_error loc "not a structure type"
@@ -123,13 +119,8 @@ let type_type t =
   match t.jc_ptype_node with
     | JCPTnative n -> JCTnative n
     | JCPTpointer (id, a, b) -> 
-	begin
-	  try
-	    let st = Hashtbl.find structs_table id in
-	    JCTvalidpointer(st, a, b)
-	  with Not_found ->
-	    typing_error t.jc_ptype_loc "undeclared structure %s" id
-	end
+	let st = find_struct_info t.jc_ptype_loc id in
+	JCTpointer(st, a, b)
     | JCPTidentifier id -> 
 	(* TODO *)
 	typing_error t.jc_ptype_loc "unknown type %s" id
@@ -215,22 +206,21 @@ let rec term env e =
 	  end
       | JCPEinstanceof(e1,t) -> 
 	  let t1,te1 = term env e1 in
-	  begin
-	    try
-	      let st = Hashtbl.find structs_table t in
-	      JCTnative `Tboolean, JCTinstanceof(te1,st)
-	    with Not_found ->
-	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
-	    end
+	  let st = find_struct_info e.jc_pexpr_loc t in
+	  JCTnative `Tboolean, JCTinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let t1,te1 = term env e1 in
+	  let st = find_struct_info e.jc_pexpr_loc t in
 	  begin
-	    try
-	      let st = Hashtbl.find structs_table t in
-	      JCTpointer(st), JCTcast(te1,st)
-	    with Not_found ->
-	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
-	    end
+	    match t1 with
+	      | JCTpointer(st1,a,b) ->
+		  if substruct st st1 then
+		    JCTpointer(st,a,b), JCTcast(te1,st)
+		  else
+		    typing_error e.jc_pexpr_loc "invalid cast"
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "only structures can be cast"
+	  end
       | JCPEbinary (e1, op, e2) -> 
 	  let t1,e1 = term env e1
 	  and t2,e2 = term env e2
@@ -317,7 +307,6 @@ let rel_bin_op loc op t1 t2 =
 	    match t1 with
 	      | JCTnative _ -> op
 	      | JCTlogic _ -> assert false
-	      | JCTvalidpointer (_, _, _) 
 	      | JCTpointer _ -> op
 	  end
 	else
@@ -350,13 +339,8 @@ let rec assertion env e =
       | JCPEvar id -> assert false
       | JCPEinstanceof(e1, t) -> 
 	  let t1,te1 = term env e1 in
-	  begin
-	    try
-	      let st = Hashtbl.find structs_table t in
-	      JCAinstanceof(te1,st)
-	    with Not_found ->
-	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
-	    end
+	  let st = find_struct_info e.jc_pexpr_loc t in
+	  JCAinstanceof(te1,st) 
       | JCPEcast(e, t) -> assert false
       | JCPEbinary (e1, Bland, e2) -> 
 	  make_and (assertion env e1) (assertion env e2)
@@ -376,7 +360,17 @@ let rec assertion env e =
 	  in
 	  JCAapp(rel_unary_op e.jc_pexpr_loc op t2,[e2])
       | JCPEapp (_, _) -> assert false
-      | JCPEderef (_, _) -> assert false
+      | JCPEderef (e, id) -> 
+	  let t,te = term env e in
+	  let fi = find_field e.jc_pexpr_loc t id in
+	  begin
+	    match fi.jc_field_info_type with
+	      | JCTnative `Tboolean ->
+		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
+				 jc_term_node = JCTderef(te,fi) }
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "non boolean expression"
+	  end
       | JCPEshift (_, _) -> assert false
       | JCPEconst c -> 
 	  begin
@@ -575,22 +569,21 @@ let rec expr env e =
 	  end
       | JCPEinstanceof(e1, t) -> 
 	  let t1,te1 = expr env e1 in
-	  begin
-	    try
-	      let st = Hashtbl.find structs_table t in
-	      JCTnative `Tboolean, JCEinstanceof(te1,st)
-	    with Not_found ->
-	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
-	    end
+	  let st = find_struct_info e.jc_pexpr_loc t in
+	  JCTnative `Tboolean, JCEinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let t1,te1 = expr env e1 in
+	  let st = find_struct_info e.jc_pexpr_loc t in
 	  begin
-	    try
-	      let st = Hashtbl.find structs_table t in
-	      JCTpointer(st), JCEcast(te1,st)
-	    with Not_found ->
-	      typing_error e.jc_pexpr_loc "undefined structure '%s'" t
-	    end
+	    match t1 with
+	      | JCTpointer(st1,a,b) ->
+		  if substruct st st1 then
+		    JCTpointer(st,a,b), JCEcast(te1,st)
+		  else
+		    typing_error e.jc_pexpr_loc "invalid cast"
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "only structures can be cast"
+	  end
       | JCPEbinary (e1, op, e2) -> 
 	  let t1,e1 = expr env e1
 	  and t2,e2 = expr env e2
@@ -723,7 +716,7 @@ let make_block (l:statement list) : statement_node =
 let rec statement env s =
   let ts =
     match s.jc_pstatement_node with
-      | JCPSskip -> assert false
+      | JCPSskip -> JCSblock []
       | JCPSthrow (_, _) -> assert false
       | JCPStry (_, _, _) -> assert false
       | JCPSgoto _ -> assert false
@@ -758,7 +751,24 @@ let rec statement env s =
 	  let t,te = expr env e in 
 	  JCSexpr (te)
       | JCPSblock l -> make_block (statement_list env l)
-
+      | JCPSpack e ->
+	  let t,te = expr env e in 
+	  begin match t with
+	    | JCTpointer(st,_,_) ->
+		JCSpack(st,te)
+	    | _ ->
+		typing_error s.jc_pstatement_loc 
+		  "only structures can be packed"
+	  end
+      | JCPSunpack e ->
+	  let t,te = expr env e in 
+	  begin match t with
+	    | JCTpointer(st,_,_) ->
+		JCSunpack(st,te)
+	    | _ ->
+		typing_error s.jc_pstatement_loc 
+		  "only structures can be unpacked"
+	  end
 
   in { jc_statement_node = ts;
        jc_statement_loc = s.jc_pstatement_loc }
@@ -793,7 +803,10 @@ and statement_list env l : statement list =
 		in
 		[ { jc_statement_loc = s.jc_pstatement_loc;
 		    jc_statement_node = JCSdecl(vi, te, tr); } ]
-	    | _ -> (statement env s)::(statement_list env r)
+	    | _ -> 
+		let s = statement env s in
+		let r = statement_list env r in
+		s :: r
   
 
 let rec location env e =
@@ -900,26 +913,33 @@ let decl d =
 	  match parent with
 	    | None -> (id,None)
 	    | Some p ->
-		try
-		  let st = Hashtbl.find structs_table p in
-		  (st.jc_struct_info_root,Some st)
-		with
-		    Not_found ->
-		      typing_error d.jc_pdecl_loc "Undefined type '%s'" p
+		let st = find_struct_info d.jc_pdecl_loc p in
+		(st.jc_struct_info_root,Some st)
 	in
-	(*	
-		let i =
-		match inv with
-		| None -> assertion_true
-		| Some e -> assertion env e
-		in
-	*)	
-	Hashtbl.add structs_table id 
+	let struct_info =
 	  { jc_struct_info_name = id;
 	    jc_struct_info_fields = env;
 	    jc_struct_info_parent = par;
 	    jc_struct_info_root = root;
 	  }
+	in
+	let invariants =
+	  List.fold_left
+	    (fun acc (inv,x,e) ->	
+	       let vi = 
+		 {
+		   jc_var_info_name = x;
+		   jc_var_info_final_name = x;
+		   jc_var_info_type = JCTpointer(struct_info,0,0);
+		   jc_var_info_assigned = false;
+		 }
+	       in
+	       let p = assertion [(x,vi)] e in
+	       (inv,vi,p) :: acc)
+	    []
+	    inv
+	in
+	Hashtbl.add structs_table id (struct_info,invariants)
     | JCPDaxiom(id,e) ->
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te

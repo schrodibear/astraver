@@ -7,11 +7,11 @@ axiom distr_left: \forall integer x,y,z; (x+y)*z == (x*z)+(y*z)
 
 /* computes the square root of x, rounded to the floor */ 
 integer isqrt(integer x) 
-    requires x >= 0
+    requires x >= 0;
     behavior is_rounded_sqrt:	
       ensures 
-         \result >=0 && \result * \result <= x && 
-         x < (\result + 1) * (\result + 1)
+	\result >=0 && \result * \result <= x && 
+	x < (\result + 1) * (\result + 1);
 {
     integer count = 0;
     integer sum = 1;
