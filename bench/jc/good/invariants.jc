@@ -1,0 +1,18 @@
+
+
+/*
+
+struct T {
+  int ok;
+  int* pt;
+  int tab[10];
+  //@ invariant pt_validity(t) { t.ok => \valid(t.pt) }
+  /*@ invariant tab_nonnegative(t) { 
+	\forall int i; 0 <= i && i < 10 => t[i] >=0 
+	}	
+  */
+}
+
+
+*/
+

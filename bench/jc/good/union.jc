@@ -3,11 +3,12 @@
 hand-made translation from C program
 
 union U { int x; float y; }
-struct T { int tag ; U v }
-
-with pseudo-invariants (exact syntax to fix)
-//@ invariant tag_0_is_int(T t) = t.tag==0 => t.v <: x ;  
-//@ invariant tag_1_is_float(T t) = t.tag==1 => t.v <: y ;
+struct T { 
+  int tag ; 
+  U v ;
+  //@ invariant tag_0_is_int(t) = t.tag==0 => t.v <: x ;  
+  //@ invariant tag_1_is_float(t) = t.tag==1 => t.v <: y ;
+}
 
 */
 
@@ -43,6 +44,8 @@ unit add(T[0] res, T[0] n1, T[0] n2)
     }
 }
     
+
+
 /*
 Local Variables: 
 mode: java

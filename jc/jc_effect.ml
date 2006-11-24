@@ -47,7 +47,7 @@ let same_effects ef1 ef2 =
   FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
 
 
-(* $Id: jc_effect.ml,v 1.10 2006-11-24 09:16:51 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.11 2006-11-24 14:46:12 marche Exp $ *)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -129,6 +129,25 @@ let fun_effects fi =
 open Format
 open Pp
 
+let logic_fun_effects f = assert false
+
+let logic_effects funs =
+  fixpoint_reached := false;
+  while not !fixpoint_reached do
+    fixpoint_reached := true;
+    Jc_options.lprintf "Effects: doing one iteration...@.";
+    List.iter logic_fun_effects funs
+  done;
+  Jc_options.lprintf "Effects: fixpoint reached@.";
+  List.iter
+    (fun f ->
+       Jc_options.lprintf
+	 "Effects for logic function %s:\n%a@." f.jc_logic_info_name
+	 (print_list comma (fun fmt field ->
+			     fprintf fmt "%s" field.jc_field_info_name))
+	 (FieldSet.elements f.jc_logic_info_effects.jc_reads_fields))
+    funs
+
 let function_effects funs =
   fixpoint_reached := false;
   while not !fixpoint_reached do
@@ -140,9 +159,13 @@ let function_effects funs =
   List.iter
     (fun f ->
        Jc_options.lprintf
-	 "Effects for function %s:\n%a@." f.jc_fun_info_name
+	 "Effects for function %s:\n reads: %a\n writes: %a@." 
+	 f.jc_fun_info_name
 	 (print_list comma (fun fmt field ->
 			     fprintf fmt "%s" field.jc_field_info_name))
+	 (FieldSet.elements f.jc_fun_info_effects.jc_reads_fields)
+	 (print_list comma (fun fmt field ->
+			      fprintf fmt "%s" field.jc_field_info_name))
 	 (FieldSet.elements f.jc_fun_info_effects.jc_writes_fields))
     funs
 

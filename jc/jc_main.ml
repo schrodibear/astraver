@@ -48,13 +48,22 @@ let main () =
 	List.iter Jc_typing.decl ast;
 	(* phase 3 : computation of call graph *)
 	Hashtbl.iter 
+	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
+	  Jc_typing.logic_functions_table;
+	Hashtbl.iter 
 	  (fun _ (f,s,b) -> Jc_callgraph.compute_calls f s b)
 	  Jc_typing.functions_table;
+	let logic_components = 
+	  Jc_callgraph.compute_logic_components 
+	    Jc_typing.logic_functions_table
+	in
 	let components = 
 	  Jc_callgraph.compute_components Jc_typing.functions_table
 	in
 	(* phase 4 : computation of effects *)
-	Jc_options.lprintf "\nstarting computation of effects.@.";
+	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
+	Array.iter Jc_effect.logic_effects logic_components;
+	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
 	Array.iter Jc_effect.function_effects components;
 	(* phase 5 : checking structure invariants *)
 	Jc_options.lprintf "\nstarting checking structure invariants.@.";
@@ -64,20 +73,35 @@ let main () =
 	(* production phase 1 : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
-	    (fun _ (st,invs) acc ->
-	       Jc_interp.tr_struct st invs acc)
+	    (fun _ (st,_) acc ->
+	       Jc_interp.tr_struct st acc)
 	    Jc_typing.structs_table
 	    []
 	in	       	  
-	(* production phase 2 : generation of Why axioms *)
+	(* production phase 2 : generation of Why logic functions *)
+	let d_lfuns = 
+	  Hashtbl.fold 
+	    (fun _ (li,p) acc ->
+	       Jc_interp.tr_logic_fun li p acc)
+	    Jc_typing.logic_functions_table
+	    d_memories
+	in	       
+	let d_preds = 
+	  Hashtbl.fold 
+	    (fun _ (li,p) acc ->
+	       Jc_interp.tr_predicate li p acc)
+	    Jc_typing.predicates_table
+	    d_lfuns
+	in	       
+	(* production phase 3 : generation of Why axioms *)
 	let d_axioms = 
 	  Hashtbl.fold 
 	    (fun id p acc ->
 	       Jc_interp.tr_axiom id p acc)
 	    Jc_typing.axioms_table
-	    d_memories
+	    d_preds
 	in	       
-	(* production phase 3 : generation of Why functions *)
+	(* production phase 4 : generation of Why functions *)
 	let d_funs = 
 	  Hashtbl.fold 
 	    (fun _ (f,s,b) acc ->
@@ -87,7 +111,7 @@ let main () =
 	    Jc_typing.functions_table
 	    d_axioms
 	in	       
-	(* production phase 4 : produce Why file *)
+	(* production phase 5 : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
 	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_funs)

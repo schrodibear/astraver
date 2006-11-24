@@ -51,7 +51,10 @@ let rec assertion this p =
 
 let check invs =
   List.iter
-    (fun (id,this,p) -> assertion this p)
+    (fun (li,p) -> 
+       match li.jc_logic_info_parameters with
+	 | [this] -> assertion this p
+	 | _ -> assert false)
     invs
 
 

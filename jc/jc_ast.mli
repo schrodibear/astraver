@@ -170,6 +170,10 @@ and assertion =
       jc_assertion_loc : Loc.position;
     }
 
+type term_or_assertion =
+  | JCAssertion of assertion
+  | JCTerm of term
+
 type incr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
 
 type expr_node =

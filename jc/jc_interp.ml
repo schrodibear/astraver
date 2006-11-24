@@ -61,6 +61,12 @@ let tr_type t =
     | JCTnative _ | JCTlogic _ -> Base_type(tr_base_type t)
     | JCTpointer _ -> Base_type(tr_base_type t)	
 
+(**************************
+
+terms and assertions 
+
+*************************)
+
 let lvar ?(assigned=true) label v =
   if assigned then
     match label with 
@@ -116,6 +122,44 @@ let rec assertion label oldlabel a =
 	LPred("instanceof",
 	      [lvar label "alloc"; ft t; LVar ty.jc_struct_info_name])
 
+(****************************
+
+logic functions
+
+****************************)
+
+let tr_logic_fun li t acc =
+  let params =
+    List.map
+      (fun vi ->
+	 (vi.jc_var_info_final_name,
+	   tr_base_type vi.jc_var_info_type))
+      li.jc_logic_info_parameters
+  in
+  let ret =
+    match li.jc_logic_info_result_type with
+      | None -> assert false
+      | Some t -> tr_base_type t
+  in
+  Function(false,li.jc_logic_info_name,params, ret, term None "" t) :: acc
+  
+let tr_predicate li p acc =
+  let params =
+    List.map
+      (fun vi ->
+	 (vi.jc_var_info_final_name,
+	   tr_base_type vi.jc_var_info_type))
+      li.jc_logic_info_parameters
+  in
+  Predicate(false,li.jc_logic_info_name,params,
+	    assertion None "" p) :: acc
+  
+(****************************
+
+expressions and statements
+
+****************************)
+
 type interp_lvalue =
   | LocalRef of var_info
   | HeapRef of field_info * expr
@@ -135,8 +179,6 @@ let rec expr e : (string * Output.expr) list * expr =
     | JCEconst JCCnull -> [],Var "null"
     | JCEconst c -> [],Cte(const c)
     | JCEvar v ->
-	Jc_options.lprintf "translating var %s (assigned = %b)@."
-	  v.jc_var_info_name v.jc_var_info_assigned;
 	if v.jc_var_info_assigned 
 	then [],Deref v.jc_var_info_final_name
 	else [],Var v.jc_var_info_final_name
@@ -287,8 +329,11 @@ let statement_expr e =
 
 
 let invariant_for_struct this st =
-  let (_,invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
-  make_and_list (List.map (fun (id,_,_) -> LPred(id,[this])) invs)
+  let (_,invs) = 
+    Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
+  in
+  make_and_list 
+    (List.map (fun (li,_) -> LPred(li.jc_logic_info_name,[this])) invs)
   
 let rec statement s = 
   reset_tmp_var();
@@ -344,7 +389,7 @@ and statement_list l =
  structures
 ******************)
 
-let tr_struct st invs acc =
+let tr_struct st acc =
   (* declarations of field memories *)
   let acc = 
     List.fold_left
@@ -363,16 +408,6 @@ let tr_struct st invs acc =
   (* declaration of the struct_id *)
   let acc =
     Logic(false,st.jc_struct_info_name,[],simple_logic_type "struct_id")::acc
-  in
-  (* declaration of invariants *)
-  let acc =
-    List.fold_left
-      (fun acc (id,x,p) ->
-	 Predicate(false,id,[(x.jc_var_info_final_name,
-			      tr_base_type x.jc_var_info_type)],
-		   assertion None "" p) :: acc)
-      acc
-      invs
   in
   match st.jc_struct_info_parent with
     | None ->
