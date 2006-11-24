@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.155 2006-11-03 12:49:01 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.156 2006-11-24 13:38:11 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -214,6 +214,8 @@ let print_predicate_v7 fmt p =
 	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id
+    | Papp (id, tl, _) when id == t_distinct ->
+	fprintf fmt "@[(%a)@]" print0 (Util.distinct tl)
     | Papp (id, [t], _) when id == well_founded ->
 	fprintf fmt "@[(well_founded %a)@]" print_term_v7 t
     | Papp (id, [a;b], _) when id == t_zwf_zero ->
@@ -502,6 +504,8 @@ let print_predicate_v8 fmt p =
 	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id
+    | Papp (id, tl, _) when id == t_distinct ->
+	fprintf fmt "@[(%a)@]" print0 (Util.distinct tl)
     | Papp (id, [t], _) when id == well_founded ->
 	fprintf fmt "@[(well_founded %a)@]" print_term_v8 t
     | Papp (id, [a;b], _) when id == t_zwf_zero ->

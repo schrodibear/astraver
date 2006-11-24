@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.47 2006-11-03 12:49:01 marche Exp $ i*)
+(*i $Id: cvcl.ml,v 1.48 2006-11-24 13:38:11 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -139,6 +139,8 @@ let rec print_predicate fmt = function
       fprintf fmt "FALSE"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
+  | Papp (id, tl, _) when id == t_distinct ->
+      fprintf fmt "@[(%a)@]" print_predicate (Util.distinct tl)
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE %% was well_founded@\n"
   | Papp (id, [a; b], _) when is_eq id ->

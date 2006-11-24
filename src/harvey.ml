@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.42 2006-11-03 12:49:02 marche Exp $ i*)
+(*i $Id: harvey.ml,v 1.43 2006-11-24 13:38:12 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -164,6 +164,8 @@ let rec print_predicate fmt = function
       fprintf fmt "false"
   | Pvar id -> 
       fprintf fmt "%a" ident id
+  | Papp (id, tl, _) when id == t_distinct ->
+      fprintf fmt "@[(%a)@]" print_predicate (Util.distinct tl)
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->

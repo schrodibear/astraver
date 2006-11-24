@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.77 2006-11-03 12:49:05 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.78 2006-11-24 13:38:12 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -174,6 +174,8 @@ let print_predicate fmt p =
 	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id
+    | Papp (id, tl, _) when id == t_distinct ->
+	fprintf fmt "@[(%a)@]" print0 (Util.distinct tl)
     | Papp (id, [t], _) when id == well_founded ->
 	fprintf fmt "well_founded?(%a)" print_term t
     | Papp (id, [a;b], _) when id == t_zwf_zero ->

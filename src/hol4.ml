@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.16 2006-11-03 12:49:03 marche Exp $ i*)
+(*i $Id: hol4.ml,v 1.17 2006-11-24 13:38:12 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -165,6 +165,8 @@ let rec print_predicate fmt = function
       fprintf fmt "F"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
+  | Papp (id, tl, _) when id == t_distinct ->
+      fprintf fmt "@[(%a)@]" print_predicate (Util.distinct tl)
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->

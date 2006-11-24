@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.65 2006-11-14 14:47:12 couchot Exp $ i*)
+(*i $Id: simplify.ml,v 1.66 2006-11-24 13:38:12 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -200,6 +200,8 @@ let rec print_predicate pos fmt p =
       fprintf fmt "%a" ident id
   | Papp (id, [], _) ->
       ident fmt id
+  | Papp (id, tl, _) when id == t_distinct ->
+      fprintf fmt "@[(DISTINCT@ %a)@]" print_terms tl
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE ; was well_founded@\n"
   | Papp (id, [a; b], _) when is_eq id ->

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.21 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: zenon.ml,v 1.22 2006-11-24 13:38:12 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -178,6 +178,8 @@ let rec print_predicate fmt = function
       fprintf fmt "False"
   | Pvar id -> 
       fprintf fmt "%a" ident id
+  | Papp (id, tl, _) when id == t_distinct ->
+      fprintf fmt "@[(%a)@]" print_predicate (Util.distinct tl)
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "True ;; was well_founded@\n"
   | Papp (id, [a; b], _) when id == t_eq_bool ->

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.39 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: mizar.ml,v 1.40 2006-11-24 13:38:12 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -217,6 +217,8 @@ let print_predicate fmt p =
 	fprintf fmt "contradiction"
     | Pvar id -> 
 	fprintf fmt "%a" Ident.print id
+    | Papp (id, tl, _) when id == t_distinct ->
+	fprintf fmt "@[(%a)@]" print0 (Util.distinct tl)
     | Papp (id, [a; b], _) when is_relation id ->
 	fprintf fmt "@[%a %s@ %a@]" 
 	print_term a (infix_relation id) print_term b
