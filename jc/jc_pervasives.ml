@@ -44,7 +44,9 @@ let empty_effects =
 let make_term_op name ty =
   { jc_logic_info_name = name;
     jc_logic_info_result_type = Some ty;
+    jc_logic_info_parameters = [];
     jc_logic_info_effects = empty_effects;
+    jc_logic_info_calls = [];
   }
 
 let eq_int_bool = make_term_op "eq_int_bool" boolean_type
@@ -61,7 +63,9 @@ let mod_int = make_term_op "mod_int" integer_type
 let make_rel name =
   { jc_logic_info_name = name;
     jc_logic_info_result_type = None;
+    jc_logic_info_parameters = [];
     jc_logic_info_effects = empty_effects;
+    jc_logic_info_calls = [];
   }
 
 let gt_int = make_rel "gt_int"

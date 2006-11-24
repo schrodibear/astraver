@@ -47,22 +47,28 @@ let main () =
 	(* phase 2 : typing *)
 	List.iter Jc_typing.decl ast;
 	(* phase 3 : computation of call graph *)
-	Hashtbl.iter 
+	(*
+	  Hashtbl.iter 
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
 	  Jc_typing.logic_functions_table;
+	  *)
 	Hashtbl.iter 
 	  (fun _ (f,s,b) -> Jc_callgraph.compute_calls f s b)
 	  Jc_typing.functions_table;
-	let logic_components = 
+	(*
+let logic_components = 
 	  Jc_callgraph.compute_logic_components 
 	    Jc_typing.logic_functions_table
 	in
+*)
 	let components = 
 	  Jc_callgraph.compute_components Jc_typing.functions_table
 	in
 	(* phase 4 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
+(*
 	Array.iter Jc_effect.logic_effects logic_components;
+*)
 	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
 	Array.iter Jc_effect.function_effects components;
 	(* phase 5 : checking structure invariants *)
@@ -80,17 +86,17 @@ let main () =
 	in	       	  
 	(* production phase 2 : generation of Why logic functions *)
 	let d_lfuns = 
-	  Hashtbl.fold 
+	  (* Hashtbl.fold 
 	    (fun _ (li,p) acc ->
 	       Jc_interp.tr_logic_fun li p acc)
-	    Jc_typing.logic_functions_table
+	    Jc_typing.logic_functions_table *)
 	    d_memories
 	in	       
 	let d_preds = 
-	  Hashtbl.fold 
+	  (* Hashtbl.fold 
 	    (fun _ (li,p) acc ->
 	       Jc_interp.tr_predicate li p acc)
-	    Jc_typing.predicates_table
+	    Jc_typing.predicates_table *)
 	    d_lfuns
 	in	       
 	(* production phase 3 : generation of Why axioms *)

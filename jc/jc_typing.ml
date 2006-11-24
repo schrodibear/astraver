@@ -89,6 +89,7 @@ let print_type fmt t =
     | JCTpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
 
 
+let logic_functions_table = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
 
@@ -925,7 +926,7 @@ let decl d =
 	in
 	let invariants =
 	  List.fold_left
-	    (fun acc (inv,x,e) ->	
+	    (fun acc (id,x,e) ->	
 	       let vi = 
 		 {
 		   jc_var_info_name = x;
@@ -935,7 +936,16 @@ let decl d =
 		 }
 	       in
 	       let p = assertion [(x,vi)] e in
-	       (inv,vi,p) :: acc)
+	       let pi =
+		 { jc_logic_info_name = id;
+		   jc_logic_info_result_type = None;
+		   jc_logic_info_parameters = [vi];
+		   jc_logic_info_effects = empty_effects;
+		   jc_logic_info_calls = [];
+		 }
+	       in
+	       Hashtbl.add logic_functions_table id (pi,JCAssertion p);
+	       (pi,p) :: acc)
 	    []
 	    inv
 	in

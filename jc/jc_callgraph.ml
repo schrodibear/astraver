@@ -146,7 +146,9 @@ module LogicCallGraph = struct
     List.iter iter f.jc_fun_info_calls 
   end
 
+(*
 module LogicCallComponents = Components.Make(LogicCallGraph)
+*)
 
 module CallGraph = struct 
   type t = (int, (fun_info * fun_spec * statement list)) Hashtbl.t
@@ -171,12 +173,12 @@ open Format
 open Pp
 
 let compute_logic_components ltable =  
-  let (scc,numcomp) = CallComponents.scc table in
+  let (scc,numcomp) = CallComponents.scc ltable in
   let tab_comp = Array.make numcomp [] in
   CallGraph.iter_vertex 
     (fun f ->
        let i = scc f in 
-       Array.set tab_comp i (f::(Array.get tab_comp i))) table ;
+       Array.set tab_comp i (f::(Array.get tab_comp i))) ltable ;
   Jc_options.lprintf "******************************\n";
   Jc_options.lprintf "Call graph: has %d components\n" (Array.length tab_comp);
   Jc_options.lprintf "******************************\n";
