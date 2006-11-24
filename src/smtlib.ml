@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.26 2006-11-17 12:24:12 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.27 2006-11-24 13:28:00 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -172,6 +172,8 @@ let rec print_predicate fmt = function
 	  may be previously dispached into to inequality **)
       fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
+  | Papp (id, tl, _) when id == t_distinct ->
+      fprintf fmt "@[(distinct@ %a)@]" print_terms tl
   | Papp (id, tl, i) -> 
       fprintf fmt "@[(%a@ %a)@]" 
 	idents (Encoding.symbol (id, i)) print_terms tl

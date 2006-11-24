@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.53 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: util.mli,v 1.54 2006-11-24 13:28:00 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -70,6 +70,8 @@ val decomp_kappa : typing_info ->
 
 val equality : term -> term -> predicate
 val tequality : type_v -> term -> term -> predicate
+
+val distinct : term list -> predicate
 
 val decomp_boolean : postcondition -> predicate * predicate
 

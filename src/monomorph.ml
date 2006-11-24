@@ -22,11 +22,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.ml,v 1.28 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: monomorph.ml,v 1.29 2006-11-24 13:28:00 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
 open Ident
+open Options
 open Misc
 open Logic
 open Logic_decl
@@ -377,7 +378,7 @@ let rec declare_logic loc id i =
      not (Hinstance.mem declared_logic (id,i)) 
   then begin
     Hinstance.add declared_logic (id,i) ();
-    (*eprintf "declare_logic %a@." Ident.print id;*)
+    if debug then eprintf "Monomorph.declare_logic %a@." Ident.print id;
     assert (Hashtbl.mem logic_symbols id);
     match Hashtbl.find logic_symbols id with
       | Uninterp t ->

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.60 2006-11-23 21:40:33 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.61 2006-11-24 13:27:59 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -213,7 +213,7 @@ and desc_predicate loc lab env = function
 	t,tt
       in
       let tl = List.map each_term pl in
-      Papp (x, List.map fst tl, List.map snd tl)
+      Papp (x, List.map fst tl, [ty])
   | PPapp (x, pl) ->
       type_papp loc env x (List.map (term lab env) pl)
   | PPtrue ->

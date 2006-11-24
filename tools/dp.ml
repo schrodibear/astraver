@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.29 2006-11-07 08:35:16 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.30 2006-11-24 13:28:00 filliatr Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -121,7 +121,10 @@ let split f =
   if Filename.check_suffix f ".cvc"  || Filename.check_suffix f ".cvc.all" then
     Cvcl_split.iter call_cvcl f 
   else 
-  if Filename.check_suffix f ".sx" || Filename.check_suffix f ".sx.all" then
+  if Filename.check_suffix f ".sx" || 
+     Filename.check_suffix f ".sx.all" ||
+     Filename.check_suffix f ".simplify"
+  then
     Simplify_split.iter call_simplify f 
   else 
   if Filename.check_suffix f ".znn" || Filename.check_suffix f ".znn.all" then

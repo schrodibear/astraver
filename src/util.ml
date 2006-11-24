@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.120 2006-11-03 14:50:23 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.121 2006-11-24 13:28:00 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -320,6 +320,7 @@ let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 (* [decomp_boolean c] returns the specs R and S of a boolean expression *)
 
 let equality t1 t2 = Papp (t_eq, [t1; t2], [])
+let nequality t1 t2 = Papp (t_neq, [t1; t2], [])
 
 let tequality v t1 t2 = match v with
   | PureType PTint -> Papp (t_eq_int, [t1; t2], [])
@@ -327,6 +328,16 @@ let tequality v t1 t2 = match v with
   | PureType PTreal -> Papp (t_eq_real, [t1; t2], [])
   | PureType PTunit -> Papp (t_eq_unit, [t1; t2], [])
   | _ -> Papp (t_eq, [t1; t2], [])
+
+let distinct tl = 
+  let rec make acc = function
+    | [] | [_] -> 
+	acc
+    | t :: tl -> 
+	let p = List.fold_left (fun p t' -> pand (nequality t t') p) acc tl in
+	make p tl
+  in
+  make Ptrue tl
 
 let decomp_boolean ({ a_value = c }, _) =
   (* q -> if result then q(true) else q(false) *)

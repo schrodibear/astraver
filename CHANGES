@@ -1,4 +1,7 @@
 
+  o new predicate distinct(t1,t2,...,tn) with n terms of the same type
+    mapped to the primitive DISTINCT in Simplify and SMTlib outputs,
+    expanded for other provers
   o fixed bug in CVC Lite output (BOOLEAN now reserved for predicates;
     new type BOOL introduced for term booleans)
   o dp now displays times for searching proofs
