@@ -22,23 +22,30 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.5 2006-11-24 14:46:12 marche Exp $ *)
+(* $Id: jc_fenv.mli,v 1.6 2006-11-27 08:40:00 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
 
-type effects =
+type effect =
     {
-      jc_reads_fields : FieldSet.t;
-      jc_writes_fields : FieldSet.t;
+      jc_effect_alloc_table : VarSet.t;
+      jc_effect_memories : FieldSet.t;
+    }
+
+type fun_effect =
+    {
+      jc_reads : effect;
+      jc_writes : effect;
     }
 
 type logic_info =
     {
+      jc_logic_info_tag : int;
       jc_logic_info_name : string;
       jc_logic_info_result_type : jc_type option; (*r None for predicates *)
       mutable jc_logic_info_parameters : var_info list;
-      mutable jc_logic_info_effects : effects;
+      mutable jc_logic_info_effects : effect;
       mutable jc_logic_info_calls : logic_info list;
     }
 
@@ -50,7 +57,7 @@ type fun_info =
       mutable jc_fun_info_parameters : var_info list;
       mutable jc_fun_info_calls : fun_info list;
       mutable jc_fun_info_logic_apps : logic_info list;
-      mutable jc_fun_info_effects : effects;
+      mutable jc_fun_info_effects : fun_effect;
     }
 
 

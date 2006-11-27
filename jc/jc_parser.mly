@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.20 2006-11-24 09:16:51 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.21 2006-11-27 08:40:00 marche Exp $ */
 
 %{
 
@@ -240,13 +240,13 @@ parameter_declaration:
 
 type_expr:
 | INTEGER
-    { locate_type (JCPTnative `Tinteger) }
+    { locate_type (JCPTnative Tinteger) }
 | BOOLEAN
-    { locate_type (JCPTnative `Tboolean) }
+    { locate_type (JCPTnative Tboolean) }
 | REAL
-    { locate_type (JCPTnative `Treal) }
+    { locate_type (JCPTnative Treal) }
 | UNIT
-    { locate_type (JCPTnative `Tunit) }
+    { locate_type (JCPTnative Tunit) }
 | IDENTIFIER
     { locate_type (JCPTidentifier $1) }
 | IDENTIFIER LSQUARE DOTDOT RSQUARE
@@ -338,23 +338,23 @@ postfix_expression:
 | postfix_expression DOT IDENTIFIER
     { locate_expr (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 
-    { locate_expr (JCPEunary (`Upostfix_inc, $1)) }
+    { locate_expr (JCPEunary (Upostfix_inc, $1)) }
 | postfix_expression MINUSMINUS
-    { locate_expr (JCPEunary (`Upostfix_dec, $1)) }
+    { locate_expr (JCPEunary (Upostfix_dec, $1)) }
 | PLUSPLUS postfix_expression 
-    { locate_expr (JCPEunary (`Uprefix_inc, $2)) }
+    { locate_expr (JCPEunary (Uprefix_inc, $2)) }
 | MINUSMINUS postfix_expression 
-    { locate_expr (JCPEunary (`Uprefix_dec, $2)) }
+    { locate_expr (JCPEunary (Uprefix_dec, $2)) }
 | PLUS postfix_expression %prec UPLUS
-    { locate_expr (JCPEunary (`Uplus, $2)) }
+    { locate_expr (JCPEunary (Uplus, $2)) }
 | MINUS postfix_expression %prec UMINUS
-    { locate_expr (JCPEunary (`Uminus, $2)) }
+    { locate_expr (JCPEunary (Uminus, $2)) }
 /*
 | TILDE postfix_expression 
-    { locate_expr (JCPEunary (`Utilde, $2)) }
+    { locate_expr (JCPEunary (Utilde, $2)) }
 */
 | EXCLAM postfix_expression 
-    { locate_expr (JCPEunary (`Unot, $2)) }
+    { locate_expr (JCPEunary (Unot, $2)) }
 ;
 
 argument_expression_list: 

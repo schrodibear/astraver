@@ -8,11 +8,11 @@ type T = {
 integer f(integer n, T[0] t) 
   requires -100 <= n && n <= 100;
   behavior x_changed:
-    assumes n > 0;
+      // assumes n > 0; 
     assigns t.x;
     ensures n>0 && t.x == n;
   behavior y_changed:
-      assumes n >= 0;
+      // assumes n >= 0;
      assigns t.y;
      ensures t.y == n;
 {

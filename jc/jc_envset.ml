@@ -22,14 +22,32 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.2 2006-11-07 16:12:14 marche Exp $ *)
+(* $Id: jc_envset.ml,v 1.3 2006-11-27 08:40:00 marche Exp $ *)
 
 open Jc_env
 
-module FieldSet = 
-  Set.Make(struct type t = field_info
-		  let compare f1 f2 = 
+module VarSet = 
+  Set.Make(struct type t = var_info
+		  let compare v1 v2 = 
 		    Pervasives.compare 
-		      f1.jc_field_info_tag f2.jc_field_info_tag
+		      v1.jc_var_info_tag v2.jc_var_info_tag
 	   end)
 
+module FieldOrd =
+  struct type t = field_info
+	 let compare f1 f2 = 
+	   Pervasives.compare 
+	     f1.jc_field_info_tag f2.jc_field_info_tag
+  end
+
+module FieldSet = Set.Make(FieldOrd)
+
+module FieldMap = Map.Make(FieldOrd)
+
+
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

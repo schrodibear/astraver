@@ -76,10 +76,10 @@ let subtype t1 t2 =
 
 let string_of_native t =
   match t with
-    | `Tunit -> "unit"
-    | `Tinteger -> "integer"
-    | `Treal -> "real"
-    | `Tboolean -> "boolean"
+    | Tunit -> "unit"
+    | Tinteger -> "integer"
+    | Treal -> "real"
+    | Tboolean -> "boolean"
 
 
 let print_type fmt t =
@@ -136,6 +136,21 @@ let const c =
     | JCCboolean _ -> boolean_type,c
     | JCCnull -> assert false
 
+(* variables *)
+
+let var_tag_counter = ref 0
+
+let var ty id =
+  incr var_tag_counter;
+  let vi = {
+    jc_var_info_tag = !var_tag_counter;
+    jc_var_info_name = id;
+    jc_var_info_final_name = id;
+    jc_var_info_type = ty;
+    jc_var_info_assigned = false;
+  }
+  in vi
+
 (* terms *)
 
 let num_op op =
@@ -147,17 +162,34 @@ let num_op op =
     | Bmod -> mod_int
     | _ -> assert false
 
+let num_un_op op e =
+  match op with
+    | Uminus -> JCTapp(minus_int,[e])
+    | Uplus -> e.jc_term_node
+    | _ -> assert false
+
 let eq_op op arg_type  =
   match (op,arg_type) with
-    | (Beq,`Tinteger) -> eq_int_bool
-    | (Bneq,`Tinteger) -> neq_int_bool
+    | (Beq,Tinteger) -> eq_int_bool
+    | (Bneq,Tinteger) -> neq_int_bool
     | _ -> assert false
 
 let logic_unary_op loc (op : Jc_ast.punary_op) t e =
   match op with
-    | `Unot -> assert false
-    | `Uminus | `Uplus -> assert false (* TODO *)
-    | `Upostfix_dec | `Upostfix_inc | `Uprefix_dec | `Uprefix_inc ->
+    | Unot -> assert false
+    | Uminus | Uplus -> 
+	let t =
+	  match t with
+	    | JCTnative t ->
+		begin
+		  match t with
+		    | Tinteger -> Tinteger
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "numeric type expected"
+	in JCTnative t,num_un_op op e
+    | Upostfix_dec | Upostfix_inc | Uprefix_dec | Uprefix_inc ->
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
 let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
@@ -172,7 +204,7 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 	    | JCTnative t1, JCTnative t2 ->
 		begin
 		  match (t1,t2) with
-		    | `Tinteger,`Tinteger -> `Tinteger
+		    | Tinteger,Tinteger -> Tinteger
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ -> assert false
@@ -184,7 +216,7 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 	    | JCTnative t1, JCTnative t2 ->
 		begin
 		  match (t1,t2) with
-		    | `Tinteger,`Tinteger -> `Tinteger
+		    | Tinteger,Tinteger -> Tinteger
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
@@ -208,7 +240,7 @@ let rec term env e =
       | JCPEinstanceof(e1,t) -> 
 	  let t1,te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTnative `Tboolean, JCTinstanceof(te1,st)
+	  JCTnative Tboolean, JCTinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let t1,te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
@@ -256,7 +288,7 @@ let rec term env e =
 	  in
 	  begin
 	    match t1 with
-	      | JCTnative `Tboolean ->
+	      | JCTnative Tboolean ->
 		  let t =
 		    if subtype t2 t3 then t3 else
 		      if subtype t3 t2 then t2 else
@@ -284,10 +316,10 @@ let rec term env e =
   
 let rel_unary_op loc op t =
   match op with
-    | `Unot -> assert false
-    | `Uminus | `Uplus -> 
+    | Unot -> assert false
+    | Uminus | Uplus -> 
 	typing_error loc "not a proposition"
-    | `Upostfix_dec | `Upostfix_inc | `Uprefix_dec | `Uprefix_inc ->
+    | Upostfix_dec | Upostfix_inc | Uprefix_dec | Uprefix_inc ->
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
 
@@ -349,7 +381,7 @@ let rec assertion env e =
 	  JCAimplies(assertion env e1,assertion env e2)
       | JCPEbinary (e1, Biff, e2) -> 
 	  JCAiff(assertion env e1,assertion env e2)
-      | JCPEunary (`Unot, e2) -> 
+      | JCPEunary (Unot, e2) -> 
 	  JCAnot(assertion env e2)
       | JCPEbinary (e1, op, e2) -> 
 	  let t1,e1 = term env e1
@@ -366,7 +398,7 @@ let rec assertion env e =
 	  let fi = find_field e.jc_pexpr_loc t id in
 	  begin
 	    match fi.jc_field_info_type with
-	      | JCTnative `Tboolean ->
+	      | JCTnative Tboolean ->
 		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
 				 jc_term_node = JCTderef(te,fi) }
 	      | _ ->
@@ -392,7 +424,7 @@ let rec assertion env e =
 	  in
 	  begin
 	    match t1 with
-	      | JCTnative `Tboolean ->
+	      | JCTnative Tboolean ->
 		  JCAif(te1,te2,te3)
 	      | _ ->
 		  typing_error e1.jc_pexpr_loc 
@@ -414,13 +446,7 @@ and make_forall loc ty idl env e : assertion =
   match idl with
     | [] -> assertion env e
     | id::r ->
-	let vi = {
-	  jc_var_info_name = id;
-	  jc_var_info_final_name = id;
-	  jc_var_info_type = ty;
-	  jc_var_info_assigned = false;
-	}
-	in
+	let vi = var ty id in
 	let f = JCAforall(vi,make_forall loc ty r ((id,vi)::env) e) in
 	{jc_assertion_loc = loc ; jc_assertion_node = f }
 
@@ -428,24 +454,24 @@ and make_forall loc ty idl env e : assertion =
 
 let unary_op t op =
   match t,op with
-    | _, `Upostfix_inc -> assert false
-    | _, `Upostfix_dec -> assert false
-    | _, `Uprefix_inc -> assert false
-    | _, `Uprefix_dec -> assert false
-    | `Tinteger, `Uplus -> uplus_int
-    | `Tinteger, `Uminus -> uminus_int
-    | `Treal, `Uplus -> uplus_real
-    | `Treal, `Uminus -> uminus_real
-    | `Tboolean, `Unot -> not_
-    | `Tunit,_ -> assert false
+    | _, Upostfix_inc -> assert false
+    | _, Upostfix_dec -> assert false
+    | _, Uprefix_inc -> assert false
+    | _, Uprefix_dec -> assert false
+    | Tinteger, Uplus -> uplus_int
+    | Tinteger, Uminus -> uminus_int
+    | Treal, Uplus -> uplus_real
+    | Treal, Uminus -> uminus_real
+    | Tboolean, Unot -> not_
+    | Tunit,_ -> assert false
     | _ -> assert false
 
 let incr_op op =
   match op with
-    | `Upostfix_inc -> Postfix_inc
-    | `Upostfix_dec -> Postfix_dec
-    | `Uprefix_inc -> Prefix_inc
-    | `Uprefix_dec -> Prefix_dec
+    | Upostfix_inc -> Postfix_inc
+    | Upostfix_dec -> Postfix_dec
+    | Uprefix_inc -> Prefix_inc
+    | Uprefix_dec -> Prefix_dec
     | _ -> assert false
 
 let set_assigned v =
@@ -454,7 +480,7 @@ let set_assigned v =
 
 let make_unary_app loc (op : Jc_ast.punary_op) t2 e2 =
   match op with
-    | `Uprefix_inc | `Upostfix_inc | `Uprefix_dec | `Upostfix_dec ->
+    | Uprefix_inc | Upostfix_inc | Uprefix_dec | Upostfix_dec ->
 	begin
 	  match e2.jc_expr_node with
 	    | JCEvar v ->
@@ -464,26 +490,26 @@ let make_unary_app loc (op : Jc_ast.punary_op) t2 e2 =
 		t2,JCEincr_heap(incr_op op, f, e)
 	    | _ -> typing_error e2.jc_expr_loc "not an lvalue"
 	end
-    | `Unot -> 
+    | Unot -> 
 	let t=
 	  match t2 with
 	    | JCTnative t2 ->
 		begin
 		  match t2 with
-		    | `Tboolean -> `Tboolean
+		    | Tboolean -> Tboolean
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
 		typing_error loc "boolean expected"
 	in JCTnative t,JCEcall(unary_op t op,[e2])
-    | `Uplus | `Uminus -> 
+    | Uplus | Uminus -> 
 	let t=
 	  match t2 with
 	    | JCTnative t2 ->
 		begin
 		  match t2 with
-		    | `Tinteger -> `Tinteger
-		    | `Treal -> `Treal
+		    | Tinteger -> Tinteger
+		    | Treal -> Treal
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
@@ -498,17 +524,17 @@ let bin_op t op =
     | _, Ble -> le_int_
     | _, Beq -> eq_int_
     | _, Bneq -> neq_int_
-    | `Tinteger, Badd -> add_int_
-    | `Treal, Badd -> add_real_
+    | Tinteger, Badd -> add_int_
+    | Treal, Badd -> add_real_
     | _, Bsub -> sub_int_
     | _, Bmul -> mul_int_
     | _, Bdiv -> div_int_
     | _, Bmod -> mod_int_
-    | `Tboolean, Bland -> and_ 
-    | `Tboolean, Blor -> or_
+    | Tboolean, Bland -> and_ 
+    | Tboolean, Blor -> or_
 	(* not allowed as expression op *)
     | _,Bimplies -> assert false
-    | `Tunit,_ -> assert false
+    | Tunit,_ -> assert false
     | _ -> assert false
 
 let make_bin_app loc op t1 e1 t2 e2 =
@@ -519,21 +545,21 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	    | JCTnative t1, JCTnative t2 ->
 		begin
 		  match (t1,t2) with
-		    | `Tinteger,`Tinteger -> ()
+		    | Tinteger,Tinteger -> ()
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
 		typing_error loc "numeric types expected"
 	end;
-	JCTnative `Tboolean,JCEcall(bin_op `Tboolean op,[e1;e2])
+	JCTnative Tboolean,JCEcall(bin_op Tboolean op,[e1;e2])
     | Badd | Bsub | Bmul | Bdiv | Bmod ->
 	let t=
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
 		begin
 		  match (t1,t2) with
-		    | `Tinteger,`Tinteger -> `Tinteger
-		    | `Treal,`Treal -> `Treal
+		    | Tinteger,Tinteger -> Tinteger
+		    | Treal,Treal -> Treal
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
@@ -545,7 +571,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	    | JCTnative t1, JCTnative t2 ->
 		begin
 		  match (t1,t2) with
-		    | `Tboolean,`Tboolean -> `Tboolean
+		    | Tboolean,Tboolean -> Tboolean
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
@@ -571,7 +597,7 @@ let rec expr env e =
       | JCPEinstanceof(e1, t) -> 
 	  let t1,te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTnative `Tboolean, JCEinstanceof(te1,st)
+	  JCTnative Tboolean, JCEinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let t1,te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
@@ -676,7 +702,7 @@ let rec expr env e =
 	  in
 	  begin
 	    match t1 with
-	      | JCTnative `Tboolean ->
+	      | JCTnative Tboolean ->
 		  let t =
 		    if subtype t2 t3 then t3 else
 		      if subtype t3 t2 then t2 else
@@ -729,7 +755,7 @@ let rec statement env s =
 	  JCSreturn te
       | JCPSwhile(c,i,v,s) -> 
 	  let t,tc = expr env c in
-	  if subtype t (JCTnative `Tboolean) then
+	  if subtype t (JCTnative Tboolean) then
 	    let ts = statement env s
 	    and lo = loop_annot env i v
 	    in
@@ -739,7 +765,7 @@ let rec statement env s =
 	  
       | JCPSif (c, s1, s2) -> 
 	  let t,tc = expr env c in
-	  if subtype t (JCTnative `Tboolean) then
+	  if subtype t (JCTnative Tboolean) then
 	    let ts1 = statement env s1
 	    and ts2 = statement env s2
 	    in
@@ -782,13 +808,7 @@ and statement_list env l : statement list =
 	    | JCPSskip -> statement_list env r
 	    | JCPSdecl (ty, id, e) ->
 		let ty = type_type ty in
-		let vi = {
-		  jc_var_info_name = id;
-		  jc_var_info_final_name = id;
-		  jc_var_info_type = ty;
-		  jc_var_info_assigned = false;
-		}
-		in
+		let vi = var ty id in
 		let te = 
 		  Option_misc.map
 		    (fun e ->
@@ -858,13 +878,8 @@ let clause env c acc =
   
 let param (t,id) =
   let ty = type_type t in
-  let vi = {
-    jc_var_info_name = id;
-    jc_var_info_final_name = id;
-    jc_var_info_type = ty;
-    jc_var_info_assigned = false;
-  }
-  in (id,vi)
+  let vi = var ty id in 
+  (id,vi)
 
 let assertion_true =
   { jc_assertion_node = JCAtrue;
@@ -872,13 +887,14 @@ let assertion_true =
 
 let field_tag_counter = ref 0
 
-let field (t,id) =
+let field root (t,id) =
   let ty = type_type t in
   incr field_tag_counter;
   let fi = {
     jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = id;
     jc_field_info_type = ty;
+    jc_field_info_root = root;
   }
   in (id,fi)
 
@@ -892,14 +908,9 @@ let decl d =
 	let ty = type_type ty in
 	let fi = make_fun_info id ty in
 	fi.jc_fun_info_parameters <- List.map snd param_env;
-	let param_env_result =
-	  ("\\result",{
-	     jc_var_info_name = "\\result";
-	     jc_var_info_final_name = "result";
-	     jc_var_info_type = ty;
-	     jc_var_info_assigned = false;
-	  })::param_env
-	in
+	let vi = var ty "\\result" in
+	vi.jc_var_info_final_name <- "result";
+	let param_env_result = ("\\result",vi)::param_env in
 	let s = List.fold_right 
 		  (clause param_env_result) specs 
 		  { jc_fun_requires = assertion_true;
@@ -909,7 +920,6 @@ let decl d =
 	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDtype(id,parent,fields,inv) ->
-	let env = List.map field fields in
 	let root,par = 
 	  match parent with
 	    | None -> (id,None)
@@ -917,6 +927,7 @@ let decl d =
 		let st = find_struct_info d.jc_pdecl_loc p in
 		(st.jc_struct_info_root,Some st)
 	in
+	let env = List.map (field root) fields in
 	let struct_info =
 	  { jc_struct_info_name = id;
 	    jc_struct_info_fields = env;
@@ -927,24 +938,12 @@ let decl d =
 	let invariants =
 	  List.fold_left
 	    (fun acc (id,x,e) ->	
-	       let vi = 
-		 {
-		   jc_var_info_name = x;
-		   jc_var_info_final_name = x;
-		   jc_var_info_type = JCTpointer(struct_info,0,0);
-		   jc_var_info_assigned = false;
-		 }
-	       in
+	       let vi = var (JCTpointer(struct_info,0,0)) x in
 	       let p = assertion [(x,vi)] e in
-	       let pi =
-		 { jc_logic_info_name = id;
-		   jc_logic_info_result_type = None;
-		   jc_logic_info_parameters = [vi];
-		   jc_logic_info_effects = empty_effects;
-		   jc_logic_info_calls = [];
-		 }
-	       in
-	       Hashtbl.add logic_functions_table id (pi,JCAssertion p);
+	       let pi = make_rel id in
+	       pi.jc_logic_info_parameters <- [vi];
+	       Hashtbl.add logic_functions_table 
+		 pi.jc_logic_info_tag (pi,JCAssertion p);
 	       (pi,p) :: acc)
 	    []
 	    inv

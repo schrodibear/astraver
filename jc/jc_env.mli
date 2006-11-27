@@ -23,8 +23,7 @@
 (**************************************************************************)
 
 
-type native_type =
-  [ `Tunit | `Tboolean | `Tinteger | `Treal ]
+type native_type = Tunit | Tboolean | Tinteger | Treal 
 
 type jc_type =
   | JCTnative of native_type
@@ -44,13 +43,15 @@ and field_info =
       jc_field_info_tag : int;
       jc_field_info_name : string;
       jc_field_info_type : jc_type;
+      jc_field_info_root : string;
     }
 
 
 type var_info =
     {
+      jc_var_info_tag : int;
       jc_var_info_name : string;
-      jc_var_info_final_name : string;
+      mutable jc_var_info_final_name : string;
       jc_var_info_type : jc_type;
       mutable jc_var_info_assigned : bool;
     }

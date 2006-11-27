@@ -28,21 +28,25 @@ open Jc_fenv
 
 (* native types *)
 
-let unit_type = JCTnative `Tunit
-let boolean_type = JCTnative `Tboolean
-let integer_type = JCTnative `Tinteger
-let real_type = JCTnative `Treal
+let unit_type = JCTnative Tunit
+let boolean_type = JCTnative Tboolean
+let integer_type = JCTnative Tinteger
+let real_type = JCTnative Treal
 
 
 (* logic functions *)
 
 let empty_effects = 
-  { jc_reads_fields = FieldSet.empty ;
-    jc_writes_fields = FieldSet.empty ;
+  { jc_effect_alloc_table = VarSet.empty ;
+    jc_effect_memories = FieldSet.empty ;
   }
 
+let logic_fun_tag_counter = ref 0
+
 let make_term_op name ty =
-  { jc_logic_info_name = name;
+  incr logic_fun_tag_counter;
+  { jc_logic_info_tag = !logic_fun_tag_counter;
+    jc_logic_info_name = name;
     jc_logic_info_result_type = Some ty;
     jc_logic_info_parameters = [];
     jc_logic_info_effects = empty_effects;
@@ -57,11 +61,14 @@ let sub_int = make_term_op "sub_int" integer_type
 let mul_int = make_term_op "mul_int" integer_type
 let div_int = make_term_op "div_int" integer_type
 let mod_int = make_term_op "mod_int" integer_type
+let minus_int = make_term_op "neg_int" integer_type
 
 (* logic predicates *)
 
 let make_rel name =
-  { jc_logic_info_name = name;
+  incr logic_fun_tag_counter;
+  { jc_logic_info_tag = !logic_fun_tag_counter;
+    jc_logic_info_name = name;
     jc_logic_info_result_type = None;
     jc_logic_info_parameters = [];
     jc_logic_info_effects = empty_effects;
@@ -78,6 +85,10 @@ let neq = make_rel "neq"
     
 (* programs *)
 
+let empty_fun_effect =
+  { jc_reads = empty_effects;
+    jc_writes = empty_effects }
+
 let fun_tag_counter = ref 0
 
 let make_fun_info name ty =
@@ -88,7 +99,7 @@ let make_fun_info name ty =
     jc_fun_info_return_type = ty;
     jc_fun_info_calls = [];
     jc_fun_info_logic_apps = [];
-    jc_fun_info_effects = empty_effects; 
+    jc_fun_info_effects = empty_fun_effect; 
  }
 
 let gt_int_ = make_fun_info "gt_int_" boolean_type

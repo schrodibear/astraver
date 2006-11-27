@@ -22,9 +22,20 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.2 2006-11-07 16:12:14 marche Exp $ *)
+(* $Id: jc_envset.mli,v 1.3 2006-11-27 08:40:00 marche Exp $ *)
 
 open Jc_env
 
+module VarSet : Set.S with type elt = var_info
+
 module FieldSet : Set.S with type elt = field_info
+
+module FieldMap : Map.S with type key = field_info
+
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)
 

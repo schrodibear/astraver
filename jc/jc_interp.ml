@@ -39,10 +39,10 @@ let const c =
 
 let tr_native_type t =
   match t with
-    | `Tunit -> "unit"
-    | `Tboolean -> "bool"
-    | `Tinteger -> "int"
-    | `Treal -> "real"
+    | Tunit -> "unit"
+    | Tboolean -> "bool"
+    | Tinteger -> "int"
+    | Treal -> "real"
 
 let simple_logic_type s =
   { logic_type_name = s; logic_type_args = [] }
@@ -52,9 +52,9 @@ let tr_base_type t =
     | JCTnative t -> simple_logic_type (tr_native_type t)
     | JCTlogic s -> simple_logic_type s
     | JCTpointer (st, a, b) -> 
-	let _ti = simple_logic_type (st.jc_struct_info_root) in
+	let ti = simple_logic_type (st.jc_struct_info_root) in
 	{ logic_type_name = "pointer";
-	  logic_type_args = [ (* ti *) ] }
+	  logic_type_args = [ ti ] }
 
 let tr_type t =
   match t with
@@ -77,6 +77,20 @@ let lvar ?(assigned=true) label v =
 let lvar_info label v = 
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
+let logic_params li l =
+  FieldSet.fold
+    (fun fi acc -> (LVar fi.jc_field_info_name)::acc)
+    li.jc_logic_info_effects.jc_effect_memories
+    l	    
+
+let make_logic_fun_call li l =
+  let params = logic_params li l in
+  LApp(li.jc_logic_info_name,params)
+
+let make_logic_pred_call li l =
+  let params = logic_params li l in
+  LPred(li.jc_logic_info_name,params)
+
 let rec term label oldlabel t =
   let ft = term label oldlabel in
   match t.jc_term_node with
@@ -84,19 +98,24 @@ let rec term label oldlabel t =
     | JCTvar v -> lvar_info label v
     | JCTconst c -> LConst(const c)
     | JCTshift(t1,t2) -> LApp("shift",[ft t1; ft t2])
-    | JCTif(t1,t2,t3) -> assert false
+    | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
-    | JCTapp(f,l) -> 
-	LApp(f.jc_logic_info_name,List.map ft l)
+    | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
     | JCTold(t) -> term (Some oldlabel) oldlabel t
-    | JCToffset_max(t) -> LApp("offset_max",[ft t])
-    | JCToffset_min(t) -> LApp("offset_min",[ft t])
+    | JCToffset_max(t) -> 
+	assert false
+	  (* LApp("offset_max",[alloc; ft t]) *)
+    | JCToffset_min(t) -> 
+	assert false
+	  (* LApp("offset_min",[ft t]) *)
     | JCTinstanceof(t,ty) ->
+	let alloc = ty.jc_struct_info_root ^ "_alloc_table" in
 	LApp("instanceof_bool",
-	     [lvar label "alloc"; ft t;LVar ty.jc_struct_info_name])
+	     [lvar label alloc; ft t;LVar ty.jc_struct_info_name])
     | JCTcast(t,ty) ->
+	let alloc = ty.jc_struct_info_root ^ "_alloc_table" in
 	LApp("downcast",
-	     [lvar label "alloc"; ft t;LVar ty.jc_struct_info_name])
+	     [lvar label alloc; ft t;LVar ty.jc_struct_info_name])
 
 let rec assertion label oldlabel a =
   let fa = assertion label oldlabel 
@@ -110,7 +129,8 @@ let rec assertion label oldlabel a =
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
     | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
     | JCAnot(a) -> LNot(fa a)
-    | JCAapp(f,l) -> LPred(f.jc_logic_info_name,List.map ft l)
+    | JCAapp(f,l) -> 
+	make_logic_pred_call f (List.map ft l)	    
     | JCAforall(v,p) -> 
 	LForall(v.jc_var_info_final_name,
 		tr_base_type v.jc_var_info_type,
@@ -119,8 +139,9 @@ let rec assertion label oldlabel a =
     | JCAbool_term(t) -> 
 	LPred("eq",[ft t;LConst(Prim_bool true)])
     | JCAinstanceof(t,ty) -> 
+	let alloc = ty.jc_struct_info_root ^ "_alloc_table" in
 	LPred("instanceof",
-	      [lvar label "alloc"; ft t; LVar ty.jc_struct_info_name])
+	      [lvar label alloc; ft t; LVar ty.jc_struct_info_name])
 
 (****************************
 
@@ -128,7 +149,16 @@ logic functions
 
 ****************************)
 
-let tr_logic_fun li t acc =
+let memory_type t v =
+  { logic_type_name = "memory";
+    logic_type_args = [t;v] }
+
+let memory_field fi =
+  memory_type 
+    (simple_logic_type fi.jc_field_info_root)
+    (tr_base_type fi.jc_field_info_type)
+	 
+let tr_logic_fun li ta acc =
   let params =
     List.map
       (fun vi ->
@@ -136,12 +166,24 @@ let tr_logic_fun li t acc =
 	   tr_base_type vi.jc_var_info_type))
       li.jc_logic_info_parameters
   in
-  let ret =
-    match li.jc_logic_info_result_type with
-      | None -> assert false
-      | Some t -> tr_base_type t
+  let params_reads =
+    FieldSet.fold
+      (fun fi acc -> 
+	 (fi.jc_field_info_name, memory_field fi)::acc)
+      li.jc_logic_info_effects.jc_effect_memories
+      params
   in
-  Function(false,li.jc_logic_info_name,params, ret, term None "" t) :: acc
+  let decl =
+    match li.jc_logic_info_result_type,ta with
+      | None,JCAssertion a -> 
+	  let a = assertion None "" a in
+	  Predicate(false,li.jc_logic_info_name,params_reads, a) 
+      | Some ty,JCTerm t -> 
+	  let ret = tr_base_type ty in
+	  let t = term None "" t in
+	  Function(false,li.jc_logic_info_name,params_reads, ret, t) 
+      | _ -> assert false
+  in decl :: acc
   
 let tr_predicate li p acc =
   let params =
@@ -169,10 +211,22 @@ let reset_tmp_var () = tempvar_count := 0
 let tmp_why_var () = incr tempvar_count; "jessie_" ^ string_of_int !tempvar_count
 
 let const_un = Cte(Prim_int "1")
+
 let incr_call op =
   match op with
     | Prefix_inc | Postfix_inc -> Jc_pervasives.add_int_.jc_fun_info_name
     | Prefix_dec | Postfix_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
+
+let make_acc fi e =
+  make_app "acc_"
+    [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
+      Var fi.jc_field_info_name ; e ]
+
+let make_upd fi e1 e2 =
+  make_app "upd_"
+    [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
+      Var fi.jc_field_info_name ; e1 ; e2 ]
+    
 
 let rec expr e : (string * Output.expr) list * expr =
   match e.jc_expr_node with
@@ -193,13 +247,15 @@ let rec expr e : (string * Output.expr) list * expr =
 	(l1@l2,make_app "shift" [e1; e2])
     | JCEinstanceof(e,t) ->
 	let l,e = expr e in
-	l,make_app "instanceof_" [Deref "alloc"; e; Var t.jc_struct_info_name]
+	let alloc = t.jc_struct_info_root ^ "_alloc_table" in
+	l,make_app "instanceof_" [Deref alloc; e; Var t.jc_struct_info_name]
     | JCEcast(e,t) ->
 	let l,e = expr e in
-	l,make_app "downcast_" [Deref "alloc"; e; Var t.jc_struct_info_name]
+	let alloc = t.jc_struct_info_root ^ "_alloc_table" in
+	l,make_app "downcast_" [Deref alloc; e; Var t.jc_struct_info_name]
     | JCEderef(e,f) -> 
 	let l,e = expr e in
-	l,make_app "acc_" [Var f.jc_field_info_name; e]
+	l,make_acc f e
     | JCEincr_local(op, vi) -> assert false
     | JCEincr_heap _ -> assert false
     | JCEassign_local (vi, e2) -> 
@@ -215,11 +271,9 @@ let rec expr e : (string * Output.expr) list * expr =
 	let l2,e2 = expr e2 in
 	let tmp1 = tmp_why_var () in
 	let tmp2 = tmp_why_var () in
-	let memory = fi.jc_field_info_name in
 	(l1@l2@[ (tmp1, e1) ; (tmp2, e2) ],
 	 append
-	   (make_app "upd_"
-	      [Var memory; Var tmp1; Var tmp2])
+	   (make_upd fi (Var tmp1) (Var tmp2))
 	   (Var tmp2)) 
     | JCEassign_op_local (vi, op, e2) -> 
 	assert false
@@ -237,7 +291,7 @@ let rec expr e : (string * Output.expr) list * expr =
 	let memory = fi.jc_field_info_name in
 	(l1@l2@[ (tmp1, e1) ; 
 		 (tmp2, make_app op.jc_fun_info_name
-		    [ make_app "acc_" [Var memory; Var tmp1] ; e2 ]) ],
+		    [ make_acc fi (Var tmp1) ; e2 ]) ],
 	 append
 	   (make_app "safe_upd_"
 	      [Var memory; Var tmp1; Var tmp2])
@@ -292,11 +346,9 @@ let statement_expr e =
 	let l2,e2 = expr e2 in
 	let tmp1 = tmp_why_var () in
 	let tmp2 = tmp_why_var () in
-	let memory = fi.jc_field_info_name in
 	make_lets 
 	  (l1@l2@[ (tmp1, e1) ; (tmp2, e2) ])
-	  (make_app "upd_"
-		   [Var memory; Var tmp1; Var tmp2])
+	  (make_upd fi (Var tmp1) (Var tmp2))
     | JCEassign_op_local (vi, op, e2) -> 
 	assert false
 	  (*
@@ -314,8 +366,7 @@ let statement_expr e =
 	make_lets 
 	  (l1@l2@[ (tmp1, e1) ; 
 		   (tmp2, make_app op.jc_fun_info_name
-		      [ make_app "acc_" [Var memory; Var tmp1] ;
-		    e2 ]) ])
+		      [ make_acc fi (Var tmp1) ; e2 ]) ])
 	  (make_app "safe_upd_"
 		  [Var memory; Var tmp1; Var tmp2])
     | JCEcall(f,l) -> 
@@ -327,13 +378,12 @@ let statement_expr e =
 	in
 	make_lets l (make_app f.jc_fun_info_name el)
 
-
 let invariant_for_struct this st =
   let (_,invs) = 
     Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
   in
   make_and_list 
-    (List.map (fun (li,_) -> LPred(li.jc_logic_info_name,[this])) invs)
+    (List.map (fun (li,_) -> make_logic_pred_call li [this]) invs)
   
 let rec statement s = 
   reset_tmp_var();
@@ -347,8 +397,7 @@ let rec statement s =
 	let l,e = expr e in
 	While(make_lets l e, assertion None "" la.jc_loop_invariant,
 	      Some (term None "" la.jc_loop_variant,None), [statement s])
-	
-    | JCSassert _ -> assert false
+    | JCSassert _ -> assert false (* TODO *)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  match e with
@@ -362,28 +411,24 @@ let rec statement s =
 		  Let(vi.jc_var_info_final_name,e, statement s))
 	end
     | JCSreturn e -> 
-	let l,e = expr e in
-	make_lets l e
+	let l,e = expr e in make_lets l e
     | JCSunpack(_,e) -> 
-	let l,e = expr e in
-	make_lets l (make_app "unpack_" [e])
+	let l,e = expr e in make_lets l (make_app "unpack_" [e])
     | JCSpack(st,e) -> 
 	let l,e = expr e in
 	let tmp = tmp_why_var() in
 	make_lets (l@[(tmp,e)])
-	  (Assert(invariant_for_struct (LVar tmp) st,
-		 make_app "pack_" [Var tmp]))
+	  (Assert(invariant_for_struct (LVar tmp) st, 
+		  make_app "pack_" [Var tmp]))
     | JCSbreak l -> assert false
     | JCScontinue l -> assert false
     | JCSgoto l -> assert false
     | JCSthrow (_, _) -> assert false
     | JCStry (_, _, _) -> assert false
 
-and statement_list l =
-  match l with
-    | [] -> Void
-    | [i] -> statement i
-    | i::r -> append (statement i) (statement_list r)
+and statement_list l = 
+  List.fold_right 
+    (fun s acc -> append (statement s) acc) l Void
 
 (******************
  structures
@@ -394,37 +439,87 @@ let tr_struct st acc =
   let acc = 
     List.fold_left
       (fun acc (_,fi) ->
-	 let mem =
-	   { logic_type_name = "memory";
-	     logic_type_args = 
-	       [(* simple_logic_type (st.jc_struct_info_root); *)
-		tr_base_type fi.jc_field_info_type] }
-	 in
+	 let mem = memory_field fi in
 	 Param(false,
 	       fi.jc_field_info_name,
 	       Ref_type(Base_type mem))::acc)
       acc st.jc_struct_info_fields
   in 
   (* declaration of the struct_id *)
-  let acc =
-    Logic(false,st.jc_struct_info_name,[],simple_logic_type "struct_id")::acc
+  let struct_id_type = 
+    { logic_type_name = "struct_id" ;
+      logic_type_args = [simple_logic_type st.jc_struct_info_root] }
   in
+  let acc =
+    Logic(false,st.jc_struct_info_name,[],struct_id_type)::acc
+  in
+  (* the invariants *)
+(*
+  let tmp = "this" in
+  let i = invariant_for_struct (LVar tmp) st in
+  let a =
+    LImpl(LPred("instanceof",
+		[LVar "a";
+		 LVar tmp;
+		 LVar st.jc_struct_info_name]),
+	  LOr(LPred("eq",
+		    [LApp("select",[LVar "mutable"; LVar tmp]);
+		     LConst (Prim_bool true)])
+		,i))
+  in
+  let (_,invs) = 
+    Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
+  in
+  let params =
+    List.fold_left
+      (fun acc (li,_) -> 
+	 FieldSet.union li.jc_logic_info_effects.jc_reads_fields acc)
+      FieldSet.empty
+      invs
+  in
+  let a =
+    FieldSet.fold
+      (fun fi a ->
+	 LForall(fi.jc_field_info_name, memory_field fi,
+		 a))
+      params a
+  in 
+  let a =
+    LForall("a",simple_logic_type "alloc_table",
+	    LForall("mutable",memory_type (simple_logic_type "bool"),
+		    LForall(tmp,simple_logic_type "pointer",a)))
+  in
+  let acc =
+    Axiom("global_invariant_for_" ^ st.jc_struct_info_name, a) :: acc
+  in
+*)
   match st.jc_struct_info_parent with
     | None ->
-	(* declaration of root type (obsolete) *)
-	(* Type(st.jc_struct_info_name,[]):: *) acc
+	(* declaration of root type and the allocation table *)
+	let r = st.jc_struct_info_name in
+	let alloc_type =
+	  Ref_type (Base_type { logic_type_name = "alloc_table";
+				logic_type_args = [simple_logic_type r] } )
+	in
+	Type(r,[]) ::
+	  Param(false,r ^ "_alloc_table",alloc_type) :: acc
     | Some p ->
 	(* axiom for instance_of *)
 	let name = 
 	  st.jc_struct_info_name ^ "_instanceof_" ^ p.jc_struct_info_name
 	in
-	let root = 
+	let root = simple_logic_type st.jc_struct_info_root in
+	let root_alloc_table = 
+	  { logic_type_name = "alloc_table";
+	    logic_type_args = [root] }
+	in
+	let root_pointer = 
 	  { logic_type_name = "pointer";
-	    logic_type_args = [ (* simple_logic_type (st.jc_struct_info_root) *)] }
+	    logic_type_args = [root] }
 	in
 	let f =
-	  LForall("a",simple_logic_type "alloc_table",
-		  LForall("p",root,
+	  LForall("a",root_alloc_table,
+		  LForall("p",root_pointer,
 			  LImpl(LPred("instanceof",
 				      [LVar "a";
 				       LVar "p";
@@ -444,40 +539,28 @@ locations
 let rec pset before loc = 
   match loc with
     | JCLderef(e,fi) ->
-	let m = lvar before fi.jc_field_info_name in
+	let m = lvar (Some before) fi.jc_field_info_name in
 	LApp("pset_deref", [pset before e; m])
     | JCLvar vi -> 
-	let m = lvar_info before vi in
+	let m = lvar_info (Some before) vi in
 	LApp("pset_singleton", [m])
 
 module StringMap = Map.Make(String)
 
-
-type mem_or_ref = 
-  | Reference of bool 
-      (* a global reference, boolean indicates whether it 
-	 is given in assigns ckause, thus is modified ;
-	 or not given, thus is not modified. *)
-  | Memory of term list
-      (* a memory heap reference, argument is the set of pointers 
-	 to parts which are given in assigns clause *)
-
-let collect_locations before acc loc =
-  let var,iloc = match loc with
-    | JCLderef(e,fi) -> fi.jc_field_info_name, Some (pset before e)
-    | JCLvar vi -> vi.jc_var_info_final_name, None
-  in
-  try
-    let p = StringMap.find var acc in
-    match p, iloc with
-       | Reference _, None -> StringMap.add var (Reference true) acc
-       | Memory l, Some iloc -> StringMap.add var (Memory (iloc::l)) acc
-       | Reference _,Some n -> assert false
-       | Memory _,None -> assert false
-  with Not_found -> 
-    (match iloc with
-       | None -> StringMap.add var (Reference true) acc
-       | Some l -> StringMap.add var (Memory [l]) acc)
+let collect_locations before (refs,mems) loc =
+  match loc with
+    | JCLderef(e,fi) -> 
+	let iloc = pset before e in
+	let l =
+	  try
+	    let l = FieldMap.find fi mems in
+	    iloc::l
+	  with Not_found -> [iloc]
+	in
+	(refs, FieldMap.add fi l mems)
+    | JCLvar vi -> 
+	let var = vi.jc_var_info_final_name in
+	(StringMap.add var true refs,mems)
 
 let rec make_union_loc = function
   | [] -> LVar "pset_empty"
@@ -488,7 +571,7 @@ let assigns before ef locs =
   match locs with
     | None -> LTrue	
     | Some locs ->
-  let m = 
+  let refs = 
     (* HeapVarSet.fold
 	    (fun v m -> 
 	       if Ceffect.is_alloc v then m 
@@ -496,27 +579,32 @@ let assigns before ef locs =
 	    assigns.Ceffect.assigns_var 
     *) StringMap.empty 
   in
-  let m = 
+  let mems = 
     FieldSet.fold
       (fun fi m -> 
-	 StringMap.add fi.jc_field_info_name (Memory []) m)
-      ef.jc_writes_fields m 
+	 FieldMap.add fi [] m)
+      ef.jc_writes.jc_effect_memories FieldMap.empty 
   in
-  let l = 
-    List.fold_left (collect_locations (Some before)) m locs
+  let refs,mems = 
+    List.fold_left (collect_locations before) (refs,mems) locs
   in
+  let a =
   StringMap.fold
-    (fun v p acc -> match p with
-       | Memory p ->
-	   make_and acc
-	     (LPred("not_assigns",
-		    [LVarAtLabel("alloc",before); 
-		     LVarAtLabel(v,before);
-		     LVar v; make_union_loc p]))
-       | Reference false ->
-	   make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)]))
-       | Reference true -> acc)
-    l LTrue
+    (fun v p acc -> 
+       if p then acc else
+	 make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)])))
+    refs LTrue
+  in
+  FieldMap.fold
+    (fun fi p acc -> 
+       let v = fi.jc_field_info_name in
+       let alloc = fi.jc_field_info_root ^ "_alloc_table" in
+       make_and acc
+	 (LPred("not_assigns",
+		[LVarAtLabel(alloc,before); 
+		 LVarAtLabel(v,before);
+		 LVar v; make_union_loc p])))
+    mems a
 
 (*****************
  functions
@@ -530,26 +618,29 @@ let tr_fun f spec body acc =
     List.fold_right
       (fun v acc ->
 	 match v.jc_var_info_type with
-	   | JCTpointer(t,a,b) ->
+	   | JCTpointer(st,a,b) ->
+	       let alloc =
+		 st.jc_struct_info_root ^ "_alloc_table"
+	       in
 	       let validity = 
 		 make_and 
 		   (LPred("le_int",
 			  [LApp("offset_min",
-				[LVar "alloc";
+				[LVar alloc;
 				 LVar v.jc_var_info_final_name]);
 			   LConst (Prim_int (string_of_int a))]))
 		   (LPred("ge_int",
 			  [LApp("offset_max",
-				[LVar "alloc";
+				[LVar alloc;
 				 LVar v.jc_var_info_final_name]);
 			   LConst (Prim_int (string_of_int b))]))
 	       in
 	       make_and 
 		 (make_and validity 
 		    (LPred("instanceof",
-			   [LVar "alloc";
+			   [LVar alloc;
 			    LVar v.jc_var_info_final_name;
-			    LVar t.jc_struct_info_name])))
+			    LVar st.jc_struct_info_name])))
 		 acc
 	   | JCTnative _ -> acc
 	   | _ -> assert false
@@ -570,16 +661,22 @@ let tr_fun f spec body acc =
       (fun (_,_,e) acc -> make_and e acc)
       all_behaviors LTrue
   in
+  let reads =
+    FieldSet.fold
+      (fun f acc -> f.jc_field_info_name::acc)
+      f.jc_fun_info_effects.jc_reads.jc_effect_memories
+      []
+  in
   let writes =
     FieldSet.fold
       (fun f acc -> f.jc_field_info_name::acc)
-      f.jc_fun_info_effects.jc_writes_fields
+      f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
   in
   let why_param = 
     let annot_type =
       Annot_type(requires,tr_type f.jc_fun_info_return_type,
-		 [],writes, global_ensures,[])
+		 reads,writes, global_ensures,[])
     in
     let fun_type =
       List.fold_right

@@ -13,7 +13,7 @@ let rec term this t =
     | JCToffset_max t -> term this t
     | JCTold t -> term this t
     | JCTapp (id, l) ->
-	if FieldSet.is_empty id.jc_logic_info_effects.jc_reads_fields
+	if FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) l
 	else
 	  Jc_typing.typing_error t.jc_term_loc
@@ -38,7 +38,7 @@ let rec assertion this p =
     | JCAold p -> assertion this p
     | JCAforall (id, p) -> assertion this p
     | JCAapp (id, l) ->
-	if FieldSet.is_empty id.jc_logic_info_effects.jc_reads_fields
+	if FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) l
 	else
 	  Jc_typing.typing_error p.jc_assertion_loc

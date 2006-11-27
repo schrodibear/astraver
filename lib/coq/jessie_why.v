@@ -5,106 +5,119 @@ Require Export Why.
 
 Set Implicit Arguments.
 
-(*Why type*) Definition alloc_table: Set.
+(*Why type*) Definition alloc_table: Set ->Set.
 Admitted.
 
-(*Why type*) Definition pointer: Set.
+(*Why type*) Definition pointer: Set ->Set.
 Admitted.
 
-(*Why logic*) Definition offset_max : alloc_table -> pointer -> Z.
+(*Why logic*) Definition offset_max :
+  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why logic*) Definition offset_min : alloc_table -> pointer -> Z.
+(*Why logic*) Definition offset_min :
+  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why predicate*) Definition valid  (a:alloc_table) (p:pointer)
-  := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A149:Set) (a:((alloc_table) A149))
+  (p:((pointer) A149)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
-(*Why type*) Definition memory: Set ->Set.
+(*Why type*) Definition memory: Set -> Set ->Set.
 Admitted.
 
 (*Why logic*) Definition select :
-  forall (A1:Set), ((memory) A1) -> pointer -> A1.
+  forall (A1:Set), forall (A2:Set), ((memory) A2 A1) -> ((pointer) A2) -> A1.
 Admitted.
 
 (*Why logic*) Definition store :
-  forall (A1:Set), ((memory) A1) -> pointer -> A1 -> ((memory) A1).
+  forall (A1:Set), forall (A2:Set), ((memory) A1 A2) -> ((pointer) A1)
+  -> A2 -> ((memory) A1 A2).
 Admitted.
 
 
 (*Why axiom*) Lemma select_store_eq :
-  forall (A1:Set),
-  (forall (m:((memory) A1)),
-   (forall (p1:pointer),
-    (forall (p2:pointer),
-     (forall (a:A1), (p1 = p2 -> (select (store m p1 a) p2) = a))))).
+  forall (A1:Set), forall (A2:Set),
+  (forall (m:((memory) A1 A2)),
+   (forall (p1:((pointer) A1)),
+    (forall (p2:((pointer) A1)),
+     (forall (a:A2), (p1 = p2 -> (select (store m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma select_store_neq :
-  forall (A1:Set),
-  (forall (m:((memory) A1)),
-   (forall (p1:pointer),
-    (forall (p2:pointer),
-     (forall (a:A1),
+  forall (A1:Set), forall (A2:Set),
+  (forall (m:((memory) A1 A2)),
+   (forall (p1:((pointer) A1)),
+    (forall (p2:((pointer) A1)),
+     (forall (a:A2),
       (~(p1 = p2) -> (select (store m p1 a) p2) = (select m p2)))))).
 Admitted.
 
-(*Why type*) Definition pset: Set.
+(*Why type*) Definition pset: Set ->Set.
 Admitted.
 
 
-(*Why logic*) Definition pset_empty : pset.
+(*Why logic*) Definition pset_empty : forall (A1:Set), ((pset) A1).
 Admitted.
 
 Set Contextual Implicit.
 Implicit Arguments pset_empty.
 Unset Contextual Implicit.
 
-(*Why logic*) Definition pset_singleton : pointer -> pset.
+(*Why logic*) Definition pset_singleton :
+  forall (A1:Set), ((pointer) A1) -> ((pset) A1).
 Admitted.
 
-(*Why logic*) Definition pset_union : pset -> pset -> pset.
+(*Why logic*) Definition pset_union :
+  forall (A1:Set), ((pset) A1) -> ((pset) A1) -> ((pset) A1).
 Admitted.
 
-(*Why logic*) Definition in_pset : pointer -> pset -> Prop.
+(*Why logic*) Definition in_pset :
+  forall (A1:Set), ((pointer) A1) -> ((pset) A1) -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma in_pset_empty :
-  (forall (p:pointer), ~(in_pset p pset_empty)).
+  forall (A1:Set), (forall (p:((pointer) A1)), ~(in_pset p pset_empty)).
 Admitted.
 
 (*Why axiom*) Lemma in_pset_singleton :
-  (forall (p:pointer),
-   (forall (q:pointer), ((in_pset p (pset_singleton q)) <-> p = q))).
+  forall (A1:Set),
+  (forall (p:((pointer) A1)),
+   (forall (q:((pointer) A1)), ((in_pset p (pset_singleton q)) <-> p = q))).
 Admitted.
 
 (*Why axiom*) Lemma in_pset_union :
-  (forall (p:pointer),
-   (forall (s1:pset),
-    (forall (s2:pset),
+  forall (A1:Set),
+  (forall (p:((pointer) A1)),
+   (forall (s1:((pset) A1)),
+    (forall (s2:((pset) A1)),
      ((in_pset p (pset_union s1 s2)) <-> (in_pset p s1) \/ (in_pset p s2))))).
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A94:Set) (a:alloc_table)
-  (m1:((memory) A94)) (m2:((memory) A94)) (l:pset)
-  := (forall (p:pointer),
+(*Why predicate*) Definition not_assigns (A166:Set)
+  (A165:Set) (a:((alloc_table) A165)) (m1:((memory) A165 A166))
+  (m2:((memory) A165 A166)) (l:((pset) A165))
+  := (forall (p:((pointer) A165)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
-(*Why type*) Definition struct_id: Set.
+(*Why type*) Definition struct_id: Set ->Set.
 Admitted.
 
 (*Why logic*) Definition instanceof :
-  alloc_table -> pointer -> struct_id -> Prop.
+  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1)
+  -> ((struct_id) A1) -> Prop.
 Admitted.
 
 (*Why logic*) Definition downcast :
-  alloc_table -> pointer -> struct_id -> pointer.
+  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1)
+  -> ((struct_id) A1) -> ((pointer) A1).
 Admitted.
 
 (*Why axiom*) Lemma downcast_instanceof :
-  (forall (a:alloc_table),
-   (forall (p:pointer),
-    (forall (s:struct_id), ((instanceof a p s) -> (downcast a p s) = p)))).
+  forall (A1:Set),
+  (forall (a:((alloc_table) A1)),
+   (forall (p:((pointer) A1)),
+    (forall (s:((struct_id) A1)),
+     ((instanceof a p s) -> (downcast a p s) = p)))).
 Admitted.
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.24 2006-11-17 16:16:15 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.25 2006-11-27 08:40:00 marche Exp $ i*)
 
 open Printf
 
@@ -129,16 +129,21 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
 let yices ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "yices -tc -smt < %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then error c t cmd
+  if c <> 0 then 
+    if c==1 && 
+      Sys.command (sprintf "grep -q -w 'feature not supported' %s" out) = 0 then
+      CannotDecide t
+    else	
+      error c t cmd
   else 
     let r = 
       if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
 	Valid t
       else
 	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
-	  CannotDecide t
-	else
-	  ProverFailure ("command failed: " ^ cmd)
+	CannotDecide t
+      else
+	ProverFailure ("command failed: " ^ cmd)
     in
     remove_file ~debug out;
     r

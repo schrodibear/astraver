@@ -23,31 +23,87 @@
 (**************************************************************************)
 
 
+(* $Id: jc_effect.ml,v 1.12 2006-11-27 08:40:00 marche Exp $ *)
+
+
 open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_ast
 
-
-let add_field_reads ef fi =
-  { ef with jc_reads_fields = FieldSet.add fi ef.jc_writes_fields }
-
-let add_field_writes ef fi =
-  { ef with jc_writes_fields = FieldSet.add fi ef.jc_writes_fields }
- 
 let ef_union ef1 ef2 =
-  { jc_reads_fields = FieldSet.union 
-			 ef1.jc_reads_fields ef2.jc_reads_fields ;
-    jc_writes_fields = FieldSet.union 
-			 ef1.jc_writes_fields ef2.jc_writes_fields ;
-  }
+  { jc_effect_alloc_table = 
+      VarSet.union
+	ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table;
+    jc_effect_memories = 
+      FieldSet.union 
+	ef1.jc_effect_memories ef2.jc_effect_memories }
 
+let fef_union fef1 fef2 =
+  { jc_reads = ef_union fef1.jc_reads fef2.jc_reads ;
+    jc_writes = ef_union fef1.jc_writes fef2.jc_writes }
+
+let add_memory_effect ef fi =
+  { ef with jc_effect_memories = FieldSet.add fi ef.jc_effect_memories } 
+  
+let add_field_reads fef fi =
+  { fef with jc_reads = add_memory_effect fef.jc_reads fi }
+
+let add_field_writes fef fi =
+  { fef with jc_writes = add_memory_effect fef.jc_writes fi }
+ 
 let same_effects ef1 ef2 =
-  FieldSet.equal ef1.jc_reads_fields ef2.jc_reads_fields &&
-  FieldSet.equal ef1.jc_writes_fields ef2.jc_writes_fields
+  VarSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table &&
+  FieldSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
 
+let same_feffects fef1 fef2 =
+  same_effects fef1.jc_reads fef2.jc_reads &&
+  same_effects fef1.jc_writes fef2.jc_writes
 
-(* $Id: jc_effect.ml,v 1.11 2006-11-24 14:46:12 marche Exp $ *)
+(***********************
+
+terms and assertions 
+
+**************************)
+
+let rec term ef t =
+  match t.jc_term_node with
+    | JCTconst _ -> ef
+    | JCTvar vi -> ef (* TODO ? *)
+    | JCTif(t1, t2, t3) -> term (term (term ef t1) t2) t3
+    | JCTcast(t, _) 
+    | JCTinstanceof (t, _)
+    | JCToffset_min t 
+    | JCToffset_max t
+    | JCTold t -> term ef t
+    | JCTapp (li, tl) -> 
+	ef_union li.jc_logic_info_effects
+	  (List.fold_left term ef tl)	
+    | JCTderef (t, fi) ->
+	term (add_memory_effect ef fi) t
+    | JCTshift (t1, t2) -> term (term ef t1) t2
+
+let rec assertion ef a =
+  match a.jc_assertion_node with
+    | JCAtrue | JCAfalse -> ef
+    | JCAif (_, _, _) -> assert false (* TODO *)
+    | JCAbool_term t
+    | JCAinstanceof (t, _) -> term ef t
+    | JCAnot a
+    | JCAold a -> assertion ef a
+    | JCAforall (_, _) -> assert false (* TODO *)
+    | JCAapp (li, tl) -> 
+	ef_union li.jc_logic_info_effects
+	  (List.fold_left term ef tl)	
+    | JCAiff (a1, a2)
+    | JCAimplies (a1, a2) -> assertion (assertion ef a1) a2
+    | JCAand al -> List.fold_left assertion ef al
+
+(********************
+
+expressions and statements
+
+***********************)
 
 let rec expr ef e =
   match e.jc_expr_node with
@@ -60,7 +116,7 @@ let rec expr ef e =
     | JCEincr_local(op,vi) -> ef
     | JCEincr_heap _ -> assert false
     | JCEcall (fi, le) -> 
-	ef_union fi.jc_fun_info_effects
+	fef_union fi.jc_fun_info_effects
 	  (List.fold_left expr ef le)
     | JCEcast(e,_)
     | JCEinstanceof(e,_) -> expr ef e
@@ -112,6 +168,21 @@ let spec ef s =
 
 let fixpoint_reached = ref false
 
+let logic_fun_effects f = 
+  let (f,ta) = 
+    Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
+  in
+  let ef = f.jc_logic_info_effects in
+  let ef = match ta with
+    | JCTerm t -> term ef t
+    | JCAssertion a -> assertion ef a
+  in
+  if same_effects ef f.jc_logic_info_effects then ()
+  else begin
+    fixpoint_reached := false;
+    f.jc_logic_info_effects <- ef
+  end
+
 let fun_effects fi =
   let (f,s,b) = 
     Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag 
@@ -119,7 +190,7 @@ let fun_effects fi =
   let ef = f.jc_fun_info_effects in
   let ef = spec ef s in
   let ef = List.fold_left statement ef b in
-  if same_effects ef f.jc_fun_info_effects then ()
+  if same_feffects ef f.jc_fun_info_effects then ()
   else begin
     fixpoint_reached := false;
     f.jc_fun_info_effects <- ef
@@ -129,7 +200,6 @@ let fun_effects fi =
 open Format
 open Pp
 
-let logic_fun_effects f = assert false
 
 let logic_effects funs =
   fixpoint_reached := false;
@@ -142,10 +212,10 @@ let logic_effects funs =
   List.iter
     (fun f ->
        Jc_options.lprintf
-	 "Effects for logic function %s:\n%a@." f.jc_logic_info_name
+	 "Effects for logic function %s:\n reads: %a@." f.jc_logic_info_name
 	 (print_list comma (fun fmt field ->
 			     fprintf fmt "%s" field.jc_field_info_name))
-	 (FieldSet.elements f.jc_logic_info_effects.jc_reads_fields))
+	 (FieldSet.elements f.jc_logic_info_effects.jc_effect_memories))
     funs
 
 let function_effects funs =
@@ -163,10 +233,10 @@ let function_effects funs =
 	 f.jc_fun_info_name
 	 (print_list comma (fun fmt field ->
 			     fprintf fmt "%s" field.jc_field_info_name))
-	 (FieldSet.elements f.jc_fun_info_effects.jc_reads_fields)
+	 (FieldSet.elements f.jc_fun_info_effects.jc_reads.jc_effect_memories)
 	 (print_list comma (fun fmt field ->
 			      fprintf fmt "%s" field.jc_field_info_name))
-	 (FieldSet.elements f.jc_fun_info_effects.jc_writes_fields))
+	 (FieldSet.elements f.jc_fun_info_effects.jc_writes.jc_effect_memories))
     funs
 
        

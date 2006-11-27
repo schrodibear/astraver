@@ -58,9 +58,9 @@ type pbin_op =
   
 
 type punary_op =
-  [ `Uplus | `Uminus | `Unot 
-  | `Upostfix_inc | `Upostfix_dec | `Uprefix_inc | `Uprefix_dec
-  ]
+  | Uplus | Uminus | Unot 
+  | Upostfix_inc | Upostfix_dec | Uprefix_inc | Uprefix_dec
+
 
 type pexpr_node =
   | JCPEconst of const

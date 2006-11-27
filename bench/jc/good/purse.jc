@@ -12,9 +12,7 @@ unit credit(purse[0] this, integer s)
     assigns this.balance;
     ensures this.balance == \old(this.balance)+s;
 {
-    unpack(this);
     this.balance += s;
-    pack(this); 
 }
 
 unit withdraw(purse[0] this, integer s) 
