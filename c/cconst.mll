@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cconst.mll,v 1.7 2006-11-16 20:23:52 filliatr Exp $ i*)
+(*i $Id: cconst.mll,v 1.8 2006-11-27 12:52:33 marche Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -60,7 +60,7 @@
   let val_char c = Int64.of_int (val_char c)
 
   let check_bounds loc hexa accu suffix =
-    match suffix with
+    match String.lowercase suffix with
       | "" ->
 	  if accu > 0x7FFFFFFFL then 
 	     if hexa then warning loc "Constant too large for a int"
@@ -70,7 +70,7 @@
 	      warning loc
 		"this constant is valid only on >= 32-bit architectures";
 	  accu 
-      | "u" | "U" ->
+      | "u" ->
 	  if accu > 0xFFFFFFFFL then raise Constant_too_large;
 	  if accu > 0xFFFFL then 
 	    warning loc
