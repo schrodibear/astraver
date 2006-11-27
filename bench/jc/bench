@@ -83,7 +83,7 @@ export JESSIELIB=`pwd`/../../../lib
 bench_jc_good () {
     options="$* -why-opt -split-user-conj -why-opt -show-time"
     echo "-------------------------------------------------------------------"
-    echo "Bench Jessie+Simplify/Yices with options: $options"
+    echo "Bench Jessie+Simplify/Yices/Ergo with options: $options"
     parsing="../../../bin/jessie.opt $options"
 
     rm -f why/*.why
@@ -96,8 +96,14 @@ bench_jc_good () {
 	if $parsing  $f.jc > /tmp/jessie.tmp 2>&1; then
 	    if $make -f $f.makefile simplify/${f}_why.sx > /tmp/jessie.tmp 2>&1 ; then
 		if $make -f $f.makefile smtlib/${f}_why.smt > /tmp/jessie.tmp 2>&1 ; then
-		    VCS="$VCS simplify/${f}_why.sx smtlib/${f}_why.smt"    
-		    echo "ok"
+		    if $make -f $f.makefile why/${f}_why.why > /tmp/jessie.tmp 2>&1 ; then
+			VCS="$VCS simplify/${f}_why.sx smtlib/${f}_why.smt why/${f}_why.why"    
+			echo "ok"
+		    else
+			echo "why FAILED :"
+			cat /tmp/jessie.tmp
+			exit 1
+		    fi
 		else
 		    echo "why FAILED :"
 		    cat /tmp/jessie.tmp

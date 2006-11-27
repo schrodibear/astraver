@@ -104,6 +104,7 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
 	    intf/hilight.ml intf/whyhilight.ml intf/tagsplit.ml intf/config.ml\
 	    tools/why2html.ml src/float_lexer.ml tools/cvcl_split.ml\
 	    tools/simplify_split.ml tools/smtlib_split.ml tools/zenon_split.ml\
+	    tools/ergo_split.ml\
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
 	    tools/simplify_parser.ml
 
@@ -292,7 +293,8 @@ bin/simplify2why.opt: $(SIMPLIFYTOWHYCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
 DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo tools/smtlib_split.cmo\
-        tools/zenon_split.cmo tools/calldp.cmo tools/dp.cmo
+        tools/zenon_split.cmo tools/ergo_split.cmo \
+	tools/calldp.cmo tools/dp.cmo
 DPCMX = $(DPCMO:.cmo=.cmx)
 
 bin/dp.byte: $(DPCMO)
