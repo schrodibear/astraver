@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cconst.mll,v 1.9 2006-11-27 12:58:02 marche Exp $ i*)
+(*i $Id: cconst.mll,v 1.10 2006-11-27 13:04:55 marche Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -68,13 +68,13 @@
           else
 	    if accu > 0x7FFFL then 
 	      warning loc
-		"this constant overflows of sizeof(int)<=16";
+		"this constant overflows if sizeof(int)<=16";
 	  accu 
       | "u" ->
 	  if accu > 0xFFFFFFFFL then raise Constant_too_large;
 	  if accu > 0xFFFFL then 
 	    warning loc
-	      "this constant overflows of sizeof(int)<=16";
+	      "this constant overflows if sizeof(int)<=16";
 	  accu 
       | "l" ->
 	  if accu > 0x7FFFFFFFL then raise Constant_too_large else accu 
