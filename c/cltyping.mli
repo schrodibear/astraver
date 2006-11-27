@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.mli,v 1.34 2006-11-03 12:48:56 marche Exp $ i*)
+(*i $Id: cltyping.mli,v 1.35 2006-11-27 15:46:33 hubert Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -31,6 +31,7 @@ open Cast
 open Cenv
 
 (* logical environments *)
+val eval_const_term_noerror : tterm -> Int64.t
 val type_term : Env.t -> parsed_term  -> tterm
 val type_ghost_lvalue : Env.t -> parsed_term  -> tterm
 val type_predicate : Env.t -> parsed_predicate -> Cast.predicate

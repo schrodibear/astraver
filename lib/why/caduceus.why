@@ -162,16 +162,20 @@ parameter ge_pointer_ : p1:'z pointer -> p2:'z pointer ->
 type ('a, 'z) memory
 
 (* pointer access *)
+
 logic acc: ('a,'z) memory, 'z pointer -> 'a
+
 parameter acc_ : m: ('a,'z) memory ref -> p:'z pointer -> 
   { valid(alloc,p) }
   'a reads alloc,m
   { result = acc(m,p) }
+
 parameter acc_offset : m: ('a,'z) memory ref -> p:'z pointer -> 
-	i : int -> n : int ->
-  { 0 <= i < n }
+	n : int ->
+  { 0 <= offset(p) < n }
   'a reads alloc,m
   { result = acc(m,p) }
+
 parameter safe_acc_ : m: ('a,'z) memory ref -> p:'z pointer -> 
   { }
   'a reads alloc,m
@@ -183,9 +187,8 @@ parameter upd_ : m:('a,'z) memory ref -> p:'z pointer -> v:'a ->
   { valid(alloc,p) }
   unit reads alloc,m writes m
   { m = upd(m@,p,v) }
-parameter upd_offset : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> i:int ->
-	size:int -> 
-  { 0<= i < size }
+parameter upd_offset : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> size:int -> 
+  { 0<= offset(p) < size }
   unit reads alloc,m writes m
   { m = upd(m@,p,v) }
 parameter safe_upd_ : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> 

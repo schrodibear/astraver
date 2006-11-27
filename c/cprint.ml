@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.41 2006-11-03 12:48:57 marche Exp $ i*)
+(*i $Id: cprint.ml,v 1.42 2006-11-27 15:46:34 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -468,8 +468,10 @@ let rec nexpr fmt e = match e.nexpr_node with
   | NEarrow (e,_,x) ->
       let typ = e.nexpr_type in
       begin match typ.Ctypes.ctype_node with
-      | Ctypes.Tpointer (Ctypes.Valid,_) | Ctypes.Tarray (Ctypes.Valid,_,_) ->
-	  fprintf fmt "%a-ok->%s" nexpr_p e x.var_unique_name
+      | Ctypes.Tpointer (Ctypes.Valid (i,j),_) 
+      | Ctypes.Tarray (Ctypes.Valid(i,j),_,_) ->
+	  fprintf fmt "%a-%d-ok-%d->%s" nexpr_p e (Int64.to_int i) 
+	    (Int64.to_int j) x.var_unique_name
       | _ ->
 	  fprintf fmt "%a->%s" nexpr_p e x.var_unique_name
       end

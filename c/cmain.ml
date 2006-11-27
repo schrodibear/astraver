@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.87 2006-11-20 10:28:33 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.88 2006-11-27 15:46:34 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -75,7 +75,7 @@ let main () =
   (* separation *)  
   lprintf "starting separation of variables.@.";
   List.iter (fun (_,p) -> Cseparation.file p)  nfiles;
-(*  Cseparation.funct [Cinit.invariants_initially_established_info]; *)
+  Cseparation.funct [Cinit.invariants_initially_established_info]; 
   Array.iter (fun l -> 
 		Cseparation.funct l ) 
     tab_comp;  

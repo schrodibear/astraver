@@ -117,9 +117,10 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
     | Tstruct n ->
  	valid_fields true n t
     | Tarray (_, ty, None) ->
-	error loc ("array size missing in `" ^ name ^ "'")
-    | Tarray (valid, ty, Some s) ->
-	assert (valid = Valid);
+	error loc ("array size missing in `" ^ name ^ "'")    
+    | Tarray (Not_valid,_,_) -> assert false
+    | Tarray (Valid(i,j), ty, Some s) ->
+	assert (i <= Int64.zero && j > Int64.zero);
 	let vrange = make_valid_range_from_0 t s in
 	let valid_form =
 	  make_and

@@ -760,6 +760,7 @@ coq-clean::
 	  rm -f .depend.coq; \
 	  $(COQDEP) -I lib/coq lib/coq/*.v > .depend.coq; \
 	  $(COQDEP) -I lib/coq-v7 lib/coq-v7/*.v >> .depend.coq; \
+	else touch .depend.coq \
 	fi
 
 alldepend:

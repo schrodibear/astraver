@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.136 2006-11-17 17:13:28 moy Exp $ i*)
+(*i $Id: ctyping.ml,v 1.137 2006-11-27 15:46:34 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -332,14 +332,13 @@ let set_referenced e = match e.texpr_node with
 let make_shift e1 e2 valid ty n =
   let is_valid =
       match valid, n with
-	| (Valid | Tab _), Some n ->
+	| Valid(a,b), Some n ->
+	    assert (b = n);
 	    begin
 	      try
 		let i = eval_const_expr_noerror e2 in
-		if (Int64.zero <= i && i < n)
-		then Valid
-		else Tab n
-	      with Invalid_argument _ -> Tab n
+		Valid(Int64.sub a i, Int64.sub b i)
+	      with Invalid_argument _ -> Not_valid
 	    end
 	| _, _ -> Not_valid
   in
@@ -378,8 +377,8 @@ and type_type_node ?(parameters=false) loc env = function
       if parameters then
 	Tarray (Not_valid,type_type loc env tyn, None)
       else
-	Tarray (Valid,type_type loc env tyn , 
-		Some (eval_const_expr  (type_int_expr env e)))
+	let n = eval_const_expr  (type_int_expr env e) in
+	Tarray (Valid(Int64.zero,n),type_type loc env tyn, Some n)
   | CTpointer tyn -> 
       Tpointer (Not_valid,type_type loc env tyn)
   | CTstruct (x,Tag) -> Env.find_tag_type loc env (Tstruct x)  
@@ -455,7 +454,8 @@ and type_expr_node loc env = function
 		 texpr_loc = loc; texpr_type = c_real }), 
       c_float fk
   | CEstring_literal s ->
-      TEstring_literal s, c_string Valid
+      TEstring_literal s, 
+      c_string (Valid(Int64.zero,Int64.of_int (1 + String.length s)))
   | CEvar x ->
       let var =
 	try Env.find x env with Not_found -> 
@@ -566,7 +566,7 @@ and type_expr_node loc env = function
       if ty.ctype_storage = Register then 
 	warning loc "address of register requested";
       set_referenced e;
-      TEunary (Uamp, e), noattr (Tpointer (Valid,ty))
+      TEunary (Uamp, e), noattr (Tpointer (Valid(Int64.zero,Int64.one),ty))
   | CEunary (Ustar, e) ->
       let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
@@ -718,7 +718,13 @@ and type_expr_node loc env = function
 	      | _ -> { node = CEconstant (IntConstant "1"); loc = loc }
 	    in
 	    let e = type_int_expr env e in
-	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (Valid, ty) }
+	    let valid =
+	      try
+		let n = eval_const_expr_noerror e in
+		Valid(Int64.zero,n)
+	      with Invalid_argument _ -> Not_valid
+	    in
+	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (valid, ty) }
 	| _ -> error loc "incompatible types"
       end
   | CEcast (typ, 
@@ -731,7 +737,13 @@ and type_expr_node loc env = function
       begin match typ.ctype_node with
 	| Tpointer (_, ty') when eq_type ty' ty ->
 	    let e = type_int_expr env e in
-	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (Valid, ty) }
+	    let valid =
+	      try
+		let n = eval_const_expr_noerror e in
+		Valid(Int64.zero,n)
+	      with Invalid_argument _ -> Not_valid
+	    in
+	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (valid, ty) }
 	| _ -> 
 	    error loc "incompatible types"
       end
@@ -909,7 +921,7 @@ let type_initializer_option loc env ty = function
 let array_size_from_initializer loc ty i = match ty.ctype_node, i with
   | Tarray (_,ety, None), Some (Ilist l) -> 
       let s = of_int (List.length l) in
-      { ty with ctype_node = Tarray (Valid,ety, Some s) }
+      { ty with ctype_node = Tarray (Valid(Int64.zero,s),ety, Some s) }
 
   | Tarray (_,ety, None), None -> error loc "array size missing"  
 
@@ -919,8 +931,8 @@ let array_size_from_initializer loc ty i = match ty.ctype_node, i with
 	 compute the length of the array. *)
       begin match e.texpr_node with
 	| TEstring_literal s ->
-	    let s = of_int (String.length s - 1) in
-	    { ty with ctype_node = Tarray (Valid,ety, Some s) }
+	    let s = of_int (String.length s + 1) in
+	    { ty with ctype_node = Tarray (Valid(Int64.zero,s),ety, Some s) }
 	| _ -> ty
       end
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctypes.mli,v 1.16 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: ctypes.mli,v 1.17 2006-11-27 15:46:34 hubert Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -37,7 +37,7 @@ type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
 
 type cfloat = Float | Double | LongDouble | Real
 
-type valid = Valid | Not_valid | Tab of int64
+type valid = Valid of int64 * int64 | Not_valid 
 
 type ctype_node =
   | Tvoid

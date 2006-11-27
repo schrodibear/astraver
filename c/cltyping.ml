@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.107 2006-11-15 07:33:10 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.108 2006-11-27 15:46:33 hubert Exp $ i*)
 
 open Coptions
 open Format
@@ -32,6 +32,25 @@ open Creport
 open Cerror
 open Cenv
 open Ctypes
+
+let rec eval_const_term_noerror (e : tterm) = match e.term_node with
+  | Clogic.Tconstant (RealConstant c | IntConstant c) -> 
+      Cconst.int e.term_loc c
+  | Clogic.Tvar v ->
+      if e.term_type.Ctypes.ctype_const 
+      then v.Info.enum_constant_value
+      else invalid_arg "not a const variable"
+  | Tunop (Uplus,t) -> eval_const_term_noerror t  
+  | Tunop (Uminus,t) -> Int64.neg (eval_const_term_noerror t)
+  | Tbinop (t1,Badd,t2) ->  
+      Int64.add (eval_const_term_noerror t1)  (eval_const_term_noerror t2)
+  | Tbinop (t1,Bsub,t2) ->  
+      Int64.sub (eval_const_term_noerror t1)  (eval_const_term_noerror t2)
+  | Tbinop (t1,Bmul,t2) ->  
+      Int64.mul (eval_const_term_noerror t1)  (eval_const_term_noerror t2)
+  | Tbinop (t1,Bdiv,t2) ->  
+      Int64.div (eval_const_term_noerror t1)  (eval_const_term_noerror t2)
+  | _ -> invalid_arg "not a constant expression"
 
 let option_app f = function Some x -> Some (f x) | None -> None
 
@@ -194,7 +213,7 @@ and type_term_node loc env = function
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
       set_referenced t;
-      Tunop (Uamp, t), noattr (Tpointer(Valid, t.term_type))   
+      Tunop (Uamp, t), noattr (Tpointer(Valid(Int64.zero,Int64.one), t.term_type))   
   | PLunop (Unot, t) -> 
       let t = type_term env t in
       Tunop (Unot, t), t.term_type   
