@@ -1,6 +1,7 @@
 
 Note: These are the changes for Caduceus.
 
+ o bug fix with missing writes clauses in why spec files (see false2.c)
  o the  bench-c-yices rule of the main Makefile launches the yices prover 
    thanks to the tool/smtlib_split module 
    that splits the verification conditions
