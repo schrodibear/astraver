@@ -1,4 +1,7 @@
 
+version 2.01, November 29th, 2006
+=============================
+
   o new predicate distinct(t1,t2,...,tn) with n terms of the same type
     mapped to the primitive DISTINCT in Simplify and SMTlib outputs,
     expanded for other provers
