@@ -87,7 +87,7 @@ VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
      lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo \
      lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo \
      @WHYFLOATS@ \
-     lib/coq/caduceus_why.vo     lib/coq/caduceus_tactics.vo \
+     lib/coq/caduceus_why.vo lib/coq/caduceus_tactics.vo \
      lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo \
      lib/coq/jessie_why.vo
 V8FILES=$(VO8:.vo=.v)
@@ -101,10 +101,11 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    c/cint.ml \
-	    intf/hilight.ml intf/whyhilight.ml intf/tagsplit.ml intf/config.ml\
-	    tools/why2html.ml src/float_lexer.ml tools/cvcl_split.ml\
-	    tools/simplify_split.ml tools/smtlib_split.ml tools/zenon_split.ml\
-	    tools/ergo_split.ml\
+	    intf/hilight.ml intf/whyhilight.ml \
+	    intf/tagsplit.ml intf/config.ml \
+	    tools/why2html.ml src/float_lexer.ml tools/cvcl_split.ml \
+	    tools/simplify_split.ml tools/smtlib_split.ml \
+	    tools/zenon_split.ml tools/ergo_split.ml \
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
 	    tools/simplify_parser.ml
 
@@ -609,7 +610,7 @@ otags:
 	otags src/*.mli src/*.ml c/*.mli c/*.ml intf/*.mli intf/*.ml
 
 wc:
-	ocamlwc -p src/*.ml* c/*.ml* intf/*.ml*
+	ocamlwc -p src/*.ml* jc/*.ml* c/*.ml* intf/*.ml* tools/*.ml*
 
 # distrib
 #########

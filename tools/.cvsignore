@@ -2,6 +2,7 @@ why2html.ml
 cvcl_split.ml
 simplify_split.ml
 zenon_split.ml
+ergo_split.ml
 *.annot
 smtlib_split.ml
 simplify_lexer.ml
