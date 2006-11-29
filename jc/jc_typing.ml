@@ -865,10 +865,12 @@ let clause env c acc =
     | JCPCrequires(e) ->
 	{ acc with 
 	    jc_fun_requires = assertion env e }
-    | JCPCbehavior(id,assigns,ensures) ->
+    | JCPCbehavior(id,assumes,assigns,ensures) ->
+	let assumes = Option_misc.map (assertion env) assumes in
 	let assigns = 
 	  Option_misc.map (List.map (fun a -> snd (location env a))) assigns in
 	let b = {
+	  jc_behavior_assumes = assumes;
 	  jc_behavior_assigns = assigns;
 	  jc_behavior_ensures = assertion env ensures }
 	in
@@ -922,7 +924,8 @@ let decl d =
     | JCPDtype(id,parent,fields,inv) ->
 	let root,par = 
 	  match parent with
-	    | None -> (id,None)
+	    | None -> 
+		(id,None)
 	    | Some p ->
 		let st = find_struct_info d.jc_pdecl_loc p in
 		(st.jc_struct_info_root,Some st)

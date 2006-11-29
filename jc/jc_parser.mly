@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.21 2006-11-27 08:40:00 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.22 2006-11-29 13:29:41 marche Exp $ */
 
 %{
 
@@ -99,8 +99,8 @@
 /* integer boolean real unit */
 %token INTEGER BOOLEAN REAL UNIT
 
-/* behavior ensures requires */
-%token ASSIGNS BEHAVIOR ENSURES REQUIRES 
+/* assigns assumes behavior ensures requires */
+%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES 
 
 /* \forall \offset_max \offset_min \old \result  */
 %token BSFORALL BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT 
@@ -276,9 +276,16 @@ function_specification:
 spec_clause:
 | REQUIRES expression SEMICOLON
     { JCPCrequires($2) }
-| BEHAVIOR IDENTIFIER COLON assigns ENSURES expression SEMICOLON
-    { JCPCbehavior($2,$4,$6) }
+| BEHAVIOR IDENTIFIER COLON assumes assigns ENSURES expression SEMICOLON
+    { JCPCbehavior($2,$4,$5,$7) }
 	
+;
+
+assumes:
+| /* epsilon */
+    { None }
+| ASSUMES expression SEMICOLON
+    { Some $2 }
 ;
 
 assigns:

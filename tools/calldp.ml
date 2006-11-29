@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.25 2006-11-27 08:40:00 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.26 2006-11-29 13:29:41 marche Exp $ i*)
 
 open Printf
 
@@ -31,7 +31,7 @@ type prover_result =
   | Invalid of float * string option 
   | CannotDecide of float 
   | Timeout of float
-  | ProverFailure of string
+  | ProverFailure of float * string
 
 let remove_file ?(debug=false) f =
   if not debug then try Sys.remove f with _ -> ()
@@ -66,14 +66,14 @@ let timed_sys_command ~debug timeout cmd =
 
 let error c t cmd =
   if c = 152 then Timeout t 
-  else ProverFailure ("command failed: " ^ cmd) 
+  else ProverFailure (t,"command failed: " ^ cmd) 
 
 let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "cvcl < %s" f in
   let t,c,out = timed_sys_command debug timeout cmd in
   if c <> 0 then error c t cmd
   else if Sys.command (sprintf "grep -q -w -i Error %s" out) = 0 then
-    ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
+    ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
   else
     let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
     if c = 0 then 
@@ -106,7 +106,7 @@ let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
 	if Sys.command (sprintf "grep -q -w Invalid %s" out) = 0 then
 	  Invalid (t,Some (file_contents out)) 
 	else
-	  ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
+	  ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
     in
     remove_file ~debug out;
     r
@@ -121,7 +121,7 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
       if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
 	Valid t
       else
-	ProverFailure ("command failed: " ^ cmd)
+	ProverFailure(t,"command failed: " ^ cmd)
     in
     remove_file ~debug out;
     r
@@ -143,7 +143,7 @@ let yices ?(debug=false) ?(timeout=10) ~filename:f () =
 	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
 	CannotDecide t
       else
-	ProverFailure ("command failed: " ^ cmd)
+	ProverFailure(t,"command failed: " ^ cmd)
     in
     remove_file ~debug out;
     r
@@ -157,7 +157,7 @@ let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
       if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
 	Valid t
       else	
-	ProverFailure ("command failed: " ^ cmd)
+	ProverFailure(t,"command failed: " ^ cmd)
     in
     remove_file ~debug out;
     r
@@ -190,7 +190,7 @@ let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
 		(sprintf "grep  -q -w \"Cannot decide\" %s " out) = 0 then
 		  CannotDecide t
 	      else
-		ProverFailure ("command failed: " ^ cmd)
+		ProverFailure(t,"command failed: " ^ cmd)
 	  in
 	  remove_file ~debug out;
 	  add r
@@ -209,7 +209,7 @@ let zenon ?(debug=false) ?(timeout=10) ~filename:f () =
       if Sys.command (sprintf "grep -q PROOF-FOUND %s" out) = 0 then
 	Valid t
       else
-	ProverFailure ("command failed: " ^ cmd)
+	ProverFailure(t,"command failed: " ^ cmd)
     in
     remove_file ~debug out;
     r

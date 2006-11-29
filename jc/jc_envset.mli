@@ -22,9 +22,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.3 2006-11-27 08:40:00 marche Exp $ *)
+(* $Id: jc_envset.mli,v 1.4 2006-11-29 13:29:41 marche Exp $ *)
 
 open Jc_env
+
+module StringSet : Set.S with type elt = string
+
+module StringMap : Map.S with type key = string 
 
 module VarSet : Set.S with type elt = var_info
 

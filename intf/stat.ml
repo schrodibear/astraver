@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.47 2006-11-07 16:12:13 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.48 2006-11-29 13:29:41 marche Exp $ i*)
 
 open Printf
 open Options
@@ -255,7 +255,7 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
 		    Model.add_failure name p s);
 	      model#set ~row ~column:column_p `NO; 0
 	    end
-	| Calldp.ProverFailure so -> 
+	| Calldp.ProverFailure(_,so) -> 
 	    begin
 	      let name = model#get ~row ~column:Model.fullname in 
 	      Model.add_failure name p so;

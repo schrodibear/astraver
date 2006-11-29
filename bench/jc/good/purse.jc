@@ -1,5 +1,5 @@
 
-/* Jessie sample file #2 : electronic purse toy example */
+/* Jessie sample file: electronic purse toy example */
 
 type purse = {		
   integer balance;

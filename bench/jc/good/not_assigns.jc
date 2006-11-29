@@ -8,17 +8,34 @@ type T = {
 integer f(integer n, T[0] t) 
   requires -100 <= n && n <= 100;
   behavior x_changed:
-      // assumes n > 0; 
+    assumes n > 0; 
     assigns t.x;
-    ensures n>0 && t.x == n;
+    ensures t.x == n;
   behavior y_changed:
-      // assumes n >= 0;
-     assigns t.y;
-     ensures t.y == n;
+    assumes n <= 0;
+    assigns t.y;
+    ensures t.y == n;
 {
   if (n > 0) t.x = n; else t.y = n;
 }
 
+integer test1(T[0] t)
+  behavior y_unchanged:
+    ensures t.y == \old(t.y);
+  behavior x_set_to_3:
+    ensures t.x == 3;
+{
+    f(3,t);
+}
+
+integer test2(T[0] t)
+  behavior x_unchanged:
+    ensures t.x == \old(t.x);
+  behavior y_set_to_minus_3:
+    ensures t.y == -3;
+{
+    f(-3,t);
+}
 
 /*
 Local Variables: 

@@ -1,4 +1,9 @@
 
+
+/***********
+ * Jessie sample file: integer square root 
+ ***********/
+
 /* complements for non-linear integer arithmetic */
 
 axiom distr_right: \forall integer x,y,z; x*(y+z) == (x*y)+(x*z)

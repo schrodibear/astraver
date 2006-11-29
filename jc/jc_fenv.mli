@@ -22,14 +22,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.6 2006-11-27 08:40:00 marche Exp $ *)
+(* $Id: jc_fenv.mli,v 1.7 2006-11-29 13:29:41 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
 
 type effect =
     {
-      jc_effect_alloc_table : VarSet.t;
+      jc_effect_alloc_table : StringSet.t;
       jc_effect_memories : FieldSet.t;
     }
 

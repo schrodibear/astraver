@@ -46,7 +46,6 @@ and field_info =
       jc_field_info_root : string;
     }
 
-
 type var_info =
     {
       jc_var_info_tag : int;

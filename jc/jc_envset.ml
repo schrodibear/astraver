@@ -22,9 +22,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.3 2006-11-27 08:40:00 marche Exp $ *)
+(* $Id: jc_envset.ml,v 1.4 2006-11-29 13:29:41 marche Exp $ *)
 
 open Jc_env
+
+module StringSet = Set.Make(String)
+
+module StringMap = Map.Make(String)
 
 module VarSet = 
   Set.Make(struct type t = var_info

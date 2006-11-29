@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.11 2006-11-03 12:49:07 marche Exp $ i*)
+(*i $Id: calldp.mli,v 1.12 2006-11-29 13:29:41 marche Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -34,7 +34,7 @@ type prover_result =
   | Invalid of float * string option 
   | CannotDecide of float
   | Timeout of float
-  | ProverFailure of string
+  | ProverFailure of float * string
 
 val simplify : 
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 

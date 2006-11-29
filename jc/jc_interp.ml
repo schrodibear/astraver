@@ -78,9 +78,15 @@ let lvar_info label v =
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
 let logic_params li l =
-  FieldSet.fold
-    (fun fi acc -> (LVar fi.jc_field_info_name)::acc)
-    li.jc_logic_info_effects.jc_effect_memories
+  let l =
+    FieldSet.fold
+      (fun fi acc -> (LVar fi.jc_field_info_name)::acc)
+      li.jc_logic_info_effects.jc_effect_memories
+      l	    
+  in
+  StringSet.fold
+    (fun v acc -> (LVar (v ^ "_alloc_table"))::acc)
+    li.jc_logic_info_effects.jc_effect_alloc_table
     l	    
 
 let make_logic_fun_call li l =
@@ -172,6 +178,16 @@ let tr_logic_fun li ta acc =
 	 (fi.jc_field_info_name, memory_field fi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       params
+  in
+  let params_reads =
+    StringSet.fold
+      (fun v acc -> 
+	 let t = { logic_type_args = [simple_logic_type v];
+		   logic_type_name = "alloc_table" }
+	 in
+	 (v ^ "_alloc_table", t)::acc)
+      li.jc_logic_info_effects.jc_effect_alloc_table
+      params_reads
   in
   let decl =
     match li.jc_logic_info_result_type,ta with
@@ -545,8 +561,6 @@ let rec pset before loc =
 	let m = lvar_info (Some before) vi in
 	LApp("pset_singleton", [m])
 
-module StringMap = Map.Make(String)
-
 let collect_locations before (refs,mems) loc =
   match loc with
     | JCLderef(e,fi) -> 
@@ -651,9 +665,18 @@ let tr_fun f spec body acc =
   let all_behaviors =
     List.map
       (fun (id,b) ->
-	 (id,b,make_and 
+	 let post = 
+	   make_and 
 	   (assertion None "" b.jc_behavior_ensures)
-	   (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)))
+	   (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)
+	 in
+	 let a =
+	   match b.jc_behavior_assumes with
+	     | None -> post
+	     | Some e -> 
+		 make_impl (assertion (Some "") "" e) post
+	 in
+	 (id,b,a))
       spec.jc_fun_behavior
   in
   let global_ensures =
@@ -666,6 +689,12 @@ let tr_fun f spec body acc =
       (fun f acc -> f.jc_field_info_name::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_memories
       []
+  in
+  let reads =
+    StringSet.fold
+      (fun v acc -> (v ^ "_alloc_table")::acc)
+      f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
+      reads
   in
   let writes =
     FieldSet.fold

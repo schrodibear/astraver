@@ -44,7 +44,8 @@ unit ColoredPoint_move(ColoredPoint[0] this, integer dx, integer dy)
   behavior y_moved:
     ensures this.y == \old(this.y)+dy;
   behavior col_decreased_if_positive:
-    ensures \old(this.col) > 0 => this.col == \old(this.col) - 1;
+    assumes this.col > 0;
+    ensures this.col == \old(this.col) - 1;
 {
     this.col = this.col > 0 ? this.col-1 : 0;
     Point_move(this,dx,dy);

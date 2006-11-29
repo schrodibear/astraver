@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.31 2006-11-27 14:59:26 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.32 2006-11-29 13:29:41 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -48,17 +48,24 @@ let () =
   Zenon_split.debug := !debug
 
 (* stats *)
+
 let nvalid = ref 0
 let tvalid = ref 0.0
 let tmaxvalid = ref 0.0
+
 let ninvalid = ref 0
 let tinvalid = ref 0.0
 let tmaxinvalid = ref 0.0
-let tmaxunknown = ref 0.0
-let ntimeout = ref 0
+
 let nunknown = ref 0
 let tunknown = ref 0.0
+let tmaxunknown = ref 0.0
+
+let ntimeout = ref 0
 let ttimeout = ref 0.0
+
+let nfailure = ref 0
+let tfailure = ref 0.0
 
 let is_valid t = 
   printf "."; incr nvalid; 
@@ -79,6 +86,10 @@ let is_timeout t =
   printf "#"; incr ntimeout;
   ttimeout := !ttimeout +. t
 
+let is_failure t = 
+  printf "!"; incr nfailure;
+  tfailure := !tfailure +. t 
+
 
 let wrapper r = 
   begin match r with
@@ -86,7 +97,7 @@ let wrapper r =
     | Invalid(t,_) -> is_invalid t
     | CannotDecide t -> is_unknown t
     | Timeout t -> is_timeout t
-    | ProverFailure _ -> printf "!"
+    | ProverFailure(t,_) -> is_failure t
   end;
   flush stdout
 
@@ -114,6 +125,7 @@ let split f =
   let oldi = !ninvalid in
   let oldt = !ntimeout in
   let oldu = !nunknown in
+  let oldf = !nfailure in
   if Filename.check_suffix f ".smt"  || Filename.check_suffix f ".smt.all" then
     begin
       Smtlib_split.iter call_yices f 
@@ -141,7 +153,7 @@ let split f =
   else 
     begin Arg.usage spec usage; exit 1 end;
   printf 
-    " (%d/%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!nunknown - oldu) (!ntimeout - oldt)
+    " (%d/%d/%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!nunknown - oldu) (!ntimeout - oldt) (!nfailure - oldf)
     
 let print_time fmt f =
   if f < 60.0 then fprintf fmt "%.2f sec" f else 
@@ -159,26 +171,29 @@ let main () =
   printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
   Queue.iter split files;
   let wctime = Unix.gettimeofday() -. wctime0 in
-  let n = !nvalid + !ninvalid + !ntimeout + !nunknown in
+  let n = !nvalid + !ninvalid + !ntimeout + !nunknown + !nfailure in
   if n = 0 then exit 0;
   let pvalid = 100. *. float !nvalid /. float n in
   let pinvalid = 100. *. float !ninvalid /. float n in
   let ptimeout = 100. *. float !ntimeout /. float n in
   let punknown = 100. *. float !nunknown /. float n in
+  let pfailure = 100. *. float !nfailure /. float n in
   printf 
-"total           : %3d
-valid           : %3d (%3.0f%%)
-invalid         : %3d (%3.0f%%)
-unknown         : %3d (%3.0f%%)
-timeout/failure : %3d (%3.0f%%)\n" 
+"total   : %3d
+valid   : %3d (%3.0f%%)
+invalid : %3d (%3.0f%%)
+unknown : %3d (%3.0f%%)
+timeout : %3d (%3.0f%%)
+failure : %3d (%3.0f%%)\n" 
     (!nvalid + !ninvalid + !nunknown + !ntimeout)
-    !nvalid pvalid !ninvalid pinvalid !nunknown punknown !ntimeout ptimeout;
+    !nvalid pvalid !ninvalid pinvalid !nunknown punknown 
+    !ntimeout ptimeout !nfailure pfailure;
   printf
 "total wallclock time : %a
 total CPU time       : %a
 valid VCs:
-    max CPU time     : %.2f
     average CPU time : %.2f
+    max CPU time     : %.2f
 invalid VCs:
     average CPU time : %.2f
     max CPU time     : %.2f
@@ -186,7 +201,7 @@ unknown VCs:
     average CPU time : %.2f
     max CPU time     : %.2f\n"
     print_time wctime
-    print_time  (!tvalid +. !tinvalid +. !ttimeout)
+    print_time  (!tvalid +. !tinvalid +. !tunknown +. !ttimeout)
     (!tvalid /. float !nvalid)
     !tmaxvalid
     (!tinvalid /. float !ninvalid)

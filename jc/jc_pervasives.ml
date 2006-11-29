@@ -37,7 +37,7 @@ let real_type = JCTnative Treal
 (* logic functions *)
 
 let empty_effects = 
-  { jc_effect_alloc_table = VarSet.empty ;
+  { jc_effect_alloc_table = StringSet.empty ;
     jc_effect_memories = FieldSet.empty ;
   }
 
@@ -121,7 +121,7 @@ let mul_real_ = make_fun_info "mul_real" real_type
 let div_real_ = make_fun_info "div_real" real_type
 
 let uplus_int = make_fun_info "uplus_int" integer_type
-let uminus_int = make_fun_info "uminus_int" integer_type
+let uminus_int = make_fun_info "neg_int" integer_type
 let uplus_real = make_fun_info "uplus_real" integer_type
 let uminus_real = make_fun_info "uminus_real" integer_type
 
