@@ -1,4 +1,4 @@
-false abs all minusminus 
+false false2 abs all minusminus 
 array assigns loop_assigns break continue goto
 call clash clash_alloc clash_redef  
 logic coord dassault_1 dassault_2 muller

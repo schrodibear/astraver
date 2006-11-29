@@ -1,0 +1,796 @@
+Caduceus version         : 1.00
+Caduceus compilation date: Thu Nov 16 12:15:08 CET 2006
+Bench execution date     : 16/11/2006
+C parsing (good)
+  annot.c... GCC ok... caduceus ok... 
+  horribilis.c... GCC ok... caduceus ok... 
+  hw.c... GCC ok... caduceus ok... 
+  obfuscated.c... GCC failed
+caduceus ok... 
+  types.c... GCC ok... caduceus ok... 
+C parsing (bad)
+  type_name_1.c... GCC ok... caduceus ok... 
+  unbound_type_1.c... GCC ok... caduceus ok... 
+  unbound_type_2.c... GCC ok... caduceus ok... 
+C parsing/typing (bad)
+  array_size_not_int.c... GCC ok... caduceus ok... 
+  array_subscript_not_int.c... GCC ok... caduceus ok... 
+  break_not_in_a_loop.c... GCC ok... caduceus ok... 
+  clash_tag_1.c... GCC ok... caduceus ok... 
+  clash_tag_2.c... GCC ok... caduceus ok... 
+  continue_not_in_a_loop.c... GCC ok... caduceus ok... 
+  goto.c... GCC ok... caduceus ok... 
+  incomplete_type_1.c... GCC ok... caduceus ok... 
+  incomplete_type_2.c... GCC ok... caduceus ok... 
+  incomplete_type_3.c... GCC ok... caduceus ok... 
+  member_1.c... GCC ok... caduceus ok... 
+  member_2.c... GCC ok... caduceus ok... 
+  member_3.c... GCC ok... caduceus ok... 
+  member_4.c... GCC ok... caduceus ok... 
+  member_5.c... GCC ok... caduceus ok... 
+  multiple_storage_class_1.c... GCC ok... caduceus ok... 
+  old_style_1.c... GCC ok... caduceus ok... 
+  old_style_2.c... GCC ok... caduceus ok... 
+  old_style_3.c... GCC ok... caduceus ok... 
+  short_long.c... GCC ok... caduceus ok... 
+  signed_unsigned.c... GCC ok... caduceus ok... 
+  sign_invalid_1.c... GCC ok... caduceus ok... 
+  struct_compare.c... GCC ok... caduceus ok... 
+  too_long.c... GCC ok... caduceus ok... 
+  two_types_1.c... GCC ok... caduceus ok... 
+  two_types_2.c... GCC ok... caduceus ok... 
+  typedef_initialized_1.c... GCC ok... caduceus ok... 
+  undeclared_variable_1.c... GCC ok... caduceus ok... 
+  undeclared_variable_2.c... GCC ok... caduceus ok... 
+  unsigned_float.c... GCC ok... caduceus ok... 
+  warnings.c... GCC ok... caduceus FAILED (accepted a bad file)
+C parsing/typing (good)
+  abs.c... GCC ok... caduceus ok... 
+  alias.c... GCC ok... caduceus ok... 
+  all.c... GCC ok... caduceus ok... 
+  alloca.c... GCC ok... caduceus ok... 
+  alloc.c... GCC ok... caduceus ok... 
+  all_zeros.c... GCC ok... caduceus ok... 
+  arith.c... GCC ok... caduceus ok... 
+  array.c... GCC ok... caduceus ok... 
+  assigns.c... GCC ok... caduceus ok... 
+  assigns_range.c... GCC ok... caduceus ok... 
+  break.c... GCC ok... caduceus ok... 
+  bug2.c... GCC ok... caduceus ok... 
+  bug.c... GCC ok... caduceus ok... 
+  call.c... GCC ok... caduceus ok... 
+  calloc.c... GCC ok... caduceus ok... 
+  clash_alloc.c... GCC ok... caduceus ok... 
+  clash.c... GCC ok... caduceus ok... 
+  clash_redef.c... GCC ok... caduceus ok... 
+  conflict.c... GCC ok... caduceus ok... 
+  const.c... GCC ok... caduceus ok... 
+  consts.c... GCC ok... caduceus ok... 
+  continue.c... GCC ok... caduceus ok... 
+  coord.c... GCC ok... caduceus ok... 
+  copy.c... GCC ok... caduceus ok... 
+  dassault_1.c... GCC ok... caduceus ok... 
+  dassault_2.c... GCC ok... caduceus ok... 
+  Dillon.c... GCC ok... caduceus ok... 
+  dowhile.c... GCC ok... caduceus ok... 
+  enum.c... GCC ok... caduceus ok... 
+  extern.c... GCC ok... caduceus ok... 
+  fact.c... GCC ok... caduceus ok... 
+  false.c... GCC ok... caduceus ok... 
+  flag.c... GCC ok... caduceus ok... 
+  float.c... GCC ok... caduceus ok... 
+  ghost2.c... GCC ok... caduceus ok... 
+  ghost.c... GCC ok... caduceus FAILED
+  goto.c... GCC ok... caduceus ok... 
+  ifs.c... GCC ok... caduceus ok... 
+  init2.c... GCC ok... caduceus ok... 
+  init.c... GCC ok... caduceus ok... 
+  invariant.c... GCC ok... caduceus ok... 
+  invariants.c... GCC ok... caduceus ok... 
+  labels.c... GCC ok... caduceus ok... 
+  latespec.c... GCC ok... caduceus ok... 
+  local_aliasing.c... GCC ok... caduceus ok... 
+  logic.c... GCC ok... caduceus ok... 
+  logic_cast.c... GCC ok... caduceus ok... 
+  loop_assigns.c... GCC ok... caduceus ok... 
+  loop_inv.c... GCC ok... caduceus ok... 
+  malloc.c... GCC ok... caduceus ok... 
+  minusminus.c... GCC ok... caduceus ok... 
+  overflow.c... GCC ok... caduceus ok... 
+  overflows.c... GCC ok... caduceus ok... 
+  param.c... GCC ok... caduceus ok... 
+  passing.c... GCC ok... caduceus ok... 
+  pointer.c... GCC ok... caduceus ok... 
+  purse.c... GCC ok... caduceus ok... 
+  queue.c... GCC ok... caduceus ok... 
+  rec2.c... GCC ok... caduceus ok... 
+  rec.c... GCC ok... caduceus ok... 
+  ref.c... GCC ok... caduceus ok... 
+  ref_glob.c... GCC ok... caduceus ok... 
+  search.c... GCC ok... caduceus ok... 
+  see.c... GCC ok... caduceus ok... 
+  separation1.c... GCC ok... caduceus ok... 
+  separation2.c... GCC ok... caduceus ok... 
+  separation3.c... GCC ok... caduceus ok... 
+  separation4.c... GCC ok... caduceus ok... 
+  separation.c... GCC ok... caduceus ok... 
+  shift.c... GCC ok... caduceus ok... 
+  sizeof.c... GCC ok... caduceus ok... 
+  skip_lists.c... GCC ok... caduceus FAILED
+  sort.c... GCC ok... caduceus ok... 
+  struct2.c... GCC ok... caduceus ok... 
+  struct3.c... GCC ok... caduceus ok... 
+  struct4.c... GCC ok... caduceus ok... 
+  struct.c... GCC ok... caduceus ok... 
+  sum1.c... GCC ok... caduceus ok... 
+  sum2.c... GCC ok... caduceus ok... 
+  switch.c... GCC ok... caduceus ok... 
+  trop.c... GCC ok... caduceus ok... 
+  unsafe.c... GCC ok... caduceus ok... 
+  zones2.c... GCC ok... caduceus ok... 
+  zones.c... GCC ok... caduceus ok... 
+C interp (bad)
+  eval1.c... GCC ok... caduceus ok... 
+  eval2.c... GCC ok... caduceus ok... 
+  eval3.c... GCC ok... caduceus ok... 
+  eval4.c... GCC ok... caduceus ok... 
+  eval5.c... GCC ok... caduceus ok... 
+  eval6.c... GCC ok... caduceus ok... 
+  eval7.c... GCC ok... caduceus ok... 
+  eval8.c... GCC ok... caduceus ok... 
+  eval9.c... GCC ok... caduceus ok... 
+  goto1.c... GCC failed (accepted a bad file, maybe not detected)
+caduceus FAILED (accepted a bad file)
+  goto2.c... GCC failed (accepted a bad file, maybe not detected)
+caduceus FAILED (accepted a bad file)
+  switch1.c... GCC failed (accepted a bad file, maybe not detected)
+caduceus FAILED (accepted a bad file)
+  switch2.c... GCC failed (accepted a bad file, maybe not detected)
+caduceus FAILED (accepted a bad file)
+  switch3.c... GCC ok... caduceus ok... 
+  switch4.c... GCC ok... caduceus ok... 
+C interp (good)
+-------------------------------------------------------------------
+Bench Caduceus+Simplify/Yices with options:  -why-opt -split-user-conj 
+  Generating VCs for false.c... ok
+  Generating VCs for abs.c... ok
+  Generating VCs for all.c... ok
+  Generating VCs for minusminus.c... ok
+  Generating VCs for array.c... ok
+  Generating VCs for assigns.c... ok
+  Generating VCs for loop_assigns.c... ok
+  Generating VCs for break.c... ok
+  Generating VCs for continue.c... ok
+  Generating VCs for goto.c... ok
+  Generating VCs for call.c... ok
+  Generating VCs for clash.c... ok
+  Generating VCs for clash_alloc.c... ok
+  Generating VCs for clash_redef.c... ok
+  Generating VCs for logic.c... ok
+  Generating VCs for coord.c... ok
+  Generating VCs for dassault_1.c... ok
+  Generating VCs for dassault_2.c... ok
+  Generating VCs for copy.c... ok
+  Generating VCs for dowhile.c... ok
+  Generating VCs for invariants.c... ok
+  Generating VCs for latespec.c... ok
+  Generating VCs for logic_cast.c... ok
+  Generating VCs for param.c... ok
+  Generating VCs for passing.c... ok
+  Generating VCs for purse.c... ok
+  Generating VCs for queue.c... ok
+  Generating VCs for rec.c... ok
+  Generating VCs for ref.c... ok
+  Generating VCs for ref_glob.c... ok
+  Generating VCs for search.c... ok
+  Generating VCs for see.c... ok
+  Generating VCs for sizeof.c... ok
+  Generating VCs for alloca.c... ok
+  Generating VCs for sort.c... ok
+  Generating VCs for all_zeros.c... ok
+  Generating VCs for malloc.c... ok
+  Generating VCs for calloc.c... ok
+  Generating VCs for pointer.c... ok
+  Generating VCs for init.c... ok
+  Generating VCs for struct.c... ok
+  Generating VCs for struct2.c... ok
+  Generating VCs for struct3.c... ok
+  Generating VCs for switch.c... ok
+  Generating VCs for enum.c... ok
+  Generating VCs for sum1.c... ok
+  Generating VCs for sum2.c... ok
+  Generating VCs for separation1.c... ok
+  Generating VCs for separation2.c... ok
+  Generating VCs for separation3.c... ok
+  Generating VCs for separation4.c... ok
+  Generating VCs for ifs.c... ok
+  Generating VCs for separation.c... ok
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/false_why.sx         : **.#*..* (3/4/0/1)
+smtlib/false_why.smt          : ??.??..? (3/0/5/0)
+simplify/abs_why.sx           : *.... (4/1/0/0)
+smtlib/abs_why.smt            : ?.... (4/0/1/0)
+simplify/all_why.sx           : ....................... (23/0/0/0)
+smtlib/all_why.smt            : ....................... (23/0/0/0)
+simplify/minusminus_why.sx    :  (0/0/0/0)
+smtlib/minusminus_why.smt     :  (0/0/0/0)
+simplify/array_why.sx         :  (0/0/0/0)
+smtlib/array_why.smt          :  (0/0/0/0)
+simplify/assigns_why.sx       : ........... (11/0/0/0)
+smtlib/assigns_why.smt        : ........... (11/0/0/0)
+simplify/loop_assigns_why.sx  : ........................ (24/0/0/0)
+smtlib/loop_assigns_why.smt   : ........................ (24/0/0/0)
+simplify/break_why.sx         : ................... (19/0/0/0)
+smtlib/break_why.smt          : ................... (19/0/0/0)
+simplify/continue_why.sx      : ......................... (25/0/0/0)
+smtlib/continue_why.smt       : ......................... (25/0/0/0)
+simplify/goto_why.sx          : ....... (7/0/0/0)
+smtlib/goto_why.smt           : ....... (7/0/0/0)
+simplify/call_why.sx          : ... (3/0/0/0)
+smtlib/call_why.smt           : ... (3/0/0/0)
+simplify/clash_why.sx         : ............. (13/0/0/0)
+smtlib/clash_why.smt          : ............. (13/0/0/0)
+simplify/clash_alloc_why.sx   :  (0/0/0/0)
+smtlib/clash_alloc_why.smt    :  (0/0/0/0)
+simplify/clash_redef_why.sx   : . (1/0/0/0)
+smtlib/clash_redef_why.smt    : . (1/0/0/0)
+simplify/logic_why.sx         : ....... (7/0/0/0)
+smtlib/logic_why.smt          : ....... (7/0/0/0)
+simplify/coord_why.sx         : .. (2/0/0/0)
+smtlib/coord_why.smt          : .. (2/0/0/0)
+simplify/dassault_1_why.sx    :  (0/0/0/0)
+smtlib/dassault_1_why.smt     :  (0/0/0/0)
+simplify/dassault_2_why.sx    :  (0/0/0/0)
+smtlib/dassault_2_why.smt     :  (0/0/0/0)
+simplify/copy_why.sx          : .....*... (8/1/0/0)
+smtlib/copy_why.smt           : .....?... (8/0/1/0)
+simplify/dowhile_why.sx       : ........ (8/0/0/0)
+smtlib/dowhile_why.smt        : ........ (8/0/0/0)
+simplify/invariants_why.sx    : ............ (12/0/0/0)
+smtlib/invariants_why.smt     : ............ (12/0/0/0)
+simplify/latespec_why.sx      : . (1/0/0/0)
+smtlib/latespec_why.smt       : . (1/0/0/0)
+simplify/logic_cast_why.sx    : ....... (7/0/0/0)
+smtlib/logic_cast_why.smt     : ....... (7/0/0/0)
+simplify/param_why.sx         : . (1/0/0/0)
+smtlib/param_why.smt          : . (1/0/0/0)
+simplify/passing_why.sx       : ....... (7/0/0/0)
+smtlib/passing_why.smt        : ....... (7/0/0/0)
+simplify/purse_why.sx         : .................*................... (36/1/0/0)
+smtlib/purse_why.smt          : .................#................... (36/0/0/1)
+simplify/queue_why.sx         : ..................................................................................................*..... (103/1/0/0)
+smtlib/queue_why.smt          : ..................................................................................................#..... (103/0/0/1)
+simplify/rec_why.sx           : .. (2/0/0/0)
+smtlib/rec_why.smt            : .. (2/0/0/0)
+simplify/ref_why.sx           : ..... (5/0/0/0)
+smtlib/ref_why.smt            : ..... (5/0/0/0)
+simplify/ref_glob_why.sx      : ............. (13/0/0/0)
+smtlib/ref_glob_why.smt       : ............. (13/0/0/0)
+simplify/search_why.sx        : ..................... (21/0/0/0)
+smtlib/search_why.smt         : ..................... (21/0/0/0)
+simplify/see_why.sx           : ... (3/0/0/0)
+smtlib/see_why.smt            : ... (3/0/0/0)
+simplify/sizeof_why.sx        : ... (3/0/0/0)
+smtlib/sizeof_why.smt         : ... (3/0/0/0)
+simplify/alloca_why.sx        : ............ (12/0/0/0)
+smtlib/alloca_why.smt         : ............ (12/0/0/0)
+simplify/sort_why.sx          : ......................................................................................................................................................................................................................................................................................................................................................................................... (377/0/0/0)
+smtlib/sort_why.smt           : ..........................................................................................................?.?............................................................................................................................................................................................................................................................................ (375/0/2/0)
+simplify/all_zeros_why.sx     : .*.......................... (27/1/0/0)
+smtlib/all_zeros_why.smt      : .?.......................... (27/0/1/0)
+simplify/malloc_why.sx        : .................... (20/0/0/0)
+smtlib/malloc_why.smt         : .................... (20/0/0/0)
+simplify/calloc_why.sx        : .................... (20/0/0/0)
+smtlib/calloc_why.smt         : .................... (20/0/0/0)
+simplify/pointer_why.sx       : ............ (12/0/0/0)
+smtlib/pointer_why.smt        : ............ (12/0/0/0)
+simplify/init_why.sx          : ................. (17/0/0/0)
+smtlib/init_why.smt           : ................. (17/0/0/0)
+simplify/struct_why.sx        : ....... (7/0/0/0)
+smtlib/struct_why.smt         : ....... (7/0/0/0)
+simplify/struct2_why.sx       : .. (2/0/0/0)
+smtlib/struct2_why.smt        : .. (2/0/0/0)
+simplify/struct3_why.sx       : .... (4/0/0/0)
+smtlib/struct3_why.smt        : .... (4/0/0/0)
+simplify/switch_why.sx        : ............................................................................................................................................ (140/0/0/0)
+smtlib/switch_why.smt         : ............................................................................................................................................ (140/0/0/0)
+simplify/enum_why.sx          : ...**..* (5/3/0/0)
+smtlib/enum_why.smt           : ******** (0/8/0/0)
+simplify/sum1_why.sx          : ....... (7/0/0/0)
+smtlib/sum1_why.smt           : ....... (7/0/0/0)
+simplify/sum2_why.sx          : ...#.......*.#..#...# (16/1/0/4)
+smtlib/sum2_why.smt           : ...........?....#...# (18/0/1/2)
+simplify/separation1_why.sx   : .....* (5/1/0/0)
+smtlib/separation1_why.smt    : .....? (5/0/1/0)
+simplify/separation2_why.sx   : ...#.....#.....#........#.##### (22/0/0/9)
+smtlib/separation2_why.smt    : ...#.....#.....#........#.##### (22/0/0/9)
+simplify/separation3_why.sx   : ...* (3/1/0/0)
+smtlib/separation3_why.smt    : ...? (3/0/1/0)
+simplify/separation4_why.sx   :  (0/0/0/0)
+smtlib/separation4_why.smt    :  (0/0/0/0)
+simplify/ifs_why.sx           : ...................................................................................... (86/0/0/0)
+smtlib/ifs_why.smt            : ...................................................................................... (86/0/0/0)
+simplify/separation_why.sx    : .................#### (17/0/0/4)
+smtlib/separation_why.smt     : .................#### (17/0/0/4)
+total           : 2408
+valid           : 2337 ( 97%)
+invalid         :  23 (  1%)
+unknown         :  13 (  1%)
+timeout/failure :  35 (  1%)
+total wallclock time : 17 m 20 sec
+total CPU time       : 15 m 14 sec
+valid VCs:
+    max CPU time     : 0.09
+    average CPU time : 2.66
+invalid VCs:
+    average CPU time : 0.11
+    max CPU time     : 1.79
+unknown VCs:
+    average CPU time : 2.75
+    max CPU time     : 13.68
+-------------------------------------------------------------------
+Bench Caduceus+Simplify/Yices with options: -separation -no-zone-type -why-opt -split-user-conj 
+  Generating VCs for false.c... ok
+  Generating VCs for abs.c... ok
+  Generating VCs for all.c... ok
+  Generating VCs for minusminus.c... ok
+  Generating VCs for array.c... ok
+  Generating VCs for assigns.c... ok
+  Generating VCs for loop_assigns.c... ok
+  Generating VCs for break.c... ok
+  Generating VCs for continue.c... ok
+  Generating VCs for goto.c... ok
+  Generating VCs for call.c... ok
+  Generating VCs for clash.c... ok
+  Generating VCs for clash_alloc.c... ok
+  Generating VCs for clash_redef.c... ok
+  Generating VCs for logic.c... ok
+  Generating VCs for coord.c... ok
+  Generating VCs for dassault_1.c... ok
+  Generating VCs for dassault_2.c... ok
+  Generating VCs for copy.c... ok
+  Generating VCs for dowhile.c... ok
+  Generating VCs for invariants.c... ok
+  Generating VCs for latespec.c... ok
+  Generating VCs for logic_cast.c... ok
+  Generating VCs for param.c... ok
+  Generating VCs for passing.c... ok
+  Generating VCs for purse.c... ok
+  Generating VCs for queue.c... ok
+  Generating VCs for rec.c... ok
+  Generating VCs for ref.c... ok
+  Generating VCs for ref_glob.c... ok
+  Generating VCs for search.c... ok
+  Generating VCs for see.c... ok
+  Generating VCs for sizeof.c... ok
+  Generating VCs for alloca.c... ok
+  Generating VCs for sort.c... ok
+  Generating VCs for all_zeros.c... ok
+  Generating VCs for malloc.c... ok
+  Generating VCs for calloc.c... ok
+  Generating VCs for pointer.c... ok
+  Generating VCs for init.c... ok
+  Generating VCs for struct.c... ok
+  Generating VCs for struct2.c... ok
+  Generating VCs for struct3.c... ok
+  Generating VCs for switch.c... ok
+  Generating VCs for enum.c... ok
+  Generating VCs for sum1.c... ok
+  Generating VCs for sum2.c... ok
+  Generating VCs for separation1.c... ok
+  Generating VCs for separation2.c... ok
+  Generating VCs for separation3.c... ok
+  Generating VCs for separation4.c... ok
+  Generating VCs for ifs.c... ok
+  Generating VCs for separation.c... ok
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/false_why.sx         : **.#*..* (3/4/0/1)
+smtlib/false_why.smt          : ??.??..? (3/0/5/0)
+simplify/abs_why.sx           : *.... (4/1/0/0)
+smtlib/abs_why.smt            : ?.... (4/0/1/0)
+simplify/all_why.sx           : ....................... (23/0/0/0)
+smtlib/all_why.smt            : ....................... (23/0/0/0)
+simplify/minusminus_why.sx    :  (0/0/0/0)
+smtlib/minusminus_why.smt     :  (0/0/0/0)
+simplify/array_why.sx         :  (0/0/0/0)
+smtlib/array_why.smt          :  (0/0/0/0)
+simplify/assigns_why.sx       : ........... (11/0/0/0)
+smtlib/assigns_why.smt        : ........... (11/0/0/0)
+simplify/loop_assigns_why.sx  : ........................ (24/0/0/0)
+smtlib/loop_assigns_why.smt   : ........................ (24/0/0/0)
+simplify/break_why.sx         : ................... (19/0/0/0)
+smtlib/break_why.smt          : ................... (19/0/0/0)
+simplify/continue_why.sx      : ......................... (25/0/0/0)
+smtlib/continue_why.smt       : ......................... (25/0/0/0)
+simplify/goto_why.sx          : ....... (7/0/0/0)
+smtlib/goto_why.smt           : ....... (7/0/0/0)
+simplify/call_why.sx          : ... (3/0/0/0)
+smtlib/call_why.smt           : ... (3/0/0/0)
+simplify/clash_why.sx         : .............. (14/0/0/0)
+smtlib/clash_why.smt          : .............. (14/0/0/0)
+simplify/clash_alloc_why.sx   :  (0/0/0/0)
+smtlib/clash_alloc_why.smt    :  (0/0/0/0)
+simplify/clash_redef_why.sx   : . (1/0/0/0)
+smtlib/clash_redef_why.smt    : . (1/0/0/0)
+simplify/logic_why.sx         : ....... (7/0/0/0)
+smtlib/logic_why.smt          : ....... (7/0/0/0)
+simplify/coord_why.sx         : .. (2/0/0/0)
+smtlib/coord_why.smt          : .. (2/0/0/0)
+simplify/dassault_1_why.sx    :  (0/0/0/0)
+smtlib/dassault_1_why.smt     :  (0/0/0/0)
+simplify/dassault_2_why.sx    :  (0/0/0/0)
+smtlib/dassault_2_why.smt     :  (0/0/0/0)
+simplify/copy_why.sx          : ......... (9/0/0/0)
+smtlib/copy_why.smt           : ......... (9/0/0/0)
+simplify/dowhile_why.sx       : ........ (8/0/0/0)
+smtlib/dowhile_why.smt        : ........ (8/0/0/0)
+simplify/invariants_why.sx    : ............ (12/0/0/0)
+smtlib/invariants_why.smt     : ............ (12/0/0/0)
+simplify/latespec_why.sx      : . (1/0/0/0)
+smtlib/latespec_why.smt       : . (1/0/0/0)
+simplify/logic_cast_why.sx    : ....... (7/0/0/0)
+smtlib/logic_cast_why.smt     : ....... (7/0/0/0)
+simplify/param_why.sx         : . (1/0/0/0)
+smtlib/param_why.smt          : . (1/0/0/0)
+simplify/passing_why.sx       : ....... (7/0/0/0)
+smtlib/passing_why.smt        : ....... (7/0/0/0)
+simplify/purse_why.sx         : ..................................... (37/0/0/0)
+smtlib/purse_why.smt          : ..................................... (37/0/0/0)
+simplify/queue_why.sx         : ........................................................................................................ (104/0/0/0)
+smtlib/queue_why.smt          : ........................................................................................................ (104/0/0/0)
+simplify/rec_why.sx           : .. (2/0/0/0)
+smtlib/rec_why.smt            : .. (2/0/0/0)
+simplify/ref_why.sx           : ..... (5/0/0/0)
+smtlib/ref_why.smt            : ..... (5/0/0/0)
+simplify/ref_glob_why.sx      : .............. (14/0/0/0)
+smtlib/ref_glob_why.smt       : .............. (14/0/0/0)
+simplify/search_why.sx        : ..................... (21/0/0/0)
+smtlib/search_why.smt         : ..................... (21/0/0/0)
+simplify/see_why.sx           : ... (3/0/0/0)
+smtlib/see_why.smt            : ... (3/0/0/0)
+simplify/sizeof_why.sx        : ... (3/0/0/0)
+smtlib/sizeof_why.smt         : ... (3/0/0/0)
+simplify/alloca_why.sx        : ............ (12/0/0/0)
+smtlib/alloca_why.smt         : ............ (12/0/0/0)
+simplify/sort_why.sx          : ......................................................................................................................................................................................................................................................................................................................................................................................... (377/0/0/0)
+smtlib/sort_why.smt           : ..........................................................................................................?.?............................................................................................................................................................................................................................................................................ (375/0/2/0)
+simplify/all_zeros_why.sx     : .*.......................... (27/1/0/0)
+smtlib/all_zeros_why.smt      : .?.......................... (27/0/1/0)
+simplify/malloc_why.sx        : .................... (20/0/0/0)
+smtlib/malloc_why.smt         : .................... (20/0/0/0)
+simplify/calloc_why.sx        : .................... (20/0/0/0)
+smtlib/calloc_why.smt         : .................... (20/0/0/0)
+simplify/pointer_why.sx       : ............ (12/0/0/0)
+smtlib/pointer_why.smt        : ............ (12/0/0/0)
+simplify/init_why.sx          : ........... (11/0/0/0)
+smtlib/init_why.smt           : ........... (11/0/0/0)
+simplify/struct_why.sx        : ....... (7/0/0/0)
+smtlib/struct_why.smt         : ....... (7/0/0/0)
+simplify/struct2_why.sx       : .. (2/0/0/0)
+smtlib/struct2_why.smt        : .. (2/0/0/0)
+simplify/struct3_why.sx       : .... (4/0/0/0)
+smtlib/struct3_why.smt        : .... (4/0/0/0)
+simplify/switch_why.sx        : ............................................................................................................................................ (140/0/0/0)
+smtlib/switch_why.smt         : ............................................................................................................................................ (140/0/0/0)
+simplify/enum_why.sx          : ...**..* (5/3/0/0)
+smtlib/enum_why.smt           : ******** (0/8/0/0)
+simplify/sum1_why.sx          : ....... (7/0/0/0)
+smtlib/sum1_why.smt           : ....... (7/0/0/0)
+simplify/sum2_why.sx          : ...#.......*.#..#...# (16/1/0/4)
+smtlib/sum2_why.smt           : ...........?....#...# (18/0/1/2)
+simplify/separation1_why.sx   : .... (4/0/0/0)
+smtlib/separation1_why.smt    : .... (4/0/0/0)
+simplify/separation2_why.sx   : ...#.....#.....#........#.#... (25/0/0/5)
+smtlib/separation2_why.smt    : ...#.....#.....#........#.#... (25/0/0/5)
+simplify/separation3_why.sx   : .... (4/0/0/0)
+smtlib/separation3_why.smt    : .... (4/0/0/0)
+simplify/separation4_why.sx   :  (0/0/0/0)
+smtlib/separation4_why.smt    :  (0/0/0/0)
+simplify/ifs_why.sx           : ...................................................................................... (86/0/0/0)
+smtlib/ifs_why.smt            : ...................................................................................... (86/0/0/0)
+simplify/separation_why.sx    : ....................................................... (55/0/0/0)
+smtlib/separation_why.smt     : ....................................................... (55/0/0/0)
+total           : 2462
+valid           : 2417 ( 98%)
+invalid         :  18 (  1%)
+unknown         :  10 (  0%)
+timeout/failure :  17 (  1%)
+total wallclock time : 10 m 54 sec
+total CPU time       : 9 m 28 sec
+valid VCs:
+    max CPU time     : 0.10
+    average CPU time : 3.88
+invalid VCs:
+    average CPU time : 0.03
+    max CPU time     : 0.09
+unknown VCs:
+    average CPU time : 0.40
+    max CPU time     : 1.75
+make[1]: Entering directory `/home/marche/why/examples-c'
+make -C tutorial allcoq
+make[2]: Entering directory `/home/marche/why/examples-c/tutorial'
+for f in max abs swap search purse ; do \
+	  caduceus $f.c; \
+	  rm -f coq/caduceus_spec_why.v; \
+	  make -f $f.makefile depend; \
+	  make -f $f.makefile coq; \
+	done
+generating Why code for function max
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqdep -I `coqc -where`/user-contrib -I coq coq/max*_why.v > max.depend
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqc -I coq coq/max_spec_why.v
+coqc -I coq coq/max_why.v
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+abs.c:10: warning: function abs2 has side-effects but no 'assigns' clause given
+generating Why code for function abs1
+generating Why code for function abs2
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqdep -I `coqc -where`/user-contrib -I coq coq/abs*_why.v > abs.depend
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqc -I coq coq/abs_spec_why.v
+coqc -I coq coq/abs_why.v
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+swap.c:3: warning: function swap has side-effects but no 'assigns' clause given
+generating Why code for function swap
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqdep -I `coqc -where`/user-contrib -I coq coq/swap*_why.v > swap.depend
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqc -I coq coq/swap_spec_why.v
+coqc -I coq coq/swap_why.v
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+generating Why code for function index
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqdep -I `coqc -where`/user-contrib -I coq coq/search*_why.v > search.depend
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqc -I coq coq/search_spec_why.v
+coqc -I coq coq/search_why.v
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+purse.c:69: warning: function test2 has side-effects but no 'assigns' clause given
+generating Why code for function credit
+generating Why code for function withdraw
+generating Why code for function credit0
+generating Why code for function withdraw0
+generating Why code for function test1
+generating Why code for function test2
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqdep -I `coqc -where`/user-contrib -I coq coq/purse*_why.v > purse.depend
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+coqc -I coq coq/purse_spec_why.v
+coqc -I coq coq/purse_why.v
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[2]: Leaving directory `/home/marche/why/examples-c/tutorial'
+for d in tutorial sorting g4 linked-lists schorr-waite; do make -C $d simplify; done
+make[2]: Entering directory `/home/marche/why/examples-c/tutorial'
+for f in max abs swap search purse ; do \
+	  caduceus $f.c; \
+	  make -f $f.makefile simplify; \
+	done
+generating Why code for function max
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/max_why.sx           : .. (2/0/0/0)
+total           :   2
+valid           :   2 (100%)
+invalid         :   0 (  0%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 0.13 sec
+total CPU time       : 0.07 sec
+valid VCs:
+    max CPU time     : 0.03
+    average CPU time : 0.04
+invalid VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+abs.c:10: warning: function abs2 has side-effects but no 'assigns' clause given
+generating Why code for function abs1
+generating Why code for function abs2
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/abs_why.sx           : *.... (4/1/0/0)
+total           :   5
+valid           :   4 ( 80%)
+invalid         :   1 ( 20%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 0.49 sec
+total CPU time       : 0.26 sec
+valid VCs:
+    max CPU time     : 0.06
+    average CPU time : 0.06
+invalid VCs:
+    average CPU time : 0.04
+    max CPU time     : 0.04
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+swap.c:3: warning: function swap has side-effects but no 'assigns' clause given
+generating Why code for function swap
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/swap_why.sx          : ..... (5/0/0/0)
+total           :   5
+valid           :   5 (100%)
+invalid         :   0 (  0%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 0.52 sec
+total CPU time       : 0.30 sec
+valid VCs:
+    max CPU time     : 0.06
+    average CPU time : 0.07
+invalid VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+generating Why code for function index
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/search_why.sx        : ..... (5/0/0/0)
+total           :   5
+valid           :   5 (100%)
+invalid         :   0 (  0%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 0.63 sec
+total CPU time       : 0.41 sec
+valid VCs:
+    max CPU time     : 0.08
+    average CPU time : 0.11
+invalid VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+purse.c:69: warning: function test2 has side-effects but no 'assigns' clause given
+generating Why code for function credit
+generating Why code for function withdraw
+generating Why code for function credit0
+generating Why code for function withdraw0
+generating Why code for function test1
+generating Why code for function test2
+make[3]: Entering directory `/home/marche/why/examples-c/tutorial'
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/purse_why.sx         : .............*.... (17/1/0/0)
+total           :  18
+valid           :  17 ( 94%)
+invalid         :   1 (  6%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 1.90 sec
+total CPU time       : 1.11 sec
+valid VCs:
+    max CPU time     : 0.06
+    average CPU time : 0.08
+invalid VCs:
+    average CPU time : 0.11
+    max CPU time     : 0.11
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[2]: Leaving directory `/home/marche/why/examples-c/tutorial'
+make[2]: Entering directory `/home/marche/why/examples-c/sorting'
+for f in selection; do \
+	  CADUCEUSLIB=/home/marche/why/examples-c/sorting/../../lib ../../bin/caduceus.opt $f.c; \
+	  make -f $f.makefile simplify; \
+	done
+selection.c:25: warning: function selection has side-effects but no 'assigns' clause given
+generating Why code for function selection
+generating Why code for function swap
+make[3]: Entering directory `/home/marche/why/examples-c/sorting'
+why -simplify [...] why/selection.why
+File "why/selection.why", line 13, characters 11-26:
+Unbound exception 'Goto_init'
+make[3]: *** [simplify/selection_why.sx] Error 1
+make[3]: Leaving directory `/home/marche/why/examples-c/sorting'
+make[2]: *** [simplify] Error 2
+make[2]: Leaving directory `/home/marche/why/examples-c/sorting'
+make[2]: Entering directory `/home/marche/why/examples-c/g4'
+for f in g4; do \
+	  CADUCEUSLIB=/home/marche/why/examples-c/g4/../../lib ../../bin/caduceus.opt $f.c; \
+	  make -f $f.makefile simplify; \
+	done
+generating Why code for function main
+make[3]: Entering directory `/home/marche/why/examples-c/g4'
+why -simplify [...] why/g4.why
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/g4_why.sx            : .*****. (2/5/0/0)
+total           :   7
+valid           :   2 ( 29%)
+invalid         :   5 ( 71%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 0.63 sec
+total CPU time       : 0.33 sec
+valid VCs:
+    max CPU time     : 0.04
+    average CPU time : 0.04
+invalid VCs:
+    average CPU time : 0.05
+    max CPU time     : 0.06
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/g4'
+make[2]: Leaving directory `/home/marche/why/examples-c/g4'
+make[2]: Entering directory `/home/marche/why/examples-c/linked-lists'
+for f in swap reverse; do \
+	  CADUCEUSLIB=/home/marche/why/examples-c/linked-lists/../../lib ../../bin/caduceus.opt  $f.c; \
+	  make -f $f.makefile simplify; \
+	done
+swap.c:7: warning: function swap has side-effects but no 'assigns' clause given
+generating Why code for function swap
+make[3]: Entering directory `/home/marche/why/examples-c/linked-lists'
+why -simplify [...] why/swap.why
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/swap_why.sx          : .*.** (2/3/0/0)
+total           :   5
+valid           :   2 ( 40%)
+invalid         :   3 ( 60%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 0.42 sec
+total CPU time       : 0.24 sec
+valid VCs:
+    max CPU time     : 0.04
+    average CPU time : 0.04
+invalid VCs:
+    average CPU time : 0.05
+    max CPU time     : 0.06
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/linked-lists'
+reverse.c:9: warning: function rev has side-effects but no 'assigns' clause given
+generating Why code for function rev
+make[3]: Entering directory `/home/marche/why/examples-c/linked-lists'
+why -simplify [...] why/reverse.why
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/reverse_why.sx       : .*.*. (3/2/0/0)
+total           :   5
+valid           :   3 ( 60%)
+invalid         :   2 ( 40%)
+unknown         :   0 (  0%)
+timeout/failure :   0 (  0%)
+total wallclock time : 0.35 sec
+total CPU time       : 0.19 sec
+valid VCs:
+    max CPU time     : 0.03
+    average CPU time : 0.04
+invalid VCs:
+    average CPU time : 0.05
+    max CPU time     : 0.06
+unknown VCs:
+    average CPU time : nan
+    max CPU time     : 0.00
+make[3]: Leaving directory `/home/marche/why/examples-c/linked-lists'
+make[2]: Leaving directory `/home/marche/why/examples-c/linked-lists'
+make[2]: Entering directory `/home/marche/why/examples-c/schorr-waite'
+make[2]: Nothing to be done for `simplify'.
+make[2]: Leaving directory `/home/marche/why/examples-c/schorr-waite'
+make[1]: Leaving directory `/home/marche/why/examples-c'
