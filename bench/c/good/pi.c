@@ -35,9 +35,7 @@ void main(){
       d *= b;
     }
     c -= 14; 
-    printf("------------------------\nf[] = \n");
-    for (i=0 ; i <= 2800; i++) printf("%d ",f[i]);
-    printf("%.4d",e+d/a); 
+    print4(e+d/a); 
     e = d%a;
     }
 }
