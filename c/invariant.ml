@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: invariant.ml,v 1.41 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: invariant.ml,v 1.42 2006-12-01 09:31:26 marche Exp $ i*)
 
 open Coptions
 open Creport
@@ -371,7 +371,21 @@ let rec separation_intern n =
       match  tag_type_definition n with
 	| TTStructUnion ((Tstruct _),fl) ->
 	    fl
-	| _ -> assert false
+	| TTStructUnion (t,fl) -> 
+	    begin match t with
+	      | Tstruct _ -> assert false
+	      | Tfun (_, _) -> assert false
+	      | Tenum _ -> assert false
+	      | Tunion _ -> assert false
+	      | Tpointer (_, _) -> assert false
+	      | Tarray (_, _, _) -> assert false
+	      | Ctypes.Tvar _ -> assert false
+	      | Tfloat _ -> assert false
+	      | Tint _ -> assert false
+	      | Tvoid -> assert false
+	    end
+	| TTEnum (_, _) -> assert false
+	| TTIncomplete -> assert false
     end  
   in
   let array_intern_separation v1  =

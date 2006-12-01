@@ -12,7 +12,7 @@ f[b]=d%--g,d/=g--,--b;d*=b);}
 
 void print4(int);
 
-int a=10000,b,c=2800,d,e,f[2801],g;
+int a=10000,b,c=2800,d,e,f[2801],g,i;
 
 /*@ requires b == 0 && c == 2800 && a == 10000 */
 void main(){
@@ -34,8 +34,10 @@ void main(){
       if (!b) break; 
       d *= b;
     }
-    c -= 14;
-    print4(e+d/a);
+    c -= 14; 
+    printf("------------------------\nf[] = \n");
+    for (i=0 ; i <= 2800; i++) printf("%d ",f[i]);
+    printf("%.4d",e+d/a); 
     e = d%a;
-  }
+    }
 }
