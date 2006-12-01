@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.32 2006-11-29 13:29:41 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.33 2006-12-01 16:17:55 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -184,8 +184,7 @@ valid   : %3d (%3.0f%%)
 invalid : %3d (%3.0f%%)
 unknown : %3d (%3.0f%%)
 timeout : %3d (%3.0f%%)
-failure : %3d (%3.0f%%)\n" 
-    (!nvalid + !ninvalid + !nunknown + !ntimeout)
+failure : %3d (%3.0f%%)\n" n
     !nvalid pvalid !ninvalid pinvalid !nunknown punknown 
     !ntimeout ptimeout !nfailure pfailure;
   printf
@@ -201,7 +200,7 @@ unknown VCs:
     average CPU time : %.2f
     max CPU time     : %.2f\n"
     print_time wctime
-    print_time  (!tvalid +. !tinvalid +. !tunknown +. !ttimeout)
+    print_time  (!tvalid +. !tinvalid +. !tunknown +. !ttimeout +. !tfailure)
     (!tvalid /. float !nvalid)
     !tmaxvalid
     (!tinvalid /. float !ninvalid)
