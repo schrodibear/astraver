@@ -1,6 +1,8 @@
 
 Note: These are the changes for Caduceus.
 
+ o support for operators ~ & | ^ >> << in the logic
+
 version 1.01, November 29th, 2006
 =============================
 
