@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.45 2006-11-17 17:13:28 moy Exp $ i*)
+(*i $Id: cllexer.mll,v 1.46 2006-12-04 22:05:19 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -111,6 +111,7 @@ rule token = parse
   | "|"      { BAR }
   | "||"      { OR }
   | "!"     { NOT }
+  | "~"     { TILDE }
   | "\\true"    { TRUE }
   | "\\false"   { FALSE }
   | "\\old"    { OLD }
@@ -167,7 +168,9 @@ rule token = parse
   | "/"                     { SLASH }
   | "%"                     { PERCENT }
   | "<"                     { LT }
+  | "<<"                    { LTLT }
   | ">"                     { GT }
+  | ">>"                    { GTGT }
   | "<="                    { LE }
   | ">="                    { GE }
   | "=="                    { EQ }
@@ -179,6 +182,7 @@ rule token = parse
   | ("["|"<:")              { LSQUARE }
   | ("]"|":>")              { RSQUARE }
   | "="                     { EQUAL }
+  | "^"                     { HAT }
   | "^^"                    { HATHAT }
 
   | eof { EOF }

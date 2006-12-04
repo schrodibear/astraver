@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.108 2006-11-27 15:46:33 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.109 2006-12-04 22:05:24 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -261,10 +261,11 @@ and type_term_node loc env = function
       let t2 = type_num_term env t2 in
       let t1,t2,ty = arith_conversion t1 t2 in
       Tbinop (t1, op, t2), ty
-  | PLbinop (t1, Bmod, t2) ->
+  | PLbinop (t1, (Bmod | Bbw_and | Bbw_or | Bbw_xor | 
+		  Bshift_right | Bshift_left as op), t2) ->
       let t1 = type_int_term env t1 in
       let t2 = type_int_term env t2 in
-      Tbinop (t1, Bmod, t2), c_int
+      Tbinop (t1, op, t2), c_int
   | PLbinop (t1, Bpow_real, t2) ->
       let t1 = type_real_term env t1 in
       let t2 = type_real_term env t2 in

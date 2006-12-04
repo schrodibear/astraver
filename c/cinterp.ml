@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.223 2006-11-27 15:46:33 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.224 2006-12-04 22:05:18 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -125,6 +125,11 @@ let interp_term_bin_op ty1 ty2 op =
   | Tfloat _, _, Bmul -> "mul_real"
   | Tfloat _, _, Bdiv -> "div_real"
   | _, _, Bpow_real -> "pow_real"
+  | _, _, Bbw_and -> "bw_and"
+  | _, _, Bbw_xor -> "bw_xor"
+  | _, _, Bbw_or -> "bw_or"
+  | _, _, Bshift_left -> "lsl"
+  | _, _, Bshift_right -> "lsr"
   | (Tpointer _ | Tarray _), _, Badd -> "shift"
   | (Tpointer _ | Tarray _), (Tenum _ | Tint _), Bsub -> 
       assert false (* normalized at typing *)

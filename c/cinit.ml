@@ -28,6 +28,13 @@ open Clogic
 open Info
 open Ctypes
 
+let binop = function
+  | Cast.Bbw_and -> Bbw_and
+  | Cast.Bbw_or -> Bbw_or
+  | Cast.Bbw_xor -> Bbw_xor
+  | Cast.Bshift_right -> Bshift_right
+  | Cast.Bshift_left -> Bshift_left
+  | _ -> assert false
 
 let rec term_of_expr (e:texpr)  =
   {
@@ -45,11 +52,11 @@ let rec term_of_expr (e:texpr)  =
 	 | TEseq (e1, e2) -> assert false
 	 | TEassign (e1, e2) -> assert false (*TODO*)
 	 | TEassign_op (e1, b, e2) -> assert false (*TODO*)
-	 | TEunary (Cast.Uplus, e) -> Tunop (Uplus, term_of_expr e)
-	 | TEunary (Cast.Uminus, e) -> Tunop (Uminus, term_of_expr e)
-	 | TEunary (Cast.Unot, e) -> Tunop (Unot,term_of_expr e) 
-	 | TEunary (Cast.Ustar, e) -> Tunop (Ustar, term_of_expr e)
-	 | TEunary (Cast.Uamp, e) -> Tunop (Uamp, term_of_expr e)
+	 | TEunary (Cast.Uplus, e) -> Tunop (Clogic.Uplus, term_of_expr e)
+	 | TEunary (Cast.Uminus, e) -> Tunop (Clogic.Uminus, term_of_expr e)
+	 | TEunary (Cast.Unot, e) -> Tunop (Clogic.Unot,term_of_expr e) 
+	 | TEunary (Cast.Ustar, e) -> Tunop (Clogic.Ustar, term_of_expr e)
+	 | TEunary (Cast.Uamp, e) -> Tunop (Clogic.Uamp, term_of_expr e)
 	 | TEunary (Cast.Utilde, e) -> Tunop (Utilde, term_of_expr e)
 	 | TEunary (Cast.Ufloat_of_int, e) -> 
 	     Tunop (Ufloat_of_int, term_of_expr e)
@@ -85,13 +92,14 @@ let rec term_of_expr (e:texpr)  =
 	     Tbinop (term_of_expr e1, Bdiv, term_of_expr e2)
 	 | TEbinary (e1, Bmod_int _, e2) | TEbinary (e1, Cast.Bmod, e2) ->
 	     Tbinop (term_of_expr e1, Bmod, term_of_expr e2)
+	 | TEbinary (e1, (Cast.Bbw_and | Cast.Bbw_or | Cast.Bbw_xor |
+			  Cast.Bshift_left | Cast.Bshift_right as op), e2) -> 
+	     Tbinop (term_of_expr e1, binop op, term_of_expr e2)
 	 | TEbinary (e1, Blt, e2) | TEbinary (e1, Bgt, e2) 
 	 | TEbinary (e1, Ble, e2) | TEbinary (e1, Bge, e2) 
 	 | TEbinary (e1, Beq, e2) | TEbinary (e1, Bneq, e2) 
-	 | TEbinary (e1, Bbw_and, e2) | TEbinary (e1, Bbw_xor, e2) 
-	 | TEbinary (e1, Bbw_or, e2) | TEbinary (e1, Band, e2) 
-	 | TEbinary (e1, Bor, e2) | TEbinary (e1, Bshift_left, e2) 
-	 | TEbinary (e1, Bshift_right, e2) | TEbinary (e1, Blt_int, e2) 
+	 | TEbinary (e1, Band, e2) | TEbinary (e1, Bor, e2) 
+	 | TEbinary (e1, Blt_int, e2) 
 	 | TEbinary (e1, Bgt_int, e2) | TEbinary (e1, Ble_int, e2) 
 	 | TEbinary (e1, Bge_int, e2) | TEbinary (e1, Beq_int, e2) 
 	 | TEbinary (e1, Bneq_int, e2) 

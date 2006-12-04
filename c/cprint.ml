@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.42 2006-11-27 15:46:34 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.43 2006-12-04 22:05:28 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -69,6 +69,11 @@ let term_binop = function
   | Clogic.Bdiv -> "/"
   | Clogic.Bmod -> "%"
   | Clogic.Bpow_real -> "^^"
+  | Clogic.Bbw_and -> "&"
+  | Clogic.Bbw_or -> "|"
+  | Clogic.Bbw_xor -> "^"
+  | Clogic.Bshift_right -> ">>"
+  | Clogic.Bshift_left -> "<<"
  
 let rec nterm fmt t = match t.nterm_node with
   | NTconstant (IntConstant s | RealConstant s) ->

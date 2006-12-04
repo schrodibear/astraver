@@ -61,9 +61,9 @@
 
 %token <string> IDENTIFIER STRING_LITERAL TYPENAME
 %token <Clogic.constant> CONSTANT
-%token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP
-%token INT FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL
-%token FORALL EXISTS IFF IMPLIES AND OR NOT BAR ABS SQRT HATHAT
+%token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP TILDE
+%token INT FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL LTLT GTGT
+%token FORALL EXISTS IFF IMPLIES AND OR NOT BAR ABS SQRT HATHAT HAT
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH ARRLEN STRLEN BASE_ADDR OFFSET
 %token SEPARATED FULLSEPARATED VALID VALID_INDEX VALID_RANGE FRESH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
@@ -83,8 +83,12 @@
 %nonassoc prec_if
 %right QUESTION prec_question
 %left prec_relation LT GT LE GE EQ NE
+%left BAR
+%left HAT
+%left prec_bamp
+%left LTLT GTGT
 %left PLUS MINUS
-%left STAR SLASH PERCENT AMP
+%left STAR SLASH PERCENT AMP TILDE
 %right HATHAT
 %right prec_uminus 
 %right prec_abs
@@ -128,6 +132,11 @@ lexpr:
 | lexpr STAR lexpr { info (PLbinop ($1, Bmul, $3)) }
 | lexpr SLASH lexpr { info (PLbinop ($1, Bdiv, $3)) }
 | lexpr PERCENT lexpr { info (PLbinop ($1, Bmod, $3)) }
+| lexpr BAR lexpr { info (PLbinop ($1, Bbw_or, $3)) }
+| lexpr HAT lexpr { info (PLbinop ($1, Bbw_xor, $3)) }
+| lexpr AMP lexpr %prec prec_bamp { info (PLbinop ($1, Bbw_and, $3)) }
+| lexpr LTLT lexpr { info (PLbinop ($1, Bshift_left, $3)) }
+| lexpr GTGT lexpr { info (PLbinop ($1, Bshift_right, $3)) }
 | lexpr ARROW IDENTIFIER { info (PLarrow ($1, $3)) }
 | lexpr DOT IDENTIFIER { info (PLdot ($1, $3)) }
 | lexpr LSQUARE lexpr RSQUARE { info (PLarrget ($1, $3)) }
@@ -145,6 +154,7 @@ lexpr:
 | PLUS lexpr %prec prec_uminus { $2 }
 | STAR lexpr { info (PLunop (Ustar, $2)) }
 | AMP lexpr { info (PLunop (Uamp, $2)) }
+| TILDE lexpr { info (PLunop (Utilde, $2)) }
 | lexpr QUESTION lexpr COLON lexpr %prec prec_question 
     { info (PLif ($1, $3, $5)) }
 | OLD LPAR lexpr RPAR { info (PLold $3) }

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: clogic.mli,v 1.62 2006-11-03 12:48:56 marche Exp $ i*)
+(*i $Id: clogic.mli,v 1.63 2006-12-04 22:05:20 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -45,6 +45,7 @@ type constant =
 
 type term_binop = 
   | Badd | Bsub | Bmul | Bdiv | Bmod | Bpow_real
+  | Bbw_and | Bbw_xor | Bbw_or | Bshift_left | Bshift_right
 
 type term_unop = 
   | Uminus | Utilde | Ustar | Uamp |Uplus
