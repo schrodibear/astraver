@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.46 2006-12-04 22:05:19 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.47 2006-12-05 10:40:33 marche Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -209,10 +209,6 @@ and comment = parse
     with Parsing.Parse_error ->
       let loc = loc lb in
       let b,e = loc in
-      Format.eprintf
-	"lnum = %d bol = %d cnum = %d@." b.pos_lnum b.pos_bol b.pos_cnum;
-      Format.eprintf
-	"lnum = %d bol = %d cnum = %d@." e.pos_lnum e.pos_bol e.pos_cnum;
       Creport.raise_located loc (AnyMessage "Syntax error in annotation")
 
   let annot = parse_with_offset Clparser.annot
