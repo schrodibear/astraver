@@ -164,6 +164,7 @@ void store_solution();
 /*@ requires
   @   k >= 0 && nbits(a) + k == N() &&
   @   included(a,all_ones(N())) && 
+  @   (* bits(a)+bits(col[0..k-1])=all_ones(N()) *)
   @   s >= 0 && partial_solution(k, col)
   @ assigns
   @   col[k..], s, k, sol[s..][..]
