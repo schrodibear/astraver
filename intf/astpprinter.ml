@@ -80,7 +80,7 @@ let print_term fmt t =
 	print_fct_shift fmt t
     | Tapp (id, [t], _) when id == t_neg_int ->
 	fprintf fmt "(- %a)" print3 t
-    | Tapp (id, [_;_], _) as t when is_arith_binop id ->
+    | Tapp (id, [_;_], _) as t when is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "(@[if %a then@ %a else@ %a@])" print0 a print0 b print0 c

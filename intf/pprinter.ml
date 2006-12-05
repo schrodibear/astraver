@@ -71,12 +71,10 @@ let read_file = function
 	begin 
 	  try
             let lexbuf = Lexing.from_channel in_channel 
-	    and hilight = if (is_cfile f) then 
-	      Hilight.token
-	  else Whyhilight.scan in
-            while true do
-              hilight !tv_source#buffer lexbuf;
-            done
+	    and hilight = 
+	      if is_cfile f then Hilight.token else Whyhilight.scan 
+	    in
+            while true do hilight !tv_source#buffer lexbuf done
 	  with Hilight.Eof | Whyhilight.Eof -> ()
 	end;
       with Sys_error s -> 
@@ -188,18 +186,17 @@ let print_oblig fmt (ctx,concl) =
   let ctx, concl = intros ctx concl in
   let rec print_list print = function
       | [] -> ()
-      | p::r ->
-	  print p;
-	  fprintf fmt "@\n";
-	  print_list print r 
-  and print_name fmt id = 
+      | p::r -> print p; fprintf fmt "@\n"; print_list print r 
+  and print_name fmt id =
     let hypo_nb = hypo (Ident.string id) in
     fprintf fmt "%s" (hypothesis hypo_nb)
   and print_hyp fmt = function
     | Svar (id, t) ->
-	fprintf fmt "@[@{<var>%a:@}@ @{<cc_type>%a@}@]" Ident.print id print_pure_type t
+	fprintf fmt "@[@{<var>%a:@}@ @{<cc_type>%a@}@]" 
+	  Ident.print id print_pure_type t
     | Spred (id, p) ->
-	fprintf fmt "@[@{<hypothesis>%a:@} @{<predicate>%a@}@]" print_name id print_predicate p
+	fprintf fmt "@[@{<hypothesis>%a:@} @{<predicate>%a@}@]" 
+	  print_name id print_predicate p
   in
   print_list (print_hyp fmt) ctx
 
