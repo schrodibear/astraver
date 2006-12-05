@@ -82,6 +82,25 @@ int count_bits(int x) {
 /*@ axiom singleton_def : \forall int i, int j; b_in(j,singleton(i)) <=> j==i
   @*/
 
+/*@ axiom lowest_bit_is_singleton : \forall int x;
+  @   x != 0 => \exists int i; lowest_bit(x) == singleton(i)
+  @*/
+
+/*@ logic int all_ones(int n) */ // this is 2^n-1, that 11...1 with n ones
+
+/*@ axiom all_ones_def : \forall int n; 
+  @   \forall int i; b_in(i, all_ones(n)) => 0 <= i < n
+  @*/   
+
+/* @ axiom help_1: \forall int a, int n, int i;
+  @   b_in(i,a) => included(a,all_ones(n)) => 0 <= i < n
+  @*/
+
+//@ axiom all_ones_trick : \forall int n; ~(~0<<n) == all_ones(n)
+
+//@ axiom nbits_all_ones : \forall int n; nbits(all_ones(n))==n
+
+
 // t1: termination of the for loop
 int t1(int a, int b, int c){
   int d=0, e=a&~b&~c, f=1;
@@ -111,18 +130,8 @@ int t2(int a, int b, int c){
 
 // soundess: every recorded solution is indeed a solution
 
-int N; // N queens on a NxN chessboard
-
-// s stores a partial solution, for the rows 0..k-1
-/*@ predicate partial_solution(int k, int* s) {
-  @   \forall int i; 0 <= i < k => 
-  @      (\exists int j; 0 <= j < N && s[i] == singleton(j)) &&
-  @      (\forall int j; j > i => ((s[i] >> (j-i)) != s[j] &&
-  @                                (s[i] << (j-i)) != s[j]))
-  @ }
-  @*/
-
-/*@ predicate solution(int *s) { partial_solution(N, s) } */
+//@ logic int N() (* N queens on a NxN chessboard *)
+//@ axiom N_positive : N() > 0
 
 int** sol; // sol[i] is the i-th solution
 /*@ axiom dont_bother_me_I_am_a_ghost_1 : 
@@ -131,11 +140,33 @@ int** sol; // sol[i] is the i-th solution
   @   \forall int i, int j; \valid(sol[i]+j) */
 
 int s = 0; // next empty slot for a solution
-int k; // current row in the current solution
+
+int *col; // current solution being built
+int k;    // current row in the current solution
+
+// s stores a partial solution, for the rows 0..k-1
+/*@ predicate partial_solution(int k, int* s) {
+  @   \forall int i; 0 <= i < k => 
+  @      (\exists int j; 0 <= j < N() && s[i] == singleton(j)) (* &&
+  @      (\forall int j; j > i => ((s[i] >> (j-i)) != s[j] &&
+  @                                (s[i] << (j-i)) != s[j])) *)
+  @ }
+  @*/
+
+/*@ predicate solution(int *s) { partial_solution(N(), s) } */
+
+/*@ requires solution(col)
+  @ assigns  s, sol[s][0..N()-1]
+  @ ensures  s==\old(s)+1 && \forall int i; sol[\old(s)][i]==col[i]
+  @*/
+void store_solution();
 
 /*@ requires
-  @   k >= 0 && nbits(a) + k == N &&
-  @   s >= 0 && partial_solution(k, sol[s])
+  @   k >= 0 && nbits(a) + k == N() &&
+  @   included(a,all_ones(N())) && 
+  @   s >= 0 && partial_solution(k, col)
+  @ assigns
+  @   col[k..], s, k, sol[s..][..]
   @ ensures  
   @   \result == s - \old(s) && \result >= 0 &&
   @   k == \old(k)
@@ -147,27 +178,24 @@ int t3(int a, int b, int c){
     /*@ invariant 
       @   included(d,e) && included(e,\at(e,L)) &&
       @   f == s - \at(s,init) && f >= 0 &&
-      @   k == \old(k) 
+      @   k == \old(k) && partial_solution(k, col)
+      @ loop_assigns
+      @   col[k..], s, k, sol[s..][..]
       @*/
     for (f=0; d=(e-=d)&-e; ) {
-      sol[s][k] = d;
-      k++;
+      //@ assert included(d,e)
+      //@ assert \exists int i; d == singleton(i) && b_in(i,a) && 0 <= i < N()
+      col[k] = d;                     // ghost code 
+      k++;                            // ghost code
       f += t3(a-d, (b+d)*2, (c+d)/2);
-      k--;
+      k--;                            // ghost code
     }
-  // begin ghost code
-  else {
-    //@ assert k == N
-    //@ assert soundness:: solution(sol[s])
-    s++; 
-  }
-  // end ghost code
+  else 
+    store_solution(); // ghost code
   return f;
 }
 
-//@ axiom init_mask : \forall int x; nbits(~(~0<<x))==x 
-
-/*@ requires N > 0 && n == N && s == 0 && k == 0
+/*@ requires n == N() && s == 0 && k == 0
   @ ensures \result == s
   @*/
 int queens(int n) {
