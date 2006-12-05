@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.47 2006-12-05 10:40:33 marche Exp $ i*)
+(*i $Id: cllexer.mll,v 1.48 2006-12-05 17:03:08 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -136,6 +136,10 @@ rule token = parse
   | "\\total_error" { TOTALERROR }
   | "\\exact" { EXACT }
   | "\\model" { MODEL }
+
+  (* Why keywords are reserved *)
+  | "in" 
+      { lex_error lexbuf ("reserved keyword `" ^ lexeme lexbuf ^ "'") }
  
   | rL (rL | rD)*       { let s = lexeme lexbuf in identifier s }
 
