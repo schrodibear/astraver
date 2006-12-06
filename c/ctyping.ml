@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.137 2006-11-27 15:46:34 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.138 2006-12-06 09:26:54 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -931,7 +931,7 @@ let array_size_from_initializer loc ty i = match ty.ctype_node, i with
 	 compute the length of the array. *)
       begin match e.texpr_node with
 	| TEstring_literal s ->
-	    let s = of_int (String.length s + 1) in
+	    let s = of_int (String.length s - 1) in
 	    { ty with ctype_node = Tarray (Valid(Int64.zero,s),ety, Some s) }
 	| _ -> ty
       end
