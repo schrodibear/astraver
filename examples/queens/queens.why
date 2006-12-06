@@ -48,14 +48,14 @@ logic pred : iset -> iset
 parameter sol : int farray array
 parameter s : int ref
 
-parameter col : int array
+parameter col : int farray ref
 parameter k : int ref
 
 parameter register_solution : unit -> 
   { } unit reads col writes s,sol { s=s@+1 }
 
 let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
-  { k >= 0 }
+  { 0 <= k and k+card(a)=N }
   if card a = 0 then begin
     register_solution void;
     1
@@ -66,11 +66,15 @@ let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
     while card !e > 0 do
       { invariant 
 	  included(e,e@L) and
-	  f = s - s@L and f >= 0
+	  f = s - s@L and f >= 0 and
+          k = k@L
         variant card(e) }
       let d = min_elt !e in
       e := remove d !e;
-      f := !f + count (remove d a) (succ (add d b)) (pred (add d c))
+      col := update !col !k d;
+      k := !k + 1;
+      f := !f + count (remove d a) (succ (add d b)) (pred (add d c));
+      k := !k - 1
     done;
     !f
   end
@@ -78,6 +82,7 @@ let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
 
 logic below_N : iset
 axiom below_N_def : forall i:int. in_(i,below_N) <-> 0<=i<N
+axiom below_N_card : card(below_N) = N
 
 let queens () =
   { s = 0 and k = 0 }
