@@ -45,7 +45,7 @@ logic pred : iset -> iset
 
 (* code *)
 
-parameter sol : int farray array
+parameter sol : int farray farray ref
 parameter s : int ref
 
 parameter col : int farray ref
