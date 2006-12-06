@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.154 2006-12-06 09:35:21 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.155 2006-12-06 13:24:29 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -1158,8 +1158,9 @@ let decl d =
 	    | Tvar s -> ()
 	    | Tfun _ -> ()
 	    | Tunion _ -> ()
-	    | Tarray (_,_,None) -> if ty.ctype_ghost then () else assert false
-	    | Tstruct _  -> assert false
+	    | Tarray (_,_,None) -> 
+		if ty.ctype_ghost then () else assert false
+	    | Tstruct _ -> assert false
 	    | Tarray (_,typ, Some s) ->
 		lprintf "adding implicit invariant for type of %s@." 
 		 v.var_name;

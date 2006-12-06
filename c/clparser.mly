@@ -363,6 +363,7 @@ type_specifier:
 | INT { Cast_misc.noattr (CTint (Signed, Int)) }
 | FLOAT { Cast_misc.noattr (CTfloat Float) }
 | DOUBLE { Cast_misc.noattr (CTfloat Double) }
+| IDENTIFIER { Cast_misc.noattr (CTvar $1) }
 ;
 
 parameters:

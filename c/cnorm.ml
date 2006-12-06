@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.89 2006-12-06 13:01:03 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.90 2006-12-06 13:24:29 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -1357,11 +1357,18 @@ let global_decl e1 loc =
       let cinit = 
 	match cinit with
 	  | None -> None
-	  | Some (Iexpr t) -> Some(Iexpr (expr_of_term (term t)))
+	  | Some (Iexpr t) -> Some(Iexpr (expr (texpr_of_term t)))
 	  | _ -> assert false
       in
       Info.set_assigned x;
-      Ndecl(x.var_type,x,cinit)
+      if var_is_referenced_or_struct_or_union x
+      then
+	begin
+	  set_var_type (Var_info x) (c_array_size (Valid(Int64.zero,Int64.one))
+				       x.var_type Int64.one) false;
+	  Ndecl(x.var_type,x,ilist cinit)
+	end
+      else Ndecl(x.var_type,x,cinit)
   | Ttype s ->
       Ntype s
       
