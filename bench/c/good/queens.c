@@ -89,7 +89,7 @@ int count_bits(int x) {
 /*@ logic int all_ones(int n) */ // this is 2^n-1, that 11...1 with n ones
 
 /*@ axiom all_ones_def : \forall int n; 
-  @   \forall int i; b_in(i, all_ones(n)) => 0 <= i < n
+  @   \forall int i; b_in(i, all_ones(n)) <=> 0 <= i < n
   @*/   
 
 /* @ axiom help_1: \forall int a, int n, int i;
@@ -100,6 +100,13 @@ int count_bits(int x) {
 
 //@ axiom nbits_all_ones : \forall int n; nbits(all_ones(n))==n
 
+/*@ axiom b_in_lsl : \forall int i, int x;
+  @   b_in(i,x) <=> b_in(i+1, x*2)
+  @*/
+
+/*@ axiom b_in_lsr : \forall int i, int x; i>0 =>
+  @   (b_in(i,x) <=> b_in(i-1, x/2))
+  @*/
 
 // t1: termination of the for loop
 int t1(int a, int b, int c){
@@ -139,9 +146,9 @@ int** sol; // sol[i] is the i-th solution
 /*@ axiom dont_bother_me_I_am_a_ghost_2 : 
   @   \forall int i, int j; \valid(sol[i]+j) */
 
-int s = 0; // next empty slot for a solution
+int s = 0; // next empty slot in sol for a solution
 
-int *col; // current solution being built
+int* col; // current solution being built
 int k;    // current row in the current solution
 
 // s stores a partial solution, for the rows 0..k-1
@@ -153,24 +160,46 @@ int k;    // current row in the current solution
   @ }
   @*/
 
-/*@ predicate solution(int *s) { partial_solution(N(), s) } */
+/*@ predicate solution(int* s) { partial_solution(N(), s) } */
+
+// lexicographic order on the solutions
+/*@ predicate lt_sol(int* s1, int* s2) {
+  @   \exists int i; 
+  @      0 <= i < N() && 
+  @      (\forall int j; 0 <= j < i => s1[j]==s2[j]) &&
+  @      s1[i] < s2[i]
+  @ }
+  @*/
+
+/*@ predicate eqk_sol(int k, int* s1, int* s2) {
+  @   \forall int i; 0 <= i < k => s1[i]==s2[i]
+  @ }
+  @*/
+
+/*@ predicate eq_sol(int* s1, int* s2) { eqk_sol(N(), s1, s2) } */
 
 /*@ requires solution(col)
   @ assigns  s, sol[s][0..N()-1]
-  @ ensures  s==\old(s)+1 && \forall int i; sol[\old(s)][i]==col[i]
+  @ ensures  s==\old(s)+1 && eq_sol(sol[\old(s)], col)
   @*/
 void store_solution();
 
 /*@ requires
   @   k >= 0 && nbits(a) + k == N() &&
-  @   included(a,all_ones(N())) && 
-  @   (* bits(a)+bits(col[0..k-1])=all_ones(N()) *)
+  @   bits_a:: (\forall int i; b_in(i,a) <=> 
+  @               (0<=i<N() && \forall int j; 0<=j<k => !b_in(i,col[j]))) &&
+  @   bits_b:: (\forall int i; i>=0 => (b_in(i,b) <=> 
+  @               (\exists int j; 0<=j<k && col[j] == singleton(i+j-k)))) &&
+  @   bits_c:: (\forall int i; i>=0 => (b_in(i,c) <=> 
+  @               (\exists int j; 0<=j<k && col[j] == singleton(i+k-j)))) &&
   @   s >= 0 && partial_solution(k, col)
   @ assigns
   @   col[k..], s, k, sol[s..][..]
   @ ensures  
   @   \result == s - \old(s) && \result >= 0 &&
-  @   k == \old(k)
+  @   k == \old(k) &&
+  @   \forall int* u; ((solution(u) && eqk_sol(k,col,u)) <=>
+  @                    (\exists int i; \old(s)<=i<s && eq_sol(u, sol[i])))
   @*/
 int t3(int a, int b, int c){
   int d=0, e=a&~b&~c, f=1;
@@ -196,8 +225,12 @@ int t3(int a, int b, int c){
   return f;
 }
 
-/*@ requires n == N() && s == 0 && k == 0
-  @ ensures \result == s
+/*@ requires 
+  @   n == N() && s == 0 && k == 0
+  @ ensures 
+  @   \result == s &&
+  @   \forall int* u; 
+  @      solution(u) <=> (\exists int i; 0<=i<\result && eq_sol(u,sol[i]))
   @*/
 int queens(int n) {
   return t3(~(~0<<n),0,0);
