@@ -51,13 +51,13 @@ typedef struct S {
   int b;
 } S;
 
-/*@ ghost S tab*/
+/*@ghost S tab[]*/
 
 
-/*@ ensures tab.a == 1*/
+/*@ensures tab[0].a == 1*/
 void h (){
   struct S a ;
   a.a = 1;
-  /*@  set tab = a*/
+  /*@set tab[0] = a*/
 }
 
