@@ -1,8 +1,14 @@
 
+WHY=../../bin/why.opt
+GWHY=../../bin/gwhy.opt
 OPT=--no-arrays
 
 gwhy:
-	ghwy $(OPT) queens.why
+	$(GWHY) $(OPT) queens.why
 
 gwhy.split:
-	gwhy $(OPT) -split-user-conj queens.why
+	$(GWHY) $(OPT) -split-user-conj queens.why
+
+coq:
+	$(WHY) $(OPT) --coq --coq-tactic "admit" queens.why
+	coqide queens_why.v

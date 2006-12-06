@@ -3,7 +3,7 @@
 
 logic N : int 
 
-(* abstract implementation using sets of integers *)
+(* abstract sets of integers *)
 
 type iset
 
@@ -22,14 +22,15 @@ axiom diff_def :
   forall a,b:iset. forall i:int.
     in_(i,diff(a,b)) <-> (in_(i,a) and not in_(i,b))
 
-
 logic add : int,iset -> iset
+axiom add_def : 
+  forall s:iset. forall x:int. forall i:int [in_(i,add(x,s))]. 
+    in_(i,add(x,s))  <-> (i=x or in_(i,s))
 
 logic remove : int,iset -> iset
 axiom remove_def : 
   forall s:iset. forall x:int. forall i:int [in_(i,remove(x,s))]. 
     in_(i,remove(x,s))  <-> (in_(i,s) and i<>x)
-
 axiom remove_card : 
   forall s:iset. forall i:int.
     in_(i,s) -> card(remove(i,s)) = card(s) - 1
@@ -41,21 +42,69 @@ axiom min_elt_def :
      forall i:int. in_(i,s) -> min_elt(s) <= i)
 
 logic succ : iset -> iset
+axiom succ_def :  
+  forall s:iset. forall i:int. 0<=i -> (in_(i+1,succ(s)) <-> in_(i,s))
+
 logic pred : iset -> iset
+axiom pred_def : 
+  forall s:iset. forall i:int. 0<=i -> (in_(i,pred(s)) <-> in_(i+1,s))
+
+(* logical arrays *)
+
+type 'a arr
+
+logic acc : 'a arr,int -> 'a
+logic upd : 'a arr,int,'a -> 'a arr
+
+axiom acc_upd_eq : 
+  forall a:'a arr. forall i:int. forall v:'a. 
+    acc(upd(a,i,v),i) = v
+axiom acc_upd_neq : 
+  forall a:'a arr. forall i,j:int. forall v:'a. 
+    i<>j -> acc(upd(a,i,v),j) = acc(a,j)
+
+predicate assigns(t:'a arr, u:'a arr, i:int) =
+  (* only the segment [i..] may differ between t and u *)
+  forall k:int. k < i -> acc(t,k)=acc(u,k)
+
+(* solutions *)
+
+predicate partial_solution(k:int, s:int arr) =
+  forall i:int. 0 <= i < k ->
+    0 <= acc(s,i) < N and
+    forall j:int. 
+      0 <= j < i -> acc(s,i) <> acc(s,j) and
+                    acc(s,i) - acc(s,j) <> i - j and
+	            acc(s,i) - acc(s,j) <> j - i
+
+predicate solution(s:int arr) = partial_solution(N, s)
+
+(*lemma*)axiom partial_solution_assigns:
+   forall t,u:int arr. forall k:int.
+     partial_solution(k,t) -> assigns(t,u,k) -> partial_solution(k,u)
 
 (* code *)
 
-parameter sol : int farray farray ref
+parameter sol : int arr arr ref
 parameter s : int ref
 
-parameter col : int farray ref
+parameter col : int arr ref
 parameter k : int ref
 
 parameter register_solution : unit -> 
-  { } unit reads col writes s,sol { s=s@+1 }
+  { solution(col) } 
+  unit reads col writes s,sol 
+  { s=s@+1 and assigns(sol@,sol,s@) and acc(sol,s@)=col }
 
 let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
-  { 0 <= k and k+card(a)=N }
+  { 0 <= k and k+card(a)=N and
+    pre_a: (forall i:int. 
+	     in_(i,a) <-> 0<=i<N and forall j:int. 0<=j<k -> i<>acc(col,j)) and
+    pre_b: (forall i:int. 0<=i ->  
+             (in_(i,b) <-> exists j:int. 0<=j<k and acc(col,j)=i+j-k)) and
+    pre_c: (forall i:int. 0<=i ->  
+             (in_(i,c) <-> exists j:int. 0<=j<k and acc(col,j)=i+k-j)) and
+    partial_solution(k, col) }
   if card a = 0 then begin
     register_solution void;
     1
@@ -66,19 +115,21 @@ let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
     while card !e > 0 do
       { invariant 
 	  included(e,e@L) and
-	  f = s - s@L and f >= 0 and
-          k = k@L
+	  f = s - s@L and f >= 0 and k = k@L and
+          (*PROVABLE*) partial_solution(k,col) and
+          assigns(col@L,col,k@L) and assigns(sol@L,sol,s@L)
         variant card(e) }
       let d = min_elt !e in
       e := remove d !e;
-      col := update !col !k d;
+      col := upd !col !k d;
       k := !k + 1;
       f := !f + count (remove d a) (succ (add d b)) (pred (add d c));
       k := !k - 1
     done;
     !f
   end
-  { result = s-s@ and result >= 0 and k = k@ }    
+  { result = s-s@ and result >= 0 and k = k@ and
+    assigns(col@,col,k) and assigns(sol@,sol,s@) }    
 
 logic below_N : iset
 axiom below_N_def : forall i:int. in_(i,below_N) <-> 0<=i<N
