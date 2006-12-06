@@ -1,0 +1,85 @@
+
+(* N queens on a NxN chessboard *)
+
+logic N : int 
+
+(* abstract implementation using sets of integers *)
+
+type iset
+
+logic in_ : int, iset -> prop
+
+predicate included(a:iset, b:iset) = forall i:int. in_(i,a) -> in_(i,b)
+
+logic card : iset -> int
+axiom card_nonneg : forall s:iset. card(s) >= 0
+
+logic empty : iset
+axiom empty_def : forall i:int. not in_(i,empty)
+
+logic diff : iset,iset -> iset
+axiom diff_def : 
+  forall a,b:iset. forall i:int.
+    in_(i,diff(a,b)) <-> (in_(i,a) and not in_(i,b))
+
+
+logic add : int,iset -> iset
+
+logic remove : int,iset -> iset
+axiom remove_def : 
+  forall s:iset. forall x:int. forall i:int [in_(i,remove(x,s))]. 
+    in_(i,remove(x,s))  <-> (in_(i,s) and i<>x)
+
+axiom remove_card : 
+  forall s:iset. forall i:int.
+    in_(i,s) -> card(remove(i,s)) = card(s) - 1
+
+logic min_elt : iset -> int
+axiom min_elt_def : 
+  forall s:iset. card(s) > 0 -> 
+    (in_(min_elt(s), s) and
+     forall i:int. in_(i,s) -> min_elt(s) <= i)
+
+logic succ : iset -> iset
+logic pred : iset -> iset
+
+(* code *)
+
+parameter sol : int farray array
+parameter s : int ref
+
+parameter col : int array
+parameter k : int ref
+
+parameter register_solution : unit -> 
+  { } unit reads col writes s,sol { s=s@+1 }
+
+let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
+  { k >= 0 }
+  if card a = 0 then begin
+    register_solution void;
+    1
+  end else begin
+    let f = ref 0 in
+    let e = ref (diff (diff a b) c) in
+    L:
+    while card !e > 0 do
+      { invariant 
+	  included(e,e@L) and
+	  f = s - s@L and f >= 0
+        variant card(e) }
+      let d = min_elt !e in
+      e := remove d !e;
+      f := !f + count (remove d a) (succ (add d b)) (pred (add d c))
+    done;
+    !f
+  end
+  { result = s-s@ and result >= 0 and k = k@ }    
+
+logic below_N : iset
+axiom below_N_def : forall i:int. in_(i,below_N) <-> 0<=i<N
+
+let queens () =
+  { s = 0 and k = 0 }
+  count below_N empty empty
+  { result = s }
