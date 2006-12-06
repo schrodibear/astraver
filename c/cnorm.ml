@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.88 2006-11-27 15:46:34 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.89 2006-12-06 13:01:03 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -359,16 +359,21 @@ and expr_node loc ty t =
       | TEarrget (lvalue,texpr) -> 
 	  (* t[e] -> *(t+e) *)
 	  let is_valid =
-	    match lvalue.texpr_type.Ctypes.ctype_node with
-	      | Tarray(Valid(a,b),_,Some n) ->
-		  assert (b = n);
-		  begin
-		    try
-		      let i = Ctyping.eval_const_expr_noerror texpr in
-		      Valid(Int64.sub a i,Int64.sub b i)
-		    with Invalid_argument _ -> Not_valid
-		  end
-	      | _ -> Not_valid
+	    if lvalue.texpr_type.Ctypes.ctype_ghost 
+	    then Valid(Int64.min_int,Int64.max_int)
+	    else
+	      begin
+		match lvalue.texpr_type.Ctypes.ctype_node with
+		  | Tarray(Valid(a,b),_,Some n) ->
+		      assert (b = n);
+		      begin
+			try
+			  let i = Ctyping.eval_const_expr_noerror texpr in
+			  Valid(Int64.sub a i,Int64.sub b i)
+			with Invalid_argument _ -> Not_valid
+		      end
+		  | _ -> Not_valid
+	      end
 	  in
 	  let info = make_field ty in
 	  let info = declare_arrow_var info in
@@ -936,6 +941,86 @@ let rec init_expr loc t lvalue initializers =
     | Ctypes.Tvar _ -> assert false
     | Tvoid -> assert false
 
+let rec texpr_of_term (t : tterm) : texpr = 
+ {
+  texpr_node = 
+    begin
+      match t.term_node with 
+	| Tconstant c ->  TEconstant c
+	| Tvar v -> TEvar (Var_info v)
+	| Tapp _ -> error t.term_loc 
+	      "logic function can't be used with ghost variables"
+	| Tunop (t , term) -> TEunary(
+	    begin  match t with 
+	      | Clogic.Uplus -> Uplus
+	      | Clogic.Unot -> Unot
+	      | Clogic.Uminus -> Uminus 
+	      | Clogic.Utilde -> Utilde 
+	      | Clogic.Ustar -> assert false
+	      | Clogic.Uamp -> assert false
+	      | Clogic.Ufloat_of_int -> Ufloat_of_int
+	      | Clogic.Uint_of_float -> Uint_of_float
+	      | Clogic.Ufloat_conversion -> Ufloat_conversion
+	      | Clogic.Usqrt_real
+	      | Clogic.Uabs_real
+	      | Clogic.Uround_error
+	      | Clogic.Utotal_error
+	      | Clogic.Uexact
+	      | Clogic.Umodel -> assert false
+	    end,
+	    (texpr_of_term term))     
+	| Tbinop (t1, b, t2) -> 
+	    let t1 = (texpr_of_term t1) in
+	    let t2 = (texpr_of_term t2) in
+	    TEbinary 
+	      (t1,
+	       begin match b,t1.texpr_type.Ctypes.ctype_node,
+	       t2.texpr_type.Ctypes.ctype_node with
+		 | Clogic.Badd,Tint i , Tint _ -> Badd_int i
+		 | Clogic.Badd,Tfloat fk , Tfloat _ -> Badd_float fk
+		 | Clogic.Badd,Tpointer _ , Tint _ -> Badd_pointer_int
+		 | Clogic.Bsub,Tint i , Tint _ -> Bsub_int i
+		 | Clogic.Bsub,Tfloat fk , Tfloat _ -> Bsub_float fk
+		 | Clogic.Bsub,Tpointer _ , Tint _ -> Bsub_pointer
+		 | Clogic.Bmul,Tfloat fk , Tfloat _ -> Bmul_float fk
+		 | Clogic.Bmul,Tint i , Tint _ -> Bmul_int i
+		 | Clogic.Bdiv,Tfloat fk , Tfloat _ -> Bdiv_float fk
+		 | Clogic.Bdiv,Tint i , Tint _ -> Bdiv_int i
+		 | Clogic.Bmod,Tint i ,Tint _ -> Bmod_int i
+		 | Clogic.Badd,Tarray _ , Tint _ -> Badd_pointer_int
+		 | Clogic.Bsub,Tarray _ , Tint _ -> Bsub_pointer   
+		 | _ -> error  t.term_loc 
+		     "this operation can't be used with ghost variables"
+	       end,
+	       t2)
+	| Tdot (t,v) -> TEdot (texpr_of_term t,v)
+	| Tarrow (t,v) -> TEarrow (texpr_of_term t,v)
+	| Tarrget (t1,t2) -> TEarrget (texpr_of_term t1, texpr_of_term t2)
+	| Tif (t1,t2,t3)-> TEcond 
+	      (texpr_of_term t1,texpr_of_term t2,texpr_of_term t3)
+	| Told t -> error t.term_loc 
+	      "old can't be used here"
+	| Tat (t , s)-> error t.term_loc 
+	      "@ can't be used here"
+	| Tbase_addr t -> error t.term_loc 
+	      "base_addr can't be used here"
+	| Toffset t -> error t.term_loc 
+	      "offset can't be used here"
+	| Tblock_length t -> error t.term_loc 
+	      "block_length can't be used here"
+	| Tarrlen t -> error t.term_loc 
+	    "arrlen can't be used here"
+	| Tstrlen t -> error t.term_loc 
+	    "strlen can't be used here"
+	| Tcast (ty,t) -> TEcast(ty,texpr_of_term t)
+	| Trange _ -> 
+	    error t.term_loc "range cannot by used here"
+    end;
+    texpr_type = t.term_type;
+    texpr_loc  = t.term_loc
+ }
+
+
 let rec expr_of_term (t : nterm) : nexpr = 
  {
   nexpr_node = 
@@ -1123,7 +1208,7 @@ and statement s =
   | TSset (x, t) -> 
       NSexpr (noattr2 s.st_loc x.term_type 
 		(NEassign 
-		   (expr_of_term (term x),expr_of_term (term t))))
+		   (expr (texpr_of_term x),expr (texpr_of_term t))))
   in
   { nst_node = nst;
     nst_break = s.st_break;

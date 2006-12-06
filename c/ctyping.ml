@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.138 2006-12-06 09:26:54 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.139 2006-12-06 13:01:03 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -333,13 +333,16 @@ let make_shift e1 e2 valid ty n =
   let is_valid =
       match valid, n with
 	| Valid(a,b), Some n ->
-	    assert (b = n);
-	    begin
-	      try
-		let i = eval_const_expr_noerror e2 in
-		Valid(Int64.sub a i, Int64.sub b i)
-	      with Invalid_argument _ -> Not_valid
-	    end
+	    if e1.texpr_type.ctype_ghost 
+	    then Valid(Int64.min_int,Int64.max_int)
+	    else
+	      begin
+	      assert (b = n);
+		try
+		  let i = eval_const_expr_noerror e2 in
+		  Valid(Int64.sub a i, Int64.sub b i)
+		with Invalid_argument _ -> Not_valid
+	      end;
 	| _, _ -> Not_valid
   in
   let ty1 = e1.texpr_type in
@@ -353,16 +356,17 @@ let remove_top_conversion e = match e.texpr_node with
 
 (*s Types *)
 
-let rec type_type ?(parameters=false) loc env ty = 
-  { Ctypes.ctype_node = type_type_node ~parameters:parameters loc env 
-      ty.Cast.ctype_node;
+let rec type_type ?(ghost=false) ?(parameters=false) loc env ty = 
+  { Ctypes.ctype_node = type_type_node ~ghost:ghost ~parameters:parameters loc env 
+      ty;
     ctype_storage = ty.Cast.ctype_storage ;
     ctype_const = ty.Cast.ctype_const ;
     ctype_volatile = ty.Cast.ctype_volatile;
     ctype_ghost = false;
   }
 
-and type_type_node ?(parameters=false) loc env = function
+and type_type_node ?(ghost=false) ?(parameters=false) loc env ty = 
+  match ty.Cast.ctype_node with
   | CTvoid -> Tvoid
   | CTfloat x -> 
       begin match x with Real -> () | _ -> use_floats := true end; Tfloat x
@@ -373,14 +377,21 @@ and type_type_node ?(parameters=false) loc env = function
       (try (find_typedef x).ctype_node with Not_found -> assert false)
   | CTarray (tyn, None) ->
       Tarray (Not_valid,type_type loc env tyn, None)
-  | CTarray (tyn, Some e) -> 
-      if parameters then
-	Tarray (Not_valid,type_type loc env tyn, None)
-      else
-	let n = eval_const_expr  (type_int_expr env e) in
-	Tarray (Valid(Int64.zero,n),type_type loc env tyn, Some n)
+  | CTarray (tyn, Some e) ->
+      if ghost 
+      then 
+	Tarray(Valid(Int64.min_int,Int64.max_int),type_type loc env tyn,None)
+      else begin
+	  if parameters 
+	  then Tarray (Not_valid,type_type loc env tyn, None)
+	  else
+	    let n = eval_const_expr  (type_int_expr env e) in
+	    Tarray (Valid(Int64.zero,n),type_type loc env tyn, Some n)
+	end
   | CTpointer tyn -> 
-      Tpointer (Not_valid,type_type loc env tyn)
+      if ghost then Tpointer (Not_valid,type_type loc env tyn)
+      else
+	Tpointer (Not_valid,type_type loc env tyn)
   | CTstruct (x,Tag) -> Env.find_tag_type loc env (Tstruct x)  
   | CTunion (x,Tag)  -> Env.find_tag_type loc env (Tunion x)
   | CTenum (x,Tag)  -> Env.find_tag_type loc env (Tenum x)
@@ -1295,7 +1306,7 @@ let type_spec_decl loc = function
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_def (pl, p))
   | LDghost (ty,x,cinit) -> 
-      let ty = type_type loc (Env.empty ()) ty in
+      let ty = type_type ~ghost:true loc (Env.empty ()) ty in
       let info = add_ghost loc x ty (default_var_info x) in 
       set_static info;
       set_var_type (Var_info info) {ty with Ctypes.ctype_ghost = true} false;

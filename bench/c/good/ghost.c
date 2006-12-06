@@ -35,14 +35,14 @@ int f() {
 
 /******** ghost arrays *******/
 
-/*@ ghost int t[10]*/
+/*@ ghost int t[]*/
 
 int u[5];
 
 /*@ ensures u[0] == \old(u[0]) && t[0] == 3 */
 void g (){
   u[1]= 3;
-  /*@ set t[0] = u[1]*/
+  /*@set t[0] = u[1]*/
 }
 
 
@@ -51,10 +51,10 @@ typedef struct S {
   int b;
 } S;
 
-/*@ ghost S tab*/
+/* @ ghost S tab*/
 
 
-/*@ ensures tab.a == 1*/
+/* @ ensures tab.a == 1*/
 void h (){
   struct S a ;
   a.a = 1;
