@@ -12,3 +12,7 @@ gwhy.split:
 coq:
 	$(WHY) $(OPT) --coq --coq-tactic "admit" queens.why
 	coqide queens_why.v
+
+coq.split:
+	$(WHY) $(OPT) -split-user-conj --coq --coq-tactic "admit" queens.why
+	coqide queens_why.v

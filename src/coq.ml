@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.156 2006-11-24 13:38:11 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.157 2006-12-06 16:21:07 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -768,9 +768,12 @@ let reprint_logic fmt id t =
     "@[<hov 2>(*Why logic*) Definition %s :@ @[%a@].@]@\n" 
     id print_logic_type t
 
+let is_polymorphic t = not (Env.Vset.is_empty t.Env.scheme_vars)
+
 let print_logic fmt id t =
   reprint_logic fmt id t;
-  fprintf fmt "Admitted.@\n"
+  fprintf fmt "Admitted.@\n";
+  if is_polymorphic t then fprintf fmt "Implicit Arguments %s.@\n" id
 
 let print_predicate_scheme fmt p =
   let (l,p) = Env.specialize_predicate p in
@@ -783,7 +786,9 @@ let reprint_axiom fmt id p =
 
 let print_axiom fmt id p = 
   reprint_axiom fmt id p;
-  fprintf fmt "Admitted.@\n"
+  fprintf fmt "Admitted.@\n";
+  if is_polymorphic p then fprintf fmt "Implicit Arguments %s.@\n" id
+
 
 let reprint_predicate fmt id p =
   let (l,(bl,p)) = Env.specialize_predicate_def p in
@@ -804,7 +809,9 @@ let reprint_predicate fmt id p =
     (print_list space print_binder) bl
     print_predicate p 
 
-let print_predicate fmt id p = reprint_predicate fmt id p
+let print_predicate fmt id p = 
+  reprint_predicate fmt id p;
+  if is_polymorphic p then fprintf fmt "Implicit Arguments %s.@\n" id
 
 let reprint_type fmt id vl =
   fprintf fmt "@[<hov 2>(*Why type*) Definition %s: @[%aSet@].@]@\n"
@@ -833,8 +840,9 @@ let reprint_function fmt id p =
     (print_list space print_binder) bl
     print_term e 
 
-let print_function fmt id p = reprint_function fmt id p
-
+let print_function fmt id p = 
+  reprint_function fmt id p;
+  if is_polymorphic p then fprintf fmt "Implicit Arguments %s.@\n" id
 
 
 open Regen
