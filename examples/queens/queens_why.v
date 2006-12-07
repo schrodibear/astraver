@@ -152,7 +152,8 @@ Admitted.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (s: Z),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -186,7 +187,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -224,7 +225,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -262,7 +263,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -300,7 +301,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -338,7 +339,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -378,7 +379,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -418,7 +419,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -456,7 +457,8 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (s: Z),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -489,7 +491,7 @@ Save.
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -521,7 +523,8 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (s: Z),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -553,7 +556,8 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (s: Z),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -585,7 +589,8 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (s: Z),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -619,7 +624,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -653,7 +658,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -692,7 +697,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -728,7 +733,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -765,7 +770,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -829,7 +834,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -893,7 +898,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -958,7 +963,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1023,7 +1028,72 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  0 <= s0.
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_23 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1082,7 +1152,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_23 : 
+(*Why goal*) Lemma count_po_24 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1090,7 +1160,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1144,12 +1214,38 @@ Save.
   forall (HW_17: (in_ i (remove (min_elt e) a))),
   (* pre_a *) i < N.
 Proof.
+(***
+intros; unfold partial_solution.
+intros.
+assert (i<k0 \/ i=k0). omega.
+destruct H0.
+unfold partial_solution in HW_7.
+subst col1.
+rewrite (acc_upd_neq).
+decompose [and] HW_7.
+generalize (H5 i); clear H5.
+intros; split.
+intuition.
+intros.
+rewrite acc_upd_neq.
+assert (0<=i<k0). omega.
+generalize (H5 H9); clear H5; intros (_,h).
+generalize (h j); intuition.
+omega.
+omega.
+subst col1 i.
+rewrite acc_upd_eq.
+split.
 admit.
-(* FILL PROOF HERE *)
+intros; rewrite acc_upd_neq.
+decompose [and] HW_7.
+red in H5.
+***)
+admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_24 : 
+(*Why goal*) Lemma count_po_25 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1157,7 +1253,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1213,38 +1309,12 @@ Save.
   forall (HW_18: 0 <= j /\ j < k1),
   (* pre_a *) i <> (acc col1 j).
 Proof.
-(***
-intros; unfold partial_solution.
-intros.
-assert (i<k0 \/ i=k0). omega.
-destruct H0.
-unfold partial_solution in HW_7.
-subst col1.
-rewrite (acc_upd_neq).
-decompose [and] HW_7.
-generalize (H5 i); clear H5.
-intros; split.
-intuition.
-intros.
-rewrite acc_upd_neq.
-assert (0<=i<k0). omega.
-generalize (H5 H9); clear H5; intros (_,h).
-generalize (h j); intuition.
-omega.
-omega.
-subst col1 i.
-rewrite acc_upd_eq.
-split.
 admit.
-intros; rewrite acc_upd_neq.
-decompose [and] HW_7.
-red in H5.
-***)
-admit.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_25 : 
+(*Why goal*) Lemma count_po_26 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1252,7 +1322,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1312,7 +1382,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_26 : 
+(*Why goal*) Lemma count_po_27 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1320,7 +1390,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1381,7 +1451,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_27 : 
+(*Why goal*) Lemma count_po_28 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1389,7 +1459,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1450,7 +1520,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_28 : 
+(*Why goal*) Lemma count_po_29 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1458,7 +1528,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1520,7 +1590,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_29 : 
+(*Why goal*) Lemma count_po_30 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1528,7 +1598,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1589,7 +1659,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_30 : 
+(*Why goal*) Lemma count_po_31 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1597,7 +1667,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1654,7 +1724,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_31 : 
+(*Why goal*) Lemma count_po_32 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1662,7 +1732,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1712,7 +1782,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -1752,7 +1823,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_32 : 
+(*Why goal*) Lemma count_po_33 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1760,7 +1831,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1810,7 +1881,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -1850,7 +1922,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_33 : 
+(*Why goal*) Lemma count_po_34 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1858,7 +1930,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -1908,7 +1980,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -1948,7 +2021,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_34 : 
+(*Why goal*) Lemma count_po_35 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1956,7 +2029,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2006,7 +2079,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2046,7 +2120,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_35 : 
+(*Why goal*) Lemma count_po_36 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2054,7 +2128,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2104,7 +2178,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2144,7 +2219,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_36 : 
+(*Why goal*) Lemma count_po_37 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2152,7 +2227,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2202,7 +2277,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2242,7 +2318,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_37 : 
+(*Why goal*) Lemma count_po_38 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2250,7 +2326,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2300,7 +2376,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2340,7 +2417,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_38 : 
+(*Why goal*) Lemma count_po_39 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2348,7 +2425,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2398,7 +2475,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2441,108 +2519,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_39 : 
-  forall (a: iset),
-  forall (b: iset),
-  forall (c: iset),
-  forall (col: ((arr) Z)),
-  forall (k: Z),
-  forall (s: Z),
-  forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
-                (* pre_a *)
-                ((forall (i:Z),
-                  ((in_ i a) <-> (0 <= i /\ i < N) /\
-                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
-                (* pre_b *)
-                ((forall (i:Z),
-                  (0 <= i ->
-                   ((in_ i b) <->
-                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                     (i + j - k))))) /\
-                (* pre_c *)
-                ((forall (i:Z),
-                  (0 <= i ->
-                   ((in_ i c) <->
-                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                     (i + k - j))))) /\
-                (partial_solution k col))))),
-  forall (HW_7: (card a) <> 0),
-  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\
-                   (exists di:Z,
-                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
-                    (eq_prefix (upd col k di) t (k + 1))) <->
-                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
-                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
-                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\
-                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
-                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
-                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
-  forall (HW_12: (card e) > 0),
-  forall (e0: iset),
-  forall (HW_13: e0 = (remove (min_elt e) e)),
-  forall (col1: ((arr) Z)),
-  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
-  forall (k1: Z),
-  forall (HW_15: k1 = (k0 + 1)),
-  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (succ (add (min_elt e) b))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + j - k1))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (pred (add (min_elt e) c))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + k1 - j))))) /\
-                 (partial_solution k1 col1))))),
-  forall (result: Z),
-  forall (col2: ((arr) Z)),
-  forall (k2: Z),
-  forall (s1: Z),
-  forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\ (eq_prefix col2 t k2) <->
-                   (exists i:Z, (s0 <= i /\ i < s1) /\
-                    (eq_sol t (acc sol1 i)))))),
-  forall (f0: Z),
-  forall (HW_28: f0 = (f + result)),
-  forall (k3: Z),
-  forall (HW_29: k3 = (k2 - 1)),
-  forall (t: ((arr) Z)),
-  forall (HW_31: (exists i:Z, (s <= i /\ i < s1) /\ (eq_sol t (acc sol1 i)))),
-  (solution t).
-Proof.
-admit.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_40 : 
+Lemma lemma_count_40 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2638,12 +2615,21 @@ Save.
   (exists di:Z, (in_ di (diff (diff (diff a b) c) e0)) /\
    (eq_prefix (upd col2 k3 di) t (k3 + 1))).
 Proof.
+intuition.
+destruct HW_31 as (i,(hi,hsoli)).
+assert (s <= i < s0 \/ s0 <= i < s1). omega. intuition.
+clear H22 H24 H25 H33.
+generalize (H21 t); intuition.
+clear H22. destruct H25.
+exists i; intuition.
+unfold eq_prefix in H31.
+rewrite H31; intuition.
 admit.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_41 : 
+(*Why goal*) Lemma count_po_40 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2651,7 +2637,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2701,7 +2687,211 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  forall (t: ((arr) Z)),
+  forall (HW_31: (exists i:Z, (s <= i /\ i < s1) /\ (eq_sol t (acc sol1 i)))),
+  (solution t).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_41 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  forall (t: ((arr) Z)),
+  forall (HW_31: (exists i:Z, (s <= i /\ i < s1) /\ (eq_sol t (acc sol1 i)))),
+  (exists di:Z, (in_ di (diff (diff (diff a b) c) e0)) /\
+   (eq_prefix (upd col2 k3 di) t (k3 + 1))).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_42 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2741,7 +2931,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_42 : 
+(*Why goal*) Lemma count_po_43 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2749,7 +2939,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2799,7 +2989,8 @@ Save.
   forall (k1: Z),
   forall (HW_15: k1 = (k0 + 1)),
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\ 0 <=
+                 s0 /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2839,7 +3030,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_43 : 
+(*Why goal*) Lemma count_po_44 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2847,7 +3038,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2897,7 +3088,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_44 : 
+(*Why goal*) Lemma count_po_45 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2905,7 +3096,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -2955,7 +3146,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_45 : 
+(*Why goal*) Lemma count_po_46 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2963,7 +3154,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -3013,7 +3204,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_46 : 
+(*Why goal*) Lemma count_po_47 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -3021,7 +3212,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -3065,64 +3256,6 @@ Save.
                    (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
   forall (HW_32: (card e) <= 0),
   (eq_prefix col col0 k0).
-Proof.
-admit.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_47 : 
-  forall (a: iset),
-  forall (b: iset),
-  forall (c: iset),
-  forall (col: ((arr) Z)),
-  forall (k: Z),
-  forall (s: Z),
-  forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
-                (* pre_a *)
-                ((forall (i:Z),
-                  ((in_ i a) <-> (0 <= i /\ i < N) /\
-                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
-                (* pre_b *)
-                ((forall (i:Z),
-                  (0 <= i ->
-                   ((in_ i b) <->
-                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                     (i + j - k))))) /\
-                (* pre_c *)
-                ((forall (i:Z),
-                  (0 <= i ->
-                   ((in_ i c) <->
-                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                     (i + k - j))))) /\
-                (partial_solution k col))))),
-  forall (HW_7: (card a) <> 0),
-  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\
-                   (exists di:Z,
-                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
-                    (eq_prefix (upd col k di) t (k + 1))) <->
-                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
-                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
-                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\
-                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
-                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
-                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
-  forall (HW_32: (card e) <= 0),
-  (eq_prefix sol sol0 s).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -3261,7 +3394,65 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  (eq_prefix sol sol0 s).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_49 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -3307,66 +3498,6 @@ Save.
   forall (t: ((arr) Z)),
   forall (HW_33: (solution t) /\ (eq_prefix col0 t k0)),
   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i))).
-Proof.
-admit.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_49 : 
-  forall (a: iset),
-  forall (b: iset),
-  forall (c: iset),
-  forall (col: ((arr) Z)),
-  forall (k: Z),
-  forall (s: Z),
-  forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
-                (* pre_a *)
-                ((forall (i:Z),
-                  ((in_ i a) <-> (0 <= i /\ i < N) /\
-                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
-                (* pre_b *)
-                ((forall (i:Z),
-                  (0 <= i ->
-                   ((in_ i b) <->
-                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                     (i + j - k))))) /\
-                (* pre_c *)
-                ((forall (i:Z),
-                  (0 <= i ->
-                   ((in_ i c) <->
-                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                     (i + k - j))))) /\
-                (partial_solution k col))))),
-  forall (HW_7: (card a) <> 0),
-  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\
-                   (exists di:Z,
-                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
-                    (eq_prefix (upd col k di) t (k + 1))) <->
-                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
-                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
-                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\
-                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
-                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
-                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
-  forall (HW_32: (card e) <= 0),
-  forall (t: ((arr) Z)),
-  forall (HW_34: (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
-  (solution t).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -3448,7 +3579,67 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  forall (t: ((arr) Z)),
+  forall (HW_34: (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
+  (solution t).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_51 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
                 (* pre_a *)
                 ((forall (i:Z),
                   ((in_ i a) <-> (0 <= i /\ i < N) /\
@@ -3536,9 +3727,7 @@ Save.
   forall (k: Z),
   forall (s: Z),
   forall (HW_1: s = 0 /\ k = 0),
-  forall (i: Z),
-  forall (HW_2: (in_ i below_N)),
-  (* pre_a *) 0 <= i.
+  0 <= s.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -3551,7 +3740,7 @@ Save.
   forall (HW_1: s = 0 /\ k = 0),
   forall (i: Z),
   forall (HW_2: (in_ i below_N)),
-  (* pre_a *) i < N.
+  (* pre_a *) 0 <= i.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -3559,6 +3748,19 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma queens_po_5 : 
+  forall (k: Z),
+  forall (s: Z),
+  forall (HW_1: s = 0 /\ k = 0),
+  forall (i: Z),
+  forall (HW_2: (in_ i below_N)),
+  (* pre_a *) i < N.
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma queens_po_6 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
@@ -3574,7 +3776,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_6 : 
+(*Why goal*) Lemma queens_po_7 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
@@ -3589,7 +3791,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_7 : 
+(*Why goal*) Lemma queens_po_8 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
@@ -3605,7 +3807,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_8 : 
+(*Why goal*) Lemma queens_po_9 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
@@ -3620,7 +3822,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_9 : 
+(*Why goal*) Lemma queens_po_10 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
@@ -3637,7 +3839,7 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_10 : 
+(*Why goal*) Lemma queens_po_11 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
@@ -3652,53 +3854,12 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_11 : 
+(*Why goal*) Lemma queens_po_12 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
   forall (HW_1: s = 0 /\ k = 0),
   (* pre_a *) (* pre_b *) (* pre_c *) (partial_solution k col).
-Proof.
-admit.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_12 : 
-  forall (col: ((arr) Z)),
-  forall (k: Z),
-  forall (s: Z),
-  forall (sol: ((arr) ((arr) Z))),
-  forall (HW_1: s = 0 /\ k = 0),
-  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i below_N) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i empty) <->
-                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                      (i + j - k))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i empty) <->
-                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
-                      (i + k - j))))) /\
-                 (partial_solution k col))))),
-  forall (result: Z),
-  forall (col0: ((arr) Z)),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_12: result = (s0 - s) /\ result >= 0 /\ k0 = k /\
-                 (eq_prefix col col0 k0) /\ (eq_prefix sol sol0 s) /\
-                 (forall (t:((arr) Z)),
-                  ((solution t) /\ (eq_prefix col0 t k0) <->
-                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
-  result = s0.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -3756,7 +3917,48 @@ Save.
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: s = 0 /\ k = 0),
-  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\
+  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\ 0 <= s /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i below_N) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + j - k))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + k - j))))) /\
+                 (partial_solution k col))))),
+  forall (result: Z),
+  forall (col0: ((arr) Z)),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_12: result = (s0 - s) /\ result >= 0 /\ k0 = k /\
+                 (eq_prefix col col0 k0) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col0 t k0) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  result = s0.
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma queens_po_14 : 
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: s = 0 /\ k = 0),
+  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\ 0 <= s /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i below_N) <-> (0 <= i /\ i < N) /\
@@ -3793,13 +3995,13 @@ admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma queens_po_14 : 
+(*Why goal*) Lemma queens_po_15 : 
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
   forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: s = 0 /\ k = 0),
-  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\
+  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\ 0 <= s /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i below_N) <-> (0 <= i /\ i < N) /\

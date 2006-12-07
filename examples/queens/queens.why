@@ -100,7 +100,7 @@ parameter register_solution : unit ->
   { s=s@+1 and eq_prefix(sol@,sol,s@) and acc(sol,s@)=col }
 
 let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
-  { 0 <= k and k+card(a)=N and
+  { 0 <= k and k+card(a)=N and 0 <= s and
     pre_a: (forall i:int. 
 	     in_(i,a) <-> 0<=i<N and forall j:int. 0<=j<k -> i<>acc(col,j)) and
     pre_b: (forall i:int. 0<=i ->  
