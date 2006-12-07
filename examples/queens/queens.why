@@ -16,6 +16,7 @@ axiom card_nonneg : forall s:iset. card(s) >= 0
 
 logic empty : iset
 axiom empty_def : forall i:int. not in_(i,empty)
+axiom empty_card : forall s:iset. card(s)=0 <-> s=empty
 
 logic diff : iset,iset -> iset
 axiom diff_def : 
@@ -64,8 +65,8 @@ axiom acc_upd_neq :
     i<>j -> acc(upd(a,i,v),j) = acc(a,j)
 
 predicate eq_prefix(t:'a arr, u:'a arr, i:int) =
-  (* only the segment [i..] may differ between t and u *)
-  forall k:int. k < i -> acc(t,k)=acc(u,k)
+  (* t and u have the same prefix [0..i[ *)
+  forall k:int. 0 <= k < i -> acc(t,k)=acc(u,k)
 
 predicate eq_sol(t:'a arr, u:'a arr) = eq_prefix(t, u, N)
 

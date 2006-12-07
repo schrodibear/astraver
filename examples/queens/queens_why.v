@@ -29,6 +29,10 @@ Admitted.
 (*Why axiom*) Lemma empty_def : (forall (i:Z), ~(in_ i empty)).
 Admitted.
 
+(*Why axiom*) Lemma empty_card :
+  (forall (s:iset), ((card s) = 0 <-> s = empty)).
+Admitted.
+
 (*Why logic*) Definition diff : iset -> iset -> iset.
 Admitted.
 
@@ -113,9 +117,15 @@ Implicit Arguments acc_upd_eq.
 Admitted.
 Implicit Arguments acc_upd_neq.
 
-(*Why predicate*) Definition assigns (A82:Set) (t:((arr) A82))
-  (u:((arr) A82)) (i:Z) := (forall (k:Z), (k < i -> (acc t k) = (acc u k))).
-Implicit Arguments assigns.
+
+(*Why predicate*) Definition eq_prefix (A114:Set) (t:((arr) A114))
+  (u:((arr) A114)) (i:Z)
+  := (forall (k:Z), (0 <= k /\ k < i -> (acc t k) = (acc u k))).
+Implicit Arguments eq_prefix.
+
+(*Why predicate*) Definition eq_sol (A115:Set) (t:((arr) A115))
+  (u:((arr) A115)) := (eq_prefix t u N).
+Implicit Arguments eq_sol.
 
 (*Why predicate*) Definition partial_solution  (k:Z) (s:((arr) Z))
   := (forall (i:Z),
@@ -128,11 +138,11 @@ Implicit Arguments assigns.
 (*Why predicate*) Definition solution  (s:((arr) Z))
   := (partial_solution N s).
 
-(*Why axiom*) Lemma partial_solution_assigns :
+(*Why axiom*) Lemma partial_solution_eq_prefix :
   (forall (t:((arr) Z)),
    (forall (u:((arr) Z)),
     (forall (k:Z),
-     ((partial_solution k t) -> ((assigns t u k) -> (partial_solution k u)))))).
+     ((partial_solution k t) -> ((eq_prefix t u k) -> (partial_solution k u)))))).
 Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -198,7 +208,7 @@ Save.
   forall (HW_3: (solution col)),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_4: s0 = (s + 1) /\ (assigns sol sol0 s) /\ (acc sol0 s) = col),
+  forall (HW_4: s0 = (s + 1) /\ (eq_prefix sol sol0 s) /\ (acc sol0 s) = col),
   1 = (s0 - s).
 Proof.
 admit.
@@ -236,7 +246,7 @@ Save.
   forall (HW_3: (solution col)),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_4: s0 = (s + 1) /\ (assigns sol sol0 s) /\ (acc sol0 s) = col),
+  forall (HW_4: s0 = (s + 1) /\ (eq_prefix sol sol0 s) /\ (acc sol0 s) = col),
   1 >= 0.
 Proof.
 admit.
@@ -274,8 +284,8 @@ Save.
   forall (HW_3: (solution col)),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_4: s0 = (s + 1) /\ (assigns sol sol0 s) /\ (acc sol0 s) = col),
-  (assigns col col k).
+  forall (HW_4: s0 = (s + 1) /\ (eq_prefix sol sol0 s) /\ (acc sol0 s) = col),
+  (eq_prefix col col k).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -312,8 +322,8 @@ Save.
   forall (HW_3: (solution col)),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_4: s0 = (s + 1) /\ (assigns sol sol0 s) /\ (acc sol0 s) = col),
-  (assigns sol sol0 s).
+  forall (HW_4: s0 = (s + 1) /\ (eq_prefix sol sol0 s) /\ (acc sol0 s) = col),
+  (eq_prefix sol sol0 s).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -326,6 +336,8 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
                 (* pre_a *)
                 ((forall (i:Z),
@@ -344,8 +356,14 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  (included (diff (diff a b) c) (diff (diff a b) c)).
+  forall (HW_2: (card a) = 0),
+  forall (HW_3: (solution col)),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_4: s0 = (s + 1) /\ (eq_prefix sol sol0 s) /\ (acc sol0 s) = col),
+  forall (t: ((arr) Z)),
+  forall (HW_5: (solution t) /\ (eq_prefix col t k)),
+  (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i))).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -359,6 +377,7 @@ Save.
   forall (col: ((arr) Z)),
   forall (k: Z),
   forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
                 (* pre_a *)
                 ((forall (i:Z),
@@ -377,8 +396,14 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  0 = (s - s).
+  forall (HW_2: (card a) = 0),
+  forall (HW_3: (solution col)),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_4: s0 = (s + 1) /\ (eq_prefix sol sol0 s) /\ (acc sol0 s) = col),
+  forall (t: ((arr) Z)),
+  forall (HW_6: (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
+  (solution t).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -391,6 +416,8 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
                 (* pre_a *)
                 ((forall (i:Z),
@@ -409,8 +436,14 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  0 >= 0.
+  forall (HW_2: (card a) = 0),
+  forall (HW_3: (solution col)),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_4: s0 = (s + 1) /\ (eq_prefix sol sol0 s) /\ (acc sol0 s) = col),
+  forall (t: ((arr) Z)),
+  forall (HW_6: (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
+  (eq_prefix col t k).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -441,8 +474,8 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  (partial_solution k col).
+  forall (HW_7: (card a) <> 0),
+  (included (diff (diff a b) c) (diff (diff a b) c)).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -455,6 +488,7 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
+  forall (s: Z),
   forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
                 (* pre_a *)
                 ((forall (i:Z),
@@ -473,8 +507,8 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  (assigns col col k).
+  forall (HW_7: (card a) <> 0),
+  0 = (s - s).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -487,8 +521,6 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (s: Z),
-  forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
                 (* pre_a *)
                 ((forall (i:Z),
@@ -507,8 +539,8 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  (assigns sol sol s).
+  forall (HW_7: (card a) <> 0),
+  0 >= 0.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -521,8 +553,6 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (s: Z),
-  forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
                 (* pre_a *)
                 ((forall (i:Z),
@@ -541,27 +571,8 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
-  forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
-  forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
-  forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  0 <= (card a).
+  forall (HW_7: (card a) <> 0),
+  (partial_solution k col).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -574,8 +585,6 @@ Save.
   forall (c: iset),
   forall (col: ((arr) Z)),
   forall (k: Z),
-  forall (s: Z),
-  forall (sol: ((arr) ((arr) Z))),
   forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
                 (* pre_a *)
                 ((forall (i:Z),
@@ -594,27 +603,8 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
-  forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
-  forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
-  forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  (card (remove (min_elt e) a)) < (card a).
+  forall (HW_7: (card a) <> 0),
+  (eq_prefix col col k).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -647,28 +637,8 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
-  forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
-  forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
-  forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  0 <= k1.
+  forall (HW_7: (card a) <> 0),
+  (eq_prefix sol sol s).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -701,28 +671,13 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
-  forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
-  forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
-  forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  (k1 + (card (remove (min_elt e) a))) = N.
+  forall (HW_7: (card a) <> 0),
+  forall (t: ((arr) Z)),
+  forall (HW_8: (solution t) /\
+                (exists di:Z,
+                 (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                 (eq_prefix (upd col k di) t (k + 1)))),
+  (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i))).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -755,30 +710,10 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
-  forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
-  forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
-  forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (i: Z),
-  forall (HW_13: (in_ i (remove (min_elt e) a))),
-  (* pre_a *) 0 <= i.
+  forall (HW_7: (card a) <> 0),
+  forall (t: ((arr) Z)),
+  forall (HW_9: (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))),
+  (solution t).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -811,30 +746,11 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
-  forall (col0: ((arr) Z)),
-  forall (e: iset),
-  forall (f: Z),
-  forall (k0: Z),
-  forall (s0: Z),
-  forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
-  forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
-  forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
-  forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (i: Z),
-  forall (HW_13: (in_ i (remove (min_elt e) a))),
-  (* pre_a *) i < N.
+  forall (HW_7: (card a) <> 0),
+  forall (t: ((arr) Z)),
+  forall (HW_9: (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))),
+  (exists di:Z, (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+   (eq_prefix (upd col k di) t (k + 1))).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -867,32 +783,38 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (i: Z),
-  forall (HW_13: (in_ i (remove (min_elt e) a))),
-  forall (j: Z),
-  forall (HW_14: 0 <= j /\ j < k1),
-  (* pre_a *) i <> (acc col1 j).
+  forall (HW_15: k1 = (k0 + 1)),
+  0 <= (card a).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -925,31 +847,38 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (i: Z),
-  forall (HW_15: (0 <= i /\ i < N) /\
-                 (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j)))),
-  (* pre_a *) (in_ i (remove (min_elt e) a)).
+  forall (HW_15: k1 = (k0 + 1)),
+  (card (remove (min_elt e) a)) < (card a).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -982,32 +911,39 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (i: Z),
-  forall (HW_16: 0 <= i),
-  forall (HW_17: (in_ i (succ (add (min_elt e) b)))),
-  (* pre_a *)
-  (* pre_b *) (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) = (i + j - k1)).
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  0 <= k1.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1040,32 +976,39 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (i: Z),
-  forall (HW_16: 0 <= i),
-  forall (HW_18: (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                  (i + j - k1))),
-  (* pre_a *) (* pre_b *) (in_ i (succ (add (min_elt e) b))).
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  (k1 + (card (remove (min_elt e) a))) = N.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1098,33 +1041,41 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
   forall (i: Z),
-  forall (HW_19: 0 <= i),
-  forall (HW_20: (in_ i (pred (add (min_elt e) c)))),
-  (* pre_a *)
-  (* pre_b *)
-  (* pre_c *) (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) = (i + k1 - j)).
+  forall (HW_17: (in_ i (remove (min_elt e) a))),
+  (* pre_a *) 0 <= i.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1157,32 +1108,41 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
   forall (i: Z),
-  forall (HW_19: 0 <= i),
-  forall (HW_21: (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                  (i + k1 - j))),
-  (* pre_a *) (* pre_b *) (* pre_c *) (in_ i (pred (add (min_elt e) c))).
+  forall (HW_17: (in_ i (remove (min_elt e) a))),
+  (* pre_a *) i < N.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1215,29 +1175,45 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  (* pre_a *) (* pre_b *) (* pre_c *) (partial_solution k1 col1).
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_17: (in_ i (remove (min_elt e) a))),
+  forall (j: Z),
+  forall (HW_18: 0 <= j /\ j < k1),
+  (* pre_a *) i <> (acc col1 j).
 Proof.
+(***
 intros; unfold partial_solution.
 intros.
 assert (i<k0 \/ i=k0). omega.
@@ -1263,6 +1239,8 @@ admit.
 intros; rewrite acc_upd_neq.
 decompose [and] HW_7.
 red in H5.
+***)
+admit.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1292,57 +1270,42 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (succ (add (min_elt e) b))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + j - k1))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (pred (add (min_elt e) c))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + k1 - j))))) /\
-                 (partial_solution k1 col1))))),
-  forall (result: Z),
-  forall (col2: ((arr) Z)),
-  forall (k2: Z),
-  forall (s1: Z),
-  forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
-  forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
-  forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  (included e0 (diff (diff a b) c)).
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_19: (0 <= i /\ i < N) /\
+                 (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j)))),
+  (* pre_a *) (in_ i (remove (min_elt e) a)).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1375,57 +1338,43 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (succ (add (min_elt e) b))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + j - k1))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (pred (add (min_elt e) c))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + k1 - j))))) /\
-                 (partial_solution k1 col1))))),
-  forall (result: Z),
-  forall (col2: ((arr) Z)),
-  forall (k2: Z),
-  forall (s1: Z),
-  forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
-  forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
-  forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  f0 = (s1 - s).
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_20: 0 <= i),
+  forall (HW_21: (in_ i (succ (add (min_elt e) b)))),
+  (* pre_a *)
+  (* pre_b *) (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) = (i + j - k1)).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1458,57 +1407,43 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (succ (add (min_elt e) b))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + j - k1))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (pred (add (min_elt e) c))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + k1 - j))))) /\
-                 (partial_solution k1 col1))))),
-  forall (result: Z),
-  forall (col2: ((arr) Z)),
-  forall (k2: Z),
-  forall (s1: Z),
-  forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
-  forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
-  forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  f0 >= 0.
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_20: 0 <= i),
+  forall (HW_22: (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                  (i + j - k1))),
+  (* pre_a *) (* pre_b *) (in_ i (succ (add (min_elt e) b))).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1541,57 +1476,44 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (succ (add (min_elt e) b))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + j - k1))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (pred (add (min_elt e) c))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + k1 - j))))) /\
-                 (partial_solution k1 col1))))),
-  forall (result: Z),
-  forall (col2: ((arr) Z)),
-  forall (k2: Z),
-  forall (s1: Z),
-  forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
-  forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
-  forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  k3 = k.
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_23: 0 <= i),
+  forall (HW_24: (in_ i (pred (add (min_elt e) c)))),
+  (* pre_a *)
+  (* pre_b *)
+  (* pre_c *) (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) = (i + k1 - j)).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1624,57 +1546,43 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (succ (add (min_elt e) b))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + j - k1))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (pred (add (min_elt e) c))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + k1 - j))))) /\
-                 (partial_solution k1 col1))))),
-  forall (result: Z),
-  forall (col2: ((arr) Z)),
-  forall (k2: Z),
-  forall (s1: Z),
-  forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
-  forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
-  forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  (partial_solution k3 col2).
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_23: 0 <= i),
+  forall (HW_25: (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                  (i + k1 - j))),
+  (* pre_a *) (* pre_b *) (* pre_c *) (in_ i (pred (add (min_elt e) c))).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1707,57 +1615,39 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
-                 (* pre_a *)
-                 ((forall (i:Z),
-                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
-                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
-                 (* pre_b *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (succ (add (min_elt e) b))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + j - k1))))) /\
-                 (* pre_c *)
-                 ((forall (i:Z),
-                   (0 <= i ->
-                    ((in_ i (pred (add (min_elt e) c))) <->
-                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
-                      (i + k1 - j))))) /\
-                 (partial_solution k1 col1))))),
-  forall (result: Z),
-  forall (col2: ((arr) Z)),
-  forall (k2: Z),
-  forall (s1: Z),
-  forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
-  forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
-  forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  (assigns col col2 k).
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  (* pre_a *) (* pre_b *) (* pre_c *) (partial_solution k1 col1).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1790,28 +1680,39 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -1834,13 +1735,17 @@ Save.
   forall (k2: Z),
   forall (s1: Z),
   forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
   forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
+  forall (HW_28: f0 = (f + result)),
   forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  (assigns sol sol1 s).
+  forall (HW_29: k3 = (k2 - 1)),
+  (included e0 (diff (diff a b) c)).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1873,28 +1778,39 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -1917,13 +1833,17 @@ Save.
   forall (k2: Z),
   forall (s1: Z),
   forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
   forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
+  forall (HW_28: f0 = (f + result)),
   forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  0 <= (card e).
+  forall (HW_29: k3 = (k2 - 1)),
+  f0 = (s1 - s).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -1956,28 +1876,39 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_8: (card e) > 0),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
   forall (e0: iset),
-  forall (HW_9: e0 = (remove (min_elt e) e)),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
   forall (col1: ((arr) Z)),
-  forall (HW_10: col1 = (upd col0 k0 (min_elt e))),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
   forall (k1: Z),
-  forall (HW_11: k1 = (k0 + 1)),
-  forall (HW_12: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
-  forall (HW_22: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
                  (* pre_a *)
                  ((forall (i:Z),
                    ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
@@ -2000,13 +1931,17 @@ Save.
   forall (k2: Z),
   forall (s1: Z),
   forall (sol1: ((arr) ((arr) Z))),
-  forall (HW_23: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
-                 (assigns col1 col2 k2) /\ (assigns sol0 sol1 s0)),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
   forall (f0: Z),
-  forall (HW_24: f0 = (f + result)),
+  forall (HW_28: f0 = (f + result)),
   forall (k3: Z),
-  forall (HW_25: k3 = (k2 - 1)),
-  (card e0) < (card e).
+  forall (HW_29: k3 = (k2 - 1)),
+  f0 >= 0.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -2039,21 +1974,72 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_26: (card e) <= 0),
-  f = (s0 - s).
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  k3 = k.
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -2086,21 +2072,72 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_26: (card e) <= 0),
-  f >= 0.
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  (partial_solution k3 col2).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -2133,21 +2170,72 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_26: (card e) <= 0),
-  k0 = k.
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  (eq_prefix col col2 k).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -2180,21 +2268,72 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_26: (card e) <= 0),
-  (assigns col col0 k0).
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  (eq_prefix sol sol1 s).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -2227,21 +2366,1134 @@ Save.
                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
                      (i + k - j))))) /\
                 (partial_solution k col))))),
-  forall (HW_5: (card a) <> 0),
-  forall (HW_6: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
-                (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
-                (assigns col col k) /\ (assigns sol sol s)),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
   forall (col0: ((arr) Z)),
   forall (e: iset),
   forall (f: Z),
   forall (k0: Z),
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
-  forall (HW_7: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >= 0 /\
-                k0 = k /\ (partial_solution k0 col0) /\
-                (assigns col col0 k) /\ (assigns sol sol0 s)),
-  forall (HW_26: (card e) <= 0),
-  (assigns sol sol0 s).
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  forall (t: ((arr) Z)),
+  forall (HW_30: (solution t) /\
+                 (exists di:Z, (in_ di (diff (diff (diff a b) c) e0)) /\
+                  (eq_prefix (upd col2 k3 di) t (k3 + 1)))),
+  (exists i:Z, (s <= i /\ i < s1) /\ (eq_sol t (acc sol1 i))).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_39 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  forall (t: ((arr) Z)),
+  forall (HW_31: (exists i:Z, (s <= i /\ i < s1) /\ (eq_sol t (acc sol1 i)))),
+  (solution t).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_40 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  forall (t: ((arr) Z)),
+  forall (HW_31: (exists i:Z, (s <= i /\ i < s1) /\ (eq_sol t (acc sol1 i)))),
+  (exists di:Z, (in_ di (diff (diff (diff a b) c) e0)) /\
+   (eq_prefix (upd col2 k3 di) t (k3 + 1))).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_41 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  0 <= (card e).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_42 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (HW_26: 0 <= k1 /\ (k1 + (card (remove (min_elt e) a))) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i (remove (min_elt e) a)) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (succ (add (min_elt e) b))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + j - k1))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i (pred (add (min_elt e) c))) <->
+                     (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) =
+                      (i + k1 - j))))) /\
+                 (partial_solution k1 col1))))),
+  forall (result: Z),
+  forall (col2: ((arr) Z)),
+  forall (k2: Z),
+  forall (s1: Z),
+  forall (sol1: ((arr) ((arr) Z))),
+  forall (HW_27: result = (s1 - s0) /\ result >= 0 /\ k2 = k1 /\
+                 (eq_prefix col1 col2 k2) /\ (eq_prefix sol0 sol1 s0) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col2 t k2) <->
+                   (exists i:Z, (s0 <= i /\ i < s1) /\
+                    (eq_sol t (acc sol1 i)))))),
+  forall (f0: Z),
+  forall (HW_28: f0 = (f + result)),
+  forall (k3: Z),
+  forall (HW_29: k3 = (k2 - 1)),
+  (card e0) < (card e).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_43 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  f = (s0 - s).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_44 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  f >= 0.
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_45 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  k0 = k.
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_46 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  (eq_prefix col col0 k0).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_47 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  (eq_prefix sol sol0 s).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+Lemma lemma_count_48 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  forall (t: ((arr) Z)),
+  forall (HW_33: (solution t) /\ (eq_prefix col0 t k0)),
+  (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i))).
+Proof.
+intros.
+clear HW_10; intuition.
+generalize (H15 t); clear H15; intuition.
+clear H16.
+apply H15; clear H15.
+exists (acc t k0).
+assert (k0N: k0<N).
+generalize (card_nonneg a); intuition.
+subst k; split.
+assert (e=empty).
+assert (card e=0).
+generalize (card_nonneg e); intuition.
+generalize (empty_card e); intuition.
+subst e. generalize (diff_def (diff (diff a b) c) empty (acc t k0)).
+intuition.
+apply H8; clear H8 H14.
+generalize (diff_def (diff a b) c (acc t k0)).
+intuition.
+apply H8; clear H8 H14.
+generalize (diff_def a b (acc t k0)).
+intuition.
+apply H8; clear H8 H14.
+(* acc t k0 in a *)
+clear H7 H9. unfold solution in H3.
+unfold partial_solution in H3.
+generalize (H2 (acc t k0)); clear H2; intuition.
+apply H8.
+generalize (H3 k0); intuition.
+generalize (H3 k0); intuition.
+unfold eq_prefix in H4, H11.
+intros j Hj.
+rewrite H11; [idtac|intuition].
+rewrite H4; [idtac|intuition].
+generalize (H3 k0); intuition.
+generalize (H17 j); intuition.
+(* acc t k0 not in b *)
+clear H2 H9. unfold solution in H3.
+unfold partial_solution in H3.
+generalize (H3 k0); clear H3; intuition.
+generalize (H7 (acc t k0)); clear H7; intuition.
+destruct H7.
+generalize (H9 x); intuition.
+unfold eq_prefix in H4, H11.
+rewrite H11 in H17; [idtac|intuition].
+rewrite H4 in H17; [idtac|intuition].
+intuition.
+(* acc t k0 not in c *)
+clear H2 H7. unfold solution in H3.
+unfold partial_solution in H3.
+generalize (H3 k0); clear H3; intuition.
+generalize (H9 (acc t k0)); clear H9; intuition.
+destruct H9.
+generalize (H8 x); intuition.
+unfold eq_prefix in H4, H11.
+rewrite H11 in H17; [idtac|intuition].
+rewrite H4 in H17; [idtac|intuition].
+intuition.
+(* acc t k0 not in empty *)
+apply empty_def.
+(* eq_prefix *)
+clear H2 H7 H9.
+unfold eq_prefix; intros.
+assert (k=k0 \/ k<k0). omega. intuition.
+subst k; rewrite acc_upd_eq; trivial.
+rewrite acc_upd_neq; try omega.
+unfold eq_prefix in H4.
+rewrite H4; intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_48 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  forall (t: ((arr) Z)),
+  forall (HW_33: (solution t) /\ (eq_prefix col0 t k0)),
+  (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i))).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_49 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  forall (t: ((arr) Z)),
+  forall (HW_34: (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
+  (solution t).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+Lemma lemma_count_50 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  forall (t: ((arr) Z)),
+  forall (HW_34: (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
+  (eq_prefix col0 t k0).
+Proof.
+intuition.
+generalize (H21 t); clear H21; intuition.
+destruct H23; intuition.
+clear H2 H5 H7 H13.
+unfold eq_prefix; unfold eq_prefix in H24.
+intros; rewrite <- H24.
+rewrite acc_upd_neq.
+trivial.
+omega.
+omega.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma count_po_50 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_32: (card e) <= 0),
+  forall (t: ((arr) Z)),
+  forall (HW_34: (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
+  (eq_prefix col0 t k0).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -2442,8 +3694,142 @@ Save.
   forall (s0: Z),
   forall (sol0: ((arr) ((arr) Z))),
   forall (HW_12: result = (s0 - s) /\ result >= 0 /\ k0 = k /\
-                 (assigns col col0 k0) /\ (assigns sol sol0 s)),
+                 (eq_prefix col col0 k0) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col0 t k0) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
   result = s0.
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+Lemma lemma_queens_13:
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: s = 0 /\ k = 0),
+  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i below_N) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + j - k))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + k - j))))) /\
+                 (partial_solution k col))))),
+  forall (result: Z),
+  forall (col0: ((arr) Z)),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_12: result = (s0 - s) /\ result >= 0 /\ k0 = k /\
+                 (eq_prefix col col0 k0) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col0 t k0) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (t: ((arr) Z)),
+  forall (HW_13: (solution t)),
+  (exists i:Z, (0 <= i /\ i < s0) /\ (eq_sol t (acc sol0 i))).
+Proof.
+intuition.
+assert (eq_prefix col0 t 0).
+unfold eq_prefix.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma queens_po_13 : 
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: s = 0 /\ k = 0),
+  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i below_N) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + j - k))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + k - j))))) /\
+                 (partial_solution k col))))),
+  forall (result: Z),
+  forall (col0: ((arr) Z)),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_12: result = (s0 - s) /\ result >= 0 /\ k0 = k /\
+                 (eq_prefix col col0 k0) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col0 t k0) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (t: ((arr) Z)),
+  forall (HW_13: (solution t)),
+  (exists i:Z, (0 <= i /\ i < s0) /\ (eq_sol t (acc sol0 i))).
+Proof.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma queens_po_14 : 
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: s = 0 /\ k = 0),
+  forall (HW_11: 0 <= k /\ (k + (card below_N)) = N /\
+                 (* pre_a *)
+                 ((forall (i:Z),
+                   ((in_ i below_N) <-> (0 <= i /\ i < N) /\
+                    (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                 (* pre_b *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + j - k))))) /\
+                 (* pre_c *)
+                 ((forall (i:Z),
+                   (0 <= i ->
+                    ((in_ i empty) <->
+                     (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                      (i + k - j))))) /\
+                 (partial_solution k col))))),
+  forall (result: Z),
+  forall (col0: ((arr) Z)),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_12: result = (s0 - s) /\ result >= 0 /\ k0 = k /\
+                 (eq_prefix col col0 k0) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\ (eq_prefix col0 t k0) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (t: ((arr) Z)),
+  forall (HW_14: (exists i:Z, (0 <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))),
+  (solution t).
 Proof.
 admit.
 (* FILL PROOF HERE *)
