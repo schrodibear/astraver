@@ -63,9 +63,11 @@ axiom acc_upd_neq :
   forall a:'a arr. forall i,j:int. forall v:'a. 
     i<>j -> acc(upd(a,i,v),j) = acc(a,j)
 
-predicate assigns(t:'a arr, u:'a arr, i:int) =
+predicate eq_prefix(t:'a arr, u:'a arr, i:int) =
   (* only the segment [i..] may differ between t and u *)
   forall k:int. k < i -> acc(t,k)=acc(u,k)
+
+predicate eq_sol(t:'a arr, u:'a arr) = eq_prefix(t, u, N)
 
 (* solutions *)
 
@@ -79,9 +81,9 @@ predicate partial_solution(k:int, s:int arr) =
 
 predicate solution(s:int arr) = partial_solution(N, s)
 
-(*lemma*)axiom partial_solution_assigns:
+(*lemma*)axiom partial_solution_eq_prefix:
    forall t,u:int arr. forall k:int.
-     partial_solution(k,t) -> assigns(t,u,k) -> partial_solution(k,u)
+     partial_solution(k,t) -> eq_prefix(t,u,k) -> partial_solution(k,u)
 
 (* code *)
 
@@ -94,7 +96,7 @@ parameter k : int ref
 parameter register_solution : unit -> 
   { solution(col) } 
   unit reads col writes s,sol 
-  { s=s@+1 and assigns(sol@,sol,s@) and acc(sol,s@)=col }
+  { s=s@+1 and eq_prefix(sol@,sol,s@) and acc(sol,s@)=col }
 
 let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
   { 0 <= k and k+card(a)=N and
@@ -117,7 +119,11 @@ let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
 	  included(e,e@L) and
 	  f = s - s@L and f >= 0 and k = k@L and
           (*PROVABLE*) partial_solution(k,col) and
-          assigns(col@L,col,k@L) and assigns(sol@L,sol,s@L)
+          eq_prefix(col@L,col,k@L) and eq_prefix(sol@L,sol,s@L) and
+          forall t:int arr.
+            (solution(t) and exists di:int. in_(di, diff(e@L, e)) and
+	     eq_prefix(upd(col,k,di), t, k+1)) <-> 
+            (exists i:int. s@L <= i < s and eq_sol(t, acc(sol,i)))
         variant card(e) }
       let d = min_elt !e in
       e := remove d !e;
@@ -129,7 +135,11 @@ let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
     !f
   end
   { result = s-s@ and result >= 0 and k = k@ and
-    assigns(col@,col,k) and assigns(sol@,sol,s@) }    
+    eq_prefix(col@,col,k) and eq_prefix(sol@,sol,s@) and
+    forall t:int arr.
+      (solution(t) and eq_prefix(col, t, k)) <-> 
+      (exists i:int. s@ <= i < s and eq_sol(t, acc(sol,i)))
+  }    
 
 logic below_N : iset
 axiom below_N_def : forall i:int. in_(i,below_N) <-> 0<=i<N
@@ -138,4 +148,7 @@ axiom below_N_card : card(below_N) = N
 let queens () =
   { s = 0 and k = 0 }
   count below_N empty empty
-  { result = s }
+  { result = s and
+    forall t:int arr. 
+      solution(t) <-> (exists i:int. 0 <= i < s and eq_sol(t, acc(sol,i)))
+  }
