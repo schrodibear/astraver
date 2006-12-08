@@ -50,7 +50,7 @@ axiom succ_def_2 :
 
 logic pred : iset -> iset
 axiom pred_def_1 : 
-  forall s:iset. forall i:int. i>=1 -> in_(i,s) -> in_(i-1,s)
+  forall s:iset. forall i:int. i>=1 -> in_(i,s) -> in_(i-1,pred(s))
 axiom pred_def_2 : 
   forall s:iset. forall i:int. in_(i,pred(s)) -> in_(i+1,s)
 
