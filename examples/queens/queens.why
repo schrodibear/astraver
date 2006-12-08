@@ -43,12 +43,16 @@ axiom min_elt_def :
      forall i:int. in_(i,s) -> min_elt(s) <= i)
 
 logic succ : iset -> iset
-axiom succ_def :  
-  forall s:iset. forall i:int. 0<=i -> (in_(i+1,succ(s)) <-> in_(i,s))
+axiom succ_def_1 :  
+  forall s:iset. forall i:int. in_(i,s) -> in_(i+1,succ(s))
+axiom succ_def_2 :  
+  forall s:iset. forall i:int. in_(i,succ(s)) -> i>=1 and in_(i-1,s)
 
 logic pred : iset -> iset
-axiom pred_def : 
-  forall s:iset. forall i:int. 0<=i -> (in_(i,pred(s)) <-> in_(i+1,s))
+axiom pred_def_1 : 
+  forall s:iset. forall i:int. i>=1 -> in_(i,s) -> in_(i-1,s)
+axiom pred_def_2 : 
+  forall s:iset. forall i:int. in_(i,pred(s)) -> in_(i+1,s)
 
 (* logical arrays *)
 

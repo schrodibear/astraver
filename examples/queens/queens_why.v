@@ -82,20 +82,30 @@ Dp_hint min_elt_def.
 (*Why logic*) Definition succ : iset -> iset.
 Admitted.
 
-(*Why axiom*) Lemma succ_def :
-  (forall (s:iset),
-   (forall (i:Z), (0 <= i -> ((in_ (i + 1) (succ s)) <-> (in_ i s))))).
+(*Why axiom*) Lemma succ_def_1 :
+  (forall (s:iset), (forall (i:Z), ((in_ i s) -> (in_ (i + 1) (succ s))))).
 Admitted.
-Dp_hint succ_def.
+Dp_hint succ_def_1.
+
+(*Why axiom*) Lemma succ_def_2 :
+  (forall (s:iset),
+   (forall (i:Z), ((in_ i (succ s)) -> i >= 1 /\ (in_ (i - 1) s)))).
+Admitted.
+Dp_hint succ_def_2.
 
 (*Why logic*) Definition pred : iset -> iset.
 Admitted.
 
-(*Why axiom*) Lemma pred_def :
+(*Why axiom*) Lemma pred_def_1 :
   (forall (s:iset),
-   (forall (i:Z), (0 <= i -> ((in_ i (pred s)) <-> (in_ (i + 1) s))))).
+   (forall (i:Z), (i >= 1 -> ((in_ i s) -> (in_ (i - 1) s))))).
 Admitted.
-Dp_hint pred_def.
+Dp_hint pred_def_1.
+
+(*Why axiom*) Lemma pred_def_2 :
+  (forall (s:iset), (forall (i:Z), ((in_ i (pred s)) -> (in_ (i + 1) s)))).
+Admitted.
+Dp_hint pred_def_2.
 
 (*Why type*) Definition arr: Set ->Set.
 Admitted.
@@ -1227,6 +1237,243 @@ Proof.
 admit.
 Save.
 
+Lemma lemma_count_25 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_17: (in_ i (remove (min_elt e) a))),
+  forall (j: Z),
+  forall (HW_18: 0 <= j /\ j < k1),
+  (* pre_a *) i <> (acc col1 j).
+Proof.
+intros; clear HW_16.
+assert (h:j<k0 \/ j=k0). omega. destruct h.
+clear HW_10.
+subst col1. rewrite acc_upd_neq; try omega.
+assert (in_ i a). simplify.
+assert (k0=k). omega. subst k0.
+assert (acc col0 j = acc col j). 
+symmetry. intuition.
+rewrite H1.   
+clear HW_11; intuition.
+clear H9 H10 H12; generalize (H8 i); clear H8; intuition.
+simplify.
+subst j col1. rewrite acc_upd_eq.
+simplify.
+Save.
+
+Lemma lemma_count_26 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_19: (0 <= i /\ i < N) /\
+                 (forall (j:Z), (0 <= j /\ j < k1 -> i <> (acc col1 j)))),
+  (* pre_a *) (in_ i (remove (min_elt e) a)).
+Proof.
+intros.
+assert (i <> (min_elt e)). 
+assert (acc col1 k0 = min_elt e). 
+subst col1. rewrite acc_upd_eq; auto.
+simplify.
+assert (in_ i a).
+clear HW_10; intuition.
+clear H11 H13 H18.
+generalize (H8 i); clear H8; intuition.
+apply H13.
+intros j Hj.
+replace (acc col j) with (acc col0 j). 
+replace (acc col0 j) with (acc col1 j).
+simplify.
+simplify.
+simplify.
+simplify.
+Save.
+
+Lemma lemma_count_27 : 
+  forall (a: iset),
+  forall (b: iset),
+  forall (c: iset),
+  forall (col: ((arr) Z)),
+  forall (k: Z),
+  forall (s: Z),
+  forall (sol: ((arr) ((arr) Z))),
+  forall (HW_1: 0 <= k /\ (k + (card a)) = N /\ 0 <= s /\
+                (* pre_a *)
+                ((forall (i:Z),
+                  ((in_ i a) <-> (0 <= i /\ i < N) /\
+                   (forall (j:Z), (0 <= j /\ j < k -> i <> (acc col j))))) /\
+                (* pre_b *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i b) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + j - k))))) /\
+                (* pre_c *)
+                ((forall (i:Z),
+                  (0 <= i ->
+                   ((in_ i c) <->
+                    (exists j:Z, (0 <= j /\ j < k) /\ (acc col j) =
+                     (i + k - j))))) /\
+                (partial_solution k col))))),
+  forall (HW_7: (card a) <> 0),
+  forall (HW_10: (included (diff (diff a b) c) (diff (diff a b) c)) /\ 0 =
+                 (s - s) /\ 0 >= 0 /\ k = k /\ (partial_solution k col) /\
+                 (eq_prefix col col k) /\ (eq_prefix sol sol s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z,
+                    (in_ di (diff (diff (diff a b) c) (diff (diff a b) c))) /\
+                    (eq_prefix (upd col k di) t (k + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s) /\ (eq_sol t (acc sol i)))))),
+  forall (col0: ((arr) Z)),
+  forall (e: iset),
+  forall (f: Z),
+  forall (k0: Z),
+  forall (s0: Z),
+  forall (sol0: ((arr) ((arr) Z))),
+  forall (HW_11: (included e (diff (diff a b) c)) /\ f = (s0 - s) /\ f >=
+                 0 /\ k0 = k /\ (partial_solution k0 col0) /\
+                 (eq_prefix col col0 k) /\ (eq_prefix sol sol0 s) /\
+                 (forall (t:((arr) Z)),
+                  ((solution t) /\
+                   (exists di:Z, (in_ di (diff (diff (diff a b) c) e)) /\
+                    (eq_prefix (upd col0 k0 di) t (k0 + 1))) <->
+                   (exists i:Z, (s <= i /\ i < s0) /\ (eq_sol t (acc sol0 i)))))),
+  forall (HW_12: (card e) > 0),
+  forall (e0: iset),
+  forall (HW_13: e0 = (remove (min_elt e) e)),
+  forall (col1: ((arr) Z)),
+  forall (HW_14: col1 = (upd col0 k0 (min_elt e))),
+  forall (k1: Z),
+  forall (HW_15: k1 = (k0 + 1)),
+  forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
+  forall (i: Z),
+  forall (HW_20: 0 <= i),
+  forall (HW_21: (in_ i (succ (add (min_elt e) b)))),
+  (* pre_a *)
+  (* pre_b *) (exists j:Z, (0 <= j /\ j < k1) /\ (acc col1 j) = (i + j - k1)).
+Proof.
+intros.
+assert (h: i >= 1 /\ in_ (i-1) (add (min_elt e) b)). simplify. destruct h.
+assert (h: i-1=min_elt e \/ in_ (i-1) b). simplify. destruct h.
+simplify.
+assert (h: exists j:Z, 0<=j<k /\ acc col j = (i-1)+j-k).
+simplify.
+destruct h as (j,(h1,h2)).
+exists j; intuition.
+simplify.
+Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma count_po_25 : 
   forall (a: iset),
@@ -1292,15 +1539,8 @@ Save.
   forall (HW_18: 0 <= j /\ j < k1),
   (* pre_a *) i <> (acc col1 j).
 Proof.
-intros.
-assert (h:j<k0 \/ j=k0). omega. destruct h.
-clear HW_10.
-subst col1. rewrite acc_upd_neq; try omega.
-assert (in_ i a). simplify.
-
-simplify.
-clear H11. unfold partial_solution in 
-simplify.
+admit.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1440,8 +1680,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_28 : 
+Lemma lemma_count_28 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -1505,8 +1744,20 @@ Save.
                   (i + j - k1))),
   (* pre_a *) (* pre_b *) (in_ i (succ (add (min_elt e) b))).
 Proof.
-admit.
-(* FILL PROOF HERE *)
+intros.
+destruct HW_22 as (j,(h1,h2)).
+replace i with ((i-1)+1). apply succ_def_1.
+assert (h: j<k \/ j=k). omega. destruct h.
+assert (in_ (i-1) b).
+simplify.
+simplify.
+assert (i-1=min_elt e).
+subst col1. subst j.
+assert (k0=k). omega. subst k0.
+rewrite acc_upd_eq in h2.
+omega.
+simplify.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
