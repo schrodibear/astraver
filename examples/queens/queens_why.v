@@ -2835,8 +2835,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_39 : 
+Lemma lemma_count_39 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2934,8 +2933,37 @@ Save.
                   (eq_prefix (upd col2 k3 di) t (k3 + 1)))),
   (exists i:Z, (s <= i /\ i < s1) /\ (eq_sol t (acc sol1 i))).
 Proof.
-admit.
-(* FILL PROOF HERE *)
+intros.
+destruct HW_30 as (h,(di,(h1,h2))).
+assert (hdi: di=min_elt e \/ in_ di (diff (diff (diff a b) c) e)).
+simplify.
+destruct hdi.
+subst di.
+decompose [and] HW_27.
+destruct (H5 t).
+destruct H4.
+split; auto.
+simplify.
+exists x; intuition.
+assert (hs: 0<=s). omega.
+clear HW_1 HW_10 HW_26.
+intuition.
+generalize (H14 t); clear H14. intuition.
+clear H15. destruct H14.
+exists di; intuition.
+subst k3 k2 k1 k0.
+assert 
+  (eq_prefix_trans: forall (a b c:arr Z) k, eq_prefix a b k ->
+      eq_prefix b c k -> eq_prefix a c k).
+simplify.
+apply eq_prefix_trans with (upd col1 k di).
+simplify.
+simplify.
+exists x; intuition.
+red in H9.
+rewrite <- H9.
+simplify.
+omega.
 Save.
 
 Lemma lemma_count_41 : 
