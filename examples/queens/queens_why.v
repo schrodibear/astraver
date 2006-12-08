@@ -2050,8 +2050,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma count_po_31 : 
+Lemma lemma_count_31 : 
   forall (a: iset),
   forall (b: iset),
   forall (c: iset),
@@ -2111,8 +2110,36 @@ Save.
   forall (HW_16: (Zwf 0 (card (remove (min_elt e) a)) (card a))),
   (* pre_a *) (* pre_b *) (* pre_c *) (partial_solution k1 col1).
 Proof.
-admit.
-(* FILL PROOF HERE *)
+intros.
+unfold partial_solution.
+intros i hi. split.
+simplify.
+intros j hj.
+assert (k0=k). omega. subst k0.
+assert (h: i<k \/ i=k). omega. destruct h. 
+subst col1. rewrite acc_upd_neq.
+rewrite acc_upd_neq.
+decompose [and] HW_11. 
+clear HW_1 HW_10 HW_11 H8.
+unfold partial_solution in H4.
+generalize (H4 i); simplify.
+omega.
+omega.
+subst i col1; rewrite acc_upd_eq.
+rewrite acc_upd_neq.
+assert (in_ (min_elt e) a). simplify.
+assert (~(in_ (min_elt e) b)). simplify.
+assert (~(in_ (min_elt e) c)). simplify.
+2: omega.
+replace (acc col0 j) with (acc col j). 2:simplify.
+clear HW_11 HW_10.
+decompose [and] HW_1; clear HW_1.
+destruct (H5 (min_elt e)); clear H5.
+destruct (H6 (min_elt e)); clear H6.
+simplify.
+destruct (H7 (min_elt e)); clear H7.
+intuition.
+simplify.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
