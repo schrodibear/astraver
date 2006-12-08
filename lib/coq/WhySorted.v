@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.11 2006-11-02 09:18:20 hubert Exp $ *)
+(* $Id: WhySorted.v,v 1.12 2006-12-08 11:53:54 filliatr Exp $ *)
 
 Require Export WhyArrays.
 Require Import WhyPermut.
@@ -179,7 +179,8 @@ unfold sorted_array; intros.
 cut (x = (j - 1)%Z \/ (x < j - 1)%Z).
 intro Hcut; elim Hcut; clear Hcut; intro.
 rewrite H2.
-ring (j - 1 + 1)%Z.
+replace (j-1+1)%Z with j.
+2: omega.
 AccessOther; try omega.
  apply Zle_trans with (m := access A j).
  apply sorted_elements with (n := i) (m := j); try omega; assumption.

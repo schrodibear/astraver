@@ -255,7 +255,7 @@ else
 	COQVER=v7
 	WHYLIBCOQ=lib/coq-v7
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
-    8.*)
+    8.*|trunk)
 	AC_MSG_RESULT($COQVERSION)
 	COQC7="$COQC -v7"
 	COQC8=$COQC

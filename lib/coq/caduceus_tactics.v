@@ -9,7 +9,8 @@ Hint Rewrite shift_shift : caduceus.
 *)
 
 (* tactic to prove the equality of two pointers *)
-Ltac eq_pointer :=
+Ltac eq_pointer := idtac.
+(***
   repeat rewrite shift_shift;
   progress auto with * ||
   match goal with
@@ -17,6 +18,7 @@ Ltac eq_pointer :=
   | |- (shift ?P1 ?O1) = ?P2 => solve [ring O1; auto with *]
   | |- ?P1 = (shift ?P2 ?O2) => solve [ring O2; auto with *]
   end.
+***)
 
 (* tactic to prove the disequality of two pointers *)
 Ltac neq_pointer := 
