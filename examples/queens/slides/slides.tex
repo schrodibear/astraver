@@ -1,0 +1,51 @@
+%\documentclass[handout,compress]{beamer}
+\documentclass[compress]{beamer}
+
+\usepackage{beamerjcf}
+
+\title{Queens on a Chessboard}
+\author{Jean-Christophe Filli\^atre}
+%\institute{CNRS -- Universit\'e Paris Sud}
+\date[Krakatoa/Caduceus WG]{Dec 15th, 2006\\
+  Krakatoa/Caduceus working group}
+
+\begin{document}
+
+\begin{frame}
+  \begin{center}
+    {\Huge\emph{Queens on a Chessboard}} \\[1em]
+    {\LARGE\emph{an exercise in program verification}} \\[3em]
+    {\large Jean-Christophe Filli\^atre} \\[2em]
+    Krakatoa/Caduceus working group \\[0.5em]
+    December 15th, 2006
+  \end{center}
+\end{frame}
+ 
+\begin{frame}[fragile]
+  \frametitle{Introduction}
+
+challenge for \emph{the verified program of the month}:
+
+{\scriptsize
+\begin{verbatim}
+   t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
+   c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
+\end{verbatim}}
+
+\Pause
+
+appears on a web page collecting C signature programs 
+
+\bigskip
+
+due to Marcel van Kervinck, author of MSCP (Marcel's Simple
+Chess Program)
+
+\end{frame}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
