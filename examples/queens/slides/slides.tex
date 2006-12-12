@@ -26,6 +26,8 @@
 
 challenge for \emph{the verified program of the month}:
 
+\bigskip
+
 {\scriptsize
 \begin{verbatim}
    t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
@@ -38,9 +40,62 @@ appears on a web page collecting C signature programs
 
 \bigskip
 
-due to Marcel van Kervinck, author of MSCP (Marcel's Simple
-Chess Program)
+due to Marcel van Kervinck, \par
+author of MSCP (Marcel's Simple Chess Program)
+\end{frame}
 
+\begin{frame}
+  \frametitle{Unobfuscating...}
+\begin{caduceus}
+int t(int a, int b, int c) {
+  int d=0, e=a&~b&~c, f=1;
+  if (a)
+    for (f=0; d=(e-=d)&-e;)
+      f+=t(a-d,(b+d)*2,(c+d)/2);
+  return f;
+}
+\end{caduceus}
+\only<1>{%
+\begin{caduceus}
+int main(int q) {
+  scanf("%d",&q);
+  printf("%d\n",t(~(~0<<q),0,0));
+}
+\end{caduceus}
+}%
+\only<2>{%
+\begin{caduceus}
+int f(int n) {
+  return t(~(~0<<n), 0, 0);
+}
+\end{caduceus}
+
+\bigskip
+
+we end up with a mysterious function 
+\texttt{f} : $\mathbb{N} \rightarrow \mathbb{N}$
+}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Queens on a chessboard}
+
+given a number $n$ smaller than 32, 
+$\mathtt{f}(n)$ is the number of ways to put $n$ queens on $n\times n$
+chessboard so that they cannot beat each other
+
+\Pause
+
+let us prove that this program is \emph{correct}, that is:
+\begin{itemize}
+\item it does not crash
+\item it terminates
+\item it computes the right number
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How does it work?}
 \end{frame}
 
 \end{document}

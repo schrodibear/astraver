@@ -6,19 +6,14 @@
 
   let slides = ref true
 
-  let ocaml_keywords = 
+  let c_keywords = 
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
-      [ 
-	"fun"; "match"; "with"; "begin"; 
-	"end"; "try"; "as"; "let"; "rec"; "in";
-	"function"; "if"; "private"; "then"; "else"; "sig"; "val"; 
-	"type"; "module";
-	"while"; "do"; "done"; "for"; "struct"; "to"; "raise"
+      [ "int"; "if"; "for"; "return";
       ];
     h
 
-  let is_keyword s = Hashtbl.mem ocaml_keywords s 
+  let is_keyword s = Hashtbl.mem c_keywords s 
 
   let print_ident =
     let print_ident_char c = 
@@ -34,27 +29,22 @@ let ident = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '_' '0'-'9']*
 rule alltt = parse
   | '{'  { print_string "\\{"; alltt lexbuf }
   | '}'  { print_string "\\}"; alltt lexbuf }
-(*
-  | '\\' { print_string "\\ensuremath{\\backslash}"; alltt lexbuf }
-*)
   | '#' { print_string "\\diese{}"; alltt lexbuf }
   | '_'  { print_string "\\_{}"; alltt lexbuf }
   | '%'  { print_string "\\%{}"; alltt lexbuf }
   | '&'  { print_string "\\&{}"; alltt lexbuf }
   | '%'  { print_string "\\%{}"; alltt lexbuf }
+  | '~'  { print_string "\\~{}"; alltt lexbuf }
+  | '\\' { print_string "\\ensuremath{\\backslash}"; alltt lexbuf }
   | '\n' { print_string "\\linebreak\n\\hspace*{0pt}"; alltt lexbuf }
   | "->" { print_string "\\ensuremath{\\rightarrow}"; alltt lexbuf }
   | "=>" { print_string "\\ensuremath{\\Rightarrow}"; alltt lexbuf }
   | "<->" { print_string "\\ensuremath{\\leftrightarrow}"; alltt lexbuf }
-  | '\n' space* "\\end{ocaml}" space* "\n" { print_newline () }
+  | '\n' space* "\\end{caduceus}" space* "\n" { print_newline () }
   | "\\emph{" [^'}''\n']* '}' { print_string (lexeme lexbuf); alltt lexbuf }
-(*
-  | "\\only<" ['0'-'9']+ ">{" [^'}''\n']* '}' 
-      { print_string (lexeme lexbuf); alltt lexbuf }
-*)
   | eof  { () }
   | "'a" { print_string "\\ensuremath{\\alpha}"; alltt lexbuf }
-  | "*"  { print_string "\\ensuremath{\\times}"; alltt lexbuf }
+(*  | "*"  { print_string "\\ensuremath{\\times}"; alltt lexbuf }*)
   | "::" { print_string ":\\hspace*{-0.1em}:"; alltt lexbuf }
   | " "  { print_string "~"; alltt lexbuf }
   | ident as s
@@ -68,7 +58,7 @@ rule alltt = parse
   | _   { print_string (lexeme lexbuf); alltt lexbuf }
 
 and pp = parse
-  | "\\begin{ocaml}" space* "\n" 
+  | "\\begin{caduceus}" space* "\n" 
       { print_string "\n\n\\medskip{\\tt\\parindent 0pt\n"; 
 	alltt lexbuf;
 	print_string "\n}\n\n\\medskip\n";
