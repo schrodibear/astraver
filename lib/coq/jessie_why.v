@@ -19,8 +19,29 @@ Admitted.
   forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why predicate*) Definition valid (A149:Set) (a:((alloc_table) A149))
-  (p:((pointer) A149)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A158:Set) (a:((alloc_table) A158))
+  (p:((pointer) A158)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+
+(*Why logic*) Definition shift :
+  forall (A1:Set), ((pointer) A1) -> Z -> ((pointer) A1).
+Admitted.
+Implicit Arguments shift.
+
+(*Why axiom*) Lemma offset_max_shift :
+  forall (A1:Set),
+  (forall (a:((alloc_table) A1)),
+   (forall (p:((pointer) A1)),
+    (forall (i:Z), (offset_max a (shift p i)) = ((offset_max a p) - i)))).
+Admitted.
+Implicit Arguments offset_max_shift.
+
+(*Why axiom*) Lemma offset_min_shift :
+  forall (A1:Set),
+  (forall (a:((alloc_table) A1)),
+   (forall (p:((pointer) A1)),
+    (forall (i:Z), (offset_min a (shift p i)) = ((offset_min a p) - i)))).
+Admitted.
+Implicit Arguments offset_min_shift.
 
 (*Why type*) Definition memory: Set -> Set ->Set.
 Admitted.
@@ -94,30 +115,36 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A166:Set)
-  (A165:Set) (a:((alloc_table) A165)) (m1:((memory) A165 A166))
-  (m2:((memory) A165 A166)) (l:((pset) A165))
-  := (forall (p:((pointer) A165)),
+(*Why predicate*) Definition not_assigns (A178:Set)
+  (A177:Set) (a:((alloc_table) A177)) (m1:((memory) A177 A178))
+  (m2:((memory) A177 A178)) (l:((pset) A177))
+  := (forall (p:((pointer) A177)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
-(*Why type*) Definition struct_id: Set ->Set.
+
+(*Why type*) Definition tag_table: Set ->Set.
+Admitted.
+
+(*Why type*) Definition tag_id: Set ->Set.
 Admitted.
 
 (*Why logic*) Definition instanceof :
-  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1)
-  -> ((struct_id) A1) -> Prop.
+  forall (A1:Set), ((tag_table) A1) -> ((pointer) A1)
+  -> ((tag_id) A1) -> Prop.
 Admitted.
+Implicit Arguments instanceof.
 
 (*Why logic*) Definition downcast :
-  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1)
-  -> ((struct_id) A1) -> ((pointer) A1).
+  forall (A1:Set), ((tag_table) A1) -> ((pointer) A1)
+  -> ((tag_id) A1) -> ((pointer) A1).
 Admitted.
+Implicit Arguments downcast.
 
 (*Why axiom*) Lemma downcast_instanceof :
   forall (A1:Set),
-  (forall (a:((alloc_table) A1)),
+  (forall (a:((tag_table) A1)),
    (forall (p:((pointer) A1)),
-    (forall (s:((struct_id) A1)),
-     ((instanceof a p s) -> (downcast a p s) = p)))).
+    (forall (s:((tag_id) A1)), ((instanceof a p s) -> (downcast a p s) = p)))).
 Admitted.
+Implicit Arguments downcast_instanceof.
 

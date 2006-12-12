@@ -35,7 +35,7 @@ int f() {
 
 /******** ghost arrays *******/
 
-/*@ ghost int t[]*/
+/*@ ghost int t[] */
 
 int u[5];
 
@@ -51,8 +51,9 @@ typedef struct S {
   int b;
 } S;
 
-/*@ghost S tab[]*/
 
+
+/*@ghost S tab[]*/
 
 /*@ensures tab[0].a == 1*/
 void h (){
@@ -61,3 +62,21 @@ void h (){
   /*@set tab[0] = a*/
 }
 
+/*@ ghost S s */
+
+
+/*@ ensures s.a == 1*/
+void i (){
+  struct S a ;
+  a.a = 1;
+  /*@set s = a*/
+}
+
+
+
+
+/*
+Local Variables: 
+compile-command: "make ghost.gui"
+End: 
+*/

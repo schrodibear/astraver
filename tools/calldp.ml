@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.26 2006-11-29 13:29:41 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.27 2006-12-12 16:28:08 marche Exp $ i*)
 
 open Printf
 
@@ -181,19 +181,22 @@ let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
 	if c = 152 then 
 	  add (Timeout t)
 	else 
-	  let r =
-	    if Sys.command 
-	      (sprintf "grep  -q -w \"is valid\" %s " out) = 0 then
-		Valid t
-	    else
+	  begin
+	    let r =
 	      if Sys.command 
-		(sprintf "grep  -q -w \"Cannot decide\" %s " out) = 0 then
-		  CannotDecide t
+		(sprintf "grep  -q -w \"is valid\" %s " out) = 0 then
+		  Valid t
 	      else
-		ProverFailure(t,"command failed: " ^ cmd)
-	  in
-	  remove_file ~debug out;
-	  add r
+		if Sys.command 
+		  (sprintf "grep  -q -w \"Cannot decide\" %s " out) = 0 then
+		    CannotDecide t
+		else
+		  ProverFailure(t,"command failed: " ^ cmd)
+	    in
+	    remove_file ~debug out;
+	    add r
+	  end;
+	iter (i+1);
       end	   	
     in
     iter 0;

@@ -13,3 +13,9 @@ int main() {
   f();
   return 0;
 }
+
+/*
+Local Variables: 
+compile-command: "make false2.gui"
+End: 
+*/

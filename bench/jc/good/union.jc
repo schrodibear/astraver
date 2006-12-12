@@ -4,29 +4,24 @@ hand-made translation from C program
 
 union U { int x; float y; }
 struct T { 
-  int tag ; 
+  int my_tag ; 
   U v ;
-  //@ invariant tag_0_is_int(t) = t.tag==0 => t.v <: x ;  
-  //@ invariant tag_1_is_float(t) = t.tag==1 => t.v <: y ;
+  //@ invariant my_tag_0_is_int(t) = t.my_tag==0 => t.v <: x ;  
+  //@ invariant my_tag_1_is_float(t) = t.my_tag==1 => t.v <: y ;
 }
 
 */
 
-type U = { }
+type U = 
+  U_x { integer x; }
+| U_y { real y; }
 
-type U_x = U with { 
-    integer x; 
-}
-
-type U_y = U with { 
-    real y; 
-}
 
 type T = { 	
-    integer tag ; 
+    integer my_tag ; 
     U[0] v ;
-    invariant tag_0_is_int(t) = t.tag==0 => t.v <: U_x ; 
-    invariant tag_1_is_float(t) = t.tag==1 => t.v <: U_y ;
+    invariant my_tag_0_is_int(t) = t.my_tag==0 => t.v <: U_x ; 
+    invariant my_tag_1_is_float(t) = t.my_tag==1 => t.v <: U_y ;
 }
 
 
@@ -34,12 +29,12 @@ unit add(T[0] res, T[0] n1, T[0] n2)
   behavior default:
     ensures true;
 {
-    if (n1.tag == 0 && n2.tag == 0) {
-	res.tag = 0;
+    if (n1.my_tag == 0 && n2.my_tag == 0) {
+	res.my_tag = 0;
 	(res.v :> U_x).x = (n1.v :> U_x).x + (n2.v :> U_x).x;
     }
     else {
-	res.tag = 1;
+	res.my_tag = 1;
 	(res.v :> U_y).y = (n1.v :> U_y).y + (n2.v :> U_y).y;
     }
 }

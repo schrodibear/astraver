@@ -16,8 +16,17 @@ logic offset_min : 't alloc_table, 't pointer -> int
 predicate valid (a:'t alloc_table, p:'t pointer) = 
   offset_min(a,p) <= 0 and offset_max(a,p) >= 0
 
-(* parameter alloc : alloc_table ref *)
+logic shift : 't pointer, int -> 't pointer
 
+axiom offset_max_shift :
+ forall a:'t alloc_table.
+  forall p: 't pointer. forall i:int.
+	offset_max(a,shift(p,i)) = offset_max(a,p)-i
+
+axiom offset_min_shift : 
+ forall a:'t alloc_table.
+  forall p: 't pointer. forall i:int.
+	offset_min(a,shift(p,i)) = offset_min(a,p)-i
 
 (**************************************
 
@@ -141,27 +150,30 @@ predicate not_assigns
 **********************)
 
 
-type 't struct_id
+type 't tag_table
 
-logic instanceof : 't alloc_table, 't pointer, 't struct_id -> prop
+type 't tag_id
+
+logic instanceof : 't tag_table, 't pointer, 't tag_id -> prop
 
 parameter instanceof_ : 
-  a:'t alloc_table -> p:'t pointer -> s:'t struct_id ->
+  a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
   { } 
   bool 
   { if result then instanceof(a,p,s) else not instanceof(a,p,s) }
 
-logic downcast : 't alloc_table, 't pointer, 't struct_id -> 't pointer
+logic downcast : 't tag_table, 't pointer, 't tag_id -> 't pointer
 
 axiom downcast_instanceof :
-  forall a:'t alloc_table.
+  forall a:'t tag_table.
   forall p:'t pointer.
-  forall s:'t struct_id.
+  forall s:'t tag_id.
    instanceof(a,p,s) -> downcast(a,p,s)=p
 
 parameter downcast_ : 
-  a:'t alloc_table -> p:'t pointer -> s:'t struct_id ->
+  a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
   { instanceof(a,p,s) } 
   't pointer 
   { result=p }
+
 
