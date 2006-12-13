@@ -9,7 +9,10 @@
   let c_keywords = 
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
-      [ "int"; "if"; "for"; "return";
+      [ "if"; "for"; "return";
+	"type"; "predicate"; "axiom"; "logic";
+	"variant"; "invariant"; "requires"; "ensures"; "assigns";
+	"loop_assigns"; "label"
       ];
     h
 
@@ -47,6 +50,10 @@ rule alltt = parse
 (*  | "*"  { print_string "\\ensuremath{\\times}"; alltt lexbuf }*)
   | "::" { print_string ":\\hspace*{-0.1em}:"; alltt lexbuf }
   | " "  { print_string "~"; alltt lexbuf }
+  | "\\" ("forall" | "exists" | "old" | "at" as s)
+	{ print_string "{\\color{blue}"; 
+	  print_string "\\ensuremath{\\backslash}"; print_string s;
+	  print_string "}"; alltt lexbuf }
   | ident as s
 	{ if !slides && is_keyword s then begin
 	    print_string "{\\color{blue}"; print_string s;

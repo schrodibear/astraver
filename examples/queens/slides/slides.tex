@@ -134,7 +134,7 @@ let us prove that this program is \emph{correct}, that is:
 \begin{frame}
   \frametitle{Code rephrased on sets}
 {\tt\begin{obeylines}
-  \kw{int} t($a$, $b$, $c$) \\
+  int t($a$, $b$, $c$) \\
   ~~ \kw{if} $a \not= \emptyset$ \\
   ~~~~ $e$ $\leftarrow$ $(a \backslash  b) \backslash c$ \\
   ~~~~ $f$ $\leftarrow$ 0 \\
@@ -146,23 +146,142 @@ let us prove that this program is \emph{correct}, that is:
   ~~ \kw{else} \\
   ~~~~ \kw{return} $1$ \\
   ~~ \\
-  \kw{int} f($n$) \\
+  int f($n$) \\
   ~~ \kw{return} t($\{0,1,\dots,n-1\}$, $\emptyset$, $\emptyset$)
 \end{obeylines}}
 \end{frame}
 
+\font\Chess=chess10
+\newcommand{\qw}{\vrule height 1.5em width 0pt{\Chess Q}}
+\newcommand{\qb}{\vrule height 1.5em width 0pt{\Chess q}}
+\newcommand{\qr}{\vrule height 1.5em width 0pt{\color{red}\Chess q}}
+\newcommand{\vide}{\vrule height 1.5em width 0pt\phantom{\Chess q}}
+\newcommand{\qm}{\vrule height 1.5em width 0pt\hfil?\hfil}
+
 \begin{frame}
-  \frametitle{}
-  TODO: DESSIN ICI
+  \frametitle{What $a$, $b$ and $c$ mean}
+\only<1>{
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
+      \vide & \vide & \vide & \vide & \vide & \vide & \qb   & \vide \\\hline
+      \vide & \vide & \vide & \qb   & \vide & \vide & \vide & \vide \\\hline
+      \qm & \qm & \qm & \qm & \qm & \qm & \qm & \qm \\\hline
+    \end{tabular}
+  \end{center}
+\bigskip
+\phantom{$a$ = columns to be filled = $11100101_2$}
+}
+\only<2>{
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
+      \vide & \vide & \vide & \vide & \qw   & \vide & \qb   & \vide \\\hline
+      \vide & \vide & \vide & \qb   & \qw   & \vide & \qw   & \vide \\\hline
+      \qr   & \qr   & \qr   & \qw   & \qw   & \qr   & \qw   & \qr   \\\hline
+    \end{tabular}
+  \end{center}
+\bigskip
+$a$ = columns to be filled = $11100101_2$
+}
+\only<3>{
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
+      \vide & \vide & \vide & \qw   & \vide & \vide & \qb   & \vide \\\hline
+      \vide & \vide & \qw   & \qb   & \vide & \qw   & \vide & \vide \\\hline
+      \vide & \qr   & \qr   & \vide & \qr   & \vide & \vide & \vide \\\hline
+    \end{tabular}
+  \end{center}
+\bigskip
+$b$ = positions to avoid because of left diagonals = $01101000_2$
+}
+\only<4>{
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
+      \vide & \vide & \vide & \vide & \vide & \qw   & \qb   & \vide \\\hline
+      \vide & \vide & \vide & \qb   & \vide & \vide & \qw   & \qw   \\\hline
+      \vide & \vide & \vide & \vide & \qr   & \vide & \vide & \qr   \\\hline
+    \end{tabular}
+  \end{center}
+\bigskip
+$c$ = positions to avoid because of right diagonals = $00001001_2$
+}
+\only<5>{
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
+      \vide & \vide & \vide & \qw   & \qw   & \qw   & \qb   & \vide \\\hline
+      \vide & \vide & \qw   & \qb   & \qw   & \qw   & \qw   & \qw   \\\hline
+      \qr   & \qw   & \qw   & \qw   & \qw   & \qr   & \qw   & \qw   \\\hline
+    \end{tabular}
+  \end{center}
+\bigskip
+$a$\&\~{}$b$\&\~{}$c$ = positions to try = $10000100_2$
+}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Warmup: termination}
-  TODO: PREUVE TERMINAISON
+  \frametitle{Abstract finite sets}
+\begin{caduceus}
+//@ type iset
+
+//@ predicate in_(int x, iset s)
+
+/*@ predicate included(iset a, iset b) 
+  @  { \forall int i; in_(i,a) => in_(i,b) } */
+
+//@ logic iset empty()
+
+//@ axiom empty_def : \forall int i; !in_(i,empty())
+
+...    
+\end{caduceus}
+
+total: \emph{66 lines} of functions, predicates and axioms
 \end{frame}
 
 \begin{frame}
-  TODO: AXIOMATISATION ENSEMBLES FINIS EN CADUCEUS
+  \frametitle{C ints as abstract sets}
+\begin{caduceus}
+//@ logic iset iset(int x)
+
+/*@ axiom iset_c_zero : \forall int x; 
+  @   iset(x)==empty() <=> x==0 */
+
+/*@ axiom iset_c_min_elt :
+  @   \forall int x; x != 0 => 
+  @     iset(x&-x) == singleton(min_elt(iset(x))) */
+
+/*@ axiom iset_c_diff : \forall int a, int b; 
+  @   iset(a&~b) == diff(iset(a), iset(b)) */
+
+...
+\end{caduceus}
+
+total: \emph{27 lines} / should be proved independently
+\end{frame}
+
+\begin{frame}
+  \frametitle{Warmup: termination of the for loop}
+\begin{caduceus}
+int t(int a, int b, int c){
+  int d=0, e=a&~b&~c, f=1;
+  if (a)
+    /*@ variant card(iset(e-d)) */
+    for (f=0; d=(e-=d)&-e; ) {
+      f+=t1(a-d,(b+d)*2,(c+d)/2);
+    }
+  return f;
+}
+\end{caduceus}
+\Pause
 \end{frame}
 
 \begin{frame}
