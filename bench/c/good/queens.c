@@ -3,92 +3,135 @@ t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
 c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 ****/
 
+/****** abstract sets of integers *******************************************/
 
-//@ logic int bit(int x, int i)
+//@ type iset
 
-//@ logic int nbits(int x)
+//@ predicate in_(int x, iset s)
 
-//@ axiom nbits_nonneg : \forall int x; nbits(x) >= 0
+//@ predicate included(iset a, iset b) { \forall int i; in_(i,a) => in_(i,b) }
 
-//@ axiom nbits_zero : \forall int x; nbits(x)==0 <=> x==0
+//@ logic int card(iset s)
+//@ axiom card_nonneg : \forall iset s; card(s) >= 0
 
-//@ logic int lowest_bit(int x)
+//@ logic iset empty()
+//@ axiom empty_def : \forall int i; !in_(i,empty())
+//@ axiom empty_card : \forall iset s; card(s)==0 <=> s==empty()
 
-/*@ axiom lowest_bit_def : 
-  @   \forall int x; x != 0 => 
-  @     \exists int i; (i >= 0 && 
-  @                     lowest_bit(x) == bit(x,i) &&
-  @                     bit(x,i) != 0 &&
-  @                     \forall int j; 0 <= j < i => bit(x,j) == 0)
+//@ logic iset diff(iset a, iset b)
+/*@ axiom diff_def : 
+  @   \forall iset a, iset b; \forall int i;
+  @     in_(i,diff(a,b)) <=> (in_(i,a) && !in_(i,b))
   @*/
 
-/*@ axiom lowest_bit_zero :
-  @   \forall int x; lowest_bit(x) == 0 <=> x == 0
+//@ logic iset add(int x, iset a)
+/*@ axiom add_def : 
+  @   \forall iset s; \forall int x; \forall int i;
+  @     in_(i,add(x,s))  <=> (i==x || in_(i,s))
   @*/
 
-/*@ axiom lowest_bit_trick :
-  @   \forall int x; x & -x == lowest_bit(x)
+//@ logic iset remove(int x, iset s)
+/*@ axiom remove_def : 
+  @   \forall iset s; \forall int x; \forall int i;
+  @     in_(i,remove(x,s))  <=> (in_(i,s) && i!=x)
   @*/
 
-/*@ axiom remove_one_bit :
-  @    \forall int x, int i; 
-  @       bit(x,i) != 0 => nbits(x - bit(x,i)) == nbits(x) - 1
+/*@ axiom remove_card : 
+  @   \forall iset s; \forall int i;
+  @     in_(i,s) => card(remove(i,s)) == card(s) - 1
   @*/
 
-// count_bits as a warmup...
-/*@ ensures \result == nbits(x) */
-int count_bits(int x) {
-  int d = 0, c = 0;
-  /*@ invariant c + nbits(x-d) == nbits(\at(x,init))
-    @ variant   nbits(x-d)
-    @*/
-  while (d = (x-=d) & -x) c++;
-  return c;
-}
+//@ logic int min_elt(iset s)
+/*@ axiom min_elt_def : 
+  @   \forall iset s; card(s) > 0 => 
+  @     (in_(min_elt(s), s) &&
+  @     \forall int i; in_(i,s) => min_elt(s) <= i)
+  @*/
 
-/* integers as sets of bits */
+//@ logic iset singleton(int x)
+/*@ axiom singleton_def : \forall int i, int j; in_(j,singleton(i)) <=> j==i
+  @*/
 
-/*@ predicate b_in(int i, int x) { bit(x,i) != 0 } */
+/****** interpretation of C ints as abstract sets of integers ***************/
 
-/*@ axiom bwand_set : \forall int x, int y; 
+//@ logic iset iset(int x)
+
+//@ axiom iset_c_zero : \forall int x; iset(x)==empty() <=> x==0
+
+/*@ axiom iset_c_remove : 
+  @  \forall int x, int a, int b; 
+  @    iset(b)==singleton(x) => in_(x,iset(a)) => iset(a-b)==remove(x, iset(a))
+  @*/
+
+// lowest bit trick
+/*@ axiom iset_c_min_elt :
+  @   \forall int x; x != 0 => iset(x&-x) == singleton(min_elt(iset(x)))
+  @*/
+/*@ axiom iset_c_min_elt_help :
+  @   \forall int x; x != 0 <=> x&-x != 0
+  @*/
+
+/*@ axiom iset_c_diff :
+  @  \forall int a, int b; iset(a&~b) == diff(iset(a), iset(b))
+  @*/
+
+/*@ axiom iset_c_add :
+  @  \forall int x, int a, int b; 
+  @    iset(b)==singleton(x) => !in_(x,iset(a)) => iset(a+b) == add(x, iset(a))
+  @*/
+
+/****** helper lemmas *******************************************************/
+
+/* @ axiom included_trans : \forall iset a, iset b, iset c;
+  @   included(a,b) => included(b,c) => included(a,c)
+  @*/
+
+/* @ axiom included_diff : \forall iset a, iset b; included(diff(a,b), a) */
+
+/* @ axiom included_remove : \forall iset a, int x; included(remove(x,a), a) */
+
+/****************************************************************************/
+
+
+/* @ axiom bwand_set : \forall int x, int y; 
   @   \forall int i; b_in(i,x&y) <=> (b_in(i,x) && b_in(i,y)) 
   @*/
 
-/*@ predicate included(int x, int y) { 
+/* @ predicate included(int x, int y) { 
   @   \forall int i; b_in(i,x) => b_in(i,y) 
   @ } 
   @*/
 
-/*@ axiom included_trans : \forall int x, int y, int z;
+/* @ axiom included_trans : \forall int x, int y, int z;
   @   included(x,y) => included(y,z) => included(x,z)
   @*/
 
-/*@ axiom included_bwand_l : \forall int x, int y; included(x&y, x) */
+/* @ axiom included_bwand_l : \forall int x, int y; included(x&y, x) */
 
-/*@ axiom included_bwand_r : \forall int x, int y; included(x&y, y) */
+/* @ axiom included_bwand_r : \forall int x, int y; included(x&y, y) */
 
-/*@ axiom included_sub : \forall int x, int y;
+/* @ axiom included_sub : \forall int x, int y;
   @   included(x,y) => included(y-x, y)
   @*/
 
-/*@ axiom included_nbits : \forall int x, int y;
+/* @ axiom included_nbits : \forall int x, int y;
   @   included(x,y) => nbits(y-x) == nbits(y) - nbits(x)
   @*/
 
-/*@ axiom included_lowest_bit : \forall int x; included(lowest_bit(x), x) */
+/* @ axiom included_lowest_bit : \forall int x; included(lowest_bit(x), x) */
 
-/*@ logic int singleton(int i) */ // this is 2^i
+/* @ logic int singleton(int i) */ // this is 2^i
 
-/*@ axiom singleton_def : \forall int i, int j; b_in(j,singleton(i)) <=> j==i
+/* @ axiom singleton_def : \forall int i, int j; b_in(j,singleton(i)) <=> j==i
   @*/
 
-/*@ axiom lowest_bit_is_singleton : \forall int x;
+/* @ axiom lowest_bit_is_singleton : \forall int x;
   @   x != 0 => \exists int i; lowest_bit(x) == singleton(i)
   @*/
 
-/*@ logic int all_ones(int n) */ // this is 2^n-1, that 11...1 with n ones
+/* @ logic int all_ones(int n) */ // this is 2^n-1, that 11...1 with n ones
 
-/*@ axiom all_ones_def : \forall int n; 
+/* @ axiom all_ones_def : \forall int n; 
   @   \forall int i; b_in(i, all_ones(n)) <=> 0 <= i < n
   @*/   
 
@@ -96,40 +139,43 @@ int count_bits(int x) {
   @   b_in(i,a) => included(a,all_ones(n)) => 0 <= i < n
   @*/
 
-//@ axiom all_ones_trick : \forall int n; ~(~0<<n) == all_ones(n)
+// @ axiom all_ones_trick : \forall int n; ~(~0<<n) == all_ones(n)
 
-//@ axiom nbits_all_ones : \forall int n; nbits(all_ones(n))==n
+// @ axiom nbits_all_ones : \forall int n; nbits(all_ones(n))==n
 
-/*@ axiom b_in_lsl : \forall int i, int x;
+/* @ axiom b_in_lsl : \forall int i, int x;
   @   b_in(i,x) <=> b_in(i+1, x*2)
   @*/
 
-/*@ axiom b_in_lsr : \forall int i, int x; i>0 =>
+/* @ axiom b_in_lsr : \forall int i, int x; i>0 =>
   @   (b_in(i,x) <=> b_in(i-1, x/2))
   @*/
+
+/***************************************************************************/
 
 // t1: termination of the for loop
 int t1(int a, int b, int c){
   int d=0, e=a&~b&~c, f=1;
   if (a)
-    /*@ variant nbits(e-d) */
+    /*@ variant card(iset(e-d)) */
     for (f=0; d=(e-=d)&-e; ) {
       f+=t1(a-d,(b+d)*2,(c+d)/2);
     }
   return f;
 }
 
-// t2: termination of the for loop: nbits(a) decreases
+// t2: termination of the for loop: card(iset(a)) decreases
 int t2(int a, int b, int c){
   int d=0, e=a&~b&~c, f=1;
-  // @ assert included(e,a)
   //@ label L
   if (a)
-    /*@ invariant included(d,e) && included(e,\at(e,L)) */
+    /*@ invariant 
+      @   included(iset(e-d), iset(e)) &&
+      @   included(iset(e),\at(iset(e),L)) 
+      @*/
     for (f=0; d=(e-=d)&-e; ) {
-      // @ assert d == lowest_bit(e)
-      // @ assert included(d,e)
-      //@ assert nbits(a-d) < nbits(a)
+      //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(e)) 
+      //@ assert card(iset(a-d)) < card(iset(a))
       f+=t2(a-d,(b+d)*2,(c+d)/2);
     }
   return f;
@@ -152,7 +198,7 @@ int* col; // current solution being built
 int k;    // current row in the current solution
 
 // s stores a partial solution, for the rows 0..k-1
-/*@ predicate partial_solution(int k, int* s) {
+/* @ predicate partial_solution(int k, int* s) {
   @   \forall int i; 0 <= i < k => 
   @      (\exists int j; 0 <= j < N() && s[i] == singleton(j)) (* &&
   @      (\forall int j; j > i => ((s[i] >> (j-i)) != s[j] &&
@@ -160,10 +206,10 @@ int k;    // current row in the current solution
   @ }
   @*/
 
-/*@ predicate solution(int* s) { partial_solution(N(), s) } */
+/* @ predicate solution(int* s) { partial_solution(N(), s) } */
 
 // lexicographic order on the solutions
-/*@ predicate lt_sol(int* s1, int* s2) {
+/* @ predicate lt_sol(int* s1, int* s2) {
   @   \exists int i; 
   @      0 <= i < N() && 
   @      (\forall int j; 0 <= j < i => s1[j]==s2[j]) &&
@@ -171,20 +217,20 @@ int k;    // current row in the current solution
   @ }
   @*/
 
-/*@ predicate eqk_sol(int k, int* s1, int* s2) {
+/* @ predicate eqk_sol(int k, int* s1, int* s2) {
   @   \forall int i; 0 <= i < k => s1[i]==s2[i]
   @ }
   @*/
 
-/*@ predicate eq_sol(int* s1, int* s2) { eqk_sol(N(), s1, s2) } */
+/* @ predicate eq_sol(int* s1, int* s2) { eqk_sol(N(), s1, s2) } */
 
-/*@ requires solution(col)
+/* @ requires solution(col)
   @ assigns  s, sol[s][0..N()-1]
   @ ensures  s==\old(s)+1 && eq_sol(sol[\old(s)], col)
   @*/
 void store_solution();
 
-/*@ requires
+/* @ requires
   @   k >= 0 && nbits(a) + k == N() &&
   @   bits_a:: (\forall int i; b_in(i,a) <=> 
   @               (0<=i<N() && \forall int j; 0<=j<k => !b_in(i,col[j]))) &&
@@ -203,9 +249,9 @@ void store_solution();
   @*/
 int t3(int a, int b, int c){
   int d=0, e=a&~b&~c, f=1;
-  //@ label L
+  // @ label L
   if (a)
-    /*@ invariant 
+    /* @ invariant 
       @   included(d,e) && included(e,\at(e,L)) &&
       @   f == s - \at(s,init) && f >= 0 &&
       @   k == \old(k) && partial_solution(k, col)
@@ -213,8 +259,8 @@ int t3(int a, int b, int c){
       @   col[k..], s, k, sol[s..][..]
       @*/
     for (f=0; d=(e-=d)&-e; ) {
-      //@ assert included(d,e)
-      //@ assert \exists int i; d == singleton(i) && b_in(i,a) && 0 <= i < N()
+      // @ assert included(d,e)
+      // @ assert \exists int i; d == singleton(i) && b_in(i,a) && 0 <= i < N()
       col[k] = d;                     // ghost code 
       k++;                            // ghost code
       f += t3(a-d, (b+d)*2, (c+d)/2);
@@ -225,7 +271,7 @@ int t3(int a, int b, int c){
   return f;
 }
 
-/*@ requires 
+/* @ requires 
   @   n == N() && s == 0 && k == 0
   @ ensures 
   @   \result == s &&
