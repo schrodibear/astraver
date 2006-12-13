@@ -6,7 +6,7 @@ WHY=why --no-arrays
 
 GWHY=gwhy --no-arrays 
 
-CADULIB=/home/marche/why/examples-c/g4/../../lib
+CADULIB=/users/demons/couchot/why/examples-c/g4/../../lib
 
 CADULIBFILE=caduceus.why
 
@@ -47,7 +47,7 @@ isabelle/%_spec_why.thy: why/%_spec.why
 
 isabelle/%_why.thy: isabelle/g4_spec_why.thy why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory g4_spec_why $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
-	cp -f /home/marche/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
+	cp -f /users/demons/couchot/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
 
 simplify: simplify/g4_why.sx
 	@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)
@@ -83,7 +83,7 @@ smtlib: smtlib/g4_why.smt
 	@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)
 
 smtlib/%_why.smt: why/g4_spec.why why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat  -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
 
 gui stat: g4.stat
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.64 2006-11-03 12:49:05 marche Exp $ i*)
+(*i $Id: options.mli,v 1.65 2006-12-13 09:28:09 couchot Exp $ i*)
 
 (*s General options *)
 
@@ -61,6 +61,7 @@ val split_user_conj : bool
 val lvlmax : int
 val all_vc : bool
 val pruning : bool
+val defExpanding : bool
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph | SortedStratified
 val get_types_encoding : unit -> encoding

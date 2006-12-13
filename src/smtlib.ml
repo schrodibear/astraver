@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.27 2006-11-24 13:28:00 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.28 2006-12-13 09:28:09 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -58,7 +58,7 @@ let prefix id =
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
   else if id == t_div_int then "/"
-  else if id == t_mod_int then "/" 
+  else if id == t_mod_int then "%" 
 (* JFC: TODO change it as soon as the modulo  will be accepted in place by yices *)
   else if id == t_neg_int then "-"
   (* real ops *)
@@ -88,7 +88,7 @@ let is_smtlib_keyword =
      "assumption";"axioms";"defintion";"extensions";"formula";
      "funs";"extrafuns";"extrasorts";"extrapreds";"language";
      "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool";
-     "Array";"U"];
+     "Array";"U";"select";"store"];
   Hashtbl.mem ht
 
 let idents fmt s = 
@@ -117,8 +117,8 @@ let rec print_term fmt = function
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
       if (Options.get_types_encoding() = SortedStratified) then
 	fprintf fmt 
-	  "@[(ite@ (= %a c_Boolean_true) @ %a@ %a)@]" 
-	  print_term a print_term b print_term c 
+	  "@[(smtlib__ite@ %a @ %a@ %a)@]" 
+	   print_term a print_term b print_term c 
       else
 	fprintf fmt "@[(ite@ (= %a c_Boolean_true) @ %a@ %a)@]" 
 	  print_term a print_term b print_term c

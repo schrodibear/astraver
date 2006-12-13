@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.114 2006-11-07 13:25:28 marche Exp $ i*)
+(*i $Id: misc.ml,v 1.115 2006-12-13 09:28:08 couchot Exp $ i*)
 
 open Options
 open Ident
@@ -372,11 +372,17 @@ let subst_one x t = Idmap.add x t Idmap.empty
 
 let subst_onev = subst_one
 
-let rec subst_manyv vl1 vl2 = match vl1, vl2 with
+let rec subst_many vl1 vl2 = match vl1, vl2 with
+  | [], [] -> Idmap.empty
+  | x1 :: l1, x2 :: l2 -> Idmap.add x1 x2 (subst_many l1 l2)
+  | _ -> invalid_arg "subst_many"
+
+let rec subst_manyv  vl1 vl2 = match vl1, vl2 with
   | [], [] -> Idmap.empty
   | x1 :: l1, x2 :: l2 -> Idmap.add x1 x2 (subst_manyv l1 l2)
   | _ -> invalid_arg "subst_manyv"
-  
+
+
 let rec unref_term = function
   | Tderef id -> Tvar id
   | Tapp (id, tl, i) -> Tapp (id, List.map unref_term tl, i)

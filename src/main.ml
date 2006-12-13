@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.117 2006-11-23 21:28:25 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.118 2006-12-13 09:28:08 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -54,7 +54,8 @@ let reset () =
     | Mizar -> Mizar.reset ()
     | Isabelle -> Isabelle.reset ()
     | Hol4 -> Hol4.reset ()
-    | Harvey | Simplify | Zenon | CVCLite | SmtLib | Gappa 
+    | SmtLib ->  ()
+    | Harvey | Simplify | Zenon | CVCLite  | Gappa 
     | Why | Dispatcher -> ()
 
 let add_loc = function
@@ -67,24 +68,33 @@ let add_loc = function
 
 let push_decl d = 
   add_loc d;
-  Queue.push d declarationQueue;
   if not pruning then 
-    match prover () with
-      | Pvs -> Pvs.push_decl d
-      | Coq _ -> Coq.push_decl d
-      | HolLight -> Holl.push_decl d
-      | Mizar -> Mizar.push_decl d
-      | Isabelle -> Isabelle.push_decl d
-      | Hol4 -> Hol4.push_decl d
-      | Gappa -> Gappa.push_decl d  
-      | Why -> Pretty.push_decl d
-      | Dispatcher -> Dispatcher.push_decl d      
-      | Harvey -> Harvey.push_decl d
-      | Simplify -> Simplify.push_decl d
-      | Zenon -> Zenon.push_decl d
-      | CVCLite -> Cvcl.push_decl d
-      | SmtLib -> Smtlib.push_decl d
-	  
+    let pushing = 
+      match prover () with
+	| Pvs -> Pvs.push_decl
+	| Coq _ -> Coq.push_decl 
+	| HolLight -> Holl.push_decl 
+	| Mizar -> Mizar.push_decl
+	| Isabelle -> Isabelle.push_decl
+	| Hol4 -> Hol4.push_decl
+	| Gappa -> Gappa.push_decl 
+	| Why -> Pretty.push_decl
+	| Dispatcher ->Dispatcher.push_decl
+	| Harvey -> Harvey.push_decl
+	| Simplify -> Simplify.push_decl
+	| Zenon -> Zenon.push_decl
+	| CVCLite -> Cvcl.push_decl
+	| SmtLib -> Smtlib.push_decl 
+    in
+    if defExpanding then 
+      pushing (PredDefExpansor.push d)
+    else
+      pushing d 
+  else
+    if defExpanding then 
+      Queue.push (PredDefExpansor.push d) declarationQueue
+    else
+      Queue.push d declarationQueue
 
 
 

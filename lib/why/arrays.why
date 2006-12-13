@@ -16,11 +16,11 @@ logic update : 'a farray, int, 'a -> 'a farray
 axiom access_update : 
   forall t : 'a farray. forall i : int. forall v : 'a.
   access(update(t,i,v), i) = v
-
+(*
 axiom access_update_eq : 
   forall t : 'a farray. forall i : int. forall j : int. forall v : 'a.
   i = j -> access(update(t,i,v), j) = v
-
+*)
 axiom access_update_neq : 
   forall t : 'a farray. forall i : int. forall j : int. forall v : 'a.
   i <> j -> access(update(t,i,v), j) = access(t,j)
@@ -37,11 +37,8 @@ parameter array_set :
 
 (* Sorted arrays *)
 
-logic sorted_array : int farray, int, int -> prop
-
-axiom sorted_array_def :
-  forall t:int farray. forall i:int. forall j:int.
-    sorted_array(t,i,j) <->
+predicate sorted_array
+  (t:int farray, i:int, j:int) = 
     forall k:int. i <= k < j -> t[k] <= t[k+1]
 
 logic array_le : int farray, int, int, int -> prop
@@ -49,11 +46,8 @@ logic array_ge : int farray, int, int, int -> prop
 
 (* Arrays permutations *)
 
-logic exchange : int farray, int farray, int, int -> prop
-
-axiom exchange_def :
-  forall t1:int farray. forall t2:int farray. forall i:int. forall j:int.
-    exchange(t1,t2,i,j) <-> 
+predicate exchange 
+(t1:int farray, t2:int farray, i:int, j:int) = 
     (array_length(t1) = array_length(t2) and
     t1[i] = t2[j] and t2[i] = t1[j] and
     forall k:int. (k <> i and k <> j) -> t1[k] = t2[k])

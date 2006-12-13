@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.4 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.5 2006-12-13 09:28:09 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -247,23 +247,29 @@ struct
 					end)
 
 
+  let fill n = 
+    let temp = ref [] in
+    for i= 0 to n-1 do
+      temp := i :: !temp
+    done ;
+    !temp
+
   (** the data structure that stores the equivalence classes 
       for the axioms number **)
-  let partition : UnionFindInt.t = 
-    let fill n = 
-      let temp = ref [] in
-      for i= 0 to n-1 do
-	temp := i :: !temp
-      done ;
-      !temp in
-    UnionFindInt.init (fill 1000)
+  let partition : UnionFindInt.t ref =  ref (UnionFindInt.init (fill 1000))
 
+  let reinit p =
+    p := UnionFindInt.init (fill 1000)
+
+  let reset () =
+    reinit partition
+    
 
 (** 
     @param m, n : class number that are equivalent.    
 **)
   let merge (m:int)  (n:int) = 
-    UnionFindInt.union m n partition 
+    UnionFindInt.union m n !partition 
     (*Printf.printf  " merge %d ,  %d \n" m n *)
 
       (**
@@ -306,9 +312,9 @@ struct
 	  merge !firstTypeDefinitionNumber !firstGoalNumber ;
 	
       (** computes the declarations corresponding to the formula classe**)
-	let goalClassNumber = UnionFindInt.find !firstGoalNumber partition in 
+	let goalClassNumber = UnionFindInt.find !firstGoalNumber !partition in 
 	let addToSet k v = 
-	  if ((UnionFindInt.find k partition) = goalClassNumber) then
+	  if ((UnionFindInt.find k !partition) = goalClassNumber) then
 	    localSet := IntSet.add k !localSet
 	in
 	Hashtbl.iter addToSet FormulaContainer.fContainer ;
@@ -323,7 +329,9 @@ struct
 	      addToQueue t
 	in 
 	addToQueue  (IntSet.elements !localSet) ;
+	
 	axiomQueue
+	
       end
 	
 end
@@ -508,8 +516,12 @@ let reduce q     =
   display q ;*)
   FormulaContainer.reset ();
   SymbolContainer.reset();
+  EquivClass.reset();
+  
   Queue.iter launcher q ;
-  EquivClass.getReducedTheory ""
+  let q = EquivClass.getReducedTheory "" in
+  (*display q ;*)
+  q 
     
 
     

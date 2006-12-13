@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.8 2006-11-17 12:24:12 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.9 2006-12-13 09:28:08 couchot Exp $ i*)
 
 open Cc
 open Logic
@@ -41,12 +41,18 @@ let axiomR c = (c^suffix)^ "_to_" ^ (c^suffix)
 let def c = "def_"^c
 
 let int2U = "int2U"
-let u2Int = "u2Int"
+let ss2Int = "ss2Int"
 let real2U = "real2U"
-let u2Real = "u2Real" 
+let ss2Real = "ss2Real" 
 let bool2U = "bool2U"
-let u2Bool = "u2Bool"
+let ss2Bool = "ss2Bool"
 let arities = ref []
+
+
+
+
+let prefixForTypeIdent ident = 
+  "type_"^ident
 
 
 let int = Tapp (Ident.create (prefix^"int"), [], []) 
@@ -99,14 +105,25 @@ let ut = PTexternal ([], Ident.create (prefix^"unique"))
 (**
    @param pt is the type we are going to translate.
    @return either the type if this one if a built in type (like int, float)
+   or the type  ssorted
+**)
+let ssortedButBuiltIn  pt = match pt with 
+    PTint as k -> k 
+  | PTreal as k -> k
+  | PTbool as k -> k
+  | _ ->       PTexternal ([], Ident.create (prefix^"ssorted"))
+
+
+(**
+   @param pt is the type we are going to translate.
+   @return either the type if this one if a built in type (like int, float)
    or the unique type define just above
 **)
 let utButBuiltIn  pt = match pt with 
     PTint as k -> k 
   | PTreal as k -> k
   | PTbool as k -> k
-      (*| PTvar _ -> PTexternal ([], Ident.create (prefix^"type"))*)
-  | _ -> PTexternal ([], Ident.create (prefix^"unique"))
+  | _ -> ut
 
 
 (**
@@ -115,12 +132,16 @@ let utButBuiltIn  pt = match pt with
    or the unique type define in the ut function. It is a shortcut since it allows 
    to create quickly a PureType. 
 **)
-let utButBuiltInString  pt = match pt with 
+let ssortedButBuiltInString  pt = match pt with 
     "PTint"  -> PTint 
   | "PTreal" -> PTreal
   | "PTbool" -> PTbool
+  | "type" -> PTexternal ([], Ident.create (prefix^"type"))
+  | "ssorted" -> PTexternal ([], Ident.create (prefix^"ssorted"))
   | _ -> 
+      (*Printf.printf " type : %s \n" pt ;  *)
       PTexternal ([], Ident.create (prefix^"type"))
+
 
 (**
    @param ptl is the list of pure type 
@@ -135,14 +156,14 @@ let unify ptl = List.map (fun _ -> ut) ptl
    the type unique, but for built in type that are preserved
 **)
 let unifyPureType ptl = 
-  List.map (fun pt -> utButBuiltIn pt) ptl
+  List.map (fun pt -> ssortedButBuiltIn pt) ptl
 
 (**
    @param ptl is the list of pure type, described as string  
    @return a list with the same size as ptl and whose only contains the 
    the type unique, but for built in type that are preserved
 **)
-let unifyString ptl = List.map (fun pt -> utButBuiltInString pt) ptl
+let unifyString ptl = List.map (fun pt -> ssortedButBuiltInString pt) ptl
 
   
 
@@ -173,15 +194,16 @@ let newForall is_wp x ty tr p =
 **) 
 let prelude =
   (* The unique sort for not built-in types*)
-  (Dtype (loc, [], prefix^"unique"))::	
+  (Dtype (loc, [], prefix^"unique"))::
+  (Dtype (loc, [], prefix^"ssorted"))::	
     (Dtype (loc, [], prefix^"type"))::
     (Dtype (loc, [], prefix^"Boolean"))::
     (Dlogic (loc, prefix^"sort", 
-	     Env.empty_scheme (Function ([utButBuiltInString "type" ; ut], ut)))):: 
+	     Env.empty_scheme (Function ([ssortedButBuiltInString "type" ; ut], ssortedButBuiltInString "ssorted")))):: 
     (Dlogic (loc, prefix^"Boolean_true",
-	     Env.empty_scheme (Function ([], utButBuiltIn PTbool)))):: 
+	     Env.empty_scheme (Function ([], ssortedButBuiltIn PTbool)))):: 
     (Dlogic (loc, prefix^"Boolean_false",
-	     Env.empty_scheme (Function ([], utButBuiltIn PTbool)))):: 
+	     Env.empty_scheme (Function ([], ssortedButBuiltIn PTbool)))):: 
     (** \forall b : bool b= true \lor b = false **)
     (Daxiom (loc, axiomR "either true_or_false",
 	     let b = Ident.create "b" in 
@@ -199,37 +221,53 @@ let prelude =
 	     Env.empty_scheme neq ))::
     
     (Dlogic (loc, int2U, 
-	     Env.empty_scheme (Function ([utButBuiltIn PTint], ut)))):: 
-    (Dlogic (loc, u2Int, 
-	     Env.empty_scheme (Function ([ut], utButBuiltIn PTint))))::
+	     Env.empty_scheme (Function ([ssortedButBuiltIn PTint], ut)))):: 
+    (Dlogic (loc, ss2Int, 
+	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTint))))::
     (Dlogic (loc, real2U, 
-	     Env.empty_scheme (Function ([utButBuiltIn PTreal], ut)))):: 
-    (Dlogic (loc, u2Real, 
-	     Env.empty_scheme (Function ([ut], utButBuiltIn PTreal)))):: 
+	     Env.empty_scheme (Function ([ssortedButBuiltIn PTreal], ut)))):: 
+    (Dlogic (loc, ss2Real, 
+	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTreal)))):: 
     (Dlogic (loc, bool2U, 
-	     Env.empty_scheme (Function ([utButBuiltIn PTbool], ut))))::
-    (Dlogic (loc, u2Bool, 
-	     Env.empty_scheme (Function ([ut], utButBuiltIn PTbool)))):: 
+	     Env.empty_scheme (Function ([ssortedButBuiltIn PTbool], ut))))::
+    (Dlogic (loc, ss2Bool, 
+	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTbool)))):: 
     (Dlogic (loc, prefix^"int",
-	     Env.empty_scheme (Function ([], utButBuiltInString "type")))):: 
+	     Env.empty_scheme (Function ([], ssortedButBuiltInString "type")))):: 
     (Dlogic (loc, prefix^"bool", 
-	     Env.empty_scheme (Function ([], utButBuiltInString "type"))))::
+	     Env.empty_scheme (Function ([], ssortedButBuiltInString "type"))))::
     (Dlogic (loc, prefix^"real", 
-	     Env.empty_scheme (Function ([], utButBuiltInString "type"))))::
+	     Env.empty_scheme (Function ([], ssortedButBuiltInString "type"))))::
     (Dlogic (loc, prefix^"unit", 
-	     Env.empty_scheme (Function ([], utButBuiltInString "type"))))::
+	     Env.empty_scheme (Function ([], ssortedButBuiltInString "type"))))::
     (Dlogic (loc, prefix^"ref", 
 	     Env.empty_scheme (Function ([ut], ut))))::
-    (** \forall x: Int .  u2Int(sort(int, int2U(x))) = x  (a) **)
-    (Daxiom (loc, axiomR "eq_"^u2Int^"_"^int2U,
+    (** \forall x,y: U, t : Typ .  sort(t,x) = sort(t,y) => x = y   **)
+    (Daxiom (loc, axiomR prefix^"sort_is_injective",
+	     let t = Ident.create "t" in 
+ 	     let x = Ident.create "x" in 
+ 	     let y = Ident.create "y" in 
+	     let sort_t_x_ = Tapp (Ident.create (prefix^"sort"),
+				  [Tvar t;Tvar x], []) in 
+	     let sort_t_y_ = Tapp (Ident.create (prefix^"sort"),
+				  [Tvar t;Tvar y], []) in 
+	     let sort_t_x_Eq_sort_t_y = Papp (Ident.t_eq, [sort_t_x_; sort_t_y_], []) in
+	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
+	     let implication = Pimplies (false, sort_t_x_Eq_sort_t_y, x_Eq_y) in 
+	     let innerForally =  newForallTriggerFree false  y  ut  implication in 
+	     let innerForallx =  newForallTriggerFree false  x  ut  innerForally in 
+	     let outerForall =  newForallTriggerFree false  t  (ssortedButBuiltInString "type") innerForallx in 
+             Env.empty_scheme outerForall))::
+    (** \forall x: Int .  ss2Int(sort(int, int2U(x))) = x  (a) **)
+    (Daxiom (loc, axiomR "eq_"^ss2Int^"_"^int2U,
  	     let x = Ident.create "x" in 
 	     let int2u_x_ = Tapp (Ident.create int2U,
 				  [Tvar x], []) in 
 	     let sort_int_int2U_x_ = Tapp (Ident.create (prefix^"sort"),
 					   [int; int2u_x_], []) in 
-	     let u2Intsort_int_int2U_x_ = Tapp (Ident.create u2Int,
+	     let ss2Intsort_int_int2U_x_ = Tapp (Ident.create ss2Int,
 						[sort_int_int2U_x_], []) in
-	     let peq = Papp (Ident.t_eq,[u2Intsort_int_int2U_x_;Tvar x], []) in 
+	     let peq = Papp (Ident.t_eq,[ss2Intsort_int_int2U_x_;Tvar x], []) in 
              Env.empty_scheme (newForall false  x  PTint [[TPat sort_int_int2U_x_]]peq )))::
     (** \forall x,y: Int .  int2U(x) = int2U(y) => x = y   **)
     (Daxiom (loc, axiomR int2U^"_is_injective",
@@ -273,145 +311,109 @@ let prelude =
 	     let innerForall =  newForallTriggerFree false  y  PTbool  implication in 
 	     let outerForall =  newForallTriggerFree false  x  PTbool  innerForall in 
              Env.empty_scheme outerForall))::
-    (** \forall x,y: U .  u2Int(x) = u2Int(y) => x = y   **)
-    (Daxiom (loc, axiomR u2Int^"_is_injective",
+    (** \forall x,y: ssorted .  ss2Int(x) = ss2Int(y) => x = y   **)
+    (Daxiom (loc, axiomR ss2Int^"_is_injective",
  	     let x = Ident.create "x" in 
-	     let u2int_x_ = Tapp (Ident.create u2Int,
+	     let ss2int_x_ = Tapp (Ident.create ss2Int,
 				  [Tvar x], []) in 
  	     let y = Ident.create "y" in 
-	     let u2int_y_ = Tapp (Ident.create u2Int,
+	     let ss2int_y_ = Tapp (Ident.create ss2Int,
 				  [Tvar y], []) in 
-	     let u2int_x_Eq_u2int_y_ = Papp (Ident.t_eq, [u2int_x_; u2int_y_], []) in
+	     let ss2int_x_Eq_ss2int_y_ = Papp (Ident.t_eq, [ss2int_x_; ss2int_y_], []) in
 	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
-	     let implication = Pimplies (false,   u2int_x_Eq_u2int_y_, x_Eq_y) in 
-	     let innerForall =  newForallTriggerFree false  y  ut  implication in 
-	     let outerForall =  newForallTriggerFree false  x  ut  innerForall in 
+	     let implication = Pimplies (false,   ss2int_x_Eq_ss2int_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  (ssortedButBuiltInString "ssorted")  implication in 
+	     let outerForall =  newForallTriggerFree false  x  (ssortedButBuiltInString "ssorted")  innerForall in 
              Env.empty_scheme outerForall))::
-    (** \forall x,y: U .  u2Real(x) = u2Real(y) => x = y   **)
-    (Daxiom (loc, axiomR u2Real^"_is_injective",
+    (** \forall x,y: U .  ss2Real(x) = ss2Real(y) => x = y   **)
+    (Daxiom (loc, axiomR ss2Real^"_is_injective",
  	     let x = Ident.create "x" in 
-	     let u2real_x_ = Tapp (Ident.create u2Real,
+	     let ss2real_x_ = Tapp (Ident.create ss2Real,
 				  [Tvar x], []) in 
  	     let y = Ident.create "y" in 
-	     let u2real_y_ = Tapp (Ident.create u2Real,
+	     let ss2real_y_ = Tapp (Ident.create ss2Real,
 				  [Tvar y], []) in 
-	     let u2real_x_Eq_u2real_y_ = Papp (Ident.t_eq, [u2real_x_; u2real_y_], []) in
+	     let ss2real_x_Eq_ss2real_y_ = Papp (Ident.t_eq, [ss2real_x_; ss2real_y_], []) in
 	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
-	     let implication = Pimplies (false,   u2real_x_Eq_u2real_y_, x_Eq_y) in 
-	     let innerForall =  newForallTriggerFree false  y  ut  implication in 
-	     let outerForall =  newForallTriggerFree false  x  ut  innerForall in 
+	     let implication = Pimplies (false,   ss2real_x_Eq_ss2real_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  (ssortedButBuiltInString "ssorted")  implication in 
+	     let outerForall =  newForallTriggerFree false  x  (ssortedButBuiltInString "ssorted")  innerForall in 
              Env.empty_scheme outerForall))::
-    (** \forall x,y: U .  u2Bool(x) = u2Bool(y) => x = y   **)
-    (Daxiom (loc, axiomR u2Bool^"_is_injective",
+    (** \forall x,y: U .  ss2Bool(x) = ss2Bool(y) => x = y   **)
+    (Daxiom (loc, axiomR ss2Bool^"_is_injective",
  	     let x = Ident.create "x" in 
-	     let u2bool_x_ = Tapp (Ident.create u2Bool,
+	     let ss2bool_x_ = Tapp (Ident.create ss2Bool,
 				  [Tvar x], []) in 
  	     let y = Ident.create "y" in 
-	     let u2bool_y_ = Tapp (Ident.create u2Bool,
+	     let ss2bool_y_ = Tapp (Ident.create ss2Bool,
 				  [Tvar y], []) in 
-	     let u2bool_x_Eq_u2bool_y_ = Papp (Ident.t_eq, [u2bool_x_; u2bool_y_], []) in
+	     let ss2bool_x_Eq_ss2bool_y_ = Papp (Ident.t_eq, [ss2bool_x_; ss2bool_y_], []) in
 	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
-	     let implication = Pimplies (false,   u2bool_x_Eq_u2bool_y_, x_Eq_y) in 
-	     let innerForall =  newForallTriggerFree false  y  ut  implication in 
-	     let outerForall =  newForallTriggerFree false  x  ut  innerForall in 
+	     let implication = Pimplies (false,   ss2bool_x_Eq_ss2bool_y_, x_Eq_y) in 
+	     let innerForall =  newForallTriggerFree false  y  (ssortedButBuiltInString "ssorted")  implication in 
+	     let outerForall =  newForallTriggerFree false  x  (ssortedButBuiltInString "ssorted")  innerForall in 
              Env.empty_scheme outerForall))::
-    (** \forall x,y: U, t : Typz .  sort(t,x) = sort(t,y) => x = y   **)
-    (Daxiom (loc, axiomR prefix^"sort_is_injective",
-	     let t = Ident.create "t" in 
- 	     let x = Ident.create "x" in 
- 	     let y = Ident.create "y" in 
-	     let sort_t_x_ = Tapp (Ident.create (prefix^"sort"),
-				  [Tvar t;Tvar x], []) in 
-	     let sort_t_y_ = Tapp (Ident.create (prefix^"sort"),
-				  [Tvar t;Tvar y], []) in 
-	     let sort_t_x_Eq_sort_t_y = Papp (Ident.t_eq, [sort_t_x_; sort_t_y_], []) in
-	     let x_Eq_y = Papp (Ident.t_eq, [Tvar x; Tvar y], []) in
-	     let implication = Pimplies (false, sort_t_x_Eq_sort_t_y, x_Eq_y) in 
-	     let innerForally =  newForallTriggerFree false  y  ut  implication in 
-	     let innerForallx =  newForallTriggerFree false  x  ut  innerForally in 
-	     let outerForall =  newForallTriggerFree false  t  (utButBuiltInString "type") innerForallx in 
-             Env.empty_scheme outerForall))::
-    (** \forall x:Real .  u2Real(sort(real, real2U(x))) = x  (b) **)
-    (Daxiom (loc, axiomR "eq_"^u2Real^"_"^real2U,
+    (** \forall x:Real .  ss2Real(sort(real, real2U(x))) = x  (b) **)
+    (Daxiom (loc, axiomR "eq_"^ss2Real^"_"^real2U,
 	     let x = Ident.create "x" in 
 	     let real2u_x_ = Tapp (Ident.create real2U,
 				   [Tvar x], []) in 
 	     let sort_real_real2U_x_ = Tapp (Ident.create (prefix^"sort"),
 					     [real; real2u_x_], []) in 
-	     let u2Realsort_real_real2U_x_ = Tapp (Ident.create u2Real,
+	     let ss2Realsort_real_real2U_x_ = Tapp (Ident.create ss2Real,
 						   [sort_real_real2U_x_], []) in
-	     let peq = Papp (Ident.t_eq,[u2Realsort_real_real2U_x_;Tvar x], []) in 
+	     let peq = Papp (Ident.t_eq,[ss2Realsort_real_real2U_x_;Tvar x], []) in 
              Env.empty_scheme (newForall false  x  PTreal [[TPat sort_real_real2U_x_]]peq )))::
-    (** \forall x:Bool .  u2Bool(sort(bool, bool2U(x))) = x  **)
-    (Daxiom (loc, axiomR "eq_"^u2Bool^"_"^bool2U,
+    (** \forall x:Bool .  ss2Bool(sort(bool, bool2U(x))) = x  **)
+    (Daxiom (loc, axiomR "eq_"^ss2Bool^"_"^bool2U,
 	     let x = Ident.create "x" in 
 	     let bool2u_x_ = Tapp (Ident.create bool2U,
 				   [Tvar x], []) in 
 	     let sort_bool_bool2U_x_ = Tapp (Ident.create (prefix^"sort"),
 					     [bool; bool2u_x_], []) in 
-	     let u2Boolsort_bool_bool2U_x_ = Tapp (Ident.create u2Bool,
+	     let ss2Boolsort_bool_bool2U_x_ = Tapp (Ident.create ss2Bool,
 						   [sort_bool_bool2U_x_], []) in
-	     let peq = Papp (Ident.t_eq,[u2Boolsort_bool_bool2U_x_;Tvar x], []) in 
+	     let peq = Papp (Ident.t_eq,[ss2Boolsort_bool_bool2U_x_;Tvar x], []) in 
              Env.empty_scheme (newForall false  x  PTbool [[TPat sort_bool_bool2U_x_]]peq )))::
-    (** \forall x. U  int2U(u2Int(sort(int,x))) = sort(int,x) **)
-    (Daxiom (loc, axiomR "eq_"^int2U^"_"^u2Int,
+    (** \forall x. U  int2U(ss2Int(sort(int,x))) = x **)
+    (Daxiom (loc, axiomR "eq_"^int2U^"_"^ss2Int,
 	     let x = Ident.create "x" in 
 	     let sort_int_x_ = Tapp (Ident.create (prefix^"sort"),
 				     [int; Tvar x], []) in
-	     let u2Int_sort_int_x_ = Tapp (Ident.create u2Int,
+	     let ss2Int_sort_int_x_ = Tapp (Ident.create ss2Int,
 					   [sort_int_x_], []) in 
-	     let int2U_u2Int_sort_int_x_ = Tapp (Ident.create int2U,
-						 [u2Int_sort_int_x_], []) in
+	     let int2U_ss2Int_sort_int_x_ = Tapp (Ident.create int2U,
+						 [ss2Int_sort_int_x_], []) in
 	     let peq = Papp (Ident.t_eq,
-			     [int2U_u2Int_sort_int_x_;sort_int_x_], [])
+			     [int2U_ss2Int_sort_int_x_;Tvar x], [])
 	     in
-	     Env.empty_scheme (newForall false  x ut [[TPat u2Int_sort_int_x_]]peq )))::
-    (** \forall x. U  real2U(u2Real(sort(real,x))) = sort(real,x) **)
-    (Daxiom (loc, axiomR "eq_"^real2U^"_"^u2Real,
+	     Env.empty_scheme (newForall false  x ut [[TPat ss2Int_sort_int_x_]]peq )))::
+    (** \forall x. U  real2U(ss2Real(sort(real,x))) = x **)
+    (Daxiom (loc, axiomR "eq_"^real2U^"_"^ss2Real,
 	     let x = Ident.create "x" in 
 	     let sort_real_x_ = Tapp (Ident.create (prefix^"sort"),
 				      [real; Tvar x], []) in
-	     let u2Real_sort_real_x_ = Tapp (Ident.create u2Real,
+	     let ss2Real_sort_real_x_ = Tapp (Ident.create ss2Real,
 					     [sort_real_x_], []) in 
-	     let real2U_u2Real_sort_real_x_ = Tapp (Ident.create real2U,
-						    [u2Real_sort_real_x_], []) in
+	     let real2U_ss2Real_sort_real_x_ = Tapp (Ident.create real2U,
+						    [ss2Real_sort_real_x_], []) in
 	     let peq = Papp (Ident.t_eq,
-			     [real2U_u2Real_sort_real_x_;sort_real_x_], [])
+			     [real2U_ss2Real_sort_real_x_;Tvar x], [])
 	     in
-	     Env.empty_scheme (newForall false  x ut [[TPat u2Real_sort_real_x_]]peq )))::
-    (** \forall x. U  bool2U(u2Bool(sort(bool,x))) = sort(bool,x) **)
-    (Daxiom (loc, axiomR "eq_"^bool2U^"_"^u2Bool,
+	     Env.empty_scheme (newForall false  x ut [[TPat ss2Real_sort_real_x_]]peq )))::
+    (** \forall x. U  bool2U(ss2Bool(sort(bool,x))) = sort(bool,x) **)
+    (Daxiom (loc, axiomR "eq_"^bool2U^"_"^ss2Bool,
 	     let x = Ident.create "x" in 
 	     let sort_bool_x_ = Tapp (Ident.create (prefix^"sort"),
 				      [bool; Tvar x], []) in
-	     let u2Bool_sort_bool_x_ = Tapp (Ident.create u2Bool,
+	     let ss2Bool_sort_bool_x_ = Tapp (Ident.create ss2Bool,
 					     [sort_bool_x_], []) in 
-	     let bool2U_u2Bool_sort_bool_x_ = Tapp (Ident.create bool2U,
-						    [u2Bool_sort_bool_x_], []) in
+	     let bool2U_ss2Bool_sort_bool_x_ = Tapp (Ident.create bool2U,
+						    [ss2Bool_sort_bool_x_], []) in
 	     let peq = Papp (Ident.t_eq,
-			     [bool2U_u2Bool_sort_bool_x_;sort_bool_x_], [])
+			     [bool2U_ss2Bool_sort_bool_x_;Tvar x], [])
 	     in
-	     Env.empty_scheme (newForall false  x ut [[TPat bool2U_u2Bool_sort_bool_x_]]peq )))::
-    (** \forall alpha : Type, \forall x, y : Int sort(alpha,x) = sort(alpha, y) 
-	\Rightarrow 
-	x = y **)
-    (Daxiom (loc, axiomR "peq",
-	     let alpha = Ident.create "alpha" in
-	     let x = Ident.create "x" in
-	     let y = Ident.create "y"  in
-	     Env.empty_scheme
-	       (newForallTriggerFree false  alpha (utButBuiltInString "type")
-		  (newForallTriggerFree false  x ut 
-		     (newForallTriggerFree false y ut 
-			(Pimplies (false, 
-				   (Papp (Ident.t_eq,
-					  [Tapp (Ident.create (prefix^"sort"),
-						 [Tvar alpha; Tvar x], []);
-					   Tapp (Ident.create (prefix^"sort"),
-						 [Tvar alpha; Tvar y], [])], 
-					  [])),
-				   (Papp (Ident.t_eq, [Tvar x; Tvar y], [])))
-			))))))::
+	     Env.empty_scheme (newForall false  x ut [[TPat bool2U_ss2Bool_sort_bool_x_]]peq )))::
     []
 
 
@@ -436,7 +438,7 @@ let rec leftt pt fv=
 	  (print_endline ("unknown vartype : "^s); Ident.create "dummy") in
 	Tvar t
     | PTvar {type_val = Some pt} -> leftt pt fv 
-    | PTexternal (ptl, id) -> Tapp (id, List.map (fun pt -> leftt pt fv) ptl, [])
+    | PTexternal (ptl, id) -> Tapp ( Ident.create (prefixForTypeIdent (Ident.string id)), List.map (fun pt -> leftt pt fv) ptl, [])
 
 
 (**@return a Tapp that encapsulates a term t with sort(..., t) 
@@ -553,11 +555,11 @@ let rec translate_term fv lv term doTheCast=
   if doTheCast then   
     match (getTermType term lv) with 
 	PTint  ->
- 	  Tapp(Ident.create u2Int, [translate fv lv term],[])
+ 	  Tapp(Ident.create ss2Int, [translate fv lv term],[])
       | PTreal  ->
- 	  Tapp(Ident.create u2Real, [translate fv lv term],[])
+ 	  Tapp(Ident.create ss2Real, [translate fv lv term],[])
       | PTbool -> 
-	  Tapp(Ident.create u2Bool, [translate fv lv term],[])
+	  Tapp(Ident.create ss2Bool, [translate fv lv term],[])
       | _   ->
 	  (** if the type is not pure, i.e. it is deduced syntactically **)
 	  let term'= translate fv lv term  in 
@@ -568,13 +570,13 @@ let rec translate_term fv lv term doTheCast=
 		      match sortTerm with       
 			  Tapp (k, [], [])  when 
 			    Ident.string k = prefix^"int" ->  
-			      Tapp(Ident.create u2Int, [term'],[])
+			      Tapp(Ident.create ss2Int, [term'],[])
 		      	| Tapp (k, [], [])  when 
 			    Ident.string k = prefix^"real" -> 
-			    Tapp(Ident.create u2Real, [term'],[])
+			    Tapp(Ident.create ss2Real, [term'],[])
 			| Tapp (k, [], [])  when 
 			    Ident.string k = prefix^"bool"->  
-			    Tapp(Ident.create u2Bool, [term'],[])
+			    Tapp(Ident.create ss2Bool, [term'],[])
 			| _ as t ->
 			    Format.printf ("tt :  %a \n ") print_term t ; 
 			    assert false
@@ -600,7 +602,7 @@ and translateParam fv lv t doTheCast =
   let tp = translate_term fv lv t doTheCast in
   match tp with 
       Tapp(id1, [ti],_) when 
-	Ident.string id1 = u2Int ->
+	Ident.string id1 = ss2Int ->
 	  begin 
 	    match ti with       
 		Tapp(id2, [_;tk],_) when 
@@ -615,7 +617,7 @@ and translateParam fv lv t doTheCast =
 	      | _ -> tp 
 	  end
     | Tapp(id1, [ti],_) when 
-	Ident.string id1 = u2Real ->
+	Ident.string id1 = ss2Real ->
 	begin 
 	  match ti with       
 	      Tapp(id2, [_;tk],_) when 
@@ -630,7 +632,7 @@ and translateParam fv lv t doTheCast =
 	    | _ -> tp 
 	end
     | Tapp(id1, [ti],_) when 
-	Ident.string id1 = u2Bool ->
+	Ident.string id1 = ss2Bool ->
 	begin 
 	  match ti with       
 	      Tapp(id2, [_;tk],_) when 
@@ -660,6 +662,24 @@ and literalParam fv lv t =
 	Ident.string id = prefix^"sort" ->  tk
     | _ -> tp 
 
+
+let rec reduceEquality t1 t2 =
+ match (t1,t2) with 
+     (Tapp(id1, [tk1],_),Tapp(id2, [tk2],_)) when 
+       (Ident.string id1 = Ident.string id2 &&
+	   (id1 = Ident.create ("int2U") ||
+	       id1 = Ident.create ("ss2Int") ||
+	       id1 = Ident.create ("bool2U") ||
+	       id1 = Ident.create ("ss2Bool") ||
+	       id1 = Ident.create ("real2U") ||
+	       id1 = Ident.create ("ss2Real") 
+	   ))-> reduceEquality tk1 tk2
+   | (Tapp(id1, [_;tk1],_),Tapp(id2, [_;tk2],_)) when 
+       (id1 = Ident.create (prefix^"sort") && Ident.string id1 = Ident.string id2) 
+       -> reduceEquality tk1 tk2
+   | _-> t1::t2::[]
+
+
 (**
    @return a predicate that is universally quantified 
    with the top most variable present in the list l. 
@@ -674,10 +694,10 @@ and literalParam fv lv t =
 let rec lifted  l p t =  
   match l with [] -> p
     | (_, s)::[] ->
-	newForall false s (utButBuiltInString "type") t p
+	newForall false s (ssortedButBuiltInString "type") t p
 	  
     | (_, s)::q -> 
-	newForallTriggerFree false s (utButBuiltInString "type") (lifted q p t)
+	newForallTriggerFree false s (ssortedButBuiltInString "type") (lifted q p t)
 	  
 (**
    @return a predicate that is universally quantified 
@@ -698,7 +718,7 @@ let rec lifted_t l p tr =
 	newForallTriggerFree false  a t  (lifted_t q p tr)
 
 let lifted_ctxt l cel =
-  (List.map (fun (pt,s) -> Svar(s, ut)) l)@cel
+  (List.map (fun (pt,s) -> Svar(s, PTexternal ([], Ident.create (prefix^"type")))) l)@cel
 
 
 
@@ -776,12 +796,26 @@ let rec getEqualityType tl lv =
 **)
 let rec translate_pred fv lv p  = match p with
   | Papp (id, tl, inst) when  
+      (Ident.is_eq id && ( Ident.is_int_comparison id ||
+	  Ident.is_real_comparison id ))->
+      let lt = List.map (fun t-> translateParam fv lv t true) tl in 
+      begin
+	match lt with 
+	    [t1;t2] -> Papp (id, reduceEquality t1 t2, [])   
+	  | _ -> 	  Papp (id,lt, [])   
+      end
+  | Papp (id, tl, inst) when  
       ( Ident.is_int_comparison id ||
 	  Ident.is_real_comparison id )->
-      Papp (id, List.map (fun t-> translateParam fv lv t true) tl, [])   
+      Papp (id,List.map (fun t-> translateParam fv lv t true) tl, [])   
   | Papp (id, tl, inst) when  
       (Ident.is_eq id || Ident.is_neq id) ->
-      Papp (id, List.map (fun t-> literalParam fv lv t) tl, [])
+      let lt = List.map (fun t-> literalParam fv lv t) tl in 
+      begin
+	match lt with 
+	    [t1;t2] -> Papp (id, reduceEquality t1 t2, [])   
+	  | _ -> 	  Papp (id,lt, [])   
+      end
   | Papp (id, [a;b], _) when id==Ident.t_zwf_zero ->  
        (* 0 <= a *)
       let aLeftBound = (Papp (Ident.t_le_int,
@@ -843,8 +877,8 @@ let rec push d =
 	   (* A type declaration is translated as new logical function, the arity of *)
 	   (* which depends on the number of type variables in the declaration *)
 	 | Dtype (loc, vars, ident) ->
-	     Queue.add (Dlogic (loc, ident, 
-				Env.empty_scheme (Function (unifyString vars, utButBuiltInString "type")))) queue
+	     Queue.add (Dlogic (loc, (prefixForTypeIdent ident), 
+				Env.empty_scheme (Function (unifyString vars, ssortedButBuiltInString "type")))) queue
 	       (* For arithmetic symbols, another encoding is used (see encoding_rec.ml) *)
 	 | Dlogic (loc, ident, arity) when Ident.is_simplify_arith (Ident.create ident) ->
 	     arities := (ident, arity)::!arities;

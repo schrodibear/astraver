@@ -133,27 +133,16 @@
  (IMPLIES (NEQ i j)
  (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) (access t j))))))))
 
-(BG_PUSH
- ;; Why axiom sorted_array_def
- (FORALL (t)
- (FORALL (i)
- (FORALL (j)
- (IFF (EQ (sorted_array t i j) |@true|)
- (FORALL (k)
- (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))))))
+(DEFPRED (sorted_array t i j)
+  (FORALL (k)
+  (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))
 
-(BG_PUSH
- ;; Why axiom exchange_def
- (FORALL (t1)
- (FORALL (t2)
- (FORALL (i)
- (FORALL (j)
- (IFF (EQ (exchange t1 t2 i j) |@true|)
- (AND (EQ (array_length t1) (array_length t2))
- (AND (EQ (access t1 i) (access t2 j))
- (AND (EQ (access t2 i) (access t1 j))
- (FORALL (k)
- (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k)))))))))))))
+(DEFPRED (exchange t1 t2 i j)
+  (AND (EQ (array_length t1) (array_length t2))
+  (AND (EQ (access t1 i) (access t2 j))
+  (AND (EQ (access t2 i) (access t1 j))
+  (FORALL (k)
+  (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k))))))))
 
 (BG_PUSH
  ;; Why axiom permut_refl
@@ -243,8 +232,7 @@
  (FORALL (j)
  (IMPLIES
  (AND (<= g i)
- (AND (<= i d)
- (AND (<= g j) (AND (<= j d) (EQ (exchange t1 t2 i j) |@true|)))))
+ (AND (<= i d) (AND (<= g j) (AND (<= j d) (exchange t1 t2 i j)))))
  (EQ (sub_permut g d t1 t2) |@true|)))))))))
 
 (BG_PUSH
@@ -309,8 +297,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t i result0))
 (IMPLIES (AND (<= 0 j) (< j (array_length t0)))
-(FORALL (t1)
-(IMPLIES (EQ t1 (update t0 j result)) (EQ (exchange t1 t i j) |@true|)))))))))))))))))
+(FORALL (t1) (IMPLIES (EQ t1 (update t0 j result)) (exchange t1 t i j)))))))))))))))))
 
 ;; maximum_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -437,7 +424,7 @@
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (AND (AND (<= 0 (+ (- result 1) 1)) (<= (+ (- result 1) 1) (array_length t)))
-(AND (EQ (sorted_array t (+ (- result 1) 1) (- (array_length t) 1)) |@true|)
+(AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
 (AND (EQ (permut t t) |@true|)
 (IMPLIES (< (+ (- result 1) 1) (array_length t))
 (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1)) 0) |@true|)))))))))
@@ -450,9 +437,7 @@
 (IMPLIES (AND
          (AND (<= 0 (+ (- result 1) 1))
          (<= (+ (- result 1) 1) (array_length t)))
-         (AND
-         (EQ (sorted_array t (+ (- result 1) 1)
-         (- (array_length t) 1)) |@true|)
+         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
          (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
@@ -460,7 +445,7 @@
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
-         (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
+         (AND (sorted_array t0 (+ i 1) (- (array_length t0) 1))
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
          (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
@@ -477,9 +462,7 @@
 (IMPLIES (AND
          (AND (<= 0 (+ (- result 1) 1))
          (<= (+ (- result 1) 1) (array_length t)))
-         (AND
-         (EQ (sorted_array t (+ (- result 1) 1)
-         (- (array_length t) 1)) |@true|)
+         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
          (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
@@ -487,7 +470,7 @@
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
-         (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
+         (AND (sorted_array t0 (+ i 1) (- (array_length t0) 1))
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
          (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
@@ -510,9 +493,7 @@
 (IMPLIES (AND
          (AND (<= 0 (+ (- result 1) 1))
          (<= (+ (- result 1) 1) (array_length t)))
-         (AND
-         (EQ (sorted_array t (+ (- result 1) 1)
-         (- (array_length t) 1)) |@true|)
+         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
          (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
@@ -520,7 +501,7 @@
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
-         (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
+         (AND (sorted_array t0 (+ i 1) (- (array_length t0) 1))
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
          (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
@@ -535,12 +516,12 @@
 (IMPLIES (AND (AND (<= 0 i) (< i (array_length t0)))
          (AND (<= 0 result0) (< result0 (array_length t0))))
 (FORALL (t1)
-(IMPLIES (EQ (exchange t1 t0 i result0) |@true|)
+(IMPLIES (exchange t1 t0 i result0)
 (FORALL (i0)
 (IMPLIES (EQ i0 (- i 1))
 (AND
 (AND (AND (<= 0 (+ i0 1)) (<= (+ i0 1) (array_length t1)))
-(AND (EQ (sorted_array t1 (+ i0 1) (- (array_length t1) 1)) |@true|)
+(AND (sorted_array t1 (+ i0 1) (- (array_length t1) 1))
 (AND (EQ (permut t1 t) |@true|)
 (IMPLIES (< (+ i0 1) (array_length t1))
 (EQ (Maximize t1 i0 (access t1 (+ i0 1)) 0) |@true|)))))
@@ -554,9 +535,7 @@
 (IMPLIES (AND
          (AND (<= 0 (+ (- result 1) 1))
          (<= (+ (- result 1) 1) (array_length t)))
-         (AND
-         (EQ (sorted_array t (+ (- result 1) 1)
-         (- (array_length t) 1)) |@true|)
+         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
          (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
@@ -564,11 +543,10 @@
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
-         (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
+         (AND (sorted_array t0 (+ i 1) (- (array_length t0) 1))
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
          (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
 (IMPLIES (< i 0)
-(AND (EQ (sorted_array t0 0 (- (array_length t0) 1)) |@true|)
-(EQ (permut t0 t) |@true|)))))))))))
+(AND (sorted_array t0 0 (- (array_length t0) 1)) (EQ (permut t0 t) |@true|)))))))))))
 

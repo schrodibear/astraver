@@ -199,12 +199,14 @@ parameter safe_upd_ : m:('a,'z) memory ref -> p:'z pointer -> v:'a ->
 axiom acc_upd : 
   forall m : ('a,'z) memory. forall p : 'z pointer. forall a: 'a [acc(upd(m,p,a),p)].
     acc(upd(m,p,a),p) = a
- 
+
+(*
 axiom acc_upd_eq : 
   forall m : ('a,'z) memory. forall p1: 'z pointer. forall p2 : 'z pointer. 
   forall a: 'a [acc(upd(m,p1,a),p2)].
     p1=p2 -> acc(upd(m,p1,a),p2) = a
- 
+*)
+
 axiom acc_upd_neq : 
   forall m : ('a,'z) memory. forall p1: 'z pointer. forall p2 : 'z pointer. 
   forall a: 'a [acc(upd(m,p1,a),p2)].

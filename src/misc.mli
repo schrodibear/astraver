@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.mli,v 1.84 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: misc.mli,v 1.85 2006-12-13 09:28:08 couchot Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -168,7 +168,10 @@ val subst_in_triggers : var_substitution -> triggers -> triggers
 
 val subst_one : Ident.t -> term -> substitution
 val subst_onev : Ident.t -> Ident.t -> var_substitution
+val subst_many : Ident.t list -> term list -> substitution
 val subst_manyv : Ident.t list -> Ident.t list -> var_substitution
+
+val map_predicate : (predicate -> predicate) -> predicate -> predicate
 
 val type_v_subst : var_substitution -> type_v -> type_v
 val type_c_subst : var_substitution -> type_c -> type_c

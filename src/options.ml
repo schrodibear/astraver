@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.81 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: options.ml,v 1.82 2006-12-13 09:28:09 couchot Exp $ i*)
 
 open Format
 
@@ -57,6 +57,7 @@ let prelude_ = ref true
 let arrays_ = ref true
 let floats_ = ref false
 let pruning_ = ref false 
+let defExpanding_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 let show_time_ = ref false
@@ -168,6 +169,8 @@ Typing/Annotations/VCG options:
   --partial          partial correctness
   --total            total correctness
   --prune            prunes the theory 
+  --exp              expands the predicate definitions 
+
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
   --no-arrays    do not read the arrays prelude file (arrays.why)
@@ -368,6 +371,8 @@ let files =
 	termination_ := Total; parse args
     | ("-prune" | "--prune") :: args ->
 	 pruning_ := true ; parse args
+    | ("-exp" | "--exp") :: args ->
+	defExpanding_ := true ; parse args
     | ("-encoding" | "--encoding") :: s :: args ->
 	(match s with 
 	  "none" -> types_encoding_ := NoEncoding 
@@ -425,6 +430,7 @@ let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
 let pruning = !pruning_
+let defExpanding = !defExpanding_
 
 let get_types_encoding () = !types_encoding_
 let set_types_encoding ec = types_encoding_ := ec

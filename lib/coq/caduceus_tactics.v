@@ -45,7 +45,7 @@ Hint Extern 0 (not (eq pointer _ _)) => neq_pointer.
 **************************************)
 Ltac Acc_upd :=
   rewrite acc_upd ||
-  (rewrite acc_upd_eq; [ idtac | eq_pointer ]) ||
+(*  (rewrite acc_upd_eq; [ idtac | eq_pointer ]) || *)
   (rewrite acc_upd_neq; [ idtac | neq_pointer ]); 
   auto with *.
 

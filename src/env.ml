@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.67 2006-11-15 09:30:17 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.68 2006-12-13 09:28:08 couchot Exp $ i*)
 
 open Ident
 open Misc
@@ -161,6 +161,7 @@ let rec subst_pure_type s t =
     | PTexternal(l,id) ->
 	PTexternal(List.map (subst_pure_type s) l,id)
     | PTint | PTreal | PTbool | PTunit -> t
+
 
 let subst_logic_type s = function
   | Function (tl,tr) -> 
