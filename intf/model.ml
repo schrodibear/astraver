@@ -151,9 +151,8 @@ let ergo = {
   }
 
 let provers = [
-  simplify; simplify_sstrat; simplify_strat; 
-  yices; yicesSSTrat ; 
-  ergo; rvsat; 
+  simplify; ergo; yicesSSTrat ; 
+  simplify_sstrat; simplify_strat; yices; rvsat; 
   zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
   harvey; cvcl]
 let provers_selected = ref provers
