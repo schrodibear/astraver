@@ -52,6 +52,26 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 /*@ axiom singleton_def : \forall int i, int j; in_(j,singleton(i)) <=> j==i
   @*/
 
+//@ logic iset succ(iset s)
+/*@ axiom succ_def_1 :  
+  @   \forall iset s; \forall int i; in_(i,s) => in_(i+1,succ(s))
+  @*/
+/*@ axiom succ_def_2 :  
+  @   \forall iset s; \forall int i; in_(i,succ(s)) => i>=1 && in_(i-1,s)
+  @*/
+
+//@ logic iset pred(iset s)
+/*@ axiom pred_def_1 : 
+  @   \forall iset s; \forall int i; i>=1 => in_(i,s) => in_(i-1,pred(s))
+  @*/
+/*@ axiom pred_def_2 : 
+  @   \forall iset s; \forall int i; in_(i,pred(s)) => in_(i+1,s)
+  @*/
+
+//@ logic iset below(int n)
+//@ axiom below_def : \forall int n, int i; in_(i, below(n)) <=> 0<=i<n
+//@ axiom below_card : \forall int n; card(below(n)) == n
+
 /****** interpretation of C ints as abstract sets of integers ***************/
 
 //@ logic iset iset(int x)
@@ -80,6 +100,8 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
   @    iset(b)==singleton(x) => !in_(x,iset(a)) => iset(a+b) == add(x, iset(a))
   @*/
 
+//@ axiom iset_c_below : \forall int n; iset(~(~0<<n)) == below(n)
+
 /****** helper lemmas *******************************************************/
 
 /* @ axiom included_trans : \forall iset a, iset b, iset c;
@@ -90,8 +112,143 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 
 /* @ axiom included_remove : \forall iset a, int x; included(remove(x,a), a) */
 
+/***************************************************************************/
+
+// t1: termination of the for loop
+int t1(int a, int b, int c){
+  int d=0, e=a&~b&~c, f=1;
+  if (a)
+    /*@ variant card(iset(e-d)) */
+    for (f=0; d=(e-=d)&-e; ) {
+      f+=t1(a-d,(b+d)*2,(c+d)/2);
+    }
+  return f;
+}
+
 /****************************************************************************/
 
+// t2: termination of the for loop: card(iset(a)) decreases
+int t2(int a, int b, int c){
+  int d=0, e=a&~b&~c, f=1;
+  //@ label L
+  if (a)
+    /*@ invariant 
+      @   included(iset(e-d), iset(e)) &&
+      @   included(iset(e),\at(iset(e),L)) 
+      @*/
+    for (f=0; d=(e-=d)&-e; ) {
+      //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(e)) 
+      //@ assert card(iset(a-d)) < card(iset(a))
+      f+=t2(a-d,(b+d)*2,(c+d)/2);
+    }
+  return f;
+}
+
+/****************************************************************************/
+
+//@ logic int N() // N queens on a NxN chessboard 
+//@ axiom N_positive : N() > 0
+
+// t and u have the same prefix [0..i[
+/*@ predicate eq_prefix(int *t, int *u, int i) {
+  @   \forall int k; 0 <= k < i => t[k]==u[k]
+  @ } 
+  @*/
+
+//@ predicate eq_sol(int *t, int *u) { eq_prefix(t, u, N()) } 
+
+int** sol; // sol[i] is the i-th solution
+/*@ axiom dont_bother_me_I_am_a_ghost_1 : 
+  @   \forall int i; \valid(sol+i) */
+/*@ axiom dont_bother_me_I_am_a_ghost_2 : 
+  @   \forall int i, int j; \valid(sol[i]+j) */
+
+int s = 0; // next empty slot in sol for a solution
+
+int* col; // current solution being built
+int k;    // current row in the current solution
+
+// s stores a partial solution, for the rows 0..k-1
+/*@ predicate partial_solution(int k, int* s) {
+  @   \forall int i; 0 <= i < k => 
+  @     (\exists int j; 0 <= j < N() && iset(s[i]) == singleton(j)) &&
+  @     (\forall int j; 0 <= j < i => s[i] != s[j] &&
+  @                                   s[i]-s[j] != i-j &&
+  @                                   s[i]-s[j] != j-i)
+  @ }
+  @*/
+
+//@ predicate solution(int* s) { partial_solution(N(), s) }
+
+// lemma
+/*@ axiom partial_solution_eq_prefix:
+  @   \forall int *t, int *u; \forall int k;
+  @     partial_solution(k,t) => eq_prefix(t,u,k) => partial_solution(k,u)
+  @*/
+
+/*@ requires solution(col)
+  @ assigns  s, sol[s][0..N()-1]
+  @ ensures  s==\old(s)+1 && eq_sol(sol[\old(s)], col)
+  @*/
+void store_solution();
+
+/*@ requires
+  @   0 <= k && k + card(iset(a)) == N() && 0 <= s &&
+  @   pre_a:: (\forall int i; in_(i,iset(a)) <=> 
+  @            (0<=i<N() && \forall int j; 0<=j<k => !in_(i,iset(col[j])))) &&
+  @   pre_b:: (\forall int i; i>=0 => (in_(i,iset(b)) <=> 
+  @            (\exists int j; 0<=j<k && iset(col[j]) == singleton(i+j-k)))) &&
+  @   pre_c:: (\forall int i; i>=0 => (in_(i,iset(c)) <=> 
+  @            (\exists int j; 0<=j<k && iset(col[j]) == singleton(i+k-j)))) &&
+  @   partial_solution(k, col)
+  @ assigns
+  @   col[k..], s, k, sol[s..][..]
+  @ ensures  
+  @   \result == s - \old(s) && \result >= 0 && k == \old(k) &&
+  @   \forall int* t; ((solution(t) && eq_prefix(col,t,k)) <=>
+  @                    (\exists int i; \old(s)<=i<s && eq_sol(t, sol[i])))
+  @*/
+int t3(int a, int b, int c){
+  int d=0, e=a&~b&~c, f=1;
+  //@ label L
+  if (a)
+    /*@ invariant 
+      @   included(iset(e-d),iset(e)) && included(iset(e),\at(iset(e),L)) &&
+      @   f == s - \at(s,L) && f >= 0 && k == \old(k) && 
+      @   partial_solution(k, col) &&
+      @   \forall int *t; 
+      @     (solution(t) && 
+      @      \exists int di; in_(di,diff(iset(e), \at(iset(e),L))) &&
+      @          eq_prefix(col,t,k) && t[k]==di) <=>
+      @     (\exists int i; \at(s,L)<=i<s && eq_sol(t, sol[i]))
+      @ loop_assigns
+      @   col[k..], s, k, sol[s..][..]
+      @*/
+    for (f=0; d=(e-=d)&-e; ) {
+      //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(a)) 
+      col[k] = d;                     // ghost code 
+      k++;                            // ghost code
+      f += t3(a-d, (b+d)*2, (c+d)/2);
+      k--;                            // ghost code
+    }
+  else 
+    store_solution(); // ghost code
+  return f;
+}
+
+/*@ requires 
+  @   n == N() && s == 0 && k == 0
+  @ ensures 
+  @   \result == s &&
+  @   \forall int* t; 
+  @      solution(t) <=> (\exists int i; 0<=i<\result && eq_sol(t,sol[i]))
+  @*/
+int queens(int n) {
+  return t3(~(~0<<n),0,0);
+}
+
+
+/****************************************************************************/
 
 /* @ axiom bwand_set : \forall int x, int y; 
   @   \forall int i; b_in(i,x&y) <=> (b_in(i,x) && b_in(i,y)) 
@@ -151,133 +308,3 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
   @   (b_in(i,x) <=> b_in(i-1, x/2))
   @*/
 
-/***************************************************************************/
-
-// t1: termination of the for loop
-int t1(int a, int b, int c){
-  int d=0, e=a&~b&~c, f=1;
-  if (a)
-    /*@ variant card(iset(e-d)) */
-    for (f=0; d=(e-=d)&-e; ) {
-      f+=t1(a-d,(b+d)*2,(c+d)/2);
-    }
-  return f;
-}
-
-// t2: termination of the for loop: card(iset(a)) decreases
-int t2(int a, int b, int c){
-  int d=0, e=a&~b&~c, f=1;
-  //@ label L
-  if (a)
-    /*@ invariant 
-      @   included(iset(e-d), iset(e)) &&
-      @   included(iset(e),\at(iset(e),L)) 
-      @*/
-    for (f=0; d=(e-=d)&-e; ) {
-      //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(e)) 
-      //@ assert card(iset(a-d)) < card(iset(a))
-      f+=t2(a-d,(b+d)*2,(c+d)/2);
-    }
-  return f;
-}
-
-// soundess: every recorded solution is indeed a solution
-
-//@ logic int N() (* N queens on a NxN chessboard *)
-//@ axiom N_positive : N() > 0
-
-int** sol; // sol[i] is the i-th solution
-/*@ axiom dont_bother_me_I_am_a_ghost_1 : 
-  @   \forall int i; \valid(sol+i) */
-/*@ axiom dont_bother_me_I_am_a_ghost_2 : 
-  @   \forall int i, int j; \valid(sol[i]+j) */
-
-int s = 0; // next empty slot in sol for a solution
-
-int* col; // current solution being built
-int k;    // current row in the current solution
-
-// s stores a partial solution, for the rows 0..k-1
-/* @ predicate partial_solution(int k, int* s) {
-  @   \forall int i; 0 <= i < k => 
-  @      (\exists int j; 0 <= j < N() && s[i] == singleton(j)) (* &&
-  @      (\forall int j; j > i => ((s[i] >> (j-i)) != s[j] &&
-  @                                (s[i] << (j-i)) != s[j])) *)
-  @ }
-  @*/
-
-/* @ predicate solution(int* s) { partial_solution(N(), s) } */
-
-// lexicographic order on the solutions
-/* @ predicate lt_sol(int* s1, int* s2) {
-  @   \exists int i; 
-  @      0 <= i < N() && 
-  @      (\forall int j; 0 <= j < i => s1[j]==s2[j]) &&
-  @      s1[i] < s2[i]
-  @ }
-  @*/
-
-/* @ predicate eqk_sol(int k, int* s1, int* s2) {
-  @   \forall int i; 0 <= i < k => s1[i]==s2[i]
-  @ }
-  @*/
-
-/* @ predicate eq_sol(int* s1, int* s2) { eqk_sol(N(), s1, s2) } */
-
-/* @ requires solution(col)
-  @ assigns  s, sol[s][0..N()-1]
-  @ ensures  s==\old(s)+1 && eq_sol(sol[\old(s)], col)
-  @*/
-void store_solution();
-
-/* @ requires
-  @   k >= 0 && nbits(a) + k == N() &&
-  @   bits_a:: (\forall int i; b_in(i,a) <=> 
-  @               (0<=i<N() && \forall int j; 0<=j<k => !b_in(i,col[j]))) &&
-  @   bits_b:: (\forall int i; i>=0 => (b_in(i,b) <=> 
-  @               (\exists int j; 0<=j<k && col[j] == singleton(i+j-k)))) &&
-  @   bits_c:: (\forall int i; i>=0 => (b_in(i,c) <=> 
-  @               (\exists int j; 0<=j<k && col[j] == singleton(i+k-j)))) &&
-  @   s >= 0 && partial_solution(k, col)
-  @ assigns
-  @   col[k..], s, k, sol[s..][..]
-  @ ensures  
-  @   \result == s - \old(s) && \result >= 0 &&
-  @   k == \old(k) &&
-  @   \forall int* u; ((solution(u) && eqk_sol(k,col,u)) <=>
-  @                    (\exists int i; \old(s)<=i<s && eq_sol(u, sol[i])))
-  @*/
-int t3(int a, int b, int c){
-  int d=0, e=a&~b&~c, f=1;
-  // @ label L
-  if (a)
-    /* @ invariant 
-      @   included(d,e) && included(e,\at(e,L)) &&
-      @   f == s - \at(s,init) && f >= 0 &&
-      @   k == \old(k) && partial_solution(k, col)
-      @ loop_assigns
-      @   col[k..], s, k, sol[s..][..]
-      @*/
-    for (f=0; d=(e-=d)&-e; ) {
-      // @ assert included(d,e)
-      // @ assert \exists int i; d == singleton(i) && b_in(i,a) && 0 <= i < N()
-      col[k] = d;                     // ghost code 
-      k++;                            // ghost code
-      f += t3(a-d, (b+d)*2, (c+d)/2);
-      k--;                            // ghost code
-    }
-  else 
-    store_solution(); // ghost code
-  return f;
-}
-
-/* @ requires 
-  @   n == N() && s == 0 && k == 0
-  @ ensures 
-  @   \result == s &&
-  @   \forall int* u; 
-  @      solution(u) <=> (\exists int i; 0<=i<\result && eq_sol(u,sol[i]))
-  @*/
-int queens(int n) {
-  return t3(~(~0<<n),0,0);
-}
