@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.10 2006-11-03 12:49:02 marche Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.11 2006-12-14 09:29:38 filliatr Exp $ i*)
 
 open Cc
 open Logic
@@ -112,10 +112,13 @@ let plunge fv term pt =
     | PTreal -> Tapp (Ident.create (prefix^"real"), [], [])
     | PTunit -> Tapp (Ident.create (prefix^"unit"), [], [])
     | PTvar ({type_val = None} as var) -> 
-	let t = try (List.assoc var.tag fv)
-	with _ ->
-	  let s = string_of_int var.tag in
-	  (print_endline ("unknown vartype : "^s); s) in
+	let t = 
+	  try 
+	    List.assoc var.tag fv
+	  with Not_found ->
+	    let s = string_of_int var.tag in
+	    (print_endline ("unknown vartype : "^s); s) 
+	in
 	Tapp (Ident.create t, [], [])
     | PTvar {type_val = Some pt} -> leftt pt
     | PTexternal (ptl, id) -> Tapp (id, List.map (fun pt -> leftt pt) ptl, [])

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.43 2006-11-24 13:38:12 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.44 2006-12-14 09:29:38 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -73,16 +73,19 @@ let prefix id =
   else if id == t_mod_int then "int_mod"
   else if id == t_neg_int then assert false
   (* real ops *)
-  else if id == t_add_real 
-       || id == t_sub_real 
-       || id == t_mul_real 
-       || id == t_div_real 
-       || id == t_neg_real 
-       || id == t_sqrt_real 
-       || id == t_real_of_int 
-  then
-    Report.raise_unlocated (AnyMessage "haRVey does not support reals")
-  else assert false
+  else if id == t_add_real then "add_real"
+  else if id == t_sub_real then "sub_real"
+  else if id == t_mul_real then "mul_real"
+  else if id == t_div_real then "div_real"
+  else if id == t_neg_real then "neg_real"
+  else if id == t_sqrt_real then "sqrt_real"
+  else if id == t_real_of_int then "real_of_int"
+  else if id == t_int_of_real then "int_of_real"
+  else if id == t_lt_real then "lt_real"
+  else if id == t_le_real then "le_real"
+  else if id == t_gt_real then "gt_real"
+  else if id == t_ge_real then "ge_real"
+  else (print_endline (Ident.string id); assert false)
 
 (* we need to rename a few identifiers *)
 
@@ -137,8 +140,16 @@ let rec print_term fmt = function
       fprintf fmt "harvey__%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
-  | Tconst (ConstFloat _) ->
-      Report.raise_unlocated (AnyMessage "haRVey does not support reals")
+  | Tconst (ConstFloat (i,f,e)) ->
+      let f = if f = "0" then "" else f in
+      let e = (if e = "" then 0 else int_of_string e) - String.length f in
+      if e = 0 then
+	fprintf fmt "(real_of_int %s%s)" i f
+      else if e > 0 then
+	fprintf fmt "(real_of_int (* %s%s 1%s))" i f (String.make e '0')
+      else
+	fprintf fmt "(div_real (real_of_int %s%s) (real_of_int 1%s))" 
+	  i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 

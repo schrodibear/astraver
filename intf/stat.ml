@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.48 2006-11-29 13:29:41 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.49 2006-12-14 09:29:38 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -270,7 +270,7 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
 	build_statistics model (model#get ~row ~column:Model.parent)
       end;
       result
-    with Exit ->
+    with Exit -> 
       0
   else begin
     !flash_info "No need to prove these obligations";

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.28 2006-12-13 09:28:10 couchot Exp $ i*)
+(*i $Id: calldp.ml,v 1.29 2006-12-14 09:29:39 filliatr Exp $ i*)
 
 open Printf
 
@@ -188,8 +188,9 @@ let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
 		  Valid t
 	      else
 		if Sys.command 
-		  (sprintf "grep  -q -w \"Cannot decide\" %s " out) = 0 then
-		    CannotDecide t
+		  (sprintf "grep  -q -w \"cannot be decided\" %s " out) = 0 
+		then
+		  CannotDecide t
 		else
 		  ProverFailure(t,"command failed: " ^ cmd)
 	    in
