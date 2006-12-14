@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.29 2006-12-14 09:29:39 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.30 2006-12-14 12:56:52 filliatr Exp $ i*)
 
 open Printf
 
@@ -156,7 +156,10 @@ let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
     let r =
       if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
 	Valid t
-      else	
+      else if Sys.command (sprintf "grep -q -w \"I don't know\" %s" out) = 0
+      then
+	CannotDecide t
+      else
 	ProverFailure(t,"command failed: " ^ cmd)
     in
     remove_file ~debug out;
