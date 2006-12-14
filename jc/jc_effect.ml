@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.13 2006-11-29 13:29:41 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.14 2006-12-14 14:14:45 marche Exp $ *)
 
 
 open Jc_env
@@ -35,6 +35,9 @@ let ef_union ef1 ef2 =
   { jc_effect_alloc_table = 
       StringSet.union
 	ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table;
+    jc_effect_tag_table = 
+      StringSet.union
+	ef1.jc_effect_tag_table ef2.jc_effect_tag_table;
     jc_effect_memories = 
       FieldSet.union 
 	ef1.jc_effect_memories ef2.jc_effect_memories }
@@ -49,11 +52,17 @@ let add_memory_effect ef fi =
 let add_alloc_effect ef a =
   { ef with jc_effect_alloc_table = StringSet.add a ef.jc_effect_alloc_table } 
   
+let add_tag_effect ef a =
+  { ef with jc_effect_tag_table = StringSet.add a ef.jc_effect_tag_table } 
+  
 let add_field_reads fef fi =
   { fef with jc_reads = add_memory_effect fef.jc_reads fi }
 
 let add_alloc_reads fef fi =
   { fef with jc_reads = add_alloc_effect fef.jc_reads fi }
+
+let add_tag_reads fef fi =
+  { fef with jc_reads = add_tag_effect fef.jc_reads fi }
 
 let add_field_writes fef fi =
   { fef with jc_writes = add_memory_effect fef.jc_writes fi }
@@ -96,7 +105,7 @@ let rec assertion ef a =
     | JCAif (_, _, _) -> assert false (* TODO *)
     | JCAbool_term t -> term ef t
     | JCAinstanceof (t, st) -> 
-	add_alloc_effect (term ef t) st.jc_struct_info_root
+	add_tag_effect (term ef t) st.jc_struct_info_root
     | JCAnot a
     | JCAold a -> assertion ef a
     | JCAforall (_, _) -> assert false (* TODO *)
@@ -128,7 +137,7 @@ let rec expr ef e =
 	  (List.fold_left expr ef le) 
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
-	add_alloc_reads (expr ef e) st.jc_struct_info_root
+	add_tag_reads (expr ef e) st.jc_struct_info_root
     | JCEderef (e, f) -> expr ef e (* TODO *)
     | JCEshift (_, _) -> assert false
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
@@ -221,10 +230,12 @@ let logic_effects funs =
   List.iter
     (fun f ->
        Jc_options.lprintf
-	 "Effects for logic function %s:@\n@[ reads alloc_table: %a@]@\n@[ reads memories: %a@]@." 
+	 "Effects for logic function %s:@\n@[ reads alloc_table: %a@]@\n@[ reads tag_table: %a@]@\n@[ reads memories: %a@]@." 
 	 f.jc_logic_info_name
 	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
 	 (StringSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
+	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
+	 (StringSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
 	 (print_list comma (fun fmt field ->
 			     fprintf fmt "%s" field.jc_field_info_name))
 	 (FieldSet.elements f.jc_logic_info_effects.jc_effect_memories))

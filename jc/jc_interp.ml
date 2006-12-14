@@ -84,9 +84,15 @@ let logic_params li l =
       li.jc_logic_info_effects.jc_effect_memories
       l	    
   in
+  let l = 
+    StringSet.fold
+      (fun v acc -> (LVar (v ^ "_alloc_table"))::acc)
+      li.jc_logic_info_effects.jc_effect_alloc_table
+      l	    
+  in
   StringSet.fold
-    (fun v acc -> (LVar (v ^ "_alloc_table"))::acc)
-    li.jc_logic_info_effects.jc_effect_alloc_table
+    (fun v acc -> (LVar (v ^ "_tag_table"))::acc)
+    li.jc_logic_info_effects.jc_effect_tag_table
     l	    
 
 let make_logic_fun_call li l =
@@ -115,13 +121,13 @@ let rec term label oldlabel t =
 	assert false
 	  (* LApp("offset_min",[ft t]) *)
     | JCTinstanceof(t,ty) ->
-	let alloc = ty.jc_struct_info_root ^ "_alloc_table" in
+	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LApp("instanceof_bool",
-	     [lvar label alloc; ft t;LVar ty.jc_struct_info_name])
+	     [lvar label tag; ft t;LVar ty.jc_struct_info_name])
     | JCTcast(t,ty) ->
-	let alloc = ty.jc_struct_info_root ^ "_alloc_table" in
+	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LApp("downcast",
-	     [lvar label alloc; ft t;LVar ty.jc_struct_info_name])
+	     [lvar label tag; ft t;LVar ty.jc_struct_info_name])
 
 let rec assertion label oldlabel a =
   let fa = assertion label oldlabel 
@@ -145,9 +151,9 @@ let rec assertion label oldlabel a =
     | JCAbool_term(t) -> 
 	LPred("eq",[ft t;LConst(Prim_bool true)])
     | JCAinstanceof(t,ty) -> 
-	let alloc = ty.jc_struct_info_root ^ "_alloc_table" in
+	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LPred("instanceof",
-	      [lvar label alloc; ft t; LVar ty.jc_struct_info_name])
+	      [lvar label tag; ft t; LVar ty.jc_struct_info_name])
 
 (****************************
 
@@ -187,6 +193,16 @@ let tr_logic_fun li ta acc =
 	 in
 	 (v ^ "_alloc_table", t)::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
+      params_reads
+  in
+  let params_reads =
+    StringSet.fold
+      (fun v acc -> 
+	 let t = { logic_type_args = [simple_logic_type v];
+		   logic_type_name = "tag_table" }
+	 in
+	 (v ^ "_tag_table", t)::acc)
+      li.jc_logic_info_effects.jc_effect_tag_table
       params_reads
   in
   let decl =
@@ -263,12 +279,12 @@ let rec expr e : (string * Output.expr) list * expr =
 	(l1@l2,make_app "shift" [e1; e2])
     | JCEinstanceof(e,t) ->
 	let l,e = expr e in
-	let alloc = t.jc_struct_info_root ^ "_alloc_table" in
-	l,make_app "instanceof_" [Deref alloc; e; Var t.jc_struct_info_name]
+	let tag = t.jc_struct_info_root ^ "_tag_table" in
+	l,make_app "instanceof_" [Deref tag; e; Var t.jc_struct_info_name]
     | JCEcast(e,t) ->
 	let l,e = expr e in
-	let alloc = t.jc_struct_info_root ^ "_alloc_table" in
-	l,make_app "downcast_" [Deref alloc; e; Var t.jc_struct_info_name]
+	let tag = t.jc_struct_info_root ^ "_tag_table" in
+	l,make_app "downcast_" [Deref tag; e; Var t.jc_struct_info_name]
     | JCEderef(e,f) -> 
 	let l,e = expr e in
 	l,make_acc f e
@@ -461,13 +477,13 @@ let tr_struct st acc =
 	       Ref_type(Base_type mem))::acc)
       acc st.jc_struct_info_fields
   in 
-  (* declaration of the struct_id *)
-  let struct_id_type = 
-    { logic_type_name = "struct_id" ;
+  (* declaration of the tag_id *)
+  let tag_id_type = 
+    { logic_type_name = "tag_id" ;
       logic_type_args = [simple_logic_type st.jc_struct_info_root] }
   in
   let acc =
-    Logic(false,st.jc_struct_info_name,[],struct_id_type)::acc
+    Logic(false,st.jc_struct_info_name,[],tag_id_type)::acc
   in
   (* the invariants *)
 (*
@@ -517,16 +533,21 @@ let tr_struct st acc =
 	  Ref_type (Base_type { logic_type_name = "alloc_table";
 				logic_type_args = [simple_logic_type r] } )
 	in
+	let tag_type =
+	  Ref_type (Base_type { logic_type_name = "tag_table";
+				logic_type_args = [simple_logic_type r] } )
+	in
 	Type(r,[]) ::
-	  Param(false,r ^ "_alloc_table",alloc_type) :: acc
+	Param(false,r ^ "_alloc_table",alloc_type) ::
+	Param(false,r ^ "_tag_table",tag_type) :: acc
     | Some p ->
 	(* axiom for instance_of *)
 	let name = 
 	  st.jc_struct_info_name ^ "_instanceof_" ^ p.jc_struct_info_name
 	in
 	let root = simple_logic_type st.jc_struct_info_root in
-	let root_alloc_table = 
-	  { logic_type_name = "alloc_table";
+	let root_tag_table = 
+	  { logic_type_name = "tag_table";
 	    logic_type_args = [root] }
 	in
 	let root_pointer = 
@@ -534,7 +555,7 @@ let tr_struct st acc =
 	    logic_type_args = [root] }
 	in
 	let f =
-	  LForall("a",root_alloc_table,
+	  LForall("a",root_tag_table,
 		  LForall("p",root_pointer,
 			  LImpl(LPred("instanceof",
 				      [LVar "a";
@@ -636,6 +657,9 @@ let tr_fun f spec body acc =
 	       let alloc =
 		 st.jc_struct_info_root ^ "_alloc_table"
 	       in
+	       let tag =
+		 st.jc_struct_info_root ^ "_tag_table"
+	       in
 	       let validity = 
 		 make_and 
 		   (LPred("le_int",
@@ -652,7 +676,7 @@ let tr_fun f spec body acc =
 	       make_and 
 		 (make_and validity 
 		    (LPred("instanceof",
-			   [LVar alloc;
+			   [LVar tag;
 			    LVar v.jc_var_info_final_name;
 			    LVar st.jc_struct_info_name])))
 		 acc
@@ -694,6 +718,12 @@ let tr_fun f spec body acc =
     StringSet.fold
       (fun v acc -> (v ^ "_alloc_table")::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
+      reads
+  in
+  let reads =
+    StringSet.fold
+      (fun v acc -> (v ^ "_tag_table")::acc)
+      f.jc_fun_info_effects.jc_reads.jc_effect_tag_table
       reads
   in
   let writes =

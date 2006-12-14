@@ -38,6 +38,7 @@ let real_type = JCTnative Treal
 
 let empty_effects = 
   { jc_effect_alloc_table = StringSet.empty ;
+    jc_effect_tag_table = StringSet.empty ;
     jc_effect_memories = FieldSet.empty ;
   }
 

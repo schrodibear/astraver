@@ -22,7 +22,7 @@ Admitted.
 Admitted.
 
 (*Why predicate*) Definition sorted  (intM_global:((memory) Z global))
-  (alloc:alloc_table) (t:((pointer) global)) (i:Z) (j:Z)
+  (t:((pointer) global)) (i:Z) (j:Z)
   := (* File "selection.c", line 19, characters 5-48 *)
      (forall (k:Z),
       (i <= k /\ k < j -> (acc intM_global (shift t k)) <=

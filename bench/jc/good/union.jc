@@ -12,9 +12,9 @@ struct T {
 
 */
 
-type U = 
-  U_x { integer x; }
-| U_y { real y; }
+type U = { } 
+type U_x = U with { integer x; }
+type U_y = U with { real y; }
 
 
 type T = { 	
