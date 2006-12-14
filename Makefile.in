@@ -741,14 +741,18 @@ clean::
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)
-	make -C octagon clean
+	if test "@enable_octagon@" = "yes" ; then \
+		make -C octagon clean; \
+	fi
 	make -C doc clean
 	make -C examples-v7 clean
 	make -C examples clean
 
 dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
-	make -C octagon dist-clean
+	if test "@enable_octagon@" = "yes" ; then \
+		make -C octagon dist-clean; \
+	fi
 
 coq-clean::
 	rm -f lib/coq*/*.vo examples/*/*.vo
