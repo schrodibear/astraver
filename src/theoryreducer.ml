@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.5 2006-12-13 09:28:09 couchot Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.6 2006-12-14 08:51:42 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -247,19 +247,12 @@ struct
 					end)
 
 
-  let fill n = 
-    let temp = ref [] in
-    for i= 0 to n-1 do
-      temp := i :: !temp
-    done ;
-    !temp
-
   (** the data structure that stores the equivalence classes 
       for the axioms number **)
-  let partition : UnionFindInt.t ref =  ref (UnionFindInt.init (fill 1000))
+  let partition : UnionFindInt.t ref =  ref (UnionFindInt.init ())
 
   let reinit p =
-    p := UnionFindInt.init (fill 1000)
+    p := UnionFindInt.init ()
 
   let reset () =
     reinit partition

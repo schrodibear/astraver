@@ -51,7 +51,7 @@ module type S = sig
   type elt
   type t
     
-  val init : elt list -> t
+  val init : unit -> t
   val find : elt -> t -> elt
   val union : elt -> elt -> t -> unit
 end
@@ -70,14 +70,15 @@ module Make(X:HashedOrderedType) = struct
   
   type t = cell H.t (* a forest *)
 
-  let init l = 
-    let h = H.create 997 in
-    List.iter 
-      (fun x ->
-         let rec cell = { c = 0; data = x; father = cell } in 
-	 H.add h x cell) 
-      l;
-    h
+  let cell h x =
+    try
+      H.find h x
+    with Not_found ->
+      let rec cell = { c = 0; data = x; father = cell } in 
+      H.add h x cell;
+      cell
+
+  let init () = H.create 997
 
   let rec find_aux cell = 
     if cell.father == cell then 
@@ -87,11 +88,11 @@ module Make(X:HashedOrderedType) = struct
       cell.father <- r; 
       r
 
-  let find x h = (find_aux (H.find h x)).data
+  let find x h = (find_aux (cell h x)).data
 
   let union x y h = 
-    let rx = find_aux (H.find h x) in
-    let ry = find_aux (H.find h y) in
+    let rx = find_aux (cell h x) in
+    let ry = find_aux (cell h y) in
     if rx != ry then begin
       if rx.c > ry.c then
         ry.father <- rx
