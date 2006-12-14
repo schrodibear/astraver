@@ -1,7 +1,8 @@
-/****
+/* Verification of the following 2 lines code for the N queens:
+
 t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
 c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
-****/
+*/
 
 /****** abstract sets of integers *******************************************/
 
@@ -171,7 +172,7 @@ int k;    // current row in the current solution
 // s stores a partial solution, for the rows 0..k-1
 /*@ predicate partial_solution(int k, int* s) {
   @   \forall int i; 0 <= i < k => 
-  @     (\exists int j; 0 <= j < N() && iset(s[i]) == singleton(j)) &&
+  @     0 <= s[i] < N() &&
   @     (\forall int j; 0 <= j < i => s[i] != s[j] &&
   @                                   s[i]-s[j] != i-j &&
   @                                   s[i]-s[j] != j-i)
@@ -186,6 +187,11 @@ int k;    // current row in the current solution
   @     partial_solution(k,t) => eq_prefix(t,u,k) => partial_solution(k,u)
   @*/
 
+/*@ requires x != 0
+  @ ensures  \result == min_elt(iset(x))
+  @*/
+int min_elt(int x);
+
 /*@ requires solution(col)
   @ assigns  s, sol[s][0..N()-1]
   @ ensures  s==\old(s)+1 && eq_sol(sol[\old(s)], col)
@@ -195,11 +201,11 @@ void store_solution();
 /*@ requires
   @   0 <= k && k + card(iset(a)) == N() && 0 <= s &&
   @   pre_a:: (\forall int i; in_(i,iset(a)) <=> 
-  @            (0<=i<N() && \forall int j; 0<=j<k => !in_(i,iset(col[j])))) &&
+  @            (0<=i<N() && \forall int j; 0<=j<k => i != col[j])) &&
   @   pre_b:: (\forall int i; i>=0 => (in_(i,iset(b)) <=> 
-  @            (\exists int j; 0<=j<k && iset(col[j]) == singleton(i+j-k)))) &&
+  @            (\exists int j; 0<=j<k && col[j] == i+j-k))) &&
   @   pre_c:: (\forall int i; i>=0 => (in_(i,iset(c)) <=> 
-  @            (\exists int j; 0<=j<k && iset(col[j]) == singleton(i+k-j)))) &&
+  @            (\exists int j; 0<=j<k && col[j] == i+k-j))) &&
   @   partial_solution(k, col)
   @ assigns
   @   col[k..], s, k, sol[s..][..]
@@ -218,7 +224,7 @@ int t3(int a, int b, int c){
       @   partial_solution(k, col) &&
       @   \forall int *t; 
       @     (solution(t) && 
-      @      \exists int di; in_(di,diff(iset(e), \at(iset(e),L))) &&
+      @      \exists int di; in_(di, diff(iset(e), \at(iset(e),L))) &&
       @          eq_prefix(col,t,k) && t[k]==di) <=>
       @     (\exists int i; \at(s,L)<=i<s && eq_sol(t, sol[i]))
       @ loop_assigns
@@ -226,7 +232,7 @@ int t3(int a, int b, int c){
       @*/
     for (f=0; d=(e-=d)&-e; ) {
       //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(a)) 
-      col[k] = d;                     // ghost code 
+      col[k] = min_elt(d);            // ghost code 
       k++;                            // ghost code
       f += t3(a-d, (b+d)*2, (c+d)/2);
       k--;                            // ghost code
@@ -246,65 +252,4 @@ int t3(int a, int b, int c){
 int queens(int n) {
   return t3(~(~0<<n),0,0);
 }
-
-
-/****************************************************************************/
-
-/* @ axiom bwand_set : \forall int x, int y; 
-  @   \forall int i; b_in(i,x&y) <=> (b_in(i,x) && b_in(i,y)) 
-  @*/
-
-/* @ predicate included(int x, int y) { 
-  @   \forall int i; b_in(i,x) => b_in(i,y) 
-  @ } 
-  @*/
-
-/* @ axiom included_trans : \forall int x, int y, int z;
-  @   included(x,y) => included(y,z) => included(x,z)
-  @*/
-
-/* @ axiom included_bwand_l : \forall int x, int y; included(x&y, x) */
-
-/* @ axiom included_bwand_r : \forall int x, int y; included(x&y, y) */
-
-/* @ axiom included_sub : \forall int x, int y;
-  @   included(x,y) => included(y-x, y)
-  @*/
-
-/* @ axiom included_nbits : \forall int x, int y;
-  @   included(x,y) => nbits(y-x) == nbits(y) - nbits(x)
-  @*/
-
-/* @ axiom included_lowest_bit : \forall int x; included(lowest_bit(x), x) */
-
-/* @ logic int singleton(int i) */ // this is 2^i
-
-/* @ axiom singleton_def : \forall int i, int j; b_in(j,singleton(i)) <=> j==i
-  @*/
-
-/* @ axiom lowest_bit_is_singleton : \forall int x;
-  @   x != 0 => \exists int i; lowest_bit(x) == singleton(i)
-  @*/
-
-/* @ logic int all_ones(int n) */ // this is 2^n-1, that 11...1 with n ones
-
-/* @ axiom all_ones_def : \forall int n; 
-  @   \forall int i; b_in(i, all_ones(n)) <=> 0 <= i < n
-  @*/   
-
-/* @ axiom help_1: \forall int a, int n, int i;
-  @   b_in(i,a) => included(a,all_ones(n)) => 0 <= i < n
-  @*/
-
-// @ axiom all_ones_trick : \forall int n; ~(~0<<n) == all_ones(n)
-
-// @ axiom nbits_all_ones : \forall int n; nbits(all_ones(n))==n
-
-/* @ axiom b_in_lsl : \forall int i, int x;
-  @   b_in(i,x) <=> b_in(i+1, x*2)
-  @*/
-
-/* @ axiom b_in_lsr : \forall int i, int x; i>0 =>
-  @   (b_in(i,x) <=> b_in(i-1, x/2))
-  @*/
 

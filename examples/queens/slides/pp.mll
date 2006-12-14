@@ -12,7 +12,7 @@
       [ "if"; "for"; "return";
 	"type"; "predicate"; "axiom"; "logic";
 	"variant"; "invariant"; "requires"; "ensures"; "assigns";
-	"loop_assigns"; "label"
+	"loop_assigns"; "label"; "assert";
       ];
     h
 
@@ -23,6 +23,8 @@
       if c = '_' then print_string "\\_{}" else print_char c
     in
     String.iter print_ident_char
+
+  let slashslash_line = ref false
 
 }
 
@@ -39,29 +41,46 @@ rule alltt = parse
   | '%'  { print_string "\\%{}"; alltt lexbuf }
   | '~'  { print_string "\\~{}"; alltt lexbuf }
   | '\\' { print_string "\\ensuremath{\\backslash}"; alltt lexbuf }
-  | '\n' { print_string "\\linebreak\n\\hspace*{0pt}"; alltt lexbuf }
+  | '\n' { if !slashslash_line then begin
+	     print_string "\\end{minipage}}"; slashslash_line := false
+	   end;
+	   print_string "\\linebreak\n\\hspace*{0pt}"; alltt lexbuf }
   | "->" { print_string "\\ensuremath{\\rightarrow}"; alltt lexbuf }
   | "=>" { print_string "\\ensuremath{\\Rightarrow}"; alltt lexbuf }
+  | "<=>" { print_string "\\ensuremath{\\Leftrightarrow}"; alltt lexbuf }
   | "<->" { print_string "\\ensuremath{\\leftrightarrow}"; alltt lexbuf }
-  | '\n' space* "\\end{caduceus}" space* "\n" { print_newline () }
+  | "<" { print_string "\\ensuremath{<}"; alltt lexbuf }
+  | "<=" { print_string "\\ensuremath{\\le}"; alltt lexbuf }
+  | '\n' space* "\\end{caduceus}" space* "\n" 
+      { if !slashslash_line then begin
+	     print_string "\\end{minipage}}"; slashslash_line := false
+	end;
+	print_newline () }
   | "\\emph{" [^'}''\n']* '}' { print_string (lexeme lexbuf); alltt lexbuf }
   | eof  { () }
   | "'a" { print_string "\\ensuremath{\\alpha}"; alltt lexbuf }
-(*  | "*"  { print_string "\\ensuremath{\\times}"; alltt lexbuf }*)
   | "::" { print_string ":\\hspace*{-0.1em}:"; alltt lexbuf }
   | " "  { print_string "~"; alltt lexbuf }
-  | "\\" ("forall" | "exists" | "old" | "at" as s)
-	{ print_string "{\\color{blue}"; 
-	  print_string "\\ensuremath{\\backslash}"; print_string s;
-	  print_string "}"; alltt lexbuf }
   | ident as s
 	{ if !slides && is_keyword s then begin
-	    print_string "{\\color{blue}"; print_string s;
+	    print_string "{\\color{blue}"; 
+	    print_string (if s = "loop_assigns" then "loop\\_assigns" else s);
 	    print_string "}"
 	  end else 
             print_ident s;
 	  alltt lexbuf 
 	}
+  | (space* as s) "/*" 
+        { print_string "\\colorbox{red!10}{\\begin{minipage}{\\textwidth}\\slshape{}\\color{red}"; 
+	  String.iter (fun _ -> print_string "~") s; print_string "/*";
+	  alltt lexbuf }
+  | (space* as s) "//" 
+        { slashslash_line := true;
+	  print_string "\\colorbox{red!10}{\\begin{minipage}{\\textwidth}\\slshape{}\\color{red}"; 
+	  String.iter (fun _ -> print_string "~") s; print_string "//";
+	  alltt lexbuf }
+  | "*/"
+        { print_string "*/\\end{minipage}}"; alltt lexbuf }
   | _   { print_string (lexeme lexbuf); alltt lexbuf }
 
 and pp = parse
