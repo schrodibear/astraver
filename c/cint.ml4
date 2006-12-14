@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cint.ml4,v 1.14 2006-11-17 17:13:28 moy Exp $ *)
+(* $Id: cint.ml4,v 1.15 2006-12-14 17:06:10 moy Exp $ *)
 
 (* TO DO:
 
@@ -684,7 +684,9 @@ struct
 	  | Clogic.Bsub -> L.sub v1 v2
 	  | Clogic.Bmul -> L.mul v1 v2
 	  | Clogic.Bdiv -> L.div v1 v2
-	  | Clogic.Bmod | Clogic.Bpow_real -> L.top ()
+	  | Clogic.Bmod | Clogic.Bpow_real | Clogic.Bbw_and | Clogic.Bbw_xor 
+	  | Clogic.Bbw_or | Clogic.Bshift_left | Clogic.Bshift_right 
+	      -> L.top ()
 	end
     | ITany -> L.top ()
 
@@ -1363,7 +1365,10 @@ struct
 			end
 		      end
 		end
-	    | Clogic.Bdiv | Clogic.Bmod | Clogic.Bpow_real -> FIrand
+	    | Clogic.Bdiv | Clogic.Bmod | Clogic.Bpow_real
+	    | Clogic.Bbw_and | Clogic.Bbw_xor 
+	    | Clogic.Bbw_or | Clogic.Bshift_left | Clogic.Bshift_right 
+		-> FIrand
 	  end
       | ITany -> FIrand
     in randup t
@@ -3645,8 +3650,8 @@ end = struct
       | NEarrow (e1,zone,field) ->
 	  let typ = e1.nexpr_type in
 	  begin match typ.Ctypes.ctype_node with
-	    | Ctypes.Tpointer (Ctypes.Valid,_)
-	    | Ctypes.Tarray (Ctypes.Valid,_,_) -> true
+	    | Ctypes.Tpointer (Ctypes.Valid _,_)
+	    | Ctypes.Tarray (Ctypes.Valid _,_,_) -> true
 	    | _ -> false
 	  end
       | _ ->
@@ -3660,8 +3665,10 @@ end = struct
       | NEarrow (e1,zone,field) ->
 	  let typ = e1.nexpr_type in
 	  let new_typ = match typ.Ctypes.ctype_node with
-	  | Ctypes.Tpointer (valid,t) -> Ctypes.Tpointer (Ctypes.Valid,t)
-	  | Ctypes.Tarray (valid,t,s) -> Ctypes.Tarray (Ctypes.Valid,t,s)
+	  | Ctypes.Tpointer (valid,t) -> 
+	      Ctypes.Tpointer (Ctypes.Valid (Int64.zero,Int64.one) ,t)
+	  | Ctypes.Tarray (valid,t,s) -> 
+	      Ctypes.Tarray (Ctypes.Valid (Int64.zero,Int64.one) ,t,s)
 	  | _ ->
 	      (* should be called only on pointer or array access *)
 	      assert false
