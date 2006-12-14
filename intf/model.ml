@@ -126,7 +126,7 @@ let rvsat = {
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Rvsat;
-  pr_enc = Monomorph;
+  pr_enc = SortedStratified;
   }
 let yices = {
   pr_name = "Yices(mono)";
@@ -147,7 +147,7 @@ let ergo = {
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Ergo;
-  pr_enc = Monomorph;
+  pr_enc = NoEncoding;
   }
 
 let provers = [
