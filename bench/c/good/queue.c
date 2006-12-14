@@ -37,7 +37,7 @@ queue q = { t, 5, 0, 0, 0, 1};
   @   \valid_range(q.contents, 0, q.length-1) &&
   @   0 <= q.first < q.length &&
   @   0 <= q.last < q.length 
-  @   (* && (q.full != 0 <=> q.last == q.first) *)
+  @   // && (q.full != 0 <=> q.last == q.first)
   @*/
 
 /*@ requires !q.full

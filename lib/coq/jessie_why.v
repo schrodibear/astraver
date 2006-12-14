@@ -19,8 +19,8 @@ Admitted.
   forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why predicate*) Definition valid (A158:Set) (a:((alloc_table) A158))
-  (p:((pointer) A158)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A155:Set) (a:((alloc_table) A155))
+  (p:((pointer) A155)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
   forall (A1:Set), ((pointer) A1) -> Z -> ((pointer) A1).
@@ -115,10 +115,10 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A178:Set)
-  (A177:Set) (a:((alloc_table) A177)) (m1:((memory) A177 A178))
-  (m2:((memory) A177 A178)) (l:((pset) A177))
-  := (forall (p:((pointer) A177)),
+(*Why predicate*) Definition not_assigns (A175:Set)
+  (A174:Set) (a:((alloc_table) A174)) (m1:((memory) A174 A175))
+  (m2:((memory) A174 A175)) (l:((pset) A174))
+  := (forall (p:((pointer) A174)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 

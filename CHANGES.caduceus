@@ -1,8 +1,9 @@
 
 Note: These are the changes for Caduceus.
 
- 
+ o comments inside annotations now have the form //, not (* ... *)
  o support for ghost structure and array without size
+
 version 1.01, November 29th, 2006
 =============================
  o support for operators ~ & | ^ >> << in the logic

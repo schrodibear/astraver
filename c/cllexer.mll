@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.49 2006-12-06 13:24:29 hubert Exp $ i*)
+(*i $Id: cllexer.mll,v 1.50 2006-12-14 08:32:04 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -100,8 +100,7 @@ let rIS = ('u'|'U'|'l'|'L')*
 rule token = parse
   | '@' | [' ' '\t' '\012' '\r']+ { token lexbuf }
   | '\n' { newline lexbuf; token lexbuf }
-  | "(*"                    { comment lexbuf; token lexbuf }
-
+  | "//" [^'\n']* ('\n'|eof) { newline lexbuf; token lexbuf }
   | "\\forall"  { FORALL }
   | "\\exists"  { EXISTS }
   | "=>" { IMPLIES }
@@ -194,14 +193,6 @@ rule token = parse
     { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
   | _   { lex_error lexbuf ("Illegal character " ^ lexeme lexbuf) }
  
-and comment = parse
-  | "*)" { () }
-  | "(*" { comment lexbuf; comment lexbuf }
-  | eof  { lex_error lexbuf "Unterminated_comment" }
-  | '\n' { newline lexbuf; comment lexbuf }
-  | _    { comment lexbuf }
-
-
 {
 
   let parse_with_offset f (ofs, s) =

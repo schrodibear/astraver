@@ -92,7 +92,8 @@ int random_level() {
 }
 
 /*@ requires \valid(l) 
-    (* ensures \result == 0 *) */
+  @  // ensures \result == 0 
+  @*/
 char search(list l, int v) {
   node p = l->header;
   node q;
@@ -105,7 +106,8 @@ char search(list l, int v) {
 }
 
 /*@ requires \valid(l) 
-  @ (* ensures ???? *) */
+  @ // ensures ???? 
+  @*/
 void insert(list l, int v) {
   node update[MaxNbLevels];
   node p = l->header;

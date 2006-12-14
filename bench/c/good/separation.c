@@ -68,7 +68,7 @@ typedef struct {
 /*@ requires 
   @   \valid(p) 
   @ assigns p->p1[0 .. 4],p->p2[0 .. 4], p->v1, p->v2 
-  @ (* ensures ... *)
+  @ // ensures ...
   @*/ 
 void g1(las * p); 
 
@@ -77,7 +77,7 @@ las u1, u2;
 /*@ assigns 
   @   u1.v1,u1.v2,u1.p1[0 .. 4],u1.p2[0 .. 4], 
   @   u2.v1,u2.v2,u2.p1[0 .. 4],u2.p2[0 .. 4] 
-  @ (* ensures ... *) 
+  @ // ensures ... 
   @*/ 
 void f1() { 
   g1(&u1); g1(&u2); 
@@ -103,7 +103,7 @@ typedef struct {
 /*@ requires 
   @   \valid(p)
   @ assigns p->p1[0 .. 4],p->p2[0 .. 4], p->v1, p->v2 
-  @ (* ensures ... *)
+  @ // ensures ...
   @*/ 
 void g3(las2 * p); 
 
@@ -126,7 +126,7 @@ las2 var1,var2,var3,var4,var5,var6,var7,var8,var9,var10;
   @   w8.v1,w8.v2,w8.p1[0 .. 4],w8.p2[0 .. 4], 
   @   w9.v1,w9.v2,w9.p1[0 .. 4],w9.p2[0 .. 4], 
   @   w10.v1,w10.v2,w10.p1[0 .. 4],w10.p2[0 .. 4] 
-  @ (* ensures ... *) 
+  @ // ensures ... 
   @*/ 
 void f3() {
   g3(&u3); 

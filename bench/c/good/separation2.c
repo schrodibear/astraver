@@ -64,22 +64,25 @@ void g(las * p);
 void g2(las2 * p);
 
 /*@
-  requires (*\valid(u.pp1) && \valid(v.pp1) 
-  && \valid(w.pp1) &&*) \valid(m.pp1)(* 
-  && \valid(u2.pp2) && \valid(v2.pp2)*)
+  requires 
+  // \valid(u.pp1) && \valid(v.pp1) 
+  // && \valid(w.pp1) && 
+  \valid(m.pp1) 
+  // && \valid(u2.pp2) && \valid(v2.pp2)
   
-(*
-  assigns u.v1,u.v2,u.p1[0 .. 5],u.p2[0 .. 5],*u.pp1
-  ,v.v1,v.v2,v.p1[0 .. 5],v.p2[0 .. 5],*v.pp1
-  ,w.v1,w.v2,w.p1[0 .. 5],w.p2[0 .. 5],*w.pp1
-  ,m.v1,m.v2,m.p1[0 .. 5],m.p2[0 .. 5],*m.pp1
-  ,*u2.pp2,*v2.pp2
-*)
+//
+//  assigns u.v1,u.v2,u.p1[0 .. 5],u.p2[0 .. 5],*u.pp1
+//  ,v.v1,v.v2,v.p1[0 .. 5],v.p2[0 .. 5],*v.pp1
+//  ,w.v1,w.v2,w.p1[0 .. 5],w.p2[0 .. 5],*w.pp1
+//  ,m.v1,m.v2,m.p1[0 .. 5],m.p2[0 .. 5],*m.pp1
+//  ,*u2.pp2,*v2.pp2
+
   ensures
    (\exists int i; u.p1[i] <= u.v1) &&
    (\exists int i; v.p1[i] <= v.v1) &&
    (\exists int i; w.p1[i] <= w.v1) &&
-   ((*\exists int i;*) m.p1[1] <= m.v1) 
+   ( // \exists int i;
+    m.p1[1] <= m.v1) 
 */
 void f()
 { 
