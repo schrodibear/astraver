@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.82 2006-12-13 09:28:09 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.83 2006-12-14 15:41:43 filliatr Exp $ i*)
 
 open Format
 
@@ -431,6 +431,11 @@ let termination = !termination_
 let gappa_rnd = !gappa_rnd_
 let pruning = !pruning_
 let defExpanding = !defExpanding_
+
+(* encoding checks *)
+let () = 
+  if prover () = SmtLib && !types_encoding_ = NoEncoding then
+    types_encoding_ := SortedStratified
 
 let get_types_encoding () = !types_encoding_
 let set_types_encoding ec = types_encoding_ := ec
