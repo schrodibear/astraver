@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.39 2006-12-13 09:28:03 couchot Exp $ i*)
+(*i $Id: cmake.ml,v 1.40 2006-12-14 08:37:41 couchot Exp $ i*)
 
 open Format
 open Pp
@@ -122,7 +122,7 @@ let generic f targets =
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp --prune  -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding mono --exp    -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");
