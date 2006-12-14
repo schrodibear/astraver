@@ -22,14 +22,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.30 2006-12-14 12:56:52 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.31 2006-12-14 15:09:28 marche Exp $ i*)
 
 open Printf
 
 type prover_result = 
   | Valid of float
   | Invalid of float * string option 
-  | CannotDecide of float 
+  | CannotDecide of float * string option 
   | Timeout of float
   | ProverFailure of float * string
 
@@ -75,24 +75,18 @@ let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
   else if Sys.command (sprintf "grep -q -w -i Error %s" out) = 0 then
     ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
   else
-    let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
-    if c = 0 then 
-      begin
-	remove_file ~debug out;
-	Valid t
-      end 
-    else 
-      let c = Sys.command (sprintf "grep -q -w Unknown %s" out)  in
-      if c= 0 then 
-	begin
-	  remove_file ~debug out;
-	  CannotDecide t 
-	end
-      else
-	begin
-	  remove_file ~debug out;
-	  Invalid (t, None)
-	end
+    let r=
+      let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
+      if c = 0 then Valid t
+      else 
+	let c = Sys.command (sprintf "grep -q -w Unknown %s" out)  in
+	if c = 0 then 
+	  CannotDecide(t,Some (file_contents out)) 
+	else
+	  Invalid (t, Some (file_contents out))
+    in
+    remove_file ~debug out;
+    r
 
 let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "Simplify %s" f in
@@ -104,7 +98,7 @@ let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
 	Valid t
       else
 	if Sys.command (sprintf "grep -q -w Invalid %s" out) = 0 then
-	  Invalid (t,Some (file_contents out)) 
+	  CannotDecide (t,Some (file_contents out)) 
 	else
 	  ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
     in
@@ -141,7 +135,7 @@ let yices ?(debug=false) ?(timeout=30) ~filename:f () =
 	Valid t
       else
 	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
-	CannotDecide t
+	CannotDecide (t, None)
       else
 	ProverFailure(t,"command failed: " ^ cmd)
     in
@@ -158,7 +152,10 @@ let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
 	Valid t
       else if Sys.command (sprintf "grep -q -w \"I don't know\" %s" out) = 0
       then
-	CannotDecide t
+	CannotDecide (t, None)
+      else if Sys.command (sprintf "grep -q -w \"Invalid\" %s" out) = 0
+      then
+	Invalid (t,None)
       else
 	ProverFailure(t,"command failed: " ^ cmd)
     in
@@ -193,7 +190,7 @@ let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
 		if Sys.command 
 		  (sprintf "grep  -q -w \"cannot be decided\" %s " out) = 0 
 		then
-		  CannotDecide t
+		  CannotDecide (t, None)
 		else
 		  ProverFailure(t,"command failed: " ^ cmd)
 	    in

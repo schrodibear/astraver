@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.12 2006-11-29 13:29:41 marche Exp $ i*)
+(*i $Id: calldp.mli,v 1.13 2006-12-14 15:09:28 marche Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -32,7 +32,7 @@
 type prover_result = 
   | Valid of float
   | Invalid of float * string option 
-  | CannotDecide of float
+  | CannotDecide of float * string option
   | Timeout of float
   | ProverFailure of float * string
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.33 2006-12-01 16:17:55 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.34 2006-12-14 15:09:28 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -95,7 +95,7 @@ let wrapper r =
   begin match r with
     | Valid t -> is_valid t
     | Invalid(t,_) -> is_invalid t
-    | CannotDecide t -> is_unknown t
+    | CannotDecide (t,_) -> is_unknown t
     | Timeout t -> is_timeout t
     | ProverFailure(t,_) -> is_failure t
   end;
