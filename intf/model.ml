@@ -129,7 +129,7 @@ let rvsat = {
   pr_enc = Monomorph;
   }
 let yices = {
-  pr_name = "Yices";
+  pr_name = "Yices(mono)";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Yices;
@@ -152,7 +152,7 @@ let ergo = {
 
 let provers = [
   simplify; ergo; yicesSSTrat ; 
-  simplify_sstrat; simplify_strat; yices; rvsat; 
+  (*simplify_sstrat;*) simplify_strat; yices; rvsat; 
   zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
   harvey; cvcl]
 let provers_selected = ref provers
