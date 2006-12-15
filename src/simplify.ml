@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.66 2006-11-24 13:38:12 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.67 2006-12-15 11:36:34 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -237,9 +237,9 @@ let rec print_predicate pos fmt p =
       fprintf fmt "@[(OR@ %a@ %a)@]" pp a pp b
   | Pnot a ->
       fprintf fmt "@[(NOT@ %a)@]" pp a
-  | Forall (_,id,n,_,tl,p) when (not no_simplify_triggers && 
-				   ( get_types_encoding () = Stratified ||
-				       get_types_encoding () = SortedStratified)) -> 
+  | Forall (_,id,n,_,tl,p) when not no_simplify_triggers 
+      (* when ( get_types_encoding () = Stratified ||
+	 get_types_encoding () = SortedStratified)) *) ->
       let id' = next_away id (predicate_vars p) in
       let s = subst_onev n id' in
       let p' = subst_in_predicate s p in
