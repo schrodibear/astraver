@@ -57,8 +57,9 @@ unit move(Point[0] this, integer dx, integer dy)
   behavior y_moved:
     ensures this.y == \old(this.y)+dy;
   behavior col_decreased:
-    ensures this <: ColoredPoint =>
-      \old((this :> ColoredPoint).col) > 0 =>
+    assumes 
+      this <: ColoredPoint && (this :> ColoredPoint).col > 0;
+    ensures 
       (this :> ColoredPoint).col == \old((this :> ColoredPoint).col) - 1;
 {
     if (this <: ColoredPoint) 

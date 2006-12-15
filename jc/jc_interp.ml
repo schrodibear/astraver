@@ -660,25 +660,25 @@ let tr_fun f spec body acc =
 	       let tag =
 		 st.jc_struct_info_root ^ "_tag_table"
 	       in
+	       let var = LVar v.jc_var_info_final_name in
 	       let validity = 
 		 make_and 
 		   (LPred("le_int",
 			  [LApp("offset_min",
-				[LVar alloc;
-				 LVar v.jc_var_info_final_name]);
+				[LVar alloc; var]);
 			   LConst (Prim_int (string_of_int a))]))
 		   (LPred("ge_int",
 			  [LApp("offset_max",
-				[LVar alloc;
-				 LVar v.jc_var_info_final_name]);
+				[LVar alloc; var]);
 			   LConst (Prim_int (string_of_int b))]))
 	       in
+	       let instance =
+		 (LPred("instanceof",
+			[LVar tag; var ; LVar st.jc_struct_info_name]))
+	       in
+	       let invariant = invariant_for_struct var st in
 	       make_and 
-		 (make_and validity 
-		    (LPred("instanceof",
-			   [LVar tag;
-			    LVar v.jc_var_info_final_name;
-			    LVar st.jc_struct_info_name])))
+		 (make_and (make_and validity instance) invariant)
 		 acc
 	   | JCTnative _ -> acc
 	   | _ -> assert false

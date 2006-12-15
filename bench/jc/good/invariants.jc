@@ -16,3 +16,20 @@ struct T {
 
 */
 
+
+type A = {
+  integer x;
+  invariant pos(this) = this.x > 0;
+}
+
+integer f(A[0] a) 
+{
+  return 100/a.x;
+}
+
+integer g(A[0] a)
+{ 
+  a.x -= 1;
+  integer r = f(a);
+  a.x += 1; 
+}
