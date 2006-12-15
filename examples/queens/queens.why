@@ -50,7 +50,8 @@ axiom succ_def_2 :
 
 logic pred : iset -> iset
 axiom pred_def_1 : 
-  forall s:iset. forall i:int. i>=1 -> in_(i,s) -> in_(i-1,pred(s))
+  forall s:iset. forall i:int [in_(i,pred(s))]. 
+  i>=0 -> in_(i+1,s) -> in_(i,pred(s))
 axiom pred_def_2 : 
   forall s:iset. forall i:int. in_(i,pred(s)) -> in_(i+1,s)
 
@@ -87,7 +88,8 @@ predicate partial_solution(k:int, s:int arr) =
 predicate solution(s:int arr) = partial_solution(N, s)
 
 (*lemma*)axiom partial_solution_eq_prefix:
-   forall t,u:int arr. forall k:int.
+   forall t,u:int arr. forall k:int 
+   [partial_solution(k,t), partial_solution(k,u)].
      partial_solution(k,t) -> eq_prefix(t,u,k) -> partial_solution(k,u)
 
 (* code *)
