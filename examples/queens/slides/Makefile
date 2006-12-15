@@ -22,3 +22,7 @@ print: slides-pp.ps
 
 wc:
 	fgrep "\begin{frame}" slides.tex | wc -l
+
+export: slides-pp.pdf
+	cp slides-pp.pdf ~/WWW/publis/slides-queens.pdf
+	cp slides-pp.pdf ~/queens.pdf
