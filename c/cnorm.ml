@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.90 2006-12-06 13:24:29 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.91 2006-12-18 12:21:45 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -1100,8 +1100,8 @@ let rec expr_of_term (t : nterm) : nexpr =
     nexpr_loc  = t.nterm_loc
  }
 
-let rec st_cases used_cases (i : tstatement) 
-  : 'a IntMap.t * 'a IntMap.t * nstatement =
+let rec st_cases default used_cases (i : tstatement) 
+  : bool * 'a IntMap.t * 'a IntMap.t * nstatement =
   match i.st_node with 
     | TScase ( e ,i') ->
 	let n =  Ctyping.eval_const_expr e in
@@ -1110,9 +1110,11 @@ let rec st_cases used_cases (i : tstatement)
 	then
 	  error i.st_loc ("duplicate case")
 	else
-	  let (used_cases' , l,i) = st_cases (IntMap.add n e used_cases) i' in
-	  (used_cases', (IntMap.add n e l),i)
-    | _ -> (used_cases , IntMap.empty , statement i)
+	  let (default, used_cases' , l, i) = 
+	    st_cases default (IntMap.add n e used_cases) i' in
+	  (default, used_cases', (IntMap.add n e l),i)
+    | TSdefault s -> (true, used_cases, IntMap.empty, statement s)
+    | _ -> (false,used_cases , IntMap.empty ,statement i)
 
 and st_instr (l : tstatement list) : tstatement list * nstatement list =
   match l with
@@ -1149,11 +1151,20 @@ and st_case_list (used_cases : 'a IntMap.t) (l : tstatement list) :
 	      then
 		error i.st_loc ("duplicate case")
 	      else
-		let (used_cases', l', i') = st_cases (used_cases) i in 
-		let (l,instr) = st_instr l in
-		let (used_cases'', l'') = 
-		  st_case_list (IntMap.add n e used_cases') l in
-		(used_cases'',((IntMap.add n e l'),i'::instr)::l'')
+		let (default,used_cases', l', i') = 
+		  st_cases false (used_cases) i in 
+		if default then begin
+		    let (l,instr) = st_instr l in
+		    let (used_cases'', l'') = (st_case_list used_cases l)
+		    in
+		    (used_cases'',
+		     (IntMap.empty,i'::instr)::l'')
+		  end
+		else
+		  let (l,instr) = st_instr l in
+		  let (used_cases'', l'') = 
+		    st_case_list (IntMap.add n e used_cases') l in
+		  (used_cases'',((IntMap.add n e l'),i'::instr)::l'')
 	  | _ ->  
 	      let (used_cases', l') = st_case_list used_cases l in
 	      match l' with
