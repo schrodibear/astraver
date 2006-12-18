@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.91 2006-12-18 12:21:45 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.92 2006-12-18 12:30:27 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -1101,7 +1101,7 @@ let rec expr_of_term (t : nterm) : nexpr =
  }
 
 let rec st_cases default used_cases (i : tstatement) 
-  : bool * 'a IntMap.t * 'a IntMap.t * nstatement =
+  : bool * 'a IntMap.t * 'a IntMap.t * tstatement =
   match i.st_node with 
     | TScase ( e ,i') ->
 	let n =  Ctyping.eval_const_expr e in
@@ -1113,8 +1113,8 @@ let rec st_cases default used_cases (i : tstatement)
 	  let (default, used_cases' , l, i) = 
 	    st_cases default (IntMap.add n e used_cases) i' in
 	  (default, used_cases', (IntMap.add n e l),i)
-    | TSdefault s -> (true, used_cases, IntMap.empty, statement s)
-    | _ -> (false,used_cases , IntMap.empty ,statement i)
+    | TSdefault s -> (true, used_cases, IntMap.empty, s)
+    | _ -> (false, used_cases, IntMap.empty, i)
 
 and st_instr (l : tstatement list) : tstatement list * nstatement list =
   match l with
@@ -1154,13 +1154,19 @@ and st_case_list (used_cases : 'a IntMap.t) (l : tstatement list) :
 		let (default,used_cases', l', i') = 
 		  st_cases false (used_cases) i in 
 		if default then begin
-		    let (l,instr) = st_instr l in
-		    let (used_cases'', l'') = (st_case_list used_cases l)
-		    in
-		    (used_cases'',
-		     (IntMap.empty,i'::instr)::l'')
+		    match i'.st_node with
+		      | TScase _ -> 
+			  unsupported i'.st_loc "case following default"
+		      | _ ->
+			  let i' = statement i' in
+			  let (l,instr) = st_instr l in
+			  let (used_cases'', l'') = (st_case_list used_cases l)
+			  in
+			  (used_cases'',
+			   (IntMap.empty,i'::instr)::l'')
 		  end
 		else
+		  let i' = statement i' in
 		  let (l,instr) = st_instr l in
 		  let (used_cases'', l'') = 
 		    st_case_list (IntMap.add n e used_cases') l in
