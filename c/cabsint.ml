@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.15 2006-11-17 17:13:27 moy Exp $ *)
+(* $Id: cabsint.ml,v 1.16 2006-12-18 15:23:01 moy Exp $ *)
 
 (* TO DO:
 
@@ -175,6 +175,8 @@ module type POINT_WISE_SEMI_LATTICE = sig
   type var_t
   type value_t
   type map_t
+    (* creates a singleton map *)
+  val singleton : var_t -> value_t -> t
     (* replace ignores the value already present for this variable, if any *)
   val replace : var_t -> value_t -> t -> t
     (* [add] performs a join if a value was already present for this variable, 
@@ -275,6 +277,9 @@ struct
 	   (fun v a -> Format.fprintf fmt "(%a,%a); " 
 	      V.pretty v L.pretty a) m) m
     | PWall -> Format.fprintf fmt "PWall"
+
+  let singleton var value =
+    PWmap (VMap.add var value VMap.empty)
 
   let replace var value pw = match pw with
     | PWempty -> PWmap (VMap.add var value VMap.empty)

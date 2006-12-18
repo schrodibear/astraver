@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.17 2006-11-17 17:13:28 moy Exp $ *)
+(* $Id: cptr.ml,v 1.18 2006-12-18 15:23:02 moy Exp $ *)
 
 (* TO DO:
 
@@ -1237,7 +1237,7 @@ end = struct
 	    representative new_rep cur_val new_var
 	else if PtrLattice.is_offset pval then
 	  let new_var,_ = PtrLattice.get_offset_opt pval in
-	  if ILVar.equal var new_var then
+	  if ILVar.equal var new_var && rep.is_offset then
 	    (* [var] is a self-offset *)
 	    raise (End_representative 0)
 	  else
@@ -1403,6 +1403,35 @@ end = struct
 	  VarSet.add var VarSet.empty 
       in
       Hashtbl.replace rep_to_based rep_var var_set
+    in
+
+    (* only keep variables where read/written *)
+    let analysis = 
+      NodeHash.fold_post
+	(fun node pwval new_analysis ->
+	   match get_node_kind node with
+	     | NKexpr | NKtest | NKlvalue | NKterm -> 
+		 let new_pwval =
+		   if termexpr_is_local_var node then
+		     let var = termexpr_var_get node in
+		     let pval = PointWisePtrLattice.find var pwval in 
+		     PointWisePtrLattice.singleton var pval
+		   else if (expr_is_ptr_assign node 
+			    || expr_is_int_assign node) then
+		     match assign_get_local_lhs_var node with
+		       | None -> PointWisePtrLattice.bottom ()
+		       | Some lhs_var ->
+			   let pval = PointWisePtrLattice.find lhs_var pwval in
+			   PointWisePtrLattice.singleton lhs_var pval
+		   else PointWisePtrLattice.bottom ()
+		 in
+		 NodeHash.replace_post new_analysis node new_pwval;
+		 new_analysis
+	     | NKstat | NKpred | NKassume | NKassert
+	     | NKnone | NKdecl | NKannot | NKspec ->
+		 (* do not include abstract values for these constructs *)
+		 new_analysis
+	) analysis (NodeHash.create 0)
     in
 
     (* collect variables in the sets they match *)
