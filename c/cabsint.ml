@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.16 2006-12-18 15:23:01 moy Exp $ *)
+(* $Id: cabsint.ml,v 1.17 2006-12-19 15:37:40 moy Exp $ *)
 
 (* TO DO:
 
@@ -396,6 +396,7 @@ type 'a pair_t = Fst of 'a | Snd of 'a | Both of 'a * 'a
 
 module type INTER_LANG = sig
   type ilvar_t
+  type ilfun_t
   type decl_t
 
   (* type of declaration/statement/expression in the intermediate language *)
@@ -1247,7 +1248,9 @@ end
 
 module type CFG_LANG_EXTERNAL = sig
 
-  include INTER_LANG with type ilvar_t = ILVar.t and type decl_t = func_t
+  include INTER_LANG with type ilvar_t = ILVar.t 
+		     and type ilfun_t = fun_info
+		     and type decl_t = func_t
 
   (* successors in both structural and logical graph *)
 
@@ -1380,6 +1383,16 @@ module type CFG_LANG_EXTERNAL = sig
       Node.t -> (ilvar_t * Node.t option) option
     (* if the dereferenced expression is a -local- variable, return it *)
   val deref_get_local_var : Node.t -> ilvar_t option
+    (* is this expression a call ? *)
+  val expr_is_call : Node.t -> bool
+    (* get the function called, if any *)
+  val call_get_function : Node.t -> ilfun_t option
+    (* get the arguments for the call, if any *)
+  val call_get_args : Node.t -> Node.t list
+    (* get precondition for function *)
+  val function_get_precondition : ilfun_t -> Node.t option
+    (* get parameters for function *)
+  val function_get_params : ilfun_t -> ilvar_t list
     (* is this term/predicate an \old one ? *)
   val termpred_is_old : Node.t -> bool
     (* is this term/predicate an \at one ? *)
@@ -1432,6 +1445,7 @@ end = struct
   
   type var_tt = ILVar.t
   type ilvar_t = ILVar.t
+  type ilfun_t = fun_info
   type decl_t = func_t
 
   type node_kind = 
@@ -2036,6 +2050,40 @@ end = struct
   let expr_is_deref node = match get_expr node with
     | NEarrow _ | NEunary (Ustar,_) -> true
     | _ -> false
+
+  let expr_is_call node = match get_expr node with
+    | NEcall _ -> true
+    | _ -> false
+
+  let call_get_function node = match get_expr node with
+    | NEcall { ncall_fun = fe } -> 
+	begin match fe.nexpr_node with
+	  | NEvar (Fun_info f) -> Some f
+	  | _ -> None
+	end
+    | _ -> assert false
+
+  let call_get_args node = match get_expr node with
+    | NEcall { ncall_args = el } -> 
+	List.map (fun e -> create_tmp_node (Nexpr e)) el
+    | _ -> assert false
+
+  let function_get_precondition func =
+    let func_name = func.fun_name in
+    try
+      let (spec,_,_,_,_) = Hashtbl.find Cenv.c_functions func_name in
+      begin match spec.requires with
+	| None -> None
+	| Some p -> Some (create_tmp_node (Npred p))
+      end
+    with Not_found -> None
+
+  let function_get_params func =
+    let func_name = func.fun_name in
+    try
+      let (_,_,f,_,_) = Hashtbl.find Cenv.c_functions func_name in
+      f.args
+    with Not_found -> []
 
   let array_and_pointer_types_match arr_typ ptr_typ =
     match arr_typ.Ctypes.ctype_node,ptr_typ.Ctypes.ctype_node with

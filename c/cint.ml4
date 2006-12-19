@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cint.ml4,v 1.15 2006-12-14 17:06:10 moy Exp $ *)
+(* $Id: cint.ml4,v 1.16 2006-12-19 15:37:40 moy Exp $ *)
 
 (* TO DO:
 
@@ -350,13 +350,16 @@ end
 module type SEPARATION_LATTICE = sig
   include PACKED_CLUSTER_LATTICE
   val add_separated_pair : V.t -> V.t -> t -> t
+  val get_separated_pairs : t -> (V.t * V.t) list
   val separated : V.t -> V.t -> t -> bool
+  val from_pred : V.P.t -> t
 end
 
 module type READ_WRITE_LATTICE = sig
   include PACKED_CLUSTER_LATTICE
   val eval_read : V.t -> t -> t
   val eval_write : V.t -> t -> t
+  val eval_precondition : V.P.t -> t -> t
 end
 
 
@@ -2278,18 +2281,35 @@ struct
   let add_separated_pair v1 v2 seps = 
     if V.equal v1 v2 then seps else VPSet.add (v1,v2) seps
 
+  let get_separated_pairs seps =
+    VPSet.fold (fun sep sl -> sep :: sl) seps []
+
   let separated v1 v2 seps =
     VPSet.exists (fun sep -> (V.equal (fst sep) v1 && V.equal (snd sep) v2)
     || (V.equal (fst sep) v2 && V.equal (snd sep) v1)) seps
 
   let eval_test ~backward pred seps = 
     let preds = V.P.get_conjuncts pred in
-    List.fold_left (fun seps p -> match p with
-		      | IPseparated (ITvar v1,ITvar v2) -> 
-			  add_separated_pair v1 v2 seps
-		      | _ -> seps) seps preds
-    
+    (* allow pointer arithmetic *)
+    let rec get_pair t1 t2 = match t1,t2 with
+      | ITvar v1,ITvar v2 -> Some (v1,v2)
+      | ITbinop (t1,_,_),t2 -> get_pair t1 t2
+      | t1,ITbinop (t2,_,_) -> get_pair t1 t2
+      | _ -> None
+    in
+    List.fold_left 
+      (fun seps p -> match p with
+	 | IPseparated (t1,t2) -> 
+	     begin match get_pair t1 t2 with
+	       | None -> seps
+	       | Some (v1,v2) ->
+		   add_separated_pair v1 v2 seps
+	     end
+	 | _ -> seps) seps preds
+      
   let sep_to_pred sep = Some (IPseparated (ITvar (fst sep),ITvar (snd sep)))
+
+  let from_pred pred = eval_test ~backward:false pred (bottom ())
 
   let to_pred seps =
     VPSet.fold (fun sep p_opt ->
@@ -2320,7 +2340,8 @@ struct
 
 end
 
-module Make_ReadWriteLattice (V : PVARIABLE) (I : INT_VALUE) 
+module Make_ReadWriteLattice (V : PVARIABLE) (I : INT_VALUE)
+    (S : SEPARATION_LATTICE with module V = V and module I = I)
     : READ_WRITE_LATTICE with module V = V and module I = I =
 struct
   module V = V         module I = I         type var_t = V.t
@@ -2328,6 +2349,7 @@ struct
   type access_t =
     | Read of V.t
     | Write of V.t
+    | Param of V.t
 
   module AccessNode =
   struct
@@ -2338,6 +2360,7 @@ struct
     let get_variable = function
       | Read v -> v
       | Write v -> v
+      | Param v -> v
   end
 
   module Self = Graph.Persistent.Graph.Concrete (AccessNode)
@@ -2386,8 +2409,9 @@ struct
 
   let remove_variable var g = 
     let new_g = Self.remove_vertex g (Read var) in
-    Self.remove_vertex new_g (Write var)
-
+    let new_g = Self.remove_vertex new_g (Write var) in
+    Self.remove_vertex new_g (Param var)
+    
   let normalize g = g
   let finalize = normalize
 
@@ -2410,9 +2434,20 @@ struct
     let new_g = Self.add_vertex g (Write v) in
     Self.fold_vertex 
       (fun w g -> match w with
-	 | Write _ -> g
+	 | Write _ | Param _ -> g
 	 | Read _ -> Self.add_edge g w (Write v)) g new_g
 
+  let eval_precondition p g =
+    if debug then Coptions.lprintf
+      "[eval_separation] sep %a, current %a@." 
+      V.P.pretty p pretty g;
+    let sepl = S.get_separated_pairs (S.from_pred p) in
+    List.fold_left 
+      (fun new_g (v1,v2) ->
+	 let new_g = Self.add_vertex new_g (Param v1) in
+	 let new_g = Self.add_vertex new_g (Param v2) in
+	 Self.add_edge new_g (Param v1) (Param v2)
+      ) g sepl
 end
 
 module Make_PredicateLattice (V : PVARIABLE) (I : INT_VALUE) 
@@ -3720,6 +3755,17 @@ struct
 	     read and write accesses *)
 	  cur_val
 
+      | NKstat ->
+	  if backward && stat_is_decl node then 
+	    (* ignore information on variable before its declaration *)
+	    let var = decl_stat_get_var node in
+	    let new_val = 
+	      RWL.remove_variable (Var.Vvar var) cur_val in
+	    if debug_more then Coptions.lprintf
+	      "[transfer] removing info on %a@." Var.pretty (Var.Vvar var);
+	    new_val
+	  else cur_val
+
       | NKexpr | NKtest ->
 	  if expr_is_int_assign node then
 	    let lhs_node = assign_get_lhs_operand node in
@@ -3736,6 +3782,25 @@ struct
 	      | Some rhs_var ->
 		  (* reading under pointer [rhs_var] *)
 		  RWL.eval_read (Var.Vvar rhs_var) cur_val
+	  else if expr_is_call node then
+	    match call_get_function node with
+	      | None -> cur_val
+	      | Some func ->
+		  (* get function precondition *)
+		  begin match function_get_precondition func with
+		    | None -> cur_val
+		    | Some p ->
+			let pred = from_pred p in
+			let params = function_get_params func in
+			let params = 
+			  List.map (fun v -> ITvar (Var.Vvar v)) params in
+			let args = call_get_args node in
+			let args = List.map from_expr args in
+			let trans = List.map2 (fun param arg -> (param,arg))
+			  params args in
+			let pred = Var.P.translate trans pred in
+			RWL.eval_precondition pred cur_val
+		  end
 	  else cur_val
 	    
       | NKassert ->
@@ -3752,7 +3817,7 @@ struct
 	    List.fold_right RWL.eval_write write_under_pointers new_val
 	  else cur_val
 
-      | NKassume | NKstat | NKdecl
+      | NKassume | NKdecl
       | NKspec | NKannot | NKterm | NKpred
       | NKnone -> cur_val
 
@@ -4296,9 +4361,9 @@ module PointWiseIntervLattice = Make_PointWiseFromAtomic(IntervLattice)
 
 (* modules for separation analysis *)
 
-module ReadWriteLattice = Make_ReadWriteLattice(Var)(Int)
-
 module SepLattice = Make_SeparationLattice(Var)(Int) 
+
+module ReadWriteLattice = Make_ReadWriteLattice(Var)(Int)(SepLattice)
 
 (* module for octogon analysis *)
 
@@ -4727,31 +4792,40 @@ let local_int_analysis fundecl =
   (* return the new program *)
   IntLangFromNormalized.to_file decls
 
-let local_int_analysis_attach () =
+let local_int_analysis_attach funcs =
+
   (* necessary prefix to translate the hash-table of functions in 
      the normalized code into a list of function representatives,
      as defined by type [func_t] in [Cabsint] *)
-  let file = Hashtbl.fold 
-    (fun name (spec,typ,f,s,loc) funcs ->
-       { name = name; spec = spec; typ = typ; f = f; s = s; loc = loc } 
-       :: funcs
-    ) Cenv.c_functions []
+  let file = 
+    List.fold_left 
+      (fun acc func ->
+	 try
+	   let name = func.fun_name in
+	   let (spec,typ,f,s,loc) = Hashtbl.find Cenv.c_functions name in
+	   { name = name; spec = spec; typ = typ; f = f; s = s; loc = loc } 
+	   :: acc
+	 with Not_found -> acc
+      ) [] funcs
   in
 
   if debug then Coptions.lprintf 
     "[local_int_analysis_attach] %i functions to treat@." (List.length file); 
 
-  let file = List.fold_right
-    (fun fundecl acc -> (local_int_analysis fundecl) @ acc) file [] in
-
+  (* update each function information as soon as treated, so that called
+     function information is up-to-date when caller treated *)
+  List.iter 
+    (fun fundecl -> 
+       let newfundecl = local_int_analysis fundecl in
+       (* necessary suffix to translate the list of function representatives
+	  to the hash-table format *)
+       List.iter (fun { name = name; spec = spec; typ = typ; 
+			f = f; s = s; loc = loc } ->
+		    Cenv.add_c_fun name (spec,typ,f,s,loc)) newfundecl
+    ) file;
+	       
   if debug then Coptions.lprintf 
     "[local_int_analysis_attach] %i functions treated@." (List.length file);
-
-  (* necessary suffix to translate the list of function representatives
-     to the hash-table format *)
-  List.iter (fun { name = name; spec = spec; typ = typ; 
-		   f = f; s = s; loc = loc } ->
-	       Cenv.add_c_fun name (spec,typ,f,s,loc)) file
 
 (* Local Variables: *)
 (* compile-command: "make -C .." *)

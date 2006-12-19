@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: csymbol.ml,v 1.6 2006-11-17 17:13:28 moy Exp $ *)
+(* $Id: csymbol.ml,v 1.7 2006-12-19 15:37:40 moy Exp $ *)
 
 (* TO DO:
 
@@ -74,10 +74,12 @@ module type TERM = sig
   type var
   include ELEMENT_OF_CONTAINER with type t = var int_term
   val collect_term_vars : t -> var list
+  val translate : (t * t) list -> t -> t
 end
 
 module type PREDICATE = sig
   type var
+  module T : TERM with type var = var
   include ELEMENT_OF_CONTAINER with type t = var int_predicate
   val explicit_pred : t -> t
   val rewrite_pred_wrt_var : t -> var -> int -> t
@@ -86,6 +88,7 @@ module type PREDICATE = sig
   val get_conjuncts : t -> t list
   val make_implication : t -> t -> t
   val get_implicants : t -> t * t
+  val translate : (T.t * T.t) list -> t -> t
 end
 
 module TermOfVariable (V : ELEMENT_OF_CONTAINER) 
@@ -119,6 +122,18 @@ struct
     | ITunop (_,t1) -> collect_term_vars t1
     | ITbinop (t1,_,t2) -> collect_term_vars t1 @ (collect_term_vars t2)
     | ITany -> []
+
+  let rec translate transl t = 
+    if List.mem_assoc t transl then
+      List.assoc t transl
+    else
+      match t with
+	| ITconstant _ | ITvar _ | ITany -> 
+	    t
+	| ITunop (op,t1) -> 
+	    ITunop (op,translate transl t1)
+	| ITbinop (t1,op,t2) -> 
+	    ITbinop (translate transl t1,op,translate transl t2)
 end
 
 module PredicateOfVariable (V : ELEMENT_OF_CONTAINER) 
@@ -128,6 +143,8 @@ struct
   
   type var = V.t
   type t = var int_predicate
+
+  module T = T
 
   let equal = ( = )
   let compare = Pervasives.compare
@@ -252,6 +269,50 @@ struct
     | IPimplies (p1,p2) -> p1,p2
     | _ -> failwith "[get_implicants] expecting an implication"
 
+  let rec translate transl p = match p with
+    | IPfalse | IPtrue | IPany ->
+	p
+    | IPrel (t1,rel,t2) ->
+	let tt1 = T.translate transl t1 in
+	let tt2 = T.translate transl t2 in
+	IPrel (tt1,rel,tt2)
+    | IPand (p1,p2) ->
+	let tp1 = translate transl p1 in
+	let tp2 = translate transl p2 in
+	IPand (tp1,tp2)
+    | IPor (p1,p2) ->
+	let tp1 = translate transl p1 in
+	let tp2 = translate transl p2 in
+	IPor (tp1,tp2)
+    | IPimplies (p1,p2) -> 
+	let tp1 = translate transl p1 in
+	let tp2 = translate transl p2 in
+	IPimplies (tp1,tp2)
+    | IPiff (p1,p2) -> 
+	let tp1 = translate transl p1 in
+	let tp2 = translate transl p2 in
+	IPiff (tp1,tp2)
+    | IPnot p -> 
+	let tp = translate transl p in
+	IPnot tp
+    | IPseparated (t1,t2) -> 
+	let tt1 = T.translate transl t1 in
+	let tt2 = T.translate transl t2 in
+	IPseparated (tt1,tt2)
+    | IPnull_pointer t1 -> 
+	let tt1 = T.translate transl t1 in
+	IPnull_pointer (tt1)
+    | IPnot_null_pointer t1 -> 
+	let tt1 = T.translate transl t1 in
+	IPnot_null_pointer (tt1)
+    | IPnull_char_pointed (t1,t2) -> 
+	let tt1 = T.translate transl t1 in
+	let tt2 = T.translate transl t2 in
+	IPnull_char_pointed (tt1,tt2)
+    | IPnot_null_char_pointed (t1,t2) -> 
+	let tt1 = T.translate transl t1 in
+	let tt2 = T.translate transl t2 in
+	IPnot_null_char_pointed (tt1,tt2)
 end
 
 (* predicate variable interface. Same as VARIABLE, plus [translate_predicate]
