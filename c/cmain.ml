@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.88 2006-11-27 15:46:34 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.89 2006-12-19 15:36:50 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -64,7 +64,8 @@ let main () =
   (* local aliasing analysis *)
   if local_aliasing then Cptr.local_aliasing_transform ();
   (* local abstract interpretation over integers *)
-  if abstract_interp || gen_invariant then Cint.local_int_analysis_attach ();
+  if abstract_interp || gen_invariant then
+    Array.iter Cint.local_int_analysis_attach tab_comp;
   (* predicate *)
   let nfiles = 
     if typing_predicates then

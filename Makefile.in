@@ -584,7 +584,7 @@ c/cint.ml: c/cint.ml4 Makefile
 	if test "@enable_octagon@" = "yes" ; then \
 	  $(CAMLP4) -impl c/cint.ml4 > c/cint.ml; \
 	else \
-	  echo "let local_int_analysis_attach () = failwith " > c/cint.ml; \
+	  echo "let local_int_analysis_attach _ = failwith " > c/cint.ml; \
 	  echo "\"Not compiled with --enable-octagon.\"" >> c/cint.ml; \
 	fi
 
