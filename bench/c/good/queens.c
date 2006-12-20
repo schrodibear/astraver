@@ -117,10 +117,10 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 
 // t1: termination of the for loop
 int t1(int a, int b, int c){
-  int d=0, e=a&~b&~c, f=1;
+  int d, e=a&~b&~c, f=1;
   if (a)
-    /*@ variant card(iset(e-d)) */
-    for (f=0; d=(e-=d)&-e; ) {
+    /*@ variant card(iset(e)) */
+    for (f=0; d=e&-e; e-=d) {
       f+=t1(a-d,(b+d)*2,(c+d)/2);
     }
   return f;
@@ -130,14 +130,11 @@ int t1(int a, int b, int c){
 
 // t2: termination of the for loop: card(iset(a)) decreases
 int t2(int a, int b, int c){
-  int d=0, e=a&~b&~c, f=1;
+  int d, e=a&~b&~c, f=1;
   //@ label L
   if (a)
-    /*@ invariant 
-      @   included(iset(e-d), iset(e)) &&
-      @   included(iset(e),\at(iset(e),L)) 
-      @*/
-    for (f=0; d=(e-=d)&-e; ) {
+    /*@ invariant included(iset(e),\at(iset(e),L)) */
+    for (f=0; d=e&-e; e-=d) {
       //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(e)) 
       //@ assert card(iset(a-d)) < card(iset(a))
       f+=t2(a-d,(b+d)*2,(c+d)/2);
@@ -215,22 +212,22 @@ void store_solution();
   @                    (\exists int i; \old(s)<=i<s && eq_sol(t, sol[i])))
   @*/
 int t3(int a, int b, int c){
-  int d=0, e=a&~b&~c, f=1;
+  int d, e=a&~b&~c, f=1;
   //@ label L
   if (a)
     /*@ invariant 
-      @   included(iset(e-d),iset(e)) && included(iset(e),\at(iset(e),L)) &&
+      @   included(iset(e),\at(iset(e),L)) &&
       @   f == s - \at(s,L) && f >= 0 && k == \old(k) && 
       @   partial_solution(k, col) &&
       @   \forall int *t; 
       @     (solution(t) && 
-      @      \exists int di; in_(di, diff(iset(e), \at(iset(e),L))) &&
+      @      \exists int di; in_(di, diff(\at(iset(e),L), iset(e))) &&
       @          eq_prefix(col,t,k) && t[k]==di) <=>
       @     (\exists int i; \at(s,L)<=i<s && eq_sol(t, sol[i]))
       @ loop_assigns
       @   col[k..], s, k, sol[s..][..]
       @*/
-    for (f=0; d=(e-=d)&-e; ) {
+    for (f=0; d=e&-e; e-=d) {
       //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(a)) 
       col[k] = min_elt(d);            // ghost code 
       k++;                            // ghost code
