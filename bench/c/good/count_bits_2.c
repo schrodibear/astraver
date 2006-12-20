@@ -43,10 +43,10 @@
 
 /*@ ensures \result == card(iset(x)) */
 int count_bits(int x) {
-  int d = 0, c = 0;
-  /*@ invariant c + card(iset(x-d)) == card(iset(\at(x,init)))
-    @ variant   card(iset(x-d))
+  int d, c;
+  /*@ invariant c + card(iset(x)) == card(iset(\at(x,init)))
+    @ variant   card(iset(x))
     @*/
-  while (d = (x-=d) & -x) c++;
+  for (c = 0; d = x&-x; x -= d) c++;
   return c;
 }

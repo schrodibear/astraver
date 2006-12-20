@@ -35,10 +35,10 @@
 
 /*@ ensures \result == nbits(x) */
 int count_bits(int x) {
-  int d = 0, c = 0;
-  /*@ invariant c + nbits(x-d) == nbits(\at(x,init))
-    @ variant   nbits(x-d)
+  int d, c;
+  /*@ invariant c + nbits(x) == nbits(\at(x,init))
+    @ variant   nbits(x)
     @*/
-  while (d = (x-=d) & -x) c++;
+  for (c = 0; d = x&-x; x -= d) c++;
   return c;
 }
