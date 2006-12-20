@@ -277,8 +277,7 @@ Definition is_list a next p := exists l : plist R, llist a next p l.
 
 
 Definition Length := ((memory (pointer R) R) * (pointer R))%type.
-Definition length (a: alloc_table)
-   (t : memory (pointer R) R) (p:pointer R) := (t, p).
+Definition length (t : memory (pointer R) R) (p:pointer R) := (t, p).
 
 Definition length_order (c1 c2: memory (pointer R) R * pointer R) : Prop :=
   let (t1, p1) := c1 in
@@ -313,7 +312,7 @@ Hint Resolve length_order_wf .
 Lemma length_acc :
   forall a tl p,
   is_list a (acc tl) p -> p <> null ->
-  length_order (length a tl (acc tl p)) (length a tl p).
+  length_order (length tl (acc tl p)) (length tl p).
 Proof.
 unfold length,length_order,is_list ; intros.
 exists a.

@@ -10,18 +10,23 @@ Require Export Caduceus.
 Admitted.
 
 (*Why type*) Definition plist: Set.
-Admitted.
+exact (plist global).
+Defined.
+
 
 (*Why type*) Definition Length: Set.
-Admitted.
+exact (Length global).
+Defined.
 
 (*Why logic*) Definition lpath :
   ((memory) ((pointer) global) global) -> alloc_table -> ((pointer) global)
   -> plist -> ((pointer) global) -> Prop.
-Admitted.
+exact (fun m a => lpath _ a (acc m)).
+Defined.
 
 (*Why logic*) Definition cons : ((pointer) global) -> plist -> plist.
-Admitted.
+exact (fun p => cons p).
+Defined.
 
 (*Why axiom*) Lemma Path_cons_inv :
   (forall (tl_global:((memory) ((pointer) global) global)),
@@ -36,7 +41,9 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition nil : plist.
-Admitted.
+exact nil.
+Defined.
+
 
 (*Why axiom*) Lemma Path_null_ax :
   (forall (tl_global:((memory) ((pointer) global) global)),
@@ -54,7 +61,9 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition app : plist -> plist -> plist.
-Admitted.
+exact (fun p => app p).
+Defined.
+
 
 (*Why axiom*) Lemma app_nil_1_ax :
   (* File "list.h", line 25, characters 26-60 *)
@@ -67,8 +76,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition cyclic :
-  ((memory) ((pointer) global) global) -> alloc_table
-  -> ((pointer) global) -> Prop.
+  ((memory) ((pointer) global) global) -> ((pointer) global) -> Prop.
 Admitted.
 
 (*Why logic*) Definition disjoint : plist -> plist -> Prop.
@@ -85,8 +93,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition finite :
-  ((memory) ((pointer) global) global) -> alloc_table
-  -> ((pointer) global) -> Prop.
+  ((memory) ((pointer) global) global) -> ((pointer) global) -> Prop.
 Admitted.
 
 (*Why predicate*) Definition llist  (tl_global:((memory) ((pointer) global)
@@ -109,15 +116,19 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition length :
-  ((memory) ((pointer) global) global) -> alloc_table
-  -> ((pointer) global) -> Length.
-Admitted.
+  ((memory) ((pointer) global) global) -> ((pointer) global) -> Length.
+exact (fun tl p => length global tl p). 
+Defined.
 
 (*Why logic*) Definition length_order : Length -> Length -> Prop.
-Admitted.
+exact (length_order global).
+Defined.
+
 
 (*Why logic*) Definition list_length : plist -> Z.
-Admitted.
+exact (fun l => Z_of_nat (List.length l)).
+Defined.
+
 
 (*Why axiom*) Lemma llist_function_ax :
   (forall (tl_global:((memory) ((pointer) global) global)),
@@ -140,7 +151,9 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition rev : plist -> plist.
-Admitted.
+exact (fun l => rev l).
+Defined.
+
 
 (*Why axiom*) Lemma rev_nil_ax :
   (* File "list.h", line 23, characters 24-43 *) (rev nil) = nil.

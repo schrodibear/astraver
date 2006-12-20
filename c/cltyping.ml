@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.109 2006-12-04 22:05:24 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.110 2006-12-20 12:38:22 marche Exp $ i*)
 
 open Coptions
 open Format
@@ -377,7 +377,7 @@ and type_term_node loc env = function
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ | PLseparated _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _ | PLfalse
   | PLfullseparated _ | PLor _ | PLand _ | PLrel _ | PLtrue | PLnamed _ ->
-      raise_located loc (AnyMessage "syntax error")
+      raise_located loc (AnyMessage "predicates are not allowed here")
 
 and type_int_term env t =
   let tt = type_term env t in

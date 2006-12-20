@@ -133,7 +133,7 @@ Qed.
     (llist tl_global1 alloc r0 lr)) /\ (disjoint lp lr)) /\
     (forall (l:plist),
      ((llist tl_global alloc p0 l) -> (app (rev lr) lp) = (rev l))))) /\
-  (length_order (length tl_global1 alloc r0) (length tl_global0 alloc r)).
+  (length_order (length tl_global1 r0) (length tl_global0 r)).
 Proof.
 intros; subst; intuition.
 (* case 1 : preservation of loop invariant *)
@@ -144,7 +144,7 @@ absurd (r = null); intuition.
 exists (r :: x); exists l; subst; intuition.
 (* subgoal 1.1 *)
 unfold llist,lpath; apply Path_cons; intuition.
-rewrite acc_upd_eq; auto.
+rewrite acc_upd; auto.
 apply llist_pset_same; auto.
 unfold disjoint,caduceus_lists.disjoint in H2; intuition.
 apply (H7 r); auto.

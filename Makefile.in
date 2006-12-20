@@ -384,6 +384,7 @@ BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log
 
 bench-c:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
 	(cd bench/c; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
+	(cd examples-c/linked-lists; make swap reverse)
 
 bench-absint:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
 	(cd bench/c/absint; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)

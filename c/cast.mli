@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cast.mli,v 1.77 2006-11-17 17:13:27 moy Exp $ i*)
+(*i $Id: cast.mli,v 1.78 2006-12-20 12:38:21 marche Exp $ i*)
 
 (*s C types *)
 
@@ -361,6 +361,13 @@ and nstatement_node =
   | NSlabel of string * nstatement
   | NSswitch of nexpr * (nexpr Cconst.IntMap.t) * 
       ((nexpr Cconst.IntMap.t * nstatement list) list)
+      (* NSswitch(e,used_cases,all_cases):
+	 e is the expression to test 
+         used_cases is a map with gives all the possible cases, mapping each value to the constant expression in comes from in the program 
+	 all_cases is the list of all branches, where each case is given by 
+           - the cases involved (a submap of used_cases)
+           - the statements to execute
+	 *)
   | NSassert of npredicate
       (* [NSassume] used to communicate results of abstract interpretation
 	 to the module that inserts verification conditions *)

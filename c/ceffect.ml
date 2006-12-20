@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.155 2006-12-06 13:24:29 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.156 2006-12-20 12:38:22 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -255,7 +255,7 @@ let rec term t = match t.nterm_node with
 	    | Uabs_real | Usqrt_real 
 	    | Uround_error | Utotal_error | Uexact | Umodel), t) -> term t
   | NTbase_addr t -> term t
-  | NToffset t -> term t
+  | NToffset t -> reads_add_alloc (term t)
   | NTblock_length t -> 
       (* [block_length] should not be used with the arithmetic memory model *)
       assert (not arith_memory_model);

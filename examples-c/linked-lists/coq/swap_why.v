@@ -16,10 +16,9 @@ Require Export swap_spec_why.
   forall (HW_4: p = c),
   (valid alloc c).
 Proof.
-intuition.
+(*unfold llist,lpath;*) intuition.
 inversion_clear HW_1; intuition.
-red in H0.
-
+inversion H0; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -107,7 +106,25 @@ Save.
   (* File "swap.c", line 4, characters 13-146 *)
   (llist tl_global1 alloc mutable_c (cons c2 (cons c1 l))).
 Proof.
-intuition.
+unfold cons ,llist, lpath; intuition; subst; auto.
+inversion_clear HW_14.
+assert (~ In c1 (c2::l)).
+   apply llist_not_starting with (next := acc tl_global) (1:=H1).
+assert (c1<>c2).
+  red in H2; simpl in H2; auto.
+assert (c2 = c1 # tl_global).
+  inversion H1; auto.
+subst.
+inversion_clear H1.
+apply Path_cons; auto.
+caduceus.
+apply Path_cons; auto.
+caduceus.
+apply lpath_pset_same; auto.
+apply lpath_pset_same; auto.
+intro; apply H2.
+red; auto.
+apply llist_not_starting with (next := acc tl_global) (1:=H6).
 Save.
 
 (* Why obligation from file "swap.c", line 4, characters 14-147: *)
@@ -126,31 +143,9 @@ Save.
   (* File "swap.c", line 4, characters 13-146 *)
   (llist tl_global alloc c (cons c2 (cons c1 l))).
 Proof.
-unfold cons ,llist, lpath; intuition; subst; auto.
-inversion_clear H.
-assert (~ In c1 (c2::l)).
-   apply llist_not_starting with (next := acc tl_Z21) (1:=H2).
-assert (c1<>c2).
-  red in H; simpl in H; auto.
-assert (c2 = c1 # tl_Z21).
-  inversion H2; auto.
-subst.
-inversion_clear H2.
-apply Path_cons; auto.
-caduceus.
-apply Path_cons; auto.
-caduceus.
-apply lpath_pset_same; auto.
-apply lpath_pset_same; auto.
-intro; apply H.
-simpl; auto.
-apply llist_not_starting with (next := acc tl_Z21) (1:=H6).
-Save.
-
-Proof.
 intuition.
 elimtype False.
-clear H c2 c1.
+clear HW_16 c2 c1.
 inversion_clear HW_1.
 inversion_clear H.
 subst.
