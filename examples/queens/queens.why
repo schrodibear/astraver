@@ -19,9 +19,17 @@ axiom empty_def : forall i:int. not in_(i,empty)
 axiom empty_card : forall s:iset. card(s)=0 <-> s=empty
 
 logic diff : iset,iset -> iset
+(*
 axiom diff_def : 
   forall a,b:iset. forall i:int.
     in_(i,diff(a,b)) <-> (in_(i,a) and not in_(i,b))
+*)
+axiom diff_def_1 : 
+  forall a,b:iset. forall i:int. 
+    in_(i,diff(a,b)) -> (in_(i,a) and not in_(i,b))
+axiom diff_def_2 : 
+  forall a,b:iset. forall i:int.
+    (in_(i,a) and not in_(i,b)) -> in_(i,diff(a,b)) 
 
 logic add : int,iset -> iset
 axiom add_def : 
@@ -37,10 +45,11 @@ axiom remove_card :
     in_(i,s) -> card(remove(i,s)) = card(s) - 1
 
 logic min_elt : iset -> int
-axiom min_elt_def : 
-  forall s:iset. card(s) > 0 -> 
-    (in_(min_elt(s), s) and
-     forall i:int. in_(i,s) -> min_elt(s) <= i)
+axiom min_elt_def_1 : 
+  forall s:iset. card(s) > 0 -> in_(min_elt(s), s)
+axiom min_elt_def_2 : 
+  forall s:iset. card(s) > 0 ->
+    forall i:int. in_(i,s) -> min_elt(s) <= i
 
 logic succ : iset -> iset
 axiom succ_def_1 :  
@@ -73,8 +82,6 @@ predicate eq_prefix(t:'a arr, u:'a arr, i:int) =
   (* t and u have the same prefix [0..i[ *)
   forall k:int. 0 <= k < i -> acc(t,k)=acc(u,k)
 
-predicate eq_sol(t:'a arr, u:'a arr) = eq_prefix(t, u, N)
-
 (* solutions *)
 
 predicate partial_solution(k:int, s:int arr) =
@@ -87,10 +94,20 @@ predicate partial_solution(k:int, s:int arr) =
 
 predicate solution(s:int arr) = partial_solution(N, s)
 
+predicate eq_sol(t:int arr, u:int arr) = eq_prefix(t, u, N)
+
 (*lemma*)axiom partial_solution_eq_prefix:
    forall t,u:int arr. forall k:int 
    [partial_solution(k,t), partial_solution(k,u)].
      partial_solution(k,t) -> eq_prefix(t,u,k) -> partial_solution(k,u)
+
+predicate lt_sol(s1:int arr, s2:int arr) =
+  exists i:int. 
+     0 <= i < N and eq_prefix(s1, s2, i) and acc(s1,i) < acc(s2,i)
+
+(* s[a..b[ is sorted for lt_sol *)
+predicate sorted(s: int arr arr, a:int, b:int) = 
+  forall i,j:int. a <= i < j < b -> lt_sol(acc(s,i), acc(s,j))
 
 (* code *)
 
@@ -125,12 +142,14 @@ let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
       { invariant 
 	  included(e,e@L) and
 	  f = s - s@L and f >= 0 and k = k@L and
+	  (forall i,j:int. in_(i,diff(e@L,e)) -> in_(j,e) -> i<j) and
           (*PROVABLE*) partial_solution(k,col) and
           eq_prefix(col@L,col,k@L) and eq_prefix(sol@L,sol,s@L) and
-          forall t:int arr.
-            (solution(t) and exists di:int. in_(di, diff(e@L, e)) and
-	     eq_prefix(upd(col,k,di), t, k+1)) <-> 
-            (exists i:int. s@L <= i < s and eq_sol(t, acc(sol,i)))
+          (forall t:int arr.
+             (solution(t) and exists di:int. in_(di, diff(e@L, e)) and
+	      eq_prefix(upd(col,k,di), t, k+1)) <-> 
+             (exists i:int. s@L <= i < s and eq_sol(t, acc(sol,i)))) and
+	  sorted(sol, s@L, s)
         variant card(e) }
       let d = min_elt !e in
       e := remove d !e;
@@ -143,6 +162,7 @@ let rec count (a:iset) (b:iset) (c:iset) : int { variant card(a) } =
   end
   { result = s-s@ and result >= 0 and k = k@ and
     eq_prefix(col@,col,k) and eq_prefix(sol@,sol,s@) and
+    sorted(sol, s@, s) and
     forall t:int arr.
       (solution(t) and eq_prefix(col, t, k)) <-> 
       (exists i:int. s@ <= i < s and eq_sol(t, acc(sol,i)))
