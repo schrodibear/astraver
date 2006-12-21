@@ -262,6 +262,12 @@ else
 	COQVER=v8
 	WHYLIBCOQ=lib/coq
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
+	case $COQVERSION in
+	trunk)
+	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+	*)
+	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;
+        esac
 	AC_MSG_CHECKING(Coq floating-point library)
 	if test -f $COQLIB/user-contrib/AllFloat.vo; then
 	  AC_MSG_RESULT(yes)

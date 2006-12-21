@@ -2408,6 +2408,12 @@ echo "${ECHO_T}$COQVERSION" >&6; }
 	COQVER=v8
 	WHYLIBCOQ=lib/coq
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
+	case $COQVERSION in
+	trunk)
+	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+	*)
+	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;
+        esac
 	{ echo "$as_me:$LINENO: checking Coq floating-point library" >&5
 echo $ECHO_N "checking Coq floating-point library... $ECHO_C" >&6; }
 	if test -f $COQLIB/user-contrib/AllFloat.vo; then

@@ -18,6 +18,3 @@
 
 Require Export Bool_nat.
 Require Export Zwf.
-
-Require Import LegacyRing.
-Tactic Notation "ring" constr(t) := legacy ring.
