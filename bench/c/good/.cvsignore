@@ -24,3 +24,4 @@ harvey
 gwhy.cache
 smtlib
 semantic.cache
+*.time

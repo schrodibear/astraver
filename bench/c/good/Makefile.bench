@@ -14,20 +14,3 @@ default: $(TFILES)
 	@make -f $*.makefile smtlib/$*_why.smt > /dev/null 2>&1 || (echo "why FAILED :"; make -f $*.makefile smtlib/$*_why.smt; exit 1)
 	../../../bin/dp.opt -timeout 20 simplify/$*_why.sx smtlib/$*_why.smt > $@ 2>&1
 
-# 		cat /tmp/caduceus.tmp
-# 		exit 1
-# 		if $make -f $f.makefile smtlib/${f}_why.smt > /tmp/caduceus.tmp 2>&1 ; then
-# 		    VCS="$VCS simplify/${f}_why.sx smtlib/${f}_why.smt"    
-# 		    echo "ok"
-# 		else
-# 		    echo "why FAILED :"
-# 		    cat /tmp/caduceus.tmp
-# 		    exit 1
-# 		fi
-# 	    else
-# 		echo "why FAILED :"
-# 		cat /tmp/caduceus.tmp
-# 		exit 1
-# 	    fi
-#     done
-#     ../../../bin/dp.opt -timeout 20 $VCS 2>/dev/null || true

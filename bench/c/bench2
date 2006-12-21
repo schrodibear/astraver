@@ -20,7 +20,9 @@ bench_c_good () {
     rm -f simplify/*_why.sx
     rm -f smtlib/*_why.smt
     rm -f *.time
-    CADUCEUS=$parsing make -e -j 7 -f Makefile.bench
+    hostname=`hostname`
+    if test $hostname = "belzebuth"; then parall="-j 7"; fi
+    CADUCEUS=$parsing make -e $parall -f Makefile.bench
 }
 
 bench_c_good
