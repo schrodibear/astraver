@@ -661,6 +661,13 @@ let assigns before ef locs =
 let parameter v =
   (v.jc_var_info_final_name,tr_type v.jc_var_info_type)
 
+let excep_posts_for_others eopt excep_posts =
+  ExceptionMap.fold
+    (fun ei l acc ->
+       if eopt = Some ei then acc 
+       else (ei.jc_exception_info_name,LTrue)::acc)
+    excep_posts []
+       
 let tr_fun f spec body acc = 
   let requires = 
     List.fold_right
@@ -699,9 +706,9 @@ let tr_fun f spec body acc =
       f.jc_fun_info_parameters
       (assertion None "" spec.jc_fun_requires)
   in
-  let all_behaviors =
-    List.map
-      (fun (id,b) ->
+  let (normal_behaviors,excep_behaviors) =
+    List.fold_left
+      (fun (normal,excep) (id,b) ->
 	 let post = 
 	   make_and 
 	   (assertion None "" b.jc_behavior_ensures)
@@ -713,13 +720,17 @@ let tr_fun f spec body acc =
 	     | Some e -> 
 		 make_impl (assertion (Some "") "" e) post
 	 in
-	 (id,b,a))
+	 match b.jc_behavior_throws with
+	   | None -> ((id,b,a)::normal,excep)
+	   | Some ei ->
+	       let eb =
+		 try
+		   ExceptionMap.find ei excep
+		 with Not_found -> []
+	       in
+	       (normal,ExceptionMap.add ei ((id,b,a)::eb) excep))
+      ([],ExceptionMap.empty)
       spec.jc_fun_behavior
-  in
-  let global_ensures =
-    List.fold_right
-      (fun (_,_,e) acc -> make_and e acc)
-      all_behaviors LTrue
   in
   let reads =
     FieldSet.fold
@@ -745,10 +756,24 @@ let tr_fun f spec body acc =
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
   in
+  let normal_post =
+    List.fold_right
+      (fun (_,_,e) acc -> make_and e acc)
+      normal_behaviors LTrue
+  in
+  let excep_posts =
+    ExceptionMap.fold
+      (fun ei l acc ->
+	 let p = 
+	   List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
+	 in (ei.jc_exception_info_name,p)::acc) 
+      excep_behaviors []
+  in
+  (* why parameter for calling the function *)
   let why_param = 
     let annot_type =
       Annot_type(requires,tr_type f.jc_fun_info_return_type,
-		 reads,writes, global_ensures,[])
+		 reads,writes, normal_post, excep_posts)
     in
     let fun_type =
       List.fold_right
@@ -759,6 +784,7 @@ let tr_fun f spec body acc =
     in
     Param(false,f.jc_fun_info_name,fun_type)
   in
+  (* why functions for each behaviors *)
   let params = List.map parameter f.jc_fun_info_parameters in
   let acc =
     List.fold_right
@@ -767,9 +793,25 @@ let tr_fun f spec body acc =
 	   Def(f.jc_fun_info_name ^ "_ensures_" ^ id,
 	       Fun(params,
 		   requires,statement_list body,
-		   e,[]))
+		   e,excep_posts_for_others None excep_behaviors))
 	 in d::acc)
-      all_behaviors acc
+      normal_behaviors acc
+  in 
+  let acc =
+    ExceptionMap.fold
+      (fun ei l acc ->
+	 List.fold_right
+	   (fun (id,b,e) acc ->
+	      let d =
+		Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
+		    Fun(params,
+			requires,statement_list body,
+			LTrue,
+			(ei.jc_exception_info_name,e) :: 
+			excep_posts_for_others (Some ei) excep_behaviors))
+	      in d::acc)
+	   l acc)
+      excep_behaviors acc
   in why_param::acc
 
 
