@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.14 2006-12-14 14:14:45 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.15 2006-12-22 13:13:24 marche Exp $ *)
 
 
 open Jc_env
@@ -40,11 +40,14 @@ let ef_union ef1 ef2 =
 	ef1.jc_effect_tag_table ef2.jc_effect_tag_table;
     jc_effect_memories = 
       FieldSet.union 
-	ef1.jc_effect_memories ef2.jc_effect_memories }
+	ef1.jc_effect_memories ef2.jc_effect_memories;
+  }
 
 let fef_union fef1 fef2 =
   { jc_reads = ef_union fef1.jc_reads fef2.jc_reads ;
-    jc_writes = ef_union fef1.jc_writes fef2.jc_writes }
+    jc_writes = ef_union fef1.jc_writes fef2.jc_writes ;
+    jc_raises = ExceptionSet.union fef1.jc_raises fef2.jc_raises;
+  }
 
 let add_memory_effect ef fi =
   { ef with jc_effect_memories = FieldSet.add fi ef.jc_effect_memories } 
@@ -54,6 +57,9 @@ let add_alloc_effect ef a =
   
 let add_tag_effect ef a =
   { ef with jc_effect_tag_table = StringSet.add a ef.jc_effect_tag_table } 
+  
+let add_exception_effect ef a =
+  { ef with jc_raises = ExceptionSet.add a ef.jc_raises }
   
 let add_field_reads fef fi =
   { fef with jc_reads = add_memory_effect fef.jc_reads fi }
@@ -153,8 +159,15 @@ let rec statement ef s =
     | JCSreturn e 
     | JCSpack(_,e) | JCSunpack(_,e)
     | JCSexpr e -> expr ef e
-    | JCSthrow (_, _) -> assert false
-    | JCStry (_, _, _) -> assert false
+    | JCSthrow (ei, e) -> 
+	add_exception_effect (expr ef e) ei
+    | JCStry (s, catches, finally) -> 
+	let ef = 
+	  List.fold_left 
+	    (fun ef (_,_,s) -> statement ef s)
+	    (statement ef s) catches
+	in
+	statement ef finally
     | JCSgoto _ -> assert false
     | JCScontinue _ -> assert false
     | JCSbreak _ -> assert false
@@ -252,14 +265,17 @@ let function_effects funs =
   List.iter
     (fun f ->
        Jc_options.lprintf
-	 "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@." 
+	 "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@\n@[ raises: %a@]@." 
 	 f.jc_fun_info_name
 	 (print_list comma (fun fmt field ->
 			     fprintf fmt "%s" field.jc_field_info_name))
 	 (FieldSet.elements f.jc_fun_info_effects.jc_reads.jc_effect_memories)
 	 (print_list comma (fun fmt field ->
 			      fprintf fmt "%s" field.jc_field_info_name))
-	 (FieldSet.elements f.jc_fun_info_effects.jc_writes.jc_effect_memories))
+	 (FieldSet.elements f.jc_fun_info_effects.jc_writes.jc_effect_memories)
+	 (print_list comma (fun fmt ei ->
+			      fprintf fmt "%s" ei.jc_exception_info_name))
+	 (ExceptionSet.elements f.jc_fun_info_effects.jc_raises))
     funs
 
        

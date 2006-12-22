@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.8 2006-12-14 14:14:45 marche Exp $ *)
+(* $Id: jc_fenv.mli,v 1.9 2006-12-22 13:13:25 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -38,6 +38,7 @@ type fun_effect =
     {
       jc_reads : effect;
       jc_writes : effect;
+      jc_raises : ExceptionSet.t;
     }
 
 type logic_info =

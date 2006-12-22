@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.7 2006-11-16 10:09:36 hubert Exp $ i*)
+(*i $Id: output.mli,v 1.8 2006-12-22 13:13:25 marche Exp $ i*)
 
 type constant =
   | Prim_int of string
@@ -173,7 +173,7 @@ type why_decl =
   | Predicate of bool * string * (string * logic_type) list * assertion  
   | Function of bool * string * (string * logic_type) list * logic_type * term
   | Type of string * string list
-  | Exception of string
+  | Exception of string * logic_type option
 
 val fprintf_why_decl : Format.formatter -> why_decl -> unit;;
 

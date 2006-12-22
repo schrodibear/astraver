@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.4 2006-11-29 13:29:41 marche Exp $ *)
+(* $Id: jc_envset.ml,v 1.5 2006-12-22 13:13:24 marche Exp $ *)
 
 open Jc_env
 
@@ -48,7 +48,14 @@ module FieldSet = Set.Make(FieldOrd)
 
 module FieldMap = Map.Make(FieldOrd)
 
+module ExceptionOrd =   
+  struct type t = exception_info
+	 let compare f1 f2 = 
+	   Pervasives.compare 
+	     f1.jc_exception_info_tag f2.jc_exception_info_tag
+  end
 
+module ExceptionSet = Set.Make(ExceptionOrd)
 
 (*
 Local Variables: 

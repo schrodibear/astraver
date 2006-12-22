@@ -34,7 +34,13 @@ type const =
   | JCCinteger of string
   | JCCreal of string
 
+type identifier = 
+    { jc_identifier_loc : Loc.position;
+      jc_identifier_name : string;
+    }
+
 type label = string
+
 
 (***************)
 (* parse trees *)
@@ -89,7 +95,7 @@ and pexpr =
      
 type pclause =
   | JCPCrequires of pexpr
-  | JCPCbehavior of string * pexpr option * pexpr list option * pexpr
+  | JCPCbehavior of string * identifier option * pexpr option * pexpr list option * pexpr
 
 
 type pstatement_node =
@@ -104,8 +110,8 @@ type pstatement_node =
   | JCPSbreak of label
   | JCPScontinue of label
   | JCPSgoto of label
-  | JCPStry of pstatement * (string * string * pstatement) list * pstatement
-  | JCPSthrow of string * pexpr
+  | JCPStry of pstatement * (identifier * string * pstatement) list * pstatement
+  | JCPSthrow of identifier * pexpr
   | JCPSpack of pexpr
   | JCPSunpack of pexpr
 
@@ -120,6 +126,7 @@ type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
   | JCPDtype of string * string option * (ptype * string) list * (string * string * pexpr) list
   | JCPDaxiom of string * pexpr
+  | JCPDexception of string * ptype
 
 and pdecl =
     {
@@ -233,6 +240,7 @@ type location =
 
 type behavior =
     { 
+      jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : assertion option ;
       jc_behavior_assigns : location list option ;
       jc_behavior_ensures : assertion;

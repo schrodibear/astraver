@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.6 2006-11-16 16:42:46 marche Exp $ i*)
+(*i $Id: output.ml,v 1.7 2006-12-22 13:13:25 marche Exp $ i*)
 
 open Format;;
 open Pp;;
@@ -589,7 +589,7 @@ type why_decl =
   | Predicate of bool * string * (string * logic_type) list * assertion  
   | Function of bool * string * (string * logic_type) list * logic_type * term
   | Type of string * string list
-  | Exception of string
+  | Exception of string * logic_type option
 
 
 
@@ -602,7 +602,7 @@ let get_why_id d =
     | Predicate(_,id,_,_) -> id
     | Function(_,id,_,_,_) -> id
     | Type (id,_) -> id
-    | Exception id -> id
+    | Exception(id,_) -> id
 
 let iter_why_decl f d =
   match d with
@@ -620,7 +620,7 @@ let iter_why_decl f d =
 	iter_logic_type f t;
 	iter_term f p
     | Type(t,args) -> List.iter f args
-    | Exception id -> ()
+    | Exception(_,t) -> Option_misc.iter (iter_logic_type f) t
 
 
 
@@ -705,8 +705,10 @@ let fprintf_why_decl form d =
 	fprintf form "@[type ('%s" t;
 	List.iter (fun t -> fprintf form ", '%s" t) l;
 	fprintf form ") %s@]@.@." id
-    | Exception id ->
+    | Exception(id, None) ->
 	fprintf form "@[exception %s@]@.@." id
+    | Exception(id, Some t) ->
+	fprintf form "@[exception %s of %a@]@.@." id fprintf_logic_type t 
 	
 
 let output_decls get_id iter_decl output_decl decls =

@@ -88,7 +88,9 @@ let neq = make_rel "neq"
 
 let empty_fun_effect =
   { jc_reads = empty_effects;
-    jc_writes = empty_effects }
+    jc_writes = empty_effects;
+    jc_raises = ExceptionSet.empty ;
+  }
 
 let fun_tag_counter = ref 0
 

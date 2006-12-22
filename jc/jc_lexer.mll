@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.17 2006-11-29 13:29:41 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.18 2006-12-22 13:13:25 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -88,6 +88,9 @@ rule token = parse
 (*
   | "break"                 { BREAK }
   | "case"                  { CASE }
+*)
+  | "catch"                 { CATCH }
+(*
   | "char"                  { CHAR }
   | "continue"              { CONTINUE }
   | "default"               { DEFAULT }
@@ -99,6 +102,7 @@ rule token = parse
 (*
   | "enum"                  { ENUM }
 *)
+  | "exception"             { EXCEPTION }
   | "false"                 { CONSTANT (JCCboolean false) }
 (*
   | "float"                 { FLOAT }
@@ -114,6 +118,7 @@ rule token = parse
 (*
   | "long"                  { LONG }
 *)
+  | "of"                    { OF }
   | "pack"                  { PACK }
   | "real"                  { REAL}
   | "requires"              { REQUIRES }
@@ -123,7 +128,10 @@ rule token = parse
   | "signed"                { SIGNED }
   | "switch"                { SWITCH }
 *)
+  | "throw"                 { THROW }
+  | "throws"                { THROWS }
   | "true"                  { CONSTANT (JCCboolean true) }
+  | "try"                   { TRY }
   | "type"                  { TYPE }
   | "unit"                  { UNIT }
   | "unpack"                { UNPACK }
@@ -134,6 +142,7 @@ rule token = parse
   | "while"                 { WHILE }
   | "with"                  { WITH }
   | "\\forall"              { BSFORALL }
+  | "\\nothing"             { BSNOTHING }
   | "\\offset_max"          { BSOFFSET_MAX }
   | "\\offset_min"          { BSOFFSET_MIN }
   | "\\old"                 { BSOLD }

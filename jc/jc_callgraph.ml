@@ -107,8 +107,13 @@ let rec statement acc s =
 	let (a,b) = statement acc s in (loop_annot a spec,expr b e)
     | JCSblock sl -> 
 	List.fold_left statement acc sl
-    | JCSthrow (_, _) -> assert false (* TODO *)
-    | JCStry (_, _, _) -> assert false (* TODO *)
+    | JCSthrow (ei, e) -> let (a,b)=acc in (a,expr b e)
+    | JCStry (s, catches, finally) -> 
+	let acc =
+	  List.fold_left 
+	    (fun acc (_,_,s) -> statement acc s) 
+	    (statement acc s) catches
+	in statement acc finally
     | JCSgoto _ -> assert false (* TODO *)
     | JCScontinue _ -> assert false (* TODO *)
     | JCSbreak _  -> assert false (* TODO *)

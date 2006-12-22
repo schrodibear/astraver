@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.224 2006-12-04 22:05:18 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.225 2006-12-22 13:13:23 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -2249,7 +2249,7 @@ let interp_functions why =
   let code = 
     Hashtbl.fold
       (fun lab () acc ->
-	 (lab,Exception("Goto_"^lab))::acc) labels_table code
+	 (lab,Exception("Goto_"^lab,None))::acc) labels_table code
   in
   (code,spec)
 

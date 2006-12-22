@@ -58,6 +58,7 @@ type var_info =
 
 type exception_info =
     {
+      jc_exception_info_tag : int;
       jc_exception_info_name : string;
       jc_exception_info_type : jc_type;
     }
@@ -66,6 +67,6 @@ type exception_info =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "unset LANG ; make -C .. bin/jessie.byte"
 End: 
 *)

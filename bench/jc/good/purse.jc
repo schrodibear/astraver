@@ -37,42 +37,40 @@ integer test1(purse[0] p1, purse[0] p2)
 
 /* introducing exceptions */
     
-/*
-exception NoCreditException of unit
+exception NoCreditException of integer
 
-unit withdraw2(purse this, int s) 
+unit withdraw2(purse[0] this, integer s) 
   requires s >= 0;
   behavior amount_withdrawn:
      assigns this.balance;
-     ensures s <= \old(this.balance) && balance == \old(this.balance) - s;
+     ensures s <= \old(this.balance) && 
+	 this.balance == \old(this.balance) - s;
   behavior amount_too_large:
-     throws NoCreditException s; 
+     throws NoCreditException; 
      assigns \nothing;
      ensures s > \old(this.balance);
 {
-    if (balance >= s) {
-	balance -= s;
+    if (this.balance >= s) {
+	this.balance -= s;
     }
     else {
-	throw NoCreditException();
+	throw NoCreditException s;
     }
 }	
  
-boolean test2(purse p) 
-  requires p != null;
+boolean test2(purse[0] p) 
   behavior ok_iff_enough_balance:
     assigns p.balance ;
-    ensures \result <==> \old(p.balance) >= 1000;
+    ensures \result <=> \old(p.balance) >= 1000;
 {
     try {
 	withdraw2(p,1000);
         return true;
     }
-    catch (NoCreditException e) { 
+    catch NoCreditException e { 
 	return false; 
     }
 }
-*/
 
 /* introducing dynamic memory allocation */
 

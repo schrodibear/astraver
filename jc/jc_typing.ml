@@ -37,7 +37,7 @@ let typing_error l =
     str_formatter
 
 
-
+let exceptions_table = Hashtbl.create 97
 
 
 let structs_table = Hashtbl.create 97
@@ -150,6 +150,19 @@ let var ty id =
     jc_var_info_assigned = false;
   }
   in vi
+
+(* exceptions *)
+
+let exception_tag_counter = ref 0
+
+let exception_info id ty =
+  incr exception_tag_counter;
+  let ei = {
+    jc_exception_info_tag = !exception_tag_counter;
+    jc_exception_info_name = id;
+    jc_exception_info_type = ty;
+  }
+  in ei
 
 (* terms *)
 
@@ -369,7 +382,20 @@ let make_and a1 a2 =
 let rec assertion env e =
   let te =
     match e.jc_pexpr_node with
-      | JCPEvar id -> assert false
+      | JCPEvar id -> 
+	  let vi = 
+	    try List.assoc id env 
+	    with Not_found -> 
+	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	  in 
+	  begin
+	    match vi.jc_var_info_type with
+	      | JCTnative Tboolean ->
+		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
+				 jc_term_node = JCTvar vi }
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "non boolean expression"
+	  end
       | JCPEinstanceof(e1, t) -> 
 	  let t1,te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
@@ -744,8 +770,36 @@ let rec statement env s =
   let ts =
     match s.jc_pstatement_node with
       | JCPSskip -> JCSblock []
-      | JCPSthrow (_, _) -> assert false
-      | JCPStry (_, _, _) -> assert false
+      | JCPSthrow (id, e) -> 
+	  let ei =
+	    try Hashtbl.find exceptions_table id.jc_identifier_name 
+	    with Not_found ->
+	      typing_error id.jc_identifier_loc 
+		"undeclared exception %s" id.jc_identifier_name
+	  in
+	  let t,te = expr env e in
+	  if subtype t ei.jc_exception_info_type then
+	    JCSthrow(ei,te)
+	  else
+	    typing_error e.jc_pexpr_loc "%a type expected" 
+	      print_type ei.jc_exception_info_type
+      | JCPStry (s, catches, finally) -> 
+	  let ts = statement env s in
+	  let catches = 
+	    List.map
+	      (fun (id,v,st) ->
+		 let ei =
+		   try Hashtbl.find exceptions_table id.jc_identifier_name 
+		   with Not_found ->
+		     typing_error id.jc_identifier_loc 
+		       "undeclared exception %s" id.jc_identifier_name
+		 in
+		 let vi = var ei.jc_exception_info_type v in
+		 let env' = (v,vi) :: env in
+		 (ei,vi,statement env' st))
+	      catches
+	  in
+	  JCStry(ts,catches,statement env finally)
       | JCPSgoto _ -> assert false
       | JCPScontinue _ -> assert false
       | JCPSbreak _ -> assert false
@@ -860,19 +914,35 @@ let rec location env e =
     | JCPEconst _ -> 
 	typing_error e.jc_pexpr_loc "invalid memory location"
 
-let clause env c acc =
+let clause env vi_result c acc =
   match c with
     | JCPCrequires(e) ->
 	{ acc with 
 	    jc_fun_requires = assertion env e }
-    | JCPCbehavior(id,assumes,assigns,ensures) ->
+    | JCPCbehavior(id,throws,assumes,assigns,ensures) ->
+	let throws,env_result = 
+	  match throws with
+	    | None -> None, (vi_result.jc_var_info_name,vi_result)::env 
+	    | Some id -> 
+		try 
+		  let ei = 
+		    Hashtbl.find exceptions_table id.jc_identifier_name 
+		  in
+		  let vi = var ei.jc_exception_info_type "\\result" in
+		  vi.jc_var_info_final_name <- "result";
+		  Some ei, (vi.jc_var_info_name,vi)::env 
+		with Not_found ->
+		  typing_error id.jc_identifier_loc 
+		    "undeclared exception %s" id.jc_identifier_name
+	in
 	let assumes = Option_misc.map (assertion env) assumes in
 	let assigns = 
 	  Option_misc.map (List.map (fun a -> snd (location env a))) assigns in
 	let b = {
+	  jc_behavior_throws = throws;
 	  jc_behavior_assumes = assumes;
 	  jc_behavior_assigns = assigns;
-	  jc_behavior_ensures = assertion env ensures }
+	  jc_behavior_ensures = assertion env_result ensures }
 	in
 	{ acc with jc_fun_behavior = (id,b)::acc.jc_fun_behavior }
 	  
@@ -912,9 +982,8 @@ let decl d =
 	fi.jc_fun_info_parameters <- List.map snd param_env;
 	let vi = var ty "\\result" in
 	vi.jc_var_info_final_name <- "result";
-	let param_env_result = ("\\result",vi)::param_env in
 	let s = List.fold_right 
-		  (clause param_env_result) specs 
+		  (clause param_env vi) specs 
 		  { jc_fun_requires = assertion_true;
 		    jc_fun_behavior = [] }
 	in
@@ -956,6 +1025,9 @@ let decl d =
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te
 
+    | JCPDexception(id,t) ->
+	let tt = type_type t in
+	Hashtbl.add exceptions_table id (exception_info id tt)
 
 (*
 Local Variables: 

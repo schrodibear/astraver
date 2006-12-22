@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.22 2006-11-29 13:29:41 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.23 2006-12-22 13:13:25 marche Exp $ */
 
 %{
 
@@ -62,6 +62,8 @@
   let with_loc l x = { node = x; loc = l }
 *)
 
+  let skip = locate_statement JCPSskip
+      
 
 %}
 
@@ -90,6 +92,9 @@
 /* if else return while */
 %token IF ELSE RETURN WHILE
 
+/* exception of throw try catch */
+%token EXCEPTION OF THROW TRY CATCH
+
 /* pack unpack */
 %token PACK UNPACK
 
@@ -99,11 +104,14 @@
 /* integer boolean real unit */
 %token INTEGER BOOLEAN REAL UNIT
 
-/* assigns assumes behavior ensures requires */
-%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES 
+/* assigns assumes behavior ensures requires throws */
+%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS
 
 /* \forall \offset_max \offset_min \old \result  */
 %token BSFORALL BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT 
+
+/* \nothing */
+%token BSNOTHING
 
 /* axiom */
 %token AXIOM
@@ -168,6 +176,8 @@ decl:
 | type_definition 
     { $1 }
 | axiom_definition
+    { $1 }
+| exception_definition
     { $1 }
 /*
 | error
@@ -276,9 +286,16 @@ function_specification:
 spec_clause:
 | REQUIRES expression SEMICOLON
     { JCPCrequires($2) }
-| BEHAVIOR IDENTIFIER COLON assumes assigns ENSURES expression SEMICOLON
-    { JCPCbehavior($2,$4,$5,$7) }
+| BEHAVIOR IDENTIFIER COLON throws assumes assigns ENSURES expression SEMICOLON
+    { JCPCbehavior($2,$4,$5,$6,$8) }
 	
+;
+
+throws:
+| /* epsilon */
+    { None }
+| THROWS identifier SEMICOLON
+    { Some $2 }
 ;
 
 assumes:
@@ -293,6 +310,8 @@ assigns:
     { None }
 | ASSIGNS argument_expression_list SEMICOLON
     { Some $2 }
+| ASSIGNS BSNOTHING SEMICOLON
+    { Some [] }
 ;
 
 
@@ -308,6 +327,16 @@ function_definition:
 axiom_definition:
 | AXIOM IDENTIFIER COLON expression
     { locate_decl( JCPDaxiom($2,$4)) }
+;
+
+
+/*************************/
+/* exception definitions */
+/*************************/
+
+exception_definition:
+| EXCEPTION IDENTIFIER OF type_expr
+    { locate_decl (JCPDexception($2,$4)) }
 ;
 
 
@@ -539,6 +568,10 @@ identifier_list:
     { $1 :: $3 }
 ;
 
+identifier:
+| IDENTIFIER
+    { { jc_identifier_loc = loc () ; jc_identifier_name = $1 } }
+;
 
 /****************/
 /* declarations */
@@ -581,7 +614,7 @@ statement_list:
 
 expression_statement: 
 | SEMICOLON 
-    { locate_statement JCPSskip }
+    { skip }
 /*
 | CODE_ANNOT { locate (CSannot $1) } 
 */
@@ -592,8 +625,7 @@ expression_statement:
 selection_statement: 
 | IF LPAR expression RPAR statement 
     %prec PRECIF 
-    { let skip = locate_statement JCPSskip in
-      locate_statement (JCPSif($3, $5, skip)) }
+    { locate_statement (JCPSif($3, $5, skip)) }
 | IF LPAR expression RPAR statement ELSE statement 
     { locate_statement (JCPSif ($3, $5, $7)) }
 /*
@@ -665,8 +697,16 @@ statement:
 | SPEC statement { locate (CSspec ($1,$2)) }
 */
 | pack_statement { $1 }
+| exception_statement { $1 }
 ;
 
+
+exception_statement:
+| THROW identifier expression SEMICOLON
+   { locate_statement (JCPSthrow($2,$3)) }
+| TRY statement CATCH identifier IDENTIFIER statement
+   { locate_statement (JCPStry($2,[($4,$5,$6)],skip)) }
+;
 
 
 

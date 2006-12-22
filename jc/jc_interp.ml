@@ -455,8 +455,21 @@ let rec statement s =
     | JCSbreak l -> assert false
     | JCScontinue l -> assert false
     | JCSgoto l -> assert false
-    | JCSthrow (_, _) -> assert false
-    | JCStry (_, _, _) -> assert false
+    | JCSthrow (ei, e) -> 
+	let l,e = expr e in
+	make_lets l (Raise(ei.jc_exception_info_name,Some e))	
+    | JCStry (s, catches, finally) -> 
+	assert (finally.jc_statement_node = JCSblock []); (* TODO *)
+	begin
+	  match catches with
+	    | [(ei,v,st)] ->
+		Try(statement s, 
+		    ei.jc_exception_info_name, 
+		    Some v.jc_var_info_final_name, statement st)
+	    | _ -> assert false  (* TODO *)
+	end
+  
+	
 
 and statement_list l = 
   List.fold_right 
@@ -761,9 +774,13 @@ let tr_fun f spec body acc =
 
 
 let tr_axiom id p acc = Axiom(id,assertion None "" p)::acc
-  
+
+let tr_exception ei acc =
+  Exception(ei.jc_exception_info_name, 
+	    Some (tr_base_type ei.jc_exception_info_type)) :: acc
+
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "unset LANG; make -C .. bin/jessie.byte"
 End: 
 *)

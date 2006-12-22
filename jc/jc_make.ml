@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.5 2006-11-07 16:12:14 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.6 2006-12-22 13:13:25 marche Exp $ i*)
 
 open Format
 open Pp
@@ -90,7 +90,8 @@ let generic f targets =
        fprintf fmt "simplify/%%_why.sx: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
        
-       fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
+       fprintf fmt "ergo: %a@\n@\n" (print_files why_goals) targets;
+       fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "why/%%_why.why: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
        
@@ -112,7 +113,7 @@ let generic f targets =
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding mono -dir smtlib $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp -dir smtlib $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");
@@ -132,3 +133,8 @@ let makefile f = generic f [f]
 
 
 
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

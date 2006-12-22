@@ -41,6 +41,9 @@ val structs_table :
 val axioms_table : 
   (string, assertion) Hashtbl.t
 
+val exceptions_table : 
+  (string, exception_info) Hashtbl.t
+
 exception Typing_error of Loc.position * string
 
 val decl : pdecl -> unit
