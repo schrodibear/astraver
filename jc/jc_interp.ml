@@ -32,6 +32,7 @@ open Output
 
 let const c =
   match c with
+    | JCCvoid -> Prim_void
     | JCCnull -> assert false
     | JCCreal s -> Prim_real s
     | JCCinteger s -> Prim_int s

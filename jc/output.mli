@@ -22,9 +22,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.8 2006-12-22 13:13:25 marche Exp $ i*)
+(*i $Id: output.mli,v 1.9 2006-12-22 15:25:13 marche Exp $ i*)
 
 type constant =
+  | Prim_void
   | Prim_int of string
   | Prim_real of string
   | Prim_bool of bool

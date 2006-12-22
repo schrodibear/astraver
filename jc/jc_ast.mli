@@ -29,6 +29,7 @@ open Jc_fenv
 
 
 type const =
+  | JCCvoid
   | JCCnull
   | JCCboolean of bool
   | JCCinteger of string
@@ -111,7 +112,7 @@ type pstatement_node =
   | JCPScontinue of label
   | JCPSgoto of label
   | JCPStry of pstatement * (identifier * string * pstatement) list * pstatement
-  | JCPSthrow of identifier * pexpr
+  | JCPSthrow of identifier * pexpr 
   | JCPSpack of pexpr
   | JCPSunpack of pexpr
 

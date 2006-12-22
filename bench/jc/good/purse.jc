@@ -37,7 +37,7 @@ integer test1(purse[0] p1, purse[0] p2)
 
 /* introducing exceptions */
     
-exception NoCreditException of integer
+exception NoCreditException of unit
 
 unit withdraw2(purse[0] this, integer s) 
   requires s >= 0;
@@ -54,7 +54,7 @@ unit withdraw2(purse[0] this, integer s)
 	this.balance -= s;
     }
     else {
-	throw NoCreditException s;
+	throw NoCreditException ();
     }
 }	
  

@@ -131,6 +131,7 @@ let type_type t =
 
 let const c =
   match c with
+    | JCCvoid -> unit_type,c
     | JCCinteger _ -> integer_type,c
     | JCCreal _ -> real_type,c
     | JCCboolean _ -> boolean_type,c
@@ -778,7 +779,7 @@ let rec statement env s =
 		"undeclared exception %s" id.jc_identifier_name
 	  in
 	  let t,te = expr env e in
-	  if subtype t ei.jc_exception_info_type then
+	  if subtype t ei.jc_exception_info_type then 
 	    JCSthrow(ei,te)
 	  else
 	    typing_error e.jc_pexpr_loc "%a type expected" 

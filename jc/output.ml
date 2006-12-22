@@ -22,12 +22,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.7 2006-12-22 13:13:25 marche Exp $ i*)
+(*i $Id: output.ml,v 1.8 2006-12-22 15:25:13 marche Exp $ i*)
 
 open Format;;
 open Pp;;
 
 type constant =
+  | Prim_void
   | Prim_int of string
   | Prim_real of string
   | Prim_bool of bool
@@ -35,6 +36,7 @@ type constant =
 
 let fprintf_constant form e =
   match e with
+    | Prim_void -> fprintf form "void"
     | Prim_int(n) -> fprintf form "%s" n
     | Prim_real(f) -> fprintf form "%s" f
     | Prim_bool(b) -> fprintf form "%b" b
