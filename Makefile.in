@@ -751,9 +751,6 @@ clean::
 
 dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
-	if test "@enable_octagon@" = "yes" ; then \
-		make -C octagon dist-clean; \
-	fi
 
 coq-clean::
 	rm -f lib/coq*/*.vo examples/*/*.vo
