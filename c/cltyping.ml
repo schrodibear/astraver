@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.110 2006-12-20 12:38:22 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.111 2007-01-04 10:09:49 moy Exp $ i*)
 
 open Coptions
 open Format
@@ -348,6 +348,14 @@ and type_term_node loc env = function
       (match t.term_type.ctype_node with
 	 | Tarray _ | Tpointer _ -> Tstrlen t, c_int
 	 | _ -> error loc "strlen argument must be either array or pointer")
+  | PLmin (t1,t2) ->
+      let t1 = type_int_term env t1 in
+      let t2 = type_int_term env t2 in
+      Tmin (t1,t2), c_int
+  | PLmax (t1,t2) ->
+      let t1 = type_int_term env t1 in
+      let t2 = type_int_term env t2 in
+      Tmax (t1,t2), c_int
   | PLresult ->
       (try 
 	 let t = Env.find "result" env in 
@@ -376,7 +384,8 @@ and type_term_node loc env = function
       end
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ | PLseparated _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _ | PLfalse
-  | PLfullseparated _ | PLor _ | PLand _ | PLrel _ | PLtrue | PLnamed _ ->
+  | PLfullseparated _ | PLor _ | PLand _ | PLrel _ | PLtrue | PLnamed _ 
+  | PLbound_separated _ | PLfull_separated _ ->
       raise_located loc (AnyMessage "predicates are not allowed here")
 
 and type_int_term env t =
@@ -600,6 +609,34 @@ and type_predicate_node env p0 = match p0.lexpr_node with
 	(match t2.term_type.ctype_node with
 	 | Tstruct _ | Tarray _ | Tpointer _ -> t2
 	 | _ -> error t2loc "subscripted value is neither array nor pointer"))
+  | PLbound_separated (t1,tu1,t2,tu2) ->
+      let t1loc = t1.lexpr_loc in
+      let t1 = type_term env t1 in 
+      let tu1 = type_int_term env tu1 in
+      let t2loc = t2.lexpr_loc in
+      let t2 = type_term env t2 in
+      let tu2 = type_int_term env tu2 in
+      Pbound_separated (
+      (match t1.term_type.ctype_node with
+	 | Tstruct _ | Tarray _ | Tpointer _ -> t1
+	 | _ -> error t1loc "subscripted value is neither array nor pointer"),
+	tu1,
+	(match t2.term_type.ctype_node with
+	 | Tstruct _ | Tarray _ | Tpointer _ -> t2
+	 | _ -> error t2loc "subscripted value is neither array nor pointer"),
+	tu2)
+  | PLfull_separated (t1,t2) ->
+      let t1loc = t1.lexpr_loc in
+      let t1 = type_term env t1 in 
+      let t2loc = t2.lexpr_loc in
+      let t2 = type_term env t2 in
+      Pfull_separated (
+      (match t1.term_type.ctype_node with
+	 | Tstruct _ | Tarray _ | Tpointer _ -> t1
+	 | _ -> error t1loc "subscripted value is neither array nor pointer"),
+	(match t2.term_type.ctype_node with
+	 | Tstruct _ | Tarray _ | Tpointer _ -> t2
+	 | _ -> error t2loc "subscripted value is neither array nor pointer"))
   | PLfullseparated (t1,t2) ->
       let t1loc = t1.lexpr_loc in
       let t1 = type_term env t1 in 
@@ -642,7 +679,7 @@ and type_predicate_node env p0 = match p0.lexpr_node with
   | PLcast _ | PLblock_length _ | PLarrlen _ | PLstrlen _ 
   | PLbase_addr _ | PLoffset _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
-  | PLresult | PLrange _ ->
+  | PLresult | PLrange _ | PLmin _ | PLmax _ ->
       (*raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))*)
       (* interpret term [t] as [t != 0] *)
       let t = type_int_term env p0 in

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.225 2006-12-22 13:13:23 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.226 2007-01-04 10:09:48 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -257,6 +257,10 @@ let rec interp_term label old_label t =
 	let var = zoned_name var.var_unique_name (Cnorm.type_why_for_term t)
 	in
 	LApp("strlen",[interp_var label var;te])
+    | NTmin (t1,t2) -> 
+	LApp("min",[f t1; f t2])
+    | NTmax (t1,t2) -> 
+	LApp("max",[f t1; f t2])
     | NTat (t, l) -> 
 	interp_term (Some l) old_label t
     | NTif (_, _, _) -> 
@@ -495,6 +499,17 @@ let rec interp_predicate label old_label p =
 	  LPred("separated",[ft t1;ft t2])
 	else
 	  LPred("separated",[interp_var label "alloc"; ft t1;ft t2])
+    | NPfull_separated (t1,t2) ->
+	if arith_memory_model then
+	  LPred("full_separated",[ft t1;ft t2])
+	else
+	  LPred("full_separated",[interp_var label "alloc"; ft t1;ft t2])
+    | NPbound_separated (t1,t2,t3,t4) ->
+	if arith_memory_model then
+	  LPred("bound_separated",[ft t1;ft t2;ft t3;ft t4])
+	else
+	  LPred("bound_separated",
+		[interp_var label "alloc";ft t1;ft t2;ft t3;ft t4])
 
 let interp_predicate label old_label p = 
   let w = interp_predicate label old_label p in

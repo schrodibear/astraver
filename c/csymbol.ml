@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: csymbol.ml,v 1.7 2006-12-19 15:37:40 moy Exp $ *)
+(* $Id: csymbol.ml,v 1.8 2007-01-04 10:09:49 moy Exp $ *)
 
 (* TO DO:
 
@@ -32,6 +32,10 @@
 
 open Clogic
 open Cabsint
+open Pp
+
+let debug = Coptions.debug
+let debug_more = false
 
 (* local types describing terms and predicates, sufficient for expressing
    the predicates that result from the integer analysis.
@@ -43,6 +47,8 @@ type 'v int_term =
   | ITvar of 'v
   | ITunop of term_unop * 'v int_term
   | ITbinop of 'v int_term * term_binop * 'v int_term
+  | ITmax of 'v int_term list
+  | ITmin of 'v int_term list
     (* used to translate an expression that has no counterpart in the small
        term language presented here. When computing an abstraction for
        a surrounding term, we will translate [ITany] to top. *)
@@ -57,7 +63,7 @@ type 'v int_predicate =
   | IPimplies of 'v int_predicate * 'v int_predicate
   | IPiff of 'v int_predicate * 'v int_predicate
   | IPnot of 'v int_predicate
-  | IPseparated of 'v int_term * 'v int_term
+  | IPfull_separated of 'v int_term * 'v int_term
     (* specific predicates to express (non-)nullity of pointer and
        (non-)nullity of char pointer read. These should be translated in some
        more specific predicates depending on the domain. *)
@@ -110,6 +116,10 @@ struct
 	(Cprint.term_unop op) pretty t
     | ITbinop (t1,op,t2) ->  Format.fprintf fmt "%a %s %a" 
 	pretty t1 (Cprint.term_binop op) pretty t2
+    | ITmax tlist ->
+	Format.fprintf fmt "max(%a)" (print_list comma pretty) tlist
+    | ITmin tlist ->
+	Format.fprintf fmt "min(%a)" (print_list comma pretty) tlist
     | ITany              -> Format.fprintf fmt "_"
 
   (* takes as input a term
@@ -121,6 +131,8 @@ struct
     | ITvar v -> [v]
     | ITunop (_,t1) -> collect_term_vars t1
     | ITbinop (t1,_,t2) -> collect_term_vars t1 @ (collect_term_vars t2)
+    | ITmax tlist -> List.flatten (List.map collect_term_vars tlist)
+    | ITmin tlist -> List.flatten (List.map collect_term_vars tlist)
     | ITany -> []
 
   let rec translate transl t = 
@@ -134,6 +146,10 @@ struct
 	    ITunop (op,translate transl t1)
 	| ITbinop (t1,op,t2) -> 
 	    ITbinop (translate transl t1,op,translate transl t2)
+	| ITmax tlist ->
+	    ITmax (List.map (translate transl) tlist)
+	| ITmin tlist ->
+	    ITmin (List.map (translate transl) tlist)
 end
 
 module PredicateOfVariable (V : ELEMENT_OF_CONTAINER) 
@@ -164,7 +180,7 @@ struct
     | IPiff (p1,p2) -> Format.fprintf fmt "%a <=> %a"
 	pretty p1 pretty p2
     | IPnot p -> Format.fprintf fmt "! %a" pretty p
-    | IPseparated (t1,t2) -> Format.fprintf fmt "separated(%a,%a)"
+    | IPfull_separated (t1,t2) -> Format.fprintf fmt "full_separated(%a,%a)"
 	T.pretty t1 T.pretty t2
     | IPnull_pointer t1 -> Format.fprintf fmt "%a == 0"
 	T.pretty t1
@@ -183,7 +199,8 @@ struct
      - negation is pushed inside sub-predicates
   *)
   let rec explicit_pred p = match p with
-    | IPfalse | IPtrue | IPrel _ | IPany | IPseparated _ | IPnull_pointer _ 
+    | IPfalse | IPtrue | IPrel _ | IPany | IPfull_separated _ 
+    | IPnull_pointer _ 
     | IPnot_null_pointer _ | IPnull_char_pointed _ | IPnot_null_char_pointed _
 	-> p
     | IPand (p1,p2) -> 
@@ -229,7 +246,7 @@ struct
 		 to [explicit_pred] *)
 	      assert false
 	  | IPany -> IPany
-	  | IPseparated _ as psep -> psep
+	  | IPfull_separated _ as psep -> psep
 	  | IPnull_pointer t1 -> IPnot_null_pointer t1
 	  | IPnot_null_pointer t1 -> IPnull_pointer t1
 	  | IPnull_char_pointed (t1,t2) -> IPnot_null_char_pointed (t1,t2)
@@ -243,7 +260,7 @@ struct
 	[]
     | IPnull_pointer t1 | IPnot_null_pointer t1 ->
 	T.collect_term_vars t1
-    | IPrel (t1,_,t2) | IPseparated (t1,t2) | IPnull_char_pointed (t1,t2)
+    | IPrel (t1,_,t2) | IPfull_separated (t1,t2) | IPnull_char_pointed (t1,t2)
     | IPnot_null_char_pointed (t1,t2) ->
 	T.collect_term_vars t1 @ (T.collect_term_vars t2)
     | IPand (p1,p2) | IPor (p1,p2) | IPimplies (p1,p2) | IPiff (p1,p2) ->
@@ -295,10 +312,10 @@ struct
     | IPnot p -> 
 	let tp = translate transl p in
 	IPnot tp
-    | IPseparated (t1,t2) -> 
+    | IPfull_separated (t1,t2) -> 
 	let tt1 = T.translate transl t1 in
 	let tt2 = T.translate transl t2 in
-	IPseparated (tt1,tt2)
+	IPfull_separated (tt1,tt2)
     | IPnull_pointer t1 -> 
 	let tt1 = T.translate transl t1 in
 	IPnull_pointer (tt1)
@@ -322,6 +339,8 @@ end
 module type PVARIABLE = sig
   include VARIABLE
 
+  exception Introduce_variable of t
+
   (* containers based on [t] *)
   module S : Set.S with type elt = t
   module M : Map.S with type key = t
@@ -344,6 +363,8 @@ module type PVARIABLE = sig
   (* list of restrained variables may be used to better translate 
      the predicate *)
   val translate_predicate : t list -> P.t -> P.t
+  (* generates a variable from a term *)
+  val generate_variable : T.t -> t
 end
 
 module NPredicate =
@@ -414,6 +435,8 @@ struct
 	raise Not_Representable
     | ITany ->
 	raise Not_Representable
+    | ITmin _ | ITmax _ -> 
+	raise Not_Representable
 
   let rec min_max v p = match p with
     | IPand (p1,p2) ->
@@ -483,13 +506,63 @@ struct
 	IPand (trans1,trans2)
     | _ -> failwith "[transitivity] expecting implication"
 
-  let fourier_motzkin v p = match p with
-    | IPimplies (lhs_p,rhs_p) ->
-	let min_lhs_tset,max_lhs_tset = min_max v lhs_p in
-	let min_rhs_tset,max_rhs_tset = min_max v rhs_p in
+  let fourier_motzkin v ~full:pf p = 
+    let lhs_p,rhs_p = match p with
+      | IPimplies (lhs_p,rhs_p) -> lhs_p,rhs_p
+      | _ -> failwith "[fourier_motzkin] expecting implication"
+    in
+    let lhs_full_p = match pf with
+      | IPimplies (lhs_p,_) -> lhs_p
+      | _ -> failwith "[fourier_motzkin] expecting implication"
+    in
+    (* min-max in minimized version *)
+    let min_lhs_tset,max_lhs_tset = min_max v lhs_p in
+    let min_rhs_tset,max_rhs_tset = min_max v rhs_p in
+    (* get equalities from full version *)
+    let min_lhs_full_tset,max_lhs_full_tset = min_max v lhs_full_p in
+    let eq_lhs_tset = V.TS.inter min_lhs_full_tset max_lhs_full_tset in
+    (* remove equal terms from min-max sets *)
+    let min_lhs_tset = V.TS.diff min_lhs_tset eq_lhs_tset in
+    let max_lhs_tset = V.TS.diff max_lhs_tset eq_lhs_tset in
+    if not (V.TS.is_empty min_rhs_tset
+	    || V.TS.is_empty min_lhs_tset) then
+      if V.TS.cardinal min_lhs_tset = 1 then
 	let min_plist = relate_bounds min_rhs_tset min_lhs_tset in
+	V.P.make_conjunct min_plist
+      else
+	(* treating implication of the form:
+	   a < x && b < x -> c < x
+	   that we rewrite into:
+	   max(a,b) < x -> c < x
+	*)
+	let max_t = ITmax (V.TS.fold (fun x l -> x::l) min_lhs_tset []) in
+	let max_t = V.TS.add max_t V.TS.empty in
+	let min_plist = relate_bounds min_rhs_tset max_t in
+	V.P.make_conjunct min_plist
+    else if not (V.TS.is_empty max_rhs_tset
+		 || V.TS.is_empty max_lhs_tset) then
+      if V.TS.cardinal max_lhs_tset = 1 then
 	let max_plist = relate_bounds max_lhs_tset max_rhs_tset in
-	V.P.make_conjunct (min_plist @ max_plist)
-    | _ -> failwith "[fourier_motzkin] expecting implication"
-
+	V.P.make_conjunct max_plist
+      else
+	(* treating implication of the form:
+	   a > x && b > x -> c > x
+	   that we rewrite into:
+	   min(a,b) > x -> c > x
+	*)
+	let min_t = ITmin (V.TS.fold (fun x l -> x::l) max_lhs_tset []) in
+	let min_t = V.TS.add min_t V.TS.empty in
+	let max_plist = relate_bounds min_t max_rhs_tset in
+	V.P.make_conjunct max_plist
+    else if not (V.TS.is_empty eq_lhs_tset) then
+      let eqt = V.TS.min_elt eq_lhs_tset in
+      if not (V.TS.is_empty min_rhs_tset) then
+	let min_plist = relate_bounds min_rhs_tset (V.TS.singleton eqt) in
+	V.P.make_conjunct min_plist
+      else if not (V.TS.is_empty max_rhs_tset) then
+	let max_plist = relate_bounds (V.TS.singleton eqt) max_rhs_tset in
+	V.P.make_conjunct max_plist
+      else IPtrue
+    else IPtrue
+      
 end

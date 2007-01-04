@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.50 2006-12-14 08:32:04 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.51 2007-01-04 10:09:48 moy Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -121,8 +121,12 @@ rule token = parse
   | "\\block_length" { BLOCK_LENGTH }
   | "\\arrlen" { ARRLEN }
   | "\\strlen" { STRLEN }
+  | "\\min" { MIN }
+  | "\\max" { MAX }
   | "\\valid" { VALID }
   | "\\separated" { SEPARATED }
+  | "\\bound_separated" { BOUND_SEPARATED }
+  | "\\full_separated" { FULL_SEPARATED }
   | "\\fullseparated" { FULLSEPARATED }
   | "\\fresh" { FRESH }
   | "\\valid_index" { VALID_INDEX }

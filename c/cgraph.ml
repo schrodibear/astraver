@@ -33,7 +33,8 @@ let rec term t =
     | Tcast (_,t)| Tblock_length t | Tarrlen t | Tstrlen t
     | Toffset t| Tbase_addr t| Tat (t,_)| Told t 
     | Tdot (t,_)  | Tarrow (t,_) | Tunop (_,t) -> term t
-    | Tarrget (t1,t2) | Tbinop (t1,_,t2) -> (term t1)@(term t2)
+    | Tarrget (t1,t2) | Tbinop (t1,_,t2) | Tmin (t1,t2) | Tmax (t1,t2) ->
+	(term t1)@(term t2)
     | Tif (t1,t2,t3) -> (term t1)@(term t2)@(term t3)
     | Trange (t,ot1,ot2) -> 
 	(term t) @ (begin match ot1,ot2 with
@@ -50,7 +51,9 @@ let rec predicate p =
   | Ptrue -> []
   | Papp (l,lt) -> l::(List.fold_left (fun acc t -> (term t)@acc) []  lt)
   | Pvalid_index  (t1,t2) | Pfullseparated (t1,t2) | Pseparated (t1,t2) 
-  | Prel (t1,_,t2) -> (term t1) @(term t2)
+  | Pfull_separated (t1,t2) | Prel (t1,_,t2) -> (term t1) @(term t2)
+  | Pbound_separated (t1,t2,t3,t4) ->
+      (term t1) @(term t2) @(term t3) @(term t4)
   | Pand (p1,p2) | Por (p1,p2)  | Pimplies (p1,p2)| Piff (p1,p2) -> 
       (predicate p1) @(predicate p2)
   | Pold p | Pat (p,_) | Pforall (_,p) | Pexists (_,p)  | Pnamed (_,p)  

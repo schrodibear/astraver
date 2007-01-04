@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.18 2006-12-18 15:23:02 moy Exp $ *)
+(* $Id: cptr.ml,v 1.19 2007-01-04 10:09:49 moy Exp $ *)
 
 (* TO DO:
 
@@ -59,7 +59,7 @@ open Cutil
 open Cabsint
 
 let debug = Coptions.debug
-let debug_more = Coptions.debug
+let debug_more = false
 
 
 (*****************************************************************************
@@ -1054,7 +1054,7 @@ end = struct
 	  end
       | NTconstant _ | NTvar _ | NTapp _ | NTunop _ | NTarrow _ | NTold _
       | NTat _ | NTbase_addr _ | NToffset _ | NTblock_length _ | NTarrlen _
-      | NTstrlen _ | NTcast _ | NTif _
+      | NTstrlen _ | NTcast _ | NTif _ | NTmin _ | NTmax _
 	  -> raise Use_inherited
     in		
     let new_t = { t with nterm_node = new_t } in
@@ -1100,7 +1100,8 @@ end = struct
       | NPfalse | NPtrue | NPapp _ | NPvalid_index _ | NPand _ | NPor _
       | NPimplies _ | NPiff _ | NPnot _ | NPforall _ | NPexists _ | NPold _
       | NPat _ | NPnamed _ | NPif _ | NPvalid _ | NPfresh _ 
-      | NPvalid_range _ | NPseparated _ ->
+      | NPvalid_range _ | NPseparated _ | NPfull_separated _ 
+      | NPbound_separated _ ->
 	  raise Use_inherited
     in		
     let new_p = { p with npred_node = new_p } in
@@ -1249,7 +1250,7 @@ end = struct
       with End_representative last_index ->
 	if rep.is_offset then
 	  begin
-	    if debug then Coptions.lprintf 
+	    if debug_more then Coptions.lprintf 
 	      "[transfer] %a is represented by an offset of %a@."
 	      ILVar.pretty rep.orig_lhs_var ILVar.pretty var;
 	    PtrLattice.make_offset var None
@@ -1267,7 +1268,7 @@ end = struct
 	      else
 		rep.sum_index 
 	    in
-	    if debug then Coptions.lprintf 
+	    if debug_more then Coptions.lprintf 
 	      "[transfer] %a is represented by an index of %i from %a@."
 	      ILVar.pretty rep.orig_lhs_var idx ILVar.pretty var;
 	    PtrLattice.make_index var idx
@@ -1473,12 +1474,12 @@ end = struct
     let self_offset_vars = !self_offset_vars in
     let defined_vars = !defined_vars in
     let complex_vars = !complex_vars in
-    if debug then print_set index_vars "basic index";
-    if debug then print_set self_index_vars "basic self-index";
-    if debug then print_set offset_vars "basic offset";
-    if debug then print_set self_offset_vars "basic self-offset";
-    if debug then print_set defined_vars "basic defined";
-    if debug then print_set complex_vars "basic complex";
+    if debug_more then print_set index_vars "basic index";
+    if debug_more then print_set self_index_vars "basic self-index";
+    if debug_more then print_set offset_vars "basic offset";
+    if debug_more then print_set self_offset_vars "basic self-offset";
+    if debug_more then print_set defined_vars "basic defined";
+    if debug_more then print_set complex_vars "basic complex";
 
     (* all variables represented by a complex one are complex *)
     let rec close_set corresp set =
@@ -1505,10 +1506,10 @@ end = struct
     let offset_vars = VarSet.union offset_vars cross_rest in
     (* offset integers/pointers must never be complex *)
     let offset_vars = VarSet.diff offset_vars complex_vars in
-    if debug then print_set offset_vars "offset"; 
+    if debug_more then print_set offset_vars "offset"; 
     (* self-offset integers/pointers must never be complex *)
     let self_offset_vars = VarSet.diff self_offset_vars complex_vars in
-    if debug then print_set self_offset_vars "self-offset";
+    if debug_more then print_set self_offset_vars "self-offset";
     (* compute sum of offset and self-offset integers/pointers *)
     let all_offset_vars = VarSet.union offset_vars self_offset_vars in
 
@@ -1518,10 +1519,10 @@ end = struct
     let self_index_vars = VarSet.diff self_index_vars all_offset_vars in
     (* index integers/pointers must never be complex *)
     let index_vars = VarSet.diff index_vars complex_vars in
-    if debug then print_set index_vars "index";
+    if debug_more then print_set index_vars "index";
     (* self_index integers/pointers must never be complex *)
     let self_index_vars = VarSet.diff self_index_vars complex_vars in
-    if debug then print_set self_index_vars "self-index";
+    if debug_more then print_set self_index_vars "self-index";
 
     (* defined integers/pointers must never be complex *)
     let defined_vars = VarSet.diff defined_vars complex_vars in
@@ -2236,7 +2237,7 @@ end = struct
 	| NKstat ->
 	    if stat_is_decl node then
 	      let var = decl_stat_get_var node in
-	      if debug then Coptions.lprintf
+	      if debug_more then Coptions.lprintf
 		"[sub_cleanup] declaration of variable %s used ? %B@."
 		var.var_name (ILVarSet.mem var used_vars);
 	      let node =
@@ -2270,7 +2271,7 @@ module LocalPtrAnalysis = Make_DataFlowAnalysis(Var)(PtrLangFromNormalized)
 
 let local_aliasing fundecl =
 
-  if debug then Coptions.lprintf 
+  if debug_more then Coptions.lprintf 
     "[local_aliasing] treating function %s@." fundecl.f.fun_name; 
 
   (* build control-flow graph *)
@@ -2290,10 +2291,10 @@ let local_aliasing fundecl =
   let decls = List.map fst decls in
   (* collect the local variables used/declared *)
   let used_vars,decl_vars = PtrLangFromNormalized.collect_vars () in
-  if debug then Coptions.lprintf
+  if debug_more then Coptions.lprintf
     "[local_aliasing_transform] %i local variables used@." 
     (ILVarSet.cardinal used_vars);
-  if debug && not (ILVarSet.is_empty used_vars) then 
+  if debug_more && not (ILVarSet.is_empty used_vars) then 
     Coptions.lprintf "[local_aliasing_transform] %a@." 
       (fun _ -> (ILVarSet.iter (Coptions.lprintf "%a " ILVar.pretty))) 
       used_vars;
@@ -2313,13 +2314,13 @@ let local_aliasing_transform () =
     ) Cenv.c_functions []
   in
 
-  if debug then Coptions.lprintf 
+  if debug_more then Coptions.lprintf 
     "[local_aliasing_transform] %i functions to treat@." (List.length file); 
 
   let file = List.fold_right
     (fun fundecl acc -> (local_aliasing fundecl) @ acc) file [] in
 
-  if debug then Coptions.lprintf 
+  if debug_more then Coptions.lprintf 
     "[local_aliasing_transform] %i functions treated@." (List.length file);
 
   (* necessary suffix to translate the list of function representatives

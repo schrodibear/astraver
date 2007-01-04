@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: clogic.mli,v 1.63 2006-12-04 22:05:20 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.64 2007-01-04 10:09:48 moy Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -82,6 +82,8 @@ and lexpr_node =
   | PLblock_length of lexpr
   | PLarrlen of lexpr
   | PLstrlen of lexpr
+  | PLmin of lexpr * lexpr
+  | PLmax of lexpr * lexpr
   | PLresult
   | PLnull
   | PLcast of logic_type * lexpr
@@ -100,6 +102,8 @@ and lexpr_node =
   | PLexists of logic_type quantifiers * lexpr
   | PLvalid of lexpr
   | PLseparated of lexpr * lexpr
+  | PLbound_separated of lexpr * lexpr * lexpr * lexpr
+  | PLfull_separated of lexpr * lexpr
   | PLfullseparated of lexpr * lexpr
   | PLvalid_index of lexpr * lexpr
   | PLvalid_range of lexpr * lexpr * lexpr
@@ -131,6 +135,8 @@ and 'ctype term_node =
   | Tblock_length of 'ctype term
   | Tarrlen of 'ctype term
   | Tstrlen of 'ctype term
+  | Tmin of 'ctype term * 'ctype term
+  | Tmax of 'ctype term * 'ctype term
 (*
   | Tresult of Info.env_info
   | Tnull
@@ -161,6 +167,8 @@ and 'ctype predicate_node =
   | Pold of 'ctype predicate
   | Pat of 'ctype predicate * string
   | Pseparated of 'ctype term * 'ctype term  
+  | Pbound_separated of 'ctype term * 'ctype term * 'ctype term * 'ctype term  
+  | Pfull_separated of 'ctype term * 'ctype term
   | Pfullseparated of 'ctype term * 'ctype term
   | Pvalid of 'ctype term 
   | Pvalid_index of 'ctype term * 'ctype term
@@ -221,6 +229,8 @@ and 'ctype nterm_node =
   | NTarrlen of 'ctype nterm
       (* [strlen(p)] depends on the value pointed to by [p] *)
   | NTstrlen of 'ctype nterm * Info.zone * Info.var_info
+  | NTmin of 'ctype nterm * 'ctype nterm
+  | NTmax of 'ctype nterm * 'ctype nterm
   | NTcast of 'ctype * 'ctype nterm
   | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option 
       * Info.zone * Info.var_info
@@ -257,6 +267,9 @@ and 'ctype npredicate_node =
   | NPfresh of 'ctype nterm 
   | NPnamed of string * 'ctype npredicate
   | NPseparated of 'ctype nterm * 'ctype nterm
+  | NPfull_separated of 'ctype nterm * 'ctype nterm
+  | NPbound_separated of 
+      'ctype nterm * 'ctype nterm * 'ctype nterm * 'ctype nterm
 
 type ('term,'ctype) nlogic_symbol =
   | NPredicate_reads of (Info.var_info * 'ctype) list * 'term location list

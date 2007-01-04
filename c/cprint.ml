@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.43 2006-12-04 22:05:28 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.44 2007-01-04 10:09:49 moy Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -106,13 +106,18 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "\\arrlen(%a)" nterm t
   | NTstrlen (t,_, _) ->
       fprintf fmt "\\strlen(%a)" nterm t
+  | NTmin (t1,t2) ->
+      fprintf fmt "\\min(%a,%a)" nterm t1 nterm t2
+  | NTmax (t1,t2) ->
+      fprintf fmt "\\max(%a,%a)" nterm t1 nterm t2
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
   | NTrange (t1, t2, t3, _,f) ->
       fprintf fmt "(%a+%a..%a+%a)->%s" nterm t1 nterm_option t2 nterm t1 nterm_option t3 f.var_unique_name
 
 and nterm_p fmt t = match t.nterm_node with
-  | NTconstant _ | NTvar _ | NTapp _ | NTold _ | NTat _ ->
+  | NTconstant _ | NTvar _ | NTapp _ | NTold _ | NTat _ 
+  | NTarrlen _ | NTstrlen _ | NTmin _ | NTmax _ ->
       nterm fmt t
   | _ ->
       fprintf fmt "(%a)" nterm t
@@ -178,6 +183,11 @@ let rec npredicate fmt p = match p.npred_node with
       fprintf fmt "@[(%s::@ %a)@]" id npredicate p
   | NPseparated (t1,t2) ->
       fprintf fmt "\\separated(%a, %a)" nterm t1 nterm t2
+  | NPfull_separated (t1,t2) ->
+      fprintf fmt "\\full_separated(%a, %a)" nterm t1 nterm t2
+  | NPbound_separated (t1,t2,t3,t4) ->
+      fprintf fmt "\\bound_separated(%a, %a, %a, %a)" 
+	nterm t1 nterm t2 nterm t3 nterm t4
 
 (* given a conjunct [p], try to match relations inside p's conjuncts, in order
    to print together range inequalities that refer to the same variable, e.g.

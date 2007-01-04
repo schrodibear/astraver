@@ -65,13 +65,14 @@
 %token INT FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL LTLT GTGT
 %token FORALL EXISTS IFF IMPLIES AND OR NOT BAR ABS SQRT HATHAT HAT
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH ARRLEN STRLEN BASE_ADDR OFFSET
-%token SEPARATED FULLSEPARATED VALID VALID_INDEX VALID_RANGE FRESH THEN AT
+%token SEPARATED BOUND_SEPARATED FULL_SEPARATED FULLSEPARATED 
+%token VALID VALID_INDEX VALID_RANGE FRESH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT ASSUME SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE GHOST SET
 %token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION TYPE
-%token ROUNDERROR TOTALERROR EXACT MODEL
+%token ROUNDERROR TOTALERROR EXACT MODEL MIN MAX
 
 %right prec_named
 %nonassoc prec_forall prec_exists
@@ -118,6 +119,10 @@ lexpr:
 | EXISTS ne_parameters SEMICOLON lexpr %prec prec_exists
       { info (PLexists ($2, $4)) }
 | SEPARATED LPAR lexpr COMMA lexpr RPAR { info (PLseparated ($3,$5)) }
+| BOUND_SEPARATED LPAR lexpr COMMA lexpr COMMA lexpr COMMA lexpr RPAR 
+      { info (PLbound_separated ($3,$5,$7,$9)) }
+| FULL_SEPARATED LPAR lexpr COMMA lexpr RPAR 
+      { info (PLfull_separated ($3,$5)) }
 | FULLSEPARATED LPAR lexpr COMMA lexpr RPAR { info (PLfullseparated ($3,$5)) }
 | VALID LPAR lexpr RPAR { info (PLvalid ($3)) }
 | VALID_INDEX LPAR lexpr COMMA lexpr RPAR { info (PLvalid_index ($3,$5)) }
@@ -164,6 +169,8 @@ lexpr:
 | BLOCK_LENGTH LPAR lexpr RPAR { info (PLblock_length $3) }
 | ARRLEN LPAR lexpr RPAR { info (PLarrlen $3) }
 | STRLEN LPAR lexpr RPAR { info (PLstrlen $3) }
+| MIN LPAR lexpr COMMA lexpr RPAR { info (PLmin ($3, $5)) }
+| MAX LPAR lexpr COMMA lexpr RPAR { info (PLmax ($3, $5)) }
 | RESULT { info PLresult }
 /* both terms and predicates */
 | LPAR lexpr RPAR %prec prec_par { $2 }

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.156 2006-12-20 12:38:22 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.157 2007-01-04 10:09:48 moy Exp $ i*)
 
 open Cast
 open Cnorm
@@ -272,7 +272,9 @@ let rec term t = match t.nterm_node with
       term t
   | NTif (t1, t2, t3) -> 
       ef_union (term t1) (ef_union (term t2) (term t3))
-  | NTbinop (t1, _, t2) -> 
+  | NTbinop (t1, _, t2) 
+  | NTmin (t1,t2)
+  | NTmax (t1,t2) -> 
       ef_union (term t1) (term t2) 
   | NTapp {napp_pred = id; napp_args = tl; napp_zones_assoc = assoc} -> 
 	let reads = ZoneSet.fold 
@@ -333,6 +335,8 @@ let rec assign_location t = match t.nterm_node with
   | NTblock_length _  
   | NTarrlen _  
   | NTstrlen _
+  | NTmin _
+  | NTmax _
   | NTat (_, _)  
   | NTold _  
   | NTif (_, _, _)  
@@ -423,8 +427,14 @@ let rec predicate p =
     | NPold p -> predicate p
     | NPat (p,_) -> predicate p
     | NPnamed (_, p) -> predicate p
-    | NPseparated (t1,t2) -> 
+    | NPseparated (t1,t2) | NPfull_separated (t1,t2) -> 
 	let ef = ef_union (term t1) (term t2) in
+	(* [alloc] not used with the arithmetic memory model *)
+	if arith_memory_model then ef else reads_add_alloc ef
+    | NPbound_separated (t1,t2,t3,t4) -> 
+	let ef1 = ef_union (term t1) (term t2) in 
+	let ef2 = ef_union (term t3) (term t4) in
+	let ef = ef_union ef1 ef2 in
 	(* [alloc] not used with the arithmetic memory model *)
 	if arith_memory_model then ef else reads_add_alloc ef
 

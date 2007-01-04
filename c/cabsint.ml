@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.17 2006-12-19 15:37:40 moy Exp $ *)
+(* $Id: cabsint.ml,v 1.18 2007-01-04 10:09:48 moy Exp $ *)
 
 (* TO DO:
 
@@ -75,7 +75,7 @@ open Cast
 open Cutil
 
 let debug = Coptions.debug
-let debug_more = Coptions.debug
+let debug_more = false
 
 
 (*****************************************************************************
@@ -669,7 +669,7 @@ module Make_DataFlowAnalysis
 
   let propagate ?analysis ?(roots=[]) params =
 
-    if debug then Coptions.lprintf 
+    if debug_more then Coptions.lprintf 
       "[propagate] %s@." (match params.direction with
       | Forward -> "forward"
       | Backward -> "backward");
@@ -729,7 +729,7 @@ module Make_DataFlowAnalysis
         | Forward -> pre_val,post_val
 	| Backward -> post_val,pre_val
       in
-      if debug then Coptions.lprintf 
+      if debug_more then Coptions.lprintf 
 	"[propagate] take node in working list %a from val %a@."
 	Node.pretty cur_node (Option.pretty params.pretty) from_val;
 
@@ -767,7 +767,7 @@ module Make_DataFlowAnalysis
 		      match to_val with
 			| None -> Some cur_val
 			| Some to_val -> 
-			    if debug then Coptions.lprintf 
+			    if debug_more then Coptions.lprintf 
 			      "[propagate] perform widening@.";
 			    Some (params.widening C.widening_strategy 
 				    ~old_value:to_val ~new_value:cur_val)
@@ -803,7 +803,7 @@ module Make_DataFlowAnalysis
 
 	  change := true;
 
-	  if debug then Coptions.lprintf 
+	  if debug_more then Coptions.lprintf 
 	    "[propagate] new value is different@.";
 	  
 	  begin match params.direction with
@@ -819,9 +819,9 @@ module Make_DataFlowAnalysis
 	    | Backward -> 
                 IL.predecessors ~ignore_looping:params.one_pass cur_node 
 	  in
-	  if debug then Coptions.lprintf 
+	  if debug_more then Coptions.lprintf 
 	    "[propagate] node has %i successor(s)@." (List.length next_nodes);
-	  if debug then Coptions.lprintf 
+	  if debug_more then Coptions.lprintf 
 	    "[propagate] %a@." (fun fmt -> List.iter 
 				(Coptions.lprintf "%a " Node.pretty))
 	    next_nodes;
@@ -852,7 +852,7 @@ module Make_DataFlowAnalysis
 		       if not (Option.equal 
 				 params.equal (Some nx_val) nx_from) then
 			 begin
-			   if debug then Coptions.lprintf 
+			   if debug_more then Coptions.lprintf 
 			     "[propagate] new value for successor \
 			      is different@.";
 			   if debug_more then Coptions.lprintf 
@@ -886,7 +886,7 @@ module Make_DataFlowAnalysis
 
     while !change do
       change := false;
-      if debug then Coptions.lprintf 
+      if debug_more then Coptions.lprintf 
 	  "[propagate] one more round of propagation@.";
       IL.iter_operational params.direction ~roots treat_node;
       (* immediately stop iteration in one-pass propagation *)
@@ -2809,6 +2809,16 @@ end = struct
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTstrlen (new_t,zone,var)
+      | NTmin (t1,t2) ->
+	  assert (List.length sub_nodes = 2);
+	  let new_t1,new_t2 = list2 sub_nodes in
+	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
+	  NTmin (new_t1,new_t2)
+      | NTmax (t1,t2) ->
+	  assert (List.length sub_nodes = 2);
+	  let new_t1,new_t2 = list2 sub_nodes in
+	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
+	  NTmax (new_t1,new_t2)
       | NTcast (typ,t1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
@@ -2941,6 +2951,17 @@ end = struct
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NPseparated (new_t1,new_t2)
+      | NPfull_separated (t1,t2) ->
+	  assert (List.length sub_nodes = 2);
+	  let new_t1,new_t2 = list2 sub_nodes in
+	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
+	  NPfull_separated (new_t1,new_t2)
+      | NPbound_separated (t1,t2,t3,t4) ->
+	  assert (List.length sub_nodes = 2);
+	  let new_t1,new_t2,new_t3,new_t4 = list4 sub_nodes in
+	  let new_t1,new_t2,new_t3,new_t4 =
+	    get_t new_t1,get_t new_t2,get_t new_t3,get_t new_t4 in
+	  NPbound_separated (new_t1,new_t2,new_t3,new_t4)
     in		
     let new_p = { p with npred_node = new_p } in
     create_tmp_node (Npred new_p)
@@ -3096,7 +3117,7 @@ end = struct
 	| NTarrlen t1 | NTstrlen (t1,_,_) | NTcast (_,t1) ->
 	    let t1node = from_term t1 in
 	    (* logic *) add_logedge tnode [t1node]
-	| NTbinop (t1,_,t2) ->
+	| NTbinop (t1,_,t2) | NTmin (t1,t2) | NTmax (t1,t2) ->
 	    let t1node = from_term t1 in
 	    let t2node = from_term t2 in
 	    (* logic *) add_logedge tnode [t1node; t2node]
@@ -3145,10 +3166,17 @@ end = struct
 	| NPapp a ->
 	    let args_nodes = List.map from_term a.napp_args in
 	    (* logic *) add_logedge pnode args_nodes
-	| NPrel (t1,_,t2) | NPvalid_index (t1,t2) | NPseparated (t1,t2) ->
+	| NPrel (t1,_,t2) | NPvalid_index (t1,t2) | NPseparated (t1,t2) 
+	| NPfull_separated (t1,t2) ->
 	    let t1node = from_term t1 in
 	    let t2node = from_term t2 in
 	    (* logic *) add_logedge pnode [t1node; t2node]
+	| NPbound_separated (t1,t2,t3,t4) ->
+  	    let t1node = from_term t1 in
+	    let t2node = from_term t2 in
+	    let t3node = from_term t3 in
+	    let t4node = from_term t4 in
+	    (* logic *) add_logedge pnode [t1node; t2node; t3node; t4node]
 	| NPand (p1,p2) | NPor (p1,p2) | NPimplies (p1,p2) | NPiff (p1,p2) ->
 	    let p1node = from_pred p1 in
 	    let p2node = from_pred p2 in
@@ -3905,7 +3933,7 @@ end = struct
     stsnode,opsnode
 
   let rec from_decl d =
-    if debug then Coptions.lprintf 
+    if debug_more then Coptions.lprintf 
       "[from_decl] treating function %s@." d.name;
     (* clear all heap variables to avoid name clash between 
        different fucntions *)

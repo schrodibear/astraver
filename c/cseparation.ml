@@ -508,7 +508,9 @@ let rec term tyf t =
 	(fun (v,ty) e -> 
 	   unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
   | NTunop (_,t) -> term tyf t 
-  | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
+  | NTbinop (t1,_,t2)
+  | NTmin (t1,t2)
+  | NTmax (t1,t2) -> term tyf t1; term tyf t2 
   | NTarrow (t,_,_) -> term tyf t
   | NTif (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
   | NTold t 
@@ -574,7 +576,10 @@ let rec predicate tyf p =
   | NPvalid_range (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
   | NPfresh  t -> term tyf t
   | NPnamed (_,p) -> predicate tyf p
-  | NPseparated (t1,t2) -> term tyf t1; term tyf t2
+  | NPseparated (t1,t2) 
+  | NPfull_separated (t1,t2) -> term tyf t1; term tyf t2
+  | NPbound_separated (t1,t2,t3,t4) ->
+      term tyf t1; term tyf t2; term tyf t3; term tyf t4
 
 let rec calcul_zones expr =
   match expr.nexpr_node with 

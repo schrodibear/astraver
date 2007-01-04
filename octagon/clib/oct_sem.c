@@ -273,6 +273,26 @@ OCT_PROTO(remove_tags) (oct_t* m)
   return mm;
 }
 
+/* make all tagged*/
+oct_t*
+OCT_PROTO(makeall_tags) (oct_t* m)
+{
+  oct_t* mm = oct_full_copy(m);
+  size_t i, nn = matsize(mm->n);
+  num_t* c = mm->c;
+  bool tagged = false;
+  if (mm->state==OCT_EMPTY) goto end;
+  if (mm->closed) mm->closed = NULL;
+  tag_init_n(mm->tags,tagsize(mm->n));
+  for (i=0;i<nn;i++,c++) {
+    if (!num_infty(c)) tag_set(mm->tags,i);
+    tagged = true;
+  }
+  mm->tagged = tagged;
+ end:
+  return mm;
+}
+
 /* get only untagged constraints. 
    Similar to [remove_tags] except it also removes tagged constraints. */
 oct_t*

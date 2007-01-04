@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.92 2006-12-18 12:30:27 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.93 2007-01-04 10:09:49 moy Exp $ i*)
 
 open Creport
 open Cconst
@@ -242,6 +242,8 @@ let rec type_why_for_term t =
     | NTblock_length t -> Info.Int
     | NTarrlen _ -> Info.Int
     | NTstrlen _ -> Info.Int
+    | NTmin _ -> Info.Int
+    | NTmax _ -> Info.Int
     | NTcast (_,t) -> (*assert false*)  type_why_for_term t 
     | NTrange (_,_,_,z,f) ->
 	begin
@@ -637,6 +639,8 @@ let rec term_node loc t ty =
 	 Add fields to describe this dependency.
 	 This treatment has be factorized. *)
       make_nstrlen_node_from_nterm (term t)
+  | Tmin (t1,t2) -> NTmin (term t1, term t2)
+  | Tmax (t1,t2) -> NTmax (term t1, term t2)
   | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
 	    {term_node = Tconstant (IntConstant "0")}) ->      
       let info = default_var_info "null" in 
@@ -698,6 +702,9 @@ and predicate_node = function
     | Pold p -> NPold (predicate p)
     | Pat (p, s) -> NPat ((predicate p),s)
     | Pseparated (t1,t2) -> NPseparated (term t1, term t2)
+    | Pbound_separated (t1,t2,t3,t4) -> 
+	NPbound_separated (term t1, term t2, term t3, term t4)
+    | Pfull_separated (t1,t2) -> NPfull_separated (term t1, term t2)
     | Pfullseparated (t1,t2) ->
 	assert false (* TODO *)
     | Pvalid (t) -> NPvalid (term t) 
@@ -1008,10 +1015,14 @@ let rec texpr_of_term (t : tterm) : texpr =
 	      "offset can't be used here"
 	| Tblock_length t -> error t.term_loc 
 	      "block_length can't be used here"
-	| Tarrlen t -> error t.term_loc 
+	| Tarrlen _ -> error t.term_loc 
 	    "arrlen can't be used here"
-	| Tstrlen t -> error t.term_loc 
+	| Tstrlen _ -> error t.term_loc 
 	    "strlen can't be used here"
+	| Tmin _ -> error t.term_loc 
+	    "min can't be used here"
+	| Tmax _ -> error t.term_loc 
+	    "max can't be used here"
 	| Tcast (ty,t) -> TEcast(ty,texpr_of_term t)
 	| Trange _ -> 
 	    error t.term_loc "range cannot by used here"
@@ -1092,6 +1103,10 @@ let rec expr_of_term (t : nterm) : nexpr =
 	    "arrlen can't be used here"
 	| NTstrlen (t,z,v) -> error t.nterm_loc 
 	    "strlen can't be used here"
+	| NTmin _ -> error t.nterm_loc 
+	    "min can't be used here"
+	| NTmax _ -> error t.nterm_loc 
+	    "max can't be used here"
 	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
 	| NTrange _ -> 
 	    error t.nterm_loc "range cannot by used here"

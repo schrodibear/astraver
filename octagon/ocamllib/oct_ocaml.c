@@ -950,6 +950,13 @@ ocaml_oct_remove_tags (value n)
 }
 
 CAMLprim value
+ocaml_oct_makeall_tags (value n)
+{
+  CAMLparam1(n);
+  CAMLreturn(Val_oct(oct_makeall_tags(Oct_val(n))));
+}
+
+CAMLprim value
 ocaml_oct_remove_tagged_constraints (value n)
 {
   CAMLparam1(n);
