@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.31 2006-12-14 15:09:28 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.32 2007-01-05 16:09:27 couchot Exp $ i*)
 
 open Printf
 
@@ -114,8 +114,11 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
     let r =
       if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
 	Valid t
-      else
-	ProverFailure(t,"command failed: " ^ cmd)
+      else	
+	if Sys.command (sprintf "grep -q -w sat %s" out) = 0 then
+	  Invalid (t, None)
+	else
+	  ProverFailure(t,"command failed: " ^ cmd)
     in
     remove_file ~debug out;
     r

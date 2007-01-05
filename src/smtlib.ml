@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.28 2006-12-13 09:28:09 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.29 2007-01-05 16:09:26 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -147,9 +147,12 @@ and instance fmt = function
   | [] -> ()
   | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
 
-let bound_variable n =
-  Ident.create (completeString n)
-
+let bound_variable =
+  let count = ref 0 in
+  function n ->  
+    count := !count+1 ;
+    Ident.create (completeString n^"_"^ (string_of_int !count)) 
+    
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "true"
