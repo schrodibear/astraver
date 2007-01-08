@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.111 2007-01-04 10:09:49 moy Exp $ i*)
+(*i $Id: cltyping.ml,v 1.112 2007-01-08 10:47:31 moy Exp $ i*)
 
 open Coptions
 open Format
@@ -554,10 +554,42 @@ and type_predicate_node env p0 = match p0.lexpr_node with
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    Prel (t1, r, t2)
-	| (Tpointer _  | Tarray _), (Tint _ | Tenum _ | Tfloat _)
+	| (Tpointer _  | Tarray _), (Tint _ | Tenum _ | Tfloat _) ->
+	    if t2.term_node = Tconstant (IntConstant "0") then
+	      let ty1 = Tpointer ( Not_valid, t1.term_type) in
+	      let ty1 = 
+		{ ctype_node = ty1;
+		  ctype_storage = No_storage;
+		  ctype_const = false;
+		  ctype_volatile = false;
+		  ctype_ghost = false;
+		}
+	      in
+	      Prel(t1, r, 
+		   { term_node = Tcast(ty1,t2);
+		     term_type = ty1;
+		     term_loc  = t2.term_loc;})
+	    else
+	      error loc "comparison between pointer and integer" (* C warning *)
+		(* Prel (t1, r, t2) *)
 	| (Tint _ | Tenum _ | Tfloat _), (Tpointer _  | Tarray _) ->
-	    error loc "comparison between pointer and integer" (* C warning *)
-	    (* Prel (t1, r, t2) *)
+	    if t1.term_node = Tconstant (IntConstant "0") then
+	      let ty2 = Tpointer ( Not_valid, t2.term_type) in
+	      let ty2 = 
+		{ ctype_node = ty2;
+		  ctype_storage = No_storage;
+		  ctype_const = false;
+		  ctype_volatile = false;
+		  ctype_ghost = false;
+		}
+	      in
+	      Prel({ term_node = Tcast(ty2,t1);
+		     term_type = ty2;
+		     term_loc  = t1.term_loc;},
+		   r, t2)
+	    else
+	      error loc "comparison between pointer and integer" (* C warning *)
+		(* Prel (t1, r, t2) *)
 	| Tvar s1, Tvar s2 when s1 = s2 -> Prel (t1, r, t2)
 	| _ ->
 	    error loc "invalid operands to comparison"

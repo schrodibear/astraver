@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.19 2007-01-04 10:09:49 moy Exp $ *)
+(* $Id: cptr.ml,v 1.20 2007-01-08 10:47:31 moy Exp $ *)
 
 (* TO DO:
 
@@ -292,7 +292,7 @@ struct
 	| PKcomplex,PKcomplex -> true
 
   (* union *)
-  let rec join p1 p2 = 
+  let rec join ?(backward=false) p1 p2 = 
     if not (comparable p1 p2) then 
       if same_var p1 p2 then
 	(* case of interest here is 2 PKindex with different indices,
@@ -1430,7 +1430,11 @@ end = struct
 		 new_analysis
 	     | NKstat | NKpred | NKassume | NKassert
 	     | NKnone | NKdecl | NKannot | NKspec ->
-		 (* do not include abstract values for these constructs *)
+		 if is_logic_scope node then
+		   NodeHash.replace_post new_analysis node pwval
+		 else 
+                   (* do not include abstract values for these constructs *)
+		   (); 
 		 new_analysis
 	) analysis (NodeHash.create 0)
     in
@@ -2055,6 +2059,8 @@ end = struct
 	  if params.has_old then
 	    begin
 	      assert (params.has_at = None);
+	      if debug then Coptions.lprintf
+		  "[sub_transform_on_term] has old@.";
 	      let begin_val = 
 		match NodeHash.find_post analysis params.block_begin with
 		  | None -> PointWisePtrLattice.bottom ()
@@ -2066,6 +2072,8 @@ end = struct
 	  | Some lab ->
 	      begin
 		assert (not params.has_old);
+		if debug then Coptions.lprintf
+		    "[sub_transform_on_term] has at@.";
 		let at_node = StringMap.find lab params.label_corresp in
 		let at_val = match NodeHash.find_post analysis at_node with
 		  | None -> PointWisePtrLattice.bottom ()
@@ -2081,7 +2089,11 @@ end = struct
 	      in
 	      PointWisePtrLattice.find var end_val
 	in
-	(make_integer_pointer_read params node pval,
+	let new_node = make_integer_pointer_read params node pval in
+	if debug then Coptions.lprintf
+	    "[sub_transform_on_term] term %a@.into %a@."
+	    Node.pretty node Node.pretty new_node;
+	(new_node,
 	 None) (* addon part useless here *)
       else raise Rec_transform
     else raise Rec_transform

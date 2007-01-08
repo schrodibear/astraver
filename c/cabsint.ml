@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.18 2007-01-04 10:09:48 moy Exp $ *)
+(* $Id: cabsint.ml,v 1.19 2007-01-08 10:47:31 moy Exp $ *)
 
 (* TO DO:
 
@@ -155,7 +155,7 @@ module type SEMI_LATTICE = sig
   val init : dim_t -> t
   val equal : t -> t -> bool
   val pretty : Format.formatter -> t -> unit
-  val join : t -> t -> t    
+  val join : ?backward:bool -> t -> t -> t    
     (* performs widening according to the widening strategy given as 1st
        argument, between the stored abstract value (2nd argument) and
        the new value computed (3rd argument).
@@ -221,7 +221,8 @@ struct
   let pretty fmt p =
     Format.fprintf fmt "(%a,%a)" L1.pretty (fst p) L2.pretty (snd p)
 
-  let join p1 p2 = L1.join (fst p1) (fst p2),L2.join (snd p1) (snd p2)
+  let join ?(backward=false) p1 p2 = 
+    L1.join ~backward (fst p1) (fst p2),L2.join ~backward (snd p1) (snd p2)
 
   let widening ws ~old_value ~new_value =
     L1.widening ws (fst old_value) (fst new_value),
@@ -309,7 +310,7 @@ struct
     | PWall -> PWall
 
   (* ideally, [pw2] should be smaller than [pw1] when unioning maps *)
-  let join pw1 pw2 = match pw1,pw2 with
+  let join ?(backward=false) pw1 pw2 = match pw1,pw2 with
     | PWempty,pw | pw,PWempty -> pw
     | PWall,_ | _,PWall -> PWall
     | PWmap m1,PWmap m2 -> 
@@ -537,7 +538,7 @@ module type DATA_FLOW_ANALYSIS = sig
 	  (* pretty-printer *)
 	pretty : Format.formatter -> 'a -> unit;
 	  (* join function *)
-	join : 'a -> 'a -> 'a;
+	join : ?backward:bool -> 'a -> 'a -> 'a;
           (* join function on contexts *)
 	join_ctxt : 'a -> 'a -> 'a;
 	  (* widening function (if any) *)
@@ -636,7 +637,7 @@ module Make_DataFlowAnalysis
 	  (* pretty-printer *)
 	pretty : Format.formatter -> 'a -> unit;
 	  (* join function *)
-	join : 'a -> 'a -> 'a;
+	join : ?backward:bool -> 'a -> 'a -> 'a;
           (* join function on contexts *)
 	join_ctxt : 'a -> 'a -> 'a;
 	  (* widening function (if any) *)
@@ -842,7 +843,7 @@ module Make_DataFlowAnalysis
 				  rather than propagating initial value *)
 			       nx_from (* ignore [cur_val] *)
 			     else
-			       params.join nx_from cur_val 
+			       params.join ~backward nx_from cur_val 
 		       in
 		       if debug_more then Coptions.lprintf 
 			 "[propagate] succ cur value: %a@."
@@ -915,7 +916,10 @@ module Make_DataFlowAnalysis
       join = L.join;
         (* join function on contexts *)
       join_ctxt = 
-	begin match join_context with None -> L.join | Some f -> f end;
+	begin match join_context with 
+	  | None -> L.join ~backward:false 
+	  | Some f -> f 
+	end;
         (* widening function (if any) *)
       widening = L.widening;
         (* additional action after propagation *)
@@ -942,9 +946,12 @@ module Make_DataFlowAnalysis
       pretty = L.pretty;
         (* join function *)
       join = L.join;
-        (* join function on contexts *)
+        (* join function on contexts, only used in forward propagation *)
       join_ctxt = 
-	begin match join_context with None -> L.join | Some f -> f end;
+	begin match join_context with 
+	  | None -> L.join ~backward:false 
+	  | Some f -> f 
+	end;
         (* widening function (if any) *)
       widening = L.widening;
         (* additional action after propagation *)
@@ -1277,7 +1284,9 @@ module type CFG_LANG_EXTERNAL = sig
     (* associated invariant relation, that relates corresponding invariant and
        assume invariant nodes for a specific loop *)
   val logic_invariant : Node.t -> Node.t option
-  
+    (* is it the beginning or the end of a logical scope ? *)
+  val is_logic_scope : Node.t -> bool  
+
   (* 11 kinds of nodes: 
      for code: expression/test/statement/declaration
      for logic: specification/loop annotation/term/predicate/assume/assert
@@ -1589,8 +1598,8 @@ end = struct
       | Ndecl _ -> Format.fprintf fmt "Ndecl"
       | Nspec _ -> Format.fprintf fmt "Nspec"
       | Nannot _ -> Format.fprintf fmt "Nannot"
-      | Nterm _ -> Format.fprintf fmt "Nterm"
-      | Npred _ -> Format.fprintf fmt "Npred"
+      | Nterm t -> Cprint.nterm fmt t
+      | Npred p -> Cprint.npredicate fmt p
       | Nassume _ -> Format.fprintf fmt "Nassume"
       | Nassinv _ -> Format.fprintf fmt "Nassinv"
       | Npre _ -> Format.fprintf fmt "Npre"
@@ -2255,6 +2264,14 @@ end = struct
       | [a] -> Some a
       | _ -> failwith ("[succ edge n] should find at most one successor"
 		       ^ " for node [n]")
+  (* hierarchical predecessors. Used for logical scopes. *)
+  let has_pred edge n = 
+    let el = Self.pred_e (graph ()) n in
+    let el = List.filter (fun e -> Edge.label e = edge) el in
+    match List.map Edge.src el with
+      | [] -> false
+      | _ -> true
+
   let child ?(structural=false) ?(logical=false) n = 
     if structural then
       succ NodeRelation.StructuralDown n
@@ -2295,7 +2312,13 @@ end = struct
       | Some ne -> ne
       | None -> failwith "no logical end node found"
 
-  let logic_invariant n =  succ NodeRelation.LogicInvariant n
+  let logic_invariant n = succ NodeRelation.LogicInvariant n
+
+  let is_logic_begin n = has_pred NodeRelation.LogicScopeBegin n
+
+  let is_logic_end n = has_pred NodeRelation.LogicScopeEnd n
+
+  let is_logic_scope n = is_logic_begin n || is_logic_end n
 
   let add_edge edge v1 v2 =
     let e = Edge.create v1 edge v2 in
@@ -3341,6 +3364,18 @@ end = struct
 	    else e
 	| _ -> e
     in
+    let rec pure e = match e.nexpr_node with
+      | NEnop | NEconstant _ | NEstring_literal _ | NEvar _ 
+	  -> true
+      | NEarrow (e1,_,_) | NEunary (_,e1) | NEcast (_,e1) 
+	  -> pure e1
+      | NEbinary (e1,_,e2) | NEseq (e1,e2) 
+	  -> pure e1 && pure e2
+      | NEcond (e1,e2,e3)
+	  -> pure e1 && pure e2 && pure e3
+      | NEmalloc _ | NEincr _ | NEassign _ | NEassign_op _ | NEcall _
+	  -> false
+    in
     let negative_lazy = match e.nexpr_node with
       | NEbinary (_,(Band | Bor),_) when neg_test -> true
       | _ -> false
@@ -3442,14 +3477,30 @@ end = struct
 	    let e1node = from_expr ~is_test start_node e1 in
 	    let e2node = from_expr ~is_test e1node e2 in
 	    (* oper *) add_opedge e2node enode;
+	    (* if the and-test is free from side-effects, the order of
+	       evaluation of [e1] and [e2] should not matter. We ensure this
+	       by merging a path where [e1] is evaluated before [e2] with
+	       a path where [e2] is evaluated before [e1]. *)
+	    if pure e then
+	      begin
+		let e2node = from_expr ~is_test start_node e2 in
+		let e1node = from_expr ~is_test e2node e1 in
+		(* oper *) add_opedge e1node enode
+	      end;
 	    (* struct *) add_stedge enode [e1node; e2node]
 	| NEbinary (e1,Bor,e2) when is_test ->
 	    (* do not take [neg_test] into account, already done *)
 	    (* OR succeeds whenever [e1] succeeds, 
 	       or [e1] fails and [e2] succeeds *)
 	    let e1node = from_expr ~is_test start_node e1 in
-	    let nege1node = from_expr ~is_test ~neg_test:true start_node e1 in
-	    let e2node = from_expr ~is_test nege1node e2 in
+	    let e2node =
+	      if pure e then
+		from_expr ~is_test start_node e2
+	      else
+		let nege1node = 
+		  from_expr ~is_test ~neg_test:true start_node e1 in
+		from_expr ~is_test nege1node e2 
+	    in
 	    (* oper *) add_opedge e1node enode;
 	    (* oper *) add_opedge e2node enode;
 	    (* struct *) add_stedge enode [e1node; e2node]

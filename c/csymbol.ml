@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: csymbol.ml,v 1.8 2007-01-04 10:09:49 moy Exp $ *)
+(* $Id: csymbol.ml,v 1.9 2007-01-08 10:47:31 moy Exp $ *)
 
 (* TO DO:
 
@@ -81,6 +81,9 @@ module type TERM = sig
   include ELEMENT_OF_CONTAINER with type t = var int_term
   val collect_term_vars : t -> var list
   val translate : (t * t) list -> t -> t
+  val sub : t -> t -> t
+  val add : t -> t -> t
+  val minus : t -> t
 end
 
 module type PREDICATE = sig
@@ -150,6 +153,25 @@ struct
 	    ITmax (List.map (translate transl) tlist)
 	| ITmin tlist ->
 	    ITmin (List.map (translate transl) tlist)
+
+  let rec sub t1 t2 = match t1,t2 with
+    | t1,ITconstant (IntConstant "0") -> t1
+    | ITconstant (IntConstant "0"),ITunop(Uminus,t2) -> t2
+    | ITconstant (IntConstant "0"),t2 -> ITunop(Uminus,t2)
+    | t1,ITunop(Uminus,t2) -> add t1 t2
+    | _ -> ITbinop(t1,Bsub,t2)
+
+  and add t1 t2 = match t1,t2 with
+    | t1,ITconstant (IntConstant "0") -> t1
+    | ITconstant (IntConstant "0"),t2 -> t2
+    | t1,ITunop(Uminus,t2) -> sub t1 t2
+    | _ -> ITbinop(t1,Badd,t2)
+
+  let minus t = match t with
+    | ITconstant (IntConstant s) -> 
+	ITconstant (IntConstant (string_of_int (-(int_of_string s))))
+    | _ -> ITunop(Uminus,t)
+
 end
 
 module PredicateOfVariable (V : ELEMENT_OF_CONTAINER) 
@@ -422,15 +444,17 @@ struct
 	if V.equal v v2 then 1,ITconstant (IntConstant "0")
 	else 0,p
     | ITunop (Uminus,p1) ->
-	let fact,term = destruct v p1 in -fact,ITunop (Uminus,term)
+	let fact,term = destruct v p1 in -fact,V.T.minus term
     | ITunop _ ->
 	raise Not_Representable
     | ITbinop (p1,Badd,p2) ->
 	let fact1,term1 = destruct v p1 in
 	let fact2,term2 = destruct v p2 in
-	fact1+fact2,ITbinop(term1,Badd,term2)
+	fact1+fact2,V.T.add term1 term2
     | ITbinop (p1,Bsub,p2) ->
-	destruct v (ITbinop (p1,Badd,ITunop(Uminus,p2)))
+	let fact1,term1 = destruct v p1 in
+	let fact2,term2 = destruct v p2 in
+	fact1-fact2,V.T.sub term1 term2
     | ITbinop _ -> 
 	raise Not_Representable
     | ITany ->
@@ -450,9 +474,9 @@ struct
 	  match lhs_vfact - rhs_vfact with
 	    | 1 -> 
 		V.TS.empty,
-		V.TS.add (ITbinop(rhs_term,Bsub,lhs_term)) V.TS.empty
+		V.TS.singleton (V.T.sub rhs_term lhs_term)
 	    | -1 -> 
-		V.TS.add (ITbinop(lhs_term,Bsub,rhs_term)) V.TS.empty,
+		V.TS.singleton (V.T.sub lhs_term rhs_term),
 		V.TS.empty
 	    | _ ->
 		V.TS.empty,V.TS.empty
@@ -463,12 +487,12 @@ struct
 	(* since we are working with integer variables, t1 < t2 is equivalent
 	   to t1 <= t2 - 1 *)
 	min_max v 
-	  (IPrel (t1,Le,ITbinop (t2,Bsub,ITconstant (IntConstant "1"))))
+	  (IPrel (t1,Le,V.T.sub t2 (ITconstant (IntConstant "1"))))
     | IPrel (t1,Gt,t2) ->
 	(* since we are working with integer variables, t1 > t2 is equivalent
 	   to t2 <= t1 - 1 *)
 	min_max v 
-	  (IPrel (t2,Le,ITbinop (t1,Bsub,ITconstant (IntConstant "1"))))
+	  (IPrel (t2,Le,V.T.sub t1 (ITconstant (IntConstant "1"))))
     | IPrel (t1,Eq,t2) ->
 	min_max v (IPand (IPrel (t1,Le,t2), IPrel (t1,Ge,t2)))
     | IPrel (_,Neq,_) ->

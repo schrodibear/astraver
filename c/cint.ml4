@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cint.ml4,v 1.17 2007-01-04 10:09:48 moy Exp $ *)
+(* $Id: cint.ml4,v 1.18 2007-01-08 10:47:31 moy Exp $ *)
 
 (* TO DO:
 
@@ -297,7 +297,7 @@ module type CONTEXTUAL_BRIDGE = sig
   val get_constrained : Constr.t -> Constr.t
   val make_unconstrained : Constr.t -> Contxt.t
   val subtract : Constr.t -> Contxt.t -> Constr.t
-  val join : Constr.t -> Contxt.t -> Constr.t
+  val join : ?backward:bool -> Constr.t -> Contxt.t -> Constr.t
   val meet : Constr.t -> Contxt.t -> Constr.t
   val eval_constraint : ipredicate -> Contxt.t -> Constr.t
 end
@@ -329,18 +329,18 @@ module type PACKED_CONTEXTUAL_LATTICE = sig
     (* are there conditional informations ? *)
   val has_conditionals : t -> bool
     (* similar to join, expects it adds conditionals *)
-  val join_context : joins:bool -> t -> t -> t
+  val join_context : t -> t -> t
     (* similar to remove_variable, expects it only does so on conditionals
        for which join was not performed ("joined" field) *)
   val remove_variable_conditionals : V.t -> t -> t
     (* subtract main context from unique conditional. The integer is a unique
      identifier for the conditional being returned. *)
-  val format_singleton : t -> int * Constr.t
+  val format_singleton : t -> int * bool * Constr.t
     (* precise the information in some context
        takes as parameters the value to precise and the contextual value.
        returns the original value with more information in some context. *)
-  val add_conditional : t -> int * Constr.t -> t
-  val add_new_conditional : t -> Constr.t -> t
+  val add_conditional : t -> do_join:bool -> int * Constr.t -> t
+  val add_new_conditional : t -> do_join:bool -> Constr.t -> t
     (* allow uniform transformation to be applied *)
   val transform : (Contxt.t -> Contxt.t) -> (Constr.t -> Constr.t) -> t -> t
     (* [fold] on context/constraint parts *)
@@ -468,7 +468,7 @@ struct
 	      IPrel (ITvar v, Le, ITconstant (IntConstant (I.to_string rb))),
 	      IPrel (ITvar v, Ge, ITconstant (IntConstant (I.to_string lb)))))
 
-  let join i1 i2 =
+  let join ?(backward=false) i1 i2 =
     if has_bounds i1 && (has_bounds i2) then
       let lb1,rb1 = get_bounds i1 in
       let lb2,rb2 = get_bounds i2 in
@@ -909,11 +909,11 @@ struct
 
   let pretty fmt = VMap.iter (fun _ elt -> L.pretty fmt elt)
 
-  let join pack1 pack2 =
+  let join ?(backward=false) pack1 pack2 =
     Hashtbl.fold
       (fun v _ m ->
 	let elt1 = VMap.find v pack1 and elt2 = VMap.find v pack2 in
-	let elt = L.join elt1 elt2 in
+	let elt = L.join ~backward elt1 elt2 in
 	VMap.add v elt m
       ) rep_to_dim_and_pack VMap.empty
 
@@ -1378,7 +1378,7 @@ struct
 		-> FIrand
 	  end
       | ITmax tlist | ITmin tlist as minmax_t ->
-	  begin try
+	    (* 
 	    let v_of_t t = match t with
 	      | ITvar s ->
 		  let idx = VMap.find s oct.indices in
@@ -1390,9 +1390,15 @@ struct
 		    raise Not_found
 	      | _ -> raise Not_found
 	    in
-	    let _ = List.map v_of_t tlist in
+	    let _ = List.map v_of_t tlist in 
+	    *)
 	    let vminmax = V.generate_variable minmax_t in
-	    let idx = VMap.find vminmax oct.indices in
+	    let idx = 
+	      try
+		VMap.find vminmax oct.indices
+	      with Not_found -> 
+		raise (V.Introduce_variable vminmax)
+	    in
 	    let s2 = Int31Map.find idx oct.variables in
 	    if V.equal vminmax s2 then
 	      (* variable is followed by octagon *)
@@ -1401,9 +1407,6 @@ struct
 	      FIlinear a
 	    else
 	      raise (V.Introduce_variable vminmax)
-	  with Not_found -> 
-	    FIrand
-	  end
       | ITany -> FIrand
     in randup t
 
@@ -1610,7 +1613,7 @@ module Make_OctogonLattice (V : PVARIABLE) (I : INT_VALUE)
 struct
   include Make_InternalOctogonLattice (V) (I)
 
-  let join oct1 oct2 =
+  let join ?(backward=false) oct1 oct2 =
     { oct1 with octogon = Oct.union oct1.octogon oct2.octogon }
 
   let meet oct1 oct2 =
@@ -1719,7 +1722,18 @@ struct
       (* both unconstrained *)
       bottom (oct1.dimension,oct1.variables)
 
-  let join = join_meet ~join:true Oct.inter Oct.union
+  let double_join oct1 oct2 =
+    let loct1 = get_unconstrained oct1 and roct1 = get_constrained oct1 in
+    let loct2 = get_unconstrained oct2 and roct2 = get_constrained oct2 in
+    let loct = Oct.close (Oct.union loct1.octogon loct2.octogon) in
+    let roct = Oct.union roct1.octogon roct2.octogon in
+    { oct1 with octogon = Oct.complete loct roct }
+
+  let join ?(backward=false) = 
+    if backward then 
+      double_join
+    else
+      join_meet ~join:true Oct.inter Oct.union
 
   let meet oct1 oct2 = (*join_meet ~join:false Oct.inter Oct.inter*)
     if is_constrained oct1 && is_constrained oct2 then
@@ -1788,7 +1802,7 @@ struct
   (* noop in forward mode, normal test in backward mode *)
   let eval_test ~backward pred oct = 
     if backward then
-      eval_test_or_constraint ~tagging:false ~or_collect:(Meet meet) pred oct
+      eval_test_or_constraint ~tagging:false ~or_collect:(Join double_join) pred oct
     else oct
 
   let eval_constraint pred oct =
@@ -1812,13 +1826,13 @@ struct
   let unconstrained_variables oct = followed_variables ~untagged:true oct
 
   let eliminate remove_vars oct =
-    if debug_more then Coptions.lprintf 
+    if debug then Coptions.lprintf 
       "[eliminate] initial oct %a@." pretty oct;
     (* get those variables from [remove_vars] that are in the current pack *)
     let remove_vars =
       List.filter (fun v -> is_targetted_variable oct v) remove_vars
     in
-    if debug_more then Coptions.lprintf 
+    if debug then Coptions.lprintf 
       "[eliminate] list of written variables %a@."
       (print_list comma V.pretty) remove_vars;
     let remove_vars =
@@ -1962,7 +1976,7 @@ struct
   (* global counter that uniquely identifies conditional abstract values *)
   let next_id = ref 0
 
-  type cond_t = { joined : bool; cond : Constr.t }
+  type cond_t = { joined : bool; do_join : bool; cond : Constr.t }
 
   type t = 
      {
@@ -1985,12 +1999,15 @@ struct
 
   let init = top
 
-  let mapcond f cond = { joined = cond.joined; cond = f cond.cond; }
+  let mapcond f cond =
+    { joined = cond.joined; do_join = cond.do_join; cond = f cond.cond; }
   let opcond f cond = f cond.cond
   let binopcond f cond1 cond2 = f cond1.cond cond2.cond
-  let crcond joined cond = { joined = joined; cond = cond; }
-  let nwcond cond = { joined = false; cond = cond; }
-  let jncond cond = { joined = true; cond = cond; }
+  let crcond ~joined ~do_join cond = 
+    { joined = joined; do_join = do_join; cond = cond; }
+  let nwcond ~do_join cond = 
+    { joined = false; do_join = do_join; cond = cond; }
+  let jncond cond = { joined = true; do_join = true; cond = cond; }
 
   (* functions for packing *)
 
@@ -2064,7 +2081,8 @@ struct
     let new_cond = 
       Int31Map.fold (fun cid cond cur_cond ->
 	if Constr.is_constrained cond.cond then
-	  let joined = cond.joined and cond = cond.cond in
+	  let joined = cond.joined and do_join = cond.do_join 
+				   and cond = cond.cond in
 	  let left_cond = Bridge.get_unconstrained cond in
 	  let cur_test = Contxt.normalize (Contxt.meet cur_main left_cond) in
 	  if Contxt.equal cur_main cur_test then
@@ -2082,7 +2100,7 @@ struct
 	      (* remove the already known main context from the conditional
 		 currently examined, in order to minimize it *)
 	      let new_cond = Bridge.subtract cond ctxt.main_context in
-	      Int31Map.add cid (crcond joined new_cond) cur_cond
+	      Int31Map.add cid (crcond ~joined ~do_join new_cond) cur_cond
 	else
 	  (* should be forbidden by normalization performed before *)
 	  assert false)
@@ -2106,42 +2124,46 @@ struct
       (print_list comma (fun fmt cond -> Constr.pretty fmt cond.cond)) 
       cond_list
 
-  let join ctxt1 ctxt2 =
-    let new_main = Contxt.join ctxt1.main_context ctxt2.main_context in
+  let join ?(backward=false) ctxt1 ctxt2 =
+    let new_main = 
+      Contxt.join ~backward ctxt1.main_context ctxt2.main_context 
+    in
     (* join corresponding conditionals in [ctxt1] and [ctxt2].
        remove simply conditionals that do not have a counterpart. *)
     let new_cond = 
       Int31Map.fold (fun cid cond1 m ->
 	try
+	  let do_join = cond1.do_join in
 	  let cond2 = Int31Map.find cid ctxt2.conditionals in
-	  let cond = Constr.join cond1.cond cond2.cond in
-	  Int31Map.add cid (nwcond cond) m
+	  let cond = Constr.join ~backward cond1.cond cond2.cond in
+	  Int31Map.add cid (nwcond ~do_join cond) m
   	with Not_found -> m)
 	ctxt1.conditionals Int31Map.empty
     in
     { main_context = new_main; conditionals = new_cond; }
 
-  let join_context ~joins ctxt1 ctxt2 =
+  let join_context ctxt1 ctxt2 =
     let new_main = Contxt.join ctxt1.main_context ctxt2.main_context in
     (* join corresponding conditionals in [ctxt1] and [ctxt2].
        join conditionals that do not have a counterpart with the main
        context from the opposite abstract value. *)
     let new_cond = 
       Int31Map.fold (fun cid cond1 m ->
-	try
+(*	try
 	  let cond2 = Int31Map.find cid ctxt2.conditionals in
 	  let cond = Constr.join cond1.cond cond2.cond in
 	  Int31Map.add cid (jncond cond) m
   	with Not_found -> 
-	  if not joins then Int31Map.add cid cond1 m else
+*)
+          if not cond1.do_join then Int31Map.add cid cond1 m else
 	  let lhs_cond1 = Bridge.get_unconstrained cond1.cond in
 	  let add_cond1 = Bridge.meet cond1.cond ctxt1.main_context in
-	  if debug then Coptions.lprintf
+	  if debug_more then Coptions.lprintf
 	    "[join_context] add_cond1 %a and ctxt2.main_context %a@." 
 	    Constr.pretty add_cond1 Contxt.pretty ctxt2.main_context;
 	  let cond = Bridge.join add_cond1 ctxt2.main_context in
 	  let rhs_cond = Bridge.get_constrained cond in
-	  if debug then Coptions.lprintf
+	  if debug_more then Coptions.lprintf
 	    "[join_context] rhs_cond %a and lhs_cond1 %a@." 
 	    Constr.pretty rhs_cond Contxt.pretty lhs_cond1;
 	  let cond = Bridge.meet rhs_cond lhs_cond1 in
@@ -2161,7 +2183,7 @@ struct
 	  let _ = Int31Map.find cid ctxt1.conditionals in
 	  m (* already taken care of above *)
   	with Not_found -> 
-	  if not joins then Int31Map.add cid cond2 m else
+          if not cond2.do_join then Int31Map.add cid cond2 m else
 	  let lhs_cond2 = Bridge.get_unconstrained cond2.cond in
 	  let add_cond2 = Bridge.meet cond2.cond ctxt2.main_context in
 	  if debug_more then Coptions.lprintf
@@ -2196,9 +2218,10 @@ struct
     let new_cond = 
       Int31Map.fold (fun cid cond1 m ->
 	try
+	  let do_join = cond1.do_join in
 	  let cond2 = Int31Map.find cid ctxt2.conditionals in
 	  let cond = Constr.meet cond1.cond cond2.cond in
-	  Int31Map.add cid (nwcond cond) m
+	  Int31Map.add cid (nwcond ~do_join cond) m
 	with Not_found -> Int31Map.add cid cond1 m)
 	ctxt1.conditionals ctxt2.conditionals
     in
@@ -2345,11 +2368,11 @@ struct
 	if Constr.is_constrained cond.cond then
 	  (* remove the already known main context from the conditional
 	     currently examined, in order to minimize it *)
-	  cid, Bridge.subtract cond.cond ctxt.main_context
+	  cid, cond.do_join, Bridge.subtract cond.cond ctxt.main_context
 	else
 	  (* return the initial constraint, so that future calls to 
 	     [Constr.is_constrained] return [false] *)
-	  cid, cond.cond
+	  cid, cond.do_join, cond.cond
     | _ -> failwith ("[format_singleton] should be passed only"
 		       ^ " unique conditionals")
 
@@ -2359,13 +2382,13 @@ struct
   let is_full ctxt = 
     let ctxt = normalize ctxt in Contxt.is_full ctxt.main_context
 
-  let add_conditional ctxt (cid,cond) =
-    let new_cond = Int31Map.add cid (nwcond cond) ctxt.conditionals in
+  let add_conditional ctxt ~do_join (cid,cond) =
+    let new_cond = Int31Map.add cid (nwcond ~do_join cond) ctxt.conditionals in
     { ctxt with conditionals = new_cond; }
 
-  let add_new_conditional ctxt cond =
+  let add_new_conditional ctxt ~do_join cond =
     let new_cid = !next_id in incr next_id; 
-    add_conditional ctxt (new_cid,cond)
+    add_conditional ctxt ~do_join (new_cid,cond)
 
   let transform f g ctxt =
     let new_main = f ctxt.main_context in
@@ -2381,10 +2404,11 @@ struct
     let new_cond =
       Int31Map.fold (fun cid cond1 m ->
 	try
+	  let do_join = cond1.do_join in
 	  let cond2 = Int31Map.find cid ctxt2.conditionals in
 	  let new_cond = Constr.subtract cond1.cond cond2.cond in
 	  if Constr.is_constrained new_cond then
-	    Int31Map.add cid (nwcond new_cond) m
+	    Int31Map.add cid (nwcond ~do_join new_cond) m
 	  else m
   	with Not_found -> Int31Map.add cid cond1 m)
 	ctxt1.conditionals Int31Map.empty
@@ -2417,7 +2441,7 @@ struct
     print_list comma (fun fmt sep -> Format.fprintf fmt "full_separated(%a,%a)"
 	V.pretty (fst sep) V.pretty (snd sep)) fmt sepl
     
-  let join = VPSet.inter
+  let join ?(backward=false) = VPSet.inter
 
   let meet = VPSet.union
 
@@ -2525,7 +2549,7 @@ struct
 
   let equal g1 g2 = (g1 == g2)
 
-  let join g1 g2 =
+  let join ?(backward=false) g1 g2 =
     let g = Self.fold_vertex (fun v g -> Self.add_vertex g v) g1 g2 in
     Self.fold_edges (fun v1 v2 g -> Self.add_edge g v1 v2) g1 g
 
@@ -2677,7 +2701,7 @@ struct
 	Format.fprintf fmt "NORMAL(%a)"
 	  (print_list (fun fmt () -> Format.fprintf fmt " && ") V.P.pretty) pl
 
-  let join ps1 ps2 = match ps1,ps2 with
+  let join ?(backward=false) ps1 ps2 = match ps1,ps2 with
     | EMPTY,ps | ps,EMPTY -> ps
     | NORMAL ps1,NORMAL ps2 ->
 	let new_state = 
@@ -2959,16 +2983,14 @@ let int_term_type = Ctypes.c_int
    - [Vstrlen v] describes a logical variable, the application of the logical
    function [strlen] to the normal variable [v]. The intended meaning is 
    the length of the string pointed-to by [v].
-   - [Vmax vl] represents the maximum of variable list [vl]
-   - [Vmin vl] represents the minimum of variable list [vl]
+   - [Vterm t] represents the term [t]
 *)
 module Var : sig
   type var_t = 
     | Vvar of var_info
     | Varrlen of var_info
     | Vstrlen of var_info
-    | Vmax of var_t list
-    | Vmin of var_t list
+    | Vterm of var_t int_term
   include PVARIABLE with type t = var_t
   val get_variable : t -> var_info
   val is_strlen : t -> bool
@@ -2978,14 +3000,15 @@ module Var : sig
     -> var_info -> t int_term -> t int_predicate
   val string_predicate : var_info -> t int_predicate
   val pointer_predicate : ?non_null:bool -> var_info -> t int_predicate
+  val arrlen_term : T.t -> T.t
+  val strlen_term : T.t -> T.t
 end = struct
 
   type var_t = 
     | Vvar of var_info
     | Varrlen of var_info
     | Vstrlen of var_info
-    | Vmax of var_t list
-    | Vmin of var_t list
+    | Vterm of var_t int_term
 
   module Self : ELEMENT_OF_CONTAINER with type t = var_t = 
   struct
@@ -2997,10 +3020,7 @@ end = struct
       | Vvar v -> Format.fprintf fmt "%s" v.var_name
       | Varrlen v -> Format.fprintf fmt "\\arrlen(%s)" v.var_name
       | Vstrlen v -> Format.fprintf fmt "\\strlen(%s)" v.var_name
-      | Vmax vl -> 
-	  Format.fprintf fmt "\\max(%a)" (print_list comma pretty) vl
-      | Vmin vl -> 
-	  Format.fprintf fmt "\\min(%a)" (print_list comma pretty) vl
+      | Vterm _ -> Format.fprintf fmt "(term)" 
   end
 
   include Self
@@ -3029,26 +3049,17 @@ end = struct
     | Vvar v -> v.var_name
     | Varrlen v -> "\\arrlen(" ^ v.var_name ^ ")"
     | Vstrlen v -> "\\strlen(" ^ v.var_name ^ ")"
-    | Vmax vl ->
-	let sl = List.map to_string vl in
-	let s = List.fold_left (fun acc s -> acc ^ "," ^ s) 
-	  (List.hd sl) (List.tl sl) in
-	"\\max(" ^ s ^ ")"
-    | Vmin vl ->
-	let sl = List.map to_string vl in
-	let s = List.fold_left (fun acc s -> acc ^ "," ^ s) 
-	  (List.hd sl) (List.tl sl) in
-	"\\min(" ^ s ^ ")"
+    | Vterm t -> "(term)"
 
   let get_variable = function
     | Vvar v | Varrlen v | Vstrlen v -> v
-    | Vmax _ | Vmin _ ->
-	failwith "No single variable for max an min meta-variables"
+    | Vterm _ ->
+	failwith "No single variable for term meta-variables"
   let is_strlen = function
-    | Vvar _ | Varrlen _ | Vmax _ | Vmin _ -> false
+    | Vvar _ | Varrlen _ | Vterm _ -> false
     | Vstrlen _ -> true
   let is_arrlen = function
-    | Vvar _ | Vstrlen _ | Vmax _ | Vmin _ -> false
+    | Vvar _ | Vstrlen _ | Vterm _ -> false
     | Varrlen _ -> true
 
   let safe_access_predicate 
@@ -3128,17 +3139,20 @@ end = struct
     in
     trans p
 
-  let generate_variable t =
-    let v_of_t t = match t with
-      | ITvar s -> s
-      | _ -> assert false
-    in
-    match t with 
-      | ITmax tlist ->
-	  let vlist = List.map v_of_t tlist in Vmax vlist
-      | ITmin tlist ->
-	  let vlist = List.map v_of_t tlist in Vmin vlist
-      | _ -> assert false
+  let generate_variable t = Vterm t
+
+  let strlen_term t = match t with
+  | ITvar (Vvar v) -> ITvar (Vstrlen v)
+  | _ -> ITany
+
+  let rec arrlen_term t = match t with
+  | ITvar (Vvar v) -> ITvar (Varrlen v)
+  | ITbinop (t1,op,t2) -> 
+      begin match arrlen_term t1 with
+      | ITany -> ITany
+      | arrt1 -> ITbinop (arrt1,op,t2)
+      end
+  | _ -> ITany
 
 end
 
@@ -3255,6 +3269,8 @@ module IntLangFromNormalized : sig
        variable is to be considered or not. *)
   val memory_access_safe_predicate : 
     (Var.t -> bool) -> Var.t list -> Node.t -> Var.P.t option
+    (* return a predicate that expresses call precondition, if any *)
+  val call_precondition : Node.t -> Var.P.t option
     (* create a predicate that expresses a variable is a string, when 
        accessing a string in test (against zero) *)
   val string_access_predicate : Node.t -> Var.P.t option
@@ -3573,7 +3589,7 @@ end = struct
 		| Some (test_null,test_not_null,etest) ->
 		    if test_not_null then
 		      Predicate (from_test etest)
-		    else if test_not_null then
+		    else if test_null then
 		      Predicate (IPnot (from_test etest))
 		    else assert false
 	end
@@ -3717,8 +3733,7 @@ end = struct
 	  (* [strlen(p)] depends on the value pointed to by [p].
 	     Add fields to describe this dependency. *)
 	  Cnorm.make_nstrlen_node_from_nterm vt
-      | ITvar (Var.Vmin _) -> assert false (* to be completed *)
-      | ITvar (Var.Vmax _) -> assert false (* to be completed *)
+      | ITvar (Var.Vterm t) -> (to_term t loc).nterm_node
       | ITunop (op,t1) -> 
 	  let nt1 = to_term t1 loc in
 	  NTunop (op,nt1)
@@ -3880,6 +3895,40 @@ end = struct
     internal_access ~string_write:Var.safe_access_predicate 
       ~string_read:(Var.safe_access_predicate ~read_string:true)
       ~pointer_access:Var.safe_access_predicate
+
+  let call_precondition node =
+    match get_node_kind node with
+    | NKexpr | NKtest | NKlvalue ->
+	if expr_is_call node then
+	  match call_get_function node with
+	  | None -> None
+	  | Some func ->
+	      (* get function precondition *)
+	      begin match function_get_precondition func with
+	      | None -> None
+	      | Some p ->
+		  let pred = from_pred p in
+		  let vars = function_get_params func in
+		  let params = List.map (fun v -> ITvar (Var.Vvar v)) vars in
+		  let arrparams = 
+		    List.map (fun v -> ITvar (Var.Varrlen v)) vars in
+		  let strparams = 
+		    List.map (fun v -> ITvar (Var.Vstrlen v)) vars in
+		  let params = params @ arrparams @ strparams in
+		  let args = call_get_args node in
+		  let args = List.map from_expr args in
+		  let arrargs = List.map Var.arrlen_term args in
+		  let strargs = List.map Var.strlen_term args in
+		  let args = args @ arrargs @ strargs in
+		  let trans = List.map2 (fun param arg -> (param,arg))
+		      params args in
+		  let pred = Var.P.translate trans pred in
+		  Some pred
+	      end
+	else None
+    | NKassume | NKassert | NKnone | NKdecl | NKstat
+    | NKpred | NKterm | NKannot | NKspec -> 
+	None
 
   let string_access_predicate node =
     match get_node_kind node with
@@ -4172,10 +4221,10 @@ struct
     match previous_value with
       | None -> fwd_ctxt_val,fwd_sep_val
       | Some (prev_ctxt_val,prev_sep_val) ->
-	  if debug then Coptions.lprintf 
+	  if debug_more then Coptions.lprintf 
 	    "[transfer] (assume) invariant previous value %a@."
 	    CL.pretty prev_ctxt_val;
-	  if debug then Coptions.lprintf 
+	  if debug_more then Coptions.lprintf 
 	    "[transfer] (assume) invariant current value %a@."
 	    CL.pretty fwd_ctxt_val;
 	  (* [meet] justified here because used between
@@ -4185,7 +4234,7 @@ struct
 	  *)
 	  let res1 = CL.normalize (CL.meet prev_ctxt_val fwd_ctxt_val) in
 	  let res2 = SL.normalize (SL.meet prev_sep_val fwd_sep_val) in
-	  if debug then Coptions.lprintf 
+	  if debug_more then Coptions.lprintf 
 	    "[transfer] (assume) invariant result value %a@."
 	    CL.pretty res1;
 	  res1,res2
@@ -4264,7 +4313,7 @@ struct
 				  not (SL.fully_separated (Var.Vvar lhs_var) 
 					 (Var.Vvar v) cur_sep_val)
 			      | Var.Vvar _ | Var.Varrlen _ 
-			      | Var.Vmin _ | Var.Vmax _ -> false
+			      | Var.Vterm _ -> false
 			    in
 			    CL.filter_variables 
 			      ~remove:not_separated cur_ctxt_val
@@ -4292,7 +4341,6 @@ struct
 		    let new_sep_val = 
 		      SL.remove_variable (Var.Vvar lhs_var) cur_sep_val in
 		    cur_ctxt_val,new_sep_val
-
 	      else cur_val
 	  | _ -> cur_val
 	  in
@@ -4348,6 +4396,9 @@ struct
 	  | NKtest | NKassume ->
 	      (* same transfer for forward and backward propagation *)
 	      let node_rep = get_pred_rep node in
+	      if debug then Coptions.lprintf 
+		"[transfer] Before test %a value is@.[transfer] %a@."
+		Var.P.pretty node_rep CL.pretty expr_ctxt_val;
 	      let new_ctxt_val = 
 		CL.eval_test ~backward node_rep expr_ctxt_val in
 	      if debug then Coptions.lprintf 
@@ -4670,14 +4721,20 @@ struct
 	ContextSepLattice.pretty pre_val;
     let pre_ctxt_val,_ = pre_val in
     match memory_access_safe_predicate ContextLattice.is_packed_variable 
-      (ContextLattice.restrained_variables pre_ctxt_val) node 
+	(ContextLattice.restrained_variables pre_ctxt_val) node 
     with
-    | None -> false
+    | None ->
+	begin match call_precondition node with
+	| None -> false
+	| Some p_precond ->
+	    (* is the precondition already guaranteed to be safe ? *)
+	    not (ContextLattice.guarantee_test p_precond pre_ctxt_val)
+	end
     | Some p_safe ->
 	(* is the access already guaranteed to be safe ? *)
 	not (is_safe_access node
-	     || ContextLattice.guarantee_test p_safe pre_ctxt_val)
-
+	   || ContextLattice.guarantee_test p_safe pre_ctxt_val)
+	    
   let string_test_select node pre_val =
     if debug_more then Coptions.lprintf
       "[string_test_select] %a with value %a@." Node.pretty node
@@ -4693,16 +4750,36 @@ struct
     if debug then Coptions.lprintf
 	"[build_safe_memory_access] %a with value %a@." Node.pretty node
 	ContextSepLattice.pretty pre_val;
-    let pre_ctxt_val,_ = pre_val in
+    let pre_ctxt_val,pre_sep_val = pre_val in
     match memory_access_safe_predicate ContextLattice.is_packed_variable 
-      (ContextLattice.restrained_variables pre_ctxt_val) node
+	(ContextLattice.restrained_variables pre_ctxt_val) node
     with
-    | None -> assert false (* [node] should have been selected first *)
+    | None ->
+	begin match call_precondition node with
+	| None -> assert false (* [node] should have been selected first *)
+	| Some p_precond ->	
+	    if debug then Coptions.lprintf
+		"[build_safe_memory_access] Trying to prove precondition %a@." 
+		Var.P.pretty p_precond;
+	    (* [arrlen] variables should not be used in left parts of conditionals,
+	       since their value cannot be tested by the programmer *)
+	    let pre_ctxt_val = 
+	      ContextLattice.filter_variables ~remove:Var.is_arrlen pre_ctxt_val in
+	    let ctxt_val = ContextLattice.get_context pre_ctxt_val in
+	    let cstr_val = ContextLattice.Bridge.eval_constraint p_precond ctxt_val in
+	    let init_val = ContextLattice.eliminate_conditionals pre_ctxt_val in
+	    let init_val = 
+	      ContextLattice.add_new_conditional init_val ~do_join:false cstr_val 
+	    in
+	    if debug_more then Coptions.lprintf
+		"[build_safe_memory_access] initial value for precondition %a@."
+		ContextLattice.pretty init_val;
+	    init_val,pre_sep_val
+	end
     | Some p_safe ->
-	let pre_ctxt_val,pre_sep_val = pre_val in
 	if debug then Coptions.lprintf
-	  "[build_safe_memory_access] Trying to prove %a@." 
-	  Var.P.pretty p_safe;
+	    "[build_safe_memory_access] Trying to prove %a@." 
+	    Var.P.pretty p_safe;
 	(* [arrlen] variables should not be used in left parts of conditionals,
 	   since their value cannot be tested by the programmer *)
 	let pre_ctxt_val = 
@@ -4710,10 +4787,12 @@ struct
 	let ctxt_val = ContextLattice.get_context pre_ctxt_val in
 	let cstr_val = ContextLattice.Bridge.eval_constraint p_safe ctxt_val in
 	let init_val = ContextLattice.eliminate_conditionals pre_ctxt_val in
-	let init_val = ContextLattice.add_new_conditional init_val cstr_val in
+	let init_val = 
+	  ContextLattice.add_new_conditional init_val ~do_join:false cstr_val 
+	in
 	if debug_more then Coptions.lprintf
-	  "[build_safe_memory_access] initial value %a@."
-	  ContextLattice.pretty init_val;
+	    "[build_safe_memory_access] initial value %a@."
+	    ContextLattice.pretty init_val;
 	init_val,pre_sep_val
 
   let build_string_context node pre_val =
@@ -4736,7 +4815,9 @@ struct
 	  let cstr_val = ContextLattice.Bridge.eval_constraint p_string ctxt_val
 	  in
 	  let init_val = ContextLattice.eliminate_conditionals pre_ctxt_val in
-	  let init_val = ContextLattice.add_new_conditional init_val cstr_val in
+	  let init_val = 
+	    ContextLattice.add_new_conditional init_val ~do_join:true cstr_val 
+	  in
 	  if debug_more then Coptions.lprintf
 	    "[build_string_context] initial value %a@."
 	    ContextLattice.pretty init_val;
@@ -4772,9 +4853,11 @@ struct
 	let new_ctxt_val = ContextLattice.set_context new_ctxt_val 
 	  (ContextLattice.get_context cur_ctxt_val) in
 	(* subtract the main context from the conditional information *)
-	let new_cid,new_cond = ContextLattice.format_singleton new_ctxt_val in
+	let new_cid,new_do_join,new_cond = 
+	  ContextLattice.format_singleton new_ctxt_val in
 	(* add this minimal conditional information to the current context *)
-	ContextLattice.add_conditional cur_ctxt_val (new_cid,new_cond)
+	ContextLattice.add_conditional 
+	  cur_ctxt_val new_do_join (new_cid,new_cond)
       else cur_ctxt_val
     in
     (* add invariants on strings and pointers *)
@@ -4786,13 +4869,13 @@ struct
       ContextLattice.pretty new_ctxt_val;
     new_ctxt_val,cur_sep_val
 
-  let join_context ~joins (ctxt1,sep1) (ctxt2,sep2) =
-    ContextLattice.join_context ~joins ctxt1 ctxt2, SepLattice.join sep1 sep2
+  let join_context (ctxt1,sep1) (ctxt2,sep2) =
+    ContextLattice.join_context ctxt1 ctxt2, SepLattice.join sep1 sep2
 
   let string_bnf_params =
     {
       compute         = compute_with_assert keep_node_select;
-      join_context    = join_context ~joins:true;
+      join_context    = join_context;
       backward_select = string_test_select;
       backward_modify = build_string_context;
       merge_select    = merge_node_select;
@@ -4803,7 +4886,7 @@ struct
   let compute_bnf_params =
     {
       compute         = compute_back_and_forth string_bnf_params;
-      join_context    = join_context ~joins:false;
+      join_context    = join_context;
       backward_select = memory_access_select;
       backward_modify = build_safe_memory_access;
       merge_select    = merge_node_select;
@@ -4941,11 +5024,11 @@ end
 
 let local_int_analysis fundecl =
 
-  if debug_more then Coptions.lprintf 
+  if debug then Coptions.lprintf 
     "[local_int_analysis] treating function %s@." fundecl.f.fun_name; 
 
   (* build control-flow graph *)
-  let decls = IntLangFromNormalized.from_file [fundecl] in
+  let _ = IntLangFromNormalized.from_file [fundecl] in
 
   (* collect the local variables used/declared *)
   let used_vars,decl_vars = IntLangFromNormalized.collect_vars () in
@@ -4965,6 +5048,10 @@ let local_int_analysis fundecl =
   let compute_new_decls pack_vars =
     (* only one pack for now *)
     ContextLattice.pack_variables [pack_vars];
+
+    (* rebuild control-flow graph, needed because problem with 
+       imperative Graph and exception *)
+    let decls = IntLangFromNormalized.from_file [fundecl] in
 
     if Coptions.abstract_interp then
 
@@ -5036,7 +5123,11 @@ let local_int_analysis fundecl =
       IntLangFromNormalized.to_file decls
 
     with Var.Introduce_variable v ->
-      compute_while_new_vars (v :: pack_vars)
+      begin
+	if debug then Coptions.lprintf
+	  "[compute_while_new_vars] adding variable %a@." Var.pretty v;
+	compute_while_new_vars (v :: pack_vars)
+      end
   in
   compute_while_new_vars pack_vars
 
