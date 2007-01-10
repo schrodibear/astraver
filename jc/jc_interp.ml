@@ -115,12 +115,16 @@ let rec term label oldlabel t =
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
     | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
     | JCTold(t) -> term (Some oldlabel) oldlabel t
-    | JCToffset_max(t) -> 
-	assert false
-	  (* LApp("offset_max",[alloc; ft t]) *)
-    | JCToffset_min(t) -> 
-	assert false
-	  (* LApp("offset_min",[ft t]) *)
+    | JCToffset_max(t,st) -> 
+	let alloc =
+	  st.jc_struct_info_root ^ "_alloc_table"
+	in
+	LApp("offset_max",[LVar alloc; ft t]) 
+    | JCToffset_min(t,st) -> 
+	let alloc =
+	  st.jc_struct_info_root ^ "_alloc_table"
+	in
+	LApp("offset_min",[LVar alloc; ft t]) 
     | JCTinstanceof(t,ty) ->
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LApp("instanceof_bool",
@@ -260,6 +264,11 @@ let make_upd fi e1 e2 =
     [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
       Var fi.jc_field_info_name ; e1 ; e2 ]
     
+let rec make_lets l e =
+  match l with
+    | [] -> e
+    | (tmp,a)::l -> Let(tmp,a,make_lets l e)
+
 
 let rec expr e : (string * Output.expr) list * expr =
   match e.jc_expr_node with
@@ -290,7 +299,21 @@ let rec expr e : (string * Output.expr) list * expr =
 	let l,e = expr e in
 	l,make_acc f e
     | JCEincr_local(op, vi) -> assert false
-    | JCEincr_heap _ -> assert false
+    | JCEincr_heap(op,fi,e1) -> 
+	let l1,e1 = expr e1 in
+	let tmp1 = tmp_why_var () in
+	let tmp2 = tmp_why_var () in
+	let acc_fi_e = make_acc fi (Var tmp1) in
+	let result_value,updated_value = 
+	  match op with
+	    | Postfix_dec | Postfix_inc -> 
+		acc_fi_e, make_app (incr_call op) [Var tmp2; const_un]
+	    | Prefix_dec | Prefix_inc ->
+		make_app (incr_call op) [acc_fi_e; const_un], (Var tmp2)
+	in
+	[],make_lets
+	  (l1@[ (tmp1, e1) ; (tmp2, result_value ) ])
+	  (append (make_upd fi (Var tmp1) updated_value) (Var tmp2))
     | JCEassign_local (vi, e2) -> 
 	assert false
 	  (*
@@ -347,11 +370,6 @@ let rec expr e : (string * Output.expr) list * expr =
 	      ([],[])
 	  in
 	  l,make_app f.jc_fun_info_name el
-
-let rec make_lets l e =
-  match l with
-    | [] -> e
-    | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
 let statement_expr e =
   match e.jc_expr_node with

@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.23 2006-12-22 13:13:25 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.24 2007-01-10 16:41:46 marche Exp $ */
 
 %{
 
@@ -72,7 +72,7 @@
 %token <string> STRING_LITERAL 
 
 /* ( ) { } [ ] .. */
-%token LPAR RPAR LBRACE RBRACE LSQUARE RSQUARE DOTDOT
+%token LPAR RPAR LPARRPAR LBRACE RBRACE LSQUARE RSQUARE DOTDOT
 
 /* ; , : . ? */
 %token SEMICOLON COMMA COLON DOT QUESTION
@@ -229,6 +229,8 @@ invariant:
 
 
 parameters:
+| LPARRPAR
+    { [] }
 | LPAR RPAR
     { [] }
 | LPAR parameter_comma_list RPAR
@@ -351,6 +353,8 @@ primary_expression:
     { locate_expr (JCPEvar "\\result") }
 | CONSTANT 
     { locate_expr (JCPEconst $1) }
+| LPARRPAR 
+    { locate_expr (JCPEconst JCCvoid) }
 /*
 | STRING_LITERAL 
     { locate (CEstring_literal $1) }

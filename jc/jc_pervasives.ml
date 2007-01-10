@@ -64,6 +64,8 @@ let div_int = make_term_op "div_int" integer_type
 let mod_int = make_term_op "mod_int" integer_type
 let minus_int = make_term_op "neg_int" integer_type
 
+let shift = make_term_op "shift" unit_type   
+
 (* logic predicates *)
 
 let make_rel name =
@@ -131,7 +133,8 @@ let uminus_real = make_fun_info "uminus_real" integer_type
 let and_ = make_fun_info "and" boolean_type
 let or_ = make_fun_info "or" boolean_type
 let not_ = make_fun_info "not" boolean_type
-    
+
+let shift_ = make_fun_info "shift" unit_type   
 
 
 (*

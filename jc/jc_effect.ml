@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.15 2006-12-22 13:13:24 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.16 2007-01-10 16:41:46 marche Exp $ *)
 
 
 open Jc_env
@@ -94,9 +94,10 @@ let rec term ef t =
     | JCTvar vi -> ef (* TODO ? *)
     | JCTif(t1, t2, t3) -> term (term (term ef t1) t2) t3
     | JCTcast(t, _) 
-    | JCTinstanceof (t, _)
-    | JCToffset_min t 
-    | JCToffset_max t
+    | JCTinstanceof (t, _) -> term ef t
+    | JCToffset_min(t,st) 
+    | JCToffset_max(t,st) ->
+	add_alloc_effect (term ef t) st.jc_struct_info_root
     | JCTold t -> term ef t
     | JCTapp (li, tl) -> 
 	ef_union li.jc_logic_info_effects
@@ -137,7 +138,8 @@ let rec expr ef e =
     | JCEassign_op_local (_, _, _) -> assert false
     | JCEassign_local (vi, e) -> expr ef e
     | JCEincr_local(op,vi) -> ef
-    | JCEincr_heap _ -> assert false
+    | JCEincr_heap(op,fi,e) -> 
+	expr (add_field_writes ef fi) e
     | JCEcall (fi, le) -> 
 	fef_union fi.jc_fun_info_effects
 	  (List.fold_left expr ef le) 
@@ -149,10 +151,8 @@ let rec expr ef e =
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
     | JCEvar _ -> ef (* TODO *)
 
-let rec loop_annot ef la = ef 
-(*
+let rec loop_annot ef la = 
   assertion (term ef la.jc_loop_variant) la.jc_loop_invariant
-*)
 
 let rec statement ef s =
   match s.jc_statement_node with
@@ -172,7 +172,8 @@ let rec statement ef s =
     | JCScontinue _ -> assert false
     | JCSbreak _ -> assert false
     | JCSwhile (c, la, s) -> 
-	statement (loop_annot (expr ef c) la) s
+	let ef = {ef with jc_reads = loop_annot ef.jc_reads la } in
+	statement (expr ef c) s
     | JCSif (e, s1, s2) -> 
 	statement (statement (expr ef e) s1) s2
     | JCSdecl(vi,e,s) -> 

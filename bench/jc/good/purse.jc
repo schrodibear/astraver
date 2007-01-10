@@ -75,7 +75,8 @@ boolean test2(purse[0] p)
 /* introducing dynamic memory allocation */
 
 /*
-purse new_purse () 
+
+purse[0] new_purse() 
   allocates \result;
   behavior balance_is_zero:
     assigns \result.balance;
@@ -86,7 +87,7 @@ purse new_purse ()
     return this;
   }
 
-int test2() 
+integer test2() 
   behavior result_is_150:
     ensures \result == 150;
 {    
@@ -98,8 +99,8 @@ int test2()
     withdraw(p2,100);
     return p1.balance+p2.balance;
 }
+*/
 
- */
 
     
 /*

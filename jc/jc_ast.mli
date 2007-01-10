@@ -83,7 +83,7 @@ type pexpr_node =
   | JCPEcast of pexpr * string
   | JCPEforall of ptype * string list * pexpr
   | JCPEold of pexpr
-  | JCPEoffset_max of pexpr
+  | JCPEoffset_max of pexpr 
   | JCPEoffset_min of pexpr
   | JCPEif of pexpr * pexpr * pexpr
 
@@ -146,8 +146,8 @@ type term_node =
   | JCTderef of term * field_info
   | JCTapp of logic_info * term list
   | JCTold of term
-  | JCToffset_max of term
-  | JCToffset_min of term
+  | JCToffset_max of term * struct_info
+  | JCToffset_min of term * struct_info
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
   | JCTif of term * term * term

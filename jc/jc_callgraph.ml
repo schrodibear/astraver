@@ -31,7 +31,7 @@ let rec term acc t =
     | JCTconst _ 
     | JCTvar _ -> acc
     | JCTapp (f,lt) -> f::(List.fold_left term acc lt)
-    | JCToffset_max t | JCToffset_min t
+    | JCToffset_max(t,_) | JCToffset_min(t,_)
     | JCTold t | JCTderef (t,_) -> term acc t
     | JCTshift (t1,t2) -> term (term acc t1) t2
     | JCTif(t1,t2,t3) -> term (term (term acc t1) t2) t3

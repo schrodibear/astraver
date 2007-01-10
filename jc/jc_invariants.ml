@@ -9,8 +9,8 @@ let rec term this t =
     | JCTif (_, _, _) -> assert false (* TODO *)
     | JCTcast (t, ty) -> term this t
     | JCTinstanceof (t, ty) -> term this t
-    | JCToffset_min t 
-    | JCToffset_max t -> term this t
+    | JCToffset_min(t,_) 
+    | JCToffset_max(t,_) -> term this t
     | JCTold t -> term this t
     | JCTapp (id, l) ->
 	if FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories

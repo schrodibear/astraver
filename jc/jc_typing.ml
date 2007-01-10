@@ -48,16 +48,6 @@ let find_struct_info loc id =
   with Not_found ->
     typing_error loc "undeclared structure %s" id
 
-(*
-let same_type t1 t2 =
-  match t1,t2 with
-    | JCTnative t1, JCTnative t2 -> t1=t2
-    | JCTlogic s1, JCTlogic s2 -> s1=s2
-    | (JCTpointer(s1) | JCTvalidpointer(s1,_,_)),
-	(JCTpointer(s2) | JCTvalidpointer(s2,_,_)) -> s1=s2
-    | _ -> false
-*)
-
 let rec substruct s1 s2 =
   if s1=s2 then true else
     let st = find_struct_info Loc.dummy_position s1.jc_struct_info_name in
@@ -71,6 +61,14 @@ let subtype t1 t2 =
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_),JCTpointer(s2,_,_) -> 
 	  substruct s1 s2
+    | _ -> false
+
+let comparable_types t1 t2 =
+  match t1,t2 with
+    | JCTnative t1, JCTnative t2 -> t1=t2
+    | JCTlogic s1, JCTlogic s2 -> s1=s2
+    | JCTpointer(s1,_,_),JCTpointer(s2,_,_) -> 
+	  s1.jc_struct_info_root = s2.jc_struct_info_root
     | _ -> false
   
 
@@ -224,7 +222,27 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 	    | _ -> assert false
 	in
 	JCTnative t,JCTapp(eq_op op t,[e1;e2])
-    | Badd | Bsub | Bmul | Bdiv | Bmod ->
+    | Badd | Bsub ->
+	begin
+	  match (t1,t2) with
+	    | JCTnative nt1, JCTnative nt2 ->
+		begin
+		  match (nt1,nt2) with
+		    | Tinteger,Tinteger -> 
+			t1,JCTapp(num_op op,[e1;e2])
+		    | _ -> assert false (* TODO *)
+		end
+	    | JCTpointer(st,a,b), JCTnative t2 ->
+		begin
+		  match t2 with
+		    | Tinteger -> 
+			JCTpointer(st,0,-1), JCTapp(shift,[e1;e2])
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "numeric types expected"
+	end 
+    | Bmul | Bdiv | Bmod ->
 	let t =
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -288,13 +306,23 @@ let rec term env e =
       | JCPEold e -> 
 	  let t,e = term env e in t,JCTold(e)
       | JCPEoffset_max e -> 
-	  let t,e = term env e in 
-	  (* TODO : check t is a pointer *)
-	  integer_type,JCToffset_max(e)
+	  let t,te = term env e in 
+	  begin
+	    match t with 
+	      | JCTpointer(st,_,_) ->
+		  integer_type,JCToffset_max(te,st)
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "pointer expected"
+	  end
       | JCPEoffset_min e -> 
-	  let t,e = term env e in 
-	  (* TODO : check t is a pointer *)
-	  integer_type,JCToffset_min(e)
+	  let t,te = term env e in 
+	  begin
+	    match t with 
+	      | JCTpointer(st,_,_) ->
+		  integer_type,JCToffset_min(te,st)
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "pointer expected"
+	  end
       | JCPEif(e1,e2,e3) ->
 	  let t1,te1 = term env e1 
 	  and t2,te2 = term env e2
@@ -349,7 +377,7 @@ let rel_bin_op loc op t1 t2 =
 	  | Bneq -> neq
 	  | _ -> assert false
 	in
-	if t1=t2 then 
+	if comparable_types t1 t2 then 
 	  begin
 	    match t1 with
 	      | JCTnative _ -> op
@@ -579,7 +607,26 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		typing_error loc "numeric types expected"
 	end;
 	JCTnative Tboolean,JCEcall(bin_op Tboolean op,[e1;e2])
-    | Badd | Bsub | Bmul | Bdiv | Bmod ->
+    | Badd | Bsub ->
+	begin
+	  match (t1,t2) with
+	    | JCTnative nt1, JCTnative nt2 ->
+		begin
+		  match (nt1,nt2) with
+		    | Tinteger,Tinteger -> 
+			JCTnative Tinteger,
+			JCEcall(bin_op Tinteger op,[e1;e2])
+		    | Treal,Treal -> 
+			JCTnative Treal,
+			JCEcall(bin_op Treal op,[e1;e2])
+		    | _ -> assert false (* TODO *)
+		end
+	    | JCTpointer(st,_,_), JCTnative Tinteger ->
+		t1, JCEcall(shift_,[e1;e2])
+	    | _ ->
+		typing_error loc "numeric types expected"
+	end
+    | Bmul | Bdiv | Bmod ->
 	let t=
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->

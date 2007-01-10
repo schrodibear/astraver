@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.19 2006-12-22 15:25:13 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.20 2007-01-10 16:41:46 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -207,7 +207,7 @@ rule token = parse
   | ","                     { COMMA }
   | ":"                     { COLON }
   | "="                     { EQ }
-  | "()"                    { CONSTANT JCCvoid }
+  | "()"                    { LPARRPAR }
   | "("                     { LPAR }
   | ")"                     { RPAR }
   | "["                     { LSQUARE }
