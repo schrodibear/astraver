@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.20 2007-01-10 16:41:46 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.21 2007-01-12 09:41:30 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -115,6 +115,7 @@ rule token = parse
   | "int"                   { INT }
 *)
   | "invariant"             { INVARIANT }
+  | "logic"                 { LOGIC }
 (*
   | "long"                  { LONG }
 *)

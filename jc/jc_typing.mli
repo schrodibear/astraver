@@ -29,6 +29,8 @@ open Jc_ast
 val typing_error : 
     Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
+val logic_type_table : (string,unit) Hashtbl.t
+  
 val logic_functions_table : 
   (int, logic_info * term_or_assertion) Hashtbl.t
 

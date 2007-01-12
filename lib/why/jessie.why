@@ -119,7 +119,7 @@ type 't pset
 logic pset_empty : 't pset
 logic pset_singleton : 't pointer -> 't pset
 logic pset_union : 't pset, 't pset -> 't pset
-
+logic pset_range : 't pointer, int, int -> 't pset
 
 logic in_pset : 't pointer, 't pset -> prop
 
@@ -131,7 +131,14 @@ axiom in_pset_singleton:
   forall q:'t pointer.
     in_pset(p,pset_singleton(q)) <-> p=q
 
- axiom in_pset_union:
+axiom in_pset_range:
+  forall p:'t pointer. 
+  forall q:'t pointer.
+  forall a:int. forall b:int.
+    in_pset(p,pset_range(q,a,b)) <-> 
+	exists i:int. a <= i and i <= b and p=shift(q,i)
+
+axiom in_pset_union:
   forall p:'t pointer. 
   forall s1:'t pset.
   forall s2:'t pset.

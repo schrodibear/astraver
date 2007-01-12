@@ -1,11 +1,8 @@
 
-type char = {
-  integer char_val;
-  invariant is_char(c) = 0 <= c.char_val && c.char_val <= 255;
-}
+logic type char
 
 type char_pointer = {
- char[..] charM;
+ char charM;
 }
 
 
@@ -25,10 +22,10 @@ type queue = {
      (q.empty <=> q.last == q.first) ;
 }
 
-unit push(queue[0] q, char[0] c) 
+unit push(queue[0] q, char c) 
   requires !q.full;
   behavior correct_push:
-    assigns q.empty, q.full, q.last, (q.contents+q.last).charM;
+    assigns q.empty, q.full, q.last, q.contents[q.last].charM;
     ensures !q.empty && (q.contents+\old(q.last)).charM == c;
 {
   (q.contents+q.last++).charM = c;

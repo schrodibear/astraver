@@ -126,6 +126,7 @@ and pstatement =
 type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
   | JCPDtype of string * string option * (ptype * string) list * (string * string * pexpr) list
+  | JCPDlogictype of string 
   | JCPDaxiom of string * pexpr
   | JCPDexception of string * ptype
 
@@ -157,6 +158,13 @@ and term =
       jc_term_node : term_node;
       jc_term_loc : Loc.position;
     }
+
+type location_set = 
+  | JCLSrange of var_info * term * term
+
+type location =
+  | JCLvar of var_info
+  | JCLderef of location_set * field_info
 
 type assertion_node =
   | JCAtrue
@@ -234,10 +242,6 @@ and statement =
       jc_statement_loc : Loc.position;
     }
 
-
-type location =
-  | JCLvar of var_info
-  | JCLderef of location * field_info
 
 type behavior =
     { 

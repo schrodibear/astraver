@@ -37,6 +37,8 @@ let typing_error l =
     str_formatter
 
 
+let logic_type_table = Hashtbl.create 97
+
 let exceptions_table = Hashtbl.create 97
 
 
@@ -121,8 +123,11 @@ let type_type t =
 	let st = find_struct_info t.jc_ptype_loc id in
 	JCTpointer(st, a, b)
     | JCPTidentifier id -> 
-	(* TODO *)
-	typing_error t.jc_ptype_loc "unknown type %s" id
+	try
+	  let () = Hashtbl.find logic_type_table id in
+	  JCTlogic id
+	with Not_found ->
+	  typing_error t.jc_ptype_loc "unknown type %s" id
 
 
 (* constants *)
@@ -932,20 +937,40 @@ and statement_list env l : statement list =
 		s :: r
   
 
-let rec location env e =
+let const_zero = 
+  { jc_term_loc = Loc.dummy_position;
+    jc_term_node = JCTconst (JCCinteger "0");
+  }
+
+let location_set env e =
   match e.jc_pexpr_node with
     | JCPEvar id ->
 	begin
 	  try
-	    let vi = List.assoc id env
-	    in vi.jc_var_info_type,JCLvar vi
+	    let vi = List.assoc id env in 
+	    match vi.jc_var_info_type with
+	      | JCTpointer(st,_,_) ->
+		  vi.jc_var_info_type,JCLSrange(vi,const_zero,const_zero)
+	      | _ -> assert false
+	  with Not_found -> 
+	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	end
+    | _ -> assert false
+
+let location env e =
+  match e.jc_pexpr_node with
+    | JCPEvar id ->
+	begin
+	  try
+	    let vi = List.assoc id env in
+	    vi.jc_var_info_type,JCLvar vi
 	  with Not_found -> 
 	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
-    | JCPEderef(e1,f) ->
-	let t,te = location env e1 in
+    | JCPEderef(ls,f) ->
+	let t,tls = location_set env ls in
 	let fi = find_field e.jc_pexpr_loc t f in
-	fi.jc_field_info_type, JCLderef(te,fi)	  
+	fi.jc_field_info_type, JCLderef(tls,fi)	  
     | JCPEshift (_, _)  -> assert false (* TODO *)
     | JCPEif _ 
     | JCPEcast _
@@ -1069,6 +1094,14 @@ let decl d =
 	    inv
 	in
 	Hashtbl.add structs_table id (struct_info,invariants)
+    | JCPDlogictype(id) ->
+	begin 
+	  try
+	    let _ = Hashtbl.find logic_type_table id in
+	    assert false
+	  with Not_found ->
+	    Hashtbl.add logic_type_table id ()
+	end
     | JCPDaxiom(id,e) ->
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te

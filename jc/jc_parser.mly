@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.24 2007-01-10 16:41:46 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.25 2007-01-12 09:41:30 marche Exp $ */
 
 %{
 
@@ -98,8 +98,8 @@
 /* pack unpack */
 %token PACK UNPACK
 
-/* type invariant with variant */
-%token TYPE INVARIANT WITH VARIANT
+/* type invariant logic with variant */
+%token TYPE INVARIANT LOGIC WITH VARIANT
 
 /* integer boolean real unit */
 %token INTEGER BOOLEAN REAL UNIT
@@ -193,6 +193,8 @@ decl:
 type_definition:
 | TYPE IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
     { let (f,i) = $6 in locate_decl (JCPDtype($2,$4,f,i)) }
+| LOGIC TYPE IDENTIFIER
+    { locate_decl (JCPDlogictype($3)) }
 ; 
 
 extends:

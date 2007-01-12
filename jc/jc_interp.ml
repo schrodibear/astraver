@@ -607,13 +607,18 @@ locations
 
 let rec pset before loc = 
   match loc with
+(*
     | JCLderef(e,fi) ->
 	let m = lvar (Some before) fi.jc_field_info_name in
 	LApp("pset_deref", [pset before e; m])
     | JCLvar vi -> 
 	let m = lvar_info (Some before) vi in
 	LApp("pset_singleton", [m])
-
+*)
+    | JCLSrange(vi,a,b) ->
+	let m = lvar_info (Some before) vi in
+	LApp("pset_range", [m;term (Some before) before a; term (Some before) before b])
+	
 let collect_locations before (refs,mems) loc =
   match loc with
     | JCLderef(e,fi) -> 
