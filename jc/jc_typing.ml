@@ -124,7 +124,7 @@ let type_type t =
 	JCTpointer(st, a, b)
     | JCPTidentifier id -> 
 	try
-	  let () = Hashtbl.find logic_type_table id in
+	  let _ = Hashtbl.find logic_type_table id in
 	  JCTlogic id
 	with Not_found ->
 	  typing_error t.jc_ptype_loc "unknown type %s" id
@@ -305,7 +305,9 @@ let rec term env e =
 	  let t,te = term env e1 in
 	  let fi = find_field e.jc_pexpr_loc t f in
 	  fi.jc_field_info_type, JCTderef(te,fi)	  
+(*
       | JCPEshift (_, _) -> assert false
+*)
       | JCPEconst c -> 
 	  let t,c = const c in t,JCTconst c
       | JCPEold e -> 
@@ -386,7 +388,7 @@ let rel_bin_op loc op t1 t2 =
 	  begin
 	    match t1 with
 	      | JCTnative _ -> op
-	      | JCTlogic _ -> assert false
+	      | JCTlogic _ -> op
 	      | JCTpointer _ -> op
 	  end
 	else
@@ -464,7 +466,9 @@ let rec assertion env e =
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non boolean expression"
 	  end
+(*
       | JCPEshift (_, _) -> assert false
+*)
       | JCPEconst c -> 
 	  begin
 	    match c with
@@ -772,7 +776,9 @@ let rec expr env e =
 	  let t,te = expr env e1 in
 	  let fi = find_field e.jc_pexpr_loc t f in
 	  fi.jc_field_info_type,JCEderef(te,fi)
+(*
       | JCPEshift (_, _) -> assert false
+*)
       | JCPEconst c -> let t,tc = const c in t,JCEconst tc
       | JCPEif(e1,e2,e3) ->
 	  let t1,te1 = expr env e1 
@@ -942,7 +948,8 @@ let const_zero =
     jc_term_node = JCTconst (JCCinteger "0");
   }
 
-let location_set env e =
+
+let rec location_set env e =
   match e.jc_pexpr_node with
     | JCPEvar id ->
 	begin
@@ -950,12 +957,41 @@ let location_set env e =
 	    let vi = List.assoc id env in 
 	    match vi.jc_var_info_type with
 	      | JCTpointer(st,_,_) ->
-		  vi.jc_var_info_type,JCLSrange(vi,const_zero,const_zero)
+		  vi.jc_var_info_type,JCLSvar(vi)
 	      | _ -> assert false
 	  with Not_found -> 
 	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	end
-    | _ -> assert false
+    | JCPEbinary(e,Badd,i) ->
+	let tye,te = location_set env e in
+	let tyi,ti = term env i in
+	begin
+	  match tye,tyi with 
+	    | JCTpointer(st,_,_), JCTnative Tinteger ->
+		tye,JCLSrange(te,ti,ti)
+	    | JCTpointer _, _ -> 
+		typing_error i.jc_pexpr_loc "integer expected, got %a" print_type tyi
+	    | _ -> 
+		typing_error e.jc_pexpr_loc "pointer expected"
+	end
+    | JCPEbinary _ -> assert false
+    | JCPEderef (ls, f) -> 
+	let t,tls = location_set env ls in
+	let fi = find_field e.jc_pexpr_loc t f in
+	fi.jc_field_info_type, JCLSderef(tls,fi)	  
+
+    | JCPEif (_, _, _)
+    | JCPEoffset_min _
+    | JCPEoffset_max _
+    | JCPEold _
+    | JCPEforall (_, _, _)
+    | JCPEcast (_, _)
+    | JCPEinstanceof (_, _)
+    | JCPEunary (_, _)
+    | JCPEassign_op (_, _, _)
+    | JCPEassign (_, _)
+    | JCPEapp (_, _)
+    | JCPEconst _ -> assert false
 
 let location env e =
   match e.jc_pexpr_node with
@@ -971,7 +1007,9 @@ let location env e =
 	let t,tls = location_set env ls in
 	let fi = find_field e.jc_pexpr_loc t f in
 	fi.jc_field_info_type, JCLderef(tls,fi)	  
+(*
     | JCPEshift (_, _)  -> assert false (* TODO *)
+*)
     | JCPEif _ 
     | JCPEcast _
     | JCPEinstanceof _
@@ -1100,7 +1138,7 @@ let decl d =
 	    let _ = Hashtbl.find logic_type_table id in
 	    assert false
 	  with Not_found ->
-	    Hashtbl.add logic_type_table id ()
+	    Hashtbl.add logic_type_table id id
 	end
     | JCPDaxiom(id,e) ->
 	let te = assertion [] e in

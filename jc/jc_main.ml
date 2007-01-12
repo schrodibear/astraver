@@ -70,15 +70,23 @@ let main () =
 	Hashtbl.iter 
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
 	  Jc_typing.structs_table;
-	(* production phase 1.1 : generation of Why memories *)
+	(* production phase 1.1 : generation of Why logic types *)
+	let d_types =
+	  Hashtbl.fold 
+	    (fun _ id acc ->
+	       Jc_interp.tr_logic_type id acc)
+	    Jc_typing.logic_type_table
+	    []
+	in	       	  
+	(* production phase 1.2 : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
 	    (fun _ (st,_) acc ->
 	       Jc_interp.tr_struct st acc)
 	    Jc_typing.structs_table
-	    []
+	    d_types
 	in	       	  
-	(* production phase 1.2 : generation of Why exceptions *)
+	(* production phase 1.3 : generation of Why exceptions *)
 	let d_exc =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->

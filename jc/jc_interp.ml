@@ -607,17 +607,15 @@ locations
 
 let rec pset before loc = 
   match loc with
-(*
-    | JCLderef(e,fi) ->
+    | JCLSderef(ls,fi) ->
 	let m = lvar (Some before) fi.jc_field_info_name in
-	LApp("pset_deref", [pset before e; m])
-    | JCLvar vi -> 
+	LApp("pset_deref", [m;pset before ls])
+    | JCLSvar vi -> 
 	let m = lvar_info (Some before) vi in
 	LApp("pset_singleton", [m])
-*)
-    | JCLSrange(vi,a,b) ->
-	let m = lvar_info (Some before) vi in
-	LApp("pset_range", [m;term (Some before) before a; term (Some before) before b])
+    | JCLSrange(ls,a,b) ->
+	let ls = pset before ls in
+	LApp("pset_range", [ls;term (Some before) before a; term (Some before) before b])
 	
 let collect_locations before (refs,mems) loc =
   match loc with
@@ -725,8 +723,7 @@ let tr_fun f spec body acc =
 		 (make_and (make_and validity instance) invariant)
 		 acc
 	   | JCTnative _ -> acc
-	   | _ -> assert false
-      )
+	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
       (assertion None "" spec.jc_fun_requires)
   in
@@ -838,6 +835,7 @@ let tr_fun f spec body acc =
       excep_behaviors acc
   in why_param::acc
 
+let tr_logic_type id acc = Type(id,[])::acc
 
 let tr_axiom id p acc = Axiom(id,assertion None "" p)::acc
 

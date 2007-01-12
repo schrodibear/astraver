@@ -118,8 +118,9 @@ type 't pset
 
 logic pset_empty : 't pset
 logic pset_singleton : 't pointer -> 't pset
+logic pset_deref : ('t,'v pointer) memory, 't pset -> 'v pset
 logic pset_union : 't pset, 't pset -> 't pset
-logic pset_range : 't pointer, int, int -> 't pset
+logic pset_range : 't pset, int, int -> 't pset
 
 logic in_pset : 't pointer, 't pset -> prop
 
@@ -131,12 +132,20 @@ axiom in_pset_singleton:
   forall q:'t pointer.
     in_pset(p,pset_singleton(q)) <-> p=q
 
+axiom in_pset_deref:
+  forall p:'v pointer. 
+  forall m:('t,'v pointer) memory.
+  forall q:'t pset.
+    in_pset(p,pset_deref(m,q)) <-> 
+	exists r:'t pointer. in_pset(r,q) and p = select(m,r)
+
 axiom in_pset_range:
   forall p:'t pointer. 
-  forall q:'t pointer.
+  forall q:'t pset.
   forall a:int. forall b:int.
     in_pset(p,pset_range(q,a,b)) <-> 
-	exists i:int. a <= i and i <= b and p=shift(q,i)
+	exists i:int. exists r:'t pointer.
+          a <= i and i <= b and in_pset(r,q) and p=shift(r,i)
 
 axiom in_pset_union:
   forall p:'t pointer. 

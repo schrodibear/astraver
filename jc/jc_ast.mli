@@ -72,7 +72,9 @@ type punary_op =
 type pexpr_node =
   | JCPEconst of const
   | JCPEvar of string
+(*
   | JCPEshift of pexpr * pexpr
+*)
   | JCPEderef of pexpr * string
   | JCPEapp of pexpr * pexpr list
   | JCPEassign of pexpr * pexpr
@@ -160,7 +162,9 @@ and term =
     }
 
 type location_set = 
-  | JCLSrange of var_info * term * term
+  | JCLSvar of var_info
+  | JCLSderef of location_set * field_info
+  | JCLSrange of location_set * term * term
 
 type location =
   | JCLvar of var_info

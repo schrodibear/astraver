@@ -19,8 +19,8 @@ Admitted.
   forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why predicate*) Definition valid (A155:Set) (a:((alloc_table) A155))
-  (p:((pointer) A155)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A171:Set) (a:((alloc_table) A171))
+  (p:((pointer) A171)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
   forall (A1:Set), ((pointer) A1) -> Z -> ((pointer) A1).
@@ -88,9 +88,20 @@ Unset Contextual Implicit.
   forall (A1:Set), ((pointer) A1) -> ((pset) A1).
 Admitted.
 
+(*Why logic*) Definition pset_deref :
+  forall (A1:Set), forall (A2:Set), ((memory) A2 ((pointer) A1))
+  -> ((pset) A2) -> ((pset) A1).
+Admitted.
+Implicit Arguments pset_deref.
+
 (*Why logic*) Definition pset_union :
   forall (A1:Set), ((pset) A1) -> ((pset) A1) -> ((pset) A1).
 Admitted.
+
+(*Why logic*) Definition pset_range :
+  forall (A1:Set), ((pset) A1) -> Z -> Z -> ((pset) A1).
+Admitted.
+Implicit Arguments pset_range.
 
 (*Why logic*) Definition in_pset :
   forall (A1:Set), ((pointer) A1) -> ((pset) A1) -> Prop.
@@ -106,6 +117,29 @@ Admitted.
    (forall (q:((pointer) A1)), ((in_pset p (pset_singleton q)) <-> p = q))).
 Admitted.
 
+(*Why axiom*) Lemma in_pset_deref :
+  forall (A1:Set), forall (A2:Set),
+  (forall (p:((pointer) A1)),
+   (forall (m:((memory) A2 ((pointer) A1))),
+    (forall (q:((pset) A2)),
+     ((in_pset p (pset_deref m q)) <->
+      (exists r:((pointer) A2), (in_pset r q) /\ p = (select m r)))))).
+Admitted.
+Implicit Arguments in_pset_deref.
+
+(*Why axiom*) Lemma in_pset_range :
+  forall (A1:Set),
+  (forall (p:((pointer) A1)),
+   (forall (q:((pset) A1)),
+    (forall (a:Z),
+     (forall (b:Z),
+      ((in_pset p (pset_range q a b)) <->
+       (exists i:Z,
+        (exists r:((pointer) A1), a <= i /\ i <= b /\ (in_pset r q) /\
+         p = (shift r i)))))))).
+Admitted.
+Implicit Arguments in_pset_range.
+
 (*Why axiom*) Lemma in_pset_union :
   forall (A1:Set),
   (forall (p:((pointer) A1)),
@@ -115,10 +149,10 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A175:Set)
-  (A174:Set) (a:((alloc_table) A174)) (m1:((memory) A174 A175))
-  (m2:((memory) A174 A175)) (l:((pset) A174))
-  := (forall (p:((pointer) A174)),
+(*Why predicate*) Definition not_assigns (A197:Set)
+  (A196:Set) (a:((alloc_table) A196)) (m1:((memory) A196 A197))
+  (m2:((memory) A196 A197)) (l:((pset) A196))
+  := (forall (p:((pointer) A196)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 

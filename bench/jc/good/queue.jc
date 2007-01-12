@@ -1,13 +1,13 @@
 
 logic type char
 
-type char_pointer = {
+type char_array = {
  char charM;
 }
 
 
 type queue = {
-  char_pointer[0..] contents;
+  char_array[0..] contents;
   integer length;
   integer first;	
   integer last;
@@ -25,7 +25,7 @@ type queue = {
 unit push(queue[0] q, char c) 
   requires !q.full;
   behavior correct_push:
-    assigns q.empty, q.full, q.last, q.contents[q.last].charM;
+    assigns q.empty, q.full, q.last, (q.contents+q.last).charM;
     ensures !q.empty && (q.contents+\old(q.last)).charM == c;
 {
   (q.contents+q.last++).charM = c;
@@ -34,7 +34,7 @@ unit push(queue[0] q, char c)
   q.full = q.first == q.last;
 }
 
-char[0] pop(queue[0] q) 
+char pop(queue[0] q) 
   requires !q.empty;
   behavior correct_pop:
     assigns q.empty, q.full, q.first;
@@ -50,9 +50,10 @@ char[0] pop(queue[0] q)
 boolean test(queue[0] q, queue[0] q1) 
   requires !q.empty;
   behavior q1_unchanged:
-   ensures \result == \old(q1.empty); 
+    assumes q != q1; // useless if separation analysis
+    ensures \result == \old(q1.empty); 
 {
-  pop(q);
+  char c = pop(q);
   return q1.empty;
 }
 
