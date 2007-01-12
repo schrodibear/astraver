@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.93 2007-01-04 10:09:49 moy Exp $ i*)
+(*i $Id: cnorm.ml,v 1.94 2007-01-12 12:28:04 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -162,8 +162,7 @@ let rec type_why e =
     | NEconstant (RealConstant x) -> 
 	let _,fk = Ctyping.float_constant_type x in 
 	Why_Logic (why_type_for_float_kind fk)
-    | NEstring_literal _ -> 
-	assert false
+    | NEstring_literal s ->  Pointer (make_zone false)
     | NEseq (e1,e2) -> 
 	type_why e2 
     | NEassign (l,e) -> 
