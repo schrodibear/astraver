@@ -18,8 +18,8 @@ type queue = {
      q.length == \offset_max(q.contents) + 1 &&
      0 <= q.first && q.first < q.length &&
      0 <= q.last && q.last < q.length &&
-     (q.full <=> q.last == (q.first-1) % q.length) &&
-     (q.empty <=> q.last == q.first) ;
+     (q.full <=> q.first == (q.last+1) % q.length) &&
+     (q.empty <=> q.first == q.last) ;
 }
 
 unit push(queue[0] q, char c) 
@@ -31,7 +31,7 @@ unit push(queue[0] q, char c)
   (q.contents+q.last++).charM = c;
   if (q.last == q.length) q.last = 0;
   q.empty = false;
-  q.full = q.first == q.last;
+  q.full = q.first == (q.last+1) % q.length;
 }
 
 char pop(queue[0] q) 
@@ -43,7 +43,7 @@ char pop(queue[0] q)
   char r = (q.contents+q.first++).charM;
   if (q.first == q.length) q.first = 0;
   q.full = false;
-  q.empty = q.last == (q.first + 1) % q.length;
+  q.empty = q.first == q.last;
   return r;
 }
 
