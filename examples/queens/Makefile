@@ -16,3 +16,13 @@ coq:
 coq.split:
 	$(WHY) $(OPT) -split-user-conj --coq --coq-tactic "admit" queens.why
 	coqide queens_why.v
+
+FTP=$$HOME/WWW/why/queens/
+
+export:
+	why2html queens.why
+	cp -f queens.why.html $(FTP)
+	cp -f slides/slides-pp.pdf $(FTP)
+	cp -f ../../bench/c/good/queens.c $(FTP)
+
+
