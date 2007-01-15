@@ -2,6 +2,7 @@
 \usepackage{url}
 
 \newcommand{\kw}[1]{\textsf{#1}}
+\newcommand{\caduceus}{\textsc{Caduceus}}
 \newcommand{\minelt}[1]{\ensuremath{\mathit{min\_elt}(#1)}}
 
 \begin{document}
@@ -19,16 +20,45 @@
 
 \section{Introduction}
 
-\begin{verbatim}
+Formal methods deal either with small properties of big programs or
+big properties of small programs. This paper describes a case study
+which definitely belongs to the latter category.
+Indeed, it details the formal verification of the following 2-lines C program:
+{\small\begin{verbatim}
 t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
 c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
-\end{verbatim}
+\end{verbatim}}
+\noindent 
+This rather obfuscated code was found on a web page gathering C signature
+programs\footnote{\url{http://www.iwriteiam.nl/SigProgC.html}} and is
+apparently due to Marcel van Kervinc. This is a standalone C program
+which reads an integer on the standard input, say $n$, and then prints another
+integer on the standard output, say $f(n)$. If $n$ is smaller than the
+machine word size (typically 32), then
+$f(n)$ appears to be the number of solutions to the famous $n$-queens
+problem, that is the number of ways to put $n$ queens on a $n\times n$
+chessboard so that they cannot beat each other. And even more
+surprisingly, this is a very efficient program to compute this number.
 
-web page gathering C signature
-programs~\footnote{\url{http://www.iwriteiam.nl/SigProgC.html}}
-Marcel van Kervinc
+As a case study for the \caduceus\ tool we are
+co-developing~\cite{caduceus}, we considered 
+the formal verification of this program. By verification, we mean here
+the mechanically-assisted proof that this program (1) does not crash, 
+(2) terminates, and (3) indeed computes the right number. We find this
+challenging since these two lines of code are at the same time idiomatic C
+programming, complex from an algorithmic point of view and highly
+efficient. Thus we can demonstrate the ability of our tools to tackle
+a wide range of verification issues without considering a too long
+program. 
 
-\section{Unobfuscation}
+This paper is organized as follows. First Section~\ref{unobf}
+``unobfuscates'' the program, unravelling the mystery of its algorithm
+and data. Then Section~\ref{caduceus} briefly introduces the \caduceus\
+tool. Finally Section~\ref{verif} details the formal verification,
+that is the logical annotations inserted in the program
+and the methods used to discharge the resulting verification conditions.
+
+\section{Unobfuscation}\label{unobf}
 
 NOTE ON \verb!d=(e-=d)&-e! NOT BEING ANSI C
 AND SPLIT INTO \verb!d=e&-e! AND \verb!e-=d!, INITIALIZATION
@@ -69,13 +99,14 @@ INTEGERS USED AS SETS (EXPLAIN); CODE REPHRASED ON SETS READS AS FOLLOWS:
 \end{obeylines}}
 
 
-\section{Formal verification}
-
-\subsection{The Caduceus tool}
+\section{The Caduceus tool}\label{caduceus}
 
 \cite{caduceus,FilliatreMarche04} \cite{why}
 
 \cite{simplify} \cite{yices} \cite{ergo} \cite{coq}
+
+
+\section{Formal verification}\label{verif}
 
 \subsection{Termination}
 
