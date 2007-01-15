@@ -9,7 +9,7 @@
 \title{Queens on a Chessboard: \\
        an Exercise in Program Verification}
 \author{Jean-Christophe Filli\^atre}
-\institute{CNRS}
+\institute{CNRS -- Universit\'e Paris Sud \\ 91405 Orsay, France}
 \maketitle
 
 \begin{abstract}
@@ -24,13 +24,21 @@ t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
 c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 \end{verbatim}
 
-\url{http://www.iwriteiam.nl/SigProgC.html}
+web page gathering C signature
+programs~\footnote{\url{http://www.iwriteiam.nl/SigProgC.html}}
+Marcel van Kervinc
 
 \section{Unobfuscation}
 
+NOTE ON \verb!d=(e-=d)&-e! NOT BEING ANSI C
+AND SPLIT INTO \verb!d=e&-e! AND \verb!e-=d!, INITIALIZATION
+\verb!d=0! NOT NEEDED ANYMORE
+
+INPUT/OUTPUT REMOVED AND MAIN REPLACED BY A INT TO INT FUNCTION
+
 \begin{verbatim}
 int t(int a, int b, int c) {
-  int d=0, e=a&~b&~c, f=1;
+  int d, e=a&~b&~c, f=1;
   if (a)
     for (f=0; d=e&-e; e-=d)
       f += t(a-d,(b+d)*2,(c+d)/2));
@@ -40,6 +48,8 @@ int queens(int q) {
   return t(~(~0<<q),0,0);
 }
 \end{verbatim}
+
+INTEGERS USED AS SETS (EXPLAIN); CODE REPHRASED ON SETS READS AS FOLLOWS:
 
 {\begin{obeylines}
   \kw{int} $t$($a$, $b$, $c$) 
@@ -62,6 +72,10 @@ int queens(int q) {
 \section{Formal verification}
 
 \subsection{The Caduceus tool}
+
+\cite{caduceus,FilliatreMarche04} \cite{why}
+
+\cite{simplify} \cite{yices} \cite{ergo} \cite{coq}
 
 \subsection{Termination}
 
