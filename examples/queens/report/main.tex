@@ -1,13 +1,20 @@
-\documentclass[a4paper,12pt]{article}
-\usepackage{fullpage}
+\documentclass[a4paper]{llncs}
+%\usepackage{fullpage}
+
+\newcommand{\kw}[1]{\textsf{#1}}
+\newcommand{\minelt}[1]{\ensuremath{\mathit{min\_elt}(#1)}}
+
 \begin{document}
 
 \title{Queens on a Chessboard: \\
        an Exercise in Program Verification}
 \author{Jean-Christophe Filli\^atre}
+\institute{CNRS}
 \maketitle
+
 \begin{abstract}
-  
+  This article details the formal verification of a 2-lines C program
+  which computes the number of solutions to the $N$-queens problem.
 \end{abstract}
 
 \section{Introduction}
@@ -17,8 +24,50 @@ t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
 c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 \end{verbatim}
 
+\section{Unobfuscation}
+
+\begin{verbatim}
+int t(int a, int b, int c) {
+  int d=0, e=a&~b&~c, f=1;
+  if (a)
+    for (f=0; d=e&-e; e-=d)
+      f += t(a-d,(b+d)*2,(c+d)/2));
+  return f;
+}
+int queens(int q) {
+  return t(~(~0<<q),0,0);
+}
+\end{verbatim}
+
+{\begin{obeylines}
+  \kw{int} $t$($a$, $b$, $c$) 
+  ~~ \kw{if} $a \not= \emptyset$ 
+  ~~~~ $e$ $\leftarrow$ $(a \backslash  b) \backslash c$ 
+  ~~~~ $f$ $\leftarrow$ 0 
+  ~~~~ \kw{while} $e \not=\emptyset$ 
+  ~~~~~~ $d$ $\leftarrow$ $\minelt{e}$ 
+  ~~~~~~ $f$ $\leftarrow$ $f$ $+$ $t$($a\backslash \{d\}$, $S(b\cup\{d\})$, $P(c\cup\{d\})$) 
+  ~~~~~~ $e$ $\leftarrow$ $e \backslash  \{d\}$ 
+  ~~~~ \kw{return} $f$ 
+  ~~ \kw{else} 
+  ~~~~ \kw{return} $1$ 
+  ~~ 
+  \kw{int} $f$($n$) 
+  ~~ \kw{return} $t$($\{0,1,\dots,n-1\}$, $\emptyset$, $\emptyset$)
+\end{obeylines}}
+
+
+\section{Formal verification}
+
+\subsection{The Caduceus tool}
+
+\subsection{Termination}
+
+\subsection{Correctness}
+
 \section{Conclusion}
 
+\nocite{*}
 \bibliographystyle{plain}
 \bibliography{./biblio}
 
