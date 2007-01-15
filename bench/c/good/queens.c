@@ -128,7 +128,7 @@ int t1(int a, int b, int c){
 
 /****************************************************************************/
 
-// t2: termination of the for loop: card(iset(a)) decreases
+// t2: termination of the recursive function: card(iset(a)) decreases
 int t2(int a, int b, int c){
   int d, e=a&~b&~c, f=1;
   //@ label L
@@ -182,6 +182,17 @@ int k;    // current row in the current solution
 /*@ axiom partial_solution_eq_prefix:
   @   \forall int *t, int *u; \forall int k;
   @     partial_solution(k,t) => eq_prefix(t,u,k) => partial_solution(k,u)
+  @*/
+
+/*@ predicate lt_sol(int *s1, int *s2) {
+  @   \exists int i; 0 <= i < N() && eq_prefix(s1, s2, i) && s1[i] < s2[i]
+  @ } 
+  @*/
+
+/* s[a..b[ is sorted for lt_sol */
+/*@ predicate sorted(int **s, int a, int b) {
+  @   \forall int i, int j; a <= i < j < b => lt_sol(s[i], s[j])
+  @ } 
   @*/
 
 /*@ requires x != 0
