@@ -84,12 +84,12 @@ we need to modify the code. Fortunately, this is quite easy:
 since \verb!d! is initialized to 0 we can move the
 assignment \verb!e-=d! to the end of the loop body and save the
 initialization. We have even reduced the size of the original code.
-
-
-
-INPUT/OUTPUT REMOVED AND MAIN REPLACED BY A INT TO INT FUNCTION
-
-We end up with the code given in Figure~\ref{fig:code}.
+The second modification we make is to replace the \texttt{main}
+function with a \texttt{queens} function from \texttt{int} to
+\texttt{int}, since \caduceus\ does not support the \texttt{scanf} and
+\texttt{printf} library functions.
+We end up with the code given in Figure~\ref{fig:code}, which is the
+one we prove correct in this paper.
 \begin{figure}[t]
   \centering\hrulefill\vspace{-1em}
 \begin{verbatim}
@@ -111,6 +111,8 @@ int queens(int q) {
 
 INTEGERS USED AS SETS (EXPLAIN); CODE REPHRASED ON SETS READS AS FOLLOWS:
 
+\begin{figure}[t]
+  \hrulefill\vspace{-0.2em}
 {\begin{obeylines}
   \kw{int} $t$($a$, $b$, $c$) 
   ~~ \kw{if} $a \not= \emptyset$ 
@@ -124,9 +126,13 @@ INTEGERS USED AS SETS (EXPLAIN); CODE REPHRASED ON SETS READS AS FOLLOWS:
   ~~ \kw{else} 
   ~~~~ \kw{return} $1$ 
   ~~ 
-  \kw{int} $f$($n$) 
+  \kw{int} \textit{queens}($n$) 
   ~~ \kw{return} $t$($\{0,1,\dots,n-1\}$, $\emptyset$, $\emptyset$)
 \end{obeylines}}
+\vspace{-0.6em}\hrulefill\vspace{-1em}
+  \caption{Abstract version of the code}
+  \label{fig:abstract}
+\end{figure}
 
 
 \section{The Caduceus tool}\label{caduceus}
