@@ -55,17 +55,43 @@ This paper is organized as follows. First Section~\ref{unobf}
 ``unobfuscates'' the program, unravelling the mystery of its algorithm
 and data. Then Section~\ref{caduceus} briefly introduces the \caduceus\
 tool. Finally Section~\ref{verif} details the formal verification,
-that is the logical annotations inserted in the program
+namely the logical annotations inserted in the program
 and the methods used to discharge the resulting verification conditions.
 
 \section{Unobfuscation}\label{unobf}
 
-NOTE ON \verb!d=(e-=d)&-e! NOT BEING ANSI C
-AND SPLIT INTO \verb!d=e&-e! AND \verb!e-=d!, INITIALIZATION
-\verb!d=0! NOT NEEDED ANYMORE
+Before entering the formal verification process, we first unravel the
+mystery behind this obfuscated code. The code is composed of two
+parts: a recursive function \texttt{t}, which takes three integers as
+arguments and returns an integer; and a main function which reads an
+integer from the standard input, makes a call to the function
+\texttt{t} and prints the result on the standard output.
+With type declarations and a bit of indentation, the function
+\texttt{t} reads as follows:
+\begin{verbatim}
+int t(int a, int b, int c) {
+  int d=0,e=a&~b&~c,f=1;
+  if(a) for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(c+d)/2));
+  return f;
+}
+\end{verbatim}
+The assignment \verb!d=(e-=d)&-e! actually does not conform with the
+ANSI norm, because it assumes that the inner assignment \verb!e-=d! is
+performed before the evaluation of \verb!-e!. This is not guaranteed
+and the compiler may freely choose between the two possible evaluation
+strategies. Since the \caduceus\ tool only deals with ANSI C programs,
+we need to modify the code. Fortunately, this is quite easy:
+since \verb!d! is initialized to 0 we can move the
+assignment \verb!e-=d! to the end of the loop body and save the
+initialization. We have even reduced the size of the original code.
+
+
 
 INPUT/OUTPUT REMOVED AND MAIN REPLACED BY A INT TO INT FUNCTION
 
+We end up with the code given in Figure~\ref{fig:code}.
+\begin{figure}[t]
+  \centering\hrulefill\vspace{-1em}
 \begin{verbatim}
 int t(int a, int b, int c) {
   int d, e=a&~b&~c, f=1;
@@ -77,7 +103,11 @@ int t(int a, int b, int c) {
 int queens(int q) {
   return t(~(~0<<q),0,0);
 }
-\end{verbatim}
+\end{verbatim}  
+\vspace{-1.2em}\hrulefill\vspace{-1em}
+  \caption{The C code to be verified}
+  \label{fig:code}
+\end{figure}
 
 INTEGERS USED AS SETS (EXPLAIN); CODE REPHRASED ON SETS READS AS FOLLOWS:
 
