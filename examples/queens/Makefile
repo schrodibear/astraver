@@ -22,6 +22,7 @@ FTP=$$HOME/WWW/why/queens/
 export:
 	why2html queens.why
 	cp -f queens.why.html $(FTP)
+	cp -f queens_why.v $(FTP)
 	cp -f slides/slides-pp.pdf $(FTP)
 	cp -f ../../bench/c/good/queens.c $(FTP)
 

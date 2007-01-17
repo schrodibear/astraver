@@ -176,6 +176,7 @@ let queens () =
   { s = 0 and k = 0 }
   count below_N empty empty
   { result = s and
+    sorted(sol, 0, s) and
     forall t:int arr. 
       solution(t) <-> (exists i:int. 0 <= i < s and eq_sol(t, acc(sol,i)))
   }

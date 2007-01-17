@@ -480,13 +480,26 @@ stated in these annotations:
   point of \texttt{t} with a column for the row $k$ taken among the
   elements of $e$ already considered by the \texttt{for} loop.
 \end{itemize}
+We end up with 46 lines of annotations (not including the preliminary
+definitions and axiomatizations!) for 2 lines of code. This huge
+ratio must be considered as extreme: we are proving a very complex
+property of a very complex and very small code. This is obviously not
+the case in all formal verifications.
 
 \subsubsection{Discharging the verification conditions.}
-
-
-57 FOR T : 44 AUTOMATICALLY PROVED / 13 MANUALLY PROVED
-
-16 FOR QUEENS : ALL PROVED AUTOMATICALLY
+When \caduceus\ is run on the resulting annotated source code, we get
+57 verification conditions for \texttt{t} and 16 for
+\texttt{queens}. Regarding the latter, all verification conditions are
+automatically discharged by \simplify, within a few seconds.
+Regarding the former, only 44 verification conditions are
+automatically discharged, either by \simplify\ or \ergo.
+The remaining 13 verification conditions were discharged manually,
+using the Coq proof assistant, but with the help of the ATPs
+\simplify\ and \ergo\ called from Coq on some subgoals. These Coq
+proof scripts amount to 600 lines and represent several hours of
+work. Though these tools could be better integrated, this
+collaboration between interactive and automatic provers can be
+considered as successful.
 
 \section{Conclusion}
 
