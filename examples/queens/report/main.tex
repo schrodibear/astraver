@@ -410,6 +410,14 @@ the $N$ rows:
 \begin{verbatim}
 //@ predicate solution(int* s) { partial_solution(N(), s) }
 \end{verbatim}
+We also introduce two handy predicates \texttt{eq\_prefix} and
+\texttt{eq\_sol} to state that two solutions coincide up a given row:
+\begin{verbatim}
+/*@ predicate eq_prefix(int *t, int *u, int i) {
+  @   \forall int k; 0 <= k < i => t[k]==u[k]
+  @ } */
+//@ predicate eq_sol(int *t, int *u) { eq_prefix(t, u, N()) } 
+\end{verbatim}
 Finally we can give \texttt{store\_solution} a specification:
 \begin{verbatim}
 /*@ requires solution(col)
@@ -428,6 +436,50 @@ we find only solutions. We still need to show that we find \emph{all}
 solutions, without duplicates.
 
 \subsubsection{All solutions, without duplicates.}
+To ensure that we find all solutions, we give \texttt{queens} the
+following postcondition:
+\begin{verbatim}
+/*@ ensures 
+  @   sorted(sol,0,s) &&
+  @   \forall int* t; solution(t) 
+  @     <=> (\exists int i; 0<=i<\result && eq_sol(t,sol[i]))
+  @*/
+int queens(int n);
+\end{verbatim}
+In other words, an array is a solution if and only if it appears in
+\texttt{sol} when we are done, and moreover \texttt{sol} is a sorted
+array so it does not contain duplicated solutions. To define the
+\texttt{sorted} predicate, we introduce a natural lexicographic order
+over solutions, as follows:
+\begin{verbatim}
+/*@ predicate lt_sol(int *s1, int *s2) {
+  @   \exists int i; 0<=i<N() && eq_prefix(s1,s2,i) && s1[i]<s2[i]
+  @ } */
+/*@ predicate sorted(int **s, int a, int b) {
+  @   \forall int i, int j; a <= i < j < b => lt_sol(s[i], s[j])
+  @ } */
+\end{verbatim}
+
+\subsubsection{Remaining annotations.} 
+We are now done with the annotations ensuring the correctness of the
+program. But to establish the verification conditions, we still need
+to give \texttt{t} a specification and its loop an invariant. The
+fully annotated code is given in appendix. Here are the key properties
+stated in these annotations:
+\begin{itemize}
+\item The precondition of \texttt{t} requires that \texttt{col} must be a
+  partial solution up to row $k$, and that \texttt{a},
+  \texttt{b} and \texttt{c} are consistent with \texttt{col}, as
+  explained in Section~\ref{unobf}.
+\item The postcondition of \texttt{t} ensures that the set of
+  solutions built by \texttt{t} is sorted and contains exactly the 
+  solutions extending the partial solution given at the entry point.
+\item The loop invariant states that \texttt{sol} remains sorted and
+  that the set of solutions built since the beginning of the loop are
+  exactly those extending the partial solution given at the entry
+  point of \texttt{t} with a column for the row $k$ taken among the
+  elements of $e$ already considered by the \texttt{for} loop.
+\end{itemize}
 
 \subsubsection{Discharging the verification conditions.}
 
@@ -443,5 +495,69 @@ OVERFLOWS
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{./biblio}
+
+\appendix
+\section{Annotated Source Code}\label{app:code}
+{\footnotesize
+\begin{verbatim}
+/*@ requires
+  @   0 <= k && k + card(iset(a)) == N() && 0 <= s &&
+  @   pre_a:: (\forall int i; in_(i,iset(a)) <=> 
+  @            (0<=i<N() && \forall int j; 0<=j<k => i != col[j])) &&
+  @   pre_b:: (\forall int i; i>=0 => (in_(i,iset(b)) <=> 
+  @            (\exists int j; 0<=j<k && col[j] == i+j-k))) &&
+  @   pre_c:: (\forall int i; i>=0 => (in_(i,iset(c)) <=> 
+  @            (\exists int j; 0<=j<k && col[j] == i+k-j))) &&
+  @   partial_solution(k, col)
+  @ assigns
+  @   col[k..], s, k, sol[s..][..]
+  @ ensures  
+  @   \result == s - \old(s) && \result >= 0 && k == \old(k) &&
+  @   sorted(sol, \old(s), s) &&
+  @   \forall int* t; ((solution(t) && eq_prefix(col,t,k)) <=>
+  @                    (\exists int i; \old(s)<=i<s && eq_sol(t, sol[i])))
+  @*/
+int t(int a, int b, int c){
+  int d, e=a&~b&~c, f=1;
+  //@ label L
+  if (a)
+    /*@ invariant 
+      @   included(iset(e),\at(iset(e),L)) &&
+      @   f == s - \at(s,L) && f >= 0 && k == \old(k) && 
+      @   partial_solution(k, col) &&
+      @   sorted(sol, \at(s,L), s) &&
+      @   \forall int *t; 
+      @     (solution(t) && 
+      @      \exists int di; in_(di, diff(\at(iset(e),L), iset(e))) &&
+      @          eq_prefix(col,t,k) && t[k]==di) <=>
+      @     (\exists int i; \at(s,L)<=i<s && eq_sol(t, sol[i]))
+      @ loop_assigns
+      @   col[k..], s, k, sol[s..][..]
+      @*/
+    for (f=0; d=e&-e; e-=d) {
+      //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(a)) 
+      //@ ghost col[k] = min_elt(d);
+      //@ ghost k++;                
+      f += t(a-d, (b+d)*2, (c+d)/2);
+      //@ ghost k--;                
+    }
+  else 
+    //@ ghost store_solution();
+  return f;
+}
+
+/*@ requires 
+  @   n == N() && s == 0 && k == 0
+  @ ensures 
+  @   \result == s &&
+  @   sorted(sol, 0, s) &&
+  @   \forall int* t; 
+  @      solution(t) <=> (\exists int i; 0<=i<\result && eq_sol(t,sol[i]))
+  @*/
+int queens(int n) {
+  return t(~(~0<<n),0,0);
+}
+\end{verbatim}
+}
 
 \end{document}
