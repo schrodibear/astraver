@@ -274,11 +274,40 @@ This new axiomatization is 30 lines long. Again it could be part of some
 
 \subsection{Termination}
 
+We now start the verification process itself by showing that the
+program terminates. This is some kind of a warmup before the
+correctness verification of Section~\ref{correctness}.
+
 \subsubsection{Termination of the \texttt{for} loop.}
+The termination of the \texttt{for} loop is easy to prove.
+Since we are removing elements from \texttt{e} one by one until it
+empties, the cardinal of \texttt{e} is the obvious variant for this
+loop. It is declared with the following annotation:
+\begin{verbatim}
+    /*@ variant card(iset(e)) */
+    for (f=0; d=e&-e; e-=d) f+=t(a-d,(b+d)*2,(c+d)/2);
+\end{verbatim}
+Two verification conditions are generated: one to ensure that the
+variant is nonnegative and another one to ensure that the variant
+decreases at each run of the loop body. Both are automatically
+discharged by Simplify.
 
 \subsubsection{Termination of the recursive function.}
+Proving the termination of the recursive function \texttt{t} is more
+tricky. There is also an obvious variant, namely the cardinal of
+\texttt{a}, but showing that it decreases is not as easy as in the
+previous case. First \caduceus\ does not support variants for
+recursive functions and thus we have to introduce the corresponding
+assertions manually, rigth before the recursive call:
+\begin{verbatim}
+    for (f=0; d=e&-e; e-=d) {
+      //@ assert card(iset(a-d)) < card(iset(a))
+      f+=t2(a-d,(b+d)*2,(c+d)/2); 
+    }
+\end{verbatim}
 
-\subsection{Correctness}
+
+\subsection{Correctness}\label{correctness}
 
 \section{Conclusion}
 
