@@ -4,6 +4,8 @@
 
 \newcommand{\kw}[1]{\textsf{#1}}
 \newcommand{\caduceus}{\textsc{Caduceus}}
+\newcommand{\simplify}{\textsc{Simplify}}
+\newcommand{\ergo}{\textsc{Ergo}}
 \newcommand{\minelt}[1]{\ensuremath{\mathit{min\_elt}(#1)}}
 
 \begin{document}
@@ -199,7 +201,7 @@ for $n=8$ and 3 rows already set.
 
 \cite{caduceus,FilliatreMarche04} \cite{why}
 
-\cite{simplify} \cite{yices} \cite{ergo} \cite{coq}
+\simplify~\cite{simplify} \cite{yices} \ergo~\cite{ergo} \cite{coq}
 
 % To do so, we are going to annotate the source code with logical
 % assertions, run \caduceus\ to get verification conditions and
@@ -225,7 +227,7 @@ program variables. To do so, we proceed in two steps. First we
 introduce an axiomatization of finite sets of integers. Then we make
 connections between C integers and these abstract sets.
 
-\subsubsection{Abstract Finite Sets.}
+\subsubsection{Abstract finite sets.}
 We introduce an abstract data type \texttt{iset} for finite sets of
 integers with the following \caduceus\ declaration:
 \begin{verbatim}
@@ -253,8 +255,7 @@ of one element (\texttt{add} and
 This axiomatization is 66 lines long and could obviously be a 
 \caduceus\ library.
 
-\subsubsection{C Integers as Finite Sets.}
-
+\subsubsection{C integers as finite sets.}
 Next we make the connection between C operations over integers and
 abstract sets. This is introduced by a function symbol \texttt{iset}
 which interprets an integer as a finite set:
@@ -290,7 +291,7 @@ loop. It is declared with the following annotation:
 Two verification conditions are generated: one to ensure that the
 variant is nonnegative and another one to ensure that the variant
 decreases at each run of the loop body. Both are automatically
-discharged by Simplify.
+discharged by \simplify.
 
 \subsubsection{Termination of the recursive function.}
 Proving the termination of the recursive function \texttt{t} is more
@@ -298,16 +299,142 @@ tricky. There is also an obvious variant, namely the cardinal of
 \texttt{a}, but showing that it decreases is not as easy as in the
 previous case. First \caduceus\ does not support variants for
 recursive functions and thus we have to introduce the corresponding
-assertions manually, rigth before the recursive call:
+assertion manually, rigth before the recursive call:
 \begin{verbatim}
     for (f=0; d=e&-e; e-=d) {
       //@ assert card(iset(a-d)) < card(iset(a))
       f+=t2(a-d,(b+d)*2,(c+d)/2); 
     }
 \end{verbatim}
-
+Two verification conditions are generated. 
+Unfortunately they cannot be discharged automatically, because there
+is some information missing. Indeed we must be able to prove that
+\texttt{d} belongs to the set \texttt{a} for the cardinal to decrease,
+and this is not immediate. To get this property we need the invariant
+that the set \texttt{e} remains included in its initial value, which
+is itself trivially included in \texttt{a}. For that purpose we
+introduce the following loop invariant:
+\begin{verbatim}
+  //@ label L
+  if (a)
+    /*@ invariant included(iset(e),\at(iset(e),L)) */
+    for (f=0; d=e&-e; e-=d) {
+\end{verbatim}
+where the label \texttt{L} is used to denote the value of
+\verb!iset(e)! before entering the loop, as \verb!\at(iset(e),L)!.
+Then all verification conditions are automatically discharged by \simplify.
 
 \subsection{Correctness}\label{correctness}
+
+We now enter the process of verifying the correctness of the program,
+i.e. the property that it computes the right number of solutions. As
+we have seen, the program is building the solutions one by one. Thus
+we need to prove that it finds \emph{all} solutions, \emph{only}
+solutions and that it does \emph{not find twice} the same
+solution. There is here a major difficulty: the program is not storing
+anything, not even the current solution being built. So how can we
+state properties about the solutions being found? 
+
+\subsubsection{Ghost code.} The solution is to
+use \emph{ghost code}, that is additional code which is not
+participating to the program computation but which can access the
+program data. We first introduce ghost global variables to record the 
+current solution being built:
+\begin{verbatim}
+//@ ghost int* col;
+//@ ghost int k;
+\end{verbatim}
+The ghost variable \texttt{k} is the next row to be set and the ghost
+array \texttt{col} records the columns assigned to the queens on the
+various rows. Similarly we introduce ghost variables to store the list of
+all solutions we have found so far:
+\begin{verbatim}
+//@ ghost int** sol;
+//@ ghost int s;
+\end{verbatim}
+The ghost array \texttt{sol} contains all the solutions, each
+solution begin an array similar to \texttt{col}.
+And the ghost variable \texttt{s} is the next empty slot in \texttt{sol}. 
+Using these four ghost variables, we can instrument the program with
+ghost code to record the solutions:
+\begin{verbatim}
+int t(int a, int b, int c){
+  int d, e=a&~b&~c, f=1;
+  if (a)
+    for (f=0; d=e&-e; e-=d) {
+      //@ ghost col[k]=min_elt(d);
+      //@ ghost k++;
+      f += t(a-d, (b+d)*2, (c+d)/2);
+      //@ ghost k--;
+    }
+  else 
+    //@ ghost store_solution();
+  return f;
+}
+\end{verbatim}
+The particular comment \verb!//@ ghost! introduces a ghost statement,
+which is similar to a traditional C statement, but may only modify
+ghost variables and does not generate verification conditions
+regarding pointers validity (ghost arrays are infinite).
+The function \texttt{store\_solution} is a ghost
+function\footnote{There is not yet a notion of ghost function in
+  \caduceus\ so we use a usual C prototype; it is thus our
+  responsibility to check that it is not called in the normal code,
+  which is here obvious.} that we introduce to record a solution when
+it is found and which we now describe.
+
+\subsubsection{Solutions.}
+To give \texttt{store\_solution} a spcification, we need to introduce
+the notion of solution to the $N$-queens problems. It is convenient to
+introduce the size of the chessboard as a logical constant:
+\begin{verbatim}
+//@ logic int N()
+\end{verbatim}
+It is also convenient to start defining the more general notion of
+\emph{partial solution}, for the first $k$ rows:
+\begin{verbatim}
+/*@ predicate partial_solution(int k, int* s) {
+  @   \forall int i; 0 <= i < k => 
+  @     0 <= s[i] < N() &&
+  @     (\forall int j; 0 <= j < i => s[i] != s[j] &&
+  @                                   s[i]-s[j] != i-j &&
+  @                                   s[i]-s[j] != j-i)
+  @ } */
+\end{verbatim}
+$\mathtt{partial\_solution}(k,s)$ states that the array $s$ contains
+column assignements for the first $k$ queens on the first $k$
+rows. Each column $s[i]$ must be in the valid range $[0,N[$ and two
+queens on two different rows $i$ and $j$ must not beat each other.
+Then we can define the notion of solution, as a partial solution for
+the $N$ rows:
+\begin{verbatim}
+//@ predicate solution(int* s) { partial_solution(N(), s) }
+\end{verbatim}
+Finally we can give \texttt{store\_solution} a specification:
+\begin{verbatim}
+/*@ requires solution(col)
+  @ assigns  s, sol[s][0..N()-1]
+  @ ensures  s==\old(s)+1 && eq_sol(sol[\old(s)], col)
+  @*/
+void store_solution();
+\end{verbatim}
+It has a precondition which enforces the user to show that
+\texttt{col} contains a valid solution, an \texttt{assigns} clause
+specifying that it only modifies \texttt{s} and the \texttt{s}-th row
+of \texttt{sol}, and a postcondition ensuring that \texttt{s} has been
+incremented and \texttt{col} stored in \verb!sol[s]!.
+With this precondition, \texttt{store\_solution} already ensures that
+we find only solutions. We still need to show that we find \emph{all}
+solutions, without duplicates.
+
+\subsubsection{All solutions, without duplicates.}
+
+\subsubsection{Discharging the verification conditions.}
+
+
+57 FOR T : 44 AUTOMATICALLY PROVED / 13 MANUALLY PROVED
+
+16 FOR QUEENS : ALL PROVED AUTOMATICALLY
 
 \section{Conclusion}
 
