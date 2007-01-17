@@ -25,7 +25,8 @@ Formal methods deal either with small properties of big programs or
 big properties of small programs. This paper describes a case study
 which definitely belongs to the latter category.
 Indeed, it details the formal verification of the following 2-lines C program:
-{\small\begin{verbatim}
+{\small%
+\begin{verbatim}
 t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
 c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 \end{verbatim}}
@@ -58,6 +59,9 @@ and data. Then Section~\ref{caduceus} briefly introduces \caduceus.
 Finally Section~\ref{verif} details the formal verification,
 namely the logical annotations inserted in the program
 and the methods used to discharge the resulting verification conditions.
+The annotated source code and the proofs are available online at
+\url{http://why.lri.fr/queens/}.
+
 
 \section{Unobfuscation}\label{unobf}
 
@@ -134,7 +138,8 @@ Patricia trees~\cite{patricia} implementations in particular.
 Another trick is the computation of the set
 $\{0,1,\dots,\mathtt{n}-1\}$ as \verb!~(~0<<n)!. Finally,
 multiplication by 2 (resp. division by 2) is used to add 1 (resp.
-subtract 1) to each element of a set; we write $S$ and $P$ these two
+subtract 1) to each element of a set; we write $\mathit{succ}$ and
+$\mathit{pred}$ these two 
 set operations in the following. We can thus write a more
 abstract version of the code which only deals with finite sets. It is
 displayed in Figure~\ref{fig:abstract}.
@@ -148,7 +153,7 @@ displayed in Figure~\ref{fig:abstract}.
   ~~~~ $f$ $\leftarrow$ 0 
   ~~~~ \kw{while} $e \not=\emptyset$ 
   ~~~~~~ $d$ $\leftarrow$ $\minelt{e}$ 
-  ~~~~~~ $f$ $\leftarrow$ $f$ $+$ $t$($a\backslash \{d\}$, $S(b\cup\{d\})$, $P(c\cup\{d\})$) 
+  ~~~~~~ $f$ $\leftarrow$ $f$ $+$ $t$($a\backslash \{d\}$, $\mathit{succ}(b\cup\{d\})$, $\mathit{pred}(c\cup\{d\})$) 
   ~~~~~~ $e$ $\leftarrow$ $e \backslash  \{d\}$ 
   ~~~~ \kw{return} $f$ 
   ~~ \kw{else} 
@@ -178,8 +183,9 @@ Then the next rows are considered by a recursive call to $t$ with $a$,
 $b$ and $c$ being updated according to the choice of the column $d$
 for the current row: $d$ is removed from the set of possible columns
 ($a\backslash\{d\}$), added to the set of ascending diagonals which is
-shifted ($S(b\cup\{d\})$, and similarly  added to the set of
-descending diagonals which is shifted the other way ($P(c\cup\{d\})$).
+shifted ($\mathit{succ}(b\cup\{d\})$, and similarly  added to the set of
+descending diagonals which is shifted the other way
+($\mathit{pred}(c\cup\{d\})$). 
 The values of $a$, $b$ and $c$ are illustrated in Figure~\ref{fig:abc}
 for $n=8$ and 3 rows already set.
 
@@ -195,10 +201,82 @@ for $n=8$ and 3 rows already set.
 
 \cite{simplify} \cite{yices} \cite{ergo} \cite{coq}
 
+% To do so, we are going to annotate the source code with logical
+% assertions, run \caduceus\ to get verification conditions and
+% discharge them with one or several provers.
 
 \section{Formal Verification}\label{verif}
 
+As stated in the introduction, we want to show that the C program in
+Figure~\ref{fig:code} is correct using \caduceus. More precisely, we
+are going to show that (1) the program does not crash; (2)
+it terminates; and (3) it computes the right number.
+The first property is easily obtained, since the program is not using
+pointers or arrays. Thus the only threat in the code is the division and
+\caduceus\ produces the corresponding verification condition $2\not=0$
+which is obviously discharged. The other two properties are much more
+difficult to establish.
+
+\subsection{Integers Modelling Finite Sets}
+
+We start with an abstraction of integers as finite sets, in order to
+annotate the code with assertions about the sets represented by the
+program variables. To do so, we proceed in two steps. First we
+introduce an axiomatization of finite sets of integers. Then we make
+connections between C integers and these abstract sets.
+
+\subsubsection{Abstract Finite Sets.}
+We introduce an abstract data type \texttt{iset} for finite sets of
+integers with the following \caduceus\ declaration:
+\begin{verbatim}
+//@ type iset
+\end{verbatim}
+It is a purely logical data type which is axiomatized through a set of
+constants, function symbols, predicates and axioms. We give here a small 
+excerpt of this axiomatization. It is based on a
+membership predicate  introduced as follows:
+\begin{verbatim}
+//@ predicate in_(int x, iset s)
+\end{verbatim}
+As we can notice, this is an abstract predicate. Then we can introduce
+the various set operations. For instance, the empty set is introduced
+with the following two declarations:
+\begin{verbatim}
+//@ logic iset empty()
+//@ axiom empty_def : \forall int i; !in_(i,empty())
+\end{verbatim}
+Similarly we introduce set inclusion (\texttt{included}), cardinal
+(\texttt{card}), addition and removal
+of one element (\texttt{add} and 
+\texttt{remove}), set difference (\texttt{diff}), smallest element
+(\texttt{min\_elt}) and the \texttt{succ} and \texttt{pred} operations.
+This axiomatization is 66 lines long and could obviously be a 
+\caduceus\ library.
+
+\subsubsection{C Integers as Finite Sets.}
+
+Next we make the connection between C operations over integers and
+abstract sets. This is introduced by a function symbol \texttt{iset}
+which interprets an integer as a finite set:
+\begin{verbatim}
+//@ logic iset iset(int x)
+\end{verbatim}
+Then several axioms give interpretations to the C operations.
+Here is one example:
+\begin{verbatim}
+/*@ axiom iset_c_min_elt :
+  @   \forall int x; x != 0 =>
+  @      iset(x&-x) == singleton(min_elt(iset(x)))
+  @*/
+\end{verbatim}
+This new axiomatization is 30 lines long. Again it could be part of some
+\caduceus\ library.
+
 \subsection{Termination}
+
+\subsubsection{Termination of the \texttt{for} loop.}
+
+\subsubsection{Termination of the recursive function.}
 
 \subsection{Correctness}
 
