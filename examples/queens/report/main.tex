@@ -1,5 +1,6 @@
 \documentclass[a4paper]{llncs}
 \usepackage{url}
+\usepackage{epsfig}
 
 \newcommand{\kw}[1]{\textsf{#1}}
 \newcommand{\caduceus}{\textsc{Caduceus}}
@@ -40,7 +41,7 @@ problem, that is the number of ways to put $n$ queens on a $n\times n$
 chessboard so that they cannot beat each other. And even more
 surprisingly, this is a very efficient program to compute this number.
 
-As a case study for the \caduceus\ tool we are
+As a case study for \caduceus, a tool we are
 co-developing~\cite{caduceus}, we considered 
 the formal verification of this program. By verification, we mean here
 the mechanically-assisted proof that this program (1) does not crash, 
@@ -53,8 +54,8 @@ program.
 
 This paper is organized as follows. First Section~\ref{unobf}
 ``unobfuscates'' the program, unravelling the mystery of its algorithm
-and data. Then Section~\ref{caduceus} briefly introduces the \caduceus\
-tool. Finally Section~\ref{verif} details the formal verification,
+and data. Then Section~\ref{caduceus} briefly introduces \caduceus.
+Finally Section~\ref{verif} details the formal verification,
 namely the logical annotations inserted in the program
 and the methods used to discharge the resulting verification conditions.
 
@@ -79,7 +80,7 @@ The assignment \verb!d=(e-=d)&-e! actually does not conform with the
 ANSI norm, because it assumes that the inner assignment \verb!e-=d! is
 performed before the evaluation of \verb!-e!. This is not guaranteed
 and the compiler may freely choose between the two possible evaluation
-strategies. Since the \caduceus\ tool only deals with ANSI C programs,
+strategies. Since \caduceus\ only deals with ANSI C programs,
 we need to modify the code. Fortunately, this is quite easy:
 since \verb!d! is initialized to 0 we can move the
 assignment \verb!e-=d! to the end of the loop body and save the
@@ -100,8 +101,8 @@ int t(int a, int b, int c) {
       f += t(a-d,(b+d)*2,(c+d)/2));
   return f;
 }
-int queens(int q) {
-  return t(~(~0<<q),0,0);
+int queens(int n) {
+  return t(~(~0<<n),0,0);
 }
 \end{verbatim}  
 \vspace{-1.2em}\hrulefill\vspace{-1em}
@@ -109,7 +110,34 @@ int queens(int q) {
   \label{fig:code}
 \end{figure}
 
-INTEGERS USED AS SETS (EXPLAIN); CODE REPHRASED ON SETS READS AS FOLLOWS:
+We now explain how the program works. This is a backtracking algorithm
+which fills the rows of the chessboard one at a time.
+%--- there is no better way to solve the $N$-queens problem --- 
+More precisely, each call to \texttt{t} enumerates all possible
+positions for a queen on the current row with the \texttt{for} loop
+and, for each of them, recursively calls \texttt{t} to set the next
+rows.  The number of solutions is accumulated in \texttt{f} and
+returned.  The key idea is the use of integers as \emph{sets} or
+equivalently as \emph{bit vectors}: $i$ belongs to the ``set'' $x$ if and
+only if the $i$-th bit of $x$ is set.
+Following this idea, the program variables
+\texttt{a}, \texttt{b}, \texttt{c}, \texttt{d} and \texttt{e} must
+be interpreted as subsets of $\{0,1,\dots,n-1\}$.
+Then almost all computations in this program are actually to be
+understood as set operations. Some of them are obvious: \verb!a&~b&~c!
+computes the set $\mathtt{a}\backslash\mathtt{b}\backslash\mathtt{c}$,
+the test \verb!if(a)! checks whether \texttt{a} is empty, etc. Other
+are more subtle. For instance, \verb!e&-e! computes the smallest
+element of \texttt{e} (as a singleton set). This is a 
+property of the twos-complement representation, exploited in
+Patricia trees~\cite{patricia} implementations in particular.
+Another trick is the computation of the set
+$\{0,1,\dots,\mathtt{n}-1\}$ as \verb!~(~0<<n)!. Finally,
+multiplication by 2 (resp. division by 2) is used to add 1 (resp.
+subtract 1) to each element of a set; we write $S$ and $P$ these two
+set operations in the following. We can thus write a more
+abstract version of the code which only deals with finite sets. It is
+displayed in Figure~\ref{fig:abstract}.
 
 \begin{figure}[t]
   \hrulefill\vspace{-0.2em}
@@ -134,21 +162,49 @@ INTEGERS USED AS SETS (EXPLAIN); CODE REPHRASED ON SETS READS AS FOLLOWS:
   \label{fig:abstract}
 \end{figure}
 
+It is now easier to explain the algorithm. The set $a$ contains the
+columns not yet assigned to a queen, thus the candidate positions
+for the queen to be set on the current row. Initially, $a$ contains
+all possible positions, that is  $a = \{0,1,\dots,n-1\}$. 
+We have found one solution whenever $a$ becomes empty and then we return 1.
+Otherwise, we have to consider all possible positions on the current
+row. The sets $b$ and $c$ respectively contain the positions which
+must be avoided because they are on an ascending (resp. descending)
+diagonal of a queen on a previous row.
+Thus $e = a\backslash b\backslash c$ precisely contain the positions to be
+considered for the current row. They are all examined one at a time by
+repeatedly removing the smallest element from $e$, which is set to $d$.
+Then the next rows are considered by a recursive call to $t$ with $a$,
+$b$ and $c$ being updated according to the choice of the column $d$
+for the current row: $d$ is removed from the set of possible columns
+($a\backslash\{d\}$), added to the set of ascending diagonals which is
+shifted ($S(b\cup\{d\})$, and similarly  added to the set of
+descending diagonals which is shifted the other way ($P(c\cup\{d\})$).
+The values of $a$, $b$ and $c$ are illustrated in Figure~\ref{fig:abc}
+for $n=8$ and 3 rows already set.
 
-\section{The Caduceus tool}\label{caduceus}
+\begin{figure}
+  \hspace*{-3em}\psfig{file=figabc.eps,width=\textwidth}
+  \caption{Interpretation of $a$, $b$ and $c$ as sets}
+  \label{fig:abc}
+\end{figure}
+
+\section{Overview of Caduceus}\label{caduceus}
 
 \cite{caduceus,FilliatreMarche04} \cite{why}
 
 \cite{simplify} \cite{yices} \cite{ergo} \cite{coq}
 
 
-\section{Formal verification}\label{verif}
+\section{Formal Verification}\label{verif}
 
 \subsection{Termination}
 
 \subsection{Correctness}
 
 \section{Conclusion}
+
+OVERFLOWS
 
 \nocite{*}
 \bibliographystyle{plain}
