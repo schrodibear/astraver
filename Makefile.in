@@ -121,8 +121,9 @@ RVMERGE=bin/rv_merge.$(OCAMLBEST)
 DP=bin/dp.$(OCAMLBEST)
 CPULIMIT=bin/cpulimit
 WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
+SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 
-TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR)
+TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) $(SIMPLIFY2WHY)
 
 all: $(BINARY) check $(CADUCEUS) $(JESSIE) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
@@ -426,6 +427,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(WHY2HTML) $(DP) $(CPULIMIT) $(
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)
 	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
 	cp -f $(WHYOBFUSCATOR) $(BINDIR)/why-obfuscator$(EXE)
+	cp -f $(SIMPLIFY2WHY) $(BINDIR)/simplify2why$(EXE)
 	if test -f bin/gwhy.$(OCAMLBEST); then \
   cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy$(EXE); \
 	fi
