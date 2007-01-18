@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: why2html.mll,v 1.5 2006-11-03 12:49:07 marche Exp $ i*)
+(*i $Id: why2html.mll,v 1.6 2007-01-18 09:18:07 filliatr Exp $ i*)
 
 {
   open Arg
@@ -32,7 +32,8 @@
   let print s = output_string !cout s
 }
 
-let decl = "external" | "parameter" | "logic"
+let decl = "external" | "parameter" | "logic" | "axiom" | "type" |
+           "predicate"
 let keyw = "let" | "in" | "begin" | "end" | "if" | "then" | "else" | 
            (* "ref" | "array" | *)
 	   "while" | "do" | "done" | "assert" | "label" | "fun" | "rec"
