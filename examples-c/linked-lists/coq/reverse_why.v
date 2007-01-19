@@ -17,9 +17,10 @@ Require Export reverse_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma rev_impl_po_1 : 
   forall (p0: ((pointer) global)),
+  forall (alloc: alloc_table),
   forall (tl_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
-                (is_list tl_global p0)),
+                (is_list tl_global alloc p0)),
   (well_founded length_order).
 Proof.
 unfold length_order; intuition.
@@ -32,15 +33,16 @@ Qed.
 (* Why obligation from file "reverse.c", line 14, characters 10-195: *)
 (*Why goal*) Lemma rev_impl_po_2 : 
   forall (p0: ((pointer) global)),
+  forall (alloc: alloc_table),
   forall (tl_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
-                (is_list tl_global p0)),
+                (is_list tl_global alloc p0)),
   (* File "reverse.c", line 14, characters 9-194 *)
   (exists lp:plist,
-   (exists lr:plist, (((llist tl_global null lp) /\
-    (llist tl_global p0 lr)) /\ (disjoint lp lr)) /\
+   (exists lr:plist, (((llist tl_global alloc null lp) /\
+    (llist tl_global alloc p0 lr)) /\ (disjoint lp lr)) /\
     (forall (l:plist),
-     ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l))))).
+     ((llist tl_global alloc p0 l) -> (app (rev lr) lp) = (rev l))))).
 Proof.
 exists nil.
 inversion_clear HW_1.
@@ -60,22 +62,24 @@ Qed.
   forall (alloc: alloc_table),
   forall (tl_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
-                (is_list tl_global p0)),
+                (is_list tl_global alloc p0)),
   forall (HW_2: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
-                 (exists lr:plist, (((llist tl_global null lp) /\
-                  (llist tl_global p0 lr)) /\ (disjoint lp lr)) /\
+                 (exists lr:plist, (((llist tl_global alloc null lp) /\
+                  (llist tl_global alloc p0 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l)))))),
+                   ((llist tl_global alloc p0 l) ->
+                    (app (rev lr) lp) = (rev l)))))),
   forall (p: ((pointer) global)),
   forall (r: ((pointer) global)),
   forall (tl_global0: ((memory) ((pointer) global) global)),
   forall (HW_3: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
-                 (exists lr:plist, (((llist tl_global0 p lp) /\
-                  (llist tl_global0 r lr)) /\ (disjoint lp lr)) /\
+                 (exists lr:plist, (((llist tl_global0 alloc p lp) /\
+                  (llist tl_global0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l)))))),
+                   ((llist tl_global alloc p0 l) ->
+                    (app (rev lr) lp) = (rev l)))))),
   forall (HW_4: ~(r = null)),
   (valid alloc r).
 Proof.
@@ -94,22 +98,24 @@ Qed.
   forall (alloc: alloc_table),
   forall (tl_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
-                (is_list tl_global p0)),
+                (is_list tl_global alloc p0)),
   forall (HW_2: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
-                 (exists lr:plist, (((llist tl_global null lp) /\
-                  (llist tl_global p0 lr)) /\ (disjoint lp lr)) /\
+                 (exists lr:plist, (((llist tl_global alloc null lp) /\
+                  (llist tl_global alloc p0 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l)))))),
+                   ((llist tl_global alloc p0 l) ->
+                    (app (rev lr) lp) = (rev l)))))),
   forall (p: ((pointer) global)),
   forall (r: ((pointer) global)),
   forall (tl_global0: ((memory) ((pointer) global) global)),
   forall (HW_3: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
-                 (exists lr:plist, (((llist tl_global0 p lp) /\
-                  (llist tl_global0 r lr)) /\ (disjoint lp lr)) /\
+                 (exists lr:plist, (((llist tl_global0 alloc p lp) /\
+                  (llist tl_global0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l)))))),
+                   ((llist tl_global alloc p0 l) ->
+                    (app (rev lr) lp) = (rev l)))))),
   forall (HW_4: ~(r = null)),
   forall (HW_5: (valid alloc r)),
   forall (result: ((pointer) global)),
@@ -123,10 +129,10 @@ Qed.
   forall (HW_10: p1 = r),
   (* File "reverse.c", line 14, characters 9-194 *)
   (exists lp:plist,
-   (exists lr:plist, (((llist tl_global1 p1 lp) /\
-    (llist tl_global1 r0 lr)) /\ (disjoint lp lr)) /\
+   (exists lr:plist, (((llist tl_global1 alloc p1 lp) /\
+    (llist tl_global1 alloc r0 lr)) /\ (disjoint lp lr)) /\
     (forall (l:plist),
-     ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l))))) /\
+     ((llist tl_global alloc p0 l) -> (app (rev lr) lp) = (rev l))))) /\
   (length_order (length tl_global1 r0) (length tl_global0 r)).
 Proof.
 intros; subst; intuition.
@@ -168,29 +174,32 @@ Qed.
 (* Why obligation from file "reverse.c", line 8, characters 14-78: *)
 (*Why goal*) Lemma rev_impl_po_5 : 
   forall (p0: ((pointer) global)),
+  forall (alloc: alloc_table),
   forall (tl_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
-                (is_list tl_global p0)),
+                (is_list tl_global alloc p0)),
   forall (HW_2: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
-                 (exists lr:plist, (((llist tl_global null lp) /\
-                  (llist tl_global p0 lr)) /\ (disjoint lp lr)) /\
+                 (exists lr:plist, (((llist tl_global alloc null lp) /\
+                  (llist tl_global alloc p0 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l)))))),
+                   ((llist tl_global alloc p0 l) ->
+                    (app (rev lr) lp) = (rev l)))))),
   forall (p: ((pointer) global)),
   forall (r: ((pointer) global)),
   forall (tl_global0: ((memory) ((pointer) global) global)),
   forall (HW_3: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
-                 (exists lr:plist, (((llist tl_global0 p lp) /\
-                  (llist tl_global0 r lr)) /\ (disjoint lp lr)) /\
+                 (exists lr:plist, (((llist tl_global0 alloc p lp) /\
+                  (llist tl_global0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist tl_global p0 l) -> (app (rev lr) lp) = (rev l)))))),
+                   ((llist tl_global alloc p0 l) ->
+                    (app (rev lr) lp) = (rev l)))))),
   forall (HW_11: r = null),
   forall (l0: plist),
-  forall (HW_12: (llist tl_global p0 l0)),
+  forall (HW_12: (llist tl_global alloc p0 l0)),
   (* File "reverse.c", line 8, characters 13-77 *)
-  (llist tl_global0 p (rev l0)).
+  (llist tl_global0 alloc p (rev l0)).
 Proof.
 intros; subst; intuition.
 (* post-condition *)

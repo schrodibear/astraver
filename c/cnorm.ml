@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.95 2007-01-19 12:44:43 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.96 2007-01-19 13:35:57 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -550,7 +550,7 @@ let rec term_node loc t ty =
 		    let () = type_why_new_zone zone f in
 		    NTrange (term e1, term_option e2, term_option e3, 
 			     zone, f)
-		| _ -> Format.eprintf "ici@."; dot_translate (term t) f ty loc
+		| _ -> dot_translate (term t) f ty loc
 	    end  
       (*let t =
 	      match t.term_node with
