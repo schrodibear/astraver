@@ -388,19 +388,7 @@ let rec rehash z1 z2 =
        Hashtbl.find type_why_table z1
      with Not_found -> Hashtbl.create 5) 
   in
-(*  Hashtbl.iter
-    (fun f tw -> 
-       let l,n = output_why_type tw in
-       Format.eprintf "adding in type_why_table :(%s,%s) -> %s@." 
-	 z1.name f.var_name n)
-    t;*)
   Hashtbl.add type_why_table z1 t;
-(*  Hashtbl.iter
-    (fun f tw -> 
-       let l,n = output_why_type tw in
-       Format.eprintf "adding in type_why_table :(%s,%s) -> %s@." 
-	 z2.name f.var_name n)
-    t;*)
   Hashtbl.add type_why_table z2 t
     
 and unifier_type_why tw1 tw2 =
@@ -410,7 +398,10 @@ and unifier_type_why tw1 tw2 =
     | Addr z1 , Addr z2 ->
 	unifier_zone z1 z2
     | Info.Int, Info.Int -> ()
-(*    | Unit, Unit -> () *)
+    | Why_Logic "double", Why_Logic "real"
+    | Why_Logic "single", Why_Logic "real" 
+    | Why_Logic "real", Why_Logic "single"
+    | Why_Logic "real", Why_Logic "double" -> ()
     | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
     | Memory _, _ | _, Memory _ -> assert false
     | _ ->
@@ -418,7 +409,7 @@ and unifier_type_why tw1 tw2 =
 	and t2 = output_why_type tw2
 	in
 	Format.eprintf "anomaly: unify why types `%a' and `%a'@."
-	  Output.fprintf_logic_type t1 Output. fprintf_logic_type t2;
+	  Output.fprintf_logic_type t1 Output.fprintf_logic_type t2;
 	raise Not_found
 	  
 
@@ -478,7 +469,7 @@ let rec term tyf t =
     | NTconstant _ -> () 
     | NTvar v -> 
 	if v.var_name = "result" then 
-	  unifier_type_why ~var_name:v.var_name v.var_why_type tyf
+	    unifier_type_why ~var_name:v.var_name v.var_why_type tyf
     | NTapp ({napp_pred = f;napp_args = l} as call) ->
       List.iter (term tyf) l;
       let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
@@ -556,7 +547,8 @@ let rec predicate tyf p =
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
       List.iter2 
-	(fun (v,ty) e -> unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
+	(fun (v,ty) e ->
+	   unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
   | NPrel (t1,op,t2) ->      
       term tyf t1; 
       term tyf t2;
@@ -642,10 +634,8 @@ let rec c_initializer ty tw init =
   match init with 
     | Iexpr e -> 
 	calcul_zones e; 
-	Coptions.lprintf "initializer: unifying types %a and %a@."
-	  Output.fprintf_logic_type (output_why_type tw) 
-	  Output.fprintf_logic_type (output_why_type (type_why e));
-	unifier_type_why ~var_name:(loc_name e.nexpr_loc) tw (type_why e)
+	let twe = type_why e in
+	unifier_type_why ~var_name:(loc_name e.nexpr_loc) tw twe
     | Ilist l -> 
 	match ty.ctype_node with  
 	  | Tstruct tag  ->
@@ -721,7 +711,8 @@ let rec statement twf st =
 	calcul_zones e1; calcul_zones e2; 
 	calcul_zones e3; statement twf st
     | NSblock ls -> List.iter (statement twf) ls
-    | NSreturn (Some e) -> calcul_zones e ;unifier_type_why ~var_name:(loc_name e.nexpr_loc) twf (type_why e)
+    | NSreturn (Some e) -> calcul_zones e ;
+	unifier_type_why ~var_name:(loc_name e.nexpr_loc) twf (type_why e)
     | NSlabel (_,st) -> statement twf st
     | NSswitch (e1, e2, l) -> calcul_zones e1;
 	List.iter (fun (x, y) -> List.iter (statement twf) y) l

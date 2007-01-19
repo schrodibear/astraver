@@ -36,6 +36,7 @@ let binop = function
   | Cast.Bshift_left -> Bshift_left
   | _ -> assert false
 
+
 let rec term_of_expr (e:texpr)  =
   {
     term_node = 
@@ -44,7 +45,8 @@ let rec term_of_expr (e:texpr)  =
 	 | TEnop ->  assert false
 	 | TEconstant c -> Tconstant c
 	 | TEstring_literal s -> assert false (*TODO*)
-	 | TEvar (Var_info v) -> Clogic.Tvar v
+	 | TEvar (Var_info v) -> 
+	     Clogic.Tvar v 
 	 | TEvar (Fun_info f) -> assert false (*TODO*)
 	 | TEdot (e, v) -> Tdot (term_of_expr e, v)
 	 | TEarrow (e, v) -> Tarrow (term_of_expr e, v)
@@ -95,24 +97,71 @@ let rec term_of_expr (e:texpr)  =
 	 | TEbinary (e1, (Cast.Bbw_and | Cast.Bbw_or | Cast.Bbw_xor |
 			  Cast.Bshift_left | Cast.Bshift_right as op), e2) -> 
 	     Tbinop (term_of_expr e1, binop op, term_of_expr e2)
-	 | TEbinary (e1, Blt, e2) | TEbinary (e1, Bgt, e2) 
-	 | TEbinary (e1, Ble, e2) | TEbinary (e1, Bge, e2) 
-	 | TEbinary (e1, Beq, e2) | TEbinary (e1, Bneq, e2) 
-	 | TEbinary (e1, Band, e2) | TEbinary (e1, Bor, e2) 
-	 | TEbinary (e1, Blt_int, e2) 
-	 | TEbinary (e1, Bgt_int, e2) | TEbinary (e1, Ble_int, e2) 
-	 | TEbinary (e1, Bge_int, e2) | TEbinary (e1, Beq_int, e2) 
-	 | TEbinary (e1, Bneq_int, e2) 
-	 | TEbinary (e1, Blt_float _, e2) | TEbinary (e1, Bgt_float _, e2) 
-	 | TEbinary (e1, Ble_float _, e2) | TEbinary (e1, Bge_float _, e2) 
-	 | TEbinary (e1, Beq_float _, e2) | TEbinary (e1, Bneq_float _, e2) 
-	 | TEbinary (e1, Blt_pointer, e2) | TEbinary (e1, Bgt_pointer, e2) 
-	 | TEbinary (e1, Ble_pointer, e2) | TEbinary (e1, Bge_pointer, e2) 
+	 | TEbinary (e1, Blt, e2) | TEbinary (e1, Bgt, e2) ->
+	     assert false
+	 | TEbinary (e1, Ble, e2) | TEbinary (e1, Bge, e2)->
+	     assert false 
+	 | TEbinary (e1, Beq, e2) | TEbinary (e1, Bneq, e2) ->
+	     assert false
+	 | TEbinary (e1, Band, e2) | TEbinary (e1, Bor, e2)->
+	     assert false 
+	 | TEbinary (e1, Blt_int, e2) ->
+	     if (Ctyping.eval_const_expr e1 < Ctyping.eval_const_expr e2) 
+	     then 
+	       Tconstant (IntConstant "0")
+	     else 
+	       Tconstant (IntConstant "1")
+	 | TEbinary (e1, Ble_int, e2)->
+	     if (Ctyping.eval_const_expr e1 <= Ctyping.eval_const_expr e2) 
+	     then 
+	       Tconstant (IntConstant "0")
+	     else 
+	       Tconstant (IntConstant "1")
+	 | TEbinary (e1, Bgt_int, e2) ->
+	     if (Ctyping.eval_const_expr e1 < Ctyping.eval_const_expr e2) 
+	     then 
+	       Tconstant (IntConstant "0")
+	     else 
+	       Tconstant (IntConstant "1")
+	 | TEbinary (e1, Bge_int, e2)->
+	     if (Ctyping.eval_const_expr e1 >= Ctyping.eval_const_expr e2) 
+	     then 
+	       Tconstant (IntConstant "0")
+	     else 
+	       Tconstant (IntConstant "1")
+	 | TEbinary (e1, Beq_int, e2)->
+	    if (Ctyping.eval_const_expr e1 = Ctyping.eval_const_expr e2) 
+	    then 
+	      Tconstant (IntConstant "0")
+	    else 
+	      Tconstant (IntConstant "1")
+	 | TEbinary (e1, Bneq_int, e2)->
+	     if (Ctyping.eval_const_expr e1 = Ctyping.eval_const_expr e2) 
+	     then 
+	       Tconstant (IntConstant "1")
+	     else 
+	       Tconstant (IntConstant "0")
+	 | TEbinary (e1, Blt_float _, e2) | TEbinary (e1, Bgt_float _, e2)->
+	     assert false 
+	 | TEbinary (e1, Ble_float _, e2) | TEbinary (e1, Bge_float _, e2)->
+	     assert false 
+	 | TEbinary (e1, Beq_float _, e2) | TEbinary (e1, Bneq_float _, e2) ->
+	     assert false
+	 | TEbinary (e1, Blt_pointer, e2) | TEbinary (e1, Bgt_pointer, e2) ->
+	     assert false
+	 | TEbinary (e1, Ble_pointer, e2) | TEbinary (e1, Bge_pointer, e2) ->
+	     assert false
 	 | TEbinary (e1, Beq_pointer, e2) | TEbinary (e1, Bneq_pointer, e2) ->
 	     assert false
 	 | TEcall (e, l) -> assert false
 	 | TEcond (e1,e2,e3) -> 
 	     Tif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
+	 | TEcast ({ctype_node = Tint _},
+		   ({texpr_type = {ctype_node = Tfloat _}} as e) ) -> 
+	     Tunop (Clogic.Uint_of_float,(term_of_expr e))
+	 | TEcast ({ctype_node = Tfloat _},
+		   ({texpr_type = {ctype_node = Tint _}} as e) ) -> 
+	     Tunop (Clogic.Ufloat_of_int,(term_of_expr e))
 	 | TEcast (_,e) -> (term_of_expr e).term_node
 	 | TEsizeof _ -> assert false
 	 | TEmalloc _ -> assert false

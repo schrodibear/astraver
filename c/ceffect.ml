@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.157 2007-01-04 10:09:48 moy Exp $ i*)
+(*i $Id: ceffect.ml,v 1.158 2007-01-19 12:44:43 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -776,63 +776,6 @@ let invariant_for_global loc v =
     
 let not_a_constant_value loc = error loc "is not a constant value"
 
-(*let binop loc e1 e2 op = 
-  match e1.nexpr_node, e2.nexpr_node, op with
-  | _, _, Badd | _, _, Badd_int | _, _, Badd_float | _, _, Badd_pointer_int ->
-      NTbinop(term_of_expr e1, Clogic.Badd, term_of_expr e2)
-  | _, _, Bsub | _, _, Bsub_int | _, _, Bsub_float | _, _, Bsub_pointer -> 
-      NTbinop(term_of_expr e1, Clogic.Bsub, term_of_expr e2)
-  | _, _, Bmul | _, _, Bmul_int | _, _, Bmul_float -> 
-      NTbinop(term_of_expr e1, Clogic.Bmul, term_of_expr e2)
-  | _, _, Bdiv | _, _, Bdiv_int | _, _, Bdiv_float -> 
-      NTbinop(term_of_expr e1, Clogic.Bdiv, term_of_expr e2)
-  | _, _, Bmod | _, _, Bmod_int ->  
-      NTbinop(term_of_expr e1, Clogic.Bmod, term_of_expr e2)
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Beq_int 
-  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Beq_float 
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Beq_pointer  ->
-      if e1 = e2 then NEconstant (Intconstant "0")
-      else NEconstant (IntConstant "1")
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bneq_int 
-  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Bneq_float 
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bneq_pointer  ->
-      if e1 = e2 then NEconstant (IntConstant "1")
-      else NEconstant (IntConstant "0")
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Blt_int 
-  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Blt_float 
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Blt_pointer  ->
-      if e1 < e2 then NEconstant (IntConstant "0")
-      else NEconstant (IntConstant "1")
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bgt_int 
-  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Bgt_float 
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bgt_pointer  ->
-      if e1 > e2 then NEconstant (IntConstant "0")
-      else NEconstant (IntConstant "1")
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Ble_int 
-  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Ble_float 
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Ble_pointer  ->
-      if e1 <= e2 then NEconstant (IntConstant "0")
-      else NEconstant (IntConstant "1")
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bge_int 
-  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Bge_float 
-  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bge_pointer  ->
-      if e1 >= e2 then NEconstant (IntConstant "0")
-      else NEconstant (IntConstant "1")
-  | _, _, Beq | _, _, Beq_int | _, _, Beq_float | _, _, Beq_pointer      
-  |  _, _, Blt |  _, _, Blt_int |  _, _, Blt_float |  _, _, Blt_pointer
-  |  _, _, Bgt |  _, _, Bgt_int |  _, _, Bgt_float |  _, _, Bgt_pointer
-  |  _, _, Ble |  _, _, Ble_int |  _, _, Ble_float |  _, _, Ble_pointer
-  |  _, _, Bge |  _, _, Bge_int |  _, _, Bge_float |  _, _, Bge_pointer
-  |  _, _, Bneq |  _, _, Bneq_int |  _, _, Bneq_float |  _, _, Bneq_pointer
-  |  _, _, Bbw_and
-  |  _, _, Bbw_xor
-  |  _, _, Bbw_or
-  |  _, _, Band
-  |  _, _, Bor
-  |  _, _, Bshift_left
-  |  _, _, Bshift_right -> error loc "not a constant value"
-*)
-
 let unop = function
   | Ustar -> Clogic.Ustar
   | Uamp -> Clogic.Uamp
@@ -852,8 +795,6 @@ let rec term_of_expr e =
   | NEvar (Var_info info) -> make (NTvar info)
   | NEarrow (nlvalue,z,var_info) -> 
       make (NTarrow (term_of_expr nlvalue,z, var_info))
-(*  | NEstar (nlvalue) -> 
-      make (NTstar (term_of_expr nlvalue))*)
   | NEunary (Uplus, nexpr) -> 
       term_of_expr nexpr
   | NEunary (Unot, nexpr) -> 
