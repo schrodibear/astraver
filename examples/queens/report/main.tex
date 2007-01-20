@@ -6,6 +6,8 @@
 \newcommand{\caduceus}{\textsc{Caduceus}}
 \newcommand{\simplify}{\textsc{Simplify}}
 \newcommand{\ergo}{\textsc{Ergo}}
+\newcommand{\yices}{\textsc{Yices}}
+\newcommand{\coq}{\textsc{Coq}}
 \newcommand{\minelt}[1]{\ensuremath{\mathit{min\_elt}(#1)}}
 
 \begin{document}
@@ -51,7 +53,7 @@ the mechanically-assisted proof that this program (1) does not crash,
 (2) terminates, and (3) indeed computes the right number. We find this
 challenging since these two lines of code are at the same time idiomatic C
 programming, complex from an algorithmic point of view and highly
-efficient. Thus we can demonstrate the ability of our tools to tackle
+efficient. And we can demonstrate the ability of our tools to tackle
 a wide range of verification issues without considering a too long
 program. 
 
@@ -201,7 +203,7 @@ for $n=8$ and 3 rows already set.
 
 \cite{caduceus,FilliatreMarche04} \cite{why}
 
-\simplify~\cite{simplify} \cite{yices} \ergo~\cite{ergo} \cite{coq}
+\simplify~\cite{simplify} \yices~\cite{yices} \ergo~\cite{ergo} \cite{coq}
 
 % To do so, we are going to annotate the source code with logical
 % assertions, run \caduceus\ to get verification conditions and
@@ -216,7 +218,7 @@ it terminates; and (3) it computes the right number.
 The first property is easily obtained, since the program is not using
 pointers or arrays. Thus the only threat in the code is the division and
 \caduceus\ produces the corresponding verification condition $2\not=0$
-which is obviously discharged. The other two properties are much more
+which is trivially discharged. The other two properties are much more
 difficult to establish.
 
 \subsection{Integers Modelling Finite Sets}
@@ -384,7 +386,7 @@ function\footnote{There is not yet a notion of ghost function in
 it is found and which we now describe.
 
 \subsubsection{Solutions.}
-To give \texttt{store\_solution} a spcification, we need to introduce
+To give \texttt{store\_solution} a specification, we need to introduce
 the notion of solution to the $N$-queens problems. It is convenient to
 introduce the size of the chessboard as a logical constant:
 \begin{verbatim}
@@ -494,14 +496,51 @@ automatically discharged by \simplify, within a few seconds.
 Regarding the former, only 44 verification conditions are
 automatically discharged, either by \simplify\ or \ergo.
 The remaining 13 verification conditions were discharged manually,
-using the Coq proof assistant, but with the help of the ATPs
-\simplify\ and \ergo\ called from Coq on some subgoals. These Coq
+using the \coq\ proof assistant, but with the help of the ATPs
+\simplify\ and \ergo\ called from \coq\ on some subgoals. These \coq\
 proof scripts amount to 600 lines and represent several hours of
 work. Though these tools could be better integrated, this
 collaboration between interactive and automatic provers can be
-considered as successful.
+considered successful.
 
 \section{Conclusion}
+
+We have presented the formal verification of an extremely short but
+also extremely complex C program using the \caduceus\ tool. Beyond a
+nice specification exercise, it was the opportunity to illustrate
+several key features of \caduceus:
+\begin{itemize}
+\item 
+  First, \caduceus\ allows the user to introduce arbitrary
+  \emph{first-order logical theories} for the purpose of the
+  specification. This includes types, constants, functions, predicates
+  and axioms, all declared within the program source code and passed
+  to the provers used to discharge the verification conditions.
+  We consider this ability as a real improvement with respect to
+  JML-like approaches~\cite{JML} where annotations may only refer to code data
+  and (pure) code functions. 
+
+\item 
+  Second, this case study clearly points out the necessity of
+  \emph{ghost code} to write specifications. In this particular case,
+  the program is enumerating the solutions to a problem, but is not
+  storing any of them, not even the current one. Thus the code has to
+  be enriched with new statements ``to tell the untold'' and thus to
+  enable the specification. In particular, ghost code must not be
+  limited to mere assignments but should include arbitrary statements,
+  up to function calls. The support of ghost code in \caduceus\ was
+  not optimal in this respect; we plan to extend it accordingly.
+
+\item 
+  Finally, the large set of verification conditions could be
+  discharged using the collaborative work of three automatic provers
+  (\simplify, \ergo\ and \yices) and an interative proof assistant
+  (\coq). This multi-provers architecture is one of the main features
+  of \caduceus\ and has been emphasized since the
+  beginning~\cite{FilliatreMarche04}. Obviously, the proof could not
+  have been conducted using automatic provers only and would have been
+  a tremendous amount of work as a fully interactive proof.
+\end{itemize}
 
 OVERFLOWS
 
