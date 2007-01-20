@@ -201,13 +201,53 @@ for $n=8$ and 3 rows already set.
 
 \section{Overview of Caduceus}\label{caduceus}
 
-\cite{caduceus,FilliatreMarche04} \cite{why}
+\caduceus~\cite{caduceus,FilliatreMarche04} is a tool for the
+formal verification of C programs at the source code level.
+The properties that may be checked are of two kinds: first, the
+program may be checked to be free of threats (null pointer
+dereferencing or out-of-bounds array access) and second, it may be
+proved to satisfy functional properties given as annotations in the
+source. These annotations include functions's preconditions and
+postconditions, global invariants, loop invariants, etc., as usual in
+Hoare logic frameworks~\cite{Hoare69}.
+They are inserted in the source as comments of
+a specific shape \texttt{/*@...*/} and written in a first-order specification
+language largely inspired by the Java Modeling Language~\cite{JML}.
+A significant part of ANSI C is supported, including pointer
+arithmetic and possible pointer aliasing.
 
-\simplify~\cite{simplify} \yices~\cite{yices} \ergo~\cite{ergo} \cite{coq}
+Here is for instance a possible specification for a function
+\texttt{math\_mod} computing the modulo:
+\begin{verbatim}
+/*@ requires 
+  @   x >= 0 && y > 0
+  @ ensures 
+  @   0 <= \result < y &&
+  @   \exists int d; x == d * y + \result
+  @*/
+int math_mod(int x, int y) { ... }
+\end{verbatim}
+The keyword \texttt{requires} introduces the function's precondition,
+that is a property to be satisfied whenever the function is called.
+The keyword \texttt{ensures} introduces the function's postcondition,
+that is a property which must be established whenever the function returns.
+As one can notice, the specification language augments the usual
+C syntax (\verb!&&!, \verb!==!, etc.) with new constructs such as
+\verb!\result! denoting the value returned by the function, the
+existential quantifier \verb!\exists!, etc.
 
-% To do so, we are going to annotate the source code with logical
-% assertions, run \caduceus\ to get verification conditions and
-% discharge them with one or several provers.
+Once a C source code is adequately annotated, \caduceus\
+produces verification conditions. These are logical statements
+expressing that the code is free of threats and fulfills the given
+specification. The verification conditions are then discharged using a
+general purpose theorem prover. A key feature of \caduceus\ is
+its independence with respect to the prover. It indeed supports a wide
+panel of existing provers, ranging from interactive proof assistants
+such as \coq~\cite{coq}, PVS~\cite{PVS} or
+\textsc{Isabelle/HOL}~\cite{Isabelle} to 
+automatic theorem provers such as 
+\simplify~\cite{simplify}, \yices~\cite{yices} or \ergo~\cite{ergo}.
+
 
 \section{Formal Verification}\label{verif}
 
