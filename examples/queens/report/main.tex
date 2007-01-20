@@ -223,11 +223,14 @@ difficult to establish.
 
 \subsection{Integers Modelling Finite Sets}
 
-We start with an abstraction of integers as finite sets, in order to
-annotate the code with assertions about the sets represented by the
-program variables. To do so, we proceed in two steps. First we
-introduce an axiomatization of finite sets of integers. Then we make
-connections between C integers and these abstract sets.
+As we explained in Section~\ref{unobf}, the program mainly uses integers
+as bit vectors, to represent finite sets.  So we first start with an
+axiomatization of finite sets of integers and then we make connections
+between C integers and these abstract sets. It is important to say
+here that we use \caduceus\ in a mode where integer overflows are not
+taken into account: it means that program integers are modeled by arbitray
+precision integers. This particular point is discussed in
+Section~\ref{conclu}. 
 
 \subsubsection{Abstract finite sets.}
 We introduce an abstract data type \texttt{iset} for finite sets of
@@ -503,7 +506,7 @@ work. Though these tools could be better integrated, this
 collaboration between interactive and automatic provers can be
 considered successful.
 
-\section{Conclusion}
+\section{Conclusion}\label{conclu}
 
 We have presented the formal verification of an extremely short but
 also extremely complex C program using the \caduceus\ tool. Beyond a
@@ -542,7 +545,19 @@ several key features of \caduceus:
   a tremendous amount of work as a fully interactive proof.
 \end{itemize}
 
-OVERFLOWS
+There is a remaining unsatisfactory aspect in this formal
+verification which deserves discussion: \emph{integer
+overflows}. Indeed, the verification was performed in a model where C
+integers are mapped to mathematical integers and not to 32-bits
+machine integers (assuming a 32-bits architecture). The limitation
+$n\le 32$ is not really an issue, the world record holding for $n=25$;
+thus all machines will be 64-bits before the limit $n=32$ is reached.
+But the program is actually performing unrelevant overflows as soon as
+$n>16$. Thus for the verification to be fully satisfactory, it should
+be conducted within a model where we can prove that the $n$ lowest
+bits only of the program variables are meaningful. But such a model
+should not penalize the work of automatic provers, which all assume
+mathematical integers. Regarding \caduceus, this is ongoing research.
 
 \nocite{*}
 \bibliographystyle{plain}
