@@ -933,7 +933,7 @@ label (another identifier), using the \texttt{@} notation.
     & $::=$ & \te{A}..\te{Z} $|$ \te{a}..\te{z}
   \\[0.1em]
   \nt{lab\_identifier}\indexnt{lab\_identifier}
-    & $::=$ & \nt{identifier} [ \te{@} \nt{identifier} ]
+    & $::=$ & \nt{identifier} [ \te{@} [ \nt{identifier} ] ]
 \end{tabular}
 \end{center}
 
@@ -1224,7 +1224,7 @@ Syntax of input files is given Figure~\ref{fig:input}.
       & $|$ & \te{if} \nt{prog} \te{then} \nt{prog}
               $[$ \te{else} \nt{prog} $]$ \\
       & $|$ & \te{while} \nt{prog} \te{do}
-              \nt{loop\_annot} \nt{prog} \te{done} \\
+              [ \nt{loop\_annot} ] \nt{prog} \te{done} \\
       & $|$ & \nt{prog} \te{;} \nt{prog} \\
       & $|$ & \nt{identifier} \te{:} \nt{prog} \\
       & $|$ & \te{assert} (\te{\{} \nt{assertion} \te{\}})\plus\
@@ -1268,8 +1268,8 @@ Syntax of input files is given Figure~\ref{fig:input}.
   \\[0.1em]
 
   \nt{loop\_annot}
-    & $::=$ & \te{\{} \te{invariant} \nt{assertion} 
-              \te{variant} \nt{wf\_arg} \te{\}} \\
+    & $::=$ & \te{\{} [ \te{invariant} \nt{assertion} ]
+              [ \te{variant} \nt{wf\_arg} ] \te{\}} \\
   \\[0.1em]
 
   \nt{wf\_arg} 
