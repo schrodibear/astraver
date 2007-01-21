@@ -847,6 +847,17 @@ is translated into a HTML file \textit{foo.mlw.html}. A title for the
 HTML page can be specified using command line option \texttt{-t};
 otherwise the original file name is used.
 
+\subsection{Simplify to Why converter (\texttt{simplify2why})}
+\indextt{simplify2why}
+A tool to convert Simplify files to Why syntax is provided. 
+Its usage is immediate:
+\begin{verbatim}
+     simplify2why files...
+\end{verbatim}
+Each Simplify input file given on the command line, say \textit{foo.sx},
+is translated into a \why\ file \textit{foo.sx.why}. Since Simplify is
+untyped, all data in the Simplify input file are mapped to integers in
+the resulting \why\ file.
 
 \section{Installation}
 \label{install}\index{Installation}
