@@ -21,6 +21,12 @@
 \begin{abstract}
   This article details the formal verification of a 2-lines C program
   which computes the number of solutions to the $N$-queens problem.
+  The formal proof is performed using the \caduceus\ tool to generate
+  the verification conditions and several provers (Simplify, Ergo,
+  Coq) to discharge them. The main purpose of this article is to show
+  how a complex behavior of a C program can be established with
+  \caduceus. The key is here the possibility to introduce an abstract
+  model and to relate it to the source code using ghost statements.
 \end{abstract}
 
 \section{Introduction}
@@ -43,27 +49,33 @@ integer on the standard output, say $f(n)$. If $n$ is smaller than the
 machine word size (typically 32), then
 $f(n)$ appears to be the number of solutions to the famous $n$-queens
 problem, that is the number of ways to put $n$ queens on a $n\times n$
-chessboard so that they cannot beat each other. And even more
+chessboard so that they cannot attack each other. And even more
 surprisingly, this is a very efficient program to compute this number.
 
 As a case study for \caduceus, a tool we are
 co-developing~\cite{caduceus}, we considered 
 the formal verification of this program. By verification, we mean here
 the mechanically-assisted proof that this program (1) does not crash, 
-(2) terminates, and (3) indeed computes the right number. We find this
-challenging since these two lines of code are at the same time idiomatic C
-programming, complex from an algorithmic point of view and highly
-efficient. And we can demonstrate the ability of our tools to tackle
-a wide range of verification issues without considering a too long
-program. 
+(2) terminates, and (3) indeed computes the expected number. 
+We find this challenging to formally prove, with the highest
+possible trust level, that this very low level, highly optimized
+idiomatic C source code, satisfies a high level behavioral property.
+% We find this
+% challenging since these two lines of code are at the same time idiomatic C
+% programming, complex from an algorithmic point of view and highly
+% efficient. And we can demonstrate the ability of our tools to tackle
+% a wide range of verification issues without considering a too long
+% program. 
 
 This paper is organized as follows. First Section~\ref{unobf}
 ``unobfuscates'' the program, unravelling the mystery of its algorithm
-and data. Then Section~\ref{caduceus} briefly introduces \caduceus.
-Finally Section~\ref{verif} details the formal verification,
-namely the logical annotations inserted in the program
-and the methods used to discharge the resulting verification conditions.
-The annotated source code and the proofs are available online at
+and data. Then Section~\ref{caduceus} briefly introduces \caduceus, a
+tool which takes annotated C source code as input and produces
+verification conditions in the native syntax of several existing provers.
+Finally Section~\ref{verif} details the formal verification, namely
+the logical annotations inserted in the program and the methods used
+to discharge the resulting verification conditions.  The annotated
+source code and the proofs are available online at
 \url{http://why.lri.fr/queens/}.
 
 
@@ -95,10 +107,11 @@ assignment \verb!e-=d! to the end of the loop body and save the
 initialization. We have even reduced the size of the original code.
 The second modification we make is to replace the \texttt{main}
 function with a \texttt{queens} function from \texttt{int} to
-\texttt{int}, since \caduceus\ does not support the \texttt{scanf} and
-\texttt{printf} library functions.
-We end up with the code given in Figure~\ref{fig:code}, which is the
-one we prove correct in this paper.
+\texttt{int}, since we are only interested in the computed function
+and not in input-outputs.
+We end up with the code given in Figure~\ref{fig:code}. Our goal is
+to show that $\mathtt{queens}(n)$ is indeed the number of
+solutions to the $n$-queens problem.
 \begin{figure}[t]
   \centering\hrulefill\vspace{-1em}
 \begin{verbatim}
@@ -118,7 +131,8 @@ int queens(int n) {
   \label{fig:code}
 \end{figure}
 
-We now explain how the program works. This is a backtracking algorithm
+We first unravel the mystery behind the program's algorithm and data.
+This is a backtracking algorithm
 which fills the rows of the chessboard one at a time.
 %--- there is no better way to solve the $N$-queens problem --- 
 More precisely, each call to \texttt{t} enumerates all possible
@@ -130,7 +144,7 @@ equivalently as \emph{bit vectors}: $i$ belongs to the ``set'' $x$ if and
 only if the $i$-th bit of $x$ is set.
 Following this idea, the program variables
 \texttt{a}, \texttt{b}, \texttt{c}, \texttt{d} and \texttt{e} must
-be interpreted as subsets of $\{0,1,\dots,n-1\}$.
+be seen as subsets of $\{0,1,\dots,n-1\}$.
 Then almost all computations in this program are actually to be
 understood as set operations. Some of them are obvious: \verb!a&~b&~c!
 computes the set $\mathtt{a}\backslash\mathtt{b}\backslash\mathtt{c}$,
@@ -152,19 +166,18 @@ displayed in Figure~\ref{fig:abstract}.
   \hrulefill\vspace{-0.2em}
 {\begin{obeylines}
   \kw{int} $t$($a$, $b$, $c$) 
-  ~~ \kw{if} $a \not= \emptyset$ 
-  ~~~~ $e$ $\leftarrow$ $(a \backslash  b) \backslash c$ 
-  ~~~~ $f$ $\leftarrow$ 0 
-  ~~~~ \kw{while} $e \not=\emptyset$ 
-  ~~~~~~ $d$ $\leftarrow$ $\minelt{e}$ 
-  ~~~~~~ $f$ $\leftarrow$ $f$ $+$ $t$($a\backslash \{d\}$, $\mathit{succ}(b\cup\{d\})$, $\mathit{pred}(c\cup\{d\})$) 
-  ~~~~~~ $e$ $\leftarrow$ $e \backslash  \{d\}$ 
+  ~~~~ $f$ $\leftarrow$ 1
+  ~~~~ \kw{if} $a \not= \emptyset$ 
+  ~~~~~~~~ $e$ $\leftarrow$ $(a \backslash  b) \backslash c$ 
+  ~~~~~~~~ $f$ $\leftarrow$ 0 
+  ~~~~~~~~ \kw{while} $e \not=\emptyset$ 
+  ~~~~~~~~~~~~ $d$ $\leftarrow$ $\minelt{e}$ 
+  ~~~~~~~~~~~~ $f$ $\leftarrow$ $f$ $+$ $t$($a\backslash \{d\}$, $\mathit{succ}(b\cup\{d\})$, $\mathit{pred}(c\cup\{d\})$) 
+  ~~~~~~~~~~~~ $e$ $\leftarrow$ $e \backslash  \{d\}$ 
   ~~~~ \kw{return} $f$ 
-  ~~ \kw{else} 
-  ~~~~ \kw{return} $1$ 
-  ~~ 
+  ~~~~ 
   \kw{int} \textit{queens}($n$) 
-  ~~ \kw{return} $t$($\{0,1,\dots,n-1\}$, $\emptyset$, $\emptyset$)
+  ~~~~ \kw{return} $t$($\{0,1,\dots,n-1\}$, $\emptyset$, $\emptyset$)
 \end{obeylines}}
 \vspace{-0.6em}\hrulefill\vspace{-1em}
   \caption{Abstract version of the code}
@@ -285,7 +298,7 @@ membership predicate  introduced as follows:
 \begin{verbatim}
 //@ predicate in_(int x, iset s)
 \end{verbatim}
-As we can notice, this is an abstract predicate. Then we can introduce
+This is an abstract predicate, without definition. Then we can introduce
 the various set operations. For instance, the empty set is introduced
 with the following two declarations:
 \begin{verbatim}
@@ -449,7 +462,7 @@ It is also convenient to start defining the more general notion of
 $\mathtt{partial\_solution}(k,s)$ states that the array $s$ contains
 column assignments for the first $k$ queens on the first $k$
 rows. Each column $s[i]$ must be in the valid range $[0,N[$ and two
-queens on two different rows $i$ and $j$ must not beat each other.
+queens on two different rows $i$ and $j$ may not attack each other.
 Then we can define the notion of solution, as a partial solution for
 the $N$ rows:
 \begin{verbatim}

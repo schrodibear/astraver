@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage{rotating}
+\usepackage{rotating,pstricks,pst-node}
 \pagestyle{empty}
 \begin{document}
 
@@ -15,25 +15,29 @@
 \newcommand{\dd}{$\ddots$}
 \newcommand{\vd}{$\vdots$}
 
+\psset{nodesep=2pt}
+
 \begin{center}
 \begin{tabular}{cc}
   \begin{tabular}{|c|c|c|c|c|c|c|c|}
     \hline
-    \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
-    \vide & \vide & \vide & \vide & \vd   & \vide & \qb   & \vide \\\hline
-    \vide & \vide & \vide & \qb   & \vd   & \vide & \vd   & \vide \\\hline
-    \one  & \one  & \one  & 0     & 0     & \one  & 0     & \one  \\\hline
+    \vide & \vide & \vide & \vide & \rnode{as}{\qb} & \vide & \vide & \vide \\\hline
+    \vide & \vide & \vide & \vide & \vide & \vide & \rnode{cs}{\qb}   & \vide \\\hline
+    \vide & \vide & \vide & \rnode{bs}{\qb}   & \vide & \vide & \vide   & \vide \\\hline
+    \one  & \one  & \one  & \rnode{bd}{0}     & \rnode{ad}{0}     & \one  & \rnode{cd}{0}     & \one  \\\hline
   \end{tabular}
+  \ncline{->}{as}{ad}\ncline{->}{bs}{bd}\ncline{->}{cs}{cd}
 
 &
 
   \begin{tabular}{|c|c|c|c|c|c|c|c|}
     \hline
-    \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
-    \vide & \vide & \vide & \ad   & \vide & \vide & \qb   & \vide \\\hline
-    \vide & \vide & \ad   & \qb   & \vide & \ad   & \vide & \vide \\\hline
-    \zero & \one  & \one  & \zero & \one  & \zero & \zero & \zero \\\hline
+    \vide & \vide & \vide & \vide & \rnode{as}{\qb} & \vide & \vide & \vide \\\hline
+    \vide & \vide & \vide & \vide & \vide & \vide & \rnode{cs}{\qb}   & \vide \\\hline
+    \vide & \vide & \vide & \rnode{bs}{\qb}  & \vide & \vide & \vide & \vide \\\hline
+    \zero & \rnode{ad}{1} & \rnode{bd}{1} & \zero & \rnode{cd}{1} & \zero & \zero & \zero \\\hline
   \end{tabular}
+  \ncline{->}{as}{ad}\ncline{->}{bs}{bd}\ncline{->}{cs}{cd}
 
 \\[4em]
   
@@ -47,21 +51,25 @@ $\mathtt{b} = 01101000_2$ / $b = \{3,5,6\}$
 
   \begin{tabular}{|c|c|c|c|c|c|c|c|}
     \hline
-    \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
-    \vide & \vide & \vide & \vide & \vide & \dd   & \qb   & \vide \\\hline
-    \vide & \vide & \vide & \qb   & \vide & \vide & \dd   & \dd   \\\hline
-    \zero & \zero & \zero & \zero & \one  & \zero & \zero & \one  \\\hline
-  \end{tabular}
+    \vide & \vide & \vide & \vide & \rnode{as}{\qb} & \vide & \vide & \vide \\\hline
+    \vide & \vide & \vide & \vide & \vide & \vide & \rnode{cs}{\qb} & \vide \\\hline
+    \vide & \vide & \vide & \rnode{bs}{\qb} & \vide & \vide & \vide & \vide \\\hline
+    \zero & \zero & \zero & \zero & \rnode{bd}{1} & \zero & \zero & \rnode{ad}{1} \\\hline
+  \end{tabular}%\rnode{cd}{}
+  \ncline{->}{as}{ad}\ncline{->}{bs}{bd}%\ncline{->}{cs}{cd}
 
 &
 
   \begin{tabular}{|c|c|c|c|c|c|c|c|}
     \hline
-    \vide & \vide & \vide & \vide & \qb   & \vide & \vide & \vide \\\hline
-    \vide & \vide & \vide & \vide & \vide & \vide & \qb   & \vide \\\hline
-    \vide & \vide & \vide & \qb   & \vide & \vide & \vide & \vide \\\hline
-    \one  & \zero & \zero & \zero & \zero & \one  & \zero & \zero \\\hline
+    \vide & \vide & \vide & \vide & \rnode{as}{\qb} & \vide & \vide & \vide \\\hline
+    \vide & \vide & \vide & \vide & \vide & \vide & \rnode{cs}{\qb} & \vide \\\hline
+    \vide & \vide & \vide & \rnode{bs}{\qb} & \vide & \vide & \vide & \vide \\\hline
+    \one  & \rnode{d6}{0} & \rnode{d5}{0} & \rnode{d4}{0} & \rnode{d3}{0} & \one  & \rnode{d1}{0} & \rnode{d0}{0} \\\hline
   \end{tabular}
+  \ncline{->}{as}{d6}\ncline{->}{as}{d3}\ncline{->}{as}{d0}
+  \ncline{->}{bs}{d5}\ncline{->}{bs}{d4}\ncline{->}{bs}{d3}
+  \ncline{->}{cs}{d3}\ncline{->}{cs}{d1}
 
 \\[4em]
   
