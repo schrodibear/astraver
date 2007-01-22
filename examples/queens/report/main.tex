@@ -315,12 +315,13 @@ This axiomatization is 66 lines long and could obviously be a
 
 \subsubsection{C integers as finite sets.}
 Next we make the connection between C operations over integers and
-abstract sets. This is introduced by a function symbol \texttt{iset}
-which interprets an integer as a finite set:
+abstract sets. This is introduced by an abstract function symbol
+\texttt{iset}, which maps a C integer to the finite set it represents:
 \begin{verbatim}
 //@ logic iset iset(int x)
 \end{verbatim}
-Then several axioms give interpretations to the C operations.
+It is not given any definition. Indeed, we simply need to 
+add axioms to interpret the C operations as set operations.
 Here is one example:
 \begin{verbatim}
 /*@ axiom iset_c_min_elt :
