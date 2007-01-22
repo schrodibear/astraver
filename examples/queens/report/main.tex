@@ -268,7 +268,7 @@ as bit vectors, to represent finite sets.  So we first start with an
 axiomatization of finite sets of integers and then we make connections
 between C integers and these abstract sets. It is important to say
 here that we use \caduceus\ in a mode where integer overflows are not
-taken into account: it means that program integers are modeled by arbitray
+taken into account: it means that program integers are modeled by arbitrary
 precision integers. This particular point is discussed in
 Section~\ref{conclu}. 
 
@@ -344,7 +344,7 @@ tricky. There is also an obvious variant, namely the cardinal of
 \texttt{a}, but showing that it decreases is not as easy as in the
 previous case. First \caduceus\ does not support variants for
 recursive functions and thus we have to introduce the corresponding
-assertion manually, rigth before the recursive call:
+assertion manually, right before the recursive call:
 \begin{verbatim}
     for (f=0; d=e&-e; e-=d) {
       //@ assert card(iset(a-d)) < card(iset(a))
@@ -447,7 +447,7 @@ It is also convenient to start defining the more general notion of
   @ } */
 \end{verbatim}
 $\mathtt{partial\_solution}(k,s)$ states that the array $s$ contains
-column assignements for the first $k$ queens on the first $k$
+column assignments for the first $k$ queens on the first $k$
 rows. Each column $s[i]$ must be in the valid range $[0,N[$ and two
 queens on two different rows $i$ and $j$ must not beat each other.
 Then we can define the notion of solution, as a partial solution for
@@ -577,7 +577,7 @@ several key features of \caduceus:
 \item 
   Finally, the large set of verification conditions could be
   discharged using the collaborative work of three automatic provers
-  (\simplify, \ergo\ and \yices) and an interative proof assistant
+  (\simplify, \ergo\ and \yices) and an interactive proof assistant
   (\coq). This multi-provers architecture is one of the main features
   of \caduceus\ and has been emphasized since the
   beginning~\cite{FilliatreMarche04}. Obviously, the proof could not
