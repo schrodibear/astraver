@@ -31,6 +31,7 @@
 
 \section{Introduction}
 
+% TODO DIRE JUSQU'A PRESENT
 Formal methods deal either with small properties of big programs or
 big properties of small programs. This paper describes a case study
 which definitely belongs to the latter category.
@@ -148,7 +149,7 @@ be seen as subsets of $\{0,1,\dots,n-1\}$.
 Then almost all computations in this program are actually to be
 understood as set operations. Some of them are obvious: \verb!a&~b&~c!
 computes the set $\mathtt{a}\backslash\mathtt{b}\backslash\mathtt{c}$,
-the test \verb!if(a)! checks whether \texttt{a} is empty, etc. Other
+the test \verb!if(a)! checks whether \texttt{a} is empty, etc. Others
 are more subtle. For instance, \verb!e&-e! computes the smallest
 element of \texttt{e} (as a singleton set). This is a 
 property of the twos-complement representation, exploited in
@@ -206,7 +207,7 @@ descending diagonals which is shifted the other way
 The values of $a$, $b$ and $c$ are illustrated in Figure~\ref{fig:abc}
 for $n=8$ and 3 rows already set.
 
-\begin{figure}
+\begin{figure}[t]
   \hspace*{-3em}\psfig{file=figabc.eps,width=\textwidth}
   \caption{Interpretation of $a$, $b$ and $c$ as sets}
   \label{fig:abc}
@@ -362,7 +363,7 @@ assertion manually, right before the recursive call:
 \begin{verbatim}
     for (f=0; d=e&-e; e-=d) {
       //@ assert card(iset(a-d)) < card(iset(a))
-      f+=t2(a-d,(b+d)*2,(c+d)/2); 
+      f+=t(a-d,(b+d)*2,(c+d)/2); 
     }
 \end{verbatim}
 Two verification conditions are generated. 
