@@ -22,7 +22,7 @@ INRIA Futurs, ProVal, Orsay F-91893}
 
 \begin{abstract}
   This article details the formal verification of a 2-lines C program
-  which computes the number of solutions to the $N$-queens problem.
+  which computes the number of solutions to the $n$-queens problem.
   The formal proof is performed using the \caduceus\ tool to generate
   the verification conditions and several provers (Simplify, Ergo,
   Coq) to discharge them. The main purpose of this article is to show
@@ -33,9 +33,8 @@ INRIA Futurs, ProVal, Orsay F-91893}
 
 \section{Introduction}
 
-% TODO DIRE JUSQU'A PRESENT
-Formal methods deal either with small properties of big programs or
-big properties of small programs. This paper describes a case study
+Today's formal methods deal either with simple properties of big programs or
+complex properties of small programs. This paper describes a case study
 which definitely belongs to the latter category.
 Indeed, it details the formal verification of the following 2-lines C program:
 {\small%
@@ -45,52 +44,51 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 \end{verbatim}}
 \noindent 
 This rather obfuscated code was found on a web page gathering C signature
-programs\footnote{\url{http://www.iwriteiam.nl/SigProgC.html}} and is
-apparently due to Marcel van Kervinc. This is a standalone C program
-which reads an integer on the standard input, say $n$, and then prints another
-integer on the standard output, say $f(n)$. If $n$ is smaller than the
-machine word size (typically 32), then
-$f(n)$ appears to be the number of solutions to the famous $n$-queens
-problem, that is the number of ways to put $n$ queens on a $n\times n$
-chessboard so that they cannot attack each other. And even more
+programs\footnote{\url{http://www.iwriteiam.nl/SigProgC.html}} and was
+apparently authored by Marcel van Kervinc. This is a standalone C program
+which reads an integer $n$ on standard input and prints another
+integer $f(n)$ on standard output. If $n$ is smaller than the
+machine word size in bits (typically 32), then
+$f(n)$ appears to be the number of solutions to the well-known $n$-queens
+problem, that is the number of ways that $n$ queens can be put on a $n\times n$
+chessboard so that they do not attack each other. More
 surprisingly, this is a very efficient program to compute this number.
 
-As a case study for \caduceus, a tool we are
-co-developing~\cite{caduceus}, we considered 
-the formal verification of this program. By verification, we mean here
-the mechanically-assisted proof that this program (1) does not crash, 
+As a case study for \caduceus, a tool the author of this paper is
+co-develo\-ping~\cite{caduceus}, we consider
+verifying this program formally. Our goal is a
+mechanically-assisted proof that this program (1) does not crash, 
 (2) terminates, and (3) indeed computes the expected number. 
-We find this challenging to formally prove, with the highest
-possible trust level, that this very low level, highly optimized
-idiomatic C source code, satisfies a high level behavioral property.
-% We find this
-% challenging since these two lines of code are at the same time idiomatic C
-% programming, complex from an algorithmic point of view and highly
-% efficient. And we can demonstrate the ability of our tools to tackle
-% a wide range of verification issues without considering a too long
-% program. 
+This is highly challenging due to the many sources of complexity in
+these two lines of code: it is at the same time
+idiomatic C programming, complex from an algorithmic point of view and
+very efficient. Meanwhile, it gives us the opportunity to demonstrate
+the ability of our tool to tackle a wide range of verification issues.
+% We find this challenging to formally prove, with the highest
+% possible trust level, that this very low level, highly optimized
+% idiomatic C source code, satisfies a high level behavioral property.
 
-This paper is organized as follows. First Section~\ref{unobf}
+This paper is organized as follows. Section~\ref{unobf}
 ``unobfuscates'' the program, unravelling the mystery of its algorithm
-and data. Then Section~\ref{caduceus} briefly introduces \caduceus, a
+and data. Section~\ref{caduceus} briefly introduces \caduceus, a
 tool which takes annotated C source code as input and produces
 verification conditions in the native syntax of several existing provers.
-Finally Section~\ref{verif} details the formal verification, namely
+Section~\ref{verif} details the formal verification task, namely
 the logical annotations inserted in the program and the methods used
-to discharge the resulting verification conditions.  The annotated
-source code and the proofs are available online at
-\url{http://why.lri.fr/queens/}.
+to discharge the resulting verification conditions.  We conclude in
+Section~\ref{conclu}. Annotated source code and proofs are available
+online at \url{http://why.lri.fr/queens/}.
 
 
 \section{Unobfuscation}\label{unobf}
 
-Before entering the formal verification process, we first unravel the
-mystery behind this obfuscated code. The code is composed of two
-parts: a recursive function \texttt{t}, which takes three integers as
-arguments and returns an integer; and a main function which reads an
-integer from the standard input, makes a call to the function
-\texttt{t} and prints the result on the standard output.
-With type declarations and a bit of indentation, the function
+Before we enter the formal verification process, we first unravel the
+mystery behind this obfuscated code. The code is divided into
+a recursive function \texttt{t}, which takes three integers as
+arguments and returns an integer, and a main function which reads an
+integer from standard input, calls function
+\texttt{t} and prints the result on standard output.
+With added type declarations and a bit of indentation, function
 \texttt{t} reads as follows:
 \begin{verbatim}
 int t(int a, int b, int c) {
@@ -99,13 +97,13 @@ int t(int a, int b, int c) {
   return f;
 }
 \end{verbatim}
-The assignment \verb!d=(e-=d)&-e! actually does not conform with the
-ANSI norm, because it assumes that the inner assignment \verb!e-=d! is
-performed before the evaluation of \verb!-e!. This is not guaranteed
-and the compiler may freely choose between the two possible evaluation
+The assignment \verb!d=(e-=d)&-e! does not strictly conform with
+ANSI C standard, because it assumes that the inner assignment \verb!e-=d! is
+performed before evaluating \verb!-e!. This is not guaranteed
+and the compiler may freely choose between both possible evaluation
 strategies. Since \caduceus\ only deals with ANSI C programs,
-we need to modify the code. Fortunately, this is quite easy:
-since \verb!d! is initialized to 0 we can move the
+we have to modify the code. Fortunately, this is quite easy:
+since \verb!d! is initialized to 0, we can safely move the
 assignment \verb!e-=d! to the end of the loop body and save the
 initialization. We have even reduced the size of the original code.
 The second modification we make is to replace the \texttt{main}
@@ -130,7 +128,7 @@ int queens(int n) {
 }
 \end{verbatim}  
 \vspace{-1.2em}\hrulefill\vspace{-1em}
-  \caption{The C code to be verified}
+  \caption{Unobfuscated code}
   \label{fig:code}
 \end{figure}
 
@@ -139,29 +137,29 @@ This is a backtracking algorithm
 which fills the rows of the chessboard one at a time.
 %--- there is no better way to solve the $N$-queens problem --- 
 More precisely, each call to \texttt{t} enumerates all possible
-positions for a queen on the current row with the \texttt{for} loop
-and, for each of them, recursively calls \texttt{t} to set the next
-rows.  The number of solutions is accumulated in \texttt{f} and
-returned.  The key idea is the use of integers as \emph{sets} or
+positions for a queen on the current row inside the \texttt{for} loop
+and, for each of them, recursively calls \texttt{t} to set the 
+rows that follow it.  The number of solutions is accumulated in \texttt{f} and
+returned.  The key idea is to use integers as \emph{sets} or
 equivalently as \emph{bit vectors}: $i$ belongs to the ``set'' $x$ if and
 only if the $i$-th bit of $x$ is set.
-Following this idea, the program variables
+According to this trick, program variables
 \texttt{a}, \texttt{b}, \texttt{c}, \texttt{d} and \texttt{e} must
 be seen as subsets of $\{0,1,\dots,n-1\}$.
-Then almost all computations in this program are actually to be
+Then almost all computations in this program are to be
 understood as set operations. Some of them are obvious: \verb!a&~b&~c!
 computes the set $\mathtt{a}\backslash\mathtt{b}\backslash\mathtt{c}$,
 the test \verb!if(a)! checks whether \texttt{a} is empty, etc. Others
 are more subtle. For instance, \verb!e&-e! computes the smallest
-element of \texttt{e} (as a singleton set). This is a 
+element of \texttt{e} (and returns the corresponding singleton set). This is a 
 property of the twos-complement representation, exploited in
 Patricia trees~\cite{patricia} implementations in particular.
 Another trick is the computation of the set
 $\{0,1,\dots,\mathtt{n}-1\}$ as \verb!~(~0<<n)!. Finally,
 multiplication by 2 (resp. division by 2) is used to add 1 (resp.
-subtract 1) to each element of a set; we write $\mathit{succ}$ and
+subtract 1) to each element of a set; from now on, we write $\mathit{succ}$ and
 $\mathit{pred}$ these two 
-set operations in the following. We can thus write a more
+set operations. We can thus write a more
 abstract version of the code which only deals with finite sets. It is
 displayed in Figure~\ref{fig:abstract}.
 
@@ -187,27 +185,27 @@ displayed in Figure~\ref{fig:abstract}.
   \label{fig:abstract}
 \end{figure}
 
-It is now easier to explain the algorithm. The set $a$ contains the
-columns not yet assigned to a queen, thus the candidate positions
+It is now easier to explain the algorithm. Set $a$ contains the
+columns not yet assigned to a queen, thus candidate positions
 for the queen to be set on the current row. Initially, $a$ contains
 all possible positions, that is  $a = \{0,1,\dots,n-1\}$. 
-We have found one solution whenever $a$ becomes empty and then we return 1.
+We have found one solution whenever $a$ becomes empty and then return 1.
 Otherwise, we have to consider all possible positions on the current
-row. The sets $b$ and $c$ respectively contain the positions which
+row. Sets $b$ and $c$ respectively contain the positions which
 must be avoided because they are on an ascending (resp. descending)
 diagonal of a queen on a previous row.
-Thus $e = a\backslash b\backslash c$ precisely contain the positions to be
+Thus $e = a\backslash b\backslash c$ precisely contains the positions to be
 considered for the current row. They are all examined one at a time by
 repeatedly removing the smallest element from $e$, which is set to $d$.
-Then the next rows are considered by a recursive call to $t$ with $a$,
-$b$ and $c$ being updated according to the choice of the column $d$
+Then next rows are considered by a recursive call to $t$ with $a$,
+$b$ and $c$ being updated according to the choice of column $d$
 for the current row: $d$ is removed from the set of possible columns
 ($a\backslash\{d\}$), added to the set of ascending diagonals which is
 shifted ($\mathit{succ}(b\cup\{d\})$, and similarly  added to the set of
 descending diagonals which is shifted the other way
 ($\mathit{pred}(c\cup\{d\})$). 
 The values of $a$, $b$ and $c$ are illustrated in Figure~\ref{fig:abc}
-for $n=8$ and 3 rows already set.
+for $n=8$ on a configuration where 3 rows are already set.
 
 \begin{figure}[t]
   \hspace*{-3em}\psfig{file=figabc.eps,width=\textwidth}
@@ -223,7 +221,7 @@ The properties that may be checked are of two kinds: first, the
 program may be checked to be free of threats (null pointer
 dereferencing or out-of-bounds array access) and second, it may be
 proved to satisfy functional properties given as annotations in the
-source. These annotations include functions's preconditions and
+source. These annotations include functions' preconditions and
 postconditions, global invariants, loop invariants, etc., as usual in
 Hoare logic frameworks~\cite{Hoare69}.
 They are inserted in the source as comments of
@@ -232,7 +230,7 @@ language largely inspired by the Java Modeling Language~\cite{JML}.
 A significant part of ANSI C is supported, including pointer
 arithmetic and possible pointer aliasing.
 
-Here is for instance a possible specification for a function
+To make it clear, here is a possible specification for a function
 \texttt{math\_mod} computing the modulo:
 \begin{verbatim}
 /*@ requires 
@@ -244,9 +242,9 @@ Here is for instance a possible specification for a function
 int math_mod(int x, int y) { ... }
 \end{verbatim}
 The keyword \texttt{requires} introduces the function's precondition,
-that is a property to be satisfied whenever the function is called.
+a property to be satisfied whenever the function is called.
 The keyword \texttt{ensures} introduces the function's postcondition,
-that is a property which must be established whenever the function returns.
+a property which must be established whenever the function returns.
 As one can notice, the specification language augments the usual
 C syntax (\verb!&&!, \verb!==!, etc.) with new constructs such as
 \verb!\result! denoting the value returned by the function, the
@@ -267,8 +265,9 @@ automatic theorem provers such as
 
 \section{Formal Verification}\label{verif}
 
-As stated in the introduction, we want to show that the C program in
-Figure~\ref{fig:code} is correct using \caduceus. More precisely, we
+As stated in the introduction, we want to use \caduceus\ to show that
+the C program in 
+Figure~\ref{fig:code} is correct. More precisely, we
 are going to show that (1) the program does not crash; (2)
 it terminates; and (3) it computes the right number.
 The first property is easily obtained, since the program is not using
@@ -277,11 +276,11 @@ pointers or arrays. Thus the only threat in the code is the division and
 which is trivially discharged. The other two properties are much more
 difficult to establish.
 
-\subsection{Integers Modelling Finite Sets}
+\subsection{Integers Modelling Finite Sets}\label{setmodel}
 
 As we explained in Section~\ref{unobf}, the program mainly uses integers
-as bit vectors, to represent finite sets.  So we first start with an
-axiomatization of finite sets of integers and then we make connections
+as bit vectors, to represent finite sets.  We first start with an
+axiomatization of finite sets of integers and then make connections
 between C integers and these abstract sets. It is important to say
 here that we use \caduceus\ in a mode where integer overflows are not
 taken into account: it means that program integers are modeled by arbitrary
@@ -301,24 +300,24 @@ membership predicate  introduced as follows:
 \begin{verbatim}
 //@ predicate in_(int x, iset s)
 \end{verbatim}
-This is an abstract predicate, without definition. Then we can introduce
-the various set operations. For instance, the empty set is introduced
+This is an abstract predicate, without definition. Then we introduce
+the usual set operations. For instance, the empty set is introduced
 with the following two declarations:
 \begin{verbatim}
 //@ logic iset empty()
 //@ axiom empty_def : \forall int i; !in_(i,empty())
 \end{verbatim}
-Similarly we introduce set inclusion (\texttt{included}), cardinal
+Similarly, we introduce set inclusion (\texttt{included}), cardinal
 (\texttt{card}), addition and removal
 of one element (\texttt{add} and 
 \texttt{remove}), set difference (\texttt{diff}), smallest element
-(\texttt{min\_elt}) and the \texttt{succ} and \texttt{pred} operations.
+(\texttt{min\_elt}) and \texttt{succ} and \texttt{pred} operations.
 This axiomatization is 66 lines long and could obviously be a 
 \caduceus\ library.
 
 \subsubsection{C integers as finite sets.}
 Next we make the connection between C operations over integers and
-abstract sets. This is introduced by an abstract function symbol
+abstract sets. This is based on an abstract function symbol
 \texttt{iset}, which maps a C integer to the finite set it represents:
 \begin{verbatim}
 //@ logic iset iset(int x)
@@ -332,7 +331,7 @@ Here is one example:
   @      iset(x&-x) == singleton(min_elt(iset(x)))
   @*/
 \end{verbatim}
-This new axiomatization is 30 lines long. Again it could be part of some
+This new axiomatization is 30 lines long. Again, it could be part of some
 \caduceus\ library.
 
 \subsection{Termination}
@@ -356,11 +355,11 @@ decreases at each run of the loop body. Both are automatically
 discharged by \simplify.
 
 \subsubsection{Termination of the recursive function.}
-Proving the termination of the recursive function \texttt{t} is more
+Proving the termination of recursive function \texttt{t} is more
 tricky. There is also an obvious variant, namely the cardinal of
 \texttt{a}, but showing that it decreases is not as easy as in the
-previous case. Since \caduceus\ does not support variants for
-recursive functions yet, we introduce the corresponding
+previous case. Since \caduceus\ does not yet support variants for
+recursive functions, we introduce the corresponding
 assertion manually, right before the recursive call:
 \begin{verbatim}
     for (f=0; d=e&-e; e-=d) {
@@ -369,11 +368,11 @@ assertion manually, right before the recursive call:
     }
 \end{verbatim}
 Two verification conditions are generated. 
-Unfortunately they cannot be discharged automatically, because there
-is some information missing. Indeed we must be able to prove that
-\texttt{d} belongs to the set \texttt{a} for the cardinal to decrease,
+Unfortunately they cannot be discharged automatically, because 
+some information is missing. Indeed we must be able to prove that
+\texttt{d} belongs to the set \texttt{a} for the variant to decrease,
 and this is not immediate. To get this property we need the invariant
-that the set \texttt{e} remains included in its initial value, which
+that set \texttt{e} remains included in its initial value, which
 is itself trivially included in \texttt{a}. For that purpose we
 introduce the following loop invariant:
 \begin{verbatim}
@@ -382,32 +381,34 @@ introduce the following loop invariant:
     /*@ invariant included(iset(e),\at(iset(e),L)) */
     for (f=0; d=e&-e; e-=d) {
 \end{verbatim}
-where the label \texttt{L} is used to denote the value of
+where label \texttt{L} is used to denote the value of
 \verb!iset(e)! before entering the loop, as \verb!\at(iset(e),L)!.
 Then all verification conditions are automatically discharged by
 \simplify, including the preservation of this loop invariant.
 
 \subsection{Correctness}\label{correctness}
 
-We now enter the process of verifying the correctness of the program,
-i.e. the property that it computes the right number of solutions. As
-we have seen, the program is building the solutions one by one. Thus
+We now enter the process of verifying the program correctness,
+i.e. the property that it computes the number of solutions to the
+$n$-queens problem. As
+we have seen, the program is building solutions one by one. Thus
 we need to prove that it finds \emph{all} solutions, \emph{only}
-solutions and that it does \emph{not find twice} the same
-solution. There is here a major difficulty: the program is not storing
-anything, not even the current solution being built. So how can we
+solutions and that it does \emph{not find} the same
+solution \emph{twice}. 
+There is a major difficulty here: the program is not storing
+anything, not even the current solution being built. How can we
 state properties about the solutions being found? 
 
 \subsubsection{Ghost code.} The solution is to
-use \emph{ghost code}, that is additional code which is not
-participating to the program computation but which can access the
+use \emph{ghost code}, which can be defined as additional code not
+participating in the program computation but potentially accessing the
 program data. We first introduce ghost global variables to record the 
 current solution being built:
 \begin{verbatim}
 //@ ghost int* col;
 //@ ghost int k;
 \end{verbatim}
-The ghost variable \texttt{k} is the next row to be set and the ghost
+Ghost variable \texttt{k} is the next row to be set and ghost
 array \texttt{col} records the columns assigned to the queens on the
 various rows. Similarly we introduce ghost variables to store the list of
 all solutions we have found so far:
@@ -415,9 +416,9 @@ all solutions we have found so far:
 //@ ghost int** sol;
 //@ ghost int s;
 \end{verbatim}
-The ghost array \texttt{sol} contains all the solutions, each
-solution begin an array similar to \texttt{col}.
-And the ghost variable \texttt{s} is the next empty slot in \texttt{sol}. 
+Ghost array \texttt{sol} contains all solutions, each
+solution being an array similar to \texttt{col}.
+Ghost variable \texttt{s} is the next empty slot in \texttt{sol}. 
 Using these four ghost variables, we can instrument the program with
 ghost code to record the solutions:
 \begin{verbatim}
@@ -435,7 +436,7 @@ int t(int a, int b, int c){
   return f;
 }
 \end{verbatim}
-The particular comment \verb!//@ ghost! introduces a ghost statement,
+The stylized comment \verb!//@ ghost! introduces a ghost statement,
 which is similar to a traditional C statement, but may only modify
 ghost variables and does not generate verification conditions
 regarding pointers validity (ghost arrays are infinite).
@@ -443,12 +444,12 @@ The function \texttt{store\_solution} is a ghost
 function\footnote{There is not yet a notion of ghost function in
   \caduceus\ so we use a usual C prototype; it is thus our
   responsibility to check that it is not called in the normal code,
-  which is here obvious.} that we introduce to record a solution when
-it is found and which we now describe.
+  which is obvious here.} that we introduce to record a solution when
+it is found. We describe it now.
 
 \subsubsection{Solutions.}
 To give \texttt{store\_solution} a specification, we need to introduce
-the notion of solution to the $N$-queens problems. It is convenient to
+the notion of solution to the $n$-queens problems. It is convenient to
 introduce the size of the chessboard as a logical constant, to avoid
 passing it as an additional argument everywhere:
 \begin{verbatim}
@@ -475,14 +476,14 @@ the $N$ rows:
 //@ predicate solution(int* s) { partial_solution(N(), s) }
 \end{verbatim}
 We also introduce two handy predicates \texttt{eq\_prefix} and
-\texttt{eq\_sol} to state that two solutions coincide up a given row:
+\texttt{eq\_sol} to state that two solutions coincide up to a given row:
 \begin{verbatim}
 /*@ predicate eq_prefix(int *t, int *u, int i) {
   @   \forall int k; 0 <= k < i => t[k]==u[k]
   @ } */
 //@ predicate eq_sol(int *t, int *u) { eq_prefix(t, u, N()) } 
 \end{verbatim}
-Finally we can give \texttt{store\_solution} a specification:
+Finally we give \texttt{store\_solution} a specification:
 \begin{verbatim}
 /*@ requires solution(col)
   @ assigns  s, sol[s][0..N()-1]
@@ -490,11 +491,11 @@ Finally we can give \texttt{store\_solution} a specification:
   @*/
 void store_solution();
 \end{verbatim}
-It has a precondition which enforces the user to show that
+It consists in a precondition which allows calling this function only when
 \texttt{col} contains a valid solution, an \texttt{assigns} clause
 specifying that it only modifies \texttt{s} and the \texttt{s}-th row
 of \texttt{sol}, and a postcondition ensuring that \texttt{s} has been
-incremented and \texttt{col} stored in \verb!sol[s]!.
+incremented after \texttt{col} was stored in \verb!sol[s]!.
 With this precondition, \texttt{store\_solution} already ensures that
 we find only solutions. We still need to show that we find \emph{all}
 solutions, without duplicates.
@@ -512,9 +513,9 @@ following postcondition:
   @*/
 int queens(int n);
 \end{verbatim}
-In other words, an array is a solution if and only if it appears in
-\texttt{sol} when we are done, and moreover \texttt{sol} is a sorted
-array so it does not contain duplicated solutions. To define the
+Stated otherwise, an array is a solution if and only if it appears in
+\texttt{sol} when we are done, and \texttt{sol} is an
+array with no duplicates. To define the
 \texttt{sorted} predicate, we introduce a natural lexicographic order
 over solutions, as follows:
 \begin{verbatim}
@@ -527,10 +528,11 @@ over solutions, as follows:
 \end{verbatim}
 
 \subsubsection{Remaining annotations.} 
-We are now done with the annotations ensuring the correctness of the
-program. But to establish the verification conditions, we still need
-to give \texttt{t} a specification and its loop an invariant. The
-fully annotated code is given in appendix. Here are the key properties
+The annotations introduced so far are sufficient to ensure program
+correctness. To prove them, in \caduceus, we need to strengthen them
+to inductive invariants. In particular, we need
+to give \texttt{t} a specification and its loop an invariant.
+Fully annotated code is given in appendix. Here are the key properties
 stated in these annotations:
 \begin{itemize}
 \item The precondition of \texttt{t} requires that \texttt{col} must be a
@@ -539,60 +541,61 @@ stated in these annotations:
   explained in Section~\ref{unobf}.
 \item The postcondition of \texttt{t} ensures that the set of
   solutions built by \texttt{t} is sorted and contains exactly the 
-  solutions extending the partial solution given at the entry point.
+  solutions extending the partial solution given at function entry.
 \item The loop invariant states that \texttt{sol} remains sorted and
-  that the set of solutions built since the beginning of the loop are
+  that the solutions built since the beginning of the loop are
   exactly those extending the partial solution given at the entry
-  point of \texttt{t} with a column for the row $k$ taken among the
+  point of \texttt{t}, with a column for row $k$ taken among the
   elements of $e$ already considered by the \texttt{for} loop.
 \end{itemize}
 We end up with 46 lines of annotations (not including the preliminary
 definitions and axiomatizations!) for 2 lines of code. This huge
 ratio must be considered as extreme: we are proving a very complex
 property of a smart algorithm that fits 2 lines of code. This
-is obviously not the case in all formal verifications.
+is obviously not the case in most formal verification tasks.
 
 \subsubsection{Discharging the verification conditions.}
-When \caduceus\ is run on the resulting annotated source code, we get
+Running \caduceus\ on the resulting annotated source code produces
 57 verification conditions for \texttt{t} and 16 for
-\texttt{queens}. Regarding the latter, all verification conditions are
-automatically discharged by \simplify, within a few seconds.
-Regarding the former, only 44 verification conditions are
-automatically discharged, either by \simplify\ or \ergo.
+\texttt{queens}. The latter are
+automatically discharged by \simplify\ within a few seconds.
+As expected, verification conditions for \texttt{t} are more difficult
+to prove. Only 44 of them are
+discharged automatically, either by \simplify\ or \ergo.
 The remaining 13 verification conditions were discharged manually,
-using the \coq\ proof assistant, but with the help of the ATPs
+using the \coq\ proof assistant, with the help of the automatic provers
 \simplify\ and \ergo\ called from \coq\ on some subgoals. These \coq\
 proof scripts amount to 600 lines and represent several hours of
-work. Though these tools could be better integrated, this
+work. Though these tools could well be better integrated, this
 collaboration between interactive and automatic provers can be
 considered successful.
 
 \section{Conclusion}\label{conclu}
 
 We have presented the formal verification of an extremely short but
-also extremely complex C program using the \caduceus\ tool. Beyond a
-nice specification exercise, it was the opportunity to illustrate
+also extremely complex C program using the \caduceus\ tool. Beyond
+being a nice specification exercise, it was the opportunity to illustrate
 several key features of \caduceus:
 \begin{itemize}
 \item 
   First, \caduceus\ allows the user to introduce arbitrary
-  \emph{first-order logical theories} for the purpose of the
+  \emph{first-order logical theories} for the purpose of
   specification. This includes types, constants, functions, predicates
-  and axioms, all declared within the program source code and passed
-  to the provers used to discharge the verification conditions.
-  We consider this ability as a real improvement with respect to
+  and axioms, all declared within the program source code and passed on
+  to the provers used to discharge verification conditions.
+  We consider this possibility as a real improvement over
   JML-like approaches~\cite{JML} where annotations may only refer to code data
   and (pure) code functions. 
 
 \item 
-  Second, this case study clearly points out the necessity of
+  Second, this case study clearly points out the utility of
   \emph{ghost code} to write specifications. In this particular case,
-  the program is enumerating the solutions to a problem, but is not
-  storing any of them, not even the current one. Thus the code has to
-  be enriched with new statements ``to tell the untold'' and thus to
-  enable the specification. In particular, ghost code must not be
+  the program is enumerating the solutions to a problem, but does not
+  store any of them, not even the current one. Thus the code has to
+  be enriched with new statements ``to tell the untold'' so that a
+  rich specification is possible. In particular, ghost code must not be
   limited to mere assignments but should include arbitrary statements,
-  up to function calls. The support of ghost code in \caduceus\ was
+  up to function calls. Ghost code support in \caduceus\ was
   not optimal in this respect; we plan to extend it accordingly.
 
 \item 
@@ -600,14 +603,15 @@ several key features of \caduceus:
   discharged using the collaborative work of two automatic provers
   (\simplify\ and \ergo) and an interactive proof assistant
   (\coq). This multi-provers architecture is one of the main features
-  of \caduceus\ and has been emphasized since the
+  of \caduceus\ since its
   beginning~\cite{FilliatreMarche04}. Obviously, the proof could not
   have been conducted using automatic provers only and would have been
   a tremendous amount of work as a fully interactive proof.
 \end{itemize}
 
-There is a remaining unsatisfactory aspect in this formal verification
-which deserves discussion: \emph{integer overflows}. Basically, we can
+One aspect in this formal verification
+remains unsatisfactory and deserves discussion: \emph{integer
+  overflows}. Basically, we can 
 choose among three possible models for machine integers when doing a
 formal verification: (1) mathematical integers, without any
 consideration for overflows; (2) mathematical integers, with
@@ -625,12 +629,13 @@ due to the repetitive multiplications by 2. Thus it would not be
 possible to use the second model, unless we restrict ourselves to
 $n\le 16$. So for the verification to be fully satisfactory, it should
 be conducted within the third model, where we can prove that only the
-$n$ lowest bits of the program variables are meaningful. But such a model
+$n$ lowest bits of the program variables are meaningful. Ideally, such a model
 should not penalize the work of automatic provers, which all assume
 mathematical integers. Regarding \caduceus, this is ongoing research.
 
 Such a low level model of machine integers could also be used to
-show the consistency of our axiomatization of C integers as finite sets.
+show the consistency of the axiomatization of C integers as finite
+sets presented in Section~\ref{setmodel}.
 This could be performed using the Coq proof assistant and a suitable
 model of machine integers as bit vectors.
 
