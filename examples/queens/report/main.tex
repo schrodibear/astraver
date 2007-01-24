@@ -15,7 +15,9 @@
 \title{Queens on a Chessboard: \\
        an Exercise in Program Verification}
 \author{Jean-Christophe Filli\^atre}
-\institute{CNRS -- Universit\'e Paris Sud \\ 91405 Orsay, France}
+\institute{CNRS \\
+LRI, Univ Paris-Sud, CNRS, Orsay F-91405 \\
+INRIA Futurs, ProVal, Orsay F-91893}
 \maketitle
 
 \begin{abstract}
@@ -357,8 +359,8 @@ discharged by \simplify.
 Proving the termination of the recursive function \texttt{t} is more
 tricky. There is also an obvious variant, namely the cardinal of
 \texttt{a}, but showing that it decreases is not as easy as in the
-previous case. First \caduceus\ does not support variants for
-recursive functions and thus we have to introduce the corresponding
+previous case. Since \caduceus\ does not support variants for
+recursive functions yet, we introduce the corresponding
 assertion manually, right before the recursive call:
 \begin{verbatim}
     for (f=0; d=e&-e; e-=d) {
@@ -382,7 +384,8 @@ introduce the following loop invariant:
 \end{verbatim}
 where the label \texttt{L} is used to denote the value of
 \verb!iset(e)! before entering the loop, as \verb!\at(iset(e),L)!.
-Then all verification conditions are automatically discharged by \simplify.
+Then all verification conditions are automatically discharged by
+\simplify, including the preservation of this loop invariant.
 
 \subsection{Correctness}\label{correctness}
 
@@ -446,7 +449,8 @@ it is found and which we now describe.
 \subsubsection{Solutions.}
 To give \texttt{store\_solution} a specification, we need to introduce
 the notion of solution to the $N$-queens problems. It is convenient to
-introduce the size of the chessboard as a logical constant:
+introduce the size of the chessboard as a logical constant, to avoid
+passing it as an additional argument everywhere:
 \begin{verbatim}
 //@ logic int N()
 \end{verbatim}
@@ -499,8 +503,10 @@ solutions, without duplicates.
 To ensure that we find all solutions, we give \texttt{queens} the
 following postcondition:
 \begin{verbatim}
-/*@ ensures 
-  @   sorted(sol,0,s) &&
+/*@ requires
+  @   n == N() && s == 0
+  @ ensures 
+  @   sorted(sol,0,\result) &&
   @   \forall int* t; solution(t) 
   @     <=> (\exists int i; 0<=i<\result && eq_sol(t,sol[i]))
   @*/
@@ -543,8 +549,8 @@ stated in these annotations:
 We end up with 46 lines of annotations (not including the preliminary
 definitions and axiomatizations!) for 2 lines of code. This huge
 ratio must be considered as extreme: we are proving a very complex
-property of a very complex and very small code. This is obviously not
-the case in all formal verifications.
+property of a smart algorithm that fits 2 lines of code. This
+is obviously not the case in all formal verifications.
 
 \subsubsection{Discharging the verification conditions.}
 When \caduceus\ is run on the resulting annotated source code, we get
@@ -591,8 +597,8 @@ several key features of \caduceus:
 
 \item 
   Finally, the large set of verification conditions could be
-  discharged using the collaborative work of three automatic provers
-  (\simplify, \ergo\ and \yices) and an interactive proof assistant
+  discharged using the collaborative work of two automatic provers
+  (\simplify\ and \ergo) and an interactive proof assistant
   (\coq). This multi-provers architecture is one of the main features
   of \caduceus\ and has been emphasized since the
   beginning~\cite{FilliatreMarche04}. Obviously, the proof could not
@@ -600,19 +606,35 @@ several key features of \caduceus:
   a tremendous amount of work as a fully interactive proof.
 \end{itemize}
 
-There is a remaining unsatisfactory aspect in this formal
-verification which deserves discussion: \emph{integer
-overflows}. Indeed, the verification was performed in a model where C
-integers are mapped to mathematical integers and not to 32-bits
-machine integers (assuming a 32-bits architecture). The limitation
-$n\le 32$ is not really an issue, the world record holding for $n=25$;
-thus all machines will be 64-bits before the limit $n=32$ is reached.
-But the program is actually performing unrelevant overflows as soon as
-$n>16$. Thus for the verification to be fully satisfactory, it should
-be conducted within a model where we can prove that the $n$ lowest
-bits only of the program variables are meaningful. But such a model
+There is a remaining unsatisfactory aspect in this formal verification
+which deserves discussion: \emph{integer overflows}. Basically, we can
+choose among three possible models for machine integers when doing a
+formal verification: (1) mathematical integers, without any
+consideration for overflows; (2) mathematical integers, with
+verification conditions to prevent any overflow; and (3) a low level
+model faithful to the machine integers. The verification presented in
+this paper was performed using the first model, i.e. assuming no
+overflow, and thus makes no assumption on the value of $n$. But 
+$n$ is obviously limited by the size of machine integers, that is 32 if we
+assume a 32-bits architecture. If this limit is not really an issue is
+practice (the world record holding for $n=25$~\cite{nqueensrecord},
+all machines will be 64-bits before the limit $n=32$ is reached), 
+the program is actually performing unrelevant overflows as soon as
+$n>16$ since \texttt{b} contains bits which will overflow
+due to the repetitive multiplications by 2. Thus it would not be
+possible to use the second model, unless we restrict ourselves to
+$n\le 16$. So for the verification to be fully satisfactory, it should
+be conducted within the third model, where we can prove that only the
+$n$ lowest bits of the program variables are meaningful. But such a model
 should not penalize the work of automatic provers, which all assume
 mathematical integers. Regarding \caduceus, this is ongoing research.
+
+Such a low level model of machine integers could also be used to
+show the consistency of our axiomatization of C integers as finite sets.
+This could be performed using the Coq proof assistant and a suitable
+model of machine integers as bit vectors.
+
+% TODO c'est un raffinement de donnees => autre approche ?
 
 \nocite{*}
 \bibliographystyle{plain}
@@ -671,8 +693,7 @@ int t(int a, int b, int c){
 /*@ requires 
   @   n == N() && s == 0 && k == 0
   @ ensures 
-  @   \result == s &&
-  @   sorted(sol, 0, s) &&
+  @   \result == s && sorted(sol, 0, s) &&
   @   \forall int* t; 
   @      solution(t) <=> (\exists int i; 0<=i<\result && eq_sol(t,sol[i]))
   @*/
