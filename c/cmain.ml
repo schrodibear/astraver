@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.89 2006-12-19 15:36:50 moy Exp $ i*)
+(*i $Id: cmain.ml,v 1.90 2007-01-25 09:26:25 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -205,7 +205,7 @@ let rec explain_exception fmt = function
 
 (*
 let () = main (); exit 1
-*)
+*) 
 
 let () =
   try

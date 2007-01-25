@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.96 2007-01-19 13:35:57 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.97 2007-01-25 09:26:25 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -220,8 +220,7 @@ let rec type_why_for_term t =
 	    | _, Pointer _ -> assert false
 	    | ty,_ -> ty
 	end
-    | NTbinop (t1,_,_) -> Format.eprintf "type_why de t1 : %a@." Output.fprintf_logic_type (Info.output_why_type (type_why_for_term t1)); 
-	type_why_for_term t1
+    | NTbinop (t1,_,_) -> type_why_for_term t1
     | NTarrow (_,z,f) ->
 	begin
 	  let z = repr z in

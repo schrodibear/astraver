@@ -495,9 +495,12 @@ let rec term tyf t =
       assert (List.length li = List.length l || 
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
-      List.iter2 
-	(fun (v,ty) e -> 
-	   unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
+      begin
+	try      List.iter2 
+	  (fun (v,ty) e -> 
+	     unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
+	with Invalid_argument _ -> assert false
+      end
   | NTunop (_,t) -> term tyf t 
   | NTbinop (t1,_,t2)
   | NTmin (t1,t2)
@@ -546,9 +549,12 @@ let rec predicate tyf p =
       assert (List.length li = List.length l || 
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
-      List.iter2 
+      begin 
+	try      List.iter2 
 	(fun (v,ty) e ->
 	   unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
+      with Invalid_argument _ -> assert false
+      end
   | NPrel (t1,op,t2) ->      
       term tyf t1; 
       term tyf t2;
@@ -623,9 +629,13 @@ let rec calcul_zones expr =
 		 | ty -> ty in v,t)
 	    f.args 
 	in
-	List.iter2 (fun (v,ty) e -> unifier_type_why ~var_name:v.var_name ty 
+	begin
+	  try List.iter2 (fun (v,ty) e -> unifier_type_why ~var_name:v.var_name ty 
 			(type_why e))
 	  arg_types l
+	with Invalid_argument _ -> 
+	   warning expr.nexpr_loc "Call to variable args function"
+	end
     | NEcond (e1,e2,e3)->  calcul_zones e1; calcul_zones e2; calcul_zones e3
     | NEcast (_,e) -> calcul_zones e
     | NEmalloc (_,e) -> calcul_zones e
@@ -642,10 +652,13 @@ let rec c_initializer ty tw init =
 	      begin
 		match tag_type_definition tag with
 		  | TTStructUnion(ty,fields) ->
-		      List.iter2
+		      begin
+			try List.iter2
 			(fun f v ->
 			    c_initializer f.var_type f.var_why_type v)
 			fields l
+		      with Invalid_argument _ -> assert false
+		      end
 		  | _ -> assert false
 	      end
 	  | Tarray (_,ty,_) ->	      
