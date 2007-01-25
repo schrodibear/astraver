@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.41 2006-12-14 08:49:46 couchot Exp $ i*)
+(*i $Id: cmake.ml,v 1.42 2007-01-25 13:23:51 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -107,7 +107,7 @@ let generic f targets =
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "cvcl/%%_why.cvc: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl --encoding sstrat -dir cvcl $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "harvey: %a@\n" (print_files harvey) targets;
        fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
