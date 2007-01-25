@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.121 2006-11-24 13:28:00 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.122 2007-01-25 08:48:55 couchot Exp $ i*)
 
 open Logic
 open Ident
@@ -523,9 +523,10 @@ and print_predicate fmt = function
       fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]"
 	(if debug then Ident.dbprint else Ident.print) b 
 	print_pure_type v print_triggers tl print_predicate p
-  | Exists (_,b,_,p) ->
-      fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
-	(if debug then Ident.dbprint else Ident.print) b print_predicate p
+  | Exists (_,b,v,p) ->
+      fprintf fmt "@[<hov 2>(exists %a:%a @ %a)@]" 
+	(if debug then Ident.dbprint else Ident.print) b 
+	print_pure_type v print_predicate p
   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
 	print_term t i1 f1 e1 i2 f2 e2

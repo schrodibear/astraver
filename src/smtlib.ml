@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.29 2007-01-05 16:09:26 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.30 2007-01-25 08:48:55 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -91,6 +91,18 @@ let is_smtlib_keyword =
      "Array";"U";"select";"store"];
   Hashtbl.mem ht
 
+let removeChar =
+  let lc = ('\'','p')::[] in 
+  function s ->
+    for i=0 to (String.length s)-1 do
+      let c = (String.get s i) in 
+      try 
+	let c' =  List.assoc c lc  in 
+	String.set  s i c'
+      with Not_found -> ()  
+    done;
+    s
+	
 let idents fmt s = 
   if is_smtlib_keyword s then
     fprintf fmt "smtlib__%s" s
@@ -151,7 +163,7 @@ let bound_variable =
   let count = ref 0 in
   function n ->  
     count := !count+1 ;
-    Ident.create (completeString n^"_"^ (string_of_int !count)) 
+    Ident.create ((removeChar (completeString n))^"_"^ (string_of_int !count)) 
     
 let rec print_predicate fmt = function
   | Ptrue ->

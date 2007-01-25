@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.9 2006-12-13 09:28:08 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.10 2007-01-25 08:48:55 couchot Exp $ i*)
 
 open Cc
 open Logic
@@ -432,10 +432,12 @@ let rec leftt pt fv=
     | PTreal -> Tapp (Ident.create (prefix^"real"), [], [])
     | PTunit -> Tapp (Ident.create (prefix^"unit"), [], [])
     | PTvar ({type_val = None} as var) -> 
+	(*let s = string_of_int var.tag in *)
 	let t = try (List.assoc var.tag fv)
 	with _ ->
 	  let s = string_of_int var.tag in
 	  (print_endline ("unknown vartype : "^s); Ident.create "dummy") in
+	(*print_endline ("Vartype : "^s^" :"^(Ident.string t)); *)
 	Tvar t
     | PTvar {type_val = Some pt} -> leftt pt fv 
     | PTexternal (ptl, id) -> Tapp ( Ident.create (prefixForTypeIdent (Ident.string id)), List.map (fun pt -> leftt pt fv) ptl, [])
@@ -469,9 +471,11 @@ let typedPlunge fv term pt =
       | PTunit -> Tapp (Ident.create ("unit2U"), [term], [])
       | _ -> term 
   in
-  Tapp (Ident.create (prefix^"sort"),
+  let l =  Tapp (Ident.create (prefix^"sort"),
 	[leftt pt fv; cast pt term],
-	[])
+	[]) in 
+  l
+
     
 
 
@@ -515,7 +519,8 @@ let isBuiltInType t= match t with
 let rec translate_term fv lv term doTheCast= 
   let translate fv lv term = match term with 
     | Tvar id as t -> 
-        typedPlunge fv  (Tvar id) (getTermType t lv)
+        let t = typedPlunge fv  (Tvar id) (getTermType t lv) in 
+	t
     | Tapp (id, tl, inst) when Ident.is_simplify_arith id ->
 	(** This function yields a numeric parameter 
 	    we have to cast the result into the u type **)
@@ -541,11 +546,14 @@ let rec translate_term fv lv term doTheCast=
 	  | [] -> assert false
 	in
 	(** eventually encapsulates the function **)
-	typedPlunge fv (Tapp (id, 
-			      List.map 
-				(fun t -> translateParameter t) tl, 
-			      []))
-	  (instantiate_arity id inst)
+	let t = typedPlunge fv 
+	  (Tapp (id, 
+		 List.map 
+		   (fun t -> translateParameter t) tl, 
+		 []))
+	  (instantiate_arity id inst) in 
+	(*Format.printf "term: %a\n" Util.print_term ter ; *)
+	t
     | Tconst (ConstInt _) as t -> typedPlunge fv  t PTint
     | Tconst (ConstBool _) as t -> typedPlunge fv t PTbool
     | Tconst (ConstUnit) as t -> typedPlunge [] t PTunit
@@ -872,6 +880,15 @@ and translate_pattern fv lv = function
 (* The core *)
 let queue = Queue.create ()
 
+
+
+let bound_variable =
+  let count = ref 0 in
+  function n ->  
+    count := !count+1 ;
+    Ident.create (n^"_"^ (string_of_int !count))
+
+
 let rec push d = 
   try (match d with
 	   (* A type declaration is translated as new logical function, the arity of *)
@@ -913,21 +930,20 @@ let rec push d =
 	     push (Daxiom (loc, def ident,pred_scheme))
 	       (* Axiom definitions *)
 	 | Daxiom (loc, ident, pred_sch) ->
-	     let cpt = ref 0 in
 	     let fv = Env.Vset.fold
 	       (fun tv acc -> 
-		  cpt := !cpt + 1;
-		  (tv.tag, Ident.create (tvar^(string_of_int !cpt)))::acc)
+		  (tv.tag, (bound_variable tvar) )::acc)
 	       (pred_sch.Env.scheme_vars) [] in
 	     let new_pred = (translate_pred fv [] pred_sch.Env.scheme_type) in 
+	     let pred' = lifted fv new_pred [] in 
 	     let new_axiom =
-	       Env.empty_scheme (lifted fv new_pred []) in
+	       Env.empty_scheme (pred') in
 	     Queue.add (Daxiom (loc, ident, new_axiom)) queue
 	       (* A goal is a sequent : a context and a predicate and both have to be translated *)
 	 | Dgoal (loc, ident, s_sch) ->
-	     let cpt = ref 0 in
 	     let fv = Env.Vset.fold
-	       (fun tv acc -> cpt := !cpt + 1;  (tv.tag, Ident.create (tvar^(string_of_int !cpt)))::acc)
+	       (fun tv acc -> 
+		  (tv.tag,  (bound_variable tvar))::acc)
 	       (s_sch.Env.scheme_vars) [] in
 	     (* function for the following fold_left *)
 	     let f  (acc_c, acc_new_cel) s = match s with
@@ -937,10 +953,13 @@ let rec push d =
 	     (* list for the following fold_left *)
 	     let l = fst s_sch.Env.scheme_type in
 	     let (context, new_cel) =  List.fold_left 	f ([], []) l in
+	     let ctxt = lifted_ctxt fv (List.rev new_cel) in 
+	     let pred' =  translate_pred fv context (snd (s_sch.Env.scheme_type)) in 
+	     (*Format.printf "%a" Util.print_predicate pred' ; *)
 	     let new_sequent =
 	       Env.empty_scheme
-		 (lifted_ctxt fv (List.rev new_cel),
-		  translate_pred fv context (snd (s_sch.Env.scheme_type))) in
+		 (ctxt,pred'
+		  ) in
 	     let temp = Dgoal (loc, ident, new_sequent) in
 	     Queue.add temp queue 
       )
