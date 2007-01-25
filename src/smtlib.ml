@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.30 2007-01-25 08:48:55 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.31 2007-01-25 17:32:13 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -58,8 +58,9 @@ let prefix id =
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
   else if id == t_div_int then "/"
-  else if id == t_mod_int then "%" 
-(* JFC: TODO change it as soon as the modulo  will be accepted in place by yices *)
+  else if id == t_mod_int then 
+    if Options.modulo then "modulo"
+    else "%" 
   else if id == t_neg_int then "-"
   (* real ops *)
   else if id == t_add_real 
@@ -333,6 +334,15 @@ let output_file f =
                       (= c_Boolean_true  c_Boolean_false))@\n";
     end;
   fprintf fmt "  :extrasorts (Unit)@\n";
+  if modulo then 
+    begin 
+      fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
+      fprintf fmt "  :assumption
+                   (forall (?x Int) (?y Int) 
+                              (and (<= (modulo ?x ?y) ?y)
+                                   (exists (?t Int)
+                                      (= ?x (+ (* ?t ?y) (modulo ?x ?y ))))))";
+    end;
   iter (output_elem fmt);
   
   (* end of smtlib file *)

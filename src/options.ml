@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.83 2006-12-14 15:41:43 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.84 2007-01-25 17:32:13 couchot Exp $ i*)
 
 open Format
 
@@ -57,6 +57,7 @@ let prelude_ = ref true
 let arrays_ = ref true
 let floats_ = ref false
 let pruning_ = ref false 
+let modulo_ = ref false 
 let defExpanding_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
@@ -169,6 +170,7 @@ Typing/Annotations/VCG options:
   --partial          partial correctness
   --total            total correctness
   --prune            prunes the theory 
+  --modulo           displays mod in smtlib instead of pourcent
   --exp              expands the predicate definitions 
 
 Prelude files:
@@ -371,6 +373,8 @@ let files =
 	termination_ := Total; parse args
     | ("-prune" | "--prune") :: args ->
 	 pruning_ := true ; parse args
+    | ("-modulo" | "--modulo") :: args ->
+	 modulo_ := true ; parse args
     | ("-exp" | "--exp") :: args ->
 	defExpanding_ := true ; parse args
     | ("-encoding" | "--encoding") :: s :: args ->
@@ -430,6 +434,7 @@ let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
 let pruning = !pruning_
+let modulo = !modulo_
 let defExpanding = !defExpanding_
 
 (* encoding checks *)
