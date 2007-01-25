@@ -1,4 +1,5 @@
 
+  o Simplify output: fixed bug with leading underscores in identifiers
   o compatibility with Coq development version (ring syntax has changed)
   o option --encoding sstrat automatically added when --smtlib is selected
   o new option --exp to expand the predicate definitions

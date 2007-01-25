@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.67 2006-12-15 11:36:34 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.68 2007-01-25 14:46:38 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -96,7 +96,7 @@ let is_simplify_ident s =
     | _ -> false
   in
   try 
-    if String.length s >= 2 && s.[0] = '_' && s.[1] = '_' then raise Exit;
+    if String.length s >= 1 && s.[0] = '_' then raise Exit;
     String.iter (fun c -> if not (is_simplify_char c) then raise Exit) s; true
   with Exit ->
     false
