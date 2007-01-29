@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.84 2007-01-25 17:32:13 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.85 2007-01-29 16:32:12 marche Exp $ i*)
 
 open Format
 
@@ -40,7 +40,7 @@ let pvs_preamble_ = ref None
 let mizar_environ_ = ref None
 let isabelle_base_theory_ = ref "Main"
 let no_simplify_prelude_ = ref false
-let no_simplify_triggers_ = ref false
+let simplify_triggers_ = ref false
 let no_cvcl_prelude_ = ref false
 let no_harvey_prelude_ = ref false
 let no_zenon_prelude_ = ref false
@@ -221,8 +221,8 @@ PVS-specific options:
 Simplify-specific options:
   --no-simplify-prelude
               suppress the Simplify prelude (BG_PUSHs for Why's symbols)
-  --no-simplify-triggers
-	      ignore user-defined triggers when writing Simplify output
+  --simplify-triggers
+	      pass user-defined triggers when writing Simplify output
 
 Zenon-specific options:
   --no-zenon-prelude
@@ -317,8 +317,8 @@ let files =
 	usage (); exit 1
     | ("--no-simplify-prelude" | "-no-simplify-prelude") :: args ->
 	no_simplify_prelude_ := true; parse args
-    | ("--no-simplify-triggers" | "-no-simplify-triggers") :: args ->
-	no_simplify_triggers_ := true; parse args
+    | ("--simplify-triggers" | "-simplify-triggers") :: args ->
+	simplify_triggers_ := true; parse args
     | ("--no-cvcl-prelude" | "-no-cvcl-prelude") :: args ->
 	no_cvcl_prelude_ := true; parse args
     | ("--no-harvey-prelude" | "-no-harvey-prelude") :: args ->
@@ -417,7 +417,7 @@ let pvs_preamble = match !pvs_preamble_ with
 let mizar_environ = !mizar_environ_
 let isabelle_base_theory = !isabelle_base_theory_
 let no_simplify_prelude = !no_simplify_prelude_
-let no_simplify_triggers = !no_simplify_triggers_
+let simplify_triggers = !simplify_triggers_
 let no_cvcl_prelude = !no_cvcl_prelude_
 let no_harvey_prelude = !no_harvey_prelude_
 let no_zenon_prelude = !no_zenon_prelude_

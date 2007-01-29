@@ -1,4 +1,8 @@
 
+  o option -no-simplify-triggers changed to -simplify-triggers,
+    defaulting to false, because Caduceus bench shows it is good in
+    general, and moreover generated triggers with Krakatoa and jessie
+    make Simplify fail
   o Simplify output: fixed bug with leading underscores in identifiers
   o compatibility with Coq development version (ring syntax has changed)
   o option --encoding sstrat automatically added when --smtlib is selected

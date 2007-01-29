@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.66 2007-01-25 17:32:13 couchot Exp $ i*)
+(*i $Id: options.mli,v 1.67 2007-01-29 16:32:13 marche Exp $ i*)
 
 (*s General options *)
 
@@ -92,7 +92,7 @@ val mizar_environ : string option
 val isabelle_base_theory : string
 
 val no_simplify_prelude : bool
-val no_simplify_triggers : bool
+val simplify_triggers : bool
 val no_harvey_prelude : bool
 val no_zenon_prelude : bool
 val no_cvcl_prelude : bool
