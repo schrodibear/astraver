@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.31 2007-01-25 17:32:13 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.32 2007-01-30 11:36:42 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -339,7 +339,8 @@ let output_file f =
       fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
       fprintf fmt "  :assumption
                    (forall (?x Int) (?y Int) 
-                              (and (<= (modulo ?x ?y) ?y)
+                              (and (<= 0 (modulo ?x ?y))
+                                   (<= (modulo ?x ?y) ?y)
                                    (exists (?t Int)
                                       (= ?x (+ (* ?t ?y) (modulo ?x ?y ))))))";
     end;
