@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.32 2007-01-30 11:36:42 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.33 2007-02-01 15:09:45 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -340,7 +340,9 @@ let output_file f =
       fprintf fmt "  :assumption
                    (forall (?x Int) (?y Int) 
                               (and (<= 0 (modulo ?x ?y))
-                                   (<= (modulo ?x ?y) ?y)
+                                   (implies (<= 0 ?y ) (<   (modulo ?x ?y) ?y))
+                                   (implies (< ?y 0) 
+                                      (< (modulo ?x ?y) (- 0 ?y)))
                                    (exists (?t Int)
                                       (= ?x (+ (* ?t ?y) (modulo ?x ?y ))))))";
     end;
