@@ -749,9 +749,9 @@ parameter_declaration
         : declaration_specifiers declarator 
             { let id,d = $2 in $1, d, id }
         | declaration_specifiers abstract_declarator 
-	    { $1, $2, "_" }
+	    { $1, $2, "" }
         | declaration_specifiers 
-	    { ($1, Dsimple, "_") }
+	    { ($1, Dsimple, "") }
         ;
 
 identifier_list

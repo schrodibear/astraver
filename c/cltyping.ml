@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.112 2007-01-08 10:47:31 moy Exp $ i*)
+(*i $Id: cltyping.ml,v 1.113 2007-02-02 15:00:00 marche Exp $ i*)
 
 open Coptions
 open Format
@@ -78,12 +78,13 @@ let is_null t = match t.term_node with
   | Tconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
   | _ -> false
 
+(*
 let compatible t1 t2 = 
   sub_type t1.term_type t2.term_type || 
   sub_type t2.term_type t1.term_type ||
   (pointer_or_array_type t1.term_type && is_null t2) ||
   (pointer_or_array_type t2.term_type && is_null t1)
-
+*)
 let compatible_term_type t ty = 
   sub_type t.term_type ty || 
   sub_type ty t.term_type ||

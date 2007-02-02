@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: creport.ml,v 1.22 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: creport.ml,v 1.23 2007-02-02 15:00:00 marche Exp $ i*)
 
 open Format
 open Cerror
@@ -114,7 +114,11 @@ let raise_locop locop e = raise (Error (locop, e))
 let unsupported loc s = raise (Error (Some loc, Unsupported s))
 
 let error l s = raise (Error (Some l, AnyMessage s))
-let errorf l f = ksprintf (fun s -> raise (Error (Some l, AnyMessage s))) f
+
+let errorf l = 
+  Format.kfprintf 
+    (fun fmt -> raise (Error(Some l, AnyMessage (flush_str_formatter())))) 
+    str_formatter
 
 let wtbl = Hashtbl.create 17;;
 

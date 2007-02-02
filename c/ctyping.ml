@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.139 2006-12-06 13:01:03 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.140 2007-02-02 15:00:00 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -1245,8 +1245,8 @@ and type_block env et lz (dl,sl) =
 
 let type_parameters loc env pl =
   let type_one (ty,x) pl =
-    let info = default_var_info x in
     let ty = type_type loc ~parameters:true env ty in 
+    let info = default_var_info x in
     set_formal_param info;
     set_var_type (Var_info info) ty true;
     Coptions.lprintf 
@@ -1353,6 +1353,19 @@ let function_spec loc f = function
        with Not_found -> 
 	 Hashtbl.add function_specs f s; s)
 
+let combine_args loc l1 l2 =
+  if l1 = [] then l2 else
+    try
+      List.map2 (fun x1 x2 ->
+		if eq_type x1.var_type x2.var_type then 
+		  if x1.var_name = "" then x2 else x1
+		else errorf loc "clash with previous declaration: expected type %a, got %a"
+		  print_type x1.var_type print_type x2.var_type
+		)
+	l1 l2
+    with Invalid_argument _ -> 
+      error loc "clash with previous declaration: not the same number of arguments"
+
 let type_prototype loc pl ty f = 
   let pl = type_parameters loc (Env.empty ()) pl in
   let ty_res = type_type loc (Env.empty ()) ty in
@@ -1363,7 +1376,7 @@ let type_prototype loc pl ty f =
       (Fun_info info) with
 	| Var_info _ -> assert false
 	| Fun_info f -> 
-	    if f.args = [] then f.args <- List.map snd pl;
+	    f.args <- combine_args loc f.args (List.map snd pl);
 	    f
   in
   let env = (* we build the env. to type the spec and the body *)

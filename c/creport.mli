@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: creport.mli,v 1.14 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: creport.mli,v 1.15 2007-02-02 15:00:00 marche Exp $ i*)
 
 open Format
 
@@ -39,7 +39,7 @@ val print_type : formatter -> Ctypes.ctype -> unit
 val print_type_node : formatter -> Ctypes.ctype_node -> unit
 
 val error : Loc.position -> string -> 'a
-val errorf : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
+val errorf : Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 val warning : Loc.position -> string -> unit
 
 
