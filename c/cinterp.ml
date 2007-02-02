@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.226 2007-01-04 10:09:48 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.227 2007-02-02 14:40:06 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -1846,9 +1846,10 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	res
   | NSassert(pred) -> 
       Output.Assert(interp_predicate None "init" pred, Void)
-  | NSassume _ -> 
-      (* WHY does not have an assume expression for the moment *)
-      Void
+  | NSassume pred -> 
+      (* Abusing assumptions endangers your proof ... *)
+      let post,_ = interp_predicate None "init" pred, Void in
+      BlackBox (Annot_type (LTrue, unit_type, [], [], post, []))
   | NSlogic_label(l) -> 
       Output.Label (l, Void)
   | NSspec (spec,s) ->
