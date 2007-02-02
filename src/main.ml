@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.118 2006-12-13 09:28:08 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.119 2007-02-02 13:36:26 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -86,13 +86,14 @@ let push_decl d =
 	| CVCLite -> Cvcl.push_decl
 	| SmtLib -> Smtlib.push_decl 
     in
-    if defExpanding then 
-      pushing (PredDefExpansor.push d)
+    if defExpanding != NoExpanding  then 
+      List.iter pushing (PredDefExpansor.push d)
     else
       pushing d 
   else
-    if defExpanding then 
-      Queue.push (PredDefExpansor.push d) declarationQueue
+    if defExpanding != NoExpanding then
+      List.iter (fun decl -> Queue.push decl declarationQueue)  (PredDefExpansor.push d)
+	(*Queue.push  declarationQueue*)
     else
       Queue.push d declarationQueue
 

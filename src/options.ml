@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.85 2007-01-29 16:32:12 marche Exp $ i*)
+(*i $Id: options.ml,v 1.86 2007-02-02 13:36:27 couchot Exp $ i*)
 
 open Format
 
@@ -58,14 +58,18 @@ let arrays_ = ref true
 let floats_ = ref false
 let pruning_ = ref false 
 let modulo_ = ref false 
-let defExpanding_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 let show_time_ = ref false
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph | SortedStratified
+type expanding = All | Goal | NoExpanding
+
+
 let types_encoding_ = ref NoEncoding (* ne pas changer svp! *)
 (* let types_encoding_ = ref Stratified *)
+
+let defExpanding_ = ref NoExpanding 
 
 type termination = UseVariant | Partial | Total
 let termination_ = ref UseVariant
@@ -171,7 +175,8 @@ Typing/Annotations/VCG options:
   --total            total correctness
   --prune            prunes the theory 
   --modulo           displays mod in smtlib instead of pourcent
-  --exp              expands the predicate definitions 
+  --exp all          expands the predicate definitions in both theory and goal 
+  --exp goal         expands the predicate definitions only in goal 
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -375,8 +380,12 @@ let files =
 	 pruning_ := true ; parse args
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
-    | ("-exp" | "--exp") :: args ->
-	defExpanding_ := true ; parse args
+    | ("-exp" | "--exp") :: s :: args ->
+	(match s with 
+	     "goal" -> defExpanding_ := Goal 
+	   | "all"  -> defExpanding_:= All 
+	   | _ -> usage (); exit 1);
+	parse args
     | ("-encoding" | "--encoding") :: s :: args ->
 	(match s with 
 	  "none" -> types_encoding_ := NoEncoding 
@@ -444,6 +453,8 @@ let () =
 
 let get_types_encoding () = !types_encoding_
 let set_types_encoding ec = types_encoding_ := ec
+
+let get_type_expanding () = !defExpanding_
 
 let arrays = !arrays_
 let floats = !floats_

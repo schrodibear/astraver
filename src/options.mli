@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.67 2007-01-29 16:32:13 marche Exp $ i*)
+(*i $Id: options.mli,v 1.68 2007-02-02 13:36:27 couchot Exp $ i*)
 
 (*s General options *)
 
@@ -62,7 +62,10 @@ val lvlmax : int
 val all_vc : bool
 val pruning : bool
 val modulo : bool
-val defExpanding : bool
+
+type expanding = All | Goal | NoExpanding
+val defExpanding : expanding
+val get_type_expanding : unit -> expanding 
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph | SortedStratified
 val get_types_encoding : unit -> encoding

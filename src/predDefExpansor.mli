@@ -26,5 +26,5 @@ open Ident
 open Misc
 open Logic_decl
 
-val  push : Logic_decl.t -> Logic_decl.t
+val  push : Logic_decl.t -> Logic_decl.t list
 
