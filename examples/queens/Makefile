@@ -25,5 +25,6 @@ export:
 	cp -f queens_why.v $(FTP)
 	cp -f slides/slides-pp.pdf $(FTP)
 	cp -f ../../bench/c/good/queens.c $(FTP)
+	make -C report export
 
 

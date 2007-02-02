@@ -14,3 +14,7 @@ main.dvi: main.tex figabc.eps
 	latex main
 	latex main
 
+FTP=$$HOME/WWW/why/queens/
+
+export: main.ps
+	cp main.ps $(FTP)queens.ps
