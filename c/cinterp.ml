@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.227 2007-02-02 14:40:06 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.228 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -1821,10 +1821,18 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NScontinue -> 
       Raise ("Continue", None)
   | NSlabel(lab,s) -> 
-      Output.Label (lab, interp_statement ab may_break s)
+      if lab.times_used = 0 then
+	begin
+	  warning stat.nst_loc "used label %s" lab.label_info_name;	 
+	  interp_statement ab may_break s
+	end
+      else
+	begin
+	  Hashtbl.add labels_table lab.label_info_name ();
+	  Output.Label (lab.label_info_name, interp_statement ab may_break s)
+	end
   | NSgoto(GotoForwardOuter,lab) ->
-      Hashtbl.add labels_table lab ();
-      Raise ("Goto_" ^ lab, None)
+      Raise ("Goto_" ^ lab.label_info_name, None)
   | NSgoto(GotoForwardInner,lab) ->
       unsupported stat.nst_loc "forward inner goto"
   | NSgoto(GotoBackward,lab) ->
@@ -1903,9 +1911,16 @@ and interp_block ab may_break statements =
   let rec block = function
     | [] -> 
 	Void,[]
-    | { nst_node = NSlabel(lab,st) } :: bl ->
-	let (be,bl) = block (st::bl) in
-	Raise("Goto_"^lab,None),(lab,be)::bl
+    | { nst_loc = loc ; nst_node = NSlabel(lab,st) } :: bl ->
+	if lab.times_used = 0 then 
+	  begin
+	    warning loc "used label %s" lab.label_info_name;
+	    block (st::bl)
+	  end
+	else
+	  let (be,bl) = block (st::bl) in
+	  Hashtbl.add labels_table lab.label_info_name ();
+	  Raise("Goto_"^lab.label_info_name,None),(lab,be)::bl
     | [s] ->
 	interp_statement ab may_break s,[]
     | { nst_node = NSnop } :: bl ->
@@ -1933,7 +1948,7 @@ and interp_block ab may_break statements =
   let be,bl = block statements in
   List.fold_left 
     (fun acc (lab,e) ->
-       Try(acc,"Goto_"^lab,None,e)) be bl
+       Try(acc,"Goto_"^lab.label_info_name,None,e)) be bl
 
 
 and interp_switch tmp ab may_break l c used_cases post_default =

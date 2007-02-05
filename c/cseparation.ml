@@ -109,7 +109,7 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 	       if fresh then npand(npvalid t, npfresh t) else npvalid t 
 	     else nptrue)
       | TTIncomplete ->
-	  error loc ("`" ^ name ^ "' has incomplete type")
+	  error loc "`%s' has incomplete type" name
       | _ ->
 	  assert false
     end
@@ -117,7 +117,7 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
     | Tstruct n ->
  	valid_fields true n t
     | Tarray (_, ty, None) ->
-	error loc ("array size missing in `" ^ name ^ "'")    
+	error loc "array size missing in `%s'" name    
     | Tarray (Not_valid,_,_) -> assert false
     | Tarray (Valid(i,j), ty, Some s) ->
 	assert (i <= Int64.zero && j > Int64.zero);
@@ -215,9 +215,9 @@ and local_separation  mark loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
     | Tarray (_,ty, None), _ ->
-	error loc ("array size missing in `" ^ n1 ^ "'")
+	error loc "array size missing in `%s'" n1
     | _, Tarray (_,ty, None) ->
-	error loc ("array size missing in `" ^ n2 ^ "'")
+	error loc "array size missing in `%s'" n2
     | Tstruct n , Tarray (_,ty,Some s) -> 
 	tab_struct  mark loc v1 v2 s ty n n1 n2
     | Tarray (_,ty,Some s) , Tstruct n -> 
@@ -272,9 +272,9 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
     | Tarray (_,ty, None), _ ->
-	error loc ("array size missing in `" ^ n1 ^ "'")
+	error loc "array size missing in `%s'" n1
     | _, Tarray (_,ty, None) ->
-	error loc ("array size missing in `" ^ n2 ^ "'")
+	error loc "array size missing in `%s'" n2
     | Tstruct n , Tarray (_,ty,Some s) -> 
 	full_tab_struct  mark loc v1 v2 s ty n n1 n2
     | Tarray (_,ty,Some s) , Tstruct n -> 

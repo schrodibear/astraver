@@ -68,6 +68,8 @@ terms and assertions
 
 *************************)
 
+let tag_name st = st.jc_struct_info_name ^ "_tag"
+
 let lvar ?(assigned=true) label v =
   if assigned then
     match label with 
@@ -128,11 +130,11 @@ let rec term label oldlabel t =
     | JCTinstanceof(t,ty) ->
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LApp("instanceof_bool",
-	     [lvar label tag; ft t;LVar ty.jc_struct_info_name])
+	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTcast(t,ty) ->
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LApp("downcast",
-	     [lvar label tag; ft t;LVar ty.jc_struct_info_name])
+	     [lvar label tag; ft t;LVar (tag_name ty)])
 
 let rec assertion label oldlabel a =
   let fa = assertion label oldlabel 
@@ -158,7 +160,7 @@ let rec assertion label oldlabel a =
     | JCAinstanceof(t,ty) -> 
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LPred("instanceof",
-	      [lvar label tag; ft t; LVar ty.jc_struct_info_name])
+	      [lvar label tag; ft t; LVar (tag_name ty)])
 
 (****************************
 
@@ -290,11 +292,11 @@ let rec expr e : (string * Output.expr) list * expr =
     | JCEinstanceof(e,t) ->
 	let l,e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
-	l,make_app "instanceof_" [Deref tag; e; Var t.jc_struct_info_name]
+	l,make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
     | JCEcast(e,t) ->
 	let l,e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
-	l,make_app "downcast_" [Deref tag; e; Var t.jc_struct_info_name]
+	l,make_app "downcast_" [Deref tag; e; Var (tag_name t)]
     | JCEderef(e,f) -> 
 	let l,e = expr e in
 	l,make_acc f e
@@ -515,7 +517,7 @@ let tr_struct st acc =
       logic_type_args = [simple_logic_type st.jc_struct_info_root] }
   in
   let acc =
-    Logic(false,st.jc_struct_info_name,[],tag_id_type)::acc
+    Logic(false,tag_name st,[],tag_id_type)::acc
   in
   (* the invariants *)
 (*
@@ -592,11 +594,11 @@ let tr_struct st acc =
 			  LImpl(LPred("instanceof",
 				      [LVar "a";
 				       LVar "p";
-				       LVar st.jc_struct_info_name]),
+				       LVar (tag_name st)]),
 				LPred("instanceof",
 				      [LVar "a";
 				       LVar "p";
-				       LVar p.jc_struct_info_name]))))
+				       LVar (tag_name p)]))))
 	in
 	Axiom(name,f)::acc
 
@@ -716,7 +718,7 @@ let tr_fun f spec body acc =
 	       in
 	       let instance =
 		 (LPred("instanceof",
-			[LVar tag; var ; LVar st.jc_struct_info_name]))
+			[LVar tag; var ; LVar (tag_name st)]))
 	       in
 	       let invariant = invariant_for_struct var st in
 	       make_and 

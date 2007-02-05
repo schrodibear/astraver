@@ -14,7 +14,8 @@ typedef struct struct_node {
 /*
  * logical lists of nodes
  */
-  
+
+/*@ type plist */  
 /*@ logic plist cons(node p, plist l) */
 /*@ predicate in_list(node p,plist stack) */
 /*@ predicate pair_in_list(node p1, node p2, plist stack) */
@@ -46,6 +47,7 @@ typedef struct struct_node {
 /*
  * the complexity measure for termination
  */
+//@ 
 /*@ logic weight_type weight(node p, node t) 
   @   reads p->m,p->c,p->l,p->r
   @*/
@@ -75,7 +77,7 @@ void schorr_waite(node root) {
     @ (I1 :: \forall node x; \old(reachable(root,x)) => 
     @       reachable(t,x) || reachable(p,x))
     @ &&
-    @ (I2 :: \forall node x; x != \null =>  (* pourquoi pas && ? *) 
+    @ (I2 :: \forall node x; x != \null =>  // pourquoi pas && ? 
     @    (reachable(t,x) || reachable(p,x) => 
     @        \old(reachable(root,x)))) 
     @ &&

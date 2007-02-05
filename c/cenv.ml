@@ -133,14 +133,14 @@ let create_tag_type k n ty =
   tt
 
 let clash_tag l s1 s2 = 
-  let redef t n = error l (sprintf "redeclaration of `%s %s'" t n) in
+  let redef t n = error l "redeclaration of `%s %s'" t n in
   match s1, s2 with
   | Tstruct (n), Tstruct _ -> redef "struct" n
   | Tunion (n), Tunion _ -> redef "union" n
   | Tenum (n), Tenum _ -> redef "enum" n
   | (Tstruct (n) | Tunion (n) | Tenum (n)), 
     (Tstruct _ | Tunion _ | Tenum _) -> 
-      error l (sprintf "`%s' defined as wrong kind of tag" n)
+      error l "`%s' defined as wrong kind of tag" n
   | _ -> assert false
 
 let iter_all_struct f =
@@ -185,8 +185,8 @@ let find_typedef = Hashtbl.find typedef_t
 
 let add_typedef l x ty = 
   if is_typedef x then begin
-    if ty = find_typedef x then error l ("redefinition of `" ^ x ^ "'")
-    else error l ("conflicting types for `" ^ x ^ "'")
+    if ty = find_typedef x then error l "redefinition of `%s'" x
+    else error l "conflicting types for `%s'" x
   end else
     Hashtbl.add typedef_t x ty
 
@@ -339,7 +339,7 @@ let add_sym l x ty info =
 	 Question de Claude: accepter aussi un raffinement des specs ? *)
       begin
 	eprintf "t : %a, ty : %a@." print_type  varty print_type  ty;
-	error l ("conflicting types for " ^ x);
+	error l "conflicting types for %s" x
       end;
     d
   with Not_found ->
@@ -377,7 +377,7 @@ let add_ghost l x ty info =
   set_unique_name (Var_info info) n;
   if n <> x then Coptions.lprintf "renaming ghost variable %s into %s@." x n;
   if is_ghost x then begin
-    error l ("ghost variable " ^ x ^ " already declared");
+    error l "ghost variable `%s' already declared" x;
   end
   else begin
     set_var_type (Var_info info) ty false;
@@ -551,7 +551,7 @@ let update_fields_type () =
 
 let type_of_field loc x ty = 
   let rec lookup su n = function
-    | [] -> error loc (su ^ " has no member named `" ^ x ^ "'")
+    | [] -> error loc "`%s' has no member named `%s'" su x
     | y :: _ when x = y.var_name -> find_field n x
     | _ :: fl -> lookup su n fl
   in
@@ -564,9 +564,9 @@ let type_of_field loc x ty =
 	  | TTStructUnion (Tstruct _, fl) -> lookup "structure" n fl
 	  | TTStructUnion (Tunion _, fl) -> lookup "union" n fl
 	  | TTStructUnion _ | TTEnum _ ->
-	      error loc ("request for member `" ^ x ^ 
-			 "' in something not a structure or union")
+	      error loc 
+		"request for member `%s' in something not a structure or union" x
 	end
-    | _ -> error loc ("request for member `" ^ x ^ 
-		      "' in something not a structure or union")
+    | _ -> error loc 
+	"request for member `%s' in something not a structure or union" x
 

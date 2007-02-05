@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.19 2007-01-08 10:47:31 moy Exp $ *)
+(* $Id: cabsint.ml,v 1.20 2007-02-05 13:08:25 marche Exp $ *)
 
 (* TO DO:
 
@@ -1997,7 +1997,9 @@ end = struct
 
   let stat_get_label node =
     match get_stat node with 
-      | NSlabel (lab,_) | NSlogic_label lab -> lab | _ -> assert false
+      | NSlabel (lab,_) -> lab.label_info_name 
+      | NSlogic_label lab -> lab
+      | _ -> assert false
 
   let stat_is_jump node = match get_stat node with
     | NSreturn _ | NSbreak | NScontinue | NSgoto _ -> 
@@ -3838,7 +3840,7 @@ end = struct
 	       accepted. Otherwise we should add a widening node in the induced
 	       loop. *)
 	    (* oper *) add_opedge start_node opsnode;
-	    let label_node = update_context_for_label ctxt lab in
+	    let label_node = update_context_for_label ctxt lab.label_info_name in
 	    (* oper *) force_add_opedge opsnode label_node
 	| NSspec (spc,s1) ->
 	    let sts1node,ops1node = from_stat ctxt start_node s1 in
@@ -3851,7 +3853,7 @@ end = struct
 	    (* logic *) add_begedge spcnode start_node;
 	    (* logic *) add_endedge spcnode stsnode
 	| NSlabel (lab,s1) ->
-	    let label_node = update_context_for_label ctxt lab in
+	    let label_node = update_context_for_label ctxt lab.label_info_name in
 	    (* oper *) add_opedge start_node label_node;
 	    let sts1node,ops1node = from_stat ctxt label_node s1 in
 	    (* oper *) add_opedge ops1node opsnode;

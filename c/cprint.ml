@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.44 2007-01-04 10:09:49 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.45 2007-02-05 13:08:25 marche Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -554,9 +554,9 @@ let rec nstatement fmt s = match s.nst_node with
   | NScontinue ->
       fprintf fmt "continue;"
   | NSlabel (l, s) ->
-      fprintf fmt "%s: %a" l nstatement s
+      fprintf fmt "%s: %a" l.label_info_name nstatement s
   | NSgoto (status, l) ->
-      fprintf fmt "goto(%s) %s" (ngoto_status status) l 
+      fprintf fmt "goto(%s) %s" (ngoto_status status) l.label_info_name 
   | NSswitch (e, m, l) ->
       fprintf fmt "@[switch (%a) {@\n    @[%a@]@\n}@]"
 	nexpr e (print_list newline ncase) l

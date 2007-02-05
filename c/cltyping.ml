@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.113 2007-02-02 15:00:00 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.114 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Coptions
 open Format
@@ -167,12 +167,12 @@ and type_term_node loc env = function
 	try Env.find x.var_name env with Not_found -> 
 	  try (Var_info (find_ghost x.var_name)) with Not_found -> 
 	    try find_sym x.var_name with Not_found -> 
-              error loc ("unbound logic variable " ^ x.var_name)
+              error loc "unbound logic variable %s " x.var_name
       in 
       begin match info with
 	| Var_info v -> Clogic.Tvar v, v.var_type
 	| Fun_info f -> 
-            error loc ("variable " ^ f.fun_name ^ " is a function")
+            error loc "variable %s is a function" f.fun_name
       end
   | PLapp (f, [t]) when f.logic_name = "sqrt" ->
       let t = type_real_term env t in
@@ -183,7 +183,7 @@ and type_term_node loc env = function
 	 let tl = type_terms loc env pl tl in
 	 Tapp (info, tl), ty
        with Not_found -> 
-	 error loc ("unbound function " ^ f.logic_name))
+	 error loc "unbound function %s" f.logic_name)
   | PLunop (Utilde, t) -> 
       let t = type_int_term env t in
       Tunop (Utilde, t), t.term_type
@@ -446,7 +446,7 @@ and type_ghost_lvalue_node loc env t =
 	let v = 
 	  try find_ghost x.var_name
 	  with Not_found -> 
-            error loc ("unbound ghost variable " ^ x.var_name)
+            error loc "unbound ghost variable %s" x.var_name
 	in 
 	Clogic.Tvar v, v.var_type
     | PLarrget (t1, t2) ->
@@ -614,7 +614,7 @@ and type_predicate_node env p0 = match p0.lexpr_node with
 	 let tl = type_terms p0.lexpr_loc env pl tl in
 	 Papp (info, tl)
        with Not_found -> 
-	 error p0.lexpr_loc ("unbound predicate " ^ p.logic_name))
+	 error p0.lexpr_loc "unbound predicate %s" p.logic_name)
   | PLif (t, p1, p2) -> 
       let t = type_int_term env t in
       Pif (t, type_predicate env p1, type_predicate env p2)

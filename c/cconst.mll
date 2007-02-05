@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cconst.mll,v 1.10 2006-11-27 13:04:55 marche Exp $ i*)
+(*i $Id: cconst.mll,v 1.11 2007-02-05 13:08:25 marche Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -173,6 +173,6 @@ and eval_char = parse
       eval_int loc lb
     with
       | Constant_too_large -> error loc "constant too large"
-      | Invalid msg -> error loc ("invalid constant: " ^ msg)
+      | Invalid msg -> error loc "invalid constant: %s" msg
 
 }

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.90 2007-01-25 09:26:25 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.91 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -110,7 +110,7 @@ let main () =
   Queue.iter 
     (fun (loc,msg) ->
        lprintf "%a %s@." Loc.report_position loc msg;
-       warning loc msg)
+       warning loc "%s" msg)
     Ceffect.warnings;
   lprintf "heap variables: %a@." Ceffect.print_heap_vars ();
   (* Why interpretation *)

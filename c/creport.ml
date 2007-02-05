@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: creport.ml,v 1.23 2007-02-02 15:00:00 marche Exp $ i*)
+(*i $Id: creport.ml,v 1.24 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Format
 open Cerror
@@ -113,22 +113,25 @@ let raise_unlocated e = raise (Error (None, e))
 let raise_locop locop e = raise (Error (locop, e))
 let unsupported loc s = raise (Error (Some loc, Unsupported s))
 
-let error l s = raise (Error (Some l, AnyMessage s))
-
-let errorf l = 
+let error l = 
   Format.kfprintf 
     (fun fmt -> raise (Error(Some l, AnyMessage (flush_str_formatter())))) 
     str_formatter
 
 let wtbl = Hashtbl.create 17;;
 
-let warning l s = 
-  let n = try Hashtbl.find wtbl s with Not_found -> 0 in
-  if n <= 2 then
-    begin
-      Hashtbl.add wtbl s (n+1);
-      Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s;
-      if n = 2 then Format.eprintf "(this repeated warning will not appear anymore)@.";
-      if Coptions.werror then exit 1
+let warning loc = 
+  Format.kfprintf 
+    (fun fmt -> 
+       let s = flush_str_formatter() in
+       let n = try Hashtbl.find wtbl s with Not_found -> 0 in
+       if n <= 2 then
+	 begin
+	   Hashtbl.add wtbl s (n+1);
+	   Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst loc) s;
+	   if n = 2 then Format.eprintf "(this repeated warning will not appear anymore)@.";
+	   if Coptions.werror then exit 1
     end
+    )
+    str_formatter
 

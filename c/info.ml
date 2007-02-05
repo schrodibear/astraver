@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.ml,v 1.40 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: info.ml,v 1.41 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -286,3 +286,9 @@ let get_why_type env =
   match env with
     | Var_info v -> v.var_why_type
     | Fun_info f -> f.type_why_fun
+
+
+type label_info =
+    { label_info_name : string;
+      mutable times_used : int;
+    }

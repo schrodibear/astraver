@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: invariant.ml,v 1.42 2006-12-01 09:31:26 marche Exp $ i*)
+(*i $Id: invariant.ml,v 1.43 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Coptions
 open Creport
@@ -72,7 +72,7 @@ let rec predicate_for name t =
 	  (*,
  	    NPapp (find_pred ("valid_" ^ n), [t]))*)
     | Tarray (_,ty, None) ->
-	error Loc.dummy_position ("array size missing in `" ^ name ^ "'")
+	error Loc.dummy_position "array size missing in `%s'" name
     | Tarray (_,ty, Some s) ->
 	  let i = default_var_info "counter" in
 	  set_var_type (Var_info i) c_int false; 
@@ -131,9 +131,9 @@ and local_separation loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
     | Tarray (_,ty, None), _ ->
-	error loc ("array size missing in `" ^ n1 ^ "'")
+	error loc "array size missing in `%s'" n1
     | _, Tarray (_,ty, None) ->
-	error loc ("array size missing in `" ^ n2 ^ "'")
+	error loc "array size missing in `%s'" n2
     | Tstruct n , Tarray (_,ty,Some s) -> tab_struct loc v1 v2 s ty n n1 n2
     | Tarray (_,ty,Some s) , Tstruct n -> tab_struct loc v2 v1 s ty n n1 n2
     | Tarray (_,ty1,Some s1), Tarray(_,ty2,Some s2) ->
@@ -158,13 +158,12 @@ and local_separation loc n1 v1 n2 v2 =
 let rec separation_intern2  n1 v1 =
   match v1.nterm_type.Ctypes.ctype_node with
     | Tarray (_,_,None) -> 
-	error Loc.dummy_position ("array size missing in `" ^ n1 ^ "'")
+	error Loc.dummy_position "array size missing in `%s'" n1
     | Tarray(_,ty,Some s) ->
 	  begin
 	    match ty.Ctypes.ctype_node with
 	      | Tarray (_,_,None) -> 
-		error Loc.dummy_position ("array size missing in `" ^ n1 
-				 ^ "[i]'")
+		error Loc.dummy_position "array size missing in `%s[i]'" n1 
 	      | Tstruct _ ->
 		  (make_forall_range Loc.dummy_position v1 s 
 		     (fun t1 i1 ->
@@ -257,9 +256,9 @@ let separation_first mark diag v1 v2 =
   let n2 =  v2.var_unique_name in
   match v1.var_type.Ctypes.ctype_node,v2.var_type.Ctypes.ctype_node with
     | Tarray (_,_,None), _  ->
-	error Loc.dummy_position ("array size missing in `" ^ n1 ^ "[i]'") 
+	error Loc.dummy_position "array size missing in `[i]'" n1
     | _ , Tarray (_,_,None) ->
-	error Loc.dummy_position ("array size missing in `" ^ n2 ^ "[i]'") 
+	error Loc.dummy_position "array size missing in `[i]'" n2
     | Tstruct _ , Tstruct _ ->
 	let pre = sep ^ n1 ^ "_" ^ n2 in
 	let info = Info.default_logic_info (pre) in
@@ -392,8 +391,7 @@ let rec separation_intern n =
     let n1 = v1.var_unique_name in
     match v1.var_type.Ctypes.ctype_node with
       | Tarray (_,_,None) -> 
-	  error Loc.dummy_position ("array size missing in `" 
-			       ^ n1 ^ "[i]'")
+	  error Loc.dummy_position "array size missing in `%s[i]'" n1
       | Tarray (_,ty,Some s) ->
 	  begin
 	    match ty.Ctypes.ctype_node with
@@ -492,7 +490,7 @@ let add_predicates l =
 		     match ty.ctype_node with
 		       | Tarray (_,ty, None)->
 			   error Loc.dummy_position 
-			     ("array size missing in `" ^ f.var_name ^ "'")
+			     "array size missing in `%s'" f.var_name
 		       | Tarray (_,ty, Some s1) ->
 			 [noattr_located (
 			    Cast.Ninvariant_strong 

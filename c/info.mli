@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.mli,v 1.35 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: info.mli,v 1.36 2007-02-05 13:08:25 marche Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -144,3 +144,7 @@ val set_var_type_why : env_info -> why_type -> unit
 
 
 
+type label_info =
+    { label_info_name : string;
+      mutable times_used : int;
+    }

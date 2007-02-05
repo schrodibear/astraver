@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.140 2007-02-02 15:00:00 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.141 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -135,7 +135,7 @@ and eval_const_expr (e : texpr) =
   try
     eval_const_expr_noerror e
   with
-      Invalid_argument msg -> error e.texpr_loc msg
+      Invalid_argument msg -> error e.texpr_loc "%s" msg
 
 (* Typing C programs *)
 
@@ -306,13 +306,13 @@ let warn_for_read_only loc e =
   in
   match e.texpr_node with
   | TEarrow (_, x) | TEdot (_, x) when e.texpr_type.ctype_const  ->
-      warning loc ("assignment of read-only member `" ^ x.var_name ^ "'")
+      warning loc "assignment of read-only member `%s'" x.var_name
   | TEarrow (e1, x) when pointer_on_read_only e1.texpr_type ->
-      warning loc ("assignment of read-only member `" ^ x.var_name ^ "'")
+      warning loc "assignment of read-only member `%s'" x.var_name
   | TEdot (e1, x) when e1.texpr_type.ctype_const ->
-      warning loc ("assignment of read-only member `" ^ x.var_name ^ "'")
+      warning loc "assignment of read-only member `%s'" x.var_name 
   | TEvar (Var_info x) when e.texpr_type.ctype_const ->
-      warning loc ("assignment of read-only variable `" ^ x.var_name ^ "'")
+      warning loc "assignment of read-only variable `%s'" x.var_name 
   | TEvar (Var_info x) ->
       Loc.report_position Coptions.log loc;
       fprintf Coptions.log "Variable %s is assigned@." x.var_name;
@@ -471,7 +471,7 @@ and type_expr_node loc env = function
       let var =
 	try Env.find x env with Not_found -> 
 	  try find_sym x with Not_found -> 
-	    error loc (x ^ " undeclared")
+	    error loc "%s undeclared" x
       in 
       (TEvar var,var_type var)
   | CEdot (e, x) ->
@@ -771,8 +771,7 @@ and type_expr_node loc env = function
 		    || (pointer_type t && is_null e) ->
 		  check_args (i+1) (coerce t e :: el') (el, tl)
 	      | e :: _, _ :: _ ->
-		  error loc ("incompatible type for argument " ^ 
-			     string_of_int i)
+		  error loc "incompatible type for argument %d" i
 	      | [], _ :: _ ->
 		  error loc "too few arguments"
 	      | el, [] ->
@@ -829,7 +828,7 @@ and type_field n loc env (ty, x, bf) =
   let info = find_field n x in
   match bf, ty.ctype_node with
     | _, Tvoid ->
-	error loc ("field `"^x^"' declared void")
+	error loc "field `%s' declared void" x
     | None, _ ->
 	(ty, info)
     | Some e, (Tenum _ | Tint _ as tyn) -> 
@@ -837,19 +836,16 @@ and type_field n loc env (ty, x, bf) =
 	  | Tenum _ -> Unsigned (* TODO: verif assez de bits pour l'enum *)
 	  | Tint (s, Int) -> s
 	  | Tint (s, _) ->
-	      let t = 
-		fprintf str_formatter 
-		  "bit-field type `%a' invalid in ANSI C"
-		  Creport.print_type ty;
-		flush_str_formatter ()
-	      in
-	      warning loc t; s
+	      warning loc 
+		"bit-field type `%a' invalid in ANSI C"
+		Creport.print_type ty; 
+	      s
 	  | _ -> assert false
 	in
 	let v = eval_const_expr e in
 	({ty with ctype_node = Tint (s, Bitfield v)}, info)
     | Some _, _ -> 
-	error loc ("bit-field `"^x^"' has invalid type")
+	error loc "bit-field `%s' has invalid type" x
 
 (*s Typing of integers expressions: to be used when coercion is not allowed
     (array subscript, array size, enum value, etc.) *)
@@ -971,31 +967,30 @@ let or_status s1 s2 =
 (* structure of labels in a function body : using Huet's zipper *)
 
 type label_tree =
-  | LabelItem of string
+  | LabelItem of label_info
   | LabelBlock of label_tree list
 
 let rec printf_label_tree fmt lt =
   match lt with 
-    | LabelItem s -> fprintf fmt "%s" s
+    | LabelItem s -> fprintf fmt "%s" s.label_info_name
     | LabelBlock l -> 
 	fprintf fmt "{ %a }" (Pp.print_list Pp.space printf_label_tree ) l
 
 let rec in_label_tree lab = function
-  | LabelItem l -> l=lab
+  | LabelItem l -> if l.label_info_name=lab then l else raise Not_found
   | LabelBlock l -> in_label_tree_list lab l
 
-and in_label_tree_list lab = List.exists (in_label_tree lab) 
+and in_label_tree_list lab = function
+  | [] -> raise Not_found
+  | h::r -> 
+      try in_label_tree lab h
+      with Not_found -> in_label_tree_list lab r
 
-let in_label_upper_tree_list lab l = 
-  List.exists (function LabelItem lab' -> lab=lab' | _ -> false) l
+let rec in_label_upper_tree_list lab = function
+  | [] -> raise Not_found
+  | LabelItem l :: _ when l.label_info_name=lab -> l
+  | _ :: r -> in_label_upper_tree_list lab r
 
-(*
-type label_path =
-  | Top
-  | Node of label_tree list * label_path * label_tree list
-
-type label_zipper = label_tree * label_path
-*)
 
 let rec build_label_tree st acc : label_tree list =
   match st.node with
@@ -1011,7 +1006,8 @@ let rec build_label_tree st acc : label_tree list =
 	let l2 = build_label_tree s2 [] in
 	(LabelBlock l1) :: (LabelBlock l2) :: acc
     | CSlabel (lab, s) ->
-	(LabelItem lab) :: (build_label_tree s acc)
+	let info = { label_info_name = lab; times_used = 0 } in
+	(LabelItem info) :: (build_label_tree s acc)
     | CSblock (_,sl) ->
 	let l = List.fold_right build_label_tree sl [] in
 	(LabelBlock l) :: acc
@@ -1059,14 +1055,14 @@ and type_statement_node loc env et lz = function
   | CScontinue -> 
      TScontinue, { mt_status with term = false; continue = true }, lz
   | CSlabel (lab, s) ->
-      let lz1 = match lz with
+      let info,lz1 = match lz with
 	| before,LabelItem lab'::after ->
-	    assert (lab=lab');
-	    (LabelItem lab'::before,after)
+	    assert (lab=lab'.label_info_name);
+	    lab',(LabelItem lab'::before,after)
 	| _ -> assert false
       in
       let s, st, lz2 = type_statement env et lz1 s in
-      TSlabel (lab, s), st, lz2
+      TSlabel (info, s), st, lz2
   | CSblock bl ->
       let lz1,lz2 = match lz with
 	| before,LabelBlock b1::after ->
@@ -1078,30 +1074,26 @@ and type_statement_node loc env et lz = function
       TSblock bl, st, lz2
   | CSgoto lab ->
       let before,after = lz in
-      let status =
-	if in_label_tree_list lab before
-	then 
-	  begin
-	    lprintf "%a: backward goto@." Loc.report_position loc;
-	    GotoBackward
-	  end
-      else
-	if in_label_upper_tree_list lab after
-	then 
-	  begin
+      let status,info =
+	try
+	  let info = in_label_tree_list lab before in
+	  lprintf "%a: backward goto@." Loc.report_position loc;
+	  GotoBackward,info
+	with Not_found ->
+	  try
+	    let info = in_label_upper_tree_list lab after in
 	    lprintf "%a: forward outer goto@." Loc.report_position loc;
-	    GotoForwardOuter
-	  end
-	else
-	  if in_label_tree_list lab after
-	  then 
-	    begin
+	    GotoForwardOuter,info
+	  with Not_found ->
+	    try
+	      let info = in_label_tree_list lab after in
 	      lprintf "%a: forward inner goto@." Loc.report_position loc;
-	      GotoForwardInner
-	    end
-	  else errorf loc "undefined label '%s'" lab
+	      GotoForwardInner,info
+	    with Not_found ->
+	      error loc "undefined label '%s'" lab
       in
-      TSgoto(status,lab), mt_status, lz
+      info.times_used <- info.times_used + 1;
+      TSgoto(status,info), mt_status, lz
   | CSfor (an, e1, e2, e3, s) -> 
       let an = type_loop_annot env an in
       let e1 = type_expr env e1 in
@@ -1209,10 +1201,10 @@ and type_block env et lz (dl,sl) =
     | [] -> 
 	[], env
     | { node = Cdecl (ty, x, i) } as d :: dl ->
-	if Sset.mem x vs then error d.loc ("redeclaration of `" ^ x ^ "'");
+	if Sset.mem x vs then error d.loc "redeclaration of `%s'" x;
 	let ty = type_type d.loc env ty in	
 	if eq_type_node ty.ctype_node Tvoid then 
-	  error d.loc ("variable `" ^ x ^ "' declared void");
+	  error d.loc "variable `%s' declared void" x;
 	let i = type_initializer_option d.loc env ty i in
 	let ty = array_size_from_initializer d.loc ty i in
 	let info = default_var_info x in
@@ -1318,7 +1310,7 @@ let type_spec_decl loc = function
       in
       Tghost (info, cinit)
   | LDtype (id, loc) ->
-      if Cenv.mem_type id then error loc ("clash with previous type " ^ id);
+      if Cenv.mem_type id then error loc "clash with previous type %s" id;
       Cenv.add_type id;
       Ttype id
 
@@ -1344,7 +1336,7 @@ let function_spec loc f = function
       (try 
 	 let s' = Hashtbl.find function_specs f in
 	 if not (is_empty_spec s') then 
-	   error loc ("already a specification for " ^ f);
+	   error loc "already a specification for %s" f;
 	 s'.requires <- s.requires;
 	 s'.assigns <- s.assigns;
 	 s'.ensures <- s.ensures;
@@ -1359,7 +1351,7 @@ let combine_args loc l1 l2 =
       List.map2 (fun x1 x2 ->
 		if eq_type x1.var_type x2.var_type then 
 		  if x1.var_name = "" then x2 else x1
-		else errorf loc "clash with previous declaration: expected type %a, got %a"
+		else error loc "clash with previous declaration: expected type %a, got %a"
 		  print_type x1.var_type print_type x2.var_type
 		)
 	l1 l2

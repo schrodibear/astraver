@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.49 2006-12-14 09:29:38 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.50 2007-02-05 13:08:25 marche Exp $ i*)
 
 open Printf
 open Options
@@ -65,8 +65,8 @@ let _ =
  * let window_height = Gdk.Screen.height ~screen:default_screen ()
  *)
 
-let monospace_font = ref (Pango.Font.from_string "Monospace 10")
-let general_font = ref (Pango.Font.from_string "Monospace 10")
+let monospace_font = ref (Pango.Font.from_string "Monospace 14")
+let general_font = ref (Pango.Font.from_string "Monospace 14")
 
 let lower_view_general_font = general_font
 let upper_view_general_font = general_font

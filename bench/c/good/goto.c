@@ -53,3 +53,11 @@ int f3(int x) {
 }
 
   
+/*@ ensures x == 0 => \result == 0
+  @*/
+int f4(int x) {
+  if (x==0) goto l1;
+ l2:  x++;
+ l1: return x;
+}
+  

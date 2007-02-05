@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cast.mli,v 1.78 2006-12-20 12:38:21 marche Exp $ i*)
+(*i $Id: cast.mli,v 1.79 2007-02-05 13:08:25 marche Exp $ i*)
 
 (*s C types *)
 
@@ -260,11 +260,11 @@ and tstatement_node =
   | TSreturn of texpr option
   | TSbreak
   | TScontinue
-  | TSlabel of string * tstatement
+  | TSlabel of Info.label_info * tstatement
   | TSswitch of texpr * tstatement
   | TScase of texpr * tstatement
   | TSdefault of tstatement
-  | TSgoto of goto_status * string
+  | TSgoto of goto_status * Info.label_info
   | TSassert of predicate
   | TSassume of predicate
   | TSlogic_label of string
@@ -357,8 +357,8 @@ and nstatement_node =
   | NSreturn of nexpr option
   | NSbreak
   | NScontinue
-  | NSgoto of goto_status * string
-  | NSlabel of string * nstatement
+  | NSgoto of goto_status * Info.label_info
+  | NSlabel of Info.label_info * nstatement
   | NSswitch of nexpr * (nexpr Cconst.IntMap.t) * 
       ((nexpr Cconst.IntMap.t * nstatement list) list)
       (* NSswitch(e,used_cases,all_cases):
