@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.141 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.142 2007-02-05 14:31:41 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -214,7 +214,7 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       { e with texpr_node = TEunary (Uint_conversion, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
-  | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
+  | Tpointer _ , Tpointer (_,{ ctype_node = Tvoid }) ->
       e
   | _, Tpointer _ when is_null e ->
       { e with texpr_node = TEcast(
@@ -225,10 +225,9 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
 	  ctype_ghost = false;
 	},e) }
   | _ ->
-      if verbose || debug then 
-	eprintf 
-	  "expected %a, found %a@." print_type ty print_type e.texpr_type;
-      error e.texpr_loc "incompatible type"
+      error e.texpr_loc
+	"incompatible type: expected %a, found %a@." 
+	print_type ty print_type e.texpr_type 
 
 let compat_pointers ty1 ty2 = 
   (ty1.ctype_node = Tvoid) || (ty2.ctype_node = Tvoid) || eq_type ty1 ty2
@@ -1449,3 +1448,8 @@ let type_decl d = match d.node with
 
 let type_file = List.map (fun d -> { d with node = type_decl d })
 
+(*
+Local Variables: 
+compile-command: "unset LANG; make -C .. bin/caduceus.byte"
+End: 
+*)

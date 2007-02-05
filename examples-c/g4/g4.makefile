@@ -6,7 +6,7 @@ WHY=why --no-arrays
 
 GWHY=gwhy --no-arrays 
 
-CADULIB=/home/hubert/why/examples-c/g4/../../lib
+CADULIB=/home/marche/why/examples-c/g4/../../lib
 
 CADULIBFILE=caduceus.why
 
@@ -47,7 +47,7 @@ isabelle/%_spec_why.thy: why/%_spec.why
 
 isabelle/%_why.thy: isabelle/g4_spec_why.thy why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory g4_spec_why $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
-	cp -f /home/hubert/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
+	cp -f /home/marche/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
 
 simplify: simplify/g4_why.sx
 	@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)
@@ -65,7 +65,7 @@ cvcl: cvcl/g4_why.cvc
 	@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)
 
 cvcl/%_why.cvc: why/g4_spec.why why/%.why
-	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
+	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl --encoding sstrat -dir cvcl $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
 
 harvey: harvey/g4_why.rv
 	@echo 'Running haRVey on proof obligations' && (dp -timeout $(TIMEOUT) $^)
