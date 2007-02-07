@@ -1,4 +1,6 @@
 
+  o WP: the invariant at loop entry does not appear anymore in the
+    verification condition related to the invariant preservation
   o option -no-simplify-triggers changed to -simplify-triggers,
     defaulting to false, because Caduceus bench shows it is good in
     general, and moreover generated triggers with Krakatoa and jessie
