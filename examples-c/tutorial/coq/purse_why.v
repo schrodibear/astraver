@@ -4,6 +4,138 @@
 
 Require Export purse_spec_why.
 
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst; caduceus.
+subst; caduceus.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst; caduceus.
+subst; caduceus.
+subst; caduceus.
+unfold not_assigns; intuition.
+rewrite acc_upd_neq; intuition.
+subst; intuition.
+apply (@pset_singleton_elim _ p0 p0); trivial.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst.
+caduceus.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst result.
+rewrite H8; intuition.
+subst; caduceus.
+Save.
+
+Proof.
+intuition.
+red.
+red in H2.
+intuition.
+apply alloc_extends_valid with alloc0;auto.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+rewrite H11; intuition.
+apply pset_singleton_intro.
+intuition;subst.
+generalize (fresh_not_valid H7);intuition.
+(* problem: need to know that p1 <> p2, which
+   should be a consequence of
+H1 : valid alloc p1
+H0 : fresh alloc p2
+
+but there is a bug: we cannot have 
+H6 : valid alloc p2
+which contradicts H0.
+*)
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+rewrite H18; intuition.
+apply pset_singleton_intro.
+intuition;subst.
+generalize (fresh_not_valid H7);intuition.
+(* again we need p1 <> p2 *)
+rewrite H18;intuition.
+apply pset_singleton_intro.
+intuition;subst.
+generalize (fresh_not_valid H7);intuition.
+(* again we need p1 <> p2 *)
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+Admitted.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+intuition.
+subst.
+assert (result0 <> result).
+red in H2.
+intuition;subst.
+generalize (fresh_not_valid H6);intuition.
+rewrite H27.
+rewrite H25; intuition.
+rewrite H23.
+rewrite H19; intuition.
+rewrite H17.
+rewrite H13; intuition.
+rewrite H12.
+rewrite H8;intuition.
+Admitted.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst; caduceus.
+subst;caduceus.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst; caduceus.
+subst; caduceus.
+(* needs a tactic to prove an assigns clause *)
+Admitted.
+
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit0_impl_po_1 : 
   forall (p: ((pointer) global)),
@@ -14,7 +146,8 @@ Require Export purse_spec_why.
                 ((purse_inv balance_global alloc p) /\ s >= 0)),
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 9, characters 14-64: *)
@@ -35,9 +168,8 @@ Save.
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
   ((acc balance_global p) + s)).
 Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -50,7 +182,8 @@ Save.
                 ((purse_inv balance_global alloc p) /\ s >= 0)),
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -72,14 +205,8 @@ Save.
   ((acc balance_global p) + s)) /\
   (not_assigns alloc balance_global balance_global0 (pset_singleton p)).
 Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
-subst; caduceus.
-unfold not_assigns; intuition.
-rewrite acc_upd_neq; intuition.
-subst; intuition.
-apply (@pset_singleton_elim _ p0 p0); trivial.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -93,7 +220,8 @@ Save.
                 (purse_inv balance_global alloc p2)) /\ ~(p1 = p2))),
   (valid alloc p1).
 Proof.
-unfold purse_inv; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 36, characters 15-37: *)
@@ -111,9 +239,8 @@ Save.
   (* File "purse.c", line 36, characters 14-36 *)
   ((purse_inv balance_global0 alloc p2) /\ 100 >= 0).
 Proof.
-unfold purse_inv; intuition.
-subst.
-caduceus.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 54, characters 14-26: *)
@@ -141,10 +268,8 @@ Save.
   forall (HW_7: result = (acc balance_global1 p1)),
   (* File "purse.c", line 54, characters 13-25 *) result = 0.
 Proof.
-unfold purse_inv; intuition.
-subst result.
-rewrite H8; intuition.
-subst; caduceus.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 36, characters 15-37: *)
@@ -167,10 +292,7 @@ Save.
   ((purse_inv balance_global alloc1 result) /\ 100 >= 0).
 Proof.
 intuition.
-red.
-red in H2.
-intuition.
-apply alloc_extends_valid with alloc0;auto.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 36, characters 15-37: *)
@@ -201,20 +323,8 @@ Save.
   (* File "purse.c", line 36, characters 14-36 *)
   ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0).
 Proof.
-unfold purse_inv; intuition.
-rewrite H11; intuition.
-apply pset_singleton_intro.
-intuition;subst.
-generalize (fresh_not_valid H7);intuition.
-(* problem: need to know that p1 <> p2, which
-   should be a consequence of
-H1 : valid alloc p1
-H0 : fresh alloc p2
-
-but there is a bug: we cannot have 
-H6 : valid alloc p2
-which contradicts H0.
-*)
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 44, characters 15-51: *)
@@ -255,17 +365,8 @@ Save.
   ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\ 50 <=
   (acc balance_global1 result)).
 Proof.
-unfold purse_inv; intuition.
-rewrite H18; intuition.
-apply pset_singleton_intro.
-intuition;subst.
-generalize (fresh_not_valid H7);intuition.
-(* again we need p1 <> p2 *)
-rewrite H18;intuition.
-apply pset_singleton_intro.
-intuition;subst.
-generalize (fresh_not_valid H7);intuition.
-(* again we need p1 <> p2 *)
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 44, characters 15-51: *)
@@ -316,8 +417,9 @@ Save.
   ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\ 100 <=
   (acc balance_global2 result0)).
 Proof.
-unfold purse_inv; intuition.
-Admitted.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_5 : 
@@ -375,7 +477,8 @@ Admitted.
                   (pset_singleton result0))),
   (valid alloc1 result).
 Proof.
-unfold purse_inv; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -437,7 +540,8 @@ Save.
   forall (HW_12: result1 = (acc balance_global3 result)),
   (valid alloc1 result0).
 Proof.
-unfold purse_inv; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -504,20 +608,8 @@ Save.
   (alloc_extends alloc alloc1).
 Proof.
 intuition.
-subst.
-assert (result0 <> result).
-red in H2.
-intuition;subst.
-generalize (fresh_not_valid H6);intuition.
-rewrite H27.
-rewrite H25; intuition.
-rewrite H23.
-rewrite H19; intuition.
-rewrite H17.
-rewrite H13; intuition.
-rewrite H12.
-rewrite H8;intuition.
-Admitted.
+(* FILL PROOF HERE *)
+Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma withdraw0_impl_po_1 : 
@@ -530,7 +622,8 @@ Admitted.
                 (acc balance_global p))),
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "purse.c", line 16, characters 14-64: *)
@@ -552,9 +645,8 @@ Save.
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
   ((acc balance_global p) - s)).
 Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
-subst;caduceus.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -568,7 +660,8 @@ Save.
                 (acc balance_global p))),
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -591,10 +684,7 @@ Save.
   ((acc balance_global p) - s)) /\
   (not_assigns alloc balance_global balance_global0 (pset_singleton p)).
 Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
-(* needs a tactic to prove an assigns clause *)
-Admitted.
-
+intuition.
+(* FILL PROOF HERE *)
+Save.
 

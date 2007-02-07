@@ -101,6 +101,10 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
   @    iset(b)==singleton(x) => !in_(x,iset(a)) => iset(a+b) == add(x, iset(a))
   @*/
 
+// @ axiom iset_c_succ : \forall int a; iset(a*2) == succ(iset(a))
+
+// @ axiom iset_c_pred : \forall int a; iset(a/2) == pred(iset(a))
+
 //@ axiom iset_c_below : \forall int n; iset(~(~0<<n)) == below(n)
 
 /****** helper lemmas *******************************************************/
@@ -219,6 +223,7 @@ void store_solution();
   @   col[k..], s, k, sol[s..][..]
   @ ensures  
   @   \result == s - \old(s) && \result >= 0 && k == \old(k) &&
+  @   sorted(sol, \old(s), s) &&
   @   \forall int* t; ((solution(t) && eq_prefix(col,t,k)) <=>
   @                    (\exists int i; \old(s)<=i<s && eq_sol(t, sol[i])))
   @*/
@@ -230,6 +235,7 @@ int t3(int a, int b, int c){
       @   included(iset(e),\at(iset(e),L)) &&
       @   f == s - \at(s,L) && f >= 0 && k == \old(k) && 
       @   partial_solution(k, col) &&
+      @   sorted(sol, \at(s,L), s) &&
       @   \forall int *t; 
       @     (solution(t) && 
       @      \exists int di; in_(di, diff(\at(iset(e),L), iset(e))) &&
@@ -254,6 +260,7 @@ int t3(int a, int b, int c){
   @   n == N() && s == 0 && k == 0
   @ ensures 
   @   \result == s &&
+  @   sorted(sol, 0, s) &&
   @   \forall int* t; 
   @      solution(t) <=> (\exists int i; 0<=i<\result && eq_sol(t,sol[i]))
   @*/

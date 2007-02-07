@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.86 2007-02-02 13:36:27 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.87 2007-02-07 08:20:54 filliatr Exp $ i*)
 
 open Format
 
@@ -62,7 +62,10 @@ let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 let show_time_ = ref false
 
-type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph | SortedStratified
+type encoding = 
+  | NoEncoding | Predicates | Stratified | Recursive | Monomorph 
+  | SortedStratified
+
 type expanding = All | Goal | NoExpanding
 
 
@@ -448,7 +451,9 @@ let defExpanding = !defExpanding_
 
 (* encoding checks *)
 let () = 
-  if prover () = SmtLib && !types_encoding_ = NoEncoding then
+  if (prover () = SmtLib || prover () = CVCLite) &&
+     !types_encoding_ = NoEncoding 
+  then
     types_encoding_ := SortedStratified
 
 let get_types_encoding () = !types_encoding_

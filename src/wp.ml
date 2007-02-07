@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.99 2006-11-03 14:50:23 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.100 2007-02-07 08:20:54 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -306,7 +306,7 @@ and wp_desc info d q =
 	  | Some {a_value=i}, Some {a_value=we} ->
 	      let vars = output_info info in
 	      wpand wfr
-		(wpand ~is_sym:false 
+		(wpand ~is_sym:true
 		   i (foralls ~is_wp:true vars (Pimplies (true, i, we))))
 	in
 	let w = Some (wp_named info.t_loc w) in

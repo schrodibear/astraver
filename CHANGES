@@ -5,7 +5,8 @@
     make Simplify fail
   o Simplify output: fixed bug with leading underscores in identifiers
   o compatibility with Coq development version (ring syntax has changed)
-  o option --encoding sstrat automatically added when --smtlib is selected
+  o option --encoding sstrat automatically added when --smtlib or
+    --cvcl is selected and no encoding specified
   o new option --exp to expand the predicate definitions
   o Coq output: the command "Implicit Arguments id" is automatically
     inserted for any polymorphic id
