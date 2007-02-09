@@ -26,6 +26,9 @@
 val window_width : int ref
 val window_height : int ref
 
+val font_size : int ref
+val font_family : string
+
 type color = {
   key : string;
   name : string;

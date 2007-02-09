@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.100 2007-02-07 08:20:54 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.101 2007-02-09 08:28:26 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -174,6 +174,10 @@ let pand_wp info w1 w2 = match w1, w2 with
   | Some _, None -> w1
   | None, Some _ -> w2
   | None, None -> None
+
+let name_wp n w = match w with
+  | Some w -> Some { w with a_value = Pnamed(n,w.a_value) }
+  | None -> None
 
 (*s function binders *)
 

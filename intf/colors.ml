@@ -27,6 +27,9 @@
 let window_width = ref 1024
 let window_height = ref 768
 
+let font_size = ref 10
+let font_family = "Monospace"
+
 type color = {
   key : string;
   name : string;

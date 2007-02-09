@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.50 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.51 2007-02-09 08:28:26 marche Exp $ i*)
 
 open Printf
 open Options
@@ -49,7 +49,7 @@ let get_files fl =
     fl
     files
 
-let _ =
+let () =
   try
     Main.main ()
   with e ->
@@ -59,21 +59,72 @@ let _ =
 
 (* GTK *)
 
-(* 
- * let default_screen = Gdk.Screen.default ()
- * let window_width = Gdk.Screen.width ~screen:default_screen ()
- * let window_height = Gdk.Screen.height ~screen:default_screen ()
- *)
+(* config in .gwhyrc *)
+let set_loaded_config () = 
+  let l = [("cache", Cache.set_active) ; 
+	   ("hard_proof", Cache.set_hard_proof) ; 
+	   ("live_update", Tools.set_live)] in
+  List.iter 
+    (fun (k,f) -> 
+       let v = 
+	 try bool_of_string (Config.get_value k)
+	 with _ -> begin
+	   prerr_endline ("     [...] .gwhyrc : invalid value for " ^ k); 
+	   true 
+	 end
+	 in
+       (f v))
+    l;
+  Tools.set_timeout 
+    (try (int_of_string (Config.get_value "timeout"))
+     with _ -> 
+       begin
+	 prerr_endline ("     [...] .gwhyrc : invalid value for timeout"); 
+	 10 
+       end);
+  Model.set_prover 
+    (try (Model.get_prover (Config.get_value "prover"))
+    with Model.No_such_prover -> 
+      begin
+	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
+	List.hd (Model.get_provers ())
+      end);
+  List.iter
+    (fun (k,f,def) ->
+       let v = 
+	 try int_of_string (Config.get_value k)
+	 with _ -> begin
+	   prerr_endline ("     [...] .gwhyrc : invalid value for " ^ k); 
+	   def
+	 end
+       in
+       f := v)
+    [("window_width", Colors.window_width, 1024) ;
+     ("window_height", Colors.window_height, 768);
+     ("font_size", Colors.font_size, 10) ];
+  Colors.set_all_colors (Config.get_colors ())
 
-let monospace_font = ref (Pango.Font.from_string "Monospace 14")
-let general_font = ref (Pango.Font.from_string "Monospace 14")
+let () =
+  ignore (GtkMain.Main.init ());
+  Config.create_default_config ();
+  Config.load ();
+  set_loaded_config ()
 
-let lower_view_general_font = general_font
-let upper_view_general_font = general_font
-let statusbar_font = ref !general_font
-let proved_lemma_font = ref !monospace_font
-let to_prove_lemma_font = ref !monospace_font
-let discharged_lemma_font = ref !monospace_font
+let modifiable_font_views = ref []
+
+let change_font () =
+  let f = 
+    Pango.Font.from_string 
+      (Colors.font_family ^ " " ^ string_of_int !Colors.font_size)
+  in
+  List.iter (fun v -> v#modify_font f) !modifiable_font_views
+
+let enlarge_font () =
+  incr Colors.font_size; change_font ()
+
+let reduce_font () =
+  decr Colors.font_size; change_font ()
+
 let display_info = ref (function s -> failwith "not ready")
 let flash_info = ref (function s -> failwith "not ready")
 
@@ -112,8 +163,7 @@ module View = struct
   let add_columns ~(view : GTree.view) ~model =
     (* let renderer = GTree.cell_renderer_text [`XALIGN 0.] in *)
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
-    let _ = view#append_column first_col 
-    in
+    let _n : int = view#append_column first_col in
     List.map
       (fun p ->
 	 let vc = 
@@ -121,7 +171,7 @@ module View = struct
 	     ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
 	 in
 	 vc#set_clickable true;
-	 let _ = view#append_column vc in
+	 let _n : int = view#append_column vc in
 	 p, vc)
       (Model.get_provers ())
 
@@ -337,6 +387,7 @@ let run_prover_all p (view:GTree.view) (model:GTree.tree_store) bench () =
     (fun f -> run_prover_fct p view model f bench ()) 
     Model.fq
 
+
 let main () = 
   let w = GWindow.window 
 	    ~allow_grow:true ~allow_shrink:true
@@ -355,12 +406,16 @@ let main () =
 		   Colors.window_width := w;
 		 end
 	    ));
+(* no effect 
   w#misc#modify_font !general_font;
-  let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
+*)  let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
   let vbox = GPack.vbox ~homogeneous:false ~packing:w#add () in
 
   (* Menu *)
   let menubar = GMenu.menu_bar ~packing:vbox#pack () in
+(* no effect
+  let () = menubar#misc#modify_font !general_font in
+*)
   let factory = new GMenu.factory menubar in
   let accel_group = factory#accel_group in
   let file_menu = factory#add_submenu "_File" in
@@ -386,10 +441,14 @@ let main () =
   let _ =
     configuration_factory#add_item 
       ~callback:(fun () -> Preferences.show Tools.Color unit ()) "Customize colors" in
-  (*let ft = 
-   * configuration_factory#add_item 
-   *   ~callback:(fun () -> !flash_info "Not implemented") "Customize fonts" in
-   *)
+  let _ = 
+    configuration_factory#add_item ~key:GdkKeysyms._plus
+      ~callback:enlarge_font "Enlarge font" 
+  in
+  let _ = 
+    configuration_factory#add_item ~key:GdkKeysyms._minus
+      ~callback:reduce_font "Reduce font" 
+  in
 
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
@@ -419,6 +478,9 @@ let main () =
     ~width:(!Colors.window_width / 2) () in
   let _ = vtable#attach ~left:0 ~top:1 ~expand:`BOTH scrollview#coerce in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
+(* has effect but not nice 
+  let () = view#misc#modify_font !general_font in
+*)
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let vc_provers = View.add_columns ~view ~model in
@@ -645,7 +707,6 @@ let main () =
 
   (* lower text view: source code *)
   let tv2 = GText.view ~packing:(sw2#add) () in
-  let _ = tv2#misc#modify_font !lower_view_general_font in
   let _ = tv2#set_editable false in
   let _ = tv2#set_wrap_mode `WORD in
   let _ = Pprinter.set_tvsource tv2 in
@@ -653,10 +714,11 @@ let main () =
   (* upper text view: obligation *)
   let buf1 = GText.buffer () in 
   let tv1 = GText.view ~buffer:buf1 ~packing:(sw1#add) () in
-  let _ = tv1#misc#modify_font !upper_view_general_font in
   let _ = tv1#set_editable false in
   let _ = tv1#set_wrap_mode `WORD in
  
+  modifiable_font_views := [tv1#misc;tv2#misc];
+  change_font ();
   (* timeout set *)
   let _ = GMisc.label ~text:" Timeout" ~xalign:0. ~packing:hbox#pack () in
   let timeout_b = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
@@ -682,7 +744,9 @@ let main () =
   let status_bar = 
     GMisc.statusbar ~packing:(hbox#pack ~fill:true ~expand:true) () 
   in
+(* no effect
   status_bar#misc#modify_font !statusbar_font ;
+*)
   let status_context = status_bar#new_context "messages" in
   (*ignore (status_context#push "Welcome to the Why GUI");*)
   display_info := (fun s -> 
@@ -857,57 +921,9 @@ let main () =
   w#add_accel_group accel_group;
   w#show ()
 
-(* config in .gwhyrc *)
-let set_loaded_config () = 
-  let l = [("cache", Cache.set_active) ; 
-	   ("hard_proof", Cache.set_hard_proof) ; 
-	   ("live_update", Tools.set_live)] in
-  List.iter 
-    (fun (k,f) -> 
-       let v = 
-	 try bool_of_string (Config.get_value k)
-	 with _ -> begin
-	   prerr_endline ("     [...] .gwhyrc : invalid value for " ^ k); 
-	   true 
-	 end
-	 in
-       (f v))
-    l;
-  Tools.set_timeout 
-    (try (int_of_string (Config.get_value "timeout"))
-     with _ -> 
-       begin
-	 prerr_endline ("     [...] .gwhyrc : invalid value for timeout"); 
-	 10 
-       end);
-  Model.set_prover 
-    (try (Model.get_prover (Config.get_value "prover"))
-    with Model.No_such_prover -> 
-      begin
-	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
-	List.hd (Model.get_provers ())
-      end);
-  List.iter
-    (fun (k,f,def) ->
-       let v = 
-	 try int_of_string (Config.get_value k)
-	 with _ -> begin
-	   prerr_endline ("     [...] .gwhyrc : invalid value for " ^ k); 
-	   def
-	 end
-       in
-       f := v)
-    [("window_width", Colors.window_width, 1024) ;
-     ("window_height", Colors.window_height, 768) ];
-
-  Colors.set_all_colors (Config.get_colors ())
 
 (* Main *)
 let _ = 
-  ignore (GtkMain.Main.init ());
-  Config.create_default_config ();
-  Config.load ();
-  set_loaded_config ();
   if not is_caduceus then Pprinter.desactivate ();
   main () ;
   GtkThread.main ()

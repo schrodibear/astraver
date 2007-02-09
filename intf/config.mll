@@ -90,7 +90,8 @@
       (fun (k,v) -> 
 	 output_string out_channel (k^" = \"" ^ string_of_int(v) ^ "\"\n"))
       [ "window_width", !window_width ;
-	"window_height", !window_height ];
+	"window_height", !window_height ; 
+	"font_size", !font_size ];
 	   
     output_string out_channel "\n\n# Colors : color_key = \"forecolor\" \"backcolor\" \n";
     output_string out_channel "# key = {title, comment, keyword, var, ";
@@ -123,7 +124,7 @@
     let h = Hashtbl.create 97 in
     List.iter 
       (fun s -> Hashtbl.add h s ())
-      [ "provers" ; "prover"; "cache"; "hard_proof"; "timeout"; "live_update"; "window_width"; "window_height"];
+      [ "provers" ; "prover"; "cache"; "hard_proof"; "timeout"; "live_update"; "window_width"; "window_height" ; "font_size"];
     fun s -> 
       Hashtbl.mem h s
 
