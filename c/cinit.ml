@@ -287,10 +287,10 @@ let rec init_expr loc t lvalue initializers =
 		    | Tstruct _ |  Tunion _ ->
 			init_expr loc ty 
 			  (noattr loc ty 
-			     (Tbinop(lvalue,Badd,ts))) initializers
+			     (Tbinop(lvalue,Badd,vari))) initializers
 		    | _ ->
 			init_expr loc ty 
-			  (noattr loc ty (Tarrget(lvalue,ts))) initializers
+			  (noattr loc ty (Tarrget(lvalue,vari))) initializers
 		  in
 		((make_forall [c_int,i] (make_implies ineq b)), init')
 	    | _ ->
