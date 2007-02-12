@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.115 2006-12-13 09:28:08 couchot Exp $ i*)
+(*i $Id: misc.ml,v 1.116 2007-02-12 22:57:45 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -546,6 +546,8 @@ let por a b =
   if a = Ptrue || b = Ptrue then Ptrue else
   if a = Pfalse then b else if b = Pfalse then a else
   Por (a, b)
+
+let pors = List.fold_left por Pfalse
 
 let pnot a =
   if a = Ptrue then Pfalse else if a = Pfalse then Ptrue else Pnot a

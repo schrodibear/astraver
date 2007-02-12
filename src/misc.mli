@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.mli,v 1.85 2006-12-13 09:28:08 couchot Exp $ i*)
+(*i $Id: misc.mli,v 1.86 2007-02-12 22:57:45 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -219,6 +219,7 @@ val pif : term -> predicate -> predicate -> predicate
 val pand : ?is_wp:is_wp -> ?is_sym:bool -> predicate -> predicate -> predicate
 val pands : ?is_wp:is_wp -> ?is_sym:bool -> predicate list -> predicate
 val por : predicate -> predicate -> predicate
+val pors : predicate list -> predicate
 val pnot : predicate -> predicate
 val pimplies : ?is_wp:is_wp -> predicate -> predicate -> predicate
 

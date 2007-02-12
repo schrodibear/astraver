@@ -82,8 +82,8 @@ fastwp.simplify:
 	$(BWHY) --simplify --fast-wp test.mlw && ../bin/dp.opt test_why.sx
 
 fastwp.ergo:
-	$(WHY) --why -d -V --fast-wp test.mlw
-	$(WHY) -no-prelude -tc test_why.why && ergo test_why.why
+	$(BWHY) --why -d -V --fast-wp test.mlw
+	$(BWHY) -no-prelude -tc test_why.why && ergo test_why.why
 
 partial:
 	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic magic test.mlw
