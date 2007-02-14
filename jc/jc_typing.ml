@@ -649,22 +649,22 @@ let bin_op t op =
     | _ -> assert false
 
 let coerce t1 t2 e =
-  let e_int =
+  let tn1,e_int =
     match t1 with
       | JCTrange ri ->
 	  let (_,_,to_int_,_) = 
 	    Hashtbl.find range_types_table ri.jc_range_info_name 
 	  in
-	  { jc_expr_node = JCEcall(to_int_,[e]) ;
+	  Tinteger,{ jc_expr_node = JCEcall(to_int_,[e]) ;
 	    jc_expr_loc = e.jc_expr_loc }  
-      | _ -> e
+      | JCTnative t -> t,e
+      | _ -> assert false
   in
-  match t2 with
-    | Tinteger -> e_int
-    | Treal -> 
+  match tn1,t2 with
+    | Tinteger,Treal -> 
 	{ jc_expr_node = JCEcall(real_of_integer_,[e_int]) ;
 	  jc_expr_loc = e.jc_expr_loc }  
-    | _ -> assert false
+    | _ -> e_int
 
 
 let restrict t1 t2 e =
