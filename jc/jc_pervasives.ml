@@ -79,6 +79,8 @@ let minus_int = make_term_op "neg_int" integer_type
 
 let shift = make_term_op "shift" unit_type   
 
+let real_of_integer = make_term_op "real_of_int" real_type
+
 (* logic predicates *)
 
 let make_rel name =
@@ -149,6 +151,7 @@ let not_ = make_fun_info "not" boolean_type
 
 let shift_ = make_fun_info "shift" unit_type   
 
+let real_of_integer_ = make_fun_info "real_of_int" real_type
 
 (*
 Local Variables: 

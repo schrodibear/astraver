@@ -52,15 +52,18 @@ let tr_base_type t =
   match t with
     | JCTnative t -> simple_logic_type (tr_native_type t)
     | JCTlogic s -> simple_logic_type s
+    | JCTrange ri -> simple_logic_type ri.jc_range_info_name
     | JCTpointer (st, a, b) -> 
 	let ti = simple_logic_type (st.jc_struct_info_root) in
 	{ logic_type_name = "pointer";
 	  logic_type_args = [ ti ] }
 
-let tr_type t =
+let tr_type t = Base_type(tr_base_type t)
+(*
   match t with
     | JCTnative _ | JCTlogic _ -> Base_type(tr_base_type t)
     | JCTpointer _ -> Base_type(tr_base_type t)	
+*)
 
 (**************************
 
@@ -724,6 +727,7 @@ let tr_fun f spec body acc =
 	       make_and 
 		 (make_and (make_and validity instance) invariant)
 		 acc
+	   | JCTrange _ -> acc
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
@@ -845,6 +849,28 @@ let tr_exception ei acc =
   Exception(ei.jc_exception_info_name, 
 	    Some (tr_base_type ei.jc_exception_info_type)) :: acc
 
+let tr_range_type ri to_int of_int acc =
+  let n = ri.jc_range_info_name in
+  let range_pred x =
+    LAnd(LPred("le_int",[LConst(Prim_int(Num.string_of_num(ri.jc_range_info_min))); x]),
+	       LPred("le_int",[x; LConst(Prim_int(Num.string_of_num(ri.jc_range_info_max)))]))
+  in
+  let of_int_type =
+    Prod_type("x", Base_type(simple_logic_type "int"),
+	      Annot_type(range_pred (LVar "x"),
+			 Base_type(simple_logic_type n),
+			 [],[],
+			 LPred("eq_int",
+			       [LVar "x";LApp(to_int.jc_fun_info_name,[LVar "result"])]),[]))
+  in
+  Type(n,[]) ::
+  Logic(false,to_int.jc_fun_info_name,
+	[("",simple_logic_type n)],simple_logic_type "int") :: 
+  Param(false,of_int.jc_fun_info_name,of_int_type) ::
+  Axiom(n^"_range",
+	LForall("x",simple_logic_type n,range_pred (LApp(to_int.jc_fun_info_name,[LVar "x"]))))		
+  :: acc
+	   
 (*
 Local Variables: 
 compile-command: "unset LANG; make -C .. bin/jessie.byte"

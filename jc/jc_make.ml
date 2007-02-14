@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.6 2006-12-22 13:13:25 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.7 2007-02-14 13:00:34 marche Exp $ i*)
 
 open Format
 open Pp
@@ -113,7 +113,7 @@ let generic f targets =
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp -dir smtlib $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");

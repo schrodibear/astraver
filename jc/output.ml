@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.8 2006-12-22 15:25:13 marche Exp $ i*)
+(*i $Id: output.ml,v 1.9 2007-02-14 13:00:35 marche Exp $ i*)
 
 open Format;;
 open Pp;;
@@ -735,18 +735,18 @@ let fprintf_why_decls form decls =
 
      - Claude, 16 nov 2006
   *)
-  let (types,others) =
+  let (types,defs,others) =
     List.fold_left
-    (fun (t,o) d ->
-       match d with
-	 | Type _ -> (d::t,o)
-	 | _ -> (t,d::o))
-    ([],[]) decls
+    (fun (t,d,o) decl ->
+       match decl with
+	 | Type _ -> (decl::t,d,o)
+	 | Def _ -> (t,decl::d,o)
+	 | _ -> (t,d,decl::o))
+    ([],[],[]) decls
   in
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
-
-
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
 
 
 

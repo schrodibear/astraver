@@ -94,13 +94,21 @@ let main () =
 	    Jc_typing.exceptions_table
 	    d_memories
 	in	       	  
+	(* production phase 1.4 : generation of Why range_types *)
+	let d_range =
+	  Hashtbl.fold 
+	    (fun _ (ri,to_int,to_int_,of_int) acc ->
+	       Jc_interp.tr_range_type ri to_int_ of_int acc)
+	    Jc_typing.range_types_table
+	    d_exc
+	in	       	  
 	(* production phase 2 : generation of Why logic functions *)
 	let d_lfuns = 
 	  Hashtbl.fold 
 	    (fun _ (li,p) acc ->
 	       Jc_interp.tr_logic_fun li p acc)
 	    Jc_typing.logic_functions_table 
-	    d_exc
+	    d_range
 	in
 	(* production phase 3 : generation of Why axioms *)
 	let d_axioms = 

@@ -131,7 +131,7 @@ let type_type t =
 	  JCTlogic id
 	with Not_found ->
 	  try
-	    let ri = Hashtbl.find range_types_table id in
+	    let (ri,_,_,_) = Hashtbl.find range_types_table id in
 	    JCTrange ri
 	  with Not_found ->
 	    typing_error t.jc_ptype_loc "unknown type %s" id
@@ -380,35 +380,17 @@ let rel_unary_op loc op t =
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
 
-let rel_bin_op loc op t1 t2 =
-  match op with
-    | Bgt -> gt_int
-    | Blt -> lt_int
-    | Bge -> ge_int
-    | Ble -> le_int
-    | Beq | Bneq -> 
-	let op = match op with
-	  | Beq -> eq
-	  | Bneq -> neq
-	  | _ -> assert false
-	in
-	if comparable_types t1 t2 then 
-	  begin
-	    match t1 with
-	      | JCTnative _ -> op
-	      | JCTlogic _ -> op
-	      | JCTrange _ -> op
-	      | JCTpointer _ -> op
-	  end
-	else
-	  typing_error loc "terms should have the same type"
-	(* non propositional operators *)
-    | Badd | Bsub | Bmul | Bdiv | Bmod -> assert false
-	(* already recognized as connectives *)
-    | Bland | Blor -> assert false 
-    | Bimplies -> assert false
-    | Biff -> assert false
-
+let rel_bin_op t op =
+  match t,op with
+    | Tinteger,Bgt -> gt_int
+    | Tinteger,Blt -> lt_int
+    | Tinteger,Bge -> ge_int
+    | Tinteger,Ble -> le_int
+    | _,Beq -> eq
+    | _,Bneq -> neq
+    | _,(Badd | Bsub | Bmul | Bdiv | Bmod) -> assert false
+    | _,(Bland | Blor | Bimplies | Biff) -> assert false
+    | _ -> assert false  (* TODO *)
 
 
 let make_and a1 a2 =
@@ -423,6 +405,62 @@ let make_and a1 a2 =
     | (JCAand l1 , _ ) -> JCAand(l1@[a2])
     | (_ , JCAand l2) -> JCAand(a1::l2)
     | _ -> JCAand [a1;a2]
+
+let is_numeric t =
+  match t with
+    | JCTnative (Tinteger|Treal) -> true
+    | JCTrange _ -> true
+    | _ -> false
+
+let is_integer t =
+  match t with
+    | JCTnative Tinteger -> true
+    | JCTrange _ -> true
+    | _ -> false
+
+let lub_numeric_types t1 t2 =
+  match t1,t2 with
+    | JCTnative Treal,_ | _,JCTnative Treal -> Treal
+    | _ -> Tinteger
+
+let term_coerce t1 t2 e =
+  let e_int =
+    match t1 with
+      | JCTrange ri ->
+	  let (_,to_int,_,_) = 
+	    Hashtbl.find range_types_table ri.jc_range_info_name 
+	  in
+	  { jc_term_node = JCTapp(to_int,[e]) ;
+	    jc_term_loc = e.jc_term_loc }  
+      | _ -> e
+  in
+  match t2 with
+    | Tinteger -> e_int
+    | Treal -> 
+	{ jc_term_node = JCTapp(real_of_integer,[e_int]) ;
+	  jc_term_loc = e.jc_term_loc }  
+    | _ -> assert false
+
+let make_rel_bin_op loc op t1 e1 t2 e2 =
+  match op with
+    | Bgt | Blt | Bge | Ble ->
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCAapp(rel_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	else
+	  typing_error loc "numeric types expected"
+    | Beq | Bneq ->
+	if comparable_types t1 t2 then 
+	  JCAapp(rel_bin_op Tunit op,[e1;e2])
+	else
+	  typing_error loc "terms should have the same type"
+	(* non propositional operators *)
+    | Badd | Bsub | Bmul | Bdiv | Bmod -> assert false
+	(* already recognized as connectives *)
+    | Bland | Blor -> assert false 
+    | Bimplies -> assert false
+    | Biff -> assert false
+
 
 let rec assertion env e =
   let te =
@@ -458,7 +496,7 @@ let rec assertion env e =
 	  let t1,e1 = term env e1
 	  and t2,e2 = term env e2
 	  in
-	  JCAapp(rel_bin_op e.jc_pexpr_loc op t1 t2,[e1;e2])
+	  make_rel_bin_op e.jc_pexpr_loc op t1 e1 t2 e2
       | JCPEunary(op, e2) -> 
 	  let t2,e2 = term env e2
 	  in
@@ -610,6 +648,35 @@ let bin_op t op =
     | Tunit,_ -> assert false
     | _ -> assert false
 
+let coerce t1 t2 e =
+  let e_int =
+    match t1 with
+      | JCTrange ri ->
+	  let (_,_,to_int_,_) = 
+	    Hashtbl.find range_types_table ri.jc_range_info_name 
+	  in
+	  { jc_expr_node = JCEcall(to_int_,[e]) ;
+	    jc_expr_loc = e.jc_expr_loc }  
+      | _ -> e
+  in
+  match t2 with
+    | Tinteger -> e_int
+    | Treal -> 
+	{ jc_expr_node = JCEcall(real_of_integer_,[e_int]) ;
+	  jc_expr_loc = e.jc_expr_loc }  
+    | _ -> assert false
+
+
+let restrict t1 t2 e =
+  match t1,t2 with
+    | JCTnative Tinteger, JCTrange ri -> 
+	let (_,_,_,of_int) = 
+	  Hashtbl.find range_types_table ri.jc_range_info_name 
+	in
+	{ jc_expr_node = JCEcall(of_int,[e]) ;
+	  jc_expr_loc = e.jc_expr_loc }  	
+    | _ -> assert false
+
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble | Beq | Bneq ->
@@ -627,22 +694,19 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	JCTnative Tboolean,JCEcall(bin_op Tboolean op,[e1;e2])
     | Badd | Bsub ->
 	begin
-	  match (t1,t2) with
-	    | JCTnative nt1, JCTnative nt2 ->
-		begin
-		  match (nt1,nt2) with
-		    | Tinteger,Tinteger -> 
-			JCTnative Tinteger,
-			JCEcall(bin_op Tinteger op,[e1;e2])
-		    | Treal,Treal -> 
-			JCTnative Treal,
-			JCEcall(bin_op Treal op,[e1;e2])
-		    | _ -> assert false (* TODO *)
-		end
-	    | JCTpointer(st,_,_), JCTnative Tinteger ->
-		t1, JCEcall(shift_,[e1;e2])
+	  match t1 with
+	    | JCTpointer(st,_,_) ->
+		if is_integer t2 then
+		  t1, JCEcall(shift_,[e1;coerce t2 Tinteger e2])
+		else
+		  typing_error loc "integer type expected"
 	    | _ ->
-		typing_error loc "numeric types expected"
+		if is_numeric t1 && is_numeric t2 then
+		  let t = lub_numeric_types t1 t2 in
+		  JCTnative t,
+		  JCEcall(bin_op t op,[coerce t1 t e1; coerce t2 t e2])
+		else
+		  typing_error loc "numeric types expected"
 	end
     | Bmul | Bdiv | Bmod ->
 	let t=
@@ -873,8 +937,18 @@ let rec statement env s =
       | JCPSbreak _ -> assert false
       | JCPSreturn e -> 
 	  let t,te = expr env e in 
-	  (* TODO *)
-	  JCSreturn te
+	  let vi = List.assoc "\\result" env in
+	  if subtype t vi.jc_var_info_type then
+	    JCSreturn te
+	  else
+	    begin
+	      try
+		JCSreturn (restrict t vi.jc_var_info_type te)
+	      with
+		  Invalid_argument _ ->
+		    typing_error s.jc_pstatement_loc "type '%a' expected"
+		      print_type vi.jc_var_info_type
+	    end
       | JCPSwhile(c,i,v,s) -> 
 	  let t,tc = expr env c in
 	  if subtype t (JCTnative Tboolean) then
@@ -1107,7 +1181,7 @@ let decl d =
 		  { jc_fun_requires = assertion_true;
 		    jc_fun_behavior = [] }
 	in
-	let b = statement_list param_env body in
+	let b = statement_list (("\\result",vi)::param_env) body in
 	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDrangetype(id,min,max) ->
@@ -1117,7 +1191,10 @@ let decl d =
 	    jc_range_info_max = max;
 	  }
 	in
-	Hashtbl.add range_types_table id ri
+	let to_int = make_term_op ("int_of_"^id) integer_type in
+	let to_int_ = make_fun_info ("int_of_"^id) integer_type in
+	let of_int = make_fun_info (id^"_of_int") (JCTrange ri) in
+	Hashtbl.add range_types_table id (ri,to_int,to_int_,of_int)
     | JCPDstructtype(id,parent,fields,inv) ->
 	let root,par = 
 	  match parent with
