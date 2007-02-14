@@ -28,7 +28,7 @@ void i(){
     h(&u[i]);
   }
 }
-    
+
 /*
 Local Variables: 
 compile-command: "make not_assigns.gui"

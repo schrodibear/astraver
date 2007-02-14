@@ -214,7 +214,9 @@ JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_options.cmo \
 	jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
-	jc/jc_typing.cmo jc/jc_invariants.cmo \
+	jc/jc_typing.cmo \
+	ocamlgraph/graph.cmo jc/jc_control_flow.cmo \
+	jc/jc_invariants.cmo \
 	ocamlgraph/components.cmo jc/jc_callgraph.cmo \
 	jc/jc_effect.cmo \
 	jc/output.cmo jc/jc_interp.cmo \
@@ -223,12 +225,12 @@ JCCMX = $(JCCMO:.cmo=.cmx)
 
 bin/jessie.opt: $(JCCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
-		unix.cmxa $^
+		unix.cmxa nums.cmxa $^
 	strip    $@
 
 bin/jessie.byte: $(JCCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
-		unix.cma $^
+		unix.cma nums.cma $^
 
 
 

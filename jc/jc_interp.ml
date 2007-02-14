@@ -710,11 +710,11 @@ let tr_fun f spec body acc =
 		   (LPred("le_int",
 			  [LApp("offset_min",
 				[LVar alloc; var]);
-			   LConst (Prim_int (string_of_int a))]))
+			   LConst (Prim_int (Num.string_of_num a))]))
 		   (LPred("ge_int",
 			  [LApp("offset_max",
 				[LVar alloc; var]);
-			   LConst (Prim_int (string_of_int b))]))
+			   LConst (Prim_int (Num.string_of_num b))]))
 	       in
 	       let instance =
 		 (LPred("instanceof",

@@ -41,6 +41,7 @@ let logic_type_table = Hashtbl.create 97
 
 let exceptions_table = Hashtbl.create 97
 
+let range_types_table = Hashtbl.create 97
 
 let structs_table = Hashtbl.create 97
 
@@ -86,6 +87,7 @@ let print_type fmt t =
   match t with
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
+    | JCTrange ri -> fprintf fmt "%s" ri.jc_range_info_name
     | JCTpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
 
 
@@ -109,6 +111,7 @@ let find_field loc ty f =
   match ty with
     | JCTpointer(st,_,_) -> find_field_struct loc st f
     | JCTnative _ 
+    | JCTrange _
     | JCTlogic _ ->
 	typing_error loc "not a structure type"
 
@@ -127,7 +130,12 @@ let type_type t =
 	  let _ = Hashtbl.find logic_type_table id in
 	  JCTlogic id
 	with Not_found ->
-	  typing_error t.jc_ptype_loc "unknown type %s" id
+	  try
+	    let ri = Hashtbl.find range_types_table id in
+	    JCTrange ri
+	  with Not_found ->
+	    typing_error t.jc_ptype_loc "unknown type %s" id
+
 
 
 (* constants *)
@@ -241,7 +249,7 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 		begin
 		  match t2 with
 		    | Tinteger -> 
-			JCTpointer(st,0,-1), JCTapp(shift,[e1;e2])
+			JCTpointer(st,zero,minus_one), JCTapp(shift,[e1;e2])
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
@@ -389,6 +397,7 @@ let rel_bin_op loc op t1 t2 =
 	    match t1 with
 	      | JCTnative _ -> op
 	      | JCTlogic _ -> op
+	      | JCTrange _ -> op
 	      | JCTpointer _ -> op
 	  end
 	else
@@ -1101,7 +1110,15 @@ let decl d =
 	let b = statement_list param_env body in
 	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
-    | JCPDtype(id,parent,fields,inv) ->
+    | JCPDrangetype(id,min,max) ->
+	let ri =
+	  { jc_range_info_name = id;
+	    jc_range_info_min = min;
+	    jc_range_info_max = max;
+	  }
+	in
+	Hashtbl.add range_types_table id ri
+    | JCPDstructtype(id,parent,fields,inv) ->
 	let root,par = 
 	  match parent with
 	    | None -> 
@@ -1121,7 +1138,7 @@ let decl d =
 	let invariants =
 	  List.fold_left
 	    (fun acc (id,x,e) ->	
-	       let vi = var (JCTpointer(struct_info,0,0)) x in
+	       let vi = var (JCTpointer(struct_info,zero,zero)) x in
 	       let p = assertion [(x,vi)] e in
 	       let pi = make_rel id in
 	       pi.jc_logic_info_parameters <- [vi];

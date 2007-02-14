@@ -50,7 +50,7 @@ type label = string
 type ptype_node = 
   | JCPTnative of native_type
   | JCPTidentifier of string
-  | JCPTpointer of string * int * int
+  | JCPTpointer of string * Num.num * Num.num
 
 and ptype =
     {
@@ -127,7 +127,8 @@ and pstatement =
 
 type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
-  | JCPDtype of string * string option * (ptype * string) list * (string * string * pexpr) list
+  | JCPDstructtype of string * string option * (ptype * string) list * (string * string * pexpr) list
+  | JCPDrangetype of string * Num.num * Num.num
   | JCPDlogictype of string 
   | JCPDaxiom of string * pexpr
   | JCPDexception of string * ptype

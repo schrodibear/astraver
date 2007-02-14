@@ -28,7 +28,15 @@ type native_type = Tunit | Tboolean | Tinteger | Treal
 type jc_type =
   | JCTnative of native_type
   | JCTlogic of string
-  | JCTpointer of struct_info * int * int
+  | JCTrange of range_info
+  | JCTpointer of struct_info * Num.num * Num.num
+
+and range_info =
+    { 
+      jc_range_info_name : string;
+      jc_range_info_min : Num.num;
+      jc_range_info_max : Num.num;
+    }
 
 and struct_info =
     { 

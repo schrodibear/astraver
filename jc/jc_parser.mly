@@ -22,13 +22,14 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.25 2007-01-12 09:41:30 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.26 2007-02-14 08:29:43 marche Exp $ */
 
 %{
 
   open Format
   open Jc_env
   open Jc_ast
+  open Jc_pervasives
   open Parsing
   open Error
 
@@ -47,14 +48,6 @@
   let locate_decl d =
     { jc_pdecl_node = d ; jc_pdecl_loc = loc () }
 
-  let int_of_constant loc c =
-    try
-      match c with
-	| JCCinteger n -> int_of_string n
-	| _ -> invalid_arg ""
-    with
-	Invalid_argument _ ->
-	  Jc_options.parsing_error loc "invalid integer constant"
 
 (*
   let locate x = { node = x; loc = loc() }
@@ -191,11 +184,20 @@ decl:
 /*******************/
 
 type_definition:
+| TYPE IDENTIFIER EQ int_constant DOTDOT int_constant
+    { locate_decl (JCPDrangetype($2,$4,$6)) }
 | TYPE IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
-    { let (f,i) = $6 in locate_decl (JCPDtype($2,$4,f,i)) }
+    { let (f,i) = $6 in locate_decl (JCPDstructtype($2,$4,f,i)) }
 | LOGIC TYPE IDENTIFIER
     { locate_decl (JCPDlogictype($3)) }
 ; 
+
+int_constant:
+| CONSTANT 
+    { num_of_constant (loc_i 1)$1 }
+| MINUS CONSTANT
+    { Num.minus_num (num_of_constant (loc_i 2) $2) }
+;
 
 extends:
 | /* epsilon */
@@ -264,20 +266,20 @@ type_expr:
 | IDENTIFIER
     { locate_type (JCPTidentifier $1) }
 | IDENTIFIER LSQUARE DOTDOT RSQUARE
-    { locate_type (JCPTpointer($1,0,-1)) }
+    { locate_type (JCPTpointer($1,zero,minus_one)) }
 | IDENTIFIER LSQUARE CONSTANT RSQUARE
-    { let n = int_of_constant (loc_i 3) $3 in
+    { let n = num_of_constant (loc_i 3) $3 in
       locate_type (JCPTpointer($1,n,n)) }
 | IDENTIFIER LSQUARE CONSTANT DOTDOT RSQUARE
-    { let n = int_of_constant (loc_i 3) $3 in
-      locate_type (JCPTpointer($1,n,n-1)) }
+    { let n = num_of_constant (loc_i 3) $3 in
+      locate_type (JCPTpointer($1,n,Num.pred_num n)) }
 | IDENTIFIER LSQUARE CONSTANT DOTDOT CONSTANT RSQUARE
-    { let n = int_of_constant (loc_i 3) $3 in
-      let m = int_of_constant (loc_i 5) $5 in
+    { let n = num_of_constant (loc_i 3) $3 in
+      let m = num_of_constant (loc_i 5) $5 in
       locate_type (JCPTpointer($1,n,m)) }
 | IDENTIFIER LSQUARE DOTDOT CONSTANT RSQUARE
-    { let m = int_of_constant (loc_i 4) $4 in
-      locate_type (JCPTpointer($1,m+1,m)) }
+    { let m = num_of_constant (loc_i 4) $4 in
+      locate_type (JCPTpointer($1,Num.succ_num m,m)) }
 ;
 
 function_specification:
