@@ -207,7 +207,11 @@ attempted, but counter-examples can be obtained by running \simplify\
 manually on the file \texttt{simplify/max\_why.sx.all}.
 It may help discovering missing pre-conditions for instance.
 
-\subsection*{Other provers}
+\subsection*{Other targets}
+
+The generated \texttt{makefile} contains many other targets, for other
+provers (\texttt{cvcl}, \texttt{smtlib}, etc.) or tools
+(\texttt{goals}, \texttt{gui}).
 
 \subsubsection*{\textsf{CVC Lite}}
 The use of \textsf{CVC Lite} is very similar to the use of
@@ -228,7 +232,7 @@ It generates a bunch of files within the \texttt{pvs/}
 subdirectory. Proof obligations are contained in the
 \url{pvs/max_why.pvs} file. 
 
-\subsubsection*{\why GUI}
+\subsubsection*{\why\ GUI}
 
 The \why{} Graphical User Interface, described in the \why{} manual,
 may be used for C program, by running
@@ -236,6 +240,21 @@ may be used for C program, by running
 > make -f max.makefile gui
 \end{verbatim}
 Inside this interface, a C-like pretty-printer for formulas is active.
+
+\subsubsection{Verification Conditions in \why\ syntax}
+
+The verification conditions can be produced in \why\ syntax using the
+\texttt{goals} target:
+\begin{verbatim}
+> make -f max.makefile goals
+\end{verbatim}
+Files are produced in the \texttt{why/} subdirectory. A file
+\texttt{why/max\_ctx.why} contains the context (symbols, axioms, etc.)
+and then each verification condition is containing in a separate file
+\texttt{why/max\_po$i$.why} with $i=1,2,\dots$ 
+This is useful when the generation  of the VCs takes time.
+This way, VCs are generated only once and then \why\ (or its
+graphical interface) can be used to discharge the VCs with various provers.
 
 \section{Pointer access and modification}
 

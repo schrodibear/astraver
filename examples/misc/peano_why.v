@@ -163,7 +163,7 @@ Qed.
   forall (HW_2: x0 = 0),
   (* I *) (0 <= y /\ x0 = (x * (y - y))).
 Proof.
-intuition; ring; auto.
+ergo.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

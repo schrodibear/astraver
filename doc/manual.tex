@@ -797,6 +797,23 @@ redirected with option \texttt{-o}. The identifiers are renamed as
 \texttt{x1}, \texttt{x2}, ... unless a different name prefix is set
 with option \texttt{-prefix}.
 
+\subsection{Why statistics (\texttt{why-stat})}
+\indextt{why-stat}
+A tool is provided to display rough statistics on the goals contained
+in \why\ files. It is invoked as follows:
+\begin{center}
+  \texttt{why-stat} files...
+\end{center}
+It collects the symbols appearing in the conclusion of 
+\texttt{goal} declarations, sums the number of goals with the same set
+of symbols and displays this multi-set starting with the most numerous
+elements. Here is a sample output:
+\begin{verbatim}
+       8 acc,shift
+       2 valid
+       1 valid_range
+\end{verbatim}
+
 \subsection{Caml code generation (\texttt{why --ocaml})}
 \label{ocamlcode}\index{Caml code generation}
 In order to run your \why\ code, true \caml\ code can be

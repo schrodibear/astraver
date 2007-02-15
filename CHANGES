@@ -1,6 +1,7 @@
 
+  o new tool why-stat to display statistics regarding symbols used in goals
   o new options -why and -multi-why to get verification conditions in
-    Why syntax (useful when computing the VCs takes much time)
+    Why syntax (useful when computing VCs takes much time)
   o gwhy: font size can be changed dynamically using Ctrl-+ and Ctrl--
   o WP: the invariant at loop entry does not appear anymore in the
     verification condition related to the invariant preservation
@@ -14,10 +15,10 @@
     --cvcl is selected and no encoding specified
   o new option --exp to expand the predicate definitions
   o Coq output: the command "Implicit Arguments id" is automatically
-    inserted for any polymorphic declaration
+    inserted for polymorphic symbols
 
 version 2.01, November 29th, 2006
-=============================
+=================================
   o new predicate distinct(t1,t2,...,tn) with n terms of the same type
     mapped to the primitive DISTINCT in Simplify and SMTlib outputs,
     expanded for other provers

@@ -121,9 +121,11 @@ RVMERGE=bin/rv_merge.$(OCAMLBEST)
 DP=bin/dp.$(OCAMLBEST)
 CPULIMIT=bin/cpulimit
 WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
+WHYSTAT=bin/why-stat.$(OCAMLBEST)
 SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 
-TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) $(SIMPLIFY2WHY)
+TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
+      $(SIMPLIFY2WHY) $(WHYSTAT)
 
 all: $(BINARY) check $(CADUCEUS) $(JESSIE) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
@@ -327,6 +329,16 @@ bin/why-obfuscator.byte: $(OBFCMO)
 bin/why-obfuscator.opt: $(OBFCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
+STATCMO=src/pp.cmo src/loc.cmo src/ident.cmo src/float_lexer.cmo \
+        src/parser.cmo src/lexer.cmo tools/whystat.cmo
+STATCMX=$(STATCMO:.cmo=.cmx)
+
+bin/why-stat.byte: $(STATCMO)
+	$(OCAMLC) $(BFLAGS) -o $@ $^
+
+bin/why-stat.opt: $(STATCMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ $^
+
 bin/cadlog.opt: c/cversion.cmx jc/jc_version.cmx tools/cadlog.cmx
 	$(OCAMLOPT) unix.cmxa -o $@ $^
 
@@ -419,7 +431,7 @@ db debug: bin/why.byte src/logic.cmo
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@
+install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(WHYOBFUSCATOR)
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
@@ -429,6 +441,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(WHY2HTML) $(DP) $(CPULIMIT) $(
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)
 	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
 	cp -f $(WHYOBFUSCATOR) $(BINDIR)/why-obfuscator$(EXE)
+	cp -f $(WHYSTAT) $(BINDIR)/why-stat$(EXE)
 	cp -f $(SIMPLIFY2WHY) $(BINDIR)/simplify2why$(EXE)
 	if test -f bin/gwhy.$(OCAMLBEST); then \
   cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy$(EXE); \

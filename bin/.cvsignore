@@ -16,3 +16,5 @@ why-obfuscator.opt
 cadlog.opt
 jessie.opt
 jessie.byte
+simplify2why.opt
+why-stat.opt
