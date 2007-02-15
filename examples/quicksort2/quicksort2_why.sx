@@ -40,18 +40,6 @@
  (FORALL (t) (FORALL (i) (FORALL (v) (EQ (access (update t i v) i) v)))))
 
 (BG_PUSH
- ;; Why axiom access_update_eq
- (FORALL (t)
- (FORALL (i)
- (FORALL (j)
- (FORALL (v) (IMPLIES (EQ i j) (EQ (access (update t i v) j) v))))))
-
- (FORALL (i)
- (FORALL (j)
- (IMPLIES (EQ i j)
- (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) v)))))))
-
-(BG_PUSH
  ;; Why axiom access_update_neq
  (FORALL (t)
  (FORALL (i)
@@ -63,27 +51,16 @@
  (IMPLIES (NEQ i j)
  (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) (access t j))))))))
 
-(BG_PUSH
- ;; Why axiom sorted_array_def
- (FORALL (t)
- (FORALL (i)
- (FORALL (j)
- (IFF (EQ (sorted_array t i j) |@true|)
- (FORALL (k)
- (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))))))
+(DEFPRED (sorted_array t i j)
+  (FORALL (k)
+  (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))
 
-(BG_PUSH
- ;; Why axiom exchange_def
- (FORALL (t1)
- (FORALL (t2)
- (FORALL (i)
- (FORALL (j)
- (IFF (EQ (exchange t1 t2 i j) |@true|)
- (AND (EQ (array_length t1) (array_length t2))
- (AND (EQ (access t1 i) (access t2 j))
- (AND (EQ (access t2 i) (access t1 j))
- (FORALL (k)
- (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k)))))))))))))
+(DEFPRED (exchange t1 t2 i j)
+  (AND (EQ (array_length t1) (array_length t2))
+  (AND (EQ (access t1 i) (access t2 j))
+  (AND (EQ (access t2 i) (access t1 j))
+  (FORALL (k)
+  (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k))))))))
 
 (BG_PUSH
  ;; Why axiom permut_refl
@@ -173,8 +150,7 @@
  (FORALL (j)
  (IMPLIES
  (AND (<= g i)
- (AND (<= i d)
- (AND (<= g j) (AND (<= j d) (EQ (exchange t1 t2 i j) |@true|)))))
+ (AND (<= i d) (AND (<= g j) (AND (<= j d) (exchange t1 t2 i j)))))
  (EQ (sub_permut g d t1 t2) |@true|)))))))))
 
 (BG_PUSH
@@ -239,8 +215,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t i result0))
 (IMPLIES (AND (<= 0 j) (< j (array_length t0)))
-(FORALL (t1)
-(IMPLIES (EQ t1 (update t0 j result)) (EQ (exchange t1 t i j) |@true|)))))))))))))))))
+(FORALL (t1) (IMPLIES (EQ t1 (update t0 j result)) (exchange t1 t i j)))))))))))))))))
 
 ;; quick_rec_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -274,15 +249,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -295,7 +261,7 @@
          (AND (EQ (sub_permut l r t0 t) |@true|)
          (AND (EQ (access t0 l) result)
          (AND (AND (<= l m) (< m i)) (<= i (+ r 1)))))))
-(IMPLIES (<= i r) (AND (<= 0 i) (< i (array_length t0)))))))))))))))))
+(IMPLIES (<= i r) (AND (<= 0 i) (< i (array_length t0))))))))))))))))
 
 ;; quick_rec_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -306,15 +272,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -335,7 +292,7 @@
 (FORALL (m0)
 (IMPLIES (EQ m0 (+ m 1))
 (AND (AND (<= 0 i) (< i (array_length t0)))
-(AND (<= 0 m0) (< m0 (array_length t0))))))))))))))))))))))))
+(AND (<= 0 m0) (< m0 (array_length t0)))))))))))))))))))))))
 
 ;; quick_rec_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -346,15 +303,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -377,7 +325,7 @@
 (IMPLIES (AND (AND (<= 0 i) (< i (array_length t0)))
          (AND (<= 0 m0) (< m0 (array_length t0))))
 (FORALL (t1)
-(IMPLIES (EQ (exchange t1 t0 i m0) |@true|)
+(IMPLIES (exchange t1 t0 i m0)
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
 (AND
@@ -386,7 +334,7 @@
 (AND (EQ (sub_permut l r t1 t) |@true|)
 (AND (EQ (access t1 l) result)
 (AND (AND (<= l m0) (< m0 i0)) (<= i0 (+ r 1)))))))
-(AND (<= 0 (- (+ 1 r) i)) (< (- (+ 1 r) i0) (- (+ 1 r) i)))))))))))))))))))))))))))))
+(AND (<= 0 (- (+ 1 r) i)) (< (- (+ 1 r) i0) (- (+ 1 r) i))))))))))))))))))))))))))))
 
 ;; quick_rec_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -397,15 +345,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -430,7 +369,7 @@
 (AND (FORALL (j) (IMPLIES (AND (< m j) (< j i0)) (>= (access t0 j) result)))
 (AND (EQ (sub_permut l r t0 t) |@true|)
 (AND (EQ (access t0 l) result) (AND (AND (<= l m) (< m i0)) (<= i0 (+ r 1)))))))
-(AND (<= 0 (- (+ 1 r) i)) (< (- (+ 1 r) i0) (- (+ 1 r) i))))))))))))))))))))))))
+(AND (<= 0 (- (+ 1 r) i)) (< (- (+ 1 r) i0) (- (+ 1 r) i)))))))))))))))))))))))
 
 ;; quick_rec_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -441,15 +380,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -464,7 +394,7 @@
          (AND (AND (<= l m) (< m i)) (<= i (+ r 1)))))))
 (IMPLIES (> i r)
 (AND (AND (<= 0 l) (< l (array_length t0)))
-(AND (<= 0 m) (< m (array_length t0))))))))))))))))))
+(AND (<= 0 m) (< m (array_length t0)))))))))))))))))
 
 ;; quick_rec_po_8, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -475,15 +405,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -500,8 +421,8 @@
 (IMPLIES (AND (AND (<= 0 l) (< l (array_length t0)))
          (AND (<= 0 m) (< m (array_length t0))))
 (FORALL (t1)
-(IMPLIES (EQ (exchange t1 t0 l m) |@true|)
-(AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l))))))))))))))))))))
+(IMPLIES (exchange t1 t0 l m)
+(AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l)))))))))))))))))))
 
 ;; quick_rec_po_9, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -512,15 +433,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -537,9 +449,9 @@
 (IMPLIES (AND (AND (<= 0 l) (< l (array_length t0)))
          (AND (<= 0 m) (< m (array_length t0))))
 (FORALL (t1)
-(IMPLIES (EQ (exchange t1 t0 l m) |@true|)
+(IMPLIES (exchange t1 t0 l m)
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l)))
-(AND (<= 0 l) (< (- m 1) (array_length t1)))))))))))))))))))))
+(AND (<= 0 l) (< (- m 1) (array_length t1))))))))))))))))))))
 
 ;; quick_rec_po_10, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -550,15 +462,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -575,13 +478,13 @@
 (IMPLIES (AND (AND (<= 0 l) (< l (array_length t0)))
          (AND (<= 0 m) (< m (array_length t0))))
 (FORALL (t1)
-(IMPLIES (EQ (exchange t1 t0 l m) |@true|)
+(IMPLIES (exchange t1 t0 l m)
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l)))
 (IMPLIES (AND (<= 0 l) (< (- m 1) (array_length t1)))
 (FORALL (t2)
-(IMPLIES (AND (EQ (sorted_array t2 l (- m 1)) |@true|)
+(IMPLIES (AND (sorted_array t2 l (- m 1))
          (EQ (sub_permut l (- m 1) t2 t1) |@true|))
-(AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 r) (+ m 1)) (- (+ 1 r) l))))))))))))))))))))))))
+(AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 r) (+ m 1)) (- (+ 1 r) l)))))))))))))))))))))))
 
 ;; quick_rec_po_11, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -592,15 +495,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -617,14 +511,14 @@
 (IMPLIES (AND (AND (<= 0 l) (< l (array_length t0)))
          (AND (<= 0 m) (< m (array_length t0))))
 (FORALL (t1)
-(IMPLIES (EQ (exchange t1 t0 l m) |@true|)
+(IMPLIES (exchange t1 t0 l m)
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l)))
 (IMPLIES (AND (<= 0 l) (< (- m 1) (array_length t1)))
 (FORALL (t2)
-(IMPLIES (AND (EQ (sorted_array t2 l (- m 1)) |@true|)
+(IMPLIES (AND (sorted_array t2 l (- m 1))
          (EQ (sub_permut l (- m 1) t2 t1) |@true|))
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 r) (+ m 1)) (- (+ 1 r) l)))
-(AND (<= 0 (+ m 1)) (< r (array_length t2)))))))))))))))))))))))))
+(AND (<= 0 (+ m 1)) (< r (array_length t2))))))))))))))))))))))))
 
 ;; quick_rec_po_12, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -635,15 +529,6 @@
 (IMPLIES (AND (<= 0 l) (< l (array_length t)))
 (FORALL (result)
 (IMPLIES (EQ result (access t l))
-(IMPLIES (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (<= j l)) (< (access t j) result)))
-         (AND
-         (FORALL (j)
-         (IMPLIES (AND (< l j) (< j (+ l 1))) (>= (access t j) result)))
-         (AND (EQ (sub_permut l r t t) |@true|)
-         (AND (EQ (access t l) result)
-         (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))
 (FORALL (i)
 (FORALL (m)
 (FORALL (t0)
@@ -660,18 +545,18 @@
 (IMPLIES (AND (AND (<= 0 l) (< l (array_length t0)))
          (AND (<= 0 m) (< m (array_length t0))))
 (FORALL (t1)
-(IMPLIES (EQ (exchange t1 t0 l m) |@true|)
+(IMPLIES (exchange t1 t0 l m)
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l)))
 (IMPLIES (AND (<= 0 l) (< (- m 1) (array_length t1)))
 (FORALL (t2)
-(IMPLIES (AND (EQ (sorted_array t2 l (- m 1)) |@true|)
+(IMPLIES (AND (sorted_array t2 l (- m 1))
          (EQ (sub_permut l (- m 1) t2 t1) |@true|))
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 r) (+ m 1)) (- (+ 1 r) l)))
 (IMPLIES (AND (<= 0 (+ m 1)) (< r (array_length t2)))
 (FORALL (t3)
-(IMPLIES (AND (EQ (sorted_array t3 (+ m 1) r) |@true|)
+(IMPLIES (AND (sorted_array t3 (+ m 1) r)
          (EQ (sub_permut (+ m 1) r t3 t2) |@true|))
-(AND (EQ (sorted_array t3 l r) |@true|) (EQ (sub_permut l r t3 t) |@true|)))))))))))))))))))))))))))
+(AND (sorted_array t3 l r) (EQ (sub_permut l r t3 t) |@true|))))))))))))))))))))))))))
 
 ;; quick_rec_po_13, Why obligation from file "", line 0, characters 0-0:
 (FORALL (l)
@@ -679,7 +564,7 @@
 (FORALL (t)
 (IMPLIES (AND (<= 0 l) (< r (array_length t)))
 (IMPLIES (>= l r)
-(AND (EQ (sorted_array t l r) |@true|) (EQ (sub_permut l r t t) |@true|)))))))
+(AND (sorted_array t l r) (EQ (sub_permut l r t t) |@true|)))))))
 
 ;; quicksort_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -693,8 +578,7 @@
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (AND (<= 0 0) (< (- result 1) (array_length t)))
 (FORALL (t0)
-(IMPLIES (AND (EQ (sorted_array t0 0 (- result 1)) |@true|)
+(IMPLIES (AND (sorted_array t0 0 (- result 1))
          (EQ (sub_permut 0 (- result 1) t0 t) |@true|))
-(AND (EQ (sorted_array t0 0 (- (array_length t0) 1)) |@true|)
-(EQ (permut t0 t) |@true|))))))))
+(AND (sorted_array t0 0 (- (array_length t0) 1)) (EQ (permut t0 t) |@true|))))))))
 

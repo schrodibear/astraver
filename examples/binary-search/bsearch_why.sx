@@ -109,18 +109,6 @@
  (FORALL (t) (FORALL (i) (FORALL (v) (EQ (access (update t i v) i) v)))))
 
 (BG_PUSH
- ;; Why axiom access_update_eq
- (FORALL (t)
- (FORALL (i)
- (FORALL (j)
- (FORALL (v) (IMPLIES (EQ i j) (EQ (access (update t i v) j) v))))))
-
- (FORALL (i)
- (FORALL (j)
- (IMPLIES (EQ i j)
- (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) v)))))))
-
-(BG_PUSH
  ;; Why axiom access_update_neq
  (FORALL (t)
  (FORALL (i)
@@ -296,13 +284,6 @@
 (IMPLIES (EQ u (- result 1))
 (FORALL (p)
 (IMPLIES (EQ p 0)
-(IMPLIES (AND (<= 1 l)
-         (AND (<= u (- (array_length t) 1))
-         (AND (AND (<= 0 p) (<= p (- (array_length t) 1)))
-         (AND
-         (IMPLIES (EQ p 0)
-         (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
-         (EQ (In t l u) |@true|))) (IMPLIES (> p 0) (EQ (access t p) v))))))
 (FORALL (l0)
 (FORALL (p0)
 (FORALL (u0)
@@ -314,7 +295,7 @@
          (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
          (EQ (In t l0 u0) |@true|))) (IMPLIES (> p0 0) (EQ (access t p0) v))))))
 (IMPLIES (<= l0 u0)
-(FORALL (m) (IMPLIES (EQ m (mean l0 u0)) (AND (<= l0 m) (<= m u0))))))))))))))))))))
+(FORALL (m) (IMPLIES (EQ m (mean l0 u0)) (AND (<= l0 m) (<= m u0)))))))))))))))))))
 
 ;; binary_search_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -328,13 +309,6 @@
 (IMPLIES (EQ u (- result 1))
 (FORALL (p)
 (IMPLIES (EQ p 0)
-(IMPLIES (AND (<= 1 l)
-         (AND (<= u (- (array_length t) 1))
-         (AND (AND (<= 0 p) (<= p (- (array_length t) 1)))
-         (AND
-         (IMPLIES (EQ p 0)
-         (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
-         (EQ (In t l u) |@true|))) (IMPLIES (> p 0) (EQ (access t p) v))))))
 (FORALL (l0)
 (FORALL (p0)
 (FORALL (u0)
@@ -348,7 +322,7 @@
 (IMPLIES (<= l0 u0)
 (FORALL (m)
 (IMPLIES (EQ m (mean l0 u0))
-(IMPLIES (AND (<= l0 m) (<= m u0)) (AND (<= 0 m) (< m (array_length t))))))))))))))))))))))
+(IMPLIES (AND (<= l0 m) (<= m u0)) (AND (<= 0 m) (< m (array_length t)))))))))))))))))))))
 
 ;; binary_search_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -362,13 +336,6 @@
 (IMPLIES (EQ u (- result 1))
 (FORALL (p)
 (IMPLIES (EQ p 0)
-(IMPLIES (AND (<= 1 l)
-         (AND (<= u (- (array_length t) 1))
-         (AND (AND (<= 0 p) (<= p (- (array_length t) 1)))
-         (AND
-         (IMPLIES (EQ p 0)
-         (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
-         (EQ (In t l u) |@true|))) (IMPLIES (> p 0) (EQ (access t p) v))))))
 (FORALL (l0)
 (FORALL (p0)
 (FORALL (u0)
@@ -397,7 +364,7 @@
 (IMPLIES (EQ p0 0)
 (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
 (EQ (In t l1 u0) |@true|))) (IMPLIES (> p0 0) (EQ (access t p0) v))))))
-(AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u0) l1) (- (+ 2 u0) l0)))))))))))))))))))))))))))))
+(AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u0) l1) (- (+ 2 u0) l0))))))))))))))))))))))))))))
 
 ;; binary_search_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -411,13 +378,6 @@
 (IMPLIES (EQ u (- result 1))
 (FORALL (p)
 (IMPLIES (EQ p 0)
-(IMPLIES (AND (<= 1 l)
-         (AND (<= u (- (array_length t) 1))
-         (AND (AND (<= 0 p) (<= p (- (array_length t) 1)))
-         (AND
-         (IMPLIES (EQ p 0)
-         (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
-         (EQ (In t l u) |@true|))) (IMPLIES (> p 0) (EQ (access t p) v))))))
 (FORALL (l0)
 (FORALL (p0)
 (FORALL (u0)
@@ -450,7 +410,7 @@
 (IMPLIES (EQ p0 0)
 (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
 (EQ (In t l0 u1) |@true|))) (IMPLIES (> p0 0) (EQ (access t p0) v))))))
-(AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u1) l0) (- (+ 2 u0) l0)))))))))))))))))))))))))))))))))
+(AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u1) l0) (- (+ 2 u0) l0))))))))))))))))))))))))))))))))
 
 ;; binary_search_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -464,13 +424,6 @@
 (IMPLIES (EQ u (- result 1))
 (FORALL (p)
 (IMPLIES (EQ p 0)
-(IMPLIES (AND (<= 1 l)
-         (AND (<= u (- (array_length t) 1))
-         (AND (AND (<= 0 p) (<= p (- (array_length t) 1)))
-         (AND
-         (IMPLIES (EQ p 0)
-         (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
-         (EQ (In t l u) |@true|))) (IMPLIES (> p 0) (EQ (access t p) v))))))
 (FORALL (l0)
 (FORALL (p0)
 (FORALL (u0)
@@ -505,7 +458,7 @@
 (IMPLIES (EQ p1 0)
 (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
 (EQ (In t l1 u0) |@true|))) (IMPLIES (> p1 0) (EQ (access t p1) v))))))
-(AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u0) l1) (- (+ 2 u0) l0)))))))))))))))))))))))))))))))))))
+(AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u0) l1) (- (+ 2 u0) l0))))))))))))))))))))))))))))))))))
 
 ;; binary_search_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -519,13 +472,6 @@
 (IMPLIES (EQ u (- result 1))
 (FORALL (p)
 (IMPLIES (EQ p 0)
-(IMPLIES (AND (<= 1 l)
-         (AND (<= u (- (array_length t) 1))
-         (AND (AND (<= 0 p) (<= p (- (array_length t) 1)))
-         (AND
-         (IMPLIES (EQ p 0)
-         (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
-         (EQ (In t l u) |@true|))) (IMPLIES (> p 0) (EQ (access t p) v))))))
 (FORALL (l0)
 (FORALL (p0)
 (FORALL (u0)
@@ -538,5 +484,5 @@
          (EQ (In t l0 u0) |@true|))) (IMPLIES (> p0 0) (EQ (access t p0) v))))))
 (IMPLIES (> l0 u0)
 (OR (AND (AND (<= 1 p0) (<= p0 (- (array_length t) 1))) (EQ (access t p0) v))
-(AND (EQ p0 0) (NOT (EQ (In t 1 (- (array_length t) 1)) |@true|))))))))))))))))))))
+(AND (EQ p0 0) (NOT (EQ (In t 1 (- (array_length t) 1)) |@true|)))))))))))))))))))
 

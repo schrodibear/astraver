@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.87 2007-02-07 08:20:54 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.88 2007-02-15 15:52:43 filliatr Exp $ i*)
 
 open Format
 
@@ -90,7 +90,7 @@ let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | Dispatcher
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | MultiWhy | Dispatcher
 
 let prover_ = ref (Coq coq_version)
 
@@ -211,6 +211,7 @@ Prover selection:
   --gappa     selects the Gappa prover
 
   --why       selects the Why pretty-printer
+  --multi-why selects the Why pretty-printer, with one file per goal
 
 Coq-specific options:
   --valid, 
@@ -278,6 +279,7 @@ let files =
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
     | ("-zenon" | "--zenon") :: args -> prover_ := Zenon; parse args
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
+    | ("-multi-why" | "--multi-why") :: args -> prover_ := MultiWhy; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-fp" | "--fp") :: args -> floats_ := true; parse args
     | ("-show-time" | "--show-time") :: args -> show_time_ := true; parse args

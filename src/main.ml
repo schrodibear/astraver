@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.119 2007-02-02 13:36:26 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.120 2007-02-15 15:52:43 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -56,7 +56,7 @@ let reset () =
     | Hol4 -> Hol4.reset ()
     | SmtLib ->  ()
     | Harvey | Simplify | Zenon | CVCLite  | Gappa 
-    | Why | Dispatcher -> ()
+    | Why | MultiWhy | Dispatcher -> ()
 
 let add_loc = function
   | Dtype (loc, _, s)
@@ -78,7 +78,7 @@ let push_decl d =
 	| Isabelle -> Isabelle.push_decl
 	| Hol4 -> Hol4.push_decl
 	| Gappa -> Gappa.push_decl 
-	| Why -> Pretty.push_decl
+	| Why | MultiWhy -> Pretty.push_decl
 	| Dispatcher ->Dispatcher.push_decl
 	| Harvey -> Harvey.push_decl
 	| Simplify -> Simplify.push_decl
@@ -115,7 +115,7 @@ let push_parameter id v tv = match prover () with
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
   | Harvey | Simplify | Zenon | SmtLib | Gappa 
-  | CVCLite | Why | Dispatcher -> 
+  | CVCLite | Why | MultiWhy | Dispatcher -> 
       ()
 
 let output fwe = 
@@ -140,6 +140,7 @@ let output fwe =
     | Gappa -> Gappa.output_file fwe
     | Dispatcher -> ()
     | Why -> Pretty.output_file fwe
+    | MultiWhy -> Pretty.output_files fwe
   end
 
 
@@ -157,7 +158,7 @@ let encode q =
     | Isabelle -> Isabelle.push_decl d
     | Hol4 -> Hol4.push_decl d
     | Gappa -> Gappa.push_decl d  
-    | Why -> Pretty.push_decl d
+    | Why | MultiWhy -> Pretty.push_decl d
     | Dispatcher -> Dispatcher.push_decl d      
     | Harvey -> Harvey.push_decl d
     | Simplify -> Simplify.push_decl d
@@ -392,7 +393,7 @@ let deal_channel parsef cin =
 
 let single_file () = match prover () with
   | Simplify | Harvey | Zenon | CVCLite | Gappa | Dispatcher 
-  | SmtLib | Why -> true
+  | SmtLib | Why | MultiWhy -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 
 let deal_file f =

@@ -110,18 +110,6 @@
  (FORALL (t) (FORALL (i) (FORALL (v) (EQ (access (update t i v) i) v)))))
 
 (BG_PUSH
- ;; Why axiom access_update_eq
- (FORALL (t)
- (FORALL (i)
- (FORALL (j)
- (FORALL (v) (IMPLIES (EQ i j) (EQ (access (update t i v) j) v))))))
-
- (FORALL (i)
- (FORALL (j)
- (IMPLIES (EQ i j)
- (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) v)))))))
-
-(BG_PUSH
  ;; Why axiom access_update_neq
  (FORALL (t)
  (FORALL (i)
@@ -434,14 +422,6 @@
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
-(IMPLIES (AND
-         (AND (<= 0 (+ (- result 1) 1))
-         (<= (+ (- result 1) 1) (array_length t)))
-         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
-         (AND (EQ (permut t t) |@true|)
-         (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
-         0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
@@ -452,21 +432,13 @@
 (IMPLIES (>= i 0)
 (AND (AND (<= 0 i) (<= i i))
 (AND (<= i i)
-(AND (< i (array_length t0)) (EQ (Maximize t0 i (access t0 i) i) |@true|)))))))))))))
+(AND (< i (array_length t0)) (EQ (Maximize t0 i (access t0 i) i) |@true|))))))))))))
 
 ;; maxisort_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
-(IMPLIES (AND
-         (AND (<= 0 (+ (- result 1) 1))
-         (<= (+ (- result 1) 1) (array_length t)))
-         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
-         (AND (EQ (permut t t) |@true|)
-         (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
-         0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
@@ -483,21 +455,13 @@
 (IMPLIES (AND (AND (<= 0 result0) (<= result0 i))
          (EQ (Maximize t0 i (access t0 result0) 0) |@true|))
 (AND (AND (<= 0 i) (< i (array_length t0)))
-(AND (<= 0 result0) (< result0 (array_length t0))))))))))))))))
+(AND (<= 0 result0) (< result0 (array_length t0)))))))))))))))
 
 ;; maxisort_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
-(IMPLIES (AND
-         (AND (<= 0 (+ (- result 1) 1))
-         (<= (+ (- result 1) 1) (array_length t)))
-         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
-         (AND (EQ (permut t t) |@true|)
-         (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
-         0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
@@ -525,21 +489,13 @@
 (AND (EQ (permut t1 t) |@true|)
 (IMPLIES (< (+ i0 1) (array_length t1))
 (EQ (Maximize t1 i0 (access t1 (+ i0 1)) 0) |@true|)))))
-(AND (<= 0 (+ i 1)) (< (+ i0 1) (+ i 1)))))))))))))))))))))
+(AND (<= 0 (+ i 1)) (< (+ i0 1) (+ i 1))))))))))))))))))))
 
 ;; maxisort_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
-(IMPLIES (AND
-         (AND (<= 0 (+ (- result 1) 1))
-         (<= (+ (- result 1) 1) (array_length t)))
-         (AND (sorted_array t (+ (- result 1) 1) (- (array_length t) 1))
-         (AND (EQ (permut t t) |@true|)
-         (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
-         0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
 (IMPLIES (AND (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
@@ -548,5 +504,5 @@
          (IMPLIES (< (+ i 1) (array_length t0))
          (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
 (IMPLIES (< i 0)
-(AND (sorted_array t0 0 (- (array_length t0) 1)) (EQ (permut t0 t) |@true|)))))))))))
+(AND (sorted_array t0 0 (- (array_length t0) 1)) (EQ (permut t0 t) |@true|))))))))))
 

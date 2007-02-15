@@ -1,4 +1,7 @@
 
+  o new options -why and -multi-why to get verification conditions in
+    Why syntax (useful when computing the VCs takes much time)
+  o gwhy: font size can be changed dynamically using Ctrl-+ and Ctrl--
   o WP: the invariant at loop entry does not appear anymore in the
     verification condition related to the invariant preservation
   o option -no-simplify-triggers changed to -simplify-triggers,
@@ -11,7 +14,7 @@
     --cvcl is selected and no encoding specified
   o new option --exp to expand the predicate definitions
   o Coq output: the command "Implicit Arguments id" is automatically
-    inserted for any polymorphic id
+    inserted for any polymorphic declaration
 
 version 2.01, November 29th, 2006
 =============================
@@ -24,8 +27,7 @@ version 2.01, November 29th, 2006
   o no using anymore the external command 'timeout', but use our own
     command 'cpulimit' for the same purpose. Time limit is now user
     CPU time instead of wall clock time.
-  o fixed bugs into smtlib output : 
-    all variables are "?" prefixed, 
+  o fixed bugs in smtlib output: all variables are "?" prefixed, 
     brackets around constants are removed, 
     validity question is turned into a sat question,  
     Boolean sort with Boolean_false and  Boolean_true constants 

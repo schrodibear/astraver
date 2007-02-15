@@ -268,10 +268,6 @@ Admitted.
 (*Why logic*) Definition pset_empty : forall (A1:Set), ((pset) A1).
 Admitted.
 
-Set Contextual Implicit.
-Implicit Arguments pset_empty.
-Unset Contextual Implicit.
-
 (*Why logic*) Definition pset_singleton :
   forall (A1:Set), ((pointer) A1) -> ((pset) A1).
 Admitted.
@@ -335,7 +331,8 @@ Admitted.
 Implicit Arguments not_assigns.
 
 (*Why axiom*) Lemma pset_empty_intro :
-  forall (A1:Set), (forall (p:((pointer) A1)), (not_in_pset p pset_empty)).
+  forall (A1:Set),
+  (forall (p:((pointer) A1)), (not_in_pset p (pset_empty A1))).
 Admitted.
 
 (*Why axiom*) Lemma pset_singleton_intro :

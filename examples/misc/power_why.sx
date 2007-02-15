@@ -198,7 +198,6 @@
 (IMPLIES (EQ m x)
 (FORALL (y)
 (IMPLIES (EQ y 1)
-(IMPLIES (AND (EQ (Zpower x n) (* y (Zpower m n))) (>= n 0))
 (FORALL (m0)
 (FORALL (n0)
 (FORALL (y0)
@@ -212,7 +211,7 @@
 (FORALL (n1)
 (IMPLIES (EQ n1 (div2 n0))
 (AND (AND (EQ (Zpower x n) (* y1 (Zpower m1 n1))) (>= n1 0))
-(AND (<= 0 n0) (< n1 n0))))))))))))))))))))))
+(AND (<= 0 n0) (< n1 n0)))))))))))))))))))))
 
 ;; power1_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -221,7 +220,6 @@
 (IMPLIES (EQ m x)
 (FORALL (y)
 (IMPLIES (EQ y 1)
-(IMPLIES (AND (EQ (Zpower x n) (* y (Zpower m n))) (>= n 0))
 (FORALL (m0)
 (FORALL (n0)
 (FORALL (y0)
@@ -233,7 +231,7 @@
 (FORALL (n1)
 (IMPLIES (EQ n1 (div2 n0))
 (AND (AND (EQ (Zpower x n) (* y0 (Zpower m1 n1))) (>= n1 0))
-(AND (<= 0 n0) (< n1 n0))))))))))))))))))))
+(AND (<= 0 n0) (< n1 n0)))))))))))))))))))
 
 ;; power1_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -242,10 +240,9 @@
 (IMPLIES (EQ m x)
 (FORALL (y)
 (IMPLIES (EQ y 1)
-(IMPLIES (AND (EQ (Zpower x n) (* y (Zpower m n))) (>= n 0))
 (FORALL (m0)
 (FORALL (n0)
 (FORALL (y0)
 (IMPLIES (AND (EQ (Zpower x n) (* y0 (Zpower m0 n0))) (>= n0 0))
-(IMPLIES (<= n0 0) (EQ y0 (Zpower x n))))))))))))))
+(IMPLIES (<= n0 0) (EQ y0 (Zpower x n)))))))))))))
 

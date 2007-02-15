@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.69 2007-02-07 08:20:54 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.70 2007-02-15 15:52:43 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -82,7 +82,7 @@ type coq_version = V7 | V8
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | Dispatcher
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | MultiWhy | Dispatcher
 
 val prover : unit -> prover
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.mli,v 1.6 2006-11-03 12:49:05 marche Exp $ i*)
+(*i $Id: pretty.mli,v 1.7 2007-02-15 15:52:43 filliatr Exp $ i*)
 
 (* Why pretty-printer *)
 
@@ -31,3 +31,7 @@ val push_decl : Logic_decl.t -> unit
 val reset : unit -> unit
 
 val output_file : string -> unit
+
+(* [output_files f] produces the context in file [f_ctx.why]
+   and each goal in a seaparate file [f_po<i>.why] for i=1,2,... *)
+val output_files : string -> unit

@@ -101,18 +101,6 @@
  (FORALL (t) (FORALL (i) (FORALL (v) (EQ (access (update t i v) i) v)))))
 
 (BG_PUSH
- ;; Why axiom access_update_eq
- (FORALL (t)
- (FORALL (i)
- (FORALL (j)
- (FORALL (v) (IMPLIES (EQ i j) (EQ (access (update t i v) j) v))))))
-
- (FORALL (i)
- (FORALL (j)
- (IMPLIES (EQ i j)
- (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) v)))))))
-
-(BG_PUSH
  ;; Why axiom access_update_neq
  (FORALL (t)
  (FORALL (i)
@@ -292,17 +280,13 @@
 (IMPLIES (NEQ 2 0)
 (FORALL (result)
 (IMPLIES (EQ result (int_div (+ x 1) 2))
-(IMPLIES (AND (> result 0)
-         (AND (> x 0)
-         (AND (EQ result (int_div (+ (int_div x x) x) 2))
-         (AND (< x (* (+ x 1) (+ x 1))) (< x (* (+ result 1) (+ result 1)))))))
 (FORALL (y)
 (FORALL (z)
 (IMPLIES (AND (> z 0)
          (AND (> y 0)
          (AND (EQ z (int_div (+ (int_div x y) y) 2))
          (AND (< x (* (+ y 1) (+ y 1))) (< x (* (+ z 1) (+ z 1)))))))
-(IMPLIES (< z y) (FORALL (y0) (IMPLIES (EQ y0 z) (NEQ z 0)))))))))))))))
+(IMPLIES (< z y) (FORALL (y0) (IMPLIES (EQ y0 z) (NEQ z 0))))))))))))))
 
 ;; sqrt_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
@@ -312,10 +296,6 @@
 (IMPLIES (NEQ 2 0)
 (FORALL (result)
 (IMPLIES (EQ result (int_div (+ x 1) 2))
-(IMPLIES (AND (> result 0)
-         (AND (> x 0)
-         (AND (EQ result (int_div (+ (int_div x x) x) 2))
-         (AND (< x (* (+ x 1) (+ x 1))) (< x (* (+ result 1) (+ result 1)))))))
 (FORALL (y)
 (FORALL (z)
 (IMPLIES (AND (> z 0)
@@ -338,7 +318,7 @@
 (AND (> y0 0)
 (AND (EQ z0 (int_div (+ (int_div x y0) y0) 2))
 (AND (< x (* (+ y0 1) (+ y0 1))) (< x (* (+ z0 1) (+ z0 1)))))))
-(AND (<= 0 y) (< y0 y)))))))))))))))))))))))))
+(AND (<= 0 y) (< y0 y))))))))))))))))))))))))
 
 ;; sqrt_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
@@ -348,15 +328,11 @@
 (IMPLIES (NEQ 2 0)
 (FORALL (result)
 (IMPLIES (EQ result (int_div (+ x 1) 2))
-(IMPLIES (AND (> result 0)
-         (AND (> x 0)
-         (AND (EQ result (int_div (+ (int_div x x) x) 2))
-         (AND (< x (* (+ x 1) (+ x 1))) (< x (* (+ result 1) (+ result 1)))))))
 (FORALL (y)
 (FORALL (z)
 (IMPLIES (AND (> z 0)
          (AND (> y 0)
          (AND (EQ z (int_div (+ (int_div x y) y) 2))
          (AND (< x (* (+ y 1) (+ y 1))) (< x (* (+ z 1) (+ z 1)))))))
-(IMPLIES (>= z y) (AND (<= (* y y) x) (< x (* (+ y 1) (+ y 1))))))))))))))))
+(IMPLIES (>= z y) (AND (<= (* y y) x) (< x (* (+ y 1) (+ y 1)))))))))))))))
 

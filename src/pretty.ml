@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.8 2006-11-03 12:49:05 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.9 2007-02-15 15:52:43 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -207,3 +207,17 @@ let print_file fmt = Queue.iter (decl fmt) queue
 let output_file f =
   print_in_file print_file (f ^ "_why.why")
 
+let output_files f =
+  let po = ref 0 in
+  print_in_file
+    (fun ctxfmt ->
+       Queue.iter 
+	 (function 
+	    | Dgoal _ as d -> 
+		incr po;
+		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
+		print_in_file (fun fmt -> decl fmt d) fpo
+	    | d -> 
+		decl ctxfmt d)
+	 queue)
+    (f ^ "_ctx.why")

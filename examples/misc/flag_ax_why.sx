@@ -318,15 +318,6 @@
 (IMPLIES (AND (<= 0 n)
          (AND (EQ (length t) n)
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))))
-(IMPLIES (AND (AND (<= 0 0) (<= 0 0))
-         (AND (AND (<= 0 n) (<= n n))
-         (AND (monochrome t 0 0 blue)
-         (AND (monochrome t 0 0 white)
-         (AND (monochrome t n n red)
-         (AND (EQ (length t) n)
-         (AND
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
-         (EQ (permutation t t 0 (- n 1)) |@true|))))))))
 (FORALL (b)
 (FORALL (i)
 (FORALL (r)
@@ -340,7 +331,7 @@
          (AND
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t0 k))))
          (EQ (permutation t0 t 0 (- n 1)) |@true|))))))))
-(IMPLIES (< i r) (AND (<= 0 i) (< i (length t0)))))))))))))
+(IMPLIES (< i r) (AND (<= 0 i) (< i (length t0))))))))))))
 
 ;; dutch_flag_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -348,15 +339,6 @@
 (IMPLIES (AND (<= 0 n)
          (AND (EQ (length t) n)
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))))
-(IMPLIES (AND (AND (<= 0 0) (<= 0 0))
-         (AND (AND (<= 0 n) (<= n n))
-         (AND (monochrome t 0 0 blue)
-         (AND (monochrome t 0 0 white)
-         (AND (monochrome t n n red)
-         (AND (EQ (length t) n)
-         (AND
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
-         (EQ (permutation t t 0 (- n 1)) |@true|))))))))
 (FORALL (b)
 (FORALL (i)
 (FORALL (r)
@@ -375,7 +357,7 @@
 (FORALL (result)
 (IMPLIES (EQ result (acc t0 i))
 (IMPLIES (EQ result blue)
-(AND (AND (<= 0 b) (< b (length t0))) (AND (<= 0 i) (< i (length t0))))))))))))))))))
+(AND (AND (<= 0 b) (< b (length t0))) (AND (<= 0 i) (< i (length t0)))))))))))))))))
 
 ;; dutch_flag_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -383,15 +365,6 @@
 (IMPLIES (AND (<= 0 n)
          (AND (EQ (length t) n)
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))))
-(IMPLIES (AND (AND (<= 0 0) (<= 0 0))
-         (AND (AND (<= 0 n) (<= n n))
-         (AND (monochrome t 0 0 blue)
-         (AND (monochrome t 0 0 white)
-         (AND (monochrome t n n red)
-         (AND (EQ (length t) n)
-         (AND
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
-         (EQ (permutation t t 0 (- n 1)) |@true|))))))))
 (FORALL (b)
 (FORALL (i)
 (FORALL (r)
@@ -427,7 +400,7 @@
 (AND (EQ (length t1) n)
 (AND (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t1 k))))
 (EQ (permutation t1 t 0 (- n 1)) |@true|))))))))
-(AND (<= 0 (- r i)) (< (- r i0) (- r i)))))))))))))))))))))))))
+(AND (<= 0 (- r i)) (< (- r i0) (- r i))))))))))))))))))))))))
 
 ;; dutch_flag_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -435,15 +408,6 @@
 (IMPLIES (AND (<= 0 n)
          (AND (EQ (length t) n)
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))))
-(IMPLIES (AND (AND (<= 0 0) (<= 0 0))
-         (AND (AND (<= 0 n) (<= n n))
-         (AND (monochrome t 0 0 blue)
-         (AND (monochrome t 0 0 white)
-         (AND (monochrome t n n red)
-         (AND (EQ (length t) n)
-         (AND
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
-         (EQ (permutation t t 0 (- n 1)) |@true|))))))))
 (FORALL (b)
 (FORALL (i)
 (FORALL (r)
@@ -477,7 +441,7 @@
 (AND (EQ (length t0) n)
 (AND (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t0 k))))
 (EQ (permutation t0 t 0 (- n 1)) |@true|))))))))
-(AND (<= 0 (- r i)) (< (- r i0) (- r i))))))))))))))))))))))))
+(AND (<= 0 (- r i)) (< (- r i0) (- r i)))))))))))))))))))))))
 
 ;; dutch_flag_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -485,15 +449,6 @@
 (IMPLIES (AND (<= 0 n)
          (AND (EQ (length t) n)
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))))
-(IMPLIES (AND (AND (<= 0 0) (<= 0 0))
-         (AND (AND (<= 0 n) (<= n n))
-         (AND (monochrome t 0 0 blue)
-         (AND (monochrome t 0 0 white)
-         (AND (monochrome t n n red)
-         (AND (EQ (length t) n)
-         (AND
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
-         (EQ (permutation t t 0 (- n 1)) |@true|))))))))
 (FORALL (b)
 (FORALL (i)
 (FORALL (r)
@@ -518,7 +473,7 @@
 (IMPLIES (NEQ result0 white)
 (FORALL (r0)
 (IMPLIES (EQ r0 (- r 1))
-(AND (AND (<= 0 r0) (< r0 (length t0))) (AND (<= 0 i) (< i (length t0))))))))))))))))))))))))
+(AND (AND (<= 0 r0) (< r0 (length t0))) (AND (<= 0 i) (< i (length t0)))))))))))))))))))))))
 
 ;; dutch_flag_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -526,15 +481,6 @@
 (IMPLIES (AND (<= 0 n)
          (AND (EQ (length t) n)
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))))
-(IMPLIES (AND (AND (<= 0 0) (<= 0 0))
-         (AND (AND (<= 0 n) (<= n n))
-         (AND (monochrome t 0 0 blue)
-         (AND (monochrome t 0 0 white)
-         (AND (monochrome t n n red)
-         (AND (EQ (length t) n)
-         (AND
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
-         (EQ (permutation t t 0 (- n 1)) |@true|))))))))
 (FORALL (b)
 (FORALL (i)
 (FORALL (r)
@@ -572,7 +518,7 @@
 (AND (EQ (length t1) n)
 (AND (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t1 k))))
 (EQ (permutation t1 t 0 (- n 1)) |@true|))))))))
-(AND (<= 0 (- r i)) (< (- r0 i) (- r i)))))))))))))))))))))))))))
+(AND (<= 0 (- r i)) (< (- r0 i) (- r i))))))))))))))))))))))))))
 
 ;; dutch_flag_po_8, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -580,15 +526,6 @@
 (IMPLIES (AND (<= 0 n)
          (AND (EQ (length t) n)
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))))
-(IMPLIES (AND (AND (<= 0 0) (<= 0 0))
-         (AND (AND (<= 0 n) (<= n n))
-         (AND (monochrome t 0 0 blue)
-         (AND (monochrome t 0 0 white)
-         (AND (monochrome t n n red)
-         (AND (EQ (length t) n)
-         (AND
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
-         (EQ (permutation t t 0 (- n 1)) |@true|))))))))
 (FORALL (b)
 (FORALL (i)
 (FORALL (r)
@@ -608,5 +545,5 @@
 (EXISTS (r)
 (AND (monochrome t0 0 b blue)
 (AND (monochrome t0 b r white) (monochrome t0 r n red)))))
-(EQ (permutation t0 t 0 (- n 1)) |@true|))))))))))))
+(EQ (permutation t0 t 0 (- n 1)) |@true|)))))))))))
 

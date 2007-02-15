@@ -216,7 +216,6 @@
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
-(IMPLIES (AND (< 0 a) (AND (< 0 b) (EQ (gcd a b) (gcd a b))))
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
@@ -225,13 +224,12 @@
 (FORALL (x0)
 (IMPLIES (EQ x0 (- x y))
 (AND (AND (< 0 x0) (AND (< 0 y) (EQ (gcd x0 y) (gcd a b))))
-(AND (<= 0 (max x y)) (< (max x0 y) (max x y)))))))))))))))
+(AND (<= 0 (max x y)) (< (max x0 y) (max x y))))))))))))))
 
 ;; gcd1_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
-(IMPLIES (AND (< 0 a) (AND (< 0 b) (EQ (gcd a b) (gcd a b))))
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
@@ -240,17 +238,16 @@
 (FORALL (y0)
 (IMPLIES (EQ y0 (- y x))
 (AND (AND (< 0 x) (AND (< 0 y0) (EQ (gcd x y0) (gcd a b))))
-(AND (<= 0 (max x y)) (< (max x y0) (max x y)))))))))))))))
+(AND (<= 0 (max x y)) (< (max x y0) (max x y))))))))))))))
 
 ;; gcd1_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
-(IMPLIES (AND (< 0 a) (AND (< 0 b) (EQ (gcd a b) (gcd a b))))
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
-(IMPLIES (EQ x y) (EQ x (gcd a b))))))))))
+(IMPLIES (EQ x y) (EQ x (gcd a b)))))))))
 
 (BG_PUSH
  ;; Why axiom gcd_a_amodb
@@ -270,7 +267,6 @@
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
-(IMPLIES (AND (<= 0 a) (AND (<= 0 b) (EQ (gcd a b) (gcd a b))))
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (<= 0 x) (AND (<= 0 y) (EQ (gcd x y) (gcd a b))))
@@ -280,15 +276,14 @@
 (FORALL (y0)
 (IMPLIES (EQ y0 (int_mod x y))
 (AND (AND (<= 0 x0) (AND (<= 0 y0) (EQ (gcd x0 y0) (gcd a b))))
-(AND (<= 0 y) (< y0 y)))))))))))))))
+(AND (<= 0 y) (< y0 y))))))))))))))
 
 ;; gcd2_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
-(IMPLIES (AND (<= 0 a) (AND (<= 0 b) (EQ (gcd a b) (gcd a b))))
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (<= 0 x) (AND (<= 0 y) (EQ (gcd x y) (gcd a b))))
-(IMPLIES (EQ y 0) (EQ x (gcd a b))))))))))
+(IMPLIES (EQ y 0) (EQ x (gcd a b)))))))))
 
