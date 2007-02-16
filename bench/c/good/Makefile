@@ -64,6 +64,13 @@ type-all:
 	  $(CADUCEUS) -type-only $$f; \
 	done
 
+goals:
+	rm -f why/*.why
+	make -j $(WBENCHFILES)
+	for f in $(BENCHFILES); do \
+	  make -f $$f.makefile goals || exit 1; \
+	done
+
 # rules ##################################################
 
 why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
