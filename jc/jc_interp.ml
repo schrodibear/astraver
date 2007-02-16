@@ -148,6 +148,7 @@ let rec assertion label oldlabel a =
     | JCAfalse -> LFalse
     | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
     | JCAand l -> make_and_list (List.map fa l)
+    | JCAor l -> make_or_list (List.map fa l)
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
     | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
     | JCAnot(a) -> LNot(fa a)

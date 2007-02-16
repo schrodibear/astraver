@@ -77,6 +77,11 @@ let div_int = make_term_op "div_int" integer_type
 let mod_int = make_term_op "mod_int" integer_type
 let minus_int = make_term_op "neg_int" integer_type
 
+let add_real = make_term_op "add_real" real_type
+let sub_real = make_term_op "sub_real" real_type
+let mul_real = make_term_op "mul_real" real_type
+let div_real = make_term_op "div_real" real_type
+
 let shift = make_term_op "shift" unit_type   
 
 let real_of_integer = make_term_op "real_of_int" real_type
@@ -99,6 +104,8 @@ let ge_int = make_rel "ge_int"
 let le_int = make_rel "le_int"
 let eq = make_rel "eq"
 let neq = make_rel "neq"
+let band = make_rel "band"
+let bor = make_rel "bor"
 
     
 (* programs *)

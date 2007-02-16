@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.26 2007-02-14 08:29:43 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.27 2007-02-16 16:15:45 marche Exp $ */
 
 %{
 
@@ -82,8 +82,8 @@
 /* && || => <=> ! */
 %token AMPAMP BARBAR EQGT LTEQGT EXCLAM
 
-/* if else return while */
-%token IF ELSE RETURN WHILE
+/* if else return while break */
+%token IF ELSE RETURN WHILE BREAK  
 
 /* exception of throw try catch */
 %token EXCEPTION OF THROW TRY CATCH
@@ -119,7 +119,7 @@
 %token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE VOID
 %token STRUCT ENUM 
 
-%token CASE DEFAULT SWITCH DO FOR GOTO CONTINUE BREAK  
+%token CASE DEFAULT SWITCH DO FOR GOTO CONTINUE 
 %token TRY CATCH FINALLY THROW 
 
 %token AMP EXL TILDE STAR SLASH PERCENT LT GT HAT PIPE
@@ -671,7 +671,9 @@ jump_statement:
 /*
 | GOTO identifier SEMICOLON { locate (CSgoto $2) }
 | CONTINUE SEMICOLON { locate CScontinue }
-| BREAK SEMICOLON { locate CSbreak }
+*/
+| BREAK SEMICOLON { locate_statement (JCPSbreak "") }
+/*
 | RETURN SEMICOLON { locate (CSreturn None) }
 */
 | RETURN expression SEMICOLON { locate_statement (JCPSreturn $2) }

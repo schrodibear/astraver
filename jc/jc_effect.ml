@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.16 2007-01-10 16:41:46 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.17 2007-02-16 16:15:45 marche Exp $ *)
 
 
 open Jc_env
@@ -115,13 +115,13 @@ let rec assertion ef a =
 	add_tag_effect (term ef t) st.jc_struct_info_root
     | JCAnot a
     | JCAold a -> assertion ef a
-    | JCAforall (_, _) -> assert false (* TODO *)
+    | JCAforall (vi, a) -> assertion ef a 
     | JCAapp (li, tl) -> 
 	ef_union li.jc_logic_info_effects
 	  (List.fold_left term ef tl)	
     | JCAiff (a1, a2)
     | JCAimplies (a1, a2) -> assertion (assertion ef a1) a2
-    | JCAand al -> List.fold_left assertion ef al
+    | JCAand al | JCAor al -> List.fold_left assertion ef al
 
 (********************
 
@@ -170,7 +170,7 @@ let rec statement ef s =
 	statement ef finally
     | JCSgoto _ -> assert false
     | JCScontinue _ -> assert false
-    | JCSbreak _ -> assert false
+    | JCSbreak _ -> ef
     | JCSwhile (c, la, s) -> 
 	let ef = {ef with jc_reads = loop_annot ef.jc_reads la } in
 	statement (expr ef c) s

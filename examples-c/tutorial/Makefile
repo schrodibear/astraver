@@ -37,6 +37,11 @@ why/%.why: %.c
 %: %.c
 	rm -f why/$*.why
 	make why/$*.why
+	make -f $*.makefile gui
+
+%.coq: %.c
+	rm -f why/$*.why
+	make why/$*.why
 	make -f $*.makefile coq
 
 

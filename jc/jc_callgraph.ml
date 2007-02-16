@@ -43,7 +43,7 @@ let rec assertion acc p =
   | JCAtrue 
   | JCAfalse -> acc
   | JCAapp(f,lt) -> f::(List.fold_left term acc lt)
-  | JCAand(pl) -> List.fold_left assertion acc pl
+  | JCAand(pl) | JCAor(pl) -> List.fold_left assertion acc pl
   | JCAimplies (p1,p2) | JCAiff(p1,p2) -> 
       assertion (assertion acc p1) p2
   | JCAif(t1,p2,p3) -> 
@@ -116,7 +116,7 @@ let rec statement acc s =
 	in statement acc finally
     | JCSgoto _ -> assert false (* TODO *)
     | JCScontinue _ -> assert false (* TODO *)
-    | JCSbreak _  -> assert false (* TODO *)
+    | JCSbreak _  -> acc
     | JCSdecl(vi,e,s) -> 
 	let (a,b)=acc in statement (a,Option_misc.fold_left expr b e) s
     | JCSassert _ -> assert false (* TODO *)

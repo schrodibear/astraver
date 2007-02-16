@@ -46,7 +46,7 @@ let rec assertion this p =
     | JCAnot p -> assertion this p
     | JCAiff (p1, p2)
     | JCAimplies (p1, p2) -> assertion this p1; assertion this p2
-    | JCAand l -> List.iter (assertion this) l
+    | JCAand l | JCAor l -> List.iter (assertion this) l
 
 
 let check invs =

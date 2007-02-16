@@ -175,6 +175,7 @@ type assertion_node =
   | JCAtrue
   | JCAfalse
   | JCAand of assertion list
+  | JCAor of assertion list
   | JCAimplies of assertion * assertion
   | JCAiff of assertion * assertion
   | JCAnot of assertion

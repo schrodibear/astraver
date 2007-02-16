@@ -51,6 +51,23 @@ let find_struct_info loc id =
   with Not_found ->
     typing_error loc "undeclared structure %s" id
 
+let is_numeric t =
+  match t with
+    | JCTnative (Tinteger|Treal) -> true
+    | JCTrange _ -> true
+    | _ -> false
+
+let is_integer t =
+  match t with
+    | JCTnative Tinteger -> true
+    | JCTrange _ -> true
+    | _ -> false
+
+let lub_numeric_types t1 t2 =
+  match t1,t2 with
+    | JCTnative Treal,_ | _,JCTnative Treal -> Treal
+    | _ -> Tinteger
+
 let rec substruct s1 s2 =
   if s1=s2 then true else
     let st = find_struct_info Loc.dummy_position s1.jc_struct_info_name in
@@ -61,6 +78,10 @@ let rec substruct s1 s2 =
 let subtype t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
+    | JCTrange ri1, JCTrange ri2 -> 
+	Num.ge_num ri1.jc_range_info_min ri2.jc_range_info_min 	&&
+	Num.le_num ri1.jc_range_info_max ri2.jc_range_info_max
+    | JCTrange _, JCTnative Tinteger -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_),JCTpointer(s2,_,_) -> 
 	  substruct s1 s2
@@ -69,6 +90,9 @@ let subtype t1 t2 =
 let comparable_types t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
+    | JCTrange _, JCTrange _ -> true
+    | JCTrange _, JCTnative Tinteger -> true
+    | JCTnative Tinteger, JCTrange _ -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_),JCTpointer(s2,_,_) -> 
 	  s1.jc_struct_info_root = s2.jc_struct_info_root
@@ -217,12 +241,28 @@ let logic_unary_op loc (op : Jc_ast.punary_op) t e =
     | Upostfix_dec | Upostfix_inc | Uprefix_dec | Uprefix_inc ->
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
+let term_coerce t1 t2 e =
+  let e_int =
+    match t1 with
+      | JCTrange ri ->
+	  let (_,to_int,_,_) = 
+	    Hashtbl.find range_types_table ri.jc_range_info_name 
+	  in
+	  { jc_term_node = JCTapp(to_int,[e]) ;
+	    jc_term_loc = e.jc_term_loc }  
+      | _ -> e
+  in
+  match t2 with
+    | Tinteger -> e_int
+    | Treal -> 
+	{ jc_term_node = JCTapp(real_of_integer,[e_int]) ;
+	  jc_term_loc = e.jc_term_loc }  
+    | _ -> assert false
+
 let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
   match op with
-    | Bgt -> assert false (* TODO *)
-    | Blt -> assert false (* TODO *)
-    | Bge -> assert false (* TODO *)
-    | Ble -> assert false (* TODO *)
+    | Bgt | Blt | Bge | Ble -> 
+	typing_error loc "comparison not allowed as a term (todo)"
     | Beq | Bneq ->
 	let t =
 	  match t1,t2 with
@@ -270,6 +310,82 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
     | Bland | Blor -> assert false (* TODO *)
     | Bimplies -> assert false
     | Biff -> assert false
+
+let logic_bin_op t op =
+  match t,op with
+    | _, Bgt -> gt_int
+    | _, Blt -> lt_int
+    | _, Bge -> ge_int
+    | _, Ble -> le_int
+    | _, Beq -> eq
+    | _, Bneq -> neq
+    | Tinteger, Badd -> add_int
+    | Treal, Badd -> add_real
+    | _, Bsub -> sub_int
+    | _, Bmul -> mul_int
+    | _, Bdiv -> div_int
+    | _, Bmod -> mod_int
+    | Tboolean, Bland -> band 
+    | Tboolean, Blor -> bor
+	(* not allowed as expression op *)
+    | _,Bimplies -> assert false
+    | Tunit,_ -> assert false
+    | _ -> assert false
+
+let make_logic_bin_op loc op t1 e1 t2 e2 =
+  match op with
+    | Bgt | Blt | Bge | Ble | Beq | Bneq ->
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative Tboolean,
+	  JCTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	else
+	  typing_error loc "numeric types expected"
+    | Badd | Bsub ->
+	begin
+	  match t1 with
+	    | JCTpointer(st,_,_) ->
+		if is_integer t2 then
+		  t1, JCTapp(shift,[e1;term_coerce t2 Tinteger e2])
+		else
+		  typing_error loc "integer type expected"
+	    | _ ->
+		if is_numeric t1 && is_numeric t2 then
+		  let t = lub_numeric_types t1 t2 in
+		  JCTnative t,
+		  JCTapp(logic_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
+		else
+		  typing_error loc "numeric types expected"
+	end
+    | Bmul | Bdiv | Bmod ->
+	let t=
+	  match (t1,t2) with
+	    | JCTnative t1, JCTnative t2 ->
+		begin
+		  match (t1,t2) with
+		    | Tinteger,Tinteger -> Tinteger
+		    | Treal,Treal -> Treal
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "numeric types expected"
+	in JCTnative t,JCTapp(logic_bin_op t op,[e1;e2])
+    | Bland | Blor -> 
+	let t=
+	  match (t1,t2) with
+	    | JCTnative t1, JCTnative t2 ->
+		begin
+		  match (t1,t2) with
+		    | Tboolean,Tboolean -> Tboolean
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ ->
+		typing_error loc "booleans expected"
+	in JCTnative t,JCTapp(logic_bin_op t op,[e1;e2])
+
+	(* not allowed as term op *)
+    | Bimplies | Biff -> assert false
+
 	  
 let rec term env e =
   let t,te =
@@ -303,7 +419,7 @@ let rec term env e =
 	  let t1,e1 = term env e1
 	  and t2,e2 = term env e2
 	  in
-	  logic_bin_op e.jc_pexpr_loc op t1 e1 t2 e2
+	  make_logic_bin_op e.jc_pexpr_loc op t1 e1 t2 e2
       | JCPEunary(op, e2) -> 
 	  let t2,e2 = term env e2
 	  in
@@ -406,40 +522,19 @@ let make_and a1 a2 =
     | (_ , JCAand l2) -> JCAand(a1::l2)
     | _ -> JCAand [a1;a2]
 
-let is_numeric t =
-  match t with
-    | JCTnative (Tinteger|Treal) -> true
-    | JCTrange _ -> true
-    | _ -> false
+let make_or a1 a2 =
+  match (a1.jc_assertion_node,a2.jc_assertion_node) with
+    | (JCAfalse,a2) -> a2
+    | (a1,JCAfalse) -> a1
+(*
+    | (LFalse,_) -> LFalse
+    | (_,LFalse) -> LFalse
+*)
+    | (JCAor l1 , JCAor l2) -> JCAor(l1@l2)
+    | (JCAor l1 , _ ) -> JCAor(l1@[a2])
+    | (_ , JCAor l2) -> JCAor(a1::l2)
+    | _ -> JCAor [a1;a2]
 
-let is_integer t =
-  match t with
-    | JCTnative Tinteger -> true
-    | JCTrange _ -> true
-    | _ -> false
-
-let lub_numeric_types t1 t2 =
-  match t1,t2 with
-    | JCTnative Treal,_ | _,JCTnative Treal -> Treal
-    | _ -> Tinteger
-
-let term_coerce t1 t2 e =
-  let e_int =
-    match t1 with
-      | JCTrange ri ->
-	  let (_,to_int,_,_) = 
-	    Hashtbl.find range_types_table ri.jc_range_info_name 
-	  in
-	  { jc_term_node = JCTapp(to_int,[e]) ;
-	    jc_term_loc = e.jc_term_loc }  
-      | _ -> e
-  in
-  match t2 with
-    | Tinteger -> e_int
-    | Treal -> 
-	{ jc_term_node = JCTapp(real_of_integer,[e_int]) ;
-	  jc_term_loc = e.jc_term_loc }  
-    | _ -> assert false
 
 let make_rel_bin_op loc op t1 e1 t2 e2 =
   match op with
@@ -450,10 +545,14 @@ let make_rel_bin_op loc op t1 e1 t2 e2 =
 	else
 	  typing_error loc "numeric types expected"
     | Beq | Bneq ->
-	if comparable_types t1 t2 then 
-	  JCAapp(rel_bin_op Tunit op,[e1;e2])
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCAapp(rel_bin_op Tunit op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
-	  typing_error loc "terms should have the same type"
+	  if comparable_types t1 t2 then 
+	    JCAapp(rel_bin_op Tunit op,[e1;e2])
+	  else
+	    typing_error loc "terms should have the same type"
 	(* non propositional operators *)
     | Badd | Bsub | Bmul | Bdiv | Bmod -> assert false
 	(* already recognized as connectives *)
@@ -486,6 +585,8 @@ let rec assertion env e =
       | JCPEcast(e, t) -> assert false
       | JCPEbinary (e1, Bland, e2) -> 
 	  make_and (assertion env e1) (assertion env e2)
+      | JCPEbinary (e1, Blor, e2) -> 
+	  make_or (assertion env e1) (assertion env e2)
       | JCPEbinary (e1, Bimplies, e2) -> 
 	  JCAimplies(assertion env e1,assertion env e2)
       | JCPEbinary (e1, Biff, e2) -> 
@@ -675,23 +776,20 @@ let restrict t1 t2 e =
 	in
 	{ jc_expr_node = JCEcall(of_int,[e]) ;
 	  jc_expr_loc = e.jc_expr_loc }  	
-    | _ -> assert false
+    | _ -> 
+	typing_error e.jc_expr_loc "cannot coerce type '%a' to type '%a'"
+	  print_type t1 print_type t2
+	
 
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble | Beq | Bneq ->
-	begin
-	  match (t1,t2) with
-	    | JCTnative t1, JCTnative t2 ->
-		begin
-		  match (t1,t2) with
-		    | Tinteger,Tinteger -> ()
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ ->
-		typing_error loc "numeric types expected"
-	end;
-	JCTnative Tboolean,JCEcall(bin_op Tboolean op,[e1;e2])
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative Tboolean,
+	  JCEcall(bin_op Tboolean op,[coerce t1 t e1; coerce t2 t e2])
+	else
+	  typing_error loc "numeric types expected"
     | Badd | Bsub ->
 	begin
 	  match t1 with
@@ -781,16 +879,23 @@ let rec expr env e =
 	    let t1,te1 = expr env e1
 	    and t2,te2 = expr env e2
 	    in
-	    if subtype t2 t1 then
-	      match te1.jc_expr_node with
-		| JCEvar v ->
-		    set_assigned v;
-		    t1,JCEassign_local(v,te2)
-		| JCEderef(e,f) ->
-		    t1,JCEassign_heap(e, f, te2)
-		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
-	    else
-	      typing_error e.jc_pexpr_loc "same type expected"
+	    let te2 =	      
+	      if subtype t2 t1 then te2 else
+		try
+		  restrict t2 t1 te2
+		with
+		    Invalid_argument _ ->
+		      typing_error e2.jc_pexpr_loc 
+			"type '%a' expected"
+			print_type t1
+	    in
+	    match te1.jc_expr_node with
+	      | JCEvar v ->
+		  set_assigned v;
+		  t1,JCEassign_local(v,te2)
+	      | JCEderef(e,f) ->
+		  t1,JCEassign_heap(e, f, te2)
+	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	  end
       | JCPEassign_op (e1, op, e2) -> 
 	  begin
@@ -934,7 +1039,8 @@ let rec statement env s =
 	  JCStry(ts,catches,statement env finally)
       | JCPSgoto _ -> assert false
       | JCPScontinue _ -> assert false
-      | JCPSbreak _ -> assert false
+      | JCPSbreak l -> 
+	  JCSbreak l (* TODO: check l exists, check enclosing loop exists, *)
       | JCPSreturn e -> 
 	  let t,te = expr env e in 
 	  let vi = List.assoc "\\result" env in
@@ -1011,7 +1117,13 @@ and statement_list env l : statement list =
 		       let t,te = expr env e in
 		       if subtype t ty then te
 		       else
-			 typing_error e.jc_pexpr_loc "incompatible type")
+			 try
+			   restrict t ty te
+			 with
+			     Invalid_argument _ ->
+			       typing_error s.jc_pstatement_loc 
+				 "type '%a' expected"
+				   print_type ty)
 		    e
 		in
 		let tr = statement_list ((id,vi)::env) r in

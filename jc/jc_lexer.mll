@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.21 2007-01-12 09:41:30 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.22 2007-02-16 16:15:45 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -85,8 +85,8 @@ rule token = parse
   | "axiom"                 { AXIOM }
   | "behavior"              { BEHAVIOR }
   | "boolean"               { BOOLEAN }
-(*
   | "break"                 { BREAK }
+(*
   | "case"                  { CASE }
 *)
   | "catch"                 { CATCH }
