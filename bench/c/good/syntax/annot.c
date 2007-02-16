@@ -27,7 +27,8 @@ int g() {
 
 /* recursive function with a variant */
 
-/*@ ensures n >= 0 (* variant n *) */
+/*@ ensures n >= 0 // variant n 
+  @*/
 int fact(int n) {
   return n == 0 ? 1 : n * fact(n-1);
 }

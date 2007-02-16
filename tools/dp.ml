@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.34 2006-12-14 15:09:28 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.35 2007-02-16 08:24:13 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -32,13 +32,16 @@ open Calldp
 let timeout = ref 10
 let eclauses = ref 2000 (* E prover max nb of clauses *)
 let debug = ref false
+let batch = ref false
 let files = Queue.create ()
 
 let spec = 
   [ "-timeout", Arg.Int ((:=) timeout), "<int>  set the timeout (in seconds)";
     "-eclauses", Arg.Int ((:=) eclauses), 
     "<int>  set the max nb of clauses for the E prover";
-    "-debug", Arg.Set debug, "set the debug flag" ]
+    "-debug", Arg.Set debug, "set the debug flag";
+    "-batch", Arg.Set batch, "run in batch mode"]
+
 let usage = "usage: dp [options] files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
 
@@ -68,25 +71,31 @@ let nfailure = ref 0
 let tfailure = ref 0.0
 
 let is_valid t = 
+  if !batch then exit 0;
   printf "."; incr nvalid; 
   tvalid := !tvalid +. t;
   tmaxvalid := max !tmaxvalid t
 
+
 let is_invalid t = 
+  if !batch then exit 2;
   printf "*"; incr ninvalid; 
   tinvalid := !tinvalid +. t;
   tmaxinvalid := max !tmaxinvalid t
 
 let is_unknown t = 
+  if !batch then exit 3;
   printf "?"; incr nunknown; 
   tunknown := !tunknown +. t;
   tmaxunknown := max !tmaxunknown t
 
 let is_timeout t = 
+  if !batch then exit 4;
   printf "#"; incr ntimeout;
   ttimeout := !ttimeout +. t
 
 let is_failure t = 
+  if !batch then exit 5;
   printf "!"; incr nfailure;
   tfailure := !tfailure +. t 
 
@@ -120,7 +129,7 @@ let call_harvey f =
 
 
 let split f =
-  printf "%-30s: " f; flush stdout;
+  if not !batch then printf "%-30s: " f;
   let oldv = !nvalid in
   let oldi = !ninvalid in
   let oldt = !ntimeout in
@@ -168,7 +177,7 @@ let print_time fmt f =
 let main () = 
   if Queue.is_empty files then begin Arg.usage spec usage; exit 1 end;
   let wctime0 = Unix.gettimeofday() in
-  printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
+  if not !batch then printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
   Queue.iter split files;
   let wctime = Unix.gettimeofday() -. wctime0 in
   let n = !nvalid + !ninvalid + !ntimeout + !nunknown + !nfailure in

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.114 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.115 2007-02-16 08:24:13 marche Exp $ i*)
 
 open Coptions
 open Format
@@ -73,9 +73,10 @@ let rec type_logic_type loc env = function
 
 (* Typing terms *)
 
-let is_null t = match t.term_node with
+let rec is_null t = match t.term_node with
   | Clogic.Tvar v -> v.Info.var_name = "null"
   | Tconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
+  | Tcast (_,t) -> is_null t
   | _ -> false
 
 (*

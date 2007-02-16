@@ -60,6 +60,7 @@ void init() {
   NIL->elt = 0x7fffffff;
 }
 
+//@ type int_list
 /*@ logic int_list nil() */
 /*@ logic int_list cons(int x, int_list l) */
 /*@ predicate mem(int x, int_list l) */

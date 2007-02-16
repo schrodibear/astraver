@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.142 2007-02-05 14:31:41 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.143 2007-02-16 08:24:13 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -196,9 +196,10 @@ let is_bitfield ty = match ty.ctype_node with
 let va_list = Ctypes.noattr (Ctypes.Tvar "va_list")
 let _ = add_typedef Loc.dummy_position "__builtin_va_list" va_list
 
-let is_null e = 
+let rec is_null e = 
   match e.texpr_node with
     | TEconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
+    | TEcast(_,e) -> is_null e
     | _ -> false
 
 (* Coercions (ints to floats, floats to int) *)
@@ -223,7 +224,7 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
 	  ctype_const = false;
 	  ctype_volatile = false;
 	  ctype_ghost = false;
-	},e) }
+	},tezero) }
   | _ ->
       error e.texpr_loc
 	"incompatible type: expected %a, found %a@." 
