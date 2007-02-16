@@ -10,6 +10,8 @@
 \newcommand{\caml}{\textsf{Caml}}
 \newcommand{\pvs}{\textsf{PVS}\index{PVS@\textsf{PVS}}}
 \newcommand{\coq}{\textsf{Coq}\index{Coq@\textsf{Coq}}}
+\newcommand{\ergo}{\textsf{Ergo}\index{Ergo@\textsf{Ergo}}}
+\newcommand{\yices}{\textsf{Yices}\index{Yices@\textsf{Yices}}}
 \newcommand{\harvey}{\textsf{haRVey}\index{haRVey@\textsf{haRVey}}}
 \newcommand{\simplify}{\textsf{Simplify}\index{Simplify@\textsf{Simplify}}}
 \newcommand{\mizar}{\textsf{Mizar}\index{Mizar@\textsf{Mizar}}}
@@ -757,16 +759,17 @@ in the corresponding \why\ input file in the bottom right window.
   \label{fig:gwhy}
 \end{figure}
 
-Note that you need the Unix \texttt{timeout} command to be installed
-on your system before running \texttt{gwhy}.
+% obsolete
+% Note that you need the Unix \texttt{timeout} command to be installed
+% on your system before running \texttt{gwhy}.
 
 \subsection{Calling decision procedures (\texttt{dp})}
 \label{tool:dp}\indextt{dp}
 
 A small tool is provided to call the decision procedures (\simplify,
-\harvey, \zenon\ and \cvclite) on files containing several goals, with
-a timeout for each goal, and to display s short summary of the
-results. Here is an example:
+\ergo, \yices, \harvey, \zenon\ and \cvclite) on files containing
+several goals, with a timeout for each goal, and to display s short
+summary of the results. Here is an example:
 \begin{verbatim}
 % dp -timeout 5 swap0_why.sx peano_why.sx
 (. = valid * = invalid # = timeout/failure)
@@ -778,8 +781,26 @@ invalid         :   3 ( 10%)
 timeout/failure :   0 (  0%)
 \end{verbatim}
 
-Note: as for \texttt{gwhy}, you need the Unix \texttt{timeout} command
-to be installed on your system to run \texttt{dp}.
+%Note: as for \texttt{gwhy}, you need the Unix \texttt{timeout} command
+%to be installed on your system to run \texttt{dp}.
+
+options:
+\begin{description}
+\item[\texttt{-batch}] run in batch mode: no output is printed at all,
+  but answer is given as the exit status. Notice that only the first
+  goal is considered, so it is intended to be used only with
+  single-goal files (see option \texttt{-?} of why)
+  \begin{enumerate}
+  \item 0: normal exit, prover said goal is valid
+  \item 1: dp error (syntax error, etc)
+  \item 2: prover answered 'invalid'
+  \item 3: prover answered 'unknown'
+  \item 4: prover was interrupted because of timeout
+  \item 5: prover failure: answer was not understood by dp
+  \end{enumerate}
+\item[\texttt{-timeout <n>}]
+  sets the time limit to \texttt{n} seconds. Default is 10
+\end{description}
 
 \subsection{Why obfuscator (\texttt{why-obfuscator})}
 \indextt{why-obfuscator}
