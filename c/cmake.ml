@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.44 2007-02-15 15:52:41 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.45 2007-02-20 17:14:42 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -103,6 +103,9 @@ let generic f targets =
        fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
        fprintf fmt "why/%%_ctx.why: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+
+       fprintf fmt "why/%%_why.why: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why -why [...] why/$*.why' && $(WHY) -why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
