@@ -183,12 +183,12 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; sqrt_po_1, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_1, Why obligation from file "sqrt_dicho.mlw", line 9, characters 8-241:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (AND (<= (* 0 0) x) (AND (< x (* (+ x 1) (+ x 1))) (< 0 (+ x 1))))))
 
-;; sqrt_po_2, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_2, Why obligation from file "sqrt_dicho.mlw", line 15, characters 12-32:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -196,7 +196,7 @@
 (IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
 (IMPLIES (NEQ (+ inf 1) sup) (NEQ 2 0)))))))
 
-;; sqrt_po_3, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_3, Why obligation from file "sqrt_dicho.mlw", line 16, characters 29-40:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -214,7 +214,7 @@
 (AND (AND (<= (* inf inf) x) (AND (< x (* sup0 sup0)) (< inf sup0)))
 (AND (<= 0 (- sup inf)) (< (- sup0 inf) (- sup inf))))))))))))))))))
 
-;; sqrt_po_4, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_4, Why obligation from file "sqrt_dicho.mlw", line 16, characters 46-57:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -232,7 +232,7 @@
 (AND (AND (<= (* inf0 inf0) x) (AND (< x (* sup sup)) (< inf0 sup)))
 (AND (<= 0 (- sup inf)) (< (- sup inf0) (- sup inf))))))))))))))))))
 
-;; sqrt_po_5, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_5, Why obligation from file "sqrt_dicho.mlw", line 18, characters 3-7:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)

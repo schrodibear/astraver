@@ -56,6 +56,10 @@ let log l sq lemma_name =
 
 let (===) = eq_predicate
 
+let rec strip_name = function
+  | Pnamed (_, p) -> strip_name p
+  | p -> p
+
 (* ... |- true *)
 let ptrue = function
   | Ptrue -> True
@@ -491,7 +495,14 @@ let boolean_case ctx concl = match ctx, concl with
 
 (* we try the automatic proofs successively, starting with the simplest ones *)
 let discharge_methods ctx concl =
-  let ctx,concl,pr = intros ctx concl in pr begin
+  let ctx,concl,pr = intros ctx concl in 
+  let concl = strip_name concl in
+  let ctx = 
+    List.map (function 
+		| Spred (h,p) -> Spred (h, strip_name p) 
+		| Svar _ as v -> v) ctx
+  in
+  pr begin
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
   try reflexivity concl with Exit -> 

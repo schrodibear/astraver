@@ -183,10 +183,10 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; sum_po_1, Why obligation from file "", line 0, characters 0-0:
+;; sum_po_1, Why obligation from file "sum.mlw", line 7, characters 6-133:
 (FORALL (n) (IMPLIES (>= n 0) (AND (EQ (* 2 0) (* 0 (+ 0 1))) (<= 0 n))))
 
-;; sum_po_2, Why obligation from file "", line 0, characters 0-0:
+;; sum_po_2, Why obligation from file "sum.mlw", line 10, characters 8-19:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (i)
@@ -200,7 +200,7 @@
 (AND (AND (EQ (* 2 s0) (* i0 (+ i0 1))) (<= i0 n))
 (AND (<= 0 (- n i)) (< (- n i0) (- n i))))))))))))))
 
-;; sum_po_3, Why obligation from file "", line 0, characters 0-0:
+;; sum_po_3, Why obligation from file "sum.mlw", line 13, characters 6-8:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (i)

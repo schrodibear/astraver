@@ -190,12 +190,12 @@
  (AND (OR (EQ (max x y) x) (EQ (max x y) y))
  (AND (>= (max x y) x) (>= (max x y) y))))))
 
-;; f91_po_1, Why obligation from file "", line 0, characters 0-0:
+;; f91_po_1, Why obligation from file "mac_carthy.mlw", line 13, characters 12-24:
 (FORALL (n)
 (IMPLIES (<= n 100)
 (AND (<= 0 (max 0 (- 101 n))) (< (max 0 (- 101 (+ n 11))) (max 0 (- 101 n))))))
 
-;; f91_po_2, Why obligation from file "", line 0, characters 0-0:
+;; f91_po_2, Why obligation from file "mac_carthy.mlw", line 13, characters 7-25:
 (FORALL (n)
 (IMPLIES (<= n 100)
 (IMPLIES (AND (<= 0 (max 0 (- 101 n)))
@@ -205,7 +205,7 @@
          (AND (>= (+ n 11) 101) (EQ result (- (+ n 11) 10))))
 (AND (<= 0 (max 0 (- 101 n))) (< (max 0 (- 101 result)) (max 0 (- 101 n)))))))))
 
-;; f91_po_3, Why obligation from file "", line 0, characters 0-0:
+;; f91_po_3, Why obligation from file "mac_carthy.mlw", line 13, characters 7-25:
 (FORALL (n)
 (IMPLIES (<= n 100)
 (IMPLIES (AND (<= 0 (max 0 (- 101 n)))
@@ -220,7 +220,7 @@
          (AND (>= result 101) (EQ result0 (- result 10))))
 (OR (AND (<= n 100) (EQ result0 91)) (AND (>= n 101) (EQ result0 (- n 10))))))))))))
 
-;; f91_po_4, Why obligation from file "", line 0, characters 0-0:
+;; f91_po_4, Why obligation from file "mac_carthy.mlw", line 15, characters 6-12:
 (FORALL (n)
 (IMPLIES (> n 100)
 (OR (AND (<= n 100) (EQ (- n 10) 91))

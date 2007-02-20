@@ -7,250 +7,318 @@ Require Import Omega.
 (*Why logic*) Definition q : Z -> Prop.
 Admitted.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 10, characters 2-55: *)
 (*Why goal*) Lemma p1_po_1 : 
-  forall (x: Z),
-  forall (HW_1: (q (x + 1))),
-  forall (x0: Z),
-  forall (HW_2: x0 = (x + 1)),
-  (q x0).
+  (* File "good/po.mlw", line 10, characters 1-54 *)
+  (forall (_:unit),
+   (forall (x:Z),
+    ((q (x + 1)) ->
+     (* File "good/po.mlw", line 10, characters 30-41 *)
+     (forall (x0:Z),
+      ((* File "good/po.mlw", line 10, characters 30-41 *) x0 = (x + 1) ->
+       (q x0)))))).
 Proof.
 intuition.
 subst; trivial.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 12, characters 2-52: *)
 (*Why goal*) Lemma p2_po_1 : 
-  forall (HW_1: (q 7)),
-  forall (x: Z),
-  forall (HW_2: x = (3 + 4)),
-  (q x).
+  (* File "good/po.mlw", line 12, characters 1-51 *)
+  (forall (_:unit),
+   ((q 7) ->
+    (* File "good/po.mlw", line 12, characters 28-38 *)
+    (forall (x:Z),
+     ((* File "good/po.mlw", line 12, characters 28-38 *) x = (3 + 4) ->
+      (q x))))).
 Proof.
 intuition.
 subst; trivial.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 14, characters 2-63: *)
 (*Why goal*) Lemma p3_po_1 : 
-  forall (x: Z),
-  forall (x0: Z),
-  forall (HW_1: x0 = (x + 1)),
-  forall (x1: Z),
-  forall (HW_2: x1 = (x0 + 2)),
-  x1 = (x + 3).
+  (* File "good/po.mlw", line 14, characters 1-62 *)
+  (forall (_:unit),
+   (forall (x:Z),
+    (* File "good/po.mlw", line 14, characters 19-30 *)
+    (forall (x0:Z),
+     ((* File "good/po.mlw", line 14, characters 19-30 *) x0 = (x + 1) ->
+      (* File "good/po.mlw", line 14, characters 32-43 *)
+      (forall (x1:Z),
+       ((* File "good/po.mlw", line 14, characters 32-43 *) x1 = (x0 + 2) ->
+        x1 = (x + 3))))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 16, characters 2-54: *)
 (*Why goal*) Lemma p4_po_1 : 
-  forall (x: Z),
-  forall (HW_1: x = 7),
-  forall (x0: Z),
-  forall (HW_2: x0 = (2 * x)),
-  x0 = 14.
+  (* File "good/po.mlw", line 16, characters 1-53 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 16, characters 19-25 *)
+   (forall (x:Z),
+    ((* File "good/po.mlw", line 16, characters 19-25 *) x = 7 ->
+     (* File "good/po.mlw", line 16, characters 27-38 *)
+     (forall (x0:Z),
+      ((* File "good/po.mlw", line 16, characters 27-38 *) x0 = (2 * x) ->
+       x0 = 14))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 18, characters 2-36: *)
 (*Why goal*) Lemma p5_po_1 : 
-  (3 + 4) = 7.
+  (* File "good/po.mlw", line 18, characters 1-35 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 18, characters 14-19 *) (3 + 4) = 7).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 20, characters 2-49: *)
 (*Why goal*) Lemma p6_po_1 : 
-  (3 + 4) = 7.
+  (* File "good/po.mlw", line 20, characters 1-48 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 20, characters 27-32 *) (3 + 4) = 7).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 22, characters 2-56: *)
 (*Why goal*) Lemma p7_po_1 : 
-  (3 + (4 + 4)) = 11.
+  (* File "good/po.mlw", line 22, characters 1-55 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 22, characters 14-38 *) (3 + (4 + 4)) = 11).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 26, characters 2-88: *)
 (*Why goal*) Lemma p8_po_1 : 
-  forall (x: Z),
-  forall (HW_1: (q (x + 1))),
-  forall (x0: Z),
-  forall (HW_2: x0 = (x + 1)),
-  (q x0) /\ (3 + x0) = (x + 4).
+  (* File "good/po.mlw", line 26, characters 1-87 *)
+  (forall (_:unit),
+   (forall (x:Z),
+    ((q (x + 1)) ->
+     (* File "good/po.mlw", line 27, characters 25-36 *)
+     (forall (x0:Z),
+      ((* File "good/po.mlw", line 27, characters 25-36 *) x0 = (x + 1) ->
+       (* File "good/po.mlw", line 27, characters 15-44 *) ((q x0) /\
+       (3 + x0) = (x + 4))))))).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 31, characters 2-85: *)
 (*Why goal*) Lemma p9_po_1 : 
-  forall (x: Z),
-  forall (HW_1: x = 1),
-  forall (x0: Z),
-  forall (HW_2: x0 = 2),
-  (1 + 1) = 2 /\ x0 = 2.
+  (* File "good/po.mlw", line 31, characters 1-84 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 32, characters 10-16 *)
+   (forall (x:Z),
+    ((* File "good/po.mlw", line 32, characters 10-16 *) x = 1 ->
+     (* File "good/po.mlw", line 32, characters 32-38 *)
+     (forall (x:Z),
+      ((* File "good/po.mlw", line 32, characters 32-38 *) x = 2 ->
+       (* File "good/po.mlw", line 32, characters 4-45 *) ((1 + 1) = 2 /\ x =
+       2)))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 34, characters 2-65: *)
 (*Why goal*) Lemma p9a_po_1 : 
-  forall (x: Z),
-  forall (HW_1: x = 1),
-  (1 + 1) = 2 /\ x = 1.
+  (* File "good/po.mlw", line 34, characters 1-64 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 34, characters 21-27 *)
+   (forall (x:Z),
+    ((* File "good/po.mlw", line 34, characters 21-27 *) x = 1 ->
+     (* File "good/po.mlw", line 34, characters 15-38 *) ((1 + 1) = 2 /\ x =
+     1)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 40, characters 2-39: *)
 (*Why goal*) Lemma p10_po_1 : 
-  forall (result: Z),
-  forall (HW_1: result = (0 + 1)),
-  result = 1.
+  (* File "good/po.mlw", line 40, characters 1-38 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 40, characters 15-22 *)
+   (forall (result:Z),
+    ((* File "good/po.mlw", line 40, characters 15-22 *) result = (0 + 1) ->
+     result = 1))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 42, characters 2-53: *)
 (*Why goal*) Lemma p11_po_1 : 
-  forall (result: Z),
-  forall (HW_1: result = (0 + 1)),
-  forall (result0: Z),
-  forall (HW_2: result0 = (3 + 1)),
-  (result + result0) = 5.
+  (* File "good/po.mlw", line 42, characters 1-52 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 42, characters 16-23 *)
+   (forall (result:Z),
+    ((* File "good/po.mlw", line 42, characters 16-23 *) result = (0 + 1) ->
+     (* File "good/po.mlw", line 42, characters 28-35 *)
+     (forall (result0:Z),
+      ((* File "good/po.mlw", line 42, characters 28-35 *) result0 = (3 + 1) ->
+       (* File "good/po.mlw", line 42, characters 15-36 *)
+       (result + result0) = 5))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 44, characters 2-59: *)
 (*Why goal*) Lemma p11a_po_1 : 
-  forall (result: Z),
-  forall (HW_1: result = (1 + 1)),
-  (result + result) = 4.
+  (* File "good/po.mlw", line 44, characters 1-58 *)
+  (forall (_:unit),
+   (* File "good/po.mlw", line 44, characters 25-32 *)
+   (forall (result:Z),
+    ((* File "good/po.mlw", line 44, characters 25-32 *) result = (1 + 1) ->
+     (* File "good/po.mlw", line 44, characters 37-42 *) (result + result) =
+     4))).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 50, characters 2-47: *)
 (*Why goal*) Lemma p12_po_1 : 
-  forall (x: Z),
-  forall (HW_1: x = 0),
-  forall (x0: Z),
-  forall (HW_2: x0 = (x + 1)),
-  x0 = 1.
+  (* File "good/po.mlw", line 50, characters 1-46 *)
+  (forall (_:unit),
+   (forall (x:Z),
+    (x = 0 ->
+     (* File "good/po.mlw", line 50, characters 25-35 *)
+     (forall (x0:Z),
+      ((* File "good/po.mlw", line 50, characters 25-35 *) x0 = (x + 1) ->
+       x0 = 1))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 52, characters 2-66: *)
 (*Why goal*) Lemma p13_po_1 : 
-  forall (x: Z),
-  forall (x0: Z),
-  forall (HW_1: x0 = (x + 1)),
-  forall (x1: Z),
-  forall (HW_2: x1 = (x0 + 1)),
-  x1 = (x + 2).
+  (* File "good/po.mlw", line 52, characters 1-65 *)
+  (forall (_:unit),
+   (forall (x:Z),
+    (* File "good/po.mlw", line 52, characters 21-31 *)
+    (forall (x0:Z),
+     ((* File "good/po.mlw", line 52, characters 21-31 *) x0 = (x + 1) ->
+      (* File "good/po.mlw", line 52, characters 35-45 *)
+      (forall (x1:Z),
+       ((* File "good/po.mlw", line 52, characters 35-45 *) x1 = (x0 + 1) ->
+        x1 = (x + 2))))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 54, characters 2-51: *)
 (*Why goal*) Lemma p13a_po_1 : 
-  forall (x: Z),
-  forall (x0: Z),
-  forall (HW_1: x0 = (x + 1)),
-  forall (x1: Z),
-  forall (HW_2: x1 = (x0 + 1)),
-  x1 = (x + 2).
+  (* File "good/po.mlw", line 54, characters 1-50 *)
+  (forall (_:unit),
+   (forall (x:Z),
+    (* File "good/po.mlw", line 54, characters 23-33 *)
+    (forall (x0:Z),
+     ((* File "good/po.mlw", line 54, characters 23-33 *) x0 = (x + 1) ->
+      (* File "good/po.mlw", line 54, characters 16-34 *)
+      (forall (x1:Z),
+       ((* File "good/po.mlw", line 54, characters 16-34 *) x1 = (x0 + 1) ->
+        x1 = (x + 2))))))).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 60, characters 2-53: *)
 (*Why goal*) Lemma p14_po_1 : 
-  forall (x: Z),
-  forall (HW_1: x = 0),
-  forall (result: Z),
-  forall (x0: Z),
-  forall (HW_2: x0 = (x + 1) /\ result = x0),
-  result = 1.
+  (* File "good/po.mlw", line 60, characters 1-52 *)
+  (forall (_:unit),
+   (forall (x:Z),
+    (x = 0 ->
+     (* File "good/po.mlw", line 60, characters 25-36 *)
+     (forall (result:Z),
+      (forall (x0:Z),
+       ((* File "good/po.mlw", line 60, characters 25-36 *) (x0 = (x + 1) /\
+        result = x0) -> result = 1)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 66, characters 40-44: *)
 (*Why goal*) Lemma p15_po_1 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10),
-  0 <= 0 /\ 0 < (array_length t).
+  (* File "good/po.mlw", line 66, characters 39-43 *) (0 <= 0 /\ 0 <
+  (array_length t)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 68, characters 40-49: *)
 (*Why goal*) Lemma p16_po_1 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10),
-  0 <= 9 /\ 9 < (array_length t).
+  (* File "good/po.mlw", line 68, characters 39-48 *) (0 <= 9 /\ 9 <
+  (array_length t)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 70, characters 61-65: *)
 (*Why goal*) Lemma p17_po_1 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10 /\ 0 <= (access t 0) /\ (access t 0) <
                 10),
-  0 <= 0 /\ 0 < (array_length t).
+  (* File "good/po.mlw", line 70, characters 60-64 *) (0 <= 0 /\ 0 <
+  (array_length t)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 70, characters 59-71: *)
 (*Why goal*) Lemma p17_po_2 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10 /\ 0 <= (access t 0) /\ (access t 0) <
                 10),
-  forall (HW_2: 0 <= 0 /\ 0 < (array_length t)),
+  forall (HW_2: (* File "good/po.mlw", line 70, characters 60-64 *) (0 <=
+                0 /\ 0 < (array_length t))),
   forall (result: Z),
-  forall (HW_3: result = (access t 0)),
-  0 <= result /\ result < (array_length t).
+  forall (HW_3: (* File "good/po.mlw", line 70, characters 60-64 *)
+                result = (access t 0)),
+  (* File "good/po.mlw", line 70, characters 58-70 *) (0 <= result /\
+  result < (array_length t)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 73, characters 30-59: *)
 (*Why goal*) Lemma p18_po_1 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10),
   forall (x: Z),
-  forall (HW_2: x = 0),
-  0 <= x /\ x < (array_length t).
+  forall (HW_2: (* File "good/po.mlw", line 73, characters 37-43 *) x = 0),
+  (* File "good/po.mlw", line 73, characters 29-58 *) (0 <= x /\ x <
+  (array_length t)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/po.mlw", line 73, characters 30-59: *)
 (*Why goal*) Lemma p18_po_2 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10),
   forall (x: Z),
-  forall (HW_2: x = 0),
-  forall (HW_3: 0 <= x /\ x < (array_length t)),
+  forall (HW_2: (* File "good/po.mlw", line 73, characters 37-43 *) x = 0),
+  forall (HW_3: (* File "good/po.mlw", line 73, characters 29-58 *) (0 <=
+                x /\ x < (array_length t))),
   forall (t0: (array Z)),
-  forall (HW_4: t0 = (update t x x)),
-  (access t0 0) = x.
+  forall (HW_4: (* File "good/po.mlw", line 73, characters 29-58 *)
+                t0 = (update t x x)),
+  (* File "good/po.mlw", line 73, characters 29-58 *) (access t0 0) = x.
 Proof.
 intuition.
 subst; intuition.

@@ -3,10 +3,11 @@
 
 Require Import Why.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "good/opaque.mlw", line 4, characters 13-32: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (x: Z),
-  x = 1.
+  forall (HW_2: (* File "good/opaque.mlw", line 4, characters 13-19 *) True),
+  (* File "good/opaque.mlw", line 4, characters 12-31 *) x = 1.
 Proof.
 intuition.
 Abort.

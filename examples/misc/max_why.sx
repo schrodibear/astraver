@@ -187,7 +187,7 @@
  ;; Why axiom l_pos
  (< 0 l))
 
-;; pgm_max_end_po_1, Why obligation from file "", line 0, characters 0-0:
+;; pgm_max_end_po_1, Why obligation from file "max.mlw", line 23, characters 6-211:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -198,7 +198,7 @@
 (AND (AND (<= 0 x) (< x l))
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))))))))
 
-;; pgm_max_end_po_2, Why obligation from file "", line 0, characters 0-0:
+;; pgm_max_end_po_2, Why obligation from file "max.mlw", line 27, characters 11-16:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -213,7 +213,7 @@
          (IMPLIES (AND (<= 0 k) (< k y0)) (<= (access a k) (access a x0))))))
 (IMPLIES (< y0 l) (AND (<= 0 y0) (< y0 (array_length a)))))))))))))
 
-;; pgm_max_end_po_3, Why obligation from file "", line 0, characters 0-0:
+;; pgm_max_end_po_3, Why obligation from file "max.mlw", line 27, characters 19-24:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -231,7 +231,7 @@
 (FORALL (result)
 (IMPLIES (EQ result (access a y0)) (AND (<= 0 x0) (< x0 (array_length a))))))))))))))))
 
-;; pgm_max_end_po_4, Why obligation from file "", line 0, characters 0-0:
+;; pgm_max_end_po_4, Why obligation from file "max.mlw", line 27, characters 30-37:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -263,7 +263,7 @@
 (IMPLIES (AND (<= 0 k) (< k y1)) (<= (access a k) (access a x1))))))
 (AND (<= 0 (- l y0)) (< (- l y1) (- l y0)))))))))))))))))))))))))
 
-;; pgm_max_end_po_5, Why obligation from file "", line 0, characters 0-0:
+;; pgm_max_end_po_5, Why obligation from file "max.mlw", line 28, characters 8-19:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -293,7 +293,7 @@
 (IMPLIES (AND (<= 0 k) (< k y1)) (<= (access a k) (access a x0))))))
 (AND (<= 0 (- l y0)) (< (- l y1) (- l y0)))))))))))))))))))))))
 
-;; pgm_max_end_po_6, Why obligation from file "", line 0, characters 0-0:
+;; pgm_max_end_po_6, Why obligation from file "max.mlw", line 30, characters 7-22:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
