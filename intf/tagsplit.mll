@@ -36,7 +36,10 @@
     fun tag ->
       Str.string_match r_num tag 0
 	  
+  let used_tags = Hashtbl.create 97
+
   let insert_tagged_text (tbuf:GText.buffer) (tag:string) text = 
+    Hashtbl.replace used_tags tag ();
     let it = tbuf#end_iter in
     let new_tag = Tags.get_gtktag tag in 
     tbuf#insert ~tags:[new_tag] ~iter:it text
@@ -51,10 +54,12 @@
     let s = Buffer.contents buf in
     Buffer.reset buf;
     match !current_tags with
-      | [] -> insert_text tbuf "" s
-      | p :: _ -> if (Hashtbl.mem Tags.gtktags p) 
-	then insert_tagged_text tbuf p s
-	else insert_text tbuf p s
+      | [] -> 
+	  insert_text tbuf "" s
+      | p :: _ -> 
+	  if Hashtbl.mem Tags.gtktags p
+	  then insert_tagged_text tbuf p s
+	  else insert_text tbuf p s
 
 }
 
@@ -85,3 +90,10 @@ rule split tbuf = parse
   | eof 
       { output tbuf () }
 
+
+{
+  let split buf lb =
+    Hashtbl.clear used_tags;
+    split buf lb;
+    Hashtbl.fold (fun t _ l -> t :: l) used_tags []
+}

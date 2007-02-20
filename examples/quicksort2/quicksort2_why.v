@@ -48,6 +48,12 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
+(*Why*) Parameter swap_valid :
+  forall (i: Z), forall (j: Z), forall (t: (array Z)), forall (_: (0 <= i /\
+  i < (array_length t)) /\ 0 <= j /\ j < (array_length t)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  => ((exchange t0 t i j)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_1 : 
   forall (l: Z),
@@ -88,19 +94,14 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_7: i <= r),
+  forall (HW_6: i <= r),
   0 <= i /\ i < (array_length t0).
 Proof.
 (* FILL PROOF HERE *)
@@ -116,25 +117,20 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_7: i <= r),
-  forall (HW_8: 0 <= i /\ i < (array_length t0)),
+  forall (HW_6: i <= r),
+  forall (HW_7: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_9: result0 = (access t0 i)),
-  forall (HW_10: result0 < result),
+  forall (HW_8: result0 = (access t0 i)),
+  forall (HW_9: result0 < result),
   forall (m0: Z),
-  forall (HW_11: m0 = (m + 1)),
+  forall (HW_10: m0 = (m + 1)),
   (0 <= i /\ i < (array_length t0)) /\ 0 <= m0 /\ m0 < (array_length t0).
 Proof.
 (* FILL PROOF HERE *)
@@ -150,31 +146,26 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_7: i <= r),
-  forall (HW_8: 0 <= i /\ i < (array_length t0)),
+  forall (HW_6: i <= r),
+  forall (HW_7: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_9: result0 = (access t0 i)),
-  forall (HW_10: result0 < result),
+  forall (HW_8: result0 = (access t0 i)),
+  forall (HW_9: result0 < result),
   forall (m0: Z),
-  forall (HW_11: m0 = (m + 1)),
-  forall (HW_12: (0 <= i /\ i < (array_length t0)) /\ 0 <= m0 /\ m0 <
+  forall (HW_10: m0 = (m + 1)),
+  forall (HW_11: (0 <= i /\ i < (array_length t0)) /\ 0 <= m0 /\ m0 <
                  (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_13: (exchange t1 t0 i m0)),
+  forall (HW_12: (exchange t1 t0 i m0)),
   forall (i0: Z),
-  forall (HW_14: i0 = (i + 1)),
+  forall (HW_13: i0 = (i + 1)),
   ((forall (j:Z), (l < j /\ j <= m0 -> (access t1 j) < result)) /\
   (forall (j:Z), (m0 < j /\ j < i0 -> (access t1 j) >= result)) /\
   (sub_permut l r t1 t) /\ (access t1 l) = result /\ (l <= m0 /\ m0 < i0) /\
@@ -193,25 +184,20 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_7: i <= r),
-  forall (HW_8: 0 <= i /\ i < (array_length t0)),
+  forall (HW_6: i <= r),
+  forall (HW_7: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_9: result0 = (access t0 i)),
-  forall (HW_15: result0 >= result),
+  forall (HW_8: result0 = (access t0 i)),
+  forall (HW_14: result0 >= result),
   forall (i0: Z),
-  forall (HW_16: i0 = (i + 1)),
+  forall (HW_15: i0 = (i + 1)),
   ((forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
   (forall (j:Z), (m < j /\ j < i0 -> (access t0 j) >= result)) /\
   (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\ m < i0) /\
@@ -230,19 +216,14 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_17: i > r),
+  forall (HW_16: i > r),
   (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m < (array_length t0).
 Proof.
 (* FILL PROOF HERE *)
@@ -258,23 +239,18 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_17: i > r),
-  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+  forall (HW_16: i > r),
+  forall (HW_17: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
                  (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_19: (exchange t1 t0 l m)),
+  forall (HW_18: (exchange t1 t0 l m)),
   (Zwf 0 (1 + (m - 1) - l) (1 + r - l)).
 Proof.
 (* FILL PROOF HERE *)
@@ -290,24 +266,19 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_17: i > r),
-  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+  forall (HW_16: i > r),
+  forall (HW_17: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
                  (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_19: (exchange t1 t0 l m)),
-  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  forall (HW_18: (exchange t1 t0 l m)),
+  forall (HW_19: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
   0 <= l /\ (m - 1) < (array_length t1).
 Proof.
 (* FILL PROOF HERE *)
@@ -323,27 +294,22 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_17: i > r),
-  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+  forall (HW_16: i > r),
+  forall (HW_17: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
                  (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_19: (exchange t1 t0 l m)),
-  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
-  forall (HW_21: 0 <= l /\ (m - 1) < (array_length t1)),
+  forall (HW_18: (exchange t1 t0 l m)),
+  forall (HW_19: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  forall (HW_20: 0 <= l /\ (m - 1) < (array_length t1)),
   forall (t2: (array Z)),
-  forall (HW_22: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
+  forall (HW_21: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
   (Zwf 0 (1 + r - (m + 1)) (1 + r - l)).
 Proof.
 (* FILL PROOF HERE *)
@@ -359,28 +325,23 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_17: i > r),
-  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+  forall (HW_16: i > r),
+  forall (HW_17: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
                  (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_19: (exchange t1 t0 l m)),
-  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
-  forall (HW_21: 0 <= l /\ (m - 1) < (array_length t1)),
+  forall (HW_18: (exchange t1 t0 l m)),
+  forall (HW_19: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  forall (HW_20: 0 <= l /\ (m - 1) < (array_length t1)),
   forall (t2: (array Z)),
-  forall (HW_22: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
-  forall (HW_23: (Zwf 0 (1 + r - (m + 1)) (1 + r - l))),
+  forall (HW_21: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
+  forall (HW_22: (Zwf 0 (1 + r - (m + 1)) (1 + r - l))),
   0 <= (m + 1) /\ r < (array_length t2).
 Proof.
 (* FILL PROOF HERE *)
@@ -396,31 +357,26 @@ Save.
   forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
   forall (HW_4: result = (access t l)),
-  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-                (forall (j:Z),
-                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
-                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_17: i > r),
-  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+  forall (HW_16: i > r),
+  forall (HW_17: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
                  (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_19: (exchange t1 t0 l m)),
-  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
-  forall (HW_21: 0 <= l /\ (m - 1) < (array_length t1)),
+  forall (HW_18: (exchange t1 t0 l m)),
+  forall (HW_19: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  forall (HW_20: 0 <= l /\ (m - 1) < (array_length t1)),
   forall (t2: (array Z)),
-  forall (HW_22: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
-  forall (HW_23: (Zwf 0 (1 + r - (m + 1)) (1 + r - l))),
-  forall (HW_24: 0 <= (m + 1) /\ r < (array_length t2)),
+  forall (HW_21: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
+  forall (HW_22: (Zwf 0 (1 + r - (m + 1)) (1 + r - l))),
+  forall (HW_23: 0 <= (m + 1) /\ r < (array_length t2)),
   forall (t3: (array Z)),
-  forall (HW_25: (sorted_array t3 (m + 1) r) /\ (sub_permut (m + 1) r t3 t2)),
+  forall (HW_24: (sorted_array t3 (m + 1) r) /\ (sub_permut (m + 1) r t3 t2)),
   (sorted_array t3 l r) /\ (sub_permut l r t3 t).
 Proof.
 (* FILL PROOF HERE *)
@@ -432,11 +388,18 @@ Save.
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
-  forall (HW_26: l >= r),
+  forall (HW_25: l >= r),
   (sorted_array t l r) /\ (sub_permut l r t t).
 Proof.
 (* FILL PROOF HERE *)
 Save.
+
+(*Why*) Parameter quick_rec_valid :
+  forall (l: Z), forall (r: Z), forall (t: (array Z)), forall (_: 0 <= l /\
+  r < (array_length t)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  => ((sorted_array t0 l r) /\
+    (sub_permut l r t0 t)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quicksort_po_1 : 
@@ -461,4 +424,10 @@ Save.
 Proof.
 (* FILL PROOF HERE *)
 Save.
+
+(*Why*) Parameter quicksort_valid :
+  forall (t: (array Z)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  =>
+    ((sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t)))).
 

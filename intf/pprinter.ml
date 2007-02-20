@@ -65,7 +65,7 @@ let is_cfile f =
 
 let read_file = function 
   | None -> ()
-  | Some {file=f; line=l; sp=_; ep=_} ->
+  | Some {file=f} ->
       try
 	let in_channel = open_in f in
 	begin 
@@ -136,7 +136,7 @@ let move_to_source = function
 	  !tv_source#set_buffer (Hashtbl.find files file)
 	else begin
 	  !tv_source#set_buffer (GText.buffer ());
-	  read_file (Some(loc));
+	  read_file (Some loc);
 	  Hashtbl.add files file !tv_source#buffer;
 	end;
 	move_to_line line
@@ -157,22 +157,23 @@ let rec intros ctx = function
       ctx, c
 
 let create_tag (tbuf:GText.buffer) t loc = 
-  let (fc, bc) = get_color "lpredicate" in
-  let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
-  ignore(
-    new_tag#connect#event ~callback:
-      (fun ~origin ev it -> 
-	 if GdkEvent.get_type ev = `BUTTON_PRESS then 
-	   move_to_source (Some(loc))
-	 else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
-	   Tags.refresh_last_colored [new_tag];
-	   new_tag#set_properties 
-	     [`BACKGROUND (get_bc "pr_hilight"); 
-	      `FOREGROUND (get_fc "pr_hilight")]
-	 end;
-	 false)
-  );
-  add_gtktag t new_tag
+  if not (Hashtbl.mem gtktags t) then begin
+    let (fc, bc) = get_color "lpredicate" in
+    let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
+    ignore(
+      new_tag#connect#event ~callback:
+	(fun ~origin ev it -> 
+	   if GdkEvent.get_type ev = `BUTTON_PRESS then 
+	     move_to_source (Some loc)
+	   else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
+	     Tags.refresh_last_colored [new_tag];
+	     new_tag#set_properties 
+	       [`BACKGROUND (get_bc "pr_hilight"); 
+		`FOREGROUND (get_fc "pr_hilight")]
+	   end;
+	   false));
+    add_gtktag t new_tag
+  end
 
 let create_all_tags (tbuf:GText.buffer) = 
   Hashtbl.iter (create_tag tbuf) Tags.loctags
@@ -209,17 +210,36 @@ let save_buffer s (tbuf:GText.buffer) pprint =
 
 let get_buffer = 
   Hashtbl.find obligs
+
+let color_lines tags =
+  let buf = !tv_source#buffer in
+  let top = buf#start_iter in
+  let orange_bg = buf#create_tag ~name:"orange_bg" [`BACKGROUND "orange"] in
+  (*
+  buf#remove_tag_by_name ~start:buf#start_iter ~stop:buf#end_iter "orange_bg";
+  *)
+  let color_one t = 
+    let loc = Hashtbl.find loctags t in
+    let l = int_of_string loc.line in
+    let start = top#forward_lines l in
+    let stop = start#forward_line in
+    buf#apply_tag ~start ~stop orange_bg
+  in
+  List.iter color_one tags
   
 let print_all (tbuf:GText.buffer) s p = 
   insert_text tbuf "title" (s^"\n\n");
+  (* 1. we print the text in a string, which fills the table loctags *)
   let fmt = Format.str_formatter in
   pp_set_tags fmt true;
   let str = 
     fprintf fmt "@[%a@]" print_oblig p;
     flush_str_formatter ()
   in
+  (* 2. then we create the GTK tags and map them to the tag names *)
   create_all_tags tbuf;
-  split tbuf (Lexing.from_string str);
+  (* 3. then we fill the GTK text buffer using Tagsplit.split *)
+  let utags = split tbuf (Lexing.from_string str) in
   let (_,concl) = p in
   let mytag = 
     tbuf#create_tag
@@ -239,7 +259,9 @@ let print_all (tbuf:GText.buffer) s p =
     create_all_tags tbuf;
     flush_str_formatter () 
   in
-  split tbuf (Lexing.from_string conclusion)
+  let utags' = split tbuf (Lexing.from_string conclusion) in
+  (*color_lines (utags @ utags')*)
+  ()
 
 let unchanged s pprint = 
   (not (Colors.has_changed ())) &&
@@ -297,7 +319,7 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
        * print_endline (text ^ "  " ^ (print_loc (Some(loc)))); 
        * flush stdout;
        *)
-      move_to_source (Some(loc))
+      move_to_source (Some loc)
     with Not_found -> ()
   end
     

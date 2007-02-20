@@ -13,7 +13,9 @@ let swap (t:int array)(i,j:int) =
 
 (* Maximize(t,n,x,k) is
    forall i, k <= i <= n implies t[k]<= x *) 
-external logic Maximize: int farray, int, int, int -> prop
+(*external logic Maximize: int farray, int, int, int -> prop*)
+predicate Maximize(t:int array, n:int, x:int, k:int) =
+  forall i:int. k <= i <= n -> t[k]<= x
 
 (* returns the index of the maximum element of t[0..n] *)
 let rec maximum (t:int array)(n,k,i:int): int { variant k } =

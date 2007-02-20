@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.52 2007-02-20 17:03:00 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.53 2007-02-20 21:46:58 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -38,16 +38,14 @@ let is_caduceus =
   List.exists (fun f -> Filename.basename f = "caduceus.why") Options.files 
 
 let get_files fl = 
-  let files = List.map (fun f -> Filename.chop_extension (Filename.basename f)) fl 
+  let files = 
+    List.map (fun f -> Filename.chop_extension (Filename.basename f)) fl 
   in
   List.fold_left
     (fun l f -> 
        let file = (Filename.concat (Sys.getcwd ()) f) ^ ".c" in
-       if Sys.file_exists file 
-       then file :: l
-       else l)
-    fl
-    files
+       if Sys.file_exists file then file :: l else l)
+    fl files
 
 let () =
   try
@@ -63,7 +61,8 @@ let () =
 let set_loaded_config () = 
   let l = [("cache", Cache.set_active) ; 
 	   ("hard_proof", Cache.set_hard_proof) ; 
-	   ("live_update", Tools.set_live)] in
+	   ("live_update", Tools.set_live)] 
+  in
   List.iter 
     (fun (k,f) -> 
        let v = 
@@ -72,23 +71,21 @@ let set_loaded_config () =
 	   prerr_endline ("     [...] .gwhyrc : invalid value for " ^ k); 
 	   true 
 	 end
-	 in
+       in
        (f v))
     l;
   Tools.set_timeout 
-    (try (int_of_string (Config.get_value "timeout"))
-     with _ -> 
-       begin
-	 prerr_endline ("     [...] .gwhyrc : invalid value for timeout"); 
-	 10 
-       end);
+    (try int_of_string (Config.get_value "timeout")
+     with _ -> begin
+       prerr_endline ("     [...] .gwhyrc : invalid value for timeout"); 
+       10 
+     end);
   Model.set_prover 
-    (try (Model.get_prover (Config.get_value "prover"))
-    with Model.No_such_prover -> 
-      begin
-	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
-	List.hd (Model.get_provers ())
-      end);
+    (try Model.get_prover (Config.get_value "prover")
+     with Model.No_such_prover -> begin
+       prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
+       List.hd (Model.get_provers ())
+     end);
   List.iter
     (fun (k,f,def) ->
        let v = 
@@ -182,7 +179,8 @@ let update_buffer tv =
   tv#set_buffer buf;
   buf
 
-let select_obligs (model:GTree.tree_store) (tv:GText.view) (tv_s:GText.view) selected_rows = 
+let select_obligs (model:GTree.tree_store) (tv:GText.view) 
+                  (tv_s:GText.view) selected_rows = 
   List.iter
     (fun p ->
        let row = model#get_iter p in
@@ -225,9 +223,7 @@ let build_statistics (model:GTree.tree_store) f =
     let row = Model.find_fct f
     and children = ref 0 in
     List.iter 
-      (fun p -> 
-	 model#set ~row ~column:p.Model.pr_result 0
-      ) 
+      (fun p -> model#set ~row ~column:p.Model.pr_result 0) 
       (Model.get_provers ());
     Model.iter_fobligs
       f
@@ -237,8 +233,7 @@ let build_statistics (model:GTree.tree_store) f =
 	   (fun p -> 
 	      let r = model#get ~row:r ~column:p.Model.pr_result 
 	      and u = model#get ~row ~column:p.Model.pr_result in
-	      model#set ~row ~column:p.Model.pr_result (u+r)
-	   ) 
+	      model#set ~row ~column:p.Model.pr_result (u+r)) 
 	   (Model.get_provers ()));
     let statistics = get_statistics model row 
     and total = string_of_int (get_all_results f model) 
@@ -247,7 +242,8 @@ let build_statistics (model:GTree.tree_store) f =
       ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
   with e -> 
     begin 
-      print_endline ("     [...] Error: unexcepted exception: " ^ Printexc.to_string e);
+      print_endline ("     [...] Error: unexcepted exception: " ^ 
+		       Printexc.to_string e);
       flush stdout 
     end  
 
@@ -272,7 +268,8 @@ let try_proof oblig =
 (* 
  * run a prover on an obligation and update the model 
  *)
-let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone = 
+let run_prover_child p (view:GTree.view) (model:GTree.tree_store) 
+                     o bench alone = 
   let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
   if bench or (try_proof seq) then
@@ -280,7 +277,8 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
       let row = 
 	try Hashtbl.find Model.orows oblig 
 	with Not_found -> 
-	  print_endline ("     [...] Error : obligation \""^oblig^"\" not found !"); 
+	  print_endline 
+	    ("     [...] Error : obligation \""^oblig^"\" not found !"); 
 	  flush stdout;
 	  raise Exit
       in
@@ -294,23 +292,22 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
 	| Calldp.Valid _ -> 
 	    Cache.add seq p.Model.pr_name;
 	    model#set ~row ~column:column_p `YES ; 1
-	| Calldp.Timeout _ -> model#set ~row ~column:column_p `CUT; 0
-	| Calldp.CannotDecide _ -> model#set ~row ~column:column_p `DIALOG_QUESTION; 0
+	| Calldp.Timeout _ -> 
+	    model#set ~row ~column:column_p `CUT; 0
+	| Calldp.CannotDecide _ -> 
+	    model#set ~row ~column:column_p `DIALOG_QUESTION; 0
 	| Calldp.Invalid(_,so) -> 
-	    begin
-	      (match so with
-		| None -> ()
-		| Some s -> 
-		    let name = model#get ~row ~column:Model.fullname in 
-		    Model.add_failure name p s);
-	      model#set ~row ~column:column_p `NO; 0
-	    end
+	    begin match so with
+	      | None -> ()
+	      | Some s -> 
+		  let name = model#get ~row ~column:Model.fullname in 
+		  Model.add_failure name p s
+	    end;
+	    model#set ~row ~column:column_p `NO; 0
 	| Calldp.ProverFailure(_,so) -> 
-	    begin
 	      let name = model#get ~row ~column:Model.fullname in 
 	      Model.add_failure name p so;
 	      model#set ~row ~column:column_p `PREFERENCES; 0
-	    end 
       in
       let result = get_result r in
       model#set ~row ~column:p.Model.pr_result result;
@@ -327,7 +324,8 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
     1
   end
 
-let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s bench alone () = 
+let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) 
+                     s bench alone () = 
   try 
     let oblig = Hashtbl.find Model.obligs s in
     let _ = run_prover_child p view model oblig bench alone in
@@ -358,18 +356,15 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () =
 	0
 	mychildren 
     in
-    if succeed = n then 
-      begin 
-	model#set ~row ~column:column_p `APPLY;
-	let path = model#get_path row in
-	collapse_row view path bench
-      end
-    else 
-      begin 
-	model#set ~row ~column:column_p `CANCEL;
-	let path = model#get_path row in
-	expand_row view path bench
-      end;
+    if succeed = n then begin 
+      model#set ~row ~column:column_p `APPLY;
+      let path = model#get_path row in
+      collapse_row view path bench
+    end else begin 
+      model#set ~row ~column:column_p `CANCEL;
+      let path = model#get_path row in
+      expand_row view path bench
+    end;
     if not (Tools.live_update ()) then begin 
       build_statistics model f
     end 
@@ -398,24 +393,23 @@ let main () =
 	    (let old_w = ref 0 
 	     and old_h = ref 0 in
 	     fun {Gtk.width=w;Gtk.height=h} -> 
-	       if !old_w <> w or !old_h <> h then
-		 begin
-		   old_h := h;
-		   old_w := w;
-		   Colors.window_height := h;
-		   Colors.window_width := w;
-		 end
-	    ));
-(* no effect 
-  w#misc#modify_font !general_font;
-*)  let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
+	       if !old_w <> w or !old_h <> h then begin
+		 old_h := h;
+		 old_w := w;
+		 Colors.window_height := h;
+		 Colors.window_width := w;
+	       end));
+  (* no effect 
+     w#misc#modify_font !general_font;
+  *)  
+  let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
   let vbox = GPack.vbox ~homogeneous:false ~packing:w#add () in
 
   (* Menu *)
   let menubar = GMenu.menu_bar ~packing:vbox#pack () in
-(* no effect
-  let () = menubar#misc#modify_font !general_font in
-*)
+  (* no effect
+     let () = menubar#misc#modify_font !general_font in
+  *)
   let factory = new GMenu.factory menubar in
   let accel_group = factory#accel_group in
   let file_menu = factory#add_submenu "_File" in
@@ -440,7 +434,9 @@ let main () =
       ~callback:(fun () -> Config.save ()) "Save preferences" in
   let _ =
     configuration_factory#add_item 
-      ~callback:(fun () -> Preferences.show Tools.Color unit ()) "Customize colors" in
+      ~callback:(fun () -> Preferences.show Tools.Color unit ()) 
+      "Customize colors" 
+  in
   let _ = 
     configuration_factory#add_item ~key:GdkKeysyms._plus
       ~callback:enlarge_font "Enlarge font" 
@@ -452,7 +448,9 @@ let main () =
 
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
-  let vtable = GPack.table ~row_spacings:5 ~homogeneous:false ~packing:hp#add () in
+  let vtable = 
+    GPack.table ~row_spacings:5 ~homogeneous:false ~packing:hp#add () 
+  in
   let table = GPack.table ~col_spacings:15 ~homogeneous:false () in
   let _ = vtable#attach ~left:0 ~top:0 table#coerce in
 
@@ -468,19 +466,23 @@ let main () =
   in
   let files_label = GMisc.label ~text:"Opened files" () in
   table#attach ~left:0 ~top:0 files_label#coerce;
-  let files_combo = GEdit.combo ~allow_empty:false ~popdown_strings:(get_files files)
-    ~value_in_list:true () in
+  let files_combo = 
+    GEdit.combo ~allow_empty:false ~popdown_strings:(get_files files)
+      ~value_in_list:true () 
+  in
   table#attach ~left:1 ~top:0 ~expand:`BOTH files_combo#coerce;
   let _ = files_combo#entry#set_editable false in
   
   (* left tree of proof obligations *)
-  let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:(!Colors.window_width / 2) () in
+  let scrollview = 
+    GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
+    ~width:(!Colors.window_width / 2) () 
+  in
   let _ = vtable#attach ~left:0 ~top:1 ~expand:`BOTH scrollview#coerce in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
-(* has effect but not nice 
-  let () = view#misc#modify_font !general_font in
-*)
+  (* has effect but not nice 
+     let () = view#misc#modify_font !general_font in
+  *)
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let vc_provers = View.add_columns ~view ~model in
@@ -503,8 +505,12 @@ let main () =
 		   | p::_ -> 
 		       let iter = model#get_iter p in
 		       try 
-			 let parent = model#get ~row:iter ~column:Model.parent in
-			 let row = model#get_path (Hashtbl.find Model.frows parent) in
+			 let parent = 
+			   model#get ~row:iter ~column:Model.parent 
+			 in
+			 let row = 
+			   model#get_path (Hashtbl.find Model.frows parent) 
+			 in
 			 view#expand_row row
 		       with Not_found -> ()) () 
   in
@@ -516,8 +522,12 @@ let main () =
 		   | p::_ -> 
 		       let iter = model#get_iter p in
 		       try 
-			 let parent = model#get ~row:iter ~column:Model.parent in
-			 let row = model#get_path (Hashtbl.find Model.frows parent) in
+			 let parent = 
+			   model#get ~row:iter ~column:Model.parent 
+			 in
+			 let row = 
+			   model#get_path (Hashtbl.find Model.frows parent) 
+			 in
 			 view#collapse_row row
 		       with Not_found -> ()) () 
   in
@@ -565,16 +575,22 @@ let main () =
 	 let row = model#get_iter p in
 	 let s = model#get ~row ~column:Model.fullname in 
 	 if model#iter_has_child row then
-	   prove (run_prover_fct (Model.get_default_prover ()) view model s bench)
-	 else let name = model#get ~row ~column:Model.parent in 
-	 prove (run_prover_fct (Model.get_default_prover ()) view model name bench))
+	   prove (run_prover_fct (Model.get_default_prover ()) 
+		    view model s bench)
+	 else 
+	   let name = model#get ~row ~column:Model.parent in 
+	   prove (run_prover_fct (Model.get_default_prover ()) 
+		    view model name bench))
       view#selection#get_selected_rows 
   in
   let _ = 
-    proof_factory#add_image_item ~label:"Start benchmark _on selected function" 
+    proof_factory#add_image_item 
+      ~label:"Start benchmark _on selected function" 
       ~key:GdkKeysyms._P 
       ~callback:(fun () -> 
-		   let row = model#get_iter (List.hd view#selection#get_selected_rows) in
+		   let row = 
+		     model#get_iter (List.hd view#selection#get_selected_rows) 
+		   in
 		   let s = 
 		     if model#iter_has_child row 
 		     then model#get ~row ~column:Model.fullname 
@@ -588,7 +604,8 @@ let main () =
     proof_factory#add_image_item ~label:"Prove _all obligations" 
       ~key:GdkKeysyms._A 
       ~callback:(fun () -> 
-		   prove (run_prover_all (Model.get_default_prover ()) view model false)) () 
+		   prove (run_prover_all (Model.get_default_prover ()) 
+			    view model false)) () 
   in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected _function" 
@@ -599,14 +616,16 @@ let main () =
       (fun p -> 
 	 let row = model#get_iter p in
 	 let s = model#get ~row ~column:Model.fullname in 
-	 (if model#iter_has_child row then
-	    let row = Queue.peek (Model.find_fobligs s) in
-	    let s = model#get ~row ~column:Model.fullname in
-	    prove (run_prover_oblig (Model.get_default_prover ()) view model s false true)
-	  else 
-	    prove (run_prover_oblig (Model.get_default_prover ()) view model s false true));
-      )
-      view#selection#get_selected_rows in
+	 if model#iter_has_child row then
+	   let row = Queue.peek (Model.find_fobligs s) in
+	   let s = model#get ~row ~column:Model.fullname in
+	   prove (run_prover_oblig (Model.get_default_prover ()) 
+		    view model s false true)
+	 else 
+	   prove (run_prover_oblig (Model.get_default_prover ()) 
+		    view model s false true))
+      view#selection#get_selected_rows 
+  in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected _obligation" 
       ~key:GdkKeysyms._O ~callback:oblig_callback () 
@@ -630,8 +649,9 @@ let main () =
       (fun p -> 
 	 let m = proof_factory#add_radio_item 
 	   ~active:(name = p.Model.pr_name) ~group p.Model.pr_name 
-	 in ignore(m#connect#toggled  
-		     ~callback:(fun () -> select_prover p));
+	 in 
+	 ignore(m#connect#toggled  
+		  ~callback:(fun () -> select_prover p));
 	 p,m)
       (List.tl (Model.get_provers ()))
   in 
@@ -798,7 +818,7 @@ let main () =
       begin fun ev -> 
 	let s = files_combo#entry#text in
 	let loc = {Tags.file=s; Tags.line="1"; Tags.sp="1"; Tags.ep="1"} in
-	Pprinter.move_to_source (Some(loc));
+	Pprinter.move_to_source (Some loc);
 	Pprinter.reset_last_file ();
 	false
       end
@@ -807,21 +827,24 @@ let main () =
   (*
    * Running obligation 
    *)
-  ignore (view#event#connect#button_release ~callback:
-	    (fun ev -> 
-	       if GdkEvent.Button.button ev = 3 then 
-		 List.iter 
-		   (fun p -> 
-		      let row = model#get_iter p in
-		      let s = model#get ~row ~column:Model.fullname in
-		      (if model#iter_has_child row then
-			prove (run_prover_fct (Model.get_default_prover ()) view model s false)
-		      else 
-			prove (run_prover_oblig (Model.get_default_prover ()) view model s false true));
-		   )
-		   view#selection#get_selected_rows;
-	       false
-	    ));
+  ignore 
+    (view#event#connect#button_release ~callback:
+       (fun ev -> 
+	  if GdkEvent.Button.button ev = 3 then 
+	    List.iter 
+	      (fun p -> 
+		 let row = model#get_iter p in
+		 let s = model#get ~row ~column:Model.fullname in
+		 (if model#iter_has_child row then
+		    prove (run_prover_fct (Model.get_default_prover ()) 
+			     view model s false)
+		  else 
+		    prove (run_prover_oblig (Model.get_default_prover ()) 
+			     view model s false true));
+	      )
+	      view#selection#get_selected_rows;
+	  false
+       ));
 
   (*
    * Remove default pango menu for textviews 
@@ -833,28 +856,31 @@ let main () =
   (*
    * Obligations : failed with ...
    *)
-  ignore (tv2#event#connect#button_release ~callback:
-	    (fun ev -> if (GdkEvent.Button.button ev) = 3 then 
-	       (match view#selection#get_selected_rows with
-		  | [] -> ()
-		  | p::_ ->
-		      let row = model#get_iter p in
-		      if not (model#iter_has_child row) then
-			try
-			  let name = model#get ~row ~column:Model.fullname in
-			  let failed_with = Hashtbl.find Model.fwrows name 
-			  and buffer = Buffer.create 1024 in
-			  Hashtbl.iter
-			    (fun p m -> Buffer.add_string buffer (p.Model.pr_name ^ ": \n" ^ m ^" \n\n"))
-			    failed_with;
-			  let tbuf = GText.buffer () in
-			  tv2#set_buffer tbuf;
-			  tbuf#set_text (Buffer.contents buffer);
-			  Pprinter.reset_last_file ();
-			  Buffer.clear buffer
-			with Not_found -> ()); 
-	       false));
-
+  ignore 
+    (tv2#event#connect#button_release ~callback:
+       (fun ev -> if (GdkEvent.Button.button ev) = 3 then 
+	  (match view#selection#get_selected_rows with
+	     | [] -> ()
+	     | p::_ ->
+		 let row = model#get_iter p in
+		 if not (model#iter_has_child row) then
+		   try
+		     let name = model#get ~row ~column:Model.fullname in
+		     let failed_with = Hashtbl.find Model.fwrows name 
+		     and buffer = Buffer.create 1024 in
+		     Hashtbl.iter
+		       (fun p m -> 
+			  Buffer.add_string buffer 
+			    (p.Model.pr_name ^ ": \n" ^ m ^" \n\n"))
+		       failed_with;
+		     let tbuf = GText.buffer () in
+		     tv2#set_buffer tbuf;
+		     tbuf#set_text (Buffer.contents buffer);
+		     Pprinter.reset_last_file ();
+		     Buffer.clear buffer
+		   with Not_found -> ()); 
+	  false));
+  
   (*
    * Startup configuration 
    *)
@@ -875,42 +901,43 @@ let main () =
       Hashtbl.iter 
 	(fun s (_,o,seq) -> 
 	   let cleaned = Cache.clean seq in
-	   if in_cache cleaned then
-	     begin 
-	       let row = Hashtbl.find Model.orows o in
-	       try 
-		 Queue.iter 
-		   (fun p -> 
-		      try 
-			let zecol = Model.get_prover p 
-			and parent = model#get ~row ~column:Model.parent in
-			let parent = Model.find_fct parent in
-			let r = model#get ~row:parent ~column:zecol.Model.pr_result in
-			model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
-			model#set ~row ~column:zecol.Model.pr_result 1;
-			model#set ~row ~column:Model.result 1;
-			model#set ~row:parent ~column:zecol.Model.pr_result (r+1)
-		      with Model.No_such_prover -> ()
-		   )
-		   (Cache.find cleaned)
-	       with Not_found -> 
-		 begin 
-		   print_endline ("sequent not found for "^o);
-		   flush stdout
-		 end
-	     end
+	   if in_cache cleaned then begin 
+	     let row = Hashtbl.find Model.orows o in
+	     try 
+	       Queue.iter 
+		 (fun p -> 
+		    try 
+		      let zecol = Model.get_prover p 
+		      and parent = model#get ~row ~column:Model.parent in
+		      let parent = Model.find_fct parent in
+		      let r = 
+			model#get ~row:parent ~column:zecol.Model.pr_result 
+		      in
+		      model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
+		      model#set ~row ~column:zecol.Model.pr_result 1;
+		      model#set ~row ~column:Model.result 1;
+		      model#set ~row:parent ~column:zecol.Model.pr_result (r+1)
+		    with Model.No_such_prover -> ()
+		 )
+		 (Cache.find cleaned)
+	     with Not_found -> 
+	       begin 
+		 print_endline ("sequent not found for "^o);
+		 flush stdout
+	       end
+	   end
 	) 
 	Model.obligs;
   in
   let _ = (* update statistics for functions *)
     Hashtbl.iter 
-    (fun k row -> 
-       let success = (string_of_int (get_all_results k model))
-       and n = (string_of_int (model#iter_n_children (Some(row))))
-       in let s = get_statistics model (Hashtbl.find Model.frows k)
-       in model#set ~row ~column:Model.name (k^" "^" "^success^"/"^n^" "^s)
-    )
-    Model.frows
+      (fun k row -> 
+	 let success = (string_of_int (get_all_results k model))
+	 and n = (string_of_int (model#iter_n_children (Some(row))))
+	 in let s = get_statistics model (Hashtbl.find Model.frows k)
+	 in model#set ~row ~column:Model.name (k^" "^" "^success^"/"^n^" "^s)
+      )
+      Model.frows
   in
   w#add_accel_group accel_group;
   w#show ()
@@ -919,5 +946,5 @@ let main () =
 (* Main *)
 let _ = 
   if not is_caduceus then Pprinter.desactivate ();
-  main () ;
+  main ();
   GtkThread.main ()

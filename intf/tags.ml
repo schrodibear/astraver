@@ -29,8 +29,8 @@ type loc = { file:string; line:string; sp:string; ep:string }
 let last_colored = ref [(GText.tag ())]
 let tag = ref 0
 
-let gtktags = Hashtbl.create 57
-let loctags = Hashtbl.create 57
+let gtktags = Hashtbl.create 57 (* tag id -> gtk tag *)
+let loctags = Hashtbl.create 57 (* tag id -> loc *)
 
 let tag_ref = !tag
 
