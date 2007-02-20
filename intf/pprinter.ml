@@ -32,7 +32,7 @@ open Colors
 open Tagsplit
 open Tags
 
-let obligs = Hashtbl.create 5501 (* Nombre premier de Sophie Germain *)
+let obligs = Hashtbl.create 5501
 let pprinter = Hashtbl.create 5501
 let files = Hashtbl.create 10
 let last_fct = ref ""
@@ -129,20 +129,18 @@ let move_to_source = function
       and file = loc.file in
       last_line := line;
       if !last_file = file then 
-	  move_to_line line
-      else 
-	begin 
-	  last_file := file;
-	  if (Hashtbl.mem files file) && (not (Colors.has_changed ())) then 
-	    !tv_source#set_buffer (Hashtbl.find files file)
-	  else  
-	    begin
-	      !tv_source#set_buffer (GText.buffer ());
-	      read_file (Some(loc));
-	      Hashtbl.add files file !tv_source#buffer;
-	    end;
-	  move_to_line line
-	end
+	move_to_line line
+      else begin 
+	last_file := file;
+	if (Hashtbl.mem files file) && (not (Colors.has_changed ())) then 
+	  !tv_source#set_buffer (Hashtbl.find files file)
+	else begin
+	  !tv_source#set_buffer (GText.buffer ());
+	  read_file (Some(loc));
+	  Hashtbl.add files file !tv_source#buffer;
+	end;
+	move_to_line line
+      end
 
 let rec intros ctx = function 
   | Forall (true, id, n, t, _, p) ->
@@ -154,6 +152,7 @@ let rec intros ctx = function
       let h = fresh_hyp () in 
       let ctx', concl' = intros (Spred (h, a) :: ctx) b in
       ctx', concl'
+  (* TODO: Pnamed ? *)
   | c -> 
       ctx, c
 
@@ -168,7 +167,8 @@ let create_tag (tbuf:GText.buffer) t loc =
 	 else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
 	   Tags.refresh_last_colored [new_tag];
 	   new_tag#set_properties 
-	       [`BACKGROUND (get_bc "pr_hilight"); `FOREGROUND (get_fc "pr_hilight")]
+	     [`BACKGROUND (get_bc "pr_hilight"); 
+	      `FOREGROUND (get_fc "pr_hilight")]
 	 end;
 	 false)
   );
@@ -185,8 +185,8 @@ let print_oblig fmt (ctx,concl) =
   in 
   let ctx, concl = intros ctx concl in
   let rec print_list print = function
-      | [] -> ()
-      | p::r -> print p; fprintf fmt "@\n"; print_list print r 
+    | [] -> ()
+    | p::r -> print p; fprintf fmt "@\n"; print_list print r 
   and print_name fmt id =
     let hypo_nb = hypo (Ident.string id) in
     fprintf fmt "%s" (hypothesis hypo_nb)
@@ -221,7 +221,12 @@ let print_all (tbuf:GText.buffer) s p =
   create_all_tags tbuf;
   split tbuf (Lexing.from_string str);
   let (_,concl) = p in
-  let mytag = tbuf#create_tag [`UNDERLINE `DOUBLE;`FOREGROUND (get_fc "separator"); `BACKGROUND (get_bc "separator")] in
+  let mytag = 
+    tbuf#create_tag
+      [`UNDERLINE `DOUBLE;
+       `FOREGROUND (get_fc "separator"); 
+       `BACKGROUND (get_bc "separator")] 
+  in
   tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter 
     "_                                                        _\n\n";
   let conclusion = 
@@ -232,7 +237,8 @@ let print_all (tbuf:GText.buffer) s p =
     in 
     fprintf fmt "@[@{<conclusion>%a@}@]" print_predicate concl;
     create_all_tags tbuf;
-    flush_str_formatter () in
+    flush_str_formatter () 
+  in
   split tbuf (Lexing.from_string conclusion)
 
 let unchanged s pprint = 
@@ -250,25 +256,23 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
   let buf = tv#buffer in
   let find_backward (it:GText.iter) = 
     let rec find start stop = 
-      if (start = buf#start_iter) then
+      if start = buf#start_iter then
 	start 
       else
 	let c = buf#get_text ~start ~stop () in
-	if is_ident_char c then 
-	  find (start#backward_char) start
-	else stop
-    in find (it#backward_char) it
+	if is_ident_char c then find (start#backward_char) start else stop
+    in 
+    find (it#backward_char) it
   in
   let find_forward (it:GText.iter) = 
     let rec find start stop = 
-      if (stop = buf#end_iter) then
+      if stop = buf#end_iter then
 	stop
       else
 	let c = buf#get_text ~start ~stop () in
-	if is_ident_char c then 
-	  find stop (stop#forward_char) 
-	else start
-    in find it (it#forward_char)
+	if is_ident_char c then find stop (stop#forward_char) else start
+    in 
+    find it (it#forward_char)
   in
   let buf = tv#buffer in
   let win = match tv#get_window `WIDGET with

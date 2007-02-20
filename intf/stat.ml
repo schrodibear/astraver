@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.51 2007-02-09 08:28:26 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.52 2007-02-20 17:03:00 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -765,23 +765,17 @@ let main () =
 	 | Some w -> w
        in
        let x,y = Gdk.Window.get_pointer_location win in
-       let b_x,b_y = tv1#window_to_buffer_coords 
-	 ~tag:`WIDGET 
-	 ~x 
-	 ~y 
-       in
+       let b_x,b_y = tv1#window_to_buffer_coords ~tag:`WIDGET ~x ~y in
        let it = tv1#get_iter_at_location ~x:b_x ~y:b_y in
        let tags = it#tags in
-       if tags = [] then Tags.reset_last_colored () else
-       List.iter 
-	 ( fun t ->
-	     Tags.reset_last_colored ();
-	     ignore (GtkText.Tag.event 
-		       t#as_tag
-		       tv2#as_widget
-		       e 
-		       it#as_iter))
-	 tags;
+       if tags = [] then 
+	 Tags.reset_last_colored () 
+       else
+	 List.iter 
+	   (fun t ->
+	      Tags.reset_last_colored ();
+	      ignore (GtkText.Tag.event t#as_tag tv2#as_widget e it#as_iter))
+	   tags;
        false)
   in
   

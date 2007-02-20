@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.101 2007-02-09 08:28:26 marche Exp $ i*)
+(*i $Id: wp.ml,v 1.102 2007-02-20 17:03:00 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -129,11 +129,16 @@ let is_while p =
     (forall y,v. Q' => Q) and ... and (forall y,x. Q'k => Qk)
     \end{verbatim} *)
 
-let abstract_wp (q',ql') (q,ql) res out =
+let loc_name loc = function
+  | Pnamed _ as p -> p
+  | p -> Pnamed (Loc.string loc, p)
+
+let abstract_wp loc (q',ql') (q,ql) res out =
   assert (List.length ql' = List.length ql);
   let quantify a' a res =
     let vars = match res with Some b -> b :: out | None -> out in
-    foralls ~is_wp:true vars (Pimplies (true, a'.a_value, a.a_value)) 
+    let a' = loc_name loc a'.a_value in
+    foralls ~is_wp:true vars (Pimplies (true, a', a.a_value)) 
   in
   let quantify_h (x',a') (x,a) =
     assert (x' = x);
@@ -157,7 +162,7 @@ let abstract_wp_0 (q,ql) res out =
 let opaque_wp q' q info = match q', q with
   | Some q', Some q ->
       let res = (result, info.t_result_type) in
-      let p = abstract_wp q' q res (output_info info) in
+      let p = abstract_wp info.t_loc q' q res (output_info info) in
       let p = erase_label info.t_label (erase_label "" p) in
       Some (wp_named info.t_loc p)
   | None, Some q ->
@@ -175,8 +180,9 @@ let pand_wp info w1 w2 = match w1, w2 with
   | None, Some _ -> w2
   | None, None -> None
 
-let name_wp n w = match w with
-  | Some w -> Some { w with a_value = Pnamed(n,w.a_value) }
+let name_wp loc w = match w with
+  | Some { a_value = Pnamed _ } -> w
+  | Some w -> Some { w with a_value = Pnamed(Loc.string loc, w.a_value) }
   | None -> None
 
 (*s function binders *)
@@ -190,7 +196,7 @@ let abstract_binders =
 (*s Adding precondition and obligations to the wp *)
 
 let add_to_wp loc al w =
-  let al = List.map (fun p -> p.a_value) al in
+  let al = List.map (fun p -> loc_name loc p.a_value) al in
   if al = [] then
     w
   else match w with
@@ -213,7 +219,7 @@ let rec wp p q =
   let p = change_desc p d in
   let w = option_app (asst_app (erase_label lab)) w in
   (* let w = force_wp_name w ?? *)
-  p, w
+  p, name_wp p.info.t_loc w
 
 and wp_desc info d q = 
   let result = info.t_result_name in

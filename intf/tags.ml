@@ -35,15 +35,16 @@ let loctags = Hashtbl.create 57
 let tag_ref = !tag
 
 let new_tag (l:loc) =
-    incr tag;
-    let mytag = string_of_int !tag in
-    Hashtbl.add loctags mytag l;
-    mytag
+  incr tag;
+  let mytag = string_of_int !tag in
+  Hashtbl.add loctags mytag l;
+  mytag
 
 let get_tag t = 
   try 
     Hashtbl.find loctags t
-  with Not_found -> assert false
+  with Not_found -> 
+    assert false
 
 let add_gtktag (index:string) (tag:GText.tag) = 
   Hashtbl.add gtktags index tag
@@ -51,14 +52,15 @@ let add_gtktag (index:string) (tag:GText.tag) =
 let get_gtktag index = 
   try 
     Hashtbl.find gtktags index
-  with Not_found -> assert false
-
+  with Not_found -> 
+    assert false
 
 let reset_last_colored () = 
-  List.iter (fun tag ->
-	       tag#set_properties 
-		 [`BACKGROUND (get_bc_predicate ()); `FOREGROUND (get_fc_predicate ())];
-	    )
+  List.iter 
+    (fun tag ->
+       tag#set_properties 
+	 [`BACKGROUND (get_bc_predicate ()); 
+	  `FOREGROUND (get_fc_predicate ())])
     !last_colored;
   last_colored := [GText.tag ()]
 

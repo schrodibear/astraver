@@ -616,6 +616,10 @@ let conj = match prover () with
 let asym_conj = Ident.create "why_asym_conj"
 let split_iff = Ident.create "why_split_iff"
 
+let name n = function
+  | Pnamed _ as p -> p
+  | p -> Pnamed (n, p)
+
 let rec split lvl ctx = function
   | Pand (wp, true, p1, p2) 
       when (wp || Options.split_user_conj) ->
@@ -665,7 +669,7 @@ let rec split lvl ctx = function
   | Pnamed (n, p1) as concl ->
       begin match split lvl ctx p1 with
 	| [_],_ -> [ctx,concl], (function [pr] -> pr | _ -> assert false)
-	| gl,v -> List.map (fun (ctx,c) -> ctx, Pnamed (n,c)) gl, v
+	| gl,v -> List.map (fun (ctx,c) -> ctx, name n c) gl, v
       end
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)

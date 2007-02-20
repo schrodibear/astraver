@@ -148,7 +148,8 @@ let print_predicate fmt p =
 	failwith "fpi not supported"
     | Pnamed (n, p) ->
 	(match (Tools.grab_infos n) with
-	   | None -> fprintf fmt "@[%a@]" print3 p
+	   | None -> 
+	       fprintf fmt "@[%a@]" print3 p
 	   | Some l ->
 	       let n = new_tag l in
 	       pp_open_tag fmt n;
