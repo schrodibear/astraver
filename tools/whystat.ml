@@ -110,6 +110,57 @@ let rec lexpr avoid s p = match p.pp_desc with
       let avoid = S.add id avoid in
       lexpr avoid s p
 
+
+let rec lexpr avoid s p = match p.pp_desc with
+  | PPvar id -> 
+      ident avoid s id
+  | PPapp (id, l) ->
+      let s = ident avoid s id in
+      List.fold_left (lexpr avoid) s l
+  | PPconst _
+  | PPtrue 
+  | PPfalse ->
+      s
+  | PPinfix (a, _, b) ->
+      lexpr avoid (lexpr avoid s a) b
+  | PPif (a, b, c) -> 
+      lexpr avoid (lexpr avoid (lexpr avoid s a) b) c
+  | PPprefix (_, a) 
+  | PPfpi (a, _, _) 
+  | PPnamed (_, a) ->
+      lexpr avoid s a
+  | PPforall (id,_,_,p)
+  | PPexists (id,_,p) ->
+      let avoid = S.add id avoid in
+      lexpr avoid s p
+
+
+let number_of_literals = ref 0
+
+
+let rec compute_literal_number  pr = match pr.pp_desc with
+  | PPinfix (p1,_, p2) ->
+      compute_literal_number  p1 ; 
+      compute_literal_number  p2 ; 
+  | PPif(_,p1,p2) -> 
+      compute_literal_number  p1 ; 
+      compute_literal_number  p2 ; 
+  | PPapp(_) -> 
+      number_of_literals := !number_of_literals + 1
+  | PPprefix(_,p)
+  | PPforall (_, _, _, p)
+  | PPexists (_,_,p) 
+  | PPnamed(_,p) 
+  | PPfpi(p,_,_) ->
+      compute_literal_number  p
+  | PPvar(_)   
+  | PPconst(_) ->
+      number_of_literals := !number_of_literals + 1
+  | PPtrue 
+  | PPfalse -> ()
+      
+
+
 let decl = function
   | Goal (_, _, p) ->
       let rec intros avoid p = match p.pp_desc with
@@ -118,7 +169,8 @@ let decl = function
 	| _ -> lexpr avoid S.empty p
       in
       let s = intros S.empty p in
-      M.add s
+      M.add s ; 
+      compute_literal_number p;
   | Program _
   | Parameter _
   | Exception _
@@ -131,6 +183,6 @@ let decl = function
 
 let () = 
   Queue.iter (List.iter decl) files;
-  M.print std_formatter
-
+  M.print std_formatter;
+  Printf.printf  "Goal Literal Number : %d \n" !number_of_literals 
 
