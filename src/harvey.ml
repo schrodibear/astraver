@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.44 2006-12-14 09:29:38 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.45 2007-02-21 08:46:38 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -45,14 +45,18 @@ let oblig = Queue.create ()
 
 let reset () = Queue.clear theory; Queue.clear oblig
 
-let push_decl = function
+
+let push_decl = Encoding.push
+
+
+(*let push_decl = function
   | Dgoal (loc,id,s) -> Queue.add (loc,id,s.Env.scheme_type) oblig
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory
   | Dtype _ -> ()
   | Dlogic _ -> ()
-
+*)
 (*s Pretty print *)
 
 let prefix id =
@@ -265,10 +269,33 @@ let output_obligation fmt (loc, o, s) =
   fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[%a@]@\n" output_sequent s
 
+
+let decl_to_elem = function
+  | Dgoal (loc,id,s) -> Queue.add (loc,id,s.Env.scheme_type) oblig
+(*  | Dgoal (loc, id, s) -> Queue.add (Oblig (loc, id, s)) oblig*)
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
+  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
+  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory
+  | _ -> ()
+
+
+(*let push_decl = function
+  | Dgoal (loc,id,s) -> Queue.add (loc,id,s.Env.scheme_type) oblig
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
+  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
+  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory
+  | Dtype _ -> ()
+  | Dlogic _ -> ()
+*)
+
+
+
+
 let output_file f = 
   let fname = Options.out_file (f ^ "_why.rv") in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
+  Encoding.iter decl_to_elem ;
   if Options.no_harvey_prelude then 
     fprintf fmt "()@\n" 
   else 
