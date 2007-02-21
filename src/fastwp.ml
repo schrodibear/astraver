@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.6 2007-02-12 22:57:45 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.7 2007-02-21 10:56:12 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -140,7 +140,7 @@ let wpforalls = foralls ~is_wp:true
 let ssubst_in_predicate s p = simplify (tsubst_in_predicate s p)
 
 let norm (p,_) = p
-let exn x pl = List.assoc x pl
+let exn x pl = try List.assoc x pl with Not_found -> Pfalse
 let exns e ee = List.map (fun x -> x, ee x) (get_exns e.info.t_effect)
 
 (* INPUT
@@ -155,6 +155,11 @@ let exns e ee = List.map (fun x -> x, ee x) (get_exns e.info.t_effect)
 *)
 
 let rec wp e s = 
+  let _,(_,ee),_ as r = wp0 e s in
+  assert (List.length ee = List.length (get_exns e.info.t_effect));
+  r
+
+and wp0 e s =
   (*Format.eprintf "@[wp avec %a@]@." Subst.print s;*)
   let v = result_type e in
   match e.desc with
@@ -225,7 +230,7 @@ let rec wp e s =
       let ok,(ne1,ee1),s' = wp e1 s in
       let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) al in
       let ee x = wpands (pl @ [exn x ee1]) in
-      wpands (pl@[ok]), (wpands (pl@[ne1]), exns e1 ee), s'
+      wpands (pl@[ok]), (wpands (pl@[ne1]), exns e ee), s'
   | Post (e1, q, _) ->
       (* TODO: what to do with the transparency here? *)
       let lab = e1.info.t_label in
@@ -285,8 +290,23 @@ let rec wp e s =
       Pfalse, (Pfalse, []), s
   | Loop _ ->
       assert false (*TODO*)
-  | Raise _ -> 
-      assert false (*TODO*)
+  | Raise (id, None) -> 
+      (* OK: true  
+	 N : false  
+	 E : true *)
+      Ptrue, (Pfalse, [id, Ptrue]), s
+  | Raise (id, Some e1) -> 
+      (* OK: ok(e1)
+	 N : false
+	 E : ne(e1) \/ E(e1) if E=id, E(e1) otherwise *)
+      let ok1,(ne1,ee1),s1 = wp e1 s in
+      let ee x = 
+	if x == id then 
+	  try por ne1 (List.assoc x ee1) with Not_found -> ne1
+	else
+	  try List.assoc x ee1 with Not_found -> assert false
+      in
+      ok1, (Pfalse, exns e ee), s1
   | Try _ ->
       assert false (*TODO*)
   | Rec _ ->

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.8 2006-11-03 12:49:03 marche Exp $ *)
+(* $Id: lexer.mll,v 1.9 2007-02-21 10:56:12 filliatr Exp $ *)
 
 {
   open Lexing
@@ -96,6 +96,16 @@
     | 'n' -> '\n'
     | 't' -> '\t'
     | c -> c
+
+  let update_loc lexbuf file line chars =
+    let pos = lexbuf.lex_curr_p in
+    let new_file = match file with None -> pos.pos_fname | Some s -> s in
+    lexbuf.lex_curr_p <- 
+      { pos with
+	  pos_fname = new_file;
+	  pos_lnum = int_of_string line;
+	  pos_bol = pos.pos_cnum - int_of_string chars;
+      }
 }
 
 let newline = '\n'
@@ -107,6 +117,9 @@ let ident = letter (letter | digit | '\'')*
 let float = digit+ '.' digit* | digit* '.' digit+
 
 rule token = parse
+  | "#" space* ("\"" ([^ '\010' '\013' '"' ]* as file) "\"")?
+    space* (digit+ as line) space* (digit+ as char) space* "#"
+      { update_loc lexbuf file line char; token lexbuf }
   | newline 
       { newline lexbuf; token lexbuf }
   | space+  

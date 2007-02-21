@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.9 2006-12-22 15:25:13 marche Exp $ i*)
+(*i $Id: output.mli,v 1.10 2007-02-21 10:56:12 filliatr Exp $ i*)
 
 type constant =
   | Prim_void
@@ -122,6 +122,7 @@ type expr =
   | Label of string * expr
   | BlackBox of why_type
   | Absurd 
+  | Loc of Lexing.position * expr
 ;;
 
 val make_or_expr : expr -> expr -> expr

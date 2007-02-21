@@ -7,16 +7,14 @@ Require Import Why.
 
 
 
-(* Why obligation from file "good/wpcalls.mlw", line 12, characters 6-37: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (x: Z),
   forall (x0: Z),
-  forall (HW_1: (* File "good/wpcalls.mlw", line 10, characters 6-12 *) x0 =
-                (1 - x)),
+  forall (HW_1: x0 = (1 - x)),
   forall (x1: Z),
-  forall (HW_2: (* File "good/wpcalls.mlw", line 11, characters 6-12 *) x1 =
-                (1 - x0)),
-  (* File "good/wpcalls.mlw", line 12, characters 5-36 *) x1 = x.
+  forall (HW_2: x1 = (1 - x0)),
+  x1 = x.
 Proof.
 intuition.
 Save.

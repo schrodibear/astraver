@@ -22,10 +22,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.9 2007-02-14 13:00:35 marche Exp $ i*)
+(*i $Id: output.ml,v 1.10 2007-02-21 10:56:12 filliatr Exp $ i*)
 
-open Format;;
-open Pp;;
+open Lexing
+open Format
+open Pp
 
 type constant =
   | Prim_void
@@ -360,6 +361,7 @@ type expr =
   | Label of string * expr
   | BlackBox of why_type
   | Absurd
+  | Loc of Lexing.position * expr
 ;;
 
 let make_or_expr a1 a2 =
@@ -445,7 +447,7 @@ let rec iter_expr f e =
 	iter_assertion f post;
 	List.iter (fun (_,a) -> iter_assertion f a) exceps
     | Assert(p, e) -> iter_assertion f p; iter_expr f e
-    | Label (_,e) -> iter_expr f e
+    | Label (_,e) | Loc (_,e) -> iter_expr f e
     | BlackBox(ty) -> iter_why_type f ty
     | Absurd -> ()
 
@@ -565,8 +567,12 @@ let rec fprintf_expr form e =
 	  (fprintf_type false) t
     | Absurd ->
 	fprintf form "@[<hv 0>absurd@ @]" 
-
-	  
+    | Loc (l, e) ->
+	fprintf_expr form e
+	(*
+	fprintf form "@[#%S %d %d#%a@]" l.pos_fname l.pos_lnum 
+	  (l.pos_cnum - l.pos_bol) fprintf_expr e
+	*)
 
 and fprintf_expr_list form l =
   match l with

@@ -195,19 +195,19 @@
  ;; Why axiom F_n
  (FORALL (n) (IMPLIES (>= n 2) (EQ (F n) (+ (F (- n 1)) (F (- n 2)))))))
 
-;; fib1_po_1, Why obligation from file "fib.mlw", line 21, characters 7-8:
+;; fib1_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 1) (EQ 1 (F n)))))
 
-;; fib1_po_2, Why obligation from file "fib.mlw", line 23, characters 8-20:
+;; fib1_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0) (IMPLIES (> n 1) (AND (<= 0 n) (< (- n 1) n)))))
 
-;; fib1_po_3, Why obligation from file "fib.mlw", line 23, characters 8-20:
+;; fib1_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1) (IMPLIES (AND (<= 0 n) (< (- n 1) n)) (>= (- n 1) 0)))))
 
-;; fib1_po_4, Why obligation from file "fib.mlw", line 23, characters 25-37:
+;; fib1_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -216,7 +216,7 @@
 (FORALL (result)
 (IMPLIES (EQ result (F (- n 1))) (AND (<= 0 n) (< (- n 2) n)))))))))
 
-;; fib1_po_5, Why obligation from file "fib.mlw", line 23, characters 25-37:
+;; fib1_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -226,7 +226,7 @@
 (IMPLIES (EQ result (F (- n 1)))
 (IMPLIES (AND (<= 0 n) (< (- n 2) n)) (>= (- n 2) 0)))))))))
 
-;; fib1_po_6, Why obligation from file "fib.mlw", line 23, characters 25-37:
+;; fib1_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -239,7 +239,7 @@
 (FORALL (result0)
 (IMPLIES (EQ result0 (F (- n 2))) (EQ (+ result result0) (F n)))))))))))))
 
-;; fib2_aux_po_1, Why obligation from file "fib.mlw", line 31, characters 7-9:
+;; fib2_aux_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -248,7 +248,7 @@
          (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
 (IMPLIES (EQ x n) (EQ fx (F n))))))))
 
-;; fib2_aux_po_2, Why obligation from file "fib.mlw", line 33, characters 8-37:
+;; fib2_aux_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -257,7 +257,7 @@
          (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
 (IMPLIES (NEQ x n) (AND (<= 0 (- n x)) (< (- n (+ x 1)) (- n x)))))))))
 
-;; fib2_aux_po_3, Why obligation from file "fib.mlw", line 33, characters 8-37:
+;; fib2_aux_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -269,22 +269,22 @@
 (AND (AND (<= 1 (+ x 1)) (<= (+ x 1) n))
 (AND (EQ (+ fx fx_1) (F (+ x 1))) (EQ fx (F (- (+ x 1) 1))))))))))))
 
-;; fib2_po_1, Why obligation from file "fib.mlw", line 38, characters 20-21:
+;; fib2_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 1) (EQ 1 (F n)))))
 
-;; fib2_po_2, Why obligation from file "fib.mlw", line 38, characters 28-44:
+;; fib2_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
 (AND (AND (<= 1 1) (<= 1 n)) (AND (EQ 1 (F 1)) (EQ 1 (F (- 1 1))))))))
 
-;; fib3_po_1, Why obligation from file "fib.mlw", line 50, characters 6-198:
+;; fib3_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
 (AND (AND (<= 1 1) (<= 1 n)) (AND (EQ 1 (F 1)) (EQ 1 (F (- 1 1))))))))
 
-;; fib3_po_2, Why obligation from file "fib.mlw", line 54, characters 10-17:
+;; fib3_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
@@ -303,7 +303,7 @@
 (AND (AND (<= 1 k0) (<= k0 n)) (AND (EQ x0 (F k0)) (EQ y0 (F (- k0 1)))))
 (AND (<= 0 (- n k)) (< (- n k0) (- n k))))))))))))))))))
 
-;; fib3_po_3, Why obligation from file "fib.mlw", line 59, characters 6-8:
+;; fib3_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
@@ -313,22 +313,22 @@
 (IMPLIES (AND (AND (<= 1 k) (<= k n)) (AND (EQ x (F k)) (EQ y (F (- k 1)))))
 (IMPLIES (>= k n) (EQ x (F n))))))))))
 
-;; fib3_po_4, Why obligation from file "fib.mlw", line 59, characters 6-8:
+;; fib3_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 0) (EQ 1 (F n)))))
 
-;; fib4_po_1, Why obligation from file "fib.mlw", line 71, characters 7-8:
+;; fib4_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
 (IMPLIES (<= n 1) (EQ 1 (F n))))))
 
-;; fib4_po_2, Why obligation from file "fib.mlw", line 73, characters 7-16:
+;; fib4_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
 (IMPLIES (> n 1) (AND (<= 0 0) (< 0 (array_length t)))))))
 
-;; fib4_po_3, Why obligation from file "fib.mlw", line 74, characters 7-16:
+;; fib4_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -337,7 +337,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t 0 1)) (AND (<= 0 1) (< 1 (array_length t0))))))))))
 
-;; fib4_po_4, Why obligation from file "fib.mlw", line 76, characters 7-252:
+;; fib4_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -352,7 +352,7 @@
 (AND (EQ (array_length t1) (array_length t))
 (FORALL (i) (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))))))))))))
 
-;; fib4_po_5, Why obligation from file "fib.mlw", line 80, characters 18-27:
+;; fib4_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -371,7 +371,7 @@
          (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (<= k n) (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))))))))))))))))
 
-;; fib4_po_6, Why obligation from file "fib.mlw", line 80, characters 30-39:
+;; fib4_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -394,7 +394,7 @@
 (IMPLIES (EQ result (access t2 (- k 1)))
 (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2))))))))))))))))))))
 
-;; fib4_po_7, Why obligation from file "fib.mlw", line 80, characters 9-39:
+;; fib4_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -420,7 +420,7 @@
 (IMPLIES (EQ result0 (access t2 (- k 2)))
 (AND (<= 0 k) (< k (array_length t2)))))))))))))))))))))))
 
-;; fib4_po_8, Why obligation from file "fib.mlw", line 80, characters 9-39:
+;; fib4_po_8, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -455,7 +455,7 @@
 (FORALL (i) (IMPLIES (AND (<= 0 i) (< i k0)) (EQ (access t3 i) (F i))))))
 (AND (<= 0 (- (+ n 1) k)) (< (- (+ n 1) k0) (- (+ n 1) k)))))))))))))))))))))))))))))
 
-;; fib4_po_9, Why obligation from file "fib.mlw", line 83, characters 7-11:
+;; fib4_po_9, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -474,7 +474,7 @@
          (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (> k n) (AND (<= 0 n) (< n (array_length t2)))))))))))))))))
 
-;; fib4_po_10, Why obligation from file "fib.mlw", line 83, characters 7-11:
+;; fib4_po_10, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))

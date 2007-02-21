@@ -252,7 +252,7 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; binary_search_po_1, Why obligation from file "bsearch.mlw", line 16, characters 6-472:
+;; binary_search_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (>= (array_length t) 1)
          (sorted_array t 1 (- (array_length t) 1)))
@@ -272,7 +272,7 @@
 (IMPLIES (EQ (In t 1 (- (array_length t) 1)) |@true|)
 (EQ (In t l u) |@true|))) (IMPLIES (> p 0) (EQ (access t p) v))))))))))))))))
 
-;; binary_search_po_2, Why obligation from file "bsearch.mlw", line 23, characters 8-201:
+;; binary_search_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (>= (array_length t) 1)
          (sorted_array t 1 (- (array_length t) 1)))
@@ -297,7 +297,7 @@
 (IMPLIES (<= l0 u0)
 (FORALL (m) (IMPLIES (EQ m (mean l0 u0)) (AND (<= l0 m) (<= m u0)))))))))))))))))))
 
-;; binary_search_po_3, Why obligation from file "bsearch.mlw", line 24, characters 11-16:
+;; binary_search_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (>= (array_length t) 1)
          (sorted_array t 1 (- (array_length t) 1)))
@@ -324,7 +324,7 @@
 (IMPLIES (EQ m (mean l0 u0))
 (IMPLIES (AND (<= l0 m) (<= m u0)) (AND (<= 0 m) (< m (array_length t)))))))))))))))))))))
 
-;; binary_search_po_4, Why obligation from file "bsearch.mlw", line 25, characters 10-21:
+;; binary_search_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (>= (array_length t) 1)
          (sorted_array t 1 (- (array_length t) 1)))
@@ -366,7 +366,7 @@
 (EQ (In t l1 u0) |@true|))) (IMPLIES (> p0 0) (EQ (access t p0) v))))))
 (AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u0) l1) (- (+ 2 u0) l0))))))))))))))))))))))))))))
 
-;; binary_search_po_5, Why obligation from file "bsearch.mlw", line 27, characters 10-21:
+;; binary_search_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (>= (array_length t) 1)
          (sorted_array t 1 (- (array_length t) 1)))
@@ -412,7 +412,7 @@
 (EQ (In t l0 u1) |@true|))) (IMPLIES (> p0 0) (EQ (access t p0) v))))))
 (AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u1) l0) (- (+ 2 u0) l0))))))))))))))))))))))))))))))))
 
-;; binary_search_po_6, Why obligation from file "bsearch.mlw", line 29, characters 10-17:
+;; binary_search_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (>= (array_length t) 1)
          (sorted_array t 1 (- (array_length t) 1)))
@@ -460,7 +460,7 @@
 (EQ (In t l1 u0) |@true|))) (IMPLIES (> p1 0) (EQ (access t p1) v))))))
 (AND (<= 0 (- (+ 2 u0) l0)) (< (- (+ 2 u0) l1) (- (+ 2 u0) l0))))))))))))))))))))))))))))))))))
 
-;; binary_search_po_7, Why obligation from file "bsearch.mlw", line 16, characters 6-472:
+;; binary_search_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (>= (array_length t) 1)
          (sorted_array t 1 (- (array_length t) 1)))

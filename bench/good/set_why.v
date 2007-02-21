@@ -3,114 +3,98 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/set.mlw", line 9, characters 50-51: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (x: Z),
-  forall (HW_2: (* File "good/set.mlw", line 9, characters 16-35 *) (x = 0 /\
-                x <> 0)),
-  (* File "good/set.mlw", line 9, characters 49-50 *) 2 = 1.
+  forall (HW_2: x = 0 /\ x <> 0),
+  2 = 1.
 Proof.
 intuition.
 Save.
 
 
-(* Why obligation from file "good/set.mlw", line 18, characters 6-17: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p2_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
   forall (y0: Z),
   forall (HW_2: y0 >= 0),
   forall (x: Z),
-  forall (HW_3: (* File "good/set.mlw", line 16, characters 10-31 *) (x =
-                y0 /\ x <> 0)),
+  forall (HW_3: x = y0 /\ x <> 0),
   forall (y1: Z),
-  forall (HW_4: (* File "good/set.mlw", line 18, characters 5-16 *)
-                y1 = (y0 - 1)),
-  (* File "good/set.mlw", line 18, characters 5-16 *) (y1 >= 0 /\
-  (Zwf 0 y1 y0)).
+  forall (HW_4: y1 = (y0 - 1)),
+  y1 >= 0 /\ (Zwf 0 y1 y0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/set.mlw", line 16, characters 4-97: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p2_po_2 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
   forall (y0: Z),
   forall (HW_2: y0 >= 0),
   forall (x: Z),
-  forall (HW_5: (* File "good/set.mlw", line 16, characters 10-31 *) (x =
-                y0 /\ x = 0)),
-  (* File "good/set.mlw", line 16, characters 3-96 *) y0 = 0.
+  forall (HW_5: x = y0 /\ x = 0),
+  y0 = 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/set.mlw", line 24, characters 45-46: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p3_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
   forall (y0: Z),
   forall (HW_2: y0 >= 0),
   forall (x: Z),
-  forall (HW_3: (* File "good/set.mlw", line 24, characters 18-39 *) (x =
-                y0 /\ x <> 0)),
+  forall (HW_3: x = y0 /\ x <> 0),
   forall (y1: Z),
-  forall (HW_4: (* File "good/set.mlw", line 26, characters 5-16 *)
-                y1 = (y0 - 1)),
-  (* File "good/set.mlw", line 24, characters 44-45 *)
-  (* File "good/set.mlw", line 26, characters 5-16 *) (y1 >= 0 /\
-  (Zwf 0 y1 y0)).
+  forall (HW_4: y1 = (y0 - 1)),
+  y1 >= 0 /\ (Zwf 0 y1 y0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/set.mlw", line 24, characters 45-46: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p3_po_2 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
   forall (y0: Z),
   forall (HW_2: y0 >= 0),
   forall (x: Z),
-  forall (HW_5: (* File "good/set.mlw", line 24, characters 18-39 *) (x =
-                y0 /\ x = 0)),
-  (* File "good/set.mlw", line 24, characters 44-45 *)
-  (* File "good/set.mlw", line 24, characters 3-109 *) y0 = 0.
+  forall (HW_5: x = y0 /\ x = 0),
+  y0 = 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/set.mlw", line 34, characters 6-10: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p4_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 1),
   forall (y0: Z),
   forall (HW_2: y0 >= 1),
   forall (y1: Z),
-  forall (HW_3: (* File "good/set.mlw", line 32, characters 15-26 *)
-                y1 = (y0 - 1)),
+  forall (HW_3: y1 = (y0 - 1)),
   forall (x: Z),
-  forall (HW_4: (* File "good/set.mlw", line 32, characters 29-50 *) (x =
-                y1 /\ x <> 0)),
-  (* File "good/set.mlw", line 34, characters 5-9 *) (y1 >= 1 /\
-  (Zwf 0 y1 y0)).
+  forall (HW_4: x = y1 /\ x <> 0),
+  y1 >= 1 /\ (Zwf 0 y1 y0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/set.mlw", line 32, characters 4-112: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p4_po_2 : 
   forall (y: Z),
   forall (HW_1: y >= 1),
   forall (y0: Z),
   forall (HW_2: y0 >= 1),
   forall (y1: Z),
-  forall (HW_3: (* File "good/set.mlw", line 32, characters 15-26 *)
-                y1 = (y0 - 1)),
+  forall (HW_3: y1 = (y0 - 1)),
   forall (x: Z),
-  forall (HW_5: (* File "good/set.mlw", line 32, characters 29-50 *) (x =
-                y1 /\ x = 0)),
-  (* File "good/set.mlw", line 32, characters 3-111 *) y1 = 0.
+  forall (HW_5: x = y1 /\ x = 0),
+  y1 = 0.
 Proof.
 intuition.
 Save.

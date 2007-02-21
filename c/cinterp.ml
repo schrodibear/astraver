@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.228 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.229 2007-02-21 10:56:10 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -858,6 +858,10 @@ let bin_op op t1 t2 = match op, t1, t2 with
 
 
 let rec interp_expr e =
+  let w = interp_expr_loc e in
+  if e.nexpr_loc = Loc.dummy_position then w else Loc (fst e.nexpr_loc, w)
+
+and interp_expr_loc e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
 	Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c)))
@@ -1033,7 +1037,10 @@ let rec interp_expr e =
 	make_app "malloc_parameter" [interp_expr e]
 
 and interp_boolean_expr e =
-  match e.nexpr_node with
+  let w = interp_boolean_expr_loc e in
+  if e.nexpr_loc = Loc.dummy_position then w else Loc (fst e.nexpr_loc, w)
+
+and interp_boolean_expr_loc e = match e.nexpr_node with
     | NEbinary(e1, (Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
 		   |Blt_float _ | Bgt_float _ | Ble_float _ | Bge_float _ 
 		   |Beq_float _ | Bneq_float _
@@ -1745,7 +1752,11 @@ let append_block e (f,l) = (append e f,l)
 
 (* [ab] indicates if returns are abrupt *)
 
-let rec interp_statement ab may_break stat = match stat.nst_node with
+let rec interp_statement ab may_break stat = 
+  let e = interp_statement_loc ab may_break stat in
+  if stat.nst_loc = Loc.dummy_position then e else Loc (fst stat.nst_loc, e)
+
+and interp_statement_loc ab may_break stat = match stat.nst_node with
   | NSnop -> 
       Void
   | NSexpr e ->

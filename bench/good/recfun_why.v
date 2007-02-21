@@ -3,207 +3,184 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/recfun.mlw", line 7, characters 31-39: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_po_1 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 7, characters 18-23 *) x > 0),
-  (* File "good/recfun.mlw", line 7, characters 30-38 *) (Zwf 0 (x - 1) x).
+  forall (HW_2: x > 0),
+  (Zwf 0 (x - 1) x).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 7, characters 31-39: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_po_2 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 7, characters 18-23 *) x > 0),
-  forall (HW_3: (* File "good/recfun.mlw", line 7, characters 30-38 *)
-                (Zwf 0 (x - 1) x)),
-  (* File "good/recfun.mlw", line 7, characters 30-38 *) (x - 1) >= 0.
+  forall (HW_2: x > 0),
+  forall (HW_3: (Zwf 0 (x - 1) x)),
+  (x - 1) >= 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 7, characters 46-47: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_po_3 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
-  forall (HW_6: (* File "good/recfun.mlw", line 7, characters 18-23 *) x <= 0),
-  (* File "good/recfun.mlw", line 7, characters 45-46 *) x = 0.
+  forall (HW_6: x <= 0),
+  x = 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 14, characters 51-58: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_po_1 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 14, characters 18-24 *) x > 0),
+  forall (HW_2: x > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 14, characters 36-47 *)
-                x0 = (x - 1)),
-  (* File "good/recfun.mlw", line 14, characters 50-57 *) (Zwf 0 x0 x).
+  forall (HW_3: x0 = (x - 1)),
+  (Zwf 0 x0 x).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 14, characters 51-58: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_po_2 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 14, characters 18-24 *) x > 0),
+  forall (HW_2: x > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 14, characters 36-47 *)
-                x0 = (x - 1)),
-  forall (HW_4: (* File "good/recfun.mlw", line 14, characters 50-57 *)
-                (Zwf 0 x0 x)),
-  (* File "good/recfun.mlw", line 14, characters 50-57 *) x0 >= 0.
+  forall (HW_3: x0 = (x - 1)),
+  forall (HW_4: (Zwf 0 x0 x)),
+  x0 >= 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 14, characters 16-63: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_po_3 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
-  forall (HW_7: (* File "good/recfun.mlw", line 14, characters 18-24 *) x <=
-                0),
-  (* File "good/recfun.mlw", line 14, characters 15-62 *) x = 0.
+  forall (HW_7: x <= 0),
+  x = 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 19, characters 50-58: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_1 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 19, characters 18-23 *) a > 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 19, characters 35-46 *)
-                x0 = (x + 1)),
-  (* File "good/recfun.mlw", line 19, characters 49-57 *) (Zwf 0 (a - 1) a).
+  forall (HW_3: x0 = (x + 1)),
+  (Zwf 0 (a - 1) a).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 19, characters 50-58: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_2 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 19, characters 18-23 *) a > 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 19, characters 35-46 *)
-                x0 = (x + 1)),
-  forall (HW_4: (* File "good/recfun.mlw", line 19, characters 49-57 *)
-                (Zwf 0 (a - 1) a)),
-  (* File "good/recfun.mlw", line 19, characters 49-57 *) (a - 1) >= 0.
+  forall (HW_3: x0 = (x + 1)),
+  forall (HW_4: (Zwf 0 (a - 1) a)),
+  (a - 1) >= 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 19, characters 50-58: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_3 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 19, characters 18-23 *) a > 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 19, characters 35-46 *)
-                x0 = (x + 1)),
-  forall (HW_4: (* File "good/recfun.mlw", line 19, characters 49-57 *)
-                (Zwf 0 (a - 1) a)),
-  forall (HW_5: (* File "good/recfun.mlw", line 19, characters 49-57 *)
-                (a - 1) >= 0),
+  forall (HW_3: x0 = (x + 1)),
+  forall (HW_4: (Zwf 0 (a - 1) a)),
+  forall (HW_5: (a - 1) >= 0),
   forall (x1: Z),
-  forall (HW_6: (* File "good/recfun.mlw", line 19, characters 49-57 *) x1 =
-                (x0 + (a - 1))),
-  (* File "good/recfun.mlw", line 19, characters 49-57 *) x1 = (x + a).
+  forall (HW_6: x1 = (x0 + (a - 1))),
+  x1 = (x + a).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 19, characters 16-63: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_4 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_7: (* File "good/recfun.mlw", line 19, characters 18-23 *) a <=
-                0),
-  (* File "good/recfun.mlw", line 19, characters 15-62 *) x = (x + a).
+  forall (HW_7: a <= 0),
+  x = (x + a).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 25, characters 53-57: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_1 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 25, characters 7-13 *) a > 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 25, characters 25-36 *)
-                x0 = (x + 1)),
+  forall (HW_3: x0 = (x + 1)),
   forall (a0: Z),
-  forall (HW_4: (* File "good/recfun.mlw", line 25, characters 38-49 *)
-                a0 = (a - 1)),
-  (* File "good/recfun.mlw", line 25, characters 52-56 *) (Zwf 0 a0 a).
+  forall (HW_4: a0 = (a - 1)),
+  (Zwf 0 a0 a).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 25, characters 53-57: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_2 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 25, characters 7-13 *) a > 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 25, characters 25-36 *)
-                x0 = (x + 1)),
+  forall (HW_3: x0 = (x + 1)),
   forall (a0: Z),
-  forall (HW_4: (* File "good/recfun.mlw", line 25, characters 38-49 *)
-                a0 = (a - 1)),
-  forall (HW_5: (* File "good/recfun.mlw", line 25, characters 52-56 *)
-                (Zwf 0 a0 a)),
-  (* File "good/recfun.mlw", line 25, characters 52-56 *) a0 >= 0.
+  forall (HW_4: a0 = (a - 1)),
+  forall (HW_5: (Zwf 0 a0 a)),
+  a0 >= 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 25, characters 53-57: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_3 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_2: (* File "good/recfun.mlw", line 25, characters 7-13 *) a > 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (HW_3: (* File "good/recfun.mlw", line 25, characters 25-36 *)
-                x0 = (x + 1)),
+  forall (HW_3: x0 = (x + 1)),
   forall (a0: Z),
-  forall (HW_4: (* File "good/recfun.mlw", line 25, characters 38-49 *)
-                a0 = (a - 1)),
-  forall (HW_5: (* File "good/recfun.mlw", line 25, characters 52-56 *)
-                (Zwf 0 a0 a)),
-  forall (HW_6: (* File "good/recfun.mlw", line 25, characters 52-56 *) a0 >=
-                0),
+  forall (HW_4: a0 = (a - 1)),
+  forall (HW_5: (Zwf 0 a0 a)),
+  forall (HW_6: a0 >= 0),
   forall (x1: Z),
-  forall (HW_7: (* File "good/recfun.mlw", line 25, characters 52-56 *) x1 =
-                (x0 + a0)),
-  (* File "good/recfun.mlw", line 25, characters 52-56 *) x1 = (x + a).
+  forall (HW_7: x1 = (x0 + a0)),
+  x1 = (x + a).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", line 25, characters 5-62: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_4 : 
   forall (a: Z),
   forall (x: Z),
   forall (HW_1: a >= 0),
-  forall (HW_8: (* File "good/recfun.mlw", line 25, characters 7-13 *) a <= 0),
-  (* File "good/recfun.mlw", line 25, characters 4-61 *) x = (x + a).
+  forall (HW_8: a <= 0),
+  x = (x + a).
 Proof.
 intuition.
 Save.

@@ -3,55 +3,37 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/see.mlw", line 6, characters 2-71: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_po_1 : 
-  (* File "good/see.mlw", line 6, characters 1-70 *)
-  (forall (_:unit),
-   (forall (b:Z),
-    (* File "good/see.mlw", line 7, characters 9-20 *)
-    (forall (b0:Z),
-     ((* File "good/see.mlw", line 7, characters 9-20 *) b0 = (1 - b) ->
-      (* File "good/see.mlw", line 7, characters 22-24 *) (b0 = b0 /\ b0 =
-      (1 - b)))))).
+  forall (b: Z),
+  forall (b0: Z),
+  forall (HW_1: b0 = (1 - b)),
+  b0 = b0 /\ b0 = (1 - b).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/see.mlw", line 9, characters 2-137: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma k_po_1 : 
-  (* File "good/see.mlw", line 9, characters 1-136 *)
-  (forall (_:unit),
-   (* File "good/see.mlw", line 11, characters 5-11 *)
-   (forall (b:Z),
-    ((* File "good/see.mlw", line 11, characters 5-11 *) b = 0 ->
-     (* File "good/see.mlw", line 12, characters 17-23 *)
-     (forall (result:Z),
-      (forall (b0:Z),
-       ((* File "good/see.mlw", line 12, characters 17-23 *) (result = b0 /\
-        b0 = (1 - b)) ->
-        (* File "good/see.mlw", line 12, characters 29-35 *)
-        (forall (result0:Z),
-         (forall (b:Z),
-          ((* File "good/see.mlw", line 12, characters 29-35 *) (result0 =
-           b /\ b = (1 - b0)) ->
-           (* File "good/see.mlw", line 12, characters 5-36 *)
-           (forall (b1:Z),
-            ((* File "good/see.mlw", line 12, characters 5-36 *)
-             b1 = (1 - result + result0) ->
-             (* File "good/see.mlw", line 13, characters 12-18 *)
-             (forall (result:Z),
-              (forall (b0:Z),
-               ((* File "good/see.mlw", line 13, characters 12-18 *)
-                (result = b0 /\ b0 = (1 - b)) ->
-                (* File "good/see.mlw", line 13, characters 28-34 *)
-                (forall (result0:Z),
-                 (forall (b:Z),
-                  ((* File "good/see.mlw", line 13, characters 28-34 *)
-                   (result0 = b /\ b = (1 - b0)) ->
-                   (* File "good/see.mlw", line 13, characters 5-36 *)
-                   (forall (b2:Z),
-                    ((* File "good/see.mlw", line 13, characters 5-36 *)
-                     b2 = (result * (1 - result0)) -> b1 = 0 /\ b2 = 1))))))))))))))))))).
+  forall (b: Z),
+  forall (HW_1: b = 0),
+  forall (result: Z),
+  forall (b0: Z),
+  forall (HW_2: result = b0 /\ b0 = (1 - b)),
+  forall (result0: Z),
+  forall (b1: Z),
+  forall (HW_3: result0 = b1 /\ b1 = (1 - b0)),
+  forall (b1_0: Z),
+  forall (HW_4: b1_0 = (1 - result + result0)),
+  forall (result1: Z),
+  forall (b2: Z),
+  forall (HW_5: result1 = b2 /\ b2 = (1 - b1)),
+  forall (result2: Z),
+  forall (b3: Z),
+  forall (HW_6: result2 = b3 /\ b3 = (1 - b2)),
+  forall (b2_0: Z),
+  forall (HW_7: b2_0 = (result1 * (1 - result2))),
+  b1_0 = 0 /\ b2_0 = 1.
 Proof.
 intuition; subst; trivial.
 Save.

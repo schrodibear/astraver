@@ -261,7 +261,7 @@
  (IMPLIES (EQ (permutation t2 t3 l r) |@true|)
  (EQ (permutation t1 t3 l r) |@true|)))))))))
 
-;; swap_po_1, Why obligation from file "flag_ax.mlw", line 63, characters 4-13:
+;; swap_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (i)
 (FORALL (j)
 (FORALL (t)
@@ -277,7 +277,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (upd t i result0)) (AND (<= 0 j) (< j (length t0))))))))))))))))
 
-;; swap_po_2, Why obligation from file "flag_ax.mlw", line 63, characters 4-13:
+;; swap_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (i)
 (FORALL (j)
 (FORALL (t)
@@ -297,7 +297,7 @@
 (IMPLIES (EQ t1 (upd t0 j result))
 (EQ t1 (upd (upd t i (acc t j)) j (acc t i)))))))))))))))))))
 
-;; dutch_flag_po_1, Why obligation from file "flag_ax.mlw", line 73, characters 4-577:
+;; dutch_flag_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)
@@ -312,7 +312,7 @@
 (AND (FORALL (k) (IMPLIES (AND (<= 0 k) (< k n)) (is_color (acc t k))))
 (EQ (permutation t t 0 (- n 1)) |@true|)))))))))))
 
-;; dutch_flag_po_2, Why obligation from file "flag_ax.mlw", line 82, characters 20-28:
+;; dutch_flag_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)
@@ -333,7 +333,7 @@
          (EQ (permutation t0 t 0 (- n 1)) |@true|))))))))
 (IMPLIES (< i r) (AND (<= 0 i) (< i (length t0))))))))))))
 
-;; dutch_flag_po_3, Why obligation from file "flag_ax.mlw", line 83, characters 9-21:
+;; dutch_flag_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)
@@ -359,7 +359,7 @@
 (IMPLIES (EQ result blue)
 (AND (AND (<= 0 b) (< b (length t0))) (AND (<= 0 i) (< i (length t0)))))))))))))))))
 
-;; dutch_flag_po_4, Why obligation from file "flag_ax.mlw", line 83, characters 9-21:
+;; dutch_flag_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)
@@ -402,7 +402,7 @@
 (EQ (permutation t1 t 0 (- n 1)) |@true|))))))))
 (AND (<= 0 (- r i)) (< (- r i0) (- r i))))))))))))))))))))))))
 
-;; dutch_flag_po_5, Why obligation from file "flag_ax.mlw", line 87, characters 9-20:
+;; dutch_flag_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)
@@ -443,7 +443,7 @@
 (EQ (permutation t0 t 0 (- n 1)) |@true|))))))))
 (AND (<= 0 (- r i)) (< (- r i0) (- r i)))))))))))))))))))))))
 
-;; dutch_flag_po_6, Why obligation from file "flag_ax.mlw", line 90, characters 9-21:
+;; dutch_flag_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)
@@ -475,7 +475,7 @@
 (IMPLIES (EQ r0 (- r 1))
 (AND (AND (<= 0 r0) (< r0 (length t0))) (AND (<= 0 i) (< i (length t0)))))))))))))))))))))))
 
-;; dutch_flag_po_7, Why obligation from file "flag_ax.mlw", line 90, characters 9-21:
+;; dutch_flag_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)
@@ -520,7 +520,7 @@
 (EQ (permutation t1 t 0 (- n 1)) |@true|))))))))
 (AND (<= 0 (- r i)) (< (- r0 i) (- r i))))))))))))))))))))))))))
 
-;; dutch_flag_po_8, Why obligation from file "flag_ax.mlw", line 73, characters 4-577:
+;; dutch_flag_po_8, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n)

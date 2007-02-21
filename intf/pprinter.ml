@@ -260,7 +260,7 @@ let print_all (tbuf:GText.buffer) s p =
     flush_str_formatter () 
   in
   let utags' = split tbuf (Lexing.from_string conclusion) in
-  (*color_lines (utags @ utags')*)
+  (*color_lines (utags @ utags');*)
   ()
 
 let unchanged s pprint = 

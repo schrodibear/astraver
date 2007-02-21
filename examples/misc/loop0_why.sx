@@ -183,10 +183,10 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; p_po_1, Why obligation from file "loop0.mlw", line 13, characters 4-91:
+;; p_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x) (IMPLIES (>= x 0) (AND (<= 0 x) (<= x x))))
 
-;; p_po_2, Why obligation from file "loop0.mlw", line 15, characters 6-17:
+;; p_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (x0)
@@ -196,7 +196,7 @@
 (IMPLIES (EQ x1 (- x0 1))
 (AND (AND (<= 0 x1) (<= x1 x)) (AND (<= 0 x0) (< x1 x0))))))))))
 
-;; p_po_3, Why obligation from file "loop0.mlw", line 13, characters 4-91:
+;; p_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (x0)
