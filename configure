@@ -2409,7 +2409,7 @@ echo "${ECHO_T}$COQVERSION" >&6; }
 	WHYLIBCOQ=lib/coq
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
 	case $COQVERSION in
-	trunk)
+	8.1*|trunk)
 	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
 	*)
 	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;

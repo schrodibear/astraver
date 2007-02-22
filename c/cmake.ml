@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.45 2007-02-20 17:14:42 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.46 2007-02-22 16:43:48 marche Exp $ i*)
 
 open Format
 open Pp
@@ -64,7 +64,7 @@ let generic f targets =
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
 
-       fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
+       fprintf fmt "coq: coq.depend %a@\n@\n" (print_files coq_vo) targets;
 
        fprintf fmt "coq/%%_spec_why.v: why/%%_spec.why@\n";
        fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export Caduceus.\" $(CADULIB)/why/$(CADULIBFILE) why/$*_spec.why@\n@\n";
@@ -134,7 +134,7 @@ let generic f targets =
        fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "-include %s.depend@\n@\n" f;
-       fprintf fmt "depend: coq/%s_spec_why.v %a@\n" f
+       fprintf fmt "coq.depend: coq/%s_spec_why.v %a@\n" f
 	 (print_files coq_v) targets;
        fprintf fmt "\t-$(COQDEP) -I coq coq/%s*_why.v > %s.depend@\n@\n" f f;
        fprintf fmt "clean:@\n";
