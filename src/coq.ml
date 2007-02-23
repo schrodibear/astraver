@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.158 2007-02-15 15:52:43 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.159 2007-02-23 09:03:05 marche Exp $ i*)
 
 open Options
 open Logic
@@ -172,7 +172,7 @@ let print_term_v7 fmt t =
     | Tvar id | Tapp (id, [], []) -> 
 	Ident.print fmt id
     | Tapp (id, [], i) ->
-	fprintf fmt "(@[%a %a@])" Ident.print id instance i
+	fprintf fmt "(@[@@%a %a@])" Ident.print id instance i
     | Tderef _ ->
 	assert false
     | Tapp (id, [t], _) when id == t_neg_int ->
@@ -460,7 +460,7 @@ let print_term_v8 fmt t =
     | Tvar id | Tapp (id, [], []) -> 
 	Ident.print fmt id
     | Tapp (id, [], i) ->
-	fprintf fmt "(@[%a %a@])" Ident.print id instance i
+	fprintf fmt "(@[@@%a %a@])" Ident.print id instance i
     | Tderef _ ->
 	assert false
     | Tapp (id, [a;b], _) when id == t_pow_real ->
@@ -777,17 +777,24 @@ let reprint_logic fmt id t =
 let polymorphic t = not (Env.Vset.is_empty t.Env.scheme_vars)
 
 let implicits_for_logic_type t = match t.Env.scheme_type with
-  | Function ([], _) | Predicate [] -> false
+  | Predicate [] -> false
   | Function _ | Predicate _ -> polymorphic t
 let implicits_for_predicate t = 
   let (bl,_) = t.Env.scheme_type in bl <> [] && polymorphic t
-let implicits_for_function t = 
-  let (bl,_,_) = t.Env.scheme_type in bl <> [] && polymorphic t
+let is_logic_constant t = match t.Env.scheme_type with
+  | Function ([],_) -> true
+  | Function _ | Predicate _ -> false
 
 let print_logic fmt id t =
   reprint_logic fmt id t;
   fprintf fmt "Admitted.@\n";
-  if implicits_for_logic_type t then fprintf fmt "Implicit Arguments %s.@\n" id
+  if implicits_for_logic_type t then 
+    begin
+      let b = is_logic_constant t in
+      if b then fprintf fmt "Set Contextual Implicit.@\n";
+      fprintf fmt "Implicit Arguments %s.@\n" id;
+      if b then fprintf fmt "Unset Contextual Implicit.@\n";
+    end
 
 let print_predicate_scheme fmt p =
   let (l,p) = Env.specialize_predicate p in
@@ -856,8 +863,13 @@ let reprint_function fmt id p =
 
 let print_function fmt id p = 
   reprint_function fmt id p;
-  if implicits_for_function p then fprintf fmt "Implicit Arguments %s.@\n" id
-
+  if polymorphic p then 
+    begin
+      let b = let (bl,_,_) = p.Env.scheme_type in bl = [] in
+      if b then fprintf fmt "Set Contextual Implicit.@\n";
+      fprintf fmt "Implicit Arguments %s.@\n" id;
+      if b then fprintf fmt "Unset Contextual Implicit.@\n";
+    end
 
 open Regen
 

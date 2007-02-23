@@ -94,7 +94,7 @@ Admitted.
 (*Why predicate*) Definition llist  (tl_global:((memory) ((pointer) global)
   global)) (alloc:alloc_table) (p:((pointer) global)) (l:plist)
   := (* File "list.h", line 63, characters 40-56 *)
-     (lpath tl_global alloc p l null).
+     (lpath tl_global alloc p l (@null global)).
 
 (*Why predicate*) Definition is_list  (tl_global:((memory) ((pointer) global)
   global)) (alloc:alloc_table) (l:((pointer) global))
@@ -140,7 +140,8 @@ Admitted.
     (* File "list.h", line 75, characters 6-85 *)
     (forall (p1:((pointer) global)),
      (forall (l:plist),
-      ((llist tl_global alloc p1 l) -> (~(p1 = null) -> (valid alloc p1))))))).
+      ((llist tl_global alloc p1 l) ->
+       (~(p1 = (@null global)) -> (valid alloc p1))))))).
 Admitted.
 
 (*Why logic*) Definition rev : plist -> plist.

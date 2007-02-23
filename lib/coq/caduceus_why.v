@@ -332,7 +332,7 @@ Implicit Arguments not_assigns.
 
 (*Why axiom*) Lemma pset_empty_intro :
   forall (A1:Set),
-  (forall (p:((pointer) A1)), (not_in_pset p (pset_empty A1))).
+  (forall (p:((pointer) A1)), (not_in_pset p (@pset_empty A1))).
 Admitted.
 
 (*Why axiom*) Lemma pset_singleton_intro :

@@ -11,7 +11,7 @@ Require Export swap_spec_why.
   forall (HW_1: (* File "swap.c", line 3, characters 14-64 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
-  forall (HW_3: ~(c = null)),
+  forall (HW_3: ~(c = (@null global))),
   forall (p: ((pointer) global)),
   forall (HW_4: p = c),
   (valid alloc c).
@@ -29,7 +29,7 @@ Save.
   forall (HW_1: (* File "swap.c", line 3, characters 14-64 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
-  forall (HW_3: ~(c = null)),
+  forall (HW_3: ~(c = (@null global))),
   forall (p: ((pointer) global)),
   forall (HW_4: p = c),
   forall (HW_5: (valid alloc c)),
@@ -57,7 +57,7 @@ Save.
   forall (HW_1: (* File "swap.c", line 3, characters 14-64 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
-  forall (HW_3: ~(c = null)),
+  forall (HW_3: ~(c = (@null global))),
   forall (p: ((pointer) global)),
   forall (HW_4: p = c),
   forall (HW_5: (valid alloc c)),
@@ -82,7 +82,7 @@ Save.
   forall (HW_1: (* File "swap.c", line 3, characters 14-64 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
-  forall (HW_3: ~(c = null)),
+  forall (HW_3: ~(c = (@null global))),
   forall (p: ((pointer) global)),
   forall (HW_4: p = c),
   forall (HW_5: (valid alloc c)),
@@ -135,7 +135,7 @@ Save.
   forall (HW_1: (* File "swap.c", line 3, characters 14-64 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
-  forall (HW_15: c = null),
+  forall (HW_15: c = (@null global)),
   forall (l: plist),
   forall (c1: ((pointer) global)),
   forall (c2: ((pointer) global)),
