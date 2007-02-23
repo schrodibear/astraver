@@ -1,4 +1,6 @@
 
+version 2.02, February 23rd, 2007
+=================================
   o new tool why-stat to display statistics regarding symbols used in goals
   o new options -why and -multi-why to get verification conditions in
     Why syntax (useful when computing VCs takes much time)

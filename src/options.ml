@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.88 2007-02-15 15:52:43 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.89 2007-02-23 10:30:11 filliatr Exp $ i*)
 
 open Format
 
@@ -167,7 +167,6 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
-  --fast-wp          uses quadratic WP calculus (instead of traditional one)
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)

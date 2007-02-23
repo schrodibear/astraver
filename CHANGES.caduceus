@@ -1,7 +1,9 @@
 
 Note: These are the changes for Caduceus.
 
- o added axiom stating that null is never valid
+version 1.02, February 23rd, 2007
+=================================
+ o added axiom stating that null is not valid
  o fixed bug with circular dependencies in Coq files
  o new target 'goals' in foo.makefile to generate the VCs in separate
    Why files (why/foo_ctx.why and why/foo_po{1,2,...}.why)
@@ -9,7 +11,7 @@ Note: These are the changes for Caduceus.
  o support for ghost structure and array without size
 
 version 1.01, November 29th, 2006
-=============================
+=================================
  o support for operators ~ & | ^ >> << in the logic
  o bug fix with missing writes clauses in why spec files (see false2.c)
  o the  bench-c-yices rule of the main Makefile launches the yices prover 
