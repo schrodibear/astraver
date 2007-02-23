@@ -8,7 +8,7 @@ echo "Checking provers outputs"
 rm -f *_why.sx *_why.znn *_why.rv *.baf *_why.cvc
 
 for f in *.mlw; do
-    if test $f == loop_monomorph.mlw; then break; fi
+    if test $f = loop_monomorph.mlw; then break; fi
     echo -n "$f: "
     for p in $provers; do
 	echo -n $p...

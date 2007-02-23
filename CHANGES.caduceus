@@ -1,6 +1,7 @@
 
 Note: These are the changes for Caduceus.
 
+ o fixed bug with circular dependencies in Coq files
  o new target 'goals' in foo.makefile to generate the VCs in separate
    Why files (why/foo_ctx.why and why/foo_po{1,2,...}.why)
  o comments inside annotations now have the form //, not (* ... *)

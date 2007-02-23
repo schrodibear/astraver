@@ -26,8 +26,6 @@ parameter any_pointer: unit -> {} 'z pointer { true }
 type 'z addr
 type alloc_table
 
-logic null : 'z pointer
-
 logic block_length: alloc_table, 'z pointer -> int
 logic base_addr: 'z pointer -> 'z addr
 logic offset: 'z pointer -> int
@@ -714,4 +712,8 @@ parameter malloc_parameter : n:int ->
 	  and alloc_extends (alloc@,alloc) }
 
 
+(* the null pointer *)
 
+logic null : 'z pointer
+
+axiom null_not_valid: forall a:alloc_table. not valid(a,null)
