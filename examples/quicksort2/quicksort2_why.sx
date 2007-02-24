@@ -183,7 +183,7 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; swap_po_1, Why obligation from file "", line 0, characters 0-0:
+;; swap_po_1, Why obligation from file "quicksort2.mlw", line 11, characters 6-15:
 (FORALL (i)
 (FORALL (j)
 (FORALL (t)
@@ -199,7 +199,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t i result0)) (AND (<= 0 j) (< j (array_length t0))))))))))))))))
 
-;; swap_po_2, Why obligation from file "", line 0, characters 0-0:
+;; swap_po_2, Why obligation from file "quicksort2.mlw", line 11, characters 6-15:
 (FORALL (i)
 (FORALL (j)
 (FORALL (t)
@@ -217,14 +217,14 @@
 (IMPLIES (AND (<= 0 j) (< j (array_length t0)))
 (FORALL (t1) (IMPLIES (EQ t1 (update t0 j result)) (exchange t1 t i j)))))))))))))))))
 
-;; quick_rec_po_1, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_1, Why obligation from file "quicksort2.mlw", line 21, characters 14-18:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
 (IMPLIES (AND (<= 0 l) (< r (array_length t)))
 (IMPLIES (< l r) (AND (<= 0 l) (< l (array_length t))))))))
 
-;; quick_rec_po_2, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_2, Why obligation from file "quicksort2.mlw", line 26, characters 8-366:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -240,7 +240,7 @@
 (AND (EQ (access t l) result)
 (AND (AND (<= l l) (< l (+ l 1))) (<= (+ l 1) (+ r 1)))))))))))))))
 
-;; quick_rec_po_3, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_3, Why obligation from file "quicksort2.mlw", line 32, characters 13-18:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -263,7 +263,7 @@
          (AND (AND (<= l m) (< m i)) (<= i (+ r 1)))))))
 (IMPLIES (<= i r) (AND (<= 0 i) (< i (array_length t0))))))))))))))))
 
-;; quick_rec_po_4, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_4, Why obligation from file "quicksort2.mlw", line 32, characters 48-60:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -294,7 +294,7 @@
 (AND (AND (<= 0 i) (< i (array_length t0)))
 (AND (<= 0 m0) (< m0 (array_length t0)))))))))))))))))))))))
 
-;; quick_rec_po_5, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_5, Why obligation from file "quicksort2.mlw", line 32, characters 48-60:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -336,7 +336,7 @@
 (AND (AND (<= l m0) (< m0 i0)) (<= i0 (+ r 1)))))))
 (AND (<= 0 (- (+ 1 r) i)) (< (- (+ 1 r) i0) (- (+ 1 r) i))))))))))))))))))))))))))))
 
-;; quick_rec_po_6, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_6, Why obligation from file "quicksort2.mlw", line 33, characters 10-21:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -371,7 +371,7 @@
 (AND (EQ (access t0 l) result) (AND (AND (<= l m) (< m i0)) (<= i0 (+ r 1)))))))
 (AND (<= 0 (- (+ 1 r) i)) (< (- (+ 1 r) i0) (- (+ 1 r) i)))))))))))))))))))))))
 
-;; quick_rec_po_7, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_7, Why obligation from file "quicksort2.mlw", line 35, characters 9-20:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -396,7 +396,7 @@
 (AND (AND (<= 0 l) (< l (array_length t0)))
 (AND (<= 0 m) (< m (array_length t0)))))))))))))))))
 
-;; quick_rec_po_8, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_8, Why obligation from file "quicksort2.mlw", line 36, characters 9-31:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -424,7 +424,7 @@
 (IMPLIES (exchange t1 t0 l m)
 (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l)))))))))))))))))))
 
-;; quick_rec_po_9, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_9, Why obligation from file "quicksort2.mlw", line 36, characters 9-31:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -453,7 +453,7 @@
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 (- m 1)) l) (- (+ 1 r) l)))
 (AND (<= 0 l) (< (- m 1) (array_length t1))))))))))))))))))))
 
-;; quick_rec_po_10, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_10, Why obligation from file "quicksort2.mlw", line 37, characters 9-31:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -486,7 +486,7 @@
          (EQ (sub_permut l (- m 1) t2 t1) |@true|))
 (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 r) (+ m 1)) (- (+ 1 r) l)))))))))))))))))))))))
 
-;; quick_rec_po_11, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_11, Why obligation from file "quicksort2.mlw", line 37, characters 9-31:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -520,7 +520,7 @@
 (IMPLIES (AND (<= 0 (- (+ 1 r) l)) (< (- (+ 1 r) (+ m 1)) (- (+ 1 r) l)))
 (AND (<= 0 (+ m 1)) (< r (array_length t2))))))))))))))))))))))))
 
-;; quick_rec_po_12, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_12, Why obligation from file "quicksort2.mlw", line 37, characters 9-31:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -558,7 +558,7 @@
          (EQ (sub_permut (+ m 1) r t3 t2) |@true|))
 (AND (sorted_array t3 l r) (EQ (sub_permut l r t3 t) |@true|))))))))))))))))))))))))))
 
-;; quick_rec_po_13, Why obligation from file "", line 0, characters 0-0:
+;; quick_rec_po_13, Why obligation from file "quicksort2.mlw", line 20, characters 4-563:
 (FORALL (l)
 (FORALL (r)
 (FORALL (t)
@@ -566,13 +566,13 @@
 (IMPLIES (>= l r)
 (AND (sorted_array t l r) (EQ (sub_permut l r t t) |@true|)))))))
 
-;; quicksort_po_1, Why obligation from file "", line 0, characters 0-0:
+;; quicksort_po_1, Why obligation from file "quicksort2.mlw", line 45, characters 5-40:
 (FORALL (t)
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (AND (<= 0 0) (< (- result 1) (array_length t))))))
 
-;; quicksort_po_2, Why obligation from file "", line 0, characters 0-0:
+;; quicksort_po_2, Why obligation from file "quicksort2.mlw", line 45, characters 5-40:
 (FORALL (t)
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
