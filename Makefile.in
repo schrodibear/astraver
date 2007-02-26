@@ -757,6 +757,14 @@ clean::
 	rm -f jc/*.cm[iox] jc/*.o jc/*~
 	rm -f ocamlgraph/*.cm[iox] ocamlgraph/*.o ocamlgraph/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
+	rm -f bin/caduceus.opt bin/caduceus.byte
+	rm -f bin/jessie.opt bin/jessie.byte
+	rm -f bin/why-obfuscator.opt bin/why-obfuscator.byte
+	rm -f bin/rv_merge.opt bin/rv_merge.byte
+	rm -f bin/why-stat.opt bin/why-stat.byte
+	rm -f bin/why2html.opt bin/why2html.byte
+	rm -f bin/dp.opt bin/dp.byte
+	rm -f bin/cpulimit
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)
 	if test "@enable_octagon@" = "yes" ; then \
