@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.159 2007-02-23 09:03:05 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.160 2007-02-26 14:16:31 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -39,6 +39,17 @@ open Pp
 
 (* common to V7 and V8 *)
 
+let is_coq_keyword =
+  let ht = Hashtbl.create 50  in
+  List.iter (fun kw -> Hashtbl.add ht kw ()) 
+    ["at"; "cofix"; "exists2"; "fix"; "IF"; "mod"; "Prop";
+     "return"; "Set"; "Type"; "using"; "where"];
+  Hashtbl.mem ht
+
+let rename s = if is_coq_keyword s then "why__" ^ s else s
+let idents fmt s = fprintf fmt "%s" (rename s)
+let ident fmt id = fprintf fmt "%s" (rename (Ident.string id))
+
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "Z"
   | PTbool -> fprintf fmt "bool"
@@ -46,11 +57,10 @@ let rec print_pure_type fmt = function
   | PTreal -> fprintf fmt "R"
   | PTexternal ([v], id) when id == farray -> 
       fprintf fmt "(array %a)" print_pure_type v
-  | PTexternal([],id) -> Ident.print fmt id
+  | PTexternal([],id) -> ident fmt id
   | PTexternal(l,id) -> 
-      fprintf fmt "((%a) %a)"
-      Ident.print id
-      (print_list space print_pure_type) l
+      fprintf fmt "(%a %a)"
+      ident id (print_list space print_pure_type) l
   | PTvar { type_val = Some t} -> 
       fprintf fmt "%a" print_pure_type t      
   | PTvar v ->
@@ -117,7 +127,7 @@ let rec collect_app l = function
   | CC_app (e1, e2) -> collect_app (e2 :: l) e1
   | p -> p :: l
 
-let print_binder_id fmt (id,_) = Ident.print fmt id
+let print_binder_id fmt (id,_) = ident fmt id
 
 let collect_lambdas = 
   let rec collect bl = function
@@ -170,9 +180,9 @@ let print_term_v7 fmt t =
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, [], []) -> 
-	Ident.print fmt id
+	ident fmt id
     | Tapp (id, [], i) ->
-	fprintf fmt "(@[@@%a %a@])" Ident.print id instance i
+	fprintf fmt "(@[@@%a %a@])" ident id instance i
     | Tderef _ ->
 	assert false
     | Tapp (id, [t], _) when id == t_neg_int ->
@@ -186,7 +196,7 @@ let print_term_v7 fmt t =
     | Tapp (id, tl, _) when is_relation id || is_arith id -> 
 	fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl, _) -> 
-	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
+	fprintf fmt "(@[%a %a@])" ident id print_terms tl
   and print_terms fmt tl =
     print_list space print0 fmt tl
   in
@@ -217,7 +227,7 @@ let print_predicate_v7 fmt p =
     | Pfalse -> 
 	fprintf fmt "False"
     | Pvar id -> 
-	Ident.print fmt id
+	ident fmt id
     | Papp (id, tl, _) when id == t_distinct ->
 	fprintf fmt "@[(%a)@]" print0 (Util.distinct tl)
     | Papp (id, [t], _) when id == well_founded ->
@@ -241,19 +251,19 @@ let print_predicate_v7 fmt p =
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v7 a print_term_v7 b
     | Papp (id, l, _) ->
-	fprintf fmt "(@[%a %a@])" Ident.print id
+	fprintf fmt "(@[%a %a@])" ident id
 	  (print_list space print_term_v7) l
     | Pnot p -> 
 	fprintf fmt "~%a" print3 p
     | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[(%s:%a)@ %a@])" (Ident.string id')
+	fprintf fmt "(@[(%a:%a)@ %a@])" ident id'
 	  print_pure_type t print0 p'
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[EX %s:%a |@ %a@])" (Ident.string id')
+	fprintf fmt "(@[EX %a:%a |@ %a@])" ident id'
 	  print_pure_type t print0 p'
     | Pfpi _ ->
 	failwith "fpi not supported with Coq V7"
@@ -299,7 +309,7 @@ let rec print_cc_type_v7 fmt = function
       fprintf fmt "Set"
 
 and print_binder_v7 fmt (id,b) = 
-  Ident.print fmt id;
+  ident fmt id;
   match b with
     | CC_pred_binder p -> fprintf fmt ": %a" print_predicate_v7 p
     | CC_var_binder t -> fprintf fmt ": %a" print_cc_type_v7 t
@@ -315,10 +325,10 @@ let print_sequent_v7 fmt (hyps,concl) =
     | [] ->
 	print_predicate_v7 fmt concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_pure_type v;
+	fprintf fmt "(%a: @[%a@])@\n" ident id print_pure_type v;
 	print_seq fmt hyps
     | Spred (id, p) :: hyps -> 
-	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_predicate_v7 p;
+	fprintf fmt "(%a: @[%a@])@\n" ident id print_predicate_v7 p;
 	print_seq fmt hyps
   in
   fprintf fmt "@[%a@]@?" print_seq hyps
@@ -327,7 +337,7 @@ let print_lambdas_v7 = print_list semi print_binder_v7
 
 let rec print_cc_term_v7 fmt = function
   | CC_var id -> 
-      Ident.print fmt id
+      ident fmt id
   | CC_lam _ as t ->
       let bl,c = collect_lambdas t in
       fprintf fmt "@[<hov 2>[@[%a@]]@,%a@]" 
@@ -350,9 +360,9 @@ let rec print_cc_term_v7 fmt = function
       let qb, q = annotation_if bl in
       fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n@[<hov 2>Cases@ (@[btest@ @[[%a:bool]@,%a@] %a@ %a@]) of@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
       (print_list comma print_binder_id) bl print_cc_term_v7 e1 
-	Ident.print idb print_predicate_v7 q Ident.print idb Ident.print qb
-	Ident.print idt print_cc_term_v7 brt
-	Ident.print idf print_cc_term_v7 brf
+	ident idb print_predicate_v7 q ident idb ident qb
+	ident idt print_cc_term_v7 brt
+	ident idf print_cc_term_v7 brf
   (* non-dependent boolean if-then-else (probably not of use) *)
   | CC_if (b,e1,e2) ->
       fprintf fmt "@[if "; print_cc_term_v7 fmt b; fprintf fmt " then@\n  ";
@@ -365,7 +375,7 @@ let rec print_cc_term_v7 fmt = function
 	(print_list newline print_case_v7) pl
   | CC_letin (_,[id,_],c,c1) ->
       fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
-      Ident.print id print_cc_term_v7 c print_cc_term_v7 c1
+      ident id print_cc_term_v7 c print_cc_term_v7 c1
   | CC_letin (_,bl,c,c1) ->
       fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n%a@]"
       (print_list comma print_binder_id) bl
@@ -387,25 +397,25 @@ and print_proof_v7 fmt = function
   | Lemma (s, []) ->
       fprintf fmt "%s" s
   | Lemma (s, vl) ->
-      fprintf fmt "@[(%s %a)@]" s (print_list space Ident.print) vl
+      fprintf fmt "@[(%s %a)@]" s (print_list space ident) vl
   | True ->
       fprintf fmt "I"
   | Reflexivity t ->
       fprintf fmt "@[(refl_equal ? %a)@]" print_term_v7 t
   | Assumption id -> 
-      Ident.print fmt id
+      ident fmt id
   | Proj1 id ->
-      fprintf fmt "@[(proj1 ? ? %a)@]" Ident.print id
+      fprintf fmt "@[(proj1 ? ? %a)@]" ident id
   | Proj2 id ->
-      fprintf fmt "@[(proj2 ? ? %a)@]" Ident.print id
+      fprintf fmt "@[(proj2 ? ? %a)@]" ident id
   | Conjunction (id1, id2) ->
-      fprintf fmt "@[(conj ? ? %a %a)@]" Ident.print id1 Ident.print id2
+      fprintf fmt "@[(conj ? ? %a %a)@]" ident id1 ident id2
   | WfZwf t ->
       fprintf fmt "(Zwf_well_founded %a)" print_term_v7 t
   | Loop_variant_1 (h, h') ->
-      fprintf fmt "(loop_variant_1 %a %a)" Ident.print h Ident.print h'
+      fprintf fmt "(loop_variant_1 %a %a)" ident h ident h'
   | Absurd h ->
-      fprintf fmt "(False_ind ? %a)" Ident.print h
+      fprintf fmt "(False_ind ? %a)" ident h
   | ProofTerm t ->
       fprintf fmt "@[%a@]" print_cc_term_v7 t
   | ShouldBeAWp ->
@@ -458,9 +468,9 @@ let print_term_v8 fmt t =
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf Z0)"
     | Tvar id | Tapp (id, [], []) -> 
-	Ident.print fmt id
+	ident fmt id
     | Tapp (id, [], i) ->
-	fprintf fmt "(@[@@%a %a@])" Ident.print id instance i
+	fprintf fmt "(@[@@%a %a@])" ident id instance i
     | Tderef _ ->
 	assert false
     | Tapp (id, [a;b], _) when id == t_pow_real ->
@@ -478,7 +488,7 @@ let print_term_v8 fmt t =
     | Tapp (id, tl, _) when is_relation id || is_arith id -> 
 	fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl, _) -> 
-	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
+	fprintf fmt "(@[%a %a@])" ident id print_terms tl
   and print_terms fmt tl =
     print_list space print3 fmt tl
   in
@@ -509,7 +519,7 @@ let print_predicate_v8 fmt p =
     | Pfalse -> 
 	fprintf fmt "False"
     | Pvar id -> 
-	Ident.print fmt id
+	ident fmt id
     | Papp (id, tl, _) when id == t_distinct ->
 	fprintf fmt "@[(%a)@]" print0 (Util.distinct tl)
     | Papp (id, [t], _) when id == well_founded ->
@@ -531,19 +541,19 @@ let print_predicate_v8 fmt p =
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v8 a print_term_v8 b
     | Papp (id, l, _) ->
-	fprintf fmt "(@[%a %a@])" Ident.print id
+	fprintf fmt "(@[%a %a@])" ident id
 	  (print_list space print_term_v8) l
     | Pnot p -> 
 	fprintf fmt "~%a" print3 p
     | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[forall (%s:%a),@ %a@])" (Ident.string id')
+	fprintf fmt "(@[forall (%a:%a),@ %a@])" ident id'
 	  print_pure_type t print0 p'
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[exists %s:%a,@ %a@])" (Ident.string id')
+	fprintf fmt "(@[exists %a:%a,@ %a@])" ident id'
 	  print_pure_type t print0 p'
     | Pfpi _ ->
 	failwith "fpi not supported with Coq V8"
@@ -590,11 +600,11 @@ let rec print_cc_type_v8 fmt = function
 
 and print_binder_v8 fmt (id,b) = match b with
   | CC_pred_binder p -> 
-      fprintf fmt "(%a: %a)" Ident.print id print_predicate_v8 p
+      fprintf fmt "(%a: %a)" ident id print_predicate_v8 p
   | CC_var_binder t -> 
-      fprintf fmt "(%a: %a)" Ident.print id print_cc_type_v8 t
+      fprintf fmt "(%a: %a)" ident id print_cc_type_v8 t
   | CC_untyped_binder -> 
-      Ident.print fmt id
+      ident fmt id
 
 and print_binder_type_v8 fmt = function
   | _, CC_var_binder t -> print_cc_type_v8 fmt t
@@ -607,11 +617,11 @@ let print_sequent_v8 fmt (hyps,concl) =
 	print_predicate_v8 fmt concl
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "forall (%a: @[%a@]),@\n" 
-	Ident.print id print_pure_type v;
+	ident id print_pure_type v;
 	print_seq fmt hyps
     | Spred (id, p) :: hyps -> 
 	fprintf fmt "forall (%a: @[%a@]),@\n" 
-	Ident.print id print_predicate_v8 p;
+	ident id print_predicate_v8 p;
 	print_seq fmt hyps
   in
   fprintf fmt "@[%a@]@?" print_seq hyps
@@ -620,7 +630,7 @@ let print_lambdas_v8 = print_list space print_binder_v8
 
 let rec print_cc_term_v8 fmt = function
   | CC_var id -> 
-      Ident.print fmt id
+      ident fmt id
   | CC_lam _ as t ->
       let bl,c = collect_lambdas t in
       fprintf fmt "(@[<hov 2>fun @[%a@] =>@ %a@])" 
@@ -643,9 +653,9 @@ let rec print_cc_term_v8 fmt = function
       let qb, q = annotation_if bl in
       fprintf fmt "@[@[<hov 2>let (%a) :=@ %a in@]@\n@[<hov 2>match@ (@[btest@ (@[fun (%a:bool) =>@ %a@]) %a@ %a@]) with@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
       (print_list comma print_binder_id) bl print_cc_term_v8 e1 
-	Ident.print idb print_predicate_v8 q Ident.print idb Ident.print qb
-	Ident.print idt print_cc_term_v8 brt
-	Ident.print idf print_cc_term_v8 brf
+	ident idb print_predicate_v8 q ident idb ident qb
+	ident idt print_cc_term_v8 brt
+	ident idf print_cc_term_v8 brf
   (* non-dependent boolean if-then-else (probably not of use) *)
   | CC_if (b,e1,e2) ->
       fprintf fmt "@[if "; print_cc_term_v8 fmt b; fprintf fmt " then@\n  ";
@@ -658,7 +668,7 @@ let rec print_cc_term_v8 fmt = function
 	(print_list newline print_case_v8) pl
   | CC_letin (_,[id,_],c,c1) ->
       fprintf fmt "@[@[<hov 2>let %a :=@ %a in@]@\n%a@]"
-      Ident.print id print_cc_term_v8 c print_cc_term_v8 c1
+      ident id print_cc_term_v8 c print_cc_term_v8 c1
   | CC_letin (_,bl,c,c1) ->
       fprintf fmt "@[@[<hov 2>let (%a) :=@ %a in@]@\n%a@]"
       (print_list comma print_binder_id) bl
@@ -680,25 +690,25 @@ and print_proof_v8 fmt = function
   | Lemma (s, []) ->
       fprintf fmt "%s" s
   | Lemma (s, vl) ->
-      fprintf fmt "@[(%s %a)@]" s (print_list space Ident.print) vl
+      fprintf fmt "@[(%s %a)@]" s (print_list space ident) vl
   | True ->
       fprintf fmt "I"
   | Reflexivity t ->
       fprintf fmt "@[(refl_equal %a)@]" print_term_v8 t
   | Assumption id -> 
-      Ident.print fmt id
+      ident fmt id
   | Proj1 id ->
-      fprintf fmt "@[(proj1 %a)@]" Ident.print id
+      fprintf fmt "@[(proj1 %a)@]" ident id
   | Proj2 id ->
-      fprintf fmt "@[(proj2 %a)@]" Ident.print id
+      fprintf fmt "@[(proj2 %a)@]" ident id
   | Conjunction (id1, id2) ->
-      fprintf fmt "@[(conj %a %a)@]" Ident.print id1 Ident.print id2
+      fprintf fmt "@[(conj %a %a)@]" ident id1 ident id2
   | WfZwf t ->
       fprintf fmt "(Zwf_well_founded %a)" print_term_v8 t
   | Loop_variant_1 (h, h') ->
-      fprintf fmt "(loop_variant_1 %a %a)" Ident.print h Ident.print h'
+      fprintf fmt "(loop_variant_1 %a %a)" ident h ident h'
   | Absurd h ->
-      fprintf fmt "(False_ind _ %a)" Ident.print h
+      fprintf fmt "(False_ind _ %a)" ident h
   | ProofTerm t ->
       fprintf fmt "@[%a@]" print_cc_term_v8 t
   | ShouldBeAWp ->
@@ -751,7 +761,7 @@ let print_obligation fmt loc id s =
 
 let reprint_parameter fmt id c =
   fprintf fmt 
-    "@[<hov 2>(*Why*) Parameter %s :@ @[%a@].@]@\n" id print_cc_type c
+    "@[<hov 2>(*Why*) Parameter %a :@ @[%a@].@]@\n" idents id print_cc_type c
 
 let print_parameter = reprint_parameter
 
@@ -771,8 +781,8 @@ let print_logic_type fmt s =
 
 let reprint_logic fmt id t = 
   fprintf fmt 
-    "@[<hov 2>(*Why logic*) Definition %s :@ @[%a@].@]@\n" 
-    id print_logic_type t
+    "@[<hov 2>(*Why logic*) Definition %a :@ @[%a@].@]@\n" 
+    idents id print_logic_type t
 
 let polymorphic t = not (Env.Vset.is_empty t.Env.scheme_vars)
 
@@ -792,7 +802,7 @@ let print_logic fmt id t =
     begin
       let b = is_logic_constant t in
       if b then fprintf fmt "Set Contextual Implicit.@\n";
-      fprintf fmt "Implicit Arguments %s.@\n" id;
+      fprintf fmt "Implicit Arguments %a.@\n" idents id;
       if b then fprintf fmt "Unset Contextual Implicit.@\n";
     end
 
@@ -803,7 +813,8 @@ let print_predicate_scheme fmt p =
 
 let reprint_axiom fmt id p =
   fprintf fmt
-     "@[<hov 2>(*Why axiom*) Lemma %s :@ @[%a@].@]@\n" id print_predicate_scheme p
+    "@[<hov 2>(*Why axiom*) Lemma %a :@ @[%a@].@]@\n" 
+    idents id print_predicate_scheme p
 
 let print_axiom fmt id p = 
   reprint_axiom fmt id p;
@@ -819,24 +830,25 @@ let reprint_predicate fmt id p =
   in
   let print_binder fmt (x,pt) = 
     if v8 then 
-      fprintf fmt "(%a:%a)" Ident.print x print_pure_type pt
+      fprintf fmt "(%a:%a)" ident x print_pure_type pt
     else
-      fprintf fmt "[%a:%a]" Ident.print x print_pure_type pt
+      fprintf fmt "[%a:%a]" ident x print_pure_type pt
   in
   fprintf fmt
-     "@[<hov 2>(*Why predicate*) Definition %s %a %a@ := @[%a@].@]@\n" 
-    id 
+     "@[<hov 2>(*Why predicate*) Definition %a %a %a@ := @[%a@].@]@\n" 
+    idents id 
     (print_list space print_poly) l
     (print_list space print_binder) bl
     print_predicate p 
 
 let print_predicate fmt id p = 
   reprint_predicate fmt id p;
-  if implicits_for_predicate p then fprintf fmt "Implicit Arguments %s.@\n" id
+  if implicits_for_predicate p then 
+    fprintf fmt "Implicit Arguments %a.@\n" idents id
 
 let reprint_type fmt id vl =
-  fprintf fmt "@[<hov 2>(*Why type*) Definition %s: @[%aSet@].@]@\n"
-    id (print_list space (fun fmt _ -> fprintf fmt "Set ->")) vl
+  fprintf fmt "@[<hov 2>(*Why type*) Definition %a: @[%aSet@].@]@\n"
+    idents id (print_list space (fun fmt _ -> fprintf fmt "Set ->")) vl
 
 let print_type fmt id vl = 
   reprint_type fmt id vl;
@@ -850,13 +862,13 @@ let reprint_function fmt id p =
   in
   let print_binder fmt (x,pt) = 
     if v8 then 
-      fprintf fmt "(%a:%a)" Ident.print x print_pure_type pt
+      fprintf fmt "(%a:%a)" ident x print_pure_type pt
     else
-      fprintf fmt "[%a:%a]" Ident.print x print_pure_type pt
+      fprintf fmt "[%a:%a]" ident x print_pure_type pt
   in
   fprintf fmt
-     "@[<hov 2>(*Why function*) Definition %s %a %a@ := @[%a@].@]@\n" 
-    id 
+     "@[<hov 2>(*Why function*) Definition %a %a %a@ := @[%a@].@]@\n" 
+    idents id
     (print_list space print_poly) l
     (print_list space print_binder) bl
     print_term e 
@@ -867,7 +879,7 @@ let print_function fmt id p =
     begin
       let b = let (bl,_,_) = p.Env.scheme_type in bl = [] in
       if b then fprintf fmt "Set Contextual Implicit.@\n";
-      fprintf fmt "Implicit Arguments %s.@\n" id;
+      fprintf fmt "Implicit Arguments %a.@\n" idents id;
       if b then fprintf fmt "Unset Contextual Implicit.@\n";
     end
 
@@ -918,11 +930,11 @@ let reset = Gen.reset
 
 let push_decl = function
   | Dgoal (loc,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,l,s))
-  | Dlogic (_, id, t) -> Gen.add_elem (Lg, id) (Logic (id, t))
-  | Daxiom (_, id, p) -> Gen.add_elem (Ax, id) (Axiom (id, p))
-  | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))
-  | Dfunction_def (_, id, f) -> Gen.add_elem (Fun, id) (Function (id, f))
-  | Dtype (_, vl, id) -> Gen.add_elem (Ty, id) (AbstractType (id, vl))
+  | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
+  | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
+  | Dpredicate_def (_,id,p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))
+  | Dfunction_def (_,id,f) -> Gen.add_elem (Fun, rename id) (Function (id, f))
+  | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
 
 
 let push_parameter id v =
@@ -974,8 +986,8 @@ let print_validation fmt (id, tt, v) =
   let l = Env.Vmap.fold (fun _ t acc -> t :: acc) l [] in
   let print_cc_term fmt c = print_lam_scheme fmt l; print_cc_term fmt c in
   fprintf fmt 
-    "@[Definition %s (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n@\n" 
-    id print_cc_type tt print_cc_term v
+    "@[Definition %a (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n@\n" 
+    idents id print_cc_type tt print_cc_term v
 
 let print_validations fwe fmt =
   fprintf fmt "(* This file is generated by Why; do not edit *)@\n@\n";

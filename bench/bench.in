@@ -37,7 +37,7 @@ provers () {
 	$pgm --pvs $f
 	exit 1
     fi
-    if test "$option" == "pvs"; then 
+    if test "$option" = "pvs"; then 
     if ! pvstc "$base"_why > /dev/null 2>&1; then
 	echo "pvs typecheck FAILED"
 	pvs -q -v 3 -batch -l pvstc.el
@@ -104,7 +104,7 @@ bads () {
     done
 }
 
-if test "$2" == "c"; then good_c good-c; exit 0; fi
+if test "$2" = "c"; then good_c good-c; exit 0; fi
 
 # 1. Syntax
 echo "=== Checking parsing errors ==="

@@ -452,7 +452,7 @@ Implicit Arguments pset_range.
 Admitted.
 
 (*Why axiom*) Lemma in_pset_empty :
-  forall (A1:Set), (forall (p:((pointer) A1)), ~(in_pset p (pset_empty A1))).
+  forall (A1:Set), (forall (p:((pointer) A1)), ~(in_pset p (@pset_empty A1))).
 Admitted.
 
 (*Why axiom*) Lemma in_pset_singleton :

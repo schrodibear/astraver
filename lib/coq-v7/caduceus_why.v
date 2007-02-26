@@ -100,60 +100,63 @@ Admitted.
 
 
 
-(*Why logic*) Definition null : (A1:Set) ((pointer) A1).
-Admitted.
-
 (*Why logic*) Definition block_length :
   (A1:Set) alloc_table -> ((pointer) A1) -> Z.
 Admitted.
+Implicit Arguments block_length.
 
 (*Why logic*) Definition base_addr : (A1:Set) ((pointer) A1) -> ((addr) A1).
 Admitted.
+Implicit Arguments base_addr.
 
 (*Why logic*) Definition offset : (A1:Set) ((pointer) A1) -> Z.
 Admitted.
+Implicit Arguments offset.
 
 (*Why logic*) Definition shift :
   (A1:Set) ((pointer) A1) -> Z -> ((pointer) A1).
 Admitted.
-
-Admitted.
+Implicit Arguments shift.
 
 (*Why logic*) Definition sub_pointer :
   (A1:Set) ((pointer) A1) -> ((pointer) A1) -> Z.
 Admitted.
+Implicit Arguments sub_pointer.
 
-(*Why predicate*) Definition lt_pointer [A695:Set] [p1:((pointer) A695)]
-  [p2:((pointer) A695)]
+(*Why predicate*) Definition lt_pointer [A681:Set] [p1:((pointer) A681)]
+  [p2:((pointer) A681)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) < (offset p2)`.
+Implicit Arguments lt_pointer.
 
-(*Why predicate*) Definition le_pointer [A696:Set] [p1:((pointer) A696)]
-  [p2:((pointer) A696)]
+(*Why predicate*) Definition le_pointer [A682:Set] [p1:((pointer) A682)]
+  [p2:((pointer) A682)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) <= (offset p2)`.
+Implicit Arguments le_pointer.
 
-(*Why predicate*) Definition gt_pointer [A697:Set] [p1:((pointer) A697)]
-  [p2:((pointer) A697)]
+(*Why predicate*) Definition gt_pointer [A683:Set] [p1:((pointer) A683)]
+  [p2:((pointer) A683)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) > (offset p2)`.
+Implicit Arguments gt_pointer.
 
-(*Why predicate*) Definition ge_pointer [A698:Set] [p1:((pointer) A698)]
-  [p2:((pointer) A698)]
+(*Why predicate*) Definition ge_pointer [A684:Set] [p1:((pointer) A684)]
+  [p2:((pointer) A684)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) >= (offset p2)`.
+Implicit Arguments ge_pointer.
 
-
-
-(*Why predicate*) Definition valid [A699:Set] [a:alloc_table]
-  [p:((pointer) A699)]
+(*Why predicate*) Definition valid [A685:Set] [a:alloc_table]
+  [p:((pointer) A685)]
   := `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.
+Implicit Arguments valid.
 
-(*Why predicate*) Definition valid_index [A700:Set] [a:alloc_table]
-  [p:((pointer) A700)] [i:Z]
+(*Why predicate*) Definition valid_index [A686:Set] [a:alloc_table]
+  [p:((pointer) A686)] [i:Z]
   := `0 <= (offset p) + i` /\ `(offset p) + i < (block_length a p)`.
+Implicit Arguments valid_index.
 
-(*Why predicate*) Definition valid_range [A701:Set] [a:alloc_table]
-  [p:((pointer) A701)] [i:Z] [j:Z]
+(*Why predicate*) Definition valid_range [A687:Set] [a:alloc_table]
+  [p:((pointer) A687)] [i:Z] [j:Z]
   := `0 <= (offset p) + i` /\ `(offset p) + j < (block_length a p)`.
-
-Admitted.
+Implicit Arguments valid_range.
 
 (*Why axiom*) Lemma offset_shift :
   (A1:Set)
@@ -180,10 +183,6 @@ Admitted.
   ((a:alloc_table)
    ((p:((pointer) A1))
     ((i:Z) `(block_length a (shift p i)) = (block_length a p)`))).
-Admitted.
-
-Admitted.
-
 Admitted.
 
 (*Why axiom*) Lemma base_addr_block_length :
@@ -245,10 +244,6 @@ Admitted.
    ((p:((pointer) A1)) ((i:Z) ((valid_index a p i) -> (valid a (shift p i)))))).
 Admitted.
 
-Admitted.
-
-Admitted.
-
 (*Why axiom*) Lemma valid_range_valid_shift :
   (A1:Set)
   ((a:alloc_table)
@@ -287,57 +282,23 @@ Admitted.
      `(sub_pointer p1 p2) = (offset p1) - (offset p2)`))).
 Admitted.
 
-
-
-
-
-
-
 (*Why type*) Definition memory: Set -> Set ->Set.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Admitted.
 
 (*Why logic*) Definition acc :
   (A1:Set) (A2:Set) ((memory) A1 A2) -> ((pointer) A2) -> A1.
 Admitted.
-Implicits acc [1].
-
+Implicit Arguments acc.
 
 (*Why logic*) Definition upd :
   (A1:Set) (A2:Set) ((memory) A1 A2) -> ((pointer) A2) -> A1 -> ((memory) A1
   A2).
 Admitted.
-Implicits upd [1].
-
+Implicit Arguments upd.
 
 (*Why axiom*) Lemma acc_upd :
   (A1:Set) (A2:Set)
   ((m:((memory) A1 A2)) ((p:((pointer) A2)) ((a:A1) (acc (upd m p a) p) = a))).
-Admitted.
-
-(*Why axiom*) Lemma acc_upd_eq :
-  (A1:Set) (A2:Set)
-  ((m:((memory) A1 A2))
-   ((p1:((pointer) A2))
-    ((p2:((pointer) A2)) ((a:A1) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
@@ -351,110 +312,88 @@ Admitted.
 (*Why axiom*) Lemma false_not_true : ~(false = true).
 Admitted.
 
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-
 (*Why type*) Definition pset: Set ->Set.
 Admitted.
 
 (*Why logic*) Definition pset_empty : (A1:Set) ((pset) A1).
 Admitted.
+Set Contextual Implicit.
+Implicit Arguments pset_empty.
+Unset Contextual Implicit.
 
 (*Why logic*) Definition pset_singleton :
   (A1:Set) ((pointer) A1) -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_singleton.
 
 (*Why logic*) Definition pset_star :
   (A1:Set) (A2:Set) ((pset) A2) -> ((memory) ((pointer) A1)
   A2) -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_star.
 
 (*Why logic*) Definition pset_all : (A1:Set) ((pset) A1) -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_all.
 
 (*Why logic*) Definition pset_range :
   (A1:Set) ((pset) A1) -> Z -> Z -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_range.
 
 (*Why logic*) Definition pset_range_left :
   (A1:Set) ((pset) A1) -> Z -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_range_left.
 
 (*Why logic*) Definition pset_range_right :
   (A1:Set) ((pset) A1) -> Z -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_range_right.
 
 (*Why logic*) Definition pset_acc_all :
   (A1:Set) (A2:Set) ((pset) A2) -> ((memory) ((pointer) A1)
   A2) -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_acc_all.
 
 (*Why logic*) Definition pset_acc_range :
   (A1:Set) (A2:Set) ((pset) A2) -> ((memory) ((pointer) A1) A2) -> Z
   -> Z -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_acc_range.
 
 (*Why logic*) Definition pset_acc_range_left :
   (A1:Set) (A2:Set) ((pset) A2) -> ((memory) ((pointer) A1) A2)
   -> Z -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_acc_range_left.
 
 (*Why logic*) Definition pset_acc_range_right :
   (A1:Set) (A2:Set) ((pset) A2) -> ((memory) ((pointer) A1) A2)
   -> Z -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_acc_range_right.
 
 (*Why logic*) Definition pset_union :
   (A1:Set) ((pset) A1) -> ((pset) A1) -> ((pset) A1).
 Admitted.
+Implicit Arguments pset_union.
 
 (*Why logic*) Definition not_in_pset :
   (A1:Set) ((pointer) A1) -> ((pset) A1) -> Prop.
 Admitted.
+Implicit Arguments not_in_pset.
 
-(*Why predicate*) Definition not_assigns [A747:Set]
-  [A746:Set] [a:alloc_table] [m1:((memory) A746 A747)] [m2:((memory) A746
-  A747)] [l:((pset) A747)]
-  := ((p:((pointer) A747))
+(*Why predicate*) Definition not_assigns [A731:Set]
+  [A730:Set] [a:alloc_table] [m1:((memory) A730 A731)] [m2:((memory) A730
+  A731)] [l:((pset) A731)]
+  := ((p:((pointer) A731))
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
+Implicit Arguments not_assigns.
 
 (*Why axiom*) Lemma pset_empty_intro :
-  (A1:Set) ((p:((pointer) A1)) (not_in_pset p pset_empty)).
+  (A1:Set) ((p:((pointer) A1)) (not_in_pset p (@pset_empty A1))).
 Admitted.
 
 (*Why axiom*) Lemma pset_singleton_intro :
@@ -708,18 +647,18 @@ Admitted.
    ((l:((pset) A1)) ((m:((memory) A2 A1)) (not_assigns a m m l)))).
 Admitted.
 
-
-
-(*Why predicate*) Definition valid_acc [A788:Set]
-  [A787:Set] [m1:((memory) ((pointer) A787) A788)]
-  := ((p:((pointer) A788))
+(*Why predicate*) Definition valid_acc [A772:Set]
+  [A771:Set] [m1:((memory) ((pointer) A771) A772)]
+  := ((p:((pointer) A772))
       ((a:alloc_table) ((valid a p) -> (valid a (acc m1 p))))).
+Implicit Arguments valid_acc.
 
-(*Why predicate*) Definition valid_acc_range [A790:Set]
-  [A789:Set] [m1:((memory) ((pointer) A789) A790)] [size:Z]
-  := ((p:((pointer) A790))
+(*Why predicate*) Definition valid_acc_range [A774:Set]
+  [A773:Set] [m1:((memory) ((pointer) A773) A774)] [size:Z]
+  := ((p:((pointer) A774))
       ((a:alloc_table)
        ((valid a p) -> (valid_range a (acc m1 p) `0` `size - 1`)))).
+Implicit Arguments valid_acc_range.
 
 (*Why axiom*) Lemma valid_acc_range_valid :
   (A1:Set) (A2:Set)
@@ -730,26 +669,28 @@ Admitted.
       ((valid_acc_range m1 size) -> ((valid a p) -> (valid a (acc m1 p)))))))).
 Admitted.
 
-(*Why predicate*) Definition separation1 [A794:Set]
-  [A793:Set] [m1:((memory) ((pointer) A793) A794)]
-  [m2:((memory) ((pointer) A793) A794)]
-  := ((p:((pointer) A794))
+(*Why predicate*) Definition separation1 [A778:Set]
+  [A777:Set] [m1:((memory) ((pointer) A777) A778)]
+  [m2:((memory) ((pointer) A777) A778)]
+  := ((p:((pointer) A778))
       ((a:alloc_table)
        ((valid a p) -> ~((base_addr (acc m1 p)) = (base_addr (acc m2 p)))))).
+Implicit Arguments separation1.
 
-(*Why predicate*) Definition separation1_range1 [A796:Set]
-  [A795:Set] [m1:((memory) ((pointer) A795) A796)]
-  [m2:((memory) ((pointer) A795) A796)] [size:Z]
-  := ((p:((pointer) A796))
+(*Why predicate*) Definition separation1_range1 [A780:Set]
+  [A779:Set] [m1:((memory) ((pointer) A779) A780)]
+  [m2:((memory) ((pointer) A779) A780)] [size:Z]
+  := ((p:((pointer) A780))
       ((a:alloc_table)
        ((valid a p) ->
         ((i:Z)
          (`0 <= i` /\ `i < size` ->
           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p)))))))).
+Implicit Arguments separation1_range1.
 
-(*Why predicate*) Definition separation1_range [A798:Set]
-  [A797:Set] [m:((memory) ((pointer) A797) A798)] [size:Z]
-  := ((p:((pointer) A798))
+(*Why predicate*) Definition separation1_range [A782:Set]
+  [A781:Set] [m:((memory) ((pointer) A781) A782)] [size:Z]
+  := ((p:((pointer) A782))
       ((a:alloc_table)
        ((valid a p) ->
         ((i1:Z)
@@ -759,39 +700,363 @@ Admitted.
             (`i1 <> i2` ->
              ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
                                                               (shift p i2)))))))))))).
+Implicit Arguments separation1_range.
 
-(*Why predicate*) Definition separation2 [A800:Set]
-  [A799:Set] [m1:((memory) ((pointer) A799) A800)]
-  [m2:((memory) ((pointer) A799) A800)]
-  := ((p1:((pointer) A800))
-      ((p2:((pointer) A800))
+(*Why predicate*) Definition separation2 [A784:Set]
+  [A783:Set] [m1:((memory) ((pointer) A783) A784)]
+  [m2:((memory) ((pointer) A783) A784)]
+  := ((p1:((pointer) A784))
+      ((p2:((pointer) A784))
        (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2)))))).
+Implicit Arguments separation2.
 
-(*Why predicate*) Definition separation2_range1 [A802:Set]
-  [A801:Set] [m1:((memory) ((pointer) A801) A802)]
-  [m2:((memory) ((pointer) A801) A802)] [size:Z]
-  := ((p:((pointer) A802))
-      ((q:((pointer) A802))
+(*Why predicate*) Definition separation2_range1 [A786:Set]
+  [A785:Set] [m1:((memory) ((pointer) A785) A786)]
+  [m2:((memory) ((pointer) A785) A786)] [size:Z]
+  := ((p:((pointer) A786))
+      ((q:((pointer) A786))
        ((a:alloc_table)
         ((i:Z)
          (`0 <= i` /\ `i < size` ->
           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 q)))))))).
+Implicit Arguments separation2_range1.
 
 (*Why logic*) Definition on_heap :
   (A1:Set) alloc_table -> ((pointer) A1) -> Prop.
 Admitted.
+Implicit Arguments on_heap.
 
 (*Why logic*) Definition on_stack :
   (A1:Set) alloc_table -> ((pointer) A1) -> Prop.
 Admitted.
+Implicit Arguments on_stack.
 
 (*Why logic*) Definition fresh :
   (A1:Set) alloc_table -> ((pointer) A1) -> Prop.
 Admitted.
+Implicit Arguments fresh.
 
 (*Why axiom*) Lemma fresh_not_valid :
   (A1:Set)
   ((a:alloc_table) ((p:((pointer) A1)) ((fresh a p) -> ~(valid a p)))).
+Admitted.
+
+(*Why axiom*) Lemma fresh_not_valid_shift :
+  (A1:Set)
+  ((a:alloc_table)
+   ((p:((pointer) A1)) ((fresh a p) -> ((i:Z) ~(valid a (shift p i)))))).
+Admitted.
+
+(*Why logic*) Definition alloc_extends : alloc_table -> alloc_table -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_valid :
+  (A1:Set)
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((alloc_extends a1 a2) ->
+     ((q:((pointer) A1)) ((valid a1 q) -> (valid a2 q)))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_valid_index :
+  (A1:Set)
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((alloc_extends a1 a2) ->
+     ((q:((pointer) A1))
+      ((i:Z) ((valid_index a1 q i) -> (valid_index a2 q i))))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_valid_range :
+  (A1:Set)
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((alloc_extends a1 a2) ->
+     ((q:((pointer) A1))
+      ((i:Z) ((j:Z) ((valid_range a1 q i j) -> (valid_range a2 q i j)))))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_refl :
+  ((a:alloc_table) (alloc_extends a a)).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_trans :
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((a3:alloc_table)
+     ((alloc_extends a1 a2) ->
+      ((alloc_extends a2 a3) -> (alloc_extends a1 a3)))))).
+Admitted.
+
+(*Why logic*) Definition free_stack :
+  alloc_table -> alloc_table -> alloc_table -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma free_stack_heap :
+  (A1:Set)
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((a3:alloc_table)
+     ((free_stack a1 a2 a3) ->
+      ((p:((pointer) A1)) ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p)))))))).
+Admitted.
+
+(*Why axiom*) Lemma free_stack_stack :
+  (A1:Set)
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((a3:alloc_table)
+     ((free_stack a1 a2 a3) ->
+      ((p:((pointer) A1)) ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p)))))))).
+Admitted.
+
+(*Why logic*) Definition null : (A1:Set) ((pointer) A1).
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+
+
+
+
+
+
+
+
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Admitted.
+
+Admitted.
+Implicits acc [1].
+
+
+Admitted.
+Implicits upd [1].
+
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
+
+
+
+
+Admitted.
+
+
+
+
+
+
+Admitted.
+
+Admitted.
+
+Admitted.
+
 Admitted.
 
 
@@ -862,72 +1127,27 @@ Admitted.
 
 Admitted.
 
-(*Why axiom*) Lemma fresh_not_valid_shift :
-  (A1:Set)
-  ((a:alloc_table)
-   ((p:((pointer) A1)) ((fresh a p) -> ((i:Z) ~(valid a (shift p i)))))).
 Admitted.
 
-(*Why logic*) Definition alloc_extends : alloc_table -> alloc_table -> Prop.
 Admitted.
 
-(*Why axiom*) Lemma alloc_extends_valid :
-  (A1:Set)
-  ((a1:alloc_table)
-   ((a2:alloc_table)
-    ((alloc_extends a1 a2) ->
-     ((q:((pointer) A1)) ((valid a1 q) -> (valid a2 q)))))).
 Admitted.
 
-(*Why axiom*) Lemma alloc_extends_valid_index :
-  (A1:Set)
-  ((a1:alloc_table)
-   ((a2:alloc_table)
-    ((alloc_extends a1 a2) ->
-     ((q:((pointer) A1))
-      ((i:Z) ((valid_index a1 q i) -> (valid_index a2 q i))))))).
 Admitted.
 
-(*Why axiom*) Lemma alloc_extends_valid_range :
-  (A1:Set)
-  ((a1:alloc_table)
-   ((a2:alloc_table)
-    ((alloc_extends a1 a2) ->
-     ((q:((pointer) A1))
-      ((i:Z) ((j:Z) ((valid_range a1 q i j) -> (valid_range a2 q i j)))))))).
 Admitted.
 
-(*Why axiom*) Lemma alloc_extends_refl :
-  ((a:alloc_table) (alloc_extends a a)).
 Admitted.
 
-(*Why axiom*) Lemma alloc_extends_trans :
-  ((a1:alloc_table)
-   ((a2:alloc_table)
-    ((a3:alloc_table)
-     ((alloc_extends a1 a2) ->
-      ((alloc_extends a2 a3) -> (alloc_extends a1 a3)))))).
 Admitted.
 
-(*Why logic*) Definition free_stack :
-  alloc_table -> alloc_table -> alloc_table -> Prop.
 Admitted.
 
-(*Why axiom*) Lemma free_stack_heap :
-  (A1:Set)
-  ((a1:alloc_table)
-   ((a2:alloc_table)
-    ((a3:alloc_table)
-     ((free_stack a1 a2 a3) ->
-      ((p:((pointer) A1)) ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p)))))))).
 Admitted.
 
-(*Why axiom*) Lemma free_stack_stack :
-  (A1:Set)
-  ((a1:alloc_table)
-   ((a2:alloc_table)
-    ((a3:alloc_table)
-     ((free_stack a1 a2 a3) ->
-      ((p:((pointer) A1)) ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p)))))))).
+Admitted.
+
+(*Why axiom*) Lemma null_not_valid :
+  (A1:Set) ((a:alloc_table) ~(valid a (@null A1))).
 Admitted.
 
