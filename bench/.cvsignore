@@ -24,3 +24,5 @@ ctest.ml
 *.baf
 bench
 *.cvc
+gmon.out gwhy.cache semantic.cache test_why.cvc test_why.cvc~ test_why.cvc.bak test_why.rv test_why.smt test_why.smt~ test_why.sx test_why.sx~ test_why.sx.bak test_why.v test_why.v~ test_why.v.bak test_why.vo test_why.why test_why.why~ test_why.znn
+tmp

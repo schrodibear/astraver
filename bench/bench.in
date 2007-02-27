@@ -49,6 +49,20 @@ provers () {
     fi
 }
 
+good_tc () {
+    for f in $1/*.mlw; do
+	echo -n "  "$f"... "
+	base=$1/`basename $f .mlw`
+	# running Why
+	if ! $pgm --type-only $f > /dev/null 2>&1; then
+	    echo "why FAILED"
+	    $pgm --type-only $f
+	    exit 1
+	fi
+	echo "why ok... "
+    done
+}
+
 good_ml () {
     for f in $1/*.mlw; do
 	echo -n "  "$f"... "
@@ -71,26 +85,6 @@ good_ml () {
     done
 }
 
-good_c () {
-    for f in $1/*.c; do
-	echo -n "  "$f"... "
-	base=$1/`basename $f .c`
-	if ! gcc -c $f > /dev/null 2>&1; then
-	    echo "GCC failed"
-	    gcc -c $f
-	    exit 1
-	fi
-	echo -n "GCC ok... "
-	if ! $pgm --coq-@COQVER@ $f > /dev/null 2>&1; then
-	    echo "why FAILED"
-	    $pgm --coq-@COQVER@ $f
-	    exit 1
-	fi
-	echo -n "why ok... "
-	provers $f $base
-    done
-}
-
 bads () {
     for f in $1/*.mlw; do
 	echo -n "  "$f"... "
@@ -103,8 +97,6 @@ bads () {
 	fi
     done
 }
-
-if test "$2" = "c"; then good_c good-c; exit 0; fi
 
 # 1. Syntax
 echo "=== Checking parsing errors ==="
@@ -121,12 +113,12 @@ echo "=== Checking other errors ==="
 bads bad/other
 echo ""
 
-# 3. ML benchmark
+# 3. benchmark
+echo "=== Type-checking good files ==="
+good_tc provers
+echo ""
+
 echo "=== Checking good files ==="
 good_ml good
 echo ""
-
-# 4. C benchmark
-# echo "=== Checking good C files ==="
-# good_c good-c
 
