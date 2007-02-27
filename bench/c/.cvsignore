@@ -11,3 +11,4 @@ coq
 why
 test.makefile
 test.depend
+semantic.cache

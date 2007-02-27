@@ -16,3 +16,4 @@ a.out
 caduceus_spec_why.v
 test_why.v
 *.tmp
+gwhy.cache
