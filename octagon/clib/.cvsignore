@@ -7,3 +7,4 @@ liboct_fag.la
 oct_polka.lo
 oct_sem.lo
 oct_util.lo
+semantic.cache
