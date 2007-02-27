@@ -3,7 +3,7 @@ CADUCEUS=../../bin/caduceus.opt
 CADUCEUSLIB=$(shell pwd)/../../lib
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
-FILES = max abs swap search purse 
+FILES = max abs swap search purse binary_search
 
 TODO = average
 
