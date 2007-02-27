@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic.mli,v 1.38 2006-11-03 12:49:03 marche Exp $ i*)
+(*i $Id: logic.mli,v 1.39 2007-02-27 13:14:48 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -46,6 +46,7 @@ type pure_type =
 
 and type_var =
   { tag : int; 
+    user : bool;
     mutable type_val : pure_type option }
 
 type instance = pure_type list

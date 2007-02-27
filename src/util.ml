@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.122 2007-01-25 08:48:55 couchot Exp $ i*)
+(*i $Id: util.ml,v 1.123 2007-02-27 13:14:49 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -429,6 +429,9 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
   | PTexternal([],id) -> fprintf fmt "%a" Ident.print id
+  | PTvar ({user=true; type_val=None} as v) -> 
+      fprintf fmt "'%s" (type_var_name v)
+  | PTvar {user=true; type_val=Some _} -> assert false
   | PTvar {tag=t; type_val=None} -> fprintf fmt "'a%d" t
   | PTvar {tag=t; type_val=Some pt} -> 
       if debug then

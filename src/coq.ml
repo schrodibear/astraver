@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.160 2007-02-26 14:16:31 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.161 2007-02-27 13:14:48 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -244,9 +244,9 @@ let print_predicate_v7 fmt p =
     | Papp (id, [a;b], _) when id == t_neq_real ->
 	fprintf fmt "~(@[eqT R %a %a@])" print_term_v7 a print_term_v7 b
     | Papp (id, [a;b], _) when is_eq id ->
-	fprintf fmt "@[%a = %a@]" print_term_v7 a print_term_v7 b
+	fprintf fmt "@[%a =@ %a@]" print_term_v7 a print_term_v7 b
     | Papp (id, [a;b], _) when is_neq id -> 
-	fprintf fmt "@[~(%a = %a)@]" print_term_v7 a print_term_v7 b
+	fprintf fmt "@[~(%a =@ %a)@]" print_term_v7 a print_term_v7 b
     | Papp (id, [a;b], _) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v7 a print_term_v7 b
@@ -534,9 +534,9 @@ let print_predicate_v8 fmt p =
     | Papp (id, [a;b], _) when id == t_neq_real ->
 	fprintf fmt "~(@[eq %a %a@])" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b], _) when is_eq id ->
-	fprintf fmt "@[%a = %a@]" print_term_v8 a print_term_v8 b
+	fprintf fmt "@[%a =@ %a@]" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b], _) when is_neq id -> 
-	fprintf fmt "@[~(%a = %a)@]" print_term_v8 a print_term_v8 b
+	fprintf fmt "@[~(%a =@ %a)@]" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b], _) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v8 a print_term_v8 b
@@ -737,7 +737,7 @@ let print_scheme fmt l =
   Env.Vmap.iter
     (fun _ x -> 
        incr r;
-       x.type_val <- Some (PTvar { tag = !r; type_val = None });
+       x.type_val <- Some (PTvar { tag = !r; user = false; type_val = None });
        if v8 then fprintf fmt "forall (A%d:Set),@ " !r
        else fprintf fmt "(A%d:Set)@ " !r)
     l
@@ -760,8 +760,10 @@ let print_obligation fmt loc id s =
   fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n"
 
 let reprint_parameter fmt id c =
+  let (l,c) = Env.specialize_cc_type c in
   fprintf fmt 
-    "@[<hov 2>(*Why*) Parameter %a :@ @[%a@].@]@\n" idents id print_cc_type c
+    "@[<hov 2>(*Why*) Parameter %a :@ @[%a%a@].@]@\n" idents id 
+    print_scheme l print_cc_type c
 
 let print_parameter = reprint_parameter
 
@@ -975,9 +977,12 @@ let push_validation id tt v = Queue.add (id,tt,v) valid_q
 
 let print_lam_scheme fmt l =
   List.iter
-    (fun x -> 
-       if v8 then fprintf fmt "fun (A%d:Set) =>@ " x.tag
-       else fprintf fmt "[A%d:Set]@ " x.tag)
+    (fun v -> match v with
+       | {type_val=Some (PTvar {type_val=None; tag=x})} -> 
+	   if v8 then fprintf fmt "fun (A%d:Set) =>@ " x
+	   else fprintf fmt "[A%d:Set]@ " x
+       | _ ->
+	   assert false)
     l
 
 let print_validation fmt (id, tt, v) =

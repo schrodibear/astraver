@@ -71,7 +71,7 @@ gappa:
 
 test:
 #	$(WHY) --coq-v8 -d -V --coq-tactic magic test.mlw
-	$(WHY) --coq-v8 -d -V --valid --coq-tactic intuition test.mlw
+	$(WHY) --coq-v8 -d -V --valid --coq-tactic admit test.mlw
 	coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
 	coqc -I ../lib/coq test_valid.v
 
@@ -87,17 +87,17 @@ fastwp.ergo:
 	$(BWHY) -no-prelude -tc test_why.why && ergo test_why.why
 
 partial:
-	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic magic test.mlw
+	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic admit test.mlw
 	coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
 	coqc -I ../lib/coq test_valid.v
 
 total:
-	$(WHY) --coq-v8 -d -V --total --valid --coq-tactic magic test.mlw
+	$(WHY) --coq-v8 -d -V --total --valid --coq-tactic admit test.mlw
 	coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
 	coqc -I ../lib/coq test_valid.v
 
 byte:
-	$(BWHY) --coq-v8 -d -V --valid --coq-tactic magic test.mlw
+	$(BWHY) --coq-v8 -d -V --valid --coq-tactic admit test.mlw
 	-coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
 	-coqc -I ../lib/coq test_valid.v
 

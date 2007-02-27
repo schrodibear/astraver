@@ -34,10 +34,7 @@ CADUCEUS
 WHY FEATURES
 ============
 
- - arguments which are types
-
- - option to suppress termination obligations (i.e. partial correctness)
-   (=> no validation)
+ - polymorphic let-in
 
  - mutually recursive functions 
    (many variants over the same type, one relation)
@@ -59,17 +56,13 @@ Simplify
 haRVey
 ======
 
- - types as for Simplify?
-
 DOCUMENTATION
 =============
 
- - whydoc (to LaTeX / HTML)
+ - whydoc (to LaTeX)
 
-WHY VIEWER
-==========
-
- - nice pretty-print for internal types
+GWHY
+====
 
 BUGS
 ====

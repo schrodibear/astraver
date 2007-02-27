@@ -641,8 +641,8 @@ Implicit Arguments separation1_range1.
           (0 <= i1 /\ i1 < size ->
            (0 <= i2 /\ i2 < size ->
             (i1 <> i2 ->
-             ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
-                                                              (shift p i2)))))))))))).
+             ~((base_addr (acc m (shift p i1))) =
+             (base_addr (acc m (shift p i2)))))))))))).
 Implicit Arguments separation1_range.
 
 (*Why predicate*) Definition separation2 (A784:Set)

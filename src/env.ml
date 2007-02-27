@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.68 2006-12-13 09:28:08 couchot Exp $ i*)
+(*i $Id: env.ml,v 1.69 2007-02-27 13:14:48 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -144,12 +144,9 @@ let dump_type_var = ref (fun (v:type_var) -> ())
 
 let new_type_var =
   let c = ref 0 in
-  fun () -> 
+  fun ?(user=false) () -> 
     incr c; 
-    let v = { tag = !c; type_val = None } in 
-(*     Printf.printf "New type variable created : %d\n" !c;  *)
-(*     flush stdout; *)
-    (*at_exit (fun () -> !dump_type_var v); *)
+    let v = { tag = !c; user=user; type_val = None } in 
     v
 
 let rec subst_pure_type s t =
@@ -390,6 +387,10 @@ and subst_proof s = function
   | WfZwf t -> WfZwf (subst_term s t)
   | ProofTerm cc -> ProofTerm (subst_cc_term s cc)
 
+let specialize_cc_type tt = 
+  let l = find_cc_type_vars Vset.empty tt in
+  specialize_scheme subst_cc_type {scheme_vars=l; scheme_type=tt}
+
 let specialize_validation tt cc =
   let l = find_cc_term_vars (find_cc_type_vars Vset.empty tt) cc in
   if Vset.is_empty l then
@@ -399,6 +400,9 @@ let specialize_validation tt cc =
       Vset.fold (fun x l -> Vmap.add x (new_type_var()) l) l Vmap.empty 
     in 
     (env, subst_cc_type env tt, subst_cc_term env cc)
+
+let type_var_names = Hashtbl.create 97
+let type_var_name v = Hashtbl.find type_var_names v.tag
 
 
 (* Environments for imperative programs.
@@ -432,7 +436,8 @@ module Penv = struct
     try
       Hashtbl.find e.type_vars s
     with Not_found ->
-      let v = new_type_var () in
+      let v = new_type_var ~user:true () in
+      Hashtbl.add type_var_names v.tag s;
       Hashtbl.add e.type_vars s v;
       v
 end

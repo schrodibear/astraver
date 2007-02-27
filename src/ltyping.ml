@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.61 2006-11-24 13:27:59 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.62 2007-02-27 13:14:49 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -93,6 +93,7 @@ let rec occurs v = function
   | PTexternal (l, _) -> List.exists (occurs v) l
   | PTint | PTbool | PTunit | PTreal -> false
 
+(* destructive type unification *)
 let rec unify t1 t2 = match (t1,t2) with
   | PTvar { type_val = Some t1 }, _ ->
       unify t1 t2
@@ -101,8 +102,8 @@ let rec unify t1 t2 = match (t1,t2) with
   | PTvar v1, PTvar v2 when v1.tag = v2.tag ->
       true
   (* instantiable variables *)
-  | (PTvar v, t)
-  | (t, PTvar v) ->
+  | (PTvar ({user=false} as v), t)
+  | (t, PTvar ({user=false} as v)) ->
       not (occurs v t) && (v.type_val <- Some t; true)
   (* recursive types *)
   | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
@@ -112,7 +113,8 @@ let rec unify t1 t2 = match (t1,t2) with
   | _, (PTexternal _) ->
       false
   (* other cases *)
-  | (PTunit | PTreal | PTbool | PTint), (PTunit | PTreal | PTbool | PTint) -> 
+  | (PTunit | PTreal | PTbool | PTint | PTvar {user=true}), 
+    (PTunit | PTreal | PTbool | PTint | PTvar {user=true}) -> 
       t1 = t2
 
 let make_comparison loc = function

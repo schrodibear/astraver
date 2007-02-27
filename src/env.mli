@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.44 2006-11-03 12:49:02 marche Exp $ i*)
+(*i $Id: env.mli,v 1.45 2007-02-27 13:14:48 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -123,7 +123,9 @@ val find_logic : Ident.t -> local_env -> pure_type
 
 (* type variables and generalization/specialization *)
 
-val new_type_var : unit -> type_var
+val new_type_var : ?user:bool -> unit -> type_var
+
+val type_var_name : type_var -> string (* for error messages only *)
 
 val generalize_logic_type : logic_type -> logic_type scheme
 val generalize_type_v : type_v -> type_v scheme
@@ -143,6 +145,7 @@ val specialize_sequent : sequent scheme -> var_subst * sequent
 
 val subst_sequent : var_subst -> sequent -> sequent
 
+val specialize_cc_type : Cc.cc_type -> var_subst * Cc.cc_type
 val specialize_validation : 
   Cc.cc_type -> Cc.validation -> var_subst * Cc.cc_type * Cc.validation
 
