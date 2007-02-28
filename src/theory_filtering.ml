@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.2 2007-02-28 08:18:06 filliatr Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.3 2007-02-28 13:58:22 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -62,10 +62,11 @@ struct
      @param f is the formula we want to store
      @return n is the index where the formula has been stored
   **)
-  let add (logic,s) = 
+  let add (logic,d) = 
     let n  = uniqueNumberGenerator () in 
-    m := Int_map.add n (logic,s)  !m ;
+    m := Int_map.add n (logic,Int_set.empty,d)  !m ;
     n
+          
 
   let reset () = 
     m := Int_map.empty ;
@@ -75,19 +76,36 @@ struct
 
   let  depends_on n =
     try 
-      snd (Int_map.find n !m)
+      let (_,_,d) =  Int_map.find n !m in 
+      d
     with 
 	Not_found -> 
 	  Printf.printf "Number %d not found \n" n;
 	  raise Exit
     
-  let get n =
+  let  produces n =
     try 
-      fst (Int_map.find n !m)
+      let (_,p,_) =  Int_map.find n !m in 
+      p
     with 
 	Not_found -> 
 	  Printf.printf "Number %d not found \n" n;
 	  raise Exit
+
+  let axiom n =
+    try 
+      let (l,_,_) =  Int_map.find n !m in 
+      l
+    with 
+	Not_found -> 
+	  Printf.printf "Number %d not found \n" n;
+	  raise Exit
+
+  let set_produce n s  = 
+    let l = axiom n in 
+    let d = depends_on n in
+    m := Int_map.add n (l,s,d)  !m 
+
 end 
   
 
@@ -127,14 +145,8 @@ let functional_symbols  f  = (*: Logic_decl.t -> StringSet*)
   (** symbols the result **)
   let symbolsSet  = ref Int_set.empty  in 
   let rec collect formula  = 
-    let rec collectIntoAList  l = match l with 
-	[] -> () 
-      |  p :: r -> 
-	   collect p ;
-	   collectIntoAList r in 
     match formula with 
-      | Tconst (ConstInt n) -> () 
-	  (*	  symbolsSet  :=   Int_set.add (Symbol_container.index_of n) !symbolsSet*)
+      | Tconst (ConstInt n) -> ()
       | Tconst (ConstBool _) -> () 
       | Tconst ConstUnit -> ()
       | Tconst (ConstFloat _) -> ()
@@ -145,12 +157,12 @@ let functional_symbols  f  = (*: Logic_decl.t -> StringSet*)
 	  collect c  
       | Tapp (id, tl, _) when is_relation id || is_arith id ->
 	  symbolsSet  := Int_set.add (Symbol_container.index_of (Ident.string id))  !symbolsSet ;
-	  collectIntoAList tl 
+	  List.iter collect tl 
       | Tapp (id, [], i) -> 
 	  symbolsSet  := Int_set.add (Symbol_container.index_of (Ident.string id)) !symbolsSet
       | Tapp (id, tl, i) ->
 	  symbolsSet  := Int_set.add (Symbol_container.index_of (Ident.string id)) !symbolsSet;
-	  collectIntoAList tl 
+	  List.iter collect tl 
       | _ -> ()
   in
   collect f ; 
@@ -207,12 +219,12 @@ let symbols  f  =
 let rec add_relevant_in elt s = 
   if Int_set.mem elt s then
     s
-  else
+  else  
     Int_set.add elt (Int_set.fold add_relevant_in (Theory_container.depends_on elt) s)
       
 
 let rank_1 n s = 
-  let s1 = Theory_container.depends_on n in 
+  let s1 = Theory_container.produces n in 
   let r = 
     if Int_set.subset s1 s then 1 else 0 in 
   (*Printf.printf "rank %d \n" r ;*)
@@ -223,11 +235,16 @@ let filter rs selectedAx notYetSelectedAx =
   let removedElem = ref Int_set.empty in
   let relevant = ref selectedAx in
   let f ax =
-    if rank_1 ax rs >= threshold then
+    let r = rank_1 ax rs in 
+    if r >= threshold then
       begin 
 	relevant := add_relevant_in ax !relevant ;
 	removedElem := Int_set.add  ax !removedElem
-      end in
+      end ; 
+    if debug then begin 
+	Printf.printf "ax (%d) has rank %d \n" ax r
+      end    
+  in
   Int_set.iter f notYetSelectedAx ;
   (!relevant,Int_set.diff notYetSelectedAx !removedElem)
 
@@ -261,8 +278,9 @@ let managesGoal id ax (hyps,concl) =
   let setOfSymbols =  symb_of_seq hyps in 
   let n = Theory_container.add  (ax,setOfSymbols) in 
   display (ax,setOfSymbols) n ;
+  (*Theory_container.set_produce n setOfSymbols ; *)
   let allax = ref Int_set.empty  in 
-  for i= 1 to n do
+  for i= 1 to n-1 do
     allax := Int_set.add i !allax 
   done;
   let (rel,irrel) = filter setOfSymbols Int_set.empty  !allax in 
@@ -270,20 +288,23 @@ let managesGoal id ax (hyps,concl) =
   Int_set.iter (fun t-> Printf.printf "%d " t) rel ;
   Printf.printf " \n " 
   *)
-  Int_set.iter (fun t-> Queue.add (Theory_container.get t)
-		  reducedQueue) rel 
+  Int_set.iter 
+    (fun t-> Queue.add (Theory_container.axiom t) reducedQueue)
+    rel 
   
   
 
 let declare_axiom id ax p =
   let setOfSymbols = symbols p in 
   let n = Theory_container.add  (ax,setOfSymbols) in 
+  Theory_container.set_produce n setOfSymbols ;
   display (ax,setOfSymbols) n
 
 
 let declare_function id ax (_,_,e) = 
   let setOfSymbols =  functional_symbols e in 
   let n = Theory_container.add  (ax,setOfSymbols) in 
+  Theory_container.set_produce n (Int_set.singleton n) ;
   Symbol_container.add id n;
   display (ax,setOfSymbols) n
 
@@ -291,6 +312,7 @@ let declare_function id ax (_,_,e) =
 let declare_predicate id ax (_,p) = 
   let setOfSymbols = symbols p in 
   let n = Theory_container.add  (ax,setOfSymbols) in 
+  Theory_container.set_produce n (Int_set.singleton n) ;
   Symbol_container.add id n;
   display (ax,setOfSymbols) n
 

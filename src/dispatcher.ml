@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.18 2007-02-28 08:18:06 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.19 2007-02-28 13:58:22 couchot Exp $ i*)
 
 open Options
 open Vcg
@@ -112,7 +112,8 @@ let output_file ?encoding p (elems,o) =
       if debug then
 	Format.printf "After the pruning dedicated to the PO: %d @." 
 	  (Queue.length q);
-      Queue.iter (push_elem p) q
+      Queue.iter (push_elem p) q ;
+      push_obligation p o 
     end
   else
     begin
