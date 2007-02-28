@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.32 2007-01-05 16:09:27 couchot Exp $ i*)
+(*i $Id: calldp.ml,v 1.33 2007-02-28 07:51:43 couchot Exp $ i*)
 
 open Printf
 
@@ -145,6 +145,37 @@ let yices ?(debug=false) ?(timeout=30) ~filename:f () =
     remove_file ~debug out;
     r
 
+
+
+let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
+  let cmd = sprintf "rvc %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c <> 0 then (error c t cmd)
+  else begin
+    let f = Filename.chop_suffix f ".rv" in
+    let fi = f ^ "-0"  ^ ".baf" in
+    let cmd = sprintf "rv   %s" fi in
+    let t,c,out = timed_sys_command ~debug timeout cmd in
+    if c <> 0 then (error c t cmd)
+    else
+      let r =
+	if Sys.command 
+	  (sprintf "grep  -q -w \"is valid\" %s " out) = 0 then
+	    Valid t
+	else
+	  if Sys.command 
+	    (sprintf "grep  -q -w \"cannot be decided\" %s " out) = 0 
+	  then
+	    CannotDecide (t, None)
+	  else
+	    ProverFailure(t,"command failed: " ^ cmd)
+      in
+      remove_file ~debug out;
+      r
+  end
+ 
+
+
 let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "ergo %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
@@ -165,47 +196,12 @@ let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
     remove_file ~debug out;
     r
     
-let harvey ?(debug=false) ?(timeout=10) ?(eclauses=200000) ~filename:f () =
-  if debug then Format.eprintf "Calling rvc@.";
-  let cmd = sprintf "rvc %s" f in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-  if debug then Format.eprintf "rvc done@.";
-  if c <> 0 then [error c t cmd]
-  else
-    let results = ref [] in
-    let add r = results := r :: !results in
-    let f = Filename.chop_suffix f ".rv" in
-    let rec iter i =
-      let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
-      if Sys.file_exists fi then begin
-	(* *)
-	let cmd = sprintf "rv --dpll %s" fi in
-	let t,c,out = timed_sys_command ~debug timeout cmd in
-	if c = 152 then 
-	  add (Timeout t)
-	else 
-	  begin
-	    let r =
-	      if Sys.command 
-		(sprintf "grep  -q -w \"is valid\" %s " out) = 0 then
-		  Valid t
-	      else
-		if Sys.command 
-		  (sprintf "grep  -q -w \"cannot be decided\" %s " out) = 0 
-		then
-		  CannotDecide (t, None)
-		else
-		  ProverFailure(t,"command failed: " ^ cmd)
-	    in
-	    remove_file ~debug out;
-	    add r
-	  end;
-	iter (i+1);
-      end	   	
-    in
-    iter 0;
-    List.rev !results
-      
+
+
+
+ 
+	      
+	
 
 let zenon ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "zenon %s" f in

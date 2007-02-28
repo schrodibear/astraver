@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.13 2006-12-14 15:09:28 marche Exp $ i*)
+(*i $Id: calldp.mli,v 1.14 2007-02-28 07:51:43 couchot Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -41,8 +41,8 @@ val simplify :
   prover_result
 
 val harvey : 
-  ?debug:bool -> ?timeout:int -> ?eclauses:int -> filename:string -> unit -> 
-  prover_result list
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+  prover_result 
 
 val cvcl : 
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 

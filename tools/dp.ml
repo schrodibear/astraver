@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.35 2007-02-16 08:24:13 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.36 2007-02-28 07:51:43 couchot Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -123,9 +123,7 @@ let call_rvsat f =
 let call_zenon f = 
   wrapper (Calldp.zenon ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_harvey f = 
-  List.iter wrapper 
-    (Calldp.harvey ~debug:!debug ~timeout:!timeout 
-       ~eclauses:!eclauses ~filename:f ())
+  wrapper (Calldp.harvey ~debug:!debug ~timeout:!timeout ~filename:f ())
 
 
 let split f =
@@ -158,7 +156,9 @@ let split f =
     Zenon_split.iter call_zenon f (* TODO: Zenon_split *)
   else 
   if Filename.check_suffix f ".rv" then
-    call_harvey f 
+    begin
+      Rv_split.iter  call_harvey f 
+    end
   else 
     begin Arg.usage spec usage; exit 1 end;
   printf 
