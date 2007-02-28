@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.16 2006-11-17 16:16:15 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.17 2007-02-28 07:45:36 couchot Exp $ i*)
 
 open Options
 open Vcg
@@ -107,10 +107,10 @@ let output_file ?encoding p (elems,o) =
 	    (loc, id, s) -> let g = Dgoal (loc, id, s) in
 	    Queue.add g  declQ
       end;
-      (*Printf.printf "Before the pruning dedicated to the PO: %d \n" (Queue.length declQ);*)
+      Printf.printf "Before the pruning dedicated to the PO: %d \n" (Queue.length declQ);
       (** reduce the theorie **)
-      let q =  (Theoryreducer.reduce declQ) in 
-      (*Printf.printf "After the pruning dedicated to the PO: %d \n" (Queue.length q);*)
+      let q =  (Theory_filtering.reduce declQ) in 
+      Printf.printf "After the pruning dedicated to the PO: %d \n" (Queue.length q);
       Queue.iter (push_elem p) q
     end
   else
@@ -147,8 +147,7 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
     | Simplify -> 
 	Calldp.simplify ~debug ?timeout ~filename () 
     | Harvey -> 
-	(match Calldp.harvey ~debug ?timeout ~filename () with 
-	   | [r] -> r | _ -> assert false)
+	Calldp.harvey ~debug ?timeout ~filename ()
     | Cvcl ->
 	Calldp.cvcl ~debug ?timeout ~filename ()
     | Zenon -> 

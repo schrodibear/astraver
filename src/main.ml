@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.121 2007-02-20 21:46:58 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.122 2007-02-28 07:45:36 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -414,13 +414,16 @@ let main () =
     output (Options.out_file "out")
   end else begin
     List.iter deal_file files;
-    if pruning then begin
-      let q = Theoryreducer.reduce declarationQueue in 
-      encode q;
-      if single_file () then 
-	let lf = Filename.chop_extension (last files) in
-	output (Options.out_file lf)  
-    end else if single_file () then 
+    if pruning then
+      begin
+	(*let q =  (Theory_filtering.reduce declarationQueue) in *)
+	let q =  declarationQueue in 
+	encode q ;
+	if single_file () then 
+	  let lf = Filename.chop_extension (last files) in
+	  output (Options.out_file lf)  
+      end
+    else if single_file () then 
       let lf = Filename.chop_extension (last files) in
       output (Options.out_file lf)
   end;

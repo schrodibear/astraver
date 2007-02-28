@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.45 2007-02-21 08:46:38 couchot Exp $ i*)
+(*i $Id: harvey.ml,v 1.46 2007-02-28 07:45:36 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -272,21 +272,12 @@ let output_obligation fmt (loc, o, s) =
 
 let decl_to_elem = function
   | Dgoal (loc,id,s) -> Queue.add (loc,id,s.Env.scheme_type) oblig
-(*  | Dgoal (loc, id, s) -> Queue.add (Oblig (loc, id, s)) oblig*)
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory
   | _ -> ()
 
 
-(*let push_decl = function
-  | Dgoal (loc,id,s) -> Queue.add (loc,id,s.Env.scheme_type) oblig
-  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
-  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
-  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory
-  | Dtype _ -> ()
-  | Dlogic _ -> ()
-*)
 
 
 

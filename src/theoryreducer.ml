@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.6 2006-12-14 08:51:42 couchot Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.7 2007-02-28 07:45:36 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -50,7 +50,7 @@ struct
   let fContainer :(int, 'a) Hashtbl.t = Hashtbl.create 20
 
   (**
-     @returns a unique integer that is used to inde the 
+     @returns a unique integer that is used to index the 
      fContainerainer hash table
   **)    
   let uniqueNumberGenerator = 
