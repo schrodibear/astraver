@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.229 2007-02-21 10:56:10 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.230 2007-02-28 10:48:57 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -1691,6 +1691,9 @@ let catch_return e = match !abrupt_return with
       e
   | Some "Return" ->
       Try (e, "Return", None, Void)
+  | Some "Return_pointer" ->
+      Let_ref("caduceus_return", Var "null",
+	      Try (e, "Return_pointer", None, Deref "caduceus_return"))
   | Some r ->
       let tmp = tmp_var () in
       Try (append e Absurd, r, Some tmp, Var tmp)
@@ -1769,7 +1772,11 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
 	| Some e -> 
 	    let r = return_exn e.nexpr_type in 
 	    abrupt_return := Some r;
-	    Raise (r, Some (interp_expr e))
+	    if r = "Return_pointer" then
+	      Block [Assign ("caduceus_return", interp_expr e); 
+		     Raise ("Return_pointer", None)]
+	    else
+	      Raise (r, Some (interp_expr e))
       else begin match eopt with
 	| None -> Void
 	| Some e -> interp_expr e

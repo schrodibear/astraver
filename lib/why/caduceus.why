@@ -216,7 +216,7 @@ exception Continue
 exception Return
 exception Return_int of int
 exception Return_real of real
-exception Return_pointer of 'z pointer
+exception Return_pointer (*of 'z pointer*)
 
 (* for Simplify *)
 
