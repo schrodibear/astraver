@@ -9,3 +9,4 @@ simplify_lexer.ml
 *.output
 simplify_parser.ml
 simplify_parser.mli
+rv_split.ml
