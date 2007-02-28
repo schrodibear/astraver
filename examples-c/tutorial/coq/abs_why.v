@@ -5,7 +5,7 @@ Require Export abs_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs1_impl_po_1 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (alloc: alloc_table),
   (valid alloc p).
 Proof.
@@ -14,9 +14,9 @@ Admitted.
 
 (* Why obligation from file "abs.c", line 3, characters 14-21: *)
 (*Why goal*) Lemma abs1_impl_po_2 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (valid alloc p)),
   forall (result: Z),
   forall (HW_2: result = (acc intM_global p)),
@@ -25,7 +25,7 @@ Admitted.
   forall (result0: Z),
   forall (HW_5: result0 = (acc intM_global p)),
   forall (HW_6: (valid alloc p)),
-  forall (intM_global0: ((memory) Z global)),
+  forall (intM_global0: (memory Z global)),
   forall (HW_7: intM_global0 = (upd intM_global p (Zopp result0))),
   (* File "abs.c", line 3, characters 13-20 *) (acc intM_global0 p) >= 0.
 Proof.
@@ -35,9 +35,9 @@ Save.
 
 (* Why obligation from file "abs.c", line 3, characters 14-21: *)
 (*Why goal*) Lemma abs1_impl_po_3 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (valid alloc p)),
   forall (result: Z),
   forall (HW_2: result = (acc intM_global p)),
@@ -50,9 +50,9 @@ Save.
 
 (* Why obligation from file "abs.c", line 9, characters 14-21: *)
 (*Why goal*) Lemma abs2_impl_po_1 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
@@ -62,7 +62,7 @@ Save.
   forall (result0: Z),
   forall (HW_6: result0 = (acc intM_global p)),
   forall (HW_7: (valid alloc p)),
-  forall (intM_global0: ((memory) Z global)),
+  forall (intM_global0: (memory Z global)),
   forall (HW_8: intM_global0 = (upd intM_global p (Zopp result0))),
   (* File "abs.c", line 9, characters 13-20 *) (acc intM_global0 p) >= 0.
 Proof.
@@ -73,9 +73,9 @@ Save.
 
 (* Why obligation from file "abs.c", line 9, characters 14-21: *)
 (*Why goal*) Lemma abs2_impl_po_2 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),

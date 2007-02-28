@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.1 2007-02-28 07:46:09 couchot Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.2 2007-02-28 08:18:06 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -135,10 +135,9 @@ let functional_symbols  f  = (*: Logic_decl.t -> StringSet*)
     match formula with 
       | Tconst (ConstInt n) -> () 
 	  (*	  symbolsSet  :=   Int_set.add (Symbol_container.index_of n) !symbolsSet*)
-      | Tconst (ConstBool b) -> () 
+      | Tconst (ConstBool _) -> () 
       | Tconst ConstUnit -> ()
-      | Tconst (ConstFloat (i,f,e)) ->
-	  failwith "real not yet suported "
+      | Tconst (ConstFloat _) -> ()
       | Tderef _ -> ()
       | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	  collect a; 
@@ -233,7 +232,7 @@ let filter rs selectedAx notYetSelectedAx =
   (!relevant,Int_set.diff notYetSelectedAx !removedElem)
 
 
-let  display_symb_of set =
+let display_symb_of set =
   Int_set.iter (fun s -> Printf.printf "%d " s) set 
  
 let display (q,s) n = 
@@ -244,10 +243,11 @@ let display (q,s) n =
     | Dfunction_def (_, id, d) -> Printf.printf  "def_func %s (%d): " id 
     | Daxiom (_, id, p)          -> Printf.printf  "axiom %s (%d): "  id 
     | Dgoal (_, id, s)   -> Printf.printf  "goal %s (%d):"  id 
-  in (di q) n;
-  display_symb_of s ;
-Printf.printf  "\n"
-
+  in 
+  if debug then begin 
+    (di q) n;
+    display_symb_of s; Printf.printf "\n" 
+  end
 
 let managesGoal id ax (hyps,concl) =   
   let rec symb_of_seq = function

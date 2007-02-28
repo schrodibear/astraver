@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.17 2007-02-28 07:45:36 couchot Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.18 2007-02-28 08:18:06 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -94,7 +94,6 @@ let output_file ?encoding p (elems,o) =
     | Rvsat -> Smtlib.reset ()
     | Yices -> Smtlib.reset ()
     | Ergo -> Pretty.reset ()
-
   end;
   if pruning then 
     begin  
@@ -102,15 +101,17 @@ let output_file ?encoding p (elems,o) =
 	 all the elements of the elems list and th obligation**)  
       let declQ = Queue.create () in
       List.iter (fun p -> Queue.add p declQ) elems ;
-      begin 
-	match o with 
-	    (loc, id, s) -> let g = Dgoal (loc, id, s) in
-	    Queue.add g  declQ
-      end;
-      Printf.printf "Before the pruning dedicated to the PO: %d \n" (Queue.length declQ);
-      (** reduce the theorie **)
-      let q =  (Theory_filtering.reduce declQ) in 
-      Printf.printf "After the pruning dedicated to the PO: %d \n" (Queue.length q);
+      let (loc, id, s) = o in
+      let g = Dgoal (loc, id, s) in
+      Queue.add g declQ;
+      if debug then
+	Format.printf "Before the pruning dedicated to the PO: %d @." 
+	  (Queue.length declQ);
+      (** reduce the theory **)
+      let q = Theory_filtering.reduce declQ in 
+      if debug then
+	Format.printf "After the pruning dedicated to the PO: %d @." 
+	  (Queue.length q);
       Queue.iter (push_elem p) q
     end
   else

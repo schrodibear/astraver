@@ -138,10 +138,10 @@ Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit0_impl_po_1 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 8, characters 14-36 *)
                 ((purse_inv balance_global alloc p) /\ s >= 0)),
   (valid alloc p).
@@ -152,17 +152,17 @@ Save.
 
 (* Why obligation from file "purse.c", line 9, characters 14-64: *)
 (*Why goal*) Lemma credit0_impl_po_2 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 8, characters 14-36 *)
                 ((purse_inv balance_global alloc p) /\ s >= 0)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result + s))),
   (* File "purse.c", line 9, characters 13-63 *)
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
@@ -174,10 +174,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit_impl_po_1 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc p) /\ s >= 0)),
   (valid alloc p).
@@ -188,17 +188,17 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit_impl_po_2 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc p) /\ s >= 0)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result + s))),
   (* File "purse.c", line 38, characters 13-63 *)
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
@@ -211,10 +211,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_1 : 
-  forall (p1: ((pointer) global)),
-  forall (p2: ((pointer) global)),
+  forall (p1: (pointer global)),
+  forall (p2: (pointer global)),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 53, characters 14-56 *)
                 (((purse_inv balance_global alloc p1) /\
                 (purse_inv balance_global alloc p2)) /\ ~(p1 = p2))),
@@ -226,15 +226,15 @@ Save.
 
 (* Why obligation from file "purse.c", line 36, characters 15-37: *)
 (*Why goal*) Lemma test1_impl_po_2 : 
-  forall (p1: ((pointer) global)),
-  forall (p2: ((pointer) global)),
+  forall (p1: (pointer global)),
+  forall (p2: (pointer global)),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 53, characters 14-56 *)
                 (((purse_inv balance_global alloc p1) /\
                 (purse_inv balance_global alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_3: balance_global0 = (upd balance_global p1 0)),
   (* File "purse.c", line 36, characters 14-36 *)
   ((purse_inv balance_global0 alloc p2) /\ 100 >= 0).
@@ -245,19 +245,19 @@ Save.
 
 (* Why obligation from file "purse.c", line 54, characters 14-26: *)
 (*Why goal*) Lemma test1_impl_po_3 : 
-  forall (p1: ((pointer) global)),
-  forall (p2: ((pointer) global)),
+  forall (p1: (pointer global)),
+  forall (p2: (pointer global)),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 53, characters 14-56 *)
                 (((purse_inv balance_global alloc p1) /\
                 (purse_inv balance_global alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_3: balance_global0 = (upd balance_global p1 0)),
   forall (HW_4: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global0 alloc p2) /\ 100 >= 0)),
-  forall (balance_global1: ((memory) Z global)),
+  forall (balance_global1: (memory Z global)),
   forall (HW_5: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global1 alloc p2) /\
                 (acc balance_global1 p2) = ((acc balance_global0 p2) + 100)) /\
@@ -275,14 +275,14 @@ Save.
 (* Why obligation from file "purse.c", line 36, characters 15-37: *)
 (*Why goal*) Lemma test2_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
-  forall (result: ((pointer) global)),
+  forall (balance_global: (memory Z global)),
+  forall (result: (pointer global)),
   forall (alloc0: alloc_table),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
                 (purse_inv balance_global alloc0 result)) /\
                 (alloc_extends alloc alloc0)),
-  forall (result0: ((pointer) global)),
+  forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc0 result0) /\
@@ -298,14 +298,14 @@ Save.
 (* Why obligation from file "purse.c", line 36, characters 15-37: *)
 (*Why goal*) Lemma test2_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
-  forall (result: ((pointer) global)),
+  forall (balance_global: (memory Z global)),
+  forall (result: (pointer global)),
   forall (alloc0: alloc_table),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
                 (purse_inv balance_global alloc0 result)) /\
                 (alloc_extends alloc alloc0)),
-  forall (result0: ((pointer) global)),
+  forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc0 result0) /\
@@ -313,7 +313,7 @@ Save.
                 (alloc_extends alloc0 alloc1)),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_4: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
@@ -330,14 +330,14 @@ Save.
 (* Why obligation from file "purse.c", line 44, characters 15-51: *)
 (*Why goal*) Lemma test2_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
-  forall (result: ((pointer) global)),
+  forall (balance_global: (memory Z global)),
+  forall (result: (pointer global)),
   forall (alloc0: alloc_table),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
                 (purse_inv balance_global alloc0 result)) /\
                 (alloc_extends alloc alloc0)),
-  forall (result0: ((pointer) global)),
+  forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc0 result0) /\
@@ -345,7 +345,7 @@ Save.
                 (alloc_extends alloc0 alloc1)),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_4: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
@@ -354,7 +354,7 @@ Save.
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
-  forall (balance_global1: ((memory) Z global)),
+  forall (balance_global1: (memory Z global)),
   forall (HW_6: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
@@ -372,14 +372,14 @@ Save.
 (* Why obligation from file "purse.c", line 44, characters 15-51: *)
 (*Why goal*) Lemma test2_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
-  forall (result: ((pointer) global)),
+  forall (balance_global: (memory Z global)),
+  forall (result: (pointer global)),
   forall (alloc0: alloc_table),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
                 (purse_inv balance_global alloc0 result)) /\
                 (alloc_extends alloc alloc0)),
-  forall (result0: ((pointer) global)),
+  forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc0 result0) /\
@@ -387,7 +387,7 @@ Save.
                 (alloc_extends alloc0 alloc1)),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_4: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
@@ -396,7 +396,7 @@ Save.
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
-  forall (balance_global1: ((memory) Z global)),
+  forall (balance_global1: (memory Z global)),
   forall (HW_6: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
@@ -406,7 +406,7 @@ Save.
   forall (HW_7: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
-  forall (balance_global2: ((memory) Z global)),
+  forall (balance_global2: (memory Z global)),
   forall (HW_8: (* File "purse.c", line 46, characters 13-63 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
@@ -424,14 +424,14 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
-  forall (result: ((pointer) global)),
+  forall (balance_global: (memory Z global)),
+  forall (result: (pointer global)),
   forall (alloc0: alloc_table),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
                 (purse_inv balance_global alloc0 result)) /\
                 (alloc_extends alloc alloc0)),
-  forall (result0: ((pointer) global)),
+  forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc0 result0) /\
@@ -439,7 +439,7 @@ Save.
                 (alloc_extends alloc0 alloc1)),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_4: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
@@ -448,7 +448,7 @@ Save.
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
-  forall (balance_global1: ((memory) Z global)),
+  forall (balance_global1: (memory Z global)),
   forall (HW_6: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
@@ -458,7 +458,7 @@ Save.
   forall (HW_7: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
-  forall (balance_global2: ((memory) Z global)),
+  forall (balance_global2: (memory Z global)),
   forall (HW_8: (* File "purse.c", line 46, characters 13-63 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
@@ -468,7 +468,7 @@ Save.
   forall (HW_9: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
-  forall (balance_global3: ((memory) Z global)),
+  forall (balance_global3: (memory Z global)),
   forall (HW_10: (* File "purse.c", line 46, characters 13-63 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
@@ -484,14 +484,14 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
-  forall (result: ((pointer) global)),
+  forall (balance_global: (memory Z global)),
+  forall (result: (pointer global)),
   forall (alloc0: alloc_table),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
                 (purse_inv balance_global alloc0 result)) /\
                 (alloc_extends alloc alloc0)),
-  forall (result0: ((pointer) global)),
+  forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc0 result0) /\
@@ -499,7 +499,7 @@ Save.
                 (alloc_extends alloc0 alloc1)),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_4: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
@@ -508,7 +508,7 @@ Save.
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
-  forall (balance_global1: ((memory) Z global)),
+  forall (balance_global1: (memory Z global)),
   forall (HW_6: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
@@ -518,7 +518,7 @@ Save.
   forall (HW_7: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
-  forall (balance_global2: ((memory) Z global)),
+  forall (balance_global2: (memory Z global)),
   forall (HW_8: (* File "purse.c", line 46, characters 13-63 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
@@ -528,7 +528,7 @@ Save.
   forall (HW_9: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
-  forall (balance_global3: ((memory) Z global)),
+  forall (balance_global3: (memory Z global)),
   forall (HW_10: (* File "purse.c", line 46, characters 13-63 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
@@ -547,14 +547,14 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_7 : 
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
-  forall (result: ((pointer) global)),
+  forall (balance_global: (memory Z global)),
+  forall (result: (pointer global)),
   forall (alloc0: alloc_table),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
                 (purse_inv balance_global alloc0 result)) /\
                 (alloc_extends alloc alloc0)),
-  forall (result0: ((pointer) global)),
+  forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc0 result0) /\
@@ -562,7 +562,7 @@ Save.
                 (alloc_extends alloc0 alloc1)),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_4: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
@@ -571,7 +571,7 @@ Save.
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
-  forall (balance_global1: ((memory) Z global)),
+  forall (balance_global1: (memory Z global)),
   forall (HW_6: (* File "purse.c", line 38, characters 13-63 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
@@ -581,7 +581,7 @@ Save.
   forall (HW_7: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
-  forall (balance_global2: ((memory) Z global)),
+  forall (balance_global2: (memory Z global)),
   forall (HW_8: (* File "purse.c", line 46, characters 13-63 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
@@ -591,7 +591,7 @@ Save.
   forall (HW_9: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
-  forall (balance_global3: ((memory) Z global)),
+  forall (balance_global3: (memory Z global)),
   forall (HW_10: (* File "purse.c", line 46, characters 13-63 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
@@ -613,10 +613,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma withdraw0_impl_po_1 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 15, characters 14-50 *)
                 ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
                 (acc balance_global p))),
@@ -628,10 +628,10 @@ Save.
 
 (* Why obligation from file "purse.c", line 16, characters 14-64: *)
 (*Why goal*) Lemma withdraw0_impl_po_2 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 15, characters 14-50 *)
                 ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
                 (acc balance_global p))),
@@ -639,7 +639,7 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result - s))),
   (* File "purse.c", line 16, characters 13-63 *)
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
@@ -651,10 +651,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma withdraw_impl_po_1 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
                 (acc balance_global p))),
@@ -666,10 +666,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma withdraw_impl_po_2 : 
-  forall (p: ((pointer) global)),
+  forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_global: ((memory) Z global)),
+  forall (balance_global: (memory Z global)),
   forall (HW_1: (* File "purse.c", line 44, characters 14-50 *)
                 ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
                 (acc balance_global p))),
@@ -677,7 +677,7 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_global0: ((memory) Z global)),
+  forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result - s))),
   (* File "purse.c", line 46, characters 13-63 *)
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =

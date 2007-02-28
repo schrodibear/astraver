@@ -5,13 +5,13 @@ Require Export swap_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_impl_po_1 : 
-  forall (t: ((pointer) global)),
+  forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
-  forall (result: ((pointer) global)),
+  forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   (valid alloc result).
 Proof.
@@ -21,21 +21,21 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_impl_po_2 : 
-  forall (t: ((pointer) global)),
+  forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
-  forall (result: ((pointer) global)),
+  forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
   forall (result0: Z),
   forall (HW_4: result0 = (acc intM_global result)),
-  forall (result1: ((pointer) global)),
+  forall (result1: (pointer global)),
   forall (HW_5: result1 = (shift t i)),
-  forall (result2: ((pointer) global)),
+  forall (result2: (pointer global)),
   forall (HW_6: result2 = (shift t j)),
   (valid alloc result2).
 Proof.
@@ -44,21 +44,21 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_impl_po_3 : 
-  forall (t: ((pointer) global)),
+  forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
-  forall (result: ((pointer) global)),
+  forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
   forall (result0: Z),
   forall (HW_4: result0 = (acc intM_global result)),
-  forall (result1: ((pointer) global)),
+  forall (result1: (pointer global)),
   forall (HW_5: result1 = (shift t i)),
-  forall (result2: ((pointer) global)),
+  forall (result2: (pointer global)),
   forall (HW_6: result2 = (shift t j)),
   forall (HW_7: (valid alloc result2)),
   forall (result3: Z),
@@ -70,29 +70,29 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_impl_po_4 : 
-  forall (t: ((pointer) global)),
+  forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
-  forall (result: ((pointer) global)),
+  forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
   forall (result0: Z),
   forall (HW_4: result0 = (acc intM_global result)),
-  forall (result1: ((pointer) global)),
+  forall (result1: (pointer global)),
   forall (HW_5: result1 = (shift t i)),
-  forall (result2: ((pointer) global)),
+  forall (result2: (pointer global)),
   forall (HW_6: result2 = (shift t j)),
   forall (HW_7: (valid alloc result2)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc intM_global result2)),
   forall (HW_9: (valid alloc result1)),
-  forall (intM_global0: ((memory) Z global)),
+  forall (intM_global0: (memory Z global)),
   forall (HW_10: intM_global0 = (upd intM_global result1 result3)),
-  forall (result4: ((pointer) global)),
+  forall (result4: (pointer global)),
   forall (HW_11: result4 = (shift t j)),
   (valid alloc result4).
 Proof.
@@ -102,32 +102,32 @@ Save.
 
 (* Why obligation from file "swap.c", line 2, characters 14-54: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
-  forall (t: ((pointer) global)),
+  forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_global: (memory Z global)),
   forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
-  forall (result: ((pointer) global)),
+  forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
   forall (result0: Z),
   forall (HW_4: result0 = (acc intM_global result)),
-  forall (result1: ((pointer) global)),
+  forall (result1: (pointer global)),
   forall (HW_5: result1 = (shift t i)),
-  forall (result2: ((pointer) global)),
+  forall (result2: (pointer global)),
   forall (HW_6: result2 = (shift t j)),
   forall (HW_7: (valid alloc result2)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc intM_global result2)),
   forall (HW_9: (valid alloc result1)),
-  forall (intM_global0: ((memory) Z global)),
+  forall (intM_global0: (memory Z global)),
   forall (HW_10: intM_global0 = (upd intM_global result1 result3)),
-  forall (result4: ((pointer) global)),
+  forall (result4: (pointer global)),
   forall (HW_11: result4 = (shift t j)),
   forall (HW_12: (valid alloc result4)),
-  forall (intM_global1: ((memory) Z global)),
+  forall (intM_global1: (memory Z global)),
   forall (HW_13: intM_global1 = (upd intM_global0 result4 result0)),
   (* File "swap.c", line 2, characters 13-53 *)
   ((acc intM_global1 (shift t i)) = (acc intM_global (shift t j)) /\
