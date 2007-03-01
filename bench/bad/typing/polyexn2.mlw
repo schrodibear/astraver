@@ -1,0 +1,4 @@
+
+type 'a t
+exception E of 'a t
+ 

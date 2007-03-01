@@ -16,9 +16,9 @@ Require Export reverse_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma rev_impl_po_1 : 
-  forall (p0: ((pointer) global)),
+  forall (p0: (pointer global)),
   forall (alloc: alloc_table),
-  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (tl_global: (memory (pointer global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
                 (is_list tl_global alloc p0)),
   (well_founded length_order).
@@ -32,9 +32,9 @@ Qed.
 
 (* Why obligation from file "reverse.c", line 14, characters 10-195: *)
 (*Why goal*) Lemma rev_impl_po_2 : 
-  forall (p0: ((pointer) global)),
+  forall (p0: (pointer global)),
   forall (alloc: alloc_table),
-  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (tl_global: (memory (pointer global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
                 (is_list tl_global alloc p0)),
   (* File "reverse.c", line 14, characters 9-194 *)
@@ -58,14 +58,14 @@ Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma rev_impl_po_3 : 
-  forall (p0: ((pointer) global)),
+  forall (p0: (pointer global)),
   forall (alloc: alloc_table),
-  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (tl_global: (memory (pointer global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
                 (is_list tl_global alloc p0)),
-  forall (p: ((pointer) global)),
-  forall (r: ((pointer) global)),
-  forall (tl_global0: ((memory) ((pointer) global) global)),
+  forall (p: (pointer global)),
+  forall (r: (pointer global)),
+  forall (tl_global0: (memory (pointer global) global)),
   forall (HW_2: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
                  (exists lr:plist, (((llist tl_global0 alloc p lp) /\
@@ -87,14 +87,14 @@ Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma rev_impl_po_4 : 
-  forall (p0: ((pointer) global)),
+  forall (p0: (pointer global)),
   forall (alloc: alloc_table),
-  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (tl_global: (memory (pointer global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
                 (is_list tl_global alloc p0)),
-  forall (p: ((pointer) global)),
-  forall (r: ((pointer) global)),
-  forall (tl_global0: ((memory) ((pointer) global) global)),
+  forall (p: (pointer global)),
+  forall (r: (pointer global)),
+  forall (tl_global0: (memory (pointer global) global)),
   forall (HW_2: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
                  (exists lr:plist, (((llist tl_global0 alloc p lp) /\
@@ -104,14 +104,14 @@ Qed.
                     (app (rev lr) lp) = (rev l)))))),
   forall (HW_3: ~(r = (@null global))),
   forall (HW_4: (valid alloc r)),
-  forall (result: ((pointer) global)),
+  forall (result: (pointer global)),
   forall (HW_5: result = (acc tl_global0 r)),
-  forall (r0: ((pointer) global)),
+  forall (r0: (pointer global)),
   forall (HW_6: r0 = result),
   forall (HW_7: (valid alloc r)),
-  forall (tl_global1: ((memory) ((pointer) global) global)),
+  forall (tl_global1: (memory (pointer global) global)),
   forall (HW_8: tl_global1 = (upd tl_global0 r p)),
-  forall (p1: ((pointer) global)),
+  forall (p1: (pointer global)),
   forall (HW_9: p1 = r),
   (* File "reverse.c", line 14, characters 9-194 *)
   (exists lp:plist,
@@ -159,14 +159,14 @@ Qed.
 
 (* Why obligation from file "reverse.c", line 8, characters 14-78: *)
 (*Why goal*) Lemma rev_impl_po_5 : 
-  forall (p0: ((pointer) global)),
+  forall (p0: (pointer global)),
   forall (alloc: alloc_table),
-  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (tl_global: (memory (pointer global) global)),
   forall (HW_1: (* File "reverse.c", line 7, characters 14-25 *)
                 (is_list tl_global alloc p0)),
-  forall (p: ((pointer) global)),
-  forall (r: ((pointer) global)),
-  forall (tl_global0: ((memory) ((pointer) global) global)),
+  forall (p: (pointer global)),
+  forall (r: (pointer global)),
+  forall (tl_global0: (memory (pointer global) global)),
   forall (HW_2: (* File "reverse.c", line 14, characters 9-194 *)
                 (exists lp:plist,
                  (exists lr:plist, (((llist tl_global0 alloc p lp) /\
@@ -175,10 +175,12 @@ Qed.
                    ((llist tl_global alloc p0 l) ->
                     (app (rev lr) lp) = (rev l)))))),
   forall (HW_10: r = (@null global)),
+  forall (caduceus_return: (pointer global)),
+  forall (HW_11: caduceus_return = p),
   forall (l0: plist),
-  forall (HW_11: (llist tl_global alloc p0 l0)),
+  forall (HW_12: (llist tl_global alloc p0 l0)),
   (* File "reverse.c", line 8, characters 13-77 *)
-  (llist tl_global0 alloc p (rev l0)).
+  (llist tl_global0 alloc caduceus_return (rev l0)).
 Proof.
 intros; subst; intuition.
 (* post-condition *)
