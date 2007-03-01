@@ -306,16 +306,13 @@ Save.
   forall (HW_6: 2 <> 0),
   forall (result: Z),
   forall (HW_7: result = ((Zdiv (x + 1) 2))),
-  forall (HW_8: result > 0 /\ x > 0 /\ result =
-                ((Zdiv ((Zdiv x x) + x) 2)) /\ x < ((x + 1) * (x + 1)) /\ x <
-                ((result + 1) * (result + 1))),
   forall (y: Z),
   forall (z: Z),
-  forall (HW_9: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
+  forall (HW_8: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
                 ((y + 1) * (y + 1)) /\ x < ((z + 1) * (z + 1))),
-  forall (HW_10: z < y),
+  forall (HW_9: z < y),
   forall (y0: Z),
-  forall (HW_11: y0 = z),
+  forall (HW_10: y0 = z),
   z <> 0.
 Proof.
 intuition.
@@ -330,24 +327,21 @@ Save.
   forall (HW_6: 2 <> 0),
   forall (result: Z),
   forall (HW_7: result = ((Zdiv (x + 1) 2))),
-  forall (HW_8: result > 0 /\ x > 0 /\ result =
-                ((Zdiv ((Zdiv x x) + x) 2)) /\ x < ((x + 1) * (x + 1)) /\ x <
-                ((result + 1) * (result + 1))),
   forall (y: Z),
   forall (z: Z),
-  forall (HW_9: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
+  forall (HW_8: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
                 ((y + 1) * (y + 1)) /\ x < ((z + 1) * (z + 1))),
-  forall (HW_10: z < y),
+  forall (HW_9: z < y),
   forall (y0: Z),
-  forall (HW_11: y0 = z),
-  forall (HW_12: z <> 0),
+  forall (HW_10: y0 = z),
+  forall (HW_11: z <> 0),
   forall (result0: Z),
-  forall (HW_13: result0 = ((Zdiv x z))),
-  forall (HW_14: 2 <> 0),
+  forall (HW_12: result0 = ((Zdiv x z))),
+  forall (HW_13: 2 <> 0),
   forall (result1: Z),
-  forall (HW_15: result1 = ((Zdiv (result0 + z) 2))),
+  forall (HW_14: result1 = ((Zdiv (result0 + z) 2))),
   forall (z0: Z),
-  forall (HW_16: z0 = result1),
+  forall (HW_15: z0 = result1),
   (z0 > 0 /\ y0 > 0 /\ z0 = ((Zdiv ((Zdiv x y0) + y0) 2)) /\ x <
   ((y0 + 1) * (y0 + 1)) /\ x < ((z0 + 1) * (z0 + 1))) /\ (Zwf 0 y0 y).
 Proof.
@@ -369,17 +363,20 @@ Save.
   forall (HW_6: 2 <> 0),
   forall (result: Z),
   forall (HW_7: result = ((Zdiv (x + 1) 2))),
-  forall (HW_8: result > 0 /\ x > 0 /\ result =
-                ((Zdiv ((Zdiv x x) + x) 2)) /\ x < ((x + 1) * (x + 1)) /\ x <
-                ((result + 1) * (result + 1))),
   forall (y: Z),
   forall (z: Z),
-  forall (HW_9: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
+  forall (HW_8: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
                 ((y + 1) * (y + 1)) /\ x < ((z + 1) * (z + 1))),
-  forall (HW_17: z >= y),
+  forall (HW_16: z >= y),
   (y * y) <= x /\ x < ((y + 1) * (y + 1)).
 Proof.
 intuition.
 apply (iter_sqrt_invar4 x y z); try omega.
 Qed.
+
+(*Why*) Parameter sqrt_valid :
+  forall (x: Z), forall (_: x >= 0),
+  (sig_1 Z
+   (fun (result: Z)  => ((result * result) <= x /\ x <
+    ((result + 1) * (result + 1))))).
 

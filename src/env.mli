@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.45 2007-02-27 13:14:48 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.46 2007-03-01 14:40:51 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -100,7 +100,7 @@ val find_pgm : Ident.t -> typed_expr option
 val empty_progs : unit -> local_env
 val empty_logic : unit -> local_env
 
-val add : Ident.t -> type_v -> local_env -> local_env
+val add : ?generalize:bool -> Ident.t -> type_v -> local_env -> local_env
 val is_local : local_env -> Ident.t -> bool
 
 val find_type_var : Ident.t -> local_env -> type_var

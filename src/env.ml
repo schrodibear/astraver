@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.69 2007-02-27 13:14:48 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.70 2007-03-01 14:40:51 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -465,7 +465,8 @@ let is_logic x env = Idmap.mem x env.logic
 
 let find_logic x env = Idmap.find x env.logic
 
-let add_logic x pt env = { env with logic = Idmap.add x pt env.logic }
+let add_logic x pt env = 
+  { env with logic = Idmap.add x pt env.logic }
 
 (* empty local environment: contains the references as *)
 
@@ -475,10 +476,6 @@ let add_logic_ref id v env = match v with
 
 let empty_progs () = 
   { progs = Penv.empty (); logic = !global_refs }
-(*
-      Idmap.fold (fun id v e -> add_logic_ref id v.scheme_type e) 
-	!env.Penv.map Idmap.empty }
-*)
 
 let empty_logic () =
   { progs = Penv.empty (); logic = Idmap.empty }
@@ -487,8 +484,13 @@ let add_logic_pure_or_ref id v env = match v with
   | Ref pt | PureType pt -> Idmap.add id pt env
   | Arrow _ -> env
 
-let add id v env = 
-  { progs = Penv.add id (empty_scheme v) env.progs;
+let generalize_type_v t =
+  let l = find_type_v_vars Vset.empty t in
+  { scheme_vars = l ; scheme_type = t }
+
+let add ?(generalize=false) id v env = 
+  let v' = if generalize then generalize_type_v v else empty_scheme v in
+  { progs = Penv.add id v' env.progs;
     logic = add_logic_pure_or_ref id v env.logic }
 
 let find_type_var x env = Penv.find_type_var x env.progs
@@ -519,10 +521,6 @@ type typed_expr = typing_info Ast.t
 let (pgm_table : (typed_expr option) Idmap.t ref) = ref Idmap.empty
 
 (* Operations on the global environment. *)
-
-let generalize_type_v t =
-  let l = find_type_v_vars Vset.empty t in
-  { scheme_vars = l ; scheme_type = t }
 
 let add_global_gen id v p =
   try

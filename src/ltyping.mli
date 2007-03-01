@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.mli,v 1.24 2006-11-23 21:28:25 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.25 2007-03-01 14:40:51 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -60,8 +60,6 @@ val binders :
   Loc.position -> Label.t -> local_env -> 
   ptype_v binder list -> 
   type_v binder list * local_env
-
-val logic_type_cannot_be_generalized : logic_type -> bool
 
 (* errors *)
 

@@ -287,6 +287,7 @@ Proof.
 intuition.
 Save.
 
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr4_po_2 : 
   forall (v6: (array Z)),
@@ -298,8 +299,6 @@ Save.
 Proof.
 intuition.
 Save.
-
-
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr5_po_1 : 
@@ -332,6 +331,10 @@ Proof.
 intuition.
 Save.
 
+
+
+
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr7_po_2 : 
   forall (v6: (array Z)),
@@ -343,12 +346,6 @@ Save.
 Proof.
 intuition.
 Save.
-
-
-
-
-
-
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fc3_po_1 : 

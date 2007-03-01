@@ -170,20 +170,16 @@ Save.
   forall (HW_4: u = (result - 1)),
   forall (p: Z),
   forall (HW_5: p = 0),
-  forall (HW_6: 1 <= l /\ u <= ((array_length t) - 1) /\ (0 <= p /\ p <=
-                ((array_length t) - 1)) /\
-                ((p = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l u)))) /\
-                ((p > 0 -> (access t p) = v))),
   forall (l0: Z),
   forall (p0: Z),
   forall (u0: Z),
-  forall (HW_7: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
+  forall (HW_6: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
                 ((array_length t) - 1)) /\
                 ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
                 ((p0 > 0 -> (access t p0) = v))),
-  forall (HW_8: l0 <= u0),
+  forall (HW_7: l0 <= u0),
   forall (m: Z),
-  forall (HW_9: m = (mean l0 u0)),
+  forall (HW_8: m = (mean l0 u0)),
   l0 <= m /\ m <= u0.
 Proof.
 intuition; subst.
@@ -204,21 +200,17 @@ Save.
   forall (HW_4: u = (result - 1)),
   forall (p: Z),
   forall (HW_5: p = 0),
-  forall (HW_6: 1 <= l /\ u <= ((array_length t) - 1) /\ (0 <= p /\ p <=
-                ((array_length t) - 1)) /\
-                ((p = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l u)))) /\
-                ((p > 0 -> (access t p) = v))),
   forall (l0: Z),
   forall (p0: Z),
   forall (u0: Z),
-  forall (HW_7: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
+  forall (HW_6: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
                 ((array_length t) - 1)) /\
                 ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
                 ((p0 > 0 -> (access t p0) = v))),
-  forall (HW_8: l0 <= u0),
+  forall (HW_7: l0 <= u0),
   forall (m: Z),
-  forall (HW_9: m = (mean l0 u0)),
-  forall (HW_10: l0 <= m /\ m <= u0),
+  forall (HW_8: m = (mean l0 u0)),
+  forall (HW_9: l0 <= m /\ m <= u0),
   0 <= m /\ m < (array_length t).
 Proof.
 intuition.
@@ -237,27 +229,23 @@ Save.
   forall (HW_4: u = (result - 1)),
   forall (p: Z),
   forall (HW_5: p = 0),
-  forall (HW_6: 1 <= l /\ u <= ((array_length t) - 1) /\ (0 <= p /\ p <=
-                ((array_length t) - 1)) /\
-                ((p = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l u)))) /\
-                ((p > 0 -> (access t p) = v))),
   forall (l0: Z),
   forall (p0: Z),
   forall (u0: Z),
-  forall (HW_7: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
+  forall (HW_6: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
                 ((array_length t) - 1)) /\
                 ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
                 ((p0 > 0 -> (access t p0) = v))),
-  forall (HW_8: l0 <= u0),
+  forall (HW_7: l0 <= u0),
   forall (m: Z),
-  forall (HW_9: m = (mean l0 u0)),
-  forall (HW_10: l0 <= m /\ m <= u0),
-  forall (HW_11: 0 <= m /\ m < (array_length t)),
+  forall (HW_8: m = (mean l0 u0)),
+  forall (HW_9: l0 <= m /\ m <= u0),
+  forall (HW_10: 0 <= m /\ m < (array_length t)),
   forall (result0: Z),
-  forall (HW_12: result0 = (access t m)),
-  forall (HW_13: result0 < v),
+  forall (HW_11: result0 = (access t m)),
+  forall (HW_12: result0 < v),
   forall (l1: Z),
-  forall (HW_14: l1 = (m + 1)),
+  forall (HW_13: l1 = (m + 1)),
   (1 <= l1 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
   ((array_length t) - 1)) /\
   ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u0)))) /\
@@ -280,31 +268,27 @@ Save.
   forall (HW_4: u = (result - 1)),
   forall (p: Z),
   forall (HW_5: p = 0),
-  forall (HW_6: 1 <= l /\ u <= ((array_length t) - 1) /\ (0 <= p /\ p <=
-                ((array_length t) - 1)) /\
-                ((p = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l u)))) /\
-                ((p > 0 -> (access t p) = v))),
   forall (l0: Z),
   forall (p0: Z),
   forall (u0: Z),
-  forall (HW_7: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
+  forall (HW_6: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
                 ((array_length t) - 1)) /\
                 ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
                 ((p0 > 0 -> (access t p0) = v))),
-  forall (HW_8: l0 <= u0),
+  forall (HW_7: l0 <= u0),
   forall (m: Z),
-  forall (HW_9: m = (mean l0 u0)),
-  forall (HW_10: l0 <= m /\ m <= u0),
-  forall (HW_11: 0 <= m /\ m < (array_length t)),
+  forall (HW_8: m = (mean l0 u0)),
+  forall (HW_9: l0 <= m /\ m <= u0),
+  forall (HW_10: 0 <= m /\ m < (array_length t)),
   forall (result0: Z),
-  forall (HW_12: result0 = (access t m)),
-  forall (HW_15: result0 >= v),
-  forall (HW_16: 0 <= m /\ m < (array_length t)),
+  forall (HW_11: result0 = (access t m)),
+  forall (HW_14: result0 >= v),
+  forall (HW_15: 0 <= m /\ m < (array_length t)),
   forall (result1: Z),
-  forall (HW_17: result1 = (access t m)),
-  forall (HW_18: result1 > v),
+  forall (HW_16: result1 = (access t m)),
+  forall (HW_17: result1 > v),
   forall (u1: Z),
-  forall (HW_19: u1 = (m - 1)),
+  forall (HW_18: u1 = (m - 1)),
   (1 <= l0 /\ u1 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
   ((array_length t) - 1)) /\
   ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u1)))) /\
@@ -327,33 +311,29 @@ Save.
   forall (HW_4: u = (result - 1)),
   forall (p: Z),
   forall (HW_5: p = 0),
-  forall (HW_6: 1 <= l /\ u <= ((array_length t) - 1) /\ (0 <= p /\ p <=
-                ((array_length t) - 1)) /\
-                ((p = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l u)))) /\
-                ((p > 0 -> (access t p) = v))),
   forall (l0: Z),
   forall (p0: Z),
   forall (u0: Z),
-  forall (HW_7: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
+  forall (HW_6: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
                 ((array_length t) - 1)) /\
                 ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
                 ((p0 > 0 -> (access t p0) = v))),
-  forall (HW_8: l0 <= u0),
+  forall (HW_7: l0 <= u0),
   forall (m: Z),
-  forall (HW_9: m = (mean l0 u0)),
-  forall (HW_10: l0 <= m /\ m <= u0),
-  forall (HW_11: 0 <= m /\ m < (array_length t)),
+  forall (HW_8: m = (mean l0 u0)),
+  forall (HW_9: l0 <= m /\ m <= u0),
+  forall (HW_10: 0 <= m /\ m < (array_length t)),
   forall (result0: Z),
-  forall (HW_12: result0 = (access t m)),
-  forall (HW_15: result0 >= v),
-  forall (HW_16: 0 <= m /\ m < (array_length t)),
+  forall (HW_11: result0 = (access t m)),
+  forall (HW_14: result0 >= v),
+  forall (HW_15: 0 <= m /\ m < (array_length t)),
   forall (result1: Z),
-  forall (HW_17: result1 = (access t m)),
-  forall (HW_20: result1 <= v),
+  forall (HW_16: result1 = (access t m)),
+  forall (HW_19: result1 <= v),
   forall (p1: Z),
-  forall (HW_21: p1 = m),
+  forall (HW_20: p1 = m),
   forall (l1: Z),
-  forall (HW_22: l1 = (u0 + 1)),
+  forall (HW_21: l1 = (u0 + 1)),
   (1 <= l1 /\ u0 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
   ((array_length t) - 1)) /\
   ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u0)))) /\
@@ -377,18 +357,14 @@ Save.
   forall (HW_4: u = (result - 1)),
   forall (p: Z),
   forall (HW_5: p = 0),
-  forall (HW_6: 1 <= l /\ u <= ((array_length t) - 1) /\ (0 <= p /\ p <=
-                ((array_length t) - 1)) /\
-                ((p = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l u)))) /\
-                ((p > 0 -> (access t p) = v))),
   forall (l0: Z),
   forall (p0: Z),
   forall (u0: Z),
-  forall (HW_7: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
+  forall (HW_6: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
                 ((array_length t) - 1)) /\
                 ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
                 ((p0 > 0 -> (access t p0) = v))),
-  forall (HW_23: l0 > u0),
+  forall (HW_22: l0 > u0),
   (1 <= p0 /\ p0 <= ((array_length t) - 1)) /\ (access t p0) = v \/ p0 = 0 /\
   ~(In t 1 ((array_length t) - 1)).
 Proof.

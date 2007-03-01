@@ -18,15 +18,14 @@ Qed.
   forall (y: Z),
   forall (x: Z),
   forall (HW_1: y >= 0),
-  forall (HW_2: 0 <= y /\ x = (x + (y - y))),
   forall (x0: Z),
   forall (z: Z),
-  forall (HW_3: 0 <= z /\ x0 = (x + (y - z))),
-  forall (HW_4: z > 0),
+  forall (HW_2: 0 <= z /\ x0 = (x + (y - z))),
+  forall (HW_3: z > 0),
   forall (x1: Z),
-  forall (HW_5: x1 = (x0 + 1)),
+  forall (HW_4: x1 = (x0 + 1)),
   forall (z0: Z),
-  forall (HW_6: z0 = (z - 1)),
+  forall (HW_5: z0 = (z - 1)),
   (0 <= z0 /\ x1 = (x + (y - z0))) /\ (Zwf 0 z0 z).
 Proof.
 unfold Zwf; intros; omega.
@@ -37,11 +36,10 @@ Qed.
   forall (y: Z),
   forall (x: Z),
   forall (HW_1: y >= 0),
-  forall (HW_2: 0 <= y /\ x = (x + (y - y))),
   forall (x0: Z),
   forall (z: Z),
-  forall (HW_3: 0 <= z /\ x0 = (x + (y - z))),
-  forall (HW_7: z <= 0),
+  forall (HW_2: 0 <= z /\ x0 = (x + (y - z))),
+  forall (HW_6: z <= 0),
   x0 = (x + y).
 Proof.
 intuition.
@@ -173,16 +171,15 @@ Qed.
   forall (HW_1: x >= 0 /\ y >= 0),
   forall (x0: Z),
   forall (HW_2: x0 = 0),
-  forall (HW_3: (* I *) (0 <= y /\ x0 = (x * (y - y)))),
   forall (x1: Z),
   forall (z: Z),
-  forall (HW_4: (* I *) (0 <= z /\ x1 = (x * (y - z)))),
-  forall (HW_5: z > 0),
-  forall (HW_6: x >= 0),
+  forall (HW_3: (* I *) (0 <= z /\ x1 = (x * (y - z)))),
+  forall (HW_4: z > 0),
+  forall (HW_5: x >= 0),
   forall (x2: Z),
-  forall (HW_7: x2 = (x1 + x)),
+  forall (HW_6: x2 = (x1 + x)),
   forall (z0: Z),
-  forall (HW_8: z0 = (z - 1)),
+  forall (HW_7: z0 = (z - 1)),
   (* I *) (0 <= z0 /\ x2 = (x * (y - z0))) /\ (Zwf 0 z0 z).
 Proof.
 simpl; intros.
@@ -200,11 +197,10 @@ Qed.
   forall (HW_1: x >= 0 /\ y >= 0),
   forall (x0: Z),
   forall (HW_2: x0 = 0),
-  forall (HW_3: (* I *) (0 <= y /\ x0 = (x * (y - y)))),
   forall (x1: Z),
   forall (z: Z),
-  forall (HW_4: (* I *) (0 <= z /\ x1 = (x * (y - z)))),
-  forall (HW_9: z <= 0),
+  forall (HW_3: (* I *) (0 <= z /\ x1 = (x * (y - z)))),
+  forall (HW_8: z <= 0),
   x1 = (x * y).
 Proof.
 simpl; intros.

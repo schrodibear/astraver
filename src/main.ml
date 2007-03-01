@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.122 2007-02-28 07:45:36 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.123 2007-03-01 14:40:51 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -252,6 +252,11 @@ let rec is_a_type_var = function
   | PTvar { type_val = Some t } -> is_a_type_var t
   | _ -> false
 
+let rec polymorphic_pure_type = function
+  | PTvar { type_val = None } -> true
+  | PTexternal (l,_) -> List.exists polymorphic_pure_type l
+  | PTint | PTbool | PTreal | PTunit | PTvar _ -> false
+
 let cannot_be_generalized = function
   | Ref _ -> true
   | PureType pt -> is_a_type_var pt
@@ -287,6 +292,11 @@ let interp_decl ?(prelude=false) d =
 	let env = Env.empty_progs () in
 	if is_exception id then raise_located loc (ClashExn id);
 	let v = option_app (Ltyping.pure_type env) v in
+	begin match v with
+	  | Some pt when polymorphic_pure_type pt ->
+	      raise_located loc CannotGeneralize
+	  | _ -> () 
+	end;
 	add_exception id v
     | Logic (loc, ext, ids, t) ->
 	let add id =
@@ -315,8 +325,6 @@ let interp_decl ?(prelude=false) d =
 	let t = Predicate (List.map snd pl) in
 	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
 	let p = Ltyping.predicate lab env' p in
-	if Ltyping.logic_type_cannot_be_generalized t then
-	  raise_located loc CannotGeneralize;
 	add_global_logic id (generalize_logic_type t);
 	let p = generalize_predicate_def (pl,p) in
 	push_decl (Dpredicate_def (loc, Ident.string id, p))
@@ -330,8 +338,6 @@ let interp_decl ?(prelude=false) d =
 	let e,ty' = Ltyping.term lab env' e in
 	if not (eq_pure_type ty ty') then 
 	  Ltyping.expected_type loc (PureType ty);
-	if Ltyping.logic_type_cannot_be_generalized t then 
-	  raise_located loc CannotGeneralize;
 	add_global_logic id (generalize_logic_type t);
 	let f = generalize_function_def (pl,ty,e) in
 	push_decl (Dfunction_def (loc, Ident.string id, f))

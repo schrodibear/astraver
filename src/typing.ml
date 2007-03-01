@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.125 2006-11-03 12:49:06 marche Exp $ i*)
+(*i $Id: typing.ml,v 1.126 2007-03-01 14:40:51 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -419,7 +419,10 @@ let rec typef lab env expr =
 	with Not_found -> raise_located loc (UnboundVariable id)
       in
       let ef = Effect.bottom in
-      if is_logic_function id && not (is_pure_type v) then 
+      if not (is_local env id) &&
+	 is_logic_function id && 
+	 not (is_pure_type v) 
+      then 
 	raise_located loc 
 	  (AnyMessage "a logic function cannot be partially applied");
       if is_pure_type_v v && not (is_rec id env) then 
@@ -490,7 +493,7 @@ let rec typef lab env expr =
       in
       (* 2. typing the function f *)
       let t_f, tyf = match f.pdesc with
-	| Svar x when is_logic_function x ->
+	| Svar x when is_logic_function x && not (is_local env x) ->
 	    let v = type_in_env env x in
 	    (* TODO: check number of args *)
 	    make_node toplabel (Expression (Tvar x)) v Effect.bottom, v
@@ -598,57 +601,7 @@ let rec typef lab env expr =
 	    end
       in
       loop_args t_f tyf args
-(***
-      let t_f = typef lab env f in
-      let x,tx,kapp = decomp_fun_type f t_f in
-      let t_a = typef lab env a in
-      expected_type a.ploc (result_type t_a) tx;
-      (match tx with 
-      (* the function expects a mutable; it must be a variable *)
-      | Ref _ -> (match t_a with
-	  | { desc = Var r } ->
-	      check_for_alias a.ploc r (result_type t_f);
-	      let kapp = type_c_subst (subst_onev x r) kapp in
-	      let (_,tapp),eapp,papp,_ = decomp_type_c kapp in
-	      let kapp = typing_info_of_type_c loc env toplabel kapp in
-	      let ef = Effect.union (effect t_f) eapp in
-	      let make ?post n = make_node ?post n tapp ef in
-	      make (Assertion (List.map (pre_named loc) papp,
-			       make ~post:kapp.t_post (AppRef (t_f, r, kapp))))
-	  | _ ->
-	      raise_located a.ploc ShouldBeVariable)
-      | _ -> (match t_a with 
- 	  (* argument is pure: it is substituted *)
-	  | { desc = Expression ta } when post t_a = None ->
-	      let kapp = type_c_subst_oldify env x ta kapp in
-	      let _,_,papp,_ = decomp_type_c kapp in
-	      let kapp = typing_info_of_type_c loc env toplabel kapp in
-	      let (_,tapp),eapp,_ = decomp_kappa kapp in
-	      let ef = union3effects (effect t_a) (effect t_f) eapp in
-	      let make ?post n = make_node ?post n tapp ef in
-	      make (Assertion 
-		      (List.map (pre_named loc) papp,
-		       make ~post:kapp.t_post (AppTerm (t_f, ta, kapp))))
-          (* otherwise we transform into [let v = arg in (f v)] *)
-	  | _ ->
-	      let (_,tapp),eapp,_,_ = decomp_type_c kapp in
-	      let ef = union3effects (effect t_a) (effect t_f) eapp in
-	      let v = fresh_var () in
-	      let kapp = type_c_subst (subst_onev x v) kapp in
-	      let _,_,papp,_ = decomp_type_c kapp in
-	      let kapp = typing_info_of_type_c loc env toplabel kapp in
-	      let env' = Env.add v tx env in
-	      let app_f_v = AppTerm (t_f, Tvar v, kapp) in
-	      let kfv = k_add_effects kapp (effect t_f) in
-	      let app_f_v = 
-		gmake_node loc env' toplabel app_f_v  
-		  ~post:kfv.t_post kfv.t_result_type kfv.t_effect
-	      in
-	      let make n = make_node n tapp ef in
-	      make (Assertion (List.map (pre_named loc) papp,
-			       make (LetIn (v, t_a, app_f_v))))))
-***)
-      
+     
   | Sletref (x, e1, e2) ->
       if is_ref env x then raise_located loc (ClashRef x);
       let t_e1 = typef lab env e1 in
@@ -667,7 +620,7 @@ let rec typef lab env expr =
       let ef1 = t_e1.info.t_effect in
       let v1 = t_e1.info.t_result_type in
       check_for_not_mutable e1.ploc v1;
-      let env' = add x v1 env in
+      let env' = add ~generalize:true x v1 env in
       let t_e2 = typef lab env' e2 in
       let ef2 = t_e2.info.t_effect in
       let v2 = t_e2.info.t_result_type in

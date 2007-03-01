@@ -248,22 +248,16 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_5: k >= 0),
+  forall (HW_4: k >= 0),
   forall (result0: Z),
-  forall (HW_6: result0 = (array_length t0)),
+  forall (HW_5: result0 = (array_length t0)),
   (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) < (array_length t0) /\
   (forall (i:Z),
    ((k + 1) <= i /\ i <= (result0 - 1) -> (heap t0 (result0 - 1) i))).
@@ -277,29 +271,23 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_5: k >= 0),
+  forall (HW_4: k >= 0),
   forall (result0: Z),
-  forall (HW_6: result0 = (array_length t0)),
-  forall (HW_7: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
+  forall (HW_5: result0 = (array_length t0)),
+  forall (HW_6: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
                 (array_length t0) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= (result0 - 1) ->
                   (heap t0 (result0 - 1) i)))),
   forall (t1: (array Z)),
-  forall (HW_8: (permut t1 t0) /\
+  forall (HW_7: (permut t1 t0) /\
                 (forall (i:Z),
                  (k <= i /\ i <= (result0 - 1) -> (heap t1 (result0 - 1) i))) /\
                 (forall (i:Z),
@@ -310,7 +298,7 @@ Save.
                  ((inftree t0 (result0 - 1) v k) ->
                   (inftree t1 (result0 - 1) v k)))),
   forall (k0: Z),
-  forall (HW_9: k0 = (k - 1)),
+  forall (HW_8: k0 = (k - 1)),
   (((Zopp 1) <= k0 /\ k0 <= ((array_length t1) - 1)) /\
   (forall (i:Z),
    ((k0 + 1) <= i /\ i <= ((array_length t1) - 1) ->
@@ -326,20 +314,14 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_10: k < 0),
+  forall (HW_9: k < 0),
   (heap t0 ((array_length t0) - 1) 0) /\ (permut t0 t).
 Proof.
 (* FILL PROOF HERE *)
@@ -351,22 +333,16 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_10: k < 0),
+  forall (HW_9: k < 0),
   forall (result0: Z),
-  forall (HW_11: result0 = (array_length t0)),
+  forall (HW_10: result0 = (array_length t0)),
   (0 <= (result0 - 1) /\ (result0 - 1) <= ((array_length t0) - 1)) /\
   (forall (i:Z), (0 <= i /\ i <= (result0 - 1) -> (heap t0 (result0 - 1) i))) /\
   (((result0 - 1 + 1) <= ((array_length t0) - 1) -> (access t0 0) <=
@@ -384,41 +360,26 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_10: k < 0),
+  forall (HW_9: k < 0),
   forall (result0: Z),
-  forall (HW_11: result0 = (array_length t0)),
-  forall (HW_12: (0 <= (result0 - 1) /\ (result0 - 1) <=
-                 ((array_length t0) - 1)) /\
-                 (forall (i:Z),
-                  (0 <= i /\ i <= (result0 - 1) -> (heap t0 (result0 - 1) i))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (access t0 0) <= (access t0 (result0 - 1 + 1)))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (sorted_array t0 (result0 - 1 + 1) ((array_length t0) - 1)))) /\
-                 (permut t0 t)),
+  forall (HW_10: result0 = (array_length t0)),
   forall (k0: Z),
   forall (t1: (array Z)),
-  forall (HW_13: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+  forall (HW_11: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
                  (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
                    (access t1 (k0 + 1)))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) ->
                    (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
                  (permut t1 t)),
-  forall (HW_14: k0 >= 1),
+  forall (HW_12: k0 >= 1),
   (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 < (array_length t1).
 Proof.
 (* FILL PROOF HERE *)
@@ -430,45 +391,30 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_10: k < 0),
+  forall (HW_9: k < 0),
   forall (result0: Z),
-  forall (HW_11: result0 = (array_length t0)),
-  forall (HW_12: (0 <= (result0 - 1) /\ (result0 - 1) <=
-                 ((array_length t0) - 1)) /\
-                 (forall (i:Z),
-                  (0 <= i /\ i <= (result0 - 1) -> (heap t0 (result0 - 1) i))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (access t0 0) <= (access t0 (result0 - 1 + 1)))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (sorted_array t0 (result0 - 1 + 1) ((array_length t0) - 1)))) /\
-                 (permut t0 t)),
+  forall (HW_10: result0 = (array_length t0)),
   forall (k0: Z),
   forall (t1: (array Z)),
-  forall (HW_13: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+  forall (HW_11: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
                  (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
                    (access t1 (k0 + 1)))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) ->
                    (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
                  (permut t1 t)),
-  forall (HW_14: k0 >= 1),
-  forall (HW_15: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+  forall (HW_12: k0 >= 1),
+  forall (HW_13: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
                  (array_length t1)),
   forall (t2: (array Z)),
-  forall (HW_16: (exchange t2 t1 0 k0)),
+  forall (HW_14: (exchange t2 t1 0 k0)),
   (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
   (forall (i:Z), ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i))).
 Proof.
@@ -481,50 +427,35 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_10: k < 0),
+  forall (HW_9: k < 0),
   forall (result0: Z),
-  forall (HW_11: result0 = (array_length t0)),
-  forall (HW_12: (0 <= (result0 - 1) /\ (result0 - 1) <=
-                 ((array_length t0) - 1)) /\
-                 (forall (i:Z),
-                  (0 <= i /\ i <= (result0 - 1) -> (heap t0 (result0 - 1) i))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (access t0 0) <= (access t0 (result0 - 1 + 1)))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (sorted_array t0 (result0 - 1 + 1) ((array_length t0) - 1)))) /\
-                 (permut t0 t)),
+  forall (HW_10: result0 = (array_length t0)),
   forall (k0: Z),
   forall (t1: (array Z)),
-  forall (HW_13: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+  forall (HW_11: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
                  (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
                    (access t1 (k0 + 1)))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) ->
                    (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
                  (permut t1 t)),
-  forall (HW_14: k0 >= 1),
-  forall (HW_15: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+  forall (HW_12: k0 >= 1),
+  forall (HW_13: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
                  (array_length t1)),
   forall (t2: (array Z)),
-  forall (HW_16: (exchange t2 t1 0 k0)),
-  forall (HW_17: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+  forall (HW_14: (exchange t2 t1 0 k0)),
+  forall (HW_15: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
                  (forall (i:Z),
                   ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
   forall (t3: (array Z)),
-  forall (HW_18: (permut t3 t2) /\
+  forall (HW_16: (permut t3 t2) /\
                  (forall (i:Z),
                   (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
                  (forall (i:Z),
@@ -534,7 +465,7 @@ Save.
                  (forall (v:Z),
                   ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
   forall (k1: Z),
-  forall (HW_19: k1 = (k0 - 1)),
+  forall (HW_17: k1 = (k0 - 1)),
   ((0 <= k1 /\ k1 <= ((array_length t3) - 1)) /\
   (forall (i:Z), (0 <= i /\ i <= k1 -> (heap t3 k1 i))) /\
   (((k1 + 1) <= ((array_length t3) - 1) -> (access t3 0) <=
@@ -552,43 +483,34 @@ Save.
   forall (HW_1: 1 <= (array_length t)),
   forall (result: Z),
   forall (HW_2: result = (array_length t)),
-  forall (HW_3: ((Zopp 1) <= (Zdiv2 (result - 2)) /\ (Zdiv2 (result - 2)) <=
-                ((array_length t) - 1)) /\
-                (forall (i:Z),
-                 (((Zdiv2 (result - 2)) + 1) <= i /\ i <=
-                  ((array_length t) - 1) -> (heap t ((array_length t) - 1) i))) /\
-                (permut t t)),
   forall (k: Z),
   forall (t0: (array Z)),
-  forall (HW_4: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
+  forall (HW_3: ((Zopp 1) <= k /\ k <= ((array_length t0) - 1)) /\
                 (forall (i:Z),
                  ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
                   (heap t0 ((array_length t0) - 1) i))) /\
                 (permut t0 t)),
-  forall (HW_10: k < 0),
+  forall (HW_9: k < 0),
   forall (result0: Z),
-  forall (HW_11: result0 = (array_length t0)),
-  forall (HW_12: (0 <= (result0 - 1) /\ (result0 - 1) <=
-                 ((array_length t0) - 1)) /\
-                 (forall (i:Z),
-                  (0 <= i /\ i <= (result0 - 1) -> (heap t0 (result0 - 1) i))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (access t0 0) <= (access t0 (result0 - 1 + 1)))) /\
-                 (((result0 - 1 + 1) <= ((array_length t0) - 1) ->
-                   (sorted_array t0 (result0 - 1 + 1) ((array_length t0) - 1)))) /\
-                 (permut t0 t)),
+  forall (HW_10: result0 = (array_length t0)),
   forall (k0: Z),
   forall (t1: (array Z)),
-  forall (HW_13: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+  forall (HW_11: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
                  (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
                    (access t1 (k0 + 1)))) /\
                  (((k0 + 1) <= ((array_length t1) - 1) ->
                    (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
                  (permut t1 t)),
-  forall (HW_20: k0 < 1),
+  forall (HW_18: k0 < 1),
   (sorted_array t1 0 ((array_length t1) - 1)) /\ (permut t1 t).
 Proof.
 (* FILL PROOF HERE *)
 Save.
+
+(*Why*) Parameter heapsort_valid :
+  forall (t: (array Z)), forall (_: 1 <= (array_length t)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  =>
+    ((sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t)))).
 

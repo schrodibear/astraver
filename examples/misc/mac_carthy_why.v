@@ -9,6 +9,15 @@ Definition max (x y:Z) : Z :=
   | right _ => x
   end.
 
+(*Why logic*) Definition max : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma max_def :
+  (forall (x:Z),
+   (forall (y:Z), ((max x y) = x \/ (max x y) = y) /\ (max x y) >= x /\
+    (max x y) >= y)).
+Admitted.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f91_po_1 : 
   forall (n: Z),

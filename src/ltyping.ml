@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.62 2007-02-27 13:14:49 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.63 2007-03-01 14:40:51 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -180,25 +180,6 @@ let instance x i =
   *)
   l
 
-(* generalization *)
-
-let rec is_a_type_var = function
-  | PTvar { type_val = None } -> true
-  | PTvar { type_val = Some t } -> is_a_type_var t
-  | _ -> false
-
-let rec pure_type_cannot_be_generalized = function
-  | PTvar { type_val = Some pt } -> not (is_a_type_var pt)
-  | PTexternal (ptl, _) -> pure_types_cannot_be_generalized ptl
-  | PTint | PTbool | PTreal | PTunit | PTvar { type_val = None } -> false
-
-and pure_types_cannot_be_generalized l = 
-  List.exists pure_type_cannot_be_generalized l
-
-let logic_type_cannot_be_generalized = function
-  | Function (ptl, pt) -> pure_types_cannot_be_generalized (pt :: ptl)
-  | Predicate ptl -> pure_types_cannot_be_generalized ptl
-
 (* typing predicates *)
 
 let rec predicate lab env p =
@@ -257,14 +238,10 @@ and desc_predicate loc lab env = function
       let env' = Env.add_logic id v env in
       let tl' = triggers lab env' tl in
       let p' = predicate lab env' a in
-      if pure_type_cannot_be_generalized v then 
-	raise_located loc CannotGeneralize;
       forall id (PureType v) ~triggers:tl' p'
   | PPexists (id, pt, a) ->
       let v = pure_type env pt in
       let p = predicate lab (Env.add_logic id v env) a in
-      if pure_type_cannot_be_generalized v then 
-	raise_located loc CannotGeneralize;
       exists id (PureType v) p
   | PPfpi (e, f1, f2) ->
       (match term lab env e with
@@ -347,6 +324,10 @@ and type_tvar loc lab env x =
   in
   try 
     let t = find_logic xu env in Tvar x, t
+    (*
+    let vars,t = find_logic xu env in
+    if Vmap.is_empty vars then Tvar x, t else Tapp (x, [], instance x vars), t
+    *)
   with Not_found -> try
     match find_global_logic xu with
       | vars, Function ([], t) -> Tapp (x, [], instance x vars), t 
