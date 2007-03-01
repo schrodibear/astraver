@@ -159,7 +159,7 @@ CMO = src/lib.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
 	   src/zenon.cmo src/cvcl.cmo tools/calldp.cmo src/pretty.cmo  \
-           src/unionfind.cmo src/theoryreducer.cmo src/theory_filtering.cmo \
+           src/unionfind.cmo src/theoryreducer.cmo src/theory_filtering.cmo src/hypotheses_filtering.cmo\
            src/dispatcher.cmo src/isabelle.cmo src/ocaml.cmo  \
 	   src/main.cmo 
 CMX      = $(CMO:.cmo=.cmx)

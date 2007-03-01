@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.3 2007-02-28 13:58:22 couchot Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.4 2007-03-01 11:11:00 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -223,7 +223,7 @@ let rec add_relevant_in elt s =
     Int_set.add elt (Int_set.fold add_relevant_in (Theory_container.depends_on elt) s)
       
 
-let rank_1 n s = 
+let rank n s = 
   let s1 = Theory_container.produces n in 
   let r = 
     if Int_set.subset s1 s then 1 else 0 in 
@@ -232,21 +232,23 @@ let rank_1 n s =
 
 
 let filter rs selectedAx notYetSelectedAx = 
-  let removedElem = ref Int_set.empty in
+  let irrelevant = ref notYetSelectedAx in
   let relevant = ref selectedAx in
+  let new_rs = ref rs in 
   let f ax =
-    let r = rank_1 ax rs in 
+    let r = rank ax rs in 
     if r >= threshold then
       begin 
 	relevant := add_relevant_in ax !relevant ;
-	removedElem := Int_set.add  ax !removedElem
+	irrelevant := Int_set.remove ax !irrelevant;
+	new_rs := Int_set.union rs (Theory_container.produces ax)
       end ; 
     if debug then begin 
 	Printf.printf "ax (%d) has rank %d \n" ax r
       end    
   in
   Int_set.iter f notYetSelectedAx ;
-  (!relevant,Int_set.diff notYetSelectedAx !removedElem)
+  (!new_rs,!relevant,!irrelevant)
 
 
 let display_symb_of set =
@@ -275,22 +277,29 @@ let managesGoal id ax (hyps,concl) =
 	  (symbols p) 
 	  (symb_of_seq q)
   in
-  let setOfSymbols =  symb_of_seq hyps in 
-  let n = Theory_container.add  (ax,setOfSymbols) in 
-  display (ax,setOfSymbols) n ;
+  let setOfSymbols =  ref (symb_of_seq hyps) in 
+  let n = Theory_container.add  (ax,!setOfSymbols) in 
+  display (ax,!setOfSymbols) n ;
   (*Theory_container.set_produce n setOfSymbols ; *)
   let allax = ref Int_set.empty  in 
   for i= 1 to n-1 do
     allax := Int_set.add i !allax 
   done;
-  let (rel,irrel) = filter setOfSymbols Int_set.empty  !allax in 
-  (*Printf.printf "Relevant of %d : " n;
-  Int_set.iter (fun t-> Printf.printf "%d " t) rel ;
-  Printf.printf " \n " 
-  *)
+  let rel = ref Int_set.empty in
+  let irrel = allax in 
+  for i=1 to 2 do (* include predicates/functions and their properties *)
+    let (rs,r,ir) = filter !setOfSymbols !rel  !irrel in
+    rel := r ;
+    setOfSymbols := rs ; 
+    irrel :=  ir 
+      (*Printf.printf "Relevant of %d : " n;
+      Int_set.iter (fun t-> Printf.printf "%d " t) rel ;
+      Printf.printf " \n " 
+    *)
+  done;
   Int_set.iter 
     (fun t-> Queue.add (Theory_container.axiom t) reducedQueue)
-    rel 
+    !rel 
   
   
 

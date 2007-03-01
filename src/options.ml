@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.89 2007-02-23 10:30:11 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.90 2007-03-01 11:11:00 couchot Exp $ i*)
 
 open Format
 
@@ -57,6 +57,7 @@ let prelude_ = ref true
 let arrays_ = ref true
 let floats_ = ref false
 let pruning_ = ref false 
+let pruning_hyp_ = ref false 
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
@@ -175,7 +176,8 @@ Typing/Annotations/VCG options:
   --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
   --total            total correctness
-  --prune            prunes the theory 
+  --prune-theory     prunes the theory 
+  --prune-hyp        prunes the hypotheses 
   --modulo           displays mod in smtlib instead of pourcent
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
@@ -380,8 +382,10 @@ let files =
 	termination_ := Partial; parse args
     | ("-total" | "--total") :: args ->
 	termination_ := Total; parse args
-    | ("-prune" | "--prune") :: args ->
+    | ("--prune-theory" | "-prune-theory") :: args ->
 	 pruning_ := true ; parse args
+    | ("--prune-hyp" | "-prune-hyp") :: args ->
+	 pruning_hyp_ := true ; parse args
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
     | ("-exp" | "--exp") :: s :: args ->
@@ -447,6 +451,7 @@ let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
 let pruning = !pruning_
+let pruning_hyp = !pruning_hyp_
 let modulo = !modulo_
 let defExpanding = !defExpanding_
 

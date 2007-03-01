@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.70 2007-02-15 15:52:43 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.71 2007-03-01 11:11:00 couchot Exp $ i*)
 
 (*s General options *)
 
@@ -61,6 +61,7 @@ val split_user_conj : bool
 val lvlmax : int
 val all_vc : bool
 val pruning : bool
+val pruning_hyp : bool
 val modulo : bool
 
 type expanding = All | Goal | NoExpanding
