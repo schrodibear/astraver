@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.36 2007-02-28 07:51:43 couchot Exp $ i*)
+(*i $Id: dp.ml,v 1.37 2007-03-02 09:37:42 filliatr Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -33,6 +33,7 @@ let timeout = ref 10
 let eclauses = ref 2000 (* E prover max nb of clauses *)
 let debug = ref false
 let batch = ref false
+let timings = ref true (* print timings *)
 let files = Queue.create ()
 
 let spec = 
@@ -40,7 +41,8 @@ let spec =
     "-eclauses", Arg.Int ((:=) eclauses), 
     "<int>  set the max nb of clauses for the E prover";
     "-debug", Arg.Set debug, "set the debug flag";
-    "-batch", Arg.Set batch, "run in batch mode"]
+    "-batch", Arg.Set batch, "run in batch mode";
+    "-no-timings", Arg.Clear timings, "do not display timings"]
 
 let usage = "usage: dp [options] files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
@@ -196,7 +198,7 @@ timeout : %3d (%3.0f%%)
 failure : %3d (%3.0f%%)\n" n
     !nvalid pvalid !ninvalid pinvalid !nunknown punknown 
     !ntimeout ptimeout !nfailure pfailure;
-  printf
+  if !timings then printf
 "total wallclock time : %a
 total CPU time       : %a
 valid VCs:
