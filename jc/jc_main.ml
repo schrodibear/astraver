@@ -46,36 +46,68 @@ let main () =
 	let ast = parse_file f in
 	(* phase 2 : typing *)
 	List.iter Jc_typing.decl ast;
-	(* phase 3 : computation of call graph *)
+	(* phase 3 : normalization *)
+	Hashtbl.iter (fun tag x -> 
+			Hashtbl.add Jc_norm.logic_type_table tag x)
+	  Jc_typing.logic_type_table;
 	Hashtbl.iter 
-	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
+	  (fun tag (f,t) -> 
+	     let t = Jc_norm.logic_function t in
+	     Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
 	  Jc_typing.logic_functions_table;
 	Hashtbl.iter 
-	  (fun _ (f,s,b) -> Jc_callgraph.compute_calls f s b)
+	  (fun tag (f,s,b) -> 
+	     let (s,b) = Jc_norm.code_function (s,b) in
+	     Hashtbl.add Jc_norm.functions_table tag (f,s,b))
 	  Jc_typing.functions_table;
+	Hashtbl.iter 
+	  (fun tag (si,l) -> 
+	     let l = List.map (fun (li, a) -> (li, Jc_norm.assertion a)) l in
+	     Hashtbl.add Jc_norm.structs_table tag (si,l))
+	  Jc_typing.structs_table;
+	Hashtbl.iter (fun tag x -> 
+			Hashtbl.add Jc_norm.range_types_table tag x)
+	  Jc_typing.range_types_table;
+	Hashtbl.iter 
+	  (fun tag a -> 
+	     let a = Jc_norm.assertion a in
+	     Hashtbl.add Jc_norm.axioms_table tag a)
+	  Jc_typing.axioms_table;
+	Hashtbl.iter (fun tag x -> 
+			Hashtbl.add Jc_norm.exceptions_table tag x)
+	  Jc_typing.exceptions_table;	
+
+	  
+	(* phase 4 : computation of call graph *)
+	Hashtbl.iter 
+	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
+	  Jc_norm.logic_functions_table;
+	Hashtbl.iter 
+	  (fun _ (f,s,b) -> Jc_callgraph.compute_calls f s b)
+	  Jc_norm.functions_table;
 	let logic_components = 
 	  Jc_callgraph.compute_logic_components 
-	    Jc_typing.logic_functions_table
+	    Jc_norm.logic_functions_table
 	in
 	let components = 
-	  Jc_callgraph.compute_components Jc_typing.functions_table
+	  Jc_callgraph.compute_components Jc_norm.functions_table
 	in
-	(* phase 4 : computation of effects *)
+	(* phase 5 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
 	Array.iter Jc_effect.logic_effects logic_components;
 	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
 	Array.iter Jc_effect.function_effects components;
-	(* phase 5 : checking structure invariants *)
+	(* phase 6 : checking structure invariants *)
 	Jc_options.lprintf "\nstarting checking structure invariants.@.";
 	Hashtbl.iter 
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
-	  Jc_typing.structs_table;
+	  Jc_norm.structs_table;
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =
 	  Hashtbl.fold 
 	    (fun _ id acc ->
 	       Jc_interp.tr_logic_type id acc)
-	    Jc_typing.logic_type_table
+	    Jc_norm.logic_type_table
 	    []
 	in	       	  
 	(* production phase 1.2 : generation of Why memories *)
@@ -83,7 +115,7 @@ let main () =
 	  Hashtbl.fold 
 	    (fun _ (st,_) acc ->
 	       Jc_interp.tr_struct st acc)
-	    Jc_typing.structs_table
+	    Jc_norm.structs_table
 	    d_types
 	in	       	  
 	(* production phase 1.3 : generation of Why exceptions *)
@@ -91,7 +123,7 @@ let main () =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
 	       Jc_interp.tr_exception ei acc)
-	    Jc_typing.exceptions_table
+	    Jc_norm.exceptions_table
 	    d_memories
 	in	       	  
 	(* production phase 1.4 : generation of Why range_types *)
@@ -99,7 +131,7 @@ let main () =
 	  Hashtbl.fold 
 	    (fun _ (ri,to_int,to_int_,of_int) acc ->
 	       Jc_interp.tr_range_type ri to_int_ of_int acc)
-	    Jc_typing.range_types_table
+	    Jc_norm.range_types_table
 	    d_exc
 	in	       	  
 	(* production phase 2 : generation of Why logic functions *)
@@ -107,7 +139,7 @@ let main () =
 	  Hashtbl.fold 
 	    (fun _ (li,p) acc ->
 	       Jc_interp.tr_logic_fun li p acc)
-	    Jc_typing.logic_functions_table 
+	    Jc_norm.logic_functions_table 
 	    d_range
 	in
 	(* production phase 3 : generation of Why axioms *)
@@ -115,7 +147,7 @@ let main () =
 	  Hashtbl.fold 
 	    (fun id p acc ->
 	       Jc_interp.tr_axiom id p acc)
-	    Jc_typing.axioms_table
+	    Jc_norm.axioms_table
 	    d_lfuns
 	in	       
 	(* production phase 4 : generation of Why functions *)
@@ -125,7 +157,7 @@ let main () =
 	       printf "Generating Why function %s@." 
 		 f.Jc_fenv.jc_fun_info_name;
 	       Jc_interp.tr_fun f s b acc)
-	    Jc_typing.functions_table
+	    Jc_norm.functions_table
 	    d_axioms
 	in	       
 	(* production phase 5 : produce Why file *)

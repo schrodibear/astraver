@@ -44,10 +44,6 @@ let new_node s = new_node_gen (Statement s)
 
 let rec statement g fun_exit_node s =
   match s.jc_statement_node with
-    | JCSexpr e ->
-	let n = new_node s in
-	G.add_vertex g n;
-	n,[n]	
     | JCSreturn e -> 
 	let n = new_node s in
 	G.add_vertex g n;
@@ -61,19 +57,21 @@ let rec statement g fun_exit_node s =
 	G.add_edge g n entry1;
 	G.add_edge g n entry2;
 	n,exits1@exits2
-    | JCSwhile (e, inv, s1) ->
+    | JCSloop (inv, s1) ->
 	let n = new_node s in
 	G.add_vertex g n;
 	let entry1,exits1 = statement g fun_exit_node s1 in
 	List.iter (fun v -> G.add_edge g v n) exits1;
 	n,[n]	
+    | JCSassign_heap (_, _, _)
+    | JCSassign_local (_, _)
+    | JCSincr_heap (_, _, _)
+    | JCSincr_local (_, _)
+    | JCScall (_, _, _, _)
     | JCSunpack (_, _)
     | JCSpack (_, _)
     | JCSthrow (_, _)
     | JCStry (_, _, _)
-    | JCSgoto _
-    | JCScontinue _
-    | JCSbreak _
     | JCSdecl (_, _, _)
     | JCSassert _
     | JCSblock _ -> assert false

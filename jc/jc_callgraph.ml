@@ -80,45 +80,27 @@ let spec s =
 let loop_annot acc la = 
   term (assertion acc la.jc_loop_invariant) la.jc_loop_variant
 
-let rec expr acc e =
-  match e.jc_expr_node with 
-    | JCEconst _ | JCEvar _ | JCEincr_local _ -> acc
-    | JCEderef(e, _) 
-    | JCEinstanceof(e,_)
-    | JCEcast(e,_)
-    | JCEassign_local (_, e) 
-    | JCEassign_op_local(_, _, e) 
-    | JCEincr_heap (_, _, e) -> expr acc e
-    | JCEshift (e1,e2) 
-    | JCEassign_heap (e1,_, e2)
-    | JCEassign_op_heap(e1,_, _, e2) -> expr (expr acc e1) e2
-    | JCEif(e1,e2,e3) -> expr (expr (expr acc e1) e2) e3
-    | JCEcall (f, le) -> 
-	f::(List.fold_left expr acc le)
-
 let rec statement acc s = 
   match s.jc_statement_node with  
-    | JCSreturn e 
-    | JCSpack(_,e) | JCSunpack(_,e)
-    | JCSexpr e -> let (a,b)=acc in (a,expr b e)
-    | JCSif(e, s1, s2) ->
-	let (a,b) = statement (statement acc s1) s2 in (a,expr b e)
-    | JCSwhile(e,spec,s) ->
-	let (a,b) = statement acc s in (loop_annot a spec,expr b e)
+    | JCScall (_, f, le, s) ->
+	let (a,b)=acc in statement (a,f::b) s
+    | JCSincr_local _ | JCSincr_heap _ -> acc
+    | JCSassign_local _ | JCSassign_heap _ -> acc
+    | JCSreturn _ | JCSpack _ | JCSunpack _ | JCSthrow _ -> acc
+    | JCSif(_, s1, s2) ->
+	statement (statement acc s1) s2
+    | JCSloop(spec,s) ->
+	let (a,b) = statement acc s in (loop_annot a spec,b)
     | JCSblock sl -> 
 	List.fold_left statement acc sl
-    | JCSthrow (ei, e) -> let (a,b)=acc in (a,expr b e)
     | JCStry (s, catches, finally) -> 
 	let acc =
 	  List.fold_left 
 	    (fun acc (_,_,s) -> statement acc s) 
 	    (statement acc s) catches
 	in statement acc finally
-    | JCSgoto _ -> assert false (* TODO *)
-    | JCScontinue _ -> assert false (* TODO *)
-    | JCSbreak _  -> acc
-    | JCSdecl(vi,e,s) -> 
-	let (a,b)=acc in statement (a,Option_misc.fold_left expr b e) s
+    | JCSdecl(vi,_,s) -> 
+	statement acc s
     | JCSassert _ -> assert false (* TODO *)
 
 

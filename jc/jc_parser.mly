@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.27 2007-02-16 16:15:45 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.28 2007-03-02 16:40:56 moy Exp $ */
 
 %{
 
@@ -713,7 +713,7 @@ statement:
 
 exception_statement:
 | THROW identifier expression SEMICOLON
-   { locate_statement (JCPSthrow($2,$3)) }
+   { locate_statement (JCPSthrow($2,Some $3)) }
 | TRY statement CATCH identifier IDENTIFIER statement
    { locate_statement (JCPStry($2,[($4,$5,$6)],skip)) }
 ;

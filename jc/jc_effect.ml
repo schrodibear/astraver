@@ -23,13 +23,14 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.17 2007-02-16 16:15:45 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.18 2007-03-02 16:40:56 moy Exp $ *)
 
 
 open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_ast
+open Jc_pervasives
 
 let ef_union ef1 ef2 =
   { jc_effect_alloc_table = 
@@ -132,17 +133,6 @@ expressions and statements
 let rec expr ef e =
   match e.jc_expr_node with
     | JCEconst _ -> ef
-    | JCEassign_heap (e1, fi, e2) 
-    | JCEassign_op_heap(e1,fi,_,e2) ->
-	expr (expr (add_field_writes ef fi) e1) e2
-    | JCEassign_op_local (_, _, _) -> assert false
-    | JCEassign_local (vi, e) -> expr ef e
-    | JCEincr_local(op,vi) -> ef
-    | JCEincr_heap(op,fi,e) -> 
-	expr (add_field_writes ef fi) e
-    | JCEcall (fi, le) -> 
-	fef_union fi.jc_fun_info_effects
-	  (List.fold_left expr ef le) 
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) st.jc_struct_info_root
@@ -156,11 +146,24 @@ let rec loop_annot ef la =
 
 let rec statement ef s =
   match s.jc_statement_node with
+    | JCScall (_, fi, le, s) -> 
+	let ef = 
+	  fef_union fi.jc_fun_info_effects
+	    (List.fold_left expr ef le) 
+	in
+	statement ef s
+    | JCSincr_local(op,vi) -> ef
+    | JCSincr_heap(op,e,fi) -> 
+	expr (add_field_writes ef fi) e
+    | JCSassign_heap (e1, fi, e2) ->
+	expr (expr (add_field_writes ef fi) e1) e2
+    | JCSassign_local (vi, e) -> expr ef e
     | JCSreturn e 
-    | JCSpack(_,e) | JCSunpack(_,e)
-    | JCSexpr e -> expr ef e
-    | JCSthrow (ei, e) -> 
+    | JCSpack(_,e) | JCSunpack(_,e) -> expr ef e
+    | JCSthrow (ei, Some e) -> 
 	add_exception_effect (expr ef e) ei
+    | JCSthrow (ei, None) -> 
+	add_exception_effect empty_fun_effect ei
     | JCStry (s, catches, finally) -> 
 	let ef = 
 	  List.fold_left 
@@ -168,12 +171,9 @@ let rec statement ef s =
 	    (statement ef s) catches
 	in
 	statement ef finally
-    | JCSgoto _ -> assert false
-    | JCScontinue _ -> assert false
-    | JCSbreak _ -> ef
-    | JCSwhile (c, la, s) -> 
+    | JCSloop (la, s) -> 
 	let ef = {ef with jc_reads = loop_annot ef.jc_reads la } in
-	statement (expr ef c) s
+	statement ef s
     | JCSif (e, s1, s2) -> 
 	statement (statement (expr ef e) s1) s2
     | JCSdecl(vi,e,s) -> 
@@ -202,7 +202,7 @@ let fixpoint_reached = ref false
 
 let logic_fun_effects f = 
   let (f,ta) = 
-    Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
+    Hashtbl.find Jc_norm.logic_functions_table f.jc_logic_info_tag 
   in
   let ef = f.jc_logic_info_effects in
   let ef = match ta with
@@ -217,7 +217,7 @@ let logic_fun_effects f =
 
 let fun_effects fi =
   let (f,s,b) = 
-    Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag 
+    Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
   in
   let ef = f.jc_fun_info_effects in
   let ef = spec ef s in

@@ -27,6 +27,7 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 
+
 let num_of_constant loc c =
   try
     match c with
@@ -39,12 +40,65 @@ let num_of_constant loc c =
 let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)
 
+
 (* native types *)
 
 let unit_type = JCTnative Tunit
 let boolean_type = JCTnative Tboolean
 let integer_type = JCTnative Tinteger
 let real_type = JCTnative Treal
+
+(* temporary variables *)
+
+let tempvar_count = ref 0
+(* let reset_tmp_var () = tempvar_count := 0 *)
+let tmp_var_name () = 
+  incr tempvar_count; "jessie_" ^ string_of_int !tempvar_count
+
+(* constants *)
+
+let const c =
+  match c with
+    | JCCvoid -> unit_type,c
+    | JCCinteger _ -> integer_type,c
+    | JCCreal _ -> real_type,c
+    | JCCboolean _ -> boolean_type,c
+    | JCCnull -> assert false
+
+(* variables *)
+
+let var_tag_counter = ref 0
+
+let var ty id =
+  incr var_tag_counter;
+  let vi = {
+    jc_var_info_tag = !var_tag_counter;
+    jc_var_info_name = id;
+    jc_var_info_final_name = id;
+    jc_var_info_type = ty;
+    jc_var_info_assigned = false;
+  }
+  in vi
+
+let newvar ty = var ty (tmp_var_name())
+
+let newrefvar ty = 
+  let vi = newvar ty in
+  vi.jc_var_info_assigned <- true;
+  vi
+
+(* exceptions *)
+
+let exception_tag_counter = ref 0
+
+let exception_info ty id =
+  incr exception_tag_counter;
+  let ei = {
+    jc_exception_info_tag = !exception_tag_counter;
+    jc_exception_info_name = id;
+    jc_exception_info_type = ty;
+  }
+  in ei
 
 
 (* logic functions *)

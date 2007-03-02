@@ -249,16 +249,12 @@ type interp_lvalue =
   | LocalRef of var_info
   | HeapRef of field_info * expr
 
-let tempvar_count = ref 0
-let reset_tmp_var () = tempvar_count := 0
-let tmp_why_var () = incr tempvar_count; "jessie_" ^ string_of_int !tempvar_count
-
 let const_un = Cte(Prim_int "1")
 
 let incr_call op =
   match op with
-    | Prefix_inc | Postfix_inc -> Jc_pervasives.add_int_.jc_fun_info_name
-    | Prefix_dec | Postfix_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
+    | Stat_inc -> Jc_pervasives.add_int_.jc_fun_info_name
+    | Stat_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
 
 let make_acc fi e =
   make_app "acc_"
@@ -276,164 +272,35 @@ let rec make_lets l e =
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
 
-let rec expr e : (string * Output.expr) list * expr =
+let rec expr e : expr =
   match e.jc_expr_node with
-    | JCEconst JCCnull -> [],Var "null"
-    | JCEconst c -> [],Cte(const c)
+    | JCEconst JCCnull -> Var "null"
+    | JCEconst c -> Cte(const c)
     | JCEvar v ->
 	if v.jc_var_info_assigned 
-	then [],Deref v.jc_var_info_final_name
-	else [],Var v.jc_var_info_final_name
+	then Deref v.jc_var_info_final_name
+	else Var v.jc_var_info_final_name
     | JCEif(e1,e2,e3) -> 
-	let l1,e1 = expr e1 in
-	let l2,e2 = expr e2 in
-	let l3,e3 = expr e3 in
-	(l1@l2@l3),If(e1,e2,e3)
+	let e1 = expr e1 in
+	let e2 = expr e2 in
+	let e3 = expr e3 in
+	If(e1,e2,e3)
     | JCEshift(e1,e2) -> 
-	let l1,e1 = expr e1 in
-	let l2,e2 = expr e2 in
-	(l1@l2,make_app "shift" [e1; e2])
+	let e1 = expr e1 in
+	let e2 = expr e2 in
+	make_app "shift" [e1; e2]
     | JCEinstanceof(e,t) ->
-	let l,e = expr e in
+	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
-	l,make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
+	make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
     | JCEcast(e,t) ->
-	let l,e = expr e in
+	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
-	l,make_app "downcast_" [Deref tag; e; Var (tag_name t)]
+	make_app "downcast_" [Deref tag; e; Var (tag_name t)]
     | JCEderef(e,f) -> 
-	let l,e = expr e in
-	l,make_acc f e
-    | JCEincr_local(op, vi) -> assert false
-    | JCEincr_heap(op,fi,e1) -> 
-	let l1,e1 = expr e1 in
-	let tmp1 = tmp_why_var () in
-	let tmp2 = tmp_why_var () in
-	let acc_fi_e = make_acc fi (Var tmp1) in
-	let result_value,updated_value = 
-	  match op with
-	    | Postfix_dec | Postfix_inc -> 
-		acc_fi_e, make_app (incr_call op) [Var tmp2; const_un]
-	    | Prefix_dec | Prefix_inc ->
-		make_app (incr_call op) [acc_fi_e; const_un], (Var tmp2)
-	in
-	[],make_lets
-	  (l1@[ (tmp1, e1) ; (tmp2, result_value ) ])
-	  (append (make_upd fi (Var tmp1) updated_value) (Var tmp2))
-    | JCEassign_local (vi, e2) -> 
-	assert false
-	  (*
-	    let n = v.var_unique_name in
-	    append
-	    (Assign(n, bin_op op (Deref n) (interp_expr e2)))
-	    (Deref n)
-	  *)
-    | JCEassign_heap(e1,fi,e2) -> 
-	let l1,e1 = expr e1 in
-	let l2,e2 = expr e2 in
-	let tmp1 = tmp_why_var () in
-	let tmp2 = tmp_why_var () in
-	(l1@l2@[ (tmp1, e1) ; (tmp2, e2) ],
-	 append
-	   (make_upd fi (Var tmp1) (Var tmp2))
-	   (Var tmp2)) 
-    | JCEassign_op_local (vi, op, e2) -> 
-	assert false
-	  (*
-	    let n = v.var_unique_name in
-	    append
-	    (Assign(n, bin_op op (Deref n) (interp_expr e2)))
-	    (Deref n)
-	  *)
-    | JCEassign_op_heap(e1,fi,op,e2) -> 
-	let l1,e1 = expr e1 in
-	let l2,e2 = expr e2 in
-	let tmp1 = tmp_why_var () in
-	let tmp2 = tmp_why_var () in
-	let memory = fi.jc_field_info_name in
-	(l1@l2@[ (tmp1, e1) ; 
-		 (tmp2, make_app op.jc_fun_info_name
-		    [ make_acc fi (Var tmp1) ; e2 ]) ],
-	 append
-	   (make_app "safe_upd_"
-	      [Var memory; Var tmp1; Var tmp2])
-	   (Var tmp2)) 
-    | JCEcall(f,l) -> 
-	if f==Jc_pervasives.and_ then
-	  begin
-	    match l with
-	      | [e1;e2] -> 
-		  let l1,e1 = expr e1 in
-		  let l2,e2 = expr e2 in
-		  (l1@l2,And(e1,e2))
-	      | _ -> assert false
-	  end
-	else
-	  let l,el =
-	    List.fold_right
-	      (fun (l,e) (ll,el) -> (l@ll,e::el))
-	      (List.map expr l)
-	      ([],[])
-	  in
-	  l,make_app f.jc_fun_info_name el
+	let e = expr e in
+	make_acc f e
 
-let statement_expr e =
-  match e.jc_expr_node with
-    | JCEconst JCCnull -> assert false
-    | JCEconst c -> assert false
-    | JCEif(e1,e2,e3) -> assert false (* If(expr e1,expr e2,expr e3) *)
-    | JCEvar v -> assert false
-    | JCEshift(e1,e2) -> assert false
-    | JCEderef(e,f) -> assert false
-    | JCEinstanceof _ -> assert false
-    | JCEcast _ -> assert false
-    | JCEincr_local(op, vi) ->
-	(* let tmp = !v in v <- tmp+-1 *)
-	let tmp = tmp_why_var () in
-	let v = vi.jc_var_info_name in
-	Let(tmp, Deref(v), 
-	    Assign(v,make_app (incr_call op) [Var tmp; const_un]))
-    | JCEincr_heap _ -> assert false
-    | JCEassign_local (vi, e2) -> 
-	let l,e2 = expr e2 in
-	let n = vi.jc_var_info_final_name in
-	make_lets l (Assign(n, e2))
-    | JCEassign_heap(e1,fi,e2) -> 
-	let l1,e1 = expr e1 in
-	let l2,e2 = expr e2 in
-	let tmp1 = tmp_why_var () in
-	let tmp2 = tmp_why_var () in
-	make_lets 
-	  (l1@l2@[ (tmp1, e1) ; (tmp2, e2) ])
-	  (make_upd fi (Var tmp1) (Var tmp2))
-    | JCEassign_op_local (vi, op, e2) -> 
-	assert false
-	  (*
-	    let n = v.var_unique_name in
-	    append
-	    (Assign(n, bin_op op (Deref n) (interp_expr e2)))
-	    (Deref n)
-	  *)
-    | JCEassign_op_heap(e1,fi,op,e2) -> 
-	let l1,e1 = expr e1 in
-	let l2,e2 = expr e2 in
-	let tmp1 = tmp_why_var () in
-	let tmp2 = tmp_why_var () in
-	let memory = fi.jc_field_info_name in
-	make_lets 
-	  (l1@l2@[ (tmp1, e1) ; 
-		   (tmp2, make_app op.jc_fun_info_name
-		      [ make_acc fi (Var tmp1) ; e2 ]) ])
-	  (make_app "safe_upd_"
-		  [Var memory; Var tmp1; Var tmp2])
-    | JCEcall(f,l) -> 
-	let l,el =
-	  List.fold_right
-	    (fun (l,e) (ll,el) -> (l@ll,e::el))
-	    (List.map expr l)
-	    ([],[])
-	in
-	make_lets l (make_app f.jc_fun_info_name el)
 
 let invariant_for_struct this st =
   let (_,invs) = 
@@ -443,16 +310,55 @@ let invariant_for_struct this st =
     (List.map (fun (li,_) -> make_logic_pred_call li [this]) invs)
   
 let rec statement s = 
-  reset_tmp_var();
+  (* reset_tmp_var(); *)
   match s.jc_statement_node with
+    | JCScall(vio,f,l,s) -> 
+	let el = List.map expr l in
+	let call = make_app f.jc_fun_info_name el in
+	begin
+	  match vio with
+	    | None -> 
+		(* check that associated statement is empty *)
+		begin match s.jc_statement_node with
+		  | JCSblock [] -> () (* ok *)
+		  | _ -> assert false
+		end;
+		call
+	    | Some vi ->
+		Let(vi.jc_var_info_final_name,call, statement s)
+	end
+    | JCSincr_local(op, vi) ->
+	(* let tmp = !v in v <- tmp+-1 *)
+	let tmp = tmp_var_name () in
+	let v = vi.jc_var_info_name in
+	Let(tmp, Deref(v), 
+	    Assign(v,make_app (incr_call op) [Var tmp; const_un]))
+    | JCSincr_heap(op,e1,fi) -> 
+ 	let e1 = expr e1 in
+ 	let tmp1 = tmp_var_name () in
+ 	let acc_fi_e = make_acc fi (Var tmp1) in
+ 	let updated_value = make_app (incr_call op) [acc_fi_e; const_un] in
+	make_lets
+ 	  [ (tmp1, e1) ]
+ 	  (make_upd fi (Var tmp1) updated_value)
+    | JCSassign_local (vi, e2) -> 
+	let e2 = expr e2 in
+	let n = vi.jc_var_info_final_name in
+	Assign(n, e2)
+    | JCSassign_heap(e1,fi,e2) -> 
+	let e1 = expr e1 in
+	let e2 = expr e2 in
+	let tmp1 = tmp_var_name () in
+	let tmp2 = tmp_var_name () in
+	make_lets 
+	  ([ (tmp1, e1) ; (tmp2, e2) ])
+	  (make_upd fi (Var tmp1) (Var tmp2))
     | JCSblock l -> statement_list l
-    | JCSexpr e -> statement_expr e
     | JCSif (e, s1, s2) -> 
-	let l,e = expr e in
-	make_lets l (If(e, statement s1, statement s2))
-    | JCSwhile (e, la, s) -> 
-	let l,e = expr e in
-	While(make_lets l e, assertion None "" la.jc_loop_invariant,
+	let e = expr e in
+	If(e, statement s1, statement s2)
+    | JCSloop (la, s) -> 
+	While(Cte(Prim_bool true), assertion None "" la.jc_loop_invariant,
 	      Some (term None "" la.jc_loop_variant,None), [statement s])
     | JCSassert _ -> assert false (* TODO *)
     | JCSdecl(vi,e,s) -> 
@@ -460,41 +366,41 @@ let rec statement s =
 	  match e with
 	    | None -> assert false
 	    | Some e ->
-		let l,e = expr e in
-		make_lets l
-		(if vi.jc_var_info_assigned then 
+		let e = expr e in
+		if vi.jc_var_info_assigned then 
 		  Let_ref(vi.jc_var_info_final_name,e, statement s)
 		else 
-		  Let(vi.jc_var_info_final_name,e, statement s))
+		  Let(vi.jc_var_info_final_name,e, statement s)
 	end
     | JCSreturn e -> 
-	let l,e = expr e in make_lets l e
+	expr e
     | JCSunpack(_,e) -> 
-	let l,e = expr e in make_lets l (make_app "unpack_" [e])
+	let e = expr e in make_app "unpack_" [e]
     | JCSpack(st,e) -> 
-	let l,e = expr e in
-	let tmp = tmp_why_var() in
-	make_lets (l@[(tmp,e)])
+	let e = expr e in
+	let tmp = tmp_var_name() in
+	make_lets ([(tmp,e)])
 	  (Assert(invariant_for_struct (LVar tmp) st, 
 		  make_app "pack_" [Var tmp]))
-    | JCSbreak l -> assert false
-    | JCScontinue l -> assert false
-    | JCSgoto l -> assert false
-    | JCSthrow (ei, e) -> 
-	let l,e = expr e in
-	make_lets l (Raise(ei.jc_exception_info_name,Some e))	
+    | JCSthrow (ei, Some e) -> 
+	let e = expr e in
+	Raise(ei.jc_exception_info_name,Some e)
+    | JCSthrow (ei, None) -> 
+	Raise(ei.jc_exception_info_name,None)
     | JCStry (s, catches, finally) -> 
 	assert (finally.jc_statement_node = JCSblock []); (* TODO *)
-	begin
-	  match catches with
-	    | [(ei,v,st)] ->
-		Try(statement s, 
-		    ei.jc_exception_info_name, 
-		    Some v.jc_var_info_final_name, statement st)
-	    | _ -> assert false  (* TODO *)
-	end
-  
-	
+	let catch s c = match c with
+	  | (ei,Some v,st) ->
+	      Try(s, 
+		  ei.jc_exception_info_name, 
+		  Some v.jc_var_info_final_name, statement st)
+	  | (ei,None,st) ->
+	      Try(s, 
+		  ei.jc_exception_info_name, 
+		  None, statement st)
+	in
+	List.fold_left catch (statement s) catches
+ 	
 
 and statement_list l = 
   List.fold_right 

@@ -22,9 +22,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.6 2006-12-22 13:56:25 marche Exp $ *)
+(* $Id: jc_envset.ml,v 1.7 2007-03-02 16:40:56 moy Exp $ *)
 
 open Jc_env
+
 
 module StringSet = Set.Make(String)
 
@@ -58,6 +59,7 @@ module ExceptionOrd =
 module ExceptionSet = Set.Make(ExceptionOrd)
 
 module ExceptionMap = Map.Make(ExceptionOrd)
+
 
 (*
 Local Variables: 

@@ -32,19 +32,19 @@ val typing_error :
 val logic_type_table : (string,string) Hashtbl.t
   
 val logic_functions_table : 
-  (int, logic_info * term_or_assertion) Hashtbl.t
+  (int, logic_info * tterm_or_tassertion) Hashtbl.t
 
 val functions_table : 
-  (int, fun_info * fun_spec * statement list) Hashtbl.t
+  (int, fun_info * tfun_spec * tstatement list) Hashtbl.t
 
 val structs_table : 
-  (string, (struct_info * (logic_info * assertion) list)) Hashtbl.t
+  (string, (struct_info * (logic_info * tassertion) list)) Hashtbl.t
 
 val range_types_table : 
   (string, (range_info * logic_info * fun_info * fun_info)) Hashtbl.t
 
 val axioms_table : 
-  (string, assertion) Hashtbl.t
+  (string, tassertion) Hashtbl.t
 
 val exceptions_table : 
   (string, exception_info) Hashtbl.t

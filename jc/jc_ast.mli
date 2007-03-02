@@ -98,7 +98,8 @@ and pexpr =
      
 type pclause =
   | JCPCrequires of pexpr
-  | JCPCbehavior of string * identifier option * pexpr option * pexpr list option * pexpr
+  | JCPCbehavior of 
+      string * identifier option * pexpr option * pexpr list option * pexpr
 
 
 type pstatement_node =
@@ -114,7 +115,7 @@ type pstatement_node =
   | JCPScontinue of label
   | JCPSgoto of label
   | JCPStry of pstatement * (identifier * string * pstatement) list * pstatement
-  | JCPSthrow of identifier * pexpr 
+  | JCPSthrow of identifier * pexpr option
   | JCPSpack of pexpr
   | JCPSunpack of pexpr
 
@@ -126,8 +127,10 @@ and pstatement =
 
 
 type pdecl_node =
-  | JCPDfun of ptype * string * (ptype * string) list * pclause list * pstatement list
-  | JCPDstructtype of string * string option * (ptype * string) list * (string * string * pexpr) list
+  | JCPDfun of 
+      ptype * string * (ptype * string) list * pclause list * pstatement list
+  | JCPDstructtype of string * 
+      string option * (ptype * string) list * (string * string * pexpr) list
   | JCPDrangetype of string * Num.num * Num.num
   | JCPDlogictype of string 
   | JCPDaxiom of string * pexpr
@@ -142,6 +145,132 @@ and pdecl =
 (*************)
 (* typed ast *)
 (*************)
+
+type tterm_node =
+  | JCTTconst of const
+  | JCTTvar of var_info
+  | JCTTshift of tterm * tterm
+  | JCTTderef of tterm * field_info
+  | JCTTapp of logic_info * tterm list
+  | JCTTold of tterm
+  | JCTToffset_max of tterm * struct_info
+  | JCTToffset_min of tterm * struct_info
+  | JCTTinstanceof of tterm * struct_info
+  | JCTTcast of tterm * struct_info
+  | JCTTif of tterm * tterm * tterm
+
+and tterm =
+    {
+      jc_tterm_node : tterm_node;
+      jc_tterm_loc : Loc.position;
+    }
+
+type tlocation_set = 
+  | JCTLSvar of var_info
+  | JCTLSderef of tlocation_set * field_info
+  | JCTLSrange of tlocation_set * tterm * tterm
+
+type tlocation =
+  | JCTLvar of var_info
+  | JCTLderef of tlocation_set * field_info
+
+type tassertion_node =
+  | JCTAtrue
+  | JCTAfalse
+  | JCTAand of tassertion list
+  | JCTAor of tassertion list
+  | JCTAimplies of tassertion * tassertion
+  | JCTAiff of tassertion * tassertion
+  | JCTAnot of tassertion
+  | JCTAapp of logic_info * tterm list
+  | JCTAforall of var_info * tassertion
+  | JCTAold of tassertion
+  | JCTAinstanceof of tterm * struct_info
+  | JCTAbool_term of tterm
+  | JCTAif of tterm * tassertion * tassertion
+
+and tassertion =
+    {
+      jc_tassertion_node : tassertion_node;
+      jc_tassertion_loc : Loc.position;
+    }
+
+type tterm_or_tassertion =
+  | JCTAssertion of tassertion
+  | JCTTerm of tterm
+
+type tincr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
+
+type texpr_node =
+  | JCTEconst of const
+  | JCTEvar of var_info
+  | JCTEshift of texpr * texpr
+  | JCTEderef of texpr * field_info
+  | JCTEcall of fun_info * texpr list
+  | JCTEinstanceof of texpr * struct_info
+  | JCTEcast of texpr * struct_info
+  | JCTEassign_local of var_info * texpr
+  | JCTEassign_heap of texpr * field_info * texpr
+  | JCTEassign_op_local of var_info * fun_info * texpr
+  | JCTEassign_op_heap of texpr * field_info * fun_info * texpr
+  | JCTEincr_local of tincr_op * var_info 
+  | JCTEincr_heap of tincr_op * texpr * field_info 
+  | JCTEif of texpr * texpr * texpr
+
+and texpr =
+   {
+      jc_texpr_node : texpr_node;
+      jc_texpr_loc : Loc.position;
+    }
+
+type tloop_annot =
+    {
+      jc_tloop_invariant : tassertion;
+      jc_tloop_variant : tterm;
+    }
+
+type tstatement_node =
+  | JCTSblock of tstatement list
+  | JCTSexpr of texpr
+  | JCTSassert of tassertion
+  | JCTSdecl of var_info * texpr option * tstatement
+  | JCTSif of texpr * tstatement * tstatement
+  | JCTSwhile of texpr * tloop_annot * tstatement
+  | JCTSreturn of texpr
+  | JCTSbreak of label
+  | JCTScontinue of label
+  | JCTSgoto of label
+  | JCTStry of 
+      tstatement * (exception_info * var_info * tstatement) list * tstatement
+  | JCTSthrow of exception_info * texpr option
+  | JCTSpack of struct_info * texpr
+  | JCTSunpack of struct_info * texpr
+
+and tstatement = 
+    {
+      jc_tstatement_node : tstatement_node;
+      jc_tstatement_loc : Loc.position;
+    }
+
+
+type tbehavior =
+    { 
+      jc_tbehavior_throws : exception_info option ;
+      jc_tbehavior_assumes : tassertion option ;
+      jc_tbehavior_assigns : tlocation list option ;
+      jc_tbehavior_ensures : tassertion;
+    }
+
+type tfun_spec =
+    {
+      jc_tfun_requires : tassertion;
+      jc_tfun_behavior : (string * tbehavior) list;
+    }
+
+
+(******************)
+(* normalized ast *)
+(******************)
 
 type term_node =
   | JCTconst of const
@@ -196,22 +325,16 @@ type term_or_assertion =
   | JCAssertion of assertion
   | JCTerm of term
 
-type incr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
-
+(* application, increment and assignment are statements.
+   special assignment with operation disappears.
+ *)
 type expr_node =
   | JCEconst of const
   | JCEvar of var_info
   | JCEshift of expr * expr
   | JCEderef of expr * field_info
-  | JCEcall of fun_info * expr list
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info
-  | JCEassign_local of var_info * expr
-  | JCEassign_heap of expr * field_info * expr
-  | JCEassign_op_local of var_info * fun_info * expr
-  | JCEassign_op_heap of expr * field_info * fun_info * expr
-  | JCEincr_local of incr_op * var_info 
-  | JCEincr_heap of incr_op * field_info * expr
   | JCEif of expr * expr * expr
 
 and expr =
@@ -226,19 +349,27 @@ type loop_annot =
       jc_loop_variant : term;
     }
 
+type incr_op = Stat_inc | Stat_dec
+
+(* application, increment and assignment are statements. 
+   expressions (without any of the above) are not statements anymore.
+   break, continue, goto are translated with exceptions.
+*)
 type statement_node =
+  | JCScall of var_info option * fun_info * expr list * statement
+  | JCSincr_local of incr_op * var_info 
+  | JCSincr_heap of incr_op * expr * field_info
+  | JCSassign_local of var_info * expr
+  | JCSassign_heap of expr * field_info * expr
   | JCSblock of statement list
-  | JCSexpr of expr
   | JCSassert of assertion
   | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement
-  | JCSwhile of expr * loop_annot * statement
+  | JCSloop of loop_annot * statement
   | JCSreturn of expr
-  | JCSbreak of label
-  | JCScontinue of label
-  | JCSgoto of label
-  | JCStry of statement * (exception_info * var_info * statement) list * statement
-  | JCSthrow of exception_info * expr
+  | JCStry of statement 
+      * (exception_info * var_info option * statement) list * statement
+  | JCSthrow of exception_info * expr option
   | JCSpack of struct_info * expr
   | JCSunpack of struct_info * expr
 
@@ -262,7 +393,6 @@ type fun_spec =
       jc_fun_requires : assertion;
       jc_fun_behavior : (string * behavior) list;
     }
-
 
 
     

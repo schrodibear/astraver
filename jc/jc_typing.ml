@@ -161,45 +161,6 @@ let type_type t =
 	    typing_error t.jc_ptype_loc "unknown type %s" id
 
 
-
-(* constants *)
-
-let const c =
-  match c with
-    | JCCvoid -> unit_type,c
-    | JCCinteger _ -> integer_type,c
-    | JCCreal _ -> real_type,c
-    | JCCboolean _ -> boolean_type,c
-    | JCCnull -> assert false
-
-(* variables *)
-
-let var_tag_counter = ref 0
-
-let var ty id =
-  incr var_tag_counter;
-  let vi = {
-    jc_var_info_tag = !var_tag_counter;
-    jc_var_info_name = id;
-    jc_var_info_final_name = id;
-    jc_var_info_type = ty;
-    jc_var_info_assigned = false;
-  }
-  in vi
-
-(* exceptions *)
-
-let exception_tag_counter = ref 0
-
-let exception_info id ty =
-  incr exception_tag_counter;
-  let ei = {
-    jc_exception_info_tag = !exception_tag_counter;
-    jc_exception_info_name = id;
-    jc_exception_info_type = ty;
-  }
-  in ei
-
 (* terms *)
 
 let num_op op =
@@ -213,8 +174,8 @@ let num_op op =
 
 let num_un_op op e =
   match op with
-    | Uminus -> JCTapp(minus_int,[e])
-    | Uplus -> e.jc_term_node
+    | Uminus -> JCTTapp(minus_int,[e])
+    | Uplus -> e.jc_tterm_node
     | _ -> assert false
 
 let eq_op op arg_type  =
@@ -248,15 +209,15 @@ let term_coerce t1 t2 e =
 	  let (_,to_int,_,_) = 
 	    Hashtbl.find range_types_table ri.jc_range_info_name 
 	  in
-	  { jc_term_node = JCTapp(to_int,[e]) ;
-	    jc_term_loc = e.jc_term_loc }  
+	  { jc_tterm_node = JCTTapp(to_int,[e]) ;
+	    jc_tterm_loc = e.jc_tterm_loc }  
       | _ -> e
   in
   match t2 with
     | Tinteger -> e_int
     | Treal -> 
-	{ jc_term_node = JCTapp(real_of_integer,[e_int]) ;
-	  jc_term_loc = e.jc_term_loc }  
+	{ jc_tterm_node = JCTTapp(real_of_integer,[e_int]) ;
+	  jc_tterm_loc = e.jc_tterm_loc }  
     | _ -> assert false
 
 let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
@@ -274,7 +235,7 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 		end
 	    | _ -> assert false
 	in
-	JCTnative t,JCTapp(eq_op op t,[e1;e2])
+	JCTnative t,JCTTapp(eq_op op t,[e1;e2])
     | Badd | Bsub ->
 	begin
 	  match (t1,t2) with
@@ -282,14 +243,14 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 		begin
 		  match (nt1,nt2) with
 		    | Tinteger,Tinteger -> 
-			t1,JCTapp(num_op op,[e1;e2])
+			t1,JCTTapp(num_op op,[e1;e2])
 		    | _ -> assert false (* TODO *)
 		end
 	    | JCTpointer(st,a,b), JCTnative t2 ->
 		begin
 		  match t2 with
 		    | Tinteger -> 
-			JCTpointer(st,zero,minus_one), JCTapp(shift,[e1;e2])
+			JCTpointer(st,zero,minus_one), JCTTapp(shift,[e1;e2])
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
@@ -306,7 +267,7 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "numeric types expected"
-	in JCTnative t,JCTapp(num_op op,[e1;e2])
+	in JCTnative t,JCTTapp(num_op op,[e1;e2])
     | Bland | Blor -> assert false (* TODO *)
     | Bimplies -> assert false
     | Biff -> assert false
@@ -338,7 +299,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
-	  JCTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	  JCTTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
 	  typing_error loc "numeric types expected"
     | Badd | Bsub ->
@@ -346,14 +307,14 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 	  match t1 with
 	    | JCTpointer(st,_,_) ->
 		if is_integer t2 then
-		  t1, JCTapp(shift,[e1;term_coerce t2 Tinteger e2])
+		  t1, JCTTapp(shift,[e1;term_coerce t2 Tinteger e2])
 		else
 		  typing_error loc "integer type expected"
 	    | _ ->
 		if is_numeric t1 && is_numeric t2 then
 		  let t = lub_numeric_types t1 t2 in
 		  JCTnative t,
-		  JCTapp(logic_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
+		  JCTTapp(logic_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
 		else
 		  typing_error loc "numeric types expected"
 	end
@@ -369,7 +330,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "numeric types expected"
-	in JCTnative t,JCTapp(logic_bin_op t op,[e1;e2])
+	in JCTnative t,JCTTapp(logic_bin_op t op,[e1;e2])
     | Bland | Blor -> 
 	let t=
 	  match (t1,t2) with
@@ -381,7 +342,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "booleans expected"
-	in JCTnative t,JCTapp(logic_bin_op t op,[e1;e2])
+	in JCTnative t,JCTTapp(logic_bin_op t op,[e1;e2])
 
 	(* not allowed as term op *)
     | Bimplies | Biff -> assert false
@@ -394,14 +355,14 @@ let rec term env e =
 	  begin
 	    try
 	      let vi = List.assoc id env
-	      in vi.jc_var_info_type,JCTvar vi
+	      in vi.jc_var_info_type,JCTTvar vi
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1,t) -> 
 	  let t1,te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTnative Tboolean, JCTinstanceof(te1,st)
+	  JCTnative Tboolean, JCTTinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let t1,te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
@@ -409,7 +370,7 @@ let rec term env e =
 	    match t1 with
 	      | JCTpointer(st1,a,b) ->
 		  if substruct st st1 then
-		    JCTpointer(st,a,b), JCTcast(te1,st)
+		    JCTpointer(st,a,b), JCTTcast(te1,st)
 		  else
 		    typing_error e.jc_pexpr_loc "invalid cast"
 	      | _ ->
@@ -428,20 +389,20 @@ let rec term env e =
       | JCPEderef (e1, f) -> 
 	  let t,te = term env e1 in
 	  let fi = find_field e.jc_pexpr_loc t f in
-	  fi.jc_field_info_type, JCTderef(te,fi)	  
+	  fi.jc_field_info_type, JCTTderef(te,fi)	  
 (*
       | JCPEshift (_, _) -> assert false
 *)
       | JCPEconst c -> 
-	  let t,c = const c in t,JCTconst c
+	  let t,c = const c in t,JCTTconst c
       | JCPEold e -> 
-	  let t,e = term env e in t,JCTold(e)
+	  let t,e = term env e in t,JCTTold(e)
       | JCPEoffset_max e -> 
 	  let t,te = term env e in 
 	  begin
 	    match t with 
 	      | JCTpointer(st,_,_) ->
-		  integer_type,JCToffset_max(te,st)
+		  integer_type,JCTToffset_max(te,st)
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
@@ -450,7 +411,7 @@ let rec term env e =
 	  begin
 	    match t with 
 	      | JCTpointer(st,_,_) ->
-		  integer_type,JCToffset_min(te,st)
+		  integer_type,JCTToffset_min(te,st)
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
@@ -468,7 +429,7 @@ let rec term env e =
 			typing_error e.jc_pexpr_loc 
 			  "imcompatible result types"
 		  in
-		  t, JCTif(te1,te2,te3)
+		  t, JCTTif(te1,te2,te3)
 	      | _ ->
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
@@ -483,8 +444,8 @@ let rec term env e =
 	  typing_error e.jc_pexpr_loc 
 	    "quantification not allowed as logic term"
 
-  in t,{ jc_term_node = te;
-	 jc_term_loc = e.jc_pexpr_loc }
+  in t,{ jc_tterm_node = te;
+	 jc_tterm_loc = e.jc_pexpr_loc }
 
   
 let rel_unary_op loc op t =
@@ -510,30 +471,30 @@ let rel_bin_op t op =
 
 
 let make_and a1 a2 =
-  match (a1.jc_assertion_node,a2.jc_assertion_node) with
-    | (JCAtrue,a2) -> a2
-    | (a1,JCAtrue) -> a1
+  match (a1.jc_tassertion_node,a2.jc_tassertion_node) with
+    | (JCTAtrue,a2) -> a2
+    | (a1,JCTAtrue) -> a1
 (*
     | (LFalse,_) -> LFalse
     | (_,LFalse) -> LFalse
 *)
-    | (JCAand l1 , JCAand l2) -> JCAand(l1@l2)
-    | (JCAand l1 , _ ) -> JCAand(l1@[a2])
-    | (_ , JCAand l2) -> JCAand(a1::l2)
-    | _ -> JCAand [a1;a2]
+    | (JCTAand l1 , JCTAand l2) -> JCTAand(l1@l2)
+    | (JCTAand l1 , _ ) -> JCTAand(l1@[a2])
+    | (_ , JCTAand l2) -> JCTAand(a1::l2)
+    | _ -> JCTAand [a1;a2]
 
 let make_or a1 a2 =
-  match (a1.jc_assertion_node,a2.jc_assertion_node) with
-    | (JCAfalse,a2) -> a2
-    | (a1,JCAfalse) -> a1
+  match (a1.jc_tassertion_node,a2.jc_tassertion_node) with
+    | (JCTAfalse,a2) -> a2
+    | (a1,JCTAfalse) -> a1
 (*
     | (LFalse,_) -> LFalse
     | (_,LFalse) -> LFalse
 *)
-    | (JCAor l1 , JCAor l2) -> JCAor(l1@l2)
-    | (JCAor l1 , _ ) -> JCAor(l1@[a2])
-    | (_ , JCAor l2) -> JCAor(a1::l2)
-    | _ -> JCAor [a1;a2]
+    | (JCTAor l1 , JCTAor l2) -> JCTAor(l1@l2)
+    | (JCTAor l1 , _ ) -> JCTAor(l1@[a2])
+    | (_ , JCTAor l2) -> JCTAor(a1::l2)
+    | _ -> JCTAor [a1;a2]
 
 
 let make_rel_bin_op loc op t1 e1 t2 e2 =
@@ -541,16 +502,16 @@ let make_rel_bin_op loc op t1 e1 t2 e2 =
     | Bgt | Blt | Bge | Ble ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCAapp(rel_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	  JCTAapp(rel_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
 	  typing_error loc "numeric types expected"
     | Beq | Bneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCAapp(rel_bin_op Tunit op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	  JCTAapp(rel_bin_op Tunit op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
 	  if comparable_types t1 t2 then 
-	    JCAapp(rel_bin_op Tunit op,[e1;e2])
+	    JCTAapp(rel_bin_op Tunit op,[e1;e2])
 	  else
 	    typing_error loc "terms should have the same type"
 	(* non propositional operators *)
@@ -573,26 +534,26 @@ let rec assertion env e =
 	  begin
 	    match vi.jc_var_info_type with
 	      | JCTnative Tboolean ->
-		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
-				 jc_term_node = JCTvar vi }
+		  JCTAbool_term { jc_tterm_loc = e.jc_pexpr_loc;
+				 jc_tterm_node = JCTTvar vi }
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non boolean expression"
 	  end
       | JCPEinstanceof(e1, t) -> 
 	  let t1,te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCAinstanceof(te1,st) 
+	  JCTAinstanceof(te1,st) 
       | JCPEcast(e, t) -> assert false
       | JCPEbinary (e1, Bland, e2) -> 
 	  make_and (assertion env e1) (assertion env e2)
       | JCPEbinary (e1, Blor, e2) -> 
 	  make_or (assertion env e1) (assertion env e2)
       | JCPEbinary (e1, Bimplies, e2) -> 
-	  JCAimplies(assertion env e1,assertion env e2)
+	  JCTAimplies(assertion env e1,assertion env e2)
       | JCPEbinary (e1, Biff, e2) -> 
-	  JCAiff(assertion env e1,assertion env e2)
+	  JCTAiff(assertion env e1,assertion env e2)
       | JCPEunary (Unot, e2) -> 
-	  JCAnot(assertion env e2)
+	  JCTAnot(assertion env e2)
       | JCPEbinary (e1, op, e2) -> 
 	  let t1,e1 = term env e1
 	  and t2,e2 = term env e2
@@ -601,7 +562,7 @@ let rec assertion env e =
       | JCPEunary(op, e2) -> 
 	  let t2,e2 = term env e2
 	  in
-	  JCAapp(rel_unary_op e.jc_pexpr_loc op t2,[e2])
+	  JCTAapp(rel_unary_op e.jc_pexpr_loc op t2,[e2])
       | JCPEapp (_, _) -> assert false
       | JCPEderef (e, id) -> 
 	  let t,te = term env e in
@@ -609,8 +570,8 @@ let rec assertion env e =
 	  begin
 	    match fi.jc_field_info_type with
 	      | JCTnative Tboolean ->
-		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
-				 jc_term_node = JCTderef(te,fi) }
+		  JCTAbool_term { jc_tterm_loc = e.jc_pexpr_loc;
+				 jc_tterm_node = JCTTderef(te,fi) }
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non boolean expression"
 	  end
@@ -620,15 +581,15 @@ let rec assertion env e =
       | JCPEconst c -> 
 	  begin
 	    match c with
-	      | JCCboolean true -> JCAtrue
-	      | JCCboolean false -> JCAfalse
+	      | JCCboolean true -> JCTAtrue
+	      | JCCboolean false -> JCTAfalse
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non propositional constant"
 	  end
       | JCPEforall(ty,idl,e1) -> 
 	  let ty = type_type ty in
-	  (make_forall e.jc_pexpr_loc ty idl env e1).jc_assertion_node
-      | JCPEold e -> JCAold(assertion env e)
+	  (make_forall e.jc_pexpr_loc ty idl env e1).jc_tassertion_node
+      | JCPEold e -> JCTAold(assertion env e)
       | JCPEif(e1,e2,e3) ->
 	  let t1,te1 = term env e1 
 	  and te2 = assertion env e2
@@ -637,7 +598,7 @@ let rec assertion env e =
 	  begin
 	    match t1 with
 	      | JCTnative Tboolean ->
-		  JCAif(te1,te2,te3)
+		  JCTAif(te1,te2,te3)
 	      | _ ->
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
@@ -651,16 +612,16 @@ let rec assertion env e =
 	  typing_error e.jc_pexpr_loc "assignment not allowed as logic term"
 
 
-  in { jc_assertion_node = te;
-       jc_assertion_loc = e.jc_pexpr_loc }
+  in { jc_tassertion_node = te;
+       jc_tassertion_loc = e.jc_pexpr_loc }
 
-and make_forall loc ty idl env e : assertion =
+and make_forall loc ty idl env e : tassertion =
   match idl with
     | [] -> assertion env e
     | id::r ->
 	let vi = var ty id in
-	let f = JCAforall(vi,make_forall loc ty r ((id,vi)::env) e) in
-	{jc_assertion_loc = loc ; jc_assertion_node = f }
+	let f = JCTAforall(vi,make_forall loc ty r ((id,vi)::env) e) in
+	{jc_tassertion_loc = loc ; jc_tassertion_node = f }
 
 (* expressions *)
 
@@ -694,13 +655,13 @@ let make_unary_app loc (op : Jc_ast.punary_op) t2 e2 =
   match op with
     | Uprefix_inc | Upostfix_inc | Uprefix_dec | Upostfix_dec ->
 	begin
-	  match e2.jc_expr_node with
-	    | JCEvar v ->
+	  match e2.jc_texpr_node with
+	    | JCTEvar v ->
 		set_assigned v;
-		t2,JCEincr_local(incr_op op,v)
-	    | JCEderef(e,f) ->
-		t2,JCEincr_heap(incr_op op, f, e)
-	    | _ -> typing_error e2.jc_expr_loc "not an lvalue"
+		t2,JCTEincr_local(incr_op op,v)
+	    | JCTEderef(e,f) ->
+		t2,JCTEincr_heap(incr_op op, e, f)
+	    | _ -> typing_error e2.jc_texpr_loc "not an lvalue"
 	end
     | Unot -> 
 	let t=
@@ -713,7 +674,7 @@ let make_unary_app loc (op : Jc_ast.punary_op) t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "boolean expected"
-	in JCTnative t,JCEcall(unary_op t op,[e2])
+	in JCTnative t,JCTEcall(unary_op t op,[e2])
     | Uplus | Uminus -> 
 	let t=
 	  match t2 with
@@ -726,7 +687,7 @@ let make_unary_app loc (op : Jc_ast.punary_op) t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "numeric type expected"
-	in JCTnative t,JCEcall(unary_op t op,[e2])
+	in JCTnative t,JCTEcall(unary_op t op,[e2])
 
 let bin_op t op =
   match t,op with
@@ -756,15 +717,15 @@ let coerce t1 t2 e =
 	  let (_,_,to_int_,_) = 
 	    Hashtbl.find range_types_table ri.jc_range_info_name 
 	  in
-	  Tinteger,{ jc_expr_node = JCEcall(to_int_,[e]) ;
-	    jc_expr_loc = e.jc_expr_loc }  
+	  Tinteger,{ jc_texpr_node = JCTEcall(to_int_,[e]) ;
+	    jc_texpr_loc = e.jc_texpr_loc }  
       | JCTnative t -> t,e
       | _ -> assert false
   in
   match tn1,t2 with
     | Tinteger,Treal -> 
-	{ jc_expr_node = JCEcall(real_of_integer_,[e_int]) ;
-	  jc_expr_loc = e.jc_expr_loc }  
+	{ jc_texpr_node = JCTEcall(real_of_integer_,[e_int]) ;
+	  jc_texpr_loc = e.jc_texpr_loc }  
     | _ -> e_int
 
 
@@ -774,10 +735,10 @@ let restrict t1 t2 e =
 	let (_,_,_,of_int) = 
 	  Hashtbl.find range_types_table ri.jc_range_info_name 
 	in
-	{ jc_expr_node = JCEcall(of_int,[e]) ;
-	  jc_expr_loc = e.jc_expr_loc }  	
+	{ jc_texpr_node = JCTEcall(of_int,[e]) ;
+	  jc_texpr_loc = e.jc_texpr_loc }  	
     | _ -> 
-	typing_error e.jc_expr_loc "cannot coerce type '%a' to type '%a'"
+	typing_error e.jc_texpr_loc "cannot coerce type '%a' to type '%a'"
 	  print_type t1 print_type t2
 	
 
@@ -787,7 +748,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
-	  JCEcall(bin_op Tboolean op,[coerce t1 t e1; coerce t2 t e2])
+	  JCTEcall(bin_op Tboolean op,[coerce t1 t e1; coerce t2 t e2])
 	else
 	  typing_error loc "numeric types expected"
     | Badd | Bsub ->
@@ -795,14 +756,14 @@ let make_bin_app loc op t1 e1 t2 e2 =
 	  match t1 with
 	    | JCTpointer(st,_,_) ->
 		if is_integer t2 then
-		  t1, JCEcall(shift_,[e1;coerce t2 Tinteger e2])
+		  t1, JCTEcall(shift_,[e1;coerce t2 Tinteger e2])
 		else
 		  typing_error loc "integer type expected"
 	    | _ ->
 		if is_numeric t1 && is_numeric t2 then
 		  let t = lub_numeric_types t1 t2 in
 		  JCTnative t,
-		  JCEcall(bin_op t op,[coerce t1 t e1; coerce t2 t e2])
+		  JCTEcall(bin_op t op,[coerce t1 t e1; coerce t2 t e2])
 		else
 		  typing_error loc "numeric types expected"
 	end
@@ -818,7 +779,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "numeric types expected"
-	in JCTnative t,JCEcall(bin_op t op,[e1;e2])
+	in JCTnative t,JCTEcall(bin_op t op,[e1;e2])
     | Bland | Blor -> 
 	let t=
 	  match (t1,t2) with
@@ -830,7 +791,7 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		end
 	    | _ ->
 		typing_error loc "booleans expected"
-	in JCTnative t,JCEcall(bin_op t op,[e1;e2])
+	in JCTnative t,JCTEcall(bin_op t op,[e1;e2])
 
 	(* not allowed as expression op *)
     | Bimplies | Biff -> assert false
@@ -844,14 +805,14 @@ let rec expr env e =
 	  begin
 	    try
 	      let vi = List.assoc id env
-	      in vi.jc_var_info_type,JCEvar vi
+	      in vi.jc_var_info_type,JCTEvar vi
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1, t) -> 
 	  let t1,te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTnative Tboolean, JCEinstanceof(te1,st)
+	  JCTnative Tboolean, JCTEinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let t1,te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
@@ -859,7 +820,7 @@ let rec expr env e =
 	    match t1 with
 	      | JCTpointer(st1,a,b) ->
 		  if substruct st st1 then
-		    JCTpointer(st,a,b), JCEcast(te1,st)
+		    JCTpointer(st,a,b), JCTEcast(te1,st)
 		  else
 		    typing_error e.jc_pexpr_loc "invalid cast"
 	      | _ ->
@@ -889,12 +850,12 @@ let rec expr env e =
 			"type '%a' expected"
 			print_type t1
 	    in
-	    match te1.jc_expr_node with
-	      | JCEvar v ->
+	    match te1.jc_texpr_node with
+	      | JCTEvar v ->
 		  set_assigned v;
-		  t1,JCEassign_local(v,te2)
-	      | JCEderef(e,f) ->
-		  t1,JCEassign_heap(e, f, te2)
+		  t1,JCTEassign_local(v,te2)
+	      | JCTEderef(e,f) ->
+		  t1,JCTEassign_heap(e, f, te2)
 	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	  end
       | JCPEassign_op (e1, op, e2) -> 
@@ -906,12 +867,12 @@ let rec expr env e =
 	      match t1 with
 		| JCTnative t ->
 		    begin
-		      match te1.jc_expr_node with
-			| JCEvar v ->
+		      match te1.jc_texpr_node with
+			| JCTEvar v ->
 			    set_assigned v;
-			    t1,JCEassign_op_local(v, bin_op t op, te2)
-			| JCEderef(e,f) ->
-			    t1,JCEassign_op_heap(e, f, bin_op t op, te2)
+			    t1,JCTEassign_op_local(v, bin_op t op, te2)
+			| JCTEderef(e,f) ->
+			    t1,JCTEassign_op_heap(e, f, bin_op t op, te2)
 			| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 		    end
 		| _ ->
@@ -942,7 +903,7 @@ let rec expr env e =
 			  typing_error e.jc_pexpr_loc 
 			    "wrong number of arguments for %s" id
 		      in
-		      fi.jc_fun_info_return_type,JCEcall(fi, tl)
+		      fi.jc_fun_info_return_type,JCTEcall(fi, tl)
 		    with Not_found ->
 		      typing_error e.jc_pexpr_loc 
 			"unbound function identifier %s" id
@@ -953,11 +914,11 @@ let rec expr env e =
       | JCPEderef (e1, f) -> 
 	  let t,te = expr env e1 in
 	  let fi = find_field e.jc_pexpr_loc t f in
-	  fi.jc_field_info_type,JCEderef(te,fi)
+	  fi.jc_field_info_type,JCTEderef(te,fi)
 (*
       | JCPEshift (_, _) -> assert false
 *)
-      | JCPEconst c -> let t,tc = const c in t,JCEconst tc
+      | JCPEconst c -> let t,tc = const c in t,JCTEconst tc
       | JCPEif(e1,e2,e3) ->
 	  let t1,te1 = expr env e1 
 	  and t2,te2 = expr env e2
@@ -972,7 +933,7 @@ let rec expr env e =
 			typing_error e.jc_pexpr_loc 
 			  "imcompatible result types"
 		  in
-		  t, JCEif(te1,te2,te3)
+		  t, JCTEif(te1,te2,te3)
 	      | _ ->
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
@@ -984,7 +945,7 @@ let rec expr env e =
       | JCPEoffset_min _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
 
-  in t,{ jc_expr_node = te; jc_expr_loc = e.jc_pexpr_loc }
+  in t,{ jc_texpr_node = te; jc_texpr_loc = e.jc_pexpr_loc }
 
   
 
@@ -993,21 +954,21 @@ let loop_annot env i v =
   and ttv,tv = term env v
   in
   (* TODO: check variant is integer, or other order ? *) 
-  { jc_loop_invariant = ti ;
-    jc_loop_variant = tv;
+  { jc_tloop_invariant = ti ;
+    jc_tloop_variant = tv;
   }
 
 
-let make_block (l:statement list) : statement_node =
+let make_block (l:tstatement list) : tstatement_node =
   match l with
-    | [s] -> s.jc_statement_node
-    | _ -> JCSblock l
+    | [s] -> s.jc_tstatement_node
+    | _ -> JCTSblock l
 
 let rec statement env s =
   let ts =
     match s.jc_pstatement_node with
-      | JCPSskip -> JCSblock []
-      | JCPSthrow (id, e) -> 
+      | JCPSskip -> JCTSblock []
+      | JCPSthrow (id, Some e) -> 
 	  let ei =
 	    try Hashtbl.find exceptions_table id.jc_identifier_name 
 	    with Not_found ->
@@ -1016,10 +977,11 @@ let rec statement env s =
 	  in
 	  let t,te = expr env e in
 	  if subtype t ei.jc_exception_info_type then 
-	    JCSthrow(ei,te)
+	    JCTSthrow(ei, Some te)
 	  else
 	    typing_error e.jc_pexpr_loc "%a type expected" 
 	      print_type ei.jc_exception_info_type
+      | JCPSthrow (id, None) -> assert false (* should never happen *)
       | JCPStry (s, catches, finally) -> 
 	  let ts = statement env s in
 	  let catches = 
@@ -1036,20 +998,20 @@ let rec statement env s =
 		 (ei,vi,statement env' st))
 	      catches
 	  in
-	  JCStry(ts,catches,statement env finally)
+	  JCTStry(ts,catches,statement env finally)
       | JCPSgoto _ -> assert false
       | JCPScontinue _ -> assert false
       | JCPSbreak l -> 
-	  JCSbreak l (* TODO: check l exists, check enclosing loop exists, *)
+	  JCTSbreak l (* TODO: check l exists, check enclosing loop exists, *)
       | JCPSreturn e -> 
 	  let t,te = expr env e in 
 	  let vi = List.assoc "\\result" env in
 	  if subtype t vi.jc_var_info_type then
-	    JCSreturn te
+	    JCTSreturn te
 	  else
 	    begin
 	      try
-		JCSreturn (restrict t vi.jc_var_info_type te)
+		JCTSreturn (restrict t vi.jc_var_info_type te)
 	      with
 		  Invalid_argument _ ->
 		    typing_error s.jc_pstatement_loc "type '%a' expected"
@@ -1061,7 +1023,7 @@ let rec statement env s =
 	    let ts = statement env s
 	    and lo = loop_annot env i v
 	    in
-	    JCSwhile(tc,lo,ts)
+	    JCTSwhile(tc,lo,ts)
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
 	  
@@ -1071,20 +1033,20 @@ let rec statement env s =
 	    let ts1 = statement env s1
 	    and ts2 = statement env s2
 	    in
-	    JCSif(tc,ts1,ts2)
+	    JCTSif(tc,ts1,ts2)
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
       | JCPSdecl (ty, id, e) -> assert false
       | JCPSassert _ -> assert false
       | JCPSexpr e -> 
 	  let t,te = expr env e in 
-	  JCSexpr (te)
+	  JCTSexpr (te)
       | JCPSblock l -> make_block (statement_list env l)
       | JCPSpack e ->
 	  let t,te = expr env e in 
 	  begin match t with
 	    | JCTpointer(st,_,_) ->
-		JCSpack(st,te)
+		JCTSpack(st,te)
 	    | _ ->
 		typing_error s.jc_pstatement_loc 
 		  "only structures can be packed"
@@ -1093,16 +1055,16 @@ let rec statement env s =
 	  let t,te = expr env e in 
 	  begin match t with
 	    | JCTpointer(st,_,_) ->
-		JCSunpack(st,te)
+		JCTSunpack(st,te)
 	    | _ ->
 		typing_error s.jc_pstatement_loc 
 		  "only structures can be unpacked"
 	  end
 
-  in { jc_statement_node = ts;
-       jc_statement_loc = s.jc_pstatement_loc }
+  in { jc_tstatement_node = ts;
+       jc_tstatement_loc = s.jc_pstatement_loc }
 
-and statement_list env l : statement list =
+and statement_list env l : tstatement list =
     match l with
       | [] -> []
       | s :: r -> 
@@ -1127,11 +1089,11 @@ and statement_list env l : statement list =
 		    e
 		in
 		let tr = statement_list ((id,vi)::env) r in
-		let tr = { jc_statement_loc = s.jc_pstatement_loc;
-			   jc_statement_node = make_block tr } 
+		let tr = { jc_tstatement_loc = s.jc_pstatement_loc;
+			   jc_tstatement_node = make_block tr } 
 		in
-		[ { jc_statement_loc = s.jc_pstatement_loc;
-		    jc_statement_node = JCSdecl(vi, te, tr); } ]
+		[ { jc_tstatement_loc = s.jc_pstatement_loc;
+		    jc_tstatement_node = JCTSdecl(vi, te, tr); } ]
 	    | _ -> 
 		let s = statement env s in
 		let r = statement_list env r in
@@ -1139,8 +1101,8 @@ and statement_list env l : statement list =
   
 
 let const_zero = 
-  { jc_term_loc = Loc.dummy_position;
-    jc_term_node = JCTconst (JCCinteger "0");
+  { jc_tterm_loc = Loc.dummy_position;
+    jc_tterm_node = JCTTconst (JCCinteger "0");
   }
 
 
@@ -1152,7 +1114,7 @@ let rec location_set env e =
 	    let vi = List.assoc id env in 
 	    match vi.jc_var_info_type with
 	      | JCTpointer(st,_,_) ->
-		  vi.jc_var_info_type,JCLSvar(vi)
+		  vi.jc_var_info_type,JCTLSvar(vi)
 	      | _ -> assert false
 	  with Not_found -> 
 	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
@@ -1163,7 +1125,7 @@ let rec location_set env e =
 	begin
 	  match tye,tyi with 
 	    | JCTpointer(st,_,_), JCTnative Tinteger ->
-		tye,JCLSrange(te,ti,ti)
+		tye,JCTLSrange(te,ti,ti)
 	    | JCTpointer _, _ -> 
 		typing_error i.jc_pexpr_loc "integer expected, got %a" print_type tyi
 	    | _ -> 
@@ -1173,7 +1135,7 @@ let rec location_set env e =
     | JCPEderef (ls, f) -> 
 	let t,tls = location_set env ls in
 	let fi = find_field e.jc_pexpr_loc t f in
-	fi.jc_field_info_type, JCLSderef(tls,fi)	  
+	fi.jc_field_info_type, JCTLSderef(tls,fi)	  
 
     | JCPEif (_, _, _)
     | JCPEoffset_min _
@@ -1194,14 +1156,14 @@ let location env e =
 	begin
 	  try
 	    let vi = List.assoc id env in
-	    vi.jc_var_info_type,JCLvar vi
+	    vi.jc_var_info_type,JCTLvar vi
 	  with Not_found -> 
 	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
     | JCPEderef(ls,f) ->
 	let t,tls = location_set env ls in
 	let fi = find_field e.jc_pexpr_loc t f in
-	fi.jc_field_info_type, JCLderef(tls,fi)	  
+	fi.jc_field_info_type, JCTLderef(tls,fi)	  
 (*
     | JCPEshift (_, _)  -> assert false (* TODO *)
 *)
@@ -1224,7 +1186,7 @@ let clause env vi_result c acc =
   match c with
     | JCPCrequires(e) ->
 	{ acc with 
-	    jc_fun_requires = assertion env e }
+	    jc_tfun_requires = assertion env e }
     | JCPCbehavior(id,throws,assumes,assigns,ensures) ->
 	let throws,env_result = 
 	  match throws with
@@ -1245,12 +1207,12 @@ let clause env vi_result c acc =
 	let assigns = 
 	  Option_misc.map (List.map (fun a -> snd (location env a))) assigns in
 	let b = {
-	  jc_behavior_throws = throws;
-	  jc_behavior_assumes = assumes;
-	  jc_behavior_assigns = assigns;
-	  jc_behavior_ensures = assertion env_result ensures }
+	  jc_tbehavior_throws = throws;
+	  jc_tbehavior_assumes = assumes;
+	  jc_tbehavior_assigns = assigns;
+	  jc_tbehavior_ensures = assertion env_result ensures }
 	in
-	{ acc with jc_fun_behavior = (id,b)::acc.jc_fun_behavior }
+	{ acc with jc_tfun_behavior = (id,b)::acc.jc_tfun_behavior }
 	  
 
   
@@ -1260,8 +1222,8 @@ let param (t,id) =
   (id,vi)
 
 let assertion_true =
-  { jc_assertion_node = JCAtrue;
-    jc_assertion_loc = Loc.dummy_position }
+  { jc_tassertion_node = JCTAtrue;
+    jc_tassertion_loc = Loc.dummy_position }
 
 let field_tag_counter = ref 0
 
@@ -1290,8 +1252,8 @@ let decl d =
 	vi.jc_var_info_final_name <- "result";
 	let s = List.fold_right 
 		  (clause param_env vi) specs 
-		  { jc_fun_requires = assertion_true;
-		    jc_fun_behavior = [] }
+		  { jc_tfun_requires = assertion_true;
+		    jc_tfun_behavior = [] }
 	in
 	let b = statement_list (("\\result",vi)::param_env) body in
 	Hashtbl.add functions_env id fi;
@@ -1332,7 +1294,7 @@ let decl d =
 	       let pi = make_rel id in
 	       pi.jc_logic_info_parameters <- [vi];
 	       Hashtbl.add logic_functions_table 
-		 pi.jc_logic_info_tag (pi,JCAssertion p);
+		 pi.jc_logic_info_tag (pi,JCTAssertion p);
 	       (pi,p) :: acc)
 	    []
 	    inv
@@ -1352,7 +1314,7 @@ let decl d =
 
     | JCPDexception(id,t) ->
 	let tt = type_type t in
-	Hashtbl.add exceptions_table id (exception_info id tt)
+	Hashtbl.add exceptions_table id (exception_info tt id)
 
 (*
 Local Variables: 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.6 2006-12-22 13:56:25 marche Exp $ *)
+(* $Id: jc_envset.mli,v 1.7 2007-03-02 16:40:56 moy Exp $ *)
 
 open Jc_env
 
@@ -39,7 +39,6 @@ module ExceptionMap : Map.S with type key = exception_info
 module FieldSet : Set.S with type elt = field_info
 
 module FieldMap : Map.S with type key = field_info
-
 
 (*
 Local Variables: 
