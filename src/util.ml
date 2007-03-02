@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.123 2007-02-27 13:14:49 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.124 2007-03-02 15:12:27 couchot Exp $ i*)
 
 open Logic
 open Ident
@@ -347,6 +347,42 @@ let decomp_boolean ({ a_value = c }, _) =
 
 (*s [make_access env id c] Access in array id.
     Constructs [t:(array s T)](access_g s T t c ?::(lt c s)). *)
+
+let add_ctx_vars =
+  List.fold_left 
+    (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
+
+
+let intros ctx p =   
+  let rec introb ctx pol = function
+    | Forall (_, id, _, t, _, p) when pol>0 ->
+	(*let id' = next_away id (predicate_vars p) in*)
+	(*let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
+	  let p' = subst_in_predicate (subst_onev n id') p in *)
+	introb (Svar (id, t) :: ctx) pol p
+    | Pimplies (_, a, b) when pol > 0-> 
+	let h = fresh_hyp () in
+	let (l,p) = introb [] (-pol) a in 	
+	let l' =  Spred(h, p)::ctx in 
+	introb (List.append l l') pol b
+    |Pand (_,_, a, b) when pol < 0-> 
+       let (l1,p1) = introb ctx pol a in
+       let h1 = fresh_hyp () in
+       let l' = Spred(h1, p1)::l1 in
+       let (l2,p2) = introb l' pol b in
+       l2, p2 
+    | Pnamed (_, p) ->
+	introb ctx pol p
+    | c -> 
+	 ctx, c in 
+  let l,g = introb ctx 1 p in 
+    List.rev l , g
+
+
+
+
+
+
 
 let array_info env id =
   let ty = type_in_env env id in

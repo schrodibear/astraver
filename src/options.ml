@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.90 2007-03-01 11:11:00 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.91 2007-03-02 15:12:27 couchot Exp $ i*)
 
 open Format
 
@@ -57,7 +57,7 @@ let prelude_ = ref true
 let arrays_ = ref true
 let floats_ = ref false
 let pruning_ = ref false 
-let pruning_hyp_ = ref false 
+let pruning_hyp_ = ref 0.0
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
@@ -384,8 +384,8 @@ let files =
 	termination_ := Total; parse args
     | ("--prune-theory" | "-prune-theory") :: args ->
 	 pruning_ := true ; parse args
-    | ("--prune-hyp" | "-prune-hyp") :: args ->
-	 pruning_hyp_ := true ; parse args
+    | ("--prune-hyp" | "-prune-hyp"):: t :: args ->
+	 pruning_hyp_ := float_of_string t ; parse args
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
     | ("-exp" | "--exp") :: s :: args ->

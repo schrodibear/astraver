@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.1 2007-03-01 11:11:00 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.2 2007-03-02 15:12:27 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -38,50 +38,61 @@ open Format
 open Pp
 open Hashtbl
 open Set
-open Unionfind 
+open Util
 
-let threshold = 1
+let threshold = Options.pruning_hyp
 
 let symbol_counter = ref 0
 
-module Int_map = Map.Make(struct type t=int let compare= compare end)
 
-module Int_set = Set.Make(struct type t=int let compare= compare end)
+
+(*module Int_set = Set.Make(struct type t=int let compare= compare end)*)
+
+module String_set = Set.Make(struct type t=string let compare= compare end)
+
+module Term_set = Set.Make(struct type t=Logic.term let compare= compare end)
+
+
+let equality_container :(string, 'a) Hashtbl.t = Hashtbl.create 20
+
+let symbs : (predicate,'a) Hashtbl.t = Hashtbl.create 20
+
 
 
 module  Symbol_container = 
 struct 
-  module Id_map = Map.Make(struct type t=string let compare= compare end)
+
+(*  module Id_map = Map.Make(struct type t=string let compare= compare end)
 
 
   let uniqueNumberGenerator () = 
     incr symbol_counter; !symbol_counter
 
-
-  let m = ref Id_map.empty
+*)
+  let m = ref String_set.empty
 
   let add symb = 
-    let n = uniqueNumberGenerator () in 
-    m:= Id_map.add symb n !m ;
-    n
+    m:= String_set.add (Ident.string symb) !m 
+	 
 
   let reset () = 
-    m := Id_map.empty
-  
-  let index_of symb =
-    try 
-       Id_map.find symb !m
-    with 
-	Not_found -> 
-	  Printf.printf "Symbol %s not found \n" symb;
-	  raise Exit
+    m := String_set.empty;
+    Hashtbl.clear equality_container
+
+
+  let display () =
+    String_set.iter
+      (fun str -> 
+	 Format.printf "%s " str)
+      !m;
+    Format.printf "@\n@.";
 end
 
 
-let f_symbols t  = 
-  let vars = ref Int_set.empty in
-  let preds = ref Int_set.empty in 
-  let funcs = ref Int_set.empty in
+let f_symbols qvars t  = 
+  let vars = ref String_set.empty in
+  let preds = ref String_set.empty in 
+  let funcs = ref String_set.empty in
   let rec collect formula  = 
     match formula with 
       | Tconst (ConstInt n) -> ()
@@ -91,137 +102,247 @@ let f_symbols t  =
       | Tderef _ -> ()
       | Tapp (id, tl , _) when id == if_then_else -> 
 	  List.iter collect tl 
-      | Tapp (id, tl, _) when is_relation id || is_arith id ->
+      | Tapp (id, tl, _) when is_arith_binop id ->
 	  List.iter collect tl 
       | Tapp (id, tl, _) ->
-	  let n= Symbol_container.add (Ident.string id) in 
-	  funcs := Int_set.add n !funcs ;
+	  Symbol_container.add  id ;
+	  funcs := String_set.add (Ident.string id) !funcs ;
 	  List.iter collect tl 
       | Tvar (id) ->
-	  let n= Symbol_container.add (Ident.string id) in 
-	  vars := Int_set.add n !vars ;
+	  if not (String_set.mem (Ident.string id) qvars)  then
+	    Symbol_container.add  id;
+	    vars := String_set.add (Ident.string id) !vars 
   in
   collect t ; 
   (!vars,!preds,!funcs)
 
 
 let symbols  f  =
-  let vars = ref Int_set.empty in
-  let preds = ref Int_set.empty in 
-  let funcs = ref Int_set.empty in
-  let rec collect formula  = 
+  let vars = ref String_set.empty in
+  let preds = ref String_set.empty in 
+  let funcs = ref String_set.empty in
+  let rec collect qvars formula  = 
     match formula with 
-      | Papp (id, tl, _) ->
-	  let n = Symbol_container.add (Ident.string id) in
-	  preds := Int_set.add n  !preds ;
+      | Papp (id, tl, _) when is_int_comparison id  || is_real_comparison id ->
 	  List.iter 
 	    (fun t -> 
-	       let (v',p',f') = f_symbols t in 
-	       vars := Int_set.union v' !vars ;
-	       preds := Int_set.union p' !preds ; 
-	       funcs := Int_set.union f' !funcs) 
+	       let (v',p',f') = f_symbols qvars t in 
+	       vars := String_set.union v' !vars ;
+	       preds := String_set.union p' !preds ; 
+	       funcs := String_set.union f' !funcs) 
+	    tl
+      | Papp (id, tl, _)  ->
+	  Symbol_container.add  id ;
+	  preds := String_set.add (Ident.string id )  !preds ;
+	  List.iter 
+	    (fun t -> 
+	       let (v',p',f') = f_symbols qvars t in 
+	       vars := String_set.union v' !vars ;
+	       preds := String_set.union p' !preds ; 
+	       funcs := String_set.union f' !funcs) 
 	    tl
       | Pand (_, _, a, b) | Forallb (_, a, b)  | Por (a, b) | Piff (a, b) | 
 	    Pimplies (_, a, b) ->
-	  collect a;
-	      collect b
+	  collect qvars a;
+	      collect qvars b
       | Pif (a, b, c) ->
-	  let (v',p',f') = f_symbols a in 
-	  vars := Int_set.union v' !vars ;
-	  preds := Int_set.union p' !preds ; 
-	  funcs := Int_set.union f' !funcs;
-	  collect b;
-	  collect c
+	  let (v',p',f') = f_symbols qvars a in 
+	  vars := String_set.union v' !vars ;
+	  preds := String_set.union p' !preds ; 
+	  funcs := String_set.union f' !funcs;
+	  collect qvars b;
+	  collect qvars c
       | Pnot a ->
+	  collect qvars a;
+      | Forall (_,id,_,_,_,p) | Exists (id,_,_,p) ->    
+	  (*let n= Symbol_container.add (Ident.string id) in 
+	  vars := String_set.add n !vars ;*)
+	  collect (String_set.add (Ident.string id) qvars) p
+      | Pfpi _ ->
+	  failwith "fpi not yet suported "
+      | Pnamed (_, p) -> (* TODO: print name *)
+	  collect qvars p 
+      | Pvar _ | Pfalse |Ptrue -> ()
+  in
+  collect String_set.empty f ; 
+  (!vars,!preds,!funcs)
+
+
+
+
+let stores_equality f  =
+  let rec collect formula  = 
+    match formula with 
+	(* awaited equality *)
+      | Papp (id, [a;b] , _) when is_eq id ->
+	  begin 
+	    let add_equal_term id t =
+	      try 
+		let s = Hashtbl.find equality_container (Ident.string id) in
+		Hashtbl.replace 
+		  equality_container (Ident.string id) (Term_set.add t s)
+	      with Not_found -> 
+		Hashtbl.add equality_container (Ident.string id) 
+		  (Term_set.singleton t) in
+	    match (a,b) with 
+		(Tvar i, Tvar j)
+		  ->
+		    add_equal_term i (Tvar j) ;
+		    add_equal_term j (Tvar i) 
+	      | (Tvar i, j)  ->
+		  add_equal_term i j 
+	      | (j, Tvar i)  ->
+		  add_equal_term i j 
+	      | _ -> ()
+	  end
+      | Papp (id, tl, _)  -> ()
+      | Pand (_, _, a, b) | Forallb (_, a, b)  | Por (a, b) | Piff (a, b) | 
+	    Pimplies (_, a, b) ->
 	  collect a;
-      | Forall (_,id,n,t,_,p) | Exists (id,n,t,p) ->    
-	  let n= Symbol_container.add (Ident.string id) in 
-	  vars := Int_set.add n !vars ;
-	  collect p
+	      collect  b
+      | Pif (_, b, c) ->
+	  collect  b;
+	  collect  c
+      | Pnot a ->
+	  collect  a;
+      | Forall (_,id,_,_,_,p) | Exists (id,_,_,p) ->    
+	  (*let n= Symbol_container.add (Ident.string id) in 
+	  vars := String_set.add n !vars ;*)
+	  (*collect (String_set.add (Ident.string id) qvars) p*)
+	  ()
       | Pfpi _ ->
 	  failwith "fpi not yet suported "
       | Pnamed (_, p) -> (* TODO: print name *)
 	  collect p 
       | Pvar _ | Pfalse |Ptrue -> ()
   in
-  collect f ; 
-  (!vars,!preds,!funcs)
-
-(*
-let rec add_relevant_in elt s = 
-  if Int_set.mem elt s then
-    s
-  else  
-    Int_set.add elt (Int_set.fold add_relevant_in (Theory_container.depends_on elt) s)
-      
-
-let rank n s = 
-  let s1 = Theory_container.produces n in 
-  let r = 
-    if Int_set.subset s1 s then 1 else 0 in 
-  (*Printf.printf "rank %d \n" r ;*)
-  r
+  collect  f  
 
 
-let filter rs selectedAx notYetSelectedAx = 
-  let irrelevant = ref notYetSelectedAx in
-  let relevant = ref selectedAx in
-  let new_rs = ref rs in 
-  let f ax =
-    let r = rank ax rs in 
-    if r >= threshold then
-      begin 
-	relevant := add_relevant_in ax !relevant ;
-	irrelevant := Int_set.remove ax !irrelevant;
-	new_rs := Int_set.union rs (Theory_container.produces ax)
-      end ; 
-    if debug then begin 
-	Printf.printf "ax (%d) has rank %d \n" ax r
-      end    
-  in
-  Int_set.iter f notYetSelectedAx ;
-  (!new_rs,!relevant,!irrelevant)
+let add_symbols (v,p,f)  =
+  let tv = ref String_set.empty in 
+  let v' = ref String_set.empty in
+  let p' = ref String_set.empty in
+  let f' = ref String_set.empty in
+
+  let rec collect e =    
+    if String_set.mem e !tv  then 
+      ()
+    else
+      begin
+	tv := String_set.add e !tv;
+	try 
+	  let s = Hashtbl.find equality_container e  in
+	  Term_set.iter (fun t -> 
+			     let (vp,pp,fp) = f_symbols String_set.empty t in
+			     String_set.iter collect vp ; 
+			     v' := String_set.union !v' vp;
+			     p' := String_set.union !p' pp;
+			     f' := String_set.union !f' fp) s
+	with Not_found ->
+	  ()
+      end in
+  String_set.iter 
+    (fun t-> collect t) v ; 
+  (String_set.union !v' v,String_set.union !p' p, String_set.union !f' f)
+
+
+let display_hash k s  = 
+  Format.printf " %s : "  k ;
+  Term_set.iter (fun t-> Format.printf "%a " Util.print_term t) s ;
+  Format.printf "@\n@."  
 
 
 let display_symb_of set =
-  Int_set.iter (fun s -> Printf.printf "%d " s) set 
- 
-let display (q,s) n = 
-  let di = function 
-    | Dtype (_, _, id) -> Printf.printf  "type %s (%d) : "  id 
-    | Dlogic (_, id, t) -> Printf.printf  "arit %s (%d) : " id   
-    | Dpredicate_def (_, id, d) -> Printf.printf  "def_pred %s (%d): " id 
-    | Dfunction_def (_, id, d) -> Printf.printf  "def_func %s (%d): " id 
-    | Daxiom (_, id, p)          -> Printf.printf  "axiom %s (%d): "  id 
-    | Dgoal (_, id, s)   -> Printf.printf  "goal %s (%d):"  id 
-  in 
-  if debug then begin 
-    (di q) n;
-    display_symb_of s; Printf.printf "\n" 
-  end
-*)
+  String_set.iter (fun s -> Format.printf "%s " s) set 
 
-let managesGoal id ax (hyps,concl) =   
-  let setOfSymbols = ref (symbols concl) in 
-  ()
+let display str set  = 
+  (*if debug then begin *)
+    Format.printf "%s : " str ;
+    display_symb_of set; 
+    Format.printf "@\n@." 
+  (*end*)
 
-    
-let launcher decl = match decl with   
-  | Dtype (_,_,_) | Dlogic (_,_,_) | Dpredicate_def (_,_,_) |Daxiom (_,_,_)
-  | Dfunction_def (_,_,_)  -> () | Dgoal (_, id, s)  as ax -> 
-      managesGoal id ax s.Env.scheme_type 
+let memorizes_hyp_symb l = 
+  Hashtbl.clear symbs ;
+  let rec mem = function  
+    | [] -> ()
+    | Svar (id, v) :: q ->  mem q 
+    | Spred (_,p) :: q -> 
+	let (v',p',f') = symbols p in 
+	Hashtbl.add symbs  p (v',p',f');
+	mem q in  
+  mem l
 
 
+let rank hyp_symbs goal_symbs = 
+  let r = 
+    if String_set.is_empty goal_symbs  then 1. else
+      (float_of_int (String_set.cardinal (String_set.inter hyp_symbs goal_symbs))) /.
+	(float_of_int (String_set.cardinal (String_set.union hyp_symbs goal_symbs))) in 
+  r
 
 
-(**
-   @param q is a logic_decl Queue 
-   @returns the pruned theory 
-**)
+let filter l goal_symbs=
+    let rec check = function  
+    | [] -> []
+    |  Svar (id, v) :: q -> Svar (id, v) ::check q 
+    | Spred (t,p) :: q -> 
+	let (v',p',f') = 
+	  try Hashtbl.find symbs p with Not_found -> raise Exit in
+	let hyp_symbs = 
+	  String_set.union v' (String_set.union p' f') in
+	if rank hyp_symbs goal_symbs >= threshold then 
+	  Spred (t,p):: check q  
+	else
+	  check q in  
+    check l
+
+
+
+let managesGoal id ax (hyps,concl) =
+  match ax with 
+    Dgoal(loc,id,s) -> 
+      let (v,p,f) = symbols concl in 
+      (*Format.printf "po : %s @\n@." id ;*)
+      (*display "var" v ;
+	display "pred" p ;
+	display "func" f ;
+	Symbol_container.display(); *)
+      let rec get_equality = function
+	| [] -> ()
+	| Svar (id, v) :: q ->  get_equality q 
+	| Spred (_,p) :: q -> 
+	    stores_equality p ;
+	    get_equality q in  
+      get_equality hyps ;
+      (*Hashtbl.iter display_hash  equality_container; *)
+      let (v,p,f) = add_symbols (v,p,f) in 
+      (* Format.printf "After @\n@.";
+      display "var" v ;
+      display "pred" p ;
+      display "func" f  ; *)
+      (*set of symbol of each hypothesis computation *)  
+      memorizes_hyp_symb hyps;
+      
+      (*filter the hypothesis*)
+      let goal_symbs = String_set.union v (String_set.union p f) in
+      let l' = filter hyps goal_symbs in  
+      Dgoal (loc,id, Env.empty_scheme (l',concl))
+    | _ -> ax 
+
 
 let reduce q = 
   Symbol_container.reset();  
-  Queue.iter launcher q 
+  let q' = 
+    match q with 
+	Dgoal (loc, id, s)  as ax -> 
+	  let (l,g) = s.Env.scheme_type in
+	  let (l',g') = Util.intros [] g in   
+	  managesGoal id ax (List.append l l',g')
+      | _ -> failwith "goal awaited"
+  in
+  q' 
   
   
 

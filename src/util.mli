@@ -22,13 +22,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.54 2006-11-24 13:28:00 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.55 2007-03-02 15:12:27 couchot Exp $ i*)
 
+open Cc
 open Logic
 open Misc
 open Types
 open Ast
 open Env
+
 
 val erase_label : string -> predicate -> predicate
 val change_label : string -> string -> predicate -> predicate
@@ -73,6 +75,9 @@ val tequality : type_v -> term -> term -> predicate
 
 val distinct : term list -> predicate
 
+val  intros : context_element list ->
+  predicate -> context_element list * Logic.predicate
+  
 val decomp_boolean : postcondition -> predicate * predicate
 
 val effect : typed_expr -> Effect.t

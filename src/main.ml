@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.123 2007-03-01 14:40:51 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.124 2007-03-02 15:12:27 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -101,7 +101,14 @@ let push_decl d =
 
 let push_obligations = 
   List.iter 
-    (fun (loc,id,s) -> push_decl (Dgoal (loc, id, generalize_sequent s))) 
+    (fun (loc,id,s) -> 
+       let dg = Dgoal (loc, id, generalize_sequent s) in
+       let dg = 
+	 if  pruning_hyp != 0.0 then 
+	   Hypotheses_filtering.reduce dg
+	 else
+	   dg in
+       push_decl (dg)) 
 
 let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 
@@ -350,9 +357,16 @@ let interp_decl ?(prelude=false) d =
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
-	(*if pruning then 
-	  Printf.printf "Theory size %d" (Queue.length declarationQueue) ;*)
-	push_decl (Dgoal (loc, Ident.string id, s))
+	let dg = Dgoal (loc, Ident.string id, s) in
+	if Options.pruning_hyp!= 0.0 then
+	  begin
+	    push_decl (Hypotheses_filtering.reduce dg)
+	  end
+	else	  
+	  begin
+	    push_decl (dg)
+	  end
+	  
     | TypeDecl (loc, ext, vl, id) ->
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in
