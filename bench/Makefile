@@ -80,7 +80,8 @@ fwp: fastwp.simplify
 fastwp.simplify:
 	$(BWHY) --why -d -V --fast-wp --all-vc test.mlw
 	$(BWHY) --no-prelude -tc test_why.why
-	$(BWHY) --simplify --fast-wp --all-vc test.mlw && ../bin/dp.opt test_why.sx
+	$(BWHY) --simplify --fast-wp --all-vc test.mlw
+	../bin/dp.opt -no-timings test_why.sx
 
 fastwp.ergo:
 	$(BWHY) --why -d -V --fast-wp test.mlw

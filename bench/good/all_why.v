@@ -130,7 +130,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p6_po_1 : 
-  (True -> ~False).
+  forall (HW_2: True),
+  ~False.
 Proof.
 tauto.
 Save.

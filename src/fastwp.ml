@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.7 2007-02-21 10:56:12 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.8 2007-03-02 15:20:08 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -111,6 +111,14 @@ module Subst = struct
 end
 open Subst
 
+let idmap_union m1 m2 =
+  Idmap.fold 
+    (fun x2 v m1 -> 
+      if Idmap.mem x2 m1 
+      then begin assert (Idmap.find x2 m1 = v); m1 end
+      else Idmap.add x2 v m1)
+    m2 m1
+
 let merge s1 s2 =
   let d = 
     Idmap.fold 
@@ -124,7 +132,11 @@ let merge s1 s2 =
 	   assert false)
       s1.current Idset.empty
   in
-  let s12 = { s1 with all_vars = Idset.union s1.all_vars s2.all_vars } in
+  let s12 = 
+    { s1 with 
+      types = idmap_union s1.types s2.types;
+      all_vars = Idset.union s1.all_vars s2.all_vars } 
+  in
   Idset.fold 
     (fun x (s',r1,r2) -> 
        let x',s' = Subst.fresh x s' in
@@ -140,7 +152,7 @@ let wpforalls = foralls ~is_wp:true
 let ssubst_in_predicate s p = simplify (tsubst_in_predicate s p)
 
 let norm (p,_) = p
-let exn x pl = try List.assoc x pl with Not_found -> Pfalse
+let exn x pl s = try List.assoc x pl with Not_found -> Pfalse, s
 let exns e ee = List.map (fun x -> x, ee x) (get_exns e.info.t_effect)
 
 (* INPUT
@@ -155,7 +167,7 @@ let exns e ee = List.map (fun x -> x, ee x) (get_exns e.info.t_effect)
 *)
 
 let rec wp e s = 
-  let _,(_,ee),_ as r = wp0 e s in
+  let _,(_,ee) as r = wp0 e s in
   assert (List.length ee = List.length (get_exns e.info.t_effect));
   r
 
@@ -167,111 +179,145 @@ and wp0 e s =
       (* OK: true
 	 NE: result=t *)
       let t = Subst.term s (unref_term t) in
-      Ptrue, (tequality v tresult t, []), s
+      Ptrue, ((tequality v tresult t, s), [])
   | If (e1, e2, e3) ->
       (* OK: ok(e1) /\ (ne(e1,true) => ok(e2)) /\ (ne(e1,false) => ok(e3))
 	 NE: (ne(e1,true) /\ ne(e2,result)) \/ (ne(e1,false) /\ ne(e3,result)) 
       *)
-      let ok1,(ne1,ee1),s1 = wp e1 s in
-      let ok2,(ne2,ee2),s2 = wp e2 s1 in
-      let ok3,(ne3,ee3),s3 = wp e3 s1 in
+      let ok1,((ne1,s1),ee1) = wp e1 s in
+      let ok2,((ne2,s2),ee2) = wp e2 s1 in
+      let ok3,((ne3,s3),ee3) = wp e3 s1 in
       let ne1true = ssubst_in_predicate (subst_one result ttrue) ne1 in
       let ne1false = ssubst_in_predicate (subst_one result tfalse) ne1 in
       let ok = wpands [ok1; wpimplies ne1true ok2; wpimplies ne1false ok3] in
-      let s',r2,r3 = merge s2 s3 in
-      let ne = por (wpands [ne1true; ne2; r2]) (wpands [ne1false; ne3; r3]) in
-      let ee x = 
-	pors [exn x ee1; wpand ne1true (exn x ee2); wpand ne1false (exn x ee3)]
+      let ne = 
+	let s',r2,r3 = merge s2 s3 in
+	por (wpands [ne1true; ne2; r2]) (wpands [ne1false; ne3; r3]), s'
       in
-      ok, (ne, exns e ee), s'
+      let ee x = 
+	let ee2,s2 = exn x ee2 s1 and ee3,s3 = exn x ee3 s1 in
+	let s23,r2,r3 = merge s2 s3 in
+	Format.eprintf "s23 = %a@." Subst.print s23;
+	let ee1,s1 = exn x ee1 s in
+	let s',q1,q23 = merge s1 s23 in
+	Format.eprintf "s' = %a@." Subst.print s';
+	pors [wpand ee1 q1; 
+	      wpands [ne1true;ee2;r2;q23]; wpands [ne1false;ee3;r3;q23]], s'
+      in
+      ok, (ne, exns e ee)
   | Seq (e1, e2) ->
       (* OK: ok(e1) /\ (ne(e1,void) => ok(e2))
 	 NE: ne(e1,void) /\ ne(e2,result) *)
-      let ok1,(ne1,ee1),s1 = wp e1 s in
-      let ok2,(ne2,ee2),s' = wp e2 s1 in
+      let ok1,((ne1,s1),ee1) = wp e1 s in
+      let ok2,((ne2,s2),ee2) = wp e2 s1 in
       let ne1void = tsubst_in_predicate (subst_one result tvoid) ne1 in
       let ok = wpand ok1 (wpimplies ne1void ok2) in
       let ne = wpand ne1void ne2 in
-      let ee x = por (exn x ee1) (wpand ne1void (exn x ee2)) in
-      ok, (ne, exns e ee), s'
+      let ee x = 
+	let ee1,sx1 = exn x ee1 s1 and ee2,sx2 = exn x ee2 s1 in
+	let s',r1,r2 = merge sx1 sx2 in
+	por (wpand ee1 r1) (wpands [ne1void; ee2; r2]), s'
+      in
+      ok, ((ne, s2), exns e ee)
+  | LetIn (x, e1, e2) ->
+      let ok1,((ne1,s1),ee1) = wp e1 s in
+      let ok2,((ne2,s2),ee2) = wp e2 s1 in
+      begin match e1.info.t_result_type with
+	| PureType pt as ty1 ->
+	    let ne1x = subst_in_predicate (subst_onev result x) ne1 in
+	    let ok = wpand ok1 (wpforall x ty1 (wpimplies ne1x ok2)) in
+	    let ne = (*exists x ty1*) (wpand ne1x ne2) in
+	    let ee x =
+	      let ee1,sx1 = exn x ee1 s and ee2,sx2 = exn x ee2 s1 in
+	      let s',r1,r2 = merge sx1 sx2 in
+	      por (wpand ee1 r1) (wpands [ne1x; ee2; r2]), s'
+	    in
+	    let s2 = Subst.add_aux x pt s2 in
+	    ok, ((ne, s2), exns e ee)
+	| Arrow _ ->
+	    assert (not (occur_predicate result ne1));
+	    assert (not (occur_predicate x ne2));
+	    let ok = wpand ok1 (wpimplies ne1 ok2) in (* ok1 /\ ok2 ? *)
+	    let ne = wpand ne1 ne2 in
+	    let ee x =
+	      let ee1,sx1 = exn x ee1 s and ee2,sx2 = exn x ee2 s1 in
+	      let s',r1,r2 = merge sx1 sx2 in
+	      por (wpand ee1 r1) (wpands [ne1; ee2; r2]), s'
+	    in
+	    ok, ((ne, s2), exns e ee)
+	| Ref _ -> 
+	    assert false
+      end
   | AppRef (e, _, k) 
   | AppTerm (e, _, k) ->
       let lab = e.info.t_label in
       let s = Subst.label lab s in
       let q = optpost_app (asst_app (change_label "" lab)) k.t_post in
-      let ok,((ne,ee) as nee),s' = wp e s in
-      let s' = Subst.writes (Effect.get_writes k.t_effect) s' in
+      let ok,(((ne,s'),ee) as nee) = wp e s in
       assert (not (occur_predicate result ne));
+      let wr s = Subst.writes (Effect.get_writes k.t_effect) s in
       let nee = match q with
 	| Some (q', qe) -> 
-	    wpand ne (Subst.predicate s' q'.a_value),
+	    (let s' = wr s' in
+	     wpand ne (Subst.predicate s' q'.a_value), s'),
 	    (let ee x = 
 	       let q' = List.assoc x qe in
-	       por (exn x ee) (wpand ne (Subst.predicate s' q'.a_value))
+	       let ee,s' = exn x ee s in
+	       let s' = wr s' in
+	       por ee (wpand ne (Subst.predicate s' q'.a_value)), s'
 	     in
 	     exns e ee)
 	| None -> 
 	    nee
       in
-      ok, nee, s'
+      ok, nee
   | Lam (bl, pl, e) ->
       (* OK: forall bl. pl => ok(e)
 	 NE: forall bl. pl /\ ne(e, result) *)
       let s = Subst.frame e.info.t_env e.info.t_effect s in
-      let ok,ne,s' = wp e s in
+      let ok,((_,s'),_) = wp e s in
       let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) pl in
       let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
       wpforalls q (wpimplies (wpands pl) ok),
-      (wpforalls q (wpands (pl@[ok])), []),
-      s'
+      ((wpforalls q (wpands (pl@[ok])), s'), [])
   | Assertion (al, e1) ->
       (* OK: al /\ ok(e)
 	 NE: al /\ ne(e,result) *)
-      let ok,(ne1,ee1),s' = wp e1 s in
+      let ok,((ne1,s'),ee1) = wp e1 s in
       let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) al in
-      let ee x = wpands (pl @ [exn x ee1]) in
-      wpands (pl@[ok]), (wpands (pl@[ne1]), exns e ee), s'
+      let ee x = let ee,sx = exn x ee1 s in wpands (pl @ [ee]), sx in
+      wpands (pl@[ok]), ((wpands (pl@[ne1]), s'), exns e ee)
   | Post (e1, q, _) ->
       (* TODO: what to do with the transparency here? *)
       let lab = e1.info.t_label in
       let s = Subst.label lab s in
-      let ok,(ne1,ee1),s' = wp e1 s in
+      let ok,((ne1,s'),ee1) = wp e1 s in
       let qql = post_app (asst_app (change_label "" lab)) q in
       let subst p = subst_in_predicate s'.sigma p.a_value in
       let (q,ql) = post_app subst qql in
+      let post_exn (x,(ex,_)) (x',qx) =
+	assert (x=x'); 
+	let p = wpimplies ex qx in
+	match find_exception x with
+	  | Some pt -> wpforall result (PureType pt) p
+	  | None -> p
+      in
       let ok = 
 	wpands 
 	  (ok :: 
 	     wpforall result e1.info.t_result_type (wpimplies ne1 q) ::
-	     List.map2 (fun (x,ex) (x',qx) -> assert (x=x'); 
-			  wpimplies ex qx) ee1 ql)
+	     List.map2 post_exn ee1 ql)
       in
       let nee = 
-	let ee x = wpand (exn x ee1) (List.assoc x ql) in
-	wpand ne1 q, exns e ee
+	let ee x = let ee,sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
+	(wpand ne1 q, s'), exns e ee
       in
-      ok, nee, s'
+      ok, nee
   | Label (l, e) ->
       wp e (Subst.label l s)
-  | LetIn (x, e1, e2) ->
-      let ok1,ne1,s1 = wp e1 s in
-      let ok2,ne2,s2 = wp e2 s1 in
-      begin match e1.info.t_result_type with
-	| PureType pt as ty1 ->
-	    let ne1x = subst_in_predicate (subst_onev result x) (fst ne1) in
-	    let ok = wpand ok1 (wpforall x ty1 (wpimplies ne1x ok2)) in
-	    let ne = (*exists x ty1*) (wpand ne1x (fst ne2)) in
-	    ok, (ne, []), Subst.add_aux x pt s2
-	| Arrow _ ->
-	    assert (not (occur_predicate result (fst ne1)));
-	    assert (not (occur_predicate x (fst ne2)));
-	    let ok = wpand ok1 (wpimplies (fst ne1) ok2) in (* ok1 /\ ok2 ? *)
-	    let ne = wpand (fst ne1) (fst ne2) in
-	    ok, (ne, []), s2
-	| Ref _ -> 
-	    assert false
-      end
   | LetRef (x, e1, e2) ->
+      assert false (*TODO*)
+(***
       let ok1,ne1,s1 = wp e1 s in
       let pt = match e1.info.t_result_type with 
 	| PureType pt -> pt | Ref _ | Arrow _ -> assert false 
@@ -282,31 +328,33 @@ and wp0 e s =
       let ok = wpand ok1 (wpimplies ne1x ok2) in
       let ne = wpand ne1x (fst ne2) in
       ok, (ne, []), s2
+***)
   | Var _ -> 
       (* this must be an impure function, thus OK = NE = true *)
-      Ptrue, (Ptrue, []), s
+      Ptrue, ((Ptrue, s), [])
   | Absurd -> 
       (* OK = NE = false *)
-      Pfalse, (Pfalse, []), s
+      Pfalse, ((Pfalse, s), [])
   | Loop _ ->
       assert false (*TODO*)
   | Raise (id, None) -> 
       (* OK: true  
 	 N : false  
 	 E : true *)
-      Ptrue, (Pfalse, [id, Ptrue]), s
+      Ptrue, ((Pfalse, s), [id, (Ptrue, s)])
   | Raise (id, Some e1) -> 
       (* OK: ok(e1)
 	 N : false
 	 E : ne(e1) \/ E(e1) if E=id, E(e1) otherwise *)
-      let ok1,(ne1,ee1),s1 = wp e1 s in
+      let ok1,((ne1,s1),ee1) = wp e1 s in
       let ee x = 
-	if x == id then 
-	  try por ne1 (List.assoc x ee1) with Not_found -> ne1
+	if x == id then
+	  try let ee1,sx = List.assoc x ee1 in por ne1 ee1, sx
+	  with Not_found -> ne1, s1
 	else
 	  try List.assoc x ee1 with Not_found -> assert false
       in
-      ok1, (Pfalse, exns e ee), s1
+      ok1, ((Pfalse, s1), exns e ee)
   | Try _ ->
       assert false (*TODO*)
   | Rec _ ->
@@ -327,7 +375,7 @@ and wp0 e s =
 
 let wp e =
   let s = Subst.frame e.info.t_env e.info.t_effect Subst.empty in
-  let ok,_,s = wp e s in
+  let ok,((_,s),_) = wp e s in
   let q = Idmap.fold (fun x pt q -> (x, PureType pt) :: q) s.types [] in
-  wpforalls q ok
+  wpforalls (List.rev q) ok
 

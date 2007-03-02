@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.126 2007-03-01 14:40:51 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.127 2007-03-02 15:20:08 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -63,28 +63,25 @@ let expected_cmp loc =
 
 let just_reads e = difference (get_reads e) (get_writes e)
 
-let rec unify_type_v v1 v2 = 
-  match (v1,v2) with
-  | (PureType c1, PureType c2) -> 
+let rec unify_type_v v1 v2 = match (v1,v2) with
+  | PureType c1, PureType c2 -> 
       Ltyping.unify c1 c2
-  | (Ref v1, Ref v2) -> 
+  | Ref v1, Ref v2 -> 
       Ltyping.unify v1 v2
-  | (Arrow(bl1,t1),Arrow(bl2,t2)) ->
-      (List.length bl1 = List.length bl2)
-      && (List.for_all2 
-	    (fun (id1,t1) (id2,t2) -> id1=id2 && unify_type_v t1 t2)
-	    bl1 bl2)
-      && unify_type_v t1.c_result_type t2.c_result_type			
-  | _ -> false
-(*
-  | (v1,v2) -> 
-      v1 = v2
-*)
+  | Arrow (bl1, k1), Arrow (bl2, k2) ->
+      let rec unify_bl = function
+	| [], [] -> unify_type_v k1.c_result_type k2.c_result_type
+	| (_,t1)::bl1, (_,t2)::bl2 -> unify_type_v t1 t2 && unify_bl (bl1,bl2)
+	| [], bl2 -> unify_type_v k1.c_result_type (Arrow (bl2, k2))
+	| bl1, [] -> unify_type_v (Arrow (bl1, k1)) k2.c_result_type
+      in
+      unify_bl (bl1,bl2)
+  | _ -> 
+      false
 
 let type_v_sup loc t1 t2 =
   if not(unify_type_v t1 t2) then raise_located loc BranchesSameType;
   t1
-
 
 let union3effects x y z = Effect.union x (Effect.union y z)
 
@@ -100,7 +97,9 @@ let decomp_fun_type loc = function
 
 let expected_type loc t et =
   if not (unify_type_v t et) then 
-    raise_located loc (ExpectedType (fun fmt -> print_type_v fmt et))
+    raise_located loc 
+      (ExpectedType2 
+	  ((fun fmt -> print_type_v fmt t), (fun fmt -> print_type_v fmt et)))
 
 let check_for_alias loc id v = 
   if occur_type_v id v then raise_located loc (Alias id)
