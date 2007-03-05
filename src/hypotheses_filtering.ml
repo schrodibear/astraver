@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.2 2007-03-02 15:12:27 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.3 2007-03-05 07:58:15 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -52,7 +52,6 @@ module String_set = Set.Make(struct type t=string let compare= compare end)
 
 module Term_set = Set.Make(struct type t=Logic.term let compare= compare end)
 
-
 let equality_container :(string, 'a) Hashtbl.t = Hashtbl.create 20
 
 let symbs : (predicate,'a) Hashtbl.t = Hashtbl.create 20
@@ -61,31 +60,43 @@ let symbs : (predicate,'a) Hashtbl.t = Hashtbl.create 20
 
 module  Symbol_container = 
 struct 
-
-(*  module Id_map = Map.Make(struct type t=string let compare= compare end)
-
-
-  let uniqueNumberGenerator () = 
-    incr symbol_counter; !symbol_counter
-
-*)
-  let m = ref String_set.empty
+  
+  let global = ref 0
+  
+  let m :(string, int) Hashtbl.t = Hashtbl.create 20
+  
+  (*let m = ref String_set.empty*)
 
   let add symb = 
-    m:= String_set.add (Ident.string symb) !m 
+    global := !global +1 ;
+    try
+      let n = Hashtbl.find m (Ident.string symb) in
+      Hashtbl.replace m (Ident.string symb) (n+1)
+    with
+	Not_found ->
+	  Hashtbl.add m (Ident.string symb) 1
+	    (*    m:= String_set.add (Ident.string symb) !m *)
 	 
 
   let reset () = 
-    m := String_set.empty;
+    Hashtbl.clear m ;
     Hashtbl.clear equality_container
 
 
   let display () =
-    String_set.iter
-      (fun str -> 
-	 Format.printf "%s " str)
-      !m;
-    Format.printf "@\n@.";
+    Hashtbl.iter
+      (fun str n -> 
+	 Format.printf "%s : %d " str n)
+      m;
+    Format.printf "@\n@."
+      
+  let oposite_freq symb = 
+    try 
+      let n = Hashtbl.find m symb in
+      !global - n 
+    with Not_found -> 
+      0
+    
 end
 
 
@@ -275,12 +286,33 @@ let memorizes_hyp_symb l =
   mem l
 
 
+let rank0 hyp_symbs goal_symbs = 
+  let r = 
+    if String_set.is_empty goal_symbs  then 1. else
+      (float_of_int (String_set.cardinal (String_set.inter hyp_symbs goal_symbs))) /.
+	(float_of_int (String_set.cardinal hyp_symbs )) in 
+  r
+
+
 let rank hyp_symbs goal_symbs = 
   let r = 
     if String_set.is_empty goal_symbs  then 1. else
       (float_of_int (String_set.cardinal (String_set.inter hyp_symbs goal_symbs))) /.
 	(float_of_int (String_set.cardinal (String_set.union hyp_symbs goal_symbs))) in 
   r
+
+
+let rank1 hyp_symbs goal_symbs = 
+  if String_set.is_empty goal_symbs  then 1. else
+    begin
+      let op_freq_of_set s = String_set.fold 
+	(fun elt n -> n + Symbol_container.oposite_freq elt)
+	s 0 in 
+      let upS = String_set.inter hyp_symbs goal_symbs in 
+      let upf = op_freq_of_set upS in 
+      let downf = op_freq_of_set hyp_symbs  in
+      (float_of_int upf) /. (float_of_int downf)
+    end
 
 
 let filter l goal_symbs=
@@ -292,7 +324,7 @@ let filter l goal_symbs=
 	  try Hashtbl.find symbs p with Not_found -> raise Exit in
 	let hyp_symbs = 
 	  String_set.union v' (String_set.union p' f') in
-	if rank hyp_symbs goal_symbs >= threshold then 
+	if rank0 hyp_symbs goal_symbs >= threshold then 
 	  Spred (t,p):: check q  
 	else
 	  check q in  
