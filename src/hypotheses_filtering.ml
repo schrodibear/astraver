@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.3 2007-03-05 07:58:15 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.4 2007-03-06 08:17:10 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -56,16 +56,26 @@ let equality_container :(string, 'a) Hashtbl.t = Hashtbl.create 20
 
 let symbs : (predicate,'a) Hashtbl.t = Hashtbl.create 20
 
+let class_of_hyp : (predicate,string) Hashtbl.t = Hashtbl.create 20
+
+(** the union find module for using classes **)
+module UnionFindString = Unionfind.Make (struct 
+					  type t = string let 
+					      hash = Hashtbl.hash 
+							  let compare = compare 
+							  let equal = (=) 
+					 end)
+
+
+
 
 
 module  Symbol_container = 
 struct 
   
   let global = ref 0
-  
   let m :(string, int) Hashtbl.t = Hashtbl.create 20
-  
-  (*let m = ref String_set.empty*)
+  let vars_partition : UnionFindString.t = UnionFindString.init()  
 
   let add symb = 
     global := !global +1 ;
@@ -74,13 +84,28 @@ struct
       Hashtbl.replace m (Ident.string symb) (n+1)
     with
 	Not_found ->
-	  Hashtbl.add m (Ident.string symb) 1
-	    (*    m:= String_set.add (Ident.string symb) !m *)
-	 
+	  Hashtbl.add m (Ident.string symb) 1 
+	    
+
+
+
+  let merge_variables v = 
+    let elt = String_set.choose v in 
+    String_set.iter
+      (fun v1 -> UnionFindString.union v1 elt  vars_partition)
+      v ;
+    UnionFindString.find elt vars_partition
+	    
+  let find_rep r = 
+    UnionFindString.find r vars_partition
+	  
 
   let reset () = 
     Hashtbl.clear m ;
-    Hashtbl.clear equality_container
+    Hashtbl.clear equality_container;
+    (* for variable variant *)
+    Hashtbl.clear class_of_hyp;
+    vars_partition = UnionFindString.init()
 
 
   let display () =
@@ -120,9 +145,13 @@ let f_symbols qvars t  =
 	  funcs := String_set.add (Ident.string id) !funcs ;
 	  List.iter collect tl 
       | Tvar (id) ->
-	  if not (String_set.mem (Ident.string id) qvars)  then
-	    Symbol_container.add  id;
-	    vars := String_set.add (Ident.string id) !vars 
+	  if not (String_set.mem (Ident.string id) qvars) 
+	  then
+	    if 	String.compare (Ident.string id) "alloc" <> 0 then 
+	      begin
+		Symbol_container.add  id;
+		vars := String_set.add (Ident.string id) !vars 
+	      end
   in
   collect t ; 
   (!vars,!preds,!funcs)
@@ -265,7 +294,8 @@ let display_hash k s  =
 
 
 let display_symb_of set =
-  String_set.iter (fun s -> Format.printf "%s " s) set 
+  String_set.iter (fun s -> Format.printf "%s " s) set ;
+  Format.printf "@\n@." 
 
 let display str set  = 
   (*if debug then begin *)
@@ -276,14 +306,20 @@ let display str set  =
 
 let memorizes_hyp_symb l = 
   Hashtbl.clear symbs ;
-  let rec mem = function  
-    | [] -> ()
-    | Svar (id, v) :: q ->  mem q 
+  let rec mem   = function  
+    | [] ->  ()
+    | Svar (id, v) :: q ->  mem  q 
     | Spred (_,p) :: q -> 
 	let (v',p',f') = symbols p in 
 	Hashtbl.add symbs  p (v',p',f');
-	mem q in  
-  mem l
+	let rep = Symbol_container.merge_variables v' in 
+	display_symb_of v' ;
+	Hashtbl.add class_of_hyp p rep;
+	mem  q    in 
+  mem l 
+  
+
+    
 
 
 let rank0 hyp_symbs goal_symbs = 
@@ -318,13 +354,28 @@ let rank1 hyp_symbs goal_symbs =
 let filter l goal_symbs=
     let rec check = function  
     | [] -> []
-    |  Svar (id, v) :: q -> Svar (id, v) ::check q 
+    | Svar (id, v) :: q -> Svar (id, v) ::check q 
     | Spred (t,p) :: q -> 
 	let (v',p',f') = 
 	  try Hashtbl.find symbs p with Not_found -> raise Exit in
 	let hyp_symbs = 
 	  String_set.union v' (String_set.union p' f') in
-	if rank0 hyp_symbs goal_symbs >= threshold then 
+	if rank1 hyp_symbs goal_symbs >= threshold then 
+	  Spred (t,p):: check q  
+	else
+	  check q in  
+    check l
+
+
+let filter_acc_variables l concl_rep=
+  let rec check = function  
+    | [] -> []
+    | Svar (id, v) :: q -> Svar (id, v) ::check q 
+    | Spred (t,p) :: q -> 
+	let rep' = 
+	  try Hashtbl.find class_of_hyp p with Not_found -> raise Exit in
+	if (Symbol_container.find_rep rep' 
+	    = Symbol_container.find_rep concl_rep) then 
 	  Spred (t,p):: check q  
 	else
 	  check q in  
@@ -332,15 +383,16 @@ let filter l goal_symbs=
 
 
 
+
 let managesGoal id ax (hyps,concl) =
   match ax with 
     Dgoal(loc,id,s) -> 
       let (v,p,f) = symbols concl in 
-      (*Format.printf "po : %s @\n@." id ;*)
-      (*display "var" v ;
-	display "pred" p ;
-	display "func" f ;
-	Symbol_container.display(); *)
+      memorizes_hyp_symb hyps;
+
+      
+      (* variant with all symbols *)
+      (*
       let rec get_equality = function
 	| [] -> ()
 	| Svar (id, v) :: q ->  get_equality q 
@@ -348,20 +400,21 @@ let managesGoal id ax (hyps,concl) =
 	    stores_equality p ;
 	    get_equality q in  
       get_equality hyps ;
-      (*Hashtbl.iter display_hash  equality_container; *)
       let (v,p,f) = add_symbols (v,p,f) in 
-      (* Format.printf "After @\n@.";
-      display "var" v ;
-      display "pred" p ;
-      display "func" f  ; *)
-      (*set of symbol of each hypothesis computation *)  
-      memorizes_hyp_symb hyps;
-      
-      (*filter the hypothesis*)
       let goal_symbs = String_set.union v (String_set.union p f) in
       let l' = filter hyps goal_symbs in  
       Dgoal (loc,id, Env.empty_scheme (l',concl))
+      *)
+      (* variant considering variables *)
+      let var_concl_rep = Symbol_container.merge_variables v in 
+      let l' = filter_acc_variables hyps var_concl_rep in  
+      Dgoal (loc,id, Env.empty_scheme (l',concl))
+      
+      
+
+
     | _ -> ax 
+
 
 
 let reduce q = 
