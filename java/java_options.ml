@@ -1,0 +1,128 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
+(*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
+(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Thierry HUBERT                                                      *)
+(*    Claude MARCHÉ                                                       *)
+(*    Yannick MOY                                                         *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU General Public                   *)
+(*  License version 2, as published by the Free Software Foundation.      *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(*  See the GNU General Public License version 2 for more details         *)
+(*  (enclosed in the file GPL).                                           *)
+(*                                                                        *)
+(**************************************************************************)
+
+(*i $Id: java_options.ml,v 1.1 2007-03-06 10:44:18 marche Exp $ i*)
+
+open Format
+
+(*s The log file *)
+
+let c = ref stdout
+
+let log =
+  c := open_out "krakatoa.log";
+  Format.formatter_of_out_channel !c
+
+let lprintf s = Format.fprintf log s
+
+let close_log () =
+  lprintf "End of log.@.";
+  close_out !c;
+  c := stdout
+
+(*s environment variables *)
+
+let libdir = 
+  try
+    let v = Sys.getenv "KRAKATOALIB" in
+    lprintf "KRAKATOALIB is set to %s@." v;
+    v
+  with Not_found -> 
+    let p = Java_version.libdir in
+    lprintf "KRAKATOALIB is not set, using %s as default@." p;
+    p
+
+let libfile = "krakatoa.why"
+
+(*s command-line options *)
+
+let parse_only = ref false
+let type_only = ref false
+let print_graph = ref false
+let debug = ref false
+let verbose = ref false
+let werror = ref false
+let why_opt = ref ""
+
+let add_why_opt s = why_opt := !why_opt ^ " " ^ s
+
+let files_ = ref []
+let add_file f = files_ := f :: !files_
+let files () = List.rev !files_
+
+let version () = 
+  Printf.printf "This is Krakatoa version %s, compiled on %s
+Copyright (c) 2006 - ProVal INRIA project 
+This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
+" Java_version.version Java_version.date;
+  exit 0
+
+let usage = "krakatoa [options] files"
+
+let _ = 
+  Arg.parse 
+      [ "-parse-only", Arg.Set parse_only, 
+	  "  stops after parsing";
+        "-type-only", Arg.Set type_only, 
+	  "  stops after typing";
+        "-print-call-graph", Arg.Set print_graph, 
+	  "  stops after call graph and print call graph";
+        "-d", Arg.Set debug,
+          "  debugging mode";
+        "-why-opt", Arg.String add_why_opt,
+	  " <why options>  passes options to Why";
+	"-v", Arg.Set verbose,
+          "  verbose mode";
+	"-q", Arg.Clear verbose,
+          "  quiet mode (default)";
+	"--werror", Arg.Set werror,
+          "  treats warnings as errors";
+	"--version", Arg.Unit version,
+          "  prints version and exit";
+      ]
+      add_file usage
+
+let usage () =
+  eprintf "usage: %s@." usage;
+  exit 2
+
+let parse_only = !parse_only
+let type_only = !type_only
+let print_graph = !print_graph
+let debug = !debug
+let verbose = !verbose
+let werror = !werror
+let why_opt = !why_opt
+
+
+(*s error handling *)
+
+exception Java_error of Loc.position * string
+
+let parsing_error l f = 
+  Format.ksprintf 
+    (fun s -> 
+       let s = if s="" then s else " ("^s^")" in
+       raise (Java_error(l, "syntax error" ^ s))) f
+
