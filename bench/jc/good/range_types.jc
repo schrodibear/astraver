@@ -12,6 +12,35 @@ shortint f(unsignedchar x, shortint y)
 {
   return x+y;
 }
+
+
+
+/* complements for non-linear integer arithmetic */
+
+axiom distr_right: \forall integer x,y,z; x*(y+z) == (x*y)+(x*z)
+axiom distr_left: \forall integer x,y,z; (x+y)*z == (x*z)+(y*z)
+
+
+/* computes the square root of x, rounded to the floor */ 
+shortint isqrt(shortint x) 
+    requires x >= 0;
+    behavior is_rounded_sqrt:	
+      ensures 
+	\result >= 0 && \result * \result <= x && 
+	x < (\result + 1) * (\result + 1);
+{
+    shortint count = 0;
+    shortint sum = 1;
+    while (sum <= x) 
+      invariant 
+        count >= 0 && x >= count*count && sum == (count+1)*(count+1);
+      variant x - sum;
+    { 
+	count++;
+	sum = sum + 2*count+1;
+    }
+    return count;
+}   
     
 /*
 Local Variables: 

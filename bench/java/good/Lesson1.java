@@ -23,7 +23,7 @@ public class Lesson1 {
 
     /*@ requires x >= 0
       @ behavior result_is_sqrt: 
-      @   ensures \result >=0 && \result * \result <= x 
+      @   ensures \result >= 0 && \result * \result <= x 
       @      && x < (\result + 1) * (\result + 1)
       @*/
     public static int sqrt(int x) {

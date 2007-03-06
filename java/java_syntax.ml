@@ -1,9 +1,22 @@
 open Java_ast
-
+open Format
+open Lexing
 
 let parse_annot loc s f =
   let lb = Lexing.from_string s in
-  lb.Lexing.lex_curr_p <- loc;
+(*
+  eprintf "lb.pos_fname = %s@." lb.lex_curr_p.pos_fname;
+  eprintf "lb.pos_lnum = %d@." lb.lex_curr_p.pos_lnum;
+  eprintf "lb.pos_bol = %d@." lb.lex_curr_p.pos_bol;
+  eprintf "lb.pos_cnum = %d@." lb.lex_curr_p.pos_cnum;
+*)
+  lb.lex_curr_p <- {loc with pos_bol = loc.pos_bol - loc.pos_cnum - 3};
+(*
+  eprintf "lb.pos_fname = %s@." lb.lex_curr_p.pos_fname;
+  eprintf "lb.pos_lnum = %d@." lb.lex_curr_p.pos_lnum;
+  eprintf "lb.pos_bol = %d@." lb.lex_curr_p.pos_bol;
+  eprintf "lb.pos_cnum = %d@." lb.lex_curr_p.pos_cnum;
+*)
   try
     f Java_lexer.next_token lb
   with Parsing.Parse_error ->
@@ -72,7 +85,7 @@ let file f =
     compilation_unit d 
   with
     | Java_lexer.Lexical_error(l,s) ->
-	Format.eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
+	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
 	exit 1
 
 (*
