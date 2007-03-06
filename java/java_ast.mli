@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.1 2007-03-06 10:44:18 marche Exp $
+$Id: java_ast.mli,v 1.2 2007-03-06 13:51:40 marche Exp $
 
 ***************************************************************************)
 
@@ -213,6 +213,7 @@ and pstatement_node =
   | JPSsynchronized of pexpr * block
   | JPSassert of pexpr
   | JPSannot of Lexing.position * string
+  | JPSloop_annot of pexpr * pexpr
 (*
   | Kml_annot_statement of jml_annotation_statement
   | Kml_ghost_var_decl of jml_declaration list

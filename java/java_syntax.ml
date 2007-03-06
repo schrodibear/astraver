@@ -9,14 +9,37 @@ let parse_annot loc s f =
   with Parsing.Parse_error ->
     Java_options.parsing_error (Java_lexer.loc lb) ""
 
+let rec statement s =
+  { s with java_pstatement_node = match s.java_pstatement_node with
+    | JPSannot(loc,s) -> parse_annot loc s Java_parser.kml_statement_annot
+    | JPSloop_annot _ -> assert false
+    | JPSassert _ -> assert false
+    | JPSsynchronized (e, s') -> JPSsynchronized(e, List.map statement s')	
+    | JPSblock b -> JPSblock(List.map statement b)
+    | JPSswitch(e, l) -> 
+	JPSswitch(e, List.map (fun (labs,b) -> (labs,List.map statement b)) l)
+    | JPStry (s, l, f) -> assert false (* TODO *)
+    | JPSfor_decl (_, _, _, _) -> assert false (* TODO *)
+    | JPSfor (_, _, _, _) -> assert false (* TODO *)
+    | JPSdo (_, _) -> assert false (* TODO *)
+    | JPSwhile (e, s') -> JPSwhile(e, statement s')
+    | JPSif (e, s1, s2) -> JPSif(e, statement s1, statement s2)
+    | JPSlabel (l, s') -> JPSlabel(l,statement s')
+    | JPScontinue _
+    | JPSbreak _
+    | JPSreturn _
+    | JPSthrow _
+    | JPSvar_decl _
+    | JPSexpr _
+    | JPSskip -> s.java_pstatement_node }
+
 let field_decl f = 
   match f with
-    | JPFmethod(m,b) -> JPFmethod(m,b) (* TODO *)
+    | JPFmethod(m,None) -> f
+    | JPFmethod(m,Some b) -> JPFmethod(m,Some (List.map statement b))
     | JPFconstructor c -> assert false (* TODO *)
     | JPFvariable _ -> f 
-    | JPFstatic_initializer b -> 
-	assert false (* TODO *)
-	(* JPFstatic_initializer (block b) *)
+    | JPFstatic_initializer b -> JPFstatic_initializer (List.map statement b)
     | JPFannot (loc,s) -> parse_annot loc s Java_parser.kml_field_decl
     | JPFinvariant _ 
     | JPFmethod_spec _ -> assert false
@@ -51,3 +74,9 @@ let file f =
     | Java_lexer.Lexical_error(l,s) ->
 	Format.eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
 	exit 1
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/krakatoa.byte"
+End: 
+*)

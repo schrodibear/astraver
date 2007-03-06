@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.1 2007-03-06 10:44:18 marche Exp $
+$Id: java_parser.mly,v 1.2 2007-03-06 13:51:40 marche Exp $
 
 */
 
@@ -54,6 +54,9 @@ $Id: java_parser.mly,v 1.1 2007-03-06 10:44:18 marche Exp $
 %start kml_field_decl
 %type  <Java_ast.field_declaration> kml_field_decl
 
+%start kml_statement_annot
+%type  <Java_ast.pstatement_node> kml_statement_annot
+
 %type <Java_ast.qualified_ident> name
 
 /*s Tokens */
@@ -80,6 +83,7 @@ $Id: java_parser.mly,v 1.1 2007-03-06 10:44:18 marche Exp $
 %token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW 
 
 %token REQUIRES ENSURES ASSUMES ASSIGNS BEHAVIOR
+%token LOOP_INVARIANT DECREASES
 %token AXIOM LOGIC TYPE PREDICATE READS
 %token BSFORALL BSEXISTS BSOLD BSRESULT
 
@@ -934,6 +938,10 @@ assigns:
     { None }
 ;
 
+kml_statement_annot:
+| LOOP_INVARIANT expr DECREASES expr
+    { JPSloop_annot($2,$4) }
+;
 
 /*
 Local Variables: 
