@@ -3,8 +3,9 @@ type unsignedchar = 0..255
 
 type shortint = -32768..32767
 
-
-
+    /*
+type int32 = -2147483648..2147483647
+     */
 shortint f(unsignedchar x, shortint y) 
   requires y <= 32000;
   behavior no_run_time_error:
@@ -19,11 +20,14 @@ shortint f(unsignedchar x, shortint y)
 
 axiom distr_right: \forall integer x,y,z; x*(y+z) == (x*y)+(x*z)
 axiom distr_left: \forall integer x,y,z; (x+y)*z == (x*z)+(y*z)
+    // axiom sqr_elim: \forall integer x; x*x <= 32767 => x < 256
+axiom sqr_elim2: \forall integer x; x*x <= 32760 => x <= 180
+axiom sqr_intro2: \forall integer x; 0 <= x && x <= 181 => x*x <= 32761
 
 
 /* computes the square root of x, rounded to the floor */ 
 shortint isqrt(shortint x) 
-    requires x >= 0;
+    requires x >= 0 && x <= 32760;
     behavior is_rounded_sqrt:	
       ensures 
 	\result >= 0 && \result * \result <= x && 
@@ -33,11 +37,12 @@ shortint isqrt(shortint x)
     shortint sum = 1;
     while (sum <= x) 
       invariant 
-        count >= 0 && x >= count*count && sum == (count+1)*(count+1);
+        count >= 0 && x >= count*count && sum == (count+1)*(count+1) &&
+        count <= 180 && sum <= 32761;
       variant x - sum;
     { 
-	count++;
-	sum = sum + 2*count+1;
+	/* count++; bug*/ count = count+1;
+	sum = sum + 2*count + 1;
     }
     return count;
 }   

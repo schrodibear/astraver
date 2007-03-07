@@ -16,5 +16,7 @@ why-obfuscator.opt
 cadlog.opt
 jessie.opt
 jessie.byte
+krakatoa.opt
+krakatoa.byte
 simplify2why.opt
 why-stat.opt

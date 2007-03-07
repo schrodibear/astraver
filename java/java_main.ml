@@ -10,9 +10,8 @@ let main () =
     | [f] ->
 	(* phase 1 : parsing *)
 	let ast = Java_syntax.file f in
-(*
 	(* phase 2 : typing *)
-	List.iter Jc_typing.decl ast;
+	Java_typing.compilation_unit ast;
 	(* phase 3 : computation of call graph *)
 	Hashtbl.iter 
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)

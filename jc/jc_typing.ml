@@ -197,7 +197,7 @@ let logic_unary_op loc (op : Jc_ast.punary_op) t e =
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
-		typing_error loc "numeric type expected"
+		typing_error loc "numeric type expected for unary + and -"
 	in JCTnative t,num_un_op op e
     | Upostfix_dec | Upostfix_inc | Uprefix_dec | Uprefix_inc ->
 	typing_error loc "pre/post incr/decr not allowed as logical term"
@@ -220,6 +220,7 @@ let term_coerce t1 t2 e =
 	  jc_tterm_loc = e.jc_tterm_loc }  
     | _ -> assert false
 
+(*
 let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble -> 
@@ -254,7 +255,7 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
-		typing_error loc "numeric types expected"
+		typing_error loc "numeric types expected for + and -"
 	end 
     | Bmul | Bdiv | Bmod ->
 	let t =
@@ -266,11 +267,12 @@ let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
 		    | _ -> assert false (* TODO *)
 		end
 	    | _ ->
-		typing_error loc "numeric types expected"
+		typing_error loc "numeric types expected for *,/ and %%"
 	in JCTnative t,JCTTapp(num_op op,[e1;e2])
     | Bland | Blor -> assert false (* TODO *)
     | Bimplies -> assert false
     | Biff -> assert false
+*)
 
 let logic_bin_op t op =
   match t,op with
@@ -301,7 +303,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 	  JCTnative Tboolean,
 	  JCTTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
-	  typing_error loc "numeric types expected"
+	  typing_error loc "numeric types expected for >, <, >=, <=, == and !="
     | Badd | Bsub ->
 	begin
 	  match t1 with
@@ -316,21 +318,14 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 		  JCTnative t,
 		  JCTTapp(logic_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
 		else
-		  typing_error loc "numeric types expected"
+		  typing_error loc "numeric types expected for + and -"
 	end
     | Bmul | Bdiv | Bmod ->
-	let t=
-	  match (t1,t2) with
-	    | JCTnative t1, JCTnative t2 ->
-		begin
-		  match (t1,t2) with
-		    | Tinteger,Tinteger -> Tinteger
-		    | Treal,Treal -> Treal
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ ->
-		typing_error loc "numeric types expected"
-	in JCTnative t,JCTTapp(logic_bin_op t op,[e1;e2])
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative t,
+	  JCTTapp(logic_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	else typing_error loc "numeric types expected for *, / and %%"
     | Bland | Blor -> 
 	let t=
 	  match (t1,t2) with
@@ -504,7 +499,7 @@ let make_rel_bin_op loc op t1 e1 t2 e2 =
 	  let t = lub_numeric_types t1 t2 in
 	  JCTAapp(rel_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
-	  typing_error loc "numeric types expected"
+	  typing_error loc "numeric types expected for >, <, >= and <="
     | Beq | Bneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
@@ -513,7 +508,7 @@ let make_rel_bin_op loc op t1 e1 t2 e2 =
 	  if comparable_types t1 t2 then 
 	    JCTAapp(rel_bin_op Tunit op,[e1;e2])
 	  else
-	    typing_error loc "terms should have the same type"
+	    typing_error loc "terms should have the same type for == and !="
 	(* non propositional operators *)
     | Badd | Bsub | Bmul | Bdiv | Bmod -> assert false
 	(* already recognized as connectives *)
@@ -765,21 +760,15 @@ let make_bin_app loc op t1 e1 t2 e2 =
 		  JCTnative t,
 		  JCTEcall(bin_op t op,[coerce t1 t e1; coerce t2 t e2])
 		else
-		  typing_error loc "numeric types expected"
+		  typing_error loc "numeric types expected for + and -"
 	end
     | Bmul | Bdiv | Bmod ->
-	let t=
-	  match (t1,t2) with
-	    | JCTnative t1, JCTnative t2 ->
-		begin
-		  match (t1,t2) with
-		    | Tinteger,Tinteger -> Tinteger
-		    | Treal,Treal -> Treal
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ ->
-		typing_error loc "numeric types expected"
-	in JCTnative t,JCTEcall(bin_op t op,[e1;e2])
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative t,
+	  JCTEcall(bin_op t op,[coerce t1 t e1; coerce t2 t e2])
+	else
+	  typing_error loc "numeric types expected for *, / and %%"
     | Bland | Blor -> 
 	let t=
 	  match (t1,t2) with
