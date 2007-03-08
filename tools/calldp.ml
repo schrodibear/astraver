@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.33 2007-02-28 07:51:43 couchot Exp $ i*)
+(*i $Id: calldp.ml,v 1.34 2007-03-08 10:00:23 filliatr Exp $ i*)
 
 open Printf
 
@@ -145,7 +145,27 @@ let yices ?(debug=false) ?(timeout=30) ~filename:f () =
     remove_file ~debug out;
     r
 
-
+let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
+  let cmd = sprintf "cvc3 -lang smt < %s" f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c <> 0 then 
+    if c==1 && 
+      Sys.command (sprintf "grep -q -w 'feature not supported' %s" out) = 0 then
+	ProverFailure(t,"command failed: " ^ cmd)
+    else	
+      error c t cmd
+  else 
+    let r = 
+      if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
+	Valid t
+      else
+	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
+	CannotDecide (t, None)
+      else
+	ProverFailure(t,"command failed: " ^ cmd)
+    in
+    remove_file ~debug out;
+    r
 
 let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "rvc %s" f in

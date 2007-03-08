@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.124 2007-03-02 15:12:27 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.125 2007-03-08 10:00:23 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -104,7 +104,7 @@ let push_obligations =
     (fun (loc,id,s) -> 
        let dg = Dgoal (loc, id, generalize_sequent s) in
        let dg = 
-	 if  pruning_hyp != 0.0 then 
+	 if  pruning_hyp <> 0.0 then 
 	   Hypotheses_filtering.reduce dg
 	 else
 	   dg in

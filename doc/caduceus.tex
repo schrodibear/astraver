@@ -1362,7 +1362,9 @@ The \why\ model for floating-point arithmetic can be found in
 \texttt{lib/why/floats.why} (it is passed to \why\ automatically, and
 only when the use of floating-point arithmetic is detected). This
 model is currently realized for the \coq\ prover only, in
-\texttt{lib/coq/WhyFloats.v}.
+\texttt{lib/coq/WhyFloats.v}. It requires the Coq library on
+floating-point arithmetic available at
+\url{http://lipforge.ens-lyon.fr/www/pff/}.
 
 This model for floating-point numbers can be turned off using the
 command-line \texttt{-no-fp} and then all floating-point numbers are

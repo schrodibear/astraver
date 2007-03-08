@@ -149,9 +149,16 @@ let ergo = {
   pr_id = Dispatcher.Ergo;
   pr_enc = NoEncoding;
   }
+let cvc3 = {
+  pr_name = "CVC3";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Cvc3;
+  pr_enc = SortedStratified;
+  }
 
 let provers = [
-  simplify; ergo; yicesSSTrat ; 
+  simplify; ergo; yicesSSTrat; cvc3;
   (*simplify_sstrat;*) simplify_strat; yices; rvsat; 
   zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
   harvey; cvcl]

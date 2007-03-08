@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.14 2007-02-28 07:51:43 couchot Exp $ i*)
+(*i $Id: calldp.mli,v 1.15 2007-03-08 10:00:23 filliatr Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -57,6 +57,10 @@ val rvsat :
   prover_result
 
 val yices : 
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+  prover_result
+
+val cvc3 : 
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 

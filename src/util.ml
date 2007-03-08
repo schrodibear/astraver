@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.124 2007-03-02 15:12:27 couchot Exp $ i*)
+(*i $Id: util.ml,v 1.125 2007-03-08 10:00:23 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -570,7 +570,7 @@ and print_predicate fmt = function
       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
 	print_term t i1 f1 e1 i2 f2 e2
   | Pnamed (n, p) ->
-      fprintf fmt "@[%s: %a@]" n print_predicate p
+      fprintf fmt "@[%s:@ %a@]" n print_predicate p
 
 let print_assertion fmt a = 
   fprintf fmt "%a: %a" Ident.print a.a_name print_predicate a.a_value
@@ -701,7 +701,8 @@ and print_desc fmt = function
   | Raise (id, None) ->
       fprintf fmt "raise %a" Ident.print id
   | Raise (id, Some p) ->
-      fprintf fmt "raise (%a %a)" Ident.print id print_expr p
+      fprintf fmt "@[<hv>raise@ (@[<hv>%a@ %a@])@]" 
+	Ident.print id print_expr p
   | Try (p, hl) ->
       fprintf fmt "@[<hv>try@ %a@ with %a@ end@]" print_expr p 
 	(print_list alt print_handler) hl

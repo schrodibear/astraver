@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.19 2007-02-28 13:58:22 couchot Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.20 2007-03-08 10:00:23 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -51,7 +51,7 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 (* calling prover *)
 
-type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo
+type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3
 
 let push_elem p e = 
   if not pruning then 
@@ -61,10 +61,8 @@ let push_elem p e =
   | Harvey -> Harvey.push_decl e
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
-  | Rvsat -> Smtlib.push_decl e
-  | Yices -> Smtlib.push_decl e
+  | Rvsat | Yices | Cvc3 -> Smtlib.push_decl e
   | Ergo -> Pretty.push_decl e
-
 
 let push_obligation p (loc, id, s) = 
   let g = Dgoal (loc, id, s) in
@@ -73,8 +71,7 @@ let push_obligation p (loc, id, s) =
   | Harvey -> Harvey.push_decl g
   | Cvcl -> Cvcl.push_decl g
   | Zenon -> Zenon.push_decl g
-  | Rvsat -> Smtlib.push_decl g
-  | Yices -> Smtlib.push_decl g
+  | Rvsat | Yices | Cvc3 -> Smtlib.push_decl g
   | Ergo -> Pretty.push_decl g
 
 (* output_file is a CRITICAL SECTION *)
@@ -91,8 +88,7 @@ let output_file ?encoding p (elems,o) =
     | Harvey -> Harvey.reset () 
     | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
-    | Rvsat -> Smtlib.reset ()
-    | Yices -> Smtlib.reset ()
+    | Rvsat | Yices | Cvc3 -> Smtlib.reset ()
     | Ergo -> Pretty.reset ()
   end;
   if pruning then 
@@ -126,8 +122,7 @@ let output_file ?encoding p (elems,o) =
     | Harvey -> Harvey.output_file f; f ^ "_why.rv"
     | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
     | Zenon -> Zenon.output_file f; f ^ "_why.znn"
-    | Rvsat -> Smtlib.output_file f; f ^ "_why.smt"
-    | Yices -> Smtlib.output_file f; f ^ "_why.smt"
+    | Rvsat | Yices | Cvc3 -> Smtlib.output_file f; f ^ "_why.smt"
     | Ergo -> Pretty.output_file f; f ^ "_why.why"
 
 open Format
@@ -140,6 +135,7 @@ let prover_name = function
   | Rvsat -> "rv-sat"
   | Yices -> "Yices"
   | Ergo -> "ergo"
+  | Cvc3 -> "CVC3"
 
 let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
@@ -160,6 +156,8 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.yices ~debug ?timeout ~filename ()
     | Ergo ->
 	Calldp.ergo ~debug ?timeout ~filename ()
+    | Cvc3 -> 
+	Calldp.cvc3 ~debug ?timeout ~filename ()
   in
   if not debug then begin try Sys.remove filename with _ -> () end;
   r
