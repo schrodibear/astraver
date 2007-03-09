@@ -24,26 +24,26 @@ is indeed the invariant of the program.
 It is true that Caduceus has already been presented (in a single paper
 dated 2004). This paper is rather a case study in formal verification
 than a presentation of Caduceus. And one of its main arguments is the
-use of ghost code, which was not discussed at all in the 2004 paper
-describing Caduceus.
+use of ghost code, which was not discussed at all in the 2004 paper.
 
 > The paper doesn't give many details of this axiomatization.  Would
 > the axioms be useful in other tools?  Could they be rephrased to
 > work better with automatic SMT solvers?  
 
 Some of the axioms are general enough to be part of a library and
-others are indeed specific to this case study. They could definitely
-benefit from a SMT solver with a built-in decision procedure for
-finite sets, for instance, but I do not have one at my disposal,
-unfortunately. 
+others are indeed specific to this case study. The former could
+definitely benefit from a SMT solver with a built-in decision
+procedure for finite sets, for instance, but I do not have one at my
+disposal, unfortunately.
 
 > How does one know that the special functions are axiomatized
 > correctly?
 
 As I tried to say in the very last paragraph of the paper, all these
-axioms could be proved using a suitable model of machine arithmetic,
-with Coq for instance. So, as noticed in the third review, I could
-then prove the properties of min_elt for instance.
+axioms could actually be proved using a suitable model of machine
+arithmetic, with Coq for instance. So, as pointed out by the third
+reviewer, I could for instance prove the properties of min_elt instead
+of simply axiomatizing them.
 
 > With such a high proportion of manual proofs, it might be that
 > standard tactics in interactive theorem provers could have
