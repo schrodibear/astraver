@@ -10,8 +10,11 @@ let main () =
     | [f] ->
 	(* phase 1 : parsing *)
 	let ast = Java_syntax.file f in
+	printf "Parsing OK.@.";
 	(* phase 2 : typing *)
 	Java_typing.compilation_unit ast;
+	printf "Typing OK.@.";
+(*
 	(* phase 3 : computation of call graph *)
 	Hashtbl.iter 
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
@@ -102,16 +105,14 @@ let main () =
 	(* phase x : produce makefile *)
 	Jc_make.makefile f
 *)
-	printf "Parsing OK.@."
+	printf "Done.@."
 
     | _ -> Java_options.usage ()
     
   with
-(*
     | Java_typing.Typing_error(l,s) ->
 	eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
 	exit 1
-*)
     | Java_options.Java_error(l,s) ->
 	eprintf "%a: %s@." Loc.gen_report_position l s;
 	exit 1

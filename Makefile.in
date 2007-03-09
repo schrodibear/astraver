@@ -240,6 +240,7 @@ bin/jessie.byte: $(JCCMO)
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	java/java_version.cmo java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
+	java/java_typing.cmo \
 	java/java_main.cmo
 KCMX = $(KCMO:.cmo=.cmx)
 

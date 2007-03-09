@@ -220,59 +220,6 @@ let term_coerce t1 t2 e =
 	  jc_tterm_loc = e.jc_tterm_loc }  
     | _ -> assert false
 
-(*
-let logic_bin_op loc (op : Jc_ast.pbin_op) t1 e1 t2 e2 =
-  match op with
-    | Bgt | Blt | Bge | Ble -> 
-	typing_error loc "comparison not allowed as a term (todo)"
-    | Beq | Bneq ->
-	let t =
-	  match t1,t2 with
-	    | JCTnative t1, JCTnative t2 ->
-		begin
-		  match (t1,t2) with
-		    | Tinteger,Tinteger -> Tinteger
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ -> assert false
-	in
-	JCTnative t,JCTTapp(eq_op op t,[e1;e2])
-    | Badd | Bsub ->
-	begin
-	  match (t1,t2) with
-	    | JCTnative nt1, JCTnative nt2 ->
-		begin
-		  match (nt1,nt2) with
-		    | Tinteger,Tinteger -> 
-			t1,JCTTapp(num_op op,[e1;e2])
-		    | _ -> assert false (* TODO *)
-		end
-	    | JCTpointer(st,a,b), JCTnative t2 ->
-		begin
-		  match t2 with
-		    | Tinteger -> 
-			JCTpointer(st,zero,minus_one), JCTTapp(shift,[e1;e2])
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ ->
-		typing_error loc "numeric types expected for + and -"
-	end 
-    | Bmul | Bdiv | Bmod ->
-	let t =
-	  match (t1,t2) with
-	    | JCTnative t1, JCTnative t2 ->
-		begin
-		  match (t1,t2) with
-		    | Tinteger,Tinteger -> Tinteger
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ ->
-		typing_error loc "numeric types expected for *,/ and %%"
-	in JCTnative t,JCTTapp(num_op op,[e1;e2])
-    | Bland | Blor -> assert false (* TODO *)
-    | Bimplies -> assert false
-    | Biff -> assert false
-*)
 
 let logic_bin_op t op =
   match t,op with
@@ -323,8 +270,9 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
     | Bmul | Bdiv | Bmod ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t,
-	  JCTTapp(logic_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	  (JCTnative t,
+	   JCTTapp(logic_bin_op t op,
+		   [term_coerce t1 t e1; term_coerce t2 t e2]))
 	else typing_error loc "numeric types expected for *, / and %%"
     | Bland | Blor -> 
 	let t=

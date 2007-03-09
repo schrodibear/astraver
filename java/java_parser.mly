@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.2 2007-03-06 13:51:40 marche Exp $
+$Id: java_parser.mly,v 1.3 2007-03-09 09:24:51 marche Exp $
 
 */
 
@@ -305,11 +305,13 @@ method_declaration:
 method_header:
 | modifiers_type_expr method_declarator throws_decl
     { let (a,b)=$1 in
-      { (* method_specification = None ; *)
+      { 
 	method_modifiers = a ;
 	method_return_type = b ;
 	method_declarator = $2 ;
-	method_throws = $3 } }
+	method_throws = $3 
+      } 
+    }
 ;
 
 method_declarator:
@@ -434,21 +436,21 @@ interface_member_declaration:
 
 base_type:
 | SHORT 
-    { "short" }
+    { Tshort }
 | BOOLEAN 
-    { "boolean" }
+    { Tboolean }
 | BYTE 
-    { "byte" }
+    { Tbyte }
 | CHAR 
-    { "char" }
+    { Tchar }
 | INT 
-    { "int" }
+    { Tint }
 | FLOAT 
-    { "float" }
+    { Tfloat }
 | LONG 
-    { "long" }
+    { Tlong }
 | DOUBLE 
-    { "double" }
+    { Tdouble }
 ;
 
 type_expr:

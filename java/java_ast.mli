@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.2 2007-03-06 13:51:40 marche Exp $
+$Id: java_ast.mli,v 1.3 2007-03-09 09:24:51 marche Exp $
 
 ***************************************************************************)
 
@@ -25,30 +25,34 @@ type modifiers = modifier list
 
 (*s type expressions *)
 
+type base_type =
+    | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
+	  (* native logic types *)
+    | Tinteger | Treal
+
 type type_expr = 
-  | Base_type of string
-  | Type_name of qualified_ident
-  | Array_type_expr of type_expr
-;;
+    | Base_type of base_type
+    | Type_name of qualified_ident
+    | Array_type_expr of type_expr
  
 (*s literals *)
 
 type literal =
-  | Integer of string
-  | Float of string
-  | Bool of bool
-  | String of string
-  | Char of string
-  | Null
+    | Integer of string
+    | Float of string
+    | Bool of bool
+    | String of string
+    | Char of string
+    | Null
 
 (*s expressions *)
 
-type quantifier = Forall | Exists;;
+type quantifier = Forall | Exists
 
 type variable_id =
-  | Simple_id of identifier
-  | Array_id of variable_id
-;;
+    | Simple_id of identifier
+    | Array_id of variable_id
+
 
 type incr_decr_op = Preincr | Predecr | Postincr | Postdecr 
 
@@ -145,49 +149,15 @@ type variable_declaration =
       variable_decls : variable_declarator list }
 
 
-(*s formal parameters *)
-
-type parameter =
-  | Simple_parameter of type_expr * identifier
-  | Array_parameter of parameter
-
-(*s KML annotations *)
-
-(*
-type kml_method_specification =
-  { kml_requires : pexpr;
-    (* TODO *)
-  }
-
-type kml_loop_annotation =
-    { kml_loop_invariant : pexpr;
-      kml_loop_assigns : pexpr list option; 
-      (*r None: everything, Some []: nothing *)
-      kml_loop_variant : pexpr;
-    }
-     
-type kml_declaration =
-  | Kml_invariant of pexpr
-
-type kml_specification =
-  | Kml_declaration of kml_declaration list
-  | Kml_method_specification of kml_method_specification
-  | Kml_loop_annotation of kml_loop_annotation
-  | Kml_assertion of pexpr
-  | Kml_axiom of identifier * pexpr
-  | Kml_logic_type of identifier
-      (*r todo: polymorphic logic types *)
-  | Kml_logic_reads of identifier * type_expr option * parameter list * pexpr list
-      (*r id, return type (None for Prop), params, reads *)
-  | Kml_logic_def of identifier * type_expr option * parameter list * pexpr
-      (*r id, return type (None for Prop), params, body *)
-*)
-
 (*s statements *)
 
 type switch_label =
   | Case of pexpr
   | Default
+
+type parameter =
+  | Simple_parameter of type_expr * identifier
+  | Array_parameter of parameter
 
 type pstatement =
   { java_pstatement_loc : Loc.position ;
@@ -214,11 +184,6 @@ and pstatement_node =
   | JPSassert of pexpr
   | JPSannot of Lexing.position * string
   | JPSloop_annot of pexpr * pexpr
-(*
-  | Kml_annot_statement of jml_annotation_statement
-  | Kml_ghost_var_decl of jml_declaration list
-  | Annotated of statement_specification * statement
-*)
 
 and block = pstatement list
 ;;
@@ -231,11 +196,11 @@ type method_declarator =
 ;;
 
 type method_declaration =
-    { (* method_specification : kml_method_specification option; *)
-      method_modifiers : modifiers ;
+    { method_modifiers : modifiers ;
       method_return_type : type_expr option ;
       method_declarator : method_declarator ;
-      method_throws : qualified_ident list }
+      method_throws : qualified_ident list ;
+    }
 ;;
 
 (*s constructor declarations *)
