@@ -232,7 +232,7 @@ language largely inspired by the Java Modeling Language~\cite{JML}.
 A significant part of ANSI C is supported, including pointer
 arithmetic and possible pointer aliasing.
 
-To make it clear, here is a possible specification for a function
+To illustrate, here is a possible specification for a function
 \texttt{math\_mod} computing the modulo:
 \begin{verbatim}
 /*@ requires 
@@ -258,7 +258,7 @@ expressing that the code is free of threats and fulfills the given
 specification. The verification conditions are then discharged using a
 general purpose theorem prover. A key feature of \caduceus\ is
 its independence with respect to the prover. It indeed supports a wide
-panel of existing provers, ranging from interactive proof assistants
+selection of existing provers, ranging from interactive proof assistants
 such as \coq~\cite{coq}, PVS~\cite{PVS} or
 \textsc{Isabelle/HOL}~\cite{Isabelle} to 
 automatic theorem provers such as 
@@ -309,7 +309,7 @@ with the following two declarations:
 //@ logic iset empty()
 //@ axiom empty_def : \forall int i; !in_(i,empty())
 \end{verbatim}
-Similarly, we introduce set inclusion (\texttt{included}), cardinal
+Similarly, we introduce set inclusion (\texttt{included}), cardinality
 (\texttt{card}), addition and removal
 of one element (\texttt{add} and 
 \texttt{remove}), set difference (\texttt{diff}), smallest element
@@ -339,13 +339,14 @@ This new axiomatization is 30 lines long. Again, it could be part of some
 \subsection{Termination}
 
 We now start the verification process itself by showing that the
-program terminates. This is some kind of a warmup before the
-correctness verification of Section~\ref{correctness}.
+program terminates. 
+% This is some kind of a warmup before the
+% correctness verification of Section~\ref{correctness}.
 
 \subsubsection{Termination of the \texttt{for} loop.}
 The termination of the \texttt{for} loop is easy to prove.
 Since we are removing elements from \texttt{e} one by one until it
-empties, the cardinal of \texttt{e} is the obvious variant for this
+becomes empty, the cardinal of \texttt{e} is the obvious variant for this
 loop. It is declared with the following annotation:
 \begin{verbatim}
     /*@ variant card(iset(e)) */
@@ -493,7 +494,7 @@ Finally we give \texttt{store\_solution} a specification:
   @*/
 void store_solution();
 \end{verbatim}
-It consists in a precondition which allows calling this function only when
+It consists of a precondition which allows calling this function only when
 \texttt{col} contains a valid solution, an \texttt{assigns} clause
 specifying that it only modifies \texttt{s} and the \texttt{s}-th row
 of \texttt{sol}, and a postcondition ensuring that \texttt{s} has been
@@ -515,7 +516,7 @@ following postcondition:
   @*/
 int queens(int n);
 \end{verbatim}
-Stated otherwise, an array is a solution if and only if it appears in
+Stated differently, an array is a solution if and only if it appears in
 \texttt{sol} when we are done, and \texttt{sol} is an
 array with no duplicates. To define the
 \texttt{sorted} predicate, we introduce a natural lexicographic order
@@ -537,7 +538,7 @@ to give \texttt{t} a specification and its loop an invariant.
 Fully annotated code is given in appendix. Here are the key properties
 stated in these annotations:
 \begin{itemize}
-\item The precondition of \texttt{t} requires that \texttt{col} must be a
+\item The precondition of \texttt{t} requires that \texttt{col} be a
   partial solution up to row $k$, and that \texttt{a},
   \texttt{b} and \texttt{c} are consistent with \texttt{col}, as
   explained in Section~\ref{unobf}.
@@ -625,7 +626,7 @@ $n$ is obviously limited by the size of machine integers, that is 32 if we
 assume a 32-bits architecture. If this limit is not really an issue is
 practice (the world record holding for $n=25$~\cite{nqueensrecord},
 all machines will be 64-bits before the limit $n=32$ is reached), 
-the program is actually performing unrelevant overflows as soon as
+the program is actually performing irrelevant overflows as soon as
 $n>16$ since \texttt{b} contains bits which will overflow
 due to the repetitive multiplications by 2. Thus it would not be
 possible to use the second model, unless we restrict ourselves to
