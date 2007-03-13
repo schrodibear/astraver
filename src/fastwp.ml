@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.9 2007-03-13 14:34:29 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.10 2007-03-13 15:28:43 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -214,7 +214,8 @@ and wp0 e s =
 	let s',q1,q23 = merge s1 s23 in
 	Format.eprintf "s' = %a@." Subst.print s';
 	pors [wpand ee1 q1; 
-	      wpands [ne1true;ee2;r2;q23]; wpands [ne1false;ee3;r3;q23]], s'
+	      wpands [ne1true;ee2;r2;q23]; 
+	      wpands [ne1false;ee3;r3;q23]], s'
       in
       ok, (ne, exns e ee)
   | Seq (e1, e2) ->

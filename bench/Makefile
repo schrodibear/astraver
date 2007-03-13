@@ -87,6 +87,14 @@ fastwp.ergo:
 	$(BWHY) --why -d -V --fast-wp test.mlw
 	$(BWHY) -no-prelude -tc test_why.why && ergo test_why.why
 
+FASTWPBENCH=po oldify opaque wpcalls
+fastwp.bench:
+	rm -f good/*_why.sx
+	for f in $(FASTWPBENCH) ; do \
+	  $(BWHY) --simplify --fast-wp good/$$f.mlw; \
+	done
+	dp -no-timings good/*_why.sx
+
 partial:
 	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic admit test.mlw
 	coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
