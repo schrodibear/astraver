@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.8 2007-03-02 15:20:08 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.9 2007-03-13 14:34:29 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -105,8 +105,12 @@ module Subst = struct
       Idmap.iter 
 	(fun x x' -> fprintf fmt "(%a->%a)" Ident.lprint x Ident.lprint x') m
     in
-    fprintf fmt "@[<hov 2>current=%a,@ sigma=%a@]" print_map s.current
-      print_map s.sigma
+    let print_keys fmt m =
+      Idmap.iter 
+	(fun x _ -> fprintf fmt "(%a)" Ident.lprint x) m
+    in
+    fprintf fmt "@[<hov 2>current=%a,@ sigma=%a,@ types=%a@]" 
+      print_map s.current print_map s.sigma print_keys s.types
 
 end
 open Subst
@@ -119,7 +123,15 @@ let idmap_union m1 m2 =
       else Idmap.add x2 v m1)
     m2 m1
 
+let all_quantifiers ((_,s),ee) =
+  let s =
+    List.fold_left (fun s (_,(_,sx)) -> idmap_union s sx.types) s.types ee 
+  in
+  let l = Idmap.fold (fun x pt acc -> (x, PureType pt) :: acc) s [] in
+  List.rev l
+
 let merge s1 s2 =
+  (* d = { x | s1(x) <> s2(x) } *)
   let d = 
     Idmap.fold 
       (fun x x1 d ->
@@ -214,7 +226,7 @@ and wp0 e s =
       let ok = wpand ok1 (wpimplies ne1void ok2) in
       let ne = wpand ne1void ne2 in
       let ee x = 
-	let ee1,sx1 = exn x ee1 s1 and ee2,sx2 = exn x ee2 s1 in
+	let ee1,sx1 = exn x ee1 s and ee2,sx2 = exn x ee2 s1 in
 	let s',r1,r2 = merge sx1 sx2 in
 	por (wpand ee1 r1) (wpands [ne1void; ee2; r2]), s'
       in
@@ -275,11 +287,12 @@ and wp0 e s =
       (* OK: forall bl. pl => ok(e)
 	 NE: forall bl. pl /\ ne(e, result) *)
       let s = Subst.frame e.info.t_env e.info.t_effect s in
-      let ok,((_,s'),_) = wp e s in
+      let ok,r = wp e s in
+      let qr = all_quantifiers r in
       let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) pl in
       let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
-      wpforalls q (wpimplies (wpands pl) ok),
-      ((wpforalls q (wpands (pl@[ok])), s'), [])
+      wpforalls (q @ qr) (wpimplies (wpands pl) ok),
+      ((Ptrue, s), [])
   | Assertion (al, e1) ->
       (* OK: al /\ ok(e)
 	 NE: al /\ ne(e,result) *)
@@ -375,7 +388,20 @@ and wp0 e s =
 
 let wp e =
   let s = Subst.frame e.info.t_env e.info.t_effect Subst.empty in
-  let ok,((_,s),_) = wp e s in
+  let ok,_ = wp e s in
+  ok
+(*
+  let ok,((_,s),ee) = wp e s in
+  Format.eprintf "final s = %a@." Subst.print s;
+  List.iter 
+    (fun (x,(_,sx)) -> Format.eprintf "final s(%a) = %a@." 
+      Ident.print x Subst.print sx) ee;
   let q = Idmap.fold (fun x pt q -> (x, PureType pt) :: q) s.types [] in
   wpforalls (List.rev q) ok
+*)
 
+(*
+Local Variables: 
+compile-command: "unset LANG; make -C .. byte"
+End: 
+*)
