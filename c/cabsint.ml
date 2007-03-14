@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.20 2007-02-05 13:08:25 marche Exp $ *)
+(* $Id: cabsint.ml,v 1.21 2007-03-14 17:01:05 moy Exp $ *)
 
 (* TO DO:
 
@@ -4031,6 +4031,8 @@ end = struct
 	  (* logic *) add_endedge spcnode end_node
       | None -> ()
     end;
+    (* clear all heap variables to avoid polluting real effects *)
+    Hashtbl.clear Ceffect.heap_vars;
     dnode,end_node
 
   let from_file file =
