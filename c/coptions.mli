@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.mli,v 1.30 2006-11-03 12:48:57 marche Exp $ i*)
+(*i $Id: coptions.mli,v 1.31 2007-03-14 18:21:54 moy Exp $ i*)
 
 (*s environment variables *)
 
@@ -51,6 +51,7 @@ val separate : bool
 val closed_program : bool
 val typing_predicates : bool
 val local_aliasing : bool
+val no_alloc_table : bool
 val arith_memory_model : bool
 val abstract_interp : bool
 val gen_invariant : bool

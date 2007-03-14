@@ -1,7 +1,7 @@
 
 (* axiomatization of a memory model in which:
 	- validity is checked based on arithmetic predicate
-	- allocation table is still used
+	- allocation table is useless 
 *)
 
 (* bitwise operations *)
@@ -26,10 +26,7 @@ parameter any_pointer: unit -> {} 'z pointer { true }
 (* pointer arithmetic *)
 
 type 'z addr
-type alloc_table
 type ('a, 'z) memory
-
-parameter alloc : alloc_table ref
 
 logic null : 'z pointer
 
@@ -37,9 +34,9 @@ logic base_addr: 'z pointer -> 'z addr
 logic offset: 'z pointer -> int
 logic shift: 'z pointer,int -> 'z pointer
 logic sub_pointer: 'z pointer, 'z pointer -> int
-(* [arrlen(a,p)] returns the array length of pointer [p], i.e. the number
+(* [arrlen(p)] returns the array length of pointer [p], i.e. the number
    of elements that can be accessed in p[0], p[1], etc. *)
-logic arrlen: alloc_table, 'z pointer -> int
+logic arrlen: 'z pointer -> int
 (* [strlen(m,p)] returns the string length of pointer [p] in memory [m],
    i.e. the number of non-null elements that can be accessed before 
    some null element (usually a byte). *)
@@ -64,18 +61,18 @@ parameter neq_pointer :
   p: 'z pointer -> q: 'z pointer -> {} bool { if result then p<>q else p=q }
 
 (* a pointer [p] is valid iff its array length is strictly positive *)
-predicate valid(a:alloc_table, p: 'z pointer) = 
-	arrlen(a,p) > 0
+predicate valid(p: 'z pointer) = 
+	arrlen(p) > 0
 
 (* an index [i] from a pointer [p] is valid iff [i] is strictly less than 
    its array length, and greater than 0 *)
-predicate valid_index(a:alloc_table, p: 'z pointer, i:int) =
-	0 <= i < arrlen(a,p)
+predicate valid_index(p: 'z pointer, i:int) =
+	0 <= i < arrlen(p)
 
 (* a range [i,j] from a pointer [p] is valid iff both integers are valid 
    indices, and form a range *)
-predicate valid_range(a:alloc_table, p: 'z pointer, i:int, j:int) =
-	0 <= i <= j < arrlen(a,p)
+predicate valid_range(p: 'z pointer, i:int, j:int) =
+	0 <= i <= j < arrlen(p)
 
 axiom offset_shift :
 (*   forall p: 'z pointer. forall i:int.  *)
@@ -122,21 +119,21 @@ axiom eq_offset_eq_shift :
 	offset(p1)+i = offset(p2)+j -> shift(p1,i) = shift(p2,j)
 
 axiom valid_index_valid_shift :
-  forall a:alloc_table. forall p:'z pointer. forall i:int. 
-  valid_index(a,p,i) -> valid(a,shift(p,i))
+  forall p:'z pointer. forall i:int. 
+  valid_index(p,i) -> valid(shift(p,i))
 
 (* redondant avec le predecent et le suivant, mais utile *)
 axiom valid_range_valid_shift :
-  forall a:alloc_table. forall p:'z pointer. forall i:int. forall j:int. forall k:int.
-  valid_range(a,p,i,j) -> i <= k <= j -> valid(a,shift(p,k))
+  forall p:'z pointer. forall i:int. forall j:int. forall k:int.
+  valid_range(p,i,j) -> i <= k <= j -> valid(shift(p,k))
 
 axiom valid_range_valid :
-  forall a:alloc_table. forall p:'z pointer. forall i:int. forall j:int. 
-  valid_range(a,p,i,j) -> i <= 0 <= j -> valid(a,p)
+  forall p:'z pointer. forall i:int. forall j:int. 
+  valid_range(p,i,j) -> i <= 0 <= j -> valid(p)
 
 axiom valid_range_valid_index :
-  forall a:alloc_table. forall p:'z pointer. forall i:int. forall j:int. forall k:int.
-  valid_range(a,p,i,j) -> i <= k <= j -> valid_index(a,p,k)
+  forall p:'z pointer. forall i:int. forall j:int. forall k:int.
+  valid_range(p,i,j) -> i <= k <= j -> valid_index(p,k)
 
 axiom sub_pointer_def :
   forall p1:'z pointer. forall p2:'z pointer.
@@ -167,33 +164,33 @@ parameter ge_pointer_ : p1:'z pointer -> p2:'z pointer ->
 (* pointer access *)
 logic acc: ('a,'z) memory, 'z pointer -> 'a
 parameter acc_ : m: ('a,'z) memory ref -> p:'z pointer -> 
-  { valid(alloc,p) }
-  'a reads alloc,m
+  { valid(p) }
+  'a reads m
   { result = acc(m,p) }
 parameter acc_offset : m: ('a,'z) memory ref -> p:'z pointer -> 
 	i : int -> n : int ->
   { 0 <= i < n }
-  'a reads alloc,m
+  'a reads m
   { result = acc(m,p) }
 parameter safe_acc_ : m: ('a,'z) memory ref -> p:'z pointer -> 
   { }
-  'a reads alloc,m
+  'a reads m
   { result = acc(m,p) }
 
 (* pointer update *)
 logic upd: ('a,'z) memory, 'z pointer, 'a -> ('a,'z) memory
 parameter upd_ : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> 
-  { valid(alloc,p) }
-  unit reads alloc,m writes m
+  { valid(p) }
+  unit reads m writes m
   { m = upd(m@,p,v) }
 parameter upd_offset : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> i:int ->
 	size:int -> 
   { 0<= i < size }
-  unit reads alloc,m writes m
+  unit reads m writes m
   { m = upd(m@,p,v) }
 parameter safe_upd_ : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> 
   { }
-  unit reads alloc,m writes m
+  unit reads m writes m
   { m = upd(m@,p,v) }
 
 axiom acc_upd : 
@@ -212,9 +209,8 @@ axiom acc_upd_neq :
 
 (* axiomatic definition of [arrlen] *)
 axiom arrlen_shift :
-  forall a:alloc_table. forall p: 'z pointer. 
-  forall i:int [arrlen(a,shift(p,i))].
-    i >= 0 -> arrlen(a,shift(p,i)) = arrlen(a,p)-i
+  forall p: 'z pointer. forall i:int [arrlen(shift(p,i))].
+  i >= 0 -> arrlen(shift(p,i)) = arrlen(p)-i
 
 (* axiomatic definition of [strlen] *)
 axiom strlen_create :
@@ -261,9 +257,8 @@ axiom strlen_update_zero :
 
 (* axiom linking [arrlen] and [strlen] *)
 axiom arrlen_strlen :
-  forall a:alloc_table. forall m : ('a,'z) memory. 
-  forall p: 'z pointer [strlen(m,p)]. 
-    strlen(m,p) >= 0 -> strlen(m,p) < arrlen(a,p)
+  forall m : ('a,'z) memory. forall p: 'z pointer [strlen(m,p)]. 
+    strlen(m,p) >= 0 -> strlen(m,p) < arrlen(p)
 
 (* axioms only to help automatic proof *)
 axiom full_separated_strlen_upd :
@@ -306,10 +301,9 @@ logic pset_union : 'z pset, 'z pset -> 'z pset
 
 logic not_in_pset : 'z pointer, 'z pset -> prop (* not_in_pset(p,s) = p is not in s *)
 
-predicate not_assigns 
-	(a:alloc_table,m1:('a,'z) memory,m2:('a,'z) memory,l:'z pset) =
+predicate not_assigns (m1:('a,'z) memory,m2:('a,'z) memory,l:'z pset) =
  forall p:'z pointer.
-    valid(a,p) -> not_in_pset(p,l) -> acc(m2,p)=acc(m1,p)
+    valid(p) -> not_in_pset(p,l) -> acc(m2,p)=acc(m1,p)
 
 axiom pset_empty_intro :
   forall p:'z pointer. not_in_pset(p, pset_empty)
@@ -475,44 +469,44 @@ axiom pset_acc_range_right_elim :
 (* lemmas on not_assigns *)
 
 axiom not_assigns_trans :
-  forall a:alloc_table. forall l:'z pset. 
+  forall l:'z pset. 
   forall m1:('a,'z) memory. forall m2:('a,'z) memory. forall m3: ('a,'z) memory.
-  not_assigns(a,m1,m2,l) -> not_assigns(a,m2,m3,l) -> not_assigns(a,m1,m3,l)
+  not_assigns(m1,m2,l) -> not_assigns(m2,m3,l) -> not_assigns(m1,m3,l)
 
 axiom not_assigns_refl :
-  forall a:alloc_table. forall l:'z pset. 
-  forall m:('a,'z) memory. not_assigns(a,m,m,l)
+  forall l:'z pset. 
+  forall m:('a,'z) memory. not_assigns(m,m,l)
 
 (* validity *)
 
 predicate valid_acc(m1: ('y pointer,'z) memory) =
-	forall p : 'z pointer. forall a : alloc_table.
-	valid(a,p) -> valid(a,acc(m1, p)) 
+	forall p : 'z pointer.
+	valid(p) -> valid(acc(m1, p)) 
 
 predicate valid_acc_range (m1: ('y pointer,'z) memory, size : int) =
-	forall p : 'z pointer. forall a : alloc_table.
-	valid(a,p) -> valid_range (a,acc (m1, p), 0, size-1) 
+	forall p : 'z pointer.
+	valid(p) -> valid_range (acc (m1, p), 0, size-1) 
 
 axiom valid_acc_range_valid : 
   forall m1: ('y pointer,'z) memory.
-  forall size : int. forall p : 'z pointer. forall a : alloc_table.
-  valid_acc_range(m1,size) -> valid(a,p) -> valid(a, acc(m1,p))
+  forall size : int. forall p : 'z pointer.
+  valid_acc_range(m1,size) -> valid(p) -> valid( acc(m1,p))
 
 (* separation *)
 
 predicate separation1(m1:('y pointer,'z) memory, m2:('y pointer,'z) memory) =
-  forall p:'z pointer. forall a : alloc_table.
-    valid(a, p) -> base_addr(acc(m1, p)) <> base_addr(acc(m2, p))
+  forall p:'z pointer.
+    valid( p) -> base_addr(acc(m1, p)) <> base_addr(acc(m2, p))
 
 predicate separation1_range1(m1:('y pointer,'z) memory,
 	m2:('y pointer,'z) memory, size : int) =
-	forall p : 'z pointer.forall a : alloc_table.
-	valid(a,p) -> forall i : int . 0 <= i < size ->
+	forall p : 'z pointer.
+	valid(p) -> forall i : int . 0 <= i < size ->
 	base_addr(acc(m1,(shift (p,i)))) <> base_addr(acc(m2, p))	
 
 predicate separation1_range(m:('y pointer,'z) memory, size:int) =
-	forall p : 'z pointer.forall a : alloc_table.
-	valid(a,p) -> forall i1 : int. forall i2 : int. 
+	forall p : 'z pointer.
+	valid(p) -> forall i1 : int. forall i2 : int. 
 	0 <= i1 < size -> 0 <= i2 < size -> i1 <> i2 -> 
 	base_addr(acc(m,(shift (p,i1)))) <> base_addr(acc(m,shift (p,i2)))  
 
@@ -523,119 +517,26 @@ predicate separation2(m1:('y pointer,'z) memory, m2:('y pointer,'z) memory) =
 	
 predicate separation2_range1(m1:('y pointer,'z) memory,
 	m2:('y pointer,'z) memory, size : int) =
-	forall p : 'z pointer. forall q : 'z pointer.forall a : alloc_table.
+	forall p : 'z pointer. forall q : 'z pointer.
 	forall i : int . 0 <= i < size ->
 	base_addr(acc(m1,(shift (p,i)))) <> base_addr(acc(m2, q))
 
 (* memory allocation *)
 
-logic on_heap : alloc_table, 'z pointer -> prop
-logic on_stack : alloc_table, 'z pointer -> prop
-
-(* fresh(a,p) means that the memory block of p is not allocated in a *)
-logic fresh : alloc_table,'z pointer -> prop
-
-axiom fresh_not_valid :
-  forall a:alloc_table. forall p:'z pointer. 
-    fresh(a,p) -> not(valid(a,p))
-
-axiom fresh_not_valid_shift :
-  forall a:alloc_table. forall p:'z pointer. 
-    fresh(a,p) -> forall i:int. not(valid(a,shift(p,i)))
-
-axiom fresh_full_separated :
-  forall a:alloc_table. forall p:'z pointer. forall q:'z pointer. 
-    fresh(a,p) -> valid(a,q) -> full_separated(p,q)
-
-(***
-predicate alloc_heap(a1 : alloc_table, a2 : alloc_table) =
-  forall p:'z pointer. 
-    arrlen(a1,p) > 0 -> arrlen(a1,p) = arrlen(a2,p)
-
-axiom alloc_heap_valid : 
-  forall a1:alloc_table. forall a2:alloc_table.
-    alloc_heap(a1,a2) -> forall p:'z pointer. valid(a1,p) -> valid(a2,p)
-
-axiom alloc_heap_valid_range : 
-  forall a1:alloc_table. forall a2:alloc_table.
-    alloc_heap(a1,a2) -> 
-    forall p:'z pointer. forall i:int. forall j:int.
-      valid_range(a1,p,i,j) -> valid_range(a2,p,i,j)
-***)
-
-logic alloc_extends : alloc_table, alloc_table -> prop
-
-axiom alloc_extends_valid : 
-  forall a1:alloc_table. forall a2:alloc_table.
-    alloc_extends(a1,a2) -> forall q:'y pointer. valid(a1,q) -> valid(a2,q)
-
-axiom alloc_extends_valid_index : 
-  forall a1:alloc_table. forall a2:alloc_table.
-    alloc_extends(a1,a2) -> 
-    forall q:'y pointer. forall i:int.
-      valid_index(a1,q,i) -> valid_index(a2,q,i)
-
-axiom alloc_extends_valid_range : 
-  forall a1:alloc_table. forall a2:alloc_table.
-    alloc_extends(a1,a2) -> 
-    forall q:'y pointer. forall i:int. forall j:int.
-      valid_range(a1,q,i,j) -> valid_range(a2,q,i,j)
-
-axiom alloc_extends_refl : forall a:alloc_table. alloc_extends(a,a) 
-
-axiom alloc_extends_trans : 
-  forall a1,a2,a3:alloc_table [alloc_extends(a1,a2), alloc_extends(a2,a3)]. 
-    alloc_extends(a1,a2) -> 
-    alloc_extends(a2,a3) -> 
-    alloc_extends(a1,a3) 
-
-(*
-logic free_heap : 'z pointer, alloc_table, alloc_table -> prop
-
-parameter free_block : p:'z pointer -> 
-	{ valid(alloc,p) and offset(p) = 0 and on_heap(alloc,p) }
-	unit writes alloc
-	{ free_heap(p, alloc@, alloc) }
-*)
-
-(*
-
-  (free_stack(a1,a2,a3)) specifies the relations between states of allocation table before and after a function body is executed :
-
-  a1 : alloc_table at beginning
-  a2 : alloc_table before return: some allocations occured in (a1) both 
-       on heap and on stack 
-  a3 : alloc_table after return: allocations on stack between (a1) and 
-       (a2) are not valid anymore
-
-*)
-
-logic free_stack : alloc_table, alloc_table, alloc_table -> prop
-
-axiom free_stack_heap : 
-  forall a1 : alloc_table. forall a2 : alloc_table. forall a3 : alloc_table. 
-    free_stack(a1,a2,a3) -> 
-      (forall p : 'z pointer. valid(a2, p) -> on_heap(a2,p) -> valid(a3, p))
-
-axiom free_stack_stack : 
-  forall a1 : alloc_table. forall a2 : alloc_table. forall a3 : alloc_table. 
-     free_stack(a1,a2,a3) -> 
-      (forall p : 'z pointer. valid(a1, p) -> on_stack(a1,p) -> valid(a3, p))
+logic on_heap : 'z pointer -> prop
+logic on_stack : 'z pointer -> prop
 
 parameter alloca_parameter : n:int -> 
-	{ n >= 0 }
-	'z pointer writes alloc
-	{ valid(alloc,result) and offset(result) = 0 and 	
-	  arrlen(alloc,result) = n and valid_range(alloc,result,0,n-1)
-	  and fresh(alloc@,result) and on_stack(alloc,result) 
-	  and alloc_extends (alloc@,alloc) }
+	{ n >= 1 }
+	'z pointer
+	{ valid(result) and offset(result) = 0 and 	
+	  arrlen(result) = n and valid_range(result,0,n-1) }
 
 parameter malloc_parameter : n:int -> 
-	{ n >= 0 }
-	'z pointer writes alloc
-	{ valid(alloc,result) and offset(result) = 0 and 	
-	  arrlen(alloc,result) = n and valid_range(alloc,result,0,n-1)
-	  and fresh(alloc@,result) and on_heap(alloc,result)
-	  and alloc_extends (alloc@,alloc) }
+	{ n >= 1 }
+	'z pointer
+	{ valid(result) and offset(result) = 0 and 	
+	  arrlen(result) = n and valid_range(result,0,n-1) }
+
 
 

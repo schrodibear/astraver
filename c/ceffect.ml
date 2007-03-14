@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.158 2007-01-19 12:44:43 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.159 2007-03-14 18:21:54 moy Exp $ i*)
 
 open Cast
 open Cnorm
@@ -209,8 +209,8 @@ let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
 (*let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }*)
 
 let reads_add_alloc e = 
-  (* [alloc] not used with the arithmetic memory model *)
-  assert (not arith_memory_model);
+  (* [alloc] not used when the alloc table is dropped *)
+  assert (not no_alloc_table);
   { e with reads_var = add_alloc e.reads_var }
 
 let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
@@ -227,8 +227,8 @@ let assigns_add_field_var v ty e =
       assigns = add_field_var v ty e.assigns }
 
 let assigns_add_alloc e = 
-  (* [alloc] should not be used with the arithmetic memory model *)
-  assert (not arith_memory_model);
+  (* [alloc] should not be used when the alloc table is dropped *)
+  assert (not no_alloc_table);
   { e with reads_var = add_alloc e.reads_var;
       assigns_var = add_alloc e.assigns_var }
 
@@ -242,9 +242,9 @@ let rec term t = match t.nterm_node with
   | NTarrow (t1,z,f) -> 
       let z = repr z in
       assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
-      (* [alloc] not used with the arithmetic memory model *)
       let ef = reads_add_field_var f (Pointer z) (term t1) in
-      ef (* if arith_memory_model then ef else reads_add_alloc ef *)
+      (* [alloc] not used when the alloc table is dropped *)
+      if no_alloc_table then ef else reads_add_alloc ef
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uplus, t) -> term t
@@ -260,7 +260,10 @@ let rec term t = match t.nterm_node with
       (* [block_length] should not be used with the arithmetic memory model *)
       assert (not arith_memory_model);
       reads_add_alloc (term t)
-  | NTarrlen t -> term t
+  | NTarrlen t -> 
+      let ef = term t in
+      (* [alloc] not used when the alloc table is dropped *)
+      if no_alloc_table then ef else reads_add_alloc ef
   | NTstrlen (t1,zone,var) ->
       (* effect of [strlen(p)] is to read the memory pointed-to by [p] *)
       let zone = repr zone in
@@ -299,8 +302,8 @@ let rec term t = match t.nterm_node with
 	(reads_add_field_var f (Pointer z)
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
       in
-      (* [alloc] not used with the arithmetic memory model *)
-      if arith_memory_model then ef else reads_add_alloc ef
+      (* [alloc] not used when the alloc table is dropped *)
+      if no_alloc_table then ef else reads_add_alloc ef
 
 and term_option = function None -> ef_empty | Some t -> term t
 
@@ -321,8 +324,8 @@ let rec assign_location t = match t.nterm_node with
       let ef = 
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
       in
-      (* [alloc] not used with the arithmetic memory model *)
-      if arith_memory_model then ef else reads_add_alloc ef
+      (* [alloc] not used when the alloc table is dropped *)
+      if no_alloc_table then ef else reads_add_alloc ef
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  | NTunop (Uplus, _)    | NTunop (Unot, _)  
@@ -350,8 +353,8 @@ let rec assign_location t = match t.nterm_node with
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1)
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
       in
-      (* [alloc] not used with the arithmetic memory model *)
-      if arith_memory_model then ef else reads_add_alloc ef
+      (* [alloc] not used when the alloc table is dropped *)
+      if no_alloc_table then ef else reads_add_alloc ef
 
 (***let assign_location loc =
   match loc with
@@ -410,33 +413,29 @@ let rec predicate p =
     | NPforall (_, p) -> predicate p	
     | NPexists (_, p) -> predicate p
     | NPfresh t -> 
-	(* [fresh] should not be used with the arithmetic memory model *)
-	assert (not arith_memory_model);
+	(* [fresh] should not be used when the alloc table is dropped *)
+	assert (not no_alloc_table);
 	assigns_add_alloc (term t)
     | NPvalid t -> 
-	(* [alloc] not used with the arithmetic memory model *)
-	if arith_memory_model then term t else reads_add_alloc (term t)
+	(* [alloc] not used when the alloc table is dropped *)
+	if no_alloc_table then term t else reads_add_alloc (term t)
     | NPvalid_index (t1,t2) ->
 	let ef = ef_union (term t1) (term t2) in
-	(* [alloc] not used with the arithmetic memory model *)
-	if arith_memory_model then ef else reads_add_alloc ef
+	(* [alloc] not used when the alloc table is dropped *)
+	if no_alloc_table then ef else reads_add_alloc ef
     | NPvalid_range (t1,t2, t3) -> 
 	let ef = ef_union (term t1) (ef_union (term t2) (term t3)) in
-	(* [alloc] not used with the arithmetic memory model *)
-	if arith_memory_model then ef else reads_add_alloc ef
+	(* [alloc] not used when the alloc table is dropped *)
+	if no_alloc_table then ef else reads_add_alloc ef
     | NPold p -> predicate p
     | NPat (p,_) -> predicate p
     | NPnamed (_, p) -> predicate p
     | NPseparated (t1,t2) | NPfull_separated (t1,t2) -> 
-	let ef = ef_union (term t1) (term t2) in
-	(* [alloc] not used with the arithmetic memory model *)
-	if arith_memory_model then ef else reads_add_alloc ef
+	ef_union (term t1) (term t2)
     | NPbound_separated (t1,t2,t3,t4) -> 
 	let ef1 = ef_union (term t1) (term t2) in 
 	let ef2 = ef_union (term t3) (term t4) in
-	let ef = ef_union ef1 ef2 in
-	(* [alloc] not used with the arithmetic memory model *)
-	if arith_memory_model then ef else reads_add_alloc ef
+	ef_union ef1 ef2
 
 (* table for weak invariants *)
 let weak_invariants = Hashtbl.create 97
@@ -548,8 +547,8 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
       let ef = 
 	reads_add_field_var f (Pointer z) (expr ~with_local e1) in
       let ef = ef_union ef (reads_under_pointer e1) in
-      (* [alloc] not used with the arithmetic memory model *)
-      if arith_memory_model then ef else reads_add_alloc ef
+      (* [alloc] not used when the alloc table is dropped *)
+      if no_alloc_table then ef else reads_add_alloc ef
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
       ef_union (expr ~with_local e1) 
 	(expr ~with_local e2)
@@ -607,7 +606,7 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
   | NEcast (_, e) ->
       expr ~with_local e
   | NEmalloc (_, e) ->
-      if arith_memory_model then
+      if no_alloc_table then
 	expr ~with_local e
       else
 	assigns_add_alloc (expr ~with_local e)
@@ -625,8 +624,8 @@ and assign_expr ?(with_local=false) e = match e.nexpr_node with
       let ef = assigns_add_field_var f (type_why e1)
 	  (expr ~with_local e1) in
       let ef = ef_union ef (assign_under_pointer e1) in
-      (* [alloc] not used with the arithmetic memory model *)
-      if arith_memory_model then ef else reads_add_alloc ef
+      (* [alloc] not used when the alloc table is dropped *)
+      if no_alloc_table then ef else reads_add_alloc ef
   | NEcast (_, e1) ->
       assign_expr ~with_local e1
   | _ -> 

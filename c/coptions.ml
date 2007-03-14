@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.38 2006-11-03 12:48:57 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.39 2007-03-14 18:21:54 moy Exp $ i*)
 
 open Format
 
@@ -83,6 +83,7 @@ let typing_predicates = ref false
 let floats = ref true
 let local_aliasing = ref false
 let arith_memory_model = ref false
+let no_alloc_table = ref false
 let abstract_interp = ref false
 let gen_invariant = ref false
 let absint_as_proof = ref false
@@ -250,6 +251,7 @@ let closed_program = !closed_program
 let typing_predicates = !typing_predicates
 let local_aliasing = !local_aliasing
 let arith_memory_model = !arith_memory_model
+let no_alloc_table = !no_alloc_table
 let abstract_interp = !abstract_interp
 let gen_invariant = !gen_invariant
 let absint_as_proof = !absint_as_proof

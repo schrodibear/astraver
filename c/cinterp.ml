@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.230 2007-02-28 10:48:57 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.231 2007-03-14 18:21:54 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -249,7 +249,10 @@ let rec interp_term label old_label t =
 	assert (not arith_memory_model);
 	LApp("block_length",[interp_var label "alloc"; f t])
     | NTarrlen t -> 
-	LApp("arrlen",[f t])
+	if no_alloc_table then
+	  LApp("arrlen",[f t])
+	else
+	  LApp("arrlen",[interp_var label "alloc"; f t])
     | NTstrlen (t,zone,var) -> 
 	(* [strlen(p)] depends on the value pointed to by [p].
 	   Pass an additional parameter for the memory. *)
@@ -464,16 +467,16 @@ let rec interp_predicate label old_label p =
     | NPat (p, l) -> 
 	interp_predicate (Some l) old_label p
     | NPfresh (t) ->
-	(* [fresh] should not be used with the arithmetic memory model *)
-	assert (not arith_memory_model);
+	(* [fresh] should not be used when the alloc table is dropped *)
+	assert (not no_alloc_table);
 	LPred("fresh",[interp_var (Some old_label) "alloc"; ft t])
     | NPvalid (t) ->
-	if arith_memory_model then
+	if no_alloc_table then
 	  LPred("valid",[ft t])
 	else
 	  LPred("valid",[interp_var label "alloc"; ft t])
     | NPvalid_index (t,a) ->
-	if arith_memory_model then
+	if no_alloc_table then
 	  LPred("valid_index",[ft t;ft a])
 	else
 	  LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
@@ -481,12 +484,12 @@ let rec interp_predicate label old_label p =
 	begin 
 	  match a.nterm_node , b.nterm_node with
 	    | NTconstant (IntConstant "0"), NTconstant (IntConstant "0") -> 
-		if arith_memory_model then
+		if no_alloc_table then
 		  LPred("valid",[ft t])
 		else
 		  LPred("valid",[interp_var label "alloc"; ft t])
 	    | _ ->
-		if arith_memory_model then
+		if no_alloc_table then
 		  LPred("valid_range",[ft t;ft a;ft b])
 		else
 		  LPred("valid_range",
@@ -495,21 +498,11 @@ let rec interp_predicate label old_label p =
     | NPnamed (n, p) ->
 	LNamed (n, f p)
     | NPseparated (t1,t2) ->
-	if arith_memory_model then
-	  LPred("separated",[ft t1;ft t2])
-	else
-	  LPred("separated",[interp_var label "alloc"; ft t1;ft t2])
+	LPred("separated",[ft t1;ft t2])
     | NPfull_separated (t1,t2) ->
-	if arith_memory_model then
-	  LPred("full_separated",[ft t1;ft t2])
-	else
-	  LPred("full_separated",[interp_var label "alloc"; ft t1;ft t2])
+	LPred("full_separated",[ft t1;ft t2])
     | NPbound_separated (t1,t2,t3,t4) ->
-	if arith_memory_model then
-	  LPred("bound_separated",[ft t1;ft t2;ft t3;ft t4])
-	else
-	  LPred("bound_separated",
-		[interp_var label "alloc";ft t1;ft t2;ft t3;ft t4])
+	LPred("bound_separated",[ft t1;ft t2;ft t3;ft t4])
 
 let interp_predicate label old_label p = 
   let w = interp_predicate label old_label p in
@@ -1424,7 +1417,7 @@ let interp_assigns before assigns = function
       StringMap.fold
 	(fun v p acc -> match p with
 	   | Memory p ->
-	       if arith_memory_model then
+	       if no_alloc_table then
 		 make_and acc
 		   (LPred("not_assigns",
 			  [LVarAtLabel(v,before);
@@ -1576,13 +1569,13 @@ let strong_invariants_for hvs =
     pred
 
 let alloc_extends () = 
-  (* [alloc_extends] should not be used with the arithmetic memory model *)
-  assert (not arith_memory_model);
+  (* [alloc_extends] should not be used when the alloc table is dropped *)
+  assert (not no_alloc_table);
   LPred ("alloc_extends", [LVar "alloc@"; LVar "alloc"])
 
 let alloc_extends_at label = 
-  (* [alloc_extends] should not be used with the arithmetic memory model *)
-  assert (not arith_memory_model);
+  (* [alloc_extends] should not be used when the alloc table is dropped *)
+  assert (not no_alloc_table);
   LPred ("alloc_extends", [LVarAtLabel ("alloc", label); LVar "alloc"])
 
 let interp_spec add_inv effect s =
