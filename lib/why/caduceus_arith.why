@@ -36,9 +36,9 @@ logic arrlen: 'z pointer -> int
    i.e. the number of non-null elements that can be accessed before 
    some null element (usually a byte). *)
 logic strlen: ('a, 'z) memory, 'z pointer -> int
-(* [separated(p,q)] is true when memory zones for pointers [p] and [q] are
+(* [full_separated(p,q)] is true when memory zones for pointers [p] and [q] are
    disjoint. *)
-predicate separated(p:'z pointer,q:'z pointer) =
+predicate full_separated(p:'z pointer,q:'z pointer) =
   base_addr(p) <> base_addr(q)
 
 predicate lt_pointer(p1:'z pointer,p2: 'z pointer) =
@@ -256,10 +256,10 @@ axiom arrlen_strlen :
     strlen(m,p) >= 0 -> strlen(m,p) < arrlen(p)
 
 (* axioms only to help automatic proof *)
-axiom separated_strlen_upd :
+axiom full_separated_strlen_upd :
   forall m : ('a,'z) memory. forall p: 'z pointer. forall q : 'z pointer.
     forall v:'z. forall i:int [strlen(upd(m,shift(p,i),v),q)]. 
-      separated(p,q) -> strlen(upd(m,shift(p,i),v),q) = strlen(m,q)
+      full_separated(p,q) -> strlen(upd(m,shift(p,i),v),q) = strlen(m,q)
 
 (* exceptions *)
 exception Break
