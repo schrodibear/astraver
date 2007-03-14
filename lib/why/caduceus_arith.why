@@ -47,7 +47,7 @@ logic strlen: ('a, 'z) memory, 'z pointer -> int
 (* [full_separated(p,q)] is true when memory zones for pointers [p] and [q] are
    disjoint. *)
 predicate full_separated(p:'z pointer,q:'z pointer) =
-  base_addr(p) <> base_addr(q)
+  p = null or q = null or base_addr(p) <> base_addr(q)
 
 predicate lt_pointer(p1:'z pointer,p2: 'z pointer) =
   base_addr(p1) = base_addr(p2) and offset(p1) < offset(p2)
@@ -568,6 +568,11 @@ logic alloc_extends : alloc_table, alloc_table -> prop
 axiom alloc_extends_valid : 
   forall a1:alloc_table. forall a2:alloc_table.
     alloc_extends(a1,a2) -> forall q:'y pointer. valid(a1,q) -> valid(a2,q)
+
+axiom alloc_extends_arrlen : 
+  forall a1:alloc_table. forall a2:alloc_table.
+    alloc_extends(a1,a2) -> forall q:'y pointer. 
+      valid(a1,q) -> arrlen(a2,q) = arrlen(a1,q)
 
 axiom alloc_extends_valid_index : 
   forall a1:alloc_table. forall a2:alloc_table.
