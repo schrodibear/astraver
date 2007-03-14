@@ -1,3 +1,4 @@
+
 typedef unsigned int size_t;
 
 // 7.21.2.1: memcpy
@@ -38,9 +39,11 @@ char* strncpy(char *s1, const char *s2, size_t n) {
 
 // 7.21.3.1: strcat
 
+/*@ requires \arrlen(s1) > \strlen(s1) + \strlen(s2) */
 char *strcat (char *s1, const char *s2) {
   char *r = s1;
-  while (*s1) s1++;
+  /*@ invariant \arrlen(r) > \strlen(r) + \strlen(s2) */
+  while (*s1++) ;
   strcpy(s1,s2);
   return r;
 }
@@ -49,9 +52,10 @@ char *strcat (char *s1, const char *s2) {
 
 char *strncat (char *s1, const char *s2, size_t n) {
   char *r = s1;
-  while (*s1) s1++;
-  while ((n-- > 0) && (*s1++ = *s2++)) ;
-  if (n >= 0) *s1 = 0;
+  while (*s1++) ;
+  /*@ invariant s1 - \old(s1) == \strlen(\old(s1)) + s2 - \old(s2) */
+   while ((n-- > 0) && (*s1++ = *s2++)) ;
+  if (n > 0) *s1 = 0;
   return r;
 }
 
@@ -87,7 +91,7 @@ int strcoll (const char *s1, const char *s2) {
 
 int strncmp (const char *s1, const char *s2, size_t n) {
   int c = 0;
-  while (*s1 && *s2 && (n-- > 0)) {
+  while (*s1 && *s2 && n-- > 0) {
     c = *s1++ - *s2++;
     if (c != 0) return c;
   }
@@ -98,7 +102,7 @@ int strncmp (const char *s1, const char *s2, size_t n) {
 // 7.21.4.4: strxfrm
 
 size_t strxfrm (char *s1, const char *s2, size_t n) {
-  size_t n1 = 0;
+  size_t n1;
   while (*s2) {
     if (n-- > 0) *s1++ = *s2;
     s2++; n1++;
@@ -149,7 +153,6 @@ char *strrchr(const char *s, char c) {
   while (*s) {
     if (*s++ == c) r = s-1;
   }
-  if (c == 0) r = s;
   return r;
 }
 
@@ -161,24 +164,14 @@ size_t strspn (const char *s1, const char *s2) {
   return n;
 }
 
-// 7.21.5.7: strstr
-
-char *strstr (const char *s1, const char *s2) {
-  if (*s2 == 0) return s1;
-  while (*s1) { 
-    const char *rs1 = s1;
-    const char *rs2 = s2;
-    while (*rs1 && *rs2 && (*rs1++ == *rs2)) rs2++;
-    if (*rs2 == 0) return s1;
-    s1++;
-  }
-  return 0;
-}
-
 // 7.21.5.8: strtok
 
 static char *tok;
 
+/*@ requires (s1 != 0 => \strlen(s1) >= 0)
+  @       && (s1 == 0 => \strlen(tok) >= 0)
+  @       && \strlen(s2) >= 0
+*/
 char *strtok (char *s1, const char *s2) {
   char *r = 0;
   size_t n;
@@ -187,7 +180,6 @@ char *strtok (char *s1, const char *s2) {
   if ((n = strcspn(s1,s2)) > 0) {
     r = s1;
     tok = s1 + n;
-    if (*tok != 0) *tok++ = 0;
   }
   return r;
 }
@@ -202,15 +194,6 @@ char *memset (char *s, char c, size_t n) {
 
 // 7.21.6.2: strerror
 
-static char errbuf[1024];
-
-extern char** errmsg;
-
-char *strerror (int errnum) {
-  strcpy(errbuf,errmsg[errnum-1]);
-  return errbuf;
-}
-
 // 7.21.6.3: strlen
 
 size_t strlen(const char *s) {
@@ -218,3 +201,21 @@ size_t strlen(const char *s) {
   while (*s++) ++n;
   return n;
 }
+
+// 7.21.5.7: strstr
+
+char *strstr (const char *s1, const char *s2) {
+  size_t n = strlen(s2);
+  int r = 0;
+  while (*s1 && ((r = strncmp(s1,s2,n)) != 0)) ++s1;
+  if (r != 0) return s1;
+  return 0;
+}
+
+
+/*
+  (* Local Variables: *)
+  (* compile-command: "caduceus -print-norm --loc-alias --arith-mem --abs-int -d string.c" *)
+  (* End: *)
+*/
+
