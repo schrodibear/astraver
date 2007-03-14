@@ -227,12 +227,12 @@ axiom strlen_zero :
 axiom strlen_not_zero :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
   forall i:int [strlen(m,p),acc(m,shift(p,i))]. 
-    i <= strlen(m,p) and acc(m,shift(p,i)) <> 0 -> i < strlen(m,p)
+    0 <= i <= strlen(m,p) and acc(m,shift(p,i)) <> 0 -> i < strlen(m,p)
 
 axiom strlen_shift :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
   forall i:int [strlen(m,shift(p,i))].
-  0 <= i <= strlen(m,p) -> strlen(m,shift(p,i)) = strlen(m,p)-i
+  0 <= i -> strlen(m,shift(p,i)) = strlen(m,p)-i
 
 axiom strlen_update_before :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
