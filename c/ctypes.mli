@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctypes.mli,v 1.17 2006-11-27 15:46:34 hubert Exp $ i*)
+(*i $Id: ctypes.mli,v 1.18 2007-03-16 09:18:37 moy Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -83,3 +83,4 @@ val pop : unit -> unit
 
 val ctype : Format.formatter -> ctype -> unit
 
+val is_pointer : ctype -> bool

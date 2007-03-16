@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctypes.ml,v 1.22 2006-11-27 15:46:34 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.23 2007-03-16 09:18:37 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -123,3 +123,8 @@ and ctype_node fmt = function
   | Tunion s -> fprintf fmt "union %s" s
   | Tenum s -> fprintf fmt "enum %s" s
   | Tfun _ -> fprintf fmt "<fun>"
+
+let is_pointer ty = 
+  match ty.ctype_node with
+    | Tarray _ | Tpointer _ -> true
+    | _ -> false

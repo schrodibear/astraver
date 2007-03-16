@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.231 2007-03-14 18:21:54 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.232 2007-03-16 09:18:37 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -2150,6 +2150,48 @@ let heap_var_unique v =
   ZoneSet.fold (fun (z,s,_) l -> zoned_name s (Pointer z)::l) v []
   
 let interp_function_spec id sp ty pl =
+  (* add to precondition the validity or nullity of pointer arguments*)
+  let sp = 
+    if Coptions.gen_invariant then
+      List.fold_right 
+	(fun p s -> 
+	   if Ctypes.is_pointer p.var_type then
+	     let pterm = {
+	       nterm_node = NTvar p; 
+	       nterm_loc = Loc.dummy_position;
+	       nterm_type = p.var_type; }
+	     in
+	     let valid = {
+	       npred_node = NPvalid pterm;
+	       npred_loc = Loc.dummy_position; }
+	     in
+	     let zeroterm = { 
+	       nterm_node = NTconstant (IntConstant "0"); 
+	       nterm_loc = Loc.dummy_position;
+	       nterm_type = Ctypes.c_int; }
+	     in
+	     let castzero = { 
+	       nterm_node = NTcast (p.var_type,zeroterm); 
+	       nterm_loc = Loc.dummy_position;
+	       nterm_type = p.var_type; }
+	     in
+	     let null = {
+	       npred_node = NPrel (pterm, Eq, castzero);
+	       npred_loc = Loc.dummy_position; }
+	     in
+	     let valid_or_null = {
+	       npred_node = NPor (valid, null);
+	       npred_loc = Loc.dummy_position; }
+	     in
+	     match s.requires with
+	       | None -> { s with requires = Some valid_or_null }
+	       | Some r ->
+		   { s with requires = Some {
+		       npred_node = NPand (valid_or_null, r);
+		       npred_loc = Loc.dummy_position; } }
+	   else s) pl sp
+    else sp
+  in
   let pre_with,pre_without,post = 
     interp_spec 
       (id != Cinit.invariants_initially_established_info)

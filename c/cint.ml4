@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cint.ml4,v 1.18 2007-01-08 10:47:31 moy Exp $ *)
+(* $Id: cint.ml4,v 1.19 2007-03-16 09:18:37 moy Exp $ *)
 
 (* TO DO:
 
@@ -3532,13 +3532,17 @@ end = struct
 		| _ -> Term ITany
 	      end
 	  | Some op ->
-	      let t1 = from_expr e1 in
+	      let pt = from_expr_or_test ~test e1 in
 	      begin match op with
 	        | Uexact ->
 		    (* [Uexact] used here to mean the operation is useless *)
-		    Term t1
-		| _ -> Term (ITunop (op,t1))
-	      end
+		    pt
+		| _ ->
+		    begin match pt with
+		      | Term t1 -> Term (ITunop (op,t1))
+		      | Predicate _ -> Term ITany
+		    end
+ 	      end
 	end
     | NEbinary (e1,op,e2) ->
 	begin match from_binop op with
