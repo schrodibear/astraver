@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cint.ml4,v 1.19 2007-03-16 09:18:37 moy Exp $ *)
+(* $Id: cint.ml4,v 1.20 2007-03-16 14:19:47 moy Exp $ *)
 
 (* TO DO:
 
@@ -5159,14 +5159,18 @@ let local_int_analysis_attach funcs =
      function information is up-to-date when caller treated *)
   List.iter 
     (fun fundecl -> 
-       let newfundecl = local_int_analysis fundecl in
-       (* necessary suffix to translate the list of function representatives
-	  to the hash-table format *)
-       List.iter (fun { name = name; spec = spec; typ = typ; 
-			f = f; s = s; loc = loc } ->
-		    Cenv.add_c_fun name (spec,typ,f,s,loc)) newfundecl
+       (* do not analyze functions that already have a precondition *)
+       match fundecl.spec.requires with
+	 | Some _ -> ()
+	 | None ->
+	     let newfundecl = local_int_analysis fundecl in
+	     (* necessary suffix to translate the list of function
+		representatives to the hash-table format *)
+	     List.iter (fun { name = name; spec = spec; typ = typ; 
+			      f = f; s = s; loc = loc } ->
+			  Cenv.add_c_fun name (spec,typ,f,s,loc)) newfundecl
     ) file;
-	       
+  
   if debug_more then Coptions.lprintf 
     "[local_int_analysis_attach] %i functions treated@." (List.length file);
 
