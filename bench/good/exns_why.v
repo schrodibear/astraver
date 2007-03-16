@@ -99,3 +99,34 @@ Save.
 
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma p15_po_1 : 
+  forall (x: Z),
+  forall (HW_2: x <> 0),
+  forall (x0: Z),
+  forall (HW_3: x0 = 0),
+  x0 = 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma p16_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x = 0),
+  forall (x0: Z),
+  forall (HW_2: x0 = 1),
+  x0 = 1.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma p17_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x = 0),
+  x = 0.
+Proof.
+intuition.
+Save.
+

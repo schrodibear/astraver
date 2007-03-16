@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.10 2007-03-13 15:28:43 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.11 2007-03-16 08:08:49 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -306,9 +306,10 @@ and wp0 e s =
       let lab = e1.info.t_label in
       let s = Subst.label lab s in
       let ok,((ne1,s'),ee1) = wp e1 s in
-      let qql = post_app (asst_app (change_label "" lab)) q in
-      let subst p = subst_in_predicate s'.sigma p.a_value in
-      let (q,ql) = post_app subst qql in
+      let (q,ql) = post_app (asst_app (change_label "" lab)) q in
+      let subst p s = subst_in_predicate s.sigma p.a_value in
+      let q = subst q s' in
+      let ql = List.map2 (fun (_,(_,sx)) (x,qx) -> x, subst qx sx) ee1 ql in
       let post_exn (x,(ex,_)) (x',qx) =
 	assert (x=x'); 
 	let p = wpimplies ex qx in
@@ -331,18 +332,6 @@ and wp0 e s =
       wp e (Subst.label l s)
   | LetRef (x, e1, e2) ->
       assert false (*TODO*)
-(***
-      let ok1,ne1,s1 = wp e1 s in
-      let pt = match e1.info.t_result_type with 
-	| PureType pt -> pt | Ref _ | Arrow _ -> assert false 
-      in
-      let s1 = Subst.add x pt s1 in
-      let ok2,ne2,s2 = wp e2 s1 in
-      let ne1x = subst_in_predicate (subst_onev result x) (fst ne1) in
-      let ok = wpand ok1 (wpimplies ne1x ok2) in
-      let ne = wpand ne1x (fst ne2) in
-      ok, (ne, []), s2
-***)
   | Var _ -> 
       (* this must be an impure function, thus OK = NE = true *)
       Ptrue, ((Ptrue, s), [])
@@ -369,8 +358,23 @@ and wp0 e s =
 	  try List.assoc x ee1 with Not_found -> assert false
       in
       ok1, ((Pfalse, s1), exns e ee)
-  | Try _ ->
+  | Try (e1, hl) ->
       assert false (*TODO*)
+(*
+      let ok1,((ne1,s1),ee1) = wp e1 s in
+      let handler_ok (x,r) =
+	let p = wpimplies ex qx in
+	match find_exception x with
+	  | Some pt -> wpforall result (PureType pt) p
+	  | None -> p
+      in
+      let ok = wpands (ok1 :: List.map handler_ok hl) in
+      let nee = 
+	let ee x = let ee,sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
+	(wpand ne1 q, s'), exns e ee
+      in
+      ok, nee
+*)
   | Rec _ ->
       assert false (*TODO*)
   | Any _ ->
@@ -391,15 +395,6 @@ let wp e =
   let s = Subst.frame e.info.t_env e.info.t_effect Subst.empty in
   let ok,_ = wp e s in
   ok
-(*
-  let ok,((_,s),ee) = wp e s in
-  Format.eprintf "final s = %a@." Subst.print s;
-  List.iter 
-    (fun (x,(_,sx)) -> Format.eprintf "final s(%a) = %a@." 
-      Ident.print x Subst.print sx) ee;
-  let q = Idmap.fold (fun x pt q -> (x, PureType pt) :: q) s.types [] in
-  wpforalls (List.rev q) ok
-*)
 
 (*
 Local Variables: 

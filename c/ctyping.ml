@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.143 2007-02-16 08:24:13 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.144 2007-03-16 08:08:49 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -218,13 +218,14 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
   | Tpointer _ , Tpointer (_,{ ctype_node = Tvoid }) ->
       e
   | _, Tpointer _ when is_null e ->
-      { e with texpr_node = TEcast(
-	  { ctype_node = Tpointer (Not_valid, ty);
-	  ctype_storage = No_storage;
-	  ctype_const = false;
-	  ctype_volatile = false;
-	  ctype_ghost = false;
-	},tezero) }
+      { e with 
+	texpr_node = 
+	  TEcast ({ ctype_node = Tpointer (Not_valid, ty);
+		    ctype_storage = No_storage;
+		    ctype_const = false;
+		    ctype_volatile = false;
+		    ctype_ghost = false }, tezero);
+	texpr_type = ty }
   | _ ->
       error e.texpr_loc
 	"incompatible type: expected %a, found %a@." 
