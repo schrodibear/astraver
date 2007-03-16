@@ -587,7 +587,7 @@ let rec calcul_zones expr =
     | NEvar _ -> ()
     | NEarrow (e,_,_) -> calcul_zones e
     | NEseq (e1,e2) -> calcul_zones e1; calcul_zones e2
-    | NEassign_op (lv,_,e) 
+    | NEassign_op (lv,_,e) -> () (* no 2 pointers here *)
     | NEassign (lv,e) -> calcul_zones lv; calcul_zones e;
 	let tw1 = type_why lv in
 	let tw2 = type_why e in
