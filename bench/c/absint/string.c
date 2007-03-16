@@ -1,3 +1,4 @@
+
 typedef unsigned int size_t;
 
 // 7.21.2.1: memcpy
@@ -137,8 +138,10 @@ size_t strcspn (const char *s1, const char *s2) {
 // 7.21.5.4: strpbrk
 
 char *strpbrk (const char *s1, const char *s2) {
-  while (strchr(s2,*s1) == 0) ++s1;
-  if (*s1) return s1;
+  while (*s1) {
+    if (strchr(s2,*s1) == 0) ++s1;
+    else return s1;
+  }
   return 0;
 }
 
@@ -168,7 +171,7 @@ char *strstr (const char *s1, const char *s2) {
   while (*s1) { 
     const char *rs1 = s1;
     const char *rs2 = s2;
-    while (*rs1 && *rs2 && (*rs1++ == *rs2)) rs2++;
+    while (*rs1 && *rs2 && (*rs1 == *rs2)) { rs1++; rs2++; }
     if (*rs2 == 0) return s1;
     s1++;
   }
@@ -218,3 +221,10 @@ size_t strlen(const char *s) {
   while (*s++) ++n;
   return n;
 }
+
+
+/*
+  (* Local Variables: *)
+  (* compile-command: "caduceus --loc-alias --arith-mem --abs-int string.c" *)
+  (* End: *)
+*/
