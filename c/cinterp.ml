@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.233 2007-03-16 14:19:47 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.234 2007-03-16 14:37:51 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -2152,7 +2152,7 @@ let heap_var_unique v =
 let interp_function_spec id sp ty pl =
   (* add to precondition the validity or nullity of pointer arguments*)
   let sp = 
-    if Coptions.abstract_interp || Coptions.gen_invariant then
+    if false then (* Coptions.abstract_interp || Coptions.gen_invariant then *)
       List.fold_right 
 	(fun p s -> 
 	   if Ctypes.is_pointer p.var_type then
