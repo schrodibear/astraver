@@ -142,13 +142,16 @@ axiom sub_pointer_def :
   forall p1:'z pointer. forall p2:'z pointer.
   base_addr(p1) = base_addr(p2) -> sub_pointer(p1,p2) = offset(p1)-offset(p2)
 
+axiom sub_pointer_self :
+  forall p:'z pointer. sub_pointer(p,p) = 0
+
 axiom sub_pointer_shift1 :
   forall p:'z pointer. forall q:'z pointer. forall i:int.
-    sub_pointer(shift(p,i),q) = sub_pointer(p,q) - i
+    sub_pointer(shift(p,i),q) = sub_pointer(p,q) + i
 
 axiom sub_pointer_shift2 :
   forall p:'z pointer. forall q:'z pointer. forall i:int.
-    sub_pointer(p,shift(q,i)) = sub_pointer(p,q) + i
+    sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
 
 parameter shift_ : p:'z pointer -> i:int -> 
   { } 'z pointer { result = shift(p,i) }
@@ -236,7 +239,7 @@ axiom strlen_init :
     i >= 0 and (forall j:int. 0 <= j < i -> acc(m,shift(p,j)) <> 0)
     -> strlen(upd(m,shift(p,i),0),p) = i
 
-axiom strlen_zero :
+axiom strlen_is_zero :
   forall m : (int,'z) memory. 
   forall p: 'z pointer [acc(m,shift(p,strlen(m,p)))]. 
     strlen(m,p) >= 0 -> acc(m,shift(p,strlen(m,p))) = 0
@@ -245,6 +248,11 @@ axiom strlen_not_zero :
   forall m : (int,'z) memory. forall p: 'z pointer. 
   forall i:int [strlen(m,p),acc(m,shift(p,i))]. 
     0 <= i <= strlen(m,p) and acc(m,shift(p,i)) <> 0 -> i < strlen(m,p)
+
+axiom strlen_zero :
+  forall m : (int,'z) memory. forall p: 'z pointer. 
+  forall i:int [strlen(m,p),acc(m,shift(p,i))]. 
+    0 <= i <= strlen(m,p) and acc(m,shift(p,i)) = 0 -> i = strlen(m,p)
 
 axiom strlen_shift :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
