@@ -290,6 +290,7 @@ else
     PVS=yes
     PVSFILE=`which pvs`
     PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`/lib
+    if test "$PVSLIB" = /lib; then PVS=no; fi
 fi
 
 # Mizar
@@ -370,6 +371,7 @@ echo "GWhy                    : $LABLGTK2"
 echo "Coq support             : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version             : $COQVER ($COQVERSION)"
+   echo "    Lib                 : $COQLIB" 
    echo "    Floats              : ${WHYFLOATS:-no}"
 fi
 echo "PVS support             : $PVS"
