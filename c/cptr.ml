@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.20 2007-01-08 10:47:31 moy Exp $ *)
+(* $Id: cptr.ml,v 1.21 2007-03-19 13:30:19 moy Exp $ *)
 
 (* TO DO:
 
@@ -1426,6 +1426,21 @@ end = struct
 			   PointWisePtrLattice.singleton lhs_var pval
 		   else PointWisePtrLattice.bottom ()
 		 in
+		 (* also store abstract value for rhs variable in assignment *)
+		 let new_pwval =
+		   match get_node_kind node with
+		     | NKexpr | NKtest | NKlvalue ->
+			 if expr_is_assign node then
+			   match assign_get_rhs_var node with
+			     | Some rhs_var,_ -> 
+				 let pval = 
+				   PointWisePtrLattice.find rhs_var pwval in 
+				 PointWisePtrLattice.replace 
+				   rhs_var pval new_pwval
+			     | _ -> new_pwval
+			 else new_pwval
+		     | _ -> new_pwval
+		 in
 		 NodeHash.replace_post new_analysis node new_pwval;
 		 new_analysis
 	     | NKstat | NKpred | NKassume | NKassert
@@ -1795,7 +1810,7 @@ end = struct
        an integer/pointer assignment too, that could have been transformed
        into an offset assignment. *)
     if new_rhs_not_offset then
-   if is_incr_decr then
+      if is_incr_decr then
 	(* nothing to change *)
 	node
       else
