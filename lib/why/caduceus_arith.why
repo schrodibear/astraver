@@ -227,6 +227,11 @@ axiom arrlen_shift :
   forall i:int [arrlen(a,shift(p,i))].
     i >= 0 -> arrlen(a,shift(p,i)) = arrlen(a,p)-i
 
+axiom arrlen_sub_pointer :
+  forall a:alloc_table. forall p: 'z pointer. forall q:'z pointer
+  [sub_pointer(q,p)].
+    0 <= sub_pointer(q,p) -> arrlen(a,q) = arrlen(a,p) - sub_pointer(q,p)
+
 (* axiomatic definition of [strlen] *)
 axiom strlen_create :
   forall m : (int,'z) memory. forall p: 'z pointer. 
