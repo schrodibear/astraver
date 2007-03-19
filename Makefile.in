@@ -664,7 +664,7 @@ EXPORT=export/$(NAME)
 FTP = $(HOME)/ftp/why
 WWW = $(HOME)/WWW/why
 
-FILES =src/*.ml* c/*.ml* jc/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
+FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
        Version Makefile.in configure.in configure .depend .depend.coq \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \

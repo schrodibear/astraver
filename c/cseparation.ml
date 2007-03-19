@@ -662,15 +662,6 @@ let rec c_initializer ty tw init =
 		  | _ -> assert false
 	      end
 	  | Tarray (_,ty,_) ->	      
-	      (*let z = match tw with
-		| Pointer z -> z
-		| _ -> 
-		    let (a,t) = output_why_type tw in
-		    Format.eprintf "anomaly : c_init type (";
-		    List.iter (fun t -> Format.eprintf ",@ %s" t) a;
-		    Format.eprintf ") %s not a pointer\n" t;
-		    assert false (*mal typé*)
-	      in*)
 	      let tw = type_type_why ty false in
 	      List.iter (fun init -> c_initializer ty tw init) l 
 	  | _ -> assert false
