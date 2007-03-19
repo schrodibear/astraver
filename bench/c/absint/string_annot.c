@@ -180,11 +180,13 @@ size_t strlen(const char *s) {
 }
 
 
-// Here we have gathered all 4 functions on which inference does not
-// work well, for 2 different reasons:
-// - on strcat/strncat, precondition should include an inequality between 
-//   3 variables, which is not possible with only octagons
-// - on strtok/strerror, precondition should mention global variables
+// Here we have gathered all 4 functions on which 
+// inference does not work well, for 2 different reasons:
+// - on strcat/strncat, precondition should include 
+//   an inequality between 3 variables, which is not 
+//   possible with only octagons
+// - on strtok/strerror, precondition should mention 
+//   global variables
 
 
 // 7.21.3.1: strcat
