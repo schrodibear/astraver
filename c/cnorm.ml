@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.97 2007-01-25 09:26:25 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.98 2007-03-19 14:05:27 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -177,7 +177,13 @@ let rec type_why e =
     | NEunary ((Ufloat_conversion | Ufloat_of_int), _) 
     | NEcast ({Ctypes.ctype_node = Tfloat _}, _) -> 
 	Why_Logic (why_type_for_float e.nexpr_type)
-    | NEcast (_,e) 
+    | NEcast (ty,e) ->
+	let tw = type_why e in
+	begin match ty.Ctypes.ctype_node, tw with
+	  | Tpointer _, Info.Pointer _ -> tw
+	  | Tpointer _, _ -> Info.Pointer (make_zone true)
+	  | _ -> tw
+	end
     | NEunary (_,e) 
     | NEincr (_,e) 
     | NEbinary (e,_,_) 
@@ -243,8 +249,14 @@ let rec type_why_for_term t =
     | NTstrlen _ -> Info.Int
     | NTmin _ -> Info.Int
     | NTmax _ -> Info.Int
-    | NTcast (_,t) -> (*assert false*)  type_why_for_term t 
-    | NTrange (_,_,_,z,f) ->
+    | NTcast (ty,t) -> 
+ 	let tw = type_why_for_term t in
+	begin match ty.Ctypes.ctype_node, tw with
+	  | Tpointer _, Info.Pointer _ -> tw
+	  | Tpointer _, _ -> Info.Pointer (make_zone true)
+	  | _ -> tw
+	end
+   | NTrange (_,_,_,z,f) ->
 	begin
 	  let z = repr z in
 	  try

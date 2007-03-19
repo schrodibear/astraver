@@ -162,7 +162,7 @@ let rec term_of_expr (e:texpr)  =
 	 | TEcast ({ctype_node = Tfloat _},
 		   ({texpr_type = {ctype_node = Tint _}} as e) ) -> 
 	     Tunop (Clogic.Ufloat_of_int,(term_of_expr e))
-	 | TEcast (_,e) -> (term_of_expr e).term_node
+	 | TEcast (ty,e) -> Tcast (ty, term_of_expr e)
 	 | TEsizeof _ -> assert false
 	 | TEmalloc _ -> assert false
      end;

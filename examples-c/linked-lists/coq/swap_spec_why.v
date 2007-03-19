@@ -76,7 +76,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition cyclic :
-  (memory (pointer global) global) -> (pointer global) -> Prop.
+  (memory (pointer global) global) -> alloc_table -> (pointer global) -> Prop.
 Admitted.
 
 (*Why logic*) Definition disjoint : plist -> plist -> Prop.
@@ -93,7 +93,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition finite :
-  (memory (pointer global) global) -> (pointer global) -> Prop.
+  (memory (pointer global) global) -> alloc_table -> (pointer global) -> Prop.
 Admitted.
 
 (*Why predicate*) Definition llist  (tl_global:(memory (pointer global)
@@ -116,7 +116,8 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition length :
-  (memory (pointer global) global) -> (pointer global) -> Length.
+  (memory (pointer global) global) -> alloc_table
+  -> (pointer global) -> Length.
 exact (fun tl p => length global tl p). 
 Defined.
 
