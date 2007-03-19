@@ -111,7 +111,7 @@ char *strchr (const char *s, char c) {
 // 7.21.5.3: strcspn
 // postcondition added for strtok
 
-/*@ ensures \result <= \strlen(\old(s1)) */
+/*@ ensures 0 <= \result <= \strlen(\old(s1)) */
 size_t strcspn (const char *s1, const char *s2) {
   size_t n = 0;
   while (*s1 && strchr(s2,*s1++) == 0) ++n;
@@ -142,7 +142,7 @@ char *strrchr(const char *s, char c) {
 // 7.21.5.6: strspn
 // postcondition added for strtok
 
-/*@ ensures \result <= \strlen(\old(s1)) */
+/*@ ensures 0 <= \result <= \strlen(\old(s1)) */
 size_t strspn (const char *s1, const char *s2) {
   size_t n = 0;
   while (*s1 && strchr(s2,*s1++) != 0) ++n;
@@ -196,7 +196,7 @@ size_t strlen(const char *s) {
 */
 char *strcat (char *s1, const char *s2) {
   char *r = s1;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1)) */
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1)) */
   while (*s1) s1++;
   strcpy(s1,s2);
   return r;
@@ -211,10 +211,11 @@ char *strcat (char *s1, const char *s2) {
 */
 char *strncat (char *s1, const char *s2, size_t n) {
   char *r = s1;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1)) */
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1)) */
   while (*s1) s1++;
-  /*@ invariant s1 - \old(s1) == \strlen(\old(s1)) + \old(n) - n
-    @        && s2 - \old(s2) <= \strlen(\old(s2))
+  /*@ invariant s1 - \old(s1) == \old(\strlen(s1)) + \old(n) - n
+    @        && 0 <= s1 - \old(s1)
+    @        && 0 <= s2 - \old(s2) <= \strlen(\old(s2))
    */
   while ((n-- > 0) && (*s1++ = *s2++)) ;
   if (n >= 0) *s1 = 0;

@@ -8,8 +8,8 @@ typedef unsigned int size_t;
  */
 char *memcpy(char *s1, const char *s2, size_t n) {
   char *r = s1;
-  /*@ invariant s1 - \old(s1) == \old(n) - n 
-    @        && s2 - \old(s2) == \old(n) - n 
+  /*@ invariant 0 <= s1 - \old(s1) == \old(n) - n 
+    @        && 0 <= s2 - \old(s2) == \old(n) - n 
   */
   while (n-- > 0) *s1++ = *s2++;
   return r;
@@ -37,8 +37,9 @@ char *memmove(char *s1, const char *s2, size_t n) {
  */
 char *strcpy(char *s1, const char *s2) {
   char *r = s1;
-  /*@ invariant s1 - \old(s1) == s2 - \old(s2)
-    @        && s2 - \old(s2) <= \strlen(\old(s2))
+  /*@ invariant 0 <= s1 - \old(s1) == s2 - \old(s2)
+    @        && 0 <= s2 - \old(s2) <= \strlen(\old(s2))
+    @        && \strlen(\old(s2)) == \old(\strlen(s2))
    */
   while (*s1++ = *s2++) ;
   return r;
@@ -52,11 +53,11 @@ char *strcpy(char *s1, const char *s2) {
  */
 char* strncpy(char *s1, const char *s2, size_t n) {
   char *r = s1;
-  /*@ invariant s1 - \old(s1) == \old(n) - n 
-    @        && s2 - \old(s2) <= \strlen(\old(s2))
+  /*@ invariant 0 <= s1 - \old(s1) == \old(n) - n 
+    @        && 0 <= s2 - \old(s2) <= \strlen(\old(s2))
   */
   while ((n-- > 0) && (*s1++ = *s2++)) ;
-  /*@ invariant s1 - \old(s1) <= \old(n) - n */
+  /*@ invariant 0 <= s1 - \old(s1) <= \old(n) - n */
   while (n-- > 0) *s1++ = 0;
   return r;
 }
@@ -68,8 +69,8 @@ char* strncpy(char *s1, const char *s2, size_t n) {
  */
 int memcmp (const char *s1, const char *s2, size_t n) {
   int c;
-  /*@ invariant s1 - \old(s1) == \old(n) - n 
-    @        && s2 - \old(s2) == \old(n) - n 
+  /*@ invariant 0 <= s1 - \old(s1) == \old(n) - n 
+    @        && 0 <= s2 - \old(s2) == \old(n) - n 
   */
   while (n-- > 0) {
     if ((c = *s1++ - *s2++) != 0) return c;
@@ -84,8 +85,8 @@ int memcmp (const char *s1, const char *s2, size_t n) {
 */
 int strcmp (const char *s1, const char *s2) {
   int c;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1))
-    @        && s2 - \old(s2) <= \strlen(\old(s2))
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1))
+    @        && 0 <= s2 - \old(s2) <= \strlen(\old(s2))
   */
   while (*s1 && *s2) {
     c = *s1++ - *s2++;
@@ -111,8 +112,8 @@ int strcoll (const char *s1, const char *s2) {
 */
 int strncmp (const char *s1, const char *s2, size_t n) {
   int c = 0;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1))
-    @        && s2 - \old(s2) <= \strlen(\old(s2))
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1))
+    @        && 0 <= s2 - \old(s2) <= \strlen(\old(s2))
   */
   while (*s1 && *s2 && (n-- > 0)) {
     c = *s1++ - *s2++;
@@ -130,9 +131,9 @@ int strncmp (const char *s1, const char *s2, size_t n) {
  */
 size_t strxfrm (char *s1, const char *s2, size_t n) {
   size_t n1 = 0;
-  /*@ invariant s2 - \old(s2) <= \strlen(\old(s2)) 
-    @        && s1 - \old(s1) == \old(n) - n
-    @        && \old(n) - n <= s2 - \old(s2)
+  /*@ invariant 0 <= s2 - \old(s2) <= \strlen(\old(s2)) 
+    @        && 0 <= s1 - \old(s1) <= \old(n) - n
+    @        && \strlen(\old(s2)) == \old(\strlen(s2))
   */
   while (*s2) {
     if (n-- > 0) *s1++ = *s2;
@@ -146,7 +147,7 @@ size_t strxfrm (char *s1, const char *s2, size_t n) {
 
 /*@ requires \arrlen(s) >= n */
 char *memchr (const char *s, char c, size_t n) {
-  /*@ invariant s - \old(s) == \old(n) - n */
+  /*@ invariant 0 <= s - \old(s) == \old(n) - n */
   while (n-- > 0) {
     if (*s++ == c) return s-1;
   }
@@ -157,7 +158,7 @@ char *memchr (const char *s, char c, size_t n) {
 
 /*@ requires \strlen(s) >= 0 */
 char *strchr (const char *s, char c) {
-  /*@ invariant s - \old(s) <= \strlen(\old(s)) */
+  /*@ invariant 0 <= s - \old(s) <= \strlen(\old(s)) */
   while (*s) {
     if (*s++ == c) return s-1;
   }
@@ -170,12 +171,12 @@ char *strchr (const char *s, char c) {
 
 /*@ requires \strlen(s1) >= 0
   @       && \strlen(s2) >= 0
-  @ ensures \result <= \strlen(\old(s1)) 
+  @ ensures 0 <= \result <= \strlen(\old(s1)) 
 */
 size_t strcspn (const char *s1, const char *s2) {
   size_t n = 0;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1)) 
-    @        && s1 - \old(s1) == n
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1)) 
+    @        && 0 <= s1 - \old(s1) == n
    */
   while (*s1 && strchr(s2,*s1++) == 0) ++n;
   return n;
@@ -187,7 +188,7 @@ size_t strcspn (const char *s1, const char *s2) {
   @       && \strlen(s2) >= 0
 */
 char *strpbrk (const char *s1, const char *s2) {
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1)) */
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1)) */
   while (*s1) {
     if (strchr(s2,*s1) == 0) ++s1;
     else return s1;
@@ -200,7 +201,7 @@ char *strpbrk (const char *s1, const char *s2) {
 /*@ requires \strlen(s) >= 0 */
 char *strrchr(const char *s, char c) {
   char *r = 0;
-  /*@ invariant s - \old(s) <= \strlen(\old(s)) */
+  /*@ invariant 0 <= s - \old(s) <= \strlen(\old(s)) */
   while (*s) {
     if (*s++ == c) r = s-1;
   }
@@ -213,12 +214,12 @@ char *strrchr(const char *s, char c) {
 
 /*@ requires \strlen(s1) >= 0
   @       && \strlen(s2) >= 0
-  @ ensures \result <= \strlen(\old(s1)) 
+  @ ensures 0 <= \result <= \strlen(\old(s1)) 
 */
 size_t strspn (const char *s1, const char *s2) {
   size_t n = 0;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1))
-    @        && s1 - \old(s1) == n
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1))
+    @        && 0 <= s1 - \old(s1) == n
   */
   while (*s1 && strchr(s2,*s1++) != 0) ++n;
   return n;
@@ -231,12 +232,12 @@ size_t strspn (const char *s1, const char *s2) {
 */
 char *strstr (const char *s1, const char *s2) {
   if (*s2 == 0) return s1;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1)) */
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1)) */
   while (*s1) { 
     const char *rs1 = s1;
     const char *rs2 = s2;
-    /*@ invariant rs1 - s1 <= \strlen(s1)
-      @        && rs2 - s2 <= \strlen(s2)
+    /*@ invariant 0 <= rs1 - s1 <= \strlen(s1)
+      @        && 0 <= rs2 - s2 <= \strlen(s2)
     */
     while (*rs1 && *rs2 && (*rs1 == *rs2)) { rs1++; rs2++; }
     if (*rs2 == 0) return s1;
@@ -250,7 +251,7 @@ char *strstr (const char *s1, const char *s2) {
 /*@ requires \arrlen(s) >= n */
 char *memset (char *s, char c, size_t n) {
   char *r = s;
-  /*@ invariant s - \old(s) == \old(n) - n */
+  /*@ invariant 0 <= s - \old(s) == \old(n) - n */
   while (n-- > 0) *s++ = c;
   return r;
 }
@@ -260,7 +261,7 @@ char *memset (char *s, char c, size_t n) {
 /*@ requires \strlen(s) >= 0 */
 size_t strlen(const char *s) {
   size_t n = 0;
-  /*@ invariant s - \old(s) <= \strlen(\old(s)) */
+  /*@ invariant 0 <= s - \old(s) <= \strlen(\old(s)) */
   while (*s++) ++n;
   return n;
 }
@@ -282,7 +283,7 @@ size_t strlen(const char *s) {
 */
 char *strcat (char *s1, const char *s2) {
   char *r = s1;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1)) */
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1)) */
   while (*s1) s1++;
   strcpy(s1,s2);
   return r;
@@ -297,10 +298,11 @@ char *strcat (char *s1, const char *s2) {
 */
 char *strncat (char *s1, const char *s2, size_t n) {
   char *r = s1;
-  /*@ invariant s1 - \old(s1) <= \strlen(\old(s1)) */
+  /*@ invariant 0 <= s1 - \old(s1) <= \strlen(\old(s1)) */
   while (*s1) s1++;
-  /*@ invariant s1 - \old(s1) == \strlen(\old(s1)) + \old(n) - n
-    @        && s2 - \old(s2) <= \strlen(\old(s2))
+  /*@ invariant s1 - \old(s1) == \old(\strlen(s1)) + \old(n) - n
+    @        && 0 <= s1 - \old(s1)
+    @        && 0 <= s2 - \old(s2) <= \strlen(\old(s2))
    */
   while ((n-- > 0) && (*s1++ = *s2++)) ;
   if (n >= 0) *s1 = 0;
