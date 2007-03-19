@@ -153,6 +153,10 @@ axiom sub_pointer_shift2 :
   forall p:'z pointer. forall q:'z pointer. forall i:int.
     sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
 
+axiom shift_sub_pointer :
+  forall p:'z pointer. forall q:'z pointer [sub_pointer(p,q)].
+    p = shift(q,sub_pointer(p,q))
+
 parameter shift_ : p:'z pointer -> i:int -> 
   { } 'z pointer { result = shift(p,i) }
 
