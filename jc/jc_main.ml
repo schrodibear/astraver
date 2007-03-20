@@ -98,10 +98,11 @@ let main () =
 	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
 	Array.iter Jc_effect.function_effects components;
 	(* phase 6 : checking structure invariants *)
+	(* --- DISABLED ---
 	Jc_options.lprintf "\nstarting checking structure invariants.@.";
 	Hashtbl.iter 
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
-	  Jc_norm.structs_table;
+	  Jc_norm.structs_table; *)
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =
 	  Hashtbl.fold 
