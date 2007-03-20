@@ -131,8 +131,11 @@ let make_deref loc e fi =
 (* expressions on the typed AST, not the normalized AST *)
 
 let make_tconst loc c =
+  let t,c = Jc_pervasives.const c in
   let node = JCTEconst c in
-  { jc_texpr_loc = loc; jc_texpr_node = node; }
+  { jc_texpr_loc = loc; 
+    jc_texpr_type = t;
+    jc_texpr_node = node; }
 
 (* statements *)
 

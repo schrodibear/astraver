@@ -39,7 +39,7 @@ int f(T* t2) {
 struct S { int z; T t; } s;
 struct S *ps;
 
-struct S *pps[] = { (void*)0 };
+struct S *pps[] = { (void *)0 };
 
 /*@ requires \valid(ps)
   @ ensures \result == 1

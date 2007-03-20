@@ -589,6 +589,8 @@ let rec calcul_zones expr =
     | NEseq (e1,e2) -> calcul_zones e1; calcul_zones e2
     | NEassign_op (lv,_,e) -> () (* no 2 pointers here *)
     | NEassign (lv,e) -> calcul_zones lv; calcul_zones e;
+	Format.eprintf "lv = %a, e = %a@."
+	  Cprint.nexpr lv Cprint.nexpr e;
 	let tw1 = type_why lv in
 	let tw2 = type_why e in
 	unifier_type_why ~var_name:(loc_name lv.nexpr_loc) tw1 tw2

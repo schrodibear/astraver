@@ -661,13 +661,15 @@ let coerce t1 t2 e =
 	    Hashtbl.find range_types_table ri.jc_range_info_name 
 	  in
 	  Tinteger,{ jc_texpr_node = JCTEcall(to_int_,[e]) ;
-	    jc_texpr_loc = e.jc_texpr_loc }  
+		     jc_texpr_type = JCTnative Tinteger;
+		     jc_texpr_loc = e.jc_texpr_loc }  
       | JCTnative t -> t,e
       | _ -> assert false
   in
   match tn1,t2 with
     | Tinteger,Treal -> 
 	{ jc_texpr_node = JCTEcall(real_of_integer_,[e_int]) ;
+	  jc_texpr_type = JCTnative Treal;
 	  jc_texpr_loc = e.jc_texpr_loc }  
     | _ -> e_int
 
@@ -679,6 +681,7 @@ let restrict t1 t2 e =
 	  Hashtbl.find range_types_table ri.jc_range_info_name 
 	in
 	{ jc_texpr_node = JCTEcall(of_int,[e]) ;
+	  jc_texpr_type = JCTrange ri;
 	  jc_texpr_loc = e.jc_texpr_loc }  	
     | _ -> 
 	typing_error e.jc_texpr_loc "cannot coerce type '%a' to type '%a'"
@@ -882,7 +885,9 @@ let rec expr env e =
       | JCPEoffset_min _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
 
-  in t,{ jc_texpr_node = te; jc_texpr_loc = e.jc_pexpr_loc }
+  in t,{ jc_texpr_node = te; 
+	 jc_texpr_type = t;
+	 jc_texpr_loc = e.jc_pexpr_loc }
 
   
 
@@ -1215,14 +1220,18 @@ let decl d =
 		let st = find_struct_info d.jc_pdecl_loc p in
 		(st.jc_struct_info_root,Some st)
 	in
-	let env = List.map (field root) fields in
 	let struct_info =
 	  { jc_struct_info_name = id;
-	    jc_struct_info_fields = env;
+	    jc_struct_info_fields = [];
 	    jc_struct_info_parent = par;
 	    jc_struct_info_root = root;
 	  }
 	in
+	(* adding structure name in global environment before typing 
+	   the fields, because of possible recursive definition *)
+	Hashtbl.add structs_table id (struct_info,[]);
+	let env = List.map (field root) fields in
+	struct_info.jc_struct_info_fields <- env;
 	let invariants =
 	  List.fold_left
 	    (fun acc (id,x,e) ->	
@@ -1236,7 +1245,7 @@ let decl d =
 	    []
 	    inv
 	in
-	Hashtbl.add structs_table id (struct_info,invariants)
+	Hashtbl.replace structs_table id (struct_info,invariants)
     | JCPDlogictype(id) ->
 	begin 
 	  try

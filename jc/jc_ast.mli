@@ -218,8 +218,9 @@ type texpr_node =
   | JCTEif of texpr * texpr * texpr
 
 and texpr =
-   {
+    {
       jc_texpr_node : texpr_node;
+      jc_texpr_type : jc_type;
       jc_texpr_loc : Loc.position;
     }
 

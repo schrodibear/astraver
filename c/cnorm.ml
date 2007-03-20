@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.98 2007-03-19 14:05:27 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.99 2007-03-20 14:21:00 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -177,6 +177,10 @@ let rec type_why e =
     | NEunary ((Ufloat_conversion | Ufloat_of_int), _) 
     | NEcast ({Ctypes.ctype_node = Tfloat _}, _) -> 
 	Why_Logic (why_type_for_float e.nexpr_type)
+(*
+    | NEcast (ty,e') -> 
+	unsupported e.nexpr_loc "separation analysis do no support casts"
+*)
     | NEcast (ty,e) ->
 	let tw = type_why e in
 	begin match ty.Ctypes.ctype_node, tw with
@@ -465,11 +469,28 @@ and expr_node loc ty t =
 	  NEcond ((expr texpr1), (expr texpr2), (expr texpr3))
       | TEsizeof (tctype,n) ->
 	  NEconstant (IntConstant (Int64.to_string n))
-      | TEcast({Ctypes.ctype_node = Tpointer _}as ty, 
+      | TEcast({Ctypes.ctype_node = Tpointer _}as ty, e') ->
+	  begin
+	    try
+	      let n = Ctyping.eval_const_expr_noerror e' in
+	      let name =
+		if n = Int64.zero then "null" else
+		  "const_ptr_" ^ Int64.to_string n
+	      in
+	      let info = default_var_info name in 
+	      Cenv.set_var_type (Var_info info) ty false;
+	      NEvar (Var_info info)    
+	    with
+		Invalid_argument _ ->
+		  unsupported loc "pointer cast"
+	  end
+(*
+       | TEcast({Ctypes.ctype_node = Tpointer _}as ty, 
 	       {texpr_node = TEconstant (IntConstant "0")}) -> 
 	  let info = default_var_info "null" in 
 	  Cenv.set_var_type (Var_info info) ty false;
 	  NEvar (Var_info info)    
+*)
       | TEcast (tctype ,texpr) -> NEcast (tctype, expr texpr)
       | TEmalloc (tctype, texpr) -> NEmalloc (tctype, expr texpr)
 

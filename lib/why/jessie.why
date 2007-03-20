@@ -93,9 +93,9 @@ parameter acc_ :
 
 parameter upd_ : 
   alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
-  { valid(alloc,p)  (* and select(mutable,p) = true *) }
+  { valid(alloc,p) (* and select(mutable,p) = true *) }
   unit
-  reads alloc,m (* ,mutable *) 
+  reads alloc,m (* ,mutable *)
   writes m
   { m = store(m@,p,v) }
 
