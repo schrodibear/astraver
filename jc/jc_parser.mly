@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.28 2007-03-02 16:40:56 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.29 2007-03-21 14:40:58 bardou Exp $ */
 
 %{
 
@@ -171,6 +171,8 @@ decl:
 | axiom_definition
     { $1 }
 | exception_definition
+    { $1 }
+| logic_definition
     { $1 }
 /*
 | error
@@ -718,9 +720,16 @@ exception_statement:
    { locate_statement (JCPStry($2,[($4,$5,$6)],skip)) }
 ;
 
+/**********************************/
+/* Logic functions and predicates */
+/**********************************/
 
-
-
+logic_definition:
+| LOGIC type_expr IDENTIFIER parameters EQ expression
+    { locate_decl (JCPDlogic(Some $2, $3, $4, $6)) }
+| LOGIC IDENTIFIER parameters EQ expression
+    { locate_decl (JCPDlogic(None, $2, $3, $5)) }
+;
 
 /*
 Local Variables: 

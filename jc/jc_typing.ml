@@ -1257,10 +1257,25 @@ let decl d =
     | JCPDaxiom(id,e) ->
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te
-
     | JCPDexception(id,t) ->
 	let tt = type_type t in
 	Hashtbl.add exceptions_table id (exception_info tt id)
+    | JCPDlogic(None, id, pl, body) ->
+	let param_env = List.map param pl in
+        let pi = make_rel id in
+        pi.jc_logic_info_parameters <- List.map snd param_env;
+        let p = assertion param_env body in
+        Hashtbl.add logic_functions_table
+          pi.jc_logic_info_tag (pi, JCTAssertion p)
+    | JCPDlogic(Some ty, id, pl, body) ->
+	let param_env = List.map param pl in
+        let ty = type_type ty in
+        let pi = make_rel id in
+        pi.jc_logic_info_parameters <- List.map snd param_env;
+        let (ty', t) = term param_env body in
+        if ty <> ty' then typing_error d.jc_pdecl_loc "inferred type differs from declared type" else
+        Hashtbl.add logic_functions_table
+          pi.jc_logic_info_tag (pi, JCTTerm t)
 
 (*
 Local Variables: 

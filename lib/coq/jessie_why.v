@@ -75,17 +75,13 @@ Implicit Arguments offset_min_shift.
 Lemma not_found_not_valid (A: Set) (a: alloc_table A) (p: pointer A):
   MapGet Z a (fst p) = None -> ~valid a p.
 Proof with intuition.
-intros A a p.
-intros H V.
+intros A a p H V.
 unfold valid in V.
 unfold offset_min in V.
 unfold offset_max in V.
-
 assert (block_length a p = 0) as BLZ.
-clear V.
 unfold block_length.
 rewrite H...
-
 rewrite BLZ in V...
 Defined.
 

@@ -135,6 +135,8 @@ type pdecl_node =
   | JCPDlogictype of string 
   | JCPDaxiom of string * pexpr
   | JCPDexception of string * ptype
+  (* logic functions and predicates (return type: None if predicate) *)
+  | JCPDlogic of ptype option * string * (ptype * string) list * pexpr
 
 and pdecl =
     {
