@@ -1,0 +1,17 @@
+type A = {
+  integer i;
+  integer j;
+  boolean inv;
+}
+
+logic invA(A[0] this) = this.inv == true <=> this.i == this.j
+
+unit m(A[0] a)
+  requires invA(a);
+  behavior ok:
+    assigns a.i, a.j;
+    ensures true;
+{
+  a.i = a.i + 1;
+  a.j = a.j + 1;
+}
