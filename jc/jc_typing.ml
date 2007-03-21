@@ -116,6 +116,7 @@ let print_type fmt t =
 
 
 let logic_functions_table = Hashtbl.create 97
+let logic_functions_env = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
 
@@ -140,6 +141,8 @@ let find_field loc ty f =
 	typing_error loc "not a structure type"
 
 let find_fun_info id = Hashtbl.find functions_env id
+
+let find_logic_info id = Hashtbl.find logic_functions_env id
     
 (* types *)
 
@@ -506,7 +509,37 @@ let rec assertion env e =
 	  let t2,e2 = term env e2
 	  in
 	  JCTAapp(rel_unary_op e.jc_pexpr_loc op t2,[e2])
-      | JCPEapp (_, _) -> assert false
+      | JCPEapp (e1, args) ->
+	  begin
+	    match e1.jc_pexpr_node with
+	      | JCPEvar id ->
+		  begin
+		    try
+		      let pi = find_logic_info id in
+		      let tl =
+			try
+			  List.map2
+			    (fun vi e ->
+			       let ty = vi.jc_var_info_type in
+			       let t,te = term env e in
+			       if subtype t ty then te
+			       else
+				 typing_error e.jc_pexpr_loc 
+				   "type %a expected" 
+				   print_type ty) 
+			    pi.jc_logic_info_parameters args
+			with  Invalid_argument _ ->
+			  typing_error e.jc_pexpr_loc 
+			    "wrong number of arguments for %s" id
+		      in
+		      JCTAapp(pi, tl)
+		    with Not_found ->
+		      typing_error e.jc_pexpr_loc 
+			"unbound predicate identifier %s" id
+		  end
+	      | _ -> 
+		  typing_error e.jc_pexpr_loc "unsupported predicate application"
+	  end
       | JCPEderef (e, id) -> 
 	  let t,te = term env e in
 	  let fi = find_field e.jc_pexpr_loc t id in
@@ -1239,8 +1272,8 @@ let decl d =
 	       let p = assertion [(x,vi)] e in
 	       let pi = make_rel id in
 	       pi.jc_logic_info_parameters <- [vi];
-	       Hashtbl.add logic_functions_table 
-		 pi.jc_logic_info_tag (pi,JCTAssertion p);
+	       Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi,JCTAssertion p);
+	       Hashtbl.add logic_functions_env id pi;
 	       (pi,p) :: acc)
 	    []
 	    inv
@@ -1265,17 +1298,19 @@ let decl d =
         let pi = make_rel id in
         pi.jc_logic_info_parameters <- List.map snd param_env;
         let p = assertion param_env body in
-        Hashtbl.add logic_functions_table
-          pi.jc_logic_info_tag (pi, JCTAssertion p)
+        Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, JCTAssertion p);
+        Hashtbl.add logic_functions_env id pi
     | JCPDlogic(Some ty, id, pl, body) ->
 	let param_env = List.map param pl in
         let ty = type_type ty in
         let pi = make_rel id in
         pi.jc_logic_info_parameters <- List.map snd param_env;
         let (ty', t) = term param_env body in
-        if ty <> ty' then typing_error d.jc_pdecl_loc "inferred type differs from declared type" else
-        Hashtbl.add logic_functions_table
-          pi.jc_logic_info_tag (pi, JCTTerm t)
+        if not (subtype ty' ty) then typing_error d.jc_pdecl_loc "inferred type differs from declared type" else
+        begin
+          Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, JCTTerm t);
+          Hashtbl.add logic_functions_env id pi
+        end
 
 (*
 Local Variables: 
