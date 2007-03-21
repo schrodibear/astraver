@@ -1,0 +1,12 @@
+type A = {
+  integer x;
+  invariant invA(a) = a.x != 0;
+}
+
+type B = {
+  A[0] i;
+}
+
+unit m(B[0] this) {
+  this.i.x = 0; /* incorrect */
+}
