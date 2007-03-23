@@ -1012,7 +1012,9 @@ let rec statement env s =
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
       | JCPSdecl (ty, id, e) -> assert false
-      | JCPSassert _ -> assert false
+      | JCPSassert e ->
+          let a = assertion env e in
+            JCTSassert a
       | JCPSexpr e -> 
 	  let t,te = expr env e in 
 	  JCTSexpr (te)

@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.18 2007-03-02 16:40:56 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.19 2007-03-23 12:33:03 bardou Exp $ *)
 
 
 open Jc_env
@@ -178,7 +178,7 @@ let rec statement ef s =
 	statement (statement (expr ef e) s1) s2
     | JCSdecl(vi,e,s) -> 
 	statement (Option_misc.fold_left expr ef e) s
-    | JCSassert _ -> assert false
+    | JCSassert a -> ef
     | JCSblock l -> List.fold_left statement ef l
 
 

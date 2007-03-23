@@ -360,7 +360,7 @@ let rec statement s =
     | JCSloop (la, s) -> 
 	While(Cte(Prim_bool true), assertion None "" la.jc_loop_invariant,
 	      Some (term None "" la.jc_loop_variant,None), [statement s])
-    | JCSassert _ -> assert false (* TODO *)
+    | JCSassert a -> Assert(assertion None "" a, Void)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  match e with

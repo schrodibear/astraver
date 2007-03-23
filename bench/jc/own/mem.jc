@@ -4,14 +4,36 @@ type A = {
   boolean inv;
 }
 
-logic invA(A[0] this) = this.inv == true <=> this.i == this.j
+logic invA(A[0] this) = this.i == this.j
 
-unit m(A[0] a)
+unit assert_invA(A[0] a)
   requires invA(a);
   behavior ok:
-    assigns a.i, a.j;
-    ensures true;
+    ensures invA(a);
 {
-  a.i = a.i + 1;
-  a.j = a.j + 1;
+}
+
+unit assert_inv_true(A[0] a)
+  requires a.inv == true;
+  behavior ok:
+    ensures a.inv == true;
+{
+}
+
+unit m(A[0] a)
+  requires invA(a) && a.inv == true;
+  behavior ok:
+    assigns a.i, a.j;
+    ensures invA(a) && a.inv == true;
+{
+  /* unpack */
+  assert_inv_true(a);
+  a.inv = false;
+  /**********/
+  a.i++;
+  a.j++;
+  /* pack */
+  assert_invA(a);
+  a.inv = true;
+  /********/
 }

@@ -101,7 +101,7 @@ let rec statement acc s =
 	in statement acc finally
     | JCSdecl(vi,_,s) -> 
 	statement acc s
-    | JCSassert _ -> assert false (* TODO *)
+    | JCSassert _ -> acc
 
 
 let compute_logic_calls f t = 

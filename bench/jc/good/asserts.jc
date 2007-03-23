@@ -1,9 +1,16 @@
-unit test_good() {
-  boolean b = true;
-  assert b;
+type A = {
+  integer i;
 }
 
-unit test_bad() {
-  boolean b = false;
-  assert b;
+unit test(A[0] a)
+  requires true;
+  behavior ok:
+    assigns a.i;
+    ensures true;
+{
+  a.i = 0;
+  assert a.i == 0;
+  a.i = 1;
+  assert a.i == 0;
+  a.i = 2;
 }

@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.29 2007-03-21 14:40:58 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.30 2007-03-23 12:33:03 bardou Exp $ */
 
 %{
 
@@ -88,8 +88,8 @@
 /* exception of throw try catch */
 %token EXCEPTION OF THROW TRY CATCH
 
-/* pack unpack */
-%token PACK UNPACK
+/* pack unpack assert */
+%token PACK UNPACK ASSERT
 
 /* type invariant logic with variant */
 %token TYPE INVARIANT LOGIC WITH VARIANT
@@ -630,6 +630,8 @@ expression_statement:
 */
 | expression SEMICOLON 
     { locate_statement (JCPSexpr $1) }
+| ASSERT expression SEMICOLON
+    { locate_statement (JCPSassert $2) }
 ;
 
 selection_statement: 
