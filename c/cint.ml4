@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cint.ml4,v 1.20 2007-03-16 14:19:47 moy Exp $ *)
+(* $Id: cint.ml4,v 1.21 2007-03-23 07:25:02 moy Exp $ *)
 
 (* TO DO:
 
@@ -2858,12 +2858,14 @@ struct
 	    "[singleton] norm predicate (%a,%B)@." V.P.pretty p b;
 	  NORMAL { state = singl_state; deps = singl_deps; }
 
-  let eval_test ~backward pred = function
+  let eval_test ~backward pred = function _ -> top()
+(* Bug with predicate and strcpy
     | EMPTY -> EMPTY
     | NORMAL _ as ps -> 
 	let plist = V.P.get_conjuncts pred in
 	let pslist = List.map singleton plist in
 	List.fold_left meet ps pslist
+*)
 
   let eval_assign ~backward var term ps = remove_variable var ps
 
