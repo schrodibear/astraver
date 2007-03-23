@@ -6,34 +6,20 @@ type A = {
 
 logic invA(A[0] this) = this.i == this.j
 
-unit assert_invA(A[0] a)
-  requires invA(a);
-  behavior ok:
-    ensures invA(a);
-{
-}
-
-unit assert_inv_true(A[0] a)
-  requires a.inv == true;
-  behavior ok:
-    ensures a.inv == true;
-{
-}
-
 unit m(A[0] a)
-  requires invA(a) && a.inv == true;
+  requires invA(a) && a.inv == true; /*** ici on aimerait bien demander uniquement a.inv == true ***/
   behavior ok:
     assigns a.i, a.j;
-    ensures invA(a) && a.inv == true;
+    ensures invA(a) && a.inv == true; /*** ici aussi d'ailleurs ***/
 {
   /* unpack */
-  assert_inv_true(a);
+  assert a.inv;
   a.inv = false;
   /**********/
   a.i++;
   a.j++;
   /* pack */
-  assert_invA(a);
+  assert invA(a);
   a.inv = true;
   /********/
 }
