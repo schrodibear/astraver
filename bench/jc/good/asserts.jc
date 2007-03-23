@@ -1,0 +1,9 @@
+unit test_good() {
+  boolean b = true;
+  assert b;
+}
+
+unit test_bad() {
+  boolean b = false;
+  assert b;
+}
