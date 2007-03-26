@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.11 2007-03-08 10:00:23 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.12 2007-03-26 20:29:15 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -78,7 +78,10 @@ let sub_double = Ident.create "sub_double"
 let mul_double = Ident.create "mul_double"
 let div_double = Ident.create "div_double"
 let d_to_r = Ident.create "d_to_r"
+let d_to_exact = Ident.create "d_to_exact"
 let r_to_d = Ident.create "r_to_d"
+
+let double_round_error = Ident.create "double_round_error"
 
 let mode = function
   | Tapp (id, [], _) | Tvar id when id == nearest_even ->
@@ -124,8 +127,13 @@ let rec term e = function
       term Exact t
   | Tapp (id, [t], _) when id == d_to_r ->
       term Double t
+  | Tapp (id, [t], _) when id == d_to_exact ->
+      term Exact t
   | Tapp (id, [m; t], _) when id == r_to_d ->
       Grnd (Double, mode m, term Exact t)
+  (* errors *)
+  | Tapp (id, [t], _) when id == double_round_error ->
+      Gabs (Gsub (term Double t, term Exact t))
   (* anything else is discarded *)
   | Tapp _ -> 
       raise NotGappa
@@ -179,7 +187,12 @@ let rec gpred = function
 
 let rec ghyp = function
   | Papp (id, [Tvar x; t2], _) when is_eq id ->
-      [(Ident.string x, term Double t2)], None
+      let x = Ident.string x in
+      [x, term Double t2; "exact_"^x, term Exact t2], None
+  | Papp (id, [Tapp (id', [Tvar x], _); t2], _) 
+    when is_eq id && id' == d_to_exact ->
+      let x = Ident.string x in
+      ["exact_"^x, term Exact t2], None
   | p ->
       [], gpred p
 
@@ -196,7 +209,6 @@ let add_ctx_vars =
 
 let rec intros ctx = function
   | Forall (true, id, n, t, _, p) ->
-      (*let id' = next_away id (predicate_vars p) in*)
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
       intros (Svar (id', t) :: ctx) p'
@@ -216,24 +228,35 @@ let gimplies l p = match l with
   | [] -> p
   | _ -> Gimplies (gands l, p)
 
+let equations vl el0 =
+  List.fold_left
+    (fun el x ->
+       if List.mem_assoc x el0 then el 
+       else (x, Grnd (Double, Mnearest_even, Gvar (Exact, "init_"^x))) :: el)
+    (List.rev el0) vl
+  
 let process_obligation (ctx, concl) =
   let ctx,concl = intros ctx concl in
   match gpred concl with
     | None -> (* goal is not a gappa prop *)
 	if debug then Format.eprintf "not a gappa prop; skipped@."
     | Some p ->
-	let el,pl = 
+	let vl,el,pl = 
 	  List.fold_left 
-	    (fun ((el,pl) as acc) h -> match h with
-	      | Svar _ -> acc
-	      | Spred (_, p) -> 
-		  let ep,pp = ghyp p in
-		  let pl = match pp with None -> pl | Some pp -> pp::pl in
-		  ep :: el, pl)
-	    ([],[]) ctx
+	    (fun ((vl,el,pl) as acc) h -> match h with
+	       | Svar (x, PTexternal ([], id)) when id == t_double ->
+		   Ident.string x :: vl, el, pl
+	       | Svar _ -> 
+		   acc
+	       | Spred (_, p) -> 
+		   let ep,pp = ghyp p in
+		   let pl = match pp with None -> pl | Some pp -> pp::pl in
+		   vl, ep :: el, pl)
+	    ([], [],[]) ctx
 	in
 	let gconcl = gimplies pl p in
-	Queue.add (List.flatten el, gconcl) queue
+	let el = equations vl (List.flatten el) in
+	Queue.add (el, gconcl) queue
 
 let push_decl = function
   | Logic_decl.Dgoal (_,_,s) -> process_obligation s.Env.scheme_type
