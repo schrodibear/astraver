@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.12 2007-03-26 20:29:15 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.13 2007-03-27 20:50:15 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -41,10 +41,14 @@ type exact = Exact | Double
 
 type mode = Mnearest_even
 
+type gappa_constant =
+  | GCdecimal of real_constant
+  | GCbinary of string * string (* <nnn>b<mmm> *)
+
 type gterm =
   | Gvar of exact * string
   | Grnd of exact * mode * gterm
-  | Gcst of real_constant
+  | Gcst of gappa_constant
   | Gneg of gterm
   | Gadd of gterm * gterm
   | Gsub of gterm * gterm
@@ -53,9 +57,9 @@ type gterm =
   | Gabs of gterm
 
 type gpred =
-  | Gle of gterm * real_constant
-  | Gge of gterm * real_constant
-  | Gin of gterm * real_constant * real_constant
+  | Gle of gterm * gappa_constant
+  | Gge of gterm * gappa_constant
+  | Gin of gterm * gappa_constant * gappa_constant
   | Gimplies of gpred * gpred
   | Gand of gpred * gpred
   | Gor of gpred * gpred
@@ -77,6 +81,7 @@ let add_double = Ident.create "add_double"
 let sub_double = Ident.create "sub_double"
 let mul_double = Ident.create "mul_double"
 let div_double = Ident.create "div_double"
+let pow_real = Ident.create "pow_real"
 let d_to_r = Ident.create "d_to_r"
 let d_to_exact = Ident.create "d_to_exact"
 let r_to_d = Ident.create "r_to_d"
@@ -89,11 +94,40 @@ let mode = function
   | _ ->
       raise NotGappa
 
-let rec term e = function
+let is_int_constant = function
+  | Tconst (ConstInt _) -> true
+  | Tapp (id, [Tconst (ConstInt _)], _) when id == t_neg_int -> true
+  | _ -> false
+
+let eval_int_constant = function
+  | Tconst (ConstInt n) -> n
+  | Tapp (id, [Tconst (ConstInt n)], _) when id == t_neg_int -> "-"^n
+  | _ -> assert false
+
+let is_constant = function
+  | Tconst (ConstFloat _) -> true
+  | Tapp (id, [Tconst (ConstInt _)], _) when id == real_of_int -> true
+  | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _);
+	       Tapp (ri2, [n], _)], _) 
+    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int 
+      && is_int_constant n -> true
+  | _ -> false
+
+let eval_constant = function
   | Tconst (ConstFloat f) -> 
-      Gcst f
-  | Tconst (ConstInt n) ->
-      Gcst (n, "0", "")
+      GCdecimal f
+  | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> 
+      GCdecimal (n, "0", "")
+  | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _);
+	       Tapp (ri2, [n], _)], _) 
+    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int -> 
+      GCbinary ("1", eval_int_constant n)
+  | _ -> 
+      assert false
+
+let rec term e = function
+  | t when is_constant t ->
+      Gcst (eval_constant t)
   | Tconst _ ->
       raise NotGappa
   | Tvar id -> 
@@ -129,6 +163,8 @@ let rec term e = function
       term Double t
   | Tapp (id, [t], _) when id == d_to_exact ->
       term Exact t
+  | Tapp (id, [m; t], _) when id == r_to_d && e = Exact ->
+      term Exact t
   | Tapp (id, [m; t], _) when id == r_to_d ->
       Grnd (Double, mode m, term Exact t)
   (* errors *)
@@ -140,6 +176,11 @@ let rec term e = function
 
 let termo e t = try Some (term e t) with NotGappa -> None
 
+let gando = function
+  | Some p1, Some p2 -> Some (Gand (p1, p2))
+  | (Some p as v), None | None, (Some p as v) -> v
+  | None, None -> None
+
 (* recognition of a Gappa predicate *)
 
 let rec gpred = function
@@ -149,17 +190,21 @@ let rec gpred = function
 	| Some t1, Some (Gcst c2) -> Some (Gle (t1, c2))
 	| _ -> None
       end
-  | Pand (_, _, 
-	  Papp (id1, [Tconst (ConstFloat f1); t1], _),
-	  Papp (id2, [t2; Tconst (ConstFloat f2)], _))
-    when id1 == t_le_real && id2 == t_le_real && t1 = t2 ->
-      begin try Some (Gin (term Double t1, f1, f2)) with NotGappa -> None end
-  | Pand (_, _, p1, p2) ->
-      begin match gpred p1, gpred p2 with
-	| Some p1, Some p2 -> Some (Gand (p1, p2))
-	| (Some p as v), None | None, (Some p as v) -> v
-	| None, None -> None
+  | Papp (id, [t1; t2], _) when id == t_ge_real ->
+      begin match termo Exact t1, termo Exact t2 with
+	| Some (Gcst c1), Some t2 -> Some (Gle (t2, c1))
+	| Some t1, Some (Gcst c2) -> Some (Gge (t1, c2))
+	| _ -> None
       end
+  | Pand (_, _, Papp (id1, [f1; t1], _), Papp (id2, [t2; f2], _))
+    when id1 == t_le_real && id2 == t_le_real && t1 = t2 
+    && is_constant f1 && is_constant f2 ->
+      begin 
+	try Some (Gin (term Double t1, eval_constant f1, eval_constant f2))
+	with NotGappa -> None 
+      end
+  | Pand (_, _, p1, p2) ->
+      gando (gpred p1, gpred p2)
   | Por (p1, p2) ->
       begin match gpred p1, gpred p2 with
 	| Some p1, Some p2 -> Some (Gor (p1, p2))
@@ -183,16 +228,33 @@ let rec gpred = function
   | Ptrue | Pfalse | Pvar _ -> (* discarded *)
       None
 
+let gpred p =
+  Format.printf "gpred %a@." Util.print_predicate p;
+  gpred p
+
 (* extraction of a list of equalities and possibly a Gappa predicate *)
 
 let rec ghyp = function
-  | Papp (id, [Tvar x; t2], _) when is_eq id ->
+  | Papp (id, [Tvar x; t], _) when is_eq id ->
       let x = Ident.string x in
-      [x, term Double t2; "exact_"^x, term Exact t2], None
-  | Papp (id, [Tapp (id', [Tvar x], _); t2], _) 
+      begin match termo Double t, termo Exact t with
+	| Some t1, Some t2 -> [x, t1; "exact_"^x, t2], None
+	| _ -> [], None
+      end
+  | Papp (id, [Tapp (id', [Tvar x], _); t], _) 
     when is_eq id && id' == d_to_exact ->
       let x = Ident.string x in
-      ["exact_"^x, term Exact t2], None
+      begin match termo Exact t with
+	| Some t -> ["exact_"^x, t], None
+	| None -> [], None
+      end
+  | Pand (_, _, p1, p2) as p ->
+      begin match ghyp p1, ghyp p2 with
+	| ([], _), ([], _) -> [], gpred p
+	| (e1,p1), (e2, p2) -> e1 @ e2, gando (p1, p2)
+      end
+  | Pnamed (_, p) ->
+      ghyp p
   | p ->
       [], gpred p
 
@@ -266,12 +328,16 @@ let print_real fmt = function
   | (i,f,"") -> fprintf fmt "%s.%s" i f
   | (i,f,e) -> fprintf fmt "%s.%se%s" i f e
 
+let print_constant fmt = function
+  | GCdecimal r -> print_real fmt r
+  | GCbinary (n,m) -> fprintf fmt "%sb%s" n m
+
 let rec print_term fmt = function
   | Gvar (Double, x) -> fprintf fmt "%s" x
   | Gvar (Exact, x) -> fprintf fmt "exact_%s" x
   | Grnd (Exact, _, t) -> print_term fmt t
   | Grnd (Double, Mnearest_even, t) -> fprintf fmt "dne(%a)" print_term t
-  | Gcst r -> print_real fmt r
+  | Gcst c -> print_constant fmt c
   | Gneg t -> fprintf fmt "(-%a)" print_term t
   | Gadd (t1, t2) -> fprintf fmt "(%a + %a)" print_term t1 print_term t2
   | Gsub (t1, t2) -> fprintf fmt "(%a - %a)" print_term t1 print_term t2
@@ -281,11 +347,12 @@ let rec print_term fmt = function
 
 let rec print_pred fmt = function
   | Gle (t, r1) ->
-      fprintf fmt "%a <= %a" print_term t print_real r1
+      fprintf fmt "%a <= %a" print_term t print_constant r1
   | Gge (t, r1) ->
-      fprintf fmt "%a >= %a" print_term t print_real r1
+      fprintf fmt "%a >= %a" print_term t print_constant r1
   | Gin (t, r1, r2) ->
-      fprintf fmt "%a in [%a, %a]" print_term t print_real r1 print_real r2
+      fprintf fmt "%a in [%a, %a]" 
+	print_term t print_constant r1 print_constant r2
   | Gimplies (p1, p2) ->
       fprintf fmt "(%a ->@ %a)" print_pred p1 print_pred p2
   | Gand (p1, p2) ->
