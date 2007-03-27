@@ -53,3 +53,10 @@ double calcul_debile3(double x) {
     x*=2;
   return x;
 }
+
+/*
+Local Variables: 
+compile-command: "make gappa && ../../../bin/why.byte --fp --why why/gappa.why && ../../../bin/why.byte --fp --gappa why/gappa.why"
+End: 
+*/
+
