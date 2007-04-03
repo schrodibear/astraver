@@ -131,6 +131,7 @@ type pdecl_node =
       ptype * string * (ptype * string) list * pclause list * pstatement list
   | JCPDstructtype of string * 
       string option * (ptype * string) list * (string * string * pexpr) list
+  | JCPDrectypes of pdecl list
   | JCPDrangetype of string * Num.num * Num.num
   | JCPDlogictype of string 
   | JCPDaxiom of string * pexpr

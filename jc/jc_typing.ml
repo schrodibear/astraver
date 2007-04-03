@@ -1218,7 +1218,28 @@ let field root (t,id) =
 
 let axioms_table = Hashtbl.create 17
 
-let decl d =
+let add_typedecl d (id,parent) =
+  let root,par = 
+    match parent with
+      | None -> 
+	  (id,None)
+      | Some p ->
+	  let st = find_struct_info d.jc_pdecl_loc p in
+	  (st.jc_struct_info_root,Some st)
+  in
+  let struct_info =
+    { jc_struct_info_name = id;
+      jc_struct_info_fields = [];
+      jc_struct_info_parent = par;
+      jc_struct_info_root = root;
+    }
+  in
+  (* adding structure name in global environment before typing 
+     the fields, because of possible recursive definition *)
+  Hashtbl.add structs_table id (struct_info,[]);
+  root,struct_info
+
+let rec decl d =
   match d.jc_pdecl_node with
     | JCPDfun(ty,id,pl,specs,body) -> 
 	let param_env = List.map param pl in
@@ -1247,24 +1268,9 @@ let decl d =
 	let of_int = make_fun_info (id^"_of_int") (JCTrange ri) in
 	Hashtbl.add range_types_table id (ri,to_int,to_int_,of_int)
     | JCPDstructtype(id,parent,fields,inv) ->
-	let root,par = 
-	  match parent with
-	    | None -> 
-		(id,None)
-	    | Some p ->
-		let st = find_struct_info d.jc_pdecl_loc p in
-		(st.jc_struct_info_root,Some st)
-	in
-	let struct_info =
-	  { jc_struct_info_name = id;
-	    jc_struct_info_fields = [];
-	    jc_struct_info_parent = par;
-	    jc_struct_info_root = root;
-	  }
-	in
 	(* adding structure name in global environment before typing 
 	   the fields, because of possible recursive definition *)
-	Hashtbl.add structs_table id (struct_info,[]);
+	let root,struct_info = add_typedecl d (id,parent) in
 	let env = List.map (field root) fields in
 	struct_info.jc_struct_info_fields <- env;
 	let invariants =
@@ -1281,6 +1287,15 @@ let decl d =
 	    inv
 	in
 	Hashtbl.replace structs_table id (struct_info,invariants)
+    | JCPDrectypes(pdecls) ->
+	(* adding structure names in global environment before typing 
+	   the fields, because of recursive definitions *)
+	List.iter (fun d -> match d.jc_pdecl_node with
+		     | JCPDstructtype(id,parent,_,_) ->
+			 ignore (add_typedecl d (id,parent))
+		     | _ -> assert false
+		  ) pdecls;
+	List.iter decl pdecls
     | JCPDlogictype(id) ->
 	begin 
 	  try

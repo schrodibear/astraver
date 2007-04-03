@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.23 2007-03-23 12:33:03 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.24 2007-04-03 08:02:30 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -80,6 +80,7 @@ rule token = parse
   | '\n'                    { newline lexbuf; token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
   | "//" [^ '\n']* '\n'     { newline lexbuf; token lexbuf }
+  | "and"                   { AND }
   | "assert"                { ASSERT }
   | "assigns"               { ASSIGNS }
   | "assumes"               { ASSUMES }

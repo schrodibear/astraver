@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.30 2007-03-23 12:33:03 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.31 2007-04-03 08:02:30 moy Exp $ */
 
 %{
 
@@ -91,8 +91,8 @@
 /* pack unpack assert */
 %token PACK UNPACK ASSERT
 
-/* type invariant logic with variant */
-%token TYPE INVARIANT LOGIC WITH VARIANT
+/* type invariant logic with variant and */
+%token TYPE INVARIANT LOGIC WITH VARIANT AND
 
 /* integer boolean real unit */
 %token INTEGER BOOLEAN REAL UNIT
@@ -136,6 +136,10 @@
 %nonassoc PRECIF
 %nonassoc ELSE
 
+%nonassoc PRECTYPE
+/* and */
+%right AND
+
 /* precedences on expressions  */
 
 %nonassoc PRECFORALL
@@ -159,9 +163,15 @@
 file: 
 | decl file 
     { $1::$2 }
+| rec_decls file 
+    { $1::$2 }
 | EOF 
     { [] }
 ;
+
+rec_decls:
+| type_rec_definitions %prec PRECTYPE
+    { locate_decl (JCPDrectypes($1)) }
 
 decl: 
 | function_definition 
@@ -184,6 +194,12 @@ decl:
 /*******************/
 /* type definition */	      
 /*******************/
+
+type_rec_definitions:
+| type_definition AND type_rec_definitions %prec PRECTYPE
+    { $1::$3 }
+| type_definition AND type_definition %prec PRECTYPE
+    { $1::[$3] }
 
 type_definition:
 | TYPE IDENTIFIER EQ int_constant DOTDOT int_constant
