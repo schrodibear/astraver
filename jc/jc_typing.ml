@@ -1288,13 +1288,22 @@ let rec decl d =
 	in
 	Hashtbl.replace structs_table id (struct_info,invariants)
     | JCPDrectypes(pdecls) ->
-	(* adding structure names in global environment before typing 
-	   the fields, because of recursive definitions *)
+        (* first pass: adding structure names *)
 	List.iter (fun d -> match d.jc_pdecl_node with
 		     | JCPDstructtype(id,parent,_,_) ->
 			 ignore (add_typedecl d (id,parent))
 		     | _ -> assert false
 		  ) pdecls;
+        (* second pass: adding structure fields *)
+	List.iter (fun d -> match d.jc_pdecl_node with
+		     | JCPDstructtype(id,parent,fields,_) ->
+			 let root,struct_info = add_typedecl d (id,parent) in
+			 let env = List.map (field root) fields in
+			 struct_info.jc_struct_info_fields <- env;
+			 Hashtbl.replace structs_table id (struct_info,[])
+		     | _ -> assert false
+		  ) pdecls;
+        (* third pass: typing invariants *)
 	List.iter decl pdecls
     | JCPDlogictype(id) ->
 	begin 

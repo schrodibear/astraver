@@ -6,18 +6,12 @@ type list = {
   invariant not_zero(x) =
     x.value != 0;
   invariant list_end(x) =
-    x.end == false => \offset_min(x.next) <= 0 && \offset_max(x.next) >= 0;
+    x.end == false <=> \offset_min(x.next) <= 0 && \offset_max(x.next) >= 0;
 }
 
 integer m(list[0] this) {
-  list[0] l = this;
-  integer z = 0;
-
-  while (!l.end)
-    invariant true;
-    variant 0;
-  {
-    z = z + 100/t.x; /* pas de division par zéro */
-    l = l.next;
+  if (!this.end) {
+    this.value = this.value / this.value;
+    m(this.next);
   }
 }
