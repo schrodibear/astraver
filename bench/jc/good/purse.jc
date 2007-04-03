@@ -9,10 +9,10 @@ type purse = {
 
 
 unit credit(purse[0] this, integer s) 
-  requires s >= 0 && \valid(this);
+  requires s >= 0;
   behavior amount_credited:
     assigns this.balance;
-    ensures this.balance == \old(this.balance)+s && \valid(this);
+    ensures this.balance == \old(this.balance)+s;
 {
     this.balance += s;
 }
