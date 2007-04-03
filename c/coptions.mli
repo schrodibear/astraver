@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.mli,v 1.31 2007-03-14 18:21:54 moy Exp $ i*)
+(*i $Id: coptions.mli,v 1.32 2007-04-03 14:48:13 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -73,22 +73,6 @@ val short_size : int
 val int_size : int
 val long_size : int
 val long_long_size : int
-
-val min_signed_char : string
-val max_signed_char : string
-val max_unsigned_char : string
-val min_signed_short : string
-val max_signed_short : string
-val max_unsigned_short : string
-val min_signed_int : string
-val max_signed_int : string
-val max_unsigned_int : string
-val min_signed_long : string
-val max_signed_long : string
-val max_unsigned_long : string
-val min_signed_longlong : string
-val max_signed_longlong : string
-val max_unsigned_longlong : string
 
 val files : unit -> string list 
 

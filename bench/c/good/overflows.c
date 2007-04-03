@@ -29,3 +29,9 @@ int f1(signed char c, int x) {
   c = uc;
   return c+(int)c;
 }
+
+/*
+Local Variables: 
+compile-command: "make overflows.overflows"
+End: 
+*/

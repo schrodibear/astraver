@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.mli,v 1.14 2006-11-03 12:48:58 marche Exp $ i*)
+(*i $Id: ctyping.mli,v 1.15 2007-04-03 14:48:13 filliatr Exp $ i*)
 
 (* Typing C programs *)
 val tezero : Cast.texpr
@@ -37,7 +37,5 @@ val eval_const_expr_noerror : Cast.texpr -> int64
 val int_teconstant : string -> Cast.texpr
 
 val float_constant_type : string -> string * Ctypes.cfloat
-
-val int_size : Ctypes.cinteger -> int (* in bits *)
 
 val coerce : Ctypes.ctype -> Cast.texpr -> Cast.texpr

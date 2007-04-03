@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.13 2007-03-27 20:50:15 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.14 2007-04-03 14:48:13 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -229,7 +229,7 @@ let rec gpred = function
       None
 
 let gpred p =
-  Format.printf "gpred %a@." Util.print_predicate p;
+  (*Format.printf "gpred %a@." Util.print_predicate p;*)
   gpred p
 
 (* extraction of a list of equalities and possibly a Gappa predicate *)

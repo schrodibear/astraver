@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.mli,v 1.14 2006-11-03 12:48:56 marche Exp $ i*)
+(*i $Id: cinterp.mli,v 1.15 2007-04-03 14:48:13 filliatr Exp $ i*)
 
 (* Interpretation of C programs *)
 
@@ -33,4 +33,4 @@ val interp : Cast.nfile -> why_decl list
 val interp_functions : why_decl list -> 
   (string * why_decl) list * why_decl list
 
-val make_int_ops_decls : unit -> why_decl list
+val make_int_types_decls : unit -> why_decl list

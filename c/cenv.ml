@@ -23,6 +23,7 @@
 (**************************************************************************)
 
 open Format
+open Coptions
 open Ctypes
 open Creport
 open Info
@@ -273,9 +274,34 @@ let make_zone ?name is_var =
   else
     global_zone
 
+let int_type_for_size signed size =
+  (if signed = Signed then "" else "u") ^ "int" ^ string_of_int size 
+
+module SI = 
+  Set.Make(struct type t = Ctypes.sign * int
+		  let compare = Pervasives.compare end)
+let int_sizes = ref SI.empty
+let declare_int_size is = int_sizes := SI.add is !int_sizes
+let all_int_sizes () = SI.elements !int_sizes
+
+let int_size = function
+  | Char -> char_size
+  | Short -> short_size
+  | Ctypes.Int -> int_size
+  | Long -> long_size
+  | LongLong -> long_long_size
+  | Bitfield n -> Int64.to_int n
+
+let int_type_for (signed, ty) = 
+  let n = int_size ty in
+  declare_int_size (signed, n);
+  int_type_for_size signed n
+
 let rec type_type_why ?name ty zone_is_var =
   match ty.ctype_node with
-    | Tint _ | Tenum _ -> Int
+    | Tint _ | Tenum _ when not Coptions.int_overflow_check -> Int
+    | Tint ik -> Why_Logic (int_type_for ik)
+    | Tenum _ -> Int (* TODO *)
     | Tfloat _ when not Coptions.floats -> Why_Logic "real"
     | Tfloat Float -> Why_Logic "single"
     | Tfloat Double -> Why_Logic "double"

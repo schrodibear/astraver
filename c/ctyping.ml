@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.145 2007-03-19 14:05:28 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.146 2007-04-03 14:48:13 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -47,7 +47,7 @@ let tezero = int_teconstant "0"
 
 let char_size_b = char_size / 8
 let short_size_b = short_size / 8
-let int_size_b = int_size / 8
+let int_size_b = Coptions.int_size / 8
 let long_size_b = long_size / 8
 let long_long_size_b = long_long_size / 8
 
@@ -239,18 +239,10 @@ let max_float = function
   | (Float | Double | LongDouble), (Float | Double | LongDouble) -> LongDouble
   | _ -> assert false
 
-let int_size = function
-  | Char -> char_size
-  | Short -> short_size
-  | Int -> int_size
-  | Long -> long_size
-  | LongLong -> long_long_size
-  | Bitfield n -> Int64.to_int n
-
 let rec le_cinteger = function
   | Tint (Signed, i1), Tint (_, i2) 
   | Tint (Unsigned, i1), Tint (Unsigned, i2) ->
-      int_size i1 <= int_size i2
+      Cenv.int_size i1 <= Cenv.int_size i2
   | Tint (Unsigned, i1), Tint (Signed, i2) ->
       int_size i1 < int_size i2
   (* enum = int TODO: could be unsigned int *)

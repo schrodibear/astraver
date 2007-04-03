@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: invariant.ml,v 1.43 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: invariant.ml,v 1.44 2007-04-03 14:48:13 filliatr Exp $ i*)
 
 open Coptions
 open Creport
@@ -514,6 +514,32 @@ let add_predicates l =
   let l = (fold_all_struct_pairs separation_2_struct l) in
   Cenv.fold_all_struct f l
 
+(* integer sizes (should be moved elsewhere) *)
+
+let string_two_power_n = function
+  | 64 -> "18446744073709551616"
+  | 63 -> "9223372036854775808"
+  | n -> 
+      assert (0 <= n && n <= 62); 
+      Int64.to_string (Int64.shift_left Int64.one n)
+
+let string_two_power_n_minus_one = function
+  | 64 -> "18446744073709551615"
+  | 63 -> "9223372036854775807"
+  | n -> 
+      assert (0 <= n && n <= 62); 
+      Int64.to_string (Int64.pred (Int64.shift_left Int64.one n))
+
+let min_int = function
+  | Signed, n -> "-" ^ string_two_power_n (n-1)
+  | Unsigned, _ -> "0"
+
+let max_int = function
+  | Signed, n -> string_two_power_n_minus_one (n-1)
+  | Unsigned, n -> string_two_power_n_minus_one n
+
+let min_cinteger (s,ty) = min_int (s, Cenv.int_size ty)
+let max_cinteger (s,ty) = max_int (s, Cenv.int_size ty)
 
 (* Type predicates 
   
@@ -537,28 +563,6 @@ let reset_var_i,var_i =
 
 let ntconstant n = nterm (NTconstant (IntConstant n)) c_int
 let ntzero = ntconstant "0"
-
-let max_int = function
-  | Signed, Char -> max_signed_char
-  | Unsigned, Char -> max_unsigned_char
-  | Signed, Short -> max_signed_short 
-  | Unsigned, Short -> max_unsigned_short
-  | Signed, Int -> max_signed_int
-  | Unsigned, Int -> max_unsigned_int
-  | Signed, Long -> max_signed_long 
-  | Unsigned, Long -> max_unsigned_long
-  | Signed, LongLong -> max_signed_longlong
-  | Unsigned, LongLong -> max_unsigned_longlong
-  | _, Bitfield _ -> assert false (*TODO*)
-
-let min_int = function
-  | Unsigned, _ -> "0"
-  | _, Char -> min_signed_char
-  | _, Short -> min_signed_short
-  | _, Int -> min_signed_int
-  | _, Long -> min_signed_long
-  | _, LongLong -> min_signed_longlong
-  | _ -> assert false (*TODO*)
 
 let predicate_name_for_int_type (sign,kind) =
   let sgs = match sign with 
@@ -704,8 +708,8 @@ let add_typing_predicates dl =
     set_var_type (Var_info x) ty true;
     is_int_n.logic_args <- [x];
     let var_x = nterm (NTvar x) ty in
-    let min_si = ntconstant (min_int si) in
-    let max_si = ntconstant (max_int si) in
+    let min_si = ntconstant (min_cinteger si) in
+    let max_si = ntconstant (max_cinteger si) in
     let p = npand (nprel (min_si, Le, var_x),
 		   nprel (var_x, Le, max_si)) in
     let d = tdecl (Nlogic (is_int_n, NPredicate_def ([x,ty], p))) in

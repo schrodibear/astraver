@@ -40,5 +40,8 @@ val add_typing_predicates :
 
 val function_for_int_type : Ctypes.sign * Ctypes.cinteger -> string
 
-val min_int : Ctypes.sign * Ctypes.cinteger -> string
-val max_int : Ctypes.sign * Ctypes.cinteger -> string
+val min_int : Ctypes.sign * int -> string
+val max_int : Ctypes.sign * int -> string
+
+val min_cinteger : Ctypes.sign * Ctypes.cinteger -> string
+val max_cinteger : Ctypes.sign * Ctypes.cinteger -> string

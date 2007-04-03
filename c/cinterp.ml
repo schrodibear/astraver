@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.234 2007-03-16 14:37:51 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.235 2007-04-03 14:48:13 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -568,23 +568,24 @@ let interp_float_conversion ty1 ty2 e =
     | _ -> 
 	assert false
 
-let int_size = Ctyping.int_size
+let int_size = Cenv.int_size
 
 let le_cinteger i1 i2 = int_size i1 <= int_size i2
 
 let lt_cinteger i1 i2 = int_size i1 < int_size i2
 
-let min_int = Invariant.min_int
-let max_int = Invariant.max_int
+let min_cinteger = Invariant.min_cinteger
+let max_cinteger = Invariant.max_cinteger
 
-let le_max_int i e = LPred ("le_int", [e; LConst (Prim_int (max_int i))])
+let le_max_int i e = LPred ("le_int", [e; LConst (Prim_int (max_cinteger i))])
 
 let is_non_negative e = LPred ("le_int", [LConst (Prim_int "0"); e])
 
 let not_zero e = LPred ("neq_int", [e; LConst (Prim_int "0")])
 
 let within_bounds i e = 
-  LAnd (LPred ("le_int", [LConst (Prim_int (min_int i)); e]), le_max_int i e)
+  LAnd (LPred ("le_int", [LConst (Prim_int (min_cinteger i)); e]), 
+       le_max_int i e)
 
 let is_enum e t = 
   let _,info = Cenv.find_pred ("is_enum_" ^ e) in LPred (info.logic_name, [t])
@@ -653,74 +654,47 @@ let float_unop fk = function
 
 (* arithmetic operations with overflow guards *)
 
-(* binary operator -> its name 
-   e.g. (Badd_int (Signed, Int)) -> "add_signed_int" *)
-let int_ops_with_check = Hashtbl.create 17
-
-let int_op_check op =
-  try
-    Hashtbl.find int_ops_with_check op 
-  with Not_found ->
-    let sign,kind = match op with
-      | Badd_int i | Bsub_int i | Bmul_int i | Bdiv_int i | Bmod_int i -> i
-      | _ ->  assert false
-    in
-    let ops = match op with
-      | Badd_int _ -> "add"
-      | Bsub_int _ -> "sub"
-      | Bmul_int _ -> "mul"
-      | Bdiv_int _ -> "div"
-      | Bmod_int _ -> "mod"
-      | _ -> assert false
-    in
-    let sgs = match sign with Signed -> "signed" | Unsigned -> "unsigned" in
-    let tys = match kind with
-      | Char -> "char"
-      | Short -> "short"
-      | Int -> "int"
-      | Long -> "long"
-      | LongLong -> "longlong"
-      | Bitfield _ -> assert false (*TODO*)
-    in
-    let name = ops ^ "_" ^ sgs ^ "_" ^ tys in
-    Hashtbl.add int_ops_with_check op name;
-    name
-
 let simple_logic_type s =
   { logic_type_args = [] ; logic_type_name = s}
 
-(* buils the parameter declarations for arithmetic operations with checks *)
-let make_int_ops_decls () =
+(* buils the declarations for integer types with checks *)
+let make_int_types_decls () =
   let int = Base_type (simple_logic_type "int") in
-  let make_one op name =
-    let ope,i = match op with
-      | Badd_int i -> "add_int",i | Bsub_int i -> "sub_int",i
-      | Bmul_int i -> "mul_int",i | Bdiv_int i -> "div_int",i
-      | Bmod_int i -> "mod_int",i | _ -> assert false
+  let make_one ((signed, size) as i) =
+    let name = Cenv.int_type_for_size signed size in
+    let min = Invariant.min_int i in
+    let max = Invariant.max_int i in
+    let of_name = "of_" ^ name in
+    let lt = simple_logic_type name in
+    let in_bounds t = 
+      LAnd (LPred ("le_int", [LConst (Prim_int min); t]),
+ 	    LPred ("le_int", [t; LConst (Prim_int max)]))
     in
-    let e = LApp (ope, [LVar "x"; LVar "y"]) in
-    let pre = match op with
-      | Bdiv_int _ | Bmod_int _ -> not_zero (LVar "y")
-      | Badd_int _ | Bsub_int _ | Bmul_int _ -> within_bounds i e
-      | _ -> assert false 
-    in
-    let post = LPred ("eq", [LVar "result"; e]) in
-    let spec = Annot_type (pre, int, [], [], post, []) in
-    Param (false, name, Prod_type ("x", int, Prod_type ("y", int, spec)))
+    [ Type (name, []);
+      Logic (false, of_name, ["x", lt], simple_logic_type "int");
+      Axiom (name ^ "_domain", 
+	     LForall ("x", lt, in_bounds (LApp (of_name, [LVar "x"]))));
+      Param (false, name ^ "of_int",
+	     Prod_type ("x", int, 
+			let pre = in_bounds (LVar "x") in
+			let post = 
+			  LPred ("eq", [LApp (of_name, [LVar "result"]); 
+					LVar "x"]) 
+			in
+			Annot_type (pre, Base_type lt, [], [], post, [])))
+    ]
   in
-  Hashtbl.fold 
-    (fun op name acc -> make_one op name :: acc) int_ops_with_check []
+  List.fold_left 
+    (fun acc t -> make_one t @ acc) []
+    (Cenv.all_int_sizes ())
 
-let int_op op =
-  if int_overflow_check then 
-    int_op_check op
-  else match op with
-    | Badd_int _ -> "add_int"
-    | Bsub_int _ -> "sub_int"
-    | Bmul_int _ -> "mul_int"
-    | Bdiv_int _ -> "div_int_"
-    | Bmod_int _ -> "mod_int_"
-    | _ -> assert false
+let int_op = function
+  | Badd_int _ -> "add_int"
+  | Bsub_int _ -> "sub_int"
+  | Bmul_int _ -> "mul_int"
+  | Bdiv_int _ -> "div_int_"
+  | Bmod_int _ -> "mod_int_"
+  | _ -> assert false
 
 open Cast
 

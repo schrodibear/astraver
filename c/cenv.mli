@@ -43,6 +43,12 @@ val set_var_type : env_info -> Ctypes.ctype -> bool -> unit
 val zone_table : (string,Info.zone) Hashtbl.t
 val make_zone :  ?name:string -> bool -> zone
 
+(* integer types *)
+val int_size : Ctypes.cinteger -> int (* in bits *)
+val int_type_for_size : Ctypes.sign -> int -> string
+val int_type_for : Ctypes.sign * Ctypes.cinteger -> string
+val all_int_sizes : unit -> (Ctypes.sign * int) list
+
 (* Global environment *)
 
 val add_sym : Loc.position -> string -> ctype -> env_info -> env_info
