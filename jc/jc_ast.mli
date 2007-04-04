@@ -209,6 +209,9 @@ type texpr_node =
   | JCTEvar of var_info
   | JCTEshift of texpr * texpr
   | JCTEderef of texpr * field_info
+(*
+  | JCTEbinary of texpr * bin_op * texpr
+*)
   | JCTEcall of fun_info * texpr list
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info

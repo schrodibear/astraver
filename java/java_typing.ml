@@ -190,7 +190,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  (JTYbase t,
-	   JTapp(logic_bin_op t op,[e1; e2]))
+	   JTbin(e1,t,op,e2))
 	else typing_error loc "numeric types expected for +,-,*, / and %%"
 
 
@@ -247,7 +247,7 @@ let make_predicate_bin_op loc op t1 e1 t2 e2 =
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JAapp(logic_bin_op t op,[e1; e2])
+	  JAbin(e1,t,op,e2)
 	else typing_error loc "numeric types expected for >,<,>=,<=,== and !="
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
 	assert false (* TODO *)

@@ -4,6 +4,7 @@ open Jc_output
 open Jc_env
 open Jc_ast
 open Java_env
+open Java_ast
 open Java_tast
 
 let int_range =
@@ -43,27 +44,6 @@ let lit l =
   | Char s -> assert false (* TODO *)
   | Null  -> JCCnull
 
-let rec assertion a =
-  let a' =
-    match a.java_assertion_node with
-      | JAtrue -> JCTAtrue
-      | _ -> assert false (* TODO *)
-  in { jc_tassertion_loc = a.java_assertion_loc ; jc_tassertion_node = a' }
-    
-let assertion_option a =
-  match a with
-    | None -> { jc_tassertion_loc = Loc.dummy_position; 
-		jc_tassertion_node = JCTAtrue }
-    | Some a -> assertion a
-
-let behavior (id,a,assigns,e) =
-  (snd id,
-  { jc_tbehavior_assumes = Option_misc.map assertion a;
-    jc_tbehavior_assigns = None ;
-    jc_tbehavior_ensures = assertion e;
-    jc_tbehavior_throws = None;
-  })
-    
 let vi_table = Hashtbl.create 97
 
 let get_var vi =
@@ -81,6 +61,76 @@ let get_var vi =
 	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
 	nvi
   
+
+let lbin_op t op =
+  match op with
+    | Bgt -> Jc_pervasives.gt_int
+    | Bge -> Jc_pervasives.ge_int
+    | Ble -> Jc_pervasives.le_int
+    | Blt -> Jc_pervasives.lt_int
+    | Bne -> Jc_pervasives.neq
+    | Beq -> Jc_pervasives.eq
+    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand-> assert false (* TODO *)
+    |Biff|Bimpl|Bor|Band -> assert false (* TODO *)
+    | Bmod -> Jc_pervasives.mod_int
+    | Bdiv -> Jc_pervasives.div_int
+    | Bmul -> Jc_pervasives.mul_int
+    | Bsub -> Jc_pervasives.sub_int
+    | Badd -> Jc_pervasives.add_int
+
+
+let rec term t =
+  let t' =
+    match t.java_term_node with
+      | JTlit l -> JCTTconst (lit l)
+      | JTbin(e1,t,op,e2) -> JCTTapp(lbin_op t op,[term e1; term e2])
+      | JTapp (_, _) -> assert false (* TODO *)
+      | JTvar vi -> JCTTvar (get_var vi)
+
+  in { jc_tterm_loc = t.java_term_loc ; jc_tterm_node = t' }
+  
+let rec assertion a =
+  let a' =
+    match a.java_assertion_node with
+      | JAtrue -> JCTAtrue
+      | JAbin(e1,t,op,e2) -> JCTAapp(lbin_op t op,[term e1; term e2])
+      | JAapp (_, _)-> assert false (* TODO *)
+      | JAquantifier (Forall, vi , a)-> 
+	  let vi = get_var vi in
+	  JCTAforall(vi,assertion a)
+      | JAquantifier (q, vi , a)-> 	  assert false (* TODO *)
+      | JAimpl (a1, a2)-> 
+	  JCTAimplies(assertion a1,assertion a2)
+      | JAor (_, _)-> assert false (* TODO *)
+      | JAand (a1, a2)-> 
+	  JCTAand [assertion a1 ; assertion a2]
+       | JAfalse -> assert false (* TODO *)
+
+  in { jc_tassertion_loc = a.java_assertion_loc ; jc_tassertion_node = a' }
+    
+let assertion_option a =
+  match a with
+    | None -> { jc_tassertion_loc = Loc.dummy_position; 
+		jc_tassertion_node = JCTAtrue }
+    | Some a -> assertion a
+
+let behavior (id,a,assigns,e) =
+  (snd id,
+  { jc_tbehavior_assumes = Option_misc.map assertion a;
+    jc_tbehavior_assigns = None ;
+    jc_tbehavior_ensures = assertion e;
+    jc_tbehavior_throws = None;
+  })
+    
+let bin_op op =
+  match op with
+    | Badd -> Jc_pervasives.add_int_
+    | Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *) 
+    | Biff|Bor|Band|Bimpl  -> assert false (* TODO *) 
+    | Bgt -> Jc_pervasives.gt_int_
+    | Bne|Beq|Bge|Ble|Blt -> assert false (* TODO *) 
+    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *) 
+
 let rec expr e =
   let e' =
     match e.java_expr_node with
@@ -88,8 +138,8 @@ let rec expr e =
       | JEincr (_, _) -> assert false (* TODO *) 
       | JEun (_, _) -> assert false (* TODO *)
       | JEbin (e1, op, e2) -> 
-	  let _e1 = expr e1 and _e2 = expr e2 in
-	  assert false
+	  let e1 = expr e1 and e2 = expr e2 in
+	  JCTEcall(bin_op op,[e1;e2])
 	  
       | JEvar vi -> JCTEvar (get_var vi)
 

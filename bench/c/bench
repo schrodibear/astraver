@@ -134,7 +134,7 @@ bench_c_good () {
     echo "======================================="
 }
 
-bench_c_good
+# bench_c_good
 # bench_c_good -separation -no-zone-type
 bench_c_good -separation
 

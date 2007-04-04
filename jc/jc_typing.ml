@@ -22,12 +22,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_output
 open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_pervasives
 open Jc_ast
-open Jc_output
 open Format
 
 exception Typing_error of Loc.position * string

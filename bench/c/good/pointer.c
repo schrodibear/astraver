@@ -48,11 +48,9 @@ int g() {
   return f(r); 
 }
 
-void * my_malloc(int);
-
 /*@ ensures *r == 1 */
 int g2() { 
-  r = (int *)my_malloc(sizeof(int));
+  r = (int*)malloc(sizeof(int));
   return f(r); 
 }
 

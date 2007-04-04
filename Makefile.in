@@ -240,7 +240,7 @@ bin/jessie.byte: $(JCCMO)
 
 # krakatoa
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/jc_output.cmo \
+	jc/jc_output.cmo jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	java/java_version.cmo java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
 	java/java_typing.cmo \
