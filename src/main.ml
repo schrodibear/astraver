@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.126 2007-03-13 10:12:23 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.127 2007-04-04 14:29:42 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -104,7 +104,7 @@ let push_obligations =
     (fun (loc,id,s) -> 
        let dg = Dgoal (loc, id, generalize_sequent s) in
        let dg = 
-	 if  pruning_hyp <> 0.0 then 
+	 if  pruning_hyp != -1 then 
 	   Hypotheses_filtering.reduce dg
 	 else
 	   dg in
@@ -358,7 +358,7 @@ let interp_decl ?(prelude=false) d =
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
 	let dg = Dgoal (loc, Ident.string id, s) in
-	if Options.pruning_hyp <> 0.0 then
+	if Options.pruning_hyp != -1 then
 	  begin
 	    push_decl (Hypotheses_filtering.reduce dg)
 	  end

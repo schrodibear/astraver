@@ -22,9 +22,23 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.4 2007-03-06 08:17:10 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.5 2007-04-04 14:29:41 couchot Exp $ i*)
 
 (*s Harvey's output *)
+
+(**
+   This modules provides a quick way to filter hypotheses of 
+   a goal. 
+   To do so 
+   1) Hypotheses are exepnaded thanks to the intros tactic
+   2) All the variables of each hypothesis are stored into a class
+   3) A hypothosis is selected if it is in the same class than the conclusion 
+**)
+
+
+
+
+
 
 open Ident
 open Options
@@ -54,8 +68,11 @@ module Term_set = Set.Make(struct type t=Logic.term let compare= compare end)
 
 let equality_container :(string, 'a) Hashtbl.t = Hashtbl.create 20
 
+
+(** (vars, preds,funcs) will be associated to each hypothesis **)
 let symbs : (predicate,'a) Hashtbl.t = Hashtbl.create 20
 
+(** a variable name will be associated to each hypothesis **)
 let class_of_hyp : (predicate,string) Hashtbl.t = Hashtbl.create 20
 
 (** the union find module for using classes **)
@@ -67,8 +84,29 @@ module UnionFindString = Unionfind.Make (struct
 					 end)
 
 
+type node =
+    {
+      node_label : string;
+    }
 
+module Var_node =
+struct
+  type t = node
+  let compare n1 n2 = Pervasives.compare n1 n2 
+  let equal n1 n2 = n1 = n2
+  let hash  = Hashtbl.hash
+end
 
+module Var_edge =
+struct
+  type t = int
+  let compare = Pervasives.compare
+end
+
+(**
+module Var_dep_graph = 
+  Graph.Imperative.Digraph.ConcreteLabeled(Var_node)(Var_edge)
+**)
 
 module  Symbol_container = 
 struct 
@@ -86,9 +124,11 @@ struct
 	Not_found ->
 	  Hashtbl.add m (Ident.string symb) 1 
 	    
-
-
-
+(**
+   @param v set of variables
+   Puts in the same classe all the variables v 
+   and returns its representative element
+**)
   let merge_variables v = 
     let elt = String_set.choose v in 
     String_set.iter
@@ -124,6 +164,16 @@ struct
     
 end
 
+(**
+@return (va,pr,fu) which is a triple of sets where
+ - va is the set of free variables do not belong to qvars 
+ - pr is the set of predicate symbols  
+ - fu is the set of functionnal symbols  
+@param f the formula which is analyzed
+@param qvars the set of variables that are outer quantified
+@TODO : REPLACE the comparison to "alloc"
+**)
+
 
 let f_symbols qvars t  = 
   let vars = ref String_set.empty in
@@ -157,6 +207,13 @@ let f_symbols qvars t  =
   (!vars,!preds,!funcs)
 
 
+(**
+@return (va,pr,fu) which is a triple of sets where
+ - va is the set of free variables
+ - pr is the set of predicate symbols  
+ - fu is the set of functionnal symbols  
+@param f the formula which is analyzed
+**)
 let symbols  f  =
   let vars = ref String_set.empty in
   let preds = ref String_set.empty in 
@@ -304,6 +361,21 @@ let display str set  =
     Format.printf "@\n@." 
   (*end*)
 
+let display (v,p,f)  = 
+  display "vars" v;
+  display "preds" p;
+  display "func" f
+
+ 
+
+(**
+   @param l list of variable declaration or predicates (hypotheses)
+   Update the hashtables 
+   - symbs which associates to each hypothesis its symbols (as a triple)
+     and class_of_hyp 
+   - class_of_hyp which associates to each hypothesis its representative 
+   variable 
+**)
 let memorizes_hyp_symb l = 
   Hashtbl.clear symbs ;
   let rec mem   = function  
@@ -312,15 +384,17 @@ let memorizes_hyp_symb l =
     | Spred (_,p) :: q -> 
 	let (v',p',f') = symbols p in 
 	Hashtbl.add symbs  p (v',p',f');
+	(** updates the equivalence classes of variables and 
+	    get the representative element**)
 	let rep = Symbol_container.merge_variables v' in 
-	display_symb_of v' ;
+	(* display_symb_of v' ;*)
 	Hashtbl.add class_of_hyp p rep;
 	mem  q    in 
   mem l 
   
 
     
-
+(**
 
 let rank0 hyp_symbs goal_symbs = 
   let r = 
@@ -365,6 +439,17 @@ let filter l goal_symbs=
 	else
 	  check q in  
     check l
+**)
+
+(**
+   @param concl_rep the the representative variable of the conclusion
+   @param l the list of hypothesis
+   @return a list where the hypotheses have been filtered. 
+   An hypothese is selected if 
+   - it is a variable declaration
+   - it is an hypothese which has the same representant than 
+   the conclusion
+**)
 
 
 let filter_acc_variables l concl_rep=
@@ -387,12 +472,13 @@ let filter_acc_variables l concl_rep=
 let managesGoal id ax (hyps,concl) =
   match ax with 
     Dgoal(loc,id,s) -> 
+      (** retrieves the list of symbols in the conclusion **)
       let (v,p,f) = symbols concl in 
+      (** set informations about hypotheses **) 
       memorizes_hyp_symb hyps;
 
-      
+      (**
       (* variant with all symbols *)
-      (*
       let rec get_equality = function
 	| [] -> ()
 	| Svar (id, v) :: q ->  get_equality q 
@@ -404,15 +490,20 @@ let managesGoal id ax (hyps,concl) =
       let goal_symbs = String_set.union v (String_set.union p f) in
       let l' = filter hyps goal_symbs in  
       Dgoal (loc,id, Env.empty_scheme (l',concl))
-      *)
+      **)
+
       (* variant considering variables *)
-      let var_concl_rep = Symbol_container.merge_variables v in 
-      let l' = filter_acc_variables hyps var_concl_rep in  
-      Dgoal (loc,id, Env.empty_scheme (l',concl))
-      
-      
+      (** update the equivalence class of the variables **)
 
-
+      if (not (String_set.is_empty v )) then 
+	let var_concl_rep = Symbol_container.merge_variables v in 
+	(** filter the hypotheses hyps w.r.t. the representative 
+	    element  var_concl_rep **)
+	let l' = filter_acc_variables hyps var_concl_rep in  
+	Dgoal (loc,id, Env.empty_scheme (l',concl))
+      else
+	Dgoal (loc,id, Env.empty_scheme ([],concl))
+	  
     | _ -> ax 
 
 
