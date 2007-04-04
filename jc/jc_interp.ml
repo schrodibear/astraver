@@ -603,10 +603,6 @@ let excep_posts_for_others eopt excep_posts =
     excep_posts []
        
 let tr_fun f spec body acc =
-  (* There will be two passes for requires clauses
-     (one for invariants, and one for requires themselves)
-     and this will be used by both *)
-  let requires_assertion = assertion None "" spec.jc_fun_requires in
   (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
   let invariants =
     List.fold_right
@@ -620,7 +616,7 @@ let tr_fun f spec body acc =
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
-      requires_assertion
+      LTrue
   in
   let requires = 
     List.fold_right
@@ -658,7 +654,7 @@ let tr_fun f spec body acc =
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
-      requires_assertion
+      (assertion None "" spec.jc_fun_requires)
   in
   (* adding invariants to requires *)
   let requires = make_and requires invariants in

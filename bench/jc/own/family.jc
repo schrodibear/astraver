@@ -9,9 +9,17 @@ and type Person = {
 }
 
 unit m(Person[0] this)
-  requires true;
+  requires this.age > 0;
   behavior ok:
     ensures true;
 {
   this.age = 0; // error
+}
+
+boolean older(Person[0] p1, Person[0] p2)
+  requires true;
+  behavior ok:
+    ensures \result <=> p1.age > p2.age;
+{
+  return p1.age > p2.age;
 }
