@@ -602,7 +602,26 @@ let excep_posts_for_others eopt excep_posts =
        else (ei.jc_exception_info_name,LTrue)::acc)
     excep_posts []
        
-let tr_fun f spec body acc = 
+let tr_fun f spec body acc =
+  (* There will be two passes for requires clauses
+     (one for invariants, and one for requires themselves)
+     and this will be used by both *)
+  let requires_assertion = assertion None "" spec.jc_fun_requires in
+  (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
+  let invariants =
+    List.fold_right
+      (fun v acc ->
+	 match v.jc_var_info_type with
+	   | JCTpointer(st,_,_) ->
+	       let var = LVar v.jc_var_info_final_name in
+	       let invariant = invariant_for_struct var st in
+	       make_and invariant acc
+	   | JCTrange _ -> acc
+	   | JCTnative _ -> acc
+	   | JCTlogic _ -> acc)
+      f.jc_fun_info_parameters
+      requires_assertion
+  in
   let requires = 
     List.fold_right
       (fun v acc ->
@@ -630,23 +649,28 @@ let tr_fun f spec body acc =
 		 (LPred("instanceof",
 			[LVar tag; var ; LVar (tag_name st)]))
 	       in
-	       let invariant = invariant_for_struct var st in
+               make_and (make_and validity instance) acc
+	       (*let invariant = invariant_for_struct var st in
 	       make_and 
 		 (make_and (make_and validity instance) invariant)
-		 acc
+		 acc*)
 	   | JCTrange _ -> acc
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
-      (assertion None "" spec.jc_fun_requires)
+      requires_assertion
   in
+  (* adding invariants to requires *)
+  let requires = make_and requires invariants in
   let (normal_behaviors,excep_behaviors) =
     List.fold_left
       (fun (normal,excep) (id,b) ->
-	 let post = 
-	   make_and 
-	   (assertion None "" b.jc_behavior_ensures)
-	   (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)
+	 let post =
+           make_and
+	     (make_and
+	       (assertion None "" b.jc_behavior_ensures)
+	       (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns))
+             invariants
 	 in
 	 let a =
 	   match b.jc_behavior_assumes with

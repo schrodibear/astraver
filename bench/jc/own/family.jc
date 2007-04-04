@@ -1,16 +1,17 @@
-/* type A = {
-  A[0] a;
-  integer i;
-  invariant test(x) = x.i == 0;
-} */
-
-type Person = {
+type Family = {
+  /* rep */ Person[0] mother;
+  /* rep */ Person[0] father;
+}
+and type Person = {
   /* rep */ Family[0] family;
   integer age;
   invariant age_inv(this) = this.family.mother.age > this.age && this.family.father.age > this.age;
 }
-and type Family = {
-  /* rep */ Person[0] mother;
-  /* rep */ Person[0] father;
-  /*  invariant test(this) = this.mother.age == 0; */
+
+unit m(Person[0] this)
+  requires true;
+  behavior ok:
+    ensures true;
+{
+  this.age = 0; // error
 }
