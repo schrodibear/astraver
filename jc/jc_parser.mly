@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.31 2007-04-03 08:02:30 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.32 2007-04-04 12:45:07 marche Exp $ */
 
 %{
 
@@ -147,6 +147,10 @@
 %right LTEQGT
 /* => */
 %right EQGT 
+%left QUESTION ASSIGNOP
+%left BARBAR
+%left AMPAMP
+%left LT GT LTEQ GTEQ EQEQ BANGEQ COLONGT LTCOLON
 /* unary -, unary +, ++, --, ! */
 %nonassoc UMINUS UPLUS PLUSPLUS MINUSMINUS EXCLAM
 /* . */
@@ -420,9 +424,9 @@ postfix_expression:
 ;
 
 argument_expression_list: 
-| assignment_expression 
+| expression 
     { [$1] }
-| assignment_expression COMMA argument_expression_list 
+| expression COMMA argument_expression_list 
     { $1::$3 }
 ;
 
@@ -458,103 +462,6 @@ shift_expression:
 */
 ;
 
-relational_expression: 
-| shift_expression 
-    { $1 }
-| relational_expression LT shift_expression 
-    { locate_expr (JCPEbinary ($1, Blt, $3)) }
-| relational_expression GT shift_expression
-    { locate_expr (JCPEbinary ($1, Bgt, $3)) }
-| relational_expression LTEQ shift_expression
-    { locate_expr (JCPEbinary ($1, Ble, $3)) }
-| relational_expression GTEQ shift_expression
-    { locate_expr (JCPEbinary ($1, Bge, $3)) }
-| relational_expression LTCOLON IDENTIFIER
-    { locate_expr (JCPEinstanceof($1, $3)) }
-| relational_expression COLONGT IDENTIFIER
-    { locate_expr (JCPEcast($1, $3)) }
-;
-
-equality_expression: 
-| relational_expression 
-    { $1 }
-| equality_expression EQEQ relational_expression 
-    { locate_expr (JCPEbinary ($1, Beq, $3)) }
-| equality_expression BANGEQ relational_expression 
-    { locate_expr (JCPEbinary ($1, Bneq, $3)) }
-;
-
-and_expression: 
-| equality_expression 
-    { $1 }
-/*
-| and_expression AMP equality_expression 
-    { locate (CEbinary ($1, Bbw_and, $3)) }
-*/
-;
-
-exclusive_or_expression: 
-| and_expression 
-    { $1 }
-/*
-| exclusive_or_expression HAT and_expression 
-    { locate (CEbinary ($1, Bbw_xor, $3)) }
-*/
-;
-
-inclusive_or_expression: 
-| exclusive_or_expression 
-    { $1 }
-/*
-| inclusive_or_expression PIPE exclusive_or_expression 
-    { locate (CEbinary ($1, Bbw_or, $3)) }
-*/
-;
-
-logical_and_expression: 
-| inclusive_or_expression 
-    { $1 }
-| logical_and_expression AMPAMP inclusive_or_expression 
-    { locate_expr (JCPEbinary($1, Bland, $3)) }
-;
-
-logical_or_expression: 
-| logical_and_expression 
-    { $1 }
-| logical_or_expression BARBAR logical_and_expression 
-    { locate_expr (JCPEbinary($1, Blor, $3)) }
-;
-
-conditional_expression: 
-| logical_or_expression 
-    { $1 }
-| logical_or_expression QUESTION expression COLON conditional_expression 
-    { locate_expr (JCPEif ($1, $3, $5)) }
-;
-
-
-assignment_expression: 
-| conditional_expression 
-    { $1 }
-| postfix_expression assignment_operator assignment_expression 
-    { let a  =
-	match $2 with
-		| `Aeq -> JCPEassign ($1, $3)
-		| `Aadd -> JCPEassign_op ($1, Badd, $3)
-		| `Asub -> JCPEassign_op ($1, Bsub, $3)
-		| `Amul -> JCPEassign_op ($1, Bmul, $3)
-		| `Adiv -> JCPEassign_op ($1, Bdiv, $3)
-		| `Amod -> JCPEassign_op ($1, Bmod, $3)
-(*
-		| Aleft -> CEassign_op ($1, Bshift_left, $3)
-		| Aright -> CEassign_op ($1, Bshift_right, $3)
-		| Aand -> CEassign_op ($1, Bbw_and, $3)
-		| Axor -> CEassign_op ($1, Bbw_xor, $3)
-		| Aor -> CEassign_op ($1, Bbw_or, $3)
-*)
-      in locate_expr a }
-;
-
 assignment_operator: 
 | EQ { `Aeq }
 | PLUSEQ { `Aadd }
@@ -573,8 +480,60 @@ assignment_operator:
 
 
 expression: 
-| assignment_expression 
+| shift_expression 
     { $1 }
+| expression LT expression 
+    { locate_expr (JCPEbinary ($1, Blt, $3)) }
+| expression GT expression
+    { locate_expr (JCPEbinary ($1, Bgt, $3)) }
+| expression LTEQ expression
+    { locate_expr (JCPEbinary ($1, Ble, $3)) }
+| expression GTEQ expression
+    { locate_expr (JCPEbinary ($1, Bge, $3)) }
+| expression LTCOLON IDENTIFIER
+    { locate_expr (JCPEinstanceof($1, $3)) }
+| expression COLONGT IDENTIFIER
+    { locate_expr (JCPEcast($1, $3)) }
+| expression EQEQ expression 
+    { locate_expr (JCPEbinary ($1, Beq, $3)) }
+| expression BANGEQ expression 
+    { locate_expr (JCPEbinary ($1, Bneq, $3)) }
+/*
+| _expression AMP expression 
+    { locate (CEbinary ($1, Bbw_and, $3)) }
+*/
+/*
+| expression HAT expression 
+    { locate (CEbinary ($1, Bbw_xor, $3)) }
+*/
+/*
+| expression PIPE expression 
+    { locate (CEbinary ($1, Bbw_or, $3)) }
+*/
+| expression AMPAMP expression 
+    { locate_expr (JCPEbinary($1, Bland, $3)) }
+| expression BARBAR expression 
+    { locate_expr (JCPEbinary($1, Blor, $3)) }
+| expression QUESTION expression COLON expression %prec QUESTION
+    { locate_expr (JCPEif ($1, $3, $5)) }
+| postfix_expression assignment_operator expression %prec ASSIGNOP
+    { let a  =
+	match $2 with
+		| `Aeq -> JCPEassign ($1, $3)
+		| `Aadd -> JCPEassign_op ($1, Badd, $3)
+		| `Asub -> JCPEassign_op ($1, Bsub, $3)
+		| `Amul -> JCPEassign_op ($1, Bmul, $3)
+		| `Adiv -> JCPEassign_op ($1, Bdiv, $3)
+		| `Amod -> JCPEassign_op ($1, Bmod, $3)
+(*
+		| Aleft -> CEassign_op ($1, Bshift_left, $3)
+		| Aright -> CEassign_op ($1, Bshift_right, $3)
+		| Aand -> CEassign_op ($1, Bbw_and, $3)
+		| Axor -> CEassign_op ($1, Bbw_xor, $3)
+		| Aor -> CEassign_op ($1, Bbw_or, $3)
+*)
+      in locate_expr a }
+
 | BSFORALL type_expr identifier_list SEMICOLON expression 
     %prec PRECFORALL
     { locate_expr (JCPEforall($2,$3,$5)) }

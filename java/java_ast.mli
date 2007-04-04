@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.3 2007-03-09 09:24:51 marche Exp $
+$Id: java_ast.mli,v 1.4 2007-04-04 12:45:06 marche Exp $
 
 ***************************************************************************)
 
@@ -25,26 +25,11 @@ type modifiers = modifier list
 
 (*s type expressions *)
 
-type base_type =
-    | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
-	  (* native logic types *)
-    | Tinteger | Treal
-
 type type_expr = 
     | Base_type of base_type
     | Type_name of qualified_ident
     | Array_type_expr of type_expr
  
-(*s literals *)
-
-type literal =
-    | Integer of string
-    | Float of string
-    | Bool of bool
-    | String of string
-    | Char of string
-    | Null
-
 (*s expressions *)
 
 type quantifier = Forall | Exists
@@ -58,7 +43,7 @@ type incr_decr_op = Preincr | Predecr | Postincr | Postdecr
 
 type bin_op = 
     | Badd | Bsub | Bmul | Bdiv | Bmod 
-    | Band | Bor | Bimpl
+    | Band | Bor | Bimpl | Biff
     | Bbwand | Bbwor | Bbwxor
     | Blsl | Blsr | Basr
     | Beq | Bne | Bgt | Blt | Ble | Bge

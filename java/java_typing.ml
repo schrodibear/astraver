@@ -1,8 +1,11 @@
 
+open Java_env
 open Java_ast
 open Java_tast
 open Format
 open Java_pervasives
+
+let methods_table = Hashtbl.create 97
 
 exception Typing_error of Loc.position * string
 
@@ -21,6 +24,29 @@ let type_type ty =
     | Type_name _ -> assert false (* TODO *)
     | Array_type_expr _ -> assert false (* TODO *)
 
+let string_of_base_type t =
+  match t with
+(*
+    | Tunit -> "unit"
+*)
+    | Tinteger -> "integer"
+    | Treal -> "real"
+    | Tboolean -> "boolean"
+    | Tdouble -> "double"
+    | Tlong -> "long"
+    | Tfloat -> "float"
+    | Tint -> "int"
+    | Tchar -> "char"
+    | Tbyte -> "byte"
+    | Tshort -> "short"
+
+
+let print_type fmt t =
+  match t with
+    | JTYbase t -> fprintf fmt "%s" (string_of_base_type t)
+    | _ -> assert false (* TODO *)
+
+
 (* variables *)
 
 let var_tag_counter = ref 0
@@ -36,6 +62,22 @@ let var ty id =
   }
   in vi
 
+(* methods *)
+
+let method_tag_counter = ref 0
+
+let method_info id ty pars =
+  incr method_tag_counter;
+  {
+    method_info_tag = !method_tag_counter;
+    method_info_name = id;
+    method_info_trans_name = id;
+    method_info_return_type = ty;
+    method_info_parameters = pars;
+    method_info_is_static = false
+  }
+    
+
 let rec var_type_and_id ty id =
   match id with
     | Simple_id (loc,n) -> ty,n
@@ -49,7 +91,10 @@ let logic_bin_op ty op =
     | Tinteger,Bmul -> mul_int
     | Tinteger,Beq -> eq_int
     | Tinteger,Bge -> ge_int
-    | _,(Bge|Ble|Blt|Bgt|Bne) -> assert false (* TODO *)
+    | _,Ble -> le_int 
+    | _,Blt -> lt_int
+    | _,Bgt -> gt_int
+    | _,Bne -> ne_int 
     | _,(Basr|Blsr|Blsl) -> assert false (* TODO *)
     | _,(Bbwxor|Bbwor|Bbwand) -> assert false (* TODO *)
     | _,(Bimpl|Bor|Band) -> assert false (* TODO *)
@@ -75,6 +120,11 @@ let is_numeric t =
 	    | Tchar -> assert false (* TODO *)
 	    | Tboolean -> false
 	end
+    | _ -> false
+
+let is_boolean t =
+  match t with
+    | JTYbase Tboolean -> true
     | _ -> false
 
 let lub_numeric_types t1 t2 =
@@ -109,11 +159,32 @@ let term_coerce t1 t2 e =
     | _ -> assert false
 *)
 
+(*
+let subbasetype t1 t2 =
+  match t1,t2 with
+    | (Tint|Tshort), Tinteger -> true
+    | _,Tinteger -> assert false (* TODO *)
+    | Tint,Tint -> true
+    | _,_ -> assert false (* TODO *)
+
+let subtype t1 t2 =
+  match t1,t2 with
+    | JTYbase t1, JTYbase t2 -> subbasetype t1 t2
+    | _ -> assert false (* TODO *)
+*)
+
+let compatible_base_types t1 t2 = true
+
+let compatible_types t1 t2 =
+  match t1,t2 with
+    | JTYbase t1, JTYbase t2 -> compatible_base_types t1 t2
+    | _ -> assert false (* TODO *)
+
 let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
 	assert false (* TODO *)
-    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band ->
+    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
 	assert false (* TODO *)
     | Bsub | Badd | Bmod | Bdiv | Bmul ->
 	if is_numeric t1 && is_numeric t2 then
@@ -178,7 +249,7 @@ let make_predicate_bin_op loc op t1 e1 t2 e2 =
 	  let t = lub_numeric_types t1 t2 in
 	  JAapp(logic_bin_op t op,[e1; e2])
 	else typing_error loc "numeric types expected for >,<,>=,<=,== and !="
-    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band ->
+    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
 	assert false (* TODO *)
     | Bsub | Badd | Bmod | Bdiv | Bmul ->
 	typing_error loc "operator +,-,*, / and %% is not a predicate"
@@ -245,70 +316,203 @@ and make_quantified_formula loc q ty idl env e : assertion =
 
 (* expressions *)
 
+let make_bin_op loc op t1 e1 t2 e2 =
+    match op with
+    | Bgt | Blt | Bge | Ble | Beq | Bne ->
+	if is_numeric t1 && is_numeric t2 then
+	  let _t = lub_numeric_types t1 t2 in
+	  Tboolean,
+	  JEbin((*coerce t1 t*) e1, op, (*coerce t2 t*) e2)
+	else
+	  typing_error loc "numeric types expected"
+    | Badd | Bsub | Bmul | Bdiv | Bmod ->
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  t,
+	  JEbin((*coerce t1 t*) e1, op, (* coerce t2 t*) e2)
+	else
+	  typing_error loc "numeric types expected for +, -, *, / and %%"
+    | Band | Bor -> 
+	if is_boolean t1 && is_boolean t2 then
+	  Tboolean,JEbin(e1,op,e2)
+	else
+	  typing_error loc "booleans expected"
+	(* not allowed as expression op *)
+    |Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *)
+    | Bimpl | Biff -> assert false
+
 let rec expr env e =
   let ty,te = 
     match e.java_pexpr_node with
       | JPElit l -> let t,l = lit l in t,(JElit l)
-      | JPEvar _ -> assert false (* TODO *)
+      | JPEvar (loc,id) -> 
+	  begin
+	    try
+	      let vi = List.assoc id env
+	      in vi.java_var_info_type,JEvar vi
+	    with Not_found -> 
+	      typing_error loc "unbound identifier %s" id
+	  end	  
       | JPEthis -> assert false (* TODO *)
-      | Instanceof (_, _)
-      | Cast (_, _)
-      | Array_access (_, _)
-      | Array_creation _
-      | Class_instance_creation (_, _)
-      | Super_method_call (_, _)
-      | Method_call (_, _, _)
-      | JPEfield_access _
-      | JPEif (_, _, _)
-      | JPEassign_array (_, _, _, _)
-      | JPEassign_field (_, _, _)
-      | Assign_name (_, _, _)
-      | JPEincr (_, _)
-      | JPEun (_, _)
-      | JPEbin (_, _, _) -> assert false (* TODO *)
-	  (* only in terms *)
+      | Instanceof (_, _)-> assert false (* TODO *)
+      | Cast (_, _)-> assert false (* TODO *)
+      | Array_access (_, _)-> assert false (* TODO *)
+      | Array_creation _-> assert false (* TODO *)
+      | Class_instance_creation (_, _)-> assert false (* TODO *)
+      | Super_method_call (_, _)-> assert false (* TODO *)
+      | Method_call (_, _, _)-> assert false (* TODO *)
+      | JPEfield_access _-> assert false (* TODO *)
+      | JPEif (_, _, _)-> assert false (* TODO *)
+      | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
+      | JPEassign_field (_, _, _)-> assert false (* TODO *)
+      | Assign_name (_, _, _)-> assert false (* TODO *)
+      | JPEincr (_, _)-> assert false (* TODO *)
+      | JPEun (_, _)-> assert false (* TODO *)
+      | JPEbin (e1, op, e2) -> 
+	  let ty1,te1 = expr env e1
+	  and ty2,te2 = expr env e2
+	  in 
+	  let t,e = make_bin_op e.java_pexpr_loc op ty1 te1 ty2 te2 in
+	  JTYbase t,e
+	       (* only in terms *)
       | JPEquantifier (_, _, _, _)
       | JPEold _
       | JPEresult -> 
 	  typing_error e.java_pexpr_loc "not allowed in expressions"
 
   in
+  ty,
   { java_expr_loc = e.java_pexpr_loc;
     java_expr_type = ty;
     java_expr_node = te;
   }
 
+
+			   
+let type_initializer env ty i =
+  match ty,i with
+    | JTYbase t, Simple_initializer e ->
+	let tye,te = expr env e in	
+	if compatible_types ty tye then JIexpr te
+	else
+	  typing_error e.java_pexpr_loc "type %a expected, got %a"
+	    print_type ty print_type tye
+    | _ -> assert false (* TODO *)
+
 (* statements *)
 
-let rec statements env b =
+(*
+let rec type_variable_id ty id =
+  match id with
+    | Simple_id (loc,id) -> (ty,id)
+    | Array_id v ->
+	let t,i = type_variable_id ty v in
+	JTYarray t,i
+*)
+
+let rec statement env s =
+  let s' =
+    match s.java_pstatement_node with
+      | JPSskip -> JSskip
+      | JPSif (e, s1, s2) ->
+	  let ty,te = expr env e in
+	  let ts1 = statement env s1 in
+	  let ts2 = statement env s2 in
+	  if is_boolean ty then	    
+	    JSif(te,ts1,ts2)
+	  else
+	    typing_error e.java_pexpr_loc "boolean expected"
+      | JPSloop_annot (_, _)-> assert false (* TODO *)
+      | JPSannot (_, _)-> assert false (* TODO *)
+      | JPSassert _-> assert false (* TODO *)
+      | JPSsynchronized (_, _)-> assert false (* TODO *)
+      | JPSblock _-> assert false (* TODO *)
+      | JPSswitch (_, _)-> assert false (* TODO *)
+      | JPStry (_, _, _)-> assert false (* TODO *)
+      | JPSfor_decl (_, _, _, _)-> assert false (* TODO *)
+      | JPSfor (_, _, _, _)-> assert false (* TODO *)
+      | JPSdo (_, _)-> assert false (* TODO *)
+      | JPSwhile (_, _)-> assert false (* TODO *)
+      | JPSlabel (_, _)-> assert false (* TODO *)
+      | JPScontinue _-> assert false (* TODO *)
+      | JPSbreak _-> assert false (* TODO *)
+      | JPSreturn None -> assert false (* TODO *)
+      | JPSreturn (Some e) -> 
+	  begin
+	    try
+	      let t,te = expr env e in 
+	      let vi = List.assoc "\\result" env in
+	      if compatible_types t vi.java_var_info_type then
+		JSreturn te
+	      else
+		begin
+		  try
+		    JSreturn ((* restrict t vi.jc_var_info_type*) te)
+		  with
+		      Invalid_argument _ ->
+			typing_error s.java_pstatement_loc "type '%a' expected"
+			  print_type vi.java_var_info_type
+		end
+	    with
+		Not_found ->
+		  typing_error e.java_pexpr_loc "no result expected"
+	  end
+      | JPSthrow _-> assert false (* TODO *)
+      | JPSvar_decl _-> assert false (* TODO *)
+      | JPSexpr _ -> assert false (* TODO *)
+  in 
+  { java_statement_loc = s.java_pstatement_loc ;
+    java_statement_node = s' }
+
+
+and statements env b =
   match b with
     | [] -> []
     | s :: rem ->
 	match s.java_pstatement_node with
 	  | JPSskip -> statements env rem
-	  | JPSif (e, s1, s2) ->
-	      let te = expr env e in
-	      let ts1 = statements env [s1] in
-	      let ts2 = statements env [s2] in
-	      JSif(te,ts1,ts2)
-	  | JPSloop_annot (_, _)
-	  | JPSannot (_, _)
-	  | JPSassert _
-	  | JPSsynchronized (_, _)
-	  | JPSblock _
-	  | JPSswitch (_, _)
-	  | JPStry (_, _, _)
-	  | JPSfor_decl (_, _, _, _)
-	  | JPSfor (_, _, _, _)
-	  | JPSdo (_, _)
-	  | JPSwhile (_, _)
-	  | JPSlabel (_, _)
-	  | JPScontinue _
-	  | JPSbreak _
-	  | JPSreturn _
-	  | JPSthrow _
-	  | JPSvar_decl _
-	  | JPSexpr _ -> assert false (* TODO *)
+	  | JPSvar_decl vd -> 
+	      let ty = type_type vd.variable_type in
+	      let l =
+		List.map
+		  (fun vd ->
+		     let ty',id = var_type_and_id ty vd.variable_id in
+		     match vd.variable_initializer with
+		       | None -> (id,ty',None)
+		       | Some e -> 
+			   let i = type_initializer env ty' e in
+			   (id,ty',Some i))
+		  vd.variable_decls
+	      in
+	      let env,decls =
+		List.fold_right
+		  (fun (id,ty,i) (env,decls)->
+		     let vi = var ty id in		     
+		     (id,vi)::env,(vi,i)::decls)
+		  l (env,[])
+	      in
+	      let r = block env rem in
+	      let s =
+		List.fold_right
+		  (fun (vi,i) acc -> 
+		     { java_statement_loc = s.java_pstatement_loc ;
+		       java_statement_node =
+			 JSvar_decl(vi,i,acc); })
+		  decls r in
+	      [s]
+	      
+	  | _ ->
+	      let s' = statement env s in
+	      s' :: statements env rem
+
+and block env b =
+  match statements env b with
+    | [] -> { java_statement_loc = Loc.dummy_position ; 
+	      java_statement_node = JSskip }
+    | [s] -> s
+    | (s::_) as l -> 
+	{ java_statement_loc = s.java_statement_loc ; 
+	  java_statement_node = JSblock l }
 
 (* methods *)
 
@@ -336,6 +540,7 @@ let rec class_fields l acc =
 	let id, ret_ty, params = 
 	  method_header head.method_return_type head.method_declarator 
 	in
+	let mi = method_info (snd id) ret_ty (List.map snd params) in
 	let req = Option_misc.map (assertion params) req in
 	let params_result = 
 	  match ret_ty with
@@ -350,8 +555,9 @@ let rec class_fields l acc =
 	      assertion params_result ensures))
 	  behs
 	in
-	let body = Option_misc.map (statements params) body in
-	class_fields rem ((id,params,ret_ty,req,behs,body) :: acc)
+	let body = Option_misc.map (statements params_result) body in
+	Hashtbl.add methods_table mi.method_info_tag (mi,req,behs,body);
+	class_fields rem (mi :: acc)
     | JPFmethod_spec _ :: _ ->
 	typing_error (assert false) "out of place method specification"
     | JPFinvariant _ :: rem ->  assert false (* TODO *)

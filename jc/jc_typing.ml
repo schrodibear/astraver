@@ -27,6 +27,7 @@ open Jc_envset
 open Jc_fenv
 open Jc_pervasives
 open Jc_ast
+open Jc_output
 open Format
 
 exception Typing_error of Loc.position * string
@@ -98,21 +99,6 @@ let comparable_types t1 t2 =
 	  s1.jc_struct_info_root = s2.jc_struct_info_root
     | _ -> false
   
-
-let string_of_native t =
-  match t with
-    | Tunit -> "unit"
-    | Tinteger -> "integer"
-    | Treal -> "real"
-    | Tboolean -> "boolean"
-
-
-let print_type fmt t =
-  match t with
-    | JCTnative n -> fprintf fmt "%s" (string_of_native n)
-    | JCTlogic s -> fprintf fmt "%s" s
-    | JCTrange ri -> fprintf fmt "%s" ri.jc_range_info_name
-    | JCTpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
 
 
 let logic_functions_table = Hashtbl.create 97

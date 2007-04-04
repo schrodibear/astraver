@@ -1,8 +1,28 @@
 
+(*s literals *)
+
+type literal =
+    | Integer of string
+    | Float of string
+    | Bool of bool
+    | String of string
+    | Char of string
+    | Null
+
 (*s types and environments *)
 
 type accessibility = [ `PUBLIC | `PROTECTED | `PRIVATE | `NONE ];;
 
+type base_type =
+    | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
+	  (* native logic types *)
+    | Tinteger | Treal
+
+type java_type =
+    | JTYbase of base_type
+    | JTYarray of java_type
+
+(*
 type java_type =
   | Byte_type
   | Short_type
@@ -16,14 +36,14 @@ type java_type =
   | Array_type of java_type
   | Prop_type
   | Logic_type of string
-      
+*)
+    
 and java_var_info =
     {
+      java_var_info_tag : int;
       java_var_info_name : string;
-(*
       mutable java_var_info_final_name : string;
-      mutable java_var_info_is_ref : bool;
-*)
+      mutable java_var_info_assigned : bool;
       java_var_info_type : java_type;
     }
     
@@ -56,17 +76,22 @@ and constant_entry =
 
 and method_info = 
     {
+     method_info_tag : int;
      method_info_name : string;
      mutable method_info_trans_name : string;
+(*
      method_info_accessibility : accessibility;
+*)
      method_info_is_static : bool;
-     method_info_is_pure : bool;
-     method_info_return_type : java_type ;
+     method_info_return_type : java_type option ;
+(*
      method_info_class_or_interface : java_env_entry;
      mutable method_info_is_predicate : bool;
      method_info_routine :  routine_entry;
      method_info_sep_specs : string list;
      mutable method_info_graph : java_env_entry list
+*)
+     method_info_parameters : java_var_info list;
    }
     
 and logic_type_entry =
@@ -74,6 +99,7 @@ and logic_type_entry =
       mutable logic_type_entry_name : string
     }
 
+(*
 and logic_entry = 
     {
       logic_entry_name : string;
@@ -81,7 +107,21 @@ and logic_entry =
       mutable logic_entry_effects : effects ;
       logic_entry_parameters : t;
     }
+*)
     
+and java_logic_info =
+    {
+      java_logic_info_name : string;
+      java_logic_info_tag : int;
+      java_logic_info_result_type : java_type option;
+      java_logic_info_parameters : java_var_info list;
+(*
+      java_logic_info_effects = empty_effects;
+*)
+      java_logic_info_calls : java_logic_info list;
+    }
+
+
 and axiom_entry = 
     {
       axiom_entry_name : string;
@@ -184,8 +224,13 @@ and java_env_entry =
   | Constructor_entry of constructor_entry
   | Local_variable_entry of java_var_info 
   | Logic_type_entry of logic_type_entry 
-  | Logic_entry of logic_entry
+  | Logic_entry of java_logic_info
 
 and t = (string * java_env_entry) list
 ;;
 
+(*
+Local Variables: 
+compile-command: "make -C .. bin/krakatoa.byte"
+End: 
+*)

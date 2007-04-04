@@ -1,10 +1,7 @@
 
-type base_type = Java_ast.base_type
+open Java_env
 
-type java_type =
-    | JTYbase of base_type
-    | JTYarray of java_type
-
+(*
 type var_info =
     {
       java_var_info_tag : int;
@@ -25,13 +22,16 @@ type logic_info =
 *)
       java_logic_info_calls : logic_info list;
     }
+*)
 
-type literal = Java_ast.literal
+type bin_op = Java_ast.bin_op
+type un_op = Java_ast.un_op
+type incr_decr_op = Java_ast.incr_decr_op
 
 type term_node =
     | JTlit of literal
-    | JTvar of var_info
-    | JTapp of logic_info * term list
+    | JTvar of java_var_info
+    | JTapp of java_logic_info * term list
 
 and term =
     { java_term_node : term_node;
@@ -47,8 +47,8 @@ type assertion_node =
     | JAand of assertion * assertion
     | JAor of assertion * assertion
     | JAimpl of assertion * assertion
-    | JAquantifier of quantifier * var_info * assertion
-    | JAapp of logic_info * term list
+    | JAquantifier of quantifier * java_var_info * assertion
+    | JAapp of java_logic_info * term list
 
 and assertion =
     { java_assertion_node : assertion_node;
@@ -64,11 +64,11 @@ type expr =
 
 and expr_node =
   | JElit of literal
-  | JEvar of var_info
+  | JEvar of java_var_info
+  | JEbin of expr * bin_op * expr         (*r binary operations *)
+  | JEun of un_op * expr                 (*r (pure) unary operations *)
+  | JEincr of incr_decr_op * expr (*r pre-post incr/decr operations *)
 (*
-  | JPEbin of pexpr * bin_op * pexpr         (*r binary operations *)
-  | JPEun of un_op * pexpr                 (*r (pure) unary operations *)
-  | JPEincr of incr_decr_op * pexpr (*r pre-post incr/decr operations *)
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
@@ -103,18 +103,24 @@ and expr_node =
 
 (* statements *)
 
+type initialiser =
+  | JIexpr of expr
+  | JIlist of initialiser list
+
 type statement =
   { java_statement_loc : Loc.position ;
     java_statement_node : statement_node }
 
 and statement_node =
   | JSskip                  (*r empty statement *)
-  | JSif of expr * block * block
+  | JSif of expr * statement * statement
+  | JSreturn of expr
+  | JSvar_decl of java_var_info * initialiser option * statement
+  | JSblock of block
 (*
   | JSexpr of expr
   | JSvar_decl of variable_declaration
   | JPSthrow of pexpr
-  | JPSreturn of pexpr option
   | JPSbreak of identifier option
   | JPScontinue of identifier option
   | JPSlabel of identifier * pstatement
@@ -124,7 +130,6 @@ and statement_node =
   | JPSfor_decl of variable_declaration * pexpr * pstatement list * pstatement
   | JPStry of block * (parameter * block) list * block option
   | JPSswitch of pexpr * (switch_label list * block) list
-  | JPSblock of block
   | JPSsynchronized of pexpr * block
   | JPSassert of pexpr
   | JPSannot of Lexing.position * string

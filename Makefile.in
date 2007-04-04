@@ -217,6 +217,7 @@ JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_options.cmo \
 	jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
+	jc/jc_output.cmo \
 	jc/jc_typing.cmo jc/jc_norm.cmo \
 	ocamlgraph/graph.cmo jc/jc_control_flow.cmo \
 	jc/jc_invariants.cmo \
@@ -238,20 +239,22 @@ bin/jessie.byte: $(JCCMO)
 
 # krakatoa
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
+	jc/jc_output.cmo \
 	java/java_version.cmo java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
 	java/java_typing.cmo \
+	java/java_interp.cmo \
 	java/java_main.cmo
 KCMX = $(KCMO:.cmo=.cmx)
 
 bin/krakatoa.opt: $(KCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
-		unix.cmxa $^
+		unix.cmxa nums.cmxa $^
 	strip    $@
 
 bin/krakatoa.byte: $(KCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
-	 	 unix.cma $^
+	 	 unix.cma nums.cma $^
 
 
 

@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.3 2007-03-09 09:24:51 marche Exp $
+$Id: java_parser.mly,v 1.4 2007-04-04 12:45:06 marche Exp $
 
 */
 
@@ -10,8 +10,11 @@ $Id: java_parser.mly,v 1.3 2007-03-09 09:24:51 marche Exp $
 %{
   
   open Loc
+  open Java_env
   open Java_ast
+(*
   open Ast
+*)
 
   let loc () = (symbol_start_pos (), symbol_end_pos ())
 

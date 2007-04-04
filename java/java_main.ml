@@ -39,7 +39,7 @@ let main () =
 	Hashtbl.iter 
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
 	  Jc_typing.structs_table;
-	(* production phase 1.1 : generation of Why logic types *)
+	(* production phase 1.1 : generation of Jessie logic types *)
 	let d_types =
 	  Hashtbl.fold 
 	    (fun _ id acc ->
@@ -47,15 +47,7 @@ let main () =
 	    Jc_typing.logic_type_table
 	    []
 	in	       	  
-	(* production phase 1.2 : generation of Why memories *)
-	let d_memories =
-	  Hashtbl.fold 
-	    (fun _ (st,_) acc ->
-	       Jc_interp.tr_struct st acc)
-	    Jc_typing.structs_table
-	    d_types
-	in	       	  
-	(* production phase 1.3 : generation of Why exceptions *)
+	(* production phase 1.3 : generation of Jessie exceptions *)
 	let d_exc =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
@@ -63,7 +55,7 @@ let main () =
 	    Jc_typing.exceptions_table
 	    d_memories
 	in	       	  
-	(* production phase 1.4 : generation of Why range_types *)
+	(* production phase 1.4 : generation of Jessie range_types *)
 	let d_range =
 	  Hashtbl.fold 
 	    (fun _ (ri,to_int,to_int_,of_int) acc ->
@@ -71,7 +63,7 @@ let main () =
 	    Jc_typing.range_types_table
 	    d_exc
 	in	       	  
-	(* production phase 2 : generation of Why logic functions *)
+	(* production phase 2 : generation of Jessie logic functions *)
 	let d_lfuns = 
 	  Hashtbl.fold 
 	    (fun _ (li,p) acc ->
@@ -79,7 +71,7 @@ let main () =
 	    Jc_typing.logic_functions_table 
 	    d_range
 	in
-	(* production phase 3 : generation of Why axioms *)
+	(* production phase 3 : generation of Jessie axioms *)
 	let d_axioms = 
 	  Hashtbl.fold 
 	    (fun id p acc ->
@@ -87,23 +79,25 @@ let main () =
 	    Jc_typing.axioms_table
 	    d_lfuns
 	in	       
-	(* production phase 4 : generation of Why functions *)
+*)
+	(* production phase 4 : generation of Jessie functions *)
 	let d_funs = 
 	  Hashtbl.fold 
-	    (fun _ (f,s,b) acc ->
+	    (fun _ (f,req,behs,body) acc ->
 	       printf "Generating Why function %s@." 
-		 f.Jc_fenv.jc_fun_info_name;
-	       Jc_interp.tr_fun f s b acc)
-	    Jc_typing.functions_table
-	    d_axioms
+		 f.Java_env.method_info_name;
+	       Java_interp.tr_method f req behs body acc)
+	    Java_typing.methods_table
+	    [] (* d_axioms *)
 	in	       
-	(* production phase 5 : produce Why file *)
+	(* production phase 5 : produce Jessie file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
-	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_funs)
-	  (Lib.file "why" (f ^ ".why"));
+	  (fun fmt -> fprintf fmt "%a@." Jc_output.print_decls d_funs)
+	  (Lib.file "jc" (f ^ ".jc"));
 	(* phase x : produce makefile *)
-	Jc_make.makefile f
+(*
+	Java_make.makefile f
 *)
 	printf "Done.@."
 

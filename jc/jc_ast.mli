@@ -385,7 +385,7 @@ and statement =
 
 
 type behavior =
-    { 
+    {  
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : assertion option ;
       jc_behavior_assigns : location list option ;

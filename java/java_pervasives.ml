@@ -1,5 +1,6 @@
 
 
+open Java_env
 open Java_ast
 
 let expr_no_loc e = 
@@ -23,7 +24,7 @@ let default_method_specification =
   }
 *)
 
-open Java_tast
+open Java_env
 
 (*
 let unit_type = JTYbase Tunit
@@ -63,6 +64,10 @@ let make_pred_op name =
 
 let eq_int = make_pred_op "eq_int"
 let ge_int = make_pred_op "ge_int"
+let gt_int = make_pred_op "gt_int"
+let lt_int = make_pred_op "lt_int"
+let le_int = make_pred_op "le_int"
+let ne_int = make_pred_op "ne_int"
 
 
 (*
