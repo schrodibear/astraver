@@ -73,6 +73,10 @@ terms and assertions
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 
+let valid_inv_name st = st.jc_struct_info_name ^ "_valid_inv"
+
+let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_valid_inv_sem"
+
 let lvar ?(assigned=true) label v =
   if assigned then
     match label with 
@@ -512,6 +516,36 @@ let tr_struct st acc =
 	in
 	Axiom(name,f)::acc
 
+let tr_valid_inv st acc =
+  (**** valid_inv predicate ****)
+  let valid_inv_type = 
+    { logic_type_name = "prop" ;
+      logic_type_args = [] }
+  in
+  let vi_this = "???", { logic_type_name = "pointer" ; logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
+  let acc =
+    Logic(false, valid_inv_name st, [vi_this], valid_inv_type)::acc
+  in
+  (**** valid_inv_sem axioms ****)
+  let quantified_fields = List.fold_left (fun acc (name, fi) -> (name, memory_field fi)::acc)
+    [] st.jc_struct_info_fields in
+  let this = "x" in
+  let this_var = LVar this in
+  let this_ty =
+    { logic_type_name = "pointer";
+      logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
+  let fields_valid_inv = List.map (fun (name, fi) ->
+    match fi.jc_field_info_type with
+    | JCTpointer(st, _, _) ->
+        LPred(valid_inv_name st, [LApp("select", [LVar name; this_var])])
+    | JCTnative _
+    | JCTlogic _
+    | JCTrange _ -> LTrue) st.jc_struct_info_fields in
+  let sem = LImpl(LPred(valid_inv_name st, [this_var]), make_and_list fields_valid_inv) in
+  (* quantifiers *)
+  let sem = List.fold_left (fun acc (id, ty) ->
+    LForall(id, ty, acc)) sem ((this, this_ty)::quantified_fields) in
+  Axiom(valid_inv_axiom_name st, sem)::acc
        
 (*************
 locations

@@ -13,7 +13,7 @@ unit m(Person[0] this)
   behavior ok:
     ensures true;
 {
-  this.age = 0; // error
+  this.age = 0; // ok thanks to the require
 }
 
 boolean older(Person[0] p1, Person[0] p2)
