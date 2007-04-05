@@ -518,15 +518,12 @@ let tr_struct st acc =
 
 let tr_valid_inv st acc =
   (**** valid_inv predicate ****)
-  let valid_inv_type = 
-    { logic_type_name = "prop" ;
-      logic_type_args = [] }
-  in
+  let valid_inv_type = simple_logic_type "prop" in
   let vi_this = "???", { logic_type_name = "pointer" ; logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
   let acc =
     Logic(false, valid_inv_name st, [vi_this], valid_inv_type)::acc
   in
-  (**** valid_inv_sem axioms ****)
+  (**** valid_inv_sem axiom ****)
   let quantified_fields = List.fold_left (fun acc (name, fi) -> (name, memory_field fi)::acc)
     [] st.jc_struct_info_fields in
   let this = "x" in
