@@ -12,26 +12,37 @@ Admitted.
 (*Why logic*) Definition Family_tag : (tag_id Family).
 Admitted.
 
+(*Why predicate*) Definition age_inv  (age:(memory Person Z))
+  (family:(memory Person (pointer Family))) (father:(memory Family
+  (pointer Person))) (mother:(memory Family (pointer Person)))
+  (age:(memory Person Z)) (this:(pointer Person))
+  := (select age (select mother (select family this))) > (select age this) /\
+     (select age (select father (select family this))) > (select age this).
+
 Inductive valid_inv: forall C: Set, pointer C ->
   memory Family (pointer Person) -> (* mother *)
   memory Family (pointer Person) -> (* father *)
   memory Person (pointer Family) -> (* family *)
+  memory Family Z -> (* age *)
   Prop :=
 | vi_family:
     forall mother: memory Family (pointer Person),
     forall father: memory Family (pointer Person),
     forall family: memory Person (pointer Family),
+    forall age: memory Person Z,
     forall x: pointer Family,
-    valid_inv Person (select mother x) mother father family ->
-    valid_inv Person (select father x) mother father family ->
-    valid_inv Family x mother father family
+    valid_inv Person (select mother x) mother father family age ->
+    valid_inv Person (select father x) mother father family age ->
+    valid_inv Family x mother father family age
 | vi_person:
     forall mother: memory Family (pointer Person),
     forall father: memory Family (pointer Person),
     forall family: memory Person (pointer Family),
+    forall age: memory Person Z,
     forall x: pointer Person,
-    valid_inv Family (select family x) mother father family ->
-    valid_inv Person x mother father family.
+    valid_inv Family (select family x) mother father family age ->
+    age_inv age family father mother age x ->
+    valid_inv Person x mother father family age.
 Hint Constructors valid_inv.
 
 (*Why logic*) Definition Family_valid_inv :
@@ -39,7 +50,7 @@ Hint Constructors valid_inv.
   -> (memory Family (pointer Person)) -> (memory Family
   (pointer Person)) -> Prop.
 exact (fun x age family father mother =>
-  valid_inv Family x mother father family).
+  valid_inv Family x mother father family age).
 Defined.
 
 (*Why logic*) Definition Person_valid_inv :
@@ -47,7 +58,7 @@ Defined.
   -> (memory Family (pointer Person)) -> (memory Family
   (pointer Person)) -> Prop.
 exact (fun x age family father mother =>
-  valid_inv Person x mother father family).
+  valid_inv Person x mother father family age).
 Defined.
 
 (*Why axiom*) Lemma Family_valid_inv_sem :
@@ -86,24 +97,21 @@ Admitted.
      (forall (age:(memory Person Z)),
       (forall (x:(pointer Person)),
        ((Person_valid_inv x age family father mother) <->
-        (Family_valid_inv (select family x) age family father mother))))))).
+        (Family_valid_inv (select family x) age family father mother) /\
+        (age_inv age family father mother age x))))))).
 Proof.
 intros.
 split; intros.
+split.
 inversion H; subst; auto.
 admit. (* Person = Family est absurde *)
 inversion H; subst; auto.
-unfold Person_valid_inv.
-auto.
+admit. (* Person = Family est absurde *)
+destruct H as [H0 H1].
+inversion H0; subst; auto.
+unfold Person_valid_inv; auto.
 admit. (* Person = Family est absurde *)
 Qed.
-
-(*Why predicate*) Definition age_inv  (age:(memory Person Z))
-  (family:(memory Person (pointer Family))) (father:(memory Family
-  (pointer Person))) (mother:(memory Family (pointer Person)))
-  (age:(memory Person Z)) (this:(pointer Person))
-  := (select age (select mother (select family this))) > (select age this) /\
-     (select age (select father (select family this))) > (select age this).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma m_ensures_ok_po_1 : 
