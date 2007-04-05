@@ -517,31 +517,44 @@ let tr_struct st acc =
 	Axiom(name,f)::acc
 
 let tr_valid_inv st acc =
+  (* memories to pass as parameters *)
+  let memories = Hashtbl.fold (fun _ (st, _) acc ->
+    List.fold_left (fun acc (name, fi) ->
+      (name, memory_field fi)::acc) acc st.jc_struct_info_fields)
+    Jc_norm.structs_table [] in
+  let memories = List.sort (fun (name1, _) (name2, _) -> compare name2 name1) memories in
+  let rec only_one prev acc = function
+    [] -> acc
+  | ((name, _) as x)::tl ->
+      if name = prev then only_one prev acc tl
+      else only_one name (x::acc) tl in
+  let memories = only_one "" [] memories in
   (**** valid_inv predicate ****)
   let valid_inv_type = simple_logic_type "prop" in
   let vi_this = "???", { logic_type_name = "pointer" ; logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
-  let acc =
-    Logic(false, valid_inv_name st, [vi_this], valid_inv_type)::acc
+  let logic = Logic(false, valid_inv_name st, vi_this::memories, valid_inv_type) in
+  let acc = logic::acc
   in
   (**** valid_inv_sem axiom ****)
-  let quantified_fields = List.fold_left (fun acc (name, fi) -> (name, memory_field fi)::acc)
-    [] st.jc_struct_info_fields in
+  (*let quantified_fields = List.fold_left (fun acc (name, fi) -> (name, memory_field fi)::acc)
+    [] st.jc_struct_info_fields in*)
   let this = "x" in
   let this_var = LVar this in
   let this_ty =
     { logic_type_name = "pointer";
       logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
+  let memories_params = List.map (fun (name, _) -> LVar name) memories in
   let fields_valid_inv = List.map (fun (name, fi) ->
     match fi.jc_field_info_type with
     | JCTpointer(st, _, _) ->
-        LPred(valid_inv_name st, [LApp("select", [LVar name; this_var])])
+        LPred(valid_inv_name st, LApp("select", [LVar name; this_var])::memories_params)
     | JCTnative _
     | JCTlogic _
     | JCTrange _ -> LTrue) st.jc_struct_info_fields in
-  let sem = LImpl(LPred(valid_inv_name st, [this_var]), make_and_list fields_valid_inv) in
+  let sem = LImpl(LPred(valid_inv_name st, this_var::memories_params), make_and_list fields_valid_inv) in
   (* quantifiers *)
   let sem = List.fold_left (fun acc (id, ty) ->
-    LForall(id, ty, acc)) sem ((this, this_ty)::quantified_fields) in
+    LForall(id, ty, acc)) sem ((this, this_ty)::memories) in
   Axiom(valid_inv_axiom_name st, sem)::acc
        
 (*************
