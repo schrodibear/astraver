@@ -551,7 +551,7 @@ let tr_valid_inv st acc =
     | JCTnative _
     | JCTlogic _
     | JCTrange _ -> LTrue) st.jc_struct_info_fields in
-  let sem = LImpl(LPred(valid_inv_name st, this_var::memories_params), make_and_list fields_valid_inv) in
+  let sem = LIff(LPred(valid_inv_name st, this_var::memories_params), make_and_list fields_valid_inv) in
   (* quantifiers *)
   let sem = List.fold_left (fun acc (id, ty) ->
     LForall(id, ty, acc)) sem ((this, this_ty)::memories) in
