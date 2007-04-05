@@ -517,6 +517,8 @@ let tr_struct st acc =
 	Axiom(name,f)::acc
 
 let tr_valid_inv st acc =
+  (* for now, only root types *)
+  if st.jc_struct_info_parent <> None then acc else
   (* memories to pass as parameters *)
   let memories = Hashtbl.fold (fun _ (st, _) acc ->
     List.fold_left (fun acc (name, fi) ->
@@ -542,7 +544,7 @@ let tr_valid_inv st acc =
   (**** valid_inv_sem axiom ****)
   (*let quantified_fields = List.fold_left (fun acc (name, fi) -> (name, memory_field fi)::acc)
     [] st.jc_struct_info_fields in*)
-  let this = "x" in
+  let this = "valid_inv_this" in
   let this_var = LVar this in
   let this_ty =
     { logic_type_name = "pointer";
