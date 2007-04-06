@@ -103,7 +103,6 @@ let rec statement acc s =
 	statement acc s
     | JCSassert _ -> acc
 
-
 let compute_logic_calls f t = 
   let calls =
     match t with

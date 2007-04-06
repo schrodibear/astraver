@@ -26,7 +26,7 @@ type T = {
 
 
 unit add(T[0] res, T[0] n1, T[0] n2) 
-  behavior default:
+  behavior normal:
     ensures true;
 {
     if (n1.my_tag == 0 && n2.my_tag == 0) {

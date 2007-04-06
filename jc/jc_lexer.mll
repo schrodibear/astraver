@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.24 2007-04-03 08:02:30 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.25 2007-04-06 14:17:41 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -88,14 +88,12 @@ rule token = parse
   | "behavior"              { BEHAVIOR }
   | "boolean"               { BOOLEAN }
   | "break"                 { BREAK }
-(*
   | "case"                  { CASE }
-*)
+  | "default"               { DEFAULT }
   | "catch"                 { CATCH }
 (*
   | "char"                  { CHAR }
   | "continue"              { CONTINUE }
-  | "default"               { DEFAULT }
   | "do"                    { DO }
   | "double"                { DOUBLE }
 *)
@@ -129,8 +127,8 @@ rule token = parse
 (*
   | "short"                 { SHORT }
   | "signed"                { SIGNED }
-  | "switch"                { SWITCH }
 *)
+  | "switch"                { SWITCH }
   | "throw"                 { THROW }
   | "throws"                { THROWS }
   | "true"                  { CONSTANT (JCCboolean true) }

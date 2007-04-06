@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.19 2007-03-23 12:33:03 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.20 2007-04-06 14:17:41 moy Exp $ *)
 
 
 open Jc_env
@@ -180,7 +180,6 @@ let rec statement ef s =
 	statement (Option_misc.fold_left expr ef e) s
     | JCSassert a -> ef
     | JCSblock l -> List.fold_left statement ef l
-
 
 let location ef l =
   match l with

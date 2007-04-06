@@ -518,6 +518,35 @@ and statement s =
 	  let (sl,tl),e = expr e in
 	  let unpack_stat = make_unpack loc si e in
 	  (make_decls loc (sl @ [unpack_stat]) tl).jc_statement_node
+      | JCTSswitch (e, csl) ->
+	  let (sl,tl),e = expr e in
+	  let ncsl = List.map 
+	    (fun (c,sl) -> match c with
+	       | Case c ->
+		   (* statement list in case considered *)
+		   let sl = List.map statement sl in
+		   let block_stat = make_block loc sl in
+		   let empty_block = make_block loc [] in
+		   (* test for case considered *)
+		   let el = [e; make_const loc c] in
+		   let (l,etl),ecall = call loc eq_int_ el ~binder:true [] in
+		   let ecall = match ecall with
+		     | Some b -> make_var loc b
+		     | None -> assert false
+		   in
+		   (* case translated into if-statement *)
+		   let if_stat = make_if loc ecall block_stat empty_block in
+		   make_decls loc (l @ [if_stat]) etl
+	       | Default ->
+		   make_block loc (List.map statement sl)
+	    ) csl 
+	  in
+	  let switch_stat = make_decls loc (sl @ ncsl) tl in
+	  let catch_exit =
+	    [(loop_exit, Some (newvar unit_type), make_block loc [])] in
+	  let try_exit = 
+	    make_try loc switch_stat catch_exit (make_block loc []) in
+	  try_exit.jc_statement_node
 
   in { jc_statement_node = ns;
        jc_statement_loc = loc }
@@ -672,6 +701,7 @@ let statement s =
 	    let cl = 
 	      List.map (fun (ei, vio, s) -> (ei, vio, link_stat s)) cl in
 	    JCStry (link_stat s, cl, link_stat fs)
+
     in { jc_statement_node = ns;
 	 jc_statement_loc = loc }
 

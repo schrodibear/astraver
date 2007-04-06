@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.32 2007-04-04 12:45:07 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.33 2007-04-06 14:17:41 moy Exp $ */
 
 %{
 
@@ -82,8 +82,8 @@
 /* && || => <=> ! */
 %token AMPAMP BARBAR EQGT LTEQGT EXCLAM
 
-/* if else return while break */
-%token IF ELSE RETURN WHILE BREAK  
+/* if else return while break case switch default */
+%token IF ELSE RETURN WHILE BREAK CASE SWITCH DEFAULT
 
 /* exception of throw try catch */
 %token EXCEPTION OF THROW TRY CATCH
@@ -119,7 +119,7 @@
 %token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE VOID
 %token STRUCT ENUM 
 
-%token CASE DEFAULT SWITCH DO FOR GOTO CONTINUE 
+%token DO FOR GOTO CONTINUE 
 %token TRY CATCH FINALLY THROW 
 
 %token AMP EXL TILDE STAR SLASH PERCENT LT GT HAT PIPE
@@ -579,10 +579,32 @@ declaration:
 
 labeled_statement
         : identifier COLON statement { locate (CSlabel ($1, $3)) }
-        | CASE constant_expression COLON statement { locate (CScase ($2, $4)) }
-        | DEFAULT COLON statement { locate (CSdefault($3)) }
-        ;
+;
 */
+
+case_statement:
+| CASE CONSTANT COLON statement_list 
+    { Case $2, $4 }
+;
+
+default_statement:
+| DEFAULT COLON statement_list
+    { Default, $3 }
+;
+
+case_statement_list: 
+| /* epsilon */ 
+    { [] }
+| case_statement case_statement_list 
+    { $1 :: $2 }
+;
+
+default_case_statement_list:
+| case_statement_list default_statement
+    { $1 @ [$2] }
+| case_statement_list
+    { $1 }
+;
 
 compound_statement:
 | LBRACE statement_list RBRACE 
@@ -615,10 +637,8 @@ selection_statement:
     { locate_statement (JCPSif($3, $5, skip)) }
 | IF LPAR expression RPAR statement ELSE statement 
     { locate_statement (JCPSif ($3, $5, $7)) }
-/*
-| SWITCH LPAR expression RPAR statement 
-    { locate (CSswitch ($3, $5)) }
-*/
+| SWITCH LPAR expression RPAR LBRACE default_case_statement_list RBRACE
+    { locate_statement (JCPSswitch ($3, $6)) }
 ;
 
 iteration_statement: 

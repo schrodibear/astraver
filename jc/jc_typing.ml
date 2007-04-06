@@ -1027,6 +1027,29 @@ let rec statement env s =
 		typing_error s.jc_pstatement_loc 
 		  "only structures can be unpacked"
 	  end
+      | JCPSswitch (e,csl) ->
+	  let t,tc = expr env e in
+	  if subtype t integer_type then
+	    let tcsl = List.map 
+	      (fun (c,sl) -> 
+		 let tc = match c with
+		   | Case c ->
+		       let t,tc = const c in
+		       if subtype t integer_type then
+			 Case tc
+		       else
+			 typing_error s.jc_pstatement_loc 
+			   "integer expected in case"
+		   | Default ->
+		       Default
+		 in
+		 let ts = statement_list env sl in
+		 tc,ts
+	      ) csl
+	    in
+	    JCTSswitch(tc,tcsl)
+	  else 
+	    typing_error s.jc_pstatement_loc "integer expected"
 
   in { jc_tstatement_node = ts;
        jc_tstatement_loc = s.jc_pstatement_loc }

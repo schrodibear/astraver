@@ -207,7 +207,19 @@ let rec statement fmt s =
     | JCTSassert _-> assert false (* TODO *) 
     | JCTSexpr e -> fprintf fmt "%a;@ " expr e
     | JCTSblock l -> block fmt l
+    | JCTSswitch (e, csl) ->
+	fprintf fmt "@[switch (%a) {@\n    @[%a@]@\n}@]"
+	  expr e (print_list newline case) csl
 	
+and case fmt (c,sl) =
+  fprintf fmt "@[%a    %a@]"
+    (fun fmt c -> match c with
+       | Case c ->
+	   fprintf fmt "case %a:@\n" const c
+       | Default ->
+	   fprintf fmt "default:@\n") c
+    block sl
+
 and block fmt b =
   fprintf fmt "{ @[<v 0>";
   List.iter (statement fmt) b;
