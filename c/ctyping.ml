@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.146 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.147 2007-04-06 10:19:28 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -278,6 +278,10 @@ let float_constant_type s =
     | 'l' | 'L' -> String.sub s 0 (n-1), LongDouble
     | _ -> s, Double
 
+let int_constant_type s =
+   (* TODO *)
+   Signed, Int
+
 (* type the assignment of [e2] into a left value of type [ty1] *)
 let type_assignment loc ty1 e2 =
   let ty2 = e2.texpr_type in
@@ -447,8 +451,9 @@ and type_expr env e =
 and type_expr_node loc env = function
   | CEnop ->
       TEnop, c_void
-  | CEconstant (IntConstant _ as c) ->
-      TEconstant c, c_int
+  | CEconstant (IntConstant s as c) ->
+      let ik = int_constant_type s in
+      TEconstant c, noattr (Tint ik)
   | CEconstant (RealConstant s) ->
       use_floats := true;
       let s,fk = float_constant_type s in

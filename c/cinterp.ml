@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.235 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.236 2007-04-06 10:19:27 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -590,6 +590,14 @@ let within_bounds i e =
 let is_enum e t = 
   let _,info = Cenv.find_pred ("is_enum_" ^ e) in LPred (info.logic_name, [t])
 
+let of_int ik e =
+  let name = Cenv.int_type_for ik in
+  App (Var (name ^ "_of_int"), e)
+
+let int_of ik e =
+  let name = Cenv.int_type_for ik in
+  App (Var ("of_" ^ name), e)
+
 let guard_1 g e =
   let v = tmp_var () in Let (v, e, Output.Assert (g (LVar v), Var v))
 
@@ -598,17 +606,20 @@ let interp_int_conversion ty1 ty2 e =
   if not int_overflow_check then e else
   match ty1.Ctypes.ctype_node, ty2.Ctypes.ctype_node with
     (* int -> int *)
-    | Tint (Unsigned, i1), Tint (Unsigned, i2) 
-    | Tint (Signed, i1), Tint (Signed, i2) when le_cinteger i1 i2 -> 
-	e
-    | Tint (Unsigned, i1), Tint (Signed, i2) when lt_cinteger i1 i2 -> 
-	e
-    | Tint (Unsigned, i1), Tint si2 ->
-	guard_1 (le_max_int si2) e
-    | Tint (Signed, i1), Tint (Unsigned, i2) when le_cinteger i1 i2 ->
-	guard_1 is_non_negative e
-    | Tint (Signed, i1), Tint si2 ->
-	guard_1 (within_bounds si2) e
+    | Tint (Unsigned, i1 as si1), Tint (Unsigned, i2 as si2) 
+    | Tint (Signed, i1 as si1), Tint (Signed, i2 as si2) 
+      when le_cinteger i1 i2 -> 
+	of_int si2 (int_of si1 e) (* TODO safe *)
+    | Tint (Unsigned, i1 as si1), Tint (Signed, i2 as si2) 
+      when lt_cinteger i1 i2 -> 
+	of_int si2 (int_of si1 e) (* TODO safe *)
+    | Tint (Unsigned, i1 as si1), Tint si2 ->
+	of_int si2 (int_of si1 e) (* TODO half safe: e <= le_max_int si2 *)
+    | Tint (Signed, i1 as si1), Tint (Unsigned, i2 as si2) 
+      when le_cinteger i1 i2 ->
+	of_int si2 (int_of si1 e) (* TODO half safe: 0 <= e *)
+    | Tint (Signed, _ as si1), Tint si2 ->
+	of_int si2 (int_of si1 e)
     (* enum -> int *)
     | Tenum _, Tint (Signed, i2) when le_cinteger Int i2 ->
 	e
@@ -674,14 +685,15 @@ let make_int_types_decls () =
       Logic (false, of_name, ["x", lt], simple_logic_type "int");
       Axiom (name ^ "_domain", 
 	     LForall ("x", lt, in_bounds (LApp (of_name, [LVar "x"]))));
-      Param (false, name ^ "of_int",
+      Param (false, name ^ "_of_int",
 	     Prod_type ("x", int, 
 			let pre = in_bounds (LVar "x") in
 			let post = 
 			  LPred ("eq", [LApp (of_name, [LVar "result"]); 
 					LVar "x"]) 
 			in
-			Annot_type (pre, Base_type lt, [], [], post, [])))
+			Annot_type (pre, Base_type lt, [], [], post, [])));
+      Exception ("Return_" ^ name, Some lt)
     ]
   in
   List.fold_left 
@@ -831,9 +843,16 @@ let rec interp_expr e =
 and interp_expr_loc e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
-	Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c)))
+	let t = Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c))) in
+	if int_overflow_check then begin 
+	  match e.nexpr_type.Ctypes.ctype_node with
+	  | Tint si -> of_int si t
+	  | Tenum _ -> assert false (*TODO*)
+	  | _ -> assert false
+	end else 
+	  t
     | NEconstant (RealConstant c) ->
-	Cte(Prim_real c)
+	Cte (Prim_real c)
     | NEvar(Var_info v) -> 
 	let n = heap_var_name v in
 	if v.var_is_assigned then Deref n else Var n
@@ -1643,6 +1662,8 @@ let break b e = if b then try_with_void "Break" e else e
 let continue b e = if b then try_with_void "Continue" e else e    
 
 let return_exn ty = match ty.Ctypes.ctype_node with
+  | Tint si when int_overflow_check -> "Return_" ^ (Cenv.int_type_for si)
+  | Tenum _ when int_overflow_check -> assert false (*TODO*)
   | Tenum _ | Tint _ -> "Return_int"
   | Tfloat _ when not floats -> "Return_real"
   | Tfloat Float -> "Return_single"

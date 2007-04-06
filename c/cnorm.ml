@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.99 2007-03-20 14:21:00 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.100 2007-04-06 10:19:27 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -141,6 +141,17 @@ let why_type_for_float t = match t.Ctypes.ctype_node with
   | Tfloat fk -> why_type_for_float_kind fk
   | _ -> assert false
 
+let why_type_for_int_kind ik =
+  if Coptions.int_overflow_check then 
+    Why_Logic (Cenv.int_type_for ik)
+  else
+    Info.Int
+
+let why_type_for_int t = match t.Ctypes.ctype_node with
+  | Tint ik -> why_type_for_int_kind ik
+  | Tenum _ -> Info.Int (*TODO*)
+  | _ -> assert false
+
 let rec type_why e =
   match e.nexpr_node with
     | NEvar e -> get_why_type e 
@@ -157,8 +168,10 @@ let rec type_why e =
     | NEnop -> assert false (* 	Unit *)
     | NEconstant (IntConstant _)
     | NEunary (Uint_of_float, _)
-    | NEcast ({Ctypes.ctype_node = Tint _}, _) -> 
-	Info.Int    
+    | NEunary (Uint_conversion, _) ->
+	why_type_for_int e.nexpr_type
+    | NEcast ({Ctypes.ctype_node = Tint ik}, _) -> 
+	why_type_for_int_kind ik
     | NEconstant (RealConstant x) -> 
 	let _,fk = Ctyping.float_constant_type x in 
 	Why_Logic (why_type_for_float_kind fk)
