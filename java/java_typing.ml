@@ -224,18 +224,18 @@ let rec term env e =
 	typing_error e.java_pexpr_loc
 	  "quantified formulas not allowed in term position"
     | JPEold _-> assert false (* TODO *)
-    | Instanceof (_, _)-> assert false (* TODO *)
-    | Cast (_, _)-> assert false (* TODO *)
-    | Array_access (_, _)-> assert false (* TODO *)
-    | Array_creation _-> assert false (* TODO *)
-    | Class_instance_creation (_, _)-> assert false (* TODO *)
-    | Super_method_call (_, _)-> assert false (* TODO *)
-    | Method_call (_, _, _)-> assert false (* TODO *)
+    | JPEinstanceof (_, _)-> assert false (* TODO *)
+    | JPEcast (_, _)-> assert false (* TODO *)
+    | JPEarray_access (_, _)-> assert false (* TODO *)
+    | JPEnew_array _-> assert false (* TODO *)
+    | JPEnew (_, _)-> assert false (* TODO *)
+    | JPEsuper_call (_, _)-> assert false (* TODO *)
+    | JPEcall (_, _, _)-> assert false (* TODO *)
     | JPEfield_access _-> assert false (* TODO *)
     | JPEif (_, _, _)-> assert false (* TODO *)
     | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
     | JPEassign_field (_, _, _)-> assert false (* TODO *)
-    | Assign_name (_, _, _)-> assert false (* TODO *)
+    | JPEassign_name (_, _, _)-> assert false (* TODO *)
     | JPEincr (_, _)-> assert false (* TODO *)
     | JPEun (_, _)-> assert false (* TODO *)
 
@@ -282,18 +282,18 @@ let rec assertion env e =
 	let a = make_quantified_formula e.java_pexpr_loc q tty idl env e in
 	a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
-    | Instanceof (_, _)-> assert false (* TODO *)
-    | Cast (_, _)-> assert false (* TODO *)
-    | Array_access (_, _)-> assert false (* TODO *)
-    | Array_creation _-> assert false (* TODO *)
-    | Class_instance_creation (_, _)-> assert false (* TODO *)
-    | Super_method_call (_, _)-> assert false (* TODO *)
-    | Method_call (_, _, _)-> assert false (* TODO *)
+    | JPEinstanceof (_, _)-> assert false (* TODO *)
+    | JPEcast (_, _)-> assert false (* TODO *)
+    | JPEarray_access (_, _)-> assert false (* TODO *)
+    | JPEnew_array _-> assert false (* TODO *)
+    | JPEnew (_, _)-> assert false (* TODO *)
+    | JPEsuper_call (_, _)-> assert false (* TODO *)
+    | JPEcall (_, _, _)-> assert false (* TODO *)
     | JPEfield_access _-> assert false (* TODO *)
     | JPEif (_, _, _)-> assert false (* TODO *)
     | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
     | JPEassign_field (_, _, _)-> assert false (* TODO *)
-    | Assign_name (_, _, _)-> assert false (* TODO *)
+    | JPEassign_name (_, _, _)-> assert false (* TODO *)
     | JPEvar _-> assert false (* TODO *)
     | JPEincr (_, _)-> assert false (* TODO *)
     | JPEun (_, _)-> assert false (* TODO *)
@@ -354,19 +354,43 @@ let rec expr env e =
 	      typing_error loc "unbound identifier %s" id
 	  end	  
       | JPEthis -> assert false (* TODO *)
-      | Instanceof (_, _)-> assert false (* TODO *)
-      | Cast (_, _)-> assert false (* TODO *)
-      | Array_access (_, _)-> assert false (* TODO *)
-      | Array_creation _-> assert false (* TODO *)
-      | Class_instance_creation (_, _)-> assert false (* TODO *)
-      | Super_method_call (_, _)-> assert false (* TODO *)
-      | Method_call (_, _, _)-> assert false (* TODO *)
+      | JPEinstanceof (_, _)-> assert false (* TODO *)
+      | JPEcast (_, _)-> assert false (* TODO *)
+      | JPEarray_access (_, _)-> assert false (* TODO *)
+      | JPEnew_array _-> assert false (* TODO *)
+      | JPEnew (_, _)-> assert false (* TODO *)
+      | JPEsuper_call (_, _)-> assert false (* TODO *)
+      | JPEcall (_, _, _)-> assert false (* TODO *)
       | JPEfield_access _-> assert false (* TODO *)
       | JPEif (_, _, _)-> assert false (* TODO *)
       | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
       | JPEassign_field (_, _, _)-> assert false (* TODO *)
-      | Assign_name (_, _, _)-> assert false (* TODO *)
-      | JPEincr (_, _)-> assert false (* TODO *)
+      | JPEassign_name (n, op, e)-> 
+	  begin
+	    let tye,te = expr env e in
+	    match n with
+	      | [(loc,id)] ->
+		  begin
+		    try
+		      let vi = List.assoc id env in 
+		      if compatible_types tye vi.java_var_info_type
+		      then 
+			if op = Beq then
+			  vi.java_var_info_type,JEassign_local_var(vi,te)
+			else assert false (* TODO *)
+		      else
+			typing_error loc "type %a expected, got %a" 
+			  print_type vi.java_var_info_type print_type tye
+		    with Not_found -> 
+		      typing_error loc "unbound identifier %s" id
+		  end
+	      | (loc,id)::r ->
+		  (* let _tyr,_tr = expr env r in *)
+		  assert false (* TODO *)
+	      | [] -> assert false
+	  end
+      | JPEincr (op, e)-> 
+	  let t,te = expr env e in t,JEincr(op,te)	  
       | JPEun (_, _)-> assert false (* TODO *)
       | JPEbin (e1, op, e2) -> 
 	  let ty1,te1 = expr env e1
@@ -422,11 +446,11 @@ let rec statement env s =
 	    JSif(te,ts1,ts2)
 	  else
 	    typing_error e.java_pexpr_loc "boolean expected"
-      | JPSloop_annot (_, _)-> assert false (* TODO *)
+      | JPSloop_annot (inv, dec) -> assert false
       | JPSannot (_, _)-> assert false (* TODO *)
       | JPSassert _-> assert false (* TODO *)
       | JPSsynchronized (_, _)-> assert false (* TODO *)
-      | JPSblock _-> assert false (* TODO *)
+      | JPSblock l -> (block env l).java_statement_node
       | JPSswitch (_, _)-> assert false (* TODO *)
       | JPStry (_, _, _)-> assert false (* TODO *)
       | JPSfor_decl (_, _, _, _)-> assert false (* TODO *)
@@ -459,7 +483,9 @@ let rec statement env s =
 	  end
       | JPSthrow _-> assert false (* TODO *)
       | JPSvar_decl _-> assert false (* TODO *)
-      | JPSexpr _ -> assert false (* TODO *)
+      | JPSexpr e -> 
+	  let t,te = expr env e in JSexpr te
+	  
   in 
   { java_statement_loc = s.java_pstatement_loc ;
     java_statement_node = s' }
@@ -500,7 +526,19 @@ and statements env b =
 			 JSvar_decl(vi,i,acc); })
 		  decls r in
 	      [s]
-	      
+	  | JPSloop_annot(inv,dec) ->
+	      let inv = assertion env inv in
+	      let tdec,dec = term env dec in
+	      begin
+		match rem with
+		  | { java_pstatement_node = JPSwhile(e,s) ;
+		      java_pstatement_loc = loc } :: rem -> 
+		      let te,e = expr env e in
+		      let s = statement env s in
+		      { java_statement_node = JSwhile(e,inv,dec,s);
+			java_statement_loc = loc } :: statements env rem
+		  | _ -> assert false (* TODO *)
+	      end      
 	  | _ ->
 	      let s' = statement env s in
 	      s' :: statements env rem

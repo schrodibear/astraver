@@ -477,11 +477,15 @@ let rec assertion env e =
 	  JCTAinstanceof(te1,st) 
       | JCPEcast(e, t) -> assert false
       | JCPEbinary (e1, Bland, e2) -> 
-	  make_and (assertion env e1) (assertion env e2)
+	  let a1 = assertion env e1 in
+	  let a2 = assertion env e2 in
+	  make_and a1 a2
       | JCPEbinary (e1, Blor, e2) -> 
 	  make_or (assertion env e1) (assertion env e2)
       | JCPEbinary (e1, Bimplies, e2) -> 
-	  JCTAimplies(assertion env e1,assertion env e2)
+	  let a1 = assertion env e1 in
+	  let a2 = assertion env e2 in
+	  JCTAimplies(a1,a2)
       | JCPEbinary (e1, Biff, e2) -> 
 	  JCTAiff(assertion env e1,assertion env e2)
       | JCPEunary (Unot, e2) -> 

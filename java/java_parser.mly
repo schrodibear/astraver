@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.4 2007-04-04 12:45:06 marche Exp $
+$Id: java_parser.mly,v 1.5 2007-04-06 08:32:37 marche Exp $
 
 */
 
@@ -101,7 +101,7 @@ $Id: java_parser.mly,v 1.4 2007-04-04 12:45:06 marche Exp $
 
 /* Operators (see precedences below for details) */
 
-%token <string> ASSIGNOP
+%token <Java_ast.bin_op> ASSIGNOP
 %token EQ EQGT
 %token VERTICALBARVERTICALBAR
 %token AMPERSANDAMPERSAND  
@@ -676,18 +676,18 @@ primary_no_new_array:
 | field_access
     { locate_expr (JPEfield_access $1) }
 | ident LEFTPAR argument_list RIGHTPAR
-    { locate_expr (Method_call(None,$1,$3)) } 
+    { locate_expr (JPEcall(None,$1,$3)) } 
 | name DOT ident LEFTPAR argument_list RIGHTPAR
     { let n = expand_name $1 in
-      locate_expr (Method_call(Some n,$3,$5)) } 
+      locate_expr (JPEcall(Some n,$3,$5)) } 
 | SUPER DOT ident LEFTPAR argument_list RIGHTPAR
-    { locate_expr (Super_method_call($3, $5)) }
+    { locate_expr (JPEsuper_call($3, $5)) }
 | primary_expr DOT ident LEFTPAR argument_list RIGHTPAR
-    { locate_expr (Method_call(Some $1,$3,$5)) } 
+    { locate_expr (JPEcall(Some $1,$3,$5)) } 
 | NEW name LEFTPAR argument_list RIGHTPAR
-    { locate_expr (Class_instance_creation($2,$4)) }
+    { locate_expr (JPEnew($2,$4)) }
 | array_access
-    { let (a,b)=$1 in locate_expr (Array_access(a,b)) }
+    { let (a,b)=$1 in locate_expr (JPEarray_access(a,b)) }
 ;
 
 array_access:
@@ -699,9 +699,9 @@ array_access:
 
 array_creation_expression:
 | NEW base_type array_dims
-    { locate_expr (Array_creation(build_array_creation_expr (Base_type($2)) $3)) }
+    { locate_expr (JPEnew_array(build_array_creation_expr (Base_type($2)) $3)) }
 | NEW name array_dims
-    { locate_expr (Array_creation(build_array_creation_expr (Type_name($2)) $3)) }
+    { locate_expr (JPEnew_array(build_array_creation_expr (Type_name($2)) $3)) }
 ;
 
 array_dims:
@@ -728,9 +728,9 @@ castable_expr:
 
 non_basic_cast:
 | LEFTPAR array_type_expr RIGHTPAR castable_expr %prec CAST
-    { locate_expr (Cast(Array_type_expr($2),$4)) }
+    { locate_expr (JPEcast(Array_type_expr($2),$4)) }
 | LEFTPAR name RIGHTPAR castable_expr %prec CAST
-    { locate_expr (Cast(Type_name($2),$4)) }
+    { locate_expr (JPEcast(Type_name($2),$4)) }
 ;
 
 statement_expr_list:
@@ -760,7 +760,7 @@ expr_no_name:
 | primary_expr
     { $1 }
 | name assign_op expr %prec ASSIGNOP
-    { locate_expr (Assign_name($1,$2,$3)) }
+    { locate_expr (JPEassign_name($1,$2,$3)) }
 | field_access assign_op expr %prec ASSIGNOP
     { locate_expr (JPEassign_field($1,$2,$3)) }
 | array_access assign_op expr %prec ASSIGNOP
@@ -829,14 +829,14 @@ expr_no_name:
 
 */
 | LEFTPAR base_type RIGHTPAR expr %prec CAST
-    { locate_expr (Cast(Base_type($2),$4)) }
+    { locate_expr (JPEcast(Base_type($2),$4)) }
 | non_basic_cast
     { $1 }
 /* 
   instanceof operator
 */
 | expr INSTANCEOF type_expr
-    { locate_expr (Instanceof($1,$3)) }
+    { locate_expr (JPEinstanceof($1,$3)) }
 /* annotations only operators */
 | BSFORALL quantified_variables_decl SEMICOLON expr %prec BSFORALL
     { let (t,v)=$2 in
@@ -873,7 +873,7 @@ expr_comma_list:
 
 assign_op:
 | EQ 
-    { "=" }
+    { Beq }
 | ASSIGNOP
     { $1 }
 ;

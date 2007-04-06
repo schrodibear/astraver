@@ -7,18 +7,26 @@ open Java_env
 open Java_ast
 open Java_tast
 
-let int_range =
+let int32_range =
   {
-    jc_range_info_name = "int";
+    jc_range_info_name = "int32";
     jc_range_info_min = Num.num_of_string "-2147483648";
     jc_range_info_max = Num.num_of_string "2147483647";
   }
+
+let range_types acc =
+  List.fold_left
+    (fun acc ri ->
+       JCrange_type_def(ri.jc_range_info_name,
+			ri.jc_range_info_min,
+			ri.jc_range_info_max)::acc) 
+    acc [ int32_range ]
 
 let tr_base_type t =
   match t with
     | Tboolean -> JCTnative Jc_env.Tboolean
     | Tinteger -> JCTnative Jc_env.Tinteger
-    | Tint -> JCTrange int_range
+    | Tint -> JCTrange int32_range
     | _ -> assert false (* TODO *)
 
 
@@ -144,6 +152,8 @@ let rec expr e =
 	  JCTEcall(bin_op op,[e1;e2])
 	  
       | JEvar vi -> JCTEvar (get_var vi)
+      | JEassign_local_var(vi,e) ->
+	  JCTEassign_local(get_var vi,expr e)
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type ;
@@ -158,6 +168,14 @@ let rec statement s =
       | JSvar_decl (_, _, _) -> assert false (* TODO *)
       | JSif (e, s1, s2) ->
 	  JCTSif (expr e, statement s1, statement s2)
+      | JSwhile(e,inv,dec,s) ->
+	  let la =
+	    { jc_tloop_invariant = assertion inv;
+	      jc_tloop_variant = term dec }
+	  in
+	  JCTSwhile(expr e, la, statement s)
+      | JSexpr e -> JCTSexpr (expr e)
+
   in { jc_tstatement_loc = s.java_statement_loc ; jc_tstatement_node = s' }
 
 and statements l = List.map statement l

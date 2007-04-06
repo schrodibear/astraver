@@ -9,6 +9,7 @@ open Pp
 type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
       tfun_spec * tstatement list
+  | JCrange_type_def of string * Num.num * Num.num
 
 let string_of_native t =
   match t with
@@ -34,6 +35,18 @@ let const fmt c =
     | JCCnull
     | JCCvoid -> assert false (* TODO *)
 
+let lbin_op op =
+  if op == Jc_pervasives.ge_int then ">=" else
+  if op == Jc_pervasives.le_int then "<=" else
+  if op == Jc_pervasives.gt_int then ">" else
+  if op == Jc_pervasives.lt_int then "<" else
+  if op == Jc_pervasives.add_int then "+" else
+  if op == Jc_pervasives.sub_int then "-" else
+  if op == Jc_pervasives.mul_int then "*" else
+  if op == Jc_pervasives.div_int then "/" else
+  if op == Jc_pervasives.mod_int then "%" else
+  raise Not_found
+
 let rec term fmt t =
   match t.jc_tterm_node with
     | JCTTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
@@ -43,6 +56,15 @@ let rec term fmt t =
     | JCTToffset_min (_, _)-> assert false (* TODO *)
     | JCTToffset_max (_, _)-> assert false (* TODO *)
     | JCTTold _-> assert false (* TODO *)
+    | JCTTapp (op, ([t1;t2] as l)) ->
+	begin
+	  try
+	    let s = lbin_op op in
+	    fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
+	  with Not_found ->
+	    fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
+	      (print_list comma term) l 
+	end
     | JCTTapp (op, l) ->
 	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
 	  (print_list comma term) l 
@@ -62,9 +84,19 @@ let rec assertion fmt a =
 	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
 	  assertion a
+    | JCTAapp (op, ([t1;t2] as l)) ->
+	begin
+	  try
+	    let s = lbin_op op in
+	    fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
+	  with Not_found ->
+	    fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
+	      (print_list comma term) l 
+	end
     | JCTAapp (op, l) ->
-	fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
-	  (print_list comma term) l 
+	 fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
+	      (print_list comma term) l 
+
     | JCTAnot _-> assert false (* TODO *)
     | JCTAiff (_, _)-> assert false (* TODO *)
     | JCTAimplies (a1, a2)-> 
@@ -92,6 +124,10 @@ let print_spec fmt s =
   List.iter (behavior fmt) s.jc_tfun_behavior;
   fprintf fmt "@]"
 
+let bin_op op =
+  if op == Jc_pervasives.gt_int_ then ">"
+  else raise Not_found
+
 let rec expr fmt e =
   match e.jc_texpr_node with
     | JCTEvar vi -> 
@@ -105,6 +141,15 @@ let rec expr fmt e =
     | JCTEassign_local (_, _) -> assert false (* TODO *)
     | JCTEcast (_, _) -> assert false (* TODO *)
     | JCTEinstanceof (_, _) -> assert false (* TODO *)
+    | JCTEcall (op, ([t1;t2] as l)) ->
+	begin
+	  try
+	    let s = bin_op op in
+	    fprintf fmt "@[(%a %s %a)@]" expr t1 s expr t2
+	  with Not_found ->
+	    fprintf fmt "@[%s(%a)@]" op.jc_fun_info_name
+	      (print_list comma expr) l 
+	end
     | JCTEcall (op, l) -> 
 	fprintf fmt "@[%s(%a)@]" op.jc_fun_info_name
 	  (print_list comma expr) l 
@@ -146,9 +191,12 @@ let param fmt vi =
 let print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
-	fprintf fmt "@[%a %s(%a)@\n%a@\n%a@]@\n@." print_type ty id
+	fprintf fmt "@[%a %s(@[%a@])@\n%a@\n%a@]@\n@." print_type ty id
 	  (print_list comma param) params 
 	  print_spec spec block body 
+    | JCrange_type_def(id,min,max) ->
+	fprintf fmt "@[type %s = %s..%s@]@\n@."
+	  id (Num.string_of_num min) (Num.string_of_num max)
 	  
 
 let rec print_decls fmt d =

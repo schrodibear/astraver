@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.4 2007-04-04 12:45:06 marche Exp $
+$Id: java_ast.mli,v 1.5 2007-04-06 08:32:37 marche Exp $
 
 ***************************************************************************)
 
@@ -65,31 +65,21 @@ and pexpr_node =
   | JPEun of un_op * pexpr                 (*r (pure) unary operations *)
   | JPEincr of incr_decr_op * pexpr (*r pre-post incr/decr operations *)
   | JPEvar of identifier
-(*
-  | Static_class of class_entry
-  | Static_interface of interface_entry
-*)
-  | Assign_name of qualified_ident * string * pexpr  
-(*
-  | Assign_local_var of local_variable_entry * string * expr  
-*)
-  | JPEassign_field of java_field_access * string * pexpr  
-  | JPEassign_array of pexpr * pexpr * string * pexpr  
+  | JPEassign_name of qualified_ident * bin_op * pexpr  
+  | JPEassign_field of java_field_access * bin_op * pexpr  
+  | JPEassign_array of pexpr * pexpr * bin_op * pexpr  
       (*r [Assign_array(e1,e2,op,e3)] is [e1[e2] op e3] *)
       (*r assignment op is =, +=, etc. *)
   | JPEif of pexpr * pexpr * pexpr
   | JPEthis
   | JPEfield_access of java_field_access
-  | Method_call of pexpr option * identifier * pexpr list
-  | Super_method_call of identifier * pexpr list
-(*
-  | Logic_call of logic_entry * expr list
-*)
-  | Class_instance_creation of qualified_ident * pexpr list
-  | Array_creation of array_creation
-  | Array_access of pexpr * pexpr
-  | Cast of type_expr * pexpr
-  | Instanceof of pexpr * type_expr
+  | JPEcall of pexpr option * identifier * pexpr list
+  | JPEsuper_call of identifier * pexpr list
+  | JPEnew of qualified_ident * pexpr list
+  | JPEnew_array of array_creation
+  | JPEarray_access of pexpr * pexpr
+  | JPEcast of type_expr * pexpr
+  | JPEinstanceof of pexpr * type_expr
       (* in annotations only *)
   | JPEresult  
   | JPEold of pexpr 

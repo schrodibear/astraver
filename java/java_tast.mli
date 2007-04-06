@@ -70,15 +70,11 @@ and expr_node =
   | JEbin of expr * bin_op * expr         (*r binary operations *)
   | JEun of un_op * expr                 (*r (pure) unary operations *)
   | JEincr of incr_decr_op * expr (*r pre-post incr/decr operations *)
-(*
+  | JEassign_local_var of java_var_info * expr  
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
-*)
   | Assign_name of qualified_ident * string * pexpr  
-(*
-  | Assign_local_var of local_variable_entry * string * expr  
-*)
   | JPEassign_field of java_field_access * string * pexpr  
   | JPEassign_array of pexpr * pexpr * string * pexpr  
       (*r [Assign_array(e1,e2,op,e3)] is [e1[e2] op e3] *)
@@ -88,19 +84,15 @@ and expr_node =
   | JPEfield_access of java_field_access
   | Method_call of pexpr option * identifier * pexpr list
   | Super_method_call of identifier * pexpr list
-(*
   | Logic_call of logic_entry * expr list
-*)
   | Class_instance_creation of qualified_ident * pexpr list
   | Array_creation of array_creation
   | Array_access of pexpr * pexpr
   | Cast of type_expr * pexpr
   | Instanceof of pexpr * type_expr
       (* in annotations only *)
-(*
   | Type of type_expr 
   | Typeof of expr 
-*)
 *)
 
 (* statements *)
@@ -119,14 +111,15 @@ and statement_node =
   | JSreturn of expr
   | JSvar_decl of java_var_info * initialiser option * statement
   | JSblock of block
-(*
+  | JSwhile of expr * assertion * term * statement  
+      (*r condition, invariant, variant, loop body *)
   | JSexpr of expr
+(*
   | JSvar_decl of variable_declaration
   | JPSthrow of pexpr
   | JPSbreak of identifier option
   | JPScontinue of identifier option
   | JPSlabel of identifier * pstatement
-  | JPSwhile of pexpr * pstatement
   | JPSdo of pstatement * pexpr
   | JPSfor of pstatement list * pexpr * pstatement list * pstatement  
   | JPSfor_decl of variable_declaration * pexpr * pstatement list * pstatement

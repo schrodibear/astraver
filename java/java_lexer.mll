@@ -4,7 +4,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.2 2007-03-06 13:51:40 marche Exp $
+$Id: java_lexer.mll,v 1.3 2007-04-06 08:32:37 marche Exp $
 
 ***************************************************************************)
 
@@ -246,9 +246,28 @@ rule token = parse
       { SHIFT Basr }
   | "=" 
       { EQ }
-  | ("*=" | "/=" | "%=" | "+=" | "-=" 
-    | "<<=" | ">>=" | ">>>=" | "&=" | "^=" | "|=") as op
-      { ASSIGNOP(op) }
+  | "*=" 
+      { ASSIGNOP Bmul }
+  | "/=" 
+      { ASSIGNOP Bdiv }
+  | "%=" 
+      { ASSIGNOP Bmod }
+  | "+=" 
+      { ASSIGNOP Badd }
+  | "-=" 
+      { ASSIGNOP Bsub }
+  | "<<=" 
+      { ASSIGNOP Blsl }
+  | ">>=" 
+      { ASSIGNOP Blsr }
+  | ">>>=" 
+      { ASSIGNOP Basr }
+  | "&=" 
+      { ASSIGNOP Bbwand }
+  | "^=" 
+      { ASSIGNOP Bbwxor }
+  | "|=" 
+      { ASSIGNOP Bbwor }
   | ">" 
       { COMP Bgt }
   | "<" 
