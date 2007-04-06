@@ -7,7 +7,7 @@ open Jc_ast
 open Pp
 
 type jc_decl =
-  | JCfun_def of jc_type * string * (jc_type * string) list *
+  | JCfun_def of jc_type * string * var_info list *
       tfun_spec * tstatement list
 
 let string_of_native t =
@@ -16,6 +16,7 @@ let string_of_native t =
     | Tinteger -> "integer"
     | Treal -> "real"
     | Tboolean -> "boolean"
+
 
 
 let print_type fmt t =
@@ -57,22 +58,23 @@ let rec assertion fmt a =
     | JCTAinstanceof (_, _)-> assert false (* TODO *)
     | JCTAold _-> assert false (* TODO *)
     | JCTAforall (vi, a)-> 
-	fprintf fmt "@[(forall %a %s; %a)@]"
+	fprintf fmt "@[(\\forall %a %s;@ %a)@]"
 	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
 	  assertion a
     | JCTAapp (op, l) ->
-	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
+	fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	  (print_list comma term) l 
     | JCTAnot _-> assert false (* TODO *)
     | JCTAiff (_, _)-> assert false (* TODO *)
     | JCTAimplies (a1, a2)-> 
-	fprintf fmt "@[(%a => %a)@]" assertion a1 assertion a2
+	fprintf fmt "@[(%a =>@ %a)@]" assertion a1 assertion a2
     | JCTAor _-> assert false (* TODO *)
+    | JCTAand [] -> assert false
     | JCTAand (a::l) -> 
 	fprintf fmt "@[(%a" assertion a;
 	List.iter
-	  (fun a -> fprintf fmt " && %a" assertion a)
+	  (fun a -> fprintf fmt " &&@ %a" assertion a)
 	  l;
 	fprintf fmt ")@]"
     | JCTAfalse -> assert false (* TODO *)
@@ -83,17 +85,70 @@ let behavior fmt (id,b) =
   Option_misc.iter
     (fun a -> fprintf fmt "assumes %a;@\n" assertion a) 
     b.jc_tbehavior_assumes;
-  fprintf fmt "ensures %a;@]" assertion b.jc_tbehavior_ensures
+  fprintf fmt "ensures %a;@]@\n" assertion b.jc_tbehavior_ensures
   
 let print_spec fmt s =
-  fprintf fmt "requires @[%a@];@ " assertion s.jc_tfun_requires;
-  List.iter (behavior fmt) s.jc_tfun_behavior
+  fprintf fmt "@[<v 2>  requires @[%a@];@ " assertion s.jc_tfun_requires;
+  List.iter (behavior fmt) s.jc_tfun_behavior;
+  fprintf fmt "@]"
+
+let rec expr fmt e =
+  match e.jc_texpr_node with
+    | JCTEvar vi -> 
+	fprintf fmt "%s" vi.jc_var_info_name
+    | JCTEif (_, _, _) -> assert false (* TODO *)
+    | JCTEincr_heap (_, _, _) -> assert false (* TODO *)
+    | JCTEincr_local (_, _) -> assert false (* TODO *)
+    | JCTEassign_op_heap (_, _, _, _) -> assert false (* TODO *)
+    | JCTEassign_op_local (_, _, _) -> assert false (* TODO *)
+    | JCTEassign_heap (_, _, _) -> assert false (* TODO *)
+    | JCTEassign_local (_, _) -> assert false (* TODO *)
+    | JCTEcast (_, _) -> assert false (* TODO *)
+    | JCTEinstanceof (_, _) -> assert false (* TODO *)
+    | JCTEcall (op, l) -> 
+	fprintf fmt "@[%s(%a)@]" op.jc_fun_info_name
+	  (print_list comma expr) l 
+    | JCTEderef (_, _) -> assert false (* TODO *)
+    | JCTEshift (_, _) -> assert false (* TODO *)
+    | JCTEconst _ -> assert false (* TODO *)
+
+let rec statement fmt s =
+  match s.jc_tstatement_node with
+    | JCTSreturn e ->
+	fprintf fmt "return %a;" expr e
+    | JCTSunpack (_, _) -> assert false (* TODO *) 
+    | JCTSpack (_, _) -> assert false (* TODO *) 
+    | JCTSthrow (_, _) -> assert false (* TODO *) 
+    | JCTStry (_, _, _) -> assert false (* TODO *) 
+    | JCTSgoto _-> assert false (* TODO *) 
+    | JCTScontinue _-> assert false (* TODO *) 
+    | JCTSbreak _-> assert false (* TODO *) 
+    | JCTSwhile (_, _, _)-> assert false (* TODO *) 
+    | JCTSif (e, s1, s2)->
+	fprintf fmt "@[if (%a)@ %a@ else@ %a@]"
+	  expr e statement s1 statement s2
+	
+    | JCTSdecl (_, _, _)-> assert false (* TODO *) 
+    | JCTSassert _-> assert false (* TODO *) 
+    | JCTSexpr _ -> assert false (* TODO *) 
+    | JCTSblock _ -> assert false (* TODO *) 
+
+
+let block fmt b =
+  fprintf fmt "{ @[<v 0>";
+  List.iter (statement fmt) b;
+  fprintf fmt "@]@\n}"
+
+
+let param fmt vi =
+  fprintf fmt "%a %s" print_type vi.jc_var_info_type vi.jc_var_info_name
 
 let print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
-	fprintf fmt "@[%a %s()@ %a@ { }@]@." print_type ty id
-	  print_spec spec (* print_block body *)
+	fprintf fmt "@[%a %s(%a)@\n%a@\n%a@]@\n@." print_type ty id
+	  (print_list comma param) params 
+	  print_spec spec block body 
 	  
 
 let rec print_decls fmt d =

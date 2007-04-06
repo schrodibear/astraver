@@ -32,18 +32,6 @@ let tr_type_option t =
     | None -> JCTnative Tunit
     | Some t -> tr_type t
 
-let tr_param vi =
-  (tr_type vi.java_var_info_type,vi.java_var_info_name)
-
-let lit l =
-  match l with
-  | Integer s -> JCCinteger s
-  | Float s -> JCCreal s
-  | Bool b -> JCCboolean b
-  | String s -> assert false (* TODO *)
-  | Char s -> assert false (* TODO *)
-  | Null  -> JCCnull
-
 let vi_table = Hashtbl.create 97
 
 let get_var vi =
@@ -61,6 +49,20 @@ let get_var vi =
 	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
 	nvi
   
+(*
+let tr_param vi =
+  (tr_type vi.java_var_info_type,vi.java_var_info_name)
+*)
+
+let lit l =
+  match l with
+  | Integer s -> JCCinteger s
+  | Float s -> JCCreal s
+  | Bool b -> JCCboolean b
+  | String s -> assert false (* TODO *)
+  | Char s -> assert false (* TODO *)
+  | Null  -> JCCnull
+
 
 let lbin_op t op =
   match op with
@@ -166,7 +168,7 @@ let tr_method mi req behs b acc =
     | Some l ->	
 	JCfun_def(tr_type_option mi.method_info_return_type,
 		  mi.method_info_trans_name,
-		  List.map tr_param mi.method_info_parameters,
+		  List.map get_var mi.method_info_parameters,
 		  { jc_tfun_requires = assertion_option req;
 		    jc_tfun_behavior = List.map behavior behs},
 		  statements l)::acc
