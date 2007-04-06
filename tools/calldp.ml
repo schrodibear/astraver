@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.34 2007-03-08 10:00:23 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.35 2007-04-06 16:42:01 couchot Exp $ i*)
 
 open Printf
 
@@ -120,7 +120,7 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
 	else
 	  ProverFailure(t,"command failed: " ^ cmd)
     in
-    remove_file ~debug out;
+    (*remove_file ~debug out;*)
     r
 
 let yices ?(debug=false) ?(timeout=30) ~filename:f () =
