@@ -390,7 +390,13 @@ let rec expr env e =
 	      | [] -> assert false
 	  end
       | JPEincr (op, e)-> 
-	  let t,te = expr env e in t,JEincr(op,te)	  
+	  let t,te = expr env e in 
+	  begin
+	    match te.java_expr_node with
+	      | JEvar v ->
+		  t,JEincr_local_var(op,v)
+	      | _ -> assert false (* TODO *)
+	  end	  
       | JPEun (_, _)-> assert false (* TODO *)
       | JPEbin (e1, op, e2) -> 
 	  let ty1,te1 = expr env e1

@@ -1,4 +1,10 @@
 
+JESSIE=../../../bin/jessie.byte
+JESSIELIB=$(shell pwd)/../../../lib
+WHYLIB=$(shell pwd)/../../../lib
+
+EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj
+
 KRAKATOA=../../../bin/krakatoa.byte
 KRAKATOALIB=$(shell pwd)/../../../lib
 
@@ -56,10 +62,10 @@ type-all:
 
 # rules ##################################################
 
-jc/%.jc: %.java 
+%.jc: %.java 
 	$(EXECKRAKATOA) $<
 
-why/%.why: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
+why/%.why: %.jc 
 	$(EXECJESSIE) $<
 
 simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
@@ -71,9 +77,9 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	make -f $*.makefile $@
 
 %: %.java
-	mkdir -p jc
-	rm -f jc/$*.jc
-	make jc/$*.jc
+	rm -f $*.jc
+	make $*.jc
+	make why/$*.why
 	make -f $*.makefile gui
 
 %.goals: %.jc

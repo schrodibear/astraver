@@ -40,6 +40,8 @@ let lbin_op op =
   if op == Jc_pervasives.le_int then "<=" else
   if op == Jc_pervasives.gt_int then ">" else
   if op == Jc_pervasives.lt_int then "<" else
+  if op == Jc_pervasives.eq then "==" else
+  if op == Jc_pervasives.neq then "!=" else
   if op == Jc_pervasives.add_int then "+" else
   if op == Jc_pervasives.sub_int then "-" else
   if op == Jc_pervasives.mul_int then "*" else
@@ -125,8 +127,16 @@ let print_spec fmt s =
   fprintf fmt "@]"
 
 let bin_op op =
-  if op == Jc_pervasives.gt_int_ then ">"
-  else raise Not_found
+  if op == Jc_pervasives.gt_int_ then ">" else
+  if op == Jc_pervasives.lt_int_ then "<" else
+  if op == Jc_pervasives.ge_int_ then ">=" else
+  if op == Jc_pervasives.le_int_ then "<=" else
+  if op == Jc_pervasives.add_int_ then "+" else
+  if op == Jc_pervasives.sub_int_ then "-" else
+  if op == Jc_pervasives.mul_int_ then "*" else
+  if op == Jc_pervasives.div_int_ then "/" else
+  if op == Jc_pervasives.mod_int_ then "%" else
+  raise Not_found
 
 let rec expr fmt e =
   match e.jc_texpr_node with
@@ -134,11 +144,23 @@ let rec expr fmt e =
 	fprintf fmt "%s" vi.jc_var_info_name
     | JCTEif (_, _, _) -> assert false (* TODO *)
     | JCTEincr_heap (_, _, _) -> assert false (* TODO *)
-    | JCTEincr_local (_, _) -> assert false (* TODO *)
+    | JCTEincr_local (op, v) -> 
+	begin
+	  match op with
+	    | Prefix_inc ->
+		fprintf fmt "++%s" v.jc_var_info_name
+	    | Prefix_dec ->
+		fprintf fmt "--%s" v.jc_var_info_name
+	    | Postfix_inc ->
+		fprintf fmt "%s++" v.jc_var_info_name
+	    | Postfix_dec ->
+		fprintf fmt "%s--" v.jc_var_info_name
+	end
     | JCTEassign_op_heap (_, _, _, _) -> assert false (* TODO *)
     | JCTEassign_op_local (_, _, _) -> assert false (* TODO *)
     | JCTEassign_heap (_, _, _) -> assert false (* TODO *)
-    | JCTEassign_local (_, _) -> assert false (* TODO *)
+    | JCTEassign_local (v, e) -> 
+	fprintf fmt "%s = %a" v.jc_var_info_name expr e
     | JCTEcast (_, _) -> assert false (* TODO *)
     | JCTEinstanceof (_, _) -> assert false (* TODO *)
     | JCTEcall (op, ([t1;t2] as l)) ->
@@ -155,7 +177,7 @@ let rec expr fmt e =
 	  (print_list comma expr) l 
     | JCTEderef (_, _) -> assert false (* TODO *)
     | JCTEshift (_, _) -> assert false (* TODO *)
-    | JCTEconst _ -> assert false (* TODO *)
+    | JCTEconst c -> const fmt c
 
 let rec statement fmt s =
   match s.jc_tstatement_node with
@@ -168,18 +190,25 @@ let rec statement fmt s =
     | JCTSgoto _-> assert false (* TODO *) 
     | JCTScontinue _-> assert false (* TODO *) 
     | JCTSbreak _-> assert false (* TODO *) 
-    | JCTSwhile (_, _, _)-> assert false (* TODO *) 
+    | JCTSwhile (e, la, s)-> 
+	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]"
+	  expr e assertion la.jc_tloop_invariant term la.jc_tloop_variant
+	  statement s
     | JCTSif (e, s1, s2)->
 	fprintf fmt "@[if (%a)@ %a@ else@ %a@]"
 	  expr e statement s1 statement s2
-	
-    | JCTSdecl (_, _, _)-> assert false (* TODO *) 
+    | JCTSdecl (vi, None, s)-> 
+	fprintf fmt "%a %s;@ %a" print_type vi.jc_var_info_type
+	  vi.jc_var_info_name statement s
+    | JCTSdecl (vi, Some e, s)-> 
+	fprintf fmt "%a %s = %a;@ %a" 
+	  print_type vi.jc_var_info_type 
+	  vi.jc_var_info_name expr e statement s
     | JCTSassert _-> assert false (* TODO *) 
-    | JCTSexpr _ -> assert false (* TODO *) 
-    | JCTSblock _ -> assert false (* TODO *) 
-
-
-let block fmt b =
+    | JCTSexpr e -> fprintf fmt "%a;@ " expr e
+    | JCTSblock l -> block fmt l
+	
+and block fmt b =
   fprintf fmt "{ @[<v 0>";
   List.iter (statement fmt) b;
   fprintf fmt "@]@\n}"

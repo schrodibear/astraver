@@ -69,7 +69,8 @@ and expr_node =
   | JEvar of java_var_info
   | JEbin of expr * bin_op * expr         (*r binary operations *)
   | JEun of un_op * expr                 (*r (pure) unary operations *)
-  | JEincr of incr_decr_op * expr (*r pre-post incr/decr operations *)
+  | JEincr_local_var of incr_decr_op * java_var_info
+      (*r pre-post incr/decr operations *)
   | JEassign_local_var of java_var_info * expr  
 (*
   | Static_class of class_entry

@@ -94,7 +94,7 @@ let main () =
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
 	  (fun fmt -> fprintf fmt "%a@." Jc_output.print_decls decls)
-	  (Lib.file "jc" (f ^ ".jc"));
+	  (f ^ ".jc");
 	(* phase x : produce makefile *)
 (*
 	Java_make.makefile f

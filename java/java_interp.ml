@@ -7,6 +7,13 @@ open Java_env
 open Java_ast
 open Java_tast
 
+let int16_range =
+  {
+    jc_range_info_name = "int16";
+    jc_range_info_min = Num.num_of_string "-32768";
+    jc_range_info_max = Num.num_of_string "32767";
+  }
+
 let int32_range =
   {
     jc_range_info_name = "int32";
@@ -20,13 +27,14 @@ let range_types acc =
        JCrange_type_def(ri.jc_range_info_name,
 			ri.jc_range_info_min,
 			ri.jc_range_info_max)::acc) 
-    acc [ int32_range ]
+    acc [ int16_range ; int32_range ]
 
 let tr_base_type t =
   match t with
     | Tboolean -> JCTnative Jc_env.Tboolean
     | Tinteger -> JCTnative Jc_env.Tinteger
-    | Tint -> JCTrange int32_range
+    | Tshort -> JCTrange int16_range 
+    | Tint -> JCTrange int32_range 
     | _ -> assert false (* TODO *)
 
 
@@ -135,17 +143,32 @@ let behavior (id,a,assigns,e) =
 let bin_op op =
   match op with
     | Badd -> Jc_pervasives.add_int_
-    | Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *) 
+    | Bmod -> Jc_pervasives.mod_int_
+    | Bdiv -> Jc_pervasives.div_int_
+    | Bmul -> Jc_pervasives.mul_int_
+    | Bsub -> Jc_pervasives.sub_int_
     | Biff|Bor|Band|Bimpl  -> assert false (* TODO *) 
     | Bgt -> Jc_pervasives.gt_int_
-    | Bne|Beq|Bge|Ble|Blt -> assert false (* TODO *) 
+    | Bne -> Jc_pervasives.neq_int_
+    | Beq -> Jc_pervasives.eq_int_
+    | Bge -> Jc_pervasives.ge_int_
+    | Ble -> Jc_pervasives.le_int_
+    | Blt -> Jc_pervasives.lt_int_
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *) 
+
+let incr_op op =
+  match op with
+    | Preincr -> Prefix_inc
+    | Predecr -> Prefix_dec
+    | Postincr -> Postfix_inc
+    | Postdecr -> Postfix_dec
 
 let rec expr e =
   let e' =
     match e.java_expr_node with
       | JElit l -> JCTEconst (lit l)
-      | JEincr (_, _) -> assert false (* TODO *) 
+      | JEincr_local_var(op,v) -> 
+	  JCTEincr_local(incr_op op,get_var v)
       | JEun (_, _) -> assert false (* TODO *)
       | JEbin (e1, op, e2) -> 
 	  let e1 = expr e1 and e2 = expr e2 in
@@ -159,13 +182,19 @@ let rec expr e =
        jc_texpr_type = tr_type e.java_expr_type ;
        jc_texpr_node = e' }
 
+let initialiser e =
+  match e with
+    | JIexpr e -> expr e
+    | _ -> assert false (* TODO *)
+
 let rec statement s =
   let s' =
     match s.java_statement_node with
       | JSskip -> assert false (* TODO *)
       | JSreturn e -> JCTSreturn (expr e)
-      | JSblock _ -> assert false (* TODO *)
-      | JSvar_decl (_, _, _) -> assert false (* TODO *)
+      | JSblock l -> JCTSblock (List.map statement l)	  
+      | JSvar_decl (vi, init, s) -> 
+	  JCTSdecl(get_var vi, Option_misc.map initialiser init, statement s)
       | JSif (e, s1, s2) ->
 	  JCTSif (expr e, statement s1, statement s2)
       | JSwhile(e,inv,dec,s) ->
