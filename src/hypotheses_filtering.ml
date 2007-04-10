@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.6 2007-04-06 16:42:01 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.7 2007-04-10 15:43:06 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -90,6 +90,11 @@ end
 module Var_graph =  Graph.Imperative.Graph.Concrete(Var_node)
 
 let vg = Var_graph.create() 
+
+
+let reset () = 
+  vg = Var_graph.create()
+
 
 
 (**
@@ -191,10 +196,8 @@ let symbols  f  =
 
 
 (**
-@return (va,pr,fu) which is a triple of sets where
- - va is the set of free variables
- - pr is the set of predicate symbols  
- - fu is the set of functionnal symbols  
+@return vars which is a set of  sets of variables
+   
 @param f the formula which is analyzed
 **)
 let sets_of_vars   f  =
@@ -262,10 +265,13 @@ let display (v,p,f)  =
     updates the graph_of_variables
 **)
 let update_v_g vars = 
+  (* computes the vertex *)
   String_set.iter (fun n -> Var_graph.add_vertex vg n) vars  ; 
   let rec updateb n v = 
+    (* adds the edges n<->n2 for all n2 in v *)
     String_set.iter (
       fun n2 -> Var_graph.add_edge vg n n2) v ;
+    (* choose another variable and computes the other edges *) 
     if not (String_set.is_empty v) then 
       let n' = String_set.choose v in
       updateb n' (String_set.remove n' v)
@@ -289,15 +295,20 @@ let update_v_g vars =
 **)
 let memorizes_hyp_symb l = 
   Hashtbl.clear hash_hyp_vars ;
+  reset();
   let rec mem   = function  
     | [] ->  ()
     | Svar (id, v) :: q ->  mem  q 
     | Spred (_,p) :: q -> 
+	(* retrieves the sets of sets of variables *)
 	let v = sets_of_vars p in 
+	(* for each set of variables, build the CFC of the set*)
 	let v' = 
 	  SS_set.fold (fun s  t -> 
 			 update_v_g s ; 
 			 String_set.union s t) v String_set.empty in    
+	(* v' is the union of all the variables *)
+	(* associates v' to the hypothesis *) 
 	Hashtbl.add hash_hyp_vars  p v';
 	mem  q   
   in
@@ -331,6 +342,14 @@ let filter_acc_variables l concl_rep=
     filter l
 
 
+(**
+   @param s the initial set of variables 
+   @param n the depth of the tree of variables
+   
+**)  
+(*let get_vars s n *)
+    (* computes the set of variables reachable in one step *)
+    
 
 
 
@@ -345,20 +364,6 @@ let managesGoal id ax (hyps,concl) =
       (** set informations about hypotheses **) 
       memorizes_hyp_symb hyps;
 
-      (**
-      (* variant with all symbols *)
-      let rec get_equality = function
-	| [] -> ()
-	| Svar (id, v) :: q ->  get_equality q 
-	| Spred (_,p) :: q -> 
-	    stores_equality p ;
-	    get_equality q in  
-      get_equality hyps ;
-      let (v,p,f) = add_symbols (v,p,f) in 
-      let goal_symbs = String_set.union v (String_set.union p f) in
-      let l' = filter hyps goal_symbs in  
-      Dgoal (loc,id, Env.empty_scheme (l',concl))
-      **)
 
       (* variant considering variables *)
       (** update the equivalence class of the variables **)
@@ -369,7 +374,7 @@ let managesGoal id ax (hyps,concl) =
 
 
 let reduce q = 
-  (* faire un reset *)
+  
   q 
   
   
