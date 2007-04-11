@@ -73,10 +73,6 @@ terms and assertions
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 
-let valid_inv_name st = st.jc_struct_info_name ^ "_valid_inv"
-
-let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_valid_inv_sem"
-
 let lvar ?(assigned=true) label v =
   if assigned then
     match label with 
@@ -515,54 +511,118 @@ let tr_struct st acc =
 	in
 	Axiom(name,f)::acc
 
-let tr_valid_inv st acc =
+let valid_inv_name st = st.jc_struct_info_name ^ "_valid_inv"
+
+let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_valid_inv_sem"
+
+let rec struct_depends st acc mem =
   (* for now, only root types *)
-  if st.jc_struct_info_parent <> None then acc else
-  (* memories to pass as parameters *)
-  let memories = Hashtbl.fold (fun _ (st, _) acc ->
+  if st.jc_struct_info_parent <> None then acc, mem else
+  let name = st.jc_struct_info_name in
+  if StringSet.mem name mem then acc, mem else
+  List.fold_left (fun (acc, mem) (_, fi) -> match fi.jc_field_info_type with
+      | JCTpointer(st, _, _) -> struct_depends st acc mem
+      | JCTnative _ | JCTlogic _ | JCTrange _ -> acc, mem)
+    (st::acc, StringSet.add name mem) st.jc_struct_info_fields
+
+let struct_depends st = fst (struct_depends st [] StringSet.empty)
+
+(* "this" is not returned in the list of parameters of invariant_params *)
+let invariant_params acc li =
+  let acc =
+    FieldSet.fold
+      (fun fi acc -> 
+	 (fi.jc_field_info_name, memory_field fi)::acc)
+      li.jc_logic_info_effects.jc_effect_memories
+      acc
+  in
+  let acc =
+    StringSet.fold
+      (fun v acc -> 
+	 let t = { logic_type_args = [simple_logic_type v];
+		   logic_type_name = "alloc_table" }
+	 in
+	 (v ^ "_alloc_table", t)::acc)
+      li.jc_logic_info_effects.jc_effect_alloc_table
+      acc
+  in
+  let acc =
+    StringSet.fold
+      (fun v acc -> 
+	 let t = { logic_type_args = [simple_logic_type v];
+		   logic_type_name = "tag_table" }
+	 in
+	 (v ^ "_tag_table", t)::acc)
+      li.jc_logic_info_effects.jc_effect_tag_table
+      acc
+  in
+    acc
+
+(* "this" is not returned in the list of parameters of invariants_params *)
+let invariants_params acc st =
+  let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+  List.fold_left (fun acc (li, _) -> invariant_params acc li) acc invs
+
+(* "this" is not returned in the list of parameters of valid_inv_params *)
+let valid_inv_params st =
+  let deps = struct_depends st in
+  let memories = List.fold_left (fun acc st ->
     List.fold_left (fun acc (name, fi) ->
       (name, memory_field fi)::acc) acc st.jc_struct_info_fields)
-    Jc_norm.structs_table [] in
-  let memories = List.sort (fun (name1, _) (name2, _) ->
-    compare name2 name1) memories in
+    [] deps in
+  let params = List.fold_left invariants_params memories deps in
+  let params = List.sort (fun (name1, _) (name2, _) ->
+    compare name2 name1) params in
   let rec only_one prev acc = function
     [] -> acc
   | ((name, _) as x)::tl ->
       if name = prev then only_one prev acc tl
       else only_one name (x::acc) tl in
-  let memories = only_one "" [] memories in
+  let params = only_one "" [] params in
+    params
+
+(* generate valid_inv predicate and its axiom *)
+(* TODO: valid_inv_params are calculated several times for the same structure, this could be optimized *)
+let tr_valid_inv st acc =
+  (*Printf.printf "******* %s ******\n" st.jc_struct_info_name;
+  let deps = struct_depends st in
+    List.iter (fun st -> Printf.printf "%s\n" st.jc_struct_info_name) deps;*)
+  (* for now, only root types *)
+  if st.jc_struct_info_parent <> None then acc else
+  let params = valid_inv_params st in
+
   (**** valid_inv predicate declaration ****)
   let valid_inv_type = simple_logic_type "prop" in
   let vi_this = "???",
     { logic_type_name = "pointer" ;
       logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
-  let logic = Logic(false, valid_inv_name st, vi_this::memories,
+  let logic = Logic(false, valid_inv_name st, vi_this::params,
     valid_inv_type) in
-  let acc = logic::acc
-  in
+  let acc = logic::acc in
+
   (**** valid_inv_sem axiom ****)
-  (*let quantified_fields = List.fold_left (fun acc (name, fi) -> (name, memory_field fi)::acc)
-    [] st.jc_struct_info_fields in*)
   let this = "valid_inv_this" in
   let this_var = LVar this in
   let this_ty =
     { logic_type_name = "pointer";
       logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
-  let memories_params = List.map (fun (name, _) -> LVar name) memories in
   let fields_valid_inv = List.map (fun (name, fi) ->
     match fi.jc_field_info_type with
     | JCTpointer(st, _, _) ->
+        let params = valid_inv_params st in
+        let params_var = List.map (fun (name, _) -> LVar name) params in
         LPred(valid_inv_name st,
-          LApp("select", [LVar name; this_var])::memories_params)
+          LApp("select", [LVar name; this_var])::params_var)
     | JCTnative _
     | JCTlogic _
     | JCTrange _ -> LTrue) st.jc_struct_info_fields in
-  let sem = LIff(LPred(valid_inv_name st, this_var::memories_params),
+  let params_var = List.map (fun (name, _) -> LVar name) params in
+  let sem = LIff(LPred(valid_inv_name st, this_var::params_var),
     make_and (make_and_list fields_valid_inv)
       (invariant_for_struct this_var st)) in
   (* quantifiers *)
   let sem = List.fold_left (fun acc (id, ty) ->
-    LForall(id, ty, acc)) sem ((this, this_ty)::memories) in
+    LForall(id, ty, acc)) sem ((this, this_ty)::params) in
   Axiom(valid_inv_axiom_name st, sem)::acc
        
 (*************
