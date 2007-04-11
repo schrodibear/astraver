@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.7 2007-04-10 15:43:06 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.8 2007-04-11 17:15:40 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -57,7 +57,7 @@ open Util
 
 let threshold = Options.pruning_hyp
 
-let symbol_counter = ref 0
+(*let symbol_counter = ref 0*)
 
 (*module Int_set = Set.Make(struct type t=int let compare= compare end)*)
 module String_set = Set.Make(struct type t=string let compare= compare end)
@@ -65,7 +65,7 @@ module String_set = Set.Make(struct type t=string let compare= compare end)
 module SS_set = Set.Make(struct type t=String_set.t let compare= compare end)
 
 (** selected variables *)
-let selected_vars = String_set.empty 
+let selected_vars = ref String_set.empty 
 
 (** a variable name will be associated to each hypothesis **)
 let hash_hyp_vars : (predicate,'a) Hashtbl.t = Hashtbl.create 20
@@ -89,12 +89,13 @@ end
 
 module Var_graph =  Graph.Imperative.Graph.Concrete(Var_node)
 
-let vg = Var_graph.create() 
+let vg = ref (Var_graph.create())
 
 
 let reset () = 
-  vg = Var_graph.create()
-
+  vg := Var_graph.create();
+  selected_vars := String_set.empty;
+  Hashtbl.clear hash_hyp_vars  
 
 
 (**
@@ -204,18 +205,13 @@ let sets_of_vars   f  =
   let vars = ref SS_set.empty  in
   let rec collect qvars formula  = 
     match formula with 
-      | Papp (id, tl, _) when is_int_comparison id  || is_real_comparison id ->
-	  List.iter 
-	    (fun t -> 
+      | Papp (id, tl, _) ->
+	  let v = List.fold_right 
+	    (fun t s -> 
 	       let (v',_,_) = f_symbols qvars t in 
-	       vars := SS_set.add v' !vars )
-	    tl
-      | Papp (id, tl, _)  ->
-	  List.iter 
-	    (fun t -> 
-	       let (v',_,_) = f_symbols qvars t in 
-	       vars := SS_set.add v' !vars )
-	    tl
+	       String_set.union s v')
+	    tl String_set.empty  in
+	  vars := SS_set.add v !vars 
       | Pand (_, _, a, b) | Forallb (_, a, b)  | Por (a, b) | Piff (a, b) | 
 	    Pimplies (_, a, b) ->
 	  collect qvars a;
@@ -247,7 +243,7 @@ let display_symb_of set =
   String_set.iter (fun s -> Format.printf "%s " s) set ;
   Format.printf "@\n@." 
 
-let display str set  = 
+let display_set str set  = 
   (*if debug then begin *)
     Format.printf "%s : " str ;
     display_symb_of set; 
@@ -255,9 +251,9 @@ let display str set  =
   (*end*)
 
 let display (v,p,f)  = 
-  display "vars" v;
-  display "preds" p;
-  display "func" f
+  display_set "vars" v;
+  display_set "preds" p;
+  display_set "func" f
 
 
 
@@ -266,11 +262,11 @@ let display (v,p,f)  =
 **)
 let update_v_g vars = 
   (* computes the vertex *)
-  String_set.iter (fun n -> Var_graph.add_vertex vg n) vars  ; 
+  String_set.iter (fun n -> Var_graph.add_vertex !vg n) vars  ; 
   let rec updateb n v = 
     (* adds the edges n<->n2 for all n2 in v *)
     String_set.iter (
-      fun n2 -> Var_graph.add_edge vg n n2) v ;
+      fun n2 -> Var_graph.add_edge !vg n n2) v ;
     (* choose another variable and computes the other edges *) 
     if not (String_set.is_empty v) then 
       let n' = String_set.choose v in
@@ -294,14 +290,20 @@ let update_v_g vars =
    variable 
 **)
 let memorizes_hyp_symb l = 
-  Hashtbl.clear hash_hyp_vars ;
+  
   reset();
   let rec mem   = function  
     | [] ->  ()
     | Svar (id, v) :: q ->  mem  q 
     | Spred (_,p) :: q -> 
 	(* retrieves the sets of sets of variables *)
+	(*Format.printf "%a @\n@." print_predicate p;*)
 	let v = sets_of_vars p in 
+	(*SS_set.iter (fun s-> 
+		       display_set "detected vars in hyp " s ) v; *)
+	
+
+	
 	(* for each set of variables, build the CFC of the set*)
 	let v' = 
 	  SS_set.fold (fun s  t -> 
@@ -315,6 +317,42 @@ let memorizes_hyp_symb l =
   mem l 
   
 
+(**
+   @param v the initial set of variables 
+   @param n the depth of the tree of variables
+   @param acc acumumulates the variables that have already been visited 
+   @return the ist of variables reachable in n steps
+   
+**)
+let rec get_vars_in_tree v n acc = 
+  if n > 0 then
+    (* computes the list of variables reachable in one step *)
+    let succ_list = String_set.fold
+      (fun el l -> 
+	 (*Format.printf "vars attached to %s : " el ;*)
+	 let l' = Var_graph.succ !vg el in
+	 (*List.iter (fun el -> 
+		      Format.printf " %s," el) l';
+	 Format.printf "@\n@.";*)
+	 List.append l l' 
+      ) 
+      v
+      [] in
+    (* computes the set of variables reachable in one step *)
+    let succ_set = List.fold_right
+      (fun el s ->
+	 String_set.add el s) succ_list String_set.empty in
+    let v' = String_set.diff succ_set acc in 
+    String_set.union v 
+      (get_vars_in_tree 
+	 v' 
+	 (n - 1)
+	 (String_set.union v succ_set)
+      )
+  else
+    v 
+    
+       
 
 
 (**
@@ -334,22 +372,20 @@ let filter_acc_variables l concl_rep=
 	let vars =  	  
 	  try Hashtbl.find hash_hyp_vars p
 	  with Not_found -> raise Exit in
-	(* strong criteria all variable are in the set of selected variables *)
-	if (String_set.subset vars selected_vars) then 
-	  Spred (t,p):: filter q  
+	(*display_set "vars " vars ;*)
+	
+	(* (* strong criteria: all variable 
+	   of the hypothessis must be in the set of selected variables *)
+	   if (String_set.subset vars !selected_vars) then *)
+	(* weakest criteria: at least one  variable 
+	   of the hypothessis should  be in the set of selected variables *)
+	   if (not (String_set.is_empty (String_set.inter vars !selected_vars))) then 
+	   Spred (t,p):: filter q  
 	else
 	  filter q in  
     filter l
 
 
-(**
-   @param s the initial set of variables 
-   @param n the depth of the tree of variables
-   
-**)  
-(*let get_vars s n *)
-    (* computes the set of variables reachable in one step *)
-    
 
 
 
@@ -363,7 +399,10 @@ let managesGoal id ax (hyps,concl) =
       let (v,p,f) = symbols concl in 
       (** set informations about hypotheses **) 
       memorizes_hyp_symb hyps;
-
+      (** select the relevant variables **)
+      selected_vars := get_vars_in_tree v threshold String_set.empty;
+      (*display_set "selected vars" !selected_vars ; *)
+      
 
       (* variant considering variables *)
       (** update the equivalence class of the variables **)
@@ -374,8 +413,13 @@ let managesGoal id ax (hyps,concl) =
 
 
 let reduce q = 
-  
-  q 
+  let q' =   match q with
+      Dgoal (loc, id, s)  as ax ->
+        let (l,g) = s.Env.scheme_type in
+        let (l',g') = Util.intros [] g in
+        managesGoal id ax (List.append l l',g')
+    | _ -> failwith "goal awaited" in
+  q' 
   
   
 
