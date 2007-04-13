@@ -1,17 +1,13 @@
 type list = {
   integer value;
-  boolean end;
   list[..] next;
 
-  invariant not_zero(x) =
-    x.value != 0;
-  invariant list_end(x) =
-    x.end == false <=> \offset_min(x.next) <= 0 && \offset_max(x.next) >= 0;
+  invariant not_zero(x) = x.value != 0;
 }
 
 integer m(list[0] this) {
-  if (!this.end) {
+  if (this != null) {
     this.value = this.value / this.value;
-    m(this.next);
+    // m(this.next);
   }
 }

@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.33 2007-04-06 14:17:41 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.34 2007-04-13 11:48:55 marche Exp $ */
 
 %{
 
@@ -63,6 +63,7 @@
 %token <string> IDENTIFIER
 %token <Jc_ast.const> CONSTANT
 %token <string> STRING_LITERAL 
+%token NULL
 
 /* ( ) { } [ ] .. */
 %token LPAR RPAR LPARRPAR LBRACE RBRACE LSQUARE RSQUARE DOTDOT
@@ -381,6 +382,8 @@ primary_expression:
     { locate_expr (JCPEconst $1) }
 | LPARRPAR 
     { locate_expr (JCPEconst JCCvoid) }
+| NULL 
+    { locate_expr (JCPEconst JCCnull) }
 /*
 | STRING_LITERAL 
     { locate (CEstring_literal $1) }

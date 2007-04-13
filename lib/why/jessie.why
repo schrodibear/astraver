@@ -28,6 +28,12 @@ axiom offset_min_shift :
   forall p: 't pointer. forall i:int.
 	offset_min(a,shift(p,i)) = offset_min(a,p)-i
 
+(* the null pointer *)
+
+logic null : 't pointer
+
+axiom null_not_valid: forall a:'t alloc_table. not valid(a,null)
+
 (**************************************
 
 heap memories, select and store
