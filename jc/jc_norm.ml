@@ -133,9 +133,15 @@ let make_deref loc e fi =
 let make_tconst loc c =
   let t,c = Jc_pervasives.const c in
   let node = JCTEconst c in
-  { jc_texpr_loc = loc; 
-    jc_texpr_type = t;
-    jc_texpr_node = node; }
+  { jc_texpr_loc = loc; jc_texpr_type = t; jc_texpr_node = node; }
+
+let make_tincr_local loc t op vi =
+  let node =  JCTEincr_local (op, vi) in
+  { jc_texpr_loc = loc; jc_texpr_type = t; jc_texpr_node = node; }
+
+let make_tincr_heap loc t op e fi =
+  let node = JCTEincr_heap (op, e, fi) in
+  { jc_texpr_loc = loc; jc_texpr_type = t; jc_texpr_node = node; }
 
 (* statements *)
 
@@ -445,6 +451,10 @@ and statement s =
       | JCTSblock sl ->
 	  JCSblock (List.map statement sl)
       | JCTSexpr e ->
+	  let prefix op = match op with 
+	    | Prefix_inc | Postfix_inc -> Prefix_inc
+	    | Prefix_dec | Postfix_dec -> Prefix_dec
+	  in
 	  let sl, tl = 
 	    match e.jc_texpr_node with
 	      | JCTEcall (f, el) ->
@@ -452,6 +462,16 @@ and statement s =
 		  let ll,tl = List.split ltl in
 		  let sl,etl = fst (call loc f el ~binder:false ll) in
 		  sl, etl @ (List.flatten tl)
+	      | JCTEincr_local (op, vi) ->
+		  (* avoid creating a useless temporary for postfix version *)
+		  let typ = e.jc_texpr_type in
+		  let e = make_tincr_local loc typ (prefix op) vi in
+		  fst (expr e)
+	      | JCTEincr_heap (op, se, fi) ->
+		  (* avoid creating a useless temporary for postfix version *)
+		  let typ = e.jc_texpr_type in
+		  let e = make_tincr_heap loc typ (prefix op) se fi in
+		  fst (expr e)
 	      | _ -> fst (expr e)
 	  in
 	  (make_decls loc sl tl).jc_statement_node
