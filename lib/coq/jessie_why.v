@@ -25,28 +25,28 @@ Definition block_length (A: Set) (a: alloc_table A) (p: pointer A) :=
   end.
 
 (*Why logic*) Definition offset_max :
-  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1) -> Z.
+  forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Z.
 exact (fun A1 a p => block_length a p - snd p - 1).
 Defined.
 
 (*Why logic*) Definition offset_min :
-  forall (A1:Set), ((alloc_table) A1) -> ((pointer) A1) -> Z.
+  forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Z.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A171:Set) (a:((alloc_table) A171))
-  (p:((pointer) A171)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A179:Set) (a:(alloc_table A179))
+  (p:(pointer A179)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
-  forall (A1:Set), ((pointer) A1) -> Z -> ((pointer) A1).
+  forall (A1:Set), (pointer A1) -> Z -> (pointer A1).
 exact (fun A1 p i => (fst p, snd p + i)).
 Defined.
 Implicit Arguments shift.
 
 (*Why axiom*) Lemma offset_max_shift :
   forall (A1:Set),
-  (forall (a:((alloc_table) A1)),
-   (forall (p:((pointer) A1)),
+  (forall (a:(alloc_table A1)),
+   (forall (p:(pointer A1)),
     (forall (i:Z), (offset_max a (shift p i)) = ((offset_max a p) - i)))).
 Proof.
 intros A1 a p i.
@@ -60,8 +60,8 @@ Implicit Arguments offset_max_shift.
 
 (*Why axiom*) Lemma offset_min_shift :
   forall (A1:Set),
-  (forall (a:((alloc_table) A1)),
-   (forall (p:((pointer) A1)),
+  (forall (a:(alloc_table A1)),
+   (forall (p:(pointer A1)),
     (forall (i:Z), (offset_min a (shift p i)) = ((offset_min a p) - i)))).
 Proof.
 intros A1 a p i.
@@ -92,6 +92,16 @@ les indices positifs ou nuls (valides), l'autre pour les indices
 négatifs (donc invalides mais c'est plus simple pour les lemmes après). *)
 Definition block (T: Set) := prod (Map T) (Map T).
 Definition blocks (T: Set) := Map (block T).
+
+(*Why logic*) Definition null : forall (A1:Set), (pointer A1).
+Admitted.
+Set Contextual Implicit.
+Implicit Arguments null.
+Unset Contextual Implicit.
+
+(*Why axiom*) Lemma null_not_valid :
+  forall (A1:Set), (forall (a:(alloc_table A1)), ~(valid a (@null A1))).
+Admitted.
 
 (*Why type*) Definition memory: Set -> Set ->Set.
 exact (fun S T => prod (blocks T) T).
@@ -130,7 +140,7 @@ Definition mem_get_item (S T: Set) (m: memory S T) (a: ad) (i: Z) :=
   block_get_item (mem_get_block m a) (snd m) i.
 
 (*Why logic*) Definition select :
-  forall (A1:Set), forall (A2:Set), ((memory) A2 A1) -> ((pointer) A2) -> A1.
+  forall (A1:Set), forall (A2:Set), (memory A2 A1) -> (pointer A2) -> A1.
 exact (fun T S m p => mem_get_item m (fst p) (snd p)).
 Defined.
 
@@ -151,8 +161,8 @@ Definition mem_set_item (S T: Set) (m: memory S T) (a: ad) (i: Z) (item: T) :=
   mem_set_block m a (block_set_item (mem_get_block m a) i item).
 
 (*Why logic*) Definition store :
-  forall (A1:Set), forall (A2:Set), ((memory) A1 A2) -> ((pointer) A1)
-  -> A2 -> ((memory) A1 A2).
+  forall (A1:Set), forall (A2:Set), (memory A1 A2) -> (pointer A1)
+  -> A2 -> (memory A1 A2).
 exact (fun S T m p item => mem_set_item m (fst p) (snd p) item).
 Defined.
 
@@ -216,9 +226,9 @@ Qed.
 
 (*Why axiom*) Lemma select_store_eq :
   forall (A1:Set), forall (A2:Set),
-  (forall (m:((memory) A1 A2)),
-   (forall (p1:((pointer) A1)),
-    (forall (p2:((pointer) A1)),
+  (forall (m:(memory A1 A2)),
+   (forall (p1:(pointer A1)),
+    (forall (p2:(pointer A1)),
      (forall (a:A2), (p1 = p2 -> (select (store m p1 a) p2) = a))))).
 Proof.
 intros S T m p q x peq.
@@ -402,9 +412,9 @@ Qed.
 
 (*Why axiom*) Lemma select_store_neq :
   forall (A1:Set), forall (A2:Set),
-  (forall (m:((memory) A1 A2)),
-   (forall (p1:((pointer) A1)),
-    (forall (p2:((pointer) A1)),
+  (forall (m:(memory A1 A2)),
+   (forall (p1:(pointer A1)),
+    (forall (p2:(pointer A1)),
      (forall (a:A2),
       (~(p1 = p2) -> (select (store m p1 a) p2) = (select m p2)))))).
 Proof.
@@ -420,79 +430,79 @@ Qed.
 Admitted.
 
 
-(*Why logic*) Definition pset_empty : forall (A1:Set), ((pset) A1).
+(*Why logic*) Definition pset_empty : forall (A1:Set), (pset A1).
 Admitted.
 
 
 (*Why logic*) Definition pset_singleton :
-  forall (A1:Set), ((pointer) A1) -> ((pset) A1).
+  forall (A1:Set), (pointer A1) -> (pset A1).
 Admitted.
 
 (*Why logic*) Definition pset_deref :
-  forall (A1:Set), forall (A2:Set), ((memory) A2 ((pointer) A1))
-  -> ((pset) A2) -> ((pset) A1).
+  forall (A1:Set), forall (A2:Set), (memory A2 (pointer A1))
+  -> (pset A2) -> (pset A1).
 Admitted.
 Implicit Arguments pset_deref.
 
 (*Why logic*) Definition pset_union :
-  forall (A1:Set), ((pset) A1) -> ((pset) A1) -> ((pset) A1).
+  forall (A1:Set), (pset A1) -> (pset A1) -> (pset A1).
 Admitted.
 
 (*Why logic*) Definition pset_range :
-  forall (A1:Set), ((pset) A1) -> Z -> Z -> ((pset) A1).
+  forall (A1:Set), (pset A1) -> Z -> Z -> (pset A1).
 Admitted.
 Implicit Arguments pset_range.
 
 (*Why logic*) Definition in_pset :
-  forall (A1:Set), ((pointer) A1) -> ((pset) A1) -> Prop.
+  forall (A1:Set), (pointer A1) -> (pset A1) -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma in_pset_empty :
-  forall (A1:Set), (forall (p:((pointer) A1)), ~(in_pset p (@pset_empty A1))).
+  forall (A1:Set), (forall (p:(pointer A1)), ~(in_pset p (@pset_empty A1))).
 Admitted.
 
 (*Why axiom*) Lemma in_pset_singleton :
   forall (A1:Set),
-  (forall (p:((pointer) A1)),
-   (forall (q:((pointer) A1)), ((in_pset p (pset_singleton q)) <-> p = q))).
+  (forall (p:(pointer A1)),
+   (forall (q:(pointer A1)), ((in_pset p (pset_singleton q)) <-> p = q))).
 Admitted.
 
 (*Why axiom*) Lemma in_pset_deref :
   forall (A1:Set), forall (A2:Set),
-  (forall (p:((pointer) A1)),
-   (forall (m:((memory) A2 ((pointer) A1))),
-    (forall (q:((pset) A2)),
+  (forall (p:(pointer A1)),
+   (forall (m:(memory A2 (pointer A1))),
+    (forall (q:(pset A2)),
      ((in_pset p (pset_deref m q)) <->
-      (exists r:((pointer) A2), (in_pset r q) /\ p = (select m r)))))).
+      (exists r:(pointer A2), (in_pset r q) /\ p = (select m r)))))).
 Admitted.
 Implicit Arguments in_pset_deref.
 
 (*Why axiom*) Lemma in_pset_range :
   forall (A1:Set),
-  (forall (p:((pointer) A1)),
-   (forall (q:((pset) A1)),
+  (forall (p:(pointer A1)),
+   (forall (q:(pset A1)),
     (forall (a:Z),
      (forall (b:Z),
       ((in_pset p (pset_range q a b)) <->
        (exists i:Z,
-        (exists r:((pointer) A1), a <= i /\ i <= b /\ (in_pset r q) /\
+        (exists r:(pointer A1), a <= i /\ i <= b /\ (in_pset r q) /\
          p = (shift r i)))))))).
 Admitted.
 Implicit Arguments in_pset_range.
 
 (*Why axiom*) Lemma in_pset_union :
   forall (A1:Set),
-  (forall (p:((pointer) A1)),
-   (forall (s1:((pset) A1)),
-    (forall (s2:((pset) A1)),
+  (forall (p:(pointer A1)),
+   (forall (s1:(pset A1)),
+    (forall (s2:(pset A1)),
      ((in_pset p (pset_union s1 s2)) <-> (in_pset p s1) \/ (in_pset p s2))))).
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A197:Set)
-  (A196:Set) (a:((alloc_table) A196)) (m1:((memory) A196 A197))
-  (m2:((memory) A196 A197)) (l:((pset) A196))
-  := (forall (p:((pointer) A196)),
+(*Why predicate*) Definition not_assigns (A207:Set)
+  (A206:Set) (a:(alloc_table A206)) (m1:(memory A206 A207)) (m2:(memory A206
+  A207)) (l:(pset A206))
+  := (forall (p:(pointer A206)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -503,22 +513,21 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition instanceof :
-  forall (A1:Set), ((tag_table) A1) -> ((pointer) A1)
-  -> ((tag_id) A1) -> Prop.
+  forall (A1:Set), (tag_table A1) -> (pointer A1) -> (tag_id A1) -> Prop.
 Admitted.
 Implicit Arguments instanceof.
 
 (*Why logic*) Definition downcast :
-  forall (A1:Set), ((tag_table) A1) -> ((pointer) A1)
-  -> ((tag_id) A1) -> ((pointer) A1).
+  forall (A1:Set), (tag_table A1) -> (pointer A1)
+  -> (tag_id A1) -> (pointer A1).
 Admitted.
 Implicit Arguments downcast.
 
 (*Why axiom*) Lemma downcast_instanceof :
   forall (A1:Set),
-  (forall (a:((tag_table) A1)),
-   (forall (p:((pointer) A1)),
-    (forall (s:((tag_id) A1)), ((instanceof a p s) -> (downcast a p s) = p)))).
+  (forall (a:(tag_table A1)),
+   (forall (p:(pointer A1)),
+    (forall (s:(tag_id A1)), ((instanceof a p s) -> (downcast a p s) = p)))).
 Admitted.
 Implicit Arguments downcast_instanceof.
 

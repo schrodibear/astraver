@@ -4,7 +4,7 @@ type A = {
 
 unit main(A[0] a)
   behavior safety:
-    ensures a.b == (a != a);
+    ensures a != null;
 {
-   a.b = a != a;
+   a.b = a == null;
 }

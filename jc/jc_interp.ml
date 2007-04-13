@@ -586,7 +586,7 @@ let valid_inv_params st =
 (* generate valid_inv predicate and its axiom *)
 (* TODO: valid_inv_params are calculated several times for the same structure, this could be optimized *)
 let tr_valid_inv st acc =
-  (*Printf.printf "******* %s ******\n" st.jc_struct_info_name;
+  (*Printf.printf "******* %s ******\n" st.jc_struct_info_name; (* TODO: modifier l'environnement qui contient 3 fois la même chose *)
   let deps = struct_depends st in
     List.iter (fun st -> Printf.printf "%s\n" st.jc_struct_info_name) deps;*)
   (* for now, only root types *)
@@ -621,8 +621,8 @@ let tr_valid_inv st acc =
     | JCTrange _ -> LTrue) st.jc_struct_info_fields in
   let params_var = List.map (fun (name, _) -> LVar name) params in
   let sem = LIff(LPred(valid_inv_name st, this_var::params_var),
-    make_and (make_and_list fields_valid_inv)
-      (invariant_for_struct this_var st)) in
+    LImpl(LPred("neq", [LVar this; LVar "null"]),
+      make_and (make_and_list fields_valid_inv) (invariant_for_struct this_var st))) in
   (* quantifiers *)
   let sem = List.fold_left (fun acc (id, ty) ->
     LForall(id, ty, acc)) sem ((this, this_ty)::params) in

@@ -9,6 +9,30 @@ Admitted.
 (*Why type*) Definition Person: Set.
 Admitted.
 
+(*Why logic*) Definition Family_inv :
+  (pointer Family) -> (memory Person Z) -> (memory Person (pointer Family))
+  -> (memory Family (pointer Person)) -> (memory Family
+  (pointer Person)) -> Prop.
+Admitted.
+
+(*Why logic*) Definition Person_inv :
+  (pointer Person) -> (memory Person Z) -> (memory Person (pointer Family))
+  -> (memory Family (pointer Person)) -> (memory Family
+  (pointer Person)) -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma Family_inv_sem :
+  (forall (mother:(memory Family (pointer Person))),
+   (forall (father:(memory Family (pointer Person))),
+    (forall (family:(memory Person (pointer Family))),
+     (forall (age:(memory Person Z)),
+      (forall (inv_this:(pointer Family)),
+       ((Family_inv inv_this age family father mother) <->
+        (~(inv_this = (@null Family)) ->
+         (Person_inv (select mother inv_this) age family father mother) /\
+         (Person_inv (select father inv_this) age family father mother)))))))).
+Admitted.
+
 (*Why logic*) Definition Family_tag : (tag_id Family).
 Admitted.
 
@@ -45,31 +69,14 @@ Inductive valid_inv: forall C: Set, pointer C ->
     valid_inv Person x mother father family age.
 Hint Constructors valid_inv.
 
-(*Why logic*) Definition Family_valid_inv :
-  (pointer Family) -> (memory Person Z) -> (memory Person (pointer Family))
-  -> (memory Family (pointer Person)) -> (memory Family
-  (pointer Person)) -> Prop.
 exact (fun x age family father mother =>
   valid_inv Family x mother father family age).
 Defined.
 
-(*Why logic*) Definition Person_valid_inv :
-  (pointer Person) -> (memory Person Z) -> (memory Person (pointer Family))
-  -> (memory Family (pointer Person)) -> (memory Family
-  (pointer Person)) -> Prop.
 exact (fun x age family father mother =>
   valid_inv Person x mother father family age).
 Defined.
 
-(*Why axiom*) Lemma Family_valid_inv_sem :
-  (forall (mother:(memory Family (pointer Person))),
-   (forall (father:(memory Family (pointer Person))),
-    (forall (family:(memory Person (pointer Family))),
-     (forall (age:(memory Person Z)),
-      (forall (x:(pointer Family)),
-       ((Family_valid_inv x age family father mother) <->
-        (Person_valid_inv (select mother x) age family father mother) /\
-        (Person_valid_inv (select father x) age family father mother))))))).
 Proof.
 intros.
 split; intros.
@@ -87,18 +94,21 @@ unfold Family_valid_inv.
 auto.
 Qed.
 
-(*Why logic*) Definition Person_tag : (tag_id Person).
-Admitted.
-
-(*Why axiom*) Lemma Person_valid_inv_sem :
+(*Why axiom*) Lemma Person_inv_sem :
   (forall (mother:(memory Family (pointer Person))),
    (forall (father:(memory Family (pointer Person))),
     (forall (family:(memory Person (pointer Family))),
      (forall (age:(memory Person Z)),
-      (forall (x:(pointer Person)),
-       ((Person_valid_inv x age family father mother) <->
-        (Family_valid_inv (select family x) age family father mother) /\
-        (age_inv age family father mother age x))))))).
+      (forall (inv_this:(pointer Person)),
+       ((Person_inv inv_this age family father mother) <->
+        (~(inv_this = (@null Person)) ->
+         (Family_inv (select family inv_this) age family father mother) /\
+         (age_inv age family father mother age inv_this)))))))).
+Admitted.
+
+(*Why logic*) Definition Person_tag : (tag_id Person).
+Admitted.
+
 Proof.
 intros.
 split; intros.
