@@ -211,6 +211,9 @@ let uminus_int = make_fun_info "neg_int" integer_type
 let uplus_real = make_fun_info "uplus_real" integer_type
 let uminus_real = make_fun_info "uminus_real" integer_type
 
+let eq_pointer = make_fun_info "eq_pointer" integer_type
+let neq_pointer = make_fun_info "neq_pointer" integer_type
+
 let and_ = make_fun_info "and" boolean_type
 let or_ = make_fun_info "or" boolean_type
 let not_ = make_fun_info "not" boolean_type

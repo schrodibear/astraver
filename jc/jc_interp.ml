@@ -57,6 +57,7 @@ let tr_base_type t =
 	let ti = simple_logic_type (st.jc_struct_info_root) in
 	{ logic_type_name = "pointer";
 	  logic_type_args = [ ti ] }
+    | JCTnull -> assert false
 
 let tr_type t = Base_type(tr_base_type t)
 (*

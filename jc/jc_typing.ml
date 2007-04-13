@@ -103,7 +103,12 @@ let comparable_types t1 t2 =
     | JCTnull, JCTpointer _
     | JCTpointer _, JCTnull -> true
     | _ -> false
-  
+
+let is_pointer_type t =
+  match t with
+    | JCTnull -> true
+    | JCTpointer _ -> true
+    | _ -> false
 
 
 let logic_functions_table = Hashtbl.create 97
@@ -239,13 +244,24 @@ let logic_bin_op t op =
 
 let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
-    | Bgt | Blt | Bge | Ble | Beq | Bneq ->
+    | Bgt | Blt | Bge | Ble ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
 	  JCTTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
-	  typing_error loc "numeric types expected for >, <, >=, <=, == and !="
+	  typing_error loc "numeric types expected for >, <, >= and <="
+    | Beq | Bneq ->
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative Tboolean,
+	  JCTTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
+	else
+	if is_pointer_type t1 && is_pointer_type t2 && (comparable_types t1 t2) then
+	  JCTnative Tboolean,
+	  JCTTapp(logic_bin_op Tboolean op,[e1; e2])
+	else
+	  typing_error loc "numeric or pointer types expected for == and !="
     | Badd | Bsub ->
 	begin
 	  match t1 with
@@ -719,13 +735,24 @@ let restrict t1 t2 e =
 
 let make_bin_app loc op t1 e1 t2 e2 =
   match op with
-    | Bgt | Blt | Bge | Ble | Beq | Bneq ->
+    | Bgt | Blt | Bge | Ble ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
 	  JCTEcall(bin_op Tboolean op,[coerce t1 t e1; coerce t2 t e2])
 	else
-	  typing_error loc "numeric types expected"
+	  typing_error loc "numeric types expected for <, >, <= and >="
+    | Beq | Bneq ->
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative Tboolean,
+	  JCTEcall(bin_op Tboolean op,[coerce t1 t e1; coerce t2 t e2])
+	else
+	if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
+	  JCTnative Tboolean,
+	  JCTEcall((if op = Beq then eq_pointer else neq_pointer), [e1; e2])
+	else
+	  typing_error loc "numeric or pointer types expected for == and !="
     | Badd | Bsub ->
 	begin
 	  match t1 with

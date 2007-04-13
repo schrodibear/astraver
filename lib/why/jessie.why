@@ -34,6 +34,13 @@ logic null : 't pointer
 
 axiom null_not_valid: forall a:'t alloc_table. not valid(a,null)
 
+(* pointer comparison *)
+
+parameter eq_pointer : 
+  p: 't pointer -> q: 't pointer -> {} bool { if result then p=q else p<>q }
+parameter neq_pointer : 
+  p: 't pointer -> q: 't pointer -> {} bool { if result then p<>q else p=q }
+
 (**************************************
 
 heap memories, select and store
