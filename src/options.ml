@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.92 2007-04-04 14:29:42 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.93 2007-04-13 09:16:11 couchot Exp $ i*)
 
 open Format
 
@@ -177,7 +177,7 @@ Typing/Annotations/VCG options:
   --partial          partial correctness
   --total            total correctness
   --prune-theory     prunes the theory 
-  --prune-hyp        prunes the hypotheses 
+  --prune-hyp k      prunes the hypotheses according to the depth k  
   --modulo           displays mod in smtlib instead of pourcent
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 

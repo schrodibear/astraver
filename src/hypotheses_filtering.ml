@@ -22,17 +22,29 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.8 2007-04-11 17:15:40 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.9 2007-04-13 09:16:10 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
 (**
-   This modules provides a quick way to filter hypotheses of 
-   a goal. 
-   To do so 
-   1) Hypotheses are exepnaded thanks to the intros tactic
-   2) All the variables of each hypothesis are stored into a class
-   3) A hypothosis is selected if it is in the same class than the conclusion 
+   This module provides a quick way to filter hypotheses of 
+   a goal. It is activated by the option 
+   --prune-hyp k 
+   where k is an integer that is positive or null. 
+   The number of selected hypotheses increases w.r.t. k 
+ 
+   The internal flow is:
+   1) Hypotheses are expanded thanks to the intros tactic. 
+   A short goal is then produced.
+   2) Variables of hypothesis are stored into a tree where 
+   - a variable is represented by a vertex
+   - a predicate linking some variables is represented by 
+   the strongly connected component between all the vertex
+   corresponding to the variables 
+   3) A breadth-first search algorithm, bounded by the constant k
+   computes the set of relevant variables R
+   4) An hypothesis is selected  by comparing its set of variables 
+   with R 
 **)
 
 
@@ -375,11 +387,11 @@ let filter_acc_variables l concl_rep=
 	(*display_set "vars " vars ;*)
 	
 	(* (* strong criteria: all variable 
-	   of the hypothessis must be in the set of selected variables *)
-	   if (String_set.subset vars !selected_vars) then *)
-	(* weakest criteria: at least one  variable 
-	   of the hypothessis should  be in the set of selected variables *)
-	   if (not (String_set.is_empty (String_set.inter vars !selected_vars))) then 
+	   of the hypothessis must be in the set of selected variables *) 
+	   if (String_set.subset vars !selected_vars) then  *)
+	(*     (* weakest criteria: at least one  variable 
+	   of the hypothessis should  be in the set of selected variables *) *)
+	   if (not (String_set.is_empty (String_set.inter vars !selected_vars))) then  
 	   Spred (t,p):: filter q  
 	else
 	  filter q in  

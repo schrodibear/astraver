@@ -22,7 +22,26 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.10 2007-01-25 08:48:55 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.11 2007-04-13 09:16:10 couchot Exp $ i*)
+
+(** 
+    Such encoding aims at simulating polymorphism in 
+    multi-sorted logic. 
+    There are basically three cases 
+    1- For a term that is not of sort INT and 
+    which is not used in a INT context, the translation 
+    of the outermost symbol is the same as in strat
+    2- For a term of sort INT and which is used in an INT 
+    context, the outermost term is not modified 
+    3- For a term of sort INT in a polymorphic context and 
+    a term of an instantied sort which is used in an INT context 
+    a special treatment is provided.    
+*)
+
+
+
+
+
 
 open Cc
 open Logic
