@@ -576,12 +576,14 @@ let rec method_header retty mdecl =
 	  | Some t -> id,Some (JTYarray t),l
 	  | None -> typing_error (fst id) "invalid type void array"
 
-let behavior (id,b) =
+let behavior (id,b) = assert false
+(*
   (id,Option_misc.map (assertion params) assumes,
 	      Option_misc.map (fun _ -> assert false (* TODO *)) assigns,
 	      assertion params_result ensures))
 	  behs
-	
+	*)
+
 let rec class_fields l acc =
   match l with
     | [] -> acc
