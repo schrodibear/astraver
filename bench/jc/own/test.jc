@@ -1,0 +1,10 @@
+type A = {
+  boolean b;
+}
+
+unit main(A[0] a)
+  behavior safety:
+    ensures a.b == (a != a);
+{
+   a.b = a != a;
+}
