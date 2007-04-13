@@ -84,8 +84,10 @@ let subtype t1 t2 =
 	Num.le_num ri1.jc_range_info_max ri2.jc_range_info_max
     | JCTrange _, JCTnative Tinteger -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
-    | JCTpointer(s1,_,_),JCTpointer(s2,_,_) -> 
+    | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
 	  substruct s1 s2
+    | JCTnull, JCTnull -> true
+    | JCTnull, JCTpointer _ -> true
     | _ -> false
 
 let comparable_types t1 t2 =
@@ -95,8 +97,11 @@ let comparable_types t1 t2 =
     | JCTrange _, JCTnative Tinteger -> true
     | JCTnative Tinteger, JCTrange _ -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
-    | JCTpointer(s1,_,_),JCTpointer(s2,_,_) -> 
+    | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
 	  s1.jc_struct_info_root = s2.jc_struct_info_root
+    | JCTnull, JCTnull -> true
+    | JCTnull, JCTpointer _
+    | JCTpointer _, JCTnull -> true
     | _ -> false
   
 
@@ -123,7 +128,8 @@ let find_field loc ty f =
     | JCTpointer(st,_,_) -> find_field_struct loc st f
     | JCTnative _ 
     | JCTrange _
-    | JCTlogic _ ->
+    | JCTlogic _
+    | JCTnull ->
 	typing_error loc "not a structure type"
 
 let find_fun_info id = Hashtbl.find functions_env id

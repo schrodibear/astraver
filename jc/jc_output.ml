@@ -26,6 +26,7 @@ let print_type fmt t =
     | JCTlogic s -> fprintf fmt "%s" s
     | JCTrange ri -> fprintf fmt "%s" ri.jc_range_info_name
     | JCTpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
+    | JCTnull -> assert false
 
 let const fmt c =
   match c with

@@ -7,7 +7,7 @@ type list = {
 unit sum(list[0] l) {
     integer s = 0;
     while (l != null) 
-	invariant 0;
+	invariant true;
         variant 0;
     {
 	s += l.content;
@@ -17,7 +17,7 @@ unit sum(list[0] l) {
 
 unit nullify(list[0] l) {
     while (l != null) 
-	invariant 0;
+	invariant true;
         variant 0;
     {
 	l.content = 0;

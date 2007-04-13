@@ -511,9 +511,9 @@ let tr_struct st acc =
 	in
 	Axiom(name,f)::acc
 
-let valid_inv_name st = st.jc_struct_info_name ^ "_valid_inv"
+let valid_inv_name st = st.jc_struct_info_name ^ "_inv"
 
-let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_valid_inv_sem"
+let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_inv_sem"
 
 let rec struct_depends st acc mem =
   (* for now, only root types *)
@@ -522,6 +522,7 @@ let rec struct_depends st acc mem =
   if StringSet.mem name mem then acc, mem else
   List.fold_left (fun (acc, mem) (_, fi) -> match fi.jc_field_info_type with
       | JCTpointer(st, _, _) -> struct_depends st acc mem
+      | JCTnull -> assert false
       | JCTnative _ | JCTlogic _ | JCTrange _ -> acc, mem)
     (st::acc, StringSet.add name mem) st.jc_struct_info_fields
 
@@ -601,7 +602,7 @@ let tr_valid_inv st acc =
   let acc = logic::acc in
 
   (**** valid_inv_sem axiom ****)
-  let this = "valid_inv_this" in
+  let this = "inv_this" in
   let this_var = LVar this in
   let this_ty =
     { logic_type_name = "pointer";
@@ -613,6 +614,7 @@ let tr_valid_inv st acc =
         let params_var = List.map (fun (name, _) -> LVar name) params in
         LPred(valid_inv_name st,
           LApp("select", [LVar name; this_var])::params_var)
+    | JCTnull -> assert false
     | JCTnative _
     | JCTlogic _
     | JCTrange _ -> LTrue) st.jc_struct_info_fields in
@@ -724,6 +726,7 @@ let tr_fun f spec body acc =
 	       let var = LVar v.jc_var_info_final_name in
 	       let invariant = invariant_for_struct var st in
 	       make_and invariant acc
+           | JCTnull -> assert false
 	   | JCTrange _ -> acc
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
@@ -762,6 +765,7 @@ let tr_fun f spec body acc =
 	       make_and 
 		 (make_and (make_and validity instance) invariant)
 		 acc*)
+           | JCTnull -> assert false
 	   | JCTrange _ -> acc
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)

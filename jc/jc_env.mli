@@ -23,13 +23,14 @@
 (**************************************************************************)
 
 
-type native_type = Tunit | Tboolean | Tinteger | Treal 
+type native_type = Tunit | Tboolean | Tinteger | Treal
 
 type jc_type =
   | JCTnative of native_type
   | JCTlogic of string
   | JCTrange of range_info
   | JCTpointer of struct_info * Num.num * Num.num
+  | JCTnull
 
 and range_info =
     { 

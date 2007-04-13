@@ -51,6 +51,7 @@ let unit_type = JCTnative Tunit
 let boolean_type = JCTnative Tboolean
 let integer_type = JCTnative Tinteger
 let real_type = JCTnative Treal
+let null_type = JCTnull
 
 (* temporary variables *)
 
@@ -67,7 +68,7 @@ let const c =
     | JCCinteger _ -> integer_type,c
     | JCCreal _ -> real_type,c
     | JCCboolean _ -> boolean_type,c
-    | JCCnull -> assert false
+    | JCCnull -> null_type,c
 
 (* variables *)
 
