@@ -43,7 +43,7 @@ shortint isqrt(shortint x)
     { 
 	/* count++; bug*/ count = count+1;
 	assert (count+2 <= 181);
-	sum = sum + 2*count + 1;
+	sum += 2*count + 1;
     }
     return count;
 }   

@@ -157,8 +157,8 @@ let rec expr fmt e =
 	    | Postfix_dec ->
 		fprintf fmt "%s--" v.jc_var_info_name
 	end
-    | JCTEassign_op_heap (_, _, _, _) -> assert false (* TODO *)
-    | JCTEassign_op_local (_, _, _) -> assert false (* TODO *)
+    | JCTEassign_op_heap (_, _, _, _, _) -> assert false (* TODO *)
+    | JCTEassign_op_local (_, _, _, _) -> assert false (* TODO *)
     | JCTEassign_heap (_, _, _) -> assert false (* TODO *)
     | JCTEassign_local (v, e) -> 
 	fprintf fmt "%s = %a" v.jc_var_info_name expr e

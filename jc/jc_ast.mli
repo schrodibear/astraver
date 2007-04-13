@@ -222,8 +222,8 @@ type texpr_node =
   | JCTEcast of texpr * struct_info
   | JCTEassign_local of var_info * texpr
   | JCTEassign_heap of texpr * field_info * texpr
-  | JCTEassign_op_local of var_info * fun_info * texpr
-  | JCTEassign_op_heap of texpr * field_info * fun_info * texpr
+  | JCTEassign_op_local of var_info * fun_info * native_type * texpr
+  | JCTEassign_op_heap of texpr * field_info * fun_info * native_type * texpr
   | JCTEincr_local of tincr_op * var_info 
   | JCTEincr_heap of tincr_op * texpr * field_info 
   | JCTEif of texpr * texpr * texpr

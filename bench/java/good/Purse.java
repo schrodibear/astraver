@@ -1,11 +1,11 @@
 
 class NoCreditException extends Exception {
 
-    /*@ behavior created:
+    /* @ behavior created:
       @   assigns \nothing
       @   ensures true
       @*/
-    public NoCreditException() {}
+    // public NoCreditException() {}
 }
 
 public class Purse {
@@ -14,13 +14,15 @@ public class Purse {
 
     //@ invariant balance_non_negative: balance >= 0
 
-    /*@ behavior created:
+    /* @ behavior created:
       @   assigns \nothing
       @   ensures balance == 0
       @*/
-    public Purse() {
+    /*
+public Purse() {
 	balance = 0;
     }
+    */
 
     /*@ requires s >= 0
       @ behavior done:

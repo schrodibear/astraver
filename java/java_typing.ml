@@ -576,13 +576,17 @@ let rec method_header retty mdecl =
 	  | Some t -> id,Some (JTYarray t),l
 	  | None -> typing_error (fst id) "invalid type void array"
 
-let behavior (id,b) = assert false
-(*
-  (id,Option_misc.map (assertion params) assumes,
-	      Option_misc.map (fun _ -> assert false (* TODO *)) assigns,
-	      assertion params_result ensures))
-	  behs
-	*)
+let behavior env env_result (id,b) = 
+  let env_ensures = 
+    match b.java_pbehavior_throws with
+      | None -> env_result
+      | Some(c,id) -> assert false (* TODO *)
+  in
+  (id,
+   Option_misc.map (assertion env) b.java_pbehavior_assumes,
+   Option_misc.map (fun _ -> assert false (* TODO *)) b.java_pbehavior_assigns,
+   assertion env_ensures b.java_pbehavior_ensures)
+	
 
 let rec class_fields l acc =
   match l with
@@ -594,23 +598,40 @@ let rec class_fields l acc =
 	in
 	let mi = method_info (snd id) ret_ty (List.map snd params) in
 	let req = Option_misc.map (assertion params) req in
-	let params_result = 
+	let env_result =
 	  match ret_ty with
 	    | None -> params
 	    | Some t ->
 		let vi = var t "\\result" in ("\\result",vi)::params
 	in
-	let behs = List.map behavior behs in
-	let body = Option_misc.map (statements params_result) body in
+	let behs = List.map (behavior params env_result) behs in
+	let body = Option_misc.map (statements env_result) body in
 	Hashtbl.add methods_table mi.method_info_tag (mi,req,behs,body);
 	class_fields rem (mi :: acc)
+   | JPFmethod_spec(req,behs) :: JPFconstructor(head,eci,body) :: rem ->
+	assert false
+(*let id, ret_ty, params = 
+	  method_header head.method_return_type head.method_declarator 
+	in
+	let mi = method_info (snd id) ret_ty (List.map snd params) in
+	let req = Option_misc.map (assertion params) req in
+	let behs = List.map (behavior params ret_ty) behs in
+	let body = Option_misc.map (statements params) body in
+	Hashtbl.add constructors_table mi.method_info_tag (mi,req,behs,body);
+	class_fields rem (mi :: acc) *)
     | JPFmethod_spec _ :: _ ->
 	typing_error (assert false) "out of place method specification"
     | JPFinvariant _ :: rem ->  assert false (* TODO *)
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
-    | JPFstatic_initializer _ ::rem
-    | JPFvariable _ :: rem
+    | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
+    | JPFvariable vd :: rem -> 
+	(*
+	vd.variable_modifiers : modifiers ;
+	vd.variable_type : type_expr ;
+	vd.variable_decls : variable_declarator list }
+*)assert false (* TODO *)
     | JPFconstructor _ :: rem -> assert false (* TODO *)
+
 
 let type_decl d = 
     match d with

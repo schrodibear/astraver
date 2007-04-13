@@ -51,6 +51,8 @@ val exceptions_table :
 
 exception Typing_error of Loc.position * string
 
+val coerce : jc_type -> native_type -> texpr -> texpr
+
 val decl : pdecl -> unit
 
 (*

@@ -1,0 +1,28 @@
+
+
+
+integer f1(unit x) 
+   behavior ok:
+	ensures \result == 0;
+{
+  integer x = 0;
+  x += x++;
+  return x;
+}
+
+integer f2(unit x) 
+   behavior ok:
+	ensures \result == 1;
+{
+  integer x = 0;
+  x += ++x;
+  return x;
+}
+
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make order"
+End: 
+*/

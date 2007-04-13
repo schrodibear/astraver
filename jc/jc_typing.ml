@@ -859,22 +859,27 @@ let rec expr env e =
 	    let t1,te1 = expr env e1
 	    and t2,te2 = expr env e2
 	    in
-	    if subtype t2 t1 then
-	      match t1 with
-		| JCTnative t ->
-		    begin
-		      match te1.jc_texpr_node with
-			| JCTEvar v ->
-			    set_assigned v;
-			    t1,JCTEassign_op_local(v, bin_op t op, te2)
-			| JCTEderef(e,f) ->
-			    t1,JCTEassign_op_heap(e, f, bin_op t op, te2)
-			| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
-		    end
-		| _ ->
-		    typing_error e.jc_pexpr_loc "incompatible type"
+	    if is_numeric t1 & is_numeric t2 then	      
+	      let t = lub_numeric_types t1 t2 in
+	      let _te2 =	      
+		if subtype t2 t1 then te2 else
+		  try
+		    restrict t2 t1 te2
+		  with
+		      Invalid_argument _ ->
+			typing_error e2.jc_pexpr_loc 
+			  "type '%a' expected"
+			  print_type t1
+	      in
+	      match te1.jc_texpr_node with
+		| JCTEvar v ->
+		    set_assigned v;
+		    t1,JCTEassign_op_local(v, bin_op t op, t, te2)
+		| JCTEderef(e,f) ->
+		    t1,JCTEassign_op_heap(e, f, bin_op t op, t, te2)
+		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	    else
-	      typing_error e.jc_pexpr_loc "incompatible types"
+	      typing_error e.jc_pexpr_loc "numeric types expected"
 	  end
       | JCPEapp (e1, l) -> 
 	  begin

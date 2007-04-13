@@ -267,17 +267,24 @@ let rec expr e =
 	  let (l2,tl2),e2 = expr e2 in
 	  let stat = make_assign_heap loc e1 fi e2 in
 	  (l1@l2@[stat], tl1@tl2), JCEderef (e1, fi)
-      | JCTEassign_op_local (vi, f, e) ->
+      | JCTEassign_op_local (vi, f, t, e) ->
+	  let e = Jc_typing.coerce e.jc_texpr_type t e in
 	  let (l1,tl1),e = expr e in
-	  let (l2,tl2),ecall = 
-	    call loc f [make_var loc vi; e] ~binder:true [[];l1] in
+	  let ev = { jc_texpr_loc = loc;
+		     jc_texpr_type = vi.jc_var_info_type;
+		     jc_texpr_node = JCTEvar vi }
+	  in
+	  let (l2,tl2),ev = expr (Jc_typing.coerce vi.jc_var_info_type t ev)
+	  in
+	  let (l3,tl3),ecall = 
+	    call loc f [ev; e] ~binder:true [[];l1] in
 	  let ecall = match ecall with
 	    | Some b -> make_var loc b
 	    | None -> assert false
 	  in
 	  let stat = make_assign_local loc vi ecall in
-	  (l2@[stat],tl1@tl2), JCEvar vi
-      | JCTEassign_op_heap (e1, fi, f, e2) ->
+	  (l2@l3@[stat],tl1@tl2@tl3), JCEvar vi
+      | JCTEassign_op_heap (e1, fi, f, t, e2) ->
 	  let (l1,tl1),e1 = expr e1 in
 	  let (l2,tl2),e2 = expr e2 in
 	  let (l3,tl3),ecall = 

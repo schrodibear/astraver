@@ -27,11 +27,13 @@ let rec statement s =
     | JPSannot(loc,s) -> parse_annot loc s Java_parser.kml_statement_annot
     | JPSloop_annot _ -> assert false
     | JPSassert _ -> assert false
-    | JPSsynchronized (e, s') -> JPSsynchronized(e, List.map statement s')	
-    | JPSblock b -> JPSblock(List.map statement b)
+    | JPSsynchronized (e, s') -> JPSsynchronized(e, statements s')	
+    | JPSblock b -> JPSblock(statements b)
     | JPSswitch(e, l) -> 
-	JPSswitch(e, List.map (fun (labs,b) -> (labs,List.map statement b)) l)
-    | JPStry (s, l, f) -> assert false (* TODO *)
+	JPSswitch(e, List.map (fun (labs,b) -> (labs,statements b)) l)
+    | JPStry (s, l, f) -> 
+	let l = List.map (fun (p,s) -> (p,statements s)) l in
+	JPStry(statements s,l,Option_misc.map (statements) f)
     | JPSfor_decl (_, _, _, _) -> assert false (* TODO *)
     | JPSfor (_, _, _, _) -> assert false (* TODO *)
     | JPSdo (_, _) -> assert false (* TODO *)
@@ -46,13 +48,15 @@ let rec statement s =
     | JPSexpr _
     | JPSskip -> s.java_pstatement_node }
 
+and statements b = List.map statement b
+
 let field_decl f = 
   match f with
     | JPFmethod(m,None) -> f
-    | JPFmethod(m,Some b) -> JPFmethod(m,Some (List.map statement b))
-    | JPFconstructor(c,eci,b) -> JPFconstructor(c,eci,List.map statement b)
+    | JPFmethod(m,Some b) -> JPFmethod(m,Some (statements b))
+    | JPFconstructor(c,eci,b) -> JPFconstructor(c,eci,statements b)
     | JPFvariable _ -> f 
-    | JPFstatic_initializer b -> JPFstatic_initializer (List.map statement b)
+    | JPFstatic_initializer b -> JPFstatic_initializer (statements b)
     | JPFannot (loc,s) -> parse_annot loc s Java_parser.kml_field_decl
     | JPFinvariant _ 
     | JPFmethod_spec _ -> assert false
