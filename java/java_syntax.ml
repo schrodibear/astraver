@@ -50,7 +50,7 @@ let field_decl f =
   match f with
     | JPFmethod(m,None) -> f
     | JPFmethod(m,Some b) -> JPFmethod(m,Some (List.map statement b))
-    | JPFconstructor c -> assert false (* TODO *)
+    | JPFconstructor(c,eci,b) -> JPFconstructor(c,eci,List.map statement b)
     | JPFvariable _ -> f 
     | JPFstatic_initializer b -> JPFstatic_initializer (List.map statement b)
     | JPFannot (loc,s) -> parse_annot loc s Java_parser.kml_field_decl

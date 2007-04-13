@@ -1,29 +1,6 @@
 
 open Java_env
 
-(*
-type var_info =
-    {
-      java_var_info_tag : int;
-      java_var_info_name : string;
-      java_var_info_final_name : string;
-      java_var_info_type : java_type;
-      java_var_info_assigned : bool;
-    }
-
-type logic_info =
-    {
-      java_logic_info_name : string;
-      java_logic_info_tag : int;
-      java_logic_info_result_type : java_type option;
-      java_logic_info_parameters : var_info list;
-(*
-      java_logic_info_effects = empty_effects;
-*)
-      java_logic_info_calls : logic_info list;
-    }
-*)
-
 type bin_op = Java_ast.bin_op
 type un_op = Java_ast.un_op
 type incr_decr_op = Java_ast.incr_decr_op

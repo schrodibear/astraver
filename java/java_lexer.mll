@@ -4,7 +4,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.3 2007-04-06 08:32:37 marche Exp $
+$Id: java_lexer.mll,v 1.4 2007-04-13 07:43:18 marche Exp $
 
 ***************************************************************************)
 
@@ -35,6 +35,7 @@ $Id: java_lexer.mll,v 1.3 2007-04-06 08:32:37 marche Exp $
       List.iter
 	(fun (s,t) -> Hashtbl.add table s t)
 	[ "abstract", ABSTRACT;
+	  "assigns", ASSIGNS;
 	  "axiom", AXIOM;
 	  "behavior", BEHAVIOR;
 	  "boolean", BOOLEAN;
@@ -70,6 +71,7 @@ $Id: java_lexer.mll,v 1.3 2007-04-06 08:32:37 marche Exp $
 	  "instanceof", INSTANCEOF;
 	  "int", INT;
 	  "interface", INTERFACE;
+	  "invariant", INVARIANT;
 	  "long", LONG;
 	  "loop_invariant", LOOP_INVARIANT;
 	  "native", NATIVE;
@@ -85,6 +87,7 @@ $Id: java_lexer.mll,v 1.3 2007-04-06 08:32:37 marche Exp $
 	  "rest", REST;
 	  "return", RETURN;
 	  "short", SHORT;
+	  "signals", SIGNALS;
 	  "static", STATIC;
 	  "super", SUPER;
 	  "switch", SWITCH;
@@ -128,7 +131,8 @@ $Id: java_lexer.mll,v 1.3 2007-04-06 08:32:37 marche Exp $
 	  "exists", BSEXISTS ;
 	  (* "fresh", BSFRESH ; *)
 	  "forall", BSFORALL ;
-	  (* "nothing", BSNOTHING;
+	  "nothing", BSNOTHING;
+	  (*
 	  "fields_of", BSFIELDSOF;
           "not_conditionally_updated", BSNOTCONDITIONALLYUPDATED;
 	  *)
@@ -145,7 +149,7 @@ $Id: java_lexer.mll,v 1.3 2007-04-06 08:32:37 marche Exp $
       Hashtbl.find special_kw_table s
     with
 	Not_found ->
-	  lex_error lexbuf ("unknown special JML keyword \\"^s)
+	  lex_error lexbuf ("unknown special keyword \\"^s)
 
 (*
 

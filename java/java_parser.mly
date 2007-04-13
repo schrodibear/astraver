@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.5 2007-04-06 08:32:37 marche Exp $
+$Id: java_parser.mly,v 1.6 2007-04-13 07:43:18 marche Exp $
 
 */
 
@@ -85,10 +85,10 @@ $Id: java_parser.mly,v 1.5 2007-04-06 08:32:37 marche Exp $
 %token THROWS TRANSIENT TRUE VAR VOID VOLATILE
 %token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW 
 
-%token REQUIRES ENSURES ASSUMES ASSIGNS BEHAVIOR
-%token LOOP_INVARIANT DECREASES
+%token REQUIRES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR
+%token INVARIANT LOOP_INVARIANT DECREASES
 %token AXIOM LOGIC TYPE PREDICATE READS
-%token BSFORALL BSEXISTS BSOLD BSRESULT
+%token BSFORALL BSEXISTS BSOLD BSRESULT BSNOTHING
 
 /* Others symbols */
 
@@ -229,7 +229,7 @@ field_declaration:
 | method_declaration 
     { $1 }
 | constructor_declaration 
-    { JPFconstructor($1) }
+    { $1 }
 | variable_declaration 
     { JPFvariable($1) }
 | static_initializer 
@@ -366,12 +366,15 @@ constructor_declaration:
     { let (a,b)=$1 in
       match b with
 	| Some (Type_name [id]) ->
-	    { (* constr_specification = None ; *)
+	    let c =
+	      { 
 	      constr_modifiers = a ;
 	      constr_name = id ;
 	      constr_parameters = $2 ;
-	      constr_throws = $3 ;
-	      constr_body = $4 }
+	      constr_throws = $3 }
+	    in
+	    let eci,b = $4 in
+	    JPFconstructor(c,eci,b) 
 	| _ -> raise Parse_error}
 ;
 
@@ -688,6 +691,8 @@ primary_no_new_array:
     { locate_expr (JPEnew($2,$4)) }
 | array_access
     { let (a,b)=$1 in locate_expr (JPEarray_access(a,b)) }
+| BSOLD LEFTPAR expr RIGHTPAR
+    { locate_expr (JPEold $3) }
 ;
 
 array_access:
@@ -910,6 +915,8 @@ kml_type_decl:
 kml_field_decl:
 | requires behaviors
     { JPFmethod_spec($1,$2) }
+| INVARIANT ident COLON expr
+    {  JPFinvariant($2,$4) } 
 ;
 
 requires:
@@ -928,9 +935,24 @@ behaviors:
 
 behavior:
 | assumes assigns ENSURES expr
-    { ($1,$2,$4) }
+    { { java_pbehavior_assumes = $1;
+	java_pbehavior_assigns = $2;
+	java_pbehavior_throws = None;
+	java_pbehavior_ensures = $4 } }
+| assumes assigns SIGNALS LEFTPAR name ident_option RIGHTPAR expr
+    { { java_pbehavior_assumes = $1;
+	java_pbehavior_assigns = $2;
+	java_pbehavior_throws = Some($5,$6);
+	java_pbehavior_ensures = $8 } }
 ;
 
+ident_option:
+| /* $\varepsilon$ */
+    { None }
+| ident
+    { Some $1 }
+;
+ 
 assumes:
 | /* $\varepsilon$ */
     { None }
@@ -938,9 +960,14 @@ assumes:
     { Some $2 }
 ;
 
+
 assigns:
 | /* $\varepsilon$ */
     { None }
+| ASSIGNS BSNOTHING
+    { Some [] }
+| ASSIGNS expr_comma_list
+    { Some $2 }
 ;
 
 kml_statement_annot:

@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.5 2007-04-06 08:32:37 marche Exp $
+$Id: java_ast.mli,v 1.6 2007-04-13 07:43:18 marche Exp $
 
 ***************************************************************************)
 
@@ -187,12 +187,10 @@ type explicit_constructor_invocation =
   | Invoke_super of pexpr list
 
 type constructor_declaration =
-    { (* constr_specification : kml_method_specification option; *)
-      constr_modifiers : modifiers ;
+    { constr_modifiers : modifiers ;
       constr_name : identifier ;
       constr_parameters : parameter list ;
-      constr_throws : qualified_ident list;
-      constr_body : explicit_constructor_invocation * block }
+      constr_throws : qualified_ident list }
 ;;
 
       
@@ -200,15 +198,22 @@ type constructor_declaration =
       
 (*s class declarations *)
 
+type pbehavior =
+    { java_pbehavior_assumes : pexpr option;
+      java_pbehavior_assigns : pexpr list option;
+      java_pbehavior_throws : (qualified_ident * identifier option) option;
+      java_pbehavior_ensures : pexpr
+    }
+
 type field_declaration =
   | JPFmethod of method_declaration * block option
-  | JPFconstructor of constructor_declaration 
+  | JPFconstructor of constructor_declaration *
+      explicit_constructor_invocation * block
   | JPFvariable of variable_declaration
   | JPFstatic_initializer of block
   | JPFannot of Lexing.position * string
   | JPFinvariant of identifier * pexpr
-  | JPFmethod_spec of pexpr option * 
-      (identifier * (pexpr option * pexpr option * pexpr)) list
+  | JPFmethod_spec of pexpr option * (identifier * pbehavior) list
 ;;
 
 

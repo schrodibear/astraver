@@ -576,6 +576,12 @@ let rec method_header retty mdecl =
 	  | Some t -> id,Some (JTYarray t),l
 	  | None -> typing_error (fst id) "invalid type void array"
 
+let behavior (id,b) =
+  (id,Option_misc.map (assertion params) assumes,
+	      Option_misc.map (fun _ -> assert false (* TODO *)) assigns,
+	      assertion params_result ensures))
+	  behs
+	
 let rec class_fields l acc =
   match l with
     | [] -> acc
@@ -592,13 +598,7 @@ let rec class_fields l acc =
 	    | Some t ->
 		let vi = var t "\\result" in ("\\result",vi)::params
 	in
-	let behs = List.map
-	  (fun (id,(assumes,assigns,ensures)) ->
-	     (id,Option_misc.map (assertion params) assumes,
-	      Option_misc.map (fun _ -> assert false (* TODO *)) assigns,
-	      assertion params_result ensures))
-	  behs
-	in
+	let behs = List.map behavior behs in
 	let body = Option_misc.map (statements params_result) body in
 	Hashtbl.add methods_table mi.method_info_tag (mi,req,behs,body);
 	class_fields rem (mi :: acc)
