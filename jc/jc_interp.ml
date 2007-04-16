@@ -586,9 +586,6 @@ let valid_inv_params st =
 (* generate valid_inv predicate and its axiom *)
 (* TODO: valid_inv_params are calculated several times for the same structure, this could be optimized *)
 let tr_valid_inv st acc =
-  Printf.printf "******* %s ******\n" st.jc_struct_info_name; (* TODO: modifier l'environnement qui contient 3 fois la même chose *)
-  let deps = struct_depends st in
-    List.iter (fun st -> Printf.printf "%s\n" st.jc_struct_info_name) deps;
   (* for now, only root types *)
   if st.jc_struct_info_parent <> None then acc else
   let params = valid_inv_params st in

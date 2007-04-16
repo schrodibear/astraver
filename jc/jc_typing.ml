@@ -1287,7 +1287,7 @@ let add_typedecl d (id,parent) =
   in
   (* adding structure name in global environment before typing 
      the fields, because of possible recursive definition *)
-  Hashtbl.add structs_table id (struct_info,[]);
+  Hashtbl.replace structs_table id (struct_info,[]);
   root,struct_info
 
 let rec decl d =
@@ -1331,8 +1331,8 @@ let rec decl d =
 	       let p = assertion [(x,vi)] e in
 	       let pi = make_rel id in
 	       pi.jc_logic_info_parameters <- [vi];
-	       Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi,JCTAssertion p);
-	       Hashtbl.add logic_functions_env id pi;
+	       Hashtbl.replace logic_functions_table pi.jc_logic_info_tag (pi,JCTAssertion p);
+	       Hashtbl.replace logic_functions_env id pi;
 	       (pi,p) :: acc)
 	    []
 	    inv
