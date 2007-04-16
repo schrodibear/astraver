@@ -9,33 +9,6 @@ Admitted.
 (*Why type*) Definition Person: Set.
 Admitted.
 
-(*Why logic*) Definition Family_inv :
-  (pointer Family) -> (memory Person Z) -> (memory Person (pointer Family))
-  -> (memory Family (pointer Person)) -> (memory Family
-  (pointer Person)) -> Prop.
-Admitted.
-
-(*Why logic*) Definition Person_inv :
-  (pointer Person) -> (memory Person Z) -> (memory Person (pointer Family))
-  -> (memory Family (pointer Person)) -> (memory Family
-  (pointer Person)) -> Prop.
-Admitted.
-
-(*Why axiom*) Lemma Family_inv_sem :
-  (forall (mother:(memory Family (pointer Person))),
-   (forall (father:(memory Family (pointer Person))),
-    (forall (family:(memory Person (pointer Family))),
-     (forall (age:(memory Person Z)),
-      (forall (inv_this:(pointer Family)),
-       ((Family_inv inv_this age family father mother) <->
-        (~(inv_this = (@null Family)) ->
-         (Person_inv (select mother inv_this) age family father mother) /\
-         (Person_inv (select father inv_this) age family father mother)))))))).
-Admitted.
-
-(*Why logic*) Definition Family_tag : (tag_id Family).
-Admitted.
-
 (*Why predicate*) Definition age_inv  (age:(memory Person Z))
   (family:(memory Person (pointer Family))) (father:(memory Family
   (pointer Person))) (mother:(memory Family (pointer Person)))
@@ -49,12 +22,29 @@ Inductive valid_inv: forall C: Set, pointer C ->
   memory Person (pointer Family) -> (* family *)
   memory Family Z -> (* age *)
   Prop :=
+| vi_family_null:
+    forall mother: memory Family (pointer Person),
+    forall father: memory Family (pointer Person),
+    forall family: memory Person (pointer Family),
+    forall age: memory Person Z,
+    forall x: pointer Family,
+    x = @null Family ->
+    valid_inv Family x mother father family age
+| vi_person_null:
+    forall mother: memory Family (pointer Person),
+    forall father: memory Family (pointer Person),
+    forall family: memory Person (pointer Family),
+    forall age: memory Person Z,
+    forall x: pointer Person,
+    x = @null Person ->
+    valid_inv Person x mother father family age
 | vi_family:
     forall mother: memory Family (pointer Person),
     forall father: memory Family (pointer Person),
     forall family: memory Person (pointer Family),
     forall age: memory Person Z,
     forall x: pointer Family,
+    x <> @null Family ->
     valid_inv Person (select mother x) mother father family age ->
     valid_inv Person (select father x) mother father family age ->
     valid_inv Family x mother father family age
@@ -64,35 +54,62 @@ Inductive valid_inv: forall C: Set, pointer C ->
     forall family: memory Person (pointer Family),
     forall age: memory Person Z,
     forall x: pointer Person,
+    x <> @null Person ->
     valid_inv Family (select family x) mother father family age ->
     age_inv age family father mother age x ->
     valid_inv Person x mother father family age.
 Hint Constructors valid_inv.
 
+(*Why logic*) Definition Family_inv :
+  (pointer Family) -> (memory Person Z) -> (memory Person (pointer Family))
+  -> (memory Family (pointer Person)) -> (memory Family
+  (pointer Person)) -> Prop.
 exact (fun x age family father mother =>
   valid_inv Family x mother father family age).
 Defined.
 
+(*Why logic*) Definition Person_inv :
+  (pointer Person) -> (memory Person Z) -> (memory Person (pointer Family))
+  -> (memory Family (pointer Person)) -> (memory Family
+  (pointer Person)) -> Prop.
 exact (fun x age family father mother =>
   valid_inv Person x mother father family age).
 Defined.
 
+(*Why axiom*) Lemma Family_inv_sem :
+  (forall (mother:(memory Family (pointer Person))),
+   (forall (father:(memory Family (pointer Person))),
+    (forall (family:(memory Person (pointer Family))),
+     (forall (age:(memory Person Z)),
+      (forall (inv_this:(pointer Family)),
+       ((Family_inv inv_this age family father mother) <->
+        (~(inv_this = (@null Family)) ->
+         (Person_inv (select mother inv_this) age family father mother) /\
+         (Person_inv (select father inv_this) age family father mother)))))))).
 Proof.
-intros.
-split; intros.
-split.
-inversion H; auto; subst.
-admit. (* Person = Family est absurde *)
-inversion H; auto; subst.
-admit. (* Person = Family est absurde *)
-destruct H as [H0 H1].
-inversion H0; subst.
-admit. (* Person = Family est absurde *)
-inversion H1; subst.
-admit. (* Person = Family est absurde *)
-unfold Family_valid_inv.
-auto.
+unfold Person_inv; unfold Family_inv.
+intros; split; intros; try split.
+inversion H; subst; auto.
+assert False as F; auto.
+destruct F.
+admit. (* Person = Family: absurde *)
+admit. (* Person = Family: absurde *)
+inversion H; subst; auto.
+assert False as F; auto.
+destruct F.
+admit. (* Person = Family: absurde *)
+admit. (* Person = Family: absurde *)
+assert (inv_this = null Family \/ inv_this <> null Family).
+admit. (* eq_pointer *)
+destruct H0; subst.
+apply vi_family_null; auto.
+apply vi_family; auto.
+apply (proj1 (H H0)).
+apply (proj2 (H H0)).
 Qed.
+
+(*Why logic*) Definition Family_tag : (tag_id Family).
+Admitted.
 
 (*Why axiom*) Lemma Person_inv_sem :
   (forall (mother:(memory Family (pointer Person))),
@@ -104,24 +121,30 @@ Qed.
         (~(inv_this = (@null Person)) ->
          (Family_inv (select family inv_this) age family father mother) /\
          (age_inv age family father mother age inv_this)))))))).
-Admitted.
+Proof.
+unfold Person_inv; unfold Family_inv.
+intros; split; intros; try split.
+inversion H; subst; auto.
+admit. (* Person = Family: absurde *)
+assert False as F; auto.
+destruct F.
+admit. (* Person = Family: absurde *)
+inversion H; subst; auto.
+admit. (* Person = Family: absurde *)
+assert False as F; auto.
+destruct F.
+admit. (* Person = Family: absurde *)
+assert (inv_this = null Person \/ inv_this <> null Person).
+admit. (* eq_pointer *)
+destruct H0; subst.
+apply vi_person_null; auto.
+apply vi_person; auto.
+apply (proj1 (H H0)).
+apply (proj2 (H H0)).
+Qed.
 
 (*Why logic*) Definition Person_tag : (tag_id Person).
 Admitted.
-
-Proof.
-intros.
-split; intros.
-split.
-inversion H; subst; auto.
-admit. (* Person = Family est absurde *)
-inversion H; subst; auto.
-admit. (* Person = Family est absurde *)
-destruct H as [H0 H1].
-inversion H0; subst; auto.
-unfold Person_valid_inv; auto.
-admit. (* Person = Family est absurde *)
-Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma m_ensures_ok_po_1 : 

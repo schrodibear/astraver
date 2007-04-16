@@ -19,9 +19,13 @@ exact (fun _ => prod ad Z).
 Defined.
 
 Definition block_length (A: Set) (a: alloc_table A) (p: pointer A) :=
+  match fst p with
+    0%N => 0
+  | _ =>
   match MapGet Z a (fst p) with
     None => 0
   | Some size => size
+  end
   end.
 
 (*Why logic*) Definition offset_max :
@@ -35,7 +39,7 @@ exact (fun A1 t p => -snd p).
 Defined.
 
 (*Why predicate*) Definition valid (A179:Set) (a:(alloc_table A179))
-  (p:(pointer A179)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+  (p:(pointer A179)) := ((offset_min a p) <= 0 /\ (offset_max a p) >= 0).
 
 (*Why logic*) Definition shift :
   forall (A1:Set), (pointer A1) -> Z -> (pointer A1).
@@ -54,7 +58,7 @@ unfold shift.
 unfold offset_max.
 unfold block_length.
 simpl.
-case (MapGet Z a (fst p)); intuition.
+case (fst p); intuition.
 Defined.
 Implicit Arguments offset_max_shift.
 
@@ -82,6 +86,7 @@ unfold offset_max in V.
 assert (block_length a p = 0) as BLZ.
 unfold block_length.
 rewrite H...
+case (fst p)...
 rewrite BLZ in V...
 Defined.
 
@@ -94,14 +99,20 @@ Definition block (T: Set) := prod (Map T) (Map T).
 Definition blocks (T: Set) := Map (block T).
 
 (*Why logic*) Definition null : forall (A1:Set), (pointer A1).
-Admitted.
+exact (fun _ => (0%N, 0%Z)).
+Defined.
 Set Contextual Implicit.
 Implicit Arguments null.
 Unset Contextual Implicit.
 
 (*Why axiom*) Lemma null_not_valid :
   forall (A1:Set), (forall (a:(alloc_table A1)), ~(valid a (@null A1))).
-Admitted.
+Proof.
+intros.
+unfold null.
+unfold valid.
+intuition.
+Defined.
 
 (*Why type*) Definition memory: Set -> Set ->Set.
 exact (fun S T => prod (blocks T) T).
