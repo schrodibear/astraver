@@ -527,7 +527,13 @@ let rec struct_depends st acc mem =
       | JCTnative _ | JCTlogic _ | JCTrange _ -> acc, mem)
     (st::acc, StringSet.add name mem) st.jc_struct_info_fields
 
-let struct_depends st = fst (struct_depends st [] StringSet.empty)
+let struct_depends =
+  let table = Hashtbl.create 97 in fun st ->
+  let name = st.jc_struct_info_name in
+  try Hashtbl.find table name with Not_found ->
+  let result = fst (struct_depends st [] StringSet.empty) in
+  Hashtbl.add table name result;
+  result
 
 (* "this" is not returned in the list of parameters of invariant_params *)
 let invariant_params acc li =
@@ -584,7 +590,6 @@ let valid_inv_params st =
     params
 
 (* generate valid_inv predicate and its axiom *)
-(* TODO: valid_inv_params are calculated several times for the same structure, this could be optimized *)
 let tr_valid_inv st acc =
   (* for now, only root types *)
   if st.jc_struct_info_parent <> None then acc else
