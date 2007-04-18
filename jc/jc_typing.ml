@@ -1341,8 +1341,9 @@ let rec decl d =
     | JCPDrectypes(pdecls) ->
         (* first pass: adding structure names *)
 	List.iter (fun d -> match d.jc_pdecl_node with
-		     | JCPDstructtype(id,parent,_,_) ->
-			 ignore (add_typedecl d (id,parent))
+		     | JCPDstructtype(id,_,_,_) ->
+			 (* parent type may not be declared yet *)
+			 ignore (add_typedecl d (id,None))
 		     | _ -> assert false
 		  ) pdecls;
         (* second pass: adding structure fields *)
