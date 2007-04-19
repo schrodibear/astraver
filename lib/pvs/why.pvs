@@ -34,7 +34,7 @@ BEGIN
 
   access(t:warray, i:below(proj_1(t))) : T = proj_2(t)(i)
 
-  store(t:warray, i:below(proj_1(t)), v): warray = 
+  update(t:warray, i:below(proj_1(t)), v): warray = 
     (proj_1(t), 
      (LAMBDA (j:below(proj_1(t))): IF j = i THEN v ELSE proj_2(t)(j) ENDIF))
 

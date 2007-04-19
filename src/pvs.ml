@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.78 2006-11-24 13:38:12 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.79 2007-04-19 14:58:23 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -57,16 +57,22 @@ let print_real fmt = function
       else
 	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
 
+let ident = Ident.print
+
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "int"
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
   | PTexternal ([pt], id) when id == farray -> 
-      fprintf fmt "warray(%a)" print_pure_type pt
+      fprintf fmt "warray[%a]" print_pure_type pt
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar _ -> assert false
-  | PTexternal (i ,id) -> fprintf fmt "%s" (Monomorph.symbol (id, i))
+  | PTexternal (i, id) -> fprintf fmt "%a%a" ident id print_instance i
+
+and print_instance fmt = function
+  | [] -> ()
+  | i -> fprintf fmt "[%a]" (print_list comma print_pure_type) i
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -120,10 +126,10 @@ let print_term fmt t =
     | Tapp (id, l, _) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [], i) -> 
-	fprintf fmt "%s" (Monomorph.symbol (id, i))
+	fprintf fmt "%a%a" ident id print_instance i
     | Tapp (id, tl, i) -> 
-	fprintf fmt "%s(@[%a@])" 
-	  (Monomorph.symbol (id, i)) (print_list comma print0) tl
+	fprintf fmt "%a%a(@[%a@])" 
+	  ident id print_instance i (print_list comma print0) tl
   in
   print0 fmt t
 
@@ -181,13 +187,14 @@ let print_predicate fmt p =
     | Papp (id, [a;b], _) when id == t_zwf_zero ->
 	fprintf fmt "zwf_zero(%a, %a)" print_term a print_term b
     | Papp (id, [a;b], _) when is_int_comparison id || is_real_comparison id ->
-	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b
+	fprintf fmt "@[%a %s@ %a@]" 
+	  print_term a (infix_relation id) print_term b
     | Papp (id, [a;b], _) when is_eq id ->
 	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
     | Papp (id, [a;b], _) when is_neq id ->
 	fprintf fmt "%a /=@ %a" print_term a print_term b
     | Papp (id, l, i) -> 	
-	fprintf fmt "%s(@[" (Monomorph.symbol (id, i));
+	fprintf fmt "%a%a(@[" ident id print_instance i;
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> 
@@ -272,11 +279,13 @@ let print_obligation fmt (loc,id,s) =
   print_sequent fmt s;
   fprintf fmt "@]@\n@\n"
 
-let push_decl d = Monomorph.push_decl d
+let queue = Queue.create ()
 
-let iter = Monomorph.iter
+let push_decl d = Queue.add d queue
 
-let reset () = Monomorph.reset ()
+let iter f = Queue.iter f queue
+
+let reset () = Queue.clear queue
 
 let output_elem fmt = function
   | Dtype (loc, [], id) -> declare_type fmt id
@@ -295,6 +304,6 @@ let output_file fwe =
     ~before:(fun fmt -> begin_theory fmt th)
     ~sep
     ~after:(fun fmt ->
-	      (*predefined_symbols fmt;*)
 	      iter (output_elem fmt);
-	      end_theory fmt th)
+	      end_theory fmt th;
+    )

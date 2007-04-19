@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.127 2007-04-04 14:29:42 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.128 2007-04-19 14:58:23 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -48,7 +48,7 @@ let declarationQueue = Queue.create ()
 let reset () =
   Vcg.logs := []; 
   match prover () with
-    | Pvs -> (*Pvs.reset*) ()
+    | Pvs -> Pvs.reset ()
     | Coq _ -> Coq.reset ()
     | HolLight -> Holl.reset ()
     | Mizar -> Mizar.reset ()
@@ -104,11 +104,12 @@ let push_obligations =
     (fun (loc,id,s) -> 
        let dg = Dgoal (loc, id, generalize_sequent s) in
        let dg = 
-	 if  pruning_hyp != -1 then 
+	 if pruning_hyp != -1 then 
 	   Hypotheses_filtering.reduce dg
 	 else
-	   dg in
-       push_decl (dg)) 
+	   dg 
+       in
+       push_decl dg) 
 
 let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 
@@ -366,7 +367,6 @@ let interp_decl ?(prelude=false) d =
 	  begin
 	    push_decl (dg)
 	  end
-	  
     | TypeDecl (loc, ext, vl, id) ->
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in
@@ -386,14 +386,8 @@ let load_file ?(prelude=false) f =
 let load_prelude () =
   try
     List.iter (load_file ~prelude:true) lib_files_to_load;
-    (* Monomorph requires the prelude to be analyzed *)
     begin match prover () with
-      | Pvs (*| SmtLib *)->
-	  let prover_prelude = Filename.temp_file "why_prelude" "" in
-	  output prover_prelude;
-	  Sys.remove prover_prelude
-      | Simplify when no_simplify_prelude ->
-	  Simplify.reset ()
+      | Simplify when no_simplify_prelude -> Simplify.reset ()
       | _ -> ()
     end
   with e ->
@@ -423,8 +417,6 @@ let deal_file f =
   close_in cin;
   let fwe = Filename.chop_extension f in
   if not (single_file ()) then output (Options.out_file fwe)
-
-
 
 let main () =
   let t0 = Unix.times () in
