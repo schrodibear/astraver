@@ -20,6 +20,7 @@ type base_type =
 
 type java_type =
     | JTYbase of base_type
+    | JTYclass of java_class_info
     | JTYarray of java_type
 
 (*
@@ -131,7 +132,7 @@ and axiom_entry =
 and constructor_entry = 
     {
      mutable constructor_entry_trans_name : string;      
-     constructor_entry_class : class_entry;
+     constructor_entry_class : java_class_info;
      constructor_entry_routine : routine_entry;
      mutable constructor_entry_graph : java_env_entry list
     }
@@ -187,16 +188,20 @@ and package_entry =
       mutable package_entry_contents : t;
     }
     
-and class_entry =
+and java_class_info =
     {
+(*
       class_entry_package : string;
-      class_entry_name : string;
+*)
+      java_class_info_name : string;
+(*
       mutable class_entry_extends : class_entry option;
       mutable class_entry_implements : interface_entry list;
       mutable class_entry_contents : t;
       mutable class_entry_constructors : constructor_entry list;
       mutable class_entry_invariant_effects : effects;
       mutable class_entry_static_invariant_effects : effects;
+*)
 (*
       mutable class_entry_invariant_args : (string * Why.base_type) list;
       mutable class_entry_static_invariant_args : (string * Why.base_type) list;
@@ -213,18 +218,22 @@ and interface_entry =
     }
 
 and java_env_entry = 
+(*
   | Package_entry of package_entry
   | Class_entry of class_entry
   | Interface_entry of interface_entry
+*)
   | Instance_variable_entry of java_field_info
 (*
   | Constant_entry of constant_entry
-*)
   | Method_entry of method_info list
   | Constructor_entry of constructor_entry
+*)
   | Local_variable_entry of java_var_info 
+(*
   | Logic_type_entry of logic_type_entry 
   | Logic_entry of java_logic_info
+*)
 
 and t = (string * java_env_entry) list
 ;;

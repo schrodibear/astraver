@@ -41,7 +41,8 @@ let tr_base_type t =
 let tr_type t =
   match t with
     | JTYbase t -> tr_base_type t	
-    | JTYarray _ -> assert false
+    | JTYclass _ -> assert false (* TODO *)
+    | JTYarray _ -> assert false (* TODO *)
 
 let tr_type_option t =
   match t with
@@ -104,6 +105,7 @@ let rec term t =
       | JTbin(e1,t,op,e2) -> JCTTapp(lbin_op t op,[term e1; term e2])
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCTTvar (get_var vi)
+      | JTfield_access _ -> assert false (* TODO *)
 
   in { jc_tterm_loc = t.java_term_loc ; jc_tterm_node = t' }
   
@@ -177,6 +179,7 @@ let rec expr e =
       | JEvar vi -> JCTEvar (get_var vi)
       | JEassign_local_var(vi,e) ->
 	  JCTEassign_local(get_var vi,expr e)
+      | JEfield_access _ -> assert false (* TODO *)
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type ;

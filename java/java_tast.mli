@@ -10,6 +10,7 @@ type term_node =
     | JTvar of java_var_info
     | JTbin of term * base_type * bin_op * term   
     | JTapp of java_logic_info * term list
+    | JTfield_access of term * java_field_info
 
 and term =
     { java_term_node : term_node;
@@ -49,6 +50,7 @@ and expr_node =
   | JEincr_local_var of incr_decr_op * java_var_info
       (*r pre-post incr/decr operations *)
   | JEassign_local_var of java_var_info * expr  
+  | JEfield_access of expr * java_field_info
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
@@ -59,7 +61,6 @@ and expr_node =
       (*r assignment op is =, +=, etc. *)
   | JPEif of pexpr * pexpr * pexpr
   | JPEthis
-  | JPEfield_access of java_field_access
   | Method_call of pexpr option * identifier * pexpr list
   | Super_method_call of identifier * pexpr list
   | Logic_call of logic_entry * expr list

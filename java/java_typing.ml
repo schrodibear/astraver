@@ -5,8 +5,6 @@ open Java_tast
 open Format
 open Java_pervasives
 
-let methods_table = Hashtbl.create 97
-
 exception Typing_error of Loc.position * string
 
 let typing_error l = 
@@ -16,6 +14,7 @@ let typing_error l =
 
 let imported_packages = ref [ "java.lang" ]
 
+let invariants_table = Hashtbl.create 17
 let axioms_table = Hashtbl.create 17
 
 let type_type ty =
@@ -62,7 +61,24 @@ let var ty id =
   }
   in vi
 
+(* fields *)
+
+let fields_table = Hashtbl.create 97
+
+let field_tag_counter = ref 0
+
+let field ty id =
+  incr field_tag_counter;
+  let fi = {
+    java_field_info_tag = !field_tag_counter;
+    java_field_info_name = id;
+    java_field_info_type = ty;
+  }
+  in fi
+
 (* methods *)
+
+let methods_table = Hashtbl.create 97
 
 let method_tag_counter = ref 0
 
@@ -202,16 +218,34 @@ let rec term env e =
     | JPEvar(loc, id) -> 
 	begin
 	  try
-	    let vi = List.assoc id env
-	    in vi.java_var_info_type,JTvar vi
+	    match List.assoc id env with
+	      | Local_variable_entry vi -> 
+		  vi.java_var_info_type,JTvar vi
+	      | Instance_variable_entry fi ->
+		  try
+		    let this = 
+		      match List.assoc "this" env with
+			| Local_variable_entry vi -> 
+			    { java_term_node = JTvar vi; 
+			      java_term_loc = e.java_pexpr_loc }
+			| Instance_variable_entry _ ->
+			    assert false (* impossible *)
+		    in
+		    fi.java_field_info_type,JTfield_access(this,fi)
+		  with Not_found -> 
+		    typing_error e.java_pexpr_loc "this undefined in this context"
+		      
 	  with Not_found -> 
 	    typing_error e.java_pexpr_loc "unbound identifier %s" id
 	end
     | JPEresult -> 
 	begin
 	  try
-	    let vi = List.assoc "\\result" env
-	    in vi.java_var_info_type,JTvar vi
+	    match List.assoc "\\result" env with
+	      | Local_variable_entry vi -> 
+		  vi.java_var_info_type,JTvar vi
+	      | Instance_variable_entry fi ->
+		  assert false (* impossible *)
 	  with Not_found -> 
 	    typing_error e.java_pexpr_loc "\\result undefined in this context"
 	end
@@ -309,7 +343,9 @@ and make_quantified_formula loc q ty idl env e : assertion =
     | id::r ->
 	let tyv, n = var_type_and_id ty id in
 	let vi = var tyv n in
-	let f = make_quantified_formula loc q ty r ((n,vi)::env) e in
+	let f = make_quantified_formula loc q ty r 
+		  ((n,Local_variable_entry vi)::env) e 
+	in
 	{ java_assertion_loc = loc ; 
 	  java_assertion_node = JAquantifier(q,vi,f) }
 
@@ -348,8 +384,11 @@ let rec expr env e =
       | JPEvar (loc,id) -> 
 	  begin
 	    try
-	      let vi = List.assoc id env
-	      in vi.java_var_info_type,JEvar vi
+	    match List.assoc id env with
+	      | Local_variable_entry vi -> 
+		  vi.java_var_info_type,JEvar vi
+	      | Instance_variable_entry fi ->
+		  assert false (* TODO *)
 	    with Not_found -> 
 	      typing_error loc "unbound identifier %s" id
 	  end	  
@@ -372,15 +411,18 @@ let rec expr env e =
 	      | [(loc,id)] ->
 		  begin
 		    try
-		      let vi = List.assoc id env in 
-		      if compatible_types tye vi.java_var_info_type
-		      then 
-			if op = Beq then
-			  vi.java_var_info_type,JEassign_local_var(vi,te)
-			else assert false (* TODO *)
-		      else
-			typing_error loc "type %a expected, got %a" 
-			  print_type vi.java_var_info_type print_type tye
+		      match List.assoc id env with
+			| Local_variable_entry vi -> 
+			    if compatible_types tye vi.java_var_info_type
+			    then 
+			      if op = Beq then
+				vi.java_var_info_type,JEassign_local_var(vi,te)
+			      else assert false (* TODO *)
+			    else
+			      typing_error loc "type %a expected, got %a" 
+				print_type vi.java_var_info_type print_type tye
+			| Instance_variable_entry fi ->
+			    assert false (* TODO *)
 		    with Not_found -> 
 		      typing_error loc "unbound identifier %s" id
 		  end
@@ -471,7 +513,12 @@ let rec statement env s =
 	  begin
 	    try
 	      let t,te = expr env e in 
-	      let vi = List.assoc "\\result" env in
+	      let vi = 
+		match List.assoc "\\result" env with
+		  | Local_variable_entry vi -> vi
+		  | Instance_variable_entry fi ->
+		      assert false (* impossible *)
+	      in
 	      if compatible_types t vi.java_var_info_type then
 		JSreturn te
 	      else
@@ -520,7 +567,7 @@ and statements env b =
 		List.fold_right
 		  (fun (id,ty,i) (env,decls)->
 		     let vi = var ty id in		     
-		     (id,vi)::env,(vi,i)::decls)
+		     (id,Local_variable_entry vi)::env,(vi,i)::decls)
 		  l (env,[])
 	      in
 	      let r = block env rem in
@@ -562,8 +609,7 @@ and block env b =
 
 let rec type_param p =
   match p with
-    | Simple_parameter(ty,(loc,id)) -> 
-	let vi = var (type_type ty) id in id,vi
+    | Simple_parameter(ty,(loc,id)) -> var (type_type ty) id
     | Array_parameter id -> assert false
 
 let rec method_header retty mdecl =
@@ -588,48 +634,91 @@ let behavior env env_result (id,b) =
    assertion env_ensures b.java_pbehavior_ensures)
 	
 
-let rec class_fields l acc =
+let class_field acc d =
+  match d with
+    | JPFvariable vd -> 
+	(*
+	vd.variable_modifiers : modifiers ;
+	vd.variable_type : type_expr ;
+	vd.variable_decls : variable_declarator list }
+	*)
+	let ty = type_type vd.variable_type in
+	let is_static = List.mem `STATIC vd.variable_modifiers in
+	List.fold_left
+	  (fun acc vd -> 
+	     let ty',id = var_type_and_id ty vd.variable_id in
+	     let init = 
+	       Option_misc.map (type_initializer [] ty') 
+		 vd.variable_initializer 
+	     in
+	     if is_static then
+	       assert false (* TODO *)
+	     else
+	       let fi = field ty' id in
+	       Hashtbl.add fields_table fi.java_field_info_tag (fi,init);
+	       (id,Instance_variable_entry fi)::acc
+	  ) acc vd.variable_decls
+    | _ -> acc
+
+let rec class_methods ci env l =
   match l with
-    | [] -> acc
+    | [] -> ()
     | JPFmethod _ :: rem -> assert false
     | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
 	let id, ret_ty, params = 
 	  method_header head.method_return_type head.method_declarator 
 	in
-	let mi = method_info (snd id) ret_ty (List.map snd params) in
-	let req = Option_misc.map (assertion params) req in
+	let mi = method_info (snd id) ret_ty params in
+	let local_env =
+	  if List.mem `STATIC head.method_modifiers then [] else
+	    let vi = var (JTYclass ci) "this" in 
+	    ("this",Local_variable_entry vi)::env
+	in
+	let local_env = 
+	  List.fold_left
+	    (fun acc vi -> 
+	       (vi.java_var_info_name,Local_variable_entry vi)::acc)
+	    local_env params
+	in
+	let req = Option_misc.map (assertion local_env) req in
 	let env_result =
 	  match ret_ty with
-	    | None -> params
+	    | None -> local_env
 	    | Some t ->
-		let vi = var t "\\result" in ("\\result",vi)::params
+		let vi = var t "\\result" in 
+		("\\result",Local_variable_entry vi)::local_env
 	in
-	let behs = List.map (behavior params env_result) behs in
+	let behs = List.map (behavior local_env env_result) behs in
 	let body = Option_misc.map (statements env_result) body in
 	Hashtbl.add methods_table mi.method_info_tag (mi,req,behs,body);
-	class_fields rem (mi :: acc)
+	class_methods ci env rem 
    | JPFmethod_spec(req,behs) :: JPFconstructor(head,eci,body) :: rem ->
 	assert false
-(*let id, ret_ty, params = 
-	  method_header head.method_return_type head.method_declarator 
-	in
-	let mi = method_info (snd id) ret_ty (List.map snd params) in
-	let req = Option_misc.map (assertion params) req in
-	let behs = List.map (behavior params ret_ty) behs in
-	let body = Option_misc.map (statements params) body in
-	Hashtbl.add constructors_table mi.method_info_tag (mi,req,behs,body);
-	class_fields rem (mi :: acc) *)
+	  (*let id, ret_ty, params = 
+	    method_header head.method_return_type head.method_declarator 
+	    in
+	    let mi = method_info (snd id) ret_ty (List.map snd params) in
+	    let req = Option_misc.map (assertion params) req in
+	    let behs = List.map (behavior params ret_ty) behs in
+	    let body = Option_misc.map (statements params) body in
+	    Hashtbl.add constructors_table mi.method_info_tag (mi,req,behs,body);
+	    class_methods env rem *)
     | JPFmethod_spec _ :: _ ->
 	typing_error (assert false) "out of place method specification"
-    | JPFinvariant _ :: rem ->  assert false (* TODO *)
+    | JPFinvariant(id,e) :: rem ->
+	let local_env =
+(*
+	  if List.mem `STATIC head.method_modifiers then [] else
+*)
+	    let vi = var (JTYclass ci) "this" in 
+	    ("this",Local_variable_entry vi)::env
+	in
+	let p = assertion local_env e in
+	Hashtbl.add invariants_table id p
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
     | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
     | JPFvariable vd :: rem -> 
-	(*
-	vd.variable_modifiers : modifiers ;
-	vd.variable_type : type_expr ;
-	vd.variable_decls : variable_declarator list }
-*)assert false (* TODO *)
+	class_methods ci env rem 
     | JPFconstructor _ :: rem -> assert false (* TODO *)
 
 
@@ -643,8 +732,9 @@ let type_decl d =
 	  class_implements : qualified_ident list;
 	  class_fields : field_declaration list
 	*)
-	let _tf = class_fields c.class_fields [] in
-	()
+	let ci = { java_class_info_name = snd c.class_name } in	  
+	let env = List.fold_left class_field [] c.class_fields in
+	class_methods ci env c.class_fields
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false
     | JPTaxiom(id,e) -> 
