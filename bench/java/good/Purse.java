@@ -61,13 +61,13 @@ public Purse() {
     }
     */
 
-    /* @ requires p1 != null && p2 != null && p1 != p2
+    /* x@ requires p1 != null && p2 != null && p1 != p2
       @ behavior ok:
       @   assigns p1.balance,p2.balance
       @   ensures \result == 0
       @*/
     /*
-    public static int test(Purse p1, Purse p2) {
+public static int test(Purse p1, Purse p2) {
 	p1.balance = 0;
 	p2.credit(100);
 	return p1.balance;

@@ -252,6 +252,13 @@ let get_this_term loc env =
   { java_term_node = JTvar (get_this loc env); 
     java_term_loc = loc }
 
+let rec list_assoc_field_name id l =
+  match l with
+    | [] -> raise Not_found
+    | fi::r ->
+	if fi.java_field_info_name = id then fi
+	else list_assoc_field_name id r
+
 let rec term env e =
   let ty,tt =
     match e.java_pexpr_node with
@@ -304,7 +311,27 @@ let rec term env e =
 	begin
 	  match fa with
 	    | Array_length _ -> assert false (* TODO *)
-	    | Primary_access (_, _) -> assert false (* TODO *)
+	    | Primary_access (e1, f) -> 
+		let ty1,te1 = term env e1 in
+		begin
+		  match ty1 with
+		    | JTYclass(_,ci) ->
+			begin
+			  try
+			    let fi = 
+			      list_assoc_field_name (snd f) ci.class_info_fields 
+			    in
+			    fi.java_field_info_type,JTfield_access(te1,fi)
+			  with
+			      Not_found ->
+				typing_error e1.java_pexpr_loc
+				  "not such field"
+			end
+		    | _ ->
+			typing_error e1.java_pexpr_loc
+			  "not a class"
+		end
+		
 	    | Super_access _ -> assert false (* TODO *)
 	end	
     | JPEif (_, _, _)-> assert false (* TODO *)

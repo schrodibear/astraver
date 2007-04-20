@@ -196,7 +196,7 @@ let rec expr fmt e =
 let rec statement fmt s =
   match s.jc_tstatement_node with
     | JCTSreturn e ->
-	fprintf fmt "return %a;" expr e
+	fprintf fmt "return %a;@\n" expr e
     | JCTSunpack (_, _) -> assert false (* TODO *) 
     | JCTSpack (_, _) -> assert false (* TODO *) 
     | JCTSthrow (_, _) -> assert false (* TODO *) 
@@ -205,24 +205,24 @@ let rec statement fmt s =
     | JCTScontinue _-> assert false (* TODO *) 
     | JCTSbreak _-> assert false (* TODO *) 
     | JCTSwhile (e, la, s)-> 
-	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]"
+	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
 	  expr e assertion la.jc_tloop_invariant term la.jc_tloop_variant
 	  statement s
     | JCTSif (e, s1, s2)->
-	fprintf fmt "@[if (%a)@ %a@ else@ %a@]"
+	fprintf fmt "@[if (%a)@ %a@ else@ %a@]@\n"
 	  expr e statement s1 statement s2
     | JCTSdecl (vi, None, s)-> 
-	fprintf fmt "%a %s;@ %a" print_type vi.jc_var_info_type
+	fprintf fmt "%a %s;@\n%a" print_type vi.jc_var_info_type
 	  vi.jc_var_info_name statement s
     | JCTSdecl (vi, Some e, s)-> 
-	fprintf fmt "%a %s = %a;@ %a" 
+	fprintf fmt "%a %s = %a;@\n%a" 
 	  print_type vi.jc_var_info_type 
 	  vi.jc_var_info_name expr e statement s
     | JCTSassert _-> assert false (* TODO *) 
-    | JCTSexpr e -> fprintf fmt "%a;@ " expr e
+    | JCTSexpr e -> fprintf fmt "%a;@\n" expr e
     | JCTSblock l -> block fmt l
     | JCTSswitch (e, csl) ->
-	fprintf fmt "@[switch (%a) {@\n    @[%a@]@\n}@]"
+	fprintf fmt "@[switch (%a) {@\n@[<v 2>  %a@]@\n}@]"
 	  expr e (print_list newline case) csl
 	
 and case fmt (c,sl) =
@@ -235,9 +235,9 @@ and case fmt (c,sl) =
     block sl
 
 and block fmt b =
-  fprintf fmt "{ @[<v 0>";
+  fprintf fmt "@[<v 0>{@ @[<v 2>  ";
   List.iter (statement fmt) b;
-  fprintf fmt "@]@\n}"
+  fprintf fmt "@]@ }@]"
 
 
 let param fmt vi =
@@ -257,7 +257,7 @@ let print_decl fmt d =
 	fprintf fmt "@[type %s = %s..%s@]@\n@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
     | JCstruct_def(id,fields) ->
-	fprintf fmt "@[<v 4>type %s = {@\n%a}@]@\n@."
+	fprintf fmt "@[<v 2>type %s = {@\n%a}@]@\n@."
 	  id (print_list space field) fields
 	  
 
