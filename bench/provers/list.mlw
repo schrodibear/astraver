@@ -100,3 +100,10 @@ goal flatten_1 : flatten(cons(cons(1,nil),
                               cons(cons(2,cons(3,nil)), 
 	                           nil))) = cons(1,cons(2,cons(3,nil)))
 *)
+
+(* poly goal *)
+
+goal poly_2 : forall l1:'a list. forall l2:'b list. length(l1) = length(l2)
+
+goal poly_1 : forall l:'a list. length(l) = 0
+

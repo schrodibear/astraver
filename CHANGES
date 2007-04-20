@@ -1,4 +1,7 @@
 
+version 2.03, April 20th, 2007
+==============================
+  o fixed PVS output
   o gwhy: added prover CVC3 (http://www.cs.nyu.edu/acsys/cvc3/)
   o fixed bug with polymorphic exceptions (not accepted anymore)
   o fixed bug in generalization test

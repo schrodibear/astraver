@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.236 2007-04-06 10:19:27 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.237 2007-04-20 12:16:15 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -301,6 +301,8 @@ let rec interp_term label old_label t =
 	  | Tfloat fk1, Tfloat fk2 -> term_float_conversion fk1 fk2 (f t1)
 	  | _ -> assert false
 	end
+    | NTunop ((Uround_error | Utotal_error), t1) when not floats ->
+	LConst (Prim_real "0.0")
     | NTunop (Uround_error, t1) ->
 	begin match t1.nterm_type.ctype_node with
 	  | Tfloat Float -> LApp ("single_round_error", [f t1])
@@ -315,6 +317,8 @@ let rec interp_term label old_label t =
 	  | Tfloat LongDouble -> LApp ("quad_total_error", [f t1])
 	  | _ -> assert false
 	end
+    | NTunop ((Uexact | Umodel), t1) when not floats ->
+	f t1
     | NTunop (Uexact, t1) ->
 	begin match t1.nterm_type.ctype_node with
 	  | Tfloat Float -> LApp ("s_to_exact", [f t1])
@@ -436,7 +440,7 @@ let rec interp_predicate label old_label p =
 	 else if has_prefix "%separation1_range1" n then "separation1_range1",2
 	 else if has_prefix "%separation1_range" n then "separation1_range", 1
 	 else if has_prefix "%separation1" n then "separation1", 2
-	 else if has_prefix "%separation2_range" n then "separation2_range", 2
+	 else if has_prefix "%separation2_range1" n then "separation2_range1",2
 	 else if has_prefix "%separation2" n then "separation2", 2
 	 else assert false
        in

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.79 2007-04-19 14:58:23 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.80 2007-04-20 12:16:15 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -67,7 +67,7 @@ let rec print_pure_type fmt = function
   | PTexternal ([pt], id) when id == farray -> 
       fprintf fmt "warray[%a]" print_pure_type pt
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
-  | PTvar _ -> assert false
+  | PTvar v -> fprintf fmt "A%d" v.tag
   | PTexternal (i, id) -> fprintf fmt "%a%a" ident id print_instance i
 
 and print_instance fmt = function
@@ -126,10 +126,10 @@ let print_term fmt t =
     | Tapp (id, l, _) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [], i) -> 
-	fprintf fmt "%a%a" ident id print_instance i
+	fprintf fmt "%a%a" ident id print_instance (List.rev i)
     | Tapp (id, tl, i) -> 
 	fprintf fmt "%a%a(@[%a@])" 
-	  ident id print_instance i (print_list comma print0) tl
+	  ident id print_instance (List.rev i) (print_list comma print0) tl
   in
   print0 fmt t
 
@@ -194,7 +194,7 @@ let print_predicate fmt p =
     | Papp (id, [a;b], _) when is_neq id ->
 	fprintf fmt "%a /=@ %a" print_term a print_term b
     | Papp (id, l, i) -> 	
-	fprintf fmt "%a%a(@[" ident id print_instance i;
+	fprintf fmt "%a%a(@[" ident id print_instance (List.rev i);
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> 
@@ -234,12 +234,29 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq hyps
 
+let last_theory = ref None
+
+let import_last_theory fmt = match !last_theory with
+  | None -> ()
+  | Some t -> fprintf fmt "  IMPORTING %s@\n@\n" t
+
 let begin_theory fmt th =
-  fprintf fmt "%s_why: THEORY@\nBEGIN@\n@\n" th;
-  fprintf fmt "  %s@\n" Options.pvs_preamble
+  fprintf fmt "%s: THEORY@\nBEGIN@\n@\n" th;
+  fprintf fmt "  %s@\n" Options.pvs_preamble;
+  import_last_theory fmt
+
+let begin_sub_theory fmt n th =
+  fprintf fmt "%s" th;
+  if n > 0 then begin
+    fprintf fmt "[";
+    for i = 1 to n do fprintf fmt "A%d" i; if i < n then fprintf fmt "," done;
+    fprintf fmt ": TYPE]"
+  end;
+  fprintf fmt ": THEORY@\nBEGIN@\n@\n";
+  import_last_theory fmt
     
 let end_theory fmt th =
-  fprintf fmt "END %s_why@\n" th
+  fprintf fmt "END %s@\n@\n" th
 
 let print_logic_type fmt = function
   | Predicate [] ->
@@ -257,27 +274,77 @@ let declare_type fmt id =
   fprintf fmt "  @[%s: NONEMPTY_TYPE;@]@\n@\n" id
 
 let print_logic fmt id t = 
-  fprintf fmt "%%%% Why logic %s@\n" id;
+  fprintf fmt "  %%%% Why logic %s@\n" id;
   fprintf fmt "  %s: @[%a@]@\n@\n" id print_logic_type t
     
 let print_axiom fmt id p =
-  fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
-  fprintf fmt "  %s: AXIOM @[%a@]@\n@\n" id print_predicate p
+  fprintf fmt "  @[%%%% Why axiom %s@]@\n" id;
+  fprintf fmt "  @[<hov 2>%s: AXIOM@ @[%a@]@]@\n@\n" id print_predicate p
     
 let print_predicate_def fmt id (bl,p) =
-  fprintf fmt "  %s(@[%a@]) : bool = @[%a@]@\n@\n"
+  fprintf fmt "  @[<hov 2>%s(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
     id (print_list comma print_logic_binder) bl print_predicate p
     
 let print_function_def fmt id (bl,t,e) =
-  fprintf fmt "  %s(@[%a@]) : %a = @[%a@]@\n@\n"
+  fprintf fmt "  @[<hov 2>%s(@[%a@]) : %a =@ @[%a@]@]@\n@\n"
     id (print_list comma print_logic_binder) bl 
     print_pure_type t print_term e
     
 let print_obligation fmt (loc,id,s) =
-  fprintf fmt "@[%% %a @]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation_position loc;
   fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
   print_sequent fmt s;
   fprintf fmt "@]@\n@\n"
+
+(* polymorphism *)
+
+let print_scheme l =
+  let r = ref 0 in
+  Env.Vmap.iter
+    (fun _ x -> 
+       incr r;
+       x.type_val <- Some (PTvar { tag = !r; user = false; type_val = None }))
+    l
+
+let tvar_so_far = ref 0
+
+let print_goal fmt (loc, id, s) =
+  let n = Vset.cardinal s.scheme_vars in
+  if n > !tvar_so_far then begin
+    fprintf fmt "  ";
+    for i = !tvar_so_far + 1 to n do
+      fprintf fmt "A%d" i; if i < n then fprintf fmt ", "
+    done;
+    fprintf fmt ": NONEMPTY_TYPE;@\n@\n";
+    tvar_so_far := n
+  end;
+  let l,s = Env.specialize_sequent s in
+  print_scheme l;
+  print_obligation fmt (loc,id,s)
+
+let print_logic_scheme fmt id s =
+  let l,t = Env.specialize_logic_type s in
+  print_scheme l;
+  print_logic fmt id t
+
+let print_axiom_scheme fmt id s =
+  let l,a = Env.specialize_predicate s in
+  print_scheme l;
+  print_axiom fmt id a
+
+type def =
+  | DefFunction of function_def scheme
+  | DefPredicate of predicate_def scheme
+
+let print_def_scheme fmt id = function
+  | DefFunction s -> 
+      let l,d = Env.specialize_function_def s in
+      print_scheme l;
+      print_function_def fmt id d
+  | DefPredicate s ->
+      let l,d = Env.specialize_predicate_def s in
+      print_scheme l;
+      print_predicate_def fmt id d
 
 let queue = Queue.create ()
 
@@ -294,16 +361,153 @@ let output_elem fmt = function
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal (loc, id, s) -> print_obligation fmt (loc, id, s.scheme_type)
+  | Dgoal (loc, id, s) -> print_goal fmt (loc, id, s)
+
+module ArMap = struct
+
+  module S = Set.Make(struct type t = int let compare = compare end)
+
+  type 'a t = { mutable keys : S.t; vals : (int, 'a Queue.t) Hashtbl.t }
+
+  let create () = { keys = S.empty; vals = Hashtbl.create 17 }
+
+  let add n x m =
+    try 
+      Queue.add x (Hashtbl.find m.vals n)
+    with Not_found -> 
+      let q = Queue.create () in 
+      Queue.add x q;
+      Hashtbl.add m.vals n q; 
+      m.keys <- S.add n m.keys
+
+  let add_scheme s = add (Vset.cardinal s.scheme_vars)
+
+  let importing fmt s m =
+    let one fmt n = fprintf fmt "%s%d" s n in
+    if not (S.is_empty m.keys) then
+      fprintf fmt "  @[<hov 2>IMPORTING %a@]@\n@\n" 
+	(print_list comma one) (S.elements m.keys)
+
+  let iter f m = Hashtbl.iter f m.vals
+
+  let print_theories fmt prefix preamble f m =
+    Hashtbl.iter
+      (fun n q -> 
+	let tn = prefix ^ string_of_int n in
+	begin_sub_theory fmt n tn;
+	preamble ();
+	Queue.iter f q;
+	end_theory fmt tn) 
+      m.vals
+
+end
+
+type pvs_theories = {
+  types : (string list * string) ArMap.t;
+  decls : (string * logic_type scheme) ArMap.t;
+  defs : (string * def) Queue.t;
+  axioms : (string * predicate scheme) ArMap.t;
+  goals : (loc * string * sequent scheme) Queue.t;
+  mutable poly : bool;
+}
+
+let sort_theory () =
+  let th = 
+    { types = ArMap.create ();
+      decls = ArMap.create ();
+      defs = Queue.create ();
+      axioms = ArMap.create ();
+      goals = Queue.create ();
+      poly = false }
+  in
+  let poly s = if not (Vset.is_empty s.scheme_vars) then th.poly <- true in
+  let sort = function
+    | Dtype (_, l, id) -> 
+	let n = List.length l in
+	if n > 0 then th.poly <- true;
+	ArMap.add n (l,id) th.types
+    | Dlogic (_, id, s) -> 
+	poly s; ArMap.add_scheme s (id,s) th.decls
+    | Dpredicate_def (_, id, s) -> 
+	poly s; Queue.add (id, DefPredicate s) th.defs
+    | Dfunction_def (_, id, s) -> 
+	poly s; Queue.add (id, DefFunction s) th.defs
+    | Daxiom (_, id, s) -> 
+	poly s; ArMap.add_scheme s (id,s) th.axioms
+    | Dgoal (loc, id, s) -> 
+	Queue.add (loc,id,s) th.goals
+  in
+  Queue.iter sort queue;
+  th
+
+let output_theory fmt th_name =
+  tvar_so_far := 0;
+  let th = sort_theory () in
+  if th.poly then begin
+    (* complex case: there are some polymorphic elements -> several theories *)
+    let import_types () = ArMap.importing fmt (th_name ^ "_types") th.types in
+    let import_decls () = ArMap.importing fmt (th_name ^ "_decls") th.decls in
+    let importing l = 
+      if l <> [] then 
+	fprintf fmt "  @[<hov 2>IMPORTING %a@]@\n@\n" 
+	  (print_list comma pp_print_string) l
+    in
+    let all_defs = 
+      Queue.fold (fun l (id,_) -> (th_name ^ "_" ^ id) :: l) [] th.defs
+    in
+    let import_defs () = importing all_defs in
+    let import_axioms () = ArMap.importing fmt (th_name^"_axioms") th.axioms in
+    import_types ();
+    import_decls ();
+    import_defs ();
+    import_axioms ();
+    (* goals *)
+    Queue.iter (print_goal fmt) th.goals;
+    end_theory fmt th_name;
+    (* axioms *)
+    ArMap.print_theories fmt (th_name ^ "_axioms") 
+      (fun () -> import_types (); import_decls (); import_defs ())
+      (fun (id,a) -> print_axiom_scheme fmt id a) th.axioms;
+    (* defs *)
+    let defs_so_far = ref [] in
+    Queue.iter 
+      (fun (id,def) -> 
+	let n = 
+	  let vars = match def with 
+	    | DefFunction s -> s.scheme_vars  | DefPredicate s -> s.scheme_vars
+	  in
+	  Vset.cardinal vars
+	in
+	let name = th_name ^ "_" ^ id in
+	begin_sub_theory fmt n name;
+	import_types ();
+	import_decls ();
+	importing !defs_so_far;
+	print_def_scheme fmt id def;
+	end_theory fmt name;
+        defs_so_far := name :: !defs_so_far)
+      th.defs;
+    (* decls *)
+    ArMap.print_theories fmt (th_name ^ "_decls") 
+      import_types
+      (fun (id,t) -> print_logic_scheme fmt id t) th.decls;
+    (* types *)
+    ArMap.print_theories fmt (th_name ^ "_types") 
+      (fun () -> ())
+      (fun (_,id) -> declare_type fmt id) th.types
+  end else begin 
+    (* simple case: no polymorphism at all -> a single theory *)
+    iter (output_elem fmt);
+    end_theory fmt th_name
+  end
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in
   let file = fwe ^ "_why.pvs" in
-  let th = Filename.basename fwe in
+  let th_name = (Filename.basename fwe) ^ "_why" in
   do_not_edit_below ~file
-    ~before:(fun fmt -> begin_theory fmt th)
+    ~before:(fun fmt -> begin_theory fmt th_name)
     ~sep
-    ~after:(fun fmt ->
-	      iter (output_elem fmt);
-	      end_theory fmt th;
-    )
+    ~after:(fun fmt -> output_theory fmt th_name);
+  last_theory := Some th_name
+

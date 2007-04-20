@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.93 2007-04-13 09:16:11 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.94 2007-04-20 12:16:15 filliatr Exp $ i*)
 
 open Format
 
@@ -428,7 +428,7 @@ let coq_preamble = match !coq_preamble_ with
   | None -> "Require Export Why."
   | Some s -> s
 let pvs_preamble = match !pvs_preamble_ with
-  | None -> "importing why@why"
+  | None -> "IMPORTING why@why"
   | Some s -> s
 
 let mizar_environ = !mizar_environ_

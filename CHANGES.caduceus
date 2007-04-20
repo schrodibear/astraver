@@ -1,6 +1,11 @@
 
 Note: These are the changes for Caduceus.
 
+
+version 1.03, April 20th, 2007
+==============================
+ o fixed PVS output
+
 version 1.02, February 23rd, 2007
 =================================
  o added axiom stating that null is not valid
