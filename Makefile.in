@@ -565,9 +565,9 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
 doc/version.tex: Version Makefile.in
-	echo "\\newcommand{\\whyversion}{$(VERSION)}" > $@
-	echo "\\newcommand{\\caduceusversion}{$(CVERSION)}" >> $@
-	echo "\\newcommand{\\jessieversion}{$(JCVERSION)}" >> $@
+	echo '\\newcommand{\\whyversion}'"{$(VERSION)}" > $@
+	echo '\\newcommand{\\caduceusversion}'"{$(CVERSION)}" >> $@
+	echo '\\newcommand{\\jessieversion}'"{$(JCVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
