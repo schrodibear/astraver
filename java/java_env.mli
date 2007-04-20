@@ -16,11 +16,11 @@ type accessibility = [ `PUBLIC | `PROTECTED | `PRIVATE | `NONE ];;
 type base_type =
     | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
 	  (* native logic types *)
-    | Tinteger | Treal
+    | Tinteger | Treal | Tnull
 
 type java_type =
     | JTYbase of base_type
-    | JTYclass of java_class_info
+    | JTYclass of bool * java_class_info (*r first arg true if non_null *)
     | JTYarray of java_type
 
 (*
@@ -52,6 +52,7 @@ and java_field_info =
     {
       java_field_info_tag : int;
       java_field_info_name : string;
+      java_field_info_class : java_class_info;
 (*
       mutable java_field_info_trans_name : string;
       java_field_info_accessibility : accessibility;
@@ -83,8 +84,6 @@ and method_info =
 (*
      method_info_accessibility : accessibility;
 *)
-     method_info_is_static : bool;
-     method_info_return_type : java_type option ;
 (*
      method_info_class_or_interface : java_env_entry;
      mutable method_info_is_predicate : bool;
@@ -92,7 +91,9 @@ and method_info =
      method_info_sep_specs : string list;
      mutable method_info_graph : java_env_entry list
 *)
+     mutable method_info_has_this : java_var_info option;
      method_info_parameters : java_var_info list;
+     method_info_return_type : java_type option ;
    }
     
 and logic_type_entry =
@@ -193,7 +194,8 @@ and java_class_info =
 (*
       class_entry_package : string;
 *)
-      java_class_info_name : string;
+      class_info_name : string;
+      mutable class_info_fields : java_field_info list;
 (*
       mutable class_entry_extends : class_entry option;
       mutable class_entry_implements : interface_entry list;

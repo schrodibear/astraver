@@ -37,11 +37,23 @@ let tr_base_type t =
     | Tint -> JCTrange int32_range 
     | _ -> assert false (* TODO *)
 
+let get_class ci =
+  {
+    jc_struct_info_name = ci.class_info_name;
+    jc_struct_info_parent = None;
+    jc_struct_info_root = ci.class_info_name;
+    jc_struct_info_fields = [];
+  }
+
+let num_zero = Num.Int 0
+let num_minus_one = Num.Int (-1)
 
 let tr_type t =
   match t with
     | JTYbase t -> tr_base_type t	
-    | JTYclass _ -> assert false (* TODO *)
+    | JTYclass(non_null,ci) -> 
+	let st = get_class ci in
+	JCTpointer(st,num_zero,if non_null then num_zero else num_minus_one)
     | JTYarray _ -> assert false (* TODO *)
 
 let tr_type_option t =
@@ -65,11 +77,30 @@ let get_var vi =
 	  }
 	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
 	nvi
-  
-(*
-let tr_param vi =
-  (tr_type vi.java_var_info_type,vi.java_var_info_name)
-*)
+
+let fi_table = Hashtbl.create 97
+
+let get_field fi =
+  try
+    Hashtbl.find fi_table fi.java_field_info_tag
+  with
+      Not_found -> 
+	let ty = tr_type fi.java_field_info_type in
+	let ci = get_class fi.java_field_info_class in
+	let nfi =
+	  { jc_field_info_name = fi.java_field_info_name;
+	    jc_field_info_tag = fi.java_field_info_tag;
+	    jc_field_info_type= ty;
+	    jc_field_info_root= ci.jc_struct_info_root;
+	    (*
+	      jc_field_info_final_name = vi.java_field_info_name;
+	      jc_var_info_assigned = vi.java_var_info_assigned;
+	      jc_var_info_type = tr_type vi.java_var_info_type;
+	      jc_var_info_tag = vi.java_var_info_tag;
+	    *)
+	  }
+	in Hashtbl.add fi_table fi.java_field_info_tag nfi;
+	nfi
 
 let lit l =
   match l with
@@ -105,7 +136,8 @@ let rec term t =
       | JTbin(e1,t,op,e2) -> JCTTapp(lbin_op t op,[term e1; term e2])
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCTTvar (get_var vi)
-      | JTfield_access _ -> assert false (* TODO *)
+      | JTfield_access(t,fi) -> JCTTderef(term t,get_field fi)
+      | JTold t -> JCTTold(term t)
 
   in { jc_tterm_loc = t.java_term_loc ; jc_tterm_node = t' }
   
@@ -179,7 +211,10 @@ let rec expr e =
       | JEvar vi -> JCTEvar (get_var vi)
       | JEassign_local_var(vi,e) ->
 	  JCTEassign_local(get_var vi,expr e)
-      | JEfield_access _ -> assert false (* TODO *)
+      | JEassign_field(e1,fi,e2) ->
+	  JCTEassign_heap(expr e1,get_field fi,expr e2)
+      | JEfield_access(e1,fi) -> 
+	  JCTEderef(expr e1,get_field fi)
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type ;
@@ -216,14 +251,24 @@ let tr_method mi req behs b acc =
   match b with
     | None -> assert false
     | Some l ->	
+	let params = List.map get_var mi.method_info_parameters in
+	let params =
+	  match mi.method_info_has_this with
+	    | None -> params
+	    | Some vi -> 
+		(get_var vi) :: params
+	in
 	JCfun_def(tr_type_option mi.method_info_return_type,
 		  mi.method_info_trans_name,
-		  List.map get_var mi.method_info_parameters,
+		  params,
 		  { jc_tfun_requires = assertion_option req;
 		    jc_tfun_behavior = List.map behavior behs},
 		  statements l)::acc
 	  
   
+let tr_class ci acc =
+  JCstruct_def(ci.class_info_name,
+	       List.map get_field ci.class_info_fields) :: acc
 
 
 

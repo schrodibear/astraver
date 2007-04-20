@@ -30,7 +30,7 @@ public Purse() {
       @   ensures balance == \old(balance)+s
       @*/
     public void credit(int s) {
-	balance += s;
+	balance = balance + s;
     }
 
     /*@ requires s >= 0 && s <= balance
@@ -39,10 +39,10 @@ public Purse() {
       @   ensures balance == \old(balance) - s
       @*/
     public void withdraw(int s) {
-	balance -= s;
+	balance = balance -s;
     }
     
-    /*@ requires s >= 0
+    /* @ requires s >= 0
       @ behavior done:
       @   assigns balance
       @   ensures s <= \old(balance) && balance == \old(balance) - s
@@ -50,31 +50,35 @@ public Purse() {
       @   assigns \nothing
       @   signals (NoCreditException) s > \old(balance) 
       @*/
+    /*
     public void withdraw2(int s) throws NoCreditException {
 	if (balance >= s) {
-	    balance -= s;
+	    balance = balance - s;
 	}
 	else {
 	    throw new NoCreditException();
 	}
     }
+    */
 
-    /*@ requires p1 != null && p2 != null && p1 != p2
+    /* @ requires p1 != null && p2 != null && p1 != p2
       @ behavior ok:
       @   assigns p1.balance,p2.balance
       @   ensures \result == 0
       @*/
+    /*
     public static int test(Purse p1, Purse p2) {
 	p1.balance = 0;
 	p2.credit(100);
 	return p1.balance;
     }
+    */
 
-    /*@ behavior ok:
+    /* @ behavior ok:
       @   assigns \nothing
       @   ensures \result == 150
       @*/
-    public static int test2() {
+    /*    public static int test2() {
 	Purse p1 = new Purse();
 	Purse p2 = new Purse();
 	p1.credit(100);
@@ -84,21 +88,25 @@ public Purse() {
 	return p1.balance+p2.balance;
     }
 
-    /*@ requires p1 != null && p2 != null && p1 != p2
+    */
+
+    /* @ requires p1 != null && p2 != null && p1 != p2
       @ behavior ok:
       @   assigns p2.balance
       @   ensures \result == \old(p1.balance)
       @*/
-    public static int test3(Purse p1,Purse p2) {
+    /*    public static int test3(Purse p1,Purse p2) {
 	p2.credit(100);
 	return p1.balance;
     }
+    */
 
-    /*@ requires p != null
+    /* @ requires p != null
       @ behavior ok:
       @   assigns p.balance 
       @   ensures \result == (\old(p.balance) >= 1000)
       @*/
+    /*
     public static boolean test4(Purse p) {
 	try {
 	    p.withdraw2(1000);
@@ -108,18 +116,20 @@ public Purse() {
 	    return false; 
 	}
     }
+    */
 
     
-    /*@ behavior not_ok:
+    /* @ behavior not_ok:
       @   ensures false
       @*/
+    /*
     public static void main(String argv[]) {
 	Purse p = new Purse();
-	/* erroneous */
+	// erroneous 
 	p.withdraw(10); 
 	p.credit(10);
     }
-    
+*/    
 
 }
 

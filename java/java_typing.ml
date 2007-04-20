@@ -17,17 +17,37 @@ let imported_packages = ref [ "java.lang" ]
 let invariants_table = Hashtbl.create 17
 let axioms_table = Hashtbl.create 17
 
+let class_table = Hashtbl.create 17 
+
+let get_class id =
+  try
+    Hashtbl.find class_table id 
+  with
+      Not_found ->
+	let ci =
+	  { class_info_name = id ;
+	    class_info_fields = [];
+	  }
+	in
+	Hashtbl.add class_table id ci;
+	ci
+
 let type_type ty =
   match ty with
     | Base_type t -> JTYbase t
-    | Type_name _ -> assert false (* TODO *)
+    | Type_name qid -> 
+	begin
+	  match qid with
+	    | [(loc,id)] ->
+		let ci = get_class id in
+		JTYclass(false,ci)
+	    | _ -> assert false (* TODO *)
+	end
     | Array_type_expr _ -> assert false (* TODO *)
 
 let string_of_base_type t =
   match t with
-(*
-    | Tunit -> "unit"
-*)
+    | Tnull -> "(nulltype)"
     | Tinteger -> "integer"
     | Treal -> "real"
     | Tboolean -> "boolean"
@@ -67,12 +87,13 @@ let fields_table = Hashtbl.create 97
 
 let field_tag_counter = ref 0
 
-let field ty id =
+let field ci ty id =
   incr field_tag_counter;
   let fi = {
     java_field_info_tag = !field_tag_counter;
     java_field_info_name = id;
     java_field_info_type = ty;
+    java_field_info_class = ci;
   }
   in fi
 
@@ -88,9 +109,9 @@ let method_info id ty pars =
     method_info_tag = !method_tag_counter;
     method_info_name = id;
     method_info_trans_name = id;
-    method_info_return_type = ty;
+    method_info_has_this = None;
     method_info_parameters = pars;
-    method_info_is_static = false
+    method_info_return_type = ty;
   }
     
 
@@ -124,7 +145,7 @@ let lit l =
     | String s -> assert false (* TODO *)
     | Bool b -> boolean_type,l
     | Float s -> real_type,l
-    | Null -> assert false (* TODO *)
+    | Null -> null_type,l
 
 let is_numeric t =
   match t with
@@ -134,7 +155,7 @@ let is_numeric t =
 	    | Tinteger | Tshort | Tbyte | Tint | Tlong -> true
 	    | Treal | Tdouble | Tfloat -> true
 	    | Tchar -> assert false (* TODO *)
-	    | Tboolean -> false
+	    | Tboolean | Tnull -> false
 	end
     | _ -> false
 
@@ -155,6 +176,14 @@ let lub_numeric_types t1 t2 =
 	end
     | _ -> assert false
 
+
+let is_object t =
+  match t with
+    | JTYbase t -> t=Tnull
+    | _ -> true
+
+let lub_object_types t1 t2 = Tnull
+  
 (*
 let term_coerce t1 t2 e =
   let e_int =
@@ -210,6 +239,19 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 	else typing_error loc "numeric types expected for +,-,*, / and %%"
 
 
+let get_this loc env =
+  try
+    match List.assoc "this" env with
+      | Local_variable_entry vi -> vi
+      | Instance_variable_entry _ ->
+	  assert false (* impossible *)
+  with Not_found -> 
+    typing_error loc "this undefined in this context"
+
+let get_this_term loc env =
+  { java_term_node = JTvar (get_this loc env); 
+    java_term_loc = loc }
+
 let rec term env e =
   let ty,tt =
     match e.java_pexpr_node with
@@ -222,19 +264,8 @@ let rec term env e =
 	      | Local_variable_entry vi -> 
 		  vi.java_var_info_type,JTvar vi
 	      | Instance_variable_entry fi ->
-		  try
-		    let this = 
-		      match List.assoc "this" env with
-			| Local_variable_entry vi -> 
-			    { java_term_node = JTvar vi; 
-			      java_term_loc = e.java_pexpr_loc }
-			| Instance_variable_entry _ ->
-			    assert false (* impossible *)
-		    in
-		    fi.java_field_info_type,JTfield_access(this,fi)
-		  with Not_found -> 
-		    typing_error e.java_pexpr_loc "this undefined in this context"
-		      
+		  let this = get_this_term e.java_pexpr_loc env in
+		  fi.java_field_info_type,JTfield_access(this,fi)
 	  with Not_found -> 
 	    typing_error e.java_pexpr_loc "unbound identifier %s" id
 	end
@@ -249,7 +280,9 @@ let rec term env e =
 	  with Not_found -> 
 	    typing_error e.java_pexpr_loc "\\result undefined in this context"
 	end
-    | JPEthis -> assert false (* TODO *)
+    | JPEthis -> 
+	let vi = get_this e.java_pexpr_loc env in
+	vi.java_var_info_type, JTvar vi
     | JPEbin (e1, op, e2) -> 
 	let ty1,te1 = term env e1
 	and ty2,te2 = term env e2
@@ -257,7 +290,9 @@ let rec term env e =
     | JPEquantifier (q, ty, idl, e)-> 
 	typing_error e.java_pexpr_loc
 	  "quantified formulas not allowed in term position"
-    | JPEold _-> assert false (* TODO *)
+    | JPEold e1 -> 
+	let ty1,te1 = term env e1 in 
+	ty1,JTold te1	
     | JPEinstanceof (_, _)-> assert false (* TODO *)
     | JPEcast (_, _)-> assert false (* TODO *)
     | JPEarray_access (_, _)-> assert false (* TODO *)
@@ -265,7 +300,13 @@ let rec term env e =
     | JPEnew (_, _)-> assert false (* TODO *)
     | JPEsuper_call (_, _)-> assert false (* TODO *)
     | JPEcall (_, _, _)-> assert false (* TODO *)
-    | JPEfield_access _-> assert false (* TODO *)
+    | JPEfield_access fa -> 
+	begin
+	  match fa with
+	    | Array_length _ -> assert false (* TODO *)
+	    | Primary_access (_, _) -> assert false (* TODO *)
+	    | Super_access _ -> assert false (* TODO *)
+	end	
     | JPEif (_, _, _)-> assert false (* TODO *)
     | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
     | JPEassign_field (_, _, _)-> assert false (* TODO *)
@@ -278,11 +319,21 @@ let rec term env e =
 
 let make_predicate_bin_op loc op t1 e1 t2 e2 =
   match op with
-    | Bgt | Blt | Bge | Ble | Beq | Bne ->
+    | Bgt | Blt | Bge | Ble ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JAbin(e1,t,op,e2)
-	else typing_error loc "numeric types expected for >,<,>=,<=,== and !="
+	else typing_error loc "numeric types expected for >,<,>= and <="
+    | Beq | Bne ->
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JAbin(e1,t,op,e2)
+	else 
+	  if is_object t1 && is_object t2 then
+	    let t = lub_object_types t1 t2 in
+	    JAbin(e1,t,op,e2)
+	  else 
+	    typing_error loc "numeric or object types expected for == and !="
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
 	assert false (* TODO *)
     | Bsub | Badd | Bmod | Bdiv | Bmul ->
@@ -332,7 +383,9 @@ let rec assertion env e =
     | JPEincr (_, _)-> assert false (* TODO *)
     | JPEun (_, _)-> assert false (* TODO *)
     | JPEresult -> assert false (* TODO *)
-    | JPEthis -> assert false (* TODO *)
+    | JPEthis -> 
+	typing_error e.java_pexpr_loc 
+	  "'this' is not a boolean expression"
 
   in { java_assertion_node = ta;
        java_assertion_loc = e.java_pexpr_loc }
@@ -377,6 +430,12 @@ let make_bin_op loc op t1 e1 t2 e2 =
     |Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *)
     | Bimpl | Biff -> assert false
 
+let get_this_expr loc env =
+  let vi = get_this loc env in
+  { java_expr_node = JEvar vi; 
+    java_expr_type = vi.java_var_info_type;
+    java_expr_loc = loc }
+
 let rec expr env e =
   let ty,te = 
     match e.java_pexpr_node with
@@ -388,11 +447,15 @@ let rec expr env e =
 	      | Local_variable_entry vi -> 
 		  vi.java_var_info_type,JEvar vi
 	      | Instance_variable_entry fi ->
-		  assert false (* TODO *)
+		  let this = get_this_expr loc env in
+		  fi.java_field_info_type,
+		  JEfield_access(this,fi)
 	    with Not_found -> 
 	      typing_error loc "unbound identifier %s" id
 	  end	  
-      | JPEthis -> assert false (* TODO *)
+      | JPEthis -> 
+	  let vi = get_this e.java_pexpr_loc env in
+	  vi.java_var_info_type, JEvar vi
       | JPEinstanceof (_, _)-> assert false (* TODO *)
       | JPEcast (_, _)-> assert false (* TODO *)
       | JPEarray_access (_, _)-> assert false (* TODO *)
@@ -422,7 +485,17 @@ let rec expr env e =
 			      typing_error loc "type %a expected, got %a" 
 				print_type vi.java_var_info_type print_type tye
 			| Instance_variable_entry fi ->
-			    assert false (* TODO *)
+			    let this = get_this_expr loc env in
+			    if compatible_types tye fi.java_field_info_type
+			    then 
+			      if op = Beq then
+				fi.java_field_info_type,
+				JEassign_field(this,fi,te)
+			      else assert false (* TODO *)
+			    else
+			      typing_error loc "type %a expected, got %a" 
+				print_type fi.java_field_info_type print_type tye
+			    
 		    with Not_found -> 
 		      typing_error loc "unbound identifier %s" id
 		  end
@@ -622,6 +695,10 @@ let rec method_header retty mdecl =
 	  | Some t -> id,Some (JTYarray t),l
 	  | None -> typing_error (fst id) "invalid type void array"
 
+let assigns env a = 
+  let ty,e = term env a in e
+  
+
 let behavior env env_result (id,b) = 
   let env_ensures = 
     match b.java_pbehavior_throws with
@@ -630,11 +707,11 @@ let behavior env env_result (id,b) =
   in
   (id,
    Option_misc.map (assertion env) b.java_pbehavior_assumes,
-   Option_misc.map (fun _ -> assert false (* TODO *)) b.java_pbehavior_assigns,
+   Option_misc.map (List.map (assigns env)) b.java_pbehavior_assigns,
    assertion env_ensures b.java_pbehavior_ensures)
 	
 
-let class_field acc d =
+let class_field ci acc d =
   match d with
     | JPFvariable vd -> 
 	(*
@@ -654,9 +731,9 @@ let class_field acc d =
 	     if is_static then
 	       assert false (* TODO *)
 	     else
-	       let fi = field ty' id in
+	       let fi = field ci ty' id in
 	       Hashtbl.add fields_table fi.java_field_info_tag (fi,init);
-	       (id,Instance_variable_entry fi)::acc
+	       fi::acc
 	  ) acc vd.variable_decls
     | _ -> acc
 
@@ -671,7 +748,8 @@ let rec class_methods ci env l =
 	let mi = method_info (snd id) ret_ty params in
 	let local_env =
 	  if List.mem `STATIC head.method_modifiers then [] else
-	    let vi = var (JTYclass ci) "this" in 
+	    let vi = var (JTYclass(true,ci)) "this" in
+	    mi.method_info_has_this <- Some vi;
 	    ("this",Local_variable_entry vi)::env
 	in
 	let local_env = 
@@ -710,11 +788,12 @@ let rec class_methods ci env l =
 (*
 	  if List.mem `STATIC head.method_modifiers then [] else
 *)
-	    let vi = var (JTYclass ci) "this" in 
+	    let vi = var (JTYclass(true,ci)) "this" in 
 	    ("this",Local_variable_entry vi)::env
 	in
 	let p = assertion local_env e in
-	Hashtbl.add invariants_table id p
+	Hashtbl.add invariants_table id p;
+	class_methods ci env rem 
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
     | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
     | JPFvariable vd :: rem -> 
@@ -732,8 +811,10 @@ let type_decl d =
 	  class_implements : qualified_ident list;
 	  class_fields : field_declaration list
 	*)
-	let ci = { java_class_info_name = snd c.class_name } in	  
-	let env = List.fold_left class_field [] c.class_fields in
+	let ci = get_class (snd c.class_name) in	  
+	let fields = List.fold_left (class_field ci) [] c.class_fields in
+	ci.class_info_fields <- fields;
+	let env = List.map (fun fi -> (fi.java_field_info_name, Instance_variable_entry fi)) fields in
 	class_methods ci env c.class_fields
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false

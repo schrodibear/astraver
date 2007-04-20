@@ -10,6 +10,7 @@ type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
       tfun_spec * tstatement list
   | JCrange_type_def of string * Num.num * Num.num
+  | JCstruct_def of string * field_info list 
 
 let string_of_native t =
   match t with
@@ -25,7 +26,16 @@ let print_type fmt t =
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
     | JCTrange ri -> fprintf fmt "%s" ri.jc_range_info_name
-    | JCTpointer (s,_,_) -> fprintf fmt "%s" s.jc_struct_info_name
+    | JCTpointer (s,a,b) -> 
+	if Num.gt_num a b then
+	  fprintf fmt "%s[..]" s.jc_struct_info_name
+	else
+	  if Num.eq_num a b then
+	  fprintf fmt "%s[%s]" s.jc_struct_info_name
+	    (Num.string_of_num a)
+	else
+	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
+	  (Num.string_of_num a) (Num.string_of_num b)
     | JCTnull -> assert false
 
 let const fmt c =
@@ -58,7 +68,7 @@ let rec term fmt t =
     | JCTTinstanceof (_, _)-> assert false (* TODO *)
     | JCTToffset_min (_, _)-> assert false (* TODO *)
     | JCTToffset_max (_, _)-> assert false (* TODO *)
-    | JCTTold _-> assert false (* TODO *)
+    | JCTTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTTapp (op, ([t1;t2] as l)) ->
 	begin
 	  try
@@ -71,7 +81,8 @@ let rec term fmt t =
     | JCTTapp (op, l) ->
 	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
 	  (print_list comma term) l 
-    | JCTTderef (_, _)-> assert false (* TODO *)
+    | JCTTderef (t, fi)-> 
+	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
     | JCTTshift (_, _)-> assert false (* TODO *)
     | JCTTconst c -> const fmt c
 
@@ -159,7 +170,8 @@ let rec expr fmt e =
 	end
     | JCTEassign_op_heap (_, _, _, _, _) -> assert false (* TODO *)
     | JCTEassign_op_local (_, _, _, _) -> assert false (* TODO *)
-    | JCTEassign_heap (_, _, _) -> assert false (* TODO *)
+    | JCTEassign_heap (e1, fi, e2) -> 
+	fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
     | JCTEassign_local (v, e) -> 
 	fprintf fmt "%s = %a" v.jc_var_info_name expr e
     | JCTEcast (_, _) -> assert false (* TODO *)
@@ -176,7 +188,8 @@ let rec expr fmt e =
     | JCTEcall (op, l) -> 
 	fprintf fmt "@[%s(%a)@]" op.jc_fun_info_name
 	  (print_list comma expr) l 
-    | JCTEderef (_, _) -> assert false (* TODO *)
+    | JCTEderef (e, fi) -> 
+	fprintf fmt "%a.%s" expr e fi.jc_field_info_name 
     | JCTEshift (_, _) -> assert false (* TODO *)
     | JCTEconst c -> const fmt c
 
@@ -230,6 +243,10 @@ and block fmt b =
 let param fmt vi =
   fprintf fmt "%a %s" print_type vi.jc_var_info_type vi.jc_var_info_name
 
+let field fmt fi =
+  fprintf fmt "%a %s;@\n" 
+    print_type fi.jc_field_info_type fi.jc_field_info_name
+
 let print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
@@ -239,6 +256,9 @@ let print_decl fmt d =
     | JCrange_type_def(id,min,max) ->
 	fprintf fmt "@[type %s = %s..%s@]@\n@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
+    | JCstruct_def(id,fields) ->
+	fprintf fmt "@[<v 4>type %s = {@\n%a}@]@\n@."
+	  id (print_list space field) fields
 	  
 
 let rec print_decls fmt d =
@@ -248,6 +268,6 @@ let rec print_decls fmt d =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "make -C .. bin/krakatoa.byte"
 End: 
 *)

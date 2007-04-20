@@ -1,12 +1,16 @@
 
 
+val class_table :
+  (string,Java_env.java_class_info) Hashtbl.t
+
 val methods_table : 
   (int,
    Java_env.method_info * 
    Java_tast.assertion option * 
    (Java_ast.identifier * 
     Java_tast.assertion option * 
-    unit option * Java_tast.assertion) list *
+    Java_tast.term list option * 
+    Java_tast.assertion) list *
    Java_tast.block option) Hashtbl.t
 
 exception Typing_error of Loc.position * string

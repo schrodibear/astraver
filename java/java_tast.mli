@@ -11,6 +11,7 @@ type term_node =
     | JTbin of term * base_type * bin_op * term   
     | JTapp of java_logic_info * term list
     | JTfield_access of term * java_field_info
+    | JTold of term
 
 and term =
     { java_term_node : term_node;
@@ -50,6 +51,7 @@ and expr_node =
   | JEincr_local_var of incr_decr_op * java_var_info
       (*r pre-post incr/decr operations *)
   | JEassign_local_var of java_var_info * expr  
+  | JEassign_field of expr * java_field_info * expr
   | JEfield_access of expr * java_field_info
 (*
   | Static_class of class_entry

@@ -50,7 +50,19 @@ let main () =
 	    Jc_typing.logic_type_table
 	    []
 	in	       	  
-	(* production phase 1.3 : generation of Jessie exceptions *)
+*)
+	(* production phase 1.2 : generation of Jessie range_types *)
+	let decls = Java_interp.range_types decls in
+	(* production phase 1.3 : generation of Jessie struct types *)
+	let decls =
+	  Hashtbl.fold 
+	    (fun _ id acc ->
+	       Java_interp.tr_class id acc)
+	    Java_typing.class_table
+	    decls
+	in	
+(*       	  
+	(* production phase 1.4 : generation of Jessie exceptions *)
 	let d_exc =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
@@ -59,8 +71,6 @@ let main () =
 	    d_memories
 	in	       	  
 *)
-	(* production phase 1.4 : generation of Jessie range_types *)
-	let decls = Java_interp.range_types decls in
 (*
 	(* production phase 2 : generation of Jessie logic functions *)
 	let d_lfuns = 
