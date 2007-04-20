@@ -9,6 +9,33 @@ Admitted.
 (*Why type*) Definition Person: Set.
 Admitted.
 
+(*Why logic*) Definition Family_inv :
+  (pointer Family) -> (memory Person Z) -> (memory Person (pointer Family))
+  -> (memory Family (pointer Person)) -> (memory Family
+  (pointer Person)) -> Prop.
+Admitted.
+
+(*Why logic*) Definition Person_inv :
+  (pointer Person) -> (memory Person Z) -> (memory Person (pointer Family))
+  -> (memory Family (pointer Person)) -> (memory Family
+  (pointer Person)) -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma Family_inv_sem :
+  (forall (mother:(memory Family (pointer Person))),
+   (forall (father:(memory Family (pointer Person))),
+    (forall (family:(memory Person (pointer Family))),
+     (forall (age:(memory Person Z)),
+      (forall (inv_this:(pointer Family)),
+       ((Family_inv inv_this age family father mother) <->
+        (~(inv_this = (@null Family)) ->
+         (Person_inv (select mother inv_this) age family father mother) /\
+         (Person_inv (select father inv_this) age family father mother)))))))).
+Admitted.
+
+(*Why logic*) Definition Family_tag : (tag_id Family).
+Admitted.
+
 (*Why predicate*) Definition age_inv  (age:(memory Person Z))
   (family:(memory Person (pointer Family))) (father:(memory Family
   (pointer Person))) (mother:(memory Family (pointer Person)))
@@ -60,32 +87,14 @@ Inductive valid_inv: forall C: Set, pointer C ->
     valid_inv Person x mother father family age.
 Hint Constructors valid_inv.
 
-(*Why logic*) Definition Family_inv :
-  (pointer Family) -> (memory Person Z) -> (memory Person (pointer Family))
-  -> (memory Family (pointer Person)) -> (memory Family
-  (pointer Person)) -> Prop.
-exact (fun x age family father mother =>
+(*exact (fun x age family father mother =>
   valid_inv Family x mother father family age).
 Defined.
 
-(*Why logic*) Definition Person_inv :
-  (pointer Person) -> (memory Person Z) -> (memory Person (pointer Family))
-  -> (memory Family (pointer Person)) -> (memory Family
-  (pointer Person)) -> Prop.
 exact (fun x age family father mother =>
   valid_inv Person x mother father family age).
 Defined.
 
-(*Why axiom*) Lemma Family_inv_sem :
-  (forall (mother:(memory Family (pointer Person))),
-   (forall (father:(memory Family (pointer Person))),
-    (forall (family:(memory Person (pointer Family))),
-     (forall (age:(memory Person Z)),
-      (forall (inv_this:(pointer Family)),
-       ((Family_inv inv_this age family father mother) <->
-        (~(inv_this = (@null Family)) ->
-         (Person_inv (select mother inv_this) age family father mother) /\
-         (Person_inv (select father inv_this) age family father mother)))))))).
 Proof.
 unfold Person_inv; unfold Family_inv.
 intros; split; intros; try split.
@@ -108,8 +117,7 @@ apply (proj1 (H H0)).
 apply (proj2 (H H0)).
 Qed.
 
-(*Why logic*) Definition Family_tag : (tag_id Family).
-Admitted.
+Admitted.*)
 
 (*Why axiom*) Lemma Person_inv_sem :
   (forall (mother:(memory Family (pointer Person))),
@@ -121,7 +129,9 @@ Admitted.
         (~(inv_this = (@null Person)) ->
          (Family_inv (select family inv_this) age family father mother) /\
          (age_inv age family father mother age inv_this)))))))).
-Proof.
+Admitted.
+
+(*Proof.
 unfold Person_inv; unfold Family_inv.
 intros; split; intros; try split.
 inversion H; subst; auto.
@@ -141,7 +151,7 @@ apply vi_person_null; auto.
 apply vi_person; auto.
 apply (proj1 (H H0)).
 apply (proj2 (H H0)).
-Qed.
+Qed.*)
 
 (*Why logic*) Definition Person_tag : (tag_id Person).
 Admitted.
@@ -159,10 +169,11 @@ Admitted.
                 (offset_max Person_alloc_table this) >= 0) /\
                 (instanceof Person_tag_table this Person_tag)) /\
                 (select age this) > 0) /\
-                (age_inv age family father mother age this)),
+                (Person_inv this age family father mother)),
   (valid Person_alloc_table this).
 Proof.
 intuition.
+admit.
 (* FILL PROOF HERE *)
 Save.
 
@@ -179,14 +190,34 @@ Save.
                 (offset_max Person_alloc_table this) >= 0) /\
                 (instanceof Person_tag_table this Person_tag)) /\
                 (select age this) > 0) /\
-                (age_inv age family father mother age this)),
+                (Person_inv this age family father mother)),
   forall (HW_2: (valid Person_alloc_table this)),
   forall (age0: (memory Person Z)),
   forall (HW_3: age0 = (store age this 0)),
-  (age_inv age0 family father mother age0 this).
+  (Person_inv this age0 family father mother).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intros; subst.
+destruct HW_1 as [H1 H2].
+generalize (Person_inv_sem mother father family age this).
+intro L.
+destruct L as [L L2]; clear L2.
+generalize (L H2).
+intro H3.
+apply (proj2 (Person_inv_sem mother father family (store age this 0) this)).
+intro NN.
+generalize (H3 NN).
+intro H4.
+destruct H4 as [H4 H5].
+split.
+admit.
+unfold age_inv.
+unfold age_inv in H5.
+
+Check Family_inv_sem.
+apply (proj2 (Family_inv_sem mother father family (store age this 0)
+  (select family this))).
+intro NN2.
+split.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -205,8 +236,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   (valid Person_alloc_table p1).
 Proof.
 intuition.
@@ -229,8 +260,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -256,8 +287,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -288,8 +319,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -297,7 +328,7 @@ Save.
   forall (result0: Z),
   forall (HW_5: result0 = (select age p2)),
   forall (HW_6: result > result0),
-  (age_inv age family father mother age p1).
+  (Person_inv p1 age family father mother).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -319,8 +350,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -328,7 +359,7 @@ Save.
   forall (result0: Z),
   forall (HW_5: result0 = (select age p2)),
   forall (HW_6: result > result0),
-  (age_inv age family father mother age p2).
+  (Person_inv p2 age family father mother).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -350,8 +381,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -382,8 +413,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -414,8 +445,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -423,7 +454,7 @@ Save.
   forall (result0: Z),
   forall (HW_5: result0 = (select age p2)),
   forall (HW_9: result <= result0),
-  (age_inv age family father mother age p1).
+  (Person_inv p1 age family father mother).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -445,8 +476,8 @@ Save.
                 ((offset_min Person_alloc_table p2) <= 0 /\
                 (offset_max Person_alloc_table p2) >= 0) /\
                 (instanceof Person_tag_table p2 Person_tag)) /\
-                (age_inv age family father mother age p1) /\
-                (age_inv age family father mother age p2)),
+                (Person_inv p1 age family father mother) /\
+                (Person_inv p2 age family father mother)),
   forall (HW_2: (valid Person_alloc_table p1)),
   forall (result: Z),
   forall (HW_3: result = (select age p1)),
@@ -454,7 +485,7 @@ Save.
   forall (result0: Z),
   forall (HW_5: result0 = (select age p2)),
   forall (HW_9: result <= result0),
-  (age_inv age family father mother age p2).
+  (Person_inv p2 age family father mother).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

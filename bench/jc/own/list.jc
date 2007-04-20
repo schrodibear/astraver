@@ -1,11 +1,13 @@
 type list = {
   integer value;
   list[..] next;
-
   invariant not_zero(x) = x.value != 0;
 }
 
-integer m(list[0] this) {
+integer m(list[..] this)
+  behavior ok:
+    ensures true;
+{
   if (this != null) {
     this.value = this.value / this.value;
     // m(this.next);

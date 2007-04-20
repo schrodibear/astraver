@@ -18,6 +18,69 @@ Defined.
 exact (fun _ => prod ad Z).
 Defined.
 
+Lemma N_eq_diff: forall (a b: N), a = b \/ a <> b.
+Proof.
+intros.
+assert (E: (b ?= b)%N = Eq).
+apply Ncompare_refl.
+caseeq (a ?= b)%N; intro H; [left | right | right].
+apply Ncompare_Eq_eq; auto.
+intro; subst.
+rewrite H in E.
+inversion E.
+intro; subst.
+rewrite H in E.
+inversion E.
+Qed.
+
+Lemma Z_eq_diff: forall (a b: Z), a = b \/ a <> b.
+Proof.
+intros.
+assert (E: (b ?= b) = Eq).
+apply Zcompare_refl.
+caseeq (a ?= b); intro H; [left | right | right].
+apply Zcompare_Eq_eq; auto.
+intro; subst.
+rewrite H in E.
+inversion E.
+intro; subst.
+rewrite H in E.
+inversion E.
+Qed.
+
+Lemma eq_pointer (A: Set): forall (p q: pointer A), p = q \/ p <> q.
+Proof.
+intros.
+unfold pointer in *.
+unfold ad in *.
+induction p as [p1 p2].
+induction q as [q1 q2].
+assert (H1: p1 = q1 \/ p1 <> q1).
+apply N_eq_diff.
+assert (H2: p2 = q2 \/ p2 <> q2).
+apply Z_eq_diff.
+destruct H1 as [H1 | H1]; destruct H2 as [H2 | H2]; subst.
+left; auto.
+right.
+intro H3.
+assert (H4: snd (q1, p2) = snd (q1, q2)).
+rewrite H3; auto.
+simpl in H4.
+auto.
+right.
+intro H3.
+assert (H4: fst (p1, q2) = fst (q1, q2)).
+rewrite H3; auto.
+simpl in H4.
+auto.
+right.
+intro H3.
+assert (H4: fst (p1, p2) = fst (q1, q2)).
+rewrite H3; auto.
+simpl in H4.
+auto.
+Qed.
+
 Definition block_length (A: Set) (a: alloc_table A) (p: pointer A) :=
   match fst p with
     0%N => 0

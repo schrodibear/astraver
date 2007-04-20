@@ -726,9 +726,14 @@ let tr_fun f spec body acc =
       (fun v acc ->
 	 match v.jc_var_info_type with
 	   | JCTpointer(st,_,_) ->
+               (* no invariants for subclasses yet *)
+               if st.jc_struct_info_parent <> None then acc else
 	       let var = LVar v.jc_var_info_final_name in
-	       let invariant = invariant_for_struct var st in
-	       make_and invariant acc
+	       (*let invariant = invariant_for_struct var st in
+	       make_and invariant acc*)
+               let params = valid_inv_params st in
+               let params = List.map (fun (s, _) -> LVar s) params in
+               make_and (LPred(valid_inv_name st, var::params)) acc
            | JCTnull -> assert false
 	   | JCTrange _ -> acc
 	   | JCTnative _ -> acc
