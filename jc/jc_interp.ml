@@ -517,15 +517,17 @@ let valid_inv_name st = st.jc_struct_info_name ^ "_inv"
 let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_inv_sem"
 
 let rec struct_depends st acc mem =
-  (* for now, only root types *)
-  if st.jc_struct_info_parent <> None then acc, mem else
   let name = st.jc_struct_info_name in
   if StringSet.mem name mem then acc, mem else
-  List.fold_left (fun (acc, mem) (_, fi) -> match fi.jc_field_info_type with
+  let acc, mem = List.fold_left (fun (acc, mem) (_, fi) -> match fi.jc_field_info_type with
       | JCTpointer(st, _, _) -> struct_depends st acc mem
       | JCTnull -> assert false
       | JCTnative _ | JCTlogic _ | JCTrange _ -> acc, mem)
     (st::acc, StringSet.add name mem) st.jc_struct_info_fields
+  in
+  match st.jc_struct_info_parent with
+    None -> acc, mem
+  | Some pst -> struct_depends pst acc mem
 
 let struct_depends =
   let table = Hashtbl.create 97 in fun st ->
@@ -591,15 +593,13 @@ let valid_inv_params st =
 
 (* generate valid_inv predicate and its axiom *)
 let tr_valid_inv st acc =
-  (* for now, only root types *)
-  if st.jc_struct_info_parent <> None then acc else
   let params = valid_inv_params st in
 
   (**** valid_inv predicate declaration ****)
   let valid_inv_type = simple_logic_type "prop" in
   let vi_this = "???",
     { logic_type_name = "pointer" ;
-      logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
+      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
   let logic = Logic(false, valid_inv_name st, vi_this::params,
     valid_inv_type) in
   let acc = logic::acc in
@@ -609,7 +609,7 @@ let tr_valid_inv st acc =
   let this_var = LVar this in
   let this_ty =
     { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type st.jc_struct_info_name] } in
+      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
   let fields_valid_inv = List.map (fun (name, fi) ->
     match fi.jc_field_info_type with
     | JCTpointer(st, _, _) ->
@@ -625,6 +625,14 @@ let tr_valid_inv st acc =
   let sem = LIff(LPred(valid_inv_name st, this_var::params_var),
     LImpl(LPred("neq", [LVar this; LVar "null"]),
       make_and (make_and_list fields_valid_inv) (invariant_for_struct this_var st))) in
+  (* parent invariant *)
+  let sem = match st.jc_struct_info_parent with
+    None -> sem
+  | Some pst ->
+      let parent_params = valid_inv_params pst in
+      let parent_params_var = List.map (fun (name, _) -> LVar name) parent_params in
+      make_and sem (LPred(valid_inv_name pst, this_var::parent_params_var))
+  in
   (* quantifiers *)
   let sem = List.fold_left (fun acc (id, ty) ->
     LForall(id, ty, acc)) sem ((this, this_ty)::params) in
@@ -726,8 +734,6 @@ let tr_fun f spec body acc =
       (fun v acc ->
 	 match v.jc_var_info_type with
 	   | JCTpointer(st,_,_) ->
-               (* no invariants for subclasses yet *)
-               if st.jc_struct_info_parent <> None then acc else
 	       let var = LVar v.jc_var_info_final_name in
 	       (*let invariant = invariant_for_struct var st in
 	       make_and invariant acc*)
