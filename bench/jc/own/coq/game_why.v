@@ -429,13 +429,31 @@ set (new_life := select life target - select damage (select sword this)) in *.
 assert (H5: select (store life target new_life) target = new_life).
 apply select_store_eq; auto.
 rewrite H5 in HW_17.
-assert (H6: select damage (select sword target) > 0).
-refine (proj1 (Sword_inv_sem _ _) _ _); auto.
+assert (NN2: this <> null Hero).
+assert (~valid Hero_alloc_table (null Hero)).
+apply null_not_valid; auto.
 intro E; rewrite E in *.
-assert (~valid Sword_alloc_table (null Sword)).
-apply null_not_valid.
 auto.
-
-
-unfold life_inv; repeat split; rewrite H5; try omega.
+split.
+refine (proj1 (proj2 (proj1 (Hero_inv_sem _ _ _ _ _) _ _))); auto.
+apply H2.
+unfold life_inv.
+rewrite H5 in *.
+repeat split; try omega.
+assert (H7: select damage (select sword this) > 0).
+refine (proj1 (Sword_inv_sem _ _) _ _); auto.
+refine (proj1 (proj1 (Hero_inv_sem _ _ _ _ _) _ _)).
+apply H1.
+auto.
+refine (proj1 (proj2 (proj1 (Hero_inv_sem _ _ _ _ _) _ _))); auto.
+apply H1.
+unfold life_inv in H4.
+destruct H4 as [_ H4].
+destruct H4 as [H4 _].
+unfold new_life.
+omega.
+intro E; rewrite E in HW_17.
+assert (F: False).
+apply (Zgt_irrefl 0); auto.
+destruct F.
 Save.
