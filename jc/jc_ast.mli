@@ -170,6 +170,7 @@ type tterm_node =
 and tterm =
     {
       jc_tterm_node : tterm_node;
+      jc_tterm_type : jc_type;
       jc_tterm_loc : Loc.position;
     }
 

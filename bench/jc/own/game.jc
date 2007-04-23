@@ -9,7 +9,10 @@ type Hero = {
   Sword[0] sword;
   invariant life_inv(this) = (this.life >= 0) && (this.life <= 100)
     && (this.life == 0 => this.dead);
-  invariant sword_inv(this) = this.sword != null;
+  // should be automatically generated from type Sword[0] above
+//  invariant sword_inv(this) = \offset_min(this.sword) <= 0 && 
+//	\offset_max(this.sword) >= 0 ;
+ 
 }
 
 unit attack(Hero[0] this, Hero[0] target)

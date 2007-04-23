@@ -26,7 +26,7 @@ unit push(queue[0] q, char c)
   requires !q.full;
   behavior correct_push:
     assigns q.empty, q.full, q.last, (q.contents+q.last).charM;
-    ensures !q.empty && (q.contents+\old(q.last)).charM == c;
+ensures !q.empty && (q.contents+\old(q.last)).charM == c;
 {
   (q.contents+q.last++).charM = c;
   if (q.last == q.length) q.last = 0;

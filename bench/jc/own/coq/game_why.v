@@ -18,8 +18,6 @@ Admitted.
   (pointer Sword) -> (memory Sword Z) -> Prop.
 Admitted.
 
-(*Why predicate*) Definition sword_inv  (sword:(memory Hero (pointer Sword)))
-  (this:(pointer Hero)) := ~((select sword this) = (@null Sword)).
 
 (*Why predicate*) Definition life_inv  (dead:(memory Hero bool))
   (life:(memory Hero Z)) (this:(pointer Hero))
@@ -35,7 +33,7 @@ Admitted.
        ((Hero_inv inv_this damage dead life sword) <->
         (~(inv_this = (@null Hero)) ->
          (Sword_inv (select sword inv_this) damage) /\
-         (sword_inv sword inv_this) /\ (life_inv dead life inv_this)))))))).
+         (life_inv dead life inv_this)))))))).
 Admitted.
 
 (*Why logic*) Definition Hero_tag : (tag_id Hero).

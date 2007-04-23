@@ -102,7 +102,7 @@ exact (fun A1 t p => -snd p).
 Defined.
 
 (*Why predicate*) Definition valid (A179:Set) (a:(alloc_table A179))
-  (p:(pointer A179)) := ((offset_min a p) <= 0 /\ (offset_max a p) >= 0).
+  (p:(pointer A179)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
   forall (A1:Set), (pointer A1) -> Z -> (pointer A1).
