@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.6 2007-04-13 07:43:18 marche Exp $
+$Id: java_ast.mli,v 1.7 2007-04-23 11:20:11 marche Exp $
 
 ***************************************************************************)
 
@@ -64,7 +64,10 @@ and pexpr_node =
   | JPEbin of pexpr * bin_op * pexpr         (*r binary operations *)
   | JPEun of un_op * pexpr                 (*r (pure) unary operations *)
   | JPEincr of incr_decr_op * pexpr (*r pre-post incr/decr operations *)
+(*
   | JPEvar of identifier
+*)
+  | JPEname of qualified_ident 
   | JPEassign_name of qualified_ident * bin_op * pexpr  
   | JPEassign_field of java_field_access * bin_op * pexpr  
   | JPEassign_array of pexpr * pexpr * bin_op * pexpr  

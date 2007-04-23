@@ -70,7 +70,7 @@ let lub_numeric_types t1 t2 =
     | _ -> Tinteger
 
 let rec substruct s1 s2 =
-  if s1=s2 then true else
+  if s1==s2 then true else
     let st = find_struct_info Loc.dummy_position s1.jc_struct_info_name in
     match st.jc_struct_info_parent with 
       | None -> false

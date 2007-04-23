@@ -54,7 +54,7 @@ public class Lesson1 {
 	  @*/
 	while (sum <= x) { 
 	    count++;
-	    sum = sum + 2*count+1;
+	    sum += 2*count+1;
 	}
 	return count;
     }   
@@ -74,7 +74,7 @@ public class Lesson1 {
 	  @*/
 	while (sum <= x) { 
 	    count++;
-	    sum = sum + 2*count+1;
+	    sum += 2*count+1;
 	}
 	return count;
     }   

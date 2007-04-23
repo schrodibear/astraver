@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.6 2007-04-13 07:43:18 marche Exp $
+$Id: java_parser.mly,v 1.7 2007-04-23 11:20:11 marche Exp $
 
 */
 
@@ -36,6 +36,7 @@ $Id: java_parser.mly,v 1.6 2007-04-13 07:43:18 marche Exp $
       | a::b ->
 	  Explicit_array_creation(a,(build_array_creation_expr t (b,n)))
 
+(*
   let rec expand_name l =
     match l with
       | [] -> assert false
@@ -43,6 +44,7 @@ $Id: java_parser.mly,v 1.6 2007-04-13 07:43:18 marche Exp $
       | id::l -> 
 	  let e = expand_name l in
 	  locate_expr (JPEfield_access(Primary_access(e,id))) 
+*)
 
 %}
 
@@ -675,13 +677,13 @@ primary_no_new_array:
 | LEFTPAR expr_no_name RIGHTPAR      
     { $2 }
 | LEFTPAR name RIGHTPAR
-    { expand_name $2 }
+    { locate_expr (JPEname $2) }
 | field_access
     { locate_expr (JPEfield_access $1) }
 | ident LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEcall(None,$1,$3)) } 
 | name DOT ident LEFTPAR argument_list RIGHTPAR
-    { let n = expand_name $1 in
+    { let n = locate_expr (JPEname $1) in
       locate_expr (JPEcall(Some n,$3,$5)) } 
 | SUPER DOT ident LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEsuper_call($3, $5)) }
@@ -699,7 +701,7 @@ array_access:
 | primary_no_new_array LEFTBRACKET expr RIGHTBRACKET
     { ($1,$3) }
 | name LEFTBRACKET expr RIGHTBRACKET
-    { (expand_name $1,$3) }
+    { (locate_expr (JPEname $1),$3) }
 ;
 
 array_creation_expression:
@@ -727,7 +729,7 @@ castable_expr:
 | primary_expr
     { $1 }
 | name
-    { expand_name $1 }
+    { locate_expr (JPEname $1) }
 | non_basic_cast
     { $1 }
 
@@ -756,7 +758,7 @@ statement_expr_ne_list:
 
 expr:
 | name
-    { expand_name $1 }
+    { locate_expr (JPEname $1) }
 | expr_no_name
     { $1 }
 ;

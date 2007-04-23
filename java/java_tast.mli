@@ -15,6 +15,7 @@ type term_node =
 
 and term =
     { java_term_node : term_node;
+      java_term_type : java_type;
       java_term_loc : Loc.position;
     }
 
