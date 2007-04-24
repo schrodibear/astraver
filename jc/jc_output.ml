@@ -168,8 +168,12 @@ let rec expr fmt e =
 	    | Postfix_dec ->
 		fprintf fmt "%s--" v.jc_var_info_name
 	end
+(*
     | JCTEassign_op_heap (_, _, _, _, _) -> assert false (* TODO *)
     | JCTEassign_op_local (_, _, _, _) -> assert false (* TODO *)
+*)
+    | JCTElet(v,e1,e2) -> 
+	fprintf fmt "let %s = %a@ in %a" v.jc_var_info_name expr e1 expr e2
     | JCTEassign_heap (e1, fi, e2) -> 
 	fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
     | JCTEassign_local (v, e) -> 

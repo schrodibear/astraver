@@ -192,16 +192,20 @@ let make_decl loc vi eo s =
 let make_decls loc sl tl =
   List.fold_right 
     (fun vi acc -> 
-       (* assert (vi.jc_var_info_type = boolean_type); *)
        (* real initial value does not matter *)
        let cst =
-	 if (vi.jc_var_info_type = boolean_type) then
-	   make_const loc (JCCboolean false)
-	 else if (vi.jc_var_info_type = integer_type) then
-	   make_const loc (JCCinteger "0")
-	 else assert false
+	 match vi.jc_var_info_type with
+	   | JCTnative t ->
+	       begin
+		 match t with
+		   | Tboolean -> JCCboolean false
+		   | _ -> JCCinteger "0"
+	       end
+	   | JCTrange _ -> JCCinteger "0"
+	   | JCTnull | JCTpointer _ -> JCCnull
+	   | JCTlogic _ -> assert false
        in
-       make_decl loc vi (Some cst) acc)
+       make_decl loc vi (Some (make_const loc cst)) acc)
     tl (make_block loc sl)
 
 let make_return loc e =
@@ -229,6 +233,23 @@ let make_tif loc e ts es =
 let make_tthrow loc exc e =
   make_tnode loc (JCTSthrow (exc,e))
 
+(*
+
+  expr e : returns ((sl,tl),ne) where
+
+   ne = normalized expression for e
+   sl = sequences of statements to execute before e
+   tl = sequences of fresh variables needed
+
+  in other words, if tl = x1..xn, e is normalized into :
+
+     t1 x1 = <default value for type t1>;
+     ...
+     tn xn = <default value for type tn>;
+     sl;
+     ...ne...
+
+*)
 
 let rec expr e =
   let loc = e.jc_texpr_loc in
@@ -267,34 +288,11 @@ let rec expr e =
 	  let (l2,tl2),e2 = expr e2 in
 	  let stat = make_assign_heap loc e1 fi e2 in
 	  (l1@l2@[stat], tl1@tl2), JCEderef (e1, fi)
-      | JCTEassign_op_local (vi, f, t, e) ->
-	  let e = Jc_typing.coerce e.jc_texpr_type t e in
-	  let (l1,tl1),e = expr e in
-	  let ev = { jc_texpr_loc = loc;
-		     jc_texpr_type = vi.jc_var_info_type;
-		     jc_texpr_node = JCTEvar vi }
-	  in
-	  let (l2,tl2),ev = expr (Jc_typing.coerce vi.jc_var_info_type t ev)
-	  in
-	  let (l3,tl3),ecall = 
-	    call loc f [ev; e] ~binder:true [[];l1] in
-	  let ecall = match ecall with
-	    | Some b -> make_var loc b
-	    | None -> assert false
-	  in
-	  let stat = make_assign_local loc vi ecall in
-	  (l2@l3@[stat],tl1@tl2@tl3), JCEvar vi
-      | JCTEassign_op_heap (e1, fi, f, t, e2) ->
+      | JCTElet(vi,e1,e2) ->
 	  let (l1,tl1),e1 = expr e1 in
 	  let (l2,tl2),e2 = expr e2 in
-	  let (l3,tl3),ecall = 
-	    call loc f [make_deref loc e1 fi; e2] ~binder:true [l1;l2] in
-	  let ecall = match ecall with
-	    | Some b -> make_var loc b
-	    | None -> assert false
-	  in
-	  let stat = make_assign_heap loc e1 fi ecall in
-	  (l3@[stat],tl1@tl2@tl3), JCEderef (e1, fi)
+	  let stat = make_assign_local loc vi e1 in
+	  (l1@[stat]@l2,tl1@[vi]@tl2), e2.jc_expr_node
       | JCTEincr_local (op, vi) ->
 	  begin match op with
 	    | Prefix_inc -> 

@@ -856,29 +856,74 @@ let rec expr env e =
       | JCPEassign_op (e1, op, e2) -> 
 	  begin
 	    let te1 = expr env e1 and te2 = expr env e2 in
-            let t1 = te1.jc_texpr_type and t2 = te2.jc_texpr_type in
-	    if is_numeric t1 & is_numeric t2 then	      
-	      let t = lub_numeric_types t1 t2 in
-	      let _te2 =	      
-		if subtype t2 t1 then te2 else
-		  try
-		    restrict t2 t1 te2
-		  with
-		      Invalid_argument _ ->
-			typing_error e2.jc_pexpr_loc 
-			  "type '%a' expected"
-			  print_type t1
-	      in
-	      match te1.jc_texpr_node with
-		| JCTEvar v ->
-		    set_assigned v;
-		    t1,JCTEassign_op_local(v, bin_op t op, t, te2)
-		| JCTEderef(e,f) ->
-		    t1,JCTEassign_op_heap(e, f, bin_op t op, t, te2)
-		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
-	    else
-	      typing_error e.jc_pexpr_loc "numeric types expected"
+            let t1 = te1.jc_texpr_type in 
+	    match te1.jc_texpr_node with
+	      | JCTEvar v ->
+		  set_assigned v;
+		  let ev = { jc_texpr_loc = te1.jc_texpr_loc;
+			     jc_texpr_type = v.jc_var_info_type;
+			     jc_texpr_node = JCTEvar v }
+		  in
+		  let t,res = make_bin_app e.jc_pexpr_loc op ev te2 in
+		  let res =
+		    { jc_texpr_node = res;
+		      jc_texpr_type = t;
+		      jc_texpr_loc = e2.jc_pexpr_loc;
+		    } 
+		  in
+		  let res =
+		    if subtype t t1 then res else
+		      try
+			restrict t t1 res
+		      with
+			  Invalid_argument _ ->
+			    typing_error e2.jc_pexpr_loc 
+			      "type '%a' expected"
+			      print_type t1
+		  in		    
+		  t1,JCTEassign_local(v, res)
+	      | JCTEderef(e,f) ->
+		  let vi = newvar e.jc_texpr_type in
+		  vi.jc_var_info_assigned <- true;
+		  let v = { jc_texpr_loc = e.jc_texpr_loc;
+			    jc_texpr_type = e.jc_texpr_type;
+			    jc_texpr_node = JCTEvar vi; }
+		  in			    
+		  let res = JCTEderef(v,f) in
+		  let res =
+		    { jc_texpr_node = res;
+		      jc_texpr_type = f.jc_field_info_type;
+		      jc_texpr_loc = e.jc_texpr_loc;
+		    } 
+		  in
+		  let t,res = make_bin_app e.jc_texpr_loc op res te2 in
+		  let res =
+		    { jc_texpr_node = res;
+		      jc_texpr_type = t;
+		      jc_texpr_loc = e2.jc_pexpr_loc;
+		    } 
+		  in
+		  let res =
+		    if subtype t t1 then res else
+		      try
+			restrict t t1 res
+		      with
+			  Invalid_argument _ ->
+			    typing_error e2.jc_pexpr_loc 
+			      "type '%a' expected"
+			      print_type t1
+		  in		    
+		  let res = JCTEassign_heap(v,f,res) in
+		  let res =
+		    { jc_texpr_node = res;
+		      jc_texpr_type = t1;
+		      jc_texpr_loc = e2.jc_pexpr_loc;
+		    } 
+		  in
+		  t1,JCTElet(vi,e,res)
+	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	  end
+
       | JCPEapp (e1, l) -> 
 	  begin
 	    match e1.jc_pexpr_node with
