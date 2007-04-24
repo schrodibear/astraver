@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.9 2007-04-13 09:16:10 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.10 2007-04-24 19:02:33 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -76,8 +76,12 @@ module String_set = Set.Make(struct type t=string let compare= compare end)
 
 module SS_set = Set.Make(struct type t=String_set.t let compare= compare end)
 
-(** selected variables *)
+(** selected variables **)
 let selected_vars = ref String_set.empty 
+
+(** avoided vars **)
+let avoided_vars = String_set.singleton "alloc" 
+
 
 (** a variable name will be associated to each hypothesis **)
 let hash_hyp_vars : (predicate,'a) Hashtbl.t = Hashtbl.create 20
@@ -140,7 +144,8 @@ let f_symbols qvars t  =
 	  funcs := String_set.add (Ident.string id) !funcs ;
 	  List.iter collect tl 
       | Tvar (id) ->
-	  if not (String_set.mem (Ident.string id) qvars) 
+	  if not (String_set.mem (Ident.string id) qvars) && 
+	     not (String_set.mem (Ident.string id) avoided_vars)
 	  then
 	    if 	String.compare (Ident.string id) "alloc" <> 0 then 
 	      begin
@@ -207,9 +212,8 @@ let symbols  f  =
   collect String_set.empty f ; 
   (!vars,!preds,!funcs)
 
-
 (**
-@return vars which is a set of  sets of variables
+@return vars which is a set of sets of variables
    
 @param f the formula which is analyzed
 **)
@@ -341,11 +345,11 @@ let rec get_vars_in_tree v n acc =
     (* computes the list of variables reachable in one step *)
     let succ_list = String_set.fold
       (fun el l -> 
-	 (*Format.printf "vars attached to %s : " el ;*)
+	 Format.printf "vars attached to %s : " el ;
 	 let l' = Var_graph.succ !vg el in
-	 (*List.iter (fun el -> 
+	 List.iter (fun el -> 
 		      Format.printf " %s," el) l';
-	 Format.printf "@\n@.";*)
+	 Format.printf "@\n@.";
 	 List.append l l' 
       ) 
       v
@@ -384,14 +388,14 @@ let filter_acc_variables l concl_rep=
 	let vars =  	  
 	  try Hashtbl.find hash_hyp_vars p
 	  with Not_found -> raise Exit in
-	(*display_set "vars " vars ;*)
+	(* display_set "vars " vars ; *)
 	
 	(* (* strong criteria: all variable 
-	   of the hypothessis must be in the set of selected variables *) 
-	   if (String_set.subset vars !selected_vars) then  *)
-	(*     (* weakest criteria: at least one  variable 
-	   of the hypothessis should  be in the set of selected variables *) *)
-	   if (not (String_set.is_empty (String_set.inter vars !selected_vars))) then  
+	   of the hypothessis must be in the set of selected variables *) *)
+	   if (String_set.subset vars !selected_vars) then  
+	(* (* weakest criteria: at least one  variable 
+	   of the hypothessis should  be in the set of selected variables *) 
+	   if (not (String_set.is_empty (String_set.inter vars !selected_vars))) then *) 
 	   Spred (t,p):: filter q  
 	else
 	  filter q in  
@@ -413,7 +417,7 @@ let managesGoal id ax (hyps,concl) =
       memorizes_hyp_symb hyps;
       (** select the relevant variables **)
       selected_vars := get_vars_in_tree v threshold String_set.empty;
-      (*display_set "selected vars" !selected_vars ; *)
+      display_set "Selected vars: " !selected_vars ; 
       
 
       (* variant considering variables *)
