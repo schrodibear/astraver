@@ -42,8 +42,8 @@ and range_info =
 and struct_info =
     { 
       jc_struct_info_name : string;
-      jc_struct_info_parent : struct_info option;
-      jc_struct_info_root : string;
+      mutable jc_struct_info_parent : struct_info option;
+      mutable jc_struct_info_root : string;
       mutable jc_struct_info_fields : (string * field_info) list;
     }
 

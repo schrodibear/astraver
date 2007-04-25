@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.34 2007-04-13 11:48:55 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.35 2007-04-25 08:06:00 moy Exp $ */
 
 %{
 
@@ -83,8 +83,8 @@
 /* && || => <=> ! */
 %token AMPAMP BARBAR EQGT LTEQGT EXCLAM
 
-/* if else return while break case switch default */
-%token IF ELSE RETURN WHILE BREAK CASE SWITCH DEFAULT
+/* if else return while break case switch default goto */
+%token IF ELSE RETURN WHILE BREAK CASE SWITCH DEFAULT GOTO
 
 /* exception of throw try catch */
 %token EXCEPTION OF THROW TRY CATCH
@@ -120,7 +120,7 @@
 %token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE VOID
 %token STRUCT ENUM 
 
-%token DO FOR GOTO CONTINUE 
+%token DO FOR CONTINUE 
 %token TRY CATCH FINALLY THROW 
 
 %token AMP EXL TILDE STAR SLASH PERCENT LT GT HAT PIPE
@@ -136,6 +136,9 @@
 
 %nonassoc PRECIF
 %nonassoc ELSE
+
+%nonassoc PRECLOGIC
+%nonassoc EQ
 
 %nonassoc PRECTYPE
 /* and */
@@ -188,6 +191,8 @@ decl:
 | exception_definition
     { $1 }
 | logic_definition
+    { $1 }
+| logic_declaration
     { $1 }
 /*
 | error
@@ -315,8 +320,9 @@ function_specification:
 spec_clause:
 | REQUIRES expression SEMICOLON
     { JCPCrequires($2) }
-| BEHAVIOR IDENTIFIER COLON throws assumes assigns ENSURES expression SEMICOLON
-    { JCPCbehavior($2,$4,$5,$6,$8) }
+| BEHAVIOR IDENTIFIER COLON throws assumes requires assigns 
+  ENSURES expression SEMICOLON
+    { JCPCbehavior($2,$4,$5,$6,$7,$9) }
 	
 ;
 
@@ -331,6 +337,13 @@ assumes:
 | /* epsilon */
     { None }
 | ASSUMES expression SEMICOLON
+    { Some $2 }
+;
+
+requires:
+| /* epsilon */
+    { None }
+| REQUIRES expression SEMICOLON
     { Some $2 }
 ;
 
@@ -578,12 +591,10 @@ declaration:
 /* statements */
 /**************/
 
-/*
-
-labeled_statement
-        : identifier COLON statement { locate (CSlabel ($1, $3)) }
+labeled_statement:
+| identifier COLON statement 
+    { locate_statement (JCPSlabel($1.jc_identifier_name,$3)) }
 ;
-*/
 
 case_statement:
 | CASE CONSTANT COLON statement_list 
@@ -670,15 +681,18 @@ loop_annot:
 ;
 
 jump_statement: 
+| GOTO identifier SEMICOLON 
+    { locate_statement (JCPSgoto $2.jc_identifier_name) }
 /*
-| GOTO identifier SEMICOLON { locate (CSgoto $2) }
 | CONTINUE SEMICOLON { locate CScontinue }
 */
-| BREAK SEMICOLON { locate_statement (JCPSbreak "") }
+| BREAK SEMICOLON 
+    { locate_statement (JCPSbreak "") }
 /*
 | RETURN SEMICOLON { locate (CSreturn None) }
 */
-| RETURN expression SEMICOLON { locate_statement (JCPSreturn $2) }
+| RETURN expression SEMICOLON 
+    { locate_statement (JCPSreturn $2) }
 ;
 
 pack_statement:
@@ -689,10 +703,8 @@ pack_statement:
 ;
 
 statement: 
-/*
 | labeled_statement 
     { $1 }
-*/
 | compound_statement 
     { locate_statement (JCPSblock $1) }
 | expression_statement 
@@ -726,13 +738,20 @@ exception_statement:
 
 logic_definition:
 | LOGIC type_expr IDENTIFIER parameters EQ expression
-    { locate_decl (JCPDlogic(Some $2, $3, $4, $6)) }
+    { locate_decl (JCPDlogic(Some $2, $3, $4, Some $6)) }
 | LOGIC IDENTIFIER parameters EQ expression
-    { locate_decl (JCPDlogic(None, $2, $3, $5)) }
+    { locate_decl (JCPDlogic(None, $2, $3, Some $5)) }
+;
+
+logic_declaration:
+| LOGIC type_expr IDENTIFIER parameters %prec PRECLOGIC
+    { locate_decl (JCPDlogic(Some $2, $3, $4, None)) }
+| LOGIC IDENTIFIER parameters %prec PRECLOGIC
+    { locate_decl (JCPDlogic(None, $2, $3, None)) }
 ;
 
 /*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 */

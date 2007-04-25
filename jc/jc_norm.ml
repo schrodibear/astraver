@@ -524,7 +524,13 @@ and statement s =
 	  JCSthrow (loop_exit, Some (make_const loc JCCvoid))
       | JCTSbreak lab -> assert false (* TODO: see Claude *)
       | JCTScontinue lab -> assert false (* TODO: see Claude *)
-      | JCTSgoto lab -> assert false (* TODO: see Claude *)
+      | JCTSgoto lab ->
+	  let name_exc = "Goto_" ^ lab in
+	  let goto_exc = exception_info unit_type name_exc in
+	  Hashtbl.add exceptions_table name_exc goto_exc;
+	  JCSthrow (goto_exc, Some (make_const loc JCCvoid))
+      | JCTSlabel (_,s) -> 
+	  (statement s).jc_statement_node
       | JCTStry (s, cl, fs) ->
 	  let cl = 
 	    List.map (fun (ei, vi, s) -> (ei, Some vi, statement s)) cl in
@@ -575,6 +581,30 @@ and statement s =
 
   in { jc_statement_node = ns;
        jc_statement_loc = loc }
+
+and block_statement statements =
+  let rec block = function
+    | [] -> 
+	[],[]
+    | { jc_tstatement_node = JCTSlabel(lab,st) } as s :: bl ->
+	let loc = s.jc_tstatement_loc in
+	let (be,bl) = block (st::bl) in
+	let name_exc = "Goto_" ^ lab in
+	let goto_exc = exception_info unit_type name_exc in
+	Hashtbl.add exceptions_table name_exc goto_exc;
+	[make_throw loc goto_exc None],(goto_exc,make_block loc be)::bl
+    | s :: bl ->
+	let append_block e (f,l) = (e :: f,l) in
+	append_block (statement s) (block bl)
+  in
+  let be,bl = block statements in
+  List.fold_left 
+    (fun acc (goto_exc,s) ->
+       let loc = s.jc_statement_loc in
+       let catch_goto =
+	 [(goto_exc, Some (newvar unit_type), make_block loc [])] in
+       make_try loc acc catch_goto (make_block loc [])
+    ) (make_block Loc.dummy_position be) bl
        
 and assertion a =
   let loc = a.jc_tassertion_loc in
@@ -652,6 +682,10 @@ and behavior b =
     | None -> None
     | Some a -> Some (assertion a)
   in
+  let requires = match b.jc_tbehavior_requires with
+    | None -> None
+    | Some a -> Some (assertion a)
+  in
   let assigns = match b.jc_tbehavior_assigns with
     | None -> None
     | Some ll -> Some (List.map location ll)
@@ -659,6 +693,7 @@ and behavior b =
   { 
     jc_behavior_throws = b.jc_tbehavior_throws;
     jc_behavior_assumes = a;
+    jc_behavior_requires = requires;
     jc_behavior_assigns = assigns;
     jc_behavior_ensures = assertion b.jc_tbehavior_ensures;
   }
@@ -738,6 +773,6 @@ let code_function (spec, sl) =
 
 (*
   Local Variables: 
-  compile-command: "make -C .. bin/jessie.byte"
+  compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
   End: 
 *)

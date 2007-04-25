@@ -206,6 +206,7 @@ let rec statement fmt s =
     | JCTSthrow (_, _) -> assert false (* TODO *) 
     | JCTStry (_, _, _) -> assert false (* TODO *) 
     | JCTSgoto _-> assert false (* TODO *) 
+    | JCTSlabel _-> assert false (* TODO *) 
     | JCTScontinue _-> assert false (* TODO *) 
     | JCTSbreak _-> assert false (* TODO *) 
     | JCTSwhile (e, la, s)-> 

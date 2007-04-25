@@ -341,7 +341,40 @@ let rec term env e =
 	  let te2 = term env e2
 	  in
 	  logic_unary_op e.jc_pexpr_loc op te2
-      | JCPEapp (_, _) -> assert false
+      | JCPEapp (e1, args) ->
+	  begin
+	    match e1.jc_pexpr_node with
+	      | JCPEvar id ->
+		  begin
+		    try
+		      let pi = find_logic_info id in
+		      let tl =
+			try
+			  List.map2
+			    (fun vi e ->
+			       let ty = vi.jc_var_info_type in
+			       let te = term env e in
+			       if subtype te.jc_tterm_type ty then te
+			       else
+				 typing_error e.jc_pexpr_loc 
+				   "type %a expected" 
+				   print_type ty) 
+			    pi.jc_logic_info_parameters args
+			with  Invalid_argument _ ->
+			  typing_error e.jc_pexpr_loc 
+			    "wrong number of arguments for %s" id
+		      in
+		      let ty = match pi.jc_logic_info_result_type with
+			| None -> assert false | Some ty -> ty
+		      in
+		      ty, JCTTapp(pi, tl)
+		    with Not_found ->
+		      typing_error e.jc_pexpr_loc 
+			"unbound logic function identifier %s" id
+		  end
+	      | _ -> 
+		  typing_error e.jc_pexpr_loc "unsupported logic function application"
+	  end
       | JCPEderef (e1, f) -> 
 	  let te = term env e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_tterm_type f in
@@ -1046,7 +1079,10 @@ let rec statement env s =
 	      catches
 	  in
 	  JCTStry(ts,catches,statement env finally)
-      | JCPSgoto _ -> assert false
+      | JCPSgoto lab -> 
+	  JCTSgoto lab
+      | JCPSlabel (lab,s) -> 
+	  JCTSlabel (lab,statement env s)
       | JCPScontinue _ -> assert false
       | JCPSbreak l -> 
 	  JCTSbreak l (* TODO: check l exists, check enclosing loop exists, *)
@@ -1259,7 +1295,7 @@ let clause env vi_result c acc =
     | JCPCrequires(e) ->
 	{ acc with 
 	    jc_tfun_requires = assertion env e }
-    | JCPCbehavior(id,throws,assumes,assigns,ensures) ->
+    | JCPCbehavior(id,throws,assumes,requires,assigns,ensures) ->
 	let throws,env_result = 
 	  match throws with
 	    | None -> None, (vi_result.jc_var_info_name,vi_result)::env 
@@ -1276,11 +1312,13 @@ let clause env vi_result c acc =
 		    "undeclared exception %s" id.jc_identifier_name
 	in
 	let assumes = Option_misc.map (assertion env) assumes in
+	let requires = Option_misc.map (assertion env) requires in
 	let assigns = 
 	  Option_misc.map (List.map (fun a -> snd (location env a))) assigns in
 	let b = {
 	  jc_tbehavior_throws = throws;
 	  jc_tbehavior_assumes = assumes;
+	  jc_tbehavior_requires = requires;
 	  jc_tbehavior_assigns = assigns;
 	  jc_tbehavior_ensures = assertion env_result ensures }
 	in
@@ -1323,15 +1361,24 @@ let add_typedecl d (id,parent) =
 	  (st.jc_struct_info_root,Some st)
   in
   let struct_info =
-    { jc_struct_info_name = id;
-      jc_struct_info_fields = [];
-      jc_struct_info_parent = par;
-      jc_struct_info_root = root;
-    }
+    try
+      let struct_info,_ = Hashtbl.find structs_table id in
+      struct_info.jc_struct_info_root <- root;
+      struct_info.jc_struct_info_parent <- par;
+      struct_info
+    with Not_found ->
+      let struct_info =
+	{ jc_struct_info_name = id;
+	  jc_struct_info_fields = [];
+	  jc_struct_info_parent = par;
+	  jc_struct_info_root = root;
+	}
+      in
+      (* adding structure name in global environment before typing 
+	 the fields, because of possible recursive definition *)
+      Hashtbl.replace structs_table id (struct_info,[]);
+      struct_info
   in
-  (* adding structure name in global environment before typing 
-     the fields, because of possible recursive definition *)
-  Hashtbl.replace structs_table id (struct_info,[]);
   root,struct_info
 
 let rec decl d =
@@ -1419,26 +1466,35 @@ let rec decl d =
 	let param_env = List.map param pl in
         let pi = make_rel id in
         pi.jc_logic_info_parameters <- List.map snd param_env;
-        let p = assertion param_env body in
-        Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, JCTAssertion p);
+	begin match body with
+	  | None -> ()
+	  | Some body ->
+              let p = assertion param_env body in
+              Hashtbl.add logic_functions_table pi.jc_logic_info_tag 
+		(pi, JCTAssertion p)
+	end;
         Hashtbl.add logic_functions_env id pi
     | JCPDlogic(Some ty, id, pl, body) ->
 	let param_env = List.map param pl in
         let ty = type_type ty in
         let pi = make_rel id in
         pi.jc_logic_info_parameters <- List.map snd param_env;
-        let t = term param_env body in
-        if not (subtype t.jc_tterm_type ty) then 
-	  typing_error d.jc_pdecl_loc 
-	    "inferred type differs from declared type" 
-	else
-          begin
-            Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, JCTTerm t);
-            Hashtbl.add logic_functions_env id pi
-          end
+	begin match body with
+	  | None -> ()
+	  | Some body ->
+              let t = term param_env body in
+              if not (subtype t.jc_tterm_type ty) then 
+		typing_error d.jc_pdecl_loc 
+		  "inferred type differs from declared type" 
+	      else
+		begin
+		  Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, JCTTerm t);
+		end
+	end;
+        Hashtbl.add logic_functions_env id pi
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

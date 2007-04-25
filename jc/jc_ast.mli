@@ -100,7 +100,8 @@ and pexpr =
 type pclause =
   | JCPCrequires of pexpr
   | JCPCbehavior of 
-      string * identifier option * pexpr option * pexpr list option * pexpr
+      string * identifier option * pexpr option * pexpr option 
+      * pexpr list option * pexpr
 
 
 type pstatement_node =
@@ -115,6 +116,7 @@ type pstatement_node =
   | JCPSbreak of label
   | JCPScontinue of label
   | JCPSgoto of label
+  | JCPSlabel of label * pstatement
   | JCPStry of pstatement * (identifier * string * pstatement) list * pstatement
   | JCPSthrow of identifier * pexpr option
   | JCPSpack of pexpr
@@ -139,7 +141,7 @@ type pdecl_node =
   | JCPDaxiom of string * pexpr
   | JCPDexception of string * ptype
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCPDlogic of ptype option * string * (ptype * string) list * pexpr
+  | JCPDlogic of ptype option * string * (ptype * string) list * pexpr option
 
 and pdecl =
     {
@@ -249,6 +251,7 @@ type tstatement_node =
   | JCTSbreak of label
   | JCTScontinue of label
   | JCTSgoto of label
+  | JCTSlabel of label * tstatement
   | JCTStry of 
       tstatement * (exception_info * var_info * tstatement) list * tstatement
   | JCTSthrow of exception_info * texpr option
@@ -267,6 +270,7 @@ type tbehavior =
     { 
       jc_tbehavior_throws : exception_info option ;
       jc_tbehavior_assumes : tassertion option ;
+      jc_tbehavior_requires : tassertion option ;
       jc_tbehavior_assigns : tlocation list option ;
       jc_tbehavior_ensures : tassertion;
     }
@@ -394,6 +398,7 @@ type behavior =
     {  
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : assertion option ;
+      jc_behavior_requires : assertion option ;
       jc_behavior_assigns : location list option ;
       jc_behavior_ensures : assertion;
     }
