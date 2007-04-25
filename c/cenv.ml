@@ -25,6 +25,7 @@
 open Format
 open Coptions
 open Ctypes
+open Cutil
 open Creport
 open Info
 
@@ -281,8 +282,12 @@ module SI =
   Set.Make(struct type t = Ctypes.sign * int
 		  let compare = Pervasives.compare end)
 let int_sizes = ref SI.empty
-let declare_int_size is = int_sizes := SI.add is !int_sizes
+let int_types = ref StringSet.empty
+let declare_int_size ((s,i) as is) = 
+  int_types := StringSet.add (int_type_for_size s i) !int_types;
+  int_sizes := SI.add is !int_sizes
 let all_int_sizes () = SI.elements !int_sizes
+let is_int_type s = StringSet.mem s !int_types
 
 let int_size = function
   | Char -> char_size

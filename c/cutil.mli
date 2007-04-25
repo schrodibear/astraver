@@ -40,6 +40,7 @@ module Pair : sig
       : Set.OrderedType with type t = L1.t * L2.t
 end
 
+module StringSet : Set.S with type elt = string
 module StringMap : Map.S with type key = string
 module Int32Map : Map.S with type key = int32
 module Int32Set : Set.S with type elt = int32

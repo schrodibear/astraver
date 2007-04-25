@@ -48,6 +48,7 @@ val int_size : Ctypes.cinteger -> int (* in bits *)
 val int_type_for_size : Ctypes.sign -> int -> string
 val int_type_for : Ctypes.sign * Ctypes.cinteger -> string
 val all_int_sizes : unit -> (Ctypes.sign * int) list
+val is_int_type : string -> bool
 
 (* Global environment *)
 

@@ -65,6 +65,7 @@ end
 
 (* commonly used maps/sets based on std lib *)
 
+module StringSet = Set.Make (String)
 module StringMap = Map.Make (String)
 module Int32Map = Map.Make (Int32)
 module Int32Set = Set.Make (Int32)

@@ -397,12 +397,19 @@ and unifier_type_why tw1 tw2 =
 	unifier_zone z1 z2     
     | Addr z1 , Addr z2 ->
 	unifier_zone z1 z2
+    | Why_Logic s1, Why_Logic s2 when s1 = s2 -> 
+	()
+    (* int types *)
     | Info.Int, Info.Int -> ()
+    | Why_Logic s1, Info.Int when is_int_type s1 -> ()
+    | Info.Int, Why_Logic s2 when is_int_type s2 -> ()
+    | Why_Logic s1, Why_Logic s2 when is_int_type s1 && is_int_type s2 -> ()
+    (* float types *)
     | Why_Logic "double", Why_Logic "real"
     | Why_Logic "single", Why_Logic "real" 
     | Why_Logic "real", Why_Logic "single"
     | Why_Logic "real", Why_Logic "double" -> ()
-    | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
+    (* errors *)
     | Memory _, _ | _, Memory _ -> assert false
     | _ ->
 	let t1 = output_why_type tw1 

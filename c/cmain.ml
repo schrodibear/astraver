@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.92 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.93 2007-04-25 15:05:36 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -120,10 +120,8 @@ let main () =
 	 let s = Cinterp.interp f in s @ specs) 
       [] nfiles
   in
+  let (why_code,why_specs) = Cinterp.interp_functions why_specs in
   let why_specs = Cinterp.make_int_types_decls () @ why_specs in
-  let (why_code,why_specs) = 
-    Cinterp.interp_functions why_specs 
-  in
   (* Why specs *)
   let first_file = Filename.chop_extension (List.hd input_files) in
   let file = Lib.file "why" (first_file ^ "_spec") in

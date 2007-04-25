@@ -24,6 +24,7 @@
 
 /* integer arithmetic overflows (requires --int-overflow) */
 
+/*@ ensures \result == 1 */
 int f1(signed char c, int x) {
   unsigned char uc = 1;
   c = uc;
