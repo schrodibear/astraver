@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.237 2007-04-20 12:16:15 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.238 2007-04-25 08:06:42 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -1833,7 +1833,7 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
   | NSlabel(lab,s) -> 
       if lab.times_used = 0 then
 	begin
-	  warning stat.nst_loc "used label %s" lab.label_info_name;	 
+	  warning stat.nst_loc "unused label %s" lab.label_info_name;	 
 	  interp_statement ab may_break s
 	end
       else
@@ -1924,7 +1924,7 @@ and interp_block ab may_break statements =
     | { nst_loc = loc ; nst_node = NSlabel(lab,st) } :: bl ->
 	if lab.times_used = 0 then 
 	  begin
-	    warning loc "used label %s" lab.label_info_name;
+	    warning loc "unused label %s" lab.label_info_name;
 	    block (st::bl)
 	  end
 	else
