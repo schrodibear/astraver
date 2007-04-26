@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.10 2007-04-24 19:02:33 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.11 2007-04-26 05:36:57 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -71,7 +71,6 @@ let threshold = Options.pruning_hyp
 
 (*let symbol_counter = ref 0*)
 
-(*module Int_set = Set.Make(struct type t=int let compare= compare end)*)
 module String_set = Set.Make(struct type t=string let compare= compare end)
 
 module SS_set = Set.Make(struct type t=String_set.t let compare= compare end)
@@ -114,12 +113,18 @@ let reset () =
   Hashtbl.clear hash_hyp_vars  
 
 
+let bound_variable =
+  let count = ref 0 in
+  function id ->  
+    count := !count+1 ;
+    Ident.create ((Ident.string id)^"_"^ (string_of_int !count))
+
 (**
 @return (va,pr,fu) which is a triple of sets where
  - va is the set of free variables do not belong to qvars 
  - pr is the set of predicate symbols  
  - fu is the set of functionnal symbols  
-@param f the formula which is anaclyzed
+@param f the formula which is analyzed
 @param qvars the set of variables that are outer quantified
 @TODO : REPLACE the comparison to "alloc"
 **)
@@ -141,19 +146,56 @@ let f_symbols qvars t  =
       | Tapp (id, tl, _) when is_arith_binop id ->
 	  List.iter collect tl 
       | Tapp (id, tl, _) ->
+	  (*Symbol_container.add  id ;*)
 	  funcs := String_set.add (Ident.string id) !funcs ;
 	  List.iter collect tl 
       | Tvar (id) ->
-	  if not (String_set.mem (Ident.string id) qvars) && 
-	     not (String_set.mem (Ident.string id) avoided_vars)
+	  if not (String_set.mem (Ident.string id) qvars) 
 	  then
 	    if 	String.compare (Ident.string id) "alloc" <> 0 then 
 	      begin
+		(*Symbol_container.add  id;*)
 		vars := String_set.add (Ident.string id) !vars 
 	      end
   in
   collect t ; 
   (!vars,!preds,!funcs)
+
+
+
+(**
+@return vars
+**)
+
+
+let vars_of_list qvars tl  = 
+  let vars = ref SS_set.empty in
+
+  let rec collect l = 
+    let inner_vars = ref String_set.empty in 
+    let f t =
+      match t with 
+	| Tconst (ConstInt n) -> ()
+	| Tconst (ConstBool _) -> () 
+	| Tconst ConstUnit -> ()
+	| Tconst (ConstFloat _) -> ()
+	| Tderef _ -> ()
+	| Tapp (id, tl, _) ->
+	    let bv = bound_variable id in
+	    inner_vars := String_set.add (Ident.string bv) !inner_vars;
+	    let l' = Tvar(bv)::tl in 
+	    collect l'
+	| Tvar (id) ->
+	    if not (String_set.mem (Ident.string id) qvars) && 
+	      not (String_set.mem (Ident.string id) avoided_vars)
+	    then
+	      inner_vars := String_set.add (Ident.string id) !inner_vars
+    in
+    List.iter f l ;
+    vars := SS_set.add !inner_vars !vars 
+  in
+  collect tl ; 
+  !vars
 
 
 (**
@@ -222,19 +264,16 @@ let sets_of_vars   f  =
   let rec collect qvars formula  = 
     match formula with 
       | Papp (id, tl, _) ->
-	  let v = List.fold_right 
-	    (fun t s -> 
-	       let (v',_,_) = f_symbols qvars t in 
-	       String_set.union s v')
-	    tl String_set.empty  in
-	  vars := SS_set.add v !vars 
+	  let v = vars_of_list qvars tl in 
+	  vars := SS_set.union v !vars 
       | Pand (_, _, a, b) | Forallb (_, a, b)  | Por (a, b) | Piff (a, b) | 
 	    Pimplies (_, a, b) ->
 	  collect qvars a;
 	      collect qvars b
       | Pif (a, b, c) ->
-	  let (v',_,_) = f_symbols qvars a in 
-	  vars := SS_set.add v' !vars ;
+	  let l = a::[] in 
+	  let v' = vars_of_list qvars l in 
+	  vars := SS_set.union v' !vars ;
 	  collect qvars b;
 	  collect qvars c
       | Pnot a ->
@@ -313,14 +352,15 @@ let memorizes_hyp_symb l =
     | Svar (id, v) :: q ->  mem  q 
     | Spred (_,p) :: q -> 
 	(* retrieves the sets of sets of variables *)
-	(*Format.printf "%a @\n@." print_predicate p;*)
+	(*	Format.printf "%a @\n@." print_predicate p; *)
 	let v = sets_of_vars p in 
 	(*SS_set.iter (fun s-> 
-		       display_set "detected vars in hyp " s ) v; *)
+		       display_set "detected vars in hyp " s ) v;*) 
 	
 
 	
-	(* for each set of variables, build the CFC of the set*)
+	(* for each set of variables, build the CFC 
+	   of the set and computes the union of all the variables*)
 	let v' = 
 	  SS_set.fold (fun s  t -> 
 			 update_v_g s ; 
@@ -385,21 +425,27 @@ let filter_acc_variables l concl_rep=
     | [] -> []
     | Svar (id, v) :: q -> Svar (id, v) ::filter q 
     | Spred (t,p) :: q -> 
+	Format.printf "Predicate : %a @\n@." print_predicate p;
 	let vars =  	  
 	  try Hashtbl.find hash_hyp_vars p
-	  with Not_found -> raise Exit in
-	(* display_set "vars " vars ; *)
+	  with Not_found -> raise Exit 
+	in
+	(*display_set "Vars: " vars ; *)
 	
 	(* (* strong criteria: all variable 
 	   of the hypothessis must be in the set of selected variables *) *)
-	   if (String_set.subset vars !selected_vars) then  
+	if (String_set.subset vars !selected_vars) then  
 	(* (* weakest criteria: at least one  variable 
 	   of the hypothessis should  be in the set of selected variables *) 
-	   if (not (String_set.is_empty (String_set.inter vars !selected_vars))) then *) 
-	   Spred (t,p):: filter q  
+	if (not (String_set.is_empty (String_set.inter vars !selected_vars)))
+	then *)
+	  Spred (t,p):: filter q  
 	else
+	  let v' = String_set.diff vars !selected_vars  
+	  in
+	  display_set "Diff: " v' ; 
 	  filter q in  
-    filter l
+  filter l
 
 
 
@@ -433,7 +479,10 @@ let reduce q =
       Dgoal (loc, id, s)  as ax ->
         let (l,g) = s.Env.scheme_type in
         let (l',g') = Util.intros [] g in
-        managesGoal id ax (List.append l l',g')
+	(*Printf.printf "Size of l %d " (List.length l');*)
+        (** TODO: REMOVE this  **)
+	Dgoal (loc,id, Env.empty_scheme (l',g'))
+    (*managesGoal id ax (List.append l l',g')*)
     | _ -> failwith "goal awaited" in
   q' 
   
