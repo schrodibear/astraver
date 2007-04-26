@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctypes.ml,v 1.23 2007-03-16 09:18:37 moy Exp $ i*)
+(*i $Id: ctypes.ml,v 1.24 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -33,7 +33,9 @@ type storage_class = No_storage | Extern | Auto | Static | Register
 
 type sign = Signed | Unsigned
 
-type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
+type cinteger = 
+  | Char | Short | Int | Long | LongLong | Bitfield of int64
+  | ExactInt
 
 type cfloat = Float | Double | LongDouble | Real
 
@@ -67,6 +69,7 @@ let noattr tyn = { ctype_node = tyn;
 		 }
 let c_void = noattr Tvoid
 let c_int = noattr (Tint (Signed, Int))
+let c_exact_int = noattr (Tint (Signed, ExactInt))
 let c_char = noattr (Tint (Unsigned, Char))
 let c_float fk = noattr (Tfloat fk)
 let c_string valid = noattr (Tpointer(valid, c_char))

@@ -296,6 +296,7 @@ let int_size = function
   | Long -> long_size
   | LongLong -> long_long_size
   | Bitfield n -> Int64.to_int n
+  | ExactInt -> assert false
 
 let int_type_for (signed, ty) = 
   let n = int_size ty in
@@ -304,6 +305,7 @@ let int_type_for (signed, ty) =
 
 let rec type_type_why ?name ty zone_is_var =
   match ty.ctype_node with
+    | Tint (_,ExactInt) -> Int
     | Tint _ | Tenum _ when not Coptions.int_overflow_check -> Int
     | Tint ik -> Why_Logic (int_type_for ik)
     | Tenum _ -> Int (* TODO *)

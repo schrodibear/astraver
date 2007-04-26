@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.159 2007-03-14 18:21:54 moy Exp $ i*)
+(*i $Id: ceffect.ml,v 1.160 2007-04-26 13:41:18 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -252,7 +252,7 @@ let rec term t = match t.nterm_node with
   | NTunop (Unot, t) -> term t
   | NTunop (Utilde, t) -> term t
   | NTunop (( Ufloat_of_int | Uint_of_float | Ufloat_conversion 
-	    | Uabs_real | Usqrt_real 
+	    | Uint_conversion | Uabs_real | Usqrt_real 
 	    | Uround_error | Utotal_error | Uexact | Umodel), t) -> term t
   | NTbase_addr t -> term t
   | NToffset t -> reads_add_alloc (term t)
@@ -331,7 +331,7 @@ let rec assign_location t = match t.nterm_node with
   | NTunop (Uminus, _)  | NTunop (Uplus, _)    | NTunop (Unot, _)  
   | NTunop (Utilde, _)  
   | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion 
-	    |Uabs_real | Usqrt_real | Uround_error 
+	    | Uint_conversion | Uabs_real | Usqrt_real | Uround_error 
 	    | Utotal_error |Uexact | Umodel), _)  
   | NTbase_addr _  
   | NToffset _  

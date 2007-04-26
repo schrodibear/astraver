@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: invariant.ml,v 1.44 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: invariant.ml,v 1.45 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 open Coptions
 open Creport
@@ -575,6 +575,7 @@ let predicate_name_for_int_type (sign,kind) =
     | Ctypes.Long -> "long"
     | Ctypes.LongLong -> "longlong"
     | Ctypes.Bitfield _ -> assert false (*TODO*)
+    | Ctypes.ExactInt -> assert false
   in
   "is_" ^ sgs ^ "_" ^ tys
 
@@ -599,6 +600,7 @@ let function_name_for_int_type (sign,kind) =
     | Ctypes.Long -> "long"
     | Ctypes.LongLong -> "longlong"
     | Ctypes.Bitfield _ -> assert false (*TODO*)
+    | Ctypes.ExactInt -> assert false
   in
   "any_" ^ sgs ^ "_" ^ tys
 

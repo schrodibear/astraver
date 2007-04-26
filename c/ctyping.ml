@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.147 2007-04-06 10:19:28 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.148 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -41,7 +41,7 @@ open Int64
 let int_teconstant n = 
   { texpr_node = TEconstant (IntConstant n); 
     texpr_loc = Loc.dummy_position;
-    texpr_type = c_int }
+    texpr_type = c_exact_int (* ? *) }
 
 let tezero = int_teconstant "0"
 
@@ -74,6 +74,7 @@ let rec sizeof loc =
 	architecture ();
 	let d = div n (of_int 8) in
 	if rem n (of_int 8) = zero then d else succ d
+    | Tint (_, ExactInt) -> assert false
     | Tfloat Float -> of_int 4
     | Tfloat Double -> of_int 8
     | Tfloat LongDouble -> of_int 12

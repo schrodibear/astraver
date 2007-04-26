@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctypes.mli,v 1.18 2007-03-16 09:18:37 moy Exp $ i*)
+(*i $Id: ctypes.mli,v 1.19 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -33,7 +33,9 @@ type storage_class = No_storage | Extern | Auto | Static | Register
 
 type sign = Signed | Unsigned
 
-type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
+type cinteger = 
+  | Char | Short | Int | Long | LongLong | Bitfield of int64
+  | ExactInt
 
 type cfloat = Float | Double | LongDouble | Real
 
@@ -62,6 +64,7 @@ and ctype = {
 val noattr : ctype_node -> ctype
 val c_void : ctype
 val c_int : ctype
+val c_exact_int : ctype
 val c_float : cfloat -> ctype
 val c_string : valid -> ctype
 val c_array :  valid -> ctype ->  ctype

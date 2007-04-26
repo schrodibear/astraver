@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.100 2007-04-06 10:19:27 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.101 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -141,11 +141,10 @@ let why_type_for_float t = match t.Ctypes.ctype_node with
   | Tfloat fk -> why_type_for_float_kind fk
   | _ -> assert false
 
-let why_type_for_int_kind ik =
-  if Coptions.int_overflow_check then 
-    Why_Logic (Cenv.int_type_for ik)
-  else
-    Info.Int
+let why_type_for_int_kind = function
+  | _, ExactInt -> Info.Int
+  | _ when not Coptions.int_overflow_check -> Info.Int
+  | ik -> Why_Logic (Cenv.int_type_for ik)
 
 let why_type_for_int t = match t.Ctypes.ctype_node with
   | Tint ik -> why_type_for_int_kind ik
@@ -234,7 +233,8 @@ let rec type_why_for_term t =
     | NTunop (Clogic.Ustar,_) | NTunop (Clogic.Uamp,_) -> assert false
     | NTunop ((Clogic.Ufloat_of_int | Clogic.Ufloat_conversion),_) -> 
 	Info.Why_Logic (why_type_for_float t.nterm_type)
-    | NTunop (Clogic.Uint_of_float,_) -> Info.Int
+    | NTunop ((Clogic.Uint_of_float | Clogic.Uint_conversion),_) -> 
+	why_type_for_int t.nterm_type
     | NTbinop (t1,Clogic.Bsub,t2) -> 
 	begin
 	  match type_why_for_term t1, type_why_for_term t2 with
@@ -1013,6 +1013,7 @@ let rec texpr_of_term (t : tterm) : texpr =
 	      | Clogic.Ufloat_of_int -> Ufloat_of_int
 	      | Clogic.Uint_of_float -> Uint_of_float
 	      | Clogic.Ufloat_conversion -> Ufloat_conversion
+	      | Clogic.Uint_conversion -> Uint_conversion
 	      | Clogic.Usqrt_real
 	      | Clogic.Uabs_real
 	      | Clogic.Uround_error
@@ -1097,6 +1098,7 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      | Clogic.Ufloat_of_int -> Ufloat_of_int
 	      | Clogic.Uint_of_float -> Uint_of_float
 	      | Clogic.Ufloat_conversion -> Ufloat_conversion
+	      | Clogic.Uint_conversion -> Uint_conversion
 	      | Clogic.Usqrt_real
 	      | Clogic.Uabs_real
 	      | Clogic.Uround_error

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: clogic.mli,v 1.64 2007-01-04 10:09:48 moy Exp $ i*)
+(*i $Id: clogic.mli,v 1.65 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -52,7 +52,7 @@ type term_unop =
   | Uabs_real | Usqrt_real | Uround_error | Utotal_error
   | Uexact | Umodel | Unot
   (* introduced during typing *)
-  | Ufloat_of_int | Uint_of_float | Ufloat_conversion 
+  | Ufloat_of_int | Uint_of_float | Ufloat_conversion | Uint_conversion
 
 type 'ctype quantifiers = ('ctype * string) list
 type 'ctype typed_quantifiers = ('ctype * Info.var_info) list

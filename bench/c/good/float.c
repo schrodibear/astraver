@@ -76,3 +76,5 @@ double f5(double x) {
   return x - 1;
 }
 
+/*@ ensures \result == -(1.0) */
+double f6(double x) { return -1.0; }

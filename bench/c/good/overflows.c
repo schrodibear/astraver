@@ -24,13 +24,79 @@
 
 /* integer arithmetic overflows (requires --int-overflow) */
 
-/*@ ensures \result == 1 */
-int f1(signed char c, int x) {
+/* operations */
+
+/*@ ensures \result == 2 */
+int add1() {
   unsigned char uc = 1;
-  c = uc;
-  //return c+(int)c;
-  return 1;
+  signed short s = 1;
+  return uc + s;
 }
+
+/*@ requires x <= 1000
+    ensures \result == x+1 */
+int add2(int x) {
+  return x+1;
+}
+
+int lsl() { return 1<<2; }
+
+/* comparisons */
+
+int cmp1() { return 1<2; }
+
+/*@ ensures \result == 0 */
+int not1() { signed char c = 1; return !c; }
+
+/* constants */
+void constant1() { int x = 1; }
+
+/* incrementation */
+
+void incr1() {
+  unsigned char c = 254;
+  c++;
+  /*@ assert c == 255 */
+}
+
+unsigned short us;
+
+/*@ requires us == 13 ensures us == 15 */
+void incr2() { us++; ++us; }
+
+/* casts */
+
+void cast1() { 
+  char c = 1;
+  unsigned char uc = c;
+}
+
+/* arrays */
+
+int t[10];
+
+void array1() {
+  signed char c = 1;
+  t[c] = 0;
+  t[c+1] = 0;
+}
+
+/*@ requires t[0] <= 1000 */
+void incr3() {
+  t[0]++;
+}
+
+/* structures */
+
+struct S {
+  unsigned char uc;
+  signed char c;
+  int i;
+} s;
+
+/*@ requires s.c == 0
+    ensures  s.c == 3 && \result == 2 */
+int struct1() { ++s.c; s.c++; return s.c++; }
 
 /*
 Local Variables: 

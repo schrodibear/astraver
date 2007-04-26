@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.115 2007-02-16 08:24:13 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.116 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -56,7 +56,7 @@ let option_app f = function Some x -> Some (f x) | None -> None
 
 let rec type_logic_type loc env = function
   | LTvoid -> c_void
-  | LTint -> c_int
+  | LTint -> c_exact_int
   | LTfloat -> use_floats := true; c_float Ctypes.Float
   | LTdouble -> use_floats := true; c_float Ctypes.Double
   | LTlongdouble -> use_floats := true; c_float Ctypes.LongDouble
@@ -120,6 +120,8 @@ let coerce ty e = match e.term_type.ctype_node, ty.ctype_node with
       { e with term_node = Tunop (Uint_of_float, e); term_type = ty }
   | Tfloat fk1, Tfloat fk2 when fk1 <> fk2 ->
       { e with term_node = Tunop (Ufloat_conversion, e); term_type = ty }
+  | (Tint _ | Tenum _ as ty1), (Tint _ | Tenum _ as ty2) when ty1 <> ty2 ->
+      { e with term_node = Tunop (Uint_conversion, e); term_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
   | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
@@ -135,7 +137,7 @@ let arith_conversion t1 t2 =
   let ty2 = t2.term_type in
   match ty1.ctype_node, ty2.ctype_node with
     | (Tint _ | Tenum _), (Tint _ | Tenum _) -> 
-	t1, t2, ty1
+	coerce c_exact_int t1, coerce c_exact_int t2, c_exact_int
     | Tfloat _, (Tint _ | Tenum _) 
     | (Tint _ | Tenum _), Tfloat _ 
     | Tfloat _, Tfloat _ ->
@@ -159,7 +161,7 @@ let rec type_term env t =
 
 and type_term_node loc env = function
   | PLconstant (IntConstant _ as c) -> 
-      Tconstant c, c_int
+      Tconstant c, c_exact_int
   | PLconstant (RealConstant _ as c) ->
       use_floats := true;
       Tconstant c, c_real
@@ -191,15 +193,15 @@ and type_term_node loc env = function
   | PLunop (Uminus, t) -> 
       let t = type_num_term env t in
       begin match t.term_type.ctype_node with
-	| Tenum _ | Tint _ -> Tunop (Uminus, t), t.term_type
-	| Tfloat _ -> Tunop (Ufloat_conversion, coerce c_real t), c_real
+	| Tenum _ | Tint _ -> Tunop (Uminus, coerce c_exact_int t), c_exact_int
+	| Tfloat _ -> Tunop (Uminus, coerce c_real t), c_real
 	| _ -> assert false
       end  
   | PLunop (Uplus, t) -> 
       let t = type_num_term env t in
       begin match t.term_type.ctype_node with
-	| Tenum _ | Tint _ -> Tunop (Uplus, t), t.term_type
-	| Tfloat _ -> Tunop (Ufloat_conversion, coerce c_real t), c_real
+	| Tenum _ | Tint _ -> Tunop (Uplus, coerce c_exact_int t), c_exact_int
+	| Tfloat _ -> Tunop (Uplus, coerce c_real t), c_real
 	| _ -> assert false
       end
   | PLunop (Uabs_real | Usqrt_real as op, t) -> 
@@ -222,7 +224,8 @@ and type_term_node loc env = function
   | PLunop (Uround_error | Utotal_error | Uexact | Umodel as op, t) ->
       let t = type_float_term env t in
       Tunop (op, t), c_real
-  | PLunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion ), _) ->
+  | PLunop ((Ufloat_of_int | Uint_of_float | 
+	     Ufloat_conversion | Uint_conversion), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
       let t1 = type_term env t1 in
@@ -255,7 +258,7 @@ and type_term_node loc env = function
 			term_type = ty2} in
 	    Tbinop (t1, Badd, mt2), ty1
 	| (Tpointer _ | Tarray _), (Tpointer _ | Tarray _) ->
-	    Tbinop (t1, Bsub, t2), c_int (* TODO check types *)
+	    Tbinop (t1, Bsub, t2), c_exact_int (* TODO check types *)
 	| _ -> error loc "invalid operands to binary -"
       end
   | PLbinop (t1, (Bmul | Bdiv as op), t2) ->
@@ -267,7 +270,7 @@ and type_term_node loc env = function
 		  Bshift_right | Bshift_left as op), t2) ->
       let t1 = type_int_term env t1 in
       let t2 = type_int_term env t2 in
-      Tbinop (t1, op, t2), c_int
+      Tbinop (t1, op, t2), c_exact_int
   | PLbinop (t1, Bpow_real, t2) ->
       let t1 = type_real_term env t1 in
       let t2 = type_real_term env t2 in
@@ -333,31 +336,31 @@ and type_term_node loc env = function
   | PLoffset t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | Tarray _ | Tpointer _ -> Toffset t, c_int
+	 | Tarray _ | Tpointer _ -> Toffset t, c_exact_int
 	 | _ -> error loc "offset argument must be either array or pointer")
   | PLblock_length t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | Tarray _ | Tpointer _ -> Tblock_length t, c_int
+	 | Tarray _ | Tpointer _ -> Tblock_length t, c_exact_int
 	 | _ -> error loc "block_length argument must be either array or pointer")
   | PLarrlen t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | Tarray _ | Tpointer _ -> Tarrlen t, c_int
+	 | Tarray _ | Tpointer _ -> Tarrlen t, c_exact_int
 	 | _ -> error loc "arrlen argument must be either array or pointer")
   | PLstrlen t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | Tarray _ | Tpointer _ -> Tstrlen t, c_int
+	 | Tarray _ | Tpointer _ -> Tstrlen t, c_exact_int
 	 | _ -> error loc "strlen argument must be either array or pointer")
   | PLmin (t1,t2) ->
       let t1 = type_int_term env t1 in
       let t2 = type_int_term env t2 in
-      Tmin (t1,t2), c_int
+      Tmin (t1,t2), c_exact_int
   | PLmax (t1,t2) ->
       let t1 = type_int_term env t1 in
       let t2 = type_int_term env t2 in
-      Tmax (t1,t2), c_int
+      Tmax (t1,t2), c_exact_int
   | PLresult ->
       (try 
 	 let t = Env.find "result" env in 
@@ -393,7 +396,7 @@ and type_term_node loc env = function
 and type_int_term env t =
   let tt = type_term env t in
   expected_int t.lexpr_loc tt;
-  tt
+  coerce c_exact_int tt
 
 and type_real_term env t = 
   let tt = type_num_term env t in
@@ -496,7 +499,7 @@ let add_quantifiers loc q env =
 let int_constant n = 
   { term_node = Tconstant (IntConstant n); 
     term_loc = Loc.dummy_position;
-    term_type = c_int}
+    term_type = c_exact_int}
 
 let zero = int_constant "0"
 

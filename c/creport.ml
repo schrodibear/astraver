@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: creport.ml,v 1.24 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: creport.ml,v 1.25 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -58,6 +58,7 @@ and print_integer fmt = function
   | Long -> fprintf fmt "long"
   | LongLong -> fprintf fmt "long long"
   | Bitfield _  -> fprintf fmt "int (bitfield)"
+  | ExactInt -> fprintf fmt "int (exact)"
 
 and print_float fmt = function
   | Float -> fprintf fmt "float"

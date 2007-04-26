@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.45 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: cprint.ml,v 1.46 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -52,6 +52,7 @@ let term_unop = function
   | Clogic.Ufloat_of_int -> "float_of_int"
   | Clogic.Uint_of_float -> "int_of_float"
   | Clogic.Ufloat_conversion -> "float_conversion"
+  | Clogic.Uint_conversion -> "int_conversion"
   | Clogic.Uabs_real -> "abs_real"
   | Clogic.Usqrt_real -> "sqrt_real"
   | Clogic.Uround_error -> "round_error"

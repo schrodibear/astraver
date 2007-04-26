@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.93 2007-04-25 15:05:36 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.94 2007-04-26 13:41:19 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -121,7 +121,6 @@ let main () =
       [] nfiles
   in
   let (why_code,why_specs) = Cinterp.interp_functions why_specs in
-  let why_specs = Cinterp.make_int_types_decls () @ why_specs in
   (* Why specs *)
   let first_file = Filename.chop_extension (List.hd input_files) in
   let file = Lib.file "why" (first_file ^ "_spec") in
@@ -143,6 +142,13 @@ let main () =
 	   Cenv.zone_table;
        fprintf fmt "(* logic types *)@.";
        Cenv.iter_types (fun t -> fprintf fmt "@[type %s@\n@]" t);
+
+       let why_int_types = Cinterp.make_int_types_decls () in
+       if why_int_types <> [] then begin
+	 fprintf fmt "(* C integer types *)@.";
+	 Output.fprintf_why_decls fmt why_int_types
+       end;
+
        fprintf fmt "(* heap variables *)@.";
        Hashtbl.iter 
 	 (fun v bt -> 
