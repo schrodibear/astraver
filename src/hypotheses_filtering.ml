@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.11 2007-04-26 05:36:57 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.12 2007-04-26 05:57:42 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -385,11 +385,11 @@ let rec get_vars_in_tree v n acc =
     (* computes the list of variables reachable in one step *)
     let succ_list = String_set.fold
       (fun el l -> 
-	 Format.printf "vars attached to %s : " el ;
+	 (*Format.printf "vars attached to %s : " el ;*)
 	 let l' = Var_graph.succ !vg el in
-	 List.iter (fun el -> 
+	 (*List.iter (fun el -> 
 		      Format.printf " %s," el) l';
-	 Format.printf "@\n@.";
+	 Format.printf "@\n@.";*)
 	 List.append l l' 
       ) 
       v
@@ -425,7 +425,7 @@ let filter_acc_variables l concl_rep=
     | [] -> []
     | Svar (id, v) :: q -> Svar (id, v) ::filter q 
     | Spred (t,p) :: q -> 
-	Format.printf "Predicate : %a @\n@." print_predicate p;
+	(*Format.printf "Predicate : %a @\n@." print_predicate p;*)
 	let vars =  	  
 	  try Hashtbl.find hash_hyp_vars p
 	  with Not_found -> raise Exit 
@@ -441,9 +441,9 @@ let filter_acc_variables l concl_rep=
 	then *)
 	  Spred (t,p):: filter q  
 	else
-	  let v' = String_set.diff vars !selected_vars  
-	  in
-	  display_set "Diff: " v' ; 
+	  (* let v' = String_set.diff vars !selected_vars  
+	     in
+	     display_set "Diff: " v' ; *)
 	  filter q in  
   filter l
 
@@ -463,7 +463,7 @@ let managesGoal id ax (hyps,concl) =
       memorizes_hyp_symb hyps;
       (** select the relevant variables **)
       selected_vars := get_vars_in_tree v threshold String_set.empty;
-      display_set "Selected vars: " !selected_vars ; 
+      (*display_set "Selected vars: " !selected_vars ; *)
       
 
       (* variant considering variables *)
@@ -481,8 +481,8 @@ let reduce q =
         let (l',g') = Util.intros [] g in
 	(*Printf.printf "Size of l %d " (List.length l');*)
         (** TODO: REMOVE this  **)
-	Dgoal (loc,id, Env.empty_scheme (l',g'))
-    (*managesGoal id ax (List.append l l',g')*)
+	(*Dgoal (loc,id, Env.empty_scheme (l',g'))*)
+	managesGoal id ax (List.append l l',g')
     | _ -> failwith "goal awaited" in
   q' 
   
