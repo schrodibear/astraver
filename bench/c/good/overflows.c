@@ -115,7 +115,6 @@ struct BF {
   int f2 :2 ;
   unsigned int uf2 :2 ;
   int f7 :7;
-  unsigned int uf42 :42 ;
 } bf;
 
 void bit_fields() {
