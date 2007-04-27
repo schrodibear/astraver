@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.125 2007-03-08 10:00:23 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.126 2007-04-27 15:52:41 couchot Exp $ i*)
 
 open Logic
 open Ident
@@ -355,11 +355,12 @@ let add_ctx_vars =
 
 let intros ctx p =   
   let rec introb ctx pol = function
-    | Forall (_, id, _, t, _, p) when pol>0 ->
-	(*let id' = next_away id (predicate_vars p) in*)
-	(*let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
-	  let p' = subst_in_predicate (subst_onev n id') p in *)
-	introb (Svar (id, t) :: ctx) pol p
+    | Forall (_, id, n, t, _, p) when pol>0 ->
+
+	let id' =  Ident.bound id  in
+	let sp  =  Misc.subst_onev  n  id' in
+	let pp  =  Misc.subst_in_predicate sp p in
+	introb (Svar (id', t) :: ctx) pol pp
     | Pimplies (_, a, b) when pol > 0-> 
 	let h = fresh_hyp () in
 	let (l,p) = introb [] (-pol) a in 	

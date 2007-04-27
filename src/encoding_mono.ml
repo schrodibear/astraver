@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.11 2007-04-13 09:16:10 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.12 2007-04-27 15:52:41 couchot Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -504,10 +504,33 @@ let typedPlunge fv term pt =
    @param term is the term we want the type
    @param lv is the list of (var,type) of the problem 
 **)
-let getTermType term lv = match term with
-  | Tvar id -> 
-      let associatedType = 
-	(try List.assoc id lv with e ->  raise e) in
+let getTermType term lv = 
+  (*Format.eprintf 
+    "getTermType  : %a \n List " 
+    Util.print_term term ;
+  List.iter (fun (id,ty) -> 
+	       Format.eprintf 
+		 "(%s ,%a) " 
+    (Ident.string id)
+		 Util.print_pure_type ty
+    ) lv; *)
+  match term with
+    | Tvar id -> 
+	(* let l = List.map (fun (id,x) -> Ident.string id,x) lv in
+	let associatedType = 
+	  (try List.assoc (Ident.string id) l
+	   with e ->  
+	     Format.eprintf 
+	       "Exception 2 Caught In getTermType  : %s" 
+	       (Ident.string id);   
+	     raise e) in*)
+	let associatedType = 
+	(try List.assoc id lv 
+	 with e ->  
+	   Format.eprintf 
+	     "Exception Caught In getTermType  : %s" 
+	     (Ident.string id);   
+	   raise e) in
       associatedType
   | Tapp (id, l, inst) when (Ident.is_int_arith id) ->
       PTint
@@ -795,10 +818,14 @@ let rec getEqualityType tl lv =
 	     | Tconst (ConstBool _) ->
 		 ret:= PTbool ; 
 		 getEqualityType l lv 
-	     | Tvar id -> 
+	     | Tvar id as t-> 
 		 begin 
 		   let pt = (try List.assoc id lv
-			     with e ->  raise e) in 
+			     with e ->  
+			       Format.eprintf 
+				 "Exception Caught In getEqualityType  : %a" 
+				 Util.print_term t ; 
+			       raise e) in 
 		   match pt  with 
 		       PTint  ->
 			 ret:= PTint ; 
@@ -968,9 +995,11 @@ let rec push d =
 	     let f  (acc_c, acc_new_cel) s = match s with
 		 Spred (id, p) -> (acc_c, 
 				   (Spred (id, translate_pred fv acc_c p))::acc_new_cel)
-	       | Svar (id, t) -> ((id,t)::acc_c, (Svar (id, utButBuiltIn t))::acc_new_cel) in
-	     (* list for the following fold_left *)
+	       | Svar (id, t)  -> 
+		   ((id,t)::acc_c, (Svar (id, utButBuiltIn t))::acc_new_cel) in
+	     (* list of hyps for the following fold_left *)
 	     let l = fst s_sch.Env.scheme_type in
+	     
 	     let (context, new_cel) =  List.fold_left 	f ([], []) l in
 	     let ctxt = lifted_ctxt fv (List.rev new_cel) in 
 	     let pred' =  translate_pred fv context (snd (s_sch.Env.scheme_type)) in 
@@ -984,7 +1013,7 @@ let rec push d =
       )
   with
       Not_found -> 
-	Format.eprintf "Exception Caught In : %a\n" Util.print_decl d;
+	Format.eprintf "Exception Caught In Push : %a\n" Util.print_decl d;
 	raise Not_found
 
 let iter f =

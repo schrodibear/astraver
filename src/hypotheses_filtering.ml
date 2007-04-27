@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.12 2007-04-26 05:57:42 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.13 2007-04-27 15:52:41 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -152,11 +152,7 @@ let f_symbols qvars t  =
       | Tvar (id) ->
 	  if not (String_set.mem (Ident.string id) qvars) 
 	  then
-	    if 	String.compare (Ident.string id) "alloc" <> 0 then 
-	      begin
-		(*Symbol_container.add  id;*)
-		vars := String_set.add (Ident.string id) !vars 
-	      end
+	    vars := String_set.add (Ident.string id) !vars 
   in
   collect t ; 
   (!vars,!preds,!funcs)
@@ -186,8 +182,8 @@ let vars_of_list qvars tl  =
 	    let l' = Tvar(bv)::tl in 
 	    collect l'
 	| Tvar (id) ->
-	    if not (String_set.mem (Ident.string id) qvars) && 
-	      not (String_set.mem (Ident.string id) avoided_vars)
+	    if not (String_set.mem (Ident.string id) qvars) 
+	      (* && 	      not (String_set.mem (Ident.string id) avoided_vars)*) 
 	    then
 	      inner_vars := String_set.add (Ident.string id) !inner_vars
     in
@@ -381,32 +377,34 @@ let memorizes_hyp_symb l =
    
 **)
 let rec get_vars_in_tree v n acc = 
-  if n > 0 then
-    (* computes the list of variables reachable in one step *)
-    let succ_list = String_set.fold
-      (fun el l -> 
-	 (*Format.printf "vars attached to %s : " el ;*)
-	 let l' = Var_graph.succ !vg el in
-	 (*List.iter (fun el -> 
-		      Format.printf " %s," el) l';
-	 Format.printf "@\n@.";*)
-	 List.append l l' 
-      ) 
-      v
-      [] in
-    (* computes the set of variables reachable in one step *)
-    let succ_set = List.fold_right
-      (fun el s ->
-	 String_set.add el s) succ_list String_set.empty in
-    let v' = String_set.diff succ_set acc in 
-    String_set.union v 
-      (get_vars_in_tree 
-	 v' 
-	 (n - 1)
+  let vret = 
+    if n > 0 then
+      (* computes the list of variables reachable in one step *)
+      let succ_list = String_set.fold
+	(fun el l -> 
+	   (*Format.printf "vars attached to %s : " el ;*)
+	   let l' = Var_graph.succ !vg el in
+	   (*List.iter (fun el -> 
+	     Format.printf " %s," el) l';
+	     Format.printf "@\n@.";*)
+	   List.append l l' 
+	) 
+	v
+	[] in
+      (* computes the set of variables reachable in one step *)
+      let succ_set = List.fold_right
+	(fun el s ->
+	   String_set.add el s) succ_list String_set.empty in
+      let v' = String_set.diff succ_set acc in 
+      String_set.union v 
+	(get_vars_in_tree 
+	   v' 
+	   (n - 1)
 	 (String_set.union v succ_set)
-      )
-  else
-    v 
+	)
+    else
+      v in
+  String_set.diff vret avoided_vars
     
        
 
@@ -478,11 +476,10 @@ let reduce q =
   let q' =   match q with
       Dgoal (loc, id, s)  as ax ->
         let (l,g) = s.Env.scheme_type in
-        let (l',g') = Util.intros [] g in
+        let (l',g') = Util.intros [] g in 
 	(*Printf.printf "Size of l %d " (List.length l');*)
         (** TODO: REMOVE this  **)
-	(*Dgoal (loc,id, Env.empty_scheme (l',g'))*)
-	managesGoal id ax (List.append l l',g')
+	managesGoal id ax (List.append l l',g') 
     | _ -> failwith "goal awaited" in
   q' 
   
