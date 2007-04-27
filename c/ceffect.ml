@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.160 2007-04-26 13:41:18 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.161 2007-04-27 08:32:02 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -1088,23 +1088,7 @@ let decl d =
 	begin
 	  match ty.Ctypes.ctype_node with
 	    | Tvoid -> ()
-	    | Tint _| Tfloat _ | Tpointer _ | Tenum _ ->
-		let t = { nterm_node = NTvar v; 
-			  nterm_loc = d.loc;
-			  nterm_type = ty ;
-			} in  
-		if typing_predicates then 
-		  begin
-		    lprintf "adding implicit invariant for type of %s@." 
-		      v.var_name; 
-		    let name = "predicate_for_" ^ v.var_name in
-		    let pre = Invariant.pred_for_type ty t in
-		    Cseparation.predicate Unit pre; 
-		    add_strong_invariant name pre 
-		      {ef_empty with reads_var =(HeapVarSet.singleton v)} 
-		  end
-		else
-		  ()
+	    | Tint _| Tfloat _ | Tpointer _ | Tenum _ -> ()
 	    | Tvar s -> ()
 	    | Tfun _ -> ()
 	    | Tunion _ -> ()
@@ -1119,21 +1103,7 @@ let decl d =
 			  nterm_type = ty ;
 			} in
 		let name1 = "predicate_for_" ^ v.var_name in
-		let pre1 =
-		  if typing_predicates then begin
-		    let pre1 = 
-		     match s,typ.Ctypes.ctype_node with
-		       | 1L, Tstruct _ | 1L, Tunion _ ->
-			   Invariant.pred_for_type typ t
-		       | _, _ ->
-			   Invariant.pred_for_type ty t	   
-		    in
-		    Cseparation.predicate Unit pre1;
-		   pre1
-		  end else
-		    let (pre1,_) = validity t typ s in
-		    pre1
-		in
+		let pre1,_ = validity t typ s in
 		add_strong_invariant name1 pre1 
 		  {ef_empty with reads_var =(HeapVarSet.singleton v)};
 		List.iter 

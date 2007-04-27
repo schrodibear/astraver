@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.239 2007-04-26 13:41:18 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.240 2007-04-27 08:32:02 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -730,6 +730,9 @@ let make_int_types_decls () =
 					LVar "x"]) 
 			in
 			Annot_type (pre, Base_type lt, [], [], post, [])));
+      Param (false, "any_" ^ name,
+	     Prod_type ("x", unit_type,
+		       Annot_type (LTrue, Base_type lt, [], [], LTrue, [])));
       Exception ("Return_" ^ name, Some lt)
     ]
   in
@@ -1940,27 +1943,24 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
       let tinit,(decl,_) = match init with 
 	| None | Some (Ilist [])->
 	    begin match ctype.Ctypes.ctype_node with
-	      | Tenum s ->    
-		  if typing_predicates then  
-		    App(Var("any_enum_" ^s^ "_parameter"),Var("void")) 
-		  else 
-		    App(Var("any_int"),Var("void"))
-	      | Tint si ->
-		    if typing_predicates then 
-		      let n = (Invariant.function_for_int_type si) 
-			^"_parameter" in
-		      App(Var(n),Var("void"))
-		    else 
-		      App(Var("any_int"),Var("void"))
-	      | Tfloat fk -> App(Var (any_float fk),Var("void"))
+	      | Tenum s when enum_check ->    
+		  App (Var ("any_enum_" ^ s ^ "_parameter"), Var "void") 
+	      | Tint (_,i as si) when i <> ExactInt && int_overflow_check ->
+		  let n = Cenv.int_type_for si in
+		  App (Var ("any_" ^ n), Var "void")
+	      | Tenum _ | Tint _ ->
+		  App (Var "any_int", Var "void")
+	      | Tfloat fk -> 
+		  App (Var (any_float fk), Var "void")
 	      | Tarray (_,_, None) | Tpointer _ -> 
-		  App(Var "any_pointer", Var "void")
+		  App (Var "any_pointer", Var "void")
 	      | Tarray (_,_, Some n) ->
 		  App (Var "alloca_parameter", 
 		       Cte (Prim_int (Int64.to_string n)))
 	      | Tstruct _ | Tunion _ ->
 		  App (Var "alloca_parameter", Cte (Prim_int "1"))
-	      | Tvoid | Tvar _ | Tfun _ -> assert false
+	      | Tvoid | Tvar _ | Tfun _ -> 
+		  assert false
 	    end,([],[])
 	| Some (Iexpr e)  ->   
 	    interp_expr e, ([],[])

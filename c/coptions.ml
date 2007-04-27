@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.40 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.41 2007-04-27 08:32:02 filliatr Exp $ i*)
 
 open Format
 
@@ -79,7 +79,6 @@ let coq_tactic = ref "intuition"
 let separate = ref false
 let no_zone_type = ref false
 let closed_program = ref false
-let typing_predicates = ref false
 let floats = ref true
 let local_aliasing = ref false
 let arith_memory_model = ref false
@@ -103,6 +102,7 @@ let set_fp_rounding_mode = function
 let fp_overflow_check = ref false
 
 let int_overflow_check = ref false
+let enum_check = ref false
 
 let char_size_ = ref 8
 let short_size_ = ref 16
@@ -207,6 +207,8 @@ let _ =
 	  "  check for FP overflows";
 	"--int-overflow", Arg.Set int_overflow_check,
 	  "  check for integer overflows";
+	"--check-enum", Arg.Set enum_check,
+	  "  check for enum values";
 	"--char-size", Arg.Int (set_integer_size char_size_),
 	  "  set the size of type `char' (default is 8)";
 	"--short-size", Arg.Int (set_integer_size short_size_),
@@ -217,8 +219,6 @@ let _ =
 	  "  set the size of type `long' (default is 32)";
 	"--long-long-size", Arg.Int (set_integer_size long_long_size_),
 	  "  set the size of type `long long' (default is 64)";
-	"--typing-predicates", Arg.Set typing_predicates,
-	  "  use typing predicates (experimental)";
 	"--loc-alias", Arg.Set local_aliasing,
 	  "  local aliasing analysis (experimental)";
 	"--arith-mem", Arg.Set arith_memory_model,
@@ -248,7 +248,6 @@ let cpp_dump = !cpp_dump
 let coq_tactic = !coq_tactic
 let separate = !separate
 let closed_program = !closed_program
-let typing_predicates = !typing_predicates
 let local_aliasing = !local_aliasing
 let arith_memory_model = !arith_memory_model
 let no_alloc_table = !no_alloc_table
@@ -266,6 +265,7 @@ let int_size = !int_size_
 let long_size = !long_size_
 let long_long_size = !long_long_size_
 
+let enum_check = !enum_check
 let int_overflow_check = !int_overflow_check
 
 let libfile =

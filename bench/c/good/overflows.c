@@ -81,9 +81,18 @@ void array1() {
   t[c+1] = 0;
 }
 
-/*@ requires t[0] <= 1000 */
+/*@ requires t[0] <= 1000 assigns t[0] */
 void incr3() {
   t[0]++;
+}
+
+/* loops */
+
+void loop1() {
+  unsigned char uc;
+  short ss;
+  /*@ invariant 0 <= uc <= 255 variant 256-uc */
+  for (uc = 0; uc < 255; uc++) ss = uc;
 }
 
 /* structures */
@@ -97,6 +106,21 @@ struct S {
 /*@ requires s.c == 0
     ensures  s.c == 3 && \result == 2 */
 int struct1() { ++s.c; s.c++; return s.c++; }
+
+/* bit fields */
+
+struct BF {
+  int f1 :1 ;
+  unsigned int uf1 :1 ; 
+  int f2 :2 ;
+  unsigned int uf2 :2 ;
+  int f7 :7;
+  unsigned int uf42 :42 ;
+} bf;
+
+void bit_fields() {
+  bf.f1 = 0;
+}
 
 /*
 Local Variables: 

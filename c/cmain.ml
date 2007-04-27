@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.94 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.95 2007-04-27 08:32:02 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -66,13 +66,6 @@ let main () =
   (* local abstract interpretation over integers *)
   if abstract_interp || gen_invariant then
     Array.iter Cint.local_int_analysis_attach tab_comp;
-  (* predicate *)
-  let nfiles = 
-    if typing_predicates then
-      on_all_files Invariant.add_typing_predicates nfiles
-    else
-      nfiles
-  in
   (* separation *)  
   lprintf "starting separation of variables.@.";
   List.iter (fun (_,p) -> Cseparation.file p)  nfiles;
@@ -81,12 +74,7 @@ let main () =
 		Cseparation.funct l ) 
     tab_comp;  
   (* typing predicates *)  
-  let nfiles = 
-    if typing_predicates then 
-      nfiles 
-    else
-      on_all_files Invariant.add_predicates nfiles 
-  in
+  let nfiles = on_all_files Invariant.add_predicates nfiles in
   if print_norm then begin
     let print_fun = ref true in
     List.iter 

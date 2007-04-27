@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.mli,v 1.32 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.33 2007-04-27 08:32:02 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -49,7 +49,6 @@ val why_opt : unit -> string
 val coq_tactic : string
 val separate : bool
 val closed_program : bool
-val typing_predicates : bool
 val local_aliasing : bool
 val no_alloc_table : bool
 val arith_memory_model : bool
@@ -67,6 +66,7 @@ val dft_fp_rounding_mode : fp_rounding_mode
 val fp_overflow_check : bool
 
 val int_overflow_check : bool
+val enum_check : bool
 
 val char_size : int
 val short_size : int
