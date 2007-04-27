@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.95 2007-04-27 08:32:02 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.96 2007-04-27 13:24:26 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -131,7 +131,9 @@ let main () =
        fprintf fmt "(* logic types *)@.";
        Cenv.iter_types (fun t -> fprintf fmt "@[type %s@\n@]" t);
 
-       let why_int_types = Cinterp.make_int_types_decls () in
+       let why_int_types = 
+	 Cinterp.make_int_types_decls () @ Cinterp.make_enum_types_decls ()
+       in
        if why_int_types <> [] then begin
 	 fprintf fmt "(* C integer types *)@.";
 	 Output.fprintf_why_decls fmt why_int_types

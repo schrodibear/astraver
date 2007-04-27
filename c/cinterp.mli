@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.mli,v 1.15 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: cinterp.mli,v 1.16 2007-04-27 13:24:26 filliatr Exp $ i*)
 
 (* Interpretation of C programs *)
 
@@ -34,3 +34,4 @@ val interp_functions : why_decl list ->
   (string * why_decl) list * why_decl list
 
 val make_int_types_decls : unit -> why_decl list
+val make_enum_types_decls : unit -> why_decl list

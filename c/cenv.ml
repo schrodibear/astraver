@@ -303,12 +303,18 @@ let int_type_for (signed, ty) =
   declare_int_size (signed, n);
   int_type_for_size signed n
 
+let enum_type_for s = 
+  let n = "enum_" ^ s in
+  int_types := StringSet.add n !int_types;
+  n
+
 let rec type_type_why ?name ty zone_is_var =
   match ty.ctype_node with
     | Tint (_,ExactInt) -> Int
-    | Tint _ | Tenum _ when not Coptions.int_overflow_check -> Int
+    | Tint _ when not Coptions.int_overflow_check -> Int
+    | Tenum _ when not Coptions.enum_check -> Int
     | Tint ik -> Why_Logic (int_type_for ik)
-    | Tenum _ -> Int (* TODO *)
+    | Tenum e -> Why_Logic (enum_type_for e)
     | Tfloat _ when not Coptions.floats -> Why_Logic "real"
     | Tfloat Float -> Why_Logic "single"
     | Tfloat Double -> Why_Logic "double"

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.240 2007-04-27 08:32:02 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.241 2007-04-27 13:24:26 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -223,24 +223,29 @@ let term_float_conversion fk1 fk2 e =
     | _ -> 
 	assert false
 
-let int_of ik e =
-  let name = Cenv.int_type_for ik in
-  LApp ("of_" ^ name, [e])
+let int_of (_,i as ik) e =
+  if int_overflow_check && i <> ExactInt then
+    let name = Cenv.int_type_for ik in LApp ("of_" ^ name, [e])
+  else
+    e
+
+let int_of_enum tag e =
+  if enum_check then
+    let name = Cenv.enum_type_for tag in LApp ("of_" ^ name, [e])
+  else
+    e
 
 let term_int_conversion ty1 ty2 e =
-  if not int_overflow_check then e else
   match ty1, ty2 with
-    (* int -> int *)
+    (* int -> exact int *)
     | Tint si1, Tint (_, ExactInt) ->
 	int_of si1 e
-    (* enum -> int *)
-    | Tenum _, Tint (_, ExactInt) ->
-	e
-    (* enum -> enum *)
-    | Tenum e1, Tenum e2 when e1 = e2 ->
-	e 
-    | (Tint _ | Tenum _), Tenum e2 ->
-	e
+    (* enum -> exact int *)
+    | Tenum t1, Tint (_, ExactInt) ->
+	int_of_enum t1 e
+    (* int,enum -> int,enum ?? *)
+    | (Tint _ | Tenum _), (Tint _ | Tenum _) ->
+	assert false
     | _ -> 
 	assert false
 
@@ -621,21 +626,51 @@ let within_bounds i e =
 let is_enum e t = 
   let _,info = Cenv.find_pred ("is_enum_" ^ e) in LPred (info.logic_name, [t])
 
-let of_int ik e =
-  let name = Cenv.int_type_for ik in
-  App (Var (name ^ "_of_int"), e)
+let of_int (_,i as ik) e =
+  if int_overflow_check && i <> ExactInt then
+    let name = Cenv.int_type_for ik in App (Var (name ^ "_of_int"), e)
+  else
+    e
 
-let int_of ik e =
-  let name = Cenv.int_type_for ik in
-  App (Var ("of_" ^ name), e)
+let int_of (_,i as ik) e =
+  if int_overflow_check && i <> ExactInt then
+    let name = Cenv.int_type_for ik in App (Var ("of_" ^ name), e)
+  else
+    e
+
+let enum_of_int tag e =
+  if enum_check then
+    let name = Cenv.enum_type_for tag in App (Var (name ^ "_of_int"), e)
+  else
+    e
+
+let int_of_enum tag e =
+  if enum_check then
+    let name = Cenv.enum_type_for tag in App (Var ("of_" ^ name), e)
+  else
+    e
 
 let guard_1 g e =
   let v = tmp_var () in Let (v, e, Output.Assert (g (LVar v), Var v))
 
 (* int conversion ty1 -> ty2 *)
 let interp_int_conversion ty1 ty2 e = 
-  if not int_overflow_check then e else
   match ty1.Ctypes.ctype_node, ty2.Ctypes.ctype_node with
+    (* enum -> enum *)
+    | Tenum t1, Tenum t2 ->
+	enum_of_int t2 (int_of_enum t1 e) 
+    (* enum -> int *)
+    | Tint si1, Tenum t2 ->
+	enum_of_int t2 (int_of si1 e)
+    (* int -> enum *)
+    | Tenum t1, Tint si2 ->
+	of_int si2 (int_of_enum t1 e)
+    (* int -> int, no check *)
+    | Tint si1, Tint si2 ->
+	of_int si2 (int_of si1 e)
+    | _ -> 
+	assert false
+(***** TODO: some checks can be safely avoided
     (* exact int -> int *)
     | Tint (_, ExactInt), Tint si2 ->
 	of_int si2 e
@@ -657,18 +692,7 @@ let interp_int_conversion ty1 ty2 e =
 	of_int si2 (int_of si1 e) (* TODO half safe: 0 <= e *)
     | Tint (Signed, _ as si1), Tint si2 ->
 	of_int si2 (int_of si1 e)
-    (* enum -> int *)
-    | Tenum _, Tint (Signed, i2) when le_cinteger Int i2 ->
-	e
-    | Tenum _, Tint si2 ->
-	guard_1 (within_bounds si2) e
-    (* enum -> enum *)
-    | Tenum e1, Tenum e2 when e1 = e2 ->
-	e 
-    | (Tint _ | Tenum _), Tenum e2 ->
-	guard_1 (is_enum e2) e
-    | _ -> 
-	assert false
+*******)
 
 let float_binop ~cmp fk opr ops opd opq =
   if floats then
@@ -708,7 +732,7 @@ let simple_logic_type s =
 (* buils the declarations for integer types with checks *)
 let make_int_types_decls () =
   let int = Base_type (simple_logic_type "int") in
-  let make_one ((signed, size) as i) =
+  let make_one acc ((signed, size) as i) =
     let name = Cenv.int_type_for_size signed size in
     let min = Invariant.min_int i in
     let max = Invariant.max_int i in
@@ -718,27 +742,124 @@ let make_int_types_decls () =
       LAnd (LPred ("le_int", [LConst (Prim_int min); t]),
  	    LPred ("le_int", [t; LConst (Prim_int max)]))
     in
-    [ Type (name, []);
-      Logic (false, of_name, ["x", lt], simple_logic_type "int");
-      Axiom (name ^ "_domain", 
-	     LForall ("x", lt, in_bounds (LApp (of_name, [LVar "x"]))));
-      Param (false, name ^ "_of_int",
-	     Prod_type ("x", int, 
-			let pre = in_bounds (LVar "x") in
-			let post = 
-			  LPred ("eq", [LApp (of_name, [LVar "result"]); 
-					LVar "x"]) 
-			in
-			Annot_type (pre, Base_type lt, [], [], post, [])));
-      Param (false, "any_" ^ name,
-	     Prod_type ("x", unit_type,
-		       Annot_type (LTrue, Base_type lt, [], [], LTrue, [])));
-      Exception ("Return_" ^ name, Some lt)
-    ]
+    (Type (name, [])) 
+    ::
+    (Logic (false, of_name, ["x", lt], simple_logic_type "int")) 
+    ::
+    (Axiom (name ^ "_domain", 
+	     LForall ("x", lt, in_bounds (LApp (of_name, [LVar "x"]))))) 
+    ::
+    (Param (false, name ^ "_of_int",
+	    Prod_type ("x", int, 
+		       let pre = in_bounds (LVar "x") in
+		       let post = 
+			 LPred ("eq", [LApp (of_name, [LVar "result"]); 
+				       LVar "x"]) 
+		       in
+		       Annot_type (pre, Base_type lt, [], [], post, []))))
+    ::
+    (Param (false, "any_" ^ name,
+            Prod_type ("x", unit_type,
+	               Annot_type (LTrue, Base_type lt, [], [], LTrue, []))))
+    ::
+    (Exception ("Return_" ^ name, Some lt))
+    ::
+    acc
   in
-  List.fold_left 
-    (fun acc t -> make_one t @ acc) []
-    (Cenv.all_int_sizes ())
+  List.fold_left make_one [] (Cenv.all_int_sizes ())
+
+(* buils the declarations for enum types with checks *)
+let make_enum_types_decls () =
+  let int = Base_type (simple_logic_type "int") in
+  let declare_enum_type s (tyn, vl) acc =
+    let name = Cenv.enum_type_for s in
+    let of_name = "of_" ^ name in
+    let is_enum = "is_" ^ name in
+    let lt = simple_logic_type name in
+    (Type (name, [])) 
+    ::
+    (Logic (false, of_name, ["x", lt], simple_logic_type "int")) 
+    ::
+    (Predicate (false, is_enum, ["x", simple_logic_type "int"], 
+	        List.fold_left 
+		  (fun p (_,v) -> 
+		    let v = Int64.to_string v in
+		    let p1 = LPred ("eq", [LVar "x"; LConst (Prim_int v)]) in
+		    make_or p p1)
+		  LFalse vl))
+    ::
+    (Axiom (name ^ "_domain", 
+	    LForall ("x", lt, LPred (is_enum, [LApp (of_name, [LVar "x"])])))) 
+    ::
+    (Param (false, name ^ "_of_int",
+	    Prod_type ("x", int, 
+		       let pre = LPred (is_enum, [LVar "x"]) in
+		       let post = 
+			 LPred ("eq", [LApp (of_name, [LVar "result"]); 
+				       LVar "x"]) 
+		       in
+		       Annot_type (pre, Base_type lt, [], [], post, []))))
+    ::
+    (Param (false, "any_" ^ name,
+            Prod_type ("x", unit_type,
+		       Annot_type (LTrue, Base_type lt, [], [], LTrue, []))))
+    ::
+    (Exception ("Return_" ^ name, Some lt))
+    ::
+    (List.fold_left
+      (fun acc (info,v) -> 
+	 let x = info.var_unique_name in
+	 let v = Int64.to_string v in
+	 let a = LPred ("eq_int", [LApp (of_name, [LVar x]); 
+				   LConst (Prim_int v)]) in
+	 (Logic (false, x, [], lt)) ::
+         (Axiom ("enum_" ^ s ^ "_" ^ x, a)) :: acc)
+      acc vl)
+  (******
+    let ty = noattr tyn in
+    let n = "is_enum_" ^ s in
+    let n' = "any_enum_" ^ s in
+    let is_enum_s = Info.default_logic_info n in   
+    let any_enum_n' = Info.default_fun_info n' in    
+    let result = {nterm_node = NTvar(Info.default_var_info "result");
+		  nterm_loc = Loc.dummy_position ;
+		  nterm_type = ty}
+    in
+    let spec_n' = { requires = None;
+		    assigns = None;
+		    ensures = Some (npapp (is_enum_s, [result]));
+		    decreases = None} 
+    in    
+    Cenv.add_c_fun n' (spec_n',ty,any_enum_n',None,Loc.dummy_position);
+    Cenv.add_pred n ([ty], is_enum_s);
+    let x = Info.default_var_info (get_fresh_name "x") in
+    set_formal_param x;
+    set_var_type (Var_info x) ty true;
+    is_enum_s.logic_args <- [x];
+    let var_x = nterm (NTvar x) ty in
+    let p = 
+      List.fold_left 
+	(fun p (v,_) -> 
+	   let p1 = nprel (var_x, Eq, nterm (NTvar v) ty) in
+	   npor (p, p1)) 
+	npfalse vl
+    in
+    let d = tdecl (Nlogic (is_enum_s, NPredicate_def ([x,ty], p))) in
+    d :: acc
+  *****)
+  in
+  let declare_enum_val n (_, vl) acc =
+    List.fold_left
+      (fun acc (info,v) -> 
+	let x = info.var_unique_name in
+	let v = Int64.to_string v in
+	let a = LPred ("eq_int", [LVar x; LConst (Prim_int v)]) in
+	(Logic (false, x, [], simple_logic_type "int")) ::
+	(Axiom ("enum_" ^ n ^ "_" ^ x, a)) :: acc)
+      acc vl
+  in
+  Cenv.fold_all_enum 
+    (if enum_check then declare_enum_type else declare_enum_val) []
 
 let int_op = function
   | Badd_int _ -> "add_int"
@@ -1730,7 +1851,7 @@ let continue b e = if b then try_with_void "Continue" e else e
 
 let return_exn ty = match ty.Ctypes.ctype_node with
   | Tint si when int_overflow_check -> "Return_" ^ (Cenv.int_type_for si)
-  | Tenum _ when int_overflow_check -> assert false (*TODO*)
+  | Tenum e when enum_check -> "Return_" ^ (Cenv.enum_type_for e)
   | Tenum _ | Tint _ -> "Return_int"
   | Tfloat _ when not floats -> "Return_real"
   | Tfloat Float -> "Return_single"
@@ -1769,7 +1890,7 @@ let make_switch_condition tmp l =
       IntMap.fold 
 	(fun x n test -> 
 	   make_or_expr 
-	     (App(App (Var "eq_int_",Var tmp), (interp_expr n))) test) 
+	     (App(App (Var "eq_int_",Var tmp), interp_int_expr n)) test) 
 	l
 	(Cte (Prim_bool false))
     in
@@ -1784,7 +1905,7 @@ let make_switch_condition_default tmp l used_cases=
     IntMap.fold 
       (fun x e test -> 
 	 make_and_expr 
-	   (App(App (Var "neq_int_",Var tmp),(interp_expr e))) test)
+	   (App(App (Var "neq_int_",Var tmp), interp_int_expr e)) test)
       fl
       (Cte (Prim_bool true))
   in
@@ -1917,7 +2038,7 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
       let tmp = tmp_var() in
       let switch_may_break = ref false in
       let res = 
-	Output.Let(tmp, interp_expr e,
+	Output.Let(tmp, interp_int_expr e,
 		   interp_switch tmp (*ab*) true switch_may_break l 
 		     IntMap.empty used_cases false)
       in
@@ -1944,10 +2065,9 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
 	| None | Some (Ilist [])->
 	    begin match ctype.Ctypes.ctype_node with
 	      | Tenum s when enum_check ->    
-		  App (Var ("any_enum_" ^ s ^ "_parameter"), Var "void") 
+		  App (Var ("any_" ^ Cenv.enum_type_for s), Var "void") 
 	      | Tint (_,i as si) when i <> ExactInt && int_overflow_check ->
-		  let n = Cenv.int_type_for si in
-		  App (Var ("any_" ^ n), Var "void")
+		  App (Var ("any_" ^ Cenv.int_type_for si), Var "void")
 	      | Tenum _ | Tint _ ->
 		  App (Var "any_int", Var "void")
 	      | Tfloat fk -> 
@@ -2281,23 +2401,25 @@ let interp_function_spec id sp ty pl =
   in
   tpl,pre_with,post, Param (false, id.fun_unique_name ^ "_parameter", ty)
 
+(**** CODE TRANSFERRED TO make_enum_types_decls 
 let interp_type loc ctype = match ctype.Ctypes.ctype_node with
   | Tenum e ->
       begin match Cenv.tag_type_definition e with
-	| Cenv.TTEnum ((Tenum n),el) -> 
+	| Cenv.TTEnum (Tenum n, el) -> 
 	    List.flatten
 	      (List.map 
 		 (fun (info,v) -> 
 		    let x = info.var_unique_name in
 		    let v = Int64.to_string v in
-		    let a = LPred ("eq_int", [LVar x; LConst(Prim_int v)]) in
-		    [Logic (false,x,[],simple_logic_type "int");
+		    let a = LPred ("eq_int", [LVar x; LConst (Prim_int v)]) in
+		    [Logic (false, x, [], simple_logic_type "int");
 		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])
 		 el)
 	| _ -> assert false
       end
   | _ -> 
       []
+****)
 
 let interp_located_tdecl why_spec decl =
   match decl.node with
@@ -2314,10 +2436,9 @@ let interp_located_tdecl why_spec decl =
   | Ninvariant_strong (id,p) ->
       lprintf "translating invariant declaration %s@." id;      
       why_spec
-  | Ntypedecl ({ Ctypes.ctype_node = Tenum _ } as ctype)
-  | Ntypedef (ctype,_) -> 
-      let dl = interp_type decl.loc ctype in 
-      dl @ why_spec
+  | Ntypedecl ({ Ctypes.ctype_node = Tenum _ })
+  | Ntypedef _ -> 
+      why_spec (* let dl = interp_type decl.loc ctype in dl @ why_spec *)
   | Ntypedecl { Ctypes.ctype_node = Tstruct _ | Tunion _ } -> 
       why_spec
   | Ntypedecl _ ->
@@ -2329,8 +2450,7 @@ let interp_located_tdecl why_spec decl =
       why_spec
 
 
-let interp_c_fun fun_name (spec, ctype, id, block, loc) 
-    (why_code,why_spec)   =
+let interp_c_fun fun_name (spec, ctype, id, block, loc) (why_code,why_spec) =
   if (id = Cinit.invariants_initially_established_info &&  
       not !Cinit.user_invariants)
   then
@@ -2381,6 +2501,7 @@ let interp_c_fun fun_name (spec, ctype, id, block, loc)
 	     (why_code, tspec :: why_spec)
 	   end
     )    
+
 let interp l =
   let s = interp_strong_invariants () in
   List.fold_left interp_located_tdecl s l

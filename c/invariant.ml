@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: invariant.ml,v 1.45 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: invariant.ml,v 1.46 2007-04-27 13:24:26 filliatr Exp $ i*)
 
 open Coptions
 open Creport
@@ -410,7 +410,7 @@ let rec separation_intern n =
 					(NTconstant 
 					    (IntConstant 
 					       (Int64.to_string s)))])))]
-	      |Tarray _ ->	
+	      | Tarray _ ->	
 		 let pre = "%separation1_range_" ^ n1  in 
 		 let info = Info.default_logic_info (pre) in
 		 info.logic_heap_args <- HeapVarSet.singleton v1 ; 
@@ -541,85 +541,8 @@ let max_int = function
 let min_cinteger (s,ty) = min_int (s, Cenv.int_size ty)
 let max_cinteger (s,ty) = max_int (s, Cenv.int_size ty)
 
-(* Type predicates 
-  
-   For each structure "struct S" we introduce a predicate is_struct_S
-   and its definition (as an axiom)
- *)
+(************* DEAD CODE (--typing-predicates) **********************
 
-open Cast
-open Ctypes
-
-let npforall = make_forall
-let npimp = make_implies
-
-let nterm d t = { nterm_node = d; nterm_type = t; 
-		  nterm_loc = Loc.dummy_position }
-
-let reset_var_i,var_i = 
-  let r = ref 0 in
-  (fun () -> r := 0),
-  (fun () -> incr r; Info.default_var_info ("i" ^ string_of_int !r))
-
-let ntconstant n = nterm (NTconstant (IntConstant n)) c_int
-let ntzero = ntconstant "0"
-
-let predicate_name_for_int_type (sign,kind) =
-  let sgs = match sign with 
-    | Ctypes.Signed -> "signed" 
-    | Ctypes.Unsigned -> "unsigned" in
-  let tys = match kind with
-    | Ctypes.Char -> "char"
-    | Ctypes.Short -> "short"
-    | Ctypes.Int -> "int"
-    | Ctypes.Long -> "long"
-    | Ctypes.LongLong -> "longlong"
-    | Ctypes.Bitfield _ -> assert false (*TODO*)
-    | Ctypes.ExactInt -> assert false
-  in
-  "is_" ^ sgs ^ "_" ^ tys
-
-let predicate_for_int_type =
-  let h = Hashtbl.create 17 in
-  fun si ->
-    try
-      Hashtbl.find h si
-    with Not_found -> 
-      let n = predicate_name_for_int_type si in
-      Hashtbl.add h si n;
-      n
-
-let function_name_for_int_type (sign,kind) =
-  let sgs = match sign with 
-    | Ctypes.Signed -> "signed" 
-    | Ctypes.Unsigned -> "unsigned" in
-  let tys = match kind with
-    | Ctypes.Char -> "char"
-    | Ctypes.Short -> "short"
-    | Ctypes.Int -> "int"
-    | Ctypes.Long -> "long"
-    | Ctypes.LongLong -> "longlong"
-    | Ctypes.Bitfield _ -> assert false (*TODO*)
-    | Ctypes.ExactInt -> assert false
-  in
-  "any_" ^ sgs ^ "_" ^ tys
-
-let function_for_int_type =
-  let h = Hashtbl.create 17 in
-  fun si ->
-    try
-      Hashtbl.find h si
-    with Not_found -> 
-      let n = function_name_for_int_type si in
-      Hashtbl.add h si n;
-      n
-
-(* dummy_is_struct records the is_struct predicates which are equivalent
-   to true *)
-let dummy_is_struct = Hashtbl.create 97
-
-(* [pred_for_type ty t] builds a predicate expressing that [t]
-   is of type [ty] *)
 let rec pred_for_type ty t = 
   match ty.Ctypes.ctype_node with
     | Ctypes.Tstruct n when Hashtbl.mem dummy_is_struct n ->
@@ -837,3 +760,9 @@ let add_typing_predicates dl =
   
   (*let dl = List.fold_right add_invariant_for_global dl [] in*)
   dl
+
+
+
+
+
+**********************************************************************)

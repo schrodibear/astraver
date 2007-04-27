@@ -50,3 +50,8 @@ void enum_as_array_index(int *t) {
   t[V] = 0;
 }
 
+/*
+Local Variables: 
+compile-command: "make enum.enum"
+End: 
+*/

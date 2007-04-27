@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.101 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.102 2007-04-27 13:24:26 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -78,28 +78,26 @@ let noattr2 loc ty e =
 let arrow_vars = Hashtbl.create 97
   
 let declare_arrow_var info =
-  try  let info' = Hashtbl.find arrow_vars info.var_name in
-  if not (same_why_type_no_zone info.var_why_type info'.var_why_type)
-  then
-    assert false
-  else
+  try  
+    let info' = Hashtbl.find arrow_vars info.var_name in
+    if not (same_why_type_no_zone info.var_why_type info'.var_why_type) then
+      assert false;
     info'
-  with
-      Not_found ->
-	begin
-	  Hashtbl.add arrow_vars info.var_name info;
-	  info
-	end
+  with Not_found ->
+    Hashtbl.add arrow_vars info.var_name info;
+    info
 
 let make_field ty =
   let rec name ty =
     match ty.Ctypes.ctype_node with 
       | Tvoid -> "void"
+      | Tint si when Coptions.int_overflow_check -> int_type_for si
+      | Tenum e when Coptions.enum_check -> enum_type_for e
       | Tint  _ | Tenum _ -> "int"
       | Tfloat _ -> "float"
       | Ctypes.Tvar s -> s
       | Tarray (_, ty ,_) | Tpointer (_,ty) -> (name ty) ^"P" 
-      | Tstruct s | Tunion s-> s^"P" (* "P" for "pointer" *)
+      | Tstruct s | Tunion s -> s^"P" (* "P" for "pointer" *)
       | Tfun _ -> "fun"
   in
   let n = (name ty) ^ "M" in (* "M" for "memory" *)

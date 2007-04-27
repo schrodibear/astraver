@@ -50,6 +50,8 @@ val int_type_for : Ctypes.sign * Ctypes.cinteger -> string
 val all_int_sizes : unit -> (Ctypes.sign * int) list
 val is_int_type : string -> bool
 
+val enum_type_for : string -> string
+
 (* Global environment *)
 
 val add_sym : Loc.position -> string -> ctype -> env_info -> env_info
