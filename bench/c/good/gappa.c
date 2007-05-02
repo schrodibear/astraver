@@ -54,6 +54,15 @@ double calcul_debile3(double x) {
   return x;
 }
 
+
+/*@ requires 0 <= x <= 0.9
+  @*/
+void boucle(double x) {
+  /*@ invariant 0 <= x <= 0.9 */
+  while (x >= 0.5) 
+    x = x*x;
+}
+
 /*
 Local Variables: 
 compile-command: "make gappa && ../../../bin/why.byte --fp --why why/gappa.why && ../../../bin/why.byte --fp --gappa why/gappa.why"

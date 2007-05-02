@@ -102,6 +102,11 @@ harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	make why/$*.why
 	make -f $*.makefile smtlib
 
+%.nofp: %.c
+	rm -f why/$*.why
+	$(EXECCADUCEUS) --no-fp $<
+	make -f $*.makefile smtlib
+
 %.gui: %.c
 	rm -f why/$*.why
 	make why/$*.why
