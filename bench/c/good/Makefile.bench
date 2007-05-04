@@ -14,8 +14,8 @@ default: $(TFILES)
 	@make -f $*.makefile smtlib/$*_why.smt > /dev/null 2>&1 || (echo "why FAILED :"; make -f $*.makefile smtlib/$*_why.smt; exit 1)
 	@echo GENERATING WHY VC FOR $*.c
 	@make -f $*.makefile why/$*_why.why > /dev/null 2>&1 || (echo "why FAILED :"; make -f $*.makefile why/$*_why.why; exit 1)
-	#../../../bin/dp.opt -timeout 20 why/$*_why.why simplify/$*_why.sx smtlib/$*_why.smt > $@ 2>&1
+	../../../bin/dp.opt -timeout 20 why/$*_why.why simplify/$*_why.sx smtlib/$*_why.smt > $@ 2>&1
 	#../../../bin/dp.opt -timeout 20 why/$*_why.why smtlib/$*_why.smt > $@ 2>&1
-	../../../bin/dp.opt -timeout 10 smtlib/$*_why.smt 
+	#../../../bin/dp.opt -timeout 10 smtlib/$*_why.smt 
 
 
