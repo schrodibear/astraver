@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ergo_split.mll,v 1.1 2006-11-27 15:03:03 marche Exp $ i*)
+(*i $Id: ergo_split.mll,v 1.2 2007-05-04 14:47:47 filliatr Exp $ i*)
 
 {
 
@@ -65,6 +65,8 @@ and goal file = parse
   | "goal" 
       { end_file file; let file = start_file () in 
 	print "goal "; goal file lexbuf }
+  | ("\"" ([^ '\"'] | "\\" _)* "\"") as s
+      { print s; goal file lexbuf }
   | ("type" | "logic" | "predicate" | "axiom") as k
       { end_file file; Buffer.add_string buf k; split lexbuf }
   | (letters | _) as s
