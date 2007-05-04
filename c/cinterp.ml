@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.241 2007-04-27 13:24:26 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.242 2007-05-04 13:33:41 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -669,7 +669,7 @@ let interp_int_conversion ty1 ty2 e =
     | Tint si1, Tint si2 ->
 	of_int si2 (int_of si1 e)
     | _ -> 
-	assert false
+	e
 (***** TODO: some checks can be safely avoided
     (* exact int -> int *)
     | Tint (_, ExactInt), Tint si2 ->
