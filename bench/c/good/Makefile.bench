@@ -8,8 +8,8 @@ default: $(TFILES)
 %.time: %.c
 	@echo RUNNING CADUCEUS ON $*.c
 	@$(CADUCEUS)  $*.c > /dev/null 2>&1 || (echo "caduceus FAILED (rejected a good file) :"; $(CADUCEUS)  $*.c; exit 1)
-	#@echo GENERATING SIMPLIFY VC FOR $*.c
-	#@make -f $*.makefile simplify/$*_why.sx > /dev/null 2>&1 || (echo "why FAILED :"; make -f $*.makefile simplify/$*_why.sx; exit 1)
+	@echo GENERATING SIMPLIFY VC FOR $*.c
+	@make -f $*.makefile simplify/$*_why.sx > /dev/null 2>&1 || (echo "why FAILED :"; make -f $*.makefile simplify/$*_why.sx; exit 1)
 	@echo GENERATING SMTLIB VC FOR $*.c
 	@make -f $*.makefile smtlib/$*_why.smt > /dev/null 2>&1 || (echo "why FAILED :"; make -f $*.makefile smtlib/$*_why.smt; exit 1)
 	@echo GENERATING WHY VC FOR $*.c
