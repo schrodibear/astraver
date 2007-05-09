@@ -103,6 +103,7 @@ let main () =
 	Hashtbl.iter 
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
 	  Jc_norm.structs_table; *)
+
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =
 	  Hashtbl.fold 
@@ -119,21 +120,22 @@ let main () =
 	    Jc_norm.structs_table
 	    d_types
 	in	       	  
-	(* production phase 1.2.2 : generation of the valid_inv predicates (Why logic) *)
-        let d_valid_inv =
+	(* production phase 1.2.2 : generation of the inv predicates for structures *)
+        let d_inv =
 	  Hashtbl.fold 
 	    (fun _ (st,_) acc ->
 	       Jc_interp.tr_valid_inv st acc)
 	    Jc_norm.structs_table
 	    d_memories
-	in	       	  
+	in
+	let d_inv = Jc_interp.assoc_declaration::d_inv in
 	(* production phase 1.3 : generation of Why exceptions *)
 	let d_exc =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
 	       Jc_interp.tr_exception ei acc)
 	    Jc_norm.exceptions_table
-	    d_valid_inv (* d_memories *)
+	    d_inv (* d_memories *)
 	in	       	  
 	(* production phase 1.4 : generation of Why range_types *)
 	let d_range =

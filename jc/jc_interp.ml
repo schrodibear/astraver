@@ -66,6 +66,73 @@ let tr_type t = Base_type(tr_base_type t)
     | JCTpointer _ -> Base_type(tr_base_type t)	
 *)
 
+(************************
+
+assoc predicate
+
+************************)
+
+let fresh_program_point =
+  let c = ref 0 in fun () ->
+  c := !c + 1; string_of_int !c
+
+let assoc_declaration =
+  (* logic assoc: int, ('a, 'b) memory -> prop *)
+  let program_point_type = simple_logic_type "int" in
+  let memory_poly_type = {
+    logic_type_name = "memory";
+    logic_type_args = [simple_logic_type "'a"; simple_logic_type "'b"];
+  } in
+  let prop = simple_logic_type "prop" in
+  Logic(false, "assoc", ["", program_point_type; "", memory_poly_type], prop)
+
+let rec term_memories aux t = match t.jc_tterm_node with
+  | JCTTconst _
+  | JCTTvar _ -> aux
+  | JCTTshift(t1, t2) -> term_memories (term_memories aux t1) t2
+  | JCTTderef(t, fi) ->
+      let m = fi.jc_field_info_name in
+      term_memories (StringSet.add m aux) t
+  | JCTTapp(_, l) -> List.fold_left term_memories aux l
+  | JCTTold t
+  | JCTToffset_max(t, _)
+  | JCTToffset_min(t, _)
+  | JCTTinstanceof(t, _)
+  | JCTTcast(t, _) -> term_memories aux t
+  | JCTTif(t1, t2, t3) -> term_memories (term_memories (term_memories aux t1) t2) t3
+
+let rec assertion_memories aux a = match a.jc_tassertion_node with
+  | JCTAtrue
+  | JCTAfalse -> aux
+  | JCTAand l
+  | JCTAor l -> List.fold_left assertion_memories aux l
+  | JCTAimplies(a1, a2)
+  | JCTAiff(a1, a2) -> assertion_memories (assertion_memories aux a1) a2
+  | JCTAnot a
+  | JCTAold a
+  | JCTAforall(_, a) -> assertion_memories aux a
+  | JCTAapp(_, l) -> List.fold_left term_memories aux l
+  | JCTAinstanceof(t, _)
+  | JCTAbool_term t -> term_memories aux t
+  | JCTAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
+
+let make_assoc pp m =
+  LPred("assoc", [LConst(Prim_int pp); LVar m])
+
+let make_field_assocs pp fi =
+  let _, invs = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in
+  let mems = List.fold_left (fun aux (_, a) ->
+      let amems = assertion_memories StringSet.empty a in
+      if StringSet.mem fi.jc_field_info_name amems then
+        StringSet.union amems aux
+      else aux
+    ) StringSet.empty invs in
+  List.map (make_assoc pp) (StringSet.elements mems)
+
+let make_assume_assocs pp fi =
+  let assocs = make_and_list (make_field_assocs pp fi) in
+  BlackBox (Annot_type (LTrue, unit_type, [], [], assocs, []))
+
 (**************************
 
 terms and assertions 
@@ -351,9 +418,11 @@ let rec statement s =
 	let e2 = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
-	make_lets 
-	  ([ (tmp1, e1) ; (tmp2, e2) ])
-	  (make_upd fi (Var tmp1) (Var tmp2))
+        append
+	  (make_assume_assocs (fresh_program_point ()) fi)
+	  (make_lets
+	    ([ (tmp1, e1) ; (tmp2, e2) ])
+	    (make_upd fi (Var tmp1) (Var tmp2)))
     | JCSblock l -> statement_list l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
