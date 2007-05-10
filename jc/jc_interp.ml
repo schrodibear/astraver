@@ -66,11 +66,9 @@ let tr_type t = Base_type(tr_base_type t)
     | JCTpointer _ -> Base_type(tr_base_type t)	
 *)
 
-(************************
-
-assoc predicate
-
-************************)
+(***********************)
+(*   assoc predicate   *)
+(***********************)
 
 let fresh_program_point =
   let c = ref 0 in fun () ->
