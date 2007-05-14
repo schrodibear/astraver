@@ -73,6 +73,8 @@ structure invariants
 
 ***************************)
 
+parameter mutable: 't -> ('t, bool) memory ref
+
 (*
 parameter mutable : bool memory ref 
 

@@ -497,8 +497,7 @@ let tr_struct st acc =
     Logic(false,tag_name st,[],tag_id_type)::acc
   in
   (* the invariants *)
-(*
-  let tmp = "this" in
+  (*let tmp = "this" in
   let i = invariant_for_struct (LVar tmp) st in
   let a =
     LImpl(LPred("instanceof",
@@ -534,8 +533,7 @@ let tr_struct st acc =
   in
   let acc =
     Axiom("global_invariant_for_" ^ st.jc_struct_info_name, a) :: acc
-  in
-*)
+  in*)
   match st.jc_struct_info_parent with
     | None ->
 	(* declaration of root type and the allocation table *)
@@ -579,6 +577,7 @@ let tr_struct st acc =
 	in
 	Axiom(name,f)::acc
 
+(*********************************************************************)
 let valid_inv_name st = st.jc_struct_info_name ^ "_inv"
 
 let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_inv_sem"
@@ -704,6 +703,7 @@ let tr_valid_inv st acc =
   let sem = List.fold_left (fun acc (id, ty) ->
     LForall(id, ty, acc)) sem ((this, this_ty)::params) in
   Axiom(valid_inv_axiom_name st, sem)::acc
+(*********************************************************************)
        
 (*************
 locations
