@@ -129,6 +129,13 @@ let main () =
 	    d_memories
 	in
 	let d_inv = Jc_interp.assoc_declaration::d_inv in
+        let d_inv =
+          Hashtbl.fold
+            (fun _ (st, _) acc ->
+               Jc_interp.invariants_axioms st acc)
+            Jc_norm.structs_table
+            d_inv
+        in
 	(* production phase 1.3 : generation of Why exceptions *)
 	let d_exc =
 	  Hashtbl.fold 

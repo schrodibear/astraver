@@ -578,6 +578,8 @@ let tr_struct st acc =
 	Axiom(name,f)::acc
 
 (*********************************************************************)
+(*               Using a recursively-defined predicate               *)
+(*********************************************************************)
 let valid_inv_name st = st.jc_struct_info_name ^ "_inv"
 
 let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_inv_sem"
@@ -703,6 +705,45 @@ let tr_valid_inv st acc =
   let sem = List.fold_left (fun acc (id, ty) ->
     LForall(id, ty, acc)) sem ((this, this_ty)::params) in
   Axiom(valid_inv_axiom_name st, sem)::acc
+(*********************************************************************)
+
+(*********************************************************************)
+(*                    Using the field "mutable"                      *)
+(*********************************************************************)
+
+let invariant_axiom st acc (inv, _) =
+  (* this *)
+  let this = "this" in
+  let this_ty =
+    { logic_type_name = "pointer";
+      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in 
+
+  (* not this.mutable => this.invariant *)
+  let mutable_ty =
+    { logic_type_name = "memory";
+      logic_type_args = [
+        simple_logic_type st.jc_struct_info_root;
+        simple_logic_type "bool"] }
+  in
+  let mutable_is_true =
+    LPred("eq", [LConst(Prim_bool true); LApp("select", [LVar "mutable"; LVar this])]) in
+  let invariant = make_logic_pred_call inv [LVar this] in
+  let axiom_impl =
+    LImpl(LNot mutable_is_true, invariant) in
+
+  (* quantifiers *)
+  let params = invariant_params [] inv in
+  let params = (this, this_ty)::params in
+  let params = ("mutable", mutable_ty)::params in
+  let axiom =
+    List.fold_left (fun acc (id, ty) -> LForall(id, ty, acc))
+      axiom_impl params in
+  Axiom("axiom_"^inv.jc_logic_info_name, axiom)::acc
+
+let invariants_axioms st acc =
+  let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+  List.fold_left (invariant_axiom st) acc invs
+
 (*********************************************************************)
        
 (*************
