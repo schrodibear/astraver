@@ -711,14 +711,20 @@ let tr_valid_inv st acc =
 (*                    Using the field "mutable"                      *)
 (*********************************************************************)
 
-let invariant_axiom st acc (inv, _) =
+let invariant_axiom st acc (li, a) =
+  let params = invariant_params [] li in
+  
   (* this *)
   let this = "this" in
   let this_ty =
     { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in 
+      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
 
-  (* not this.mutable => this.invariant *)
+  (* program point *)
+  let pp = "program_point" in
+  let pp_ty = simple_logic_type "int" in
+
+  (* assoc memories with program point => not this.mutable => this.invariant *)
   let mutable_ty =
     { logic_type_name = "memory";
       logic_type_args = [
@@ -727,18 +733,22 @@ let invariant_axiom st acc (inv, _) =
   in
   let mutable_is_true =
     LPred("eq", [LConst(Prim_bool true); LApp("select", [LVar "mutable"; LVar this])]) in
-  let invariant = make_logic_pred_call inv [LVar this] in
-  let axiom_impl =
-    LImpl(LNot mutable_is_true, invariant) in
+  let assoc_memories = StringSet.fold (fun mem acc ->
+    LPred("assoc", [LVar pp; LVar mem])::acc) (assertion_memories (StringSet.singleton "mutable") a) [] in
+  let invariant = make_logic_pred_call li [LVar this] in
+  let axiom_impl = List.fold_left (fun acc assoc -> LImpl(assoc, acc))
+    (LImpl(LNot mutable_is_true, invariant))
+    assoc_memories in
 
   (* quantifiers *)
-  let params = invariant_params [] inv in
-  let params = (this, this_ty)::params in
-  let params = ("mutable", mutable_ty)::params in
+  let quantified_vars = params in
+  let quantified_vars = ("mutable", mutable_ty)::quantified_vars in
+  let quantified_vars = (pp, pp_ty)::quantified_vars in
+  let quantified_vars = (this, this_ty)::quantified_vars in
   let axiom =
     List.fold_left (fun acc (id, ty) -> LForall(id, ty, acc))
-      axiom_impl params in
-  Axiom("axiom_"^inv.jc_logic_info_name, axiom)::acc
+      axiom_impl quantified_vars in
+  Axiom("axiom_"^li.jc_logic_info_name, axiom)::acc
 
 let invariants_axioms st acc =
   let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
