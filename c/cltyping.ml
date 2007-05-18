@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.116 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.117 2007-05-18 09:29:13 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -54,9 +54,19 @@ let rec eval_const_term_noerror (e : tterm) = match e.term_node with
 
 let option_app f = function Some x -> Some (f x) | None -> None
 
+let sign = function true -> Signed | false -> Unsigned
+
 let rec type_logic_type loc env = function
   | LTvoid -> c_void
-  | LTint -> c_exact_int
+  | LTchar _ | LTshort _ | LTint _ | LTlong _ | LTlonglong _ 
+    when not int_overflow_check ->
+      c_exact_int
+  | LTchar s -> noattr (Tint (sign s, Char))
+  | LTshort s -> noattr (Tint (sign s, Short))
+  | LTint s -> noattr (Tint (sign s, Int))
+  | LTlong s -> noattr (Tint (sign s, Long))
+  | LTlonglong s -> noattr (Tint (sign s, LongLong))
+  | LTinteger -> c_exact_int
   | LTfloat -> use_floats := true; c_float Ctypes.Float
   | LTdouble -> use_floats := true; c_float Ctypes.Double
   | LTlongdouble -> use_floats := true; c_float Ctypes.LongDouble
@@ -361,6 +371,22 @@ and type_term_node loc env = function
       let t1 = type_int_term env t1 in
       let t2 = type_int_term env t2 in
       Tmax (t1,t2), c_exact_int
+  | PLminint ty ->
+      let ty = type_logic_type loc env ty in
+      begin match ty.ctype_node with
+	| Tint (_, (Char | Short | Ctypes.Int | Long | LongLong)) -> 
+	    Tminint ty, c_exact_int
+	| _ -> 
+	    error loc "argument must be a C integer type"
+      end
+  | PLmaxint ty ->
+      let ty = type_logic_type loc env ty in
+      begin match ty.ctype_node with
+	| Tint (_, (Char | Short | Ctypes.Int | Long | LongLong)) -> 
+	    Tmaxint ty, c_exact_int
+	| _ -> 
+	    error loc "argument must be a C integer type"
+      end
   | PLresult ->
       (try 
 	 let t = Env.find "result" env in 
@@ -380,7 +406,8 @@ and type_term_node loc env = function
       begin match ty, tt.ctype_node with
 	| LTvoid, Tvoid -> 
 	    t.term_node, tt
-	| (LTint | LTfloat | LTdouble | LTlongdouble | LTreal), 
+	| (LTchar _ | LTshort _ | LTint _ | LTlong _ | LTlonglong _ | LTinteger
+	  | LTfloat | LTdouble | LTlongdouble | LTreal), 
 	  (Tenum _ | Tint _ | Tfloat _) -> 
 	    let t = coerce (type_logic_type loc env ty) t in
 	    t.term_node, t.term_type
@@ -488,9 +515,8 @@ let add_quantifiers loc q env =
     List.fold_left
       (fun (tq,env) (ty, x) -> 
 	 let i = Info.default_var_info x 
-	 and ty = type_logic_type loc env ty
-	 in
-	 ((ty,i)::tq,Env.add x ty (Var_info i) env))
+	 and ty = type_logic_type loc env ty in
+	 ((ty,i)::tq, Env.add x ty (Var_info i) env))
       ([],env) q
   in
   (List.rev tq,env)
@@ -716,7 +742,7 @@ and type_predicate_node env p0 = match p0.lexpr_node with
   | PLcast _ | PLblock_length _ | PLarrlen _ | PLstrlen _ 
   | PLbase_addr _ | PLoffset _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
-  | PLresult | PLrange _ | PLmin _ | PLmax _ ->
+  | PLresult | PLrange _ | PLmin _ | PLmax _ | PLminint _ | PLmaxint _ ->
       (*raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))*)
       (* interpret term [t] as [t != 0] *)
       let t = type_int_term env p0 in

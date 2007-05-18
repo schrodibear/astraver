@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.21 2007-03-19 13:30:19 moy Exp $ *)
+(* $Id: cptr.ml,v 1.22 2007-05-18 09:29:13 filliatr Exp $ *)
 
 (* TO DO:
 
@@ -1054,7 +1054,8 @@ end = struct
 	  end
       | NTconstant _ | NTvar _ | NTapp _ | NTunop _ | NTarrow _ | NTold _
       | NTat _ | NTbase_addr _ | NToffset _ | NTblock_length _ | NTarrlen _
-      | NTstrlen _ | NTcast _ | NTif _ | NTmin _ | NTmax _
+      | NTstrlen _ | NTcast _ | NTif _ | NTmin _ | NTmax _ 
+      | NTminint _ | NTmaxint _
 	  -> raise Use_inherited
     in		
     let new_t = { t with nterm_node = new_t } in

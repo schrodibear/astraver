@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.102 2007-04-27 13:24:26 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.103 2007-05-18 09:29:13 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -262,8 +262,7 @@ let rec type_why_for_term t =
     | NTblock_length t -> Info.Int
     | NTarrlen _ -> Info.Int
     | NTstrlen _ -> Info.Int
-    | NTmin _ -> Info.Int
-    | NTmax _ -> Info.Int
+    | NTmin _ | NTmax _ | NTminint _ | NTmaxint _ -> Info.Int
     | NTcast (ty,t) -> 
  	let tw = type_why_for_term t in
 	begin match ty.Ctypes.ctype_node, tw with
@@ -684,6 +683,8 @@ let rec term_node loc t ty =
       make_nstrlen_node_from_nterm (term t)
   | Tmin (t1,t2) -> NTmin (term t1, term t2)
   | Tmax (t1,t2) -> NTmax (term t1, term t2)
+  | Tminint ty -> NTminint ty
+  | Tmaxint ty -> NTmaxint ty
   | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
 	    {term_node = Tconstant (IntConstant "0")}) ->      
       let info = default_var_info "null" in 
@@ -1067,6 +1068,10 @@ let rec texpr_of_term (t : tterm) : texpr =
 	    "min can't be used here"
 	| Tmax _ -> error t.term_loc 
 	    "max can't be used here"
+	| Tminint _ -> error t.term_loc 
+	    "minint can't be used here"
+	| Tmaxint _ -> error t.term_loc 
+	    "maxint can't be used here"
 	| Tcast (ty,t) -> TEcast(ty,texpr_of_term t)
 	| Trange _ -> 
 	    error t.term_loc "range cannot by used here"
@@ -1152,6 +1157,10 @@ let rec expr_of_term (t : nterm) : nexpr =
 	    "min can't be used here"
 	| NTmax _ -> error t.nterm_loc 
 	    "max can't be used here"
+	| NTminint _ -> error t.nterm_loc 
+	    "minint can't be used here"
+	| NTmaxint _ -> error t.nterm_loc 
+	    "maxint can't be used here"
 	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
 	| NTrange _ -> 
 	    error t.nterm_loc "range cannot by used here"

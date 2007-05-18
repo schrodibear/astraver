@@ -28,7 +28,9 @@ open Cast
 let rec term t =
   match t.term_node with
     | Tconstant _
-    | Tvar _ ->  []
+    | Tvar _ 
+    | Tminint _ 
+    | Tmaxint _ ->  []
     | Tapp (f,lt) -> f::(List.fold_left (fun acc x -> term x@acc) []  lt)
     | Tcast (_,t)| Tblock_length t | Tarrlen t | Tstrlen t
     | Toffset t| Tbase_addr t| Tat (t,_)| Told t 

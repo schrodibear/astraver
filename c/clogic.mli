@@ -22,13 +22,20 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: clogic.mli,v 1.65 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.66 2007-05-18 09:29:12 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
+type signed = bool
+
 type logic_type = 
   | LTvoid
-  | LTint
+  | LTchar of signed
+  | LTshort of signed
+  | LTint of signed
+  | LTlong of signed
+  | LTlonglong of signed
+  | LTinteger
   | LTfloat
   | LTdouble
   | LTlongdouble
@@ -84,6 +91,8 @@ and lexpr_node =
   | PLstrlen of lexpr
   | PLmin of lexpr * lexpr
   | PLmax of lexpr * lexpr
+  | PLminint of logic_type
+  | PLmaxint of logic_type
   | PLresult
   | PLnull
   | PLcast of logic_type * lexpr
@@ -137,6 +146,8 @@ and 'ctype term_node =
   | Tstrlen of 'ctype term
   | Tmin of 'ctype term * 'ctype term
   | Tmax of 'ctype term * 'ctype term
+  | Tminint of 'ctype
+  | Tmaxint of 'ctype
 (*
   | Tresult of Info.env_info
   | Tnull
@@ -231,6 +242,8 @@ and 'ctype nterm_node =
   | NTstrlen of 'ctype nterm * Info.zone * Info.var_info
   | NTmin of 'ctype nterm * 'ctype nterm
   | NTmax of 'ctype nterm * 'ctype nterm
+  | NTminint of 'ctype
+  | NTmaxint of 'ctype
   | NTcast of 'ctype * 'ctype nterm
   | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option 
       * Info.zone * Info.var_info

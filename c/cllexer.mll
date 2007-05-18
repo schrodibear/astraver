@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.51 2007-01-04 10:09:48 moy Exp $ i*)
+(*i $Id: cllexer.mll,v 1.52 2007-05-18 09:29:12 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -62,6 +62,7 @@
 	"predicate", PREDICATE;
 	"axiom", AXIOM;
 	"int", INT;
+	"integer", INTEGER;
 	"float", FLOAT;
 	"void", VOID;
 	"char", CHAR;
@@ -123,6 +124,8 @@ rule token = parse
   | "\\strlen" { STRLEN }
   | "\\min" { MIN }
   | "\\max" { MAX }
+  | "\\min_range" { MININT }
+  | "\\max_range" { MAXINT }
   | "\\valid" { VALID }
   | "\\separated" { SEPARATED }
   | "\\bound_separated" { BOUND_SEPARATED }

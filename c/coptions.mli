@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.mli,v 1.33 2007-04-27 08:32:02 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.34 2007-05-18 09:29:13 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -65,7 +65,10 @@ val fp_rounding_mode : fp_rounding_mode ref
 val dft_fp_rounding_mode : fp_rounding_mode
 val fp_overflow_check : bool
 
+type int_model = IMexact | IMbounded | IMmodulo
+val int_model : int_model
 val int_overflow_check : bool
+
 val enum_check : bool
 
 val char_size : int

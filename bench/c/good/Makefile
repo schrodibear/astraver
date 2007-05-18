@@ -115,13 +115,13 @@ harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 %.overflows: %.c
 	rm -f coq/caduceus_spec_why.v
 	rm -f why/$*.why
-	$(EXECCADUCEUS) --int-overflow $<
+	$(EXECCADUCEUS) --int-model bounded $<
 	make -f $*.makefile gui
 
 %.overflows+enum: %.c
 	rm -f coq/caduceus_spec_why.v
 	rm -f why/$*.why
-	$(EXECCADUCEUS) --int-overflow --check-enum $<
+	$(EXECCADUCEUS) --int-model bounded --check-enum $<
 	make -f $*.makefile gui
 
 %.enum: %.c

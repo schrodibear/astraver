@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.41 2007-04-27 08:32:02 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.42 2007-05-18 09:29:13 filliatr Exp $ i*)
 
 open Format
 
@@ -98,10 +98,25 @@ let set_fp_rounding_mode = function
   | "down" -> fp_rounding_mode := RM_down
   | "nearest_away" -> fp_rounding_mode := RM_nearest_away
   | _ -> 
-      Printf.eprintf "rounding mode should be nearest_even, to_zero, up, down, or nearest_away"; exit 1
+      eprintf "rounding mode should be nearest_even, to_zero, up, down, or nearest_away@."; exit 1
 let fp_overflow_check = ref false
 
-let int_overflow_check = ref false
+type int_model = IMexact | IMbounded | IMmodulo
+
+let int_model = ref IMexact
+let set_int_model = function
+  | "exact" -> 
+      int_model := IMexact
+  | "bounded" -> 
+      int_model := IMbounded
+  | "modulo" -> 
+      int_model := IMmodulo;
+      eprintf "modulo arithmetic is not yet implement@."; exit 1
+  | _ -> 
+      eprintf 
+	"integer arithmetic model should be `exact', `bounded' or `modulo'@."; 
+      exit 1
+
 let enum_check = ref false
 
 let char_size_ = ref 8
@@ -147,7 +162,7 @@ let verify s =
 
 let assume s =
   if !verification = Verify then begin
-    Printf.eprintf "you cannot use both -verify and -assume\n"; exit 1
+    eprintf "you cannot use both -verify and -assume\n"; exit 1
   end;
   verification := Assume;
   List.iter (fun f -> Hashtbl.add functions f ()) (split s)
@@ -205,19 +220,19 @@ let _ =
 	  "  set the default FP rounding mode";
 	"--fp-overflow", Arg.Set fp_overflow_check,
 	  "  check for FP overflows";
-	"--int-overflow", Arg.Set int_overflow_check,
-	  "  check for integer overflows";
-	"--check-enum", Arg.Set enum_check,
+	"-int-model", Arg.String set_int_model, 
+          "  set the model for integer arithmetic (exact, bounded or modulo)";
+	"-check-enum", Arg.Set enum_check,
 	  "  check for enum values";
-	"--char-size", Arg.Int (set_integer_size char_size_),
-	  "  set the size of type `char' (default is 8)";
-	"--short-size", Arg.Int (set_integer_size short_size_),
+	"-char-size", Arg.Int (set_integer_size char_size_),
+	  "<n>  set the size of type `char' (default is 8)";
+	"-short-size", Arg.Int (set_integer_size short_size_),
 	  "  set the size of type `short' (default is 16)";
-	"--int-size", Arg.Int (set_integer_size int_size_),
+	"-int-size", Arg.Int (set_integer_size int_size_),
 	  "  set the size of type `int' (default is 32)";
-	"--long-size", Arg.Int (set_integer_size long_size_),
+	"-long-size", Arg.Int (set_integer_size long_size_),
 	  "  set the size of type `long' (default is 32)";
-	"--long-long-size", Arg.Int (set_integer_size long_long_size_),
+	"-long-long-size", Arg.Int (set_integer_size long_long_size_),
 	  "  set the size of type `long long' (default is 64)";
 	"--loc-alias", Arg.Set local_aliasing,
 	  "  local aliasing analysis (experimental)";
@@ -265,8 +280,10 @@ let int_size = !int_size_
 let long_size = !long_size_
 let long_long_size = !long_long_size_
 
+let int_model = !int_model
+let int_overflow_check = int_model = IMbounded
+
 let enum_check = !enum_check
-let int_overflow_check = !int_overflow_check
 
 let libfile =
   if arith_memory_model then

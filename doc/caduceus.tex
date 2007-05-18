@@ -1015,11 +1015,11 @@ void f(int n) \{
   \item[Models selection:] ~\par
   \item[\texttt{-no-fp}]: ~\par
     Turn off the floating-point arithmetic model. 
-    See~Section~\cite{arithmetic:float}.
+    See~Section~\ref{arithmetic:float}.
 
-  \item[\texttt{-int-overflow}]: ~\par
-    Turn on the checks for arithmetic overflows.
-    See~Section~\cite{arithmetic:int}.
+  \item[\texttt{-int-model} \textit{model}]: ~\par
+    Selects the model for integer arithmetic.
+    See~Section~\ref{arithmetic:int}.
 
   \item[Prover specific options:] ~\par
   \item[\texttt{-coq-tactic} \textit{tactic}]: ~\par
@@ -1274,24 +1274,36 @@ annotations.
 \label{arithmetic}
 
 \subsection{Integer arithmetic}
-\label{arithmetic:int}\index{Arithmetic}
+\label{arithmetic:int}\index{Arithmetic}\index{int-model@\texttt{-int-model}}
 
-\paragraph{Default model.}
-The default arithmetic model is to map all integer types to
-arbitrary precision integers i.e. to act as if all integer
-computations were \emph{exact}. Said otherwise, a C program proved
-correct with \caduceus\ is indeed correct  \emph{only if no
+The model used for integer arithmetic is controlled through the
+\texttt{-int-model} option. It takes one of the following values:
+
+\begin{description}
+\item[\texttt{-int-model exact}] ~\par
+  This is the default model.
+  All C integers are mapped to mathematical integers \emph{i.e.}
+  arbitrary precision integers. It is thus a model where 
+  all integer computations are assumed to be \emph{exact}. 
+  As a consequence, a C program proved
+  correct using this model is indeed correct  \emph{only if no
   integer overflow occurs during the execution}.
 
-\paragraph{Integer arithmetic without overflows.}
-There is a second model where the user \emph{proves} that there is no
-integer overflow during the program execution. This model is turned on
-using the command-line option \texttt{-int-overflow}.
-This means that each operation, including the implicit conversions
-from one integer type to another, is given a precondition to
-establish that the result of the computation fits into the target
-type. The sizes of the various integer types can be set using the
-following command-line options:
+  Note that in this model there is no range of values associated to
+  the C integer types. For instance, if $x$ has type
+  \texttt{char}, you are not able to prove that $-128\le x < 127$.
+
+\item[\texttt{-int-model bounded}] ~\par
+  In this model the user \emph{proves} that there is
+  no integer overflow during the program execution. 
+  This means that each operation, including the implicit conversions
+  from one integer type to another, is given a precondition to
+  establish that the result of the computation fits into the target
+  type. As a counterpart, information about the range of each integer
+  variable is provided.
+
+  The sizes of the various integer types can be set using the
+  following command-line options:
 \begin{center}
   \begin{tabular}{|l|l|l|}
     \hline
@@ -1303,6 +1315,32 @@ following command-line options:
     \texttt{long long} & \texttt{-long-long-size} & 64 \\\hline
   \end{tabular}
 \end{center}
+
+\item[\texttt{-int-model modulo}] ~\par
+  Not yet implemented.
+\end{description}
+
+
+\subsection{Enumeration types}
+\label{arithmetic:enum}
+\index{Enumeration}\index{check-enum@\texttt{check-enum}}
+
+The default behavior regarding enumeration types is to map them to
+mathematical integers and to introduce one integer constant for each
+element in the enumeration. For instance, the declaration
+\begin{verbatim}
+  enum E { A = 0, B, C };
+\end{verbatim}
+introduces three integer constant \texttt{A}, \texttt{B}, \texttt{C}
+with values 0, 1 and 2 respectively. But a variable of type
+\texttt{enum E} will not be guaranteed to have one of the enumeration
+values: it is not provided as input and it is not required when
+assigned the variable.
+
+Option \texttt{-check-enum} enforces the invariant that an
+expression of an enumeration type always has one of the enumeration
+values. It implies that a proof obligation is emitted when building a
+value of any enumration type.
 
 \subsection{Floating-point arithmetic}
 \label{arithmetic:float}\index{Floating-point arithmetic}

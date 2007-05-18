@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.161 2007-04-27 08:32:02 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.162 2007-05-18 09:29:12 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -294,6 +294,7 @@ let rec term t = match t.nterm_node with
 	  {ef_empty with reads = reads; reads_var = id.logic_heap_args; }
 	  tl  
   | NTconstant _ -> ef_empty
+  | NTminint _ | NTmaxint _ -> ef_empty
   | NTcast (_, t) -> term t
   | NTrange (t1, t2, t3, z, f) ->
       let z = repr z in
@@ -340,6 +341,8 @@ let rec assign_location t = match t.nterm_node with
   | NTstrlen _
   | NTmin _
   | NTmax _
+  | NTminint _
+  | NTmaxint _
   | NTat (_, _)  
   | NTold _  
   | NTif (_, _, _)  

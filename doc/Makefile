@@ -37,8 +37,8 @@ caduceus.html: caduceus.tex
 %.dvi: %.tex
 	latex $< && latex $<
 
-%.ps: %.dvi
-	dvips -o $@ $<
+# %.ps: %.dvi
+# 	dvips -o $@ $<
 
 clean::
 	rm -f *~ *.dvi *.log *.aux *.toc dep.ps doc.ps manual.ps caduceus.ps

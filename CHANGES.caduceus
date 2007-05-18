@@ -1,11 +1,9 @@
 
 Note: These are the changes for Caduceus.
 
- o new option --int-overflow to ensure the absence of arithmetic overflows
-   (the default behavior is to assume arbitrary precision integers)
+ o new option -int-model to control the integer arithmetic model
    See section ``Integer arithmetic'' in the manual.
-   new options --char-size, --short-size, --int-size, --long-size
-   and --long-long-size to set the integer types sizes (in bits)
+   (the default behavior is to assume arbitrary precision integers, as before)
 
 version 1.03, April 20th, 2007
 ==============================

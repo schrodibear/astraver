@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.46 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.47 2007-05-18 09:29:13 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -111,6 +111,10 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "\\min(%a,%a)" nterm t1 nterm t2
   | NTmax (t1,t2) ->
       fprintf fmt "\\max(%a,%a)" nterm t1 nterm t2
+  | NTminint ty ->
+      fprintf fmt "\\minint(%a)" ctype ty
+  | NTmaxint ty ->
+      fprintf fmt "\\maxint(%a)" ctype ty
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
   | NTrange (t1, t2, t3, _,f) ->

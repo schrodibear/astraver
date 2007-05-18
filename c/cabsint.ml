@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.21 2007-03-14 17:01:05 moy Exp $ *)
+(* $Id: cabsint.ml,v 1.22 2007-05-18 09:29:12 filliatr Exp $ *)
 
 (* TO DO:
 
@@ -2782,7 +2782,7 @@ end = struct
   let change_sub_components_in_term node sub_nodes =
     let t = get_t node in
     let new_t = match t.nterm_node with
-      | NTconstant _ | NTvar _ -> 
+      | NTconstant _ | NTvar _ | NTminint _ | NTmaxint _ -> 
 	  assert (List.length sub_nodes = 0);
 	  t.nterm_node
       | NTapp a ->
@@ -3133,7 +3133,7 @@ end = struct
     let tnode = create_node (Nterm t) in
     begin
       match t.nterm_node with
-	| NTconstant _ | NTvar _ -> ()
+	| NTconstant _ | NTvar _ | NTminint _ | NTmaxint _ -> ()
 	| NTapp a ->
 	    let args_nodes = List.map from_term a.napp_args in
 	    (* logic *) add_logedge tnode args_nodes

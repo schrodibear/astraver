@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.242 2007-05-04 13:33:41 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.243 2007-05-18 09:29:12 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -290,6 +290,12 @@ let rec interp_term label old_label t =
 	LApp("min",[f t1; f t2])
     | NTmax (t1,t2) -> 
 	LApp("max",[f t1; f t2])
+    | NTminint { ctype_node = Tint (s,i) } ->
+	LConst (Prim_int (Invariant.min_int (s, Cenv.int_size i)))
+    | NTmaxint { ctype_node = Tint (s,i) } ->
+	LConst (Prim_int (Invariant.max_int (s, Cenv.int_size i)))
+    | NTminint _ | NTmaxint _ -> 
+	assert false
     | NTat (t, l) -> 
 	interp_term (Some l) old_label t
     | NTif (_, _, _) -> 

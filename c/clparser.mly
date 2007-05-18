@@ -62,7 +62,7 @@
 %token <string> IDENTIFIER STRING_LITERAL TYPENAME
 %token <Clogic.constant> CONSTANT
 %token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP TILDE
-%token INT FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL LTLT GTGT
+%token INT INTEGER FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL LTLT GTGT
 %token FORALL EXISTS IFF IMPLIES AND OR NOT BAR ABS SQRT HATHAT HAT
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH ARRLEN STRLEN BASE_ADDR OFFSET
 %token SEPARATED BOUND_SEPARATED FULL_SEPARATED FULLSEPARATED 
@@ -72,7 +72,7 @@
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE GHOST SET
 %token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION TYPE
-%token ROUNDERROR TOTALERROR EXACT MODEL MIN MAX
+%token ROUNDERROR TOTALERROR EXACT MODEL MIN MAX MININT MAXINT
 
 %right prec_named
 %nonassoc prec_forall prec_exists
@@ -171,6 +171,8 @@ lexpr:
 | STRLEN LPAR lexpr RPAR { info (PLstrlen $3) }
 | MIN LPAR lexpr COMMA lexpr RPAR { info (PLmin ($3, $5)) }
 | MAX LPAR lexpr COMMA lexpr RPAR { info (PLmax ($3, $5)) }
+| MININT LPAR logic_type RPAR { info (PLminint $3) }
+| MAXINT LPAR logic_type RPAR { info (PLmaxint $3) }
 | RESULT { info PLresult }
 /* both terms and predicates */
 | LPAR lexpr RPAR %prec prec_par { $2 }
@@ -199,24 +201,25 @@ logic_type:
 
 logic_type_not_id:
 | VOID           { LTvoid }
-| CHAR           { LTint }       /** [char] */
-| SIGNED CHAR    { LTint }      /** [signed char] */
-| UNSIGNED CHAR  { LTint }      /** [unsigned char] */
-| SIGNED INT     { LTint }        /** [int] */
-| INT            { LTint }        /** [int] */
-| UNSIGNED INT   { LTint }       /** [unsigned int] */
-| SIGNED SHORT   { LTint }      /** [short] */
-| SHORT          { LTint }      /** [short] */
-| UNSIGNED SHORT { LTint }     /** [unsigned short] */
-| SIGNED LONG    { LTint }       /** [long] */
-| LONG           { LTint }       /** [long] */
-| UNSIGNED LONG  { LTint }      /** [unsigned long] */
-| SIGNED LONG LONG { LTint }   /** [long long] (or [_int64] on 
+| CHAR           { LTchar true }       /** [char] */
+| SIGNED CHAR    { LTchar true }      /** [signed char] */
+| UNSIGNED CHAR  { LTchar false }      /** [unsigned char] */
+| SIGNED INT     { LTint true }        /** [int] */
+| INT            { LTint true }        /** [int] */
+| UNSIGNED INT   { LTint false }       /** [unsigned int] */
+| SIGNED SHORT   { LTshort true }      /** [short] */
+| SHORT          { LTshort true }      /** [short] */
+| UNSIGNED SHORT { LTshort false }     /** [unsigned short] */
+| SIGNED LONG    { LTlong true }       /** [long] */
+| LONG           { LTlong true }       /** [long] */
+| UNSIGNED LONG  { LTlong false }      /** [unsigned long] */
+| SIGNED LONG LONG { LTlonglong true }   /** [long long] (or [_int64] on 
 					   Microsoft Visual C) */
-| LONG LONG   { LTint }   /** [long long] (or [_int64] on 
+| LONG LONG   { LTlonglong true }   /** [long long] (or [_int64] on 
 					   Microsoft Visual C) */
-| UNSIGNED LONG LONG { LTint }  /** [unsigned long long] 
+| UNSIGNED LONG LONG { LTlonglong false }  /** [unsigned long long] 
                                 (or [unsigned _int64] on Microsoft Visual C) */
+| INTEGER     { LTinteger }
 | FLOAT       { LTfloat }
 | DOUBLE      { LTdouble }
 | LONG DOUBLE { LTlongdouble }

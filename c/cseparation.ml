@@ -525,6 +525,8 @@ let rec term tyf t =
   | NTrange (t,None,None,_,_) -> term tyf t
   | NTrange (t1,Some t2,None,_,_) | NTrange (t1,None,Some t2,_,_) -> 
       term tyf t1; term tyf t2
+  | NTminint _ | NTmaxint _ ->
+      ()
   | NTrange (t1,Some t2,Some t3,_,_) -> term tyf t1; term tyf t2; term tyf t3
 
 let rec predicate tyf p =
