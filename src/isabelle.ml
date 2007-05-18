@@ -34,6 +34,55 @@ open Format
 open Cc
 open Pp
 
+let is_isabelle_keyword =
+  let ht = Hashtbl.create 300  in
+  List.iter (fun kw -> Hashtbl.add ht kw ()) 
+    ["also"; "apply"; "apply_end"; "arities"; "assume"; "automaton";
+    "ax_specification"; "axclass"; "axioms"; "back"; "by"; "cannot_undo";
+    "case"; "cd"; "chapter"; "classes"; "classrel"; "clear_undos"; 
+    "code_library"; "code_module"; "coinductive"; "commit"; "constdefs";
+    "consts"; "consts_code"; "context"; "corollary"; "cpodef"; "datatype";
+    "declare"; "def"; "defaultsort"; "defer"; "defer_recdef"; "defs"; 
+     "disable_pr"; "display_drafts"; "domain"; "done"; "enable_pr"; 
+    "end"; "exit"; "extract"; "extract_type"; "finalconsts"; "finally"; 
+    "find_theorems"; "fix"; "fixpat"; "fixrec"; "from"; "full_prf";
+    "global"; "have"; "header"; "hence"; "hide"; "inductive"; "inductive_cases";
+    "init_toplevel"; "instance"; "interpret"; "interpretation"; "judgment"; 
+    "kill"; "kill_thy"; "lemma"; "lemmas"; "let"; "local"; "locale"; 
+    "method_setup"; "moreover"; "next"; "no_syntax"; "nonterminals"; "note";
+    "obtain"; "oops"; "oracle"; "parse_ast_translation"; "parse_translation";
+    "pcpodef"; "pr"; "prefer"; "presume"; "pretty_setmargin"; "prf"; "primrec";
+    "print_antiquotations"; "print_ast_translation"; "print_attributes";
+    "print_binds"; "print_cases"; "print_claset"; "print_commands"; 
+    "print_context"; "print_drafts"; "print_facts"; "print_induct_rules";
+    "print_interps"; "print_locale"; "print_locales"; "print_methods";
+    "print_rules"; "print_simpset"; "print_syntax"; "print_theorems"; 
+    "print_theory"; "print_trans_rules"; "print_translation"; "proof";
+    "prop"; "pwd"; "qed"; "quickcheck"; "quickcheck_params"; "quit"; 
+    "realizability"; "realizers"; "recdef"; "recdef_tc"; "record"; "redo";
+    "refute"; "refute_params"; "remove_thy"; "rep_datatype"; "sect";
+    "section"; "setup"; "show"; "sorry"; "specification"; "subsect";
+    "subsection"; "subsubsect"; "subsubsection"; "syntax"; "term"; "text";
+    "text_raw"; "then"; "theorem"; "theorems"; "theory"; "thm"; "thm_deps";
+    "thus"; "token_translation"; "touch_all_thys"; "touch_child_thys";
+    "touch_thy"; "translations"; "txt"; "txt_raw"; "typ"; 
+    "typed_print_translation";  "typedecl"; "typedef"; "types"; "types_code";
+    "ultimately"; "undo"; "undos_proof"; "update_thy"; "update_thy_only"; 
+    "use"; "use_thy"; "use_thy_only"; "using"; "value"; "welcome"; "with";
+    "actions"; "advanced"; "and"; "assumes"; "attach"; "begin"; "binder";
+    "compose"; "concl"; "congs"; "constrains"; "contains"; "defines"; 
+    "distinct"; "file"; "files"; "fixes"; "hide_action"; "hints"; 
+    "imports"; "in"; "includes"; "induction"; "infix"; "infixl"; "infixr";
+    "initially"; "inject"; "inputs"; "internals"; "intros"; "is"; "lazy";
+    "monos"; "morphisms"; "notes"; "open"; "output"; "outputs"; "overloaded";
+    "permissive"; "post"; "pre"; "rename"; "restrict"; "shows"; "signature";
+    "states"; "structure"; "to"; "transitions"; "transrel"; "uses"; "where"];
+  Hashtbl.mem ht
+
+let rename s = if is_isabelle_keyword s then "why__" ^ s else s
+let idents fmt s = fprintf fmt "%s" (rename s)
+let ident fmt id = fprintf fmt "%s" (rename (Ident.string id))
+
 (*s Pretty print *)
 
 let rec print_pure_type fmt = function
@@ -43,15 +92,15 @@ let rec print_pure_type fmt = function
   | PTreal -> fprintf fmt "real"
   | PTexternal ([v], id) when id == farray -> 
       fprintf fmt "(%a list)" print_pure_type v (* TODO *)
-  | PTexternal([],id) -> Ident.print fmt id
+  | PTexternal([],id) -> ident fmt id
   | PTexternal([t],id) -> 
       fprintf fmt "(%a %a)"
       print_pure_type t
-      Ident.print id
+      ident id 
   | PTexternal(l,id) -> 
-      fprintf fmt "((%a) %a)"
+      fprintf fmt "((@[%a@]) %a)"
       (print_list comma print_pure_type) l
-      Ident.print id
+      ident id
   | PTvar { type_val = Some t} -> 
       fprintf fmt "%a" print_pure_type t      
   | PTvar v -> fprintf fmt "'a%d" v.tag
@@ -97,9 +146,9 @@ let prefix_id id =
 
 let rec print_term fmt = function
   | Tvar id -> 
-      Ident.print fmt id
+      ident fmt id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%s" n
+      fprintf fmt "(%s::int)" n
   | Tconst (ConstBool true) -> 
       fprintf fmt "True" 
   | Tconst (ConstBool false) -> 
@@ -145,7 +194,7 @@ let rec print_term fmt = function
   (* any other application *)
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
-	Ident.print id (print_list space print_term) tl
+	ident id (print_list space print_term) tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -158,28 +207,28 @@ let rec print_predicate fmt = function
   | Pfalse ->
       fprintf fmt "False"
   | Pvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Papp (id, tl, _) when id == t_distinct ->
       fprintf fmt "@[(%a)@]" print_predicate (Util.distinct tl)
   | Papp (id, [a; b], _) when is_eq id ->
-      fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
+      fprintf fmt "(@[%a =@ %a@])" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->
-      fprintf fmt "@[~(%a =@ %a)@]" print_term a print_term b
+      fprintf fmt "(@[%a ~=@ %a@])" print_term a print_term b
   | Papp (id, [a; b], _) when id == t_lt_int || id == t_lt_real ->
-      fprintf fmt "@[(%a <@ %a)@]" print_term a print_term b
+      fprintf fmt "(@[%a <@ %a@])" print_term a print_term b
   | Papp (id, [a; b], _) when id == t_le_int || id == t_le_real ->
-      fprintf fmt "@[(%a <=@ %a)@]" print_term a print_term b
+      fprintf fmt "(@[%a <=@ %a@])" print_term a print_term b
   | Papp (id, [a; b], _) when id == t_gt_int || id == t_gt_real ->
-      fprintf fmt "@[(%a <@ %a)@]" print_term b print_term a
+      fprintf fmt "(@[%a <@ %a@])" print_term b print_term a
   | Papp (id, [a; b], _) when id == t_ge_int || id == t_ge_real ->
-      fprintf fmt "@[(%a <=@ %a)@]" print_term b print_term a
+      fprintf fmt "(@[%a <=@ %a@])" print_term b print_term a
   | Papp (id, [a; b], _) when id == t_zwf_zero ->
-      fprintf fmt "@[((0 <= %a) &@ (%a < %a))@]" 
+      fprintf fmt "(@[(0 <= %a) &@ (%a < %a)@])" 
 	print_term b print_term a print_term b
   | Papp (id, tl, _) when is_relation id || is_arith id ->
-      fprintf fmt "@[(%s %a)@]" (prefix_id id) print_terms tl
+      fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
   | Papp (id, tl, _) -> 
-      fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
+      fprintf fmt "(@[%a@ %a@])" ident id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "(@[%a -->@ %a@])" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -189,35 +238,35 @@ let rec print_predicate fmt = function
       fprintf fmt "(@[if %a@ then %a@ else %a@])" 
 	print_term a print_predicate b print_predicate c
   | Pand (_, _, a, b) | Forallb (_, a, b) ->
-      fprintf fmt "@[(%a &@ %a)@]" print_predicate a print_predicate b
+      fprintf fmt "(@[%a &@ %a@])" print_predicate a print_predicate b
   | Por (a, b) ->
-      fprintf fmt "@[(%a |@ %a)@]" print_predicate a print_predicate b
+      fprintf fmt "(@[%a |@ %a@])" print_predicate a print_predicate b
   | Pnot a ->
-      fprintf fmt "@[~(%a)@]" print_predicate a
+      fprintf fmt "~%a" print_predicate a
   | Forall (_,id,n,t,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "(@[(!%s::%a.@ %a)@])" (Ident.string id')
+      fprintf fmt "(@[!%a::%a.@ %a@])" ident id'
 	print_pure_type t print_predicate p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "(@[? %s::%a.@ %a@])" (Ident.string id')
+      fprintf fmt "(@[? %a::%a.@ %a@])" ident id'
 	print_pure_type t print_predicate p'
   | Pfpi _ ->
       failwith "fpi not supported in Isabelle/HOL"
   | Pnamed (n, p) ->
-      fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
+      fprintf fmt "@[(* %s: *)@ %a@]" (String.escaped n) print_predicate p
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
 	fprintf fmt "shows \"@[%a@]\"@\n" print_predicate concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "fixes %a::\"%a\"@\n" Ident.print id print_pure_type v;
+	fprintf fmt "fixes %a::\"%a\"@\n" ident id print_pure_type v;
 	print_seq fmt hyps
     | Spred (id, p) :: hyps -> 
-	fprintf fmt "assumes %a: \"@[%a@]\"@\n" Ident.print id print_predicate p;
+	fprintf fmt "assumes %a: \"@[%a@]\"@\n" ident id print_predicate p;
 	print_seq fmt hyps
   in
   fprintf fmt "@[%a@]@?" print_seq hyps
@@ -232,29 +281,29 @@ let print_logic_type fmt s =
   | Logic.Function ([], t) ->
       print_pure_type fmt t
   | Logic.Function (pl, t) ->
-      fprintf fmt "[%a] => %a" 
+      fprintf fmt "[@[%a@]] => %a" 
 	(print_list comma print_pure_type) pl print_pure_type t
   | Logic.Predicate [] ->
       fprintf fmt "bool"
   | Logic.Predicate pl ->
-      fprintf fmt "[%a] => bool" (print_list comma print_pure_type) pl
+      fprintf fmt "[@[%a@]] => bool" (print_list comma print_pure_type) pl
 
 let reprint_logic fmt id t =
   fprintf fmt 
-    "@[<hov 2>(*Why logic*) consts %s ::@ @[\"%a\"@]@];@\n" 
-    id print_logic_type t
+    "@[<hov 4>(*Why logic*) consts %a ::@ @[\"%a\"@]@];@\n" 
+    idents id print_logic_type t
 
 let print_logic fmt id t = reprint_logic fmt id t
 
 let reprint_axiom fmt id p =
-  fprintf fmt "(*Why axiom*) axioms %s: \"%a\";@\n@\n" id print_predicate_scheme p
+  fprintf fmt "@[<hov 4>(*Why axiom*) axioms %a:@ \"%a\";@]@\n" idents id print_predicate_scheme p
 
 let print_axiom fmt id p = 
   reprint_axiom fmt id p
 
 let reprint_obligation fmt loc id s =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
-  fprintf fmt "(*Why goal*) lemma %s: %a;@\n" id print_sequent s
+  fprintf fmt "@[<hov 4>(*Why goal*) lemma %a:@\n%a;@]@\n" idents id print_sequent s
 
 let print_obligation fmt loc id s = 
   reprint_obligation fmt loc id s;
@@ -265,14 +314,14 @@ let reprint_predicate fmt id p =
   let print_binder_type fmt (x,pt) = 
       fprintf fmt "%a" print_pure_type pt in
   let print_binder fmt (x,pt) = 
-      fprintf fmt "%a" Ident.print x in
+      fprintf fmt "%a" ident x in
   fprintf fmt
-     "@[<hov 2>(*Why predicate*) constdefs %s :: @[\"[%a] => bool\"@]@]@\n" 
-    id 
+     "@[<hov 2>(*Why predicate*) constdefs %a :: @[\"[@[%a@]] => bool\"@]@]@\n" 
+    idents id 
     (print_list comma print_binder_type) bl;
   fprintf fmt
-     "@[<hov 2>     \"%s %a == @[%a@]\"@];@\n" 
-    id 
+     "@[<hov 2>     \"%a == @[%%@[%a@]. @[%a@]@]\"@];@\n" 
+    idents id 
     (print_list space print_binder) bl
     print_predicate p 
 
@@ -283,14 +332,14 @@ let reprint_function fmt id p =
   let print_binder_type fmt (x,pt) = 
       fprintf fmt "%a" print_pure_type pt in
   let print_binder fmt (x,pt) = 
-      fprintf fmt "%a" Ident.print x in
+      fprintf fmt "%a" ident x in
   fprintf fmt
-     "@[<hov 2>(*Why function*) constdefs %s :: @[\"[%a] => %a\"@]@]@\n" 
-    id 
+     "@[<hov 2>(*Why function*) constdefs %a :: @[\"[%a] => %a\"@]@]@\n" 
+    idents id 
     (print_list comma print_binder_type) bl print_pure_type t;
   fprintf fmt
-     "@[<hov 2>     \"%s %a == @[%a@]\"@];@\n" 
-    id 
+     "@[<hov 8>    \"%a ==@ %%%a. @[%a@]\"@];@\n" 
+    idents id 
     (print_list space print_binder) bl
     print_term e 
 
@@ -304,8 +353,8 @@ let type_parameters fmt l =
     | l -> fprintf fmt "(%a) " (print_list comma one) l
 
 let reprint_type fmt id vl =
-  fprintf fmt "@[<hov 2>(*Why type*) typedecl %a%s;@\n"
-    type_parameters vl id
+  fprintf fmt "@[<hov 2>(*Why type*) typedecl %a%a;@]@\n"
+    type_parameters vl idents id
 
 let print_type fmt id vl = reprint_type fmt id vl
 
@@ -343,7 +392,7 @@ struct
     fprintf fmt "\
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)@\n
-theory %s = %s:@\n@\n" (!theory_name) Options.isabelle_base_theory
+theory %s@\nimports %s@\nbegin@\n@\n" (!theory_name) Options.isabelle_base_theory
 
   let first_time_trailer fmt = fprintf fmt "end@\n"
 
@@ -357,11 +406,11 @@ let reset = Gen.reset
 
 let push_decl = function
   | Dgoal (loc,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,l,s))
-  | Dlogic (_, id, t) -> Gen.add_elem (Lg, id) (Logic (id, t))
-  | Daxiom (_, id, p) -> Gen.add_elem (Ax, id) (Axiom (id, p))
-  | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))
-  | Dfunction_def (_, id, p) -> Gen.add_elem (Fun, id) (Function (id, p))
-  | Dtype (_, vl, id) -> Gen.add_elem (Ty, id) (AbstractType (id, vl))
+  | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
+  | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
+  | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))
+  | Dfunction_def (_, id, p) -> Gen.add_elem (Fun, rename id) (Function (id, p))
+  | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
 
 let _ = 
   Gen.add_regexp 
@@ -377,7 +426,13 @@ let _ =
   Gen.add_regexp 
     "(\\*Why predicate\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Pr;
   Gen.add_regexp 
-    "(\\*Why function\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Fun
+    "(\\*Why function\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Fun;
+  Gen.add_regexp 
+    "(\\*Why type\\*) typedecl[ ]+\\([^ ]*\\);" Ty;
+  Gen.add_regexp 
+    "(\\*Why type\\*) typedecl[ ]+[^ ]*[ ]+\\([^ ]*\\);" Ty;
+  Gen.add_regexp 
+    "(\\*Why type\\*) typedecl[ ]+(.*)[ ]+\\([^ ]*\\);" Ty
 
 let output_file fwe =
   let f = fwe ^ "_why.thy" in
