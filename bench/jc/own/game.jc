@@ -25,3 +25,9 @@ unit attack(Hero[0] this, Hero[0] target)
     target.dead = true;
   }
 }
+
+/*
+Local Variables: 
+compile-command: "make game"
+End: 
+*/

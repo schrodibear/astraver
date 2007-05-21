@@ -731,13 +731,13 @@ let invariant_axiom st acc (li, a) =
         simple_logic_type st.jc_struct_info_root;
         simple_logic_type "bool"] }
   in
-  let mutable_is_true =
-    LPred("eq", [LConst(Prim_bool true); LApp("select", [LVar "mutable"; LVar this])]) in
+  let mutable_is_false =
+    LPred("eq", [LConst(Prim_bool false); LApp("select", [LVar "mutable"; LVar this])]) in
   let assoc_memories = StringSet.fold (fun mem acc ->
     LPred("assoc", [LVar pp; LVar mem])::acc) (assertion_memories (StringSet.singleton "mutable") a) [] in
   let invariant = make_logic_pred_call li [LVar this] in
   let axiom_impl = List.fold_left (fun acc assoc -> LImpl(assoc, acc))
-    (LImpl(LNot mutable_is_true, invariant))
+    (LImpl(mutable_is_false, invariant))
     assoc_memories in
 
   (* quantifiers *)
