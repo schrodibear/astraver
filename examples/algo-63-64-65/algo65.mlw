@@ -17,10 +17,10 @@ parameter partition :
   { m < n } 
   unit writes a,i,j
   { m <= j and j < i and i <= n and sub_permut(m,n,a@,a) and
-    (*exists x:int.*)
-      (forall r:int. m <= r <= j -> a[r] <= a[j+1](*x*)) and
-      (forall r:int. j < r < i -> a[r] = a[j+1](*x*)) and
-      (forall r:int. i <= r <= n -> a[r] >= a[j+1](*x*)) }
+    exists x:int.
+      (forall r:int. m <= r <= j -> a[r] <= x) and
+      (forall r:int. j < r < i -> a[r] = x) and
+      (forall r:int. i <= r <= n -> a[r] >= x) }
 
 (* Algorithm 65 (fixed version) *)
 
