@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.13 2007-04-27 15:52:41 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.14 2007-05-23 13:18:20 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -291,7 +291,7 @@ let sets_of_vars   f  =
 
 
 let display_symb_of set =
-  String_set.iter (fun s -> Format.printf "%s " s) set ;
+  String_set.iter (fun s -> Format.printf "%s \n" s) set ;
   Format.printf "@\n@." 
 
 let display_set str set  = 
@@ -362,7 +362,8 @@ let memorizes_hyp_symb l =
 			 update_v_g s ; 
 			 String_set.union s t) v String_set.empty in    
 	(* v' is the union of all the variables *)
-	(* associates v' to the hypothesis *) 
+	(* associates v' to the hypothesis *)
+	let v' = String_set.diff v' avoided_vars in 
 	Hashtbl.add hash_hyp_vars  p v';
 	mem  q   
   in
@@ -421,7 +422,14 @@ let rec get_vars_in_tree v n acc =
 let filter_acc_variables l concl_rep=
   let rec filter = function  
     | [] -> []
-    | Svar (id, v) :: q -> Svar (id, v) ::filter q 
+    | Svar (id, v) :: q -> 
+	if 
+	  ( String_set.mem (Ident.string id) !selected_vars ||
+	      String_set.mem (Ident.string id) avoided_vars) 
+	then
+	  Svar (id, v) ::filter q 
+	else
+	  filter q
     | Spred (t,p) :: q -> 
 	(*Format.printf "Predicate : %a @\n@." print_predicate p;*)
 	let vars =  	  
@@ -461,7 +469,7 @@ let managesGoal id ax (hyps,concl) =
       memorizes_hyp_symb hyps;
       (** select the relevant variables **)
       selected_vars := get_vars_in_tree v threshold String_set.empty;
-      (*display_set "Selected vars: " !selected_vars ; *)
+      display_set "Selected vars: " !selected_vars ; 
       
 
       (* variant considering variables *)

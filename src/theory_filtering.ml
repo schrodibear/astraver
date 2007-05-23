@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.4 2007-03-01 11:11:00 couchot Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.5 2007-05-23 13:18:20 couchot Exp $ i*)
 
 (*s Harvey's output *)
 

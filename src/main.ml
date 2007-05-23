@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.128 2007-04-19 14:58:23 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.129 2007-05-23 13:18:20 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -67,8 +67,14 @@ let add_loc = function
   | Dgoal _ -> ()
 
 let push_decl d = 
+(*  if pruning then 
+    Printf.printf "Pruning yes \n" 
+  else 
+    Printf.printf "Pruning no \n";
+*)
+
   add_loc d;
-  if not pruning then 
+  if (not pruning) then
     let pushing = 
       match prover () with
 	| Pvs -> Pvs.push_decl
@@ -158,6 +164,8 @@ let output fwe =
     @q is the queue of  theory that will be modified
 **)
 let encode q = 
+  Printf.printf "Encode"; 
+  
   let callEncoding d =  match prover () with
     | Pvs -> Pvs.push_decl d
     | Coq _ -> Coq.push_decl d
