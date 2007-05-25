@@ -122,13 +122,13 @@ let main () =
 	in	       	  
 	(* production phase 1.2.2 : generation of the inv predicates for structures *)
         let d_inv =
-	  Hashtbl.fold 
+	 (* Hashtbl.fold 
 	    (fun _ (st,_) acc ->
 	       Jc_interp.tr_valid_inv st acc)
-	    Jc_norm.structs_table
+	    Jc_norm.structs_table *)
 	    d_memories
 	in
-	let d_inv = Jc_interp.assoc_declaration::d_inv in
+	let d_inv = Jc_interp.mutable_declaration::Jc_interp.assoc_declaration::d_inv in
         let d_inv =
           Hashtbl.fold
             (fun _ (st, _) acc ->

@@ -70,19 +70,57 @@ let tr_type t = Base_type(tr_base_type t)
 (*   assoc predicate   *)
 (***********************)
 
+(* other modifications for this extension can be found in:
+     jc_main
+       (to generate axioms)
+     jc_interp
+       (functions that generate axioms, used by jc_main)
+*)
+
 let fresh_program_point =
   let c = ref 0 in fun () ->
   c := !c + 1; string_of_int !c
 
+let mutable_memory_type struct_name = {
+  logic_type_name = "memory";
+  logic_type_args = [
+    simple_logic_type struct_name;
+    simple_logic_type "bool"
+  ];
+}
+
+let prop_type = simple_logic_type "prop"
+
+let program_point_type = simple_logic_type "int"
+
 let assoc_declaration =
   (* logic assoc: int, ('a, 'b) memory -> prop *)
-  let program_point_type = simple_logic_type "int" in
   let memory_poly_type = {
     logic_type_name = "memory";
-    logic_type_args = [simple_logic_type "'a"; simple_logic_type "'b"];
+    logic_type_args = [
+      simple_logic_type "'a";
+      simple_logic_type "'b";
+    ];
   } in
-  let prop = simple_logic_type "prop" in
-  Logic(false, "assoc", ["", program_point_type; "", memory_poly_type], prop)
+  Logic(
+    false,
+    "assoc",
+    [ "", program_point_type;
+      "", memory_poly_type ],
+    prop_type)
+
+let mutable_declaration =
+  (* *)
+  let pointer_poly_type = {
+    logic_type_name = "pointer";
+    logic_type_args = [ simple_logic_type "'a" ];
+  } in
+  Logic(
+    false,
+    "mutable", 
+    [ "", program_point_type;
+      "", pointer_poly_type ],
+    prop_type)
 
 let rec term_memories aux t = match t.jc_tterm_node with
   | JCTTconst _
@@ -725,16 +763,12 @@ let invariant_axiom st acc (li, a) =
   let pp_ty = simple_logic_type "int" in
 
   (* assoc memories with program point => not this.mutable => this.invariant *)
-  let mutable_ty =
-    { logic_type_name = "memory";
-      logic_type_args = [
-        simple_logic_type st.jc_struct_info_root;
-        simple_logic_type "bool"] }
-  in
+  (* let mutable_ty = mutable_memory_type st.jc_struct_info_root in *)
   let mutable_is_false =
-    LPred("eq", [LConst(Prim_bool false); LApp("select", [LVar "mutable"; LVar this])]) in
+    (* LPred("eq", [LConst(Prim_bool false); LApp("select", [LVar "mutable"; LVar this])]) in *)
+    LPred("mutable", [LVar pp; LVar this]) in
   let assoc_memories = StringSet.fold (fun mem acc ->
-    LPred("assoc", [LVar pp; LVar mem])::acc) (assertion_memories (StringSet.singleton "mutable") a) [] in
+    LPred("assoc", [LVar pp; LVar mem])::acc) (assertion_memories (StringSet.empty (*singleton "mutable"*) ) a) [] in
   let invariant = make_logic_pred_call li [LVar this] in
   let axiom_impl = List.fold_left (fun acc assoc -> LImpl(assoc, acc))
     (LImpl(mutable_is_false, invariant))
@@ -742,7 +776,7 @@ let invariant_axiom st acc (li, a) =
 
   (* quantifiers *)
   let quantified_vars = params in
-  let quantified_vars = ("mutable", mutable_ty)::quantified_vars in
+  (* let quantified_vars = ("mutable", mutable_ty)::quantified_vars in *)
   let quantified_vars = (pp, pp_ty)::quantified_vars in
   let quantified_vars = (this, this_ty)::quantified_vars in
   let axiom =
@@ -848,7 +882,7 @@ let excep_posts_for_others eopt excep_posts =
 let tr_fun f spec body acc =
   (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
   let invariants =
-    List.fold_right
+    (* List.fold_right
       (fun v acc ->
 	 match v.jc_var_info_type with
 	   | JCTpointer(st,_,_) ->
@@ -862,7 +896,7 @@ let tr_fun f spec body acc =
 	   | JCTrange _ -> acc
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
-      f.jc_fun_info_parameters
+      f.jc_fun_info_parameters *)
       LTrue
   in
   let requires = 
