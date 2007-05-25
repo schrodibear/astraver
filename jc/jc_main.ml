@@ -128,7 +128,14 @@ let main () =
 	    Jc_norm.structs_table *)
 	    d_memories
 	in
-	let d_inv = Jc_interp.mutable_declaration::Jc_interp.assoc_declaration::d_inv in
+	let d_inv = Jc_interp.assoc_declaration::d_inv in
+	let d_inv =
+          Hashtbl.fold
+            (fun _ (st, _) acc ->
+               (Jc_interp.mutable_declaration st)::acc)
+            Jc_norm.structs_table
+            d_inv
+        in
         let d_inv =
           Hashtbl.fold
             (fun _ (st, _) acc ->

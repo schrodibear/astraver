@@ -66,9 +66,9 @@ let tr_type t = Base_type(tr_base_type t)
     | JCTpointer _ -> Base_type(tr_base_type t)	
 *)
 
-(***********************)
-(*   assoc predicate   *)
-(***********************)
+(**************************************)
+(*   assoc predicate, mutable field   *)
+(**************************************)
 
 (* other modifications for this extension can be found in:
      jc_main
@@ -94,34 +94,29 @@ let prop_type = simple_logic_type "prop"
 
 let program_point_type = simple_logic_type "int"
 
+let memory_type st_type f_type = {
+  logic_type_name = "memory";
+  logic_type_args = [
+    simple_logic_type st_type;
+    simple_logic_type f_type;
+  ];
+}
+
 let assoc_declaration =
   (* logic assoc: int, ('a, 'b) memory -> prop *)
-  let memory_poly_type = {
-    logic_type_name = "memory";
-    logic_type_args = [
-      simple_logic_type "'a";
-      simple_logic_type "'b";
-    ];
-  } in
   Logic(
     false,
     "assoc",
     [ "", program_point_type;
-      "", memory_poly_type ],
+      "", memory_type "'a" "'b" ],
     prop_type)
 
-let mutable_declaration =
+let mutable_declaration st =
   (* logic mutable: int, 'a pointer -> prop *)
-  let pointer_poly_type = {
-    logic_type_name = "pointer";
-    logic_type_args = [ simple_logic_type "'a" ];
-  } in
-  Logic(
+  Param(
     false,
-    "mutable", 
-    [ "", program_point_type;
-      "", pointer_poly_type ],
-    prop_type)
+    "mutable_"^st.jc_struct_info_name,
+    Ref_type(Base_type (memory_type st.jc_struct_info_name "bool")))
 
 let rec term_memories aux t = match t.jc_tterm_node with
   | JCTTconst _
@@ -158,13 +153,17 @@ let make_assoc pp m =
 
 let make_field_assocs pp fi =
   let _, invs = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in
-  let mems = List.fold_left (fun aux (_, a) ->
+  let mems = List.fold_left
+    (fun aux (_, a) ->
       let amems = assertion_memories StringSet.empty a in
       if StringSet.mem fi.jc_field_info_name amems then
         StringSet.union amems aux
-      else aux
-    ) StringSet.empty invs in
-  List.map (make_assoc pp) (StringSet.elements mems)
+      else
+	aux
+    ) (StringSet.singleton ("mutable_"^fi.jc_field_info_root)) invs in
+  List.map
+    (make_assoc pp)
+    (StringSet.elements mems)
 
 let make_assume_assocs pp fi =
   let assocs = make_and_list (make_field_assocs pp fi) in
@@ -764,12 +763,19 @@ let invariant_axiom st acc (li, a) =
   let pp_ty = simple_logic_type "int" in
 
   (* assoc memories with program point => not this.mutable => this.invariant *)
-  (* let mutable_ty = mutable_memory_type st.jc_struct_info_root in *)
+  let mutable_ty = mutable_memory_type st.jc_struct_info_root in
   let mutable_is_false =
-    (* LPred("eq", [LConst(Prim_bool false); LApp("select", [LVar "mutable"; LVar this])]) in *)
-    LPred("mutable", [LVar pp; LVar this]) in
-  let assoc_memories = StringSet.fold (fun mem acc ->
-    LPred("assoc", [LVar pp; LVar mem])::acc) (assertion_memories (StringSet.empty (*singleton "mutable"*) ) a) [] in
+    LPred(
+      "eq",
+      [ LConst(Prim_bool false);
+	LApp("select", [LVar "mutable"; LVar this]) ]) in
+  let assoc_memories = StringSet.fold
+    (fun mem acc ->
+       LPred("assoc", [LVar pp; LVar mem])::acc)
+    (assertion_memories
+       (StringSet.singleton "mutable")
+       a)
+    [] in
   let invariant = make_logic_pred_call li [LVar this] in
   let axiom_impl = List.fold_left (fun acc assoc -> LImpl(assoc, acc))
     (LImpl(mutable_is_false, invariant))
@@ -777,7 +783,7 @@ let invariant_axiom st acc (li, a) =
 
   (* quantifiers *)
   let quantified_vars = params in
-  (* let quantified_vars = ("mutable", mutable_ty)::quantified_vars in *)
+  let quantified_vars = ("mutable", mutable_ty)::quantified_vars in
   let quantified_vars = (pp, pp_ty)::quantified_vars in
   let quantified_vars = (this, this_ty)::quantified_vars in
   let axiom =
