@@ -75,6 +75,7 @@ let tr_type t = Base_type(tr_base_type t)
        (to generate axioms)
      jc_interp
        (functions that generate axioms, used by jc_main)
+       (assignements assumes assoc)
 *)
 
 let fresh_program_point =
@@ -110,7 +111,7 @@ let assoc_declaration =
     prop_type)
 
 let mutable_declaration =
-  (* *)
+  (* logic mutable: int, 'a pointer -> prop *)
   let pointer_poly_type = {
     logic_type_name = "pointer";
     logic_type_args = [ simple_logic_type "'a" ];
