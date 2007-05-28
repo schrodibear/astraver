@@ -132,7 +132,7 @@ let main () =
 	let d_inv =
           Hashtbl.fold
             (fun _ (st, _) acc ->
-               (Jc_interp.mutable_declaration st)::acc)
+               Jc_interp.mutable_declaration st acc)
             Jc_norm.structs_table
             d_inv
         in

@@ -111,12 +111,15 @@ let assoc_declaration =
       "", memory_type "'a" "'b" ],
     prop_type)
 
-let mutable_declaration st =
-  (* logic mutable: int, 'a pointer -> prop *)
-  Param(
-    false,
-    "mutable_"^st.jc_struct_info_name,
-    Ref_type(Base_type (memory_type st.jc_struct_info_name "bool")))
+let mutable_declaration st acc =
+  if st.jc_struct_info_parent = None then
+    Param(
+      false,
+      "mutable_"^st.jc_struct_info_name,
+      Ref_type(Base_type (memory_type st.jc_struct_info_name "bool"))
+    )::acc
+  else
+    acc
 
 let rec term_memories aux t = match t.jc_tterm_node with
   | JCTTconst _
