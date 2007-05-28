@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.22 2007-05-18 09:29:12 filliatr Exp $ *)
+(* $Id: cabsint.ml,v 1.23 2007-05-28 06:36:59 moy Exp $ *)
 
 (* TO DO:
 
@@ -1309,9 +1309,9 @@ module type CFG_LANG_EXTERNAL = sig
        for collecting values on the backward edge of a loop before
        merging with the upward value ? *)
   val is_loop_backward_source_node : Node.t -> bool
-    (* is this node a [Nintern InternOperationalBwdDest] node for merging
-       values on upward and backward flows ? *)
-  val is_loop_backward_destination_node : Node.t -> bool
+  (* put in INTER_LANG interface :
+     is_loop_backward_destination_node : Node.t -> bool
+  *)
     (* get the list of variables modified in this loop *) 
   val get_loop_write_vars : Node.t -> ilvar_t list
     (* get the list of pointers whose content is read in this loop *) 

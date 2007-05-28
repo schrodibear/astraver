@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cint.ml4,v 1.21 2007-03-23 07:25:02 moy Exp $ *)
+(* $Id: cint.ml4,v 1.22 2007-05-28 06:36:59 moy Exp $ *)
 
 (* TO DO:
 
@@ -673,7 +673,7 @@ struct
 	begin match op with
 	  | Clogic.Uminus -> 
 	      L.neg v1
-	  | Clogic.Uplus ->
+	  | Clogic.Uplus | Clogic.Uint_conversion ->
 	      v1
 	  | Clogic.Utilde | Clogic.Ustar | Clogic.Uamp | Clogic.Uexact 
 	  | Clogic.Umodel | Clogic.Uabs_real | Clogic.Usqrt_real 
@@ -1325,7 +1325,7 @@ struct
 		      for i=0 to n do a.(i) <- (-. a1.(i)) done;
 		      FIlinear a
 		end
-	    | Clogic.Uplus ->
+	    | Clogic.Uplus | Clogic.Uint_conversion ->
 		randup t1
 	    | Clogic.Utilde | Clogic.Ustar | Clogic.Uamp | Clogic.Uexact 
 	    | Clogic.Umodel | Clogic.Uabs_real | Clogic.Usqrt_real 
@@ -3704,7 +3704,8 @@ end = struct
 	end
     | NTmin _ | NTmax _
     | NTapp _ | NTarrow _ | NTif _ | NTold _ | NTat _ | NTbase_addr _
-    | NToffset _ | NTblock_length _ | NTcast _ | NTrange _ -> ITany
+    | NToffset _ | NTblock_length _ | NTcast _ | NTrange _ 
+    | NTmaxint _ | NTminint _ -> ITany
 
   let rec from_pred p = match p.npred_node with
     | NPfalse -> IPfalse
