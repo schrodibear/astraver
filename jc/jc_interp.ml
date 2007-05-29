@@ -75,7 +75,7 @@ let tr_type t = Base_type(tr_base_type t)
        (to generate axioms)
      jc_interp
        (functions that generate axioms, used by jc_main)
-       (assignements assumes assoc)
+       (assignements assumes assoc (call to "make_assume_assoc" in function "statement")
 *)
 
 let fresh_program_point =
@@ -158,11 +158,11 @@ let make_field_assocs pp fi =
   let _, invs = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in
   let mems = List.fold_left
     (fun aux (_, a) ->
-      let amems = assertion_memories StringSet.empty a in
-      if StringSet.mem fi.jc_field_info_name amems then
-        StringSet.union amems aux
-      else
-	aux
+       let amems = assertion_memories StringSet.empty a in
+       if StringSet.mem fi.jc_field_info_name amems then
+         StringSet.union amems aux
+       else
+	 aux
     ) (StringSet.singleton ("mutable_"^fi.jc_field_info_root)) invs in
   List.map
     (make_assoc pp)
@@ -170,6 +170,59 @@ let make_field_assocs pp fi =
 
 let make_assume_assocs pp fi =
   let assocs = make_and_list (make_field_assocs pp fi) in
+  BlackBox (Annot_type (LTrue, unit_type, [], [], assocs, []))
+
+(* Returns (as a StringSet.t) every structure name that can be reach from st.
+Assumes the structures whose name is in acc have already been visited
+and won't be visited again. *)
+let rec all_structures st acc =
+  if StringSet.mem st.jc_struct_info_name acc then acc else
+  begin
+    List.fold_left
+      (fun acc (_, fi) ->
+	 match fi.jc_field_info_type with
+	   | JCTpointer(st, _, _) -> all_structures st acc
+	   | _ -> acc)
+      (StringSet.add st.jc_struct_info_name acc)
+      st.jc_struct_info_fields
+  end
+
+(* Returns all memories used by the structure invariants. *)
+let struct_inv_memories acc st =
+  let _, invs = Hashtbl.find Jc_typing.structs_table st in
+  List.fold_left
+    (fun acc (_, a) -> assertion_memories acc a)
+    acc
+    invs
+
+(* Returns all assocs needed by a function parameter list *)
+let make_all_assocs pp params =
+  (* structures that can used by the function *)
+  let structures = List.fold_left
+    (fun acc vi ->
+       match vi.jc_var_info_type with
+	 | JCTpointer(st, _, _) ->
+	     if st.jc_struct_info_parent = None then
+	       all_structures st acc
+	     else acc (* TODO *)
+	 | _ -> acc)
+    StringSet.empty
+    params
+  in
+  let structures = StringSet.elements structures in
+  (* memories used by these structures' invariants *)
+  let memories = List.fold_left
+    struct_inv_memories
+    StringSet.empty
+    structures
+  in
+  (* mutable fields *)
+  let mutable_fields = List.map (fun s -> "mutable_"^s) structures in
+  List.map (make_assoc pp) (StringSet.elements memories@mutable_fields)
+
+(* Assume all assocs needed by a function parameter list *)
+let make_assume_all_assocs pp params =
+  let assocs = make_and_list (make_all_assocs pp params) in
   BlackBox (Annot_type (LTrue, unit_type, [], [], assocs, []))
 
 (**************************
@@ -458,10 +511,10 @@ let rec statement s =
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
         append
-	  (make_assume_assocs (fresh_program_point ()) fi)
 	  (make_lets
 	    ([ (tmp1, e1) ; (tmp2, e2) ])
 	    (make_upd fi (Var tmp1) (Var tmp2)))
+	  (make_assume_assocs (fresh_program_point ()) fi)
     | JCSblock l -> statement_list l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
@@ -1015,6 +1068,9 @@ let tr_fun f spec body acc =
 	 in (ei.jc_exception_info_name,p)::acc) 
       excep_behaviors []
   in
+  (* DEBUG *)
+  List.iter (Printf.printf "*** %s\n") reads;
+  flush stdout;
   (* why parameter for calling the function *)
   let why_param = 
     let annot_type =
@@ -1036,10 +1092,18 @@ let tr_fun f spec body acc =
     List.fold_right
       (fun (id,b,e) acc ->
 	 let d =
-	   Def(f.jc_fun_info_name ^ "_ensures_" ^ id,
-	       Fun(params,
-		   requires,statement_list body,
-		   e,excep_posts_for_others None excep_behaviors))
+	   Def(
+	     f.jc_fun_info_name ^ "_ensures_" ^ id,
+	     Fun(
+	       params,
+	       requires,
+	       append
+		 (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)
+		 (statement_list body),
+	       e,
+	       excep_posts_for_others None excep_behaviors
+	     )
+	   )
 	 in d::acc)
       normal_behaviors acc
   in 

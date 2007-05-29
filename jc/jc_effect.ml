@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.20 2007-04-06 14:17:41 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.21 2007-05-29 15:03:04 bardou Exp $ *)
 
 
 open Jc_env
@@ -193,7 +193,8 @@ let behavior ef (_,b) =
     b.jc_behavior_assigns ef
 
 let spec ef s = 
-  List.fold_left behavior ef s.jc_fun_behavior
+  let ef = List.fold_left behavior ef s.jc_fun_behavior in
+  { ef with jc_reads = assertion ef.jc_reads s.jc_fun_requires }
 
 (* computing the fixpoint *)
 

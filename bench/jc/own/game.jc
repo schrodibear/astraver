@@ -16,9 +16,11 @@ type Hero = {
 }
 
 unit attack(Hero[0] this, Hero[0] target)
+  requires (this.sword.mutable == false) && (target.mutable == false);
   behavior ok:
-    ensures true;
+    ensures (this.mutable == false) && (target.mutable == false);
 {
+  assert this.life >= 0;
   target.life = target.life - this.sword.damage;
   if (target.life <= 0) {
     target.life = 0;

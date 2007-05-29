@@ -9,109 +9,62 @@ Admitted.
 (*Why type*) Definition Sword: Set.
 Admitted.
 
-(*Why logic*) Definition Hero_inv :
-  (pointer Hero) -> (alloc_table Sword) -> (memory Sword Z) -> (memory Hero
-  bool) -> (memory Hero Z) -> (memory Hero (pointer Sword)) -> Prop.
+(*Why logic*) Definition Hero_tag : (tag_id Hero).
 Admitted.
 
-(*Why logic*) Definition Sword_inv :
-  (pointer Sword) -> (memory Sword Z) -> Prop.
+(*Why logic*) Definition Sword_tag : (tag_id Sword).
 Admitted.
 
+(*Why logic*) Definition assoc :
+  forall (A1:Set), forall (A2:Set), Z -> (memory A1 A2) -> Prop.
+Admitted.
+Implicit Arguments assoc.
 
-(*Why predicate*) Definition sword_inv  (Sword_alloc_table:(alloc_table Sword))
-  (sword:(memory Hero (pointer Sword))) (this:(pointer Hero))
-  := (offset_min Sword_alloc_table (select sword this)) <= 0 /\
-     (offset_max Sword_alloc_table (select sword this)) >= 0.
+(*Why predicate*) Definition damage_inv  (damage:(memory Sword Z))
+  (this:(pointer Sword)) := (select damage this) > 0.
+
+(*Why axiom*) Lemma axiom_damage_inv :
+  (forall (damage:(memory Sword Z)),
+   (forall (mutable:(memory Sword bool)),
+    (forall (program_point:Z),
+     (forall (this:(pointer Sword)),
+      ((assoc program_point damage) ->
+       ((assoc program_point mutable) ->
+        (false = (select mutable this) -> (damage_inv damage this)))))))).
+Admitted.
 
 (*Why predicate*) Definition life_inv  (dead:(memory Hero bool))
   (life:(memory Hero Z)) (this:(pointer Hero))
   := (select life this) >= 0 /\ (select life this) <= 100 /\
      (((select life this) = 0 -> (select dead this) = true)).
 
-(*Why axiom*) Lemma Hero_inv_sem :
-  (forall (sword:(memory Hero (pointer Sword))),
-   (forall (life:(memory Hero Z)),
-    (forall (dead:(memory Hero bool)),
-     (forall (damage:(memory Sword Z)),
-      (forall (Sword_alloc_table:(alloc_table Sword)),
-       (forall (inv_this:(pointer Hero)),
-        ((Hero_inv inv_this Sword_alloc_table damage dead life sword) <->
-         (~(inv_this = (@null Hero)) ->
-          (Sword_inv (select sword inv_this) damage) /\
-          (sword_inv Sword_alloc_table sword inv_this) /\
-          (life_inv dead life inv_this))))))))).
+(*Why axiom*) Lemma axiom_life_inv :
+  (forall (life:(memory Hero Z)),
+   (forall (dead:(memory Hero bool)),
+    (forall (mutable:(memory Hero bool)),
+     (forall (program_point:Z),
+      (forall (this:(pointer Hero)),
+       ((assoc program_point dead) ->
+        ((assoc program_point life) ->
+         ((assoc program_point mutable) ->
+          (false = (select mutable this) -> (life_inv dead life this)))))))))).
 Admitted.
 
-Lemma Hero_inv_sem1 :
+(*Why predicate*) Definition sword_inv  (Sword_alloc_table:(alloc_table Sword))
+  (sword:(memory Hero (pointer Sword))) (this:(pointer Hero))
+  := (offset_min Sword_alloc_table (select sword this)) <= 0 /\
+     (offset_max Sword_alloc_table (select sword this)) >= 0.
+
+(*Why axiom*) Lemma axiom_sword_inv :
   (forall (sword:(memory Hero (pointer Sword))),
-   (forall (life:(memory Hero Z)),
-    (forall (dead:(memory Hero bool)),
-     (forall (damage:(memory Sword Z)),
-      (forall (Sword_alloc_table:(alloc_table Sword)),
-       (forall (inv_this:(pointer Hero)),
-        ((Hero_inv inv_this Sword_alloc_table damage dead life sword) ->
-         (~(inv_this = (@null Hero)) ->
-          (Sword_inv (select sword inv_this) damage) /\
-          (sword_inv Sword_alloc_table sword inv_this) /\
-          (life_inv dead life inv_this))))))))).
-Proof.
-intros a b c d e f.
-exact (proj1 (Hero_inv_sem a b c d e f)).
-Qed.
-
-Lemma Hero_inv_sem2 :
-  (forall (sword:(memory Hero (pointer Sword))),
-   (forall (life:(memory Hero Z)),
-    (forall (dead:(memory Hero bool)),
-     (forall (damage:(memory Sword Z)),
-      (forall (Sword_alloc_table:(alloc_table Sword)),
-       (forall (inv_this:(pointer Hero)),
-        ((~(inv_this = (@null Hero)) ->
-          (Sword_inv (select sword inv_this) damage) /\
-          (sword_inv Sword_alloc_table sword inv_this) /\
-          (life_inv dead life inv_this)) -> 
-(Hero_inv inv_this Sword_alloc_table damage dead life sword)
-         ))))))).
-Proof.
-intros a b c d e f.
-exact (proj2 (Hero_inv_sem a b c d e f)).
-Qed.
-
-(*Why logic*) Definition Hero_tag : (tag_id Hero).
-Admitted.
-
-(*Why predicate*) Definition damage_inv  (damage:(memory Sword Z))
-  (this:(pointer Sword)) := (select damage this) > 0.
-
-(*Why axiom*) Lemma Sword_inv_sem :
-  (forall (damage:(memory Sword Z)),
-   (forall (inv_this:(pointer Sword)),
-    ((Sword_inv inv_this damage) <->
-     (~(inv_this = (@null Sword)) -> (damage_inv damage inv_this))))).
-Admitted.
-
-Lemma Sword_inv_sem1 :
-  (forall (damage:(memory Sword Z)),
-   (forall (inv_this:(pointer Sword)),
-    ((Sword_inv inv_this damage) ->
-     (~(inv_this = (@null Sword)) -> (damage_inv damage inv_this))))).
-Proof.
-intros a b.
-exact (proj1 (Sword_inv_sem a b)).
-Qed.
-
-Lemma Sword_inv_sem2 :
-  (forall (damage:(memory Sword Z)),
-   (forall (inv_this:(pointer Sword)),
-    ((~(inv_this = (@null Sword)) -> (damage_inv damage inv_this)) ->
-(Sword_inv inv_this damage)))).
-Proof.
-intros a b.
-exact (proj2 (Sword_inv_sem a b)).
-Qed.
-
-(*Why logic*) Definition Sword_tag : (tag_id Sword).
+   (forall (Sword_alloc_table:(alloc_table Sword)),
+    (forall (mutable:(memory Hero bool)),
+     (forall (program_point:Z),
+      (forall (this:(pointer Hero)),
+       ((assoc program_point mutable) ->
+        ((assoc program_point sword) ->
+         (false = (select mutable this) ->
+          (sword_inv Sword_alloc_table sword this))))))))).
 Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -120,21 +73,29 @@ Admitted.
   forall (target: (pointer Hero)),
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
-  forall (Sword_alloc_table: (alloc_table Sword)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
   forall (sword: (memory Hero (pointer Sword))),
-  forall (HW_1: ((((offset_min Hero_alloc_table this) <= 0 /\
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
                 (instanceof Hero_tag_table this Hero_tag)) /\
-                ((offset_min Hero_alloc_table target) <= 0 /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (Hero_inv this Sword_alloc_table damage dead life sword) /\
-                (Hero_inv target Sword_alloc_table damage dead life sword)),
-  (valid Hero_alloc_table target).
-Admitted.
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  (select life this) >= 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+admit.
+Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma attack_ensures_ok_po_2 : 
@@ -142,24 +103,30 @@ Admitted.
   forall (target: (pointer Hero)),
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
-  forall (Sword_alloc_table: (alloc_table Sword)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
   forall (sword: (memory Hero (pointer Sword))),
-  forall (HW_1: ((((offset_min Hero_alloc_table this) <= 0 /\
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
                 (instanceof Hero_tag_table this Hero_tag)) /\
-                ((offset_min Hero_alloc_table target) <= 0 /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (Hero_inv this Sword_alloc_table damage dead life sword) /\
-                (Hero_inv target Sword_alloc_table damage dead life sword)),
-  forall (HW_2: (valid Hero_alloc_table target)),
-  forall (result: Z),
-  forall (HW_3: result = (select life target)),
-  (valid Hero_alloc_table this).
-Admitted.
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  forall (HW_3: (select life this) >= 0),
+  (valid Hero_alloc_table target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+admit.
+Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma attack_ensures_ok_po_3 : 
@@ -167,27 +134,33 @@ Admitted.
   forall (target: (pointer Hero)),
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
-  forall (Sword_alloc_table: (alloc_table Sword)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
   forall (sword: (memory Hero (pointer Sword))),
-  forall (HW_1: ((((offset_min Hero_alloc_table this) <= 0 /\
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
                 (instanceof Hero_tag_table this Hero_tag)) /\
-                ((offset_min Hero_alloc_table target) <= 0 /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (Hero_inv this Sword_alloc_table damage dead life sword) /\
-                (Hero_inv target Sword_alloc_table damage dead life sword)),
-  forall (HW_2: (valid Hero_alloc_table target)),
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  forall (HW_3: (select life this) >= 0),
+  forall (HW_4: (valid Hero_alloc_table target)),
   forall (result: Z),
-  forall (HW_3: result = (select life target)),
-  forall (HW_4: (valid Hero_alloc_table this)),
-  forall (result0: (pointer Sword)),
-  forall (HW_5: result0 = (select sword this)),
-  (valid Sword_alloc_table result0).
-Admitted.
+  forall (HW_5: result = (select life target)),
+  (valid Hero_alloc_table this).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+admit.
+Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma attack_ensures_ok_po_4 : 
@@ -199,74 +172,32 @@ Admitted.
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
   forall (sword: (memory Hero (pointer Sword))),
-  forall (HW_1: ((((offset_min Hero_alloc_table this) <= 0 /\
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
                 (instanceof Hero_tag_table this Hero_tag)) /\
-                ((offset_min Hero_alloc_table target) <= 0 /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (Hero_inv this Sword_alloc_table damage dead life sword) /\
-                (Hero_inv target Sword_alloc_table damage dead life sword)),
-  forall (HW_2: (valid Hero_alloc_table target)),
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  forall (HW_3: (select life this) >= 0),
+  forall (HW_4: (valid Hero_alloc_table target)),
   forall (result: Z),
-  forall (HW_3: result = (select life target)),
-  forall (HW_4: (valid Hero_alloc_table this)),
+  forall (HW_5: result = (select life target)),
+  forall (HW_6: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_5: result0 = (select sword this)),
-  forall (HW_6: (valid Sword_alloc_table result0)),
-  forall (result1: Z),
-  forall (HW_7: result1 = (select damage result0)),
-  forall (HW_8: (valid Hero_alloc_table target)),
-  forall (life0: (memory Hero Z)),
-  forall (HW_9: life0 = (store life target (result - result1))),
-  forall (HW_10: (valid Hero_alloc_table target)),
-  forall (result2: Z),
-  forall (HW_11: result2 = (select life0 target)),
-  forall (HW_12: result2 <= 0),
-  forall (HW_13: (valid Hero_alloc_table target)),
-  forall (life1: (memory Hero Z)),
-  forall (HW_14: life1 = (store life0 target 0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
-  forall (dead0: (memory Hero bool)),
-  forall (HW_16: dead0 = (store dead target true)),
-  (Hero_inv this Sword_alloc_table damage dead0 life1 sword).
+  forall (HW_7: result0 = (select sword this)),
+  (valid Sword_alloc_table result0).
 Proof.
 intros; subst.
-clear HW_8 HW_10 HW_13 HW_15.
-destruct HW_1 as [HW_1 H1].
-destruct H1 as [H1 H2].
-apply Hero_inv_sem2.
-intro NN1.
-split.
-apply Hero_inv_sem1 in H1; auto.
-destruct H1; auto.
-split.
-apply Hero_inv_sem1 in H1; auto.
-set (new_life := select life target - select damage (select sword this)).
-assert (E: this = target \/ this <> target).
-apply eq_pointer.
-destruct E as [E | D].
-unfold life_inv.
-rewrite (@select_store_eq Hero Z (store life target new_life) target this);
-  auto.
-repeat (split; try omega).
-intro H; clear H.
-rewrite (@select_store_eq Hero bool dead target this); auto.
-unfold life_inv.
-rewrite (@select_store_neq Hero Z (store life target new_life) target this);
-  auto.
-rewrite (@select_store_neq Hero Z life target this);
-  auto.
-apply Hero_inv_sem1 in H1; auto.
-destruct H1 as [_ H1].
-destruct H1 as [_ H1].
-unfold life_inv in H1.
-destruct H1 as [H1a H1b].
-destruct H1b as [H1b H1c].
-repeat split; auto.
-intro.
-rewrite (@select_store_neq Hero bool dead target this); auto.
+unfold valid.
+refine (axiom_sword_inv _ _ mutable_Hero 4 _ _ _ _); intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -279,59 +210,50 @@ Save.
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
   forall (sword: (memory Hero (pointer Sword))),
-  forall (HW_1: ((((offset_min Hero_alloc_table this) <= 0 /\
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
                 (instanceof Hero_tag_table this Hero_tag)) /\
-                ((offset_min Hero_alloc_table target) <= 0 /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (Hero_inv this Sword_alloc_table damage dead life sword) /\
-                (Hero_inv target Sword_alloc_table damage dead life sword)),
-  forall (HW_2: (valid Hero_alloc_table target)),
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  forall (HW_3: (select life this) >= 0),
+  forall (HW_4: (valid Hero_alloc_table target)),
   forall (result: Z),
-  forall (HW_3: result = (select life target)),
-  forall (HW_4: (valid Hero_alloc_table this)),
+  forall (HW_5: result = (select life target)),
+  forall (HW_6: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_5: result0 = (select sword this)),
-  forall (HW_6: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
+  forall (HW_8: (valid Sword_alloc_table result0)),
   forall (result1: Z),
-  forall (HW_7: result1 = (select damage result0)),
-  forall (HW_8: (valid Hero_alloc_table target)),
-  forall (life0: (memory Hero Z)),
-  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_9: result1 = (select damage result0)),
   forall (HW_10: (valid Hero_alloc_table target)),
-  forall (result2: Z),
-  forall (HW_11: result2 = (select life0 target)),
-  forall (HW_12: result2 <= 0),
+  forall (life0: (memory Hero Z)),
+  forall (HW_11: life0 = (store life target (result - result1))),
+  forall (HW_12: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero)),
   forall (HW_13: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_14: result2 = (select life0 target)),
+  forall (HW_15: result2 <= 0),
+  forall (HW_16: (valid Hero_alloc_table target)),
   forall (life1: (memory Hero Z)),
-  forall (HW_14: life1 = (store life0 target 0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_17: life1 = (store life0 target 0)),
+  forall (HW_18: (assoc 2 dead) /\ (assoc 2 life1) /\ (assoc 2 mutable_Hero)),
+  forall (HW_19: (valid Hero_alloc_table target)),
   forall (dead0: (memory Hero bool)),
-  forall (HW_16: dead0 = (store dead target true)),
-  (Hero_inv target Sword_alloc_table damage dead0 life1 sword).
+  forall (HW_20: dead0 = (store dead target true)),
+  forall (HW_21: (assoc 1 dead0) /\ (assoc 1 life1) /\ (assoc 1 mutable_Hero)),
+  (select mutable_Hero this) = false.
 Proof.
-intros; subst.
-clear HW_8 HW_10 HW_13 HW_15.
-destruct HW_1 as [HW_1 H1].
-destruct H1 as [H1 H2].
-apply Hero_inv_sem2.
-intro NN1.
-split.
-apply Hero_inv_sem1 in H2; auto.
-destruct H2; auto.
-split.
-apply Hero_inv_sem1 in H2; auto.
-destruct H2 as [_ H2].
-destruct H2; auto.
-set (new_life := select life target - select damage (select sword this)).
-unfold life_inv.
-rewrite (@select_store_eq Hero Z (store life target new_life) target target);
-  auto.
-repeat (split; try omega).
-intro H; clear H.
-rewrite (@select_store_eq Hero bool dead target target); auto.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -344,90 +266,51 @@ Save.
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
   forall (sword: (memory Hero (pointer Sword))),
-  forall (HW_1: ((((offset_min Hero_alloc_table this) <= 0 /\
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
                 (instanceof Hero_tag_table this Hero_tag)) /\
-                ((offset_min Hero_alloc_table target) <= 0 /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (Hero_inv this Sword_alloc_table damage dead life sword) /\
-                (Hero_inv target Sword_alloc_table damage dead life sword)),
-  forall (HW_2: (valid Hero_alloc_table target)),
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  forall (HW_3: (select life this) >= 0),
+  forall (HW_4: (valid Hero_alloc_table target)),
   forall (result: Z),
-  forall (HW_3: result = (select life target)),
-  forall (HW_4: (valid Hero_alloc_table this)),
+  forall (HW_5: result = (select life target)),
+  forall (HW_6: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_5: result0 = (select sword this)),
-  forall (HW_6: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
+  forall (HW_8: (valid Sword_alloc_table result0)),
   forall (result1: Z),
-  forall (HW_7: result1 = (select damage result0)),
-  forall (HW_8: (valid Hero_alloc_table target)),
-  forall (life0: (memory Hero Z)),
-  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_9: result1 = (select damage result0)),
   forall (HW_10: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_11: life0 = (store life target (result - result1))),
+  forall (HW_12: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero)),
+  forall (HW_13: (valid Hero_alloc_table target)),
   forall (result2: Z),
-  forall (HW_11: result2 = (select life0 target)),
-  forall (HW_17: result2 > 0),
-  (Hero_inv this Sword_alloc_table damage dead life0 sword).
+  forall (HW_14: result2 = (select life0 target)),
+  forall (HW_15: result2 <= 0),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (life1: (memory Hero Z)),
+  forall (HW_17: life1 = (store life0 target 0)),
+  forall (HW_18: (assoc 2 dead) /\ (assoc 2 life1) /\ (assoc 2 mutable_Hero)),
+  forall (HW_19: (valid Hero_alloc_table target)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_20: dead0 = (store dead target true)),
+  forall (HW_21: (assoc 1 dead0) /\ (assoc 1 life1) /\ (assoc 1 mutable_Hero)),
+  (select mutable_Hero target) = false.
 Proof.
-intros; subst.
-clear HW_8 HW_10.
-destruct HW_1 as [HW_1 H1].
-destruct H1 as [H1 H2].
-apply Hero_inv_sem2.
-intro NN1.
-split.
-apply Hero_inv_sem1 in H1; auto.
-destruct H1; auto.
-split.
-apply Hero_inv_sem1 in H1; auto.
-set (new_life := select life target - select damage (select sword this)) in *.
-assert (E: this = target \/ this <> target).
-apply eq_pointer.
-destruct E as [E | D].
-unfold life_inv.
-rewrite (@select_store_eq Hero Z life target this) in *;
-  auto.
-rewrite (@select_store_eq Hero Z life target target) in *;
-  auto.
-repeat (split; try omega).
-unfold new_life.
-assert (select life target <= 100).
-apply Hero_inv_sem1 in H2.
-destruct H2 as [_ H2].
-destruct H2 as [_ H2].
-unfold life_inv in H2.
-destruct H2 as [_ H2].
-destruct H2 as [H2 _].
-auto.
-rewrite <- E; auto.
-assert (select damage (select sword this) > 0).
-apply Hero_inv_sem1 in H1; auto.
-destruct H1 as [H1 _].
-apply Sword_inv_sem1 in H1.
-unfold damage_inv in H1; auto.
-intro N.
-rewrite N in HW_6.
-assert (~valid Sword_alloc_table (null Sword)).
-apply null_not_valid.
-auto.
-omega.
-intro N; rewrite N in *.
-assert (F: False).
-apply (Zgt_irrefl 0); auto.
-destruct F.
-unfold life_inv.
-rewrite (@select_store_neq Hero Z life target this) in *;
-  auto.
-apply Hero_inv_sem1 in H1; auto.
-destruct H1 as [_ H1].
-destruct H1 as [_ H1].
-unfold life_inv in H1.
-destruct H1 as [H1a H1b].
-destruct H1b as [H1b H1c].
-repeat split; auto.
-Qed.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma attack_ensures_ok_po_7 : 
@@ -439,69 +322,89 @@ Qed.
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
   forall (sword: (memory Hero (pointer Sword))),
-  forall (HW_1: ((((offset_min Hero_alloc_table this) <= 0 /\
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
                 (instanceof Hero_tag_table this Hero_tag)) /\
-                ((offset_min Hero_alloc_table target) <= 0 /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (Hero_inv this Sword_alloc_table damage dead life sword) /\
-                (Hero_inv target Sword_alloc_table damage dead life sword)),
-  forall (HW_2: (valid Hero_alloc_table target)),
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  forall (HW_3: (select life this) >= 0),
+  forall (HW_4: (valid Hero_alloc_table target)),
   forall (result: Z),
-  forall (HW_3: result = (select life target)),
-  forall (HW_4: (valid Hero_alloc_table this)),
+  forall (HW_5: result = (select life target)),
+  forall (HW_6: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_5: result0 = (select sword this)),
-  forall (HW_6: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
+  forall (HW_8: (valid Sword_alloc_table result0)),
   forall (result1: Z),
-  forall (HW_7: result1 = (select damage result0)),
-  forall (HW_8: (valid Hero_alloc_table target)),
-  forall (life0: (memory Hero Z)),
-  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_9: result1 = (select damage result0)),
   forall (HW_10: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_11: life0 = (store life target (result - result1))),
+  forall (HW_12: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero)),
+  forall (HW_13: (valid Hero_alloc_table target)),
   forall (result2: Z),
-  forall (HW_11: result2 = (select life0 target)),
-  forall (HW_17: result2 > 0),
-  (Hero_inv target Sword_alloc_table damage dead life0 sword).
+  forall (HW_14: result2 = (select life0 target)),
+  forall (HW_22: result2 > 0),
+  (select mutable_Hero this) = false.
 Proof.
-intros; subst.
-clear HW_8 HW_10.
-destruct HW_1 as [HW_1 H1].
-destruct H1 as [H1 H2].
-apply Hero_inv_sem2.
-intro NN1.
-split.
-apply Hero_inv_sem1 in H2; auto.
-apply (proj1 H2).
-split.
-apply Hero_inv_sem1 in H2; auto.
-apply (proj1 (proj2 H2)).
-set (new_life := select life target - select damage (select sword this)) in *.
-unfold life_inv.
-rewrite (@select_store_eq Hero Z life target target) in *; auto.
-repeat (split; try omega).
-unfold new_life.
-assert (select life target <= 100).
-apply Hero_inv_sem1 in H2; auto.
-unfold life_inv in H2.
-apply (proj1 (proj2 (proj2 (proj2 H2)))).
-assert (select damage (select sword this) > 0).
-apply Hero_inv_sem1 in H1.
-destruct H1 as [H1 _].
-apply Sword_inv_sem1 in H1.
-auto.
-intro E; rewrite E in *.
-assert (~valid Sword_alloc_table (null Sword)).
-apply null_not_valid.
-auto.
-intro E; rewrite E in *.
-assert (~valid Hero_alloc_table (null Hero)).
-apply null_not_valid.
-auto.
-omega.
-intro E; rewrite E in *.
-absurd (0 > 0); auto.
-apply Zgt_irrefl.
+intuition.
+(* FILL PROOF HERE *)
 Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_ensures_ok_po_8 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero bool)),
+  forall (mutable_Sword: (memory Sword bool)),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = false /\
+                (select mutable_Hero target) = false),
+  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
+                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
+                (assoc 4 mutable_Sword)),
+  forall (HW_3: (select life this) >= 0),
+  forall (HW_4: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_5: result = (select life target)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_7: result0 = (select sword this)),
+  forall (HW_8: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_9: result1 = (select damage result0)),
+  forall (HW_10: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_11: life0 = (store life target (result - result1))),
+  forall (HW_12: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero)),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_14: result2 = (select life0 target)),
+  forall (HW_22: result2 > 0),
+  (select mutable_Hero target) = false.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

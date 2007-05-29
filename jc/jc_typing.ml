@@ -46,6 +46,20 @@ let range_types_table = Hashtbl.create 97
 
 let structs_table = Hashtbl.create 97
 
+let mutable_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
+
+let field_tag_counter = ref 0
+
+let create_mutable_field id =
+  incr field_tag_counter;
+  let fi = {
+    jc_field_info_tag = !field_tag_counter; (* TODO *)
+    jc_field_info_name = "mutable_"^id;
+    jc_field_info_type = JCTnative Tboolean;
+    jc_field_info_root = "?? jc_typing.ml: find_field_struct ??"; (* ? *)
+  } in
+  Hashtbl.add mutable_fields_table id fi
+
 let find_struct_info loc id =
   try
     let st,_ = Hashtbl.find structs_table id in st
@@ -118,6 +132,8 @@ let functions_env = Hashtbl.create 97
 
 
 let rec find_field_struct loc st f =
+  if f = "mutable" then
+    Hashtbl.find mutable_fields_table st.jc_struct_info_root else
   try
     List.assoc f st.jc_struct_info_fields
   with Not_found ->
@@ -1335,8 +1351,6 @@ let assertion_true =
   { jc_tassertion_node = JCTAtrue;
     jc_tassertion_loc = Loc.dummy_position }
 
-let field_tag_counter = ref 0
-
 let field root (t,id) =
   let ty = type_type t in
   incr field_tag_counter;
@@ -1410,6 +1424,8 @@ let rec decl d =
 	let of_int = make_fun_info (id^"_of_int") (JCTrange ri) in
 	Hashtbl.add range_types_table id (ri,to_int,to_int_,of_int)
     | JCPDstructtype(id,parent,fields,inv) ->
+	(* mutable field *)
+	if parent = None then create_mutable_field id;
 	(* adding structure name in global environment before typing 
 	   the fields, because of possible recursive definition *)
 	let root,struct_info = add_typedecl d (id,parent) in
