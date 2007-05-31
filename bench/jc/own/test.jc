@@ -2,9 +2,14 @@ type A = {
   boolean b;
 }
 
-unit main(A[0] a)
+unit main(A[..] a)
   behavior safety:
-    ensures a != null;
+    ensures true;
 {
-   a.b = a == null;
 }
+
+/*
+Local Variables: 
+compile-command: "make test"
+End: 
+*/

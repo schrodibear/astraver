@@ -16,7 +16,7 @@ type Hero = {
 }
 
 unit attack(Hero[0] this, Hero[0] target)
-  requires (this.sword.mutable == false) && (target.mutable == false);
+  requires (this.mutable == false) && (target.mutable == false);
   behavior ok:
     ensures (this.mutable == false) && (target.mutable == false);
 {

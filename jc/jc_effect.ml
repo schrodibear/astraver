@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.21 2007-05-29 15:03:04 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.22 2007-05-31 11:42:59 bardou Exp $ *)
 
 
 open Jc_env
@@ -188,13 +188,34 @@ let location ef l =
     | JCLvar _ -> assert false (* TODO *)
 
 let behavior ef (_,b) =
-  Option_misc.fold 
+  (* assigns *)
+  let ef = Option_misc.fold
     (fun x ef -> List.fold_left location ef x) 
     b.jc_behavior_assigns ef
+  in
+  (* requires: reads *)
+  let ef = match b.jc_behavior_requires with
+      None -> ef
+    | Some r ->	{ ef with jc_reads = assertion ef.jc_reads r }
+  in
+  (* assumes: reads *)
+  let ef = match b.jc_behavior_assumes with
+      None -> ef
+    | Some a ->	{ ef with jc_reads = assertion ef.jc_reads a }
+  in
+  (* ensures: reads *)
+  { ef with jc_reads = assertion ef.jc_reads b.jc_behavior_ensures }
 
 let spec ef s = 
   let ef = List.fold_left behavior ef s.jc_fun_behavior in
   { ef with jc_reads = assertion ef.jc_reads s.jc_fun_requires }
+
+let parameter ef vi =
+  match vi.jc_var_info_type with
+    | JCTpointer(st, _, _) ->
+	let name = st.jc_struct_info_root in
+	{ ef with jc_reads = add_alloc_effect (add_tag_effect ef.jc_reads name) name }
+    | _ -> ef
 
 (* computing the fixpoint *)
 
@@ -222,6 +243,7 @@ let fun_effects fi =
   let ef = f.jc_fun_info_effects in
   let ef = spec ef s in
   let ef = List.fold_left statement ef b in
+  let ef = List.fold_left parameter ef f.jc_fun_info_parameters in
   if same_feffects ef f.jc_fun_info_effects then ()
   else begin
     fixpoint_reached := false;

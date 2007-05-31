@@ -154,7 +154,16 @@ let rec assertion_memories aux a = match a.jc_tassertion_node with
 let make_assoc pp m =
   LPred("assoc", [LConst(Prim_int pp); LVar m])
 
-let make_field_assocs pp fi =
+let make_assoc_list pp mems =
+  make_and_list (List.map (make_assoc pp) mems)
+
+let make_assume_assocs pp mems =
+  let assocs = make_assoc_list pp mems in
+  BlackBox (Annot_type (LTrue, unit_type, mems, [], assocs, []))
+
+(* List of each memory m that might need an assoc (i.e. m appears in an invariant
+which can be broken by the modification of the field fi) *)
+let field_assocs fi =
   let _, invs = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in
   let mems = List.fold_left
     (fun aux (_, a) ->
@@ -164,13 +173,10 @@ let make_field_assocs pp fi =
        else
 	 aux
     ) (StringSet.singleton ("mutable_"^fi.jc_field_info_root)) invs in
-  List.map
-    (make_assoc pp)
-    (StringSet.elements mems)
+  StringSet.elements mems
 
-let make_assume_assocs pp fi =
-  let assocs = make_and_list (make_field_assocs pp fi) in
-  BlackBox (Annot_type (LTrue, unit_type, [], [], assocs, []))
+let make_assume_field_assocs pp fi =
+  make_assume_assocs pp (field_assocs fi)
 
 (* Returns (as a StringSet.t) every structure name that can be reach from st.
 Assumes the structures whose name is in acc have already been visited
@@ -195,8 +201,9 @@ let struct_inv_memories acc st =
     acc
     invs
 
-(* Returns all assocs needed by a function parameter list *)
-let make_all_assocs pp params =
+(* Returns a list of all memories which need an "assoc"
+(calculated from a function parameter list) *)
+let all_assocs pp params =
   (* structures that can used by the function *)
   let structures = List.fold_left
     (fun acc vi ->
@@ -218,12 +225,11 @@ let make_all_assocs pp params =
   in
   (* mutable fields *)
   let mutable_fields = List.map (fun s -> "mutable_"^s) structures in
-  List.map (make_assoc pp) (StringSet.elements memories@mutable_fields)
+  StringSet.elements memories@mutable_fields
 
 (* Assume all assocs needed by a function parameter list *)
 let make_assume_all_assocs pp params =
-  let assocs = make_and_list (make_all_assocs pp params) in
-  BlackBox (Annot_type (LTrue, unit_type, [], [], assocs, []))
+  make_assume_assocs pp (all_assocs pp params)
 
 (**************************
 
@@ -514,7 +520,7 @@ let rec statement s =
 	  (make_lets
 	    ([ (tmp1, e1) ; (tmp2, e2) ])
 	    (make_upd fi (Var tmp1) (Var tmp2)))
-	  (make_assume_assocs (fresh_program_point ()) fi)
+	  (make_assume_field_assocs (fresh_program_point ()) fi)
     | JCSblock l -> statement_list l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
@@ -945,7 +951,7 @@ let excep_posts_for_others eopt excep_posts =
 let tr_fun f spec body acc =
   (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
   let invariants =
-    (* List.fold_right
+    (* (* with the inv predicate (DISABLED) *) List.fold_right
       (fun v acc ->
 	 match v.jc_var_info_type with
 	   | JCTpointer(st,_,_) ->
@@ -1069,8 +1075,8 @@ let tr_fun f spec body acc =
       excep_behaviors []
   in
   (* DEBUG *)
-  List.iter (Printf.printf "*** %s\n") reads;
-  flush stdout;
+  (* List.iter (Printf.printf "*** %s\n") reads;
+  flush stdout; *)
   (* why parameter for calling the function *)
   let why_param = 
     let annot_type =
