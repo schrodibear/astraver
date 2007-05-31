@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.126 2007-04-27 15:52:41 couchot Exp $ i*)
+(*i $Id: util.ml,v 1.127 2007-05-31 08:50:25 couchot Exp $ i*)
 
 open Logic
 open Ident
@@ -353,7 +353,7 @@ let add_ctx_vars =
     (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
 
 
-let intros ctx p =   
+let intros ctx p my_fresh_hyp =   
   let rec introb ctx pol = function
     | Forall (_, id, n, t, _, p) when pol>0 ->
 
@@ -362,13 +362,13 @@ let intros ctx p =
 	let pp  =  Misc.subst_in_predicate sp p in
 	introb (Svar (id', t) :: ctx) pol pp
     | Pimplies (_, a, b) when pol > 0-> 
-	let h = fresh_hyp () in
+	let h = my_fresh_hyp () in
 	let (l,p) = introb [] (-pol) a in 	
 	let l' =  Spred(h, p)::ctx in 
 	introb (List.append l l') pol b
     |Pand (_,_, a, b) when pol < 0-> 
        let (l1,p1) = introb ctx pol a in
-       let h1 = fresh_hyp () in
+       let h1 = my_fresh_hyp () in
        let l' = Spred(h1, p1)::l1 in
        let (l2,p2) = introb l' pol b in
        l2, p2 

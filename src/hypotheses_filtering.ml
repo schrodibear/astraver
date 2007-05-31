@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.14 2007-05-23 13:18:20 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.15 2007-05-31 08:50:25 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -106,18 +106,29 @@ module Var_graph =  Graph.Imperative.Graph.Concrete(Var_node)
 
 let vg = ref (Var_graph.create())
 
+let v_count = ref 0
+
+let hyp_count = ref 0
+
+
+
 
 let reset () = 
   vg := Var_graph.create();
   selected_vars := String_set.empty;
-  Hashtbl.clear hash_hyp_vars  
+  Hashtbl.clear hash_hyp_vars;
+  v_count := 0 ; 
+  hyp_count := 0 
 
 
-let bound_variable =
-  let count = ref 0 in
-  function id ->  
-    count := !count+1 ;
-    Ident.create ((Ident.string id)^"_"^ (string_of_int !count))
+let bound_variable id = 
+  v_count := !v_count+1 ;
+  Ident.create ((Ident.string id)^"_"^ (string_of_int !v_count))
+
+let my_fresh_hyp ()=
+    hyp_count := !hyp_count+1 ;
+    Ident.create (string_of_int !hyp_count)
+
 
 (**
 @return (va,pr,fu) which is a triple of sets where
@@ -334,15 +345,24 @@ let update_v_g vars =
 
 (**
    @param l list of variable declaration or predicates (hypotheses)
+   @param c is the conclusion 
    Update the hashtables 
    - symbs which associates to each hypothesis its symbols (as a triple)
      and class_of_hyp 
    - class_of_hyp which associates to each hypothesis its representative 
    variable 
 **)
-let memorizes_hyp_symb l = 
-  
+let memorizes_hyp_symb (l,c)= 
   reset();
+  
+  (** retrieves the variables of the conclusion **)
+  let v = (sets_of_vars c) in 
+  let v = SS_set.fold (fun s  t -> 
+			 update_v_g s ; 
+			 String_set.union s t) v String_set.empty in
+
+  
+
   let rec mem   = function  
     | [] ->  ()
     | Svar (id, v) :: q ->  mem  q 
@@ -383,11 +403,11 @@ let rec get_vars_in_tree v n acc =
       (* computes the list of variables reachable in one step *)
       let succ_list = String_set.fold
 	(fun el l -> 
-	   (*Format.printf "vars attached to %s : " el ;*)
+	   (*Printf.printf "vars attached to %s : " el ;*)
 	   let l' = Var_graph.succ !vg el in
 	   (*List.iter (fun el -> 
-	     Format.printf " %s," el) l';
-	     Format.printf "@\n@.";*)
+			Format.printf " %s," el) l';
+	   Format.printf "@\n@.";*)
 	   List.append l l' 
 	) 
 	v
@@ -466,16 +486,18 @@ let managesGoal id ax (hyps,concl) =
       (** retrieves the list of symbols in the conclusion **)
       let (v,p,f) = symbols concl in 
       (** set informations about hypotheses **) 
-      memorizes_hyp_symb hyps;
+      memorizes_hyp_symb (hyps,concl);
       (** select the relevant variables **)
       selected_vars := get_vars_in_tree v threshold String_set.empty;
-      display_set "Selected vars: " !selected_vars ; 
+      (*display_set "Selected vars: " !selected_vars ; *)
       
 
       (* variant considering variables *)
       (** update the equivalence class of the variables **)
       let l' = filter_acc_variables hyps v in  
       Dgoal (loc,id, Env.empty_scheme (l',concl))
+	(*Dgoal (loc,id, Env.empty_scheme (l',concl))*)
+		   
     | _ -> ax 
 
 
@@ -484,7 +506,7 @@ let reduce q =
   let q' =   match q with
       Dgoal (loc, id, s)  as ax ->
         let (l,g) = s.Env.scheme_type in
-        let (l',g') = Util.intros [] g in 
+        let (l',g') = Util.intros [] g my_fresh_hyp in 
 	(*Printf.printf "Size of l %d " (List.length l');*)
         (** TODO: REMOVE this  **)
 	managesGoal id ax (List.append l l',g') 
