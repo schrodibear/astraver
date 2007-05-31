@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.15 2007-05-31 08:50:25 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.16 2007-05-31 18:57:00 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -65,7 +65,6 @@ open Pp
 open Hashtbl
 open Set
 open Util
-
 
 let threshold = Options.pruning_hyp
 
@@ -478,7 +477,24 @@ let filter_acc_variables l concl_rep=
 
 
 
+(************************)
 
+module Display = struct
+  let vertex_name v = Var_graph.V.label v 
+    
+  let graph_attributes _ = []
+  let default_vertex_attributes _ = []
+  let vertex_attributes _ = []
+  let default_edge_attributes _ = []
+  let get_subgraph _ = None
+  let edge_attributes _ = []
+  include Var_graph
+end
+  
+module Dot = Graphviz.Dot(Display)
+
+  
+(************************)
 
 let managesGoal id ax (hyps,concl) =
   match ax with 
@@ -489,12 +505,14 @@ let managesGoal id ax (hyps,concl) =
       memorizes_hyp_symb (hyps,concl);
       (** select the relevant variables **)
       selected_vars := get_vars_in_tree v threshold String_set.empty;
-      (*display_set "Selected vars: " !selected_vars ; *)
+      display_set "Selected vars: " !selected_vars ; 
       
 
       (* variant considering variables *)
       (** update the equivalence class of the variables **)
-      let l' = filter_acc_variables hyps v in  
+      let l' = filter_acc_variables hyps v in
+      let oc  =  open_out "test.dot" in 
+      Dot.output_graph oc !vg ;
       Dgoal (loc,id, Env.empty_scheme (l',concl))
 	(*Dgoal (loc,id, Env.empty_scheme (l',concl))*)
 		   
@@ -502,6 +520,8 @@ let managesGoal id ax (hyps,concl) =
 
 
 
+
+ 
 let reduce q = 
   let q' =   match q with
       Dgoal (loc, id, s)  as ax ->
@@ -509,7 +529,8 @@ let reduce q =
         let (l',g') = Util.intros [] g my_fresh_hyp in 
 	(*Printf.printf "Size of l %d " (List.length l');*)
         (** TODO: REMOVE this  **)
-	managesGoal id ax (List.append l l',g') 
+	managesGoal id ax (List.append l l',g');
+
     | _ -> failwith "goal awaited" in
   q' 
   
