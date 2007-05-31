@@ -11,6 +11,7 @@ type jc_decl =
       tfun_spec * tstatement list
   | JCrange_type_def of string * Num.num * Num.num
   | JCstruct_def of string * field_info list 
+  | JCrec_struct_defs of jc_decl list
 
 let string_of_native t =
   match t with
@@ -41,10 +42,10 @@ let print_type fmt t =
 let const fmt c =
   match c with
     | JCCinteger s -> fprintf fmt "%s" s
-    | JCCreal _
-    | JCCboolean _
-    | JCCnull
-    | JCCvoid -> assert false (* TODO *)
+    | JCCreal s -> fprintf fmt "%s" s
+    | JCCboolean b -> fprintf fmt "%B" b
+    | JCCnull -> fprintf fmt "null"
+    | JCCvoid -> fprintf fmt "()"
 
 let lbin_op op =
   if op == Jc_pervasives.ge_int then ">=" else
@@ -252,7 +253,7 @@ let field fmt fi =
   fprintf fmt "%a %s;@\n" 
     print_type fi.jc_field_info_type fi.jc_field_info_name
 
-let print_decl fmt d =
+let rec print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@[%a %s(@[%a@])@\n%a@\n%a@]@\n@." print_type ty id
@@ -264,8 +265,9 @@ let print_decl fmt d =
     | JCstruct_def(id,fields) ->
 	fprintf fmt "@[<v 2>type %s = {@\n%a}@]@\n@."
 	  id (print_list space field) fields
-	  
-
+    | JCrec_struct_defs dlist ->
+	print_list (fun fmt () -> fprintf fmt " and ") print_decl fmt dlist
+		   
 let rec print_decls fmt d =
   match d with
     | [] -> ()

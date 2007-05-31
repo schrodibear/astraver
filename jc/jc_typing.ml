@@ -686,7 +686,10 @@ let incr_op op =
     | _ -> assert false
 
 let set_assigned v =
-  Jc_options.lprintf "Local var %s is assigned@." v.jc_var_info_name;
+(* Yannick: jc_options cannot be exported, and jc_typing must be
+   --> to use log here, move it out of jc_options
+  Jc_options.lprintf "Local var %s is assigned@." v.jc_var_info_name; 
+*)
   v.jc_var_info_assigned <- true
 
 let make_unary_app loc (op : Jc_ast.punary_op) e2 =
