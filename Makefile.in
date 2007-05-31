@@ -162,8 +162,7 @@ CMO = src/lib.cmo \
 	   src/zenon.cmo src/cvcl.cmo tools/calldp.cmo src/pretty.cmo  \
            src/unionfind.cmo src/theoryreducer.cmo \
            ocamlgraph/graph.cmo \
-           src/theory_filtering.cmo \
-           ocamlgraph/graphviz.cmo src/hypotheses_filtering.cmo \
+           src/theory_filtering.cmo src/hypotheses_filtering.cmo \
            src/dispatcher.cmo src/isabelle.cmo src/ocaml.cmo  \
 	   src/main.cmo 
 CMX      = $(CMO:.cmo=.cmx)
