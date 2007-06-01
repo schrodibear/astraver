@@ -5,7 +5,6 @@ OCAMLDEP = @OCAMLDEP@
 OFLAGS = @FORPACK@
 
 CMO=util.cmo per_imp.cmo bitv.cmo imperative.cmo topological.cmo persistent.cmo
-
 CMX = $(CMO:.cmo=.cmx)
 
 opt: graph.cmx
