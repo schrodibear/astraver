@@ -205,32 +205,46 @@ module Make(X : INPUT) = struct
 
   let make_seq cfg init =
     let invariants = HN.create 17 in
+    let todo = ref [init] in
+    let invariant n = match n.node_status with
+      | NStodo -> HN.add invariants n (); todo := n :: !todo
+      | _ -> ()
+    in
     let rec dfs n = 
       if n.node_status = NSinprogress then 
-	failwith ("loop without any invariant: " ^ X.Label.to_string n.node_name);
+	failwith ("loop without any invariant: " ^ 
+		     X.Label.to_string n.node_name);
       if n.node_status = NStodo then begin
-	n.node_status <- NSinprogress;
-	let pre = 
-	  match n.node_kind with Ninvariant i -> Some i | Nother -> None 
+	let pre = match n.node_kind with 
+	  | Ninvariant i -> n.node_status <- NSdone []; Some i 
+	  | Nother -> n.node_status <- NSinprogress; None 
 	in 
 	let code s = { seq_pre = pre; seq_code = s } in
 	let cl = 
 	  List.map
-	    (fun (m,s) -> 
-	      dfs m;
-	      match m.node_kind, m.node_status with
-		| Ninvariant i, _ ->
-		    [code s]
-		| Nother, NSdone cl ->
-		    List.map (fun c -> code (X.append_stmt s c.seq_code)) cl
-		| Nother, _ ->
-		    assert false)
+	    (fun (m,s) -> match m.node_kind with
+		| Ninvariant i ->
+		    invariant m; 
+		    let s1 = X.append_stmt s (X.assert_stmt i) in
+		    [code s1]
+		| Nother ->
+		    dfs m;
+		    match m.node_status with
+		      | NSdone cl ->
+			  List.map 
+			    (fun c -> code (X.append_stmt s c.seq_code)) cl
+		      | _ ->
+			  assert false)
 	    (cfg n)
 	in
 	n.node_status <- NSdone (List.flatten cl)
       end
     in
-    dfs init;
+    let rec loop () = match !todo with
+      | [] -> ()
+      | n :: l -> todo := l; dfs n
+    in
+    loop ();
     let code n = match n.node_status with NSdone c -> c | _ -> assert false in
     HN.fold (fun n _ acc -> code n @ acc) invariants (code init)
 
