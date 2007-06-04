@@ -27,6 +27,7 @@ module X = struct
 end
 
 module Seq = Mix_cfg.Make(X)
+open Seq
 
 let report_loc lb =
   let b,e = lexeme_start_p lb, lexeme_end_p lb in
@@ -62,5 +63,13 @@ let asm = List.map (fun (l,s) -> (l, interp_stmt s)) asm
 
 let cl = Seq.transform asm Sys.argv.(2)
 
+let print_seq_code fmt c = 
+  begin match c.seq_pre with
+    | Some p -> fprintf fmt "pre { %s }@\n" (X.string_of_predicate p)
+    | None -> ()
+  end;
+  fprintf fmt "code %s@\n@\n" (X.string_of_stmt c.seq_code)
+
+let () = List.iter (print_seq_code std_formatter) cl
 
 

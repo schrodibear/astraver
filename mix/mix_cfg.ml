@@ -65,13 +65,11 @@ module Make(X : INPUT) = struct
 
   module HL = Hashtbl.Make(X.Label)
       
-  module HN = struct
-    let create = Hashtbl.create 
-    let add h n = Hashtbl.add h n.node_id
-    let mem h n = Hashtbl.mem h n.node_id
-    let find h n = Hashtbl.find h n.node_id
-    let fold = Hashtbl.fold
-  end
+  module HN = Hashtbl.Make(struct
+			     type t = node
+			     let hash n = Hashtbl.hash n.node_id
+			     let equal n1 n2 = n1.node_id = n2.node_id
+			   end)
 
   let make_cfg asm init =
     (* first pass: find out labels which are node starting points *)
@@ -101,7 +99,7 @@ module Make(X : INPUT) = struct
     in
     let rec make_nodes = function
       | [] -> 
-	  (* end of code -> dummy node *)
+	  (* end of code -> dummy node (~ halt) *)
 	  let l = X.Label.create () in
 	  let _ = create_node l Nother in
 	  HL.add lcfg l [];
@@ -220,29 +218,32 @@ module Make(X : INPUT) = struct
 	  | Nother -> n.node_status <- NSinprogress; None 
 	in 
 	let code s = { seq_pre = pre; seq_code = s } in
-	let cl = 
-	  List.map
-	    (fun (m,s) -> match m.node_kind with
-		| Ninvariant i ->
-		    invariant m; 
-		    let s1 = X.append_stmt s (X.assert_stmt i) in
-		    [code s1]
-		| Nother ->
-		    dfs m;
-		    match m.node_status with
-		      | NSdone cl ->
-			  List.map 
-			    (fun c -> code (X.append_stmt s c.seq_code)) cl
-		      | _ ->
-			  assert false)
-	    (cfg n)
+	let cl = match cfg n with
+	  | [] -> 
+	      [[code X.void_stmt]]
+	  | sl ->
+	      List.map
+		(fun (m,s) -> match m.node_kind with
+		   | Ninvariant i ->
+		       invariant m; 
+		       let s1 = X.append_stmt s (X.assert_stmt i) in
+		       [code s1]
+		   | Nother ->
+		       dfs m;
+		       match m.node_status with
+			 | NSdone cl ->
+			     List.map 
+			       (fun c -> code (X.append_stmt s c.seq_code)) cl
+			 | _ ->
+			     assert false)
+		sl
 	in
 	n.node_status <- NSdone (List.flatten cl)
       end
     in
     let rec loop () = match !todo with
       | [] -> ()
-      | n :: l -> todo := l; dfs n
+      | n :: l -> todo := l; dfs n; loop ()
     in
     loop ();
     let code n = match n.node_status with NSdone c -> c | _ -> assert false in
