@@ -108,7 +108,8 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
 	    tools/simplify_split.ml tools/smtlib_split.ml tools/rv_split.ml \
 	    tools/zenon_split.ml tools/ergo_split.ml \
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
-	    tools/simplify_parser.ml
+	    tools/simplify_parser.ml \
+	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml
 
 # main targets
 ##############
@@ -274,6 +275,17 @@ bin/krakatoa.byte: $(KCMO)
 	 	 unix.cma nums.cma $^
 
 
+# demixify
+
+MIXCMO=mix/mix_parser.cmo mix/mix_lexer.cmo mix/mix_cfg.cmo mix/mix_main.cmo
+MIXCMX = $(MIXCMO:.cmo=.cmx)
+
+bin/demixify.opt: $(MIXCMX)
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ $^
+	strip    $@
+
+bin/demixify.byte: $(MIXCMO)
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ $^
 
 # ocamlgraph
 
@@ -827,7 +839,7 @@ coq-clean::
 
 .depend depend:: $(GENERATED)
 	rm -f .depend
-	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml > .depend
+	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml > .depend
 
 .depend.coq: #lib/coq*/*.v
 	if test @COQ@ = yes; then \
