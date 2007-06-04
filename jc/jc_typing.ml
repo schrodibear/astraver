@@ -130,6 +130,7 @@ let logic_functions_env = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
 let variables_table = Hashtbl.create 97
+let variables_env = Hashtbl.create 97
 
 
 let rec find_field_struct loc st f =
@@ -332,7 +333,11 @@ let rec term env e =
 	      let vi = List.assoc id env
 	      in vi.jc_var_info_type,JCTTvar vi
 	    with Not_found -> 
-	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	      try 
+		let vi = Hashtbl.find variables_env id 
+		in vi.jc_var_info_type,JCTTvar vi
+	      with Not_found -> 
+		typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1,t) -> 
 	  let te1 = term env e1 in
@@ -535,7 +540,9 @@ let rec assertion env e =
 	  let vi = 
 	    try List.assoc id env 
 	    with Not_found -> 
-	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	      try Hashtbl.find variables_env id
+	      with Not_found -> 
+		typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  in 
 	  begin
 	    match vi.jc_var_info_type with
@@ -859,7 +866,11 @@ let rec expr env e =
 	      let vi = List.assoc id env
 	      in vi.jc_var_info_type,JCTEvar vi
 	    with Not_found -> 
-	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	      try 
+		let vi = Hashtbl.find variables_env id
+		in vi.jc_var_info_type,JCTEvar vi
+	      with Not_found -> 
+		typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1, t) -> 
 	  let te1 = expr env e1 in
@@ -1245,7 +1256,14 @@ let rec location_set env e =
 		  vi.jc_var_info_type,JCTLSvar(vi)
 	      | _ -> assert false
 	  with Not_found -> 
-	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	    try 
+	      let vi = Hashtbl.find variables_env id in
+	      match vi.jc_var_info_type with
+		| JCTpointer(st,_,_) ->
+		    vi.jc_var_info_type,JCTLSvar(vi)
+		| _ -> assert false
+	    with Not_found -> 
+	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	end
     | JCPEbinary(e,Badd,i) ->
 	let ty,te = location_set env e in
@@ -1286,7 +1304,11 @@ let location env e =
 	    let vi = List.assoc id env in
 	    vi.jc_var_info_type,JCTLvar vi
 	  with Not_found -> 
-	    typing_error e.jc_pexpr_loc "unbound identifier %s" id
+	    try 
+	      let vi = Hashtbl.find variables_env id in
+	      vi.jc_var_info_type,JCTLvar vi
+	    with Not_found -> 
+	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
     | JCPEderef(ls,f) ->
 	let t,tls = location_set env ls in
@@ -1405,6 +1427,7 @@ let rec decl d =
 	let ty = type_type ty in
 	let vi = var ~static:true ty id in
 	let e = expr [] init in
+	Hashtbl.add variables_env id vi;
 	Hashtbl.add variables_table vi.jc_var_info_tag (vi,e)
     | JCPDfun(ty,id,pl,specs,body) -> 
 	let param_env = List.map param pl in
