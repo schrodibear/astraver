@@ -6,11 +6,14 @@ module type INPUT = sig
     val create : unit -> t
     val equal : t -> t -> bool
     val hash : t -> int
+    val to_string : t -> string
   end
 
   type predicate
     
   val ptrue : predicate
+
+  val string_of_predicate : predicate -> string
 
   type statement
     
@@ -20,6 +23,8 @@ module type INPUT = sig
 
   val assert_stmt : predicate -> statement
     
+  val string_of_stmt : statement -> string
+
 end
 
 module Make(X : INPUT) = struct
@@ -62,6 +67,7 @@ module Make(X : INPUT) = struct
     let create = Hashtbl.create 
     let add h n = Hashtbl.add h n.node_id
     let mem h n = Hashtbl.mem h n.node_id
+    let find h n = Hashtbl.find h n.node_id
   end
 
   let make_cfg asm init =
@@ -86,7 +92,7 @@ module Make(X : INPUT) = struct
       | (l, Aother st1) :: asm when 
 	(match l with None -> true | Some l -> not (HL.mem node_labels l)) ->
  	  descend (X.append_stmt st st1) asm
-      | _ ->
+      | asm ->
 	  st, asm
     in
     let rec make_nodes = function
@@ -132,7 +138,27 @@ module Make(X : INPUT) = struct
     HL.iter (fun l succ -> 
 	       HN.add cfg (node l) 
 		 (List.map (fun (l1,s1) -> (node l1, s1)) succ)) lcfg;
-    Hashtbl.find cfg, node init
+    HN.find cfg, node init
+
+  (* debug *)
+
+  open Format
+
+  let print_cfg fmt cfg init =
+    let visited = HN.create 17 in
+    let rec dfs n =
+      if not (HN.mem visited n) then begin
+	HN.add visited n ();
+	fprintf fmt "node %s:@\n" (X.Label.to_string n.node_name);
+	let succ = cfg n in
+	List.iter 
+	  (fun (m,s) -> 
+	    fprintf fmt "  %s -> %s@\n" (X.string_of_stmt s) 
+	      (X.Label.to_string m.node_name)) succ;
+	List.iter (fun (m,_) -> dfs m) succ
+      end
+    in
+    dfs init
 
   (* phase 2: from CFG to purely sequential programs *)
 

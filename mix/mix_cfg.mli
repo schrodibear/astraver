@@ -8,11 +8,14 @@ module type INPUT = sig
     val create : unit -> t
     val equal : t -> t -> bool
     val hash : t -> int
+    val to_string : t -> string
   end
 
   type predicate
     
   val ptrue : predicate
+
+  val string_of_predicate : predicate -> string
 
   type statement
     
@@ -21,6 +24,8 @@ module type INPUT = sig
   val append_stmt : statement -> statement -> statement
 
   val assert_stmt : predicate -> statement
+
+  val string_of_stmt : statement -> string
     
 end
 
