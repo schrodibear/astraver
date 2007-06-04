@@ -65,7 +65,7 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I ocamlgraph -I octagon/ocamllib
+INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ocamlgraph -I octagon/ocamllib
 BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads
 OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads
 
