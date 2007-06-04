@@ -229,18 +229,19 @@ JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_make.cmo jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 
-JCCMO_EXPORT = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/jc_version.cmo \
-	jc/jc_envset.cmo jc/jc_pervasives.cmo \
-	jc/jc_output.cmo \
-	jc/jc_typing.cmo jc/jc_norm.cmo \
-	jc/output.cmo
-JCCMX_EXPORT = $(JCCMO_EXPORT:.cmo=.cmx)
+JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
+	jc/jc_version.ml \
+	jc/jc_envset.ml jc/jc_pervasives.ml \
+	jc/jc_output.ml \
+	jc/jc_typing.ml jc/jc_norm.ml \
+	jc/output.ml
+JCCMO_EXPORT = $(JCCMO_EXPORT:.ml=.cmo)
+JCCMX_EXPORT = $(JCCMO_EXPORT:.ml=.cmx)
 
-jc/jc.cma: $(JCCMO_EXPORT)
+jc/jc.cma: $(JCCML_EXPORT)
 	$(OCAMLC) $(BFLAGS) -a -o $@ $^
 
-jc/jc.cmxa: $(JCCMX_EXPORT)
+jc/jc.cmxa: $(JCCML_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
 
 bin/jessie.opt: $(JCCMX) 
