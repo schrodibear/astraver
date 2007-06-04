@@ -129,6 +129,7 @@ let logic_functions_table = Hashtbl.create 97
 let logic_functions_env = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
+let variables_table = Hashtbl.create 97
 
 
 let rec find_field_struct loc st f =
@@ -1400,6 +1401,11 @@ let add_typedecl d (id,parent) =
 
 let rec decl d =
   match d.jc_pdecl_node with
+    | JCPDvar(ty,id,init) ->
+	let ty = type_type ty in
+	let vi = var ~static:true ty id in
+	let e = expr [] init in
+	Hashtbl.add variables_table vi.jc_var_info_tag (vi,e)
     | JCPDfun(ty,id,pl,specs,body) -> 
 	let param_env = List.map param pl in
 	let ty = type_type ty in

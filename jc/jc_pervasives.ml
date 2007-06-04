@@ -74,7 +74,7 @@ let const c =
 
 let var_tag_counter = ref 0
 
-let var ty id =
+let var ?(static=false) ty id =
   incr var_tag_counter;
   let vi = {
     jc_var_info_tag = !var_tag_counter;
@@ -82,6 +82,7 @@ let var ty id =
     jc_var_info_final_name = id;
     jc_var_info_type = ty;
     jc_var_info_assigned = false;
+    jc_var_info_static = static;
   }
   in vi
 

@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.36 2007-06-04 12:57:02 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.37 2007-06-04 12:59:29 moy Exp $ */
 
 %{
 
@@ -182,6 +182,8 @@ rec_decls:
     { locate_decl (JCPDrectypes($1)) }
 
 decl: 
+| variable_definition
+    { $1 }
 | function_definition 
     { $1 }
 | type_definition 
