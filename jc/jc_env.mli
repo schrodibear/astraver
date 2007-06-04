@@ -62,6 +62,7 @@ type var_info =
       mutable jc_var_info_final_name : string;
       jc_var_info_type : jc_type;
       mutable jc_var_info_assigned : bool;
+      jc_var_info_static : bool;
     }
 
 

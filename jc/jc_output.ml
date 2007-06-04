@@ -12,7 +12,8 @@ type jc_decl =
   | JCrange_type_def of string * Num.num * Num.num
   | JCstruct_def of string * field_info list 
   | JCrec_struct_defs of jc_decl list
-
+  | JCvar_def of jc_type * string * texpr
+      
 let string_of_native t =
   match t with
     | Tunit -> "unit"
@@ -267,7 +268,10 @@ let rec print_decl fmt d =
 	  id (print_list space field) fields
     | JCrec_struct_defs dlist ->
 	print_list (fun fmt () -> fprintf fmt " and ") print_decl fmt dlist
-		   
+    | JCvar_def(ty,id,init) ->
+	fprintf fmt "@[%a %s = %a@]@\n@." print_type ty id expr init
+	
+   
 let rec print_decls fmt d =
   match d with
     | [] -> ()

@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.35 2007-04-25 08:06:00 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.36 2007-06-04 12:57:02 moy Exp $ */
 
 %{
 
@@ -360,6 +360,16 @@ assigns:
 function_definition: 
 | type_expr IDENTIFIER parameters function_specification compound_statement
     { locate_decl (JCPDfun($1, $2, $3, $4, $5)) }
+;
+
+
+/******************************/
+/* Global variable definition */
+/******************************/
+
+variable_definition:
+| type_expr IDENTIFIER EQ expression
+    { locate_decl (JCPDvar($1,$2,$4)) }
 ;
 
 /***************/

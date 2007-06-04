@@ -131,6 +131,7 @@ and pstatement =
 
 
 type pdecl_node =
+  | JCPDvar of ptype * string * pexpr
   | JCPDfun of 
       ptype * string * (ptype * string) list * pclause list * pstatement list
   | JCPDstructtype of string * 
