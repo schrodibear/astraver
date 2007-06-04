@@ -1,4 +1,8 @@
 
+open Format
+open Lexing
+open Mix_ast
+
 module X = struct
   module Label = struct
     type t = string
@@ -24,12 +28,37 @@ end
 
 module Seq = Mix_cfg.Make(X)
 
+let report_loc lb =
+  let b,e = lexeme_start_p lb, lexeme_end_p lb in
+  eprintf "File \"%s\", " b.pos_fname;
+  let l = b.pos_lnum in
+  let fc = b.pos_cnum - b.pos_bol + 1 in
+  let lc = e.pos_cnum - b.pos_bol + 1 in
+  eprintf "line %d, characters %d-%d:@\n" l fc lc
+
 let asm =
-  let c = open_in Sys.argv.(1) in
+  let f = Sys.argv.(1) in
+  let c = open_in f in
   let lb = Lexing.from_channel c in
-  let asm = Mix_parser.file Mix_lexer.token lb in
-  close_in c;
-  asm
+  lb.Lexing.lex_curr_p <- { lb.Lexing.lex_curr_p with Lexing.pos_fname = f };
+  try
+    let asm = Mix_parser.file Mix_lexer.token lb in
+    close_in c;
+    asm
+  with
+    | Mix_lexer.Lexical_error s -> 
+	report_loc lb; eprintf "Lexical error: %s@." s; exit 1
+    | Parsing.Parse_error -> 
+	report_loc lb; eprintf "Syntax error@."; exit 1
+
+let interp_stmt = function
+  | PSinvariant i -> Seq.Ainvariant i
+  | PSjump l -> Seq.Ajump l
+  | PScond l -> Seq.Acond (l, "cond true", "cond false")
+  | PShalt -> Seq.Ahalt
+  | PSother s -> Seq.Aother s
+
+let asm = List.map (fun (l,s) -> (l, interp_stmt s)) asm
 
 let cl = Seq.transform asm Sys.argv.(2)
 

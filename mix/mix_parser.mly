@@ -10,7 +10,8 @@
 %token <string> STRING
 %token <string> LABEL
 %token AND EXISTS FALSE FORALL NOT OR TRUE
-%token JUMP JCOND HALT
+%token LBRALBRA RBRARBRA JUMP JCOND HALT
+%token EOF
 
 /* Precedences */
 
@@ -19,7 +20,7 @@
 %right NOT
 /* Entry points */
 
-%type <Mix_ast.file> file
+%type <Mix_ast.pfile> file
 %start file
 
 %%
@@ -43,7 +44,7 @@ stmt:
 ;
 
 stmt_kind:
-| LBRALBRA STRING RBRARBRA { PSinvariant $3 }
+| LBRALBRA STRING RBRARBRA { PSinvariant $2 }
 | JUMP IDENT { PSjump $2 }
 | JCOND IDENT { PScond $2 }
 | HALT { PShalt }

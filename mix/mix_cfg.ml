@@ -38,13 +38,9 @@ module Make(X : INPUT) = struct
 
   type asm_code = (X.Label.t option * asm) list
   
-  type seq =
-    | Sassert of X.predicate
-    | Sstmt of X.statement
-
   type seq_code = {
     seq_pre : X.predicate option;
-    seq_code : seq list;
+    seq_code : X.statement;
   }
 
   (* phase 1: from assembly code to CFG *)
@@ -53,10 +49,16 @@ module Make(X : INPUT) = struct
     | Ninvariant of X.predicate
     | Nother
 
+  type node_status =
+    | NStodo
+    | NSinprogress
+    | NSdone of seq_code list
+
   type node = { 
     node_id : int;
     node_name : X.Label.t;
-    node_kind : node_kind
+    node_kind : node_kind;
+    mutable node_status : node_status;
   }
 
   type graph = node -> (node * X.statement) list
@@ -68,6 +70,7 @@ module Make(X : INPUT) = struct
     let add h n = Hashtbl.add h n.node_id
     let mem h n = Hashtbl.mem h n.node_id
     let find h n = Hashtbl.find h n.node_id
+    let fold = Hashtbl.fold
   end
 
   let make_cfg asm init =
@@ -83,7 +86,8 @@ module Make(X : INPUT) = struct
       let id = ref 0 in
       fun lab kind -> 
 	incr id; 
-	let node = { node_id = !id; node_name = lab; node_kind = kind } in
+	let node = { node_id = !id; node_name = lab; 
+		     node_kind = kind; node_status = NStodo } in
 	HL.add nodes lab node;
 	node
     in
@@ -200,10 +204,39 @@ module Make(X : INPUT) = struct
 ***)
 
   let make_seq cfg init =
-    assert false
+    let invariants = HN.create 17 in
+    let rec dfs n = 
+      if n.node_status = NSinprogress then 
+	failwith ("loop without any invariant: " ^ X.Label.to_string n.node_name);
+      if n.node_status = NStodo then begin
+	n.node_status <- NSinprogress;
+	let pre = 
+	  match n.node_kind with Ninvariant i -> Some i | Nother -> None 
+	in 
+	let code s = { seq_pre = pre; seq_code = s } in
+	let cl = 
+	  List.map
+	    (fun (m,s) -> 
+	      dfs m;
+	      match m.node_kind, m.node_status with
+		| Ninvariant i, _ ->
+		    [code s]
+		| Nother, NSdone cl ->
+		    List.map (fun c -> code (X.append_stmt s c.seq_code)) cl
+		| Nother, _ ->
+		    assert false)
+	    (cfg n)
+	in
+	n.node_status <- NSdone (List.flatten cl)
+      end
+    in
+    dfs init;
+    let code n = match n.node_status with NSdone c -> c | _ -> assert false in
+    HN.fold (fun n _ acc -> code n @ acc) invariants (code init)
 
   let transform asm init =
     let cfg,ninit = make_cfg asm init in
+    print_cfg std_formatter cfg ninit;
     make_seq cfg ninit
 
 end

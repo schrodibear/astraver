@@ -1,0 +1,10 @@
+
+init:	"ent3 0,1"
+	jmp changem
+loop:	"cmpa x,3"
+	jcond dec
+changem:"ent2 0,3"
+	"lda x,3"
+dec:	{{  "invariant" }}
+	"dec3 1"
+	jcond loop

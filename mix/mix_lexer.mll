@@ -16,7 +16,7 @@
 	"or", OR;
 	"true", TRUE;
 	(* asm *)
-	"jump", JUMP;
+	"jmp", JUMP;
 	"jcond", JCOND;
 	"halt", HALT;
       ]
@@ -27,6 +27,11 @@
       { pos with pos_lnum = pos.pos_lnum + 1; pos_bol = pos.pos_cnum }
 
   let string_buf = Buffer.create 1024
+
+  let char_for_backslash = function
+    | 'n' -> '\n'
+    | 't' -> '\t'
+    | c -> c
 
   exception Lexical_error of string
 }
@@ -44,7 +49,8 @@ rule token = parse
   | space+  
       { token lexbuf }
   | ident as id  
-      { try Hashtbl.find keywords id with Not_found -> IDENT id }
+      { let id = String.lowercase id in
+	try Hashtbl.find keywords id with Not_found -> IDENT id }
   | ident as id ":"
       { LABEL id }
   | "{{"
