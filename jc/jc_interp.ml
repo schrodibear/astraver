@@ -390,16 +390,17 @@ let rec statement s =
     | JCSreturn e -> 
 	expr e
     | JCSunpack(st, e) ->
-	(* La méthode du unpack_ dans jessie.why ne marche pas
+	(* La méthode consistant à placer unpack_ dans jessie.why ne marche pas
 quand il y a un unpack par type structure. *)
 	(* let e = expr e in make_app "unpack_" [e] *)
 	let e = expr e in make_app ("unpack_"^st.jc_struct_info_root) [e]
     | JCSpack(st,e) ->
-	let e = expr e in
+	let e = expr e in make_app ("pack_"^st.jc_struct_info_root) [e]
+(*	let e = expr e in
 	let tmp = tmp_var_name() in
 	make_lets ([(tmp,e)])
 	  (Assert(invariant_for_struct (LVar tmp) st, 
-		  make_app "pack_" [Var tmp]))
+		  make_app "pack_" [Var tmp])) *)
     | JCSthrow (ei, Some e) -> 
 	let e = expr e in
 	Raise(ei.jc_exception_info_name,Some e)

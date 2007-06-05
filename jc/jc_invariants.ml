@@ -67,6 +67,13 @@ let memory_type st_type f_type = {
   ];
 }
 
+let pointer_type st_type = {
+  logic_type_name = "pointer";
+  logic_type_args = [
+    simple_logic_type st_type;
+  ];
+}
+
 (************************************)
 (* Checking an invariant definition *)
 (************************************)
@@ -361,6 +368,80 @@ let invariant_axiom st acc (li, a) =
 let invariants_axioms st acc =
   let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
   List.fold_left (invariant_axiom st) acc invs
+
+(*****************)
+(* pack / unpack *)
+(*****************)
+
+let pack_declaration st acc =
+  let this = "this" in
+  let name = st.jc_struct_info_root in
+  let mutable_name = "mutable_"^name in
+  let struct_type = pointer_type st.jc_struct_info_root in
+  if st.jc_struct_info_parent = None then
+    Param(
+      false,
+      "pack_"^st.jc_struct_info_root,
+      Prod_type(
+	this,
+	Base_type (struct_type),
+	Annot_type(
+	  LPred(
+	    "eq",
+	    [ LConst(Prim_bool true);
+	      LApp("select", [LVar mutable_name; LVar this]) ]),
+	  Base_type (simple_logic_type "unit"),
+	  [mutable_name],
+	  [mutable_name],
+	  LPred(
+	    "eq",
+	    [ LVar mutable_name;
+	      LApp(
+		"store",
+		[ LVarAtLabel(mutable_name, "");
+		  LVar this;
+		  LConst(Prim_bool false) ])]),
+	  []
+	)
+      )
+    )::acc
+  else
+    acc
+
+let unpack_declaration st acc =
+  let this = "this" in
+  let name = st.jc_struct_info_root in
+  let mutable_name = "mutable_"^name in
+  let struct_type = pointer_type st.jc_struct_info_root in
+  if st.jc_struct_info_parent = None then
+    Param(
+      false,
+      "unpack_"^st.jc_struct_info_root,
+      Prod_type(
+	this,
+	Base_type (struct_type),
+	Annot_type(
+	  LPred(
+	    "eq",
+	    [ LConst(Prim_bool false);
+	      LApp("select", [LVar mutable_name; LVar this]) ]),
+	  Base_type (simple_logic_type "unit"),
+	  [mutable_name],
+	  [mutable_name],
+	  LPred(
+	    "eq",
+	    [ LVar mutable_name;
+	      LApp(
+		"store",
+		[ LVarAtLabel(mutable_name, "");
+		  LVar this;
+		  LConst(Prim_bool true) ])]),
+	  []
+	)
+      )
+    )::acc
+  else
+    acc
 
 (*********************************************************************)
 (*               Using a recursively-defined predicate               *)

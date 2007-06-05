@@ -26,6 +26,7 @@ unit attack(Hero[0] this, Hero[0] target)
     target.life = 0;
     target.dead = true;
   }
+  pack(target);
 }
 
 /*

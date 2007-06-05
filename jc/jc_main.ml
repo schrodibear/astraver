@@ -182,6 +182,22 @@ let main () =
             Jc_norm.structs_table
             d_inv
         in
+	(* production phase 5.4 : pack *)
+        let d_inv =
+          Hashtbl.fold
+            (fun _ (st, _) acc ->
+               Jc_invariants.pack_declaration st acc)
+            Jc_norm.structs_table
+            d_inv
+        in
+	(* production phase 5.5 : unpack *)
+        let d_inv =
+          Hashtbl.fold
+            (fun _ (st, _) acc ->
+               Jc_invariants.unpack_declaration st acc)
+            Jc_norm.structs_table
+            d_inv
+        in
 	(* production phase 6 : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 

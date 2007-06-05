@@ -4,7 +4,7 @@ type A = {
 
 unit main(A[..] a)
   behavior safety:
-    ensures true;
+    ensures a.b == \old(a.b);
 {
 }
 
