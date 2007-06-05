@@ -310,6 +310,17 @@ let invariant_for_struct this st =
   in
   make_and_list 
     (List.map (fun (li,_) -> make_logic_pred_call li [this]) invs)
+
+let any_value = function
+  | JCTnative t -> 
+      begin match t with
+	| Tunit -> assert false (* TODO *)
+	| Tboolean -> assert false (* TODO *)
+	| Tinteger ->
+	    App (Var "any_integer", Void)
+	| Treal -> assert false (* TODO *)
+      end
+  | _ -> assert false (* TODO *)
   
 let rec statement s = 
   (* reset_tmp_var(); *)
@@ -367,14 +378,14 @@ let rec statement s =
     | JCSassert a -> Assert(assertion None "" a, Void)
     | JCSdecl(vi,e,s) -> 
 	begin
-	  match e with
-	    | None -> assert false
-	    | Some e ->
-		let e = expr e in
-		if vi.jc_var_info_assigned then 
-		  Let_ref(vi.jc_var_info_final_name,e, statement s)
-		else 
-		  Let(vi.jc_var_info_final_name,e, statement s)
+	  let e = match e with
+	    | None -> any_value vi.jc_var_info_type
+	    | Some e -> expr e 
+	  in
+	  if vi.jc_var_info_assigned then 
+	    Let_ref(vi.jc_var_info_final_name,e, statement s)
+	  else 
+	    Let(vi.jc_var_info_final_name,e, statement s)
 	end
     | JCSreturn e -> 
 	expr e
@@ -604,6 +615,18 @@ let excep_posts_for_others eopt excep_posts =
        if eopt = Some ei then acc 
        else (ei.jc_exception_info_name,LTrue)::acc)
     excep_posts []
+
+let interp_fun_params f annot_type =
+  match f.jc_fun_info_parameters with
+    | [] ->
+	Prod_type("tt",unit_type, annot_type)
+    | l ->
+	List.fold_right
+	  (fun v acc ->
+	     Prod_type(v.jc_var_info_final_name,
+		       tr_type v.jc_var_info_type,
+		       acc))
+	  l annot_type
        
 let tr_fun f spec body acc =
   (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
@@ -740,17 +763,14 @@ let tr_fun f spec body acc =
       Annot_type(requires,tr_type f.jc_fun_info_return_type,
 		 reads,writes, normal_post, excep_posts)
     in
-    let fun_type =
-      List.fold_right
-	(fun v acc ->
-	   Prod_type(v.jc_var_info_final_name,tr_type v.jc_var_info_type,acc))
-	f.jc_fun_info_parameters
-	annot_type
-    in
+    let fun_type = interp_fun_params f annot_type in
     Param(false,f.jc_fun_info_name,fun_type)
   in
   (* why functions for each behaviors *)
-  let params = List.map parameter f.jc_fun_info_parameters in
+  let params = match f.jc_fun_info_parameters with
+    | [] -> ["tt", unit_type]
+    | l -> List.map parameter l
+  in
   let acc =
     List.fold_right
       (fun (id,b,e) acc ->

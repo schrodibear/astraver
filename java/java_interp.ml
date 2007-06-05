@@ -74,6 +74,7 @@ let get_var vi =
 	    jc_var_info_assigned = vi.java_var_info_assigned;
 	    jc_var_info_type = tr_type vi.java_var_info_type;
 	    jc_var_info_tag = vi.java_var_info_tag;
+	    jc_var_info_static = false; (* TODO *)
 	  }
 	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
 	nvi

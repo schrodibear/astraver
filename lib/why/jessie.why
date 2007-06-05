@@ -208,3 +208,11 @@ parameter downcast_ :
   { result=p }
 
 
+(*******************
+
+  default values
+
+
+**********************)
+
+parameter any_integer : unit -> {} int {}
