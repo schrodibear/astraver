@@ -133,7 +133,7 @@ all: $(BINARY) check $(CADUCEUS) $(JESSIE) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
 opt: bin/why.opt bin/caduceus.opt bin/jessie.opt
 
-byte : bin/why.byte bin/caduceus.byte bin/jessie.byte
+byte : bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte
 
 .PHONY: check
 
@@ -352,7 +352,7 @@ bin/simplify2why.opt: $(SIMPLIFYTOWHYCMX)
 
 DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo tools/smtlib_split.cmo\
         tools/zenon_split.cmo tools/ergo_split.cmo tools/rv_split.cmo \
-	tools/calldp.cmo tools/dp.cmo
+        tools/calldp.cmo tools/dp.cmo
 DPCMX = $(DPCMO:.cmo=.cmx)
 
 bin/dp.byte: $(DPCMO)

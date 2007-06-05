@@ -51,6 +51,15 @@ let simplify = {
   pr_id = Dispatcher.Simplify;
   pr_enc = NoEncoding;
   }
+
+let graph = {
+  pr_name = "Graph";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Graph;
+  pr_enc = NoEncoding;
+  }
+
 let simplify_pred = {
   pr_name = "Simplify(P)";
   pr_result = cols#add int;
@@ -135,7 +144,7 @@ let yices = {
   pr_id = Dispatcher.Yices;
   pr_enc = Monomorph;
   }
-let yicesSSTrat = {
+let yicesSStrat = {
   pr_name = "Yices(SS)";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
@@ -158,7 +167,7 @@ let cvc3 = {
   }
 
 let provers = [
-  simplify; ergo; yicesSSTrat; cvc3;
+  simplify; graph; ergo; yicesSStrat; cvc3;
   (*simplify_sstrat;*) simplify_strat; yices; rvsat; 
   zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
   harvey; cvcl]

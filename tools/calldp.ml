@@ -22,16 +22,21 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.35 2007-04-06 16:42:01 couchot Exp $ i*)
+(*i $Id: calldp.ml,v 1.36 2007-06-05 11:29:14 couchot Exp $ i*)
 
 open Printf
+open Options
+
 
 type prover_result = 
-  | Valid of float
-  | Invalid of float * string option 
-  | CannotDecide of float * string option 
-  | Timeout of float
-  | ProverFailure of float * string
+  | Valid of float                         
+  | Invalid of float * string option       
+  | CannotDecide of float * string option  
+  | Timeout of float                       
+  | ProverFailure of float * string        
+
+
+
 
 let remove_file ?(debug=false) f =
   if not debug then try Sys.remove f with _ -> ()
@@ -104,6 +109,74 @@ let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
     in
     remove_file ~debug out;
     r
+
+let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
+  let pruning_hyp = 3 in 
+  let last_dot_index = String.rindex f '.' in 
+  let f_for_simplify = (String.sub f  0 last_dot_index) ^ "_why.sx" in 
+  let cmd = sprintf "why --simplify --no-prelude %s " f in
+  let t'= 
+    (*    if 
+	  pruning_hyp <= 0 then timeout 
+	  else *)
+    (float_of_int timeout) /. (float_of_int (pruning_hyp +1)) in
+  let t'',c,out = timed_sys_command ~debug (int_of_float t') cmd in
+  let cmd = sprintf "Simplify %s"  f_for_simplify in
+  let t'',c,out = timed_sys_command ~debug (int_of_float (t' -. t'')) cmd in
+  let result_sort t'' out  = 
+    if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
+      Valid t''
+    else
+      if Sys.command (sprintf "grep -q -w Invalid %s" out) = 0 then
+	CannotDecide (t'',Some (file_contents out))
+      else
+	ProverFailure
+	  (t'',"command failed: " ^ cmd ^ "\n" ^ file_contents out) in
+  if c == 0 then 
+    let r = result_sort t'' out in
+    remove_file ~debug out;
+    r
+  else 
+    let t = ref 0.0 in 
+    let c = ref 0 in 
+    let k = ref 1 in
+    let explicitRes = ref true in
+    let r = ref (Valid 0.0) in 
+    while ( !c == 0 && !explicitRes  &&  !t < float_of_int timeout) 
+    do
+
+      (* compute the new proof obligation *)
+      let cmd = sprintf "why --simplify --no-prelude --prune-hyp %d %s " !k f  in
+      let t'',c',out = timed_sys_command ~debug (int_of_float t') cmd in
+    
+      let cmd = sprintf "Simplify %s"  f_for_simplify in
+      let t'',c',out = timed_sys_command ~debug (int_of_float (t' -. t'')) cmd in
+
+      t :=  !t +. t'';
+      c := c';
+      r := result_sort t'' out ;
+      k := !k+1 ;
+      explicitRes := match !r with 
+	  Valid _ | Timeout _ | ProverFailure _  -> false 
+	| Invalid _ | CannotDecide  _ ->   true ;
+	 
+    done;
+    
+    let res  = 
+      if !t >= float_of_int timeout then 
+	error !c (float_of_int timeout) cmd
+      else 
+	if !c != 0 then 
+	  error !c (float_of_int timeout) cmd
+	else
+	  !r in
+    res
+          
+	  
+      
+      
+    
+
 
 let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
   (*let cmd = sprintf "rv-sat %s" f in*)

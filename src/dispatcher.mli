@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.mli,v 1.15 2007-03-08 10:00:23 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.16 2007-06-05 11:29:14 couchot Exp $ i*)
 
 open Cc
 
@@ -30,7 +30,7 @@ val push_decl : Logic_decl.t -> unit
 
 val iter : (Loc.position * string * sequent Env.scheme -> unit) -> unit
 
-type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3
+type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3 | Graph
 
 val call_prover : 
   ?debug:bool -> ?timeout:int -> ?encoding:Options.encoding ->

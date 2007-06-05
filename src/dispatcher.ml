@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.20 2007-03-08 10:00:23 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.21 2007-06-05 11:29:14 couchot Exp $ i*)
 
 open Options
 open Vcg
@@ -51,7 +51,7 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 (* calling prover *)
 
-type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3
+type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3 | Graph
 
 let push_elem p e = 
   if not pruning then 
@@ -63,7 +63,7 @@ let push_elem p e =
   | Zenon -> Zenon.push_decl e
   | Rvsat | Yices | Cvc3 -> Smtlib.push_decl e
   | Ergo -> Pretty.push_decl e
-
+  | Graph -> Pretty.push_decl e
 let push_obligation p (loc, id, s) = 
   let g = Dgoal (loc, id, s) in
   match p with
@@ -73,7 +73,7 @@ let push_obligation p (loc, id, s) =
   | Zenon -> Zenon.push_decl g
   | Rvsat | Yices | Cvc3 -> Smtlib.push_decl g
   | Ergo -> Pretty.push_decl g
-
+  | Graph -> Pretty.push_decl g
 (* output_file is a CRITICAL SECTION *)
 (** @parama elems is the List that stores the theory
     @parama o is the proof obligation
@@ -90,7 +90,9 @@ let output_file ?encoding p (elems,o) =
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
     | Rvsat | Yices | Cvc3 -> Smtlib.reset ()
     | Ergo -> Pretty.reset ()
+    | Graph -> Pretty.reset ()
   end;
+  
   if pruning then 
     begin  
       (**stores into the declarationQueue 
@@ -124,7 +126,7 @@ let output_file ?encoding p (elems,o) =
     | Zenon -> Zenon.output_file f; f ^ "_why.znn"
     | Rvsat | Yices | Cvc3 -> Smtlib.output_file f; f ^ "_why.smt"
     | Ergo -> Pretty.output_file f; f ^ "_why.why"
-
+    | Graph -> Pretty.output_file f; f ^ "_why.why"
 open Format
 
 let prover_name = function 
@@ -136,6 +138,7 @@ let prover_name = function
   | Yices -> "Yices"
   | Ergo -> "ergo"
   | Cvc3 -> "CVC3"
+  | Graph -> "Graph"
 
 let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
@@ -158,6 +161,8 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.ergo ~debug ?timeout ~filename ()
     | Cvc3 -> 
 	Calldp.cvc3 ~debug ?timeout ~filename ()
+    | Graph -> 
+	Calldp.graph  ~debug ?timeout ~filename ()
   in
   if not debug then begin try Sys.remove filename with _ -> () end;
   r

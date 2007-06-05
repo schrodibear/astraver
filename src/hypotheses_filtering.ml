@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.18 2007-06-01 09:24:46 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.19 2007-06-05 11:29:14 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -459,12 +459,13 @@ let filter_acc_variables l concl_rep=
 	in
 	(*display_set "Vars: " vars ; *)
 	
-	(* (* strong criteria: all variable 
-	   of the hypothessis must be in the set of selected variables *) *)
+	(* strong criteria: all variable 
+	   of the hypothessis must be in the set of selected variables *) 
 	if (String_set.subset vars !selected_vars) then  
-	(* (* weakest criteria: at least one  variable 
+	
+	(*  weakest criteria: at least one  variable 
 	   of the hypothessis should  be in the set of selected variables *) 
-	if (not (String_set.is_empty (String_set.inter vars !selected_vars)))
+	  (* if (not (String_set.is_empty (String_set.inter vars !selected_vars)))
 	then *)
 	  Spred (t,p):: filter q  
 	else
@@ -511,17 +512,17 @@ let managesGoal id ax (hyps,concl) =
       if debug then 
 	display_set "Selected vars: " !selected_vars ; 
       
-
-      (* variant considering variables *)
       (** update the equivalence class of the variables **)
       let l' = filter_acc_variables hyps v in
+      (** output the dot version of variables graph **)
       if debug then 
 	begin 
 	  let oc  =  open_out "test.dot" in 
 	  Dot.output_graph oc !vg 
 	end; 
       Dgoal (loc,id, Env.empty_scheme (l',concl))
-	(*Dgoal (loc,id, Env.empty_scheme (l',concl))*)
+
+      (*Dgoal (loc,id, Env.empty_scheme (hyps,concl))*)
 		   
     | _ -> ax 
 

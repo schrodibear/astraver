@@ -1,4 +1,6 @@
-
+  o new prover interface Graph which iteratively allows to select more 
+    and more hypotheses and to discharge POs in  Simplify 
+  o new option -prune-hyp to select relevant hypotheses in the goal
   o fixed Isabelle output (contribution by Yasuhiko Minamide)
 
 version 2.03, April 20th, 2007
