@@ -112,7 +112,7 @@ let main () =
 	    Jc_norm.logic_type_table
 	    []
 	in	       	 
-	(* production phase 1.2.1 : generation of Why memories *)
+	(* production phase 1.2 : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
 	    (fun _ (st,_) acc ->
@@ -120,36 +120,13 @@ let main () =
 	    Jc_norm.structs_table
 	    d_types
 	in	       	  
-	(* production phase 1.2.2 : generation of the inv predicates for structures *)
-        let d_inv =
-	 (* Hashtbl.fold 
-	    (fun _ (st,_) acc ->
-	       Jc_interp.tr_valid_inv st acc)
-	    Jc_norm.structs_table *)
-	    d_memories
-	in
-	let d_inv = Jc_interp.assoc_declaration::d_inv in
-	let d_inv =
-          Hashtbl.fold
-            (fun _ (st, _) acc ->
-               Jc_interp.mutable_declaration st acc)
-            Jc_norm.structs_table
-            d_inv
-        in
-        let d_inv =
-          Hashtbl.fold
-            (fun _ (st, _) acc ->
-               Jc_interp.invariants_axioms st acc)
-            Jc_norm.structs_table
-            d_inv
-        in
 	(* production phase 1.3 : generation of Why exceptions *)
 	let d_exc =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
 	       Jc_interp.tr_exception ei acc)
 	    Jc_norm.exceptions_table
-	    d_inv (* d_memories *)
+	    d_memories
 	in	       	  
 	(* production phase 1.4 : generation of Why range_types *)
 	let d_range =
@@ -185,10 +162,30 @@ let main () =
 	    Jc_norm.functions_table
 	    d_axioms
 	in	       
-	(* production phase 5 : produce Why file *)
+	(* production phase 5 : (invariants tools) *)
+        let d_inv = d_funs in
+	(* production phase 5.1 : "assoc" declaration *)
+	let d_inv = Jc_invariants.assoc_declaration::d_inv in
+	(* production phase 5.2 : "mutable" declaration *)
+	let d_inv =
+          Hashtbl.fold
+            (fun _ (st, _) acc ->
+               Jc_invariants.mutable_declaration st acc)
+            Jc_norm.structs_table
+            d_inv
+        in
+	(* production phase 5.3 : axioms (not mutable implies invariant) *)
+        let d_inv =
+          Hashtbl.fold
+            (fun _ (st, _) acc ->
+               Jc_invariants.invariants_axioms st acc)
+            Jc_norm.structs_table
+            d_inv
+        in
+	(* production phase 6 : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
-	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_funs)
+	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_inv)
 	  (Lib.file "why" (f ^ ".why"));
 	(* phase x : produce makefile *)
 	Jc_make.makefile f
