@@ -1,3 +1,4 @@
+HEVEA=hevea -charset ISO-8859-1
 
 all: manual.ps doc.ps
 
@@ -22,7 +23,9 @@ manual.ps: manual.tex
 	dvips manual.dvi -o manual.ps
 
 manual.html: manual.tex
-	hevea manual.tex
+	rm -f manual.aux
+	$(HEVEA) manual.tex
+	$(HEVEA) manual.tex
 
 caduceus.ps: caduceus.tex
 	latex caduceus
@@ -32,7 +35,9 @@ caduceus.ps: caduceus.tex
 	dvips caduceus.dvi -o caduceus.ps
 
 caduceus.html: caduceus.tex
-	hevea caduceus.tex
+	rm -f caduceus.aux
+	$(HEVEA) caduceus.tex
+	$(HEVEA) caduceus.tex
 
 %.dvi: %.tex
 	latex $< && latex $<
