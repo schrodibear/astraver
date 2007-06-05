@@ -60,6 +60,7 @@ let lbin_op op =
   if op == Jc_pervasives.mul_int then "*" else
   if op == Jc_pervasives.div_int then "/" else
   if op == Jc_pervasives.mod_int then "%" else
+  if op == Jc_pervasives.shift then "+" else
   raise Not_found
 
 let rec term fmt t =
@@ -141,6 +142,8 @@ let print_spec fmt s =
   fprintf fmt "@]"
 
 let bin_op op =
+  if op == Jc_pervasives.eq_int_ then "==" else
+  if op == Jc_pervasives.neq_int_ then "!=" else
   if op == Jc_pervasives.gt_int_ then ">" else
   if op == Jc_pervasives.lt_int_ then "<" else
   if op == Jc_pervasives.ge_int_ then ">=" else
@@ -150,6 +153,7 @@ let bin_op op =
   if op == Jc_pervasives.mul_int_ then "*" else
   if op == Jc_pervasives.div_int_ then "/" else
   if op == Jc_pervasives.mod_int_ then "%" else
+  if op == Jc_pervasives.shift_ then "+" else
   raise Not_found
 
 let rec expr fmt e =
