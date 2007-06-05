@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.36 2007-06-05 11:29:14 couchot Exp $ i*)
+(*i $Id: calldp.ml,v 1.37 2007-06-05 11:53:34 couchot Exp $ i*)
 
 open Printf
 open Options
@@ -110,15 +110,33 @@ let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
     remove_file ~debug out;
     r
 
+
+(**
+   Graph is an interface which aims at recursively calling 
+   the hypotheses_filtering module if needed.
+   
+   @param timeout is the global timeout for the proof
+   @param f : is the name of the input file which contains the proof obligation
+
+   For the moment, the proof obligation is stored as a why file. 
+   
+   The first part try to check whether the formula f is valid by 
+   discharging it into simplify in a timeout set to timeout/4.
+   The function exits when the result is valid, unknown or not valid.
+
+   Otherwise, the function enters in a second step.
+   The hypotheses_filtering module is  
+   called with with a depth that increases, provided 
+   the result returned by the prover is not_valid or unknown.
+   Face to a timeout result, the prover is called again with the same PO but 
+   with a longer timeout.
+**)
 let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
   let pruning_hyp = 3 in 
   let last_dot_index = String.rindex f '.' in 
   let f_for_simplify = (String.sub f  0 last_dot_index) ^ "_why.sx" in 
   let cmd = sprintf "why --simplify --no-prelude %s " f in
   let t'= 
-    (*    if 
-	  pruning_hyp <= 0 then timeout 
-	  else *)
     (float_of_int timeout) /. (float_of_int (pruning_hyp +1)) in
   let t'',c,out = timed_sys_command ~debug (int_of_float t') cmd in
   let cmd = sprintf "Simplify %s"  f_for_simplify in
