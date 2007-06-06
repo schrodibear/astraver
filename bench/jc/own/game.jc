@@ -21,6 +21,9 @@ unit attack(Hero[0] this, Hero[0] target)
     ensures (this.mutable == false) && (target.mutable == false);
 {
   unpack(target);
+//  if (this.mutable) { this.life = 0; };
+//  assert (this.committed);
+//  this.mutable = true;
   target.life = target.life - this.sword.damage;
   if (target.life <= 0) {
     target.life = 0;

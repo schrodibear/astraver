@@ -14,6 +14,12 @@ open Output
          JCSassign_heap: call to "make_assume_field_assoc"
          JCSunpack
          JCSpack
+     jc_typing.ml
+       hashtbl mutable_fields_table
+       hashtbl committed_fields_table
+       function create_mutable_field
+       function find_field_struct: "mutable" and "committed" cases
+       function decl: JCPDstructtype: call to create_mutable_field
 *)
 
 (********)
@@ -343,12 +349,19 @@ let make_assume_all_assocs pp params =
 let mutable_memory_type struct_name =
   memory_type struct_name "bool"
 
+let committed_memory_type struct_name =
+  memory_type struct_name "bool"
+
 let mutable_declaration st acc =
   if st.jc_struct_info_parent = None then
     Param(
       false,
       "mutable_"^st.jc_struct_info_name,
-      Ref_type(Base_type (memory_type st.jc_struct_info_name "bool"))
+      Ref_type(Base_type (mutable_memory_type st.jc_struct_info_name))
+    )::Param(
+      false,
+      "committed_"^st.jc_struct_info_name,
+      Ref_type(Base_type (committed_memory_type st.jc_struct_info_name))
     )::acc
   else
     acc

@@ -47,18 +47,27 @@ let range_types_table = Hashtbl.create 97
 let structs_table = Hashtbl.create 97
 
 let mutable_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
+let committed_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
 
 let field_tag_counter = ref 0
 
 let create_mutable_field id =
   incr field_tag_counter;
   let fi = {
-    jc_field_info_tag = !field_tag_counter; (* TODO *)
+    jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = "mutable_"^id;
     jc_field_info_type = JCTnative Tboolean;
-    jc_field_info_root = "?? jc_typing.ml: find_field_struct ??"; (* ? *)
+    jc_field_info_root = "?? jc_typing.ml: create_mutable_field ??"; (* ? *)
   } in
-  Hashtbl.add mutable_fields_table id fi
+  Hashtbl.add mutable_fields_table id fi;
+  incr field_tag_counter;
+  let fi = {
+    jc_field_info_tag = !field_tag_counter;
+    jc_field_info_name = "committed_"^id;
+    jc_field_info_type = JCTnative Tboolean;
+    jc_field_info_root = "?? jc_typing.ml: create_mutable_field ??"; (* ? *)
+  } in
+  Hashtbl.add committed_fields_table id fi
 
 let find_struct_info loc id =
   try
@@ -133,22 +142,29 @@ let variables_table = Hashtbl.create 97
 let variables_env = Hashtbl.create 97
 
 
-let rec find_field_struct loc st f =
-  if f = "mutable" then
-    Hashtbl.find mutable_fields_table st.jc_struct_info_root else
-  try
-    List.assoc f st.jc_struct_info_fields
-  with Not_found ->
-    match st.jc_struct_info_parent with
-      | None -> 
-	  typing_error loc "no field %s in structure %s" 
-	    f st.jc_struct_info_name
-      | Some st -> find_field_struct loc st f
+let rec find_field_struct loc st allow_mutable = function
+  | ("mutable" | "committed") as x ->
+      if allow_mutable then
+	let table =
+	  if x = "mutable" then mutable_fields_table
+	  else committed_fields_table
+	in
+	Hashtbl.find table st.jc_struct_info_root
+      else typing_error loc "field %s cannot be used here" x
+  | f ->
+      try
+	List.assoc f st.jc_struct_info_fields
+      with Not_found ->
+	match st.jc_struct_info_parent with
+	  | None -> 
+	      typing_error loc "no field %s in structure %s" 
+		f st.jc_struct_info_name
+	  | Some st -> find_field_struct loc st allow_mutable f
 
   
-let find_field loc ty f =
+let find_field loc ty f in_assertion =
   match ty with
-    | JCTpointer(st,_,_) -> find_field_struct loc st f
+    | JCTpointer(st,_,_) -> find_field_struct loc st in_assertion f
     | JCTnative _ 
     | JCTrange _
     | JCTlogic _
@@ -399,7 +415,7 @@ let rec term env e =
 	  end
       | JCPEderef (e1, f) -> 
 	  let te = term env e1 in
-	  let fi = find_field e.jc_pexpr_loc te.jc_tterm_type f in
+	  let fi = find_field e.jc_pexpr_loc te.jc_tterm_type f true in
 	  fi.jc_field_info_type, JCTTderef(te,fi)	  
       | JCPEconst c -> 
 	  let t,c = const c in t,JCTTconst c
@@ -611,7 +627,7 @@ let rec assertion env e =
 	  end
       | JCPEderef (e, id) -> 
 	  let te = term env e in
-	  let fi = find_field e.jc_pexpr_loc te.jc_tterm_type id in
+	  let fi = find_field e.jc_pexpr_loc te.jc_tterm_type id false in
 	  begin
 	    match fi.jc_field_info_type with
 	      | JCTnative Tboolean ->
@@ -1021,7 +1037,7 @@ let rec expr env e =
 	  end
       | JCPEderef (e1, f) -> 
 	  let te = expr env e1 in
-	  let fi = find_field e.jc_pexpr_loc te.jc_texpr_type f in
+	  let fi = find_field e.jc_pexpr_loc te.jc_texpr_type f false in
 	  fi.jc_field_info_type,JCTEderef(te,fi)
 (*
       | JCPEshift (_, _) -> assert false
@@ -1280,7 +1296,7 @@ let rec location_set env e =
     | JCPEbinary _ -> assert false
     | JCPEderef (ls, f) -> 
 	let t,tls = location_set env ls in
-	let fi = find_field e.jc_pexpr_loc t f in
+	let fi = find_field e.jc_pexpr_loc t f false in
 	fi.jc_field_info_type, JCTLSderef(tls,fi)	  
 
     | JCPEif (_, _, _)
@@ -1312,7 +1328,7 @@ let location env e =
 	  end
     | JCPEderef(ls,f) ->
 	let t,tls = location_set env ls in
-	let fi = find_field e.jc_pexpr_loc t f in
+	let fi = find_field e.jc_pexpr_loc t f false in
 	fi.jc_field_info_type, JCTLderef(tls,fi)	  
 (*
     | JCPEshift (_, _)  -> assert false (* TODO *)
