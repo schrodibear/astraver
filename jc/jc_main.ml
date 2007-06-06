@@ -76,7 +76,6 @@ let main () =
 	Hashtbl.iter (fun tag x -> 
 			Hashtbl.add Jc_norm.exceptions_table tag x)
 	  Jc_typing.exceptions_table;	
-
 	  
 	(* phase 4 : computation of call graph *)
 	Hashtbl.iter 
@@ -92,17 +91,18 @@ let main () =
 	let components = 
 	  Jc_callgraph.compute_components Jc_norm.functions_table
 	in
+
 	(* phase 5 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
 	Array.iter Jc_effect.logic_effects logic_components;
 	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
 	Array.iter Jc_effect.function_effects components;
+
 	(* phase 6 : checking structure invariants *)
-	(* --- DISABLED ---
 	Jc_options.lprintf "\nstarting checking structure invariants.@.";
 	Hashtbl.iter 
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
-	  Jc_norm.structs_table; *)
+	  Jc_norm.structs_table;
 
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =
@@ -163,9 +163,8 @@ let main () =
 	    d_axioms
 	in	       
 	(* production phase 5 : (invariants tools) *)
-        let d_inv = d_funs in
 	(* production phase 5.1 : "assoc" declaration *)
-	let d_inv = Jc_invariants.assoc_declaration::d_inv in
+	let d_inv = Jc_invariants.assoc_declaration::d_funs in
 	(* production phase 5.2 : "mutable" declaration *)
 	let d_inv =
           Hashtbl.fold

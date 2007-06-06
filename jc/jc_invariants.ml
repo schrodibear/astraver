@@ -74,6 +74,40 @@ let pointer_type st_type = {
   ];
 }
 
+let logic_info_reads acc li =
+  let acc =
+    FieldSet.fold
+      (fun fi acc -> StringSet.add fi.jc_field_info_name acc)
+      li.jc_logic_info_effects.jc_effect_memories
+      acc
+  in
+  let acc =
+    StringSet.fold
+      (fun v acc -> StringSet.add (v^"_alloc_table") acc)
+      li.jc_logic_info_effects.jc_effect_alloc_table
+      acc
+  in
+  StringSet.fold
+    (fun v acc -> StringSet.add (v^"_tag_table") acc)
+    li.jc_logic_info_effects.jc_effect_tag_table
+    acc
+
+(* returns (inv, reads) where i is the assertion of the invariants of the structure
+and r is a StringSet of the "reads" needed by these invariants *)
+let invariant_for_struct this st =
+  let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+  let inv =
+    make_and_list
+      (List.map (fun (li, _) -> make_logic_pred_call li [this]) invs)
+  in
+  let reads =
+    List.fold_left
+      (fun acc (li, _) -> logic_info_reads acc li)
+      StringSet.empty
+      invs
+  in
+  (inv, reads)
+
 (************************************)
 (* Checking an invariant definition *)
 (************************************)
@@ -319,6 +353,17 @@ let mutable_declaration st acc =
   else
     acc
 
+let assert_mutable e fi =
+  let mutable_name = "mutable_"^fi.jc_field_info_root in
+  Assert(
+    LPred(
+      "eq",
+      [ LApp("select", [LVar mutable_name; e]);
+	LConst(Prim_bool true) ]
+    ),
+    Void
+  )
+
 (********************)
 (* Invariant axioms *)
 (********************)
@@ -378,6 +423,8 @@ let pack_declaration st acc =
   let name = st.jc_struct_info_root in
   let mutable_name = "mutable_"^name in
   let struct_type = pointer_type st.jc_struct_info_root in
+  let inv, reads = invariant_for_struct (LVar this) st in
+  let reads = StringSet.add mutable_name reads in
   if st.jc_struct_info_parent = None then
     Param(
       false,
@@ -386,12 +433,14 @@ let pack_declaration st acc =
 	this,
 	Base_type (struct_type),
 	Annot_type(
-	  LPred(
-	    "eq",
-	    [ LConst(Prim_bool true);
-	      LApp("select", [LVar mutable_name; LVar this]) ]),
+	  make_and
+	    (LPred(
+	      "eq",
+	      [ LConst(Prim_bool true);
+		LApp("select", [LVar mutable_name; LVar this]) ]))
+	    inv,
 	  Base_type (simple_logic_type "unit"),
-	  [mutable_name],
+	  StringSet.elements reads,
 	  [mutable_name],
 	  LPred(
 	    "eq",

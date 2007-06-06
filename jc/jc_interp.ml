@@ -363,11 +363,13 @@ let rec statement s =
 	let e2 = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
-        append
-	  (make_lets
-	    ([ (tmp1, e1) ; (tmp2, e2) ])
-	    (make_upd fi (Var tmp1) (Var tmp2)))
-	  (make_assume_field_assocs (fresh_program_point ()) fi)
+        (append
+	   (make_lets
+	      ([ (tmp1, e1) ; (tmp2, e2) ])
+	      (append
+		 (assert_mutable (LVar tmp1) fi)
+		 (make_upd fi (Var tmp1) (Var tmp2))))
+	   (make_assume_field_assocs (fresh_program_point ()) fi))
     | JCSblock l -> statement_list l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
