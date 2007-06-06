@@ -39,6 +39,7 @@ let structs_table = Hashtbl.create 97
 
 let logic_functions_table = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
+let variables_table = Hashtbl.create 97
 
 let axioms_table = Hashtbl.create 17
 
@@ -257,6 +258,13 @@ let rec expr e =
     match e.jc_texpr_node with
       | JCTEconst c -> ([], []), JCEconst c
       | JCTEvar vi -> ([], []), JCEvar vi
+      | JCTEunary(op,e1) ->
+	  let (l1,tl1),e1 = expr e1 in
+	  (l1, tl1), JCEunary (op,e1)
+      | JCTEbinary (e1, op, e2) ->
+	  let (l1,tl1),e1 = expr e1 in
+	  let (l2,tl2),e2 = expr e2 in
+	  (l1@l2, tl1@tl2), JCEbinary (e1, op, e2)	  
       | JCTEshift (e1, e2) ->
 	  let (l1,tl1),e1 = expr e1 in
 	  let (l2,tl2),e2 = expr e2 in
@@ -770,6 +778,11 @@ let statement s =
 let code_function (spec, sl) =
   (fun_spec spec, List.map statement sl)
 
+let static_variable (v,e) =
+  let (sl,tl),e = expr e in
+  match sl,tl with
+    | [],[] -> v,e
+    | _ -> assert false (* TODO *)
 
 (*
   Local Variables: 

@@ -63,14 +63,14 @@ and ptype =
     }
 
 type pbin_op =
-  | Blt | Bgt | Ble | Bge | Beq | Bneq 
-  | Badd | Bsub | Bmul | Bdiv | Bmod
-  | Bland | Blor | Bimplies | Biff
+  | BPlt | BPgt | BPle | BPge | BPeq | BPneq 
+  | BPadd | BPsub | BPmul | BPdiv | BPmod
+  | BPland | BPlor | BPimplies | BPiff
   
 
 type punary_op =
-  | Uplus | Uminus | Unot 
-  | Upostfix_inc | Upostfix_dec | Uprefix_inc | Uprefix_dec
+  | UPplus | UPminus | UPnot 
+  | UPpostfix_inc | UPpostfix_dec | UPprefix_inc | UPprefix_dec
 
 
 type pexpr_node =
@@ -208,6 +208,17 @@ type tterm_or_tassertion =
   | JCTAssertion of tassertion
   | JCTTerm of tterm
 
+type bin_op =
+  | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
+  | Blt_real | Bgt_real | Ble_real | Bge_real | Beq_real | Bneq_real 
+  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
+  | Badd_real | Bsub_real | Bmul_real | Bdiv_real
+  | Bland | Blor | Bimplies | Biff
+  | Beq_pointer | Bneq_pointer
+  
+type unary_op =
+  | Uplus_int | Uminus_int | Uplus_real | Uminus_real | Unot 
+
 type tincr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
 
 type texpr_node =
@@ -215,9 +226,8 @@ type texpr_node =
   | JCTEvar of var_info
   | JCTEshift of texpr * texpr
   | JCTEderef of texpr * field_info
-(*
   | JCTEbinary of texpr * bin_op * texpr
-*)
+  | JCTEunary of unary_op * texpr
   | JCTEcall of fun_info * texpr list
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info
@@ -346,6 +356,8 @@ type term_or_assertion =
 type expr_node =
   | JCEconst of const
   | JCEvar of var_info
+  | JCEbinary of expr * bin_op * expr
+  | JCEunary of unary_op * expr
   | JCEshift of expr * expr
   | JCEderef of expr * field_info
   | JCEinstanceof of expr * struct_info

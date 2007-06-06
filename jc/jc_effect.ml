@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.22 2007-05-31 11:42:59 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.23 2007-06-06 14:02:25 moy Exp $ *)
 
 
 open Jc_env
@@ -140,6 +140,8 @@ let rec expr ef e =
     | JCEshift (_, _) -> assert false
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
     | JCEvar _ -> ef (* TODO *)
+    | JCEunary(op,e1) -> expr ef e1
+    | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
 
 let rec loop_annot ef la = 
   assertion (term ef la.jc_loop_variant) la.jc_loop_invariant

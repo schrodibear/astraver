@@ -69,8 +69,10 @@ let rec term fmt t =
     | JCTTif (_, _, _)-> assert false (* TODO *)
     | JCTTcast (_, _)-> assert false (* TODO *)
     | JCTTinstanceof (_, _)-> assert false (* TODO *)
-    | JCTToffset_min (_, _)-> assert false (* TODO *)
-    | JCTToffset_max (_, _)-> assert false (* TODO *)
+    | JCTToffset_min (t, _)->
+	fprintf fmt "@[\\offset_min(%a)@]" term t
+    | JCTToffset_max (t, _)->
+	fprintf fmt "@[\\offset_max(%a)@]" term t
     | JCTTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTTapp (op, ([t1;t2] as l)) ->
 	begin
@@ -141,25 +143,40 @@ let print_spec fmt s =
   List.iter (behavior fmt) s.jc_tfun_behavior;
   fprintf fmt "@]"
 
-let bin_op op =
-  if op == Jc_pervasives.eq_int_ then "==" else
-  if op == Jc_pervasives.neq_int_ then "!=" else
-  if op == Jc_pervasives.gt_int_ then ">" else
-  if op == Jc_pervasives.lt_int_ then "<" else
-  if op == Jc_pervasives.ge_int_ then ">=" else
-  if op == Jc_pervasives.le_int_ then "<=" else
-  if op == Jc_pervasives.add_int_ then "+" else
-  if op == Jc_pervasives.sub_int_ then "-" else
-  if op == Jc_pervasives.mul_int_ then "*" else
-  if op == Jc_pervasives.div_int_ then "/" else
-  if op == Jc_pervasives.mod_int_ then "%" else
+let call_bin_op op =
   if op == Jc_pervasives.shift_ then "+" else
   raise Not_found
+
+let bin_op = function
+  | Blt_int | Blt_real -> "<"
+  | Bgt_int | Bgt_real -> ">"
+  | Ble_int | Ble_real -> "<="
+  | Bge_int | Bge_real -> ">="
+  | Beq_int | Beq_real | Beq_pointer -> "=="
+  | Bneq_int | Bneq_real | Bneq_pointer -> "!="
+  | Badd_int | Badd_real -> "+"
+  | Bsub_int | Bsub_real -> "-"
+  | Bmul_int | Bmul_real -> "*"
+  | Bdiv_int | Bdiv_real -> "/"
+  | Bmod_int -> "%"
+  | Bland -> "&&"
+  | Blor -> "||"
+  | Bimplies -> "=>"
+  | Biff -> "<=>"
+
+let unary_op = function
+  | Uplus_int | Uplus_real -> "+"
+  | Uminus_int | Uminus_real -> "-"
+  | Unot -> "!"
 
 let rec expr fmt e =
   match e.jc_texpr_node with
     | JCTEvar vi -> 
 	fprintf fmt "%s" vi.jc_var_info_name
+    | JCTEbinary(e1,op,e2) ->
+	fprintf fmt "@[(%a %s %a)@]" expr e1 (bin_op op) expr e2
+    | JCTEunary(op,e1) ->
+	fprintf fmt "@[(%s %a)@]" (unary_op op) expr e1
     | JCTEif (_, _, _) -> assert false (* TODO *)
     | JCTEincr_heap (_, _, _) -> assert false (* TODO *)
     | JCTEincr_local (op, v) -> 
@@ -189,7 +206,7 @@ let rec expr fmt e =
     | JCTEcall (op, ([t1;t2] as l)) ->
 	begin
 	  try
-	    let s = bin_op op in
+	    let s = call_bin_op op in
 	    fprintf fmt "@[(%a %s %a)@]" expr t1 s expr t2
 	  with Not_found ->
 	    fprintf fmt "@[%s(%a)@]" op.jc_fun_info_name

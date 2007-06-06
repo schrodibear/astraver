@@ -183,30 +183,30 @@ let type_type t =
 
 let num_op op =
   match op with
-    | Badd -> add_int
-    | Bsub -> sub_int
-    | Bmul -> mul_int
-    | Bdiv -> div_int
-    | Bmod -> mod_int
+    | BPadd -> add_int
+    | BPsub -> sub_int
+    | BPmul -> mul_int
+    | BPdiv -> div_int
+    | BPmod -> mod_int
     | _ -> assert false
 
 let num_un_op op e =
   match op with
-    | Uminus -> JCTTapp(minus_int,[e])
-    | Uplus -> e.jc_tterm_node
+    | UPminus -> JCTTapp(minus_int,[e])
+    | UPplus -> e.jc_tterm_node
     | _ -> assert false
 
 let eq_op op arg_type  =
   match (op,arg_type) with
-    | (Beq,Tinteger) -> eq_int_bool
-    | (Bneq,Tinteger) -> neq_int_bool
+    | (BPeq,Tinteger) -> eq_int_bool
+    | (BPneq,Tinteger) -> neq_int_bool
     | _ -> assert false
 
 let logic_unary_op loc (op : Jc_ast.punary_op) e =
   let t = e.jc_tterm_type in
   match op with
-    | Unot -> assert false
-    | Uminus | Uplus -> 
+    | UPnot -> assert false
+    | UPminus | UPplus -> 
 	let t =
 	  match t with
 	    | JCTnative t ->
@@ -218,7 +218,7 @@ let logic_unary_op loc (op : Jc_ast.punary_op) e =
 	    | _ ->
 		typing_error loc "numeric type expected for unary + and -"
 	in JCTnative t,num_un_op op e
-    | Upostfix_dec | Upostfix_inc | Uprefix_dec | Uprefix_inc ->
+    | UPpostfix_dec | UPpostfix_inc | UPprefix_dec | UPprefix_inc ->
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
 let term_coerce t1 t2 e =
@@ -244,36 +244,36 @@ let term_coerce t1 t2 e =
 
 let logic_bin_op t op =
   match t,op with
-    | _, Bgt -> gt_int
-    | _, Blt -> lt_int
-    | _, Bge -> ge_int
-    | _, Ble -> le_int
-    | _, Beq -> eq
-    | _, Bneq -> neq
-    | Tinteger, Badd -> add_int
-    | Treal, Badd -> add_real
-    | _, Bsub -> sub_int
-    | _, Bmul -> mul_int
-    | _, Bdiv -> div_int
-    | _, Bmod -> mod_int
-    | Tboolean, Bland -> band 
-    | Tboolean, Blor -> bor
+    | _, BPgt -> gt_int
+    | _, BPlt -> lt_int
+    | _, BPge -> ge_int
+    | _, BPle -> le_int
+    | _, BPeq -> eq
+    | _, BPneq -> neq
+    | Tinteger, BPadd -> add_int
+    | Treal, BPadd -> add_real
+    | _, BPsub -> sub_int
+    | _, BPmul -> mul_int
+    | _, BPdiv -> div_int
+    | _, BPmod -> mod_int
+    | Tboolean, BPland -> band 
+    | Tboolean, BPlor -> bor
 	(* not allowed as expression op *)
-    | _,Bimplies -> assert false
+    | _,BPimplies -> assert false
     | Tunit,_ -> assert false
     | _ -> assert false
 
 let make_logic_bin_op loc op e1 e2 =
   let t1 = e1.jc_tterm_type and t2 = e2.jc_tterm_type in
   match op with
-    | Bgt | Blt | Bge | Ble ->
+    | BPgt | BPlt | BPge | BPle ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
 	  JCTTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
 	  typing_error loc "numeric types expected for >, <, >= and <="
-    | Beq | Bneq ->
+    | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
@@ -284,7 +284,7 @@ let make_logic_bin_op loc op e1 e2 =
 	  JCTTapp(logic_bin_op Tboolean op,[e1; e2])
 	else
 	  typing_error loc "numeric or pointer types expected for == and !="
-    | Badd | Bsub ->
+    | BPadd | BPsub ->
 	begin
 	  match t1 with
 	    | JCTpointer(st,_,_) ->
@@ -300,14 +300,14 @@ let make_logic_bin_op loc op e1 e2 =
 		else
 		  typing_error loc "numeric types expected for + and -"
 	end
-    | Bmul | Bdiv | Bmod ->
+    | BPmul | BPdiv | BPmod ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  (JCTnative t,
 	   JCTTapp(logic_bin_op t op,
 		   [term_coerce t1 t e1; term_coerce t2 t e2]))
 	else typing_error loc "numeric types expected for *, / and %%"
-    | Bland | Blor -> 
+    | BPland | BPlor -> 
 	let t=
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -321,7 +321,7 @@ let make_logic_bin_op loc op e1 e2 =
 	in JCTnative t,JCTTapp(logic_bin_op t op,[e1;e2])
 
 	(* not allowed as term op *)
-    | Bimplies | Biff -> assert false
+    | BPimplies | BPiff -> assert false
 
 	  
 let rec term env e =
@@ -460,23 +460,23 @@ let rec term env e =
   
 let rel_unary_op loc op t =
   match op with
-    | Unot -> assert false
-    | Uminus | Uplus -> 
+    | UPnot -> assert false
+    | UPminus | UPplus -> 
 	typing_error loc "not a proposition"
-    | Upostfix_dec | Upostfix_inc | Uprefix_dec | Uprefix_inc ->
+    | UPpostfix_dec | UPpostfix_inc | UPprefix_dec | UPprefix_inc ->
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
 
 let rel_bin_op t op =
   match t,op with
-    | Tinteger,Bgt -> gt_int
-    | Tinteger,Blt -> lt_int
-    | Tinteger,Bge -> ge_int
-    | Tinteger,Ble -> le_int
-    | _,Beq -> eq
-    | _,Bneq -> neq
-    | _,(Badd | Bsub | Bmul | Bdiv | Bmod) -> assert false
-    | _,(Bland | Blor | Bimplies | Biff) -> assert false
+    | Tinteger,BPgt -> gt_int
+    | Tinteger,BPlt -> lt_int
+    | Tinteger,BPge -> ge_int
+    | Tinteger,BPle -> le_int
+    | _,BPeq -> eq
+    | _,BPneq -> neq
+    | _,(BPadd | BPsub | BPmul | BPdiv | BPmod) -> assert false
+    | _,(BPland | BPlor | BPimplies | BPiff) -> assert false
     | _ -> assert false  (* TODO *)
 
 
@@ -510,13 +510,13 @@ let make_or a1 a2 =
 let make_rel_bin_op loc op e1 e2 =
   let t1 = e1.jc_tterm_type and t2 = e2.jc_tterm_type in
   match op with
-    | Bgt | Blt | Bge | Ble ->
+    | BPgt | BPlt | BPge | BPle ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTAapp(rel_bin_op t op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
 	  typing_error loc "numeric types expected for >, <, >= and <="
-    | Beq | Bneq ->
+    | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTAapp(rel_bin_op Tunit op,[term_coerce t1 t e1; term_coerce t2 t e2])
@@ -526,11 +526,11 @@ let make_rel_bin_op loc op e1 e2 =
 	  else
 	    typing_error loc "terms should have the same type for == and !="
 	(* non propositional operators *)
-    | Badd | Bsub | Bmul | Bdiv | Bmod -> assert false
+    | BPadd | BPsub | BPmul | BPdiv | BPmod -> assert false
 	(* already recognized as connectives *)
-    | Bland | Blor -> assert false 
-    | Bimplies -> assert false
-    | Biff -> assert false
+    | BPland | BPlor -> assert false 
+    | BPimplies -> assert false
+    | BPiff -> assert false
 
 
 let rec assertion env e =
@@ -558,19 +558,19 @@ let rec assertion env e =
 	  let st = find_struct_info e.jc_pexpr_loc t in
 	  JCTAinstanceof(te1,st) 
       | JCPEcast(e, t) -> assert false
-      | JCPEbinary (e1, Bland, e2) -> 
+      | JCPEbinary (e1, BPland, e2) -> 
 	  let a1 = assertion env e1 in
 	  let a2 = assertion env e2 in
 	  make_and a1 a2
-      | JCPEbinary (e1, Blor, e2) -> 
+      | JCPEbinary (e1, BPlor, e2) -> 
 	  make_or (assertion env e1) (assertion env e2)
-      | JCPEbinary (e1, Bimplies, e2) -> 
+      | JCPEbinary (e1, BPimplies, e2) -> 
 	  let a1 = assertion env e1 in
 	  let a2 = assertion env e2 in
 	  JCTAimplies(a1,a2)
-      | JCPEbinary (e1, Biff, e2) -> 
+      | JCPEbinary (e1, BPiff, e2) -> 
 	  JCTAiff(assertion env e1,assertion env e2)
-      | JCPEunary (Unot, e2) -> 
+      | JCPEunary (UPnot, e2) -> 
 	  JCTAnot(assertion env e2)
       | JCPEbinary (e1, op, e2) -> 
 	  let e1 = term env e1 and e2 = term env e2 in
@@ -673,24 +673,24 @@ and make_forall loc ty idl env e : tassertion =
 
 let unary_op t op =
   match t,op with
-    | _, Upostfix_inc -> assert false
-    | _, Upostfix_dec -> assert false
-    | _, Uprefix_inc -> assert false
-    | _, Uprefix_dec -> assert false
-    | Tinteger, Uplus -> uplus_int
-    | Tinteger, Uminus -> uminus_int
-    | Treal, Uplus -> uplus_real
-    | Treal, Uminus -> uminus_real
-    | Tboolean, Unot -> not_
+    | _, UPpostfix_inc -> assert false
+    | _, UPpostfix_dec -> assert false
+    | _, UPprefix_inc -> assert false
+    | _, UPprefix_dec -> assert false
+    | Tinteger, UPplus -> Uplus_int
+    | Tinteger, UPminus -> Uminus_int
+    | Treal, UPplus -> Uplus_real
+    | Treal, UPminus -> Uminus_real
+    | Tboolean, UPnot -> Unot
     | Tunit,_ -> assert false
     | _ -> assert false
 
 let incr_op op =
   match op with
-    | Upostfix_inc -> Postfix_inc
-    | Upostfix_dec -> Postfix_dec
-    | Uprefix_inc -> Prefix_inc
-    | Uprefix_dec -> Prefix_dec
+    | UPpostfix_inc -> Postfix_inc
+    | UPpostfix_dec -> Postfix_dec
+    | UPprefix_inc -> Prefix_inc
+    | UPprefix_dec -> Prefix_dec
     | _ -> assert false
 
 let set_assigned v =
@@ -703,7 +703,7 @@ let set_assigned v =
 let make_unary_app loc (op : Jc_ast.punary_op) e2 =
   let t2 = e2.jc_texpr_type in
   match op with
-    | Uprefix_inc | Upostfix_inc | Uprefix_dec | Upostfix_dec ->
+    | UPprefix_inc | UPpostfix_inc | UPprefix_dec | UPpostfix_dec ->
 	begin
 	  match e2.jc_texpr_node with
 	    | JCTEvar v ->
@@ -713,7 +713,7 @@ let make_unary_app loc (op : Jc_ast.punary_op) e2 =
 		t2,JCTEincr_heap(incr_op op, e, f)
 	    | _ -> typing_error e2.jc_texpr_loc "not an lvalue"
 	end
-    | Unot -> 
+    | UPnot -> 
 	let t=
 	  match t2 with
 	    | JCTnative t2 ->
@@ -724,8 +724,8 @@ let make_unary_app loc (op : Jc_ast.punary_op) e2 =
 		end
 	    | _ ->
 		typing_error loc "boolean expected"
-	in JCTnative t,JCTEcall(unary_op t op,[e2])
-    | Uplus | Uminus -> 
+	in JCTnative t,JCTEunary(unary_op t op, e2)
+    | UPplus | UPminus -> 
 	let t=
 	  match t2 with
 	    | JCTnative t2 ->
@@ -737,26 +737,26 @@ let make_unary_app loc (op : Jc_ast.punary_op) e2 =
 		end
 	    | _ ->
 		typing_error loc "numeric type expected"
-	in JCTnative t,JCTEcall(unary_op t op,[e2])
+	in JCTnative t,JCTEunary(unary_op t op, e2)
 
 let bin_op t op =
   match t,op with
-    | _, Bgt -> gt_int_
-    | _, Blt -> lt_int_
-    | _, Bge -> ge_int_
-    | _, Ble -> le_int_
-    | _, Beq -> eq_int_
-    | _, Bneq -> neq_int_
-    | Tinteger, Badd -> add_int_
-    | Treal, Badd -> add_real_
-    | _, Bsub -> sub_int_
-    | _, Bmul -> mul_int_
-    | _, Bdiv -> div_int_
-    | _, Bmod -> mod_int_
-    | Tboolean, Bland -> and_ 
-    | Tboolean, Blor -> or_
+    | _, BPgt -> Bgt_int (* TODO: why no real version ? (Yannick) *)
+    | _, BPlt -> Blt_int
+    | _, BPge -> Bge_int
+    | _, BPle -> Ble_int
+    | _, BPeq -> Beq_int
+    | _, BPneq -> Bneq_int
+    | Tinteger, BPadd -> Badd_int
+    | Treal, BPadd -> Badd_real
+    | _, BPsub -> Bsub_int
+    | _, BPmul -> Bmul_int
+    | _, BPdiv -> Bdiv_int
+    | _, BPmod -> Bmod_int
+    | Tboolean, BPland -> Bland 
+    | Tboolean, BPlor -> Blor
 	(* not allowed as expression op *)
-    | _,Bimplies -> assert false
+    | _,BPimplies -> assert false
     | Tunit,_ -> assert false
     | _ -> assert false
 
@@ -798,25 +798,25 @@ let restrict t1 t2 e =
 let make_bin_app loc op e1 e2 =
   let t1 = e1.jc_texpr_type and t2 = e2.jc_texpr_type in
   match op with
-    | Bgt | Blt | Bge | Ble ->
+    | BPgt | BPlt | BPge | BPle ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
-	  JCTEcall(bin_op Tboolean op,[coerce t1 t e1; coerce t2 t e2])
+	  JCTEbinary (coerce t1 t e1, bin_op Tboolean op, coerce t2 t e2)
 	else
 	  typing_error loc "numeric types expected for <, >, <= and >="
-    | Beq | Bneq ->
+    | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
-	  JCTEcall(bin_op Tboolean op,[coerce t1 t e1; coerce t2 t e2])
+	  JCTEbinary(coerce t1 t e1, bin_op Tboolean op, coerce t2 t e2)
 	else
 	if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
 	  JCTnative Tboolean,
-	  JCTEcall((if op = Beq then eq_pointer else neq_pointer), [e1; e2])
+	JCTEbinary(e1, (if op = BPeq then Beq_pointer else Bneq_pointer), e2)
 	else
 	  typing_error loc "numeric or pointer types expected for == and !="
-    | Badd | Bsub ->
+    | BPadd | BPsub ->
 	begin
 	  match t1 with
 	    | JCTpointer(st,_,_) ->
@@ -828,18 +828,18 @@ let make_bin_app loc op e1 e2 =
 		if is_numeric t1 && is_numeric t2 then
 		  let t = lub_numeric_types t1 t2 in
 		  JCTnative t,
-		  JCTEcall(bin_op t op,[coerce t1 t e1; coerce t2 t e2])
+		  JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 		else
 		  typing_error loc "numeric types expected for + and -"
 	end
-    | Bmul | Bdiv | Bmod ->
+    | BPmul | BPdiv | BPmod ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative t,
-	  JCTEcall(bin_op t op,[coerce t1 t e1; coerce t2 t e2])
+	  JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "numeric types expected for *, / and %%"
-    | Bland | Blor -> 
+    | BPland | BPlor -> 
 	let t=
 	  match (t1,t2) with
 	    | JCTnative t1, JCTnative t2 ->
@@ -850,10 +850,10 @@ let make_bin_app loc op e1 e2 =
 		end
 	    | _ ->
 		typing_error loc "booleans expected"
-	in JCTnative t,JCTEcall(bin_op t op,[e1;e2])
+	in JCTnative t,JCTEbinary(e1, bin_op t op, e2)
 
 	(* not allowed as expression op *)
-    | Bimplies | Biff -> assert false
+    | BPimplies | BPiff -> assert false
 
 
 
@@ -1265,7 +1265,7 @@ let rec location_set env e =
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	end
-    | JCPEbinary(e,Badd,i) ->
+    | JCPEbinary(e,BPadd,i) ->
 	let ty,te = location_set env e in
 	let ti = term env i in
 	begin

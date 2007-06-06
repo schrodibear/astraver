@@ -61,6 +61,11 @@ let main () =
 	     Hashtbl.add Jc_norm.functions_table tag (f,s,b))
 	  Jc_typing.functions_table;
 	Hashtbl.iter 
+	  (fun tag (v,e) -> 
+	     let (v,e) = Jc_norm.static_variable (v,e) in
+	     Hashtbl.add Jc_norm.variables_table tag (v,e))
+	  Jc_typing.variables_table;
+	Hashtbl.iter 
 	  (fun tag (si,l) -> 
 	     let l = List.map (fun (li, a) -> (li, Jc_norm.assertion a)) l in
 	     Hashtbl.add Jc_norm.structs_table tag (si,l))

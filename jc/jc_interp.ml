@@ -273,6 +273,29 @@ let rec make_lets l e =
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
+let unary_op = function
+  | Uplus_int -> "uplus_int"
+  | Uminus_int -> "neg_int"
+  | Uplus_real -> "uplus_real"
+  | Uminus_real -> "uminus_real"
+  | Unot -> "not"
+
+let bin_op = function
+  | Bgt_int -> "gt_int_"
+  | Blt_int -> "lt_int_"
+  | Bge_int -> "ge_int_"
+  | Ble_int -> "le_int_"
+  | Beq_int -> "eq_int_"
+  | Bneq_int -> "neq_int_"
+  | Badd_int -> "add_int"
+  | Badd_real -> "add_real"
+  | Bsub_int -> "sub_int"
+  | Bmul_int -> "mul_int"
+  | Bdiv_int -> "div_int"
+  | Bmod_int -> "mod_int"
+  | Bland -> "and"
+  | Blor -> "or"
+  | _ -> assert false (* TODO *)
 
 let rec expr e : expr =
   match e.jc_expr_node with
@@ -282,6 +305,13 @@ let rec expr e : expr =
 	if v.jc_var_info_assigned 
 	then Deref v.jc_var_info_final_name
 	else Var v.jc_var_info_final_name
+    | JCEunary(op,e1) ->
+	let e1 = expr e1 in
+	make_app (unary_op op) [e1]	
+    | JCEbinary(e1,op,e2) ->
+	let e1 = expr e1 in
+	let e2 = expr e2 in
+	make_app (bin_op op) [e1; e2]	
     | JCEif(e1,e2,e3) -> 
 	let e1 = expr e1 in
 	let e2 = expr e2 in

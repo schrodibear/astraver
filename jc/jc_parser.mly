@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.37 2007-06-04 12:59:29 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.38 2007-06-06 14:02:25 moy Exp $ */
 
 %{
 
@@ -432,23 +432,23 @@ postfix_expression:
 | postfix_expression DOT IDENTIFIER
     { locate_expr (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 
-    { locate_expr (JCPEunary (Upostfix_inc, $1)) }
+    { locate_expr (JCPEunary (UPpostfix_inc, $1)) }
 | postfix_expression MINUSMINUS
-    { locate_expr (JCPEunary (Upostfix_dec, $1)) }
+    { locate_expr (JCPEunary (UPpostfix_dec, $1)) }
 | PLUSPLUS postfix_expression 
-    { locate_expr (JCPEunary (Uprefix_inc, $2)) }
+    { locate_expr (JCPEunary (UPprefix_inc, $2)) }
 | MINUSMINUS postfix_expression 
-    { locate_expr (JCPEunary (Uprefix_dec, $2)) }
+    { locate_expr (JCPEunary (UPprefix_dec, $2)) }
 | PLUS postfix_expression %prec UPLUS
-    { locate_expr (JCPEunary (Uplus, $2)) }
+    { locate_expr (JCPEunary (UPplus, $2)) }
 | MINUS postfix_expression %prec UMINUS
-    { locate_expr (JCPEunary (Uminus, $2)) }
+    { locate_expr (JCPEunary (UPminus, $2)) }
 /*
 | TILDE postfix_expression 
-    { locate_expr (JCPEunary (Utilde, $2)) }
+    { locate_expr (JCPEunary (UPtilde, $2)) }
 */
 | EXCLAM postfix_expression 
-    { locate_expr (JCPEunary (Unot, $2)) }
+    { locate_expr (JCPEunary (UPnot, $2)) }
 ;
 
 argument_expression_list: 
@@ -463,20 +463,20 @@ multiplicative_expression:
 | postfix_expression 
     { $1 }
 | multiplicative_expression STAR postfix_expression 
-    { locate_expr (JCPEbinary ($1, Bmul, $3)) }
+    { locate_expr (JCPEbinary ($1, BPmul, $3)) }
 | multiplicative_expression SLASH postfix_expression 
-    { locate_expr (JCPEbinary ($1, Bdiv, $3)) }
+    { locate_expr (JCPEbinary ($1, BPdiv, $3)) }
 | multiplicative_expression PERCENT postfix_expression 
-    { locate_expr (JCPEbinary ($1, Bmod, $3)) }
+    { locate_expr (JCPEbinary ($1, BPmod, $3)) }
 ;
 
 additive_expression: 
 | multiplicative_expression 
     { $1 }
 | additive_expression PLUS multiplicative_expression 
-    { locate_expr (JCPEbinary ($1, Badd, $3)) }
+    { locate_expr (JCPEbinary ($1, BPadd, $3)) }
 | additive_expression MINUS multiplicative_expression 
-    { locate_expr (JCPEbinary ($1, Bsub, $3)) }
+    { locate_expr (JCPEbinary ($1, BPsub, $3)) }
 ;
 
 shift_expression: 
@@ -484,9 +484,9 @@ shift_expression:
     { $1 }
 /*
 | shift_expression LEFT_OP additive_expression 
-    { locate (CEbinary ($1, Bshift_left, $3)) }
+    { locate (CEbinary ($1, BPshift_left, $3)) }
 | shift_expression RIGHT_OP additive_expression 
-    { locate (CEbinary ($1, Bshift_right, $3)) }
+    { locate (CEbinary ($1, BPshift_right, $3)) }
 */
 ;
 
@@ -511,54 +511,54 @@ expression:
 | shift_expression 
     { $1 }
 | expression LT expression 
-    { locate_expr (JCPEbinary ($1, Blt, $3)) }
+    { locate_expr (JCPEbinary ($1, BPlt, $3)) }
 | expression GT expression
-    { locate_expr (JCPEbinary ($1, Bgt, $3)) }
+    { locate_expr (JCPEbinary ($1, BPgt, $3)) }
 | expression LTEQ expression
-    { locate_expr (JCPEbinary ($1, Ble, $3)) }
+    { locate_expr (JCPEbinary ($1, BPle, $3)) }
 | expression GTEQ expression
-    { locate_expr (JCPEbinary ($1, Bge, $3)) }
+    { locate_expr (JCPEbinary ($1, BPge, $3)) }
 | expression LTCOLON IDENTIFIER
     { locate_expr (JCPEinstanceof($1, $3)) }
 | expression COLONGT IDENTIFIER
     { locate_expr (JCPEcast($1, $3)) }
 | expression EQEQ expression 
-    { locate_expr (JCPEbinary ($1, Beq, $3)) }
+    { locate_expr (JCPEbinary ($1, BPeq, $3)) }
 | expression BANGEQ expression 
-    { locate_expr (JCPEbinary ($1, Bneq, $3)) }
+    { locate_expr (JCPEbinary ($1, BPneq, $3)) }
 /*
 | _expression AMP expression 
-    { locate (CEbinary ($1, Bbw_and, $3)) }
+    { locate (CEbinary ($1, BPbw_and, $3)) }
 */
 /*
 | expression HAT expression 
-    { locate (CEbinary ($1, Bbw_xor, $3)) }
+    { locate (CEbinary ($1, BPbw_xor, $3)) }
 */
 /*
 | expression PIPE expression 
-    { locate (CEbinary ($1, Bbw_or, $3)) }
+    { locate (CEbinary ($1, BPbw_or, $3)) }
 */
 | expression AMPAMP expression 
-    { locate_expr (JCPEbinary($1, Bland, $3)) }
+    { locate_expr (JCPEbinary($1, BPland, $3)) }
 | expression BARBAR expression 
-    { locate_expr (JCPEbinary($1, Blor, $3)) }
+    { locate_expr (JCPEbinary($1, BPlor, $3)) }
 | expression QUESTION expression COLON expression %prec QUESTION
     { locate_expr (JCPEif ($1, $3, $5)) }
 | postfix_expression assignment_operator expression %prec ASSIGNOP
     { let a  =
 	match $2 with
 		| `Aeq -> JCPEassign ($1, $3)
-		| `Aadd -> JCPEassign_op ($1, Badd, $3)
-		| `Asub -> JCPEassign_op ($1, Bsub, $3)
-		| `Amul -> JCPEassign_op ($1, Bmul, $3)
-		| `Adiv -> JCPEassign_op ($1, Bdiv, $3)
-		| `Amod -> JCPEassign_op ($1, Bmod, $3)
+		| `Aadd -> JCPEassign_op ($1, BPadd, $3)
+		| `Asub -> JCPEassign_op ($1, BPsub, $3)
+		| `Amul -> JCPEassign_op ($1, BPmul, $3)
+		| `Adiv -> JCPEassign_op ($1, BPdiv, $3)
+		| `Amod -> JCPEassign_op ($1, BPmod, $3)
 (*
-		| Aleft -> CEassign_op ($1, Bshift_left, $3)
-		| Aright -> CEassign_op ($1, Bshift_right, $3)
-		| Aand -> CEassign_op ($1, Bbw_and, $3)
-		| Axor -> CEassign_op ($1, Bbw_xor, $3)
-		| Aor -> CEassign_op ($1, Bbw_or, $3)
+		| Aleft -> CEassign_op ($1, BPshift_left, $3)
+		| Aright -> CEassign_op ($1, BPshift_right, $3)
+		| Aand -> CEassign_op ($1, BPbw_and, $3)
+		| Axor -> CEassign_op ($1, BPbw_xor, $3)
+		| Aor -> CEassign_op ($1, BPbw_or, $3)
 *)
       in locate_expr a }
 
@@ -566,9 +566,9 @@ expression:
     %prec PRECFORALL
     { locate_expr (JCPEforall($2,$3,$5)) }
 | expression EQGT expression
-    { locate_expr (JCPEbinary($1,Bimplies,$3)) }
+    { locate_expr (JCPEbinary($1,BPimplies,$3)) }
 | expression LTEQGT expression
-    { locate_expr (JCPEbinary($1,Biff,$3)) }
+    { locate_expr (JCPEbinary($1,BPiff,$3)) }
 /*
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
 */
