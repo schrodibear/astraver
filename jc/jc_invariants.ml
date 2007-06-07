@@ -18,7 +18,7 @@ open Output
        hashtbl mutable_fields_table
        hashtbl committed_fields_table
        function create_mutable_field
-       function find_field_struct: "mutable" and "committed" cases
+       function find_field_struct: "mutable" and "committed" cases (and the parameter allow_mutable)
        function decl: JCPDstructtype: call to create_mutable_field
 *)
 
@@ -261,7 +261,7 @@ let invariant_params acc li =
   in
     acc
 
-(* Returns the parameters needed by an invariant, "this" not included *)
+(* Returns the parameters needed by the invariants of a structure, "this" not included *)
 let invariants_params acc st =
   let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
   List.fold_left (fun acc (li, _) -> invariant_params acc li) acc invs
@@ -432,13 +432,111 @@ let invariants_axioms st acc =
 (* pack / unpack *)
 (*****************)
 
+let components st =
+  List.fold_left
+    (fun acc (_, fi) ->
+       match fi.jc_field_info_type with
+	 | JCTpointer(si, _, _) -> (fi, si)::acc
+	 | _ -> acc)
+    []
+    st.jc_struct_info_fields
+
+let components_by_type st =
+  let compare_structs s t =
+    compare s.jc_struct_info_name t.jc_struct_info_name in
+  let comps = components st in
+  let comps =
+    List.sort
+      (fun (_, s) (_, t) -> compare_structs s t)
+      comps
+  in
+  let rec part prev acc = function
+    | [] -> [prev, acc]
+    | (fi, si)::tl ->
+	if compare_structs si prev = 0 then
+	  part prev (fi::acc) tl
+	else
+	  (prev, acc)::(part si [fi] tl)
+  in
+  let part = function
+    | [] -> []
+    | (fi, si)::tl -> part si [fi] tl
+  in
+  part comps
+
+let make_components_postcond this st reads writes committed =
+  let comps = components_by_type st in
+  let writes =
+    List.fold_left
+      (fun acc (si, _) -> StringSet.add ("committed_"^si.jc_struct_info_name) acc)
+      writes
+      comps
+  in
+  let reads =
+    List.fold_left
+      (fun acc (_, fields) ->
+	 List.fold_left
+	   (fun acc fi -> StringSet.add fi.jc_field_info_name acc)
+	   acc
+	   fields)
+      reads
+      comps
+  in
+  let reads = StringSet.union reads writes in
+  let committed_value = LConst(Prim_bool committed) in
+  let postcond =
+    make_and_list
+      (List.map
+	 (fun (si, fields) ->
+	    let committed_name = "committed_"^si.jc_struct_info_name in
+	    LPred(
+	      "eq",
+	      [ LVar committed_name;
+		List.fold_left
+		  (fun acc fi ->
+		     let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
+		     LApp("store", [acc; this_field; committed_value]))
+		  (LVarAtLabel(committed_name, ""))
+		  fields ]))
+	 comps)
+  in
+  postcond, reads, writes  
+
+(* all components must have mutable = false (for pack) *)
+let make_components_precond this st reads =
+  let comps = components st in
+  let reads =
+    List.fold_left
+      (fun acc (fi, _) -> StringSet.add fi.jc_field_info_name acc)
+      reads
+      comps
+  in
+  let l, reads = List.fold_left
+    (fun (l, reads) (fi, si) ->
+       let mutable_name = "mutable_"^si.jc_struct_info_name in
+       let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
+       LPred(
+	 "eq",
+	 [ LApp("select", [LVar mutable_name; this_field]);
+	   LConst(Prim_bool false) ]
+       )::l,
+       StringSet.add mutable_name reads)
+    ([], reads)
+    (components st)
+  in
+  make_and_list l, reads
+
 let pack_declaration st acc =
   let this = "this" in
   let name = st.jc_struct_info_root in
   let mutable_name = "mutable_"^name in
   let struct_type = pointer_type st.jc_struct_info_root in
   let inv, reads = invariant_for_struct (LVar this) st in
+  let writes = StringSet.empty in
+  let components_post, reads, writes = make_components_postcond (LVar this) st reads writes true in
+  let components_pre, reads = make_components_precond (LVar this) st reads in
   let reads = StringSet.add mutable_name reads in
+  let writes = StringSet.add mutable_name writes in
   if st.jc_struct_info_parent = None then
     Param(
       false,
@@ -447,23 +545,32 @@ let pack_declaration st acc =
 	this,
 	Base_type (struct_type),
 	Annot_type(
+	  (* requires *)
+	  make_and_list [
+	    (LPred(
+	       "eq",
+	       [ LConst(Prim_bool true);
+		 LApp("select", [LVar mutable_name; LVar this]) ]));
+	    inv;
+	    components_pre
+	  ],
+	  (* the function actually does nothing *)
+	  Base_type (simple_logic_type "unit"),
+	  (* reads *)
+	  StringSet.elements reads,
+	  (* writes *)
+	  StringSet.elements writes,
+	  (* ensures *)
 	  make_and
 	    (LPred(
-	      "eq",
-	      [ LConst(Prim_bool true);
-		LApp("select", [LVar mutable_name; LVar this]) ]))
-	    inv,
-	  Base_type (simple_logic_type "unit"),
-	  StringSet.elements reads,
-	  [mutable_name],
-	  LPred(
-	    "eq",
-	    [ LVar mutable_name;
-	      LApp(
-		"store",
-		[ LVarAtLabel(mutable_name, "");
-		  LVar this;
-		  LConst(Prim_bool false) ])]),
+	       "eq",
+	       [ LVar mutable_name;
+		 LApp(
+		   "store",
+		   [ LVarAtLabel(mutable_name, "");
+		     LVar this;
+		     LConst(Prim_bool false) ])]))
+	    components_post,
 	  []
 	)
       )
@@ -475,7 +582,12 @@ let unpack_declaration st acc =
   let this = "this" in
   let name = st.jc_struct_info_root in
   let mutable_name = "mutable_"^name in
+  let committed_name = "committed_"^name in
   let struct_type = pointer_type st.jc_struct_info_root in
+  let reads = StringSet.singleton mutable_name in
+  let writes = StringSet.singleton mutable_name in
+  let reads = StringSet.add committed_name reads in
+  let components_post, reads, writes = make_components_postcond (LVar this) st reads writes false in
   if st.jc_struct_info_parent = None then
     Param(
       false,
@@ -484,21 +596,33 @@ let unpack_declaration st acc =
 	this,
 	Base_type (struct_type),
 	Annot_type(
-	  LPred(
-	    "eq",
-	    [ LConst(Prim_bool false);
-	      LApp("select", [LVar mutable_name; LVar this]) ]),
+	  (* requires *)
+	  make_and
+	    (LPred(
+	       "eq",
+	       [ LConst(Prim_bool false);
+		 LApp("select", [LVar mutable_name; LVar this]); ]))
+	    (LPred(
+	       "eq",
+	       [ LConst(Prim_bool false);
+		 LApp("select", [LVar committed_name; LVar this]); ])),
+	  (* the function actually does nothing *)
 	  Base_type (simple_logic_type "unit"),
-	  [mutable_name],
-	  [mutable_name],
-	  LPred(
-	    "eq",
-	    [ LVar mutable_name;
-	      LApp(
-		"store",
-		[ LVarAtLabel(mutable_name, "");
-		  LVar this;
-		  LConst(Prim_bool true) ])]),
+	  (* reads *)
+	  StringSet.elements reads,
+	  (* writes *)
+	  StringSet.elements writes,
+	  (* ensures *)
+	  make_and
+	    (LPred(
+	       "eq",
+	       [ LVar mutable_name;
+		 LApp(
+		   "store",
+		   [ LVarAtLabel(mutable_name, "");
+		     LVar this;
+		     LConst(Prim_bool true) ])]))
+	    components_post,
 	  []
 	)
       )

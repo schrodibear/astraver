@@ -162,9 +162,9 @@ let rec find_field_struct loc st allow_mutable = function
 	  | Some st -> find_field_struct loc st allow_mutable f
 
   
-let find_field loc ty f in_assertion =
+let find_field loc ty f allow_mutable =
   match ty with
-    | JCTpointer(st,_,_) -> find_field_struct loc st in_assertion f
+    | JCTpointer(st,_,_) -> find_field_struct loc st allow_mutable f
     | JCTnative _ 
     | JCTenum _
     | JCTlogic _
@@ -633,7 +633,7 @@ let rec assertion env e =
 	  end
       | JCPEderef (e, id) -> 
 	  let te = term env e in
-	  let fi = find_field e.jc_pexpr_loc te.jc_tterm_type id false in
+	  let fi = find_field e.jc_pexpr_loc te.jc_tterm_type id true in
 	  begin
 	    match fi.jc_field_info_type with
 	      | JCTnative Tboolean ->
