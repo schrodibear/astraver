@@ -42,7 +42,7 @@ let logic_type_table = Hashtbl.create 97
 
 let exceptions_table = Hashtbl.create 97
 
-let range_types_table = Hashtbl.create 97
+let enum_types_table = Hashtbl.create 97
 
 let structs_table = Hashtbl.create 97
 
@@ -78,13 +78,13 @@ let find_struct_info loc id =
 let is_numeric t =
   match t with
     | JCTnative (Tinteger|Treal) -> true
-    | JCTrange _ -> true
+    | JCTenum _ -> true
     | _ -> false
 
 let is_integer t =
   match t with
     | JCTnative Tinteger -> true
-    | JCTrange _ -> true
+    | JCTenum _ -> true
     | _ -> false
 
 let lub_numeric_types t1 t2 =
@@ -102,10 +102,10 @@ let rec substruct s1 s2 =
 let subtype t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
-    | JCTrange ri1, JCTrange ri2 -> 
-	Num.ge_num ri1.jc_range_info_min ri2.jc_range_info_min 	&&
-	Num.le_num ri1.jc_range_info_max ri2.jc_range_info_max
-    | JCTrange _, JCTnative Tinteger -> true
+    | JCTenum ri1, JCTenum ri2 -> 
+	Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min 	&&
+	Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max
+    | JCTenum _, JCTnative Tinteger -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
 	  substruct s1 s2
@@ -116,9 +116,9 @@ let subtype t1 t2 =
 let comparable_types t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
-    | JCTrange _, JCTrange _ -> true
-    | JCTrange _, JCTnative Tinteger -> true
-    | JCTnative Tinteger, JCTrange _ -> true
+    | JCTenum _, JCTenum _ -> true
+    | JCTenum _, JCTnative Tinteger -> true
+    | JCTnative Tinteger, JCTenum _ -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
 	  s1.jc_struct_info_root = s2.jc_struct_info_root
@@ -166,7 +166,7 @@ let find_field loc ty f in_assertion =
   match ty with
     | JCTpointer(st,_,_) -> find_field_struct loc st in_assertion f
     | JCTnative _ 
-    | JCTrange _
+    | JCTenum _
     | JCTlogic _
     | JCTnull ->
 	typing_error loc "not a structure type"
@@ -189,8 +189,8 @@ let type_type t =
 	  JCTlogic id
 	with Not_found ->
 	  try
-	    let (ri,_,_,_) = Hashtbl.find range_types_table id in
-	    JCTrange ri
+	    let (ri,_,_,_) = Hashtbl.find enum_types_table id in
+	    JCTenum ri
 	  with Not_found ->
 	    typing_error t.jc_ptype_loc "unknown type %s" id
 
@@ -240,9 +240,9 @@ let logic_unary_op loc (op : Jc_ast.punary_op) e =
 let term_coerce t1 t2 e =
   let e_int =
     match t1 with
-      | JCTrange ri ->
+      | JCTenum ri ->
 	  let (_,to_int,_,_) = 
-	    Hashtbl.find range_types_table ri.jc_range_info_name 
+	    Hashtbl.find enum_types_table ri.jc_enum_info_name 
 	  in
 	  { jc_tterm_node = JCTTapp(to_int,[e]) ;
 	    jc_tterm_type = JCTnative Tinteger;
@@ -468,7 +468,13 @@ let rec term env e =
       | JCPEforall _ -> 
 	  typing_error e.jc_pexpr_loc 
 	    "quantification not allowed as logic term"
-
+      | JCPErange(e1,e2) ->
+	  let e1 = term env e1 and e2 = term env e2 in
+	  let t1 = e1.jc_tterm_type and t2 = e2.jc_tterm_type in
+	  assert (is_numeric t1 && is_numeric t2);
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative t, JCTTrange(term_coerce t1 t e1, term_coerce t2 t e2)
+	    
   in { jc_tterm_node = te;
        jc_tterm_type = t;
        jc_tterm_loc = e.jc_pexpr_loc }
@@ -666,13 +672,12 @@ let rec assertion env e =
 		    "boolean expression expected"
 	  end
 	  (* non propositional expressions *)
-      | JCPEoffset_max _ | JCPEoffset_min _ ->
-	  typing_error e.jc_pexpr_loc "offsets are not propositions"
+      | JCPEoffset_max _ | JCPEoffset_min _ | JCPErange _ ->
+	  typing_error e.jc_pexpr_loc "offsets and range are not propositions"
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
       | JCPEassign _ -> 
 	  typing_error e.jc_pexpr_loc "assignment not allowed as logic term"
-
 
   in { jc_tassertion_node = te;
        jc_tassertion_loc = e.jc_pexpr_loc }
@@ -779,9 +784,9 @@ let bin_op t op =
 let coerce t1 t2 e =
   let tn1,e_int =
     match t1 with
-      | JCTrange ri ->
+      | JCTenum ri ->
 	  let (_,_,to_int_,_) = 
-	    Hashtbl.find range_types_table ri.jc_range_info_name 
+	    Hashtbl.find enum_types_table ri.jc_enum_info_name 
 	  in
 	  Tinteger,{ jc_texpr_node = JCTEcall(to_int_,[e]) ;
 		     jc_texpr_type = JCTnative Tinteger;
@@ -799,12 +804,12 @@ let coerce t1 t2 e =
 
 let restrict t1 t2 e =
   match t1,t2 with
-    | JCTnative Tinteger, JCTrange ri -> 
+    | JCTnative Tinteger, JCTenum ri -> 
 	let (_,_,_,of_int) = 
-	  Hashtbl.find range_types_table ri.jc_range_info_name 
+	  Hashtbl.find enum_types_table ri.jc_enum_info_name 
 	in
 	{ jc_texpr_node = JCTEcall(of_int,[e]) ;
-	  jc_texpr_type = JCTrange ri;
+	  jc_texpr_type = JCTenum ri;
 	  jc_texpr_loc = e.jc_texpr_loc }  	
     | _ -> 
 	typing_error e.jc_texpr_loc "cannot coerce type '%a' to type '%a'"
@@ -1067,7 +1072,8 @@ let rec expr env e =
       | JCPEforall _ 
       | JCPEold _ 
       | JCPEoffset_max _ 
-      | JCPEoffset_min _ ->
+      | JCPEoffset_min _ 
+      | JCPErange _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
 
   in { jc_texpr_node = te; 
@@ -1287,7 +1293,10 @@ let rec location_set env e =
 	begin
 	  match ty,ti.jc_tterm_type with 
 	    | JCTpointer(st,_,_), JCTnative Tinteger ->
-		ty,JCTLSrange(te,ti,ti)
+		begin match ti.jc_tterm_node with
+		  | JCTTrange(t1,t2) -> ty,JCTLSrange(te,t1,t2)
+		  | _ -> ty,JCTLSrange(te,ti,ti)
+		end
 	    | JCTpointer _, _ -> 
 		typing_error i.jc_pexpr_loc "integer expected, got %a" print_type ti.jc_tterm_type
 	    | _ -> 
@@ -1310,7 +1319,8 @@ let rec location_set env e =
     | JCPEassign_op (_, _, _)
     | JCPEassign (_, _)
     | JCPEapp (_, _)
-    | JCPEconst _ -> assert false
+    | JCPEconst _
+    | JCPErange (_,_) -> assert false
 
 let location env e =
   match e.jc_pexpr_node with
@@ -1345,7 +1355,8 @@ let location env e =
     | JCPEassign_op (_, _, _)
     | JCPEassign (_, _)
     | JCPEapp (_, _)
-    | JCPEconst _ -> 
+    | JCPEconst _ 
+    | JCPErange (_,_) ->
 	typing_error e.jc_pexpr_loc "invalid memory location"
 
 let clause env vi_result c acc =
@@ -1460,17 +1471,17 @@ let rec decl d =
 	let b = statement_list (("\\result",vi)::param_env) body in
 	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
-    | JCPDrangetype(id,min,max) ->
+    | JCPDenumtype(id,min,max) ->
 	let ri =
-	  { jc_range_info_name = id;
-	    jc_range_info_min = min;
-	    jc_range_info_max = max;
+	  { jc_enum_info_name = id;
+	    jc_enum_info_min = min;
+	    jc_enum_info_max = max;
 	  }
 	in
 	let to_int = make_term_op ("int_of_"^id) integer_type in
 	let to_int_ = make_fun_info ("int_of_"^id) integer_type in
-	let of_int = make_fun_info (id^"_of_int") (JCTrange ri) in
-	Hashtbl.add range_types_table id (ri,to_int,to_int_,of_int)
+	let of_int = make_fun_info (id^"_of_int") (JCTenum ri) in
+	Hashtbl.add enum_types_table id (ri,to_int,to_int_,of_int)
     | JCPDstructtype(id,parent,fields,inv) ->
 	(* mutable field *)
 	if parent = None then create_mutable_field id;

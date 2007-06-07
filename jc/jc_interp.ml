@@ -52,7 +52,7 @@ let tr_base_type t =
   match t with
     | JCTnative t -> simple_logic_type (tr_native_type t)
     | JCTlogic s -> simple_logic_type s
-    | JCTrange ri -> simple_logic_type ri.jc_range_info_name
+    | JCTenum ri -> simple_logic_type ri.jc_enum_info_name
     | JCTpointer (st, a, b) -> 
 	let ti = simple_logic_type (st.jc_struct_info_root) in
 	{ logic_type_name = "pointer";
@@ -139,6 +139,7 @@ let rec term label oldlabel t =
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LApp("downcast",
 	     [lvar label tag; ft t;LVar (tag_name ty)])
+    | JCTrange(t1,t2) -> assert false (* TODO ? *)
 
 let rec assertion label oldlabel a =
   let fa = assertion label oldlabel 
@@ -714,7 +715,7 @@ let tr_fun f spec body acc =
 		 (make_and (make_and validity instance) invariant)
 		 acc*)
            | JCTnull -> assert false
-	   | JCTrange _ -> acc
+	   | JCTenum _ -> acc
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
@@ -848,15 +849,15 @@ let tr_exception ei acc =
   Exception(ei.jc_exception_info_name, 
 	    Some (tr_base_type ei.jc_exception_info_type)) :: acc
 
-let tr_range_type ri to_int of_int acc =
-  let n = ri.jc_range_info_name in
-  let range_pred x =
-    LAnd(LPred("le_int",[LConst(Prim_int(Num.string_of_num(ri.jc_range_info_min))); x]),
-	       LPred("le_int",[x; LConst(Prim_int(Num.string_of_num(ri.jc_range_info_max)))]))
+let tr_enum_type ri to_int of_int acc =
+  let n = ri.jc_enum_info_name in
+  let enum_pred x =
+    LAnd(LPred("le_int",[LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_min))); x]),
+	       LPred("le_int",[x; LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_max)))]))
   in
   let of_int_type =
     Prod_type("x", Base_type(simple_logic_type "int"),
-	      Annot_type(range_pred (LVar "x"),
+	      Annot_type(enum_pred (LVar "x"),
 			 Base_type(simple_logic_type n),
 			 [],[],
 			 LPred("eq_int",
@@ -866,9 +867,18 @@ let tr_range_type ri to_int of_int acc =
   Logic(false,to_int.jc_fun_info_name,
 	[("",simple_logic_type n)],simple_logic_type "int") :: 
   Param(false,of_int.jc_fun_info_name,of_int_type) ::
-  Axiom(n^"_range",
-	LForall("x",simple_logic_type n,range_pred (LApp(to_int.jc_fun_info_name,[LVar "x"]))))		
+  Axiom(n^"_enum",
+	LForall("x",simple_logic_type n,enum_pred (LApp(to_int.jc_fun_info_name,[LVar "x"]))))		
   :: acc
+
+let tr_variable vi e acc =
+  let t = 
+    if vi.jc_var_info_assigned then
+      Ref_type(tr_type vi.jc_var_info_type)
+    else
+      tr_type vi.jc_var_info_type
+  in
+  Param(false,vi.jc_var_info_name,t)::acc
 	   
 (*
 Local Variables: 

@@ -33,7 +33,7 @@ let logic_type_table = Hashtbl.create 97
 
 let exceptions_table = Hashtbl.create 97
 
-let range_types_table = Hashtbl.create 97
+let enum_types_table = Hashtbl.create 97
 
 let structs_table = Hashtbl.create 97
 
@@ -55,64 +55,6 @@ let () = Hashtbl.add exceptions_table "True" true_output
 let () = Hashtbl.add exceptions_table "False" false_output
 let () = Hashtbl.add exceptions_table "Loop_exit" loop_exit
 let () = Hashtbl.add exceptions_table "Loop_continue" loop_continue
-
-
-(* terms *)
-
-let rec term e =
-  let ne =
-    match e.jc_tterm_node with
-      | JCTTconst c -> JCTconst c
-      | JCTTvar vi -> JCTvar vi
-      | JCTTshift (e1,e2) -> JCTshift (term e1, term e2)
-      | JCTTderef (e, f) -> JCTderef (term e, f)
-      | JCTTapp (f, el) -> JCTapp (f, List.map term el)
-      | JCTTold e -> JCTold (term e)
-      | JCTToffset_max (e, s) -> JCToffset_max (term e, s)
-      | JCTToffset_min (e, s) -> JCToffset_min (term e, s)
-      | JCTTinstanceof (e, s) -> JCTinstanceof (term e, s)
-      | JCTTcast (e, s) -> JCTcast (term e, s)
-      | JCTTif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
-
-  in { jc_term_node = ne;
-       jc_term_loc = e.jc_tterm_loc }
-
-
-let rec assertion e =
-  let ne =
-    match e.jc_tassertion_node with
-      | JCTAtrue -> JCAtrue
-      | JCTAfalse -> JCAfalse
-      | JCTAand el ->
-	  JCAand (List.map assertion el)
-      | JCTAor el ->
-	  JCAor (List.map assertion el)
-      | JCTAimplies (e1, e2) ->
-	  JCAimplies (assertion e1, assertion e2)
-      | JCTAiff (e1, e2) ->
-	  JCAiff (assertion e1, assertion e2)
-      | JCTAnot e ->
-	  JCAnot (assertion e)
-      | JCTAapp (f, tl) ->
-	  JCAapp (f, List.map term tl)
-      | JCTAforall (vi, e) ->
-	  JCAforall (vi, assertion e)
-      | JCTAold e ->
-	  JCAold (assertion e)
-      | JCTAinstanceof (t, s) ->
-	  JCAinstanceof (term t, s)
-      | JCTAbool_term t ->
-	  JCAbool_term (term t)
-      | JCTAif (t, e1, e2) ->
-	  JCAif (term t, assertion e1, assertion e2)
-
-  in { jc_assertion_node = ne;
-       jc_assertion_loc = e.jc_tassertion_loc }
-
-let logic_function t =
-  match t with 
-    | JCTAssertion p -> JCAssertion (assertion p) 
-    | _ -> assert false
 
 
 (* expressions *)
@@ -202,7 +144,7 @@ let make_decls loc sl tl =
 		   | Tboolean -> JCCboolean false
 		   | _ -> JCCinteger "0"
 	       end
-	   | JCTrange _ -> JCCinteger "0"
+	   | JCTenum _ -> JCCinteger "0"
 	   | JCTnull | JCTpointer _ -> JCCnull
 	   | JCTlogic _ -> assert false
        in
@@ -663,6 +605,7 @@ and term t =
       | JCTTinstanceof (t, si) -> JCTinstanceof (term t, si)
       | JCTTcast (t, si) -> JCTcast (term t, si)
       | JCTTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
+      | JCTTrange (t1, t2) -> JCTrange (term t1, term t2)
   in { jc_term_node = nt;
        jc_term_loc =  loc }
 
@@ -783,6 +726,11 @@ let static_variable (v,e) =
   match sl,tl with
     | [],[] -> v,e
     | _ -> assert false (* TODO *)
+
+let logic_function t =
+  match t with 
+    | JCTAssertion p -> JCAssertion (assertion p) 
+    | _ -> assert false
 
 (*
   Local Variables: 

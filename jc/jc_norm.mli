@@ -40,8 +40,8 @@ val variables_table :
 val structs_table : 
   (string, (struct_info * (logic_info * assertion) list)) Hashtbl.t
 
-val range_types_table : 
-  (string, (range_info * logic_info * fun_info * fun_info)) Hashtbl.t
+val enum_types_table : 
+  (string, (enum_info * logic_info * fun_info * fun_info)) Hashtbl.t
 
 val axioms_table : 
   (string, assertion) Hashtbl.t

@@ -33,7 +33,8 @@ let rec term acc t =
     | JCTapp (f,lt) -> f::(List.fold_left term acc lt)
     | JCToffset_max(t,_) | JCToffset_min(t,_)
     | JCTold t | JCTderef (t,_) -> term acc t
-    | JCTshift (t1,t2) -> term (term acc t1) t2
+    | JCTshift (t1,t2) 
+    | JCTrange (t1,t2) -> term (term acc t1) t2
     | JCTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
     | JCTcast(t,_)
     | JCTinstanceof(t,_) -> term acc t

@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.23 2007-06-06 14:02:25 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.24 2007-06-07 12:01:43 moy Exp $ *)
 
 
 open Jc_env
@@ -106,6 +106,7 @@ let rec term ef t =
     | JCTderef (t, fi) ->
 	term (add_memory_effect ef fi) t
     | JCTshift (t1, t2) -> term (term ef t1) t2
+    | JCTrange (t1, t2) -> term (term ef t1) t2
 
 let rec assertion ef a =
   match a.jc_assertion_node with

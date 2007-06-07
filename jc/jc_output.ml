@@ -9,10 +9,11 @@ open Pp
 type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
       tfun_spec * tstatement list
-  | JCrange_type_def of string * Num.num * Num.num
+  | JCenum_type_def of string * Num.num * Num.num
   | JCstruct_def of string * field_info list 
   | JCrec_struct_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr
+  | JCaxiom_def of string * tassertion
       
 let string_of_native t =
   match t with
@@ -27,7 +28,7 @@ let print_type fmt t =
   match t with
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
-    | JCTrange ri -> fprintf fmt "%s" ri.jc_range_info_name
+    | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
     | JCTpointer (s,a,b) -> 
 	if Num.gt_num a b then
 	  fprintf fmt "%s[..]" s.jc_struct_info_name
@@ -90,6 +91,8 @@ let rec term fmt t =
 	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
     | JCTTshift (_, _)-> assert false (* TODO *)
     | JCTTconst c -> const fmt c
+    | JCTTrange (t1,t2) -> 
+	fprintf fmt "@[%a..%a@]" term t1 term t2
 
 let rec assertion fmt a =
   match a.jc_tassertion_node with
@@ -281,7 +284,7 @@ let rec print_decl fmt d =
 	fprintf fmt "@[%a %s(@[%a@])@\n%a@\n%a@]@\n@." print_type ty id
 	  (print_list comma param) params 
 	  print_spec spec block body 
-    | JCrange_type_def(id,min,max) ->
+    | JCenum_type_def(id,min,max) ->
 	fprintf fmt "@[type %s = %s..%s@]@\n@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
     | JCstruct_def(id,fields) ->
@@ -291,6 +294,8 @@ let rec print_decl fmt d =
 	print_list (fun fmt () -> fprintf fmt " and ") print_decl fmt dlist
     | JCvar_def(ty,id,init) ->
 	fprintf fmt "@[%a %s = %a@]@\n@." print_type ty id expr init
+    | JCaxiom_def(id,a) ->
+	fprintf fmt "@[axiom %s : %a@]@\n@." id assertion a
 	
    
 let rec print_decls fmt d =

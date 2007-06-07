@@ -71,8 +71,8 @@ let main () =
 	     Hashtbl.add Jc_norm.structs_table tag (si,l))
 	  Jc_typing.structs_table;
 	Hashtbl.iter (fun tag x -> 
-			Hashtbl.add Jc_norm.range_types_table tag x)
-	  Jc_typing.range_types_table;
+			Hashtbl.add Jc_norm.enum_types_table tag x)
+	  Jc_typing.enum_types_table;
 	Hashtbl.iter 
 	  (fun tag a -> 
 	     let a = Jc_norm.assertion a in
@@ -125,6 +125,13 @@ let main () =
 	    Jc_norm.structs_table
 	    d_types
 	in	       	  
+	let d_memories =
+	  Hashtbl.fold 
+	    (fun _ (v,e) acc ->
+	       Jc_interp.tr_variable v e acc)
+	    Jc_norm.variables_table
+	    d_memories
+	in	       	  
 	(* production phase 1.3 : generation of Why exceptions *)
 	let d_exc =
 	  Hashtbl.fold 
@@ -133,12 +140,12 @@ let main () =
 	    Jc_norm.exceptions_table
 	    d_memories
 	in	       	  
-	(* production phase 1.4 : generation of Why range_types *)
-	let d_range =
+	(* production phase 1.4 : generation of Why enum_types *)
+	let d_enum =
 	  Hashtbl.fold 
 	    (fun _ (ri,to_int,to_int_,of_int) acc ->
-	       Jc_interp.tr_range_type ri to_int_ of_int acc)
-	    Jc_norm.range_types_table
+	       Jc_interp.tr_enum_type ri to_int_ of_int acc)
+	    Jc_norm.enum_types_table
 	    d_exc
 	in	       	  
 	(* production phase 2 : generation of Why logic functions *)
@@ -147,7 +154,7 @@ let main () =
 	    (fun _ (li,p) acc ->
 	       Jc_interp.tr_logic_fun li p acc)
 	    Jc_norm.logic_functions_table 
-	    d_range
+	    d_enum
 	in
 	(* production phase 3 : generation of Why axioms *)
 	let d_axioms = 

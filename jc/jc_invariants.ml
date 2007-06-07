@@ -141,7 +141,7 @@ let rec term this t =
 		Jc_typing.typing_error t.jc_term_loc
 		  "this dereferencing is not allowed in structure invariant"
 	end
-    | JCTshift (t1, t2) -> term this t1; term this t2
+    | JCTshift (t1, t2) | JCTrange (t1, t2) -> term this t1; term this t2
     | JCTvar _ -> ()
 
 let rec assertion this p =
@@ -179,7 +179,8 @@ let check invs =
 let rec term_memories aux t = match t.jc_tterm_node with
   | JCTTconst _
   | JCTTvar _ -> aux
-  | JCTTshift(t1, t2) -> term_memories (term_memories aux t1) t2
+  | JCTTshift(t1, t2)
+  | JCTTrange(t1,t2) -> term_memories (term_memories aux t1) t2
   | JCTTderef(t, fi) ->
       let m = fi.jc_field_info_name in
       term_memories (StringSet.add m aux) t

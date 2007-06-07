@@ -89,6 +89,7 @@ type pexpr_node =
   | JCPEoffset_max of pexpr 
   | JCPEoffset_min of pexpr
   | JCPEif of pexpr * pexpr * pexpr
+  | JCPErange of pexpr * pexpr
 
 and pexpr =
     {
@@ -137,7 +138,7 @@ type pdecl_node =
   | JCPDstructtype of string * 
       string option * (ptype * string) list * (string * string * pexpr) list
   | JCPDrectypes of pdecl list
-  | JCPDrangetype of string * Num.num * Num.num
+  | JCPDenumtype of string * Num.num * Num.num
   | JCPDlogictype of string 
   | JCPDaxiom of string * pexpr
   | JCPDexception of string * ptype
@@ -166,6 +167,7 @@ type tterm_node =
   | JCTTinstanceof of tterm * struct_info
   | JCTTcast of tterm * struct_info
   | JCTTif of tterm * tterm * tterm
+  | JCTTrange of tterm * tterm
 
 and tterm =
     {
@@ -309,6 +311,7 @@ type term_node =
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
   | JCTif of term * term * term
+  | JCTrange of term * term
 
 and term =
     {
@@ -426,6 +429,6 @@ type fun_spec =
     
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

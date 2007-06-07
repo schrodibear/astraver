@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.38 2007-06-06 14:02:25 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.39 2007-06-07 12:01:43 moy Exp $ */
 
 %{
 
@@ -155,6 +155,7 @@
 %left BARBAR
 %left AMPAMP
 %left LT GT LTEQ GTEQ EQEQ BANGEQ COLONGT LTCOLON
+%nonassoc DOTDOT
 /* unary -, unary +, ++, --, ! */
 %nonassoc UMINUS UPLUS PLUSPLUS MINUSMINUS EXCLAM
 /* . */
@@ -215,7 +216,7 @@ type_rec_definitions:
 
 type_definition:
 | TYPE IDENTIFIER EQ int_constant DOTDOT int_constant
-    { locate_decl (JCPDrangetype($2,$4,$6)) }
+    { locate_decl (JCPDenumtype($2,$4,$6)) }
 | TYPE IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
     { let (f,i) = $6 in locate_decl (JCPDstructtype($2,$4,f,i)) }
 | LOGIC TYPE IDENTIFIER
@@ -572,6 +573,8 @@ expression:
 /*
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
 */
+| expression DOTDOT expression
+    { locate_expr (JCPErange($1,$3)) }
 ;
 
 identifier_list: 
