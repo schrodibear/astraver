@@ -12,6 +12,7 @@ type jc_decl =
   | JCenum_type_def of string * Num.num * Num.num
   | JCstruct_def of string * field_info list 
   | JCrec_struct_defs of jc_decl list
+  | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr
   | JCaxiom_def of string * tassertion
       
@@ -67,9 +68,12 @@ let lbin_op op =
 let rec term fmt t =
   match t.jc_tterm_node with
     | JCTTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
-    | JCTTif (_, _, _)-> assert false (* TODO *)
-    | JCTTcast (_, _)-> assert false (* TODO *)
-    | JCTTinstanceof (_, _)-> assert false (* TODO *)
+    | JCTTif (t1,t2,t3) -> 
+	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
+    | JCTTcast (t, si) ->
+	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
+    | JCTTinstanceof (t, si) ->
+	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
     | JCTToffset_min (t, _)->
 	fprintf fmt "@[\\offset_min(%a)@]" term t
     | JCTToffset_max (t, _)->
@@ -120,7 +124,8 @@ let rec assertion fmt a =
 	      (print_list comma term) l 
 
     | JCTAnot _-> assert false (* TODO *)
-    | JCTAiff (_, _)-> assert false (* TODO *)
+    | JCTAiff (a1, a2)-> 
+	fprintf fmt "@[(%a <=>@ %a)@]" assertion a1 assertion a2
     | JCTAimplies (a1, a2)-> 
 	fprintf fmt "@[(%a =>@ %a)@]" assertion a1 assertion a2
     | JCTAor _-> assert false (* TODO *)
@@ -131,7 +136,7 @@ let rec assertion fmt a =
 	  (fun a -> fprintf fmt " &&@ %a" assertion a)
 	  l;
 	fprintf fmt ")@]"
-    | JCTAfalse -> assert false (* TODO *)
+    | JCTAfalse -> fprintf fmt "false"
 
 
 let behavior fmt (id,b) =
@@ -180,7 +185,8 @@ let rec expr fmt e =
 	fprintf fmt "@[(%a %s %a)@]" expr e1 (bin_op op) expr e2
     | JCTEunary(op,e1) ->
 	fprintf fmt "@[(%s %a)@]" (unary_op op) expr e1
-    | JCTEif (_, _, _) -> assert false (* TODO *)
+    | JCTEif (e1,e2,e3) -> 
+	fprintf fmt "@[(%a ? %a : %a)@]" expr e1 expr e2 expr e3
     | JCTEincr_heap (_, _, _) -> assert false (* TODO *)
     | JCTEincr_local (op, v) -> 
 	begin
@@ -202,12 +208,14 @@ let rec expr fmt e =
 	fprintf fmt "let %s = %a@ in %a" v.jc_var_info_name expr e1 expr e2
     | JCTEassign_heap (e1, fi, e2) -> 
 	fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
-    | JCTEassign_local (v, e) -> 
-	fprintf fmt "%s = %a" v.jc_var_info_name expr e
     | JCTEassign_local_op (v, op, e) -> 
 	fprintf fmt "%s %s= %a" (bin_op op) v.jc_var_info_name expr e
-    | JCTEcast (_, _) -> assert false (* TODO *)
-    | JCTEinstanceof (_, _) -> assert false (* TODO *)
+    | JCTEassign_local (v, e) -> 
+	fprintf fmt "%s = %a" v.jc_var_info_name expr e
+    | JCTEcast (e, si) ->
+	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
+    | JCTEinstanceof (e, si) ->
+	fprintf fmt "(%a <: %s)" expr e si.jc_struct_info_name
     | JCTEcall (op, ([t1;t2] as l)) ->
 	begin
 	  try
@@ -233,10 +241,14 @@ let rec statement fmt s =
     | JCTSpack (_, _) -> assert false (* TODO *) 
     | JCTSthrow (_, _) -> assert false (* TODO *) 
     | JCTStry (_, _, _) -> assert false (* TODO *) 
-    | JCTSgoto _-> assert false (* TODO *) 
-    | JCTSlabel _-> assert false (* TODO *) 
-    | JCTScontinue _-> assert false (* TODO *) 
-    | JCTSbreak _-> assert false (* TODO *) 
+    | JCTSgoto lab -> 
+	fprintf fmt "goto %s;@\n" lab
+    | JCTSlabel (lab, s) -> 
+	fprintf fmt "%s:@\n%a@\n" lab statement s
+    | JCTScontinue lab -> 
+	fprintf fmt "continue %s;@\n" lab
+    | JCTSbreak lab -> 
+	fprintf fmt "break %s;@\n" lab
     | JCTSwhile (e, la, s)-> 
 	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
 	  expr e assertion la.jc_tloop_invariant term la.jc_tloop_variant
@@ -292,7 +304,7 @@ let rec print_decl fmt d =
     | JCstruct_def(id,fields) ->
 	fprintf fmt "@[<v 2>type %s = {@\n%a}@]@\n@."
 	  id (print_list space field) fields
-    | JCrec_struct_defs dlist ->
+    | JCrec_struct_defs dlist | JCrec_fun_defs dlist ->
 	print_list (fun fmt () -> fprintf fmt " and ") print_decl fmt dlist
     | JCvar_def(ty,id,init) ->
 	fprintf fmt "@[%a %s = %a@]@\n@." print_type ty id expr init
@@ -307,6 +319,6 @@ let rec print_decls fmt d =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/krakatoa.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

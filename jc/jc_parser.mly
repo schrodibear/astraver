@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.39 2007-06-07 12:01:43 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.40 2007-06-08 15:52:39 moy Exp $ */
 
 %{
 
@@ -181,6 +181,8 @@ file:
 rec_decls:
 | type_rec_definitions %prec PRECTYPE
     { locate_decl (JCPDrectypes($1)) }
+| function_rec_definitions %prec PRECTYPE
+    { locate_decl (JCPDrecfuns($1)) }
 
 decl: 
 | variable_definition
@@ -359,6 +361,11 @@ assigns:
     { Some [] }
 ;
 
+function_rec_definitions:
+| function_definition AND function_rec_definitions %prec PRECTYPE
+    { $1::$3 }
+| function_definition AND function_definition %prec PRECTYPE
+    { $1::[$3] }
 
 function_definition: 
 | type_expr IDENTIFIER parameters function_specification compound_statement

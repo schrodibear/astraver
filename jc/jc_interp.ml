@@ -420,9 +420,9 @@ let rec statement s =
 	let e = expr e in
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) -> 
-	While(Cte(Prim_bool true), assertion None "" la.jc_loop_invariant,
+	While(Cte(Prim_bool true), assertion None "init" la.jc_loop_invariant,
 	      Some (term None "" la.jc_loop_variant,None), [statement s])
-    | JCSassert a -> Assert(assertion None "" a, Void)
+    | JCSassert a -> Assert(assertion None "init" a, Void)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  let e = match e with
@@ -819,6 +819,31 @@ let tr_fun f spec body acc =
     | [] -> ["tt", unit_type]
     | l -> List.map parameter l
   in
+  (* rename formals just before body is treated *)
+  let list_of_refs =
+    List.fold_right
+      (fun id bl ->
+	 if id.jc_var_info_assigned
+	 then 
+	   let n = id.jc_var_info_final_name in
+	   let newn = "mutable_" ^ n in
+	   id.jc_var_info_final_name <- newn;
+	   (newn, n) :: bl
+	 else bl) 
+      f.jc_fun_info_parameters [] 
+  in
+  let body = statement_list body in
+  let tblock =
+    append
+      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)
+      body
+  in
+  let tblock = make_label "init" tblock in
+  let tblock =
+    List.fold_right
+      (fun (mut_id,id) bl ->
+	 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+  in
   let acc =
     List.fold_right
       (fun (id,b,e) acc ->
@@ -828,9 +853,7 @@ let tr_fun f spec body acc =
 	     Fun(
 	       params,
 	       requires,
-	       append
-		 (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)
-		 (statement_list body),
+	       tblock,
 	       e,
 	       excep_posts_for_others None excep_behaviors
 	     )
@@ -838,6 +861,13 @@ let tr_fun f spec body acc =
 	 in d::acc)
       normal_behaviors acc
   in 
+  (* redefine [tblock] for use in exception functions *)
+  let tblock = make_label "init" tblock in
+  let tblock =
+    List.fold_right
+      (fun (mut_id,id) bl ->
+	 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+  in
   let acc =
     ExceptionMap.fold
       (fun ei l acc ->
@@ -846,7 +876,8 @@ let tr_fun f spec body acc =
 	      let d =
 		Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
 		    Fun(params,
-			requires,statement_list body,
+			requires,
+			tblock,
 			LTrue,
 			(ei.jc_exception_info_name,e) :: 
 			excep_posts_for_others (Some ei) excep_behaviors))

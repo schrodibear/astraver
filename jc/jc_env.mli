@@ -41,7 +41,7 @@ and enum_info =
 
 and struct_info =
     { 
-      jc_struct_info_name : string;
+              jc_struct_info_name : string;
       mutable jc_struct_info_parent : struct_info option;
       mutable jc_struct_info_root : string;
       mutable jc_struct_info_fields : (string * field_info) list;
@@ -57,12 +57,13 @@ and field_info =
 
 type var_info =
     {
-      jc_var_info_tag : int;
-      jc_var_info_name : string;
+              jc_var_info_tag : int;
+              jc_var_info_name : string;
       mutable jc_var_info_final_name : string;
-      jc_var_info_type : jc_type;
+              jc_var_info_type : jc_type;
+              mutable jc_var_info_formal : bool;
       mutable jc_var_info_assigned : bool;
-      jc_var_info_static : bool;
+              jc_var_info_static : bool;
     }
 
 

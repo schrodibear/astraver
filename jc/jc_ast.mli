@@ -137,7 +137,10 @@ type pdecl_node =
       ptype * string * (ptype * string) list * pclause list * pstatement list
   | JCPDstructtype of string * 
       string option * (ptype * string) list * (string * string * pexpr) list
+  (* use to define recursively a set of types *)
   | JCPDrectypes of pdecl list
+  (* use to define recursively a set of functions *)
+  | JCPDrecfuns of pdecl list
   | JCPDenumtype of string * Num.num * Num.num
   | JCPDlogictype of string 
   | JCPDaxiom of string * pexpr

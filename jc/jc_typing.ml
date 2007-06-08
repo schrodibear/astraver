@@ -1401,7 +1401,7 @@ let clause env vi_result c acc =
   
 let param (t,id) =
   let ty = type_type t in
-  let vi = var ty id in 
+  let vi = var ~formal:true ty id in 
   (id,vi)
 
 let assertion_true =
@@ -1452,6 +1452,22 @@ let add_typedecl d (id,parent) =
   in
   root,struct_info
 
+let add_fundecl (ty,id,pl) =
+  try
+    let fi = Hashtbl.find functions_env id in
+    let ty = fi.jc_fun_info_return_type in
+    let param_env =
+      List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
+    in
+    param_env, ty, fi
+  with Not_found ->
+    let param_env = List.map param pl in
+    let ty = type_type ty in
+    let fi = make_fun_info id ty in
+    fi.jc_fun_info_parameters <- List.map snd param_env;
+    Hashtbl.add functions_env id fi;
+    param_env, ty, fi
+
 let rec decl d =
   match d.jc_pdecl_node with
     | JCPDvar(ty,id,init) ->
@@ -1461,10 +1477,7 @@ let rec decl d =
 	Hashtbl.add variables_env id vi;
 	Hashtbl.add variables_table vi.jc_var_info_tag (vi,e)
     | JCPDfun(ty,id,pl,specs,body) -> 
-	let param_env = List.map param pl in
-	let ty = type_type ty in
-	let fi = make_fun_info id ty in
-	fi.jc_fun_info_parameters <- List.map snd param_env;
+	let param_env,ty,fi = add_fundecl (ty,id,pl) in
 	let vi = var ty "\\result" in
 	vi.jc_var_info_final_name <- "result";
 	let s = List.fold_right 
@@ -1473,8 +1486,16 @@ let rec decl d =
 		    jc_tfun_behavior = [] }
 	in
 	let b = statement_list (("\\result",vi)::param_env) body in
-	Hashtbl.add functions_env id fi;
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
+    | JCPDrecfuns pdecls ->
+        (* first pass: adding function names *)
+	List.iter (fun d -> match d.jc_pdecl_node with
+		     | JCPDfun(ty,id,pl,_,_) ->
+			 ignore (add_fundecl (ty,id,pl))
+		     | _ -> assert false
+		  ) pdecls;
+        (* second pass: type function body *)
+	List.iter decl pdecls
     | JCPDenumtype(id,min,max) ->
 	let ri =
 	  { jc_enum_info_name = id;
