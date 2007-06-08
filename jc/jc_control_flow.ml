@@ -65,8 +65,6 @@ let rec statement g fun_exit_node s =
 	n,[n]	
     | JCSassign_heap (_, _, _)
     | JCSassign_local (_, _)
-    | JCSincr_heap (_, _, _)
-    | JCSincr_local (_, _)
     | JCScall (_, _, _, _)
     | JCSunpack (_, _)
     | JCSpack (_, _)

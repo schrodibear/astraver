@@ -59,17 +59,28 @@ let () = Hashtbl.add exceptions_table "Loop_continue" loop_continue
 
 (* expressions *)
 
-let make_const loc c =
+let make_const loc t c =
   let node = JCEconst c in
-  { jc_expr_loc = loc; jc_expr_node = node; }
+  { jc_expr_loc = loc; 
+    jc_expr_type = t;
+    jc_expr_node = node; }
+
+let void_const loc = make_const loc (JCTnative Tunit) JCCvoid
+let true_const loc = make_const loc (JCTnative Tboolean) (JCCboolean true)
+let false_const loc = make_const loc (JCTnative Tboolean) (JCCboolean false)
+let one_const loc = make_const loc (JCTnative Tinteger) (JCCinteger "1")
 
 let make_var loc vi =
   let node = JCEvar vi in
-  { jc_expr_loc = loc; jc_expr_node = node; }
+  { jc_expr_loc = loc; 
+    jc_expr_type = vi.jc_var_info_type;
+    jc_expr_node = node; } 
 
 let make_deref loc e fi =
   let node = JCEderef (e, fi) in
-  { jc_expr_loc = loc; jc_expr_node = node; }
+  { jc_expr_loc = loc; 
+    jc_expr_type = fi.jc_field_info_type;
+    jc_expr_node = node; }
 
 (* expressions on the typed AST, not the normalized AST *)
 
@@ -96,12 +107,6 @@ let make_assign_local loc vi e =
 
 let make_assign_heap loc e1 fi e2 =
   make_node loc (JCSassign_heap (e1, fi, e2))
-
-let make_incr_local loc op vi =
-  make_node loc (JCSincr_local (op, vi))
-
-let make_incr_heap loc op e fi =
-  make_node loc (JCSincr_heap (op, e, fi))
 
 let make_block loc sl =
   match sl with 
@@ -136,19 +141,19 @@ let make_decls loc sl tl =
   List.fold_right 
     (fun vi acc -> 
        (* real initial value does not matter *)
-       let cst =
+       let t,cst =
 	 match vi.jc_var_info_type with
 	   | JCTnative t ->
 	       begin
 		 match t with
-		   | Tboolean -> JCCboolean false
-		   | _ -> JCCinteger "0"
+		   | Tboolean -> JCTnative Tboolean, JCCboolean false
+		   | _ -> JCTnative Tinteger, JCCinteger "0"
 	       end
-	   | JCTenum _ -> JCCinteger "0"
-	   | JCTnull | JCTpointer _ -> JCCnull
+	   | JCTenum _ ->  JCTnative Tinteger, JCCinteger "0"
+	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull
 	   | JCTlogic _ -> assert false
        in
-       make_decl loc vi (Some (make_const loc cst)) acc)
+       make_decl loc vi (Some (make_const loc t cst)) acc)
     tl (make_block loc sl)
 
 let make_return loc e =
@@ -175,6 +180,15 @@ let make_tif loc e ts es =
 
 let make_tthrow loc exc e =
   make_tnode loc (JCTSthrow (exc,e))
+
+
+let make_incr_local loc op vi =
+  make_assign_local loc vi
+    { jc_expr_node = JCEbinary(make_var loc vi, op, one_const loc);
+      jc_expr_type = JCTnative Tinteger;
+      jc_expr_loc = loc }
+
+let make_incr_heap loc op e fi = assert false (* TODO *)
 
 (*
 
@@ -233,6 +247,8 @@ let rec expr e =
 	  let (l,tl),e = expr e in
 	  let stat = make_assign_local loc vi e in
 	  (l@[stat], tl), JCEvar vi
+      | JCTEassign_local_op (vi,op, e) -> assert false (* TODO *)
+
       | JCTEassign_heap (e1, fi, e2) ->
 	  let (l1,tl1),e1 = expr e1 in
 	  let (l2,tl2),e2 = expr e2 in
@@ -246,19 +262,23 @@ let rec expr e =
       | JCTEincr_local (op, vi) ->
 	  begin match op with
 	    | Prefix_inc -> 
-		([make_incr_local loc Stat_inc vi], []), JCEvar vi
+		([make_incr_local loc Badd_int vi], []), JCEvar vi
 	    | Prefix_dec ->
-		([make_incr_local loc Stat_dec vi], []), JCEvar vi
-	    | Postfix_inc ->
+		([make_incr_local loc Bsub_int vi], []), JCEvar vi
+	    | Postfix_inc -> assert false (* TODO *)
+(*
 		let tmp = newvar vi.jc_var_info_type in
 		let stat = make_decl loc tmp (Some (make_var loc vi)) 
 		  (make_block loc []) in
 		(stat::[make_incr_local loc Stat_inc vi], []), JCEvar tmp
-	    | Postfix_dec ->
+*)
+	    | Postfix_dec ->assert false (* TODO *)
+(*
 	    	let tmp = newvar vi.jc_var_info_type in
 		let stat = make_decl loc tmp (Some (make_var loc vi))
 		  (make_block loc []) in
 		(stat::[make_incr_local loc Stat_dec vi], []), JCEvar tmp
+*)
 	  end
       | JCTEincr_heap (op, e, fi) ->
 	  begin match op with
@@ -294,19 +314,18 @@ let rec expr e =
 	      (make_block loc (l3 @ [assign3])) in
 	  (l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
 
-  in (sl, tl), { jc_expr_node = ne; jc_expr_loc = e.jc_texpr_loc }
+  in (sl, tl), { jc_expr_node = ne; 
+		 jc_expr_type = e.jc_texpr_type;
+		 jc_expr_loc = e.jc_texpr_loc }
 
 and call loc f el ~binder ll = 
   if f == and_ then
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
     let tmp = newrefvar boolean_type in
-    let e1_false_stat = 
-      make_assign_local loc tmp (make_const loc (JCCboolean false)) in
-    let e2_false_stat = 
-      make_assign_local loc tmp (make_const loc (JCCboolean false)) in
-    let true_stat = 
-      make_assign_local loc tmp (make_const loc (JCCboolean true)) in
+    let e1_false_stat = make_assign_local loc tmp (false_const loc) in
+    let e2_false_stat = make_assign_local loc tmp (false_const loc) in
+    let true_stat = make_assign_local loc tmp (true_const loc) in
     let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
     let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
     let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
@@ -316,12 +335,9 @@ and call loc f el ~binder ll =
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
     let tmp = newrefvar boolean_type in
-    let e1_true_stat = 
-      make_assign_local loc tmp (make_const loc (JCCboolean true)) in
-    let e2_true_stat = 
-      make_assign_local loc tmp (make_const loc (JCCboolean true)) in
-    let false_stat = 
-      make_assign_local loc tmp (make_const loc (JCCboolean false)) in
+    let e1_true_stat = make_assign_local loc tmp (true_const loc) in
+    let e2_true_stat = make_assign_local loc tmp (true_const loc) in
+    let false_stat = make_assign_local loc tmp (false_const loc) in
     let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
     let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
     let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
@@ -454,7 +470,7 @@ and statement s =
 	    (Some (make_tconst loc JCCvoid)) in
 	  let if_stat = statement (make_tif loc e s exit_stat) in
 	  let continue_stat = make_throw loc loop_continue
-	    (Some (make_const loc JCCvoid)) in
+	    (Some (void_const loc)) in
 	  let body = make_block loc [if_stat;continue_stat] in
 	  let catch_continue = 
 	    [(loop_continue, Some (newvar unit_type), make_block loc [])] in
@@ -471,14 +487,14 @@ and statement s =
 	  let return_stat = make_return loc e in
 	  (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
       | JCTSbreak "" -> 
-	  JCSthrow (loop_exit, Some (make_const loc JCCvoid))
+	  JCSthrow (loop_exit, Some (void_const loc))
       | JCTSbreak lab -> assert false (* TODO: see Claude *)
       | JCTScontinue lab -> assert false (* TODO: see Claude *)
       | JCTSgoto lab ->
 	  let name_exc = "Goto_" ^ lab in
 	  let goto_exc = exception_info unit_type name_exc in
 	  Hashtbl.add exceptions_table name_exc goto_exc;
-	  JCSthrow (goto_exc, Some (make_const loc JCCvoid))
+	  JCSthrow (goto_exc, Some (void_const loc))
       | JCTSlabel (_,s) -> 
 	  (statement s).jc_statement_node
       | JCTStry (s, cl, fs) ->
@@ -509,7 +525,7 @@ and statement s =
 		   let block_stat = make_block loc sl in
 		   let empty_block = make_block loc [] in
 		   (* test for case considered *)
-		   let el = [e; make_const loc c] in
+		   let el = [e; make_const loc (JCTnative Tinteger) c] in
 		   let (l,etl),ecall = call loc eq_int_ el ~binder:true [] in
 		   let ecall = match ecall with
 		     | Some b -> make_var loc b
@@ -697,8 +713,6 @@ let statement s =
 	    JCScall (vio, fi, el, link_stat s)
 	| JCSblock sl ->
 	    JCSblock (List.fold_right link_call sl [])
-	| JCSincr_local (_, _)
-	| JCSincr_heap (_, _, _)
 	| JCSassign_local (_, _)
 	| JCSassign_heap (_, _, _)
 	| JCSassert _ 

@@ -254,10 +254,12 @@ type interp_lvalue =
 
 let const_un = Cte(Prim_int "1")
 
+(*
 let incr_call op =
   match op with
     | Stat_inc -> Jc_pervasives.add_int_.jc_fun_info_name
     | Stat_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
+*)
 
 let make_acc fi e =
   make_app "acc_"
@@ -298,6 +300,15 @@ let bin_op = function
   | Blor -> "or"
   | _ -> assert false (* TODO *)
 
+let coerce t e =
+  match t with
+    | JCTenum ri ->
+	make_app ("int_of_" ^ ri.jc_enum_info_name) [e]
+    | JCTnative t -> e
+    | _ -> assert false
+
+
+
 let rec expr e : expr =
   match e.jc_expr_node with
     | JCEconst JCCnull -> Var "null"
@@ -307,12 +318,13 @@ let rec expr e : expr =
 	then Deref v.jc_var_info_final_name
 	else Var v.jc_var_info_final_name
     | JCEunary(op,e1) ->
-	let e1 = expr e1 in
-	make_app (unary_op op) [e1]	
+	let e1' = expr e1 in
+	make_app (unary_op op) [coerce e1.jc_expr_type e1']	
     | JCEbinary(e1,op,e2) ->
-	let e1 = expr e1 in
-	let e2 = expr e2 in
-	make_app (bin_op op) [e1; e2]	
+	let e1' = expr e1 in
+	let e2' = expr e2 in
+	make_app (bin_op op) 
+	  [coerce e1.jc_expr_type e1'; coerce e2.jc_expr_type e2']	
     | JCEif(e1,e2,e3) -> 
 	let e1 = expr e1 in
 	let e2 = expr e2 in
@@ -371,6 +383,7 @@ let rec statement s =
 	    | Some vi ->
 		Let(vi.jc_var_info_final_name,call, statement s)
 	end
+(*
     | JCSincr_local(op, vi) ->
 	(* let tmp = !v in v <- tmp+-1 *)
 	let tmp = tmp_var_name () in
@@ -385,6 +398,7 @@ let rec statement s =
 	make_lets
  	  [ (tmp1, e1) ]
  	  (make_upd fi (Var tmp1) updated_value)
+*)
     | JCSassign_local (vi, e2) -> 
 	let e2 = expr e2 in
 	let n = vi.jc_var_info_final_name in

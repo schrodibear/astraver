@@ -378,6 +378,7 @@ type expr_node =
 and expr =
    {
       jc_expr_node : expr_node;
+      jc_expr_type : jc_type;
       jc_expr_loc : Loc.position;
     }
 
@@ -395,15 +396,11 @@ type incr_op = Stat_inc | Stat_dec
 *)
 
 type statement_node =
-  (* instructions *)
+    (* instructions *)
   | JCScall of var_info option * fun_info * expr list * statement
-(* doit disparaitre *)
-  | JCSincr_local of incr_op * var_info 
-  | JCSincr_heap of incr_op * expr * field_info
-(* instructions *)
   | JCSassign_local of var_info * expr
   | JCSassign_heap of expr * field_info * expr
-(* statements *)
+      (* statements *)
   | JCSassert of assertion
   | JCSblock of statement list
   | JCSdecl of var_info * expr option * statement

@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.25 2007-06-08 12:48:48 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.26 2007-06-08 15:38:40 marche Exp $ *)
 
 
 open Jc_env
@@ -155,9 +155,6 @@ let rec statement ef s =
 	    (List.fold_left expr ef le) 
 	in
 	statement ef s
-    | JCSincr_local(op,vi) -> ef
-    | JCSincr_heap(op,e,fi) -> 
-	expr (add_field_writes ef fi) e
     | JCSassign_heap (e1, fi, e2) ->
 	expr (expr (add_field_writes ef fi) e1) e2
     | JCSassign_local (vi, e) -> expr ef e

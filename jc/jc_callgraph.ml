@@ -85,7 +85,6 @@ let rec statement acc s =
   match s.jc_statement_node with  
     | JCScall (_, f, le, s) ->
 	let (a,b)=acc in statement (a,f::b) s
-    | JCSincr_local _ | JCSincr_heap _ -> acc
     | JCSassign_local _ | JCSassign_heap _ -> acc
     | JCSreturn _ | JCSpack _ | JCSunpack _ | JCSthrow _ -> acc
     | JCSif(_, s1, s2) ->
