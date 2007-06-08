@@ -204,6 +204,8 @@ let rec expr fmt e =
 	fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
     | JCTEassign_local (v, e) -> 
 	fprintf fmt "%s = %a" v.jc_var_info_name expr e
+    | JCTEassign_local_op (v, op, e) -> 
+	fprintf fmt "%s %s= %a" (bin_op op) v.jc_var_info_name expr e
     | JCTEcast (_, _) -> assert false (* TODO *)
     | JCTEinstanceof (_, _) -> assert false (* TODO *)
     | JCTEcall (op, ([t1;t2] as l)) ->

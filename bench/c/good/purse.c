@@ -29,7 +29,7 @@ typedef struct purse {
 //@ predicate purse_inv(purse *p) { \valid(p) && p->balance >= 0 }
 
 /*@ requires purse_inv(p) && s >= 0
-  @ assigns p->balance
+  @ // assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
   @*/
 void credit(purse *p,int s) {
@@ -47,7 +47,7 @@ void withdraw(purse *p,int s) {
 }
 
 
-/*@ requires purse_inv(p1) && purse_inv(p2)  
+/*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2
   @ assigns p1->balance, p2->balance
   @ ensures \result == 0
   @*/

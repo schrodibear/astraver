@@ -586,8 +586,11 @@ let rec expr env e =
 			    if compatible_types te.java_expr_type vi.java_var_info_type
 			    then 
 			      if op = Beq then
-				vi.java_var_info_type,JEassign_local_var(vi,te)
-			      else assert false (* TODO *)
+				(vi.java_var_info_type,
+				 JEassign_local_var(vi,te))
+			      else 
+				(vi.java_var_info_type,
+			         JEassign_local_var_op(vi,op,te))
 			    else
 			      typing_error loc "type %a expected, got %a" 
 				print_type vi.java_var_info_type 

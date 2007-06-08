@@ -633,10 +633,12 @@ and behavior b =
     | None -> None
     | Some a -> Some (assertion a)
   in
+(*
   let requires = match b.jc_tbehavior_requires with
     | None -> None
     | Some a -> Some (assertion a)
   in
+*)
   let assigns = match b.jc_tbehavior_assigns with
     | None -> None
     | Some ll -> Some (List.map location ll)
@@ -644,7 +646,9 @@ and behavior b =
   { 
     jc_behavior_throws = b.jc_tbehavior_throws;
     jc_behavior_assumes = a;
+(*
     jc_behavior_requires = requires;
+*)
     jc_behavior_assigns = assigns;
     jc_behavior_ensures = assertion b.jc_tbehavior_ensures;
   }

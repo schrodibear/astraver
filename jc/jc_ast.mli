@@ -234,6 +234,7 @@ type texpr_node =
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info
   | JCTEassign_local of var_info * texpr
+  | JCTEassign_local_op of var_info * bin_op * texpr
   | JCTEassign_heap of texpr * field_info * texpr
   | JCTElet of var_info * texpr * texpr
   | JCTEincr_local of tincr_op * var_info 
@@ -283,7 +284,9 @@ type tbehavior =
     { 
       jc_tbehavior_throws : exception_info option ;
       jc_tbehavior_assumes : tassertion option ;
+(*
       jc_tbehavior_requires : tassertion option ;
+*)
       jc_tbehavior_assigns : tlocation list option ;
       jc_tbehavior_ensures : tassertion;
     }
@@ -366,6 +369,11 @@ type expr_node =
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info
   | JCEif of expr * expr * expr
+(*
+  - rajouter JCEbinary : OUI
+  - enlever JCEif et le mettre au niveau des statements comme
+      l'appel de fonction : A VOIR
+*)
 
 and expr =
    {
@@ -385,14 +393,19 @@ type incr_op = Stat_inc | Stat_dec
    expressions (without any of the above) are not statements anymore.
    break, continue, goto are translated with exceptions.
 *)
+
 type statement_node =
+  (* instructions *)
   | JCScall of var_info option * fun_info * expr list * statement
+(* doit disparaitre *)
   | JCSincr_local of incr_op * var_info 
   | JCSincr_heap of incr_op * expr * field_info
+(* instructions *)
   | JCSassign_local of var_info * expr
   | JCSassign_heap of expr * field_info * expr
-  | JCSblock of statement list
+(* statements *)
   | JCSassert of assertion
+  | JCSblock of statement list
   | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement
   | JCSloop of loop_annot * statement
@@ -414,7 +427,9 @@ type behavior =
     {  
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : assertion option ;
+(*
       jc_behavior_requires : assertion option ;
+*)
       jc_behavior_assigns : location list option ;
       jc_behavior_ensures : assertion;
     }

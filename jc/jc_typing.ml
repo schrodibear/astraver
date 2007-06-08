@@ -1381,13 +1381,17 @@ let clause env vi_result c acc =
 		    "undeclared exception %s" id.jc_identifier_name
 	in
 	let assumes = Option_misc.map (assertion env) assumes in
+(*
 	let requires = Option_misc.map (assertion env) requires in
+*)
 	let assigns = 
 	  Option_misc.map (List.map (fun a -> snd (location env a))) assigns in
 	let b = {
 	  jc_tbehavior_throws = throws;
 	  jc_tbehavior_assumes = assumes;
+(*
 	  jc_tbehavior_requires = requires;
+*)
 	  jc_tbehavior_assigns = assigns;
 	  jc_tbehavior_ensures = assertion env_result ensures }
 	in

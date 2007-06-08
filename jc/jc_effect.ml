@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.24 2007-06-07 12:01:43 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.25 2007-06-08 12:48:48 marche Exp $ *)
 
 
 open Jc_env
@@ -197,10 +197,12 @@ let behavior ef (_,b) =
     b.jc_behavior_assigns ef
   in
   (* requires: reads *)
+(*
   let ef = match b.jc_behavior_requires with
       None -> ef
     | Some r ->	{ ef with jc_reads = assertion ef.jc_reads r }
   in
+*)
   (* assumes: reads *)
   let ef = match b.jc_behavior_assumes with
       None -> ef

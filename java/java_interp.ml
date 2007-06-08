@@ -9,32 +9,32 @@ open Java_tast
 
 let int16_range =
   {
-    jc_range_info_name = "int16";
-    jc_range_info_min = Num.num_of_string "-32768";
-    jc_range_info_max = Num.num_of_string "32767";
+    jc_enum_info_name = "int16";
+    jc_enum_info_min = Num.num_of_string "-32768";
+    jc_enum_info_max = Num.num_of_string "32767";
   }
 
 let int32_range =
   {
-    jc_range_info_name = "int32";
-    jc_range_info_min = Num.num_of_string "-2147483648";
-    jc_range_info_max = Num.num_of_string "2147483647";
+    jc_enum_info_name = "int32";
+    jc_enum_info_min = Num.num_of_string "-2147483648";
+    jc_enum_info_max = Num.num_of_string "2147483647";
   }
 
 let range_types acc =
   List.fold_left
     (fun acc ri ->
-       JCrange_type_def(ri.jc_range_info_name,
-			ri.jc_range_info_min,
-			ri.jc_range_info_max)::acc) 
+       JCenum_type_def(ri.jc_enum_info_name,
+			ri.jc_enum_info_min,
+			ri.jc_enum_info_max)::acc) 
     acc [ int16_range ; int32_range ]
 
 let tr_base_type t =
   match t with
     | Tboolean -> JCTnative Jc_env.Tboolean
     | Tinteger -> JCTnative Jc_env.Tinteger
-    | Tshort -> JCTrange int16_range 
-    | Tint -> JCTrange int32_range 
+    | Tshort -> JCTenum int16_range 
+    | Tint -> JCTenum int32_range 
     | _ -> assert false (* TODO *)
 
 let get_class ci =
@@ -140,7 +140,9 @@ let rec term t =
       | JTfield_access(t,fi) -> JCTTderef(term t,get_field fi)
       | JTold t -> JCTTold(term t)
 
-  in { jc_tterm_loc = t.java_term_loc ; jc_tterm_node = t' }
+  in { jc_tterm_loc = t.java_term_loc ; 
+       jc_tterm_type = tr_type t.java_term_type ;
+       jc_tterm_node = t' }
   
 let rec assertion a =
   let a' =
@@ -177,18 +179,18 @@ let behavior (id,a,assigns,e) =
     
 let bin_op op =
   match op with
-    | Badd -> Jc_pervasives.add_int_
-    | Bmod -> Jc_pervasives.mod_int_
-    | Bdiv -> Jc_pervasives.div_int_
-    | Bmul -> Jc_pervasives.mul_int_
-    | Bsub -> Jc_pervasives.sub_int_
+    | Badd -> Badd_int
+    | Bmod -> Bmod_int
+    | Bdiv -> Bdiv_int
+    | Bmul -> Bmul_int
+    | Bsub -> Bsub_int
     | Biff|Bor|Band|Bimpl  -> assert false (* TODO *) 
-    | Bgt -> Jc_pervasives.gt_int_
-    | Bne -> Jc_pervasives.neq_int_
-    | Beq -> Jc_pervasives.eq_int_
-    | Bge -> Jc_pervasives.ge_int_
-    | Ble -> Jc_pervasives.le_int_
-    | Blt -> Jc_pervasives.lt_int_
+    | Bgt -> Bgt_int
+    | Bne -> Bneq_int
+    | Beq -> Beq_int
+    | Bge -> Bge_int
+    | Ble -> Ble_int
+    | Blt -> Blt_int
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *) 
 
 let incr_op op =
@@ -207,10 +209,12 @@ let rec expr e =
       | JEun (_, _) -> assert false (* TODO *)
       | JEbin (e1, op, e2) -> 
 	  let e1 = expr e1 and e2 = expr e2 in
-	  JCTEcall(bin_op op,[e1;e2])
+	  JCTEbinary(e1,bin_op op,e2)
 	  
       | JEvar vi -> JCTEvar (get_var vi)
       | JEassign_local_var(vi,e) ->
+	  JCTEassign_local(get_var vi,expr e)
+      | JEassign_local_var_op(vi,op,e) ->
 	  JCTEassign_local(get_var vi,expr e)
       | JEassign_field(e1,fi,e2) ->
 	  JCTEassign_heap(expr e1,get_field fi,expr e2)
