@@ -1,4 +1,6 @@
 
+/* Program M (TAOCP, vol. 1, page 145) */
+	
 init:	{{ n>=1 }}
 	ent3 0,1
 	jmp changem

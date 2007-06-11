@@ -2,32 +2,7 @@
 open Format
 open Lexing
 open Mix_ast
-
-module X = struct
-  module Label = struct
-    type t = string
-    let equal = (=)
-    let hash = Hashtbl.hash
-    let create = let r = ref 0 in fun () -> incr r; "L" ^ string_of_int !r
-    let to_string l = l
-  end
-
-  type predicate = string
-    
-  let ptrue = "true"
-  let string_of_predicate p = p
-
-  type statement = string
-    
-  let void_stmt = "void"
-  let append_stmt s1 s2 = s1 ^ "; " ^ s2
-  let assert_stmt p = "assert " ^ p
-  let string_of_stmt s = s
-
-end
-
-module Seq = Mix_cfg.Make(X)
-open Seq
+open Mix_interp
 
 let report_loc lb =
   let b,e = lexeme_start_p lb, lexeme_end_p lb in
@@ -52,19 +27,7 @@ let asm =
     | Parsing.Parse_error -> 
 	report_loc lb; eprintf "Syntax error@."; exit 1
 
-(***
-let interp_stmt = function
-  | PSinvariant i -> Seq.Ainvariant i
-  | PSjump l -> Seq.Ajump l
-  | PScond l -> Seq.Acond (l, "cond true", "cond false")
-  | PShalt -> Seq.Ahalt
-  | PSother s -> Seq.Aother s
-
-let asm = List.map (fun (l,s) -> (l, interp_stmt s)) asm
-***)
-let asm = []
-
-let cl = Seq.transform asm Sys.argv.(2)
+let cl = interp asm Sys.argv.(2)
 
 let print_seq_code fmt c = 
   begin match c.seq_pre with
