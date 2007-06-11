@@ -330,14 +330,18 @@ let bin_arg_type loc = function
 
 let coerce loc tdest tsrc e =
   match tdest,tsrc with
+    | JCTnative t, JCTnative u when t=u -> e
+    | JCTlogic t, JCTlogic u when t=u -> e
+    | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTnative Tinteger, JCTenum ri ->
 	make_app ("int_of_" ^ ri.jc_enum_info_name) [e]
+    | JCTenum ri, JCTnative Tinteger ->
+	make_app (ri.jc_enum_info_name ^ "_of_int") [e]
     | _ , JCTnull -> e
     | JCTpointer (st, a, b), _  -> 
 	make_app "downcast_" 
 	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
 	    Var (st.jc_struct_info_name ^ "_tag") ]	
-    | JCTnative Tinteger, JCTnative Tinteger -> e
     |  _ -> 
 	 Jc_typing.typing_error loc 
 	   "can't coerce type %a to type %a" 
@@ -467,8 +471,8 @@ let rec statement s =
 		coerce s.jc_statement_loc vi.jc_var_info_type t e', 
 		statement s)
 	end
-    | JCSreturn e -> 
-	expr e
+    | JCSreturn(t,e) -> 
+	coerce e.jc_expr_loc t e.jc_expr_type (expr e)
     | JCSunpack(st, e) ->
 	(* La méthode consistant à placer unpack_ dans jessie.why ne marche pas
 quand il y a un unpack par type structure. *)

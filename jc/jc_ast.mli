@@ -264,7 +264,7 @@ type tstatement_node =
   | JCTSdecl of var_info * texpr option * tstatement
   | JCTSif of texpr * tstatement * tstatement
   | JCTSwhile of texpr * tloop_annot * tstatement
-  | JCTSreturn of texpr
+  | JCTSreturn of jc_type * texpr
   | JCTSbreak of label
   | JCTScontinue of label
   | JCTSgoto of label
@@ -409,7 +409,7 @@ type statement_node =
   | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement
   | JCSloop of loop_annot * statement
-  | JCSreturn of expr
+  | JCSreturn of jc_type * expr
   | JCStry of statement 
       * (exception_info * var_info option * statement) list * statement
   | JCSthrow of exception_info * expr option

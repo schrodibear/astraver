@@ -156,8 +156,8 @@ let make_decls loc sl tl =
        make_decl loc vi (Some (make_const loc t cst)) acc)
     tl (make_block loc sl)
 
-let make_return loc e =
-  make_node loc (JCSreturn e)
+let make_return loc t e =
+  make_node loc (JCSreturn (t,e))
 
 let make_pack loc si e =
   make_node loc (JCSpack (si, e))
@@ -188,7 +188,18 @@ let make_incr_local loc op vi =
       jc_expr_type = JCTnative Tinteger;
       jc_expr_loc = loc }
 
-let make_incr_heap loc op e fi = assert false (* TODO *)
+let make_incr_heap loc op e fi = 
+  let d =
+    { jc_expr_loc = loc;
+      jc_expr_type = fi.jc_field_info_type;
+      jc_expr_node = JCEderef(e,fi) ;
+    }
+  in
+  make_assign_heap loc e fi
+    { jc_expr_node = JCEbinary(d, op, one_const loc);
+      jc_expr_type = JCTnative Tinteger;
+      jc_expr_loc = loc }
+  
 
 (*
 
@@ -281,22 +292,22 @@ let rec expr e =
 	  begin match op with
 	    | Prefix_inc -> 
 		let (l,tl),e = expr e in
-		(l@[make_incr_heap loc Stat_inc e fi],tl), JCEderef (e, fi)
+		(l@[make_incr_heap loc Badd_int e fi],tl), JCEderef (e, fi)
 	    | Prefix_dec ->
 		let (l,tl),e = expr e in
-		(l@[make_incr_heap loc Stat_dec e fi],tl), JCEderef (e, fi)
+		(l@[make_incr_heap loc Bsub_int e fi],tl), JCEderef (e, fi)
 	    | Postfix_inc ->
 		let (l,tl),e = expr e in
 		let tmp = newvar fi.jc_field_info_type in
 		let stat = make_decl loc tmp (Some (make_deref loc e fi))
 		  (make_block loc []) in
-		(l@stat::[make_incr_heap loc Stat_inc e fi],tl), JCEvar tmp
+		(l@stat::[make_incr_heap loc Badd_int e fi],tl), JCEvar tmp
 	    | Postfix_dec ->
 		let (l,tl),e = expr e in
 		let tmp = newvar fi.jc_field_info_type in
 		let stat = make_decl loc tmp (Some (make_deref loc e fi))
 		  (make_block loc []) in
-		(l@stat::[make_incr_heap loc Stat_dec e fi],tl), JCEvar tmp
+		(l@stat::[make_incr_heap loc Bsub_int e fi],tl), JCEvar tmp
 	  end
       | JCTEif (e1, e2, e3) ->
 	  let (l1,tl1),e1 = expr e1 in
@@ -479,9 +490,9 @@ and statement s =
 	  let try_exit = 
 	    make_try loc while_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
-      | JCTSreturn e ->
+      | JCTSreturn(t,e) ->
 	  let (sl,tl),e = expr e in
-	  let return_stat = make_return loc e in
+	  let return_stat = make_return loc t e in
 	  (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
       | JCTSbreak "" -> 
 	  JCSthrow (loop_exit, Some (void_const loc))

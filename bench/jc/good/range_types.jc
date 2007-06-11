@@ -24,7 +24,7 @@ shortint max(shortint x, shortint y)
   behavior result_is_lub:
     ensures \forall integer z ; z >= x && z >= y => z >= \result;
 {
-  if (x >= y) return x+1; else return y;
+  if (x >= y) return (x+1)-1; else return y;
 } 
 
 

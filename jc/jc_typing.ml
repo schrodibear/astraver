@@ -1114,16 +1114,10 @@ let rec statement env s =
 	  let te = expr env e in 
 	  let vi = List.assoc "\\result" env in
 	  if subtype te.jc_texpr_type vi.jc_var_info_type then
-	    JCTSreturn te
+	    JCTSreturn(vi.jc_var_info_type,te)
 	  else
-	    begin
-	      try
-		JCTSreturn te
-	      with
-		  Invalid_argument _ ->
-		    typing_error s.jc_pstatement_loc "type '%a' expected"
-		      print_type vi.jc_var_info_type
-	    end
+	    typing_error s.jc_pstatement_loc "type '%a' expected"
+	      print_type vi.jc_var_info_type
       | JCPSwhile(c,i,v,s) -> 
 	  let tc = expr env c in
 	  if subtype tc.jc_texpr_type (JCTnative Tboolean) then

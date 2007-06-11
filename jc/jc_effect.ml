@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.26 2007-06-08 15:38:40 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.27 2007-06-11 15:19:59 marche Exp $ *)
 
 
 open Jc_env
@@ -158,7 +158,7 @@ let rec statement ef s =
     | JCSassign_heap (e1, fi, e2) ->
 	expr (expr (add_field_writes ef fi) e1) e2
     | JCSassign_local (vi, e) -> expr ef e
-    | JCSreturn e 
+    | JCSreturn(_,e) 
     | JCSpack(_,e) | JCSunpack(_,e) -> expr ef e
     | JCSthrow (ei, Some e) -> 
 	add_exception_effect (expr ef e) ei
