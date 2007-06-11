@@ -16,6 +16,18 @@ shortint f(unsignedchar x, shortint y)
 
 
 
+shortint max(shortint x, shortint y) 
+  behavior result_ge_x: 
+    ensures \result >= x ;
+  behavior result_ge_y: 
+    ensures \result >= y; 
+  behavior result_is_lub:
+    ensures \forall integer z ; z >= x && z >= y => z >= \result;
+{
+  if (x >= y) return x+1; else return y;
+} 
+
+
 /* complements for non-linear integer arithmetic */
 
 axiom distr_right: \forall integer x,y,z; x*(y+z) == (x*y)+(x*z)

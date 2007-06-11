@@ -200,18 +200,14 @@ let rec expr fmt e =
 	    | Postfix_dec ->
 		fprintf fmt "%s--" v.jc_var_info_name
 	end
-(*
-    | JCTEassign_op_heap (_, _, _, _, _) -> assert false (* TODO *)
-    | JCTEassign_op_local (_, _, _, _) -> assert false (* TODO *)
-*)
     | JCTElet(v,e1,e2) -> 
 	fprintf fmt "let %s = %a@ in %a" v.jc_var_info_name expr e1 expr e2
     | JCTEassign_heap (e1, fi, e2) -> 
 	fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
-    | JCTEassign_local_op (v, op, e) -> 
-	fprintf fmt "%s %s= %a" (bin_op op) v.jc_var_info_name expr e
     | JCTEassign_local (v, e) -> 
 	fprintf fmt "%s = %a" v.jc_var_info_name expr e
+    | JCTEassign_local_op (v, op, e) -> 
+	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
     | JCTEcast (e, si) ->
 	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
     | JCTEinstanceof (e, si) ->

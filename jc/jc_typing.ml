@@ -103,9 +103,13 @@ let subtype t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
     | JCTenum ri1, JCTenum ri2 -> 
+	true
+	  (*
 	Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min 	&&
 	Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max
+	  *)
     | JCTenum _, JCTnative Tinteger -> true
+    | JCTnative Tinteger, JCTenum _ -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
 	  substruct s1 s2
@@ -784,13 +788,7 @@ let bin_op t op =
 let coerce t1 t2 e =
   let tn1,e_int =
     match t1 with
-      | JCTenum ri ->
-	  let (_,_,to_int_,_) = 
-	    Hashtbl.find enum_types_table ri.jc_enum_info_name 
-	  in
-	  Tinteger,{ jc_texpr_node = JCTEcall(to_int_,[e]) ;
-		     jc_texpr_type = JCTnative Tinteger;
-		     jc_texpr_loc = e.jc_texpr_loc }  
+      | JCTenum ri -> Tinteger,e 
       | JCTnative t -> t,e
       | _ -> assert false
   in
@@ -802,19 +800,7 @@ let coerce t1 t2 e =
     | _ -> e_int
 
 
-let restrict t1 t2 e =
-  match t1,t2 with
-    | JCTnative Tinteger, JCTenum ri -> 
-	let (_,_,_,of_int) = 
-	  Hashtbl.find enum_types_table ri.jc_enum_info_name 
-	in
-	{ jc_texpr_node = JCTEcall(of_int,[e]) ;
-	  jc_texpr_type = JCTenum ri;
-	  jc_texpr_loc = e.jc_texpr_loc }  	
-    | _ -> 
-	typing_error e.jc_texpr_loc "cannot coerce type '%a' to type '%a'"
-	  print_type t1 print_type t2
-	
+
 
 let make_bin_app loc op e1 e2 =
   let t1 = e1.jc_texpr_type and t2 = e2.jc_texpr_type in
@@ -920,23 +906,18 @@ let rec expr env e =
 	  begin
 	    let te1 = expr env e1 and te2 = expr env e2 in
             let t1 = te1.jc_texpr_type and t2 = te2.jc_texpr_type in
-	    let te2 =	 	      
-	      if subtype t2 t1 then te2 else
-		try
-		  restrict t2 t1 te2
-		with
-		    Invalid_argument _ ->
-		      typing_error e2.jc_pexpr_loc 
-			"type '%a' expected"
-			print_type t1
-	    in
-	    match te1.jc_texpr_node with
-	      | JCTEvar v ->
-		  set_assigned v;
-		  t1,JCTEassign_local(v,te2)
-	      | JCTEderef(e,f) ->
-		  t1,JCTEassign_heap(e, f, te2)
-	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	    if subtype t2 t1 then 
+	      match te1.jc_texpr_node with
+		| JCTEvar v ->
+		    set_assigned v;
+		    t1,JCTEassign_local(v,te2)
+		| JCTEderef(e,f) ->
+		    t1,JCTEassign_heap(e, f, te2)
+		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
+	    else
+	      typing_error e2.jc_pexpr_loc 
+		"type '%a' expected"
+		print_type t1
 	  end
       | JCPEassign_op (e1, op, e2) -> 
 	  begin
@@ -956,17 +937,12 @@ let rec expr env e =
 		      jc_texpr_loc = e2.jc_pexpr_loc;
 		    } 
 		  in
-		  let res =
-		    if subtype t t1 then res else
-		      try
-			restrict t t1 res
-		      with
-			  Invalid_argument _ ->
-			    typing_error e2.jc_pexpr_loc 
-			      "type '%a' expected"
-			      print_type t1
-		  in		    
-		  t1,JCTEassign_local(v, res)
+		  if subtype t t1 then 
+		    t1,JCTEassign_local(v, res)
+		  else
+		    typing_error e2.jc_pexpr_loc 
+		      "type '%a' expected"
+		      print_type t1
 	      | JCTEderef(e,f) ->
 		  let vi = newvar e.jc_texpr_type in
 		  vi.jc_var_info_assigned <- true;
@@ -988,24 +964,19 @@ let rec expr env e =
 		      jc_texpr_loc = e2.jc_pexpr_loc;
 		    } 
 		  in
-		  let res =
-		    if subtype t t1 then res else
-		      try
-			restrict t t1 res
-		      with
-			  Invalid_argument _ ->
-			    typing_error e2.jc_pexpr_loc 
-			      "type '%a' expected"
-			      print_type t1
-		  in		    
-		  let res = JCTEassign_heap(v,f,res) in
-		  let res =
-		    { jc_texpr_node = res;
-		      jc_texpr_type = t1;
-		      jc_texpr_loc = e2.jc_pexpr_loc;
-		    } 
-		  in
-		  t1,JCTElet(vi,e,res)
+		  if subtype t t1 then 
+		    let res = JCTEassign_heap(v,f,res) in
+		    let res =
+		      { jc_texpr_node = res;
+			jc_texpr_type = t1;
+			jc_texpr_loc = e2.jc_pexpr_loc;
+		      } 
+		    in
+		    t1,JCTElet(vi,e,res)
+		  else
+		    typing_error e2.jc_pexpr_loc 
+		      "type '%a' expected"
+		      print_type t1
 	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	  end
 
@@ -1147,7 +1118,7 @@ let rec statement env s =
 	  else
 	    begin
 	      try
-		JCTSreturn (restrict te.jc_texpr_type vi.jc_var_info_type te)
+		JCTSreturn te
 	      with
 		  Invalid_argument _ ->
 		    typing_error s.jc_pstatement_loc "type '%a' expected"
@@ -1237,13 +1208,10 @@ and statement_list env l : tstatement list =
 		  Option_misc.map
 		    (fun e ->
 		       let te = expr env e in
-		       if subtype te.jc_texpr_type ty then te
+		       if subtype te.jc_texpr_type ty then 
+			 te
 		       else
-			 try
-			   restrict te.jc_texpr_type ty te
-			 with
-			     Invalid_argument _ ->
-			       typing_error s.jc_pstatement_loc 
+			 typing_error s.jc_pstatement_loc 
 				 "type '%a' expected"
 				   print_type ty)
 		    e

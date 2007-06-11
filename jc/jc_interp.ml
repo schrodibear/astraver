@@ -307,6 +307,13 @@ let coerce t e =
     | JCTnative t -> e
     | _ -> assert false
 
+let restrict t e =
+  match t with
+    | JCTenum ri ->
+	make_app (ri.jc_enum_info_name ^ "_of_int") [e]
+    | JCTnative t -> e
+    | _ -> assert false
+
 
 
 let rec expr e : expr =
@@ -383,26 +390,10 @@ let rec statement s =
 	    | Some vi ->
 		Let(vi.jc_var_info_final_name,call, statement s)
 	end
-(*
-    | JCSincr_local(op, vi) ->
-	(* let tmp = !v in v <- tmp+-1 *)
-	let tmp = tmp_var_name () in
-	let v = vi.jc_var_info_name in
-	Let(tmp, Deref(v), 
-	    Assign(v,make_app (incr_call op) [Var tmp; const_un]))
-    | JCSincr_heap(op,e1,fi) -> 
- 	let e1 = expr e1 in
- 	let tmp1 = tmp_var_name () in
- 	let acc_fi_e = make_acc fi (Var tmp1) in
- 	let updated_value = make_app (incr_call op) [acc_fi_e; const_un] in
-	make_lets
- 	  [ (tmp1, e1) ]
- 	  (make_upd fi (Var tmp1) updated_value)
-*)
     | JCSassign_local (vi, e2) -> 
-	let e2 = expr e2 in
+	let e2' = expr e2 in
 	let n = vi.jc_var_info_final_name in
-	Assign(n, e2)
+	Assign(n, restrict vi.jc_var_info_type e2')
     | JCSassign_heap(e1,fi,e2) -> 
 	let e1 = expr e1 in
 	let e2 = expr e2 in
@@ -430,9 +421,13 @@ let rec statement s =
 	    | Some e -> expr e 
 	  in
 	  if vi.jc_var_info_assigned then 
-	    Let_ref(vi.jc_var_info_final_name,e, statement s)
+	    Let_ref(vi.jc_var_info_final_name, 
+		    restrict vi.jc_var_info_type e, 
+		    statement s)
 	  else 
-	    Let(vi.jc_var_info_final_name,e, statement s)
+	    Let(vi.jc_var_info_final_name,
+		restrict vi.jc_var_info_type e, 
+		statement s)
 	end
     | JCSreturn e -> 
 	expr e
