@@ -265,20 +265,17 @@ let rec expr e =
 		([make_incr_local loc Badd_int vi], []), JCEvar vi
 	    | Prefix_dec ->
 		([make_incr_local loc Bsub_int vi], []), JCEvar vi
-	    | Postfix_inc -> assert false (* TODO *)
-(*
+	    | Postfix_inc -> 
 		let tmp = newvar vi.jc_var_info_type in
 		let stat = make_decl loc tmp (Some (make_var loc vi)) 
 		  (make_block loc []) in
-		(stat::[make_incr_local loc Stat_inc vi], []), JCEvar tmp
-*)
-	    | Postfix_dec ->assert false (* TODO *)
-(*
+		(stat::[make_incr_local loc Badd_int vi], []), JCEvar tmp
+
+	    | Postfix_dec ->
 	    	let tmp = newvar vi.jc_var_info_type in
 		let stat = make_decl loc tmp (Some (make_var loc vi))
 		  (make_block loc []) in
-		(stat::[make_incr_local loc Stat_dec vi], []), JCEvar tmp
-*)
+		(stat::[make_incr_local loc Bsub_int vi], []), JCEvar tmp
 	  end
       | JCTEincr_heap (op, e, fi) ->
 	  begin match op with

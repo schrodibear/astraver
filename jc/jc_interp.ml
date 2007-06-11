@@ -283,6 +283,13 @@ let unary_op = function
   | Uminus_real -> "uminus_real"
   | Unot -> "not"
 
+let unary_arg_type = function
+  | Uplus_int 
+  | Uminus_int -> JCTnative Tinteger
+  | Uplus_real 
+  | Uminus_real -> JCTnative Treal
+  | Unot -> JCTnative Tboolean
+
 let bin_op = function
   | Bgt_int -> "gt_int_"
   | Blt_int -> "lt_int_"
@@ -298,21 +305,45 @@ let bin_op = function
   | Bmod_int -> "mod_int"
   | Bland -> "and"
   | Blor -> "or"
+  | Beq_pointer -> "eq_pointer"
+  | Bneq_pointer -> "neq_pointer"
   | _ -> assert false (* TODO *)
 
-let coerce t e =
-  match t with
-    | JCTenum ri ->
-	make_app ("int_of_" ^ ri.jc_enum_info_name) [e]
-    | JCTnative t -> e
-    | _ -> assert false
+let bin_arg_type loc = function
+  | Bgt_int 
+  | Blt_int 
+  | Bge_int 
+  | Ble_int 
+  | Beq_int 
+  | Bneq_int 
+  | Badd_int 
+  | Badd_real
+  | Bsub_int 
+  | Bmul_int 
+  | Bdiv_int 
+  | Bmod_int -> JCTnative Tinteger
+  | Bneq_pointer | Beq_pointer -> assert false
+  | Biff|Bimplies|Blor|Bland|Bdiv_real|Bmul_real
+  | Bsub_real|Bneq_real|Beq_real|Bge_real|Ble_real|Bgt_real|Blt_real -> 
+      Jc_typing.typing_error loc
+	"Jc_interp.bin_arg_type: unsupported operator"
 
-let restrict t e =
-  match t with
-    | JCTenum ri ->
-	make_app (ri.jc_enum_info_name ^ "_of_int") [e]
-    | JCTnative t -> e
-    | _ -> assert false
+let coerce loc tdest tsrc e =
+  match tdest,tsrc with
+    | JCTnative Tinteger, JCTenum ri ->
+	make_app ("int_of_" ^ ri.jc_enum_info_name) [e]
+    | _ , JCTnull -> e
+    | JCTpointer (st, a, b), _  -> 
+	make_app "downcast_" 
+	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
+	    Var (st.jc_struct_info_name ^ "_tag") ]	
+    | JCTnative Tinteger, JCTnative Tinteger -> e
+    |  _ -> 
+	 Jc_typing.typing_error loc 
+	   "can't coerce type %a to type %a" 
+	   Jc_output.print_type tsrc Jc_output.print_type tdest
+
+
 
 
 
@@ -326,12 +357,19 @@ let rec expr e : expr =
 	else Var v.jc_var_info_final_name
     | JCEunary(op,e1) ->
 	let e1' = expr e1 in
-	make_app (unary_op op) [coerce e1.jc_expr_type e1']	
+	make_app (unary_op op) 
+	  [coerce e.jc_expr_loc (unary_arg_type op) e1.jc_expr_type e1' ]
+    | JCEbinary(e1,((Beq_pointer | Bneq_pointer) as op),e2) ->
+	let e1' = expr e1 in
+	let e2' = expr e2 in
+	make_app (bin_op op) [ e1'; e2']	
     | JCEbinary(e1,op,e2) ->
 	let e1' = expr e1 in
 	let e2' = expr e2 in
+	let t = bin_arg_type e.jc_expr_loc op in
 	make_app (bin_op op) 
-	  [coerce e1.jc_expr_type e1'; coerce e2.jc_expr_type e2']	
+	  [ coerce e1.jc_expr_loc t e1.jc_expr_type e1'; 
+	    coerce e2.jc_expr_loc t e2.jc_expr_type e2']	
     | JCEif(e1,e2,e3) -> 
 	let e1 = expr e1 in
 	let e2 = expr e2 in
@@ -393,7 +431,7 @@ let rec statement s =
     | JCSassign_local (vi, e2) -> 
 	let e2' = expr e2 in
 	let n = vi.jc_var_info_final_name in
-	Assign(n, restrict vi.jc_var_info_type e2')
+	Assign(n, coerce e2.jc_expr_loc vi.jc_var_info_type e2.jc_expr_type e2')
     | JCSassign_heap(e1,fi,e2) -> 
 	let e1 = expr e1 in
 	let e2 = expr e2 in
@@ -416,17 +454,17 @@ let rec statement s =
     | JCSassert a -> Assert(assertion None "init" a, Void)
     | JCSdecl(vi,e,s) -> 
 	begin
-	  let e = match e with
-	    | None -> any_value vi.jc_var_info_type
-	    | Some e -> expr e 
+	  let e',t = match e with
+	    | None -> any_value vi.jc_var_info_type, vi.jc_var_info_type 
+	    | Some e -> expr e, e.jc_expr_type
 	  in
 	  if vi.jc_var_info_assigned then 
 	    Let_ref(vi.jc_var_info_final_name, 
-		    restrict vi.jc_var_info_type e, 
+		    coerce s.jc_statement_loc vi.jc_var_info_type t e', 
 		    statement s)
 	  else 
 	    Let(vi.jc_var_info_final_name,
-		restrict vi.jc_var_info_type e, 
+		coerce s.jc_statement_loc vi.jc_var_info_type t e', 
 		statement s)
 	end
     | JCSreturn e -> 

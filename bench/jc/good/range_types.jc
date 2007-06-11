@@ -53,7 +53,7 @@ shortint isqrt(shortint x)
         count <= 180 && sum <= 32761;
       variant x - sum;
     { 
-	count++;
+	count++; 
 	assert (count+2 <= 181);
 	sum += 2*count + 1;
     }

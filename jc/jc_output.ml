@@ -40,7 +40,7 @@ let print_type fmt t =
 	else
 	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
 	  (Num.string_of_num a) (Num.string_of_num b)
-    | JCTnull -> assert false
+    | JCTnull -> fprintf fmt "(nulltype)"  
 
 let const fmt c =
   match c with
