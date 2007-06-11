@@ -1,12 +1,20 @@
 
-init:	{{ "n>=1" }}
-	"ent3 0,1"
+init:	{{ n>=1 }}
+	ent3 0,1
 	jmp changem
-loop:	"cmpa x,3"
-	jcond dec
-changem:"ent2 0,3"
-	"lda x,3"
-dec:	{{  "invariant" }}
-	"dec3 1"
-	jcond loop
-	"assert post"
+loop:	cmpa x,3
+	jge dec
+changem:ent2 0,3
+	lda x,3
+dec:	{{ invariant }}
+	dec3 1
+	j3p loop
+	{ assert post }
+
+/*
+Local Variables: 
+mode: asm
+compile-command: "../bin/demixify.opt test.mix init"
+End: 
+*/
+

@@ -52,6 +52,7 @@ let asm =
     | Parsing.Parse_error -> 
 	report_loc lb; eprintf "Syntax error@."; exit 1
 
+(***
 let interp_stmt = function
   | PSinvariant i -> Seq.Ainvariant i
   | PSjump l -> Seq.Ajump l
@@ -60,6 +61,8 @@ let interp_stmt = function
   | PSother s -> Seq.Aother s
 
 let asm = List.map (fun (l,s) -> (l, interp_stmt s)) asm
+***)
+let asm = []
 
 let cl = Seq.transform asm Sys.argv.(2)
 

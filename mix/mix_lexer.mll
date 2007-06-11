@@ -1,24 +1,35 @@
 
 {
   open Lexing 
+  open Mix_ast
   open Mix_parser
 
   let keywords = Hashtbl.create 97
   let () = 
     List.iter 
       (fun (x,y) -> Hashtbl.add keywords x y)
-      [ (* logic *)
-	"and", AND;
-        "exists", EXISTS;
-	"false", FALSE;
-	"forall", FORALL;
-	"not", NOT;
-	"or", OR;
-	"true", TRUE;
-	(* asm *)
-	"jmp", JUMP;
-	"jcond", JCOND;
-	"halt", HALT;
+      [ "jmp", INSTR Jmp;
+	"jge", INSTR Jge;
+	"j3p", INSTR J3p;
+	(* loading *)
+	"lda", INSTR Lda;
+	(* address transfer *)
+	"ent1", INSTR Ent1;
+	"ent2", INSTR Ent2;
+	"ent3", INSTR Ent3;
+	"ent4", INSTR Ent4;
+	"ent5", INSTR Ent5;
+	"ent6", INSTR Ent6;
+	"dec1", INSTR Dec1;
+	"dec2", INSTR Dec2;
+	"dec3", INSTR Dec3;
+	"dec4", INSTR Dec4;
+	"dec5", INSTR Dec5;
+	"dec6", INSTR Dec6;
+        (* comparison *)
+        "cmpa", INSTR Cmpa;
+	(* other *)
+	"halt", INSTR Halt;
       ]
 
   let newline lexbuf =
@@ -42,6 +53,7 @@ let alpha = ['a'-'z' 'A'-'Z']
 let letter = alpha | '_'
 let digit = ['0'-'9']
 let ident = letter (letter | digit | '\'')*
+let integer = digit+
 
 rule token = parse
   | newline 
@@ -52,24 +64,39 @@ rule token = parse
       { let id = String.lowercase id in
 	try Hashtbl.find keywords id with Not_found -> IDENT id }
   | ident as id ":"
-      { LABEL id }
+      { LABEL (String.lowercase id) }
+  | integer as n
+      { INTEGER n }
   | "{{"
-      { LBRALBRA }
-  | "}}" 
-      { RBRARBRA }
-  | "(*"
+      { Buffer.clear string_buf; invariant lexbuf }
+  | "{"
+      { Buffer.clear string_buf; assertion lexbuf }
+  | "/*"
       { comment lexbuf; token lexbuf }
-  | "\""
-      { Buffer.clear string_buf; string lexbuf }
+  | "\""      { Buffer.clear string_buf; string lexbuf }
+  | ","
+      { COMMA }
+  | ":"
+      { COLON }
+  | "("
+      { LPAR }
+  | ")"
+      { RPAR }
+  | "+"
+      { PLUS }
+  | "-"
+      { MINUS }
+  | "*"
+      { STAR }
   | eof 
       { EOF }
   | _ as c
       { raise (Lexical_error ("illegal character: " ^ String.make 1 c)) }
 
 and comment = parse
-  | "*)" 
+  | "*/" 
       { () }
-  | "(*" 
+  | "/*" 
       { comment lexbuf; comment lexbuf }
   | newline 
       { newline lexbuf; comment lexbuf }
@@ -89,3 +116,19 @@ and string = parse
       { raise (Lexical_error "unterminated string") }
   | _ as c
       { Buffer.add_char string_buf c; string lexbuf }
+
+and invariant = parse
+  | "}}" 
+      { INVARIANT (Buffer.contents string_buf) }
+  | eof
+      { raise (Lexical_error "unterminated invariant") }
+  | _ as c
+      { Buffer.add_char string_buf c; invariant lexbuf }
+
+and assertion = parse
+  | "}" 
+      { ASSERT (Buffer.contents string_buf) }
+  | eof
+      { raise (Lexical_error "unterminated assert") }
+  | _ as c
+      { Buffer.add_char string_buf c; assertion lexbuf }
