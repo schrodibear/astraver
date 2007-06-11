@@ -34,4 +34,9 @@ type pstmt =
   | PSassert of string
   | PSinstr of instr * poperand
 
-type pfile = (string option * pstmt) list
+type pseudo =
+  | Equ_addr of string * paddress
+  | Equ_field of string * pfield
+  | Orig of string option * paddress
+
+type pfile = pseudo list * (string option * pstmt) list

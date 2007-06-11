@@ -30,6 +30,9 @@
         "cmpa", INSTR Cmpa;
 	(* other *)
 	"halt", INSTR Halt;
+	(* pseudo *)
+	"equ", EQU;
+	"orig", ORIG;
       ]
 
   let newline lexbuf =

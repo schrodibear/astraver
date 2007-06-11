@@ -14,6 +14,7 @@
 %token <string> STRING
 %token <Mix_ast.instr> INSTR
 %token COLON COMMA LPAR RPAR PLUS STAR MINUS
+%token EQU ORIG
 %token EOF
 
 /* Precedences */
@@ -29,10 +30,22 @@
 %%
 
 file:
-| list1_stmt EOF 
-   { List.rev $1 }
+| list0_pseudo list1_stmt EOF 
+   { List.rev $1, List.rev $2 }
 | EOF 
-   { [] }
+   { [], [] }
+;
+
+list0_pseudo:
+| /* epsilon */ { [] }
+| list0_pseudo pseudo { $2 :: $1 }
+;
+
+pseudo:
+| IDENT EQU address  { Equ_addr ($1, $3) }
+| IDENT EQU INTEGER COLON INTEGER { Equ_field ($1, PFrange ($3, $5)) }
+| ORIG address       { Orig (None, $2) }
+| IDENT ORIG address { Orig (Some $1, $3) } 
 ;
 
 list1_stmt:
