@@ -279,7 +279,7 @@ bin/krakatoa.byte: $(KCMO)
 # demixify
 
 MIXCMO=mix/mix_parser.cmo mix/mix_lexer.cmo mix/mix_cfg.cmo \
-       mix/mix_interp.cmo mix/mix_main.cmo
+       mix/mix_seq.cmo mix/mix_interp.cmo mix/mix_main.cmo
 MIXCMX = $(MIXCMO:.cmo=.cmx)
 
 bin/demixify.opt: $(MIXCMX)
