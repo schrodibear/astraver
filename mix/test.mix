@@ -1,5 +1,6 @@
 
 /* Program M (TAOCP, vol. 1, page 145) */
+	
 X	equ 1000
 	orig 3000
 init:	{{ i1 >= 1 }}
@@ -19,7 +20,7 @@ dec:	dec3 1
 /*
 Local Variables: 
 mode: asm
-compile-command: "../bin/demixify.opt test.mix -entry init"
+compile-command: "../bin/demixify.opt test.mix -entry init -gwhy"
 End: 
 */
 
