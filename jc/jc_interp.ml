@@ -285,10 +285,10 @@ let unary_op = function
 
 let unary_arg_type = function
   | Uplus_int 
-  | Uminus_int -> JCTnative Tinteger
+  | Uminus_int -> integer_type
   | Uplus_real 
-  | Uminus_real -> JCTnative Treal
-  | Unot -> JCTnative Tboolean
+  | Uminus_real -> real_type
+  | Unot -> boolean_type
 
 let bin_op = function
   | Bgt_int -> "gt_int_"
@@ -319,22 +319,14 @@ let bin_op = function
 
 
 let bin_arg_type loc = function
-  | Bgt_int 
-  | Blt_int 
-  | Bge_int 
-  | Ble_int 
-  | Beq_int 
-  | Bneq_int 
-  | Badd_int 
-  | Bsub_int 
-  | Bmul_int 
-  | Bdiv_int 
-  | Bmod_int -> JCTnative Tinteger
-  | Bneq_pointer | Beq_pointer -> assert false
-  | Biff|Bimplies|Blor|Bland -> JCTnative Tboolean
+  | Bgt_int | Blt_int | Bge_int | Ble_int 
+  | Beq_int | Bneq_int 
+  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int -> integer_type
+  | Biff|Bimplies|Blor|Bland -> boolean_type
   | Bdiv_real | Bmul_real | Bsub_real | Badd_real
   | Bneq_real | Beq_real | Bge_real
-  | Ble_real | Bgt_real | Blt_real -> JCTnative Treal
+  | Ble_real | Bgt_real | Blt_real -> real_type
+  | Bneq_pointer | Beq_pointer -> assert false
 
 let coerce loc tdest tsrc e =
   match tdest,tsrc with

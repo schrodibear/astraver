@@ -143,6 +143,7 @@ let sub_real = make_term_op "sub_real" real_type
 let mul_real = make_term_op "mul_real" real_type
 let div_real = make_term_op "div_real" real_type
 
+
 let shift = make_term_op "shift" unit_type   
 
 let real_of_integer = make_term_op "real_of_int" real_type
@@ -190,37 +191,6 @@ let make_fun_info name ty =
     jc_fun_info_effects = empty_fun_effect; 
  }
 
-let gt_int_ = make_fun_info "gt_int_" boolean_type
-let lt_int_ = make_fun_info "lt_int_" boolean_type 
-let ge_int_ = make_fun_info "ge_int_" boolean_type
-let le_int_ = make_fun_info "le_int_" boolean_type 
-let eq_int_ = make_fun_info "eq_int_" integer_type
-let neq_int_ = make_fun_info "neq_int_" integer_type
-
-let add_int_ = make_fun_info "add_int" integer_type
-let sub_int_ = make_fun_info "sub_int" integer_type
-let mul_int_ = make_fun_info "mul_int" integer_type
-let div_int_ = make_fun_info "div_int" integer_type
-let mod_int_ = make_fun_info "mod_int" integer_type
-
-let add_real_ = make_fun_info "add_real" real_type
-let sub_real_ = make_fun_info "sub_real" real_type
-let mul_real_ = make_fun_info "mul_real" real_type
-let div_real_ = make_fun_info "div_real" real_type
-
-let uplus_int = make_fun_info "uplus_int" integer_type
-let uminus_int = make_fun_info "neg_int" integer_type
-let uplus_real = make_fun_info "uplus_real" integer_type
-let uminus_real = make_fun_info "uminus_real" integer_type
-
-let eq_pointer = make_fun_info "eq_pointer" integer_type
-let neq_pointer = make_fun_info "neq_pointer" integer_type
-
-let and_ = make_fun_info "and" boolean_type
-let or_ = make_fun_info "or" boolean_type
-let not_ = make_fun_info "not" boolean_type
-
-let shift_ = make_fun_info "shift" unit_type   
 
 let real_of_integer_ = make_fun_info "real_of_int" real_type
 

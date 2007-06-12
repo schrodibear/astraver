@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.27 2007-06-11 15:19:59 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.28 2007-06-12 15:42:37 marche Exp $ *)
 
 
 open Jc_env
@@ -137,8 +137,8 @@ let rec expr ef e =
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) st.jc_struct_info_root
-    | JCEderef (e, f) -> expr ef e (* TODO *)
-    | JCEshift (_, _) -> assert false
+    | JCEderef (e, f) -> expr ef e 
+    | JCEshift (e1, e2) -> expr (expr ef e1) e2
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
     | JCEvar _ -> ef (* TODO *)
     | JCEunary(op,e1) -> expr ef e1

@@ -56,7 +56,7 @@ let create_mutable_field id =
   let fi = {
     jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = "mutable_"^id;
-    jc_field_info_type = JCTnative Tboolean;
+    jc_field_info_type = boolean_type;
     jc_field_info_root = "?? jc_typing.ml: create_mutable_field ??"; (* ? *)
   } in
   Hashtbl.add mutable_fields_table id fi;
@@ -64,7 +64,7 @@ let create_mutable_field id =
   let fi = {
     jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = "committed_"^id;
-    jc_field_info_type = JCTnative Tboolean;
+    jc_field_info_type = boolean_type;
     jc_field_info_root = "?? jc_typing.ml: create_mutable_field ??"; (* ? *)
   } in
   Hashtbl.add committed_fields_table id fi
@@ -250,7 +250,7 @@ let term_coerce t1 t2 e =
 	    Hashtbl.find enum_types_table ri.jc_enum_info_name 
 	  in
 	  { jc_tterm_node = JCTTapp(to_int,[e]) ;
-	    jc_tterm_type = JCTnative Tinteger;
+	    jc_tterm_type = integer_type;
 	    jc_tterm_loc = e.jc_tterm_loc }  
       | _ -> e
   in
@@ -258,7 +258,7 @@ let term_coerce t1 t2 e =
     | Tinteger -> e_int
     | Treal -> 
 	{ jc_tterm_node = JCTTapp(real_of_integer,[e_int]) ;
-	  jc_tterm_type = JCTnative Treal;
+	  jc_tterm_type = real_type;
 	  jc_tterm_loc = e.jc_tterm_loc }  
     | _ -> assert false
 
@@ -290,18 +290,18 @@ let make_logic_bin_op loc op e1 e2 =
     | BPgt | BPlt | BPge | BPle ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative Tboolean,
+	  boolean_type,
 	  JCTTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
 	  typing_error loc "numeric types expected for >, <, >= and <="
     | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative Tboolean,
+	  boolean_type,
 	  JCTTapp(logic_bin_op Tboolean op,[term_coerce t1 t e1; term_coerce t2 t e2])
 	else
 	if is_pointer_type t1 && is_pointer_type t2 && (comparable_types t1 t2) then
-	  JCTnative Tboolean,
+	  boolean_type,
 	  JCTTapp(logic_bin_op Tboolean op,[e1; e2])
 	else
 	  typing_error loc "numeric or pointer types expected for == and !="
@@ -363,7 +363,7 @@ let rec term env e =
       | JCPEinstanceof(e1,t) -> 
 	  let te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTnative Tboolean, JCTTinstanceof(te1,st)
+	  boolean_type, JCTTinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
@@ -814,7 +814,7 @@ let coerce t1 t2 e =
   match tn1,t2 with
     | Tinteger,Treal -> 
 	{ jc_texpr_node = JCTEcall(real_of_integer_,[e_int]) ;
-	  jc_texpr_type = JCTnative Treal;
+	  jc_texpr_type = real_type;
 	  jc_texpr_loc = e.jc_texpr_loc }  
     | _ -> e_int
 
@@ -827,18 +827,18 @@ let make_bin_app loc op e1 e2 =
     | BPgt | BPlt | BPge | BPle ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative Tboolean,
+	  boolean_type,
 	  JCTEbinary (coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "numeric types expected for <, >, <= and >="
     | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  (JCTnative Tboolean,
+	  (boolean_type,
 	   JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2))
 	else
 	  if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
-	    (JCTnative Tboolean,
+	    (boolean_type,
 	     JCTEbinary(e1, 
 			(if op = BPeq then Beq_pointer else Bneq_pointer), e2))
 	  else
@@ -848,7 +848,7 @@ let make_bin_app loc op e1 e2 =
 	  match t1 with
 	    | JCTpointer(st,_,_) ->
 		if is_integer t2 then
-		  t1, JCTEcall(shift_,[e1;coerce t2 Tinteger e2])
+		  t1, JCTEshift(e1, coerce t2 Tinteger e2)
 		else
 		  typing_error loc "integer type expected"
 	    | _ ->
@@ -902,7 +902,7 @@ let rec expr env e =
       | JCPEinstanceof(e1, t) -> 
 	  let te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTnative Tboolean, JCTEinstanceof(te1,st)
+	  boolean_type, JCTEinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
@@ -1140,7 +1140,7 @@ let rec statement env s =
 	      print_type vi.jc_var_info_type
       | JCPSwhile(c,i,v,s) -> 
 	  let tc = expr env c in
-	  if subtype tc.jc_texpr_type (JCTnative Tboolean) then
+	  if subtype tc.jc_texpr_type boolean_type then
 	    let ts = statement env s
 	    and lo = loop_annot env i v
 	    in
@@ -1150,7 +1150,7 @@ let rec statement env s =
 	  
       | JCPSif (c, s1, s2) -> 
 	  let tc = expr env c in
-	  if subtype tc.jc_texpr_type (JCTnative Tboolean) then
+	  if subtype tc.jc_texpr_type boolean_type then
 	    let ts1 = statement env s1
 	    and ts2 = statement env s2
 	    in

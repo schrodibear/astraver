@@ -50,6 +50,7 @@ let const fmt c =
     | JCCnull -> fprintf fmt "null"
     | JCCvoid -> fprintf fmt "()"
 
+
 let lbin_op op =
   if op == Jc_pervasives.ge_int then ">=" else
   if op == Jc_pervasives.le_int then "<=" else
@@ -64,6 +65,7 @@ let lbin_op op =
   if op == Jc_pervasives.mod_int then "%" else
   if op == Jc_pervasives.shift then "+" else
   raise Not_found
+
 
 let rec term fmt t =
   match t.jc_tterm_node with
@@ -152,8 +154,11 @@ let print_spec fmt s =
   fprintf fmt "@]"
 
 let call_bin_op op =
+(*
   if op == Jc_pervasives.shift_ then "+" else
+*)
   raise Not_found
+
 
 let bin_op = function
   | Blt_int | Blt_real -> "<"

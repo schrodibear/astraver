@@ -66,9 +66,9 @@ let make_const loc t c =
     jc_expr_node = node; }
 
 let void_const loc = make_const loc (JCTnative Tunit) JCCvoid
-let true_const loc = make_const loc (JCTnative Tboolean) (JCCboolean true)
-let false_const loc = make_const loc (JCTnative Tboolean) (JCCboolean false)
-let one_const loc = make_const loc (JCTnative Tinteger) (JCCinteger "1")
+let true_const loc = make_const loc boolean_type (JCCboolean true)
+let false_const loc = make_const loc boolean_type (JCCboolean false)
+let one_const loc = make_const loc integer_type (JCCinteger "1")
 
 let make_var loc vi =
   let node = JCEvar vi in
@@ -146,10 +146,10 @@ let make_decls loc sl tl =
 	   | JCTnative t ->
 	       begin
 		 match t with
-		   | Tboolean -> JCTnative Tboolean, JCCboolean false
-		   | _ -> JCTnative Tinteger, JCCinteger "0"
+		   | Tboolean -> boolean_type, JCCboolean false
+		   | _ -> integer_type, JCCinteger "0"
 	       end
-	   | JCTenum _ ->  JCTnative Tinteger, JCCinteger "0"
+	   | JCTenum _ ->  integer_type, JCCinteger "0"
 	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull
 	   | JCTlogic _ -> assert false
        in
@@ -185,7 +185,7 @@ let make_tthrow loc exc e =
 let make_incr_local loc op vi =
   make_assign_local loc vi
     { jc_expr_node = JCEbinary(make_var loc vi, op, one_const loc);
-      jc_expr_type = JCTnative Tinteger;
+      jc_expr_type = integer_type;
       jc_expr_loc = loc }
 
 let make_incr_heap loc op e fi = 
@@ -197,7 +197,7 @@ let make_incr_heap loc op e fi =
   in
   make_assign_heap loc e fi
     { jc_expr_node = JCEbinary(d, op, one_const loc);
-      jc_expr_type = JCTnative Tinteger;
+      jc_expr_type = integer_type;
       jc_expr_loc = loc }
   
 
@@ -327,6 +327,7 @@ let rec expr e =
 		 jc_expr_loc = e.jc_texpr_loc }
 
 and call loc f el ~binder ll = 
+(*
   if f == and_ then
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
@@ -338,8 +339,9 @@ and call loc f el ~binder ll =
     let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
     let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
     (l1 @ [if_e1_stat], [tmp]), Some tmp
+  else
 
-  else if f == or_ then
+  if f == or_ then
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
     let tmp = newrefvar boolean_type in
@@ -350,10 +352,12 @@ and call loc f el ~binder ll =
     let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
     let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
     (l1 @ [if_e1_stat], [tmp]), Some tmp
+  else
+*)
 
   (* no special case here for not_ *)
 
-  else if binder then
+  if binder then
     let tmp = newvar f.jc_fun_info_return_type in
     let stat = make_call loc (Some tmp) f el (make_block loc []) in
     (* [tmp] will be declared in a post-treatement of the calls generated *)
@@ -366,6 +370,7 @@ and call loc f el ~binder ll =
 (* [el] is the only part not yet translated *)
 
 and if_statement loc f el st sf =
+(*
   if f == and_ then
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let e1_false_stat = make_tthrow loc false_output 
@@ -381,8 +386,8 @@ and if_statement loc f el st sf =
       [(true_output, Some (newvar unit_type), st);
        (false_output, Some (newvar unit_type), sf)] in
     make_try loc try_body catch_list (make_block loc [])
-
-  else if f == or_ then
+  else 
+  if f == or_ then
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let e1_true_stat = make_tthrow loc true_output
       (Some (make_tconst loc JCCvoid)) in
@@ -398,7 +403,8 @@ and if_statement loc f el st sf =
        (false_output, Some (newvar unit_type), sf)] in
     make_try loc try_body catch_list (make_block loc [])
     
-  else if f == not_ then
+  else 
+if f == not_ then
     let e = match el with [e] -> e | _ -> assert false in
     let true_stat = make_tthrow loc true_output
       (Some (make_tconst loc JCCvoid)) in
@@ -412,6 +418,7 @@ and if_statement loc f el st sf =
     make_try loc try_body catch_list (make_block loc [])
 
   else 
+*)
     let ltl,el = List.split (List.map expr el) in
     let ll,tl = List.split ltl in
     let (l,etl),ecall = call loc f el ~binder:true ll in
@@ -533,15 +540,17 @@ and statement s =
 		   let block_stat = make_block loc sl in
 		   let empty_block = make_block loc [] in
 		   (* test for case considered *)
-		   let el = [e; make_const loc (JCTnative Tinteger) c] in
-		   let (l,etl),ecall = call loc eq_int_ el ~binder:true [] in
-		   let ecall = match ecall with
-		     | Some b -> make_var loc b
-		     | None -> assert false
+		   let etest = 
+		     { 
+		       jc_expr_node = 
+			 JCEbinary(e, Beq_int, 
+				    make_const loc integer_type c) ;
+		       jc_expr_type = integer_type;
+		       jc_expr_loc = loc 
+		     }		       
 		   in
 		   (* case translated into if-statement *)
-		   let if_stat = make_if loc ecall block_stat empty_block in
-		   make_decls loc (l @ [if_stat]) etl
+		   make_if loc etest block_stat empty_block 
 	       | Default ->
 		   make_block loc (List.map statement sl)
 	    ) csl 
