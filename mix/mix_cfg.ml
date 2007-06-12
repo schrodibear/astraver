@@ -251,7 +251,7 @@ module Make(X : INPUT) = struct
 
   let transform asm init =
     let cfg,ninit = make_cfg asm init in
-    print_cfg std_formatter cfg ninit;
+    (* print_cfg err_formatter cfg ninit; *)
     make_seq cfg ninit
 
 end

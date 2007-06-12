@@ -41,10 +41,10 @@ module X = struct
   let string_of_predicate p = p
 
   type statement = 
-      | Void
-      | Mix of pstmt
-      | Assume of predicate
-      | Seq of statement * statement
+    | Void
+    | Mix of pstmt
+    | Assume of predicate
+    | Seq of statement * statement
     
   let void_stmt = Void
   let append_stmt s1 s2 = Seq (s1, s2)
@@ -101,7 +101,7 @@ let interp_stmt prev lab s = match s.node with
   | PSinstr (Jmp, op) -> 
       Ajump (address s.loc op)
   | PSinstr (J3p, op) -> 
-      Acond (address s.loc op, X.Assume "r3 > 0", X.Assume "r3 <= 0")
+      Acond (address s.loc op, X.Assume "i3 > 0", X.Assume "i3 <= 0")
   | PSinstr (Jge, op) ->
       Acond (address s.loc op, X.Assume "cmp >= 0", X.Assume "cmp < 0")
 (***

@@ -81,6 +81,6 @@ let () =
   Pp.print_in_file print_code ofile;
   if !gwhy then 
     let cmd = sprintf "gwhy -lib-file mix.why %s" ofile in
-    ignore (Sys.command cmd)
+    exit (Sys.command cmd)
 
 
