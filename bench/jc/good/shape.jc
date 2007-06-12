@@ -32,9 +32,9 @@ real area(Shape[0] s)
   behavior safety: 
     ensures true;
 {
-  if (s.kind == 0) {
+    if (s.kind == 0) {
     return circ_area(s:>Circle);
-  } else if (s.kind == 1) {
+    } else if (s.kind == 1) {
     return rect_area(s:>Rectangle);
   }
   else return 0.;

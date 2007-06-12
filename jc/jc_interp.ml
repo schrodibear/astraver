@@ -298,16 +298,25 @@ let bin_op = function
   | Beq_int -> "eq_int_"
   | Bneq_int -> "neq_int_"
   | Badd_int -> "add_int"
-  | Badd_real -> "add_real"
   | Bsub_int -> "sub_int"
   | Bmul_int -> "mul_int"
   | Bdiv_int -> "div_int"
   | Bmod_int -> "mod_int"
-  | Bland -> "and"
-  | Blor -> "or"
   | Beq_pointer -> "eq_pointer"
   | Bneq_pointer -> "neq_pointer"
-  | _ -> assert false (* TODO *)
+  | Badd_real -> "add_real"
+  | Bsub_real -> "sub_real"
+  | Bmul_real -> "mul_real"
+  | Bdiv_real -> "div_real"
+  | Bneq_real -> "neq_real_"
+  | Beq_real -> "eq_real_"
+  | Bge_real -> "ge_real_"
+  | Ble_real -> "le_real_"
+  | Bgt_real -> "gt_real_"
+  | Blt_real -> "lt_real_"
+  | Blor | Bland -> assert false (* should be handled before for laziness *)
+  | Biff | Bimplies -> assert false (* never in expressions *)
+
 
 let bin_arg_type loc = function
   | Bgt_int 
@@ -317,16 +326,15 @@ let bin_arg_type loc = function
   | Beq_int 
   | Bneq_int 
   | Badd_int 
-  | Badd_real
   | Bsub_int 
   | Bmul_int 
   | Bdiv_int 
   | Bmod_int -> JCTnative Tinteger
   | Bneq_pointer | Beq_pointer -> assert false
-  | Biff|Bimplies|Blor|Bland|Bdiv_real|Bmul_real
-  | Bsub_real|Bneq_real|Beq_real|Bge_real|Ble_real|Bgt_real|Blt_real -> 
-      Jc_typing.typing_error loc
-	"Jc_interp.bin_arg_type: unsupported operator"
+  | Biff|Bimplies|Blor|Bland -> JCTnative Tboolean
+  | Bdiv_real | Bmul_real | Bsub_real | Badd_real
+  | Bneq_real | Beq_real | Bge_real
+  | Ble_real | Bgt_real | Blt_real -> JCTnative Treal
 
 let coerce loc tdest tsrc e =
   match tdest,tsrc with
@@ -367,6 +375,16 @@ let rec expr e : expr =
 	let e1' = expr e1 in
 	let e2' = expr e2 in
 	make_app (bin_op op) [ e1'; e2']	
+    | JCEbinary(e1,Bland,e2) ->
+	(* lazy conjunction *)
+	let e1' = expr e1 in
+	let e2' = expr e2 in
+	And(e1',e2')	
+    | JCEbinary(e1,Blor,e2) ->
+	(* lazy disjunction *)
+	let e1' = expr e1 in
+	let e2' = expr e2 in
+	Or(e1',e2')	
     | JCEbinary(e1,op,e2) ->
 	let e1' = expr e1 in
 	let e2' = expr e2 in

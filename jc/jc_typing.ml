@@ -766,24 +766,42 @@ let make_unary_app loc (op : Jc_ast.punary_op) e2 =
 
 let bin_op t op =
   match t,op with
-    | _, BPgt -> Bgt_int (* TODO: why no real version ? (Yannick) *)
-    | _, BPlt -> Blt_int
-    | _, BPge -> Bge_int
-    | _, BPle -> Ble_int
-    | _, BPeq -> Beq_int
-    | _, BPneq -> Bneq_int
+
+    | Tinteger, BPgt -> Bgt_int 
+    | Tinteger, BPlt -> Blt_int
+    | Tinteger, BPge -> Bge_int
+    | Tinteger, BPle -> Ble_int
+    | Tinteger, BPeq -> Beq_int
+    | Tinteger, BPneq -> Bneq_int
+
+    | Treal, BPgt -> Bgt_real
+    | Treal, BPlt -> Blt_real
+    | Treal, BPge -> Bge_real
+    | Treal, BPle -> Ble_real
+    | Treal, BPeq -> Beq_real
+    | Treal, BPneq -> Bneq_real
+
     | Tinteger, BPadd -> Badd_int
     | Treal, BPadd -> Badd_real
-    | _, BPsub -> Bsub_int
-    | _, BPmul -> Bmul_int
-    | _, BPdiv -> Bdiv_int
-    | _, BPmod -> Bmod_int
+    | Tinteger, BPmul -> Bmul_int
+    | Treal, BPmul -> Bmul_real
+    | Tinteger, BPsub -> Bsub_int
+    | Treal, BPsub -> Bsub_real
+    | Tinteger, BPdiv -> Bdiv_int
+    | Treal, BPdiv -> Bdiv_real
+    | Tinteger, BPmod -> Bmod_int
     | Tboolean, BPland -> Bland 
     | Tboolean, BPlor -> Blor
+    | _, BPland -> assert false
+    | _, BPlor -> assert false
+    | Treal, BPmod -> assert false
 	(* not allowed as expression op *)
+    | _,BPiff -> assert false
     | _,BPimplies -> assert false
     | Tunit,_ -> assert false
-    | _ -> assert false
+    | Tboolean, BPeq -> assert false
+    | Tboolean, BPneq -> assert false
+    | Tboolean, _ -> assert false
 
 let coerce t1 t2 e =
   let tn1,e_int =
@@ -809,19 +827,20 @@ let make_bin_app loc op e1 e2 =
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative Tboolean,
-	  JCTEbinary (coerce t1 t e1, bin_op Tboolean op, coerce t2 t e2)
+	  JCTEbinary (coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "numeric types expected for <, >, <= and >="
     | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative Tboolean,
-	  JCTEbinary(coerce t1 t e1, bin_op Tboolean op, coerce t2 t e2)
+	  (JCTnative Tboolean,
+	   JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2))
 	else
-	if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
-	  JCTnative Tboolean,
-	JCTEbinary(e1, (if op = BPeq then Beq_pointer else Bneq_pointer), e2)
-	else
+	  if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
+	    (JCTnative Tboolean,
+	     JCTEbinary(e1, 
+			(if op = BPeq then Beq_pointer else Bneq_pointer), e2))
+	  else
 	  typing_error loc "numeric or pointer types expected for == and !="
     | BPadd | BPsub ->
 	begin
