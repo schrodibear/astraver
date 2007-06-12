@@ -16,11 +16,7 @@ logic update : 'a farray, int, 'a -> 'a farray
 axiom access_update : 
   forall t : 'a farray. forall i : int. forall v : 'a.
   access(update(t,i,v), i) = v
-(*
-axiom access_update_eq : 
-  forall t : 'a farray. forall i : int. forall j : int. forall v : 'a.
-  i = j -> access(update(t,i,v), j) = v
-*)
+
 axiom access_update_neq : 
   forall t : 'a farray. forall i : int. forall j : int. forall v : 'a.
   i <> j -> access(update(t,i,v), j) = access(t,j)
@@ -37,20 +33,18 @@ parameter array_set :
 
 (* Sorted arrays *)
 
-predicate sorted_array
-  (t:int farray, i:int, j:int) = 
-    forall k:int. i <= k < j -> t[k] <= t[k+1]
+predicate sorted_array(t:int farray, i:int, j:int) = 
+  forall k:int. i <= k < j -> t[k] <= t[k+1]
 
 logic array_le : int farray, int, int, int -> prop
 logic array_ge : int farray, int, int, int -> prop
 
 (* Arrays permutations *)
 
-predicate exchange 
-(t1:int farray, t2:int farray, i:int, j:int) = 
-    (array_length(t1) = array_length(t2) and
-    t1[i] = t2[j] and t2[i] = t1[j] and
-    forall k:int. (k <> i and k <> j) -> t1[k] = t2[k])
+predicate exchange(t1:int farray, t2:int farray, i:int, j:int) = 
+  array_length(t1) = array_length(t2) and
+  t1[i] = t2[j] and t2[i] = t1[j] and
+  forall k:int. (k <> i and k <> j) -> t1[k] = t2[k]
 
 logic permut : int farray, int farray -> prop
 
@@ -96,6 +90,20 @@ axiom sub_permut_exchange_2 :
   forall g:int. forall d:int. forall i:int. forall j:int.
     (g <= i and i <= d and g <= j and j <= d and
     exchange(t1,t2,i,j)) -> sub_permut(g,d,t1,t2)
+
+axiom sub_permut_weakening :
+  forall a1:int farray. forall a2:int farray.
+  forall l1:int. forall r1:int. forall l2:int. forall r2:int.
+    l1 <= l2 and l2 <= r2 and r2 <= r1 ->
+    sub_permut(l2,r2,a1,a2) ->
+    sub_permut(l1,r1,a1,a2)
+
+axiom sub_permut_eq :
+  forall a1:int farray. forall a2:int farray.
+  forall l:int. forall r:int. 
+    l <= r ->
+    sub_permut(l,r,a1,a2) ->
+    forall i:int. (i < l or r < i) -> access(a2,i) = access(a1,i)
 
 axiom sub_permut_permut :
   forall t1:int farray. forall t2:int farray. forall g:int. forall d:int. 
