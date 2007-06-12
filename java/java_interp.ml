@@ -63,7 +63,7 @@ let tr_type_option t =
 
 let vi_table = Hashtbl.create 97
 
-let get_var vi =
+let get_var ?(formal=false) vi =
   try
     Hashtbl.find vi_table vi.java_var_info_tag
   with
@@ -75,6 +75,7 @@ let get_var vi =
 	    jc_var_info_type = tr_type vi.java_var_info_type;
 	    jc_var_info_tag = vi.java_var_info_tag;
 	    jc_var_info_static = false; (* TODO *)
+	    jc_var_info_formal = formal;
 	  }
 	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
 	nvi
@@ -234,7 +235,7 @@ let rec statement s =
   let s' =
     match s.java_statement_node with
       | JSskip -> assert false (* TODO *)
-      | JSreturn e -> JCTSreturn (expr e)
+      | JSreturn e -> JCTSreturn (tr_type e.java_expr_type,expr e)
       | JSblock l -> JCTSblock (List.map statement l)	  
       | JSvar_decl (vi, init, s) -> 
 	  JCTSdecl(get_var vi, Option_misc.map initialiser init, statement s)

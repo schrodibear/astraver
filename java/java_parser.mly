@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.7 2007-04-23 11:20:11 marche Exp $
+$Id: java_parser.mly,v 1.8 2007-06-12 14:57:22 marche Exp $
 
 */
 
@@ -104,7 +104,7 @@ $Id: java_parser.mly,v 1.7 2007-04-23 11:20:11 marche Exp $
 /* Operators (see precedences below for details) */
 
 %token <Java_ast.bin_op> ASSIGNOP
-%token EQ EQGT
+%token EQ EQEQGT LTEQEQGT
 %token VERTICALBARVERTICALBAR
 %token AMPERSANDAMPERSAND  
 %token VERTICALBAR         
@@ -123,9 +123,9 @@ $Id: java_parser.mly,v 1.7 2007-04-23 11:20:11 marche Exp $
 %nonassoc ELSE
 %nonassoc BSFORALL
 
-%right EQ ASSIGNOP EQGT              
+%right EQ ASSIGNOP EQEQGT LTEQEQGT              
   /*r ["="], ["*="],  ["/="], ["%="], ["+="], ["-="], ["<<="], [">>="], 
-  [">>>="], ["&="], ["^="] and ["|="], and ["=>"] */ 
+  [">>>="], ["&="], ["^="] and ["|="], and ["==>"] ["<==>"] */ 
 %right IFEXPR QUESTIONMARK     /*r [" ? : "] */
 %left VERTICALBARVERTICALBAR  /*r conditional OR ["||"] */
 %left AMPERSANDAMPERSAND  /*r conditional AND ["&&"] */
@@ -848,8 +848,10 @@ expr_no_name:
 | BSFORALL quantified_variables_decl SEMICOLON expr %prec BSFORALL
     { let (t,v)=$2 in
       locate_expr (JPEquantifier(Forall,t,v,$4)) }
-| expr EQGT expr
+| expr EQEQGT expr
     { locate_expr (JPEbin($1,Bimpl,$3)) }
+| expr LTEQEQGT expr
+    { locate_expr (JPEbin($1,Biff,$3)) }
 ;
 
 quantified_variables_decl:

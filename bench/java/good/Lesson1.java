@@ -10,19 +10,19 @@
   @*/
 
 /*@ axiom sqr_short_elim: 
-  @   \forall int x; x*x <= 32760 => x <= 180
+  @   \forall int x; x*x <= 32760 ==> x <= 180
   @*/
 
 /*@ axiom sqr_short_intro: 
-  @   \forall int x; 0 <= x && x <= 181 => x*x <= 32761
+  @   \forall int x; 0 <= x && x <= 181 ==> x*x <= 32761
   @*/
 
 /*@ axiom sqr_int_elim: 
-  @   \forall int x; x*x <= 2147395599 => x <= 46339
+  @   \forall int x; x*x <= 2147395599 ==> x <= 46339
   @*/
 
 /*@ axiom sqr_int_intro: 
-  @   \forall int x; 0 <= x && x <= 46340 => x*x <= 2147395600
+  @   \forall int x; 0 <= x && x <= 46340 ==> x*x <= 2147395600
   @*/
 
 
@@ -33,7 +33,7 @@ public class Lesson1 {
       @ behavior result_ge_y:
       @   ensures \result >= y 
       @ behavior result_is_lub:
-      @   ensures \forall int z; z >= x && z >= y => z >= \result
+      @   ensures \forall int z; z >= x && z >= y ==> z >= \result
       @*/
     public static int max(int x, int y) {
 	if (x>y) return x; else  return y; 

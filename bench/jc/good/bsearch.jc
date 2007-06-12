@@ -1,5 +1,5 @@
 
-axiom mean_1 : \forall integer x,y; x <= y => x <= (x+y)/2 && (x+y)/2 <= y 
+axiom mean_1 : \forall integer x,y; x <= y ==> x <= (x+y)/2 && (x+y)/2 <= y 
 
 type byte = -128..127
 
@@ -11,12 +11,12 @@ type shortT = { short shortM; }
 byte binary_search(shortT[0..] t, byte n, short v) 
  requires 
    n >= 0 && \offset_max(t) >= n-1 &&
-    (\forall byte k1, k2; 0 <= k1 && k1 <= k2 && k2 <= n-1 =>
+    (\forall byte k1, k2; 0 <= k1 && k1 <= k2 && k2 <= n-1 ==>
      (t+k1).shortM <= (t+k2).shortM);
  behavior search_ok:
     ensures
       (\result >= 0 && (t+\result).shortM == v) ||
-      (\result == -1 && (\forall byte k; 0 <= k && k < n => (t+k).shortM != v));
+      (\result == -1 && (\forall byte k; 0 <= k && k < n ==> (t+k).shortM != v));
 {
   byte l = 0;
   byte u = n-1;
@@ -24,10 +24,10 @@ byte binary_search(shortT[0..] t, byte n, short v)
   while (l <= u ) 
     invariant 
 	0 <= l && u <= n-1 && -1 <= p && p <= n-1 && 
-	(p == -1 => 
-	 \forall byte k; 0 <= k && k < n => 
-	   (t+k).shortM == v => l <= k && k <= u)
-	&& (p >= 0 => (t+p).shortM==v);
+	(p == -1 ==> 
+	 \forall byte k; 0 <= k && k < n ==> 
+	   (t+k).shortM == v ==> l <= k && k <= u)
+	&& (p >= 0 ==> (t+p).shortM==v);
     variant u-l; 
   {
     byte m = (l + u) / 2;
