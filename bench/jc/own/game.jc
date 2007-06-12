@@ -30,7 +30,7 @@ unit attack(Hero[0] this, Hero[0] target)
     target.dead = true;
   }
   pack(target);
-  // assert false;
+  assert this.life >= 0;
 }
 
 /*

@@ -114,6 +114,9 @@ let invariant_for_struct this st =
   in
   (inv, reads)
 
+let make_assume reads assume =
+  BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, []))
+
 (************************************)
 (* Checking an invariant definition *)
 (************************************)
@@ -293,7 +296,7 @@ let make_assoc_list pp mems =
 
 let make_assume_assocs pp mems =
   let assocs = make_assoc_list pp mems in
-  BlackBox (Annot_type (LTrue, unit_type, mems, [], assocs, []))
+  make_assume mems assocs
 
 (* List of each memory m that appears in an invariant
 which can be broken by the modification of the field fi *)
@@ -313,9 +316,8 @@ let field_assocs fi =
 let make_assume_field_assocs pp fi =
   make_assume_assocs pp (field_assocs fi)
 
-(* Returns a list of all memories which need an "assoc"
-(calculated from a function parameter list) *)
-let all_assocs pp params =
+(* Returns every structure (name) that can be used by a function, given its parameters *)
+let function_structures params =
   (* structures that can be used by the function *)
   let structures = List.fold_left
     (fun acc vi ->
@@ -328,7 +330,12 @@ let all_assocs pp params =
     StringSet.empty
     params
   in
-  let structures = StringSet.elements structures in
+  StringSet.elements structures
+
+(* Returns a list of all memories which need an "assoc"
+(calculated from a function parameter list) *)
+let all_assocs pp params =
+  let structures = function_structures params in
   (* memories used by these structures' invariants *)
   let memories = List.fold_left
     struct_inv_memories
@@ -427,6 +434,76 @@ let invariant_axiom st acc (li, a) =
 let invariants_axioms st acc =
   let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
   List.fold_left (invariant_axiom st) acc invs
+
+(******************************************)
+(* Invariant assumes (axioms pre-applied) *)
+(******************************************)
+
+(* List of each invariant that can be broken by modifying a given field *)
+let field_invariants fi =
+  let _, invs = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in
+  List.fold_left
+    (fun aux (li, a) ->
+       let amems = assertion_memories StringSet.empty a in
+       if StringSet.mem fi.jc_field_info_name amems then
+         (li, a)::aux
+       else
+	 aux)
+    []
+    invs
+
+(* Assume that for all this: st, not this.mutable => invariant *)
+let assume_invariant st (li, _) =
+  let params = invariant_params [] li in
+  
+  (* this *)
+  let this = "this" in
+  let this_ty =
+    { logic_type_name = "pointer";
+      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
+
+  (* not this.mutable => this.invariant *)
+  let mutable_name = "mutable_"^st.jc_struct_info_root in
+  let mutable_is_false =
+    LPred(
+      "eq",
+      [ LConst(Prim_bool false);
+	LApp("select", [LVar mutable_name; LVar this]) ]) in
+  let invariant = make_logic_pred_call li [LVar this] in
+  let assume_impl = LImpl(mutable_is_false, invariant) in
+
+  (* quantifier (forall this) *)
+  let assume = LForall(this, this_ty, assume_impl) in
+
+  (* reads *)
+  let reads = List.map fst params in
+  let reads = mutable_name::reads in
+
+  make_assume reads assume
+
+(* Given a field that has just been modified, assume all potentially
+useful invariant for all objects that is not mutable *)
+let assume_field_invariants fi =
+  let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in
+  let assumes = List.map (fun inv -> assume_invariant st inv) (field_invariants fi) in
+  List.fold_left append Void assumes
+
+let rec flatten_snd = function
+  | [] -> []
+  | (a, l)::tl -> (List.map (fun b -> a, b) l)@(flatten_snd tl)
+
+(* Given the parameters of a function, assume all potentially useful
+forall this: st, not this.mutable => invariant *)
+let assume_all_invariants params =
+  let structures = function_structures params in
+  let st_invs =
+    List.map
+      (fun id -> Hashtbl.find Jc_typing.structs_table id)
+      structures
+  in
+  let st_invs = flatten_snd st_invs in
+  let assumes = List.map (fun (st, inv) -> assume_invariant st inv) st_invs in
+  List.fold_left append Void assumes
 
 (*****************)
 (* pack / unpack *)

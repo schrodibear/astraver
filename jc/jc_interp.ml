@@ -465,7 +465,8 @@ let rec statement s =
 	      (append
 		 (assert_mutable (LVar tmp1) fi)
 		 (make_upd fi (Var tmp1) (Var tmp2))))
-	   (make_assume_field_assocs (fresh_program_point ()) fi))
+	   (assume_field_invariants fi))
+(*	   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCSblock l -> statement_list l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
@@ -890,7 +891,8 @@ let tr_fun f spec body acc =
   let body = statement_list body in
   let tblock =
     append
-      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)
+(*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+      (assume_all_invariants f.jc_fun_info_parameters)
       body
   in
   let tblock = make_label "init" tblock in

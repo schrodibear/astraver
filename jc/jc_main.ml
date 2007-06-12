@@ -175,8 +175,9 @@ let main () =
 	    d_axioms
 	in	       
 	(* production phase 5 : (invariants tools) *)
+	let d_inv = d_funs in
 	(* production phase 5.1 : "assoc" declaration *)
-	let d_inv = Jc_invariants.assoc_declaration::d_funs in
+	(*let d_inv = Jc_invariants.assoc_declaration::d_funs in *)
 	(* production phase 5.2 : "mutable" declaration *)
 	let d_inv =
           Hashtbl.fold
@@ -186,13 +187,13 @@ let main () =
             d_inv
         in
 	(* production phase 5.3 : axioms (not mutable implies invariant) *)
-        let d_inv =
+        (*let d_inv =
           Hashtbl.fold
             (fun _ (st, _) acc ->
                Jc_invariants.invariants_axioms st acc)
             Jc_norm.structs_table
             d_inv
-        in
+        in*)
 	(* production phase 5.4 : pack *)
         let d_inv =
           Hashtbl.fold

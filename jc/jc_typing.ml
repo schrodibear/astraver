@@ -139,6 +139,7 @@ let is_pointer_type t =
 
 
 let logic_functions_table = Hashtbl.create 97
+let logic_functions_decl_table = Hashtbl.create 97
 let logic_functions_env = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
@@ -1548,10 +1549,11 @@ let rec decl d =
         let pi = make_rel id in
         pi.jc_logic_info_parameters <- List.map snd param_env;
 	begin match body with
-	  | None -> ()
+	  | None ->
+	      Hashtbl.add logic_functions_decl_table pi.jc_logic_info_tag pi
 	  | Some body ->
-              let p = assertion param_env body in
-              Hashtbl.add logic_functions_table pi.jc_logic_info_tag 
+	      let p = assertion param_env body in
+              Hashtbl.add logic_functions_table pi.jc_logic_info_tag
 		(pi, JCTAssertion p)
 	end;
         Hashtbl.add logic_functions_env id pi
