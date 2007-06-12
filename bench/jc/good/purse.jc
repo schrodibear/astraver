@@ -63,7 +63,7 @@ unit withdraw2(purse[0] this, integer s)
 boolean test2(purse[0] p) 
   behavior ok_iff_enough_balance:
     assigns p.balance ;
-    ensures \result <=> \old(p.balance) >= 1000;
+    ensures \result <==> \old(p.balance) >= 1000;
 {
     try {
 	withdraw2(p,1000);

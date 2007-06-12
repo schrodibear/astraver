@@ -27,8 +27,8 @@ type realT = { real r; }
 
 type header = {
     integer discr;
-    invariant discr0(this) = this.discr == 0 => this <: packet1;
-    invariant discr1(this) = this.discr == 1 => this <: packet2;
+    invariant discr0(this) = this.discr == 0 ==> this <: packet1;
+    invariant discr1(this) = this.discr == 1 ==> this <: packet2;
 }
 
 and type packet1 = header with {

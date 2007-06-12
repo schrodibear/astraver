@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.8 2007-06-12 14:57:22 marche Exp $
+$Id: java_parser.mly,v 1.9 2007-06-12 15:00:44 marche Exp $
 
 */
 
@@ -122,8 +122,9 @@ $Id: java_parser.mly,v 1.8 2007-06-12 14:57:22 marche Exp $
 %nonassoc THEN
 %nonassoc ELSE
 %nonassoc BSFORALL
-
-%right EQ ASSIGNOP EQEQGT LTEQEQGT              
+%right LTEQEQGT 
+%right EQEQGT 
+x%right EQ ASSIGNOP 
   /*r ["="], ["*="],  ["/="], ["%="], ["+="], ["-="], ["<<="], [">>="], 
   [">>>="], ["&="], ["^="] and ["|="], and ["==>"] ["<==>"] */ 
 %right IFEXPR QUESTIONMARK     /*r [" ? : "] */

@@ -9,7 +9,7 @@ integer max(integer x, integer y)
   behavior result_ge_y: 
     ensures \result >= y; 
   behavior result_is_lub:
-    ensures \forall integer z ; z >= x && z >= y => z >= \result;
+    ensures \forall integer z ; z >= x && z >= y ==> z >= \result;
 {
   if (x >= y) return x; else return y;
 } 

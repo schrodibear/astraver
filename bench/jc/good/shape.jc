@@ -7,8 +7,8 @@ type shape_kind = 0..1
 
 type Shape = {
   shape_kind kind;
-  invariant dicr(s) = (s.kind == 0 => s <: Circle)
-		   && (s.kind == 1 => s <: Rectangle);
+  invariant dicr(s) = (s.kind == 0 ==> s <: Circle)
+		   && (s.kind == 1 ==> s <: Rectangle);
 }
 
 and type Circle = Shape with {

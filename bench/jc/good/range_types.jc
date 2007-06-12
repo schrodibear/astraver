@@ -22,7 +22,7 @@ shortint max(shortint x, shortint y)
   behavior result_ge_y: 
     ensures \result >= y; 
   behavior result_is_lub:
-    ensures \forall integer z ; z >= x && z >= y => z >= \result;
+    ensures \forall integer z ; z >= x && z >= y ==> z >= \result;
 {
   if (x >= y) return (x+1)-1; else return y;
 } 
@@ -32,9 +32,9 @@ shortint max(shortint x, shortint y)
 
 axiom distr_right: \forall integer x,y,z; x*(y+z) == (x*y)+(x*z)
 axiom distr_left: \forall integer x,y,z; (x+y)*z == (x*z)+(y*z)
-    // axiom sqr_elim: \forall integer x; x*x <= 32767 => x < 256
-axiom sqr_elim2: \forall integer x; x*x <= 32760 => x <= 180
-axiom sqr_intro2: \forall integer x; 0 <= x && x <= 181 => x*x <= 32761
+    // axiom sqr_elim: \forall integer x; x*x <= 32767 ==> x < 256
+axiom sqr_elim2: \forall integer x; x*x <= 32760 ==> x <= 180
+axiom sqr_intro2: \forall integer x; 0 <= x && x <= 181 ==> x*x <= 32761
 
 
 /* computes the square root of x, rounded to the floor */ 

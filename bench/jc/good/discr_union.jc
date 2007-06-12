@@ -35,8 +35,8 @@ type packet_uni_float = packet_uni with {
 type packet = {
     integer discr;
     packet_uni[0] uni;
-    invariant discr0(this) = this.discr == 0 => this.uni <: packet_uni_int;
-    invariant discr1(this) = this.discr == 1 => this.uni <: packet_uni_float;
+    invariant discr0(this) = this.discr == 0 ==> this.uni <: packet_uni_int;
+    invariant discr1(this) = this.discr == 1 ==> this.uni <: packet_uni_float;
 }
 
 unit get(packet[0] p, integerT[0] v1, realT[0] v2)

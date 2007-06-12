@@ -67,8 +67,8 @@ type T_NATURE_MSG = 0..1
 
 type T_MSG = {
     T_NATURE_MSG    NATURE ;
-    invariant dicr(msg) = (msg.NATURE == 0 => msg <: T_1MSG16C)
-                       && (msg.NATURE == 1 => msg <: T_2MSG41C);
+    invariant dicr(msg) = (msg.NATURE == 0 ==> msg <: T_1MSG16C)
+                       && (msg.NATURE == 1 ==> msg <: T_2MSG41C);
 }
 
 and type T_1MSG16C = T_MSG with {

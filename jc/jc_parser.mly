@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.40 2007-06-08 15:52:39 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.41 2007-06-12 15:00:44 marche Exp $ */
 
 %{
 
@@ -81,7 +81,7 @@
 %token PLUSEQ MINUSEQ STAREQ SLASHEQ PERCENTEQ
 
 /* && || => <=> ! */
-%token AMPAMP BARBAR EQGT LTEQGT EXCLAM
+%token AMPAMP BARBAR EQEQGT LTEQEQGT EXCLAM
 
 /* if else return while break case switch default goto */
 %token IF ELSE RETURN WHILE BREAK CASE SWITCH DEFAULT GOTO
@@ -148,9 +148,9 @@
 
 %nonassoc PRECFORALL
 /* <=> */
-%right LTEQGT
+%right LTEQEQGT
 /* => */
-%right EQGT 
+%right EQEQGT 
 %left QUESTION ASSIGNOP
 %left BARBAR
 %left AMPAMP
@@ -573,9 +573,9 @@ expression:
 | BSFORALL type_expr identifier_list SEMICOLON expression 
     %prec PRECFORALL
     { locate_expr (JCPEforall($2,$3,$5)) }
-| expression EQGT expression
+| expression EQEQGT expression
     { locate_expr (JCPEbinary($1,BPimplies,$3)) }
-| expression LTEQGT expression
+| expression LTEQEQGT expression
     { locate_expr (JCPEbinary($1,BPiff,$3)) }
 /*
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
