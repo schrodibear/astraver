@@ -42,7 +42,7 @@ let file = match !file with None -> usage () | Some f -> f
 
 (* parsing *)
 
-let asm =
+let pseudo,_ as asm =
   let c = open_in file in
   let lb = Lexing.from_channel c in
   lb.Lexing.lex_curr_p <- {lb.Lexing.lex_curr_p with Lexing.pos_fname = file};
@@ -70,10 +70,16 @@ let cl =
 
 let wl = interp cl
 
+let print_pseudo fmt p = match p.node with
+  | Verbatim s -> fprintf fmt "%s@\n@\n" s
+  | Equ_addr (id,_) -> fprintf fmt "logic %s : int@\n@\n" id
+  | _ -> ()
+
 let print_code fmt = 
   fprintf fmt 
     "(* this file was automatically generated from %s using demixify *)@\n@\n" 
     file;
+  List.iter (print_pseudo fmt) pseudo;
   List.iter (print_why_code fmt) wl
 
 let () =

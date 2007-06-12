@@ -73,17 +73,23 @@ exception Error of loc * error
 
 let error loc s = raise (Error (loc, s))
 
-(* Mixal: we resolve addresses *)
+(* symbol table *)
 
 let labels = Hashtbl.create 97
-
-let step s = match s.node with
-  | PSinvariant _ | PSassert _ -> 0
-  | PSinstr _ -> 1
 
 let find_label loc id = 
   try Hashtbl.find labels id 
   with Not_found -> error loc (UnboundLabel id)
+
+(* TODO
+let equ = Hashtbl.create 17 
+*)
+
+(* Mixal: we resolve addresses *)
+
+let step s = match s.node with
+  | PSinvariant _ | PSassert _ -> 0
+  | PSinstr _ -> 1
 
 let address loc = function
   | { pop_address = Some (PAident id); pop_index = None; pop_field = None } ->
@@ -143,7 +149,8 @@ let mixal (pseudo,asm) init =
     | [] -> []
     | (l,i) :: r -> (l, interp_stmt prev l i) :: map_instr (Some i) r
   in
-  map_instr None asm
+  let asm = map_instr None asm in
+  asm
 
 let sequentialize asm init =
   let asm = mixal asm init in

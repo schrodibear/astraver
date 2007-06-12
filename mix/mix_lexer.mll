@@ -64,12 +64,14 @@ rule token = parse
   | space+  
       { token lexbuf }
   | ident as id  
-      { let id = String.lowercase id in
-	try Hashtbl.find keywords id with Not_found -> IDENT id }
+      { let lid = String.lowercase id in
+	try Hashtbl.find keywords lid with Not_found -> IDENT id }
   | ident as id ":"
-      { LABEL (String.lowercase id) }
+      { LABEL id }
   | integer as n
       { INTEGER n }
+  | "{{{"
+      { Buffer.clear string_buf; verbatim lexbuf }
   | "{{"
       { Buffer.clear string_buf; invariant lexbuf }
   | "{"
@@ -119,6 +121,14 @@ and string = parse
       { raise (Lexical_error "unterminated string") }
   | _ as c
       { Buffer.add_char string_buf c; string lexbuf }
+
+and verbatim = parse
+  | "}}}" 
+      { VERBATIM (Buffer.contents string_buf) }
+  | eof
+      { raise (Lexical_error "unterminated verbatim") }
+  | _ as c
+      { Buffer.add_char string_buf c; verbatim lexbuf }
 
 and invariant = parse
   | "}}" 

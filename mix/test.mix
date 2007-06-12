@@ -5,12 +5,12 @@ X	equ 1000
 init:	{{ i1 >= 1 }}
 	ent3 0,1
 	jmp changem
-loop:	cmpa x,3
+loop:	cmpa X,3
 	jge dec
 changem:ent2 0,3
 	lda X,3
 dec:	{{ 0 <= i3 <= i1 and 1 <= i2 <= i1 and a = mem[X+i2]
-           and forall i:int. i3 < i <= i1 -> a >= mem[X+i] }}
+           and forall i:int. i3 <= i <= i1 -> a >= mem[X+i] }}
 	dec3 1
 	j3p loop
 	{ 1 <= i2 <= i1 and a = mem[X+i2] and

@@ -46,5 +46,6 @@ and pseudo_node =
   | Equ_addr of string * paddress
   | Equ_field of string * pfield
   | Orig of string option * paddress
+  | Verbatim of string
 
 type pfile = pseudo list * (string option * pstmt) list

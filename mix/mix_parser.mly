@@ -10,6 +10,7 @@
 
 %token <string> IDENT
 %token <string> LABEL
+%token <string> VERBATIM
 %token <string> INVARIANT
 %token <string> ASSERT
 %token <string> INTEGER
@@ -48,6 +49,7 @@ pseudo:
 | IDENT EQU INTEGER COLON INTEGER { locate (Equ_field ($1, PFrange ($3, $5))) }
 | ORIG address       { locate (Orig (None, $2)) }
 | IDENT ORIG address { locate (Orig (Some $1, $3)) } 
+| VERBATIM           { locate (Verbatim $1) }
 ;
 
 list1_stmt:
