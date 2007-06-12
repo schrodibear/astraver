@@ -19,7 +19,7 @@ dec:	{{ 0 <= r3 <= r1 and 1 <= r2 <= r1 and a = mem[X+r2]
 /*
 Local Variables: 
 mode: asm
-compile-command: "../bin/demixify.opt test.mix init"
+compile-command: "../bin/demixify.opt test.mix -entry init"
 End: 
 */
 

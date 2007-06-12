@@ -3,6 +3,7 @@ open Format
 open Lexing
 open Mix_ast
 open Mix_seq
+open Mix_interp
 
 let report_lb lb =
   let b,e = lexeme_start_p lb, lexeme_end_p lb in
@@ -20,11 +21,31 @@ let report_loc loc =
     eprintf "line %d, character %d:@\n" l fc
   end
 
+(* command line *)
+
+let file = ref None
+let entry = ref "init"
+let gwhy = ref false
+
+let spec = 
+  ["-entry", Arg.Set_string entry, "<label>  sets the entry point";
+   "-gwhy", Arg.Set gwhy, "  launches gwhy automatically";
+  ]
+let usage_msg = "demixify [options] file.mix"
+let usage () = Arg.usage spec usage_msg; exit 1
+let set_file f = match !file with
+  | None when Filename.check_suffix f ".mix" -> file := Some f
+  | _ -> usage ()
+let () = Arg.parse spec set_file usage_msg
+
+let file = match !file with None -> usage () | Some f -> f
+
+(* parsing *)
+
 let asm =
-  let f = Sys.argv.(1) in
-  let c = open_in f in
+  let c = open_in file in
   let lb = Lexing.from_channel c in
-  lb.Lexing.lex_curr_p <- { lb.Lexing.lex_curr_p with Lexing.pos_fname = f };
+  lb.Lexing.lex_curr_p <- {lb.Lexing.lex_curr_p with Lexing.pos_fname = file};
   try
     let asm = Mix_parser.file Mix_lexer.token lb in
     close_in c;
@@ -35,21 +56,31 @@ let asm =
     | Parsing.Parse_error -> 
 	report_lb lb; eprintf "Syntax error@."; exit 1
 
+(* transformation into sequential programs *)
+
 let cl = 
   try 
-    interp asm Sys.argv.(2)
+    sequentialize asm !entry
   with Error (loc, e) ->
     report_loc loc;
     eprintf "%a@." report e;
     exit 1
 
-let print_seq_code fmt c = 
-  begin match c.seq_pre with
-    | Some p -> fprintf fmt "pre { %s }@\n" (X.string_of_predicate p)
-    | None -> ()
-  end;
-  fprintf fmt "code %s@\n@\n" (X.string_of_stmt c.seq_code)
+(* translation to Why code *)
 
-let () = List.iter (print_seq_code std_formatter) cl
+let wl = interp cl
+
+let print_code fmt = 
+  fprintf fmt 
+    "(* this file was automatically generated from %s using demixify *)@\n@\n" 
+    file;
+  List.iter (print_why_code fmt) wl
+
+let () =
+  let ofile = (Filename.chop_extension file) ^ ".why" in
+  Pp.print_in_file print_code ofile;
+  if !gwhy then 
+    let cmd = sprintf "gwhy -lib-file mix.why %s" ofile in
+    ignore (Sys.command cmd)
 
 

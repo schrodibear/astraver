@@ -145,7 +145,7 @@ let mixal (pseudo,asm) init =
   in
   map_instr None asm
 
-let interp asm init =
+let sequentialize asm init =
   let asm = mixal asm init in
   let init = find_label Lexing.dummy_pos init in
   transform asm init
