@@ -2,15 +2,23 @@
 open Format
 open Lexing
 open Mix_ast
-open Mix_interp
+open Mix_seq
 
-let report_loc lb =
+let report_lb lb =
   let b,e = lexeme_start_p lb, lexeme_end_p lb in
   eprintf "File \"%s\", " b.pos_fname;
   let l = b.pos_lnum in
   let fc = b.pos_cnum - b.pos_bol + 1 in
   let lc = e.pos_cnum - b.pos_bol + 1 in
   eprintf "line %d, characters %d-%d:@\n" l fc lc
+
+let report_loc loc =
+  if loc != Lexing.dummy_pos then begin
+    eprintf "File \"%s\", " loc.pos_fname;
+    let l = loc.pos_lnum in
+    let fc = loc.pos_cnum - loc.pos_bol + 1 in
+    eprintf "line %d, character %d:@\n" l fc
+  end
 
 let asm =
   let f = Sys.argv.(1) in
@@ -23,11 +31,17 @@ let asm =
     asm
   with
     | Mix_lexer.Lexical_error s -> 
-	report_loc lb; eprintf "Lexical error: %s@." s; exit 1
+	report_lb lb; eprintf "Lexical error: %s@." s; exit 1
     | Parsing.Parse_error -> 
-	report_loc lb; eprintf "Syntax error@."; exit 1
+	report_lb lb; eprintf "Syntax error@."; exit 1
 
-let cl = interp asm Sys.argv.(2)
+let cl = 
+  try 
+    interp asm Sys.argv.(2)
+  with Error (loc, e) ->
+    report_loc loc;
+    eprintf "%a@." report e;
+    exit 1
 
 let print_seq_code fmt c = 
   begin match c.seq_pre with

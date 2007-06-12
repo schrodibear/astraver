@@ -1,17 +1,20 @@
 
 /* Program M (TAOCP, vol. 1, page 145) */
+X	equ 1000
 	orig 3000
-init:	{{ n>=1 }}
+init:	{{ r1 >= 1 }}
 	ent3 0,1
 	jmp changem
 loop:	cmpa x,3
 	jge dec
 changem:ent2 0,3
-	lda x,3
-dec:	{{ invariant }}
+	lda X,3
+dec:	{{ 0 <= r3 <= r1 and 1 <= r2 <= r1 and a = mem[X+r2]
+           and forall i:int. r3 < i <= r1 -> a >= mem[X+i] }}
 	dec3 1
 	j3p loop
-	{ assert post }
+	{ 1 <= r2 <= r1 and a = mem[X+r2] and
+          forall i:int. 1 <= i <= r1 -> a >= mem[X+i] }
 
 /*
 Local Variables: 

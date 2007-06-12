@@ -2,6 +2,8 @@
 %{
   open Mix_ast
   open Parsing
+
+  let locate n = { node = n; loc = symbol_start_pos () }
 %}
 
 /* Tokens */ 
@@ -42,10 +44,10 @@ list0_pseudo:
 ;
 
 pseudo:
-| IDENT EQU address  { Equ_addr ($1, $3) }
-| IDENT EQU INTEGER COLON INTEGER { Equ_field ($1, PFrange ($3, $5)) }
-| ORIG address       { Orig (None, $2) }
-| IDENT ORIG address { Orig (Some $1, $3) } 
+| IDENT EQU address  { locate (Equ_addr ($1, $3)) }
+| IDENT EQU INTEGER COLON INTEGER { locate (Equ_field ($1, PFrange ($3, $5))) }
+| ORIG address       { locate (Orig (None, $2)) }
+| IDENT ORIG address { locate (Orig (Some $1, $3)) } 
 ;
 
 list1_stmt:
@@ -60,9 +62,9 @@ stmt:
 ;
 
 stmt_kind:
-| INVARIANT { PSinvariant $1 }
-| ASSERT { PSassert $1 }
-| INSTR operand { PSinstr ($1, $2) }
+| INVARIANT { locate (PSinvariant $1) }
+| ASSERT { locate (PSassert $1) }
+| INSTR operand { locate (PSinstr ($1, $2)) }
 ;
 
 opt_label:

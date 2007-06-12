@@ -1,6 +1,10 @@
 
 (* parsed trees *)
 
+type loc = Lexing.position
+
+type 'a located = { node : 'a; loc : loc }
+
 type instr = 
   | Jmp | Jge | J3p
   (* loading *)
@@ -29,12 +33,16 @@ type poperand =
     pop_field   : pfield option; 
   }
 
-type pstmt =
+type pstmt = pstmt_node located
+
+and pstmt_node =
   | PSinvariant of string
   | PSassert of string
   | PSinstr of instr * poperand
 
-type pseudo =
+type pseudo = pseudo_node located
+
+and pseudo_node =
   | Equ_addr of string * paddress
   | Equ_field of string * pfield
   | Orig of string option * paddress
