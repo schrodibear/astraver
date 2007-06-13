@@ -646,6 +646,8 @@ and assertion a =
 	  JCAiff (assertion a1, assertion a2)
       | JCTAnot a ->
 	  JCAnot (assertion a)
+      | JCTArelation (t1, op, t2) ->
+	  JCArelation (term t1, op, term t2)
       | JCTAapp (li, tl) ->
 	  JCAapp (li, List.map term tl)
       | JCTAforall (vi, a) ->
@@ -668,6 +670,8 @@ and term t =
     match t.jc_tterm_node with
       | JCTTconst c -> JCTconst c
       | JCTTvar vi -> JCTvar vi
+      | JCTTunary(op,t1) -> JCTunary (op, term t1)
+      | JCTTbinary (t1, op, t2) -> JCTbinary (term t1, op, term t2)
       | JCTTshift (t1, t2) -> JCTshift (term t1, term t2)
       | JCTTderef (t, fi) -> JCTderef (term t, fi)
       | JCTTapp (li, tl) -> JCTapp (li, List.map term tl)

@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.28 2007-06-12 15:42:37 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.29 2007-06-13 19:12:42 moy Exp $ *)
 
 
 open Jc_env
@@ -95,7 +95,8 @@ let rec term ef t =
     | JCTvar vi -> ef (* TODO ? *)
     | JCTif(t1, t2, t3) -> term (term (term ef t1) t2) t3
     | JCTcast(t, _) 
-    | JCTinstanceof (t, _) -> term ef t
+    | JCTinstanceof (t, _)
+    | JCTunary (_, t) -> term ef t
     | JCToffset_min(t,st) 
     | JCToffset_max(t,st) ->
 	add_alloc_effect (term ef t) st.jc_struct_info_root
@@ -107,6 +108,7 @@ let rec term ef t =
 	term (add_memory_effect ef fi) t
     | JCTshift (t1, t2) -> term (term ef t1) t2
     | JCTrange (t1, t2) -> term (term ef t1) t2
+    | JCTbinary (t1, _, t2) -> term (term ef t1) t2
 
 let rec assertion ef a =
   match a.jc_assertion_node with
@@ -118,6 +120,7 @@ let rec assertion ef a =
     | JCAnot a
     | JCAold a -> assertion ef a
     | JCAforall (vi, a) -> assertion ef a 
+    | JCArelation (t1,_,t2) -> term (term ef t1) t2
     | JCAapp (li, tl) -> 
 	ef_union li.jc_logic_info_effects
 	  (List.fold_left term ef tl)	

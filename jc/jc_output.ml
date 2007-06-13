@@ -15,7 +15,9 @@ type jc_decl =
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr
   | JCaxiom_def of string * tassertion
-      
+  | JClogic_fun_def of jc_type option * string 
+      * var_info list * tterm_or_tassertion      
+
 let string_of_native t =
   match t with
     | Tunit -> "unit"
@@ -52,6 +54,7 @@ let const fmt c =
 
 
 let lbin_op op =
+(*
   if op == Jc_pervasives.ge_int then ">=" else
   if op == Jc_pervasives.le_int then "<=" else
   if op == Jc_pervasives.gt_int then ">" else
@@ -64,12 +67,38 @@ let lbin_op op =
   if op == Jc_pervasives.div_int then "/" else
   if op == Jc_pervasives.mod_int then "%" else
   if op == Jc_pervasives.shift then "+" else
+*)
   raise Not_found
 
+let bin_op = function
+  | Blt_int | Blt_real -> "<"
+  | Bgt_int | Bgt_real -> ">"
+  | Ble_int | Ble_real -> "<="
+  | Bge_int | Bge_real -> ">="
+  | Beq_int | Beq_real | Beq_pointer -> "=="
+  | Bneq_int | Bneq_real | Bneq_pointer -> "!="
+  | Badd_int | Badd_real -> "+"
+  | Bsub_int | Bsub_real -> "-"
+  | Bmul_int | Bmul_real -> "*"
+  | Bdiv_int | Bdiv_real -> "/"
+  | Bmod_int -> "%"
+  | Bland -> "&&"
+  | Blor -> "||"
+  | Bimplies -> "==>"
+  | Biff -> "<==>"
+
+let unary_op = function
+  | Uplus_int | Uplus_real -> "+"
+  | Uminus_int | Uminus_real -> "-"
+  | Unot -> "!"
 
 let rec term fmt t =
   match t.jc_tterm_node with
     | JCTTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
+    | JCTTbinary(t1,op,t2) ->
+	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
+    | JCTTunary(op,t1) ->
+	fprintf fmt "@[(%s %a)@]" (unary_op op) term t1
     | JCTTif (t1,t2,t3) -> 
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
     | JCTTcast (t, si) ->
@@ -95,7 +124,8 @@ let rec term fmt t =
 	  (print_list comma term) l 
     | JCTTderef (t, fi)-> 
 	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
-    | JCTTshift (_, _)-> assert false (* TODO *)
+    | JCTTshift (t1, t2) -> 
+	fprintf fmt "@[(%a + %a)@]" term t1 term t2
     | JCTTconst c -> const fmt c
     | JCTTrange (t1,t2) -> 
 	fprintf fmt "@[%a..%a@]" term t1 term t2
@@ -112,6 +142,8 @@ let rec assertion fmt a =
 	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
 	  assertion a
+    | JCTArelation (t1, op, t2) ->
+	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
     | JCTAapp (op, ([t1;t2] as l)) ->
 	begin
 	  try
@@ -124,13 +156,19 @@ let rec assertion fmt a =
     | JCTAapp (op, l) ->
 	 fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	      (print_list comma term) l 
-
-    | JCTAnot _-> assert false (* TODO *)
+    | JCTAnot a1 ->
+	fprintf fmt "@[(!@ %a)@]" assertion a1
     | JCTAiff (a1, a2)-> 
-	fprintf fmt "@[(%a <=>@ %a)@]" assertion a1 assertion a2
+	fprintf fmt "@[(%a <==>@ %a)@]" assertion a1 assertion a2
     | JCTAimplies (a1, a2)-> 
-	fprintf fmt "@[(%a =>@ %a)@]" assertion a1 assertion a2
-    | JCTAor _-> assert false (* TODO *)
+	fprintf fmt "@[(%a ==>@ %a)@]" assertion a1 assertion a2
+    | JCTAor [] -> assert false
+    | JCTAor (a::l) -> 
+	fprintf fmt "@[(%a" assertion a;
+	List.iter
+	  (fun a -> fprintf fmt " ||@ %a" assertion a)
+	  l;
+	fprintf fmt ")@]"
     | JCTAand [] -> assert false
     | JCTAand (a::l) -> 
 	fprintf fmt "@[(%a" assertion a;
@@ -158,29 +196,6 @@ let call_bin_op op =
   if op == Jc_pervasives.shift_ then "+" else
 *)
   raise Not_found
-
-
-let bin_op = function
-  | Blt_int | Blt_real -> "<"
-  | Bgt_int | Bgt_real -> ">"
-  | Ble_int | Ble_real -> "<="
-  | Bge_int | Bge_real -> ">="
-  | Beq_int | Beq_real | Beq_pointer -> "=="
-  | Bneq_int | Bneq_real | Bneq_pointer -> "!="
-  | Badd_int | Badd_real -> "+"
-  | Bsub_int | Bsub_real -> "-"
-  | Bmul_int | Bmul_real -> "*"
-  | Bdiv_int | Bdiv_real -> "/"
-  | Bmod_int -> "%"
-  | Bland -> "&&"
-  | Blor -> "||"
-  | Bimplies -> "=>"
-  | Biff -> "<=>"
-
-let unary_op = function
-  | Uplus_int | Uplus_real -> "+"
-  | Uminus_int | Uminus_real -> "-"
-  | Unot -> "!"
 
 let rec expr fmt e =
   match e.jc_texpr_node with
@@ -232,7 +247,8 @@ let rec expr fmt e =
 	  (print_list comma expr) l 
     | JCTEderef (e, fi) -> 
 	fprintf fmt "%a.%s" expr e fi.jc_field_info_name 
-    | JCTEshift (_, _) -> assert false (* TODO *)
+    | JCTEshift (e1, e2) -> 
+	fprintf fmt "@[(%a + %a)@]" expr e1 expr e2
     | JCTEconst c -> const fmt c
 
 let rec statement fmt s =
@@ -294,6 +310,10 @@ let field fmt fi =
   fprintf fmt "%a %s;@\n" 
     print_type fi.jc_field_info_type fi.jc_field_info_name
 
+let term_or_assertion fmt = function
+  | JCTAssertion a -> assertion fmt a
+  | JCTTerm t -> term fmt t
+
 let rec print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
@@ -312,7 +332,17 @@ let rec print_decl fmt d =
 	fprintf fmt "@[%a %s = %a@]@\n@." print_type ty id expr init
     | JCaxiom_def(id,a) ->
 	fprintf fmt "@[axiom %s : %a@]@\n@." id assertion a
-	
+    | JClogic_fun_def(ty,id,params,body) ->
+	match ty with
+	  | None ->
+	      fprintf fmt "@[logic %s(@[%a@]) =@\n%a@]@\n@." 
+		id (print_list comma param) params 
+		term_or_assertion body 
+	  | Some ty ->
+	      fprintf fmt "@[logic %a %s(@[%a@]) =@\n%a@]@\n@." 
+		print_type ty 
+		id (print_list comma param) params 
+		term_or_assertion body 
    
 let rec print_decls fmt d =
   match d with

@@ -129,7 +129,8 @@ let rec term this t =
     | JCTinstanceof (t, ty) -> term this t
     | JCToffset_min(t,_) 
     | JCToffset_max(t,_) -> term this t
-    | JCTold t -> term this t
+    | JCTold t
+    | JCTunary (_,t) -> term this t
     | JCTapp (id, l) ->
 	if FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) l
@@ -144,7 +145,9 @@ let rec term this t =
 		Jc_typing.typing_error t.jc_term_loc
 		  "this dereferencing is not allowed in structure invariant"
 	end
-    | JCTshift (t1, t2) | JCTrange (t1, t2) -> term this t1; term this t2
+    | JCTshift (t1, t2) 
+    | JCTrange (t1, t2)
+    | JCTbinary(t1,_,t2) -> term this t1; term this t2
     | JCTvar _ -> ()
 
 let rec assertion this p =
@@ -164,6 +167,7 @@ let rec assertion this p =
     | JCAnot p -> assertion this p
     | JCAiff (p1, p2)
     | JCAimplies (p1, p2) -> assertion this p1; assertion this p2
+    | JCArelation (t1,_, t2) -> term this t1; term this t2
     | JCAand l | JCAor l -> List.iter (assertion this) l
 
 
@@ -183,7 +187,8 @@ let rec term_memories aux t = match t.jc_tterm_node with
   | JCTTconst _
   | JCTTvar _ -> aux
   | JCTTshift(t1, t2)
-  | JCTTrange(t1,t2) -> term_memories (term_memories aux t1) t2
+  | JCTTrange(t1,t2) 
+  | JCTTbinary(t1,_,t2) -> term_memories (term_memories aux t1) t2
   | JCTTderef(t, fi) ->
       let m = fi.jc_field_info_name in
       term_memories (StringSet.add m aux) t
@@ -192,7 +197,8 @@ let rec term_memories aux t = match t.jc_tterm_node with
   | JCTToffset_max(t, _)
   | JCTToffset_min(t, _)
   | JCTTinstanceof(t, _)
-  | JCTTcast(t, _) -> term_memories aux t
+  | JCTTcast(t, _) 
+  | JCTTunary(_,t) -> term_memories aux t
   | JCTTif(t1, t2, t3) -> term_memories (term_memories (term_memories aux t1) t2) t3
 
 let rec assertion_memories aux a = match a.jc_tassertion_node with
@@ -202,6 +208,7 @@ let rec assertion_memories aux a = match a.jc_tassertion_node with
   | JCTAor l -> List.fold_left assertion_memories aux l
   | JCTAimplies(a1, a2)
   | JCTAiff(a1, a2) -> assertion_memories (assertion_memories aux a1) a2
+  | JCTArelation(t1,_,t2) -> term_memories (term_memories aux t1) t2
   | JCTAnot a
   | JCTAold a
   | JCTAforall(_, a) -> assertion_memories aux a

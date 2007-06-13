@@ -158,11 +158,24 @@ and pdecl =
 (* typed ast *)
 (*************)
 
+type bin_op =
+  | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
+  | Blt_real | Bgt_real | Ble_real | Bge_real | Beq_real | Bneq_real 
+  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
+  | Badd_real | Bsub_real | Bmul_real | Bdiv_real
+  | Bland | Blor | Bimplies | Biff
+  | Beq_pointer | Bneq_pointer
+  
+type unary_op =
+  | Uplus_int | Uminus_int | Uplus_real | Uminus_real | Unot 
+
 type tterm_node =
   | JCTTconst of const
   | JCTTvar of var_info
   | JCTTshift of tterm * tterm
   | JCTTderef of tterm * field_info
+  | JCTTbinary of tterm * bin_op * tterm
+  | JCTTunary of unary_op * tterm
   | JCTTapp of logic_info * tterm list
   | JCTTold of tterm
   | JCTToffset_max of tterm * struct_info
@@ -191,6 +204,7 @@ type tlocation =
 type tassertion_node =
   | JCTAtrue
   | JCTAfalse
+  | JCTArelation of tterm * bin_op * tterm
   | JCTAand of tassertion list
   | JCTAor of tassertion list
   | JCTAimplies of tassertion * tassertion
@@ -212,17 +226,6 @@ and tassertion =
 type tterm_or_tassertion =
   | JCTAssertion of tassertion
   | JCTTerm of tterm
-
-type bin_op =
-  | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
-  | Blt_real | Bgt_real | Ble_real | Bge_real | Beq_real | Bneq_real 
-  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
-  | Badd_real | Bsub_real | Bmul_real | Bdiv_real
-  | Bland | Blor | Bimplies | Biff
-  | Beq_pointer | Bneq_pointer
-  
-type unary_op =
-  | Uplus_int | Uminus_int | Uplus_real | Uminus_real | Unot 
 
 type tincr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
 
@@ -308,6 +311,8 @@ type tfun_spec =
 type term_node =
   | JCTconst of const
   | JCTvar of var_info
+  | JCTbinary of term * bin_op * term
+  | JCTunary of unary_op * term
   | JCTshift of term * term
   | JCTderef of term * field_info
   | JCTapp of logic_info * term list
@@ -337,6 +342,7 @@ type location =
 type assertion_node =
   | JCAtrue
   | JCAfalse
+  | JCArelation of term * bin_op * term
   | JCAand of assertion list
   | JCAor of assertion list
   | JCAimplies of assertion * assertion

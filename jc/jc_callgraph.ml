@@ -34,15 +34,19 @@ let rec term acc t =
     | JCToffset_max(t,_) | JCToffset_min(t,_)
     | JCTold t | JCTderef (t,_) -> term acc t
     | JCTshift (t1,t2) 
-    | JCTrange (t1,t2) -> term (term acc t1) t2
+    | JCTrange (t1,t2)
+    | JCTbinary (t1,_,t2) -> term (term acc t1) t2
     | JCTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
     | JCTcast(t,_)
-    | JCTinstanceof(t,_) -> term acc t
+    | JCTinstanceof(t,_)
+    | JCTunary (_,t) -> term acc t
 
 let rec assertion acc p =
   match p.jc_assertion_node with
   | JCAtrue 
   | JCAfalse -> acc
+  | JCArelation(t1,op,t2) ->
+      term (term acc t1) t2
   | JCAapp(f,lt) -> f::(List.fold_left term acc lt)
   | JCAand(pl) | JCAor(pl) -> List.fold_left assertion acc pl
   | JCAimplies (p1,p2) | JCAiff(p1,p2) -> 

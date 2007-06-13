@@ -66,6 +66,92 @@ let tr_type t = Base_type(tr_base_type t)
     | JCTpointer _ -> Base_type(tr_base_type t)	
 *)
 
+let unary_op = function
+  | Uplus_int -> "uplus_int"
+  | Uminus_int -> "neg_int"
+  | Uplus_real -> "uplus_real"
+  | Uminus_real -> "uminus_real"
+  | Unot -> "not"
+
+let unary_arg_type = function
+  | Uplus_int 
+  | Uminus_int -> integer_type
+  | Uplus_real 
+  | Uminus_real -> real_type
+  | Unot -> boolean_type
+
+let bin_op = function
+  | Bgt_int -> "gt_int_"
+  | Blt_int -> "lt_int_"
+  | Bge_int -> "ge_int_"
+  | Ble_int -> "le_int_"
+  | Beq_int -> "eq_int_"
+  | Bneq_int -> "neq_int_"
+  | Badd_int -> "add_int"
+  | Bsub_int -> "sub_int"
+  | Bmul_int -> "mul_int"
+  | Bdiv_int -> "div_int"
+  | Bmod_int -> "mod_int"
+  | Beq_pointer -> "eq_pointer"
+  | Bneq_pointer -> "neq_pointer"
+  | Badd_real -> "add_real"
+  | Bsub_real -> "sub_real"
+  | Bmul_real -> "mul_real"
+  | Bdiv_real -> "div_real"
+  | Bneq_real -> "neq_real_"
+  | Beq_real -> "eq_real_"
+  | Bge_real -> "ge_real_"
+  | Ble_real -> "le_real_"
+  | Bgt_real -> "gt_real_"
+  | Blt_real -> "lt_real_"
+  | Blor | Bland -> assert false (* should be handled before for laziness *)
+  | Biff | Bimplies -> assert false (* never in expressions *)
+
+let pred_bin_op = function
+  | Bgt_int -> "gt_int"
+  | Blt_int -> "lt_int"
+  | Bge_int -> "ge_int"
+  | Ble_int -> "le_int"
+  | Beq_int -> "eq"
+  | Bneq_int -> "neq"
+  | Beq_pointer -> "eq"
+  | Bneq_pointer -> "neq"
+  | Bneq_real -> "neq"
+  | Beq_real -> "eq"
+  | Blor -> "bor"
+  | Bland -> "band"
+  | Biff | Bimplies -> assert false (* TODO *)
+  | _ -> assert false (* TODO *)
+
+let bin_arg_type loc = function
+  | Bgt_int | Blt_int | Bge_int | Ble_int 
+  | Beq_int | Bneq_int 
+  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int -> integer_type
+  | Biff|Bimplies|Blor|Bland -> boolean_type
+  | Bdiv_real | Bmul_real | Bsub_real | Badd_real
+  | Bneq_real | Beq_real | Bge_real
+  | Ble_real | Bgt_real | Blt_real -> real_type
+  | Bneq_pointer | Beq_pointer -> assert false
+
+let coerce loc tdest tsrc e =
+  match tdest,tsrc with
+    | JCTnative t, JCTnative u when t=u -> e
+    | JCTlogic t, JCTlogic u when t=u -> e
+    | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
+    | JCTnative Tinteger, JCTenum ri ->
+	make_app ("int_of_" ^ ri.jc_enum_info_name) [e]
+    | JCTenum ri, JCTnative Tinteger ->
+	make_app (ri.jc_enum_info_name ^ "_of_int") [e]
+    | _ , JCTnull -> e
+    | JCTpointer (st, a, b), _  -> 
+	make_app "downcast_" 
+	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
+	    Var (st.jc_struct_info_name ^ "_tag") ]	
+    |  _ -> 
+	 Jc_typing.typing_error loc 
+	   "can't coerce type %a to type %a" 
+	   Jc_output.print_type tsrc Jc_output.print_type tdest
+
 (**************************
 
 terms and assertions 
@@ -116,6 +202,32 @@ let rec term label oldlabel t =
     | JCTconst JCCnull -> LVar "null"
     | JCTvar v -> lvar_info label v
     | JCTconst c -> LConst(const c)
+    | JCTunary(op,t1) ->
+	let t1' = term label oldlabel t1 in
+	LApp (unary_op op, [t1'])
+(* TODO: no need for coercion ? (contrary to expr)
+	  [coerce t.jc_term_loc (unary_arg_type op) t1.jc_term_type t1' ]
+*)
+    | JCTbinary(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
+	let t1' = term label oldlabel t1 in
+	let t2' = term label oldlabel t2 in
+	LApp (bin_op op, [ t1'; t2'])
+    | JCTbinary(t1,Bland,t2) ->
+	assert false (* should be an assertion *)
+    | JCTbinary(t1,Blor,t2) ->
+	assert false (* should be an assertion *)
+    | JCTbinary(t1,op,t2) ->
+	let t1' = term label oldlabel t1 in
+	let t2' = term label oldlabel t2 in
+	LApp (bin_op op, [ t1'; t2'])
+(* TODO: no need for coercion ? (contrary to expr)
+	let e1' = expr e1 in
+	let e2' = expr e2 in
+	let t = bin_arg_type e.jc_expr_loc op in
+	make_app (bin_op op) 
+	  [ coerce e1.jc_expr_loc t e1.jc_expr_type e1'; 
+	    coerce e2.jc_expr_loc t e2.jc_expr_type e2']	
+*)
     | JCTshift(t1,t2) -> LApp("shift",[ft t1; ft t2])
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
@@ -154,6 +266,8 @@ let rec assertion label oldlabel a =
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
     | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
     | JCAnot(a) -> LNot(fa a)
+    | JCArelation(t1,op,t2) ->
+	LPred (pred_bin_op op, [ft t1; ft t2])
     | JCAapp(f,l) -> 
 	make_logic_pred_call f (List.map ft l)	    
     | JCAforall(v,p) -> 
@@ -275,81 +389,6 @@ let rec make_lets l e =
   match l with
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
-
-let unary_op = function
-  | Uplus_int -> "uplus_int"
-  | Uminus_int -> "neg_int"
-  | Uplus_real -> "uplus_real"
-  | Uminus_real -> "uminus_real"
-  | Unot -> "not"
-
-let unary_arg_type = function
-  | Uplus_int 
-  | Uminus_int -> integer_type
-  | Uplus_real 
-  | Uminus_real -> real_type
-  | Unot -> boolean_type
-
-let bin_op = function
-  | Bgt_int -> "gt_int_"
-  | Blt_int -> "lt_int_"
-  | Bge_int -> "ge_int_"
-  | Ble_int -> "le_int_"
-  | Beq_int -> "eq_int_"
-  | Bneq_int -> "neq_int_"
-  | Badd_int -> "add_int"
-  | Bsub_int -> "sub_int"
-  | Bmul_int -> "mul_int"
-  | Bdiv_int -> "div_int"
-  | Bmod_int -> "mod_int"
-  | Beq_pointer -> "eq_pointer"
-  | Bneq_pointer -> "neq_pointer"
-  | Badd_real -> "add_real"
-  | Bsub_real -> "sub_real"
-  | Bmul_real -> "mul_real"
-  | Bdiv_real -> "div_real"
-  | Bneq_real -> "neq_real_"
-  | Beq_real -> "eq_real_"
-  | Bge_real -> "ge_real_"
-  | Ble_real -> "le_real_"
-  | Bgt_real -> "gt_real_"
-  | Blt_real -> "lt_real_"
-  | Blor | Bland -> assert false (* should be handled before for laziness *)
-  | Biff | Bimplies -> assert false (* never in expressions *)
-
-
-let bin_arg_type loc = function
-  | Bgt_int | Blt_int | Bge_int | Ble_int 
-  | Beq_int | Bneq_int 
-  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int -> integer_type
-  | Biff|Bimplies|Blor|Bland -> boolean_type
-  | Bdiv_real | Bmul_real | Bsub_real | Badd_real
-  | Bneq_real | Beq_real | Bge_real
-  | Ble_real | Bgt_real | Blt_real -> real_type
-  | Bneq_pointer | Beq_pointer -> assert false
-
-let coerce loc tdest tsrc e =
-  match tdest,tsrc with
-    | JCTnative t, JCTnative u when t=u -> e
-    | JCTlogic t, JCTlogic u when t=u -> e
-    | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
-    | JCTnative Tinteger, JCTenum ri ->
-	make_app ("int_of_" ^ ri.jc_enum_info_name) [e]
-    | JCTenum ri, JCTnative Tinteger ->
-	make_app (ri.jc_enum_info_name ^ "_of_int") [e]
-    | _ , JCTnull -> e
-    | JCTpointer (st, a, b), _  -> 
-	make_app "downcast_" 
-	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
-	    Var (st.jc_struct_info_name ^ "_tag") ]	
-    |  _ -> 
-	 Jc_typing.typing_error loc 
-	   "can't coerce type %a to type %a" 
-	   Jc_output.print_type tsrc Jc_output.print_type tdest
-
-
-
-
 
 let rec expr e : expr =
   match e.jc_expr_node with
