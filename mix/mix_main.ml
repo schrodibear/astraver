@@ -71,9 +71,14 @@ let cl =
 let wl = interp cl
 
 let print_pseudo fmt p = match p.node with
-  | Verbatim s -> fprintf fmt "%s@\n@\n" s
-  | Equ_addr (id,_) -> fprintf fmt "logic %s : int@\n@\n" id
-  | _ -> ()
+  | Verbatim s -> 
+      fprintf fmt "%s@\n@\n" s
+  | Equ_addr (id,_) | Orig (Some id, _) -> 
+      fprintf fmt "logic %s : int@\n@\n" id;
+      let n = Hashtbl.find equ id in
+      fprintf fmt "axiom %s_equ : %s = %d@\n@\n" id id n
+  | _ -> 
+      ()
 
 let print_code fmt = 
   fprintf fmt 

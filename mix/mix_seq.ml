@@ -69,10 +69,12 @@ include Mix_cfg.Make(X)
 type error = 
   | UnboundLabel of string
   | IllegalCodeAddress of int
+  | ClashEqu of string
 
 let report fmt = function
   | UnboundLabel s -> fprintf fmt "unbound label %s" s
   | IllegalCodeAddress n -> fprintf fmt "illegal address %d" n
+  | ClashEqu id -> fprintf fmt "clash with previous EQU %s" id
 
 exception Error of loc * error
 
@@ -95,9 +97,7 @@ let find_label_by_addr loc a =
   try Hashtbl.find labels_by_addr a
   with Not_found -> error loc (IllegalCodeAddress a)
 
-(*
 let equ = Hashtbl.create 17 
-*)
 
 (* Mixal: we resolve addresses *)
 
@@ -114,16 +114,19 @@ let eval_address self loc a =
     | PAconst n -> int_of_string n
     | PAself -> self
   in
-  match a.pop_address, a.pop_index, a.pop_field with
-    | Some a, None, None -> addr a
+  addr a
+
+let eval_operand self loc op =
+  match op.pop_address, op.pop_index, op.pop_field with
+    | Some a, None, None -> eval_address self loc a
     | None, _, _ | _, Some _, _ | _, _, Some _ -> assert false (*TODO*)
 
 let address self loc = function
   | { pop_address = Some (PAident id); pop_index = None; pop_field = None } ->
       find_label_by_name loc id
-  | a ->
+  | op ->
       (* otherwise we eval the address and find the corresponding label *)
-      find_label_by_addr loc (eval_address self loc a)
+      find_label_by_addr loc (eval_operand self loc op)
 
 (* prev = previous instruction
    lab = label of current instruction *)
@@ -143,10 +146,30 @@ let interp_stmt self prev lab s = match s.node with
   | PSinstr _ -> 
       Aother (X.Mix s)
 
+let declare_equ loc id a =
+  if Hashtbl.mem equ id then error loc (ClashEqu id);
+  Hashtbl.add equ id a
+
 let mixal (pseudo,asm) init =
-  (* TODO pseudo *)  
   let self = ref 0 in
-  (* 1. declare labels *)
+  (* pseudo *)
+  List.iter
+    (fun p -> match p.node with
+      | Equ_addr (id, a) -> 
+	  declare_equ p.loc id (eval_address !self p.loc a)
+      | Equ_field _ -> 
+	  assert false (*TODO*)
+      | Orig (id, a) ->
+	  let n = eval_address !self p.loc a in
+	  begin match id with 
+	    | Some id -> declare_equ p.loc id n 
+	    | None -> () 
+	  end;
+	  self := n
+      | Verbatim _ -> 
+	  ())
+    pseudo;
+  (* declare code labels *)
   let asm =
     List.map
       (fun (lo, ps) -> 
@@ -159,7 +182,7 @@ let mixal (pseudo,asm) init =
 	l, ps)
     asm
   in
-  (* 2. *)
+  (* instruction interpretation *)
   let rec map_instr prev = function
     | [] -> 
 	[]
