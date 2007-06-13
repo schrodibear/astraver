@@ -36,7 +36,7 @@ module Make(X : INPUT) = struct
     | Ahalt
     | Aother of X.statement
 
-  type asm_code = (X.Label.t option * asm) list
+  type asm_code = (X.Label.t * asm) list
   
   type seq_code = {
     seq_pre : X.predicate option;
@@ -91,8 +91,7 @@ module Make(X : INPUT) = struct
     in
     let lcfg = HL.create 97 in (* label -> (label * stmt) list *)
     let rec descend st = function
-      | (l, Aother st1) :: asm when 
-	(match l with None -> true | Some l -> not (HL.mem node_labels l)) ->
+      | (l, Aother st1) :: asm when not (HL.mem node_labels l) ->
  	  descend (X.append_stmt st st1) asm
       | asm ->
 	  st, asm
@@ -106,13 +105,11 @@ module Make(X : INPUT) = struct
 	  l
       | (l, Ainvariant i) :: asm ->
 	  (* invariant -> create a node *)
-	  let l = match l with None -> X.Label.create () | Some l -> l in
 	  let _ = create_node l (Ninvariant i) in
 	  let m = make_nodes asm in
 	  HL.add lcfg l [m, X.void_stmt];
 	  l
       | (l, a) :: asm  ->
-	  let l = match l with None -> X.Label.create () | Some l -> l in
 	  let _ = create_node l Nother in
 	  begin match a with
 	    | Ainvariant _ -> 

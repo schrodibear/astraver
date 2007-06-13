@@ -22,8 +22,8 @@
 
 /* Precedences */
 
-%left PLUS
-%nonassoc MINUS
+%left PLUS MINUS
+%nonassoc uminus
 
 /* Entry points */
 
@@ -89,7 +89,8 @@ address:
 | IDENT { PAident $1 }
 | INTEGER { PAconst $1 }
 | address PLUS address { PAplus ($1, $3) }
-| MINUS address { PAuminus $2 }
+| address MINUS address { PAminus ($1, $3) }
+| MINUS address %prec uminus { PAuminus $2 }
 ;
 
 index_opt:

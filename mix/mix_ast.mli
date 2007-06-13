@@ -21,6 +21,7 @@ type paddress =
   | PAconst of string
   | PAident of string
   | PAplus of paddress * paddress
+  | PAminus of paddress * paddress
   | PAuminus of paddress
 
 type pfield =

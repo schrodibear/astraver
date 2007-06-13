@@ -39,7 +39,7 @@ module Make(X : INPUT) : sig
     | Ahalt
     | Aother of X.statement
 
-  type asm_code = (X.Label.t option * asm) list
+  type asm_code = (X.Label.t * asm) list
   
   type seq_code = {
     seq_pre : X.predicate option;

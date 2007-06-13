@@ -29,6 +29,7 @@ let rec value_addr = function
   | PAconst s -> Tconst s
   | PAident s -> Tvar s
   | PAplus (a1, a2) -> Tapp ("add_int", [value_addr a1; value_addr a2])
+  | PAminus (a1, a2) -> Tapp ("sub_int", [value_addr a1; value_addr a2])
   | PAuminus a -> Tapp ("neg_int", [value_addr a])
 
 let value_op op = match op.pop_address, op.pop_index, op.pop_field with
