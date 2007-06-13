@@ -35,7 +35,14 @@ let tr_base_type t =
     | Tinteger -> JCTnative Jc_env.Tinteger
     | Tshort -> JCTenum int16_range 
     | Tint -> JCTenum int32_range 
-    | _ -> assert false (* TODO *)
+    | Tnull -> JCTnull
+    | Treal -> assert false (* TODO *)
+    | Tdouble -> assert false (* TODO *)
+    | Tlong -> assert false (* TODO *)
+    | Tfloat -> assert false (* TODO *)
+    | Tchar -> assert false (* TODO *)
+    | Tbyte  -> assert false (* TODO *)
+
 
 let get_class ci =
   {

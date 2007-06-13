@@ -239,7 +239,7 @@ type texpr_node =
   | JCTEassign_local of var_info * texpr
   | JCTEassign_local_op of var_info * bin_op * texpr
   | JCTEassign_heap of texpr * field_info * texpr
-  | JCTElet of var_info * texpr * texpr
+  | JCTEassign_heap_op of texpr * field_info * bin_op * texpr
   | JCTEincr_local of tincr_op * var_info 
   | JCTEincr_heap of tincr_op * texpr * field_info 
   | JCTEif of texpr * texpr * texpr

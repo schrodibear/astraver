@@ -68,7 +68,7 @@ public Purse() {
       @*/
     public static int test(Purse p1, Purse p2) {
 	p1.balance = 0;
-	p2.credit(100);
+	// p2.credit(100);
 	return p1.balance;
     }
 

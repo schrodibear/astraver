@@ -538,6 +538,7 @@ let get_this_expr loc env =
     java_expr_type = vi.java_var_info_type;
     java_expr_loc = loc }
 
+(*
 let type_expr_name loc env n =
   match n with
       | [(loc,id)] -> 
@@ -554,12 +555,73 @@ let type_expr_name loc env n =
 	      typing_error loc "unbound identifier %s" id
 	  end	  
       | _ -> assert false (* TODO *)
+*)
+
+type classified_name =
+  | ExpressionName of expr
+
+let rec classify_name env name =
+  match name with
+    | [] -> assert false
+    | [(loc,id)] ->
+	begin
+	  try
+	    match List.assoc id env with
+	      | Local_variable_entry vi -> 
+		  ExpressionName { 
+		    java_expr_node = JEvar vi; 
+		    java_expr_type = vi.java_var_info_type;
+		    java_expr_loc = loc 
+		  }
+	      | Instance_variable_entry fi ->
+		  let this = get_this_expr loc env in
+		  ExpressionName {
+		    java_expr_node = JEfield_access(this,fi);
+		    java_expr_type = fi.java_field_info_type;
+		    java_expr_loc = loc
+		  }
+	  with Not_found -> 
+	    assert false (* TODO *)
+	end		
+    | (loc,id)::n ->
+	match classify_name env n with
+	  | ExpressionName e -> 
+	      begin
+		match e.java_expr_type with
+		  | JTYclass(_,c) ->
+		      begin
+			try
+			  let fi = 
+			    list_assoc_field_name id 
+			      c.class_info_fields
+			  in
+			  ExpressionName { 
+			    java_expr_loc = loc;
+			    java_expr_type = fi.java_field_info_type ;
+			    java_expr_node = JEfield_access(e,fi)
+			  }
+			with Not_found ->
+			  typing_error loc 
+			    "no such field in this class"
+		      end
+		  | JTYarray _ -> 
+		      assert false (* TODO: .length *)
+		  | JTYbase _ ->
+		      typing_error e.java_expr_loc 
+			"not a class type" 
+	      end
+
 
 let rec expr env e =
   let ty,te = 
     match e.java_pexpr_node with
       | JPElit l -> let t,l = lit l in t,(JElit l)
-      | JPEname n -> type_expr_name e.java_pexpr_loc env n
+      | JPEname n -> 
+	  begin
+	    match classify_name env n with
+	      | ExpressionName te ->
+		  te.java_expr_type, te.java_expr_node
+	  end
       | JPEthis -> 
 	  let vi = get_this e.java_pexpr_loc env in
 	  vi.java_var_info_type, JEvar vi
@@ -578,6 +640,7 @@ let rec expr env e =
 	  begin
 	    let te = expr env e in
 	    match n with
+	      | [] -> assert false
 	      | [(loc,id)] ->
 		  begin
 		    try
@@ -613,9 +676,31 @@ let rec expr env e =
 		      typing_error loc "unbound identifier %s" id
 		  end
 	      | (loc,id)::r ->
-		  (* let _tyr,_tr = expr env r in *)
-		  assert false (* TODO *)
-	      | [] -> assert false
+		  begin
+		    match classify_name env r with
+		      | ExpressionName e ->
+			  begin
+			    match e.java_expr_type with
+			      | JTYclass(_,c) ->
+				  begin
+				    try
+				      let fi = 
+					list_assoc_field_name id 
+					  c.class_info_fields
+				      in
+				      fi.java_field_info_type,
+				      JEassign_field(e,fi,te)
+				    with Not_found ->
+				      typing_error loc 
+					"no such field in this class"
+				  end
+			      | JTYarray _ -> 
+				  assert false (* TODO: .length *)
+			      | JTYbase _ ->
+				  typing_error e.java_expr_loc 
+				    "not a class type" 
+			  end
+		  end
 	  end
       | JPEincr (op, e)-> 
 	  let te = expr env e in 

@@ -205,10 +205,11 @@ let rec expr fmt e =
 	    | Postfix_dec ->
 		fprintf fmt "%s--" v.jc_var_info_name
 	end
-    | JCTElet(v,e1,e2) -> 
-	fprintf fmt "let %s = %a@ in %a" v.jc_var_info_name expr e1 expr e2
     | JCTEassign_heap (e1, fi, e2) -> 
 	fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
+    | JCTEassign_heap_op (e1, fi, op, e2) -> 
+	fprintf fmt "%a.%s %s= %a" expr e1 fi.jc_field_info_name 
+	  (bin_op op) expr e2
     | JCTEassign_local (v, e) -> 
 	fprintf fmt "%s = %a" v.jc_var_info_name expr e
     | JCTEassign_local_op (v, op, e) -> 

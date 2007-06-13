@@ -946,24 +946,29 @@ let rec expr env e =
 	    match te1.jc_texpr_node with
 	      | JCTEvar v ->
 		  set_assigned v;
-		  let ev = { jc_texpr_loc = te1.jc_texpr_loc;
-			     jc_texpr_type = v.jc_var_info_type;
-			     jc_texpr_node = JCTEvar v }
-		  in
-		  let t,res = make_bin_app e.jc_pexpr_loc op ev te2 in
-		  let res =
-		    { jc_texpr_node = res;
-		      jc_texpr_type = t;
-		      jc_texpr_loc = e2.jc_pexpr_loc;
-		    } 
-		  in
-		  if subtype t t1 then 
-		    t1,JCTEassign_local(v, res)
+		  let t,res = make_bin_app e.jc_pexpr_loc op te1 te2 in
+		  if subtype t t1 then
+		    match res with
+		      | JCTEbinary(_,op,_) ->
+			  t1,JCTEassign_local_op(v, op, te2)
+		      | _ -> assert false
 		  else
 		    typing_error e2.jc_pexpr_loc 
 		      "type '%a' expected"
 		      print_type t1
-	      | JCTEderef(e,f) ->
+	      | JCTEderef(te,f) ->
+		  let t,res = make_bin_app e.jc_pexpr_loc op te1 te2 in
+		  if subtype t t1 then
+		    match res with
+		      | JCTEbinary(_,op,_) ->
+			  t1,JCTEassign_heap_op(te, f, op, te2)
+		      | _ -> assert false
+		  else
+		    typing_error e2.jc_pexpr_loc 
+		      "type '%a' expected"
+		      print_type t1
+(*
+
 		  let vi = newvar e.jc_texpr_type in
 		  vi.jc_var_info_assigned <- true;
 		  let v = { jc_texpr_loc = e.jc_texpr_loc;
@@ -997,6 +1002,7 @@ let rec expr env e =
 		    typing_error e2.jc_pexpr_loc 
 		      "type '%a' expected"
 		      print_type t1
+*)
 	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	  end
 

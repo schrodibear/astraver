@@ -136,7 +136,6 @@ let make_try loc s exl fs =
 let make_decl loc vi eo s =
   make_node loc (JCSdecl (vi, eo, s))
 
-(* only works with boolean variables, and integer due to hack for if-expr *)
 let make_decls loc sl tl =
   List.fold_right 
     (fun vi acc -> 
@@ -181,12 +180,21 @@ let make_tif loc e ts es =
 let make_tthrow loc exc e =
   make_tnode loc (JCTSthrow (exc,e))
 
+let make_binary loc e1 t op e2 =
+  let t = match t with
+    | JCTenum _ -> integer_type
+    | _ -> t
+  in
+    { jc_expr_node = JCEbinary(e1, op, e2);
+      jc_expr_type = t;
+      jc_expr_loc = loc }
+
+let make_int_binary loc e1 op e2 = make_binary loc e1 integer_type op e2
+
 
 let make_incr_local loc op vi =
   make_assign_local loc vi
-    { jc_expr_node = JCEbinary(make_var loc vi, op, one_const loc);
-      jc_expr_type = integer_type;
-      jc_expr_loc = loc }
+    (make_int_binary loc (make_var loc vi) op (one_const loc))
 
 let make_incr_heap loc op e fi = 
   let d =
@@ -196,16 +204,18 @@ let make_incr_heap loc op e fi =
     }
   in
   make_assign_heap loc e fi
-    { jc_expr_node = JCEbinary(d, op, one_const loc);
-      jc_expr_type = integer_type;
-      jc_expr_loc = loc }
+    (make_int_binary loc d op (one_const loc))
   
+
+let op_of_incdec = function
+  | Prefix_inc | Postfix_inc -> Badd_int 
+  | Prefix_dec | Postfix_dec -> Bsub_int
 
 (*
 
   expr e : returns ((sl,tl),ne) where
 
-   ne = normalized expression for e
+   ne = normalized expression for e, without side-effect
    sl = sequences of statements to execute before e
    tl = sequences of fresh variables needed
 
@@ -258,56 +268,90 @@ let rec expr e =
 	  let (l,tl),e = expr e in
 	  let stat = make_assign_local loc vi e in
 	  (l@[stat], tl), JCEvar vi
-      | JCTEassign_local_op (vi,op, e) -> assert false (* TODO *)
+      | JCTEassign_local_op (vi,op, e) -> 
+	  (* 
+	     vi op= e becomes:
+
+	     stat0: tmp <- vi
+	     <e effects>
+             stat: vi <- tmp op e
+             ... vi ...
+	  *)             
+	  let tmp = newvar vi.jc_var_info_type in
+	  tmp.jc_var_info_assigned <- true;
+	  let stat0 = 
+	    make_assign_local loc tmp (make_var loc vi) 
+	  in
+	  let (l,tl),e = expr e in
+	  let e = 
+	    make_binary loc (make_var loc tmp) vi.jc_var_info_type op e 
+	  in
+	  let stat = make_assign_local loc vi e in
+	  (stat0::l@[stat], tmp::tl), JCEvar vi
 
       | JCTEassign_heap (e1, fi, e2) ->
 	  let (l1,tl1),e1 = expr e1 in
 	  let (l2,tl2),e2 = expr e2 in
 	  let stat = make_assign_heap loc e1 fi e2 in
 	  (l1@l2@[stat], tl1@tl2), JCEderef (e1, fi)
-      | JCTElet(vi,e1,e2) ->
+
+      | JCTEassign_heap_op (e1, fi, op, e2) -> 
+	  (* 
+	     e1.fi op= e2 becomes:
+
+	     <e1 effects>
+             stat1: tmp1 <- e1
+             <e2 effects>
+             stat2: tmp2 <- tmp1.fi op e2
+	     stat: tmp1.fi <- tmp2
+             ... tmp2 ...
+	  *)             
 	  let (l1,tl1),e1 = expr e1 in
+	  let tmp1 = newvar e1.jc_expr_type in
+	  tmp1.jc_var_info_assigned <- true;
+	  let stat1 = make_assign_local loc tmp1 e1 in
 	  let (l2,tl2),e2 = expr e2 in
-	  let stat = make_assign_local loc vi e1 in
-	  (l1@[stat]@l2,tl1@[vi]@tl2), e2.jc_expr_node
+	  let e3 = 
+	    make_binary loc 
+	     (make_deref loc (make_var loc tmp1) fi) 
+	      fi.jc_field_info_type op e2
+	  in
+	  let tmp2 = newvar fi.jc_field_info_type in
+	  tmp2.jc_var_info_assigned <- true;
+	  let stat2 = make_assign_local loc tmp2 e3 in
+	  let stat = 
+	    make_assign_heap loc (make_var loc tmp1) fi (make_var loc tmp2) 
+	  in
+	  (l1@stat1::l2@[stat2; stat], tl1@tmp1::tl2@[tmp2]), JCEvar tmp2
+
       | JCTEincr_local (op, vi) ->
 	  begin match op with
-	    | Prefix_inc -> 
-		([make_incr_local loc Badd_int vi], []), JCEvar vi
-	    | Prefix_dec ->
-		([make_incr_local loc Bsub_int vi], []), JCEvar vi
-	    | Postfix_inc -> 
-		let tmp = newvar vi.jc_var_info_type in
-		let stat = make_decl loc tmp (Some (make_var loc vi)) 
-		  (make_block loc []) in
-		(stat::[make_incr_local loc Badd_int vi], []), JCEvar tmp
-
-	    | Postfix_dec ->
+	    | Prefix_inc | Prefix_dec ->
+		([make_incr_local loc (op_of_incdec op) vi], []), JCEvar vi
+	    | Postfix_inc | Postfix_dec ->
 	    	let tmp = newvar vi.jc_var_info_type in
-		let stat = make_decl loc tmp (Some (make_var loc vi))
-		  (make_block loc []) in
-		(stat::[make_incr_local loc Bsub_int vi], []), JCEvar tmp
+		tmp.jc_var_info_assigned <- true;
+		let stat0 = 
+		  make_assign_local loc tmp (make_var loc vi) 
+		in
+		([stat0 ; make_incr_local loc (op_of_incdec op) vi], [tmp]), 
+		JCEvar tmp
 	  end
       | JCTEincr_heap (op, e, fi) ->
 	  begin match op with
-	    | Prefix_inc -> 
+	    | Prefix_inc | Prefix_dec ->
 		let (l,tl),e = expr e in
-		(l@[make_incr_heap loc Badd_int e fi],tl), JCEderef (e, fi)
-	    | Prefix_dec ->
-		let (l,tl),e = expr e in
-		(l@[make_incr_heap loc Bsub_int e fi],tl), JCEderef (e, fi)
-	    | Postfix_inc ->
+		(l@[make_incr_heap loc (op_of_incdec op) e fi],tl), 
+		JCEderef (e, fi)
+	    | Postfix_inc | Postfix_dec ->
 		let (l,tl),e = expr e in
 		let tmp = newvar fi.jc_field_info_type in
-		let stat = make_decl loc tmp (Some (make_deref loc e fi))
-		  (make_block loc []) in
-		(l@stat::[make_incr_heap loc Badd_int e fi],tl), JCEvar tmp
-	    | Postfix_dec ->
-		let (l,tl),e = expr e in
-		let tmp = newvar fi.jc_field_info_type in
-		let stat = make_decl loc tmp (Some (make_deref loc e fi))
-		  (make_block loc []) in
-		(l@stat::[make_incr_heap loc Bsub_int e fi],tl), JCEvar tmp
+		tmp.jc_var_info_assigned <- true;
+		let stat0 = 
+		  make_assign_local loc tmp (make_deref loc e fi) 
+		in
+		(l@stat0::[make_incr_heap loc Badd_int e fi],tl@[tmp]), 
+		JCEvar tmp
 	  end
       | JCTEif (e1, e2, e3) ->
 	  let (l1,tl1),e1 = expr e1 in
@@ -541,13 +585,8 @@ and statement s =
 		   let empty_block = make_block loc [] in
 		   (* test for case considered *)
 		   let etest = 
-		     { 
-		       jc_expr_node = 
-			 JCEbinary(e, Beq_int, 
-				    make_const loc integer_type c) ;
-		       jc_expr_type = integer_type;
-		       jc_expr_loc = loc 
-		     }		       
+		     make_int_binary loc e Beq_int 
+		       (make_const loc integer_type c) 
 		   in
 		   (* case translated into if-statement *)
 		   make_if loc etest block_stat empty_block 
