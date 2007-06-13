@@ -30,6 +30,10 @@ shortint max(shortint x, shortint y)
 
 /* complements for non-linear integer arithmetic */
 
+axiom zero_right: \forall integer x; x*0 == 0
+axiom zero_left: \forall integer x; 0*x == 0
+axiom one_right: \forall integer x; x*1 == x
+axiom one_left: \forall integer x; 1*x == x
 axiom distr_right: \forall integer x,y,z; x*(y+z) == (x*y)+(x*z)
 axiom distr_left: \forall integer x,y,z; (x+y)*z == (x*z)+(y*z)
     // axiom sqr_elim: \forall integer x; x*x <= 32767 ==> x < 256
