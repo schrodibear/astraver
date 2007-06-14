@@ -33,7 +33,6 @@ unit move(Point[0] p)
 
 /*
 Local Variables: 
-mode: java
 compile-command: "make color"
 End: 
 */

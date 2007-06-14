@@ -1511,6 +1511,7 @@ let rec decl d =
 	let root,struct_info = add_typedecl d (id,parent) in
 	let env = List.map (field root) fields in
 	struct_info.jc_struct_info_fields <- env;
+	(* declare invariants as logical functions *)
 	let invariants =
 	  List.fold_left
 	    (fun acc (id,x,e) ->	
