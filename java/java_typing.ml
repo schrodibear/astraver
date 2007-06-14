@@ -15,6 +15,7 @@ let typing_error l =
 let imported_packages = ref [ "java.lang" ]
 
 let invariants_table = Hashtbl.create 17
+
 let axioms_table = Hashtbl.create 17
 
 let class_table = Hashtbl.create 17 
@@ -32,7 +33,7 @@ let get_class id =
 	Hashtbl.add class_table id ci;
 	ci
 
-let type_type ty =
+let rec type_type ty =
   match ty with
     | Base_type t -> JTYbase t
     | Type_name qid -> 
@@ -43,7 +44,9 @@ let type_type ty =
 		JTYclass(false,ci)
 	    | _ -> assert false (* TODO *)
 	end
-    | Array_type_expr _ -> assert false (* TODO *)
+    | Array_type_expr t -> 
+	let ty = type_type t in
+	JTYarray ty
 
 let string_of_base_type t =
   match t with
@@ -261,6 +264,7 @@ let rec list_assoc_field_name id l =
 	if fi.java_field_info_name = id then fi
 	else list_assoc_field_name id r
 
+(*
 type ambiguous_name =
   | ExpressionName of term
 
@@ -286,7 +290,71 @@ let type_ambiguous_name loc env qi =
 	end
     | [] -> assert false (* impossible *)
     | (loc,id)::qi -> assert false (* TODO *)
+*)
+
+type classified_name =
+  | TermName of term
+
+let rec classify_name env name =
+  match name with
+    | [] -> assert false
+    | [(loc,id)] ->
+	begin
+	  try
+	    match List.assoc id env with
+	      | Local_variable_entry vi -> 
+		  TermName { 
+		    java_term_node = JTvar vi; 
+		    java_term_type = vi.java_var_info_type;
+		    java_term_loc = loc 
+		  }
+	      | Instance_variable_entry fi ->
+		  let this = get_this_term loc env in
+		  TermName {
+		    java_term_node = JTfield_access(this,fi);
+		    java_term_type = fi.java_field_info_type;
+		    java_term_loc = loc
+		  }
+	  with Not_found -> 
+	    typing_error loc "unknown identifier %s" id
+	end		
+    | (loc,id)::n ->
+	match classify_name env n with
+	  | TermName t -> 
+	      begin
+		match t.java_term_type with
+		  | JTYclass(_,c) ->
+		      begin
+			try
+			  let fi = 
+			    list_assoc_field_name id 
+			      c.class_info_fields
+			  in
+			  TermName { 
+			    java_term_loc = loc;
+			    java_term_type = fi.java_field_info_type ;
+			    java_term_node = JTfield_access(t,fi)
+			  }
+			with Not_found ->
+			  typing_error loc 
+			    "no such field in this class"
+		      end
+		  | JTYarray _ -> 
+		      if id="length" then
+			TermName {
+			  java_term_loc = loc;
+			  java_term_type = integer_type;
+			  java_term_node = JTarray_length(t)
+			}
+		      else
+			typing_error loc 
+			  "no such field in array type"
+		  | JTYbase _ ->
+		      typing_error t.java_term_loc 
+			"not a class type" 
+	      end
 	
+(*
 
 let type_term_name loc env n =
   match n with
@@ -322,7 +390,7 @@ let type_term_name loc env n =
 		    end
 		| _ ->  typing_error loc
 			      "class type expected"
-
+*)
 
   
 let rec term env e =
@@ -345,7 +413,11 @@ let rec term env e =
 	end
 *)
     | JPEname n ->
-	type_term_name e.java_pexpr_loc env n
+	begin
+	  match classify_name env n with
+	    | TermName t ->
+		t.java_term_type, t.java_term_node
+	end
 
     | JPEresult -> 
 	begin
@@ -372,7 +444,20 @@ let rec term env e =
 	let te1 = term env e1 in te1.java_term_type,JTold te1	
     | JPEinstanceof (_, _)-> assert false (* TODO *)
     | JPEcast (_, _)-> assert false (* TODO *)
-    | JPEarray_access (_, _)-> assert false (* TODO *)
+    | JPEarray_access (e1, e2)-> 
+	let te1 = term env e1 and te2 = term env e2 in 
+	begin
+	  match te1.java_term_type with
+	    | JTYarray t ->
+		if is_numeric te2.java_term_type then
+		  t, JTarray_access(te1,te2)
+		else
+		  typing_error e2.java_pexpr_loc
+		    "integer expected"	
+	    | _ ->
+		typing_error e1.java_pexpr_loc
+		  "not an array"	
+	end
     | JPEnew_array _-> assert false (* TODO *)
     | JPEnew (_, _)-> assert false (* TODO *)
     | JPEsuper_call (_, _)-> assert false (* TODO *)
@@ -380,7 +465,6 @@ let rec term env e =
     | JPEfield_access fa -> 
 	begin
 	  match fa with
-	    | Array_length _ -> assert false (* TODO *)
 	    | Primary_access (e1, f) -> 
 		let te1 = term env e1 in
 		begin
@@ -538,79 +622,25 @@ let get_this_expr loc env =
     java_expr_type = vi.java_var_info_type;
     java_expr_loc = loc }
 
-(*
-let type_expr_name loc env n =
-  match n with
-      | [(loc,id)] -> 
-	  begin
-	    try
-	    match List.assoc id env with
-	      | Local_variable_entry vi -> 
-		  vi.java_var_info_type,JEvar vi
-	      | Instance_variable_entry fi ->
-		  let this = get_this_expr loc env in
-		  fi.java_field_info_type,
-		  JEfield_access(this,fi)
-	    with Not_found -> 
-	      typing_error loc "unbound identifier %s" id
-	  end	  
-      | _ -> assert false (* TODO *)
-*)
-
-type classified_name =
-  | ExpressionName of expr
-
-let rec classify_name env name =
-  match name with
-    | [] -> assert false
-    | [(loc,id)] ->
-	begin
-	  try
-	    match List.assoc id env with
-	      | Local_variable_entry vi -> 
-		  ExpressionName { 
-		    java_expr_node = JEvar vi; 
-		    java_expr_type = vi.java_var_info_type;
-		    java_expr_loc = loc 
-		  }
-	      | Instance_variable_entry fi ->
-		  let this = get_this_expr loc env in
-		  ExpressionName {
-		    java_expr_node = JEfield_access(this,fi);
-		    java_expr_type = fi.java_field_info_type;
-		    java_expr_loc = loc
-		  }
-	  with Not_found -> 
-	    assert false (* TODO *)
-	end		
-    | (loc,id)::n ->
-	match classify_name env n with
-	  | ExpressionName e -> 
-	      begin
-		match e.java_expr_type with
-		  | JTYclass(_,c) ->
-		      begin
-			try
-			  let fi = 
-			    list_assoc_field_name id 
-			      c.class_info_fields
-			  in
-			  ExpressionName { 
-			    java_expr_loc = loc;
-			    java_expr_type = fi.java_field_info_type ;
-			    java_expr_node = JEfield_access(e,fi)
-			  }
-			with Not_found ->
-			  typing_error loc 
-			    "no such field in this class"
-		      end
-		  | JTYarray _ -> 
-		      assert false (* TODO: .length *)
-		  | JTYbase _ ->
-		      typing_error e.java_expr_loc 
-			"not a class type" 
-	      end
-
+let rec expr_of_term t =
+  let n =
+    match t.java_term_node with
+      | JTvar vi -> JEvar vi
+      | JTold _ -> assert false (* TODO *)
+      | JTfield_access(t, fi) -> 
+	  JEfield_access(expr_of_term t,fi)
+      | JTarray_length(t) -> 
+	  JEarray_length(expr_of_term t)
+      | JTarray_access(t1,t2) -> 
+	  JEarray_access(expr_of_term t1, expr_of_term t2)
+      | JTapp (_, _) -> assert false (* TODO *)
+      | JTbin (_, _, _, _) -> assert false (* TODO *)
+      | JTlit _ -> assert false (* TODO *)
+  in
+  { java_expr_loc = t.java_term_loc;
+    java_expr_type = t.java_term_type;
+    java_expr_node = n ;
+  }
 
 let rec expr env e =
   let ty,te = 
@@ -619,15 +649,29 @@ let rec expr env e =
       | JPEname n -> 
 	  begin
 	    match classify_name env n with
-	      | ExpressionName te ->
-		  te.java_expr_type, te.java_expr_node
+	      | TermName t ->
+		  let e = expr_of_term t in
+		  e.java_expr_type, e.java_expr_node
 	  end
       | JPEthis -> 
 	  let vi = get_this e.java_pexpr_loc env in
 	  vi.java_var_info_type, JEvar vi
       | JPEinstanceof (_, _)-> assert false (* TODO *)
       | JPEcast (_, _)-> assert false (* TODO *)
-      | JPEarray_access (_, _)-> assert false (* TODO *)
+      | JPEarray_access (e1, e2)-> 
+	  let te1 = expr env e1 and te2 = expr env e2 in 
+	  begin
+	    match te1.java_expr_type with
+	      | JTYarray t ->
+		  if is_numeric te2.java_expr_type then
+		    t, JEarray_access(te1,te2)
+		  else
+		    typing_error e2.java_pexpr_loc
+		      "integer expected"	
+	      | _ ->
+		  typing_error e1.java_pexpr_loc
+		    "not an array"	
+	  end
       | JPEnew_array _-> assert false (* TODO *)
       | JPEnew (_, _)-> assert false (* TODO *)
       | JPEsuper_call (_, _)-> assert false (* TODO *)
@@ -679,9 +723,9 @@ let rec expr env e =
 	      | (loc,id)::r ->
 		  begin
 		    match classify_name env r with
-		      | ExpressionName e ->
+		      | TermName t ->
 			  begin
-			    match e.java_expr_type with
+			    match t.java_term_type with
 			      | JTYclass(_,c) ->
 				  begin
 				    try
@@ -690,7 +734,7 @@ let rec expr env e =
 					  c.class_info_fields
 				      in
 				      fi.java_field_info_type,
-				      JEassign_field(e,fi,te)
+				      JEassign_field(expr_of_term t,fi,te)
 				    with Not_found ->
 				      typing_error loc 
 					"no such field in this class"
@@ -698,7 +742,7 @@ let rec expr env e =
 			      | JTYarray _ -> 
 				  assert false (* TODO: .length *)
 			      | JTYbase _ ->
-				  typing_error e.java_expr_loc 
+				  typing_error t.java_term_loc 
 				    "not a class type" 
 			  end
 		  end
@@ -750,6 +794,25 @@ let rec type_variable_id ty id =
 	JTYarray t,i
 *)
 
+let variable_declaration env vd =
+  let ty = type_type vd.variable_type in
+  let l =
+    List.map
+      (fun vd ->
+	 let ty',id = var_type_and_id ty vd.variable_id in
+	 match vd.variable_initializer with
+	   | None -> (id,ty',None)
+	   | Some e -> 
+	       let i = type_initializer env ty' e in
+	       (id,ty',Some i))
+      vd.variable_decls
+  in
+  List.fold_right
+      (fun (id,ty,i) (env,decls)->
+	 let vi = var ty id in		     
+	 (id,Local_variable_entry vi)::env,(vi,i)::decls)
+      l (env,[])
+
 let rec statement env s =
   let s' =
     match s.java_pstatement_node with
@@ -764,7 +827,9 @@ let rec statement env s =
 	    typing_error e.java_pexpr_loc "boolean expected"
       | JPSloop_annot (inv, dec) -> assert false
       | JPSannot (_, _)-> assert false (* TODO *)
-      | JPSassert _-> assert false (* TODO *)
+      | JPSassert(id,a) ->
+	  let ta = assertion env a in
+	  JSassert(Option_misc.map snd id,ta)
       | JPSsynchronized (_, _)-> assert false (* TODO *)
       | JPSblock l -> (block env l).java_statement_node
       | JPSswitch (_, _)-> assert false (* TODO *)
@@ -819,25 +884,7 @@ and statements env b =
 	match s.java_pstatement_node with
 	  | JPSskip -> statements env rem
 	  | JPSvar_decl vd -> 
-	      let ty = type_type vd.variable_type in
-	      let l =
-		List.map
-		  (fun vd ->
-		     let ty',id = var_type_and_id ty vd.variable_id in
-		     match vd.variable_initializer with
-		       | None -> (id,ty',None)
-		       | Some e -> 
-			   let i = type_initializer env ty' e in
-			   (id,ty',Some i))
-		  vd.variable_decls
-	      in
-	      let env,decls =
-		List.fold_right
-		  (fun (id,ty,i) (env,decls)->
-		     let vi = var ty id in		     
-		     (id,Local_variable_entry vi)::env,(vi,i)::decls)
-		  l (env,[])
-	      in
+	      let env,decls = variable_declaration env vd in
 	      let r = block env rem in
 	      let s =
 		List.fold_right
@@ -848,17 +895,26 @@ and statements env b =
 		  decls r in
 	      [s]
 	  | JPSloop_annot(inv,dec) ->
-	      let inv = assertion env inv in
-	      let dec = term env dec in
 	      begin
 		match rem with
 		  | { java_pstatement_node = JPSwhile(e,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
+		      let inv = assertion env inv in
+		      let dec = term env dec in
 		      let e = expr env e in
 		      let s = statement env s in
 		      { java_statement_node = JSwhile(e,inv,dec,s);
 			java_statement_loc = loc } :: statements env rem
-		  | _ -> assert false (* TODO *)
+		  | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
+		      java_pstatement_loc = loc } :: rem -> 
+		      let env,decls = variable_declaration env vd in
+		      let inv = assertion env inv in
+		      let dec = term env dec in
+		      let e = expr env e in
+		      let sl = statements env sl in
+		      let s = statement env s in
+		      { java_statement_node = JSfor_decl(decls,e,inv,dec,sl,s);
+			java_statement_loc = loc } :: statements env rem		  | _ -> assert false
 	      end      
 	  | _ ->
 	      let s' = statement env s in

@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.7 2007-04-23 11:20:11 marche Exp $
+$Id: java_ast.mli,v 1.8 2007-06-14 14:18:52 marche Exp $
 
 ***************************************************************************)
 
@@ -53,7 +53,6 @@ type un_op = Uplus | Uminus | Unot | Ucompl
 type java_field_access =
   | Super_access of identifier
   | Primary_access of pexpr * identifier
-  | Array_length of pexpr
 
 and pexpr =
   { java_pexpr_loc : Loc.position ;
@@ -159,7 +158,7 @@ and pstatement_node =
   | JPSswitch of pexpr * (switch_label list * block) list
   | JPSblock of block
   | JPSsynchronized of pexpr * block
-  | JPSassert of pexpr
+  | JPSassert of identifier option * pexpr
   | JPSannot of Lexing.position * string
   | JPSloop_annot of pexpr * pexpr
 

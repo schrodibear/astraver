@@ -55,13 +55,52 @@ let get_class ci =
 let num_zero = Num.Int 0
 let num_minus_one = Num.Int (-1)
 
-let tr_type t =
+let array_struct_table = Hashtbl.create 17
+
+let name_base_type t =
+  match t with
+    | Tboolean -> "bool"
+    | Tchar | Tbyte | Tinteger | Tshort | Tlong | Tint -> "int" 
+    | Tnull -> "null"
+    | Tfloat | Treal | Tdouble -> "real"
+
+let rec name_type t =
+  match t with
+    | JTYbase t -> name_base_type t
+    | _ -> assert false (* TODO *)
+
+let rec intro_array_struct t =
+  try
+    Hashtbl.find array_struct_table t
+  with Not_found ->
+    let n = name_type t in
+    let fi =
+      { jc_field_info_name = n ^ "M";
+	jc_field_info_tag = 0 (* TODO *);
+	jc_field_info_type= tr_type t;
+	jc_field_info_root= n ^ "P";
+      }
+    in
+    let st =
+      {
+	jc_struct_info_name = n ^ "P";
+	jc_struct_info_parent = None;
+	jc_struct_info_root = n ^ "P";
+	jc_struct_info_fields = [(n ^ "M", fi)];
+      }
+    in
+    Hashtbl.add array_struct_table t st;
+    st
+      
+and tr_type t =
   match t with
     | JTYbase t -> tr_base_type t	
     | JTYclass(non_null,ci) -> 
 	let st = get_class ci in
 	JCTpointer(st,num_zero,if non_null then num_zero else num_minus_one)
-    | JTYarray _ -> assert false (* TODO *)
+    | JTYarray t ->
+	let st = intro_array_struct t in
+	JCTpointer(st,num_zero,num_minus_one)
 
 let tr_type_option t =
   match t with
@@ -146,6 +185,29 @@ let rec term t =
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCTTvar (get_var vi)
       | JTfield_access(t,fi) -> JCTTderef(term t,get_field fi)
+      | JTarray_length(t) -> 
+	  begin
+	    match t.java_term_type with
+	      | JTYarray ty ->
+		  let st = intro_array_struct ty in
+		  JCTToffset_max(term t,st)
+	      | _ -> assert false
+	  end
+      | JTarray_access(t1,t2) -> 
+	  begin
+	    match t1.java_term_type with
+	      | JTYarray ty ->
+		  let st = intro_array_struct ty in
+		  let t1' = term t1 in
+		  let shift = {
+		      jc_tterm_loc = t.java_term_loc;
+		      jc_tterm_type = t1'.jc_tterm_type;
+		      jc_tterm_node = JCTTshift(t1', term t2)
+		    }
+		  in
+		  JCTTderef(shift,snd (List.hd st.jc_struct_info_fields))
+	      | _ -> assert false
+	  end
       | JTold t -> JCTTold(term t)
 
   in { jc_tterm_loc = t.java_term_loc ; 
@@ -229,6 +291,31 @@ let rec expr e =
 	  JCTEassign_heap_op(expr e1,get_field fi,bin_op op,expr e2)
       | JEfield_access(e1,fi) -> 
 	  JCTEderef(expr e1,get_field fi)
+      | JEarray_length(e) -> 
+	  begin
+	    match e.java_expr_type with
+	      | JTYarray ty ->
+		  let st = intro_array_struct ty in
+		  JCTEoffset_max(expr e,st)
+	      | _ -> assert false
+	  end
+      | JEarray_access(e1,e2) -> 
+	  begin
+	    match e1.java_expr_type with
+	      | JTYarray ty ->
+		  let st = intro_array_struct ty in
+		  let e1' = expr e1 in
+		  let shift = {
+		      jc_texpr_loc = e.java_expr_loc;
+		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_node = JCTEshift(e1', expr e2)
+		    }
+		  in
+		  JCTEderef(shift,snd (List.hd st.jc_struct_info_fields))
+	      | _ -> assert false
+	  end
+
+	  
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type ;
@@ -242,7 +329,7 @@ let initialiser e =
 let rec statement s =
   let s' =
     match s.java_statement_node with
-      | JSskip -> assert false (* TODO *)
+      | JSskip -> JCTSblock []
       | JSreturn e -> JCTSreturn (tr_type e.java_expr_type,expr e)
       | JSblock l -> JCTSblock (List.map statement l)	  
       | JSvar_decl (vi, init, s) -> 
@@ -255,7 +342,28 @@ let rec statement s =
 	      jc_tloop_variant = term dec }
 	  in
 	  JCTSwhile(expr e, la, statement s)
+      | JSfor_decl(decls,e,inv,dec,sl,body) ->
+	  let la =
+	    { jc_tloop_invariant = assertion inv;
+	      jc_tloop_variant = term dec }
+	  in
+	  let decls = List.map
+	    (fun (vi,init) -> (get_var vi, Option_misc.map initialiser init))
+	    decls
+	  in
+	  let res =
+	    List.fold_right
+	      (fun (vi,init) acc -> 
+		 { jc_tstatement_loc = acc.jc_tstatement_loc ;
+		   jc_tstatement_node = JCTSdecl(vi,init, acc) })
+	      decls
+	      { jc_tstatement_loc = s.java_statement_loc ;
+		jc_tstatement_node = 
+		  JCTSfor(expr e, statements sl, la, statement body) }
+	  in res.jc_tstatement_node
       | JSexpr e -> JCTSexpr (expr e)
+      | JSassert(id,e) -> JCTSassert(id,assertion e)
+
 
   in { jc_tstatement_loc = s.java_statement_loc ; jc_tstatement_node = s' }
 
@@ -284,6 +392,9 @@ let tr_class ci acc =
   JCstruct_def(ci.class_info_name,
 	       List.map get_field ci.class_info_fields) :: acc
 
+
+let tr_axiom (_,id) p acc =
+  JCaxiom_def(id,assertion p)::acc
 
 
 (*

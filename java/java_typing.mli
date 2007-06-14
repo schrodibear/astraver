@@ -13,6 +13,8 @@ val methods_table :
     Java_tast.assertion) list *
    Java_tast.block option) Hashtbl.t
 
+val axioms_table : (Java_ast.identifier,Java_tast.assertion) Hashtbl.t
+
 exception Typing_error of Loc.position * string
 
 val compilation_unit : Java_ast.compilation_unit -> unit

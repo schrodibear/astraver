@@ -4,7 +4,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.5 2007-06-12 14:57:22 marche Exp $
+$Id: java_lexer.mll,v 1.6 2007-06-14 14:18:52 marche Exp $
 
 ***************************************************************************)
 
@@ -35,6 +35,7 @@ $Id: java_lexer.mll,v 1.5 2007-06-12 14:57:22 marche Exp $
       List.iter
 	(fun (s,t) -> Hashtbl.add table s t)
 	[ "abstract", ABSTRACT;
+	  "assert", ASSERT;
 	  "assigns", ASSIGNS;
 	  "axiom", AXIOM;
 	  "behavior", BEHAVIOR;
@@ -70,6 +71,7 @@ $Id: java_lexer.mll,v 1.5 2007-06-12 14:57:22 marche Exp $
 	  "inner", INNER;
 	  "instanceof", INSTANCEOF;
 	  "int", INT;
+	  "integer", INTEGER;
 	  "interface", INTERFACE;
 	  "invariant", INVARIANT;
 	  "long", LONG;
@@ -83,6 +85,7 @@ $Id: java_lexer.mll,v 1.5 2007-06-12 14:57:22 marche Exp $
 	  "private", PRIVATE;
 	  "protected", PROTECTED;
 	  "public", PUBLIC;
+	  "real", REAL;
 	  "requires", REQUIRES;
 	  "rest", REST;
 	  "return", RETURN;
@@ -290,28 +293,28 @@ rule token = parse
       (* decimal constants *)
 
   | ('0' | ['1'-'9']['0'-'9']*) ['l''L']? as n
-      { INTEGER n }
+      { INTCONSTANT n }
 
       (* octal constants *)
 
   | '0'['0'-'7']+ ['l''L']? as n         
-      { INTEGER ("0o" ^ n) }
+      { INTCONSTANT ("0o" ^ n) }
 
       (* hexadecimal constants *)
 
   | '0'['x''X']['0'-'9' 'A'-'F' 'a'-'f']+['l''L']? as n 
-    { INTEGER n }
+    { INTCONSTANT n }
 
       (* floating-point constants *)
 
   | ['0'-'9']+ '.' ['0'-'9']* (['e''E']['-''+']?['0'-'9']+)? ['f''F''d''D'] ?
-      { REAL (lexeme lexbuf) }
+      { REALCONSTANT (lexeme lexbuf) }
 
   | '.' ['0'-'9']+ (['e''E']['-''+']?['0'-'9']+)? ['f''F''d''D'] ?
-      { REAL (lexeme lexbuf) }
+      { REALCONSTANT (lexeme lexbuf) }
 
   | ['0'-'9']+ ['e''E'] ['-''+']?['0'-'9']+ ['f''F''d''D'] ?
-      { REAL (lexeme lexbuf) }
+      { REALCONSTANT (lexeme lexbuf) }
 
       (* character constants *)
 
@@ -410,7 +413,7 @@ let next_token lexbuf =
       with
 	Dotdot(n) ->
 	  dotdot_mem := true;
-	  INTEGER n
+	  INTCONSTANT n
     end
 
   let parse f c =

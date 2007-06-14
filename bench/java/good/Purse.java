@@ -24,31 +24,31 @@ public Purse() {
     }
     */
 
-    /*@ requires s >= 0
+    /*@ requires s >= 0;
       @ behavior done:
-      @   assigns balance
-      @   ensures balance == \old(balance)+s
+      @   assigns balance;
+      @   ensures balance == \old(balance)+s;
       @*/
     public void credit(int s) {
 	balance += s;
     }
 
-    /*@ requires s >= 0 && s <= balance
+    /*@ requires s >= 0 && s <= balance;
       @ behavior done:
-      @   assigns balance
-      @   ensures balance == \old(balance) - s
+      @   assigns balance;
+      @   ensures balance == \old(balance) - s;
       @*/
     public void withdraw(int s) {
 	balance -= s;
     }
     
-    /* @ requires s >= 0
+    /* @ requires s >= 0;
       @ behavior done:
-      @   assigns balance
-      @   ensures s <= \old(balance) && balance == \old(balance) - s
+      @   assigns balance;
+      @   ensures s <= \old(balance) && balance == \old(balance) - s;
       @ behavior amount_too_large:
-      @   assigns \nothing
-      @   signals (NoCreditException) s > \old(balance) 
+      @   assigns \nothing;
+      @   signals (NoCreditException) s > \old(balance) ;
       @*/
     /*
     public void withdraw2(int s) throws NoCreditException {
@@ -61,10 +61,10 @@ public Purse() {
     }
     */
 
-    /*@ requires p1 != null && p2 != null && p1 != p2
+    /*@ requires p1 != null && p2 != null && p1 != p2;
       @ behavior ok:
-      @   assigns p1.balance,p2.balance
-      @   ensures \result == 0
+      @   assigns p1.balance,p2.balance;
+      @   ensures \result == 0;
       @*/
     public static int test(Purse p1, Purse p2) {
 	p1.balance = 0;
@@ -89,10 +89,10 @@ public Purse() {
 
     */
 
-    /* @ requires p1 != null && p2 != null && p1 != p2
+    /* @ requires p1 != null && p2 != null && p1 != p2;
       @ behavior ok:
-      @   assigns p2.balance
-      @   ensures \result == \old(p1.balance)
+      @   assigns p2.balance;
+      @   ensures \result == \old(p1.balance);
       @*/
     /*    public static int test3(Purse p1,Purse p2) {
 	p2.credit(100);
@@ -100,10 +100,10 @@ public Purse() {
     }
     */
 
-    /* @ requires p != null
+    /* @ requires p != null;
       @ behavior ok:
-      @   assigns p.balance 
-      @   ensures \result == (\old(p.balance) >= 1000)
+      @   assigns p.balance ;
+      @   ensures \result == (\old(p.balance) >= 1000);
       @*/
     /*
     public static boolean test4(Purse p) {

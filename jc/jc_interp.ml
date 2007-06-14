@@ -515,7 +515,9 @@ let rec statement s =
     | JCSloop (la, s) -> 
 	While(Cte(Prim_bool true), assertion None "init" la.jc_loop_invariant,
 	      Some (term None "" la.jc_loop_variant,None), [statement s])
-    | JCSassert a -> Assert(assertion None "init" a, Void)
+    | JCSassert(None, a) -> Assert(assertion None "init" a, Void)
+    | JCSassert(Some name, a) -> 
+	Assert(LNamed(name,assertion None "init" a), Void)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  let e',t = match e with

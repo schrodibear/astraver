@@ -8,10 +8,12 @@ type incr_decr_op = Java_ast.incr_decr_op
 type term_node =
     | JTlit of literal
     | JTvar of java_var_info
+    | JTold of term
     | JTbin of term * base_type * bin_op * term   
     | JTapp of java_logic_info * term list
     | JTfield_access of term * java_field_info
-    | JTold of term
+    | JTarray_length of term 
+    | JTarray_access of term * term
 
 and term =
     { java_term_node : term_node;
@@ -56,6 +58,8 @@ and expr_node =
   | JEassign_field of expr * java_field_info * expr
   | JEassign_field_op of expr * java_field_info * bin_op * expr
   | JEfield_access of expr * java_field_info
+  | JEarray_length of expr 
+  | JEarray_access of expr * expr
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
@@ -71,7 +75,6 @@ and expr_node =
   | Logic_call of logic_entry * expr list
   | Class_instance_creation of qualified_ident * pexpr list
   | Array_creation of array_creation
-  | Array_access of pexpr * pexpr
   | Cast of type_expr * pexpr
   | Instanceof of pexpr * type_expr
       (* in annotations only *)
@@ -97,7 +100,10 @@ and statement_node =
   | JSblock of block
   | JSwhile of expr * assertion * term * statement  
       (*r condition, invariant, variant, loop body *)
+  | JSfor_decl of (java_var_info * initialiser option) list * expr * assertion * term * statement list * statement  
+      (*r decls, condition, invariant, variant, steps, loop body *)
   | JSexpr of expr
+  | JSassert of string option * assertion
 (*
   | JSvar_decl of variable_declaration
   | JPSthrow of pexpr
@@ -110,7 +116,6 @@ and statement_node =
   | JPStry of block * (parameter * block) list * block option
   | JPSswitch of pexpr * (switch_label list * block) list
   | JPSsynchronized of pexpr * block
-  | JPSassert of pexpr
   | JPSannot of Lexing.position * string
   | JPSloop_annot of pexpr * pexpr
 *)

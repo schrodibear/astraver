@@ -80,15 +80,15 @@ let main () =
 	    Jc_typing.logic_functions_table 
 	    d_range
 	in
+*)
 	(* production phase 3 : generation of Jessie axioms *)
-	let d_axioms = 
+	let decls = 
 	  Hashtbl.fold 
 	    (fun id p acc ->
-	       Jc_interp.tr_axiom id p acc)
-	    Jc_typing.axioms_table
-	    d_lfuns
+	       Java_interp.tr_axiom id p acc)
+	    Java_typing.axioms_table
+	    decls
 	in	       
-*)
 	(* production phase 4 : generation of Jessie functions *)
 	let decls = 
 	  Hashtbl.fold 
@@ -122,7 +122,9 @@ let main () =
 	exit 1
 
 
-let _ = Printexc.catch main ()
+let _ = 
+  Sys.catch_break true;
+  (* Printexc.catch *) main ()
 
   
 (*

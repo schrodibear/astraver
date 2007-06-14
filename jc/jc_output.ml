@@ -105,9 +105,9 @@ let rec term fmt t =
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
     | JCTTinstanceof (t, si) ->
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
-    | JCTToffset_min (t, _)->
+    | JCTToffset_min (t,_)->
 	fprintf fmt "@[\\offset_min(%a)@]" term t
-    | JCTToffset_max (t, _)->
+    | JCTToffset_max (t,_)->
 	fprintf fmt "@[\\offset_max(%a)@]" term t
     | JCTTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTTapp (op, ([t1;t2] as l)) ->
@@ -231,6 +231,10 @@ let rec expr fmt e =
 	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
     | JCTEcast (e, si) ->
 	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
+    | JCTEoffset_max(e, _) ->
+	fprintf fmt "\\offset_max(%a)" expr e 
+    | JCTEoffset_min(e, _) ->
+	fprintf fmt "\\offset_min(%a)" expr e 
     | JCTEinstanceof (e, si) ->
 	fprintf fmt "(%a <: %s)" expr e si.jc_struct_info_name
     | JCTEcall (op, ([t1;t2] as l)) ->
@@ -271,6 +275,12 @@ let rec statement fmt s =
 	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
 	  expr e assertion la.jc_tloop_invariant term la.jc_tloop_variant
 	  statement s
+    | JCTSfor (cond, updates, loop_annot, body)-> 
+	fprintf fmt "@[for ( ; %a ; %a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
+	  expr cond statements updates
+	  assertion loop_annot.jc_tloop_invariant 
+	  term loop_annot.jc_tloop_variant
+	  statement body
     | JCTSif (e, s1, s2)->
 	fprintf fmt "@[if (%a)@ %a@ else@ %a@]@\n"
 	  expr e statement s1 statement s2
@@ -281,7 +291,10 @@ let rec statement fmt s =
 	fprintf fmt "%a %s = %a;@\n%a" 
 	  print_type vi.jc_var_info_type 
 	  vi.jc_var_info_name expr e statement s
-    | JCTSassert _-> assert false (* TODO *) 
+    | JCTSassert(None,a)-> 
+	fprintf fmt "assert %a;@\n" assertion a
+    | JCTSassert(Some n,a)-> 
+	fprintf fmt "assert %s: %a;@\n" n assertion a
     | JCTSexpr e -> fprintf fmt "%a;@\n" expr e
     | JCTSblock l -> block fmt l
     | JCTSswitch (e, csl) ->
@@ -297,9 +310,11 @@ and case fmt (c,sl) =
 	   fprintf fmt "default:@\n") c
     block sl
 
+and statements fmt l = List.iter (statement fmt) l
+
 and block fmt b =
   fprintf fmt "@[<v 0>{@ @[<v 2>  ";
-  List.iter (statement fmt) b;
+  statements fmt b;
   fprintf fmt "@]@ }@]"
 
 

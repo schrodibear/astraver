@@ -500,8 +500,8 @@ and statement s =
 	      | _ -> fst (expr e)
 	  in
 	  (make_decls loc sl tl).jc_statement_node
-      | JCTSassert a ->
-	  JCSassert (assertion a)
+      | JCTSassert(id,a) ->
+	  JCSassert (id, assertion a)
       | JCTSdecl (vi, Some e, s) ->
 	  let (sl,tl),e = expr e in
 	  let decl_stat = make_decl loc vi (Some e) (statement s) in
@@ -536,6 +536,8 @@ and statement s =
 	  let try_exit = 
 	    make_try loc while_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
+      | JCTSfor (cond, updates, la, body) ->
+	  assert false (* TODO *)
       | JCTSreturn(t,e) ->
 	  let (sl,tl),e = expr e in
 	  let return_stat = make_return loc t e in

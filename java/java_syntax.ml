@@ -34,7 +34,8 @@ let rec statement s =
     | JPStry (s, l, f) -> 
 	let l = List.map (fun (p,s) -> (p,statements s)) l in
 	JPStry(statements s,l,Option_misc.map (statements) f)
-    | JPSfor_decl (_, _, _, _) -> assert false (* TODO *)
+    | JPSfor_decl (d, e, sl, s) -> 
+	JPSfor_decl(d, e, statements sl, statement s)
     | JPSfor (_, _, _, _) -> assert false (* TODO *)
     | JPSdo (_, _) -> assert false (* TODO *)
     | JPSwhile (e, s') -> JPSwhile(e, statement s')

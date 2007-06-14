@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.9 2007-06-12 15:00:44 marche Exp $
+$Id: java_parser.mly,v 1.10 2007-06-14 14:18:52 marche Exp $
 
 */
 
@@ -69,8 +69,8 @@ $Id: java_parser.mly,v 1.9 2007-06-12 15:00:44 marche Exp $
 /* Literals */
 
 %token <string> ID 
-%token <string> INTEGER
-%token <string> REAL
+%token <string> INTCONSTANT
+%token <string> REALCONSTANT
 %token <string> STRING
 %token <string> CHARACTER
 %token TRUE FALSE NULL THIS 
@@ -81,13 +81,13 @@ $Id: java_parser.mly,v 1.9 2007-06-12 15:00:44 marche Exp $
 %token ABSTRACT BOOLEAN BYTE BYVALUE CASE CAST CATCH
 %token CHAR CLASS CONST DEFAULT DOUBLE ELSE EXTENDS
 %token FALSE FINAL FINALLY FLOAT FUTURE GENERIC GOTO 
-%token IMPLEMENTS IMPORT INNER INSTANCEOF INT INTERFACE LONG
+%token IMPLEMENTS IMPORT INNER INSTANCEOF INT INTEGER INTERFACE LONG
 %token NATIVE OPERATOR OUTER PACKAGE PRIVATE PROTECTED
-%token PUBLIC REST SHORT STATIC 
+%token PUBLIC REST REAL SHORT STATIC 
 %token THROWS TRANSIENT TRUE VAR VOID VOLATILE
 %token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW 
 
-%token REQUIRES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR
+%token REQUIRES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
 %token INVARIANT LOOP_INVARIANT DECREASES
 %token AXIOM LOGIC TYPE PREDICATE READS
 %token BSFORALL BSEXISTS BSOLD BSRESULT BSNOTHING
@@ -460,6 +460,10 @@ base_type:
     { Tlong }
 | DOUBLE 
     { Tdouble }
+| INTEGER
+    { Tinteger }
+| REAL
+    { Treal }
 ;
 
 type_expr:
@@ -657,9 +661,9 @@ primary_expr:
 ;
 
 primary_no_new_array:
-| INTEGER                    
+| INTCONSTANT                    
     { locate_lit (Integer $1) }
-| REAL                    
+| REALCONSTANT                    
     { locate_lit (Float $1) }
 | TRUE                       
     { locate_lit (Bool true) }
@@ -927,7 +931,7 @@ kml_field_decl:
 requires:
 | /* $\varepsilon$ */
     { None }
-| REQUIRES expr
+| REQUIRES expr SEMICOLON
     { Some $2 }
 ;
 
@@ -939,12 +943,12 @@ behaviors:
 ;
 
 behavior:
-| assumes assigns ENSURES expr
+| assumes assigns ENSURES expr SEMICOLON
     { { java_pbehavior_assumes = $1;
 	java_pbehavior_assigns = $2;
 	java_pbehavior_throws = None;
 	java_pbehavior_ensures = $4 } }
-| assumes assigns SIGNALS LEFTPAR name ident_option RIGHTPAR expr
+| assumes assigns SIGNALS LEFTPAR name ident_option RIGHTPAR expr SEMICOLON
     { { java_pbehavior_assumes = $1;
 	java_pbehavior_assigns = $2;
 	java_pbehavior_throws = Some($5,$6);
@@ -961,7 +965,7 @@ ident_option:
 assumes:
 | /* $\varepsilon$ */
     { None }
-| ASSUMES expr
+| ASSUMES expr SEMICOLON
     { Some $2 }
 ;
 
@@ -969,15 +973,19 @@ assumes:
 assigns:
 | /* $\varepsilon$ */
     { None }
-| ASSIGNS BSNOTHING
+| ASSIGNS BSNOTHING SEMICOLON
     { Some [] }
-| ASSIGNS expr_comma_list
+| ASSIGNS expr_comma_list SEMICOLON
     { Some $2 }
 ;
 
 kml_statement_annot:
-| LOOP_INVARIANT expr DECREASES expr
-    { JPSloop_annot($2,$4) }
+| LOOP_INVARIANT expr SEMICOLON DECREASES expr SEMICOLON
+    { JPSloop_annot($2,$5) }
+| ASSERT expr SEMICOLON
+    { JPSassert(None,$2) }
+| ASSERT ident COLON expr SEMICOLON
+    { JPSassert(Some $2,$4) }
 ;
 
 /*

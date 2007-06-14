@@ -109,7 +109,7 @@ type pstatement_node =
   | JCPSskip
   | JCPSblock of pstatement list
   | JCPSexpr of pexpr
-  | JCPSassert of pexpr
+  | JCPSassert of identifier option * pexpr
   | JCPSdecl of ptype * string * pexpr option
   | JCPSif of pexpr * pstatement * pstatement
   | JCPSwhile of pexpr * pexpr * pexpr * pstatement
@@ -181,8 +181,8 @@ type tterm_node =
   | JCTTunary of unary_op * tterm
   | JCTTapp of logic_info * tterm list
   | JCTTold of tterm
-  | JCTToffset_max of tterm * struct_info
-  | JCTToffset_min of tterm * struct_info
+  | JCTToffset_max of tterm * struct_info 
+  | JCTToffset_min of tterm * struct_info 
   | JCTTinstanceof of tterm * struct_info
   | JCTTcast of tterm * struct_info
   | JCTTif of tterm * tterm * tterm
@@ -241,6 +241,8 @@ type texpr_node =
   | JCTEbinary of texpr * bin_op * texpr
   | JCTEunary of unary_op * texpr
   | JCTEcall of fun_info * texpr list
+  | JCTEoffset_max of texpr * struct_info 
+  | JCTEoffset_min of texpr * struct_info 
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info
   | JCTEassign_local of var_info * texpr
@@ -267,10 +269,13 @@ type tloop_annot =
 type tstatement_node =
   | JCTSblock of tstatement list
   | JCTSexpr of texpr
-  | JCTSassert of tassertion
+  | JCTSassert of string option * tassertion
   | JCTSdecl of var_info * texpr option * tstatement
   | JCTSif of texpr * tstatement * tstatement
   | JCTSwhile of texpr * tloop_annot * tstatement
+  | JCTSfor of texpr * tstatement list * tloop_annot  * tstatement
+      (*r condition, updates, loop annotations, body *)
+      (*r inits must be given before using JCTSdecl *)
   | JCTSreturn of jc_type * texpr
   | JCTSbreak of label
   | JCTScontinue of label
@@ -415,7 +420,7 @@ type statement_node =
   | JCSassign_local of var_info * expr
   | JCSassign_heap of expr * field_info * expr
       (* statements *)
-  | JCSassert of assertion
+  | JCSassert of string option * assertion
   | JCSblock of statement list
   | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement

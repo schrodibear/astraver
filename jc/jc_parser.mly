@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.42 2007-06-14 10:43:14 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.43 2007-06-14 14:18:52 marche Exp $ */
 
 %{
 
@@ -673,7 +673,9 @@ expression_statement:
 | expression SEMICOLON 
     { locate_statement (JCPSexpr $1) }
 | ASSERT expression SEMICOLON
-    { locate_statement (JCPSassert $2) }
+    { locate_statement (JCPSassert(None,$2)) }
+| ASSERT identifier COLON expression SEMICOLON
+    { locate_statement (JCPSassert(Some $2,$4)) }
 ;
 
 selection_statement: 
