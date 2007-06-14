@@ -277,8 +277,7 @@ let rec expr e =
              stat: vi <- tmp op e
              ... vi ...
 	  *)             
-	  let tmp = newvar vi.jc_var_info_type in
-	  tmp.jc_var_info_assigned <- true;
+	  let tmp = newrefvar vi.jc_var_info_type in
 	  let stat0 = 
 	    make_assign_local loc tmp (make_var loc vi) 
 	  in
@@ -307,8 +306,7 @@ let rec expr e =
              ... tmp2 ...
 	  *)             
 	  let (l1,tl1),e1 = expr e1 in
-	  let tmp1 = newvar e1.jc_expr_type in
-	  tmp1.jc_var_info_assigned <- true;
+	  let tmp1 = newrefvar e1.jc_expr_type in
 	  let stat1 = make_assign_local loc tmp1 e1 in
 	  let (l2,tl2),e2 = expr e2 in
 	  let e3 = 
@@ -316,8 +314,7 @@ let rec expr e =
 	     (make_deref loc (make_var loc tmp1) fi) 
 	      fi.jc_field_info_type op e2
 	  in
-	  let tmp2 = newvar fi.jc_field_info_type in
-	  tmp2.jc_var_info_assigned <- true;
+	  let tmp2 = newrefvar fi.jc_field_info_type in
 	  let stat2 = make_assign_local loc tmp2 e3 in
 	  let stat = 
 	    make_assign_heap loc (make_var loc tmp1) fi (make_var loc tmp2) 
@@ -329,8 +326,7 @@ let rec expr e =
 	    | Prefix_inc | Prefix_dec ->
 		([make_incr_local loc (op_of_incdec op) vi], []), JCEvar vi
 	    | Postfix_inc | Postfix_dec ->
-	    	let tmp = newvar vi.jc_var_info_type in
-		tmp.jc_var_info_assigned <- true;
+	    	let tmp = newrefvar vi.jc_var_info_type in
 		let stat0 = 
 		  make_assign_local loc tmp (make_var loc vi) 
 		in
@@ -345,8 +341,7 @@ let rec expr e =
 		JCEderef (e, fi)
 	    | Postfix_inc | Postfix_dec ->
 		let (l,tl),e = expr e in
-		let tmp = newvar fi.jc_field_info_type in
-		tmp.jc_var_info_assigned <- true;
+		let tmp = newrefvar fi.jc_field_info_type in
 		let stat0 = 
 		  make_assign_local loc tmp (make_deref loc e fi) 
 		in

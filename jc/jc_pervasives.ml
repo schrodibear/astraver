@@ -128,24 +128,6 @@ let make_term_op name ty =
     jc_logic_info_calls = [];
   }
 
-let eq_int_bool = make_term_op "eq_int_bool" boolean_type
-let neq_int_bool = make_term_op "neq_int_bool" boolean_type
-let neq_pointer_bool = make_term_op "neq_pointer_bool" boolean_type
-let add_int = make_term_op "add_int" integer_type
-let sub_int = make_term_op "sub_int" integer_type
-let mul_int = make_term_op "mul_int" integer_type
-let div_int = make_term_op "div_int" integer_type
-let mod_int = make_term_op "mod_int" integer_type
-let minus_int = make_term_op "neg_int" integer_type
-
-let add_real = make_term_op "add_real" real_type
-let sub_real = make_term_op "sub_real" real_type
-let mul_real = make_term_op "mul_real" real_type
-let div_real = make_term_op "div_real" real_type
-
-
-let shift = make_term_op "shift" unit_type   
-
 let real_of_integer = make_term_op "real_of_int" real_type
 
 (* logic predicates *)
@@ -159,15 +141,6 @@ let make_rel name =
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
   }
-
-let gt_int = make_rel "gt_int"
-let lt_int = make_rel "lt_int"
-let ge_int = make_rel "ge_int"
-let le_int = make_rel "le_int"
-let eq = make_rel "eq"
-let neq = make_rel "neq"
-let band = make_rel "band"
-let bor = make_rel "bor"
 
     
 (* programs *)

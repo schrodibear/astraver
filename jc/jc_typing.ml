@@ -270,11 +270,11 @@ let incr_op op =
 
 let num_op op =
   match op with
-    | BPadd -> add_int
-    | BPsub -> sub_int
-    | BPmul -> mul_int
-    | BPdiv -> div_int
-    | BPmod -> mod_int
+    | BPadd -> Badd_int
+    | BPsub -> Bsub_int
+    | BPmul -> Bmul_int
+    | BPdiv -> Bdiv_int
+    | BPmod -> Bmod_int
     | _ -> assert false
 
 let num_un_op t op e =
@@ -283,11 +283,6 @@ let num_un_op t op e =
     | UPplus -> e.jc_tterm_node
     | _ -> assert false
 
-let eq_op op arg_type  =
-  match (op,arg_type) with
-    | (BPeq,Tinteger) -> eq_int_bool
-    | (BPneq,Tinteger) -> neq_int_bool
-    | _ -> assert false
 
 let logic_unary_op loc (op : Jc_ast.punary_op) e =
   let t = e.jc_tterm_type in

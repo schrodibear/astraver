@@ -123,26 +123,26 @@ let lit l =
 
 let lbin_op t op =
   match op with
-    | Bgt -> Jc_pervasives.gt_int
-    | Bge -> Jc_pervasives.ge_int
-    | Ble -> Jc_pervasives.le_int
-    | Blt -> Jc_pervasives.lt_int
-    | Bne -> Jc_pervasives.neq
-    | Beq -> Jc_pervasives.eq
+    | Bgt -> Bgt_int
+    | Bge -> Bge_int
+    | Ble -> Ble_int
+    | Blt -> Blt_int
+    | Bne -> Bneq_int
+    | Beq -> Beq_int
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand-> assert false (* TODO *)
-    |Biff|Bimpl|Bor|Band -> assert false (* TODO *)
-    | Bmod -> Jc_pervasives.mod_int
-    | Bdiv -> Jc_pervasives.div_int
-    | Bmul -> Jc_pervasives.mul_int
-    | Bsub -> Jc_pervasives.sub_int
-    | Badd -> Jc_pervasives.add_int
+    | Biff|Bimpl|Bor|Band -> assert false (* TODO *)
+    | Bmod -> Bmod_int
+    | Bdiv -> Bdiv_int
+    | Bmul -> Bmul_int
+    | Bsub -> Bsub_int
+    | Badd -> Badd_int
 
 
 let rec term t =
   let t' =
     match t.java_term_node with
       | JTlit l -> JCTTconst (lit l)
-      | JTbin(e1,t,op,e2) -> JCTTapp(lbin_op t op,[term e1; term e2])
+      | JTbin(e1,t,op,e2) -> JCTTbinary(term e1, lbin_op t op, term e2)
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCTTvar (get_var vi)
       | JTfield_access(t,fi) -> JCTTderef(term t,get_field fi)
@@ -156,7 +156,7 @@ let rec assertion a =
   let a' =
     match a.java_assertion_node with
       | JAtrue -> JCTAtrue
-      | JAbin(e1,t,op,e2) -> JCTAapp(lbin_op t op,[term e1; term e2])
+      | JAbin(e1,t,op,e2) -> JCTArelation(term e1, lbin_op t op, term e2)
       | JAapp (_, _)-> assert false (* TODO *)
       | JAquantifier (Forall, vi , a)-> 
 	  let vi = get_var vi in
@@ -217,8 +217,7 @@ let rec expr e =
       | JEun (_, _) -> assert false (* TODO *)
       | JEbin (e1, op, e2) -> 
 	  let e1 = expr e1 and e2 = expr e2 in
-	  JCTEbinary(e1,bin_op op,e2)
-	  
+	  JCTEbinary(e1,bin_op op,e2)	  
       | JEvar vi -> JCTEvar (get_var vi)
       | JEassign_local_var(vi,e) ->
 	  JCTEassign_local(get_var vi,expr e)
