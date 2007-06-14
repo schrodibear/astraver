@@ -649,6 +649,8 @@ and assertion a =
 	  JCAapp (li, List.map term tl)
       | JCTAforall (vi, a) ->
 	  JCAforall (vi, assertion a)
+      | JCTAexists (vi, a) ->
+	  JCAexists (vi, assertion a)
       | JCTAold a ->
 	  JCAold (assertion a)
       | JCTAinstanceof (t, si) ->

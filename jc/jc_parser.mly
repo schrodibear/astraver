@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.43 2007-06-14 14:18:52 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.44 2007-06-14 14:36:09 moy Exp $ */
 
 %{
 
@@ -101,14 +101,17 @@
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
-/* \forall \offset_max \offset_min \old \result  */
-%token BSFORALL BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT 
+/* \forall \exists \offset_max \offset_min \old \result  */
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT 
 
 /* \nothing */
 %token BSNOTHING
 
 /* axiom */
 %token AXIOM
+
+/* & ~ ^ | */
+%token AMP TILDE HAT PIPE
 
 /*
 
@@ -154,10 +157,13 @@
 %left QUESTION ASSIGNOP
 %left BARBAR
 %left AMPAMP
+%left PIPE
+%left HAT
+%left AMP
 %left LT GT LTEQ GTEQ EQEQ BANGEQ COLONGT LTCOLON
 %nonassoc DOTDOT
-/* unary -, unary +, ++, --, ! */
-%nonassoc UMINUS UPLUS PLUSPLUS MINUSMINUS EXCLAM
+/* unary -, unary +, ++, --, ! ~ */
+%nonassoc UMINUS UPLUS PLUSPLUS MINUSMINUS EXCLAM TILDE
 /* . */
 %nonassoc DOT
 
@@ -183,6 +189,8 @@ rec_decls:
     { locate_decl (JCPDrectypes($1)) }
 | function_rec_definitions %prec PRECTYPE
     { locate_decl (JCPDrecfuns($1)) }
+| logic_rec_definitions %prec PRECTYPE
+    { locate_decl (JCPDrecfuns($1)) }
 
 decl: 
 | variable_definition
@@ -193,11 +201,11 @@ decl:
     { $1 }
 | axiom_definition
     { $1 }
+| global_invariant_definition
+    { $1 }
 | exception_definition
     { $1 }
 | logic_definition
-    { $1 }
-| logic_declaration
     { $1 }
 /*
 | error
@@ -401,6 +409,16 @@ axiom_definition:
 ;
 
 
+/********************/
+/* global invariant */
+/********************/
+
+global_invariant_definition:
+| INVARIANT IDENTIFIER COLON expression
+    { locate_decl( JCPDglobinv($2,$4)) }
+;
+
+
 /*************************/
 /* exception definitions */
 /*************************/
@@ -460,10 +478,8 @@ postfix_expression:
     { locate_expr (JCPEunary (UPplus, $2)) }
 | MINUS postfix_expression %prec UMINUS
     { locate_expr (JCPEunary (UPminus, $2)) }
-/*
 | TILDE postfix_expression 
-    { locate_expr (JCPEunary (UPtilde, $2)) }
-*/
+    { locate_expr (JCPEunary (UPbw_not, $2)) }
 | EXCLAM postfix_expression 
     { locate_expr (JCPEunary (UPnot, $2)) }
 ;
@@ -543,18 +559,12 @@ expression:
     { locate_expr (JCPEbinary ($1, BPeq, $3)) }
 | expression BANGEQ expression 
     { locate_expr (JCPEbinary ($1, BPneq, $3)) }
-/*
-| _expression AMP expression 
-    { locate (CEbinary ($1, BPbw_and, $3)) }
-*/
-/*
+| expression AMP expression 
+    { locate_expr (JCPEbinary ($1, BPbw_and, $3)) }
 | expression HAT expression 
-    { locate (CEbinary ($1, BPbw_xor, $3)) }
-*/
-/*
+    { locate_expr (JCPEbinary ($1, BPbw_xor, $3)) }
 | expression PIPE expression 
-    { locate (CEbinary ($1, BPbw_or, $3)) }
-*/
+    { locate_expr (JCPEbinary ($1, BPbw_or, $3)) }
 | expression AMPAMP expression 
     { locate_expr (JCPEbinary($1, BPland, $3)) }
 | expression BARBAR expression 
@@ -582,6 +592,9 @@ expression:
 | BSFORALL type_expr identifier_list SEMICOLON expression 
     %prec PRECFORALL
     { locate_expr (JCPEforall($2,$3,$5)) }
+| BSEXISTS type_expr identifier_list SEMICOLON expression 
+    %prec PRECFORALL
+    { locate_expr (JCPEexists($2,$3,$5)) }
 | expression EQEQGT expression
     { locate_expr (JCPEbinary($1,BPimplies,$3)) }
 | expression LTEQEQGT expression
@@ -774,14 +787,18 @@ logic_definition:
     { locate_decl (JCPDlogic(Some $2, $3, $4, JCPExpr $6)) }
 | LOGIC IDENTIFIER parameters EQ expression
     { locate_decl (JCPDlogic(None, $2, $3, JCPExpr $5)) }
-;
-
-logic_declaration:
 | LOGIC type_expr IDENTIFIER parameters reads %prec PRECLOGIC
     { locate_decl (JCPDlogic(Some $2, $3, $4, JCPReads $5)) }
 | LOGIC IDENTIFIER parameters reads %prec PRECLOGIC
     { locate_decl (JCPDlogic(None, $2, $3, JCPReads $4)) }
 ;
+
+logic_rec_definitions:
+| logic_definition AND logic_rec_definitions %prec PRECTYPE
+    { $1::$3 }
+| logic_definition AND logic_definition %prec PRECTYPE
+    { $1::[$3] }
+
 
 /*
 Local Variables: 

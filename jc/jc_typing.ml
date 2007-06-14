@@ -244,6 +244,11 @@ let bin_op t op =
     | Tinteger, BPmod -> Bmod_int
     | Tboolean, BPland -> Bland 
     | Tboolean, BPlor -> Blor
+
+    | _, BPbw_and -> Bbw_and
+    | _, BPbw_or -> Bbw_or
+    | _, BPbw_xor -> Bbw_xor
+
     | _, BPland -> assert false
     | _, BPlor -> assert false
     | Treal, BPmod -> assert false
@@ -278,7 +283,8 @@ let num_op op =
 
 let num_un_op t op e =
   match op with
-    | UPminus -> JCTTunary(unary_op t op,e)
+    | UPminus
+    | UPbw_not -> JCTTunary(unary_op t op,e)
     | UPplus -> e.jc_tterm_node
     | _ -> assert false
 
@@ -287,7 +293,7 @@ let logic_unary_op loc (op : Jc_ast.punary_op) e =
   let t = e.jc_tterm_type in
   match op with
     | UPnot -> assert false
-    | UPminus | UPplus -> 
+    | UPminus | UPplus | UPbw_not -> 
 	let t =
 	  match t with
 	    | JCTnative t ->
@@ -387,7 +393,7 @@ let make_logic_bin_op loc op e1 e2 =
 		else
 		  typing_error loc "numeric types expected for + and -"
 	end
-    | BPmul | BPdiv | BPmod ->
+    | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  (JCTnative t,
@@ -536,7 +542,7 @@ let rec term env e =
 	  typing_error e.jc_pexpr_loc 
 	    "assignment not allowed as logic term"
 	    (* propositional (non-boolean) expressions *)
-      | JCPEforall _ -> 
+      | JCPEforall _ | JCPEexists _ -> 
 	  typing_error e.jc_pexpr_loc 
 	    "quantification not allowed as logic term"
       | JCPErange(e1,e2) ->
@@ -553,7 +559,7 @@ let rec term env e =
   
 let rel_unary_op loc op t =
   match op with
-    | UPnot -> assert false
+    | UPnot | UPbw_not -> assert false
     | UPminus | UPplus -> 
 	typing_error loc "not a proposition"
     | UPpostfix_dec | UPpostfix_inc | UPprefix_dec | UPprefix_inc ->
@@ -622,7 +628,8 @@ let make_rel_bin_op loc op e1 e2 =
 	  else
 	    typing_error loc "terms should have the same type for == and !="
 	(* non propositional operators *)
-    | BPadd | BPsub | BPmul | BPdiv | BPmod -> assert false
+    | BPadd | BPsub | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor
+	-> assert false
 	(* already recognized as connectives *)
     | BPland | BPlor -> assert false 
     | BPimplies -> assert false
@@ -731,6 +738,9 @@ let rec assertion env e =
       | JCPEforall(ty,idl,e1) -> 
 	  let ty = type_type ty in
 	  (make_forall e.jc_pexpr_loc ty idl env e1).jc_tassertion_node
+      | JCPEexists(ty,idl,e1) -> 
+	  let ty = type_type ty in
+	  (make_exists e.jc_pexpr_loc ty idl env e1).jc_tassertion_node
       | JCPEold e -> JCTAold(assertion env e)
       | JCPEif(e1,e2,e3) ->
 	  let te1 = term env e1 
@@ -762,6 +772,14 @@ and make_forall loc ty idl env e : tassertion =
     | id::r ->
 	let vi = var ty id in
 	let f = JCTAforall(vi,make_forall loc ty r ((id,vi)::env) e) in
+	{jc_tassertion_loc = loc ; jc_tassertion_node = f }
+
+and make_exists loc ty idl env e : tassertion =
+  match idl with
+    | [] -> assertion env e
+    | id::r ->
+	let vi = var ty id in
+	let f = JCTAexists(vi,make_exists loc ty r ((id,vi)::env) e) in
 	{jc_tassertion_loc = loc ; jc_tassertion_node = f }
 
 (* expressions *)
@@ -798,7 +816,7 @@ let make_unary_app loc (op : Jc_ast.punary_op) e2 =
 	    | _ ->
 		typing_error loc "boolean expected"
 	in JCTnative t,JCTEunary(unary_op t op, e2)
-    | UPplus | UPminus -> 
+    | UPplus | UPminus | UPbw_not -> 
 	let t=
 	  match t2 with
 	    | JCTnative t2 ->
@@ -867,7 +885,7 @@ let make_bin_app loc op e1 e2 =
 		else
 		  typing_error loc "numeric types expected for + and -"
 	end
-    | BPmul | BPdiv | BPmod ->
+    | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative t,
@@ -1075,6 +1093,7 @@ let rec expr env e =
 	  end
 	  (* logic expressions, not allowed as program expressions *)
       | JCPEforall _ 
+      | JCPEexists _ 
       | JCPEold _ 
       | JCPEoffset_max _ 
       | JCPEoffset_min _ 
@@ -1309,6 +1328,7 @@ let rec location_set env e =
     | JCPEoffset_max _
     | JCPEold _
     | JCPEforall (_, _, _)
+    | JCPEexists (_, _, _)
     | JCPEcast (_, _)
     | JCPEinstanceof (_, _)
     | JCPEunary (_, _)
@@ -1346,6 +1366,7 @@ let location env e =
     | JCPEoffset_max _ 
     | JCPEoffset_min _
     | JCPEforall (_, _, _)
+    | JCPEexists (_, _, _)
     | JCPEunary _
     | JCPEbinary (_, _, _)
     | JCPEassign_op (_, _, _)
@@ -1417,6 +1438,7 @@ let field root (t,id) =
 
 
 let axioms_table = Hashtbl.create 17
+let global_invariants_table = Hashtbl.create 17
 
 let add_typedecl d (id,parent) =
   let root,par = 
@@ -1461,8 +1483,25 @@ let add_fundecl (ty,id,pl) =
     let ty = type_type ty in
     let fi = make_fun_info id ty in
     fi.jc_fun_info_parameters <- List.map snd param_env;
-    Hashtbl.add functions_env id fi;
+    Hashtbl.replace functions_env id fi;
     param_env, ty, fi
+
+let add_logic_fundecl (ty,id,pl) =
+  try
+    let pi = Hashtbl.find logic_functions_env id in
+    let ty = pi.jc_logic_info_result_type in
+    let param_env =
+      List.map (fun v -> v.jc_var_info_name, v) pi.jc_logic_info_parameters
+    in
+    param_env, ty, pi
+  with Not_found ->
+    let param_env = List.map param pl in
+    let ty = Option_misc.map type_type ty in
+    let pi = make_rel id in
+    pi.jc_logic_info_parameters <- List.map snd param_env;
+    pi.jc_logic_info_result_type <- ty;
+    Hashtbl.replace logic_functions_env id pi;
+    param_env, ty, pi
 
 let rec decl d =
   match d.jc_pdecl_node with
@@ -1488,6 +1527,8 @@ let rec decl d =
 	List.iter (fun d -> match d.jc_pdecl_node with
 		     | JCPDfun(ty,id,pl,_,_) ->
 			 ignore (add_fundecl (ty,id,pl))
+		     | JCPDlogic(ty,id,pl,_) ->
+			 ignore (add_logic_fundecl (ty,id,pl))
 		     | _ -> assert false
 		  ) pdecls;
         (* second pass: type function body *)
@@ -1519,7 +1560,8 @@ let rec decl d =
 	       let p = assertion [(x,vi)] e in
 	       let pi = make_rel id in
 	       pi.jc_logic_info_parameters <- [vi];
-	       Hashtbl.replace logic_functions_table pi.jc_logic_info_tag (pi,JCTAssertion p);
+	       Hashtbl.replace logic_functions_table 
+		 pi.jc_logic_info_tag (pi,JCTAssertion p);
 	       Hashtbl.replace logic_functions_env id pi;
 	       (pi,p) :: acc)
 	    []
@@ -1556,27 +1598,24 @@ let rec decl d =
     | JCPDaxiom(id,e) ->
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te
+    | JCPDglobinv(id,e) ->
+	let te = assertion [] e in
+	Hashtbl.add global_invariants_table id te
     | JCPDexception(id,t) ->
 	let tt = type_type t in
 	Hashtbl.add exceptions_table id (exception_info tt id)
     | JCPDlogic(None, id, pl, body) ->
-	let param_env = List.map param pl in
-        let pi = make_rel id in
-        pi.jc_logic_info_parameters <- List.map snd param_env;
+	let param_env,ty,pi = add_logic_fundecl (None,id,pl) in
 	let p = match body with
 	  | JCPReads reads ->
 	      JCTReads ((List.map (fun a -> snd (location param_env a))) reads)
 	  | JCPExpr body ->
 	      JCTAssertion(assertion param_env body)
 	in
-        Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p);
-        Hashtbl.add logic_functions_env id pi
+        Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p)
     | JCPDlogic(Some ty, id, pl, body) ->
-	let param_env = List.map param pl in
-        let ty = type_type ty in
-        let pi = make_rel id in
-        pi.jc_logic_info_parameters <- List.map snd param_env;
-	pi.jc_logic_info_result_type <- Some ty;
+	let param_env,ty,pi = add_logic_fundecl (Some ty,id,pl) in
+	let ty = match ty with Some ty -> ty | None -> assert false in
 	let t = match body with
 	  | JCPReads reads ->
 	      JCTReads ((List.map (fun a -> snd (location param_env a))) reads)
@@ -1587,8 +1626,7 @@ let rec decl d =
 		  "inferred type differs from declared type" 
 	      else JCTTerm t
 	in
-	Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t);
-        Hashtbl.add logic_functions_env id pi
+	Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t)
 
 (*
 Local Variables: 

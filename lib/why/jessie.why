@@ -216,3 +216,24 @@ parameter downcast_ :
 **********************)
 
 parameter any_integer : unit -> {} int {}
+
+
+(*******************
+
+  bitwise operations
+
+
+**********************)
+
+logic bw_compl : int -> int
+
+logic bw_and : int,int -> int
+
+logic bw_xor : int,int -> int
+
+logic bw_or : int,int -> int
+
+logic lsl : int,int -> int
+
+logic lsr : int,int -> int
+

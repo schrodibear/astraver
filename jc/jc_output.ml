@@ -86,11 +86,15 @@ let bin_op = function
   | Blor -> "||"
   | Bimplies -> "==>"
   | Biff -> "<==>"
+  | Bbw_and -> "&"
+  | Bbw_or -> "|"
+  | Bbw_xor -> "^"
 
 let unary_op = function
   | Uplus_int | Uplus_real -> "+"
   | Uminus_int | Uminus_real -> "-"
   | Unot -> "!"
+  | Ubw_not -> "~"
 
 let rec term fmt t =
   match t.jc_tterm_node with
@@ -142,6 +146,11 @@ let rec assertion fmt a =
 	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
 	  assertion a
+    | JCTAexists (vi, a)-> 
+	fprintf fmt "@[(\\exists %a %s;@ %a)@]"
+	  print_type vi.jc_var_info_type
+	  vi.jc_var_info_name
+	  assertion a
     | JCTArelation (t1, op, t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
     | JCTAapp (op, ([t1;t2] as l)) ->
@@ -178,12 +187,28 @@ let rec assertion fmt a =
 	fprintf fmt ")@]"
     | JCTAfalse -> fprintf fmt "false"
 
+let rec location_set fmt = function
+  | JCTLSvar vi-> 
+      fprintf fmt "%s" vi.jc_var_info_name
+  | JCTLSderef (locset, fi) ->
+      fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
+  | JCTLSrange (locset, t1, t2) ->
+      fprintf fmt "%a[%a..%a]" location_set locset term t1 term t2
+
+let location fmt = function
+  | JCTLvar vi -> 
+      fprintf fmt "%s" vi.jc_var_info_name
+  | JCTLderef (locset, fi) ->
+      fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
 
 let behavior fmt (id,b) =
   fprintf fmt "@[<v 2>behavior %s:@\n" id;
   Option_misc.iter
     (fun a -> fprintf fmt "assumes %a;@\n" assertion a) 
     b.jc_tbehavior_assumes;
+  Option_misc.iter 
+    (fun locs -> fprintf fmt "assigns %a;@\n" (print_list comma location) locs)
+    b.jc_tbehavior_assigns;
   fprintf fmt "ensures %a;@]@\n" assertion b.jc_tbehavior_ensures
   
 let print_spec fmt s =
@@ -326,9 +351,14 @@ let field fmt fi =
     print_type fi.jc_field_info_type fi.jc_field_info_name
 
 let term_or_assertion fmt = function
-  | JCTAssertion a -> assertion fmt a
-  | JCTTerm t -> term fmt t
-  | JCTReads r -> assert false (* TODO *)
+  | JCTAssertion a -> 
+      fprintf fmt "=@\n%a" assertion a
+  | JCTTerm t ->
+      fprintf fmt "=@\n%a" term t
+  | JCTReads [] -> 
+      fprintf fmt "reads \\nothing;"
+  | JCTReads locs -> 
+      fprintf fmt "reads %a;" (print_list comma location) locs
 
 let rec print_decl fmt d =
   match d with
@@ -351,11 +381,11 @@ let rec print_decl fmt d =
     | JClogic_fun_def(ty,id,params,body) ->
 	match ty with
 	  | None ->
-	      fprintf fmt "@[logic %s(@[%a@]) =@\n%a@]@\n@." 
+	      fprintf fmt "@[logic %s(@[%a@]) %a@]@\n@." 
 		id (print_list comma param) params 
 		term_or_assertion body 
 	  | Some ty ->
-	      fprintf fmt "@[logic %a %s(@[%a@]) =@\n%a@]@\n@." 
+	      fprintf fmt "@[logic %a %s(@[%a@]) %a@]@\n@." 
 		print_type ty 
 		id (print_list comma param) params 
 		term_or_assertion body 

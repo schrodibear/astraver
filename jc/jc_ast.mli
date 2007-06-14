@@ -66,12 +66,14 @@ type pbin_op =
   | BPlt | BPgt | BPle | BPge | BPeq | BPneq 
   | BPadd | BPsub | BPmul | BPdiv | BPmod
   | BPland | BPlor | BPimplies | BPiff
-  
+  (* bitwise operators *)
+  | BPbw_and | BPbw_or | BPbw_xor
 
 type punary_op =
   | UPplus | UPminus | UPnot 
   | UPpostfix_inc | UPpostfix_dec | UPprefix_inc | UPprefix_dec
-
+  (* bitwise operator *)
+  | UPbw_not
 
 type pexpr_node =
   | JCPEconst of const
@@ -85,6 +87,7 @@ type pexpr_node =
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * string
   | JCPEforall of ptype * string list * pexpr
+  | JCPEexists of ptype * string list * pexpr
   | JCPEold of pexpr
   | JCPEoffset_max of pexpr 
   | JCPEoffset_min of pexpr
@@ -149,7 +152,10 @@ type pdecl_node =
   | JCPDaxiom of string * pexpr
   | JCPDexception of string * ptype
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCPDlogic of ptype option * string * (ptype * string) list * preads_or_pexpr
+  | JCPDlogic of ptype option * string * (ptype * string) list 
+      * preads_or_pexpr
+  (* global invariant *)
+  | JCPDglobinv of string * pexpr
 
 and pdecl =
     {
@@ -168,9 +174,13 @@ type bin_op =
   | Badd_real | Bsub_real | Bmul_real | Bdiv_real
   | Bland | Blor | Bimplies | Biff
   | Beq_pointer | Bneq_pointer
+  (* bitwise operators *)
+  | Bbw_and | Bbw_or | Bbw_xor
   
 type unary_op =
   | Uplus_int | Uminus_int | Uplus_real | Uminus_real | Unot 
+  (* bitwise operator *)
+  | Ubw_not
 
 type tterm_node =
   | JCTTconst of const
@@ -215,6 +225,7 @@ type tassertion_node =
   | JCTAnot of tassertion
   | JCTAapp of logic_info * tterm list
   | JCTAforall of var_info * tassertion
+  | JCTAexists of var_info * tassertion
   | JCTAold of tassertion
   | JCTAinstanceof of tterm * struct_info
   | JCTAbool_term of tterm
@@ -359,6 +370,7 @@ type assertion_node =
   | JCAnot of assertion
   | JCAapp of logic_info * term list
   | JCAforall of var_info * assertion
+  | JCAexists of var_info * assertion
   | JCAold of assertion
   | JCAinstanceof of term * struct_info
   | JCAbool_term of term

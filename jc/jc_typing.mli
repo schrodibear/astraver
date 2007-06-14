@@ -49,6 +49,9 @@ val enum_types_table :
 val axioms_table : 
   (string, tassertion) Hashtbl.t
 
+val global_invariants_table : 
+  (string, tassertion) Hashtbl.t
+
 val exceptions_table : 
   (string, exception_info) Hashtbl.t
 

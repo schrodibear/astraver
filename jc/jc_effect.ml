@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.31 2007-06-14 14:18:52 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.32 2007-06-14 14:36:09 moy Exp $ *)
 
 
 open Jc_env
@@ -120,6 +120,7 @@ let rec assertion ef a =
     | JCAnot a
     | JCAold a -> assertion ef a
     | JCAforall (vi, a) -> assertion ef a 
+    | JCAexists (vi, a) -> assertion ef a 
     | JCArelation (t1,_,t2) -> term (term ef t1) t2
     | JCAapp (li, tl) -> 
 	ef_union li.jc_logic_info_effects

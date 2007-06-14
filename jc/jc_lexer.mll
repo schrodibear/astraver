@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.29 2007-06-14 10:43:14 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.30 2007-06-14 14:36:09 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -145,6 +145,7 @@ rule token = parse
   | "while"                 { WHILE }
   | "with"                  { WITH }
   | "\\forall"              { BSFORALL }
+  | "\\exists"              { BSEXISTS }
   | "\\nothing"             { BSNOTHING }
   | "\\offset_max"          { BSOFFSET_MAX }
   | "\\offset_min"          { BSOFFSET_MIN }
@@ -219,13 +220,9 @@ rule token = parse
   | ".."                    { DOTDOT }
   | "<:"                    { LTCOLON } 
   | ":>"                    { COLONGT } 
-(*
   | "&"                     { AMP }
-*)
   | "!"                     { EXCLAM }
-(*
   | "~"                     { TILDE }
-*)
   | "-"                     { MINUS }
   | "+"                     { PLUS }
   | "*"                     { STAR }
@@ -233,10 +230,8 @@ rule token = parse
   | "%"                     { PERCENT }
   | "<"                     { LT }
   | ">"                     { GT }
-(*
   | "^"                     { HAT }
   | "|"                     { PIPE }
-*)
   | "?"                     { QUESTION }
   | eof { EOF }
   | '"' { lex_error lexbuf "unterminated string" }

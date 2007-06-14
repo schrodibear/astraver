@@ -72,10 +72,12 @@ let unary_op = function
   | Uplus_real -> "uplus_real"
   | Uminus_real -> "uminus_real"
   | Unot -> "not"
+  | Ubw_not -> "bw_compl"
 
 let unary_arg_type = function
   | Uplus_int 
-  | Uminus_int -> integer_type
+  | Uminus_int
+  | Ubw_not -> integer_type
   | Uplus_real 
   | Uminus_real -> real_type
   | Unot -> boolean_type
@@ -104,6 +106,9 @@ let bin_op = function
   | Ble_real -> "le_real_"
   | Bgt_real -> "gt_real_"
   | Blt_real -> "lt_real_"
+  | Bbw_and -> "bw_and"
+  | Bbw_or -> "bw_or"
+  | Bbw_xor -> "bw_xor"
   | Blor | Bland -> assert false (* should be handled before for laziness *)
   | Biff | Bimplies -> assert false (* never in expressions *)
 
@@ -126,7 +131,8 @@ let pred_bin_op = function
 let bin_arg_type loc = function
   | Bgt_int | Blt_int | Bge_int | Ble_int 
   | Beq_int | Bneq_int 
-  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int -> integer_type
+  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
+  | Bbw_and | Bbw_or | Bbw_xor -> integer_type
   | Biff|Bimplies|Blor|Bland -> boolean_type
   | Bdiv_real | Bmul_real | Bsub_real | Badd_real
   | Bneq_real | Beq_real | Bge_real
@@ -209,7 +215,7 @@ let rec term label oldlabel t =
 	  [coerce t.jc_term_loc (unary_arg_type op) t1.jc_term_type t1' ]
 *)
     | JCTbinary(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-	let t1' = term label oldlabel t1 in
+let t1' = term label oldlabel t1 in
 	let t2' = term label oldlabel t2 in
 	LApp (bin_op op, [ t1'; t2'])
     | JCTbinary(t1,Bland,t2) ->
@@ -272,6 +278,10 @@ let rec assertion label oldlabel a =
 	make_logic_pred_call f (List.map ft l)	    
     | JCAforall(v,p) -> 
 	LForall(v.jc_var_info_final_name,
+		tr_base_type v.jc_var_info_type,
+		fa p)
+    | JCAexists(v,p) -> 
+	LExists(v.jc_var_info_final_name,
 		tr_base_type v.jc_var_info_type,
 		fa p)
     | JCAold a -> assertion (Some oldlabel) oldlabel a

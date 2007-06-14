@@ -158,6 +158,7 @@ let rec assertion this p =
     | JCAbool_term t -> term this t
     | JCAold p -> assertion this p
     | JCAforall (id, p) -> assertion this p
+    | JCAexists (id, p) -> assertion this p
     | JCAapp (id, l) ->
 	if FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) l
@@ -212,6 +213,7 @@ let rec assertion_memories aux a = match a.jc_tassertion_node with
   | JCTAnot a
   | JCTAold a
   | JCTAforall(_, a) -> assertion_memories aux a
+  | JCTAexists(_, a) -> assertion_memories aux a
   | JCTAapp(_, l) -> List.fold_left term_memories aux l
   | JCTAinstanceof(t, _)
   | JCTAbool_term t -> term_memories aux t
