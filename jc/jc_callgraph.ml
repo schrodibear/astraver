@@ -112,7 +112,7 @@ let compute_logic_calls f t =
     match t with
       | JCTerm t -> term [] t 
       | JCAssertion a -> assertion [] a 
-      | JCReads r -> [] (* TODO *)
+      | JCReads r -> []
   in
   f.jc_logic_info_calls <- calls
 

@@ -27,7 +27,7 @@ unit move(Point[0] p)
   unpack(p);
   p.x += 1;
   p.y += 1;
-  if (p.colored) break_color_inv(p :> ColorPoint); (* BAD! *)
+  if (p.colored) break_color_inv(p :> ColorPoint); // BAD!
   pack(p);
 }
 
