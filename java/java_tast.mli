@@ -54,6 +54,7 @@ and expr_node =
   | JEassign_local_var of java_var_info * expr  
   | JEassign_local_var_op of java_var_info * bin_op * expr  
   | JEassign_field of expr * java_field_info * expr
+  | JEassign_field_op of expr * java_field_info * bin_op * expr
   | JEfield_access of expr * java_field_info
 (*
   | Static_class of class_entry

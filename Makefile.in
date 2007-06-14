@@ -98,6 +98,7 @@ PVSLIB = @PVSLIB@
 GENERATED = src/version.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
             jc/jc_version.ml jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
+	    java/java_version.ml \
 	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
@@ -117,6 +118,7 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
 BINARY=bin/why.$(OCAMLBEST)
 CADUCEUS=bin/caduceus.$(OCAMLBEST)
 JESSIE=bin/jessie.$(OCAMLBEST)
+KRAKATOA=bin/krakatoa.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 WHY2HTML=bin/why2html.$(OCAMLBEST)
 RVMERGE=bin/rv_merge.$(OCAMLBEST)
@@ -129,7 +131,7 @@ SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT)
 
-all: $(BINARY) check $(CADUCEUS) $(JESSIE) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
+all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
 opt: bin/why.opt bin/caduceus.opt bin/jessie.opt
 
@@ -393,7 +395,8 @@ bin/why-stat.byte: $(STATCMO)
 bin/why-stat.opt: $(STATCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
-bin/cadlog.opt: c/cversion.cmx jc/jc_version.cmx tools/cadlog.cmx
+bin/cadlog.opt: c/cversion.cmx jc/jc_version.cmx \
+		java/java_version.cmx tools/cadlog.cmx
 	$(OCAMLOPT) unix.cmxa -o $@ $^
 
 static:: $(STATICBINARY)
@@ -453,6 +456,11 @@ JCBENCHLOG=jessie-bench-`date +%d-%m-%y`.log
 
 jc-bench:: $(JESSIE) bin/cadlog.opt
 	(cd bench/jc; sh ./bench 2>&1) | bin/cadlog.opt -jc $(JCBENCHLOG)
+
+JAVABENCHLOG=krakatoa-bench-`date +%d-%m-%y`.log
+
+java-bench:: $(KRAKATOA) bin/cadlog.opt
+	(cd bench/java; sh ./bench 2>&1) | bin/cadlog.opt -java $(JAVABENCHLOG)
 
 BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log
 

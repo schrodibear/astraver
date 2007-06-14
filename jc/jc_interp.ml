@@ -486,13 +486,13 @@ let rec statement s =
 	let n = vi.jc_var_info_final_name in
 	Assign(n, coerce e2.jc_expr_loc vi.jc_var_info_type e2.jc_expr_type e2')
     | JCSassign_heap(e1,fi,e2) -> 
-	let e1 = expr e1 in
-	let e2 = expr e2 in
+	let e1' = expr e1 in
+	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
         (append
 	   (make_lets
-	      ([ (tmp1, e1) ; (tmp2, e2) ])
+	      ([ (tmp1, e1') ; (tmp2, coerce e2.jc_expr_loc fi.jc_field_info_type e2.jc_expr_type e2') ])
 	      (append
 		 (assert_mutable (LVar tmp1) fi)
 		 (make_upd fi (Var tmp1) (Var tmp2))))

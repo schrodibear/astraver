@@ -666,8 +666,9 @@ let rec expr env e =
 			      if op = Beq then
 				fi.java_field_info_type,
 				JEassign_field(this,fi,te)
-			      else assert false (* TODO *)
-			    else
+			      else 
+				fi.java_field_info_type,
+				JEassign_field_op(this,fi,op,te)			    else
 			      typing_error loc "type %a expected, got %a" 
 				print_type fi.java_field_info_type 
 				print_type te.java_expr_type

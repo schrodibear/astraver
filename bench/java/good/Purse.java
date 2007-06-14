@@ -30,7 +30,7 @@ public Purse() {
       @   ensures balance == \old(balance)+s
       @*/
     public void credit(int s) {
-	balance = balance + s;
+	balance += s;
     }
 
     /*@ requires s >= 0 && s <= balance
@@ -39,7 +39,7 @@ public Purse() {
       @   ensures balance == \old(balance) - s
       @*/
     public void withdraw(int s) {
-	balance = balance -s;
+	balance -= s;
     }
     
     /* @ requires s >= 0

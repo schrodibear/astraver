@@ -39,10 +39,12 @@ let def_file s =
   
 let jessie = ref false
 
+let krakatoa = ref false
+
 let _ = 
   Arg.parse 
-      [ "-jc", Arg.Set jessie, 
-	  "  Jessie bench";
+      [ "-jc", Arg.Set jessie, "  Jessie bench";
+	"-java", Arg.Set krakatoa, "  Krakatoa bench";
       ]
       def_file usage_string
 
@@ -52,11 +54,15 @@ let c = open_out file
 
 let fmt = formatter_of_out_channel c
 
-let tool = if !jessie then "Jessie" else "Caduceus"
+let tool = 
+  if !jessie then "Jessie" else 
+  if !krakatoa then "Krakatoa" else 
+    "Caduceus"
 
 let version,date =
-  if !jessie then Jc_version.version, Jc_version.date
-  else Cversion.version, Cversion.date
+  if !jessie then Jc_version.version, Jc_version.date else 
+  if !krakatoa then Java_version.version, Java_version.date else 
+    Cversion.version, Cversion.date
 
 let d,m,y =
   let tm = localtime (time ()) in

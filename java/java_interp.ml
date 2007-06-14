@@ -226,6 +226,8 @@ let rec expr e =
 	  JCTEassign_local_op(get_var vi,bin_op op, expr e)
       | JEassign_field(e1,fi,e2) ->
 	  JCTEassign_heap(expr e1,get_field fi,expr e2)
+      | JEassign_field_op(e1,fi,op,e2) ->
+	  JCTEassign_heap_op(expr e1,get_field fi,bin_op op,expr e2)
       | JEfield_access(e1,fi) -> 
 	  JCTEderef(expr e1,get_field fi)
 
