@@ -70,11 +70,13 @@ type error =
   | UnboundLabel of string
   | IllegalCodeAddress of int
   | ClashEqu of string
+  | UnsupportedInstruction
 
 let report fmt = function
   | UnboundLabel s -> fprintf fmt "unbound label %s" s
   | IllegalCodeAddress n -> fprintf fmt "illegal address %d" n
   | ClashEqu id -> fprintf fmt "clash with previous EQU %s" id
+  | UnsupportedInstruction -> fprintf fmt "unsupported instruction"
 
 exception Error of loc * error
 
@@ -128,6 +130,18 @@ let address self loc = function
       (* otherwise we eval the address and find the corresponding label *)
       find_label_by_addr loc (eval_operand self loc op)
 
+let register_name = function
+  | A -> "a" | X -> "x"
+  | I1 -> "i1" | I2 -> "i2" | I3 -> "i3" 
+  | I4 -> "i4" | I5 -> "i5" | I6 -> "i6" 
+
+let pos s = s ^ " > 0"
+let zero s = s ^ " = 0"
+let neg s = s ^ " < 0"
+let npos s = s ^ " <= 0"
+let nzero s = s ^ " <> 0"
+let nneg s = s ^ " >= 0"
+
 (* prev = previous instruction
    lab = label of current instruction *)
 let interp_stmt self prev lab s = match s.node with
@@ -135,13 +149,19 @@ let interp_stmt self prev lab s = match s.node with
       Ainvariant i
   | PSassert a -> 
       Aother (X.assert_stmt a)
-  | PSinstr (Jmp, op) -> 
+  | PSinstr ((Jmp | Jsj), op) -> (* TODO Jsj *)
       Ajump (address self s.loc op)
-  | PSinstr (J3p, op) -> 
-      Acond (address self s.loc op, X.Assume "i3 > 0", X.Assume "i3 <= 0")
+  | PSinstr (Jn r | Jz r | Jp r | Jnn r | Jnz r | Jnp r as i, op) -> 
+      let n = register_name r in
+      let tt,tf = match i with
+	| Jp _ -> pos, npos | Jz _ -> zero, nzero | Jn _ -> neg, nneg
+	| Jnp _ -> npos, pos | Jnz _ -> nzero, zero | Jnn _ -> nneg, neg
+	| _ -> assert false
+      in
+      Acond (address self s.loc op, X.Assume (tt n), X.Assume (tf n))
   | PSinstr (Jge, op) ->
       Acond (address self s.loc op, X.Assume "cmp >= 0", X.Assume "cmp < 0")
-  | PSinstr (Halt, _) -> 
+  | PSinstr (Hlt, _) -> 
       Ahalt
   | PSinstr _ -> 
       Aother (X.Mix s)

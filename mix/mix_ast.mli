@@ -5,16 +5,29 @@ type loc = Lexing.position
 
 type 'a located = { node : 'a; loc : loc }
 
+type register = A | X | I1 | I2 | I3 | I4 | I5 | I6
+
 type instr = 
-  | Jmp | Jge | J3p
   (* loading *)
-  | Lda
+  | Ld of register
+  (* storing *)
+  | St of register | Stj | Stz
+  (* arithmetic *)
+  | Add | Sub | Mul | Div
   (* address transfer *)
-  | Ent1 | Ent2 | Ent3 | Ent4 | Ent5 | Ent6
-  | Dec1 | Dec2 | Dec3 | Dec4 | Dec5 | Dec6
+  | Ent of register
+  | Inc of register
+  | Dec of register
   (* comparison *)
-  | Cmpa
-  | Halt
+  | Cmp of register
+  (* jump *)
+  | Jmp | Jsj 
+  | Jl | Je | Jg | Jge | Jne | Jle
+  | Jn of register | Jz of register | Jp of register
+  | Jnn of register | Jnz of register | Jnp of register
+  (* other *)
+  | Nop
+  | Hlt
 
 type paddress =
   | PAself

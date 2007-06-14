@@ -24,42 +24,67 @@ let index a = function
   | None -> a
   | Some i -> Tapp ("add_int", [a; Tvar ("!i" ^ i)])
 
-let rec value_addr = function
-  | PAself -> assert false (*TODO*)
+let rec value_addr loc = function
+  | PAself -> error loc UnsupportedInstruction
   | PAconst s -> Tconst s
   | PAident s -> Tvar s
-  | PAplus (a1, a2) -> Tapp ("add_int", [value_addr a1; value_addr a2])
-  | PAminus (a1, a2) -> Tapp ("sub_int", [value_addr a1; value_addr a2])
-  | PAuminus a -> Tapp ("neg_int", [value_addr a])
+  | PAplus (a1, a2) -> Tapp ("add_int", [value_addr loc a1; value_addr loc a2])
+  | PAminus (a1, a2) -> Tapp ("sub_int",[value_addr loc a1; value_addr loc a2])
+  | PAuminus a -> Tapp ("neg_int", [value_addr loc a])
 
-let value_op op = match op.pop_address, op.pop_index, op.pop_field with
-  | Some a, i, None -> index (value_addr a) i
+let value_op loc op = match op.pop_address, op.pop_index, op.pop_field with
+  | Some a, i, None -> index (value_addr loc a) i
   | _ -> assert false (*TODO*)
 
-let value_at op = Tapp ("access", [Tvar "!mem"; value_op op])
+let value_at loc op = Tapp ("access", [Tvar "!mem"; value_op loc op])
 
-let interp_instr i op = match i with
-  | Lda -> 
-      Wassign ("a", value_at op)
-  | Cmpa -> 
-      Wassign ("cmp", Tapp ("sub_int",[Tvar "!a"; value_at op]))
-  | Dec3 ->
-      Wassign ("i3", Tapp ("sub_int", [Tvar "!i3"; Tconst "1"]))
-  | Ent2 ->
-      Wassign ("i2", value_op op)
-  | Ent3 ->
-      Wassign ("i3", value_op op)
-  | Ent1 | Ent4 | Ent5 | Ent6
-  | Dec1 | Dec2 | Dec4 | Dec5 | Dec6 -> 
-      Wvoid (* TODO *)
-  | Jmp | Jge | J3p | Halt -> 
+let register_value = function
+  | A -> "!a" | X -> "!x"
+  | I1 -> "!i1" | I2 -> "!i2" | I3 -> "!i3" 
+  | I4 -> "!i4" | I5 -> "!i5" | I6 -> "!i6" 
+
+let interp_instr loc i op = match i with
+  | Ld r -> 
+      Wassign (register_name r, value_at loc op)
+  | St r ->
+      Wassign ("mem", 
+	       Tapp ("update", 
+		     [Tvar "!mem"; value_op loc op; Tvar (register_value r)]))
+  | Stz ->
+      Wassign ("mem", 
+	       Tapp ("update", [Tvar "!mem"; value_op loc op; Tconst "0"]))
+  | Stj -> 
+      error loc UnsupportedInstruction
+  | Add | Sub | Mul | Div -> (* TODO: actually incorrect for Mul and Div *)
+      let aop = match i with
+	| Add -> "add_int" | Sub -> "sub_int"
+	| Mul -> "mul_int" | Div -> "div_int" | _ -> assert false
+      in
+      Wassign ("a", Tapp (aop, [Tvar "!a"; value_at loc op]))
+  | Cmp r -> 
+      Wassign ("cmp", 
+	       Tapp ("sub_int", [Tvar (register_value r); value_at loc op]))
+  | Ent r ->
+      Wassign (register_name r, value_op loc op)
+  | Inc r ->
+      Wassign (register_name r, 
+	      Tapp ("add_int", [Tvar (register_value r); Tconst "1"]))
+  | Dec r ->
+      Wassign (register_name r, 
+	       Tapp ("sub_int", [Tvar (register_value r); Tconst "1"]))
+  | Nop ->
+      Wvoid
+  | Jmp | Jsj 
+  | Jl | Je | Jg | Jge | Jne | Jle
+  | Jn _ | Jz _ | Jp _ | Jnn _ | Jnz _ | Jnp _
+  | Hlt -> 
       assert false 
 
 let rec interp_stmt = function
   | Void -> Wvoid
   | Mix { node = PSassert p } -> Wassert p
   | Mix { node = PSinvariant _ } -> assert false
-  | Mix { node = PSinstr (i, op) } -> interp_instr i op
+  | Mix { loc = loc; node = PSinstr (i, op) } -> interp_instr loc i op
   | Assume p -> Wassume p
   | Seq (s1, s2) -> Wseq (interp_stmt s1, interp_stmt s2)
 

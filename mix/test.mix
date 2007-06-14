@@ -2,11 +2,11 @@
 /* Program M (TAOCP, vol. 1, page 145) */
 
 buf	orig *+100
-init:	{{ i3 > 0 }}
-	dec3
-	{{ 0 <= i3 }}
-	j3p	*-1
-exit:	{ i3 = 0 }
+init:	{{ a > 0 }}
+	deca
+	{{ 0 <= a }}
+	jap	*-1
+exit:	{ a = 0 }
 	halt
 	
 /*

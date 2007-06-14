@@ -61,17 +61,16 @@ let pseudo,_ as asm =
 
 (* transformation into sequential programs *)
 
-let cl = 
+let wl = 
   try 
-    sequentialize ~show_graph asm !entry
+    let cl = sequentialize ~show_graph asm !entry in
+    interp cl
   with Error (loc, e) ->
     report_loc loc;
     eprintf "%a@." report e;
     exit 1
 
 (* translation to Why code *)
-
-let wl = interp cl
 
 let print_pseudo fmt p = match p.node with
   | Verbatim s -> 
