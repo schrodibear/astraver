@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.129 2007-05-23 13:18:20 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.130 2007-06-14 08:19:12 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -46,6 +46,7 @@ open Logic_decl
 let declarationQueue = Queue.create ()
 
 let reset () =
+  Queue.clear declarationQueue ;
   Vcg.logs := []; 
   match prover () with
     | Pvs -> Pvs.reset ()
@@ -66,13 +67,14 @@ let add_loc = function
   | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
   | Dgoal _ -> ()
 
-let push_decl d = 
-(*  if pruning then 
-    Printf.printf "Pruning yes \n" 
-  else 
-    Printf.printf "Pruning no \n";
-*)
+let store_decl_into_a_queue d  = 
+  Queue.push d declarationQueue
 
+
+(** push the declarations  in the corresponding 
+    prover and stores them (or their expansed version) into 
+    declarationQueue **)
+let push_decl d = 
   add_loc d;
   if (not pruning) then
     let pushing = 
@@ -93,18 +95,22 @@ let push_decl d =
 	| SmtLib -> Smtlib.push_decl 
     in
     if defExpanding != NoExpanding  then 
-      List.iter pushing (PredDefExpansor.push d)
+      let decl = (PredDefExpansor.push d) in 
+      List.iter pushing decl ;
+      List.iter store_decl_into_a_queue decl ; 
     else
-      pushing d 
+      begin 
+	store_decl_into_a_queue d ; 
+	pushing d 
+      end
   else
     if defExpanding != NoExpanding then
-      List.iter (fun decl -> Queue.push decl declarationQueue)  (PredDefExpansor.push d)
-	(*Queue.push  declarationQueue*)
+      List.iter store_decl_into_a_queue (PredDefExpansor.push d)
     else
-      Queue.push d declarationQueue
-
-
-
+      store_decl_into_a_queue d 
+	
+	
+	
 let push_obligations = 
   List.iter 
     (fun (loc,id,s) -> 
@@ -316,7 +322,6 @@ let interp_decl ?(prelude=false) d =
 	add_exception id v
     | Logic (loc, ext, ids, t) ->
 	let add id =
-	  (*Printf.printf  "%s " (Ident.string id);*)
 	  if is_global_logic id then raise_located loc (Clash id);
 	  let t = Ltyping.logic_type t in
 	  if logic_type_is_var t then raise_located loc CannotGeneralize;
@@ -325,12 +330,10 @@ let interp_decl ?(prelude=false) d =
 	  if ext then 
 	    begin 
 	      Monomorph.add_external id ;
-	      (*Printf.printf  " : no \n"*)
 	    end
 	  else
 	    begin
 	      push_decl (Dlogic (loc, Ident.string id, t));
-	      (*Printf.printf  " : yes \n"*)
 	    end 
 	in
 	List.iter add ids
@@ -436,7 +439,6 @@ let main () =
     List.iter deal_file files;
     if pruning then
       begin
-	(*let q =  (Theory_filtering.reduce declarationQueue) in *)
 	let q =  declarationQueue in 
 	encode q ;
 	if single_file () then 

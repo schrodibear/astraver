@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.19 2007-06-05 11:29:14 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.20 2007-06-14 08:19:12 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -67,11 +67,25 @@ open Set
 open Util
 open Graphviz 
 
-let threshold = Options.pruning_hyp
+let bound = ref Options.pruning_hyp
+
+let set_bound n = 
+  bound := n 
+
+
+let bound2 = 1 
 
 (*let symbol_counter = ref 0*)
 
-module String_set = Set.Make(struct type t=string let compare= compare end)
+type var_string =
+  | PureVar of string
+  | FreshVar of string 
+
+module String_set = Set.Make(struct type t=var_string let compare= compare end)
+
+let member_of_string_set str st = 
+  String_set.mem (PureVar str) st || String_set.mem (FreshVar str) st
+
 
 module SS_set = Set.Make(struct type t=String_set.t let compare= compare end)
 
@@ -79,23 +93,20 @@ module SS_set = Set.Make(struct type t=String_set.t let compare= compare end)
 let selected_vars = ref String_set.empty 
 
 (** avoided vars **)
-let avoided_vars = String_set.singleton "alloc" 
+let avoided_vars = String_set.singleton (PureVar "alloc") 
 
 
 (** a variable name will be associated to each hypothesis **)
 let hash_hyp_vars : (predicate,'a) Hashtbl.t = Hashtbl.create 20
 
 
-(*
-type node =
-    {
-      node_label : string;
-    }
-*)
+
+
+
 
 module Var_node =
 struct
-  type t = string
+  type t = var_string
   let hash = Hashtbl.hash
   let compare n1 n2 = Pervasives.compare n1 n2
   let equal = (=)
@@ -125,6 +136,9 @@ let bound_variable id =
   v_count := !v_count+1 ;
   Ident.create ((Ident.string id)^"_"^ (string_of_int !v_count))
 
+
+
+
 let my_fresh_hyp ()=
     hyp_count := !hyp_count+1 ;
     Ident.create (string_of_int !hyp_count)
@@ -143,8 +157,6 @@ let my_fresh_hyp ()=
 
 let f_symbols qvars t  = 
   let vars = ref String_set.empty in
-  let preds = ref String_set.empty in 
-  let funcs = ref String_set.empty in
   let rec collect formula  = 
     match formula with 
       | Tconst (ConstInt n) -> ()
@@ -152,21 +164,15 @@ let f_symbols qvars t  =
       | Tconst ConstUnit -> ()
       | Tconst (ConstFloat _) -> ()
       | Tderef _ -> ()
-      | Tapp (id, tl , _) when id == if_then_else -> 
-	  List.iter collect tl 
-      | Tapp (id, tl, _) when is_arith_binop id ->
-	  List.iter collect tl 
-      | Tapp (id, tl, _) ->
-	  (*Symbol_container.add  id ;*)
-	  funcs := String_set.add (Ident.string id) !funcs ;
+      | Tapp (id, tl , _)  -> 
 	  List.iter collect tl 
       | Tvar (id) ->
-	  if not (String_set.mem (Ident.string id) qvars) 
+	  if not (String_set.mem (PureVar (Ident.string id)) qvars) 
 	  then
-	    vars := String_set.add (Ident.string id) !vars 
+	    vars := String_set.add (PureVar (Ident.string id)) !vars 
   in
   collect t ; 
-  (!vars,!preds,!funcs)
+  !vars
 
 
 
@@ -177,8 +183,7 @@ let f_symbols qvars t  =
 
 let vars_of_list qvars tl  = 
   let vars = ref SS_set.empty in
-
-  let rec collect l = 
+  let rec collect l ac_fv_set = 
     let inner_vars = ref String_set.empty in 
     let f t =
       match t with 
@@ -188,21 +193,23 @@ let vars_of_list qvars tl  =
 	| Tconst (ConstFloat _) -> ()
 	| Tderef _ -> ()
 	| Tapp (id, tl, _) ->
-	    let bv = bound_variable id in
-	    inner_vars := String_set.add (Ident.string bv) !inner_vars;
-	    let l' = Tvar(bv)::tl in 
-	    collect l'
+	    let id' = (bound_variable id) in 
+	    let bv = (FreshVar (Ident.string id')) in
+	    inner_vars := String_set.add bv !inner_vars;
+	    let l' = Tvar(id')::tl in 
+	    collect l' (String_set.add bv ac_fv_set)
 	| Tvar (id) ->
-	    if not (String_set.mem (Ident.string id) qvars) 
-	      (* && 	      not (String_set.mem (Ident.string id) avoided_vars)*) 
-	    then
-	      inner_vars := String_set.add (Ident.string id) !inner_vars
+	    if not (member_of_string_set (Ident.string id) qvars) then
+	      if not (member_of_string_set (Ident.string id) ac_fv_set)
+	      then
+		inner_vars := String_set.add (PureVar (Ident.string id)) !inner_vars 
+	      else
+		inner_vars := String_set.add (FreshVar (Ident.string id)) !inner_vars
     in
     List.iter f l ;
     vars := SS_set.add (String_set.diff !inner_vars avoided_vars) !vars 
-    (*vars := SS_set.add  !inner_vars !vars *)
   in
-  collect tl ; 
+  collect tl String_set.empty ; 
   !vars
 
 
@@ -213,38 +220,29 @@ let vars_of_list qvars tl  =
  - fu is the set of functionnal symbols  
 @param f the formula which is analyzed
 **)
-let symbols  f  =
+let symbols_vars  f  =
   let vars = ref String_set.empty in
-  let preds = ref String_set.empty in 
-  let funcs = ref String_set.empty in
   let rec collect qvars formula  = 
     match formula with 
       | Papp (id, tl, _) when is_int_comparison id  || is_real_comparison id ->
 	  List.iter 
 	    (fun t -> 
-	       let (v',p',f') = f_symbols qvars t in 
-	       vars := String_set.union v' !vars ;
-	       preds := String_set.union p' !preds ; 
-	       funcs := String_set.union f' !funcs) 
+	       let v' = f_symbols qvars t in 
+	       vars := String_set.union v' !vars)
 	    tl
       | Papp (id, tl, _)  ->
-	  preds := String_set.add (Ident.string id )  !preds ;
 	  List.iter 
 	    (fun t -> 
-	       let (v',p',f') = f_symbols qvars t in 
-	       vars := String_set.union v' !vars ;
-	       preds := String_set.union p' !preds ; 
-	       funcs := String_set.union f' !funcs) 
+	       let v' = f_symbols qvars t in 
+	       vars := String_set.union v' !vars)
 	    tl
       | Pand (_, _, a, b) | Forallb (_, a, b)  | Por (a, b) | Piff (a, b) | 
 	    Pimplies (_, a, b) ->
 	  collect qvars a;
 	      collect qvars b
       | Pif (a, b, c) ->
-	  let (v',p',f') = f_symbols qvars a in 
+	  let v' = f_symbols qvars a in 
 	  vars := String_set.union v' !vars ;
-	  preds := String_set.union p' !preds ; 
-	  funcs := String_set.union f' !funcs;
 	  collect qvars b;
 	  collect qvars c
       | Pnot a ->
@@ -252,7 +250,7 @@ let symbols  f  =
       | Forall (_,id,_,_,_,p) | Exists (id,_,_,p) ->    
 	  (*let n= Symbol_container.add (Ident.string id) in 
 	  vars := String_set.add n !vars ;*)
-	  collect (String_set.add (Ident.string id) qvars) p
+	  collect (String_set.add (PureVar (Ident.string id)) qvars) p
       | Pfpi _ ->
 	  failwith "fpi not yet suported "
       | Pnamed (_, p) -> (* TODO: print name *)
@@ -260,17 +258,49 @@ let symbols  f  =
       | Pvar _ | Pfalse |Ptrue -> ()
   in
   collect String_set.empty f ; 
-  (!vars,!preds,!funcs)
+  !vars
 
 (**
 @return vars which is a set of sets of variables
-   
-@param f the formula which is analyzed
+@param f the formula to be analyzed
 **)
 let sets_of_vars   f  =
   let vars = ref SS_set.empty  in
   let rec collect qvars formula  = 
     match formula with 
+	(** TODO faire un cas particulier ici pour l'égalité ?**)
+	
+      | Papp (id, [el1;el2], _) when is_eq id ->
+	  begin
+	    match (el1,el2) with 
+		(Tvar (v1), Tvar(v2)) ->
+		  vars :=  SS_set.add
+		    (String_set.add (PureVar (Ident.string v1)) 
+		       (String_set.singleton (PureVar (Ident.string v2))) )
+		    !vars
+		    (* TODO memorize that V1 is equal to v2 *)
+	      | (Tvar (v1), Tapp (_, tl, _)) ->
+		  let l' = Tvar(v1)::tl in 
+		  let v = vars_of_list qvars l' in
+		  vars := SS_set.union v !vars
+		    
+	      | (Tapp (_, tl,_), Tvar(v1)) ->
+		  let l' = Tvar(v1)::tl in 
+		  let v = vars_of_list qvars l' in
+		  vars := SS_set.union v !vars
+		    
+	      | (Tapp (id, tl, _), Tapp (_, tl', _)) ->
+		  let id' = bound_variable id in
+		  let tl = Tvar(id')::tl in 
+		  let tl' = Tvar(id')::tl' in
+		  Format.printf " applications %s \n"
+		    (Ident.string id);
+		  let v = vars_of_list qvars tl in
+		  let v' = vars_of_list qvars tl' in
+		  vars := SS_set.union v !vars ; 
+		  vars := SS_set.union v' !vars ; 
+	      | (_,_) -> ()
+	  end  
       | Papp (id, tl, _) ->
 	  let v = vars_of_list qvars tl in 
 	  vars := SS_set.union v !vars 
@@ -287,10 +317,10 @@ let sets_of_vars   f  =
       | Pnot a ->
 	  collect qvars a;
       | Forall (_,id,_,_,_,p) | Exists (id,_,_,p) ->    
-	  collect (String_set.add (Ident.string id) qvars) p
+	  collect (String_set.add (PureVar (Ident.string id)) qvars) p
       | Pfpi _ ->
 	  failwith "fpi not yet suported "
-      | Pnamed (_, p) -> (* TODO: print name *)
+      | Pnamed (_, p) -> 
 	  collect qvars p 
       | Pvar _ | Pfalse |Ptrue -> ()
   in
@@ -303,7 +333,14 @@ let sets_of_vars   f  =
 
 
 let display_symb_of set =
-  String_set.iter (fun s -> Format.printf "%s \n" s) set ;
+  String_set.iter (fun s -> 
+		     let s' = 
+		       match s with 
+			   PureVar(id)  -> "pv "^id 
+			 | FreshVar(id) -> "fv "^id
+		     in
+		     Format.printf "%s \n" s'
+		  ) set ;
   Format.printf "@\n@." 
 
 let display_set str set  = 
@@ -354,7 +391,7 @@ let update_v_g vars =
    variable 
 **)
 let memorizes_hyp_symb (l,c)= 
-  reset();
+
   
   (** retrieves the variables of the conclusion **)
   let v = (sets_of_vars c) in 
@@ -369,10 +406,10 @@ let memorizes_hyp_symb (l,c)=
     | Svar (id, v) :: q ->  mem  q 
     | Spred (_,p) :: q -> 
 	(* retrieves the sets of sets of variables *)
-	(*	Format.printf "%a @\n@." print_predicate p; *)
+	(*Format.printf "%a @\n@." print_predicate p; *)
 	let v = sets_of_vars p in 
 	(*SS_set.iter (fun s-> 
-		       display_set "detected vars in hyp " s ) v;*) 
+		       display_set "detected vars in hyp " s ) v; *)
 	
 
 	
@@ -428,8 +465,6 @@ let rec get_vars_in_tree v n acc =
       v in
   String_set.diff vret avoided_vars
     
-       
-
 
 (**
    @param concl_rep the the representative variable of the conclusion
@@ -445,8 +480,8 @@ let filter_acc_variables l concl_rep=
     | [] -> []
     | Svar (id, v) :: q -> 
 	if 
-	  ( String_set.mem (Ident.string id) !selected_vars ||
-	      String_set.mem (Ident.string id) avoided_vars) 
+	  ( member_of_string_set (Ident.string id)  !selected_vars ||
+	     member_of_string_set (Ident.string id) avoided_vars) 
 	then
 	  Svar (id, v) ::filter q 
 	else
@@ -477,14 +512,32 @@ let filter_acc_variables l concl_rep=
 
 
 
+(**
+   @returns a set of set varaibles. 
+   The variables of the set of variables represent a path 
+   in the graph of variables between two varaiables of the goal
+
+   @param v is the set of variables of the goal
+
+**)
+let get_linked_vars v = 
+  let returned_set = ref SS_set.empty in 
+
+  
+  
+  !returned_set
+    
 
 
 
-(************************)
+
+
 
 module Display = struct
-  let vertex_name v = Var_graph.V.label v 
-    
+  let vertex_name v = 
+    match Var_graph.V.label v with 
+	PureVar(id)  -> "pv_"^id 
+      | FreshVar(id) -> "fv_"^id
   let graph_attributes _ = []
   let default_vertex_attributes _ = []
   let vertex_attributes _ = []
@@ -497,32 +550,46 @@ end
 module Dot = Graphviz.Dot(Display)
 
   
-(************************)
+
 
 let managesGoal id ax (hyps,concl) =
   match ax with 
     Dgoal(loc,id,s) -> 
       (** retrieves the list of symbols in the conclusion **)
-      let (v,p,f) = symbols concl in 
+      let v = symbols_vars concl in 
       let v = String_set.diff v avoided_vars in 
+
       (** set informations about hypotheses **) 
       memorizes_hyp_symb (hyps,concl);
-      (** select the relevant variables **)
-      selected_vars := get_vars_in_tree v threshold String_set.empty;
-      if debug then 
-	display_set "Selected vars: " !selected_vars ; 
+
+
+
+      (** variables liées par un chemin de variables **)
+      let set_of_pairs = get_linked_vars v in 
+
       
-      (** update the equivalence class of the variables **)
+      
+
+
+
+      (** select the relevant variables **)
+      selected_vars := get_vars_in_tree v !bound String_set.empty;
+      
+
+      if debug then 
+	display_set " Selected vars" !selected_vars ; 
+      
+
       let l' = filter_acc_variables hyps v in
+
       (** output the dot version of variables graph **)
       if debug then 
 	begin 
-	  let oc  =  open_out "test.dot" in 
+	  let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
 	  Dot.output_graph oc !vg 
 	end; 
       Dgoal (loc,id, Env.empty_scheme (l',concl))
-
-      (*Dgoal (loc,id, Env.empty_scheme (hyps,concl))*)
+	(*Dgoal (loc,id, Env.empty_scheme (hyps,concl))*)
 		   
     | _ -> ax 
 
@@ -531,13 +598,14 @@ let managesGoal id ax (hyps,concl) =
 
  
 let reduce q = 
+  reset();
   let q' =   match q with
       Dgoal (loc, id, s)  as ax ->
         let (l,g) = s.Env.scheme_type in
         let (l',g') = Util.intros [] g my_fresh_hyp in 
-	(*Printf.printf "Size of l %d " (List.length l');*)
-        (** TODO: REMOVE this  **)
+
 	managesGoal id ax (List.append l l',g');
+
 
     | _ -> failwith "goal awaited" in
   q' 
