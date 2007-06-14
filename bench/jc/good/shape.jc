@@ -28,8 +28,9 @@ real rect_area(Rectangle[0] s) {
   return s.length * s.width;
 }
 
-real area(Shape[0] s) 
-  behavior safety: 
+real area(Shape[0] s)
+  requires s.mutable == false;
+  behavior safety:
     ensures true;
 {
     if (s.kind == 0) {
