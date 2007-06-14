@@ -192,7 +192,7 @@ let mixal (pseudo,asm) init =
   let asm = map_instr None asm in
   asm
 
-let sequentialize asm init =
+let sequentialize ~show_graph asm init =
   let asm = mixal asm init in
   let init = find_label_by_name Lexing.dummy_pos init in
-  transform asm init
+  transform ~show_graph asm init

@@ -46,7 +46,7 @@ module Make(X : INPUT) : sig
     seq_code : X.statement;
   }
 
-  val transform : asm_code -> X.Label.t -> seq_code list
+  val transform : show_graph:bool -> asm_code -> X.Label.t -> seq_code list
 
 end
 

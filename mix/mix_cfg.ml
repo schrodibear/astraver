@@ -159,6 +159,28 @@ module Make(X : INPUT) = struct
     in
     dfs init
 
+  let display_cfg cfg init =
+    let c = open_out "cfg.dot" in
+    let fmt = formatter_of_out_channel c in
+    fprintf fmt "digraph cfg {@\n";
+    let visited = HN.create 17 in
+    let rec dfs n =
+      if not (HN.mem visited n) then begin
+	HN.add visited n ();
+	let name_n = X.Label.to_string n.node_name in
+	let succ = cfg n in
+	List.iter 
+	  (fun (m,s) -> 
+	    let name_m = X.Label.to_string m.node_name in
+	    fprintf fmt "  %s -> %s;@\n" name_n name_m) 
+	  succ;
+	List.iter (fun (m,_) -> dfs m) succ
+      end
+    in
+    dfs init;
+    fprintf fmt "}@.";
+    close_out c
+
   (* phase 2: from CFG to purely sequential programs *)
 
   module S = struct
@@ -246,9 +268,12 @@ module Make(X : INPUT) = struct
     let code n = match n.node_status with NSdone c -> c | _ -> assert false in
     HN.fold (fun n _ acc -> code n @ acc) invariants (code init)
 
-  let transform asm init =
+  let transform ~show_graph asm init =
     let cfg,ninit = make_cfg asm init in
-    (* print_cfg err_formatter cfg ninit; *)
+    if show_graph then begin
+      print_cfg err_formatter cfg ninit;
+      display_cfg cfg ninit
+    end;
     make_seq cfg ninit
 
 end

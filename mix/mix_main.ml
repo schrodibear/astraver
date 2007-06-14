@@ -26,10 +26,12 @@ let report_loc loc =
 let file = ref None
 let entry = ref "init"
 let gwhy = ref false
+let show_graph = ref false
 
 let spec = 
   ["-entry", Arg.Set_string entry, "<label>  sets the entry point";
    "-gwhy", Arg.Set gwhy, "  launches gwhy automatically";
+   "-show-graph", Arg.Set show_graph, "  prints the CFG in cfg.dot";
   ]
 let usage_msg = "demixify [options] file.mix"
 let usage () = Arg.usage spec usage_msg; exit 1
@@ -38,6 +40,7 @@ let set_file f = match !file with
   | _ -> usage ()
 let () = Arg.parse spec set_file usage_msg
 
+let show_graph = !show_graph
 let file = match !file with None -> usage () | Some f -> f
 
 (* parsing *)
@@ -60,7 +63,7 @@ let pseudo,_ as asm =
 
 let cl = 
   try 
-    sequentialize asm !entry
+    sequentialize ~show_graph asm !entry
   with Error (loc, e) ->
     report_loc loc;
     eprintf "%a@." report e;
