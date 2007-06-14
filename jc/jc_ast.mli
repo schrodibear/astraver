@@ -229,6 +229,7 @@ and tassertion =
 type tterm_or_tassertion =
   | JCTAssertion of tassertion
   | JCTTerm of tterm
+  | JCTReads of tlocation list
 
 type tincr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
 
@@ -367,6 +368,7 @@ and assertion =
 type term_or_assertion =
   | JCAssertion of assertion
   | JCTerm of term
+  | JCReads of location list
 
 (* application, increment and assignment are statements.
    special assignment with operation disappears.

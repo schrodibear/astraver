@@ -803,6 +803,7 @@ let static_variable (v,e) =
 let logic_function t =
   match t with 
     | JCTAssertion p -> JCAssertion (assertion p) 
+    | JCTReads r -> JCReads (List.map location r)
     | _ -> assert false
 
 (*

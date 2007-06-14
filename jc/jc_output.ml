@@ -313,6 +313,7 @@ let field fmt fi =
 let term_or_assertion fmt = function
   | JCTAssertion a -> assertion fmt a
   | JCTTerm t -> term fmt t
+  | JCTReads r -> assert false (* TODO *)
 
 let rec print_decl fmt d =
   match d with

@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.29 2007-06-13 19:12:42 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.30 2007-06-14 11:44:03 bardou Exp $ *)
 
 
 open Jc_env
@@ -234,6 +234,16 @@ let logic_fun_effects f =
   let ef = match ta with
     | JCTerm t -> term ef t
     | JCAssertion a -> assertion ef a
+    | JCReads r ->
+	List.fold_left
+	  (fun ef l ->
+	     let ef = {
+	       jc_reads = ef;
+	       jc_writes = ef; (* could be anything *)
+	       jc_raises = ExceptionSet.empty;
+	     }
+	     in (location ef l).jc_reads)
+	  ef r
   in
   if same_effects ef f.jc_logic_info_effects then ()
   else begin

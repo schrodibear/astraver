@@ -335,13 +335,23 @@ let tr_logic_fun li ta acc =
   in
   let decl =
     match li.jc_logic_info_result_type,ta with
-      | None,JCAssertion a -> 
+      (* Predicate *)
+      | None, JCAssertion a -> 
 	  let a = assertion None "" a in
 	  Predicate(false,li.jc_logic_info_name,params_reads, a) 
-      | Some ty,JCTerm t -> 
+      (* Function *)
+      | Some ty, JCTerm t -> 
 	  let ret = tr_base_type ty in
 	  let t = term None "" t in
 	  Function(false,li.jc_logic_info_name,params_reads, ret, t) 
+      (* Logic *)
+      | tyo, JCReads r ->
+	  let ret = match tyo with
+	    | None -> simple_logic_type "prop"
+	    | Some ty -> tr_base_type ty
+	  in
+	  Logic(false, li.jc_logic_info_name, params_reads, ret)
+      (* Other *)
       | _ -> assert false
   in decl :: acc
   
