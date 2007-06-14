@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.41 2007-06-12 15:00:44 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.42 2007-06-14 10:43:14 bardou Exp $ */
 
 %{
 
@@ -98,8 +98,8 @@
 /* integer boolean real unit */
 %token INTEGER BOOLEAN REAL UNIT
 
-/* assigns assumes behavior ensures requires throws */
-%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS
+/* assigns assumes behavior ensures requires throws reads */
+%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
 /* \forall \offset_max \offset_min \old \result  */
 %token BSFORALL BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT 
@@ -359,6 +359,15 @@ assigns:
     { Some $2 }
 | ASSIGNS BSNOTHING SEMICOLON
     { Some [] }
+;
+
+reads:
+| /* epsilon */
+    { [] }
+| READS argument_expression_list SEMICOLON
+    { $2 }
+| READS BSNOTHING SEMICOLON
+    { [] }
 ;
 
 function_rec_definitions:
@@ -760,16 +769,16 @@ exception_statement:
 
 logic_definition:
 | LOGIC type_expr IDENTIFIER parameters EQ expression
-    { locate_decl (JCPDlogic(Some $2, $3, $4, Some $6)) }
+    { locate_decl (JCPDlogic(Some $2, $3, $4, JCPExpr $6)) }
 | LOGIC IDENTIFIER parameters EQ expression
-    { locate_decl (JCPDlogic(None, $2, $3, Some $5)) }
+    { locate_decl (JCPDlogic(None, $2, $3, JCPExpr $5)) }
 ;
 
 logic_declaration:
-| LOGIC type_expr IDENTIFIER parameters %prec PRECLOGIC
-    { locate_decl (JCPDlogic(Some $2, $3, $4, None)) }
-| LOGIC IDENTIFIER parameters %prec PRECLOGIC
-    { locate_decl (JCPDlogic(None, $2, $3, None)) }
+| LOGIC type_expr IDENTIFIER parameters reads %prec PRECLOGIC
+    { locate_decl (JCPDlogic(Some $2, $3, $4, JCPReads $5)) }
+| LOGIC IDENTIFIER parameters reads %prec PRECLOGIC
+    { locate_decl (JCPDlogic(None, $2, $3, JCPReads $4)) }
 ;
 
 /*

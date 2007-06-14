@@ -130,6 +130,9 @@ and pstatement =
       jc_pstatement_loc : Loc.position;
     }
 
+type preads_or_pexpr =
+  | JCPReads of pexpr list
+  | JCPExpr of pexpr
 
 type pdecl_node =
   | JCPDvar of ptype * string * pexpr
@@ -146,7 +149,7 @@ type pdecl_node =
   | JCPDaxiom of string * pexpr
   | JCPDexception of string * ptype
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCPDlogic of ptype option * string * (ptype * string) list * pexpr option
+  | JCPDlogic of ptype option * string * (ptype * string) list * preads_or_pexpr
 
 and pdecl =
     {

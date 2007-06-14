@@ -139,7 +139,6 @@ let is_pointer_type t =
 
 
 let logic_functions_table = Hashtbl.create 97
-let logic_functions_decl_table = Hashtbl.create 97
 let logic_functions_env = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
 let functions_env = Hashtbl.create 97
@@ -1564,9 +1563,8 @@ let rec decl d =
         let pi = make_rel id in
         pi.jc_logic_info_parameters <- List.map snd param_env;
 	begin match body with
-	  | None ->
-	      Hashtbl.add logic_functions_decl_table pi.jc_logic_info_tag pi
-	  | Some body ->
+	  | JCPReads reads -> ()
+	  | JCPExpr body ->
 	      let p = assertion param_env body in
               Hashtbl.add logic_functions_table pi.jc_logic_info_tag
 		(pi, JCTAssertion p)
@@ -1578,8 +1576,8 @@ let rec decl d =
         let pi = make_rel id in
         pi.jc_logic_info_parameters <- List.map snd param_env;
 	begin match body with
-	  | None -> ()
-	  | Some body ->
+	  | JCPReads reads -> ()
+	  | JCPExpr body ->
               let t = term param_env body in
               if not (subtype t.jc_tterm_type ty) then 
 		typing_error d.jc_pdecl_loc 

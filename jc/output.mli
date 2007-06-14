@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.10 2007-02-21 10:56:12 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.11 2007-06-14 10:43:14 bardou Exp $ i*)
 
 type constant =
   | Prim_void
@@ -150,6 +150,7 @@ val make_app_e : expr -> expr list -> expr
     
 
 *)
+
 val make_label : string -> expr -> expr;;
 
 (*
