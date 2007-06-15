@@ -28,7 +28,7 @@ let short_range =
 (* int = int32 *)
 let int_range =
   {
-    jc_enum_info_name = "int";
+    jc_enum_info_name = "int32";
     jc_enum_info_min = Num.num_of_string "-2147483648";
     jc_enum_info_max = Num.num_of_string "2147483647";
   }
