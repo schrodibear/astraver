@@ -7,7 +7,7 @@ init:	{{ a > 0 }}
 	{{ 0 <= a }}
 	jap	*-1
 exit:	{ a = 0 }
-	halt
+	hlt
 	
 /*
 Local Variables: 

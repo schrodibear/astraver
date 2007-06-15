@@ -18,6 +18,7 @@ parameter partition :
   unit writes a,i,j
   { m <= j and j < i and i <= n and sub_permut(m,n,a@,a) and
     exists x:int.
+
       (forall r:int. m <= r <= j -> a[r] <= x) and
       (forall r:int. j < r < i -> a[r] = x) and
       (forall r:int. i <= r <= n -> a[r] >= x) }
