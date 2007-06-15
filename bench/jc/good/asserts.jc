@@ -13,3 +13,10 @@ unit test(A[0] a)
   a.i = a.i + 1;
   assert a.i != 0;
 }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make asserts"
+End: 
+*/

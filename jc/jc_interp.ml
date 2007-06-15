@@ -42,7 +42,7 @@ let tr_native_type t =
   match t with
     | Tunit -> "unit"
     | Tboolean -> "bool"
-    | Tinteger -> "integer"
+    | Tinteger -> "int"
     | Treal -> "real"
 
 let simple_logic_type s =
@@ -486,11 +486,10 @@ let invariant_for_struct this st =
 let any_value = function
   | JCTnative t -> 
       begin match t with
-	| Tunit -> assert false (* TODO *)
-	| Tboolean -> assert false (* TODO *)
-	| Tinteger ->
-	    App (Var "any_integer", Void)
-	| Treal -> assert false (* TODO *)
+	| Tunit -> Void
+	| Tboolean -> App (Var "any_bool", Void)
+	| Tinteger -> App (Var "any_int", Void)
+	| Treal -> App (Var "any_real", Void)
       end
   | _ -> assert false (* TODO *)
   
@@ -1039,7 +1038,7 @@ let tr_enum_type ri to_int of_int acc =
 	       LPred("le_int",[x; LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_max)))]))
   in
   let of_int_type =
-    Prod_type("x", Base_type(simple_logic_type "integer"),
+    Prod_type("x", Base_type(simple_logic_type "int"),
 	      Annot_type(enum_pred (LVar "x"),
 			 Base_type(simple_logic_type n),
 			 [],[],
@@ -1048,7 +1047,7 @@ let tr_enum_type ri to_int of_int acc =
   in
   Type(n,[]) ::
   Logic(false,to_int.jc_fun_info_name,
-	[("",simple_logic_type n)],simple_logic_type "integer") :: 
+	[("",simple_logic_type n)],simple_logic_type "int") :: 
   Param(false,of_int.jc_fun_info_name,of_int_type) ::
   Axiom(n^"_enum",
 	LForall("x",simple_logic_type n,enum_pred (LApp(to_int.jc_fun_info_name,[LVar "x"]))))		

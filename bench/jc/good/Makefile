@@ -1,6 +1,6 @@
 
 JESSIE=../../../bin/jessie.byte
-JESSIELIB=$(shell pwd)/../../../lib
+JESSIELIB=$(shell pwd)/../../../lib/why
 WHYLIB=$(shell pwd)/../../../lib
 
 EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj
@@ -60,14 +60,14 @@ type-all:
 $(JESSIE):
 	make -C ../../.. bin/jessie.byte
 
-why/%.why: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
+why/%.why: %.jc $(JESSIE) $(JESSIELIB)/jessie.why
 	$(EXECJESSIE) $<
 
-simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
+simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/jessie.why
 	$(EXECJESSIE) $<
 	make -f $*.makefile $@
 
-smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
+smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/jessie.why
 	$(EXECJESSIE) $<
 	make -f $*.makefile $@
 

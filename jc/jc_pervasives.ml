@@ -129,7 +129,7 @@ let make_term_op name ty =
     jc_logic_info_calls = [];
   }
 
-let real_of_integer = make_term_op "real_of_int" real_type
+let real_of_integer = make_term_op "real_of_integer" real_type
 
 (* logic predicates *)
 
@@ -166,7 +166,7 @@ let make_fun_info name ty =
  }
 
 
-let real_of_integer_ = make_fun_info "real_of_int" real_type
+let real_of_integer_ = make_fun_info "real_of_integer" real_type
 
 (*
 Local Variables: 
