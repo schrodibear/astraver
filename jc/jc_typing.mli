@@ -26,6 +26,8 @@ open Jc_env
 open Jc_fenv
 open Jc_ast
 
+val print_type : Format.formatter -> jc_type -> unit
+
 val typing_error : 
     Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
@@ -38,13 +40,16 @@ val functions_table :
   (int, fun_info * tfun_spec * tstatement list option) Hashtbl.t
 
 val variables_table : 
-  (int, var_info * texpr) Hashtbl.t
+  (int, var_info * texpr option) Hashtbl.t
 
 val structs_table : 
   (string, (struct_info * (logic_info * tassertion) list)) Hashtbl.t
 
 val enum_types_table : 
   (string, (enum_info * logic_info * fun_info * fun_info)) Hashtbl.t
+
+val enum_conversion_functions_table : (fun_info, string) Hashtbl.t
+val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 
 val axioms_table : 
   (string, tassertion) Hashtbl.t

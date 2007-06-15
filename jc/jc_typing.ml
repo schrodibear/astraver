@@ -22,7 +22,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_output
 open Jc_env
 open Jc_envset
 open Jc_fenv
@@ -32,17 +31,43 @@ open Format
 
 exception Typing_error of Loc.position * string
 
+let string_of_native t =
+  match t with
+    | Tunit -> "unit"
+    | Tinteger -> "integer"
+    | Treal -> "real"
+    | Tboolean -> "boolean"
+
+let print_type fmt t =
+  match t with
+    | JCTnative n -> fprintf fmt "%s" (string_of_native n)
+    | JCTlogic s -> fprintf fmt "%s" s
+    | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
+    | JCTpointer (s,a,b) -> 
+	if Num.gt_num a b then
+	  fprintf fmt "%s[..]" s.jc_struct_info_name
+	else
+	  if Num.eq_num a b then
+	  fprintf fmt "%s[%s]" s.jc_struct_info_name
+	    (Num.string_of_num a)
+	else
+	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
+	  (Num.string_of_num a) (Num.string_of_num b)
+    | JCTnull -> fprintf fmt "(nulltype)"  
+
 let typing_error l = 
   Format.kfprintf 
     (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
     str_formatter
-
 
 let logic_type_table = Hashtbl.create 97
 
 let exceptions_table = Hashtbl.create 97
 
 let enum_types_table = Hashtbl.create 97
+
+let enum_conversion_functions_table = Hashtbl.create 97
+let enum_conversion_logic_functions_table = Hashtbl.create 97
 
 let structs_table = Hashtbl.create 97
 
@@ -952,7 +977,7 @@ let rec expr env e =
 	      match te1.jc_texpr_node with
 		| JCTEvar v ->
 		    set_assigned v;
-		    t1,JCTEassign_local(v,te2)
+		    t1,JCTEassign_var(v,te2)
 		| JCTEderef(e,f) ->
 		    t1,JCTEassign_heap(e, f, te2)
 		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
@@ -972,7 +997,7 @@ let rec expr env e =
 		  if subtype t t1 then
 		    match res with
 		      | JCTEbinary(_,op,_) ->
-			  t1,JCTEassign_local_op(v, op, te2)
+			  t1,JCTEassign_var_op(v, op, te2)
 		      | _ -> assert false
 		  else
 		    typing_error e2.jc_pexpr_loc 
@@ -1534,7 +1559,7 @@ let rec decl d =
     | JCPDvar(ty,id,init) ->
 	let ty = type_type ty in
 	let vi = var ~static:true ty id in
-	let e = expr [] init in
+	let e = Option_misc.map (expr []) init in
 	Hashtbl.add variables_env id vi;
 	Hashtbl.add variables_table vi.jc_var_info_tag (vi,e)
     | JCPDfun(ty,id,pl,specs,body) -> 
@@ -1571,7 +1596,10 @@ let rec decl d =
 	let to_int = make_term_op ("integer_of_"^id) integer_type in
 	let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
 	let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
-	Hashtbl.add enum_types_table id (ri,to_int,to_int_,of_int)
+	Hashtbl.add enum_types_table id (ri,to_int,to_int_,of_int);
+	Hashtbl.add enum_conversion_logic_functions_table to_int id;
+	Hashtbl.add enum_conversion_functions_table to_int_ id;
+	Hashtbl.add enum_conversion_functions_table of_int id
     | JCPDstructtype(id,parent,fields,inv) ->
 	(* mutable field *)
 	if parent = None then create_mutable_field id;

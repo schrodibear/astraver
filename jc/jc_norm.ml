@@ -102,8 +102,8 @@ let make_tincr_heap loc t op e fi =
 let make_node loc node = 
   { jc_statement_loc = loc; jc_statement_node = node; }
 
-let make_assign_local loc vi e =
-  make_node loc (JCSassign_local (vi, e))
+let make_assign_var loc vi e =
+  make_node loc (JCSassign_var (vi, e))
 
 let make_assign_heap loc e1 fi e2 =
   make_node loc (JCSassign_heap (e1, fi, e2))
@@ -193,7 +193,7 @@ let make_int_binary loc e1 op e2 = make_binary loc e1 integer_type op e2
 
 
 let make_incr_local loc op vi =
-  make_assign_local loc vi
+  make_assign_var loc vi
     (make_int_binary loc (make_var loc vi) op (one_const loc))
 
 let make_incr_heap loc op e fi = 
@@ -267,11 +267,11 @@ let rec expr e =
       | JCTEcast (e, s) ->
 	  let (l, tl), e = expr e in
 	  (l, tl), JCEcast (e, s)
-      | JCTEassign_local (vi, e) ->
+      | JCTEassign_var (vi, e) ->
 	  let (l,tl),e = expr e in
-	  let stat = make_assign_local loc vi e in
+	  let stat = make_assign_var loc vi e in
 	  (l@[stat], tl), JCEvar vi
-      | JCTEassign_local_op (vi,op, e) -> 
+      | JCTEassign_var_op (vi,op, e) -> 
 	  (* 
 	     vi op= e becomes:
 
@@ -282,13 +282,13 @@ let rec expr e =
 	  *)             
 	  let tmp = newrefvar vi.jc_var_info_type in
 	  let stat0 = 
-	    make_assign_local loc tmp (make_var loc vi) 
+	    make_assign_var loc tmp (make_var loc vi) 
 	  in
 	  let (l,tl),e = expr e in
 	  let e = 
 	    make_binary loc (make_var loc tmp) vi.jc_var_info_type op e 
 	  in
-	  let stat = make_assign_local loc vi e in
+	  let stat = make_assign_var loc vi e in
 	  (stat0::l@[stat], tmp::tl), JCEvar vi
 
       | JCTEassign_heap (e1, fi, e2) ->
@@ -310,7 +310,7 @@ let rec expr e =
 	  *)             
 	  let (l1,tl1),e1 = expr e1 in
 	  let tmp1 = newrefvar e1.jc_expr_type in
-	  let stat1 = make_assign_local loc tmp1 e1 in
+	  let stat1 = make_assign_var loc tmp1 e1 in
 	  let (l2,tl2),e2 = expr e2 in
 	  let e3 = 
 	    make_binary loc 
@@ -318,7 +318,7 @@ let rec expr e =
 	      fi.jc_field_info_type op e2
 	  in
 	  let tmp2 = newrefvar fi.jc_field_info_type in
-	  let stat2 = make_assign_local loc tmp2 e3 in
+	  let stat2 = make_assign_var loc tmp2 e3 in
 	  let stat = 
 	    make_assign_heap loc (make_var loc tmp1) fi (make_var loc tmp2) 
 	  in
@@ -331,7 +331,7 @@ let rec expr e =
 	    | Postfix_inc | Postfix_dec ->
 	    	let tmp = newrefvar vi.jc_var_info_type in
 		let stat0 = 
-		  make_assign_local loc tmp (make_var loc vi) 
+		  make_assign_var loc tmp (make_var loc vi) 
 		in
 		([stat0 ; make_incr_local loc (op_of_incdec op) vi], [tmp]), 
 		JCEvar tmp
@@ -346,7 +346,7 @@ let rec expr e =
 		let (l,tl),e = expr e in
 		let tmp = newrefvar fi.jc_field_info_type in
 		let stat0 = 
-		  make_assign_local loc tmp (make_deref loc e fi) 
+		  make_assign_var loc tmp (make_deref loc e fi) 
 		in
 		(l@stat0::[make_incr_heap loc Badd_int e fi],tl@[tmp]), 
 		JCEvar tmp
@@ -357,8 +357,8 @@ let rec expr e =
 	  let (l3,tl3),e3 = expr e3 in
 	  (* hack because we do not have a type to rely on ... *)
 	  let tmp = newrefvar integer_type in
-	  let assign2 = make_assign_local loc tmp e2 in
-	  let assign3 = make_assign_local loc tmp e3 in
+	  let assign2 = make_assign_var loc tmp e2 in
+	  let assign3 = make_assign_var loc tmp e3 in
 	  let if_e1_stat = 
 	    make_if loc e1 (make_block loc (l2 @ [assign2])) 
 	      (make_block loc (l3 @ [assign3])) in
@@ -374,9 +374,9 @@ and call loc f el ~binder ll =
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
     let tmp = newrefvar boolean_type in
-    let e1_false_stat = make_assign_local loc tmp (false_const loc) in
-    let e2_false_stat = make_assign_local loc tmp (false_const loc) in
-    let true_stat = make_assign_local loc tmp (true_const loc) in
+    let e1_false_stat = make_assign_var loc tmp (false_const loc) in
+    let e2_false_stat = make_assign_var loc tmp (false_const loc) in
+    let true_stat = make_assign_var loc tmp (true_const loc) in
     let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
     let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
     let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
@@ -387,9 +387,9 @@ and call loc f el ~binder ll =
     let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
     let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
     let tmp = newrefvar boolean_type in
-    let e1_true_stat = make_assign_local loc tmp (true_const loc) in
-    let e2_true_stat = make_assign_local loc tmp (true_const loc) in
-    let false_stat = make_assign_local loc tmp (false_const loc) in
+    let e1_true_stat = make_assign_var loc tmp (true_const loc) in
+    let e2_true_stat = make_assign_var loc tmp (true_const loc) in
+    let false_stat = make_assign_var loc tmp (false_const loc) in
     let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
     let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
     let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
@@ -798,7 +798,7 @@ let statement s =
 	    JCScall (vio, fi, el, link_stat s)
 	| JCSblock sl ->
 	    JCSblock (List.fold_right link_call sl [])
-	| JCSassign_local (_, _)
+	| JCSassign_var (_, _)
 	| JCSassign_heap (_, _, _)
 	| JCSassert _ 
 	| JCSreturn _ 
@@ -825,10 +825,13 @@ let code_function (spec, sl) =
   (fun_spec spec, Option_misc.map (List.map statement) sl)
 
 let static_variable (v,e) =
-  let (sl,tl),e = expr e in
-  match sl,tl with
-    | [],[] -> v,e
-    | _ -> assert false (* TODO *)
+  match e with
+    | None -> v,None
+    | Some e ->
+	let (sl,tl),e = expr e in
+	match sl,tl with
+	  | [],[] -> v, Some e
+	  | _ -> assert false (* TODO *)
 
 let logic_function t =
   match t with 

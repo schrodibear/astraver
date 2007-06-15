@@ -111,9 +111,10 @@ let exception_info ty id =
 (* logic functions *)
 
 let empty_effects = 
-  { jc_effect_alloc_table = StringSet.empty ;
-    jc_effect_tag_table = StringSet.empty ;
-    jc_effect_memories = FieldSet.empty ;
+  { jc_effect_alloc_table = StringSet.empty;
+    jc_effect_tag_table = StringSet.empty;
+    jc_effect_memories = FieldSet.empty;
+    jc_effect_globals = VarSet.empty;
   }
 
 let logic_fun_tag_counter = ref 0

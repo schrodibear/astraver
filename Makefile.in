@@ -223,8 +223,7 @@ JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_options.cmo \
 	jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
-	jc/jc_output.cmo \
-	jc/jc_typing.cmo jc/jc_norm.cmo \
+	jc/jc_typing.cmo jc/jc_norm.cmo jc/jc_output.cmo \
 	ocamlgraph/graph.cmo jc/jc_control_flow.cmo \
 	ocamlgraph/components.cmo jc/jc_callgraph.cmo \
 	jc/jc_effect.cmo \
@@ -237,8 +236,7 @@ JCCMX = $(JCCMO:.cmo=.cmx)
 JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_version.ml \
 	jc/jc_envset.ml jc/jc_pervasives.ml \
-	jc/jc_output.ml \
-	jc/jc_typing.ml jc/jc_norm.ml \
+	jc/jc_typing.ml jc/jc_norm.ml jc/jc_output.ml \
 	jc/output.ml
 JCCMO_EXPORT = $(JCCMO_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCMO_EXPORT:.ml=.cmx)
@@ -261,7 +259,8 @@ bin/jessie.byte: $(JCCMO)
 
 # krakatoa
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/jc_envset.cmo jc/jc_pervasives.cmo jc/jc_output.cmo \
+	jc/jc_envset.cmo jc/jc_pervasives.cmo jc/jc_typing.cmo \
+	jc/jc_output.cmo \
 	java/java_version.cmo java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
 	java/java_typing.cmo \

@@ -35,7 +35,7 @@ val functions_table :
   (int, fun_info * fun_spec * statement list option) Hashtbl.t
 
 val variables_table : 
-  (int, var_info * expr) Hashtbl.t
+  (int, var_info * expr option) Hashtbl.t
 
 val structs_table : 
   (string, (struct_info * (logic_info * assertion) list)) Hashtbl.t
@@ -54,7 +54,7 @@ val logic_function : tterm_or_tassertion -> term_or_assertion
 val code_function : tfun_spec * tstatement list option 
   -> fun_spec * statement list option
 
-val static_variable : var_info * texpr -> var_info * expr
+val static_variable : var_info * texpr option -> var_info * expr option
 
 val assertion : tassertion -> assertion
 

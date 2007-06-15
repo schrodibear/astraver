@@ -22,18 +22,23 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.11 2007-06-14 14:36:09 moy Exp $ *)
+(* $Id: jc_fenv.mli,v 1.12 2007-06-15 14:05:03 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
 
+(* When adding fields for effects, change accordingly function [same_effects]
+   in [jc_effect.ml]. *)
 type effect =
     {
       jc_effect_alloc_table : StringSet.t;
       jc_effect_tag_table : StringSet.t;
       jc_effect_memories : FieldSet.t;
+      jc_effect_globals : VarSet.t;
     }
 
+(* When adding fields for effects, change accordingly function [same_feffects]
+   in [jc_effect.ml]. *)
 type fun_effect =
     {
       jc_reads : effect;

@@ -325,9 +325,9 @@ let rec expr e =
 	  JCTEbinary(e1,bin_op op,e2)	  
       | JEvar vi -> JCTEvar (get_var vi)
       | JEassign_local_var(vi,e) ->
-	  JCTEassign_local(get_var vi,expr e)
+	  JCTEassign_var(get_var vi,expr e)
       | JEassign_local_var_op(vi,op,e) ->
-	  JCTEassign_local_op(get_var vi,bin_op op, expr e)
+	  JCTEassign_var_op(get_var vi,bin_op op, expr e)
       | JEassign_field(e1,fi,e2) ->
 	  JCTEassign_heap(expr e1,get_field fi,expr e2)
       | JEassign_field_op(e1,fi,op,e2) ->

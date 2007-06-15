@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.34 2007-06-15 11:48:43 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.35 2007-06-15 14:05:02 moy Exp $ *)
 
 
 open Jc_env
@@ -42,6 +42,9 @@ let ef_union ef1 ef2 =
     jc_effect_memories = 
       FieldSet.union 
 	ef1.jc_effect_memories ef2.jc_effect_memories;
+    jc_effect_globals = 
+      VarSet.union 
+	ef1.jc_effect_globals ef2.jc_effect_globals;
   }
 
 let fef_union fef1 fef2 =
@@ -52,6 +55,9 @@ let fef_union fef1 fef2 =
 
 let add_memory_effect ef fi =
   { ef with jc_effect_memories = FieldSet.add fi ef.jc_effect_memories } 
+  
+let add_global_effect ef vi =
+  { ef with jc_effect_globals = VarSet.add vi ef.jc_effect_globals } 
   
 let add_alloc_effect ef a =
   { ef with jc_effect_alloc_table = StringSet.add a ef.jc_effect_alloc_table } 
@@ -65,6 +71,9 @@ let add_exception_effect ef a =
 let add_field_reads fef fi =
   { fef with jc_reads = add_memory_effect fef.jc_reads fi }
 
+let add_global_reads fef vi =
+  { fef with jc_reads = add_global_effect fef.jc_reads vi }
+
 let add_alloc_reads fef fi =
   { fef with jc_reads = add_alloc_effect fef.jc_reads fi }
 
@@ -73,10 +82,14 @@ let add_tag_reads fef fi =
 
 let add_field_writes fef fi =
   { fef with jc_writes = add_memory_effect fef.jc_writes fi }
- 
+
+let add_global_writes fef vi =
+  { fef with jc_writes = add_global_effect fef.jc_writes vi }
+
 let same_effects ef1 ef2 =
-  StringSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table &&
-  FieldSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
+  StringSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
+  && FieldSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
+  && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
 
 let same_feffects fef1 fef2 =
   same_effects fef1.jc_reads fef2.jc_reads &&
@@ -92,7 +105,10 @@ terms and assertions
 let rec term ef t =
   match t.jc_term_node with
     | JCTconst _ -> ef
-    | JCTvar vi -> ef (* TODO ? *)
+    | JCTvar vi ->
+	if vi.jc_var_info_static then
+	  add_global_effect ef vi
+	else ef
     | JCTif(t1, t2, t3) -> term (term (term ef t1) t2) t3
     | JCTcast(t, _) 
     | JCTinstanceof (t, _)
@@ -140,10 +156,14 @@ let rec expr ef e =
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) st.jc_struct_info_root
-    | JCEderef (e, f) -> expr ef e 
+    | JCEderef (e, f) -> 
+	add_field_reads (expr ef e) f
     | JCEshift (e1, e2) -> expr (expr ef e1) e2
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
-    | JCEvar _ -> ef (* TODO *)
+    | JCEvar vi -> 
+	if vi.jc_var_info_static then
+	  add_global_reads ef vi
+	else ef
     | JCEunary(op,e1) -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) -> expr ef e
@@ -161,7 +181,11 @@ let rec statement ef s =
 	statement ef s
     | JCSassign_heap (e1, fi, e2) ->
 	expr (expr (add_field_writes ef fi) e1) e2
-    | JCSassign_local (vi, e) -> expr ef e
+    | JCSassign_var (vi, e) ->
+	if vi.jc_var_info_static then
+	  add_global_writes (expr ef e) vi
+	else 
+	  expr ef e
     | JCSreturn(_,e) 
     | JCSpack(_,e) | JCSunpack(_,e) -> expr ef e
     | JCSthrow (ei, Some e) -> 
@@ -189,7 +213,10 @@ let location ef l =
   match l with
     | JCLderef(t,fi) ->
 	add_field_writes ef fi
-    | JCLvar _ -> assert false (* TODO *)
+    | JCLvar vi ->
+	if vi.jc_var_info_static then
+	  add_global_writes ef vi
+	else ef
 
 let behavior ef (_,b) =
   (* assigns *)
@@ -301,6 +328,16 @@ let function_effects funs =
     List.iter fun_effects funs
   done;
   Jc_options.lprintf "Effects: fixpoint reached@.";
+  Jc_options.lprintf "Effects: removing global reads without writes@.";
+  List.iter (fun f ->
+	       f.jc_fun_info_effects <-
+		 let efw = f.jc_fun_info_effects.jc_writes.jc_effect_globals in
+		 let efr = f.jc_fun_info_effects.jc_reads.jc_effect_globals in
+		 let efg = VarSet.inter efr efw in
+		 let ef = { f.jc_fun_info_effects.jc_reads 
+			    with jc_effect_globals = efg } in
+		 { f.jc_fun_info_effects with jc_reads = ef }
+	    ) funs;
   List.iter
     (fun f ->
        Jc_options.lprintf
@@ -316,7 +353,6 @@ let function_effects funs =
 			      fprintf fmt "%s" ei.jc_exception_info_name))
 	 (ExceptionSet.elements f.jc_fun_info_effects.jc_raises))
     funs
-
        
 
   

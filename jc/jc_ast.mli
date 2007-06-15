@@ -142,7 +142,7 @@ type preads_or_pexpr =
   | JCPExpr of pexpr
 
 type pdecl_node =
-  | JCPDvar of ptype * string * pexpr
+  | JCPDvar of ptype * string * pexpr option
   | JCPDfun of ptype * string * (ptype * string) list * pclause list
       * pstatement list option
   | JCPDstructtype of string * 
@@ -258,8 +258,8 @@ type texpr_node =
   | JCTEoffset of offset_kind * texpr * struct_info 
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info
-  | JCTEassign_local of var_info * texpr
-  | JCTEassign_local_op of var_info * bin_op * texpr
+  | JCTEassign_var of var_info * texpr
+  | JCTEassign_var_op of var_info * bin_op * texpr
   | JCTEassign_heap of texpr * field_info * texpr
   | JCTEassign_heap_op of texpr * field_info * bin_op * texpr
   | JCTEincr_local of tincr_op * var_info 
@@ -430,7 +430,7 @@ type incr_op = Stat_inc | Stat_dec
 type statement_node =
     (* instructions *)
   | JCScall of var_info option * fun_info * expr list * statement
-  | JCSassign_local of var_info * expr
+  | JCSassign_var of var_info * expr
   | JCSassign_heap of expr * field_info * expr
       (* statements *)
   | JCSassert of string option * assertion

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.10 2007-02-21 10:56:12 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.11 2007-06-15 14:05:03 moy Exp $ i*)
 
 open Lexing
 open Format
@@ -381,10 +381,14 @@ let make_and_expr a1 a2 =
     | (_,_) -> And(a1,a2)
 
 
-let rec make_app_rec accu l =
-  match l with
+let make_app_rec f l = 
+  let rec make_rec accu = function
     | [] -> accu
-    | e::r -> make_app_rec (App(accu,e)) r
+    | e::r -> make_rec (App(accu,e)) r
+  in
+  match l with
+    | [] -> make_rec f [Void]
+    | l -> make_rec f l
 ;;
 
 let make_app id l = make_app_rec (Var id) l

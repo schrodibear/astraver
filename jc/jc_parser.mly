@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.47 2007-06-15 11:48:43 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.48 2007-06-15 14:05:03 moy Exp $ */
 
 %{
 
@@ -387,8 +387,10 @@ function_definition:
 /******************************/
 
 variable_definition:
-| type_expr IDENTIFIER EQ expression
-    { locate_decl (JCPDvar($1,$2,$4)) }
+| type_expr IDENTIFIER EQ expression SEMICOLON
+    { locate_decl (JCPDvar($1,$2,Some $4)) }
+| type_expr IDENTIFIER SEMICOLON
+    { locate_decl (JCPDvar($1,$2,None)) }
 ;
 
 /***************/

@@ -158,7 +158,7 @@ let coerce loc tdest tsrc e =
     |  _ -> 
 	 Jc_typing.typing_error loc 
 	   "can't coerce type %a to type %a" 
-	   Jc_output.print_type tsrc Jc_output.print_type tdest
+	   Jc_typing.print_type tsrc Jc_typing.print_type tdest
 
 (**************************
 
@@ -512,7 +512,7 @@ let rec statement s =
 	    | Some vi ->
 		Let(vi.jc_var_info_final_name,call, statement s)
 	end
-    | JCSassign_local (vi, e2) -> 
+    | JCSassign_var (vi, e2) -> 
 	let e2' = expr e2 in
 	let n = vi.jc_var_info_final_name in
 	Assign(n, coerce e2.jc_expr_loc vi.jc_var_info_type e2.jc_expr_type e2')
@@ -892,6 +892,12 @@ let tr_fun f spec body acc =
       []
   in
   let reads =
+    VarSet.fold
+      (fun v acc -> v.jc_var_info_final_name::acc)
+      f.jc_fun_info_effects.jc_reads.jc_effect_globals
+      reads
+  in
+  let reads =
     StringSet.fold
       (fun v acc -> (v ^ "_alloc_table")::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
@@ -908,6 +914,12 @@ let tr_fun f spec body acc =
       (fun f acc -> f.jc_field_info_name::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
+  in
+  let writes =
+    VarSet.fold
+      (fun v acc -> v.jc_var_info_final_name::acc)
+      f.jc_fun_info_effects.jc_writes.jc_effect_globals
+      writes
   in
   let normal_post =
     List.fold_right
@@ -1043,13 +1055,13 @@ let tr_enum_type ri to_int of_int acc =
   :: acc
 
 let tr_variable vi e acc =
-  let t = 
-    if vi.jc_var_info_assigned then
-      Ref_type(tr_type vi.jc_var_info_type)
-    else
-      tr_type vi.jc_var_info_type
-  in
-  Param(false,vi.jc_var_info_name,t)::acc
+  if vi.jc_var_info_assigned then
+    let t = Ref_type(tr_type vi.jc_var_info_type) in
+    Param(false,vi.jc_var_info_name,t)::acc
+  else
+    let t = tr_base_type vi.jc_var_info_type in
+    Logic(false,vi.jc_var_info_name,[],t)::acc
+
 	   
 (*
 Local Variables: 
