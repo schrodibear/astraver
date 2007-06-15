@@ -22,13 +22,18 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.7 2006-11-03 12:49:05 marche Exp $ i*)
+(*i $Id: pp.mli,v 1.8 2007-06-15 07:01:21 moy Exp $ i*)
 
 open Format
 
 val print_option : (formatter -> 'a -> unit) -> formatter -> 'a option -> unit
+val print_option_or_default :
+  string -> (formatter -> 'a -> unit) -> formatter -> 'a option -> unit
 val print_list : 
   (formatter -> unit -> unit) -> 
+  (formatter -> 'a -> unit) -> formatter -> 'a list -> unit
+val print_list_or_default :
+  string -> (formatter -> unit -> unit) -> 
   (formatter -> 'a -> unit) -> formatter -> 'a list -> unit
 val space : formatter -> unit -> unit
 val alt : formatter -> unit -> unit

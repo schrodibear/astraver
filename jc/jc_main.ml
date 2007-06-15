@@ -87,7 +87,8 @@ let main () =
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
 	  Jc_norm.logic_functions_table;
 	Hashtbl.iter 
-	  (fun _ (f,s,b) -> Jc_callgraph.compute_calls f s b)
+	  (fun _ (f,s,b) -> 
+	     Option_misc.iter (Jc_callgraph.compute_calls f s) b)
 	  Jc_norm.functions_table;
 	let logic_components = 
 	  Jc_callgraph.compute_logic_components 

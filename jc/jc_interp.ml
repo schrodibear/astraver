@@ -109,6 +109,8 @@ let bin_op = function
   | Bbw_and -> "bw_and"
   | Bbw_or -> "bw_or"
   | Bbw_xor -> "bw_xor"
+  | Bshift_left -> "lsl"
+  | Bshift_right -> "lsr"
   | Blor | Bland -> assert false (* should be handled before for laziness *)
   | Biff | Bimplies -> assert false (* never in expressions *)
 
@@ -132,7 +134,7 @@ let bin_arg_type loc = function
   | Bgt_int | Blt_int | Bge_int | Ble_int 
   | Beq_int | Bneq_int 
   | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
-  | Bbw_and | Bbw_or | Bbw_xor -> integer_type
+  | Bbw_and | Bbw_or | Bbw_xor | Bshift_right | Bshift_left -> integer_type
   | Biff|Bimplies|Blor|Bland -> boolean_type
   | Bdiv_real | Bmul_real | Bsub_real | Badd_real
   | Bneq_real | Beq_real | Bge_real
@@ -923,78 +925,83 @@ let tr_fun f spec body acc =
     let fun_type = interp_fun_params f annot_type in
     Param(false,f.jc_fun_info_name,fun_type)
   in
-  (* why functions for each behaviors *)
-  let params = match f.jc_fun_info_parameters with
-    | [] -> ["tt", unit_type]
-    | l -> List.map parameter l
-  in
-  (* rename formals just before body is treated *)
-  let list_of_refs =
-    List.fold_right
-      (fun id bl ->
-	 if id.jc_var_info_assigned
-	 then 
-	   let n = id.jc_var_info_final_name in
-	   let newn = "mutable_" ^ n in
-	   id.jc_var_info_final_name <- newn;
-	   (newn, n) :: bl
-	 else bl) 
-      f.jc_fun_info_parameters [] 
-  in
-  let body = statement_list body in
-  let tblock =
-    append
-(*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-      (assume_all_invariants f.jc_fun_info_parameters)
-      body
-  in
-  let tblock = make_label "init" tblock in
-  let tblock =
-    List.fold_right
-      (fun (mut_id,id) bl ->
-	 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-  in
-  let acc =
-    List.fold_right
-      (fun (id,b,e) acc ->
-	 let d =
-	   Def(
-	     f.jc_fun_info_name ^ "_ensures_" ^ id,
-	     Fun(
-	       params,
-	       requires,
-	       tblock,
-	       e,
-	       excep_posts_for_others None excep_behaviors
-	     )
-	   )
-	 in d::acc)
-      normal_behaviors acc
-  in 
-  (* redefine [tblock] for use in exception functions *)
-  let tblock = make_label "init" tblock in
-  let tblock =
-    List.fold_right
-      (fun (mut_id,id) bl ->
-	 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-  in
-  let acc =
-    ExceptionMap.fold
-      (fun ei l acc ->
-	 List.fold_right
-	   (fun (id,b,e) acc ->
-	      let d =
-		Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
-		    Fun(params,
-			requires,
-			tblock,
-			LTrue,
-			(ei.jc_exception_info_name,e) :: 
-			excep_posts_for_others (Some ei) excep_behaviors))
-	      in d::acc)
-	   l acc)
-      excep_behaviors acc
-  in why_param::acc
+  match body with
+    | None -> 
+	(* function was only declared *)
+	why_param :: acc
+    | Some body ->
+	(* why functions for each behaviors *)
+	let params = match f.jc_fun_info_parameters with
+	  | [] -> ["tt", unit_type]
+	  | l -> List.map parameter l
+	in
+	(* rename formals just before body is treated *)
+	let list_of_refs =
+	  List.fold_right
+	    (fun id bl ->
+	       if id.jc_var_info_assigned
+	       then 
+		 let n = id.jc_var_info_final_name in
+		 let newn = "mutable_" ^ n in
+		 id.jc_var_info_final_name <- newn;
+		 (newn, n) :: bl
+	       else bl) 
+	    f.jc_fun_info_parameters [] 
+	in
+	let body = statement_list body in
+	let tblock =
+	  append
+	    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+	    (assume_all_invariants f.jc_fun_info_parameters)
+	    body
+	in
+	let tblock = make_label "init" tblock in
+	let tblock =
+	  List.fold_right
+	    (fun (mut_id,id) bl ->
+	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+	in
+	let acc =
+	  List.fold_right
+	    (fun (id,b,e) acc ->
+	       let d =
+		 Def(
+		   f.jc_fun_info_name ^ "_ensures_" ^ id,
+		   Fun(
+		     params,
+		     requires,
+		     tblock,
+		     e,
+		     excep_posts_for_others None excep_behaviors
+		   )
+		 )
+	       in d::acc)
+	    normal_behaviors acc
+	in 
+	(* redefine [tblock] for use in exception functions *)
+	let tblock = make_label "init" tblock in
+	let tblock =
+	  List.fold_right
+	    (fun (mut_id,id) bl ->
+	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+	in
+	let acc =
+	  ExceptionMap.fold
+	    (fun ei l acc ->
+	       List.fold_right
+		 (fun (id,b,e) acc ->
+		    let d =
+		      Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
+			  Fun(params,
+			      requires,
+			      tblock,
+			      LTrue,
+			      (ei.jc_exception_info_name,e) :: 
+				excep_posts_for_others (Some ei) excep_behaviors))
+		    in d::acc)
+		 l acc)
+	    excep_behaviors acc
+	in why_param::acc
 
 let tr_logic_type id acc = Type(id,[])::acc
 

@@ -8,7 +8,7 @@ open Pp
 
 type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
-      tfun_spec * tstatement list
+      tfun_spec * tstatement list option
   | JCenum_type_def of string * Num.num * Num.num
   | JCstruct_def of string * field_info list 
   | JCrec_struct_defs of jc_decl list
@@ -89,6 +89,8 @@ let bin_op = function
   | Bbw_and -> "&"
   | Bbw_or -> "|"
   | Bbw_xor -> "^"
+  | Bshift_right -> ">>"
+  | Bshift_left -> "<<"
 
 let unary_op = function
   | Uplus_int | Uplus_real -> "+"
@@ -193,7 +195,7 @@ let rec location_set fmt = function
   | JCTLSderef (locset, fi) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
   | JCTLSrange (locset, t1, t2) ->
-      fprintf fmt "%a[%a..%a]" location_set locset term t1 term t2
+      fprintf fmt "(%a + (%a..%a))" location_set locset term t1 term t2
 
 let location fmt = function
   | JCTLvar vi -> 
@@ -207,7 +209,8 @@ let behavior fmt (id,b) =
     (fun a -> fprintf fmt "assumes %a;@\n" assertion a) 
     b.jc_tbehavior_assumes;
   Option_misc.iter 
-    (fun locs -> fprintf fmt "assigns %a;@\n" (print_list comma location) locs)
+    (fun locs -> fprintf fmt "assigns %a;@\n" 
+       (print_list_or_default "\\nothing" comma location) locs)
     b.jc_tbehavior_assigns;
   fprintf fmt "ensures %a;@]@\n" assertion b.jc_tbehavior_ensures
   
@@ -365,7 +368,8 @@ let rec print_decl fmt d =
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@[%a %s(@[%a@])@\n%a@\n%a@]@\n@." print_type ty id
 	  (print_list comma param) params 
-	  print_spec spec block body 
+	  print_spec spec 
+	  (print_option_or_default ";" block) body
     | JCenum_type_def(id,min,max) ->
 	fprintf fmt "@[type %s = %s..%s@]@\n@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
@@ -379,16 +383,10 @@ let rec print_decl fmt d =
     | JCaxiom_def(id,a) ->
 	fprintf fmt "@[axiom %s : %a@]@\n@." id assertion a
     | JClogic_fun_def(ty,id,params,body) ->
-	match ty with
-	  | None ->
-	      fprintf fmt "@[logic %s(@[%a@]) %a@]@\n@." 
-		id (print_list comma param) params 
-		term_or_assertion body 
-	  | Some ty ->
-	      fprintf fmt "@[logic %a %s(@[%a@]) %a@]@\n@." 
-		print_type ty 
-		id (print_list comma param) params 
-		term_or_assertion body 
+	fprintf fmt "@[logic %a %s(@[%a@]) %a@]@\n@." 
+	  (print_option print_type) ty 
+	  id (print_list comma param) params
+	  term_or_assertion body 
    
 let rec print_decls fmt d =
   match d with

@@ -138,7 +138,7 @@ module LogicCallGraph = struct
 module LogicCallComponents = Components.Make(LogicCallGraph)
 
 module CallGraph = struct 
-  type t = (int, (fun_info * fun_spec * statement list)) Hashtbl.t
+  type t = (int, (fun_info * fun_spec * statement list option)) Hashtbl.t
   module V = struct
     type t = fun_info
     let compare f1 f2 = Pervasives.compare f1.jc_fun_info_tag f2.jc_fun_info_tag

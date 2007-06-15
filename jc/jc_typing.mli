@@ -35,7 +35,7 @@ val logic_functions_table :
   (int, logic_info * tterm_or_tassertion) Hashtbl.t
 
 val functions_table : 
-  (int, fun_info * tfun_spec * tstatement list) Hashtbl.t
+  (int, fun_info * tfun_spec * tstatement list option) Hashtbl.t
 
 val variables_table : 
   (int, var_info * texpr) Hashtbl.t

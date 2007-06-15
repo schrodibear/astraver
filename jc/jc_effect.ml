@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.32 2007-06-14 14:36:09 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.33 2007-06-15 07:01:31 moy Exp $ *)
 
 
 open Jc_env
@@ -258,7 +258,7 @@ let fun_effects fi =
   in
   let ef = f.jc_fun_info_effects in
   let ef = spec ef s in
-  let ef = List.fold_left statement ef b in
+  let ef = Option_misc.fold_left (List.fold_left statement) ef b in
   let ef = List.fold_left parameter ef f.jc_fun_info_parameters in
   if same_feffects ef f.jc_fun_info_effects then ()
   else begin

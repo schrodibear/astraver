@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.30 2007-06-14 14:36:09 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.31 2007-06-15 07:01:31 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -192,9 +192,9 @@ rule token = parse
   | "&="                    { AND_ASSIGN }
   | "^="                    { XOR_ASSIGN }
   | "|="                    { OR_ASSIGN }
-  | ">>"                    { RIGHT_OP }
-  | "<<"                    { LEFT_OP }
 *)
+  | ">>"                    { RSHIFT }
+  | "<<"                    { LSHIFT }
   | "++"                    { PLUSPLUS }
   | "--"                    { MINUSMINUS }
   | "&&"                    { AMPAMP }

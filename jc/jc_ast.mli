@@ -67,7 +67,7 @@ type pbin_op =
   | BPadd | BPsub | BPmul | BPdiv | BPmod
   | BPland | BPlor | BPimplies | BPiff
   (* bitwise operators *)
-  | BPbw_and | BPbw_or | BPbw_xor
+  | BPbw_and | BPbw_or | BPbw_xor | BPshift_left | BPshift_right
 
 type punary_op =
   | UPplus | UPminus | UPnot 
@@ -139,8 +139,8 @@ type preads_or_pexpr =
 
 type pdecl_node =
   | JCPDvar of ptype * string * pexpr
-  | JCPDfun of 
-      ptype * string * (ptype * string) list * pclause list * pstatement list
+  | JCPDfun of ptype * string * (ptype * string) list * pclause list
+      * pstatement list option
   | JCPDstructtype of string * 
       string option * (ptype * string) list * (string * string * pexpr) list
   (* use to define recursively a set of types *)
@@ -175,7 +175,7 @@ type bin_op =
   | Bland | Blor | Bimplies | Biff
   | Beq_pointer | Bneq_pointer
   (* bitwise operators *)
-  | Bbw_and | Bbw_or | Bbw_xor
+  | Bbw_and | Bbw_or | Bbw_xor | Bshift_left | Bshift_right
   
 type unary_op =
   | Uplus_int | Uminus_int | Uplus_real | Uminus_real | Unot 

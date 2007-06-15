@@ -796,7 +796,7 @@ let statement s =
   in link_stat s
 
 let code_function (spec, sl) =
-  (fun_spec spec, List.map statement sl)
+  (fun_spec spec, Option_misc.map (List.map statement) sl)
 
 let static_variable (v,e) =
   let (sl,tl),e = expr e in
@@ -808,7 +808,7 @@ let logic_function t =
   match t with 
     | JCTAssertion p -> JCAssertion (assertion p) 
     | JCTReads r -> JCReads (List.map location r)
-    | _ -> assert false
+    | JCTTerm t -> JCTerm (term t)
 
 (*
   Local Variables: 

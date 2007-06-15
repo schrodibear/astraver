@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.44 2007-06-14 14:36:09 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.45 2007-06-15 07:01:32 moy Exp $ */
 
 %{
 
@@ -65,7 +65,7 @@
 %token <string> STRING_LITERAL 
 %token NULL
 
-/* ( ) { } [ ] .. */
+/* ( ) () { } [ ] .. */
 %token LPAR RPAR LPARRPAR LBRACE RBRACE LSQUARE RSQUARE DOTDOT
 
 /* ; , : . ? */
@@ -95,7 +95,7 @@
 /* type invariant logic with variant and */
 %token TYPE INVARIANT LOGIC WITH VARIANT AND
 
-/* integer boolean real unit */
+/* integer boolean real unit void */
 %token INTEGER BOOLEAN REAL UNIT
 
 /* assigns assumes behavior ensures requires throws reads */
@@ -110,12 +110,11 @@
 /* axiom */
 %token AXIOM
 
-/* & ~ ^ | */
-%token AMP TILDE HAT PIPE
+/* & ~ ^ | << >> */
+%token AMP TILDE HAT PIPE LSHIFT RSHIFT
 
 /*
 
-%token LEFT_OP RIGHT_OP 
 %token OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN 
 %token LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
 %token XOR_ASSIGN OR_ASSIGN
@@ -386,7 +385,9 @@ function_rec_definitions:
 
 function_definition: 
 | type_expr IDENTIFIER parameters function_specification compound_statement
-    { locate_decl (JCPDfun($1, $2, $3, $4, $5)) }
+    { locate_decl (JCPDfun($1, $2, $3, $4, Some $5)) }
+| type_expr IDENTIFIER parameters function_specification SEMICOLON
+    { locate_decl (JCPDfun($1, $2, $3, $4, None)) }
 ;
 
 
@@ -454,6 +455,8 @@ primary_expression:
 postfix_expression: 
 | primary_expression 
     { $1 }
+| primary_expression LPARRPAR 
+    { locate_expr (JCPEapp($1, [])) }
 | primary_expression LPAR RPAR 
     { locate_expr (JCPEapp($1, [])) }
 | primary_expression LPAR argument_expression_list RPAR 
@@ -515,12 +518,10 @@ additive_expression:
 shift_expression: 
 | additive_expression 
     { $1 }
-/*
-| shift_expression LEFT_OP additive_expression 
-    { locate (CEbinary ($1, BPshift_left, $3)) }
-| shift_expression RIGHT_OP additive_expression 
-    { locate (CEbinary ($1, BPshift_right, $3)) }
-*/
+| shift_expression LSHIFT additive_expression 
+    { locate_expr (JCPEbinary ($1, BPshift_left, $3)) }
+| shift_expression RSHIFT additive_expression 
+    { locate_expr (JCPEbinary ($1, BPshift_right, $3)) }
 ;
 
 assignment_operator: 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.7 2006-11-03 12:49:05 marche Exp $ i*)
+(*i $Id: pp.ml,v 1.8 2007-06-15 07:01:21 moy Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -32,10 +32,18 @@ let print_option f fmt = function
   | None -> ()
   | Some x -> f fmt x
 
+let print_option_or_default default f fmt = function
+  | None -> fprintf fmt "%s" default
+  | Some x -> f fmt x
+
 let rec print_list sep print fmt = function
   | [] -> ()
   | [x] -> print fmt x
   | x :: r -> print fmt x; sep fmt (); print_list sep print fmt r
+
+let print_list_or_default default sep print fmt = function
+  | [] -> fprintf fmt "%s" default
+  | l -> print_list sep print fmt l
 
 let comma fmt () = fprintf fmt ",@ "
 let underscore fmt () = fprintf fmt "_"

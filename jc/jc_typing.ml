@@ -248,6 +248,8 @@ let bin_op t op =
     | _, BPbw_and -> Bbw_and
     | _, BPbw_or -> Bbw_or
     | _, BPbw_xor -> Bbw_xor
+    | _, BPshift_right -> Bshift_right
+    | _, BPshift_left -> Bshift_left
 
     | _, BPland -> assert false
     | _, BPlor -> assert false
@@ -393,7 +395,8 @@ let make_logic_bin_op loc op e1 e2 =
 		else
 		  typing_error loc "numeric types expected for + and -"
 	end
-    | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor ->
+    | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
+    | BPshift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  (JCTnative t,
@@ -629,6 +632,7 @@ let make_rel_bin_op loc op e1 e2 =
 	    typing_error loc "terms should have the same type for == and !="
 	(* non propositional operators *)
     | BPadd | BPsub | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor
+    | BPshift_right | BPshift_left 
 	-> assert false
 	(* already recognized as connectives *)
     | BPland | BPlor -> assert false 
@@ -885,7 +889,8 @@ let make_bin_app loc op e1 e2 =
 		else
 		  typing_error loc "numeric types expected for + and -"
 	end
-    | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor ->
+    | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
+    | BPshift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative t,
@@ -1520,7 +1525,9 @@ let rec decl d =
 		  { jc_tfun_requires = assertion_true;
 		    jc_tfun_behavior = [] }
 	in
-	let b = statement_list (("\\result",vi)::param_env) body in
+	let b = 
+	  Option_misc.map (statement_list (("\\result",vi)::param_env)) body 
+	in
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDrecfuns pdecls ->
         (* first pass: adding function names *)
