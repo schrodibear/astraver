@@ -10,22 +10,22 @@ type 't alloc_table
 
 type 't pointer
 
-logic offset_max : 't alloc_table, 't pointer -> int
-logic offset_min : 't alloc_table, 't pointer -> int
+logic offset_max : 't alloc_table, 't pointer -> integer
+logic offset_min : 't alloc_table, 't pointer -> integer
 
 predicate valid (a:'t alloc_table, p:'t pointer) = 
   offset_min(a,p) <= 0 and offset_max(a,p) >= 0
 
-logic shift : 't pointer, int -> 't pointer
+logic shift : 't pointer, integer -> 't pointer
 
 axiom offset_max_shift :
  forall a:'t alloc_table.
-  forall p: 't pointer. forall i:int.
+  forall p: 't pointer. forall i:integer.
 	offset_max(a,shift(p,i)) = offset_max(a,p)-i
 
 axiom offset_min_shift : 
  forall a:'t alloc_table.
-  forall p: 't pointer. forall i:int.
+  forall p: 't pointer. forall i:integer.
 	offset_min(a,shift(p,i)) = offset_min(a,p)-i
 
 (* the null pointer *)
@@ -135,7 +135,7 @@ logic pset_empty : 't pset
 logic pset_singleton : 't pointer -> 't pset
 logic pset_deref : ('t,'v pointer) memory, 't pset -> 'v pset
 logic pset_union : 't pset, 't pset -> 't pset
-logic pset_range : 't pset, int, int -> 't pset
+logic pset_range : 't pset, integer, integer -> 't pset
 
 logic in_pset : 't pointer, 't pset -> prop
 
@@ -157,9 +157,9 @@ axiom in_pset_deref:
 axiom in_pset_range:
   forall p:'t pointer. 
   forall q:'t pset.
-  forall a:int. forall b:int.
+  forall a:integer. forall b:integer.
     in_pset(p,pset_range(q,a,b)) <-> 
-	exists i:int. exists r:'t pointer.
+	exists i:integer. exists r:'t pointer.
           a <= i and i <= b and in_pset(r,q) and p=shift(r,i)
 
 axiom in_pset_union:
@@ -215,7 +215,7 @@ parameter downcast_ :
 
 **********************)
 
-parameter any_integer : unit -> {} int {}
+parameter any_integer : unit -> {} integer {}
 
 
 (*******************
@@ -225,15 +225,16 @@ parameter any_integer : unit -> {} int {}
 
 **********************)
 
-logic bw_compl : int -> int
+(*
+logic bw_compl : integer -> integer
 
-logic bw_and : int,int -> int
+logic bw_and : integer,integer -> integer
 
-logic bw_xor : int,int -> int
+logic bw_xor : integer,integer -> integer
 
-logic bw_or : int,int -> int
+logic bw_or : integer,integer -> integer
 
-logic lsl : int,int -> int
+logic lsl : integer,integer -> integer
 
-logic lsr : int,int -> int
-
+logic lsr : integer,integer -> integer
+*)

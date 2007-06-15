@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.130 2007-06-14 08:19:12 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.131 2007-06-15 11:48:43 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -432,6 +432,8 @@ let deal_file f =
 let main () =
   let t0 = Unix.times () in
   load_prelude ();
+  (* after prelude because it contains `int' not `integer' *)
+  Lexer.int_is_ident := Options.int_is_ident;
   if files = [] then begin
     deal_channel (why_parser "standard input") stdin;
     output (Options.out_file "out")

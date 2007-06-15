@@ -501,21 +501,12 @@ let rec term env e =
 	  let t,c = const c in t,JCTTconst c
       | JCPEold e -> 
 	  let te = term env e in te.jc_tterm_type,JCTTold(te)
-      | JCPEoffset_max e -> 
+      | JCPEoffset(k,e) -> 
 	  let te = term env e in 
 	  begin
 	    match te.jc_tterm_type with 
 	      | JCTpointer(st,_,_) ->
-		  integer_type,JCTToffset_max(te,st)
-	      | _ ->
-		  typing_error e.jc_pexpr_loc "pointer expected"
-	  end
-      | JCPEoffset_min e -> 
-	  let te = term env e in 
-	  begin
-	    match te.jc_tterm_type with 
-	      | JCTpointer(st,_,_) ->
-		  integer_type,JCTToffset_min(te,st)
+		  integer_type,JCTToffset(k,te,st)
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
@@ -760,7 +751,7 @@ let rec assertion env e =
 		    "boolean expression expected"
 	  end
 	  (* non propositional expressions *)
-      | JCPEoffset_max _ | JCPEoffset_min _ | JCPErange _ ->
+      | JCPEoffset _ | JCPErange _ ->
 	  typing_error e.jc_pexpr_loc "offsets and range are not propositions"
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
@@ -1097,11 +1088,18 @@ let rec expr env e =
 		    "boolean expression expected"
 	  end
 	  (* logic expressions, not allowed as program expressions *)
+      | JCPEoffset(k, e) ->
+	  let te = expr env e in
+	  begin
+	    match te.jc_texpr_type with 
+	      | JCTpointer(st,_,_) ->
+		  integer_type,JCTEoffset(k,te,st)
+	      | _ ->
+		  typing_error e.jc_pexpr_loc "pointer expected"
+	  end
       | JCPEforall _ 
       | JCPEexists _ 
       | JCPEold _ 
-      | JCPEoffset_max _ 
-      | JCPEoffset_min _ 
       | JCPErange _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
 
@@ -1176,15 +1174,40 @@ let rec statement env s =
 	  else
 	    typing_error s.jc_pstatement_loc "type '%a' expected"
 	      print_type vi.jc_var_info_type
-      | JCPSwhile(c,i,v,s) -> 
-	  let tc = expr env c in
+      | JCPSwhile(cond,inv,var,body) -> 
+	  let tc = expr env cond in
 	  if subtype tc.jc_texpr_type boolean_type then
-	    let ts = statement env s
-	    and lo = loop_annot env i v
+	    let ts = statement env body
+	    and lo = loop_annot env inv var
 	    in
 	    JCTSwhile(tc,lo,ts)
 	  else 
-	    typing_error s.jc_pstatement_loc "boolean expected"
+	    typing_error cond.jc_pexpr_loc "boolean expected"
+      | JCPSfor(init,cond,updates,inv,var,body) -> 
+	  let tcond = expr env cond in
+	  if subtype tcond.jc_texpr_type boolean_type then
+	    let tbody = statement env body
+	    and lo = loop_annot env inv var
+	    and tupdates = List.map (expr env) updates
+	    in
+	    match init with
+	      |	[] ->
+		  JCTSfor(tcond,tupdates,lo,tbody)
+	      | _ ->
+		  let l =
+		    List.fold_right
+		      (fun init acc ->
+			 let tinit = expr env init in
+			 { jc_tstatement_loc = init.jc_pexpr_loc;
+			   jc_tstatement_node = JCTSexpr tinit } :: acc)
+		      init
+		      [ { jc_tstatement_loc = s.jc_pstatement_loc;
+			  jc_tstatement_node = 
+			    JCTSfor(tcond,tupdates,lo,tbody) 
+			} ]
+		  in JCTSblock l
+	  else 
+	    typing_error cond.jc_pexpr_loc "boolean expected"
 	  
       | JCPSif (c, s1, s2) -> 
 	  let tc = expr env c in
@@ -1329,8 +1352,7 @@ let rec location_set env e =
 	fi.jc_field_info_type, JCTLSderef(tls,fi)	  
 
     | JCPEif (_, _, _)
-    | JCPEoffset_min _
-    | JCPEoffset_max _
+    | JCPEoffset _
     | JCPEold _
     | JCPEforall (_, _, _)
     | JCPEexists (_, _, _)
@@ -1368,8 +1390,7 @@ let location env e =
     | JCPEcast _
     | JCPEinstanceof _
     | JCPEold _ 
-    | JCPEoffset_max _ 
-    | JCPEoffset_min _
+    | JCPEoffset _
     | JCPEforall (_, _, _)
     | JCPEexists (_, _, _)
     | JCPEunary _
@@ -1547,9 +1568,9 @@ let rec decl d =
 	    jc_enum_info_max = max;
 	  }
 	in
-	let to_int = make_term_op ("int_of_"^id) integer_type in
-	let to_int_ = make_fun_info ("int_of_"^id) integer_type in
-	let of_int = make_fun_info (id^"_of_int") (JCTenum ri) in
+	let to_int = make_term_op ("integer_of_"^id) integer_type in
+	let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
+	let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
 	Hashtbl.add enum_types_table id (ri,to_int,to_int_,of_int)
     | JCPDstructtype(id,parent,fields,inv) ->
 	(* mutable field *)

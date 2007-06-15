@@ -40,6 +40,20 @@ let main () =
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
 	  Jc_typing.structs_table;
 *)
+
+	(************)
+	(* Analyses *)
+	(************)
+
+	Hashtbl.iter 
+	  (fun _ (mi,req,behs,body) -> 
+	     Java_analysis.do_method mi req behs body)
+	  Java_typing.methods_table;
+
+	(*******************************)
+	(* production of jessie output *)
+	(*******************************)
+
 	let decls = [] in
 (*
 	(* production phase 1.1 : generation of Jessie logic types *)

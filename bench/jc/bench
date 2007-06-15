@@ -78,7 +78,6 @@ done
 
 echo "JC interp (good)"
 cd good
-export JESSIELIB=`pwd`/../../../lib
 
 bench_jc_good () {
     options="$* -why-opt -split-user-conj -why-opt -show-time"

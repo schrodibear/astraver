@@ -265,7 +265,7 @@ KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	java/java_version.cmo java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
 	java/java_typing.cmo \
-	java/java_interp.cmo \
+	java/java_analysis.cmo java/java_interp.cmo \
 	java/java_main.cmo
 KCMX = $(KCMO:.cmo=.cmx)
 
@@ -439,7 +439,7 @@ lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
 
 lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
-	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/jessie.why
+	WHYLIB=lib/why $(BINARY) --int-is-ident --dir lib/coq --coq-v8 lib/why/jessie.why
 
 # bench
 

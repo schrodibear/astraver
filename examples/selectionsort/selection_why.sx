@@ -175,6 +175,46 @@
  (EQ (sub_permut g d t1 t2) |@true|)))))))))
 
 (BG_PUSH
+ ;; Why axiom sub_permut_weakening
+ (FORALL (a1)
+ (FORALL (a2)
+ (FORALL (l1)
+ (FORALL (r1)
+ (FORALL (l2)
+ (FORALL (r2)
+ (IMPLIES (AND (<= l1 l2) (AND (<= l2 r2) (<= r2 r1)))
+ (IMPLIES (EQ (sub_permut l2 r2 a1 a2) |@true|)
+ (EQ (sub_permut l1 r1 a1 a2) |@true|)))))))))
+
+ (FORALL (l1)
+ (FORALL (r1)
+ (FORALL (l2)
+ (FORALL (r2)
+ (IMPLIES (AND (<= l1 l2) (AND (<= l2 r2) (<= r2 r1)))
+ (FORALL (a2)
+ (FORALL (a1)
+ (IMPLIES (EQ (sub_permut l2 r2 a1 a2) |@true|)
+ (EQ (sub_permut l1 r1 a1 a2) |@true|))))))))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_eq
+ (FORALL (a1)
+ (FORALL (a2)
+ (FORALL (l)
+ (FORALL (r)
+ (IMPLIES (<= l r)
+ (IMPLIES (EQ (sub_permut l r a1 a2) |@true|)
+ (FORALL (i) (IMPLIES (OR (< i l) (< r i)) (EQ (access a2 i) (access a1 i))))))))))
+
+ (FORALL (l)
+ (FORALL (r)
+ (IMPLIES (<= l r)
+ (FORALL (a2)
+ (FORALL (a1)
+ (IMPLIES (EQ (sub_permut l r a1 a2) |@true|)
+ (FORALL (i) (IMPLIES (OR (< i l) (< r i)) (EQ (access a2 i) (access a1 i)))))))))))
+
+(BG_PUSH
  ;; Why axiom sub_permut_permut
  (FORALL (t1)
  (FORALL (t2)

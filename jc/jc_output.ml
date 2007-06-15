@@ -98,6 +98,12 @@ let unary_op = function
   | Unot -> "!"
   | Ubw_not -> "~"
 
+let offset_kind fmt k =
+  match k with
+    | Offset_max -> fprintf fmt "ax"
+    | Offset_min -> fprintf fmt "in"
+
+
 let rec term fmt t =
   match t.jc_tterm_node with
     | JCTTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
@@ -111,10 +117,8 @@ let rec term fmt t =
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
     | JCTTinstanceof (t, si) ->
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
-    | JCTToffset_min (t,_)->
-	fprintf fmt "@[\\offset_min(%a)@]" term t
-    | JCTToffset_max (t,_)->
-	fprintf fmt "@[\\offset_max(%a)@]" term t
+    | JCTToffset (k,t,_)->
+	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
     | JCTTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTTapp (op, ([t1;t2] as l)) ->
 	begin
@@ -259,10 +263,8 @@ let rec expr fmt e =
 	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
     | JCTEcast (e, si) ->
 	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
-    | JCTEoffset_max(e, _) ->
-	fprintf fmt "\\offset_max(%a)" expr e 
-    | JCTEoffset_min(e, _) ->
-	fprintf fmt "\\offset_min(%a)" expr e 
+    | JCTEoffset(k,e, _) ->
+	fprintf fmt "\\offset_m%a(%a)" offset_kind k expr e 
     | JCTEinstanceof (e, si) ->
 	fprintf fmt "(%a <: %s)" expr e si.jc_struct_info_name
     | JCTEcall (op, ([t1;t2] as l)) ->
@@ -395,6 +397,6 @@ let rec print_decls fmt d =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
 End: 
 *)

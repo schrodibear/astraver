@@ -23,6 +23,6 @@ val compilation_unit : Java_ast.compilation_unit -> unit
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/krakatoa.byte"
+compile-command: "make -j -C .. bin/krakatoa.byte"
 End: 
 *)

@@ -75,6 +75,8 @@ type punary_op =
   (* bitwise operator *)
   | UPbw_not
 
+type offset_kind = Offset_max | Offset_min
+
 type pexpr_node =
   | JCPEconst of const
   | JCPEvar of string
@@ -89,8 +91,7 @@ type pexpr_node =
   | JCPEforall of ptype * string list * pexpr
   | JCPEexists of ptype * string list * pexpr
   | JCPEold of pexpr
-  | JCPEoffset_max of pexpr 
-  | JCPEoffset_min of pexpr
+  | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
   | JCPErange of pexpr * pexpr
 
@@ -194,8 +195,7 @@ type tterm_node =
   | JCTTunary of unary_op * tterm
   | JCTTapp of logic_info * tterm list
   | JCTTold of tterm
-  | JCTToffset_max of tterm * struct_info 
-  | JCTToffset_min of tterm * struct_info 
+  | JCTToffset of offset_kind * tterm * struct_info 
   | JCTTinstanceof of tterm * struct_info
   | JCTTcast of tterm * struct_info
   | JCTTif of tterm * tterm * tterm
@@ -255,8 +255,7 @@ type texpr_node =
   | JCTEbinary of texpr * bin_op * texpr
   | JCTEunary of unary_op * texpr
   | JCTEcall of fun_info * texpr list
-  | JCTEoffset_max of texpr * struct_info 
-  | JCTEoffset_min of texpr * struct_info 
+  | JCTEoffset of offset_kind * texpr * struct_info 
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info
   | JCTEassign_local of var_info * texpr
@@ -340,8 +339,7 @@ type term_node =
   | JCTderef of term * field_info
   | JCTapp of logic_info * term list
   | JCTold of term
-  | JCToffset_max of term * struct_info
-  | JCToffset_min of term * struct_info
+  | JCToffset of offset_kind * term * struct_info
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
   | JCTif of term * term * term
@@ -403,8 +401,8 @@ type expr_node =
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info
   | JCEif of expr * expr * expr
+  | JCEoffset of offset_kind * expr * struct_info
 (*
-  - rajouter JCEbinary : OUI
   - enlever JCEif et le mettre au niveau des statements comme
       l'appel de fonction : A VOIR
 *)

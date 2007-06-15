@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.73 2007-04-04 14:29:42 couchot Exp $ i*)
+(*i $Id: options.mli,v 1.74 2007-06-15 11:48:43 marche Exp $ i*)
 
 (*s General options *)
 
@@ -42,6 +42,7 @@ val ocaml : bool
 val ocaml_annot : bool
 val ocaml_externals : bool
 
+val int_is_ident : bool
 
 val wol : bool
 
@@ -126,3 +127,8 @@ val gui : bool ref
 
 val lib_files_to_load : string list
 
+(*
+Local Variables: 
+compile-command: "unset LANG; make -j -C .. bin/why.byte"
+End: 
+*)

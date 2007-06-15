@@ -127,8 +127,7 @@ let rec term this t =
     | JCTif (_, _, _) -> assert false (* TODO *)
     | JCTcast (t, ty) -> term this t
     | JCTinstanceof (t, ty) -> term this t
-    | JCToffset_min(t,_) 
-    | JCToffset_max(t,_) -> term this t
+    | JCToffset(_,t,_) -> term this t
     | JCTold t
     | JCTunary (_,t) -> term this t
     | JCTapp (id, l) ->
@@ -195,8 +194,7 @@ let rec term_memories aux t = match t.jc_tterm_node with
       term_memories (StringSet.add m aux) t
   | JCTTapp(_, l) -> List.fold_left term_memories aux l
   | JCTTold t
-  | JCTToffset_max(t, _)
-  | JCTToffset_min(t, _)
+  | JCTToffset(_,t, _)
   | JCTTinstanceof(t, _)
   | JCTTcast(t, _) 
   | JCTTunary(_,t) -> term_memories aux t

@@ -22,9 +22,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mli,v 1.5 2006-11-03 12:49:03 marche Exp $ *)
+(* $Id: lexer.mli,v 1.6 2007-06-15 11:48:43 marche Exp $ *)
 
 exception Lexical_error of string
+
+val int_is_ident : bool ref
 
 val token : Lexing.lexbuf -> Parser.token
 
@@ -33,3 +35,8 @@ val parse_lexpr : Lexing.lexbuf -> Ptree.lexpr
 
 val lexpr_of_string : string -> Ptree.lexpr
 
+(*
+Local Variables: 
+compile-command: "unset LANG; make -j -C .. bin/why.byte"
+End: 
+*)

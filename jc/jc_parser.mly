@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.46 2007-06-15 07:27:32 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.47 2007-06-15 11:48:43 marche Exp $ */
 
 %{
 
@@ -453,9 +453,9 @@ postfix_expression:
 | BSOLD LPAR expression RPAR 
     { locate_expr (JCPEold($3)) }
 | BSOFFSET_MAX LPAR expression RPAR 
-    { locate_expr (JCPEoffset_max($3)) }
+    { locate_expr (JCPEoffset(Offset_max,$3)) }
 | BSOFFSET_MIN LPAR expression RPAR 
-    { locate_expr (JCPEoffset_min($3)) }
+    { locate_expr (JCPEoffset(Offset_min,$3)) }
 | postfix_expression DOT IDENTIFIER
     { locate_expr (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 

@@ -258,6 +258,9 @@ let rec expr e =
 	    | None -> assert false
 	  in
 	  (l,tl@(List.flatten tll)),ecall
+      | JCTEoffset (k, e, si) -> 
+	  let (l,tl), e = expr e in
+	  (l, tl), JCEoffset(k, e, si)
       | JCTEinstanceof (e, s) ->
 	  let (l,tl), e = expr e in
 	  (l, tl), JCEinstanceof (e, s)
@@ -519,10 +522,10 @@ and statement s =
 		let if_stat = make_if loc e st sf in
 		(make_decls loc (sl @ [if_stat]) tl).jc_statement_node
 	  end
-      | JCTSwhile (e, la, s) ->
+      | JCTSwhile (e, la, body) ->
 	  let exit_stat = make_tthrow loc loop_exit
 	    (Some (make_tconst loc JCCvoid)) in
-	  let if_stat = statement (make_tif loc e s exit_stat) in
+	  let if_stat = statement (make_tif loc e body exit_stat) in
 	  let continue_stat = make_throw loc loop_continue
 	    (Some (void_const loc)) in
 	  let body = make_block loc [if_stat;continue_stat] in
@@ -537,7 +540,31 @@ and statement s =
 	    make_try loc while_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
       | JCTSfor (cond, updates, la, body) ->
-	  assert false (* TODO *)
+	  let exit_stat = make_tthrow loc loop_exit
+	    (Some (make_tconst loc JCCvoid)) in
+	  let if_stat = statement (make_tif loc cond body exit_stat) in
+	  let continue_stat = make_throw loc loop_continue
+	    (Some (void_const loc)) in
+	  let body = make_block loc [if_stat;continue_stat] in
+	  let updates =
+	    List.fold_right
+	      (fun e acc -> statement {
+		 jc_tstatement_loc = e.jc_texpr_loc;
+		 jc_tstatement_node = JCTSexpr e;} :: acc)
+	      updates
+	      []
+	  in		 
+	  let catch_continue = 
+	    [(loop_continue, Some (newvar unit_type), make_block loc updates)] in
+	  let try_continue = 
+	    make_try loc body catch_continue (make_block loc []) in
+	  let for_stat = make_loop loc (loop_annot la) try_continue in
+	  let catch_exit =
+	    [(loop_exit, Some (newvar unit_type), make_block loc [])] in
+	  let try_exit = 
+	    make_try loc for_stat catch_exit (make_block loc []) in
+	  try_exit.jc_statement_node
+	  
       | JCTSreturn(t,e) ->
 	  let (sl,tl),e = expr e in
 	  let return_stat = make_return loc t e in
@@ -675,8 +702,7 @@ and term t =
       | JCTTderef (t, fi) -> JCTderef (term t, fi)
       | JCTTapp (li, tl) -> JCTapp (li, List.map term tl)
       | JCTTold (t) -> JCTold (term t)
-      | JCTToffset_max (t, si) -> JCToffset_max (term t, si)
-      | JCTToffset_min (t, si) -> JCToffset_min (term t, si)
+      | JCTToffset(k, t, si) -> JCToffset(k, term t, si)
       | JCTTinstanceof (t, si) -> JCTinstanceof (term t, si)
       | JCTTcast (t, si) -> JCTcast (term t, si)
       | JCTTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)

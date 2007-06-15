@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.7 2007-02-14 13:00:34 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.8 2007-06-15 11:48:43 marche Exp $ i*)
 
 open Format
 open Pp
@@ -54,10 +54,10 @@ let generic f targets =
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";	    
-       fprintf fmt "WHY=why --no-arrays %s@\n@\n" (Jc_options.why_opt);
-       fprintf fmt "GWHY=gwhy --no-arrays %s@\n@\n" (Jc_options.why_opt);
-       fprintf fmt "JESSIELIB=%s@\n@\n" Jc_options.libdir;	    
-       fprintf fmt "JESSIELIBFILE=%s@\n@\n" Jc_options.libfile;
+       fprintf fmt "WHY=why --int-is-ident --no-arrays %s@\n@\n" (Jc_options.why_opt);
+       fprintf fmt "GWHY=gwhy --int-is-ident --no-arrays %s@\n@\n" (Jc_options.why_opt);
+       fprintf fmt "JESSIELIBFILE=%s@\n@\n" 
+	 (Filename.concat Jc_options.libdir Jc_options.libfile);
 
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
@@ -66,60 +66,60 @@ let generic f targets =
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
 
        fprintf fmt "coq/%%_why.v: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n";
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" $(JESSIELIBFILE) why/$*.why@\n";
        fprintf fmt "\t@@rm coq/jessie_why.v@\n@\n";
        fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
        
        fprintf fmt "pvs: %a@\n@\n" (print_files pvs) targets;
 
        fprintf fmt "pvs/%%_why.pvs: why/%%.why@\n";
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing jessie_why\" $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing jessie_why\" $(JESSIELIBFILE) why/$*.why@\n@\n";
 
        fprintf fmt "pvs/caduceus_why.pvs:@\n";
-       fprintf fmt "\t$(WHY) -pvs -dir pvs $(JESSIELIB)/why/$(JESSIELIBFILE)@\n@\n";
+       fprintf fmt "\t$(WHY) -pvs -dir pvs $(JESSIELIBFILE)@\n@\n";
        
        fprintf fmt "isabelle: %a@\n@\n" (print_files isabelle) targets;
 
        fprintf fmt "isabelle/%%_why.thy: why/%%.why@\n";
-       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n";
+       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why@\n";
        fprintf fmt "\tcp -f %s/isabelle/jessie_why.thy isabelle/@\n@\n" 
 	 Jc_options.libdir;
 
        fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "ergo: %a@\n@\n" (print_files why_goals) targets;
        fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "why/%%_why.why: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "cvcl/%%_why.cvc: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "harvey: %a@\n" (print_files harvey) targets;
        fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "harvey/%%_why.rv: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "zenon: %a@\n" (print_files zenon) targets;
        fprintf fmt "\t@@echo 'Running Zenon on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "zenon/%%_why.znn: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        fprintf fmt "@\n";
        fprintf fmt "%%.stat: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(JESSIELIB)/why/$(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "-include %s.depend@\n@\n" f;
        fprintf fmt "depend: %a@\n" (print_files coq_v) targets;

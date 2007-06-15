@@ -9,18 +9,44 @@ open Java_tast
 
 (*s range types *)
 
-let int16_range =
+(* byte = int8 *)
+let byte_range =
   {
-    jc_enum_info_name = "int16";
+    jc_enum_info_name = "byte";
+    jc_enum_info_min = Num.num_of_string "-128";
+    jc_enum_info_max = Num.num_of_string "127";
+  }
+
+(* short = int16 *)
+let short_range =
+  {
+    jc_enum_info_name = "short";
     jc_enum_info_min = Num.num_of_string "-32768";
     jc_enum_info_max = Num.num_of_string "32767";
   }
 
-let int32_range =
+(* int = int32 *)
+let int_range =
   {
-    jc_enum_info_name = "int32";
+    jc_enum_info_name = "int";
     jc_enum_info_min = Num.num_of_string "-2147483648";
     jc_enum_info_max = Num.num_of_string "2147483647";
+  }
+
+(* long = int64 *)
+let long_range =
+  {
+    jc_enum_info_name = "long";
+    jc_enum_info_min = Num.num_of_string "-9223372036854775808";
+    jc_enum_info_max = Num.num_of_string "9223372036854775807";
+  }
+
+(* char = uint16 *)
+let char_range =
+  {
+    jc_enum_info_name = "char";
+    jc_enum_info_min = Num.num_of_string "0";
+    jc_enum_info_max = Num.num_of_string "65535";
   }
 
 let range_types acc =
@@ -29,21 +55,21 @@ let range_types acc =
        JCenum_type_def(ri.jc_enum_info_name,
 			ri.jc_enum_info_min,
 			ri.jc_enum_info_max)::acc) 
-    acc [ int16_range ; int32_range ]
+    acc [ byte_range ; short_range ; int_range ; long_range ; char_range ]
 
 let tr_base_type t =
   match t with
     | Tboolean -> JCTnative Jc_env.Tboolean
     | Tinteger -> JCTnative Jc_env.Tinteger
-    | Tshort -> JCTenum int16_range 
-    | Tint -> JCTenum int32_range 
+    | Tshort -> JCTenum short_range 
+    | Tint -> JCTenum int_range 
     | Tnull -> JCTnull
     | Treal -> assert false (* TODO *)
     | Tdouble -> assert false (* TODO *)
-    | Tlong -> assert false (* TODO *)
+    | Tlong -> JCTenum long_range 
     | Tfloat -> assert false (* TODO *)
-    | Tchar -> assert false (* TODO *)
-    | Tbyte  -> assert false (* TODO *)
+    | Tchar -> JCTenum char_range 
+    | Tbyte  -> JCTenum byte_range 
 
 (*s class types *)
 
@@ -61,43 +87,14 @@ let num_zero = Num.Int 0
 let num_minus_one = Num.Int (-1)
 
 let array_struct_table = Hashtbl.create 17
-
-let name_base_type t =
-  match t with
-    | Tboolean -> "bool"
-    | Tchar | Tbyte | Tinteger | Tshort | Tlong | Tint -> "int" 
-    | Tnull -> "null"
-    | Tfloat | Treal | Tdouble -> "real"
-
-let rec name_type t =
-  match t with
-    | JTYbase t -> name_base_type t
-    | _ -> assert false (* TODO *)
-
-let rec intro_array_struct t =
-  try
-    Hashtbl.find array_struct_table t
-  with Not_found ->
-    let n = name_type t in
-    let fi =
-      { jc_field_info_name = n ^ "M";
-	jc_field_info_tag = 0 (* TODO *);
-	jc_field_info_type= tr_type t;
-	jc_field_info_root= n ^ "P";
-      }
-    in
-    let st =
-      {
-	jc_struct_info_name = n ^ "P";
-	jc_struct_info_parent = None;
-	jc_struct_info_root = n ^ "P";
-	jc_struct_info_fields = [(n ^ "M", fi)];
-      }
-    in
-    Format.eprintf "add array structure %s@." st.jc_struct_info_name;
-    Hashtbl.add array_struct_table t st;
-    st
       
+let rec get_array_struct t = 
+  try
+    let st = Hashtbl.find array_struct_table t in
+    Format.eprintf "got array structure %s@." st.jc_struct_info_name;
+    st
+  with Not_found -> assert false
+
 and tr_type t =
   match t with
     | JTYbase t -> tr_base_type t	
@@ -105,7 +102,7 @@ and tr_type t =
 	let st = get_class ci in
 	JCTpointer(st,num_zero,if non_null then num_zero else num_minus_one)
     | JTYarray t ->
-	let st = intro_array_struct t in
+	let st = get_array_struct t in
 	JCTpointer(st,num_zero,num_minus_one)
 
 let tr_type_option t =
@@ -148,11 +145,27 @@ let tr_class ci acc =
 let array_types decls =
   Format.eprintf "array types:@.";
   Hashtbl.fold
-    (fun t st acc ->
-       Format.eprintf "tr array structure %s@." st.jc_struct_info_name;
+    (fun t (s,f) acc ->
+       let fi =
+	 { jc_field_info_name = f;
+	   jc_field_info_tag = 0 (* TODO *);
+	   jc_field_info_type = tr_type t;
+	   jc_field_info_root = s;
+	 }
+       in
+       let st =
+	 {
+	   jc_struct_info_name = s;
+	   jc_struct_info_parent = None;
+	   jc_struct_info_root = s;
+	   jc_struct_info_fields = [(f, fi)];
+	 }
+       in
+       Format.eprintf "created array structure %s@." st.jc_struct_info_name;
+       Hashtbl.add array_struct_table t st;
        JCstruct_def(st.jc_struct_info_name,
 		    List.map snd st.jc_struct_info_fields) :: acc)
-    array_struct_table
+    Java_analysis.array_struct_table
     decls
       
 
@@ -219,15 +232,15 @@ let rec term t =
 	  begin
 	    match t.java_term_type with
 	      | JTYarray ty ->
-		  let st = intro_array_struct ty in
-		  JCTToffset_max(term t,st)
+		  let st = get_array_struct ty in
+		  JCTToffset(Offset_max,term t,st)
 	      | _ -> assert false
 	  end
       | JTarray_access(t1,t2) -> 
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray ty ->
-		  let st = intro_array_struct ty in
+		  let st = get_array_struct ty in
 		  let t1' = term t1 in
 		  let shift = {
 		      jc_tterm_loc = t.java_term_loc;
@@ -325,15 +338,15 @@ let rec expr e =
 	  begin
 	    match e.java_expr_type with
 	      | JTYarray ty ->
-		  let st = intro_array_struct ty in
-		  JCTEoffset_max(expr e,st)
+		  let st = get_array_struct ty in
+		  JCTEoffset(Offset_max,expr e,st)
 	      | _ -> assert false
 	  end
       | JEarray_access(e1,e2) -> 
 	  begin
 	    match e1.java_expr_type with
 	      | JTYarray ty ->
-		  let st = intro_array_struct ty in
+		  let st = get_array_struct ty in
 		  let e1' = expr e1 in
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
@@ -426,7 +439,7 @@ let tr_axiom (_,id) p acc =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/krakatoa.byte"
+compile-command: "make -j -C .. bin/krakatoa.byte"
 End: 
 *)
 

@@ -42,7 +42,7 @@ let tr_native_type t =
   match t with
     | Tunit -> "unit"
     | Tboolean -> "bool"
-    | Tinteger -> "int"
+    | Tinteger -> "integer"
     | Treal -> "real"
 
 let simple_logic_type s =
@@ -147,9 +147,9 @@ let coerce loc tdest tsrc e =
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTnative Tinteger, JCTenum ri ->
-	make_app ("int_of_" ^ ri.jc_enum_info_name) [e]
+	make_app ("integer_of_" ^ ri.jc_enum_info_name) [e]
     | JCTenum ri, JCTnative Tinteger ->
-	make_app (ri.jc_enum_info_name ^ "_of_int") [e]
+	make_app (ri.jc_enum_info_name ^ "_of_integer") [e]
     | _ , JCTnull -> e
     | JCTpointer (st, a, b), _  -> 
 	make_app "downcast_" 
@@ -241,16 +241,15 @@ let t1' = term label oldlabel t1 in
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
     | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
     | JCTold(t) -> term (Some oldlabel) oldlabel t
-    | JCToffset_max(t,st) -> 
+    | JCToffset(k,t,st) -> 
 	let alloc =
 	  st.jc_struct_info_root ^ "_alloc_table"
 	in
-	LApp("offset_max",[LVar alloc; ft t]) 
-    | JCToffset_min(t,st) -> 
-	let alloc =
-	  st.jc_struct_info_root ^ "_alloc_table"
+	let f = match k with
+	  | Offset_min -> "offset_min"
+	  | Offset_max -> "offset_max"
 	in
-	LApp("offset_min",[LVar alloc; ft t]) 
+	LApp(f,[LVar alloc; ft t]) 
     | JCTinstanceof(t,ty) ->
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LApp("instanceof_bool",
@@ -397,10 +396,6 @@ let incr_call op =
     | Stat_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
 *)
 
-let make_acc fi e =
-  make_app "acc_"
-    [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
-      Var fi.jc_field_info_name ; e ]
 
 let make_upd fi e1 e2 =
   make_app "upd_"
@@ -451,9 +446,20 @@ let rec expr e : expr =
 	let e3 = expr e3 in
 	If(e1,e2,e3)
     | JCEshift(e1,e2) -> 
-	let e1 = expr e1 in
-	let e2 = expr e2 in
-	make_app "shift" [e1; e2]
+	let e1' = expr e1 in
+	let e2' = expr e2 in
+	make_app "shift" 
+	  [e1'; 
+	   coerce e2.jc_expr_loc integer_type e2.jc_expr_type e2']
+    | JCEoffset(k,e,st) -> 
+	let alloc =
+	  st.jc_struct_info_root ^ "_alloc_table"
+	in
+	let f = match k with
+	  | Offset_min -> "offset_min"
+	  | Offset_max -> "offset_max"
+	in
+	make_app f [Deref alloc; expr e] 
     | JCEinstanceof(e,t) ->
 	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
@@ -462,9 +468,12 @@ let rec expr e : expr =
 	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
 	make_app "downcast_" [Deref tag; e; Var (tag_name t)]
-    | JCEderef(e,f) -> 
-	let e = expr e in
-	make_acc f e
+    | JCEderef(e,fi) -> 
+	make_app "acc_"
+	  [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
+	    Var fi.jc_field_info_name ; 
+	    (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
+
 
 
 let invariant_for_struct this st =
@@ -1018,7 +1027,7 @@ let tr_enum_type ri to_int of_int acc =
 	       LPred("le_int",[x; LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_max)))]))
   in
   let of_int_type =
-    Prod_type("x", Base_type(simple_logic_type "int"),
+    Prod_type("x", Base_type(simple_logic_type "integer"),
 	      Annot_type(enum_pred (LVar "x"),
 			 Base_type(simple_logic_type n),
 			 [],[],
@@ -1027,7 +1036,7 @@ let tr_enum_type ri to_int of_int acc =
   in
   Type(n,[]) ::
   Logic(false,to_int.jc_fun_info_name,
-	[("",simple_logic_type n)],simple_logic_type "int") :: 
+	[("",simple_logic_type n)],simple_logic_type "integer") :: 
   Param(false,of_int.jc_fun_info_name,of_int_type) ::
   Axiom(n^"_enum",
 	LForall("x",simple_logic_type n,enum_pred (LApp(to_int.jc_fun_info_name,[LVar "x"]))))		

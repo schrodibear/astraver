@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.33 2007-06-15 07:01:31 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.34 2007-06-15 11:48:43 marche Exp $ *)
 
 
 open Jc_env
@@ -97,8 +97,7 @@ let rec term ef t =
     | JCTcast(t, _) 
     | JCTinstanceof (t, _)
     | JCTunary (_, t) -> term ef t
-    | JCToffset_min(t,st) 
-    | JCToffset_max(t,st) ->
+    | JCToffset(_,t,st) ->
 	add_alloc_effect (term ef t) st.jc_struct_info_root
     | JCTold t -> term ef t
     | JCTapp (li, tl) -> 
@@ -147,6 +146,7 @@ let rec expr ef e =
     | JCEvar _ -> ef (* TODO *)
     | JCEunary(op,e1) -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
+    | JCEoffset(k,e,st) -> expr ef e
 
 let rec loop_annot ef la = 
   assertion (term ef la.jc_loop_variant) la.jc_loop_invariant

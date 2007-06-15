@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.94 2007-04-20 12:16:15 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.95 2007-06-15 11:48:43 marche Exp $ i*)
 
 open Format
 
@@ -62,6 +62,7 @@ let modulo_ = ref false
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 let show_time_ = ref false
+let int_is_ident = ref  false
 
 type encoding = 
   | NoEncoding | Predicates | Stratified | Recursive | Monomorph 
@@ -258,6 +259,9 @@ Misc options:
   --ocaml-ext    Consider \"external\"s as parameters in ocaml code
   --output f     Redirect output to file f
   --dir d        Output files in directory d
+  --int-is-ident
+                 Consider `int' as a normal identifier, and use 
+                 built-in name `integer' instead for integers
 ";
   flush stderr
 
@@ -404,6 +408,9 @@ let files =
 	| "sstrat" -> types_encoding_ := SortedStratified
 	| _ -> usage (); exit 1);
 	parse args
+    | "--int-is-ident" :: args ->
+	int_is_ident := true;
+	parse args
     | f :: args -> 
 	filesq := f :: !filesq; parse args
   in
@@ -487,6 +494,8 @@ let if_debug f x = if debug then f x
 let if_debug_2 f x y = if debug then f x y
 let if_debug_3 f x y z = if debug then f x y z
 
+let int_is_ident = !int_is_ident
+
 (* compatibility checks *)
 let () = if prover () = Gappa && valid then begin
   Printf.eprintf "options -gappa and -valid are not compatible\n";
@@ -524,3 +533,9 @@ let () =
     Printf.eprintf "cannot find prelude file %s\n" prelude_file;
     exit 1
   end
+
+(*
+Local Variables: 
+compile-command: "unset LANG; make -j -C .. bin/why.byte"
+End: 
+*)

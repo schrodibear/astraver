@@ -2,6 +2,7 @@
 
 # benchmark for krakatoa
 export KRAKATOALIB=`pwd`/../../lib/why
+export JESSIELIB=`pwd`/../../lib/why
 export WHYCOQ=`pwd`/../../lib/coq
 make="make WHYCOQ=$WHYCOQ"
 
@@ -78,7 +79,6 @@ done
 
 echo "Java interp (good)"
 cd good
-export KRAKATOALIB=`pwd`/../../../lib
 
 bench_java_good () {
     options="$* -why-opt -split-user-conj -why-opt -show-time"
