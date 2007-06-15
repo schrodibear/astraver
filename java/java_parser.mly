@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.10 2007-06-14 14:18:52 marche Exp $
+$Id: java_parser.mly,v 1.11 2007-06-15 07:27:32 marche Exp $
 
 */
 
@@ -555,11 +555,11 @@ statement:
     { locate_statement (JPSwhile($3,$5)) }
 | DO statement WHILE LEFTPAR expr RIGHTPAR 
     { locate_statement (JPSdo($2,$5)) } 
-| FOR LEFTPAR statement_expr_list SEMICOLON for_cond SEMICOLON 
-  statement_expr_list RIGHTPAR statement 
+| FOR LEFTPAR argument_list SEMICOLON for_cond SEMICOLON 
+  argument_list RIGHTPAR statement 
     { locate_statement (JPSfor($3,$5,$7,$9)) }
 | FOR LEFTPAR local_variable_declaration SEMICOLON for_cond SEMICOLON 
-  statement_expr_list RIGHTPAR statement 
+  argument_list RIGHTPAR statement 
     { locate_statement (JPSfor_decl($3,$5,$7,$9)) }
 | ANNOT
     { let (loc,s)=$1 in locate_statement (JPSannot(loc,s)) }
@@ -744,22 +744,6 @@ non_basic_cast:
 | LEFTPAR name RIGHTPAR castable_expr %prec CAST
     { locate_expr (JPEcast(Type_name($2),$4)) }
 ;
-
-statement_expr_list:
-| /* $\varepsilon$ */
-    { [] }
-| statement_expr_ne_list
-    { $1 }
-;
-
-statement_expr_ne_list:
-| expr 
-    { [locate_statement (JPSexpr($1))] }
-| expr COMMA statement_expr_ne_list
-    { (locate_statement (JPSexpr($1)))::$3 }
-;
-
-
 
 expr:
 | name

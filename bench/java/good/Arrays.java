@@ -1,5 +1,5 @@
 
-public class Arrays {
+public static class Arrays {
 
     /*@ requires t != null && t.length >= 1;
       @ behavior max_found:

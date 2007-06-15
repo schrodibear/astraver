@@ -305,7 +305,7 @@ let rec statement fmt s =
 	  statement s
     | JCTSfor (cond, updates, loop_annot, body)-> 
 	fprintf fmt "@[for ( ; %a ; %a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
-	  expr cond statements updates
+	  expr cond (print_list comma expr) updates
 	  assertion loop_annot.jc_tloop_invariant 
 	  term loop_annot.jc_tloop_variant
 	  statement body

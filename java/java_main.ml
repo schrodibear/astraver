@@ -54,6 +54,7 @@ let main () =
 	(* production phase 1.2 : generation of Jessie range_types *)
 	let decls = Java_interp.range_types decls in
 	(* production phase 1.3 : generation of Jessie struct types *)
+	let decls = Java_interp.array_types decls in
 	let decls =
 	  Hashtbl.fold 
 	    (fun _ id acc ->
@@ -105,10 +106,6 @@ let main () =
 	Pp.print_in_file 
 	  (fun fmt -> fprintf fmt "%a@." Jc_output.print_decls decls)
 	  (f ^ ".jc");
-	(* phase x : produce makefile *)
-(*
-	Java_make.makefile f
-*)
 	printf "Done.@."
 
     | _ -> Java_options.usage ()

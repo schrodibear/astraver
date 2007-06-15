@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.31 2007-06-15 07:01:31 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.32 2007-06-15 07:27:32 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -91,10 +91,9 @@ rule token = parse
   | "case"                  { CASE }
   | "default"               { DEFAULT }
   | "catch"                 { CATCH }
-(*
-  | "char"                  { CHAR }
   | "continue"              { CONTINUE }
   | "do"                    { DO }
+(*
   | "double"                { DOUBLE }
 *)
   | "else"                  { ELSE }
@@ -106,19 +105,13 @@ rule token = parse
   | "false"                 { CONSTANT (JCCboolean false) }
 (*
   | "float"                 { FLOAT }
-  | "for"                   { FOR }
 *)
+  | "for"                   { FOR }
   | "goto"                  { GOTO }
   | "if"                    { IF }
   | "integer"               { INTEGER }
-(*
-  | "int"                   { INT }
-*)
   | "invariant"             { INVARIANT }
   | "logic"                 { LOGIC }
-(*
-  | "long"                  { LONG }
-*)
   | "null"                  { NULL }
   | "of"                    { OF }
   | "pack"                  { PACK }
@@ -126,10 +119,6 @@ rule token = parse
   | "real"                  { REAL}
   | "requires"              { REQUIRES }
   | "return"                { RETURN }
-(*
-  | "short"                 { SHORT }
-  | "signed"                { SIGNED }
-*)
   | "switch"                { SWITCH }
   | "throw"                 { THROW }
   | "throws"                { THROWS }
@@ -138,9 +127,6 @@ rule token = parse
   | "type"                  { TYPE }
   | "unit"                  { UNIT }
   | "unpack"                { UNPACK }
-(*
-  | "unsigned"              { UNSIGNED }
-*)
   | "variant"               { VARIANT }
   | "while"                 { WHILE }
   | "with"                  { WITH }

@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.8 2007-06-14 14:18:52 marche Exp $
+$Id: java_ast.mli,v 1.9 2007-06-15 07:27:32 marche Exp $
 
 ***************************************************************************)
 
@@ -152,8 +152,8 @@ and pstatement_node =
   | JPSif of pexpr * pstatement * pstatement
   | JPSwhile of pexpr * pstatement
   | JPSdo of pstatement * pexpr
-  | JPSfor of pstatement list * pexpr * pstatement list * pstatement  
-  | JPSfor_decl of variable_declaration * pexpr * pstatement list * pstatement
+  | JPSfor of pexpr list * pexpr * pexpr list * pstatement  
+  | JPSfor_decl of variable_declaration * pexpr * pexpr list * pstatement
   | JPStry of block * (parameter * block) list * block option
   | JPSswitch of pexpr * (switch_label list * block) list
   | JPSblock of block

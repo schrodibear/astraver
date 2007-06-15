@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.45 2007-06-15 07:01:32 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.46 2007-06-15 07:27:32 marche Exp $ */
 
 %{
 
@@ -47,13 +47,6 @@
 
   let locate_decl d =
     { jc_pdecl_node = d ; jc_pdecl_loc = loc () }
-
-
-(*
-  let locate x = { node = x; loc = loc() }
-  let locate_i i x = { node = x; loc = loc_i i }
-  let with_loc l x = { node = x; loc = l }
-*)
 
   let skip = locate_statement JCPSskip
       
@@ -83,8 +76,8 @@
 /* && || => <=> ! */
 %token AMPAMP BARBAR EQEQGT LTEQEQGT EXCLAM
 
-/* if else return while break case switch default goto */
-%token IF ELSE RETURN WHILE BREAK CASE SWITCH DEFAULT GOTO
+/* if else return while break for fo break continue case switch default goto */
+%token IF ELSE RETURN WHILE FOR DO BREAK CONTINUE CASE SWITCH DEFAULT GOTO
 
 /* exception of throw try catch */
 %token EXCEPTION OF THROW TRY CATCH
@@ -92,8 +85,8 @@
 /* pack unpack assert */
 %token PACK UNPACK ASSERT
 
-/* type invariant logic with variant and */
-%token TYPE INVARIANT LOGIC WITH VARIANT AND
+/* type invariant logic with variant and axiom */
+%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM
 
 /* integer boolean real unit void */
 %token INTEGER BOOLEAN REAL UNIT
@@ -107,8 +100,6 @@
 /* \nothing */
 %token BSNOTHING
 
-/* axiom */
-%token AXIOM
 
 /* & ~ ^ | << >> */
 %token AMP TILDE HAT PIPE LSHIFT RSHIFT
@@ -455,12 +446,10 @@ primary_expression:
 postfix_expression: 
 | primary_expression 
     { $1 }
+| primary_expression LPAR argument_expression_list_opt RPAR 
+    { locate_expr (JCPEapp($1, $3)) }
 | primary_expression LPARRPAR 
     { locate_expr (JCPEapp($1, [])) }
-| primary_expression LPAR RPAR 
-    { locate_expr (JCPEapp($1, [])) }
-| primary_expression LPAR argument_expression_list RPAR 
-    { locate_expr (JCPEapp($1, $3)) }
 | BSOLD LPAR expression RPAR 
     { locate_expr (JCPEold($3)) }
 | BSOFFSET_MAX LPAR expression RPAR 
@@ -492,6 +481,13 @@ argument_expression_list:
     { [$1] }
 | expression COMMA argument_expression_list 
     { $1::$3 }
+;
+
+argument_expression_list_opt: 
+| /* $\varepsilon$ */
+    { [] }
+| argument_expression_list 
+    { $1 }
 ;
 
 
@@ -709,17 +705,11 @@ iteration_statement:
 /*
 | loop_annot DO statement WHILE LPAR expression RPAR SEMICOLON 
     { locate (CSdowhile ($1, $3, $6)) }
-| loop_annot FOR LPAR expression_statement expression_statement RPAR 
-        statement
-	{ locate (CSfor ($1, expr_of_statement $4, expr_of_statement $5, 
-			 locate CEnop, $7)) }
-| loop_annot 
-            FOR LPAR expression_statement expression_statement expression RPAR 
-            statement 
-	    { locate (CSfor ($1, expr_of_statement $4, expr_of_statement $5, 
-			     $6, $8)) }
-        ;
 */
+| FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
+    argument_expression_list_opt RPAR loop_annot statement
+    { let (i,v) = $9 in 
+      locate_statement (JCPSfor($3, $5, $7, i, v, $10)) }
 ;
 
 loop_annot:

@@ -7,6 +7,8 @@ open Java_env
 open Java_ast
 open Java_tast
 
+(*s range types *)
+
 let int16_range =
   {
     jc_enum_info_name = "int16";
@@ -43,6 +45,7 @@ let tr_base_type t =
     | Tchar -> assert false (* TODO *)
     | Tbyte  -> assert false (* TODO *)
 
+(*s class types *)
 
 let get_class ci =
   {
@@ -51,6 +54,8 @@ let get_class ci =
     jc_struct_info_root = ci.class_info_name;
     jc_struct_info_fields = [];
   }
+
+(*s array types *)
 
 let num_zero = Num.Int 0
 let num_minus_one = Num.Int (-1)
@@ -89,6 +94,7 @@ let rec intro_array_struct t =
 	jc_struct_info_fields = [(n ^ "M", fi)];
       }
     in
+    Format.eprintf "add array structure %s@." st.jc_struct_info_name;
     Hashtbl.add array_struct_table t st;
     st
       
@@ -107,24 +113,7 @@ let tr_type_option t =
     | None -> JCTnative Tunit
     | Some t -> tr_type t
 
-let vi_table = Hashtbl.create 97
-
-let get_var ?(formal=false) vi =
-  try
-    Hashtbl.find vi_table vi.java_var_info_tag
-  with
-      Not_found -> 
-	let nvi =
-	  { jc_var_info_name = vi.java_var_info_name;
-	    jc_var_info_final_name = vi.java_var_info_name;
-	    jc_var_info_assigned = vi.java_var_info_assigned;
-	    jc_var_info_type = tr_type vi.java_var_info_type;
-	    jc_var_info_tag = vi.java_var_info_tag;
-	    jc_var_info_static = false; (* TODO *)
-	    jc_var_info_formal = formal;
-	  }
-	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
-	nvi
+(*s structure fields *)
 
 let fi_table = Hashtbl.create 97
 
@@ -149,6 +138,47 @@ let get_field fi =
 	  }
 	in Hashtbl.add fi_table fi.java_field_info_tag nfi;
 	nfi
+
+(*s translation of structure types *)
+
+let tr_class ci acc =
+  JCstruct_def(ci.class_info_name,
+	       List.map get_field ci.class_info_fields) :: acc
+
+let array_types decls =
+  Format.eprintf "array types:@.";
+  Hashtbl.fold
+    (fun t st acc ->
+       Format.eprintf "tr array structure %s@." st.jc_struct_info_name;
+       JCstruct_def(st.jc_struct_info_name,
+		    List.map snd st.jc_struct_info_fields) :: acc)
+    array_struct_table
+    decls
+      
+
+
+(* local variables and parameters *)
+
+let vi_table = Hashtbl.create 97
+
+let get_var ?(formal=false) vi =
+  try
+    Hashtbl.find vi_table vi.java_var_info_tag
+  with
+      Not_found -> 
+	let nvi =
+	  { jc_var_info_name = vi.java_var_info_name;
+	    jc_var_info_final_name = vi.java_var_info_name;
+	    jc_var_info_assigned = vi.java_var_info_assigned;
+	    jc_var_info_type = tr_type vi.java_var_info_type;
+	    jc_var_info_tag = vi.java_var_info_tag;
+	    jc_var_info_static = false; (* TODO *)
+	    jc_var_info_formal = formal;
+	  }
+	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
+	nvi
+
+(*s terms *)
 
 let lit l =
   match l with
@@ -359,7 +389,7 @@ let rec statement s =
 	      decls
 	      { jc_tstatement_loc = s.java_statement_loc ;
 		jc_tstatement_node = 
-		  JCTSfor(expr e, statements sl, la, statement body) }
+		  JCTSfor(expr e, List.map expr sl, la, statement body) }
 	  in res.jc_tstatement_node
       | JSexpr e -> JCTSexpr (expr e)
       | JSassert(id,e) -> JCTSassert(id,assertion e)
@@ -385,17 +415,14 @@ let tr_method mi req behs b acc =
 		  params,
 		  { jc_tfun_requires = assertion_option req;
 		    jc_tfun_behavior = List.map behavior behs},
-		  statements l)::acc
+		  Some (statements l))::acc
 	  
-  
-let tr_class ci acc =
-  JCstruct_def(ci.class_info_name,
-	       List.map get_field ci.class_info_fields) :: acc
-
+(*s axioms *)
 
 let tr_axiom (_,id) p acc =
   JCaxiom_def(id,assertion p)::acc
 
+  
 
 (*
 Local Variables: 
