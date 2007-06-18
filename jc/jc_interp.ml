@@ -235,12 +235,11 @@ let rec term label oldlabel t =
     | JCTconst c -> LConst(const c)
     | JCTunary(op,t1) ->
 	let t1' = term label oldlabel t1 in
-	LApp (unary_op op, [t1'])
-(* TODO: no need for coercion ? (contrary to expr)
-	  [coerce t.jc_term_loc (unary_arg_type op) t1.jc_term_type t1' ]
-*)
+	LApp (unary_op op, 
+	      [term_coerce t.jc_term_loc 
+		 (unary_arg_type op) t1.jc_term_type t1' ])
     | JCTbinary(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-let t1' = term label oldlabel t1 in
+	let t1' = term label oldlabel t1 in
 	let t2' = term label oldlabel t2 in
 	LApp (bin_op op, [ t1'; t2'])
     | JCTbinary(t1,Bland,t2) ->
@@ -250,15 +249,10 @@ let t1' = term label oldlabel t1 in
     | JCTbinary(t1,op,t2) ->
 	let t1' = term label oldlabel t1 in
 	let t2' = term label oldlabel t2 in
-	LApp (bin_op op, [ t1'; t2'])
-(* TODO: no need for coercion ? (contrary to expr)
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	let t = bin_arg_type e.jc_expr_loc op in
-	make_app (bin_op op) 
-	  [ coerce e1.jc_expr_loc t e1.jc_expr_type e1'; 
-	    coerce e2.jc_expr_loc t e2.jc_expr_type e2']	
-*)
+	let t = bin_arg_type t.jc_term_loc op in
+	LApp (bin_op op, 
+	      [ term_coerce t1.jc_term_loc t t1.jc_term_type t1'; 
+		term_coerce t2.jc_term_loc t t2.jc_term_type t2'])
     | JCTshift(t1,t2) -> LApp("shift",[ft t1; ft t2])
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
@@ -296,8 +290,17 @@ let rec assertion label oldlabel a =
     | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
     | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
     | JCAnot(a) -> LNot(fa a)
+    | JCArelation(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
+	let t1' = ft t1 in
+	let t2' = ft t2 in
+	LPred (pred_bin_op op, [ t1'; t2'])
     | JCArelation(t1,op,t2) ->
-	LPred (pred_bin_op op, [ft t1; ft t2])
+	let t1' = ft t1 in
+	let t2' = ft t2 in
+	let t = bin_arg_type a.jc_assertion_loc op in
+	LPred(pred_bin_op op, 
+	      [ term_coerce t1.jc_term_loc t t1.jc_term_type t1'; 
+		term_coerce t2.jc_term_loc t t2.jc_term_type t2'])
     | JCAapp(f,l) -> 
 	begin try
 	  make_logic_pred_call f 

@@ -31,14 +31,14 @@ int gcd(int x, int y) {
   while (y > 0) {
     int r = x % y;
     //@ ghost int q = x / y
+    //@ ghost int ta = a
+    //@ ghost int tb = b
     x = y;
     y = r;
-    //@ ghost int ta = a;
-    //@ ghost int tb = b;
-    //@ set a = c; 
-    //@ set b = d;
-    //@ set c = ta - c * q;
-    //@ set d = tb - d * q;
+    //@ set a = c 
+    //@ set b = d
+    //@ set c = ta - c * q
+    //@ set d = tb - d * q
   }
   return x;
 }
