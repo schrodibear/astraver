@@ -12,6 +12,9 @@
 	"lda", INSTR (Ld A);  "ldx", INSTR (Ld X);
 	"ld1", INSTR (Ld I1); "ld2", INSTR (Ld I2); "ld3", INSTR (Ld I3);
 	"ld4", INSTR (Ld I4); "ld5", INSTR (Ld I5); "ld6", INSTR (Ld I6);
+	"ldan", INSTR (Ldn A);  "ldxn", INSTR (Ldn X);
+	"ld1n", INSTR (Ldn I1); "ld2n", INSTR (Ldn I2); "ld3n", INSTR (Ldn I3);
+	"ld4n", INSTR (Ldn I4); "ld5n", INSTR (Ldn I5); "ld6n", INSTR (Ldn I6);
 	(* storing *)
 	"sta", INSTR (St A);  "stx", INSTR (St X);
 	"st1", INSTR (St I1); "st2", INSTR (St I2); "st3", INSTR (St I3);
@@ -24,6 +27,9 @@
 	"enta", INSTR (Ent A);  "entx", INSTR (Ent X);
 	"ent1", INSTR (Ent I1); "ent2", INSTR (Ent I2); "ent3", INSTR (Ent I3);
 	"ent4", INSTR (Ent I4); "ent5", INSTR (Ent I5); "ent6", INSTR (Ent I6);
+	"enna", INSTR (Enn A);  "ennx", INSTR (Enn X);
+	"enn1", INSTR (Enn I1); "enn2", INSTR (Enn I2); "enn3", INSTR (Enn I3);
+	"enn4", INSTR (Enn I4); "enn5", INSTR (Enn I5); "enn6", INSTR (Enn I6);
 	"inca", INSTR (Inc A);  "incx", INSTR (Inc X);
 	"inc1", INSTR (Inc I1); "inc2", INSTR (Inc I2); "inc3", INSTR (Inc I3);
 	"inc4", INSTR (Inc I4); "inc5", INSTR (Inc I5); "inc6", INSTR (Inc I6);
@@ -76,6 +82,28 @@
     | c -> c
 
   exception Lexical_error of string
+
+  (* local symbols *)
+
+  let local_symbols = Array.create 10 (0,0)
+
+  let make_local_symbol i n = Printf.sprintf "local_symbol_%d_%d" i n
+
+  let line lexbuf = (lexeme_start_p lexbuf).pos_lnum
+
+  let local_symbol lexbuf i =
+    let (n,_) = local_symbols.(i) in
+    local_symbols.(i) <- (n+1, line lexbuf);
+    make_local_symbol i (n+1)
+
+  let forward_local_symbol _ i =
+    let (n,_) = local_symbols.(i) in
+    make_local_symbol i (n+1)
+
+  let backward_local_symbol lexbuf i =
+    let (n,l) = local_symbols.(i) in
+    make_local_symbol i (if line lexbuf > l then n else n-1)
+
 }
 
 let newline = '\n'
@@ -96,6 +124,12 @@ rule token = parse
 	try Hashtbl.find keywords lid with Not_found -> IDENT id }
   | ident as id ":"
       { LABEL id }
+  | digit as d "H:"
+      { LABEL (local_symbol lexbuf (Char.code d - Char.code '0')) }
+  | digit as d "F"
+      { IDENT (forward_local_symbol lexbuf (Char.code d - Char.code '0')) }
+  | digit as d "B"
+      { IDENT (backward_local_symbol lexbuf (Char.code d - Char.code '0')) }
   | integer as n
       { INTEGER n }
   | "{{{"

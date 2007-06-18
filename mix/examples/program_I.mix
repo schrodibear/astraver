@@ -22,7 +22,7 @@ init:	ent1	N
 /*
 Local Variables: 
 mode: asm
-compile-command: "../bin/demixify.opt test.mix -entry init -gwhy"
+compile-command: "../../bin/demixify.opt program_I.mix -entry init -gwhy"
 End: 
 */
 

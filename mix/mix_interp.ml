@@ -46,6 +46,8 @@ let register_value = function
 let interp_instr loc i op = match i with
   | Ld r -> 
       Wassign (register_name r, value_at loc op)
+  | Ldn r -> 
+      Wassign (register_name r, Tapp ("neg_int", [value_at loc op]))
   | St r ->
       Wassign ("mem", 
 	       Tapp ("update", 
@@ -66,6 +68,8 @@ let interp_instr loc i op = match i with
 	       Tapp ("sub_int", [Tvar (register_value r); value_at loc op]))
   | Ent r ->
       Wassign (register_name r, value_op loc op)
+  | Enn r ->
+      Wassign (register_name r, Tapp ("neg_int", [value_op loc op]))
   | Inc r ->
       Wassign (register_name r, 
 	      Tapp ("add_int", [Tvar (register_value r); Tconst "1"]))

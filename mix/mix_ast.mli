@@ -10,12 +10,14 @@ type register = A | X | I1 | I2 | I3 | I4 | I5 | I6
 type instr = 
   (* loading *)
   | Ld of register
+  | Ldn of register
   (* storing *)
   | St of register | Stj | Stz
   (* arithmetic *)
   | Add | Sub | Mul | Div
   (* address transfer *)
   | Ent of register
+  | Enn of register
   | Inc of register
   | Dec of register
   (* comparison *)
