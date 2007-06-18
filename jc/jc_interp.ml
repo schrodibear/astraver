@@ -511,8 +511,20 @@ let rec expr e : expr =
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
 	    Var fi.jc_field_info_name ; 
 	    (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
-
-
+    | JCEalloc (e, st) ->
+	let alloc =
+	  st.jc_struct_info_root ^ "_alloc_table"
+	in
+	make_app "alloc_parameter" [Var alloc; expr e]
+    | JCEfree e ->
+	let st = match e.jc_expr_type with
+	  | JCTpointer(st, _, _) -> st
+	  | _ -> assert false
+	in	
+	let alloc =
+	  st.jc_struct_info_root ^ "_alloc_table"
+	in
+	make_app "free_parameter" [Var alloc; expr e]
 
 let invariant_for_struct this st =
   let (_,invs) = 
@@ -529,6 +541,7 @@ let any_value = function
 	| Tinteger -> App (Var "any_int", Void)
 	| Treal -> App (Var "any_real", Void)
       end
+  | JCTpointer _ -> App (Var "any_pointer", Void)
   | _ -> assert false (* TODO *)
   
 let rec statement s = 
@@ -956,6 +969,18 @@ let tr_fun f spec body acc =
     VarSet.fold
       (fun v acc -> v.jc_var_info_final_name::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_globals
+      writes
+  in
+  let writes =
+    StringSet.fold
+      (fun v acc -> (v ^ "_alloc_table")::acc)
+      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+      writes
+  in
+  let writes =
+    StringSet.fold
+      (fun v acc -> (v ^ "_tag_table")::acc)
+      f.jc_fun_info_effects.jc_writes.jc_effect_tag_table
       writes
   in
   let normal_post =

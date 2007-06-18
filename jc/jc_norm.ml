@@ -267,6 +267,12 @@ let rec expr e =
       | JCTEcast (e, s) ->
 	  let (l, tl), e = expr e in
 	  (l, tl), JCEcast (e, s)
+      | JCTEalloc (e, s) ->
+	  let (l, tl), e = expr e in
+	  (l, tl), JCEalloc (e, s)
+      | JCTEfree e ->
+	  let (l, tl), e = expr e in
+	  (l, tl), JCEfree e
       | JCTEassign_var (vi, e) ->
 	  let (l,tl),e = expr e in
 	  let stat = make_assign_var loc vi e in

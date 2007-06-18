@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.49 2007-06-18 07:15:58 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.50 2007-06-18 15:21:45 moy Exp $ */
 
 %{
 
@@ -80,7 +80,7 @@
 %token IF ELSE RETURN WHILE FOR DO BREAK CONTINUE CASE SWITCH DEFAULT GOTO
 
 /* exception of throw try catch */
-%token EXCEPTION OF THROW TRY CATCH
+%token EXCEPTION OF THROW TRY CATCH NEW FREE
 
 /* pack unpack assert */
 %token PACK UNPACK ASSERT
@@ -542,6 +542,10 @@ assignment_operator:
 expression: 
 | shift_expression 
     { $1 }
+| NEW IDENTIFIER LSQUARE expression RSQUARE
+    { locate_expr (JCPEalloc ($4, $2)) }
+| FREE LPAR expression RPAR
+    { locate_expr (JCPEfree $3) }
 | expression LT expression 
     { locate_expr (JCPEbinary ($1, BPlt, $3)) }
 | expression GT expression

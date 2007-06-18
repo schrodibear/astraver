@@ -244,6 +244,10 @@ let rec expr fmt e =
 	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
     | JCTEcast (e, si) ->
 	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
+    | JCTEalloc (e, si) ->
+	fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e 
+    | JCTEfree (e) ->
+	fprintf fmt "(free(%a))" expr e 
     | JCTEoffset(k,e, _) ->
 	fprintf fmt "\\offset_m%a(%a)" offset_kind k expr e 
     | JCTEinstanceof (e, si) ->

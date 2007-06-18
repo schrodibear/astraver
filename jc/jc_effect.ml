@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.36 2007-06-18 07:15:58 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.37 2007-06-18 15:21:45 moy Exp $ *)
 
 
 open Jc_env
@@ -74,11 +74,11 @@ let add_field_reads fef fi =
 let add_global_reads fef vi =
   { fef with jc_reads = add_global_effect fef.jc_reads vi }
 
-let add_alloc_reads fef fi =
-  { fef with jc_reads = add_alloc_effect fef.jc_reads fi }
+let add_alloc_reads fef a =
+  { fef with jc_reads = add_alloc_effect fef.jc_reads a }
 
-let add_tag_reads fef fi =
-  { fef with jc_reads = add_tag_effect fef.jc_reads fi }
+let add_tag_reads fef a =
+  { fef with jc_reads = add_tag_effect fef.jc_reads a }
 
 let add_field_writes fef fi =
   { fef with jc_writes = add_memory_effect fef.jc_writes fi }
@@ -86,8 +86,15 @@ let add_field_writes fef fi =
 let add_global_writes fef vi =
   { fef with jc_writes = add_global_effect fef.jc_writes vi }
 
+let add_alloc_writes fef a =
+  { fef with jc_writes = add_alloc_effect fef.jc_writes a }
+
+let add_tag_writes fef a =
+  { fef with jc_writes = add_tag_effect fef.jc_writes a }
+
 let same_effects ef1 ef2 =
   StringSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
+  && StringSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && FieldSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
 
@@ -166,6 +173,17 @@ let rec expr ef e =
     | JCEunary(op,e1) -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) -> expr ef e
+    | JCEalloc(e,st) ->
+	let name = st.jc_struct_info_root in
+	add_alloc_writes (add_tag_writes ef name) name
+    | JCEfree e ->
+	begin match e.jc_expr_type with
+	  | JCTpointer(st, _, _) ->
+	      let name = st.jc_struct_info_root in
+	      (* write tag table ? *)
+	      add_alloc_writes (add_tag_writes ef name) name
+	  | _ -> assert false
+	end
 
 let rec loop_annot ef la = 
   assertion (term ef la.jc_loop_variant) la.jc_loop_invariant
@@ -246,7 +264,7 @@ let parameter ef vi =
   match vi.jc_var_info_type with
     | JCTpointer(st, _, _) ->
 	let name = st.jc_struct_info_root in
-	{ ef with jc_reads = add_alloc_effect (add_tag_effect ef.jc_reads name) name }
+	add_alloc_reads (add_tag_reads ef name) name
     | _ -> ef
 
 (* computing the fixpoint *)

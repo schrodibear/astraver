@@ -566,6 +566,9 @@ let rec term env e =
       | JCPEquantifier _ -> 
 	  typing_error e.jc_pexpr_loc 
 	    "quantification not allowed as logic term"
+      | JCPEalloc _ | JCPEfree _ ->
+	  typing_error e.jc_pexpr_loc 
+	    "memory (de-)allocation not allowed as logic term"
       | JCPErange(e1,e2) ->
 	  let e1 = term env e1 and e2 = term env e2 in
 	  let t1 = e1.jc_tterm_type and t2 = e2.jc_tterm_type in
@@ -781,6 +784,9 @@ let rec assertion env e =
       | JCPEassign_op _ 
       | JCPEassign _ -> 
 	  typing_error e.jc_pexpr_loc "assignment not allowed as logic term"
+      | JCPEalloc _ | JCPEfree _ ->
+	  typing_error e.jc_pexpr_loc 
+	    "memory (de-)allocation not allowed as logic term"
 
   in { jc_tassertion_node = te;
        jc_tassertion_loc = e.jc_pexpr_loc }
@@ -956,6 +962,13 @@ let rec expr env e =
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "only structures can be cast"
 	  end
+      | JCPEalloc(e1, t) ->
+	  let te1 = expr env e1 in
+	  let st = find_struct_info e.jc_pexpr_loc t in
+	  JCTpointer(st,Num.Int 0, Num.Int (-1)), JCTEalloc (te1, st)
+      | JCPEfree e1 ->
+	  let e1 = expr env e1 in
+	  unit_type, JCTEfree e1
       | JCPEbinary (e1, op, e2) -> 
 	  let e1 = expr env e1 and e2 = expr env e2 in
 	  make_bin_app e.jc_pexpr_loc op e1 e2
@@ -1381,7 +1394,9 @@ let rec location_set env e =
     | JCPEassign (_, _)
     | JCPEapp (_, _)
     | JCPEconst _
-    | JCPErange (_,_) -> assert false
+    | JCPErange (_,_)
+    | JCPEalloc (_,_)
+    | JCPEfree _ -> assert false
 
 let location env e =
   match e.jc_pexpr_node with
@@ -1416,7 +1431,9 @@ let location env e =
     | JCPEassign (_, _)
     | JCPEapp (_, _)
     | JCPEconst _ 
-    | JCPErange (_,_) ->
+    | JCPErange (_,_)
+    | JCPEalloc (_,_)
+    | JCPEfree _ ->
 	typing_error e.jc_pexpr_loc "invalid memory location"
 
 let clause env vi_result c acc =

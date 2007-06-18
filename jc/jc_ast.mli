@@ -95,6 +95,8 @@ type pexpr_node =
   | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
   | JCPErange of pexpr * pexpr
+  | JCPEalloc of pexpr * string
+  | JCPEfree of pexpr
 
 and pexpr =
     {
@@ -265,6 +267,8 @@ type texpr_node =
   | JCTEincr_local of tincr_op * var_info 
   | JCTEincr_heap of tincr_op * texpr * field_info 
   | JCTEif of texpr * texpr * texpr
+  | JCTEalloc of texpr * struct_info
+  | JCTEfree of texpr
 
 and texpr =
     {
@@ -402,6 +406,8 @@ type expr_node =
   | JCEcast of expr * struct_info
   | JCEif of expr * expr * expr
   | JCEoffset of offset_kind * expr * struct_info
+  | JCEalloc of expr * struct_info
+  | JCEfree of expr
 (*
   - enlever JCEif et le mettre au niveau des statements comme
       l'appel de fonction : A VOIR

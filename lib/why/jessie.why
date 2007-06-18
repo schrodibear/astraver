@@ -41,6 +41,19 @@ parameter eq_pointer :
 parameter neq_pointer : 
   p: 't pointer -> q: 't pointer -> {} bool { if result then p<>q else p=q }
 
+parameter alloc_parameter : a:'t alloc_table ref -> n:int -> 
+  { n > 0 }
+  't pointer 
+  writes a
+  { offset_min(a,result) = 0 and offset_max(a,result) = n-1 }
+
+parameter free_parameter : a:'t alloc_table ref -> p:'t pointer -> 
+  { offset_min(a,p) = 0 and offset_max(a,p) >= 0 }
+  unit
+  writes a
+  { not valid(a,p) }
+
+
 (**************************************
 
 heap memories, select and store
@@ -218,6 +231,8 @@ parameter downcast_ :
 (* already in Why
 parameter any_int : unit -> {} int {}
 *)
+
+parameter any_pointer: unit -> {} 'z pointer { true }
 
 (*******************
 
