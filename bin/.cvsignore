@@ -20,3 +20,5 @@ krakatoa.opt
 krakatoa.byte
 simplify2why.opt
 why-stat.opt
+bin/demixify.byte
+bin/demixify.opt

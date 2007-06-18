@@ -1,7 +1,7 @@
+*.jc
 *.makefile
 krakatoa.log
 gwhy.cache
-jc
 why
 smtlib
 coq
