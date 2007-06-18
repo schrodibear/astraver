@@ -497,11 +497,12 @@ db debug: bin/why.byte src/logic.cmo
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(WHYOBFUSCATOR)
+install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(WHYOBFUSCATOR)
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
+	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)
