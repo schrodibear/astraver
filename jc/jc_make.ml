@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.9 2007-06-15 14:50:15 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.10 2007-06-18 12:36:32 oudot Exp $ i*)
 
 open Format
 open Pp
@@ -57,7 +57,8 @@ let generic f targets =
        fprintf fmt "WHY=why --no-arrays %s@\n@\n" (Jc_options.why_opt);
        fprintf fmt "GWHY=gwhy --no-arrays %s@\n@\n" (Jc_options.why_opt);
        fprintf fmt "JESSIELIBFILE=%s@\n@\n" 
-	 (Filename.concat Jc_options.libdir Jc_options.libfile);
+	 (Filename.concat Jc_options.libdir 
+	    (Filename.concat "why" Jc_options.libfile));
 
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
