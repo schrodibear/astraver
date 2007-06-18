@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.1 2007-03-06 10:44:18 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.2 2007-06-18 07:15:58 marche Exp $ i*)
 
 open Format
 
@@ -64,6 +64,7 @@ let debug = ref false
 let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
+let ignore_overflow = ref false
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
@@ -96,10 +97,12 @@ let _ =
           "  verbose mode";
 	"-q", Arg.Clear verbose,
           "  quiet mode (default)";
-	"--werror", Arg.Set werror,
+	"-werror", Arg.Set werror,
           "  treats warnings as errors";
-	"--version", Arg.Unit version,
+	"-version", Arg.Unit version,
           "  prints version and exit";
+	"-ignore-overflow", Arg.Set ignore_overflow,
+	  "  ignore arithmetic overflow threats" ;
       ]
       add_file usage
 
@@ -114,7 +117,7 @@ let debug = !debug
 let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
-
+let ignore_overflow = !ignore_overflow
 
 (*s error handling *)
 
@@ -125,4 +128,11 @@ let parsing_error l f =
     (fun s -> 
        let s = if s="" then s else " ("^s^")" in
        raise (Java_error(l, "syntax error" ^ s))) f
+
+
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/krakatoa.byte"
+End: 
+*)
 

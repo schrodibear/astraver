@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.48 2007-06-15 14:05:03 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.49 2007-06-18 07:15:58 marche Exp $ */
 
 %{
 
@@ -590,10 +590,10 @@ expression:
 
 | BSFORALL type_expr identifier_list SEMICOLON expression 
     %prec PRECFORALL
-    { locate_expr (JCPEforall($2,$3,$5)) }
+    { locate_expr (JCPEquantifier(Forall,$2,$3,$5)) }
 | BSEXISTS type_expr identifier_list SEMICOLON expression 
     %prec PRECFORALL
-    { locate_expr (JCPEexists($2,$3,$5)) }
+    { locate_expr (JCPEquantifier(Exists,$2,$3,$5)) }
 | expression EQEQGT expression
     { locate_expr (JCPEbinary($1,BPimplies,$3)) }
 | expression LTEQEQGT expression

@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.35 2007-06-15 14:05:02 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.36 2007-06-18 07:15:58 marche Exp $ *)
 
 
 open Jc_env
@@ -134,8 +134,7 @@ let rec assertion ef a =
 	add_tag_effect (term ef t) st.jc_struct_info_root
     | JCAnot a
     | JCAold a -> assertion ef a
-    | JCAforall (vi, a) -> assertion ef a 
-    | JCAexists (vi, a) -> assertion ef a 
+    | JCAquantifier(_,vi, a) -> assertion ef a 
     | JCArelation (t1,_,t2) -> term (term ef t1) t2
     | JCAapp (li, tl) -> 
 	ef_union li.jc_logic_info_effects

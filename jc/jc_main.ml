@@ -144,8 +144,8 @@ let main () =
 	(* production phase 1.4 : generation of Why enum_types *)
 	let d_enum =
 	  Hashtbl.fold 
-	    (fun _ (ri,to_int,to_int_,of_int) acc ->
-	       Jc_interp.tr_enum_type ri to_int_ of_int acc)
+	    (fun _ (ri (* ,to_int,to_int_,of_int *)) acc ->
+	       Jc_interp.tr_enum_type ri (* to_int_ of_int *) acc)
 	    Jc_norm.enum_types_table
 	    d_exc
 	in	       	  

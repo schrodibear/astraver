@@ -141,15 +141,38 @@ let bin_arg_type loc = function
   | Ble_real | Bgt_real | Blt_real -> real_type
   | Bneq_pointer | Beq_pointer -> assert false
 
+let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
+let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
+let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
+
+let term_coerce loc tdest tsrc e =
+  match tdest,tsrc with
+    | JCTnative t, JCTnative u when t=u -> e
+    | JCTlogic t, JCTlogic u when t=u -> e
+    | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
+    | JCTnative Tinteger, JCTenum ri ->
+	LApp(logic_int_of_enum ri,[e])
+    | JCTenum ri, JCTnative Tinteger ->
+	LApp(logic_enum_of_int ri,[e])
+    | _ , JCTnull -> e
+    | JCTpointer (st, a, b), _  -> 
+	LApp("downcast", 
+	  [ LVar (st.jc_struct_info_root ^ "_tag_table") ; e ;
+	    LVar (st.jc_struct_info_name ^ "_tag") ])	
+    |  _ -> 
+	 Jc_typing.typing_error loc 
+	   "can't coerce type %a to type %a" 
+	   Jc_typing.print_type tsrc Jc_typing.print_type tdest
+
 let coerce loc tdest tsrc e =
   match tdest,tsrc with
     | JCTnative t, JCTnative u when t=u -> e
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTnative Tinteger, JCTenum ri ->
-	make_app ("integer_of_" ^ ri.jc_enum_info_name) [e]
+	make_app (logic_int_of_enum ri) [e]
     | JCTenum ri, JCTnative Tinteger ->
-	make_app (ri.jc_enum_info_name ^ "_of_integer") [e]
+	make_app (fun_enum_of_int ri) [e]
     | _ , JCTnull -> e
     | JCTpointer (st, a, b), _  -> 
 	make_app "downcast_" 
@@ -276,12 +299,20 @@ let rec assertion label oldlabel a =
     | JCArelation(t1,op,t2) ->
 	LPred (pred_bin_op op, [ft t1; ft t2])
     | JCAapp(f,l) -> 
-	make_logic_pred_call f (List.map ft l)	    
-    | JCAforall(v,p) -> 
+	begin try
+	  make_logic_pred_call f 
+	    (List.map2 
+	       (fun vi t -> 
+		  term_coerce t.jc_term_loc vi.jc_var_info_type 
+		    t.jc_term_type (term label oldlabel t))
+	       f.jc_logic_info_parameters l)	    
+	with Invalid_argument _ -> assert false
+	end
+    | JCAquantifier(Forall,v,p) -> 
 	LForall(v.jc_var_info_final_name,
 		tr_base_type v.jc_var_info_type,
 		fa p)
-    | JCAexists(v,p) -> 
+    | JCAquantifier(Exists,v,p) -> 
 	LExists(v.jc_var_info_final_name,
 		tr_base_type v.jc_var_info_type,
 		fa p)
@@ -1031,7 +1062,7 @@ let tr_exception ei acc =
   Exception(ei.jc_exception_info_name, 
 	    Some (tr_base_type ei.jc_exception_info_type)) :: acc
 
-let tr_enum_type ri to_int of_int acc =
+let tr_enum_type ri (* to_int of_int *) acc =
   let n = ri.jc_enum_info_name in
   let enum_pred x =
     LAnd(LPred("le_int",[LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_min))); x]),
@@ -1043,14 +1074,18 @@ let tr_enum_type ri to_int of_int acc =
 			 Base_type(simple_logic_type n),
 			 [],[],
 			 LPred("eq_int",
-			       [LVar "x";LApp(to_int.jc_fun_info_name,[LVar "result"])]),[]))
+			       [LVar "x";LApp(logic_int_of_enum ri,
+					      [LVar "result"])]),[]))
   in
   Type(n,[]) ::
-  Logic(false,to_int.jc_fun_info_name,
+  Logic(false,logic_int_of_enum ri,
 	[("",simple_logic_type n)],simple_logic_type "int") :: 
-  Param(false,of_int.jc_fun_info_name,of_int_type) ::
+  Logic(false,logic_enum_of_int ri,
+	[("",simple_logic_type "int")],simple_logic_type n) :: 
+  Param(false,fun_enum_of_int ri,of_int_type) ::
   Axiom(n^"_enum",
-	LForall("x",simple_logic_type n,enum_pred (LApp(to_int.jc_fun_info_name,[LVar "x"]))))		
+	LForall("x",simple_logic_type n,enum_pred 
+		  (LApp(logic_int_of_enum ri,[LVar "x"]))))		
   :: acc
 
 let tr_variable vi e acc =

@@ -77,6 +77,8 @@ type punary_op =
 
 type offset_kind = Offset_max | Offset_min
 
+type quantifier = Forall | Exists
+
 type pexpr_node =
   | JCPEconst of const
   | JCPEvar of string
@@ -88,8 +90,7 @@ type pexpr_node =
   | JCPEunary of punary_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * string
-  | JCPEforall of ptype * string list * pexpr
-  | JCPEexists of ptype * string list * pexpr
+  | JCPEquantifier of quantifier * ptype * string list * pexpr
   | JCPEold of pexpr
   | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
@@ -227,8 +228,7 @@ type tassertion_node =
   | JCTAiff of tassertion * tassertion
   | JCTAnot of tassertion
   | JCTAapp of logic_info * tterm list
-  | JCTAforall of var_info * tassertion
-  | JCTAexists of var_info * tassertion
+  | JCTAquantifier of quantifier * var_info * tassertion
   | JCTAold of tassertion
   | JCTAinstanceof of tterm * struct_info
   | JCTAbool_term of tterm
@@ -348,6 +348,7 @@ type term_node =
 and term =
     {
       jc_term_node : term_node;
+      jc_term_type : jc_type;
       jc_term_loc : Loc.position;
     }
 
@@ -370,8 +371,7 @@ type assertion_node =
   | JCAiff of assertion * assertion
   | JCAnot of assertion
   | JCAapp of logic_info * term list
-  | JCAforall of var_info * assertion
-  | JCAexists of var_info * assertion
+  | JCAquantifier of quantifier * var_info * assertion
   | JCAold of assertion
   | JCAinstanceof of term * struct_info
   | JCAbool_term of term

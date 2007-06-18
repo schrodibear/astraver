@@ -4,7 +4,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.6 2007-06-14 14:18:52 marche Exp $
+$Id: java_lexer.mll,v 1.7 2007-06-18 07:15:58 marche Exp $
 
 ***************************************************************************)
 
@@ -64,6 +64,7 @@ $Id: java_lexer.mll,v 1.6 2007-06-14 14:18:52 marche Exp $
 	  "for", FOR;
 	  "future", FUTURE;
 	  "generic", GENERIC;
+	  "ghost", GHOST;
 	  "goto", GOTO;
 	  "if", IF;
 	  "implements", IMPLEMENTS;
@@ -82,6 +83,7 @@ $Id: java_lexer.mll,v 1.6 2007-06-14 14:18:52 marche Exp $
 	  "operator", OPERATOR;
 	  "outer", OUTER;
 	  "package", PACKAGE;
+	  "predicate", PREDICATE;
 	  "private", PRIVATE;
 	  "protected", PROTECTED;
 	  "public", PUBLIC;
@@ -428,6 +430,6 @@ let next_token lexbuf =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/krakatoa.byte"
+compile-command: "make -j -C .. bin/krakatoa.byte"
 End: 
 *)

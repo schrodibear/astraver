@@ -218,7 +218,7 @@ let type_type t =
 	  JCTlogic id
 	with Not_found ->
 	  try
-	    let (ri,_,_,_) = Hashtbl.find enum_types_table id in
+	    let (ri (* ,_,_,_ *)) = Hashtbl.find enum_types_table id in
 	    JCTenum ri
 	  with Not_found ->
 	    typing_error t.jc_ptype_loc "unknown type %s" id
@@ -336,25 +336,27 @@ let logic_unary_op loc (op : Jc_ast.punary_op) e =
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
 let term_coerce t1 t2 e =
-  let e_int =
+  let tn1,e_int =
     match t1 with
       | JCTenum ri ->
+(*
 	  let (_,to_int,_,_) = 
 	    Hashtbl.find enum_types_table ri.jc_enum_info_name 
 	  in
 	  { jc_tterm_node = JCTTapp(to_int,[e]) ;
 	    jc_tterm_type = integer_type;
 	    jc_tterm_loc = e.jc_tterm_loc }  
-      | _ -> e
+*)
+	  Tinteger, e
+      | JCTnative t -> t, e
+      | _ -> assert false
   in
-  match t2 with
-    | Tinteger -> e_int
-    | Treal -> 
+  match tn1,t2 with
+    | Tinteger, Treal -> 
 	{ jc_tterm_node = JCTTapp(real_of_integer,[e_int]) ;
 	  jc_tterm_type = real_type;
 	  jc_tterm_loc = e.jc_tterm_loc }  
-    | _ -> assert false
-
+    | _ -> e_int
 
 let logic_bin_op t op =
   bin_op t op
@@ -561,7 +563,7 @@ let rec term env e =
 	  typing_error e.jc_pexpr_loc 
 	    "assignment not allowed as logic term"
 	    (* propositional (non-boolean) expressions *)
-      | JCPEforall _ | JCPEexists _ -> 
+      | JCPEquantifier _ -> 
 	  typing_error e.jc_pexpr_loc 
 	    "quantification not allowed as logic term"
       | JCPErange(e1,e2) ->
@@ -755,12 +757,9 @@ let rec assertion env e =
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non propositional constant"
 	  end
-      | JCPEforall(ty,idl,e1) -> 
+      | JCPEquantifier(q,ty,idl,e1) -> 
 	  let ty = type_type ty in
-	  (make_forall e.jc_pexpr_loc ty idl env e1).jc_tassertion_node
-      | JCPEexists(ty,idl,e1) -> 
-	  let ty = type_type ty in
-	  (make_exists e.jc_pexpr_loc ty idl env e1).jc_tassertion_node
+	  (make_quantifier q e.jc_pexpr_loc ty idl env e1).jc_tassertion_node
       | JCPEold e -> JCTAold(assertion env e)
       | JCPEif(e1,e2,e3) ->
 	  let te1 = term env e1 
@@ -786,20 +785,14 @@ let rec assertion env e =
   in { jc_tassertion_node = te;
        jc_tassertion_loc = e.jc_pexpr_loc }
 
-and make_forall loc ty idl env e : tassertion =
+and make_quantifier q loc ty idl env e : tassertion =
   match idl with
     | [] -> assertion env e
     | id::r ->
 	let vi = var ty id in
-	let f = JCTAforall(vi,make_forall loc ty r ((id,vi)::env) e) in
-	{jc_tassertion_loc = loc ; jc_tassertion_node = f }
-
-and make_exists loc ty idl env e : tassertion =
-  match idl with
-    | [] -> assertion env e
-    | id::r ->
-	let vi = var ty id in
-	let f = JCTAexists(vi,make_exists loc ty r ((id,vi)::env) e) in
+	let f = 
+	  JCTAquantifier(q,vi,make_quantifier q loc ty r ((id,vi)::env) e) 
+	in
 	{jc_tassertion_loc = loc ; jc_tassertion_node = f }
 
 (* expressions *)
@@ -1122,8 +1115,7 @@ let rec expr env e =
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
-      | JCPEforall _ 
-      | JCPEexists _ 
+      | JCPEquantifier _ 
       | JCPEold _ 
       | JCPErange _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
@@ -1243,7 +1235,9 @@ let rec statement env s =
 	    JCTSif(tc,ts1,ts2)
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
-      | JCPSdecl (ty, id, e) -> assert false
+      | JCPSdecl (ty, id, e) -> 
+	  typing_error s.jc_pstatement_loc
+	    "decl of `%s' with statements afterwards" id
       | JCPSassert(id,e) ->
           let a = assertion env e in
           JCTSassert(Option_misc.map (fun x -> x.jc_identifier_name) id,a)
@@ -1379,8 +1373,7 @@ let rec location_set env e =
     | JCPEif (_, _, _)
     | JCPEoffset _
     | JCPEold _
-    | JCPEforall (_, _, _)
-    | JCPEexists (_, _, _)
+    | JCPEquantifier (_,_, _, _)
     | JCPEcast (_, _)
     | JCPEinstanceof (_, _)
     | JCPEunary (_, _)
@@ -1416,8 +1409,7 @@ let location env e =
     | JCPEinstanceof _
     | JCPEold _ 
     | JCPEoffset _
-    | JCPEforall (_, _, _)
-    | JCPEexists (_, _, _)
+    | JCPEquantifier (_,_, _, _)
     | JCPEunary _
     | JCPEbinary (_, _, _)
     | JCPEassign_op (_, _, _)
@@ -1593,13 +1585,17 @@ let rec decl d =
 	    jc_enum_info_max = max;
 	  }
 	in
-	let to_int = make_term_op ("integer_of_"^id) integer_type in
+(*
+	let to_int = make_logic_fun ("integer_of_"^id) integer_type in
 	let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
 	let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
-	Hashtbl.add enum_types_table id (ri,to_int,to_int_,of_int);
+*)
+	Hashtbl.add enum_types_table id (ri (*,to_int,to_int_,of_int*));
+(*
 	Hashtbl.add enum_conversion_logic_functions_table to_int id;
 	Hashtbl.add enum_conversion_functions_table to_int_ id;
 	Hashtbl.add enum_conversion_functions_table of_int id
+*)
     | JCPDstructtype(id,parent,fields,inv) ->
 	(* mutable field *)
 	if parent = None then create_mutable_field id;

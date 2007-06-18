@@ -25,7 +25,7 @@ let parse_annot loc s f =
 let rec statement s =
   { s with java_pstatement_node = match s.java_pstatement_node with
     | JPSannot(loc,s) -> parse_annot loc s Java_parser.kml_statement_annot
-    | JPSloop_annot _ -> assert false
+    | JPSghost_local_decls _ | JPSghost_statement _ | JPSloop_annot _ 
     | JPSassert _ -> assert false
     | JPSsynchronized (e, s') -> JPSsynchronized(e, statements s')	
     | JPSblock b -> JPSblock(statements b)

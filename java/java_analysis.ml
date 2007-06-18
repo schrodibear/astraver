@@ -42,10 +42,6 @@ let rec expr e =
     | JEun (_, _) -> assert false (* TODO *)
     | JEbin (e1, op, e2) -> expr e1; expr e2 
     | JEvar vi -> ()
-    | JEassign_local_var(vi,e) -> expr e
-    | JEassign_local_var_op(vi,op,e) -> expr e
-    | JEassign_field(e1,fi,e2) -> expr e1; expr e2
-    | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
     | JEfield_access(e1,fi) -> expr e1
     | JEarray_length(e) -> 
 	begin
@@ -60,6 +56,11 @@ let rec expr e =
 	    | JTYarray ty -> intro_array_struct ty
 	    | _ -> assert false
 	end
+    | JEassign_local_var(vi,e) -> expr e
+    | JEassign_local_var_op(vi,op,e) -> expr e
+    | JEassign_field(e1,fi,e2) -> expr e1; expr e2
+    | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
+    | JEassign_array_op(e1,e2,op,e3) -> expr e1; expr e2; expr e3
 
 
 let initialiser i = 

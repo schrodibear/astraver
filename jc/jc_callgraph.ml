@@ -52,7 +52,7 @@ let rec assertion acc p =
       assertion (assertion acc p1) p2
   | JCAif(t1,p2,p3) -> 
       assertion (assertion (term acc t1) p2) p3
-  | JCAnot p | JCAold p | JCAforall (_,p) | JCAexists (_,p) -> assertion acc p
+  | JCAnot p | JCAold p | JCAquantifier (_,_,p) -> assertion acc p
   | JCAinstanceof(t,_)
   | JCAbool_term t -> term acc t
 

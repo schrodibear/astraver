@@ -2,6 +2,7 @@
 
 open Jc_output
 open Jc_env
+open Jc_fenv
 open Jc_ast
 open Java_env
 open Java_ast
@@ -50,6 +51,7 @@ let char_range =
   }
 
 let range_types acc =
+  if Java_options.ignore_overflow then acc else
   List.fold_left
     (fun acc ri ->
        JCenum_type_def(ri.jc_enum_info_name,
@@ -59,17 +61,28 @@ let range_types acc =
 
 let tr_base_type t =
   match t with
-    | Tboolean -> JCTnative Jc_env.Tboolean
-    | Tinteger -> JCTnative Jc_env.Tinteger
-    | Tshort -> JCTenum short_range 
-    | Tint -> JCTenum int_range 
     | Tnull -> JCTnull
+    | Tboolean -> Jc_pervasives.boolean_type
+    | Tinteger -> Jc_pervasives.integer_type
+    | Tshort -> 
+	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	JCTenum short_range 
+    | Tint -> 
+	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	JCTenum int_range 
+    | Tlong -> 
+	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	JCTenum long_range 
+    | Tchar -> 
+	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	JCTenum char_range 
+    | Tbyte  -> 
+	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	JCTenum byte_range 
     | Treal -> assert false (* TODO *)
-    | Tdouble -> assert false (* TODO *)
-    | Tlong -> JCTenum long_range 
     | Tfloat -> assert false (* TODO *)
-    | Tchar -> JCTenum char_range 
-    | Tbyte  -> JCTenum byte_range 
+    | Tdouble -> assert false (* TODO *)
+
 
 (*s class types *)
 
@@ -191,6 +204,28 @@ let get_var ?(formal=false) vi =
 	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
 	nvi
 
+(*s logic funs *)
+
+let logics_table = Hashtbl.create 97
+
+let get_logic_fun fi =
+  try
+    Hashtbl.find logics_table fi.java_logic_info_tag
+  with
+      Not_found -> 
+	let nfi =
+	  match fi.java_logic_info_result_type with
+	    | None ->
+		Jc_pervasives.make_rel fi.java_logic_info_name 
+	    | Some t ->
+		Jc_pervasives.make_logic_fun fi.java_logic_info_name 
+		  (tr_type t) 
+	in
+	nfi.jc_logic_info_parameters <-
+	      List.map get_var fi.java_logic_info_parameters;
+	Hashtbl.add logics_table nfi.jc_logic_info_tag nfi;
+	nfi
+
 (*s terms *)
 
 let lit l =
@@ -257,16 +292,20 @@ let rec term t =
        jc_tterm_type = tr_type t.java_term_type ;
        jc_tterm_node = t' }
   
+let quantifier = function
+  | Forall -> Jc_ast.Forall
+  | Exists -> Jc_ast.Exists
+
 let rec assertion a =
   let a' =
     match a.java_assertion_node with
       | JAtrue -> JCTAtrue
       | JAbin(e1,t,op,e2) -> JCTArelation(term e1, lbin_op t op, term e2)
-      | JAapp (_, _)-> assert false (* TODO *)
-      | JAquantifier (Forall, vi , a)-> 
+      | JAapp (fi, el)-> 
+	  JCTAapp(get_logic_fun fi,List.map term el)
+      | JAquantifier (q, vi , a)-> 
 	  let vi = get_var vi in
-	  JCTAforall(vi,assertion a)
-      | JAquantifier (q, vi , a)-> 	  assert false (* TODO *)
+	  JCTAquantifier(quantifier q,vi,assertion a)
       | JAimpl (a1, a2)-> 
 	  JCTAimplies(assertion a1,assertion a2)
       | JAor (_, _)-> assert false (* TODO *)
@@ -324,14 +363,6 @@ let rec expr e =
 	  let e1 = expr e1 and e2 = expr e2 in
 	  JCTEbinary(e1,bin_op op,e2)	  
       | JEvar vi -> JCTEvar (get_var vi)
-      | JEassign_local_var(vi,e) ->
-	  JCTEassign_var(get_var vi,expr e)
-      | JEassign_local_var_op(vi,op,e) ->
-	  JCTEassign_var_op(get_var vi,bin_op op, expr e)
-      | JEassign_field(e1,fi,e2) ->
-	  JCTEassign_heap(expr e1,get_field fi,expr e2)
-      | JEassign_field_op(e1,fi,op,e2) ->
-	  JCTEassign_heap_op(expr e1,get_field fi,bin_op op,expr e2)
       | JEfield_access(e1,fi) -> 
 	  JCTEderef(expr e1,get_field fi)
       | JEarray_length(e) -> 
@@ -355,6 +386,34 @@ let rec expr e =
 		    }
 		  in
 		  JCTEderef(shift,snd (List.hd st.jc_struct_info_fields))
+	      | _ -> assert false
+	  end
+      | JEassign_local_var(vi,e) ->
+	  JCTEassign_var(get_var vi,expr e)
+      | JEassign_local_var_op(vi,op,e) ->
+	  JCTEassign_var_op(get_var vi,bin_op op, expr e)
+      | JEassign_field(e1,fi,e2) ->
+	  JCTEassign_heap(expr e1,get_field fi,expr e2)
+      | JEassign_field_op(e1,fi,op,e2) ->
+	  JCTEassign_heap_op(expr e1,get_field fi,bin_op op,expr e2)
+      | JEassign_array_op(e1,e2,op,e3) ->
+	  begin
+	    match e1.java_expr_type with
+	      | JTYarray ty ->
+		  let st = get_array_struct ty in
+		  let e1' = expr e1 in
+		  let shift = {
+		      jc_texpr_loc = e.java_expr_loc;
+		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_node = JCTEshift(e1', expr e2)
+		    }
+		  in
+		  let fi = snd (List.hd st.jc_struct_info_fields) in
+		  let e3' = expr e3 in
+		  if op = Beq then
+		    JCTEassign_heap(shift,fi,e3')
+		  else
+		    JCTEassign_heap_op(shift,fi,bin_op op,e3')
 	      | _ -> assert false
 	  end
 
@@ -432,10 +491,17 @@ let tr_method mi req behs b acc =
 	  
 (*s axioms *)
 
-let tr_axiom (_,id) p acc =
+let tr_axiom id p acc =
   JCaxiom_def(id,assertion p)::acc
 
-  
+
+let tr_logic_fun fi b acc =   
+  let nfi = get_logic_fun fi in
+  JClogic_fun_def(nfi.jc_logic_info_result_type,
+		  nfi.jc_logic_info_name,
+		  nfi.jc_logic_info_parameters,
+		  JCTAssertion(assertion b))::acc
+
 
 (*
 Local Variables: 

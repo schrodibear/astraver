@@ -118,6 +118,22 @@ let method_info id ty pars =
   }
     
 
+(* logic funs *)
+
+let logics_table = Hashtbl.create 97
+
+let logic_tag_counter = ref 0
+
+let logic_info id ty pars =
+  incr logic_tag_counter;
+  { java_logic_info_tag = !logic_tag_counter;
+    java_logic_info_name = id;
+    java_logic_info_parameters = pars;
+    java_logic_info_result_type = ty;
+    java_logic_info_calls = [];
+  }
+    
+
 let rec var_type_and_id ty id =
   match id with
     | Simple_id (loc,n) -> ty,n
@@ -223,9 +239,10 @@ let subtype t1 t2 =
 
 let compatible_base_types t1 t2 = true
 
-let compatible_types t1 t2 =
+let rec compatible_types t1 t2 =
   match t1,t2 with
     | JTYbase t1, JTYbase t2 -> compatible_base_types t1 t2
+    | JTYarray t1, JTYarray t2 -> compatible_types t1 t2
     | _ -> assert false (* TODO *)
 
 let make_logic_bin_op loc op t1 e1 t2 e2 =
@@ -556,7 +573,36 @@ let rec assertion env e =
     | JPEnew_array _-> assert false (* TODO *)
     | JPEnew (_, _)-> assert false (* TODO *)
     | JPEsuper_call (_, _)-> assert false (* TODO *)
-    | JPEcall (_, _, _)-> assert false (* TODO *)
+    | JPEcall (None, (loc,id), args)-> 
+	begin
+	  try
+	    let (fi,_) = Hashtbl.find logics_table id in
+	    let tl =
+	      try
+		List.map2
+		  (fun vi e ->
+		     let ty = vi.java_var_info_type in
+		     let te = term env e in
+		     if compatible_types te.java_term_type ty then te
+		     else
+		       typing_error e.java_pexpr_loc 
+			 "type %a expected" 
+			 print_type ty) 
+		  fi.java_logic_info_parameters args
+	      with  Invalid_argument _ ->
+		typing_error e.java_pexpr_loc 
+		  "wrong number of arguments for %s" id
+	    in
+	    JAapp(fi, tl)
+		 
+	  with
+	      Not_found ->
+		typing_error e.java_pexpr_loc 
+		  "unknown predicate `%s'" id
+	end
+    | JPEcall (Some _, _, _)-> 
+	typing_error e.java_pexpr_loc 
+	  "method calls not allowed in assertion"	
     | JPEfield_access _-> assert false (* TODO *)
     | JPEif (_, _, _)-> assert false (* TODO *)
     | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
@@ -678,7 +724,28 @@ let rec expr env e =
       | JPEcall (_, _, _)-> assert false (* TODO *)
       | JPEfield_access _-> assert false (* TODO *)
       | JPEif (_, _, _)-> assert false (* TODO *)
-      | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
+      | JPEassign_array (e1, e2, op, e3)-> 
+	  let te1 = expr env e1 
+	  and te2 = expr env e2 
+	  and te3 = expr env e3 
+	  in 
+	  begin
+	    match te1.java_expr_type with
+	      | JTYarray t ->
+		  if is_numeric te2.java_expr_type then
+		    if compatible_types t te3.java_expr_type then
+		      t, JEassign_array_op(te1,te2,op,te3)
+		    else
+		    typing_error e3.java_pexpr_loc
+		      "type `%a' expected" print_type t	
+		  else
+		    typing_error e2.java_pexpr_loc
+		      "integer expected"	
+	      | _ ->
+		  typing_error e1.java_pexpr_loc
+		    "not an array"	
+	  end
+	  
       | JPEassign_field (_, _, _)-> assert false (* TODO *)
       | JPEassign_name (n, op, e)-> 
 	  begin
@@ -827,6 +894,10 @@ let rec statement env s =
 	    typing_error e.java_pexpr_loc "boolean expected"
       | JPSloop_annot (inv, dec) -> assert false
       | JPSannot (_, _)-> assert false (* TODO *)
+      | JPSghost_local_decls d -> assert false (* TODO *)
+      | JPSghost_statement e
+      | JPSexpr e -> 
+	  let te = expr env e in JSexpr te
       | JPSassert(id,a) ->
 	  let ta = assertion env a in
 	  JSassert(Option_misc.map snd id,ta)
@@ -869,8 +940,6 @@ let rec statement env s =
 	  end
       | JPSthrow _-> assert false (* TODO *)
       | JPSvar_decl _-> assert false (* TODO *)
-      | JPSexpr e -> 
-	  let te = expr env e in JSexpr te
 	  
   in 
   { java_statement_loc = s.java_pstatement_loc ;
@@ -883,6 +952,7 @@ and statements env b =
     | s :: rem ->
 	match s.java_pstatement_node with
 	  | JPSskip -> statements env rem
+	  | JPSghost_local_decls vd 
 	  | JPSvar_decl vd -> 
 	      let env,decls = variable_declaration env vd in
 	      let r = block env rem in
@@ -1069,12 +1139,27 @@ let type_decl d =
 	class_methods ci env c.class_fields
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false
-    | JPTaxiom(id,e) -> 
+    | JPTaxiom((loc,id),e) -> 
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te
-    | JPTlogic_type_decl _
-    | JPTlogic_reads _ 
-    | JPTlogic_def _ -> assert false (* TODO *)
+    | JPTlogic_type_decl _ -> assert false (* TODO *)
+    | JPTlogic_reads _ -> assert false (* TODO *)
+    | JPTlogic_def((loc,id),ret_type,params,body) -> 
+	let pl = List.map type_param params in
+	let env = 
+	  List.fold_left
+	    (fun acc vi -> 
+	       (vi.java_var_info_name,Local_variable_entry vi)::acc)
+	    [] pl
+	in
+	begin match ret_type with
+	  | None ->
+	      let fi = logic_info id None pl in
+	      let a = assertion env body in
+	      Hashtbl.add logics_table id (fi,a)
+	  | Some _ -> assert false (* TODO *)
+	end
+	
 
 
 let compilation_unit cu =

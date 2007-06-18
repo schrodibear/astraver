@@ -13,7 +13,10 @@ val methods_table :
     Java_tast.assertion) list *
    Java_tast.block option) Hashtbl.t
 
-val axioms_table : (Java_ast.identifier,Java_tast.assertion) Hashtbl.t
+val axioms_table : (string,Java_tast.assertion) Hashtbl.t
+
+val logics_table : 
+  (string,Java_env.java_logic_info * Java_tast.assertion) Hashtbl.t
 
 exception Typing_error of Loc.position * string
 

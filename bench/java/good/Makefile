@@ -65,20 +65,29 @@ type-all:
 %.jc: %.java 
 	$(EXECKRAKATOA) $<
 
+%.jcio: %.java 
+	$(EXECKRAKATOA) -ignore-overflow $<
+
 why/%.why: %.jc 
 	$(EXECJESSIE) $<
 
-simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
+simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/jessie.why
 	$(EXECJESSIE) $<
 	make -f $*.makefile $@
 
-smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
+smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/jessie.why
 	$(EXECJESSIE) $<
 	make -f $*.makefile $@
 
 %: %.java
 	rm -f $*.jc
 	make $*.jc
+	make why/$*.why
+	make -f $*.makefile gui
+
+%.io: %.java
+	rm -f $*.jc
+	make $*.jcio
 	make why/$*.why
 	make -f $*.makefile gui
 

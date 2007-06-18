@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.11 2007-06-15 07:27:32 marche Exp $
+$Id: java_parser.mly,v 1.12 2007-06-18 07:15:58 marche Exp $
 
 */
 
@@ -80,7 +80,7 @@ $Id: java_parser.mly,v 1.11 2007-06-15 07:27:32 marche Exp $
 %token NEW SUPER
 %token ABSTRACT BOOLEAN BYTE BYVALUE CASE CAST CATCH
 %token CHAR CLASS CONST DEFAULT DOUBLE ELSE EXTENDS
-%token FALSE FINAL FINALLY FLOAT FUTURE GENERIC GOTO 
+%token FALSE FINAL FINALLY FLOAT FUTURE GENERIC GHOST GOTO 
 %token IMPLEMENTS IMPORT INNER INSTANCEOF INT INTEGER INTERFACE LONG
 %token NATIVE OPERATOR OUTER PACKAGE PRIVATE PROTECTED
 %token PUBLIC REST REAL SHORT STATIC 
@@ -837,6 +837,9 @@ expr_no_name:
 | BSFORALL quantified_variables_decl SEMICOLON expr %prec BSFORALL
     { let (t,v)=$2 in
       locate_expr (JPEquantifier(Forall,t,v,$4)) }
+| BSEXISTS quantified_variables_decl SEMICOLON expr %prec BSFORALL
+    { let (t,v)=$2 in
+      locate_expr (JPEquantifier(Exists,t,v,$4)) }
 | expr EQEQGT expr
     { locate_expr (JPEbin($1,Bimpl,$3)) }
 | expr LTEQEQGT expr
@@ -902,13 +905,15 @@ ident:
 /*s parsing of annotations: KML */
 
 kml_type_decl:
-| AXIOM ident COLON expr
+| PREDICATE ident method_parameters LEFTBRACE expr RIGHTBRACE EOF
+    { JPTlogic_def($2,None,$3,$5) }
+| AXIOM ident COLON expr EOF
     { JPTaxiom($2,$4) }
 
 kml_field_decl:
-| requires behaviors
+| requires behaviors EOF
     { JPFmethod_spec($1,$2) }
-| INVARIANT ident COLON expr
+| INVARIANT ident COLON expr EOF
     {  JPFinvariant($2,$4) } 
 ;
 
@@ -964,16 +969,20 @@ assigns:
 ;
 
 kml_statement_annot:
-| LOOP_INVARIANT expr SEMICOLON DECREASES expr SEMICOLON
+| LOOP_INVARIANT expr SEMICOLON DECREASES expr SEMICOLON EOF
     { JPSloop_annot($2,$5) }
-| ASSERT expr SEMICOLON
+| ASSERT expr SEMICOLON EOF
     { JPSassert(None,$2) }
-| ASSERT ident COLON expr SEMICOLON
+| ASSERT ident COLON expr SEMICOLON EOF
     { JPSassert(Some $2,$4) }
+| GHOST local_variable_declaration SEMICOLON EOF
+    { JPSghost_local_decls($2) }
+| GHOST expr SEMICOLON EOF
+    { JPSghost_statement($2) }
 ;
 
 /*
 Local Variables: 
-compile-command: "make -C .. bin/krakatoa.byte"
+compile-command: "make -j -C .. bin/krakatoa.byte"
 End: 
 */

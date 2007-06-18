@@ -86,16 +86,14 @@ let main () =
 	    d_memories
 	in	       	  
 *)
-(*
-	(* production phase 2 : generation of Jessie logic functions *)
-	let d_lfuns = 
+	(* production phase 1.5 : generation of Jessie logic functions *)
+	let decls = 
 	  Hashtbl.fold 
 	    (fun _ (li,p) acc ->
-	       Jc_interp.tr_logic_fun li p acc)
-	    Jc_typing.logic_functions_table 
-	    d_range
+	       Java_interp.tr_logic_fun li p acc)
+	    Java_typing.logics_table 
+	    decls
 	in
-*)
 	(* production phase 3 : generation of Jessie axioms *)
 	let decls = 
 	  Hashtbl.fold 
@@ -135,7 +133,7 @@ let main () =
 
 let _ = 
   Sys.catch_break true;
-  (* Printexc.catch *) main ()
+  Printexc.catch main ()
 
   
 (*

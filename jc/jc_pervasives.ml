@@ -119,7 +119,7 @@ let empty_effects =
 
 let logic_fun_tag_counter = ref 0
 
-let make_term_op name ty =
+let make_logic_fun name ty =
   incr logic_fun_tag_counter;
   { jc_logic_info_tag = !logic_fun_tag_counter;
     jc_logic_info_name = name;
@@ -129,7 +129,7 @@ let make_term_op name ty =
     jc_logic_info_calls = [];
   }
 
-let real_of_integer = make_term_op "real_of_integer" real_type
+let real_of_integer = make_logic_fun "real_of_integer" real_type
 
 (* logic predicates *)
 

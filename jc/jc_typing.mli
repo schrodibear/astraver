@@ -46,7 +46,7 @@ val structs_table :
   (string, (struct_info * (logic_info * tassertion) list)) Hashtbl.t
 
 val enum_types_table : 
-  (string, (enum_info * logic_info * fun_info * fun_info)) Hashtbl.t
+  (string, (enum_info (* * logic_info * fun_info * fun_info *))) Hashtbl.t
 
 val enum_conversion_functions_table : (fun_info, string) Hashtbl.t
 val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t

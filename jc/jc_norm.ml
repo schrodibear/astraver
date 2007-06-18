@@ -674,10 +674,8 @@ and assertion a =
 	  JCArelation (term t1, op, term t2)
       | JCTAapp (li, tl) ->
 	  JCAapp (li, List.map term tl)
-      | JCTAforall (vi, a) ->
-	  JCAforall (vi, assertion a)
-      | JCTAexists (vi, a) ->
-	  JCAexists (vi, assertion a)
+      | JCTAquantifier(q, vi, a) ->
+	  JCAquantifier(q,vi, assertion a)
       | JCTAold a ->
 	  JCAold (assertion a)
       | JCTAinstanceof (t, si) ->
@@ -708,6 +706,7 @@ and term t =
       | JCTTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
       | JCTTrange (t1, t2) -> JCTrange (term t1, term t2)
   in { jc_term_node = nt;
+       jc_term_type = t.jc_tterm_type;
        jc_term_loc =  loc }
 
 and loop_annot la =

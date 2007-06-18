@@ -121,6 +121,10 @@ let rec term fmt t =
     | JCTTrange (t1,t2) -> 
 	fprintf fmt "@[%a..%a@]" term t1 term t2
 
+let quantifier fmt = function
+  | Forall -> fprintf fmt "forall"
+  | Exists -> fprintf fmt "exists"
+
 let rec assertion fmt a =
   match a.jc_tassertion_node with
     | JCTAtrue -> fprintf fmt "true"
@@ -128,13 +132,9 @@ let rec assertion fmt a =
     | JCTAbool_term _-> assert false (* TODO *)
     | JCTAinstanceof (_, _)-> assert false (* TODO *)
     | JCTAold _-> assert false (* TODO *)
-    | JCTAforall (vi, a)-> 
-	fprintf fmt "@[(\\forall %a %s;@ %a)@]"
-	  Jc_typing.print_type vi.jc_var_info_type
-	  vi.jc_var_info_name
-	  assertion a
-    | JCTAexists (vi, a)-> 
-	fprintf fmt "@[(\\exists %a %s;@ %a)@]"
+    | JCTAquantifier (q,vi, a)-> 
+	fprintf fmt "@[(\\%a %a %s;@ %a)@]"
+	  quantifier q
 	  Jc_typing.print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
 	  assertion a
@@ -285,13 +285,13 @@ let rec statement fmt s =
     | JCTSwhile (e, la, s)-> 
 	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
 	  expr e assertion la.jc_tloop_invariant term la.jc_tloop_variant
-	  statement s
+	  block [s]
     | JCTSfor (cond, updates, loop_annot, body)-> 
 	fprintf fmt "@[for ( ; %a ; %a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
 	  expr cond (print_list comma expr) updates
 	  assertion loop_annot.jc_tloop_invariant 
 	  term loop_annot.jc_tloop_variant
-	  statement body
+	  block [body]
     | JCTSif (e, s1, s2)->
 	fprintf fmt "@[if (%a)@ %a@ else@ %a@]@\n"
 	  expr e statement s1 statement s2

@@ -135,6 +135,6 @@ public Purse() {
 
 /*
 Local Variables: 
-compile-command: "make Purse"
+compile-command: "make Purse.io"
 End: 
 */
