@@ -5,7 +5,7 @@
   @ }
   @*/
 
-public static class Arrays {
+public class Arrays {
 
     /*@ requires t != null && 1 <= t.length && t.length <= 32767;
       @ behavior max_found:

@@ -14,6 +14,8 @@ let typing_error l =
 
 let imported_packages = ref [ "java.lang" ]
 
+let static_fields = Hashtbl.create 17
+
 let invariants_table = Hashtbl.create 17
 
 let axioms_table = Hashtbl.create 17
@@ -136,10 +138,10 @@ let logic_info id ty pars =
 
 let rec var_type_and_id ty id =
   match id with
-    | Simple_id (loc,n) -> ty,n
+    | Simple_id id -> ty,id
     | Array_id id -> 
-	let ty,n = var_type_and_id ty id in
-	JTYarray(ty),n
+	let ty,id = var_type_and_id ty id in
+	JTYarray(ty),id
 
 let logic_bin_op ty op =
   match ty,op with
@@ -626,7 +628,7 @@ and make_quantified_formula loc q ty idl env e : assertion =
   match idl with
     | [] -> assertion env e
     | id::r ->
-	let tyv, n = var_type_and_id ty id in
+	let tyv, (loc,n) = var_type_and_id ty id in
 	let vi = var tyv n in
 	let f = make_quantified_formula loc q ty r 
 		  ((n,Local_variable_entry vi)::env) e 
@@ -875,7 +877,7 @@ let variable_declaration env vd =
       vd.variable_decls
   in
   List.fold_right
-      (fun (id,ty,i) (env,decls)->
+      (fun ((loc,id),ty,i) (env,decls)->
 	 let vi = var ty id in		     
 	 (id,Local_variable_entry vi)::env,(vi,i)::decls)
       l (env,[])
@@ -1001,10 +1003,15 @@ and block env b =
 
 (* methods *)
 
-let rec type_param p =
-  match p with
-    | Simple_parameter(ty,(loc,id)) -> var (type_type ty) id
-    | Array_parameter id -> assert false
+let type_param p =
+  let rec get_type p =
+    match p with
+      | Simple_parameter(ty,(loc,id)) -> (type_type ty, id)
+      | Array_parameter x -> 
+	  let (t,i) = get_type x in
+	  (JTYarray t,i)
+  in
+  let (t,i) = get_type p in var t i
 
 let rec method_header retty mdecl =
   match mdecl with
@@ -1044,13 +1051,18 @@ let class_field ci acc d =
 	let is_static = List.mem `STATIC vd.variable_modifiers in
 	List.fold_left
 	  (fun acc vd -> 
-	     let ty',id = var_type_and_id ty vd.variable_id in
+	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
 	     let init = 
 	       Option_misc.map (type_initializer [] ty') 
 		 vd.variable_initializer 
 	     in
 	     if is_static then
-	       assert false (* TODO *)
+	       let vi = var ty' id in
+	       match init with
+		 | None -> typing_error loc "static field without initializer"
+		 | Some i ->
+		     Hashtbl.add static_fields vi.java_var_info_tag (vi,i);
+		     acc
 	     else
 	       let fi = field ci ty' id in
 	       Hashtbl.add fields_table fi.java_field_info_tag (fi,init);
