@@ -2,7 +2,7 @@
 
 # benchmark for krakatoa
 export KRAKATOALIB=`pwd`/../../lib/why
-export JESSIELIB=`pwd`/../../lib/why
+export JESSIELIB=`pwd`/../../lib
 export WHYCOQ=`pwd`/../../lib/coq
 make="make WHYCOQ=$WHYCOQ"
 

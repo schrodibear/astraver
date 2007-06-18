@@ -253,7 +253,11 @@ let rec term label oldlabel t =
 	LApp (bin_op op, 
 	      [ term_coerce t1.jc_term_loc t t1.jc_term_type t1'; 
 		term_coerce t2.jc_term_loc t t2.jc_term_type t2'])
-    | JCTshift(t1,t2) -> LApp("shift",[ft t1; ft t2])
+    | JCTshift(t1,t2) -> 
+	let t2' = ft t2 in
+	LApp("shift",[ft t1; 
+		      term_coerce t2.jc_term_loc integer_type 
+			t2.jc_term_type t2'])
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
     | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
