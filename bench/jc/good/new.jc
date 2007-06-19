@@ -1,0 +1,41 @@
+
+type Point = {
+    integer x;
+    integer y;
+}
+
+type PointSet = {
+    integer num;
+    Point[..] set;
+    invariant inv_num(p) =
+      \offset_min(p.set) == 0 && \offset_max(p.set) == p.num;
+}
+
+PointSet[1] createPointSet(integer n) 
+    requires n > 0;
+    behavior normal:
+	ensures inv_num(\result);
+{
+    Point[..] p = new Point[n];
+    PointSet[1] ps = new PointSet[1];
+    ps.num = n;
+    ps.set = p;
+    return ps;
+}
+
+unit deletePointSet(PointSet[1] ps) 
+    requires inv_num(ps);
+    behavior normal:
+	ensures \offset_max(ps) < \offset_min(ps);
+{
+    integer i;
+    free(ps.set);
+    free(ps);
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make new"
+End: 
+*/
