@@ -8,7 +8,7 @@ type Hero = {
   boolean dead;
   Sword[0] sword;
   invariant life_inv(this) = (this.life >= 0) && (this.life <= 100)
-    && (this.life == 0 => this.dead);
+    && (this.life == 0 ==> this.dead);
   // Devrait être rajouté automatiquement (déduit du [0] dans la définition
   // de sword)
   invariant sword_inv(this) = \offset_min(this.sword) <= 0
@@ -31,6 +31,14 @@ unit attack(Hero[0] this, Hero[0] target)
   }
   pack(target);
   assert this.life >= 0;
+}
+
+unit plante(Hero[0] this)
+  requires true;
+  behavior ok:
+    ensures true;
+{
+  unpack(this);
 }
 
 /*
