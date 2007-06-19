@@ -515,8 +515,9 @@ let rec expr e : expr =
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
 	let tag = st.jc_struct_info_root ^ "_tag_table" in
 	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
+	let com = Jc_invariants.committed_name st.jc_struct_info_root in
 	make_app "alloc_parameter" 
-	  [Var alloc; Var mut; Var tag; Var (tag_name st); expr e]
+	  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); expr e]
     | JCEfree e ->
 	let st = match e.jc_expr_type with
 	  | JCTpointer(st, _, _) -> st
