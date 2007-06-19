@@ -62,6 +62,7 @@ let range_types acc =
 let tr_base_type t =
   match t with
     | Tnull -> JCTnull
+    | Tunit -> Jc_pervasives.unit_type
     | Tboolean -> Jc_pervasives.boolean_type
     | Tinteger -> Jc_pervasives.integer_type
     | Tshort -> 
@@ -120,7 +121,7 @@ and tr_type t =
 
 let tr_type_option t =
   match t with
-    | None -> JCTnative Tunit
+    | None -> Jc_pervasives.unit_type
     | Some t -> tr_type t
 
 (*s structure fields *)
@@ -300,6 +301,7 @@ let rec assertion a =
   let a' =
     match a.java_assertion_node with
       | JAtrue -> JCTAtrue
+      | JAfalse -> JCTAfalse
       | JAbin(e1,t,op,e2) -> JCTArelation(term e1, lbin_op t op, term e2)
       | JAapp (fi, el)-> 
 	  JCTAapp(get_logic_fun fi,List.map term el)
@@ -308,10 +310,12 @@ let rec assertion a =
 	  JCTAquantifier(quantifier q,vi,assertion a)
       | JAimpl (a1, a2)-> 
 	  JCTAimplies(assertion a1,assertion a2)
+      | JAiff (a1, a2)-> 
+	  JCTAiff(assertion a1,assertion a2)
       | JAor (_, _)-> assert false (* TODO *)
       | JAand (a1, a2)-> 
 	  JCTAand [assertion a1 ; assertion a2]
-       | JAfalse -> assert false (* TODO *)
+      | JAbool_expr t -> JCTAbool_term(term t)
 
   in { jc_tassertion_loc = a.java_assertion_loc ; jc_tassertion_node = a' }
     
@@ -416,7 +420,7 @@ let rec expr e =
 		    JCTEassign_heap_op(shift,fi,bin_op op,e3')
 	      | _ -> assert false
 	  end
-
+      | JEcall(e,mi,args) -> assert false (* TODO *)
 	  
 
   in { jc_texpr_loc = e.java_expr_loc ; 
@@ -432,6 +436,8 @@ let rec statement s =
   let s' =
     match s.java_statement_node with
       | JSskip -> JCTSblock []
+      | JSbreak None -> JCTSbreak ""
+      | JSbreak (Some l) -> JCTSbreak l
       | JSreturn e -> JCTSreturn (tr_type e.java_expr_type,expr e)
       | JSblock l -> JCTSblock (List.map statement l)	  
       | JSvar_decl (vi, init, s) -> 
@@ -465,11 +471,19 @@ let rec statement s =
 	  in res.jc_tstatement_node
       | JSexpr e -> JCTSexpr (expr e)
       | JSassert(id,e) -> JCTSassert(id,assertion e)
-
+      | JSswitch(e,l) -> 
+	  JCTSswitch(expr e,List.map switch_case l)
 
   in { jc_tstatement_loc = s.java_statement_loc ; jc_tstatement_node = s' }
 
 and statements l = List.map statement l
+
+and switch_case (labels,b) =
+  (List.map switch_label labels, statements b)
+
+and switch_label = function
+  | Java_ast.Default -> None
+  | Java_ast.Case e -> Some (expr e)
 
 let tr_method mi req behs b acc =
   match b with

@@ -16,7 +16,7 @@ type accessibility = [ `PUBLIC | `PROTECTED | `PRIVATE | `NONE ];;
 type base_type =
     | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
 	  (* native logic types *)
-    | Tinteger | Treal | Tnull
+    | Tinteger | Treal | Tnull | Tunit
 
 type java_type =
     | JTYbase of base_type
@@ -135,7 +135,9 @@ and constructor_entry =
      mutable constructor_entry_trans_name : string;      
      constructor_entry_class : java_class_info;
      constructor_entry_routine : routine_entry;
+(*
      mutable constructor_entry_graph : java_env_entry list
+*)
     }
 
 and routine_entry =
@@ -219,13 +221,16 @@ and interface_entry =
       mutable interface_entry_contents : t;
     }
 
+(*
 and java_env_entry = 
 (*
   | Package_entry of package_entry
   | Class_entry of class_entry
   | Interface_entry of interface_entry
 *)
+(*
   | Instance_variable_entry of java_field_info
+*)
 (*
   | Constant_entry of constant_entry
   | Method_entry of method_info list
@@ -236,8 +241,9 @@ and java_env_entry =
   | Logic_type_entry of logic_type_entry 
   | Logic_entry of java_logic_info
 *)
+*)
 
-and t = (string * java_env_entry) list
+and t = (string * java_var_info) list
 ;;
 
 (*

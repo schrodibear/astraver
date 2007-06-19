@@ -15,6 +15,7 @@ let name_base_type t =
     | Tlong -> "long"
     | Tint -> "int" 
     | Tnull -> assert false (* "null" ?? *)
+    | Tunit -> "unit"
     | Tfloat -> "float"
     | Treal -> "real"
     | Tdouble -> "double"
@@ -61,16 +62,22 @@ let rec expr e =
     | JEassign_field(e1,fi,e2) -> expr e1; expr e2
     | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
     | JEassign_array_op(e1,e2,op,e3) -> expr e1; expr e2; expr e3
-
+    | JEcall(e,mi,args) ->
+	Option_misc.iter expr e;
+	List.iter expr args
 
 let initialiser i = 
   match i with
     | JIexpr e -> expr e
     | _ -> assert false (* TODO *)
 
+let switch_label = function
+  | Java_ast.Default -> ()
+  | Java_ast.Case e -> expr e
+  
 let rec statement s =
   match s.java_statement_node with
-    | JSskip -> ()
+    | JSskip | JSbreak _ -> ()
     | JSreturn e -> expr e
     | JSblock l -> List.iter statement l	  
     | JSvar_decl (vi, init, s) ->
@@ -89,6 +96,12 @@ let rec statement s =
 	statement body
     | JSexpr e -> expr e
     | JSassert(id,e) -> assertion e
+    | JSswitch(e,l) -> 
+	expr e;
+	List.iter (fun (labels,b) ->
+		     List.iter switch_label labels;
+		     List.iter statement b)
+	  l
 
 let do_method mi req behs body =
 

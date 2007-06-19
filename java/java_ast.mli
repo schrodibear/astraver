@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.10 2007-06-18 07:15:58 marche Exp $
+$Id: java_ast.mli,v 1.11 2007-06-19 15:44:10 marche Exp $
 
 ***************************************************************************)
 
@@ -128,8 +128,8 @@ type variable_declaration =
 
 (*s statements *)
 
-type switch_label =
-  | Case of pexpr
+type 'a switch_label =
+  | Case of 'a 
   | Default
 
 type parameter =
@@ -155,7 +155,7 @@ and pstatement_node =
   | JPSfor of pexpr list * pexpr * pexpr list * pstatement  
   | JPSfor_decl of variable_declaration * pexpr * pexpr list * pstatement
   | JPStry of block * (parameter * block) list * block option
-  | JPSswitch of pexpr * (switch_label list * block) list
+  | JPSswitch of pexpr * (pexpr switch_label list * block) list
   | JPSblock of block
   | JPSsynchronized of pexpr * block
   | JPSassert of identifier option * pexpr

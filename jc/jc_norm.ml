@@ -608,20 +608,22 @@ and statement s =
 	  let (sl,tl),e = expr e in
 	  let ncsl = List.map 
 	    (fun (c,sl) -> match c with
-	       | Case c ->
+	       | [Some c] ->
 		   (* statement list in case considered *)
 		   let sl = List.map statement sl in
 		   let block_stat = make_block loc sl in
 		   let empty_block = make_block loc [] in
 		   (* test for case considered *)
+		   let (slc,tlc),c = expr c in
+		   assert (slc = [] && tlc = []); 
 		   let etest = 
-		     make_int_binary loc e Beq_int 
-		       (make_const loc integer_type c) 
+		     make_int_binary loc e Beq_int c
 		   in
 		   (* case translated into if-statement *)
 		   make_if loc etest block_stat empty_block 
-	       | Default ->
+	       | [None] ->
 		   make_block loc (List.map statement sl)
+	       | _ -> assert false (* TODO *)
 	    ) csl 
 	  in
 	  let switch_stat = make_decls loc (sl @ ncsl) tl in

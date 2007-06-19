@@ -27,6 +27,7 @@ let default_method_specification =
 open Java_env
 
 let null_type = JTYbase Tnull
+let unit_type = JTYbase Tunit
 let boolean_type = JTYbase Tboolean
 let integer_type = JTYbase Tinteger
 let real_type = JTYbase Treal

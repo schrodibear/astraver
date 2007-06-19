@@ -12,7 +12,7 @@ public class Purse {
     
     public int balance;
 
-    //@ invariant balance_non_negative: balance >= 0
+    //@ invariant balance_non_negative: balance >= 0;
 
     /* @ behavior created:
       @   assigns \nothing

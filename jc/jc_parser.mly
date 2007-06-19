@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.50 2007-06-18 15:21:45 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.51 2007-06-19 15:44:10 marche Exp $ */
 
 %{
 
@@ -643,6 +643,7 @@ labeled_statement:
     { locate_statement (JCPSlabel($1.jc_identifier_name,$3)) }
 ;
 
+/*
 case_statement:
 | CASE CONSTANT COLON statement_list 
     { Case $2, $4 }
@@ -654,7 +655,7 @@ default_statement:
 ;
 
 case_statement_list: 
-| /* epsilon */ 
+|  
     { [] }
 | case_statement case_statement_list 
     { $1 :: $2 }
@@ -666,6 +667,7 @@ default_case_statement_list:
 | case_statement_list
     { $1 }
 ;
+*/
 
 compound_statement:
 | LBRACE statement_list RBRACE 
@@ -700,8 +702,31 @@ selection_statement:
     { locate_statement (JCPSif($3, $5, skip)) }
 | IF LPAR expression RPAR statement ELSE statement 
     { locate_statement (JCPSif ($3, $5, $7)) }
-| SWITCH LPAR expression RPAR LBRACE default_case_statement_list RBRACE
+| SWITCH LPAR expression RPAR LBRACE switch_block RBRACE
     { locate_statement (JCPSswitch ($3, $6)) }
+;
+
+switch_block: 
+| /* $\varepsilon$ */
+    { [] }
+| switch_labels 
+    { [($1,[])] }
+| switch_labels statement statement_list switch_block
+    { ($1,$2::$3)::$4 }
+;
+
+switch_labels:
+| switch_label
+    { [$1] }
+| switch_label switch_labels
+    { $1::$2 }
+;
+
+switch_label:
+| CASE expression COLON
+    { Some($2) }
+| DEFAULT COLON
+    { None }
 ;
 
 iteration_statement: 

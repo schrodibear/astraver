@@ -1279,20 +1279,23 @@ let rec statement env s =
 	  let tc = expr env e in
 	  if subtype tc.jc_texpr_type integer_type then
 	    let tcsl = List.map 
-	      (fun (c,sl) -> 
-		 let tc = match c with
-		   | Case c ->
-		       let t,tc = const c in
-		       if subtype t integer_type then
-			 Case tc
-		       else
-			 typing_error s.jc_pstatement_loc 
-			   "integer expected in case"
-		   | Default ->
-		       Default
+	      (fun (labels,sl) -> 
+		 let labels =
+		   List.map
+		     (fun e ->
+			match e with
+			  | Some e ->
+			      let te = expr env e in
+			      if subtype te.jc_texpr_type integer_type then
+				Some te
+			      else
+				typing_error e.jc_pexpr_loc 
+				  "integer expected in case"
+			  | None -> None)
+		     labels
 		 in
 		 let ts = statement_list env sl in
-		 tc,ts
+		 labels,ts
 	      ) csl
 	    in
 	    JCTSswitch(tc,tcsl)

@@ -42,11 +42,6 @@ type identifier =
 
 type label = string
 
-type switch_label =
-  | Case of const
-  | Default
-
-
 (***************)
 (* parse trees *)
 (***************)
@@ -132,7 +127,7 @@ type pstatement_node =
   | JCPSthrow of identifier * pexpr option
   | JCPSpack of pexpr
   | JCPSunpack of pexpr
-  | JCPSswitch of pexpr * (switch_label * pstatement list) list
+  | JCPSswitch of pexpr * (pexpr option list * pstatement list) list
 
 and pstatement = 
     {
@@ -303,7 +298,7 @@ type tstatement_node =
   | JCTSthrow of exception_info * texpr option
   | JCTSpack of struct_info * texpr
   | JCTSunpack of struct_info * texpr
-  | JCTSswitch of texpr * (switch_label * tstatement list) list
+  | JCTSswitch of texpr * (texpr option list * tstatement list) list
 
 and tstatement = 
     {

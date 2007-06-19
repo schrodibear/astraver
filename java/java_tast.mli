@@ -30,7 +30,9 @@ type assertion_node =
     | JAand of assertion * assertion
     | JAor of assertion * assertion
     | JAimpl of assertion * assertion
+    | JAiff of assertion * assertion
     | JAquantifier of quantifier * java_var_info * assertion
+    | JAbool_expr of term
     | JAbin of term * base_type * bin_op * term   
     | JAapp of java_logic_info * term list
 
@@ -61,6 +63,7 @@ and expr_node =
   | JEassign_field of expr * java_field_info * expr
   | JEassign_field_op of expr * java_field_info * bin_op * expr
   | JEassign_array_op of expr * expr * bin_op * expr
+  | JEcall of expr option * method_info * expr list
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
@@ -71,7 +74,6 @@ and expr_node =
       (*r assignment op is =, +=, etc. *)
   | JPEif of pexpr * pexpr * pexpr
   | JPEthis
-  | Method_call of pexpr option * identifier * pexpr list
   | Super_method_call of identifier * pexpr list
   | Logic_call of logic_entry * expr list
   | Class_instance_creation of qualified_ident * pexpr list
@@ -89,6 +91,7 @@ type initialiser =
   | JIexpr of expr
   | JIlist of initialiser list
 
+type 'a switch_label = 'a Java_ast.switch_label
 type statement =
   { java_statement_loc : Loc.position ;
     java_statement_node : statement_node }
@@ -105,17 +108,17 @@ and statement_node =
       (*r decls, condition, invariant, variant, steps, loop body *)
   | JSexpr of expr
   | JSassert of string option * assertion
+  | JSswitch of expr * (expr switch_label list * block) list
+  | JSbreak of string option
 (*
   | JSvar_decl of variable_declaration
   | JPSthrow of pexpr
-  | JPSbreak of identifier option
   | JPScontinue of identifier option
   | JPSlabel of identifier * pstatement
   | JPSdo of pstatement * pexpr
   | JPSfor of pstatement list * pexpr * pstatement list * pstatement  
   | JPSfor_decl of variable_declaration * pexpr * pstatement list * pstatement
   | JPStry of block * (parameter * block) list * block option
-  | JPSswitch of pexpr * (switch_label list * block) list
   | JPSsynchronized of pexpr * block
   | JPSannot of Lexing.position * string
   | JPSloop_annot of pexpr * pexpr

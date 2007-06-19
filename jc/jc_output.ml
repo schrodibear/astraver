@@ -129,7 +129,7 @@ let rec assertion fmt a =
   match a.jc_tassertion_node with
     | JCTAtrue -> fprintf fmt "true"
     | JCTAif (_, _, _)-> assert false (* TODO *)
-    | JCTAbool_term _-> assert false (* TODO *)
+    | JCTAbool_term t -> term fmt t
     | JCTAinstanceof (_, _)-> assert false (* TODO *)
     | JCTAold _-> assert false (* TODO *)
     | JCTAquantifier (q,vi, a)-> 
@@ -317,12 +317,13 @@ let rec statement fmt s =
 	  expr e (print_list newline case) csl
 	
 and case fmt (c,sl) =
-  fprintf fmt "@[%a    %a@]"
+  fprintf fmt "@[<hv 2>%a@\n%a@]"
     (fun fmt c -> match c with
-       | Case c ->
-	   fprintf fmt "case %a:@\n" const c
-       | Default ->
-	   fprintf fmt "default:@\n") c
+       | [Some c] ->
+	   fprintf fmt "case %a:" expr c
+       | [None] ->
+	   fprintf fmt "default:"
+       | _ -> assert false (* TODO *)) c
     block sl
 
 and statements fmt l = List.iter (statement fmt) l
