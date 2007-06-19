@@ -265,5 +265,5 @@ parameter free_parameter : a:'t alloc_table ref -> p:'t pointer ->
   { offset_min(a,p) = 0 and offset_max(a,p) >= 0 }
   unit
   writes a
-  { not valid(a,p) }
+  { offset_max(a,p) < offset_min(a,p) }
 

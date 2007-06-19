@@ -82,7 +82,7 @@ let create_mutable_field id =
     jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = "mutable_"^id;
     jc_field_info_type = boolean_type;
-    jc_field_info_root = "?? jc_typing.ml: create_mutable_field ??"; (* ? *)
+    jc_field_info_root = id;
   } in
   Hashtbl.add mutable_fields_table id fi;
   incr field_tag_counter;
@@ -90,7 +90,7 @@ let create_mutable_field id =
     jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = "committed_"^id;
     jc_field_info_type = boolean_type;
-    jc_field_info_root = "?? jc_typing.ml: create_mutable_field ??"; (* ? *)
+    jc_field_info_root = id;
   } in
   Hashtbl.add committed_fields_table id fi
 
