@@ -512,18 +512,17 @@ let rec expr e : expr =
 	    Var fi.jc_field_info_name ; 
 	    (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (e, st) ->
-	let alloc =
-	  st.jc_struct_info_root ^ "_alloc_table"
-	in
-	make_app "alloc_parameter" [Var alloc; expr e]
+	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
+	let tag = st.jc_struct_info_root ^ "_tag_table" in
+	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
+	make_app "alloc_parameter" 
+	  [Var alloc; Var mut; Var tag; Var (tag_name st); expr e]
     | JCEfree e ->
 	let st = match e.jc_expr_type with
 	  | JCTpointer(st, _, _) -> st
 	  | _ -> assert false
 	in	
-	let alloc =
-	  st.jc_struct_info_root ^ "_alloc_table"
-	in
+	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
 	make_app "free_parameter" [Var alloc; expr e]
 
 let invariant_for_struct this st =

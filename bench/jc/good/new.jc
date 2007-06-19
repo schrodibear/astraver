@@ -8,7 +8,7 @@ type PointSet = {
     integer num;
     Point[..] set;
     invariant inv_num(p) =
-      \offset_min(p.set) == 0 && \offset_max(p.set) == p.num;
+      \offset_min(p.set) == 0 && \offset_max(p.set) == p.num-1;
 }
 
 PointSet[1] createPointSet(integer n) 

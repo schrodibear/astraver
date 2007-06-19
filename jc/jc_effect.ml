@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.37 2007-06-18 15:21:45 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.38 2007-06-19 14:13:38 moy Exp $ *)
 
 
 open Jc_env
@@ -176,6 +176,10 @@ let rec expr ef e =
     | JCEalloc(e,st) ->
 	let name = st.jc_struct_info_root in
 	add_alloc_writes (add_tag_writes ef name) name
+(*
+	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
+	add_global_writes ef mut
+*)
     | JCEfree e ->
 	begin match e.jc_expr_type with
 	  | JCTpointer(st, _, _) ->
