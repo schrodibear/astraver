@@ -120,6 +120,9 @@ let make_assume reads assume =
 let mutable_name root_structure_name =
   "mutable_"^root_structure_name
 
+let committed_name root_structure_name =
+  "committed_"^root_structure_name
+
 (************************************)
 (* Checking an invariant definition *)
 (************************************)
@@ -317,7 +320,7 @@ let field_assocs fi =
          StringSet.union amems aux
        else
 	 aux
-    ) (StringSet.singleton ("mutable_"^fi.jc_field_info_root)) invs in
+    ) (StringSet.singleton (mutable_name fi.jc_field_info_root)) invs in
   StringSet.elements mems
 
 (* Assume all assocs needed after a field has been modified *)
@@ -351,7 +354,7 @@ let all_assocs pp params =
     structures
   in
   (* mutable fields *)
-  let mutable_fields = List.map (fun s -> "mutable_"^s) structures in
+  let mutable_fields = List.map (fun s -> mutable_name s) structures in
   StringSet.elements memories@mutable_fields
 
 (* Assume all assocs needed at the start of a fonction *)
@@ -372,18 +375,18 @@ let mutable_declaration st acc =
   if st.jc_struct_info_parent = None then
     Param(
       false,
-      "mutable_"^st.jc_struct_info_name,
+      mutable_name st.jc_struct_info_name,
       Ref_type(Base_type (mutable_memory_type st.jc_struct_info_name))
     )::Param(
       false,
-      "committed_"^st.jc_struct_info_name,
+      committed_name st.jc_struct_info_name,
       Ref_type(Base_type (committed_memory_type st.jc_struct_info_name))
     )::acc
   else
     acc
 
 let assert_mutable e fi =
-  let mutable_name = "mutable_"^fi.jc_field_info_root in
+  let mutable_name = mutable_name fi.jc_field_info_root in
   Assert(
     LPred(
       "eq",
@@ -471,7 +474,7 @@ let assume_invariant st (li, _) =
       logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
 
   (* not this.mutable => this.invariant *)
-  let mutable_name = "mutable_"^st.jc_struct_info_root in
+  let mutable_name = mutable_name st.jc_struct_info_root in
   let mutable_is_false =
     LPred(
       "eq",
@@ -553,7 +556,7 @@ let make_components_postcond this st reads writes committed =
   let comps = components_by_type st in
   let writes =
     List.fold_left
-      (fun acc (si, _) -> StringSet.add ("committed_"^si.jc_struct_info_name) acc)
+      (fun acc (si, _) -> StringSet.add (committed_name si.jc_struct_info_name) acc)
       writes
       comps
   in
@@ -573,7 +576,7 @@ let make_components_postcond this st reads writes committed =
     make_and_list
       (List.map
 	 (fun (si, fields) ->
-	    let committed_name = "committed_"^si.jc_struct_info_name in
+	    let committed_name = committed_name si.jc_struct_info_name in
 	    LPred(
 	      "eq",
 	      [ LVar committed_name;
@@ -598,7 +601,7 @@ let make_components_precond this st reads =
   in
   let l, reads = List.fold_left
     (fun (l, reads) (fi, si) ->
-       let mutable_name = "mutable_"^si.jc_struct_info_name in
+       let mutable_name = mutable_name si.jc_struct_info_name in
        let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
        LPred(
 	 "eq",
@@ -614,7 +617,7 @@ let make_components_precond this st reads =
 let pack_declaration st acc =
   let this = "this" in
   let name = st.jc_struct_info_root in
-  let mutable_name = "mutable_"^name in
+  let mutable_name = mutable_name name in
   let struct_type = pointer_type st.jc_struct_info_root in
   let inv, reads = invariant_for_struct (LVar this) st in
   let writes = StringSet.empty in
@@ -666,8 +669,8 @@ let pack_declaration st acc =
 let unpack_declaration st acc =
   let this = "this" in
   let name = st.jc_struct_info_root in
-  let mutable_name = "mutable_"^name in
-  let committed_name = "committed_"^name in
+  let mutable_name = mutable_name name in
+  let committed_name = committed_name name in
   let struct_type = pointer_type st.jc_struct_info_root in
   let reads = StringSet.singleton mutable_name in
   let writes = StringSet.singleton mutable_name in
