@@ -1,6 +1,15 @@
 
 Note: These are the changes for Caduceus.
 
+ o change in loop_assigns interpretation: the set of memory locations
+   may refer to variables modified by the loop and is interpreted
+   within the current state of each loop body execution, as for the
+   loop invariant. Therefore it is possible annotations such as
+
+	//@ loop_assigns t[0..i-1]
+	while (i < n) { t[i] = ...; i++; }
+
+   to express that the loop has modified t[0..i-1] so far.
  o new option -int-model to control the integer arithmetic model
    See section ``Integer arithmetic'' in the manual.
    (the default behavior is to assume arbitrary precision integers, as before)

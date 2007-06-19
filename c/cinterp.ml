@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.243 2007-05-18 09:29:12 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.244 2007-06-19 08:00:39 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -1477,7 +1477,7 @@ type mem_or_ref = Reference of bool | Memory of Output.term list
 
 type term_loc_interp = Pset of Output.term | Term of Output.term
 
-let collect_locations before acc loc =
+let collect_locations label old_label acc loc =
   (* term_loc t interprets t either as Term t' with t' a Why term of type 
      pointer, or as Pset s with s a Why term of type pset *)
   let rec term_or_pset t = match t.nterm_node with
@@ -1485,7 +1485,7 @@ let collect_locations before acc loc =
 	let ty = Cnorm.type_why_for_term e in
 	assert (same_why_type ty (Pointer z));
 	let m = 
-	  interp_var (Some before) 
+	  interp_var label
 	    (zoned_name f.var_unique_name ty) in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
@@ -1495,31 +1495,31 @@ let collect_locations before acc loc =
 	let ty = Cnorm.type_why_for_term e in
 	assert (same_why_type ty (Pointer z));
 	let var = zoned_name f.var_unique_name ty in
-	Pset (LApp ("pset_acc_all", [pset e; interp_var (Some before) var]))
+	Pset (LApp ("pset_acc_all", [pset e; interp_var label var]))
     | NTrange (e, None, Some a,z,f) ->
 	let ty = Cnorm.type_why_for_term e in
 	assert (same_why_type ty (Pointer z));
 	let var = zoned_name f.var_unique_name ty in
 	Pset (LApp ("pset_acc_range_left", 
-		    [pset e; interp_var (Some before) var;
-		     interp_term (Some before) before a]))
+		    [pset e; interp_var label var;
+		     interp_term label old_label a]))
     | NTrange (e, Some a, None,z,f) ->
 	let ty = Cnorm.type_why_for_term e in
 	assert (same_why_type ty (Pointer z));
 	let var = zoned_name f.var_unique_name ty in
 	Pset (LApp ("pset_acc_range_right", 
-		    [pset e; interp_var (Some before) var;
-		     interp_term (Some before) before a]))
+		    [pset e; interp_var label var;
+		     interp_term label old_label a]))
     | NTrange (e, Some a, Some b,z,f) ->
 	let ty = Cnorm.type_why_for_term e in
 	assert (same_why_type ty (Pointer z));
 	let var = zoned_name f.var_unique_name ty in
 	Pset (LApp ("pset_acc_range", 
-		    [pset e; interp_var (Some before) var;
-		     interp_term (Some before) before a;
-		     interp_term (Some before) before b]))
+		    [pset e; interp_var label var;
+		     interp_term label old_label a;
+		     interp_term label old_label b]))
     | _ ->
-	Term (interp_term (Some before) before t)
+	Term (interp_term label old_label t)
 
   (* term_loc t interprets t as a Why term of type pset *)
   and pset t = match term_or_pset t with
@@ -1544,14 +1544,14 @@ let collect_locations before acc loc =
 	assert (same_why_type ty (Pointer z));
 	let var = zoned_name f.var_unique_name ty in
 	let loc = LApp ("pset_range_left", 
-			[pset t; interp_term (Some before) before a]) in
+			[pset t; interp_term label old_label a]) in
 	var, Some loc
     | NTrange (t, Some a, None,z,f) -> 
 	let ty = Cnorm.type_why_for_term t in
 	assert (same_why_type ty (Pointer z));
 	let var = zoned_name f.var_unique_name ty in
 	let loc = LApp ("pset_range_right", 
-			[pset t; interp_term (Some before) before a]) in
+			[pset t; interp_term label old_label a]) in
 	var, Some loc
     | NTrange(t1, Some t2, Some t3,z,f) -> 
 	let ty = Cnorm.type_why_for_term t1 in
@@ -1560,8 +1560,8 @@ let collect_locations before acc loc =
 	let loc = 
 	  LApp("pset_range",
 	       [pset t1;
-		interp_term (Some before) before t2;
-		interp_term (Some before) before t3;])
+		interp_term label old_label t2;
+		interp_term label old_label t3;])
 	in
 	var, Some loc
     | _ ->
@@ -1584,7 +1584,7 @@ let rec make_union_loc = function
   | [l] -> l
   | l::r -> LApp("pset_union",[l;make_union_loc r])
 
-let interp_assigns before assigns = function
+let interp_assigns label old_label assigns = function
   | Some locl ->
       let m = HeapVarSet.fold
 	(fun v m -> 
@@ -1599,7 +1599,7 @@ let interp_assigns before assigns = function
       in
       
       let l = 
-	List.fold_left (collect_locations before) m locl
+	List.fold_left (collect_locations label old_label) m locl
       in
       StringMap.fold
 	(fun v p acc -> match p with
@@ -1607,15 +1607,16 @@ let interp_assigns before assigns = function
 	       if no_alloc_table then
 		 make_and acc
 		   (LPred("not_assigns",
-			  [LVarAtLabel(v,before);
+			  [interp_var (Some old_label) v;
 			   LVar v; make_union_loc p]))
 	       else
 		 make_and acc
 		   (LPred("not_assigns",
-			  [LVarAtLabel("alloc",before); LVarAtLabel(v,before);
+			  [interp_var None "alloc"; 
+			   interp_var (Some old_label) v;
 			   LVar v; make_union_loc p]))
 	   | Reference false ->
-	       make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)]))
+	       make_and acc (LPred("eq", [LVar v; interp_var (Some old_label) v]))
 	   | Reference true ->
 	       acc)
 	l LTrue
@@ -1778,7 +1779,7 @@ let interp_spec add_inv effect s =
    make_and
      (interp_predicate_opt None "" s.ensures)
      (make_and 
-	(interp_assigns "" effect s.assigns)
+	(interp_assigns (Some "") "" effect s.assigns)
 	(make_and
 	   (if add_inv then weak_invariants_for effect else LTrue)
 	   (if Ceffect.assigns_alloc effect then alloc_extends () else LTrue)))
@@ -1835,7 +1836,7 @@ let interp_invariant label effects annot =
   in
   let inv = 
     make_and 
-      (interp_assigns label effects annot.loop_assigns) 
+      (interp_assigns None label effects annot.loop_assigns) 
       (make_and 
 	 inv 
 	 (if Ceffect.assigns_alloc effects 

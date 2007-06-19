@@ -7,9 +7,8 @@ void negate(int *t, int n) {
   int i = 0;
   /*@ invariant 
     @   0 <= i <= n && 
-    @   (\forall int k; 0 <= k < i => t[k] == -\old(t[k])) &&
-    @   (\forall int k; i <= k < n => t[k] == \old(t[k]))
-    @ loop_assigns t[0..n-1]
+    @   (\forall int k; 0 <= k < i => t[k] == -\old(t[k])) 
+    @ loop_assigns t[0..i-1]
     @ variant n-i */
   while (i < n) {
     t[i] = -t[i];
