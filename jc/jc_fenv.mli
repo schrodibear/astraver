@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.12 2007-06-15 14:05:03 moy Exp $ *)
+(* $Id: jc_fenv.mli,v 1.13 2007-06-19 15:42:33 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -35,6 +35,8 @@ type effect =
       jc_effect_tag_table : StringSet.t;
       jc_effect_memories : FieldSet.t;
       jc_effect_globals : VarSet.t;
+      jc_effect_mutable : StringSet.t;
+      jc_effect_committed : StringSet.t;
     }
 
 (* When adding fields for effects, change accordingly function [same_feffects]

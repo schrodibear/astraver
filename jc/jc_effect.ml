@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.38 2007-06-19 14:13:38 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.39 2007-06-19 15:42:33 bardou Exp $ *)
 
 
 open Jc_env
@@ -45,6 +45,12 @@ let ef_union ef1 ef2 =
     jc_effect_globals = 
       VarSet.union 
 	ef1.jc_effect_globals ef2.jc_effect_globals;
+    jc_effect_mutable =
+      StringSet.union
+	ef1.jc_effect_mutable ef2.jc_effect_mutable;
+    jc_effect_committed =
+      StringSet.union
+	ef1.jc_effect_committed ef2.jc_effect_committed;
   }
 
 let fef_union fef1 fef2 =
@@ -64,7 +70,13 @@ let add_alloc_effect ef a =
   
 let add_tag_effect ef a =
   { ef with jc_effect_tag_table = StringSet.add a ef.jc_effect_tag_table } 
+
+let add_mutable_effect ef st =
+  { ef with jc_effect_mutable = StringSet.add st ef.jc_effect_mutable }
   
+let add_committed_effect ef st =
+  { ef with jc_effect_committed = StringSet.add st ef.jc_effect_committed }
+
 let add_exception_effect ef a =
   { ef with jc_raises = ExceptionSet.add a ef.jc_raises }
   
@@ -80,6 +92,12 @@ let add_alloc_reads fef a =
 let add_tag_reads fef a =
   { fef with jc_reads = add_tag_effect fef.jc_reads a }
 
+let add_mutable_reads fef st =
+  { fef with jc_reads = add_mutable_effect fef.jc_reads st }
+
+let add_committed_reads fef st =
+  { fef with jc_reads = add_committed_effect fef.jc_reads st }
+
 let add_field_writes fef fi =
   { fef with jc_writes = add_memory_effect fef.jc_writes fi }
 
@@ -92,11 +110,19 @@ let add_alloc_writes fef a =
 let add_tag_writes fef a =
   { fef with jc_writes = add_tag_effect fef.jc_writes a }
 
+let add_mutable_writes fef st =
+  { fef with jc_writes = add_mutable_effect fef.jc_writes st }
+
+let add_committed_writes fef st =
+  { fef with jc_writes = add_committed_effect fef.jc_writes st }
+
 let same_effects ef1 ef2 =
   StringSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
   && StringSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && FieldSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
+  && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
+  && StringSet.equal ef1.jc_effect_committed ef2.jc_effect_committed
 
 let same_feffects fef1 fef2 =
   same_effects fef1.jc_reads fef2.jc_reads &&
@@ -207,8 +233,25 @@ let rec statement ef s =
 	  add_global_writes (expr ef e) vi
 	else 
 	  expr ef e
-    | JCSreturn(_,e) 
-    | JCSpack(_,e) | JCSunpack(_,e) -> expr ef e
+    | JCSreturn(_,e) -> expr ef e
+    | JCSpack(st, e) ->
+	let ef = expr ef e in
+	(* Assert the invariants of the structure => need the invariants' effects *)
+	(* Modify fields committed => need committed of fields as reads and writes *)
+	(* ...and fields as reads *)
+	(* Assert fields not mutable => need mutable of fields as reads *)
+	(* Change structure mutable => need mutable as reads *)
+	let ef = add_mutable_reads ef st.jc_struct_info_root in
+	let ef = add_mutable_writes ef st.jc_struct_info_root in
+        (* And that's all *)
+	ef
+    | JCSunpack(st, e) ->
+	let ef = expr ef e in
+	(* Assert not mutable => need mutable as reads *)
+	(* Modify fields committed => need committed of fields as reads and writes *)
+	(* ...and fields as reads *)
+	(* And that's all *)
+	ef
     | JCSthrow (ei, Some e) -> 
 	add_exception_effect (expr ef e) ei
     | JCSthrow (ei, None) -> 
