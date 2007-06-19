@@ -2,10 +2,15 @@ type A = {
   boolean b;
 }
 
+type B = {
+  boolean c;
+}
+
 unit main(A[..] a)
   behavior safety:
     ensures a.b == \old(a.b);
 {
+  if ((a :> B).c);
 }
 
 /*

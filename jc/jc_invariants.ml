@@ -117,6 +117,9 @@ let invariant_for_struct this st =
 let make_assume reads assume =
   BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, []))
 
+let mutable_name root_structure_name =
+  "mutable_"^root_structure_name
+
 (************************************)
 (* Checking an invariant definition *)
 (************************************)
