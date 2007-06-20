@@ -33,15 +33,6 @@ unit attack(Hero[0] this, Hero[0] target)
   assert this.life >= 0;
 }
 
-unit plante(Hero[0] this)
-  requires true;
-  behavior ok:
-    ensures true;
-{
-  unpack(this);
-  pack(this);
-}
-
 /*
 Local Variables: 
 compile-command: "make game"

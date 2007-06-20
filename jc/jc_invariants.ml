@@ -554,6 +554,7 @@ let components_by_type st =
   in
   part comps
 
+(* all components have "committed" = committed *)
 let make_components_postcond this st reads writes committed =
   let comps = components_by_type st in
   let writes =
@@ -592,7 +593,7 @@ let make_components_postcond this st reads writes committed =
   in
   postcond, reads, writes  
 
-(* all components must have mutable = false (for pack) *)
+(* all components must have mutable = committed = false (for pack) *)
 let make_components_precond this st reads =
   let comps = components st in
   let reads =
@@ -604,12 +605,17 @@ let make_components_precond this st reads =
   let l, reads = List.fold_left
     (fun (l, reads) (fi, si) ->
        let mutable_name = mutable_name si.jc_struct_info_name in
+       let committed_name = committed_name si.jc_struct_info_name in
        let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
-       LPred(
+       (LPred(
 	 "eq",
 	 [ LApp("select", [LVar mutable_name; this_field]);
-	   LConst(Prim_bool false) ]
-       )::l,
+	   LConst(Prim_bool false) ]))
+       ::(LPred(
+	    "eq",
+	    [ LApp("select", [LVar committed_name; this_field]);
+	      LConst(Prim_bool false) ]))
+       ::l,
        StringSet.add mutable_name reads)
     ([], reads)
     (components st)
