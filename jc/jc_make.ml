@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.10 2007-06-18 12:36:32 oudot Exp $ i*)
+(*i $Id: jc_make.ml,v 1.11 2007-06-20 14:40:09 marche Exp $ i*)
 
 open Format
 open Pp
@@ -43,7 +43,7 @@ let cvcl fmt f = fprintf fmt "cvcl/%s_why.cvc" f
 let harvey fmt f = fprintf fmt "harvey/%s_why.rv" f
 let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
 let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
-let why_goals fmt f = fprintf fmt "why/%s_why.why" f
+let why_goals fmt f = fprintf fmt "why/%s_ctx.why" f
 let isabelle fmt f = fprintf fmt "isabelle/%s_why.thy" f 
 
 let print_files = print_list (fun fmt () -> fprintf fmt "\\@\n  ")
@@ -63,6 +63,10 @@ let generic f targets =
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
+
+       fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
+       fprintf fmt "why/%%_ctx.why: why/%%.why@\n";
+       fprintf fmt "\t@@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
 
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
 
