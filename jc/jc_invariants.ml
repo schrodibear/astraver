@@ -20,6 +20,8 @@ open Output
        function create_mutable_field
        function find_field_struct: "mutable" and "committed" cases (and the parameter allow_mutable)
        function decl: JCPDstructtype: call to create_mutable_field
+     jc_effect.ml
+       pack & unpack effects
 *)
 
 (********)

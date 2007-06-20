@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.39 2007-06-19 15:42:33 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.40 2007-06-20 08:49:42 bardou Exp $ *)
 
 
 open Jc_env
@@ -236,10 +236,29 @@ let rec statement ef s =
     | JCSreturn(_,e) -> expr ef e
     | JCSpack(st, e) ->
 	let ef = expr ef e in
-	(* Assert the invariants of the structure => need the invariants' effects *)
-	(* Modify fields committed => need committed of fields as reads and writes *)
-	(* ...and fields as reads *)
-	(* Assert fields not mutable => need mutable of fields as reads *)
+	(* Assert the invariants of the structure => need the reads of the invariants *)
+	let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+	let ef =
+	  List.fold_left
+	    (fun ef (li, _) -> { ef with jc_reads = ef_union ef.jc_reads li.jc_logic_info_effects })
+	    ef
+	    invs
+	in
+	(* Fields *)
+	let ef = List.fold_left
+	  (fun ef (_, fi) ->
+	     match fi.jc_field_info_type with
+	       | JCTpointer(st, _, _) ->
+	           (* Assert fields not mutable => need mutable (of field) as reads *)
+		   let ef = add_mutable_reads ef st.jc_struct_info_root in
+	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
+		   let ef = add_committed_reads ef st.jc_struct_info_root in
+		   let ef = add_committed_writes ef st.jc_struct_info_root in
+		   (* ...and field as reads *)
+		   add_field_reads ef fi
+	       | _ -> ef)
+	  ef
+	  st.jc_struct_info_fields in
 	(* Change structure mutable => need mutable as reads *)
 	let ef = add_mutable_reads ef st.jc_struct_info_root in
 	let ef = add_mutable_writes ef st.jc_struct_info_root in
@@ -248,8 +267,20 @@ let rec statement ef s =
     | JCSunpack(st, e) ->
 	let ef = expr ef e in
 	(* Assert not mutable => need mutable as reads *)
-	(* Modify fields committed => need committed of fields as reads and writes *)
-	(* ...and fields as reads *)
+	let ef = add_mutable_reads ef st.jc_struct_info_root in
+	(* Fields *)
+	let ef = List.fold_left
+	  (fun ef (_, fi) ->
+	     match fi.jc_field_info_type with
+	       | JCTpointer(st, _, _) ->
+	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
+		   let ef = add_committed_reads ef st.jc_struct_info_root in
+		   let ef = add_committed_writes ef st.jc_struct_info_root in
+		   (* ...and field as reads *)
+		   add_field_reads ef fi
+	       | _ -> ef)
+	  ef
+	  st.jc_struct_info_fields in
 	(* And that's all *)
 	ef
     | JCSthrow (ei, Some e) -> 

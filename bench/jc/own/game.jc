@@ -39,6 +39,7 @@ unit plante(Hero[0] this)
     ensures true;
 {
   unpack(this);
+  pack(this);
 }
 
 /*
