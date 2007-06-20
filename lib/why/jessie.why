@@ -256,6 +256,7 @@ parameter alloc_parameter : a:'t alloc_table ref -> mut:('t,bool) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
   { n > 0 }
   't pointer 
+  reads mut, com
   writes a, at
   { offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) and select(mut,result) = true 

@@ -959,6 +959,18 @@ let tr_fun f spec body acc =
       f.jc_fun_info_effects.jc_reads.jc_effect_tag_table
       reads
   in
+  let reads =
+    StringSet.fold
+      (fun v acc -> (mutable_name v)::acc)
+      f.jc_fun_info_effects.jc_reads.jc_effect_mutable
+      reads
+  in
+  let reads =
+    StringSet.fold
+      (fun v acc -> (committed_name v)::acc)
+      f.jc_fun_info_effects.jc_reads.jc_effect_committed
+      reads
+  in
   let writes =
     FieldSet.fold
       (fun f acc -> f.jc_field_info_name::acc)
@@ -981,6 +993,18 @@ let tr_fun f spec body acc =
     StringSet.fold
       (fun v acc -> (v ^ "_tag_table")::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_tag_table
+      writes
+  in
+  let writes =
+    StringSet.fold
+      (fun v acc -> (mutable_name v)::acc)
+      f.jc_fun_info_effects.jc_writes.jc_effect_mutable
+      writes
+  in
+  let writes =
+    StringSet.fold
+      (fun v acc -> (committed_name v)::acc)
+      f.jc_fun_info_effects.jc_writes.jc_effect_committed
       writes
   in
   let normal_post =
