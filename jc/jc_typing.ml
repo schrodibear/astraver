@@ -502,8 +502,8 @@ let rec term env e =
 			       if subtype te.jc_tterm_type ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
-				   "type %a expected" 
-				   print_type ty) 
+				   "type %a expected instead of %a" 
+				   print_type ty print_type te.jc_tterm_type) 
 			    pi.jc_logic_info_parameters args
 			with  Invalid_argument _ ->
 			  typing_error e.jc_pexpr_loc 
@@ -722,8 +722,8 @@ let rec assertion env e =
 			       if subtype te.jc_tterm_type ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
-				   "type %a expected" 
-				   print_type ty) 
+				   "type %a expected instead of %a" 
+				   print_type ty print_type te.jc_tterm_type) 
 			    pi.jc_logic_info_parameters args
 			with  Invalid_argument _ ->
 			  typing_error e.jc_pexpr_loc 
@@ -989,8 +989,8 @@ let rec expr env e =
 		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	    else
 	      typing_error e2.jc_pexpr_loc 
-		"type '%a' expected"
-		print_type t1
+		"type '%a' expected in assignment instead of '%a'"
+		print_type t1 print_type t2
 	  end
       | JCPEassign_op (e1, op, e2) -> 
 	  begin
@@ -1007,8 +1007,8 @@ let rec expr env e =
 		      | _ -> assert false
 		  else
 		    typing_error e2.jc_pexpr_loc 
-		      "type '%a' expected"
-		      print_type t1
+		      "type '%a' expected in op-assignment instead of '%a'"
+		      print_type t1 print_type t
 	      | JCTEderef(te,f) ->
 		  let t,res = make_bin_app e.jc_pexpr_loc op te1 te2 in
 		  if subtype t t1 then
@@ -1018,8 +1018,8 @@ let rec expr env e =
 		      | _ -> assert false
 		  else
 		    typing_error e2.jc_pexpr_loc 
-		      "type '%a' expected"
-		      print_type t1
+		      "type '%a' expected in op-assignment instead of '%a'"
+		      print_type t1 print_type t
 (*
 
 		  let vi = newvar e.jc_texpr_type in
@@ -1075,8 +1075,8 @@ let rec expr env e =
 			       if subtype te.jc_texpr_type ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
-				   "type %a expected" 
-				   print_type ty) 
+				   "type %a expected instead of %a" 
+				   print_type ty print_type te.jc_texpr_type) 
 			    fi.jc_fun_info_parameters l
 			with  Invalid_argument _ ->
 			  typing_error e.jc_pexpr_loc 
@@ -1202,8 +1202,9 @@ let rec statement env s =
 	  if subtype te.jc_texpr_type vi.jc_var_info_type then
 	    JCTSreturn(vi.jc_var_info_type,te)
 	  else
-	    typing_error s.jc_pstatement_loc "type '%a' expected"
-	      print_type vi.jc_var_info_type
+	    typing_error s.jc_pstatement_loc 
+	      "type '%a' expected in return instead of '%a'"
+	      print_type vi.jc_var_info_type print_type te.jc_texpr_type
       | JCPSwhile(cond,inv,var,body) -> 
 	  let tc = expr env cond in
 	  if subtype tc.jc_texpr_type boolean_type then
@@ -1322,8 +1323,8 @@ and statement_list env l : tstatement list =
 			 te
 		       else
 			 typing_error s.jc_pstatement_loc 
-				 "type '%a' expected"
-				   print_type ty)
+			   "type '%a' expected in declaration instead of '%a'"
+			   print_type ty print_type te.jc_texpr_type)
 		    e
 		in
 		let tr = statement_list ((id,vi)::env) r in
