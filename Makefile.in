@@ -65,9 +65,9 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ocamlgraph -I octagon/ocamllib
-BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads
-OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads
+INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib
+BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads @OCAMLGRAPHLIB@ 
+OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads @OCAMLGRAPHLIB@ 
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
@@ -165,35 +165,34 @@ CMO = src/lib.cmo \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
 	   src/zenon.cmo src/cvcl.cmo tools/calldp.cmo src/pretty.cmo  \
            src/unionfind.cmo src/theoryreducer.cmo \
-           ocamlgraph/graph.cmo src/graphviz.cmo \
+           src/graphviz.cmo \
            src/theory_filtering.cmo src/hypotheses_filtering.cmo \
            src/dispatcher.cmo src/isabelle.cmo src/ocaml.cmo  \
 	   src/main.cmo 
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
 #	strip $@
 
 bin/why.byte: $(CMO) src/why.cmo
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma graph.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
 	strip $@
 
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ str.cma $^
 
 # caduceus
-CCMO = ocamlgraph/graph.cmo \
-	src/lib.cmo src/linenum.cmo \
+CCMO = src/lib.cmo src/linenum.cmo \
 	src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	src/version.cmo jc/output.cmo \
 	c/cversion.cmo c/coptions.cmo c/cutil.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
 	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo c/cprint_graph.cmo \
-	ocamlgraph/components.cmo c/cgraph.cmo c/cinit.cmo \
+	c/cgraph.cmo c/cinit.cmo \
 	c/cast_misc.cmo c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
@@ -206,15 +205,15 @@ CCMXA = $(CCMA:.cma=.cmxa)
 
 bin/caduceus.opt: $(CCMXA) $(CCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
-	      @STATIC@ $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	      @STATIC@ $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
 	strip    $@
 
 bin/caduceus.byte: $(CCMA) $(CCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
-	      @STATIC@ $(BFLAGS) -o $@ unix.cma str.cma $^
+	      @STATIC@ $(BFLAGS) -o $@ unix.cma str.cma graph.cma $^
 
 bin/caduceus.static: $(CCMXA) $(CCMX) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
 	strip    $@
 
 
@@ -224,8 +223,8 @@ JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_typing.cmo jc/jc_norm.cmo jc/jc_output.cmo \
-	ocamlgraph/graph.cmo jc/jc_control_flow.cmo \
-	ocamlgraph/components.cmo jc/jc_callgraph.cmo \
+	jc/jc_control_flow.cmo \
+	jc/jc_callgraph.cmo \
 	jc/output.cmo \
 	jc/jc_invariants.cmo \
 	jc/jc_effect.cmo \
@@ -249,12 +248,12 @@ jc/jc.cmxa: $(JCCML_EXPORT)
 
 bin/jessie.opt: $(JCCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
-		unix.cmxa nums.cmxa $^
+		unix.cmxa nums.cmxa graph.cmxa $^
 	strip    $@
 
 bin/jessie.byte: $(JCCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
-		unix.cma nums.cma $^
+		unix.cma nums.cma graph.cma $^
 
 
 # krakatoa
@@ -263,19 +262,19 @@ KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_output.cmo \
 	java/java_version.cmo java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
-	java/java_typing.cmo \
+	java/java_typing.cmo java/java_callgraph.cmo \
 	java/java_analysis.cmo java/java_interp.cmo \
 	java/java_main.cmo
 KCMX = $(KCMO:.cmo=.cmx)
 
 bin/krakatoa.opt: $(KCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
-		unix.cmxa nums.cmxa $^
+		unix.cmxa nums.cmxa graph.cmxa $^
 	strip    $@
 
 bin/krakatoa.byte: $(KCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
-	 	 unix.cma nums.cma $^
+	 	 unix.cma nums.cma graph.cma $^
 
 
 # demixify
@@ -290,14 +289,6 @@ bin/demixify.opt: $(MIXCMX)
 
 bin/demixify.byte: $(MIXCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ $^
-
-# ocamlgraph
-
-ocamlgraph/graph.cmx: ocamlgraph/*.ml*
-	make -C ocamlgraph opt
-
-ocamlgraph/graph.cmo: ocamlgraph/*.ml*
-	make -C ocamlgraph byte
 
 # octagon
 
@@ -330,11 +321,11 @@ gwhy-no:
 gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
 	strip    $@
 
 bin/gwhy.byte: $(GCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma lablgtk.cma threads.cma gtkThread.cmo $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^
 
 # tools
 bin/why2html.byte: tools/why2html.ml
@@ -721,7 +712,6 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
         bench/c/bench bench/c/bench-files bench/c/*/*.c bench/c/*/*/*.c \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
-	ocamlgraph/Makefile.in ocamlgraph/*.ml* \
 	octagon/aclocal.m4 octagon/AUTHORS octagon/ChangeLog \
 	octagon/clib/Makefile* octagon/clib/*.c octagon/clib/*.h \
 	octagon/clib/README octagon/config* octagon/COPYING octagon/depcomp \
@@ -822,7 +812,6 @@ clean::
 	rm -f intf/*.cm[iox] intf/*.o intf/*~
 	rm -f tools/*.cm[iox] tools/*.o tools/*~
 	rm -f jc/*.cm[iox] jc/*.o jc/*~
-	rm -f ocamlgraph/*.cm[iox] ocamlgraph/*.o ocamlgraph/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f bin/caduceus.opt bin/caduceus.byte
 	rm -f bin/jessie.opt bin/jessie.byte

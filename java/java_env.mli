@@ -56,7 +56,9 @@ and java_field_info =
 (*
       mutable java_field_info_trans_name : string;
       java_field_info_accessibility : accessibility;
+*)
       java_field_info_is_static : bool;
+(*
       java_field_info_is_final : bool;
       java_field_info_class_or_interface : java_env_entry;
 *)
@@ -94,6 +96,7 @@ and method_info =
      mutable method_info_has_this : java_var_info option;
      method_info_parameters : java_var_info list;
      method_info_return_type : java_type option ;
+     mutable method_info_calls : method_info list;
    }
     
 and logic_type_entry =
@@ -120,7 +123,7 @@ and java_logic_info =
 (*
       java_logic_info_effects = empty_effects;
 *)
-      java_logic_info_calls : java_logic_info list;
+      mutable java_logic_info_calls : java_logic_info list;
     }
 
 

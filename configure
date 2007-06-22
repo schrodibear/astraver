@@ -636,6 +636,7 @@ OCAMLBEST
 OCAMLVERSION
 OCAMLV
 OCAMLLIB
+OCAMLGRAPHLIB
 enable_octagon
 OCTAGONLIB
 STATIC
@@ -2088,6 +2089,71 @@ echo "$as_me: error: Cannot find ocamlyacc." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
+#looking for ocamlgraph library
+
+as_ac_File=`echo "ac_cv_file_$OCAMLLIB/ocamlgraph/graph.cmi" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $OCAMLLIB/ocamlgraph/graph.cmi" >&5
+echo $ECHO_N "checking for $OCAMLLIB/ocamlgraph/graph.cmi... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$OCAMLLIB/ocamlgraph/graph.cmi"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  OCAMLGRAPH=yes
+else
+  OCAMLGRAPH=no
+fi
+
+if test "$OCAMLGRAPH" = no ; then
+   as_ac_File=`echo "ac_cv_file_$OCAMLLIB/graph.cmi" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $OCAMLLIB/graph.cmi" >&5
+echo $ECHO_N "checking for $OCAMLLIB/graph.cmi... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$OCAMLLIB/graph.cmi"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  OCAMLGRAPH=yes
+else
+  OCAMLGRAPH=no
+fi
+
+   if test "$OCAMLGRAPH" = no ; then
+      { { echo "$as_me:$LINENO: error: Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*" >&5
+echo "$as_me: error: Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*" >&2;}
+   { (exit 1); exit 1; }; }
+   else
+	OCAMLGRAPHLIB=""
+   fi
+else
+   OCAMLGRAPHLIB="-I +ocamlgraph"
+fi
+
+
 # checking for lablgtk2
 # Extract the first word of "lablgtk2", so it can be a program name with args.
 set dummy lablgtk2; ac_word=$2
@@ -2591,6 +2657,7 @@ fi
 
 
 
+
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
 
@@ -2618,7 +2685,7 @@ fi
 
 
 # Finally create the Makefile from Makefile.in
-ac_config_files="$ac_config_files Makefile bench/bench ocamlgraph/Makefile"
+ac_config_files="$ac_config_files Makefile bench/bench"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3189,7 +3256,6 @@ do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "bench/bench") CONFIG_FILES="$CONFIG_FILES bench/bench" ;;
-    "ocamlgraph/Makefile") CONFIG_FILES="$CONFIG_FILES ocamlgraph/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -3309,6 +3375,7 @@ OCAMLBEST!$OCAMLBEST$ac_delim
 OCAMLVERSION!$OCAMLVERSION$ac_delim
 OCAMLV!$OCAMLV$ac_delim
 OCAMLLIB!$OCAMLLIB$ac_delim
+OCAMLGRAPHLIB!$OCAMLGRAPHLIB$ac_delim
 enable_octagon!$enable_octagon$ac_delim
 OCTAGONLIB!$OCTAGONLIB$ac_delim
 STATIC!$STATIC$ac_delim
@@ -3328,7 +3395,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 76; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 77; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -3655,7 +3722,7 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
-chmod a-w Makefile bench/bench ocamlgraph/Makefile
+chmod a-w Makefile bench/bench
 chmod a+x bench/bench
 
 # Summary

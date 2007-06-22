@@ -105,6 +105,7 @@ let rec statement acc s =
     | JCSdecl(vi,_,s) -> 
 	statement acc s
     | JCSassert _ -> acc
+    | JCSreturn_void -> acc
 
 let compute_logic_calls f t = 
   let calls =
@@ -134,7 +135,7 @@ module LogicCallGraph = struct
     List.iter iter f.jc_logic_info_calls 
   end
 
-module LogicCallComponents = Components.Make(LogicCallGraph)
+module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
 
 module CallGraph = struct 
   type t = (int, (fun_info * fun_spec * statement list option)) Hashtbl.t
@@ -150,13 +151,17 @@ module CallGraph = struct
     List.iter iter f.jc_fun_info_calls 
   end
 
-module CallComponents = Components.Make(CallGraph)
+module CallComponents = Graph.Components.Make(CallGraph)
 
 open Format
 open Pp
 
 let compute_logic_components ltable =  
-  let (scc,numcomp) = LogicCallComponents.scc ltable in
+  (* numcomp should be returned gy ocamlgraph ! 
+     -> overapproximation with the graph size
+  *)
+  let numcomp = 1+Hashtbl.length ltable in
+  let (scc (* ,numcomp*)) = LogicCallComponents.scc ltable in
   let tab_comp = Array.make numcomp [] in
   LogicCallGraph.iter_vertex 
     (fun f ->
@@ -179,8 +184,10 @@ let compute_logic_components ltable =
   tab_comp
 
 
-let compute_components table =  
-  let (scc,numcomp) = CallComponents.scc table in
+let compute_components table = 
+  (* see above *)
+  let numcomp = 1+Hashtbl.length table in
+  let (scc (*,numcomp*)) = CallComponents.scc table in
   let tab_comp = Array.make numcomp [] in
   CallGraph.iter_vertex 
     (fun f ->

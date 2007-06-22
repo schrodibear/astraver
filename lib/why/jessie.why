@@ -268,3 +268,11 @@ parameter free_parameter : a:'t alloc_table ref -> p:'t pointer ->
   writes a
   { offset_max(a,p) < offset_min(a,p) }
 
+
+(************
+
+exceptions for control flow handling
+
+*********)
+
+exception Return

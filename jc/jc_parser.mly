@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.51 2007-06-19 15:44:10 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.52 2007-06-22 12:47:00 marche Exp $ */
 
 %{
 
@@ -756,11 +756,9 @@ jump_statement:
 */
 | BREAK SEMICOLON 
     { locate_statement (JCPSbreak "") }
-/*
-| RETURN SEMICOLON { locate (CSreturn None) }
-*/
+| RETURN SEMICOLON { locate_statement (JCPSreturn None) }
 | RETURN expression SEMICOLON 
-    { locate_statement (JCPSreturn $2) }
+    { locate_statement (JCPSreturn (Some $2)) }
 ;
 
 pack_statement:

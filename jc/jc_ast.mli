@@ -118,7 +118,7 @@ type pstatement_node =
       (*r condition, invariant, variant, body *)
   | JCPSfor of pexpr list * pexpr * pexpr list * pexpr * pexpr * pstatement
       (*r inits, condition, updates, invariant, variant, body *)
-  | JCPSreturn of pexpr
+  | JCPSreturn of pexpr option
   | JCPSbreak of label
   | JCPScontinue of label
   | JCPSgoto of label
@@ -288,6 +288,7 @@ type tstatement_node =
   | JCTSfor of texpr * texpr list * tloop_annot  * tstatement
       (*r condition, updates, loop annotations, body *)
       (*r inits must be given before using JCTSexpr or JCTSdecl *)
+  | JCTSreturn_void 
   | JCTSreturn of jc_type * texpr
   | JCTSbreak of label
   | JCTScontinue of label
@@ -439,6 +440,7 @@ type statement_node =
   | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement
   | JCSloop of loop_annot * statement
+  | JCSreturn_void 
   | JCSreturn of jc_type * expr
   | JCStry of statement 
       * (exception_info * var_info option * statement) list * statement

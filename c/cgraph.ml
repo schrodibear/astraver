@@ -199,10 +199,14 @@ module G = struct
     List.iter iter f.graph 
   end
 
-module SCC = Components.Make(G)
+module SCC = Graph.Components.Make(G)
 
-let find_comp tfiles =  
-  let (scc,numcomp) = SCC.scc tfiles in
+let find_comp tfiles =
+  (* numcomp should be returned gy ocamlgraph ! 
+     -> overapproximation with the graph size
+  *)
+  let numcomp = 1+List.length tfiles in 
+  let (scc (* ,numcomp*)) = SCC.scc tfiles in
   let tab_comp = Array.make numcomp [] in
   G.iter_vertex 
     (fun f ->
@@ -214,3 +218,10 @@ let find_comp tfiles =
 		 Coptions.lprintf "@.")
     tab_comp;
   tab_comp
+
+
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/caduceus.byte"
+End: 
+*)

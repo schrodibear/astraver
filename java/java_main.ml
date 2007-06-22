@@ -46,9 +46,36 @@ let main () =
 	(************)
 
 	Hashtbl.iter 
-	  (fun _ (mi,req,behs,body) -> 
-	     Java_analysis.do_method mi req behs body)
+	  (fun _ (f,t) -> Java_callgraph.compute_logic_calls f t)
+	  Java_typing.logics_table;
+	Hashtbl.iter 
+	  (fun _ mt -> 
+	     Option_misc.iter (Java_callgraph.compute_calls 
+				 mt.Java_typing.mt_method_info
+				 mt.Java_typing.mt_requires) 
+	       mt.Java_typing.mt_body)
 	  Java_typing.methods_table;
+	let _logic_components = 
+	  Java_callgraph.compute_logic_components 
+	    Java_typing.logics_table
+	in
+	let components = 
+	  Java_callgraph.compute_components 
+	    Java_typing.methods_table
+	in
+	(* analyze following call graph order *)
+	Array.iter
+	  (List.iter 
+	    (fun mi -> 
+	       let mti = Hashtbl.find Java_typing.methods_table
+		 mi.method_info_tag
+	       in
+	       Java_analysis.do_method 
+		 mti.Java_typing.mt_method_info 
+		 mti.Java_typing.mt_requires
+		 mti.Java_typing.mt_behaviors 
+		 mti.Java_typing.mt_body))
+	    components;
 
 	(*******************************)
 	(* production of jessie output *)
@@ -105,10 +132,13 @@ let main () =
 	(* production phase 4 : generation of Jessie functions *)
 	let decls = 
 	  Hashtbl.fold 
-	    (fun _ (f,req,behs,body) acc ->
+	    (fun _ mt acc ->
+	       let f = mt.Java_typing.mt_method_info in
 	       printf "Generating Why function %s@." 
 		 f.Java_env.method_info_name;
-	       Java_interp.tr_method f req behs body acc)
+	       Java_interp.tr_method f mt.Java_typing.mt_requires 
+		 mt.Java_typing.mt_behaviors 
+		 mt.Java_typing.mt_body acc)
 	    Java_typing.methods_table
 	    decls
 	in	       
@@ -138,6 +168,6 @@ let _ =
   
 (*
 Local Variables: 
-compile-command: "make -C .. bin/krakatoa.byte"
+compile-command: "make -j -C .. bin/krakatoa.byte"
 End: 
 *)

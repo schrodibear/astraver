@@ -60,6 +60,9 @@ let tr_base_type t =
     | JCTnull -> assert false
 
 let tr_type t = Base_type(tr_base_type t)
+
+ 
+
 (*
   match t with
     | JCTnative _ | JCTlogic _ -> Base_type(tr_base_type t)
@@ -144,6 +147,7 @@ let bin_arg_type loc = function
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
 let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
 let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
+let fun_any_enum n = "any_" ^ n.jc_enum_info_name
 
 let term_coerce loc tdest tsrc e =
   match tdest,tsrc with
@@ -533,7 +537,8 @@ let invariant_for_struct this st =
   make_and_list 
     (List.map (fun (li,_) -> make_logic_pred_call li [this]) invs)
 
-let any_value = function
+let any_value ty = 
+  match ty with
   | JCTnative t -> 
       begin match t with
 	| Tunit -> Void
@@ -541,9 +546,16 @@ let any_value = function
 	| Tinteger -> App (Var "any_int", Void)
 	| Treal -> App (Var "any_real", Void)
       end
+  | JCTnull 
   | JCTpointer _ -> App (Var "any_pointer", Void)
-  | _ -> assert false (* TODO *)
+  | JCTenum ri -> App (Var ("any_" ^ ri.jc_enum_info_name), Void)
+  | JCTlogic _ -> assert false
+
   
+let jessie_return_variable = "jessie_returned_value"
+let jessie_return_exception = "Return"
+let return_void = ref false
+
 let rec statement s = 
   (* reset_tmp_var(); *)
   match s.jc_statement_node with
@@ -604,8 +616,12 @@ let rec statement s =
 		coerce s.jc_statement_loc vi.jc_var_info_type t e', 
 		statement s)
 	end
+    | JCSreturn_void -> Raise(jessie_return_exception,None)	
     | JCSreturn(t,e) -> 
-	coerce e.jc_expr_loc t e.jc_expr_type (expr e)
+	append
+	  (Assign(jessie_return_variable,
+		  coerce e.jc_expr_loc t e.jc_expr_type (expr e)))
+	  (Raise(jessie_return_exception,None))
     | JCSunpack(st, e) ->
 	(* La méthode consistant à placer unpack_ dans jessie.why ne marche pas
 quand il y a un unpack par type structure. *)
@@ -846,6 +862,7 @@ let interp_fun_params f annot_type =
 		       acc))
 	  l annot_type
        
+  
 let tr_fun f spec body acc =
   (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
   let invariants =
@@ -1024,9 +1041,10 @@ let tr_fun f spec body acc =
   (* List.iter (Printf.printf "*** %s\n") reads;
   flush stdout; *)
   (* why parameter for calling the function *)
+  let ret_type = tr_type f.jc_fun_info_return_type in
   let why_param = 
     let annot_type =
-      Annot_type(requires,tr_type f.jc_fun_info_return_type,
+      Annot_type(requires,ret_type,
 		 reads,writes, normal_post, excep_posts)
     in
     let fun_type = interp_fun_params f annot_type in
@@ -1055,12 +1073,27 @@ let tr_fun f spec body acc =
 	       else bl) 
 	    f.jc_fun_info_parameters [] 
 	in
+	return_void := 
+	  (match f.jc_fun_info_return_type with
+	    | JCTnative Tunit -> true
+	    | _ -> false);		
 	let body = statement_list body in
 	let tblock =
 	  append
 	    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
 	    (assume_all_invariants f.jc_fun_info_parameters)
 	    body
+	in
+	let tblock = 
+	  if !return_void then
+	    Try(append tblock (Raise(jessie_return_exception,None)),
+		jessie_return_exception,None,Void)
+	  else
+	    let e = any_value f.jc_fun_info_return_type in
+	    Let_ref(jessie_return_variable,e,
+		    Try(append tblock Absurd,
+			jessie_return_exception,None,
+			Deref(jessie_return_variable)))
 	in
 	let tblock = make_label "init" tblock in
 	let tblock =
@@ -1133,12 +1166,20 @@ let tr_enum_type ri (* to_int of_int *) acc =
 			       [LVar "x";LApp(logic_int_of_enum ri,
 					      [LVar "result"])]),[]))
   in
+  let any_type =
+    Prod_type("", Base_type(simple_logic_type "unit"),
+	      Annot_type(LTrue,
+			 Base_type(simple_logic_type n),
+			 [],[],
+			 LTrue,[]))
+  in
   Type(n,[]) ::
   Logic(false,logic_int_of_enum ri,
 	[("",simple_logic_type n)],simple_logic_type "int") :: 
   Logic(false,logic_enum_of_int ri,
 	[("",simple_logic_type "int")],simple_logic_type n) :: 
   Param(false,fun_enum_of_int ri,of_int_type) ::
+  Param(false,fun_any_enum ri,any_type) ::
   Axiom(n^"_enum",
 	LForall("x",simple_logic_type n,enum_pred 
 		  (LApp(logic_int_of_enum ri,[LVar "x"]))))		

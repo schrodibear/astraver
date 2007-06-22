@@ -1,8 +1,7 @@
 
 /* Dijkstra's dutch flag */
 
-// @ predicate is_color(int c) { Flag.BLUE <= c && c <= Flag.RED }
-//@ predicate is_color(int c) { 1 <= c && c <= 3 }
+//@ predicate is_color(int c) { Flag.BLUE <= c && c <= Flag.RED }
 
 /*@ predicate is_color_array(int t[]) { 
   @   t != null && 
@@ -82,3 +81,11 @@ class Flag {
 	}
     }
 }
+
+
+
+/*
+Local Variables: 
+compile-command: "make Flag.io"
+End: 
+*/

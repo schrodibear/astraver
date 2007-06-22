@@ -25,7 +25,7 @@ type T = {
 }
 
 
-integer f3(T[0..1] p) 
+unit f3(T[0..1] p) 
    behavior ok:
 	ensures p.i == \old(p.i) && (p+1).i == \old((p+1).i)+1;
 {

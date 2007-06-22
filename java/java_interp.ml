@@ -104,9 +104,7 @@ let array_struct_table = Hashtbl.create 17
       
 let rec get_array_struct t = 
   try
-    let st = Hashtbl.find array_struct_table t in
-    Format.eprintf "got array structure %s@." st.jc_struct_info_name;
-    st
+    Hashtbl.find array_struct_table t 
   with Not_found -> assert false
 
 and tr_type t =
@@ -157,7 +155,9 @@ let tr_class ci acc =
 	       List.map get_field ci.class_info_fields) :: acc
 
 let array_types decls =
-  Format.eprintf "array types:@.";
+  Java_options.lprintf "(**********************)@.";
+  Java_options.lprintf "(* array types        *)@.";
+  Java_options.lprintf "(**********************)@.";
   Hashtbl.fold
     (fun t (s,f) acc ->
        let fi =
@@ -175,7 +175,7 @@ let array_types decls =
 	   jc_struct_info_fields = [(f, fi)];
 	 }
        in
-       Format.eprintf "created array structure %s@." st.jc_struct_info_name;
+       Java_options.lprintf "%s@." st.jc_struct_info_name;
        Hashtbl.add array_struct_table t st;
        JCstruct_def(st.jc_struct_info_name,
 		    List.map snd st.jc_struct_info_fields) :: acc)
@@ -224,8 +224,9 @@ let get_logic_fun fi =
 	in
 	nfi.jc_logic_info_parameters <-
 	      List.map get_var fi.java_logic_info_parameters;
-	Hashtbl.add logics_table nfi.jc_logic_info_tag nfi;
+	Hashtbl.add logics_table fi.java_logic_info_tag nfi;
 	nfi
+
 
 (*s terms *)
 
@@ -511,10 +512,13 @@ let tr_axiom id p acc =
 
 let tr_logic_fun fi b acc =   
   let nfi = get_logic_fun fi in
-  JClogic_fun_def(nfi.jc_logic_info_result_type,
-		  nfi.jc_logic_info_name,
-		  nfi.jc_logic_info_parameters,
-		  JCTAssertion(assertion b))::acc
+  match b with
+    | Java_typing.JAssertion a ->
+	JClogic_fun_def(nfi.jc_logic_info_result_type,
+			nfi.jc_logic_info_name,
+			nfi.jc_logic_info_parameters,
+			JCTAssertion(assertion a))::acc
+    | Java_typing.JTerm _ -> assert false  (* TODO *)
 
 
 (*

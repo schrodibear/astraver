@@ -26,7 +26,8 @@ let get_class id =
   try
     Hashtbl.find class_table id 
   with
-      Not_found ->
+      Not_found -> assert false
+(*
 	let ci =
 	  { class_info_name = id ;
 	    class_info_fields = [];
@@ -34,6 +35,7 @@ let get_class id =
 	in
 	Hashtbl.add class_table id ci;
 	ci
+*)
 
 let rec type_type ty =
   match ty with
@@ -95,17 +97,28 @@ let fields_table = Hashtbl.create 97
 
 let field_tag_counter = ref 0
 
-let field ci ty id =
+let field ~is_static ci ty id =
   incr field_tag_counter;
   let fi = {
     java_field_info_tag = !field_tag_counter;
     java_field_info_name = id;
     java_field_info_type = ty;
     java_field_info_class = ci;
+    java_field_info_is_static = is_static;
   }
   in fi
 
 (* methods *)
+
+type method_table_info =
+    { mt_method_info : Java_env.method_info;
+      mt_requires : Java_tast.assertion option;
+      mt_behaviors : (Java_ast.identifier * 
+			Java_tast.assertion option * 
+			Java_tast.term list option * 
+			Java_tast.assertion) list ;
+      mt_body : Java_tast.block option;
+    }
 
 let methods_table = Hashtbl.create 97
 
@@ -120,12 +133,21 @@ let method_info id ty pars =
     method_info_has_this = None;
     method_info_parameters = pars;
     method_info_return_type = ty;
+    method_info_calls = [];
   }
     
 
 (* logic funs *)
 
+type logic_body =
+  | JAssertion of assertion
+  | JTerm of term
+(*
+  | JReads of location list
+*)
+
 let logics_table = Hashtbl.create 97
+let logics_env = Hashtbl.create 97
 
 let logic_tag_counter = ref 0
 
@@ -145,22 +167,6 @@ let rec var_type_and_id ty id =
     | Array_id id -> 
 	let ty,id = var_type_and_id ty id in
 	JTYarray(ty),id
-
-let logic_bin_op ty op =
-  match ty,op with
-    | Tinteger,Badd -> add_int
-    | Tinteger,Bmul -> mul_int
-    | Tinteger,Beq -> eq_int
-    | Tinteger,Bge -> ge_int
-    | _,Ble -> le_int 
-    | _,Blt -> lt_int
-    | _,Bgt -> gt_int
-    | _,Bne -> ne_int 
-    | _,(Basr|Blsr|Blsl) -> assert false (* TODO *)
-    | _,(Bbwxor|Bbwor|Bbwand) -> assert false (* TODO *)
-    | _,(Bimpl|Bor|Band) -> assert false (* TODO *)
-    | _,(Bmod|Bdiv|Bsub) -> assert false (* TODO *)
-    | _ -> assert false (* TODO *)
 
 let lit l =
   match l with
@@ -289,12 +295,12 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 
 
 let get_this loc env =
-  try List.assoc "this" env 
+  try 
+    List.assoc "this" env 
   with Not_found -> 
     typing_error loc "this undefined in this context"
 
-let get_this_term loc env =
-  let vi = get_this loc env in
+let term_var loc vi =
   { java_term_node = JTvar vi; 
     java_term_type = vi.java_var_info_type;
     java_term_loc = loc }
@@ -312,12 +318,14 @@ let lookup_field ci id =
 
 type classified_name =
   | TermName of term
+  | ClassName of java_class_info
 
 let rec classify_name env name =
   match name with
     | [] -> assert false
     | [(loc,id)] ->
 	begin
+	  (* look for a local var of that name *)
 	  try
 	    let vi = List.assoc id env in
 	    TermName { 
@@ -326,21 +334,29 @@ let rec classify_name env name =
 	      java_term_loc = loc 
 	    }
 	  with Not_found -> 
-	    let this = get_this_term loc env in	    
-	    match this.java_term_type with
-	      | JTYclass(_,ci) ->
-		  begin
-		    try 
-		      let fi = lookup_field ci id in
-		      TermName {
-			java_term_node = JTfield_access(this,fi);
-			java_term_type = fi.java_field_info_type;
-			java_term_loc = loc
-		      }
-		    with Not_found ->
-		      typing_error loc "unknown identifier %s" id
-		  end
-	      | _ -> assert false (* impossible *)
+	    (* look for a field of that name in class this *)
+	    try
+	      let this = List.assoc "this" env in	    
+	      match this.java_var_info_type with
+		| JTYclass(_,ci) ->
+		    begin
+		      try 
+			let fi = lookup_field ci id in
+			TermName {
+			  java_term_node = JTfield_access(term_var loc this,fi);
+			  java_term_type = fi.java_field_info_type;
+			  java_term_loc = loc
+			}
+		      with Not_found ->
+			typing_error loc "unknown identifier %s" id
+		    end
+		| _ -> assert false (* impossible *)
+	    with Not_found ->
+	      (* look for a class of that name *)
+	      try 
+		let ci = get_class id in ClassName ci
+	      with Not_found ->
+		assert false (* TODO *)
 	end		
     | (loc,id)::n ->
 	match classify_name env n with
@@ -374,7 +390,23 @@ let rec classify_name env name =
 		      typing_error t.java_term_loc 
 			"not a class type" 
 	      end
-	
+	  | ClassName ci ->
+	      	try
+		  let fi = lookup_field ci id in
+		  if fi.java_field_info_is_static then
+		    TermName { 
+		      java_term_loc = loc;
+		      java_term_type = fi.java_field_info_type ;
+		      java_term_node = JTstatic_field_access(ci,fi)
+		    }
+		  else
+		    typing_error loc 
+		      "field %s is not static" id
+
+		with Not_found ->
+		  typing_error loc 
+		    "no such field in class %s" ci.class_info_name
+		
   
 let rec term env e =
   let ty,tt =
@@ -433,7 +465,7 @@ let rec term env e =
 	      | None -> 
 		  begin 
 		    try 
-		      let (fi,_) = Hashtbl.find logics_table id in
+		      let fi = Hashtbl.find logics_env id in
 		      let args = List.map (term env) args in		      
 		      (* TODO: check arg types *)
 		      match fi.java_logic_info_result_type with
@@ -543,7 +575,7 @@ let rec assertion env e =
     | JPEcall (None, (loc,id), args)-> 
 	begin
 	  try
-	    let (fi,_) = Hashtbl.find logics_table id in
+	    let fi = Hashtbl.find logics_env id in
 	    let tl =
 	      try
 		List.map2
@@ -642,8 +674,7 @@ let make_bin_op loc op t1 e1 t2 e2 =
     |Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *)
     | Bimpl | Biff -> assert false
 
-let get_this_expr loc env =
-  let vi = get_this loc env in
+let expr_var loc vi =
   { java_expr_node = JEvar vi; 
     java_expr_type = vi.java_var_info_type;
     java_expr_loc = loc }
@@ -655,6 +686,8 @@ let rec expr_of_term t =
       | JTold _ -> assert false (* TODO *)
       | JTfield_access(t, fi) -> 
 	  JEfield_access(expr_of_term t,fi)
+      | JTstatic_field_access(ci, fi) -> 
+	  JEstatic_field_access(ci,fi)
       | JTarray_length(t) -> 
 	  JEarray_length(expr_of_term t)
       | JTarray_access(t1,t2) -> 
@@ -1090,7 +1123,7 @@ let class_field ci acc d =
 	vd.variable_decls : variable_declarator list }
 	*)
 	let ty = type_type vd.variable_type in
-	let _is_static = List.mem `STATIC vd.variable_modifiers in
+	let is_static = List.mem `STATIC vd.variable_modifiers in
 	List.fold_left
 	  (fun acc vd -> 
 	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
@@ -1098,7 +1131,7 @@ let class_field ci acc d =
 	       Option_misc.map (type_initializer [] ty') 
 		 vd.variable_initializer 
 	     in
-	     let fi = field ci ty' id in
+	     let fi = field ~is_static ci ty' id in	     
 	     Hashtbl.add fields_table fi.java_field_info_tag (fi,init);
 	     fi::acc
 	  ) acc vd.variable_decls
@@ -1135,7 +1168,11 @@ let rec class_methods ci env l =
 	in
 	let behs = List.map (behavior local_env env_result) behs in
 	let body = Option_misc.map (statements env_result) body in
-	Hashtbl.add methods_table mi.method_info_tag (mi,req,behs,body);
+	Hashtbl.add methods_table mi.method_info_tag 
+	  { mt_method_info = mi;
+	    mt_requires = req;
+	    mt_behaviors = behs;
+	    mt_body = body };
 	class_methods ci env rem 
    | JPFmethod_spec(req,behs) :: JPFconstructor(head,eci,body) :: rem ->
 	assert false
@@ -1201,7 +1238,8 @@ let type_decl d =
 	  | None ->
 	      let fi = logic_info id None pl in
 	      let a = assertion env body in
-	      Hashtbl.add logics_table id (fi,a)
+	      Hashtbl.add logics_env id fi;
+	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
 	  | Some _ -> assert false (* TODO *)
 	end
 	

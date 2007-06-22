@@ -1196,7 +1196,9 @@ let rec statement env s =
       | JCPScontinue _ -> assert false
       | JCPSbreak l -> 
 	  JCTSbreak l (* TODO: check l exists, check enclosing loop exists, *)
-      | JCPSreturn e -> 
+      | JCPSreturn None ->
+	  JCTSreturn_void
+      | JCPSreturn (Some e) -> 
 	  let te = expr env e in 
 	  let vi = List.assoc "\\result" env in
 	  if subtype te.jc_texpr_type vi.jc_var_info_type then

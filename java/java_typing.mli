@@ -3,20 +3,30 @@
 val class_table :
   (string,Java_env.java_class_info) Hashtbl.t
 
+type method_table_info =
+    { mt_method_info : Java_env.method_info;
+      mt_requires : Java_tast.assertion option;
+      mt_behaviors : (Java_ast.identifier * 
+			Java_tast.assertion option * 
+			Java_tast.term list option * 
+			Java_tast.assertion) list ;
+      mt_body : Java_tast.block option;
+    }
+
 val methods_table : 
-  (int,
-   Java_env.method_info * 
-   Java_tast.assertion option * 
-   (Java_ast.identifier * 
-    Java_tast.assertion option * 
-    Java_tast.term list option * 
-    Java_tast.assertion) list *
-   Java_tast.block option) Hashtbl.t
+  (int, method_table_info) Hashtbl.t
 
 val axioms_table : (string,Java_tast.assertion) Hashtbl.t
 
+type logic_body =
+  | JAssertion of Java_tast.assertion
+  | JTerm of Java_tast.term
+(*
+  | JReads of location list
+*)
+
 val logics_table : 
-  (string,Java_env.java_logic_info * Java_tast.assertion) Hashtbl.t
+  (int,Java_env.java_logic_info * logic_body) Hashtbl.t
 
 exception Typing_error of Loc.position * string
 

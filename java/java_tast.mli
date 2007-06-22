@@ -12,6 +12,7 @@ type term_node =
     | JTbin of term * base_type * bin_op * term   
     | JTapp of java_logic_info * term list
     | JTfield_access of term * java_field_info
+    | JTstatic_field_access of java_class_info * java_field_info
     | JTarray_length of term 
     | JTarray_access of term * term
 
@@ -55,6 +56,7 @@ and expr_node =
   | JEun of un_op * expr                 (*r (pure) unary operations *)
   | JEincr_local_var of incr_decr_op * java_var_info
       (*r pre-post incr/decr operations *)
+  | JEstatic_field_access of java_class_info * java_field_info
   | JEfield_access of expr * java_field_info
   | JEarray_length of expr 
   | JEarray_access of expr * expr

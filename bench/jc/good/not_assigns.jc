@@ -5,7 +5,7 @@ type T = {
   integer y;
 }
 
-integer f(integer n, T[0] t) 
+unit f(integer n, T[0] t) 
   requires -100 <= n && n <= 100;
   behavior x_changed:
     assumes n > 0; 
@@ -19,7 +19,7 @@ integer f(integer n, T[0] t)
   if (n > 0) t.x = n; else t.y = n;
 }
 
-integer test1(T[0] t)
+unit test1(T[0] t)
   behavior y_unchanged:
     ensures t.y == \old(t.y);
   behavior x_set_to_3:
@@ -28,7 +28,7 @@ integer test1(T[0] t)
     f(3,t);
 }
 
-integer test2(T[0] t)
+unit test2(T[0] t)
   behavior x_unchanged:
     ensures t.x == \old(t.x);
   behavior y_set_to_minus_3:
