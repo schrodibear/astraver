@@ -27,7 +27,8 @@ open Java_tast
 
 let rec term acc t =
   match t.java_term_node with
-    | JTlit _ | JTvar _ -> acc
+    | JTlit _ | JTvar _ 
+    | JTstatic_field_access _ -> acc
     | JTapp (f,lt) -> f::(List.fold_left term acc lt)
     | JTold t -> term acc t
     | JTbin (t1,_,_,t2) -> term (term acc t1) t2
@@ -89,7 +90,8 @@ let rec expr acc e : 'a list =
   match e.java_expr_node with
     | JElit _ 
     | JEvar _ 
-    | JEincr_local_var _ -> acc
+    | JEincr_local_var _ 
+    | JEstatic_field_access _ -> acc
     | JEcall (e, mi, args) ->
 	List.fold_left expr (Option_misc.fold_left expr acc e) args
     | JEassign_array_op (e1, e2, _, e3)-> 

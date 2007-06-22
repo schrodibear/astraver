@@ -275,6 +275,8 @@ let rec statement fmt s =
   match s.jc_tstatement_node with
     | JCTSreturn (t,e) ->
 	fprintf fmt "return %a;@\n" expr e
+    | JCTSreturn_void ->
+	fprintf fmt "return;@\n"
     | JCTSunpack (_, _, _) -> assert false (* TODO *) 
     | JCTSpack (_, _, _) -> assert false (* TODO *) 
     | JCTSthrow (_, _) -> assert false (* TODO *) 

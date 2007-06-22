@@ -418,6 +418,9 @@ let rec term env e =
 	    match classify_name env n with
 	      | TermName t ->
 		  t.java_term_type, t.java_term_node
+	      | ClassName _ ->
+		  typing_error e.java_pexpr_loc
+		    "term expected, got a class"
 	  end
 
       | JPEresult -> 
@@ -713,6 +716,9 @@ let rec expr env e =
 	      | TermName t ->
 		  let e = expr_of_term t in
 		  e.java_expr_type, e.java_expr_node
+	      | ClassName _ ->
+		  typing_error e.java_pexpr_loc
+		    "expression expected, got a class"
 	  end
       | JPEthis -> 
 	  let vi = get_this e.java_pexpr_loc env in
@@ -816,6 +822,9 @@ let rec expr env e =
 			      print_type te.java_expr_type
 		      | _ -> assert false (* TODO *)
 		  end
+	      | ClassName _ ->
+		  typing_error e.java_pexpr_loc
+		    "lvalue expected, got a class"
 	  end
 (*	    
 	    match n with

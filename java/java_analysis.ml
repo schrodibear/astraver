@@ -43,6 +43,7 @@ let rec expr e =
     | JEun (_, _) -> assert false (* TODO *)
     | JEbin (e1, op, e2) -> expr e1; expr e2 
     | JEvar vi -> ()
+    | JEstatic_field_access(ci,fi) -> ()
     | JEfield_access(e1,fi) -> expr e1
     | JEarray_length(e) -> 
 	begin

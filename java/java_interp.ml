@@ -148,6 +148,21 @@ let get_field fi =
 	in Hashtbl.add fi_table fi.java_field_info_tag nfi;
 	nfi
 
+let static_fields_table = Hashtbl.create 97
+
+let get_static_var ci fi =
+  try
+    Hashtbl.find static_fields_table fi.java_field_info_tag
+  with
+      Not_found -> 
+	let ty = tr_type fi.java_field_info_type in
+	let name = ci.class_info_name ^ "_" ^ 
+	      fi.java_field_info_name
+	in
+	let vi = Jc_pervasives.var ~static:true ty name in
+	Hashtbl.add static_fields_table fi.java_field_info_tag vi;
+	vi
+
 (*s translation of structure types *)
 
 let tr_class ci acc =
@@ -193,16 +208,10 @@ let get_var ?(formal=false) vi =
     Hashtbl.find vi_table vi.java_var_info_tag
   with
       Not_found -> 
-	let nvi =
-	  { jc_var_info_name = vi.java_var_info_name;
-	    jc_var_info_final_name = vi.java_var_info_name;
-	    jc_var_info_assigned = vi.java_var_info_assigned;
-	    jc_var_info_type = tr_type vi.java_var_info_type;
-	    jc_var_info_tag = vi.java_var_info_tag;
-	    jc_var_info_static = false; (* TODO *)
-	    jc_var_info_formal = formal;
-	  }
-	in Hashtbl.add vi_table vi.java_var_info_tag nvi;
+	let ty = tr_type vi.java_var_info_type in
+	let nvi = Jc_pervasives.var ~formal ty vi.java_var_info_name in
+	nvi.jc_var_info_assigned <- vi.java_var_info_assigned;
+	Hashtbl.add vi_table vi.java_var_info_tag nvi;
 	nvi
 
 (*s logic funs *)
@@ -265,6 +274,8 @@ let rec term t =
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCTTvar (get_var vi)
       | JTfield_access(t,fi) -> JCTTderef(term t,get_field fi)
+      | JTstatic_field_access(ci,fi) ->
+	  JCTTvar(get_static_var ci fi)
       | JTarray_length(t) -> 
 	  begin
 	    match t.java_term_type with
@@ -368,6 +379,8 @@ let rec expr e =
 	  let e1 = expr e1 and e2 = expr e2 in
 	  JCTEbinary(e1,bin_op op,e2)	  
       | JEvar vi -> JCTEvar (get_var vi)
+      | JEstatic_field_access(ci,fi) ->
+	  JCTEvar(get_static_var ci fi)
       | JEfield_access(e1,fi) -> 
 	  JCTEderef(expr e1,get_field fi)
       | JEarray_length(e) -> 

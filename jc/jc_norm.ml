@@ -571,6 +571,7 @@ and statement s =
 	    make_try loc for_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
 	  
+      | JCTSreturn_void -> JCSreturn_void  
       | JCTSreturn(t,e) ->
 	  let (sl,tl),e = expr e in
 	  let return_stat = make_return loc t e in
@@ -810,6 +811,7 @@ let statement s =
 	| JCSassign_var (_, _)
 	| JCSassign_heap (_, _, _)
 	| JCSassert _ 
+	| JCSreturn_void  
 	| JCSreturn _ 
 	| JCSthrow (_, _)
 	| JCSpack (_, _, _)

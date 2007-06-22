@@ -44,7 +44,8 @@ let new_node s = new_node_gen (Statement s)
 
 let rec statement g fun_exit_node s =
   match s.jc_statement_node with
-    | JCSreturn(_,e) -> 
+    | JCSreturn_void
+    | JCSreturn _ -> 
 	let n = new_node s in
 	G.add_vertex g n;
 	G.add_edge g n fun_exit_node;

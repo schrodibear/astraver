@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.41 2007-06-22 15:16:30 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.42 2007-06-22 15:48:55 marche Exp $ *)
 
 
 open Jc_env
@@ -221,6 +221,7 @@ let rec loop_annot ef la =
 
 let rec statement ef s =
   match s.jc_statement_node with
+    | JCSreturn_void -> ef
     | JCScall (_, fi, le, s) -> 
 	let ef = 
 	  fef_union fi.jc_fun_info_effects
