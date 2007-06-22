@@ -14,7 +14,7 @@ type PointSet = {
 PointSet[1] createPointSet(integer n) 
     requires n > 0;
     behavior normal:
-	ensures \result.committed == false && \result.mutable == false;
+	ensures \result.committed == false && \mutable(\result, PointSet);
 {
     Point[..] p = new Point[n];
     PointSet[1] ps = new PointSet[1];
@@ -26,7 +26,7 @@ PointSet[1] createPointSet(integer n)
 }
 
 unit deletePointSet(PointSet[1] ps) 
-    requires ps.committed == false && ps.mutable == false;
+    requires ps.committed == false && \mutable(ps, PointSet);
     behavior normal:
 	ensures \offset_max(ps) < \offset_min(ps);
 {

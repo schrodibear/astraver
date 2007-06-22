@@ -29,7 +29,7 @@ real rect_area(Rectangle[0] s) {
 }
 
 real area(Shape[0] s)
-  requires s.mutable == false;
+  requires \mutable(s, Shape);
   behavior safety:
     ensures true;
 {

@@ -334,6 +334,20 @@ let rec assertion label oldlabel a =
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LPred("instanceof",
 	      [lvar label tag; ft t; LVar (tag_name ty)])
+    | JCAmutable(t, st, v) ->
+	let hierarchy = match v with
+	  | Some st -> st
+	  | _ -> st
+	in
+	let mutable_field =
+	  LVar (mutable_name hierarchy.jc_struct_info_root) in
+	let tag = match v with
+	  | Some st -> LVar (tag_name st)
+	  | None -> LVar "bottom_tag"
+	in
+	LPred(
+	  "eq",
+	  [ LApp("select", [ mutable_field; ft t ]); tag ])
 
 (****************************
 
@@ -622,18 +636,10 @@ let rec statement s =
 	  (Assign(jessie_return_variable,
 		  coerce e.jc_expr_loc t e.jc_expr_type (expr e)))
 	  (Raise(jessie_return_exception,None))
-    | JCSunpack(st, e) ->
-	(* La méthode consistant à placer unpack_ dans jessie.why ne marche pas
-quand il y a un unpack par type structure. *)
-	(* let e = expr e in make_app "unpack_" [e] *)
-	let e = expr e in make_app ("unpack_"^st.jc_struct_info_root) [e]
-    | JCSpack(st,e) ->
-	let e = expr e in make_app ("pack_"^st.jc_struct_info_root) [e]
-(*	let e = expr e in
-	let tmp = tmp_var_name() in
-	make_lets ([(tmp,e)])
-	  (Assert(invariant_for_struct (LVar tmp) st, 
-		  make_app "pack_" [Var tmp])) *)
+    | JCSunpack(st, e, as_t) ->
+	let e = expr e in make_app ("unpack_"^st.jc_struct_info_root) [e; Var (tag_name st)]
+    | JCSpack(st, e, from_t) ->
+	let e = expr e in make_app ("pack_"^st.jc_struct_info_root) [e; Var (tag_name st)]
     | JCSthrow (ei, Some e) -> 
 	let e = expr e in
 	Raise(ei.jc_exception_info_name,Some e)

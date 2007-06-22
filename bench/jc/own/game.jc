@@ -20,7 +20,7 @@ unit attack(Hero[0] this, Hero[0] target)
   behavior ok:
     ensures (this.mutable == false) && (target.mutable == false);
 {
-  unpack(target);
+  unpack(target, Hero);
 //  if (this.mutable) { this.life = 0; };
 //  assert (this.committed);
 //  this.mutable = true;
@@ -29,7 +29,7 @@ unit attack(Hero[0] this, Hero[0] target)
     target.life = 0;
     target.dead = true;
   }
-  pack(target);
+  pack(target, Hero);
   assert this.life >= 0;
 }
 

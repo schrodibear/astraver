@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.33 2007-06-18 15:21:45 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.34 2007-06-22 15:16:30 bardou Exp $ i*)
 
 {
   open Jc_ast
@@ -134,6 +134,7 @@ rule token = parse
   | "with"                  { WITH }
   | "\\forall"              { BSFORALL }
   | "\\exists"              { BSEXISTS }
+  | "\\mutable"             { BSMUTABLE }
   | "\\nothing"             { BSNOTHING }
   | "\\offset_max"          { BSOFFSET_MAX }
   | "\\offset_min"          { BSOFFSET_MIN }

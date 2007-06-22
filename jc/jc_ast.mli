@@ -92,6 +92,7 @@ type pexpr_node =
   | JCPErange of pexpr * pexpr
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
+  | JCPEmutable of pexpr * identifier option
 
 and pexpr =
     {
@@ -125,8 +126,8 @@ type pstatement_node =
   | JCPSlabel of label * pstatement
   | JCPStry of pstatement * (identifier * string * pstatement) list * pstatement
   | JCPSthrow of identifier * pexpr option
-  | JCPSpack of pexpr
-  | JCPSunpack of pexpr
+  | JCPSpack of pexpr * identifier option
+  | JCPSunpack of pexpr * identifier option
   | JCPSswitch of pexpr * (pexpr option list * pstatement list) list
 
 and pstatement = 
@@ -230,6 +231,7 @@ type tassertion_node =
   | JCTAinstanceof of tterm * struct_info
   | JCTAbool_term of tterm
   | JCTAif of tterm * tassertion * tassertion
+  | JCTAmutable of tterm * struct_info * struct_info option
 
 and tassertion =
     {
@@ -297,8 +299,8 @@ type tstatement_node =
   | JCTStry of 
       tstatement * (exception_info * var_info * tstatement) list * tstatement
   | JCTSthrow of exception_info * texpr option
-  | JCTSpack of struct_info * texpr
-  | JCTSunpack of struct_info * texpr
+  | JCTSpack of struct_info * texpr * struct_info
+  | JCTSunpack of struct_info * texpr * struct_info
   | JCTSswitch of texpr * (texpr option list * tstatement list) list
 
 and tstatement = 
@@ -376,6 +378,7 @@ type assertion_node =
   | JCAinstanceof of term * struct_info
   | JCAbool_term of term
   | JCAif of term * assertion * assertion
+  | JCAmutable of term * struct_info * struct_info option
 
 and assertion =
     {
@@ -445,8 +448,8 @@ type statement_node =
   | JCStry of statement 
       * (exception_info * var_info option * statement) list * statement
   | JCSthrow of exception_info * expr option
-  | JCSpack of struct_info * expr
-  | JCSunpack of struct_info * expr
+  | JCSpack of struct_info * expr * struct_info
+  | JCSunpack of struct_info * expr * struct_info
 
 and statement = 
     {

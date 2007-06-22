@@ -173,6 +173,7 @@ let rec assertion fmt a =
 	  l;
 	fprintf fmt ")@]"
     | JCTAfalse -> fprintf fmt "false"
+    | JCTAmutable _ -> assert false (* TODO *)
 
 let rec location_set fmt = function
   | JCTLSvar vi-> 
@@ -274,8 +275,8 @@ let rec statement fmt s =
   match s.jc_tstatement_node with
     | JCTSreturn (t,e) ->
 	fprintf fmt "return %a;@\n" expr e
-    | JCTSunpack (_, _) -> assert false (* TODO *) 
-    | JCTSpack (_, _) -> assert false (* TODO *) 
+    | JCTSunpack (_, _, _) -> assert false (* TODO *) 
+    | JCTSpack (_, _, _) -> assert false (* TODO *) 
     | JCTSthrow (_, _) -> assert false (* TODO *) 
     | JCTStry (_, _, _) -> assert false (* TODO *) 
     | JCTSgoto lab -> 

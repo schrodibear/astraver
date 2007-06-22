@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.52 2007-06-22 12:47:00 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.53 2007-06-22 15:16:30 bardou Exp $ */
 
 %{
 
@@ -94,8 +94,8 @@
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
-/* \forall \exists \offset_max \offset_min \old \result  */
-%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT 
+/* \forall \exists \offset_max \offset_min \old \result \mutable */
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT BSMUTABLE
 
 /* \nothing */
 %token BSNOTHING
@@ -607,6 +607,10 @@ expression:
 */
 | expression DOTDOT expression
     { locate_expr (JCPErange($1,$3)) }
+| BSMUTABLE LPAR expression COMMA identifier RPAR
+    { locate_expr (JCPEmutable($3, Some $5)) }
+| BSMUTABLE LPAR expression RPAR
+    { locate_expr (JCPEmutable($3, None)) }
 ;
 
 identifier_list: 
@@ -762,10 +766,14 @@ jump_statement:
 ;
 
 pack_statement:
+| PACK LPAR expression COMMA identifier RPAR SEMICOLON
+    { locate_statement (JCPSpack ($3, Some $5)) }
 | PACK LPAR expression RPAR SEMICOLON
-    { locate_statement (JCPSpack $3 ) }
+    { locate_statement (JCPSpack ($3, None)) }
+| UNPACK LPAR expression COMMA identifier RPAR SEMICOLON
+    { locate_statement (JCPSunpack ($3, Some $5)) }
 | UNPACK LPAR expression RPAR SEMICOLON
-    { locate_statement (JCPSunpack $3 ) }
+    { locate_statement (JCPSunpack ($3, None)) }
 ;
 
 statement: 

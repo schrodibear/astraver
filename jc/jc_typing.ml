@@ -74,6 +74,13 @@ let structs_table = Hashtbl.create 97
 let mutable_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
 let committed_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
 
+let logic_functions_table = Hashtbl.create 97
+let logic_functions_env = Hashtbl.create 97
+let functions_table = Hashtbl.create 97
+let functions_env = Hashtbl.create 97
+let variables_table = Hashtbl.create 97
+let variables_env = Hashtbl.create 97
+
 let field_tag_counter = ref 0
 
 let create_mutable_field id =
@@ -161,14 +168,6 @@ let is_pointer_type t =
     | JCTnull -> true
     | JCTpointer _ -> true
     | _ -> false
-
-
-let logic_functions_table = Hashtbl.create 97
-let logic_functions_env = Hashtbl.create 97
-let functions_table = Hashtbl.create 97
-let functions_env = Hashtbl.create 97
-let variables_table = Hashtbl.create 97
-let variables_env = Hashtbl.create 97
 
 
 let rec find_field_struct loc st allow_mutable = function
@@ -575,6 +574,8 @@ let rec term env e =
 	  assert (is_numeric t1 && is_numeric t2);
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative t, JCTTrange(term_coerce t1 t e1, term_coerce t2 t e2)
+      | JCPEmutable(e, t) ->
+	  assert false (* TODO *)
 	    
   in { jc_tterm_node = te;
        jc_tterm_type = t;
@@ -787,6 +788,17 @@ let rec assertion env e =
       | JCPEalloc _ | JCPEfree _ ->
 	  typing_error e.jc_pexpr_loc 
 	    "memory (de-)allocation not allowed as logic term"
+      | JCPEmutable(e, t) ->
+	  let te = term env e in
+	  let st = match t with
+	    | Some t -> Some (find_struct_info t.jc_identifier_loc t.jc_identifier_name)
+	    | None -> None
+	  in
+	  let est = match te.jc_tterm_type with
+	    | JCTpointer(est, _, _) -> est
+	    | _ -> typing_error e.jc_pexpr_loc "pointer expression expected"
+	  in
+	  JCTAmutable(te, est, st)
 
   in { jc_tassertion_node = te;
        jc_tassertion_loc = e.jc_pexpr_loc }
@@ -1132,6 +1144,8 @@ let rec expr env e =
       | JCPEold _ 
       | JCPErange _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
+      | JCPEmutable(e, t) ->
+	  assert false (* TODO *)
 
   in { jc_texpr_node = te; 
        jc_texpr_type = t;
@@ -1260,20 +1274,28 @@ let rec statement env s =
       | JCPSexpr e -> 
 	  let te = expr env e in JCTSexpr te
       | JCPSblock l -> make_block (statement_list env l)
-      | JCPSpack e ->
-	  let te = expr env e in 
+      | JCPSpack (e, t) ->
+	  let te = expr env e in
 	  begin match te.jc_texpr_type with
-	    | JCTpointer(st,_,_) ->
-		JCTSpack(st,te)
+	    | JCTpointer(st, _, _) ->
+		let as_t = match t with
+		  | Some t -> find_struct_info t.jc_identifier_loc t.jc_identifier_name
+		  | None -> st
+		in
+		JCTSpack(st, te, as_t)
 	    | _ ->
 		typing_error s.jc_pstatement_loc 
 		  "only structures can be packed"
 	  end
-      | JCPSunpack e ->
+      | JCPSunpack (e, t) ->
 	  let te = expr env e in 
 	  begin match te.jc_texpr_type with
-	    | JCTpointer(st,_,_) ->
-		JCTSunpack(st,te)
+	    | JCTpointer(st, _, _) ->
+		let from_t = match t with
+		  | Some t -> find_struct_info t.jc_identifier_loc t.jc_identifier_name
+		  | None -> st
+		in
+		JCTSunpack(st, te, from_t)
 	    | _ ->
 		typing_error s.jc_pstatement_loc 
 		  "only structures can be unpacked"
@@ -1402,6 +1424,7 @@ let rec location_set env e =
     | JCPEconst _
     | JCPErange (_,_)
     | JCPEalloc (_,_)
+    | JCPEmutable _ (* TODO ? *)
     | JCPEfree _ -> assert false
 
 let location env e =
@@ -1439,6 +1462,7 @@ let location env e =
     | JCPEconst _ 
     | JCPErange (_,_)
     | JCPEalloc (_,_)
+    | JCPEmutable _ (* TODO ? *)
     | JCPEfree _ ->
 	typing_error e.jc_pexpr_loc "invalid memory location"
 

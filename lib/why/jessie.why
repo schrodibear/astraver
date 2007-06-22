@@ -208,6 +208,8 @@ parameter downcast_ :
   't pointer 
   { result=p }
 
+logic bottom_tag: 'a tag_id
+
 
 (*******************
 
@@ -252,14 +254,14 @@ logic lsr : int,int -> int
 
 **********************)
 
-parameter alloc_parameter : a:'t alloc_table ref -> mut:('t,bool) memory ref ->
+parameter alloc_parameter : a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
   { n > 0 }
   't pointer 
   reads mut, com
   writes a, at
   { offset_min(a,result) = 0 and offset_max(a,result) = n-1 
-    and instanceof(at,result,s) and select(mut,result) = true 
+    and instanceof(at,result,s) and select(mut,result) = bottom_tag 
     and select(com,result) = false }
 
 parameter free_parameter : a:'t alloc_table ref -> p:'t pointer -> 

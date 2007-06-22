@@ -158,11 +158,11 @@ let make_decls loc sl tl =
 let make_return loc t e =
   make_node loc (JCSreturn (t,e))
 
-let make_pack loc si e =
-  make_node loc (JCSpack (si, e))
+let make_pack loc si e as_t =
+  make_node loc (JCSpack (si, e, as_t))
 
-let make_unpack loc si e =
-  make_node loc (JCSunpack (si, e))
+let make_unpack loc si e from_t =
+  make_node loc (JCSunpack (si, e, from_t))
 
 (* statements on the typed AST, not the normalized AST *)
 
@@ -596,13 +596,13 @@ and statement s =
 	  (make_decls loc (sl @ [throw_stat]) tl).jc_statement_node
       | JCTSthrow (ei, None) ->
 	  JCSthrow (ei, None)
-      | JCTSpack (si, e) ->
+      | JCTSpack (si, e, as_t) ->
 	  let (sl,tl),e = expr e in
-	  let pack_stat = make_pack loc si e in
+	  let pack_stat = make_pack loc si e as_t in
 	  (make_decls loc (sl @ [pack_stat]) tl).jc_statement_node
-      | JCTSunpack (si, e) ->
+      | JCTSunpack (si, e, from_t) ->
 	  let (sl,tl),e = expr e in
-	  let unpack_stat = make_unpack loc si e in
+	  let unpack_stat = make_unpack loc si e from_t in
 	  (make_decls loc (sl @ [unpack_stat]) tl).jc_statement_node
       | JCTSswitch (e, csl) ->
 	  let (sl,tl),e = expr e in
@@ -692,6 +692,8 @@ and assertion a =
 	  JCAbool_term (term t)
       | JCTAif (t, at, af) ->
 	  JCAif (term t, assertion at, assertion af)
+      | JCTAmutable (t, st, v) ->
+	  JCAmutable (term t, st, v)
 
   in { jc_assertion_node = na;
        jc_assertion_loc =  loc }
@@ -810,8 +812,8 @@ let statement s =
 	| JCSassert _ 
 	| JCSreturn _ 
 	| JCSthrow (_, _)
-	| JCSpack (_, _)
-	| JCSunpack (_, _) as node -> node
+	| JCSpack (_, _, _)
+	| JCSunpack (_, _, _) as node -> node
 	| JCSdecl (vi, eo, s) ->
 	    JCSdecl (vi, eo, link_stat s)
 	| JCSif (e, st, sf) ->

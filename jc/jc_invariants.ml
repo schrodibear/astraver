@@ -5,6 +5,7 @@ open Jc_ast
 open Output
 
 (* other modifications for this extension can be found in:
+     ast, typing, norm, interp: about pack / unpack, and mutable
      jc_main.ml
        phase 6
        production phase 5
@@ -12,16 +13,13 @@ open Output
        function tr_fun: call to "make_assume_all_assocs"
        function statement
          JCSassign_heap: call to "make_assume_field_assoc"
-         JCSunpack
-         JCSpack
      jc_typing.ml
        hashtbl mutable_fields_table
        hashtbl committed_fields_table
        function create_mutable_field
+       function create_structure_tag
        function find_field_struct: "mutable" and "committed" cases (and the parameter allow_mutable)
        function decl: JCPDstructtype: call to create_mutable_field
-     jc_effect.ml
-       pack & unpack effects
 *)
 
 (********)
@@ -71,7 +69,7 @@ let memory_type st_type f_type = {
   logic_type_name = "memory";
   logic_type_args = [
     simple_logic_type st_type;
-    simple_logic_type f_type;
+    f_type;
   ];
 }
 
@@ -79,6 +77,13 @@ let pointer_type st_type = {
   logic_type_name = "pointer";
   logic_type_args = [
     simple_logic_type st_type;
+  ];
+}
+
+let tag_type st = {
+  logic_type_name = "tag_id";
+  logic_type_args = [
+    simple_logic_type st.jc_struct_info_root;
   ];
 }
 
@@ -176,7 +181,9 @@ let rec assertion this p =
     | JCAimplies (p1, p2) -> assertion this p1; assertion this p2
     | JCArelation (t1,_, t2) -> term this t1; term this t2
     | JCAand l | JCAor l -> List.iter (assertion this) l
-
+    | JCAmutable _ ->
+	Jc_typing.typing_error p.jc_assertion_loc
+	  "\\mutable is not allowed in structure invariant"
 
 let check invs =
   List.iter
@@ -222,6 +229,7 @@ let rec assertion_memories aux a = match a.jc_tassertion_node with
   | JCTAinstanceof(t, _)
   | JCTAbool_term t -> term_memories aux t
   | JCTAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
+  | JCTAmutable(t, _, _) -> term_memories aux t
 
 (* Returns (as a StringSet.t) every structure name that can be reach from st.
 Assumes the structures whose name is in acc have already been visited
@@ -298,7 +306,7 @@ let assoc_declaration =
     false,
     "assoc",
     [ "", program_point_type;
-      "", memory_type "'a" "'b" ],
+      "", memory_type "'a" (simple_logic_type "'b") ],
     prop_type)
 
 let make_assoc pp m =
@@ -367,34 +375,37 @@ let make_assume_all_assocs pp params =
 (* mutable *)
 (***********)
 
-let mutable_memory_type struct_name =
-  memory_type struct_name "bool"
+let mutable_memory_type st =
+  memory_type st.jc_struct_info_root (tag_type st)
 
-let committed_memory_type struct_name =
-  memory_type struct_name "bool"
+let committed_memory_type st =
+  memory_type st.jc_struct_info_root (simple_logic_type "bool")
 
 let mutable_declaration st acc =
   if st.jc_struct_info_parent = None then
+    (* mutable_T: T tag_id *)
     Param(
       false,
       mutable_name st.jc_struct_info_name,
-      Ref_type(Base_type (mutable_memory_type st.jc_struct_info_name))
-    )::Param(
+      Ref_type(Base_type (mutable_memory_type st)))
+    (* committed_T: bool *)
+    ::Param(
       false,
       committed_name st.jc_struct_info_name,
-      Ref_type(Base_type (committed_memory_type st.jc_struct_info_name))
-    )::acc
+      Ref_type(Base_type (committed_memory_type st)))
+    ::acc
   else
     acc
 
 let assert_mutable e fi =
-  let mutable_name = mutable_name fi.jc_field_info_root in
+(*  let mutable_name = mutable_name fi.jc_field_info_root in*)
   Assert(
-    LPred(
+(* TODO    LPred(
       "eq",
       [ LApp("select", [LVar mutable_name; e]);
 	LConst(Prim_bool true) ]
-    ),
+    ), *)
+    LTrue,
     Void
   )
 
@@ -416,7 +427,7 @@ let invariant_axiom st acc (li, a) =
   let pp_ty = simple_logic_type "int" in
 
   (* assoc memories with program point => not this.mutable => this.invariant *)
-  let mutable_ty = mutable_memory_type st.jc_struct_info_root in
+  let mutable_ty = mutable_memory_type st in
   let mutable_is_false =
     LPred(
       "eq",
@@ -478,10 +489,11 @@ let assume_invariant st (li, _) =
   (* not this.mutable => this.invariant *)
   let mutable_name = mutable_name st.jc_struct_info_root in
   let mutable_is_false =
-    LPred(
+    LTrue in
+(* TODO   LPred(
       "eq",
       [ LConst(Prim_bool false);
-	LApp("select", [LVar mutable_name; LVar this]) ]) in
+	LApp("select", [LVar mutable_name; LVar this]) ]) in*)
   let invariant = make_logic_pred_call li [LVar this] in
   let assume_impl = LImpl(mutable_is_false, invariant) in
 
@@ -607,11 +619,11 @@ let make_components_precond this st reads =
        let mutable_name = mutable_name si.jc_struct_info_name in
        let committed_name = committed_name si.jc_struct_info_name in
        let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
-       (LPred(
+(* TODO       (LPred(
 	 "eq",
 	 [ LApp("select", [LVar mutable_name; this_field]);
 	   LConst(Prim_bool false) ]))
-       ::(LPred(
+       ::*)(LPred(
 	    "eq",
 	    [ LApp("select", [LVar committed_name; this_field]);
 	      LConst(Prim_bool false) ]))
@@ -624,50 +636,60 @@ let make_components_precond this st reads =
 
 let pack_declaration st acc =
   let this = "this" in
+  let this_type = pointer_type st.jc_struct_info_root in
+  let tag = "tag" in
+  let tag_type = tag_type st in
   let name = st.jc_struct_info_root in
   let mutable_name = mutable_name name in
-  let struct_type = pointer_type st.jc_struct_info_root in
   let inv, reads = invariant_for_struct (LVar this) st in
   let writes = StringSet.empty in
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes true in
   let components_pre, reads = make_components_precond (LVar this) st reads in
   let reads = StringSet.add mutable_name reads in
   let writes = StringSet.add mutable_name writes in
+  let requires =
+    make_and_list [
+(* TODO     (LPred(
+	 "eq",
+	 [ LConst(Prim_bool true);
+	   LApp("select", [LVar mutable_name; LVar this]) ]));*)
+      inv;
+      components_pre
+    ]
+  in
+  let ensures =
+(* TODO    make_and
+      (LPred(
+	 "eq",
+	 [ LVar mutable_name;
+	   LApp(
+	     "store",
+	     [ LVarAtLabel(mutable_name, "");
+	       LVar this;
+	       LConst(Prim_bool false) ])]))*)
+      components_post
+  in
+  let annot_type =
+    Annot_type(
+      requires,
+      Base_type (simple_logic_type "unit"),
+      StringSet.elements reads,
+      StringSet.elements writes,
+      ensures,
+      []
+    )
+  in
   if st.jc_struct_info_parent = None then
     Param(
       false,
       "pack_"^st.jc_struct_info_root,
       Prod_type(
 	this,
-	Base_type (struct_type),
-	Annot_type(
-	  (* requires *)
-	  make_and_list [
-	    (LPred(
-	       "eq",
-	       [ LConst(Prim_bool true);
-		 LApp("select", [LVar mutable_name; LVar this]) ]));
-	    inv;
-	    components_pre
-	  ],
-	  (* the function actually does nothing *)
-	  Base_type (simple_logic_type "unit"),
-	  (* reads *)
-	  StringSet.elements reads,
-	  (* writes *)
-	  StringSet.elements writes,
-	  (* ensures *)
-	  make_and
-	    (LPred(
-	       "eq",
-	       [ LVar mutable_name;
-		 LApp(
-		   "store",
-		   [ LVarAtLabel(mutable_name, "");
-		     LVar this;
-		     LConst(Prim_bool false) ])]))
-	    components_post,
-	  []
+	Base_type this_type,
+	Prod_type(
+	  tag,
+	  Base_type tag_type,
+	  annot_type
 	)
       )
     )::acc
@@ -676,50 +698,64 @@ let pack_declaration st acc =
 
 let unpack_declaration st acc =
   let this = "this" in
+  let this_type = pointer_type st.jc_struct_info_root in
+  let tag = "tag" in
+  let tag_type = tag_type st in
   let name = st.jc_struct_info_root in
   let mutable_name = mutable_name name in
   let committed_name = committed_name name in
-  let struct_type = pointer_type st.jc_struct_info_root in
   let reads = StringSet.singleton mutable_name in
   let writes = StringSet.singleton mutable_name in
   let reads = StringSet.add committed_name reads in
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes false in
+  let requires =
+    make_and
+(*      (LPred(
+	 "eq",
+	 [ LConst(Prim_bool false);
+	   LApp("select", [LVar mutable_name; LVar this]); ]))*)
+      (LPred(
+	 "eq",
+	 [ LVar tag;
+	   LApp("select", [LVar mutable_name; LVar this]) ]))
+      (LPred(
+	 "eq",
+	 [ LConst(Prim_bool false);
+	   LApp("select", [LVar committed_name; LVar this]) ]))
+  in
+  let ensures =
+(* TODO    make_and
+      (LPred(
+	 "eq",
+	 [ LVar mutable_name;
+	   LApp(
+	     "store",
+	     [ LVarAtLabel(mutable_name, "");
+	       LVar this;
+	       LConst(Prim_bool true) ])])) *)
+      components_post
+  in
+  let annot_type =
+    Annot_type(
+      requires,
+      Base_type (simple_logic_type "unit"),
+      StringSet.elements reads,
+      StringSet.elements writes,
+      ensures,
+      []
+    )
+  in
   if st.jc_struct_info_parent = None then
     Param(
       false,
       "unpack_"^st.jc_struct_info_root,
       Prod_type(
 	this,
-	Base_type (struct_type),
-	Annot_type(
-	  (* requires *)
-	  make_and
-	    (LPred(
-	       "eq",
-	       [ LConst(Prim_bool false);
-		 LApp("select", [LVar mutable_name; LVar this]); ]))
-	    (LPred(
-	       "eq",
-	       [ LConst(Prim_bool false);
-		 LApp("select", [LVar committed_name; LVar this]); ])),
-	  (* the function actually does nothing *)
-	  Base_type (simple_logic_type "unit"),
-	  (* reads *)
-	  StringSet.elements reads,
-	  (* writes *)
-	  StringSet.elements writes,
-	  (* ensures *)
-	  make_and
-	    (LPred(
-	       "eq",
-	       [ LVar mutable_name;
-		 LApp(
-		   "store",
-		   [ LVarAtLabel(mutable_name, "");
-		     LVar this;
-		     LConst(Prim_bool true) ])]))
-	    components_post,
-	  []
+	Base_type this_type,
+	Prod_type(
+	  tag,
+	  Base_type tag_type,
+	  annot_type
 	)
       )
     )::acc

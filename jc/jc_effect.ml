@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.40 2007-06-20 08:49:42 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.41 2007-06-22 15:16:30 bardou Exp $ *)
 
 
 open Jc_env
@@ -175,6 +175,7 @@ let rec assertion ef a =
     | JCAiff (a1, a2)
     | JCAimplies (a1, a2) -> assertion (assertion ef a1) a2
     | JCAand al | JCAor al -> List.fold_left assertion ef al
+    | JCAmutable (t, _, _) -> term ef t
 
 (********************
 
@@ -234,7 +235,7 @@ let rec statement ef s =
 	else 
 	  expr ef e
     | JCSreturn(_,e) -> expr ef e
-    | JCSpack(st, e) ->
+    | JCSpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Assert the invariants of the structure => need the reads of the invariants *)
 	let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
@@ -264,7 +265,7 @@ let rec statement ef s =
 	let ef = add_mutable_writes ef st.jc_struct_info_root in
         (* And that's all *)
 	ef
-    | JCSunpack(st, e) ->
+    | JCSunpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Assert not mutable => need mutable as reads *)
 	let ef = add_mutable_reads ef st.jc_struct_info_root in
