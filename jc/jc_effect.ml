@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.42 2007-06-22 15:48:55 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.43 2007-06-25 15:03:02 bardou Exp $ *)
 
 
 open Jc_env
@@ -175,7 +175,8 @@ let rec assertion ef a =
     | JCAiff (a1, a2)
     | JCAimplies (a1, a2) -> assertion (assertion ef a1) a2
     | JCAand al | JCAor al -> List.fold_left assertion ef al
-    | JCAmutable (t, _, _) -> term ef t
+    | JCAmutable (t, st, _) ->
+	term (add_mutable_effect ef st.jc_struct_info_root) t
 
 (********************
 

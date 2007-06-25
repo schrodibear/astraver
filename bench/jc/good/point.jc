@@ -68,6 +68,7 @@ unit move(Point[0] this, integer dx, integer dy)
 }
 	
 unit test1(ColoredPoint[0] p) 
+    requires \mutable(p);
   behavior ok:
     ensures p.x == 10 && p.y == 20 && p.col == 99;
 {

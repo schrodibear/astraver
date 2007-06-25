@@ -179,7 +179,7 @@ let main () =
 	let d_inv = d_funs in
 	(* production phase 5.1 : "assoc" declaration *)
 	(*let d_inv = Jc_invariants.assoc_declaration::d_funs in *)
-	(* production phase 5.2 : "mutable" declaration *)
+	(* production phase 5.2 : "mutable" and "committed" declarations *)
 	let d_inv =
           Hashtbl.fold
             (fun _ (st, _) acc ->

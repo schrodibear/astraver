@@ -84,20 +84,22 @@ let variables_env = Hashtbl.create 97
 let field_tag_counter = ref 0
 
 let create_mutable_field id =
-  incr field_tag_counter;
+(*  incr field_tag_counter;
   let fi = {
     jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = "mutable_"^id;
     jc_field_info_type = boolean_type;
     jc_field_info_root = id;
+    jc_field_info_struct = id;
   } in
-  Hashtbl.add mutable_fields_table id fi;
+  Hashtbl.add mutable_fields_table id fi;*)
   incr field_tag_counter;
   let fi = {
     jc_field_info_tag = !field_tag_counter;
     jc_field_info_name = "committed_"^id;
     jc_field_info_type = boolean_type;
     jc_field_info_root = id;
+    jc_field_info_struct = id;
   } in
   Hashtbl.add committed_fields_table id fi
 
@@ -1515,7 +1517,7 @@ let assertion_true =
   { jc_tassertion_node = JCTAtrue;
     jc_tassertion_loc = Loc.dummy_position }
 
-let field root (t,id) =
+let field st root (t,id) =
   let ty = type_type t in
   incr field_tag_counter;
   let fi = {
@@ -1523,6 +1525,7 @@ let field root (t,id) =
     jc_field_info_name = id;
     jc_field_info_type = ty;
     jc_field_info_root = root;
+    jc_field_info_struct = st;
   }
   in (id,fi)
 
@@ -1649,7 +1652,7 @@ let rec decl d =
 	(* adding structure name in global environment before typing 
 	   the fields, because of possible recursive definition *)
 	let root,struct_info = add_typedecl d (id,parent) in
-	let env = List.map (field root) fields in
+	let env = List.map (field struct_info.jc_struct_info_name root) fields in
 	struct_info.jc_struct_info_fields <- env;
 	(* declare invariants as logical functions *)
 	let invariants =
@@ -1679,7 +1682,7 @@ let rec decl d =
 	List.iter (fun d -> match d.jc_pdecl_node with
 		     | JCPDstructtype(id,parent,fields,_) ->
 			 let root,struct_info = add_typedecl d (id,parent) in
-			 let env = List.map (field root) fields in
+			 let env = List.map (field struct_info.jc_struct_info_name root) fields in
 			 struct_info.jc_struct_info_fields <- env;
 			 Hashtbl.replace structs_table id (struct_info,[])
 		     | _ -> assert false

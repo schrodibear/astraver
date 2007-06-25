@@ -741,7 +741,7 @@ let tr_struct st acc =
 	Param(false,r ^ "_tag_table",tag_type) :: acc
     | Some p ->
 	(* axiom for instance_of *)
-	let name = 
+	let name =
 	  st.jc_struct_info_name ^ "_instanceof_" ^ p.jc_struct_info_name
 	in
 	let root = simple_logic_type st.jc_struct_info_root in
@@ -765,7 +765,36 @@ let tr_struct st acc =
 				       LVar "p";
 				       LVar (tag_name p)]))))
 	in
-	Axiom(name,f)::acc
+	let acc = 
+	  Axiom(name,f)::acc
+	in
+	(* axiom for subtag *)
+	let name =
+	  st.jc_struct_info_name ^ "_subtag_" ^ p.jc_struct_info_name
+	in
+	let tag_type =
+	  { logic_type_name = "tag_id";
+	    logic_type_args = [root] }
+	in
+	let f =
+	  LForall(
+	    "a", root_tag_table,
+	    LForall(
+	      "t", tag_type,
+	      LImpl(
+		LPred("subtag",
+		      [LVar "a";
+		       LVar "t";
+		       LVar (tag_name st)]),
+		LPred("subtag",
+		      [LVar "a";
+		       LVar "t";
+		       LVar (tag_name p)])
+	      )
+	    )
+	  )
+	in
+	Axiom(name, f)::acc
 
 (*************
 locations

@@ -188,6 +188,13 @@ type 't tag_id
 
 logic instanceof : 't tag_table, 't pointer, 't tag_id -> prop
 
+logic subtag: 't tag_table, 't tag_id, 't tag_id -> prop
+
+axiom subtag_refl:
+  forall a: 't tag_table.
+  forall t: 't tag_id.
+    subtag(a, t, t)
+
 parameter instanceof_ : 
   a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
   { } 
