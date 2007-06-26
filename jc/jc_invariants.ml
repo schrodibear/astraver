@@ -83,17 +83,17 @@ let pointer_type st_type = {
   ];
 }
 
-let tag_type st = {
+let tag_type root = {
   logic_type_name = "tag_id";
   logic_type_args = [
-    simple_logic_type st.jc_struct_info_root;
+    simple_logic_type root;
   ];
 }
 
-let tag_table_type st = {
+let tag_table_type root = {
   logic_type_name = "tag_table";
   logic_type_args = [
-    simple_logic_type st.jc_struct_info_root
+    simple_logic_type root
   ]
 }
 
@@ -140,8 +140,25 @@ let mutable_name root_structure_name =
 let committed_name root_structure_name =
   "committed_"^root_structure_name
 
+let fully_packed_name root =
+  "fully_packed_"^root
+
+let tag_table_name root =
+  root^"_tag_table"
+
 let make_subtag root t u =
   LPred("subtag", [ LVar(root^"_tag_table"); t; u ])
+
+let fully_packed root e =
+  LPred(
+    "fully_packed",
+    [ LVar (tag_table_name root);
+      LVar (mutable_name root);
+      e ])
+
+let type_structure = function
+  | JCTpointer(st, _, _) -> st
+  | _ -> failwith "type_structure"
 
 (*let mutable_instance_of_name root_structure_name =
   (mutable_name root_structure_name)^"_instance_of"*)
@@ -396,11 +413,11 @@ let make_assume_all_assocs pp params =
 (* mutable *)
 (***********)
 
-let mutable_memory_type st =
-  memory_type st.jc_struct_info_root (tag_type st)
+let mutable_memory_type root =
+  memory_type root (tag_type root)
 
-let committed_memory_type st =
-  memory_type st.jc_struct_info_root (simple_logic_type "bool")
+let committed_memory_type root =
+  memory_type root (simple_logic_type "bool")
 
 (* instanceof doesn't take two tags as parameters, so "mutable <: tag" doesn't make sense.
    Instead, we define:
@@ -445,19 +462,44 @@ let mutable_instance_of_app root e tag =
       e;
       LVar tag ])*)
 
+(*let fully_packed_definition root =
+  let mutable_name = mutable_name root in
+  let this = "this" in
+  let tag = "tag" in
+  let tag_table = tag_table_name root in
+  Predicate(
+    false,
+    fully_packed_name root,
+    [ tag_table, tag_table_type "'a";
+      mutable_name, mutable_memory_type "'a";
+      this, pointer_type "'a" ],
+    LForall(
+      tag, tag_type root,
+      LImpl(
+	LPred(
+	   "instanceof",
+	   [ LVar tag_table;
+	     LVar this;
+	     LVar tag ]),
+	LPred(
+	   "subtag",
+	   [ LVar tag_table;
+	     LApp("select", [ LVar mutable_name; LVar this ]);
+	     LVar tag ]))))*)
+
 let mutable_declaration st acc =
+  let root = st.jc_struct_info_root in
   if st.jc_struct_info_parent = None then
     (* mutable_T: T tag_id *)
     Param(
       false,
       mutable_name st.jc_struct_info_name,
-      Ref_type(Base_type (mutable_memory_type st)))
+      Ref_type(Base_type (mutable_memory_type root)))
     (* committed_T: bool *)
     ::Param(
       false,
       committed_name st.jc_struct_info_name,
-      Ref_type(Base_type (committed_memory_type st)))
-(*    ::(mutable_instance_of_definition st)*)
+      Ref_type(Base_type (committed_memory_type root)))
     ::acc
   else
     acc
@@ -470,7 +512,6 @@ let assert_mutable e fi =
   let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
   let mutable_name = mutable_name st.jc_struct_info_root in
   let e_mutable = LApp("select", [LVar mutable_name; e]) in
-  (* e.mutable = bottom_tag *)
   let btag =
     LPred(
       "eq",
@@ -502,7 +543,7 @@ let invariant_axiom st acc (li, a) =
   let pp_ty = simple_logic_type "int" in
 
   (* assoc memories with program point => not this.mutable => this.invariant *)
-  let mutable_ty = mutable_memory_type st in
+  let mutable_ty = mutable_memory_type st.jc_struct_info_root in
   let mutable_is_false =
     LPred(
       "eq",
@@ -582,6 +623,7 @@ let assume_invariant st (li, _) =
   (* reads *)
   let reads = List.map fst params in
   let reads = mutable_name::reads in
+  let reads = (tag_table_name st.jc_struct_info_root)::reads in
 
   make_assume reads assume
 
@@ -699,16 +741,16 @@ let make_components_precond this st reads =
        let mutable_name = mutable_name si.jc_struct_info_name in
        let committed_name = committed_name si.jc_struct_info_name in
        let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
-(* TODO       (LPred(
-	 "eq",
-	 [ LApp("select", [LVar mutable_name; this_field]);
-	   LConst(Prim_bool false) ]))
-       ::*)(LPred(
+       let fi_st = type_structure fi.jc_field_info_type in
+       let reads = StringSet.add (tag_table_name fi_st.jc_struct_info_root) reads in
+       let reads = StringSet.add mutable_name reads in
+       (fully_packed (fi_st.jc_struct_info_root) this_field)
+       ::(LPred(
 	    "eq",
 	    [ LApp("select", [LVar committed_name; this_field]);
 	      LConst(Prim_bool false) ]))
        ::l,
-       StringSet.add mutable_name reads)
+       reads)
     ([], reads)
     (components st)
   in
@@ -718,7 +760,7 @@ let pack_declaration st acc =
   let this = "this" in
   let this_type = pointer_type st.jc_struct_info_root in
   let tag = "tag" in
-  let tag_type = tag_type st in
+  let tag_type = tag_type st.jc_struct_info_root in
   let name = st.jc_struct_info_root in
   let mutable_name = mutable_name name in
   let inv, reads = invariant_for_struct (LVar this) st in
@@ -727,18 +769,20 @@ let pack_declaration st acc =
   let components_pre, reads = make_components_precond (LVar this) st reads in
   let reads = StringSet.add mutable_name reads in
   let writes = StringSet.add mutable_name writes in
+  let reads = StringSet.add (tag_table_name st.jc_struct_info_root) reads in
   let requires =
     make_and_list [
-(* TODO     (LPred(
-	 "eq",
-	 [ LConst(Prim_bool true);
-	   LApp("select", [LVar mutable_name; LVar this]) ]));*)
+      (LPred(
+	 "parenttag",
+	 [ LVar (tag_table_name st.jc_struct_info_root);
+	   LVar tag;
+	   LApp("select", [LVar mutable_name; LVar this]) ]));
       inv;
       components_pre
     ]
   in
   let ensures =
-(* TODO    make_and
+    make_and
       (LPred(
 	 "eq",
 	 [ LVar mutable_name;
@@ -746,7 +790,7 @@ let pack_declaration st acc =
 	     "store",
 	     [ LVarAtLabel(mutable_name, "");
 	       LVar this;
-	       LConst(Prim_bool false) ])]))*)
+	       LVar tag ])]))
       components_post
   in
   let annot_type =
@@ -776,11 +820,12 @@ let pack_declaration st acc =
   else
     acc
 
+(* Contrairement à Boogie, ici on "unpack to S" au lieu de "unpack from T" *)
 let unpack_declaration st acc =
   let this = "this" in
   let this_type = pointer_type st.jc_struct_info_root in
   let tag = "tag" in
-  let tag_type = tag_type st in
+  let tag_type = tag_type st.jc_struct_info_root in
   let name = st.jc_struct_info_root in
   let mutable_name = mutable_name name in
   let committed_name = committed_name name in
@@ -790,10 +835,6 @@ let unpack_declaration st acc =
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes false in
   let requires =
     make_and
-(*      (LPred(
-	 "eq",
-	 [ LConst(Prim_bool false);
-	   LApp("select", [LVar mutable_name; LVar this]); ]))*)
       (LPred(
 	 "eq",
 	 [ LVar tag;
@@ -806,13 +847,13 @@ let unpack_declaration st acc =
   let ensures =
 (* TODO    make_and
       (LPred(
-	 "eq",
+ 	 "eq",
 	 [ LVar mutable_name;
 	   LApp(
 	     "store",
 	     [ LVarAtLabel(mutable_name, "");
 	       LVar this;
-	       LConst(Prim_bool true) ])])) *)
+	       LConst(Prim_bool true) ])]))*)
       components_post
   in
   let annot_type =

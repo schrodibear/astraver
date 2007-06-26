@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.43 2007-06-25 15:03:02 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.44 2007-06-26 14:53:22 bardou Exp $ *)
 
 
 open Jc_env
@@ -252,8 +252,9 @@ let rec statement ef s =
 	  (fun ef (_, fi) ->
 	     match fi.jc_field_info_type with
 	       | JCTpointer(st, _, _) ->
-	           (* Assert fields not mutable => need mutable (of field) as reads *)
+	           (* Assert fields fully mutable => need mutable and tag_table (of field) as reads *)
 		   let ef = add_mutable_reads ef st.jc_struct_info_root in
+		   let ef = add_tag_reads ef st.jc_struct_info_root in
 	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
 		   let ef = add_committed_reads ef st.jc_struct_info_root in
 		   let ef = add_committed_writes ef st.jc_struct_info_root in
@@ -262,8 +263,9 @@ let rec statement ef s =
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
-	(* Change structure mutable => need mutable as reads *)
+	(* Change structure mutable => need mutable and tag_table as reads *)
 	let ef = add_mutable_reads ef st.jc_struct_info_root in
+	let ef = add_tag_reads ef st.jc_struct_info_root in
 	let ef = add_mutable_writes ef st.jc_struct_info_root in
         (* And that's all *)
 	ef

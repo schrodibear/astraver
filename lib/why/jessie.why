@@ -70,32 +70,6 @@ axiom select_store_neq :
 
 (****************************
 
-structure invariants
-
-***************************)
-
-(*
-parameter mutable: 't -> ('t, bool) memory ref
-
-parameter mutable : bool memory ref 
-
-parameter unpack_ : p:'t pointer ->
-  { select(mutable,p) = false }
-  unit
-  reads mutable 
-  writes mutable	
-  { mutable = store(mutable@,p,true) }
-
-parameter pack_ : p:'t pointer ->
-  { select(mutable,p) = true }
-  unit
-  reads mutable 
-  writes mutable	
-  { mutable = store(mutable@,p,false) }
-*)
-
-(****************************
-
 access and update side-effect functions
 
 ***************************)
@@ -190,6 +164,8 @@ logic instanceof : 't tag_table, 't pointer, 't tag_id -> prop
 
 logic subtag: 't tag_table, 't tag_id, 't tag_id -> prop
 
+logic parenttag: 't tag_table, 't tag_id, 't tag_id -> prop
+
 axiom subtag_refl:
   forall a: 't tag_table.
   forall t: 't tag_id.
@@ -216,6 +192,21 @@ parameter downcast_ :
   { result=p }
 
 logic bottom_tag: 'a tag_id
+
+
+(****************************
+
+structure invariants
+
+***************************)
+
+predicate fully_packed(
+  tag_table: 'a tag_table,
+  mutable: ('a, 'a tag_id) memory,
+  this: 'a pointer) =
+    forall tag: 'a tag_id.
+      instanceof(tag_table, this, tag) ->
+      subtag(tag_table, select(mutable, this), tag)
 
 
 (*******************
