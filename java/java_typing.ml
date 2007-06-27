@@ -26,8 +26,10 @@ let get_class id =
   try
     Hashtbl.find class_table id 
   with
-      Not_found -> assert false
+      Not_found -> 
 (*
+assert false
+*)
 	let ci =
 	  { class_info_name = id ;
 	    class_info_fields = [];
@@ -35,7 +37,6 @@ let get_class id =
 	in
 	Hashtbl.add class_table id ci;
 	ci
-*)
 
 let rec type_type ty =
   match ty with
