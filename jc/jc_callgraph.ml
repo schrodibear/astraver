@@ -158,16 +158,7 @@ open Format
 open Pp
 
 let compute_logic_components ltable =  
-  (* numcomp should be returned gy ocamlgraph ! 
-     -> overapproximation with the graph size
-  *)
-  let numcomp = 1+Hashtbl.length ltable in
-  let (scc (* ,numcomp*)) = LogicCallComponents.scc ltable in
-  let tab_comp = Array.make numcomp [] in
-  LogicCallGraph.iter_vertex 
-    (fun f ->
-       let i = scc f in 
-       Array.set tab_comp i (f::(Array.get tab_comp i))) ltable ;
+  let tab_comp = LogicCallComponents.scc_array ltable in
   Jc_options.lprintf "***********************************\n";
   Jc_options.lprintf "Logic call graph: has %d components\n" 
     (Array.length tab_comp);
@@ -187,13 +178,7 @@ let compute_logic_components ltable =
 
 let compute_components table = 
   (* see above *)
-  let numcomp = 1+Hashtbl.length table in
-  let (scc (*,numcomp*)) = CallComponents.scc table in
-  let tab_comp = Array.make numcomp [] in
-  CallGraph.iter_vertex 
-    (fun f ->
-       let i = scc f in 
-       Array.set tab_comp i (f::(Array.get tab_comp i))) table ;
+  let tab_comp = CallComponents.scc_array table in
   Jc_options.lprintf "******************************\n";
   Jc_options.lprintf "Call graph: has %d components\n" (Array.length tab_comp);
   Jc_options.lprintf "******************************\n";
