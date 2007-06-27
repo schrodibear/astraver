@@ -2091,33 +2091,7 @@ fi
 
 #looking for ocamlgraph library
 
-as_ac_File=`echo "ac_cv_file_$OCAMLLIB/ocamlgraph/graph.cmi" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $OCAMLLIB/ocamlgraph/graph.cmi" >&5
-echo $ECHO_N "checking for $OCAMLLIB/ocamlgraph/graph.cmi... $ECHO_C" >&6; }
-if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$OCAMLLIB/ocamlgraph/graph.cmi"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-ac_res=`eval echo '${'$as_ac_File'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  OCAMLGRAPH=yes
-else
-  OCAMLGRAPH=no
-fi
-
-if test "$OCAMLGRAPH" = no ; then
-   as_ac_File=`echo "ac_cv_file_$OCAMLLIB/graph.cmi" | $as_tr_sh`
+as_ac_File=`echo "ac_cv_file_$OCAMLLIB/graph.cmi" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $OCAMLLIB/graph.cmi" >&5
 echo $ECHO_N "checking for $OCAMLLIB/graph.cmi... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -2142,15 +2116,41 @@ else
   OCAMLGRAPH=no
 fi
 
+if test "$OCAMLGRAPH" = no ; then
+   as_ac_File=`echo "ac_cv_file_$OCAMLLIB/ocamlgraph/graph.cmi" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $OCAMLLIB/ocamlgraph/graph.cmi" >&5
+echo $ECHO_N "checking for $OCAMLLIB/ocamlgraph/graph.cmi... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$OCAMLLIB/ocamlgraph/graph.cmi"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  OCAMLGRAPH=yes
+else
+  OCAMLGRAPH=no
+fi
+
    if test "$OCAMLGRAPH" = no ; then
       { { echo "$as_me:$LINENO: error: Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*" >&5
 echo "$as_me: error: Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*" >&2;}
    { (exit 1); exit 1; }; }
    else
-	OCAMLGRAPHLIB=""
+	OCAMLGRAPHLIB="-I +ocamlgraph"
    fi
 else
-   OCAMLGRAPHLIB="-I +ocamlgraph"
+   OCAMLGRAPHLIB=""
 fi
 
 

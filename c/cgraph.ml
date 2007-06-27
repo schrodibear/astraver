@@ -202,16 +202,7 @@ module G = struct
 module SCC = Graph.Components.Make(G)
 
 let find_comp tfiles =
-  (* numcomp should be returned gy ocamlgraph ! 
-     -> overapproximation with the graph size
-  *)
-  let numcomp = 1+List.length tfiles in 
-  let (scc (* ,numcomp*)) = SCC.scc tfiles in
-  let tab_comp = Array.make numcomp [] in
-  G.iter_vertex 
-    (fun f ->
-       let i = scc f in 
-       Array.set tab_comp i (f::(Array.get tab_comp i))) tfiles;
+  let tab_comp = SCC.scc_array tfiles in
   Coptions.lprintf "Call graph by components: @.";
   Array.iteri (fun i l -> Coptions.lprintf "%d: " i;
 		 List.iter (fun f -> Coptions.lprintf "%s " f.fun_name) l;

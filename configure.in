@@ -174,16 +174,16 @@ fi
 
 #looking for ocamlgraph library
 
-AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
+AC_CHECK_FILE($OCAMLLIB/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
 if test "$OCAMLGRAPH" = no ; then
-   AC_CHECK_FILE($OCAMLLIB/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
+   AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
    if test "$OCAMLGRAPH" = no ; then	
       AC_MSG_ERROR(Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*)
    else		  
-	OCAMLGRAPHLIB=""
+	OCAMLGRAPHLIB="-I +ocamlgraph"
    fi
 else
-   OCAMLGRAPHLIB="-I +ocamlgraph"
+   OCAMLGRAPHLIB=""
 fi
 
 
