@@ -122,7 +122,7 @@ let rec ppure_type fmt = function
   | PPTexternal ([t],id,_) -> 
       fprintf fmt "%a %a" ppure_type t gident id
   | PPTexternal (l,id,_) -> fprintf fmt "(%a) %a" 
-      (print_list space ppure_type) l gident id
+      (print_list comma ppure_type) l gident id
 
 let constant fmt = function
   | ConstInt n -> 
@@ -131,6 +131,8 @@ let constant fmt = function
       fprintf fmt "%b" b
   | ConstUnit -> 
       fprintf fmt "void" 
+  | ConstFloat (i,f,"") -> 
+      fprintf fmt "%s.%s" i f
   | ConstFloat (i,f,e) -> 
       fprintf fmt "%s.%se%s" i f e
 
