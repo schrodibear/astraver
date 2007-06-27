@@ -30,7 +30,7 @@ void inverse(int *t, int n) {
 }
 
 /* test */
-
+/***
 int n = 6;
 int t[7] = { 0,2,3,1,6,5,4 };
 
@@ -46,3 +46,4 @@ int main() {
   print(t,n);
 }
 
+***/

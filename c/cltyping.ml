@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.117 2007-05-18 09:29:13 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.118 2007-06-27 08:51:18 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -56,6 +56,10 @@ let option_app f = function Some x -> Some (f x) | None -> None
 
 let sign = function true -> Signed | false -> Unsigned
 
+let retype_typedef = function
+  | Tint _ when not int_overflow_check -> Tint (Signed, ExactInt)
+  | tn -> tn
+
 let rec type_logic_type loc env = function
   | LTvoid -> c_void
   | LTchar _ | LTshort _ | LTint _ | LTlong _ | LTlonglong _ 
@@ -76,7 +80,7 @@ let rec type_logic_type loc env = function
   | LTvar id ->  
       noattr 
 	(try 
-	   (find_typedef id).ctype_node 
+	   retype_typedef (find_typedef id).ctype_node 
 	 with Not_found -> 
 	   if not (Cenv.mem_type id) then error loc "unbound type"; 
 	   Tvar id )

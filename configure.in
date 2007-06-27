@@ -186,6 +186,14 @@ else
    OCAMLGRAPHLIB=""
 fi
 
+# checking ocamlgraph version
+
+AC_MSG_CHECKING(ocamlgraph version)
+if $OCAMLC $OCAMLGRAPHLIB graph.cma config/check_ocamlgraph.ml; then
+   AC_MSG_RESULT(ok)
+else
+   AC_MSG_ERROR(You need ocamlgraph 0.99 or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*)
+fi
 
 # checking for lablgtk2
 AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no)
