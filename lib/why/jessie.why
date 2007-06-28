@@ -163,21 +163,42 @@ predicate not_assigns
 
 **********************)
 
+(*****
+typeof gives the dynamic type of an object.
+
+parenttag is defined by axioms in jc_interp, and defines the hierarchy.
+  parenttag(a, t1, t2) <-> t2 is the immediate superclass of t1
+
+subtag is axiomatized from parenttag, and is the reflexive, transitive
+  closure of parenttag.
+
+instanceof is defined from typeof and subtag.
+*****)
 
 type 't tag_table
 
 type 't tag_id
 
-logic instanceof : 't tag_table, 't pointer, 't tag_id -> prop
-
-logic subtag: 't tag_table, 't tag_id, 't tag_id -> prop
+logic typeof: 't tag_table, 't pointer -> 't tag_id
 
 logic parenttag: 't tag_table, 't tag_id, 't tag_id -> prop
+
+logic subtag: 't tag_table, 't tag_id, 't tag_id -> prop
 
 axiom subtag_refl:
   forall a: 't tag_table.
   forall t: 't tag_id.
     subtag(a, t, t)
+
+axiom subtag_parent:
+  forall a: 't tag_table.
+  forall t1: 't tag_id.
+  forall t2: 't tag_id.
+  forall t3: 't tag_id.
+    subtag(a, t1, t2) -> parenttag(a, t2, t3) -> subtag(a, t1, t3)
+
+predicate instanceof (a: 't tag_table, p: 't pointer, t: 't tag_id) =
+  subtag(a, typeof(a, p), t)
 
 parameter instanceof_ : 
   a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
@@ -212,9 +233,7 @@ predicate fully_packed(
   tag_table: 'a tag_table,
   mutable: ('a, 'a tag_id) memory,
   this: 'a pointer) =
-    forall tag: 'a tag_id.
-      instanceof(tag_table, this, tag) ->
-      subtag(tag_table, select(mutable, this), tag)
+    select(mutable, this) = typeof(tag_table, this)
 
 
 (*******************

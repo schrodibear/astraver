@@ -31,8 +31,8 @@ unit deletePointSet(PointSet[1] ps)
 	ensures \offset_max(ps) < \offset_min(ps);
 {
     integer i;
-    unpack(ps);
-    unpack(ps.set);
+    //    unpack(ps);
+    //    unpack(ps.set);
     free(ps.set);
     free(ps);
 }

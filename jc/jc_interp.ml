@@ -617,12 +617,12 @@ let rec statement ~threats s =
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
+	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in
+	let upd = if threats then append (assert_mutable (LVar tmp1) fi) upd else upd in
         (append
 	   (make_lets
 	      ([ (tmp1, e1') ; (tmp2, coerce e2.jc_expr_loc fi.jc_field_info_type e2.jc_expr_type e2') ])
-	      (append
-		 (assert_mutable (LVar tmp1) fi)
-		 (make_upd ~threats fi (Var tmp1) (Var tmp2))))
+	      upd)
 	   (assume_field_invariants fi))
 (*	   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCSblock l -> statement_list ~threats l
@@ -777,7 +777,7 @@ let tr_struct st acc =
 	Axiom(name, f)::acc
     | Some p ->
 	(* axiom for instance_of *)
-	let name =
+	(*let name =
 	  st.jc_struct_info_name ^ "_instanceof_" ^ p.jc_struct_info_name
 	in
 	let root = simple_logic_type st.jc_struct_info_root in
@@ -803,37 +803,13 @@ let tr_struct st acc =
 	in
 	let acc = 
 	  Axiom(name,f)::acc
-	in
-	(* axiom for subtag *)
-	let name =
-	  st.jc_struct_info_name ^ "_subtag_" ^ p.jc_struct_info_name
-	in
-	let tag_type =
-	  { logic_type_name = "tag_id";
+	in*)
+	(* axiom for parenttag *)
+	let root = simple_logic_type st.jc_struct_info_root in
+	let root_tag_table = 
+	  { logic_type_name = "tag_table";
 	    logic_type_args = [root] }
 	in
-	let f =
-	  LForall(
-	    "a", root_tag_table,
-	    LForall(
-	      "t", tag_type,
-	      LImpl(
-		LPred("subtag",
-		      [LVar "a";
-		       LVar "t";
-		       LVar (tag_name st)]),
-		LPred("subtag",
-		      [LVar "a";
-		       LVar "t";
-		       LVar (tag_name p)])
-	      )
-	    )
-	  )
-	in
-	let acc = 
-	  Axiom(name, f)::acc
-	in
-	(* axiom for parenttag *)
 	let name =
 	  st.jc_struct_info_name ^ "_parenttag_" ^ p.jc_struct_info_name
 	in

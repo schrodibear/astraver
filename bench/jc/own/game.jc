@@ -30,7 +30,7 @@ unit attack(Hero[0] this, Hero[0] target)
     \mutable(this.sword, Sword) && \mutable(target.sword, Sword);
 behavior ok:
   ensures
-    \mutable(target, Hero);
+    life_inv(target);
 {
     unpack(target);
     target.life = target.life - this.sword.damage;
