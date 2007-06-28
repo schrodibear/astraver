@@ -694,10 +694,21 @@ and assertion a =
       | JCTAif (t, at, af) ->
 	  JCAif (term t, assertion at, assertion af)
       | JCTAmutable (t, st, v) ->
-	  JCAmutable (term t, st, v)
+	  JCAmutable (term t, st, tag v)
 
   in { jc_assertion_node = na;
        jc_assertion_loc =  loc }
+
+and tag t =
+  let loc = t.jc_ttag_loc in
+  let tag = match t.jc_ttag_node with
+    | JCTTtag st -> JCTtag st
+    | JCTTbottom -> JCTbottom
+    | JCTTtypeof(t, st) -> JCTtypeof(term t, st)
+  in {
+    jc_tag_node = tag;
+    jc_tag_loc = loc;
+  }
 
 and term t =
   let loc = t.jc_tterm_loc in

@@ -285,9 +285,18 @@ let rec term label oldlabel t =
 	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
 
+let tag label oldlabel = function
+  | JCTtag st -> LVar (st.jc_struct_info_root^"_tag")
+  | JCTbottom -> LVar "bottom_tag"
+  | JCTtypeof(t, st) ->
+      let te = term label oldlabel t in
+      LApp("typeof", [ LVar (st.jc_struct_info_root^"_tag_table"); te ])
+	     
+
 let rec assertion label oldlabel a =
   let fa = assertion label oldlabel 
   and ft = term label oldlabel
+  and ftag = tag label oldlabel
   in
   match a.jc_assertion_node with
     | JCAtrue -> LTrue
@@ -334,20 +343,10 @@ let rec assertion label oldlabel a =
 	let tag = ty.jc_struct_info_root ^ "_tag_table" in
 	LPred("instanceof",
 	      [lvar label tag; ft t; LVar (tag_name ty)])
-    | JCAmutable(t, st, v) ->
-	let hierarchy = match v with
-	  | Some st -> st
-	  | _ -> st
-	in
-	let mutable_field =
-	  LVar (mutable_name hierarchy.jc_struct_info_root) in
-	let tag = match v with
-	  | Some st -> LVar (tag_name st)
-	  | None -> LVar "bottom_tag"
-	in
-	LPred(
-	  "eq",
-	  [ LApp("select", [ mutable_field; ft t ]); tag ])
+    | JCAmutable(te, st, ta) ->
+	let mutable_field = LVar (mutable_name st.jc_struct_info_root) in
+	let tag = ftag ta.jc_tag_node in
+	LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
 
 (****************************
 

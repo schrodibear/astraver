@@ -663,6 +663,30 @@ let make_rel_bin_op loc op e1 e2 =
     | BPimplies -> assert false
     | BPiff -> assert false
 
+let tag env hierarchy t =
+  let check_hierarchy loc st =
+    if st.jc_struct_info_root != hierarchy then
+      typing_error loc
+	"this is in the hierarchy of %s, while it should be in the hierarchy of %s"
+	st.jc_struct_info_root hierarchy
+  in
+  let tt = match t.jc_ptag_node with
+    | JCPTtag id ->
+	let st = find_struct_info id.jc_identifier_loc id.jc_identifier_name in
+	check_hierarchy id.jc_identifier_loc st;
+	JCTTtag st
+    | JCPTbottom -> JCTTbottom
+    | JCPTtypeof tof ->
+	let ttof = term env tof in
+	match ttof.jc_tterm_type with
+	  | JCTpointer(st, _, _) ->
+	      check_hierarchy tof.jc_pexpr_loc st;
+	      JCTTtypeof (ttof, st)
+	  | _ -> typing_error tof.jc_pexpr_loc "pointer expression expected"
+  in {
+    jc_ttag_node = tt;
+    jc_ttag_loc = t.jc_ptag_loc
+  }
 
 let rec assertion env e =
   let te =
@@ -792,15 +816,12 @@ let rec assertion env e =
 	    "memory (de-)allocation not allowed as logic term"
       | JCPEmutable(e, t) ->
 	  let te = term env e in
-	  let st = match t with
-	    | Some t -> Some (find_struct_info t.jc_identifier_loc t.jc_identifier_name)
-	    | None -> None
-	  in
-	  let est = match te.jc_tterm_type with
-	    | JCTpointer(est, _, _) -> est
+	  let te_st = match te.jc_tterm_type with
+	    | JCTpointer(st, _, _) -> st
 	    | _ -> typing_error e.jc_pexpr_loc "pointer expression expected"
 	  in
-	  JCTAmutable(te, est, st)
+	  let tt = tag env te_st.jc_struct_info_root t in
+	  JCTAmutable(te, te_st, tt)
 
   in { jc_tassertion_node = te;
        jc_tassertion_loc = e.jc_pexpr_loc }

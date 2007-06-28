@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.34 2007-06-22 15:16:30 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.35 2007-06-28 14:37:41 bardou Exp $ i*)
 
 {
   open Jc_ast
@@ -132,6 +132,7 @@ rule token = parse
   | "variant"               { VARIANT }
   | "while"                 { WHILE }
   | "with"                  { WITH }
+  | "\\bottom"              { BSBOTTOM }
   | "\\forall"              { BSFORALL }
   | "\\exists"              { BSEXISTS }
   | "\\mutable"             { BSMUTABLE }
@@ -140,6 +141,7 @@ rule token = parse
   | "\\offset_min"          { BSOFFSET_MIN }
   | "\\old"                 { BSOLD }
   | "\\result"              { BSRESULT }
+  | "\\typeof"              { BSTYPEOF }
   | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
 
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*

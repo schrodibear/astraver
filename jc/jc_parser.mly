@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.53 2007-06-22 15:16:30 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.54 2007-06-28 14:37:41 bardou Exp $ */
 
 %{
 
@@ -41,6 +41,9 @@
 
   let locate_expr e =
     { jc_pexpr_node = e ; jc_pexpr_loc = loc () }
+
+  let locate_tag e =
+    { jc_ptag_node = e ; jc_ptag_loc = loc () }
 
   let locate_statement s =
     { jc_pstatement_node = s ; jc_pstatement_loc = loc () }
@@ -94,8 +97,8 @@
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
-/* \forall \exists \offset_max \offset_min \old \result \mutable */
-%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT BSMUTABLE
+/* \forall \exists \offset_max \offset_min \old \result \mutable \typeof \bottom */
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM
 
 /* \nothing */
 %token BSNOTHING
@@ -607,10 +610,19 @@ expression:
 */
 | expression DOTDOT expression
     { locate_expr (JCPErange($1,$3)) }
-| BSMUTABLE LPAR expression COMMA identifier RPAR
-    { locate_expr (JCPEmutable($3, Some $5)) }
+| BSMUTABLE LPAR expression COMMA tag RPAR
+    { locate_expr (JCPEmutable($3, $5)) }
 | BSMUTABLE LPAR expression RPAR
-    { locate_expr (JCPEmutable($3, None)) }
+    { locate_expr (JCPEmutable($3, locate_tag JCPTbottom)) }
+;
+
+tag:
+| identifier
+    { locate_tag (JCPTtag $1) }
+| BSBOTTOM
+    { locate_tag JCPTbottom }
+| BSTYPEOF LPAR expression RPAR
+    { locate_tag (JCPTtypeof $3) }
 ;
 
 identifier_list: 

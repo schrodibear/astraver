@@ -13,7 +13,7 @@ integer f(A[0] a)
 }
 
 unit g(A[0] a)
-    requires \mutable(a, A) && a.committed == false;
+    requires \mutable(a, \typeof(a)) && a.committed == false;
   behavior ok:
     ensures \mutable(a, A) && a.committed == false;
 {

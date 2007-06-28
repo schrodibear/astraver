@@ -92,12 +92,23 @@ type pexpr_node =
   | JCPErange of pexpr * pexpr
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
-  | JCPEmutable of pexpr * identifier option
+  | JCPEmutable of pexpr * ptag
 
 and pexpr =
     {
       jc_pexpr_node : pexpr_node;
       jc_pexpr_loc : Loc.position;
+    }
+
+and ptag_node =
+  | JCPTtag of identifier
+  | JCPTbottom
+  | JCPTtypeof of pexpr
+
+and ptag =
+    {
+      jc_ptag_node : ptag_node;
+      jc_ptag_loc : Loc.position;
     }
 
      
@@ -207,6 +218,17 @@ and tterm =
       jc_tterm_loc : Loc.position;
     }
 
+type ttag =
+    {
+      jc_ttag_node : ttag_node;
+      jc_ttag_loc : Loc.position;
+    }
+
+and ttag_node =
+  | JCTTtag of struct_info
+  | JCTTbottom
+  | JCTTtypeof of tterm * struct_info
+
 type tlocation_set = 
   | JCTLSvar of var_info
   | JCTLSderef of tlocation_set * field_info
@@ -231,7 +253,7 @@ type tassertion_node =
   | JCTAinstanceof of tterm * struct_info
   | JCTAbool_term of tterm
   | JCTAif of tterm * tassertion * tassertion
-  | JCTAmutable of tterm * struct_info * struct_info option
+  | JCTAmutable of tterm * struct_info * ttag
 
 and tassertion =
     {
@@ -354,6 +376,17 @@ and term =
       jc_term_loc : Loc.position;
     }
 
+type tag =
+    {
+      jc_tag_node : tag_node;
+      jc_tag_loc : Loc.position;
+    }
+
+and tag_node =
+  | JCTtag of struct_info
+  | JCTbottom
+  | JCTtypeof of term * struct_info
+
 type location_set = 
   | JCLSvar of var_info
   | JCLSderef of location_set * field_info
@@ -378,7 +411,7 @@ type assertion_node =
   | JCAinstanceof of term * struct_info
   | JCAbool_term of term
   | JCAif of term * assertion * assertion
-  | JCAmutable of term * struct_info * struct_info option
+  | JCAmutable of term * struct_info * tag
 
 and assertion =
     {
