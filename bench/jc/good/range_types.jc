@@ -8,8 +8,6 @@ type int32 = -2147483648..2147483647
      */
 shortint f(unsignedchar x, shortint y) 
   requires y <= 32000;
-  behavior no_run_time_error:
-    ensures true;
 {
   return x+y;
 }

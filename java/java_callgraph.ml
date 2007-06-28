@@ -99,8 +99,8 @@ let rec expr acc e : 'a list =
     | JEassign_local_var_op (_, _, e) 
     | JEassign_local_var (_, e) 
     | JEarray_length e  
-    | JEfield_access (e, _) -> expr acc e 
-    | JEun (_, _)-> assert false (* TODO *)
+    | JEfield_access (e, _) 
+    | JEun (_, e) -> expr acc e 
     | JEassign_field (e1, _, e2)
     | JEassign_field_op (e1, _, _, e2)
     | JEarray_access (e1, e2) 

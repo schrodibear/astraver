@@ -861,6 +861,42 @@ let make_bin_op loc op t1 e1 t2 e2 =
     |Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *)
     | Bimpl | Biff -> assert false
 
+let make_unary_op loc op t1 e1 =
+  match op with
+    | Unot -> assert false
+    | Ucompl-> assert false
+    | Uminus-> 
+	if is_numeric t1 then
+	  let t = lub_numeric_types t1 t1 in
+	  t,JEun(op, e1)
+	else
+	  typing_error loc "numeric types expected for -"
+      | Uplus -> assert false
+(*
+    | Bgt | Blt | Bge | Ble | Beq | Bne ->
+	if is_numeric t1 && is_numeric t2 then
+	  let _t = lub_numeric_types t1 t2 in
+	  Tboolean,
+	  JEbin((*coerce t1 t*) e1, op, (*coerce t2 t*) e2)
+	else
+	  typing_error loc "numeric types expected"
+    | Badd | Bsub | Bmul | Bdiv | Bmod ->
+	if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  t,
+	  JEbin((*coerce t1 t*) e1, op, (* coerce t2 t*) e2)
+	else
+	  typing_error loc "numeric types expected for +, -, *, / and %%"
+    | Band | Bor -> 
+	if is_boolean t1 && is_boolean t2 then
+	  Tboolean,JEbin(e1,op,e2)
+	else
+	  typing_error loc "booleans expected"
+	(* not allowed as expression op *)
+    |Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *)
+    | Bimpl | Biff -> assert false
+	*)
+
 let expr_var loc vi =
   { java_expr_node = JEvar vi; 
     java_expr_type = vi.java_var_info_type;
@@ -1084,7 +1120,12 @@ let rec expr env e =
 		  te.java_expr_type,JEincr_local_var(op,v)
 	      | _ -> assert false (* TODO *)
 	  end	  
-      | JPEun (_, _)-> assert false (* TODO *)
+      | JPEun (op, e1)-> 
+	  let te1 = expr env e1 in 
+	  let t,e = make_unary_op e.java_pexpr_loc op 
+		      te1.java_expr_type te1 in
+	  JTYbase t,e
+
       | JPEbin (e1, op, e2) -> 
 	  let te1 = expr env e1 and te2 = expr env e2 in 
 	  let t,e = make_bin_op e.java_pexpr_loc op 

@@ -366,7 +366,12 @@ let behavior (id,a,assigns,e) =
     jc_tbehavior_ensures = assertion e;
     jc_tbehavior_throws = None;
   })
-    
+
+let un_op op =
+  match op with
+    | Uminus-> Uminus_int
+    | Ucompl|Unot|Uplus -> assert false (* TODO *)
+
 let bin_op op =
   match op with
     | Badd -> Badd_int
@@ -396,7 +401,9 @@ let rec expr e =
       | JElit l -> JCTEconst (lit l)
       | JEincr_local_var(op,v) -> 
 	  JCTEincr_local(incr_op op,get_var v)
-      | JEun (_, _) -> assert false (* TODO *)
+      | JEun (op, e1) -> 
+	  let e1 = expr e1 in
+	  JCTEunary(un_op op,e1)	
       | JEbin (e1, op, e2) -> 
 	  let e1 = expr e1 and e2 = expr e2 in
 	  JCTEbinary(e1,bin_op op,e2)	  

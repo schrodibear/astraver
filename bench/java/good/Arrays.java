@@ -1,4 +1,3 @@
-
 /*@ predicate is_max(int[] t,int i,int l) {
   @   t != null && 0<=i && i < l && l <= t.length &&
   @   (\forall integer j; 0 <= j && j < l ==> t[j] <= t[i])
@@ -73,6 +72,8 @@ public class Arrays {
 	  t[j] = t[j-1];
 	}
     }
+
+
 }
 
 

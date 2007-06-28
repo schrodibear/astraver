@@ -453,17 +453,23 @@ let incr_call op =
 *)
 
 
-let make_upd fi e1 e2 =
-  make_app "upd_"
-    [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
-      Var fi.jc_field_info_name ; e1 ; e2 ]
+let make_upd ~threats fi e1 e2 =
+  if threats then
+    make_app "upd_"
+      [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
+	Var fi.jc_field_info_name ; e1 ; e2 ]
+  else
+    make_app "safe_upd_"
+      [ Var fi.jc_field_info_name ; e1 ; e2 ]
+
     
 let rec make_lets l e =
   match l with
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
-let rec expr e : expr =
+let rec expr ~threats e : expr =
+  let expr = expr ~threats in
   match e.jc_expr_node with
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
@@ -524,11 +530,16 @@ let rec expr e : expr =
 	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
 	make_app "downcast_" [Deref tag; e; Var (tag_name t)]
-    | JCEderef(e,fi) -> 
-	make_app "acc_"
-	  [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
-	    Var fi.jc_field_info_name ; 
-	    (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
+    | JCEderef(e,fi) ->
+	if threats then
+	  make_app "acc_" 
+	    [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
+	      Var fi.jc_field_info_name ; 
+	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
+	else
+	  make_app "safe_acc_"
+	    [ Var fi.jc_field_info_name ; 
+	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (e, st) ->
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
 	let tag = st.jc_struct_info_root ^ "_tag_table" in
@@ -570,11 +581,20 @@ let jessie_return_variable = "jessie_returned_value"
 let jessie_return_exception = "Return"
 let return_void = ref false
 
-let rec statement s = 
+let expr_coerce ~threats vi e =
+  coerce e.jc_expr_loc vi.jc_var_info_type e.jc_expr_type (expr ~threats e)
+  
+let rec statement ~threats s = 
   (* reset_tmp_var(); *)
+  let statement = statement ~threats in
+  let expr = expr ~threats in
   match s.jc_statement_node with
     | JCScall(vio,f,l,s) -> 
-	let el = List.map expr l in
+	let el = 
+	  try
+	    List.map2 (expr_coerce ~threats) f.jc_fun_info_parameters l 
+	  with Invalid_argument _ -> assert false
+	in
 	let call = make_app f.jc_fun_info_name el in
 	begin
 	  match vio with
@@ -602,10 +622,10 @@ let rec statement s =
 	      ([ (tmp1, e1') ; (tmp2, coerce e2.jc_expr_loc fi.jc_field_info_type e2.jc_expr_type e2') ])
 	      (append
 		 (assert_mutable (LVar tmp1) fi)
-		 (make_upd fi (Var tmp1) (Var tmp2))))
+		 (make_upd ~threats fi (Var tmp1) (Var tmp2))))
 	   (assume_field_invariants fi))
 (*	   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
-    | JCSblock l -> statement_list l
+    | JCSblock l -> statement_list ~threats l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
 	If(e, statement s1, statement s2)
@@ -659,9 +679,9 @@ let rec statement s =
 	in
 	List.fold_left catch (statement s) catches
 
-and statement_list l = 
+and statement_list ~threats l = 
   List.fold_right 
-    (fun s acc -> append (statement s) acc) l Void
+    (fun s acc -> append (statement ~threats s) acc) l Void
 
 (******************
  structures
@@ -1141,7 +1161,45 @@ let tr_fun f spec body acc =
 	  (match f.jc_fun_info_return_type with
 	    | JCTnative Tunit -> true
 	    | _ -> false);		
-	let body = statement_list body in
+	(* default behavior *)
+	let why_body = statement_list ~threats:true body in
+	let tblock =
+	  append
+	    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+	    (assume_all_invariants f.jc_fun_info_parameters)
+	    why_body
+	in
+	let tblock = 
+	  if !return_void then
+	    Try(append tblock (Raise(jessie_return_exception,None)),
+		jessie_return_exception,None,Void)
+	  else
+	    let e = any_value f.jc_fun_info_return_type in
+	    Let_ref(jessie_return_variable,e,
+		    Try(append tblock Absurd,
+			jessie_return_exception,None,
+			Deref(jessie_return_variable)))
+	in
+	let tblock = make_label "init" tblock in
+	let tblock =
+	  List.fold_right
+	    (fun (mut_id,id) bl ->
+	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+	in
+	let acc =
+	  Def(
+	    f.jc_fun_info_name ^ "_safety",
+	    Fun(
+	      params,
+	      requires,
+	      tblock,
+	      LTrue,
+	      excep_posts_for_others None excep_behaviors
+	    )
+	  )::acc
+	in
+	(* user behaviors *)
+	let body = statement_list ~threats:false body in
 	let tblock =
 	  append
 	    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
@@ -1165,6 +1223,7 @@ let tr_fun f spec body acc =
 	    (fun (mut_id,id) bl ->
 	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
 	in
+	(* normal behaviors *)
 	let acc =
 	  List.fold_right
 	    (fun (id,b,e) acc ->
@@ -1183,12 +1242,15 @@ let tr_fun f spec body acc =
 	    normal_behaviors acc
 	in 
 	(* redefine [tblock] for use in exception functions *)
+(* CLAUDE: pourquoi ??????
 	let tblock = make_label "init" tblock in
 	let tblock =
 	  List.fold_right
 	    (fun (mut_id,id) bl ->
 	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
 	in
+*)
+	(* exceptional behaviors *)
 	let acc =
 	  ExceptionMap.fold
 	    (fun ei l acc ->

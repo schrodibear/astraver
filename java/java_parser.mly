@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.13 2007-06-18 15:41:12 marche Exp $
+$Id: java_parser.mly,v 1.14 2007-06-28 12:28:00 marche Exp $
 
 */
 
@@ -12,9 +12,6 @@ $Id: java_parser.mly,v 1.13 2007-06-18 15:41:12 marche Exp $
   open Loc
   open Java_env
   open Java_ast
-(*
-  open Ast
-*)
 
   let loc () = (symbol_start_pos (), symbol_end_pos ())
 
@@ -35,16 +32,6 @@ $Id: java_parser.mly,v 1.13 2007-06-18 15:41:12 marche Exp $
 	  Implicit_array_creation(build_array_type t n)
       | a::b ->
 	  Explicit_array_creation(a,(build_array_creation_expr t (b,n)))
-
-(*
-  let rec expand_name l =
-    match l with
-      | [] -> assert false
-      | [id] -> locate_expr (JPEvar id) 
-      | id::l -> 
-	  let e = expand_name l in
-	  locate_expr (JPEfield_access(Primary_access(e,id))) 
-*)
 
 %}
 
@@ -907,7 +894,7 @@ ident:
 kml_type_decl:
 | PREDICATE ident method_parameters LEFTBRACE expr RIGHTBRACE EOF
     { JPTlogic_def($2,None,$3,$5) }
-| AXIOM ident COLON expr EOF
+| AXIOM ident COLON expr SEMICOLON EOF
     { JPTaxiom($2,$4) }
 
 kml_field_decl:
@@ -942,6 +929,8 @@ behavior:
 	java_pbehavior_assigns = $2;
 	java_pbehavior_throws = Some($5,$6);
 	java_pbehavior_ensures = $8 } }
+| error
+	{ raise (Java_options.Java_error (loc(),"`ensures' expected")) }
 ;
 
 ident_option:

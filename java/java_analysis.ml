@@ -40,7 +40,7 @@ let rec expr e =
   match e.java_expr_node with
     | JElit l -> ()
     | JEincr_local_var(op,v) -> ()
-    | JEun (_, _) -> assert false (* TODO *)
+    | JEun (_, e1) -> expr e1
     | JEbin (e1, op, e2) -> expr e1; expr e2 
     | JEvar vi -> ()
     | JEstatic_field_access(ci,fi) -> ()

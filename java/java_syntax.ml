@@ -19,8 +19,11 @@ let parse_annot loc s f =
 *)
   try
     f Java_lexer.next_token lb
-  with Parsing.Parse_error ->
-    Java_options.parsing_error (Java_lexer.loc lb) ""
+  with 
+    | Parsing.Parse_error ->
+	Java_options.parsing_error (Java_lexer.loc lb) ""
+    | Java_options.Java_error (_,msg) ->
+	Java_options.parsing_error (Java_lexer.loc lb) "%s" msg
 
 let rec statement s =
   { s with java_pstatement_node = match s.java_pstatement_node with

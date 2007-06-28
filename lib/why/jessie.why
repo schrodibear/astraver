@@ -74,12 +74,26 @@ access and update side-effect functions
 
 ***************************)
 
+parameter safe_acc_ : 
+  m : ('t,'v) memory ref -> p:'t pointer ->
+  { }
+  'v 
+  reads m
+  { result = select(m,p) }
+
 parameter acc_ : 
   alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer ->
   { valid(alloc,p) }
   'v 
   reads alloc,m
   { result = select(m,p) }
+
+parameter safe_upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+  { (* select(mutable,p) = true *) }
+  unit
+  reads m (* ,mutable *) 
+  writes m
+  { m = store(m@,p,v) }
 
 parameter upd_ : 
   alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
@@ -89,12 +103,6 @@ parameter upd_ :
   writes m
   { m = store(m@,p,v) }
 
-parameter safe_upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
-  { (* select(mutable,p) = true *) }
-  unit
-  reads m (* ,mutable *) 
-  writes m
-  { m = store(m@,p,v) }
 
 
 (*************
