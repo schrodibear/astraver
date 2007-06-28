@@ -1,35 +1,32 @@
-
-
-/*
-
-struct T {
-  int ok;
-  int* pt;
-  int tab[10];
-  //@ invariant pt_validity(t) { t.ok => \valid(t.pt) }
-  /*@ invariant tab_nonnegative(t) { 
-	\forall int i; 0 <= i && i < 10 => t[i] >=0 
-	}	
-  */
-}
-
-
-*/
-
-
 type A = {
   integer x;
   invariant pos(this) = this.x > 0;
 }
 
-integer f(A[0] a) 
+integer f(A[0] a)
+    requires \mutable(a, A);
+  behavior ok:
+    ensures true;
 {
-  return 100/a.x;
+    assert a.x != 0;
+    return 100/a.x;
 }
 
-integer g(A[0] a)
-{ 
-  a.x -= 1;
-  integer r = f(a);
-  a.x += 1; 
+unit g(A[0] a)
+    requires \mutable(a, A) && a.committed == false;
+  behavior ok:
+    ensures \mutable(a, A) && a.committed == false;
+{
+    unpack(a);
+    a.x -= 1;
+    integer r = f(a); // erreur
+    a.x += 1;
+    pack(a, A);
 }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make invariants"
+End: 
+*/

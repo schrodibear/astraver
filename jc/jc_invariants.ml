@@ -826,34 +826,38 @@ let unpack_declaration st acc =
   let this_type = pointer_type st.jc_struct_info_root in
   let tag = "tag" in
   let tag_type = tag_type st.jc_struct_info_root in
+  let tag_table = tag_table_name st.jc_struct_info_root in
   let name = st.jc_struct_info_root in
   let mutable_name = mutable_name name in
   let committed_name = committed_name name in
   let reads = StringSet.singleton mutable_name in
   let writes = StringSet.singleton mutable_name in
   let reads = StringSet.add committed_name reads in
+  let reads = StringSet.add tag_table reads in
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes false in
   let requires =
+    (* unpack this as tag: requires parenttag(this.mutable, tag) and not this.committed *)
     make_and
       (LPred(
-	 "eq",
-	 [ LVar tag;
-	   LApp("select", [LVar mutable_name; LVar this]) ]))
+	 "parenttag",
+	 [ LVar tag_table;
+	   LApp("select", [LVar mutable_name; LVar this]);
+	   LVar tag ]))
       (LPred(
 	 "eq",
 	 [ LConst(Prim_bool false);
 	   LApp("select", [LVar committed_name; LVar this]) ]))
   in
   let ensures =
-(* TODO    make_and
+    make_and
       (LPred(
- 	 "eq",
+	 "eq",
 	 [ LVar mutable_name;
 	   LApp(
 	     "store",
 	     [ LVarAtLabel(mutable_name, "");
 	       LVar this;
-	       LConst(Prim_bool true) ])]))*)
+	       LVar tag ])]))
       components_post
   in
   let annot_type =

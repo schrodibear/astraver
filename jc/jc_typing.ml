@@ -1295,7 +1295,13 @@ let rec statement env s =
 	    | JCTpointer(st, _, _) ->
 		let from_t = match t with
 		  | Some t -> find_struct_info t.jc_identifier_loc t.jc_identifier_name
-		  | None -> st
+		  | None -> (*st*)
+		      { 
+			jc_struct_info_name = "bottom";
+			jc_struct_info_parent = None;
+			jc_struct_info_root = "";
+			jc_struct_info_fields = [];
+		      }
 		in
 		JCTSunpack(st, te, from_t)
 	    | _ ->

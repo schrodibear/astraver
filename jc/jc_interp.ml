@@ -637,9 +637,9 @@ let rec statement s =
 		  coerce e.jc_expr_loc t e.jc_expr_type (expr e)))
 	  (Raise(jessie_return_exception,None))
     | JCSunpack(st, e, as_t) ->
-	let e = expr e in make_app ("unpack_"^st.jc_struct_info_root) [e; Var (tag_name st)]
+	let e = expr e in make_app ("unpack_"^st.jc_struct_info_root) [e; Var (tag_name as_t)]
     | JCSpack(st, e, from_t) ->
-	let e = expr e in make_app ("pack_"^st.jc_struct_info_root) [e; Var (tag_name st)]
+	let e = expr e in make_app ("pack_"^st.jc_struct_info_root) [e; Var (tag_name from_t)]
     | JCSthrow (ei, Some e) -> 
 	let e = expr e in
 	Raise(ei.jc_exception_info_name,Some e)

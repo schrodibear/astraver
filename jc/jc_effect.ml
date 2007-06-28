@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.44 2007-06-26 14:53:22 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.45 2007-06-28 12:05:33 bardou Exp $ *)
 
 
 open Jc_env
@@ -263,7 +263,7 @@ let rec statement ef s =
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
-	(* Change structure mutable => need mutable and tag_table as reads *)
+	(* Change structure mutable => need mutable as reads and writes, and tag_table as reads *)
 	let ef = add_mutable_reads ef st.jc_struct_info_root in
 	let ef = add_tag_reads ef st.jc_struct_info_root in
 	let ef = add_mutable_writes ef st.jc_struct_info_root in
@@ -271,8 +271,10 @@ let rec statement ef s =
 	ef
     | JCSunpack(st, e, _) ->
 	let ef = expr ef e in
-	(* Assert not mutable => need mutable as reads *)
+	(* Change structure mutable => need mutable as reads and writes, and tag_table as reads *)
 	let ef = add_mutable_reads ef st.jc_struct_info_root in
+	let ef = add_tag_reads ef st.jc_struct_info_root in
+	let ef = add_mutable_writes ef st.jc_struct_info_root in
 	(* Fields *)
 	let ef = List.fold_left
 	  (fun ef (_, fi) ->

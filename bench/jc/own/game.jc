@@ -1,40 +1,49 @@
 type Sword = {
-  integer damage;
-  invariant damage_inv(this) = this.damage > 0;
+    integer damage;
+    invariant damage_inv(this) = this.damage > 0;
 }
 
 type Hero = {
-  integer life;
-  boolean dead;
-  Sword[0] sword;
-  invariant life_inv(this) = (this.life >= 0) && (this.life <= 100)
-    && (this.life == 0 ==> this.dead);
-  // Devrait être rajouté automatiquement (déduit du [0] dans la définition
-  // de sword)
-  invariant sword_inv(this) = \offset_min(this.sword) <= 0
-    && \offset_max(this.sword) >= 0;
+    integer life;
+    boolean dead;
+    Sword[0] sword;
+    invariant life_inv(this) =
+        (this.life >= 0) &&
+        (this.life <= 100) &&
+        (this.life == 0 ==> this.dead);
+    // Devrait être rajouté automatiquement (déduit du [0] dans la définition
+    // de sword)
+    invariant sword_inv(this) =
+        \offset_min(this.sword) <= 0 &&
+        \offset_max(this.sword) >= 0;
+}
+
+type Sorcerer = Hero with {
+    integer mana;
+    invariant mana_inv(this) = this.mana >= 0;
 }
 
 unit attack(Hero[0] this, Hero[0] target)
-  requires (this.mutable == false) && (target.mutable == false) && (target.committed == false) && (this.sword.mutable == false) && (target.sword.mutable == false);
-  behavior ok:
-    ensures (this.mutable == false) && (target.mutable == false);
+  requires
+    \mutable(this, Hero) && \mutable(target, Hero) && target.committed == false &&
+    // Devraient être déductibles de la ligne précédente :
+    \mutable(this.sword, Sword) && \mutable(target.sword, Sword);
+behavior ok:
+  ensures
+    \mutable(target, Hero);
 {
-  unpack(target, Hero);
-//  if (this.mutable) { this.life = 0; };
-//  assert (this.committed);
-//  this.mutable = true;
-  target.life = target.life - this.sword.damage;
-  if (target.life <= 0) {
-    target.life = 0;
-    target.dead = true;
-  }
-  pack(target, Hero);
-  assert this.life >= 0;
+    unpack(target);
+    target.life = target.life - this.sword.damage;
+    if (target.life <= 0) {
+	target.life = 0;
+	target.dead = true;
+    }
+    pack(target);
 }
 
 /*
 Local Variables: 
+mode: java
 compile-command: "make game"
 End: 
 */
