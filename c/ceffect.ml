@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.162 2007-05-18 09:29:12 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.163 2007-06-28 09:07:44 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -244,7 +244,8 @@ let rec term t = match t.nterm_node with
       assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
       let ef = reads_add_field_var f (Pointer z) (term t1) in
       (* [alloc] not used when the alloc table is dropped *)
-      if no_alloc_table then ef else reads_add_alloc ef
+      (* CLAUDE: in terms e->f, DOES NOT reads alloc *)
+      (* if no_alloc_table then *) ef (* else reads_add_alloc ef *)
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uplus, t) -> term t
@@ -304,7 +305,8 @@ let rec term t = match t.nterm_node with
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
       in
       (* [alloc] not used when the alloc table is dropped *)
-      if no_alloc_table then ef else reads_add_alloc ef
+      (* CLAUDE: e->f ne lit jamais alloc *)
+      (* if no_alloc_table then *) ef (* else reads_add_alloc ef *)
 
 and term_option = function None -> ef_empty | Some t -> term t
 
@@ -326,7 +328,8 @@ let rec assign_location t = match t.nterm_node with
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
       in
       (* [alloc] not used when the alloc table is dropped *)
-      if no_alloc_table then ef else reads_add_alloc ef
+      (* CLAUDE: in terms e->f, DOES NOT reads alloc *)
+      (* if no_alloc_table then *) ef (* else reads_add_alloc ef *)
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  | NTunop (Uplus, _)    | NTunop (Unot, _)  
@@ -357,7 +360,8 @@ let rec assign_location t = match t.nterm_node with
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
       in
       (* [alloc] not used when the alloc table is dropped *)
-      if no_alloc_table then ef else reads_add_alloc ef
+      (* CLAUDE: in terms e->f, DOES NOT reads alloc *)
+      (* if no_alloc_table then *) ef (* else reads_add_alloc ef *)
 
 (***let assign_location loc =
   match loc with
@@ -551,7 +555,7 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
 	reads_add_field_var f (Pointer z) (expr ~with_local e1) in
       let ef = ef_union ef (reads_under_pointer e1) in
       (* [alloc] not used when the alloc table is dropped *)
-      if no_alloc_table then ef else reads_add_alloc ef
+      if no_alloc_table then ef else reads_add_alloc ef 
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
       ef_union (expr ~with_local e1) 
 	(expr ~with_local e2)
@@ -628,7 +632,7 @@ and assign_expr ?(with_local=false) e = match e.nexpr_node with
 	  (expr ~with_local e1) in
       let ef = ef_union ef (assign_under_pointer e1) in
       (* [alloc] not used when the alloc table is dropped *)
-      if no_alloc_table then ef else reads_add_alloc ef
+      if no_alloc_table then ef else reads_add_alloc ef 
   | NEcast (_, e1) ->
       assign_expr ~with_local e1
   | _ -> 
@@ -1245,3 +1249,9 @@ let effect  nfiles fun_list =
 	       done) 
     fun_list 
 
+
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/caduceus.byte"
+End: 
+*)

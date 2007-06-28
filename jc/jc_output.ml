@@ -374,6 +374,10 @@ let rec print_decl fmt d =
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JCaxiom_def(id,a) ->
 	fprintf fmt "@[axiom %s : %a@]@\n@." id assertion a
+    | JClogic_fun_def(ty,id,[],b) ->
+	assert (b=JCTReads []);
+	fprintf fmt "@[logic %a %s@]@\n@." 
+	  (print_option Jc_typing.print_type) ty id
     | JClogic_fun_def(ty,id,params,body) ->
 	fprintf fmt "@[logic %a %s(@[%a@]) %a@]@\n@." 
 	  (print_option Jc_typing.print_type) ty 
@@ -387,6 +391,6 @@ let rec print_decls fmt d =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte bin/krakatoa.byte"
 End: 
 *)

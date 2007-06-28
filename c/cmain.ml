@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.96 2007-04-27 13:24:26 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.97 2007-06-28 09:07:44 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -208,3 +208,8 @@ let () =
     eprintf "%a@." explain_exception e;
     exit 1
 
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/caduceus.byte"
+End: 
+*)

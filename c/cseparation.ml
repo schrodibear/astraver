@@ -833,3 +833,9 @@ let funct l =
 (*  Hashtbl.iter c_fun_poly Cenv.c_functions;
   Hashtbl.iter c_fun_separation Cenv.c_functions;
 *)
+
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/caduceus.byte"
+End: 
+*)

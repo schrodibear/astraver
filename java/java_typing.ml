@@ -12,31 +12,61 @@ let typing_error l =
     (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
     str_formatter
 
-let imported_packages = ref [ "java.lang" ]
 
-let static_fields = Hashtbl.create 17
+(******************************
 
-let invariants_table = Hashtbl.create 17
+Typing level 0: extract types (logic, Java classes, Java interfaces)
 
-let axioms_table = Hashtbl.create 17
+**********************************)
 
 let class_table = Hashtbl.create 17 
 
-let get_class id =
+let new_class_info id =
+  let ci =
+    { class_info_name = id ;
+      class_info_fields = [];
+      class_info_methods = [];
+    }
+  in
+  Hashtbl.add class_table id ci;
+  ci
+
+let get_type_decl d = 
+    match d with
+    | JPTclass c -> 
+	(*
+	  class_modifiers : modifiers;
+	  class_name : identifier;
+	  class_extends : qualified_ident option;
+	  class_implements : qualified_ident list;
+	  class_fields : field_declaration list
+	*)
+	let _ci = new_class_info (snd c.class_name) in ()
+    | JPTinterface i -> assert false (* TODO *)
+    | JPTannot(loc,s) -> assert false
+    | JPTaxiom((loc,id),e) -> ()
+    | JPTlogic_type_decl _ -> assert false (* TODO *)
+    | JPTlogic_reads _ -> assert false (* TODO *)
+    | JPTlogic_def((loc,id),ret_type,params,body) -> ()	
+
+let get_types cu =
+  assert (cu.cu_package = []); (* TODO *)
+  assert (cu.cu_imports = []); (* TODO *)
+  List.iter get_type_decl cu.cu_type_decls
+
+
+(******************************
+
+Typing level 1: extract prototypes 
+  (logic functions profiles, Field types of Java classes and interfaces, profiles of methods and constructors)
+
+**********************************)
+
+let search_for_class id =
   try
     Hashtbl.find class_table id 
   with
-      Not_found -> 
-(*
-assert false
-*)
-	let ci =
-	  { class_info_name = id ;
-	    class_info_fields = [];
-	  }
-	in
-	Hashtbl.add class_table id ci;
-	ci
+      Not_found -> assert false
 
 let rec type_type ty =
   match ty with
@@ -45,13 +75,212 @@ let rec type_type ty =
 	begin
 	  match qid with
 	    | [(loc,id)] ->
-		let ci = get_class id in
+		let ci = search_for_class id in
 		JTYclass(false,ci)
 	    | _ -> assert false (* TODO *)
 	end
     | Array_type_expr t -> 
 	let ty = type_type t in
 	JTYarray ty
+
+let rec var_type_and_id ty id =
+  match id with
+    | Simple_id id -> ty,id
+    | Array_id id -> 
+	let ty,id = var_type_and_id ty id in
+	JTYarray(ty),id
+
+
+(* variables *)
+
+let var_tag_counter = ref 0
+
+let new_var ty id =
+  incr var_tag_counter;
+  let vi = {
+    java_var_info_tag = !var_tag_counter;
+    java_var_info_name = id;
+    java_var_info_final_name = id;
+    java_var_info_type = ty;
+    java_var_info_assigned = false;
+  }
+  in vi
+
+
+(* fields *)
+
+let fields_table = Hashtbl.create 97
+
+let field_tag_counter = ref 0
+
+let new_field ~is_static ~is_final ci ty id =
+  incr field_tag_counter;
+  let fi = {
+    java_field_info_tag = !field_tag_counter;
+    java_field_info_name = id;
+    java_field_info_type = ty;
+    java_field_info_class = ci;
+    java_field_info_is_static = is_static;
+    java_field_info_is_final = is_final;
+  }
+  in fi
+
+(* methods *)
+
+let methods_env = Hashtbl.create 97
+
+let method_tag_counter = ref 0
+
+let new_method_info ~is_static id ty pars =
+  incr method_tag_counter;
+  {
+    method_info_tag = !method_tag_counter;
+    method_info_name = id;
+    method_info_trans_name = id;
+    method_info_has_this = None;
+    method_info_parameters = pars;
+    method_info_return_type = ty;
+    method_info_calls = [];
+    method_info_is_static = is_static;
+  }
+
+let type_param p =
+  let rec get_type p =
+    match p with
+      | Simple_parameter(ty,(loc,id)) -> (type_type ty, id)
+      | Array_parameter x -> 
+	  let (t,i) = get_type x in
+	  (JTYarray t,i)
+  in
+  let (t,i) = get_type p in new_var t i
+
+let rec method_header retty mdecl =
+  match mdecl with
+    | Simple_method_declarator(id,l) -> 
+	id,(Option_misc.map type_type retty), List.map type_param l
+    | Array_method_declarator d -> 
+	let id,t,l = method_header retty d in
+	match t with
+	  | Some t -> id,Some (JTYarray t),l
+	  | None -> typing_error (fst id) "invalid type void array"
+
+let get_field_prototypes ci acc d =
+  match d with
+    | JPFvariable vd -> 
+	(*
+	vd.variable_modifiers : modifiers ;
+	vd.variable_type : type_expr ;
+	vd.variable_decls : variable_declarator list }
+	*)
+	let ty = type_type vd.variable_type in
+	let is_static = List.mem `STATIC vd.variable_modifiers in
+	let is_final = List.mem `FINAL vd.variable_modifiers in
+	List.fold_left
+	  (fun acc vd -> 
+	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
+	     let fi = new_field ~is_static ~is_final ci ty' id in	     
+	     Hashtbl.add fields_table fi.java_field_info_tag 
+	       (fi,vd.variable_initializer,None);
+	     fi::acc
+	  ) acc vd.variable_decls
+    | _ -> acc
+
+let rec get_method_prototypes ci acc env l =
+  match l with
+    | [] -> acc
+    | JPFmethod _ :: rem -> assert false
+    | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
+	let id, ret_ty, params = 
+	  method_header head.method_return_type head.method_declarator 
+	in
+	let is_static = List.mem `STATIC head.method_modifiers in
+	let mi = new_method_info ~is_static (snd id) ret_ty params in
+	Hashtbl.add methods_env mi.method_info_tag (mi,req,behs,body)
+	  (* { mt_method_info = mi;
+	    mt_requires = req;
+	    mt_behaviors = behs;
+	    mt_body = body } *);
+	get_method_prototypes ci (mi::acc) env rem 
+   | JPFmethod_spec(req,behs) :: JPFconstructor(head,eci,body) :: rem ->
+	assert false
+	  (*let id, ret_ty, params = 
+	    method_header head.method_return_type head.method_declarator 
+	    in
+	    let mi = method_info (snd id) ret_ty (List.map snd params) in
+	    let req = Option_misc.map (assertion params) req in
+	    let behs = List.map (behavior params ret_ty) behs in
+	    let body = Option_misc.map (statements params) body in
+	    Hashtbl.add constructors_table mi.method_info_tag (mi,req,behs,body);
+	    class_methods env rem *)
+    | JPFmethod_spec _ :: _ ->
+	typing_error (assert false) "out of place method specification"
+    | JPFinvariant(id,e) :: rem ->
+(*
+	let local_env =
+(*
+	  if List.mem `STATIC head.method_modifiers then [] else
+*)
+	    let vi = var (JTYclass(true,ci)) "this" in 
+	    ("this",vi)::env
+	in
+	let p = assertion local_env e in
+	Hashtbl.add invariants_table id p;
+*)
+	get_method_prototypes ci acc env rem 
+    | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
+    | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
+    | JPFvariable vd :: rem -> 
+	get_method_prototypes ci acc env rem 
+    | JPFconstructor _ :: rem -> assert false (* TODO *)
+
+let type_decl d = 
+    match d with
+    | JPTclass c -> 
+	(*
+	  class_modifiers : modifiers;
+	  class_name : identifier;
+	  class_extends : qualified_ident option;
+	  class_implements : qualified_ident list;
+	  class_fields : field_declaration list
+	*)
+	let ci = search_for_class (snd c.class_name) in	  
+	let fields = List.fold_left (get_field_prototypes ci) [] c.class_fields in
+	ci.class_info_fields <- fields;
+	let methods = get_method_prototypes ci [] [] c.class_fields in
+	ci.class_info_methods <- methods;
+    | JPTinterface i -> assert false (* TODO *)
+    | JPTannot(loc,s) -> assert false
+    | JPTaxiom((loc,id),e) -> ()
+    | JPTlogic_type_decl _ -> assert false (* TODO *)
+    | JPTlogic_reads _ -> assert false (* TODO *)
+    | JPTlogic_def((loc,id),ret_type,params,body) -> ()
+	
+
+
+let get_prototypes cu =
+  assert (cu.cu_package = []); (* TODO *)
+  assert (cu.cu_imports = []); (* TODO *)
+  List.iter type_decl cu.cu_type_decls
+
+
+(*******************************
+
+Typing level 2: extract bodies
+  (logic functions definitions, axioms,
+   field initializers, method and constructors bodies)
+
+**********************************)
+
+let imported_packages = ref [ "java.lang" ]
+
+let static_fields = Hashtbl.create 17
+
+let invariants_table = Hashtbl.create 17
+
+let axioms_table = Hashtbl.create 17
+
+
+
 
 let string_of_base_type t =
   match t with
@@ -77,37 +306,6 @@ let rec print_type fmt t =
 
 
 
-(* variables *)
-
-let var_tag_counter = ref 0
-
-let var ty id =
-  incr var_tag_counter;
-  let vi = {
-    java_var_info_tag = !var_tag_counter;
-    java_var_info_name = id;
-    java_var_info_final_name = id;
-    java_var_info_type = ty;
-    java_var_info_assigned = false;
-  }
-  in vi
-
-(* fields *)
-
-let fields_table = Hashtbl.create 97
-
-let field_tag_counter = ref 0
-
-let field ~is_static ci ty id =
-  incr field_tag_counter;
-  let fi = {
-    java_field_info_tag = !field_tag_counter;
-    java_field_info_name = id;
-    java_field_info_type = ty;
-    java_field_info_class = ci;
-    java_field_info_is_static = is_static;
-  }
-  in fi
 
 (* methods *)
 
@@ -121,22 +319,7 @@ type method_table_info =
       mt_body : Java_tast.block option;
     }
 
-let methods_table = Hashtbl.create 97
-
-let method_tag_counter = ref 0
-
-let method_info id ty pars =
-  incr method_tag_counter;
-  {
-    method_info_tag = !method_tag_counter;
-    method_info_name = id;
-    method_info_trans_name = id;
-    method_info_has_this = None;
-    method_info_parameters = pars;
-    method_info_return_type = ty;
-    method_info_calls = [];
-  }
-    
+  
 
 (* logic funs *)
 
@@ -162,12 +345,6 @@ let logic_info id ty pars =
   }
     
 
-let rec var_type_and_id ty id =
-  match id with
-    | Simple_id id -> ty,id
-    | Array_id id -> 
-	let ty,id = var_type_and_id ty id in
-	JTYarray(ty),id
 
 let lit l =
   match l with
@@ -343,8 +520,14 @@ let rec classify_name env name =
 		    begin
 		      try 
 			let fi = lookup_field ci id in
+			let facc =
+			  if fi.java_field_info_is_static then
+			    JTstatic_field_access(ci,fi)
+			  else
+			    JTfield_access(term_var loc this,fi)
+			in
 			TermName {
-			  java_term_node = JTfield_access(term_var loc this,fi);
+			  java_term_node = facc;
 			  java_term_type = fi.java_field_info_type;
 			  java_term_loc = loc
 			}
@@ -355,7 +538,7 @@ let rec classify_name env name =
 	    with Not_found ->
 	      (* look for a class of that name *)
 	      try 
-		let ci = get_class id in ClassName ci
+		let ci = search_for_class id in ClassName ci
 	      with Not_found ->
 		assert false (* TODO *)
 	end		
@@ -644,7 +827,7 @@ and make_quantified_formula loc q ty idl env e : assertion =
     | [] -> assertion env e
     | id::r ->
 	let tyv, (loc,n) = var_type_and_id ty id in
-	let vi = var tyv n in
+	let vi = new_var tyv n in
 	let f = make_quantified_formula loc q ty r ((n,vi)::env) e 
 	in
 	{ java_assertion_loc = loc ; 
@@ -946,7 +1129,7 @@ let variable_declaration env vd =
   in
   List.fold_right
       (fun ((loc,id),ty,i) (env,decls)->
-	 let vi = var ty id in		     
+	 let vi = new_var ty id in		     
 	 (id,vi)::env,(vi,i)::decls)
       l (env,[])
 
@@ -1088,6 +1271,7 @@ and switch_label env t = function
 
 (* methods *)
 
+(*
 let type_param p =
   let rec get_type p =
     match p with
@@ -1096,7 +1280,7 @@ let type_param p =
 	  let (t,i) = get_type x in
 	  (JTYarray t,i)
   in
-  let (t,i) = get_type p in var t i
+  let (t,i) = get_type p in new_var t i
 
 let rec method_header retty mdecl =
   match mdecl with
@@ -1107,6 +1291,7 @@ let rec method_header retty mdecl =
 	match t with
 	  | Some t -> id,Some (JTYarray t),l
 	  | None -> typing_error (fst id) "invalid type void array"
+*)
 
 let assigns env a = 
   term env a 
@@ -1124,30 +1309,45 @@ let behavior env env_result (id,b) =
    assertion env_ensures b.java_pbehavior_ensures)
 	
 
-let class_field ci acc d =
-  match d with
-    | JPFvariable vd -> 
-	(*
-	vd.variable_modifiers : modifiers ;
-	vd.variable_type : type_expr ;
-	vd.variable_decls : variable_declarator list }
-	*)
-	let ty = type_type vd.variable_type in
-	let is_static = List.mem `STATIC vd.variable_modifiers in
-	List.fold_left
-	  (fun acc vd -> 
-	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
-	     let init = 
-	       Option_misc.map (type_initializer [] ty') 
-		 vd.variable_initializer 
-	     in
-	     let fi = field ~is_static ci ty' id in	     
-	     Hashtbl.add fields_table fi.java_field_info_tag (fi,init);
-	     fi::acc
-	  ) acc vd.variable_decls
-    | _ -> acc
+let methods_table = Hashtbl.create 97
 
-let rec class_methods ci env l =
+
+let type_method_spec_and_body ci mi =
+  let (_,req,behs,body) = 
+    try
+      Hashtbl.find methods_env mi.method_info_tag 
+    with Not_found -> assert false
+  in
+  let local_env =
+    if mi.method_info_is_static then [] else
+      let vi = new_var (JTYclass(true,ci)) "this" in
+      mi.method_info_has_this <- Some vi;
+      [("this",vi)]
+  in
+  let local_env = 
+    List.fold_left
+      (fun acc vi -> 
+	 (vi.java_var_info_name,vi)::acc)
+      local_env mi.method_info_parameters
+  in
+  let req = Option_misc.map (assertion local_env) req in
+  let env_result =
+    match mi.method_info_return_type with
+      | None -> local_env
+      | Some t ->
+	  let vi = new_var t "\\result" in 
+	  ("\\result",vi)::local_env
+  in
+  let behs = List.map (behavior local_env env_result) behs in
+  let body = Option_misc.map (statements env_result) body in
+  Hashtbl.add methods_table mi.method_info_tag 
+    { mt_method_info = mi;
+      mt_requires = req;
+      mt_behaviors = behs;
+      mt_body = body } 
+
+
+(*
   match l with
     | [] -> ()
     | JPFmethod _ :: rem -> assert false
@@ -1155,7 +1355,7 @@ let rec class_methods ci env l =
 	let id, ret_ty, params = 
 	  method_header head.method_return_type head.method_declarator 
 	in
-	let mi = method_info (snd id) ret_ty params in
+	let mi = new_method_info (snd id) ret_ty params in
 	let local_env =
 	  if List.mem `STATIC head.method_modifiers then [] else
 	    let vi = var (JTYclass(true,ci)) "this" in
@@ -1213,8 +1413,19 @@ let rec class_methods ci env l =
     | JPFvariable vd :: rem -> 
 	class_methods ci env rem 
     | JPFconstructor _ :: rem -> assert false (* TODO *)
+*)
 
-
+let type_field_initializer fi =
+  let (_,init,_) = 
+    try
+      Hashtbl.find fields_table fi.java_field_info_tag 
+    with Not_found -> assert false
+  in
+  let tinit = 
+    Option_misc.map (type_initializer [] fi.java_field_info_type) init 
+  in
+  Hashtbl.replace fields_table fi.java_field_info_tag (fi,init,tinit)
+  
 let type_decl d = 
     match d with
     | JPTclass c -> 
@@ -1225,10 +1436,9 @@ let type_decl d =
 	  class_implements : qualified_ident list;
 	  class_fields : field_declaration list
 	*)
-	let ci = get_class (snd c.class_name) in	  
-	let fields = List.fold_left (class_field ci) [] c.class_fields in
-	ci.class_info_fields <- fields;
-	class_methods ci [] c.class_fields
+	let ci = search_for_class (snd c.class_name) in	  
+	List.iter type_field_initializer ci.class_info_fields;
+	List.iter (type_method_spec_and_body ci) ci.class_info_methods
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false
     | JPTaxiom((loc,id),e) -> 
@@ -1255,7 +1465,7 @@ let type_decl d =
 	
 
 
-let compilation_unit cu =
+let get_bodies cu =
   assert (cu.cu_package = []); (* TODO *)
   assert (cu.cu_imports = []); (* TODO *)
   List.iter type_decl cu.cu_type_decls

@@ -167,8 +167,28 @@ let get_static_var ci fi =
 (*s translation of structure types *)
 
 let tr_class ci acc =
+  let (static_fields,fields) = 
+    List.partition 
+      (fun fi -> fi.java_field_info_is_static)
+      ci.class_info_fields
+  in
+  let acc =
+    List.fold_right
+      (fun fi acc ->
+	 let vi = get_static_var ci fi in
+	 if fi.java_field_info_is_final then
+	   let decl =
+	     JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_name,
+			     [],JCTReads [])
+	   in
+	   decl::acc
+	 else
+	   assert false (* TODO *))
+      static_fields
+      acc
+  in
   JCstruct_def(ci.class_info_name,
-	       List.map get_field ci.class_info_fields) :: acc
+	       List.map get_field fields) :: acc
 
 let array_types decls =
   Java_options.lprintf "(**********************)@.";

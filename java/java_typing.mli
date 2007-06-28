@@ -16,6 +16,7 @@ type method_table_info =
 val methods_table : 
   (int, method_table_info) Hashtbl.t
 
+
 val axioms_table : (string,Java_tast.assertion) Hashtbl.t
 
 type logic_body =
@@ -30,7 +31,9 @@ val logics_table :
 
 exception Typing_error of Loc.position * string
 
-val compilation_unit : Java_ast.compilation_unit -> unit
+val get_types : Java_ast.compilation_unit -> unit
+val get_prototypes: Java_ast.compilation_unit -> unit
+val get_bodies : Java_ast.compilation_unit -> unit
 
 
 

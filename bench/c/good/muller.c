@@ -39,52 +39,19 @@ void m(int t[], int length) {
   for (i=0 ; i < length; i++) {
     if (t[i] > 0) count++;
   }
-  // @ label L
   u = (int *)calloc(count,sizeof(int));
   count = 0;
   
   /*@ invariant
     @    0 <= i && i <= length && 
-    @    0 <= count && count <= i && // count <= \at(count,L) && 
+    @    0 <= count && count <= i && 
     @    count == num_of_pos(0,i-1,t)
     @ variant length - i
     @*/
   for (i=0 ; i < length; i++) {
     if (t[i] > 0) {
-      /* USELESS @ assert count == num_of_pos(0,i,t)-1 && count < \at(count,L)
-      */
       u[count++] = t[i];
     }
   }
 }
-
-
-// USELESS AXIOMS
-
-
-/* USELESS @ axiom num_of_pos_singl_true :
-  @   \forall int i, int t[];
-  @       t[i] > 0 => num_of_pos(i,i,t) == 1
-  @*/
-
-/* USELESS @ axiom num_of_pos_singl_false :
-  @   \forall int i, int t[];
-  @       ! (t[i] > 0) => num_of_pos(i,i,t) == 0
-  @*/
- 
-/* USELESS @ axiom num_of_pos_union :
-  @   \forall int i, int j, int k, int t[];
-  @       i <= j && j < k => 
-  @         num_of_pos(i,k,t) == num_of_pos(i,j,t) + num_of_pos(j+1,k,t)
-  @*/
-
-/* USELESS @ axiom num_of_pos_non_negative :
-  @   \forall int i, int j, int k, int t[];
-  @       num_of_pos(i,j,t) >= 0
-  @*/
-
-/* USELESS @ axiom num_of_pos_increasing:
-  @   \forall int i, int j, int k, int t[];
-  @       j <= k => num_of_pos(i,j,t) <= num_of_pos(i,k,t)
-  @*/
 

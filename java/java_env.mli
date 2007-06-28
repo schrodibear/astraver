@@ -58,8 +58,8 @@ and java_field_info =
       java_field_info_accessibility : accessibility;
 *)
       java_field_info_is_static : bool;
-(*
       java_field_info_is_final : bool;
+(*
       java_field_info_class_or_interface : java_env_entry;
 *)
       java_field_info_type : java_type;
@@ -83,6 +83,7 @@ and method_info =
      method_info_tag : int;
      method_info_name : string;
      mutable method_info_trans_name : string;
+     method_info_is_static : bool;
 (*
      method_info_accessibility : accessibility;
 *)
@@ -201,6 +202,7 @@ and java_class_info =
 *)
       class_info_name : string;
       mutable class_info_fields : java_field_info list;
+      mutable class_info_methods : method_info list;
 (*
       mutable class_entry_extends : class_entry option;
       mutable class_entry_implements : interface_entry list;

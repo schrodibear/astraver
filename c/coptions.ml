@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.42 2007-05-18 09:29:13 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.43 2007-06-28 09:07:44 marche Exp $ i*)
 
 open Format
 
@@ -82,7 +82,7 @@ let closed_program = ref false
 let floats = ref true
 let local_aliasing = ref false
 let arith_memory_model = ref false
-let no_alloc_table = ref false
+let no_alloc_table = ref false 
 let abstract_interp = ref false
 let gen_invariant = ref false
 let absint_as_proof = ref false
@@ -312,3 +312,9 @@ let evaluation_order =
   { binary_left_to_right = true;
     assign_left_to_right = false;
     call_left_to_right = true }
+
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/caduceus.byte"
+End: 
+*)

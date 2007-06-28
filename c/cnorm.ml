@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.103 2007-05-18 09:29:13 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.104 2007-06-28 09:07:44 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -1472,3 +1472,8 @@ let file = map_succeed (fun d -> { node = global_decl d.node d.loc ;
 
 
 
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/caduceus.byte"
+End: 
+*)

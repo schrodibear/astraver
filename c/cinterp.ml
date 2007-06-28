@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.244 2007-06-19 08:00:39 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.245 2007-06-28 09:07:44 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -2527,3 +2527,8 @@ let interp_functions why =
   
 
 
+(*
+Local Variables: 
+compile-command: "make -j -C .. bin/caduceus.byte"
+End: 
+*)

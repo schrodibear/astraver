@@ -12,7 +12,9 @@ let main () =
 	let ast = Java_syntax.file f in
 	printf "Parsing OK.@.";
 	(* phase 2 : typing *)
-	Java_typing.compilation_unit ast;
+	Java_typing.get_types ast;
+	Java_typing.get_prototypes ast;
+	Java_typing.get_bodies ast;
 	printf "Typing OK.@.";
 (*
 	(* phase 3 : computation of call graph *)
