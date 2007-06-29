@@ -9,9 +9,8 @@ and type B = A with {
 }
 
 boolean equal(A[0] a, A[0] b)
-    requires \typeeq(\typeof(a), \typeof(b));
+    requires \typeeq(\typeof(a), \typeof(b)) && \mutable(a, \typeof(a));
 {
-    assert (a <: B ==> b <: B);
     if (a.is_b) {
 	return a.i == b.i && (a :> B).j == (b :> B).j;
     } else {
