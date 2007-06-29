@@ -554,7 +554,8 @@ let rec expr ~threats e : expr =
 	  | _ -> assert false
 	in	
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
-	make_app "free_parameter" [Var alloc; expr e]
+	let com = Jc_invariants.committed_name st.jc_struct_info_root in
+	make_app "free_parameter" [Var alloc; Var com; expr e]
 
 let invariant_for_struct this st =
   let (_,invs) = 

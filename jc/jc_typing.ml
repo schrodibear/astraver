@@ -1213,7 +1213,10 @@ let make_block (l:tstatement list) : tstatement_node =
     | [s] -> s.jc_tstatement_node
     | _ -> JCTSblock l
 
-(* structure of labels in a function body : using Huet's zipper *)
+(* structure of labels in a function body : using Huet's zipper.
+   Contrary to what is done in Caduceus, where gotos are first identified as
+   
+ *)
 
 type label_tree =
   | LabelItem of label_info

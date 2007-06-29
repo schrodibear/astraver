@@ -279,7 +279,8 @@ logic lsr : int,int -> int
 
 **********************)
 
-parameter alloc_parameter : a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
+parameter alloc_parameter : 
+  a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
   { n > 0 }
   't pointer 
@@ -289,8 +290,10 @@ parameter alloc_parameter : a:'t alloc_table ref -> mut:('t,'t tag_id) memory re
     and instanceof(at,result,s) and select(mut,result) = bottom_tag 
     and select(com,result) = false }
 
-parameter free_parameter : a:'t alloc_table ref -> p:'t pointer -> 
-  { offset_min(a,p) = 0 and offset_max(a,p) >= 0 }
+parameter free_parameter : 
+  a:'t alloc_table ref -> com:('t,bool) memory ref -> p:'t pointer -> 
+  { offset_min(a,p) = 0 and offset_max(a,p) >= 0 
+	and select(com,p) = false }
   unit
   writes a
   { offset_max(a,p) < offset_min(a,p) }
