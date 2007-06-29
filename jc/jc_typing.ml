@@ -578,6 +578,8 @@ let rec term env e =
 	  JCTnative t, JCTTrange(term_coerce t1 t e1, term_coerce t2 t e2)
       | JCPEmutable(e, t) ->
 	  assert false (* TODO *)
+      | JCPEtagequality _ ->
+	  assert false (* TODO *)
 	    
   in { jc_tterm_node = te;
        jc_tterm_type = t;
@@ -665,7 +667,7 @@ let make_rel_bin_op loc op e1 e2 =
 
 let tag env hierarchy t =
   let check_hierarchy loc st =
-    if st.jc_struct_info_root != hierarchy then
+    if hierarchy <> "" && st.jc_struct_info_root != hierarchy then
       typing_error loc
 	"this is in the hierarchy of %s, while it should be in the hierarchy of %s"
 	st.jc_struct_info_root hierarchy
@@ -822,6 +824,26 @@ let rec assertion env e =
 	  in
 	  let tt = tag env te_st.jc_struct_info_root t in
 	  JCTAmutable(te, te_st, tt)
+      | JCPEtagequality(tag1, tag2) ->
+	  let ttag1 = tag env "" tag1 in
+	  let ttag2 = tag env "" tag2 in
+	  let st = match ttag1.jc_ttag_node, ttag2.jc_ttag_node with
+	    | JCTTbottom, JCTTbottom -> None
+	    | JCTTbottom, JCTTtag st
+	    | JCTTtag st, JCTTbottom
+	    | JCTTbottom, JCTTtypeof(_, st)
+	    | JCTTtypeof(_, st), JCTTbottom -> Some st.jc_struct_info_root
+	    | JCTTtag st1, JCTTtag st2
+	    | JCTTtypeof(_, st1), JCTTtag st2
+	    | JCTTtag st1, JCTTtypeof(_, st2)
+	    | JCTTtypeof(_, st1), JCTTtypeof(_, st2) ->
+		if st1.jc_struct_info_root <> st2.jc_struct_info_root then
+		  typing_error e.jc_pexpr_loc "the hierarchy %s and %s are different"
+		    st1.jc_struct_info_root st2.jc_struct_info_root
+		else
+		  Some st1.jc_struct_info_root
+	  in
+	  JCTAtagequality(ttag1, ttag2, st)
 
   in { jc_tassertion_node = te;
        jc_tassertion_loc = e.jc_pexpr_loc }
@@ -1165,10 +1187,10 @@ let rec expr env e =
 	  end
       | JCPEquantifier _ 
       | JCPEold _ 
-      | JCPErange _ ->
+      | JCPErange _
+      | JCPEmutable _
+      | JCPEtagequality _ ->
 	  typing_error e.jc_pexpr_loc "not allowed in this context"
-      | JCPEmutable(e, t) ->
-	  assert false (* TODO *)
 
   in { jc_texpr_node = te; 
        jc_texpr_type = t;
@@ -1453,7 +1475,8 @@ let rec location_set env e =
     | JCPEconst _
     | JCPErange (_,_)
     | JCPEalloc (_,_)
-    | JCPEmutable _ (* TODO ? *)
+    | JCPEmutable _
+    | JCPEtagequality _
     | JCPEfree _ -> assert false
 
 let location env e =
@@ -1491,7 +1514,8 @@ let location env e =
     | JCPEconst _ 
     | JCPErange (_,_)
     | JCPEalloc (_,_)
-    | JCPEmutable _ (* TODO ? *)
+    | JCPEmutable _
+    | JCPEtagequality _
     | JCPEfree _ ->
 	typing_error e.jc_pexpr_loc "invalid memory location"
 

@@ -93,6 +93,7 @@ type pexpr_node =
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
   | JCPEmutable of pexpr * ptag
+  | JCPEtagequality of ptag * ptag
 
 and pexpr =
     {
@@ -254,6 +255,7 @@ type tassertion_node =
   | JCTAbool_term of tterm
   | JCTAif of tterm * tassertion * tassertion
   | JCTAmutable of tterm * struct_info * ttag
+  | JCTAtagequality of ttag * ttag * string option
 
 and tassertion =
     {
@@ -412,6 +414,7 @@ type assertion_node =
   | JCAbool_term of term
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
+  | JCAtagequality of tag * tag * string option
 
 and assertion =
     {

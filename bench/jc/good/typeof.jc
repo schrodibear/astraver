@@ -1,0 +1,27 @@
+type A = {
+    integer i;
+    boolean is_b;
+    invariant is_b_inv(this) = this.is_b ==> this <: B;
+}
+
+and type B = A with {
+    integer j;
+}
+
+boolean equal(A[0] a, A[0] b)
+    requires \typeeq(\typeof(a), \typeof(b));
+{
+    assert (a <: B ==> b <: B);
+    if (a.is_b) {
+	return a.i == b.i && (a :> B).j == (b :> B).j;
+    } else {
+	return a.i == b.i;
+    }
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make typeof"
+End: 
+*/

@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.54 2007-06-28 14:37:41 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.55 2007-06-29 09:30:04 bardou Exp $ */
 
 %{
 
@@ -97,8 +97,8 @@
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
-/* \forall \exists \offset_max \offset_min \old \result \mutable \typeof \bottom */
-%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM
+/* \forall \exists \offset_max \offset_min \old \result \mutable \typeof \bottom \typeeq */
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ
 
 /* \nothing */
 %token BSNOTHING
@@ -614,6 +614,8 @@ expression:
     { locate_expr (JCPEmutable($3, $5)) }
 | BSMUTABLE LPAR expression RPAR
     { locate_expr (JCPEmutable($3, locate_tag JCPTbottom)) }
+| BSTYPEEQ LPAR tag COMMA tag RPAR
+    { locate_expr (JCPEtagequality($3, $5)) }
 ;
 
 tag:

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.35 2007-06-28 14:37:41 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.36 2007-06-29 09:30:04 bardou Exp $ i*)
 
 {
   open Jc_ast
@@ -141,6 +141,7 @@ rule token = parse
   | "\\offset_min"          { BSOFFSET_MIN }
   | "\\old"                 { BSOLD }
   | "\\result"              { BSRESULT }
+  | "\\typeeq"              { BSTYPEEQ }
   | "\\typeof"              { BSTYPEOF }
   | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
 

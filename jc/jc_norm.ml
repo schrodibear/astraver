@@ -695,6 +695,8 @@ and assertion a =
 	  JCAif (term t, assertion at, assertion af)
       | JCTAmutable (t, st, v) ->
 	  JCAmutable (term t, st, tag v)
+      | JCTAtagequality (t1, t2, h) ->
+	  JCAtagequality (tag t1, tag t2, h)
 
   in { jc_assertion_node = na;
        jc_assertion_loc =  loc }

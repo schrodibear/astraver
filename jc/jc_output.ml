@@ -174,6 +174,7 @@ let rec assertion fmt a =
 	fprintf fmt ")@]"
     | JCTAfalse -> fprintf fmt "false"
     | JCTAmutable _ -> assert false (* TODO *)
+    | JCTAtagequality _ -> assert false (* TODO *)
 
 let rec location_set fmt = function
   | JCTLSvar vi-> 

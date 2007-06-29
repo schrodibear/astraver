@@ -347,6 +347,8 @@ let rec assertion label oldlabel a =
 	let mutable_field = LVar (mutable_name st.jc_struct_info_root) in
 	let tag = ftag ta.jc_tag_node in
 	LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
+    | JCAtagequality(t1, t2, h) ->
+	LPred("eq", [ ftag t1.jc_tag_node; ftag t2.jc_tag_node ])
 
 (****************************
 

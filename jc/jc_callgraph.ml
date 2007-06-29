@@ -40,6 +40,10 @@ let rec term acc t =
     | JCTinstanceof(t,_)
     | JCTunary (_,t) -> term acc t
 
+let tag acc t = match t.jc_tag_node with
+  | JCTtag _ | JCTbottom -> acc
+  | JCTtypeof(t, _) -> term acc t
+
 let rec assertion acc p =
   match p.jc_assertion_node with
   | JCAtrue 
@@ -56,6 +60,8 @@ let rec assertion acc p =
   | JCAinstanceof(t,_)
   | JCAmutable(t,_,_)
   | JCAbool_term t -> term acc t
+  | JCAtagequality(t1, t2, _) ->
+      tag (tag acc t1) t2
 
 (*
 let spec s = 

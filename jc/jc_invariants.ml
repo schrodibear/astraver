@@ -217,6 +217,9 @@ let rec assertion this p =
     | JCAmutable _ ->
 	Jc_typing.typing_error p.jc_assertion_loc
 	  "\\mutable is not allowed in structure invariant"
+    | JCAtagequality _ ->
+	Jc_typing.typing_error p.jc_assertion_loc
+	  "\\typeeq is not allowed in structure invariant"
 
 let check invs =
   List.iter
@@ -247,6 +250,10 @@ let rec term_memories aux t = match t.jc_tterm_node with
   | JCTTunary(_,t) -> term_memories aux t
   | JCTTif(t1, t2, t3) -> term_memories (term_memories (term_memories aux t1) t2) t3
 
+let tag_memories aux t = match t.jc_ttag_node with
+  | JCTTtag _ | JCTTbottom -> aux
+  | JCTTtypeof(t, _) -> term_memories aux t
+
 let rec assertion_memories aux a = match a.jc_tassertion_node with
   | JCTAtrue
   | JCTAfalse -> aux
@@ -263,6 +270,7 @@ let rec assertion_memories aux a = match a.jc_tassertion_node with
   | JCTAbool_term t -> term_memories aux t
   | JCTAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
   | JCTAmutable(t, _, _) -> term_memories aux t
+  | JCTAtagequality(t1, t2, _) -> tag_memories (tag_memories aux t2) t1
 
 (* Returns (as a StringSet.t) every structure name that can be reach from st.
 Assumes the structures whose name is in acc have already been visited

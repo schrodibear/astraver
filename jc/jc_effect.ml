@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.45 2007-06-28 12:05:33 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.46 2007-06-29 09:30:04 bardou Exp $ *)
 
 
 open Jc_env
@@ -158,6 +158,16 @@ let rec term ef t =
     | JCTrange (t1, t2) -> term (term ef t1) t2
     | JCTbinary (t1, _, t2) -> term (term ef t1) t2
 
+let tag ef t h =
+  let ef = match h with
+    | None -> ef
+    | Some h -> add_tag_effect ef h
+  in
+  match t.jc_tag_node with
+    | JCTtag _
+    | JCTbottom -> ef
+    | JCTtypeof(t, _) -> term ef t
+
 let rec assertion ef a =
   match a.jc_assertion_node with
     | JCAtrue | JCAfalse -> ef
@@ -175,8 +185,10 @@ let rec assertion ef a =
     | JCAiff (a1, a2)
     | JCAimplies (a1, a2) -> assertion (assertion ef a1) a2
     | JCAand al | JCAor al -> List.fold_left assertion ef al
-    | JCAmutable (t, st, _) ->
-	term (add_mutable_effect ef st.jc_struct_info_root) t
+    | JCAmutable (t, st, ta) ->
+	term (add_mutable_effect (tag ef ta (Some st.jc_struct_info_root)) st.jc_struct_info_root) t
+    | JCAtagequality (t1, t2, h) ->
+	tag (tag ef t1 h) t2 h
 
 (********************
 
