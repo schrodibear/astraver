@@ -42,6 +42,11 @@ type identifier =
 
 type label = string
 
+type label_info =
+    { label_info_name : string;
+      mutable times_used : int;
+    }
+
 (***************)
 (* parse trees *)
 (***************)
@@ -320,8 +325,8 @@ type tstatement_node =
   | JCTScontinue of label
   | JCTSgoto of label
   | JCTSlabel of label * tstatement
-  | JCTStry of 
-      tstatement * (exception_info * var_info * tstatement) list * tstatement
+  | JCTStry of tstatement 
+      * (exception_info * var_info option * tstatement) list * tstatement
   | JCTSthrow of exception_info * texpr option
   | JCTSpack of struct_info * texpr * struct_info
   | JCTSunpack of struct_info * texpr * struct_info

@@ -46,10 +46,10 @@ let axioms_table = Hashtbl.create 17
 (* result of test, to be used during translation of lazy boolean operators
    to instructions *)
 
-let true_output = exception_info unit_type "True"
-let false_output = exception_info unit_type "False"
-let loop_exit = exception_info unit_type "Loop_exit"
-let loop_continue = exception_info unit_type "Loop_continue"
+let true_output = exception_info None "True"
+let false_output = exception_info None "False"
+let loop_exit = exception_info None "Loop_exit"
+let loop_continue = exception_info None "Loop_continue"
 
 let () = Hashtbl.add exceptions_table "True" true_output
 let () = Hashtbl.add exceptions_table "False" false_output
@@ -529,28 +529,24 @@ and statement s =
 		(make_decls loc (sl @ [if_stat]) tl).jc_statement_node
 	  end
       | JCTSwhile (e, la, body) ->
-	  let exit_stat = make_tthrow loc loop_exit
-	    (Some (make_tconst loc JCCvoid)) in
+	  let exit_stat = make_tthrow loc loop_exit None in
 	  let if_stat = statement (make_tif loc e body exit_stat) in
-	  let continue_stat = make_throw loc loop_continue
-	    (Some (void_const loc)) in
+	  let continue_stat = make_throw loc loop_continue None in
 	  let body = make_block loc [if_stat;continue_stat] in
 	  let catch_continue = 
-	    [(loop_continue, Some (newvar unit_type), make_block loc [])] in
+	    [(loop_continue, None, make_block loc [])] in
 	  let try_continue = 
 	    make_try loc body catch_continue (make_block loc []) in
 	  let while_stat = make_loop loc (loop_annot la) try_continue in
 	  let catch_exit =
-	    [(loop_exit, Some (newvar unit_type), make_block loc [])] in
+	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
 	    make_try loc while_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
       | JCTSfor (cond, updates, la, body) ->
-	  let exit_stat = make_tthrow loc loop_exit
-	    (Some (make_tconst loc JCCvoid)) in
+	  let exit_stat = make_tthrow loc loop_exit None in
 	  let if_stat = statement (make_tif loc cond body exit_stat) in
-	  let continue_stat = make_throw loc loop_continue
-	    (Some (void_const loc)) in
+	  let continue_stat = make_throw loc loop_continue None in
 	  let body = make_block loc [if_stat;continue_stat] in
 	  let updates =
 	    List.fold_right
@@ -561,12 +557,12 @@ and statement s =
 	      []
 	  in		 
 	  let catch_continue = 
-	    [(loop_continue, Some (newvar unit_type), make_block loc updates)] in
+	    [(loop_continue, None, make_block loc updates)] in
 	  let try_continue = 
 	    make_try loc body catch_continue (make_block loc []) in
 	  let for_stat = make_loop loc (loop_annot la) try_continue in
 	  let catch_exit =
-	    [(loop_exit, Some (newvar unit_type), make_block loc [])] in
+	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
 	    make_try loc for_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
@@ -577,19 +573,19 @@ and statement s =
 	  let return_stat = make_return loc t e in
 	  (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
       | JCTSbreak "" -> 
-	  JCSthrow (loop_exit, Some (void_const loc))
+	  JCSthrow (loop_exit, None)
       | JCTSbreak lab -> assert false (* TODO: see Claude *)
       | JCTScontinue lab -> assert false (* TODO: see Claude *)
       | JCTSgoto lab ->
 	  let name_exc = "Goto_" ^ lab in
-	  let goto_exc = exception_info unit_type name_exc in
+	  let goto_exc = exception_info None name_exc in
 	  Hashtbl.add exceptions_table name_exc goto_exc;
-	  JCSthrow (goto_exc, Some (void_const loc))
+	  JCSthrow (goto_exc, None)
       | JCTSlabel (_,s) -> 
 	  (statement s).jc_statement_node
       | JCTStry (s, cl, fs) ->
 	  let cl = 
-	    List.map (fun (ei, vi, s) -> (ei, Some vi, statement s)) cl in
+	    List.map (fun (ei, vi, s) -> (ei, vi, statement s)) cl in
 	  JCStry (statement s, cl, statement fs)
       | JCTSthrow (ei, Some e) -> 
 	  let (sl,tl),e = expr e in
@@ -629,7 +625,7 @@ and statement s =
 	  in
 	  let switch_stat = make_decls loc (sl @ ncsl) tl in
 	  let catch_exit =
-	    [(loop_exit, Some (newvar unit_type), make_block loc [])] in
+	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
 	    make_try loc switch_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
@@ -645,7 +641,7 @@ and block_statement statements =
 	let loc = s.jc_tstatement_loc in
 	let (be,bl) = block (st::bl) in
 	let name_exc = "Goto_" ^ lab in
-	let goto_exc = exception_info unit_type name_exc in
+	let goto_exc = exception_info None name_exc in
 	Hashtbl.add exceptions_table name_exc goto_exc;
 	[make_throw loc goto_exc None],(goto_exc,make_block loc be)::bl
     | s :: bl ->
@@ -657,7 +653,7 @@ and block_statement statements =
     (fun acc (goto_exc,s) ->
        let loc = s.jc_statement_loc in
        let catch_goto =
-	 [(goto_exc, Some (newvar unit_type), make_block loc [])] in
+	 [(goto_exc, None, make_block loc [])] in
        make_try loc acc catch_goto (make_block loc [])
     ) (make_block Loc.dummy_position be) bl
        

@@ -72,7 +72,7 @@ type exception_info =
     {
       jc_exception_info_tag : int;
       jc_exception_info_name : string;
-      jc_exception_info_type : jc_type;
+      jc_exception_info_type : jc_type option;
     }
 
 

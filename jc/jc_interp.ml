@@ -1251,8 +1251,11 @@ let tr_logic_type id acc = Type(id,[])::acc
 let tr_axiom id p acc = Axiom(id,assertion None "" p)::acc
 
 let tr_exception ei acc =
-  Exception(ei.jc_exception_info_name, 
-	    Some (tr_base_type ei.jc_exception_info_type)) :: acc
+  let typ = match ei.jc_exception_info_type with
+    | Some tei -> Some (tr_base_type tei)
+    | None -> None
+  in
+  Exception(ei.jc_exception_info_name, typ) :: acc
 
 let tr_enum_type ri (* to_int of_int *) acc =
   let n = ri.jc_enum_info_name in

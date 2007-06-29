@@ -1213,10 +1213,105 @@ let make_block (l:tstatement list) : tstatement_node =
     | [s] -> s.jc_tstatement_node
     | _ -> JCTSblock l
 
-let rec statement env s =
-  let ts =
+(* structure of labels in a function body : using Huet's zipper *)
+
+type label_tree =
+  | LabelItem of label_info
+  | LabelBlock of label_tree list
+
+let rec printf_label_tree fmt lt =
+  match lt with 
+    | LabelItem s -> fprintf fmt "%s" s.label_info_name
+    | LabelBlock l -> 
+	fprintf fmt "{ %a }" (Pp.print_list Pp.space printf_label_tree ) l
+
+let rec in_label_tree lab = function
+  | LabelItem l -> if l.label_info_name=lab then l else raise Not_found
+  | LabelBlock l -> in_label_tree_list lab l
+
+and in_label_tree_list lab = function
+  | [] -> raise Not_found
+  | h::r -> 
+      try in_label_tree lab h
+      with Not_found -> in_label_tree_list lab r
+
+let rec in_label_upper_tree_list lab = function
+  | [] -> raise Not_found
+  | LabelItem l :: _ when l.label_info_name=lab -> l
+  | _ :: r -> in_label_upper_tree_list lab r
+
+let build_label_tree s : label_tree list =
+  let rec build_bwd s (acc,fwdacc) =
     match s.jc_pstatement_node with
-      | JCPSskip -> JCTSblock []
+      | JCPSskip  
+      | JCPSexpr _ 
+      | JCPSbreak _
+      | JCPScontinue _
+      | JCPSreturn _
+      | JCPSpack _
+      | JCPSunpack _ 
+      | JCPSthrow _ 
+      | JCPSdecl _ 
+      | JCPSassert _ -> acc,fwdacc
+      | JCPSgoto lab ->
+	  begin try 
+	    (* Count number of forward gotos. Labels with 0 count will
+	       not be considered in generated try-catch. *)
+	    let info = in_label_tree_list lab fwdacc in
+	    info.times_used <- info.times_used + 1
+	  with Not_found -> () end;
+	  acc,fwdacc
+      | JCPSif (e, s1, s2) ->
+	  let l1,fwdl1 = build_bwd s1 ([],fwdacc) in
+	  let l2,fwdl2 = build_bwd s2 ([],fwdl1) in 
+	  (LabelBlock l1) :: (LabelBlock l2) :: acc, fwdl2
+      | JCPSlabel (lab, s) ->
+	  let info = { label_info_name = lab; times_used = 0 } in
+	  let l,fwdl = build_bwd s (acc,fwdacc) in
+	  (LabelItem info) :: l, (LabelItem info) :: fwdl
+      | JCPSblock sl ->
+	  let l,fwdl = List.fold_right build_bwd sl ([],fwdacc) in
+	  (LabelBlock l) :: acc, fwdl
+      | JCPSfor (_, _, _, _, _, s) 
+      | JCPSwhile (_, _, _, s) ->
+	  let l,fwdl = build_bwd s ([],fwdacc) in
+	  (LabelBlock l) :: acc, fwdl
+      | JCPSswitch (_, cl) ->
+	  let l,fwdl = 
+	    List.fold_right 
+	      (fun (_,sl) (acc,fwdacc) ->
+		 let l,fwdl = List.fold_right build_bwd sl ([],fwdacc) in
+		 LabelBlock l :: acc, fwdl)
+	      cl ([],fwdacc)
+	  in (LabelBlock l) :: acc, fwdl
+      | JCPStry (s,hl,fs) ->
+	  let lf,fwdl = build_bwd fs ([],fwdacc) in
+	  let l,fwdl = 
+	    List.fold_right
+	      (fun (_,_,s) (acc,fwdacc) ->
+		 let l,fwdl = build_bwd s ([],fwdacc) in
+		 LabelBlock l :: acc, fwdl)
+	      hl ([],fwdl)
+	  in
+	  let ls,fwdl = build_bwd s ([],fwdl) in
+	  LabelBlock ls
+	  :: LabelBlock l
+	  :: LabelBlock lf
+	  :: acc, fwdl
+  in
+  let l,_ = build_bwd s ([],[]) in l
+
+let build_label_tree sl : label_tree list =
+  let bs = { jc_pstatement_node = JCPSblock sl;
+	     jc_pstatement_loc = Loc.dummy_position; } in
+  match build_label_tree bs with
+    | [LabelBlock l] -> l
+    | _ -> assert false
+
+let rec statement env lz s =
+  let ts,lz =
+    match s.jc_pstatement_node with
+      | JCPSskip -> JCTSblock [], lz
       | JCPSthrow (id, Some e) -> 
 	  let ei =
 	    try Hashtbl.find exceptions_table id.jc_identifier_name 
@@ -1225,43 +1320,111 @@ let rec statement env s =
 		"undeclared exception %s" id.jc_identifier_name
 	  in
 	  let te = expr env e in
-	  if subtype te.jc_texpr_type ei.jc_exception_info_type then 
-	    JCTSthrow(ei, Some te)
+	  let tei = match ei.jc_exception_info_type with
+	    | Some tei -> tei
+	    | None -> typing_error e.jc_pexpr_loc "no expression expected" 
+	  in
+	  if subtype te.jc_texpr_type tei then 
+	    JCTSthrow(ei, Some te), lz
 	  else
-	    typing_error e.jc_pexpr_loc "%a type expected" 
-	      print_type ei.jc_exception_info_type
+	    typing_error e.jc_pexpr_loc "%a type expected" print_type tei
       | JCPSthrow (id, None) -> assert false (* should never happen *)
       | JCPStry (s, catches, finally) -> 
-	  let ts = statement env s in
-	  let catches = 
-	    List.map
-	      (fun (id,v,st) ->
+	  let lz1,lz2,lz3,lz4 = match lz with
+	    | before,LabelBlock b1::LabelBlock b2::LabelBlock b3::after ->
+		(before,b1@after),
+		(before,b2@after),
+		(before,b3@after),
+		(LabelBlock b1::LabelBlock b2::LabelBlock b3::before,after)
+	    | _ -> assert false
+	  in
+	  let ts,_ = statement env lz1 s in
+	  let catches,_ = 
+	    List.fold_left
+	      (fun (acc,lz) (id,v,st) ->
+		 let lz1,lz2 = match lz with
+		   | before,LabelBlock b1::after ->
+		       (before,b1@after),
+		       (LabelBlock b1::before,after)
+		   | _ -> assert false
+		 in
 		 let ei =
 		   try Hashtbl.find exceptions_table id.jc_identifier_name 
 		   with Not_found ->
 		     typing_error id.jc_identifier_loc 
 		       "undeclared exception %s" id.jc_identifier_name
 		 in
-		 let vi = var ei.jc_exception_info_type v in
+		 let tei = match ei.jc_exception_info_type with
+		   | Some tei -> tei
+		   | None -> typing_error id.jc_identifier_loc 
+		       "exception without value" 
+		 in
+		 let vi = var tei v in
 		 let env' = (v,vi) :: env in
-		 (ei,vi,statement env' st))
-	      catches
+		 let s,_ = statement env' lz1 st in
+		 (ei,Some vi,s)::acc, lz2)
+	      ([],lz2) catches
 	  in
-	  JCTStry(ts,catches,statement env finally)
+	  let fs,_ = statement env lz3 finally in
+	  JCTStry(ts,catches,fs), lz4
       | JCPSgoto lab -> 
-	  JCTSgoto lab
+	  let before,after = lz in
+	  begin try
+	    let _ = in_label_tree_list lab before in
+	    typing_error s.jc_pstatement_loc "unsupported backward goto"
+	  with Not_found ->
+	    try
+	      let _ = in_label_upper_tree_list lab after in
+	      let id = "Goto_" ^ lab in
+	      let ei =
+		try Hashtbl.find exceptions_table id
+		with Not_found ->
+		  let ei = exception_info None id in
+		  Hashtbl.add exceptions_table id ei;
+		  ei
+	      in
+	      JCTSthrow(ei, None), lz
+	    with Not_found ->
+	      try
+		let _ = in_label_tree_list lab after in
+		typing_error s.jc_pstatement_loc 
+		  "unsupported forward inner goto"
+	      with Not_found ->
+		typing_error s.jc_pstatement_loc "undefined label '%s'" lab
+	  end
       | JCPSlabel (lab,s) -> 
-	  JCTSlabel (lab,statement env s)
+	  let info,lz1 = match lz with
+	    | before,LabelItem lab'::after ->
+		assert (lab=lab'.label_info_name);
+		lab',(LabelItem lab'::before,after)
+	    | _ -> assert false
+	  in
+	  if info.times_used = 0 then
+	    begin
+	      (* unused label *)
+	      let ts,lz2 = statement env lz1 s in
+	      ts.jc_tstatement_node, lz2
+	    end
+	  else
+	    let id = "Goto_" ^ lab in
+	    let ei =
+	      try Hashtbl.find exceptions_table id
+	      with Not_found ->
+		let ei = exception_info None id in
+		Hashtbl.add exceptions_table id ei;
+		ei
+	    in
+	    JCTSthrow(ei, None), lz1
       | JCPScontinue _ -> assert false
-      | JCPSbreak l -> 
-	  JCTSbreak l (* TODO: check l exists, check enclosing loop exists, *)
+      | JCPSbreak l -> (* TODO: check l exists, check enclosing loop exists, *)
+	  JCTSbreak l, lz 
       | JCPSreturn None ->
-	  JCTSreturn_void
+	  JCTSreturn_void, lz
       | JCPSreturn (Some e) -> 
 	  let te = expr env e in 
 	  let vi = List.assoc "\\result" env in
 	  if subtype te.jc_texpr_type vi.jc_var_info_type then
-	    JCTSreturn(vi.jc_var_info_type,te)
+	    JCTSreturn(vi.jc_var_info_type,te), lz
 	  else
 	    typing_error s.jc_pstatement_loc 
 	      "type '%a' expected in return instead of '%a'"
@@ -1269,22 +1432,34 @@ let rec statement env s =
       | JCPSwhile(cond,inv,var,body) -> 
 	  let tc = expr env cond in
 	  if subtype tc.jc_texpr_type boolean_type then
-	    let ts = statement env body
+	    let lz1,lz2 = match lz with
+	      | before,LabelBlock b1::after ->
+		  (before,b1@after),
+		  (LabelBlock b1::before,after)
+	      | _ -> assert false
+	    in
+	    let ts,_ = statement env lz1 body
 	    and lo = loop_annot env inv var
 	    in
-	    JCTSwhile(tc,lo,ts)
+	    JCTSwhile(tc,lo,ts), lz2
 	  else 
 	    typing_error cond.jc_pexpr_loc "boolean expected"
       | JCPSfor(init,cond,updates,inv,var,body) -> 
 	  let tcond = expr env cond in
 	  if subtype tcond.jc_texpr_type boolean_type then
-	    let tbody = statement env body
+	    let lz1,lz2 = match lz with
+	      | before,LabelBlock b1::after ->
+		  (before,b1@after),
+		  (LabelBlock b1::before,after)
+	      | _ -> assert false
+	    in
+	    let tbody,_ = statement env lz1 body
 	    and lo = loop_annot env inv var
 	    and tupdates = List.map (expr env) updates
 	    in
 	    match init with
 	      |	[] ->
-		  JCTSfor(tcond,tupdates,lo,tbody)
+		  JCTSfor(tcond,tupdates,lo,tbody), lz2
 	      | _ ->
 		  let l =
 		    List.fold_right
@@ -1297,28 +1472,45 @@ let rec statement env s =
 			  jc_tstatement_node = 
 			    JCTSfor(tcond,tupdates,lo,tbody) 
 			} ]
-		  in JCTSblock l
+		  in JCTSblock l, lz2
 	  else 
 	    typing_error cond.jc_pexpr_loc "boolean expected"
 	  
       | JCPSif (c, s1, s2) -> 
 	  let tc = expr env c in
 	  if subtype tc.jc_texpr_type boolean_type then
-	    let ts1 = statement env s1
-	    and ts2 = statement env s2
+	    let lz1,lz2,lz3 = match lz with
+	      | before,LabelBlock b1::LabelBlock b2::after ->
+		  (before,b1@(LabelBlock b2)::after),
+		  (before,b2@(LabelBlock b1)::after),
+		  (LabelBlock b1::LabelBlock b2::before,after)
+	      | (before,after) -> 
+		  printf "before if: %a" printf_label_tree (LabelBlock before);
+		  printf "after if: %a" printf_label_tree (LabelBlock after);
+		  assert false
 	    in
-	    JCTSif(tc,ts1,ts2)
+	    let ts1,_ = statement env lz1 s1
+	    and ts2,_ = statement env lz2 s2
+	    in
+	    JCTSif(tc,ts1,ts2), lz3
 	  else 
 	    typing_error s.jc_pstatement_loc "boolean expected"
       | JCPSdecl (ty, id, e) -> 
 	  typing_error s.jc_pstatement_loc
-	    "decl of `%s' with statements afterwards" id
+	    "decl of `%s' with statements afterwards" id, lz
       | JCPSassert(id,e) ->
           let a = assertion env e in
-          JCTSassert(Option_misc.map (fun x -> x.jc_identifier_name) id,a)
+          JCTSassert(Option_misc.map (fun x -> x.jc_identifier_name) id,a), lz
       | JCPSexpr e -> 
-	  let te = expr env e in JCTSexpr te
-      | JCPSblock l -> make_block (statement_list env l)
+	  let te = expr env e in JCTSexpr te, lz
+      | JCPSblock l -> 
+	  let lz1,lz2 = match lz with
+	    | before,LabelBlock b1::after ->
+		(before,b1@after),
+		(LabelBlock b1::before,after)
+	    | _ -> assert false
+	  in
+	  make_block (statement_list env lz1 l), lz2
       | JCPSpack (e, t) ->
 	  let te = expr env e in
 	  begin match te.jc_texpr_type with
@@ -1327,7 +1519,7 @@ let rec statement env s =
 		  | Some t -> find_struct_info t.jc_identifier_loc t.jc_identifier_name
 		  | None -> st
 		in
-		JCTSpack(st, te, as_t)
+		JCTSpack(st, te, as_t), lz
 	    | _ ->
 		typing_error s.jc_pstatement_loc 
 		  "only structures can be packed"
@@ -1346,7 +1538,7 @@ let rec statement env s =
 			jc_struct_info_fields = [];
 		      }
 		in
-		JCTSunpack(st, te, from_t)
+		JCTSunpack(st, te, from_t), lz
 	    | _ ->
 		typing_error s.jc_pstatement_loc 
 		  "only structures can be unpacked"
@@ -1354,65 +1546,126 @@ let rec statement env s =
       | JCPSswitch (e,csl) ->
 	  let tc = expr env e in
 	  if subtype tc.jc_texpr_type integer_type then
-	    let tcsl = List.map 
-	      (fun (labels,sl) -> 
-		 let labels =
-		   List.map
-		     (fun e ->
-			match e with
-			  | Some e ->
-			      let te = expr env e in
-			      if subtype te.jc_texpr_type integer_type then
-				Some te
-			      else
-				typing_error e.jc_pexpr_loc 
-				  "integer expected in case"
-			  | None -> None)
-		     labels
-		 in
-		 let ts = statement_list env sl in
-		 labels,ts
-	      ) csl
+	    let lz1,lz2 = match lz with
+	      | before,LabelBlock b1::after ->
+		  (before,b1@after),
+		  (LabelBlock b1::before,after)
+	      | _ -> assert false
 	    in
-	    JCTSswitch(tc,tcsl)
+	    let tcsl,_ = 
+	      List.fold_left
+		(fun (acc,lz) (labels,sl) -> 
+		   let lz1,lz2 = match lz with
+		     | before,LabelBlock b1::after ->
+			 (before,b1@after),
+			 (LabelBlock b1::before,after)
+		     | _ -> assert false
+		   in
+		   let labels =
+		     List.map
+		       (fun e ->
+			  match e with
+			    | Some e ->
+				let te = expr env e in
+				if subtype te.jc_texpr_type integer_type then
+				  Some te
+				else
+				  typing_error e.jc_pexpr_loc 
+				    "integer expected in case"
+			    | None -> None)
+		       labels
+		   in
+		   let ts = statement_list env lz1 sl in
+		   (labels,ts) :: acc, lz2
+		) ([],lz1) csl
+	    in
+	    JCTSswitch(tc,tcsl), lz2
 	  else 
 	    typing_error s.jc_pstatement_loc "integer expected"
+  in 
+  let ts = { jc_tstatement_node = ts;
+	     jc_tstatement_loc = s.jc_pstatement_loc } in
+  ts, lz
 
-  in { jc_tstatement_node = ts;
-       jc_tstatement_loc = s.jc_pstatement_loc }
+and statement_list env lz l : tstatement list =
+  let rec block env lz = function
+    | [] -> [], []
+    | s :: r -> 
+	match s.jc_pstatement_node with
+	  | JCPSskip -> block env lz r
+	  | JCPSdecl (ty, id, e) ->
+	      let ty = type_type ty in
+	      let vi = var ty id in
+	      let te = 
+		Option_misc.map
+		  (fun e ->
+		     let te = expr env e in
+		     if subtype te.jc_texpr_type ty then 
+		       te
+		     else
+		       typing_error s.jc_pstatement_loc 
+			 "type '%a' expected in declaration instead of '%a'"
+			 print_type ty print_type te.jc_texpr_type)
+		  e
+	      in
+	      let tr,bl = block ((id,vi)::env) lz r in
+	      let tr = { jc_tstatement_loc = s.jc_pstatement_loc;
+			 jc_tstatement_node = make_block tr } 
+	      in
+	      [ { jc_tstatement_loc = s.jc_pstatement_loc;
+		  jc_tstatement_node = JCTSdecl(vi, te, tr); } ], bl
 
-and statement_list env l : tstatement list =
-    match l with
-      | [] -> []
-      | s :: r -> 
-	  match s.jc_pstatement_node with
-	    | JCPSskip -> statement_list env r
-	    | JCPSdecl (ty, id, e) ->
-		let ty = type_type ty in
-		let vi = var ty id in
-		let te = 
-		  Option_misc.map
-		    (fun e ->
-		       let te = expr env e in
-		       if subtype te.jc_texpr_type ty then 
-			 te
-		       else
-			 typing_error s.jc_pstatement_loc 
-			   "type '%a' expected in declaration instead of '%a'"
-			   print_type ty print_type te.jc_texpr_type)
-		    e
+	  | JCPSlabel (lab,s) ->
+	      let info,lz1 = match lz with
+		| before,LabelItem lab'::after ->
+		    assert (lab=lab'.label_info_name);
+		    lab',(LabelItem lab'::before,after)
+		| _ -> assert false
+	      in
+	      if info.times_used = 0 then
+		begin
+		  (* unused label *)
+		  block env lz1 (s::r)
+		end
+	      else
+		let (bs,bl) = block env lz1 (s::r) in
+		let id = "Goto_" ^ lab in
+		let ei =
+		  try Hashtbl.find exceptions_table id
+		  with Not_found ->
+		    let ei = exception_info None id in
+		    Hashtbl.add exceptions_table id ei;
+		    ei
 		in
-		let tr = statement_list ((id,vi)::env) r in
-		let tr = { jc_tstatement_loc = s.jc_pstatement_loc;
-			   jc_tstatement_node = make_block tr } 
-		in
+		let bs = { jc_tstatement_node = make_block bs;
+			   jc_tstatement_loc = s.jc_pstatement_loc } in
 		[ { jc_tstatement_loc = s.jc_pstatement_loc;
-		    jc_tstatement_node = JCTSdecl(vi, te, tr); } ]
-	    | _ -> 
-		let s = statement env s in
-		let r = statement_list env r in
-		s :: r
-  
+		    jc_tstatement_node = JCTSthrow(ei, None); } ], (lab,bs)::bl
+	  | _ -> 
+	      let s,lz' = statement env lz s in
+	      let r,bl = block env lz' r in
+	      s :: r, bl
+  in
+  let bs,bl = block env lz l in
+  let bs = { jc_tstatement_node = make_block bs;
+	     jc_tstatement_loc = Loc.dummy_position } in
+  let ts = List.fold_left 
+    (fun acc (lab,si) ->
+       let id = "Goto_" ^ lab in
+       let ei =
+	 try Hashtbl.find exceptions_table id
+	 with Not_found ->
+	   let ei = exception_info None id in
+	   Hashtbl.add exceptions_table id ei;
+	   ei
+       in
+       let skip = { jc_tstatement_node = JCTSblock [];
+		    jc_tstatement_loc = Loc.dummy_position } in
+       let sn = JCTStry(acc,[ei,None,si],skip) in
+       { jc_tstatement_node = sn;
+	 jc_tstatement_loc = Loc.dummy_position }
+    ) bs bl
+  in [ts]
 
 let const_zero = 
   { jc_tterm_loc = Loc.dummy_position;
@@ -1533,7 +1786,12 @@ let clause env vi_result c acc =
 		  let ei = 
 		    Hashtbl.find exceptions_table id.jc_identifier_name 
 		  in
-		  let vi = var ei.jc_exception_info_type "\\result" in
+		  let tei = match ei.jc_exception_info_type with
+		    | Some tei -> tei
+		    | None -> typing_error id.jc_identifier_loc
+			"exception without value"
+		  in
+		  let vi = var tei "\\result" in
 		  vi.jc_var_info_final_name <- "result";
 		  Some ei, (vi.jc_var_info_name,vi)::env 
 		with Not_found ->
@@ -1665,7 +1923,12 @@ let rec decl d =
 		    jc_tfun_behavior = [] }
 	in
 	let b = 
-	  Option_misc.map (statement_list (("\\result",vi)::param_env)) body 
+	  Option_misc.map 
+	    (fun body ->
+	       let lz = build_label_tree body in
+	       printf "%a" printf_label_tree (LabelBlock lz);
+	       statement_list (("\\result",vi)::param_env) ([],lz) body
+	    ) body
 	in
 	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDrecfuns pdecls ->
@@ -1756,7 +2019,7 @@ let rec decl d =
 	Hashtbl.add global_invariants_table id te
     | JCPDexception(id,t) ->
 	let tt = type_type t in
-	Hashtbl.add exceptions_table id (exception_info tt id)
+	Hashtbl.add exceptions_table id (exception_info (Some tt) id)
     | JCPDlogic(None, id, pl, body) ->
 	let param_env,ty,pi = add_logic_fundecl (None,id,pl) in
 	let p = match body with
