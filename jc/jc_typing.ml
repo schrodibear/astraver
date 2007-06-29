@@ -1215,8 +1215,9 @@ let make_block (l:tstatement list) : tstatement_node =
 
 (* structure of labels in a function body : using Huet's zipper.
    Contrary to what is done in Caduceus, where gotos are first identified as
-   
- *)
+   GotoBackward/GotoForwardOuter/GotoForwardInner, and later on translated
+   as exceptions in WHY, here both are done during typing.
+*)
 
 type label_tree =
   | LabelItem of label_info
@@ -1244,6 +1245,12 @@ let rec in_label_upper_tree_list lab = function
   | _ :: r -> in_label_upper_tree_list lab r
 
 let build_label_tree s : label_tree list =
+  (* [acc] is the tree of labels for the list of statements that follow 
+     the current one, in the same block.
+     [fwdacc] is the tree of labels for all the statements that follow 
+     the current one to the end of the function. It is used to identify
+     unused labels.
+  *)
   let rec build_bwd s (acc,fwdacc) =
     match s.jc_pstatement_node with
       | JCPSskip  
