@@ -3,13 +3,12 @@ JESSIE=../../../bin/jessie.byte
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
-EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) 
+EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj
 
 KRAKATOA=../../../bin/krakatoa.byte
 KRAKATOALIB=$(shell pwd)/../../../lib
 
-EXECKRAKATOA=KRAKATOALIB=$(KRAKATOALIB) $(KRAKATOA) -why-opt -split-user-conj
-
+EXECKRAKATOA=KRAKATOALIB=$(KRAKATOALIB) $(KRAKATOA)
 JAVAFILES=$(shell ls *.java)
 WFILES=$(addprefix why/, $(JCFILES:.jc=.why))
 

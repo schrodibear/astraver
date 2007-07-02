@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.14 2007-06-28 12:28:00 marche Exp $
+$Id: java_parser.mly,v 1.15 2007-07-02 07:52:03 marche Exp $
 
 */
 
@@ -894,6 +894,10 @@ ident:
 kml_type_decl:
 | PREDICATE ident method_parameters LEFTBRACE expr RIGHTBRACE EOF
     { JPTlogic_def($2,None,$3,$5) }
+| LOGIC type_expr ident method_parameters LEFTBRACE expr RIGHTBRACE EOF
+    { JPTlogic_def($3,Some $2,$4,$6) }
+| LOGIC type_expr ident method_parameters READS expr_comma_list SEMICOLON EOF
+    { JPTlogic_reads($3,Some $2,$4,$6) }
 | AXIOM ident COLON expr SEMICOLON EOF
     { JPTaxiom($2,$4) }
 

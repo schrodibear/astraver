@@ -46,6 +46,7 @@ let rec assertion acc p =
   match p.java_assertion_node with
   | JAtrue 
   | JAfalse -> acc
+  | JAnot a -> assertion acc a
   | JAbin(t1,_,op,t2) -> term (term acc t1) t2
   | JAapp(f,lt) -> f::(List.fold_left term acc lt)
   | JAand(p1,p2) | JAor(p1,p2) 
@@ -181,9 +182,7 @@ let compute_logic_calls f t =
     match t with
       | Java_typing.JTerm t -> term [] t 
       | Java_typing.JAssertion a -> assertion [] a 
-(*
-      | JReads r -> []
-*)
+      | Java_typing.JReads r -> List.fold_left term [] r 
   in
   f.java_logic_info_calls <- calls
 

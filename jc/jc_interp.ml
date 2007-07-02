@@ -158,8 +158,9 @@ let term_coerce loc tdest tsrc e =
 	LApp(logic_int_of_enum ri,[e])
     | JCTenum ri, JCTnative Tinteger ->
 	LApp(logic_enum_of_int ri,[e])
-    | _ , JCTnull -> e
-    | JCTpointer (st, a, b), _  -> 
+    | JCTpointer (st1, _, _), JCTpointer(st2,_,_) 
+	when Jc_typing.substruct st2 st1 -> e
+    | JCTpointer (st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
 	LApp("downcast", 
 	  [ LVar (st.jc_struct_info_root ^ "_tag_table") ; e ;
 	    LVar (st.jc_struct_info_name ^ "_tag") ])	

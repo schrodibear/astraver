@@ -260,7 +260,7 @@ bin/jessie.byte: $(JCCMO)
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/jc_pervasives.cmo jc/jc_typing.cmo \
 	jc/jc_output.cmo \
-	java/java_version.cmo java/java_misc.cmo \
+	java/java_version.cmo \
 	java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
 	java/java_typing.cmo java/java_callgraph.cmo \
@@ -494,7 +494,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
-	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
+	cp -f $(KRAKATOA) $(BINDIR)/krakatoa1$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)

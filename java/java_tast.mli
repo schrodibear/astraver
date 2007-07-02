@@ -28,6 +28,7 @@ type quantifier = Java_ast.quantifier
 type assertion_node =
     | JAtrue
     | JAfalse
+    | JAnot of assertion 
     | JAand of assertion * assertion
     | JAor of assertion * assertion
     | JAimpl of assertion * assertion

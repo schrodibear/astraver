@@ -4,7 +4,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.7 2007-06-18 07:15:58 marche Exp $
+$Id: java_lexer.mll,v 1.8 2007-07-02 07:52:03 marche Exp $
 
 ***************************************************************************)
 
@@ -75,6 +75,7 @@ $Id: java_lexer.mll,v 1.7 2007-06-18 07:15:58 marche Exp $
 	  "integer", INTEGER;
 	  "interface", INTERFACE;
 	  "invariant", INVARIANT;
+	  "logic", LOGIC;
 	  "long", LONG;
 	  "loop_invariant", LOOP_INVARIANT;
 	  "native", NATIVE;
@@ -87,6 +88,7 @@ $Id: java_lexer.mll,v 1.7 2007-06-18 07:15:58 marche Exp $
 	  "private", PRIVATE;
 	  "protected", PROTECTED;
 	  "public", PUBLIC;
+	  "reads", READS;
 	  "real", REAL;
 	  "requires", REQUIRES;
 	  "rest", REST;

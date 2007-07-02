@@ -46,7 +46,7 @@ let get_type_decl d =
     | JPTannot(loc,s) -> assert false
     | JPTaxiom((loc,id),e) -> ()
     | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads _ -> assert false (* TODO *)
+    | JPTlogic_reads((loc,id),ret_type,params,reads) -> () 
     | JPTlogic_def((loc,id),ret_type,params,body) -> ()	
 
 let get_types cu =
@@ -252,7 +252,7 @@ let type_decl d =
     | JPTannot(loc,s) -> assert false
     | JPTaxiom((loc,id),e) -> ()
     | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads _ -> assert false (* TODO *)
+    | JPTlogic_reads _ -> ()
     | JPTlogic_def((loc,id),ret_type,params,body) -> ()
 	
 
@@ -326,9 +326,7 @@ type method_table_info =
 type logic_body =
   | JAssertion of assertion
   | JTerm of term
-(*
-  | JReads of location list
-*)
+  | JReads of term list
 
 let logics_table = Hashtbl.create 97
 let logics_env = Hashtbl.create 97
@@ -740,6 +738,9 @@ let rec assertion env e =
     | JPElit _ -> 
 	typing_error e.java_pexpr_loc 
 	  "this literal is not a boolean expression"
+    | JPEun(Unot, e2) ->
+	let te2 = assertion env e2 in JAnot(te2)
+    | JPEun (_, _)-> assert false (* TODO *)
     | JPEbin(e1, ((Band | Bor | Bimpl | Biff) as op) , e2) ->
 	let te1 = assertion env e1
 	and te2 = assertion env e2
@@ -796,7 +797,6 @@ let rec assertion env e =
     | JPEassign_name (_, _, _)-> assert false (* TODO *)
     | JPEname _-> assert false (* TODO *)
     | JPEincr (_, _)-> assert false (* TODO *)
-    | JPEun (_, _)-> assert false (* TODO *)
     | JPEresult -> 
 	begin
 	  try
@@ -1334,8 +1334,7 @@ let rec method_header retty mdecl =
 	  | None -> typing_error (fst id) "invalid type void array"
 *)
 
-let assigns env a = 
-  term env a 
+let location env a = term env a 
   
 
 let behavior env env_result (id,b) = 
@@ -1346,7 +1345,7 @@ let behavior env env_result (id,b) =
   in
   (id,
    Option_misc.map (assertion env) b.java_pbehavior_assumes,
-   Option_misc.map (List.map (assigns env)) b.java_pbehavior_assigns,
+   Option_misc.map (List.map (location env)) b.java_pbehavior_assigns,
    assertion env_ensures b.java_pbehavior_ensures)
 	
 
@@ -1486,7 +1485,26 @@ let type_decl d =
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te
     | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads _ -> assert false (* TODO *)
+    | JPTlogic_reads((loc,id),ret_type,params,reads) -> 
+	let pl = List.map type_param params in
+	let env = 
+	  List.fold_left
+	    (fun acc vi -> 
+	       (vi.java_var_info_name,vi)::acc)
+	    [] pl
+	in
+	begin match ret_type with
+	  | None ->
+	      let fi = logic_info id None pl in
+	      let r = List.map (location env) reads in
+	      Hashtbl.add logics_env id fi;
+	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
+	  | Some ty -> 
+	      let fi = logic_info id (Some (type_type ty)) pl in
+	      let r = List.map (location env) reads in
+	      Hashtbl.add logics_env id fi;
+	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
+	end
     | JPTlogic_def((loc,id),ret_type,params,body) -> 
 	let pl = List.map type_param params in
 	let env = 

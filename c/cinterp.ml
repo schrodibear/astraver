@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.245 2007-06-28 09:07:44 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.246 2007-07-02 07:52:03 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -337,7 +337,9 @@ let rec interp_term label old_label t =
 	begin match t1.nterm_type.ctype_node, t.nterm_type.ctype_node with
 	  | (Tenum _ | Tint _ as ty1), (Tint (_, ExactInt) as ty2) -> 
 	      term_int_conversion ty1 ty2 (f t1)
-	  | _ -> assert false
+	  | ty1,ty2 -> 
+	      error t1.nterm_loc "cannot convert type %a to %a" 
+		Creport.print_type t1.nterm_type Creport.print_type t.nterm_type; 
 	end
     | NTunop ((Uround_error | Utotal_error), t1) when not floats ->
 	LConst (Prim_real "0.0")

@@ -22,9 +22,7 @@ val axioms_table : (string,Java_tast.assertion) Hashtbl.t
 type logic_body =
   | JAssertion of Java_tast.assertion
   | JTerm of Java_tast.term
-(*
-  | JReads of location list
-*)
+  | JReads of Java_tast.term list
 
 val logics_table : 
   (int,Java_env.java_logic_info * logic_body) Hashtbl.t

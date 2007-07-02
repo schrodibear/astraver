@@ -326,7 +326,7 @@ let rec term t =
   in { jc_tterm_loc = t.java_term_loc ; 
        jc_tterm_type = tr_type t.java_term_type ;
        jc_tterm_node = t' }
-  
+
 let quantifier = function
   | Forall -> Jc_ast.Forall
   | Exists -> Jc_ast.Exists
@@ -336,6 +336,7 @@ let rec assertion a =
     match a.java_assertion_node with
       | JAtrue -> JCTAtrue
       | JAfalse -> JCTAfalse
+      | JAnot a -> JCTAnot(assertion a)
       | JAbin(e1,t,op,e2) -> JCTArelation(term e1, lbin_op t op, term e2)
       | JAapp (fi, el)-> 
 	  JCTAapp(get_logic_fun fi,List.map term el)
@@ -358,6 +359,53 @@ let assertion_option a =
     | None -> { jc_tassertion_loc = Loc.dummy_position; 
 		jc_tassertion_node = JCTAtrue }
     | Some a -> assertion a
+
+let rec location_set t =
+  match t.java_term_node with
+      | JTlit l -> assert false (* TODO *)
+      | JTbin(e1,t,op,e2) -> assert false (* TODO *)
+      | JTapp (_, _) -> assert false (* TODO *)
+      | JTvar vi -> JCTLSvar (get_var vi)
+      | JTfield_access(t,fi) -> JCTLSderef(location_set t,get_field fi)
+      | JTstatic_field_access(ci,fi) ->
+	  JCTLSvar(get_static_var ci fi)
+      | JTarray_length(t) -> assert false (* TODO *)
+      | JTarray_access(t1,t2) -> 
+	  begin
+	    match t1.java_term_type with
+	      | JTYarray ty ->
+		  let st = get_array_struct ty in
+		  let t1' = location_set t1 in
+		  let t2' = term t2 in
+		  let shift = JCTLSrange(t1', t2', t2') in
+		  JCTLSderef(shift,snd (List.hd st.jc_struct_info_fields))
+	      | _ -> assert false
+	  end
+      | JTold t -> assert false (* TODO *)
+  
+let location t =
+  match t.java_term_node with
+      | JTlit l -> assert false (* TODO *)
+      | JTbin(e1,t,op,e2) -> assert false (* TODO *)
+      | JTapp (_, _) -> assert false (* TODO *)
+      | JTvar vi -> JCTLvar (get_var vi)
+      | JTfield_access(t,fi) -> JCTLderef(location_set t,get_field fi)
+      | JTstatic_field_access(ci,fi) ->
+	  JCTLvar(get_static_var ci fi)
+      | JTarray_length(t) -> assert false (* TODO *)
+      | JTarray_access(t1,t2) -> 
+	  begin
+	    match t1.java_term_type with
+	      | JTYarray ty ->
+		  let st = get_array_struct ty in
+		  let t1' = location_set t1 in
+		  let t2' = term t2 in
+		  let shift = JCTLSrange(t1', t2', t2') in
+		  JCTLderef(shift,snd (List.hd st.jc_struct_info_fields))
+	      | _ -> assert false
+	  end
+      | JTold t -> assert false (* TODO *)
+  
 
 let behavior (id,a,assigns,e) =
   (snd id,
@@ -561,6 +609,12 @@ let tr_logic_fun fi b acc =
 			nfi.jc_logic_info_parameters,
 			JCTAssertion(assertion a))::acc
     | Java_typing.JTerm _ -> assert false  (* TODO *)
+    | Java_typing.JReads l ->
+	JClogic_fun_def(nfi.jc_logic_info_result_type,
+			nfi.jc_logic_info_name,
+			nfi.jc_logic_info_parameters,
+			JCTReads(List.map location l))::acc
+
 
 
 (*

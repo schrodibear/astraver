@@ -31,6 +31,8 @@ val print_type : Format.formatter -> jc_type -> unit
 val typing_error : 
     Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
+val substruct : struct_info -> struct_info -> bool
+
 val logic_type_table : (string,string) Hashtbl.t
   
 val logic_functions_table : 
