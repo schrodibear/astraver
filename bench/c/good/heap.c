@@ -92,7 +92,7 @@
   @          tree_of_array(t, 2*root+2, bound))
   @*/
 
-/**** the heap ************************************************************/
+/**** the heap and its model **********************************************/
 
 #define MAXSIZE 100
 
@@ -103,8 +103,6 @@ int size = 0;
 /*@ invariant size_inv : 0 <= size < MAXSIZE */
 
 //@ invariant is_heap: is_heap(tree_of_array(heap, 0, size))
-
-/**** the model ***********************************************************/
 
 //@ logic bag model() { bag_of_tree(tree_of_array(heap, 0, size)) }
 
