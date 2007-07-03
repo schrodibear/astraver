@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.246 2007-07-02 07:52:03 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.247 2007-07-03 08:32:31 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -2260,6 +2260,14 @@ let cinterp_logic_symbol id ls =
 	    | Tvar s -> s
 	    | Tint _ -> "int"
 	    | Tfloat fk -> Cnorm.why_type_for_float_kind fk
+	    | Tpointer _ | Tstruct _ -> 
+		begin
+		  match id.logic_why_type with
+		    | Pointer z -> 
+			let zone = Info.output_zone_name z in
+			sprintf "%s pointer" zone.logic_type_name 
+		    | _ -> assert false
+		end
 	    | _ -> assert false
 	in
 	let args =
@@ -2289,6 +2297,14 @@ let cinterp_logic_symbol id ls =
 	    | Tvar s -> s
 	    | Tint _ -> "int"
 	    | Tfloat fk -> Cnorm.why_type_for_float_kind fk
+	    | Tpointer _ | Tstruct _ -> 
+		begin
+		  match id.logic_why_type with
+		    | Pointer z -> 
+			let zone = Info.output_zone_name z in
+			sprintf "%s pointer" zone.logic_type_name 
+		    | _ -> assert false
+		end
 	    | _ -> assert false
 	in
 	let args = interp_predicate_args id args in

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.mli,v 1.36 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: info.mli,v 1.37 2007-07-03 08:32:31 hubert Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -55,6 +55,7 @@ val found_repr : ?quote_var:bool -> zone -> string
 
 val output_why_type : ?quote_var:bool -> why_type -> Output.logic_type
 
+val output_zone_name : ?quote_var:bool -> zone -> Output.logic_type
 
 type var_info = private
     {

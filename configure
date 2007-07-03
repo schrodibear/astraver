@@ -2142,7 +2142,7 @@ fi
 
 { echo "$as_me:$LINENO: checking ocamlgraph version" >&5
 echo $ECHO_N "checking ocamlgraph version... $ECHO_C" >&6; }
-if $OCAMLC $OCAMLGRAPHLIB graph.cma config/check_ocamlgraph.ml; then
+if $OCAMLC $OCAMLGRAPHLIB graph.cma config/check_ocamlgraph.ml > /dev/null 2>&1; then
    { echo "$as_me:$LINENO: result: ok" >&5
 echo "${ECHO_T}ok" >&6; }
 else

@@ -503,9 +503,11 @@ let rec term tyf t =
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
       begin
-	try      List.iter2 
-	  (fun (v,ty) e -> 
-	     unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
+	try      
+	  List.iter2 
+	    (fun (v,ty) e -> 
+	       unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) 
+	    li l
 	with Invalid_argument _ -> assert false
       end
   | NTunop (_,t) -> term tyf t 
@@ -567,7 +569,8 @@ let rec predicate tyf p =
   | NPrel (t1,op,t2) ->      
       term tyf t1; 
       term tyf t2;
-      unifier_type_why ~var_name:(loc_name t1.nterm_loc) (type_why_for_term t1) (type_why_for_term t2)      
+      unifier_type_why ~var_name:(loc_name t1.nterm_loc) (type_why_for_term t1)
+	(type_why_for_term t2)      
   | NPand (p1,p2) 
   | NPor (p1,p2) 
   | NPimplies (p1,p2) 
