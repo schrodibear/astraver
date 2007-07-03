@@ -814,6 +814,7 @@ clean::
 	rm -f intf/*.cm[iox] intf/*.o intf/*~
 	rm -f tools/*.cm[iox] tools/*.o tools/*~
 	rm -f jc/*.cm[iox] jc/*.o jc/*~
+	rm -f java/*.cm[iox] java/*.o java/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f bin/caduceus.opt bin/caduceus.byte
 	rm -f bin/jessie.opt bin/jessie.byte
