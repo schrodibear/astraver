@@ -197,6 +197,13 @@ fi
 
 # checking for lablgtk2
 AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no)
+if test "$LABLGTK2" = yes ; then
+   if test -d "$OCAMLLIB/lablgtk2" ; then
+      INCLUDEGTK2="-I +lablgtk2"
+   else
+      LABLGTK2=no
+   fi      
+fi
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
@@ -352,6 +359,7 @@ AC_SUBST(OCAMLV)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLGRAPHLIB)
 AC_SUBST(LABLGTK2)
+AC_SUBST(INCLUDEGTK2)
 AC_SUBST(OCAMLWEB)
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)

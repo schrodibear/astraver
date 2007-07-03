@@ -66,8 +66,8 @@ OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
 INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib
-BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads @OCAMLGRAPHLIB@ 
-OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads @OCAMLGRAPHLIB@ 
+BFLAGS   = -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
