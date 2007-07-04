@@ -7,13 +7,13 @@
   @*/
  
 /*@ axiom num_of_pos_true_case :
-  @   \forall int i, int j, int k, int t[];
+  @   \forall int i, int j, int t[];
   @       i <= j && t[j] > 0 => 
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t) + 1
   @*/
 
 /*@ axiom num_of_pos_false_case :
-  @   \forall int i, int j, int k, int t[];
+  @   \forall int i, int j, int t[];
   @       i <= j && ! (t[j] > 0) => 
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t)
   @*/
