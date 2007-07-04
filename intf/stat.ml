@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.53 2007-02-20 21:46:58 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.54 2007-07-04 15:21:30 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -382,6 +382,36 @@ let run_prover_all p (view:GTree.view) (model:GTree.tree_store) bench () =
     (fun f -> run_prover_fct p view model f bench ()) 
     Model.fq
 
+let run_benchmark_fct (view:GTree.view) (model:GTree.tree_store) f () =
+  try
+    let row = Model.find_fct f in
+    model#set ~row ~column:Model.total 0;
+    let n = model#iter_n_children (Some row) in
+    let mychildren = Model.find_fobligs f in
+    Queue.iter
+      (fun row -> 
+	let s = model#get ~row ~column:Model.fullname in
+	let oblig = Model.find_oblig s in
+	let rec try_prover = function
+	  | [] -> 
+	      ()
+	  | p :: pl -> 
+	      let result = run_prover_child p view model oblig true false in
+	      if result = 0 then try_prover pl
+	in
+	try_prover (Model.get_provers ()))
+      mychildren;
+    if not (Tools.live_update ()) then begin 
+      build_statistics model f
+    end 
+  with Not_found -> 
+    begin 
+      print_endline ("     [...] Error : function \""^f^"\" not found !"); 
+      flush stdout 
+    end
+
+let run_benchmark (view:GTree.view) (model:GTree.tree_store) () =
+  Queue.iter (fun f -> prove (run_benchmark_fct view model f)) Model.fq
 
 let main () = 
   let w = GWindow.window 
@@ -564,10 +594,12 @@ let main () =
   let _ = 
     proof_factory#add_image_item ~label:"Start _benchmark" 
       ~key:GdkKeysyms._B 
-      ~callback:(fun () -> 
+      ~callback:(run_benchmark view model)
+                (***
+                (fun () -> 
 		   List.iter
 		     (fun p -> prove (run_prover_all p view model true))
-		     (Model.get_provers ())) () 
+		     (Model.get_provers ())) ***) () 
   in
   let fct_callback bench () = 
     List.iter 
@@ -596,9 +628,11 @@ let main () =
 		     then model#get ~row ~column:Model.fullname 
 		     else model#get ~row ~column:Model.parent
 		   in
+		   prove (run_benchmark_fct view model s))
+      (***
 		   List.iter
 		     (fun p -> prove (run_prover_fct p view model s true))
-		     (Model.get_provers())) ()
+		     (Model.get_provers())) ***)  ()
   in
   let _ = 
     proof_factory#add_image_item ~label:"Prove _all obligations" 
