@@ -165,6 +165,8 @@ let main () =
 	    Jc_norm.axioms_table
 	    d_lfuns
 	in	       
+	(* production phase 3.5 : generation of global invariant predicates *)
+	let d_axioms = Jc_invariants.make_global_invariants d_axioms in
 	(* production phase 4 : generation of Why functions *)
 	let d_funs = 
 	  Hashtbl.fold 
@@ -187,7 +189,7 @@ let main () =
             Jc_norm.structs_table
             d_inv
         in
-	(* production phase 5.3 : axioms (not mutable implies invariant) *)
+	(* production phase 5.3 : global invariants (not mutable implies invariant) *)
         (*let d_inv =
           Hashtbl.fold
             (fun _ (st, _) acc ->

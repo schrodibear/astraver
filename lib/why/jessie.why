@@ -295,6 +295,7 @@ parameter free_parameter :
   { offset_min(a,p) = 0 and offset_max(a,p) >= 0 
 	and select(com,p) = false }
   unit
+  reads com
   writes a
   { offset_max(a,p) < offset_min(a,p) }
 

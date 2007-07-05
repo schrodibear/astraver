@@ -16,6 +16,7 @@ type Hero = {
     invariant sword_inv(this) =
         \offset_min(this.sword) <= 0 &&
         \offset_max(this.sword) >= 0;
+    invariant test(this) = (this.sword+4).damage == 5;
 }
 
 type Sorcerer = Hero with {

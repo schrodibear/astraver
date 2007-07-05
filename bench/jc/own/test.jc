@@ -1,17 +1,10 @@
-type A = {
-  boolean b;
+type Point = {
+  integer x;
+  integer y;
 }
 
-type B = {
-  boolean c;
-}
-
-unit main(A[..] a)
-  behavior safety:
-    ensures a.b == \old(a.b);
-{
-  if ((a :> B).c);
-}
+type ColorPoint = Point with { integer color; }
+ 
 
 /*
 Local Variables: 

@@ -160,6 +160,8 @@ let type_structure = function
   | JCTpointer(st, _, _) -> st
   | _ -> failwith "type_structure"
 
+let hierarchy_invariant_name h = "global_invariant_"^h
+
 (*let mutable_instance_of_name root_structure_name =
   (mutable_name root_structure_name)^"_instance_of"*)
 
@@ -167,13 +169,28 @@ let type_structure = function
 (* Checking an invariant definition *)
 (************************************)
 
+let field _ = ()
+
+let rec check_rep ?(must_deref=false) this loc t =
+  match t.jc_term_node with
+    | JCTvar vi when vi == this && not must_deref -> ()
+    | JCTderef (t, fi) ->
+	field fi;
+	check_rep ~must_deref:false this loc t
+    | JCTcast (t, _)
+    | JCTshift (t, _) ->
+	(* t must not be this, but might be a field of this *)
+	check_rep ~must_deref:true this loc t
+    | _ ->
+	Jc_typing.typing_error loc "this term is not a rep field of %s" this.jc_var_info_name
+
 let rec term this t =
   match t.jc_term_node with
     | JCTconst _ -> ()
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTcast (t, ty) -> term this t
-    | JCTinstanceof (t, ty) -> term this t
-    | JCToffset(_,t,_) -> term this t
+    | JCTcast (t, _) -> term this t
+    | JCTinstanceof (t, _) -> term this t
+    | JCToffset(_, t, _) -> term this t
     | JCTold t
     | JCTunary (_,t) -> term this t
     | JCTapp (id, l) ->
@@ -182,18 +199,19 @@ let rec term this t =
 	else
 	  Jc_typing.typing_error t.jc_term_loc
 	    "this call is not allowed in structure invariant"
-    | JCTderef (t1, fi) -> 
-	begin
-	  match t1.jc_term_node with
-	    | JCTvar vi when vi == this -> ()
-	    | _ -> 
-		Jc_typing.typing_error t.jc_term_loc
-		  "this dereferencing is not allowed in structure invariant"
-	end
+    | JCTderef (t1, fi) ->
+	field fi;
+	check_rep this t.jc_term_loc t1
     | JCTshift (t1, t2) 
     | JCTrange (t1, t2)
     | JCTbinary(t1,_,t2) -> term this t1; term this t2
     | JCTvar _ -> ()
+
+let tag this t =
+  match t.jc_tag_node with
+    | JCTtag _
+    | JCTbottom -> ()
+    | JCTtypeof(t, _) -> term this t
 
 let rec assertion this p =
   match p.jc_assertion_node with
@@ -217,9 +235,9 @@ let rec assertion this p =
     | JCAmutable _ ->
 	Jc_typing.typing_error p.jc_assertion_loc
 	  "\\mutable is not allowed in structure invariant"
-    | JCAtagequality _ ->
-	Jc_typing.typing_error p.jc_assertion_loc
-	  "\\typeeq is not allowed in structure invariant"
+    | JCAtagequality(t1, t2, _) ->
+	tag this t1;
+	tag this t2
 
 let check invs =
   List.iter
@@ -338,11 +356,45 @@ let rec parents acc st =
     | Some p -> parents (st::acc) p
 let parents = parents []
 
+(* Returns every structure (name) that can be used by a function, given its parameters *)
+let function_structures params =
+  (* structures that can be used by the function *)
+  let structures = List.fold_left
+    (fun acc vi ->
+       match vi.jc_var_info_type with
+	 | JCTpointer(st, _, _) ->
+	     all_structures st acc
+	 | _ -> acc)
+    StringSet.empty
+    params
+  in
+  StringSet.elements structures
+
+let hierarchy_structures h =
+  Hashtbl.fold
+    (fun _ (st, _) acc -> if st.jc_struct_info_root = h then st::acc else acc)
+    Jc_typing.structs_table
+    []
+  
+let structure_root st =
+  try
+    let st, _ = Hashtbl.find Jc_typing.structs_table st in
+    st.jc_struct_info_root
+  with Not_found -> failwith "Jc_invariants.structure_root"
+
+let hierarchies () =
+  let h = Hashtbl.fold
+    (fun _ (st, _) acc -> StringSet.add st.jc_struct_info_root acc)
+    Jc_typing.structs_table
+    StringSet.empty
+  in StringSet.elements h
+
+
 (*********)
 (* assoc *)
 (*********)
 
-let program_point_type = simple_logic_type "int"
+(*let program_point_type = simple_logic_type "int"
 
 let fresh_program_point =
   let c = ref 0 in fun () ->
@@ -385,20 +437,6 @@ let field_assocs fi =
 let make_assume_field_assocs pp fi =
   make_assume_assocs pp (field_assocs fi)
 
-(* Returns every structure (name) that can be used by a function, given its parameters *)
-let function_structures params =
-  (* structures that can be used by the function *)
-  let structures = List.fold_left
-    (fun acc vi ->
-       match vi.jc_var_info_type with
-	 | JCTpointer(st, _, _) ->
-	     all_structures st acc
-	 | _ -> acc)
-    StringSet.empty
-    params
-  in
-  StringSet.elements structures
-
 (* Returns a list of all memories which need an "assoc"
 (calculated from a function parameter list) *)
 let all_assocs pp params =
@@ -415,7 +453,7 @@ let all_assocs pp params =
 
 (* Assume all assocs needed at the start of a fonction *)
 let make_assume_all_assocs pp params =
-  make_assume_assocs pp (all_assocs pp params)
+  make_assume_assocs pp (all_assocs pp params)*)
 
 (***********)
 (* mutable *)
@@ -426,74 +464,6 @@ let mutable_memory_type root =
 
 let committed_memory_type root =
   memory_type root (simple_logic_type "bool")
-
-(* instanceof doesn't take two tags as parameters, so "mutable <: tag" doesn't make sense.
-   Instead, we define:
-     mutable_T_instance_of(e: T pointer; tag: T tag_id) = forall p: T pointer, p <: e.mutable_T -> p <: tag
-   which corresponds to the instanceof axioms. *)
-(*let mutable_instance_of_definition st =
-  let tag_table = st.jc_struct_info_root^"_tag_table" in
-  let mutable_name = mutable_name st.jc_struct_info_root in
-  let p = "p" in
-  let e = "e" in
-  let tag = "tag" in
-  Predicate(
-    false,
-    mutable_instance_of_name st.jc_struct_info_root,
-    [ tag_table, tag_table_type st;
-      mutable_name, mutable_memory_type st;
-      e, pointer_type st.jc_struct_info_root;
-      tag, tag_type st;
-    ],
-    LForall(
-      p, pointer_type st.jc_struct_info_root,
-      LImpl(
-	(LPred(
-	   "instanceof",
-	   [ LVar tag_table;
-	     LVar p;
-	     LVar (tag_name st) ])),
-	(LPred(
-	   "instanceof",
-	   [ LVar tag_table;
-	     LVar p;
-	     LApp("select", [LVar mutable_name; LVar e]) ]))
-      )
-    )
-  )
-
-let mutable_instance_of_app root e tag =
-  LPred(
-    mutable_instance_of_name root,
-    [ LVar (root^"_tag_table");
-      LVar (mutable_name root);
-      e;
-      LVar tag ])*)
-
-(*let fully_packed_definition root =
-  let mutable_name = mutable_name root in
-  let this = "this" in
-  let tag = "tag" in
-  let tag_table = tag_table_name root in
-  Predicate(
-    false,
-    fully_packed_name root,
-    [ tag_table, tag_table_type "'a";
-      mutable_name, mutable_memory_type "'a";
-      this, pointer_type "'a" ],
-    LForall(
-      tag, tag_type root,
-      LImpl(
-	LPred(
-	   "instanceof",
-	   [ LVar tag_table;
-	     LVar this;
-	     LVar tag ]),
-	LPred(
-	   "subtag",
-	   [ LVar tag_table;
-	     LApp("select", [ LVar mutable_name; LVar this ]);
-	     LVar tag ]))))*)
 
 let mutable_declaration st acc =
   let root = st.jc_struct_info_root in
@@ -537,7 +507,7 @@ let assert_mutable e fi =
 (* Invariant axioms *)
 (********************)
 
-let invariant_axiom st acc (li, a) =
+(*let invariant_axiom st acc (li, a) =
   let params = invariant_params [] li in
   
   (* this *)
@@ -581,25 +551,29 @@ let invariant_axiom st acc (li, a) =
 
 let invariants_axioms st acc =
   let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
-  List.fold_left (invariant_axiom st) acc invs
+  List.fold_left (invariant_axiom st) acc invs*)
 
 (******************************************)
 (* Invariant assumes (axioms pre-applied) *)
 (******************************************)
 
+(* hierarchy root (string) -> hierarchy invariant parameters ((string * logic_type) list) *)
+let hierarchy_invariants = Hashtbl.create 97
+
 (* List of each invariant that can be broken by modifying a given field *)
 let field_invariants fi =
+  (* List of all structure * invariant *)
   let invs = Hashtbl.fold
-    (fun _ (_, i) acc -> i@acc)
+    (fun _ (st, invs) acc -> (List.map (fun inv -> st, inv) invs)@acc)
     Jc_typing.structs_table
     []
   in
-(*  let _, invs = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in*)
+  (* Only keep the invariants which uses the field *)
   List.fold_left
-    (fun aux (li, a) ->
+    (fun aux ((_, (_, a)) as x) ->
        let amems = assertion_memories StringSet.empty a in
        if StringSet.mem fi.jc_field_info_name amems then
-         (li, a)::aux
+         x::aux
        else
 	 aux)
     []
@@ -607,40 +581,112 @@ let field_invariants fi =
 
 (* Assume that for all this: st, not this.mutable => invariant *)
 (* (the invariant li must be declared in st) *)
-let assume_invariant st (li, _) =
+let forall_mutable_invariant st (li, _) =
   let params = invariant_params [] li in
+  let root = st.jc_struct_info_root in
   
   (* this *)
   let this = "this" in
   let this_ty =
     { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
+      logic_type_args = [simple_logic_type root] } in
 
   (* this.mutable <: st => this.invariant *)
-  let mutable_name = mutable_name st.jc_struct_info_root in
-  let mutable_io = make_subtag st.jc_struct_info_root
+  let mutable_name = mutable_name root in
+  let mutable_io = make_subtag root
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
   in
   let invariant = make_logic_pred_call li [LVar this] in
-  let assume_impl = LImpl(mutable_io, invariant) in
+  let impl = LImpl(mutable_io, invariant) in
 
   (* quantifier (forall this) *)
-  let assume = LForall(this, this_ty, assume_impl) in
+  let inv = LForall(this, this_ty, impl) in
 
-  (* reads *)
-  let reads = List.map fst params in
-  let reads = mutable_name::reads in
-  let reads = (tag_table_name st.jc_struct_info_root)::reads in
+  (* params *)
+  let params = (mutable_name, mutable_memory_type root)::params in
+  let params = (tag_table_name root, tag_table_type root)::params in
 
-  make_assume reads assume
+  params, inv
+
+let lex2 (a1, b1) (a2, b2) =
+  let c = compare a1 a2 in
+  if c = 0 then compare b1 b2 else c
+
+let make_hierarchy_global_invariant acc h =
+  let fmi = List.map
+    (fun st ->
+       let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+       List.map (fun inv -> forall_mutable_invariant st inv) invs)
+    (hierarchy_structures h)
+  in
+  let fmi = List.flatten fmi in
+  let params, fmi = List.map fst fmi, List.map snd fmi in
+  let params = List.fold_left
+    (fun acc (n, t) -> StringMap.add n t acc)
+    StringMap.empty
+    (List.flatten params)
+  in
+  let params = StringMap.fold (fun n t acc -> (n, t)::acc) params [] in
+  let params = List.sort lex2 params in
+  let fmi = make_and_list fmi in
+  Hashtbl.add hierarchy_invariants h params;
+  match params with
+    | [] -> acc
+    | _ -> Predicate(false, hierarchy_invariant_name h, params, fmi)::acc
+
+let make_global_invariants acc =
+  let h = hierarchies () in
+  List.fold_left make_hierarchy_global_invariant acc h
+
+let assume_global_invariant root =
+  let params =
+    try
+      Hashtbl.find hierarchy_invariants root
+    with Not_found -> failwith ("Jc_invariants.assume_global_invariant: "^root^" not found")
+  in
+  match params with
+    | [] -> Void
+    | _ ->
+	let reads = List.map fst params in
+	let params = List.map (fun (n, _) -> LVar n) params in
+	let inv = LPred(hierarchy_invariant_name root, params) in
+	make_assume reads inv
+
+let assume_global_invariants hl =
+  List.fold_left append Void (List.map assume_global_invariant hl)
 
 (* Given a field that has just been modified, assume all potentially
 useful invariant for all objects that is not mutable *)
 let assume_field_invariants fi =
+  let invs = field_invariants fi in
+  (* keep hierarchies only once *)
+  let hl = List.fold_left
+    (fun acc (st, _) -> StringSet.add st.jc_struct_info_root acc)
+    StringSet.empty
+    invs
+  in
+  assume_global_invariants (StringSet.elements hl)
+
+(* Given the parameters of a function, assume all potentially useful
+forall this: st, not this.mutable => invariant *)
+let assume_all_invariants params =
+  let structures = function_structures params in
+  (* keep hierarchies only once *)
+  let hl = List.fold_left
+    (fun acc st -> StringSet.add (structure_root st) acc)
+    StringSet.empty
+    structures
+  in
+  assume_global_invariants (StringSet.elements hl)
+
+(*(* Given a field that has just been modified, assume all potentially
+useful invariant for all objects that is not mutable *)
+let assume_field_invariants fi =
   (* structure in which the field is defined *)
   let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
-  let assumes = List.map (fun inv -> assume_invariant st inv) (field_invariants fi) in
+  let assumes = List.map (fun inv -> forall_mutable_invariant st inv) (field_invariants fi) in (* FAUX (st n'est pas forcément la bonne structure !) *)
+  let assumes = List.map (fun (params, inv) -> make_assume (List.map fst params) inv) assumes in
   List.fold_left append Void assumes
 
 let rec flatten_snd = function
@@ -657,8 +703,9 @@ let assume_all_invariants params =
       structures
   in
   let st_invs = flatten_snd st_invs in
-  let assumes = List.map (fun (st, inv) -> assume_invariant st inv) st_invs in
-  List.fold_left append Void assumes
+  let assumes = List.map (fun (st, inv) -> forall_mutable_invariant st inv) st_invs in
+  let assumes = List.map (fun (params, inv) -> make_assume (List.map fst params) inv) assumes in
+  List.fold_left append Void assumes*)
 
 (*****************)
 (* pack / unpack *)
