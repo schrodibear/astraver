@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.47 2007-07-06 07:45:28 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.48 2007-07-06 08:52:35 marche Exp $ *)
 
 
 open Jc_env
@@ -210,7 +210,8 @@ let rec expr ef e =
 	if vi.jc_var_info_static then
 	  add_global_reads ef vi
 	else ef
-    | JCEunary(op,e1) -> expr ef e1
+    | JCErange_cast(_,e1)
+    | JCEunary(_,e1) -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) -> expr ef e
     | JCEalloc(e,st) ->

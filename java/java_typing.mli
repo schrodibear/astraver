@@ -26,6 +26,8 @@ type logic_body =
   | JTerm of Java_tast.term
   | JReads of Java_tast.term list
 
+val is_numeric : Java_env.java_type -> bool 
+
 val logics_table : 
   (int,Java_env.java_logic_info * logic_body) Hashtbl.t
 

@@ -247,6 +247,8 @@ let rec expr fmt e =
 	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
     | JCTEcast (e, si) ->
 	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
+    | JCTErange_cast (ri, e) ->
+	fprintf fmt "(%a :> %s)" expr e ri.jc_enum_info_name
     | JCTEalloc (e, si) ->
 	fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e 
     | JCTEfree (e) ->

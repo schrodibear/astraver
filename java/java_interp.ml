@@ -59,6 +59,13 @@ let range_types acc =
 			ri.jc_enum_info_max)::acc) 
     acc [ byte_range ; short_range ; int_range ; long_range ; char_range ]
 
+
+let byte_type = JCTenum byte_range
+let short_type = JCTenum short_range 
+let int_type = JCTenum int_range 
+let long_type = JCTenum long_range 
+let char_type = JCTenum char_range 
+
 let tr_base_type t =
   match t with
     | Tnull -> JCTnull
@@ -67,19 +74,19 @@ let tr_base_type t =
     | Tinteger -> Jc_pervasives.integer_type
     | Tshort -> 
 	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
-	JCTenum short_range 
+	short_type
     | Tint -> 
 	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
-	JCTenum int_range 
+	int_type
     | Tlong -> 
 	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
-	JCTenum long_range 
+	long_type
     | Tchar -> 
 	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
-	JCTenum char_range 
+	char_type
     | Tbyte  -> 
 	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
-	JCTenum byte_range 
+	byte_type
     | Treal -> assert false (* TODO *)
     | Tfloat -> assert false (* TODO *)
     | Tdouble -> assert false (* TODO *)
@@ -532,6 +539,11 @@ let incr_op op =
     | Postincr -> Postfix_inc
     | Postdecr -> Postfix_dec
 
+let int_cast loc t e =
+   if Java_options.ignore_overflow || not (Java_typing.is_numeric t) then e else     
+     JCTErange_cast(int_range, { jc_texpr_loc = loc;
+				 jc_texpr_type = Jc_pervasives.integer_type;
+				 jc_texpr_node = e })
 
 let rec expr e =
   let e' =
@@ -541,10 +553,10 @@ let rec expr e =
 	  JCTEincr_local(incr_op op,get_var v)
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
-	  JCTEunary(un_op op,e1)	
+	  int_cast e.java_expr_loc e.java_expr_type (JCTEunary(un_op op,e1))
       | JEbin (e1, op, e2) -> 
 	  let e1 = expr e1 and e2 = expr e2 in
-	  JCTEbinary(e1,bin_op op,e2)	  
+	  int_cast e.java_expr_loc e.java_expr_type (JCTEbinary(e1,bin_op op,e2))
       | JEvar vi -> JCTEvar (get_var vi)
       | JEstatic_field_access(ci,fi) ->
 	  JCTEvar(get_static_var ci fi)
@@ -605,7 +617,7 @@ let rec expr e =
 	  
 
   in { jc_texpr_loc = e.java_expr_loc ; 
-       jc_texpr_type = tr_type e.java_expr_type ;
+       jc_texpr_type = tr_type e.java_expr_type;
        jc_texpr_node = e' }
 
 let initialiser e =

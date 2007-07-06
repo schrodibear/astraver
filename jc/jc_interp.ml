@@ -47,12 +47,15 @@ let tr_native_type t =
 
 let simple_logic_type s =
   { logic_type_name = s; logic_type_args = [] }
+
+let why_integer_type = simple_logic_type "int"
   
 let tr_base_type t =
   match t with
     | JCTnative t -> simple_logic_type (tr_native_type t)
     | JCTlogic s -> simple_logic_type s
-    | JCTenum ri -> simple_logic_type ri.jc_enum_info_name
+    | JCTenum ri -> 
+	simple_logic_type ri.jc_enum_info_name
     | JCTpointer (st, a, b) -> 
 	let ti = simple_logic_type (st.jc_struct_info_root) in
 	{ logic_type_name = "pointer";
@@ -145,6 +148,7 @@ let bin_arg_type loc = function
   | Bneq_pointer | Beq_pointer -> assert false
 
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
+let safe_fun_enum_of_int n = "safe_" ^ n.jc_enum_info_name ^ "_of_integer_"
 let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
 let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
 let fun_any_enum n = "any_" ^ n.jc_enum_info_name
@@ -169,15 +173,24 @@ let term_coerce loc tdest tsrc e =
 	   "can't coerce type %a to type %a" 
 	   Jc_typing.print_type tsrc Jc_typing.print_type tdest
 
-let coerce loc tdest tsrc e =
+let coerce ~no_int_overflow loc tdest tsrc e =
   match tdest,tsrc with
     | JCTnative t, JCTnative u when t=u -> e
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
+    | JCTenum ri1, JCTenum ri2 -> 
+	let e = make_app (logic_int_of_enum ri2) [e] in
+	if no_int_overflow then 
+	  make_app (safe_fun_enum_of_int ri1) [e]
+	else
+	  make_app (fun_enum_of_int ri1) [e]
     | JCTnative Tinteger, JCTenum ri ->
 	make_app (logic_int_of_enum ri) [e]
     | JCTenum ri, JCTnative Tinteger ->
-	make_app (fun_enum_of_int ri) [e]
+	if no_int_overflow then 
+	  make_app (safe_fun_enum_of_int ri) [e]
+	else
+	  make_app (fun_enum_of_int ri) [e]
     | _ , JCTnull -> e
     | JCTpointer (st, a, b), _  -> 
 	make_app "downcast_" 
@@ -239,25 +252,27 @@ let rec term label oldlabel t =
     | JCTvar v -> lvar_info label v
     | JCTconst c -> LConst(const c)
     | JCTunary(op,t1) ->
-	let t1' = term label oldlabel t1 in
+	let t1' = ft t1 in
 	LApp (unary_op op, 
 	      [term_coerce t.jc_term_loc 
 		 (unary_arg_type op) t1.jc_term_type t1' ])
     | JCTbinary(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-	let t1' = term label oldlabel t1 in
-	let t2' = term label oldlabel t2 in
+	let t1' = ft t1 in
+	let t2' = ft t2 in
 	LApp (bin_op op, [ t1'; t2'])
     | JCTbinary(t1,Bland,t2) ->
 	assert false (* should be an assertion *)
     | JCTbinary(t1,Blor,t2) ->
 	assert false (* should be an assertion *)
     | JCTbinary(t1,op,t2) ->
-	let t1' = term label oldlabel t1 in
-	let t2' = term label oldlabel t2 in
+	let t1' = ft t1 in
+	let t2' = ft t2 in
 	let t = bin_arg_type t.jc_term_loc op in
 	LApp (bin_op op, 
-	      [ term_coerce t1.jc_term_loc t t1.jc_term_type t1'; 
-		term_coerce t2.jc_term_loc t t2.jc_term_type t2'])
+	      [ term_coerce t1.jc_term_loc t 
+		  t1.jc_term_type t1'; 
+		term_coerce t2.jc_term_loc t 
+		  t2.jc_term_type t2'])
     | JCTshift(t1,t2) -> 
 	let t2' = ft t2 in
 	LApp("shift",[ft t1; 
@@ -317,15 +332,17 @@ let rec assertion label oldlabel a =
 	let t2' = ft t2 in
 	let t = bin_arg_type a.jc_assertion_loc op in
 	LPred(pred_bin_op op, 
-	      [ term_coerce t1.jc_term_loc t t1.jc_term_type t1'; 
-		term_coerce t2.jc_term_loc t t2.jc_term_type t2'])
+	      [ term_coerce t1.jc_term_loc t
+		  t1.jc_term_type t1'; 
+		term_coerce t2.jc_term_loc t 
+		  t2.jc_term_type t2'])
     | JCAapp(f,l) -> 
 	begin try
 	  make_logic_pred_call f 
 	    (List.map2 
 	       (fun vi t -> 
-		  term_coerce t.jc_term_loc vi.jc_var_info_type 
-		    t.jc_term_type (term label oldlabel t))
+		  term_coerce t.jc_term_loc 
+		    vi.jc_var_info_type t.jc_term_type (ft t))
 	       f.jc_logic_info_parameters l)	    
 	with Invalid_argument _ -> assert false
 	end
@@ -494,7 +511,8 @@ let rec expr ~threats e : expr =
     | JCEunary(op,e1) ->
 	let e1' = expr e1 in
 	make_app (unary_op op) 
-	  [coerce e.jc_expr_loc (unary_arg_type op) e1.jc_expr_type e1' ]
+	  [coerce ~no_int_overflow:(not threats) 
+	     e.jc_expr_loc (unary_arg_type op) e1.jc_expr_type e1' ]
     | JCEbinary(e1,((Beq_pointer | Bneq_pointer) as op),e2) ->
 	let e1' = expr e1 in
 	let e2' = expr e2 in
@@ -514,8 +532,10 @@ let rec expr ~threats e : expr =
 	let e2' = expr e2 in
 	let t = bin_arg_type e.jc_expr_loc op in
 	make_app (bin_op op) 
-	  [ coerce e1.jc_expr_loc t e1.jc_expr_type e1'; 
-	    coerce e2.jc_expr_loc t e2.jc_expr_type e2']	
+	  [ coerce ~no_int_overflow:(not threats) 
+	      e1.jc_expr_loc t e1.jc_expr_type e1'; 
+	    coerce ~no_int_overflow:(not threats) 
+	      e2.jc_expr_loc t e2.jc_expr_type e2']	
     | JCEif(e1,e2,e3) -> 
 	let e1 = expr e1 in
 	let e2 = expr e2 in
@@ -526,7 +546,8 @@ let rec expr ~threats e : expr =
 	let e2' = expr e2 in
 	make_app "shift" 
 	  [e1'; 
-	   coerce e2.jc_expr_loc integer_type e2.jc_expr_type e2']
+	   coerce ~no_int_overflow:(not threats) 
+	     e2.jc_expr_loc integer_type e2.jc_expr_type e2']
     | JCEoffset(k,e,st) -> 
 	let alloc =
 	  st.jc_struct_info_root ^ "_alloc_table"
@@ -544,6 +565,12 @@ let rec expr ~threats e : expr =
 	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
 	make_app "downcast_" [Deref tag; e; Var (tag_name t)]
+    | JCErange_cast(ri,e) ->
+	let e = expr e in
+	if threats then 
+	  make_app (fun_enum_of_int ri) [e]	  
+	else
+	  make_app (safe_fun_enum_of_int ri) [e]
     | JCEderef(e,fi) ->
 	if threats then
 	  make_app "acc_" 
@@ -588,7 +615,8 @@ let any_value ty =
       end
   | JCTnull 
   | JCTpointer _ -> App (Var "any_pointer", Void)
-  | JCTenum ri -> App (Var ("any_" ^ ri.jc_enum_info_name), Void)
+  | JCTenum ri -> 
+      App (Var ("any_" ^ ri.jc_enum_info_name), Void)
   | JCTlogic _ -> assert false
 
   
@@ -597,7 +625,8 @@ let jessie_return_exception = "Return"
 let return_void = ref false
 
 let expr_coerce ~threats vi e =
-  coerce e.jc_expr_loc vi.jc_var_info_type e.jc_expr_type (expr ~threats e)
+  coerce ~no_int_overflow:(not threats) 
+    e.jc_expr_loc vi.jc_var_info_type e.jc_expr_type (expr ~threats e)
   
 let rec statement ~threats s = 
   (* reset_tmp_var(); *)
@@ -626,7 +655,8 @@ let rec statement ~threats s =
     | JCSassign_var (vi, e2) -> 
 	let e2' = expr e2 in
 	let n = vi.jc_var_info_final_name in
-	Assign(n, coerce e2.jc_expr_loc vi.jc_var_info_type e2.jc_expr_type e2')
+	Assign(n, coerce ~no_int_overflow:(not threats) 
+		 e2.jc_expr_loc vi.jc_var_info_type e2.jc_expr_type e2')
     | JCSassign_heap(e1,fi,e2) -> 
 	let e1' = expr e1 in
 	let e2' = expr e2 in
@@ -636,7 +666,9 @@ let rec statement ~threats s =
 	let upd = if threats then append (assert_mutable (LVar tmp1) fi) upd else upd in
         (append
 	   (make_lets
-	      ([ (tmp1, e1') ; (tmp2, coerce e2.jc_expr_loc fi.jc_field_info_type e2.jc_expr_type e2') ])
+	      ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
+				  e2.jc_expr_loc fi.jc_field_info_type 
+				  e2.jc_expr_type e2') ])
 	      upd)
 	   (assume_field_invariants fi))
 (*	   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
@@ -658,18 +690,21 @@ let rec statement ~threats s =
 	  in
 	  if vi.jc_var_info_assigned then 
 	    Let_ref(vi.jc_var_info_final_name, 
-		    coerce s.jc_statement_loc vi.jc_var_info_type t e', 
+		    coerce ~no_int_overflow:(not threats) 
+		      s.jc_statement_loc vi.jc_var_info_type t e', 
 		    statement s)
 	  else 
 	    Let(vi.jc_var_info_final_name,
-		coerce s.jc_statement_loc vi.jc_var_info_type t e', 
+		coerce ~no_int_overflow:(not threats) 
+		  s.jc_statement_loc vi.jc_var_info_type t e', 
 		statement s)
 	end
     | JCSreturn_void -> Raise(jessie_return_exception,None)	
     | JCSreturn(t,e) -> 
 	append
 	  (Assign(jessie_return_variable,
-		  coerce e.jc_expr_loc t e.jc_expr_type (expr e)))
+		  coerce ~no_int_overflow:(not threats) 
+		    e.jc_expr_loc t e.jc_expr_type (expr e)))
 	  (Raise(jessie_return_exception,None))
     | JCSunpack(st, e, as_t) ->
 	let e = expr e in make_app ("unpack_"^st.jc_struct_info_root) [e; Var (tag_name as_t)]
@@ -1277,8 +1312,17 @@ let tr_enum_type ri (* to_int of_int *) acc =
     LAnd(LPred("le_int",[LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_min))); x]),
 	       LPred("le_int",[x; LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_max)))]))
   in
+  let safe_of_int_type =
+    Prod_type("x", Base_type(why_integer_type),
+	      Annot_type(LTrue,
+			 Base_type(simple_logic_type n),
+			 [],[],
+			 LPred("eq_int",
+			       [LVar "x";LApp(logic_int_of_enum ri,
+					      [LVar "result"])]),[]))
+  in
   let of_int_type =
-    Prod_type("x", Base_type(simple_logic_type "int"),
+    Prod_type("x", Base_type(why_integer_type),
 	      Annot_type(enum_pred (LVar "x"),
 			 Base_type(simple_logic_type n),
 			 [],[],
@@ -1294,16 +1338,17 @@ let tr_enum_type ri (* to_int of_int *) acc =
 			 LTrue,[]))
   in
   Type(n,[]) ::
-  Logic(false,logic_int_of_enum ri,
-	[("",simple_logic_type n)],simple_logic_type "int") :: 
-  Logic(false,logic_enum_of_int ri,
-	[("",simple_logic_type "int")],simple_logic_type n) :: 
-  Param(false,fun_enum_of_int ri,of_int_type) ::
-  Param(false,fun_any_enum ri,any_type) ::
-  Axiom(n^"_enum",
-	LForall("x",simple_logic_type n,enum_pred 
-		  (LApp(logic_int_of_enum ri,[LVar "x"]))))		
-  :: acc
+    Logic(false,logic_int_of_enum ri,
+	  [("",simple_logic_type n)],why_integer_type) :: 
+    Logic(false,logic_enum_of_int ri,
+	  [("",why_integer_type)],simple_logic_type n) :: 
+    Param(false,fun_enum_of_int ri,of_int_type) ::
+    Param(false,safe_fun_enum_of_int ri,safe_of_int_type) ::
+    Param(false,fun_any_enum ri,any_type) ::
+    Axiom(n^"_enum",
+	  LForall("x",simple_logic_type n,enum_pred 
+		    (LApp(logic_int_of_enum ri,[LVar "x"])))) ::
+    acc
 
 let tr_variable vi e acc =
   if vi.jc_var_info_assigned then

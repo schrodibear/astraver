@@ -475,16 +475,23 @@ let rec term env e =
 	  boolean_type, JCTinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let te1 = term env e1 in
-	  let st = find_struct_info e.jc_pexpr_loc t in
 	  begin
-	    match te1.jc_term_type with
-	      | JCTpointer(st1,a,b) ->
-		  if substruct st st1 then
-		    JCTpointer(st,a,b), JCTcast(te1,st)
-		  else
-		    typing_error e.jc_pexpr_loc "invalid cast"
-	      | _ ->
-		  typing_error e.jc_pexpr_loc "only structures can be cast"
+	    try
+	      let ri = Hashtbl.find enum_types_table t in
+	      if is_numeric te1.jc_term_type then
+		JCTenum ri, te1.jc_term_node
+	      else
+		typing_error e.jc_pexpr_loc "numeric type expected"
+	    with Not_found ->
+	      let st = find_struct_info e.jc_pexpr_loc t in
+	      match te1.jc_term_type with
+		| JCTpointer(st1,a,b) ->
+		    if substruct st st1 then
+		      JCTpointer(st,a,b), JCTcast(te1,st)
+		    else
+		      typing_error e.jc_pexpr_loc "invalid cast"
+		| _ ->
+		    typing_error e.jc_pexpr_loc "only structures can be cast"
 	  end
       | JCPEbinary (e1, op, e2) -> 
 	  let e1 = term env e1 and e2 = term env e2 in
@@ -1019,16 +1026,23 @@ let rec expr env e =
 	  boolean_type, JCTEinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let te1 = expr env e1 in
-	  let st = find_struct_info e.jc_pexpr_loc t in
 	  begin
-	    match te1.jc_texpr_type with
-	      | JCTpointer(st1,a,b) ->
-		  if substruct st st1 then
-		    JCTpointer(st,a,b), JCTEcast(te1,st)
-		  else
-		    typing_error e.jc_pexpr_loc "invalid cast"
-	      | _ ->
-		  typing_error e.jc_pexpr_loc "only structures can be cast"
+	    try
+	      let ri = Hashtbl.find enum_types_table t in
+	      if is_numeric te1.jc_texpr_type then
+		JCTenum ri, JCTErange_cast(ri,te1)
+	      else
+		typing_error e.jc_pexpr_loc "numeric type expected"
+	    with Not_found ->
+	      let st = find_struct_info e.jc_pexpr_loc t in
+	      match te1.jc_texpr_type with
+		| JCTpointer(st1,a,b) ->
+		    if substruct st st1 then
+		      JCTpointer(st,a,b), JCTEcast(te1,st)
+		    else
+		      typing_error e.jc_pexpr_loc "invalid cast"
+		| _ ->
+		    typing_error e.jc_pexpr_loc "only structures can be cast"
 	  end
       | JCPEalloc(e1, t) ->
 	  let te1 = expr env e1 in

@@ -258,6 +258,9 @@ let rec expr e =
       | JCTEcast (e, s) ->
 	  let (l, tl), e = expr e in
 	  (l, tl), JCEcast (e, s)
+      | JCTErange_cast (r, e) ->
+	  let (l, tl), e = expr e in
+	  (l, tl), JCErange_cast (r, e)
       | JCTEalloc (e, s) ->
 	  let (l, tl), e = expr e in
 	  (l, tl), JCEalloc (e, s)

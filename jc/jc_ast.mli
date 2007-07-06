@@ -286,6 +286,7 @@ type texpr_node =
   | JCTEoffset of offset_kind * texpr * struct_info 
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info
+  | JCTErange_cast of enum_info * texpr
   | JCTEassign_var of var_info * texpr
   | JCTEassign_var_op of var_info * bin_op * texpr
   | JCTEassign_heap of texpr * field_info * texpr
@@ -448,6 +449,7 @@ type expr_node =
   | JCEderef of expr * field_info
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info
+  | JCErange_cast of enum_info * expr
   | JCEif of expr * expr * expr
   | JCEoffset of offset_kind * expr * struct_info
   | JCEalloc of expr * struct_info

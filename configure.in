@@ -180,10 +180,12 @@ if test "$OCAMLGRAPH" = no ; then
    if test "$OCAMLGRAPH" = no ; then	
       AC_MSG_ERROR(Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*)
    else		  
-	OCAMLGRAPHLIB="-I +ocamlgraph"
+      OCAMLGRAPHLIB="-I +ocamlgraph"
+      OCAMLGRAPHVER=" in Ocaml lib, subdir ocamlgraph"
    fi
 else
    OCAMLGRAPHLIB=""
+      OCAMLGRAPHVER=" in Ocaml lib, main dir"
 fi
 
 # checking ocamlgraph version
@@ -191,8 +193,9 @@ fi
 AC_MSG_CHECKING(ocamlgraph version)
 if $OCAMLC $OCAMLGRAPHLIB graph.cma config/check_ocamlgraph.ml > /dev/null 2>&1; then
    AC_MSG_RESULT(ok)
+   OCAMLGRAPHVER="0.99"$OCAMLGRAPHVER
 else
-   AC_MSG_ERROR(You need ocamlgraph 0.99 or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*)
+   AC_MSG_ERROR(OcamlGraph$OCAMLGRAPHVER is too old. You need ocamlgraph 0.99 or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*)
 fi
 
 # checking for lablgtk2
@@ -397,6 +400,9 @@ chmod a+x bench/bench
 echo
 echo "                 Summary"
 echo "-----------------------------------------"
+echo "OCaml version           : $OCAMLVERSION"
+echo "OCaml library path      : $OCAMLLIB"
+echo "OcamlGraph lib          : $OCAMLGRAPHVER"
 echo "Verbose make            : $VERBOSEMAKE"
 echo "Abstract interpretation : $enable_octagon"
 echo "GWhy                    : $LABLGTK2"
