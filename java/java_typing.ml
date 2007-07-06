@@ -109,7 +109,7 @@ let new_var ty id =
 
 (* fields *)
 
-let fields_table = Hashtbl.create 97
+let field_prototypes_table = Hashtbl.create 97
 
 let field_tag_counter = ref 0
 
@@ -133,13 +133,16 @@ let method_tag_counter = ref 0
 
 let new_method_info ~is_static id ty pars =
   incr method_tag_counter;
+  let result = 
+      Option_misc.map (fun t -> new_var t "\\result") ty
+  in
   {
     method_info_tag = !method_tag_counter;
     method_info_name = id;
     method_info_trans_name = id;
     method_info_has_this = None;
     method_info_parameters = pars;
-    method_info_return_type = ty;
+    method_info_result = result;
     method_info_calls = [];
     method_info_is_static = is_static;
   }
@@ -179,8 +182,8 @@ let get_field_prototypes ci acc d =
 	  (fun acc vd -> 
 	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
 	     let fi = new_field ~is_static ~is_final ci ty' id in	     
-	     Hashtbl.add fields_table fi.java_field_info_tag 
-	       (fi,vd.variable_initializer,None);
+	     Hashtbl.add field_prototypes_table fi.java_field_info_tag 
+	       (fi,vd.variable_initializer);
 	     fi::acc
 	  ) acc vd.variable_decls
     | _ -> acc
@@ -273,7 +276,8 @@ Typing level 2: extract bodies
 
 let imported_packages = ref [ "java.lang" ]
 
-let static_fields = Hashtbl.create 17
+
+let fields_table = Hashtbl.create 17
 
 let invariants_table = Hashtbl.create 17
 
@@ -973,9 +977,10 @@ let rec expr env e =
 		    | JTYclass(_,ci) ->
 			let mi = lookup_method ci id arg_types in
 			begin
-			  match mi.method_info_return_type with
+			  match mi.method_info_result with
 			    | None -> unit_type,JEcall(None,mi,args)
-			    | Some t -> t,JEcall(None,mi,args)
+			    | Some vi -> vi.java_var_info_type,
+				JEcall(None,mi,args)
 			end
 		    | _ -> assert false
 		  end		
@@ -1372,11 +1377,9 @@ let type_method_spec_and_body ci mi =
   in
   let req = Option_misc.map (assertion local_env) req in
   let env_result =
-    match mi.method_info_return_type with
+    match mi.method_info_result with
       | None -> local_env
-      | Some t ->
-	  let vi = new_var t "\\result" in 
-	  ("\\result",vi)::local_env
+      | Some vi -> (vi.java_var_info_name,vi)::local_env
   in
   let behs = List.map (behavior local_env env_result) behs in
   let body = Option_misc.map (statements env_result) body in
@@ -1456,15 +1459,15 @@ let type_method_spec_and_body ci mi =
 *)
 
 let type_field_initializer fi =
-  let (_,init,_) = 
+  let (_,init) = 
     try
-      Hashtbl.find fields_table fi.java_field_info_tag 
+      Hashtbl.find field_prototypes_table fi.java_field_info_tag 
     with Not_found -> assert false
   in
   let tinit = 
     Option_misc.map (type_initializer [] fi.java_field_info_type) init 
   in
-  Hashtbl.replace fields_table fi.java_field_info_tag (fi,init,tinit)
+  Hashtbl.add fields_table fi.java_field_info_tag tinit
   
 let type_decl d = 
     match d with

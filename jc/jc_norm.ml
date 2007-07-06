@@ -29,19 +29,8 @@ open Jc_pervasives
 open Jc_ast
 open Format
 
-let logic_type_table = Hashtbl.create 97
-
-let exceptions_table = Hashtbl.create 97
-
-let enum_types_table = Hashtbl.create 97
-
-let structs_table = Hashtbl.create 97
-
-let logic_functions_table = Hashtbl.create 97
 let functions_table = Hashtbl.create 97
 let variables_table = Hashtbl.create 97
-
-let axioms_table = Hashtbl.create 17
 
 (* result of test, to be used during translation of lazy boolean operators
    to instructions *)
@@ -50,6 +39,8 @@ let true_output = exception_info None "True"
 let false_output = exception_info None "False"
 let loop_exit = exception_info None "Loop_exit"
 let loop_continue = exception_info None "Loop_continue"
+
+let exceptions_table = Jc_typing.exceptions_table
 
 let () = Hashtbl.add exceptions_table "True" true_output
 let () = Hashtbl.add exceptions_table "False" false_output
@@ -509,8 +500,7 @@ and statement s =
 	      | _ -> fst (expr e)
 	  in
 	  (make_decls loc sl tl).jc_statement_node
-      | JCTSassert(id,a) ->
-	  JCSassert (id, assertion a)
+      | JCTSassert(id,a) -> JCSassert (id, a)
       | JCTSdecl (vi, Some e, s) ->
 	  let (sl,tl),e = expr e in
 	  let decl_stat = make_decl loc vi (Some e) (statement s) in
@@ -537,7 +527,7 @@ and statement s =
 	    [(loop_continue, None, make_block loc [])] in
 	  let try_continue = 
 	    make_try loc body catch_continue (make_block loc []) in
-	  let while_stat = make_loop loc (loop_annot la) try_continue in
+	  let while_stat = make_loop loc la try_continue in
 	  let catch_exit =
 	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
@@ -560,7 +550,7 @@ and statement s =
 	    [(loop_continue, None, make_block loc updates)] in
 	  let try_continue = 
 	    make_try loc body catch_continue (make_block loc []) in
-	  let for_stat = make_loop loc (loop_annot la) try_continue in
+	  let for_stat = make_loop loc la try_continue in
 	  let catch_exit =
 	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
@@ -657,6 +647,7 @@ and block_statement statements =
        make_try loc acc catch_goto (make_block loc [])
     ) (make_block Loc.dummy_position be) bl
        
+(*
 and assertion a =
   let loc = a.jc_tassertion_loc in
   let na =
@@ -779,6 +770,7 @@ and fun_spec spec =
     jc_fun_behavior = 
       List.map (fun (s, b) -> (s, behavior b)) spec.jc_tfun_behavior;
   }
+*)
 
 
 let statement s =
@@ -842,7 +834,7 @@ let statement s =
   in link_stat s
 
 let code_function (spec, sl) =
-  (fun_spec spec, Option_misc.map (List.map statement) sl)
+  (spec, Option_misc.map (List.map statement) sl)
 
 let static_variable (v,e) =
   match e with
@@ -853,11 +845,13 @@ let static_variable (v,e) =
 	  | [],[] -> v, Some e
 	  | _ -> assert false (* TODO *)
 
+(*
 let logic_function t =
   match t with 
-    | JCTAssertion p -> JCAssertion (assertion p) 
+    | JCTAssertion p -> JCAssertion ertion p) 
     | JCTReads r -> JCReads (List.map location r)
     | JCTTerm t -> JCTerm (term t)
+*)
 
 (*
   Local Variables: 

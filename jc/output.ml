@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.11 2007-06-15 14:05:03 moy Exp $ i*)
+(*i $Id: output.ml,v 1.12 2007-07-06 07:45:28 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -701,7 +701,7 @@ let fprintf_why_decl form d =
 	  fprint_logic_arg a;
 	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
 	fprintf form ") =@ %a@]@.@." fprintf_assertion p
-    | Function(_,_,[],_,_) -> assert false
+    | Function(b,id,[],t,e) -> assert false 
     | Function(b,id,a::args,t,e) ->
 	fprintf form "@[<hv 1>%sfunction %s(%a"
 	  (if b then "external " else "") id 

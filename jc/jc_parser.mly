@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.55 2007-06-29 09:30:04 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.56 2007-07-06 07:45:28 marche Exp $ */
 
 %{
 
@@ -825,12 +825,22 @@ exception_statement:
 /**********************************/
 
 logic_definition:
+/* constants def */
+| LOGIC type_expr IDENTIFIER EQ expression
+    { locate_decl (JCPDlogic(Some $2, $3, [], JCPExpr $5)) }
+/* constants no def */
+| LOGIC type_expr IDENTIFIER 
+    { locate_decl (JCPDlogic(Some $2, $3, [], JCPReads [])) }
+/* logic fun def */
 | LOGIC type_expr IDENTIFIER parameters EQ expression
     { locate_decl (JCPDlogic(Some $2, $3, $4, JCPExpr $6)) }
+/* logic pred def */
 | LOGIC IDENTIFIER parameters EQ expression
     { locate_decl (JCPDlogic(None, $2, $3, JCPExpr $5)) }
+/* logic fun reads */
 | LOGIC type_expr IDENTIFIER parameters reads %prec PRECLOGIC
     { locate_decl (JCPDlogic(Some $2, $3, $4, JCPReads $5)) }
+/* logic pred reads */
 | LOGIC IDENTIFIER parameters reads %prec PRECLOGIC
     { locate_decl (JCPDlogic(None, $2, $3, JCPReads $4)) }
 ;

@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.46 2007-06-29 09:30:04 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.47 2007-07-06 07:45:28 marche Exp $ *)
 
 
 open Jc_env
@@ -370,7 +370,7 @@ let fixpoint_reached = ref false
 
 let logic_fun_effects f = 
   let (f,ta) = 
-    Hashtbl.find Jc_norm.logic_functions_table f.jc_logic_info_tag 
+    Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
   in
   let ef = f.jc_logic_info_effects in
   let ef = match ta with

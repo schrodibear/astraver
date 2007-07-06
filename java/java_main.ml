@@ -147,9 +147,21 @@ let main () =
 	(* production phase 5 : produce Jessie file *)
 	let decls = List.rev decls in
 	let f = Filename.chop_extension f in
-	Pp.print_in_file 
+	let cout = Pp.print_in_file_no_close
 	  (fun fmt -> fprintf fmt "%a@." Jc_output.print_decls decls)
-	  (f ^ ".jc");
+	  (f ^ ".jc") 
+	in
+	output_string cout "/*\n";
+	output_string cout "Local Variables:\n";
+	output_string cout "mode: java\n";
+	output_string cout "compile-command: \"jessie ";
+	output_string cout f;
+	output_string cout ".jc ; make -f ";
+	output_string cout f;
+	output_string cout ".makefile gui\"\n";
+	output_string cout "End:\n";
+	output_string cout "*/\n";
+	close_out cout;
 	printf "Done.@."
 
     | _ -> Java_options.usage ()

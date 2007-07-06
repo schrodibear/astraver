@@ -251,44 +251,44 @@ let check invs =
 (* Tools for structure definitions *)
 (***********************************)
 
-let rec term_memories aux t = match t.jc_tterm_node with
-  | JCTTconst _
-  | JCTTvar _ -> aux
-  | JCTTshift(t1, t2)
-  | JCTTrange(t1,t2) 
-  | JCTTbinary(t1,_,t2) -> term_memories (term_memories aux t1) t2
-  | JCTTderef(t, fi) ->
+let rec term_memories aux t = match t.jc_term_node with
+  | JCTconst _
+  | JCTvar _ -> aux
+  | JCTshift(t1, t2)
+  | JCTrange(t1,t2) 
+  | JCTbinary(t1,_,t2) -> term_memories (term_memories aux t1) t2
+  | JCTderef(t, fi) ->
       let m = fi.jc_field_info_name in
       term_memories (StringSet.add m aux) t
-  | JCTTapp(_, l) -> List.fold_left term_memories aux l
-  | JCTTold t
-  | JCTToffset(_,t, _)
-  | JCTTinstanceof(t, _)
-  | JCTTcast(t, _) 
-  | JCTTunary(_,t) -> term_memories aux t
-  | JCTTif(t1, t2, t3) -> term_memories (term_memories (term_memories aux t1) t2) t3
+  | JCTapp(_, l) -> List.fold_left term_memories aux l
+  | JCTold t
+  | JCToffset(_,t, _)
+  | JCTinstanceof(t, _)
+  | JCTcast(t, _) 
+  | JCTunary(_,t) -> term_memories aux t
+  | JCTif(t1, t2, t3) -> term_memories (term_memories (term_memories aux t1) t2) t3
 
-let tag_memories aux t = match t.jc_ttag_node with
-  | JCTTtag _ | JCTTbottom -> aux
-  | JCTTtypeof(t, _) -> term_memories aux t
+let tag_memories aux t = match t.jc_tag_node with
+  | JCTtag _ | JCTbottom -> aux
+  | JCTtypeof(t, _) -> term_memories aux t
 
-let rec assertion_memories aux a = match a.jc_tassertion_node with
-  | JCTAtrue
-  | JCTAfalse -> aux
-  | JCTAand l
-  | JCTAor l -> List.fold_left assertion_memories aux l
-  | JCTAimplies(a1, a2)
-  | JCTAiff(a1, a2) -> assertion_memories (assertion_memories aux a1) a2
-  | JCTArelation(t1,_,t2) -> term_memories (term_memories aux t1) t2
-  | JCTAnot a
-  | JCTAold a
-  | JCTAquantifier(_,_, a) -> assertion_memories aux a
-  | JCTAapp(_, l) -> List.fold_left term_memories aux l
-  | JCTAinstanceof(t, _)
-  | JCTAbool_term t -> term_memories aux t
-  | JCTAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
-  | JCTAmutable(t, _, _) -> term_memories aux t
-  | JCTAtagequality(t1, t2, _) -> tag_memories (tag_memories aux t2) t1
+let rec assertion_memories aux a = match a.jc_assertion_node with
+  | JCAtrue
+  | JCAfalse -> aux
+  | JCAand l
+  | JCAor l -> List.fold_left assertion_memories aux l
+  | JCAimplies(a1, a2)
+  | JCAiff(a1, a2) -> assertion_memories (assertion_memories aux a1) a2
+  | JCArelation(t1,_,t2) -> term_memories (term_memories aux t1) t2
+  | JCAnot a
+  | JCAold a
+  | JCAquantifier(_,_, a) -> assertion_memories aux a
+  | JCAapp(_, l) -> List.fold_left term_memories aux l
+  | JCAinstanceof(t, _)
+  | JCAbool_term t -> term_memories aux t
+  | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
+  | JCAmutable(t, _, _) -> term_memories aux t
+  | JCAtagequality(t1, t2, _) -> tag_memories (tag_memories aux t2) t1
 
 (* Returns (as a StringSet.t) every structure name that can be reach from st.
 Assumes the structures whose name is in acc have already been visited

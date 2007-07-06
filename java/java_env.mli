@@ -96,7 +96,7 @@ and method_info =
 *)
      mutable method_info_has_this : java_var_info option;
      method_info_parameters : java_var_info list;
-     method_info_return_type : java_type option ;
+     method_info_result : java_var_info option ;
      mutable method_info_calls : method_info list;
    }
     

@@ -202,76 +202,76 @@ type unary_op =
   (* bitwise operator *)
   | Ubw_not
 
-type tterm_node =
-  | JCTTconst of const
-  | JCTTvar of var_info
-  | JCTTshift of tterm * tterm
-  | JCTTderef of tterm * field_info
-  | JCTTbinary of tterm * bin_op * tterm
-  | JCTTunary of unary_op * tterm
-  | JCTTapp of logic_info * tterm list
-  | JCTTold of tterm
-  | JCTToffset of offset_kind * tterm * struct_info 
-  | JCTTinstanceof of tterm * struct_info
-  | JCTTcast of tterm * struct_info
-  | JCTTif of tterm * tterm * tterm
-  | JCTTrange of tterm * tterm
+type term_node =
+  | JCTconst of const
+  | JCTvar of var_info
+  | JCTshift of term * term
+  | JCTderef of term * field_info
+  | JCTbinary of term * bin_op * term
+  | JCTunary of unary_op * term
+  | JCTapp of logic_info * term list
+  | JCTold of term
+  | JCToffset of offset_kind * term * struct_info 
+  | JCTinstanceof of term * struct_info
+  | JCTcast of term * struct_info
+  | JCTif of term * term * term
+  | JCTrange of term * term
 
-and tterm =
+and term =
     {
-      jc_tterm_node : tterm_node;
-      jc_tterm_type : jc_type;
-      jc_tterm_loc : Loc.position;
+      jc_term_node : term_node;
+      jc_term_type : jc_type;
+      jc_term_loc : Loc.position;
     }
 
-type ttag =
+type tag =
     {
-      jc_ttag_node : ttag_node;
-      jc_ttag_loc : Loc.position;
+      jc_tag_node : tag_node;
+      jc_tag_loc : Loc.position;
     }
 
-and ttag_node =
-  | JCTTtag of struct_info
-  | JCTTbottom
-  | JCTTtypeof of tterm * struct_info
+and tag_node =
+  | JCTtag of struct_info
+  | JCTbottom
+  | JCTtypeof of term * struct_info
 
 type tlocation_set = 
-  | JCTLSvar of var_info
-  | JCTLSderef of tlocation_set * field_info
-  | JCTLSrange of tlocation_set * tterm * tterm
+  | JCLSvar of var_info
+  | JCLSderef of tlocation_set * field_info
+  | JCLSrange of tlocation_set * term * term
 
 type tlocation =
-  | JCTLvar of var_info
-  | JCTLderef of tlocation_set * field_info
+  | JCLvar of var_info
+  | JCLderef of tlocation_set * field_info
 
-type tassertion_node =
-  | JCTAtrue
-  | JCTAfalse
-  | JCTArelation of tterm * bin_op * tterm
-  | JCTAand of tassertion list
-  | JCTAor of tassertion list
-  | JCTAimplies of tassertion * tassertion
-  | JCTAiff of tassertion * tassertion
-  | JCTAnot of tassertion
-  | JCTAapp of logic_info * tterm list
-  | JCTAquantifier of quantifier * var_info * tassertion
-  | JCTAold of tassertion
-  | JCTAinstanceof of tterm * struct_info
-  | JCTAbool_term of tterm
-  | JCTAif of tterm * tassertion * tassertion
-  | JCTAmutable of tterm * struct_info * ttag
-  | JCTAtagequality of ttag * ttag * string option
+type assertion_node =
+  | JCAtrue
+  | JCAfalse
+  | JCArelation of term * bin_op * term
+  | JCAand of assertion list
+  | JCAor of assertion list
+  | JCAimplies of assertion * assertion
+  | JCAiff of assertion * assertion
+  | JCAnot of assertion
+  | JCAapp of logic_info * term list
+  | JCAquantifier of quantifier * var_info * assertion
+  | JCAold of assertion
+  | JCAinstanceof of term * struct_info
+  | JCAbool_term of term
+  | JCAif of term * assertion * assertion
+  | JCAmutable of term * struct_info * tag
+  | JCAtagequality of tag * tag * string option
 
-and tassertion =
+and assertion =
     {
-      jc_tassertion_node : tassertion_node;
-      jc_tassertion_loc : Loc.position;
+      jc_assertion_node : assertion_node;
+      jc_assertion_loc : Loc.position;
     }
 
-type tterm_or_tassertion =
-  | JCTAssertion of tassertion
-  | JCTTerm of tterm
-  | JCTReads of tlocation list
+type term_or_assertion =
+  | JCAssertion of assertion
+  | JCTerm of term
+  | JCReads of tlocation list
 
 type tincr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
 
@@ -303,20 +303,20 @@ and texpr =
       jc_texpr_loc : Loc.position;
     }
 
-type tloop_annot =
+type loop_annot =
     {
-      jc_tloop_invariant : tassertion;
-      jc_tloop_variant : tterm;
+      jc_loop_invariant : assertion;
+      jc_loop_variant : term;
     }
 
 type tstatement_node =
   | JCTSblock of tstatement list
   | JCTSexpr of texpr
-  | JCTSassert of string option * tassertion
+  | JCTSassert of string option * assertion
   | JCTSdecl of var_info * texpr option * tstatement
   | JCTSif of texpr * tstatement * tstatement
-  | JCTSwhile of texpr * tloop_annot * tstatement
-  | JCTSfor of texpr * texpr list * tloop_annot  * tstatement
+  | JCTSwhile of texpr * loop_annot * tstatement
+  | JCTSfor of texpr * texpr list * loop_annot  * tstatement
       (*r condition, updates, loop annotations, body *)
       (*r inits must be given before using JCTSexpr or JCTSdecl *)
   | JCTSreturn_void 
@@ -339,21 +339,21 @@ and tstatement =
     }
 
 
-type tbehavior =
+type behavior =
     { 
-      jc_tbehavior_throws : exception_info option ;
-      jc_tbehavior_assumes : tassertion option ;
+      jc_behavior_throws : exception_info option ;
+      jc_behavior_assumes : assertion option ;
 (*
-      jc_tbehavior_requires : tassertion option ;
+      jc_behavior_requires : assertion option ;
 *)
-      jc_tbehavior_assigns : tlocation list option ;
-      jc_tbehavior_ensures : tassertion;
+      jc_behavior_assigns : tlocation list option ;
+      jc_behavior_ensures : assertion;
     }
 
-type tfun_spec =
+type fun_spec =
     {
-      jc_tfun_requires : tassertion;
-      jc_tfun_behavior : (string * tbehavior) list;
+      jc_fun_requires : assertion;
+      jc_fun_behavior : (string * behavior) list;
     }
 
 
@@ -361,6 +361,7 @@ type tfun_spec =
 (* normalized ast *)
 (******************)
 
+(*
 type term_node =
   | JCTconst of const
   | JCTvar of var_info
@@ -426,11 +427,14 @@ and assertion =
       jc_assertion_node : assertion_node;
       jc_assertion_loc : Loc.position;
     }
+*)
 
+(*
 type term_or_assertion =
   | JCAssertion of assertion
   | JCTerm of term
-  | JCReads of location list
+  | JCReads of tlocation list
+*)
 
 (* application, increment and assignment are statements.
    special assignment with operation disappears.
@@ -460,11 +464,13 @@ and expr =
       jc_expr_loc : Loc.position;
     }
 
+(*
 type loop_annot =
     {
       jc_loop_invariant : assertion;
       jc_loop_variant : term;
     }
+*)
 
 type incr_op = Stat_inc | Stat_dec
 
@@ -499,6 +505,7 @@ and statement =
     }
 
 
+(*
 type behavior =
     {  
       jc_behavior_throws : exception_info option ;
@@ -506,15 +513,18 @@ type behavior =
 (*
       jc_behavior_requires : assertion option ;
 *)
-      jc_behavior_assigns : location list option ;
+      jc_behavior_assigns : tlocation list option ;
       jc_behavior_ensures : assertion;
     }
+*)
 
+(*
 type fun_spec =
     {
       jc_fun_requires : assertion;
       jc_fun_behavior : (string * behavior) list;
     }
+*)
 
 
     

@@ -47,14 +47,15 @@ let main () =
 	(* phase 2 : typing *)
 	List.iter Jc_typing.decl ast;
 	(* phase 3 : normalization *)
+(*
 	Hashtbl.iter (fun tag x -> 
-			Hashtbl.add Jc_norm.logic_type_table tag x)
+			Hashtbl.add Jc_typing.logic_type_table tag x)
 	  Jc_typing.logic_type_table;
 	Hashtbl.iter 
 	  (fun tag (f,t) -> 
-	     let t = Jc_norm.logic_function t in
 	     Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
 	  Jc_typing.logic_functions_table;
+*)
 	Hashtbl.iter 
 	  (fun tag (f,s,b) -> 
 	     let (s,b) = Jc_norm.code_function (s,b) in
@@ -65,34 +66,41 @@ let main () =
 	     let (v,e) = Jc_norm.static_variable (v,e) in
 	     Hashtbl.add Jc_norm.variables_table tag (v,e))
 	  Jc_typing.variables_table;
+(*
 	Hashtbl.iter 
 	  (fun tag (si,l) -> 
 	     let l = List.map (fun (li, a) -> (li, Jc_norm.assertion a)) l in
 	     Hashtbl.add Jc_norm.structs_table tag (si,l))
 	  Jc_typing.structs_table;
+*)
+(*
 	Hashtbl.iter (fun tag x -> 
 			Hashtbl.add Jc_norm.enum_types_table tag x)
 	  Jc_typing.enum_types_table;
+*)
+(*
 	Hashtbl.iter 
 	  (fun tag a -> 
 	     let a = Jc_norm.assertion a in
 	     Hashtbl.add Jc_norm.axioms_table tag a)
 	  Jc_typing.axioms_table;
+*)
+(*
 	Hashtbl.iter (fun tag x -> 
 			Hashtbl.add Jc_norm.exceptions_table tag x)
 	  Jc_typing.exceptions_table;	
-	  
+*)	  
 	(* phase 4 : computation of call graph *)
 	Hashtbl.iter 
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
-	  Jc_norm.logic_functions_table;
+	  Jc_typing.logic_functions_table;
 	Hashtbl.iter 
 	  (fun _ (f,s,b) -> 
 	     Option_misc.iter (Jc_callgraph.compute_calls f s) b)
 	  Jc_norm.functions_table;
 	let logic_components = 
 	  Jc_callgraph.compute_logic_components 
-	    Jc_norm.logic_functions_table
+	    Jc_typing.logic_functions_table
 	in
 	let components = 
 	  Jc_callgraph.compute_components Jc_norm.functions_table
@@ -108,14 +116,14 @@ let main () =
 	Jc_options.lprintf "\nstarting checking structure invariants.@.";
 	Hashtbl.iter 
 	  (fun _ (_,invs) -> Jc_invariants.check invs)
-	  Jc_norm.structs_table;
+	  Jc_typing.structs_table;
 
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =
 	  Hashtbl.fold 
 	    (fun _ id acc ->
 	       Jc_interp.tr_logic_type id acc)
-	    Jc_norm.logic_type_table
+	    Jc_typing.logic_type_table
 	    []
 	in	       	 
 	(* production phase 1.2 : generation of Why memories *)
@@ -123,7 +131,7 @@ let main () =
 	  Hashtbl.fold 
 	    (fun _ (st,_) acc ->
 	       Jc_interp.tr_struct st acc)
-	    Jc_norm.structs_table
+	    Jc_typing.structs_table
 	    d_types
 	in	       	  
 	let d_memories =
@@ -138,31 +146,39 @@ let main () =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
 	       Jc_interp.tr_exception ei acc)
-	    Jc_norm.exceptions_table
+	    Jc_typing.exceptions_table
 	    d_memories
 	in	       	  
 	(* production phase 1.4 : generation of Why enum_types *)
-	let d_enum =
+	let d =
 	  Hashtbl.fold 
 	    (fun _ (ri (* ,to_int,to_int_,of_int *)) acc ->
 	       Jc_interp.tr_enum_type ri (* to_int_ of_int *) acc)
-	    Jc_norm.enum_types_table
+	    Jc_typing.enum_types_table
 	    d_exc
+	in	       	  
+	(* production phase x.x : generation of Why logic constants *)
+	let d =
+	  Hashtbl.fold 
+	    (fun _ (vi,init) acc ->
+	       Jc_interp.tr_logic_const vi init acc)
+	    Jc_typing.logic_constants_table
+	    d
 	in	       	  
 	(* production phase 2 : generation of Why logic functions *)
 	let d_lfuns = 
 	  Hashtbl.fold 
 	    (fun _ (li,p) acc ->
 	       Jc_interp.tr_logic_fun li p acc)
-	    Jc_norm.logic_functions_table 
-	    d_enum
+	    Jc_typing.logic_functions_table 
+	    d
 	in
 	(* production phase 3 : generation of Why axioms *)
 	let d_axioms = 
 	  Hashtbl.fold 
 	    (fun id p acc ->
 	       Jc_interp.tr_axiom id p acc)
-	    Jc_norm.axioms_table
+	    Jc_typing.axioms_table
 	    d_lfuns
 	in	       
 	(* production phase 3.5 : generation of global invariant predicates *)
@@ -186,7 +202,7 @@ let main () =
           Hashtbl.fold
             (fun _ (st, _) acc ->
                Jc_invariants.mutable_declaration st acc)
-            Jc_norm.structs_table
+            Jc_typing.structs_table
             d_inv
         in
 	(* production phase 5.3 : global invariants (not mutable implies invariant) *)
@@ -202,7 +218,7 @@ let main () =
           Hashtbl.fold
             (fun _ (st, _) acc ->
                Jc_invariants.pack_declaration st acc)
-            Jc_norm.structs_table
+            Jc_typing.structs_table
             d_inv
         in
 	(* production phase 5.5 : unpack *)
@@ -210,7 +226,7 @@ let main () =
           Hashtbl.fold
             (fun _ (st, _) acc ->
                Jc_invariants.unpack_declaration st acc)
-            Jc_norm.structs_table
+            Jc_typing.structs_table
             d_inv
         in
 	(* production phase 6 : produce Why file *)

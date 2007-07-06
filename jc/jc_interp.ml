@@ -357,6 +357,17 @@ logic functions
 
 ****************************)
 
+let tr_logic_const vi init acc =
+  let decl =
+    Logic(false,vi.jc_var_info_name,[], tr_base_type vi.jc_var_info_type) :: acc
+  in
+  match init with
+      | None -> decl
+      | Some t ->
+	  Axiom(vi.jc_var_info_name ^ "_value_axiom" , 
+		LPred("eq",[LVar vi.jc_var_info_name; term None "" t])) 
+	  :: decl 
+
 let memory_type t v =
   { logic_type_name = "memory";
     logic_type_args = [t;v] }
@@ -367,6 +378,7 @@ let memory_field fi =
     (tr_base_type fi.jc_field_info_type)
 let _ = Jc_invariants.memory_field' := memory_field
 	 
+
 let tr_logic_fun li ta acc =
   let params =
     List.map

@@ -16,6 +16,8 @@ type method_table_info =
 val methods_table : 
   (int, method_table_info) Hashtbl.t
 
+val fields_table : 
+  (int, Java_tast.initialiser option) Hashtbl.t
 
 val axioms_table : (string,Java_tast.assertion) Hashtbl.t
 

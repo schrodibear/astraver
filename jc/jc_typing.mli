@@ -35,17 +35,21 @@ val substruct : struct_info -> struct_info -> bool
 
 val logic_type_table : (string,string) Hashtbl.t
   
+
+val logic_constants_table : 
+  (int, var_info * term option) Hashtbl.t
+
 val logic_functions_table : 
-  (int, logic_info * tterm_or_tassertion) Hashtbl.t
+  (int, logic_info * term_or_assertion) Hashtbl.t
 
 val functions_table : 
-  (int, fun_info * tfun_spec * tstatement list option) Hashtbl.t
+  (int, fun_info * fun_spec * tstatement list option) Hashtbl.t
 
 val variables_table : 
   (int, var_info * texpr option) Hashtbl.t
 
 val structs_table : 
-  (string, (struct_info * (logic_info * tassertion) list)) Hashtbl.t
+  (string, (struct_info * (logic_info * assertion) list)) Hashtbl.t
 
 val enum_types_table : 
   (string, (enum_info (* * logic_info * fun_info * fun_info *))) Hashtbl.t
@@ -54,10 +58,10 @@ val enum_conversion_functions_table : (fun_info, string) Hashtbl.t
 val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 
 val axioms_table : 
-  (string, tassertion) Hashtbl.t
+  (string, assertion) Hashtbl.t
 
 val global_invariants_table : 
-  (string, tassertion) Hashtbl.t
+  (string, assertion) Hashtbl.t
 
 val exceptions_table : 
   (string, exception_info) Hashtbl.t

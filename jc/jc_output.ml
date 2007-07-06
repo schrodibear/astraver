@@ -7,15 +7,15 @@ open Pp
 
 type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
-      tfun_spec * tstatement list option
+      fun_spec * tstatement list option
   | JCenum_type_def of string * Num.num * Num.num
   | JCstruct_def of string * field_info list 
   | JCrec_struct_defs of jc_decl list
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr option
-  | JCaxiom_def of string * tassertion
+  | JCaxiom_def of string * assertion
   | JClogic_fun_def of jc_type option * string 
-      * var_info list * tterm_or_tassertion      
+      * var_info list * term_or_assertion      
 
 let const fmt c =
   match c with
@@ -77,23 +77,24 @@ let offset_kind fmt k =
     | Offset_min -> fprintf fmt "in"
 
 
+
 let rec term fmt t =
-  match t.jc_tterm_node with
-    | JCTTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
-    | JCTTbinary(t1,op,t2) ->
+  match t.jc_term_node with
+    | JCTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
+    | JCTbinary(t1,op,t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
-    | JCTTunary(op,t1) ->
+    | JCTunary(op,t1) ->
 	fprintf fmt "@[(%s %a)@]" (unary_op op) term t1
-    | JCTTif (t1,t2,t3) -> 
+    | JCTif (t1,t2,t3) -> 
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
-    | JCTTcast (t, si) ->
+    | JCTcast (t, si) ->
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
-    | JCTTinstanceof (t, si) ->
+    | JCTinstanceof (t, si) ->
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
-    | JCTToffset (k,t,_)->
+    | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
-    | JCTTold t -> fprintf fmt "@[\\old(%a)@]" term t
-    | JCTTapp (op, [t1]) ->
+    | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
+    | JCTapp (op, [t1]) ->
 	begin try 
 	  ignore 
 	    (Hashtbl.find Jc_typing.enum_conversion_logic_functions_table op);
@@ -102,7 +103,7 @@ let rec term fmt t =
 	with Not_found ->
 	  fprintf fmt "%s(@[%a@])" op.jc_logic_info_name term t1
 	end
-    | JCTTapp (op, ([t1;t2] as l)) ->
+    | JCTapp (op, ([t1;t2] as l)) ->
 	begin try
 	  let s = lbin_op op in
 	  fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
@@ -110,15 +111,15 @@ let rec term fmt t =
 	  fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	    (print_list comma term) l 
 	end
-    | JCTTapp (op, l) ->
+    | JCTapp (op, l) ->
 	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
 	  (print_list comma term) l 
-    | JCTTderef (t, fi)-> 
+    | JCTderef (t, fi)-> 
 	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
-    | JCTTshift (t1, t2) -> 
+    | JCTshift (t1, t2) -> 
 	fprintf fmt "@[(%a + %a)@]" term t1 term t2
-    | JCTTconst c -> const fmt c
-    | JCTTrange (t1,t2) -> 
+    | JCTconst c -> const fmt c
+    | JCTrange (t1,t2) -> 
 	fprintf fmt "@[%a..%a@]" term t1 term t2
 
 let quantifier fmt = function
@@ -126,21 +127,21 @@ let quantifier fmt = function
   | Exists -> fprintf fmt "exists"
 
 let rec assertion fmt a =
-  match a.jc_tassertion_node with
-    | JCTAtrue -> fprintf fmt "true"
-    | JCTAif (_, _, _)-> assert false (* TODO *)
-    | JCTAbool_term t -> term fmt t
-    | JCTAinstanceof (_, _)-> assert false (* TODO *)
-    | JCTAold _-> assert false (* TODO *)
-    | JCTAquantifier (q,vi, a)-> 
+  match a.jc_assertion_node with
+    | JCAtrue -> fprintf fmt "true"
+    | JCAif (_, _, _)-> assert false (* TODO *)
+    | JCAbool_term t -> term fmt t
+    | JCAinstanceof (_, _)-> assert false (* TODO *)
+    | JCAold _-> assert false (* TODO *)
+    | JCAquantifier (q,vi, a)-> 
 	fprintf fmt "@[(\\%a %a %s;@ %a)@]"
 	  quantifier q
 	  Jc_typing.print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
 	  assertion a
-    | JCTArelation (t1, op, t2) ->
+    | JCArelation (t1, op, t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
-    | JCTAapp (op, ([t1;t2] as l)) ->
+    | JCAapp (op, ([t1;t2] as l)) ->
 	begin
 	  try
 	    let s = lbin_op op in
@@ -149,61 +150,61 @@ let rec assertion fmt a =
 	    fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	      (print_list comma term) l 
 	end
-    | JCTAapp (op, l) ->
+    | JCAapp (op, l) ->
 	 fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	      (print_list comma term) l 
-    | JCTAnot a1 ->
+    | JCAnot a1 ->
 	fprintf fmt "@[(!@ %a)@]" assertion a1
-    | JCTAiff (a1, a2)-> 
+    | JCAiff (a1, a2)-> 
 	fprintf fmt "@[(%a <==>@ %a)@]" assertion a1 assertion a2
-    | JCTAimplies (a1, a2)-> 
+    | JCAimplies (a1, a2)-> 
 	fprintf fmt "@[(%a ==>@ %a)@]" assertion a1 assertion a2
-    | JCTAor [] -> assert false
-    | JCTAor (a::l) -> 
+    | JCAor [] -> assert false
+    | JCAor (a::l) -> 
 	fprintf fmt "@[(%a" assertion a;
 	List.iter
 	  (fun a -> fprintf fmt " ||@ %a" assertion a)
 	  l;
 	fprintf fmt ")@]"
-    | JCTAand [] -> assert false
-    | JCTAand (a::l) -> 
+    | JCAand [] -> assert false
+    | JCAand (a::l) -> 
 	fprintf fmt "@[(%a" assertion a;
 	List.iter
 	  (fun a -> fprintf fmt " &&@ %a" assertion a)
 	  l;
 	fprintf fmt ")@]"
-    | JCTAfalse -> fprintf fmt "false"
-    | JCTAmutable _ -> assert false (* TODO *)
-    | JCTAtagequality _ -> assert false (* TODO *)
+    | JCAfalse -> fprintf fmt "false"
+    | JCAmutable _ -> assert false (* TODO *)
+    | JCAtagequality _ -> assert false (* TODO *)
 
 let rec location_set fmt = function
-  | JCTLSvar vi-> 
+  | JCLSvar vi-> 
       fprintf fmt "%s" vi.jc_var_info_name
-  | JCTLSderef (locset, fi) ->
+  | JCLSderef (locset, fi) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
-  | JCTLSrange (locset, t1, t2) ->
+  | JCLSrange (locset, t1, t2) ->
       fprintf fmt "(%a + (%a..%a))" location_set locset term t1 term t2
 
 let location fmt = function
-  | JCTLvar vi -> 
+  | JCLvar vi -> 
       fprintf fmt "%s" vi.jc_var_info_name
-  | JCTLderef (locset, fi) ->
+  | JCLderef (locset, fi) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
 
 let behavior fmt (id,b) =
   fprintf fmt "@[<v 2>behavior %s:@\n" id;
   Option_misc.iter
     (fun a -> fprintf fmt "assumes %a;@\n" assertion a) 
-    b.jc_tbehavior_assumes;
+    b.jc_behavior_assumes;
   Option_misc.iter 
     (fun locs -> fprintf fmt "assigns %a;@\n" 
        (print_list_or_default "\\nothing" comma location) locs)
-    b.jc_tbehavior_assigns;
-  fprintf fmt "ensures %a;@]@\n" assertion b.jc_tbehavior_ensures
+    b.jc_behavior_assigns;
+  fprintf fmt "ensures %a;@]@\n" assertion b.jc_behavior_ensures
   
 let print_spec fmt s =
-  fprintf fmt "@[<v 2>  requires @[%a@];@ " assertion s.jc_tfun_requires;
-  List.iter (behavior fmt) s.jc_tfun_behavior;
+  fprintf fmt "@[<v 2>  requires @[%a@];@ " assertion s.jc_fun_requires;
+  List.iter (behavior fmt) s.jc_fun_behavior;
   fprintf fmt "@]"
 
 let call_bin_op op =
@@ -292,13 +293,13 @@ let rec statement fmt s =
 	fprintf fmt "break %s;@\n" lab
     | JCTSwhile (e, la, s)-> 
 	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
-	  expr e assertion la.jc_tloop_invariant term la.jc_tloop_variant
+	  expr e assertion la.jc_loop_invariant term la.jc_loop_variant
 	  block [s]
     | JCTSfor (cond, updates, loop_annot, body)-> 
 	fprintf fmt "@[for ( ; %a ; %a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
 	  expr cond (print_list comma expr) updates
-	  assertion loop_annot.jc_tloop_invariant 
-	  term loop_annot.jc_tloop_variant
+	  assertion loop_annot.jc_loop_invariant 
+	  term loop_annot.jc_loop_variant
 	  block [body]
     | JCTSif (e, s1, s2)->
 	fprintf fmt "@[if (%a)@ %a@ else@ %a@]@\n"
@@ -346,13 +347,13 @@ let field fmt fi =
     Jc_typing.print_type fi.jc_field_info_type fi.jc_field_info_name
 
 let term_or_assertion fmt = function
-  | JCTAssertion a -> 
+  | JCAssertion a -> 
       fprintf fmt "=@\n%a" assertion a
-  | JCTTerm t ->
+  | JCTerm t ->
       fprintf fmt "=@\n%a" term t
-  | JCTReads [] -> 
+  | JCReads [] -> 
       fprintf fmt "reads \\nothing;"
-  | JCTReads locs -> 
+  | JCReads locs -> 
       fprintf fmt "reads %a;" (print_list comma location) locs
 
 let rec print_decl fmt d =
@@ -375,10 +376,13 @@ let rec print_decl fmt d =
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JCaxiom_def(id,a) ->
 	fprintf fmt "@[axiom %s : %a@]@\n@." id assertion a
-    | JClogic_fun_def(ty,id,[],b) ->
-	assert (b=JCTReads []);
+    | JClogic_fun_def(ty,id,[],JCReads l) ->
+	assert (l=[]);
 	fprintf fmt "@[logic %a %s@]@\n@." 
 	  (print_option Jc_typing.print_type) ty id
+    | JClogic_fun_def(ty,id,[],JCTerm t) ->
+	fprintf fmt "@[logic %a %s = %a@]@\n@." 
+	  (print_option Jc_typing.print_type) ty id term t
     | JClogic_fun_def(ty,id,params,body) ->
 	fprintf fmt "@[logic %a %s(@[%a@]) %a@]@\n@." 
 	  (print_option Jc_typing.print_type) ty 

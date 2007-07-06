@@ -5,7 +5,7 @@
 
 /*@ predicate is_color_array(int t[]) { 
   @   t != null && 
-  @   \forall int k; 0 <= k && k < t.length ==> is_color(t[k])
+  @   \forall int i; 0 <= i && i < t.length ==> is_color(t[i])
   @ }
   @*/
 
