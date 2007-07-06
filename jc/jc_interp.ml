@@ -382,7 +382,10 @@ let tr_logic_const vi init acc =
       | None -> decl
       | Some t ->
 	  Axiom(vi.jc_var_info_name ^ "_value_axiom" , 
-		LPred("eq",[LVar vi.jc_var_info_name; term None "" t])) 
+		LPred("eq",[term_coerce Loc.dummy_position integer_type
+			      vi.jc_var_info_type (LVar vi.jc_var_info_name); 
+			    term_coerce t.jc_term_loc integer_type 
+			      t.jc_term_type (term None "" t)])) 
 	  :: decl 
 
 let memory_type t v =
