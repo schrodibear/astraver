@@ -28,7 +28,8 @@ unit attack(Hero[0] this, Hero[0] target)
   requires
     \mutable(this, Hero) && \mutable(target, Hero) && target.committed == false &&
     // Devraient être déductibles de la ligne précédente :
-    \mutable(this.sword, Sword) && \mutable(target.sword, Sword);
+    //    \mutable(this.sword, Sword) && \mutable(target.sword, Sword);
+    true;
 behavior ok:
   ensures
     life_inv(target);
@@ -40,6 +41,16 @@ behavior ok:
 	target.dead = true;
     }
     pack(target);
+}
+
+unit test_fun(Hero[0] this)
+    requires \mutable(this, Hero) && this.committed == false;
+{
+    unpack(this);
+    unpack(this.sword);
+    this.sword.damage = 1;
+    pack(this.sword);
+    pack(this);
 }
 
 /*

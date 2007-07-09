@@ -101,8 +101,8 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A179:Set) (a:(alloc_table A179))
-  (p:(pointer A179)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A226:Set) (a:(alloc_table A226))
+  (p:(pointer A226)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
   forall (A1:Set), (pointer A1) -> Z -> (pointer A1).
@@ -573,10 +573,10 @@ Implicit Arguments in_pset_range.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A207:Set)
-  (A206:Set) (a:(alloc_table A206)) (m1:(memory A206 A207)) (m2:(memory A206
-  A207)) (l:(pset A206))
-  := (forall (p:(pointer A206)),
+(*Why predicate*) Definition not_assigns (A254:Set)
+  (A253:Set) (a:(alloc_table A253)) (m1:(memory A253 A254)) (m2:(memory A253
+  A254)) (l:(pset A253))
+  := (forall (p:(pointer A253)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -586,9 +586,37 @@ Admitted.
 (*Why type*) Definition tag_id: Set ->Set.
 Admitted.
 
-(*Why logic*) Definition instanceof :
-  forall (A1:Set), (tag_table A1) -> (pointer A1) -> (tag_id A1) -> Prop.
+(*Why logic*) Definition typeof :
+  forall (A1:Set), (tag_table A1) -> (pointer A1) -> (tag_id A1).
 Admitted.
+Implicit Arguments typeof.
+
+(*Why logic*) Definition parenttag :
+  forall (A1:Set), (tag_table A1) -> (tag_id A1) -> (tag_id A1) -> Prop.
+Admitted.
+Implicit Arguments parenttag.
+
+(*Why logic*) Definition subtag :
+  forall (A1:Set), (tag_table A1) -> (tag_id A1) -> (tag_id A1) -> Prop.
+Admitted.
+Implicit Arguments subtag.
+
+(*Why axiom*) Lemma subtag_refl :
+  forall (A1:Set),
+  (forall (a:(tag_table A1)), (forall (t:(tag_id A1)), (subtag a t t))).
+Admitted.
+
+(*Why axiom*) Lemma subtag_parent :
+  forall (A1:Set),
+  (forall (a:(tag_table A1)),
+   (forall (t1:(tag_id A1)),
+    (forall (t2:(tag_id A1)),
+     (forall (t3:(tag_id A1)),
+      ((subtag a t1 t2) -> ((parenttag a t2 t3) -> (subtag a t1 t3))))))).
+Admitted.
+
+(*Why predicate*) Definition instanceof (A260:Set) (a:(tag_table A260))
+  (p:(pointer A260)) (t:(tag_id A260)) := (subtag a (typeof a p) t).
 Implicit Arguments instanceof.
 
 (*Why logic*) Definition downcast :
@@ -604,4 +632,21 @@ Implicit Arguments downcast.
     (forall (s:(tag_id A1)), ((instanceof a p s) -> (downcast a p s) = p)))).
 Admitted.
 Implicit Arguments downcast_instanceof.
+
+(*Why logic*) Definition bottom_tag : forall (A1:Set), (tag_id A1).
+Admitted.
+Set Contextual Implicit.
+Implicit Arguments bottom_tag.
+Unset Contextual Implicit.
+
+(*Why axiom*) Lemma bottom_tag_axiom :
+  forall (A1:Set),
+  (forall (a:(tag_table A1)),
+   (forall (t:(tag_id A1)), (subtag a t (@bottom_tag A1)))).
+Admitted.
+
+(*Why predicate*) Definition fully_packed (A265:Set) (tag_table:(tag_table A265))
+  (mutable:(memory A265 (tag_id A265))) (this:(pointer A265))
+  := (select mutable this) = (typeof tag_table this).
+Implicit Arguments fully_packed.
 

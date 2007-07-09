@@ -12,25 +12,25 @@ Admitted.
 (*Why logic*) Definition Hero_tag : (tag_id Hero).
 Admitted.
 
+(*Why axiom*) Lemma Hero_parenttag_bottom :
+  (forall (a:(tag_table Hero)), (parenttag a Hero_tag (@bottom_tag Hero))).
+Admitted.
+
+(*Why logic*) Definition Sorcerer_tag : (tag_id Hero).
+Admitted.
+
+(*Why axiom*) Lemma Sorcerer_parenttag_Hero :
+  (forall (a:(tag_table Hero)), (parenttag a Sorcerer_tag Hero_tag)).
+Admitted.
+
 (*Why logic*) Definition Sword_tag : (tag_id Sword).
 Admitted.
 
-(*Why logic*) Definition assoc :
-  forall (A1:Set), forall (A2:Set), Z -> (memory A1 A2) -> Prop.
 Admitted.
 Implicit Arguments assoc.
 
-(*Why predicate*) Definition damage_inv  (damage:(memory Sword Z))
-  (this:(pointer Sword)) := (select damage this) > 0.
-
-(*Why axiom*) Lemma axiom_damage_inv :
-  (forall (damage:(memory Sword Z)),
-   (forall (mutable:(memory Sword bool)),
-    (forall (program_point:Z),
-     (forall (this:(pointer Sword)),
-      ((assoc program_point damage) ->
-       ((assoc program_point mutable) ->
-        (false = (select mutable this) -> (damage_inv damage this)))))))).
+(*Why axiom*) Lemma Sword_parenttag_bottom :
+  (forall (a:(tag_table Sword)), (parenttag a Sword_tag (@bottom_tag Sword))).
 Admitted.
 
 (*Why predicate*) Definition life_inv  (dead:(memory Hero bool))
@@ -38,34 +38,60 @@ Admitted.
   := (select life this) >= 0 /\ (select life this) <= 100 /\
      (((select life this) = 0 -> (select dead this) = true)).
 
-(*Why axiom*) Lemma axiom_life_inv :
-  (forall (life:(memory Hero Z)),
-   (forall (dead:(memory Hero bool)),
-    (forall (mutable:(memory Hero bool)),
-     (forall (program_point:Z),
-      (forall (this:(pointer Hero)),
-       ((assoc program_point dead) ->
-        ((assoc program_point life) ->
-         ((assoc program_point mutable) ->
-          (false = (select mutable this) -> (life_inv dead life this)))))))))).
+(*Why predicate*) Definition damage_inv  (damage:(memory Sword Z))
+  (this:(pointer Sword)) := (select damage this) > 0.
+
 Admitted.
+
+
+Admitted.
+
+(*Why predicate*) Definition mana_inv  (mana:(memory Hero Z))
+  (this:(pointer Hero)) := (select mana this) >= 0.
+
+(*Why predicate*) Definition test  (sword:(memory Hero (pointer Sword)))
+  (damage:(memory Sword Z)) (this:(pointer Hero))
+  := (select damage (shift (select sword this) 4)) = 5.
 
 (*Why predicate*) Definition sword_inv  (Sword_alloc_table:(alloc_table Sword))
   (sword:(memory Hero (pointer Sword))) (this:(pointer Hero))
   := (offset_min Sword_alloc_table (select sword this)) <= 0 /\
      (offset_max Sword_alloc_table (select sword this)) >= 0.
 
-(*Why axiom*) Lemma axiom_sword_inv :
-  (forall (sword:(memory Hero (pointer Sword))),
-   (forall (Sword_alloc_table:(alloc_table Sword)),
-    (forall (mutable:(memory Hero bool)),
-     (forall (program_point:Z),
-      (forall (this:(pointer Hero)),
-       ((assoc program_point mutable) ->
-        ((assoc program_point sword) ->
-         (false = (select mutable this) ->
-          (sword_inv Sword_alloc_table sword this))))))))).
 Admitted.
+
+(*Why predicate*) Definition global_invariant_Hero  (Hero_tag_table:(tag_table Hero))
+  (Sword_alloc_table:(alloc_table Sword)) (committed_Hero:(memory Hero bool))
+  (committed_Sword:(memory Sword bool)) (damage:(memory Sword Z))
+  (dead:(memory Hero bool)) (life:(memory Hero Z)) (mana:(memory Hero Z))
+  (mutable_Hero:(memory Hero (tag_id Hero))) (sword:(memory Hero
+  (pointer Sword)))
+  := (forall (this:(pointer Hero)),
+      ((((subtag Hero_tag_table (select mutable_Hero this) Sorcerer_tag) ->
+         (mana_inv mana this))) /\
+      (((subtag Hero_tag_table (select mutable_Hero this) Hero_tag) ->
+        (test sword damage this))) /\
+      (((subtag Hero_tag_table (select mutable_Hero this) Hero_tag) ->
+        (sword_inv Sword_alloc_table sword this))) /\
+      (((subtag Hero_tag_table (select mutable_Hero this) Hero_tag) ->
+        (life_inv dead life this)))) /\
+      ((((subtag Hero_tag_table (select mutable_Hero this) Hero_tag) ->
+         (select committed_Sword (select sword this)) = true)) /\
+      (((subtag Hero_tag_table (select mutable_Hero this) Sorcerer_tag) ->
+        True))) /\
+      (((select committed_Hero this) = true ->
+        (fully_packed Hero_tag_table mutable_Hero this)))).
+
+(*Why predicate*) Definition global_invariant_Sword  (Sword_tag_table:(tag_table Sword))
+  (committed_Sword:(memory Sword bool)) (damage:(memory Sword Z))
+  (mutable_Sword:(memory Sword (tag_id Sword)))
+  := (forall (this:(pointer Sword)),
+      (((subtag Sword_tag_table (select mutable_Sword this) Sword_tag) ->
+        (damage_inv damage this))) /\
+      (((subtag Sword_tag_table (select mutable_Sword this) Sword_tag) ->
+        True)) /\
+      (((select committed_Sword this) = true ->
+        (fully_packed Sword_tag_table mutable_Sword this)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma attack_ensures_ok_po_1 : 
@@ -73,12 +99,16 @@ Admitted.
   forall (target: (pointer Hero)),
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -86,14 +116,15 @@ Admitted.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  false = (select mutable_Hero target).
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  (parenttag Hero_tag_table (select mutable_Hero target) (@bottom_tag Hero)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -105,12 +136,16 @@ Save.
   forall (target: (pointer Hero)),
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -118,13 +153,14 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
   false = (select committed_Hero target).
 Proof.
 intuition.
@@ -137,12 +173,16 @@ Save.
   forall (target: (pointer Hero)),
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -150,18 +190,48 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  (valid Hero_alloc_table target).
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (result: Z),
+  forall (HW_6: result = (select life target)),
+  forall (result0: (pointer Sword)),
+  forall (HW_7: result0 = (select sword this)),
+  forall (result1: Z),
+  forall (HW_8: result1 = (select damage result0)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (result2: Z),
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_12: result2 <= 0),
+  forall (life1: (memory Hero Z)),
+  forall (HW_13: life1 = (store life0 target 0)),
+  forall (HW_14: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_15: dead0 = (store dead target true)),
+  forall (HW_16: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (parenttag Hero_tag_table Hero_tag (select mutable_Hero0 target)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -174,12 +244,16 @@ Save.
   forall (target: (pointer Hero)),
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -187,21 +261,48 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  (valid Hero_alloc_table this).
+  forall (result0: (pointer Sword)),
+  forall (HW_7: result0 = (select sword this)),
+  forall (result1: Z),
+  forall (HW_8: result1 = (select damage result0)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (result2: Z),
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_12: result2 <= 0),
+  forall (life1: (memory Hero Z)),
+  forall (HW_13: life1 = (store life0 target 0)),
+  forall (HW_14: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_15: dead0 = (store dead target true)),
+  forall (HW_16: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (test sword damage target).
 Proof.
 admit.
 Save.
@@ -213,12 +314,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -226,24 +330,48 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  (valid Sword_alloc_table result0).
+  forall (HW_7: result0 = (select sword this)),
+  forall (result1: Z),
+  forall (HW_8: result1 = (select damage result0)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (result2: Z),
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_12: result2 <= 0),
+  forall (life1: (memory Hero Z)),
+  forall (HW_13: life1 = (store life0 target 0)),
+  forall (HW_14: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_15: dead0 = (store dead target true)),
+  forall (HW_16: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (sword_inv Sword_alloc_table sword target).
 Proof.
 intros; subst.
 unfold valid.
@@ -257,12 +385,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -270,27 +401,48 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  (select mutable_Hero0 target) = true.
+  forall (HW_8: result1 = (select damage result0)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (result2: Z),
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_12: result2 <= 0),
+  forall (life1: (memory Hero Z)),
+  forall (HW_13: life1 = (store life0 target 0)),
+  forall (HW_14: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_15: dead0 = (store dead target true)),
+  forall (HW_16: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (life_inv dead0 life1 target).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -303,12 +455,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -316,47 +471,48 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_17: result2 <= 0),
-  forall (HW_18: (select mutable_Hero0 target) = true),
-  forall (HW_19: (valid Hero_alloc_table target)),
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_12: result2 <= 0),
   forall (life1: (memory Hero Z)),
-  forall (HW_20: life1 = (store life0 target 0)),
-  forall (HW_21: (assoc 2 dead) /\ (assoc 2 life1) /\ (assoc 2 mutable_Hero0)),
-  forall (HW_22: (select mutable_Hero0 target) = true),
-  forall (HW_23: (valid Hero_alloc_table target)),
+  forall (HW_13: life1 = (store life0 target 0)),
+  forall (HW_14: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
   forall (dead0: (memory Hero bool)),
-  forall (HW_24: dead0 = (store dead target true)),
-  forall (HW_25: (assoc 1 dead0) /\ (assoc 1 life1) /\
-                 (assoc 1 mutable_Hero0)),
-  true = (select mutable_Hero0 target).
+  forall (HW_15: dead0 = (store dead target true)),
+  forall (HW_16: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (fully_packed Sword_tag_table mutable_Sword (select sword target)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -369,12 +525,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -382,47 +541,48 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_17: result2 <= 0),
-  forall (HW_18: (select mutable_Hero0 target) = true),
-  forall (HW_19: (valid Hero_alloc_table target)),
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_12: result2 <= 0),
   forall (life1: (memory Hero Z)),
-  forall (HW_20: life1 = (store life0 target 0)),
-  forall (HW_21: (assoc 2 dead) /\ (assoc 2 life1) /\ (assoc 2 mutable_Hero0)),
-  forall (HW_22: (select mutable_Hero0 target) = true),
-  forall (HW_23: (valid Hero_alloc_table target)),
+  forall (HW_13: life1 = (store life0 target 0)),
+  forall (HW_14: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
   forall (dead0: (memory Hero bool)),
-  forall (HW_24: dead0 = (store dead target true)),
-  forall (HW_25: (assoc 1 dead0) /\ (assoc 1 life1) /\
-                 (assoc 1 mutable_Hero0)),
-  (sword_inv Sword_alloc_table sword target).
+  forall (HW_15: dead0 = (store dead target true)),
+  forall (HW_16: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (select committed_Sword0 (select sword target)) = false.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -435,12 +595,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -448,46 +611,60 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_17: result2 <= 0),
-  forall (HW_18: (select mutable_Hero0 target) = true),
-  forall (HW_19: (valid Hero_alloc_table target)),
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_12: result2 <= 0),
   forall (life1: (memory Hero Z)),
-  forall (HW_20: life1 = (store life0 target 0)),
-  forall (HW_21: (assoc 2 dead) /\ (assoc 2 life1) /\ (assoc 2 mutable_Hero0)),
-  forall (HW_22: (select mutable_Hero0 target) = true),
-  forall (HW_23: (valid Hero_alloc_table target)),
+  forall (HW_13: life1 = (store life0 target 0)),
+  forall (HW_14: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
   forall (dead0: (memory Hero bool)),
-  forall (HW_24: dead0 = (store dead target true)),
-  forall (HW_25: (assoc 1 dead0) /\ (assoc 1 life1) /\
-                 (assoc 1 mutable_Hero0)),
+  forall (HW_15: dead0 = (store dead target true)),
+  forall (HW_16: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  forall (HW_17: (parenttag Hero_tag_table Hero_tag
+                  (select mutable_Hero0 target)) /\
+                 ((test sword damage target) /\
+                 (sword_inv Sword_alloc_table sword target) /\
+                 (life_inv dead0 life1 target)) /\
+                 (fully_packed Sword_tag_table mutable_Sword
+                  (select sword target)) /\
+                 (select committed_Sword0 (select sword target)) = false),
+  forall (committed_Sword1: (memory Sword bool)),
+  forall (mutable_Hero1: (memory Hero (tag_id Hero))),
+  forall (HW_18: mutable_Hero1 = (store mutable_Hero0 target Hero_tag) /\
+                 committed_Sword1 =
+                 (store committed_Sword0 (select sword target) true)),
   (life_inv dead0 life1 target).
 Proof.
 intuition.
@@ -501,12 +678,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -514,52 +694,38 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_17: result2 <= 0),
-  forall (HW_18: (select mutable_Hero0 target) = true),
-  forall (HW_19: (valid Hero_alloc_table target)),
-  forall (life1: (memory Hero Z)),
-  forall (HW_20: life1 = (store life0 target 0)),
-  forall (HW_21: (assoc 2 dead) /\ (assoc 2 life1) /\ (assoc 2 mutable_Hero0)),
-  forall (HW_22: (select mutable_Hero0 target) = true),
-  forall (HW_23: (valid Hero_alloc_table target)),
-  forall (dead0: (memory Hero bool)),
-  forall (HW_24: dead0 = (store dead target true)),
-  forall (HW_25: (assoc 1 dead0) /\ (assoc 1 life1) /\
-                 (assoc 1 mutable_Hero0)),
-  forall (HW_26: true = (select mutable_Hero0 target) /\
-                 (sword_inv Sword_alloc_table sword target) /\
-                 (life_inv dead0 life1 target)),
-  forall (mutable_Hero1: (memory Hero bool)),
-  forall (HW_27: mutable_Hero1 = (store mutable_Hero0 target false)),
-  (select mutable_Hero1 this) = false.
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_19: result2 > 0),
+  (parenttag Hero_tag_table Hero_tag (select mutable_Hero0 target)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -572,12 +738,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -585,52 +754,38 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_17: result2 <= 0),
-  forall (HW_18: (select mutable_Hero0 target) = true),
-  forall (HW_19: (valid Hero_alloc_table target)),
-  forall (life1: (memory Hero Z)),
-  forall (HW_20: life1 = (store life0 target 0)),
-  forall (HW_21: (assoc 2 dead) /\ (assoc 2 life1) /\ (assoc 2 mutable_Hero0)),
-  forall (HW_22: (select mutable_Hero0 target) = true),
-  forall (HW_23: (valid Hero_alloc_table target)),
-  forall (dead0: (memory Hero bool)),
-  forall (HW_24: dead0 = (store dead target true)),
-  forall (HW_25: (assoc 1 dead0) /\ (assoc 1 life1) /\
-                 (assoc 1 mutable_Hero0)),
-  forall (HW_26: true = (select mutable_Hero0 target) /\
-                 (sword_inv Sword_alloc_table sword target) /\
-                 (life_inv dead0 life1 target)),
-  forall (mutable_Hero1: (memory Hero bool)),
-  forall (HW_27: mutable_Hero1 = (store mutable_Hero0 target false)),
-  (select mutable_Hero1 target) = false.
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_19: result2 > 0),
+  (test sword damage target).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -643,12 +798,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -656,36 +814,38 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_28: result2 > 0),
-  true = (select mutable_Hero0 target).
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_19: result2 > 0),
+  (sword_inv Sword_alloc_table sword target).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -698,12 +858,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -711,36 +874,38 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_28: result2 > 0),
-  (sword_inv Sword_alloc_table sword target).
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_19: result2 > 0),
+  (life_inv dead life0 target).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -753,12 +918,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -766,36 +934,38 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_28: result2 > 0),
-  (life_inv dead life0 target).
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_19: result2 > 0),
+  (fully_packed Sword_tag_table mutable_Sword (select sword target)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -808,12 +978,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -821,41 +994,38 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_28: result2 > 0),
-  forall (HW_29: true = (select mutable_Hero0 target) /\
-                 (sword_inv Sword_alloc_table sword target) /\
-                 (life_inv dead life0 target)),
-  forall (mutable_Hero1: (memory Hero bool)),
-  forall (HW_30: mutable_Hero1 = (store mutable_Hero0 target false)),
-  (select mutable_Hero1 this) = false.
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_19: result2 > 0),
+  (select committed_Sword0 (select sword target)) = false.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -868,12 +1038,15 @@ Save.
   forall (Hero_alloc_table: (alloc_table Hero)),
   forall (Hero_tag_table: (tag_table Hero)),
   forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
   forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
   forall (damage: (memory Sword Z)),
   forall (dead: (memory Hero bool)),
   forall (life: (memory Hero Z)),
-  forall (mutable_Hero: (memory Hero bool)),
-  forall (mutable_Sword: (memory Sword bool)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
   forall (sword: (memory Hero (pointer Sword))),
   forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
                 (offset_max Hero_alloc_table this) >= 0) /\
@@ -881,41 +1054,2214 @@ Save.
                 (((offset_min Hero_alloc_table target) <= 0 /\
                 (offset_max Hero_alloc_table target) >= 0) /\
                 (instanceof Hero_tag_table target Hero_tag)) /\
-                (select mutable_Hero this) = false /\
-                (select committed_Hero target) = false /\
-                (select mutable_Hero target) = false /\
-                (select mutable_Sword (select sword this)) = false),
-  forall (HW_2: (assoc 4 damage) /\ (assoc 4 dead) /\ (assoc 4 life) /\
-                (assoc 4 sword) /\ (assoc 4 mutable_Hero) /\
-                (assoc 4 mutable_Sword)),
-  forall (HW_3: false = (select mutable_Hero target) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
                 false = (select committed_Hero target)),
-  forall (mutable_Hero0: (memory Hero bool)),
-  forall (HW_4: mutable_Hero0 = (store mutable_Hero target true)),
-  forall (HW_5: (valid Hero_alloc_table target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
   forall (result: Z),
   forall (HW_6: result = (select life target)),
-  forall (HW_7: (valid Hero_alloc_table this)),
   forall (result0: (pointer Sword)),
-  forall (HW_8: result0 = (select sword this)),
-  forall (HW_9: (valid Sword_alloc_table result0)),
+  forall (HW_7: result0 = (select sword this)),
   forall (result1: Z),
-  forall (HW_10: result1 = (select damage result0)),
-  forall (HW_11: (select mutable_Hero0 target) = true),
-  forall (HW_12: (valid Hero_alloc_table target)),
+  forall (HW_8: result1 = (select damage result0)),
   forall (life0: (memory Hero Z)),
-  forall (HW_13: life0 = (store life target (result - result1))),
-  forall (HW_14: (assoc 3 dead) /\ (assoc 3 life0) /\ (assoc 3 mutable_Hero0)),
-  forall (HW_15: (valid Hero_alloc_table target)),
+  forall (HW_9: life0 = (store life target (result - result1))),
+  forall (HW_10: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
   forall (result2: Z),
-  forall (HW_16: result2 = (select life0 target)),
-  forall (HW_28: result2 > 0),
-  forall (HW_29: true = (select mutable_Hero0 target) /\
+  forall (HW_11: result2 = (select life0 target)),
+  forall (HW_19: result2 > 0),
+  forall (HW_20: (parenttag Hero_tag_table Hero_tag
+                  (select mutable_Hero0 target)) /\
+                 ((test sword damage target) /\
                  (sword_inv Sword_alloc_table sword target) /\
-                 (life_inv dead life0 target)),
-  forall (mutable_Hero1: (memory Hero bool)),
-  forall (HW_30: mutable_Hero1 = (store mutable_Hero0 target false)),
-  (select mutable_Hero1 target) = false.
+                 (life_inv dead life0 target)) /\
+                 (fully_packed Sword_tag_table mutable_Sword
+                  (select sword target)) /\
+                 (select committed_Sword0 (select sword target)) = false),
+  forall (committed_Sword1: (memory Sword bool)),
+  forall (mutable_Hero1: (memory Hero (tag_id Hero))),
+  forall (HW_21: mutable_Hero1 = (store mutable_Hero0 target Hero_tag) /\
+                 committed_Sword1 =
+                 (store committed_Sword0 (select sword target) true)),
+  (life_inv dead life0 target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_1 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  (parenttag Hero_tag_table (select mutable_Hero target) (@bottom_tag Hero)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_2 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  false = (select committed_Hero target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_3 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  (valid Hero_alloc_table target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_4 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  (valid Hero_alloc_table this).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_5 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  (valid Sword_alloc_table result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_6 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  (subtag Hero_tag_table (@bottom_tag Hero) (select mutable_Hero0 target)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_7 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  (select committed_Hero target) = false.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_8 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_18: result2 <= 0),
+  forall (HW_19: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_20: (valid Hero_alloc_table target)),
+  forall (life1: (memory Hero Z)),
+  forall (HW_21: life1 = (store life0 target 0)),
+  forall (HW_22: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (HW_23: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_24: (valid Hero_alloc_table target)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_25: dead0 = (store dead target true)),
+  forall (HW_26: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (parenttag Hero_tag_table Hero_tag (select mutable_Hero0 target)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_9 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_18: result2 <= 0),
+  forall (HW_19: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_20: (valid Hero_alloc_table target)),
+  forall (life1: (memory Hero Z)),
+  forall (HW_21: life1 = (store life0 target 0)),
+  forall (HW_22: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (HW_23: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_24: (valid Hero_alloc_table target)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_25: dead0 = (store dead target true)),
+  forall (HW_26: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (test sword damage target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_10 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_18: result2 <= 0),
+  forall (HW_19: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_20: (valid Hero_alloc_table target)),
+  forall (life1: (memory Hero Z)),
+  forall (HW_21: life1 = (store life0 target 0)),
+  forall (HW_22: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (HW_23: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_24: (valid Hero_alloc_table target)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_25: dead0 = (store dead target true)),
+  forall (HW_26: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (sword_inv Sword_alloc_table sword target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_11 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_18: result2 <= 0),
+  forall (HW_19: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_20: (valid Hero_alloc_table target)),
+  forall (life1: (memory Hero Z)),
+  forall (HW_21: life1 = (store life0 target 0)),
+  forall (HW_22: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (HW_23: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_24: (valid Hero_alloc_table target)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_25: dead0 = (store dead target true)),
+  forall (HW_26: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (life_inv dead0 life1 target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_12 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_18: result2 <= 0),
+  forall (HW_19: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_20: (valid Hero_alloc_table target)),
+  forall (life1: (memory Hero Z)),
+  forall (HW_21: life1 = (store life0 target 0)),
+  forall (HW_22: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (HW_23: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_24: (valid Hero_alloc_table target)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_25: dead0 = (store dead target true)),
+  forall (HW_26: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (fully_packed Sword_tag_table mutable_Sword (select sword target)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_13 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_18: result2 <= 0),
+  forall (HW_19: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_20: (valid Hero_alloc_table target)),
+  forall (life1: (memory Hero Z)),
+  forall (HW_21: life1 = (store life0 target 0)),
+  forall (HW_22: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life1 mana
+                  mutable_Hero0 sword)),
+  forall (HW_23: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_24: (valid Hero_alloc_table target)),
+  forall (dead0: (memory Hero bool)),
+  forall (HW_25: dead0 = (store dead target true)),
+  forall (HW_26: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead0 life1 mana
+                  mutable_Hero0 sword)),
+  (select committed_Sword0 (select sword target)) = false.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_14 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_29: result2 > 0),
+  (parenttag Hero_tag_table Hero_tag (select mutable_Hero0 target)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_15 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_29: result2 > 0),
+  (test sword damage target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_16 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_29: result2 > 0),
+  (sword_inv Sword_alloc_table sword target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_17 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_29: result2 > 0),
+  (life_inv dead life0 target).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_18 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_29: result2 > 0),
+  (fully_packed Sword_tag_table mutable_Sword (select sword target)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma attack_safety_po_19 : 
+  forall (this: (pointer Hero)),
+  forall (target: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (((offset_min Hero_alloc_table target) <= 0 /\
+                (offset_max Hero_alloc_table target) >= 0) /\
+                (instanceof Hero_tag_table target Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select mutable_Hero target) = Hero_tag /\
+                (select committed_Hero target) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero target)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero target)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 =
+                (store mutable_Hero target (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword target) false)),
+  forall (HW_6: (valid Hero_alloc_table target)),
+  forall (result: Z),
+  forall (HW_7: result = (select life target)),
+  forall (HW_8: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_9: result0 = (select sword this)),
+  forall (HW_10: (valid Sword_alloc_table result0)),
+  forall (result1: Z),
+  forall (HW_11: result1 = (select damage result0)),
+  forall (HW_12: (subtag Hero_tag_table (@bottom_tag Hero)
+                  (select mutable_Hero0 target)) /\
+                 (select committed_Hero target) = false),
+  forall (HW_13: (valid Hero_alloc_table target)),
+  forall (life0: (memory Hero Z)),
+  forall (HW_14: life0 = (store life target (result - result1))),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage dead life0 mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (valid Hero_alloc_table target)),
+  forall (result2: Z),
+  forall (HW_17: result2 = (select life0 target)),
+  forall (HW_29: result2 > 0),
+  (select committed_Sword0 (select sword target)) = false.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_1 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  (parenttag Hero_tag_table (select mutable_Hero this) (@bottom_tag Hero)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_2 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  false = (select committed_Hero this).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_3 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  (valid Hero_alloc_table this).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_4 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  (parenttag Sword_tag_table (select mutable_Sword result)
+   (@bottom_tag Sword)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_5 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  false = (select committed_Sword0 result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_6 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  (subtag Sword_tag_table (@bottom_tag Sword) (select mutable_Sword0 result0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_7 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  (select committed_Sword0 result0) = false.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_8 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  (valid Sword_alloc_table result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_9 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  (parenttag Sword_tag_table Sword_tag (select mutable_Sword0 result1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_10 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  (damage_inv damage0 result1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_11 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  forall (HW_19: (parenttag Sword_tag_table Sword_tag
+                  (select mutable_Sword0 result1)) /\
+                 (damage_inv damage0 result1)),
+  forall (mutable_Sword1: (memory Sword (tag_id Sword))),
+  forall (HW_20: mutable_Sword1 = (store mutable_Sword0 result1 Sword_tag)),
+  (parenttag Hero_tag_table Hero_tag (select mutable_Hero0 this)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_12 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  forall (HW_19: (parenttag Sword_tag_table Sword_tag
+                  (select mutable_Sword0 result1)) /\
+                 (damage_inv damage0 result1)),
+  forall (mutable_Sword1: (memory Sword (tag_id Sword))),
+  forall (HW_20: mutable_Sword1 = (store mutable_Sword0 result1 Sword_tag)),
+  (test sword damage0 this).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_13 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  forall (HW_19: (parenttag Sword_tag_table Sword_tag
+                  (select mutable_Sword0 result1)) /\
+                 (damage_inv damage0 result1)),
+  forall (mutable_Sword1: (memory Sword (tag_id Sword))),
+  forall (HW_20: mutable_Sword1 = (store mutable_Sword0 result1 Sword_tag)),
+  (sword_inv Sword_alloc_table sword this).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_14 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  forall (HW_19: (parenttag Sword_tag_table Sword_tag
+                  (select mutable_Sword0 result1)) /\
+                 (damage_inv damage0 result1)),
+  forall (mutable_Sword1: (memory Sword (tag_id Sword))),
+  forall (HW_20: mutable_Sword1 = (store mutable_Sword0 result1 Sword_tag)),
+  (life_inv dead life this).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_15 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  forall (HW_19: (parenttag Sword_tag_table Sword_tag
+                  (select mutable_Sword0 result1)) /\
+                 (damage_inv damage0 result1)),
+  forall (mutable_Sword1: (memory Sword (tag_id Sword))),
+  forall (HW_20: mutable_Sword1 = (store mutable_Sword0 result1 Sword_tag)),
+  (fully_packed Sword_tag_table mutable_Sword1 (select sword this)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_fun_safety_po_16 : 
+  forall (this: (pointer Hero)),
+  forall (Hero_alloc_table: (alloc_table Hero)),
+  forall (Hero_tag_table: (tag_table Hero)),
+  forall (Sword_alloc_table: (alloc_table Sword)),
+  forall (Sword_tag_table: (tag_table Sword)),
+  forall (committed_Hero: (memory Hero bool)),
+  forall (committed_Sword: (memory Sword bool)),
+  forall (damage: (memory Sword Z)),
+  forall (dead: (memory Hero bool)),
+  forall (life: (memory Hero Z)),
+  forall (mana: (memory Hero Z)),
+  forall (mutable_Hero: (memory Hero (tag_id Hero))),
+  forall (mutable_Sword: (memory Sword (tag_id Sword))),
+  forall (sword: (memory Hero (pointer Sword))),
+  forall (HW_1: (((offset_min Hero_alloc_table this) <= 0 /\
+                (offset_max Hero_alloc_table this) >= 0) /\
+                (instanceof Hero_tag_table this Hero_tag)) /\
+                (select mutable_Hero this) = Hero_tag /\
+                (select committed_Hero this) = false),
+  forall (HW_2: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                 committed_Hero committed_Sword damage dead life mana
+                 mutable_Hero sword)),
+  forall (HW_3: (global_invariant_Sword Sword_tag_table committed_Sword
+                 damage mutable_Sword)),
+  forall (HW_4: (parenttag Hero_tag_table (select mutable_Hero this)
+                 (@bottom_tag Hero)) /\
+                false = (select committed_Hero this)),
+  forall (committed_Sword0: (memory Sword bool)),
+  forall (mutable_Hero0: (memory Hero (tag_id Hero))),
+  forall (HW_5: mutable_Hero0 = (store mutable_Hero this (@bottom_tag Hero)) /\
+                committed_Sword0 =
+                (store committed_Sword (select sword this) false)),
+  forall (HW_6: (valid Hero_alloc_table this)),
+  forall (result: (pointer Sword)),
+  forall (HW_7: result = (select sword this)),
+  forall (HW_8: (parenttag Sword_tag_table (select mutable_Sword result)
+                 (@bottom_tag Sword)) /\
+                false = (select committed_Sword0 result)),
+  forall (mutable_Sword0: (memory Sword (tag_id Sword))),
+  forall (HW_9: mutable_Sword0 =
+                (store mutable_Sword result (@bottom_tag Sword))),
+  forall (HW_10: (valid Hero_alloc_table this)),
+  forall (result0: (pointer Sword)),
+  forall (HW_11: result0 = (select sword this)),
+  forall (HW_12: (subtag Sword_tag_table (@bottom_tag Sword)
+                  (select mutable_Sword0 result0)) /\
+                 (select committed_Sword0 result0) = false),
+  forall (HW_13: (valid Sword_alloc_table result0)),
+  forall (damage0: (memory Sword Z)),
+  forall (HW_14: damage0 = (store damage result0 1)),
+  forall (HW_15: (global_invariant_Hero Hero_tag_table Sword_alloc_table
+                  committed_Hero committed_Sword0 damage0 dead life mana
+                  mutable_Hero0 sword)),
+  forall (HW_16: (global_invariant_Sword Sword_tag_table committed_Sword0
+                  damage0 mutable_Sword0)),
+  forall (HW_17: (valid Hero_alloc_table this)),
+  forall (result1: (pointer Sword)),
+  forall (HW_18: result1 = (select sword this)),
+  forall (HW_19: (parenttag Sword_tag_table Sword_tag
+                  (select mutable_Sword0 result1)) /\
+                 (damage_inv damage0 result1)),
+  forall (mutable_Sword1: (memory Sword (tag_id Sword))),
+  forall (HW_20: mutable_Sword1 = (store mutable_Sword0 result1 Sword_tag)),
+  (select committed_Sword0 (select sword this)) = false.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

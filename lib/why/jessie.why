@@ -222,6 +222,10 @@ parameter downcast_ :
 
 logic bottom_tag: 'a tag_id
 
+axiom bottom_tag_axiom:
+  forall a: 't tag_table.
+  forall t: 't tag_id.
+    subtag(a, t, bottom_tag)
 
 (****************************
 

@@ -89,7 +89,7 @@ VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
      @WHYFLOATS@ \
      lib/coq/caduceus_why.vo lib/coq/caduceus_tactics.vo \
      lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo 
-#     lib/coq/jessie_why.vo
+     lib/coq/jessie_why.vo
 V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs
@@ -430,7 +430,7 @@ lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
 
 lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
-	WHYLIB=lib/why $(BINARY) --int-is-ident --dir lib/coq --coq-v8 lib/why/jessie.why
+	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/jessie.why
 
 # bench
 

@@ -484,13 +484,16 @@ let mutable_declaration st acc =
 
 (* Assert the condition under which a field update statement can be executed.
 The object must be "sufficiently unpacked", that is: its "mutable" field is
-a strict superclass of the class in which the field is defined. *)
-(* assert (e.mutable <: st.jc_struct_info_parent || e.mutable = bottom_tag) *)
+a strict superclass of the class in which the field is defined.
+  And the object must not be committed. *)
+(* assert ((st.jc_struct_info_parent <: e.mutable || e.mutable = bottom_tag) && e.committed = false) *)
 let assert_mutable e fi =
   let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
   let mutable_name = mutable_name st.jc_struct_info_root in
+  let committed_name = committed_name st.jc_struct_info_root in
   let e_mutable = LApp("select", [LVar mutable_name; e]) in
-  let btag =
+  let e_committed = LApp("select", [LVar committed_name; e]) in
+  (*let btag =
     LPred(
       "eq",
       [ e_mutable;
@@ -500,8 +503,20 @@ let assert_mutable e fi =
     | None -> LFalse
     | Some parent ->
 	make_subtag st.jc_struct_info_root (LVar (tag_name parent)) e_mutable
+  in*)
+  let parent_tag = match st.jc_struct_info_parent with
+    | None -> LVar "bottom_tag"
+    | Some parent -> LVar (tag_name parent)
   in
-  Assert(make_or btag io, Void)
+  let sub = make_subtag st.jc_struct_info_root parent_tag e_mutable in
+  let not_committed =
+    LPred(
+      "eq",
+      [ e_committed;
+	LConst (Prim_bool false) ])
+  in
+  Assert(make_and sub not_committed, Void)
+(*  Assert(make_and (make_or btag io) not_committed, Void)*)
 
 (********************)
 (* Invariant axioms *)
@@ -579,61 +594,170 @@ let field_invariants fi =
     []
     invs
 
-(* Assume that for all this: st, not this.mutable => invariant *)
+(* this.mutable <: st => invariant *)
 (* (the invariant li must be declared in st) *)
-let forall_mutable_invariant st (li, _) =
+let not_mutable_implies_invariant this st (li, _) =
   let params = invariant_params [] li in
   let root = st.jc_struct_info_root in
   
+  (* this.mutable <: st *)
+  let mutable_name = mutable_name root in
+  let mutable_io = make_subtag root
+    (LApp("select", [ LVar mutable_name; LVar this ]))
+    (LVar (tag_name st))
+  in
+
+  (* invariant *)
+  let invariant = make_logic_pred_call li [LVar this] in
+
+  (* implies *)
+  let impl = LImpl(mutable_io, invariant) in
+
+  (* params *)
+  let params = (mutable_name, mutable_memory_type root)::params in
+  let params = (tag_table_name root, tag_table_type root)::params in
+
+  params, impl
+
+(* this.mutable <: st => this.fields.committed *)
+let not_mutable_implies_fields_committed this st =
+  let root = st.jc_struct_info_root in
+  let fields = st.jc_struct_info_fields in
+
+  (* this.mutable <: st *)
+  let mutable_name = mutable_name root in
+  let mutable_io = make_subtag root
+    (LApp("select", [ LVar mutable_name; LVar this ]))
+    (LVar (tag_name st))
+  in
+
+  (* fields committed *)
+  let fields_pc = List.fold_left
+    (fun acc (n, fi) ->
+       match fi.jc_field_info_type with
+	 | JCTpointer(fi_st, _, _) ->
+	     let fi_root = fi_st.jc_struct_info_root in
+	     let committed_name = committed_name fi_root in
+	     let params =
+	       [ n, memory_field fi;
+		 committed_name, committed_memory_type fi_root ]
+	     in
+	     let f = LApp("select", [ LVar n; LVar this ]) in
+	     let com =
+	       LPred(
+		 "eq",
+		 [ LApp("select", [ LVar committed_name; f ]);
+		   LConst(Prim_bool true) ])
+	     in
+	     (params, com)::acc
+	 | _ -> acc)
+    [] fields
+  in
+  let params, coms = List.flatten (List.map fst fields_pc), make_and_list (List.map snd fields_pc) in
+
+  (* additional params *)
+  let params = (mutable_name, mutable_memory_type root)::params in
+  let params = (tag_table_name root, tag_table_type root)::params in
+
+  (* implies *)
+  let impl = LImpl(mutable_io, coms) in
+
+  params, impl
+
+(* this.committed => fully_packed(this) *)
+let committed_implies_fully_packed this root =
+  let committed_name = committed_name root in
+  let committed_type = committed_memory_type root in
+  let mutable_name = mutable_name root in
+  let mutable_type = mutable_memory_type root in
+  let tag_table = tag_table_name root in
+  let tag_table_type = tag_table_type root in
+
+  (* this.committed = true *)
+  let com = LPred(
+    "eq",
+    [ LApp(
+	"select",
+	[ LVar committed_name;
+	  LVar this ]);
+      LConst(Prim_bool true) ])
+  in
+
+  (* fully_packed(this) *)
+  let packed = LPred(
+    "fully_packed",
+    [ LVar tag_table;
+      LVar mutable_name;
+      LVar this ])
+  in
+
+  (* implies *)
+  let impl = LImpl(com, packed) in
+
+  (* params *)
+  let params = [
+    tag_table, tag_table_type;
+    committed_name, committed_type;
+    mutable_name, mutable_type;
+  ] in
+
+  params, impl
+
+let lex2 (a1, b1) (a2, b2) =
+  let c = compare a1 a2 in
+  if c = 0 then compare b1 b2 else c
+
+let make_hierarchy_global_invariant acc root =
   (* this *)
   let this = "this" in
   let this_ty =
     { logic_type_name = "pointer";
       logic_type_args = [simple_logic_type root] } in
 
-  (* this.mutable <: st => this.invariant *)
-  let mutable_name = mutable_name root in
-  let mutable_io = make_subtag root
-    (LApp("select", [ LVar mutable_name; LVar this ]))
-    (LVar (tag_name st))
-  in
-  let invariant = make_logic_pred_call li [LVar this] in
-  let impl = LImpl(mutable_io, invariant) in
-
-  (* quantifier (forall this) *)
-  let inv = LForall(this, this_ty, impl) in
-
-  (* params *)
-  let params = (mutable_name, mutable_memory_type root)::params in
-  let params = (tag_table_name root, tag_table_type root)::params in
-
-  params, inv
-
-let lex2 (a1, b1) (a2, b2) =
-  let c = compare a1 a2 in
-  if c = 0 then compare b1 b2 else c
-
-let make_hierarchy_global_invariant acc h =
-  let fmi = List.map
+  (* not mutable => invariant, and their parameters *)
+  let structs = hierarchy_structures root in
+  let mut_inv = List.map
     (fun st ->
        let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
-       List.map (fun inv -> forall_mutable_invariant st inv) invs)
-    (hierarchy_structures h)
+       List.map (fun inv -> not_mutable_implies_invariant this st inv) invs)
+    structs
   in
-  let fmi = List.flatten fmi in
-  let params, fmi = List.map fst fmi, List.map snd fmi in
+  let mut_inv = List.flatten mut_inv in
+  let params, mut_inv = List.map fst mut_inv, List.map snd mut_inv in
+  let mut_inv = make_and_list mut_inv in
+
+  (* not mutable for T => fields defined in T committed *)
+  let params, mut_com = List.fold_left
+    (fun (params, coms) st ->
+       let p, c = not_mutable_implies_fields_committed this st in
+       p@params, make_and c coms)
+    (List.flatten params, LTrue)
+    structs
+  in
+
+  (* committed => fully packed *)
+  let params_cfp, com_fp = committed_implies_fully_packed this root in
+  let params = params_cfp@params in
+
+  (* predicate body, quantified on "this" *)
+  let body = LForall(this, this_ty, make_and_list [ mut_inv; mut_com; com_fp ]) in
+
+  (* sort the parameters and only keep one of each *)
   let params = List.fold_left
     (fun acc (n, t) -> StringMap.add n t acc)
     StringMap.empty
-    (List.flatten params)
+    params
   in
   let params = StringMap.fold (fun n t acc -> (n, t)::acc) params [] in
   let params = List.sort lex2 params in
-  let fmi = make_and_list fmi in
-  Hashtbl.add hierarchy_invariants h params;
+
+  (* fill hash table *)
+  Hashtbl.add hierarchy_invariants root params;
+
+  (* return the predicate *)
   match params with
-    | [] -> acc
-    | _ -> Predicate(false, hierarchy_invariant_name h, params, fmi)::acc
+    | [] -> acc (* Not supposed to happen though *)
+    | _ -> Predicate(false, hierarchy_invariant_name root, params, body)::acc
 
 let make_global_invariants acc =
   let h = hierarchies () in
