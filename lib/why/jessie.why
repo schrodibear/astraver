@@ -181,24 +181,22 @@ type 't tag_id
 
 logic typeof: 't tag_table, 't pointer -> 't tag_id
 
-logic parenttag: 't tag_table, 't tag_id, 't tag_id -> prop
+logic parenttag: 't tag_id, 't tag_id -> prop
 
-logic subtag: 't tag_table, 't tag_id, 't tag_id -> prop
+logic subtag: 't tag_id, 't tag_id -> prop
 
 axiom subtag_refl:
-  forall a: 't tag_table.
   forall t: 't tag_id.
-    subtag(a, t, t)
+    subtag(t, t)
 
 axiom subtag_parent:
-  forall a: 't tag_table.
   forall t1: 't tag_id.
   forall t2: 't tag_id.
   forall t3: 't tag_id.
-    subtag(a, t1, t2) -> parenttag(a, t2, t3) -> subtag(a, t1, t3)
+    subtag(t1, t2) -> parenttag(t2, t3) -> subtag(t1, t3)
 
 predicate instanceof (a: 't tag_table, p: 't pointer, t: 't tag_id) =
-  subtag(a, typeof(a, p), t)
+  subtag(typeof(a, p), t)
 
 parameter instanceof_ : 
   a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
@@ -223,9 +221,8 @@ parameter downcast_ :
 logic bottom_tag: 'a tag_id
 
 axiom bottom_tag_axiom:
-  forall a: 't tag_table.
   forall t: 't tag_id.
-    subtag(a, t, bottom_tag)
+    subtag(t, bottom_tag)
 
 (****************************
 

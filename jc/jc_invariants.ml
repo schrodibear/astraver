@@ -146,8 +146,8 @@ let fully_packed_name root =
 let tag_table_name root =
   root^"_tag_table"
 
-let make_subtag root t u =
-  LPred("subtag", [ LVar(root^"_tag_table"); t; u ])
+let make_subtag t u =
+  LPred("subtag", [ t; u ])
 
 let fully_packed root e =
   LPred(
@@ -508,7 +508,7 @@ let assert_mutable e fi =
     | None -> LVar "bottom_tag"
     | Some parent -> LVar (tag_name parent)
   in
-  let sub = make_subtag st.jc_struct_info_root parent_tag e_mutable in
+  let sub = make_subtag parent_tag e_mutable in
   let not_committed =
     LPred(
       "eq",
@@ -602,7 +602,7 @@ let not_mutable_implies_invariant this st (li, _) =
   
   (* this.mutable <: st *)
   let mutable_name = mutable_name root in
-  let mutable_io = make_subtag root
+  let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
   in
@@ -626,7 +626,7 @@ let not_mutable_implies_fields_committed this st =
 
   (* this.mutable <: st *)
   let mutable_name = mutable_name root in
-  let mutable_io = make_subtag root
+  let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
   in
@@ -948,13 +948,11 @@ let pack_declaration st acc =
   let components_pre, reads = make_components_precond (LVar this) st reads in
   let reads = StringSet.add mutable_name reads in
   let writes = StringSet.add mutable_name writes in
-  let reads = StringSet.add (tag_table_name st.jc_struct_info_root) reads in
   let requires =
     make_and_list [
       (LPred(
 	 "parenttag",
-	 [ LVar (tag_table_name st.jc_struct_info_root);
-	   LVar tag;
+	 [ LVar tag;
 	   LApp("select", [LVar mutable_name; LVar this]) ]));
       inv;
       components_pre
@@ -1005,22 +1003,19 @@ let unpack_declaration st acc =
   let this_type = pointer_type st.jc_struct_info_root in
   let tag = "tag" in
   let tag_type = tag_type st.jc_struct_info_root in
-  let tag_table = tag_table_name st.jc_struct_info_root in
   let name = st.jc_struct_info_root in
   let mutable_name = mutable_name name in
   let committed_name = committed_name name in
   let reads = StringSet.singleton mutable_name in
   let writes = StringSet.singleton mutable_name in
   let reads = StringSet.add committed_name reads in
-  let reads = StringSet.add tag_table reads in
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes false in
   let requires =
     (* unpack this as tag: requires parenttag(this.mutable, tag) and not this.committed *)
     make_and
       (LPred(
 	 "parenttag",
-	 [ LVar tag_table;
-	   LApp("select", [LVar mutable_name; LVar this]);
+	 [ LApp("select", [LVar mutable_name; LVar this]);
 	   LVar tag ]))
       (LPred(
 	 "eq",

@@ -817,17 +817,10 @@ let tr_struct st acc =
 	let name =
 	  st.jc_struct_info_name ^ "_parenttag_bottom"
 	in
-	let root = simple_logic_type st.jc_struct_info_root in
-	let root_tag_table = 
-	  { logic_type_name = "tag_table";
-	    logic_type_args = [root] }
+	let p =
+	  LPred("parenttag", [ LVar (tag_name st); LVar "bottom_tag" ])
 	in
-	let f =
-	  LForall(
-	    "a", root_tag_table,
-	    LPred("parenttag", [ LVar "a"; LVar (tag_name st); LVar "bottom_tag" ]))
-	in
-	Axiom(name, f)::acc
+	Axiom(name, p)::acc
     | Some p ->
 	(* axiom for instance_of *)
 	(*let name =
@@ -858,20 +851,13 @@ let tr_struct st acc =
 	  Axiom(name,f)::acc
 	in*)
 	(* axiom for parenttag *)
-	let root = simple_logic_type st.jc_struct_info_root in
-	let root_tag_table = 
-	  { logic_type_name = "tag_table";
-	    logic_type_args = [root] }
-	in
 	let name =
 	  st.jc_struct_info_name ^ "_parenttag_" ^ p.jc_struct_info_name
 	in
-	let f =
-	  LForall(
-	    "a", root_tag_table,
-	    LPred("parenttag", [ LVar "a"; LVar (tag_name st); LVar (tag_name p) ]))
+	let p =
+	  LPred("parenttag", [ LVar (tag_name st); LVar (tag_name p) ])
 	in
-	Axiom(name, f)::acc
+	Axiom(name, p)::acc
 
 
 (*************

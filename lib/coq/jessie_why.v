@@ -593,31 +593,29 @@ Admitted.
 Implicit Arguments typeof.
 
 (*Why logic*) Definition parenttag :
-  forall (A1:Set), (tag_table A1) -> (tag_id A1) -> (tag_id A1) -> Prop.
+  forall (A1:Set), (tag_id A1) -> (tag_id A1) -> Prop.
 Admitted.
 Implicit Arguments parenttag.
 
 (*Why logic*) Definition subtag :
-  forall (A1:Set), (tag_table A1) -> (tag_id A1) -> (tag_id A1) -> Prop.
+  forall (A1:Set), (tag_id A1) -> (tag_id A1) -> Prop.
 Admitted.
 Implicit Arguments subtag.
 
 (*Why axiom*) Lemma subtag_refl :
-  forall (A1:Set),
-  (forall (a:(tag_table A1)), (forall (t:(tag_id A1)), (subtag a t t))).
+  forall (A1:Set), (forall (t:(tag_id A1)), (subtag t t)).
 Admitted.
 
 (*Why axiom*) Lemma subtag_parent :
   forall (A1:Set),
-  (forall (a:(tag_table A1)),
-   (forall (t1:(tag_id A1)),
-    (forall (t2:(tag_id A1)),
-     (forall (t3:(tag_id A1)),
-      ((subtag a t1 t2) -> ((parenttag a t2 t3) -> (subtag a t1 t3))))))).
+  (forall (t1:(tag_id A1)),
+   (forall (t2:(tag_id A1)),
+    (forall (t3:(tag_id A1)),
+     ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
 (*Why predicate*) Definition instanceof (A260:Set) (a:(tag_table A260))
-  (p:(pointer A260)) (t:(tag_id A260)) := (subtag a (typeof a p) t).
+  (p:(pointer A260)) (t:(tag_id A260)) := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
 (*Why logic*) Definition downcast :
@@ -641,9 +639,7 @@ Implicit Arguments bottom_tag.
 Unset Contextual Implicit.
 
 (*Why axiom*) Lemma bottom_tag_axiom :
-  forall (A1:Set),
-  (forall (a:(tag_table A1)),
-   (forall (t:(tag_id A1)), (subtag a t (@bottom_tag A1)))).
+  forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
 (*Why predicate*) Definition fully_packed (A265:Set) (tag_table:(tag_table A265))
