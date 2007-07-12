@@ -648,6 +648,7 @@ COQLIB
 COQVER
 WHYLIBCOQ
 WHYFLOATS
+JESSIELIBCOQ
 PVS
 PVSLIB
 MIZAR
@@ -2514,8 +2515,10 @@ echo "${ECHO_T}$COQVERSION" >&6; }
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
 	case $COQVERSION in
 	8.1*|trunk)
+	  JESSIELIBCOQ=lib/coq/jessie_why.vo
 	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
 	*)
+	  JESSIELIBCOQ=
 	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;
         esac
 	{ echo "$as_me:$LINENO: checking Coq floating-point library" >&5
@@ -2684,6 +2687,7 @@ fi
 
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
+
 
 
 
@@ -3411,6 +3415,7 @@ COQLIB!$COQLIB$ac_delim
 COQVER!$COQVER$ac_delim
 WHYLIBCOQ!$WHYLIBCOQ$ac_delim
 WHYFLOATS!$WHYFLOATS$ac_delim
+JESSIELIBCOQ!$JESSIELIBCOQ$ac_delim
 PVS!$PVS$ac_delim
 PVSLIB!$PVSLIB$ac_delim
 MIZAR!$MIZAR$ac_delim
@@ -3420,7 +3425,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 78; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 79; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -3764,6 +3769,9 @@ echo "GWhy                    : $LABLGTK2"
 echo "Coq support             : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version             : $COQVER ($COQVERSION)"
+   if test "$JESSIELIBCOQ" = ""; then
+      echo "                        : (Jessie Coq proofs disabled, requires >= 8.1)"
+   fi
    echo "    Lib                 : $COQLIB"
    echo "    Floats              : ${WHYFLOATS:-no}"
 fi

@@ -89,7 +89,7 @@ VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
      @WHYFLOATS@ \
      lib/coq/caduceus_why.vo lib/coq/caduceus_tactics.vo \
      lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo \
-     lib/coq/jessie_why.vo
+     @JESSIELIBCOQ@
 V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs

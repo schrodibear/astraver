@@ -297,8 +297,10 @@ else
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
 	case $COQVERSION in
 	8.1*|trunk)
+	  JESSIELIBCOQ=lib/coq/jessie_why.vo
 	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
 	*)
+	  JESSIELIBCOQ=
 	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;
         esac
 	AC_MSG_CHECKING(Coq floating-point library)
@@ -379,6 +381,7 @@ AC_SUBST(COQLIB)
 AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
+AC_SUBST(JESSIELIBCOQ)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)
@@ -409,6 +412,9 @@ echo "GWhy                    : $LABLGTK2"
 echo "Coq support             : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version             : $COQVER ($COQVERSION)"
+   if test "$JESSIELIBCOQ" = ""; then
+      echo "                        : (Jessie Coq proofs disabled, requires >= 8.1)"
+   fi
    echo "    Lib                 : $COQLIB" 
    echo "    Floats              : ${WHYFLOATS:-no}"
 fi

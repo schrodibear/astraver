@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.21 2007-06-05 11:29:14 couchot Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.22 2007-07-12 10:55:26 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -51,7 +51,7 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 (* calling prover *)
 
-type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3 | Graph
+type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3 | Graph | Z3
 
 let push_elem p e = 
   if not pruning then 
@@ -61,7 +61,7 @@ let push_elem p e =
   | Harvey -> Harvey.push_decl e
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
-  | Rvsat | Yices | Cvc3 -> Smtlib.push_decl e
+  | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl e
   | Ergo -> Pretty.push_decl e
   | Graph -> Pretty.push_decl e
 let push_obligation p (loc, id, s) = 
@@ -71,7 +71,7 @@ let push_obligation p (loc, id, s) =
   | Harvey -> Harvey.push_decl g
   | Cvcl -> Cvcl.push_decl g
   | Zenon -> Zenon.push_decl g
-  | Rvsat | Yices | Cvc3 -> Smtlib.push_decl g
+  | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl g
   | Ergo -> Pretty.push_decl g
   | Graph -> Pretty.push_decl g
 (* output_file is a CRITICAL SECTION *)
@@ -88,7 +88,7 @@ let output_file ?encoding p (elems,o) =
     | Harvey -> Harvey.reset () 
     | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
-    | Rvsat | Yices | Cvc3 -> Smtlib.reset ()
+    | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.reset ()
     | Ergo -> Pretty.reset ()
     | Graph -> Pretty.reset ()
   end;
@@ -124,7 +124,7 @@ let output_file ?encoding p (elems,o) =
     | Harvey -> Harvey.output_file f; f ^ "_why.rv"
     | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
     | Zenon -> Zenon.output_file f; f ^ "_why.znn"
-    | Rvsat | Yices | Cvc3 -> Smtlib.output_file f; f ^ "_why.smt"
+    | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
     | Ergo -> Pretty.output_file f; f ^ "_why.why"
     | Graph -> Pretty.output_file f; f ^ "_why.why"
 open Format
@@ -139,6 +139,7 @@ let prover_name = function
   | Ergo -> "ergo"
   | Cvc3 -> "CVC3"
   | Graph -> "Graph"
+  | Z3 -> "Z3"
 
 let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
@@ -161,6 +162,8 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.ergo ~debug ?timeout ~filename ()
     | Cvc3 -> 
 	Calldp.cvc3 ~debug ?timeout ~filename ()
+    | Z3 -> 
+	Calldp.z3 ~debug ?timeout ~filename ()
     | Graph -> 
 	Calldp.graph  ~debug ?timeout ~filename ()
   in

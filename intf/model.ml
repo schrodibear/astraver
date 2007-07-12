@@ -165,9 +165,16 @@ let cvc3 = {
   pr_id = Dispatcher.Cvc3;
   pr_enc = SortedStratified;
   }
+let z3SS = {
+  pr_name = "Z3(SS)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Z3;
+  pr_enc = SortedStratified;
+  }
 
 let provers = [
-  simplify; ergo; yicesSStrat; cvc3; graph; 
+  simplify; ergo; z3SS ; yicesSStrat; cvc3; graph; 
   (*simplify_sstrat;*) simplify_strat; yices; rvsat; 
   zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
   harvey; cvcl]
