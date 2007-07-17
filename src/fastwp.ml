@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.11 2007-03-16 08:08:49 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.12 2007-07-17 14:48:05 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -295,8 +295,8 @@ and wp0 e s =
       wpforalls (q @ qr) (wpimplies (wpands pl) ok),
       ((Ptrue, s), [])
   | Assertion (al, e1) ->
-      (* OK: al /\ ok(e)
-	 NE: al /\ ne(e,result) *)
+      (* OK: al /\ ok(e1)
+	 NE: al /\ ne(e1,result) *)
       let ok,((ne1,s'),ee1) = wp e1 s in
       let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) al in
       let ee x = let ee,sx = exn x ee1 s in wpands (pl @ [ee]), sx in
@@ -331,15 +331,53 @@ and wp0 e s =
   | Label (l, e) ->
       wp e (Subst.label l s)
   | LetRef (x, e1, e2) ->
-      assert false (*TODO*)
+      begin match e1.info.t_result_type with
+	| PureType pt as ty1 ->
+	    let ok1,((ne1,s1),ee1) = wp e1 s in
+	    let s1 = Subst.add x pt s1 in
+	    let ok2,((ne2,s2),ee2) = wp e2 s1 in
+	    let ne1x = subst_in_predicate (subst_onev result x) ne1 in
+	    let ok = wpand ok1 (wpforall x ty1 (wpimplies ne1x ok2)) in
+	    let ne = (*exists x ty1*) (wpand ne1x ne2) in
+	    let ee x =
+	      let ee1,sx1 = exn x ee1 s and ee2,sx2 = exn x ee2 s1 in
+	      let s',r1,r2 = merge sx1 sx2 in
+	      por (wpand ee1 r1) (wpands [ne1x; ee2; r2]), s'
+	    in
+	    let s2 = Subst.add_aux x pt s2 in
+	    ok, ((ne, s2), exns e ee)
+	| Arrow _ | Ref _ -> 
+	    assert false
+      end
   | Var _ -> 
       (* this must be an impure function, thus OK = NE = true *)
       Ptrue, ((Ptrue, s), [])
   | Absurd -> 
       (* OK = NE = false *)
       Pfalse, ((Pfalse, s), [])
-  | Loop _ ->
-      assert false (*TODO*)
+  | Loop (inv, var, e1) ->
+      (* OK: I /\ forall w. (I => (ok(e1) /\ (ne(e1,void) => I /\ var<var@)))
+	 N : false
+	 E : e(e1) *)
+      let s0 = Subst.frame e1.info.t_env e1.info.t_effect s in
+      let ok1,((ne1,s1),ee1) = wp e1 s0 in
+      let ne1void = tsubst_in_predicate (subst_one result tvoid) ne1 in
+      let subst_inv s = match inv with
+	| None -> Ptrue
+	| Some {a_value=i} -> Subst.predicate s i
+      in
+      let i0 = subst_inv s0 in 
+      let ok = 
+	wpand 
+	  (subst_inv s)
+	  (wpimplies 
+	      i0
+	      (wpand ok1 (wpimplies ne1void (subst_inv s1))))
+      in
+      let ee x =
+	let ee,sx = exn x ee1 s0 in wpand i0 ee, sx
+      in
+      ok, ((Pfalse, s), exns e ee)
   | Raise (id, None) -> 
       (* OK: true  
 	 N : false  
@@ -359,37 +397,58 @@ and wp0 e s =
       in
       ok1, ((Pfalse, s1), exns e ee)
   | Try (e1, hl) ->
-      assert false (*TODO*)
-(*
       let ok1,((ne1,s1),ee1) = wp e1 s in
-      let handler_ok (x,r) =
-	let p = wpimplies ex qx in
-	match find_exception x with
-	  | Some pt -> wpforall result (PureType pt) p
-	  | None -> p
+      let hl = 
+	List.map 
+	  (fun ((x,v),ei) -> 
+	    let _,sx = exn x ee1 s in 
+	    ((x,v), wp ei sx))
+	  hl 
+      in
+      let bind_result v p = match v with
+	| None -> p
+	| Some x -> subst_in_predicate (subst_onev result x) p
+      in
+      let handler_ok ((x,v), (oki,_)) = 
+	let e1x,_ = exn x ee1 s in 
+	let e1x = bind_result v e1x in
+	let p = wpimplies e1x oki in
+	match find_exception x, v with
+	  | Some pt, Some v -> wpforall v (PureType pt) p
+	  | None, None -> p
+	  | _ -> assert false
       in
       let ok = wpands (ok1 :: List.map handler_ok hl) in
+      let ne =
+	List.fold_left
+	  (fun (ne,s) ((x,v), (_,((nei,si),_))) ->
+	    let e1x,_ = exn x ee1 s in 
+	    let e1x = bind_result v e1x in
+	    let si = match find_exception x, v with
+	      | Some pt, Some v -> Subst.add_aux v pt si
+	      | None, None -> si
+	      | _ -> assert false
+	    in
+	    let s',r1,r2 = merge s si in
+	    por (wpand ne r1) (wpands [e1x; nei; r2]), s'
+	  )
+	  (ne1,s1) hl
+      in
       let nee = 
+	[] (*TODO*)
+	  (***
 	let ee x = let ee,sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
 	(wpand ne1 q, s'), exns e ee
+	  ***)
       in
-      ok, nee
-*)
+      ok, (ne, nee)
+(*| Rec of variable * type_v binder list * type_v * variant option * 
+           precondition list * 'a t *)
   | Rec _ ->
       assert false (*TODO*)
+(*| Any of type_c *)
   | Any _ ->
       assert false (*TODO*)
-(***
-  | Loop of assertion option * variant option * 'a t (* infinite loop *)
-  (* exceptions *)
-  | Raise of variable * 'a t option
-  | Try of 'a t * (exn_pattern * 'a t) list 
-  (* functions and applications *)
-  | Rec of variable * type_v binder list * type_v * variant option * 
-      precondition list * 'a t
-  (* undeterministic expression *)
-  | Any of type_c
-***)
 
 let wp e =
   let s = Subst.frame e.info.t_env e.info.t_effect Subst.empty in
