@@ -6,7 +6,7 @@ type Point = {
 
 type PointSet = {
     integer num;
-    Point[..] set;
+    rep Point[..] set;
     invariant inv_num(p) =
       p.num > 0 && \offset_min(p.set) == 0 && \offset_max(p.set) == p.num-1;
 }

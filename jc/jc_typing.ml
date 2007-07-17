@@ -102,6 +102,7 @@ let create_mutable_field id =
     jc_field_info_type = boolean_type;
     jc_field_info_root = id;
     jc_field_info_struct = id;
+    jc_field_info_rep = false;
   } in
   Hashtbl.add committed_fields_table id fi
 
@@ -1861,7 +1862,7 @@ let assertion_true =
   { jc_assertion_node = JCAtrue;
     jc_assertion_loc = Loc.dummy_position }
 
-let field st root (t,id) =
+let field st root (rep, t, id) =
   let ty = type_type t in
   incr field_tag_counter;
   let fi = {
@@ -1870,6 +1871,7 @@ let field st root (t,id) =
     jc_field_info_type = ty;
     jc_field_info_root = root;
     jc_field_info_struct = st;
+    jc_field_info_rep = rep or (not (is_pointer_type ty));
   }
   in (id,fi)
 

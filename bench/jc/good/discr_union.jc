@@ -34,7 +34,7 @@ type packet_uni_float = packet_uni with {
 
 type packet = {
     integer discr;
-    packet_uni[0] uni;
+    rep packet_uni[0] uni;
     invariant discr0(this) = this.discr == 0 ==> this.uni <: packet_uni_int;
     invariant discr1(this) = this.discr == 1 ==> this.uni <: packet_uni_float;
 }

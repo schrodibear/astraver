@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.56 2007-07-06 07:45:28 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.57 2007-07-17 10:40:39 romain Exp $ */
 
 %{
 
@@ -91,8 +91,8 @@
 /* type invariant logic with variant and axiom */
 %token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM
 
-/* integer boolean real unit void */
-%token INTEGER BOOLEAN REAL UNIT
+/* integer boolean real unit void rep */
+%token INTEGER BOOLEAN REAL UNIT REP
 
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
@@ -251,7 +251,9 @@ field_declaration_list:
 
 field_declaration:
 | type_expr IDENTIFIER SEMICOLON
-    { ($1,$2) }
+    { (false, $1, $2) }
+| REP type_expr IDENTIFIER SEMICOLON
+    { (true, $2, $3) }
 ;
 
 invariant:

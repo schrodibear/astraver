@@ -7,7 +7,7 @@ type char_array = {
 
 
 type queue = {
-  char_array[0..] contents;
+  rep char_array[0..] contents;
   integer length;
   integer first;	
   integer last;

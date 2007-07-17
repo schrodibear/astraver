@@ -162,7 +162,7 @@ type pdecl_node =
   | JCPDfun of ptype * string * (ptype * string) list * pclause list
       * pstatement list option
   | JCPDstructtype of string * 
-      string option * (ptype * string) list * (string * string * pexpr) list
+      string option * (bool * ptype * string) list * (string * string * pexpr) list
   (* use to define recursively a set of types *)
   | JCPDrectypes of pdecl list
   (* use to define recursively a set of functions *)

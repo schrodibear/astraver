@@ -20,6 +20,11 @@ open Output
        function create_structure_tag
        function find_field_struct: "mutable" and "committed" cases (and the parameter allow_mutable)
        function decl: JCPDstructtype: call to create_mutable_field
+
+TODOs:
+     Maybe generate assocs (or global invariant) when doing unpack or pack, as it modifies
+mutable and committed.
+     Arrays and global invariant.
 *)
 
 (********)
@@ -169,17 +174,20 @@ let hierarchy_invariant_name h = "global_invariant_"^h
 (* Checking an invariant definition *)
 (************************************)
 
-let field _ = ()
+(* Typing imposes non pointer fields to have the flag "rep" *)
+let field fi this loc =
+  if not fi.jc_field_info_rep then
+    Jc_typing.typing_error loc "this term is not a rep field of %s" this.jc_var_info_name
 
 let rec check_rep ?(must_deref=false) this loc t =
   match t.jc_term_node with
     | JCTvar vi when vi == this && not must_deref -> ()
     | JCTderef (t, fi) ->
-	field fi;
+	field fi this loc;
 	check_rep ~must_deref:false this loc t
     | JCTcast (t, _)
     | JCTshift (t, _) ->
-	(* t must not be this, but might be a field of this *)
+	(* t must not be this, but might be a field of this if it is a table (? TODO) *)
 	check_rep ~must_deref:true this loc t
     | _ ->
 	Jc_typing.typing_error loc "this term is not a rep field of %s" this.jc_var_info_name
@@ -199,9 +207,8 @@ let rec term this t =
 	else
 	  Jc_typing.typing_error t.jc_term_loc
 	    "this call is not allowed in structure invariant"
-    | JCTderef (t1, fi) ->
-	field fi;
-	check_rep this t.jc_term_loc t1
+    | JCTderef _ ->
+	check_rep this t.jc_term_loc t
     | JCTshift (t1, t2) 
     | JCTrange (t1, t2)
     | JCTbinary(t1,_,t2) -> term this t1; term this t2
@@ -290,7 +297,7 @@ let rec assertion_memories aux a = match a.jc_assertion_node with
   | JCAmutable(t, _, _) -> term_memories aux t
   | JCAtagequality(t1, t2, _) -> tag_memories (tag_memories aux t2) t1
 
-(* Returns (as a StringSet.t) every structure name that can be reach from st.
+(* Returns (as a StringSet.t) every structure name that can be reached from st.
 Assumes the structures whose name is in acc have already been visited
 and won't be visited again. *)
 let rec all_structures st acc =
@@ -388,6 +395,12 @@ let hierarchies () =
     Jc_typing.structs_table
     StringSet.empty
   in StringSet.elements h
+
+(* Returns every rep fields of a structure *)
+let rep_fields st =
+  List.filter
+    (fun (_, fi) -> fi.jc_field_info_rep)
+    st.jc_struct_info_fields
 
 
 (*********)
@@ -488,35 +501,28 @@ a strict superclass of the class in which the field is defined.
   And the object must not be committed. *)
 (* assert ((st.jc_struct_info_parent <: e.mutable || e.mutable = bottom_tag) && e.committed = false) *)
 let assert_mutable e fi =
-  let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
-  let mutable_name = mutable_name st.jc_struct_info_root in
-  let committed_name = committed_name st.jc_struct_info_root in
-  let e_mutable = LApp("select", [LVar mutable_name; e]) in
-  let e_committed = LApp("select", [LVar committed_name; e]) in
-  (*let btag =
-    LPred(
-      "eq",
-      [ e_mutable;
-	LVar "bottom_tag" ])
-  in
-  let io = match st.jc_struct_info_parent with
-    | None -> LFalse
-    | Some parent ->
-	make_subtag st.jc_struct_info_root (LVar (tag_name parent)) e_mutable
-  in*)
-  let parent_tag = match st.jc_struct_info_parent with
-    | None -> LVar "bottom_tag"
-    | Some parent -> LVar (tag_name parent)
-  in
-  let sub = make_subtag parent_tag e_mutable in
-  let not_committed =
-    LPred(
-      "eq",
-      [ e_committed;
-	LConst (Prim_bool false) ])
-  in
-  Assert(make_and sub not_committed, Void)
-(*  Assert(make_and (make_or btag io) not_committed, Void)*)
+  if fi.jc_field_info_rep then
+    begin
+      let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
+      let mutable_name = mutable_name st.jc_struct_info_root in
+      let committed_name = committed_name st.jc_struct_info_root in
+      let e_mutable = LApp("select", [LVar mutable_name; e]) in
+      let e_committed = LApp("select", [LVar committed_name; e]) in
+      let parent_tag = match st.jc_struct_info_parent with
+	| None -> LVar "bottom_tag"
+	| Some parent -> LVar (tag_name parent)
+      in
+      let sub = make_subtag parent_tag e_mutable in
+      let not_committed =
+	LPred(
+	  "eq",
+	  [ e_committed;
+	    LConst (Prim_bool false) ])
+      in
+      Assert(make_and sub not_committed, Void)
+    end
+  else
+    Void
 
 (********************)
 (* Invariant axioms *)
@@ -577,22 +583,23 @@ let hierarchy_invariants = Hashtbl.create 97
 
 (* List of each invariant that can be broken by modifying a given field *)
 let field_invariants fi =
-  (* List of all structure * invariant *)
-  let invs = Hashtbl.fold
-    (fun _ (st, invs) acc -> (List.map (fun inv -> st, inv) invs)@acc)
-    Jc_typing.structs_table
-    []
-  in
-  (* Only keep the invariants which uses the field *)
-  List.fold_left
-    (fun aux ((_, (_, a)) as x) ->
-       let amems = assertion_memories StringSet.empty a in
-       if StringSet.mem fi.jc_field_info_name amems then
-         x::aux
-       else
+  if not fi.jc_field_info_rep then [] else (* small optimisation, it is not needed *)
+    (* List of all structure * invariant *)
+    let invs = Hashtbl.fold
+      (fun _ (st, invs) acc -> (List.map (fun inv -> st, inv) invs)@acc)
+      Jc_typing.structs_table
+      []
+    in
+    (* Only keep the invariants which uses the field *)
+    List.fold_left
+      (fun aux ((_, (_, a)) as x) ->
+	 let amems = assertion_memories StringSet.empty a in
+	 if StringSet.mem fi.jc_field_info_name amems then
+           x::aux
+	 else
 	 aux)
-    []
-    invs
+      []
+      invs
 
 (* this.mutable <: st => invariant *)
 (* (the invariant li must be declared in st) *)
@@ -622,7 +629,7 @@ let not_mutable_implies_invariant this st (li, _) =
 (* this.mutable <: st => this.fields.committed *)
 let not_mutable_implies_fields_committed this st =
   let root = st.jc_struct_info_root in
-  let fields = st.jc_struct_info_fields in
+  let fields = rep_fields st in
 
   (* this.mutable <: st *)
   let mutable_name = mutable_name root in
@@ -835,12 +842,15 @@ let assume_all_invariants params =
 (* pack / unpack *)
 (*****************)
 
+(* return fields that are both pointers and rep fields *)
 let components st =
   List.fold_left
     (fun acc (_, fi) ->
-       match fi.jc_field_info_type with
-	 | JCTpointer(si, _, _) -> (fi, si)::acc
-	 | _ -> acc)
+       if fi.jc_field_info_rep then
+	 match fi.jc_field_info_type with
+	   | JCTpointer(si, _, _) -> (fi, si)::acc
+	   | _ -> acc
+       else acc)
     []
     st.jc_struct_info_fields
 
@@ -997,7 +1007,7 @@ let pack_declaration st acc =
   else
     acc
 
-(* Contrairement à Boogie, ici on "unpack to S" au lieu de "unpack from T" *)
+(* Unlike Boogie, Jessie has "unpack to S" instead of "unpack from T" *)
 let unpack_declaration st acc =
   let this = "this" in
   let this_type = pointer_type st.jc_struct_info_root in

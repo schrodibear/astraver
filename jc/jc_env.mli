@@ -54,6 +54,7 @@ and field_info =
       jc_field_info_type : jc_type;
       jc_field_info_struct: string; (* The structure in which the field is defined *)
       jc_field_info_root : string; (* The root of the structure in which the field is defined *)
+      jc_field_info_rep : bool; (* "rep" flag *)
     }
 
 type var_info =

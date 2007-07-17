@@ -6,7 +6,8 @@ type Sword = {
 type Hero = {
     integer life;
     boolean dead;
-    Sword[0] sword;
+    rep Sword[0] sword;
+    Sword[0] sword_not_rep;
     invariant life_inv(this) =
         (this.life >= 0) &&
         (this.life <= 100) &&

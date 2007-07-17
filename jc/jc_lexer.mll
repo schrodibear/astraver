@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.36 2007-06-29 09:30:04 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.37 2007-07-17 10:40:39 romain Exp $ i*)
 
 {
   open Jc_ast
@@ -119,6 +119,7 @@ rule token = parse
   | "pack"                  { PACK }
   | "reads"                 { READS }
   | "real"                  { REAL}
+  | "rep"                   { REP }
   | "requires"              { REQUIRES }
   | "return"                { RETURN }
   | "switch"                { SWITCH }
