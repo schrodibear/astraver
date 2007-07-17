@@ -147,6 +147,7 @@ let create_field fi =
       jc_field_info_type = ty;
       jc_field_info_root = ci.jc_struct_info_root;
       jc_field_info_struct = ci.jc_struct_info_root;
+      jc_field_info_rep = false;
       (*
 	jc_field_info_final_name = vi.java_field_info_name;
 	jc_var_info_assigned = vi.java_var_info_assigned;
@@ -405,6 +406,7 @@ let array_types decls =
 	   jc_field_info_type = tr_type t;
 	   jc_field_info_root = s;
 	   jc_field_info_struct = s;
+	   jc_field_info_rep = false;
 	 }
        in
        let st =
