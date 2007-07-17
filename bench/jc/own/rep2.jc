@@ -4,7 +4,7 @@ type B = {
 }
 
 type A = {
-  B[0] b;
+  rep B[0] b;
   invariant repA(this) = this.b.owned == true;
 }
 

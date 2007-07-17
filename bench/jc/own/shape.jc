@@ -18,8 +18,9 @@ and type Rectangle = Shape with {
 
 and type Shape = {
   shape_kind kind;
-  invariant dicr(s) = (s.kind == 0 => s <: Circle && circle_inv(s :> Circle))
-		   && (s.kind == 1 => s <: Rectangle && rectangle_inv(s :> Rectangle));
+  invariant dicr(s) = 
+     (s.kind == 0 ==> s <: Circle && circle_inv(s :> Circle))
+  && (s.kind == 1 ==> s <: Rectangle && rectangle_inv(s :> Rectangle));
 }
 
 integer circ_area(Circle[0] s)

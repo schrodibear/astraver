@@ -1,9 +1,9 @@
 type Family = {
-  /* rep */ Person[0] mother;
-  /* rep */ Person[0] father;
+  rep Person[0] mother;
+  rep Person[0] father;
 }
 and type Person = {
-  /* rep */ Family[0] family;
+  rep Family[0] family;
   integer age;
   invariant age_inv(this) = this.family.mother.age > this.age && this.family.father.age > this.age;
 }
@@ -19,7 +19,7 @@ unit m(Person[0] this)
 boolean older(Person[0] p1, Person[0] p2)
   requires true;
   behavior ok:
-    ensures \result <=> p1.age > p2.age;
+    ensures \result <==> p1.age > p2.age;
 {
   return p1.age > p2.age;
 }

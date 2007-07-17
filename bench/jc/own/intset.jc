@@ -1,13 +1,13 @@
 type int_array = { integer intM; }
 
 type intset = {
-  int_array[0..] t;
+  rep int_array[0..] t;
   integer size;
 
   invariant valid(x) =
     0 <= x.size && x.size <= \offset_max(x.t)+1;
   invariant sorted(x) =
     \forall integer i, j;
-    0 <= i => i <= j => j < x.size =>
+    0 <= i ==> i <= j ==> j < x.size ==>
     (x.t+i).intM <= (x.t+j).intM;
 }
