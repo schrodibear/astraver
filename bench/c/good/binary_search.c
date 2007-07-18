@@ -1,8 +1,6 @@
 
 /*@ axiom mean_1 : \forall int x, int y; x <= y => x <= (x+y)/2 <= y */
 
-
-
 /* binary_search(t,n,v) search for element v in array t 
    between index 0 and n-1
    array t is assumed sorted in increasing order
@@ -32,3 +30,9 @@ int binary_search(int* t, int n, int v) {
   }
   return -1;
 }
+    
+/*
+Local Variables: 
+compile-command: "make binary_search.overflows"
+End: 
+*/

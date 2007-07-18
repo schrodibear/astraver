@@ -14,23 +14,27 @@ void inverse(int *t, int n) {
   while (m > 0) {
     int i = t[m];
     //@ label L
-    /*@ invariant 1 <= m <= n && i == t[m]
-      @*/
-    while (i > 0) {
-      t[m] = j;
-      j = -m;
-      m = i;
-      i = t[m];
+    if (i > 0) {
+      /*@ invariant 1 <= m <= n && i == t[m]
+	@*/
+      while (i > 0) {
+	t[m] = j;
+	j = -m;
+	m = i;
+	i = t[m];
+      }
+      //@ assert m == \at(m,L)
+      i = j;
     }
-    //@ assert m == \at(m,L)
-    i = j;
     t[m] = -i;
     m--;
   }
 }
 
 /* test */
-/***
+
+#ifdef 0
+
 int n = 6;
 int t[7] = { 0,2,3,1,6,5,4 };
 
@@ -45,5 +49,5 @@ int main() {
   inverse(t, n);
   print(t,n);
 }
+#endif
 
-***/
