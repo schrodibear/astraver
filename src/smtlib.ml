@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.33 2007-02-01 15:09:45 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.34 2007-07-18 16:28:12 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -321,6 +321,7 @@ let output_file f =
   let fmt = formatter_of_out_channel cout in
   fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
   fprintf fmt "  :status unknown@\n";
+  fprintf fmt "  :logic AUFLIA@\n";
   if (Options.get_types_encoding() != SortedStratified) then  
     begin
       fprintf fmt "  :extrasorts (c_Boolean)@\n";
