@@ -90,6 +90,14 @@ let main () =
 			Hashtbl.add Jc_norm.exceptions_table tag x)
 	  Jc_typing.exceptions_table;	
 *)	  
+	  
+        (* phase 3.1 : inference of annotations *)
+	Hashtbl.iter 
+	  (fun tag (f, s, b) -> 
+	     let b = Jc_annot_inference.code_function f b in
+	     Hashtbl.replace Jc_norm.functions_table tag (f, s, b))
+	  Jc_norm.functions_table;
+
 	(* phase 4 : computation of call graph *)
 	Hashtbl.iter 
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)

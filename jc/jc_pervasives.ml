@@ -119,6 +119,16 @@ let empty_effects =
     jc_effect_committed = StringSet.empty;
   }
 
+let empty_logic_info =
+  {
+    jc_logic_info_tag = 0;
+    jc_logic_info_name = "";
+    jc_logic_info_result_type = None;
+    jc_logic_info_parameters = [];
+    jc_logic_info_effects = empty_effects;
+    jc_logic_info_calls = []; 
+  }
+
 let logic_fun_tag_counter = ref 0
 
 let make_logic_fun name ty =
