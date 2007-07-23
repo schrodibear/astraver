@@ -69,6 +69,15 @@ INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib
 BFLAGS   = -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
+OCAMLOPTLDFLAGS = \
+-verbose -ccopt "$(LCFLAGS)" \
+bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
+-cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
+
+LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
+
+APRON = -I /usr/lib
+
 COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
@@ -223,6 +232,7 @@ JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_typing.cmo jc/jc_norm.cmo jc/jc_output.cmo \
+	jc/jc_annot_inference.cmo \
 	jc/jc_control_flow.cmo \
 	jc/jc_callgraph.cmo \
 	jc/output.cmo \
@@ -247,7 +257,7 @@ jc/jc.cmxa: $(JCCML_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
 
 bin/jessie.opt: $(JCCMX) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRON) $(OCAMLOPTLDFLAGS) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
 	strip    $@
 
@@ -628,16 +638,16 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 .SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo .ml4
 
 .mli.cmi:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRON) -c $(BFLAGS) $<
 
 .ml.cmo:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRON) -c $(BFLAGS) $<
 
 .ml.o:
-	$(OCAMLOPT) -c $(OFLAGS) $<
+	$(OCAMLOPT) $(APRON) -c $(OFLAGS) $<
 
 .ml.cmx:
-	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) -c $(OFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) $(APRON) -c $(OFLAGS) $<
 
 .mll.ml:
 	$(OCAMLLEX) $<
