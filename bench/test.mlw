@@ -38,5 +38,5 @@ let p12 =
   with E -> 2
      | F x -> 3
   end
-  { result = 2 }
+  { result = 4 }
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.12 2007-07-17 14:48:05 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.13 2007-07-23 13:18:55 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -57,6 +57,7 @@ module Subst = struct
       all_vars = Idset.add x s.all_vars }
 
   let add_aux x pt s = 
+    Format.eprintf "add_aux %a@." Ident.print x;
     { s with
 	types = Idmap.add x pt s.types;
 	all_vars = Idset.add x s.all_vars }
@@ -166,6 +167,11 @@ let ssubst_in_predicate s p = simplify (tsubst_in_predicate s p)
 let norm (p,_) = p
 let exn x pl s = try List.assoc x pl with Not_found -> Pfalse, s
 let exns e ee = List.map (fun x -> x, ee x) (get_exns e.info.t_effect)
+
+let with_exception_type e v f x = match find_exception e, v with
+  | None, None -> x
+  | Some pt, Some v -> f v pt x
+  | _ -> assert false
 
 (* INPUT
    - e : program
@@ -400,9 +406,7 @@ and wp0 e s =
       let ok1,((ne1,s1),ee1) = wp e1 s in
       let hl = 
 	List.map 
-	  (fun ((x,v),ei) -> 
-	    let _,sx = exn x ee1 s in 
-	    ((x,v), wp ei sx))
+	  (fun ((x,v),ei) -> let _,sx = exn x ee1 s in ((x,v), wp ei sx))
 	  hl 
       in
       let bind_result v p = match v with
@@ -413,10 +417,7 @@ and wp0 e s =
 	let e1x,_ = exn x ee1 s in 
 	let e1x = bind_result v e1x in
 	let p = wpimplies e1x oki in
-	match find_exception x, v with
-	  | Some pt, Some v -> wpforall v (PureType pt) p
-	  | None, None -> p
-	  | _ -> assert false
+	with_exception_type x v (fun v pt -> wpforall v (PureType pt)) p
       in
       let ok = wpands (ok1 :: List.map handler_ok hl) in
       let ne =
@@ -424,14 +425,11 @@ and wp0 e s =
 	  (fun (ne,s) ((x,v), (_,((nei,si),_))) ->
 	    let e1x,_ = exn x ee1 s in 
 	    let e1x = bind_result v e1x in
-	    let si = match find_exception x, v with
-	      | Some pt, Some v -> Subst.add_aux v pt si
-	      | None, None -> si
-	      | _ -> assert false
+	    let si = 
+	      with_exception_type x v (fun v pt -> Subst.add_aux v pt) si 
 	    in
 	    let s',r1,r2 = merge s si in
-	    por (wpand ne r1) (wpands [e1x; nei; r2]), s'
-	  )
+	    por (wpand ne r1) (wpands [e1x; nei; r2]), s')
 	  (ne1,s1) hl
       in
       let nee = 

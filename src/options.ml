@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.95 2007-06-15 11:48:43 marche Exp $ i*)
+(*i $Id: options.ml,v 1.96 2007-07-23 13:18:55 filliatr Exp $ i*)
 
 open Format
 
@@ -61,6 +61,7 @@ let pruning_hyp_ = {contents = -1}
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
+let files_to_load_ = ref []
 let show_time_ = ref false
 let int_is_ident = ref  false
 
@@ -291,6 +292,9 @@ let files =
     | ("-lib-file" | "--lib-file") :: f :: args -> 
 	lib_files_to_load_ := f :: !lib_files_to_load_; parse args
     | ("-lib-file" | "--lib-file") :: [] -> usage (); exit 1
+    | ("-load-file" | "--load-file") :: f :: args -> 
+	files_to_load_ := f :: !files_to_load_; parse args
+    | ("-load-file" | "--load-file") :: [] -> usage (); exit 1
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only_ := true; parse args
@@ -526,7 +530,8 @@ let lib_files_to_load =
    else
      []) @
   (if floats then [floats_file] else []) @
-  List.rev_map lib_file !lib_files_to_load_
+  List.rev_map lib_file !lib_files_to_load_ @
+  List.rev !files_to_load_
 
 let () = 
   if prelude && not (Sys.file_exists prelude_file) then begin
