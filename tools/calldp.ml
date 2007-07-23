@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.38 2007-07-12 10:55:26 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.39 2007-07-23 13:05:28 marche Exp $ i*)
 
 open Printf
 open Options
@@ -259,7 +259,7 @@ let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
     r
 
 let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
-  let cmd = sprintf "z3 -smt < %s" f in
+  let cmd = sprintf "z3 < %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> 0 then 
     if c==1 && 

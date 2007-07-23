@@ -23,6 +23,7 @@
 (**************************************************************************)
 
 
+(*
 open Apron
 open Format
 open Jc_ast
@@ -414,8 +415,10 @@ let rec statement man pre s fv (* Uselesss ? *) =
    ({ s with jc_statement_node = jc_statement_node }, post)
 ;;
 
+*)
 
-let code_function fi slo =
+let code_function fi slo = assert false
+(*
   try
     let man = Box.manager_alloc () in
     (* let man = Oct.manager_alloc () in *)
@@ -459,7 +462,7 @@ let code_function fi slo =
     Manager.print_exclog std_formatter e;
     slo
 ;;
-
+*)
 
 (*
 Local Variables: 
