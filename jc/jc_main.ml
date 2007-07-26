@@ -92,12 +92,13 @@ let main () =
 *)	  
 	  
         (* phase 3.1 : inference of annotations *)
+(* until it does not "assert false"
 	Hashtbl.iter 
 	  (fun tag (f, s, b) -> 
 	     let b = Jc_annot_inference.code_function f b in
 	     Hashtbl.replace Jc_norm.functions_table tag (f, s, b))
 	  Jc_norm.functions_table;
-
+*)
 	(* phase 4 : computation of call graph *)
 	Hashtbl.iter 
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
