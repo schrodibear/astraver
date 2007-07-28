@@ -1,0 +1,35 @@
+
+/* "!=" not supported in apron0.9.6 */
+
+type integerT = { integer integerM; }
+
+
+integer coincidence_count(integerT[0..] f, integerT[0..] g)
+    requires true;
+    behavior coincidence_count:
+      ensures true;
+  {
+    integer ct = 0;
+    integer m = 0;
+    integer n = 0;
+	
+    while (m < \offset_max(f) || n < \offset_max(g))
+      invariant true;
+/*        0 <= m && m <= \offset_max(f) &&
+	0 <= n && n <= \offset_max(g); */
+      variant
+        \offset_max(f) - m + \offset_max(g) - n;
+      {
+        if (n == \offset_max(g) || (m < \offset_max(f) && (f + m).integerM < (g + n).integerM))
+	  m++;
+	else if (m == \offset_max(f) || (n < \offset_max(g) && (g + n).integerM < (f + m).integerM))
+	  n++;
+	else {
+	  ct++;
+	  m++;
+	  n++;
+        }
+      }
+
+    return ct;
+  }

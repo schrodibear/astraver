@@ -59,16 +59,16 @@ and field_info =
 
 type var_info =
     {
-              jc_var_info_tag : int;
-              jc_var_info_name : string;
-      mutable jc_var_info_final_name : string;
-              jc_var_info_type : jc_type;
-      mutable jc_var_info_formal : bool;
-      mutable jc_var_info_assigned : bool;
-              jc_var_info_static : bool;
-    }
-
-
+     jc_var_info_tag : int;
+     jc_var_info_name : string;
+     mutable jc_var_info_final_name : string;
+     jc_var_info_type : jc_type;
+     mutable jc_var_info_formal : bool;
+     mutable jc_var_info_assigned : bool;
+     jc_var_info_static : bool;
+   }
+      
+      
 type exception_info =
     {
       jc_exception_info_tag : int;

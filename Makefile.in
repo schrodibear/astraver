@@ -69,7 +69,8 @@ INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib
 BFLAGS   = -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
-# bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
+# Nicolas: to add to OCAMLOPTLDFLAGS to use APRON
+# bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa
 OCAMLOPTLDFLAGS = \
 -verbose -ccopt "$(LCFLAGS)" \
 -cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
@@ -268,8 +269,8 @@ bin/jessie.byte: $(JCCMO)
 
 # krakatoa
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/jc_envset.cmo jc/jc_pervasives.cmo jc/jc_typing.cmo \
-	jc/jc_output.cmo \
+	jc/jc_envset.cmo jc/jc_pervasives.cmo jc/jc_version.cmo \
+	jc/jc_options.cmo jc/jc_typing.cmo jc/jc_output.cmo \
 	java/java_version.cmo \
 	java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \

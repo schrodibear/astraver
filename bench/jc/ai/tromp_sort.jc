@@ -1,0 +1,56 @@
+/**
+ * A sorting algorithm from John Tromp Programming Pearls
+ * (http://homepages.cwi.nl/~tromp/pearls.html)
+ * @author Nicolas Rousset
+ * 
+ * Notes: 
+ *   * operator "!=" not yet supported in APRON 
+ *       => replaced by two branches < and >
+ *   * APRON Parser error: 2 times the same variable in an expr 
+ *       => second while: l + l replaced by 2 * l 
+ */
+
+// @ axiom div_pos : (\forall int x, y; 0 <= x && 1 <= y; 0 <= x / y && x / y < x);
+
+
+type integerT = { integer integerM; }
+
+
+unit sort(integerT[0..] t, integer j) 
+  requires true;
+  behavior sort:
+    ensures true;
+{
+    integer k = 0;
+    integer l = 0;
+    integer m = 0;
+
+    integer i = j / 2;
+    while (j > 1)
+      invariant true;
+      variant 0;
+    {
+	if (i < 0) {
+	    k = (t + i--).integerM; 
+	} else
+	    if (i > 0) { 	 
+	    k = (t + i--).integerM; 
+	} else {
+	    k = (t + j).integerM; 
+	    (t + j--).integerM = (t + 1).integerM; 
+	}
+        l = i + 1;
+	while ((m = 2 * l) <= j)
+	    invariant true;
+	    variant 0;
+        {
+	   if (m < j && (t + m).integerM < (t + m + 1).integerM)
+	       m++;
+	   if ((t + m).integerM <= k)
+	     break;
+	   (t + l).integerM = (t + m).integerM;
+           l = m;
+	}
+	(t + l).integerM = k;
+    }
+}

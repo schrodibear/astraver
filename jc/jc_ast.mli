@@ -261,13 +261,13 @@ type assertion_node =
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
   | JCAtagequality of tag * tag * string option
-
+	
 and assertion =
     {
-      jc_assertion_node : assertion_node;
-      jc_assertion_loc : Loc.position;
-    }
-
+     jc_assertion_node : assertion_node;
+     jc_assertion_loc : Loc.position;
+   }
+      
 type term_or_assertion =
   | JCAssertion of assertion
   | JCTerm of term

@@ -1,0 +1,17 @@
+
+/* example from Cousot's 1976 paper */
+
+integer cousot76()
+  requires true;
+  behavior example1:
+    ensures true;
+{
+  integer i = 1;
+  while(i <= 100)
+    invariant true;
+    variant 101 - i;
+  {
+    i++;
+  }
+}
+

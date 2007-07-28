@@ -39,6 +39,8 @@ val verbose : bool
 val werror : bool
 val why_opt : string
 
+val ai : bool
+
 val files : unit -> string list 
 val usage : unit -> unit
 

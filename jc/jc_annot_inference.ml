@@ -22,27 +22,49 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
+(* unset comment to use APRON, set comment for the cvs version to compile for the moment *)
 (*
 open Apron
 open Format
 open Jc_ast
 open Jc_env
 open Jc_fenv
+open Jc_options
 open Jc_pervasives
+open Lincons1
+open Coeff
 
 
-let variables_table = Hashtbl.create 97
-let expr_table = Hashtbl.create 97
+(*
+
+  usage: jessie -ai [other_options] f 
+  
+  ai behaviour with other jessie options:
+  
+  -v prints inferred annotations
+  -d prints awful debug info
+ 
+ *)
+  
+
+let terms_vars_table = Hashtbl.create 97
 
 
 let make_term loc node t = 
   { jc_term_node = node; jc_term_type = t; jc_term_loc = loc }
 ;;
 
+let make_term_no_loc node t = 
+  { jc_term_node = node; jc_term_type = t; jc_term_loc = Loc.dummy_position }
+;;
+
 
 let make_assertion loc node =
   { jc_assertion_node = node; jc_assertion_loc = loc }
+;;
+
+let make_assertion_no_loc node =
+  { jc_assertion_node = node; jc_assertion_loc = Loc.dummy_position }
 ;;
 
 
@@ -56,60 +78,174 @@ let make_and loc al =
 ;;
 
 
-let absvalue_to_assertion man loc env a =
-  let vars = fst (Environment.vars env) in
-  let ia = Array.map (Abstract1.bound_variable man a) vars in
-  List.fold_left2
-    (fun a v i ->
-       let vi = Hashtbl.find variables_table v in 
-       Interval.print str_formatter i;
-       let i = flush_str_formatter () in
-       printf "%s@." i;
-       let s = String.index i ';' in 
-       let inf = String.sub i 1 (s - 1) in
-       let la = 
-         make_assertion 
-           loc 
-           (JCArelation(make_term loc (JCTconst (JCCinteger inf)) (JCTnative Tinteger),
-			Ble_int,
-			make_term loc (JCTvar vi) (JCTnative Tinteger))) in
-       let sup = String.sub i (s + 2) (String.length i - (s + 3)) in
-       let ra = make_assertion loc (JCArelation(make_term loc (JCTvar vi) (JCTnative Tinteger),
-						Ble_int,
-						make_term loc (JCTconst (JCCinteger sup)) (JCTnative Tinteger))) in
-       make_and loc ([a; make_and loc [la; ra]]))
-    (make_assertion loc JCAtrue)
-    (Array.to_list vars)
-    (Array.to_list ia)
+let term_of_coeff c =
+  match c with
+  | Scalar scalar -> 
+      let s = Scalar.to_string scalar in
+      s, make_term_no_loc (JCTconst (JCCinteger s)) (JCTnative Tinteger)
+  | Interval i ->
+      assert false (* TODO ? *)
 ;;
 
+let term_of_lincons1 lincons =
+  let vl = Array.to_list (fst (Environment.vars lincons.env)) in
+  let c = Lincons1.get_cst lincons in
+  let s, t = term_of_coeff c in
+  let t =
+    List.fold_left
+      (fun acc v ->
+	let s, c = term_of_coeff (Lincons1.get_coeff lincons v) in
+	try
+	  let t = Hashtbl.find terms_vars_table v in
+	  let t = 
+	    match s with 
+	    | "0." -> None
+	    | "1" -> Some t
+	    | "-1" -> 
+		Some 
+		  (make_term_no_loc 
+		     (JCTunary (Uminus_int, t)) 
+		     (JCTnative Tinteger))
+	    | _ -> 
+		Some 
+		  (make_term_no_loc 
+		     (JCTbinary (c, Bmul_int, t)) 
+		     (JCTnative Tinteger))
+	  in
+	  match acc, t with
+	  | _, None -> acc
+	  | None, _ -> t
+	  | Some acc, Some t -> 
+	      Some
+		(make_term_no_loc 
+		   (JCTbinary (t, Badd_int, acc)) 
+		   (JCTnative Tinteger))
+	with Not_found ->
+	  assert false (* should never happen *))
+      (if s = "0" then None else Some t)
+      vl
+  in
+  match t with 
+  | None -> assert false (* should never happen *)
+  | Some t -> t
+;;
+
+let bin_op_and_rvalue_of_lincons1 lincons =
+  match (Lincons1.get_typ lincons) with
+  | EQ -> Beq_int, JCCinteger "0"
+  | SUPEQ -> Bge_int, JCCinteger "0"
+  | SUP -> Bgt_int, JCCinteger "0"
+  | DISEQ -> Bneq_int, JCCinteger "0"
+  | EQMOD scalar -> Bmod_int, JCCinteger (Scalar.to_string scalar)
+;;
+
+let absvalue_to_assertion man loc env a =
+  if debug then printf "absvalue_to_assertion...@.";
+  let lincons = Abstract1.to_lincons_array man a in
+  let lincons1l = 
+    List.fold_left
+      (fun acc lincons0 -> ({ lincons0 = lincons0; env = lincons.array_env })::acc)
+      []
+      (Array.to_list lincons.lincons0_array)
+  in
+  let al = 
+    List.map
+      (fun lincons ->
+	let t1 = term_of_lincons1 lincons in
+	let op, t2 = bin_op_and_rvalue_of_lincons1 lincons in
+	make_assertion_no_loc 
+	  (JCArelation (t1, op, 
+			(make_term_no_loc 
+			   (JCTconst t2)
+			   (JCTnative Tinteger)))))
+      lincons1l
+  in
+  make_assertion_no_loc (JCAand al)
+;;
+
+
+let abstract_vars_of_vi vi =
+  match vi.jc_var_info_type with
+  | JCTnative nt ->
+      begin
+        match nt with
+        | Tunit -> assert false (* TODO ? *)
+	| Tboolean | Tinteger -> 
+	    let v = Var.of_string vi.jc_var_info_name in
+	    Hashtbl.add terms_vars_table
+	      v (make_term_no_loc (JCTvar vi) vi.jc_var_info_type);
+	    [v]
+	| Treal -> assert false (* FUTURE WORK *)
+      end
+  | JCTlogic _ -> assert false (* should never happen *)
+  | JCTenum _ -> assert false (* TODO ? *)
+  | JCTpointer (si, n1, n2) ->
+      let s = vi.jc_var_info_name in
+      let v1 = Var.of_string (s ^ "_offset_min") in
+      let t1 = 
+	make_term_no_loc 
+	  (JCToffset (Offset_min, 
+		      make_term_no_loc (JCTvar vi) vi.jc_var_info_type, 
+		      si))
+	  (JCTnative Tinteger) 
+      in
+      Hashtbl.add terms_vars_table v1 t1;
+      let v2 = Var.of_string (s ^ "_offset_max") in
+      let t2 = 
+	make_term_no_loc 
+	  (JCToffset (Offset_max, 
+		      make_term_no_loc (JCTvar vi) vi.jc_var_info_type,
+		      si))
+	  (JCTnative Tinteger) 
+      in	       
+      Hashtbl.add terms_vars_table v2 t2;
+      [v1; v2]
+  | JCTnull -> assert false (* should never happen *)
+;;
 
 let fresh_variable man env pre vi =
   (* create a new variable *)
   let v = Var.of_string vi.jc_var_info_name in
-  Hashtbl.add variables_table v vi;
+  Hashtbl.add terms_vars_table v
+    (make_term_no_loc (JCTvar vi) vi.jc_var_info_type);
   (* add the variable to env *)
-  let env = Environment.add env [|v|] [||] in (* TO DO ?: raise Failure in case of name conflict -> should not occur *)
-  (* update env in pre *)
-  let pre = Abstract1.change_environment man pre env false in
-  (env, pre)
+  try
+    (env, pre)
+  with Failure _ ->
+    assert false (* should never happen *)
 ;;
 
 
 let rec not_expr e =
+  if debug then printf "not_expr...@.";
   let expr_node = 
     match e.jc_expr_node with
-    | JCEconst c -> assert false (* TO DO *)
-    | JCEvar vi -> assert false (* TO DO *)
+    | JCEconst c -> assert false (* TODO *)
+    | JCEvar vi ->
+	begin
+	  match vi.jc_var_info_type with
+	  | JCTnative nt ->
+	      begin
+		match nt with 
+		| Tunit -> assert false (* TODO *)
+		| Tboolean -> JCEunary (Unot, e)
+		| Tinteger -> assert false (* TODO *)
+		| Treal -> assert false (* TODO *)
+	      end
+	  | JCTlogic s -> assert false (* TODO *)
+	  | JCTenum ei -> assert false (* TODO *)
+	  | JCTpointer (si, n1, n2) -> assert false (* TODO *)
+	  | JCTnull -> assert false (* TODO *)
+	end
     | JCEbinary(e1, bop, e2) ->
       begin
       match bop with
       | Blt_int -> JCEbinary (e1, Bge_int, e2)
       | Bgt_int -> JCEbinary (e1, Ble_int, e2)
       | Ble_int -> JCEbinary (e1, Bgt_int, e2)
-      | Bge_int -> assert false (* TO DO *)
-      | Beq_int -> assert false (* TO DO *)
-	  (* JCEbinary (e1, Bneq_int, e2) *) (* != not supported by apron0.9.6 *)
+      | Bge_int -> JCEbinary (e1, Blt_int, e2)
+      | Beq_int -> (* fails because != not supported by apron0.9.6 *)
+	  JCEbinary (e1, Bneq_int, e2) 
       | Bneq_int -> assert false (* TO DO *)
       | Blt_real -> assert false (* TO DO *)
       | Bgt_real -> assert false (* TO DO *)
@@ -138,290 +274,370 @@ let rec not_expr e =
       | Bshift_left -> assert false (* TO DO *)
       | Bshift_right -> assert false (* TO DO *)
      end
-    | JCEunary(uop, e) -> assert false (* TO DO *)
-    | JCEshift(e1, e2) -> assert false (* TO DO *)
-    | JCEderef(e, fi) -> assert false (* TO DO *)
-    | JCEinstanceof(e, si) -> assert false (* TO DO *)
-    | JCEcast(e, si) -> assert false (* TO DO *)
-    | JCEif(e1, e2, e3) -> assert false (* TO DO *)
-    | JCEoffset(ok, e, si) -> assert false (* TO DO *)
-    | JCEalloc(e1, si) -> assert false (* TO DO *)
-    | JCEfree(e) -> assert false (* TO DO *)
+    | JCEunary (uop, e) -> assert false (* TO DO *)
+    | JCEshift (e1, e2) -> assert false (* TO DO *)
+    | JCEderef (e, fi) -> assert false (* TO DO *)
+    | JCEinstanceof (e, si) -> assert false (* TO DO *)
+    | JCEcast (e, si) -> assert false (* TO DO *)
+    | JCErange_cast (ei, e) -> assert false (* TO DO *)
+    | JCEif (e1, e2, e3) -> assert false (* TO DO *)
+    | JCEoffset (ok, e, si) -> assert false (* TO DO *)
+    | JCEalloc (e1, si) -> assert false (* TO DO *)
+    | JCEfree e -> assert false (* TO DO *)
   in
   { e with jc_expr_node = expr_node }
 ;;
 
 
 let rec expr man env pre e =
+  if debug then printf "expr...@.";
   match e.jc_expr_node with
   | JCEconst c ->
+      if debug then printf "  JCEconst...@.";
       begin
 	match c with
-        | JCCvoid -> assert false (* TO DO *)
-        | JCCnull -> assert false (* TO DO *)
-        | JCCboolean b -> assert false (* TO DO *)
-        | JCCinteger s -> env, pre, s
-        | JCCreal s -> assert false (* TO DO *)
+        | JCCvoid -> assert false (* TODO ? *)
+        | JCCnull -> env, pre, ["0"; "-1"]
+        | JCCboolean b -> env, pre, [if b then "1" else "0"]
+        | JCCinteger s -> env, pre, [s]
+        | JCCreal s -> assert false (* TODO ? *)
       end
-  | JCEvar vi -> env, pre, vi.jc_var_info_name
+  | JCEvar vi -> 
+      if debug then printf "  JCEvar...@.";
+      begin
+	match vi.jc_var_info_type with
+	| JCTnative nt ->
+	    begin
+	      match nt with
+	      | Tunit -> assert false (* should never happen *)
+	      | Tboolean -> env, pre, [vi.jc_var_info_name ^ " = 1"]
+	      | Tinteger -> env, pre, [vi.jc_var_info_name]
+	      | Treal -> assert false (* TODO *)
+	    end
+	| JCTlogic _ -> assert false (* should never happen *)
+	| JCTenum _ -> assert false (* TODO ? *)
+	| JCTpointer (si, n1, n2) -> 
+	    env, pre, [Num.string_of_num n1; Num.string_of_num n2]
+	| JCTnull -> assert false (* should never happen *)
+      end
   | JCEbinary(e1, bop, e2) ->
+      if debug then printf "  JCEbinary...@.";
       let env, pre, e1 = expr man env pre e1 in
+      if e1 = [] then env, pre, [] else 
       let env, pre, e2 = expr man env pre e2 in
+      if e2 = [] then env, pre, [] else
       begin
 	match bop with
-	| Blt_int | Blt_real -> env, pre, e1 ^ "<" ^ e2
-	| Bgt_int | Bgt_real -> env, pre, e1 ^ ">" ^ e2
-	| Ble_int | Ble_real -> env, pre, e1 ^ "<=" ^ e2
-	| Bge_int | Bge_real -> env, pre, e1 ^ ">=" ^ e2
-	| Beq_int | Beq_real -> env, pre, e1 ^ "=" ^ e2
-	| Bneq_int | Bneq_real | Beq_pointer -> env, pre, e1 ^ "!=" ^ e2
-	| Badd_int | Badd_real | Bneq_pointer -> env, pre, e1 ^ "+" ^ e2
-	| Bsub_int | Bsub_real -> env, pre, e1 ^ "-" ^ e2
-	| Bmul_int | Bmul_real -> env, pre, e1 ^ "*" ^ e2
-	| Bdiv_int -> env, pre, "1/" ^ e2 ^ "*" ^ e1
-	| Bdiv_real -> assert false (* TO DO *)
-	| Bmod_int -> assert false (* TO DO *)
+	| Blt_int | Blt_real -> 
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ "<" ^ e2) e1 e2
+	| Bgt_int | Bgt_real -> 
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ ">" ^ e2) e1 e2
+	| Ble_int | Ble_real -> 
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ "<=" ^ e2) e1 e2
+	| Bge_int | Bge_real ->
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ ">=" ^ e2) e1 e2
+	| Beq_int | Beq_real ->
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ "=" ^ e2) e1 e2
+	| Bneq_int | Bneq_real | Beq_pointer ->
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ "!=" ^ e2) e1 e2
+	| Badd_int | Badd_real | Bneq_pointer ->
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ "+" ^ e2) e1 e2
+	| Bsub_int | Bsub_real ->
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ "-" ^ e2) e1 e2
+	| Bmul_int | Bmul_real ->
+	    env, pre, List.map2 (fun e1 e2 -> e1 ^ "*" ^ e2) e1 e2
+	| Bdiv_int ->
+	    env, pre, List.map2 (fun e1 e2 -> "1/" ^ e2 ^ "*" ^ e1) e1 e2
+	| Bdiv_real -> assert false (* TODO ? *)
+	| Bmod_int -> assert false (* TODO ? *)
 	| Bland | Blor -> assert false (* should never happen *)
 	| Bimplies -> assert false (* should never happen *)
 	| Biff -> assert false (* should never happen *)
-	| Bbw_and -> assert false (* TO DO *)
-	| Bbw_or -> assert false (* TO DO *)
-	| Bbw_xor -> assert false (* TO DO *)
-	| Bshift_left -> assert false (* TO DO *)
-	| Bshift_right -> assert false (* TO DO *)
+	| Bbw_and -> assert false (* TODO ? *)
+	| Bbw_or -> assert false (* TODO *)
+	| Bbw_xor -> assert false (* TODO *)
+	| Bshift_left -> assert false (* TODO *)
+	| Bshift_right -> assert false (* TODO *)
       end
-  | JCEunary(uop, e) -> assert false (* TO DO *)
-  | JCEshift(e1, e2) -> 
+  | JCEunary (uop, e) ->
+      let env, pre, strl = expr man env pre e in
+      begin
+	match uop with
+	| Uplus_int -> assert false (* TODO ? *)
+	| Uminus_int -> assert false (* TODO ? *)
+	| Uplus_real -> assert false (* TODO ? *)
+	| Uminus_real -> assert false (* TODO ? *)
+	| Unot ->
+	    begin
+	      match e.jc_expr_node with
+	      | JCEvar vi ->
+		  env, pre, [vi.jc_var_info_name ^ " = 0"]
+	      | _ -> assert false (* TODO ? *)
+	    end
+	| Ubw_not -> assert false (* TODO ? *)
+      end
+  | JCEshift (e1, e2) -> 
+      if debug then printf "  JCEshift...@.";
       let env, pre, s1 = expr man env pre e1 in
       let env, pre, s2 = expr man env pre e2 in
-      env, pre, s1 ^ "_" ^ s2
-  | JCEderef(e, fi) ->
-      begin
-	match e.jc_expr_node with
-	| JCEshift (e1, e2) ->
-	    let env, pre, s = expr man env pre e in
-	    let v = Var.of_string s in
-	    if Hashtbl.mem expr_table v then
-	      (env, pre, s)
-	    else
-	      (* create a new variable *)
-	      let v = Var.of_string s in
-	      Hashtbl.add expr_table v e;
-	      (* add the variable to env *)
-	      let env = Environment.add env [|v|] [||] in (* TO DO ?: raise Failure in case of name conflict -> should not occur *)
-	      (* update env in pre *)
-	      let pre = Abstract1.change_environment man pre env false in
-	      (env, pre, s)
-	| _ -> assert false (* TO DO *)
-      end
+      env, pre, List.map2 (fun s1 s2 -> s1 ^ "_" ^ s2) s1 s2
+  | JCEderef (e, fi) ->
+      if debug then printf "  JCEderef...@.";
+      env, pre, []
   | JCEinstanceof(e, si) -> assert false (* TO DO *)
   | JCEcast(e, si) -> assert false (* TO DO *)
+  | JCErange_cast (ei, e) -> assert false (* TO DO *)
   | JCEif(e1, e2, e3) -> assert false (* TO DO *)
-  | JCEoffset(ok, e, si) -> assert false (* TO DO *)
-  | JCEalloc(e1, si) -> assert false (* TO DO *)
-  | JCEfree(e) -> assert false (* TO DO *)
+  | JCEoffset (ok, e, si) ->
+      if debug then printf "  JCEoffset...@.";
+      let s =
+	match e.jc_expr_node with
+	| JCEconst c -> assert false (* TO DO *)
+	| JCEvar vi -> 
+	    begin
+	      match ok with
+	      | Offset_max -> vi.jc_var_info_name ^ "_offset_max"
+	      | Offset_min -> vi.jc_var_info_name ^ "_offset_min"
+	    end
+	| JCEbinary (e1, op, e2) -> assert false (* TO DO *)
+	| JCEunary (op, e) -> assert false (* TO DO *)
+	| JCEshift (e1, e2) -> assert false (* TO DO *)
+	| JCEderef (e, fi) -> assert false (* TO DO *)
+	| JCEinstanceof (e, si) -> assert false (* TO DO *)
+	| JCEcast (e, si) -> assert false (* TO DO *)
+	| JCErange_cast (ei, e) -> assert false (* TO DO *)
+	| JCEif (e1, e2, e3) -> assert false (* TO DO *)
+	| JCEoffset (ok, e, si) -> assert false (* TO DO *)
+	| JCEalloc (e, si) -> assert false (* TO DO *)
+	| JCEfree e -> assert false (* TO DO *)
+      in
+      env, pre, [s]
+  | JCEalloc (e, si) ->
+      if debug then printf "  JCEalloc...@.";
+      (* TODO: understand how to handle e *)
+      (* let env, pre, s = expr man env pre e1 in *)
+      env, pre, ["0" ; "0"] (* values of \offset_min and \offset_max ? *)
+  | JCEfree (e) -> assert false (* TODO ? *)
 ;;
 
 
-let rec statement man pre s fv (* Uselesss ? *) =
-  printf "statement ...@.";
-  let jc_statement_node, post =
+let rec loop_condition man pre e sb se la =
+  (* make the constraint from the loop condition *)
+  (* if debug then printf "loop pre: %a@." Abstract1.print pre; *)
+  let pre = Abstract1.join man (Abstract1.bottom man (Abstract1.env pre)) pre in (* Useless ? *)
+  (* if debug then printf "pre(loop_condition): %a@." Abstract1.print pre; *)
+  let env, pre, s = expr man (Abstract1.env pre) pre e in
+  (* if debug then printf "loop condition expr: %s@." s; *)
+  let lincons = Parser.lincons1_of_lstring env s in
+  let absvalue = Abstract1.of_lincons_array man env lincons in
+  if debug then printf "loop condition: %a@." Abstract1.print absvalue;
+  let pre = Abstract1.meet man pre absvalue in
+  (* if debug then printf "post(loop_condition): %a@." Abstract1.print pre; *)
+  let sb, body, _ = statement man pre true None sb in
+  (* if debug then printf "loop body: %a@." Abstract1.print body; *)
+  (* compute loop invariant *)
+  (* let pre = Abstract1.of_lincons_array 
+     man 
+     (Abstract1.env body) 
+     (Abstract1.to_lincons_array man pre) in *)
+  let body = Abstract1.change_environment man body (Abstract1.env pre) false in
+  (* if debug then printf "widen pre body : %a %a@." Abstract1.print pre Abstract1.print body; *)
+  let loop_inv = Abstract1.widening man pre body in
+  if debug then printf "after widening: %a@." Abstract1.print loop_inv;
+  (* update env in absvalue *)
+  let loop_inv = 
+    Abstract1.change_environment man loop_inv (Abstract1.env absvalue) false
+  in
+  let loop_inv = Abstract1.meet man loop_inv absvalue in
+  if debug then printf "2nd loop_condition: %a@." Abstract1.print loop_inv;
+  let sb, body, _ = statement man loop_inv false None sb in
+  (* if debug then printf "2nd loop_body: %a@." Abstract1.print body; *)
+  let body = Abstract1.change_environment man body (Abstract1.env pre) false in
+  let loop_inv = Abstract1.join man pre body in
+  if verbose then printf "    inferred loop invariant: %a@." Abstract1.print loop_inv;
+  let loop_invariant = la.jc_loop_invariant in
+  let infered_loop_inv = 
+    absvalue_to_assertion man (loop_invariant.jc_assertion_loc) (Abstract1.env loop_inv) loop_inv
+  in
+  let la = 
+    { la with 
+      jc_loop_invariant = make_and 
+	(loop_invariant.jc_assertion_loc)
+	[loop_invariant; infered_loop_inv] }
+  in
+  let env, pre, s = expr man env pre (not_expr e) in
+  (* if debug then printf "not e : %s@." s; *)
+  let lincons = Parser.lincons1_of_lstring (Abstract1.env pre) s in
+  let absvalue = Abstract1.of_lincons_array man (Abstract1.env pre) lincons in
+  let post = Abstract1.meet man loop_inv absvalue in
+  JCSif (e, sb, se), post, Some la
+
+and statement man pre fv lao s =
+  if debug then printf "statement ...@.";
+  let jc_statement_node, post, lao =
     match s.jc_statement_node with
-      (* instructions *)
-    | JCScall(vio, fi, el, s) ->
-        printf "  JCScall ...@.";
+    | JCScall (vio, fi, el, s) ->
+        if debug then printf "  JCScall ...@.";
         begin
           match vio with
-          | None -> assert false (* TO DO *)
+          | None -> 
+	      (* TODO: add the post of f if any + check the parameters and store the info *)
+	      JCScall (None, fi, el, s), pre, lao
           | Some vi -> 
               begin
 		match fi.jc_fun_info_name with
 		| "shift" -> 
                     (* cases to distinguish parameters ? *)
                     (* just add the fresh variable to env *)
-                    let env, pre = if fv then fresh_variable man (Abstract1.env pre) pre vi else (Abstract1.env pre), pre in
-                    let s, post = statement man pre s fv in
-                    (JCScall(vio, fi, el, s), post)
+                    let env, pre = 
+		      if fv then fresh_variable man (Abstract1.env pre) pre vi 
+		      else (Abstract1.env pre), pre
+		    in
+                    let s, post, lao = statement man pre fv lao s in
+                    JCScall(vio, fi, el, s), post, lao
 		| _ -> assert false (* TO DO *)
               end
         end
-    | JCSassign_var(vi, e) ->
-	printf "  JCSassign_var ...@.";
-	(* make the constraint from the expr *)
-	let v = Var.of_string vi.jc_var_info_name in
-(*      let fv = Var.of_string (vi.jc_var_info_name ^ "_fresh") in *)
-(*      let env = Environment.add (Abstract1.env pre) [|fv|] [||] in *)
-	let env, pre, s = expr man (Abstract1.env pre) pre e in
-	let linexpr = Parser.linexpr1_of_string (Abstract1.env pre) s in
-	(* compute the new abstract value *)
-	let post = Abstract1.assign_linexpr man pre v linexpr None in
-(*      let post = Abstract1.rename_array man post [|fv|] [|v|] in *)
-(*      let env = Environment.remove (Abstract1.env post) [|v|] [||] in *)
-(*      let post = Abstract1.of_lincons_array man env (Abstract1.to_lincons_array man post) in *)
-	(JCSassign_var(vi, e), post)       
-    | JCSassign_heap(e1, fi, e2) ->
-	printf "  JCSassign_heap ...@.";
-	(JCSassign_heap(e1, fi, e2), pre)
-	  (* statements *)
-    | JCSassert(so, a) -> assert false (* TO DO *)
+    | JCSassign_var (vi, e) ->
+	if debug then printf "  JCSassign_var ...%s@." vi.jc_var_info_name;
+	let env, pre, sl = expr man (Abstract1.env pre) pre e in
+	if sl = [] then JCSassign_var (vi, e), pre, lao else
+	let vl = abstract_vars_of_vi vi in
+	let linexprl = 
+	  List.map 
+	    (Parser.linexpr1_of_string (Abstract1.env pre))
+	    sl
+	in
+	let post = 
+	  Abstract1.assign_linexpr_array man pre 
+	    (Array.of_list vl)
+	    (Array.of_list linexprl) 
+	    None
+	in
+	JCSassign_var (vi, e), post, lao
+    | JCSassign_heap (e1, fi, e2) ->
+	if debug then printf "  JCSassign_heap ...@.";
+	JCSassign_heap(e1, fi, e2), pre, lao
+    | JCSassert (so, a) -> assert false (* TO DO *)
     | JCSblock sl ->
-	printf "  JCSblock ...@.";
-	let sl, post =
+	if debug then printf "  JCSblock ...@.";
+	let sl, post, lao =
           List.fold_left
-            (fun (sl, pre) s ->
-              let s, post = statement man pre s fv in
-              (List.rev (s::(List.rev sl)), post) ) 
-            ([], pre) 
+            (fun (sl, pre, lao) s ->
+              let s, post, lao = statement man pre fv lao s in
+              (List.rev (s::(List.rev sl)), post, lao) ) 
+            ([], pre, lao) 
             sl
 	in
-	(JCSblock sl, post)
-    | JCSdecl(vi, eo, s) ->
-	printf "  JCSdecl ...@.";
-        let env, pre = fresh_variable man (Abstract1.env pre) pre vi in
+	JCSblock sl, post, lao
+    | JCSdecl (vi, eo, s) ->
+	if debug then printf "  JCSdecl ...@.";
+	let vl = abstract_vars_of_vi vi in
+	let env = Environment.add (Abstract1.env pre) (Array.of_list vl) [||] in 
+	let pre = Abstract1.change_environment man pre env false in
         begin
           match eo with
           | None ->
-              (* no initial value => just give the new env *)
-              let (s, post) = statement man pre s fv in
-              (* TO DO ? : update env in pre (i.e. like in fresh_variable) *)
-              (JCSdecl(vi, eo, s), post) 
-          | Some e -> 
-              (* initial value *)
-              (* make the constraint from the expr *)
-	      let env, pre, str = expr man env pre e in
-              let lincons = Parser.lincons1_of_lstring env [vi.jc_var_info_name ^ "=" ^ str] in
-              (* compute the new abstract value *)
-              let post = Abstract1.meet_lincons_array man pre lincons in
-              let (s, post) = statement man post s fv in
-              (JCSdecl(vi, eo, s), post)
+              let s, post, lao = statement man pre fv lao s in
+              (* TO DO ? : update env in pre *)
+              JCSdecl (vi, eo, s), post, lao
+          | Some e ->
+	      let env, pre, sl = expr man env pre e in
+	      let linexprl =
+		List.map
+		  (Parser.linexpr1_of_string env)
+		  sl
+	      in
+	      let post = 
+		Abstract1.assign_linexpr_array man pre
+		  (Array.of_list vl) 
+		  (Array.of_list linexprl) 
+		  None
+	      in
+ (*             let post = Abstract1.meet_lincons_array man pre lincons in *)
+              let s, post, lao = statement man post fv lao s in
+              JCSdecl (vi, eo, s), post, lao
         end;
-    | JCSif(e, s1, s2) ->
-	(* Step 1: if branch *)
-	let env, pre, s = expr man (Abstract1.env pre) pre e in
-	let lincons = Parser.lincons1_of_lstring (Abstract1.env pre) [s] in
-	let absvalue = Abstract1.of_lincons_array man (Abstract1.env pre) lincons in
-	printf "if condition: %a@." Abstract1.print absvalue;
-	let if_pre = Abstract1.meet man pre absvalue in
-	let (s1, post1) = statement man if_pre s1 fv in
-	(* Step 2: else branch *)
-	let env, pre, s = expr man env pre (not_expr e) in
-	let lincons = Parser.lincons1_of_lstring (Abstract1.env pre) [s] in
-	let absvalue = Abstract1.of_lincons_array man (Abstract1.env pre) lincons in
-	printf "else condition: %a@." Abstract1.print absvalue;
-	let else_pre = Abstract1.meet man pre absvalue in
-	let (s2, post2) = statement man else_pre s2 fv in
-	(* Step 3: join the two branches *)
-	let post = Abstract1.join man post1 post2 in
-	(JCSif(e, s1, s2), post)
-    | JCSloop(la, s) -> 
-	assert false 
-	  (* this case is treated in JCStry as every loop in normalized AST is enclosed within a try statement*)
-    | JCSreturn_void -> assert false (* TO DO *)
-    | JCSreturn(t, e) -> assert false (* TO DO *)
-	  (* loop *)
-    | JCStry(sb, [(ei, vio, s)], sf) ->
-	printf "  JCStry ...@.";
-	let sb, post =
-          let jc_statement_node, post =
-            match sb.jc_statement_node with
-            | JCSloop(la, sb) ->
-		let sb, post, la =
-		  let jc_statement_node, post, la =
-                    match sb.jc_statement_node with 
-                    | JCStry(sb, cl, sf) ->
-			let sb, post, la =
-			  let jc_statement_node, post, la =
-			    match sb.jc_statement_node with
-			    | JCSblock(sl) -> 
-				let sl, post, la =
-				  match sl with
-				  | [s1; s2] ->
-				      let s1, post, la =
-					let jc_statement_node, post, la =
-					  match s1.jc_statement_node with
-					  | JCSif(e, sb, se) -> 
-					      (* make the constraint from the loop condition *)
-					      (* printf "loop pre: %a@." Abstract1.print pre; *)
-					      let pre = Abstract1.join man (Abstract1.bottom man (Abstract1.env pre)) pre in (* Useless ? *)
-					      (* printf "pre(loop_condition): %a@." Abstract1.print pre; *)
-					      let env, pre, s = expr man (Abstract1.env pre) pre e in
-					      let lincons = Parser.lincons1_of_lstring (Abstract1.env pre) [s] in
-					      let absvalue = Abstract1.of_lincons_array man (Abstract1.env pre) lincons in
-					      printf "loop condition: %a@." Abstract1.print absvalue;
-					      let pre = Abstract1.meet man pre absvalue in
-					      (* printf "post(loop_condition): %a@." Abstract1.print pre; *)
-					      let (sb, body) = statement man pre sb true in
-					      (* printf "loop body: %a@." Abstract1.print body; *)
-					      (* compute loop invariant *)
-					      (* let pre = Abstract1.of_lincons_array man (Abstract1.env body) (Abstract1.to_lincons_array man pre) in *)
-					      let body = Abstract1.change_environment man body (Abstract1.env pre) false in
-					      (* printf "widen pre body : %a %a@." Abstract1.print pre Abstract1.print body; *)
-					      let loop_inv = Abstract1.widening man pre body in
-					      printf "after widening: %a@." Abstract1.print loop_inv;
-					      (* update env in absvalue *)
-					      let loop_inv = 
-						Abstract1.change_environment man loop_inv (Abstract1.env absvalue) false
-					      in
-					      let loop_inv = Abstract1.meet man loop_inv absvalue in
-					      printf "2nd loop_condition: %a@." Abstract1.print loop_inv;
-					      let (sb, body) = statement man loop_inv sb false in
-					      (* printf "2nd loop_body: %a@." Abstract1.print body; *)
-					      let body = Abstract1.change_environment man body (Abstract1.env pre) false in
-					      let loop_inv = Abstract1.join man pre body in
-					      printf "computed loop invariant: %a@." Abstract1.print loop_inv;
-					      let loop_invariant = la.jc_loop_invariant in
-					      let infered_loop_inv = 
-						absvalue_to_assertion man (loop_invariant.jc_assertion_loc) (Abstract1.env loop_inv) loop_inv
-					      in
-					      let la = 
-						{ la with jc_loop_invariant = make_and (loop_invariant.jc_assertion_loc) [loop_invariant; infered_loop_inv] }
-					      in
-					      let env, pre, s = expr man env pre (not_expr e) in
-					      printf "not e : %s@." s;
-					      let lincons = Parser.lincons1_of_lstring (Abstract1.env pre) [s] in
-					      let absvalue = Abstract1.of_lincons_array man (Abstract1.env pre) lincons in
-					      let post = Abstract1.meet man loop_inv absvalue in
-					      (JCSif(e, sb, se), post, la)
-					  | _ -> assert false (* shoud never happen *)
-					in
-					({ s1 with jc_statement_node = jc_statement_node }, post, la)
-				      in
-				      ([s1; s2], post, la)
-				  | _ -> assert false (* should never occur *)
-				in
-				(JCSblock(sl), post, la)
-			    | _ -> assert false (* should never happen *)
-			  in
-			  ({ sb with jc_statement_node = jc_statement_node }, post, la)
-			in
-			(JCStry(sb, cl, sf), post, la)
-                    | _ -> assert false (* should never happen *)
-		  in
-		  ({ sb with jc_statement_node = jc_statement_node }, post, la)
-		in
-		(JCSloop(la, sb), post)
-            | _ -> assert false (* should never happen *)
-          in
-          ({ sb with jc_statement_node = jc_statement_node }, post)
+    | JCSif (e, s1, s2) ->
+        if debug then printf "  JCSif ...@.";
+	begin
+	  match lao with
+	  | None -> (* a 'true' *if* *)
+	      (* Step 1: if branch *)
+	      let env, pre, strl = expr man (Abstract1.env pre) pre e in
+	      let lincons = Parser.lincons1_of_lstring env strl in
+	      let absvalue = Abstract1.of_lincons_array man env lincons in
+	      if debug then printf "if condition: %a@." Abstract1.print absvalue;
+	      let if_pre = Abstract1.meet man pre absvalue in
+	      let s1, post1, lao = statement man if_pre fv lao s1 in
+	      (* Step 2: else branch *)
+	      let env, pre, strl = expr man (Abstract1.env pre) pre (not_expr e) in
+	      let lincons = Parser.lincons1_of_lstring env strl in
+	      let absvalue = Abstract1.of_lincons_array man env lincons in
+	      if debug then printf "else condition: %a@." Abstract1.print absvalue;
+	      let else_pre = Abstract1.meet man pre absvalue in
+	      let s2, post2, lao = statement man else_pre fv lao s2 in
+	      (* Step 3: join the two branches *)
+	      Abstract1.change_environment_with man post1 (Abstract1.env pre) false;
+	      Abstract1.change_environment_with man post2 (Abstract1.env pre) false;
+	      let post = Abstract1.join man post1 post2 in
+	      JCSif (e, s1, s2), post, lao
+	  | Some la -> (* the *if* is actually a *loop condition* *)
+	      if debug then printf "   the if is a loop_condition @.";
+	      loop_condition man pre e s1 s2 la
+	end
+    | JCSloop (la, s) ->
+        if debug then printf "  JCSloop ...@.";
+	let s, post, la = 
+	  let s, post, lao = statement man pre fv (Some la) s in
+	  s, post, 
+	  match lao with 
+	  | None -> assert false (* should never happen *) 
+	  | Some la -> la
 	in
-	let (s, post) = statement man post s true in
-	(JCStry(sb, [(ei, vio, s)], sf), post)
-	  (* 'true' try statement *)
-    | JCStry(s1, cl, s2) -> assert false (* TO DO *)
-    | JCSthrow(ei, eo) -> assert false (* TO DO *)
-    | JCSpack(si1, e, si2) -> assert false (* TO DO *)
-    | JCSunpack(si1, e, si2) -> assert false (* TO DO *)
+	JCSloop (la, s), post, lao
+    | JCSreturn_void -> assert false (* TODO *)
+    | JCSreturn (t, e) ->
+	(* TODO: postcondition on result ? *)
+	JCSreturn (t, e), pre, lao
+    | JCStry (sb, catchl, sf) ->
+	if debug then printf "  JCStry ...@.";
+	let sb, post, lao = statement man pre true lao sb in
+	let catchl, postl =
+	  List.fold_left
+	    (fun (acc1, acc2) (ei, vio, s) ->
+	      let env, post = 
+		match vio with
+		| None -> Abstract1.env post, post
+		| Some vi -> fresh_variable man (Abstract1.env post) post vi
+	      in
+	      let s, post, lao = statement man post true lao s in
+	      (ei, vio, s)::acc1, post::acc2)
+	    ([], [])
+	    catchl
+	in
+	let pref = Abstract1.join_array man (Array.of_list (post::postl)) in
+	let sf, post, lao = statement man pref true lao sf in
+	JCStry (sb, catchl, sf), post, lao
+    | JCSthrow (ei, eo) ->
+        if debug then printf "  JCSthrow ...@.";
+	JCSthrow (ei, eo), pre, lao
+    | JCSpack (si1, e, si2) -> assert false (* TODO ? *)
+    | JCSunpack (si1, e, si2) -> assert false (* TODO ? *)
   in
-   ({ s with jc_statement_node = jc_statement_node }, post)
+  { s with jc_statement_node = jc_statement_node }, post, lao
 ;;
 
 *)
 
 let code_function fi slo = assert false
 (*
+  if debug then printf "code_function...@.";
+  if verbose then printf "  function %s@." fi.jc_fun_info_name;
   try
-    let man = Box.manager_alloc () in
-    (* let man = Oct.manager_alloc () in *)
+    (* let man = Box.manager_alloc () in *) (* Intervalles abstract domain *)
+    let man = Oct.manager_alloc () in (* Octagon abstract domain *)
+    (* let man = Polka.manager_alloc_strict () in *) (* Polyhedra abstract domain *)
     let env = Environment.make [||] [||] in
 
     (* add parameters as variables in env *)
@@ -434,13 +650,39 @@ let code_function fi slo = assert false
              match nt with
              | Tunit -> acc (* TO DO *)
 	     | Tboolean -> acc (* TO DO *)
-             | Tinteger -> (Var.of_string vi.jc_var_info_name)::acc
+             | Tinteger -> 
+		 let v = Var.of_string vi.jc_var_info_name in
+		 Hashtbl.add
+		   terms_vars_table
+		   v
+		   (make_term_no_loc (JCTvar vi) vi.jc_var_info_type);
+		 v::acc
 	     | Treal -> acc (* TO DO *)
              end
-           | JCTlogic s -> acc (* TO DO *)
+           | JCTlogic _ -> assert false (* should never happen *)
            | JCTenum ei -> acc (* TO DO *)
-           | JCTpointer(si, n1, n2) -> acc (* TO DO *)
-           | JCTnull -> acc (* TO DO *))
+           | JCTpointer (si, n1, n2) ->
+	       let s = vi.jc_var_info_name in
+	       let v1 = Var.of_string (s ^ "_offset_min") in
+	       let t1 = 
+		 make_term_no_loc 
+		   (JCToffset (Offset_min, 
+			       make_term_no_loc (JCTvar vi) vi.jc_var_info_type, 
+			       si))
+		   (JCTnative Tinteger) 
+	       in
+	       Hashtbl.add terms_vars_table v1 t1;
+	       let v2 = Var.of_string (s ^ "_offset_max") in
+	       let t2 = 
+		 make_term_no_loc 
+		   (JCToffset (Offset_max, 
+			       make_term_no_loc (JCTvar vi) vi.jc_var_info_type,
+			       si))
+		   (JCTnative Tinteger) 
+	       in	       
+	       Hashtbl.add terms_vars_table v2 t2;
+	       v1::v2::acc
+          | JCTnull -> assert false (* should never happen *))
         []
         fi.jc_fun_info_parameters
     in
@@ -454,8 +696,8 @@ let code_function fi slo = assert false
 	  (fst
 	     (List.fold_left
 		(fun (sl, pre) s ->
-		  let s, post = statement man pre s true in
-		  (List.rev (s::(List.rev sl)), post) ) 
+		  let s, post, _ = statement man pre true None s in
+		  (List.rev (s::(List.rev sl)), post)) 
 		([], Abstract1.top man env) 
 		sl))
   with Manager.Error e ->

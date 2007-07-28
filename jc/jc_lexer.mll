@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.37 2007-07-17 10:40:39 romain Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.38 2007-07-28 11:15:59 nrousset Exp $ i*)
 
 {
   open Jc_ast
@@ -236,7 +236,7 @@ and comment = parse
   | eof  { lex_error lexbuf "unterminated comment" }
   | '\n' { newline lexbuf; comment lexbuf }
   | _    { comment lexbuf }
-
+      
 {
 
 let dotdot_mem = ref false
@@ -264,7 +264,7 @@ let next_token lexbuf =
       Jc_parser.file next_token lb
     with Parsing.Parse_error ->
       Jc_options.parsing_error (loc lb) ""
-
+	
 }
 
 

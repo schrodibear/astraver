@@ -1045,10 +1045,10 @@ let rec expr env e =
 		| _ ->
 		    typing_error e.jc_pexpr_loc "only structures can be cast"
 	  end
-      | JCPEalloc(e1, t) ->
+      | JCPEalloc (e1, t) ->
 	  let te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTpointer(st,Num.Int 0, Num.Int (-1)), JCTEalloc (te1, st)
+	  JCTpointer (st, Num.Int 0, Num.Int (-1)), JCTEalloc (te1, st)
       | JCPEfree e1 ->
 	  let e1 = expr env e1 in
 	  unit_type, JCTEfree e1
@@ -1963,7 +1963,10 @@ let rec decl d =
 	  Option_misc.map 
 	    (fun body ->
 	       let lz = build_label_tree body in
-	       printf "%a" printf_label_tree (LabelBlock lz);
+	       (* Nicolas: 
+		  this was printed by default... 
+		  i put it in debug mode but don't know it's the right way to do so *)
+	       if Jc_options.debug then printf "%a" printf_label_tree (LabelBlock lz);
 	       statement_list (("\\result",vi)::param_env) ([],lz) body
 	    ) body
 	in

@@ -202,10 +202,11 @@ let op_of_incdec = function
   | Prefix_inc | Postfix_inc -> Badd_int 
   | Prefix_dec | Postfix_dec -> Bsub_int
 
+
 (*
-
-  expr e : returns ((sl,tl),ne) where
-
+  
+  expr e : returns ((sl, tl), ne) where
+  
    ne = normalized expression for e, without side-effect
    sl = sequences of statements to execute before e
    tl = sequences of fresh variables needed
@@ -224,181 +225,169 @@ let rec expr e =
   let loc = e.jc_texpr_loc in
   let (sl, tl), ne =
     match e.jc_texpr_node with
-      | JCTEconst c -> ([], []), JCEconst c
-      | JCTEvar vi -> ([], []), JCEvar vi
-      | JCTEunary(op,e1) ->
-	  let (l1,tl1),e1 = expr e1 in
-	  (l1, tl1), JCEunary (op,e1)
-      | JCTEbinary (e1, op, e2) ->
-	  let (l1,tl1),e1 = expr e1 in
-	  let (l2,tl2),e2 = expr e2 in
-	  (l1@l2, tl1@tl2), JCEbinary (e1, op, e2)	  
-      | JCTEshift (e1, e2) ->
-	  let (l1,tl1),e1 = expr e1 in
-	  let (l2,tl2),e2 = expr e2 in
-	  (l1@l2, tl1@tl2), JCEshift (e1, e2)
-      | JCTEderef (e, f) ->
-	  let (l,tl),e = expr e in
-	  (l, tl), JCEderef (e, f)
-      | JCTEcall (f, el) ->
-	  let ltl,el = List.split (List.map expr el) in
-	  let ll,tll = List.split ltl in
-	  let (l,tl),ecall = call loc f el ~binder:true ll in
-	  let ecall = match ecall with
-	    | Some b -> JCEvar b
-	    | None -> assert false
-	  in
-	  (l,tl@(List.flatten tll)),ecall
-      | JCTEoffset (k, e, si) -> 
-	  let (l,tl), e = expr e in
-	  (l, tl), JCEoffset(k, e, si)
-      | JCTEinstanceof (e, s) ->
-	  let (l,tl), e = expr e in
-	  (l, tl), JCEinstanceof (e, s)
-      | JCTEcast (e, s) ->
-	  let (l, tl), e = expr e in
-	  (l, tl), JCEcast (e, s)
-      | JCTErange_cast (r, e) ->
-	  let (l, tl), e = expr e in
-	  (l, tl), JCErange_cast (r, e)
-      | JCTEalloc (e, s) ->
-	  let (l, tl), e = expr e in
-	  (l, tl), JCEalloc (e, s)
-      | JCTEfree e ->
-	  let (l, tl), e = expr e in
-	  (l, tl), JCEfree e
-      | JCTEassign_var (vi, e) ->
-	  let (l,tl),e = expr e in
-	  let stat = make_assign_var loc vi e in
-	  (l@[stat], tl), JCEvar vi
-      | JCTEassign_var_op (vi,op, e) -> 
-	  (* 
-	     vi op= e becomes:
-
-	     stat0: tmp <- vi
-	     <e effects>
-             stat: vi <- tmp op e
-             ... vi ...
-	  *)             
-	  let tmp = newrefvar vi.jc_var_info_type in
-	  let stat0 = 
-	    make_assign_var loc tmp (make_var loc vi) 
-	  in
-	  let (l,tl),e = expr e in
-	  let e = 
-	    make_binary loc (make_var loc tmp) vi.jc_var_info_type op e 
-	  in
-	  let stat = make_assign_var loc vi e in
-	  (stat0::l@[stat], tmp::tl), JCEvar vi
-
-      | JCTEassign_heap (e1, fi, e2) ->
-	  let (l1,tl1),e1 = expr e1 in
-	  let (l2,tl2),e2 = expr e2 in
-	  let stat = make_assign_heap loc e1 fi e2 in
-	  (l1@l2@[stat], tl1@tl2), JCEderef (e1, fi)
-
-      | JCTEassign_heap_op (e1, fi, op, e2) -> 
-	  (* 
-	     e1.fi op= e2 becomes:
-
-	     <e1 effects>
-             stat1: tmp1 <- e1
-             <e2 effects>
-             stat2: tmp2 <- tmp1.fi op e2
-	     stat: tmp1.fi <- tmp2
-             ... tmp2 ...
-	  *)             
-	  let (l1,tl1),e1 = expr e1 in
-	  let tmp1 = newrefvar e1.jc_expr_type in
-	  let stat1 = make_assign_var loc tmp1 e1 in
-	  let (l2,tl2),e2 = expr e2 in
-	  let e3 = 
-	    make_binary loc 
-	     (make_deref loc (make_var loc tmp1) fi) 
-	      fi.jc_field_info_type op e2
-	  in
-	  let tmp2 = newrefvar fi.jc_field_info_type in
-	  let stat2 = make_assign_var loc tmp2 e3 in
-	  let stat = 
-	    make_assign_heap loc (make_var loc tmp1) fi (make_var loc tmp2) 
-	  in
-	  (l1@stat1::l2@[stat2; stat], tl1@tmp1::tl2@[tmp2]), JCEvar tmp2
-
-      | JCTEincr_local (op, vi) ->
-	  begin match op with
-	    | Prefix_inc | Prefix_dec ->
-		([make_incr_local loc (op_of_incdec op) vi], []), JCEvar vi
-	    | Postfix_inc | Postfix_dec ->
-	    	let tmp = newrefvar vi.jc_var_info_type in
-		let stat0 = 
-		  make_assign_var loc tmp (make_var loc vi) 
-		in
-		([stat0 ; make_incr_local loc (op_of_incdec op) vi], [tmp]), 
-		JCEvar tmp
-	  end
-      | JCTEincr_heap (op, e, fi) ->
-	  begin match op with
-	    | Prefix_inc | Prefix_dec ->
-		let (l,tl),e = expr e in
-		(l@[make_incr_heap loc (op_of_incdec op) e fi],tl), 
-		JCEderef (e, fi)
-	    | Postfix_inc | Postfix_dec ->
-		let (l,tl),e = expr e in
-		let tmp = newrefvar fi.jc_field_info_type in
-		let stat0 = 
-		  make_assign_var loc tmp (make_deref loc e fi) 
-		in
-		(l@stat0::[make_incr_heap loc Badd_int e fi],tl@[tmp]), 
-		JCEvar tmp
-	  end
-      | JCTEif (e1, e2, e3) ->
-	  let (l1,tl1),e1 = expr e1 in
-	  let (l2,tl2),e2 = expr e2 in
-	  let (l3,tl3),e3 = expr e3 in
-	  (* hack because we do not have a type to rely on ... *)
-	  let tmp = newrefvar integer_type in
-	  let assign2 = make_assign_var loc tmp e2 in
-	  let assign3 = make_assign_var loc tmp e3 in
-	  let if_e1_stat = 
-	    make_if loc e1 (make_block loc (l2 @ [assign2])) 
-	      (make_block loc (l3 @ [assign3])) in
-	  (l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
-
+    | JCTEconst c -> ([], []), JCEconst c
+    | JCTEvar vi -> ([], []), JCEvar vi
+    | JCTEunary(op,e1) ->
+	let (l1, tl1), e1 = expr e1 in
+	(l1, tl1), JCEunary (op, e1)
+    | JCTEbinary (e1, op, e2) ->
+	let (l1, tl1), e1 = expr e1 in
+	let (l2, tl2), e2 = expr e2 in
+	begin
+	  match op with
+	  | Bland ->
+	      let tmp = newrefvar boolean_type in
+	      let e1_false_stat = make_assign_var loc tmp (false_const loc) in
+	      let e2_false_stat = make_assign_var loc tmp (false_const loc) in
+	      let true_stat = make_assign_var loc tmp (true_const loc) in
+	      let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
+	      let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
+	      let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
+	      (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
+	  | Blor ->
+	      let tmp = newrefvar boolean_type in
+	      let e1_true_stat = make_assign_var loc tmp (true_const loc) in
+	      let e2_true_stat = make_assign_var loc tmp (true_const loc) in
+	      let false_stat = make_assign_var loc tmp (false_const loc) in
+	      let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
+	      let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
+	      let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
+	      (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
+	  | _ -> (* Note: no special case for Unot *)
+	      (l1@l2, tl1@tl2), JCEbinary (e1, op, e2)
+	end
+    | JCTEshift (e1, e2) ->
+	let (l1, tl1), e1 = expr e1 in
+	let (l2, tl2), e2 = expr e2 in
+	(l1@l2, tl1@tl2), JCEshift (e1, e2)
+    | JCTEderef (e, f) ->
+	let (l, tl), e = expr e in
+	(l, tl), JCEderef (e, f)
+    | JCTEcall (f, el) ->
+	let ltl, el = List.split (List.map expr el) in
+	let ll, tll = List.split ltl in
+	let (l, tl), ecall = call loc f el ~binder:true ll in
+	let ecall = match ecall with
+	| Some b -> JCEvar b
+	| None -> assert false
+	in
+	(l, tl@(List.flatten tll)), ecall
+    | JCTEoffset (k, e, si) -> 
+	let (l, tl), e = expr e in
+	(l, tl), JCEoffset (k, e, si)
+    | JCTEinstanceof (e, s) ->
+	let (l, tl), e = expr e in
+	(l, tl), JCEinstanceof (e, s)
+    | JCTEcast (e, s) ->
+	let (l, tl), e = expr e in
+	(l, tl), JCEcast (e, s)
+    | JCTErange_cast (r, e) ->
+	let (l, tl), e = expr e in
+	(l, tl), JCErange_cast (r, e)
+    | JCTEalloc (e, s) ->
+	let (l, tl), e = expr e in
+	(l, tl), JCEalloc (e, s)
+    | JCTEfree e ->
+	let (l, tl), e = expr e in
+	(l, tl), JCEfree e
+    | JCTEassign_var (vi, e) ->
+	let (l, tl), e = expr e in
+	let stat = make_assign_var loc vi e in
+	(l@[stat], tl), JCEvar vi
+    | JCTEassign_var_op (vi,op, e) -> 
+	(* 
+	   vi op= e becomes:
+	   
+	   stat0: tmp <- vi
+	   <e effects>
+           stat: vi <- tmp op e
+           ... vi ...
+	 *)             
+	let tmp = newrefvar vi.jc_var_info_type in
+	let stat0 = 
+	  make_assign_var loc tmp (make_var loc vi) 
+	in
+	let (l, tl), e = expr e in
+	let e = 
+	  make_binary loc (make_var loc tmp) vi.jc_var_info_type op e 
+	in
+	let stat = make_assign_var loc vi e in
+	(stat0::l@[stat], tmp::tl), JCEvar vi
+    | JCTEassign_heap (e1, fi, e2) ->
+	let (l1, tl1), e1 = expr e1 in
+	let (l2, tl2), e2 = expr e2 in
+	let stat = make_assign_heap loc e1 fi e2 in
+	(l1@l2@[stat], tl1@tl2), JCEderef (e1, fi)
+    | JCTEassign_heap_op (e1, fi, op, e2) -> 
+	(* 
+	   e1.fi op= e2 becomes:
+	   
+	   <e1 effects>
+           stat1: tmp1 <- e1
+           <e2 effects>
+           stat2: tmp2 <- tmp1.fi op e2
+	   stat: tmp1.fi <- tmp2
+           ... tmp2 ...
+	 *)             
+	let (l1, tl1), e1 = expr e1 in
+	let tmp1 = newrefvar e1.jc_expr_type in
+	let stat1 = make_assign_var loc tmp1 e1 in
+	let (l2, tl2), e2 = expr e2 in
+	let e3 = 
+	  make_binary loc 
+	    (make_deref loc (make_var loc tmp1) fi) 
+	    fi.jc_field_info_type op e2
+	in
+	let tmp2 = newrefvar fi.jc_field_info_type in
+	let stat2 = make_assign_var loc tmp2 e3 in
+	let stat = 
+	  make_assign_heap loc (make_var loc tmp1) fi (make_var loc tmp2) 
+	in
+	(l1@stat1::l2@[stat2; stat], tl1@tmp1::tl2@[tmp2]), JCEvar tmp2
+    | JCTEincr_local (op, vi) ->
+	begin match op with
+	| Prefix_inc | Prefix_dec ->
+	    ([make_incr_local loc (op_of_incdec op) vi], []), JCEvar vi
+	| Postfix_inc | Postfix_dec ->
+	    let tmp = newrefvar vi.jc_var_info_type in
+	    let stat0 = 
+	      make_assign_var loc tmp (make_var loc vi) 
+	    in
+	    ([stat0; make_incr_local loc (op_of_incdec op) vi], [tmp]), 
+	    JCEvar tmp
+	end
+    | JCTEincr_heap (op, e, fi) ->
+	begin match op with
+	| Prefix_inc | Prefix_dec ->
+	    let (l, tl), e = expr e in
+	    (l@[make_incr_heap loc (op_of_incdec op) e fi], tl), 
+	    JCEderef (e, fi)
+	| Postfix_inc | Postfix_dec ->
+	    let (l, tl), e = expr e in
+	    let tmp = newrefvar fi.jc_field_info_type in
+	    let stat0 = 
+	      make_assign_var loc tmp (make_deref loc e fi) 
+	    in
+	    (l@stat0::[make_incr_heap loc Badd_int e fi], tl@[tmp]), 
+	    JCEvar tmp
+	end
+    | JCTEif (e1, e2, e3) ->
+	let (l1, tl1), e1 = expr e1 in
+	let (l2, tl2), e2 = expr e2 in
+	let (l3, tl3), e3 = expr e3 in
+	(* hack because we do not have a type to rely on ... *)
+	let tmp = newrefvar integer_type in
+	let assign2 = make_assign_var loc tmp e2 in
+	let assign3 = make_assign_var loc tmp e3 in
+	let if_e1_stat = 
+	  make_if loc e1 (make_block loc (l2 @ [assign2])) 
+	    (make_block loc (l3 @ [assign3])) in
+	(l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
   in (sl, tl), { jc_expr_node = ne; 
 		 jc_expr_type = e.jc_texpr_type;
 		 jc_expr_loc = e.jc_texpr_loc }
 
 and call loc f el ~binder ll = 
-(*
-  if f == and_ then
-    let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
-    let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
-    let tmp = newrefvar boolean_type in
-    let e1_false_stat = make_assign_var loc tmp (false_const loc) in
-    let e2_false_stat = make_assign_var loc tmp (false_const loc) in
-    let true_stat = make_assign_var loc tmp (true_const loc) in
-    let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
-    let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
-    let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
-    (l1 @ [if_e1_stat], [tmp]), Some tmp
-  else
-
-  if f == or_ then
-    let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
-    let l1,l2 = match ll with [l1;l2] -> l1,l2 | _ -> assert false in
-    let tmp = newrefvar boolean_type in
-    let e1_true_stat = make_assign_var loc tmp (true_const loc) in
-    let e2_true_stat = make_assign_var loc tmp (true_const loc) in
-    let false_stat = make_assign_var loc tmp (false_const loc) in
-    let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
-    let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
-    let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
-    (l1 @ [if_e1_stat], [tmp]), Some tmp
-  else
-*)
-
-  (* no special case here for not_ *)
-
   if binder then
     let tmp = newvar f.jc_fun_info_return_type in
     let stat = make_call loc (Some tmp) f el (make_block loc []) in

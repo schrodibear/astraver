@@ -1,0 +1,22 @@
+/* two levels of loops */
+
+integer loops2() 
+  requires true;
+  behavior normal:
+    ensures true;
+{
+  integer x = 0;
+  while(x <= 9)
+    invariant true;
+    variant 10 - x;
+  {
+    x++;
+    integer y = 0;
+    while(y <= x)
+      invariant true;
+      variant x + 1 - y;
+    {
+      y++;
+    }
+  }
+}
