@@ -69,15 +69,19 @@ INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib
 BFLAGS   = -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
-# Nicolas: to add to OCAMLOPTLDFLAGS to use APRON
-# bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa
-OCAMLOPTLDFLAGS = \
--verbose -ccopt "$(LCFLAGS)" \
--cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
-
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
 
-APRON = -I /usr/lib
+APRONLIB = -I /usr/lib
+
+APRONOPTLDFLAGS = \
+-verbose -ccopt "$(LCFLAGS)" \
+# bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
+-cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
+
+APRONBYTLDFLAGS = \
+-verbose -ccopt "$(LCFLAGS)" \
+# bigarray.cma gmp.cma apron.cma box.cma polka.cma \
+-cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
@@ -257,13 +261,13 @@ jc/jc.cma: $(JCCML_EXPORT)
 jc/jc.cmxa: $(JCCML_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
 
-bin/jessie.opt: $(JCCMX) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRON) $(OCAMLOPTLDFLAGS) -o $@ \
+bin/jessie.opt: $(JCCMX)
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONOPTLDFLAGS) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
 	strip    $@
 
 bin/jessie.byte: $(JCCMO) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLDFLAGS) -o $@ \
 		unix.cma nums.cma graph.cma $^
 
 
@@ -639,16 +643,16 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 .SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo .ml4
 
 .mli.cmi:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRON) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) -c $(BFLAGS) $<
 
 .ml.cmo:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRON) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) -c $(BFLAGS) $<
 
 .ml.o:
-	$(OCAMLOPT) $(APRON) -c $(OFLAGS) $<
+	$(OCAMLOPT) $(APRONLIB) -c $(OFLAGS) $<
 
 .ml.cmx:
-	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) $(APRON) -c $(OFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) $(APRONLIB) -c $(OFLAGS) $<
 
 .mll.ml:
 	$(OCAMLLEX) $<

@@ -1,0 +1,23 @@
+
+integer main(integer i)
+  behavior safety: 
+    ensures \result == 1;
+{
+  integer j = i + 1;
+  switch (j) {
+    case 0:
+      ++j;
+    case 1:
+      break;
+    default:
+      j = 1;
+  }
+  return j;
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make switch"
+End: 
+*/

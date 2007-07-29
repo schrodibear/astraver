@@ -1,0 +1,22 @@
+type A = {
+  integer i;
+}
+
+unit test(A[..] a)
+  requires true;
+  behavior ok:
+    assigns a.i;
+    ensures true;
+{
+  a.i = 0;
+  assert a.i == 0;
+  a.i = a.i + 1;
+  assert a.i != 0;
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make asserts"
+End: 
+*/
