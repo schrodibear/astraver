@@ -16,13 +16,13 @@ unsigned int umean(unsigned int l, unsigned int r) {
 }
 
 //@ ensures (\result == x <= y) || (\result == y <= x)
-int min(int x, int y);
+int min_int(int x, int y);
 
 //@ ensures (\result == x >= y) || (\result == y >= x)
-int max(int x, int y);
+int max_int(int x, int y);
 
 //@ requires 0 <= x && 0 <= y
 int mean2(int x, int y) {
-  int min = min(x,y), max = max(x,y);
+  int min = min_int(x,y), max = max_int(x,y);
   return min + (max - min)/2;
 }

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.104 2007-06-28 09:07:44 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.105 2007-08-02 12:46:58 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -91,7 +91,7 @@ let make_field ty =
   let rec name ty =
     match ty.Ctypes.ctype_node with 
       | Tvoid -> "void"
-      | Tint si when Coptions.int_overflow_check -> int_type_for si
+      | Tint si when Coptions.machine_ints -> int_type_for si
       | Tenum e when Coptions.enum_check -> enum_type_for e
       | Tint  _ | Tenum _ -> "int"
       | Tfloat _ -> "float"
@@ -141,7 +141,7 @@ let why_type_for_float t = match t.Ctypes.ctype_node with
 
 let why_type_for_int_kind = function
   | _, ExactInt -> Info.Int
-  | _ when not Coptions.int_overflow_check -> Info.Int
+  | _ when not Coptions.machine_ints -> Info.Int
   | ik -> Why_Logic (Cenv.int_type_for ik)
 
 let why_type_for_int t = match t.Ctypes.ctype_node with

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.mli,v 1.34 2007-05-18 09:29:13 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.35 2007-08-02 12:46:58 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -67,7 +67,7 @@ val fp_overflow_check : bool
 
 type int_model = IMexact | IMbounded | IMmodulo
 val int_model : int_model
-val int_overflow_check : bool
+val machine_ints : bool
 
 val enum_check : bool
 

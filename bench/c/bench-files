@@ -9,7 +9,7 @@ copy dowhile invariants latespec logic_cast
 param passing queue rec ref ref_glob search see 
 sizeof alloca all_zeros malloc calloc pointer init
 struct struct2 struct3 switch enum sum1 sum2 incr pi count_bits count_bits_2
-purse abs string return binary_search division negate
+purse abs string return binary_search division negate mean
 false false2 
 
 

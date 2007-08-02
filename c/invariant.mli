@@ -37,3 +37,5 @@ val max_int : Ctypes.sign * int -> string
 
 val min_cinteger : Ctypes.sign * Ctypes.cinteger -> string
 val max_cinteger : Ctypes.sign * Ctypes.cinteger -> string
+
+val string_two_power_n : int -> string

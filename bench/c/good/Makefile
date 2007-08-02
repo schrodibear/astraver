@@ -124,6 +124,18 @@ harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	$(EXECCADUCEUS) -int-model bounded -check-enum $<
 	make -f $*.makefile gui
 
+%.modulo: %.c
+	rm -f coq/caduceus_spec_why.v
+	rm -f why/$*.why
+	$(EXECCADUCEUS) -int-model modulo $<
+	make -f $*.makefile gui
+
+%.modulo+enum: %.c
+	rm -f coq/caduceus_spec_why.v
+	rm -f why/$*.why
+	$(EXECCADUCEUS) -int-model modulo -check-enum $<
+	make -f $*.makefile gui
+
 %.enum: %.c
 	rm -f coq/caduceus_spec_why.v
 	rm -f why/$*.why

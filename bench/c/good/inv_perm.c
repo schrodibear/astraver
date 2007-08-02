@@ -33,7 +33,7 @@ void inverse(int *t, int n) {
 
 /* test */
 
-#ifdef 0
+#ifdef TEST
 
 int n = 6;
 int t[7] = { 0,2,3,1,6,5,4 };

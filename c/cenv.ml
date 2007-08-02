@@ -311,7 +311,7 @@ let enum_type_for s =
 let rec type_type_why ?name ty zone_is_var =
   match ty.ctype_node with
     | Tint (_,ExactInt) -> Int
-    | Tint _ when not Coptions.int_overflow_check -> Int
+    | Tint _ when not Coptions.machine_ints -> Int
     | Tenum _ when not Coptions.enum_check -> Int
     | Tint ik -> Why_Logic (int_type_for ik)
     | Tenum e -> Why_Logic (enum_type_for e)

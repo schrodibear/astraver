@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.118 2007-06-27 08:51:18 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.119 2007-08-02 12:46:58 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -57,13 +57,13 @@ let option_app f = function Some x -> Some (f x) | None -> None
 let sign = function true -> Signed | false -> Unsigned
 
 let retype_typedef = function
-  | Tint _ when not int_overflow_check -> Tint (Signed, ExactInt)
+  | Tint _ when not machine_ints -> Tint (Signed, ExactInt)
   | tn -> tn
 
 let rec type_logic_type loc env = function
   | LTvoid -> c_void
   | LTchar _ | LTshort _ | LTint _ | LTlong _ | LTlonglong _ 
-    when not int_overflow_check ->
+    when not machine_ints ->
       c_exact_int
   | LTchar s -> noattr (Tint (sign s, Char))
   | LTshort s -> noattr (Tint (sign s, Short))

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.247 2007-07-03 08:32:31 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.248 2007-08-02 12:46:58 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -224,7 +224,7 @@ let term_float_conversion fk1 fk2 e =
 	assert false
 
 let int_of (_,i as ik) e =
-  if int_overflow_check && i <> ExactInt then
+  if machine_ints && i <> ExactInt then
     let name = Cenv.int_type_for ik in LApp ("of_" ^ name, [e])
   else
     e
@@ -635,13 +635,13 @@ let is_enum e t =
   let _,info = Cenv.find_pred ("is_enum_" ^ e) in LPred (info.logic_name, [t])
 
 let of_int (_,i as ik) e =
-  if int_overflow_check && i <> ExactInt then
+  if machine_ints && i <> ExactInt then
     let name = Cenv.int_type_for ik in App (Var (name ^ "_of_int"), e)
   else
     e
 
 let int_of (_,i as ik) e =
-  if int_overflow_check && i <> ExactInt then
+  if machine_ints && i <> ExactInt then
     let name = Cenv.int_type_for ik in App (Var ("of_" ^ name), e)
   else
     e
@@ -745,6 +745,7 @@ let make_int_types_decls () =
     let min = Invariant.min_int i in
     let max = Invariant.max_int i in
     let of_name = "of_" ^ name in
+    let mod_name = "mod_" ^ name in
     let lt = simple_logic_type name in
     let in_bounds t = 
       LAnd (LPred ("le_int", [LConst (Prim_int min); t]),
@@ -757,14 +758,44 @@ let make_int_types_decls () =
     (Axiom (name ^ "_domain", 
 	     LForall ("x", lt, in_bounds (LApp (of_name, [LVar "x"]))))) 
     ::
-    (Param (false, name ^ "_of_int",
-	    Prod_type ("x", int, 
-		       let pre = in_bounds (LVar "x") in
-		       let post = 
-			 LPred ("eq", [LApp (of_name, [LVar "result"]); 
-				       LVar "x"]) 
-		       in
-		       Annot_type (pre, Base_type lt, [], [], post, []))))
+    (if int_model = IMmodulo then
+       let width = LConst (Prim_int (Invariant.string_two_power_n size)) in
+       let fmod t = LApp (mod_name, [t]) in
+       [Logic (false, mod_name, 
+	       ["x", simple_logic_type "int"], simple_logic_type "int");
+	Axiom (mod_name ^ "_id",
+	       LForall ("x", simple_logic_type "int",
+		       LImpl (in_bounds (LVar "x"), 
+		             LPred ("eq", [LApp (mod_name, [LVar "x"]);
+					   LVar "x"]))));
+	Axiom (mod_name ^ "_lt",
+	       LForall ("x", simple_logic_type "int",
+		       LImpl (LPred ("lt_int", [LVar "x"; 
+						LConst (Prim_int min)]), 
+		             LPred ("eq", [fmod (LVar "x");
+					   fmod (LApp ("add_int", 
+						      [LVar "x"; width]))]))));
+	Axiom (mod_name ^ "_gt",
+	       LForall ("x", simple_logic_type "int",
+		       LImpl (LPred ("gt_int", [LVar "x"; 
+						LConst (Prim_int max)]), 
+		             LPred ("eq", [fmod (LVar "x");
+					   fmod (LApp ("sub_int", 
+						      [LVar "x"; width]))]))));
+	
+	]
+     else
+       [])
+    @
+    (let pre = if int_model = IMbounded then in_bounds (LVar "x") else LTrue in
+    let post = 
+      LPred ("eq", [LApp (of_name, [LVar "result"]); 
+		    if int_model = IMbounded then LVar "x" 
+		    else LApp (mod_name, [LVar "x"])]) 
+    in
+    Param (false, name ^ "_of_int",
+	  Prod_type ("x", int, 
+		    Annot_type (pre, Base_type lt, [], [], post, []))))
     ::
     (Param (false, "any_" ^ name,
             Prod_type ("x", unit_type,
@@ -1013,7 +1044,7 @@ and interp_expr_loc e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
 	let t = Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c))) in
-	if int_overflow_check then begin 
+	if machine_ints then begin 
 	  match e.nexpr_type.Ctypes.ctype_node with
 	  | Tint si -> of_int si t
 	  | Tenum _ -> assert false (*TODO*)
@@ -1859,7 +1890,7 @@ let break b e = if b then try_with_void "Break" e else e
 let continue b e = if b then try_with_void "Continue" e else e    
 
 let return_exn ty = match ty.Ctypes.ctype_node with
-  | Tint si when int_overflow_check -> "Return_" ^ (Cenv.int_type_for si)
+  | Tint si when machine_ints -> "Return_" ^ (Cenv.int_type_for si)
   | Tenum e when enum_check -> "Return_" ^ (Cenv.enum_type_for e)
   | Tenum _ | Tint _ -> "Return_int"
   | Tfloat _ when not floats -> "Return_real"
@@ -2075,7 +2106,7 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
 	    begin match ctype.Ctypes.ctype_node with
 	      | Tenum s when enum_check ->    
 		  App (Var ("any_" ^ Cenv.enum_type_for s), Var "void") 
-	      | Tint (_,i as si) when i <> ExactInt && int_overflow_check ->
+	      | Tint (_,i as si) when i <> ExactInt && machine_ints ->
 		  App (Var ("any_" ^ Cenv.int_type_for si), Var "void")
 	      | Tenum _ | Tint _ ->
 		  App (Var "any_int", Var "void")

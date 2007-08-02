@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.148 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.149 2007-08-02 12:46:58 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -240,6 +240,7 @@ let max_float = function
   | (Float | Double | LongDouble), (Float | Double | LongDouble) -> LongDouble
   | _ -> assert false
 
+(****
 let rec le_cinteger = function
   | Tint (Signed, i1), Tint (_, i2) 
   | Tint (Unsigned, i1), Tint (Unsigned, i2) ->
@@ -255,19 +256,43 @@ let rec le_cinteger = function
       assert false
 
 let max_int i1 i2 = if le_cinteger (i1, i2) then i2 else i1
+****)
+
+let integral_promotion = function
+  | Tenum _ | Tint (_, (Char | Short)) -> Tint (Signed, Int)
+  | tn -> tn
 
 (* convert [e1] and [e2] to the same arithmetic type *)
 let conversion e1 e2 =
   let ty1 = e1.texpr_type in
   let ty2 = e2.texpr_type in
   match ty1.ctype_node, ty2.ctype_node with
-    | (Tint _ | Tenum _ as tn1), (Tint _ | Tenum _ as tn2) -> 
-	let ty = noattr (max_int tn1 tn2) in
-	coerce ty e1, coerce ty e2, ty1
     | Tfloat _, (Tint _ | Tenum _) -> e1, coerce ty1 e2, ty1
     | (Tint _ | Tenum _), Tfloat _ -> coerce ty2 e1, e2, ty2
     | Tfloat fk1, Tfloat fk2 -> 
 	let ty = noattr (Tfloat (max_float (fk1, fk2))) in
+	coerce ty e1, coerce ty e2, ty
+    | (Tint _ | Tenum _ as tn1), (Tint _ | Tenum _ as tn2) -> 
+	let tn = match integral_promotion tn1, integral_promotion tn2 with
+	  | (Tint (Unsigned, LongLong) as tn), _ -> tn
+	  | _, (Tint (Unsigned, LongLong) as tn) -> tn
+	  | (Tint (Signed, LongLong) as tn), _ -> tn
+	  | _, (Tint (Signed, LongLong) as tn) -> tn
+	  | (Tint (Unsigned, Long) as tn), _ -> tn
+	  | _, (Tint (Unsigned, Long) as tn) -> tn
+	  | Tint (Signed, Long), Tint (Unsigned, Int) 
+	  | Tint (Unsigned, Int), Tint (Signed, Long)
+	    when Coptions.long_size <= Coptions.int_size -> 
+	      Tint (Unsigned, Long)
+	  | (Tint (Signed, Long) as tn), _ -> tn
+	  | _, (Tint (Signed, Long) as tn) -> tn
+	  | (Tint (Unsigned, Int) as tn), _ -> tn
+	  | _, (Tint (Unsigned, Int) as tn) -> tn
+	  | (Tint (Signed, Int) as tn), _ -> tn
+	  | _, (Tint (Signed, Int) as tn) -> tn
+	  | _ -> assert false
+	in
+	let ty = noattr tn in
 	coerce ty e1, coerce ty e2, ty
     | _ -> assert false
 

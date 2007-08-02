@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.43 2007-06-28 09:07:44 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.44 2007-08-02 12:46:58 filliatr Exp $ i*)
 
 open Format
 
@@ -110,8 +110,7 @@ let set_int_model = function
   | "bounded" -> 
       int_model := IMbounded
   | "modulo" -> 
-      int_model := IMmodulo;
-      eprintf "modulo arithmetic is not yet implement@."; exit 1
+      int_model := IMmodulo
   | _ -> 
       eprintf 
 	"integer arithmetic model should be `exact', `bounded' or `modulo'@."; 
@@ -281,7 +280,7 @@ let long_size = !long_size_
 let long_long_size = !long_long_size_
 
 let int_model = !int_model
-let int_overflow_check = int_model = IMbounded
+let machine_ints = int_model = IMbounded || int_model = IMmodulo
 
 let enum_check = !enum_check
 

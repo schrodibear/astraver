@@ -717,6 +717,7 @@ WWW = $(HOME)/WWW/why
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
        mix/*.ml* \
        Version Makefile.in configure.in configure .depend .depend.coq \
+       config/check_ocamlgraph.ml \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
 	examples-c/*/*.h examples-c/*/*.c \
@@ -743,6 +744,10 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
 	octagon/README octagon/test/Makefile* octagon/test/oct_test.c \
 	octagon/test/README
 
+OCAMLGRAPHFILES = ocamlgraph/configure.in ocamlgraph/configure \
+	ocamlgraph/*.in ocamlgraph/LICENSE ocamlgraph/README \
+	ocamlgraph/*.ml* ocamlgraph/editor/*.ml*
+
 distrib export: source export-doc export-examples export-examples-c linux
 	make -C $(HOME)/www/why install
 
@@ -755,6 +760,9 @@ source: doc/manual.ps export/$(NAME).tar.gz
 export/$(NAME).tar.gz:
 	mkdir -p $(EXPORT)/bin
 	cp --parents $(FILES) $(EXPORT)
+	if test -d ocamlgraph; then \
+	  cp --parents $(OCAMLGRAPHFILES) $(EXPORT); \
+	fi
 	cd $(EXPORT); rm -f $(GENERATED)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
 
@@ -844,6 +852,7 @@ clean::
 	if test "@enable_octagon@" = "yes" ; then \
 		make -C octagon clean; \
 	fi
+	if test -d ocamlgraph; then make -C ocamlgraph clean; fi
 	make -C doc clean
 	make -C examples-v7 clean
 	make -C examples clean

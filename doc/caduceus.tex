@@ -1324,7 +1324,12 @@ The model used for integer arithmetic is controlled through the
   \texttt{\char'134max\_range($\tau$)} respectively.
 
 \item[\texttt{-int-model modulo}] ~\par
-  Not yet implemented.
+  This is the model which is faithful to the program execution
+  \emph{i.e.} modulo arithmetic is performed as soon
+  as an overflow occurs. 
+  
+  Sizes of integer types can be specified on the command-line as for
+  the \texttt{bounded} model above.
 \end{description}
 
 

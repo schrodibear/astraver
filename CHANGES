@@ -1,4 +1,6 @@
 
+version 2.04, August 2nd, 2007
+==============================
   o new option -load-file to read an input file without generating
     output for the prover
   o new prover interface Graph which iteratively allows to select more 
