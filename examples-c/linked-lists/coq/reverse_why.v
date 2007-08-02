@@ -51,7 +51,7 @@ unfold is_list, app,nil; intuition.
 constructor.
 apply disjoint_nil2.
 rewrite <- app_nil_end; auto.
-rewrite (llist_function  H H0); auto.
+rewrite (llist_function _ _ _ _ _ _ _ H H0); auto.
 Qed.
 
 

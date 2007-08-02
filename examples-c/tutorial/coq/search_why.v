@@ -97,7 +97,7 @@ Proof.
 intuition.
 assert (h : k<i \/ k=i); [ omega | inversion_clear h].
 (* case k < i *)
-apply (H2 k); auto.
+apply (H0 k); auto.
 (* case k=i *)
 subst; auto.
 Save.
@@ -122,5 +122,5 @@ Save.
     (forall (i:Z), (0 <= i /\ i < n -> (acc intM_global (shift t i)) <> v))))).
 Proof.
 intuition.
-apply H2 with i0; auto with *.
+apply H0 with i0; auto with *.
 Save.

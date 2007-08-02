@@ -74,7 +74,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition disjoint : plist -> plist -> Prop.
-exact (fun p => disjoint p).
+exact (fun p => disjoint _ p).
 Defined.
 
 (*Why axiom*) Lemma disjoint_nil1 :
