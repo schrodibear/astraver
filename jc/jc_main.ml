@@ -23,6 +23,7 @@
 (**************************************************************************)
 
 open Jc_env
+open Jc_fenv
 open Jc_ast
 open Format
 
@@ -91,18 +92,6 @@ let main () =
 	  Jc_typing.exceptions_table;	
 *)	  
 	  
-        (* phase 3.1 (optional) : inference of annotations *)
-	if Jc_options.ai then
-	  begin
-	    if Jc_options.verbose then printf "Begin AI@.";
-	    Hashtbl.iter 
-	      (fun tag (f, s, b) -> 
-		let b = Jc_annot_inference.code_function f b in
-		Hashtbl.replace Jc_norm.functions_table tag (f, s, b))
-	      Jc_norm.functions_table;
-	    if Jc_options.verbose then printf "End AI@."
-	  end;
-	
 	(* phase 4 : computation of call graph *)
 	Hashtbl.iter 
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
@@ -119,6 +108,26 @@ let main () =
 	  Jc_callgraph.compute_components Jc_norm.functions_table
 	in
 
+        (* phase 4.1 (optional) : inference of annotations *)
+	if Jc_options.ai then
+	  begin
+	    if Jc_options.verbose then printf "Begin AI@.";
+	    Hashtbl.iter 
+	      (fun tag (fi, fs, bo) ->
+		if Jc_options.main = "" then
+		  (* no main: inference of loop invariants only *)
+		  let bo = Jc_annot_inference.code_function fi bo in
+		  Hashtbl.replace Jc_norm.functions_table tag (fi, fs, bo)
+		else
+		  if fi.jc_fun_info_name = Jc_options.main then
+		    (* main: inference of pre/post and loop invariants *)
+		    Jc_annot_inference.main_function fi fs bo
+		  else
+		    ())
+	      Jc_norm.functions_table;
+	    if Jc_options.verbose then printf "End AI@."
+	  end;
+	
 	(* phase 5 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
 	Array.iter Jc_effect.logic_effects logic_components;

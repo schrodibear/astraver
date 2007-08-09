@@ -40,6 +40,7 @@ val werror : bool
 val why_opt : string
 
 val ai : bool
+val main : string
 
 val files : unit -> string list 
 val usage : unit -> unit

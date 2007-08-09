@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.6 2007-07-28 11:15:59 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.7 2007-08-09 18:04:59 nrousset Exp $ i*)
 
 open Format
 
@@ -68,6 +68,7 @@ let why_opt = ref ""
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let ai = ref false
+let main = ref ""
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -99,7 +100,9 @@ let _ =
 	"-q", Arg.Clear verbose,
           "  quiet mode (default)";
 	"-ai", Arg.Set(ai),
-	  "  performs annotations inference";
+	  "performs annotations inference";
+	"-main", Arg.Set_string(main),
+	  "main function";
 	"--werror", Arg.Set werror,
           "  treats warnings as errors";
 	"--version", Arg.Unit version,
@@ -120,6 +123,7 @@ let werror = !werror
 let why_opt = !why_opt
 
 let ai = !ai
+let main = !main
 
 (*s error handling *)
 

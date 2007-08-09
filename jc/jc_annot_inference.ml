@@ -23,6 +23,7 @@
 (**************************************************************************)
 
 (*
+
 open Apron
 open Format
 open Jc_ast
@@ -30,8 +31,9 @@ open Jc_env
 open Jc_fenv
 open Jc_options
 open Jc_pervasives
-open Lincons1
 open Coeff
+open Interval
+open Lincons1
 
 
 (*
@@ -47,6 +49,8 @@ open Coeff
   
 
 let terms_vars_table = Hashtbl.create 97
+
+let calls_changed = ref false;;
 
 
 let make_term loc node t = 
@@ -454,7 +458,7 @@ let rec expr man env pre e =
 ;;
 
 
-let rec loop_condition man pre e sb se la =
+let rec loop_condition man pre e sb se la fil =
   (* make the constraint from the loop condition *)
   let pre = Abstract1.join man (Abstract1.bottom man (Abstract1.env pre)) pre in (* Useless ? *)
   let env, pre, strl = expr man (Abstract1.env pre) pre e in
@@ -469,7 +473,7 @@ let rec loop_condition man pre e sb se la =
   in
   if debug then printf "loop condition: %a@." Abstract1.print absvalue;
   let pre = Abstract1.meet man pre absvalue in
-  let sb, body, _ = statement man pre true None sb in
+  let sb, body, _ = statement man pre true None fil sb in
   (* compute loop invariant *)
   let body = Abstract1.change_environment man body (Abstract1.env pre) false in
   let loop_inv = Abstract1.widening man pre body in
@@ -480,19 +484,19 @@ let rec loop_condition man pre e sb se la =
   in
   let loop_inv = Abstract1.meet man loop_inv absvalue in
   if debug then printf "2nd loop_condition: %a@." Abstract1.print loop_inv;
-  let sb, body, _ = statement man loop_inv false None sb in
+  let sb, body, _ = statement man loop_inv false None fil sb in
   let body = Abstract1.change_environment man body (Abstract1.env pre) false in
   let loop_inv = Abstract1.join man pre body in
   if verbose then printf "    inferred loop invariant: %a@." Abstract1.print loop_inv;
   let loop_invariant = la.jc_loop_invariant in
-  let infered_loop_inv = 
+  let inferred_loop_inv = 
     absvalue_to_assertion man (loop_invariant.jc_assertion_loc) (Abstract1.env loop_inv) loop_inv
   in
   let la = 
     { la with 
       jc_loop_invariant = make_and 
 	(loop_invariant.jc_assertion_loc)
-	[loop_invariant; infered_loop_inv] }
+	[loop_invariant; inferred_loop_inv] }
   in
   let env, pre, strl = expr man env pre (not_expr e) in
   let absvalue = 
@@ -507,16 +511,89 @@ let rec loop_condition man pre e sb se la =
   let post = Abstract1.meet man loop_inv absvalue in
   JCSif (e, sb, se), post, Some la
 
-and statement man pre fv lao s =
+and statement man pre fv lao fil s =
   if debug then printf "statement ...@.";
   let jc_statement_node, post, lao =
     match s.jc_statement_node with
     | JCScall (vio, fi, el, s) ->
         if debug then printf "  JCScall ...@.";
+	let fi =
+	  if List.mem fi fil then
+	    begin
+	      let new_params =
+		List.map2
+		  (fun vi e ->
+		    match vi.jc_var_info_type with
+		    | JCTnative _ -> vi (* TODO ? *)
+		    | JCTlogic _ -> assert false (* should never happen *)
+		    | JCTenum _ -> vi (* TODO ? *)
+		    | JCTpointer (si, n1, n2) ->
+			if Num.le_num n1 n2 then
+			  begin
+			    match e.jc_expr_node with
+			    | JCEconst c ->
+				begin
+				  match c with
+				  | JCCvoid -> vi (* TODO ? *)
+				  | JCCnull ->
+				      calls_changed := true;
+				      { vi with jc_var_info_type = JCTpointer (si, Num.Int 0, Num.Int (-1)) }
+				  | JCCboolean _ -> vi (* TODO ? *)
+				  | JCCinteger _ -> vi (* TODO ? *)
+				  | JCCreal _ -> vi (* TODO ? *)
+				end
+			    | JCEvar vi ->
+				let v = 
+				  Hashtbl.fold
+				    (fun v t acc ->
+				      match t.jc_term_node with
+				      | JCTvar vi' ->
+					  if vi'.jc_var_info_name = vi.jc_var_info_name then
+					    v
+					  else
+					    acc
+				      | _ -> acc)
+				    terms_vars_table
+				    (Var.of_string "")
+				in
+				let interval = Abstract1.bound_variable man pre v in
+				let inf = Num.num_of_string (Scalar.to_string interval.inf) in
+				let sup = Num.num_of_string (Scalar.to_string interval.sup) in
+				let n1 = Num.min_num n1 inf in
+				let n2 = Num.min_num n2 sup in
+				calls_changed := true;
+				{ vi with jc_var_info_type = JCTpointer (si, n1, n2) }
+			  | JCEbinary (e1, bop, e2) -> vi (* TODO ? *)
+			  | JCEunary (uop, e) -> vi (* TODO ? *)
+			  | JCEshift (e1, e2) -> vi (* TODO ? *)
+			  | JCEderef (e, fi) -> vi (* TODO ? *)
+			  | JCEinstanceof (e, si) -> vi (* TODO ? *)
+			  | JCEcast (e, si) -> vi (* TODO ? *)
+			  | JCErange_cast (ei, e) -> vi (* TODO ? *)
+			  | JCEif (e1, e2, e3) -> vi (* TODO ? *)
+			  | JCEoffset (ok, e, si) -> vi (* TODO ? *)
+			  | JCEalloc (e, si) -> vi (* TODO ? *)
+			  | JCEfree e -> vi (* TODO ? *)			
+			end
+		      else
+			(* the type is the more general => nothing to be done *)
+			vi
+		    | JCTnull -> vi (* TODO ? *))
+		  fi.jc_fun_info_parameters
+		  el
+	      in
+	      { fi with jc_fun_info_parameters = new_params }
+	    end
+	  else
+	    fi
+	in
+	let (_, fs, bo) = Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag in
+	Hashtbl.replace Jc_norm.functions_table fi.jc_fun_info_tag (fi, fs, bo);
         begin
           match vio with
           | None -> 
-	      (* TODO: add the post of f if any + check the parameters and store the info *)
+	      (* TODO: add the post of f if any + 
+		 check the parameters and store the info *)
 	      JCScall (None, fi, el, s), pre, lao
           | Some vi -> 
               begin
@@ -528,7 +605,7 @@ and statement man pre fv lao s =
 		      if fv then fresh_variable man (Abstract1.env pre) pre vi 
 		      else (Abstract1.env pre), pre
 		    in
-                    let s, post, lao = statement man pre fv lao s in
+                    let s, post, lao = statement man pre fv lao fil s in
                     JCScall (vio, fi, el, s), post, lao
 		| _ -> (* TODO?: add the post of fi to pre *)
 		    JCScall (vio, fi, el, s), pre, lao
@@ -562,7 +639,7 @@ and statement man pre fv lao s =
 	let sl, post, lao =
           List.fold_left
             (fun (sl, pre, lao) s ->
-              let s, post, lao = statement man pre fv lao s in
+              let s, post, lao = statement man pre fv lao fil s in
               (List.rev (s::(List.rev sl)), post, lao) ) 
             ([], pre, lao) 
             sl
@@ -576,7 +653,7 @@ and statement man pre fv lao s =
         begin
           match eo with
           | None ->
-              let s, post, lao = statement man pre fv lao s in
+              let s, post, lao = statement man pre fv lao fil s in
               (* TO DO ? : update env in pre *)
               JCSdecl (vi, eo, s), post, lao
           | Some e ->
@@ -594,7 +671,7 @@ and statement man pre fv lao s =
 		  None
 	      in
  (*             let post = Abstract1.meet_lincons_array man pre lincons in *)
-              let s, post, lao = statement man post fv lao s in
+              let s, post, lao = statement man post fv lao fil s in
               JCSdecl (vi, eo, s), post, lao
         end;
     | JCSif (e, s1, s2) ->
@@ -608,14 +685,14 @@ and statement man pre fv lao s =
 	      let absvalue = Abstract1.of_lincons_array man env lincons in
 	      if debug then printf "if condition: %a@." Abstract1.print absvalue;
 	      let if_pre = Abstract1.meet man pre absvalue in
-	      let s1, post1, lao = statement man if_pre fv lao s1 in
+	      let s1, post1, lao = statement man if_pre fv lao fil s1 in
 	      (* Step 2: else branch *)
 	      let env, pre, strl = expr man (Abstract1.env pre) pre (not_expr e) in
 	      let lincons = Parser.lincons1_of_lstring env strl in
 	      let absvalue = Abstract1.of_lincons_array man env lincons in
 	      if debug then printf "else condition: %a@." Abstract1.print absvalue;
 	      let else_pre = Abstract1.meet man pre absvalue in
-	      let s2, post2, lao = statement man else_pre fv lao s2 in
+	      let s2, post2, lao = statement man else_pre fv lao fil s2 in
 	      (* Step 3: join the two branches *)
 	      Abstract1.change_environment_with man post1 (Abstract1.env pre) false;
 	      Abstract1.change_environment_with man post2 (Abstract1.env pre) false;
@@ -623,12 +700,12 @@ and statement man pre fv lao s =
 	      JCSif (e, s1, s2), post, lao
 	  | Some la -> (* the *if* is actually a *loop condition* *)
 	      if debug then printf "   the if is a loop_condition @.";
-	      loop_condition man pre e s1 s2 la
+	      loop_condition man pre e s1 s2 la fil
 	end
     | JCSloop (la, s) ->
         if debug then printf "  JCSloop ...@.";
 	let s, post, la = 
-	  let s, post, lao = statement man pre fv (Some la) s in
+	  let s, post, lao = statement man pre fv (Some la) fil s in
 	  s, post, 
 	  match lao with 
 	  | None -> assert false (* should never happen *) 
@@ -642,7 +719,7 @@ and statement man pre fv lao s =
 	JCSreturn (t, e), pre, lao
     | JCStry (sb, catchl, sf) ->
 	if debug then printf "  JCStry ...@.";
-	let sb, post, lao = statement man pre true lao sb in
+	let sb, post, lao = statement man pre true lao fil sb in
 	let catchl, postl =
 	  List.fold_left
 	    (fun (acc1, acc2) (ei, vio, s) ->
@@ -651,13 +728,13 @@ and statement man pre fv lao s =
 		| None -> Abstract1.env post, post
 		| Some vi -> fresh_variable man (Abstract1.env post) post vi
 	      in
-	      let s, post, lao = statement man post true lao s in
+	      let s, post, lao = statement man post true lao fil s in
 	      (ei, vio, s)::acc1, post::acc2)
 	    ([], [])
 	    catchl
 	in
 	let pref = Abstract1.join_array man (Array.of_list (post::postl)) in
-	let sf, post, lao = statement man pref true lao sf in
+	let sf, post, lao = statement man pref true lao fil sf in
 	JCStry (sb, catchl, sf), post, lao
     | JCSthrow (ei, eo) ->
         if debug then printf "  JCSthrow ...@.";
@@ -668,21 +745,19 @@ and statement man pre fv lao s =
 	JCSunpack (si1, e, si2), pre, lao
   in
   { s with jc_statement_node = jc_statement_node }, post, lao
-;;
+									   ;;
 
 *)
-
-let code_function fi slo = assert false
-(*
-  if debug then printf "code_function...@.";
+									   
+let code_function fi bo = assert false
+(*  if debug then printf "code_function...@.";
   if verbose then printf "  function %s@." fi.jc_fun_info_name;
   try
     (* let man = Box.manager_alloc () in *) (* Intervalles abstract domain *)
     let man = Oct.manager_alloc () in (* Octagon abstract domain *)
     (* let man = Polka.manager_alloc_strict () in *) (* Polyhedra abstract domain *)
     let env = Environment.make [||] [||] in
-
-
+    
     (* add global variables as abstract variables in env *)
     let vars =
       Hashtbl.fold
@@ -704,10 +779,8 @@ let code_function fi slo = assert false
         fi.jc_fun_info_parameters
     in
     let env = Environment.add env (Array.of_list params) [||] in
-
-    (* TODO?: add precondition if any *)
     
-    match slo with
+    match bo with
     | None -> None
     | Some sl ->
 	(* annotation inference on the function body *)
@@ -715,15 +788,47 @@ let code_function fi slo = assert false
 	  (fst
 	     (List.fold_left
 		(fun (sl, pre) s ->
-		  let s, post, _ = statement man pre true None s in
+		  let s, post, _ = statement man pre true None fi.jc_fun_info_calls s in
 		  (List.rev (s::(List.rev sl)), post)) 
-		([], Abstract1.top man env) 
+		([], Abstract1.top man env)
 		sl))
   with Manager.Error e ->
     Manager.print_exclog std_formatter e;
-    slo
+    bo
 ;;
+
+
+let rec calls_infer fi fs bo =
+  let bo = code_function fi bo in
+  let (fi, _, _) = Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag in
+  Hashtbl.replace Jc_norm.functions_table fi.jc_fun_info_tag (fi, fs, bo);
+  List.iter
+    (fun fi ->
+      let fi, fs, bo =
+	try 
+	  Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag
+	with Not_found -> assert false (* should never happen *)
+      in
+      calls_infer fi fs bo)
+    fi.jc_fun_info_calls
+;;
+
 *)
+
+let rec main_function fi fs bo = assert false
+(*  calls_infer fi fs bo;
+  if !calls_changed then 
+    main_function fi fs bo
+  else
+    ()
+;;
+
+
+(* TODO : cas appels récursifs (direct ou indirect) *)
+
+
+*)
+
 
 (*
 Local Variables: 

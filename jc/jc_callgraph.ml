@@ -126,7 +126,6 @@ let compute_logic_calls f t =
 let compute_calls f s b = 
   let (a,b) = List.fold_left statement ([],[]) b in
   f.jc_fun_info_calls <- b
-
       
 module LogicCallGraph = struct 
   type t = (int, (logic_info * term_or_assertion)) Hashtbl.t 
@@ -190,17 +189,17 @@ let compute_components table =
   Jc_options.lprintf "******************************\n";
   Array.iteri 
     (fun i l -> 
-       Jc_options.lprintf "Component %d:\n%a@." i
-	 (print_list newline 
-	    (fun fmt f -> fprintf fmt " %s calls: %a\n" f.jc_fun_info_name
-		 (print_list comma 
-		    (fun fmt f -> fprintf fmt "%s" f.jc_fun_info_name))
-		 f.jc_fun_info_calls))
-	 l)
+      Jc_options.lprintf "Component %d:\n%a@." i
+	(print_list newline 
+	   (fun fmt f -> fprintf fmt " %s calls: %a\n" f.jc_fun_info_name
+	       (print_list comma 
+		  (fun fmt f -> fprintf fmt "%s" f.jc_fun_info_name))
+	       f.jc_fun_info_calls))
+	l)
     tab_comp;
   tab_comp
-
-
+    
+    
 
 
 (*

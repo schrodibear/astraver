@@ -7,7 +7,7 @@ type Purse = {
 }	
 
 
-unit credit(Purse[..] this, integer s) 
+unit credit(Purse[0] this, integer s) 
   requires s >= 0;
   behavior amount_credited:
     assigns this.balance;
@@ -16,7 +16,7 @@ unit credit(Purse[..] this, integer s)
     this.balance += s;
 }
 
-unit withdraw(Purse[..] this, integer s) 
+unit withdraw(Purse[0] this, integer s) 
   requires s >= 0 && s <= this.balance;
   behavior amount_withdrawn:
     assigns this.balance;
@@ -25,7 +25,7 @@ unit withdraw(Purse[..] this, integer s)
   this.balance -= s;
 }
 
-integer test1(Purse[..] p1, Purse[..] p2)
+integer test1(Purse[0] p1, Purse[0] p2)
   /* requires p1 != p2; */
   behavior result_is_nul:
     assigns p1.balance,p2.balance;
@@ -40,7 +40,7 @@ integer test1(Purse[..] p1, Purse[..] p2)
     
 exception NoCreditException of unit
 
-unit withdraw2(Purse[..] this, integer s) 
+unit withdraw2(Purse[0] this, integer s) 
   requires s >= 0;
   behavior amount_withdrawn:
      assigns this.balance;
@@ -59,7 +59,7 @@ unit withdraw2(Purse[..] this, integer s)
     }
 }	
  
-boolean test2(Purse[..] p) 
+boolean test2(Purse[0] p) 
   behavior ok_iff_enough_balance:
     assigns p.balance ;
     ensures \result <==> \old(p.balance) >= 1000;
@@ -78,8 +78,9 @@ unit main()
   behavior main:
     ensures true;
 {
-    Purse[1] p = new Purse[1];
-    credit(p, 10);
+    // Purse[1] p = new Purse[1];
+    //    credit(p, 10);
+    credit(null, 42);
 }
 
 

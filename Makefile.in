@@ -75,12 +75,12 @@ APRONLIB = -I /usr/lib
 
 APRONOPTLDFLAGS = \
 -verbose -ccopt "$(LCFLAGS)" \
-# bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
+#bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
 -cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
 
 APRONBYTLDFLAGS = \
 -verbose -ccopt "$(LCFLAGS)" \
-# bigarray.cma gmp.cma apron.cma box.cma polka.cma \
+#bigarray.cma gmp.cma apron.cma box.cma polka.cma \
 -cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
 
 COQC7  = @COQC7@

@@ -174,7 +174,7 @@ let make_fun_info name ty =
     jc_fun_info_return_type = ty;
     jc_fun_info_calls = [];
     jc_fun_info_logic_apps = [];
-    jc_fun_info_effects = empty_fun_effect; 
+    jc_fun_info_effects = empty_fun_effect;
  }
 
 

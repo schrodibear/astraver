@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.13 2007-06-19 15:42:33 bardou Exp $ *)
+(* $Id: jc_fenv.mli,v 1.14 2007-08-09 18:04:59 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -59,21 +59,20 @@ type logic_info =
       mutable jc_logic_info_calls : logic_info list;
     }
 
-type fun_info =
-    {
-      jc_fun_info_tag : int;
-      jc_fun_info_name : string;
-      jc_fun_info_return_type : jc_type;
-      mutable jc_fun_info_parameters : var_info list;
-      mutable jc_fun_info_calls : fun_info list;
-      mutable jc_fun_info_logic_apps : logic_info list;
-      mutable jc_fun_info_effects : fun_effect;
-    }
+type fun_info = {
+    jc_fun_info_tag : int;
+    jc_fun_info_name : string;
+    jc_fun_info_return_type : jc_type;
+    mutable jc_fun_info_parameters : var_info list;
+    mutable jc_fun_info_calls : fun_info list;
+    mutable jc_fun_info_logic_apps : logic_info list;
+    mutable jc_fun_info_effects : fun_effect;
+  }
 
 
 
 (*
-Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
-End: 
-*)
+  Local Variables: 
+  compile-command: "make -C .. bin/jessie.byte"
+  End: 
+ *)

@@ -29,6 +29,8 @@ open Jc_fenv
 
 val code_function : fun_info -> statement list option -> statement list option
 
+val main_function : fun_info -> fun_spec -> statement list option -> unit
+
 
 (*
 Local Variables: 
