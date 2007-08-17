@@ -1966,11 +1966,15 @@ let rec decl d =
 	       (* Nicolas: 
 		  this was printed by default... 
 		  i put it in debug mode but don't know it's the right way to do so *)
-	       if Jc_options.debug then printf "%a" printf_label_tree (LabelBlock lz);
-	       statement_list (("\\result",vi)::param_env) ([],lz) body
+	       (* Yannick: jc_options cannot be exported, and jc_typing must 
+		  --> to use log here, move it out of jc_options 
+		  if Jc_options.debug then 
+		    printf "%a" printf_label_tree (LabelBlock lz); 
+	        *)
+		 statement_list (("\\result",vi)::param_env) ([],lz) body
 	    ) body
 	in
-	Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
+	  Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDrecfuns pdecls ->
         (* first pass: adding function names *)
 	List.iter (fun d -> match d.jc_pdecl_node with

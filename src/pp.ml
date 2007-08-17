@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.9 2007-07-06 07:45:28 marche Exp $ i*)
+(*i $Id: pp.ml,v 1.10 2007-08-17 15:15:03 moy Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -48,7 +48,7 @@ let print_list_or_default default sep print fmt = function
 let comma fmt () = fprintf fmt ",@ "
 let underscore fmt () = fprintf fmt "_"
 let semi fmt () = fprintf fmt ";@ "
-let space fmt () = fprintf fmt "@ "
+let space fmt () = fprintf fmt " "
 let alt fmt () = fprintf fmt "|@ "
 let newline fmt () = fprintf fmt "@\n"
 let arrow fmt () = fprintf fmt "@ -> "

@@ -192,18 +192,18 @@ let location fmt = function
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
 
 let behavior fmt (id,b) =
-  fprintf fmt "@[<v 2>behavior %s:@\n" id;
+  fprintf fmt "@\n@[<v 2>behavior %s:" id;
   Option_misc.iter
-    (fun a -> fprintf fmt "assumes %a;@\n" assertion a) 
+    (fun a -> fprintf fmt "@\nassumes %a;" assertion a) 
     b.jc_behavior_assumes;
   Option_misc.iter 
-    (fun locs -> fprintf fmt "assigns %a;@\n" 
+    (fun locs -> fprintf fmt "@\nassigns %a;" 
        (print_list_or_default "\\nothing" comma location) locs)
     b.jc_behavior_assigns;
-  fprintf fmt "ensures %a;@]@\n" assertion b.jc_behavior_ensures
+  fprintf fmt "@\nensures %a;@]" assertion b.jc_behavior_ensures
   
 let print_spec fmt s =
-  fprintf fmt "@[<v 2>  requires @[%a@];@ " assertion s.jc_fun_requires;
+  fprintf fmt "@\n@[<v 2>  requires @[%a@];" assertion s.jc_fun_requires;
   List.iter (behavior fmt) s.jc_fun_behavior;
   fprintf fmt "@]"
 
@@ -278,49 +278,49 @@ let rec expr fmt e =
 let rec statement fmt s =
   match s.jc_tstatement_node with
     | JCTSreturn (t,e) ->
-	fprintf fmt "return %a;@\n" expr e
+	fprintf fmt "@\nreturn %a;" expr e
     | JCTSreturn_void ->
-	fprintf fmt "return;@\n"
+	fprintf fmt "@\nreturn;"
     | JCTSunpack (_, _, _) -> assert false (* TODO *) 
     | JCTSpack (_, _, _) -> assert false (* TODO *) 
     | JCTSthrow (_, _) -> assert false (* TODO *) 
     | JCTStry (_, _, _) -> assert false (* TODO *) 
     | JCTSgoto lab -> 
-	fprintf fmt "goto %s;@\n" lab
+	fprintf fmt "@\ngoto %s;" lab
     | JCTSlabel (lab, s) -> 
-	fprintf fmt "%s:@\n%a@\n" lab statement s
+	fprintf fmt "@\n%s:%a" lab statement s
     | JCTScontinue lab -> 
-	fprintf fmt "continue %s;@\n" lab
+	fprintf fmt "@\ncontinue %s;" lab
     | JCTSbreak lab -> 
-	fprintf fmt "break %s;@\n" lab
+	fprintf fmt "@\nbreak %s;" lab
     | JCTSwhile (e, la, s)-> 
-	fprintf fmt "@[while (%a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
+	fprintf fmt "@\n@[while (%a)@\ninvariant %a;@\nvariant %a;%a@]"
 	  expr e assertion la.jc_loop_invariant term la.jc_loop_variant
 	  block [s]
     | JCTSfor (cond, updates, loop_annot, body)-> 
-	fprintf fmt "@[for ( ; %a ; %a)@\ninvariant %a;@\nvariant %a;@\n%a@]@\n"
+	fprintf fmt "@\n@[for ( ; %a ; %a)@\ninvariant %a;@\nvariant %a;%a@]"
 	  expr cond (print_list comma expr) updates
 	  assertion loop_annot.jc_loop_invariant 
 	  term loop_annot.jc_loop_variant
 	  block [body]
     | JCTSif (e, s1, s2)->
-	fprintf fmt "@[if (%a)@ %a@ else@ %a@]@\n"
+	fprintf fmt "@\n@[if (%a)@ %a@ else@ %a@]"
 	  expr e statement s1 statement s2
     | JCTSdecl (vi, None, s)-> 
-	fprintf fmt "%a %s;@\n%a" Jc_typing.print_type vi.jc_var_info_type
+	fprintf fmt "@\n%a %s;%a" Jc_typing.print_type vi.jc_var_info_type
 	  vi.jc_var_info_name statement s
     | JCTSdecl (vi, Some e, s)-> 
-	fprintf fmt "%a %s = %a;@\n%a" 
+	fprintf fmt "@\n%a %s = %a;%a" 
 	  Jc_typing.print_type vi.jc_var_info_type 
 	  vi.jc_var_info_name expr e statement s
     | JCTSassert(None,a)-> 
-	fprintf fmt "assert %a;@\n" assertion a
+	fprintf fmt "@\nassert %a;" assertion a
     | JCTSassert(Some n,a)-> 
-	fprintf fmt "assert %s: %a;@\n" n assertion a
-    | JCTSexpr e -> fprintf fmt "%a;@\n" expr e
+	fprintf fmt "@\nassert %s: %a;" n assertion a
+    | JCTSexpr e -> fprintf fmt "@\n%a;" expr e
     | JCTSblock l -> block fmt l
     | JCTSswitch (e, csl) ->
-	fprintf fmt "@[switch (%a) {@\n@[<v 2>  %a@]@\n}@]"
+	fprintf fmt "@\n@[switch (%a) {@\n@[<v 2>  %a@]@\n}@]"
 	  expr e (print_list newline case) csl
 	
 and case fmt (c,sl) =
@@ -336,16 +336,16 @@ and case fmt (c,sl) =
 and statements fmt l = List.iter (statement fmt) l
 
 and block fmt b =
-  fprintf fmt "@[<v 0>{@ @[<v 2>  ";
+  fprintf fmt "@\n@[<v 0>{@[<v 2>  ";
   statements fmt b;
-  fprintf fmt "@]@ }@]"
+  fprintf fmt "@]@\n}@]"
 
 
 let param fmt vi =
   fprintf fmt "%a %s" Jc_typing.print_type vi.jc_var_info_type vi.jc_var_info_name
 
 let field fmt fi =
-  fprintf fmt "%a %s;@\n" 
+  fprintf fmt "@\n%a %s;" 
     Jc_typing.print_type fi.jc_field_info_type fi.jc_field_info_name
 
 let term_or_assertion fmt = function
@@ -361,32 +361,32 @@ let term_or_assertion fmt = function
 let rec print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
-	fprintf fmt "@[%a %s(@[%a@])@\n%a@\n%a@]@\n@." Jc_typing.print_type ty id
+	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." Jc_typing.print_type ty id
 	  (print_list comma param) params 
 	  print_spec spec 
-	  (print_option_or_default ";" block) body
+	  (print_option_or_default "@\n;" block) body
     | JCenum_type_def(id,min,max) ->
-	fprintf fmt "@[type %s = %s..%s@]@\n@."
+	fprintf fmt "@\n@[type %s = %s..%s@]@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
     | JCstruct_def(id,fields) ->
-	fprintf fmt "@[<v 2>type %s = {@\n%a}@]@\n@."
+	fprintf fmt "@\n@[<v 2>type %s = {%a@]@\n}@."
 	  id (print_list space field) fields
     | JCrec_struct_defs dlist | JCrec_fun_defs dlist ->
-	print_list (fun fmt () -> fprintf fmt " and ") print_decl fmt dlist
+	print_list (fun fmt () -> fprintf fmt "@\nand") print_decl fmt dlist
     | JCvar_def(ty,id,init) ->
-	fprintf fmt "@[%a %s%a;@]@\n@." Jc_typing.print_type ty id
+	fprintf fmt "@\n@[%a %s%a;@]@." Jc_typing.print_type ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JCaxiom_def(id,a) ->
-	fprintf fmt "@[axiom %s : %a@]@\n@." id assertion a
+	fprintf fmt "@\n@[axiom %s : %a@]@." id assertion a
     | JClogic_fun_def(ty,id,[],JCReads l) ->
 	assert (l=[]);
-	fprintf fmt "@[logic %a %s@]@\n@." 
+	fprintf fmt "@\n@[logic %a %s@]@." 
 	  (print_option Jc_typing.print_type) ty id
     | JClogic_fun_def(ty,id,[],JCTerm t) ->
-	fprintf fmt "@[logic %a %s = %a@]@\n@." 
+	fprintf fmt "@\n@[logic %a %s = %a@]@." 
 	  (print_option Jc_typing.print_type) ty id term t
     | JClogic_fun_def(ty,id,params,body) ->
-	fprintf fmt "@[logic %a %s(@[%a@]) %a@]@\n@." 
+	fprintf fmt "@\n@[logic %a %s(@[%a@]) %a@]@." 
 	  (print_option Jc_typing.print_type) ty 
 	  id (print_list comma param) params
 	  term_or_assertion body 
