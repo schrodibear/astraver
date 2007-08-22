@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.38 2007-07-28 11:15:59 nrousset Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.39 2007-08-22 11:13:41 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -103,6 +103,7 @@ rule token = parse
 *)
   | "exception"             { EXCEPTION }
   | "false"                 { CONSTANT (JCCboolean false) }
+  | "finally"               { FINALLY }
 (*
   | "float"                 { FLOAT }
 *)

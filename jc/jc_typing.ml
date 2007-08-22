@@ -1364,7 +1364,14 @@ let rec statement env lz s =
 	    JCTSthrow(ei, Some te), lz
 	  else
 	    typing_error e.jc_pexpr_loc "%a type expected" print_type tei
-      | JCPSthrow (id, None) -> assert false (* should never happen *)
+      | JCPSthrow (id, None) ->
+	  let ei =
+	    try Hashtbl.find exceptions_table id.jc_identifier_name 
+	    with Not_found ->
+	      typing_error id.jc_identifier_loc 
+		"undeclared exception %s" id.jc_identifier_name
+	  in
+	  JCTSthrow(ei, None), lz
       | JCPStry (s, catches, finally) -> 
 	  let lz1,lz2,lz3,lz4 = match lz with
 	    | before,LabelBlock b1::LabelBlock b2::LabelBlock b3::after ->

@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.57 2007-07-17 10:40:39 romain Exp $ */
+/* $Id: jc_parser.mly,v 1.58 2007-08-22 11:13:41 moy Exp $ */
 
 %{
 
@@ -82,8 +82,8 @@
 /* if else return while break for fo break continue case switch default goto */
 %token IF ELSE RETURN WHILE FOR DO BREAK CONTINUE CASE SWITCH DEFAULT GOTO
 
-/* exception of throw try catch */
-%token EXCEPTION OF THROW TRY CATCH NEW FREE
+/* exception of throw try catch finally new free */
+%token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE
 
 /* pack unpack assert */
 %token PACK UNPACK ASSERT
@@ -132,6 +132,9 @@
 
 %nonassoc PRECIF
 %nonassoc ELSE
+
+%nonassoc PRECTRY
+%nonassoc FINALLY
 
 %nonassoc PRECLOGIC
 %nonassoc EQ
@@ -620,6 +623,13 @@ expression:
     { locate_expr (JCPEtagequality($3, $5)) }
 ;
 
+expression_opt: 
+| /* $\varepsilon$ */
+    { None }
+| expression
+    { Some $1 }
+;
+
 tag:
 | identifier
     { locate_tag (JCPTtag $1) }
@@ -816,10 +826,12 @@ statement:
 
 
 exception_statement:
-| THROW identifier expression SEMICOLON
-   { locate_statement (JCPSthrow($2,Some $3)) }
-| TRY statement CATCH identifier IDENTIFIER statement
+| THROW identifier expression_opt SEMICOLON
+   { locate_statement (JCPSthrow($2,$3)) }
+| TRY statement CATCH identifier IDENTIFIER statement %prec PRECTRY
    { locate_statement (JCPStry($2,[($4,$5,$6)],skip)) }
+| TRY statement CATCH identifier IDENTIFIER statement FINALLY statement
+   { locate_statement (JCPStry($2,[($4,$5,$6)],$8)) }
 ;
 
 /**********************************/

@@ -16,6 +16,7 @@ type jc_decl =
   | JCaxiom_def of string * assertion
   | JClogic_fun_def of jc_type option * string 
       * var_info list * term_or_assertion      
+  | JCexception_def of string * exception_info
 
 let const fmt c =
   match c with
@@ -283,8 +284,16 @@ let rec statement fmt s =
 	fprintf fmt "@\nreturn;"
     | JCTSunpack (_, _, _) -> assert false (* TODO *) 
     | JCTSpack (_, _, _) -> assert false (* TODO *) 
-    | JCTSthrow (_, _) -> assert false (* TODO *) 
-    | JCTStry (_, _, _) -> assert false (* TODO *) 
+    | JCTSthrow (ei, eo) ->
+	fprintf fmt "@\nthrow %s %a;" 
+	  ei.jc_exception_info_name 
+	  (print_option_or_default "()" expr) eo
+    | JCTStry (s, hl, fs) ->
+	fprintf fmt 
+	  "@\n@[<v 2>try %a@]%a@\n@[<v 2>finally%a@]"
+	  statement s 
+	  (print_list nothing handler) hl
+	  statement fs
     | JCTSgoto lab -> 
 	fprintf fmt "@\ngoto %s;" lab
     | JCTSlabel (lab, s) -> 
@@ -304,7 +313,7 @@ let rec statement fmt s =
 	  term loop_annot.jc_loop_variant
 	  block [body]
     | JCTSif (e, s1, s2)->
-	fprintf fmt "@\n@[if (%a)@ %a@ else@ %a@]"
+	fprintf fmt "@\n@[<v 2>if (%a) %a@]@\n@[<v 2>else %a@]"
 	  expr e statement s1 statement s2
     | JCTSdecl (vi, None, s)-> 
 	fprintf fmt "@\n%a %s;%a" Jc_typing.print_type vi.jc_var_info_type
@@ -332,6 +341,13 @@ and case fmt (c,sl) =
 	   fprintf fmt "default:"
        | _ -> assert false (* TODO *)) c
     block sl
+
+and handler fmt (ei,vio,s) =
+  fprintf fmt "@\n@[<v 2>catch %s %a %a@]"
+    ei.jc_exception_info_name 
+    (print_option_or_default "__dummy"
+      (fun fmt vi -> fprintf fmt "%s" vi.jc_var_info_name)) vio
+    statement s
 
 and statements fmt l = List.iter (statement fmt) l
 
@@ -364,7 +380,7 @@ let rec print_decl fmt d =
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." Jc_typing.print_type ty id
 	  (print_list comma param) params 
 	  print_spec spec 
-	  (print_option_or_default "@\n;" block) body
+	  (print_option_or_default "\n;" block) body
     | JCenum_type_def(id,min,max) ->
 	fprintf fmt "@\n@[type %s = %s..%s@]@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
@@ -378,6 +394,10 @@ let rec print_decl fmt d =
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JCaxiom_def(id,a) ->
 	fprintf fmt "@\n@[axiom %s : %a@]@." id assertion a
+    | JCexception_def(id,ei) ->
+	fprintf fmt "@\n@[exception %s of %a@]@." id
+	  (print_option_or_default "unit" Jc_typing.print_type)
+	  ei.jc_exception_info_type
     | JClogic_fun_def(ty,id,[],JCReads l) ->
 	assert (l=[]);
 	fprintf fmt "@\n@[logic %a %s@]@." 
