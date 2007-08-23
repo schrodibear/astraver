@@ -329,18 +329,17 @@ let rec statement fmt s =
     | JCTSexpr e -> fprintf fmt "@\n%a;" expr e
     | JCTSblock l -> block fmt l
     | JCTSswitch (e, csl) ->
-	fprintf fmt "@\n@[switch (%a) {@\n@[<v 2>  %a@]@\n}@]"
-	  expr e (print_list newline case) csl
+	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
+	  expr e (print_list nothing case) csl
 	
 and case fmt (c,sl) =
-  fprintf fmt "@[<hv 2>%a@\n%a@]"
-    (fun fmt c -> match c with
-       | [Some c] ->
-	   fprintf fmt "case %a:" expr c
-       | [None] ->
-	   fprintf fmt "default:"
-       | _ -> assert false (* TODO *)) c
-    block sl
+  let onecase fmt = function
+    | Some c ->
+	fprintf fmt "@\ncase %a:" expr c
+    | None ->
+	fprintf fmt "@\ndefault:"
+  in
+  fprintf fmt "%a%a" (print_list nothing onecase) c block sl
 
 and handler fmt (ei,vio,s) =
   fprintf fmt "@\n@[<v 2>catch %s %a %a@]"

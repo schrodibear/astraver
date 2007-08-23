@@ -73,6 +73,15 @@ let make_deref loc e fi =
     jc_expr_type = fi.jc_field_info_type;
     jc_expr_node = node; }
 
+let rec make_or_list_test loc = function
+  | [] -> false_const loc
+  | [e] -> e
+  | e :: r -> 
+      let node = JCEbinary (e, Blor, make_or_list_test loc r) in
+      { jc_expr_loc = loc; 
+        jc_expr_type = boolean_type;
+	jc_expr_node = node; } 
+
 (* expressions on the typed AST, not the normalized AST *)
 
 let make_tconst loc c =
@@ -585,27 +594,44 @@ and statement s =
 	  (make_decls loc (sl @ [unpack_stat]) tl).jc_statement_node
       | JCTSswitch (e, csl) ->
 	  let (sl,tl),e = expr e in
+	  let test_one_case ~(neg:bool) c = 
+	    (* test for case considered *)
+	    let (slc,tlc),c = expr c in
+	    assert (slc = [] && tlc = []); 
+	    if neg then
+	      make_int_binary loc e Bneq_int c
+	    else
+	      make_int_binary loc e Beq_int c
+	  in
+	  let collect_neg_case c = 
+	    List.fold_right (fun c l -> match c with
+	    | Some c -> test_one_case ~neg:true c :: l
+	    | None -> l) c []
+	  in
+	  let all_neg_cases csl = 
+	    List.fold_right (fun (c,_) l -> collect_neg_case c @ l) csl []
+	  in
+	  let test_one_case_or_default = function
+	    | Some c -> test_one_case ~neg:false c
+	    | None -> make_or_list_test loc (all_neg_cases csl)
+	  in
+	  let test_case_or_default c = 
+	    let el = List.map test_one_case_or_default c in
+	    make_or_list_test loc el
+	  in
 	  let ncsl = List.map 
-	    (fun (c,sl) -> match c with
-	       | [Some c] ->
-		   (* statement list in case considered *)
-		   let sl = List.map statement sl in
-		   let block_stat = make_block loc sl in
-		   let empty_block = make_block loc [] in
-		   (* test for case considered *)
-		   let (slc,tlc),c = expr c in
-		   assert (slc = [] && tlc = []); 
-		   let etest = 
-		     make_int_binary loc e Beq_int c
-		   in
-		   (* case translated into if-statement *)
-		   make_if loc etest block_stat empty_block 
-	       | [None] ->
-		   make_block loc (List.map statement sl)
-	       | _ -> assert false (* TODO *)
+	    (fun (c,sl) -> 
+	      (* statement list in case considered *)
+	      let sl = List.map statement sl in
+	      let block_stat = make_block loc sl in
+	      let empty_block = make_block loc [] in
+	      let etest = test_case_or_default c in
+	      (* case translated into if-statement *)
+	      make_if loc etest block_stat empty_block 
 	    ) csl 
 	  in
-	  let switch_stat = make_decls loc (sl @ ncsl) tl in
+	  let dummy_throw = make_throw loc loop_exit None in
+	  let switch_stat = make_decls loc (sl @ ncsl @ [dummy_throw]) tl in
 	  let catch_exit =
 	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
