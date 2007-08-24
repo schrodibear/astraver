@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.mli,v 1.86 2007-02-12 22:57:45 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.87 2007-08-24 13:26:58 couchot Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -31,6 +31,7 @@ open Types
 open Ptree
 open Ast
 open Cc
+
 
 val is_mutable : type_v -> bool
 val is_pure : type_v -> bool
@@ -282,5 +283,4 @@ val do_not_edit_above :
   after:(formatter -> unit) -> unit
 
 val file_formatter : (Format.formatter -> unit) -> (out_channel -> unit)
-
 

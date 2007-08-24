@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.116 2007-02-12 22:57:45 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.117 2007-08-24 13:26:58 couchot Exp $ i*)
 
 open Options
 open Ident
@@ -31,6 +31,7 @@ open Types
 open Ast
 open Ptree
 open Cc
+
 
 (*s Utility functions. *)
 
@@ -137,14 +138,14 @@ let post_name_from =
   let avoid = ref Idset.empty in
   reset_names_table := (fun () -> avoid := Idset.empty) :: !reset_names_table;
   function
-  | Anonymous ->
-      post_name ()
-  | Name id when is_post id ->
-      post_name ()
-  | Name id -> 
-      let id' = Ident.next_away id !avoid in
-      avoid := Idset.add id' !avoid;
-      id'
+    | Anonymous ->
+	post_name ()
+    | Name id when is_post id ->
+	post_name ()
+    | Name id -> 
+	let id' = Ident.next_away id !avoid in
+	avoid := Idset.add id' !avoid;
+	id'
 
 let warning s = Format.eprintf "warning: %s@\n" s
 let wprintf loc f = 
@@ -201,11 +202,11 @@ let force_wp_name = option_app (fun a -> { a with a_name = wp_name () })
 let force_name f a = { a with a_name = f a.a_name }
 
 (***
-let force_post_name = option_app (fun (q,l) -> (force_name post_name q, l))
+    let force_post_name = option_app (fun (q,l) -> (force_name post_name q, l))
 
-let force_bool_name = 
-  let f = function Name id -> id | Anonymous -> bool_name() in
-  option_app (fun (q,l) -> (force_name f q, l))
+    let force_bool_name = 
+    let f = function Name id -> id | Anonymous -> bool_name() in
+    option_app (fun (q,l) -> (force_name f q, l))
 ***)
 
 let force_loc l a = { a with a_loc = l }
@@ -214,15 +215,15 @@ let force_post_loc l (q,ql) =
   (force_loc l q, List.map (fun (x,a) -> (x, force_loc l a)) ql)
 
 (***
-let rec force_type_c_loc l c =
-  { c with 
-      c_result_type = force_type_v_loc l c.c_result_type;
-      c_pre = List.map (force_loc l) c.c_pre;
-      c_post = option_app (force_post_loc l) c.c_post }
+    let rec force_type_c_loc l c =
+    { c with 
+    c_result_type = force_type_v_loc l c.c_result_type;
+    c_pre = List.map (force_loc l) c.c_pre;
+    c_post = option_app (force_post_loc l) c.c_post }
 
-and force_type_v_loc l = function
-  | Arrow (bl, c) -> Arrow (bl, force_type_c_loc l c)
-  | (PureType _ | Ref _) as v -> v
+    and force_type_v_loc l = function
+    | Arrow (bl, c) -> Arrow (bl, force_type_c_loc l c)
+    | (PureType _ | Ref _) as v -> v
 ***)
 
 let default_post = anonymous Loc.dummy_position (Pvar Ident.default_post)
@@ -330,8 +331,8 @@ and tsubst_in_pattern s = function
   | PPat p -> PPat (tsubst_in_predicate s p)
 
 (***
-let subst_in_term s = 
-  tsubst_in_term (Idmap.map (fun id -> Tvar id) s)
+    let subst_in_term s = 
+    tsubst_in_term (Idmap.map (fun id -> Tvar id) s)
 ***)
 let rec subst_in_term s = function
   | Tvar x | Tderef x as t ->
@@ -342,10 +343,10 @@ let rec subst_in_term s = function
       t
 
 (***
-let subst_in_predicate s = 
-  tsubst_in_predicate (Idmap.map (fun id -> Tvar id) s)
-let subst_in_pattern s =
-  tsubst_in_pattern (Idmap.map (fun id -> Tvar id) s)
+    let subst_in_predicate s = 
+    tsubst_in_predicate (Idmap.map (fun id -> Tvar id) s)
+    let subst_in_pattern s =
+    tsubst_in_pattern (Idmap.map (fun id -> Tvar id) s)
 ***)
 
 let rec subst_in_predicate s = function
@@ -532,8 +533,8 @@ let pif a b c =
 
 let pand ?(is_wp=false) ?(is_sym=true) a b = 
   if a = Ptrue then b else if b = Ptrue then a else
-  if a = Pfalse || b = Pfalse then Pfalse else
-  Pand (is_wp, is_sym, a, b)
+    if a = Pfalse || b = Pfalse then Pfalse else
+      Pand (is_wp, is_sym, a, b)
 
 let wpand = pand ~is_wp:true
 
@@ -544,8 +545,8 @@ let wpands = pands ~is_wp:true
 
 let por a b =
   if a = Ptrue || b = Ptrue then Ptrue else
-  if a = Pfalse then b else if b = Pfalse then a else
-  Por (a, b)
+    if a = Pfalse then b else if b = Pfalse then a else
+      Por (a, b)
 
 let pors = List.fold_left por Pfalse
 
@@ -560,7 +561,7 @@ let pimplies ?(is_wp=false) p1 p2 =
 let wpimplies = pimplies ~is_wp:true
 
 (*s [simplify] only performs simplications which are Coq reductions.
-     Currently: only [if true] and [if false] *)
+  Currently: only [if true] and [if false] *)
 
 let rec simplify = function
   | Pif (Tconst (ConstBool true), a, _) -> simplify a
@@ -582,14 +583,14 @@ let rec eq_pure_type t1 t2 = match t1, t2 with
 let rec eq_term t1 t2 = match t1, t2 with
   | Tapp (id1, tl1, i1), Tapp (id2, tl2, i2) ->
       id1 == id2 && List.for_all2 eq_term tl1 tl2 
-      (* && List.for_all2 eq_pure_type i1 i2 ??? *)
+	(* && List.for_all2 eq_pure_type i1 i2 ??? *)
   | _ -> 
       t1 = t2
 
 let rec eq_predicate p1 p2 = match p1, p2 with
   | Papp (id1, tl1, i1), Papp (id2, tl2, i2) ->
       id1 == id2 && List.for_all2 eq_term tl1 tl2 
-      (* && List.for_all2 eq_pure_type i1 i2 ??? *)
+	(* && List.for_all2 eq_pure_type i1 i2 ??? *)
   | Pvar id1, Pvar id2 ->
       id1 == id2
   | Ptrue, Ptrue 
@@ -607,20 +608,20 @@ let rec eq_predicate p1 p2 = match p1, p2 with
       eq_term t1 t2 && eq_predicate a1 a2 && eq_predicate b1 b2
   | Pfpi (t1, a1, b1), Pfpi (t2, a2, b2) ->
       eq_term t1 t2 && a1 = a2 && b1 = b2
-  (* no alpha-equivalence *)
+	  (* no alpha-equivalence *)
   | (Forall _ | Exists _), _
   | _, (Forall _ | Exists _) ->
       false
-  (* equality up to names *)
+	(* equality up to names *)
   | Pnamed (_, p1), _ ->
       eq_predicate p1 p2
   | _, Pnamed (_, p2) ->
       eq_predicate p1 p2
-  (* outside of the diagonal -> false *)
+	(* outside of the diagonal -> false *)
   | (Pfpi _ | Forallb _ | Pnot _ | Piff _ | Por _ |
-     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue),
-    (Pfpi _ | Forallb _ | Pnot _ | Piff _ | Por _ |
-     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue) ->
+	 Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue),
+      (Pfpi _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+	   Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue) ->
       false
 
 (*s Debug functions *)
@@ -708,27 +709,26 @@ let do_not_edit_below ~file ~before ~sep ~after =
 
 let do_not_edit_above ~file ~before ~sep ~after =
   if not (Sys.file_exists file) then begin
-      let cout = open_out file in
-      file_formatter before cout;
-      output_string cout ("\n" ^ sep ^ "\n\n");
-      file_formatter after cout;
-      close_out cout
+    let cout = open_out file in
+    file_formatter before cout;
+    output_string cout ("\n" ^ sep ^ "\n\n");
+    file_formatter after cout;
+    close_out cout
   end else begin
-      let file_bak = file ^ ".bak" in
-      Sys.rename file file_bak;
-      let cout = open_out file in
-      file_formatter before cout;
-      output_string cout ("\n" ^ sep ^ "\n\n");
-      let cin = open_in file_bak in
-      begin try 
-	while input_line cin <> sep do () done;
-	while true do 
-	  let s = input_line cin in output_string cout (s ^ "\n")
-	done
-      with End_of_file -> 
-	()
-      end;
-      close_out cout
+    let file_bak = file ^ ".bak" in
+    Sys.rename file file_bak;
+    let cout = open_out file in
+    file_formatter before cout;
+    output_string cout ("\n" ^ sep ^ "\n\n");
+    let cin = open_in file_bak in
+    begin try 
+      while input_line cin <> sep do () done;
+      while true do 
+	let s = input_line cin in output_string cout (s ^ "\n")
+      done
+    with End_of_file -> 
+      ()
+    end;
+    close_out cout
   end
 
-      

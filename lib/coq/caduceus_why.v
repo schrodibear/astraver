@@ -59,37 +59,31 @@ Implicit Arguments shift.
 Admitted.
 Implicit Arguments sub_pointer.
 
-(*Why predicate*) Definition lt_pointer (A682:Set) (p1:(pointer A682))
-  (p2:(pointer A682))
+(*Why predicate*) Definition lt_pointer (A682:Set) (p1:(pointer A682)) (p2:(pointer A682))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) < (offset p2).
 Implicit Arguments lt_pointer.
 
-(*Why predicate*) Definition le_pointer (A683:Set) (p1:(pointer A683))
-  (p2:(pointer A683))
+(*Why predicate*) Definition le_pointer (A683:Set) (p1:(pointer A683)) (p2:(pointer A683))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) <= (offset p2).
 Implicit Arguments le_pointer.
 
-(*Why predicate*) Definition gt_pointer (A684:Set) (p1:(pointer A684))
-  (p2:(pointer A684))
+(*Why predicate*) Definition gt_pointer (A684:Set) (p1:(pointer A684)) (p2:(pointer A684))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) > (offset p2).
 Implicit Arguments gt_pointer.
 
-(*Why predicate*) Definition ge_pointer (A685:Set) (p1:(pointer A685))
-  (p2:(pointer A685))
+(*Why predicate*) Definition ge_pointer (A685:Set) (p1:(pointer A685)) (p2:(pointer A685))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) >= (offset p2).
 Implicit Arguments ge_pointer.
 
-(*Why predicate*) Definition valid (A686:Set) (a:alloc_table)
-  (p:(pointer A686)) := 0 <= (offset p) /\ (offset p) < (block_length a p).
+(*Why predicate*) Definition valid (A686:Set) (a:alloc_table) (p:(pointer A686))
+  := 0 <= (offset p) /\ (offset p) < (block_length a p).
 Implicit Arguments valid.
 
-(*Why predicate*) Definition valid_index (A687:Set) (a:alloc_table)
-  (p:(pointer A687)) (i:Z)
+(*Why predicate*) Definition valid_index (A687:Set) (a:alloc_table) (p:(pointer A687)) (i:Z)
   := 0 <= ((offset p) + i) /\ ((offset p) + i) < (block_length a p).
 Implicit Arguments valid_index.
 
-(*Why predicate*) Definition valid_range (A688:Set) (a:alloc_table)
-  (p:(pointer A688)) (i:Z) (j:Z)
+(*Why predicate*) Definition valid_range (A688:Set) (a:alloc_table) (p:(pointer A688)) (i:Z) (j:Z)
   := 0 <= ((offset p) + i) /\ ((offset p) + j) < (block_length a p).
 Implicit Arguments valid_range.
 
@@ -264,8 +258,8 @@ Admitted.
 Implicit Arguments pset_singleton.
 
 (*Why logic*) Definition pset_star :
-  forall (A1:Set), forall (A2:Set), (pset A2) -> (memory (pointer A1)
-  A2) -> (pset A1).
+  forall (A1:Set), forall (A2:Set), (pset A2)
+  -> (memory (pointer A1) A2) -> (pset A1).
 Admitted.
 Implicit Arguments pset_star.
 
@@ -289,8 +283,8 @@ Admitted.
 Implicit Arguments pset_range_right.
 
 (*Why logic*) Definition pset_acc_all :
-  forall (A1:Set), forall (A2:Set), (pset A2) -> (memory (pointer A1)
-  A2) -> (pset A1).
+  forall (A1:Set), forall (A2:Set), (pset A2)
+  -> (memory (pointer A1) A2) -> (pset A1).
 Admitted.
 Implicit Arguments pset_acc_all.
 
@@ -322,9 +316,7 @@ Implicit Arguments pset_union.
 Admitted.
 Implicit Arguments not_in_pset.
 
-(*Why predicate*) Definition not_assigns (A732:Set)
-  (A731:Set) (a:alloc_table) (m1:(memory A731 A732)) (m2:(memory A731 A732))
-  (l:(pset A732))
+(*Why predicate*) Definition not_assigns (A732:Set) (A731:Set) (a:alloc_table) (m1:(memory A731 A732)) (m2:(memory A731 A732)) (l:(pset A732))
   := (forall (p:(pointer A732)),
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments not_assigns.
@@ -590,14 +582,12 @@ Admitted.
    (forall (l:(pset A1)), (forall (m:(memory A2 A1)), (not_assigns a m m l)))).
 Admitted.
 
-(*Why predicate*) Definition valid_acc (A773:Set)
-  (A772:Set) (m1:(memory (pointer A772) A773))
+(*Why predicate*) Definition valid_acc (A773:Set) (A772:Set) (m1:(memory (pointer A772) A773))
   := (forall (p:(pointer A773)),
       (forall (a:alloc_table), ((valid a p) -> (valid a (acc m1 p))))).
 Implicit Arguments valid_acc.
 
-(*Why predicate*) Definition valid_acc_range (A775:Set)
-  (A774:Set) (m1:(memory (pointer A774) A775)) (size:Z)
+(*Why predicate*) Definition valid_acc_range (A775:Set) (A774:Set) (m1:(memory (pointer A774) A775)) (size:Z)
   := (forall (p:(pointer A775)),
       (forall (a:alloc_table),
        ((valid a p) -> (valid_range a (acc m1 p) 0 (size - 1))))).
@@ -612,17 +602,13 @@ Implicit Arguments valid_acc_range.
       ((valid_acc_range m1 size) -> ((valid a p) -> (valid a (acc m1 p)))))))).
 Admitted.
 
-(*Why predicate*) Definition separation1 (A779:Set)
-  (A778:Set) (m1:(memory (pointer A778) A779)) (m2:(memory (pointer A778)
-  A779))
+(*Why predicate*) Definition separation1 (A779:Set) (A778:Set) (m1:(memory (pointer A778) A779)) (m2:(memory (pointer A778) A779))
   := (forall (p:(pointer A779)),
       (forall (a:alloc_table),
        ((valid a p) -> ~((base_addr (acc m1 p)) = (base_addr (acc m2 p)))))).
 Implicit Arguments separation1.
 
-(*Why predicate*) Definition separation1_range1 (A781:Set)
-  (A780:Set) (m1:(memory (pointer A780) A781)) (m2:(memory (pointer A780)
-  A781)) (size:Z)
+(*Why predicate*) Definition separation1_range1 (A781:Set) (A780:Set) (m1:(memory (pointer A780) A781)) (m2:(memory (pointer A780) A781)) (size:Z)
   := (forall (p:(pointer A781)),
       (forall (a:alloc_table),
        ((valid a p) ->
@@ -631,8 +617,7 @@ Implicit Arguments separation1.
           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p)))))))).
 Implicit Arguments separation1_range1.
 
-(*Why predicate*) Definition separation1_range (A783:Set)
-  (A782:Set) (m:(memory (pointer A782) A783)) (size:Z)
+(*Why predicate*) Definition separation1_range (A783:Set) (A782:Set) (m:(memory (pointer A782) A783)) (size:Z)
   := (forall (p:(pointer A783)),
       (forall (a:alloc_table),
        ((valid a p) ->
@@ -645,17 +630,13 @@ Implicit Arguments separation1_range1.
              (base_addr (acc m (shift p i2)))))))))))).
 Implicit Arguments separation1_range.
 
-(*Why predicate*) Definition separation2 (A785:Set)
-  (A784:Set) (m1:(memory (pointer A784) A785)) (m2:(memory (pointer A784)
-  A785))
+(*Why predicate*) Definition separation2 (A785:Set) (A784:Set) (m1:(memory (pointer A784) A785)) (m2:(memory (pointer A784) A785))
   := (forall (p1:(pointer A785)),
       (forall (p2:(pointer A785)),
        (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2)))))).
 Implicit Arguments separation2.
 
-(*Why predicate*) Definition separation2_range1 (A787:Set)
-  (A786:Set) (m1:(memory (pointer A786) A787)) (m2:(memory (pointer A786)
-  A787)) (size:Z)
+(*Why predicate*) Definition separation2_range1 (A787:Set) (A786:Set) (m1:(memory (pointer A786) A787)) (m2:(memory (pointer A786) A787)) (size:Z)
   := (forall (p:(pointer A787)),
       (forall (q:(pointer A787)),
        (forall (a:alloc_table),

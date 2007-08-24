@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.34 2007-07-18 16:28:12 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.35 2007-08-24 13:26:58 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -249,7 +249,8 @@ let print_predicate_def fmt id (bl,p) =
   let tl = List.map snd bl in
   fprintf fmt "@[:extrapreds ((%a %a))@]@\n@\n" idents id pure_type_list tl;
   fprintf fmt "@[:assumption@ (forall %a@ (iff (%a %a)@ @[%a@]))@]@\n@\n" 
-    print_quantifiers bl idents id
+    print_quantifiers bl 
+    idents id
     (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_predicate p
 

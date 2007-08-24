@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.39 2007-07-23 13:05:28 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.40 2007-08-24 13:26:59 couchot Exp $ i*)
 
 open Printf
 open Options
@@ -157,14 +157,17 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
   else 
     let t = ref 0.0 in 
     let c = ref 0 in 
-    let k = ref 1 in
+    let vb = ref 0 in
+    let pb = ref 1 in
     let explicitRes = ref true in
     let r = ref (Valid 0.0) in 
     while ( !c == 0 && !explicitRes  &&  !t < float_of_int timeout) 
-    do
+    
+    (**** UPDATE THIS WITH A LOOP OVER PB AS DONE IN THE ARTICLE CouchotHubert07**)
 
+    do
       (* compute the new proof obligation *)
-      let cmd = sprintf "why --simplify --no-prelude --prune-hyp %d %s " !k f  in
+      let cmd = sprintf "why --simplify --no-prelude --prune-hyp %d %d %s " !pb !vb f  in
       let t'',c',out = timed_sys_command ~debug (int_of_float t') cmd in
     
       let cmd = sprintf "Simplify %s"  f_for_simplify in
@@ -173,7 +176,7 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
       t :=  !t +. t'';
       c := c';
       r := result_sort t'' out ;
-      k := !k+1 ;
+      vb := !vb+1 ;
       explicitRes := match !r with 
 	  Valid _ | Timeout _ | ProverFailure _  -> false 
 	| Invalid _ | CannotDecide  _ ->   true ;
@@ -191,7 +194,6 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
     res
           
 	  
-      
       
     
 

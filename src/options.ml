@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.96 2007-07-23 13:18:55 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.97 2007-08-24 13:26:58 couchot Exp $ i*)
 
 open Format
 
@@ -57,7 +57,8 @@ let prelude_ = ref true
 let arrays_ = ref true
 let floats_ = ref false
 let pruning_ = ref false 
-let pruning_hyp_ = {contents = -1}
+let pruning_hyp_v_ = {contents = -1}
+let pruning_hyp_p_ = {contents = -1}
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
@@ -392,8 +393,10 @@ let files =
 	termination_ := Total; parse args
     | ("--prune-theory" | "-prune-theory") :: args ->
 	 pruning_ := true ; parse args
-    | ("--prune-hyp" | "-prune-hyp"):: t :: args ->
-	 pruning_hyp_ := int_of_string t ; parse args
+    | ("--prune-hyp" | "-prune-hyp"):: tp :: tv :: args ->
+	pruning_hyp_p_ := int_of_string tp ; 
+	pruning_hyp_v_ := int_of_string tv ; 
+	parse args
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
     | ("-exp" | "--exp") :: s :: args ->
@@ -462,7 +465,8 @@ let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
 let pruning = !pruning_
-let pruning_hyp = !pruning_hyp_
+let pruning_hyp_p = !pruning_hyp_p_
+let pruning_hyp_v = !pruning_hyp_v_
 let modulo = !modulo_
 let defExpanding = !defExpanding_
 

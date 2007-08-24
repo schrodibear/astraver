@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.131 2007-06-15 11:48:43 marche Exp $ i*)
+(*i $Id: main.ml,v 1.132 2007-08-24 13:26:58 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -46,7 +46,7 @@ open Logic_decl
 let declarationQueue = Queue.create ()
 
 let reset () =
-  Queue.clear declarationQueue ;
+  (*Queue.clear declarationQueue ;*)
   Vcg.logs := []; 
   match prover () with
     | Pvs -> Pvs.reset ()
@@ -77,32 +77,34 @@ let store_decl_into_a_queue d  =
 let push_decl d = 
   add_loc d;
   if (not pruning) then
-    let pushing = 
-      match prover () with
-	| Pvs -> Pvs.push_decl
-	| Coq _ -> Coq.push_decl 
-	| HolLight -> Holl.push_decl 
-	| Mizar -> Mizar.push_decl
-	| Isabelle -> Isabelle.push_decl
-	| Hol4 -> Hol4.push_decl
-	| Gappa -> Gappa.push_decl 
-	| Why | MultiWhy -> Pretty.push_decl
-	| Dispatcher ->Dispatcher.push_decl
-	| Harvey -> Harvey.push_decl
-	| Simplify -> Simplify.push_decl
-	| Zenon -> Zenon.push_decl
-	| CVCLite -> Cvcl.push_decl
-	| SmtLib -> Smtlib.push_decl 
-    in
-    if defExpanding != NoExpanding  then 
-      let decl = (PredDefExpansor.push d) in 
-      List.iter pushing decl ;
-      List.iter store_decl_into_a_queue decl ; 
-    else
-      begin 
-	store_decl_into_a_queue d ; 
-	pushing d 
-      end
+    begin 
+      let pushing = 
+	match prover () with
+	  | Pvs -> Pvs.push_decl
+	  | Coq _ -> Coq.push_decl 
+	  | HolLight -> Holl.push_decl 
+	  | Mizar -> Mizar.push_decl
+	  | Isabelle -> Isabelle.push_decl
+	  | Hol4 -> Hol4.push_decl
+	  | Gappa -> Gappa.push_decl 
+	  | Why | MultiWhy -> Pretty.push_decl
+	  | Dispatcher ->Dispatcher.push_decl
+	  | Harvey -> Harvey.push_decl
+	  | Simplify -> Simplify.push_decl
+	  | Zenon -> Zenon.push_decl
+	  | CVCLite -> Cvcl.push_decl
+	  | SmtLib -> Smtlib.push_decl 
+      in
+      if defExpanding != NoExpanding  then 
+	let decl = (PredDefExpansor.push d) in 
+	List.iter pushing decl ;
+	List.iter store_decl_into_a_queue decl ; 
+      else
+	begin 
+	  store_decl_into_a_queue d ;
+	  pushing d 
+	end
+    end
   else
     if defExpanding != NoExpanding then
       List.iter store_decl_into_a_queue (PredDefExpansor.push d)
@@ -116,8 +118,8 @@ let push_obligations =
     (fun (loc,id,s) -> 
        let dg = Dgoal (loc, id, generalize_sequent s) in
        let dg = 
-	 if pruning_hyp != -1 then 
-	   Hypotheses_filtering.reduce dg
+	 if pruning_hyp_v != -1 then 
+	   Hypotheses_filtering.reduce dg declarationQueue
 	 else
 	   dg 
        in
@@ -170,8 +172,6 @@ let output fwe =
     @q is the queue of  theory that will be modified
 **)
 let encode q = 
-  Printf.printf "Encode"; 
-  
   let callEncoding d =  match prover () with
     | Pvs -> Pvs.push_decl d
     | Coq _ -> Coq.push_decl d
@@ -370,22 +370,16 @@ let interp_decl ?(prelude=false) d =
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
 	let dg = Dgoal (loc, Ident.string id, s) in
-	if Options.pruning_hyp != -1 then
-	  begin
-	    push_decl (Hypotheses_filtering.reduce dg)
-	  end
+	if Options.pruning_hyp_v != -1 then
+	  push_decl (Hypotheses_filtering.reduce dg declarationQueue)
 	else	  
-	  begin
-	    push_decl (dg)
-	  end
+	  push_decl (dg)
     | TypeDecl (loc, ext, vl, id) ->
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in
 	if not ext then 
-	  begin
-	    push_decl (Dtype (loc, vl, Ident.string id))
-	  end
-
+	  push_decl (Dtype (loc, vl, Ident.string id))
+	    
 (*s Prelude *)
 
 let load_file ?(prelude=false) f =
