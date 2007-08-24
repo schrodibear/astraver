@@ -135,7 +135,7 @@ let rec assertion fmt a =
     | JCAinstanceof (_, _)-> assert false (* TODO *)
     | JCAold _-> assert false (* TODO *)
     | JCAquantifier (q,vi, a)-> 
-	fprintf fmt "@[(\\%a %a %s;@ %a)@]"
+	fprintf fmt "@[<v 3>(\\%a %a %s;@ %a)@]"
 	  quantifier q
 	  Jc_typing.print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
