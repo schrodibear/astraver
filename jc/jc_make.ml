@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.11 2007-06-20 14:40:09 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.12 2007-08-25 13:20:28 moy Exp $ i*)
 
 open Format
 open Pp
@@ -43,7 +43,8 @@ let cvcl fmt f = fprintf fmt "cvcl/%s_why.cvc" f
 let harvey fmt f = fprintf fmt "harvey/%s_why.rv" f
 let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
 let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
-let why_goals fmt f = fprintf fmt "why/%s_ctx.why" f
+(* Replaced ctx.why extension in why_goals by why.why. *)
+let why_goals fmt f = fprintf fmt "why/%s_why.why" f
 let isabelle fmt f = fprintf fmt "isabelle/%s_why.thy" f 
 
 let print_files = print_list (fun fmt () -> fprintf fmt "\\@\n  ")
@@ -95,7 +96,7 @@ let generic f targets =
        fprintf fmt "simplify/%%_why.sx: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(JESSIELIBFILE) why/$*.why@\n@\n";
        
-       fprintf fmt "ergo: %a@\n@\n" (print_files why_goals) targets;
+       fprintf fmt "ergo: %a@\n" (print_files why_goals) targets;
        fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "why/%%_why.why: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
