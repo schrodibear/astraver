@@ -17,6 +17,9 @@ type jc_decl =
   | JClogic_fun_def of jc_type option * string 
       * var_info list * term_or_assertion      
   | JCexception_def of string * exception_info
+  | JCglobinv_def of string * assertion
+  | JClogic_const_def of jc_type * string * term option
+  | JClogic_type_def of string
 
 let const fmt c =
   match c with
@@ -393,10 +396,17 @@ let rec print_decl fmt d =
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JCaxiom_def(id,a) ->
 	fprintf fmt "@\n@[axiom %s : %a@]@." id assertion a
+    | JCglobinv_def(id,a) ->
+	fprintf fmt "@\n@[invariant %s : %a@]@." id assertion a
     | JCexception_def(id,ei) ->
 	fprintf fmt "@\n@[exception %s of %a@]@." id
 	  (print_option_or_default "unit" Jc_typing.print_type)
 	  ei.jc_exception_info_type
+    | JClogic_const_def(ty,id,None) ->
+	fprintf fmt "@\n@[logic %a %s@]@." Jc_typing.print_type ty id
+    | JClogic_const_def(ty,id,Some t) ->
+	fprintf fmt "@\n@[logic %a %s = %a@]@." Jc_typing.print_type ty id
+	  term t
     | JClogic_fun_def(ty,id,[],JCReads l) ->
 	assert (l=[]);
 	fprintf fmt "@\n@[logic %a %s@]@." 
@@ -409,6 +419,8 @@ let rec print_decl fmt d =
 	  (print_option Jc_typing.print_type) ty 
 	  id (print_list comma param) params
 	  term_or_assertion body 
+    | JClogic_type_def id ->
+	fprintf fmt "@\n@[logic type %s@]@." id
    
 let rec print_decls fmt d =
   match d with

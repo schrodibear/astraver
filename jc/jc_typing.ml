@@ -207,7 +207,7 @@ let find_field loc ty f allow_mutable =
 let find_fun_info id = Hashtbl.find functions_env id
 
 let find_logic_info id = Hashtbl.find logic_functions_env id
-    
+
 (* types *)
 
 let type_type t =
@@ -505,7 +505,10 @@ let rec term env e =
 	  begin
 	    match e1.jc_pexpr_node with
 	      | JCPEvar id ->
-		  begin
+		  if List.length args = 0 then
+		    let vi = Hashtbl.find logic_constants_env id in
+		    vi.jc_var_info_type, JCTvar vi
+		  else begin
 		    try
 		      let pi = find_logic_info id in
 		      let tl =
@@ -1949,6 +1952,16 @@ let add_logic_fundecl (ty,id,pl) =
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
 
+let add_logic_constdecl (ty,id) =
+  try
+    let vi = Hashtbl.find logic_constants_env id in
+    vi.jc_var_info_type, vi 
+  with Not_found ->
+    let ty = type_type ty in
+    let vi = var ~static:true ty id in
+    Hashtbl.add logic_constants_env id vi;
+    ty, vi
+
 let rec decl d =
   match d.jc_pdecl_node with
     | JCPDvar(ty,id,init) ->
@@ -1987,6 +2000,8 @@ let rec decl d =
 	List.iter (fun d -> match d.jc_pdecl_node with
 		     | JCPDfun(ty,id,pl,_,_) ->
 			 ignore (add_fundecl (ty,id,pl))
+		     | JCPDlogic(Some ty,id,[],_) ->
+			 ignore (add_logic_constdecl (ty,id))
 		     | JCPDlogic(ty,id,pl,_) ->
 			 ignore (add_logic_fundecl (ty,id,pl))
 		     | _ -> assert false
@@ -2072,7 +2087,7 @@ let rec decl d =
 	let tt = type_type t in
 	Hashtbl.add exceptions_table id (exception_info (Some tt) id)
     | JCPDlogic(Some ty, id, [], body) ->
-	let ty = type_type ty in
+	let ty,vi = add_logic_constdecl (ty,id) in
 	let t = match body with
 	  | JCPReads reads -> 
 	      assert (reads =[]);
@@ -2084,10 +2099,7 @@ let rec decl d =
 		  "inferred type differs from declared type" 
 	      else Some t
 	in
-	let vi = var ~static:true ty id in
-	Hashtbl.add logic_constants_env id vi;
 	Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t)
-	
     | JCPDlogic(None, id, pl, body) ->
 	let param_env,ty,pi = add_logic_fundecl (None,id,pl) in
 	let p = match body with
