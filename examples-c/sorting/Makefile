@@ -1,9 +1,9 @@
 
-CADUCEUS=../../bin/caduceus.opt
+CADUCEUS=../../bin/caduceus.opt -why-opt -split-user-conj
 CADUCEUSLIB=$(shell pwd)/../../lib
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
-FILES = selection
+FILES = quicksort selection
 
 TODO = selection
 
@@ -20,6 +20,12 @@ simplify:
 	for f in $(FILES); do \
 	  $(EXECCADUCEUS) $$f.c; \
 	  make -f $$f.makefile simplify; \
+	done
+
+gui:
+	for f in $(FILES); do \
+	  $(EXECCADUCEUS) $$f.c; \
+	  make -f $$f.makefile gui; \
 	done
 
 cvcl:
