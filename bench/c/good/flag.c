@@ -37,7 +37,7 @@ typedef enum { BLUE, WHITE, RED } color;
   @ assigns t[i],t[j]
   @ ensures t[i] == \old(t[j]) && t[j] == \old(t[i])
   @*/
-void swap(int t[], int i, int j) {
+void swap(color t[], int i, int j) {
   int tmp = t[i];
   t[i] = t[j];
   t[j] = tmp;
@@ -53,7 +53,7 @@ void swap(int t[], int i, int j) {
   @            isMonochrome(t,b,r-1,WHITE) &&
   @            isMonochrome(t,r,n-1,RED))
   @*/
-void flag(int t[], int n) {
+void flag(color t[], int n) {
   int b = 0;
   int i = 0;
   int r = n;

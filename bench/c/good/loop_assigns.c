@@ -46,3 +46,14 @@ void f2() {
   for (i = 0; i < 10; i++) t[i] = 0;
 }
 
+/*@ assigns t[0 .. 9]
+    ensures \forall int k; 0 <= k < 10 => t[k] == 0 */
+void f3() {
+  int i;
+  /*@ invariant 0 <= i <= 10 && \forall int k; 0 <= k < i => t[k] == 0
+    @ loop_assigns t[0 .. i-1]
+    @ variant 10-i
+    @*/
+  for (i = 0; i < 10; i++) t[i] = 0;
+}
+
