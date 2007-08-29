@@ -136,7 +136,7 @@ let rec assertion fmt a =
     | JCAif (_, _, _)-> assert false (* TODO *)
     | JCAbool_term t -> term fmt t
     | JCAinstanceof (_, _)-> assert false (* TODO *)
-    | JCAold _-> assert false (* TODO *)
+    | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAquantifier (q,vi, a)-> 
 	fprintf fmt "@[<v 3>(\\%a %a %s;@ %a)@]"
 	  quantifier q
