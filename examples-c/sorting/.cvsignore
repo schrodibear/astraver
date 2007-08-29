@@ -4,3 +4,4 @@ simplify
 *.log
 why
 cvcl
+gwhy.cache semantic.cache
