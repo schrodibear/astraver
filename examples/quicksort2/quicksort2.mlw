@@ -44,3 +44,9 @@ let quicksort (t:int array) =
   {} 
   (quick_rec t 0 ((array_length_ t)-1))
   { sorted_array(t, 0, array_length(t)-1) and permut(t, t@) }
+
+(*
+Local Variables: 
+compile-command: "gwhy -split-user-conj quicksort2.mlw"
+End: 
+*)

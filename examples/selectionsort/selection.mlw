@@ -34,3 +34,9 @@ let selection () =
     done
   end
   { sorted_array(t, 0, array_length(t)-1) and permut(t, t@) }
+
+(*
+Local Variables: 
+compile-command: "gwhy -split-user-conj selection.mlw"
+End: 
+*)

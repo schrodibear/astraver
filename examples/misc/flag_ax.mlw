@@ -95,3 +95,9 @@ let dutch_flag (t:color_array ref) (n:int) =
       monochrome(t,b,r,white) and 
       monochrome(t,r,n,red))
     and permutation(t,t@,0,n-1) }
+
+(*
+Local Variables: 
+compile-command: "gwhy flag_ax.mlw"
+End: 
+*)
