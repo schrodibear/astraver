@@ -173,10 +173,24 @@ int max() {
   @*/
 int pop() {
   int res = heap[0];
-  int i = 0;
-  heap[0] = heap[--size];
-  while (i < size) {
-    
+  if (--size) {
+    int v = heap[size]; // value to insert
+    int i = 0;          // candidate position
+    /*@ invariant
+      @   0 <= i <= size // TODO: complete invariant
+      @ loop_assigns
+      @   heap[..]
+      @ variant
+      @   size - i
+      @*/
+    while (i < size) {
+      int j = 2*i+1;
+      if (j < size-1 && heap[j] < heap[j+1]) j++;
+      if (v >= heap[j]) break;
+      heap[i] = heap[j];
+      i = j;
+    }
+    heap[i] = v;
   }
   return res;
 }

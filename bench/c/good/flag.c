@@ -81,3 +81,9 @@ void flag(color t[], int n) {
   }
 }
 
+    
+/*
+Local Variables: 
+compile-command: "make flag.gui"
+End: 
+*/
