@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.7 2007-02-28 07:45:36 couchot Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.8 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -484,7 +484,7 @@ let launcher decl = match decl with
   | Dpredicate_def (_, id, d) as ax -> (*Printf.printf  "Dpredicate_def %s \n"  id ; *)managesPredicate id ax d.scheme_type
   | Dfunction_def (_, id, d)  as ax -> (*Printf.printf  "Dfunction_def %s \n"  id ; *)managesFunction  id ax d.scheme_type
   | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)managesAxiom  id ax p.scheme_type
-  | Dgoal (_, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)managesGoal id ax s.Env.scheme_type 
+  | Dgoal (_, expl, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)managesGoal id ax s.Env.scheme_type 
 
 
 
@@ -495,7 +495,7 @@ let display q =
   | Dpredicate_def (_, id, d) -> Printf.printf  "%s \n" id
   | Dfunction_def (_, id, d) -> Printf.printf  "%s \n" id
   | Daxiom (_, id, p)          -> Printf.printf  "%s \n"  id
-  | Dgoal (_, id, s)   -> Printf.printf  "%s \n"  id
+  | Dgoal (_, expl, id, s)   -> Printf.printf  "%s \n"  id
   in
   Queue.iter displayMatch q 
 

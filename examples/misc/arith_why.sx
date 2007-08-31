@@ -128,8 +128,8 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -137,8 +137,8 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|))))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -223,12 +223,12 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; mult_po_1, Why obligation from file "", line 0, characters 0-0:
+;; mult_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0)) (AND (>= x 0) (EQ (+ 0 (* x y)) (* x y))))))
 
-;; mult_po_2, Why obligation from file "", line 0, characters 0-0:
+;; mult_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -240,7 +240,7 @@
 (IMPLIES (EQ (int_mod a 2) 1)
 (FORALL (p0) (IMPLIES (EQ p0 (+ p b)) (NEQ 2 0))))))))))))
 
-;; mult_po_3, Why obligation from file "", line 0, characters 0-0:
+;; mult_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -261,7 +261,7 @@
 (IMPLIES (EQ b0 (* 2 b))
 (AND (AND (>= a0 0) (EQ (+ p0 (* a0 b0)) (* x y))) (AND (<= 0 a) (< a0 a)))))))))))))))))))))
 
-;; mult_po_4, Why obligation from file "", line 0, characters 0-0:
+;; mult_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -271,7 +271,7 @@
 (IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
 (IMPLIES (NEQ a 0) (IMPLIES (NEQ (int_mod a 2) 1) (NEQ 2 0))))))))))
 
-;; mult_po_5, Why obligation from file "", line 0, characters 0-0:
+;; mult_po_5, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -290,7 +290,7 @@
 (IMPLIES (EQ b0 (* 2 b))
 (AND (AND (>= a0 0) (EQ (+ p (* a0 b0)) (* x y))) (AND (<= 0 a) (< a0 a)))))))))))))))))))
 
-;; mult_po_6, Why obligation from file "", line 0, characters 0-0:
+;; mult_po_6, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))

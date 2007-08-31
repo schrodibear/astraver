@@ -30,6 +30,24 @@ open Jc_ast
 open Jc_invariants
 open Output
 
+(* locs table *)
+
+let locs_table = Hashtbl.create 97
+let name_counter = ref 0
+let reg_loc ?name loc =
+  let id = match name with
+    | None ->  
+	incr name_counter;
+	"JC_" ^ string_of_int !name_counter
+    | Some n -> n
+  in
+  Jc_options.lprintf "recording location for id '%s'@." id;
+  Hashtbl.add locs_table id loc;
+  id
+
+
+(* consts *)
+
 let const c =
   match c with
     | JCCvoid -> Prim_void
@@ -642,18 +660,22 @@ let rec statement ~threats s =
   let statement = statement ~threats in
   let expr = expr ~threats in
   match s.jc_statement_node with
-    | JCScall(vio,f,l,s) -> 
+    | JCScall(vio,f,l,block) -> 
+	let loc = s.jc_statement_loc in
 	let el = 
 	  try
 	    List.map2 (expr_coerce ~threats) f.jc_fun_info_parameters l 
 	  with Invalid_argument _ -> assert false
 	in
-	let call = make_app f.jc_fun_info_name el in
+	let call = 
+	  Label(reg_loc loc, 
+		make_app f.jc_fun_info_name el) 
+	in
 	begin
 	  match vio with
 	    | None -> 
 		(* check that associated statement is empty *)
-		begin match s.jc_statement_node with
+		begin match block.jc_statement_node with
 		  | JCSblock [] -> () (* ok *)
 		  | _ -> assert false
 		end;
@@ -662,7 +684,7 @@ let rec statement ~threats s =
 		| _ -> let tmp = tmp_var_name () in Let(tmp,call,Void)
 		end
 	    | Some vi ->
-		Let(vi.jc_var_info_final_name,call, statement s)
+		Let(vi.jc_var_info_final_name,call, statement block)
 	end
     | JCSassign_var (vi, e2) -> 
 	let e2' = expr e2 in
@@ -691,9 +713,12 @@ let rec statement ~threats s =
     | JCSloop (la, s) -> 
 	While(Cte(Prim_bool true), assertion None "init" la.jc_loop_invariant,
 	      Some (term None "" la.jc_loop_variant,None), [statement s])
-    | JCSassert(None, a) -> Assert(assertion None "init" a, Void)
+    | JCSassert(None, a) -> 
+	Assert(LNamed(reg_loc a.jc_assertion_loc,
+		      assertion None "init" a), Void)
     | JCSassert(Some name, a) -> 
-	Assert(LNamed(name,assertion None "init" a), Void)
+	Assert(LNamed(reg_loc ~name a.jc_assertion_loc,
+		      assertion None "init" a), Void)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  let e',t = match e with
@@ -991,6 +1016,7 @@ let tr_fun f spec body acc =
       f.jc_fun_info_parameters *)
       LTrue
   in
+  let requires = spec.jc_fun_requires in
   let requires = 
     List.fold_right
       (fun v acc ->
@@ -1028,8 +1054,9 @@ let tr_fun f spec body acc =
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
-      (assertion None "" spec.jc_fun_requires)
+      (LNamed(reg_loc requires.jc_assertion_loc,assertion None "" requires))
   in
+  (* Jc_options.lprintf "DEBUG: tr_fun 1@."; *)
   (* adding invariants to requires *)
   let requires = make_and requires invariants in
   let (normal_behaviors,excep_behaviors) =
@@ -1038,7 +1065,8 @@ let tr_fun f spec body acc =
 	 let post =
            make_and
 	     (make_and
-	       (assertion None "" b.jc_behavior_ensures)
+	       (LNamed(reg_loc b.jc_behavior_ensures.jc_assertion_loc,
+		       assertion None "" b.jc_behavior_ensures))
 	       (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns))
              invariants
 	 in
@@ -1146,8 +1174,7 @@ let tr_fun f spec body acc =
       excep_behaviors []
   in
   (* DEBUG *)
-  (* List.iter (Printf.printf "*** %s\n") reads;
-  flush stdout; *)
+  (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
   (* why parameter for calling the function *)
   let ret_type = tr_type f.jc_fun_info_return_type in
   let why_param = 
@@ -1223,74 +1250,79 @@ let tr_fun f spec body acc =
 	  )::acc
 	in
 	(* user behaviors *)
-	let body = statement_list ~threats:false body in
-	let tblock =
-	  append
-	    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-	    (assume_all_invariants f.jc_fun_info_parameters)
-	    body
-	in
-	let tblock = 
-	  if !return_void then
-	    Try(append tblock (Raise(jessie_return_exception,None)),
-		jessie_return_exception,None,Void)
+	let acc = 
+	  if spec.jc_fun_behavior = [] then
+	    acc
 	  else
-	    let e = any_value f.jc_fun_info_return_type in
-	    Let_ref(jessie_return_variable,e,
-		    Try(append tblock Absurd,
-			jessie_return_exception,None,
-			Deref(jessie_return_variable)))
-	in
-	let tblock = make_label "init" tblock in
-	let tblock =
-	  List.fold_right
-	    (fun (mut_id,id) bl ->
-	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-	in
-	(* normal behaviors *)
-	let acc =
-	  List.fold_right
-	    (fun (id,b,e) acc ->
-	       let d =
-		 Def(
-		   f.jc_fun_info_name ^ "_ensures_" ^ id,
-		   Fun(
-		     params,
-		     requires,
-		     tblock,
-		     e,
-		     excep_posts_for_others None excep_behaviors
-		   )
-		 )
-	       in d::acc)
-	    normal_behaviors acc
-	in 
-	(* redefine [tblock] for use in exception functions *)
-(* CLAUDE: pourquoi ??????
-	let tblock = make_label "init" tblock in
-	let tblock =
-	  List.fold_right
-	    (fun (mut_id,id) bl ->
-	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-	in
-*)
-	(* exceptional behaviors *)
-	let acc =
-	  ExceptionMap.fold
-	    (fun ei l acc ->
+	    let body = statement_list ~threats:false body in
+	    let tblock =
+	      append
+		(*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+		(assume_all_invariants f.jc_fun_info_parameters)
+		body
+	    in
+	    let tblock = 
+	      if !return_void then
+		Try(append tblock (Raise(jessie_return_exception,None)),
+		    jessie_return_exception,None,Void)
+	      else
+		let e = any_value f.jc_fun_info_return_type in
+		Let_ref(jessie_return_variable,e,
+			Try(append tblock Absurd,
+			    jessie_return_exception,None,
+			    Deref(jessie_return_variable)))
+	    in
+	    let tblock = make_label "init" tblock in
+	    let tblock =
+	      List.fold_right
+		(fun (mut_id,id) bl ->
+		   Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+	    in
+	    (* normal behaviors *)
+	    let acc =
+	      List.fold_right
+		(fun (id,b,e) acc ->
+		   let d =
+		     Def(
+		       f.jc_fun_info_name ^ "_ensures_" ^ id,
+		       Fun(
+			 params,
+			 requires,
+			 tblock,
+			 e,
+			 excep_posts_for_others None excep_behaviors
+		       )
+		     )
+		   in d::acc)
+		normal_behaviors acc
+	    in 
+	    (* redefine [tblock] for use in exception functions *)
+	    (* CLAUDE: pourquoi ??????
+	       let tblock = make_label "init" tblock in
+	       let tblock =
 	       List.fold_right
-		 (fun (id,b,e) acc ->
-		    let d =
-		      Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
-			  Fun(params,
-			      requires,
-			      tblock,
-			      LTrue,
-			      (ei.jc_exception_info_name,e) :: 
-				excep_posts_for_others (Some ei) excep_behaviors))
-		    in d::acc)
-		 l acc)
-	    excep_behaviors acc
+	       (fun (mut_id,id) bl ->
+	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+	       in
+	    *)
+	    (* exceptional behaviors *)
+	    let acc =
+	      ExceptionMap.fold
+		(fun ei l acc ->
+		   List.fold_right
+		     (fun (id,b,e) acc ->
+			let d =
+			  Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
+			      Fun(params,
+				  requires,
+				  tblock,
+				  LTrue,
+				  (ei.jc_exception_info_name,e) :: 
+				    excep_posts_for_others (Some ei) excep_behaviors))
+			in d::acc)
+		     l acc)
+		excep_behaviors acc
+	    in acc
 	in why_param::acc
 
 let tr_logic_type id acc = Type(id,[])::acc
@@ -1355,6 +1387,27 @@ let tr_variable vi e acc =
   else
     let t = tr_base_type vi.jc_var_info_type in
     Logic(false,vi.jc_var_info_name,[],t)::acc
+
+open Format
+open Lexing
+
+let abs_fname f =
+  if Filename.is_relative f then
+    Filename.concat (Unix.getcwd ()) f 
+  else f
+
+let print_locs fmt =
+  Hashtbl.iter 
+    (fun id (b,e) ->
+       fprintf fmt "[%s]@\n" id;
+       fprintf fmt "file = \"%s\"@\n" (abs_fname b.pos_fname);
+       let l = b.pos_lnum in
+       let fc = b.pos_cnum - b.pos_bol in
+       let lc = e.pos_cnum - b.pos_bol in
+       fprintf fmt "line = %d@\n" l;
+       fprintf fmt "begin = %d@\n" fc;
+       fprintf fmt "end = %d@\n@\n" lc)
+    locs_table
 
 	   
 (*

@@ -114,6 +114,7 @@ let push = function
 			if Options.defExpanding = All then 
 			  expand ps.scheme_type else 
 			    ps.scheme_type ))::[]
-  | Dgoal (loc, ident, ps) ->
-      Dgoal (loc, ident, Env.generalize_sequent (expand_sequent ps.scheme_type))::[]
+  | Dgoal (loc, expl, ident, ps) ->
+      Dgoal (loc, expl, ident, 
+	     Env.generalize_sequent (expand_sequent ps.scheme_type))::[]
 

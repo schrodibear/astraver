@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.48 2006-11-24 13:38:11 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.49 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -245,9 +245,10 @@ let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
-let print_obligation fmt loc o s = 
+let print_obligation fmt loc expl o s = 
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation_position loc;
-  fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
+  fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s;
+  fprintf fmt "@[%%%% %a@]@\n" Util.print_explanation expl
 
 let push_decl d = Encoding.push d
 
@@ -262,7 +263,7 @@ let output_elem fmt = function
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
+  | Dgoal (loc, expl, id, s) -> print_obligation fmt loc expl id s.Env.scheme_type
 
 let prelude_done = ref false
 let prelude fmt = 

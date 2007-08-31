@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.40 2006-11-24 13:38:12 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.41 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -48,8 +48,8 @@ let elem_q = Queue.create ()
 let reset () = Queue.clear elem_q
 
 let push_decl = function
-  | Dgoal (loc, id, s) -> 
-      Queue.add (Obligation (loc, id, s.Env.scheme_type)) elem_q
+  | Dgoal (loc, expl, id, s) -> 
+      Queue.add (Obligation (loc, expl, id, s.Env.scheme_type)) elem_q
   | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
@@ -277,13 +277,16 @@ let rec print_thesis fmt = function
   | Pand (_, _, t1, t2) -> fprintf fmt "%a@ %a" print_thesis t1 print_thesis t2
   | t -> fprintf fmt "@[thus %a@];" print_predicate t
 
-let reprint_obligation fmt loc id s =
+let reprint_obligation fmt loc expl id s =
   let s = s.Env.scheme_type in
   fprintf fmt "@[ :: %a @]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[ (*Why goal*) theorem %s:@\n @[%a@]@]@\n" id print_sequent s
+  (*;
+  fprintf fmt "@[ :: %a @]@\n@\n" Util.print_explanation expl
+  *)
 
-let print_obligation fmt loc id s =
-  reprint_obligation fmt loc id s;
+let print_obligation fmt loc expl id s =
+  reprint_obligation fmt loc expl id s;
   let t = snd s.Env.scheme_type in
   fprintf fmt "@[  :: FILL PROOF HERE@\n  @[%a@]@]@\n end;@\n" print_thesis t
 
@@ -310,7 +313,7 @@ struct
   let print_element fmt e = 
     begin match e with
       | Parameter _ -> assert false
-      | Obligation (loc, id, s) -> print_obligation fmt loc id s
+      | Obligation (loc, expl, id, s) -> print_obligation fmt loc expl id s
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate _ -> assert false (*TODO*)
@@ -321,7 +324,7 @@ struct
       
   let reprint_element fmt = function
     | Parameter _ -> assert false
-    | Obligation (loc, id, s) -> reprint_obligation fmt loc id s
+    | Obligation (loc, expl, id, s) -> reprint_obligation fmt loc expl id s
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate _ -> assert false (*TODO*)
@@ -360,7 +363,7 @@ end)
 let reset = Gen.reset
 
 let push_obligations = 
-  List.iter (fun (loc,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,l,s)))
+  List.iter (fun (loc,expl,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s)))
 
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))

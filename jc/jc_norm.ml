@@ -111,7 +111,11 @@ let make_assign_heap loc e1 fi e2 =
 let make_block loc sl =
   match sl with 
     | [s] -> s
-    | _ -> make_node loc (JCSblock sl)
+    | s :: l -> 
+	make_node s.jc_statement_loc (JCSblock sl)
+    | [] -> 
+	make_node loc (JCSblock sl)
+	
 
 let make_block_node loc sl snode =
   match sl with

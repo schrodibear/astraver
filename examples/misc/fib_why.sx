@@ -128,8 +128,8 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -137,8 +137,8 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|))))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -235,19 +235,19 @@
  ;; Why axiom F_n
  (FORALL (n) (IMPLIES (>= n 2) (EQ (F n) (+ (F (- n 1)) (F (- n 2)))))))
 
-;; fib1_po_1, Why obligation from file "", line 0, characters 0-0:
+;; fib1_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 1) (EQ 1 (F n)))))
 
-;; fib1_po_2, Why obligation from file "", line 0, characters 0-0:
+;; fib1_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0) (IMPLIES (> n 1) (AND (<= 0 n) (< (- n 1) n)))))
 
-;; fib1_po_3, Why obligation from file "", line 0, characters 0-0:
+;; fib1_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1) (IMPLIES (AND (<= 0 n) (< (- n 1) n)) (>= (- n 1) 0)))))
 
-;; fib1_po_4, Why obligation from file "", line 0, characters 0-0:
+;; fib1_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -256,7 +256,7 @@
 (FORALL (result)
 (IMPLIES (EQ result (F (- n 1))) (AND (<= 0 n) (< (- n 2) n)))))))))
 
-;; fib1_po_5, Why obligation from file "", line 0, characters 0-0:
+;; fib1_po_5, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -266,7 +266,7 @@
 (IMPLIES (EQ result (F (- n 1)))
 (IMPLIES (AND (<= 0 n) (< (- n 2) n)) (>= (- n 2) 0)))))))))
 
-;; fib1_po_6, Why obligation from file "", line 0, characters 0-0:
+;; fib1_po_6, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -279,7 +279,7 @@
 (FORALL (result0)
 (IMPLIES (EQ result0 (F (- n 2))) (EQ (+ result result0) (F n)))))))))))))
 
-;; fib2_aux_po_1, Why obligation from file "", line 0, characters 0-0:
+;; fib2_aux_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -288,7 +288,7 @@
          (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
 (IMPLIES (EQ x n) (EQ fx (F n))))))))
 
-;; fib2_aux_po_2, Why obligation from file "", line 0, characters 0-0:
+;; fib2_aux_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -297,7 +297,7 @@
          (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
 (IMPLIES (NEQ x n) (AND (<= 0 (- n x)) (< (- n (+ x 1)) (- n x)))))))))
 
-;; fib2_aux_po_3, Why obligation from file "", line 0, characters 0-0:
+;; fib2_aux_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -309,22 +309,22 @@
 (AND (AND (<= 1 (+ x 1)) (<= (+ x 1) n))
 (AND (EQ (+ fx fx_1) (F (+ x 1))) (EQ fx (F (- (+ x 1) 1))))))))))))
 
-;; fib2_po_1, Why obligation from file "", line 0, characters 0-0:
+;; fib2_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 1) (EQ 1 (F n)))))
 
-;; fib2_po_2, Why obligation from file "", line 0, characters 0-0:
+;; fib2_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
 (AND (AND (<= 1 1) (<= 1 n)) (AND (EQ 1 (F 1)) (EQ 1 (F (- 1 1))))))))
 
-;; fib3_po_1, Why obligation from file "", line 0, characters 0-0:
+;; fib3_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
 (AND (AND (<= 1 1) (<= 1 n)) (AND (EQ 1 (F 1)) (EQ 1 (F (- 1 1))))))))
 
-;; fib3_po_2, Why obligation from file "", line 0, characters 0-0:
+;; fib3_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
@@ -343,7 +343,7 @@
 (AND (AND (<= 1 k0) (<= k0 n)) (AND (EQ x0 (F k0)) (EQ y0 (F (- k0 1)))))
 (AND (<= 0 (- n k)) (< (- n k0) (- n k))))))))))))))))))
 
-;; fib3_po_3, Why obligation from file "", line 0, characters 0-0:
+;; fib3_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
@@ -353,22 +353,22 @@
 (IMPLIES (AND (AND (<= 1 k) (<= k n)) (AND (EQ x (F k)) (EQ y (F (- k 1)))))
 (IMPLIES (>= k n) (EQ x (F n))))))))))
 
-;; fib3_po_4, Why obligation from file "", line 0, characters 0-0:
+;; fib3_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 0) (EQ 1 (F n)))))
 
-;; fib4_po_1, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
 (IMPLIES (<= n 1) (EQ 1 (F n))))))
 
-;; fib4_po_2, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
 (IMPLIES (> n 1) (AND (<= 0 0) (< 0 (array_length t)))))))
 
-;; fib4_po_3, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -377,7 +377,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t 0 1)) (AND (<= 0 1) (< 1 (array_length t0))))))))))
 
-;; fib4_po_4, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -392,7 +392,7 @@
 (AND (EQ (array_length t1) (array_length t))
 (FORALL (i) (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))))))))))))
 
-;; fib4_po_5, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_5, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -411,7 +411,7 @@
          (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (<= k n) (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))))))))))))))))
 
-;; fib4_po_6, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_6, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -434,7 +434,7 @@
 (IMPLIES (EQ result (access t2 (- k 1)))
 (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2))))))))))))))))))))
 
-;; fib4_po_7, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_7, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -460,7 +460,7 @@
 (IMPLIES (EQ result0 (access t2 (- k 2)))
 (AND (<= 0 k) (< k (array_length t2)))))))))))))))))))))))
 
-;; fib4_po_8, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_8, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -495,7 +495,7 @@
 (FORALL (i) (IMPLIES (AND (<= 0 i) (< i k0)) (EQ (access t3 i) (F i))))))
 (AND (<= 0 (- (+ n 1) k)) (< (- (+ n 1) k0) (- (+ n 1) k)))))))))))))))))))))))))))))
 
-;; fib4_po_9, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_9, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -514,7 +514,7 @@
          (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (> k n) (AND (<= 0 n) (< n (array_length t2)))))))))))))))))
 
-;; fib4_po_10, Why obligation from file "", line 0, characters 0-0:
+;; fib4_po_10, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))

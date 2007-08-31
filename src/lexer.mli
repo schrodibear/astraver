@@ -22,11 +22,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mli,v 1.6 2007-06-15 11:48:43 marche Exp $ *)
+(* $Id: lexer.mli,v 1.7 2007-08-31 08:16:08 marche Exp $ *)
 
 exception Lexical_error of string
-
-val int_is_ident : bool ref
 
 val token : Lexing.lexbuf -> Parser.token
 

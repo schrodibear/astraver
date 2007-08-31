@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.12 2007-04-27 15:52:41 couchot Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.13 2007-08-31 08:16:08 marche Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -986,7 +986,7 @@ let rec push d =
 	       Env.empty_scheme (pred') in
 	     Queue.add (Daxiom (loc, ident, new_axiom)) queue
 	       (* A goal is a sequent : a context and a predicate and both have to be translated *)
-	 | Dgoal (loc, ident, s_sch) ->
+	 | Dgoal (loc, expl, ident, s_sch) ->
 	     let fv = Env.Vset.fold
 	       (fun tv acc -> 
 		  (tv.tag,  (bound_variable tvar))::acc)
@@ -1008,7 +1008,7 @@ let rec push d =
 	       Env.empty_scheme
 		 (ctxt,pred'
 		  ) in
-	     let temp = Dgoal (loc, ident, new_sequent) in
+	     let temp = Dgoal (loc, expl, ident, new_sequent) in
 	     Queue.add temp queue 
       )
   with

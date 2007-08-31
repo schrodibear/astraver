@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_rec.ml,v 1.8 2006-11-03 12:49:02 marche Exp $ i*)
+(*i $Id: encoding_rec.ml,v 1.9 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Options
 open Cc
@@ -295,7 +295,7 @@ let rec push d =
       Queue.add (Daxiom (loc, ident,
 			 Env.empty_scheme 
  			   (lifted fv (translate_eq [] pred_sch.Env.scheme_type)))) queue
-  | Dgoal (loc, ident, s_sch) ->
+  | Dgoal (loc, expl, ident, s_sch) ->
       let cpt = ref 0 in
       let (cel, pred) = s_sch.Env.scheme_type in
       let fv = Env.Vset.fold
@@ -367,7 +367,7 @@ let rec push d =
 	    lifted q (Forall(false, Ident.create a, Ident.create a, ut, [], p))
       in
       Queue.add (Dgoal 
-		   (loc, ident,
+		   (loc, expl, ident,
 		    Env.empty_scheme 
 		      (List.map 
 			 (fun s -> match s with 

@@ -437,10 +437,8 @@ and unifier_zone z1 z2 =
 	| _ -> assert false
     end
 
-let loc_name (b,e) =
-  let l = b.Lexing.pos_lnum in
-  let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol + 1 in
-  let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol + 1 in
+let loc_name loc =
+  let (f,l,fc,lc) = Loc.extract loc in
   Format.sprintf "line %d, characters %d-%d" l fc lc
 
 let unifier_type_why ?(var_name="?") tw1 tw2 =

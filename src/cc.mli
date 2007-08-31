@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cc.mli,v 1.20 2006-11-03 12:49:01 marche Exp $ i*)
+(*i $Id: cc.mli,v 1.21 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -96,4 +96,18 @@ type context_element =
 
 type sequent = context_element list * predicate
 
-type obligation = Loc.position * string * sequent
+type loc_predicate = Loc.position * predicate
+
+type vc_explain =
+  | VCEstring of string
+  | VCEabsurd
+  | VCEassert of loc_predicate list
+  | VCEpre of string * loc_predicate list 
+  | VCEpost of loc_predicate
+  | VCEwfrel
+  | VCEvardecr 
+  | VCEinvinit of loc_predicate
+  | VCEinvpreserv of loc_predicate 
+
+type obligation = Loc.position * vc_explain * string * sequent
+    (* loc, explanation, id, sequent *) 

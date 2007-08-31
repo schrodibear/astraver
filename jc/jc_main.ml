@@ -205,7 +205,7 @@ let main () =
 	in	       
 	(* production phase 3.5 : generation of global invariant predicates *)
 	let d_axioms = Jc_invariants.make_global_invariants d_axioms in
-	(* production phase 4 : generation of Why functions *)
+	Jc_options.lprintf "production phase 4 : generation of Why functions@.";
 	let d_funs = 
 	  Hashtbl.fold 
 	    (fun _ (f,s,b) acc ->
@@ -215,7 +215,7 @@ let main () =
 	    Jc_norm.functions_table
 	    d_axioms
 	in	       
-	(* production phase 5 : (invariants tools) *)
+	Jc_options.lprintf "production phase 5 : (invariants tools)@.";
 	let d_inv = d_funs in
 	(* production phase 5.1 : "assoc" declaration *)
 	(*let d_inv = Jc_invariants.assoc_declaration::d_funs in *)
@@ -251,12 +251,16 @@ let main () =
             Jc_typing.structs_table
             d_inv
         in
-	(* production phase 6 : produce Why file *)
+	(* production phase 6.1 : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 
 	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_inv)
 	  (Lib.file "why" (f ^ ".why"));
-	(* phase x : produce makefile *)
+	(* production phase 6.2 : produce locs file *)
+	Pp.print_in_file 
+	  Jc_interp.print_locs
+	  (Lib.file "." (f ^ ".loc"));
+	(* production phase 6.3 : produce makefile *)
 	Jc_make.makefile f
 
 

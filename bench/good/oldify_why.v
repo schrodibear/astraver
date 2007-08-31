@@ -17,7 +17,7 @@ Admitted.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma g_po_1 : 
   forall (t: (array Z)),
   forall (result: Z),

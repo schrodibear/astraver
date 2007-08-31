@@ -61,8 +61,9 @@ let rec strip_name = function
   | p -> p
 
 (* ... |- true *)
-let ptrue = function
+let rec ptrue = function
   | Ptrue -> True
+  | Pnamed(_,p) -> ptrue p
   | Pvar id when id == Ident.default_post -> True
   | _ -> raise Exit
 
@@ -627,9 +628,11 @@ let conj = match prover () with
 let asym_conj = Ident.create "why_asym_conj"
 let split_iff = Ident.create "why_split_iff"
 
+(*
 let name n = function
   | Pnamed _ as p -> p
   | p -> Pnamed (n, p)
+*)
 
 let rec split lvl ctx = function
   | Pand (wp, true, p1, p2) 
@@ -680,7 +683,7 @@ let rec split lvl ctx = function
   | Pnamed (n, p1) as concl ->
       begin match split lvl ctx p1 with
 	| [_],_ -> [ctx,concl], (function [pr] -> pr | _ -> assert false)
-	| gl,v -> List.map (fun (ctx,c) -> ctx, name n c) gl, v
+	| gl,v -> List.map (fun (ctx,c) -> ctx, Pnamed(n,c)) gl, v
       end
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)
@@ -780,10 +783,30 @@ let vcg base t =
 ***)
 
 let rec loc_for_pred = function
-  | Pnamed (s, _) -> begin try Loc.parse s with _ -> Loc.dummy_position end
+  | Pnamed (User s, _) -> begin try Loc.parse s with _ -> Loc.dummy_position end
   | Forall (_,_,_,_,_,p)
   | Pimplies (_,_,p)  -> loc_for_pred p
   | _ -> Loc.dummy_position
+
+let rec explain_for_pred = function
+  | Forall (_,_,_,_,_,p)
+  | Pimplies (_,_,p)  -> explain_for_pred p
+  | Pnamed(Internal n,p) -> 
+      begin
+	(*Format.eprintf "looking for named explanation '%s'@." n;*)
+	try
+	  let e = Hashtbl.find Wp.explanation_table n in
+	  (*Format.eprintf "found@.";*)
+	  e
+	with
+	    Not_found ->
+	      (*Format.eprintf "not found@.";*)
+	      explain_for_pred p	
+      end
+  | p -> 
+      fprintf str_formatter 
+	"unexplained assertion `%a'" print_predicate p;
+      VCEstring(flush_str_formatter()) 
 
 (* Proof obligations from the WP *)
 
@@ -792,6 +815,7 @@ let vcg_from_wp base w =
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
     let loc = loc_for_pred concl in
+    let explain = explain_for_pred concl in
     try
       discharge loc ctx concl
     with Exit -> begin
@@ -801,7 +825,7 @@ let vcg_from_wp base w =
       let sq = (ctx', concl) in
       log (snd loc) sq (Some id);
       (*Format.eprintf "Vcg.push_one: %a@." Loc.report_position loc;*)
-      po := (loc, id, sq) :: !po;
+      po := (loc,explain, id, sq) :: !po;
       Lemma (id, hyps_names ctx')
     end
   in
@@ -810,3 +834,8 @@ let vcg_from_wp base w =
   let prl = List.map push_one ol in
   List.rev !po, pr prl
 
+(*
+Local Variables: 
+compile-command: "make -C .. bin/why.byte"
+End: 
+*)

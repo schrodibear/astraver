@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic_decl.mli,v 1.7 2006-11-03 12:49:04 marche Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.8 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers
@@ -40,5 +40,5 @@ type t =
   | Dpredicate_def of loc * string * predicate_def scheme
   | Dfunction_def  of loc * string * function_def scheme
   | Daxiom         of loc * string * predicate scheme
-  | Dgoal          of loc * string * sequent scheme
+  | Dgoal          of loc * vc_explain * string * sequent scheme
 

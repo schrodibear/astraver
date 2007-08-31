@@ -17,7 +17,7 @@ Require Import Why.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p7_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -29,11 +29,11 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p8_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
-  x = 1 /\ x = 1.
+  (x = 1 /\ x = 1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -41,11 +41,11 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p9_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
-  x = 1 /\ x = 1.
+  (x = 1 /\ x = 1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -59,7 +59,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p13_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 2),
@@ -71,7 +71,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p13a_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -85,13 +85,13 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p14_po_1 : 
   forall (x: Z),
   forall (HW_2: x <> 1),
   forall (HW_4: x <> 2),
   forall (HW_6: x <> 3),
-  x <> 1 /\ x <> 2 /\ x <> 3.
+  (x <> 1 /\ x <> 2 /\ x <> 3).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -99,7 +99,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p15_po_1 : 
   forall (x: Z),
   forall (HW_2: x <> 0),
@@ -110,7 +110,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p16_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),
@@ -121,7 +121,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p17_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),

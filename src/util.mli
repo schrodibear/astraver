@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.56 2007-05-31 08:50:25 couchot Exp $ i*)
+(*i $Id: util.mli,v 1.57 2007-08-31 08:16:09 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -156,6 +156,8 @@ val print_logic_type : formatter -> logic_type -> unit
 
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
+val raw_explanation : formatter -> vc_explain -> unit
+val print_explanation : formatter -> vc_explain -> unit
 val print_assertion : formatter -> assertion -> unit
 val print_wp : formatter -> assertion option -> unit
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.22 2007-07-12 10:55:26 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.23 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -38,13 +38,13 @@ let add_elem e = stack := e :: !stack
 let oblig = Queue.create ()
 let oblig_h = Hashtbl.create 97
 
-let add_oblig ((_,id,_) as o) =
+let add_oblig ((_,_,id,_) as o) =
   let so = (List.rev !stack, o) in
   Queue.add so oblig ;
   Hashtbl.add oblig_h id so
 
 let push_decl = function
-  | Dgoal (loc, id, s) -> add_oblig (loc, id, s)
+  | Dgoal (loc, expl, id, s) -> add_oblig (loc, expl, id, s)
   | d -> add_elem d
 
 let iter f = Queue.iter (fun (_,o) -> f o) oblig
@@ -64,8 +64,8 @@ let push_elem p e =
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl e
   | Ergo -> Pretty.push_decl e
   | Graph -> Pretty.push_decl e
-let push_obligation p (loc, id, s) = 
-  let g = Dgoal (loc, id, s) in
+let push_obligation p (loc, expl, id, s) = 
+  let g = Dgoal (loc, expl, id, s) in
   match p with
   | Simplify -> Simplify.push_decl g
   | Harvey -> Harvey.push_decl g
@@ -99,8 +99,8 @@ let output_file ?encoding p (elems,o) =
 	 all the elements of the elems list and th obligation**)  
       let declQ = Queue.create () in
       List.iter (fun p -> Queue.add p declQ) elems ;
-      let (loc, id, s) = o in
-      let g = Dgoal (loc, id, s) in
+      let (loc, expl, id, s) = o in
+      let g = Dgoal (loc, expl, id, s) in
       Queue.add g declQ;
       if debug then
 	Format.printf "Before the pruning dedicated to the PO: %d @." 

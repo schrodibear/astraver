@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.46 2007-02-28 07:45:36 couchot Exp $ i*)
+(*i $Id: harvey.ml,v 1.47 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -265,13 +265,12 @@ let output_sequent fmt (ctx, concl) =
   in
   print_seq fmt ctx
 
-let output_obligation fmt (loc, o, s) = 
+let output_obligation fmt (loc, expl, o, s) = 
   fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[%a@]@\n" output_sequent s
 
-
 let decl_to_elem = function
-  | Dgoal (loc,id,s) -> Queue.add (loc,id,s.Env.scheme_type) oblig
+  | Dgoal (loc,expl,id,s) -> Queue.add (loc,expl,id,s.Env.scheme_type) oblig
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory

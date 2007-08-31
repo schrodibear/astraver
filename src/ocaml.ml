@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ocaml.ml,v 1.21 2006-11-03 14:50:22 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.22 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -202,7 +202,7 @@ and exprd fmt = function
       fprintf fmt "@[assert false@]"
   | Any _ ->
       fprintf fmt "@[assert false (* code not given *)@]"
-  | Assertion (p,e) ->
+  | Assertion (k, p,e) ->
       expr_pre fmt (p,e)
   | Post (e, q, _) ->
       let q = post_app a_value q in

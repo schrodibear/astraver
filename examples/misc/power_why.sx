@@ -128,8 +128,8 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -137,8 +137,8 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|))))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -223,7 +223,7 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; power1_po_1, Why obligation from file "", line 0, characters 0-0:
+;; power1_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -231,7 +231,7 @@
 (FORALL (y)
 (IMPLIES (EQ y 1) (AND (EQ (Zpower x n) (* y (Zpower m n))) (>= n 0))))))))
 
-;; power1_po_2, Why obligation from file "", line 0, characters 0-0:
+;; power1_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -253,7 +253,7 @@
 (AND (AND (EQ (Zpower x n) (* y1 (Zpower m1 n1))) (>= n1 0))
 (AND (<= 0 n0) (< n1 n0)))))))))))))))))))))
 
-;; power1_po_3, Why obligation from file "", line 0, characters 0-0:
+;; power1_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -273,7 +273,7 @@
 (AND (AND (EQ (Zpower x n) (* y0 (Zpower m1 n1))) (>= n1 0))
 (AND (<= 0 n0) (< n1 n0)))))))))))))))))))
 
-;; power1_po_4, Why obligation from file "", line 0, characters 0-0:
+;; power1_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)

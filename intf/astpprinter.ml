@@ -169,7 +169,7 @@ let print_predicate fmt p =
 	  print_pure_type t (Ident.string id') print0 p'
     | Pfpi _ ->
 	failwith "fpi not supported with Coq V8"
-    | Pnamed (n, p) ->
+    | Pnamed (User n, p) ->
 	(match (Tools.grab_infos n) with
 	   | None -> fprintf fmt "@[%a@]" print3 p
 	   | Some l ->
@@ -178,6 +178,8 @@ let print_predicate fmt p =
 	       fprintf fmt "@[%a@]" print3 p;
 	       pp_close_tag fmt ()
 	)
+    | Pnamed (Internal n, p) ->
+	fprintf fmt "@[%a@]" print3 p
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "@[(%a)@]" print0 p
   in

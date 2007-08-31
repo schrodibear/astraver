@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.17 2006-11-24 13:38:12 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.18 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -51,7 +51,8 @@ let push_decl = function
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
   | Dfunction_def _ -> assert false (*TODO*)
-  | Dgoal (loc,id,s) -> Queue.add (Obligation (loc,id,s.Env.scheme_type)) elem_q
+  | Dgoal (loc,expl,id,s) -> 
+      Queue.add (Obligation (loc,expl,id,s.Env.scheme_type)) elem_q
   | Dtype _ -> assert false (*TODO*)
 
 (*s Pretty print *)
@@ -213,8 +214,9 @@ let rec print_predicate fmt = function
 	print_pure_type t print_predicate p'
   | Pfpi _ ->
       failwith "fpi not supported in HOL Light"
-  | Pnamed (n, p) ->
+  | Pnamed (User n, p) ->
       fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
+  | Pnamed (_, p) -> print_predicate fmt p
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
@@ -247,7 +249,7 @@ let print_obligation fmt loc id sq =
   fprintf fmt "val %s = Parse.Term `%a`;;@\n@\n" id print_sequent sq
 
 let print_elem fmt = function
-  | Obligation (loc, s, sq) -> print_obligation fmt loc s sq
+  | Obligation (loc, expl, s, sq) -> print_obligation fmt loc s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate _ -> assert false (*TODO*)
@@ -255,7 +257,7 @@ let print_elem fmt = function
 let print_obl_list fmt = 
   let comma = ref false in
   let print = function
-    | Obligation (_,id,_) -> 
+    | Obligation (_,_,id,_) -> 
 	if !comma then fprintf fmt "; "; fprintf fmt "%s" id; comma := true
     | Axiom _ | Logic _ | Predicate _ -> 
 	()

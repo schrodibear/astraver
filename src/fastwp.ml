@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.13 2007-07-23 13:18:55 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.14 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -300,7 +300,7 @@ and wp0 e s =
       let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
       wpforalls (q @ qr) (wpimplies (wpands pl) ok),
       ((Ptrue, s), [])
-  | Assertion (al, e1) ->
+  | Assertion (k, al, e1) ->
       (* OK: al /\ ok(e1)
 	 NE: al /\ ne(e1,result) *)
       let ok,((ne1,s'),ee1) = wp e1 s in

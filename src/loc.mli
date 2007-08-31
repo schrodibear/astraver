@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.mli,v 1.18 2006-11-03 16:21:03 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.19 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Format
 
@@ -41,9 +41,12 @@ val parse : string -> position
 
 val dummy_position : position
 
+val extract :  position -> string * int * int * int
+val gen_report_line : formatter -> (string * int * int * int) -> unit
 val gen_report_position : formatter -> position -> unit
 val report_position : formatter -> position -> unit
 val report_obligation_position : formatter -> position -> unit
+
 
 (* for both type [t] and [position] *)
 

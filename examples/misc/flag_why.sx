@@ -128,8 +128,8 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -137,8 +137,8 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|))))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -223,7 +223,7 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; dutch_flag_po_1, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (AND (AND (<= 0 0) (<= 0 0))
@@ -232,7 +232,7 @@
 (AND (EQ (monochrome t 0 0 white) |@true|)
 (AND (EQ (monochrome t N N red) |@true|) (EQ (array_length t) N))))))))
 
-;; dutch_flag_po_2, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -246,7 +246,7 @@
          (AND (EQ (monochrome t0 r N red) |@true|) (EQ (array_length t0) N))))))
 (IMPLIES (< i r) (AND (<= 0 i) (< i (array_length t0)))))))))))
 
-;; dutch_flag_po_3, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -264,7 +264,7 @@
 (IMPLIES (EQ result (access t0 i))
 (IMPLIES (EQ result blue) (AND (<= 0 b) (< b (array_length t0)))))))))))))))
 
-;; dutch_flag_po_4, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -292,7 +292,7 @@
 (IMPLIES (EQ t1 (update t0 b result1))
 (AND (<= 0 i) (< i (array_length t1))))))))))))))))))))))))
 
-;; dutch_flag_po_5, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_5, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -333,7 +333,7 @@
 (AND (EQ (monochrome t2 r N red) |@true|) (EQ (array_length t2) N))))))
 (AND (<= 0 (- r i)) (< (- r i0) (- r i))))))))))))))))))))))))))))))))
 
-;; dutch_flag_po_6, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_6, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -364,7 +364,7 @@
 (AND (EQ (monochrome t0 r N red) |@true|) (EQ (array_length t0) N))))))
 (AND (<= 0 (- r i)) (< (- r i0) (- r i))))))))))))))))))))))
 
-;; dutch_flag_po_7, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_7, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -388,7 +388,7 @@
 (FORALL (r0)
 (IMPLIES (EQ r0 (- r 1)) (AND (<= 0 r0) (< r0 (array_length t0)))))))))))))))))))))
 
-;; dutch_flag_po_8, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_8, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -422,7 +422,7 @@
 (IMPLIES (EQ t1 (update t0 r0 result2))
 (AND (<= 0 i) (< i (array_length t1))))))))))))))))))))))))))))))
 
-;; dutch_flag_po_9, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_9, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -465,7 +465,7 @@
 (AND (EQ (monochrome t2 r0 N red) |@true|) (EQ (array_length t2) N))))))
 (AND (<= 0 (- r i)) (< (- r0 i) (- r i))))))))))))))))))))))))))))))))))
 
-;; dutch_flag_po_10, Why obligation from file "", line 0, characters 0-0:
+;; dutch_flag_po_10, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)

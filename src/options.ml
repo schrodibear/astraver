@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.97 2007-08-24 13:26:58 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.98 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Format
 
@@ -64,7 +64,8 @@ let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 let files_to_load_ = ref []
 let show_time_ = ref false
-let int_is_ident = ref  false
+let locs_files = ref []
+let locs_table = Hashtbl.create 97
 
 type encoding = 
   | NoEncoding | Predicates | Stratified | Recursive | Monomorph 
@@ -415,8 +416,8 @@ let files =
 	| "sstrat" -> types_encoding_ := SortedStratified
 	| _ -> usage (); exit 1);
 	parse args
-    | "--int-is-ident" :: args ->
-	int_is_ident := true;
+    | ("-locs" | "--locs") :: s :: args ->
+	locs_files := s :: !locs_files;
 	parse args
     | f :: args -> 
 	filesq := f :: !filesq; parse args
@@ -502,7 +503,26 @@ let if_debug f x = if debug then f x
 let if_debug_2 f x y = if debug then f x y
 let if_debug_3 f x y z = if debug then f x y z
 
-let int_is_ident = !int_is_ident
+let () =
+  List.iter
+    (fun f -> 
+       let l = Rc.from_file f in
+       List.iter
+	 (fun (id,fs) ->
+	    let (f,l,b,e) =
+	      List.fold_left
+		(fun (f,l,b,e) v ->
+		   match v with
+		     | "file", Rc.RCstring f -> (f,l,b,e)
+		     | "line", Rc.RCint l -> (f,l,b,e)
+		     | "begin", Rc.RCint b -> (f,l,b,e)
+		     | "end", Rc.RCint e -> (f,l,b,e)
+		     | _ -> (f,l,b,e))
+		("",0,0,0) fs
+	    in
+	    Hashtbl.add locs_table id (f,l,b,e))
+	 l)
+    !locs_files
 
 (* compatibility checks *)
 let () = if prover () = Gappa && valid then begin

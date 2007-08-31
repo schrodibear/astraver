@@ -255,8 +255,9 @@ let rec print_predicate fmt = function
 	print_pure_type t print_predicate p'
   | Pfpi _ ->
       failwith "fpi not supported in Isabelle/HOL"
-  | Pnamed (n, p) ->
+  | Pnamed (User n, p) ->
       fprintf fmt "@[(* %s: *)@ %a@]" (String.escaped n) print_predicate p
+  | Pnamed (_, p) -> print_predicate fmt p
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
@@ -301,12 +302,15 @@ let reprint_axiom fmt id p =
 let print_axiom fmt id p = 
   reprint_axiom fmt id p
 
-let reprint_obligation fmt loc id s =
+let reprint_obligation fmt loc expl id s =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[<hov 4>(*Why goal*) lemma %a:@\n%a;@]@\n" idents id print_sequent s
+(*;
+  fprintf fmt "@[(* %a *)@]@\n" Util.print_explanation expl
+*)
 
-let print_obligation fmt loc id s = 
-  reprint_obligation fmt loc id s;
+let print_obligation fmt loc expl id s = 
+  reprint_obligation fmt loc expl id s;
   fprintf fmt "(* FILL PROOF HERE *)@\n@\n"
 
 let reprint_predicate fmt id p =
@@ -368,7 +372,8 @@ struct
   let print_element fmt e = 
     begin match e with
       | Parameter _-> assert false
-      | Obligation (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
+      | Obligation (loc, expl, id, s) -> 
+	  print_obligation fmt loc expl id s.Env.scheme_type
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
@@ -379,7 +384,8 @@ struct
       
   let reprint_element fmt = function
     | Parameter _ -> assert false
-    | Obligation (loc, id, s) -> reprint_obligation fmt loc id s.Env.scheme_type
+    | Obligation (loc, expl, id, s) -> 
+	reprint_obligation fmt loc expl id s.Env.scheme_type
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
@@ -405,7 +411,7 @@ end)
 let reset = Gen.reset
 
 let push_decl = function
-  | Dgoal (loc,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,l,s))
+  | Dgoal (loc,expl,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
   | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
   | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))

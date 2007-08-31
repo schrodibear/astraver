@@ -92,7 +92,7 @@ Admitted.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p2_po_1 : 
   ~False.
 Proof.
@@ -101,36 +101,36 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p3_po_1 : 
-  True /\ True.
+  (True /\ True).
 Proof.
 tauto.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p4_po_1 : 
-  True \/ False.
+  (True \/ False).
 Proof.
 tauto.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p5_po_1 : 
-  False \/ ~False.
+  (False \/ ~False).
 Proof.
 tauto.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p6_po_1 : 
-  (True -> ~False).
+  ((True -> ~False)).
 Proof.
 tauto.
 Save.
@@ -139,9 +139,9 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p8_po_1 : 
-  True /\ (forall (x:Z), x = x).
+  (True /\ (forall (x:Z), x = x)).
 Proof.
 intuition.
 Save.
@@ -171,7 +171,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma ar6_po_1 : 
   1 <> 0.
 Proof.
@@ -200,7 +200,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma c2_po_1 : 
   forall (v1: bool),
   (if v1 then True else True).
@@ -244,89 +244,89 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr1_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1),
-  0 <= 0 /\ 0 < (array_length v6).
+  (0 <= 0 /\ 0 < (array_length v6)).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr2_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 4),
-  0 <= (1 + 2) /\ (1 + 2) < (array_length v6).
+  (0 <= (1 + 2) /\ (1 + 2) < (array_length v6)).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr3_po_1 : 
   forall (v4: Z),
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1 /\ v4 = 0),
-  0 <= v4 /\ v4 < (array_length v6).
+  (0 <= v4 /\ v4 < (array_length v6)).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr4_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  0 <= 0 /\ 0 < (array_length v6).
+  (0 <= 0 /\ 0 < (array_length v6)).
 Proof.
 intuition.
 Save.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr4_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
   forall (HW_2: 0 <= 0 /\ 0 < (array_length v6)),
   forall (result: Z),
   forall (HW_3: result = (access v6 0)),
-  0 <= result /\ result < (array_length v6).
+  (0 <= result /\ result < (array_length v6)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr5_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1),
-  0 <= 0 /\ 0 < (array_length v6).
+  (0 <= 0 /\ 0 < (array_length v6)).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr6_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 4),
-  0 <= (1 + 2) /\ (1 + 2) < (array_length v6).
+  (0 <= (1 + 2) /\ (1 + 2) < (array_length v6)).
 Proof.
 intuition.
 Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr7_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  0 <= 0 /\ 0 < (array_length v6).
+  (0 <= 0 /\ 0 < (array_length v6)).
 Proof.
 intuition.
 Save.
@@ -335,19 +335,19 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr7_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
   forall (HW_2: 0 <= 0 /\ 0 < (array_length v6)),
   forall (result: Z),
   forall (HW_3: result = (access v6 0)),
-  0 <= result /\ result < (array_length v6).
+  (0 <= result /\ result < (array_length v6)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma fc3_po_1 : 
   0 >= 0.
 Proof.
@@ -358,7 +358,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma an2_po_1 : 
   forall (v4: Z),
   forall (HW_1: v4 >= 0),

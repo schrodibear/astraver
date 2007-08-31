@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.5 2007-05-23 13:18:20 couchot Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.6 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -261,7 +261,7 @@ let display (q,s) n =
     | Dpredicate_def (_, id, d) -> Printf.printf  "def_pred %s (%d): " id 
     | Dfunction_def (_, id, d) -> Printf.printf  "def_func %s (%d): " id 
     | Daxiom (_, id, p)          -> Printf.printf  "axiom %s (%d): "  id 
-    | Dgoal (_, id, s)   -> Printf.printf  "goal %s (%d):"  id 
+    | Dgoal (_, expl, id, s)   -> Printf.printf  "goal %s (%d):"  id 
   in 
   if debug then begin 
     (di q) n;
@@ -348,7 +348,7 @@ let launcher decl = match decl with
       declare_function id ax d.scheme_type 
   | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)
       declare_axiom  id ax p.scheme_type 
-  | Dgoal (_, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)
+  | Dgoal (_, expl, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)
       managesGoal id ax s.Env.scheme_type 
 
 

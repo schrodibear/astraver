@@ -128,8 +128,8 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -137,8 +137,8 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|))))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -246,13 +246,13 @@
  (AND (OR (EQ (max x y) x) (EQ (max x y) y))
  (AND (>= (max x y) x) (>= (max x y) y))))))
 
-;; gcd1_po_1, Why obligation from file "", line 0, characters 0-0:
+;; gcd1_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
 (AND (< 0 a) (AND (< 0 b) (EQ (gcd a b) (gcd a b)))))))
 
-;; gcd1_po_2, Why obligation from file "", line 0, characters 0-0:
+;; gcd1_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -266,7 +266,7 @@
 (AND (AND (< 0 x0) (AND (< 0 y) (EQ (gcd x0 y) (gcd a b))))
 (AND (<= 0 (max x y)) (< (max x0 y) (max x y))))))))))))))
 
-;; gcd1_po_3, Why obligation from file "", line 0, characters 0-0:
+;; gcd1_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -280,7 +280,7 @@
 (AND (AND (< 0 x) (AND (< 0 y0) (EQ (gcd x y0) (gcd a b))))
 (AND (<= 0 (max x y)) (< (max x y0) (max x y))))))))))))))
 
-;; gcd1_po_4, Why obligation from file "", line 0, characters 0-0:
+;; gcd1_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -297,13 +297,13 @@
  ;; Why axiom mod_lt
  (FORALL (a) (FORALL (b) (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
 
-;; gcd2_po_1, Why obligation from file "", line 0, characters 0-0:
+;; gcd2_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
 (AND (<= 0 a) (AND (<= 0 b) (EQ (gcd a b) (gcd a b)))))))
 
-;; gcd2_po_2, Why obligation from file "", line 0, characters 0-0:
+;; gcd2_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
@@ -318,7 +318,7 @@
 (AND (AND (<= 0 x0) (AND (<= 0 y0) (EQ (gcd x0 y0) (gcd a b))))
 (AND (<= 0 y) (< y0 y))))))))))))))
 
-;; gcd2_po_3, Why obligation from file "", line 0, characters 0-0:
+;; gcd2_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.69 2007-01-29 16:32:13 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.70 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -37,7 +37,7 @@ open Format
 open Pp
 
 type elem = 
-  | Oblig of Loc.position * string * sequent Env.scheme
+  | Oblig of Loc.position * vc_explain * string * sequent Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
   | FunctionDef of string * function_def Env.scheme
@@ -47,7 +47,7 @@ let queue = Queue.create ()
 let reset () = Queue.clear queue; Encoding.reset ()
 
 let decl_to_elem = function
-  | Dgoal (loc, id, s) -> Queue.add (Oblig (loc, id, s)) queue
+  | Dgoal (loc, expl, id, s) -> Queue.add (Oblig (loc, expl,id, s)) queue
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) queue
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
@@ -362,7 +362,7 @@ let print_function fmt id p =
 	print_term e
 
 let print_elem fmt = function
-  | Oblig (loc, id, s) -> print_obligation fmt loc id s
+  | Oblig (loc, expl, id, s) -> print_obligation fmt loc id s
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
   | FunctionDef (id, f) -> print_function fmt id f

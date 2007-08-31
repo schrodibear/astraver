@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.128 2007-08-24 13:26:59 couchot Exp $ i*)
+(*i $Id: util.ml,v 1.129 2007-08-31 08:16:09 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -410,6 +410,7 @@ let make_raw_store env (id,id') c1 c2 =
 let make_lnode loc p env k = 
   { desc = p; 
     info = { t_loc = loc; t_env = env; t_label = label_name ();
+	     t_userlabel = "";
 	     t_result_name = k.c_result_name; t_result_type = k.c_result_type;
 	     t_effect = k.c_effect; 
 	     t_post = optpost_app (anonymous loc) k.c_post } }
@@ -569,8 +570,10 @@ and print_predicate fmt = function
   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
 	print_term t i1 f1 e1 i2 f2 e2
-  | Pnamed (n, p) ->
+  | Pnamed (User n, p) ->
       fprintf fmt "@[%s:@ %a@]" n print_predicate p
+  | Pnamed (Internal n, p) ->
+      fprintf fmt "@[(%d):@ %a@]" n print_predicate p
 
 let print_assertion fmt a = 
   fprintf fmt "%a: %a" Ident.print a.a_name print_predicate a.a_value
@@ -712,7 +715,7 @@ and print_desc fmt = function
       fprintf fmt "absurd"
   | Any k ->
       fprintf fmt "[%a]" print_type_c k
-  | Assertion (l, p) ->
+  | Assertion (b, l, p) ->
       fprintf fmt "@[{%a}@ %a@]" 
 	(print_pre print_assertion) l print_expr p
   | Post (e, q, Transparent) ->
@@ -902,6 +905,120 @@ let print_decl fmt = function
 
 let print_pfile = print_list newline print_decl
 
+(*s explanation *)
+
+let read_in_file f l b e = 
+  let ch = open_in f in
+  for i = 2 to l do
+    ignore (input_line ch)
+  done;
+  for i = 1 to b do
+    ignore (input_char ch)
+  done;
+  let buf = Buffer.create 17 in
+  for i = b to e-1 do
+    Buffer.add_char buf (input_char ch)
+  done;
+  Buffer.contents buf
+ 
+
+let raw_loc fmt f l b e =
+  fprintf fmt "file = \"%s\"@\n" f;
+  fprintf fmt "line = %d@\n" l;
+  fprintf fmt "begin = %d@\n" b;
+  fprintf fmt "end = %d@\n" e
+
+let raw_loc_predicate fmt (loc,p) =
+  let (f,l,b,e) = 
+    match p with
+      | Pnamed(User n,p) -> 
+	  begin
+	    fprintf fmt "name = \"%s\"@\n" n; 
+	    try 
+	      Hashtbl.find locs_table n 
+	    with Not_found -> Loc.extract loc 
+	  end
+      | _ -> Loc.extract loc 
+  in
+  let s = read_in_file f l b e in
+  raw_loc fmt f l b e;
+  fprintf fmt "pred = \"%s\"@\n" s
+
+let raw_explanation fmt e =
+  match e with
+    | VCEstring s -> 
+	fprintf fmt "kind = Other@\ntext = %s@\n" s
+    | VCEabsurd -> 
+	fprintf fmt "kind = Absurd@\n"
+    | VCEassert p -> 
+	fprintf fmt "kind = Assert@\n";
+	List.iter (raw_loc_predicate fmt) p
+    | VCEpre(lab,p) -> 
+	fprintf fmt "kind = Pre@\n";
+	fprintf fmt "call_label = %s@\n" lab;
+	begin
+	  try 
+	    let (f,l,b,e) = Hashtbl.find locs_table lab in
+	    let s = read_in_file f l b e in
+	    raw_loc fmt f l b e;
+	    fprintf fmt "call = \"%s\"@\n" s
+	  with Not_found -> ()
+	end;
+	List.iter (raw_loc_predicate fmt) p
+    | VCEpost p -> 
+	fprintf fmt "kind = Post@\n";  
+	raw_loc_predicate fmt p
+    | VCEwfrel -> 
+	fprintf fmt "kind = WfRel@\n" 
+    | VCEvardecr (*loc*) -> 
+	fprintf fmt "kind = VarDecr@\n" 
+    | VCEinvinit p ->
+	fprintf fmt "kind = LoopInvInit@\n"; 
+	raw_loc_predicate fmt p 
+    | VCEinvpreserv p ->
+	fprintf fmt "kind = LoopInvPreserv@\n"; 
+	raw_loc_predicate fmt p 
+
+let print_loc_predicate fmt (loc,p) =
+  match p with
+    | Pnamed(User s,p) -> 
+	begin
+	  try 
+	    let (f,l,b,e) = Hashtbl.find locs_table s in
+	    let s = read_in_file f l b e in
+	    fprintf fmt "(relocated from %a) %s"
+	      Loc.gen_report_line (f,l,b,e) s 
+	  with Not_found ->
+	    fprintf fmt "(named %s) %a" s print_predicate p
+	end
+    | _ -> 
+	fprintf fmt "(located %a) %a" 
+	  Loc.gen_report_position loc print_predicate p
+
+let print_explanation fmt e =
+  match e with
+    | VCEstring s -> fprintf fmt "%s" s
+    | VCEabsurd -> fprintf fmt "absurd case"
+    | VCEassert p -> 
+	fprintf fmt "assertions %a" 
+	  (print_list comma print_loc_predicate) p 
+    | VCEpre(lab, p) -> 
+	fprintf fmt "pre-conditions for call %s: %a" lab
+	  (print_list comma print_loc_predicate) p 
+    | VCEpost p -> 
+	fprintf fmt "post-condition %a" 
+	  print_loc_predicate p 
+    | VCEwfrel -> 
+	fprintf fmt "well-foundedness of relation" 
+    | VCEvardecr (*loc*) -> 
+	fprintf fmt "decreasingness of variant" 
+    | VCEinvinit p ->
+	fprintf fmt "initialization of loop invariant %a" 
+	  print_loc_predicate p 
+    | VCEinvpreserv p ->
+	fprintf fmt "preservation of loop invariant %a" 
+	  print_loc_predicate p 
+
 let print_decl fmt = function
     Dtype (_, sl, s) -> 
       fprintf fmt "type %s" s
@@ -921,7 +1038,7 @@ let print_decl fmt = function
   | Daxiom (_, s, pred_sch) ->
       fprintf fmt "axiom %s : %a" s 
 	print_predicate pred_sch.Env.scheme_type
-  | Dgoal (_, s, seq_sch) -> 
+  | Dgoal (loc, expl, s, seq_sch) -> 
       let (cel, pred) = seq_sch.Env.scheme_type in
       fprintf fmt "goal %s (%a) : %a" s
 	(print_list comma 
@@ -930,7 +1047,8 @@ let print_decl fmt = function
 	       fprintf fmt "%a : %a" Ident.print id print_pure_type pt
 	   | Cc.Spred (id, pred) -> 
 	       fprintf fmt "%a <=> %a" Ident.print id print_predicate pred)) cel
-	print_predicate pred
+	print_predicate pred;
+      fprintf fmt "(* %a *)@\n" print_explanation expl 
 
 (* debug *)
 

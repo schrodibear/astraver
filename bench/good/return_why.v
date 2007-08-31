@@ -5,7 +5,7 @@ Require Import Why.
 (*Why logic*) Definition N : Z.
 Admitted.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -16,7 +16,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p_po_2 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -25,12 +25,12 @@ Save.
   forall (i0: Z),
   forall (HW_3: 0 <= i0),
   forall (HW_4: i0 < N),
-  0 <= i0 /\ i0 < (array_length t).
+  (0 <= i0 /\ i0 < (array_length t)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p_po_3 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -49,7 +49,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p_po_4 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -64,12 +64,12 @@ Save.
   forall (HW_9: result <> 0),
   forall (i1: Z),
   forall (HW_10: i1 = (i0 + 1)),
-  0 <= i1 /\ (Zwf 0 (N - i1) (N - i0)).
+  (0 <= i1 /\ (Zwf 0 (N - i1) (N - i0))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p_po_5 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),

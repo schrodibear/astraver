@@ -3,17 +3,17 @@
 
 Require Import Why.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma f_po_1 : 
   forall (b: Z),
   forall (b0: Z),
   forall (HW_1: b0 = (1 - b)),
-  b0 = b0 /\ b0 = (1 - b).
+  (b0 = b0 /\ b0 = (1 - b)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma k_po_1 : 
   forall (b: Z),
   forall (HW_1: b = 0),
@@ -33,7 +33,7 @@ Save.
   forall (HW_6: result2 = b3 /\ b3 = (1 - b2)),
   forall (b2_0: Z),
   forall (HW_7: b2_0 = (result1 * (1 - result2))),
-  b1_0 = 0 /\ b2_0 = 1.
+  (b1_0 = 0 /\ b2_0 = 1).
 Proof.
 intuition; subst; trivial.
 Save.

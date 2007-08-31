@@ -22,13 +22,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.mli,v 1.17 2007-07-12 10:55:26 marche Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.18 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Cc
 
 val push_decl : Logic_decl.t -> unit
 
-val iter : (Loc.position * string * sequent Env.scheme -> unit) -> unit
+val iter : (Loc.position * Cc.vc_explain * string * sequent Env.scheme -> unit) -> unit
 
 type prover = 
   | Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo 

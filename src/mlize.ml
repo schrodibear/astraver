@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.ml,v 1.78 2006-11-03 14:50:22 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.79 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -171,7 +171,7 @@ and trad_desc info d ren = match d with
       in
       Monad.handle e.info (trad e) info (List.map handler hl) ren
 
-  | Assertion (al, e) ->
+  | Assertion (k, al, e) ->
       insert_many_pre info.t_env al (trad e) ren
 
   | Ast.Absurd ->

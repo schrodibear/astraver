@@ -128,8 +128,8 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -137,8 +137,8 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|))))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -223,12 +223,12 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; sqrt_po_1, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (AND (<= (* 0 0) x) (AND (< x (* (+ x 1) (+ x 1))) (< 0 (+ x 1))))))
 
-;; sqrt_po_2, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -236,7 +236,7 @@
 (IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
 (IMPLIES (NEQ (+ inf 1) sup) (NEQ 2 0)))))))
 
-;; sqrt_po_3, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -254,7 +254,7 @@
 (AND (AND (<= (* inf inf) x) (AND (< x (* sup0 sup0)) (< inf sup0)))
 (AND (<= 0 (- sup inf)) (< (- sup0 inf) (- sup inf))))))))))))))))))
 
-;; sqrt_po_4, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -272,7 +272,7 @@
 (AND (AND (<= (* inf0 inf0) x) (AND (< x (* sup sup)) (< inf0 sup)))
 (AND (<= 0 (- sup inf)) (< (- sup inf0) (- sup inf))))))))))))))))))
 
-;; sqrt_po_5, Why obligation from file "", line 0, characters 0-0:
+;; sqrt_po_5, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)

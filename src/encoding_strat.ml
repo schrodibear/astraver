@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.11 2006-12-14 09:29:38 filliatr Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.12 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -340,7 +340,7 @@ let rec push d =
 	Env.empty_scheme (lifted fv (translate_pred fv [] pred_sch.Env.scheme_type) []) in
       Queue.add (Daxiom (loc, ident, new_axiom)) queue
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
-  | Dgoal (loc, ident, s_sch) ->
+  | Dgoal (loc, expl, ident, s_sch) ->
       let cpt = ref 0 in
       let fv = Env.Vset.fold
 	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
@@ -357,7 +357,7 @@ let rec push d =
 	Env.empty_scheme
 	  (lifted_ctxt fv (List.rev new_cel),
 	   translate_eq (translate_pred fv context (snd (s_sch.Env.scheme_type)))) in
-      Queue.add (Dgoal (loc, ident, new_sequent)) queue)
+      Queue.add (Dgoal (loc, expl, ident, new_sequent)) queue)
   with
     Not_found -> 
       Format.eprintf "Exception caught in : %a\n" Util.print_decl d;

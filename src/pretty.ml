@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.9 2007-02-15 15:52:43 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.10 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Format
 open Pp
@@ -139,8 +139,9 @@ let rec predicate fmt = function
   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
 	term t i1 f1 e1 i2 f2 e2
-  | Pnamed (n, p) ->
+  | Pnamed (User n, p) ->
       fprintf fmt "@[(%S:@ %a)@]" n predicate p
+  | Pnamed (_, p) -> predicate fmt p
 
 and print_pattern fmt = function
   | TPat t -> term fmt t
@@ -196,7 +197,7 @@ let decl fmt = function
   | Daxiom (_, id, p) ->
       let p = specialize p in
       fprintf fmt "@[<hov 2>axiom %s:@ %a@]" id predicate p
-  | Dgoal (_, id, sq) ->
+  | Dgoal (_, expl, id, sq) ->
       let sq = specialize sq in
       fprintf fmt "@[<hov 2>goal %s:@\n%a@]" id sequent sq
 
@@ -204,8 +205,21 @@ let decl fmt d = fprintf fmt "@[%a@]@\n@\n" decl d
 
 let print_file fmt = Queue.iter (decl fmt) queue
 
+let print_trace fmt id expl =
+  fprintf fmt "[%s]@\n" id;
+  Util.raw_explanation fmt expl;
+  fprintf fmt "@\n"
+
+let print_traces fmt =
+  Queue.iter
+    (function
+       | Dgoal (_, expl, id, _) -> print_trace fmt id expl
+       | _ -> ())
+    queue
+
 let output_file f =
-  print_in_file print_file (f ^ "_why.why")
+  print_in_file print_file (f ^ "_why.why");
+  print_in_file print_traces (f ^ "_why.xpl")
 
 let output_files f =
   let po = ref 0 in
@@ -213,10 +227,12 @@ let output_files f =
     (fun ctxfmt ->
        Queue.iter 
 	 (function 
-	    | Dgoal _ as d -> 
+	    | Dgoal (_,expl,id,_) as d -> 
 		incr po;
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
-		print_in_file (fun fmt -> decl fmt d) fpo
+		print_in_file (fun fmt -> decl fmt d) fpo;
+		let ftr = f ^ "_po" ^ string_of_int !po ^ ".xpl" in
+		print_in_file (fun fmt -> print_trace fmt id expl) ftr
 	    | d -> 
 		decl ctxfmt d)
 	 queue)

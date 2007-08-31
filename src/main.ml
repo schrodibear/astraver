@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.132 2007-08-24 13:26:58 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.133 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -115,8 +115,8 @@ let push_decl d =
 	
 let push_obligations = 
   List.iter 
-    (fun (loc,id,s) -> 
-       let dg = Dgoal (loc, id, generalize_sequent s) in
+    (fun (loc,expl,id,s) -> 
+       let dg = Dgoal (loc, expl, id, generalize_sequent s) in
        let dg = 
 	 if pruning_hyp_v != -1 then 
 	   Hypotheses_filtering.reduce dg declarationQueue
@@ -369,7 +369,7 @@ let interp_decl ?(prelude=false) d =
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
-	let dg = Dgoal (loc, Ident.string id, s) in
+	let dg = Dgoal (loc, VCEstring "user goal", Ident.string id, s) in
 	if Options.pruning_hyp_v != -1 then
 	  push_decl (Hypotheses_filtering.reduce dg declarationQueue)
 	else	  
@@ -426,8 +426,6 @@ let deal_file f =
 let main () =
   let t0 = Unix.times () in
   load_prelude ();
-  (* after prelude because it contains `int' not `integer' *)
-  Lexer.int_is_ident := Options.int_is_ident;
   if files = [] then begin
     deal_channel (why_parser "standard input") stdin;
     output (Options.out_file "out")

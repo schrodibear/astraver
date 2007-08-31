@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.127 2007-03-02 15:20:08 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.128 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Typing. *)
 
@@ -171,6 +171,7 @@ let type_un_poly id =
 let gmake_node loc env l ?(post=None) p rt e = 
   { desc = p; 
     info = { t_loc = loc; t_env = env; t_label = l; 
+	     t_userlabel = "";
 	     t_result_name = result; 
 	     t_result_type = rt; t_effect = e; t_post = post } }
 
@@ -194,6 +195,7 @@ let typing_info_of_type_c loc env l k =
   { t_loc = loc;
     t_env = env;
     t_label = l;
+    t_userlabel = "";
     t_result_name = k.c_result_name;
     t_result_type = k.c_result_type;
     t_effect = k.c_effect;
@@ -526,8 +528,9 @@ let rec typef lab env expr =
 		      let make ?post n = 
 			make_node (label_name ()) ?post n tapp ef 
 		      in
-		      make (Assertion 
-			      (List.map (pre_named loc) papp,
+		      make (Assertion
+			      (`PRE, 
+			       List.map (pre_named loc) papp,
 			       make ~post:kapp.t_post (AppRef (t_f, r, kapp))))
 		    in
 		    loop_args t_f (result_type t_f) ra
@@ -557,7 +560,8 @@ let rec typef lab env expr =
 			  in
 			  make 
 			    (Assertion 
-			       (List.map (pre_named loc) papp,
+			       (`PRE,
+				List.map (pre_named loc) papp,
 				make 
 				  ~post:kapp.t_post (AppTerm (t_f, ta, kapp))))
 		    in
@@ -595,7 +599,9 @@ let rec typef lab env expr =
 				gmake_node loc env' (label_name ()) n tapp ef
 			      in
 			      make (Assertion 
-				      (List.map (pre_named loc) papp, app))))
+				      (`PRE,
+				       List.map (pre_named loc) papp, 
+				       app))))
 		end
 	    end
       in
@@ -755,7 +761,7 @@ let rec typef lab env expr =
       in
       let absurd = make_node (label_name ()) Absurd v Effect.bottom in
       make_node toplabel 
-	(Assertion ([anonymous loc Pfalse], absurd)) v Effect.bottom
+	(Assertion (`ABSURD,[anonymous loc Pfalse], absurd)) v Effect.bottom
 
   | Sany c ->
       let c = type_c loc lab env c in
@@ -775,10 +781,11 @@ let rec typef lab env expr =
       let ep,p = state_pre lab env loc p in
       let t_e = typef lab env e in
       let ef = Effect.union (effect t_e) ep in
-      make_node toplabel (Assertion (p, t_e)) (result_type t_e) ef
+      make_node toplabel (Assertion (`ASSERT,p, t_e)) (result_type t_e) ef
 
   | Slabel (s, e) ->
       let lab' = Label.add s lab in
       let t_e = typef lab' env e in
+      t_e.info.t_userlabel <- s;
       make_node toplabel (Label (s, t_e)) (result_type t_e) (effect t_e)
 

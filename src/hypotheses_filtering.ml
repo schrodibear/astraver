@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.21 2007-08-24 13:26:58 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.22 2007-08-31 08:16:08 marche Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -546,8 +546,7 @@ let build_var_graph (l,c)=
   
   (** retrieves the variables of the conclusion **)
   let v = (sets_of_vars c) in 
-
-  let v = SS_set.fold (fun s  t ->
+  let _ = SS_set.fold (fun s  t ->
 			 (** update the graph of variables **)
 			 update_v_g s ; 
 			 VarStringSet.union s t) v VarStringSet.empty in
@@ -1055,7 +1054,7 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 
 let managesGoal id ax (hyps,concl) =
   match ax with 
-      Dgoal(loc,id,_) -> 
+      Dgoal(loc,expl,id,_) -> 
 	(** retrieves the list of variables in the conclusion **)
 	let v = free_vars_of concl in 
 	let v = VarStringSet.diff v avoided_vars in 
@@ -1078,7 +1077,7 @@ let managesGoal id ax (hyps,concl) =
 	    let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
 	    DotVG.output_graph oc !vg     
 	  end;
-	Dgoal (loc,id, Env.empty_scheme (l',concl))	  
+	Dgoal (loc,expl,id, Env.empty_scheme (l',concl))	  
     | _ -> ax 
 
 
@@ -1100,7 +1099,7 @@ let reduce q decl=
 
   (** manages goal **)
   let q' =   match q with
-      Dgoal (loc, id, s)  as ax ->
+      Dgoal (loc, expl, id, s)  as ax ->
         let (l,g) = s.Env.scheme_type in
         let (l',g') = Util.intros [] g my_fresh_hyp in 
 	let l' = List.append l l' in 

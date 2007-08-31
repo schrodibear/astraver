@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.80 2007-04-20 12:16:15 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.81 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -290,11 +290,14 @@ let print_function_def fmt id (bl,t,e) =
     id (print_list comma print_logic_binder) bl 
     print_pure_type t print_term e
     
-let print_obligation fmt (loc,id,s) =
+let print_obligation fmt (loc,expl,id,s) =
   fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation_position loc;
   fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
   print_sequent fmt s;
-  fprintf fmt "@]@\n@\n"
+  fprintf fmt "@]@\n"
+  (*;
+  fprintf fmt "@[%% %a @]@\n@\n" Util.print_explanation expl
+  *)
 
 (* polymorphism *)
 
@@ -308,7 +311,7 @@ let print_scheme l =
 
 let tvar_so_far = ref 0
 
-let print_goal fmt (loc, id, s) =
+let print_goal fmt (loc, expl, id, s) =
   let n = Vset.cardinal s.scheme_vars in
   if n > !tvar_so_far then begin
     fprintf fmt "  ";
@@ -320,7 +323,7 @@ let print_goal fmt (loc, id, s) =
   end;
   let l,s = Env.specialize_sequent s in
   print_scheme l;
-  print_obligation fmt (loc,id,s)
+  print_obligation fmt (loc,expl,id,s)
 
 let print_logic_scheme fmt id s =
   let l,t = Env.specialize_logic_type s in
@@ -361,7 +364,7 @@ let output_elem fmt = function
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal (loc, id, s) -> print_goal fmt (loc, id, s)
+  | Dgoal (loc, expl, id, s) -> print_goal fmt (loc, expl, id, s)
 
 module ArMap = struct
 
@@ -407,7 +410,7 @@ type pvs_theories = {
   decls : (string * logic_type scheme) ArMap.t;
   defs : (string * def) Queue.t;
   axioms : (string * predicate scheme) ArMap.t;
-  goals : (loc * string * sequent scheme) Queue.t;
+  goals : (loc * vc_explain * string * sequent scheme) Queue.t;
   mutable poly : bool;
 }
 
@@ -434,8 +437,8 @@ let sort_theory () =
 	poly s; Queue.add (id, DefFunction s) th.defs
     | Daxiom (_, id, s) -> 
 	poly s; ArMap.add_scheme s (id,s) th.axioms
-    | Dgoal (loc, id, s) -> 
-	Queue.add (loc,id,s) th.goals
+    | Dgoal (loc, expl, id, s) -> 
+	Queue.add (loc,expl,id,s) th.goals
   in
   Queue.iter sort queue;
   th

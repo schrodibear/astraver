@@ -239,7 +239,7 @@ let print_all (tbuf:GText.buffer) s p =
   (* 2. then we create the GTK tags and map them to the tag names *)
   create_all_tags tbuf;
   (* 3. then we fill the GTK text buffer using Tagsplit.split *)
-  let utags = split tbuf (Lexing.from_string str) in
+  let _utags = split tbuf (Lexing.from_string str) in
   let (_,concl) = p in
   let mytag = 
     tbuf#create_tag
@@ -259,7 +259,7 @@ let print_all (tbuf:GText.buffer) s p =
     create_all_tags tbuf;
     flush_str_formatter () 
   in
-  let utags' = split tbuf (Lexing.from_string conclusion) in
+  let _utags' = split tbuf (Lexing.from_string conclusion) in
   (*color_lines (utags @ utags');*)
   ()
 
@@ -323,7 +323,7 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
     with Not_found -> ()
   end
     
-let text_of_obligation (tv:GText.view) (o,s,p) = 
+let text_of_obligation (tv:GText.view) (o,expl,s,p) = 
   let p = p.Env.scheme_type in
   last_fct := s;
   if (unchanged s (is_active ())) then 

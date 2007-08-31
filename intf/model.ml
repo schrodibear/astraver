@@ -289,7 +289,7 @@ let _ =
 let create_model () =
   let model = GTree.tree_store cols in
   Dispatcher.iter
-    (fun ((_,s,_) as o) ->
+    (fun ((_,_,s,_) as o) ->
        Hashtbl.add obligs s o;
        let f,n = Tools.decomp_name s in
        let row =

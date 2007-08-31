@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.103 2007-02-21 10:56:12 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.104 2007-08-31 08:16:09 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -75,6 +75,18 @@ let filter_post k =
   let keep (x,_) = is_exn ef x in
   option_app (fun (q, ql) -> (q, List.filter keep ql))
 
+
+let explanation_table = Hashtbl.create 97
+let explanation_counter = ref 0
+
+let reg_explanation e =
+  incr explanation_counter;
+  let id = !explanation_counter in
+  (*Format.eprintf "registering named explanation '%s'@." id;*)
+  Hashtbl.add explanation_table id e;
+  Internal id
+
+
 (*s post-condition for a loop body *)
 
 let default_exns_post e =
@@ -85,14 +97,17 @@ let while_post_block env inv var e =
   let lab = e.info.t_label in
   let decphi = match var with
     | None -> Ptrue
-    | Some (phi,_,r) -> Papp (r, [phi; put_label_term env lab phi], []) 
+    | Some (phi,_,r) -> 
+	let id = reg_explanation Cc.VCEvardecr in
+	Pnamed(id, Papp (r, [phi; put_label_term env lab phi], [])) 
   in
   let ql = default_exns_post (effect e) in
   match inv with
     | None -> 
 	anonymous e.info.t_loc decphi, ql
     | Some i -> 
-	{ a_value = pand i.a_value decphi; (* is_wp:true ? *)
+	let id = reg_explanation (Cc.VCEinvpreserv(i.a_loc,i.a_value)) in
+	{ a_value = pand (Pnamed(id,i.a_value)) decphi; (* is_wp:true ? *)
 	  a_name = post_name_from (Name i.a_name);
 	  a_loc = e.info.t_loc;
 	  a_proof = None }, ql
@@ -129,9 +144,11 @@ let is_while p =
     (forall y,v. Q' => Q) and ... and (forall y,x. Q'k => Qk)
     \end{verbatim} *)
 
+(*
 let loc_name loc = function
   | Pnamed _ as p -> p
-  | p -> Pnamed (Loc.string loc, p)
+  | p -> Pnamed (User (Loc.string loc), p)
+*)
 
 let abstract_wp loc (q',ql') (q,ql) res out =
   assert (List.length ql' = List.length ql);
@@ -180,10 +197,12 @@ let pand_wp info w1 w2 = match w1, w2 with
   | None, Some _ -> w2
   | None, None -> None
 
-let name_wp n w = match w with
-  | Some { a_value = Pnamed _ } -> w
-  | Some w -> Some { w with a_value = Pnamed(n, w.a_value) }
-  | None -> None
+
+let explain_assertion e a = 
+  let id = reg_explanation e in 
+  { a with a_value = Pnamed(id, a.a_value) }
+
+let explain_wp e = Option_misc.map (explain_assertion e)
 
 (*s function binders *)
 
@@ -195,15 +214,19 @@ let abstract_binders =
 
 (*s Adding precondition and obligations to the wp *)
 
-let add_to_wp loc al w =
+let add_to_wp loc explain_id al w =
   let al = List.map (fun p -> (*loc_name loc*) p.a_value) al in
   if al = [] then
     w
   else match w with
     | Some w -> 
-	Some (asst_app (fun w -> List.fold_right (wpand ~is_sym:false) al w) w)
+	Some (asst_app 
+		(fun w -> 
+		   Pnamed(explain_id,
+			  List.fold_right (wpand ~is_sym:false) al w))
+		w)
     | None -> 
-	Some (wp_named loc (wpands ~is_sym:false al))
+	Some (wp_named loc (Pnamed(explain_id,wpands ~is_sym:false al)))
 
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
@@ -218,7 +241,7 @@ let rec wp p q =
   let d,w = wp_desc p.info p.desc q0_ in
   let p = change_desc p d in
   let w = option_app (asst_app (erase_label lab)) w in
-  p, (*name_wp n*) w
+  p, w
 
 and wp_desc info d q = 
   let result = info.t_result_name in
@@ -300,23 +323,27 @@ and wp_desc info d q =
 	Rec (f, bl, v, var, p, e'), pand_wp info (optpost_val q) w
     | Loop (inv, var, e) ->
         (* wp = well_founded(R) /\ I /\ forall w. I => wp(e, I/\var<var@) *)
-	let wfr = well_founded_rel var in
+	let id = reg_explanation Cc.VCEwfrel in
+	let wfr = Pnamed(id, well_founded_rel var) in
 	let qe = while_post_block info.t_env inv var e in
 	let qe = sup (Some qe) q in (* exc. posts taken from [q] *)
 	let e',we = wp e qe in
 	let w = match inv, we with
 	  | None, None ->
 	      wfr
-	  | Some {a_value=i}, None ->
-	      wpand wfr i
+	  | Some i, None ->
+	      let id = reg_explanation (Cc.VCEinvinit(i.a_loc,i.a_value)) in
+	      wpand wfr (Pnamed(id,i.a_value))
 	  | None, Some {a_value=we} ->
 	      let vars = output_info info in
 	      wpand wfr (foralls ~is_wp:true vars we)
-	  | Some {a_value=i}, Some {a_value=we} ->
+	  | Some i, Some {a_value=we} ->
 	      let vars = output_info info in
+	      let id = reg_explanation (Cc.VCEinvinit(i.a_loc,i.a_value)) in
 	      wpand wfr
 		(wpand ~is_sym:true
-		   i (foralls ~is_wp:true vars (Pimplies (true, i, we))))
+		   (Pnamed(id,i.a_value))
+		   (foralls ~is_wp:true vars (Pimplies (true, i.a_value, we))))
 	in
 	let w = Some (wp_named info.t_loc w) in
 	Loop (inv, var, e'), w
@@ -354,21 +381,41 @@ and wp_desc info d q =
 	let qe = filter_post e.info (option_app make_post q) in
 	let e',w = wp e qe in
 	Try (e', hl'), w
-    | Assertion (l, e) ->
+    | Assertion (k, l, e) ->
 	let e',w = wp e q in
-	Assertion (l, e'), add_to_wp info.t_loc l w
+	let expl =  
+	  match k with
+	    | `ABSURD ->
+		Cc.VCEabsurd
+	    | `ASSERT ->
+		Cc.VCEassert (List.map (fun a -> (a.a_loc,a.a_value)) l) 
+	    | `PRE ->
+		let lab = info.t_userlabel in
+		Cc.VCEpre (lab,List.map (fun a -> (a.a_loc,a.a_value)) l) 
+	in
+	let id = reg_explanation expl in
+	Assertion (k, l, e'), add_to_wp info.t_loc id l w
     | Absurd ->
 	Absurd, Some (anonymous info.t_loc Pfalse)
     | Any k as d ->
 	let q' = optpost_app (post_named info.t_loc) k.c_post in
 	let w = opaque_wp q' q info in
 	let pre = List.map (pre_named info.t_loc) k.c_pre in
-	let w = add_to_wp info.t_loc pre w in
+	let l = List.map (fun a -> (a.a_loc,a.a_value)) pre in
+	let lab = info.t_userlabel in
+	let id = reg_explanation (Cc.VCEpre(lab,l)) in
+	let w = add_to_wp info.t_loc id pre w in
 	d, w
     | Post (e, qe, Transparent) ->
 	let lab = e.info.t_label in
 	let qe' = Typing.conj (Some qe) q in
-	let qe' = optpost_app (asst_app (change_label "" lab)) qe' in
+	let qe' = 
+	  optpost_app (fun a -> 
+			 explain_assertion
+			   (Cc.VCEpost(a.a_loc,a.a_value))
+			   (asst_app (change_label "" lab) a))
+	    qe' 
+	in
 	let e',w = wp e qe' in
 	Post (e', qe, Transparent), w
     | Post (e, qe, Opaque) ->

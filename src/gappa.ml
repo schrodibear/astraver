@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.14 2007-04-03 14:48:13 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.15 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -321,7 +321,7 @@ let process_obligation (ctx, concl) =
 	Queue.add (el, gconcl) queue
 
 let push_decl = function
-  | Logic_decl.Dgoal (_,_,s) -> process_obligation s.Env.scheme_type
+  | Logic_decl.Dgoal (_,_,_,s) -> process_obligation s.Env.scheme_type
   | _ -> ()
 
 let print_real fmt = function

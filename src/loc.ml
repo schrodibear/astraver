@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.ml,v 1.20 2006-11-03 16:21:03 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.21 2007-08-31 08:16:08 marche Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -62,14 +62,22 @@ exception Located of position * exn
 
 let dummy_position = Lexing.dummy_pos, Lexing.dummy_pos
 
-let gen_report_position fmt (b,e) = 
-  fprintf fmt "File \"%s\", " b.pos_fname;
-  let l = b.pos_lnum in
-  let fc = b.pos_cnum - b.pos_bol + 1 in
-  let lc = e.pos_cnum - b.pos_bol + 1 in
-  fprintf fmt "line %d, characters %d-%d" l fc lc
+let gen_report_line fmt (f,l,b,e) = 
+  fprintf fmt "File \"%s\", " f;
+  fprintf fmt "line %d, characters %d-%d" l b e
 
-let report_position fmt pos = fprintf fmt "%a:@\n" gen_report_position pos
+let extract (b,e) = 
+  let f = b.pos_fname in
+  let l = b.pos_lnum in
+  let fc = b.pos_cnum - b.pos_bol in
+  let lc = e.pos_cnum - b.pos_bol in
+  (f,l,fc,lc)
+
+let gen_report_position fmt loc = 
+  gen_report_line fmt (extract loc)
+
+let report_position fmt pos = 
+  fprintf fmt "%a:@\n" gen_report_position pos
 
 let string =
   let buf = Buffer.create 1024 in
@@ -89,13 +97,11 @@ let parse s =
        in
        { p with pos_cnum = c1 }, { p with pos_cnum = c2 })
 
-let report_obligation_position fmt (b,e) =
-  fprintf fmt "Why obligation from file \"%s\", " b.pos_fname;
-  let l = b.pos_lnum in
-  let fc = b.pos_cnum - b.pos_bol + 1 in
-  let lc = e.pos_cnum - b.pos_bol + 1 in
-  fprintf fmt "line %d, characters %d-%d:" l fc lc
-  
+let report_obligation_position fmt loc =
+  let (f,l,b,e) = extract loc in
+  fprintf fmt "Why obligation from file \"%s\", " f;
+  fprintf fmt "line %d, characters %d-%d:" l b e
+
 let current_offset = ref 0
 let reloc p = { p with pos_cnum = p.pos_cnum + !current_offset }
 

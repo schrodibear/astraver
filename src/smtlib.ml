@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.35 2007-08-24 13:26:58 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.36 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -311,7 +311,7 @@ let output_elem fmt = function
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type 
-  | Dgoal (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
+  | Dgoal (loc, expl, id, s) -> print_obligation fmt loc id s.Env.scheme_type
 
 
    

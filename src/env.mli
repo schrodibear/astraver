@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.46 2007-03-01 14:40:51 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.47 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -53,6 +53,7 @@ type typing_info = {
   t_loc : Loc.position;
   t_env : local_env;
   t_label : label;
+  mutable t_userlabel : label;
   t_result_name : Ident.t;
   t_result_type : type_v;
   t_effect : Effect.t;

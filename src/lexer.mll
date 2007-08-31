@@ -22,13 +22,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.10 2007-06-15 11:48:43 marche Exp $ *)
+(* $Id: lexer.mll,v 1.11 2007-08-31 08:16:08 marche Exp $ *)
 
 {
   open Lexing
   open Parser
-
-  let int_is_ident = ref false
 
   let keywords = Hashtbl.create 97
   let () = 
@@ -57,6 +55,7 @@
 	"goal", GOAL;
 	"if", IF;
 	"in", IN;
+	"int", INT;
 	"invariant", INVARIANT;
 	"let", LET;
 	"logic", LOGIC;
@@ -125,10 +124,6 @@ rule token = parse
       { newline lexbuf; token lexbuf }
   | space+  
       { token lexbuf }
-  | "int" as id
-      { if !int_is_ident then IDENT id else INT }
-  | "integer" as id
-      { if !int_is_ident then INT else IDENT id }
   | ident as id  
       { try Hashtbl.find keywords id with Not_found -> IDENT id }
   | digit+ as s

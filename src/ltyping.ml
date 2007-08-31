@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.63 2007-03-01 14:40:51 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.64 2007-08-31 08:16:08 marche Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -249,7 +249,7 @@ and desc_predicate loc lab env = function
 	 | _ -> raise_located e.pp_loc 
 	         (AnyMessage "this expression should have type real"))
   | PPnamed (n, a) ->
-      Pnamed (n, predicate lab env a)
+      Pnamed (User n, predicate lab env a)
 
 and type_pvar loc env x =
   if is_at x then 

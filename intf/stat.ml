@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.54 2007-07-04 15:21:30 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.55 2007-08-31 08:16:08 marche Exp $ i*)
 
 open Printf
 open Options
@@ -271,7 +271,7 @@ let try_proof oblig =
 let run_prover_child p (view:GTree.view) (model:GTree.tree_store) 
                      o bench alone = 
   let column_p = p.Model.pr_icon in
-  let (_, oblig, seq) = o in
+  let (_, expl, oblig, seq) = o in
   if bench or (try_proof seq) then
     try 
       let row = 
@@ -386,7 +386,7 @@ let run_benchmark_fct (view:GTree.view) (model:GTree.tree_store) f () =
   try
     let row = Model.find_fct f in
     model#set ~row ~column:Model.total 0;
-    let n = model#iter_n_children (Some row) in
+    let _n = model#iter_n_children (Some row) in
     let mychildren = Model.find_fobligs f in
     Queue.iter
       (fun row -> 
@@ -933,7 +933,7 @@ let main () =
     load_cache "gwhy.cache";
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
-	(fun s (_,o,seq) -> 
+	(fun s (_,expl,o,seq) -> 
 	   let cleaned = Cache.clean seq in
 	   if in_cache cleaned then begin 
 	     let row = Hashtbl.find Model.orows o in

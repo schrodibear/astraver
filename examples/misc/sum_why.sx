@@ -128,8 +128,8 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -137,8 +137,8 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|))))))))
+ (EQ (sub_permut
+ g d t (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -223,10 +223,10 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
-;; sum_po_1, Why obligation from file "", line 0, characters 0-0:
+;; sum_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n) (IMPLIES (>= n 0) (AND (EQ (* 2 0) (* 0 (+ 0 1))) (<= 0 n))))
 
-;; sum_po_2, Why obligation from file "", line 0, characters 0-0:
+;; sum_po_2, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (i)
@@ -240,7 +240,7 @@
 (AND (AND (EQ (* 2 s0) (* i0 (+ i0 1))) (<= i0 n))
 (AND (<= 0 (- n i)) (< (- n i0) (- n i))))))))))))))
 
-;; sum_po_3, Why obligation from file "", line 0, characters 0-0:
+;; sum_po_3, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (i)
