@@ -1,8 +1,8 @@
 
-/* exemple 1 
- * on veut le message: 
+/* example 1 
+ * we want the message: 
  *  "assertion `x < 9' cannot be established"
- * localisÃ© sur `x < 9' 
+ * localized on `x < 9' 
  */
 
 integer f1(integer x)
@@ -15,7 +15,7 @@ integer f1(integer x)
 /* exemple 2 
  * on veut le message: 
  *  "post-condition `\result > 10' of function f1 cannot be established"
- * localisÃ© sur `\result > 10' 
+ * localisé sur `\result > 10' 
  */
 integer f2 (integer x) 
   requires x > 0 && x < 100;
@@ -29,7 +29,7 @@ integer f2 (integer x)
 /* exemple 3 
  * on veut le message: 
  *  "pre-condition `x > 0' for call to function f1 cannot be established"
- * localisÃ© sur `(f1 x)' 
+ * localisé sur `(f1 x)' 
  */
 integer f3 (integer x)  
   requires x >= 0 && x < 50;
@@ -43,6 +43,6 @@ integer f3 (integer x)
 /*
 Local Variables: 
 mode: java
-compile-command: "recherche/why/bin/jessie.byte trace.jc"
+compile-command: "make why/trace.why"
 End: 
 */
