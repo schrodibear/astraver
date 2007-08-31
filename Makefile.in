@@ -110,7 +110,7 @@ V8FILES=$(VO8:.vo=.v)
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
-GENERATED = src/version.ml src/lexer.ml src/parser.mli \
+GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
             jc/jc_version.ml jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
 	    java/java_version.ml \
