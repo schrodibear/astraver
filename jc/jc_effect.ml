@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.49 2007-07-12 12:10:03 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.50 2007-08-31 08:09:46 moy Exp $ *)
 
 
 open Jc_env
@@ -154,8 +154,9 @@ let rec term ef t =
 	  (List.fold_left term ef tl)	
     | JCTderef (t, fi) ->
 	term (add_memory_effect ef fi) t
-    | JCTshift (t1, t2) -> term (term ef t1) t2
-    | JCTrange (t1, t2) -> term (term ef t1) t2
+    | JCTshift (t1, t2)
+    | JCTsub_pointer (t1, t2)
+    | JCTrange (t1, t2)
     | JCTbinary (t1, _, t2) -> term (term ef t1) t2
 
 let tag ef t h =
@@ -204,7 +205,8 @@ let rec expr ef e =
 	add_tag_reads (expr ef e) st.jc_struct_info_root
     | JCEderef (e, f) -> 
 	add_field_reads (expr ef e) f
-    | JCEshift (e1, e2) -> expr (expr ef e1) e2
+    | JCEshift (e1, e2)
+    | JCEsub_pointer (e1, e2) -> expr (expr ef e1) e2
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
     | JCEvar vi -> 
 	if vi.jc_var_info_static then

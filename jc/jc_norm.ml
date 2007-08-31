@@ -269,6 +269,10 @@ let rec expr e =
 	let (l1, tl1), e1 = expr e1 in
 	let (l2, tl2), e2 = expr e2 in
 	(l1@l2, tl1@tl2), JCEshift (e1, e2)
+    | JCTEsub_pointer (e1, e2) ->
+	let (l1, tl1), e1 = expr e1 in
+	let (l2, tl2), e2 = expr e2 in
+	(l1@l2, tl1@tl2), JCEsub_pointer (e1, e2)
     | JCTEderef (e, f) ->
 	let (l, tl), e = expr e in
 	(l, tl), JCEderef (e, f)

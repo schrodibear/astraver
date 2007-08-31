@@ -210,6 +210,7 @@ let rec term this t =
     | JCTderef _ ->
 	check_rep this t.jc_term_loc t
     | JCTshift (t1, t2) 
+    | JCTsub_pointer (t1, t2) 
     | JCTrange (t1, t2)
     | JCTbinary(t1,_,t2) -> term this t1; term this t2
     | JCTvar _ -> ()
@@ -262,6 +263,7 @@ let rec term_memories aux t = match t.jc_term_node with
   | JCTconst _
   | JCTvar _ -> aux
   | JCTshift(t1, t2)
+  | JCTsub_pointer(t1, t2)
   | JCTrange(t1,t2) 
   | JCTbinary(t1,_,t2) -> term_memories (term_memories aux t1) t2
   | JCTderef(t, fi) ->

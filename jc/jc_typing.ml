@@ -320,7 +320,7 @@ let num_un_op t op e =
     | _ -> assert false
 
 
-let logic_unary_op loc (op : Jc_ast.punary_op) e =
+let make_logic_unary_op loc (op : Jc_ast.punary_op) e =
   let t = e.jc_term_type in
   match op with
     | UPnot -> assert false
@@ -409,23 +409,32 @@ let make_logic_bin_op loc op e1 e2 =
 	  JCTbinary(e1, logic_bin_op Tunit op, e2)
 	else
 	  typing_error loc "numeric or pointer types expected for == and !="
-    | BPadd | BPsub ->
-	begin
-	  match t1 with
-	    | JCTpointer(st,_,_) ->
-		if is_integer t2 then
-		  t1, JCTshift(e1, term_coerce t2 Tinteger e2)
-		else
-		  typing_error loc "integer type expected"
-	    | _ ->
-		if is_numeric t1 && is_numeric t2 then
-		  let t = lub_numeric_types t1 t2 in
-		  JCTnative t,
-		  JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
-			     term_coerce t2 t e2)
-		else
-		  typing_error loc "numeric types expected for + and -"
-	end
+    | BPadd ->
+	if is_pointer_type t1 && is_integer t2 then
+	  t1, JCTshift(e1, term_coerce t2 Tinteger e2)
+	else if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative t, JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
+	                         term_coerce t2 t e2)
+	else
+	  typing_error loc "unexpected types for +"
+    | BPsub ->
+	if is_pointer_type t1 && is_integer t2 then
+	  let e2 = { e2 with 
+	    jc_term_node = snd (make_logic_unary_op loc UPminus e2);
+	  } in
+	  t1, JCTshift(e1, term_coerce t2 Tinteger e2)
+	else if 
+	  is_pointer_type t1 && is_pointer_type t2 
+	  && comparable_types t1 t2 
+	then
+	  integer_type, JCTsub_pointer(e1, e2)
+	else if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative t, JCTbinary(term_coerce t1 t e1, logic_bin_op t op, 
+	                         term_coerce t2 t e2)
+	else
+	  typing_error loc "unexpected types for -"
     | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
     | BPshift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
@@ -500,7 +509,7 @@ let rec term env e =
       | JCPEunary(op, e2) -> 
 	  let te2 = term env e2
 	  in
-	  logic_unary_op e.jc_pexpr_loc op te2
+	  make_logic_unary_op e.jc_pexpr_loc op te2
       | JCPEapp (e1, args) ->
 	  begin
 	    match e1.jc_pexpr_node with
@@ -885,7 +894,7 @@ let set_assigned v =
 *)
   v.jc_var_info_assigned <- true
 
-let make_unary_app loc (op : Jc_ast.punary_op) e2 =
+let make_unary_op loc (op : Jc_ast.punary_op) e2 =
   let t2 = e2.jc_texpr_type in
   match op with
     | UPprefix_inc | UPpostfix_inc | UPprefix_dec | UPpostfix_dec ->
@@ -938,10 +947,7 @@ let coerce t1 t2 e =
 	  jc_texpr_loc = e.jc_texpr_loc }  
     | _ -> e_int
 
-
-
-
-let make_bin_app loc op e1 e2 =
+let make_bin_op loc op e1 e2 =
   let t1 = e1.jc_texpr_type and t2 = e2.jc_texpr_type in
   match op with
     | BPgt | BPlt | BPge | BPle ->
@@ -963,22 +969,30 @@ let make_bin_app loc op e1 e2 =
 			(if op = BPeq then Beq_pointer else Bneq_pointer), e2))
 	  else
 	  typing_error loc "numeric or pointer types expected for == and !="
-    | BPadd | BPsub ->
-	begin
-	  match t1 with
-	    | JCTpointer(st,_,_) ->
-		if is_integer t2 then
-		  t1, JCTEshift(e1, coerce t2 Tinteger e2)
-		else
-		  typing_error loc "integer type expected"
-	    | _ ->
-		if is_numeric t1 && is_numeric t2 then
-		  let t = lub_numeric_types t1 t2 in
-		  JCTnative t,
-		  JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
-		else
-		  typing_error loc "numeric types expected for + and -"
-	end
+    | BPadd ->
+	if is_pointer_type t1 && is_integer t2 then
+	  t1, JCTEshift(e1, coerce t2 Tinteger e2)
+	else if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative t, JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
+	else
+	  typing_error loc "unexpected types for +"
+    | BPsub ->
+	if is_pointer_type t1 && is_integer t2 then
+	  let e2 = { e2 with
+	    jc_texpr_node = snd (make_unary_op loc UPminus e2);
+	  } in
+	  t1, JCTEshift(e1, coerce t2 Tinteger e2)
+	else if 
+	  is_pointer_type t1 && is_pointer_type t2 
+	  && comparable_types t1 t2 
+	then
+	  integer_type, JCTEsub_pointer(e1, e2)
+	else if is_numeric t1 && is_numeric t2 then
+	  let t = lub_numeric_types t1 t2 in
+	  JCTnative t, JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
+	else
+	  typing_error loc "unexpected types for -"
     | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
     | BPshift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
@@ -1057,10 +1071,10 @@ let rec expr env e =
 	  unit_type, JCTEfree e1
       | JCPEbinary (e1, op, e2) -> 
 	  let e1 = expr env e1 and e2 = expr env e2 in
-	  make_bin_app e.jc_pexpr_loc op e1 e2
+	  make_bin_op e.jc_pexpr_loc op e1 e2
       | JCPEunary (op, e2) -> 
 	  let e2 = expr env e2 in
-	  make_unary_app e.jc_pexpr_loc op e2
+	  make_unary_op e.jc_pexpr_loc op e2
       | JCPEassign (e1, e2) -> 
 	  begin
 	    let te1 = expr env e1 and te2 = expr env e2 in
@@ -1085,7 +1099,7 @@ let rec expr env e =
 	    match te1.jc_texpr_node with
 	      | JCTEvar v ->
 		  set_assigned v;
-		  let t,res = make_bin_app e.jc_pexpr_loc op te1 te2 in
+		  let t,res = make_bin_op e.jc_pexpr_loc op te1 te2 in
 		  if subtype t t1 then
 		    match res with
 		      | JCTEbinary(_,op,_) ->
@@ -1096,7 +1110,7 @@ let rec expr env e =
 		      "type '%a' expected in op-assignment instead of '%a'"
 		      print_type t1 print_type t
 	      | JCTEderef(te,f) ->
-		  let t,res = make_bin_app e.jc_pexpr_loc op te1 te2 in
+		  let t,res = make_bin_op e.jc_pexpr_loc op te1 te2 in
 		  if subtype t t1 then
 		    match res with
 		      | JCTEbinary(_,op,_) ->
@@ -1121,7 +1135,7 @@ let rec expr env e =
 		      jc_texpr_loc = e.jc_texpr_loc;
 		    } 
 		  in
-		  let t,res = make_bin_app e.jc_texpr_loc op res te2 in
+		  let t,res = make_bin_op e.jc_texpr_loc op res te2 in
 		  let res =
 		    { jc_texpr_node = res;
 		      jc_texpr_type = t;

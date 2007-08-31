@@ -206,6 +206,7 @@ type term_node =
   | JCTconst of const
   | JCTvar of var_info
   | JCTshift of term * term
+  | JCTsub_pointer of term * term
   | JCTderef of term * field_info
   | JCTbinary of term * bin_op * term
   | JCTunary of unary_op * term
@@ -279,6 +280,7 @@ type texpr_node =
   | JCTEconst of const
   | JCTEvar of var_info
   | JCTEshift of texpr * texpr
+  | JCTEsub_pointer of texpr * texpr
   | JCTEderef of texpr * field_info
   | JCTEbinary of texpr * bin_op * texpr
   | JCTEunary of unary_op * texpr
@@ -446,6 +448,7 @@ type expr_node =
   | JCEbinary of expr * bin_op * expr
   | JCEunary of unary_op * expr
   | JCEshift of expr * expr
+  | JCEsub_pointer of expr * expr
   | JCEderef of expr * field_info
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info

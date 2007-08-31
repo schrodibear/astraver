@@ -278,6 +278,8 @@ let rec term label oldlabel t =
 	LApp("shift",[ft t1; 
 		      term_coerce t2.jc_term_loc integer_type 
 			t2.jc_term_type t2'])
+    | JCTsub_pointer(t1,t2) -> 
+	LApp("sub_pointer",[ft t1; ft t2])
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
     | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
@@ -551,6 +553,10 @@ let rec expr ~threats e : expr =
 	  [e1'; 
 	   coerce ~no_int_overflow:(not threats) 
 	     e2.jc_expr_loc integer_type e2.jc_expr_type e2']
+    | JCEsub_pointer(e1,e2) -> 
+	let e1' = expr e1 in
+	let e2' = expr e2 in
+	make_app "sub_pointer" [ e1'; e2']
     | JCEoffset(k,e,st) -> 
 	let alloc =
 	  st.jc_struct_info_root ^ "_alloc_table"
@@ -651,7 +657,10 @@ let rec statement ~threats s =
 		  | JCSblock [] -> () (* ok *)
 		  | _ -> assert false
 		end;
-		call
+		begin match f.jc_fun_info_return_type with
+		| JCTnative Tunit -> call
+		| _ -> let tmp = tmp_var_name () in Let(tmp,call,Void)
+		end
 	    | Some vi ->
 		Let(vi.jc_var_info_final_name,call, statement s)
 	end

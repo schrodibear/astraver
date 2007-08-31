@@ -122,6 +122,8 @@ let rec term fmt t =
 	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
     | JCTshift (t1, t2) -> 
 	fprintf fmt "@[(%a + %a)@]" term t1 term t2
+    | JCTsub_pointer (t1, t2) -> 
+	fprintf fmt "@[(%a - %a)@]" term t1 term t2
     | JCTconst c -> const fmt c
     | JCTrange (t1,t2) -> 
 	fprintf fmt "@[%a..%a@]" term t1 term t2
@@ -277,6 +279,8 @@ let rec expr fmt e =
 	fprintf fmt "%a.%s" expr e fi.jc_field_info_name 
     | JCTEshift (e1, e2) -> 
 	fprintf fmt "@[(%a + %a)@]" expr e1 expr e2
+    | JCTEsub_pointer (e1, e2) -> 
+	fprintf fmt "@[(%a - %a)@]" expr e1 expr e2
     | JCTEconst c -> const fmt c
 
 let rec statement fmt s =

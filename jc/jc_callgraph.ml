@@ -33,6 +33,7 @@ let rec term acc t =
     | JCTapp (f,lt) -> f::(List.fold_left term acc lt)
     | JCToffset(_,t,_) | JCTold t | JCTderef (t,_) -> term acc t
     | JCTshift (t1,t2) 
+    | JCTsub_pointer (t1,t2) 
     | JCTrange (t1,t2)
     | JCTbinary (t1,_,t2) -> term (term acc t1) t2
     | JCTif(t1,t2,t3) -> term (term (term acc t1) t2) t3

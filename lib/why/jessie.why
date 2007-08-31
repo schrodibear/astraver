@@ -17,6 +17,7 @@ predicate valid (a:'t alloc_table, p:'t pointer) =
   offset_min(a,p) <= 0 and offset_max(a,p) >= 0
 
 logic shift : 't pointer, int -> 't pointer
+logic sub_pointer: 't pointer, 't pointer -> int
 
 axiom offset_max_shift :
  forall a:'t alloc_table.
