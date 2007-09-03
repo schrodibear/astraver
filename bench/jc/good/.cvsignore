@@ -1,4 +1,5 @@
 *.makefile
+*.loc
 jessie.log
 gwhy.cache
 why

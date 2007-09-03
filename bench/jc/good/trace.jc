@@ -43,6 +43,6 @@ integer f3 (integer x)
 /*
 Local Variables: 
 mode: java
-compile-command: "make trace"
+compile-command: "make trace.goals"
 End: 
 */

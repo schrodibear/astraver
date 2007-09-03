@@ -12,3 +12,4 @@ compat.ml
 *.annot
 lexer.ml
 parser.mli
+rc.ml
