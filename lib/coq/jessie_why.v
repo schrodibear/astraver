@@ -102,8 +102,8 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A226:Set) (a:(alloc_table A226))
-  (p:(pointer A226)) := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
+(*Why predicate*) Definition valid (A226:Set) (a:(alloc_table A226)) (p:(pointer A226))
+  := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
   forall (A1:Set), (pointer A1) -> Z -> (pointer A1).
@@ -574,9 +574,7 @@ Implicit Arguments in_pset_range.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A254:Set)
-  (A253:Set) (a:(alloc_table A253)) (m1:(memory A253 A254)) (m2:(memory A253
-  A254)) (l:(pset A253))
+(*Why predicate*) Definition not_assigns (A254:Set) (A253:Set) (a:(alloc_table A253)) (m1:(memory A253 A254)) (m2:(memory A253 A254)) (l:(pset A253))
   := (forall (p:(pointer A253)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
@@ -614,8 +612,8 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A260:Set) (a:(tag_table A260))
-  (p:(pointer A260)) (t:(tag_id A260)) := (subtag (typeof a p) t).
+(*Why predicate*) Definition instanceof (A260:Set) (a:(tag_table A260)) (p:(pointer A260)) (t:(tag_id A260))
+  := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
 (*Why logic*) Definition downcast :
@@ -642,8 +640,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A265:Set) (tag_table:(tag_table A265))
-  (mutable:(memory A265 (tag_id A265))) (this:(pointer A265))
+(*Why predicate*) Definition fully_packed (A265:Set) (tag_table:(tag_table A265)) (mutable:(memory A265 (tag_id A265))) (this:(pointer A265))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

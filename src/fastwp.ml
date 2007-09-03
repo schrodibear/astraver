@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.14 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: fastwp.ml,v 1.15 2007-09-03 13:28:19 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -57,7 +57,6 @@ module Subst = struct
       all_vars = Idset.add x s.all_vars }
 
   let add_aux x pt s = 
-    Format.eprintf "add_aux %a@." Ident.print x;
     { s with
 	types = Idmap.add x pt s.types;
 	all_vars = Idset.add x s.all_vars }
@@ -215,10 +214,8 @@ and wp0 e s =
       let ee x = 
 	let ee2,s2 = exn x ee2 s1 and ee3,s3 = exn x ee3 s1 in
 	let s23,r2,r3 = merge s2 s3 in
-	Format.eprintf "s23 = %a@." Subst.print s23;
 	let ee1,s1 = exn x ee1 s in
 	let s',q1,q23 = merge s1 s23 in
-	Format.eprintf "s' = %a@." Subst.print s';
 	pors [wpand ee1 q1; 
 	      wpands [ne1true;ee2;r2;q23]; 
 	      wpands [ne1false;ee3;r3;q23]], s'
@@ -425,21 +422,29 @@ and wp0 e s =
 	  (fun (ne,s) ((x,v), (_,((nei,si),_))) ->
 	    let e1x,_ = exn x ee1 s in 
 	    let e1x = bind_result v e1x in
-	    let si = 
-	      with_exception_type x v (fun v pt -> Subst.add_aux v pt) si 
-	    in
+	    let si = with_exception_type x v Subst.add_aux si in
 	    let s',r1,r2 = merge s si in
 	    por (wpand ne r1) (wpands [e1x; nei; r2]), s')
 	  (ne1,s1) hl
       in
-      let nee = 
-	[] (*TODO*)
-	  (***
-	let ee x = let ee,sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
-	(wpand ne1 q, s'), exns e ee
-	  ***)
+      let ee x = 
+	let eex,sx =
+	  if List.exists (fun ((xi,_),_) -> x == xi) hl then
+ 	    Pfalse, s
+	  else
+ 	    exn x ee1 s
+	in
+	List.fold_left
+	  (fun (nex,sx) ((xi,vi),(_,(_,eei))) ->
+	    let e1xi,sxi = exn xi ee1 s in
+	    let eeix,sxi = exn x eei sxi in
+	    let eeix = bind_result vi eeix in
+	    let sxi = with_exception_type xi vi Subst.add_aux sxi in
+	    let sx,r1,r2 = merge sx sxi in
+	    por (wpand nex r1) (wpands [e1xi; eeix; r2]), sx)
+	  (eex, sx) hl
       in
-      ok, (ne, nee)
+      ok, (ne, exns e ee)
 (*| Rec of variable * type_v binder list * type_v * variant option * 
            precondition list * 'a t *)
   | Rec _ ->
