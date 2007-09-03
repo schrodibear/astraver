@@ -1,6 +1,6 @@
 
-/* example 1 
- * we want the message: 
+/* Example 1 
+ * We want the message: 
  *  "assertion `x < 9' cannot be established"
  * localized on `x < 9' 
  */
@@ -12,10 +12,10 @@ integer f1(integer x)
   return x+1;
 }
 
-/* exemple 2 
- * on veut le message: 
- *  "post-condition `\result > 10' of function f1 cannot be established"
- * localisé sur `\result > 10' 
+/* Example 2 
+ * We want the message: 
+ *  "post-condition `\result > 10' of function f2 cannot be established"
+ * localized on `\result > 10' 
  */
 integer f2 (integer x) 
   requires x > 0 && x < 100;
@@ -26,10 +26,10 @@ integer f2 (integer x)
 }
 
 
-/* exemple 3 
- * on veut le message: 
- *  "pre-condition `x > 0' for call to function f1 cannot be established"
- * localisé sur `(f1 x)' 
+/* Example 3 
+ * We want the message: 
+ *  "pre-condition `x > 0' for call to function f3 cannot be established"
+ * localized on `(f2 x)' 
  */
 integer f3 (integer x)  
   requires x >= 0 && x < 50;
@@ -43,6 +43,6 @@ integer f3 (integer x)
 /*
 Local Variables: 
 mode: java
-compile-command: "make why/trace.why"
+compile-command: "make trace"
 End: 
 */
