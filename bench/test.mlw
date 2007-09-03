@@ -26,17 +26,18 @@ let p () =
 parameter x : int ref
 exception E
 exception F of int
+exception G
 logic q : int -> prop
 
-let p10 = (try raise E : int with E -> assert {1=2}; 0 end) { result = 1 }
+let p10 = (try raise E : int with E -> assert {1=0+1}; 0 end) { result = 1-1 }
 
-let p11 = (try raise (F 1) : int with F x -> x end) { result = 2 }
+let p11 () = (try raise (F 1) : int with F x -> x end) { result = 0+1 }
 
-let p12 = 
+let p12 () = 
   try 
     begin raise E; raise (F 1); 1 end
-  with E -> 2
+  with E -> raise (F 0)
      | F x -> 3
   end
-  { result = 4 }
+  { false | F => result = 1-1 }
 

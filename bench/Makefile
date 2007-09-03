@@ -84,10 +84,11 @@ fastwp.simplify:
 	../bin/dp.opt -no-timings test_why.sx
 
 fastwp.ergo:
-	$(BWHY) --why -d -V --fast-wp test.mlw
+	$(BWHY) --why --fast-wp test.mlw
 	$(BWHY) -no-prelude -tc test_why.why && ergo test_why.why
 
-FASTWPBENCH=po oldify opaque wpcalls
+FASTWPBENCH=po oldify opaque wpcalls exns loops poly see all set 
+# complex_arg_1 complex_arg_2 recfun return
 fastwp.bench:
 	rm -f good/*_why.sx
 	for f in $(FASTWPBENCH) ; do \
