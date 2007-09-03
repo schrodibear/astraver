@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.15 2007-09-03 13:28:19 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.16 2007-09-03 15:30:07 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -362,6 +362,7 @@ and wp0 e s =
       (* OK: I /\ forall w. (I => (ok(e1) /\ (ne(e1,void) => I /\ var<var@)))
 	 N : false
 	 E : e(e1) *)
+      (* TODO: termination *)
       let s0 = Subst.frame e1.info.t_env e1.info.t_effect s in
       let ok1,((ne1,s1),ee1) = wp e1 s0 in
       let ne1void = tsubst_in_predicate (subst_one result tvoid) ne1 in
@@ -373,9 +374,9 @@ and wp0 e s =
       let ok = 
 	wpand 
 	  (subst_inv s)
-	  (wpimplies 
-	      i0
-	      (wpand ok1 (wpimplies ne1void (subst_inv s1))))
+	  (wpforalls
+	      (all_quantifiers ((ne1,s1),ee1)) 
+	      (wpimplies i0 (wpand ok1 (wpimplies ne1void (subst_inv s1)))))
       in
       let ee x =
 	let ee,sx = exn x ee1 s0 in wpand i0 ee, sx

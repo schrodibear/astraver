@@ -13,6 +13,10 @@ Proof.
 intuition.
 Save.
 
+(*Why*) Parameter f_valid :
+  forall (_: unit), forall (b: Z),
+  (sig_2 Z Z (fun (b0: Z) (result: Z)  => (result = b0 /\ b0 = (1 - b)))).
+
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma k_po_1 : 
   forall (b: Z),
@@ -37,4 +41,9 @@ Save.
 Proof.
 intuition; subst; trivial.
 Save.
+
+(*Why*) Parameter k_valid :
+  forall (_: unit), forall (b: Z), forall (b1: Z), forall (b2: Z),
+  (sig_4 Z Z Z unit
+   (fun (b0: Z) (b1_0: Z) (b2_0: Z) (result: unit)  => (b1_0 = 0 /\ b2_0 = 1))).
 
