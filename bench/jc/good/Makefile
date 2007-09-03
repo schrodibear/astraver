@@ -90,6 +90,12 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	make why/$*.why
 	make -f $*.makefile coq
 
+%.ergo: %.jc
+	mkdir -p why
+	rm -f why/$*.why
+	make why/$*.why
+	make -f $*.makefile ergo
+
 .PHONY: simplify coq harvey cvcl
 
 clean:
