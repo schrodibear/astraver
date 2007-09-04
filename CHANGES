@@ -1,10 +1,11 @@
 
 version 2.04, August 2nd, 2007
 ==============================
+  o gwhy: Ctrl-B successively tries all provers on all proof obligations
   o new option -load-file to read an input file without generating
     output for the prover
   o new prover interface Graph which iteratively allows to select more 
-    and more hypotheses and to discharge POs in  Simplify 
+    and more hypotheses and to discharge POs in Simplify 
   o new option -prune-hyp to select relevant hypotheses in the goal
   o fixed Isabelle output (contribution by Yasuhiko Minamide)
 
