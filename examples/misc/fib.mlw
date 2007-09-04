@@ -38,6 +38,16 @@ let fib2 = fun (n:int) ->
   (if n <= 1 then 1 else (fib2_aux n 1 1 1))
   { result = F(n) }
 
+(** Recursive, but with a local function *)
+
+let fib2b (n:int) =
+  let rec helper (x:int) (fx:int) (fx_1:int) : int { variant x } =
+    { 0 <= x < n and fx = F(n-x) and fx_1 = F(n-x-1) }
+    if x = 0 then fx else helper (x-1) (fx+fx_1) fx
+    { result = F(n) }
+  in
+  if n <= 1 then 1 else helper (n-1) 1 1
+
 (** Imperative *)
 
 let fib3 (n:int) =
