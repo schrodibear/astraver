@@ -22,11 +22,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.10 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.11 2007-09-05 13:46:54 filliatr Exp $ i*)
 
 open Format
 open Pp
 open Ident
+open Options
 open Logic
 open Logic_decl
 
@@ -219,7 +220,7 @@ let print_traces fmt =
 
 let output_file f =
   print_in_file print_file (f ^ "_why.why");
-  print_in_file print_traces (f ^ "_why.xpl")
+  if explain_vc then print_in_file print_traces (f ^ "_why.xpl")
 
 let output_files f =
   let po = ref 0 in
@@ -231,8 +232,9 @@ let output_files f =
 		incr po;
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
-		let ftr = f ^ "_po" ^ string_of_int !po ^ ".xpl" in
-		print_in_file (fun fmt -> print_trace fmt id expl) ftr
+		if explain_vc then
+		  let ftr = f ^ "_po" ^ string_of_int !po ^ ".xpl" in
+		  print_in_file (fun fmt -> print_trace fmt id expl) ftr
 	    | d -> 
 		decl ctxfmt d)
 	 queue)

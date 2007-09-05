@@ -318,6 +318,42 @@
 (IMPLIES (> n 1)
 (AND (AND (<= 1 1) (<= 1 n)) (AND (EQ 1 (F 1)) (EQ 1 (F (- 1 1))))))))
 
+;; fib2b_po_1, Why obligation from file "", line 0, characters -1--1:
+(FORALL (n)
+(IMPLIES (> n 1)
+(AND (AND (<= 0 (- n 1)) (< (- n 1) n))
+(AND (EQ 1 (F (- n (- n 1)))) (EQ 1 (F (- (- n (- n 1)) 1)))))))
+
+;; fib2b_po_2, Why obligation from file "", line 0, characters -1--1:
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 0 x) (< x n))
+         (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
+(IMPLIES (EQ x 0) (EQ fx (F n))))))))
+
+;; fib2b_po_3, Why obligation from file "", line 0, characters -1--1:
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 0 x) (< x n))
+         (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
+(IMPLIES (NEQ x 0) (AND (<= 0 x) (< (- x 1) x))))))))
+
+;; fib2b_po_4, Why obligation from file "", line 0, characters -1--1:
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 0 x) (< x n))
+         (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
+(IMPLIES (NEQ x 0)
+(IMPLIES (AND (<= 0 x) (< (- x 1) x))
+(AND (AND (<= 0 (- x 1)) (< (- x 1) n))
+(AND (EQ (+ fx fx_1) (F (- n (- x 1)))) (EQ fx (F (- (- n (- x 1)) 1))))))))))))
+
 ;; fib3_po_1, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)

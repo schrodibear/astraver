@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.76 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: options.mli,v 1.77 2007-09-05 13:46:54 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -42,6 +42,7 @@ val ocaml : bool
 val ocaml_annot : bool
 val ocaml_externals : bool
 
+val explain_vc : bool
 val locs_table : (string, (string * int * int * int)) Hashtbl.t
 
 val wol : bool

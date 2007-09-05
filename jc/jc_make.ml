@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.14 2007-09-03 08:54:37 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.15 2007-09-05 13:46:54 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -55,8 +55,8 @@ let generic f targets =
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";	    
-       fprintf fmt "WHY=why --no-arrays %s -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
-       fprintf fmt "GWHY=gwhy --no-arrays %s -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       fprintf fmt "WHY=why --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       fprintf fmt "GWHY=gwhy --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
        fprintf fmt "JESSIELIBFILE=%s@\n@\n" 
 	 (Filename.concat Jc_options.libdir 
 	    (Filename.concat "why" Jc_options.libfile));

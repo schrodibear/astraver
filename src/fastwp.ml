@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.16 2007-09-03 15:30:07 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.17 2007-09-05 13:46:54 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -81,6 +81,13 @@ module Subst = struct
     { current = Idmap.add x x' s.current; 
       sigma = Idmap.add x x' s.sigma; 
       types = Idmap.add x' (Idmap.find x s.types) s.types;
+      all_vars = Idset.add x' s.all_vars }
+
+  let fresh_pure x pt s =
+    let x' = next_away x s.all_vars in
+    x',
+    { s with 
+      types = Idmap.add x' pt s.types;
       all_vars = Idset.add x' s.all_vars }
 
   let write x s = let _,s = fresh x s in s
@@ -237,18 +244,22 @@ and wp0 e s =
       ok, ((ne, s2), exns e ee)
   | LetIn (x, e1, e2) ->
       let ok1,((ne1,s1),ee1) = wp e1 s in
+      let x',s1 = match e1.info.t_result_type with
+	| PureType pt -> Subst.fresh_pure x pt s1 
+	| _ -> x, s1
+      in
       let ok2,((ne2,s2),ee2) = wp e2 s1 in
       begin match e1.info.t_result_type with
 	| PureType pt as ty1 ->
-	    let ne1x = subst_in_predicate (subst_onev result x) ne1 in
-	    let ok = wpand ok1 (wpforall x ty1 (wpimplies ne1x ok2)) in
-	    let ne = (*exists x ty1*) (wpand ne1x ne2) in
+	    let ne1x = subst_in_predicate (subst_onev result x') ne1 in
+	    let subst = subst_in_predicate (subst_onev x x') in
+	    let ok = wpand ok1 (wpimplies ne1x (subst ok2)) in
+	    let ne = wpand ne1x (subst ne2) in
 	    let ee x =
 	      let ee1,sx1 = exn x ee1 s and ee2,sx2 = exn x ee2 s1 in
 	      let s',r1,r2 = merge sx1 sx2 in
 	      por (wpand ee1 r1) (wpands [ne1x; ee2; r2]), s'
 	    in
-	    let s2 = Subst.add_aux x pt s2 in
 	    ok, ((ne, s2), exns e ee)
 	| Arrow _ ->
 	    assert (not (occur_predicate result ne1));
@@ -326,11 +337,9 @@ and wp0 e s =
 	     wpforall result e1.info.t_result_type (wpimplies ne1 q) ::
 	     List.map2 post_exn ee1 ql)
       in
-      let nee = 
-	let ee x = let ee,sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
-	(wpand ne1 q, s'), exns e ee
-      in
-      ok, nee
+      let ne = wpand ne1 q, s' in
+      let ee x = let ee,sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
+      ok, (ne, exns e ee)
   | Label (l, e) ->
       wp e (Subst.label l s)
   | LetRef (x, e1, e2) ->

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.98 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: options.ml,v 1.99 2007-09-05 13:46:54 filliatr Exp $ i*)
 
 open Format
 
@@ -65,6 +65,7 @@ let lib_files_to_load_ = ref []
 let files_to_load_ = ref []
 let show_time_ = ref false
 let locs_files = ref []
+let explain_vc = ref false
 let locs_table = Hashtbl.create 97
 
 type encoding = 
@@ -185,6 +186,8 @@ Typing/Annotations/VCG options:
   --modulo           displays mod in smtlib instead of pourcent
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
+  --explain          outputs explanations for VCs in file.xpl
+  --locs file        reads source locations from a file
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -416,6 +419,8 @@ let files =
 	| "sstrat" -> types_encoding_ := SortedStratified
 	| _ -> usage (); exit 1);
 	parse args
+    | ("-explain" | "--explain") :: args ->
+	explain_vc := true; parse args
     | ("-locs" | "--locs") :: s :: args ->
 	locs_files := s :: !locs_files;
 	parse args
@@ -470,6 +475,7 @@ let pruning_hyp_p = !pruning_hyp_p_
 let pruning_hyp_v = !pruning_hyp_v_
 let modulo = !modulo_
 let defExpanding = !defExpanding_
+let explain_vc = !explain_vc
 
 (* encoding checks *)
 let () = 

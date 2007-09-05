@@ -4,6 +4,7 @@ CADUCEUSLIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
 EXECCADUCEUS=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-norm -separation -why-opt -split-user-conj
+EXECCADUCEUSFASTWP=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-norm -separation -why-opt -split-user-conj -why-opt -fast-wp
 EXECCADUCEUSNOSEP=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-norm -why-opt -split-user-conj
 
 CFILES=$(shell ls *.c)
@@ -147,6 +148,12 @@ harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v
 	rm -f why/$*.why
 	$(EXECCADUCEUSNOSEP) $<
+	make -f $*.makefile gui
+
+%.fastwp: %.c
+	rm -f coq/caduceus_spec_why.v
+	rm -f why/$*.why
+	$(EXECCADUCEUSFASTWP) $<
 	make -f $*.makefile gui
 
 %.coq: %.c
