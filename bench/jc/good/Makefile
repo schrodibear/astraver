@@ -82,7 +82,6 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	rm -f why/$*.why
 	make why/$*.why
 	make -f $*.makefile goals
-	gwhy -no-prelude why/$*_ctx.why why/$*_po*.why
 
 %.coq: %.jc
 	mkdir -p why
