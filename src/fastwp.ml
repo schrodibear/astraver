@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.17 2007-09-05 13:46:54 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.18 2007-09-05 14:51:01 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -145,10 +145,7 @@ let merge s1 s2 =
 	 try 
 	   let x2 = Subst.find x s2 in if x1 != x2 then Idset.add x d else d
 	 with Not_found -> 
-	   Format.eprintf "@[merge avec %a et %a ; pbm avec x=%a@]@." 
-	     Subst.print s1 Subst.print s2 Ident.lprint x;
-	   Format.eprintf "Idmap.mem x s2 = %b@." (Idmap.mem x s2.sigma);
-	   assert false)
+	   d)
       s1.current Idset.empty
   in
   let s12 = 
@@ -275,6 +272,25 @@ and wp0 e s =
 	| Ref _ -> 
 	    assert false
       end
+  | LetRef (x, e1, e2) ->
+      begin match e1.info.t_result_type with
+	| PureType pt as ty1 ->
+	    let ok1,((ne1,s1),ee1) = wp e1 s in
+	    let s1 = Subst.add x pt s1 in
+	    let ok2,((ne2,s2),ee2) = wp e2 s1 in
+	    let ne1x = subst_in_predicate (subst_onev result x) ne1 in
+	    let ok = wpand ok1 ((*wpforall x ty1*) (wpimplies ne1x ok2)) in
+	    let ne = (*exists x ty1*) (wpand ne1x ne2) in
+	    let ee x =
+	      let ee1,sx1 = exn x ee1 s and ee2,sx2 = exn x ee2 s1 in
+	      let s',r1,r2 = merge sx1 sx2 in
+	      por (wpand ee1 r1) (wpands [ne1x; ee2; r2]), s'
+	    in
+	    let s2 = Subst.add_aux x pt s2 in
+	    ok, ((ne, s2), exns e ee)
+	| Arrow _ | Ref _ -> 
+	    assert false
+      end
   | AppRef (e, _, k) 
   | AppTerm (e, _, k) ->
       let lab = e.info.t_label in
@@ -342,25 +358,6 @@ and wp0 e s =
       ok, (ne, exns e ee)
   | Label (l, e) ->
       wp e (Subst.label l s)
-  | LetRef (x, e1, e2) ->
-      begin match e1.info.t_result_type with
-	| PureType pt as ty1 ->
-	    let ok1,((ne1,s1),ee1) = wp e1 s in
-	    let s1 = Subst.add x pt s1 in
-	    let ok2,((ne2,s2),ee2) = wp e2 s1 in
-	    let ne1x = subst_in_predicate (subst_onev result x) ne1 in
-	    let ok = wpand ok1 (wpforall x ty1 (wpimplies ne1x ok2)) in
-	    let ne = (*exists x ty1*) (wpand ne1x ne2) in
-	    let ee x =
-	      let ee1,sx1 = exn x ee1 s and ee2,sx2 = exn x ee2 s1 in
-	      let s',r1,r2 = merge sx1 sx2 in
-	      por (wpand ee1 r1) (wpands [ne1x; ee2; r2]), s'
-	    in
-	    let s2 = Subst.add_aux x pt s2 in
-	    ok, ((ne, s2), exns e ee)
-	| Arrow _ | Ref _ -> 
-	    assert false
-      end
   | Var _ -> 
       (* this must be an impure function, thus OK = NE = true *)
       Ptrue, ((Ptrue, s), [])
@@ -372,7 +369,7 @@ and wp0 e s =
 	 N : false
 	 E : e(e1) *)
       (* TODO: termination *)
-      let s0 = Subst.frame e1.info.t_env e1.info.t_effect s in
+      let s0 = Subst.writes (Effect.get_writes e1.info.t_effect) s in
       let ok1,((ne1,s1),ee1) = wp e1 s0 in
       let ne1void = tsubst_in_predicate (subst_one result tvoid) ne1 in
       let subst_inv s = match inv with
@@ -383,9 +380,7 @@ and wp0 e s =
       let ok = 
 	wpand 
 	  (subst_inv s)
-	  (wpforalls
-	      (all_quantifiers ((ne1,s1),ee1)) 
-	      (wpimplies i0 (wpand ok1 (wpimplies ne1void (subst_inv s1)))))
+	  (wpimplies i0 (wpand ok1 (wpimplies ne1void (subst_inv s1))))
       in
       let ee x =
 	let ee,sx = exn x ee1 s0 in wpand i0 ee, sx
