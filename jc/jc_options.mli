@@ -39,7 +39,8 @@ val verbose : bool
 val werror : bool
 val why_opt : string
 
-val ai : bool
+val annot_infer : bool
+val ai_domain : string
 val main : string
 
 val files : unit -> string list 

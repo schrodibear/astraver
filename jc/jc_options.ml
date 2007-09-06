@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.7 2007-08-09 18:04:59 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.8 2007-09-06 07:29:54 moy Exp $ i*)
 
 open Format
 
@@ -67,7 +67,8 @@ let why_opt = ref ""
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
-let ai = ref false
+let annot_infer = ref false
+let ai_domain = ref ""
 let main = ref ""
 
 let files_ = ref []
@@ -94,15 +95,19 @@ let _ =
         "-d", Arg.Set debug,
           "  debugging mode";
         "-why-opt", Arg.String add_why_opt,
-	  " <why options>  passes options to Why";
+	  "  <why options>  passes options to Why";
 	"-v", Arg.Set verbose,
           "  verbose mode";
 	"-q", Arg.Clear verbose,
           "  quiet mode (default)";
-	"-ai", Arg.Set(ai),
-	  "performs annotations inference";
+	"-ai", Arg.Tuple [
+	  Arg.String (fun s -> ai_domain := s); 
+	  Arg.Set annot_infer],
+          "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference"
+          ^ " with abstract interpretation using the Box, Octagon"
+          ^ " or Polyhedron domain, or with weakest preconditions or with both";
 	"-main", Arg.Set_string(main),
-	  "main function";
+	  "  main function";
 	"--werror", Arg.Set werror,
           "  treats warnings as errors";
 	"--version", Arg.Unit version,
@@ -122,7 +127,8 @@ let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
 
-let ai = !ai
+let annot_infer = !annot_infer
+let ai_domain = !ai_domain
 let main = !main
 
 (*s error handling *)

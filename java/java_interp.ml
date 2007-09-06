@@ -8,6 +8,10 @@ open Java_env
 open Java_ast
 open Java_tast
 
+let get_loop_counter = 
+  let counter = ref 0 in
+  function () -> let tag = !counter in incr counter; tag
+
 (*s range types *)
 
 (* byte = int8 *)
@@ -642,7 +646,8 @@ let rec statement s =
 	  JCTSif (expr e, statement s1, statement s2)
       | JSwhile(e,inv,dec,s) ->
 	  let la =
-	    { jc_loop_invariant = assertion inv;
+	    { jc_loop_tag = get_loop_counter ();
+	      jc_loop_invariant = assertion inv;
 	      jc_loop_variant = term dec }
 	  in
 	  JCTSwhile(expr e, la, statement s)
@@ -652,7 +657,8 @@ let rec statement s =
 	    decls
 	  in
 	  let la =
-	    { jc_loop_invariant = assertion inv;
+	    { jc_loop_tag = get_loop_counter ();
+	      jc_loop_invariant = assertion inv;
 	      jc_loop_variant = term dec }
 	  in
 	  let res =

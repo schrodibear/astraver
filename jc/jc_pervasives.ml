@@ -45,6 +45,41 @@ let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)
 
 
+(* operators *)
+
+let is_relation_binary_op = function
+  | Blt_int | Blt_real | Bgt_int | Bgt_real
+  | Ble_int | Ble_real | Bge_int | Bge_real
+  | Beq_int | Beq_real | Beq_pointer
+  | Bneq_int | Bneq_real | Bneq_pointer -> true
+  | _ -> false
+
+let is_logical_binary_op = function
+  | Bland | Blor | Bimplies | Biff -> true
+  | _ -> false
+
+let is_arithmetic_binary_op = function
+  | Badd_int | Badd_real | Bsub_int | Bsub_real
+  | Bmul_int | Bmul_real | Bdiv_int | Bdiv_real | Bmod_int -> true
+  | _ -> false
+
+let is_bitwise_binary_op = function
+  | Bbw_and | Bbw_or | Bbw_xor | Bshift_left | Bshift_right -> true
+  | _ -> false
+
+let is_logical_unary_op = function
+  | Unot -> true
+  | _ -> false
+
+let is_arithmetic_unary_op = function
+  | Uplus_int | Uminus_int | Uplus_real | Uminus_real -> true
+  | _ -> false
+
+let is_bitwise_unary_op = function
+  | Ubw_not -> true
+  | _ -> false
+
+
 (* native types *)
 
 let unit_type = JCTnative Tunit

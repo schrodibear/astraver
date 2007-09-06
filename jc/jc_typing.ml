@@ -1239,16 +1239,19 @@ let rec expr env e =
        jc_texpr_type = t;
        jc_texpr_loc = e.jc_pexpr_loc }
 
-  
-
-let loop_annot env i v =
-  let ti = assertion env i
-  and tv = term env v
-  in
-  (* TODO: check variant is integer, or other order ? *) 
-  { jc_loop_invariant = ti ;
-    jc_loop_variant = tv;
-  }
+let loop_annot = 
+  let globtag = ref 0 in
+  let get() = let tag = !globtag in incr globtag; tag in
+  fun env i v ->
+    let ti = assertion env i
+    and tv = term env v
+    in
+    (* TODO: check variant is integer, or other order ? *) 
+    { 
+      jc_loop_tag = get();
+      jc_loop_invariant = ti ;
+      jc_loop_variant = tv;
+    }
 
 
 let make_block (l:tstatement list) : tstatement_node =

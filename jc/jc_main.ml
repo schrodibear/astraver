@@ -109,6 +109,15 @@ let main () =
 	in
 
         (* phase 4.1 (optional) : inference of annotations *)
+(* Yannick
+	if Jc_options.annot_infer then
+	  Hashtbl.iter 
+	    (fun _ (f,s,b) -> 
+	      Jc_annot_inference.code_function (f,s,b) 
+	    ) Jc_norm.functions_table;
+Yannick *)
+
+(* Nicolas
 	if Jc_options.ai then
 	  begin
 	    if Jc_options.verbose then printf "Begin AI@.";
@@ -127,6 +136,7 @@ let main () =
 	      Jc_norm.functions_table;
 	    if Jc_options.verbose then printf "End AI@."
 	  end;
+Nicolas *)
 	
 	(* phase 5 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";

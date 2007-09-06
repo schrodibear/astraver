@@ -308,7 +308,8 @@ and texpr =
 
 type loop_annot =
     {
-      jc_loop_invariant : assertion;
+      jc_loop_tag : int;
+      mutable jc_loop_invariant : assertion;
       jc_loop_variant : term;
     }
 

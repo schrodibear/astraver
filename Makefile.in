@@ -75,11 +75,15 @@ APRONLIB = -I /usr/lib
 
 APRONOPTLDFLAGS = \
 -verbose -ccopt "$(LCFLAGS)" \
+#Yannick: nums.cmxa atp.cmx bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
+-cclib " -lpolka_caml -lpolka_debug -loct_caml -loct -lbox_caml -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
 #bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
 -cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
 
 APRONBYTLDFLAGS = \
 -verbose -ccopt "$(LCFLAGS)" \
+#Yannick: nums.cma atp.cmo bigarray.cma gmp.cma apron.cma box.cma polka.cma \
+-cclib " -lpolka_caml -lpolka_debug -loct_caml -loct -lbox_caml -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
 #bigarray.cma gmp.cma apron.cma box.cma polka.cma \
 -cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
 
