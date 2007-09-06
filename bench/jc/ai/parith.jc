@@ -1,0 +1,17 @@
+
+type char = {
+  integer val;
+}
+
+unit f(char[0..10] p) {
+  char[..] q = p;
+  integer i = 0;
+  while (i < 10) 
+	invariant true;
+	variant 0;
+	{
+	q.val = 0;
+	q = q+1;
+	i++;
+  }	
+}	

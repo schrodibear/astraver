@@ -17,6 +17,22 @@ integer test0(integerT[0..10] t)
   }
 }
 
+integer test0bis(integerT[0..10] t) 
+  requires true;
+  behavior test0bis:
+    assigns t;
+    ensures true;
+{
+  integer x = 0;
+  while(x < 10) 
+    invariant true;
+    variant 10 - x;
+  {
+    (t + x).integerM = x;
+    x++;
+  }
+}
+
 integer test1(integerT[0..10] t, integer max)
   requires true;
   behavior test0:

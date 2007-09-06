@@ -87,6 +87,6 @@ unit main()
 /*
 Local Variables: 
 mode: java
-compile-command: "make Purse"
+compile-command: "make purse"
 End: 
 */
