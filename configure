@@ -2356,12 +2356,12 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_file__usr_local_lib_apron_cmxa" >&5
 echo "${ECHO_T}$ac_cv_file__usr_local_lib_apron_cmxa" >&6; }
 if test $ac_cv_file__usr_local_lib_apron_cmxa = yes; then
-  APRONLIB=/usr/local/lib
+  APRONLIB="-I /usr/local/lib"
 else
-  APRON=no
+  APRONLIB=no
 fi
 
-   if test "$APRON" = no ; then
+   if test "$APRONLIB" = no ; then
       { echo "$as_me:$LINENO: checking for /usr/lib/apron.cmxa" >&5
 echo $ECHO_N "checking for /usr/lib/apron.cmxa... $ECHO_C" >&6; }
 if test "${ac_cv_file__usr_lib_apron_cmxa+set}" = set; then
@@ -2380,12 +2380,12 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_file__usr_lib_apron_cmxa" >&5
 echo "${ECHO_T}$ac_cv_file__usr_lib_apron_cmxa" >&6; }
 if test $ac_cv_file__usr_lib_apron_cmxa = yes; then
-  APRON=/usr/lib
+  APRONLIB="-I /usr/lib"
 else
-  APRON=no
+  APRONLIB=no
 fi
 
-      if test "$APRON" = no ; then
+      if test "$APRONLIB" = no ; then
 	 { { echo "$as_me:$LINENO: error: Cannot find APRON library." >&5
 echo "$as_me: error: Cannot find APRON library." >&2;}
    { (exit 1); exit 1; }; }
