@@ -1,0 +1,48 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
+(*  Copyright (C) 2002-2006                                               *)
+(*    Jean-François COUCHOT                                               *)
+(*    Mehdi DOGGUY                                                        *)
+(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Thierry HUBERT                                                      *)
+(*    Claude MARCHÉ                                                       *)
+(*    Yannick MOY                                                         *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU General Public                   *)
+(*  License version 2, as published by the Free Software Foundation.      *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(*  See the GNU General Public License version 2 for more details         *)
+(*  (enclosed in the file GPL).                                           *)
+(*                                                                        *)
+(**************************************************************************)
+
+
+open Jc_ast
+open Jc_fenv
+
+(* Yannick
+
+val code_function : fun_info * fun_spec * statement list option -> unit
+
+Yannick *)
+
+
+(* automatically infer loop invariants for loops in code *)
+val code_function : fun_info -> statement list option -> statement list option
+
+(* automatically infer preconditions for a function and recursively on
+   function it calls *)
+val main_function : fun_info -> fun_spec -> statement list option -> unit
+
+
+(*
+  Local Variables: 
+  compile-command: "make -C .. bin/jessie.byte"
+  End: 
+*)

@@ -1427,10 +1427,6 @@ let code_function = function
   
 Yannick *)
 
-(* Nicolas
-
-(*
-
 open Apron
 open Format
 open Jc_ast
@@ -2154,10 +2150,9 @@ and statement man pre fv lao fil s =
   { s with jc_statement_node = jc_statement_node }, post, lao
 									   ;;
 
-*)
 									   
-let code_function fi bo = assert false
-(*  if debug then printf "code_function...@.";
+let code_function fi bo = 
+  if debug then printf "code_function...@.";
   if verbose then printf "  function %s@." fi.jc_fun_info_name;
   try
     (* let man = Box.manager_alloc () in *) (* Intervalles abstract domain *)
@@ -2220,23 +2215,21 @@ let rec calls_infer fi fs bo =
     fi.jc_fun_info_calls
 ;;
 
-*)
 
-let rec main_function fi fs bo = assert false
-(*  calls_infer fi fs bo;
+let rec main_function fi fs bo = 
+  calls_infer fi fs bo;
   if !calls_changed then 
     main_function fi fs bo
   else
     ()
-;;
 
 
-(* TODO : cas appels récursifs (direct ou indirect) *)
-
-
+(* TODO : cas appels récursifs (direct ou indirect) 
+    -> utiliser le graphe d'appel
 *)
+   
 
-Nicolas *)
+
 
 (*
 Local Variables: 

@@ -117,26 +117,24 @@ let main () =
 	    ) Jc_norm.functions_table;
 Yannick *)
 
-(* Nicolas
-	if Jc_options.ai then
+	if Jc_options.ai_domain <> "" then
 	  begin
 	    if Jc_options.verbose then printf "Begin AI@.";
 	    Hashtbl.iter 
 	      (fun tag (fi, fs, bo) ->
 		if Jc_options.main = "" then
 		  (* no main: inference of loop invariants only *)
-		  let bo = Jc_annot_inference.code_function fi bo in
+		  let bo = Jc_ai.code_function fi bo in
 		  Hashtbl.replace Jc_norm.functions_table tag (fi, fs, bo)
 		else
 		  if fi.jc_fun_info_name = Jc_options.main then
 		    (* main: inference of pre/post and loop invariants *)
-		    Jc_annot_inference.main_function fi fs bo
+		    Jc_ai.main_function fi fs bo
 		  else
 		    ())
 	      Jc_norm.functions_table;
 	    if Jc_options.verbose then printf "End AI@."
 	  end;
-Nicolas *)
 	
 	(* phase 5 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
