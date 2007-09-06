@@ -45,7 +45,7 @@ simplify:
 	../bin/dp.opt test_why.sx
 
 yices:
-	../bin/why.opt --smtlib -d --encoding sstrat --prune -V test.mlw
+	../bin/why.opt --smtlib --encoding sstrat test.mlw
 	../bin/dp.opt test_why.smt
 
 ergo:

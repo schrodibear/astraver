@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.13 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.14 2007-09-06 13:53:24 filliatr Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -64,6 +64,7 @@ let ss2Int = "ss2Int"
 let real2U = "real2U"
 let ss2Real = "ss2Real" 
 let bool2U = "bool2U"
+let unit2U = "unit2U"
 let ss2Bool = "ss2Bool"
 let arities = ref []
 
@@ -217,6 +218,7 @@ let prelude =
   (Dtype (loc, [], prefix^"ssorted"))::	
     (Dtype (loc, [], prefix^"type"))::
     (Dtype (loc, [], prefix^"Boolean"))::
+    (Dtype (loc, [], prefix^"Unit"))::
     (Dlogic (loc, prefix^"sort", 
 	     Env.empty_scheme (Function ([ssortedButBuiltInString "type" ; ut], ssortedButBuiltInString "ssorted")))):: 
     (Dlogic (loc, prefix^"Boolean_true",
@@ -239,6 +241,8 @@ let prelude =
     	     let neq = Papp (Ident.t_neq,[boolTrue;boolFalse], []) in 	     
 	     Env.empty_scheme neq ))::
     
+    (Dlogic (loc, "tt",
+	     Env.empty_scheme (Function ([], ssortedButBuiltIn PTunit)))):: 
     (Dlogic (loc, int2U, 
 	     Env.empty_scheme (Function ([ssortedButBuiltIn PTint], ut)))):: 
     (Dlogic (loc, ss2Int, 
@@ -249,6 +253,8 @@ let prelude =
 	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTreal)))):: 
     (Dlogic (loc, bool2U, 
 	     Env.empty_scheme (Function ([ssortedButBuiltIn PTbool], ut))))::
+    (Dlogic (loc, unit2U, 
+	     Env.empty_scheme (Function ([ssortedButBuiltIn PTunit], ut))))::
     (Dlogic (loc, ss2Bool, 
 	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTbool)))):: 
     (Dlogic (loc, prefix^"int",
@@ -449,7 +455,7 @@ let rec leftt pt fv=
       PTint -> Tapp (Ident.create (prefix^"int"), [], [])
     | PTbool -> Tapp (Ident.create (prefix^"bool"), [], [])
     | PTreal -> Tapp (Ident.create (prefix^"real"), [], [])
-    | PTunit -> Tapp (Ident.create (prefix^"unit"), [], [])
+    | PTunit -> Tapp (Ident.create (prefix^"Unit"), [], [])
     | PTvar ({type_val = None} as var) -> 
 	(*let s = string_of_int var.tag in *)
 	let t = try (List.assoc var.tag fv)
@@ -487,7 +493,7 @@ let typedPlunge fv term pt =
 	PTint -> Tapp (Ident.create int2U,  [term], [])
       | PTbool -> Tapp (Ident.create bool2U, [term], [])
       | PTreal -> Tapp (Ident.create real2U, [term], [])
-      | PTunit -> Tapp (Ident.create ("unit2U"), [term], [])
+      | PTunit -> Tapp (Ident.create unit2U, [term], [])
       | _ -> term 
   in
   let l =  Tapp (Ident.create (prefix^"sort"),

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.mli,v 1.15 2007-08-31 08:16:09 marche Exp $ i*)
+(*i $Id: wp.mli,v 1.16 2007-09-06 13:53:25 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -34,3 +34,5 @@ val wp : typed_expr -> typed_expr * Ast.assertion option
 (**
 val wp : typed_expr -> Ast.assertion option * (Cc.proof_term -> typed_expr)
 ***)
+
+val well_founded_rel : Ast.variant option -> Logic.predicate
