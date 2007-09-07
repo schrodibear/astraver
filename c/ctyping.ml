@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.149 2007-08-02 12:46:58 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.150 2007-09-07 13:02:53 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -1207,7 +1207,9 @@ and type_statement_node loc env et lz = function
   | CSannot (Label l) ->
       TSlogic_label l, mt_status, lz
   | CSannot (GhostSet(x,t)) ->
-      TSset (type_ghost_lvalue env x,type_term env t), mt_status, lz
+      let x = type_ghost_lvalue env x in
+      let t = type_term env t in
+      TSset (x, Cltyping.coerce x.term_type t), mt_status, lz
   | CSspec (spec, s) ->
       let spec = type_spec env spec in
       let lz1,lz2 = match lz with

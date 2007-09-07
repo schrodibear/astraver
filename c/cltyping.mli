@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.mli,v 1.35 2006-11-27 15:46:33 hubert Exp $ i*)
+(*i $Id: cltyping.mli,v 1.36 2007-09-07 13:02:53 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -41,3 +41,5 @@ val type_loop_annot : Env.t -> parsed_loop_annot -> Cast.loop_annot
 val type_logic_type : Loc.position -> Env.t -> parsed_logic_type -> tctype
 val int_constant : string -> tterm
 val zero : tterm
+val coerce : tctype -> tterm -> tterm
+

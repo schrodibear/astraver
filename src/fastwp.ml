@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.20 2007-09-07 10:45:45 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.21 2007-09-07 13:02:53 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -295,29 +295,6 @@ and wp0 e s =
 	| Arrow _ | Ref _ -> 
 	    assert false
       end
-  | AppRef (e1, _, k) 
-  | AppTerm (e1, _, k) ->
-      let lab = e1.info.t_label in
-      let s = Subst.label lab s in
-      let q = optpost_app (asst_app (change_label "" lab)) k.t_post in
-      let ok,(((ne,s'),ee) as nee) = wp e1 s in
-      assert (not (occur_predicate result ne));
-      let wr s = Subst.writes (Effect.get_writes k.t_effect) s in
-      let nee = match q with
-	| Some (q', qe) -> 
-	    (let s' = wr s' in
-	     wpand ne (Subst.predicate s' q'.a_value), s'),
-	    (let ee x = 
-	       let q' = List.assoc x qe in
-	       let ee,s' = exn x ee s in
-	       let s' = wr s' in
-	       por ee (wpand ne (Subst.predicate s' q'.a_value)), s'
-	     in
-	     exns e ee)
-	| None -> 
-	    nee
-      in
-      ok, nee
   | Assertion (k, al, e1) ->
       (* OK: al /\ ok(e1)
 	 NE: al /\ ne(e1,result) *)
@@ -471,9 +448,51 @@ and wp0 e s =
       let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
       pand wfr (wpforalls (q @ qr) (wpimplies (wpands pl) ok)),
       ((Ptrue, s), [])
-  (*| Any of type_c *)
+  | AppRef (e1, _, k) 
+  | AppTerm (e1, _, k) ->
+      let lab = e1.info.t_label in
+      let s = Subst.label lab s in
+      let q = optpost_app (asst_app (change_label "" lab)) k.t_post in
+      let ok,(((ne,s'),ee) as nee) = wp e1 s in
+      assert (not (occur_predicate result ne));
+      let wr s = Subst.writes (Effect.get_writes k.t_effect) s in
+      let nee = match q with
+	| Some (q', qe) -> 
+	    (let s' = wr s' in
+	     wpand ne (Subst.predicate s' q'.a_value), s'),
+	    (let ee x = 
+	       let q' = List.assoc x qe in
+	       let ee,s' = exn x ee s in
+	       let s' = wr s' in
+	       por ee (wpand ne (Subst.predicate s' q'.a_value)), s'
+	     in
+	     exns e ee)
+	| None -> 
+	    nee
+      in
+      ok, nee
   | Any k ->
-      assert false (*TODO*)
+      assert false
+(***
+      let lab = e.info.t_label in
+      let s = Subst.label lab s in
+      let q = optpost_app (asst_app (change_label "" lab)) k.t_post in
+      let wr s = Subst.writes (Effect.get_writes k.t_effect) s in
+      let nee = match q with
+	| Some (q', qe) -> 
+	    (let s' = wr s in
+	     Subst.predicate s' q'.a_value, s'),
+	    (let ee x = 
+	       let q' = List.assoc x qe in
+	       let s' = wr s in
+	       por ee (wpand ne (Subst.predicate s' q'.a_value)), s'
+	     in
+	     exns e ee)
+	| None -> 
+	    nee
+      in
+      ok, nee
+***)
 
 let wp e =
   let s = Subst.frame e.info.t_env e.info.t_effect Subst.empty in
