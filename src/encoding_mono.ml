@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.14 2007-09-06 13:53:24 filliatr Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.15 2007-09-07 10:45:45 filliatr Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -64,8 +64,9 @@ let ss2Int = "ss2Int"
 let real2U = "real2U"
 let ss2Real = "ss2Real" 
 let bool2U = "bool2U"
-let unit2U = "unit2U"
 let ss2Bool = "ss2Bool"
+let unit2U = "unit2U"
+let ss2Unit = "ss2Unit"
 let arities = ref []
 
 
@@ -241,8 +242,6 @@ let prelude =
     	     let neq = Papp (Ident.t_neq,[boolTrue;boolFalse], []) in 	     
 	     Env.empty_scheme neq ))::
     
-    (Dlogic (loc, "tt",
-	     Env.empty_scheme (Function ([], ssortedButBuiltIn PTunit)))):: 
     (Dlogic (loc, int2U, 
 	     Env.empty_scheme (Function ([ssortedButBuiltIn PTint], ut)))):: 
     (Dlogic (loc, ss2Int, 
@@ -253,10 +252,12 @@ let prelude =
 	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTreal)))):: 
     (Dlogic (loc, bool2U, 
 	     Env.empty_scheme (Function ([ssortedButBuiltIn PTbool], ut))))::
-    (Dlogic (loc, unit2U, 
-	     Env.empty_scheme (Function ([ssortedButBuiltIn PTunit], ut))))::
     (Dlogic (loc, ss2Bool, 
 	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTbool)))):: 
+    (Dlogic (loc, unit2U, 
+	     Env.empty_scheme (Function ([ssortedButBuiltIn PTunit], ut))))::
+    (Dlogic (loc, ss2Unit, 
+	     Env.empty_scheme (Function ([ssortedButBuiltInString "ssorted"], ssortedButBuiltIn PTunit)))):: 
     (Dlogic (loc, prefix^"int",
 	     Env.empty_scheme (Function ([], ssortedButBuiltInString "type")))):: 
     (Dlogic (loc, prefix^"bool", 
@@ -455,7 +456,7 @@ let rec leftt pt fv=
       PTint -> Tapp (Ident.create (prefix^"int"), [], [])
     | PTbool -> Tapp (Ident.create (prefix^"bool"), [], [])
     | PTreal -> Tapp (Ident.create (prefix^"real"), [], [])
-    | PTunit -> Tapp (Ident.create (prefix^"Unit"), [], [])
+    | PTunit -> Tapp (Ident.create (prefix^"unit"), [], [])
     | PTvar ({type_val = None} as var) -> 
 	(*let s = string_of_int var.tag in *)
 	let t = try (List.assoc var.tag fv)
@@ -616,6 +617,8 @@ let rec translate_term fv lv term doTheCast=
  	  Tapp(Ident.create ss2Real, [translate fv lv term],[])
       | PTbool -> 
 	  Tapp(Ident.create ss2Bool, [translate fv lv term],[])
+      | PTunit -> 
+	  Tapp(Ident.create ss2Unit, [translate fv lv term],[])
       | _   ->
 	  (** if the type is not pure, i.e. it is deduced syntactically **)
 	  let term'= translate fv lv term  in 
@@ -633,6 +636,9 @@ let rec translate_term fv lv term doTheCast=
 			| Tapp (k, [], [])  when 
 			    Ident.string k = prefix^"bool"->  
 			    Tapp(Ident.create ss2Bool, [term'],[])
+			| Tapp (k, [], [])  when 
+			    Ident.string k = prefix^"unit"->  
+			    Tapp(Ident.create ss2Unit, [term'],[])
 			| _ as t ->
 			    Format.printf ("tt :  %a \n ") print_term t ; 
 			    assert false

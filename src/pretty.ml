@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.11 2007-09-05 13:46:54 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.12 2007-09-07 10:45:45 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -109,6 +109,8 @@ let rec predicate fmt = function
       fprintf fmt "(%a %s %a)" term t1 (int_relation_string id) term t2
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[((0 <= %a) and@ (%a < %a))@]" term b term a term b
+  | Papp (id, [t], _) when id == well_founded ->
+      fprintf fmt "@[true (* was well founded *)@]" 
   | Papp (id, l, _) ->
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma term) l
   | Ptrue ->

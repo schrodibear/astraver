@@ -106,16 +106,16 @@ let arr6 () = { array_length(v6) >= 4 } v6[1+2] := 3+4
 let arr7 () = { array_length(v6) >= 10 and v6[0] = 9 } v6[v6[0]] := 1
 
 (* function calls *)
-let fc1 = (f5 v5)
-let fc2 = (f4 void)
-let fc3 = let a = ref 0 in let b = ref 0 in (f3 a b)
+let fc1 () = (f5 v5)
+let fc2 () = (f4 void)
+let fc3 () = let a = ref 0 in let b = ref 0 in (f3 a b)
 
 (* while loops: in file loops.ml *)
 
 (* recursive functions: in file recfun.ml *)
 
 (* annotations *)
-let an1 = 0 { result = 0 }
+let an1 () = 0 { result = 0 }
 let an2 () = { v4 >= 0 } begin v4 := !v4 + 1 end { v4 > v4@ }
 (* let an3 = { v4 >= 0 } begin v4 := !v4 + 1 end { v4 > v4@init } *)
 

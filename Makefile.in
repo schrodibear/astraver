@@ -134,7 +134,8 @@ GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
 	    tools/zenon_split.ml tools/ergo_split.ml \
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
 	    tools/simplify_parser.ml \
-	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml
+	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml \
+	    jc/jc_ai.ml
 
 # main targets
 ##############
@@ -464,6 +465,7 @@ WHYVO=lib/coq/Why.vo
 
 bench:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY)"
+	make -C bench fastwp.bench.ergo
 	make -C examples simplify
 	cd bench/provers; sh ./bench "../../$(BINARY)"
 

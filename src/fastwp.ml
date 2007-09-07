@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.19 2007-09-06 13:53:24 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.20 2007-09-07 10:45:45 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -295,12 +295,12 @@ and wp0 e s =
 	| Arrow _ | Ref _ -> 
 	    assert false
       end
-  | AppRef (e, _, k) 
-  | AppTerm (e, _, k) ->
-      let lab = e.info.t_label in
+  | AppRef (e1, _, k) 
+  | AppTerm (e1, _, k) ->
+      let lab = e1.info.t_label in
       let s = Subst.label lab s in
       let q = optpost_app (asst_app (change_label "" lab)) k.t_post in
-      let ok,(((ne,s'),ee) as nee) = wp e s in
+      let ok,(((ne,s'),ee) as nee) = wp e1 s in
       assert (not (occur_predicate result ne));
       let wr s = Subst.writes (Effect.get_writes k.t_effect) s in
       let nee = match q with
@@ -318,16 +318,6 @@ and wp0 e s =
 	    nee
       in
       ok, nee
-  | Lam (bl, pl, e) ->
-      (* OK: forall bl. pl => ok(e)
-	 NE: forall bl. pl /\ ne(e, result) *)
-      let s = Subst.frame e.info.t_env e.info.t_effect s in
-      let ok,r = wp e s in
-      let qr = all_quantifiers r in
-      let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) pl in
-      let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
-      wpforalls (q @ qr) (wpimplies (wpands pl) ok),
-      ((Ptrue, s), [])
   | Assertion (k, al, e1) ->
       (* OK: al /\ ok(e1)
 	 NE: al /\ ne(e1,result) *)
@@ -460,12 +450,29 @@ and wp0 e s =
 	  (eex, sx) hl
       in
       ok, (ne, exns e ee)
-(*| Rec of variable * type_v binder list * type_v * variant option * 
-           precondition list * 'a t *)
-  | Rec _ ->
-      assert false (*TODO*)
-(*| Any of type_c *)
-  | Any _ ->
+  | Lam (bl, pl, e) ->
+      (* OK: forall bl. pl => ok(e)
+	 NE: forall bl. pl /\ ne(e, result) *)
+      let s = Subst.frame e.info.t_env e.info.t_effect s in
+      let ok,r = wp e s in
+      let qr = all_quantifiers r in
+      let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) pl in
+      let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
+      wpforalls (q @ qr) (wpimplies (wpands pl) ok),
+      ((Ptrue, s), [])
+  | Rec (f, bl, v, var, pl, e) ->
+      (* OK: well_founded(R) /\ forall bl. pl => ok(e)
+	 NE: forall bl. pl /\ ne(e, result) *)
+      let wfr = Wp.well_founded_rel var in
+      let s = Subst.frame e.info.t_env e.info.t_effect s in
+      let ok,r = wp e s in
+      let qr = all_quantifiers r in
+      let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) pl in
+      let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
+      pand wfr (wpforalls (q @ qr) (wpimplies (wpands pl) ok)),
+      ((Ptrue, s), [])
+  (*| Any of type_c *)
+  | Any k ->
       assert false (*TODO*)
 
 let wp e =

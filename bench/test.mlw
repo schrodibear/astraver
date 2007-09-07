@@ -1,21 +1,4 @@
 
-goal test : forall x,y:unit. x=y -> false
-
-(***
-
-parameter i : int ref
-
-let p() =
-  i := 100;
-  while !i > 0 do { invariant 0 <= i variant i }
-    i := !i - 1
-  done;
-  !i
-  { result = 0 }
-
-***)
-
-(***
 
 exception Exception
 
@@ -28,4 +11,3 @@ parameter f1 : tt:unit ->
 let f = fun () ->
   f1 void 
 
-***)

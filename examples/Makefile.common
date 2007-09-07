@@ -1,6 +1,7 @@
 # Generated automatically from Makefile.common.in by configure.
 
 WHY=../../bin/why.opt
+GWHY=../../bin/gwhy.opt -split-user-conj
 CADUCEUS=../../bin/caduceus.opt
 # WHYOPTIONS=--coq-v8
 WHYOPTIONS=--coq-v8 --valid
@@ -67,6 +68,12 @@ harvey: $(VO:_valid.vo=_why.rv)
 
 %.wol: %.mlw
 	$(WHY) --wol $<
+
+%.gui: %.mlw
+	$(GWHY) $<
+
+%.fastwp: %.mlw
+	$(GWHY) -fast-wp $<
 
 clean::
 	rm -f *~ *.vo *.wol
