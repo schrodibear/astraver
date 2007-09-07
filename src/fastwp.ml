@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.21 2007-09-07 13:02:53 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.22 2007-09-07 13:19:36 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -472,27 +472,24 @@ and wp0 e s =
       in
       ok, nee
   | Any k ->
-      assert false
-(***
       let lab = e.info.t_label in
       let s = Subst.label lab s in
-      let q = optpost_app (asst_app (change_label "" lab)) k.t_post in
-      let wr s = Subst.writes (Effect.get_writes k.t_effect) s in
+      let q = optpost_app (post_named e.info.t_loc) k.c_post in
+      let q = optpost_app (asst_app (change_label "" lab)) q in
+      let s' = Subst.writes (Effect.get_writes k.c_effect) s in
       let nee = match q with
 	| Some (q', qe) -> 
-	    (let s' = wr s in
-	     Subst.predicate s' q'.a_value, s'),
+	    (Subst.predicate s' q'.a_value, s'),
 	    (let ee x = 
 	       let q' = List.assoc x qe in
-	       let s' = wr s in
-	       por ee (wpand ne (Subst.predicate s' q'.a_value)), s'
+	       Subst.predicate s' q'.a_value, s'
 	     in
 	     exns e ee)
 	| None -> 
-	    nee
+	    let ee x = Ptrue, s' in
+	    (Ptrue, s'), exns e ee
       in
-      ok, nee
-***)
+      Ptrue, nee
 
 let wp e =
   let s = Subst.frame e.info.t_env e.info.t_effect Subst.empty in

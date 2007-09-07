@@ -1,13 +1,13 @@
 
+parameter x : int ref
 
-exception Exception
+exception E
 
-parameter f1 : tt:unit ->
-  { }
-  unit
-  raises Exception
-  { true }
-
-let f = fun () ->
-  f1 void 
+let p () =
+  begin 
+    x := 0;
+    [ {} unit writes x raises E { x=1 | E => x@=0 -> x=2 } ];
+    void
+  end
+  { x=0+1 | E => x=0+2 }
 

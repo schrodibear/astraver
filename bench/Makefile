@@ -1,6 +1,7 @@
  
 WHY=WHYLIB=../lib/why ../bin/why.opt
 BWHY=WHYLIB=../lib/why ../bin/why.byte
+GWHY=WHYLIB=../lib/why ../bin/gwhy.opt
 
 all:
 	./bench "../bin/why.opt --coq-v8 --valid"
