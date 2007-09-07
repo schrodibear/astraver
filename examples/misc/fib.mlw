@@ -48,6 +48,18 @@ let fib2b (n:int) =
   in
   if n <= 1 then 1 else helper (n-1) 1 1
 
+(** With a recursive without precondition *)
+
+let rec fib2c_aux (n:int) (fx:int) (fx_1:int) : int { variant n } =
+  { 0 <= n }
+  if n = 0 then fx else fib2c_aux (n-1) (fx+fx_1) fx
+  { forall x:int. 1 <= x -> fx=F(x) -> fx_1=F(x-1) -> result=F(x+n) }
+
+let fib2c (n:int) =
+  { n >= 0 }
+  (if n <= 1 then 1 else fib2c_aux (n-1) 1 1)
+  { result = F(n) } 
+
 (** Imperative *)
 
 let fib3 (n:int) =
