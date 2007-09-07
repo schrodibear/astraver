@@ -13,3 +13,4 @@ VO=swap0_valid.vo loop0_valid.vo peano_valid.vo power_valid.vo \
 all: $(VO)
 
 include ../Makefile.common
+
