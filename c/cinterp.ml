@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.248 2007-08-02 12:46:58 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.249 2007-09-07 14:25:32 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -595,6 +595,9 @@ let interp_float_conversion ty1 ty2 e =
     | Tfloat Real, Tfloat Float -> make_app "r_to_s" [rounding_mode (); e]
     | Tfloat Real, Tfloat Double -> make_app "r_to_d" [rounding_mode (); e]
     | Tfloat Real, Tfloat LongDouble -> make_app "r_to_q" [rounding_mode (); e]
+    | Tfloat Float, Tfloat Real -> make_app "s_to_r" [e]
+    | Tfloat Double, Tfloat Real -> make_app "d_to_r" [e]
+    | Tfloat LongDouble, Tfloat Real -> make_app "q_to_r" [e]
     | Tfloat Float, Tfloat Double -> 
 	make_app "double_of_single" [e]
     | Tfloat Double, Tfloat Float -> 
