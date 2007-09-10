@@ -283,7 +283,8 @@ Yannick *)
 	exit 1
 
 
-let _ = Printexc.catch main ()
+let _ =   Sys.catch_break true;
+Printexc.catch main ()
 
   
 (*

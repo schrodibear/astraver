@@ -102,7 +102,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A226:Set) (a:(alloc_table A226)) (p:(pointer A226))
+(*Why predicate*) Definition valid (A227:Set) (a:(alloc_table A227)) (p:(pointer A227))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -110,6 +110,11 @@ Defined.
 exact (fun A1 p i => (fst p, snd p + i)).
 Defined.
 Implicit Arguments shift.
+
+(*Why logic*) Definition sub_pointer :
+  forall (A1:Set), (pointer A1) -> (pointer A1) -> Z.
+Admitted.
+Implicit Arguments sub_pointer.
 
 (*Why axiom*) Lemma offset_max_shift :
   forall (A1:Set),
@@ -574,8 +579,8 @@ Implicit Arguments in_pset_range.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A254:Set) (A253:Set) (a:(alloc_table A253)) (m1:(memory A253 A254)) (m2:(memory A253 A254)) (l:(pset A253))
-  := (forall (p:(pointer A253)),
+(*Why predicate*) Definition not_assigns (A256:Set) (A255:Set) (a:(alloc_table A255)) (m1:(memory A255 A256)) (m2:(memory A255 A256)) (l:(pset A255))
+  := (forall (p:(pointer A255)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -612,7 +617,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A260:Set) (a:(tag_table A260)) (p:(pointer A260)) (t:(tag_id A260))
+(*Why predicate*) Definition instanceof (A262:Set) (a:(tag_table A262)) (p:(pointer A262)) (t:(tag_id A262))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -640,7 +645,25 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A265:Set) (tag_table:(tag_table A265)) (mutable:(memory A265 (tag_id A265))) (this:(pointer A265))
+(*Why predicate*) Definition fully_packed (A267:Set) (tag_table:(tag_table A267)) (mutable:(memory A267 (tag_id A267))) (this:(pointer A267))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
+
+(*Why logic*) Definition bw_compl : Z -> Z.
+Admitted.
+
+(*Why logic*) Definition bw_and : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition bw_xor : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition bw_or : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition lsl : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition lsr : Z -> Z -> Z.
+Admitted.
 

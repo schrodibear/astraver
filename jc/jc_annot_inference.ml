@@ -1575,15 +1575,13 @@ let abstract_vars_of_vi vi =
   | JCTnative nt ->
       begin
         match nt with
-        | Tunit ->
-	    []
+        | Tunit -> []
 	| Tboolean | Tinteger -> 
 	    let v = Var.of_string vi.jc_var_info_name in
 	    Hashtbl.add terms_vars_table
 	      v (make_term_no_loc (JCTvar vi) vi.jc_var_info_type);
 	    [v]
-	| Treal ->
-	    []
+	| Treal -> []
       end
   | JCTlogic _ -> assert false (* should never happen *)
   | JCTenum ei ->
@@ -1594,7 +1592,8 @@ let abstract_vars_of_vi vi =
       [v]
   | JCTpointer (si, n1, n2) ->
       let s = vi.jc_var_info_name in
-      let v1 = Var.of_string (s ^ "_offset_min") in
+      let offset_min = s ^ "_offset_min" in
+      let v1 = Var.of_string offset_min in
       let t1 = 
 	make_term_no_loc 
 	  (JCToffset (Offset_min, 
@@ -1603,16 +1602,44 @@ let abstract_vars_of_vi vi =
 	  (JCTnative Tinteger) 
       in
       Hashtbl.add terms_vars_table v1 t1;
-      let v2 = Var.of_string (s ^ "_offset_max") in
+      let offset_max = s ^ "_offset_max" in
+      let v2 = Var.of_string offset_max in
       let t2 = 
 	make_term_no_loc 
 	  (JCToffset (Offset_max, 
 		      make_term_no_loc (JCTvar vi) vi.jc_var_info_type,
 		      si))
 	  (JCTnative Tinteger) 
-      in	       
+      in
       Hashtbl.add terms_vars_table v2 t2;
+(*      let offset_min_spec = offset_min ^ "<=" ^ Num.string_of_num n1 in
+      let offset_max_spec = offset_max ^ ">=" ^ Num.string_of_num n2 in
+      let lincons = Parser.lincons1_of_lstring env [offset_min_spec; offset_max_spec] in
+      let absvalue = Abstract1.of_lincons_array man env lincons in
+      if debug then printf "%s spec: %a@." s Abstract1.print absvalue;
+      let post = Abstract1.meet man pre absvalue in *)
       [v1; v2]
+  | JCTnull -> assert false (* should never happen *)
+;;
+
+let abstract_vars_spec_of_vi man pre vi =
+  match vi.jc_var_info_type with
+  | JCTnative nt -> pre
+  | JCTlogic _ -> assert false (* should never happen *)
+  | JCTenum ei -> pre (* TODO *)
+  | JCTpointer (si, n1, n2) ->
+      let s = vi.jc_var_info_name in
+      let offset_min = s ^ "_offset_min" in
+      let offset_max = s ^ "_offset_max" in
+      let offset_min_spec = offset_min ^ "<=" ^ Num.string_of_num n1 in
+      let offset_max_spec = offset_max ^ ">=" ^ Num.string_of_num n2 in
+      let lincons = 
+	Parser.lincons1_of_lstring (Abstract1.env pre) [offset_min_spec; offset_max_spec]
+      in
+      let absvalue = Abstract1.of_lincons_array man (Abstract1.env pre) lincons in
+      if debug then printf "%s spec: %a@." s Abstract1.print absvalue;
+      let post = Abstract1.meet man pre absvalue in
+      post
   | JCTnull -> assert false (* should never happen *)
 ;;
 
@@ -1700,6 +1727,7 @@ let rec not_expr e =
 	end
     | JCEunary (uop, e) -> assert false (* TO DO *)
     | JCEshift (e1, e2) -> assert false (* TO DO *)
+    | JCEsub_pointer (e1, e2) -> assert false (* TO DO *)
     | JCEderef _ ->
 	if debug then printf "  JCEderef...@.";
 	JCEunary (Unot, e)
@@ -1717,8 +1745,32 @@ let rec not_expr e =
 ;;
 
 
+(*
+let rec e_without_strict e =
+  let expr_node =
+    match e.jc_expr_node with
+    | JCEbinary (e1, Blt_int, e2) ->
+	let loc = e2.jc_expr_loc in
+	let e2 = Jc_norm.make_int_binary loc e2 Bsub_int (Jc_norm.one_const loc) in 
+	JCEbinary (e1, Ble_int, e2)
+    | JCEbinary (e1, Bgt_int, e2) ->
+	let loc = e2.jc_expr_loc in
+	let e2 = Jc_norm.make_int_binary loc e2 Badd_int (Jc_norm.one_const loc) in 
+	JCEbinary (e1, Bge_int, e2)
+    | node -> 
+	node 
+  in
+  { e with jc_expr_node = expr_node }
+;;
+*)
+
+
 let rec expr man env pre e =
   if debug then printf "expr...@.";
+  (* BEGIN PREPROC
+  (* Bug APRON (?) with ops <, > *)
+  let e = e_without_strict e in
+  END PREPROC *)
   match e.jc_expr_node with
   | JCEconst c ->
       if debug then printf "  JCEconst...@.";
@@ -1746,7 +1798,9 @@ let rec expr man env pre e =
 	| JCTenum ei ->
 	    env, pre, [vi.jc_var_info_name]
 	| JCTpointer (si, n1, n2) -> 
-	    env, pre, [Num.string_of_num n1; Num.string_of_num n2]
+(*	    env, pre, [Num.string_of_num n1; Num.string_of_num n2] *)
+	    env, pre, [vi.jc_var_info_name ^ "_offset_min";
+		       vi.jc_var_info_name ^ "_offset_max"]
 	| JCTnull -> assert false (* should never happen *)
       end
   | JCEbinary (e1, bop, e2) ->
@@ -1816,7 +1870,12 @@ let rec expr man env pre e =
       end
   | JCEshift (e1, e2) ->
       if debug then printf "  JCEshift...@.";
-      env, pre, []
+      let env, pre, strl1 = expr man env pre e1 in
+      assert (List.length strl1 = 2);
+      let env, pre, strl2 = expr man env pre e2 in
+      assert (List.length strl2 = 1);
+      env, pre, [(List.nth strl1 1) ^ "-" ^ List.hd strl2; List.nth strl1 0]
+  | JCEsub_pointer (e1, e2) -> assert false (* TO DO *)
   | JCEderef (e, fi) ->
       if debug then printf "  JCEderef...@.";
       env, pre, []
@@ -1842,6 +1901,7 @@ let rec expr man env pre e =
 	| JCEbinary (e1, op, e2) -> assert false (* TO DO *)
 	| JCEunary (op, e) -> assert false (* TO DO *)
 	| JCEshift (e1, e2) -> assert false (* TO DO *)
+	| JCEsub_pointer (e1, e2) -> assert false (* TO DO *)
 	| JCEderef (e, fi) -> assert false (* TO DO *)
 	| JCEinstanceof (e, si) -> assert false (* TO DO *)
 	| JCEcast (e, si) -> assert false (* TO DO *)
@@ -1874,7 +1934,8 @@ let rec loop_condition man pre e sb se la fil =
       let lincons = Parser.lincons1_of_lstring env strl in
       Abstract1.of_lincons_array man env lincons
   in
-  if debug then printf "loop condition: %a@." Abstract1.print absvalue;
+  if debug then printf "loop condition: %s@." (if List.length strl > 0 then List.hd strl else "0");
+  if debug then printf "loop condition as abstract value: %a@." Abstract1.print absvalue;
   let pre = Abstract1.meet man pre absvalue in
   let sb, body, _ = statement man pre true None fil sb in
   (* compute loop invariant *)
@@ -1893,7 +1954,11 @@ let rec loop_condition man pre e sb se la fil =
   if verbose then printf "    inferred loop invariant: %a@." Abstract1.print loop_inv;
   let loop_invariant = la.jc_loop_invariant in
   let inferred_loop_inv = 
-    absvalue_to_assertion man (loop_invariant.jc_assertion_loc) (Abstract1.env loop_inv) loop_inv
+    absvalue_to_assertion 
+      man
+      (loop_invariant.jc_assertion_loc)
+      (Abstract1.env loop_inv)
+      loop_inv
   in
   let la = 
     { la with 
@@ -1945,30 +2010,44 @@ and statement man pre fv lao fil s =
 				  | JCCinteger _ -> vi (* TODO ? *)
 				  | JCCreal _ -> vi (* TODO ? *)
 				end
-			    | JCEvar vi ->
+			    | JCEvar vie ->
 				let v = 
 				  Hashtbl.fold
 				    (fun v t acc ->
 				      match t.jc_term_node with
-				      | JCTvar vi' ->
-					  if vi'.jc_var_info_name = vi.jc_var_info_name then
-					    v
-					  else
-					    acc
+				      | JCTvar vi' -> acc
+				      | JCToffset (ok, t, si) ->
+					  begin
+					    match t.jc_term_node with
+					    | JCTvar vi' ->
+						if vi'.jc_var_info_name = vie.jc_var_info_name then
+						  begin
+						    match ok with
+						    | Offset_min -> v, snd acc
+						    | Offset_max -> fst acc, v
+						  end
+						else
+						  acc
+					    | _ -> assert false (* should never happen *)
+					  end
 				      | _ -> acc)
 				    terms_vars_table
-				    (Var.of_string "")
+				    (Var.of_string "", Var.of_string "")
 				in
-				let interval = Abstract1.bound_variable man pre v in
-				let inf = Num.num_of_string (Scalar.to_string interval.inf) in
-				let sup = Num.num_of_string (Scalar.to_string interval.sup) in
-				let n1 = Num.min_num n1 inf in
-				let n2 = Num.min_num n2 sup in
+				let v_min = fst v in
+				let v_max = snd v in
+				let interval_min = Abstract1.bound_variable man pre v_min in
+				let interval_max = Abstract1.bound_variable man pre v_max in
+				let sup_min = Num.num_of_string (Scalar.to_string interval_min.sup) in
+				let inf_max = Num.num_of_string (Scalar.to_string interval_max.inf) in
+				let n1 = Num.min_num n1 sup_min in
+				let n2 = Num.min_num n2 inf_max in
 				calls_changed := true;
 				{ vi with jc_var_info_type = JCTpointer (si, n1, n2) }
 			  | JCEbinary (e1, bop, e2) -> vi (* TODO ? *)
 			  | JCEunary (uop, e) -> vi (* TODO ? *)
 			  | JCEshift (e1, e2) -> vi (* TODO ? *)
+			  | JCEsub_pointer (e1, e2) -> assert false (* TO DO *)
 			  | JCEderef (e, fi) -> vi (* TODO ? *)
 			  | JCEinstanceof (e, si) -> vi (* TODO ? *)
 			  | JCEcast (e, si) -> vi (* TODO ? *)
@@ -2021,7 +2100,7 @@ and statement man pre fv lao fil s =
 	let vl = abstract_vars_of_vi vi in
 	let linexprl = 
 	  List.map 
-	    (Parser.linexpr1_of_string (Abstract1.env pre))
+	    (Parser.linexpr1_of_string env)
 	    strl
 	in
 	let post = 
@@ -2049,9 +2128,9 @@ and statement man pre fv lao fil s =
 	in
 	JCSblock sl, post, lao
     | JCSdecl (vi, eo, s) ->
-	if debug then printf "  JCSdecl ...@.";
+	if debug then printf "  JCSdecl ...%s@." vi.jc_var_info_name;
 	let vl = abstract_vars_of_vi vi in
-	let env = Environment.add (Abstract1.env pre) (Array.of_list vl) [||] in 
+	let env = Environment.add (Abstract1.env pre) (Array.of_list vl) [||] in
 	let pre = Abstract1.change_environment man pre env false in
         begin
           match eo with
@@ -2060,13 +2139,14 @@ and statement man pre fv lao fil s =
               (* TO DO ? : update env in pre *)
               JCSdecl (vi, eo, s), post, lao
           | Some e ->
-	      let env, pre, strl = expr man env pre e in
+	      let env, pre, strl = expr man (Abstract1.env pre) pre e in
 	      if strl = [] then JCSdecl (vi, eo, s), pre, lao else
 	      let linexprl =
 		List.map
 		  (Parser.linexpr1_of_string env)
 		  strl
 	      in
+	      assert (List.length vl = List.length linexprl);
 	      let post = 
 		Abstract1.assign_linexpr_array man pre
 		  (Array.of_list vl) 
@@ -2181,7 +2261,17 @@ let code_function fi bo =
         fi.jc_fun_info_parameters
     in
     let env = Environment.add env (Array.of_list params) [||] in
-    
+
+    (* add parameters specs *)
+    let post =
+      List.fold_left
+        (fun pre vi ->
+	  let post = abstract_vars_spec_of_vi man pre vi in
+	  post)
+        (Abstract1.top man env)
+        fi.jc_fun_info_parameters
+    in
+
     match bo with
     | None -> None
     | Some sl ->
@@ -2192,7 +2282,7 @@ let code_function fi bo =
 		(fun (sl, pre) s ->
 		  let s, post, _ = statement man pre true None fi.jc_fun_info_calls s in
 		  (List.rev (s::(List.rev sl)), post)) 
-		([], Abstract1.top man env)
+		([], post)
 		sl))
   with Manager.Error e ->
     Manager.print_exclog std_formatter e;

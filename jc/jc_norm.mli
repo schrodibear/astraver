@@ -65,6 +65,11 @@ val code_function : fun_spec * tstatement list option
 val static_variable : var_info * texpr option -> var_info * expr option
 
 
+val make_int_binary : Loc.position -> expr -> bin_op -> expr -> expr
+
+val one_const : Loc.position -> expr
+
+
 (*
 Local Variables: 
 compile-command: "make -C .. bin/jessie.byte"

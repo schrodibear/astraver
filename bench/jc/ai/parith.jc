@@ -6,9 +6,10 @@ type char = {
 unit f(char[0..10] p) {
   char[..] q = p;
   integer i = 0;
-  while (i < 10) 
-	invariant true;
-	variant 0;
+  while (i <= 9) 
+	invariant true; 
+	// 0 <= i && i <= 10 && \offset_min(q) <= 0 && \offset_max(q) >= 10 - i;
+	variant 10 - i;
 	{
 	q.val = 0;
 	q = q+1;
