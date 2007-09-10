@@ -73,9 +73,11 @@ OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
 
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
 
-APRONLIB = @APRONLIB@
+APRONLIB = -I @APRONLIB@
 APRONLIBS = @APRONLIBS@
 APRONBYTLIBS = $(APRONLIBS:.cmxa=.cma)
+
+ATPLIB = -I atp
 
 APRONOPTLDFLAGS = \
 -verbose -ccopt "$(LCFLAGS)" \
@@ -265,20 +267,23 @@ JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 JCCMO_EXPORT = $(JCCMO_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCMO_EXPORT:.ml=.cmx)
 
+atp/atp.cmx: 
+	make -C atp atp.cmx
+
 jc/jc.cma: $(JCCML_EXPORT)
 	$(OCAMLC) $(BFLAGS) -a -o $@ $^
 
 jc/jc.cmxa: $(JCCML_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
 
-bin/jessie.opt: $(JCCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) -o $@ \
-		unix.cmxa nums.cmxa graph.cmxa $^
+bin/jessie.opt: atp/atp.cmx $(JCCMX)
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
+		unix.cmxa nums.cmxa graph.cmxa atp.cmx $^
 	# strip    $@
 
 bin/jessie.byte: $(JCCMO) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) -o $@ \
-		unix.cma nums.cma graph.cma $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) $(ATPLIB) -o $@ \
+		unix.cma nums.cma graph.cma atp.cmo $^
 
 
 # krakatoa
@@ -654,16 +659,16 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 .SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo .ml4
 
 .mli.cmi:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
 
 .ml.cmo:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
 
 .ml.o:
-	$(OCAMLOPT) $(APRONLIB) -c $(OFLAGS) $<
+	$(OCAMLOPT) $(APRONLIB) $(ATPLIB) -c $(OFLAGS) $<
 
 .ml.cmx:
-	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) $(APRONLIB) -c $(OFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) $(APRONLIB) $(ATPLIB) -c $(OFLAGS) $<
 
 .mll.ml:
 	$(OCAMLLEX) $<
@@ -873,6 +878,7 @@ clean::
 	if test "@enable_octagon@" = "yes" ; then \
 		make -C octagon clean; \
 	fi
+	make -C atp clean
 	if test -d ocamlgraph; then make -C ocamlgraph clean; fi
 	make -C doc clean
 	make -C examples-v7 clean

@@ -129,6 +129,16 @@ let newrefvar ty =
   vi.jc_var_info_assigned <- true;
   vi
 
+let copyvar vi =
+  incr var_tag_counter;
+  { vi with 
+    jc_var_info_tag = !var_tag_counter; 
+    jc_var_info_name = 
+      "__jc_" ^ (string_of_int !var_tag_counter) ^ vi.jc_var_info_name;
+    jc_var_info_final_name = 
+      "__jc_" ^ (string_of_int !var_tag_counter) ^ vi.jc_var_info_final_name;
+  }
+
 (* exceptions *)
 
 let exception_tag_counter = ref 0

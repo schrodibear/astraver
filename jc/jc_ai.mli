@@ -26,19 +26,8 @@
 open Jc_ast
 open Jc_fenv
 
-(* Yannick
 
 val code_function : fun_info * fun_spec * statement list option -> unit
-
-Yannick *)
-
-
-(* automatically infer loop invariants for loops in code *)
-val code_function : fun_info -> statement list option -> statement list option
-
-(* automatically infer preconditions for a function and recursively on
-   function it calls *)
-val main_function : fun_info -> fun_spec -> statement list option -> unit
 
 
 (*

@@ -8,6 +8,7 @@
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Nicolas ROUSSET                                                     *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -26,19 +27,9 @@
 open Jc_ast
 open Jc_fenv
 
-(* Yannick
 
 val code_function : fun_info * fun_spec * statement list option -> unit
 
-Yannick *)
-
-(* Nicolas
-
-val code_function : fun_info -> statement list option -> statement list option
-
-val main_function : fun_info -> fun_spec -> statement list option -> unit
-
-Nicolas *)
 
 (*
 Local Variables: 
