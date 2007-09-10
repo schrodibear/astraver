@@ -1,13 +1,19 @@
 
-parameter x : int ref
 
-exception E
+parameter g : 'a -> 'a
 
-let p () =
-  begin 
-    x := 0;
-    [ {} unit writes x raises E { x=1 | E => x@=0 -> x=2 } ];
-    void
-  end
-  { x=0+1 | E => x=0+2 }
+let f =
+ fun (mode : bool) ->
+   let v = ref 0 in
+     if mode then
+       v := let tmp = g 0 in tmp
+     else
+       v := let tmp = g 1 in tmp
 
+
+(*
+
+  $ why -fast-wp test_fastwp.why
+  Fatal error: exception Assert_failure("src/fastwp.ml", 129, 17)
+
+*)
