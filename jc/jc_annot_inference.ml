@@ -1295,39 +1295,39 @@ let ai_function mgr targets (fi,fs,sl) =
     (* TODO: add \return as abstract variable. *)
 
     (* add parameters specs *)
-    let cstrs =
-      List.fold_left
-	(fun acc vi -> match vi.jc_var_info_type with
-	| JCTpointer(st,n1,n2) ->
-	    let vt = raw_term(JCTvar vi) in
-	    let mincstr = 
-	      if Num.is_integer_num n1 then
-		let mint = raw_term (JCToffset(Offset_min,vt,st)) in
-		let n1t = 
-		  raw_term (JCTconst(JCCinteger(Num.string_of_num n1))) 
-		in
-		let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
-		[mina]
-	      else []
-	    in
-	    let maxcstr = 
-	      if Num.is_integer_num n2 then
-		let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
-		let n2t = 
-		  raw_term (JCTconst(JCCinteger(Num.string_of_num n2))) 
-		in
-		let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
-		[maxa]
-	      else []
-	    in
-	    mincstr @ maxcstr @ acc
-	| _ -> acc
-	) [] fi.jc_fun_info_parameters
-    in
-    let cstrs = List.map (linstr_of_assertion env) cstrs in
-    let lincons = Parser.lincons1_of_lstring env cstrs in
+(*     let cstrs = *)
+(*       List.fold_left *)
+(* 	(fun acc vi -> match vi.jc_var_info_type with *)
+(* 	| JCTpointer(st,n1,n2) -> *)
+(* 	    let vt = raw_term(JCTvar vi) in *)
+(* 	    let mincstr =  *)
+(* 	      if Num.is_integer_num n1 then *)
+(* 		let mint = raw_term (JCToffset(Offset_min,vt,st)) in *)
+(* 		let n1t =  *)
+(* 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n1)))  *)
+(* 		in *)
+(* 		let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in *)
+(* 		[mina] *)
+(* 	      else [] *)
+(* 	    in *)
+(* 	    let maxcstr =  *)
+(* 	      if Num.is_integer_num n2 then *)
+(* 		let maxt = raw_term (JCToffset(Offset_max,vt,st)) in *)
+(* 		let n2t =  *)
+(* 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n2)))  *)
+(* 		in *)
+(* 		let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in *)
+(* 		[maxa] *)
+(* 	      else [] *)
+(* 	    in *)
+(* 	    mincstr @ maxcstr @ acc *)
+(* 	| _ -> acc *)
+(* 	) [] fi.jc_fun_info_parameters *)
+(*     in *)
+(*     let cstrs = List.map (linstr_of_assertion env) cstrs in *)
+(*     let lincons = Parser.lincons1_of_lstring env cstrs in *)
     let initpre = Abstract1.top mgr env in
-    Abstract1.meet_lincons_array_with mgr initpre lincons;
+(*     Abstract1.meet_lincons_array_with mgr initpre lincons; *)
 
     (* Annotation inference on the function body. *)
     let initinvs = {
@@ -1564,6 +1564,9 @@ let rec asrt_of_atp fm =
 (* Computing weakest preconditions.                                          *)
 (*****************************************************************************)
 
+let is_function_level posts =
+  List.length posts.jc_post_modified_vars = 1
+
 let add_modified_var posts v =
   let vars = match posts.jc_post_modified_vars with
     | vs :: r -> VarSet.add v vs :: r
@@ -1632,8 +1635,12 @@ let rec wp_statement weak s curposts =
 	    Some (raw_asrt (JCAimplies(eq,a)))
       in
       let curposts = add_modified_var curposts copyvi in
-      (* Also add regular variable, for other branches in loop. *)
-      let curposts = add_modified_var curposts vi in
+      let curposts = 
+	if is_function_level curposts then curposts
+	else
+	  (* Also add regular variable, for other branches in loop. *)
+	  add_modified_var curposts vi 
+      in
       { curposts with jc_post_normal = post; }
   | JCSassign_heap _ -> assert false (* TODO *)
   | JCSassert(_,a1) ->

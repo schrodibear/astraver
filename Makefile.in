@@ -79,20 +79,6 @@ APRONBYTLIBS = $(APRONLIBS:.cmxa=.cma)
 
 ATPLIB = -I atp
 
-APRONOPTLDFLAGS = \
--verbose -ccopt "$(LCFLAGS)" \
-#Yannick: nums.cmxa atp.cmx bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
--cclib " -lpolka_caml -lpolka_debug -loct_caml -loct -lbox_caml -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
-#bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa \
--cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
-
-APRONBYTLDFLAGS = \
--verbose -ccopt "$(LCFLAGS)" \
-#Yannick: nums.cma atp.cmo bigarray.cma gmp.cma apron.cma box.cma polka.cma \
--cclib " -lpolka_caml -lpolka_debug -loct_caml -loct -lbox_caml -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
-#bigarray.cma gmp.cma apron.cma box.cma polka.cma \
--cclib " -lpolka_caml -lpolkag_debug -loct_caml -loctQg -lbox_caml -lboxmpq_debug -litvmpq_debug -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray"
-
 COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
@@ -267,8 +253,11 @@ JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 JCCMO_EXPORT = $(JCCMO_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCMO_EXPORT:.ml=.cmx)
 
-atp/atp.cmx: 
+atp.cmx: 
 	make -C atp atp.cmx
+
+atp.cmo: 
+	make -C atp atp.cmo
 
 jc/jc.cma: $(JCCML_EXPORT)
 	$(OCAMLC) $(BFLAGS) -a -o $@ $^
@@ -276,14 +265,14 @@ jc/jc.cma: $(JCCML_EXPORT)
 jc/jc.cmxa: $(JCCML_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
 
-bin/jessie.opt: atp/atp.cmx $(JCCMX)
+bin/jessie.opt: atp.cmx $(JCCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
-		unix.cmxa nums.cmxa graph.cmxa atp.cmx $^
+		unix.cmxa nums.cmxa graph.cmxa $^
 	# strip    $@
 
-bin/jessie.byte: $(JCCMO) 
+bin/jessie.byte: atp.cmo $(JCCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) $(ATPLIB) -o $@ \
-		unix.cma nums.cma graph.cma atp.cmo $^
+		unix.cma nums.cma graph.cma $^
 
 
 # krakatoa
@@ -768,7 +757,10 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
 	octagon/ocamllib/*.c octagon/ocamllib/*.h octagon/ocamllib/*.ml* \
 	octagon/ocamllib/README octagon/oct-config* octagon/oct_config* \
 	octagon/README octagon/test/Makefile* octagon/test/oct_test.c \
-	octagon/test/README
+	octagon/test/README \
+	atp/cooper.ml atp/fol.ml atp/formulas.ml atp/intro.ml atp/lib.ml \
+	atp/LICENSE.txt atp/Makefile atp/Mk_ml_file atp/prop.ml \
+	atp/qelim.ml atp/Quotexpander.ml atp/skolem.ml
 
 OCAMLGRAPHFILES = ocamlgraph/configure.in ocamlgraph/configure \
 	ocamlgraph/*.in ocamlgraph/LICENSE ocamlgraph/README \
