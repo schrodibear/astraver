@@ -514,7 +514,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
-	cp -f $(KRAKATOA) $(BINDIR)/krakatoa1$(EXE)
+	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)

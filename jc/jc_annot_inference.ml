@@ -680,8 +680,8 @@ let rec linearize t =
 
 let linstr_of_term env t =
   let mkmulstr = function
-    | (va,0) -> ""
-    | (va,c) -> string_of_int c ^ " * " ^ va 
+    | (va, 0) -> ""
+    | (va, c) -> string_of_int c ^ " * " ^ va 
   in
   let rec mkaddstr = function
     | [] -> ""
@@ -692,8 +692,8 @@ let linstr_of_term env t =
 	| s,"" | "",s -> s
 	| s1,s2 -> s1 ^ " + " ^ s2
   in
-  try 
-    let coeffs,cst = linearize t in
+  try
+    let coeffs, cst = linearize t in
     let coeffs = 
       List.map (fun (t,c) ->
 	let va = Vai.variable_of_term t in
@@ -716,10 +716,19 @@ let rec linstr_of_assertion env a =
 	  let cstr = string_of_int (- cst) in
 	  (* Do not use <= and >= with APRON. Convert to equivalent strict. *)
 	  match bop with
-	  | Blt_int -> str ^ " < " ^ cstr
-	  | Bgt_int -> str ^ " > " ^ cstr
-	  | Ble_int -> str ^ " < " ^ (string_of_int ((- cst) + 1))
-	  | Bge_int -> str ^ " > " ^ (string_of_int ((- cst) - 1))
+	    (* Begin old version - Nicolas *)
+	    (* in cousot76.jc wrong invariant generated (i.e. i >= 102 instead of 101) *)
+	    (* | Blt_int -> str ^ " < " ^ cstr
+	       | Bgt_int -> str ^ " > " ^ cstr
+	       | Ble_int -> str ^ " < " ^ (string_of_int ((- cst) + 1))
+	       | Bge_int -> str ^ " > " ^ (string_of_int ((- cst) - 1)) *)
+	    (* End old version - Nicolas *)
+	    (* Begin new version - Nicolas *)
+	  | Blt_int -> str ^ " <= " ^ (string_of_int ((- cst) - 1))
+	  | Bgt_int -> str ^ " >= " ^ (string_of_int ((- cst) + 1))
+	  | Ble_int -> str ^ " <= " ^ cstr
+	  | Bge_int -> str ^ " >= " ^ cstr
+	   (* End new version - Nicolas *)
 	  | Beq_int -> str ^ " = " ^ cstr
 	  | Blt_real | Bgt_real | Ble_real | Bge_real -> ""
 	  | Beq_real | Beq_pointer -> ""
@@ -903,21 +912,25 @@ let mkinvariant mgr absval =
 
 let assignment mgr pre t e =
   let env = Abstract1.env pre in
-  let vars,linexprs = 
+  let vars, linexprs = 
     if Vai.has_variable t then
       let va = Vai.variable t in
       if Environment.mem_var env va then
-	let lin = Parser.linexpr1_of_string env (linstr_of_expr env e) in
+	let lin = 
+	  try Parser.linexpr1_of_string env (linstr_of_expr env e) 
+	  with Parser.Error _ -> assert false
+	in
 	[va], [lin]
       else [], []
     else [], []
   in
-  let vars,linexprs = 
+(*  let vars,linexprs = 
     if Vai.has_offset_min_variable t then
       let va = Vai.offset_min_variable t in
       if Environment.mem_var env va then
 	let lin = 
-	  Parser.linexpr1_of_string env (offset_min_linstr_of_expr env e) 
+	  try Parser.linexpr1_of_string env (offset_min_linstr_of_expr env e) 
+	  with Parser.Error _ -> assert false
 	in
 	va :: vars, lin :: linexprs
       else vars, linexprs
@@ -928,12 +941,13 @@ let assignment mgr pre t e =
       let va = Vai.offset_max_variable t in
       if Environment.mem_var env va then
 	let lin = 
-	  Parser.linexpr1_of_string env (offset_max_linstr_of_expr env e) 
+	  try Parser.linexpr1_of_string env (offset_max_linstr_of_expr env e) 
+	  with Parser.Error _ -> assert false
 	in
 	va :: vars, lin :: linexprs
       else vars, linexprs
     else vars, linexprs
-  in
+  in *)
   let vars = Array.of_list vars and linexprs = Array.of_list linexprs in
   Abstract1.assign_linexpr_array_with mgr pre vars linexprs None;
   pre
@@ -963,7 +977,10 @@ let test_expr ~(neg:bool) mgr pre e =
     if cstrs = [] then 
       pre
     else
-      let lincons = Parser.lincons1_of_lstring env cstrs in
+      let lincons = 
+	try Parser.lincons1_of_lstring env cstrs 
+	with Parser.Error _ -> assert false
+      in
       let envprint = Environment.print ~first:"[" ~sep:"," ~last:"]" in
       if Jc_options.debug then
 	printf "pre.env = %a@.lincons.env = %a@." 
@@ -988,7 +1005,10 @@ let test_assertion mgr pre a =
     if cstrs = [] then 
       pre
     else
-      let lincons = Parser.lincons1_of_lstring env cstrs in
+      let lincons = 
+	try Parser.lincons1_of_lstring env cstrs 
+	with Parser.Error _ -> assert false
+      in
       let envprint = Environment.print ~first:"[" ~sep:"," ~last:"]" in
       if Jc_options.debug then
 	printf "pre.env = %a@.lincons.env = %a@." 
@@ -1079,24 +1099,23 @@ let eq_invariants mgr invs1 invs2 =
     ) postexcl1 true
   in
   Abstract1.is_eq mgr invs1.jc_absinv_normal invs2.jc_absinv_normal =
-      Manager.True
-  && eq_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
-  && Abstract1.is_eq mgr invs1.jc_absinv_return invs2.jc_absinv_return =
-      Manager.True
+  Manager.True
+    && eq_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
+    && Abstract1.is_eq mgr invs1.jc_absinv_return invs2.jc_absinv_return =
+  Manager.True
 
-let copy_invariants mgr invs =
-  { 
-    jc_absinv_normal = Abstract1.copy mgr invs.jc_absinv_normal;
-    jc_absinv_exceptional = 
-      List.map (fun (ei,post) -> (ei,Abstract1.copy mgr post)) 
-	invs.jc_absinv_exceptional;
-    jc_absinv_return = Abstract1.copy mgr invs.jc_absinv_return;
-  }
-
+let copy_invariants mgr invs = { 
+  jc_absinv_normal = Abstract1.copy mgr invs.jc_absinv_normal;
+  jc_absinv_exceptional = 
+  List.map (fun (ei,post) -> (ei,Abstract1.copy mgr post)) 
+    invs.jc_absinv_exceptional;
+  jc_absinv_return = Abstract1.copy mgr invs.jc_absinv_return;
+}
+    
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
   if List.memq s abs.jc_absint_target_statements then
-    begin try 
+    begin try
       (List.assq s abs.jc_absint_target_invariants) := 
 	Abstract1.copy mgr curinvs.jc_absinv_normal
     with Not_found -> assert false end;
@@ -1118,7 +1137,7 @@ let rec ai_statement abs curinvs s =
       in
       let curinvs = { curinvs with jc_absinv_normal = pre; } in
       ai_statement abs curinvs s
-  | JCSassign_var(vi,e) ->
+  | JCSassign_var (vi, e) ->
       let vit = var_term vi in
       { curinvs with jc_absinv_normal = assignment mgr pre vit e; }
   | JCSassign_heap(e1,fi,e2) ->
@@ -1132,7 +1151,7 @@ let rec ai_statement abs curinvs s =
       { curinvs with jc_absinv_normal = test_assertion mgr pre a; }
   | JCSblock sl ->
       List.fold_left (ai_statement abs) curinvs sl
-  | JCSif(e,ts,fs) ->
+  | JCSif (e, ts, fs) ->
       let copy_pre = Abstract1.copy mgr pre in
       let tpre = test_expr ~neg:false mgr pre e in
       let tinvs = { curinvs with jc_absinv_normal = tpre; } in
@@ -1190,16 +1209,21 @@ let rec ai_statement abs curinvs s =
       | JCSblock [] -> curinvs
       | _ -> assert false (* TODO: apply finally stmt to all paths. *)
       end
-  | JCSloop(la,ls) ->
+  | JCSloop (la, ls) ->
       let loop_invariants = abs.jc_absint_loop_invariants in
       let loop_iterations = abs.jc_absint_loop_iterations in
       let num = 
 	try Hashtbl.find loop_iterations la.jc_loop_tag 
 	with Not_found -> 0
       in
-      Hashtbl.replace loop_iterations la.jc_loop_tag (num+1);
+      Hashtbl.replace loop_iterations la.jc_loop_tag (num + 1);
       if num < abs.jc_absint_widening_threshold then
 	let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
+(* Begin hack - Nicolas *)
+(* sufficient to infer most *simple* loop invariant (see couso76.jc, loop.jc, etc.) *)
+	let wideninvs = widen_invariants mgr curinvs nextinvs in
+	let nextinvs = ai_statement abs (copy_invariants mgr wideninvs) ls in
+(* End hack - Nicolas *)
 	let joininvs = join_invariants mgr curinvs nextinvs in
 	ai_statement abs joininvs s
 (* begin useless, only because no eq *)
@@ -1218,7 +1242,7 @@ let rec ai_statement abs curinvs s =
 (* 	  if eq_invariants mgr loopinvscopy wideninvs then *)
 (* 	    copy_invariants mgr wideninvs *)
 (* 	  else *)
-(* 	    ai_statement abs (copy_invariants mgr wideninvs) s *)
+(* 	  ai_statement abs (copy_invariants mgr wideninvs) s *)
 	  (* Propagate to assertions. *)
 	  copy_invariants mgr wideninvs
 	with Not_found ->
@@ -1262,7 +1286,7 @@ let rec record_invariants abs s =
   | JCScall _ ->
       ()
 
-let ai_function mgr targets (fi,fs,sl) =
+let ai_function mgr targets (fi, fs, sl) =
   try
     let env = Environment.make [||] [||] in
     
@@ -1295,39 +1319,39 @@ let ai_function mgr targets (fi,fs,sl) =
     (* TODO: add \return as abstract variable. *)
 
     (* add parameters specs *)
-(*     let cstrs = *)
-(*       List.fold_left *)
-(* 	(fun acc vi -> match vi.jc_var_info_type with *)
-(* 	| JCTpointer(st,n1,n2) -> *)
-(* 	    let vt = raw_term(JCTvar vi) in *)
-(* 	    let mincstr =  *)
-(* 	      if Num.is_integer_num n1 then *)
-(* 		let mint = raw_term (JCToffset(Offset_min,vt,st)) in *)
-(* 		let n1t =  *)
-(* 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n1)))  *)
-(* 		in *)
-(* 		let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in *)
-(* 		[mina] *)
-(* 	      else [] *)
-(* 	    in *)
-(* 	    let maxcstr =  *)
-(* 	      if Num.is_integer_num n2 then *)
-(* 		let maxt = raw_term (JCToffset(Offset_max,vt,st)) in *)
-(* 		let n2t =  *)
-(* 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n2)))  *)
-(* 		in *)
-(* 		let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in *)
-(* 		[maxa] *)
-(* 	      else [] *)
-(* 	    in *)
-(* 	    mincstr @ maxcstr @ acc *)
-(* 	| _ -> acc *)
-(* 	) [] fi.jc_fun_info_parameters *)
-(*     in *)
-(*     let cstrs = List.map (linstr_of_assertion env) cstrs in *)
-(*     let lincons = Parser.lincons1_of_lstring env cstrs in *)
-    let initpre = Abstract1.top mgr env in
-(*     Abstract1.meet_lincons_array_with mgr initpre lincons; *)
+    let cstrs =
+      List.fold_left
+ 	(fun acc vi -> match vi.jc_var_info_type with
+ 	| JCTpointer(st,n1,n2) ->
+ 	    let vt = raw_term(JCTvar vi) in
+ 	    let mincstr =
+ 	      if Num.is_integer_num n1 then
+ 		let mint = raw_term (JCToffset(Offset_min,vt,st)) in
+ 		let n1t =
+ 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n1)))
+ 		in
+ 		let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
+ 		[mina]
+ 	      else []
+ 	    in
+ 	    let maxcstr =
+ 	      if Num.is_integer_num n2 then
+ 		let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
+ 		let n2t =
+ 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n2)))
+ 		in
+ 		let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
+ 		[maxa]
+ 	      else []
+ 	    in
+ 	    mincstr @ maxcstr @ acc
+ 	| _ -> acc
+ 	) [] fi.jc_fun_info_parameters
+     in
+     let cstrs = List.map (linstr_of_assertion env) cstrs in
+     let lincons = Parser.lincons1_of_lstring env cstrs in
+     let initpre = Abstract1.top mgr env in
+     Abstract1.meet_lincons_array_with mgr initpre lincons;
 
     (* Annotation inference on the function body. *)
     let initinvs = {
@@ -1736,11 +1760,11 @@ let rec wp_statement weak s curposts =
 
 let rec destruct_pointer e = 
   match e.jc_expr_node with
-  | JCEconst JCCnull -> None,None
-  | JCEvar vi -> Some vi,None
-  | JCEshift(e1,e2) ->
+  | JCEconst JCCnull -> None, None
+  | JCEvar vi -> Some vi, None
+  | JCEshift (e1, e2) ->
       begin match destruct_pointer e1 with
-      | viopt,None -> viopt,Some e2
+      | viopt, None -> viopt, Some e2
       | viopt,Some offe -> 
 	  let enode = JCEbinary(offe,Badd_int,e2) in
 	  let offe = full_expr enode integer_type e2.jc_expr_loc in
@@ -1838,21 +1862,23 @@ let simplify =
 	  if Jc_options.debug then
 	    printf "asrt conjunct : %a@."
 	      (Pp.print_list (fun fmt () -> printf " /\\ ") 
-		Jc_output.assertion)
+		 Jc_output.assertion)
 	      conjunct;
 	  let absval = Abstract1.top mgr env in
 	  let cstrs = 
-	    List.map (fun a -> match linstr_of_assertion env a with
-	    | "" -> failwith "Not supported"
-	    | s ->  s
-	    ) conjunct 
+	    List.map 
+	      (fun a -> match linstr_of_assertion env a with
+	      | "" -> failwith "Not supported"
+	      | s ->  s) conjunct 
 	  in
 	  if Jc_options.debug then
 	    printf "linstr conjunct : %a@." 
 	      (Pp.print_list (fun fmt () -> printf " /\\ ") 
-		(fun fmt s -> print_string s))
+		 (fun fmt s -> print_string s))
 	      cstrs;
-	  let lincons = Parser.lincons1_of_lstring env cstrs in
+	  let lincons = 
+	    Parser.lincons1_of_lstring env cstrs 
+	  in
 	  Abstract1.meet_lincons_array_with mgr absval lincons;
 	  if Jc_options.debug then
 	    printf "abstract conjunct : %a@." Abstract1.print absval;
