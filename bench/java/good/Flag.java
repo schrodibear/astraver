@@ -21,6 +21,7 @@ class Flag {
     public static final int BLUE = 1, WHITE = 2, RED = 3;
     
     int t[];
+    //@ invariant t_non_null: t != null;
     //@ invariant is_color_array: is_color_array(t);
 
     /*@ requires 0 <= i && i <= j && j <= t.length ;

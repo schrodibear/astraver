@@ -154,7 +154,7 @@ let main () =
 	output_string cout "/*\n";
 	output_string cout "Local Variables:\n";
 	output_string cout "mode: java\n";
-	output_string cout "compile-command: \"jessie ";
+	output_string cout "compile-command: \"jessie -why-opt -split-user-conj";
 	output_string cout f;
 	output_string cout ".jc ; make -f ";
 	output_string cout f;
