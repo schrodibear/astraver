@@ -2,14 +2,7 @@
 
 parameter g : 'a -> 'a
 
-let f =
- fun (mode : bool) ->
-   let v = ref 0 in
-     if mode then
-       v := let tmp = g 0 in tmp
-     else
-       v := let tmp = g 1 in tmp
-
+let f () = if true then let tmp = 0 in tmp else let tmp = true in 1
 
 (*
 

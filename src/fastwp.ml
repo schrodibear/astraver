@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.22 2007-09-07 13:19:36 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.23 2007-09-11 08:32:58 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -34,6 +34,14 @@ open Misc
 open Util
 open Ast
 open Env
+
+let idmap_union m1 m2 =
+  Idmap.fold 
+    (fun x2 v m1 -> 
+      if Idmap.mem x2 m1 
+      then begin assert (Idmap.find x2 m1 = v); m1 end
+      else Idmap.add x2 v m1)
+    m2 m1
 
 module Subst = struct
 
@@ -74,6 +82,13 @@ module Subst = struct
 
   let find x s = Idmap.find x s.current
 
+  let global_names = ref Idset.empty
+
+  let next_away x s =
+    let x' = next_away x (Idset.union !global_names s) in
+    global_names := Idset.add x' !global_names;
+    x'
+
   let fresh x s =
     assert (Idmap.mem x s.types);
     let x' = next_away x s.all_vars in
@@ -105,6 +120,11 @@ module Subst = struct
 	     if not (is_at x) then Idmap.add (at_id x l) x' m else m)
 	  s.current s.sigma }
 
+  let add_vars s1 s2 =
+    { s1 with 
+	types = idmap_union s1.types s2.types;
+	all_vars = Idset.union s1.all_vars s2.all_vars } 
+
   (* debug *)
   open Format
   let print fmt s =
@@ -121,14 +141,6 @@ module Subst = struct
 
 end
 open Subst
-
-let idmap_union m1 m2 =
-  Idmap.fold 
-    (fun x2 v m1 -> 
-      if Idmap.mem x2 m1 
-      then begin assert (Idmap.find x2 m1 = v); m1 end
-      else Idmap.add x2 v m1)
-    m2 m1
 
 let all_quantifiers ((_,s),ee) =
   let s =
