@@ -1,28 +1,90 @@
 
-/* Inverse of a permutation, in place.
-   The Art of Computer Programming, vol. 1, page 176 */
+/* Program I: Inverse of a permutation, in place.
+   The Art of Computer Programming, vol. 1, page 176.*/
+
+/*@ predicate permutation(int *t, int n) {
+  @   \forall int i; 1 <= i <= n => \exists int j; 1 <= j <= n && t[j] == i 
+  @ } */
+
+/*@ axiom permut_domain :
+  @  \forall int *t, int n; permutation(t,n) =>
+  @    \forall int k; 1 <= k <= n => 1 <= t[k] <= n
+  @*/
+
+/*@ axiom permut_involution : 
+  @  \forall int *t, int n; permutation(t,n) =>
+  @    \forall int k; 1 <= k <= n => t[t[k]] == k
+  @*/
+
+// cycle-free path from k1 to k2 in t
+
+//@ predicate path(int *t, int k1, int k2) reads t[..]
+
+//@ axiom path_nil : \forall int *t, int k; path(t, k, k)
+
+/*@ axiom path_cons : 
+  @   \forall int *t, int k0, int k; 
+  @     path(t, k0, k) => t[k] != k0 => path(t, k0, t[k])
+  @*/
+
+// largest element in a cycle
+
+//@ logic int largest(int *t, int k) reads t[..]
+
+/*@ axiom largest_domain : 
+  @   \forall int *t, int n; permutation(t, n) => 
+  @     \forall int k; 1 <= largest(t, k) <= n
+  @*/
 
 /*@ requires 
-  @   n >= 0 && \valid_range(t,1,n) &&
-  @   \forall int k; 1 <= k <= n => 1 <= t[k] <= n
+  @   n >= 0 && \valid_range(t,1,n) && permutation(t, n)
+  @ ensures
+  @   \forall int k; 1 <= k <= n => t[\old(t[k])] == k
   @*/
 void inverse(int *t, int n) {
   int m = n, j = -1;
-  /*@ invariant 0 <= m <= n 
-    @ variant m
+  //@ label init
+  /*@ invariant 
+    @   0 <= m <= n && j < 0 &&
+    @   (\forall int k; 1 <= k <= n => 
+    @      (\at(largest(t, k), init) > m &&
+    @        // cycle done
+    @        (\forall int tk; t[k] == tk =>
+    @          (m <  k &&  1 <= tk <= n  && \at(t[tk],  init) == k) ||
+    @          (k <= m && -n <= tk <= -1 && \at(t[-tk], init) == k)))
+    @   ||
+    @      (\at(largest(t, k), init) <= m && t[k] == \at(t[k], init)))
+    @ variant 
+    @   m
     @*/
   while (m > 0) {
     int i = t[m];
     //@ label L
     if (i > 0) {
-      /*@ invariant 1 <= m <= n && i == t[m]
+      /*@ invariant 
+	@   1 <= m <= n && i == t[m] && j < 0 && 
+	@   (\forall int mc; mc == m => \at(path(t, \at(m, L), mc), init)) &&
+	@   (\forall int k; 1 <= k <= n => 
+	@      (\at(largest(t, k), init) > m &&
+	@        // cycle done
+	@        (\forall int tk; t[k] == tk =>
+	@          (m <  k &&  1 <= tk <= n  && \at(t[tk],  init) == k) ||
+	@          (k <= m && -n <= tk <= -1 && \at(t[-tk], init) == k)))
+	@   ||
+	@      (\at(largest(t, k), init) < m && t[k] == \at(t[k], init))
+	@   ||
+	@      (\at(largest(t, k), init) == m && 
+	@         1 // todo
+	@   ))
+	@ // variant
+	@ // todo  
 	@*/
-      while (i > 0) {
+      do {
 	t[m] = j;
 	j = -m;
 	m = i;
 	i = t[m];
-      }
+      } while (i > 0);
       //@ assert m == \at(m,L)
       i = j;
     }
