@@ -27,6 +27,11 @@
   @     path(t, k0, k) => t[k] != k0 => path(t, k0, t[k])
   @*/
 
+/*@ predicate path3(int *t, int ml, int k, int m) {
+  @   path(t, ml, k) && t[k] != m && path(t, k, m)
+  @ }
+  @*/
+
 // largest element in a cycle
 
 //@ logic int largest(int *t, int k) reads t[..]
@@ -63,6 +68,8 @@ void inverse(int *t, int n) {
     if (i > 0) {
       /*@ invariant 
 	@   1 <= m <= n && i == t[m] && j < 0 && 
+	@   (m < \at(m,L) => 
+	@     \forall int cj; cj == -j => \at(t[cj], init) == m) &&
 	@   (\forall int mc; mc == m => \at(path(t, \at(m, L), mc), init)) &&
 	@   (\forall int k; 1 <= k <= n => 
 	@      (\at(largest(t, k), init) > m &&
@@ -74,8 +81,11 @@ void inverse(int *t, int n) {
 	@      (\at(largest(t, k), init) < m && t[k] == \at(t[k], init))
 	@   ||
 	@      (\at(largest(t, k), init) == m && 
-	@         1 // todo
-	@   ))
+	@         (  (\at(path3(t, \at(m,L), k, m), init) && 
+	@             (\forall int tk; t[k] == tk => 
+	@                -n <= tk <= -1 && \at(t[-tk], init) == k))
+	@         || (\at(path3(t, m, k, \at(m,L)), init) && 
+	@             t[k] == \at(t[k], init)))))
 	@ // variant
 	@ // todo  
 	@*/
