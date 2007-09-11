@@ -64,7 +64,8 @@ let rec expr e =
     | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
     | JEassign_array_op(e1,e2,op,e3) -> expr e1; expr e2; expr e3
     | JEcall(e,mi,args) ->
-	Option_misc.iter expr e;
+	expr e;	List.iter expr args
+    | JEstatic_call(mi,args) ->
 	List.iter expr args
 
 let initialiser i = 

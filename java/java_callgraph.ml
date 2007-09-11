@@ -94,7 +94,9 @@ let rec expr acc e : 'a list =
     | JEincr_local_var _ 
     | JEstatic_field_access _ -> acc
     | JEcall (e, mi, args) ->
-	List.fold_left expr (Option_misc.fold_left expr acc e) args
+	List.fold_left expr (expr (mi::acc) e) args
+    | JEstatic_call (mi, args) ->
+	List.fold_left expr (mi::acc) args
     | JEassign_array_op (e1, e2, _, e3)-> 
 	expr (expr (expr acc e1) e2) e3
     | JEassign_local_var_op (_, _, e) 

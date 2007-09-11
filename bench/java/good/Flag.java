@@ -69,13 +69,13 @@ class Flag {
 	while (i < r) {
 	    switch (t[i]) {
 	    case BLUE:  
-		// swap(b++, i++);
+		swap(b++, i++);
 		break;	    
 	    case WHITE: 
 		i++; 
 		break;
 	    case RED: 
-		// swap(--r, i);
+		swap(--r, i);
 		break;
 	    }
 	}

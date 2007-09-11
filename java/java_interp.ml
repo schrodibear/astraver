@@ -213,6 +213,31 @@ let create_logic_fun fi =
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
   nfi
 
+(*s program funs *)
+
+let funs_table = Hashtbl.create 97
+
+let get_fun mi =
+  try
+    Hashtbl.find funs_table mi.method_info_tag
+  with
+      Not_found -> assert false
+
+let create_fun mi =
+  let nfi =
+    match mi.method_info_result with
+      | None ->
+	  Jc_pervasives.make_fun_info mi.method_info_name 
+	    Jc_pervasives.unit_type
+      | Some vi ->
+	  Jc_pervasives.make_fun_info mi.method_info_name
+	    (tr_type vi.java_var_info_type) 
+  in
+  nfi.jc_fun_info_parameters <-
+    List.map create_var mi.method_info_parameters;
+  Hashtbl.add funs_table mi.method_info_tag nfi;
+  nfi
+
 
 (*s terms *)
 
@@ -622,8 +647,10 @@ let rec expr e =
 		    JCTEassign_heap_op(shift,fi,bin_op op,e3')
 	      | _ -> assert false
 	  end
-      | JEcall(e,mi,args) -> assert false (* TODO *)
-	  
+      | JEcall(e,mi,args) -> 
+	  JCTEcall(get_fun mi,List.map expr (e::args))
+      | JEstatic_call(mi,args) -> 
+	  assert false
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type;
@@ -707,8 +734,9 @@ let tr_method mi req behs b acc =
 	      let _nvi = create_var vi in 
 	      Some vi.java_var_info_type
 	in
+	let nfi = create_fun mi in
 	JCfun_def(tr_type_option t,
-		  mi.method_info_trans_name,
+		  nfi.jc_fun_info_name,
 		  params,
 		  { jc_fun_requires = assertion_option req;
 		    jc_fun_behavior = List.map behavior behs},

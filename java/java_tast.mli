@@ -66,7 +66,8 @@ and expr_node =
   | JEassign_field of expr * java_field_info * expr
   | JEassign_field_op of expr * java_field_info * bin_op * expr
   | JEassign_array_op of expr * expr * bin_op * expr
-  | JEcall of expr option * method_info * expr list
+  | JEcall of expr * method_info * expr list
+  | JEstatic_call of method_info * expr list
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry

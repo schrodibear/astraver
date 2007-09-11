@@ -64,6 +64,7 @@ Typing level 1: extract prototypes
 **********************************)
 
 let search_for_class id =
+  (* TODO: handling multiples packages *)
   try
     Hashtbl.find class_table id 
   with
@@ -959,7 +960,26 @@ let rec expr_of_term t =
     java_expr_node = n ;
   }
 
-let lookup_method ci id arg_types = assert false (* TODO *)
+let lookup_method ci (loc,id) arg_types = 
+  let rec collect_methods ci acc =
+    let acc = 
+      List.fold_left
+	(fun acc mi -> if mi.method_info_name = id then mi::acc else acc)
+	acc ci.class_info_methods 
+    in
+    match ci.class_info_extends with
+      | None -> acc 
+      | Some ci -> collect_methods ci acc
+  in
+  let meths = collect_methods ci [] in
+  match meths with
+    | [] -> raise Not_found
+    | [mi] -> mi
+    | _ -> 
+	typing_error loc "overloading/overriding not yet supported"
+(* !!!!!!! TODO !!!! 
+  check args types and overloading/overriding
+*)
 
 let rec expr env e =
   let ty,te = 
@@ -1007,12 +1027,19 @@ let rec expr env e =
 		  begin match vi.java_var_info_type with
 		    | JTYclass(_,ci) ->
 			let mi = lookup_method ci id arg_types in
-			begin
+			let ty = 
 			  match mi.method_info_result with
-			    | None -> unit_type,JEcall(None,mi,args)
-			    | Some vi -> vi.java_var_info_type,
-				JEcall(None,mi,args)
-			end
+			    | None -> unit_type
+			    | Some vi -> vi.java_var_info_type
+			in
+			let this =
+			  {
+			    java_expr_node = JEvar vi;
+			    java_expr_type = vi.java_var_info_type;
+			    java_expr_loc = e.java_pexpr_loc;
+			  }
+			in
+			ty,JEcall(this,mi,args)
 		    | _ -> assert false
 		  end		
 	      | Some e -> assert false (* TODO *)
