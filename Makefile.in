@@ -73,7 +73,7 @@ OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
 
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
 
-APRONLIB = -I @APRONLIB@
+APRONLIB = @APRONLIB@
 APRONLIBS = @APRONLIBS@
 APRONBYTLIBS = $(APRONLIBS:.cmxa=.cma)
 
