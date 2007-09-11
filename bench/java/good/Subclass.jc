@@ -1,0 +1,30 @@
+
+type byte = -128..127
+
+type short = -32768..32767
+
+type int32 = -2147483648..2147483647
+
+type long = -9223372036854775808..9223372036854775807
+
+type char = 0..65535
+
+type A = {
+  int32 x;
+}
+
+type B = A with {
+}
+
+int32 m(B[0] this)
+  requires true;
+{  
+   return this.x;
+}
+
+/*
+Local Variables:
+mode: java
+compile-command: "jessie Subclass.jc ; make -f Subclass.makefile gui"
+End:
+*/

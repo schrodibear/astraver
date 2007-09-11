@@ -26,6 +26,7 @@ let new_class_info id =
     { class_info_name = id ;
       class_info_fields = [];
       class_info_methods = [];
+      class_info_extends = None;
     }
   in
   Hashtbl.add class_table id ci;
@@ -191,7 +192,18 @@ let get_field_prototypes ci acc d =
 let rec get_method_prototypes ci acc env l =
   match l with
     | [] -> acc
-    | JPFmethod _ :: rem -> assert false
+    | JPFmethod(head,body) :: rem -> 
+	let id, ret_ty, params = 
+	  method_header head.method_return_type head.method_declarator 
+	in
+	let is_static = List.mem `STATIC head.method_modifiers in
+	let mi = new_method_info ~is_static (snd id) ret_ty params in
+	Hashtbl.add methods_env mi.method_info_tag (mi,None,[],body)
+	  (* { mt_method_info = mi;
+	    mt_requires = req;
+	    mt_behaviors = behs;
+	    mt_body = body } *);
+	get_method_prototypes ci (mi::acc) env rem 
     | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
 	let id, ret_ty, params = 
 	  method_header head.method_return_type head.method_declarator 
@@ -236,6 +248,126 @@ let rec get_method_prototypes ci acc env l =
 	get_method_prototypes ci acc env rem 
     | JPFconstructor _ :: rem -> assert false (* TODO *)
 
+(* name classification *)
+
+let term_var loc vi =
+  { java_term_node = JTvar vi; 
+    java_term_type = vi.java_var_info_type;
+    java_term_loc = loc }
+
+let rec list_assoc_field_name id l =
+  match l with
+    | [] -> raise Not_found
+    | fi::r ->
+	if fi.java_field_info_name = id then fi
+	else list_assoc_field_name id r
+
+let rec lookup_field ci id =
+  try
+    list_assoc_field_name id ci.class_info_fields
+  with
+      Not_found ->
+	match ci.class_info_extends with
+	  | None -> raise Not_found
+	  | Some ci -> lookup_field ci id
+
+type classified_name =
+  | TermName of term
+  | ClassName of java_class_info
+
+let rec classify_name env name =
+  match name with
+    | [] -> assert false
+    | [(loc,id)] ->
+	begin
+	  (* look for a local var of that name *)
+	  try
+	    let vi = List.assoc id env in
+	    TermName { 
+	      java_term_node = JTvar vi; 
+	      java_term_type = vi.java_var_info_type;
+	      java_term_loc = loc 
+	    }
+	  with Not_found -> 
+	    (* look for a field of that name in class this *)
+	    try
+	      let this = List.assoc "this" env in	    
+	      match this.java_var_info_type with
+		| JTYclass(_,ci) ->
+		    begin
+		      try 
+			let fi = lookup_field ci id in
+			let facc =
+			  if fi.java_field_info_is_static then
+			    JTstatic_field_access(ci,fi)
+			  else
+			    JTfield_access(term_var loc this,fi)
+			in
+			TermName {
+			  java_term_node = facc;
+			  java_term_type = fi.java_field_info_type;
+			  java_term_loc = loc
+			}
+		      with Not_found ->
+			typing_error loc "unknown identifier %s" id
+		    end
+		| _ -> assert false (* impossible *)
+	    with Not_found ->
+	      (* look for a class of that name *)
+	      try 
+		let ci = search_for_class id in ClassName ci
+	      with Not_found ->
+		assert false (* TODO *)
+	end		
+    | (loc,id)::n ->
+	match classify_name env n with
+	  | TermName t -> 
+	      begin
+		match t.java_term_type with
+		  | JTYclass(_,c) ->
+		      begin
+			try
+			  let fi = lookup_field c id in
+			  TermName { 
+			    java_term_loc = loc;
+			    java_term_type = fi.java_field_info_type ;
+			    java_term_node = JTfield_access(t,fi)
+			  }
+			with Not_found ->
+			  typing_error loc 
+			    "no such field in this class"
+		      end
+		  | JTYarray _ -> 
+		      if id="length" then
+			TermName {
+			  java_term_loc = loc;
+			  java_term_type = integer_type;
+			  java_term_node = JTarray_length(t)
+			}
+		      else
+			typing_error loc 
+			  "no such field in array type"
+		  | JTYbase _ ->
+		      typing_error t.java_term_loc 
+			"not a class type" 
+	      end
+	  | ClassName ci ->
+	      	try
+		  let fi = lookup_field ci id in
+		  if fi.java_field_info_is_static then
+		    TermName { 
+		      java_term_loc = loc;
+		      java_term_type = fi.java_field_info_type ;
+		      java_term_node = JTstatic_field_access(ci,fi)
+		    }
+		  else
+		    typing_error loc 
+		      "field %s is not static" id
+
+		with Not_found ->
+		  typing_error loc 
+		    "no such field in class %s" ci.class_info_name
+
 let type_decl d = 
     match d with
     | JPTclass c -> 
@@ -247,6 +379,16 @@ let type_decl d =
 	  class_fields : field_declaration list
 	*)
 	let ci = search_for_class (snd c.class_name) in	  
+	(* extends *)
+	ci.class_info_extends <-
+	  Option_misc.map 
+	  (fun id -> 
+	     match classify_name [] id with
+	       | ClassName ci -> ci
+	       | _ ->
+		   typing_error (fst (List.hd id)) "no such class") 
+	  c.class_extends;
+	(* fields *)
 	let fields = List.fold_left (get_field_prototypes ci) [] c.class_fields in
 	ci.class_info_fields <- fields;
 	let methods = get_method_prototypes ci [] [] c.class_fields in
@@ -480,119 +622,8 @@ let get_this loc env =
   with Not_found -> 
     typing_error loc "this undefined in this context"
 
-let term_var loc vi =
-  { java_term_node = JTvar vi; 
-    java_term_type = vi.java_var_info_type;
-    java_term_loc = loc }
 
-let lookup_field ci id =
-  let rec list_assoc_field_name id l =
-    match l with
-      | [] -> raise Not_found
-      | fi::r ->
-	  if fi.java_field_info_name = id then fi
-	  else list_assoc_field_name id r
-  in
-  list_assoc_field_name id ci.class_info_fields
-
-
-type classified_name =
-  | TermName of term
-  | ClassName of java_class_info
-
-let rec classify_name env name =
-  match name with
-    | [] -> assert false
-    | [(loc,id)] ->
-	begin
-	  (* look for a local var of that name *)
-	  try
-	    let vi = List.assoc id env in
-	    TermName { 
-	      java_term_node = JTvar vi; 
-	      java_term_type = vi.java_var_info_type;
-	      java_term_loc = loc 
-	    }
-	  with Not_found -> 
-	    (* look for a field of that name in class this *)
-	    try
-	      let this = List.assoc "this" env in	    
-	      match this.java_var_info_type with
-		| JTYclass(_,ci) ->
-		    begin
-		      try 
-			let fi = lookup_field ci id in
-			let facc =
-			  if fi.java_field_info_is_static then
-			    JTstatic_field_access(ci,fi)
-			  else
-			    JTfield_access(term_var loc this,fi)
-			in
-			TermName {
-			  java_term_node = facc;
-			  java_term_type = fi.java_field_info_type;
-			  java_term_loc = loc
-			}
-		      with Not_found ->
-			typing_error loc "unknown identifier %s" id
-		    end
-		| _ -> assert false (* impossible *)
-	    with Not_found ->
-	      (* look for a class of that name *)
-	      try 
-		let ci = search_for_class id in ClassName ci
-	      with Not_found ->
-		assert false (* TODO *)
-	end		
-    | (loc,id)::n ->
-	match classify_name env n with
-	  | TermName t -> 
-	      begin
-		match t.java_term_type with
-		  | JTYclass(_,c) ->
-		      begin
-			try
-			  let fi = lookup_field c id in
-			  TermName { 
-			    java_term_loc = loc;
-			    java_term_type = fi.java_field_info_type ;
-			    java_term_node = JTfield_access(t,fi)
-			  }
-			with Not_found ->
-			  typing_error loc 
-			    "no such field in this class"
-		      end
-		  | JTYarray _ -> 
-		      if id="length" then
-			TermName {
-			  java_term_loc = loc;
-			  java_term_type = integer_type;
-			  java_term_node = JTarray_length(t)
-			}
-		      else
-			typing_error loc 
-			  "no such field in array type"
-		  | JTYbase _ ->
-		      typing_error t.java_term_loc 
-			"not a class type" 
-	      end
-	  | ClassName ci ->
-	      	try
-		  let fi = lookup_field ci id in
-		  if fi.java_field_info_is_static then
-		    TermName { 
-		      java_term_loc = loc;
-		      java_term_type = fi.java_field_info_type ;
-		      java_term_node = JTstatic_field_access(ci,fi)
-		    }
-		  else
-		    typing_error loc 
-		      "field %s is not static" id
-
-		with Not_found ->
-		  typing_error loc 
-		    "no such field in class %s" ci.class_info_name
-		
+	
   
 let rec term env e =
   let ty,tt =

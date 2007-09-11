@@ -351,6 +351,9 @@ let tr_class ci acc =
       (fun fi -> fi.java_field_info_is_static)
       ci.class_info_fields
   in
+  let super =
+    Option_misc.map (fun ci -> ci.class_info_name) ci.class_info_extends
+  in
   let acc =
     List.fold_right
       (fun fi acc ->
@@ -377,7 +380,7 @@ let tr_class ci acc =
       static_fields
       acc
   in
-  JCstruct_def(ci.class_info_name,
+  JCstruct_def(ci.class_info_name, super,
 	       List.map create_field fields) :: acc
 
 let java_array_length_funs = Hashtbl.create 17
@@ -450,7 +453,7 @@ let array_types decls =
        in
        JCfun_def(fi.jc_fun_info_return_type,fi.jc_fun_info_name,[vi],spec,None)
 	::	
-       JCstruct_def(st.jc_struct_info_name,
+       JCstruct_def(st.jc_struct_info_name, None,
 		    List.map snd st.jc_struct_info_fields) :: acc)
     Java_analysis.array_struct_table
     decls

@@ -9,7 +9,7 @@ type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
       fun_spec * tstatement list option
   | JCenum_type_def of string * Num.num * Num.num
-  | JCstruct_def of string * field_info list 
+  | JCstruct_def of string * string option * field_info list 
   | JCrec_struct_defs of jc_decl list
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr option
@@ -380,6 +380,10 @@ let term_or_assertion fmt = function
   | JCReads locs -> 
       fprintf fmt "reads %a;" (print_list comma location) locs
 
+let print_super fmt = function
+  | None -> ()
+  | Some id -> fprintf fmt "%s with " id
+
 let rec print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
@@ -390,9 +394,9 @@ let rec print_decl fmt d =
     | JCenum_type_def(id,min,max) ->
 	fprintf fmt "@\n@[type %s = %s..%s@]@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
-    | JCstruct_def(id,fields) ->
-	fprintf fmt "@\n@[<v 2>type %s = {%a@]@\n}@."
-	  id (print_list space field) fields
+    | JCstruct_def(id,extends,fields) ->
+	fprintf fmt "@\n@[<v 2>type %s = %a{%a@]@\n}@."
+	  id print_super extends (print_list space field) fields
     | JCrec_struct_defs dlist | JCrec_fun_defs dlist ->
 	print_list (fun fmt () -> fprintf fmt "@\nand") print_decl fmt dlist
     | JCvar_def(ty,id,init) ->

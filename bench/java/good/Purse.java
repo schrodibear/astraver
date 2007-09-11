@@ -1,12 +1,14 @@
 
+/*
 class NoCreditException extends Exception {
 
-    /* @ behavior created:
+    / *@ behavior created:
       @   assigns \nothing
       @   ensures true
-      @*/
-    // public NoCreditException() {}
+      @* /
+    public NoCreditException() {}
 }
+*/
 
 public class Purse {
     

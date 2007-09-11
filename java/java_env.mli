@@ -203,8 +203,8 @@ and java_class_info =
       class_info_name : string;
       mutable class_info_fields : java_field_info list;
       mutable class_info_methods : method_info list;
+      mutable class_info_extends : java_class_info option;
 (*
-      mutable class_entry_extends : class_entry option;
       mutable class_entry_implements : interface_entry list;
       mutable class_entry_contents : t;
       mutable class_entry_constructors : constructor_entry list;
