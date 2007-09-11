@@ -252,10 +252,10 @@ if test "$enable_apron" = "yes" ; then
       AC_CHECK_FILE(/usr/lib/apron.cmxa,APRONLIB="-I /usr/lib",APRONLIB=no)
       if test "$APRONLIB" = no ; then	
 	 AC_MSG_ERROR(Cannot find APRON library.)
-
       fi		     
    fi
    APRONLIBS="-cclib ' -lpolka_caml -lpolka_debug -loct_caml -loct -lbox_caml -lapron_caml_debug -lapron_debug -lgmp_caml -lmpfr -lgmp -lbigarray' bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa"
+   ATPCMO=atp/atp.cmo
 fi
 
 
@@ -405,6 +405,7 @@ AC_SUBST(STATIC)
 AC_SUBST(enable_apron)
 AC_SUBST(APRONLIB)
 AC_SUBST(APRONLIBS)
+AC_SUBST(ATPCMO)
 
 AC_SUBST(COQ)
 AC_SUBST(COQC7)
