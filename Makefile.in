@@ -253,10 +253,10 @@ JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 JCCMO_EXPORT = $(JCCMO_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCMO_EXPORT:.ml=.cmx)
 
-atp.cmx: 
+atp/atp.cmx: atp/atp.ml
 	make -C atp atp.cmx
 
-atp.cmo: 
+atp/atp.cmo: atp/atp.ml
 	make -C atp atp.cmo
 
 jc/jc.cma: $(JCCML_EXPORT)
@@ -265,12 +265,12 @@ jc/jc.cma: $(JCCML_EXPORT)
 jc/jc.cmxa: $(JCCML_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
 
-bin/jessie.opt: atp.cmx $(JCCMX)
+bin/jessie.opt: atp/atp.cmx $(JCCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
 	# strip    $@
 
-bin/jessie.byte: atp.cmo $(JCCMO) 
+bin/jessie.byte: atp/atp.cmo $(JCCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) $(ATPLIB) -o $@ \
 		unix.cma nums.cma graph.cma $^
 
