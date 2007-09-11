@@ -253,10 +253,10 @@ JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 JCCMO_EXPORT = $(JCCMO_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCMO_EXPORT:.ml=.cmx)
 
-atp/atp.cmx: atp/atp.ml
+atp/atp.cmx: 
 	make -C atp atp.cmx
 
-atp/atp.cmo: atp/atp.ml
+atp/atp.cmo: 
 	make -C atp atp.cmo
 
 jc/jc.cma: $(JCCML_EXPORT)
