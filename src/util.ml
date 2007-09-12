@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.129 2007-08-31 08:16:09 marche Exp $ i*)
+(*i $Id: util.ml,v 1.130 2007-09-12 13:41:17 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -265,7 +265,7 @@ let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
       let p = subst_in_predicate (subst_onev x n) p in
       Forallb (is_wp, x, n, p, simplify ptrue, simplify pfalse)
 ***)
-  | PureType PTbool ->
+  | PureType PTbool when not fast_wp ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
       Pand (true, true, simplify ptrue, simplify pfalse)
