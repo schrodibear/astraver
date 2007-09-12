@@ -172,25 +172,26 @@ let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
 let fun_any_enum n = "any_" ^ n.jc_enum_info_name
 
 let term_coerce loc tdest tsrc e =
-  match tdest,tsrc with
-    | JCTnative t, JCTnative u when t=u -> e
-    | JCTlogic t, JCTlogic u when t=u -> e
-    | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
-    | JCTnative Tinteger, JCTenum ri ->
-	LApp(logic_int_of_enum ri,[e])
-    | JCTenum ri, JCTnative Tinteger ->
-	LApp(logic_enum_of_int ri,[e])
-    | JCTpointer (st1, _, _), JCTpointer(st2,_,_) 
-	when Jc_typing.substruct st2 st1 -> e
-    | JCTpointer (st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
-	LApp("downcast", 
-	  [ LVar (st.jc_struct_info_root ^ "_tag_table") ; e ;
-	    LVar (st.jc_struct_info_name ^ "_tag") ])	
-    |  _ -> 
-	 Jc_typing.typing_error loc 
-	   "can't coerce type %a to type %a" 
-	   Jc_typing.print_type tsrc Jc_typing.print_type tdest
-
+  match tdest, tsrc with
+  | JCTnative t, JCTnative u when t=u -> e
+  | JCTlogic t, JCTlogic u when t=u -> e
+  | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
+  | JCTnative Tinteger, JCTnative Tunit -> e (* hack for ai - Nicolas *)
+  | JCTnative Tinteger, JCTenum ri ->
+      LApp(logic_int_of_enum ri,[e])
+  | JCTenum ri, JCTnative Tinteger ->
+      LApp(logic_enum_of_int ri,[e])
+  | JCTpointer (st1, _, _), JCTpointer(st2,_,_) 
+    when Jc_typing.substruct st2 st1 -> e
+  | JCTpointer (st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
+      LApp("downcast", 
+	   [ LVar (st.jc_struct_info_root ^ "_tag_table") ; e ;
+	     LVar (st.jc_struct_info_name ^ "_tag") ])	
+  |  _ -> 
+      Jc_typing.typing_error loc 
+	"can't coerce type %a to type %a" 
+	Jc_typing.print_type tsrc Jc_typing.print_type tdest
+	
 let coerce ~no_int_overflow loc tdest tsrc e =
   match tdest,tsrc with
     | JCTnative t, JCTnative u when t=u -> e
@@ -1000,20 +1001,20 @@ let tr_fun f spec body acc =
   (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
   let invariants =
     (* (* with the inv predicate (DISABLED) *) List.fold_right
-      (fun v acc ->
-	 match v.jc_var_info_type with
-	   | JCTpointer(st,_,_) ->
-	       let var = LVar v.jc_var_info_final_name in
-	       (*let invariant = invariant_for_struct var st in
-	       make_and invariant acc*)
-               let params = valid_inv_params st in
-               let params = List.map (fun (s, _) -> LVar s) params in
-               make_and (LPred(valid_inv_name st, var::params)) acc
-           | JCTnull -> assert false
-	   | JCTrange _ -> acc
-	   | JCTnative _ -> acc
-	   | JCTlogic _ -> acc)
-      f.jc_fun_info_parameters *)
+       (fun v acc ->
+       match v.jc_var_info_type with
+       | JCTpointer(st,_,_) ->
+       let var = LVar v.jc_var_info_final_name in
+       (*let invariant = invariant_for_struct var st in
+	 make_and invariant acc*)
+       let params = valid_inv_params st in
+       let params = List.map (fun (s, _) -> LVar s) params in
+       make_and (LPred(valid_inv_name st, var::params)) acc
+       | JCTnull -> assert false
+       | JCTrange _ -> acc
+       | JCTnative _ -> acc
+       | JCTlogic _ -> acc)
+       f.jc_fun_info_parameters *)
       LTrue
   in
   let requires = spec.jc_fun_requires in

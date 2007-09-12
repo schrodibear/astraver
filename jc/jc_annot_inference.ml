@@ -1220,7 +1220,7 @@ let rec ai_statement abs curinvs s =
       if num < abs.jc_absint_widening_threshold then
 	let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
 (* Begin hack - Nicolas *)
-(* sufficient to infer most *simple* loop invariant (see couso76.jc, loop.jc, etc.) *)
+(* sufficient to infer most *simple* loop invariant (see cousot76.jc, loop.jc, etc.) *)
 	let wideninvs = widen_invariants mgr curinvs nextinvs in
 	let nextinvs = ai_statement abs (copy_invariants mgr wideninvs) ls in
 (* End hack - Nicolas *)

@@ -196,12 +196,12 @@ let main () =
 	let d_funs = 
 	  Hashtbl.fold 
 	    (fun _ (f,s,b) acc ->
-	       printf "Generating Why function %s@." 
-		 f.Jc_fenv.jc_fun_info_name;
-	       Jc_interp.tr_fun f s b acc)
+	      printf "Generating Why function %s@."
+		f.Jc_fenv.jc_fun_info_name;
+	      Jc_interp.tr_fun f s b acc)
 	    Jc_norm.functions_table
 	    d_axioms
-	in	       
+	in
 	Jc_options.lprintf "production phase 5 : (invariants tools)@.";
 	let d_inv = d_funs in
 	(* production phase 5.1 : "assoc" declaration *)

@@ -1208,14 +1208,14 @@ let rec expr env e =
 			   
 let type_initializer env ty i =
   match ty,i with
-    | JTYbase t, Simple_initializer e ->
-	let te = expr env e in	
-	if compatible_types ty te.java_expr_type then JIexpr te
-	else
-	  typing_error e.java_pexpr_loc "type %a expected, got %a"
-	    print_type ty print_type te.java_expr_type
-    | _ -> assert false (* TODO *)
-
+  | JTYbase t, Simple_initializer e ->
+      let te = expr env e in	
+      if compatible_types ty te.java_expr_type then JIexpr te
+      else
+	typing_error e.java_pexpr_loc "type %a expected, got %a"
+	  print_type ty print_type te.java_expr_type
+  | _ -> assert false (* TODO *)
+	
 (* statements *)
 
 let variable_declaration env vd =
