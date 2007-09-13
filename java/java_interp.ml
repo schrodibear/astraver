@@ -650,7 +650,8 @@ let rec expr e =
       | JEcall(e,mi,args) -> 
 	  JCTEcall(get_fun mi,List.map expr (e::args))
       | JEstatic_call(mi,args) -> 
-	  assert false
+	  JCTEcall(get_fun mi,List.map expr args)
+	  
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type;
