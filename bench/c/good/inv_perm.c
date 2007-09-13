@@ -41,6 +41,8 @@
   @     \forall int k; 1 <= largest(t, k) <= n
   @*/
 
+#ifdef BEHAV
+
 /*@ requires 
   @   n >= 0 && \valid_range(t,1,n) && permutation(t, n)
   @ ensures
@@ -96,6 +98,61 @@ void inverse(int *t, int n) {
 	i = t[m];
       } while (i > 0);
       //@ assert m == \at(m,L)
+      i = j;
+    }
+    t[m] = -i;
+    m--;
+  }
+}
+
+#endif
+
+/*@ requires 
+  @   n >= 1 && \valid_range(t,1,n) &&
+  @   \forall int k; 1 <= k <= n => 1 <= t[k] <= n
+  @*/
+void safety(int *t, int n) {
+  int m = n, j = -1;
+  /*@ invariant 
+    @   0 <= m <= n && -n <= j <= -1 &&
+    @   \forall int k; 1 <= k <= n => (-n <= t[k] <= -1 || 1 <= t[k] <= n)
+    @*/
+  while (m > 0) {
+    int i = t[m];
+    if (i > 0) {
+      /*@ invariant 
+	@   1 <= m <= n && 1 <= i <= n && -n <= j <= -1 &&
+	@   \forall int k; 1 <= k <= n => (-n <= t[k] <= -1 || 1 <= t[k] <= n)
+	@*/
+      do {
+	t[m] = j;
+	j = -m;
+	m = i;
+	i = t[m];
+      } while (i > 0);
+      i = j;
+    }
+    t[m] = -i;
+    m--;
+  }
+}
+
+
+/*@ requires 
+  @   n <= 0
+  @*/
+void safety_n_eq_0(int *t, int n) {
+  int m = n, j = -1;
+  //@ invariant m == n
+  while (m > 0) {
+    int i = t[m];
+    if (i > 0) {
+      do {
+	t[m] = j;
+	j = -m;
+	m = i;
+	i = t[m];
+      } while (i > 0);
       i = j;
     }
     t[m] = -i;
