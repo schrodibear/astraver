@@ -1,4 +1,14 @@
 
+logic N,X : int 
+
+parameter mem : int array
+
+parameter i1,i2,i3 : int ref
+
+let seq1 () =
+  i2 := (neg_int (access !mem (add_int X !i1)));
+  (assert { 1 <= i1 <= N and 1 <= -i2 <= N and -N <= i3 <= -1 }; void)
+
 (***
 predicate p() = true
 

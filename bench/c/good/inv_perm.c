@@ -41,10 +41,8 @@
   @     \forall int k; 1 <= largest(t, k) <= n
   @*/
 
-#ifdef BEHAV
-
 /*@ requires 
-  @   n >= 0 && \valid_range(t,1,n) && permutation(t, n)
+  @   n >= 1 && \valid_range(t,1,n) && permutation(t, n)
   @ ensures
   @   \forall int k; 1 <= k <= n => t[\old(t[k])] == k
   @*/
@@ -52,7 +50,7 @@ void inverse(int *t, int n) {
   int m = n, j = -1;
   //@ label init
   /*@ invariant 
-    @   0 <= m <= n && j < 0 &&
+    @   1 <= m <= n && j < 0 &&
     @   (\forall int k; 1 <= k <= n => 
     @      (\at(largest(t, k), init) > m &&
     @        // cycle done
@@ -64,7 +62,7 @@ void inverse(int *t, int n) {
     @ variant 
     @   m
     @*/
-  while (m > 0) {
+  do {
     int i = t[m];
     //@ label L
     if (i > 0) {
@@ -102,10 +100,8 @@ void inverse(int *t, int n) {
     }
     t[m] = -i;
     m--;
-  }
+  } while (m > 0);
 }
-
-#endif
 
 /*@ requires 
   @   n >= 1 && \valid_range(t,1,n) &&
@@ -114,10 +110,10 @@ void inverse(int *t, int n) {
 void safety(int *t, int n) {
   int m = n, j = -1;
   /*@ invariant 
-    @   0 <= m <= n && -n <= j <= -1 &&
+    @   1 <= m <= n && -n <= j <= -1 &&
     @   \forall int k; 1 <= k <= n => (-n <= t[k] <= -1 || 1 <= t[k] <= n)
     @*/
-  while (m > 0) {
+  do {
     int i = t[m];
     if (i > 0) {
       /*@ invariant 
@@ -134,31 +130,9 @@ void safety(int *t, int n) {
     }
     t[m] = -i;
     m--;
-  }
+  } while (m > 0);
 }
 
-
-/*@ requires 
-  @   n <= 0
-  @*/
-void safety_n_eq_0(int *t, int n) {
-  int m = n, j = -1;
-  //@ invariant m == n
-  while (m > 0) {
-    int i = t[m];
-    if (i > 0) {
-      do {
-	t[m] = j;
-	j = -m;
-	m = i;
-	i = t[m];
-      } while (i > 0);
-      i = j;
-    }
-    t[m] = -i;
-    m--;
-  }
-}
 
 /* test */
 
