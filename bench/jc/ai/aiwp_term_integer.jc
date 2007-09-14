@@ -1,0 +1,23 @@
+
+type intP = {
+    integer intM;
+}
+
+integer foo(integer s, intP[..] n) {
+    intP[0] i = new intP[1];
+    i.intM = 0;
+    while true ; {
+        if (i.intM < n.intM) {
+            assert (0 <= i.intM && i.intM < s);
+        }
+        i.intM = i.intM + 1;
+    }
+    return i.intM;
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make aiwp_term_integer"
+End: 
+*/
