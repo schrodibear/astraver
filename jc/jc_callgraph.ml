@@ -90,7 +90,10 @@ let spec s =
 *)
 
 let loop_annot acc la = 
-  term (assertion acc la.jc_loop_invariant) la.jc_loop_variant
+  let acc = assertion acc la.jc_loop_invariant in
+  match la.jc_loop_variant with
+  | None -> acc
+  | Some t -> term acc t
 
 let rec statement acc s = 
   match s.jc_statement_node with  
@@ -205,6 +208,6 @@ let compute_components table =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

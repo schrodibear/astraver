@@ -122,10 +122,11 @@ and tr_type t =
     | JTYbase t -> tr_base_type t	
     | JTYclass(non_null,ci) -> 
 	let st = get_class ci in
-	JCTpointer(st,num_zero,if non_null then num_zero else num_minus_one)
+	JCTpointer(st,Some num_zero,
+	           if non_null then Some num_zero else None)
     | JTYarray t ->
 	let st = get_array_struct t in
-	JCTpointer(st,num_zero,num_minus_one)
+	JCTpointer(st,Some num_zero,None)
 
 let tr_type_option t =
   match t with
@@ -453,7 +454,7 @@ let array_types decls =
        Hashtbl.add array_struct_table t st;
        let fi = create_java_array_length_fun st in
        let vi = Jc_pervasives.var 
-	 (JCTpointer(st,num_zero,num_minus_one)) "x" 
+	 (JCTpointer(st,Some num_zero,None)) "x" 
        in
        let result = Jc_pervasives.var Jc_pervasives.integer_type "\\result" in
        let nvi = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
@@ -679,7 +680,7 @@ let rec statement s =
 	  let la =
 	    { jc_loop_tag = get_loop_counter ();
 	      jc_loop_invariant = assertion inv;
-	      jc_loop_variant = term dec }
+	      jc_loop_variant = Some (term dec) }
 	  in
 	  JCTSwhile(expr e, la, statement s)
       | JSfor_decl(decls,e,inv,dec,sl,body) ->
@@ -690,7 +691,7 @@ let rec statement s =
 	  let la =
 	    { jc_loop_tag = get_loop_counter ();
 	      jc_loop_invariant = assertion inv;
-	      jc_loop_variant = term dec }
+	      jc_loop_variant = Some (term dec) }
 	  in
 	  let res =
 	    List.fold_right

@@ -29,7 +29,7 @@ type jc_type =
   | JCTnative of native_type
   | JCTlogic of string
   | JCTenum of enum_info
-  | JCTpointer of struct_info * Num.num * Num.num
+  | JCTpointer of struct_info * Num.num option * Num.num option
   | JCTnull
 
 and enum_info =

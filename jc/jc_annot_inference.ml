@@ -160,6 +160,39 @@ let rec deep_raw_term t =
   in
   raw_term tnode
 
+let rec deep_raw_asrt a =
+  let term = deep_raw_term and asrt = deep_raw_asrt in
+  let anode = match a.jc_assertion_node with
+    | JCArelation(t1,bop,t2) ->
+	JCArelation(term t1,bop,term t2)
+    | JCAnot a -> 
+	JCAnot (asrt a)
+    | JCAand al ->
+	JCAand(List.map asrt al)
+    | JCAor al ->
+	JCAor(List.map asrt al)
+    | JCAimplies(a1,a2) ->
+	JCAimplies(asrt a1,asrt a2)
+    | JCAiff(a1,a2) ->
+	JCAiff(asrt a1,asrt a2)
+    | JCAapp(li,tl) ->
+	JCAapp(li,List.map term tl)
+    | JCAquantifier(qt,vi,a) ->
+	JCAquantifier(qt,vi,asrt a)
+    | JCAold a ->
+	JCAold(asrt a)      
+    | JCAinstanceof(t,st) ->
+	JCAinstanceof(term t,st)
+    | JCAbool_term t ->
+	JCAbool_term(term t)
+    | JCAif(t,a1,a2) ->
+	JCAif(term t,asrt a1,asrt a2)
+    | JCAmutable(t,st,tag) ->
+	JCAmutable(term t,st,tag)
+    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+  in
+  raw_asrt anode
+
 let rec term_name =
   let string_explode s = 
     let rec next acc i = 
@@ -318,24 +351,29 @@ let print_abstract_invariants fmt invs =
 (* From expressions to terms and assertions.                                 *)
 (*****************************************************************************)
 
-let rec term_of_expr e =
-  let tnode = match e.jc_expr_node with
-    | JCEconst c -> JCTconst c
-    | JCEvar vi -> JCTvar vi
-    | JCEbinary(e1,bop,e2) -> JCTbinary(term_of_expr e1,bop,term_of_expr e2)
-    | JCEunary(uop,e1) -> JCTunary(uop,term_of_expr e1)
-    | JCEshift(e1,e2) -> JCTshift(term_of_expr e1, term_of_expr e2)
-    | JCEsub_pointer(e1,e2) -> JCTsub_pointer(term_of_expr e1, term_of_expr e2)
-    | JCEderef(e1,fi) -> JCTderef(term_of_expr e1,fi)
-    | JCEinstanceof(e1,st) -> JCTinstanceof(term_of_expr e1,st)
-    | JCEcast(e1,st) -> JCTcast(term_of_expr e1,st)
-    | JCErange_cast _ -> assert false (* TODO *)
-    | JCEif(e1,e2,e3) -> JCTif(term_of_expr e1,term_of_expr e2,term_of_expr e3)
-    | JCEoffset(off,e1,st) -> JCToffset(off, term_of_expr e1, st)
-    | JCEalloc _ -> assert false (* TODO *)
-    | JCEfree _ -> assert false (* TODO *)
+let term_of_expr e =
+  let rec term e = 
+    let tnode = match e.jc_expr_node with
+      | JCEconst c -> JCTconst c
+      | JCEvar vi -> JCTvar vi
+      | JCEbinary(e1,bop,e2) -> JCTbinary(term e1,bop,term e2)
+      | JCEunary(uop,e1) -> JCTunary(uop,term e1)
+      | JCEshift(e1,e2) -> JCTshift(term e1, term e2)
+      | JCEsub_pointer(e1,e2) -> JCTsub_pointer(term e1,term e2)
+      | JCEderef(e1,fi) -> JCTderef(term e1,fi)
+      | JCEinstanceof(e1,st) -> JCTinstanceof(term e1,st)
+      | JCEcast(e1,st) -> JCTcast(term e1,st)
+      | JCErange_cast _ -> failwith "Not a term"
+      | JCEif(e1,e2,e3) -> JCTif(term e1,term e2,term e3)
+      | JCEoffset(off,e1,st) -> JCToffset(off, term e1, st)
+      | JCEalloc _ -> failwith "Not a term"
+      | JCEfree _ -> failwith "Not a term"
+    in
+    raw_term tnode
   in
-  raw_term tnode
+  try Some (term e) with Failure _ -> None
+
+let raw_term_of_expr = term_of_expr
 
 let rec asrt_of_expr e =
   let anode = match e.jc_expr_node with
@@ -345,7 +383,9 @@ let rec asrt_of_expr e =
     | JCEvar _ -> assert false (* TODO: what about boolean variables ? *)
     | JCEbinary(e1,bop,e2) ->
 	if is_relation_binary_op bop then
-	  JCArelation(term_of_expr e1,bop,term_of_expr e2)
+	  match term_of_expr e1,term_of_expr e2 with
+	  | Some t1,Some t2 -> JCArelation(t1,bop,t2)
+	  | _ -> JCAtrue
 	else if is_logical_binary_op bop then
 	  match bop with
 	  | Bland -> JCAand [asrt_of_expr e1;asrt_of_expr e2]
@@ -360,29 +400,43 @@ let rec asrt_of_expr e =
 	  | Unot -> JCAnot(asrt_of_expr e1)
 	  | _ -> assert false
 	else assert false
-    | JCEinstanceof(e1,st) -> JCAinstanceof(term_of_expr e1,st)
-    | JCEif(e1,e2,e3) -> JCAif(term_of_expr e1,asrt_of_expr e2,asrt_of_expr e3)
-    | JCEderef _ -> JCAbool_term (term_of_expr e)
+    | JCEinstanceof(e1,st) ->
+	begin match term_of_expr e1 with
+	| Some t1 -> JCAinstanceof(t1,st)
+	| None -> JCAtrue 
+	end
+    | JCEif(e1,e2,e3) -> 
+	begin match term_of_expr e1 with
+	| Some t1 -> JCAif(t1,asrt_of_expr e2,asrt_of_expr e3)
+	| None -> JCAtrue 
+	end
+    | JCEderef _ -> 
+	begin match term_of_expr e with
+	| Some t -> JCAbool_term t
+	| None -> JCAtrue 
+	end
     | JCEcast _ | JCErange_cast _ | JCEshift _ | JCEsub_pointer _ 
     | JCEoffset _ | JCEalloc _ | JCEfree _ -> assert false
   in
   raw_asrt anode
+
+let raw_asrt_of_expr = asrt_of_expr
 
 
 (*****************************************************************************)
 (* Replacing variables in terms and assertions.                              *)
 (*****************************************************************************)
 
-let rec replace_var_in_term srcvi targetvi t = 
-  let term = replace_var_in_term srcvi targetvi in
-  let tnode = match t.jc_term_node with
+(* All terms involved should be raw terms. *)
+let rec replace_term_in_term srct targetvi t = 
+  let term = replace_term_in_term srct targetvi in
+  let tnode =
+    if srct = t then JCTvar targetvi
+    else match t.jc_term_node with
     | JCTconst _ as tnode -> tnode
     | JCTvar vi as tnode ->
-	if vi.jc_var_info_tag = srcvi.jc_var_info_tag then
-	  JCTvar targetvi
-	else if vi.jc_var_info_tag = targetvi.jc_var_info_tag then 
-	  assert false
-	else tnode 
+	assert(vi.jc_var_info_tag != targetvi.jc_var_info_tag);
+	tnode 
     | JCTbinary(t1,bop,t2) ->
 	JCTbinary(term t1,bop,term t2) 
     | JCTunary(uop,t1) ->
@@ -410,9 +464,10 @@ let rec replace_var_in_term srcvi targetvi t =
   in
   { t with jc_term_node = tnode; }
       
-let rec replace_var_in_assertion srcvi targetvi a = 
-  let term = replace_var_in_term srcvi targetvi in
-  let asrt = replace_var_in_assertion srcvi targetvi in
+(* All assertions and terms involved should be raw. *)
+let rec replace_term_in_assertion srct targetvi a = 
+  let term = replace_term_in_term srct targetvi in
+  let asrt = replace_term_in_assertion srct targetvi in
   let anode = match a.jc_assertion_node with
     | JCArelation(t1,bop,t2) ->
 	JCArelation(term t1,bop,term t2)
@@ -428,11 +483,9 @@ let rec replace_var_in_assertion srcvi targetvi a =
 	JCAiff(asrt a1,asrt a2)
     | JCAapp(li,tl) ->
 	JCAapp(li,List.map term tl)
-    | JCAquantifier(qt,vi,a) as anode ->
-	if vi.jc_var_info_tag = srcvi.jc_var_info_tag then anode
-	else if vi.jc_var_info_tag = targetvi.jc_var_info_tag then 
-	  assert false
-	else JCAquantifier(qt,vi,asrt a)
+    | JCAquantifier(qt,vi,a) ->
+	assert(vi.jc_var_info_tag != targetvi.jc_var_info_tag);
+	JCAquantifier(qt,vi,asrt a)
     | JCAold a ->
 	JCAold(asrt a)      
     | JCAinstanceof(t,st) ->
@@ -541,7 +594,7 @@ end = struct
 
   let variable_of_term t =
     match t.jc_term_node with
-    | JCTvar vi -> variable t
+    | JCTvar _ | JCTderef _ -> variable t
     | JCToffset(Offset_min,t,_) ->
 	begin match t.jc_term_node with
 	| JCTvar vi -> offset_min_variable t
@@ -590,6 +643,8 @@ let rec not_asrt a =
   in
   { a with jc_assertion_node = anode; }
 
+let raw_not_asrt = not_asrt
+
 let rec linearize t =
   match t.jc_term_node with
   | JCTconst c ->
@@ -599,8 +654,8 @@ let rec linearize t =
       | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ -> 
 	  failwith "Not linear"
       end
-  | JCTvar vi -> 
-      ([t,1],0)
+  | JCTvar _ | JCTderef _ ->
+      ([deep_raw_term t,1],0)
   | JCTbinary(t1,bop,t2) ->
       if is_arithmetic_binary_op bop then
 	let coeffs1,cst1 = linearize t1 in
@@ -674,7 +729,7 @@ let rec linearize t =
       | JCTvar vi -> ([t,1],0)
       | _ -> assert false
       end
-  | JCTshift _ | JCTsub_pointer _ | JCTderef _ | JCTinstanceof _ | JCTapp _
+  | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _ | JCTapp _
   | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ -> 
       failwith "Not linear"
 
@@ -749,10 +804,13 @@ let offset_min_linstr_of_assertion env a = "" (* TODO *)
 let offset_max_linstr_of_assertion env a = "" (* TODO *)
 
 let linstr_of_expr env e = 
-  match linstr_of_term env (term_of_expr e) with
-  | None -> ""
-  | Some ("",cst) -> string_of_int cst
-  | Some (str,cst) -> str ^ " + " ^ (string_of_int cst)
+  match term_of_expr e with
+  | None -> None
+  | Some t ->
+      match linstr_of_term env t with
+      | None -> None
+      | Some ("",cst) -> Some (string_of_int cst)
+      | Some (str,cst) -> Some (str ^ " + " ^ (string_of_int cst))
 
 let linstr_of_boolean_expr env e = 
   linstr_of_assertion env (asrt_of_expr e)
@@ -903,7 +961,7 @@ let mkinvariant mgr absval =
     else acc
   in
   let asserts = mkrec [] (Lincons1.array_length linconsarr - 1) in
-  raw_asrt (JCAand (List.map presentify asserts))
+  make_and (List.map presentify asserts)
 
 
 (*****************************************************************************)
@@ -912,17 +970,20 @@ let mkinvariant mgr absval =
 
 let assignment mgr pre t e =
   let env = Abstract1.env pre in
-  let vars, linexprs = 
+  let forget_vars, vars, linexprs = 
     if Vai.has_variable t then
       let va = Vai.variable t in
       if Environment.mem_var env va then
-	let lin = 
-	  try Parser.linexpr1_of_string env (linstr_of_expr env e) 
-	  with Parser.Error _ -> assert false
-	in
-	[va], [lin]
-      else [], []
-    else [], []
+	match linstr_of_expr env e with
+	| None -> [va], [], []
+	| Some str ->
+	    let lin = 
+	      try Parser.linexpr1_of_string env str
+	      with Parser.Error _ -> assert false
+	    in
+	    [], [va], [lin]
+      else [], [], []
+    else [], [], []
   in
 (*  let vars,linexprs = 
     if Vai.has_offset_min_variable t then
@@ -948,8 +1009,11 @@ let assignment mgr pre t e =
       else vars, linexprs
     else vars, linexprs
   in *)
-  let vars = Array.of_list vars and linexprs = Array.of_list linexprs in
+  let forget_vars = Array.of_list forget_vars in
+  let vars = Array.of_list vars in
+  let linexprs = Array.of_list linexprs in
   Abstract1.assign_linexpr_array_with mgr pre vars linexprs None;
+  Abstract1.forget_array_with mgr pre forget_vars false;
   pre
 
 let test_expr ~(neg:bool) mgr pre e =
@@ -1017,21 +1081,18 @@ let test_assertion mgr pre a =
       Abstract1.meet_lincons_array_with mgr pre lincons;
       pre
 
-(* Contrary to what is said in APRON documentation, arguments of [join] should
-   be on the same environment. *)
+(* Arguments of [join] should be on the same environment. *)
 let join mgr absval1 absval2 =
   let env1 = Abstract1.env absval1 in
   let absval2 = Abstract1.change_environment mgr absval2 env1 false in
   Abstract1.join_with mgr absval1 absval2;
   absval1
 
-(* Contrary to what is said in APRON documentation, arguments of [widening] 
-   should be on the same environment. *)
+(* Arguments of [widening] should be on the same environment. *)
 let widening mgr absval1 absval2 =
   let env1 = Abstract1.env absval1 in
   let absval2 = Abstract1.change_environment mgr absval2 env1 false in
-  (* Due to problem with POLKA, join before widening so that arguments are in
-     increasing order (1st included in 2nd). *)
+  (* Join before widening so that arguments are in increasing order. *)
   ignore (join mgr absval2 absval1);
   Abstract1.widening mgr absval1 absval2 (* no destructive version *)
 
@@ -1141,12 +1202,25 @@ let rec ai_statement abs curinvs s =
       let vit = var_term vi in
       { curinvs with jc_absinv_normal = assignment mgr pre vit e; }
   | JCSassign_heap(e1,fi,e2) ->
-      let dereft = raw_term(JCTderef(term_of_expr e1,fi)) in
-      let vars = Vai.all_variables dereft in
-      
-
-
-      curinvs
+      begin match term_of_expr e1 with
+      | None -> curinvs (* TODO *)
+      | Some t1 ->
+	  let dereft = 
+	    type_term (JCTderef(t1,fi)) fi.jc_field_info_type
+	  in
+	  let vars = Vai.all_variables dereft in
+	  let env = Abstract1.env pre in
+	  let vars = 
+	    List.filter (fun va -> not (Environment.mem_var env va)) vars
+	  in
+	  begin if vars != [] then
+	    let env = 
+	      Environment.add env (Array.of_list vars) [||] 
+	    in 
+	    Abstract1.change_environment_with mgr pre env false
+	  end;
+	  { curinvs with jc_absinv_normal = assignment mgr pre dereft e2; }
+      end
   | JCSassert(_,a) ->
       { curinvs with jc_absinv_normal = test_assertion mgr pre a; }
   | JCSblock sl ->
@@ -1274,12 +1348,16 @@ let rec record_invariants abs s =
 	let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
 	let loopinv = loopinvs.jc_absinv_normal in
 	(* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON *)
-	let a = mkinvariant mgr loopinv in
-	if Jc_options.verbose then
-	  printf "@[<v 2>Inferring loop invariant@\n%a@]@\nfor function %s@."
-	    Jc_output.assertion a abs.jc_absint_function_name;
-	la.jc_loop_invariant <- 
-	  raw_asrt (JCAand [la.jc_loop_invariant; a])
+	if Abstract1.is_top mgr loopinv = Manager.True then
+	  ()
+	else if Abstract1.is_bottom mgr loopinv = Manager.True then
+	  la.jc_loop_invariant <- raw_asrt JCAfalse
+	else
+	  let a = mkinvariant mgr loopinv in
+	  if Jc_options.verbose then
+	    printf "@[<v 2>Inferring loop invariant@\n%a@]@\nfor function %s@."
+	      Jc_output.assertion a abs.jc_absint_function_name;
+	  la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a]
       with Not_found -> () end
   | JCSassign_var _ | JCSassign_heap _ | JCSassert _ 
   | JCSreturn_void | JCSreturn _ | JCSthrow _ | JCSpack _ | JCSunpack _ 
@@ -1322,27 +1400,27 @@ let ai_function mgr targets (fi, fs, sl) =
     let cstrs =
       List.fold_left
  	(fun acc vi -> match vi.jc_var_info_type with
- 	| JCTpointer(st,n1,n2) ->
+ 	| JCTpointer(st,n1opt,n2opt) ->
  	    let vt = raw_term(JCTvar vi) in
- 	    let mincstr =
- 	      if Num.is_integer_num n1 then
- 		let mint = raw_term (JCToffset(Offset_min,vt,st)) in
- 		let n1t =
- 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n1)))
- 		in
- 		let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
- 		[mina]
- 	      else []
+ 	    let mincstr = match n1opt with
+	      | None -> []
+	      | Some n1 ->
+ 		  let mint = raw_term (JCToffset(Offset_min,vt,st)) in
+ 		  let n1t =
+ 		    raw_term (JCTconst(JCCinteger(Num.string_of_num n1)))
+ 		  in
+ 		  let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
+ 		  [mina]
  	    in
- 	    let maxcstr =
- 	      if Num.is_integer_num n2 then
- 		let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
- 		let n2t =
- 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n2)))
- 		in
- 		let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
- 		[maxa]
- 	      else []
+ 	    let maxcstr = match n2opt with
+	      | None -> []
+	      | Some n2 ->
+ 		  let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
+ 		  let n2t =
+ 		    raw_term (JCTconst(JCCinteger(Num.string_of_num n2)))
+ 		  in
+ 		  let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
+ 		  [maxa]
  	    in
  	    mincstr @ maxcstr @ acc
  	| _ -> acc
@@ -1361,8 +1439,22 @@ let ai_function mgr targets (fi, fs, sl) =
     } in
     ignore (List.fold_left (ai_statement abs) initinvs sl);
     List.iter (record_invariants abs) sl;
-    List.map (fun (s,absvalptr) -> (s,mkinvariant mgr !absvalptr))
-      abs.jc_absint_target_invariants
+    List.map 
+      (fun (s,absvalptr) -> 
+	if Jc_options.verbose then
+	  printf "@[<v 2>Inferring assert invariant@\n%a@]@\nfor function %s@."
+	    Abstract1.print !absvalptr abs.jc_absint_function_name;
+	if Abstract1.is_top mgr !absvalptr = Manager.True then
+	  (s,raw_asrt JCAtrue)
+	else if Abstract1.is_bottom mgr !absvalptr = Manager.True then
+	  (s,raw_asrt JCAfalse)
+	else
+	  let a = mkinvariant mgr !absvalptr in
+	  if Jc_options.verbose then
+	    printf "@[<v 2>Inferring assert invariant@\n%a@]@\nfor function %s@."
+	      Jc_output.assertion a abs.jc_absint_function_name;
+	  (s,a)
+      ) abs.jc_absint_target_invariants
       
   with Manager.Error exc ->
     Manager.print_exclog std_formatter exc;
@@ -1376,9 +1468,9 @@ let ai_function mgr targets (fi, fs, sl) =
 
 module Vwp : sig
 
-  val variable : var_info -> string
-  val offset_min_variable : var_info -> string
-  val offset_max_variable : var_info -> string
+  val variable : term -> string
+  val offset_min_variable : term -> string
+  val offset_max_variable : term -> string
 
   val term : string -> term
 
@@ -1389,27 +1481,27 @@ end = struct
   let offset_max_variable_table = Hashtbl.create 0
   let term_table = Hashtbl.create 0
 
-  let variable vi = 
-    let s = vi.jc_var_info_name in
+  let variable t = 
+    let t1 = deep_raw_term t in
+    let s = term_name t1 in
     begin try 
-      let vj = Hashtbl.find variable_table s in
-      assert (vi.jc_var_info_tag = vj.jc_var_info_tag)
+      let t2 = Hashtbl.find variable_table s in
+      assert (t1 = t2)
     with Not_found ->
-      Hashtbl.add variable_table s vi;
-      let t = type_term (JCTvar vi) vi.jc_var_info_type in
+      Hashtbl.add variable_table s t1;
       Hashtbl.add term_table s t
     end;
     s
 
-  let offset_min_variable vi = 
-    let s = "__jc_offset_min_" ^ vi.jc_var_info_name in
+  let offset_min_variable t = 
+    let t1 = deep_raw_term t in
+    let s = "__jc_offset_min_" ^ (term_name t1) in
     begin try 
-      let vj = Hashtbl.find offset_min_variable_table s in
-      assert (vi.jc_var_info_tag = vj.jc_var_info_tag)
+      let t2 = Hashtbl.find offset_min_variable_table s in
+      assert (t1 = t2)
     with Not_found ->
-      Hashtbl.add offset_min_variable_table s vi;
-      let t = type_term (JCTvar vi) vi.jc_var_info_type in
-      let st = match vi.jc_var_info_type with
+      Hashtbl.add offset_min_variable_table s t1;
+      let st = match t.jc_term_type with
 	| JCTpointer(st,_,_) -> st
 	| _ -> assert false
       in
@@ -1418,15 +1510,15 @@ end = struct
     end;
     s
 
-  let offset_max_variable vi = 
-    let s = "__jc_offset_max_" ^ vi.jc_var_info_name in
+  let offset_max_variable t = 
+    let t1 = deep_raw_term t in
+    let s = "__jc_offset_max_" ^ (term_name t1) in
     begin try 
-      let vj = Hashtbl.find offset_max_variable_table s in
-      assert (vi.jc_var_info_tag = vj.jc_var_info_tag)
+      let t2 = Hashtbl.find offset_max_variable_table s in
+      assert (t1 = t2)
     with Not_found ->
-      Hashtbl.add offset_max_variable_table s vi;
-      let t = type_term (JCTvar vi) vi.jc_var_info_type in
-      let st = match vi.jc_var_info_type with
+      Hashtbl.add offset_max_variable_table s t1;
+      let st = match t.jc_term_type with
 	| JCTpointer(st,_,_) -> st
 	| _ -> assert false
       in
@@ -1469,23 +1561,17 @@ let rec atp_of_term t =
       | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ -> 
 	  assert false
       end
-  | JCTvar vi ->
-      Atp.Var (Vwp.variable vi)
+  | JCTvar _ | JCTderef _ ->
+      Atp.Var (Vwp.variable t)
   | JCTbinary(t1,bop,t2) ->
       Atp.Fn(atp_arithmetic_of_binop bop, List.map atp_of_term [t1;t2])
   | JCTunary(uop,t1) ->
       Atp.Fn(Jc_output.unary_op uop, [atp_of_term t1])
   | JCToffset(Offset_min,t,_) ->
-      begin match t.jc_term_node with
-      | JCTvar vi -> Atp.Var (Vwp.offset_min_variable vi)
-      | _ -> assert false
-      end
+      Atp.Var (Vwp.offset_min_variable t)
   | JCToffset(Offset_max,t,_) ->
-      begin match t.jc_term_node with
-      | JCTvar vi -> Atp.Var (Vwp.offset_max_variable vi)
-      | _ -> assert false
-      end
-  | JCTshift _ | JCTsub_pointer _ | JCTderef _ | JCTapp _ | JCTold _
+      Atp.Var (Vwp.offset_max_variable t)
+  | JCTshift _ | JCTsub_pointer _ | JCTapp _ | JCTold _
   | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
       assert false
 
@@ -1623,140 +1709,185 @@ let pop_modified_vars posts =
   in
   vs,{ posts with jc_post_modified_vars = vars; }
 
-let rec wp_statement weak s curposts =
-  let target_stmt = weak.jc_weakpre_target_statement in
-  let goal_asrt = weak.jc_weakpre_goal_assertion in
-  if s == target_stmt then { curposts with jc_post_normal = Some goal_asrt; }
-  else match s.jc_statement_node with
-  | JCSdecl(vi,eo,s) ->
-      let curposts = wp_statement weak s curposts in
-      let post = match curposts.jc_post_normal with
-	| None -> None
-	| Some a -> 
-	    let a = match eo with
-	      | None -> a
-	      | Some e ->
-		  let t1 = raw_term (JCTvar vi) in
-		  let t2 = term_of_expr e in
+let rec wp_statement = 
+  let var_of_term = Hashtbl.create 0 in
+  (* Terms should be raw only. *)
+  let unique_var_for_term t ty =
+    try Hashtbl.find var_of_term t
+    with Not_found ->
+      let vi = var ty (term_name t) in
+      Hashtbl.add var_of_term t vi;
+      vi
+  in
+  fun weak s curposts ->
+    let target_stmt = weak.jc_weakpre_target_statement in
+    let goal_asrt = weak.jc_weakpre_goal_assertion in
+    if s == target_stmt then
+      { curposts with jc_post_normal = Some (deep_raw_asrt goal_asrt); }
+    else match s.jc_statement_node with
+    | JCSdecl(vi,eo,s) ->
+	let curposts = wp_statement weak s curposts in
+	let post = match curposts.jc_post_normal with
+	  | None -> None
+	  | Some a -> 
+	      let a = match eo with
+		| None -> a
+		| Some e ->
+		    match raw_term_of_expr e with
+		    | None -> a
+		    | Some t2 ->
+			let t1 = raw_term (JCTvar vi) in
+			let bop = 
+			  equality_operator_for_type vi.jc_var_info_type in
+			let eq = raw_asrt (JCArelation(t1,bop,t2)) in
+			raw_asrt (JCAimplies(eq,a))
+	      in
+	      Some (raw_asrt (JCAquantifier(Forall,vi,a)))
+	in
+	let curposts = remove_modified_var curposts vi in
+	{ curposts with jc_post_normal = post; }
+    | JCSassign_var(vi,e) ->
+	let vit = raw_term(JCTvar vi) in
+	let copyvi = copyvar vi in
+	let post = match curposts.jc_post_normal with
+	  | None -> None
+	  | Some a -> 
+	      let a = replace_term_in_assertion vit copyvi a in
+	      match raw_term_of_expr e with
+	      | None -> Some a
+	      | Some t2 ->
+		  let t1 = raw_term (JCTvar copyvi) in
 		  let bop = equality_operator_for_type vi.jc_var_info_type in
 		  let eq = raw_asrt (JCArelation(t1,bop,t2)) in
-		  raw_asrt (JCAimplies(eq,a))
+		  Some (raw_asrt (JCAimplies(eq,a)))
+	in
+	let curposts = add_modified_var curposts copyvi in
+	let curposts = 
+	  if is_function_level curposts then curposts
+	  else
+	    (* Also add regular variable, for other branches in loop. *)
+	    add_modified_var curposts vi 
+	in
+	{ curposts with jc_post_normal = post; }
+    | JCSassign_heap(e1,fi,e2) ->
+	begin match raw_term_of_expr e1 with
+	| None -> curposts (* TODO *)
+	| Some t1 ->
+	    let dereft = raw_term (JCTderef(t1,fi)) in
+	    let vi = unique_var_for_term dereft fi.jc_field_info_type in
+	    let copyvi = copyvar vi in
+	    let post = match curposts.jc_post_normal with
+	      | None -> None
+	      | Some a -> 
+		  let a = replace_term_in_assertion dereft copyvi a in
+		  match raw_term_of_expr e2 with
+		  | None -> Some a
+		  | Some t2 ->
+		      let t1 = raw_term (JCTvar copyvi) in
+		      let bop = 
+			equality_operator_for_type fi.jc_field_info_type in
+		      let eq = raw_asrt (JCArelation(t1,bop,t2)) in
+		      Some (raw_asrt (JCAimplies(eq,a)))
 	    in
-	    Some (raw_asrt (JCAquantifier(Forall,vi,a)))
-      in
-      let curposts = remove_modified_var curposts vi in
-      { curposts with jc_post_normal = post; }
-  | JCSassign_var(vi,e) ->
-      let copyvi = copyvar vi in
-      let post = match curposts.jc_post_normal with
-	| None -> None
-	| Some a -> 
-	    let a = replace_var_in_assertion vi copyvi a in
-	    let t1 = raw_term (JCTvar copyvi) in
-	    let t2 = term_of_expr e in
-	    let bop = equality_operator_for_type vi.jc_var_info_type in
-	    let eq = raw_asrt (JCArelation(t1,bop,t2)) in
-	    Some (raw_asrt (JCAimplies(eq,a)))
-      in
-      let curposts = add_modified_var curposts copyvi in
-      let curposts = 
-	if is_function_level curposts then curposts
-	else
-	  (* Also add regular variable, for other branches in loop. *)
-	  add_modified_var curposts vi 
-      in
-      { curposts with jc_post_normal = post; }
-  | JCSassign_heap _ -> assert false (* TODO *)
-  | JCSassert(_,a1) ->
-      let post = match curposts.jc_post_normal with
-	| None -> None
-	| Some a -> Some (raw_asrt (JCAimplies(a1,a)))
-      in
-      { curposts with jc_post_normal = post; }
-  | JCSblock sl ->
-      List.fold_right (wp_statement weak) sl curposts
-  | JCSif(e,ts,fs) ->
-      let tposts = wp_statement weak ts curposts in
-      let tpost = match tposts.jc_post_normal with
-	| None -> None
-	| Some a -> 
-	    let ta = asrt_of_expr e in
-	    Some (raw_asrt (JCAimplies(ta,a)))
-      in
-      let fposts = wp_statement weak fs curposts in
-      let fpost = match fposts.jc_post_normal with
-	| None -> None
-	| Some a -> 
-	    let fa = not_asrt (asrt_of_expr e) in
-	    Some (raw_asrt (JCAimplies(fa,a)))
-      in
-      let post = match tpost,fpost with
-	| None,opta | opta,None -> opta
-	| Some ta,Some fa -> Some (raw_asrt (JCAand [ta;fa]))
-      in
-      let tvs,_ = pop_modified_vars tposts in
-      let fvs,_ = pop_modified_vars fposts in
-      let vs = VarSet.union tvs fvs in
-      let curposts = add_modified_vars curposts vs in
-      { curposts with jc_post_normal = post; }
-  | JCSreturn_void | JCSreturn _ -> 
-      { curposts with jc_post_normal = None; }
-  | JCSthrow(ei,_) -> (* TODO: link with value caught *)
-      let post = 
-	try Some (List.assoc ei curposts.jc_post_exceptional) 
-	with Not_found -> None 
-      in
-      { curposts with jc_post_normal = post; }
-  | JCSpack _ | JCSunpack _ -> 
-      curposts
-  | JCStry(s,hl,fs) ->
-      begin match fs.jc_statement_node with 
-      | JCSblock [] -> ()
-      | _ -> assert false (* TODO: apply finally stmt to all paths. *)
-      end;
-      let handlpostexcl,handlvs = 
-	List.fold_left 
-	  (fun (curpostexcl,curvs) (ei,vio,s) ->
-	    let excposts = wp_statement weak s curposts in
-	    let curpostexcl = match excposts.jc_post_normal with
-	      | None -> curpostexcl
-	      | Some a -> (ei,a) :: curpostexcl
+	    let curposts = add_modified_var curposts copyvi in
+	    let curposts = 
+	      if is_function_level curposts then curposts
+	      else
+		(* Also add regular variable, for other branches in loop. *)
+		add_modified_var curposts vi 
 	    in
-	    let excvs,_ = pop_modified_vars excposts in
-	    let curvs = VarSet.union curvs excvs in
-	    (curpostexcl,curvs)
-	  ) ([],VarSet.empty) hl
-      in
-      let curpostexcl = 
-	List.filter (fun (ei,_) ->
-	  not (List.exists (fun (ej,_,_) ->
-	    ei.jc_exception_info_tag = ej.jc_exception_info_tag) hl)
-	) curposts.jc_post_exceptional
-      in
-      let curpostexcl = handlpostexcl @ curpostexcl in
-      let tmpposts = { curposts with jc_post_exceptional = curpostexcl; } in
-      let bodyposts = wp_statement weak s tmpposts in
-      let bodyvs,_ = pop_modified_vars bodyposts in
-      let vs = VarSet.union handlvs bodyvs in
-      let curposts = add_modified_vars curposts vs in
-      { curposts with jc_post_normal = bodyposts.jc_post_normal; }
-  | JCSloop(la,ls) ->
-      let loopposts = push_modified_vars curposts in
-      let loopposts = wp_statement weak ls loopposts in
-      let vs,loopposts = pop_modified_vars loopposts in
-      (* Add modified variables of current loop to enclosing loop. *)
-      (* let curposts = add_modified_vars curposts vs in *)
-      let post = match loopposts.jc_post_normal with
-	| None -> None
-	| Some a ->
-	    (* Prefix by loop invariant in left-hand side of implication.*)
-	    let impl = raw_asrt(JCAimplies(la.jc_loop_invariant,a)) in
-	    Some (VarSet.fold 
-	      (fun vi a -> raw_asrt (JCAquantifier(Forall,vi,a))) vs impl)
-      in
-      { curposts with jc_post_normal = post; }
-  | JCScall(vio,f,args,s) -> 
-      curposts
+	    { curposts with jc_post_normal = post; }
+	end
+    | JCSassert(_,a1) ->
+	let post = match curposts.jc_post_normal with
+	  | None -> None
+	  | Some a -> Some (raw_asrt (JCAimplies(a1,a)))
+	in
+	{ curposts with jc_post_normal = post; }
+    | JCSblock sl ->
+	List.fold_right (wp_statement weak) sl curposts
+    | JCSif(e,ts,fs) ->
+	let tposts = wp_statement weak ts curposts in
+	let tpost = match tposts.jc_post_normal with
+	  | None -> None
+	  | Some a -> 
+	      let ta = raw_asrt_of_expr e in
+	      Some (raw_asrt (JCAimplies(ta,a)))
+	in
+	let fposts = wp_statement weak fs curposts in
+	let fpost = match fposts.jc_post_normal with
+	  | None -> None
+	  | Some a -> 
+	      let fa = raw_not_asrt (raw_asrt_of_expr e) in
+	      Some (raw_asrt (JCAimplies(fa,a)))
+	in
+	let post = match tpost,fpost with
+	  | None,opta | opta,None -> opta
+	  | Some ta,Some fa -> Some (make_and [ta;fa])
+	in
+	let tvs,_ = pop_modified_vars tposts in
+	let fvs,_ = pop_modified_vars fposts in
+	let vs = VarSet.union tvs fvs in
+	let curposts = add_modified_vars curposts vs in
+	{ curposts with jc_post_normal = post; }
+    | JCSreturn_void | JCSreturn _ -> 
+	{ curposts with jc_post_normal = None; }
+    | JCSthrow(ei,_) -> (* TODO: link with value caught *)
+	let post = 
+	  try Some (List.assoc ei curposts.jc_post_exceptional) 
+	  with Not_found -> None 
+	in
+	{ curposts with jc_post_normal = post; }
+    | JCSpack _ | JCSunpack _ -> 
+	curposts
+    | JCStry(s,hl,fs) ->
+	begin match fs.jc_statement_node with 
+	| JCSblock [] -> ()
+	| _ -> assert false (* TODO: apply finally stmt to all paths. *)
+	end;
+	let handlpostexcl,handlvs = 
+	  List.fold_left 
+	    (fun (curpostexcl,curvs) (ei,vio,s) ->
+	      let excposts = wp_statement weak s curposts in
+	      let curpostexcl = match excposts.jc_post_normal with
+		| None -> curpostexcl
+		| Some a -> (ei,a) :: curpostexcl
+	      in
+	      let excvs,_ = pop_modified_vars excposts in
+	      let curvs = VarSet.union curvs excvs in
+	      (curpostexcl,curvs)
+	    ) ([],VarSet.empty) hl
+	in
+	let curpostexcl = 
+	  List.filter (fun (ei,_) ->
+	    not (List.exists (fun (ej,_,_) ->
+	      ei.jc_exception_info_tag = ej.jc_exception_info_tag) hl)
+	  ) curposts.jc_post_exceptional
+	in
+	let curpostexcl = handlpostexcl @ curpostexcl in
+	let tmpposts = { curposts with jc_post_exceptional = curpostexcl; } in
+	let bodyposts = wp_statement weak s tmpposts in
+	let bodyvs,_ = pop_modified_vars bodyposts in
+	let vs = VarSet.union handlvs bodyvs in
+	let curposts = add_modified_vars curposts vs in
+	{ curposts with jc_post_normal = bodyposts.jc_post_normal; }
+    | JCSloop(la,ls) ->
+	let loopposts = push_modified_vars curposts in
+	let loopposts = wp_statement weak ls loopposts in
+	let vs,loopposts = pop_modified_vars loopposts in
+	(* Add modified variables of current loop to enclosing loop. *)
+	(* let curposts = add_modified_vars curposts vs in *)
+	let post = match loopposts.jc_post_normal with
+	  | None -> None
+	  | Some a ->
+	      (* Prefix by loop invariant in left-hand side of implication.*)
+	      let impl = raw_asrt(JCAimplies(la.jc_loop_invariant,a)) in
+	      Some (VarSet.fold 
+		(fun vi a -> raw_asrt (JCAquantifier(Forall,vi,a))) vs impl)
+	in
+	{ curposts with jc_post_normal = post; }
+    | JCScall(vio,f,args,s) -> 
+	curposts
 
 let rec destruct_pointer e = 
   match e.jc_expr_node with
@@ -1783,9 +1914,9 @@ let rec collect_expr_asserts s e =
 	| viopt,None -> viopt,raw_expr(JCEconst(JCCinteger "0"))
 	| viopt,Some offe -> viopt,offe
       in
-      begin match viopt with
-      | None -> []
-      | Some vi ->
+      begin match viopt,term_of_expr offe with
+      | None,_ | _,None -> []
+      | Some vi,Some offt ->
 	  let vt = raw_term(JCTvar vi) in
 	  let st = match vi.jc_var_info_type with
 	    | JCTpointer(st,_,_) -> st
@@ -1793,8 +1924,8 @@ let rec collect_expr_asserts s e =
 	  in
 	  let mint = raw_term (JCToffset(Offset_min,vt,st)) in
 	  let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
-	  let mina = raw_asrt (JCArelation(mint,Ble_int,term_of_expr offe)) in
-	  let maxa = raw_asrt (JCArelation(term_of_expr offe,Ble_int,maxt)) in
+	  let mina = raw_asrt (JCArelation(mint,Ble_int,offt)) in
+	  let maxa = raw_asrt (JCArelation(offt,Ble_int,maxt)) in
 	  [{ 
 	    jc_weakpre_target_statement = s;
 	    jc_weakpre_goal_assertion = make_and [mina;maxa];
@@ -1942,7 +2073,7 @@ let wp_function weakl (fi,fs,sl) =
 	    if Jc_options.verbose then
 	      printf "@[<v 2>Inferring precondition@\n%a@]@\nfor function %s@."
 		Jc_output.assertion qe fi.jc_fun_info_name;
-	    fs.jc_fun_requires <- raw_asrt(JCAand [fs.jc_fun_requires; qe])
+	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; qe]
   ) weakl
     
 

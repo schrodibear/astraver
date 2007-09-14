@@ -54,7 +54,7 @@ type label_info =
 type ptype_node = 
   | JCPTnative of native_type
   | JCPTidentifier of string
-  | JCPTpointer of string * Num.num * Num.num
+  | JCPTpointer of string * Num.num option * Num.num option
 
 and ptype =
     {
@@ -132,9 +132,10 @@ type pstatement_node =
   | JCPSassert of identifier option * pexpr
   | JCPSdecl of ptype * string * pexpr option
   | JCPSif of pexpr * pstatement * pstatement
-  | JCPSwhile of pexpr * pexpr * pexpr * pstatement
+  | JCPSwhile of pexpr * pexpr * pexpr option * pstatement
       (*r condition, invariant, variant, body *)
-  | JCPSfor of pexpr list * pexpr * pexpr list * pexpr * pexpr * pstatement
+  | JCPSfor of 
+      pexpr list * pexpr * pexpr list * pexpr * pexpr option * pstatement
       (*r inits, condition, updates, invariant, variant, body *)
   | JCPSreturn of pexpr option
   | JCPSbreak of label
@@ -310,7 +311,7 @@ type loop_annot =
     {
       jc_loop_tag : int;
       mutable jc_loop_invariant : assertion;
-      jc_loop_variant : term;
+      jc_loop_variant : term option;
     }
 
 type tstatement_node =

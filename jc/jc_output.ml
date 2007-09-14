@@ -310,14 +310,17 @@ let rec statement fmt s =
     | JCTSbreak lab -> 
 	fprintf fmt "@\nbreak %s;" lab
     | JCTSwhile (e, la, s)-> 
-	fprintf fmt "@\n@[while (%a)@\ninvariant %a;@\nvariant %a;%a@]"
-	  expr e assertion la.jc_loop_invariant term la.jc_loop_variant
+	fprintf fmt "@\n@[while (%a)@\ninvariant %a;%a%a@]"
+	  expr e assertion la.jc_loop_invariant 
+	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
+	  la.jc_loop_variant
 	  block [s]
     | JCTSfor (cond, updates, loop_annot, body)-> 
-	fprintf fmt "@\n@[for ( ; %a ; %a)@\ninvariant %a;@\nvariant %a;%a@]"
+	fprintf fmt "@\n@[for ( ; %a ; %a)@\ninvariant %a;%a%a@]"
 	  expr cond (print_list comma expr) updates
 	  assertion loop_annot.jc_loop_invariant 
-	  term loop_annot.jc_loop_variant
+	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
+	  loop_annot.jc_loop_variant
 	  block [body]
     | JCTSif (e, s1, s2)->
 	fprintf fmt "@\n@[<v 2>if (%a) %a@]@\n@[<v 2>else %a@]"

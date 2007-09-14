@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.50 2007-08-31 08:09:46 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.51 2007-09-14 17:09:46 moy Exp $ *)
 
 
 open Jc_env
@@ -233,7 +233,10 @@ let rec expr ef e =
 	end
 
 let rec loop_annot ef la = 
-  assertion (term ef la.jc_loop_variant) la.jc_loop_invariant
+  let ef = assertion ef la.jc_loop_invariant in
+  match la.jc_loop_variant with
+  | None -> ef
+  | Some t -> term ef t
 
 let rec statement ef s =
   match s.jc_statement_node with
@@ -475,6 +478,6 @@ let function_effects funs =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

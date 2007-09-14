@@ -711,9 +711,17 @@ let rec statement ~threats s =
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
 	If(e, statement s1, statement s2)
-    | JCSloop (la, s) -> 
-	While(Cte(Prim_bool true), assertion None "init" la.jc_loop_invariant,
-	      Some (term None "" la.jc_loop_variant,None), [statement s])
+    | JCSloop (la, s) ->
+	begin match la.jc_loop_variant with
+	| None ->
+	    While(Cte(Prim_bool true), 
+	          assertion None "init" la.jc_loop_invariant,
+	          None, [statement s])
+	| Some t ->
+	    While(Cte(Prim_bool true), 
+	          assertion None "init" la.jc_loop_invariant,
+	          Some (term None "" t,None), [statement s])
+	end
     | JCSassert(None, a) -> 
 	Assert(LNamed(reg_loc a.jc_assertion_loc,
 		      assertion None "init" a), Void)
@@ -1030,13 +1038,25 @@ let tr_fun f spec body acc =
 		 st.jc_struct_info_root ^ "_tag_table"
 	       in
 	       let var = LVar v.jc_var_info_final_name in
-	       let validity = 
-		 make_and 
-		   (LPred("le_int",
+	       let validity = match a,b with
+		 | None,None -> LTrue
+		 | Some a,None ->
+		     LPred("le_int",
+			  [LApp("offset_min",
+				[LVar alloc; var]);
+			   LConst (Prim_int (Num.string_of_num a))])
+		 | None, Some b ->
+		     LPred("ge_int",
+			  [LApp("offset_max",
+				[LVar alloc; var]);
+			   LConst (Prim_int (Num.string_of_num b))])
+		 | Some a,Some b ->
+		     make_and 
+		       (LPred("le_int",
 			  [LApp("offset_min",
 				[LVar alloc; var]);
 			   LConst (Prim_int (Num.string_of_num a))]))
-		   (LPred("ge_int",
+		       (LPred("ge_int",
 			  [LApp("offset_max",
 				[LVar alloc; var]);
 			   LConst (Prim_int (Num.string_of_num b))]))

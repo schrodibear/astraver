@@ -43,16 +43,18 @@ let print_type fmt t =
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
     | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
-    | JCTpointer (s,a,b) -> 
-	if Num.gt_num a b then
-	  fprintf fmt "%s[..]" s.jc_struct_info_name
-	else
-	  if Num.eq_num a b then
-	  fprintf fmt "%s[%s]" s.jc_struct_info_name
-	    (Num.string_of_num a)
+    | JCTpointer (s,None,None) -> 
+	fprintf fmt "%s[..]" s.jc_struct_info_name
+    | JCTpointer (s,Some a,None) -> 
+	fprintf fmt "%s[%s..]" s.jc_struct_info_name (Num.string_of_num a)
+    | JCTpointer (s,None,Some b) -> 
+	fprintf fmt "%s[..%s]" s.jc_struct_info_name (Num.string_of_num b)
+    | JCTpointer (s,Some a,Some b) -> 
+	if Num.eq_num a b then
+	  fprintf fmt "%s[%s]" s.jc_struct_info_name (Num.string_of_num a)
 	else
 	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
-	  (Num.string_of_num a) (Num.string_of_num b)
+	    (Num.string_of_num a) (Num.string_of_num b)
     | JCTnull -> fprintf fmt "(nulltype)"  
 
 let typing_error l = 
@@ -1065,7 +1067,7 @@ let rec expr env e =
       | JCPEalloc (e1, t) ->
 	  let te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTpointer (st, Num.Int 0, Num.Int (-1)), JCTEalloc (te1, st)
+	  JCTpointer (st,Some zero,None), JCTEalloc (te1, st)
       | JCPEfree e1 ->
 	  let e1 = expr env e1 in
 	  unit_type, JCTEfree e1
@@ -1244,7 +1246,7 @@ let loop_annot =
   let get() = let tag = !globtag in incr globtag; tag in
   fun env i v ->
     let ti = assertion env i
-    and tv = term env v
+    and tv = match v with None -> None | Some v -> Some (term env v)
     in
     (* TODO: check variant is integer, or other order ? *) 
     { 
@@ -2055,7 +2057,7 @@ let rec decl d =
 	let invariants =
 	  List.fold_left
 	    (fun acc (id,x,e) ->	
-	       let vi = var (JCTpointer(struct_info,zero,zero)) x in
+	       let vi = var (JCTpointer(struct_info,Some zero,Some zero)) x in
 	       let p = assertion [(x,vi)] e in
 	       let pi = make_rel id in
 	       pi.jc_logic_info_parameters <- [vi];

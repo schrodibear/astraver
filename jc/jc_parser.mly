@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.58 2007-08-22 11:13:41 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.59 2007-09-14 17:09:46 moy Exp $ */
 
 %{
 
@@ -305,20 +305,20 @@ type_expr:
 | IDENTIFIER
     { locate_type (JCPTidentifier $1) }
 | IDENTIFIER LSQUARE DOTDOT RSQUARE
-    { locate_type (JCPTpointer($1,zero,minus_one)) }
+    { locate_type (JCPTpointer($1,None,None)) }
 | IDENTIFIER LSQUARE CONSTANT RSQUARE
     { let n = num_of_constant (loc_i 3) $3 in
-      locate_type (JCPTpointer($1,n,n)) }
+      locate_type (JCPTpointer($1,Some n,Some n)) }
 | IDENTIFIER LSQUARE CONSTANT DOTDOT RSQUARE
     { let n = num_of_constant (loc_i 3) $3 in
-      locate_type (JCPTpointer($1,n,Num.pred_num n)) }
+      locate_type (JCPTpointer($1,Some n,None)) }
 | IDENTIFIER LSQUARE CONSTANT DOTDOT CONSTANT RSQUARE
     { let n = num_of_constant (loc_i 3) $3 in
       let m = num_of_constant (loc_i 5) $5 in
-      locate_type (JCPTpointer($1,n,m)) }
+      locate_type (JCPTpointer($1,Some n,Some m)) }
 | IDENTIFIER LSQUARE DOTDOT CONSTANT RSQUARE
     { let m = num_of_constant (loc_i 4) $4 in
-      locate_type (JCPTpointer($1,Num.succ_num m,m)) }
+      locate_type (JCPTpointer($1,None,Some m)) }
 ;
 
 function_specification:
@@ -760,7 +760,7 @@ switch_label:
 ;
 
 iteration_statement: 
-| WHILE expression loop_annot statement 
+| WHILE expression loop_annot_opt statement 
     { let (i,v) = $3 in 
       locate_statement (JCPSwhile ($2, i, v, $4)) }
 /*
@@ -768,14 +768,20 @@ iteration_statement:
     { locate (CSdowhile ($1, $3, $6)) }
 */
 | FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
-    argument_expression_list_opt RPAR loop_annot statement
+    argument_expression_list_opt RPAR loop_annot_opt statement
     { let (i,v) = $9 in 
       locate_statement (JCPSfor($3, $5, $7, i, v, $10)) }
 ;
 
-loop_annot:
+loop_annot_opt:
 | INVARIANT expression SEMICOLON VARIANT expression SEMICOLON
-    { ($2,$5) }
+    { ($2, Some $5) }
+| INVARIANT expression SEMICOLON
+    { ($2, None) }
+| VARIANT expression SEMICOLON
+    { (locate_expr (JCPEconst(JCCboolean true)), Some $2) }
+| SEMICOLON
+    { (locate_expr (JCPEconst(JCCboolean true)), None) }
 ;
 
 jump_statement: 
