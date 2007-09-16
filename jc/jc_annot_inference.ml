@@ -208,9 +208,9 @@ let rec term_name =
   let filter_alphanumeric s =
     let alphanum c = 
       String.contains "abcdefghijklmnopqrstuvwxyz" c
-      || String.contains "ABCDEFGHIJKLMNOPQRSTUVWXYZ" c
-      || String.contains "123456789" c
-      || c = '_'
+    || String.contains "ABCDEFGHIJKLMNOPQRSTUVWXYZ" c
+    || String.contains "123456789" c
+    || c = '_'
     in
     string_implode (List.filter alphanum (string_explode s))
   in
@@ -257,7 +257,7 @@ let rec term_name =
 	  | Ubw_not -> "bwnot"
 	in
 	uop_name ^ "_" ^ (term_name t1)
-    | JCTshift(t1,t2) ->
+    | JCTshift (t1, t2) ->
 	term_name t1 ^ "_shift_" ^ (term_name t2)
     | JCTsub_pointer(t1,t2) ->
 	term_name t1 ^ "_sub_pointer_" ^ (term_name t2)
@@ -649,34 +649,33 @@ let rec linearize t =
   match t.jc_term_node with
   | JCTconst c ->
       begin match c with
-      | JCCinteger s -> 
-	  ([],int_of_string s)
-      | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ -> 
+      | JCCinteger s -> ([], int_of_string s)
+      | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ ->
 	  failwith "Not linear"
       end
   | JCTvar _ | JCTderef _ ->
       ([deep_raw_term t,1],0)
   | JCTbinary(t1,bop,t2) ->
       if is_arithmetic_binary_op bop then
-	let coeffs1,cst1 = linearize t1 in
-	let coeffs2,cst2 = linearize t2 in
+	let coeffs1, cst1 = linearize t1 in
+	let coeffs2, cst2 = linearize t2 in
         begin match bop with
 	| Badd_int ->
 	    let coeffs = 
-	      List.fold_right (fun (vt1,c1) acc ->
+	      List.fold_right (fun (vt1, c1) acc ->
 		try 
 		  let c2 = List.assoc vt1 coeffs2 in
-		  (vt1,c1 + c2) :: acc
-		with Not_found -> (vt1,c1) :: acc
-	      ) coeffs1 []
+		  (vt1, c1 + c2) :: acc
+		with Not_found -> (vt1, c1) :: acc) 
+		coeffs1 []
 	    in
 	    let coeffs = 
-	      List.fold_right (fun (vt2,c2) acc ->
+	      List.fold_right (fun (vt2, c2) acc ->
 		if List.mem_assoc vt2 coeffs then acc
-		else (vt2,c2) :: acc
-	      ) coeffs2 coeffs
+		else (vt2, c2) :: acc) 
+		coeffs2 coeffs
 	    in
-	    (coeffs,cst1 + cst2)
+	    (coeffs, cst1 + cst2)
 	| Bsub_int ->
 	    let coeffs = 
 	      List.fold_right (fun (vt1,c1) acc ->
@@ -759,6 +758,26 @@ let linstr_of_term env t =
     Some (mkaddstr coeffs, cst)
   with Failure _ -> None
 
+let rec offset_min_linstr_of_term t =
+  match t.jc_term_node with
+  | JCTvar vi -> "__jc_offset_min_" ^ vi.jc_var_info_name
+  | JCTshift (t1, t2) ->
+      let offset_min_t1 = offset_min_linstr_of_term t1 in 
+      let coeffs, cst = linearize t2 in
+      assert (coeffs = []);
+      offset_min_t1 ^ "-" ^ (string_of_int cst)
+  | _ -> "" (* TODO ? *)
+
+let rec offset_max_linstr_of_term t =
+  match t.jc_term_node with
+  | JCTvar vi -> "__jc_offset_max_" ^ vi.jc_var_info_name
+  | JCTshift (t1, t2) ->
+      let offset_max_t1 = offset_max_linstr_of_term t1 in 
+      let coeffs, cst = linearize t2 in
+      assert (coeffs = []);
+      offset_max_t1 ^ "-" ^ (string_of_int cst)
+  | _ -> "" (* TODO ? *)
+
 let rec linstr_of_assertion env a =
   match a.jc_assertion_node with
   | JCAtrue -> "true"
@@ -818,8 +837,16 @@ let linstr_of_boolean_expr env e =
 let linstr_of_not_boolean_expr env e = 
   linstr_of_assertion env (not_asrt (asrt_of_expr e))
 
-let rec offset_min_linstr_of_expr env e = "" (* TODO *)
-let rec offset_max_linstr_of_expr env e = "" (* TODO *)
+let rec offset_min_linstr_of_expr env e = 
+  match term_of_expr e with
+  | None -> "" (* TODO? *)
+  | Some t -> offset_min_linstr_of_term t
+	
+let rec offset_max_linstr_of_expr env e =
+  match term_of_expr e with
+  | None -> "" (* TODO? *)
+  | Some t -> offset_max_linstr_of_term t
+
 let rec offset_min_linstr_of_boolean_expr env e = "" (* TODO *)
 let rec offset_max_linstr_of_boolean_expr env e = "" (* TODO *)
 let rec offset_min_linstr_of_not_boolean_expr env e = "" (* TODO *)
@@ -985,13 +1012,13 @@ let assignment mgr pre t e =
       else [], [], []
     else [], [], []
   in
-(*  let vars,linexprs = 
+  let vars,linexprs = 
     if Vai.has_offset_min_variable t then
       let va = Vai.offset_min_variable t in
       if Environment.mem_var env va then
 	let lin = 
 	  try Parser.linexpr1_of_string env (offset_min_linstr_of_expr env e) 
-	  with Parser.Error _ -> assert false
+	  with Parser.Error msg -> printf "%s@." msg; assert false
 	in
 	va :: vars, lin :: linexprs
       else vars, linexprs
@@ -1008,7 +1035,7 @@ let assignment mgr pre t e =
 	va :: vars, lin :: linexprs
       else vars, linexprs
     else vars, linexprs
-  in *)
+  in
   let forget_vars = Array.of_list forget_vars in
   let vars = Array.of_list vars in
   let linexprs = Array.of_list linexprs in
@@ -1185,7 +1212,7 @@ let rec ai_statement abs curinvs s =
   let postexcl = curinvs.jc_absinv_exceptional in
   let postret = curinvs.jc_absinv_return in
   match s.jc_statement_node with
-  | JCSdecl(vi,eo,s) ->
+  | JCSdecl (vi, eo, s) ->
       let vit = var_term vi in
       let vars = Vai.all_variables vit in
       let env = 

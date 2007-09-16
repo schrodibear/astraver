@@ -12,7 +12,7 @@ unit f(char[0..10] p) {
     variant 10 - i;
   {
       q.val = 0;
-      q = q+1;
+      q = q + 1;
       i++;
   }	
 }	
