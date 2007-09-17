@@ -19,8 +19,9 @@
           ste.ml lcf.ml hilbert.ml lcfprop.ml lcffol.ml checking.ml     \
           tactics.ml
 
-MLFILES = lib.ml intro.ml formulas.ml prop.ml fol.ml skolem.ml \
-	  qelim.ml cooper.ml
+MLFILES = lib.ml intro.ml formulas.ml prop.ml propexamples.ml           \
+	  defcnf.ml dp.ml fol.ml skolem.ml herbrand.ml qelim.ml         \
+	  cooper.ml
 
 # The default is to build a bytecode executable
 

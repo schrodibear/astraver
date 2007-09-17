@@ -285,10 +285,32 @@ let rec term_name =
     | JCTrange(t1,t2) ->
 	(term_name t1) ^ "_range_" ^ (term_name t2)
 
+let rec destruct_pointer t = 
+  match t.jc_term_node with
+  | JCTconst JCCnull -> None, None
+  | JCTvar vi -> Some vi, None
+  | JCTshift(t1,t2) ->
+      begin match destruct_pointer t1 with
+      | viopt, None -> viopt, Some t2
+      | viopt,Some offt -> 
+	  let tnode = JCTbinary(offt,Badd_int,t2) in
+	  let offt = full_term tnode integer_type t2.jc_term_loc in
+	  viopt,Some offt
+      end
+  | JCTcast _ -> assert false (* TODO *)
+  | _ -> assert false
+
 
 (*****************************************************************************)
 (* Types.                                                                    *)
 (*****************************************************************************)
+
+(* Assertion to be checked at some program point. *)
+type target_assertion = {
+  jc_target_statement : statement;
+  jc_target_assertion : assertion;
+  mutable jc_target_invariant : assertion;
+}
 
 (* Type of current invariant in abstract interpretation, made up of 3 parts:
  * - abstract value at current program point
@@ -310,8 +332,7 @@ type 'a abstract_interpreter = {
   jc_absint_widening_threshold : int;
   jc_absint_loop_invariants : (int,'a abstract_invariants) Hashtbl.t;
   jc_absint_loop_iterations : (int,int) Hashtbl.t;
-  jc_absint_target_statements : statement list;
-  jc_absint_target_invariants : (statement * 'a Abstract1.t ref) list;
+  jc_absint_target_assertions : target_assertion list;
 }
 
 (* Type of current postcondition in weakest precondition computation:
@@ -325,12 +346,6 @@ type weakest_postconditions = {
   jc_post_normal : assertion option;
   jc_post_exceptional : (exception_info * assertion) list;
   jc_post_modified_vars : VarSet.t list;
-}
-
-(* Parameters of a weakest precondition computation. *)
-type weakest_precond = {
-  jc_weakpre_target_statement : statement;
-  jc_weakpre_goal_assertion : assertion;
 }
 
 
@@ -758,25 +773,37 @@ let linstr_of_term env t =
     Some (mkaddstr coeffs, cst)
   with Failure _ -> None
 
-let rec offset_min_linstr_of_term t =
-  match t.jc_term_node with
-  | JCTvar vi -> "__jc_offset_min_" ^ vi.jc_var_info_name
-  | JCTshift (t1, t2) ->
-      let offset_min_t1 = offset_min_linstr_of_term t1 in 
-      let coeffs, cst = linearize t2 in
-      assert (coeffs = []);
-      offset_min_t1 ^ "-" ^ (string_of_int cst)
-  | _ -> "" (* TODO ? *)
-
-let rec offset_max_linstr_of_term t =
-  match t.jc_term_node with
-  | JCTvar vi -> "__jc_offset_max_" ^ vi.jc_var_info_name
-  | JCTshift (t1, t2) ->
-      let offset_max_t1 = offset_max_linstr_of_term t1 in 
-      let coeffs, cst = linearize t2 in
-      assert (coeffs = []);
-      offset_max_t1 ^ "-" ^ (string_of_int cst)
-  | _ -> "" (* TODO ? *)
+let offset_min_linstr_of_term env t =
+  match destruct_pointer t with
+  | None,_ -> None
+  | Some vi,offt ->
+      let vt = raw_term(JCTvar vi) in
+      let st = match vi.jc_var_info_type with
+	| JCTpointer(st,_,_) -> st
+	| _ -> assert false
+      in
+      let mint = raw_term(JCToffset(Offset_min,vt,st)) in
+      let t = match offt with 
+	| None -> mint
+	| Some offt -> raw_term(JCTbinary(mint,Badd_int,offt)) 
+      in
+      linstr_of_term env t
+      
+let offset_max_linstr_of_term env t =
+  match destruct_pointer t with
+  | None,_ -> None
+  | Some vi,offt ->
+      let vt = raw_term(JCTvar vi) in
+      let st = match vi.jc_var_info_type with
+	| JCTpointer(st,_,_) -> st
+	| _ -> assert false
+      in
+      let maxt = raw_term(JCToffset(Offset_max,vt,st)) in
+      let t = match offt with 
+	| None -> maxt
+	| Some offt -> raw_term(JCTbinary(maxt,Bsub_int,offt)) 
+      in
+      linstr_of_term env t
 
 let rec linstr_of_assertion env a =
   match a.jc_assertion_node with
@@ -837,15 +864,23 @@ let linstr_of_boolean_expr env e =
 let linstr_of_not_boolean_expr env e = 
   linstr_of_assertion env (not_asrt (asrt_of_expr e))
 
-let rec offset_min_linstr_of_expr env e = 
+let offset_min_linstr_of_expr env e = 
   match term_of_expr e with
-  | None -> "" (* TODO? *)
-  | Some t -> offset_min_linstr_of_term t
+  | None -> None
+  | Some t -> 
+      match offset_min_linstr_of_term env t with
+      | None -> None
+      | Some ("",cst) -> Some (string_of_int cst)
+      | Some (str,cst) -> Some (str ^ " + " ^ (string_of_int cst))
 	
-let rec offset_max_linstr_of_expr env e =
+let offset_max_linstr_of_expr env e =
   match term_of_expr e with
-  | None -> "" (* TODO? *)
-  | Some t -> offset_max_linstr_of_term t
+  | None -> None
+  | Some t -> 
+      match offset_max_linstr_of_term env t with
+      | None -> None
+      | Some ("",cst) -> Some (string_of_int cst)
+      | Some (str,cst) -> Some (str ^ " + " ^ (string_of_int cst))
 
 let rec offset_min_linstr_of_boolean_expr env e = "" (* TODO *)
 let rec offset_max_linstr_of_boolean_expr env e = "" (* TODO *)
@@ -981,14 +1016,19 @@ let presentify a =
   linasrt_of_assertion a
 
 let mkinvariant mgr absval =
-  let linconsarr = Abstract1.to_lincons_array mgr absval in
-  let rec mkrec acc i = 
-    if i >= 0 then
-      mkrec (mkassertion (Lincons1.array_get linconsarr i) :: acc) (i-1)
-    else acc
-  in
-  let asserts = mkrec [] (Lincons1.array_length linconsarr - 1) in
-  make_and (List.map presentify asserts)
+  if Abstract1.is_top mgr absval = Manager.True then
+    raw_asrt JCAtrue    
+  else if Abstract1.is_bottom mgr absval = Manager.True then
+    raw_asrt JCAfalse
+  else
+    let linconsarr = Abstract1.to_lincons_array mgr absval in
+    let rec mkrec acc i = 
+      if i >= 0 then
+	mkrec (mkassertion (Lincons1.array_get linconsarr i) :: acc) (i-1)
+      else acc
+    in
+    let asserts = mkrec [] (Lincons1.array_length linconsarr - 1) in
+    make_and (List.map presentify asserts)
 
 
 (*****************************************************************************)
@@ -1012,29 +1052,35 @@ let assignment mgr pre t e =
       else [], [], []
     else [], [], []
   in
-  let vars,linexprs = 
+  let forget_vars, vars,linexprs = 
     if Vai.has_offset_min_variable t then
       let va = Vai.offset_min_variable t in
       if Environment.mem_var env va then
-	let lin = 
-	  try Parser.linexpr1_of_string env (offset_min_linstr_of_expr env e) 
-	  with Parser.Error msg -> printf "%s@." msg; assert false
-	in
-	va :: vars, lin :: linexprs
-      else vars, linexprs
-    else vars, linexprs
+	match offset_min_linstr_of_expr env e with
+	| None -> [va], [], []
+	| Some str ->
+	    let lin = 
+	      try Parser.linexpr1_of_string env str
+	      with Parser.Error msg -> printf "%s@." msg; assert false
+	    in
+	    forget_vars, va :: vars, lin :: linexprs
+      else forget_vars, vars, linexprs
+    else forget_vars, vars, linexprs
   in
-  let vars,linexprs = 
+  let forget_vars, vars,linexprs = 
     if Vai.has_offset_max_variable t then
       let va = Vai.offset_max_variable t in
       if Environment.mem_var env va then
-	let lin = 
-	  try Parser.linexpr1_of_string env (offset_max_linstr_of_expr env e) 
-	  with Parser.Error _ -> assert false
-	in
-	va :: vars, lin :: linexprs
-      else vars, linexprs
-    else vars, linexprs
+	match offset_max_linstr_of_expr env e with
+	| None -> [va], [], []
+	| Some str ->
+	    let lin = 
+	      try Parser.linexpr1_of_string env str
+	      with Parser.Error _ -> assert false
+	    in
+	    forget_vars, va :: vars, lin :: linexprs
+      else forget_vars, vars, linexprs
+    else forget_vars, vars, linexprs
   in
   let forget_vars = Array.of_list forget_vars in
   let vars = Array.of_list vars in
@@ -1199,14 +1245,60 @@ let copy_invariants mgr invs = {
     invs.jc_absinv_exceptional;
   jc_absinv_return = Abstract1.copy mgr invs.jc_absinv_return;
 }
+
+let rec ai_expression abs curinvs e =
+  let expr = ai_expression abs in
+  let mgr = abs.jc_absint_manager in
+  match e.jc_expr_node with
+  | JCEconst _ | JCEvar _ | JCErange_cast _ -> 
+      curinvs
+  | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) ->
+      expr (expr curinvs e1) e2
+  | JCEunary(_,e1) | JCEinstanceof(e1,_) | JCEcast(e1,_) | JCEoffset(_,e1,_) 
+  | JCEalloc(e1,_) | JCEfree e1 -> 
+      expr curinvs e1
+  | JCEif(e1,e2,e3) -> 
+      expr (expr (expr curinvs e1) e2) e3
+  | JCEderef(e1,fi) ->
+      let curinvs = expr curinvs e1 in
+      begin match term_of_expr e1 with
+      | None -> curinvs
+      | Some t1 ->
+	  match destruct_pointer t1 with
+	  | None,_ -> curinvs
+	  | Some vi,offt ->
+	      let offt = match offt with
+		| None -> raw_term(JCTconst(JCCinteger "0"))
+		| Some offt -> offt
+	      in
+	      let vt = raw_term(JCTvar vi) in
+	      let st = match vi.jc_var_info_type with
+		| JCTpointer(st,_,_) -> st
+		| _ -> assert false
+	      in
+	      let mint = raw_term(JCToffset(Offset_min,vt,st)) in
+	      let maxt = raw_term(JCToffset(Offset_max,vt,st)) in
+	      let mina = raw_asrt(JCArelation(mint,Ble_int,offt)) in
+	      let maxa = raw_asrt(JCArelation(offt,Ble_int,maxt)) in
+	      let pre = curinvs.jc_absinv_normal in
+	      let pre = test_assertion mgr pre mina in
+	      let pre = test_assertion mgr pre maxa in
+	      { curinvs with jc_absinv_normal = pre; }
+      end
+
+let find_target_assertion targets s =
+  List.fold_left 
+    (fun acc target -> 
+      if target.jc_target_statement == s then Some target else acc
+    ) None targets
     
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
-  if List.memq s abs.jc_absint_target_statements then
-    begin try
-      (List.assq s abs.jc_absint_target_invariants) := 
-	Abstract1.copy mgr curinvs.jc_absinv_normal
-    with Not_found -> assert false end;
+  begin match find_target_assertion abs.jc_absint_target_assertions s with
+  | None -> ()
+  | Some target ->
+      target.jc_target_invariant <- mkinvariant mgr curinvs.jc_absinv_normal
+  end;
   let env = abs.jc_absint_function_environment in
   let pre = curinvs.jc_absinv_normal in
   let postexcl = curinvs.jc_absinv_exceptional in
@@ -1409,7 +1501,6 @@ let ai_function mgr targets (fi, fs, sl) =
     in
     let env = Environment.add env (Array.of_list params) [||] in
 
-    let bot = Abstract1.bottom mgr env in
     let abs = { 
       jc_absint_manager = mgr;
       jc_absint_function_environment = env;
@@ -1417,8 +1508,7 @@ let ai_function mgr targets (fi, fs, sl) =
       jc_absint_widening_threshold = 1;
       jc_absint_loop_invariants = Hashtbl.create 0;
       jc_absint_loop_iterations = Hashtbl.create 0;
-      jc_absint_target_statements = targets;
-      jc_absint_target_invariants = List.map (fun s -> (s,ref bot)) targets;
+      jc_absint_target_assertions = targets;
     } in
     
     (* TODO: add \return as abstract variable. *)
@@ -1466,27 +1556,17 @@ let ai_function mgr targets (fi, fs, sl) =
     } in
     ignore (List.fold_left (ai_statement abs) initinvs sl);
     List.iter (record_invariants abs) sl;
-    List.map 
-      (fun (s,absvalptr) -> 
+    List.iter 
+      (fun target -> 
 	if Jc_options.verbose then
 	  printf "@[<v 2>Inferring assert invariant@\n%a@]@\nfor function %s@."
-	    Abstract1.print !absvalptr abs.jc_absint_function_name;
-	if Abstract1.is_top mgr !absvalptr = Manager.True then
-	  (s,raw_asrt JCAtrue)
-	else if Abstract1.is_bottom mgr !absvalptr = Manager.True then
-	  (s,raw_asrt JCAfalse)
-	else
-	  let a = mkinvariant mgr !absvalptr in
-	  if Jc_options.verbose then
-	    printf "@[<v 2>Inferring assert invariant@\n%a@]@\nfor function %s@."
-	      Jc_output.assertion a abs.jc_absint_function_name;
-	  (s,a)
-      ) abs.jc_absint_target_invariants
+	    Jc_output.assertion target.jc_target_invariant 
+	    abs.jc_absint_function_name
+      ) targets
       
   with Manager.Error exc ->
     Manager.print_exclog std_formatter exc;
-    printf "@.";
-    []
+    printf "@."
 
 
 (*****************************************************************************)
@@ -1496,8 +1576,8 @@ let ai_function mgr targets (fi, fs, sl) =
 module Vwp : sig
 
   val variable : term -> string
-  val offset_min_variable : term -> string
-  val offset_max_variable : term -> string
+  val offset_min_variable : term -> struct_info -> string
+  val offset_max_variable : term -> struct_info -> string
 
   val term : string -> term
 
@@ -1520,7 +1600,7 @@ end = struct
     end;
     s
 
-  let offset_min_variable t = 
+  let offset_min_variable t st = 
     let t1 = deep_raw_term t in
     let s = "__jc_offset_min_" ^ (term_name t1) in
     begin try 
@@ -1528,16 +1608,12 @@ end = struct
       assert (t1 = t2)
     with Not_found ->
       Hashtbl.add offset_min_variable_table s t1;
-      let st = match t.jc_term_type with
-	| JCTpointer(st,_,_) -> st
-	| _ -> assert false
-      in
       let tmin = type_term (JCToffset(Offset_min,t,st)) integer_type in
       Hashtbl.add term_table s tmin
     end;
     s
 
-  let offset_max_variable t = 
+  let offset_max_variable t st = 
     let t1 = deep_raw_term t in
     let s = "__jc_offset_max_" ^ (term_name t1) in
     begin try 
@@ -1545,10 +1621,6 @@ end = struct
       assert (t1 = t2)
     with Not_found ->
       Hashtbl.add offset_max_variable_table s t1;
-      let st = match t.jc_term_type with
-	| JCTpointer(st,_,_) -> st
-	| _ -> assert false
-      in
       let tmax = type_term (JCToffset(Offset_max,t,st)) integer_type in
       Hashtbl.add term_table s tmax
     end;
@@ -1594,10 +1666,10 @@ let rec atp_of_term t =
       Atp.Fn(atp_arithmetic_of_binop bop, List.map atp_of_term [t1;t2])
   | JCTunary(uop,t1) ->
       Atp.Fn(Jc_output.unary_op uop, [atp_of_term t1])
-  | JCToffset(Offset_min,t,_) ->
-      Atp.Var (Vwp.offset_min_variable t)
-  | JCToffset(Offset_max,t,_) ->
-      Atp.Var (Vwp.offset_max_variable t)
+  | JCToffset(Offset_min,t,st) ->
+      Atp.Var (Vwp.offset_min_variable t st)
+  | JCToffset(Offset_max,t,st) ->
+      Atp.Var (Vwp.offset_max_variable t st)
   | JCTshift _ | JCTsub_pointer _ | JCTapp _ | JCTold _
   | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
       assert false
@@ -1746,14 +1818,14 @@ let rec wp_statement =
       Hashtbl.add var_of_term t vi;
       vi
   in
-  fun weak s curposts ->
-    let target_stmt = weak.jc_weakpre_target_statement in
-    let goal_asrt = weak.jc_weakpre_goal_assertion in
-    if s == target_stmt then
-      { curposts with jc_post_normal = Some (deep_raw_asrt goal_asrt); }
+  fun target s curposts ->
+    if s == target.jc_target_statement then
+      let a = raw_asrt(JCAimplies(target.jc_target_invariant,
+                                  target.jc_target_assertion)) in
+      { curposts with jc_post_normal = Some (deep_raw_asrt a); }
     else match s.jc_statement_node with
     | JCSdecl(vi,eo,s) ->
-	let curposts = wp_statement weak s curposts in
+	let curposts = wp_statement target s curposts in
 	let post = match curposts.jc_post_normal with
 	  | None -> None
 	  | Some a -> 
@@ -1832,16 +1904,16 @@ let rec wp_statement =
 	in
 	{ curposts with jc_post_normal = post; }
     | JCSblock sl ->
-	List.fold_right (wp_statement weak) sl curposts
+	List.fold_right (wp_statement target) sl curposts
     | JCSif(e,ts,fs) ->
-	let tposts = wp_statement weak ts curposts in
+	let tposts = wp_statement target ts curposts in
 	let tpost = match tposts.jc_post_normal with
 	  | None -> None
 	  | Some a -> 
 	      let ta = raw_asrt_of_expr e in
 	      Some (raw_asrt (JCAimplies(ta,a)))
 	in
-	let fposts = wp_statement weak fs curposts in
+	let fposts = wp_statement target fs curposts in
 	let fpost = match fposts.jc_post_normal with
 	  | None -> None
 	  | Some a -> 
@@ -1875,7 +1947,7 @@ let rec wp_statement =
 	let handlpostexcl,handlvs = 
 	  List.fold_left 
 	    (fun (curpostexcl,curvs) (ei,vio,s) ->
-	      let excposts = wp_statement weak s curposts in
+	      let excposts = wp_statement target s curposts in
 	      let curpostexcl = match excposts.jc_post_normal with
 		| None -> curpostexcl
 		| Some a -> (ei,a) :: curpostexcl
@@ -1893,14 +1965,14 @@ let rec wp_statement =
 	in
 	let curpostexcl = handlpostexcl @ curpostexcl in
 	let tmpposts = { curposts with jc_post_exceptional = curpostexcl; } in
-	let bodyposts = wp_statement weak s tmpposts in
+	let bodyposts = wp_statement target s tmpposts in
 	let bodyvs,_ = pop_modified_vars bodyposts in
 	let vs = VarSet.union handlvs bodyvs in
 	let curposts = add_modified_vars curposts vs in
 	{ curposts with jc_post_normal = bodyposts.jc_post_normal; }
     | JCSloop(la,ls) ->
 	let loopposts = push_modified_vars curposts in
-	let loopposts = wp_statement weak ls loopposts in
+	let loopposts = wp_statement target ls loopposts in
 	let vs,loopposts = pop_modified_vars loopposts in
 	(* Add modified variables of current loop to enclosing loop. *)
 	(* let curposts = add_modified_vars curposts vs in *)
@@ -1916,47 +1988,35 @@ let rec wp_statement =
     | JCScall(vio,f,args,s) -> 
 	curposts
 
-let rec destruct_pointer e = 
-  match e.jc_expr_node with
-  | JCEconst JCCnull -> None, None
-  | JCEvar vi -> Some vi, None
-  | JCEshift (e1, e2) ->
-      begin match destruct_pointer e1 with
-      | viopt, None -> viopt, Some e2
-      | viopt,Some offe -> 
-	  let enode = JCEbinary(offe,Badd_int,e2) in
-	  let offe = full_expr enode integer_type e2.jc_expr_loc in
-	  viopt,Some offe
-      end
-  | JCEcast _ -> assert false (* TODO *)
-  | JCEalloc _ -> assert false (* TODO *)
-  | _ -> assert false
-
 let rec collect_expr_asserts s e =
   let collect = collect_expr_asserts s in
   match e.jc_expr_node with
   | JCEconst _ | JCEvar _ -> []
   | JCEderef(e1,fi) ->
-      let viopt,offe = match destruct_pointer e1 with
-	| viopt,None -> viopt,raw_expr(JCEconst(JCCinteger "0"))
-	| viopt,Some offe -> viopt,offe
-      in
-      begin match viopt,term_of_expr offe with
-      | None,_ | _,None -> []
-      | Some vi,Some offt ->
-	  let vt = raw_term(JCTvar vi) in
-	  let st = match vi.jc_var_info_type with
-	    | JCTpointer(st,_,_) -> st
-	    | _ -> assert false
-	  in
-	  let mint = raw_term (JCToffset(Offset_min,vt,st)) in
-	  let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
-	  let mina = raw_asrt (JCArelation(mint,Ble_int,offt)) in
-	  let maxa = raw_asrt (JCArelation(offt,Ble_int,maxt)) in
-	  [{ 
-	    jc_weakpre_target_statement = s;
-	    jc_weakpre_goal_assertion = make_and [mina;maxa];
-	  }]
+      begin match term_of_expr e1 with
+      | None -> []
+      | Some t1 ->
+	  match destruct_pointer t1 with
+	  | None,_ -> []
+	  | Some vi,offt ->
+	      let offt = match offt with
+		| None -> raw_term(JCTconst(JCCinteger "0"))
+		| Some offt -> offt
+	      in
+	      let vt = raw_term(JCTvar vi) in
+	      let st = match vi.jc_var_info_type with
+		| JCTpointer(st,_,_) -> st
+		| _ -> assert false
+	      in
+	      let mint = raw_term (JCToffset(Offset_min,vt,st)) in
+	      let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
+	      let mina = raw_asrt (JCArelation(mint,Ble_int,offt)) in
+	      let maxa = raw_asrt (JCArelation(offt,Ble_int,maxt)) in
+	      [{ 
+		jc_target_statement = s;
+		jc_target_assertion = make_and [mina;maxa];
+		jc_target_invariant = raw_asrt JCAfalse;
+	      }]
       end
   | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) -> 
       collect e1 @ (collect e2)
@@ -1966,42 +2026,43 @@ let rec collect_expr_asserts s e =
   | JCEif(e1,e2,e3) ->
       collect e1 @ (collect e2) @ (collect e3)
 
-let rec collect_asserts weakl s =
+let rec collect_asserts targets s =
   match s.jc_statement_node with
   | JCSdecl(_,Some e,s) -> 
-      collect_asserts (collect_expr_asserts s e @ weakl) s
+      collect_asserts (collect_expr_asserts s e @ targets) s
   | JCSdecl(_,None,s) -> 
-      collect_asserts weakl s
+      collect_asserts targets s
   | JCScall(_,_,els,s) ->
       collect_asserts 
-	(List.flatten (List.map (collect_expr_asserts s) els) @ weakl) s
+	(List.flatten (List.map (collect_expr_asserts s) els) @ targets) s
   | JCSblock sl ->
-      List.fold_left collect_asserts weakl sl
+      List.fold_left collect_asserts targets sl
   | JCSif(e,ts,fs) ->
       collect_asserts (collect_asserts 
-	(collect_expr_asserts s e @ weakl) ts) fs
+	(collect_expr_asserts s e @ targets) ts) fs
   | JCStry(s,hl,fs) ->
-      let weakl = collect_asserts weakl s in
-      let weakl = 
-	List.fold_left (fun weakl (_,_,s) -> collect_asserts weakl s) weakl hl
+      let targets = collect_asserts targets s in
+      let targets = 
+	List.fold_left (fun targets (_,_,s) -> collect_asserts targets s) targets hl
       in
-      collect_asserts weakl fs
+      collect_asserts targets fs
   | JCSloop(_,ls) ->
-      collect_asserts weakl ls
+      collect_asserts targets ls
   | JCSassert(_,a) ->
       { 
-	jc_weakpre_target_statement = s;
-	jc_weakpre_goal_assertion = a;
-      } :: weakl
+	jc_target_statement = s;
+	jc_target_assertion = a;
+	jc_target_invariant = raw_asrt JCAfalse;
+      } :: targets
   | JCSassign_var(_,e1) | JCSreturn(_,e1) | JCSthrow(_,Some e1) 
   | JCSpack(_,e1,_) | JCSunpack(_,e1,_) ->
-      collect_expr_asserts s e1 @ weakl
+      collect_expr_asserts s e1 @ targets
   | JCSassign_heap(e1,fi,e2) ->
       let derefe = raw_expr(JCEderef(e1,fi)) in
       collect_expr_asserts s e1 @ (collect_expr_asserts s derefe)
-      @ (collect_expr_asserts s e2) @ weakl
+      @ (collect_expr_asserts s e2) @ targets
   | JCSreturn_void | JCSthrow(_,None) ->
-      weakl
+      targets
 
 let simplify =
   let mgr = Polka.manager_alloc_strict () in
@@ -2063,15 +2124,15 @@ let simplify =
     let disjuncts = abstract_disjuncts @ other_disjuncts in
     make_or disjuncts
 
-let wp_function weakl (fi,fs,sl) =
-  List.iter (fun weak ->
+let wp_function targets (fi,fs,sl) =
+  List.iter (fun target ->
     let initposts = {
       jc_post_normal = None;
       jc_post_exceptional = [];
       jc_post_modified_vars = [];
     } in
     let initposts = push_modified_vars initposts in
-    let posts = List.fold_right (wp_statement weak) sl initposts in
+    let posts = List.fold_right (wp_statement target) sl initposts in
     let vs,posts = pop_modified_vars posts in
     assert (posts.jc_post_modified_vars = []);
     match posts.jc_post_normal with
@@ -2101,12 +2162,20 @@ let wp_function weakl (fi,fs,sl) =
 	      printf "@[<v 2>Inferring precondition@\n%a@]@\nfor function %s@."
 		Jc_output.assertion qe fi.jc_fun_info_name;
 	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; qe]
-  ) weakl
+  ) targets
     
 
 (*****************************************************************************)
 (* Main function.                                                            *)
 (*****************************************************************************)
+
+let tautology a =
+  let qf = Atp.generalize (atp_of_asrt a) in
+  let qe = Atp.integer_qelim qf in
+  let qe = asrt_of_atp qe in
+  match qe.jc_assertion_node with
+  | JCAtrue -> true
+  | _ -> false
 
 let code_function = function
   | fi,fs,None -> ()
@@ -2114,45 +2183,39 @@ let code_function = function
       begin match Jc_options.ai_domain with
       | "box" -> 
 	  let mgr = Box.manager_alloc () in
-	  ignore (ai_function mgr [] (fi,fs,sl))
+	  ai_function mgr [] (fi,fs,sl)
       | "oct" -> 
 	  let mgr = Oct.manager_alloc () in
-	  ignore (ai_function mgr [] (fi,fs,sl))
+	  ai_function mgr [] (fi,fs,sl)
       | "pol" -> 
 	  let mgr = Polka.manager_alloc_strict () in
-	  ignore (ai_function mgr [] (fi,fs,sl))
+	  ai_function mgr [] (fi,fs,sl)
       | "wp" ->
-	  let weakl = List.fold_left collect_asserts [] sl in
-	  wp_function weakl (fi,fs,sl)
+	  let targets = List.fold_left collect_asserts [] sl in
+	  wp_function targets (fi,fs,sl)
       | "boxwp" | "octwp" | "polwp" ->
-	  let weakl = List.fold_left collect_asserts [] sl in
+	  let targets = List.fold_left collect_asserts [] sl in
+	  begin match Jc_options.ai_domain with
+	  | "boxwp" -> 
+	      let mgr = Box.manager_alloc () in
+	      ai_function mgr targets (fi,fs,sl) 
+	  | "octwp" -> 
+	      let mgr = Oct.manager_alloc () in
+	      ai_function mgr targets (fi,fs,sl) 
+	  | "polwp" -> 
+	      let mgr = Polka.manager_alloc_strict () in
+	      ai_function mgr targets (fi,fs,sl) 
+	  | _ -> assert false
+	  end;
 	  let targets = 
-	    List.map (fun weak -> weak.jc_weakpre_target_statement) weakl in
-	  let invl = match Jc_options.ai_domain with
-	    | "boxwp" -> 
-		let mgr = Box.manager_alloc () in
-		ai_function mgr targets (fi,fs,sl) 
-	    | "octwp" -> 
-		let mgr = Oct.manager_alloc () in
-		ai_function mgr targets (fi,fs,sl) 
-	    | "polwp" -> 
-		let mgr = Polka.manager_alloc_strict () in
-		ai_function mgr targets (fi,fs,sl) 
-	    | _ -> assert false
+	    List.fold_right (fun target acc ->
+	      target.jc_target_invariant <- simplify target.jc_target_invariant;
+	      let impl = raw_asrt(JCAimplies(target.jc_target_invariant,
+		                             target.jc_target_assertion)) in
+	      if tautology impl then acc else target :: acc
+	    ) targets []
 	  in
-	  let weakl = 
-	    List.fold_right (fun weak acc ->
-	      try 
-		let inv = List.assq weak.jc_weakpre_target_statement invl in 
-		let inv = simplify inv in
-		let weak = { weak with jc_weakpre_goal_assertion =
-		    raw_asrt(JCAimplies(inv,weak.jc_weakpre_goal_assertion))
-		} in
-		weak :: acc
-	      with Not_found -> assert false
-	    ) weakl []
-	  in
-	  wp_function weakl (fi,fs,sl)
+	  wp_function targets (fi,fs,sl)
       | _ -> assert false
       end
   
