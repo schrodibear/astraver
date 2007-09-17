@@ -502,26 +502,29 @@ The object must be "sufficiently unpacked", that is: its "mutable" field is
 a strict superclass of the class in which the field is defined.
   And the object must not be committed. *)
 (* assert ((st.jc_struct_info_parent <: e.mutable || e.mutable = bottom_tag) && e.committed = false) *)
+(* Actually, the "not committed" part is meta-implied by the
+condition on mutable. *)
 let assert_mutable e fi =
   if fi.jc_field_info_rep then
     begin
       let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
       let mutable_name = mutable_name st.jc_struct_info_root in
-      let committed_name = committed_name st.jc_struct_info_root in
+      (*let committed_name = committed_name st.jc_struct_info_root in*)
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
-      let e_committed = LApp("select", [LVar committed_name; e]) in
+      (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
       let parent_tag = match st.jc_struct_info_parent with
 	| None -> LVar "bottom_tag"
 	| Some parent -> LVar (tag_name parent)
       in
       let sub = make_subtag parent_tag e_mutable in
-      let not_committed =
+      (*let not_committed =
 	LPred(
 	  "eq",
 	  [ e_committed;
 	    LConst (Prim_bool false) ])
       in
-      Assert(make_and sub not_committed, Void)
+      Assert(make_and sub not_committed, Void)*)
+      Assert(sub, Void)
     end
   else
     Void
