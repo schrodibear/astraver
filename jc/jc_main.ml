@@ -122,11 +122,16 @@ let main () =
 	Array.iter Jc_effect.function_effects components;
 
 	(* phase 6 : checking structure invariants *)
-	Jc_options.lprintf "\nstarting checking structure invariants.@.";
-	Hashtbl.iter 
-	  (fun _ (_,invs) -> Jc_invariants.check invs)
-	  Jc_typing.structs_table;
-
+	begin
+	  match Jc_options.inv_sem with
+	    | Jc_options.InvOwnership ->
+		Jc_options.lprintf "\nstarting checking structure invariants.@.";
+		Hashtbl.iter 
+		  (fun _ (_,invs) -> Jc_invariants.check invs)
+		  Jc_typing.structs_table
+	    | Jc_options.InvNone -> ()
+	end;
+	
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =
 	  Hashtbl.fold 
@@ -191,7 +196,11 @@ let main () =
 	    d_lfuns
 	in	       
 	(* production phase 3.5 : generation of global invariant predicates *)
-	let d_axioms = Jc_invariants.make_global_invariants d_axioms in
+	let d_axioms =
+	  if Jc_options.inv_sem = Jc_options.InvOwnership then
+	    Jc_invariants.make_global_invariants d_axioms
+	  else d_axioms
+	in
 	Jc_options.lprintf "production phase 4 : generation of Why functions@.";
 	let d_funs = 
 	  Hashtbl.fold 
@@ -202,42 +211,50 @@ let main () =
 	    Jc_norm.functions_table
 	    d_axioms
 	in
-	Jc_options.lprintf "production phase 5 : (invariants tools)@.";
-	let d_inv = d_funs in
-	(* production phase 5.1 : "assoc" declaration *)
-	(*let d_inv = Jc_invariants.assoc_declaration::d_funs in *)
-	(* production phase 5.2 : "mutable" and "committed" declarations *)
 	let d_inv =
-          Hashtbl.fold
-            (fun _ (st, _) acc ->
-               Jc_invariants.mutable_declaration st acc)
-            Jc_typing.structs_table
-            d_inv
-        in
-	(* production phase 5.3 : global invariants (not mutable implies invariant) *)
-        (*let d_inv =
-          Hashtbl.fold
-            (fun _ (st, _) acc ->
-               Jc_invariants.invariants_axioms st acc)
-            Jc_norm.structs_table
-            d_inv
-        in*)
-	(* production phase 5.4 : pack *)
-        let d_inv =
-          Hashtbl.fold
-            (fun _ (st, _) acc ->
-               Jc_invariants.pack_declaration st acc)
-            Jc_typing.structs_table
-            d_inv
-        in
-	(* production phase 5.5 : unpack *)
-        let d_inv =
-          Hashtbl.fold
-            (fun _ (st, _) acc ->
-               Jc_invariants.unpack_declaration st acc)
-            Jc_typing.structs_table
-            d_inv
-        in
+	  if Jc_options.inv_sem = Jc_options.InvOwnership then
+	    begin
+	      Jc_options.lprintf "production phase 5 : (invariants tools)@.";
+	      (* production phase 5.1 : "assoc" declaration *)
+	      (*let d_inv = Jc_invariants.assoc_declaration::d_funs in *)
+	      let d_inv = d_funs in
+	      (* production phase 5.2 : "mutable" and "committed" declarations *)
+	      let d_inv =
+		Hashtbl.fold
+		  (fun _ (st, _) acc ->
+		     Jc_invariants.mutable_declaration st acc)
+		  Jc_typing.structs_table
+		  d_inv
+              in
+	      (* production phase 5.3 : global invariants (not mutable implies invariant) *)
+              (*let d_inv =
+                Hashtbl.fold
+                  (fun _ (st, _) acc ->
+                     Jc_invariants.invariants_axioms st acc)
+                  Jc_norm.structs_table
+                  d_inv
+              in*)
+	      (* production phase 5.4 : pack *)
+              let d_inv =
+		Hashtbl.fold
+		  (fun _ (st, _) acc ->
+		     Jc_invariants.pack_declaration st acc)
+		  Jc_typing.structs_table
+		  d_inv
+              in
+	      (* production phase 5.5 : unpack *)
+              let d_inv =
+		Hashtbl.fold
+		  (fun _ (st, _) acc ->
+		     Jc_invariants.unpack_declaration st acc)
+		  Jc_typing.structs_table
+		  d_inv
+              in
+	      d_inv
+	    end
+	  else
+	    d_funs
+	in
 	(* production phase 6.1 : produce Why file *)
 	let f = Filename.chop_extension f in
 	Pp.print_in_file 

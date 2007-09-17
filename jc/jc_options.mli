@@ -46,6 +46,9 @@ val main : string
 val files : unit -> string list 
 val usage : unit -> unit
 
+type inv_sem = InvNone | InvOwnership
+val inv_sem: inv_sem
+
 (*s The log file *)
 
 val log : Format.formatter
@@ -59,3 +62,9 @@ exception Jc_error of Loc.position * string
 val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
 
 
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

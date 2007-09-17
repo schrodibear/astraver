@@ -179,7 +179,7 @@ let is_pointer_type t =
 
 let rec find_field_struct loc st allow_mutable = function
   | ("mutable" | "committed") as x ->
-      if allow_mutable then
+      if allow_mutable && Jc_options.inv_sem = Jc_options.InvOwnership then
 	let table =
 	  if x = "mutable" then mutable_fields_table
 	  else committed_fields_table
@@ -2047,7 +2047,7 @@ let rec decl d =
 *)
     | JCPDstructtype(id,parent,fields,inv) ->
 	(* mutable field *)
-	if parent = None then create_mutable_field id;
+	if parent = None && Jc_options.inv_sem = Jc_options.InvOwnership then create_mutable_field id;
 	(* adding structure name in global environment before typing 
 	   the fields, because of possible recursive definition *)
 	let root,struct_info = add_typedecl d (id,parent) in

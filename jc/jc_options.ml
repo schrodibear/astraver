@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.8 2007-09-06 07:29:54 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.9 2007-09-17 13:16:02 romain Exp $ i*)
 
 open Format
 
@@ -64,6 +64,9 @@ let debug = ref false
 let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
+
+type inv_sem = InvNone | InvOwnership
+let inv_sem = ref InvOwnership
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
@@ -112,6 +115,12 @@ let _ =
           "  treats warnings as errors";
 	"--version", Arg.Unit version,
           "  prints version and exit";
+	"-inv-sem", Arg.String
+	  (function
+	     | "none" -> inv_sem := InvNone
+	     | "ownership" -> inv_sem := InvOwnership
+	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
+	  "  <kind>  sets the semantics of invariants (available modes: none, ownership)";
       ]
       add_file usage
 
@@ -126,6 +135,7 @@ let debug = !debug
 let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
+let inv_sem = !inv_sem
 
 let annot_infer = !annot_infer
 let ai_domain = !ai_domain
@@ -141,3 +151,9 @@ let parsing_error l f =
        let s = if s="" then s else " ("^s^")" in
        raise (Jc_error(l, "syntax error" ^ s))) f
 
+
+(*
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
+*)

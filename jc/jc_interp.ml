@@ -699,14 +699,18 @@ let rec statement ~threats s =
 	let tmp2 = tmp_var_name () in
 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in
 	let upd = if threats then append (assert_mutable (LVar tmp1) fi) upd else upd in
-        (append
-	   (make_lets
-	      ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
-				  e2.jc_expr_loc fi.jc_field_info_type 
-				  e2.jc_expr_type e2') ])
-	      upd)
-	   (assume_field_invariants fi))
-(*	   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
+	let lets =
+	  (make_lets
+	     ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
+				 e2.jc_expr_loc fi.jc_field_info_type 
+				 e2.jc_expr_type e2') ])
+	     upd)
+	in
+	if Jc_options.inv_sem = Jc_options.InvOwnership then
+	  append lets (assume_field_invariants fi)
+	else
+	  lets
+(*	if Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCSblock l -> statement_list ~threats l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
@@ -1236,9 +1240,12 @@ let tr_fun f spec body acc =
 	(* default behavior *)
 	let why_body = statement_list ~threats:true body in
 	let tblock =
-	  append
-	    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-	    (assume_all_invariants f.jc_fun_info_parameters)
+	  if Jc_options.inv_sem = Jc_options.InvOwnership then
+	    append
+	      (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+	      (assume_all_invariants f.jc_fun_info_parameters)
+	      why_body
+	  else
 	    why_body
 	in
 	let tblock = 
@@ -1277,9 +1284,12 @@ let tr_fun f spec body acc =
 	  else
 	    let body = statement_list ~threats:false body in
 	    let tblock =
-	      append
-		(*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-		(assume_all_invariants f.jc_fun_info_parameters)
+	      if Jc_options.inv_sem = Jc_options.InvOwnership then
+		append
+		  (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+		  (assume_all_invariants f.jc_fun_info_parameters)
+		  body
+	      else
 		body
 	    in
 	    let tblock = 

@@ -7,17 +7,16 @@ open Output
 (* other modifications for this extension can be found in:
      ast, typing, norm, interp: about pack / unpack, and mutable
      jc_main.ml
-       phase 6
+       phase 3.5
        production phase 5
      jc_interp.ml
-       function tr_fun: call to "make_assume_all_assocs"
+       function tr_fun: 2 calls to "assume_all_invariants"
        function statement
-         JCSassign_heap: call to "make_assume_field_assoc"
+         JCSassign_heap: call to "assume_field_invariants"
      jc_typing.ml
        hashtbl mutable_fields_table
        hashtbl committed_fields_table
        function create_mutable_field
-       function create_structure_tag
        function find_field_struct: "mutable" and "committed" cases (and the parameter allow_mutable)
        function decl: JCPDstructtype: call to create_mutable_field
 
