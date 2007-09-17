@@ -19,6 +19,7 @@ open Output
        function create_mutable_field
        function find_field_struct: "mutable" and "committed" cases (and the parameter allow_mutable)
        function decl: JCPDstructtype: call to create_mutable_field
+       function statement: call to "assert_mutable"
 
 TODOs:
      Maybe generate assocs (or global invariant) when doing unpack or pack, as it modifies

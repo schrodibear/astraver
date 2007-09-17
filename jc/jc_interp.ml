@@ -698,7 +698,8 @@ let rec statement ~threats s =
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in
-	let upd = if threats then append (assert_mutable (LVar tmp1) fi) upd else upd in
+	let upd = if threats && Jc_options.inv_sem = Jc_options.InvOwnership then
+	  append (assert_mutable (LVar tmp1) fi) upd else upd in
 	let lets =
 	  (make_lets
 	     ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
