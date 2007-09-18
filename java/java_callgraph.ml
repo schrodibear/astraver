@@ -97,6 +97,11 @@ let rec expr acc e : 'a list =
 	List.fold_left expr (expr (mi::acc) e) args
     | JEstatic_call (mi, args) ->
 	List.fold_left expr (mi::acc) args
+    | JEnew_array(ty, dims) ->
+	List.fold_left expr acc dims
+    | JEnew_object(ci,args) ->
+	(* TODO: calls constructor *)
+	List.fold_left expr acc args
     | JEassign_array_op (e1, e2, _, e3)-> 
 	expr (expr (expr acc e1) e2) e3
     | JEassign_local_var_op (_, _, e) 
@@ -122,31 +127,19 @@ let loop_annot acc la =
 
 let rec statement acc s : ('a list * 'b list) = 
   match s.java_statement_node with  
-(*
-*)
-(*
-    | JSthrow e 
-*)
     | JSif(_, s1, s2) ->
 	statement (statement acc s1) s2
-(*
-    | JSloop(spec,s) ->
-	let (a,b) = statement acc s in (loop_annot a spec,b)
-*)
     | JSblock sl -> 
 	List.fold_left statement acc sl
-(*
     | JStry (s, catches, finally) -> 
+	let acc = List.fold_left statement acc s in
 	let acc =
 	  List.fold_left 
-	    (fun acc (_,_,s) -> statement acc s) 
-	    (statement acc s) catches
-	in statement acc finally
-*)
-(*
-    | JSdecl(vi,_,s) -> 
-	statement acc s
-*)
+	    (fun acc (_,s) -> List.fold_left statement acc s) 
+	    acc catches
+	in 
+	Option_misc.fold 
+	  (fun b acc -> List.fold_left statement acc b) finally acc
     | JSassert (_,t) -> let (a,b) = acc in (assertion a t,b)
     | JSbreak _ -> acc 
     | JSswitch (e, l)-> 
@@ -155,6 +148,7 @@ let rec statement acc s : ('a list * 'b list) =
 	List.fold_left
 	  (fun acc (cases,body) -> statements acc body)
 	  (a,b) l
+    | JSthrow e 
     | JSreturn e 
     | JSexpr e -> let (a,b)=acc in (a,expr b e)
     | JSfor_decl (inits, cond, inv, dec, updates, body)-> 

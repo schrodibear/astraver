@@ -15,14 +15,20 @@ integer f1(integer x)
 /* Example 2 
  * We want the message: 
  *  "post-condition `\result > 10' of function f2 cannot be established"
- * localized on `\result > 10' 
+ * localized on `return x+1'
+ * all lines involved in the execution path should be ~underlined 
  */
 integer f2 (integer x) 
   requires x > 0 && x < 100;
   behavior ok:
     ensures \result != 0 && \result > 10;  
 {
-    return x+1;
+  integer y;
+  if (x<50) 
+     return x+1;
+  else 
+     y = x-1;
+  return y;
 }
 
 
@@ -36,6 +42,42 @@ integer f3 (integer x)
 {
     return f2(x);
 }
+
+
+/* Example 4 
+ * Explanation expected: 
+ *   "validity of loop invariant `0 <= y' at loop entrance"
+ * localized on `0 <= y' 
+ */
+
+unit f4 (integer x) 
+{ 
+ integer y = x;
+ while (y > 0)
+     invariant 0 <= y && y <= x;
+ {
+     y = y - 1;
+ }
+}
+
+
+/* Example 5 
+ * Explanation expected:
+ *   "preservation of loop invariant `y = x'"
+ * localized on `y=x' 
+ */
+
+unit f5 (integer x)  
+{
+ integer y = x;
+ while (y > 0)
+ invariant y == x;
+ {
+ y = y - 1;
+ }
+}
+
+
 
 
 

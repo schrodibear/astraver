@@ -190,7 +190,7 @@ let term_coerce loc tdest tsrc e =
   |  _ -> 
       Jc_typing.typing_error loc 
 	"can't coerce type %a to type %a" 
-	Jc_typing.print_type tsrc Jc_typing.print_type tdest
+	print_type tsrc print_type tdest
 	
 let coerce ~no_int_overflow loc tdest tsrc e =
   match tdest,tsrc with
@@ -218,7 +218,7 @@ let coerce ~no_int_overflow loc tdest tsrc e =
     |  _ -> 
 	 Jc_typing.typing_error loc 
 	   "can't coerce type %a to type %a" 
-	   Jc_typing.print_type tsrc Jc_typing.print_type tdest
+	   print_type tsrc print_type tdest
 
 (**************************
 
@@ -615,7 +615,9 @@ let rec expr ~threats e : expr =
 	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
 	let com = Jc_invariants.committed_name st.jc_struct_info_root in
 	make_app "alloc_parameter" 
-	  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); expr e]
+	  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
+	   coerce ~no_int_overflow:(not threats) 
+	     e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
     | JCEfree e ->
 	let st = match e.jc_expr_type with
 	  | JCTpointer(st, _, _) -> st
@@ -922,7 +924,12 @@ let rec pset before loc =
 	LApp("pset_singleton", [m])
     | JCLSrange(ls,a,b) ->
 	let ls = pset before ls in
-	LApp("pset_range", [ls;term (Some before) before a; term (Some before) before b])
+	let a' = term (Some before) before a in
+	let b' = term (Some before) before b in
+	LApp("pset_range", 
+	     [ls; 
+	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'; 
+	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
 	
 let collect_locations before (refs,mems) loc =
   match loc with

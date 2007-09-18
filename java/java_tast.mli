@@ -68,6 +68,10 @@ and expr_node =
   | JEassign_array_op of expr * expr * bin_op * expr
   | JEcall of expr * method_info * expr list
   | JEstatic_call of method_info * expr list
+  | JEnew_array of java_type * expr list
+      (*r elements type, dimensions *)
+  | JEnew_object of java_class_info * expr list
+      (*r class, args *)
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
@@ -114,15 +118,15 @@ and statement_node =
   | JSassert of string option * assertion
   | JSswitch of expr * (expr switch_label list * block) list
   | JSbreak of string option
+  | JSthrow of expr
+  | JStry of block * (java_var_info * block) list * block option
 (*
   | JSvar_decl of variable_declaration
-  | JPSthrow of pexpr
   | JPScontinue of identifier option
   | JPSlabel of identifier * pstatement
   | JPSdo of pstatement * pexpr
   | JPSfor of pstatement list * pexpr * pstatement list * pstatement  
   | JPSfor_decl of variable_declaration * pexpr * pstatement list * pstatement
-  | JPStry of block * (parameter * block) list * block option
   | JPSsynchronized of pexpr * block
   | JPSannot of Lexing.position * string
   | JPSloop_annot of pexpr * pexpr

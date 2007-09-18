@@ -2,6 +2,7 @@
 open Format
 open Jc_env
 open Jc_fenv
+open Jc_pervasives
 open Jc_ast
 open Pp
 
@@ -99,14 +100,18 @@ let rec term fmt t =
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTapp (op, [t1]) ->
+(*
 	begin try 
 	  ignore 
 	    (Hashtbl.find Jc_typing.enum_conversion_logic_functions_table op);
 	  (* conversion due to enumeration. Ignore it. *)
 	  term fmt t1
 	with Not_found ->
+*)
 	  fprintf fmt "%s(@[%a@])" op.jc_logic_info_name term t1
+(*
 	end
+*)
     | JCTapp (op, ([t1;t2] as l)) ->
 	begin try
 	  let s = lbin_op op in
@@ -142,7 +147,7 @@ let rec assertion fmt a =
     | JCAquantifier (q,vi, a)-> 
 	fprintf fmt "@[<v 3>(\\%a %a %s;@ %a)@]"
 	  quantifier q
-	  Jc_typing.print_type vi.jc_var_info_type
+	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
 	  assertion a
     | JCArelation (t1, op, t2) ->
@@ -202,6 +207,9 @@ let behavior fmt (id,b) =
   Option_misc.iter
     (fun a -> fprintf fmt "@\nassumes %a;" assertion a) 
     b.jc_behavior_assumes;
+  Option_misc.iter
+  (fun a -> fprintf fmt "@\nthrows %s;" a.jc_exception_info_name) 
+    b.jc_behavior_throws;    
   Option_misc.iter 
     (fun locs -> fprintf fmt "@\nassigns %a;" 
        (print_list_or_default "\\nothing" comma location) locs)
@@ -326,11 +334,11 @@ let rec statement fmt s =
 	fprintf fmt "@\n@[<v 2>if (%a) %a@]@\n@[<v 2>else %a@]"
 	  expr e statement s1 statement s2
     | JCTSdecl (vi, None, s)-> 
-	fprintf fmt "@\n%a %s;%a" Jc_typing.print_type vi.jc_var_info_type
+	fprintf fmt "@\n%a %s;%a" print_type vi.jc_var_info_type
 	  vi.jc_var_info_name statement s
     | JCTSdecl (vi, Some e, s)-> 
 	fprintf fmt "@\n%a %s = %a;%a" 
-	  Jc_typing.print_type vi.jc_var_info_type 
+	  print_type vi.jc_var_info_type 
 	  vi.jc_var_info_name expr e statement s
     | JCTSassert(None,a)-> 
 	fprintf fmt "@\nassert %a;" assertion a
@@ -367,11 +375,11 @@ and block fmt b =
 
 
 let param fmt vi =
-  fprintf fmt "%a %s" Jc_typing.print_type vi.jc_var_info_type vi.jc_var_info_name
+  fprintf fmt "%a %s" print_type vi.jc_var_info_type vi.jc_var_info_name
 
 let field fmt fi =
   fprintf fmt "@\n%a %s;" 
-    Jc_typing.print_type fi.jc_field_info_type fi.jc_field_info_name
+    print_type fi.jc_field_info_type fi.jc_field_info_name
 
 let term_or_assertion fmt = function
   | JCAssertion a -> 
@@ -390,7 +398,7 @@ let print_super fmt = function
 let rec print_decl fmt d =
   match d with
     | JCfun_def(ty,id,params,spec,body) ->
-	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." Jc_typing.print_type ty id
+	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
 	  (print_list comma param) params 
 	  print_spec spec 
 	  (print_option_or_default "\n;" block) body
@@ -403,7 +411,7 @@ let rec print_decl fmt d =
     | JCrec_struct_defs dlist | JCrec_fun_defs dlist ->
 	print_list (fun fmt () -> fprintf fmt "@\nand") print_decl fmt dlist
     | JCvar_def(ty,id,init) ->
-	fprintf fmt "@\n@[%a %s%a;@]@." Jc_typing.print_type ty id
+	fprintf fmt "@\n@[%a %s%a;@]@." print_type ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JCaxiom_def(id,a) ->
 	fprintf fmt "@\n@[axiom %s : %a@]@." id assertion a
@@ -411,23 +419,23 @@ let rec print_decl fmt d =
 	fprintf fmt "@\n@[invariant %s : %a@]@." id assertion a
     | JCexception_def(id,ei) ->
 	fprintf fmt "@\n@[exception %s of %a@]@." id
-	  (print_option_or_default "unit" Jc_typing.print_type)
+	  (print_option_or_default "unit" print_type)
 	  ei.jc_exception_info_type
     | JClogic_const_def(ty,id,None) ->
-	fprintf fmt "@\n@[logic %a %s@]@." Jc_typing.print_type ty id
+	fprintf fmt "@\n@[logic %a %s@]@." print_type ty id
     | JClogic_const_def(ty,id,Some t) ->
-	fprintf fmt "@\n@[logic %a %s = %a@]@." Jc_typing.print_type ty id
+	fprintf fmt "@\n@[logic %a %s = %a@]@." print_type ty id
 	  term t
     | JClogic_fun_def(ty,id,[],JCReads l) ->
 	assert (l=[]);
 	fprintf fmt "@\n@[logic %a %s@]@." 
-	  (print_option Jc_typing.print_type) ty id
+	  (print_option print_type) ty id
     | JClogic_fun_def(ty,id,[],JCTerm t) ->
 	fprintf fmt "@\n@[logic %a %s = %a@]@." 
-	  (print_option Jc_typing.print_type) ty id term t
+	  (print_option print_type) ty id term t
     | JClogic_fun_def(ty,id,params,body) ->
 	fprintf fmt "@\n@[logic %a %s(@[%a@]) %a@]@." 
-	  (print_option Jc_typing.print_type) ty 
+	  (print_option print_type) ty 
 	  id (print_list comma param) params
 	  term_or_assertion body 
     | JClogic_type_def id ->

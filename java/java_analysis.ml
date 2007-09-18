@@ -67,6 +67,10 @@ let rec expr e =
 	expr e;	List.iter expr args
     | JEstatic_call(mi,args) ->
 	List.iter expr args
+    | JEnew_array(ty,dims) ->
+	List.iter expr dims
+    | JEnew_object(ci,args) ->
+	List.iter expr args
 
 let initialiser i = 
   match i with
@@ -80,7 +84,6 @@ let switch_label = function
 let rec statement s =
   match s.java_statement_node with
     | JSskip | JSbreak _ -> ()
-    | JSreturn e -> expr e
     | JSblock l -> List.iter statement l	  
     | JSvar_decl (vi, init, s) ->
 	Option_misc.iter initialiser init;
@@ -96,6 +99,8 @@ let rec statement s =
 	term dec;
 	List.iter expr sl;
 	statement body
+    | JSthrow e
+    | JSreturn e 
     | JSexpr e -> expr e
     | JSassert(id,e) -> assertion e
     | JSswitch(e,l) -> 
@@ -104,6 +109,10 @@ let rec statement s =
 		     List.iter switch_label labels;
 		     List.iter statement b)
 	  l
+    | JStry(s, catches, finally) ->
+	List.iter statement s;
+	List.iter (fun (_,s) -> List.iter statement s) catches;
+	Option_misc.iter (List.iter statement) finally
 
 let do_method mi req behs body =
 

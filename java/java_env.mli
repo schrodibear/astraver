@@ -204,6 +204,7 @@ and java_class_info =
       mutable class_info_fields : java_field_info list;
       mutable class_info_methods : method_info list;
       mutable class_info_extends : java_class_info option;
+      mutable class_info_is_exception : bool;
 (*
       mutable class_entry_implements : interface_entry list;
       mutable class_entry_contents : t;

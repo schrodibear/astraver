@@ -115,7 +115,10 @@ let array_struct_table = Hashtbl.create 17
 let rec get_array_struct t = 
   try
     Hashtbl.find array_struct_table t 
-  with Not_found -> assert false
+  with Not_found -> 
+    Format.eprintf "Array struct for type %a not found@." 
+      Java_typing.print_type t;
+    assert false
 
 and tr_type t =
   match t with
@@ -181,7 +184,8 @@ let get_var vi =
     Hashtbl.find vi_table vi.java_var_info_tag
   with
       Not_found -> 
-	failwith ("Java_interp.get_var " ^ vi.java_var_info_name)
+	Format.eprintf "Java_interp.get_var %s@." vi.java_var_info_name;
+	assert false
 
 let create_var ?(formal=false) vi =
   let ty = tr_type vi.java_var_info_type in
@@ -239,6 +243,35 @@ let create_fun mi =
   Hashtbl.add funs_table mi.method_info_tag nfi;
   nfi
 
+(*s exceptions *)
+
+let exceptions_table = Hashtbl.create 17 
+
+let get_exception ty =
+  match ty with
+    | JTYclass(_,ci) ->
+	begin
+	  try
+	    Hashtbl.find exceptions_table ci.class_info_name
+	  with
+	      Not_found -> 
+		Format.eprintf "exception %s not found@." ci.class_info_name;
+		assert false
+	end
+    | _ -> assert false
+
+let exceptions_tag = ref 0
+
+let create_exception ty n =
+  incr exceptions_tag;
+  let ei =
+    { jc_exception_info_name = n;
+      jc_exception_info_tag = !exceptions_tag;
+      jc_exception_info_type = ty     
+    }
+  in
+  Hashtbl.add exceptions_table n ei;
+  ei
 
 (*s terms *)
 
@@ -274,7 +307,8 @@ let rec term t =
     match t.java_term_node with
       | JTlit l -> JCTconst (lit l)
       | JTbin(e1,t,op,e2) -> JCTbinary(term e1, lbin_op t op, term e2)
-      | JTapp (_, _) -> assert false (* TODO *)
+      | JTapp (fi, el) -> 
+	  JCTapp(get_logic_fun fi,List.map term el)
       | JTvar vi -> JCTvar (get_var vi)
       | JTfield_access(t,fi) -> JCTderef(term t,get_field fi)
       | JTstatic_field_access(ci,fi) ->
@@ -371,7 +405,7 @@ let term_of_expr e =
     java_term_type = e.java_expr_type;
     java_term_node = t }
 
-let tr_class ci acc =
+let tr_class ci acc0 acc =
   let (static_fields,fields) = 
     List.partition 
       (fun fi -> fi.java_field_info_is_static)
@@ -406,9 +440,16 @@ let tr_class ci acc =
       static_fields
       acc
   in
-  JCstruct_def(ci.class_info_name, super,
-	       List.map create_field fields) :: acc
+  (* create exceptions if subclass of Exception *)
+  begin
+    if ci.class_info_is_exception then
+    ignore (create_exception (Some (tr_type (JTYclass(false,ci)))) ci.class_info_name);
+  end;
+  JCstruct_def(ci.class_info_name, super, List.map create_field fields)::acc0, acc
 
+let tr_exception ei acc =
+  JCexception_def(ei.jc_exception_info_name, ei) :: acc
+  
 let java_array_length_funs = Hashtbl.create 17
 
 let java_array_length_fun st =
@@ -538,12 +579,13 @@ let location t =
       | JTold t -> assert false (* TODO *)
   
 
-let behavior (id,a,assigns,e) =
+let behavior (id,assumes,throws,assigns,ensures) =
   (snd id,
-  { jc_behavior_assumes = Option_misc.map assertion a;
-    jc_behavior_assigns = None ;
-    jc_behavior_ensures = assertion e;
-    jc_behavior_throws = None;
+  { jc_behavior_assumes = Option_misc.map assertion assumes;
+    jc_behavior_assigns = Option_misc.map (List.map location) assigns ;
+    jc_behavior_ensures = assertion ensures;
+    jc_behavior_throws = 
+      Option_misc.map (fun ci -> get_exception (JTYclass(false,ci))) throws;
   })
 
 let un_op op =
@@ -579,6 +621,12 @@ let int_cast loc t e =
      JCTErange_cast(int_range, { jc_texpr_loc = loc;
 				 jc_texpr_type = Jc_pervasives.integer_type;
 				 jc_texpr_node = e })
+
+let dummy_loc_expr ty e =
+  { jc_texpr_loc = Loc.dummy_position; 
+    jc_texpr_type = ty;
+    jc_texpr_node = e }
+
 
 let rec expr e =
   let e' =
@@ -652,6 +700,14 @@ let rec expr e =
 	  JCTEcall(get_fun mi,List.map expr (e::args))
       | JEstatic_call(mi,args) -> 
 	  JCTEcall(get_fun mi,List.map expr args)
+      | JEnew_array(ty,[e]) ->
+	  let si = get_array_struct ty in
+	  JCTEalloc (expr e, si) 
+      | JEnew_array(ty,_) ->
+	  assert false (* TODO *)
+      | JEnew_object(ci,args) ->
+	  let si = get_class ci in
+	  JCTEalloc (dummy_loc_expr int_type (JCTEconst (JCCinteger "1")), si) 
 	  
 
   in { jc_texpr_loc = e.java_expr_loc ; 
@@ -663,6 +719,15 @@ let initialiser e =
     | JIexpr e -> expr e
     | _ -> assert false (* TODO *)
 
+let dummy_loc_statement s =
+  { jc_tstatement_loc = Loc.dummy_position; 
+    jc_tstatement_node = s }
+
+let make_block l =
+  match l with
+    | [s] -> s
+    | _ -> dummy_loc_statement (JCTSblock l)
+
 let rec statement s =
   let s' =
     match s.java_statement_node with
@@ -670,6 +735,7 @@ let rec statement s =
       | JSbreak None -> JCTSbreak ""
       | JSbreak (Some l) -> JCTSbreak l
       | JSreturn e -> JCTSreturn (tr_type e.java_expr_type,expr e)
+      | JSthrow e -> JCTSthrow(get_exception e.java_expr_type,Some (expr e))
       | JSblock l -> JCTSblock (List.map statement l)	  
       | JSvar_decl (vi, init, s) -> 
 	  let vi = create_var vi in
@@ -685,7 +751,8 @@ let rec statement s =
 	  JCTSwhile(expr e, la, statement s)
       | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	  let decls = List.map
-	    (fun (vi,init) -> (create_var vi, Option_misc.map initialiser init))
+	    (fun (vi,init) -> 
+	       (create_var vi, Option_misc.map initialiser init))
 	    decls
 	  in
 	  let la =
@@ -702,15 +769,26 @@ let rec statement s =
 	      { jc_tstatement_loc = s.java_statement_loc ;
 		jc_tstatement_node = 
 		  JCTSfor(expr e, List.map expr sl, la, statement body) }
-	  in res.jc_tstatement_node
+	  in JCTSblock [res]
       | JSexpr e -> JCTSexpr (expr e)
       | JSassert(id,e) -> JCTSassert(id,assertion e)
       | JSswitch(e,l) -> 
 	  JCTSswitch(expr e,List.map switch_case l)
+      | JStry(s, catches, finally) ->
+	  JCTStry(block s,
+		  List.map 
+		    (fun (vi,s) ->
+		       let e = get_exception vi.java_var_info_type in
+		       (e, Some (create_var vi), block s))
+		    catches,
+		  make_block 
+		    (Option_misc.fold (fun s acc -> List.map statement s) finally []))
 
   in { jc_tstatement_loc = s.java_statement_loc ; jc_tstatement_node = s' }
 
 and statements l = List.map statement l
+
+and block l = make_block (statements l)
 
 and switch_case (labels,b) =
   (List.map switch_label labels, statements b)

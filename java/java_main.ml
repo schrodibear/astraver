@@ -98,23 +98,24 @@ let main () =
 	let decls = Java_interp.range_types decls in
 	(* production phase 1.3 : generation of Jessie struct types *)
 	let decls = Java_interp.array_types decls in
+	let acc,decls =
+	  Hashtbl.fold 
+	    (fun _ id (acc0,acc) ->
+	       Java_interp.tr_class id acc0 acc)
+	    Java_typing.class_table
+	    ([],decls)
+	in	
+	let decls = (Jc_output.JCrec_struct_defs acc) :: decls in
+
+	(* production phase 1.4 : generation of Jessie exceptions *)
 	let decls =
 	  Hashtbl.fold 
-	    (fun _ id acc ->
-	       Java_interp.tr_class id acc)
-	    Java_typing.class_table
-	    decls
-	in	
-(*       	  
-	(* production phase 1.4 : generation of Jessie exceptions *)
-	let d_exc =
-	  Hashtbl.fold 
 	    (fun _ ei acc ->
-	       Jc_interp.tr_exception ei acc)
-	    Jc_typing.exceptions_table
-	    d_memories
+	       Java_interp.tr_exception ei acc)
+	    Java_interp.exceptions_table
+	    decls
 	in	       	  
-*)
+
 	(* production phase 1.5 : generation of Jessie logic functions *)
 	let decls = 
 	  Hashtbl.fold 
@@ -177,7 +178,11 @@ let main () =
 
 let _ = 
   Sys.catch_break true;
-  Printexc.catch main ()
+  try
+    main ()
+  with
+      (Assert_failure _ | Match_failure _ ) as exc -> 
+	eprintf "%s@." (Printexc.to_string exc)
 
   
 (*

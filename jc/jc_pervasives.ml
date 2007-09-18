@@ -22,10 +22,38 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Format
 open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_ast
+
+
+let string_of_native t =
+  match t with
+    | Tunit -> "unit"
+    | Tinteger -> "integer"
+    | Treal -> "real"
+    | Tboolean -> "boolean"
+
+let print_type fmt t =
+  match t with
+    | JCTnative n -> fprintf fmt "%s" (string_of_native n)
+    | JCTlogic s -> fprintf fmt "%s" s
+    | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
+    | JCTpointer (s,None,None) -> 
+	fprintf fmt "%s[..]" s.jc_struct_info_name
+    | JCTpointer (s,Some a,None) -> 
+	fprintf fmt "%s[%s..]" s.jc_struct_info_name (Num.string_of_num a)
+    | JCTpointer (s,None,Some b) -> 
+	fprintf fmt "%s[..%s]" s.jc_struct_info_name (Num.string_of_num b)
+    | JCTpointer (s,Some a,Some b) -> 
+	if Num.eq_num a b then
+	  fprintf fmt "%s[%s]" s.jc_struct_info_name (Num.string_of_num a)
+	else
+	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
+	    (Num.string_of_num a) (Num.string_of_num b)
+    | JCTnull -> fprintf fmt "(nulltype)"  
 
 
 let num_of_constant loc c =

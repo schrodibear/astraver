@@ -268,7 +268,7 @@ jc/jc.cmxa: $(JCCML_EXPORT)
 bin/jessie.opt: $(JCCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
-	# strip    $@
+	strip    $@
 
 bin/jessie.byte: $(JCCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) $(ATPLIB) -o $@ \
@@ -276,11 +276,9 @@ bin/jessie.byte: $(JCCMO)
 
 
 # krakatoa
+# CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/jc_version.cmo \
-	jc/jc_options.cmo \
-	jc/jc_envset.cmo jc/jc_pervasives.cmo \
-	jc/jc_typing.cmo jc/jc_output.cmo \
+	jc/jc_envset.cmo jc/jc_pervasives.cmo jc/jc_output.cmo \
 	java/java_version.cmo \
 	java/java_options.cmo java/java_pervasives.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \

@@ -1,4 +1,5 @@
 
+val print_type : Format.formatter -> Java_env.java_type -> unit
 
 val class_table :
   (string,Java_env.java_class_info) Hashtbl.t
@@ -8,6 +9,7 @@ type method_table_info =
       mt_requires : Java_tast.assertion option;
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
+			Java_env.java_class_info option *
 			Java_tast.term list option * 
 			Java_tast.assertion) list ;
       mt_body : Java_tast.block option;

@@ -31,32 +31,6 @@ open Format
 
 exception Typing_error of Loc.position * string
 
-let string_of_native t =
-  match t with
-    | Tunit -> "unit"
-    | Tinteger -> "integer"
-    | Treal -> "real"
-    | Tboolean -> "boolean"
-
-let print_type fmt t =
-  match t with
-    | JCTnative n -> fprintf fmt "%s" (string_of_native n)
-    | JCTlogic s -> fprintf fmt "%s" s
-    | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
-    | JCTpointer (s,None,None) -> 
-	fprintf fmt "%s[..]" s.jc_struct_info_name
-    | JCTpointer (s,Some a,None) -> 
-	fprintf fmt "%s[%s..]" s.jc_struct_info_name (Num.string_of_num a)
-    | JCTpointer (s,None,Some b) -> 
-	fprintf fmt "%s[..%s]" s.jc_struct_info_name (Num.string_of_num b)
-    | JCTpointer (s,Some a,Some b) -> 
-	if Num.eq_num a b then
-	  fprintf fmt "%s[%s]" s.jc_struct_info_name (Num.string_of_num a)
-	else
-	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
-	    (Num.string_of_num a) (Num.string_of_num b)
-    | JCTnull -> fprintf fmt "(nulltype)"  
-
 let typing_error l = 
   Format.kfprintf 
     (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
@@ -68,8 +42,10 @@ let exceptions_table = Hashtbl.create 97
 
 let enum_types_table = Hashtbl.create 97
 
+(*
 let enum_conversion_functions_table = Hashtbl.create 97
 let enum_conversion_logic_functions_table = Hashtbl.create 97
+*)
 
 let structs_table = Hashtbl.create 97
 

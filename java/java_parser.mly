@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.15 2007-07-02 07:52:03 marche Exp $
+$Id: java_parser.mly,v 1.16 2007-09-18 08:41:56 marche Exp $
 
 */
 
@@ -26,12 +26,14 @@ $Id: java_parser.mly,v 1.15 2007-07-02 07:52:03 marche Exp $
   let rec build_array_type t n =
     if n=0 then t else Array_type_expr(build_array_type t (pred n))
 
+(*
   let rec build_array_creation_expr t (l,n) =
     match l with
       | [] -> 
 	  Implicit_array_creation(build_array_type t n)
       | a::b ->
 	  Explicit_array_creation(a,(build_array_creation_expr t (b,n)))
+*)
 
 %}
 
@@ -698,9 +700,13 @@ array_access:
 
 array_creation_expression:
 | NEW base_type array_dims
-    { locate_expr (JPEnew_array(build_array_creation_expr (Base_type($2)) $3)) }
+    { let (a,b) = $3 in 
+      let t = build_array_type (Base_type($2)) b in
+      locate_expr (JPEnew_array(t,a)) }
 | NEW name array_dims
-    { locate_expr (JPEnew_array(build_array_creation_expr (Type_name($2)) $3)) }
+    { let (a,b) = $3 in 
+      let t = build_array_type (Type_name($2)) b in
+      locate_expr (JPEnew_array(t,a)) }
 ;
 
 array_dims:

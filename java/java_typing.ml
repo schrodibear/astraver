@@ -27,10 +27,16 @@ let new_class_info id =
       class_info_fields = [];
       class_info_methods = [];
       class_info_extends = None;
+      class_info_is_exception = false;
     }
   in
+  eprintf "adding class %s in current environnement@." id;
   Hashtbl.add class_table id ci;
   ci
+
+(* hack *)
+let the_exception_class = new_class_info "Exception"
+let () = the_exception_class.class_info_is_exception <- true
 
 let get_type_decl d = 
     match d with
@@ -64,12 +70,14 @@ Typing level 1: extract prototypes
 **********************************)
 
 let search_for_class (loc,id) =
-  (* TODO: handling multiples packages *)
   try
     Hashtbl.find class_table id 
   with
       Not_found -> 
-	typing_error loc "class not found"
+	eprintf "class %s not yet known@." id;
+	(* looking in current directory (correct ????) TODO *)
+	(* looking in class path *)
+	raise Not_found
 
 let rec type_type ty =
   match ty with
@@ -163,6 +171,7 @@ let type_param p =
 let rec method_header retty mdecl =
   match mdecl with
     | Simple_method_declarator(id,l) -> 
+	eprintf "get prototype for method %s@." (snd id);
 	id,(Option_misc.map type_type retty), List.map type_param l
     | Array_method_declarator d -> 
 	let id,t,l = method_header retty d in
@@ -333,7 +342,7 @@ let rec classify_name current_class env name =
 			  }
 			with Not_found ->
 			  typing_error loc 
-			    "no such field in this class"
+			    "no such field in class %s" c.class_info_name
 		      end
 		  | JTYarray _ -> 
 		      if id="length" then
@@ -382,9 +391,12 @@ let type_decl d =
 	  Option_misc.map 
 	  (fun id -> 
 	     match classify_name None [] id with
-	       | ClassName ci -> ci
+	       | ClassName super -> 
+		   ci.class_info_is_exception <-
+		     super.class_info_is_exception;
+		   super
 	       | _ ->
-		   typing_error (fst (List.hd id)) "no such class") 
+		   typing_error (fst (List.hd id)) "class type expected") 
 	  c.class_extends;
 	(* fields *)
 	let fields = List.fold_left (get_field_prototypes ci) [] c.class_fields in
@@ -458,10 +470,12 @@ type method_table_info =
       mt_requires : Java_tast.assertion option;
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
+			Java_env.java_class_info option *
 			Java_tast.term list option * 
 			Java_tast.assertion) list ;
       mt_body : Java_tast.block option;
     }
+
 
   
 
@@ -984,6 +998,10 @@ let lookup_method ci (loc,id) arg_types =
   check args types and overloading/overriding
 *)
 
+let lookup_constructor ci arg_types = 
+  (* !!!!!!!!! TODO !!!!!!! *)
+  ()
+
 let rec expr current_class env e =
   let exprt = expr current_class env in
   let ty,te = 
@@ -1018,47 +1036,73 @@ let rec expr current_class env e =
 		  typing_error e1.java_pexpr_loc
 		    "not an array"	
 	  end
-      | JPEnew_array _-> assert false (* TODO *)
-      | JPEnew (_, _)-> assert false (* TODO *)
+      | JPEnew_array(t,dims) ->
+	  let ty = type_type t in 
+	  let l =
+	    List.map (fun e ->
+			let te = exprt e in
+			if is_numeric te.java_expr_type then te
+			else 
+			  typing_error e.java_pexpr_loc
+			    "integer expected")	
+	      dims
+	  in
+	  JTYarray ty, JEnew_array(ty,l)
+      | JPEnew (n, args) -> 
+	  let args = List.map exprt args in
+	  let arg_types = List.map (fun e -> e.java_expr_type) args in
+	  begin
+	    match classify_name current_class env n with
+	      | TermName t ->
+		  typing_error t.java_term_loc
+		    "class type expected"	
+	      | ClassName ci ->
+		  let _constr = lookup_constructor ci arg_types in
+		  JTYclass(true,ci),JEnew_object(ci,args)
+	  end	  
       | JPEsuper_call (_, _)-> assert false (* TODO *)
       | JPEcall (e1, id, args)-> 
 	  let args = List.map exprt args in
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in
 	  begin
-	    match e1 with
-	      | None -> 
-		  begin
-		    match current_class with
-		      | None -> assert false
-		      | Some ci ->
-(*
-			  let vi = get_this e.java_pexpr_loc env in
-			  begin match vi.java_var_info_type with
-			    | JTYclass(_,ci) ->
-*)
-			  let mi = lookup_method ci id arg_types in
-			  let ty = 
-			    match mi.method_info_result with
-			      | None -> unit_type
-			      | Some vi -> vi.java_var_info_type
-			  in
-			  if mi.method_info_is_static then
-			    ty,JEstatic_call(mi,args)
-			  else
-			    let vi = get_this e.java_pexpr_loc env in
-			    let this =
-			      {
-				java_expr_node = JEvar vi;
-				java_expr_type = vi.java_var_info_type;
-				java_expr_loc = e.java_pexpr_loc;
-			    }
-			    in
-			    ty,JEcall(this,mi,args)
-(*
-			    | _ -> assert false
-*)
-		  end
-	      | Some e -> assert false (* TODO *)
+	    let ci,te1 =
+	      match e1 with
+		| None -> 
+		    begin
+		      match current_class with
+			| None -> assert false
+			| Some ci -> ci,None
+		    end
+		| Some e ->
+		    let te = expr current_class env e in
+		    begin
+		      match te.java_expr_type with
+			| JTYclass(_,ci) -> ci,Some te
+			| _ -> typing_error e.java_pexpr_loc 
+			    "not a class type"
+		    end
+	    in
+	    let mi = lookup_method ci id arg_types in
+	    let ty = 
+	      match mi.method_info_result with
+		| None -> unit_type
+		| Some vi -> vi.java_var_info_type
+	    in
+	    if mi.method_info_is_static then
+	      ty,JEstatic_call(mi,args)
+	    else
+	      let te2 =
+		match te1 with
+		  | Some e -> e
+		  | None ->
+		      let vi = get_this e.java_pexpr_loc env in
+		      {
+			java_expr_node = JEvar vi;
+			java_expr_type = vi.java_var_info_type;
+			java_expr_loc = e.java_pexpr_loc;
+		      }
+	      in
+	      ty,JEcall(te2,mi,args)
 	  end
       | JPEfield_access _-> assert false (* TODO *)
       | JPEif (_, _, _)-> assert false (* TODO *)
@@ -1221,16 +1265,25 @@ let rec expr current_class env e =
 	java_expr_node = te; }
 
 
+let rec initializer_loc i =
+  match i with
+    | Simple_initializer e -> e.java_pexpr_loc
+    | Array_initializer (x::_) -> initializer_loc x
+    | Array_initializer [] -> assert false (* TODO *)
 			   
 let type_initializer current_class env ty i =
   match ty,i with
-    | JTYbase t, Simple_initializer e ->
+    | _, Simple_initializer e ->
 	let te = expr current_class env e in	
 	if compatible_types ty te.java_expr_type then JIexpr te
 	else
 	  typing_error e.java_pexpr_loc "type %a expected, got %a"
 	    print_type ty print_type te.java_expr_type
-    | _ -> assert false (* TODO *)
+    | JTYarray t, Array_initializer l -> 
+	assert false (* TODO *)
+    | _, Array_initializer l -> 
+	typing_error (initializer_loc i) "wrong type for initializer"
+
 
 (* statements *)
 
@@ -1286,7 +1339,18 @@ let rec statement current_class env s =
 	    with Not_found ->
 	      typing_error e.java_pexpr_loc "char, byte, short or int expected"
 	  end
-      | JPStry (_, _, _)-> assert false (* TODO *)
+      | JPStry (s, catches, finally)-> 
+	  let ts = statements current_class env s in
+	  let tl =
+	    List.map
+	      (fun (p,s) ->
+		 let vi = type_param p in
+		 let e = (vi.java_var_info_name,vi)::env in
+		 (vi,statements current_class e s))
+	      catches
+	  in
+	  JStry(ts, tl, 
+		Option_misc.map (statements current_class env) finally)
       | JPSfor_decl (_, _, _, _)-> assert false (* TODO *)
       | JPSfor (_, _, _, _)-> assert false (* TODO *)
       | JPSdo (_, _)-> assert false (* TODO *)
@@ -1315,7 +1379,9 @@ let rec statement current_class env s =
 		Not_found ->
 		  typing_error e.java_pexpr_loc "no result expected"
 	  end
-      | JPSthrow _-> assert false (* TODO *)
+      | JPSthrow e -> 
+	  let te = expr current_class env e in
+	  JSthrow te
       | JPSvar_decl _-> assert false (* TODO *)
 	  
   in 
@@ -1423,16 +1489,28 @@ let location env a = term env a
   
 
 let behavior current_class env env_result (id,b) = 
-  let env_ensures = 
+  let throws,env_ensures = 
     match b.java_pbehavior_throws with
-      | None -> env_result
-      | Some(c,id) -> assert false (* TODO *)
+      | None -> None,env_result
+      | Some(c,None) -> 
+	  begin
+	    match classify_name current_class env c with
+	      | ClassName ci ->
+		  (Some ci),env_result
+	      | TermName _ ->
+		  typing_error (fst (List.hd c))
+		    "class type expected"
+	  end
+      | Some(c,Some id) -> 
+	  assert false (* TODO *)
   in
   (id,
    Option_misc.map (assertion current_class env) b.java_pbehavior_assumes,
+   throws,
    Option_misc.map (List.map (location current_class env)) b.java_pbehavior_assigns,
    assertion current_class env_ensures b.java_pbehavior_ensures)
 	
+
 
 let methods_table = Hashtbl.create 97
 

@@ -5,7 +5,7 @@ WHYLIB=$(shell pwd)/../../../lib
 
 EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj
 
-KRAKATOA=../../../bin/krakatoa.byte
+KRAKATOA=ocamlrun -bt ../../../bin/krakatoa.byte
 KRAKATOALIB=$(shell pwd)/../../../lib
 
 EXECKRAKATOA=KRAKATOALIB=$(KRAKATOALIB) $(KRAKATOA)

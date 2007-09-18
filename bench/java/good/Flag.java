@@ -55,7 +55,7 @@ class Flag {
       @                       is_monochrome(t,b,r,WHITE) &&
       @                       is_monochrome(t,r,t.length,RED));
       @*/
-    public static void flag(int t[]) {
+    public void flag() {
 	int b = 0;
 	int i = 0;
 	int r = t.length;

@@ -1,14 +1,7 @@
 
-/*
 class NoCreditException extends Exception {
 
-    / *@ behavior created:
-      @   assigns \nothing
-      @   ensures true
-      @* /
-    public NoCreditException() {}
 }
-*/
 
 public class Purse {
     
@@ -44,7 +37,7 @@ public Purse() {
 	balance -= s;
     }
     
-    /* @ requires s >= 0;
+    /*@ requires s >= 0;
       @ behavior done:
       @   assigns balance;
       @   ensures s <= \old(balance) && balance == \old(balance) - s;
@@ -52,7 +45,6 @@ public Purse() {
       @   assigns \nothing;
       @   signals (NoCreditException) s > \old(balance) ;
       @*/
-    /*
     public void withdraw2(int s) throws NoCreditException {
 	if (balance >= s) {
 	    balance = balance - s;
@@ -61,7 +53,6 @@ public Purse() {
 	    throw new NoCreditException();
 	}
     }
-    */
 
     /*@ requires p1 != null && p2 != null && p1 != p2;
       @ behavior ok:
@@ -70,7 +61,7 @@ public Purse() {
       @*/
     public static int test(Purse p1, Purse p2) {
 	p1.balance = 0;
-	// p2.credit(100);
+	p2.credit(100);
 	return p1.balance;
     }
 
@@ -91,23 +82,21 @@ public Purse() {
 
     */
 
-    /* @ requires p1 != null && p2 != null && p1 != p2;
+    /*@ requires p1 != null && p2 != null && p1 != p2;
       @ behavior ok:
       @   assigns p2.balance;
       @   ensures \result == \old(p1.balance);
       @*/
-    /*    public static int test3(Purse p1,Purse p2) {
+    public static int test3(Purse p1,Purse p2) {
 	p2.credit(100);
 	return p1.balance;
     }
-    */
 
-    /* @ requires p != null;
+    /*@ requires p != null;
       @ behavior ok:
       @   assigns p.balance ;
-      @   ensures \result == (\old(p.balance) >= 1000);
+      @   ensures \result <==> (\old(p.balance) >= 1000);
       @*/
-    /*
     public static boolean test4(Purse p) {
 	try {
 	    p.withdraw2(1000);
@@ -117,7 +106,6 @@ public Purse() {
 	    return false; 
 	}
     }
-    */
 
     
     /* @ behavior not_ok:
