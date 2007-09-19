@@ -99,6 +99,20 @@ and method_info =
      method_info_result : java_var_info option ;
      mutable method_info_calls : method_info list;
    }
+
+and constructor_info = 
+    {
+      constr_info_tag : int;
+      constr_info_class : java_class_info;
+      mutable constr_info_this : java_var_info option;
+      mutable constr_info_result : java_var_info option;
+      constr_info_parameters : java_var_info list;
+      constr_info_calls : method_info list;
+(*
+     mutable constructor_entry_graph : java_env_entry list
+*)
+    }
+
     
 and logic_type_entry =
     {
@@ -134,20 +148,10 @@ and axiom_entry =
       mutable axiom_entry_effects : effects ;
     }
     
-and constructor_entry = 
-    {
-     mutable constructor_entry_trans_name : string;      
-     constructor_entry_class : java_class_info;
-     constructor_entry_routine : routine_entry;
 (*
-     mutable constructor_entry_graph : java_env_entry list
-*)
-    }
-
 and routine_entry =
     {
      routine_entry_parameters : t;
-(*
      mutable routine_entry_parameters_as_local_var : t;
      mutable routine_entry_produce_body : bool;
      mutable routine_entry_local_vars : t;
@@ -159,8 +163,8 @@ and routine_entry =
      mutable routine_entry_fields_writes_nothing : 
        java_field_info Inttagset.t;
      mutable routine_entry_use_transactions : bool
-       *)
    }
+*)
 
 and effects = 
     {
@@ -203,6 +207,7 @@ and java_class_info =
       class_info_name : string;
       mutable class_info_fields : java_field_info list;
       mutable class_info_methods : method_info list;
+      mutable class_info_constructors : constructor_info list;
       mutable class_info_extends : java_class_info option;
       mutable class_info_is_exception : bool;
 (*

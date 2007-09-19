@@ -228,19 +228,19 @@ let get_fun mi =
   with
       Not_found -> assert false
 
-let create_fun mi =
+let create_fun tag result name params =
   let nfi =
-    match mi.method_info_result with
+    match result with
       | None ->
-	  Jc_pervasives.make_fun_info mi.method_info_name 
+	  Jc_pervasives.make_fun_info name 
 	    Jc_pervasives.unit_type
       | Some vi ->
-	  Jc_pervasives.make_fun_info mi.method_info_name
+	  Jc_pervasives.make_fun_info name
 	    (tr_type vi.java_var_info_type) 
   in
   nfi.jc_fun_info_parameters <-
-    List.map create_var mi.method_info_parameters;
-  Hashtbl.add funs_table mi.method_info_tag nfi;
+    List.map create_var params;
+  Hashtbl.add funs_table tag nfi;
   nfi
 
 (*s exceptions *)
@@ -336,6 +336,7 @@ let rec term t =
 		  JCTderef(shift,snd (List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
+      | JTarray_range _ -> assert false
       | JTold t -> JCTold(term t)
 
   in { jc_term_loc = t.java_term_loc ; 
@@ -553,6 +554,18 @@ let rec location_set t =
 		  JCLSderef(shift,snd (List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
+      | JTarray_range(t1,t2,t3) -> 
+	  begin
+	    match t1.java_term_type with
+	      | JTYarray ty ->
+		  let st = get_array_struct ty in
+		  let t1' = location_set t1 in
+		  let t2' = term t2 in
+		  let t3' = term t3 in
+		  let shift = JCLSrange(t1', t2', t3') in
+		  JCLSderef(shift,snd (List.hd st.jc_struct_info_fields))
+	      | _ -> assert false
+	  end
       | JTold t -> assert false (* TODO *)
   
 let location t =
@@ -573,6 +586,18 @@ let location t =
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', t2', t2') in
+		  JCLderef(shift,snd (List.hd st.jc_struct_info_fields))
+	      | _ -> assert false
+	  end
+      | JTarray_range(t1,t2,t3) -> 
+	  begin
+	    match t1.java_term_type with
+	      | JTYarray ty ->
+		  let st = get_array_struct ty in
+		  let t1' = location_set t1 in
+		  let t2' = term t2 in
+		  let t3' = term t3 in
+		  let shift = JCLSrange(t1', t2', t3') in
 		  JCLderef(shift,snd (List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
@@ -814,13 +839,48 @@ let tr_method mi req behs b acc =
 	      let _nvi = create_var vi in 
 	      Some vi.java_var_info_type
 	in
-	let nfi = create_fun mi in
+	let nfi = 
+	  create_fun mi.method_info_tag mi.method_info_result 
+	    mi.method_info_name mi.method_info_parameters
+	in
 	JCfun_def(tr_type_option t,
 		  nfi.jc_fun_info_name,
 		  params,
 		  { jc_fun_requires = assertion_option req;
 		    jc_fun_behavior = List.map behavior behs},
 		  Some (statements l))::acc
+	  
+let tr_constr ci req behs b acc =
+  let params = List.map create_var ci.constr_info_parameters in
+  let this =
+    match ci.constr_info_this with
+      | None -> assert false
+      | Some vi -> (create_var vi) 
+  in
+  let _result =
+    match ci.constr_info_result with
+      | None -> assert false
+      | Some vi -> (create_var vi) 
+  in
+  let nfi = 
+    create_fun ci.constr_info_tag None
+      ci.constr_info_class.class_info_name ci.constr_info_parameters
+  in
+  let body = statements b @ 
+    [dummy_loc_statement (JCTSreturn(this.jc_var_info_type,
+				     dummy_loc_expr 
+				       this.jc_var_info_type
+				       (JCTEvar this)))] 
+  in
+  let body = 
+    dummy_loc_statement (JCTSdecl(this,None,make_block body))
+  in
+  JCfun_def(this.jc_var_info_type,
+	    nfi.jc_fun_info_name,
+	    params,
+	    { jc_fun_requires = assertion_option req;
+	      jc_fun_behavior = List.map behavior behs},
+	    Some [body])::acc
 	  
 (*s axioms *)
 

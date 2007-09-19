@@ -39,6 +39,7 @@ let rec term acc t =
     | JTunary (_,t) -> term acc t
 *)
     | JTarray_access (t1, t2) -> term (term acc t1) t2
+    | JTarray_range (t1, t2, t3) -> term (term (term acc t1) t2) t3
     | JTarray_length t1
     | JTfield_access (t1, _) -> term acc t1
 

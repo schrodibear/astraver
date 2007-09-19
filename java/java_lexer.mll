@@ -4,7 +4,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.8 2007-07-02 07:52:03 marche Exp $
+$Id: java_lexer.mll,v 1.9 2007-09-19 08:58:32 marche Exp $
 
 ***************************************************************************)
 
@@ -189,6 +189,13 @@ i*)
 let space = [' ' '\t' '\r']
 let backslash_escapes =
   ['\\' '"' '\'' 'n' 't' 'b' 'r' 'f' (* octal manque ! *)]
+let rD = ['0'-'9']
+let rL = ['a'-'z' 'A'-'Z' '_']
+let rH = ['a'-'f' 'A'-'F' '0'-'9']
+let rE = ['E''e']['+''-']? rD+
+let rFS	= ('f'|'F'|'l'|'L')
+let rIS = ('u'|'U'|'l'|'L')*
+
 
 rule token = parse
   | space+
@@ -215,6 +222,8 @@ rule token = parse
       { COMMA }
   | '.'
       { DOT }
+  | ".."
+      { DOTDOT }
   | '+'                 
       { PLUS }
   | '-'       
@@ -296,7 +305,7 @@ rule token = parse
 
       (* decimal constants *)
 
-  | ('0' | ['1'-'9']['0'-'9']*) ['l''L']? as n
+  | ('0' | ['1'-'9']rD*) ['l''L']? as n
       { INTCONSTANT n }
 
       (* octal constants *)
@@ -309,15 +318,19 @@ rule token = parse
   | '0'['x''X']['0'-'9' 'A'-'F' 'a'-'f']+['l''L']? as n 
     { INTCONSTANT n }
 
+      (* trick to deal with intervals like 0..10 *)
+
+  | (rD+ as n) ".."         { raise (Dotdot n) }
+
       (* floating-point constants *)
 
-  | ['0'-'9']+ '.' ['0'-'9']* (['e''E']['-''+']?['0'-'9']+)? ['f''F''d''D'] ?
+  | rD+ '.' rD* (['e''E']['-''+']?rD+)? ['f''F''d''D'] ?
       { REALCONSTANT (lexeme lexbuf) }
 
-  | '.' ['0'-'9']+ (['e''E']['-''+']?['0'-'9']+)? ['f''F''d''D'] ?
+  | '.' rD+ (['e''E']['-''+']?rD+)? ['f''F''d''D'] ?
       { REALCONSTANT (lexeme lexbuf) }
 
-  | ['0'-'9']+ ['e''E'] ['-''+']?['0'-'9']+ ['f''F''d''D'] ?
+  | rD+ ['e''E'] ['-''+']?rD+ ['f''F''d''D'] ?
       { REALCONSTANT (lexeme lexbuf) }
 
       (* character constants *)
@@ -408,6 +421,7 @@ let next_token lexbuf =
   if !dotdot_mem then
     begin
       dotdot_mem := false;
+      Format.eprintf "DOTDOT@.";
       DOTDOT
     end
   else

@@ -18,6 +18,23 @@ type method_table_info =
 val methods_table : 
   (int, method_table_info) Hashtbl.t
 
+type constructor_table_info =
+    { ct_constr_info : Java_env.constructor_info;
+      ct_requires : Java_tast.assertion option;
+      ct_behaviors : (Java_ast.identifier * 
+			Java_tast.assertion option * 
+			Java_env.java_class_info option *
+			Java_tast.term list option * 
+			Java_tast.assertion) list ;
+(*
+      ct_eci : int;
+*)
+      ct_body : Java_tast.block;
+    }
+
+val constructors_table : 
+  (int, constructor_table_info) Hashtbl.t
+
 val fields_table : 
   (int, Java_tast.initialiser option) Hashtbl.t
 

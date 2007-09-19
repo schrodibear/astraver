@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.16 2007-09-18 08:41:56 marche Exp $
+$Id: java_parser.mly,v 1.17 2007-09-19 08:58:32 marche Exp $
 
 */
 
@@ -687,6 +687,8 @@ primary_no_new_array:
     { locate_expr (JPEnew($2,$4)) }
 | array_access
     { let (a,b)=$1 in locate_expr (JPEarray_access(a,b)) }
+| array_range
+    { let (a,b,c)=$1 in locate_expr (JPEarray_range(a,b,c)) }
 | BSOLD LEFTPAR expr RIGHTPAR
     { locate_expr (JPEold $3) }
 ;
@@ -696,6 +698,13 @@ array_access:
     { ($1,$3) }
 | name LEFTBRACKET expr RIGHTBRACKET
     { (locate_expr (JPEname $1),$3) }
+;
+
+array_range:
+| primary_no_new_array LEFTBRACKET expr DOTDOT expr RIGHTBRACKET
+    { ($1,$3,$5) }
+| name LEFTBRACKET expr DOTDOT expr RIGHTBRACKET
+    { (locate_expr (JPEname $1),$3,$5) }
 ;
 
 array_creation_expression:

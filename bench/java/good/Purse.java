@@ -9,15 +9,13 @@ public class Purse {
 
     //@ invariant balance_non_negative: balance >= 0;
 
-    /* @ behavior created:
-      @   assigns \nothing
-      @   ensures balance == 0
+    /*@ behavior created:
+      @   assigns \nothing;
+      @   ensures balance == 0;
       @*/
-    /*
-public Purse() {
+    public Purse() {
 	balance = 0;
     }
-    */
 
     /*@ requires s >= 0;
       @ behavior done:
@@ -66,11 +64,11 @@ public Purse() {
     }
 
 
-    /* @ behavior ok:
-      @   assigns \nothing
-      @   ensures \result == 150
+    /*@ behavior ok:
+      @   assigns \nothing;
+      @   ensures \result == 150;
       @*/
-    /*    public static int test2() {
+    public static int test2() {
 	Purse p1 = new Purse();
 	Purse p2 = new Purse();
 	p1.credit(100);
@@ -79,8 +77,6 @@ public Purse() {
 	p2.withdraw(100);
 	return p1.balance+p2.balance;
     }
-
-    */
 
     /*@ requires p1 != null && p2 != null && p1 != p2;
       @ behavior ok:

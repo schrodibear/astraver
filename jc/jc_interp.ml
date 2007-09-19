@@ -1366,7 +1366,8 @@ let tr_fun f spec body acc =
 
 let tr_logic_type id acc = Type(id,[])::acc
 
-let tr_axiom id p acc = Axiom(id,assertion None "" p)::acc
+let tr_axiom id p acc = 
+  Axiom(id,assertion None "" p)::acc
 
 let tr_exception ei acc =
   let typ = match ei.jc_exception_info_type with

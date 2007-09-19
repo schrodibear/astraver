@@ -135,6 +135,18 @@ let main () =
 	(* production phase 4 : generation of Jessie functions *)
 	let decls = 
 	  Hashtbl.fold 
+	    (fun _ ct acc ->
+	       let f = ct.Java_typing.ct_constr_info in
+	       printf "Generating Why function %s@." 
+		 f.Java_env.constr_info_class.class_info_name;
+	       Java_interp.tr_constr f ct.Java_typing.ct_requires 
+		 ct.Java_typing.ct_behaviors 
+		 ct.Java_typing.ct_body acc)
+	    Java_typing.constructors_table
+	    decls
+	in	       
+	let decls = 
+	  Hashtbl.fold 
 	    (fun _ mt acc ->
 	       let f = mt.Java_typing.mt_method_info in
 	       printf "Generating Why function %s@." 

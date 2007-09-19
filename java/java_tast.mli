@@ -15,6 +15,7 @@ type term_node =
     | JTstatic_field_access of java_class_info * java_field_info
     | JTarray_length of term 
     | JTarray_access of term * term
+    | JTarray_range of term * term * term
 
 and term =
     { java_term_node : term_node;
