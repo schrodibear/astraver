@@ -27,6 +27,7 @@ void initialize(int **a, int n, int m) {
     @   0 <= i <= n &&
     @   \forall int i0; 0 <= i0 < i => 
     @     \forall int j; 0 <= j < m => a[i0][j] == i0+j
+    @ loop_assigns a[..][..]
     @*/
   for (i = 0; i < n; i++)
     /*@ invariant 
@@ -34,10 +35,35 @@ void initialize(int **a, int n, int m) {
       @  \forall int i0, int j0; 
       @    ((0 <= i0 < i && 0 <= j0 < m) || (i0 == i && 0 <= j0 < j)) => 
       @    a[i0][j0] == i0+j0
+      @ loop_assigns a[i][..]
       @*/
     for (j = 0; j < m; j++)
       a[i][j] = i+j;
 }
+
+/*@ requires 0 <= n && 0 <= m && is_matrix(a,n,m)
+  @ ensures  \forall int i, int j; 0 <= i < n => 0 <= j < m => a[i][j] == i+j
+  @*/
+void initialize2(int **a, int n, int m) {
+  int i, j;
+  /*@ invariant 
+    @   0 <= j <= m &&
+    @   \forall int j0; 0 <= j0 < j => 
+    @     \forall int i; 0 <= i < n => a[i][j0] == i+j0
+    @ // loop_assigns a[..][..]
+    @*/
+  for (j = 0; j < m; j++)
+    /*@ invariant 
+      @  0 <= i <= n &&
+      @  \forall int i0, int j0; 
+      @    ((0 <= j0 < j && 0 <= i0 < n) || (j0 == j && 0 <= i0 < i)) => 
+      @    a[i0][j0] == i0+j0
+      @ // loop_assigns a[..][j]
+      @*/
+    for (i = 0; i < n; i++)
+      a[i][j] = i+j;
+}
+
 
 /*@ requires 
   @   0 <= n && 0 <= m
