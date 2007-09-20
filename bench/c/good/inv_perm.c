@@ -154,3 +154,8 @@ int main() {
 }
 #endif
 
+/*
+Local Variables: 
+compile-command: "make inv_perm.gui"
+End: 
+*/

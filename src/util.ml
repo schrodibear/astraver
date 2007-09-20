@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.130 2007-09-12 13:41:17 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.131 2007-09-20 08:22:05 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -257,14 +257,6 @@ and occur_arrow id bl c = match bl with
 
 let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
-(***
-  | PureType PTbool ->
-      let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
-      let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
-      let n = Ident.bound x in
-      let p = subst_in_predicate (subst_onev x n) p in
-      Forallb (is_wp, x, n, p, simplify ptrue, simplify pfalse)
-***)
   | PureType PTbool when not fast_wp ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
@@ -279,12 +271,28 @@ let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
       let triggers = List.map (List.map (subst_in_pattern s)) triggers in
       Forall (is_wp, x, n, mlize_type v, triggers, p)
 
+let pforall ?(is_wp=false) x v p =
+  if p = Ptrue then Ptrue else forall ~is_wp x v p
+
 let foralls ?(is_wp=false) =
   List.fold_right
     (fun (x,v) p -> if occur_predicate x p then forall ~is_wp x v p else p)
-    
-let pforall ?(is_wp=false) x v p =
-  if p = Ptrue then Ptrue else forall ~is_wp x v p
+
+let foralls_many ?(is_wp=false) bl p =
+  let l1,l2 = 
+    List.fold_right 
+      (fun ((x,v) as xv) (l1,l2) ->
+	if occur_predicate x p then 
+	  let n = Ident.bound x in xv::l1, n::l2
+	else
+	  l1,l2)
+      bl ([],[])
+  in
+  let s = subst_manyv (List.map fst l1) l2 in
+  let p = subst_in_predicate s p in
+  List.fold_right2 
+    (fun (x,v) n p -> Forall (is_wp, x, n, mlize_type v, [], p))
+    l1 l2 p
 
 let exists x v p =
   let n = Ident.bound x in
@@ -298,6 +306,27 @@ let exists x v p =
   let n = Ident.bound x in
   let p = subst_in_predicate (subst_onev x n) p in
   Exists (x, n, mlize_type v, p)
+
+(* decomposing universal quantifiers, renaming variables on the fly *)
+
+let decomp_forall ?(ids=Idset.empty) p = 
+  let rec decomp bv = function
+    | Forall (_,id,n,pt,_,p) ->
+	decomp ((id,n,pt) :: bv) p
+    | p ->
+	let s,_,bv = 
+	  List.fold_left 
+	    (fun (s,ids,bv) (id,n,pt) -> 
+	      let id' = next_away id ids in
+	      let s = Idmap.add n id' s in
+	      let ids = Idset.add id' ids in
+	      s, ids, (id',pt) :: bv)
+	    (Idmap.empty, Idset.union ids (predicate_vars p), []) bv
+	in
+	bv, subst_in_predicate s p
+  in
+  decomp [] p
+
 
 (* misc. functions *)
 
@@ -374,15 +403,10 @@ let intros ctx p my_fresh_hyp =
     | Pnamed (_, p) ->
 	introb ctx pol p
     | c -> 
-	 ctx, c in 
+	 ctx, c 
+  in 
   let l,g = introb ctx 1 p in 
-    List.rev l , g
-
-
-
-
-
-
+  List.rev l, g
 
 let array_info env id =
   let ty = type_in_env env id in

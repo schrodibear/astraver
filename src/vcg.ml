@@ -293,14 +293,26 @@ let add_ctx_vars =
    return the new goal (context-conclusion), together with a proof-term
    modifier to apply to the proof-term found for the new goal. *)
 let rec intros ctx = function
+(*
   | Forall (_, id, n, t, _, p) ->
-      (*let id' = next_away id (predicate_vars p) in*)
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
       let ctx', concl', f = intros (Svar (id', t) :: ctx) p' in
       ctx', concl',
       (fun pr -> 
 	 ProofTerm (cc_lam [id', CC_var_binder (TTpure t)] (CC_hole (f pr))))
+*)
+  | Forall _ as p ->
+      let ids = add_ctx_vars Idset.empty ctx in
+      let bv, p' = decomp_forall ~ids p in
+      let ctx = 
+	List.fold_left (fun ctx (id', t) -> Svar (id', t) :: ctx) ctx bv
+      in
+      let ctx', concl', f = intros ctx p' in
+      ctx', concl',
+      (fun pr -> 
+	 let bvars = List.map (fun (x, t) -> x, CC_var_binder (TTpure t)) bv in
+	 ProofTerm (cc_lam bvars (CC_hole (f pr))))
   | Pimplies (_, a, b) -> 
       let h = fresh_hyp () in 
       let ctx', concl', f = intros (Spred (h, a) :: ctx) b in
@@ -514,10 +526,7 @@ let discharge_methods ctx concl =
   try rewrite_var ctx concl with Exit ->
   try discriminate ctx concl with Exit ->
   try boolean_destruct ctx concl with Exit ->
-(***
-  try should_be_a_wp ctx with Exit ->
-***)
-  try linear ctx concl with Exit ->
+  try if fast_wp then raise Exit; linear ctx concl with Exit ->
   boolean_case ctx concl
   end
 
@@ -535,7 +544,7 @@ let print_sequent fmt (ctx, concl) =
 let count = ref 0
 
 let discharge loc ctx concl =
-  let pr = (if all_vc then linear else discharge_methods) ctx concl in
+  let pr = (if all_vc then raise Exit else discharge_methods) ctx concl in
   log (snd loc) (ctx, concl) None;
   incr count;
   if_verbose_2 eprintf "one obligation trivially discharged [%d]@." !count;
@@ -564,11 +573,6 @@ let clean_sequent hyps concl =
     | [] ->
 	[]
     | Svar (x, v) as h :: hl -> 
-(***
-	if List.exists (occur_as_var x) hl then
-	  clean (filter_up_to x hl)
-	else 
-***)
 	if List.exists (occur_in_hyp x) hl || occur_predicate x concl then
 	  h :: clean hl
 	else

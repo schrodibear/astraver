@@ -100,7 +100,7 @@ fastwp.bench.simplify:
 fastwp.bench.ergo:
 	rm -f good/*_why.sx
 	for f in $(FASTWPBENCH) ; do \
-	  $(BWHY) --why --fast-wp good/$$f.mlw; \
+	  $(WHY) --why --fast-wp good/$$f.mlw; \
 	done
 	dp -no-timings good/*_why.why
 

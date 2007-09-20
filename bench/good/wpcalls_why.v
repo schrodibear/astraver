@@ -9,12 +9,12 @@ Require Import Why.
 
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p_po_1 : 
-  forall (x: Z),
   forall (x0: Z),
-  forall (HW_1: x0 = (1 - x)),
+  forall (x: Z),
+  forall (HW_1: x = (1 - x0)),
   forall (x1: Z),
-  forall (HW_2: x1 = (1 - x0)),
-  x1 = x.
+  forall (HW_2: x1 = (1 - x)),
+  x1 = x0.
 Proof.
 intuition.
 Save.

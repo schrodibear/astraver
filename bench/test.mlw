@@ -1,32 +1,48 @@
-
-logic N,X : int 
-
-parameter mem : int array
-
-parameter i1,i2,i3 : int ref
-
-let seq1 () =
-  i2 := (neg_int (access !mem (add_int X !i1)));
-  (assert { 1 <= i1 <= N and 1 <= -i2 <= N and -N <= i3 <= -1 }; void)
-
-(***
-predicate p() = true
-
-exception Return
-
-let f = fun (n : int) ->
-  try
-    let found = ref false in
-    let i = ref 0 in
-    while (lt_int_ !i 10) do
-    { invariant true variant 0 }
-        if (eq_int_ !i n)
-        then begin found := true; raise Return end
-        else i := add_int !i 1
-    done;
-    raise Return
-  with
-    Return -> void
-  end
-  { p }
-***)
+type x1
+type 'a x2
+type x3
+exception Break
+exception Exception of x1
+exception Return_void of unit
+logic x4 : 'a x2, x1 -> 'a
+logic x5 : x3, x3 -> prop
+logic x6 : x3,
+x1 -> prop
+parameter x7: (x1 ref)
+parameter x8: (x1 ref)
+parameter x9: (x1 ref)
+parameter x10: (bool x2 ref)
+parameter x11: (int x2 ref)
+parameter x12: (int x2 ref)
+parameter x13: (int x2 ref)
+parameter x14: (int x2 ref)
+parameter x15: (int x2 ref)
+parameter x16: (int x2 ref)
+parameter x17: (x1 x2 ref)
+parameter x18: (x1 x2 ref)
+parameter x19: (x1 x2 ref)
+parameter x20: (x1 x2 ref)
+parameter x21: (x1 x2 ref)
+parameter x22: (x1 x2 ref)
+parameter x23: (x3 ref)
+parameter x24: (x1 ref)
+parameter x25:
+  unit ->
+    {} returns result: x1
+    reads x7, x9, x8, x23, x17, x18, x20, x22 writes x7, x9, x8, x11, x12,
+    x13, x15, x16, x19, x23, x17, x14, x10, x18, x20, x21, x22
+    raises Exception { x6(x23, result) | Exception => x5(x23, x23) }
+let x27 = (fun (x28: int) ->  ((init: try (try (let x29 = x28 in
+  ((if ((eq_int_ x29) 0) then (((ref_set x24) (x25 void));
+  (raise Break)) else void); ((if ((eq_int_ x29) 1) then (((ref_set x24) (x25
+  void)); (raise Break)) else void); ((if ((eq_int_ x29) 2) then (((ref_set
+  x24) (x25 void)); (raise Break)) else void); ((if ((eq_int_ x29) 3) then
+  (((ref_set x24) (x25 void)); (raise Break)) else void); ((if ((eq_int_ x29)
+  4) then (((ref_set x24) (x25 void)); (raise Break)) else void);
+  ((if ((eq_int_ x29) 5) then (((ref_set x24) (x25 void));
+  (raise Break)) else void); ((if ((eq_int_ x29) 6) then (((ref_set x24) (x25
+  void)); (raise Break)) else void); (if ((eq_int_ x29) 9) then (((ref_set
+  x24) (x25 void)); (raise Break)) else void))))))))) with Break -> void end;
+  (raise (Return_void void)))
+  with Return_void x30 -> x30 end) {  x5(x23, x23)
+                                     | Exception => x5(x23, x23)  }))

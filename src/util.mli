@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.57 2007-08-31 08:16:09 marche Exp $ i*)
+(*i $Id: util.mli,v 1.58 2007-09-20 08:22:05 filliatr Exp $ i*)
 
 open Cc
 open Logic
@@ -93,9 +93,19 @@ val forall :
 val foralls : ?is_wp:is_wp -> (Ident.t * type_v) list -> predicate -> predicate
 val exists : Ident.t -> type_v -> predicate -> predicate
 
+(* more efficient version when there are many variables *)
+val foralls_many : 
+  ?is_wp:is_wp -> (Ident.t * type_v) list -> predicate -> predicate
+
+
 (* versions performing simplifcations *)
 val pforall : ?is_wp:is_wp -> Ident.t -> type_v -> predicate -> predicate
 val pexists : Ident.t -> type_v -> predicate -> predicate
+
+(* decomposing universal quantifiers, renaming variables on the fly *)
+
+val decomp_forall : 
+  ?ids:Ident.set -> predicate -> (Ident.t * pure_type) list * predicate
 
 (*s Occurrences *)
 

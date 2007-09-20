@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.70 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.71 2007-09-20 08:22:05 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -179,13 +179,13 @@ let external_type = function
   | _ -> false
 
 let has_type ty fmt id = match ty with
-| PTexternal([PTexternal (_,ty)], id) when id == farray ->
-    fprintf fmt "(FORALL (k) (EQ (%a (select %a k)) |@@true|))" 
-      sortp ty ident id
-| PTexternal(_, ty) ->
-    fprintf fmt "(EQ (%a %a) |@@true|)" sortp ty ident id
-| _ -> 
-    assert false
+  | PTexternal([PTexternal (_,ty)], id) when id == farray ->
+      fprintf fmt "(FORALL (k) (EQ (%a (select %a k)) |@@true|))" 
+	sortp ty ident id
+  | PTexternal(_, ty) ->
+      fprintf fmt "(EQ (%a %a) |@@true|)" sortp ty ident id
+  | _ -> 
+      assert false
 
 let rec print_predicate pos fmt p = 
   let pp = print_predicate pos in
@@ -250,6 +250,12 @@ let rec print_predicate pos fmt p =
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id' pp p'
+(*
+  | Forall _ as p ->
+      let bv,p = Util.decomp_forall p in
+      let var fmt (x,_) = ident fmt x in
+      fprintf fmt "@[(FORALL (%a)@ %a)@]" (print_list space var) bv pp p
+*)
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in

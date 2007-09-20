@@ -32,12 +32,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p3_po_1 : 
-  forall (x: Z),
   forall (x0: Z),
-  forall (HW_1: x0 = (x + 1)),
+  forall (x: Z),
+  forall (HW_1: x = (x0 + 1)),
   forall (x1: Z),
-  forall (HW_2: x1 = (x0 + 2)),
-  x1 = (x + 3).
+  forall (HW_2: x1 = (x + 2)),
+  x1 = (x0 + 3).
 Proof.
 intuition.
 Save.
@@ -153,24 +153,24 @@ Save.
 
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p13_po_1 : 
-  forall (x: Z),
   forall (x0: Z),
-  forall (HW_1: x0 = (x + 1)),
+  forall (x: Z),
+  forall (HW_1: x = (x0 + 1)),
   forall (x1: Z),
-  forall (HW_2: x1 = (x0 + 1)),
-  x1 = (x + 2).
+  forall (HW_2: x1 = (x + 1)),
+  x1 = (x0 + 2).
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p13a_po_1 : 
-  forall (x: Z),
   forall (x0: Z),
-  forall (HW_1: x0 = (x + 1)),
+  forall (x: Z),
+  forall (HW_1: x = (x0 + 1)),
   forall (x1: Z),
-  forall (HW_2: x1 = (x0 + 1)),
-  x1 = (x + 2).
+  forall (HW_2: x1 = (x + 1)),
+  x1 = (x0 + 2).
 Proof.
 intuition.
 Save.

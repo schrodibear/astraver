@@ -5,10 +5,10 @@ Require Import Why.
 
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma f_po_1 : 
-  forall (b: Z),
   forall (b0: Z),
-  forall (HW_1: b0 = (1 - b)),
-  (b0 = b0 /\ b0 = (1 - b)).
+  forall (b: Z),
+  forall (HW_1: b = (1 - b0)),
+  (b = b /\ b = (1 - b0)).
 Proof.
 intuition.
 Save.

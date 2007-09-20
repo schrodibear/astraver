@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.23 2007-09-11 08:32:58 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.24 2007-09-20 08:22:05 filliatr Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -175,7 +175,7 @@ let merge s1 s2 =
     d (s12, Ptrue, Ptrue)
 
 let wpforall = pforall ~is_wp:true
-let wpforalls = foralls ~is_wp:true
+let wpforalls = foralls_many ~is_wp:true
 
 let ssubst_in_predicate s p = simplify (tsubst_in_predicate s p)
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.133 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: main.ml,v 1.134 2007-09-20 08:22:05 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -245,7 +245,9 @@ let interp_program id p =
     | None -> 
 	if_debug eprintf "no WP => no obligation@."
     | Some wp -> 
+	if_debug eprintf "VCs from WP...@?";
 	let ol,pr = Vcg.vcg_from_wp ids wp in
+	if_debug eprintf "done@.";
 	push_obligations ol;
 	push_validation (ids ^ "_wp") (TTpred wp.a_value) (CC_hole pr)
   end;

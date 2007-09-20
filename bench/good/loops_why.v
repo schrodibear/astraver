@@ -32,10 +32,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma oppose_po_1 : 
-  forall (x: Z),
   forall (x0: Z),
-  forall (HW_1: x0 = (Zopp x)),
-  x0 = (Zopp x).
+  forall (x: Z),
+  forall (HW_1: x = (Zopp x0)),
+  x = (Zopp x0).
 Proof.
 intuition.
 Save.

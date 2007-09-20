@@ -208,42 +208,6 @@ Proof.
 destruct v1; intuition.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma arr1_po_1 : 
   forall (v6: (array Z)),
