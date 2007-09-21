@@ -34,10 +34,12 @@ let rec term acc t =
     | JTbin (t1,_,_,t2) -> term (term acc t1) t2
 (*
     | JTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
-    | JTcast(t,_)
-    | JTinstanceof(t,_)
-    | JTunary (_,t) -> term acc t
 *)
+(*
+    | JTinstanceof(t,_)
+    | JTunary (_,t) 
+*)
+    | JTcast(_,t) -> term acc t
     | JTarray_access (t1, t2) -> term (term acc t1) t2
     | JTarray_range (t1, t2, t3) -> term (term (term acc t1) t2) t3
     | JTarray_length t1
@@ -48,7 +50,8 @@ let rec assertion acc p =
   | JAtrue 
   | JAfalse -> acc
   | JAnot a -> assertion acc a
-  | JAbin(t1,_,op,t2) -> term (term acc t1) t2
+  | JAbin_obj(t1,_,t2)
+  | JAbin(t1,_,_,t2) -> term (term acc t1) t2
   | JAapp(f,lt) -> f::(List.fold_left term acc lt)
   | JAand(p1,p2) | JAor(p1,p2) 
   | JAimpl (p1,p2) | JAiff(p1,p2) -> 
@@ -114,6 +117,7 @@ let rec expr acc e : 'a list =
     | JEassign_field_op (e1, _, _, e2)
     | JEarray_access (e1, e2) 
     | JEbin (e1, _, e2) -> expr (expr acc e1) e2
+    | JEcast (_,e) -> expr acc e
 
 let initialiser acc i =
   match i with

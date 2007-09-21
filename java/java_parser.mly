@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.17 2007-09-19 08:58:32 marche Exp $
+$Id: java_parser.mly,v 1.18 2007-09-21 07:29:56 marche Exp $
 
 */
 
@@ -71,7 +71,7 @@ $Id: java_parser.mly,v 1.17 2007-09-19 08:58:32 marche Exp $
 %token CHAR CLASS CONST DEFAULT DOUBLE ELSE EXTENDS
 %token FALSE FINAL FINALLY FLOAT FUTURE GENERIC GHOST GOTO 
 %token IMPLEMENTS IMPORT INNER INSTANCEOF INT INTEGER INTERFACE LONG
-%token NATIVE OPERATOR OUTER PACKAGE PRIVATE PROTECTED
+%token MODEL NATIVE OPERATOR OUTER PACKAGE PRIVATE PROTECTED
 %token PUBLIC REST REAL SHORT STATIC 
 %token THROWS TRANSIENT TRUE VAR VOID VOLATILE
 %token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW 
@@ -420,11 +420,11 @@ interface_member_declarations:
 
 interface_member_declaration:
 | variable_declaration
-    { JPIMconstant($1) }
+    { JPFvariable($1) }
 | method_header SEMICOLON
-    { JPIMmethod($1) }
+    { JPFmethod($1,None) }
 | ANNOT
-    { let (loc,s)=$1 in JPIMannot(loc,s) }
+    { let (loc,s)=$1 in JPFannot(loc,s) }
 ;
 
 
@@ -484,24 +484,24 @@ modifiers:
 ;
 modifier:
 | STATIC
-    { `STATIC }
+    { Static }
 | FINAL
-    { `FINAL }
+    { Final }
 | PUBLIC
-    { `PUBLIC }
+    { Public }
 | PRIVATE 
-    { `PRIVATE }
+    { Private }
 | PROTECTED
-    { `PROTECTED }
+    { Protected }
 | NATIVE
-    { `NATIVE }
+    { Native }
 | SYNCHRONIZED
-    { `SYNCHRONIZED }
+    { Synchronized }
 | ABSTRACT
-    { `ABSTRACT }
+    { Abstract }
 /* "threadsafe" ? */
 | TRANSIENT
-    { `TRANSIENT }
+    { Transient }
 ;
 
 modifiers_type_expr:
@@ -920,7 +920,9 @@ kml_field_decl:
 | requires behaviors EOF
     { JPFmethod_spec($1,$2) }
 | INVARIANT ident COLON expr SEMICOLON EOF
-    {  JPFinvariant($2,$4) } 
+    { JPFinvariant($2,$4) } 
+| MODEL variable_declaration
+    { JPFmodel_variable($2) }
 ;
 
 requires:

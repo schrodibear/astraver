@@ -1,8 +1,8 @@
 
 val print_type : Format.formatter -> Java_env.java_type -> unit
 
-val class_table :
-  (string,Java_env.java_class_info) Hashtbl.t
+val type_table :
+  (string,Java_env.java_type_info) Hashtbl.t
 
 type method_table_info =
     { mt_method_info : Java_env.method_info;

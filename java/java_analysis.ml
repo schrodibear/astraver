@@ -14,7 +14,6 @@ let name_base_type t =
     | Tshort -> "short"
     | Tlong -> "long"
     | Tint -> "int" 
-    | Tnull -> assert false (* "null" ?? *)
     | Tunit -> "unit"
     | Tfloat -> "float"
     | Treal -> "real"
@@ -71,6 +70,7 @@ let rec expr e =
 	List.iter expr dims
     | JEnew_object(ci,args) ->
 	List.iter expr args
+    | JEcast(_,e) -> expr e
 
 let initialiser i = 
   match i with

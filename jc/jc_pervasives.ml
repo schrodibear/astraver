@@ -214,7 +214,7 @@ let make_logic_fun name ty =
     jc_logic_info_calls = [];
   }
 
-let real_of_integer = make_logic_fun "real_of_integer" real_type
+let real_of_integer = make_logic_fun "real_of_int" real_type
 
 (* logic predicates *)
 

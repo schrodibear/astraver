@@ -16,11 +16,13 @@ type accessibility = [ `PUBLIC | `PROTECTED | `PRIVATE | `NONE ];;
 type base_type =
     | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
 	  (* native logic types *)
-    | Tinteger | Treal | Tnull | Tunit
+    | Tinteger | Treal | Tunit
 
 type java_type =
     | JTYbase of base_type
+    | JTYnull (*r type of 'null' *)
     | JTYclass of bool * java_class_info (*r first arg true if non_null *)
+    | JTYinterface of interface_info 
     | JTYarray of java_type
 
 (*
@@ -196,7 +198,9 @@ and package_entry =
       package_entry_name : string;
       mutable package_entry_directories : string list;
       mutable package_entry_contents_read : bool;
+(*
       mutable package_entry_contents : t;
+*)
     }
     
 and java_class_info =
@@ -210,8 +214,8 @@ and java_class_info =
       mutable class_info_constructors : constructor_info list;
       mutable class_info_extends : java_class_info option;
       mutable class_info_is_exception : bool;
+      mutable class_info_implements : interface_info list;
 (*
-      mutable class_entry_implements : interface_entry list;
       mutable class_entry_contents : t;
       mutable class_entry_constructors : constructor_entry list;
       mutable class_entry_invariant_effects : effects;
@@ -225,37 +229,18 @@ and java_class_info =
 *)
     }
 
-and interface_entry =
+and interface_info =
     {
-      interface_entry_name : string;
-      mutable interface_entry_extends : interface_entry list;
-      mutable interface_entry_contents : t;
+      interface_info_name : string;
+      mutable interface_info_extends : interface_info list;
+      mutable interface_info_fields : java_field_info list;
+      mutable interface_info_methods : method_info list;
     }
 
-(*
-and java_env_entry = 
-(*
-  | Package_entry of package_entry
-  | Class_entry of class_entry
-  | Interface_entry of interface_entry
-*)
-(*
-  | Instance_variable_entry of java_field_info
-*)
-(*
-  | Constant_entry of constant_entry
-  | Method_entry of method_info list
-  | Constructor_entry of constructor_entry
-*)
-  | Local_variable_entry of java_var_info 
-(*
-  | Logic_type_entry of logic_type_entry 
-  | Logic_entry of java_logic_info
-*)
-*)
+and java_type_info =
+  | TypeClass of java_class_info
+  | TypeInterface of interface_info
 
-and t = (string * java_var_info) list
-;;
 
 (*
 Local Variables: 

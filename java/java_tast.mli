@@ -12,10 +12,11 @@ type term_node =
     | JTbin of term * base_type * bin_op * term   
     | JTapp of java_logic_info * term list
     | JTfield_access of term * java_field_info
-    | JTstatic_field_access of java_class_info * java_field_info
+    | JTstatic_field_access of java_type_info * java_field_info
     | JTarray_length of term 
     | JTarray_access of term * term
     | JTarray_range of term * term * term
+    | JTcast of java_type * term
 
 and term =
     { java_term_node : term_node;
@@ -37,6 +38,7 @@ type assertion_node =
     | JAquantifier of quantifier * java_var_info * assertion
     | JAbool_expr of term
     | JAbin of term * base_type * bin_op * term   
+    | JAbin_obj of term * bin_op * term   
     | JAapp of java_logic_info * term list
 
 and assertion =
@@ -58,7 +60,7 @@ and expr_node =
   | JEun of un_op * expr                 (*r (pure) unary operations *)
   | JEincr_local_var of incr_decr_op * java_var_info
       (*r pre-post incr/decr operations *)
-  | JEstatic_field_access of java_class_info * java_field_info
+  | JEstatic_field_access of java_type_info * java_field_info
   | JEfield_access of expr * java_field_info
   | JEarray_length of expr 
   | JEarray_access of expr * expr
@@ -73,21 +75,15 @@ and expr_node =
       (*r elements type, dimensions *)
   | JEnew_object of java_class_info * expr list
       (*r class, args *)
+  | JEcast of java_type * expr
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
-  | Assign_name of qualified_ident * string * pexpr  
-  | JPEassign_field of java_field_access * string * pexpr  
   | JPEassign_array of pexpr * pexpr * string * pexpr  
       (*r [Assign_array(e1,e2,op,e3)] is [e1[e2] op e3] *)
       (*r assignment op is =, +=, etc. *)
   | JPEif of pexpr * pexpr * pexpr
-  | JPEthis
   | Super_method_call of identifier * pexpr list
-  | Logic_call of logic_entry * expr list
-  | Class_instance_creation of qualified_ident * pexpr list
-  | Array_creation of array_creation
-  | Cast of type_expr * pexpr
   | Instanceof of pexpr * type_expr
       (* in annotations only *)
   | Type of type_expr 

@@ -63,13 +63,15 @@ let field_decl f =
     | JPFstatic_initializer b -> JPFstatic_initializer (statements b)
     | JPFannot (loc,s) -> parse_annot loc s Java_parser.kml_field_decl
     | JPFinvariant _ 
+    | JPFmodel_variable _ 
     | JPFmethod_spec _ -> assert false
 
   
 let class_decl c = 
   { c with class_fields = List.map field_decl c.class_fields }
 
-let interface_decl i = assert false (* TODO *)
+let interface_decl i = 
+  { i with interface_members = List.map field_decl i.interface_members }
 
 let type_decl d =
   match d with

@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.13 2007-09-19 08:58:32 marche Exp $
+$Id: java_ast.mli,v 1.14 2007-09-21 07:29:56 marche Exp $
 
 ***************************************************************************)
 
@@ -17,9 +17,8 @@ type qualified_ident = identifier list
 (*s Modifiers *)
  
 type modifier =
-    [ `STATIC | `FINAL | `GHOST | `PUBLIC | `PRIVATE | `PROTECTED | `NATIVE 
-    | `SYNCHRONIZED | `ABSTRACT | `TRANSIENT (* "threadsafe" ? *)
-    | `PURE | `SPEC_PUBLIC | `MODEL ]  
+  | Static | Final | Ghost | Public | Private | Protected | Native 
+  | Synchronized | Abstract | Transient (* "threadsafe" ? *)
 
 type modifiers = modifier list
 
@@ -217,8 +216,7 @@ type field_declaration =
   | JPFannot of Lexing.position * string
   | JPFinvariant of identifier * pexpr
   | JPFmethod_spec of pexpr option * (identifier * pbehavior) list
-;;
-
+  | JPFmodel_variable of variable_declaration
 
 type class_declaration =
     { 
@@ -231,18 +229,21 @@ type class_declaration =
 
 (*s interface declarations *)
 
+(*
 type interface_member_declaration =
   | JPIMconstant of variable_declaration
   | JPIMmethod of method_declaration
-  | Model_variable of variable_declaration
+  | JPIMmodel_variable of variable_declaration
   | JPIMannot of Lexing.position * string
+  | JPIMmethod_spec of pexpr option * (identifier * pbehavior) list
 ;;
+*)
 
 type interface_declaration =
     { interface_modifiers : modifiers;
       interface_name : identifier;
       interface_extends : qualified_ident list;
-      interface_members : interface_member_declaration list
+      interface_members : field_declaration list
     }
 ;;
 

@@ -70,9 +70,17 @@ let int_type = JCTenum int_range
 let long_type = JCTenum long_range 
 let char_type = JCTenum char_range 
 
+let get_enum_info t =
+  match t with
+    | Tshort -> short_range
+    | Tint -> int_range
+    | Tlong -> long_range
+    | Tchar -> char_range
+    | Tbyte -> byte_range
+    | _ -> assert false
+
 let tr_base_type t =
   match t with
-    | Tnull -> JCTnull
     | Tunit -> Jc_pervasives.unit_type
     | Tboolean -> Jc_pervasives.boolean_type
     | Tinteger -> Jc_pervasives.integer_type
@@ -91,7 +99,7 @@ let tr_base_type t =
     | Tbyte  -> 
 	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	byte_type
-    | Treal -> assert false (* TODO *)
+    | Treal -> Jc_pervasives.real_type
     | Tfloat -> assert false (* TODO *)
     | Tdouble -> assert false (* TODO *)
 
@@ -102,6 +110,14 @@ let get_class ci =
     jc_struct_info_name = ci.class_info_name;
     jc_struct_info_parent = None;
     jc_struct_info_root = ci.class_info_name;
+    jc_struct_info_fields = [];
+  }
+
+let get_interface ii =
+  {
+    jc_struct_info_name = ii.interface_info_name;
+    jc_struct_info_parent = None;
+    jc_struct_info_root = ii.interface_info_name;
     jc_struct_info_fields = [];
   }
 
@@ -123,10 +139,16 @@ let rec get_array_struct t =
 and tr_type t =
   match t with
     | JTYbase t -> tr_base_type t	
+    | JTYnull -> JCTnull
     | JTYclass(non_null,ci) -> 
 	let st = get_class ci in
 	JCTpointer(st,Some num_zero,
 	           if non_null then Some num_zero else None)
+    | JTYinterface ii ->
+	let st = get_interface ii in
+	JCTpointer(st,Some num_zero,
+	           (* if non_null then Some num_zero else *) None)
+	
     | JTYarray t ->
 	let st = get_array_struct t in
 	JCTpointer(st,Some num_zero,None)
@@ -301,6 +323,11 @@ let lbin_op t op =
     | Bsub -> Bsub_int
     | Badd -> Badd_int
 
+let lobj_op op =
+  match op with
+    | Bne -> Bneq_pointer
+    | Beq -> Beq_pointer
+    | _ -> assert false
 
 let rec term t =
   let t' =
@@ -338,6 +365,15 @@ let rec term t =
 	  end
       | JTarray_range _ -> assert false
       | JTold t -> JCTold(term t)
+      | JTcast(ty,t) ->
+	  begin
+	    match ty with
+	      | JTYbase _ -> (term t).jc_term_node
+	      | JTYclass(_,ci) ->
+		  let st = get_class ci in
+		  JCTcast(term t,st)
+	      | _ -> assert false (* TODO *)
+	  end
 
   in { jc_term_loc = t.java_term_loc ; 
        jc_term_type = tr_type t.java_term_type ;
@@ -359,6 +395,7 @@ let rec assertion a =
       | JAfalse -> JCAfalse
       | JAnot a -> JCAnot(assertion a)
       | JAbin(e1,t,op,e2) -> JCArelation(term e1, lbin_op t op, term e2)
+      | JAbin_obj(e1,op,e2) -> JCArelation(term e1, lobj_op op, term e2)
       | JAapp (fi, el)-> 
 	  JCAapp(get_logic_fun fi,List.map term el)
       | JAquantifier (q, vi , a)-> 
@@ -447,6 +484,21 @@ let tr_class ci acc0 acc =
     ignore (create_exception (Some (tr_type (JTYclass(false,ci)))) ci.class_info_name);
   end;
   JCstruct_def(ci.class_info_name, super, List.map create_field fields)::acc0, acc
+
+(* interfaces *)
+
+
+let tr_interface ii acc = 
+  (* TODO *)
+  acc
+
+let tr_class_or_interface ti acc0 acc =
+  match ti with
+    | TypeClass ci -> tr_class ci acc0 acc
+    | TypeInterface ii -> (acc0,tr_interface ii acc)
+
+
+(* exceptions *)
 
 let tr_exception ei acc =
   JCexception_def(ei.jc_exception_info_name, ei) :: acc
@@ -567,7 +619,9 @@ let rec location_set t =
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
-  
+      | JTcast(ty,t) -> assert false (* TODO *)
+
+
 let location t =
   match t.java_term_node with
       | JTlit l -> assert false (* TODO *)
@@ -602,6 +656,7 @@ let location t =
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
+      | JTcast(ty,t) -> assert false (* TODO *)
   
 
 let behavior (id,assumes,throws,assigns,ensures) =
@@ -733,7 +788,20 @@ let rec expr e =
       | JEnew_object(ci,args) ->
 	  let si = get_class ci in
 	  JCTEalloc (dummy_loc_expr int_type (JCTEconst (JCCinteger "1")), si) 
-	  
+      | JEcast(ty,e) ->
+	  begin
+	    match ty with
+	      | JTYbase t -> 
+		  if Java_options.ignore_overflow 
+		  then 
+		    (expr e).jc_texpr_node
+		  else
+		    JCTErange_cast(get_enum_info t, expr e)		  
+	      | JTYclass(_,ci) ->
+		  let st = get_class ci in
+		  JCTEcast(expr e,st)
+	      | _ -> assert false (* TODO *)
+	  end
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type;
@@ -896,7 +964,11 @@ let tr_logic_fun fi b acc =
 			nfi.jc_logic_info_name,
 			nfi.jc_logic_info_parameters,
 			JCAssertion(assertion a))::acc
-    | Java_typing.JTerm _ -> assert false  (* TODO *)
+    | Java_typing.JTerm t -> 
+	JClogic_fun_def(nfi.jc_logic_info_result_type,
+			nfi.jc_logic_info_name,
+			nfi.jc_logic_info_parameters,
+			JCTerm(term t))::acc
     | Java_typing.JReads l ->
 	JClogic_fun_def(nfi.jc_logic_info_result_type,
 			nfi.jc_logic_info_name,

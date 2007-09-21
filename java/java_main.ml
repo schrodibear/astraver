@@ -101,8 +101,8 @@ let main () =
 	let acc,decls =
 	  Hashtbl.fold 
 	    (fun _ id (acc0,acc) ->
-	       Java_interp.tr_class id acc0 acc)
-	    Java_typing.class_table
+	       Java_interp.tr_class_or_interface id acc0 acc)
+	    Java_typing.type_table
 	    ([],decls)
 	in	
 	let decls = (Jc_output.JCrec_struct_defs acc) :: decls in
@@ -194,7 +194,8 @@ let _ =
     main ()
   with
       (Assert_failure _ | Match_failure _ ) as exc -> 
-	eprintf "%s@." (Printexc.to_string exc)
+	eprintf "%s@." (Printexc.to_string exc);
+	exit 2
 
   
 (*
