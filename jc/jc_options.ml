@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.9 2007-09-17 13:16:02 romain Exp $ i*)
+(*i $Id: jc_options.ml,v 1.10 2007-09-24 12:04:53 romain Exp $ i*)
 
 open Format
 
@@ -65,7 +65,7 @@ let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
 
-type inv_sem = InvNone | InvOwnership
+type inv_sem = InvNone | InvOwnership | InvArguments
 let inv_sem = ref InvOwnership
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
@@ -119,8 +119,9 @@ let _ =
 	  (function
 	     | "none" -> inv_sem := InvNone
 	     | "ownership" -> inv_sem := InvOwnership
+	     | "arguments" -> inv_sem := InvArguments
 	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
-	  "  <kind>  sets the semantics of invariants (available modes: none, ownership)";
+	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
       ]
       add_file usage
 
@@ -154,6 +155,6 @@ let parsing_error l f =
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "unset LANG; make -C .. bin/jessie.byte"
 End: 
 *)

@@ -46,7 +46,7 @@ val main : string
 val files : unit -> string list 
 val usage : unit -> unit
 
-type inv_sem = InvNone | InvOwnership
+type inv_sem = InvNone | InvOwnership | InvArguments
 val inv_sem: inv_sem
 
 (*s The log file *)

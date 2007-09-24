@@ -129,7 +129,8 @@ let main () =
 		Hashtbl.iter 
 		  (fun _ (_,invs) -> Jc_invariants.check invs)
 		  Jc_typing.structs_table
-	    | Jc_options.InvNone -> ()
+	    | Jc_options.InvNone
+	    | Jc_options.InvArguments -> ()
 	end;
 	
 	(* production phase 1.1 : generation of Why logic types *)

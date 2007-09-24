@@ -1018,9 +1018,23 @@ let interp_fun_params f annot_type =
        
   
 let tr_fun f spec body acc =
-  (* Calculate invariants (for each parameter), that will be used as pre and post conditions *)
+  (* Calculate invariants (for each parameter), that will
+     be used as pre and post conditions *)
   let invariants =
-    (* (* with the inv predicate (DISABLED) *) List.fold_right
+    if Jc_options.inv_sem = Jc_options.InvArguments then
+      List.fold_left
+	(fun acc v ->
+	   match v.jc_var_info_type with
+	     | JCTpointer(st, _, _) ->
+		 make_and acc
+		   (invariant_for_struct
+		      (LVar v.jc_var_info_final_name) st)
+	     | _ -> acc)
+	LTrue
+	f.jc_fun_info_parameters
+    else begin
+    (* (* with the inv predicate (DISABLED) *)
+      List.fold_right
        (fun v acc ->
        match v.jc_var_info_type with
        | JCTpointer(st,_,_) ->
@@ -1036,6 +1050,7 @@ let tr_fun f spec body acc =
        | JCTlogic _ -> acc)
        f.jc_fun_info_parameters *)
       LTrue
+    end
   in
   let requires = spec.jc_fun_requires in
   let requires = 
@@ -1096,12 +1111,10 @@ let tr_fun f spec body acc =
     List.fold_left
       (fun (normal,excep) (id,b) ->
 	 let post =
-           make_and
-	     (make_and
-	       (LNamed(reg_loc b.jc_behavior_ensures.jc_assertion_loc,
-		       assertion None "" b.jc_behavior_ensures))
-	       (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns))
-             invariants
+	   make_and
+	     (LNamed(reg_loc b.jc_behavior_ensures.jc_assertion_loc,
+		     assertion None "" b.jc_behavior_ensures))
+	     (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)
 	 in
 	 let a =
 	   match b.jc_behavior_assumes with
@@ -1280,7 +1293,7 @@ let tr_fun f spec body acc =
 	      params,
 	      requires,
 	      tblock,
-	      LTrue,
+	      invariants,
 	      excep_posts_for_others None excep_behaviors
 	    )
 	  )::acc
