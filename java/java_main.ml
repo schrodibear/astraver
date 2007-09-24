@@ -12,9 +12,9 @@ let main () =
 	let ast = Java_syntax.file f in
 	printf "Parsing OK.@.";
 	(* phase 2 : typing *)
-	Java_typing.get_types ast;
-	Java_typing.get_prototypes ast;
-	Java_typing.get_bodies ast;
+	let (p,t) = Java_typing.get_types ast in
+	Java_typing.get_prototypes p t ast;
+	Java_typing.get_bodies p t ast;
 	printf "Typing OK.@.";
 (*
 	(* phase 3 : computation of call graph *)
@@ -61,11 +61,32 @@ let main () =
 	  Java_callgraph.compute_logic_components 
 	    Java_typing.logics_table
 	in
-	let components = 
+	let _components = 
 	  Java_callgraph.compute_components 
 	    Java_typing.methods_table
 	in
-	(* analyze following call graph order *)
+	(* analyze in any order *)
+	Hashtbl.iter
+	  (fun mi mti ->
+	     Java_analysis.do_method 
+	       mti.Java_typing.mt_method_info 
+	       mti.Java_typing.mt_requires
+	       mti.Java_typing.mt_behaviors 
+	       mti.Java_typing.mt_body)
+	  Java_typing.methods_table;
+	Hashtbl.iter
+	  (fun ci cti ->
+	     Java_analysis.do_constructor 
+	       cti.Java_typing.ct_constr_info 
+	       cti.Java_typing.ct_requires
+	       cti.Java_typing.ct_behaviors 
+	       cti.Java_typing.ct_body)
+	  Java_typing.constructors_table;
+
+	(* analyze following call graph order
+	TODO: incorporate constructors in call graph
+	+ precise the meaning of call graph with dynamic calls *)
+(*
 	Array.iter
 	  (List.iter 
 	    (fun mi -> 
@@ -78,6 +99,7 @@ let main () =
 		 mti.Java_typing.mt_behaviors 
 		 mti.Java_typing.mt_body))
 	    components;
+*)
 
 	(*******************************)
 	(* production of jessie output *)

@@ -1,4 +1,14 @@
 
+(*
+
+  Performs several analyses after Java typing and before interpretation into Jessie code.
+
+  1) determines which structure type to introduce for arrays
+  2) disambiguates names:
+     . different constructors for the same class are named
+         Class_typearg1_..._typeargn
+
+*)
 
 open Java_env
 open Java_tast
@@ -115,13 +125,26 @@ let rec statement s =
 	Option_misc.iter (List.iter statement) finally
 
 let do_method mi req behs body =
-
 (*
   Option_misc.iter assertion req;
   ... behs
 *)
   Option_misc.iter (List.iter statement) body
 
+
+let do_constructor ci reg behs body =
+  let l = ci.constr_info_class.class_info_constructors in
+  if List.length l >= 2 then
+    begin
+      ci.constr_info_trans_name <-
+	ci.constr_info_class.class_info_name ^
+	(List.fold_right
+	   (fun vi acc ->
+	      "_" ^ name_type vi.java_var_info_type ^ acc)
+	   ci.constr_info_parameters "")
+    end;
+  List.iter statement body
+  
 
 (*
 Local Variables: 

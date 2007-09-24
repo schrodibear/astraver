@@ -1914,14 +1914,17 @@ let add_typedecl d (id,parent) =
   in
   root,struct_info
 
-let add_fundecl (ty,id,pl) =
+let add_fundecl (ty,loc,id,pl) =
   try
-    let fi = Hashtbl.find functions_env id in
+    let _fi = Hashtbl.find functions_env id in
+    typing_error loc "function %s already declared" id
+(*
     let ty = fi.jc_fun_info_return_type in
     let param_env =
       List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
     in
     param_env, ty, fi
+*)
   with Not_found ->
     let param_env = List.map param pl in
     let ty = type_type ty in
@@ -1966,7 +1969,9 @@ let rec decl d =
 	Hashtbl.add variables_env id vi;
 	Hashtbl.add variables_table vi.jc_var_info_tag (vi,e)
     | JCPDfun(ty,id,pl,specs,body) -> 
-	let param_env,ty,fi = add_fundecl (ty,id,pl) in
+	let param_env,ty,fi = 
+	  add_fundecl (ty,id.jc_identifier_loc,id.jc_identifier_name,pl) 
+	in
 	let vi = var ty "\\result" in
 	vi.jc_var_info_final_name <- "result";
 	let s = List.fold_right 
@@ -1992,15 +1997,17 @@ let rec decl d =
 	  Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
     | JCPDrecfuns pdecls ->
         (* first pass: adding function names *)
-	List.iter (fun d -> match d.jc_pdecl_node with
-		     | JCPDfun(ty,id,pl,_,_) ->
-			 ignore (add_fundecl (ty,id,pl))
-		     | JCPDlogic(Some ty,id,[],_) ->
-			 ignore (add_logic_constdecl (ty,id))
-		     | JCPDlogic(ty,id,pl,_) ->
-			 ignore (add_logic_fundecl (ty,id,pl))
-		     | _ -> assert false
-		  ) pdecls;
+	List.iter 
+	  (fun d -> match d.jc_pdecl_node with
+	     | JCPDfun(ty,id,pl,_,_) ->
+		 ignore (add_fundecl (ty,id.jc_identifier_loc,
+				      id.jc_identifier_name,pl))
+	     | JCPDlogic(Some ty,id,[],_) ->
+		 ignore (add_logic_constdecl (ty,id))
+	     | JCPDlogic(ty,id,pl,_) ->
+		 ignore (add_logic_fundecl (ty,id,pl))
+	     | _ -> assert false
+	  ) pdecls;
         (* second pass: type function body *)
 	List.iter decl pdecls
     | JCPDenumtype(id,min,max) ->

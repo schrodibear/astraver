@@ -106,6 +106,7 @@ and constructor_info =
     {
       constr_info_tag : int;
       constr_info_class : java_class_info;
+      mutable constr_info_trans_name : string;
       mutable constr_info_this : java_var_info option;
       mutable constr_info_result : java_var_info option;
       constr_info_parameters : java_var_info list;
@@ -193,14 +194,11 @@ and effects =
       continue : bool
     }
 
-and package_entry =
+and package_info =
     {
-      package_entry_name : string;
-      mutable package_entry_directories : string list;
-      mutable package_entry_contents_read : bool;
-(*
-      mutable package_entry_contents : t;
-*)
+      package_info_tag : int;
+      package_info_name : string;
+      package_info_directory : string;
     }
     
 and java_class_info =

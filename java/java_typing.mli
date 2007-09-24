@@ -1,8 +1,11 @@
 
+val print_qualified_ident : Format.formatter -> Java_ast.qualified_ident -> unit
+
 val print_type : Format.formatter -> Java_env.java_type -> unit
 
 val type_table :
   (string,Java_env.java_type_info) Hashtbl.t
+
 
 type method_table_info =
     { mt_method_info : Java_env.method_info;
@@ -52,9 +55,20 @@ val logics_table :
 
 exception Typing_error of Loc.position * string
 
-val get_types : Java_ast.compilation_unit -> unit
-val get_prototypes: Java_ast.compilation_unit -> unit
-val get_bodies : Java_ast.compilation_unit -> unit
+val get_types : 
+  Java_ast.compilation_unit -> 
+  'a list *
+    (string * Java_env.java_type_info) list
+
+val get_prototypes: 
+  (string * Java_env.package_info) list ->
+  (string * Java_env.java_type_info) list ->
+  Java_ast.compilation_unit -> unit
+
+val get_bodies : 
+  (string * Java_env.package_info) list ->
+  (string * Java_env.java_type_info) list ->
+  Java_ast.compilation_unit -> unit
 
 
 

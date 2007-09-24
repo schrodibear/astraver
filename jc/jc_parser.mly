@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.59 2007-09-14 17:09:46 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.60 2007-09-24 08:06:55 marche Exp $ */
 
 %{
 
@@ -383,9 +383,9 @@ function_rec_definitions:
     { $1::[$3] }
 
 function_definition: 
-| type_expr IDENTIFIER parameters function_specification compound_statement
+| type_expr identifier parameters function_specification compound_statement
     { locate_decl (JCPDfun($1, $2, $3, $4, Some $5)) }
-| type_expr IDENTIFIER parameters function_specification SEMICOLON
+| type_expr identifier parameters function_specification SEMICOLON
     { locate_decl (JCPDfun($1, $2, $3, $4, None)) }
 ;
 

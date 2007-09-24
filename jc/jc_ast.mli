@@ -160,7 +160,7 @@ type preads_or_pexpr =
 
 type pdecl_node =
   | JCPDvar of ptype * string * pexpr option
-  | JCPDfun of ptype * string * (ptype * string) list * pclause list
+  | JCPDfun of ptype * identifier * (ptype * string) list * pclause list
       * pstatement list option
   | JCPDstructtype of string * 
       string option * (bool * ptype * string) list * (string * string * pexpr) list

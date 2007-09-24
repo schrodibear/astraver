@@ -405,7 +405,8 @@ let rec assertion a =
 	  JCAimplies(assertion a1,assertion a2)
       | JAiff (a1, a2)-> 
 	  JCAiff(assertion a1,assertion a2)
-      | JAor (_, _)-> assert false (* TODO *)
+      | JAor (a1, a2)-> 
+	  JCAor [assertion a1 ; assertion a2]
       | JAand (a1, a2)-> 
 	  JCAand [assertion a1 ; assertion a2]
       | JAbool_expr t -> JCAbool_term(term t)
@@ -932,7 +933,7 @@ let tr_constr ci req behs b acc =
   in
   let nfi = 
     create_fun ci.constr_info_tag None
-      ci.constr_info_class.class_info_name ci.constr_info_parameters
+      ci.constr_info_trans_name ci.constr_info_parameters
   in
   let body = statements b @ 
     [dummy_loc_statement (JCTSreturn(this.jc_var_info_type,
