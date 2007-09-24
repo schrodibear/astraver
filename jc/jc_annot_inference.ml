@@ -520,15 +520,19 @@ let rec replace_term_in_assertion srct targetvi a =
 (* Abstract variables naming and creation.                                   *)
 (*****************************************************************************)
 
+let strlen_f = make_logic_fun "strlen" unit_type
+
 module Vai : sig
 
   val has_variable : term -> bool
   val has_offset_min_variable : term -> bool
   val has_offset_max_variable : term -> bool
+  val has_strlen_variable : term -> bool
 
   val variable : term -> Var.t
   val offset_min_variable : term -> Var.t
   val offset_max_variable : term -> Var.t
+  val strlen_variable : term -> Var.t
   val all_variables : term -> Var.t list
 
   val term : Var.t -> term
@@ -539,6 +543,7 @@ end = struct
   let variable_table = Hashtbl.create 0
   let offset_min_variable_table = Hashtbl.create 0
   let offset_max_variable_table = Hashtbl.create 0
+  let strlen_variable_table = Hashtbl.create 0
   let term_table = Hashtbl.create 0
 
   let has_variable t =
@@ -557,6 +562,11 @@ end = struct
     | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull -> false
 
   let has_offset_max_variable = has_offset_min_variable
+
+  let has_strlen_variable t = 
+    match t.jc_term_type with
+    | JCTpointer _ -> true
+    | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull -> false
 
   let variable t =
     let t = deep_raw_term t in
@@ -600,10 +610,22 @@ end = struct
       Hashtbl.add term_table va tmax;
       va
 
+  let strlen_variable t =
+    let t = deep_raw_term t in
+    try
+      Hashtbl.find strlen_variable_table t
+    with Not_found ->
+      let va = Var.of_string ("__jc_strlen_" ^ (term_name t)) in
+      Hashtbl.add strlen_variable_table t va;
+      let tstr = type_term (JCTapp(strlen_f,[t])) integer_type in
+      Hashtbl.add term_table va tstr;
+      va
+
   let all_variables t =
     (if has_variable t then [variable t] else [])
     @ (if has_offset_min_variable t then [offset_min_variable t] else [])
     @ (if has_offset_max_variable t then [offset_max_variable t] else [])
+    @ (if has_strlen_variable t then [strlen_variable t] else [])
 
   let term va = Hashtbl.find term_table va
 
@@ -620,6 +642,10 @@ end = struct
 	| JCTvar vi -> offset_max_variable t
 	| _ -> assert false
 	end
+    | JCTapp(f,[t]) ->
+	if f.jc_logic_info_name = "strlen" then
+	  strlen_variable t
+	else assert false
     | _ -> assert false
 
 end      
@@ -743,7 +769,11 @@ let rec linearize t =
       | JCTvar vi -> ([t,1],0)
       | _ -> assert false
       end
-  | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _ | JCTapp _
+  | JCTapp(f,_) ->
+      if f.jc_logic_info_name = "strlen" then
+	([t,1],0)
+      else failwith "Not linear"
+  | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
   | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ -> 
       failwith "Not linear"
 
@@ -858,12 +888,6 @@ let linstr_of_expr env e =
       | Some ("",cst) -> Some (string_of_int cst)
       | Some (str,cst) -> Some (str ^ " + " ^ (string_of_int cst))
 
-let linstr_of_boolean_expr env e = 
-  linstr_of_assertion env (asrt_of_expr e)
-
-let linstr_of_not_boolean_expr env e = 
-  linstr_of_assertion env (not_asrt (asrt_of_expr e))
-
 let offset_min_linstr_of_expr env e = 
   match term_of_expr e with
   | None -> None
@@ -882,10 +906,48 @@ let offset_max_linstr_of_expr env e =
       | Some ("",cst) -> Some (string_of_int cst)
       | Some (str,cst) -> Some (str ^ " + " ^ (string_of_int cst))
 
-let rec offset_min_linstr_of_boolean_expr env e = "" (* TODO *)
-let rec offset_max_linstr_of_boolean_expr env e = "" (* TODO *)
-let rec offset_min_linstr_of_not_boolean_expr env e = "" (* TODO *)
-let rec offset_max_linstr_of_not_boolean_expr env e = "" (* TODO *)
+let is_null_term t = 
+  match t.jc_term_node with
+  | JCTconst (JCCinteger "0") -> true
+  | _ -> false
+
+let strlen_linstr_of_assertion env a = 
+  match a.jc_assertion_node with
+  | JCArelation(t1,(Bneq_int | Beq_int as op),t2) ->
+      if is_null_term t2 then
+	begin match t1.jc_term_node with
+	| JCTderef(t1,_) -> 
+	    begin match destruct_pointer t1 with
+	    | None,_ -> None
+	    | Some vi,offt ->
+		let vit = var_term vi in
+		let va = Vai.strlen_variable vit in
+		let env = 
+		  if Environment.mem_var env va then env
+		  else Environment.add env [|va|] [||] 
+		in 
+		let strt = Vai.term va in
+		let t = match offt with 
+		  | None -> strt
+		  | Some offt -> raw_term(JCTbinary(strt,Bsub_int,offt)) 
+		in
+		match linstr_of_term env t with
+		| None -> None
+		| Some ("",_) -> assert false
+		| Some (str,cst) ->
+		    match op with
+		    | Bneq_int -> 
+			let stra = str ^ " < " ^ (string_of_int cst) in
+			Some (stra,env)
+		    | Beq_int -> 
+			let stra = str ^ " = " ^ (string_of_int cst) in
+			Some (stra,env)
+		    | _ -> assert false
+	    end
+	| _ -> None
+	end
+      else None
+  | _ -> None
 
 
 (*****************************************************************************)
@@ -1089,55 +1151,23 @@ let assignment mgr pre t e =
   Abstract1.forget_array_with mgr pre forget_vars false;
   pre
 
-let test_expr ~(neg:bool) mgr pre e =
-  let env = Abstract1.env pre in
-  let be = 
-    if neg then linstr_of_not_boolean_expr env e 
-    else linstr_of_boolean_expr env e 
-  in
-  let bemin = 
-    if neg then offset_min_linstr_of_not_boolean_expr env e 
-    else offset_min_linstr_of_boolean_expr env e 
-  in
-  let bemax = 
-    if neg then offset_max_linstr_of_not_boolean_expr env e 
-    else offset_max_linstr_of_boolean_expr env e 
-  in
-  if be = "false" || bemin = "false" || bemax = "false" then
-    Abstract1.bottom mgr (Abstract1.env pre)
-  else
-    let cstrs = 
-      (if be = "true" || be = "" then [] else [be])
-      @ (if bemin = "true" || bemin = "" then [] else [bemin])
-      @ (if bemax = "true" || bemax = "" then [] else [bemax])
-    in
-    if cstrs = [] then 
-      pre
-    else
-      let lincons = 
-	try Parser.lincons1_of_lstring env cstrs 
-	with Parser.Error _ -> assert false
-      in
-      let envprint = Environment.print ~first:"[" ~sep:"," ~last:"]" in
-      if Jc_options.debug then
-	printf "pre.env = %a@.lincons.env = %a@." 
-	  envprint (Abstract1.env pre)
-	  envprint (Lincons1.array_get_env lincons);
-      Abstract1.meet_lincons_array_with mgr pre lincons;
-      pre
-
 let test_assertion mgr pre a =
   let env = Abstract1.env pre in
   let be = linstr_of_assertion env a in
   let bemin = offset_min_linstr_of_assertion env a in
   let bemax = offset_max_linstr_of_assertion env a in
-  if be = "false" || bemin = "false" || bemax = "false" then
+  let bestr,env = match strlen_linstr_of_assertion env a with
+    | None -> "",env
+    | Some strenv -> strenv
+  in
+  if be = "false" || bemin = "false" || bemax = "false" || bestr = "false" then
     Abstract1.bottom mgr (Abstract1.env pre)
   else
     let cstrs = 
       (if be = "true" || be = "" then [] else [be])
       @ (if bemin = "true" || bemin = "" then [] else [bemin])
       @ (if bemax = "true" || bemax = "" then [] else [bemax])
+      @ (if bestr = "true" || bestr = "" then [] else [bestr])
     in
     if cstrs = [] then 
       pre
@@ -1151,8 +1181,14 @@ let test_assertion mgr pre a =
 	printf "pre.env = %a@.lincons.env = %a@." 
 	  envprint (Abstract1.env pre)
 	  envprint (Lincons1.array_get_env lincons);
+      Abstract1.change_environment_with mgr pre env false;
       Abstract1.meet_lincons_array_with mgr pre lincons;
       pre
+
+let test_expr ~(neg:bool) mgr pre e =
+  let a = asrt_of_expr e in
+  let a = if neg then not_asrt a else a in
+  test_assertion mgr pre a
 
 (* Arguments of [join] should be on the same environment. *)
 let join mgr absval1 absval2 =
@@ -1578,6 +1614,7 @@ module Vwp : sig
   val variable : term -> string
   val offset_min_variable : term -> struct_info -> string
   val offset_max_variable : term -> struct_info -> string
+  val strlen_variable : term -> string
 
   val term : string -> term
 
@@ -1586,6 +1623,7 @@ end = struct
   let variable_table = Hashtbl.create 0
   let offset_min_variable_table = Hashtbl.create 0
   let offset_max_variable_table = Hashtbl.create 0
+  let strlen_variable_table = Hashtbl.create 0
   let term_table = Hashtbl.create 0
 
   let variable t = 
@@ -1622,6 +1660,19 @@ end = struct
     with Not_found ->
       Hashtbl.add offset_max_variable_table s t1;
       let tmax = type_term (JCToffset(Offset_max,t,st)) integer_type in
+      Hashtbl.add term_table s tmax
+    end;
+    s
+
+  let strlen_variable t = 
+    let t1 = deep_raw_term t in
+    let s = "__jc_strlen_" ^ (term_name t1) in
+    begin try 
+      let t2 = Hashtbl.find strlen_variable_table s in
+      assert (t1 = t2)
+    with Not_found ->
+      Hashtbl.add strlen_variable_table s t1;
+      let tmax = type_term (JCTapp(strlen_f,[t])) integer_type in
       Hashtbl.add term_table s tmax
     end;
     s
@@ -1670,7 +1721,13 @@ let rec atp_of_term t =
       Atp.Var (Vwp.offset_min_variable t st)
   | JCToffset(Offset_max,t,st) ->
       Atp.Var (Vwp.offset_max_variable t st)
-  | JCTshift _ | JCTsub_pointer _ | JCTapp _ | JCTold _
+  | JCTapp(f,[t]) ->
+      if f.jc_logic_info_name = "strlen" then
+	Atp.Var (Vwp.strlen_variable t)
+      else assert false
+  | JCTapp _ -> 
+      assert false
+  | JCTshift _ | JCTsub_pointer _ | JCTold _
   | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
       assert false
 
