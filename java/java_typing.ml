@@ -355,11 +355,15 @@ let get_type_decl package d acc =
 
 let package_counter = ref 0
 
-let get_import imp =
+let get_import imp acc =
     match imp with
       | Import_package qid ->
 	  eprintf "importing package %a@." print_qualified_ident qid;
 	  begin
+	    match classify_name [] [] None [] qid with
+	      | PackageName pi -> pi::acc
+	      | _ -> typing_error (fst (List.hd qid))
+		  "package name expected"
 (*
 	    try
 	      ignore (search_package qid)
@@ -372,8 +376,8 @@ let get_import imp =
 		    }
 		  in
 		  Hashtbl.add package_table !package_counter pi
-*)
 	    assert false
+*)
 	  end
       | Import_class_or_interface qid ->
 	  eprintf "importing %a@." print_qualified_ident qid;
@@ -391,6 +395,8 @@ let anonymous_package =
     package_info_directory = ".";
   }
 	
+let javalang_qid = [(Loc.dummy_position,"lang"); (Loc.dummy_position,"java")]
+
 let get_types cu =
   let pi = 
     match cu.cu_package with
@@ -400,10 +406,10 @@ let get_types cu =
 	    | PackageName pi -> pi
 	    | _ -> assert false
   in
-  (*
-  List.iter get_import cu.cu_imports;
-  *)
-  [], List.fold_right (get_type_decl pi) cu.cu_type_decls []
+  let package_env = 
+    List.fold_right get_import (Import_package javalang_qid::cu.cu_imports) []
+  in
+  package_env, List.fold_right (get_type_decl pi) cu.cu_type_decls []
 
 
 
@@ -429,7 +435,6 @@ let search_for_type (loc,id) =
 (* importing java.lang and the 'Throwable' class *)
   
 (* 
-let javalang_qid = [(Loc.dummy_position,"lang"); (Loc.dummy_position,"java")]
 
 let () = 
   get_import (Import_package javalang_qid);

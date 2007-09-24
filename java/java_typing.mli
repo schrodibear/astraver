@@ -57,7 +57,7 @@ exception Typing_error of Loc.position * string
 
 val get_types : 
   Java_ast.compilation_unit -> 
-  'a list *
+  Java_env.package_info list *
     (string * Java_env.java_type_info) list
 
 val get_prototypes: 
