@@ -188,14 +188,29 @@ let toplevel_packages =
   Java_options.lprintf "Reading toplevel packages@.";
   read_dir_contents Java_options.classpath 
 
+ 
+type type_data =
+  | TypeDataClass of java_class_info * Java_ast.class_declaration
+  | TypeDataInterface of interface_info * Java_ast.interface_declaration
 
-  
+let type_table : (int, type_data) Hashtbl.t = Hashtbl.create 97
 
-type classified_name =
-  | TermName of term
-  | TypeName of java_type_info
-  | PackageName of package_info
+let type_fields_table : (int, java_field_info list) Hashtbl.t 
+    = Hashtbl.create 97
 
+let type_fields tag =
+  try
+    Hashtbl.find type_fields_table tag
+  with
+      Not_found ->
+	try
+	  match Hashtbl.find type_table tag with
+	    | TypeDataInterface(ii,id) ->
+		assert false
+	    | TypeDataClass(ci,cd) ->
+		assert false
+	with
+	    Not_found -> assert false
 
 let rec list_assoc_field_name id l =
   match l with
@@ -206,7 +221,7 @@ let rec list_assoc_field_name id l =
 
 let rec lookup_interface_field ii id =
   try
-    list_assoc_field_name id ii.interface_info_fields
+    list_assoc_field_name id (type_fields ii.interface_info_tag)
   with
       Not_found ->
 	match ii.interface_info_extends with
@@ -216,7 +231,7 @@ let rec lookup_interface_field ii id =
 
 let rec lookup_class_field ci id =
   try
-    list_assoc_field_name id ci.class_info_fields
+    list_assoc_field_name id (type_fields ci.class_info_tag)
   with
       Not_found ->
 	(* TODO: lookup implemented interfaces *)
@@ -236,22 +251,19 @@ Typing level 0: extract types (logic, Java classes, Java interfaces)
 
 **********************************)
 
-let type_table = Hashtbl.create 97
 
 let type_counter = ref 0
 
 (* adds an interface named [id] in package [p] *)
-let new_interface_info (p:package_info) (id:string) =
+let new_interface_info (p:package_info) (id:string) i =
   incr type_counter;
   let ii =    
     { interface_info_tag = !type_counter;
       interface_info_name = id ;
-      interface_info_fields = [];
-      interface_info_methods = [];
       interface_info_extends = [];
     }
   in
-  Hashtbl.add type_table !type_counter (TypeInterface ii);
+  Hashtbl.add type_table !type_counter (TypeDataInterface (ii,i));
   eprintf "adding interface %s in package '%s'@." id p.package_info_name;
   let h =
     try
@@ -262,20 +274,17 @@ let new_interface_info (p:package_info) (id:string) =
   Hashtbl.replace h id (Type (TypeInterface ii));
   ii
 
-let new_class_info (p:package_info) (id:string) =
+let new_class_info (p:package_info) (id:string) c =
   incr type_counter;
   let ci =    
     { class_info_tag = !type_counter;
       class_info_name = id ;
-      class_info_fields = [];
-      class_info_methods = [];
-      class_info_constructors = [];
       class_info_extends = None;
       class_info_is_exception = false;
       class_info_implements = [];
     }
   in
-  Hashtbl.add type_table !type_counter (TypeClass ci);
+  Hashtbl.add type_table !type_counter (TypeDataClass (ci, c));
   eprintf "adding class %s in package %s@." id p.package_info_name;
   let h =
     try
@@ -298,11 +307,11 @@ let get_type_decl package d acc =
 	  class_fields : field_declaration list
 	*)
 	let (_,id) = c.class_name in
-	let ci = new_class_info package id in 
+	let ci = new_class_info package id c in 
 	(id,TypeClass ci)::acc
     | JPTinterface i -> 
 	let (_,id) = i.interface_name in
-	let ii = new_interface_info package id in 
+	let ii = new_interface_info package id i in 
 	(id,TypeInterface ii)::acc
     | JPTannot(loc,s) -> assert false
     | JPTaxiom((loc,id),e) -> acc
@@ -310,6 +319,11 @@ let get_type_decl package d acc =
     | JPTlogic_reads((loc,id),ret_type,params,reads) -> acc 
     | JPTlogic_def((loc,id),ret_type,params,body) -> acc
 
+
+type classified_name =
+  | TermName of term
+  | TypeName of java_type_info
+  | PackageName of package_info
 
 
 let rec get_import imp acc =
@@ -542,30 +556,6 @@ Typing level 1: extract prototypes
 
 **********************************)
 
-(*
-let search_for_type (loc,id) =
-  try
-    Hashtbl.find type_table id 
-  with
-      Not_found -> 
-	eprintf "class or interface %s not yet known@." id;
-	(* looking in current directory (correct ????) TODO *)
-	(* looking in imported packages *)
-	raise Not_found
-*)
-
-(* importing java.lang and the 'Throwable' class *)
-  
-(* 
-
-let () = 
-  get_import (Import_package javalang_qid);
-  (* importing the 'Throwable' class *)
-  get_import (Import_class_or_interface 
-		((Loc.dummy_position,"Throwable")::javalang_qid));
-  let the_throwable_class = search_for_type "Throwable" in
-  the_throwable_class.class_info_is_exception <- true
-*)
 
 (* typing types *)
 
@@ -842,12 +832,13 @@ let type_decl package_env type_env d =
 		  c.class_extends;
 		(* fields *)
 		let fields = List.fold_left (get_field_prototypes package_env type_env ci) [] c.class_fields in
-		ci.class_info_fields <- fields;
-		let methods,constructors = 
+		Hashtbl.add type_fields_table ci.class_info_tag fields;
+		let _methods,_constructors = 
 		  get_method_prototypes package_env type_env (Some ci) ([],[]) [] c.class_fields 
 		in
-		ci.class_info_methods <- methods;
-		ci.class_info_constructors <- constructors;
+		(* TODO ci.class_info_methods <- methods; *)
+		(* TODO ci.class_info_constructors <- constructors; *)
+		()
 	  with Not_found -> assert false
 	end
     | JPTinterface i -> 
@@ -870,11 +861,12 @@ let type_decl package_env type_env d =
 		  let fields = 
 		    List.fold_left (get_interface_field_prototypes package_env type_env ii) [] i.interface_members
 		  in
-		  ii.interface_info_fields <- fields;
-		  let methods,constructors = 
+		  Hashtbl.add type_fields_table ii.interface_info_tag fields;
+		  let _methods,_constructors = 
 		    get_method_prototypes  package_env type_env None ([],[]) [] i.interface_members
 		  in
-		  ii.interface_info_methods <- methods
+		  (* TODO ii.interface_info_methods <- methods *)
+		  ()
 	  with Not_found -> assert false
 	end
     | JPTannot(loc,s) -> assert false
@@ -1458,7 +1450,7 @@ let lookup_method ti (loc,id) arg_types =
 	   if is_accessible_and_applicable mi id arg_types then 
 	     mi::acc 
 	   else acc)
-	acc ii.interface_info_methods 
+	acc (assert false (* ii.interface_info_methods *))
     in
     List.fold_left
       collect_methods_from_interface acc ii.interface_info_extends
@@ -1470,7 +1462,7 @@ let lookup_method ti (loc,id) arg_types =
 	   if is_accessible_and_applicable mi id arg_types then 
 	     mi::acc 
 	   else acc)
-	acc ci.class_info_methods 
+	acc (assert false (* ci.class_info_methods *))
     in
     let acc =
       match ci.class_info_extends with
@@ -2193,13 +2185,16 @@ let type_decl package_env type_env d =
 	  try
 	    match List.assoc (snd c.class_name) type_env with	  
 	      | TypeInterface _ -> assert false
-	      | TypeClass ci as ti ->
+	      | TypeClass ci as _ti ->
+(*
 		  List.iter (type_field_initializer package_env type_env ti) 
 		    ci.class_info_fields;
 		  List.iter (type_method_spec_and_body package_env type_env ti) 
 		    ci.class_info_methods;
 		  List.iter (type_constr_spec_and_body package_env type_env ti) 
 		    ci.class_info_constructors
+*)
+		  ()
 	  with
 	      Not_found -> assert false
 	end

@@ -450,7 +450,7 @@ let tr_class ci acc0 acc =
   let (static_fields,fields) = 
     List.partition 
       (fun fi -> fi.java_field_info_is_static)
-      ci.class_info_fields
+      [] (* ci.class_info_fields *)
   in
   let super =
     Option_misc.map (fun ci -> ci.class_info_name) ci.class_info_extends

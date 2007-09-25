@@ -123,7 +123,8 @@ let main () =
 	let acc,decls =
 	  Hashtbl.fold 
 	    (fun _ id (acc0,acc) ->
-	       Java_interp.tr_class_or_interface id acc0 acc)
+	       assert false 
+		 (* Java_interp.tr_class_or_interface id acc0 acc *))
 	    Java_typing.type_table
 	    ([],decls)
 	in	
