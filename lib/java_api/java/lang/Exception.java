@@ -1,5 +1,5 @@
 /*
-* $Workfile: Exception.java $	$Revision: 1.1 $, $Date: 2007-09-24 08:11:50 $
+* $Workfile: Exception.java $	$Revision: 1.1 $, $Date: 2007-09-25 08:10:43 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -20,7 +20,7 @@
 // /*
 // $Workfile: Exception.java $
 // $Revision: 1.1 $
-// $Date: 2007-09-24 08:11:50 $
+// $Date: 2007-09-25 08:10:43 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/java/lang/Exception.java $
 // $Modtime: 5/02/00 7:13p $
@@ -36,15 +36,13 @@ package java.lang;
   * <em>Java Platform Core API Specification</em>.<p>
   */
 
-public class Exception extends Throwable{
+public class Exception extends Throwable {
 
   /**
    * Constructs an <code>Exception</code> instance. 
    */
-  /*@ public normal_behavior 
-         requires true;
-       assignable \nothing;
-          ensures true;
+  /*@ requires true;
+    @ assigns \nothing;
     @*/
   public Exception() {}
   

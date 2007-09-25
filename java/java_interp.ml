@@ -1,5 +1,4 @@
 
-
 open Jc_output
 open Jc_env
 open Jc_fenv
@@ -166,9 +165,12 @@ let get_field fi =
   try
     Hashtbl.find fi_table fi.java_field_info_tag
   with
-      Not_found -> assert false
+      Not_found -> 
+	Format.eprintf "Internal error: field '%s' not found@." fi.java_field_info_name;
+	assert false
 
 let create_field fi =
+  Format.eprintf "Creating JC field '%s'@." fi.java_field_info_name;
   let ty = tr_type fi.java_field_info_type in
   let ci = get_class fi.java_field_info_class in
   let nfi =
@@ -495,7 +497,9 @@ let tr_interface ii acc =
 
 let tr_class_or_interface ti acc0 acc =
   match ti with
-    | TypeClass ci -> tr_class ci acc0 acc
+    | TypeClass ci -> 
+	Format.eprintf "Creating JC structure for class '%s'@." ci.class_info_name;
+	tr_class ci acc0 acc
     | TypeInterface ii -> (acc0,tr_interface ii acc)
 
 

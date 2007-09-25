@@ -75,6 +75,126 @@ Name classification
 
 ***********************)
 
+let split_extension filename =
+  try
+    let dotindex = String.rindex filename '.' in
+    (String.sub filename 0 dotindex,
+     String.sub filename (dotindex+1) (String.length filename - dotindex - 1))
+  with Not_found -> filename,""
+
+let read_dir d =
+  let l =
+    try
+      Sys.readdir d
+    with
+	Sys_error _ -> 
+	  eprintf "Cannot open directory %s@." d;
+	  exit 2
+  in
+  Array.fold_left
+    (fun (dirs,files) name ->
+       if name <> "CVS" then
+	 let fullname = Filename.concat d name in
+	 let s = Unix.lstat fullname in
+	 if s.Unix.st_kind = Unix.S_DIR then
+	   begin
+	     Java_options.lprintf "got sub-directory %s@." name;
+	     ((name,fullname)::dirs,files)
+	   end
+	 else
+           if s.Unix.st_kind = Unix.S_REG then
+	     let base,ext = split_extension name in
+	     match ext with
+	       | "java" ->
+		   Java_options.lprintf "got Java file %s@." base;
+		   (dirs,(base,fullname)::files)
+	       | _ -> 
+		   Java_options.lprintf "file %s skipped@." name;
+		   (dirs,files)
+	   else 
+	     begin
+	       Java_options.lprintf "skipping special file %s@." name;
+	       (dirs,files)
+	     end
+       else 
+	 begin
+	   Java_options.lprintf "skipping special file %s@." name;
+	   (dirs,files)
+	 end)
+    ([],[]) l
+	     
+  
+(* [package_table] maps each internal package id to package_info *)
+let package_table = 
+  (Hashtbl.create 17 : (int,package_info) Hashtbl.t)
+
+let package_counter = ref 0
+
+let anonymous_package =
+  { package_info_tag = 0;
+    package_info_name = "";
+    package_info_directory = ".";
+  }
+
+
+let new_package_info name fullname =
+  incr package_counter;
+  let pi =
+    { package_info_tag = !package_counter;
+      package_info_name = name;
+      package_info_directory = fullname;
+    }
+  in
+  Hashtbl.add package_table !package_counter pi;
+  pi
+
+(* [package_contents] maps each internal package id to its contents *)
+type package_member =
+  | Subpackage of package_info
+  | File of string
+  | Type of java_type_info
+
+let package_contents = 
+  (Hashtbl.create 17 : (int,(string,package_member) Hashtbl.t) Hashtbl.t)
+
+let () = Hashtbl.add package_contents anonymous_package.package_info_tag 
+  (Hashtbl.create 17)
+	
+let javalang_qid = [(Loc.dummy_position,"lang"); (Loc.dummy_position,"java")]
+
+let read_dir_contents d =
+  Java_options.lprintf "reading directory '%s'@." d; 
+  let (d,f) = read_dir d in
+  let h = Hashtbl.create 17 in
+  List.iter
+    (fun (name,fullname) ->
+       let pi = new_package_info name fullname in
+       Java_options.lprintf "adding subpackage %s@."	name; 
+       Hashtbl.add h name (Subpackage pi))
+    d;
+  List.iter
+    (fun (name,fullname) ->
+       Java_options.lprintf "adding java file %s (fullname %s)@." name fullname; 
+       Hashtbl.add h name (File fullname))
+    f;
+  h
+
+let get_package_contents pi =
+  try
+    Hashtbl.find package_contents pi.package_info_tag
+  with
+      Not_found ->
+	let l = read_dir_contents pi.package_info_directory in
+	Hashtbl.add package_contents pi.package_info_tag l;
+	l
+
+let toplevel_packages = 
+  Java_options.lprintf "Reading toplevel packages@.";
+  read_dir_contents Java_options.classpath 
+
+
+  
+
 type classified_name =
   | TermName of term
   | TypeName of java_type_info
@@ -113,9 +233,126 @@ let lookup_field ti id =
     | TypeClass ci -> lookup_class_field ci id
     | TypeInterface ii -> lookup_interface_field ii id
 
+
+(******************************
+
+Typing level 0: extract types (logic, Java classes, Java interfaces)
+
+**********************************)
+
+let type_table = Hashtbl.create 97
+
+let type_counter = ref 0
+
+(* adds an interface named [id] in package [p] *)
+let new_interface_info (p:package_info) (id:string) =
+  incr type_counter;
+  let ii =    
+    { interface_info_tag = !type_counter;
+      interface_info_name = id ;
+      interface_info_fields = [];
+      interface_info_methods = [];
+      interface_info_extends = [];
+    }
+  in
+  Hashtbl.add type_table !type_counter (TypeInterface ii);
+  eprintf "adding interface %s in package '%s'@." id p.package_info_name;
+  let h =
+    try
+      Hashtbl.find package_contents p.package_info_tag 
+    with
+	Not_found -> assert false
+  in
+  Hashtbl.replace h id (Type (TypeInterface ii));
+  ii
+
+let new_class_info (p:package_info) (id:string) =
+  incr type_counter;
+  let ci =    
+    { class_info_tag = !type_counter;
+      class_info_name = id ;
+      class_info_fields = [];
+      class_info_methods = [];
+      class_info_constructors = [];
+      class_info_extends = None;
+      class_info_is_exception = false;
+      class_info_implements = [];
+    }
+  in
+  Hashtbl.add type_table !type_counter (TypeClass ci);
+  eprintf "adding class %s in package %s@." id p.package_info_name;
+  let h =
+    try
+      Hashtbl.find package_contents p.package_info_tag 
+    with
+	Not_found -> assert false
+  in
+  Hashtbl.replace h id (Type (TypeClass ci));
+  ci
+
+
+let get_type_decl package d acc = 
+    match d with
+    | JPTclass c -> 
+	(*
+	  class_modifiers : modifiers;
+	  class_name : identifier;
+	  class_extends : qualified_ident option;
+	  class_implements : qualified_ident list;
+	  class_fields : field_declaration list
+	*)
+	let (_,id) = c.class_name in
+	let ci = new_class_info package id in 
+	(id,TypeClass ci)::acc
+    | JPTinterface i -> 
+	let (_,id) = i.interface_name in
+	let ii = new_interface_info package id in 
+	(id,TypeInterface ii)::acc
+    | JPTannot(loc,s) -> assert false
+    | JPTaxiom((loc,id),e) -> acc
+    | JPTlogic_type_decl _ -> assert false (* TODO *)
+    | JPTlogic_reads((loc,id),ret_type,params,reads) -> acc 
+    | JPTlogic_def((loc,id),ret_type,params,body) -> acc
+
+
+
+let rec get_import imp acc =
+    match imp with
+      | Import_package qid ->
+	  eprintf "importing package %a@." print_qualified_ident qid;
+	  begin
+	    match classify_name [] [] None [] qid with
+	      | PackageName pi -> pi::acc
+	      | _ -> typing_error (fst (List.hd qid))
+		  "package name expected"
+	  end
+      | Import_class_or_interface qid ->
+	  eprintf "importing %a@." print_qualified_ident qid;
+	  assert false
+(*
+	  let ast = Java_syntax.file f in
+	  Java_typing.get_types ast;
+	  Java_typing.get_prototypes ast
+*)
+	  
+
+and get_types cu =
+  let pi = 
+    match cu.cu_package with
+      | [] -> anonymous_package
+      | qid ->
+	  match classify_name [] [] None [] qid with
+	    | PackageName pi -> pi
+	    | _ -> assert false
+  in
+  let package_env = 
+    List.fold_right get_import (Import_package javalang_qid::cu.cu_imports) []
+  in
+  package_env, List.fold_right (get_type_decl pi) cu.cu_type_decls []
+
 (* corresponds to JLS 2nd ed., par. 6.5.2, pp. 96--97 *)
-let rec classify_name 
-    (package_env : (string * package_info) list)
+and classify_name 
+    (package_env : package_info list)
     (type_env : (string * java_type_info) list)
     (current_type : java_type_info option)
     (local_env : (string * java_var_info) list)
@@ -174,25 +411,63 @@ let rec classify_name
 		      let ti = List.assoc id type_env in
 		      TypeName ti 
 		    with Not_found ->
-		      
-		      (* look for a type of that name 
+		      (* TODO: look for a type of that name 
 			 declared by a type-import-on-demand declaration 
 			 (fail if two of them are visible) *)
-		      try
-			let pi = List.assoc id package_env in
-			PackageName pi 
-		      with Not_found ->
-			  (* otherwise look for a package of that name *)
-			  (* TODO *)
-			  typing_error loc "unknown identifier %s" id
+		      let l =
+			List.fold_left
+			  (fun acc pi ->
+			     let h = get_package_contents pi in
+			     try 
+			       (h,(Hashtbl.find h id)) :: acc
+			     with Not_found -> acc)
+			  [] package_env
+		      in
+		      match l with
+			| [(h,x)] ->
+			    begin
+			      match x with
+				| Subpackage pi -> assert false
+				| Type ti -> TypeName ti
+				| File f -> 
+				    let ast = Java_syntax.file f in
+				    let (_,t) = get_types ast in
+				    try
+				      let ti = List.assoc id t in
+				      Hashtbl.replace h id (Type ti);
+				      TypeName ti
+				    with Not_found -> assert false
+			    end
+			| _::_ ->
+			    typing_error loc "ambiguous name from import-on-demand packages"
+			| [] ->
+			    (* otherwise look for a toplevel package 
+			       of that name *)
+			    try
+			      match Hashtbl.find toplevel_packages id with
+				| Subpackage pi -> PackageName pi 
+				| Type ti -> assert false (* TypeName ti ? *)
+				| File f -> assert false (* TODO ? *)
+			    with Not_found ->
+			      typing_error loc "unknown identifier %s" id
+			      			      
 	end		
 	  
     | (loc,id)::n ->
 	(* case of a qualified name (JLS p 97) *)
 	match classify_name package_env type_env current_type local_env n with
 	  | PackageName pi -> 
-	      (* TODO *)
-	      assert false
+	      let contents = get_package_contents pi in
+	      begin
+		try
+		  match Hashtbl.find contents id with
+		    | Subpackage pi -> PackageName pi
+		    | Type ti -> TypeName ti
+		    | File f -> assert false (* TODO *)
+		with
+		    Not_found ->
+		      typing_error loc "unknown identifier %s" id
+	      end
 	  | TypeName ci ->
 	      begin
   		try
@@ -244,172 +519,6 @@ let rec classify_name
 		  | JTYnull | JTYbase _ ->
 		      class_or_interface_expected t.java_term_loc 
 	      end
-
-(******************************
-
-Typing level 0: extract types (logic, Java classes, Java interfaces)
-
-**********************************)
-
-(* [package_table] maps each internal package id to package_info *)
-let package_table = 
-  (Hashtbl.create 17 : (int,package_info) Hashtbl.t)
-
-(* [package_contents] maps each internal package id to its contents *)
-type package_member =
-  | Subpackage of package_info
-  | Type of java_type_info
-
-let package_contents = 
-  (Hashtbl.create 17 : (int,package_member list) Hashtbl.t)
-
-(* [package_env] maps each visible package name to its internal id 
-
-   initially should contain "java" mapped to 0, then package_contents
-   maps 0 to the 1-element list [Subpackage pi] where pi is the
-   package_info for "lang" whose id is 1,
-   
-*) 
-
-(*
-let package_env = ref ([] : (string * int) list)
-*)
-
-let type_table = Hashtbl.create 17
-
-(*
-let search_package_info qid =
-  let rec get_table qid =
-    match qid with
-      | [] -> assert false
-      | [_] -> package_table
-      | _::r -> get_table 
-  in 
-*)  
-
-(* adds an interface named [id] in package [p] *)
-let new_interface_info (p:package_info) (id:string) =
-  let ii =
-    { interface_info_name = id ;
-      interface_info_fields = [];
-      interface_info_methods = [];
-      interface_info_extends = [];
-    }
-  in
-  eprintf "adding interface %s in package '%s'@." id p.package_info_name;
-  let l =
-    try
-      Hashtbl.find package_contents p.package_info_tag 
-    with
-	Not_found -> []
-  in
-  Hashtbl.replace package_contents p.package_info_tag 
-    (Type (TypeInterface ii) :: l);
-  ii
-
-let new_class_info (p:package_info) (id:string) =
-  let ci =
-    { class_info_name = id ;
-      class_info_fields = [];
-      class_info_methods = [];
-      class_info_constructors = [];
-      class_info_extends = None;
-      class_info_is_exception = false;
-      class_info_implements = [];
-    }
-  in
-  eprintf "adding class %s in package %s@." id p.package_info_name;
-  let l =
-    try
-      Hashtbl.find package_contents p.package_info_tag 
-    with
-	Not_found -> []
-  in
-  Hashtbl.replace package_contents p.package_info_tag 
-    (Type (TypeClass ci) :: l);
-  ci
-
-let get_type_decl package d acc = 
-    match d with
-    | JPTclass c -> 
-	(*
-	  class_modifiers : modifiers;
-	  class_name : identifier;
-	  class_extends : qualified_ident option;
-	  class_implements : qualified_ident list;
-	  class_fields : field_declaration list
-	*)
-	let (_,id) = c.class_name in
-	let ci = new_class_info package id in 
-	(id,TypeClass ci)::acc
-    | JPTinterface i -> 
-	let (_,id) = i.interface_name in
-	let ii = new_interface_info package id in 
-	(id,TypeInterface ii)::acc
-    | JPTannot(loc,s) -> assert false
-    | JPTaxiom((loc,id),e) -> acc
-    | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads((loc,id),ret_type,params,reads) -> acc 
-    | JPTlogic_def((loc,id),ret_type,params,body) -> acc
-
-
-let package_counter = ref 0
-
-let get_import imp acc =
-    match imp with
-      | Import_package qid ->
-	  eprintf "importing package %a@." print_qualified_ident qid;
-	  begin
-	    match classify_name [] [] None [] qid with
-	      | PackageName pi -> pi::acc
-	      | _ -> typing_error (fst (List.hd qid))
-		  "package name expected"
-(*
-	    try
-	      ignore (search_package qid)
-	    with
-		Not_found ->
-		  incr package_counter;
-		  let pi =
-		    { package_entry_tag = !package_counter;
-		      package_entry_name = snd (List.hd qid);
-		    }
-		  in
-		  Hashtbl.add package_table !package_counter pi
-	    assert false
-*)
-	  end
-      | Import_class_or_interface qid ->
-	  eprintf "importing %a@." print_qualified_ident qid;
-	  assert false
-(*
-	  let ast = Java_syntax.file f in
-	  Java_typing.get_types ast;
-	  Java_typing.get_prototypes ast
-*)
-	  
-
-let anonymous_package =
-  { package_info_tag = 0;
-    package_info_name = "";
-    package_info_directory = ".";
-  }
-	
-let javalang_qid = [(Loc.dummy_position,"lang"); (Loc.dummy_position,"java")]
-
-let get_types cu =
-  let pi = 
-    match cu.cu_package with
-      | [] -> anonymous_package
-      | qid ->
-	  match classify_name [] [] None [] qid with
-	    | PackageName pi -> pi
-	    | _ -> assert false
-  in
-  let package_env = 
-    List.fold_right get_import (Import_package javalang_qid::cu.cu_imports) []
-  in
-  package_env, List.fold_right (get_type_decl pi) cu.cu_type_decls []
 
 
 
@@ -638,20 +747,20 @@ let rec get_method_prototypes package_env type_env current_type (mis,cis) env l 
 	in
 	let is_static = List.mem Static head.method_modifiers in
 	let mi = new_method_info ~is_static (snd id) ret_ty params in
-	Hashtbl.add methods_env mi.method_info_tag (mi,None,[],body);
+	Hashtbl.add methods_env mi.method_info_tag (mi,None,None,[],body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
-    | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
+    | JPFmethod_spec(req,assigns,behs) :: JPFmethod(head,body) :: rem ->
 	let id, ret_ty, params = 
 	  method_header package_env type_env 
 	    head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
 	let mi = new_method_info ~is_static (snd id) ret_ty params in
-	Hashtbl.add methods_env mi.method_info_tag (mi,req,behs,body);
+	Hashtbl.add methods_env mi.method_info_tag (mi,req,assigns,behs,body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
-   | JPFmethod_spec(req,behs) :: JPFconstructor(head,eci,body) :: rem ->
+   | JPFmethod_spec(req,assigns,behs) :: JPFconstructor(head,eci,body) :: rem ->
        begin
 	 match current_type with
 	   | None -> assert false
@@ -663,7 +772,7 @@ let rec get_method_prototypes package_env type_env current_type (mis,cis) env l 
 	       in
 	       let ci = new_constructor_info cur (snd id) params in
 	       Hashtbl.add constructors_env ci.constr_info_tag 
-		 (ci,req,behs,eci,body);
+		 (ci,req,assigns,behs,eci,body);
 	       get_method_prototypes package_env type_env 
 		 current_type (mis,ci::cis) env rem 
        end
@@ -1919,6 +2028,7 @@ let behavior package_env type_env current_type pre_state_env post_state_env (id,
 type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
+      mt_assigns : Java_tast.term list option;
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -1933,7 +2043,7 @@ let methods_table = Hashtbl.create 97
 
 
 let type_method_spec_and_body package_env type_env ti mi =
-  let (_,req,behs,body) = 
+  let (_,req,assigns,behs,body) = 
     try
       Hashtbl.find methods_env mi.method_info_tag 
     with Not_found -> assert false
@@ -1961,11 +2071,17 @@ let type_method_spec_and_body package_env type_env ti mi =
       | None -> local_env
       | Some vi -> (vi.java_var_info_name,vi)::local_env
   in
+  let assigns = 
+    Option_misc.map 
+      (List.map 
+	 (location package_env type_env (Some ti) env_result)) assigns
+  in
   let behs = List.map (behavior package_env type_env (Some ti) local_env env_result) behs in
   let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
   Hashtbl.add methods_table mi.method_info_tag 
     { mt_method_info = mi;
       mt_requires = req;
+      mt_assigns = assigns;
       mt_behaviors = behs;
       mt_body = body } 
 
@@ -1974,6 +2090,7 @@ let type_method_spec_and_body package_env type_env ti mi =
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
+      ct_assigns : Java_tast.term list option;
       ct_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -1988,7 +2105,7 @@ type constructor_table_info =
 let constructors_table = Hashtbl.create 97
 
 let type_constr_spec_and_body package_env type_env current_type ci =
-  let (_,req,behs,eci,body) = 
+  let (_,req,assigns,behs,eci,body) = 
     try
       Hashtbl.find constructors_env ci.constr_info_tag 
     with Not_found -> assert false
@@ -2017,6 +2134,13 @@ let type_constr_spec_and_body package_env type_env current_type ci =
     ("this",vi)::local_env
   in
   let req = Option_misc.map (assertion package_env type_env (Some current_type) local_env) req in
+   (* Note: for constructors, the `assigns' clause is typed in
+      pre-state environnement: `this' is not allowed there *)
+  let assigns = 
+    Option_misc.map 
+      (List.map 
+	 (location package_env type_env (Some current_type) local_env)) assigns
+  in
   let behs = List.map (behavior package_env type_env (Some current_type) local_env spec_env) behs in
   match eci with
     | Invoke_none -> 
@@ -2024,6 +2148,7 @@ let type_constr_spec_and_body package_env type_env current_type ci =
 	Hashtbl.add constructors_table ci.constr_info_tag 
 	  { ct_constr_info = ci;
 	    ct_requires = req;
+	    ct_assigns = assigns;
 	    ct_behaviors = behs;
 	    ct_body = body } 
     | Invoke_this _ | Invoke_super _ -> assert false (* TODO *)

@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.18 2007-09-21 07:29:56 marche Exp $
+$Id: java_parser.mly,v 1.19 2007-09-25 08:10:42 marche Exp $
 
 */
 
@@ -917,8 +917,8 @@ kml_type_decl:
     { JPTaxiom($2,$4) }
 
 kml_field_decl:
-| requires behaviors EOF
-    { JPFmethod_spec($1,$2) }
+| requires assigns behaviors EOF
+    { JPFmethod_spec($1,$2,$3) }
 | INVARIANT ident COLON expr SEMICOLON EOF
     { JPFinvariant($2,$4) } 
 | MODEL variable_declaration

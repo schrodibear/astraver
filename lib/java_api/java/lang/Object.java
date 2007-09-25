@@ -1,5 +1,5 @@
 /*
-* $Workfile: Object.java $	$Revision: 1.1 $, $Date: 2007-09-24 08:11:51 $
+* $Workfile: Object.java $	$Revision: 1.1 $, $Date: 2007-09-25 08:10:43 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -20,7 +20,7 @@
 // /*
 // $Workfile: Object.java $
 // $Revision: 1.1 $
-// $Date: 2007-09-24 08:11:51 $
+// $Date: 2007-09-25 08:10:43 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/java/lang/Object.java $
 // $Modtime: 5/02/00 7:13p $

@@ -13,8 +13,8 @@ let main () =
 	printf "Parsing OK.@.";
 	(* phase 2 : typing *)
 	let (p,t) = Java_typing.get_types ast in
-	Java_typing.get_prototypes [] t ast;
-	Java_typing.get_bodies [] t ast;
+	Java_typing.get_prototypes p t ast;
+	Java_typing.get_bodies p t ast;
 	printf "Typing OK.@.";
 (*
 	(* phase 3 : computation of call graph *)

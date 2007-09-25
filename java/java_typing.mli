@@ -3,13 +3,12 @@ val print_qualified_ident : Format.formatter -> Java_ast.qualified_ident -> unit
 
 val print_type : Format.formatter -> Java_env.java_type -> unit
 
-val type_table :
-  (string,Java_env.java_type_info) Hashtbl.t
-
+val type_table : (int,Java_env.java_type_info) Hashtbl.t
 
 type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
+      mt_assigns : Java_tast.term list option;
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -24,6 +23,7 @@ val methods_table :
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
+      ct_assigns : Java_tast.term list option;
       ct_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -57,16 +57,16 @@ exception Typing_error of Loc.position * string
 
 val get_types : 
   Java_ast.compilation_unit -> 
-  Java_env.package_info list *
+  Java_env.package_info list * 
     (string * Java_env.java_type_info) list
 
 val get_prototypes: 
-  (string * Java_env.package_info) list ->
+  Java_env.package_info list ->
   (string * Java_env.java_type_info) list ->
   Java_ast.compilation_unit -> unit
 
 val get_bodies : 
-  (string * Java_env.package_info) list ->
+  Java_env.package_info list ->
   (string * Java_env.java_type_info) list ->
   Java_ast.compilation_unit -> unit
 

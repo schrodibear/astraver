@@ -1,5 +1,5 @@
 /*
-* $Workfile: Throwable.java $	$Revision: 1.1 $, $Date: 2007-09-24 08:11:51 $
+* $Workfile: RuntimeException.java $	$Revision: 1.1 $, $Date: 2007-09-25 08:10:43 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -18,33 +18,32 @@
 */
 
 // /*
-// $Workfile: Throwable.java $
+// $Workfile: RuntimeException.java $
 // $Revision: 1.1 $
-// $Date: 2007-09-24 08:11:51 $
+// $Date: 2007-09-25 08:10:43 $
 // $Author: marche $
-// $Archive: /Products/Europa/api21/java/lang/Throwable.java $
+// $Archive: /Products/Europa/api21/java/lang/RuntimeException.java $
 // $Modtime: 5/02/00 7:13p $
 // Original author:  Ravi
 // */
 
 package java.lang;
 
-  /**
-   * The Throwable class is the superclass of all errors and exceptions in the Java Card subset
-   * of the Java language.
-   * Only objects that are instances of this class (or of one of its
-   * subclasses) are thrown by the Java Card Virtual Machine
-   * or can be thrown by the Java <code>throw</code> statement.
-   * Similarly, only this class or one of its subclasses
-   * can be the argument type in a <code>catch</code> clause.
-   * <p>This Java Card class's functionality is a strict subset of the definition in the 
-   * <em>Java Platform Core API Specification</em>.<p>
-   */
-public class Throwable {
+/**
+ * <code>RuntimeException</code> is the superclass of those exceptions that can be thrown
+ * during the normal operation of the Java Card Virtual Machine.<p> 
+ * A method is not required to declare in its throws clause any subclasses of
+ * <code>RuntimeException</code> that might be thrown during the execution of the
+ * method but not caught.
+ * <p>This Java Card class's functionality is a strict subset of the definition in the 
+ * <em>Java Platform Core API Specification</em>.<p> 
+ */
+
+public class RuntimeException extends Exception {
 
   /**
-   * Constructs a new <code>Throwable</code>. 
+   * Constructs a <code>RuntimeException</code> instance.
    */
-  public Throwable() {}
-  
+  public RuntimeException() {}
+
 }

@@ -1,17 +1,7 @@
 
-(*s literals *)
-
-type literal =
-    | Integer of string
-    | Float of string
-    | Bool of bool
-    | String of string
-    | Char of string
-    | Null
-
 (*s types and environments *)
 
-type accessibility = [ `PUBLIC | `PROTECTED | `PRIVATE | `NONE ];;
+type accessibility = Apublic | Aprotected | Aprivate | Anone
 
 type base_type =
     | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
@@ -25,22 +15,7 @@ type java_type =
     | JTYinterface of interface_info 
     | JTYarray of java_type
 
-(*
-type java_type =
-  | Byte_type
-  | Short_type
-  | Integer_type
-  | Float_type
-  | Boolean_type
-  | Null_type
-  | Type_type
-  | Class_type of class_entry
-  | Interface_type of interface_entry
-  | Array_type of java_type
-  | Prop_type
-  | Logic_type of string
-*)
-    
+   
 and java_var_info =
     {
       java_var_info_tag : int;
@@ -122,53 +97,26 @@ and logic_type_entry =
       mutable logic_type_entry_name : string
     }
 
-(*
-and logic_entry = 
-    {
-      logic_entry_name : string;
-      logic_entry_return_type : java_type;
-      mutable logic_entry_effects : effects ;
-      logic_entry_parameters : t;
-    }
-*)
-    
 and java_logic_info =
     {
       java_logic_info_name : string;
       java_logic_info_tag : int;
       java_logic_info_result_type : java_type option;
       java_logic_info_parameters : java_var_info list;
-(*
-      java_logic_info_effects = empty_effects;
-*)
       mutable java_logic_info_calls : java_logic_info list;
     }
 
 
-and axiom_entry = 
+and axiom_info = 
     {
-      axiom_entry_name : string;
-      mutable axiom_entry_effects : effects ;
+      axiom_info_name : string;
+(*
+      mutable axiom_info_effects : effects ;
+*)
     }
     
-(*
-and routine_entry =
-    {
-     routine_entry_parameters : t;
-     mutable routine_entry_parameters_as_local_var : t;
-     mutable routine_entry_produce_body : bool;
-     mutable routine_entry_local_vars : t;
-     mutable routine_entry_effects : effects;
-     mutable routine_entry_int_array_writes_nothing : bool;
-     mutable routine_entry_float_array_writes_nothing : bool;
-     mutable routine_entry_bool_array_writes_nothing : bool;
-     mutable routine_entry_obj_array_writes_nothing : bool;
-     mutable routine_entry_fields_writes_nothing : 
-       java_field_info Inttagset.t;
-     mutable routine_entry_use_transactions : bool
-   }
-*)
 
+(*
 and effects = 
     {
       reads_alloc : bool;
@@ -193,6 +141,7 @@ and effects =
       breaks : bool (*i label_entry Inttagset.t i*);
       continue : bool
     }
+*)
 
 and package_info =
     {
@@ -203,9 +152,7 @@ and package_info =
     
 and java_class_info =
     {
-(*
-      class_entry_package : string;
-*)
+      class_info_tag : int;
       class_info_name : string;
       mutable class_info_fields : java_field_info list;
       mutable class_info_methods : method_info list;
@@ -213,22 +160,11 @@ and java_class_info =
       mutable class_info_extends : java_class_info option;
       mutable class_info_is_exception : bool;
       mutable class_info_implements : interface_info list;
-(*
-      mutable class_entry_contents : t;
-      mutable class_entry_constructors : constructor_entry list;
-      mutable class_entry_invariant_effects : effects;
-      mutable class_entry_static_invariant_effects : effects;
-*)
-(*
-      mutable class_entry_invariant_args : (string * Why.base_type) list;
-      mutable class_entry_static_invariant_args : (string * Why.base_type) list;
-      mutable class_entry_restore_invariant_args : (string * Why.base_type) list;
-      mutable class_entry_representation_invariant_effects : effects;
-*)
     }
 
 and interface_info =
     {
+      interface_info_tag : int;
       interface_info_name : string;
       mutable interface_info_extends : interface_info list;
       mutable interface_info_fields : java_field_info list;
@@ -238,6 +174,16 @@ and interface_info =
 and java_type_info =
   | TypeClass of java_class_info
   | TypeInterface of interface_info
+
+(*s literals, shared between ASTs and typed ASTs *)
+
+type literal =
+    | Integer of string
+    | Float of string
+    | Bool of bool
+    | String of string
+    | Char of string
+    | Null
 
 
 (*
