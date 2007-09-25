@@ -1620,7 +1620,7 @@ let rec statement env lz s =
 		   (labels,ts) :: acc, lz2
 		) ([],lz1) csl
 	    in
-	    JCTSswitch(tc,tcsl), lz2
+	    JCTSswitch(tc,List.rev tcsl), lz2
 	  else 
 	    typing_error s.jc_pstatement_loc "integer expected"
   in 

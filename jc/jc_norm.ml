@@ -627,17 +627,20 @@ and statement s =
 	    let el = List.map test_one_case_or_default c in
 	    make_or_list_test loc el
 	  in
-	  let ncsl = List.map 
-	    (fun (c,sl) -> 
+	  let _,ncsl = List.fold_left
+	    (fun (previous_c,statl) (c,sl) -> 
 	      (* statement list in case considered *)
 	      let sl = List.map statement sl in
 	      let block_stat = make_block loc sl in
 	      let empty_block = make_block loc [] in
-	      let etest = test_case_or_default c in
+	      let current_c = previous_c @ c in
+	      let etest = test_case_or_default current_c in
 	      (* case translated into if-statement *)
-	      make_if loc etest block_stat empty_block 
-	    ) csl 
+	      let if_stat = make_if loc etest block_stat empty_block in
+	      current_c, if_stat :: statl
+	    ) ([],[]) csl 
 	  in
+	  let ncsl = List.rev ncsl in
 	  let dummy_throw = make_throw loc loop_exit None in
 	  let switch_stat = make_decls loc (sl @ ncsl @ [dummy_throw]) tl in
 	  let catch_exit =
