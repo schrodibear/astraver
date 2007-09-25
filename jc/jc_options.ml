@@ -22,9 +22,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.10 2007-09-24 12:04:53 romain Exp $ i*)
+(*i $Id: jc_options.ml,v 1.11 2007-09-25 08:19:47 moy Exp $ i*)
 
 open Format
+open Jc_env
+open Jc_common_options
 
 (*s The log file *)
 
@@ -60,13 +62,7 @@ let libfile = "jessie.why"
 let parse_only = ref false
 let type_only = ref false
 let print_graph = ref false
-let debug = ref false
-let verbose = ref false
-let werror = ref false
 let why_opt = ref ""
-
-type inv_sem = InvNone | InvOwnership | InvArguments
-let inv_sem = ref InvOwnership
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 

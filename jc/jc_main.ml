@@ -124,13 +124,13 @@ let main () =
 	(* phase 6 : checking structure invariants *)
 	begin
 	  match Jc_options.inv_sem with
-	    | Jc_options.InvOwnership ->
+	    | InvOwnership ->
 		Jc_options.lprintf "\nstarting checking structure invariants.@.";
 		Hashtbl.iter 
 		  (fun _ (_,invs) -> Jc_invariants.check invs)
 		  Jc_typing.structs_table
-	    | Jc_options.InvNone
-	    | Jc_options.InvArguments -> ()
+	    | InvNone
+	    | InvArguments -> ()
 	end;
 	
 	(* production phase 1.1 : generation of Why logic types *)
@@ -198,7 +198,7 @@ let main () =
 	in	       
 	(* production phase 3.5 : generation of global invariant predicates *)
 	let d_axioms =
-	  if Jc_options.inv_sem = Jc_options.InvOwnership then
+	  if Jc_options.inv_sem = InvOwnership then
 	    Jc_invariants.make_global_invariants d_axioms
 	  else d_axioms
 	in
@@ -213,7 +213,7 @@ let main () =
 	    d_axioms
 	in
 	let d_inv =
-	  if Jc_options.inv_sem = Jc_options.InvOwnership then
+	  if Jc_options.inv_sem = InvOwnership then
 	    begin
 	      Jc_options.lprintf "production phase 5 : (invariants tools)@.";
 	      (* production phase 5.1 : "assoc" declaration *)

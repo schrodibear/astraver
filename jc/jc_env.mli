@@ -25,6 +25,8 @@
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
+type inv_sem = InvNone | InvOwnership | InvArguments
+
 type jc_type =
   | JCTnative of native_type
   | JCTlogic of string

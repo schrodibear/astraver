@@ -700,7 +700,7 @@ let rec statement ~threats s =
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in
-	let upd = if threats && Jc_options.inv_sem = Jc_options.InvOwnership then
+	let upd = if threats && Jc_options.inv_sem = InvOwnership then
 	  append (assert_mutable (LVar tmp1) fi) upd else upd in
 	let lets =
 	  (make_lets
@@ -709,7 +709,7 @@ let rec statement ~threats s =
 				 e2.jc_expr_type e2') ])
 	     upd)
 	in
-	if Jc_options.inv_sem = Jc_options.InvOwnership then
+	if Jc_options.inv_sem = InvOwnership then
 	  append lets (assume_field_invariants fi)
 	else
 	  lets
@@ -1021,7 +1021,7 @@ let tr_fun f spec body acc =
   (* Calculate invariants (for each parameter), that will
      be used as pre and post conditions *)
   let invariants =
-    if Jc_options.inv_sem = Jc_options.InvArguments then
+    if Jc_options.inv_sem = InvArguments then
       List.fold_left
 	(fun acc v ->
 	   match v.jc_var_info_type with
@@ -1261,7 +1261,7 @@ let tr_fun f spec body acc =
 	(* default behavior *)
 	let why_body = statement_list ~threats:true body in
 	let tblock =
-	  if Jc_options.inv_sem = Jc_options.InvOwnership then
+	  if Jc_options.inv_sem = InvOwnership then
 	    append
 	      (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
 	      (assume_all_invariants f.jc_fun_info_parameters)
@@ -1305,7 +1305,7 @@ let tr_fun f spec body acc =
 	  else
 	    let body = statement_list ~threats:false body in
 	    let tblock =
-	      if Jc_options.inv_sem = Jc_options.InvOwnership then
+	      if Jc_options.inv_sem = InvOwnership then
 		append
 		  (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
 		  (assume_all_invariants f.jc_fun_info_parameters)

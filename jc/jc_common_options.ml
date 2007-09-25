@@ -22,48 +22,20 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.11 2007-09-25 08:19:47 moy Exp $ *)
-
-(*s environment variables *)
-
-val libdir : string
-val libfile : string
+(*i $Id: jc_common_options.ml,v 1.1 2007-09-25 08:19:47 moy Exp $ i*)
 
 (*s command-line options *)
 
-val parse_only : bool
-val type_only : bool
-val print_graph : bool
-val debug : bool
-val verbose : bool
-val werror : bool
-val why_opt : string
+open Jc_env
 
-val annot_infer : bool
-val ai_domain : string
-val main : string
+let debug = ref false
+let verbose = ref false
+let werror = ref false
 
-val files : unit -> string list 
-val usage : unit -> unit
-
-val inv_sem: Jc_env.inv_sem
-
-(*s The log file *)
-
-val log : Format.formatter
-val lprintf : ('a, Format.formatter, unit) format -> 'a
-val close_log : unit -> unit
-
-(*s error handling *)
-
-exception Jc_error of Loc.position * string
-
-val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
-
-
+let inv_sem = ref InvOwnership
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "unset LANG; make -C .. bin/jessie.byte"
 End: 
 *)
