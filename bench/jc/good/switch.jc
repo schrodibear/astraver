@@ -11,6 +11,8 @@ integer main(integer i)
       break;
     default:
       j = 1;
+    case 2:
+      j = 2;
   }
   return j;
 }
