@@ -93,34 +93,30 @@ let read_dir d =
   in
   Array.fold_left
     (fun (dirs,files) name ->
-       if name <> "CVS" then
-	 let fullname = Filename.concat d name in
-	 let s = Unix.lstat fullname in
-	 if s.Unix.st_kind = Unix.S_DIR then
-	   begin
-	     Java_options.lprintf "got sub-directory %s@." name;
-	     ((name,fullname)::dirs,files)
-	   end
-	 else
-           if s.Unix.st_kind = Unix.S_REG then
-	     let base,ext = split_extension name in
-	     match ext with
-	       | "java" ->
-		   Java_options.lprintf "got Java file %s@." base;
-		   (dirs,(base,fullname)::files)
-	       | _ -> 
-		   Java_options.lprintf "file %s skipped@." name;
-		   (dirs,files)
-	   else 
+       let fullname = Filename.concat d name in
+       let s = Unix.lstat fullname in
+       match s.Unix.st_kind with
+	 | Unix.S_DIR when name <> "CVS" ->
+	     begin
+	       Java_options.lprintf "got sub-directory %s@." name;
+	       ((name,fullname)::dirs,files)
+	     end
+	 | Unix.S_REG ->
+	     begin
+	       let base,ext = split_extension name in
+	       match ext with
+		 | "java" ->
+		     Java_options.lprintf "got Java file %s@." base;
+		     (dirs,(base,fullname)::files)
+		 | _ -> 
+		   Java_options.lprintf "file %s ignored@." name;
+		     (dirs,files)
+	     end
+	 | _ ->
 	     begin
 	       Java_options.lprintf "skipping special file %s@." name;
 	       (dirs,files)
-	     end
-       else 
-	 begin
-	   Java_options.lprintf "skipping special file %s@." name;
-	   (dirs,files)
-	 end)
+	     end)
     ([],[]) l
 	     
   
@@ -463,7 +459,15 @@ and classify_name
 		  match Hashtbl.find contents id with
 		    | Subpackage pi -> PackageName pi
 		    | Type ti -> TypeName ti
-		    | File f -> assert false (* TODO *)
+		    | File f -> 
+			let ast = Java_syntax.file f in
+			let (_,t) = get_types ast in
+			try
+			  let ti = List.assoc id t in
+			  Hashtbl.replace contents id (Type ti);
+			  TypeName ti
+			with Not_found -> assert false
+			
 		with
 		    Not_found ->
 		      typing_error loc "unknown identifier %s" id
@@ -519,6 +523,15 @@ and classify_name
 		  | JTYnull | JTYbase _ ->
 		      class_or_interface_expected t.java_term_loc 
 	      end
+
+
+let () =
+  match classify_name [] [] None [] 
+    ((Loc.dummy_position,"Throwable") :: javalang_qid)
+  with
+    | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
+    | _ -> assert false
+
 
 
 

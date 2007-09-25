@@ -1916,15 +1916,13 @@ let add_typedecl d (id,parent) =
 
 let add_fundecl (ty,loc,id,pl) =
   try
-    let _fi = Hashtbl.find functions_env id in
-    typing_error loc "function %s already declared" id
-(*
+    let fi = Hashtbl.find functions_env id in
+    Format.eprintf "FIXME: Warning: ignoring second declaration of function %s@." id;
     let ty = fi.jc_fun_info_return_type in
     let param_env =
       List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
     in
     param_env, ty, fi
-*)
   with Not_found ->
     let param_env = List.map param pl in
     let ty = type_type ty in
