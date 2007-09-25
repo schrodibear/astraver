@@ -404,6 +404,9 @@ let rep_fields st =
     (fun (_, fi) -> fi.jc_field_info_rep)
     st.jc_struct_info_fields
 
+(* Returns every rep fields of a hierarchy *)
+let hierarchy_rep_fields root =
+  List.flatten (List.map rep_fields (hierarchy_structures root))
 
 (*********)
 (* assoc *)
@@ -719,6 +722,82 @@ let lex2 (a1, b1) (a2, b2) =
   let c = compare a1 a2 in
   if c = 0 then compare b1 b2 else c
 
+(* forall x, ((meta) forall rep field f),
+   this.f = x.f /\ this.f.committed -> this = y *)
+let owner_unicity this root =
+  let reps = hierarchy_rep_fields root in
+
+  (* x name and type *)
+  let x_name = this^"_2" in
+  let x_type = pointer_type root in
+
+  (* big "or" on all rep fields *)
+  let eq_and_com_list = List.map
+    (fun (name, fi) ->
+       try
+	 let committed_name =
+	   committed_name
+	     (type_structure fi.jc_field_info_type).
+	     jc_struct_info_root
+	 in
+         (* this.f *)
+	 let this_dot_f =
+	   LApp(
+	     "select",
+	     [ LVar name;
+	       LVar this ])
+	 in
+         (* x.f *)
+	 let x_dot_f =
+	   LApp(
+	     "select",
+	     [ LVar name;
+	       LVar x_name ])
+	 in
+         (* this.f = x.f *)
+	 let eq =
+	   LPred(
+	     "eq",
+	     [ this_dot_f;
+	       x_dot_f ])
+	 in
+         (* this.f.committed = true *)
+	 let com =
+	   LPred(
+	     "eq",
+	     [ LApp(
+		 "select",
+		 [ LVar committed_name;
+		   this_dot_f ]);
+	       LConst(Prim_bool true) ])
+	 in
+	 make_and eq com
+       with Failure "type_structure" ->
+	 LFalse)
+    reps
+  in
+  let big_or = make_or_list eq_and_com_list in
+
+  let impl =
+    LImpl(
+      big_or,
+      LPred("eq", [ LVar this; LVar x_name ]))
+  in
+
+  let forall = LForall(x_name, x_type, impl) in
+
+  (* params *)
+  let params = List.map
+    (fun (name, fi) ->
+       [ name, memory_field fi;
+	 committed_name fi.jc_field_info_root,
+	 committed_memory_type fi.jc_field_info_root ])
+    reps
+  in
+  let params = List.flatten params in
+
+  params, forall
+
 let make_hierarchy_global_invariant acc root =
   (* this *)
   let this = "this" in
@@ -751,8 +830,12 @@ let make_hierarchy_global_invariant acc root =
   let params_cfp, com_fp = committed_implies_fully_packed this root in
   let params = params_cfp@params in
 
+  (* unicity of the owner: x.f == y.f && x.f.committed ==> x == y *)
+  let params_ou, owner_unicity = owner_unicity this root in
+  let params = params_ou@params in
+
   (* predicate body, quantified on "this" *)
-  let body = LForall(this, this_ty, make_and_list [ mut_inv; mut_com; com_fp ]) in
+  let body = LForall(this, this_ty, make_and_list [ mut_inv; mut_com; com_fp; owner_unicity ]) in
 
   (* sort the parameters and only keep one of each *)
   let params = List.fold_left
