@@ -462,7 +462,7 @@ let tr_class ci acc0 acc =
 	 if fi.java_field_info_is_final then
 	   let e = 
 	     try
-	       Hashtbl.find Java_typing.fields_table fi.java_field_info_tag
+	       Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
 	     with Not_found -> assert false
 	   in
 	   let body =

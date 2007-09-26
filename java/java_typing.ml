@@ -930,13 +930,13 @@ Typing level 2: extract bodies
 
 **********************************)
 
-let imported_packages = ref [ "java.lang" ]
 
 
-let fields_table = Hashtbl.create 17
+let field_initializer_table = Hashtbl.create 17
 
+(*
 let invariants_table = Hashtbl.create 17
-
+*)
 let axioms_table = Hashtbl.create 17
 
 
@@ -2011,27 +2011,6 @@ and switch_label package_env type_env current_type env t = function
 
 (* methods *)
 
-(*
-let type_param p =
-  let rec get_type p =
-    match p with
-      | Simple_parameter(ty,(loc,id)) -> (type_type ty, id)
-      | Array_parameter x -> 
-	  let (t,i) = get_type x in
-	  (JTYarray t,i)
-  in
-  let (t,i) = get_type p in new_var t i
-
-let rec method_header retty mdecl =
-  match mdecl with
-    | Simple_method_declarator(id,l) -> 
-	id,(Option_misc.map type_type retty), List.map type_param l
-    | Array_method_declarator d -> 
-	let id,t,l = method_header retty d in
-	match t with
-	  | Some t -> id,Some (JTYarray t),l
-	  | None -> typing_error (fst id) "invalid type void array"
-*)
 
 let location env a = term env a 
   
@@ -2210,7 +2189,7 @@ let type_field_initializer package_env type_env ci fi =
   let tinit = 
     Option_misc.map (type_initializer package_env type_env (Some ci) [] fi.java_field_info_type) init 
   in
-  Hashtbl.add fields_table fi.java_field_info_tag tinit
+  Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
   
 let type_decl package_env type_env d = 
     match d with

@@ -38,7 +38,7 @@ type constructor_table_info =
 val constructors_table : 
   (int, constructor_table_info) Hashtbl.t
 
-val fields_table : 
+val field_initializer_table : 
   (int, Java_tast.initialiser option) Hashtbl.t
 
 val axioms_table : (string,Java_tast.assertion) Hashtbl.t
