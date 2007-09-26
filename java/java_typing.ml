@@ -186,7 +186,13 @@ let get_package_contents pi =
 
 let toplevel_packages = 
   Java_options.lprintf "Reading toplevel packages@.";
-  read_dir_contents Java_options.classpath 
+  let h = Hashtbl.create 17 in
+  List.iter
+    (fun dir ->
+       let h' = read_dir_contents dir in
+       Hashtbl.iter (Hashtbl.add h) h')
+    Java_options.classpath;
+  h
 
  
 let type_table : (int, java_type_info) Hashtbl.t = Hashtbl.create 97
@@ -389,7 +395,7 @@ let new_class_info (p:package_info) (id:string) c =
   ci
 
 
-let get_type_decl package package_env d acc = 
+let get_type_decl package package_env acc d = 
     match d with
     | JPTclass c -> 
 	(*
@@ -419,7 +425,7 @@ type classified_name =
   | PackageName of package_info
 
 
-let rec get_import imp (packages,types) =
+let rec get_import (packages,types) imp =
     match imp with
       | Import_package qid ->
 	  eprintf "importing package %a@." print_qualified_ident qid;
@@ -431,12 +437,12 @@ let rec get_import imp (packages,types) =
 	  end
       | Import_class_or_interface qid ->
 	  eprintf "importing %a@." print_qualified_ident qid;
-	  assert false
-(*
-	  let ast = Java_syntax.file f in
-	  Java_typing.get_types ast;
-	  Java_typing.get_prototypes ast
-*)
+	  begin
+	    match classify_name [] [] None [] qid with
+	      | TypeName ti -> (packages,(snd (List.hd qid),ti)::types)
+	      | _ -> typing_error (fst (List.hd qid))
+		  "type name expected"
+	  end
 	  
 
 and get_types cu =
@@ -449,12 +455,12 @@ and get_types cu =
 	    | _ -> assert false
   in
   let package_env,type_env = 
-    List.fold_right get_import (Import_package javalang_qid::cu.cu_imports) 
-      ([],[])
+    List.fold_left get_import ([],[])
+      (Import_package javalang_qid::cu.cu_imports) 
   in
   let local_type_env =
-    List.fold_right (get_type_decl pi package_env) 
-      cu.cu_type_decls []
+    List.fold_left (get_type_decl pi package_env) 
+      [] cu.cu_type_decls 
   in
   let full_type_env = local_type_env @ type_env in
   List.iter
@@ -563,6 +569,7 @@ and classify_name
 			    (* otherwise look for a toplevel package 
 			       of that name *)
 			    try
+			      
 			      match Hashtbl.find toplevel_packages id with
 				| Subpackage pi -> PackageName pi 
 				| Type ti -> assert false (* TypeName ti ? *)
