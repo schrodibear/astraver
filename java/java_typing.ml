@@ -189,15 +189,27 @@ let toplevel_packages =
   read_dir_contents Java_options.classpath 
 
  
-type type_data =
-  | TypeDataClass of java_class_info * Java_ast.class_declaration
-  | TypeDataInterface of interface_info * Java_ast.interface_declaration
+let type_table : (int, java_type_info) Hashtbl.t = Hashtbl.create 97
 
-let type_table : (int, type_data) Hashtbl.t = Hashtbl.create 97
-
-let type_fields_table : (int, java_field_info list) Hashtbl.t 
+let class_decl_table : 
+    (int, (package_info list * 
+	     Java_ast.class_declaration)) Hashtbl.t
     = Hashtbl.create 97
 
+let class_type_env_table : 
+    (int, (string * java_type_info) list) Hashtbl.t
+    = Hashtbl.create 97
+
+let interface_decl_table : 
+    (int, (package_info list * 
+	     Java_ast.interface_declaration)) Hashtbl.t
+    = Hashtbl.create 97
+
+let interface_type_env_table : 
+    (int, (string * java_type_info) list) Hashtbl.t
+    = Hashtbl.create 97
+
+(*
 let type_fields tag =
   try
     Hashtbl.find type_fields_table tag
@@ -205,12 +217,55 @@ let type_fields tag =
       Not_found ->
 	try
 	  match Hashtbl.find type_table tag with
-	    | TypeDataInterface(ii,id) ->
+	    | TypeInterface(ii) ->
+		(* TODO: read table interface_decl_table *)
 		assert false
-	    | TypeDataClass(ci,cd) ->
+	    | TypeClass(ci) ->
+		(* TODO: read table class_decl_table *)
 		assert false
 	with
 	    Not_found -> assert false
+*)
+
+(* variables *)
+
+let var_tag_counter = ref 0
+
+let new_var ty id =
+  incr var_tag_counter;
+  let vi = {
+    java_var_info_tag = !var_tag_counter;
+    java_var_info_name = id;
+    java_var_info_final_name = id;
+    java_var_info_type = ty;
+    java_var_info_assigned = false;
+  }
+  in vi
+
+let rec var_type_and_id ty id =
+  match id with
+    | Simple_id id -> ty,id
+    | Array_id id -> 
+	let ty,id = var_type_and_id ty id in
+	JTYarray(ty),id
+
+(* fields *)
+
+let field_prototypes_table = Hashtbl.create 97
+
+let field_tag_counter = ref 0
+
+let new_field ~is_static ~is_final ci ty id =
+  incr field_tag_counter;
+  let fi = {
+    java_field_info_tag = !field_tag_counter;
+    java_field_info_name = id;
+    java_field_info_type = ty;
+    java_field_info_class = ci;
+    java_field_info_is_static = is_static;
+    java_field_info_is_final = is_final;
+  }
+  in fi
 
 let rec list_assoc_field_name id l =
   match l with
@@ -219,30 +274,59 @@ let rec list_assoc_field_name id l =
 	if fi.java_field_info_name = id then fi
 	else list_assoc_field_name id r
 
-let rec lookup_interface_field ii id =
-  try
-    list_assoc_field_name id (type_fields ii.interface_info_tag)
-  with
-      Not_found ->
-	match ii.interface_info_extends with
-	  | [] -> raise Not_found
-	  | [ii] -> lookup_interface_field ii id
-	  | _ -> assert false (* TODO *)
 
-let rec lookup_class_field ci id =
-  try
-    list_assoc_field_name id (type_fields ci.class_info_tag)
-  with
-      Not_found ->
-	(* TODO: lookup implemented interfaces *)
-	match ci.class_info_extends with
-	  | None -> raise Not_found
-	  | Some ci -> lookup_class_field ci id
+let new_model_field ii ty id =
+(*
+  incr field_tag_counter;
+  let fi = {
+    java_field_info_tag = !field_tag_counter;
+    java_field_info_name = id;
+    java_field_info_type = ty;
+    java_field_info_class = ci;
+    java_field_info_is_static = is_static;
+    java_field_info_is_final = is_final;
+  }
+  in fi
+*)
+assert false (* TODO *)
 
-let lookup_field ti id =
-  match ti with
-    | TypeClass ci -> lookup_class_field ci id
-    | TypeInterface ii -> lookup_interface_field ii id
+(* methods *)
+
+let methods_env = Hashtbl.create 97
+
+let method_tag_counter = ref 0
+
+let new_method_info ~is_static id ty pars =
+  incr method_tag_counter;
+  let result = 
+      Option_misc.map (fun t -> new_var t "\\result") ty
+  in
+  {
+    method_info_tag = !method_tag_counter;
+    method_info_name = id;
+    method_info_trans_name = id;
+    method_info_has_this = None;
+    method_info_parameters = pars;
+    method_info_result = result;
+    method_info_calls = [];
+    method_info_is_static = is_static;
+  }
+
+let constructors_env = Hashtbl.create 97
+
+let constr_tag_counter = ref 0
+
+let new_constructor_info ci id pars =
+  incr constr_tag_counter;
+  {
+    constr_info_tag = !constr_tag_counter;
+    constr_info_class = ci;
+    constr_info_trans_name = ci.class_info_name;
+    constr_info_this = None;
+    constr_info_result = None;
+    constr_info_parameters = pars;
+    constr_info_calls = [];
+  }
 
 
 (******************************
@@ -260,10 +344,14 @@ let new_interface_info (p:package_info) (id:string) i =
   let ii =    
     { interface_info_tag = !type_counter;
       interface_info_name = id ;
+      interface_info_incomplete = true;
       interface_info_extends = [];
+      interface_info_fields = [];
+      interface_info_methods = [];
     }
   in
-  Hashtbl.add type_table !type_counter (TypeDataInterface (ii,i));
+  Hashtbl.add type_table !type_counter (TypeInterface ii);
+  Hashtbl.add interface_decl_table !type_counter i;
   eprintf "adding interface %s in package '%s'@." id p.package_info_name;
   let h =
     try
@@ -279,12 +367,17 @@ let new_class_info (p:package_info) (id:string) c =
   let ci =    
     { class_info_tag = !type_counter;
       class_info_name = id ;
+      class_info_incomplete = true;
       class_info_extends = None;
       class_info_is_exception = false;
       class_info_implements = [];
+      class_info_fields = [];
+      class_info_methods = [];
+      class_info_constructors = [];
     }
   in
-  Hashtbl.add type_table !type_counter (TypeDataClass (ci, c));
+  Hashtbl.add type_table !type_counter (TypeClass ci);
+  Hashtbl.add class_decl_table !type_counter c;
   eprintf "adding class %s in package %s@." id p.package_info_name;
   let h =
     try
@@ -296,7 +389,7 @@ let new_class_info (p:package_info) (id:string) c =
   ci
 
 
-let get_type_decl package d acc = 
+let get_type_decl package package_env d acc = 
     match d with
     | JPTclass c -> 
 	(*
@@ -307,11 +400,11 @@ let get_type_decl package d acc =
 	  class_fields : field_declaration list
 	*)
 	let (_,id) = c.class_name in
-	let ci = new_class_info package id c in 
+	let ci = new_class_info package id (package_env,c) in 
 	(id,TypeClass ci)::acc
     | JPTinterface i -> 
 	let (_,id) = i.interface_name in
-	let ii = new_interface_info package id i in 
+	let ii = new_interface_info package id (package_env,i) in 
 	(id,TypeInterface ii)::acc
     | JPTannot(loc,s) -> assert false
     | JPTaxiom((loc,id),e) -> acc
@@ -326,13 +419,13 @@ type classified_name =
   | PackageName of package_info
 
 
-let rec get_import imp acc =
+let rec get_import imp (packages,types) =
     match imp with
       | Import_package qid ->
 	  eprintf "importing package %a@." print_qualified_ident qid;
 	  begin
 	    match classify_name [] [] None [] qid with
-	      | PackageName pi -> pi::acc
+	      | PackageName pi -> (pi::packages,types)
 	      | _ -> typing_error (fst (List.hd qid))
 		  "package name expected"
 	  end
@@ -355,10 +448,26 @@ and get_types cu =
 	    | PackageName pi -> pi
 	    | _ -> assert false
   in
-  let package_env = 
-    List.fold_right get_import (Import_package javalang_qid::cu.cu_imports) []
+  let package_env,type_env = 
+    List.fold_right get_import (Import_package javalang_qid::cu.cu_imports) 
+      ([],[])
   in
-  package_env, List.fold_right (get_type_decl pi) cu.cu_type_decls []
+  let local_type_env =
+    List.fold_right (get_type_decl pi package_env) 
+      cu.cu_type_decls []
+  in
+  let full_type_env = local_type_env @ type_env in
+  List.iter
+    (fun (_,ti) ->
+       match ti with
+	 | TypeClass ci ->
+	     Hashtbl.add class_type_env_table ci.class_info_tag 
+	       full_type_env
+	 | TypeInterface ii ->
+	     Hashtbl.add interface_type_env_table ii.interface_info_tag 
+	       full_type_env)
+    local_type_env;
+  package_env,local_type_env
 
 (* corresponds to JLS 2nd ed., par. 6.5.2, pp. 96--97 *)
 and classify_name 
@@ -538,28 +647,7 @@ and classify_name
 		      class_or_interface_expected t.java_term_loc 
 	      end
 
-
-let () =
-  match classify_name [] [] None [] 
-    ((Loc.dummy_position,"Throwable") :: javalang_qid)
-  with
-    | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
-    | _ -> assert false
-
-
-
-
-(******************************
-
-Typing level 1: extract prototypes 
-  (logic functions profiles, Field types of Java classes and interfaces, profiles of methods and constructors)
-
-**********************************)
-
-
-(* typing types *)
-
-let rec type_type package_env type_env ty =
+and type_type package_env type_env ty =
   match ty with
     | Base_type t -> JTYbase t
     | Type_name qid -> 
@@ -577,128 +665,7 @@ let rec type_type package_env type_env ty =
 	let ty = type_type package_env type_env t in
 	JTYarray ty
 
-let rec var_type_and_id ty id =
-  match id with
-    | Simple_id id -> ty,id
-    | Array_id id -> 
-	let ty,id = var_type_and_id ty id in
-	JTYarray(ty),id
-
-
-(* variables *)
-
-let var_tag_counter = ref 0
-
-let new_var ty id =
-  incr var_tag_counter;
-  let vi = {
-    java_var_info_tag = !var_tag_counter;
-    java_var_info_name = id;
-    java_var_info_final_name = id;
-    java_var_info_type = ty;
-    java_var_info_assigned = false;
-  }
-  in vi
-
-
-(* fields *)
-
-let field_prototypes_table = Hashtbl.create 97
-
-let field_tag_counter = ref 0
-
-let new_field ~is_static ~is_final ci ty id =
-  incr field_tag_counter;
-  let fi = {
-    java_field_info_tag = !field_tag_counter;
-    java_field_info_name = id;
-    java_field_info_type = ty;
-    java_field_info_class = ci;
-    java_field_info_is_static = is_static;
-    java_field_info_is_final = is_final;
-  }
-  in fi
-
-let new_model_field ii ty id =
-(*
-  incr field_tag_counter;
-  let fi = {
-    java_field_info_tag = !field_tag_counter;
-    java_field_info_name = id;
-    java_field_info_type = ty;
-    java_field_info_class = ci;
-    java_field_info_is_static = is_static;
-    java_field_info_is_final = is_final;
-  }
-  in fi
-*)
-assert false (* TODO *)
-
-(* methods *)
-
-let methods_env = Hashtbl.create 97
-
-let method_tag_counter = ref 0
-
-let new_method_info ~is_static id ty pars =
-  incr method_tag_counter;
-  let result = 
-      Option_misc.map (fun t -> new_var t "\\result") ty
-  in
-  {
-    method_info_tag = !method_tag_counter;
-    method_info_name = id;
-    method_info_trans_name = id;
-    method_info_has_this = None;
-    method_info_parameters = pars;
-    method_info_result = result;
-    method_info_calls = [];
-    method_info_is_static = is_static;
-  }
-
-let constructors_env = Hashtbl.create 97
-
-let constr_tag_counter = ref 0
-
-let new_constructor_info ci id pars =
-  incr constr_tag_counter;
-  {
-    constr_info_tag = !constr_tag_counter;
-    constr_info_class = ci;
-    constr_info_trans_name = ci.class_info_name;
-    constr_info_this = None;
-    constr_info_result = None;
-    constr_info_parameters = pars;
-    constr_info_calls = [];
-  }
-
-let type_param package_env type_env p =
-  let rec get_type p =
-    match p with
-      | Simple_parameter(ty,(loc,id)) -> 
-	  (type_type package_env type_env ty, id)
-      | Array_parameter x -> 
-	  let (t,i) = get_type x in
-	  (JTYarray t,i)
-  in
-  let (t,i) = get_type p in new_var t i
-
-let rec method_header package_env type_env retty mdecl =
-  match mdecl with
-    | Simple_method_declarator(id,l) -> 
-	eprintf "get prototype for method %s@." (snd id);
-	id,(Option_misc.map (type_type package_env type_env) retty), 
-	List.map (type_param package_env type_env) l
-    | Array_method_declarator d -> 
-	let id,t,l = 
-	  method_header package_env type_env retty d 
-	in
-	match t with
-	  | Some t -> id,Some (JTYarray t),l
-	  | None -> typing_error (fst id) "invalid type void array"
-
-
-let get_field_prototypes package_env type_env ci acc d =
+and get_field_prototypes package_env type_env ci acc d =
   match d with
     | JPFvariable vd -> 
 	(*
@@ -719,28 +686,47 @@ let get_field_prototypes package_env type_env ci acc d =
 	  ) acc vd.variable_decls
     | _ -> acc
 
-let get_interface_field_prototypes package_env type_env ii acc d =
-  match d with
-    | JPFmodel_variable vd -> 
-	(*
-	vd.variable_modifiers : modifiers ;
-	vd.variable_type : type_expr ;
-	vd.variable_decls : variable_declarator list }
-	*)
-	let ty = type_type package_env type_env vd.variable_type in
-	List.fold_left
-	  (fun acc vd -> 
-	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
-	     let fi = new_model_field ii ty' id in	     
-(*
-	     Hashtbl.add model_field_prototypes_table fi.java_field_info_tag 
-	       (fi,vd.variable_initializer);
-*)
-	     fi::acc
-	  ) acc vd.variable_decls
-    | _ -> acc
+and type_param package_env type_env p =
+  let rec get_type p =
+    match p with
+      | Simple_parameter(ty,(loc,id)) -> 
+	  (type_type package_env type_env ty, id)
+      | Array_parameter x -> 
+	  let (t,i) = get_type x in
+	  (JTYarray t,i)
+  in
+  let (t,i) = get_type p in new_var t i
 
-let rec get_method_prototypes package_env type_env current_type (mis,cis) env l =
+and method_header package_env type_env retty mdecl =
+  match mdecl with
+    | Simple_method_declarator(id,l) -> 
+	eprintf "get prototype for method %s@." (snd id);
+	id,(Option_misc.map (type_type package_env type_env) retty), 
+	List.map (type_param package_env type_env) l
+    | Array_method_declarator d -> 
+	let id,t,l = 
+	  method_header package_env type_env retty d 
+	in
+	match t with
+	  | Some t -> id,Some (JTYarray t),l
+	  | None -> typing_error (fst id) "invalid type void array"
+
+and get_constructor_prototype package_env type_env current_type 
+    req assigns behs head eci body =
+  match current_type with
+    | None -> assert false
+    | Some cur ->
+	let id = head.constr_name in
+	let params = 
+	  List.map (type_param package_env type_env) 
+	    head.constr_parameters 
+	in
+	let ci = new_constructor_info cur (snd id) params in
+	Hashtbl.add constructors_env ci.constr_info_tag 
+	  (ci,req,assigns,behs,eci,body);
+	ci
+
+and get_method_prototypes package_env type_env current_type (mis,cis) env l =
   match l with
     | [] -> (mis,cis)
     | JPFmethod(head,body) :: rem -> 
@@ -763,22 +749,20 @@ let rec get_method_prototypes package_env type_env current_type (mis,cis) env l 
 	Hashtbl.add methods_env mi.method_info_tag (mi,req,assigns,behs,body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
-   | JPFmethod_spec(req,assigns,behs) :: JPFconstructor(head,eci,body) :: rem ->
-       begin
-	 match current_type with
-	   | None -> assert false
-	   | Some cur ->
-	       let id = head.constr_name in
-	       let params = 
-		 List.map (type_param package_env type_env) 
-		   head.constr_parameters 
-	       in
-	       let ci = new_constructor_info cur (snd id) params in
-	       Hashtbl.add constructors_env ci.constr_info_tag 
-		 (ci,req,assigns,behs,eci,body);
-	       get_method_prototypes package_env type_env 
-		 current_type (mis,ci::cis) env rem 
-       end
+    | JPFconstructor(head,eci,body) :: rem -> 
+	let ci =
+	  get_constructor_prototype package_env type_env current_type 
+	    None None [] head eci body
+	in
+	get_method_prototypes package_env type_env 
+	  current_type (mis,ci::cis) env rem 
+    | JPFmethod_spec(req,assigns,behs) :: JPFconstructor(head,eci,body) :: rem ->
+	let ci =
+	  get_constructor_prototype package_env type_env current_type 
+	    req assigns behs head eci body
+	in
+	get_method_prototypes package_env type_env 
+	  current_type (mis,ci::cis) env rem 
     | JPFmethod_spec _ :: _ ->
 	typing_error (assert false) "out of place method specification"
     | JPFinvariant(id,e) :: rem ->
@@ -800,85 +784,135 @@ let rec get_method_prototypes package_env type_env current_type (mis,cis) env l 
     | (JPFmodel_variable _ | JPFvariable _) :: rem -> 
 	get_method_prototypes package_env type_env 
 	  current_type (mis,cis) env rem 
-    | JPFconstructor _ :: rem -> assert false (* TODO *)
 
 
-let type_decl package_env type_env d = 
-    match d with
-    | JPTclass c -> 
+and get_class_prototypes package_env type_env ci d =
+  (* extends *)
+  ci.class_info_extends <-
+    Option_misc.map 
+    (fun id -> 
+       match classify_name package_env type_env None [] id with
+	 | TypeName (TypeClass super) -> 
+	     check_if_class_complete super;
+	     ci.class_info_is_exception <-
+	       super.class_info_is_exception;
+	     super
+	 | _ ->
+	     typing_error (fst (List.hd id)) "class type expected") 
+    d.class_extends;
+  (* fields *)
+  let fields = List.fold_left (get_field_prototypes package_env type_env ci) [] d.class_fields in
+  ci.class_info_fields <- fields;
+  let methods,constructors =
+    get_method_prototypes package_env type_env (Some ci) ([],[]) [] d.class_fields 
+  in
+  ci.class_info_methods <- methods;
+  ci.class_info_constructors <- constructors
+    
+and get_interface_field_prototypes package_env type_env ii acc d =
+  match d with
+    | JPFmodel_variable vd -> 
 	(*
-	  class_modifiers : modifiers;
-	  class_name : identifier;
-	  class_extends : qualified_ident option;
-	  class_implements : qualified_ident list;
-	  class_fields : field_declaration list
+	vd.variable_modifiers : modifiers ;
+	vd.variable_type : type_expr ;
+	vd.variable_decls : variable_declarator list }
 	*)
-	begin
-	  try
-	    match List.assoc (snd c.class_name) type_env with	  
-	    | TypeInterface _ -> assert false
-	    | TypeClass ci ->
-		(* extends *)
-		ci.class_info_extends <-
-		  Option_misc.map 
-		  (fun id -> 
-		     match classify_name package_env type_env None [] id with
-		       | TypeName (TypeClass super) -> 
-			   ci.class_info_is_exception <-
-			     super.class_info_is_exception;
-			   super
-		       | _ ->
-			   typing_error (fst (List.hd id)) "class type expected") 
-		  c.class_extends;
-		(* fields *)
-		let fields = List.fold_left (get_field_prototypes package_env type_env ci) [] c.class_fields in
-		Hashtbl.add type_fields_table ci.class_info_tag fields;
-		let _methods,_constructors = 
-		  get_method_prototypes package_env type_env (Some ci) ([],[]) [] c.class_fields 
-		in
-		(* TODO ci.class_info_methods <- methods; *)
-		(* TODO ci.class_info_constructors <- constructors; *)
-		()
-	  with Not_found -> assert false
-	end
-    | JPTinterface i -> 
-	begin
-	  try
-	    match List.assoc (snd i.interface_name) type_env with
-	      | TypeClass _ -> assert false
-	      | TypeInterface ii ->
-		  (* extends *)
-		  ii.interface_info_extends <-
-		    List.map 
-		    (fun id -> 
-		       match classify_name package_env type_env None [] id with
-			 | TypeName (TypeInterface super) -> 
-			     super
-			 | _ ->
-			     typing_error (fst (List.hd id)) "interface type expected") 
-		    i.interface_extends;
-		  (* fields *)
-		  let fields = 
-		    List.fold_left (get_interface_field_prototypes package_env type_env ii) [] i.interface_members
-		  in
-		  Hashtbl.add type_fields_table ii.interface_info_tag fields;
-		  let _methods,_constructors = 
-		    get_method_prototypes  package_env type_env None ([],[]) [] i.interface_members
-		  in
-		  (* TODO ii.interface_info_methods <- methods *)
-		  ()
-	  with Not_found -> assert false
-	end
-    | JPTannot(loc,s) -> assert false
-    | JPTaxiom((loc,id),e) -> ()
-    | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads _ -> ()
-    | JPTlogic_def((loc,id),ret_type,params,body) -> ()
-	
+	let ty = type_type package_env type_env vd.variable_type in
+	List.fold_left
+	  (fun acc vd -> 
+	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
+	     let fi = new_model_field ii ty' id in	     
+(*
+	     Hashtbl.add model_field_prototypes_table fi.java_field_info_tag 
+	       (fi,vd.variable_initializer);
+*)
+	     fi::acc
+	  ) acc vd.variable_decls
+    | _ -> acc
+
+and get_interface_prototypes package_env type_env ii d =
+  (* extends *)
+  ii.interface_info_extends <-
+    List.map 
+    (fun id -> 
+       match classify_name package_env type_env None [] id with
+	 | TypeName (TypeInterface super) -> 
+	     super
+	 | _ ->
+	     typing_error (fst (List.hd id)) "interface type expected") 
+    d.interface_extends;
+  (* fields *)
+  let fields = 
+    List.fold_left (get_interface_field_prototypes package_env type_env ii) [] 
+      d.interface_members
+  in
+  ii.interface_info_fields <- fields;
+  let methods,constructors = 
+    get_method_prototypes  package_env type_env None ([],[]) [] d.interface_members
+  in
+  ii.interface_info_methods <- methods 
+
+and check_if_interface_complete ii =
+  if ii.interface_info_incomplete then
+    begin
+      (* get interface decls prototypes *)
+      let (p,d) = Hashtbl.find interface_decl_table ii.interface_info_tag in
+      let t = Hashtbl.find interface_type_env_table ii.interface_info_tag in
+      get_interface_prototypes p t ii d;
+      ii.interface_info_incomplete <- false;    
+    end;
+
+and lookup_interface_field ii id =
+  check_if_interface_complete ii;
+  try
+    list_assoc_field_name id ii.interface_info_fields
+  with
+      Not_found ->
+	match ii.interface_info_extends with
+	  | [] -> raise Not_found
+	  | [ii] -> lookup_interface_field ii id
+	  | _ -> assert false (* TODO *)
+
+and check_if_class_complete ci =
+  if ci.class_info_incomplete then
+    begin
+      (* get class decls prototypes *)
+      let (p,d) = Hashtbl.find class_decl_table ci.class_info_tag in
+      let t = Hashtbl.find class_type_env_table ci.class_info_tag in
+      get_class_prototypes p t ci d;
+      ci.class_info_incomplete <- false;    
+    end;
+
+and lookup_class_field ci id =
+  check_if_class_complete ci;
+  try
+    list_assoc_field_name id ci.class_info_fields
+  with
+      Not_found ->
+	(* TODO: lookup implemented interfaces *)
+	match ci.class_info_extends with
+	  | None -> raise Not_found
+	  | Some ci -> lookup_class_field ci id
+	      
+and lookup_field ti id =
+  match ti with
+    | TypeClass ci -> lookup_class_field ci id
+    | TypeInterface ii -> lookup_interface_field ii id
 
 
-let get_prototypes package_env type_env cu =
-  List.iter (type_decl package_env type_env) cu.cu_type_decls
+(*
+
+  read the 'Throwable' class to initiate fields
+  class_info_is_exception
+
+*)
+
+let () =
+  match classify_name [] [] None [] 
+    ((Loc.dummy_position,"Throwable") :: javalang_qid)
+  with
+    | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
+    | _ -> assert false
 
 
 (*******************************
@@ -1462,7 +1496,7 @@ let lookup_method ti (loc,id) arg_types =
 	   if is_accessible_and_applicable mi id arg_types then 
 	     mi::acc 
 	   else acc)
-	acc (assert false (* ci.class_info_methods *))
+	acc (assert (not ci.class_info_incomplete);ci.class_info_methods)
     in
     let acc =
       match ci.class_info_extends with
@@ -2185,16 +2219,14 @@ let type_decl package_env type_env d =
 	  try
 	    match List.assoc (snd c.class_name) type_env with	  
 	      | TypeInterface _ -> assert false
-	      | TypeClass ci as _ti ->
-(*
+	      | TypeClass ci as ti ->
+		  check_if_class_complete ci;
 		  List.iter (type_field_initializer package_env type_env ti) 
 		    ci.class_info_fields;
 		  List.iter (type_method_spec_and_body package_env type_env ti) 
 		    ci.class_info_methods;
 		  List.iter (type_constr_spec_and_body package_env type_env ti) 
 		    ci.class_info_constructors
-*)
-		  ()
 	  with
 	      Not_found -> assert false
 	end

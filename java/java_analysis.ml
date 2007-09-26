@@ -133,9 +133,7 @@ let do_method mi req behs body =
 
 
 let do_constructor ci reg behs body =
-  assert false
-(*
-let l = ci.constr_info_class.class_info_constructors in
+  let l = ci.constr_info_class.class_info_constructors in
   if List.length l >= 2 then
     begin
       ci.constr_info_trans_name <-
@@ -146,7 +144,7 @@ let l = ci.constr_info_class.class_info_constructors in
 	   ci.constr_info_parameters "")
     end;
   List.iter statement body
-*)  
+
 
 (*
 Local Variables: 

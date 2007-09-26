@@ -12,36 +12,11 @@ let main () =
 	let ast = Java_syntax.file f in
 	printf "Parsing OK.@.";
 	(* phase 2 : typing *)
+	Java_options.lprintf "(****** typing phase *****)@.";
 	let (p,t) = Java_typing.get_types ast in
-	Java_typing.get_prototypes p t ast;
+	Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
 	Java_typing.get_bodies p t ast;
 	printf "Typing OK.@.";
-(*
-	(* phase 3 : computation of call graph *)
-	Hashtbl.iter 
-	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
-	  Jc_typing.logic_functions_table;
-	Hashtbl.iter 
-	  (fun _ (f,s,b) -> Jc_callgraph.compute_calls f s b)
-	  Jc_typing.functions_table;
-	let logic_components = 
-	  Jc_callgraph.compute_logic_components 
-	    Jc_typing.logic_functions_table
-	in
-	let components = 
-	  Jc_callgraph.compute_components Jc_typing.functions_table
-	in
-	(* phase 4 : computation of effects *)
-	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
-	Array.iter Jc_effect.logic_effects logic_components;
-	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
-	Array.iter Jc_effect.function_effects components;
-	(* phase 5 : checking structure invariants *)
-	Jc_options.lprintf "\nstarting checking structure invariants.@.";
-	Hashtbl.iter 
-	  (fun _ (_,invs) -> Jc_invariants.check invs)
-	  Jc_typing.structs_table;
-*)
 
 	(************)
 	(* Analyses *)
@@ -123,8 +98,7 @@ let main () =
 	let acc,decls =
 	  Hashtbl.fold 
 	    (fun _ id (acc0,acc) ->
-	       assert false 
-		 (* Java_interp.tr_class_or_interface id acc0 acc *))
+	       Java_interp.tr_class_or_interface id acc0 acc)
 	    Java_typing.type_table
 	    ([],decls)
 	in	
