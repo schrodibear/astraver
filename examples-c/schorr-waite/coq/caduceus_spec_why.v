@@ -46,27 +46,12 @@ constructor.
 Qed.
 
 
-Admitted.
 
 (*Why logic*) Definition unmarked_reachable :
   alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)
   -> pointer -> pointer -> Prop.
 exact unmarked_reachable.
 Defined.
-
-
-Admitted.
-
-
-Admitted.
-
-
-Admitted.
-
-Admitted.
-
-
-Admitted.
 
 (*Why logic*) Definition weight :
   alloc_table -> ((memory) Z) -> ((memory) Z) -> ((memory) pointer)
