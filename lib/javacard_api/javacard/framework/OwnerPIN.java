@@ -1,5 +1,5 @@
 /*
-* $Workfile: OwnerPIN.java $	$Revision: 1.1 $, $Date: 2007-09-26 14:32:59 $
+* $Workfile: OwnerPIN.java $	$Revision: 1.2 $, $Date: 2007-09-26 15:15:36 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: OwnerPIN.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
+// $Revision: 1.2 $
+// $Date: 2007-09-26 15:15:36 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/framework/OwnerPIN.java $
 // $Modtime: 5/02/00 7:13p $
@@ -66,7 +66,7 @@ public class OwnerPIN implements PIN{
    * presented before the PIN is blocked. When the PIN is blocked, it
    * cannot be validated even on valid PIN presentation.
    */
-    private /*@ spec_public */ byte tryLimit;
+    private /* @ spec_public */ byte tryLimit;
 
   /**
    * max PIN size, the maximum length of PIN allowed
@@ -87,7 +87,7 @@ public class OwnerPIN implements PIN{
    * validated flag, true if a valid PIN has been presented. This flag is
    * reset on every card reset.
    */
-    //@invariant flags instanceof boolean[];
+    // @ invariant flags instanceof boolean[];
     private boolean[] flags; //default null
 
   private static final byte VALIDATED = (byte)0;
@@ -108,10 +108,10 @@ public class OwnerPIN implements PIN{
    * override the internal PIN state of the <code>OwnerPIN</code>.
    * @return the boolean state of the PIN validated flag.
    */
-    /*@public normal_behavior
+    /* @public normal_behavior
       @ensures \result == flags[VALIDATED];
       @*/
-    protected /*@ pure */ boolean getValidatedFlag() {
+    protected /* @ pure */ boolean getValidatedFlag() {
     createFlags();
     return flags[VALIDATED];
     }
@@ -139,7 +139,7 @@ public class OwnerPIN implements PIN{
    * tries : temporary byte. This byte is used while decrementing triesLeft field
    * in persistent space, to ensure unconditional update.
    */
-    //@ invariant temps instanceof byte[];
+    // @ invariant temps instanceof byte[];
     private byte[] temps; // default 0
     
   private static final byte TRIES = (byte)0;
@@ -172,7 +172,7 @@ public class OwnerPIN implements PIN{
    * <li><code>PINException.ILLEGAL_VALUE</code> if <code>maxPINSize</code> parameter is less than 1.</ul>
    */
    
-    /*@invariant
+    /* @invariant
       @triesLeft instanceof byte[] &&
       @pinValue instanceof byte[] ;
       @*/
@@ -192,11 +192,11 @@ public class OwnerPIN implements PIN{
    *
    * @return the number of times remaining
    */
-    /*@public normal_behavior
+    /* @public normal_behavior
       @modifiable \nothing;
       @ensures \result==triesLeft[0];
       @*/
-    public /*@ pure */ byte getTriesRemaining(){
+    public /* @ pure */ byte getTriesRemaining(){
     return triesLeft[0];
     }
 
@@ -247,10 +247,10 @@ public class OwnerPIN implements PIN{
    *
    * @return <code>true</code> if validated; <code>false</code> otherwise
    */
-    /*@public normal_behavior
+    /* @public normal_behavior
       @ensures \result<==>getValidatedFlag();
       @*/
-    public /*@ pure */ boolean isValidated(){
+    public /* @ pure */ boolean isValidated(){
     return getValidatedFlag();
     }
 

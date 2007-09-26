@@ -1,5 +1,5 @@
 /*
-* $Workfile: CardRuntimeException.java $	$Revision: 1.1 $, $Date: 2007-09-26 14:32:59 $
+* $Workfile: CardRuntimeException.java $	$Revision: 1.2 $, $Date: 2007-09-26 15:15:36 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: CardRuntimeException.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
+// $Revision: 1.2 $
+// $Date: 2007-09-26 15:15:36 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/framework/CardRuntimeException.java $
 // $Modtime: 5/02/00 7:13p $
@@ -45,7 +45,7 @@ public class CardRuntimeException extends RuntimeException {
   private static CardRuntimeException systemInstance;
 
   // CardRuntimeException reason code
-  private /*@ spec_public */ short reason;
+  private /* @ spec_public */ short reason;
 
   /**
    * Construct a CardRuntimeException instance with the specified reason.
@@ -64,7 +64,7 @@ public class CardRuntimeException extends RuntimeException {
    */
 
     
-    public /*@ pure @*/ short getReason() {
+    public /* @ pure @*/ short getReason() {
 	return reason;
     }
 

@@ -17,8 +17,8 @@
 
 /*
 // $Workfile: DESKey.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
+// $Revision: 1.2 $
+// $Date: 2007-09-26 15:15:36 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/security/DESKey.java $
 // $Modtime: 5/02/00 7:13p $
@@ -57,7 +57,7 @@ package javacard.security;
      * </ul>
      */
 
-    /*@ public normal_behavior
+    /* @ public normal_behavior
       @   ensures true;
       @*/
 
@@ -74,7 +74,7 @@ package javacard.security;
      */
 
 
-    /*@ public normal_behavior
+    /* @ public normal_behavior
       @   ensures true;
       @*/
 

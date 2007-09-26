@@ -40,7 +40,7 @@ let rec statement s =
     | JPSfor_decl (d, e, sl, s) -> 
 	JPSfor_decl(d, e, sl, statement s)
     | JPSfor (_, _, _, _) -> assert false (* TODO *)
-    | JPSdo (_, _) -> assert false (* TODO *)
+    | JPSdo (s', e) -> JPSdo (statement s',e)
     | JPSwhile (e, s') -> JPSwhile(e, statement s')
     | JPSif (e, s1, s2) -> JPSif(e, statement s1, statement s2)
     | JPSlabel (l, s') -> JPSlabel(l,statement s')
