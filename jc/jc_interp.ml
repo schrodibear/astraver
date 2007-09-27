@@ -825,14 +825,14 @@ let rec statement ~threats s =
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->
 	begin match la.jc_loop_variant with
-	| None ->
-	    While(Cte(Prim_bool true), 
-	          assertion None "init" la.jc_loop_invariant,
-	          None, [statement s])
-	| Some t ->
+	| Some t when threats ->
 	    While(Cte(Prim_bool true), 
 	          assertion None "init" la.jc_loop_invariant,
 	          Some (term None "" t,None), [statement s])
+	| _ ->
+	    While(Cte(Prim_bool true), 
+	          assertion None "init" la.jc_loop_invariant,
+	          None, [statement s])
 	end
     | JCSassert(None, a) -> 
 	Assert(LNamed(reg_loc a.jc_assertion_loc,
