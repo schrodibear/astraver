@@ -507,24 +507,92 @@ let incr_call op =
     | Stat_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
 *)
 
+type shift_offset = Int_offset of string | Expr_offset of Jc_ast.expr 
 
-let make_upd ~threats fi e1 e2 =
-  if threats then
-    make_app "upd_"
-      [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
-	Var fi.jc_field_info_name ; e1 ; e2 ]
-  else
-    make_app "safe_upd_"
-      [ Var fi.jc_field_info_name ; e1 ; e2 ]
+let bounded lb rb s =
+  let n = Num.num_of_string s in Num.le_num lb n && Num.le_num n rb
 
-    
+let lbounded lb s =
+  let n = Num.num_of_string s in Num.le_num lb n
+
+let rbounded rb s =
+  let n = Num.num_of_string s in Num.le_num n rb
+
+let destruct_pointer e = 
+  let ptre,off = match e.jc_expr_node with
+    | JCEshift(e1,e2) -> 
+	begin match e2.jc_expr_node with
+	| JCEconst (JCCinteger s) -> 
+	    e1,Int_offset s
+	| JCEconst _ -> assert false
+	| _ ->
+	    e1,Expr_offset e2
+	end
+    | _ -> e,Int_offset "0"
+  in
+  match ptre.jc_expr_type with
+  | JCTpointer(_,lb,rb) -> ptre,off,lb,rb
+  | _ -> assert false
+
 let rec make_lets l e =
   match l with
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
-let rec expr ~threats e : expr =
-  let expr = expr ~threats in
+let rec make_upd ~threats fi e1 e2 =
+  let expr = expr ~threats and offset = offset ~threats in
+  if threats then
+    match destruct_pointer e1 with
+    | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
+	make_app "safe_upd_" 
+	  [ Var fi.jc_field_info_name ; expr e1; expr e2 ]
+    | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
+	make_app "lsafe_bound_upd_" 
+	  [ Var fi.jc_field_info_name ; expr p; offset off;
+	    Cte (Prim_int (Num.string_of_num rb)); expr e2 ]
+    | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
+	make_app "rsafe_bound_upd_" 
+	  [ Var fi.jc_field_info_name ; expr p; offset off;
+	    Cte (Prim_int (Num.string_of_num lb)); expr e2 ]
+    | p,off,Some lb,Some rb ->
+	make_app "bound_upd_" 
+	  [ Var fi.jc_field_info_name ; expr p; offset off; 
+	    Cte (Prim_int (Num.string_of_num lb)); 
+	    Cte (Prim_int (Num.string_of_num rb)); expr e2 ]
+    | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
+	make_app "lsafe_lbound_upd_" 
+	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
+	    Var fi.jc_field_info_name; expr p; offset off; expr e2 ]
+    | p,off,Some lb,None ->
+	make_app "lbound_upd_" 
+	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
+	    Var fi.jc_field_info_name; expr p; offset off;
+	    Cte (Prim_int (Num.string_of_num lb)); expr e2 ]
+    | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
+	make_app "rsafe_rbound_upd_" 
+	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
+	    Var fi.jc_field_info_name; expr p; offset off; expr e2 ]
+    | p,off,None,Some rb ->
+	make_app "rbound_upd_" 
+	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
+	    Var fi.jc_field_info_name; expr p; offset off;
+	    Cte (Prim_int (Num.string_of_num rb)); expr e2 ]
+    | _,_,None,None ->
+	make_app "upd_" 
+	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
+	    Var fi.jc_field_info_name ; expr e1; expr e2 ]
+  else
+    make_app "safe_upd_"
+      [ Var fi.jc_field_info_name ; expr e1 ; expr e2 ]
+    
+and offset ~threats = function
+  | Int_offset s -> Cte (Prim_int s)
+  | Expr_offset e -> 
+      coerce ~no_int_overflow:(not threats) 
+	e.jc_expr_loc integer_type e.jc_expr_type (expr ~threats e)
+
+and expr ~threats e : expr =
+  let expr = expr ~threats and offset = offset ~threats in
   match e.jc_expr_node with
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
@@ -601,10 +669,45 @@ let rec expr ~threats e : expr =
 	  make_app (safe_fun_enum_of_int ri) [e]
     | JCEderef(e,fi) ->
 	if threats then
-	  make_app "acc_" 
-	    [ Var (fi.jc_field_info_root ^ "_alloc_table") ;
-	      Var fi.jc_field_info_name ; 
-	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
+	  match destruct_pointer e with
+	  | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
+	      make_app "safe_acc_" 
+		[ Var fi.jc_field_info_name ; expr e ]
+	  | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
+	      make_app "lsafe_bound_acc_" 
+		[ Var fi.jc_field_info_name ; expr p; offset off;
+		  Cte (Prim_int (Num.string_of_num rb)) ]
+	  | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
+	      make_app "rsafe_bound_acc_" 
+		[ Var fi.jc_field_info_name ; expr p; offset off;
+		  Cte (Prim_int (Num.string_of_num lb)) ]
+	  | p,off,Some lb,Some rb ->
+	      make_app "bound_acc_" 
+		[ Var fi.jc_field_info_name ; expr p; offset off; 
+		  Cte (Prim_int (Num.string_of_num lb)); 
+		  Cte (Prim_int (Num.string_of_num rb)) ]
+	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
+	      make_app "lsafe_lbound_acc_" 
+		[ Var (fi.jc_field_info_root ^ "_alloc_table");
+		  Var fi.jc_field_info_name; expr p; offset off ]
+	  | p,off,Some lb,None ->
+	      make_app "lbound_acc_" 
+		[ Var (fi.jc_field_info_root ^ "_alloc_table");
+		  Var fi.jc_field_info_name; expr p; offset off;
+		  Cte (Prim_int (Num.string_of_num lb)) ]
+	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
+	      make_app "rsafe_rbound_acc_" 
+		[ Var (fi.jc_field_info_root ^ "_alloc_table");
+		  Var fi.jc_field_info_name; expr p; offset off ]
+	  | p,off,None,Some rb ->
+	      make_app "rbound_acc_" 
+		[ Var (fi.jc_field_info_root ^ "_alloc_table");
+		  Var fi.jc_field_info_name; expr p; offset off;
+		  Cte (Prim_int (Num.string_of_num rb)) ]
+	  | _,_,None,None ->
+	      make_app "acc_" 
+		[ Var (fi.jc_field_info_root ^ "_alloc_table");
+		  Var fi.jc_field_info_name ; expr e ]
 	else
 	  make_app "safe_acc_"
 	    [ Var fi.jc_field_info_name ; 
@@ -699,7 +802,9 @@ let rec statement ~threats s =
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
-	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in
+	let upd = make_upd ~threats fi e1 e2 in
+(* Yannick: ignore variables to be able to refine update function used. *)	
+(* 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
 	let upd = if threats && Jc_options.inv_sem = InvOwnership then
 	  append (assert_mutable (LVar tmp1) fi) upd else upd in
 	let lets =

@@ -272,6 +272,13 @@ let rec expr e =
     | JCTEshift (e1, e2) ->
 	let (l1, tl1), e1 = expr e1 in
 	let (l2, tl2), e2 = expr e2 in
+	(* Translate recursive shifts into single shift. *)
+	let e1,e2 = match e1.jc_expr_node with
+	  | JCEshift(e3,e4) -> 
+	      let adde = JCEbinary(e4,Badd_int,e2) in
+	      e3, { e4 with jc_expr_node = adde; }
+	  | _ -> e1,e2
+	in
 	(l1@l2, tl1@tl2), JCEshift (e1, e2)
     | JCTEsub_pointer (e1, e2) ->
 	let (l1, tl1), e1 = expr e1 in
