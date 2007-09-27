@@ -4,12 +4,11 @@
 
 class BinarySearch {
 
-
     /* binary_search(t,n,v) search for element v in array t 
        between index 0 and n-1
-       array t is assumed sorted in increasing order
+       array t is assumed to be sorted in increasing order
        returns an index i between 0 and n-1 where t[i] equals v, 
-       or -1 if no element of t is equal to v  
+       or -1 if no element in t is equal to v  
     */
     
     /*@ requires 

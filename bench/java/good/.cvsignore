@@ -6,3 +6,4 @@ why
 smtlib
 coq
 simplify
+*.loc
