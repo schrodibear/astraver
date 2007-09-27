@@ -172,7 +172,11 @@ let get_field fi =
 let create_field fi =
   Format.eprintf "Creating JC field '%s'@." fi.java_field_info_name;
   let ty = tr_type fi.java_field_info_type in
-  let ci = get_class fi.java_field_info_class in
+  let ci = 
+    match fi.java_field_info_class_or_interface with
+      | TypeClass ci -> get_class ci
+      | TypeInterface _ -> assert false
+  in
   let nfi =
     { jc_field_info_name = fi.java_field_info_name;
       jc_field_info_tag  = fi.java_field_info_tag;

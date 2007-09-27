@@ -29,7 +29,7 @@ and java_field_info =
     {
       java_field_info_tag : int;
       java_field_info_name : string;
-      java_field_info_class : java_class_info;
+      java_field_info_class_or_interface : java_type_info;
 (*
       mutable java_field_info_trans_name : string;
       java_field_info_accessibility : accessibility;
@@ -46,14 +46,6 @@ and java_field_info =
 *)
     }
     
-(*
-and constant_entry =
-    {
-      constant_entry_name : string;
-      constant_entry_interface : interface_entry;
-      constant_entry_type : java_type;
-    }
-*)
 
 and method_info = 
     {

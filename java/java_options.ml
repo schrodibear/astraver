@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.5 2007-09-26 14:33:25 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.6 2007-09-27 14:28:59 marche Exp $ i*)
 
 open Format
 
@@ -53,6 +53,17 @@ let libdir =
     lprintf "KRAKATOALIB is not set, using %s as default@." p;
     p
 
+let rec split ch s =
+  try
+    let i = String.index s ch in
+    let h = String.sub s 0 i
+    and t = String.sub s (i+1) (String.length s - i - 1)
+    in
+    h::(split ch t)
+  with
+    Not_found -> [s]
+     
+
 let libfile = "krakatoa.why"
 
 let classpath = 
@@ -60,13 +71,13 @@ let classpath =
     try
       let v = Sys.getenv "KRAKATOACLASSPATH" in
       lprintf "KRAKATOACLASSPATH is set to %s@." v;
-      v
+      split ':' v
     with Not_found -> 
       let p = Filename.concat libdir "java_api" in
       lprintf "KRAKATOACLASSPATH is not set, using %s as default@." p;
-      p
+      [p]
   in
-  ["." ; p ]
+  "." :: p 
 
 
 (*s command-line options *)

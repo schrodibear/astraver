@@ -126,13 +126,6 @@ let package_table =
 
 let package_counter = ref 0
 
-let anonymous_package =
-  { package_info_tag = 0;
-    package_info_name = "";
-    package_info_directory = ".";
-  }
-
-
 let new_package_info name fullname =
   incr package_counter;
   let pi =
@@ -153,9 +146,9 @@ type package_member =
 let package_contents = 
   (Hashtbl.create 17 : (int,(string,package_member) Hashtbl.t) Hashtbl.t)
 
-let () = Hashtbl.add package_contents anonymous_package.package_info_tag 
-  (Hashtbl.create 17)
-	
+
+let anonymous_package = new_package_info "" "."
+
 let javalang_qid = [(Loc.dummy_position,"lang"); (Loc.dummy_position,"java")]
 
 let read_dir_contents d =
@@ -257,28 +250,34 @@ let rec var_type_and_id ty id =
 
 (* fields *)
 
-let field_prototypes_table = Hashtbl.create 97
+let field_prototypes_table : (int, variable_initializer option) Hashtbl.t 
+    = Hashtbl.create 97
 
 let field_tag_counter = ref 0
 
-let new_field ~is_static ~is_final ci ty id =
+let new_field ~is_static ~is_final ti ty id =
   incr field_tag_counter;
   let fi = {
     java_field_info_tag = !field_tag_counter;
     java_field_info_name = id;
     java_field_info_type = ty;
-    java_field_info_class = ci;
+    java_field_info_class_or_interface = ti;
     java_field_info_is_static = is_static;
     java_field_info_is_final = is_final;
   }
   in fi
 
-let rec list_assoc_field_name id l =
-  match l with
-    | [] -> raise Not_found
-    | fi::r ->
-	if fi.java_field_info_name = id then fi
-	else list_assoc_field_name id r
+(*
+let new_constant_field ii ty id =
+  incr field_tag_counter;
+  let fi = {
+    constant_info_tag = !field_tag_counter;
+    constant_info_name = id;
+    constant_info_type = ty;
+    constant_info_interface = ii;
+  }
+  in fi
+*)
 
 
 let new_model_field ii ty id =
@@ -334,6 +333,13 @@ let new_constructor_info ci id pars =
     constr_info_calls = [];
   }
 
+let rec list_assoc_name f id l =
+  match l with
+    | [] -> raise Not_found
+    | fi::r -> 
+	if (f fi) = id then fi
+	else list_assoc_name f id r
+
 
 (******************************
 
@@ -359,12 +365,7 @@ let new_interface_info (p:package_info) (id:string) i =
   Hashtbl.add type_table !type_counter (TypeInterface ii);
   Hashtbl.add interface_decl_table !type_counter i;
   eprintf "adding interface %s in package '%s'@." id p.package_info_name;
-  let h =
-    try
-      Hashtbl.find package_contents p.package_info_tag 
-    with
-	Not_found -> assert false
-  in
+  let h = get_package_contents p in
   Hashtbl.replace h id (Type (TypeInterface ii));
   ii
 
@@ -385,12 +386,7 @@ let new_class_info (p:package_info) (id:string) c =
   Hashtbl.add type_table !type_counter (TypeClass ci);
   Hashtbl.add class_decl_table !type_counter c;
   eprintf "adding class %s in package %s@." id p.package_info_name;
-  let h =
-    try
-      Hashtbl.find package_contents p.package_info_tag 
-    with
-	Not_found -> assert false
-  in
+  let h = get_package_contents p in
   Hashtbl.replace h id (Type (TypeClass ci));
   ci
 
@@ -458,6 +454,7 @@ and get_types cu =
     List.fold_left get_import ([],[])
       (Import_package javalang_qid::cu.cu_imports) 
   in
+  let package_env = pi :: package_env in    
   let local_type_env =
     List.fold_left (get_type_decl pi package_env) 
       [] cu.cu_type_decls 
@@ -467,6 +464,10 @@ and get_types cu =
     (fun (_,ti) ->
        match ti with
 	 | TypeClass ci ->
+	     eprintf "setting type env for class '%s' as:@\n" ci.class_info_name;
+	     List.iter
+	       (fun (id,_) -> eprintf "  %s@\n" id)
+	       type_env;
 	     Hashtbl.add class_type_env_table ci.class_info_tag 
 	       full_type_env
 	 | TypeInterface ii ->
@@ -533,10 +534,14 @@ and classify_name
 		      (* look for a type of that name 
 			 in the current compilation unit, or
 			 in another compilation unit of the current package *)
+		      eprintf "lookup id '%s' in type_env:@\n" id;
+		      List.iter
+			(fun (id,_) -> eprintf "  %s@\n" id)
+			type_env;
 		      let ti = List.assoc id type_env in
 		      TypeName ti 
 		    with Not_found ->
-		      (* TODO: look for a type of that name 
+		      (* look for a type of that name 
 			 declared by a type-import-on-demand declaration 
 			 (fail if two of them are visible) *)
 		      let l =
@@ -572,8 +577,10 @@ and classify_name
 			      
 			      match Hashtbl.find toplevel_packages id with
 				| Subpackage pi -> PackageName pi 
-				| Type ti -> assert false (* TypeName ti ? *)
-				| File f -> assert false (* TODO ? *)
+				| Type ti -> assert false 
+				| File f -> 
+				    eprintf "Internal error: got file %s in place of a package@." f;
+				    assert false
 			    with Not_found ->
 			      typing_error loc "unknown identifier %s" id
 			      			      
@@ -688,7 +695,7 @@ and get_field_prototypes package_env type_env ci acc d =
 	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
 	     let fi = new_field ~is_static ~is_final ci ty' id in	     
 	     Hashtbl.add field_prototypes_table fi.java_field_info_tag 
-	       (fi,vd.variable_initializer);
+	       vd.variable_initializer;
 	     fi::acc
 	  ) acc vd.variable_decls
     | _ -> acc
@@ -808,7 +815,7 @@ and get_class_prototypes package_env type_env ci d =
 	     typing_error (fst (List.hd id)) "class type expected") 
     d.class_extends;
   (* fields *)
-  let fields = List.fold_left (get_field_prototypes package_env type_env ci) [] d.class_fields in
+  let fields = List.fold_left (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
   ci.class_info_fields <- fields;
   let methods,constructors =
     get_method_prototypes package_env type_env (Some ci) ([],[]) [] d.class_fields 
@@ -833,6 +840,25 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	     Hashtbl.add model_field_prototypes_table fi.java_field_info_tag 
 	       (fi,vd.variable_initializer);
 *)
+	     fi::acc
+	  ) acc vd.variable_decls
+    | JPFvariable vd -> 
+	(*
+	vd.variable_modifiers : modifiers ;
+	vd.variable_type : type_expr ;
+	vd.variable_decls : variable_declarator list }
+	*)
+	let ty = type_type package_env type_env vd.variable_type in
+	(* Note: no need to check if it is static and final, because 
+	   it is implicitly the case (JLS,9.3, p 203) *)
+	List.fold_left
+	  (fun acc vd -> 
+	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
+	     let fi = new_field ~is_static:true ~is_final:true 
+	       (TypeInterface ii) ty' id 
+	     in
+	     Hashtbl.add field_prototypes_table fi.java_field_info_tag 
+	       vd.variable_initializer;
 	     fi::acc
 	  ) acc vd.variable_decls
     | _ -> acc
@@ -872,7 +898,8 @@ and check_if_interface_complete ii =
 and lookup_interface_field ii id =
   check_if_interface_complete ii;
   try
-    list_assoc_field_name id ii.interface_info_fields
+    list_assoc_name (fun fi -> fi.java_field_info_name) 
+      id ii.interface_info_fields
   with
       Not_found ->
 	match ii.interface_info_extends with
@@ -893,7 +920,7 @@ and check_if_class_complete ci =
 and lookup_class_field ci id =
   check_if_class_complete ci;
   try
-    list_assoc_field_name id ci.class_info_fields
+    list_assoc_name (fun fi -> fi.java_field_info_name) id ci.class_info_fields
   with
       Not_found ->
 	(* TODO: lookup implemented interfaces *)
@@ -2205,7 +2232,7 @@ let type_constr_spec_and_body package_env type_env current_type ci =
 
 
 let type_field_initializer package_env type_env ci fi =
-  let (_,init) = 
+  let init = 
     try
       Hashtbl.find field_prototypes_table fi.java_field_info_tag 
     with Not_found -> assert false
@@ -2231,11 +2258,14 @@ let type_decl package_env type_env d =
 	      | TypeInterface _ -> assert false
 	      | TypeClass ci as ti ->
 		  check_if_class_complete ci;
-		  List.iter (type_field_initializer package_env type_env ti) 
+		  let full_type_env =
+		    Hashtbl.find class_type_env_table ci.class_info_tag
+		  in
+		  List.iter (type_field_initializer package_env full_type_env ti) 
 		    ci.class_info_fields;
-		  List.iter (type_method_spec_and_body package_env type_env ti) 
+		  List.iter (type_method_spec_and_body package_env full_type_env ti) 
 		    ci.class_info_methods;
-		  List.iter (type_constr_spec_and_body package_env type_env ti) 
+		  List.iter (type_constr_spec_and_body package_env full_type_env ti) 
 		    ci.class_info_constructors
 	  with
 	      Not_found -> assert false
