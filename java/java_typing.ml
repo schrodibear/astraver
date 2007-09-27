@@ -1015,6 +1015,22 @@ let int_type t =
 	end
     | _ -> raise Not_found
 
+let integer_type t =
+  match t with
+    | JTYbase t -> 
+	begin
+	  match t with
+	    | Tchar | Tshort | Tbyte | Tint | Tinteger | Tlong -> t
+	    | Tdouble | Tfloat | Treal 
+	    | Tboolean | Tunit -> raise Not_found
+	end
+    | _ -> raise Not_found
+
+let is_boolean t =
+  match t with
+    | JTYbase Tboolean -> true
+    | _ -> false
+
 let is_numeric t =
   match t with
     | JTYbase t -> 
@@ -1025,11 +1041,6 @@ let is_numeric t =
 	    | Tchar -> assert false (* TODO *)
 	    | Tboolean | Tunit -> false
 	end
-    | _ -> false
-
-let is_boolean t =
-  match t with
-    | JTYbase Tboolean -> true
     | _ -> false
 
 let lub_numeric_types t1 t2 =
@@ -1449,7 +1460,28 @@ let make_bin_op loc op t1 e1 t2 e2 =
 	else
 	  typing_error loc "booleans expected"
 	(* not allowed as expression op *)
-    |Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *)
+    | Basr|Blsr|Blsl -> 
+	begin
+	  try
+	    let t1 = integer_type t1 in
+	    let _t2 = integer_type t2 in
+	    t1, JEbin(e1, op, e2)
+	  with Not_found ->
+	    typing_error loc "integers expected"
+	end
+    | Bbwxor|Bbwor|Bbwand -> 	
+	if is_boolean t1 && is_boolean t2 then
+	  Tboolean,JEbin(e1,op,e2)
+	else
+	  begin
+	    try
+	      let t1 = integer_type t1 in
+	      let _t2 = integer_type t2 in
+	      t1, JEbin(e1, op, e2)
+	    with Not_found ->
+	      typing_error loc "booleans or integers expected"
+	  end
+	  
     | Bimpl | Biff -> assert false
 
 let make_unary_op loc op t1 e1 =
