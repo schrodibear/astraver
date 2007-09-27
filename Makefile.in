@@ -518,6 +518,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
 	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
+	cp -f bin/gvc $(BINDIR)/gvc
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)
@@ -549,6 +550,8 @@ install-lib:
 	cp -f lib/isabelle/caduceus_why.thy $(LIBDIR)/caduceus/isabelle
 	mkdir -p $(LIBDIR)/caduceus/harvey
 	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
+	mkdir -p $(LIBDIR)/krakatoa
+	cd lib; cp --parents java_api/java/*/*.java $(LIBDIR)/krakatoa
 
 install-man:
 	mkdir -p $(MANDIR)/man1
