@@ -1092,6 +1092,19 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 	   JTbin(e1,t,op,e2))
 	else typing_error loc "numeric types expected for +,-,*, / and %%"
 
+let make_logic_un_op loc op t1 e1 = 
+  match op with
+    | Uplus ->
+	if is_numeric t1 then t1, e1.java_term_node
+	else typing_error loc "numeric type expected for unary +"
+    | Uminus ->
+	if is_numeric t1 then t1, JTun (lub_numeric_types t1 t1, op, e1)
+	else typing_error loc "numeric type expected for unary -"
+    | Ucompl ->
+	assert false (*TODO*)
+    | Unot ->
+	if is_boolean t1 then t1, JTun (Tboolean, op, e1)
+	else typing_error loc "boolean type expected for unary !"
 
 let get_this loc env =
   try 
@@ -1229,7 +1242,11 @@ let rec term package_env type_env current_type env e =
       | JPEassign_field (_, _, _)-> assert false (* TODO *)
       | JPEassign_name (_, _, _)-> assert false (* TODO *)
       | JPEincr (_, _)-> assert false (* TODO *)
-      | JPEun (_, _)-> assert false (* TODO *)
+      | JPEun (op, e1)-> 	 
+	  let te1 = termt e1 in 
+	  let t,e = make_logic_un_op e.java_pexpr_loc op 
+	    te1.java_term_type te1 in
+	  t,e
 
   in { java_term_node = tt; 
        java_term_type = ty;
@@ -1282,6 +1299,12 @@ let rec assertion package_env type_env current_type env e =
 	let te1 = assertiont e1
 	and te2 = assertiont e2
 	in connective te1 op te2
+    | JPEbin 
+	({java_pexpr_node = 
+	    JPEbin (_, (Beq | Bne | Bgt | Blt | Ble | Bge), a) } as p,
+	(Beq | Bne | Bgt | Blt | Ble | Bge as op), b) ->
+	let q = { e with java_pexpr_node = JPEbin (a, op, b) } in
+	JAand (assertiont p, assertiont q)
     | JPEbin(e1, op, e2) -> 
 	let te1 = termt e1 and te2 = termt e2 in 
 	make_predicate_bin_op e.java_pexpr_loc op 
@@ -1459,6 +1482,7 @@ let rec expr_of_term t =
       | JTarray_range _  -> assert false (* TODO *)
       | JTapp (_, _) -> assert false (* TODO *)
       | JTbin (_, _, _, _) -> assert false (* TODO *)
+      | JTun (t, op, e1) -> assert false (* TODO *)
       | JTlit _ -> assert false (* TODO *)
       | JTcast(ty,t) -> JEcast(ty,expr_of_term t)
   in

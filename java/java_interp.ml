@@ -308,6 +308,13 @@ let lit l =
   | Char s -> assert false (* TODO *)
   | Null  -> JCCnull
 
+let lun_op t op =
+  match op with
+    | Unot -> Jc_ast.Unot
+    | Uminus when t = Tinteger -> Uminus_int
+    | Uminus -> assert false (* TODO *)
+    | Uplus -> assert false
+    | Ucompl -> Ubw_not
 
 let lbin_op t op =
   match op with
@@ -335,6 +342,7 @@ let rec term t =
   let t' =
     match t.java_term_node with
       | JTlit l -> JCTconst (lit l)
+      | JTun (t,op,e1) -> JCTunary (lun_op t op, term e1)
       | JTbin(e1,t,op,e2) -> JCTbinary(term e1, lbin_op t op, term e2)
       | JTapp (fi, el) -> 
 	  JCTapp(get_logic_fun fi,List.map term el)
@@ -593,6 +601,7 @@ let array_types decls =
 let rec location_set t =
   match t.java_term_node with
       | JTlit l -> assert false (* TODO *)
+      | JTun(t,op,e1) -> assert false (* TODO *)
       | JTbin(e1,t,op,e2) -> assert false (* TODO *)
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCLSvar (get_var vi)
@@ -630,6 +639,7 @@ let rec location_set t =
 let location t =
   match t.java_term_node with
       | JTlit l -> assert false (* TODO *)
+      | JTun(t,op,e1) -> assert false (* TODO *)
       | JTbin(e1,t,op,e2) -> assert false (* TODO *)
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCLvar (get_var vi)

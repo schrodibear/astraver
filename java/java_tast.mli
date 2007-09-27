@@ -10,6 +10,7 @@ type term_node =
     | JTvar of java_var_info
     | JTold of term
     | JTbin of term * base_type * bin_op * term   
+    | JTun of base_type * un_op * term
     | JTapp of java_logic_info * term list
     | JTfield_access of term * java_field_info
     | JTstatic_field_access of java_type_info * java_field_info
