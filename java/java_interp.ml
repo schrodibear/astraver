@@ -338,6 +338,9 @@ let lobj_op op =
     | Beq -> Beq_pointer
     | _ -> assert false
 
+let term_plus_one t =
+  JCTbinary (t, Badd_int, { t with jc_term_node = JCTconst (JCCinteger "1") })
+
 let rec term t =
   let t' =
     match t.java_term_node with
@@ -355,7 +358,9 @@ let rec term t =
 	    match t.java_term_type with
 	      | JTYarray ty ->
 		  let st = get_array_struct ty in
-		  JCToffset(Offset_max,term t,st)
+		  let t = term t in
+		  term_plus_one
+		    { t with jc_term_node = JCToffset(Offset_max, t, st) }
 	      | _ -> assert false
 	  end
       | JTarray_access(t1,t2) -> 
@@ -580,7 +585,9 @@ let array_types decls =
 				   (JCTvar result),
 				 Beq_int,
 				 dummy_loc_term vi.jc_var_info_type 
-				   (JCToffset(Offset_max,nvi,st)))) ;
+				   (term_plus_one
+				       (dummy_loc_term vi.jc_var_info_type 
+					   (JCToffset(Offset_max,nvi,st)))))) ;
 		jc_behavior_throws = None } ]
 	     }
        in
