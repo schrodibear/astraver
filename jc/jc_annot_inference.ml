@@ -95,6 +95,12 @@ let type_expr e ty = {
   jc_expr_loc = Loc.dummy_position;
 }
 
+let loc_expr e loc = {
+  jc_expr_node = e;
+  jc_expr_type = unit_type;
+  jc_expr_loc = loc;
+}
+
 let full_expr e ty loc = {
   jc_expr_node = e;
   jc_expr_type = ty;
@@ -308,6 +314,7 @@ let rec destruct_pointer t =
 (* Assertion to be checked at some program point. *)
 type target_assertion = {
   jc_target_statement : statement;
+  jc_target_location : Loc.position;
   jc_target_assertion : assertion;
   mutable jc_target_invariant : assertion;
 }
@@ -937,10 +944,10 @@ let strlen_linstr_of_assertion env a =
 		| Some (str,cst) ->
 		    match op with
 		    | Bneq_int -> 
-			let stra = str ^ " < " ^ (string_of_int cst) in
+			let stra = str ^ " > " ^ (string_of_int (- cst)) in
 			Some (stra,env)
 		    | Beq_int -> 
-			let stra = str ^ " = " ^ (string_of_int cst) in
+			let stra = str ^ " = " ^ (string_of_int (- cst)) in
 			Some (stra,env)
 		    | _ -> assert false
 	    end
@@ -1144,11 +1151,17 @@ let assignment mgr pre t e =
       else forget_vars, vars, linexprs
     else forget_vars, vars, linexprs
   in
-  let forget_vars = Array.of_list forget_vars in
-  let vars = Array.of_list vars in
-  let linexprs = Array.of_list linexprs in
-  Abstract1.assign_linexpr_array_with mgr pre vars linexprs None;
-  Abstract1.forget_array_with mgr pre forget_vars false;
+  if vars <> [] then
+    begin
+      let vars = Array.of_list vars in
+      let linexprs = Array.of_list linexprs in
+      Abstract1.assign_linexpr_array_with mgr pre vars linexprs None
+    end;
+  if forget_vars <> [] then
+    begin
+      let forget_vars = Array.of_list forget_vars in
+      Abstract1.forget_array_with mgr pre forget_vars false
+    end;
   pre
 
 let test_assertion mgr pre a =
@@ -1322,19 +1335,18 @@ let rec ai_expression abs curinvs e =
 	      { curinvs with jc_absinv_normal = pre; }
       end
 
-let find_target_assertion targets s =
+let find_target_assertions targets s =
   List.fold_left 
     (fun acc target -> 
-      if target.jc_target_statement == s then Some target else acc
-    ) None targets
+      if target.jc_target_statement == s then target::acc else acc
+    ) [] targets
     
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
-  begin match find_target_assertion abs.jc_absint_target_assertions s with
-  | None -> ()
-  | Some target ->
-      target.jc_target_invariant <- mkinvariant mgr curinvs.jc_absinv_normal
-  end;
+  let targets = find_target_assertions abs.jc_absint_target_assertions s in
+  List.iter (fun target ->
+    target.jc_target_invariant <- mkinvariant mgr curinvs.jc_absinv_normal
+  ) targets;
   let env = abs.jc_absint_function_environment in
   let pre = curinvs.jc_absinv_normal in
   let postexcl = curinvs.jc_absinv_exceptional in
@@ -1510,8 +1522,10 @@ let rec record_invariants abs s =
 	else
 	  let a = mkinvariant mgr loopinv in
 	  if Jc_options.verbose then
-	    printf "@[<v 2>Inferring loop invariant@\n%a@]@\nfor function %s@."
-	      Jc_output.assertion a abs.jc_absint_function_name;
+	    printf 
+	      "%a@[<v 2>Inferring loop invariant@\n%a@]@."
+	      Loc.report_position s.jc_statement_loc
+	      Jc_output.assertion a;
 	  la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a]
       with Not_found -> () end
   | JCSassign_var _ | JCSassign_heap _ | JCSassert _ 
@@ -1595,9 +1609,10 @@ let ai_function mgr targets (fi, fs, sl) =
     List.iter 
       (fun target -> 
 	if Jc_options.verbose then
-	  printf "@[<v 2>Inferring assert invariant@\n%a@]@\nfor function %s@."
+	  printf 
+	    "%a@[<v 2>Inferring assert invariant@\n%a@]@."
+	    Loc.report_position target.jc_target_location
 	    Jc_output.assertion target.jc_target_invariant 
-	    abs.jc_absint_function_name
       ) targets
       
   with Manager.Error exc ->
@@ -2031,8 +2046,6 @@ let rec wp_statement =
 	let loopposts = push_modified_vars curposts in
 	let loopposts = wp_statement target ls loopposts in
 	let vs,loopposts = pop_modified_vars loopposts in
-	(* Add modified variables of current loop to enclosing loop. *)
-	(* let curposts = add_modified_vars curposts vs in *)
 	let post = match loopposts.jc_post_normal with
 	  | None -> None
 	  | Some a ->
@@ -2071,6 +2084,7 @@ let rec collect_expr_asserts s e =
 	      let maxa = raw_asrt (JCArelation(offt,Ble_int,maxt)) in
 	      [{ 
 		jc_target_statement = s;
+		jc_target_location = e.jc_expr_loc;
 		jc_target_assertion = make_and [mina;maxa];
 		jc_target_invariant = raw_asrt JCAfalse;
 	      }]
@@ -2108,6 +2122,7 @@ let rec collect_asserts targets s =
   | JCSassert(_,a) ->
       { 
 	jc_target_statement = s;
+	jc_target_location = s.jc_statement_loc;
 	jc_target_assertion = a;
 	jc_target_invariant = raw_asrt JCAfalse;
       } :: targets
@@ -2115,7 +2130,7 @@ let rec collect_asserts targets s =
   | JCSpack(_,e1,_) | JCSunpack(_,e1,_) ->
       collect_expr_asserts s e1 @ targets
   | JCSassign_heap(e1,fi,e2) ->
-      let derefe = raw_expr(JCEderef(e1,fi)) in
+      let derefe = loc_expr (JCEderef(e1,fi)) s.jc_statement_loc in
       collect_expr_asserts s e1 @ (collect_expr_asserts s derefe)
       @ (collect_expr_asserts s e2) @ targets
   | JCSreturn_void | JCSthrow(_,None) ->
@@ -2212,12 +2227,14 @@ let wp_function targets (fi,fs,sl) =
 	match qe.jc_assertion_node with
 	| JCAfalse ->
 	    if Jc_options.verbose then
-	      printf "@[<v 2>No inferred precondition for function %s@."
+	      printf "%a@[<v 2>No inferred precondition for function %s@."
+		Loc.report_position target.jc_target_location
 		fi.jc_fun_info_name
 	| _ ->
 	    if Jc_options.verbose then
-	      printf "@[<v 2>Inferring precondition@\n%a@]@\nfor function %s@."
-		Jc_output.assertion qe fi.jc_fun_info_name;
+	      printf "%a@[<v 2>Inferring precondition@\n%a@]@\nfor function %s@."
+		Loc.report_position target.jc_target_location
+		Jc_output.assertion qe fi.jc_fun_info_name ;
 	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; qe]
   ) targets
     
