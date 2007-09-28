@@ -1487,7 +1487,11 @@ let make_bin_op loc op t1 e1 t2 e2 =
 
 let make_unary_op loc op t1 e1 =
   match op with
-    | Unot -> assert false
+    | Unot -> 
+	if is_boolean t1 then
+	  Tboolean,JEun(op,e1)
+	else
+	  typing_error loc "boolean expected"
     | Ucompl-> assert false
     | Uminus-> 
 	if is_numeric t1 then
@@ -1496,30 +1500,6 @@ let make_unary_op loc op t1 e1 =
 	else
 	  typing_error loc "numeric types expected for -"
       | Uplus -> assert false
-(*
-    | Bgt | Blt | Bge | Ble | Beq | Bne ->
-	if is_numeric t1 && is_numeric t2 then
-	  let _t = lub_numeric_types t1 t2 in
-	  Tboolean,
-	  JEbin((*coerce t1 t*) e1, op, (*coerce t2 t*) e2)
-	else
-	  typing_error loc "numeric types expected"
-    | Badd | Bsub | Bmul | Bdiv | Bmod ->
-	if is_numeric t1 && is_numeric t2 then
-	  let t = lub_numeric_types t1 t2 in
-	  t,
-	  JEbin((*coerce t1 t*) e1, op, (* coerce t2 t*) e2)
-	else
-	  typing_error loc "numeric types expected for +, -, *, / and %%"
-    | Band | Bor -> 
-	if is_boolean t1 && is_boolean t2 then
-	  Tboolean,JEbin(e1,op,e2)
-	else
-	  typing_error loc "booleans expected"
-	(* not allowed as expression op *)
-    |Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *)
-    | Bimpl | Biff -> assert false
-	*)
 
 let expr_var loc vi =
   { java_expr_node = JEvar vi; 
@@ -1596,8 +1576,11 @@ let lookup_method ti (loc,id) arg_types =
 	| None -> acc 
 	| Some ci -> collect_methods_from_class acc ci
     in
+    acc
+      (* What to do with methods from interfaces ???
     List.fold_left
       collect_methods_from_interface acc ci.class_info_implements
+      *)
   in
   let meths = 
     match ti with

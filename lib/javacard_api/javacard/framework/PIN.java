@@ -1,5 +1,5 @@
 /*
-* $Workfile: PIN.java $	$Revision: 1.2 $, $Date: 2007-09-28 13:14:39 $
+* $Workfile: PIN.java $	$Revision: 1.3 $, $Date: 2007-09-28 13:41:14 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: PIN.java $
-// $Revision: 1.2 $
-// $Date: 2007-09-28 13:14:39 $
+// $Revision: 1.3 $
+// $Date: 2007-09-28 13:41:14 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/framework/PIN.java $
 // $Modtime: 5/02/00 7:13p $
@@ -71,7 +71,6 @@ public interface PIN {
     /* @ public normal_behavior
       @   ensures true;
       @*/
-
    byte getTriesRemaining();
 
   /**
@@ -105,7 +104,6 @@ public interface PIN {
     /* @ public normal_behavior
       @   ensures true;
       @*/
-
   public boolean check(byte[] pin, short offset, byte length)
       throws ArrayIndexOutOfBoundsException, NullPointerException;
 
@@ -119,7 +117,6 @@ public interface PIN {
     /* @ public normal_behavior
       @   ensures true;
       @*/
-
    boolean isValidated();
 
   /**
@@ -130,6 +127,5 @@ public interface PIN {
     /* @ public normal_behavior
       @   ensures true;
       @*/
-
    void reset();
 }

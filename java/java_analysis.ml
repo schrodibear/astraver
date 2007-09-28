@@ -72,7 +72,8 @@ let rec expr e =
     | JEassign_local_var_op(vi,op,e) -> expr e
     | JEassign_field(e1,fi,e2) -> expr e1; expr e2
     | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
-    | JEassign_array_op(e1,e2,op,e3) -> expr e1; expr e2; expr e3
+    | JEif(e1,e2,e3)
+    | JEassign_array_op(e1,e2,_,e3) -> expr e1; expr e2; expr e3
     | JEcall(e,mi,args) ->
 	expr e;	List.iter expr args
     | JEstatic_call(mi,args) ->

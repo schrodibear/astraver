@@ -748,6 +748,7 @@ let rec expr e =
       | JEbin (e1, op, e2) -> 
 	  let e1 = expr e1 and e2 = expr e2 in
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEbinary(e1,bin_op op,e2))
+      | JEif _ -> assert false (* TODO *)
       | JEvar vi -> JCTEvar (get_var vi)
       | JEstatic_field_access(ci,fi) ->
 	  JCTEvar(get_static_var ci fi)
