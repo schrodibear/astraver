@@ -798,7 +798,7 @@ let rec statement ~threats s =
 	Assign(n, coerce ~no_int_overflow:(not threats) 
 		 e2.jc_expr_loc vi.jc_var_info_type e2.jc_expr_type e2')
     | JCSassign_heap(e1,fi,e2) -> 
-	let _e1' = expr e1 in
+	let e1' = expr e1 in
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
@@ -806,12 +806,12 @@ let rec statement ~threats s =
 (* Yannick: ignore variables to be able to refine update function used. *)	
 (* 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
 (* Claude: do not ignore variable tmp2, since it may involve a coercion. 
-   Anywayver, safety of the update do not depend on e2 *)
+   Anyway, safety of the update do not depend on e2 *)
 	let upd = if threats && Jc_options.inv_sem = InvOwnership then
 	  append (assert_mutable (LVar tmp1) fi) upd else upd in
 	let lets =
 	  (make_lets
-	     ([ (* (tmp1, e1') ; *) (tmp2, coerce ~no_int_overflow:(not threats) 
+	     ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
 				 e2.jc_expr_loc fi.jc_field_info_type 
 				 e2.jc_expr_type e2') ])
 	     upd)
