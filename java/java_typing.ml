@@ -190,41 +190,27 @@ let toplevel_packages =
  
 let type_table : (int, java_type_info) Hashtbl.t = Hashtbl.create 97
 
+(* A GROUPER *)
+let class_type_env_table : 
+    (int, (string * java_type_info) list) Hashtbl.t
+    = Hashtbl.create 97
+and interface_type_env_table : 
+    (int, (string * java_type_info) list) Hashtbl.t
+    = Hashtbl.create 97
+
+
 let class_decl_table : 
     (int, (package_info list * 
 	     Java_ast.class_declaration)) Hashtbl.t
     = Hashtbl.create 97
 
-let class_type_env_table : 
-    (int, (string * java_type_info) list) Hashtbl.t
-    = Hashtbl.create 97
 
 let interface_decl_table : 
     (int, (package_info list * 
 	     Java_ast.interface_declaration)) Hashtbl.t
     = Hashtbl.create 97
 
-let interface_type_env_table : 
-    (int, (string * java_type_info) list) Hashtbl.t
-    = Hashtbl.create 97
 
-(*
-let type_fields tag =
-  try
-    Hashtbl.find type_fields_table tag
-  with
-      Not_found ->
-	try
-	  match Hashtbl.find type_table tag with
-	    | TypeInterface(ii) ->
-		(* TODO: read table interface_decl_table *)
-		assert false
-	    | TypeClass(ci) ->
-		(* TODO: read table class_decl_table *)
-		assert false
-	with
-	    Not_found -> assert false
-*)
 
 (* variables *)
 
@@ -266,18 +252,6 @@ let new_field ~is_static ~is_final ti ty id =
     java_field_info_is_final = is_final;
   }
   in fi
-
-(*
-let new_constant_field ii ty id =
-  incr field_tag_counter;
-  let fi = {
-    constant_info_tag = !field_tag_counter;
-    constant_info_name = id;
-    constant_info_type = ty;
-    constant_info_interface = ii;
-  }
-  in fi
-*)
 
 
 let new_model_field ii ty id =
@@ -421,13 +395,19 @@ type classified_name =
   | PackageName of package_info
 
 
+let rec add_in_package_list pi l =
+  match l with
+    | [] -> [pi]
+    | qi::_ when pi.package_info_tag = qi.package_info_tag -> l
+    | qi::r -> qi::add_in_package_list pi r
+
 let rec get_import (packages,types) imp =
     match imp with
       | Import_package qid ->
 	  eprintf "importing package %a@." print_qualified_ident qid;
 	  begin
 	    match classify_name [] [] None [] qid with
-	      | PackageName pi -> (pi::packages,types)
+	      | PackageName pi -> (add_in_package_list pi packages,types)
 	      | _ -> typing_error (fst (List.hd qid))
 		  "package name expected"
 	  end
@@ -454,7 +434,7 @@ and get_types cu =
     List.fold_left get_import ([],[])
       (Import_package javalang_qid::cu.cu_imports) 
   in
-  let package_env = pi :: package_env in    
+  let package_env = add_in_package_list pi package_env in    
   let local_type_env =
     List.fold_left (get_type_decl pi package_env) 
       [] cu.cu_type_decls 
@@ -549,12 +529,12 @@ and classify_name
 			  (fun acc pi ->
 			     let h = get_package_contents pi in
 			     try 
-			       (h,(Hashtbl.find h id)) :: acc
+			       (pi,h,(Hashtbl.find h id)) :: acc
 			     with Not_found -> acc)
 			  [] package_env
 		      in
 		      match l with
-			| [(h,x)] ->
+			| [(pi,h,x)] ->
 			    begin
 			      match x with
 				| Subpackage pi -> assert false
@@ -568,8 +548,8 @@ and classify_name
 				      TypeName ti
 				    with Not_found -> assert false
 			    end
-			| _::_ ->
-			    typing_error loc "ambiguous name from import-on-demand packages"
+			| (pi1,_,_)::(pi2,_,_)::_ ->
+			    typing_error loc "ambiguous name from import-on-demand packages '%s' and '%s'" pi1.package_info_name pi2.package_info_name
 			| [] ->
 			    (* otherwise look for a toplevel package 
 			       of that name *)
