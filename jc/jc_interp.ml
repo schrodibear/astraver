@@ -800,7 +800,7 @@ let rec statement ~threats s =
     | JCSassign_heap(e1,fi,e2) -> 
 	let _e1' = expr e1 in
 	let e2' = expr e2 in
-	let _tmp1 = tmp_var_name () in
+	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
 	let upd = make_upd ~threats fi e1 (Var tmp2) in
 (* Yannick: ignore variables to be able to refine update function used. *)	
