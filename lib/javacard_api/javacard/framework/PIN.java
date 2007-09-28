@@ -1,5 +1,5 @@
 /*
-* $Workfile: PIN.java $	$Revision: 1.1 $, $Date: 2007-09-26 14:32:59 $
+* $Workfile: PIN.java $	$Revision: 1.2 $, $Date: 2007-09-28 13:14:39 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: PIN.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
+// $Revision: 1.2 $
+// $Date: 2007-09-28 13:14:39 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/framework/PIN.java $
 // $Modtime: 5/02/00 7:13p $
@@ -68,7 +68,7 @@ public interface PIN {
    * @return the number of times remaining
    */
 
-    /*@ public normal_behavior
+    /* @ public normal_behavior
       @   ensures true;
       @*/
 
@@ -102,7 +102,7 @@ public interface PIN {
    * @exception java.lang.NullPointerException - if <code>pin</code> is <code>null</code> 
    */
 
-    /*@ public normal_behavior
+    /* @ public normal_behavior
       @   ensures true;
       @*/
 
@@ -116,7 +116,7 @@ public interface PIN {
    * @return <code>true</code> if validated; <code>false</code> otherwise
    */
 
-    /*@ public normal_behavior
+    /* @ public normal_behavior
       @   ensures true;
       @*/
 
@@ -127,7 +127,7 @@ public interface PIN {
    * If the validated flag is not set, this method does nothing.
    */
 
-    /*@ public normal_behavior
+    /* @ public normal_behavior
       @   ensures true;
       @*/
 

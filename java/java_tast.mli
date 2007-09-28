@@ -59,8 +59,10 @@ and expr_node =
   | JEvar of java_var_info
   | JEbin of expr * bin_op * expr         (*r binary operations *)
   | JEun of un_op * expr                 (*r (pure) unary operations *)
-  | JEincr_local_var of incr_decr_op * java_var_info
+  | JEif of expr * expr * expr
       (*r pre-post incr/decr operations *)
+  | JEincr_local_var of incr_decr_op * java_var_info
+  | JEincr_field of incr_decr_op * expr * java_field_info 
   | JEstatic_field_access of java_type_info * java_field_info
   | JEfield_access of expr * java_field_info
   | JEarray_length of expr 
@@ -83,7 +85,6 @@ and expr_node =
   | JPEassign_array of pexpr * pexpr * string * pexpr  
       (*r [Assign_array(e1,e2,op,e3)] is [e1[e2] op e3] *)
       (*r assignment op is =, +=, etc. *)
-  | JPEif of pexpr * pexpr * pexpr
   | Super_method_call of identifier * pexpr list
   | Instanceof of pexpr * type_expr
       (* in annotations only *)

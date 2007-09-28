@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.19 2007-09-25 08:10:42 marche Exp $
+$Id: java_parser.mly,v 1.20 2007-09-28 13:14:39 marche Exp $
 
 */
 
@@ -674,15 +674,12 @@ primary_no_new_array:
     { locate_expr (JPEname $2) }
 | field_access
     { locate_expr (JPEfield_access $1) }
-| ident LEFTPAR argument_list RIGHTPAR
-    { locate_expr (JPEcall(None,$1,$3)) } 
-| name DOT ident LEFTPAR argument_list RIGHTPAR
-    { let n = locate_expr (JPEname $1) in
-      locate_expr (JPEcall(Some n,$3,$5)) } 
+| name LEFTPAR argument_list RIGHTPAR
+    { locate_expr (JPEcall_name($1,$3)) } 
 | SUPER DOT ident LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEsuper_call($3, $5)) }
 | primary_expr DOT ident LEFTPAR argument_list RIGHTPAR
-    { locate_expr (JPEcall(Some $1,$3,$5)) } 
+    { locate_expr (JPEcall_expr($1,$3,$5)) } 
 | NEW name LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEnew($2,$4)) }
 | array_access

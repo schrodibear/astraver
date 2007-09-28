@@ -107,12 +107,14 @@ let rec expr acc e : 'a list =
     | JEnew_object(ci,args) ->
 	(* TODO: calls constructor *)
 	List.fold_left expr acc args
+    | JEif(e1,e2,e3) 
     | JEassign_array_op (e1, e2, _, e3)-> 
 	expr (expr (expr acc e1) e2) e3
     | JEassign_local_var_op (_, _, e) 
     | JEassign_local_var (_, e) 
     | JEarray_length e  
     | JEfield_access (e, _) 
+    | JEincr_field (_,e,_)
     | JEun (_, e) -> expr acc e 
     | JEassign_field (e1, _, e2)
     | JEassign_field_op (e1, _, _, e2)

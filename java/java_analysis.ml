@@ -49,6 +49,7 @@ let rec expr e =
   match e.java_expr_node with
     | JElit l -> ()
     | JEincr_local_var(op,v) -> ()
+    | JEincr_field(op,e1,fi) -> expr e1
     | JEun (_, e1) -> expr e1
     | JEbin (e1, op, e2) -> expr e1; expr e2 
     | JEvar vi -> ()

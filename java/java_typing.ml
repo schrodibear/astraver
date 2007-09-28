@@ -794,6 +794,17 @@ and get_class_prototypes package_env type_env ci d =
 	 | _ ->
 	     typing_error (fst (List.hd id)) "class type expected") 
     d.class_extends;
+  (* implements *)
+  ci.class_info_implements <-
+    List.map 
+    (fun id -> 
+       match classify_name package_env type_env None [] id with
+	 | TypeName (TypeInterface super) -> 
+	     check_if_interface_complete super;
+	     super
+	 | _ ->
+	     typing_error (fst (List.hd id)) "interface type expected") 
+    d.class_implements;
   (* fields *)
   let fields = List.fold_left (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
   ci.class_info_fields <- fields;
@@ -903,10 +914,17 @@ and lookup_class_field ci id =
     list_assoc_name (fun fi -> fi.java_field_info_name) id ci.class_info_fields
   with
       Not_found ->
-	(* TODO: lookup implemented interfaces *)
-	match ci.class_info_extends with
-	  | None -> raise Not_found
-	  | Some ci -> lookup_class_field ci id
+	try
+	  match ci.class_info_extends with
+	    | None -> raise Not_found
+	    | Some ci -> lookup_class_field ci id
+	with
+	    Not_found ->
+	      match ci.class_info_implements with
+		| [] -> raise Not_found
+		| [ii] -> lookup_interface_field ii id
+		| _ -> assert false (* TODO *)
+	      
 	      
 and lookup_field ti id =
   match ti with
@@ -1211,10 +1229,10 @@ let rec term package_env type_env current_type env e =
       | JPEnew_array _-> assert false (* TODO *)
       | JPEnew (_, _)-> assert false (* TODO *)
       | JPEsuper_call (_, _)-> assert false (* TODO *)
-      | JPEcall (e1, (loc,id), args)-> 
+      | JPEcall_name (qid, args)-> 
 	  begin
-	    match e1 with
-	      | None -> 
+	    match qid with
+	      | [(loc,id)] -> 
 		  begin 
 		    try 
 		      let fi = Hashtbl.find logics_env id in
@@ -1228,9 +1246,12 @@ let rec term package_env type_env current_type env e =
 		    with Not_found ->
 		      typing_error loc "logic function `%s' not found" id
 		  end		
-	      | Some e -> 
+	      | _ -> 
 		  typing_error e.java_pexpr_loc "method calls not allowed in annotations"
 	  end
+      | JPEcall_expr _ -> 
+	  typing_error e.java_pexpr_loc 
+	    "method calls not allowed in annotations"
       | JPEfield_access fa -> 
 	  begin
 	    match fa with
@@ -1341,7 +1362,7 @@ let rec assertion package_env type_env current_type env e =
     | JPEnew_array _-> assert false (* TODO *)
     | JPEnew (_, _)-> assert false (* TODO *)
     | JPEsuper_call (_, _)-> assert false (* TODO *)
-    | JPEcall (None, (loc,id), args)-> 
+    | JPEcall_name([(loc,id)], args)-> 
 	begin
 	  try
 	    let fi = Hashtbl.find logics_env id in
@@ -1368,7 +1389,7 @@ let rec assertion package_env type_env current_type env e =
 		typing_error e.java_pexpr_loc 
 		  "unknown predicate `%s'" id
 	end
-    | JPEcall (Some _, _, _)-> 
+    | JPEcall_name _ | JPEcall_expr _ -> 
 	typing_error e.java_pexpr_loc 
 	  "method calls not allowed in assertion"	
     | JPEfield_access _-> assert false (* TODO *)
@@ -1548,25 +1569,27 @@ let is_accessible_and_applicable mi id arg_types =
 	
 let lookup_method ti (loc,id) arg_types = 
   let rec collect_methods_from_interface acc ii =
+    check_if_interface_complete ii;
     let acc = 
       List.fold_left
 	(fun acc mi -> 
 	   if is_accessible_and_applicable mi id arg_types then 
 	     mi::acc 
 	   else acc)
-	acc (assert false (* ii.interface_info_methods *))
+	acc ii.interface_info_methods
     in
     List.fold_left
       collect_methods_from_interface acc ii.interface_info_extends
   in
   let rec collect_methods_from_class acc ci =
+    check_if_class_complete ci;
     let acc = 
       List.fold_left
 	(fun acc mi -> 
 	   if is_accessible_and_applicable mi id arg_types then 
 	     mi::acc 
 	   else acc)
-	acc (assert (not ci.class_info_incomplete);ci.class_info_methods)
+	acc ci.class_info_methods
     in
     let acc =
       match ci.class_info_extends with
@@ -1657,27 +1680,75 @@ let rec expr package_env type_env current_type env e =
 		    "class type expected"	
 	  end	  
       | JPEsuper_call (_, _)-> assert false (* TODO *)
-      | JPEcall (e1, id, args)-> 
+      | JPEcall_name (qid, args)-> 
+	  eprintf "method call name@.";
+	  let args = List.map exprt args in
+	  let arg_types = List.map (fun e -> e.java_expr_type) args in
+	  let ti,id,te1 =
+	    match qid with
+	      | [] -> assert false
+	      | [id] ->
+		  begin
+		    match current_type with
+		      | None -> assert false
+		      | Some ti -> ti,id,None
+		  end
+	      | id::n ->
+		  begin
+		    match 
+		      classify_name package_env type_env current_type env n
+		    with
+		      | TypeName ti -> ti, id, None
+		      | TermName te -> 
+			  let ti =
+			    match te.java_term_type with
+			      | JTYclass(_,ci) -> TypeClass ci
+			      | JTYinterface ii -> TypeInterface ii 
+			      | _ -> typing_error e.java_pexpr_loc 
+				  "not a class or interface type"
+			  in ti,id,Some (expr_of_term te)
+		      | PackageName _ ->
+			  typing_error (fst (List.hd n)) 
+			    "expr or class or interface expected"
+		  end
+	  in
+	  eprintf "looking up method '%s'@." (snd id);
+	  let mi = lookup_method ti id arg_types in
+	  let ty = 
+	    match mi.method_info_result with
+	      | None -> unit_type
+	      | Some vi -> vi.java_var_info_type
+	  in
+	  if mi.method_info_is_static then
+	    ty,JEstatic_call(mi,args)
+	  else
+	    let te2 =
+	      match te1 with
+		| Some e -> e
+		| None ->
+		    let vi = get_this e.java_pexpr_loc env in
+		    {
+		      java_expr_node = JEvar vi;
+		      java_expr_type = vi.java_var_info_type;
+		      java_expr_loc = e.java_pexpr_loc;
+		    }
+	    in
+	    ty,JEcall(te2,mi,args)
+
+      | JPEcall_expr (e1, id, args)-> 
+	  eprintf "method call expr@.";
 	  let args = List.map exprt args in
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in
 	  begin
 	    let ci,te1 =
-	      match e1 with
-		| None -> 
-		    begin
-		      match current_type with
-			| None -> assert false
-			| Some ci -> ci,None
-		    end
-		| Some e ->
-		    let te = expr package_env type_env current_type env e in
-		    begin
-		      match te.java_expr_type with
-			| JTYclass(_,ci) -> (TypeClass ci),Some te
-			| JTYinterface(ii) -> (TypeInterface ii),Some te
-			| _ -> typing_error e.java_pexpr_loc 
-			    "not a class or interface type"
-		    end
+	      let te = expr package_env type_env current_type env e1 in
+	      begin
+		match te.java_expr_type with
+		  | JTYclass(_,ci) -> (TypeClass ci),Some te
+		  | JTYinterface(ii) -> (TypeInterface ii),Some te
+		  | _ -> typing_error e.java_pexpr_loc 
+		      "not a class or interface type"
+	      end
 	    in
 	    let mi = lookup_method ci id arg_types in
 	    let ty = 
@@ -1702,7 +1773,16 @@ let rec expr package_env type_env current_type env e =
 	      ty,JEcall(te2,mi,args)
 	  end
       | JPEfield_access _-> assert false (* TODO *)
-      | JPEif (_, _, _)-> assert false (* TODO *)
+      | JPEif (e1, e2, e3)-> 
+	  let te1 = exprt e1 in
+	  if is_boolean te1.java_expr_type then	    
+	    let te2 = exprt e2 in
+	    let te3 = exprt e3 in
+	    (* TODO: check if compatible types *)
+	    te2.java_expr_type,JEif(te1,te2,te3)
+	  else
+	    typing_error e1.java_pexpr_loc "boolean expected"
+
       | JPEassign_array (e1, e2, op, e3)-> 
 	  let te1 = exprt e1 
 	  and te2 = exprt e2 
@@ -1841,7 +1921,9 @@ let rec expr package_env type_env current_type env e =
 	    match te.java_expr_node with
 	      | JEvar v ->
 		  te.java_expr_type,JEincr_local_var(op,v)
-	      | _ -> assert false (* TODO *)
+	      | JEfield_access(e1,fi) -> 
+		  fi.java_field_info_type, JEincr_field(op,e1,fi)
+	      | _ -> assert false (* TODO ? *)
 	  end	  
       | JPEun (op, e1)-> 
 	  let te1 = exprt e1 in 
@@ -1958,7 +2040,7 @@ let rec statement package_env type_env current_type env s =
 	  in
 	  JStry(ts, tl, 
 		Option_misc.map (statements package_env type_env current_type env) finally)
-      | JPSfor_decl (_, _, _, _)-> assert false (* TODO *)
+      | JPSfor_decl (vd, cond, incrs, body) -> assert false
       | JPSfor (_, _, _, _)-> assert false (* TODO *)
       | JPSdo (_, _)-> assert false (* TODO *)
       | JPSwhile (_, _)-> assert false (* TODO *)
@@ -2031,22 +2113,39 @@ and statements package_env type_env current_type env b =
 			statements package_env type_env current_type env rem
 		  | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
-		      let env,decls = 
-			variable_declaration package_env type_env current_type env vd 
+		      let tfor =
+			type_for_decl package_env type_env current_type env 
+			  loc vd inv dec e sl s
 		      in
-		      let inv = assertion package_env type_env current_type env inv in
-		      let dec = term package_env type_env current_type env dec in
-		      let e = expr package_env type_env current_type env e in
-		      let sl = List.map (expr package_env type_env current_type env) sl in
-		      let s = statement package_env type_env current_type env s in
-		      { java_statement_node = JSfor_decl(decls,e,inv,dec,sl,s);
-			java_statement_loc = loc } :: 
-			statements package_env type_env current_type env rem	
+		      tfor ::
+			statements package_env type_env current_type env rem
 		  | _ -> assert false
 	      end      
+	  | JPSfor_decl(vd,e,sl,s) ->
+	      let tfor =
+		type_for_decl package_env type_env current_type env 
+		  s.java_pstatement_loc vd expr_true expr_zero e sl s
+	      in
+	      tfor :: statements package_env type_env current_type env rem
+
 	  | _ ->
 	      let s' = statement package_env type_env current_type env s in
 	      s' :: statements package_env type_env current_type env rem
+
+
+and type_for_decl package_env type_env current_type env loc vd
+    inv dec e sl s =
+  let env,decls = 
+    variable_declaration package_env type_env current_type env vd 
+  in
+  let inv = assertion package_env type_env current_type env inv in
+  let dec = term package_env type_env current_type env dec in
+  let e = expr package_env type_env current_type env e in
+  let sl = List.map (expr package_env type_env current_type env) sl in
+  let s = statement package_env type_env current_type env s in
+  { java_statement_node = JSfor_decl(decls,e,inv,dec,sl,s);
+    java_statement_loc = loc }
+
 
 and block package_env type_env current_type env b =
   match statements package_env type_env current_type env b with

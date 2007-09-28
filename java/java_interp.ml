@@ -740,6 +740,8 @@ let rec expr e =
       | JElit l -> JCTEconst (lit l)
       | JEincr_local_var(op,v) -> 
 	  JCTEincr_local(incr_op op,get_var v)
+      | JEincr_field(op,e,fi) -> 
+	  assert false
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEunary(un_op op,e1))
