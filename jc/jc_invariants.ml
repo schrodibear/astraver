@@ -151,6 +151,9 @@ let fully_packed_name root =
 let tag_table_name root =
   root^"_tag_table"
 
+let alloc_table_name root =
+  root^"_alloc_table"
+
 let make_subtag t u =
   LPred("subtag", [ t; u ])
 
@@ -165,10 +168,65 @@ let type_structure = function
   | JCTpointer(st, _, _) -> st
   | _ -> failwith "type_structure"
 
+let range_min = function
+  | JCTpointer(_, x, _) -> x
+  | _ -> failwith "range_min"
+
+let range_max = function
+  | JCTpointer(_, _, x) -> x
+  | _ -> failwith "range_max"
+
 let hierarchy_invariant_name h = "global_invariant_"^h
 
 (*let mutable_instance_of_name root_structure_name =
   (mutable_name root_structure_name)^"_instance_of"*)
+
+let omin_omax alloc basep min max =
+  let omin = match min with
+    | None -> LApp("offset_min", [ alloc; basep ])
+    | Some n -> LConst(Prim_int(Num.string_of_num n))
+  in
+  let omax = match max with
+    | None -> LApp("offset_max", [ alloc; basep ])
+    | Some n -> LConst(Prim_int(Num.string_of_num n))
+  in
+  omin, omax
+
+let make_range index omin omax =
+  if omin = omax then
+    LPred("eq", [ index; omin ])
+  else
+    make_and
+      (LPred("ge_int", [ index; omin ]))
+      (LPred("le_int", [ index; omax ]))
+
+let pset_singleton p =
+  LApp("pset_singleton", [ p ])
+
+let pset_union a b =
+  LApp("pset_union", [ a; b ])
+
+let pset_union_list = function
+  | [] -> LVar "pset_empty"
+  | hd::tl -> List.fold_left pset_union hd tl
+
+let pset_range s a b =
+  LApp("pset_range", [ s; a; b ])
+
+let make_select fi this =
+  LApp("select", [ LVar fi.jc_field_info_name; this ])
+
+let make_select_committed root this =
+  LApp("select", [ LVar (committed_name root); this ])
+
+let make_shift p i =
+  LApp("shift", [ p; i ])
+
+let make_eq a b =
+  LPred("eq", [ a; b ])
+
+let make_not_assigns alloc old_mem new_mem pset =
+  LPred("not_assigns", [ alloc; old_mem; new_mem; pset ])
 
 (************************************)
 (* Checking an invariant definition *)
@@ -668,7 +726,8 @@ let not_mutable_implies_fields_committed this st =
 	 | _ -> acc)
     [] fields
   in
-  let params, coms = List.flatten (List.map fst fields_pc), make_and_list (List.map snd fields_pc) in
+  let params, coms = List.flatten (List.map fst fields_pc),
+    make_and_list (List.map snd fields_pc) in
 
   (* additional params *)
   let params = (mutable_name, mutable_memory_type root)::params in
@@ -944,7 +1003,7 @@ let components st =
 
 let components_by_type st =
   let compare_structs s t =
-    compare s.jc_struct_info_name t.jc_struct_info_name in
+    compare s.jc_struct_info_root t.jc_struct_info_root in
   let comps = components st in
   let comps =
     List.sort
@@ -964,6 +1023,56 @@ let components_by_type st =
     | (fi, si)::tl -> part si [fi] tl
   in
   part comps
+
+(* return a post-condition stating that the committed
+field of each component of "this" (in "fields") of the
+hierarchy "root" has been set to "value", and only them *)
+let hierarchy_committed_postcond this root fields value =
+  let com = committed_name root in
+  let alloc = alloc_table_name root in
+  (* fields information and range *)
+  let fields = List.map
+    (fun fi ->
+       let this_fi = make_select fi this in
+       let omin, omax = omin_omax (LVar alloc) this_fi
+	 (range_min fi.jc_field_info_type)
+	 (range_max fi.jc_field_info_type)
+       in
+       fi, this_fi, omin, omax)
+    fields
+  in
+  (* pset of pointers that have been modified *)
+  let pset_list = List.map
+    (fun (fi, this_fi, omin, omax) ->
+       (pset_range (pset_singleton this_fi) omin omax))
+    fields
+  in
+  let pset = pset_union_list pset_list in
+  (* "not_assigns" saying that only the pointers of pset
+     have been modified *)
+  let not_assigns = make_not_assigns (LVar alloc)
+    (LVarAtLabel(com, ""))
+    (LVar com)
+    pset
+  in
+  (* new values for the fields in their ranges *)
+  let com_values = List.map
+    (fun (fi, this_fi, omin, omax) ->
+       let fi_root =
+	 (type_structure fi.jc_field_info_type).jc_struct_info_root
+       in
+       let index = "jc_index" in
+       let range = make_range (LVar index) omin omax in
+       let new_value = make_eq
+	 (make_select_committed fi_root
+	    (make_shift this_fi (LVar index)))
+	 (LConst(Prim_bool value))
+       in
+       LForall(index, simple_logic_type "int", LImpl(range, new_value)))
+    fields
+  in
+  (* result *)
+  make_and_list (not_assigns::com_values)
 
 (* all components have "committed" = committed *)
 let make_components_postcond this st reads writes committed =
@@ -985,12 +1094,18 @@ let make_components_postcond this st reads writes committed =
       comps
   in
   let reads = StringSet.union reads writes in
-  let committed_value = LConst(Prim_bool committed) in
+  let reads = List.fold_left
+    (fun acc (si, fields) -> StringSet.add
+       (alloc_table_name si.jc_struct_info_root) acc)
+    reads comps
+  in
   let postcond =
     make_and_list
+      (* for each hierarchy... *)
       (List.map
-	 (fun (si, fields) ->
-	    let committed_name = committed_name si.jc_struct_info_name in
+	 (fun (si, fields) -> hierarchy_committed_postcond
+	    this si.jc_struct_info_root fields committed)
+(*	    let committed_name = committed_name si.jc_struct_info_root in
 	    LPred(
 	      "eq",
 	      [ LVar committed_name;
@@ -999,7 +1114,7 @@ let make_components_postcond this st reads writes committed =
 		     let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
 		     LApp("store", [acc; this_field; committed_value]))
 		  (LVarAtLabel(committed_name, ""))
-		  fields ]))
+		  fields ])) *)
 	 comps)
   in
   postcond, reads, writes  
@@ -1015,19 +1130,38 @@ let make_components_precond this st reads =
   in
   let l, reads = List.fold_left
     (fun (l, reads) (fi, si) ->
+       let index_name = "jc_index" in
        let mutable_name = mutable_name si.jc_struct_info_name in
        let committed_name = committed_name si.jc_struct_info_name in
-       let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
+       (* x.f *)
+       let base_field =
+	 LApp("select", [LVar fi.jc_field_info_name; this])
+       in
+       (* x.f+i *)
+       let this_field =
+	 LApp("shift", [ base_field; LVar index_name ])
+       in
        let fi_st = type_structure fi.jc_field_info_type in
+       let alloc = alloc_table_name fi_st.jc_struct_info_root in
        let reads = StringSet.add (tag_table_name fi_st.jc_struct_info_root) reads in
+       let reads = StringSet.add alloc reads in
        let reads = StringSet.add mutable_name reads in
-       (fully_packed (fi_st.jc_struct_info_root) this_field)
-       ::(LPred(
+       (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
+       let body = make_and
+	 (fully_packed (fi_st.jc_struct_info_root) this_field)
+	 (LPred(
 	    "eq",
 	    [ LApp("select", [LVar committed_name; this_field]);
 	      LConst(Prim_bool false) ]))
-       ::l,
-       reads)
+       in
+       let omin, omax = omin_omax (LVar alloc) base_field
+	 (range_min fi.jc_field_info_type)
+	 (range_max fi.jc_field_info_type)
+       in
+       let range = make_range (LVar index_name) omin omax in
+       let valid_impl = LImpl(range, body) in
+       let forall = LForall(index_name, simple_logic_type "int", valid_impl) in
+       forall::l, reads)
     ([], reads)
     (components st)
   in
