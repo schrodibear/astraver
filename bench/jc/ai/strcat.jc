@@ -3,6 +3,8 @@ type charP = {
     integer charM;
 }
 
+logic integer strlen(charP[..] p) reads (p+[0..]).charM;
+
 unit strcat(charP[..] dest, charP[..] src) {  
     integer i = 0;
     integer j = 0;

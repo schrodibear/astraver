@@ -1,9 +1,9 @@
 
-exception Exc of integer
-
 type charP = {
     integer charM;
 }
+
+logic integer strlen(charP[..] p) reads (p+[0..]).charM;
 
 unit strcpy(charP[..] dest, charP[..] src) {  
     integer i = 0;

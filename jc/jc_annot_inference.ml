@@ -481,7 +481,24 @@ let rec replace_term_in_assertion srct targetvi a =
 (* Abstract variables naming and creation.                                   *)
 (*****************************************************************************)
 
-let strlen_f = make_logic_fun "strlen" unit_type
+let strlen_f = 
+  let fref = ref None in
+  function () ->
+    match !fref with
+    | Some f -> f
+    | None ->
+	let fopt =
+	  Hashtbl.fold (fun _ (f,_) -> function
+	    | Some f -> Some f
+	    | None -> if f.jc_logic_info_name = "strlen" then Some f else None
+	  ) Jc_typing.logic_functions_table None 
+	in
+	let f = match fopt with
+	  | None -> make_logic_fun "strlen" unit_type (* TODO: add reads *)
+	  | Some f -> f
+	in
+	fref := Some f;
+	f
 
 module Vai : sig
 
@@ -580,7 +597,7 @@ end = struct
     with Not_found ->
       let va = Var.of_string ("__jc_strlen_" ^ (term_name t)) in
       Hashtbl.add strlen_variable_table t va;
-      let tstr = type_term (JCTapp(strlen_f,[t])) integer_type in
+      let tstr = type_term (JCTapp(strlen_f (),[t])) integer_type in
       Hashtbl.add term_table va tstr;
       va
 
@@ -1658,7 +1675,7 @@ end = struct
       assert (t1 = t2)
     with Not_found ->
       Hashtbl.add strlen_variable_table s t1;
-      let tmax = type_term (JCTapp(strlen_f,[t])) integer_type in
+      let tmax = type_term (JCTapp(strlen_f (),[t])) integer_type in
       Hashtbl.add term_table s tmax
     end;
     s
