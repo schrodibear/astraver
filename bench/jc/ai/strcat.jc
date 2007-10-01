@@ -1,0 +1,26 @@
+
+type charP = {
+    integer charM;
+}
+
+unit strcat(charP[..] dest, charP[..] src) {  
+    integer i = 0;
+    integer j = 0;
+    while (dest + i).charM != 0 ; {
+	i = i + 1;
+    }
+    while true ; {
+        if ((src + j).charM != 0) {
+             (dest + i + j).charM = (src + j).charM;
+	     j = j + 1;
+	}
+    }
+}
+
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make strcat"
+End: 
+*/

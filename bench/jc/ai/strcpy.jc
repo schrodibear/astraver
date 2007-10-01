@@ -1,0 +1,23 @@
+
+exception Exc of integer
+
+type charP = {
+    integer charM;
+}
+
+unit strcpy(charP[..] dest, charP[..] src) {  
+    integer i = 0;
+    while ((src + i).charM != 0) ; {
+	(dest + i).charM = (src + i).charM;
+	i = i + 1;
+    }
+    (dest + i).charM = 0;
+}
+
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make strcpy"
+End: 
+*/
