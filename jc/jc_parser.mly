@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.60 2007-09-24 08:06:55 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.61 2007-10-01 13:20:55 marche Exp $ */
 
 %{
 
@@ -613,8 +613,14 @@ expression:
 /*
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
 */
-| expression DOTDOT expression
-    { locate_expr (JCPErange($1,$3)) }
+| LSQUARE expression DOTDOT expression RSQUARE
+    { locate_expr (JCPErange($2,$4)) }
+| LSQUARE DOTDOT expression RSQUARE 
+    { locate_expr (JCPErange(None,$3)) }
+| LSQUARE expression DOTDOT RSQUARE 
+    { locate_expr (JCPErange($2,None)) }
+| LSQUARE DOTDOT RSQUARE 
+    { locate_expr (JCPErange(None,None)) }
 | BSMUTABLE LPAR expression COMMA tag RPAR
     { locate_expr (JCPEmutable($3, $5)) }
 | BSMUTABLE LPAR expression RPAR
