@@ -1500,7 +1500,9 @@ let rec ai_statement abs curinvs s =
 (* 	  else *)
 (* 	  ai_statement abs (copy_invariants mgr wideninvs) s *)
 	  (* Propagate to assertions. *)
-	  copy_invariants mgr wideninvs
+	  let copyinvs = copy_invariants mgr wideninvs in
+	  let bot = Abstract1.bottom mgr (Abstract1.env pre) in
+	  { copyinvs with jc_absinv_normal = bot; }
 	with Not_found ->
 	  let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
 	  let wideninvs = widen_invariants mgr curinvs nextinvs in
@@ -1857,9 +1859,11 @@ let rec atp_of_asrt a =
       let fvars = Atp.fv f in
       let varsets = List.map (fun v -> free_variables (Vwp.term v)) fvars in
       let vars = List.fold_left2
-	(fun acc va vs -> if VarSet.mem vi vs then va::acc else acc) 
-	[vi.jc_var_info_name] fvars varsets
+	(fun acc va vs -> 
+	  if VarSet.mem vi vs then StringSet.add va acc else acc) 
+	(StringSet.singleton vi.jc_var_info_name) fvars varsets
       in
+      let vars = StringSet.elements vars in
       let rec quant f = function
 	| [] -> f
 	| v::r -> 
@@ -2108,6 +2112,7 @@ let rec wp_statement =
 	let curposts = add_modified_vars curposts vs in
 	{ curposts with jc_post_normal = bodyposts.jc_post_normal; }
     | JCSloop(la,ls) ->
+	let curposts = { curposts with jc_post_normal = None; } in
 	let loopposts = push_modified_vars curposts in
 	let loopposts = wp_statement target ls loopposts in
 	let vs,loopposts = pop_modified_vars loopposts in
