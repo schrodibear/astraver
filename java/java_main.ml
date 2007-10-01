@@ -197,6 +197,7 @@ let _ =
   
 (*
 Local Variables: 
-compile-command: "make -j -C .. bin/krakatoa.byte"
+compile-command: "LC_ALL=C make -j -C .. bin/krakatoa.byte"
 End: 
 *)
+

@@ -131,7 +131,7 @@ let rec term fmt t =
 	fprintf fmt "@[(%a - %a)@]" term t1 term t2
     | JCTconst c -> const fmt c
     | JCTrange (t1,t2) -> 
-	fprintf fmt "@[%a..%a@]" (print_option term) t1 (print_option term) t2
+	fprintf fmt "@[[%a..%a]@]" (print_option term) t1 (print_option term) t2
 
 let quantifier fmt = function
   | Forall -> fprintf fmt "forall"
@@ -194,7 +194,7 @@ let rec location_set fmt = function
   | JCLSderef (locset, fi) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
   | JCLSrange (locset, t1, t2) ->
-      fprintf fmt "(%a + (%a..%a))" location_set locset 
+      fprintf fmt "(%a + [%a..%a])" location_set locset 
 	(print_option term) t1 (print_option term) t2
 
 let location fmt = function
