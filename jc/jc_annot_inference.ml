@@ -545,6 +545,8 @@ module Vai : sig
   val term : Var.t -> term
   val variable_of_term : term -> Var.t
 
+  val is_strlen_variable : Var.t -> bool
+
 end = struct
   
   let variable_table = Hashtbl.create 0
@@ -654,6 +656,12 @@ end = struct
 	  strlen_variable t
 	else assert false
     | _ -> assert false
+
+  let is_strlen_variable va = 
+    match (term va).jc_term_node with
+    | JCTapp(f,[t]) ->
+	f.jc_logic_info_name = "strlen"
+    | _ -> false
 
 end      
 
@@ -918,7 +926,7 @@ let is_null_term t =
   | JCTconst (JCCinteger "0") -> true
   | _ -> false
 
-let strlen_linstr_of_assertion env a = 
+let rec strlen_linstr_of_assertion env a = 
   match a.jc_assertion_node with
   | JCArelation(t1,(Bneq_int | Beq_int as op),t2) ->
       if is_null_term t2 then
@@ -954,6 +962,12 @@ let strlen_linstr_of_assertion env a =
 	| _ -> None
 	end
       else None
+  | JCAnot a ->
+      let nota = not_asrt a in
+      begin match nota.jc_assertion_node with
+      | JCAnot _ -> None
+      | _ -> strlen_linstr_of_assertion env nota
+      end
   | _ -> None
 
 
@@ -1393,12 +1407,13 @@ let rec ai_statement abs curinvs s =
   | JCSblock sl ->
       List.fold_left (ai_statement abs) curinvs sl
   | JCSif (e, ts, fs) ->
-      let copy_pre = Abstract1.copy mgr pre in
+      let copyinvs = copy_invariants mgr curinvs in
       let tpre = test_expr ~neg:false mgr pre e in
       let tinvs = { curinvs with jc_absinv_normal = tpre; } in
       let tinvs = ai_statement abs tinvs ts in
+      let copy_pre = copyinvs.jc_absinv_normal in
       let fpre = test_expr ~neg:true mgr copy_pre e in
-      let finvs = { curinvs with jc_absinv_normal = fpre; } in
+      let finvs = { copyinvs with jc_absinv_normal = fpre; } in
       let finvs = ai_statement abs finvs fs in
       join_invariants mgr tinvs finvs
   | JCSreturn_void ->
@@ -1717,6 +1732,25 @@ let atp_arithmetic_of_binop = function
   | Bdiv_int | Bdiv_real -> "/"
   | _ -> assert false  
 
+let rec free_variables t =
+  match t.jc_term_node with
+  | JCTconst _ ->
+      VarSet.empty
+  | JCTvar vi ->
+      VarSet.singleton vi
+  | JCTderef(t1,_) | JCTunary(_,t1) | JCToffset(_,t1,_) | JCTold t1 
+  | JCTinstanceof(t1,_) | JCTcast(t1,_) ->
+      free_variables t1
+  | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2)
+  | JCTrange(t1,t2) ->
+      VarSet.union (free_variables t1) (free_variables t2) 
+  | JCTapp(_,tl) ->
+      List.fold_left (fun acc t -> VarSet.union acc (free_variables t)) 
+	VarSet.empty tl
+  | JCTif(t1,t2,t3) ->
+      VarSet.union (VarSet.union (free_variables t1) (free_variables t2))
+	(free_variables t3)
+
 let rec atp_of_term t = 
   match t.jc_term_node with
   | JCTconst c ->
@@ -1768,6 +1802,25 @@ let rec term_of_atp tm =
   in
   raw_term tnode
 
+let rec free_variables t =
+  match t.jc_term_node with
+  | JCTconst _ ->
+      VarSet.empty
+  | JCTvar vi ->
+      VarSet.singleton vi
+  | JCTderef(t1,_) | JCTunary(_,t1) | JCToffset(_,t1,_) | JCTold t1 
+  | JCTinstanceof(t1,_) | JCTcast(t1,_) ->
+      free_variables t1
+  | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2)
+  | JCTrange(t1,t2) ->
+      VarSet.union (free_variables t1) (free_variables t2) 
+  | JCTapp(_,tl) ->
+      List.fold_left (fun acc t -> VarSet.union acc (free_variables t)) 
+	VarSet.empty tl
+  | JCTif(t1,t2,t3) ->
+      VarSet.union (VarSet.union (free_variables t1) (free_variables t2))
+	(free_variables t3)
+
 let rec atp_of_asrt a = 
   match a.jc_assertion_node with
   | JCAtrue -> 
@@ -1799,10 +1852,22 @@ let rec atp_of_asrt a =
       Atp.Iff(atp_of_asrt a1,atp_of_asrt a2)
   | JCAnot a ->
       Atp.Not(atp_of_asrt a)
-  | JCAquantifier(Forall,vi,a) ->
-      Atp.Forall(vi.jc_var_info_name,atp_of_asrt a)
-  | JCAquantifier(Exists,vi,a) ->
-      Atp.Exists(vi.jc_var_info_name,atp_of_asrt a)
+  | JCAquantifier(q,vi,a) ->
+      let f = atp_of_asrt a in
+      let fvars = Atp.fv f in
+      let varsets = List.map (fun v -> free_variables (Vwp.term v)) fvars in
+      let vars = List.fold_left2
+	(fun acc va vs -> if VarSet.mem vi vs then va::acc else acc) 
+	[vi.jc_var_info_name] fvars varsets
+      in
+      let rec quant f = function
+	| [] -> f
+	| v::r -> 
+	    match q with 
+	    | Forall -> quant (Atp.Forall(v,f)) r
+	    | Exists -> quant (Atp.Exists(v,f)) r
+      in
+      quant f vars
   | JCAapp _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
   | JCAif _ | JCAmutable _ | JCAtagequality _ ->
       assert false
@@ -2147,6 +2212,15 @@ let simplify =
     let disjuncts = Atp.disjuncts dnf in
     let disjuncts = List.map Atp.conjuncts disjuncts in
     let disjuncts = List.map (List.map asrt_of_atp) disjuncts in
+
+    let strlen_vars = List.filter Vai.is_strlen_variable vars in
+    let cstrs = List.map (fun va ->
+      let zero = raw_term(JCTconst(JCCinteger "0")) in
+      raw_asrt(JCArelation(Vai.term va,Bge_int,zero))
+    ) strlen_vars in
+    let cstrs = List.map (linstr_of_assertion env) cstrs in
+    let strlen_lincons = Parser.lincons1_of_lstring env cstrs in
+
     let abstract_disjuncts,other_disjuncts = 
       List.fold_right (fun conjunct (abstractl,otherl) ->
 	try 
@@ -2176,7 +2250,12 @@ let simplify =
 	  if Abstract1.is_bottom mgr absval = Manager.True then
 	    abstractl, otherl
 	  else
-	    absval :: abstractl, otherl
+	    let test_absval = Abstract1.copy mgr absval in
+	    Abstract1.meet_lincons_array_with mgr test_absval strlen_lincons;
+	    if Abstract1.is_bottom mgr test_absval = Manager.True then
+	      abstractl, otherl
+	    else
+	      absval :: abstractl, otherl
 	with Parser.Error _ | Failure _ ->
 	  abstractl, make_and (List.map presentify conjunct) :: otherl
       ) disjuncts ([],[])
