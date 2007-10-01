@@ -34,3 +34,10 @@ integer test1(integerT[0..] t, integer max) {
     x++;
   }
 }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make loop"
+End: 
+*/

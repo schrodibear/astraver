@@ -1267,10 +1267,10 @@ let eq_invariants mgr invs1 invs2 =
     ) postexcl1 true
   in
   Abstract1.is_eq mgr invs1.jc_absinv_normal invs2.jc_absinv_normal =
-  Manager.True
-    && eq_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
-    && Abstract1.is_eq mgr invs1.jc_absinv_return invs2.jc_absinv_return =
-  Manager.True
+      Manager.True
+  && eq_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
+  && Abstract1.is_eq mgr invs1.jc_absinv_return invs2.jc_absinv_return =
+      Manager.True
 
 let copy_invariants mgr invs = { 
   jc_absinv_normal = Abstract1.copy mgr invs.jc_absinv_normal;
@@ -1446,34 +1446,21 @@ let rec ai_statement abs curinvs s =
       Hashtbl.replace loop_iterations la.jc_loop_tag (num + 1);
       if num < abs.jc_absint_widening_threshold then
 	let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
-(* Begin hack - Nicolas *)
-(* sufficient to infer most *simple* loop invariant (see cousot76.jc, loop.jc, etc.) *)
-	let wideninvs = widen_invariants mgr curinvs nextinvs in
-	let nextinvs = ai_statement abs (copy_invariants mgr wideninvs) ls in
-(* End hack - Nicolas *)
 	let joininvs = join_invariants mgr curinvs nextinvs in
 	ai_statement abs joininvs s
-(* begin useless, only because no eq *)
-      else if num = abs.jc_absint_widening_threshold then
-	let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
-	let wideninvs = widen_invariants mgr curinvs nextinvs in
-	ai_statement abs (copy_invariants mgr wideninvs) s
-(* end useless, only because no eq *)
       else
 	begin try
 	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
-(* 	  let loopinvscopy = copy_invariants mgr loopinvs in *)
-	  let wideninvs = widen_invariants mgr loopinvs curinvs in
-	  Hashtbl.replace loop_invariants la.jc_loop_tag wideninvs;
-(* Problem with convergence, [is_eq] does not seem to work. *)
-(* 	  if eq_invariants mgr loopinvscopy wideninvs then *)
-(* 	    copy_invariants mgr wideninvs *)
-(* 	  else *)
-(* 	  ai_statement abs (copy_invariants mgr wideninvs) s *)
-	  (* Propagate to assertions. *)
-	  let copyinvs = copy_invariants mgr wideninvs in
-	  let bot = Abstract1.bottom mgr (Abstract1.env pre) in
-	  { copyinvs with jc_absinv_normal = bot; }
+	  let wideninvs = 
+	    widen_invariants mgr (copy_invariants mgr loopinvs) curinvs in
+	  Hashtbl.replace 
+	    loop_invariants la.jc_loop_tag (copy_invariants mgr wideninvs);
+	  if eq_invariants mgr loopinvs wideninvs then
+	    (* Propagate to assertions. *)
+	    let bot = Abstract1.bottom mgr (Abstract1.env pre) in
+	    { wideninvs with jc_absinv_normal = bot; }
+	  else
+	    ai_statement abs wideninvs s
 	with Not_found ->
 	  let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
 	  let wideninvs = widen_invariants mgr curinvs nextinvs in

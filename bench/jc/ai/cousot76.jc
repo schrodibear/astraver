@@ -16,3 +16,9 @@ integer cousot76()
   }
 }
 
+/*
+Local Variables: 
+mode: java
+compile-command: "make cousot76"
+End: 
+*/

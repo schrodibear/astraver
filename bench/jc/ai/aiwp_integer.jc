@@ -1,3 +1,4 @@
+
 integer foo(integer s, integer n) {
     integer i = 0;
     while true ; {
