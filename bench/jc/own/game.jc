@@ -1,3 +1,8 @@
+type Shield = {
+    integer absorb;
+    invariant absorb_inv(this) = this.absorb >= 0;
+}
+
 type Sword = {
     integer damage;
     invariant damage_inv(this) = this.damage > 0;
@@ -7,6 +12,7 @@ type Hero = {
     integer life;
     boolean dead;
     rep Sword[0] sword;
+    rep Shield[0] shield;
     Sword[0] sword_not_rep;
     invariant life_inv(this) =
         (this.life >= 0) &&

@@ -154,6 +154,12 @@ let tag_table_name root =
 let alloc_table_name root =
   root^"_alloc_table"
 
+let alloc_table_type root = {
+  logic_type_name = "alloc_table";
+  logic_type_args = [ simple_logic_type root ];
+}
+
+
 let make_subtag t u =
   LPred("subtag", [ t; u ])
 
@@ -213,11 +219,14 @@ let pset_union_list = function
 let pset_range s a b =
   LApp("pset_range", [ s; a; b ])
 
-let make_select fi this =
-  LApp("select", [ LVar fi.jc_field_info_name; this ])
+let make_select f this =
+  LApp("select", [ f; this ])
 
-let make_select_committed root this =
-  LApp("select", [ LVar (committed_name root); this ])
+let make_select_fi fi =
+  make_select (LVar fi.jc_field_info_name)
+
+let make_select_committed root =
+  make_select (LVar (committed_name root))
 
 let make_shift p i =
   LApp("shift", [ p; i ])
@@ -227,6 +236,8 @@ let make_eq a b =
 
 let make_not_assigns alloc old_mem new_mem pset =
   LPred("not_assigns", [ alloc; old_mem; new_mem; pset ])
+
+let make_bool b = LConst(Prim_bool b)
 
 (************************************)
 (* Checking an invariant definition *)
@@ -708,21 +719,29 @@ let not_mutable_implies_fields_committed this st =
   let fields_pc = List.fold_left
     (fun acc (n, fi) ->
        match fi.jc_field_info_type with
-	 | JCTpointer(fi_st, _, _) ->
+	 | JCTpointer(fi_st, min, max) ->
+	     let index = "jc_index" in
 	     let fi_root = fi_st.jc_struct_info_root in
 	     let committed_name = committed_name fi_root in
+	     let alloc = alloc_table_name fi_root in
 	     let params =
 	       [ n, memory_field fi;
-		 committed_name, committed_memory_type fi_root ]
+		 committed_name, committed_memory_type fi_root;
+		 alloc, alloc_table_type fi_root; ]
 	     in
-	     let f = LApp("select", [ LVar n; LVar this ]) in
-	     let com =
-	       LPred(
-		 "eq",
-		 [ LApp("select", [ LVar committed_name; f ]);
-		   LConst(Prim_bool true) ])
+	     let this_fi = make_select (LVar n) (LVar this) in
+	     let f = make_shift this_fi (LVar index) in
+	     let eq = make_eq (make_select_committed fi_root f)
+	       (make_bool true)
 	     in
-	     (params, com)::acc
+	     let omin, omax = omin_omax (LVar alloc) this_fi min max in
+	     let range = make_range (LVar index) omin omax in
+	     let pred =
+	       LForall(
+		 index, simple_logic_type "int",
+		 LImpl(range, eq))
+	     in
+	     (params, pred)::acc
 	 | _ -> acc)
     [] fields
   in
@@ -790,67 +809,68 @@ let owner_unicity this root =
   let x_name = this^"_2" in
   let x_type = pointer_type root in
 
+  (* shift indexes *)
+  let index1 = "jc_index" in
+  let index2 = "jc_index_2" in
+
   (* big "or" on all rep fields *)
   let eq_and_com_list = List.map
     (fun (name, fi) ->
        try
-	 let committed_name =
-	   committed_name
-	     (type_structure fi.jc_field_info_type).
-	     jc_struct_info_root
+	 let fi_root =
+	   (type_structure fi.jc_field_info_type).jc_struct_info_root
 	 in
-         (* this.f *)
-	 let this_dot_f =
-	   LApp(
-	     "select",
-	     [ LVar name;
-	       LVar this ])
+	 let committed_name = committed_name fi_root in
+	 let this_dot_f = make_select (LVar name) (LVar this) in
+	 let x_dot_f = make_select (LVar name) (LVar x_name) in
+
+	 (* indexes, ranges *)
+	 let alloc = alloc_table_name fi_root in
+	 let omin1, omax1 = omin_omax (LVar alloc) this_dot_f
+	   (range_min fi.jc_field_info_type)
+	   (range_max fi.jc_field_info_type)
 	 in
-         (* x.f *)
-	 let x_dot_f =
-	   LApp(
-	     "select",
-	     [ LVar name;
-	       LVar x_name ])
+	 let omin2, omax2 = omin_omax (LVar alloc) x_dot_f
+	   (range_min fi.jc_field_info_type)
+	   (range_max fi.jc_field_info_type)
 	 in
-         (* this.f = x.f *)
-	 let eq =
-	   LPred(
-	     "eq",
-	     [ this_dot_f;
-	       x_dot_f ])
+	 let range1 = make_range (LVar index1) omin1 omax1 in
+	 let range2 = make_range (LVar index2) omin2 omax2 in
+	 let shift1 = make_shift this_dot_f (LVar index1) in
+	 let shift2 = make_shift this_dot_f (LVar index2) in
+
+	 let eq = make_eq shift1 shift2 in
+
+	 let com = make_eq
+	   (make_select (LVar committed_name) shift1)
+	   (make_bool true)
 	 in
-         (* this.f.committed = true *)
-	 let com =
-	   LPred(
-	     "eq",
-	     [ LApp(
-		 "select",
-		 [ LVar committed_name;
-		   this_dot_f ]);
-	       LConst(Prim_bool true) ])
-	 in
-	 make_and eq com
+
+	 make_and_list [ range1; range2; eq; com ]
        with Failure "type_structure" ->
 	 LFalse)
     reps
   in
   let big_or = make_or_list eq_and_com_list in
 
-  let impl =
-    LImpl(
-      big_or,
-      LPred("eq", [ LVar this; LVar x_name ]))
-  in
+  let impl = LImpl(big_or, make_eq (LVar this) (LVar x_name)) in
 
-  let forall = LForall(x_name, x_type, impl) in
+  let forall =
+    LForall(
+      index1, simple_logic_type "int",
+      LForall(
+	index2, simple_logic_type "int",
+	LForall(x_name, x_type, impl)))
+  in
 
   (* params *)
   let params = List.map
     (fun (name, fi) ->
        [ name, memory_field fi;
 	 committed_name fi.jc_field_info_root,
-	 committed_memory_type fi.jc_field_info_root ])
+	 committed_memory_type fi.jc_field_info_root;
+	 alloc_table_name fi.jc_field_info_root,
+	 alloc_table_type fi.jc_field_info_root ])
     reps
   in
   let params = List.flatten params in
@@ -1033,7 +1053,7 @@ let hierarchy_committed_postcond this root fields value =
   (* fields information and range *)
   let fields = List.map
     (fun fi ->
-       let this_fi = make_select fi this in
+       let this_fi = make_select_fi fi this in
        let omin, omax = omin_omax (LVar alloc) this_fi
 	 (range_min fi.jc_field_info_type)
 	 (range_max fi.jc_field_info_type)
