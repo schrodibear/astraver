@@ -71,7 +71,7 @@ why/%.why: %.jc
 	$(EXECJESSIE) $<
 
 why/%.whyai: %.jc 
-	$(EXECJESSIE) -ai oct $<
+	$(EXECJESSIE) -ai pol -main main $<
 
 simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	$(EXECJESSIE) $<

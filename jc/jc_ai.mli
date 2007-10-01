@@ -27,7 +27,11 @@ open Jc_ast
 open Jc_fenv
 
 
+(* intraprocedural analysis *)
 val code_function : fun_info * fun_spec * statement list option -> unit
+
+(* interprocedural analysis *)
+val main_function : fun_info * fun_spec * statement list option -> unit
 
 
 (*

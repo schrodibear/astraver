@@ -8,6 +8,7 @@
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Nicolas ROUSSET                                                     *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -110,10 +111,20 @@ let main () =
 
         (* phase 4.1 (optional) : inference of annotations *)
 	if Jc_options.annot_infer then
-	  Hashtbl.iter 
-	    (fun _ (f,s,b) -> 
-	      Jc_ai.code_function (f,s,b) 
-	    ) Jc_norm.functions_table;
+	  if Jc_options.interprocedural then
+	    (* interprocedural analysis over the call graph +
+	       intraprocedural analysis of each function called *)
+	    Hashtbl.iter
+	      (fun _ (fi, fs, sl) ->
+		if fi.jc_fun_info_name = Jc_options.main then
+		  Jc_ai.main_function (fi, fs, sl)
+	      ) Jc_norm.functions_table
+	  else
+            (* intraprocedural inference of annotations otherwise *)
+	    Hashtbl.iter 
+	      (fun _ (f, s, b) -> 
+		Jc_ai.code_function (f, s, b) 
+	      ) Jc_norm.functions_table;
 	
 	(* phase 5 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";

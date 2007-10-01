@@ -1043,14 +1043,14 @@ let is_numeric t =
 
 let lub_numeric_types t1 t2 =
   match t1,t2 with
-    | JTYbase t1,JTYbase t2 -> 
-	begin
-	  match t1,t2 with
-	    | (Treal | Tdouble | Tfloat),_ 
-	    | _, (Treal | Tdouble | Tfloat) -> Treal
-	    | _ -> Tinteger
-
-	end
+  | JTYbase t1,JTYbase t2 -> 
+      begin
+	match t1,t2 with
+	| (Treal | Tdouble | Tfloat),_ 
+	| _, (Treal | Tdouble | Tfloat) -> Treal
+	| _ -> Tinteger
+	      
+      end
     | _ -> assert false
 
 

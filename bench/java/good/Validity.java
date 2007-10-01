@@ -16,10 +16,10 @@ class B {
     }
 
     int main() {
-	A x = new A();
+	A y = new A();
 	int[] t = new int[3];
 	m1(t);
-	return m(x);
+	return m(y);
     }
 
 }

@@ -8,6 +8,7 @@
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Nicolas ROUSSET                                                     *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -22,7 +23,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.11 2007-09-25 08:19:47 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.12 2007-10-01 19:59:28 nrousset Exp $ i*)
 
 open Format
 open Jc_env
@@ -68,6 +69,7 @@ let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let annot_infer = ref false
 let ai_domain = ref ""
+let interprocedural = ref false
 let main = ref ""
 
 let files_ = ref []
@@ -105,8 +107,8 @@ let _ =
           "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference"
           ^ " with abstract interpretation using the Box, Octagon"
           ^ " or Polyhedron domain, or with weakest preconditions or with both";
-	"-main", Arg.Set_string(main),
-	  "  main function";
+	"-main", Arg.Tuple [Arg.Set annot_infer; Arg.Set interprocedural; Arg.Set_string main],
+	  "  main function for interprocedural abstract interpretation (needs -ai <domain>)";
 	"--werror", Arg.Set werror,
           "  treats warnings as errors";
 	"--version", Arg.Unit version,
@@ -136,6 +138,7 @@ let inv_sem = !inv_sem
 
 let annot_infer = !annot_infer
 let ai_domain = !ai_domain
+let interprocedural = !interprocedural
 let main = !main
 
 (*s error handling *)

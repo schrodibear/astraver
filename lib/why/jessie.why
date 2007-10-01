@@ -33,7 +33,7 @@ axiom offset_min_shift :
 
 logic null : 't pointer
 
-axiom null_not_valid: forall a:'t alloc_table. not valid(a,null)
+axiom null_not_valid : forall a:'t alloc_table. not valid(a,null)
 
 (* pointer comparison *)
 

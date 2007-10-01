@@ -491,7 +491,7 @@ type statement_node =
   | JCScall of var_info option * fun_info * expr list * statement
   | JCSassign_var of var_info * expr
   | JCSassign_heap of expr * field_info * expr
-      (* statements *)
+    (* statements *)
   | JCSassert of string option * assertion
   | JCSblock of statement list
   | JCSdecl of var_info * expr option * statement
@@ -507,11 +507,11 @@ type statement_node =
 
 and statement = 
     {
-      jc_statement_node : statement_node;
-      jc_statement_loc : Loc.position;
-    }
-
-
+     jc_statement_node : statement_node;
+     jc_statement_loc : Loc.position;
+   }
+      
+      
 (*
 type behavior =
     {  

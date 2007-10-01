@@ -8,6 +8,7 @@
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Nicolas ROUSSET                                                     *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -22,7 +23,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.11 2007-09-25 08:19:47 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.12 2007-10-01 19:59:28 nrousset Exp $ *)
 
 (*s environment variables *)
 
@@ -41,6 +42,7 @@ val why_opt : string
 
 val annot_infer : bool
 val ai_domain : string
+val interprocedural : bool
 val main : string
 
 val files : unit -> string list 

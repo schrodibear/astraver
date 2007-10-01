@@ -47,7 +47,11 @@ open Lincons1
   -v prints inferred annotations
   -d prints debug info
  *)
-  
+
+
+(* Variable used for the fixpoint in the interprocedural analysis *)
+let state_changed = ref false
+
 
 let raw_term t = {
   jc_term_node = t;
@@ -273,14 +277,24 @@ let rec term_name =
 let rec destruct_pointer t = 
   match t.jc_term_node with
   | JCTconst JCCnull -> None, None
+  | JCTconst (JCCinteger str) -> None, Some t (* support of <new> (Nicolas) *)
   | JCTvar vi -> Some vi, None
-  | JCTshift(t1,t2) ->
+  | JCTshift (t1, t2) ->
       begin match destruct_pointer t1 with
       | viopt, None -> viopt, Some t2
-      | viopt,Some offt -> 
-	  let tnode = JCTbinary(offt,Badd_int,t2) in
+      | viopt, Some offt -> 
+	  let tnode = JCTbinary (offt, Badd_int,t2) in
 	  let offt = full_term tnode integer_type t2.jc_term_loc in
 	  viopt,Some offt
+      end
+  | JCTbinary (t1, Bsub_int, t2) -> (* support of <new> (Nicolas) *)
+      begin
+	match destruct_pointer t1 with
+	| vio, None -> vio, Some (raw_term (JCTunary (Uminus_int, raw_term (JCTconst (JCCinteger "-1")))))
+	| vio, Some offt ->
+	    let t3 = JCTbinary (offt, Bsub_int, t2) in
+	    let offt = full_term t3 integer_type t1.jc_term_loc in
+	    vio, Some offt
       end
   | JCTcast _ -> assert false (* TODO *)
   | _ -> assert false
@@ -355,20 +369,22 @@ let print_abstract_invariants fmt invs =
 let term_of_expr e =
   let rec term e = 
     let tnode = match e.jc_expr_node with
-      | JCEconst c -> JCTconst c
-      | JCEvar vi -> JCTvar vi
-      | JCEbinary(e1,bop,e2) -> JCTbinary(term e1,bop,term e2)
-      | JCEunary(uop,e1) -> JCTunary(uop,term e1)
-      | JCEshift(e1,e2) -> JCTshift(term e1, term e2)
-      | JCEsub_pointer(e1,e2) -> JCTsub_pointer(term e1,term e2)
-      | JCEderef(e1,fi) -> JCTderef(term e1,fi)
-      | JCEinstanceof(e1,st) -> JCTinstanceof(term e1,st)
-      | JCEcast(e1,st) -> JCTcast(term e1,st)
-      | JCErange_cast _ -> failwith "Not a term"
-      | JCEif(e1,e2,e3) -> JCTif(term e1,term e2,term e3)
-      | JCEoffset(off,e1,st) -> JCToffset(off, term e1, st)
-      | JCEalloc _ -> failwith "Not a term"
-      | JCEfree _ -> failwith "Not a term"
+    | JCEconst c -> JCTconst c
+    | JCEvar vi -> JCTvar vi
+    | JCEbinary (e1, bop, e2) -> JCTbinary(term e1, bop, term e2)
+    | JCEunary (uop, e1) -> JCTunary (uop, term e1)
+    | JCEshift (e1, e2) -> JCTshift(term e1, term e2)
+    | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term e1, term e2)
+    | JCEderef (e1, fi) -> JCTderef (term e1, fi)
+    | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, st)
+    | JCEcast (e1, st) -> JCTcast (term e1, st)
+    | JCErange_cast _ -> failwith "Not a term"
+    | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
+    | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
+    | JCEalloc (e, _) -> (* support of <new> (nicolas) *)
+	(* Note: offset_max(t) = length(t) - 1 *)
+	JCTbinary (term e, Bsub_int, raw_term (JCTconst (JCCinteger "1")))
+    | JCEfree _ -> failwith "Not a term"
     in
     raw_term tnode
   in
@@ -567,8 +583,8 @@ end = struct
       let va = Var.of_string ("__jc_offset_min_" ^ (term_name t)) in
       Hashtbl.add offset_min_variable_table t va;
       let st = match ty with
-	| JCTpointer(st,_,_) -> st
-	| _ -> assert false
+      | JCTpointer(st,_,_) -> st
+      | _ -> assert false
       in
       let tmin = type_term (JCToffset(Offset_min,t,st)) integer_type in
       Hashtbl.add term_table va tmin;
@@ -783,12 +799,11 @@ let linstr_of_term env t =
       List.map (fun (t,c) ->
 	let va = Vai.variable_of_term t in
 	if Environment.mem_var env va then (Var.to_string va,c)
-	else failwith "Not in environment"
-      ) coeffs 
+	else failwith "Not in environment") coeffs 
     in
     Some (mkaddstr coeffs, cst)
   with Failure _ -> None
-
+      
 let offset_min_linstr_of_term env t =
   match destruct_pointer t with
   | None,_ -> None
@@ -800,24 +815,26 @@ let offset_min_linstr_of_term env t =
       in
       let mint = raw_term(JCToffset(Offset_min,vt,st)) in
       let t = match offt with 
-	| None -> mint
-	| Some offt -> raw_term(JCTbinary(mint,Badd_int,offt)) 
+      | None -> mint
+      | Some offt -> raw_term(JCTbinary(mint,Bsub_int,offt)) 
       in
       linstr_of_term env t
-      
+
 let offset_max_linstr_of_term env t =
   match destruct_pointer t with
-  | None,_ -> None
-  | Some vi,offt ->
+  | None, None -> None
+  | None, Some t -> (* support of <new> (Nicolas) *)
+      linstr_of_term env t
+  | Some vi, offt ->
       let vt = raw_term(JCTvar vi) in
       let st = match vi.jc_var_info_type with
-	| JCTpointer(st,_,_) -> st
-	| _ -> assert false
+      | JCTpointer(st,_,_) -> st
+      | _ -> assert false
       in
       let maxt = raw_term(JCToffset(Offset_max,vt,st)) in
       let t = match offt with 
-	| None -> maxt
-	| Some offt -> raw_term(JCTbinary(maxt,Bsub_int,offt)) 
+      | None -> maxt
+      | Some offt -> raw_term(JCTbinary(maxt,Bsub_int,offt)) 
       in
       linstr_of_term env t
 
@@ -891,7 +908,7 @@ let offset_max_linstr_of_expr env e =
       | None -> None
       | Some ("",cst) -> Some (string_of_int cst)
       | Some (str,cst) -> Some (str ^ " + " ^ (string_of_int cst))
-
+	    
 let is_null_term t = 
   match t.jc_term_node with
   | JCTconst (JCCinteger "0") -> true
@@ -1121,7 +1138,7 @@ let assignment mgr pre t e =
       else forget_vars, vars, linexprs
     else forget_vars, vars, linexprs
   in
-  let forget_vars, vars,linexprs = 
+  let forget_vars, vars, linexprs = 
     if Vai.has_offset_max_variable t then
       let va = Vai.offset_max_variable t in
       if Environment.mem_var env va then
@@ -1289,7 +1306,7 @@ let rec ai_expression abs curinvs e =
   | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) ->
       expr (expr curinvs e1) e2
   | JCEunary(_,e1) | JCEinstanceof(e1,_) | JCEcast(e1,_) | JCEoffset(_,e1,_) 
-  | JCEalloc(e1,_) | JCEfree e1 -> 
+  | JCEalloc (e1, _) | JCEfree e1 -> 
       expr curinvs e1
   | JCEif(e1,e2,e3) -> 
       expr (expr (expr curinvs e1) e2) e3
@@ -1325,13 +1342,14 @@ let find_target_assertions targets s =
     (fun acc target -> 
       if target.jc_target_statement == s then target::acc else acc
     ) [] targets
-    
+
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
   let targets = find_target_assertions abs.jc_absint_target_assertions s in
-  List.iter (fun target ->
-    target.jc_target_invariant <- mkinvariant mgr curinvs.jc_absinv_normal
-  ) targets;
+  List.iter
+    (fun target ->
+      target.jc_target_invariant <- mkinvariant mgr curinvs.jc_absinv_normal
+    ) targets;
   let env = abs.jc_absint_function_environment in
   let pre = curinvs.jc_absinv_normal in
   let postexcl = curinvs.jc_absinv_exceptional in
@@ -1345,8 +1363,8 @@ let rec ai_statement abs curinvs s =
       in 
       Abstract1.change_environment_with mgr pre env false;
       let pre = match eo with
-	| None -> pre
-        | Some e -> assignment mgr pre vit e
+      | None -> pre
+      | Some e -> assignment mgr pre vit e
       in
       let curinvs = { curinvs with jc_absinv_normal = pre; } in
       ai_statement abs curinvs s
@@ -1468,9 +1486,42 @@ let rec ai_statement abs curinvs s =
 	  let nextinvs = ai_statement abs curinvs ls in
 	  ai_statement abs nextinvs s
 	end
-  | JCScall(vio,f,args,s) -> 
+  | JCScall (vio, fi, el, s) ->
+      if Jc_options.interprocedural then
+	List.iter2
+	  (fun vi e ->
+	    match vi.jc_var_info_type with
+	    | JCTpointer (si, no1, no2) ->
+		(* Note: no1 is always 0 for Java programs (Nicolas) *)
+		let t = match term_of_expr e with None -> assert false | Some t -> t in
+		let tt = type_term t.jc_term_node e.jc_expr_type in
+		assert (Vai.has_offset_max_variable tt);
+		let offset_max = Vai.offset_max_variable t in
+		let interval =
+		  Abstract1.bound_variable
+		    abs.jc_absint_manager curinvs.jc_absinv_normal offset_max in
+		let inf = interval.inf in
+		if (Scalar.is_infty inf != 0) then () else
+		let n = Num.num_of_string (Scalar.to_string inf) in
+		begin
+		  match no2 with
+		  | None ->
+		      vi.jc_var_info_type <- JCTpointer (si, no1, Some n);
+		      state_changed := true
+		  | Some n' ->
+		      let i = Num.int_of_num n in
+		      let i' = Num.int_of_num n' in
+		      if i > i' then
+			begin
+			  vi.jc_var_info_type <- JCTpointer (si, no1, Some n);
+			  state_changed := true
+			end
+		end
+		  
+	    | _ -> ())
+	  fi.jc_fun_info_parameters el;
       curinvs
-
+	  
 let rec record_invariants abs s =
   let mgr = abs.jc_absint_manager in
   match s.jc_statement_node with
@@ -1526,7 +1577,7 @@ let ai_function mgr targets (fi, fs, sl) =
 	[] fi.jc_fun_info_parameters
     in
     let env = Environment.add env (Array.of_list params) [||] in
-
+    
     let abs = { 
       jc_absint_manager = mgr;
       jc_absint_function_environment = env;
@@ -1543,37 +1594,37 @@ let ai_function mgr targets (fi, fs, sl) =
     let cstrs =
       List.fold_left
  	(fun acc vi -> match vi.jc_var_info_type with
- 	| JCTpointer(st,n1opt,n2opt) ->
- 	    let vt = raw_term(JCTvar vi) in
+ 	| JCTpointer (st, n1opt, n2opt) ->
+ 	    let vt = raw_term (JCTvar vi) in
  	    let mincstr = match n1opt with
-	      | None -> []
-	      | Some n1 ->
- 		  let mint = raw_term (JCToffset(Offset_min,vt,st)) in
- 		  let n1t =
- 		    raw_term (JCTconst(JCCinteger(Num.string_of_num n1)))
- 		  in
- 		  let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
- 		  [mina]
+	    | None -> []
+	    | Some n1 ->
+ 		let mint = raw_term (JCToffset(Offset_min,vt,st)) in
+ 		let n1t =
+ 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n1)))
+ 		in
+ 		let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
+ 		[mina]
  	    in
  	    let maxcstr = match n2opt with
-	      | None -> []
-	      | Some n2 ->
- 		  let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
- 		  let n2t =
- 		    raw_term (JCTconst(JCCinteger(Num.string_of_num n2)))
- 		  in
- 		  let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
- 		  [maxa]
+	    | None -> []
+	    | Some n2 ->
+ 		let maxt = raw_term (JCToffset(Offset_max,vt,st)) in
+ 		let n2t =
+ 		  raw_term (JCTconst(JCCinteger(Num.string_of_num n2)))
+ 		in
+ 		let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
+ 		[maxa]
  	    in
  	    mincstr @ maxcstr @ acc
  	| _ -> acc
  	) [] fi.jc_fun_info_parameters
-     in
-     let cstrs = List.map (linstr_of_assertion env) cstrs in
-     let lincons = Parser.lincons1_of_lstring env cstrs in
-     let initpre = Abstract1.top mgr env in
-     Abstract1.meet_lincons_array_with mgr initpre lincons;
-
+    in
+    let cstrs = List.map (linstr_of_assertion env) cstrs in
+    let lincons = Parser.lincons1_of_lstring env cstrs in
+    let initpre = Abstract1.top mgr env in
+    Abstract1.meet_lincons_array_with mgr initpre lincons;
+    
     (* Annotation inference on the function body. *)
     let initinvs = {
       jc_absinv_normal = initpre;
@@ -1594,7 +1645,7 @@ let ai_function mgr targets (fi, fs, sl) =
   with Manager.Error exc ->
     Manager.print_exclog std_formatter exc;
     printf "@."
-
+      
 
 (*****************************************************************************)
 (* From terms and assertions to ATP formulas and the opposite way.           *)
@@ -2309,8 +2360,54 @@ let code_function = function
       | _ -> assert false
       end
   
+
+(*****************************************************************************)
+(* Interprocedural analysis.                                                 *)
+(*****************************************************************************)
+
+(* TODO: recursive functions *)
+
+let rec ai_entrypoint mgr (fi, fs, sl) =
+  ai_function mgr [] (fi, fs, sl);
+  List.iter
+    (fun fi ->
+      Hashtbl.iter
+	(fun _ (fi', fs, slo) ->
+	  match slo with
+	  | None -> ()
+	  | Some sl ->
+	      if fi'.jc_fun_info_name = fi.jc_fun_info_name then
+		ai_entrypoint mgr (fi, fs, sl))
+	Jc_norm.functions_table)
+    fi.jc_fun_info_calls
+
+let rec ai_entrypoint_fix mgr (fi, fs, sl) =
+  ai_entrypoint mgr (fi, fs, sl);
+  if !state_changed then
+    begin
+      state_changed := false;
+      ai_entrypoint_fix mgr (fi, fs, sl)
+    end
+  
+let main_function = function
+  | fi, fs, None -> ()
+  | fi, fs, Some sl ->
+      begin match Jc_options.ai_domain with
+      | "box" -> 
+	  let mgr = Box.manager_alloc () in
+	  ai_entrypoint_fix mgr (fi, fs, sl)
+      | "oct" -> 
+	  let mgr = Oct.manager_alloc () in
+	  ai_entrypoint_fix mgr (fi, fs, sl)
+      | "pol" -> 
+	  let mgr = Polka.manager_alloc_strict () in
+	  ai_entrypoint_fix mgr (fi,fs,sl)
+      | _ -> assert false
+      end
+
+	
 (*
-Local Variables: 
-compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-End: 
-*)
+  Local Variables: 
+  compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+  End: 
+ *)
