@@ -574,12 +574,25 @@ let rec term env e =
       | JCPEalloc _ | JCPEfree _ ->
 	  typing_error e.jc_pexpr_loc 
 	    "memory (de-)allocation not allowed as logic term"
-      | JCPErange(e1,e2) ->
+      | JCPErange(Some e1,Some e2) ->
 	  let e1 = term env e1 and e2 = term env e2 in
 	  let t1 = e1.jc_term_type and t2 = e2.jc_term_type in
 	  assert (is_numeric t1 && is_numeric t2);
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t, JCTrange(term_coerce t1 t e1, term_coerce t2 t e2)
+	  JCTnative t, 
+	  JCTrange(Some (term_coerce t1 t e1), Some (term_coerce t2 t e2))
+      | JCPErange(Some e,None) ->
+	  let e = term env e in
+	  let t = e.jc_term_type in
+	  assert (is_numeric t);
+	  t, JCTrange(Some e,None)
+      | JCPErange(None,Some e) ->
+	  let e = term env e in
+	  let t = e.jc_term_type in
+	  assert (is_numeric t);
+	  t, JCTrange(None,Some e)
+      | JCPErange(None,None) ->
+	  integer_type, JCTrange(None,None)
       | JCPEmutable(e, t) ->
 	  assert false (* TODO *)
       | JCPEtagequality _ ->
@@ -1743,7 +1756,7 @@ let rec location_set env e =
 	    | JCTpointer(st,_,_), JCTnative Tinteger ->
 		begin match ti.jc_term_node with
 		  | JCTrange(t1,t2) -> ty,JCLSrange(te,t1,t2)
-		  | _ -> ty,JCLSrange(te,ti,ti)
+		  | _ -> ty,JCLSrange(te,Some ti,Some ti)
 		end
 	    | JCTpointer _, _ -> 
 		typing_error i.jc_pexpr_loc "integer expected, got %a" print_type ti.jc_term_type

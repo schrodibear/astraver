@@ -94,7 +94,7 @@ type pexpr_node =
   | JCPEold of pexpr
   | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
-  | JCPErange of pexpr * pexpr
+  | JCPErange of pexpr option * pexpr option
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
   | JCPEmutable of pexpr * ptag
@@ -217,7 +217,7 @@ type term_node =
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
   | JCTif of term * term * term
-  | JCTrange of term * term
+  | JCTrange of term option * term option
 
 and term =
     {
@@ -240,7 +240,7 @@ and tag_node =
 type tlocation_set = 
   | JCLSvar of var_info
   | JCLSderef of tlocation_set * field_info
-  | JCLSrange of tlocation_set * term * term
+  | JCLSrange of tlocation_set * term option * term option
 
 type tlocation =
   | JCLvar of var_info

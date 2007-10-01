@@ -2,6 +2,7 @@ open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_ast
+open Jc_pervasives
 open Output
 
 (* other modifications for this extension can be found in:
@@ -261,28 +262,19 @@ let rec check_rep ?(must_deref=false) this loc t =
     | _ ->
 	Jc_typing.typing_error loc "this term is not a rep field of %s" this.jc_var_info_name
 
-let rec term this t =
-  match t.jc_term_node with
-    | JCTconst _ -> ()
+let term this t =
+  iter_term
+    (fun t -> match t.jc_term_node with
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTcast (t, _) -> term this t
-    | JCTinstanceof (t, _) -> term this t
-    | JCToffset(_, t, _) -> term this t
-    | JCTold t
-    | JCTunary (_,t) -> term this t
     | JCTapp (id, l) ->
-	if FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories
-	then List.iter (term this) l
-	else
+	if not (FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories) 
+	then
 	  Jc_typing.typing_error t.jc_term_loc
 	    "this call is not allowed in structure invariant"
     | JCTderef _ ->
 	check_rep this t.jc_term_loc t
-    | JCTshift (t1, t2) 
-    | JCTsub_pointer (t1, t2) 
-    | JCTrange (t1, t2)
-    | JCTbinary(t1,_,t2) -> term this t1; term this t2
-    | JCTvar _ -> ()
+    | _ -> ()
+    ) t
 
 let tag this t =
   match t.jc_tag_node with
@@ -328,23 +320,14 @@ let check invs =
 (* Tools for structure definitions *)
 (***********************************)
 
-let rec term_memories aux t = match t.jc_term_node with
-  | JCTconst _
-  | JCTvar _ -> aux
-  | JCTshift(t1, t2)
-  | JCTsub_pointer(t1, t2)
-  | JCTrange(t1,t2) 
-  | JCTbinary(t1,_,t2) -> term_memories (term_memories aux t1) t2
-  | JCTderef(t, fi) ->
-      let m = fi.jc_field_info_name in
-      term_memories (StringSet.add m aux) t
-  | JCTapp(_, l) -> List.fold_left term_memories aux l
-  | JCTold t
-  | JCToffset(_,t, _)
-  | JCTinstanceof(t, _)
-  | JCTcast(t, _) 
-  | JCTunary(_,t) -> term_memories aux t
-  | JCTif(t1, t2, t3) -> term_memories (term_memories (term_memories aux t1) t2) t3
+let rec term_memories aux t = 
+  fold_term 
+    (fun aux t -> match t.jc_term_node with
+    | JCTderef(t, fi) ->
+	let m = fi.jc_field_info_name in
+	StringSet.add m aux
+    | _ -> aux
+    ) aux t
 
 let tag_memories aux t = match t.jc_tag_node with
   | JCTtag _ | JCTbottom -> aux

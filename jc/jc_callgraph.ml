@@ -25,21 +25,14 @@
 open Jc_env
 open Jc_fenv
 open Jc_ast
+open Jc_pervasives
 
 let rec term acc t =
-  match t.jc_term_node with
-    | JCTconst _ 
-    | JCTvar _ -> acc
-    | JCTapp (f,lt) -> f::(List.fold_left term acc lt)
-    | JCToffset(_,t,_) | JCTold t | JCTderef (t,_) -> term acc t
-    | JCTshift (t1,t2) 
-    | JCTsub_pointer (t1,t2) 
-    | JCTrange (t1,t2)
-    | JCTbinary (t1,_,t2) -> term (term acc t1) t2
-    | JCTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
-    | JCTcast(t,_)
-    | JCTinstanceof(t,_)
-    | JCTunary (_,t) -> term acc t
+  fold_term 
+    (fun acc t -> match t.jc_term_node with
+    | JCTapp (f,lt) -> f::acc
+    | _ -> acc
+    ) acc t
 
 let tag acc t = match t.jc_tag_node with
   | JCTtag _ | JCTbottom -> acc

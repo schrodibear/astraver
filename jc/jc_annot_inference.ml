@@ -136,35 +136,8 @@ let make_or al =
   in
   raw_asrt anode
 
-let rec deep_raw_term t =
-  let tnode = match t.jc_term_node with
-    | JCTconst _ | JCTvar _ as tnode -> tnode
-    | JCTbinary(t1,bop,t2) ->
-	JCTbinary(deep_raw_term t1,bop,deep_raw_term t2) 
-    | JCTunary(uop,t1) ->
-	JCTunary(uop,deep_raw_term t1)
-    | JCTshift(t1,t2) ->
-	JCTshift(deep_raw_term t1,deep_raw_term t2)
-    | JCTsub_pointer(t1,t2) ->
-	JCTsub_pointer(deep_raw_term t1,deep_raw_term t2)
-    | JCTderef(t1,fi) ->
-	JCTderef(deep_raw_term t1,fi)
-    | JCTapp(li,tl) ->
-	JCTapp(li,List.map deep_raw_term tl)
-    | JCTold t ->
-	JCTold(deep_raw_term t)
-    | JCToffset(off,t,st) ->
-	JCToffset(off,deep_raw_term t,st)
-    | JCTinstanceof(t,st) ->
-	JCTinstanceof(deep_raw_term t,st)
-    | JCTcast(t,st) ->
-	JCTcast(deep_raw_term t,st)
-    | JCTif(t1,t2,t3) ->
-	JCTif(deep_raw_term t1,deep_raw_term t2,deep_raw_term t3)
-    | JCTrange(t1,t2) ->
-	JCTrange(deep_raw_term t1,deep_raw_term t2)
-  in
-  raw_term tnode
+let deep_raw_term t =
+  post_map_term raw_term t
 
 let rec deep_raw_asrt a =
   let term = deep_raw_term and asrt = deep_raw_asrt in
@@ -288,8 +261,14 @@ let rec term_name =
     | JCTif(t1,t2,t3) ->
 	"if_" ^ (term_name t1) ^ "_then_" ^ (term_name t2) 
 	^ "_else_" ^ (term_name t3)
-    | JCTrange(t1,t2) ->
+    | JCTrange(Some t1,Some t2) ->
 	(term_name t1) ^ "_range_" ^ (term_name t2)
+    | JCTrange(Some t1,None) ->
+	(term_name t1) ^ "_range_none"
+    | JCTrange(None,Some t2) ->
+	"none_range_" ^ (term_name t2)
+    | JCTrange(None,None) ->
+	"none_range_none"
 
 let rec destruct_pointer t = 
   match t.jc_term_node with
@@ -451,40 +430,15 @@ let raw_asrt_of_expr = asrt_of_expr
 
 (* All terms involved should be raw terms. *)
 let rec replace_term_in_term srct targetvi t = 
-  let term = replace_term_in_term srct targetvi in
-  let tnode =
-    if srct = t then JCTvar targetvi
-    else match t.jc_term_node with
-    | JCTconst _ as tnode -> tnode
-    | JCTvar vi as tnode ->
-	assert(vi.jc_var_info_tag != targetvi.jc_var_info_tag);
-	tnode 
-    | JCTbinary(t1,bop,t2) ->
-	JCTbinary(term t1,bop,term t2) 
-    | JCTunary(uop,t1) ->
-	JCTunary(uop,term t1)
-    | JCTshift(t1,t2) ->
-	JCTshift(term t1,term t2)
-    | JCTsub_pointer(t1,t2) ->
-	JCTsub_pointer(term t1,term t2)
-    | JCTderef(t1,fi) ->
-	JCTderef(term t1,fi)
-    | JCTapp(li,tl) ->
-	JCTapp(li,List.map term tl)
-    | JCTold t ->
-	JCTold(term t)
-    | JCToffset(off,t,st) ->
-	JCToffset(off,term t,st)
-    | JCTinstanceof(t,st) ->
-	JCTinstanceof(term t,st)
-    | JCTcast(t,st) ->
-	JCTcast(term t,st)
-    | JCTif(t1,t2,t3) ->
-	JCTif(term t1,term t2,term t3)
-    | JCTrange(t1,t2) ->
-	JCTrange(term t1,term t2)
-  in
-  { t with jc_term_node = tnode; }
+  pre_map_term 
+    (fun t ->
+      if srct = t then Some (JCTvar targetvi)
+      else match t.jc_term_node with
+      | JCTvar vi ->
+	  assert(vi.jc_var_info_tag != targetvi.jc_var_info_tag);
+	  None
+      | _ -> None
+    ) t
       
 (* All assertions and terms involved should be raw. *)
 let rec replace_term_in_assertion srct targetvi a = 
@@ -1735,23 +1689,12 @@ let atp_arithmetic_of_binop = function
   | _ -> assert false  
 
 let rec free_variables t =
-  match t.jc_term_node with
-  | JCTconst _ ->
-      VarSet.empty
-  | JCTvar vi ->
-      VarSet.singleton vi
-  | JCTderef(t1,_) | JCTunary(_,t1) | JCToffset(_,t1,_) | JCTold t1 
-  | JCTinstanceof(t1,_) | JCTcast(t1,_) ->
-      free_variables t1
-  | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2)
-  | JCTrange(t1,t2) ->
-      VarSet.union (free_variables t1) (free_variables t2) 
-  | JCTapp(_,tl) ->
-      List.fold_left (fun acc t -> VarSet.union acc (free_variables t)) 
-	VarSet.empty tl
-  | JCTif(t1,t2,t3) ->
-      VarSet.union (VarSet.union (free_variables t1) (free_variables t2))
-	(free_variables t3)
+  fold_term
+    (fun acc t -> match t.jc_term_node with
+    | JCTvar vi ->
+	VarSet.add vi acc
+    | _ -> acc
+    ) VarSet.empty t
 
 let rec atp_of_term t = 
   match t.jc_term_node with
@@ -1803,25 +1746,6 @@ let rec term_of_atp tm =
 	assert false
   in
   raw_term tnode
-
-let rec free_variables t =
-  match t.jc_term_node with
-  | JCTconst _ ->
-      VarSet.empty
-  | JCTvar vi ->
-      VarSet.singleton vi
-  | JCTderef(t1,_) | JCTunary(_,t1) | JCToffset(_,t1,_) | JCTold t1 
-  | JCTinstanceof(t1,_) | JCTcast(t1,_) ->
-      free_variables t1
-  | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2)
-  | JCTrange(t1,t2) ->
-      VarSet.union (free_variables t1) (free_variables t2) 
-  | JCTapp(_,tl) ->
-      List.fold_left (fun acc t -> VarSet.union acc (free_variables t)) 
-	VarSet.empty tl
-  | JCTif(t1,t2,t3) ->
-      VarSet.union (VarSet.union (free_variables t1) (free_variables t2))
-	(free_variables t3)
 
 let rec atp_of_asrt a = 
   match a.jc_assertion_node with
@@ -2120,7 +2044,8 @@ let rec wp_statement =
 	  | None -> None
 	  | Some a ->
 	      (* Prefix by loop invariant in left-hand side of implication.*)
-	      let impl = raw_asrt(JCAimplies(la.jc_loop_invariant,a)) in
+	      (*let impl = raw_asrt(JCAimplies(la.jc_loop_invariant,a)) in*)
+	      let impl = a in
 	      Some (VarSet.fold 
 		(fun vi a -> raw_asrt (JCAquantifier(Forall,vi,a))) vs impl)
 	in
@@ -2235,11 +2160,12 @@ let simplify =
 		 Jc_output.assertion)
 	      conjunct;
 	  let absval = Abstract1.top mgr env in
+	  (* Overapproximate conjunct. *)
 	  let cstrs = 
-	    List.map 
-	      (fun a -> match linstr_of_assertion env a with
-	      | "" -> failwith "Not supported"
-	      | s ->  s) conjunct 
+	    List.fold_left
+	      (fun acc a -> match linstr_of_assertion env a with
+	      | "" -> acc (* failwith "Not supported" *)
+	      | s ->  s::acc) [] conjunct 
 	  in
 	  if Jc_options.debug then
 	    printf "linstr conjunct : %a@." 

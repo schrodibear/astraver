@@ -627,7 +627,7 @@ let rec location_set t =
 		  let st = get_array_struct ty in
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
-		  let shift = JCLSrange(t1', t2', t2') in
+		  let shift = JCLSrange(t1', Some t2', Some t2') in
 		  JCLSderef(shift,snd (List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
@@ -639,7 +639,7 @@ let rec location_set t =
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let t3' = term t3 in
-		  let shift = JCLSrange(t1', t2', t3') in
+		  let shift = JCLSrange(t1', Some t2', Some t3') in
 		  JCLSderef(shift,snd (List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
@@ -665,7 +665,7 @@ let location t =
 		  let st = get_array_struct ty in
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
-		  let shift = JCLSrange(t1', t2', t2') in
+		  let shift = JCLSrange(t1', Some t2', Some t2') in
 		  JCLderef(shift,snd (List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
@@ -677,7 +677,7 @@ let location t =
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let t3' = term t3 in
-		  let shift = JCLSrange(t1', t2', t3') in
+		  let shift = JCLSrange(t1', Some t2', Some t3') in
 		  JCLderef(shift,snd (List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
@@ -1008,7 +1008,7 @@ let tr_logic_fun fi b acc =
 
 (*
 Local Variables: 
-compile-command: "make -j -C .. bin/krakatoa.byte"
+compile-command: "LC_ALL=C make -j -C .. bin/krakatoa.byte"
 End: 
 *)
 

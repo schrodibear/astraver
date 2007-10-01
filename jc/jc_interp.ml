@@ -1029,7 +1029,22 @@ let rec pset before loc =
     | JCLSvar vi -> 
 	let m = lvar_info (Some before) vi in
 	LApp("pset_singleton", [m])
-    | JCLSrange(ls,a,b) ->
+    | JCLSrange(ls,None,None) ->
+	let ls = pset before ls in
+	LApp("pset_all", [ls])
+    | JCLSrange(ls,None,Some b) ->
+	let ls = pset before ls in
+	let b' = term (Some before) before b in
+	LApp("pset_range_left", 
+	     [ls; 
+	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
+    | JCLSrange(ls,Some a,None) ->
+	let ls = pset before ls in
+	let a' = term (Some before) before a in
+	LApp("pset_range_right", 
+	     [ls; 
+	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'])
+    | JCLSrange(ls,Some a,Some b) ->
 	let ls = pset before ls in
 	let a' = term (Some before) before a in
 	let b' = term (Some before) before b in

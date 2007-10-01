@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.51 2007-09-14 17:09:46 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.52 2007-10-01 14:12:14 moy Exp $ *)
 
 
 open Jc_env
@@ -136,28 +136,20 @@ terms and assertions
 **************************)
 
 let rec term ef t =
-  match t.jc_term_node with
-    | JCTconst _ -> ef
+  fold_term
+    (fun ef t -> match t.jc_term_node with
     | JCTvar vi ->
 	if vi.jc_var_info_static then
 	  add_global_effect ef vi
 	else ef
-    | JCTif(t1, t2, t3) -> term (term (term ef t1) t2) t3
-    | JCTcast(t, _) 
-    | JCTinstanceof (t, _)
-    | JCTunary (_, t) -> term ef t
     | JCToffset(_,t,st) ->
 	add_alloc_effect (term ef t) st.jc_struct_info_root
-    | JCTold t -> term ef t
     | JCTapp (li, tl) -> 
-	ef_union li.jc_logic_info_effects
-	  (List.fold_left term ef tl)	
+	ef_union li.jc_logic_info_effects ef
     | JCTderef (t, fi) ->
-	term (add_memory_effect ef fi) t
-    | JCTshift (t1, t2)
-    | JCTsub_pointer (t1, t2)
-    | JCTrange (t1, t2)
-    | JCTbinary (t1, _, t2) -> term (term ef t1) t2
+	add_memory_effect ef fi
+    | _ -> ef
+    ) ef t
 
 let tag ef t h =
   let ef = match h with
