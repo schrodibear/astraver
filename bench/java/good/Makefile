@@ -70,6 +70,9 @@ type-all:
 why/%.why: %.jc 
 	$(EXECJESSIE) $<
 
+why/%.whyai: %.jc 
+	$(EXECJESSIE) -ai oct $<
+
 simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	$(EXECJESSIE) $<
 	make -f $*.makefile $@
@@ -88,6 +91,12 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	rm -f $*.jc
 	make $*.jcio
 	make why/$*.why
+	make -f $*.makefile gui
+
+%.ai: %.java
+	rm -f $*.jc
+	make $*.jcio
+	make why/$*.whyai
 	make -f $*.makefile gui
 
 %.goals: %.jc
