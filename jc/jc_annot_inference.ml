@@ -1460,12 +1460,13 @@ let rec ai_statement abs curinvs s =
 	    let bot = Abstract1.bottom mgr (Abstract1.env pre) in
 	    { wideninvs with jc_absinv_normal = bot; }
 	  else
-	    ai_statement abs wideninvs s
+	    let nextinvs = ai_statement abs wideninvs ls in
+	    ai_statement abs nextinvs s
 	with Not_found ->
-	  let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
-	  let wideninvs = widen_invariants mgr curinvs nextinvs in
-	  Hashtbl.replace loop_invariants la.jc_loop_tag wideninvs;
-	  ai_statement abs (copy_invariants mgr wideninvs) s
+	  Hashtbl.replace 
+	    loop_invariants la.jc_loop_tag (copy_invariants mgr curinvs);
+	  let nextinvs = ai_statement abs curinvs ls in
+	  ai_statement abs nextinvs s
 	end
   | JCScall(vio,f,args,s) -> 
       curinvs
@@ -1621,6 +1622,7 @@ end = struct
     let s = term_name t1 in
     begin try 
       let t2 = Hashtbl.find variable_table s in
+(*       printf "t1 = %a t2 = %a@." Jc_output.term t1 Jc_output.term t2; *)
       assert (t1 = t2)
     with Not_found ->
       Hashtbl.add variable_table s t1;
