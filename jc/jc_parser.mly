@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.62 2007-10-01 14:12:14 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.63 2007-10-01 14:19:19 moy Exp $ */
 
 %{
 
@@ -484,6 +484,14 @@ postfix_expression:
     { locate_expr (JCPEunary (UPbw_not, $2)) }
 | EXCLAM postfix_expression 
     { locate_expr (JCPEunary (UPnot, $2)) }
+| LSQUARE expression DOTDOT expression RSQUARE
+    { locate_expr (JCPErange(Some $2,Some $4)) }
+| LSQUARE DOTDOT expression RSQUARE 
+    { locate_expr (JCPErange(None,Some $3)) }
+| LSQUARE expression DOTDOT RSQUARE 
+    { locate_expr (JCPErange(Some $2,None)) }
+| LSQUARE DOTDOT RSQUARE 
+    { locate_expr (JCPErange(None,None)) }
 ;
 
 argument_expression_list: 
@@ -613,14 +621,6 @@ expression:
 /*
 | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
 */
-| LSQUARE expression DOTDOT expression RSQUARE
-    { locate_expr (JCPErange(Some $2,Some $4)) }
-| LSQUARE DOTDOT expression RSQUARE 
-    { locate_expr (JCPErange(None,Some $3)) }
-| LSQUARE expression DOTDOT RSQUARE 
-    { locate_expr (JCPErange(Some $2,None)) }
-| LSQUARE DOTDOT RSQUARE 
-    { locate_expr (JCPErange(None,None)) }
 | BSMUTABLE LPAR expression COMMA tag RPAR
     { locate_expr (JCPEmutable($3, $5)) }
 | BSMUTABLE LPAR expression RPAR
