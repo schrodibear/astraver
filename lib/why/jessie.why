@@ -251,7 +251,10 @@ logic pset_empty : 't pset
 logic pset_singleton : 't pointer -> 't pset
 logic pset_deref : ('t,'v pointer) memory, 't pset -> 'v pset
 logic pset_union : 't pset, 't pset -> 't pset
-logic pset_range : 't pset, int, int -> 't pset
+logic pset_all : 'z pset -> 'z pset (* l(..) *)
+logic pset_range : 't pset, int, int -> 't pset (* l(a..b) *)
+logic pset_range_left : 'z pset, int -> 'z pset (* l(..b) *)
+logic pset_range_right : 'z pset, int -> 'z pset (* l(a..) *)
 
 logic in_pset : 't pointer, 't pset -> prop
 
@@ -270,6 +273,13 @@ axiom in_pset_deref:
     in_pset(p,pset_deref(m,q)) <-> 
 	exists r:'t pointer. in_pset(r,q) and p = select(m,r)
 
+axiom in_pset_all:
+  forall p:'t pointer. 
+  forall q:'t pset.
+    in_pset(p,pset_all(q)) <-> 
+	exists i:int. exists r:'t pointer.
+          in_pset(r,q) and p=shift(r,i)
+
 axiom in_pset_range:
   forall p:'t pointer. 
   forall q:'t pset.
@@ -277,6 +287,22 @@ axiom in_pset_range:
     in_pset(p,pset_range(q,a,b)) <-> 
 	exists i:int. exists r:'t pointer.
           a <= i and i <= b and in_pset(r,q) and p=shift(r,i)
+
+axiom in_pset_range_left:
+  forall p:'t pointer. 
+  forall q:'t pset.
+  forall b:int.
+    in_pset(p,pset_range_left(q,b)) <-> 
+	exists i:int. exists r:'t pointer.
+          i <= b and in_pset(r,q) and p=shift(r,i)
+
+axiom in_pset_range_right:
+  forall p:'t pointer. 
+  forall q:'t pset.
+  forall a:int.
+    in_pset(p,pset_range_right(q,a)) <-> 
+	exists i:int. exists r:'t pointer.
+          a <= i and in_pset(r,q) and p=shift(r,i)
 
 axiom in_pset_union:
   forall p:'t pointer. 
