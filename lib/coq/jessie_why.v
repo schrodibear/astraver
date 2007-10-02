@@ -102,7 +102,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A335:Set) (a:(alloc_table A335)) (p:(pointer A335))
+(*Why predicate*) Definition valid (A364:Set) (a:(alloc_table A364)) (p:(pointer A364))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -528,10 +528,24 @@ Implicit Arguments pset_deref.
   forall (A1:Set), (pset A1) -> (pset A1) -> (pset A1).
 Admitted.
 
+(*Why logic*) Definition pset_all : forall (A1:Set), (pset A1) -> (pset A1).
+Admitted.
+Implicit Arguments pset_all.
+
 (*Why logic*) Definition pset_range :
   forall (A1:Set), (pset A1) -> Z -> Z -> (pset A1).
 Admitted.
 Implicit Arguments pset_range.
+
+(*Why logic*) Definition pset_range_left :
+  forall (A1:Set), (pset A1) -> Z -> (pset A1).
+Admitted.
+Implicit Arguments pset_range_left.
+
+(*Why logic*) Definition pset_range_right :
+  forall (A1:Set), (pset A1) -> Z -> (pset A1).
+Admitted.
+Implicit Arguments pset_range_right.
 
 (*Why logic*) Definition in_pset :
   forall (A1:Set), (pointer A1) -> (pset A1) -> Prop.
@@ -557,6 +571,14 @@ Admitted.
 Admitted.
 Implicit Arguments in_pset_deref.
 
+(*Why axiom*) Lemma in_pset_all :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pset A1)),
+    ((in_pset p (pset_all q)) <->
+     (exists i:Z, (exists r:(pointer A1), (in_pset r q) /\ p = (shift r i)))))).
+Admitted.
+
 (*Why axiom*) Lemma in_pset_range :
   forall (A1:Set),
   (forall (p:(pointer A1)),
@@ -570,6 +592,26 @@ Implicit Arguments in_pset_deref.
 Admitted.
 Implicit Arguments in_pset_range.
 
+(*Why axiom*) Lemma in_pset_range_left :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pset A1)),
+    (forall (b:Z),
+     ((in_pset p (pset_range_left q b)) <->
+      (exists i:Z,
+       (exists r:(pointer A1), i <= b /\ (in_pset r q) /\ p = (shift r i))))))).
+Admitted.
+
+(*Why axiom*) Lemma in_pset_range_right :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pset A1)),
+    (forall (a:Z),
+     ((in_pset p (pset_range_right q a)) <->
+      (exists i:Z,
+       (exists r:(pointer A1), a <= i /\ (in_pset r q) /\ p = (shift r i))))))).
+Admitted.
+
 (*Why axiom*) Lemma in_pset_union :
   forall (A1:Set),
   (forall (p:(pointer A1)),
@@ -579,8 +621,8 @@ Implicit Arguments in_pset_range.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A364:Set) (A363:Set) (a:(alloc_table A363)) (m1:(memory A363 A364)) (m2:(memory A363 A364)) (l:(pset A363))
-  := (forall (p:(pointer A363)),
+(*Why predicate*) Definition not_assigns (A399:Set) (A398:Set) (a:(alloc_table A398)) (m1:(memory A398 A399)) (m2:(memory A398 A399)) (l:(pset A398))
+  := (forall (p:(pointer A398)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -617,7 +659,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A370:Set) (a:(tag_table A370)) (p:(pointer A370)) (t:(tag_id A370))
+(*Why predicate*) Definition instanceof (A405:Set) (a:(tag_table A405)) (p:(pointer A405)) (t:(tag_id A405))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -645,7 +687,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A375:Set) (tag_table:(tag_table A375)) (mutable:(memory A375 (tag_id A375))) (this:(pointer A375))
+(*Why predicate*) Definition fully_packed (A410:Set) (tag_table:(tag_table A410)) (mutable:(memory A410 (tag_id A410))) (this:(pointer A410))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

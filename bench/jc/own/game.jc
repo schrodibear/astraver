@@ -48,6 +48,7 @@ behavior ok:
 	target.dead = true;
     }
     pack(target);
+    assert false;
 }
 
 unit test_fun(Hero[0] this)

@@ -715,20 +715,29 @@ and expr ~threats e : expr =
     | JCEalloc (e, st) ->
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
 	let tag = st.jc_struct_info_root ^ "_tag_table" in
-	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
-	let com = Jc_invariants.committed_name st.jc_struct_info_root in
-	make_app "alloc_parameter" 
-	  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
-	   coerce ~no_int_overflow:(not threats) 
-	     e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
+	if Jc_options.inv_sem = InvOwnership then
+	  let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
+	  let com = Jc_invariants.committed_name st.jc_struct_info_root in
+	  make_app "alloc_parameter_ownership" 
+	    [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
+	     coerce ~no_int_overflow:(not threats) 
+	       e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
+	else
+	  make_app "alloc_parameter" 
+	    [Var alloc; Var tag; Var (tag_name st); 
+	     coerce ~no_int_overflow:(not threats) 
+	       e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
     | JCEfree e ->
 	let st = match e.jc_expr_type with
 	  | JCTpointer(st, _, _) -> st
 	  | _ -> assert false
 	in	
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
-	let com = Jc_invariants.committed_name st.jc_struct_info_root in
-	make_app "free_parameter" [Var alloc; Var com; expr e]
+	if Jc_options.inv_sem = InvOwnership then
+	  let com = Jc_invariants.committed_name st.jc_struct_info_root in
+	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
+	else
+	  make_app "free_parameter" [Var alloc; expr e]
 
 let invariant_for_struct this st =
   let (_,invs) = 

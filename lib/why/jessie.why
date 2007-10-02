@@ -437,7 +437,7 @@ logic lsr : int,int -> int
 
 **********************)
 
-parameter alloc_parameter : 
+parameter alloc_parameter_ownership : 
   a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
   { n > 0 }
@@ -448,12 +448,29 @@ parameter alloc_parameter :
     and instanceof(at,result,s) and select(mut,result) = bottom_tag 
     and select(com,result) = false }
 
-parameter free_parameter : 
+parameter free_parameter_ownership : 
   a:'t alloc_table ref -> com:('t,bool) memory ref -> p:'t pointer -> 
   { offset_min(a,p) = 0 and offset_max(a,p) >= 0 
 	and select(com,p) = false }
   unit
   reads com
+  writes a
+  { offset_max(a,p) < offset_min(a,p) }
+
+(* With -inv-sem <> ownership *)
+
+parameter alloc_parameter : 
+  a:'t alloc_table ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
+  { n > 0 }
+  't pointer 
+  writes a, at
+  { offset_min(a,result) = 0 and offset_max(a,result) = n-1 
+    and instanceof(at,result,s) }
+
+parameter free_parameter : 
+  a:'t alloc_table ref -> p:'t pointer -> 
+  { offset_min(a,p) = 0 and offset_max(a,p) >= 0 }
+  unit
   writes a
   { offset_max(a,p) < offset_min(a,p) }
 
