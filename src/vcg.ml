@@ -845,7 +845,8 @@ let rec explain_for_pred acc = function
       match acc with
 	| Some n ->
 	    begin
-	      Format.eprintf "looking for internal explanation '%d'@." n;
+	      if debug then 
+		Format.eprintf "looking for internal explanation '%d'@." n;
 	      try
 		let e = Hashtbl.find Wp.explanation_table n in
 		(*Format.eprintf "found@.";*)

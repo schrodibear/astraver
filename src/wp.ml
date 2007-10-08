@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.105 2007-10-08 11:57:18 marche Exp $ i*)
+(*i $Id: wp.ml,v 1.106 2007-10-08 14:11:01 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -35,6 +35,7 @@ open Ast
 open Util
 open Env
 open Effect
+open Options
 
 (*s to quantify over all the variables read/modified by [p] *)
 
@@ -82,7 +83,7 @@ let explanation_counter = ref 0
 let reg_explanation e =
   incr explanation_counter;
   let id = !explanation_counter in
-  Format.eprintf "registering internal explanation '%d'@." id;
+  if debug then Format.eprintf "registering internal explanation '%d'@." id;
   Hashtbl.add explanation_table id e;
   Internal id
 
@@ -391,7 +392,9 @@ and wp_desc info d q =
 		Cc.VCEassert (List.map (fun a -> (a.a_loc,a.a_value)) l) 
 	    | `PRE ->
 		let lab = info.t_userlabel in
-		Format.eprintf "wp: set label for `PRE explanation: %s@." lab;
+		if debug then 
+		  Format.eprintf 
+		    "wp: set label for `PRE explanation: %s@." lab;
 		Cc.VCEpre (lab,List.map (fun a -> (a.a_loc,a.a_value)) l) 
 	in
 	let id = reg_explanation expl in

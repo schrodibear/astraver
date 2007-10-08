@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.129 2007-10-08 11:57:18 marche Exp $ i*)
+(*i $Id: typing.ml,v 1.130 2007-10-08 14:11:01 marche Exp $ i*)
 
 (*s Typing. *)
 
@@ -787,6 +787,6 @@ let rec typef lab env expr =
       let lab' = Label.add s lab in
       let t_e = typef lab' env e in
       t_e.info.t_userlabel <- s;
-      eprintf "Typing: set label for node: %s@." s;
+      if debug then eprintf "Typing: set label for node: %s@." s;
       make_node toplabel (Label (s, t_e)) (result_type t_e) (effect t_e)
 
