@@ -16,7 +16,7 @@ integer f1(integer x)
  * We want the message: 
  *  "post-condition `\result > 10' of function f2 cannot be established"
  * localized on `return x+1'
- * all lines involved in the execution path should be ~underlined 
+ * Bonus: all lines involved in the execution path should be ~underlined 
  */
 integer f2 (integer x) 
   requires x > 0 && x < 100;
@@ -47,7 +47,7 @@ integer f3 (integer x)
 /* Example 4 
  * Explanation expected: 
  *   "validity of loop invariant `0 <= y' at loop entrance"
- * localized on `0 <= y' 
+ * localized on `while ...' 
  */
 
 unit f4 (integer x) 
@@ -64,7 +64,7 @@ unit f4 (integer x)
 /* Example 5 
  * Explanation expected:
  *   "preservation of loop invariant `y = x'"
- * localized on `y=x' 
+ * localized on the '}' closing the loop body 
  */
 
 unit f5 (integer x)  
@@ -77,7 +77,18 @@ unit f5 (integer x)
  }
 }
 
-
+/* Example 6
+ * Explanation expected:
+ *   "arithmetic overflow"
+ * localized on "y", "x+y :> byte" and on "y+z"
+ */
+type byte = 0..255
+byte f6(byte x)
+{
+    byte y = x+1;
+    byte z = (x+y) :> byte; 
+    return y+z;
+}
 
 
 

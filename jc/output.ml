@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.12 2007-07-06 07:45:28 marche Exp $ i*)
+(*i $Id: output.ml,v 1.13 2007-10-08 11:57:18 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -565,7 +565,7 @@ let rec fprintf_expr form e =
 	fprintf form "@[<hv 0>(assert@ { %a };@ %a)@]" 
 	  fprintf_assertion p fprintf_expr e
     | Label (s, e) ->
-	fprintf form "@[<hv 0>%s:@ %a@]" s fprintf_expr e
+	fprintf form "@[<hv 0>(%s:@ %a)@]" s fprintf_expr e
     | BlackBox(t) ->
 	fprintf form "@[<hv 0>[ %a ]@]" 
 	  (fprintf_type false) t

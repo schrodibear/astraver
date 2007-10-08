@@ -26,8 +26,8 @@ byte binary_search(shortT[0..] t, byte n, short v)
 	     (t+k).shortM == v ==> l <= k && k <= u;
     variant u-l; 
   {
-    byte m = (l + u) / 2;
-    //@ assert l <= m <= u
+    byte m = (l + u :> byte) / 2;
+    // @ assert l <= m <= u
     if ((t+m).shortM < v) l = m + 1;
     else if ((t+m).shortM > v) u = m - 1;
     else return m;

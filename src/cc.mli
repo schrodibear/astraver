@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cc.mli,v 1.21 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: cc.mli,v 1.22 2007-10-08 11:57:18 marche Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -100,6 +100,7 @@ type loc_predicate = Loc.position * predicate
 
 type vc_explain =
   | VCEstring of string
+  | VCEexternal of string
   | VCEabsurd
   | VCEassert of loc_predicate list
   | VCEpre of string * loc_predicate list 

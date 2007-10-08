@@ -45,7 +45,8 @@ let rec print_type fmt t =
     | JTYbase t -> fprintf fmt "%s" (string_of_base_type t)
     | JTYnull -> fprintf fmt "(nulltype)"
     | JTYarray t -> fprintf fmt "%a[]" print_type t
-    | JTYclass(_,c) -> fprintf fmt "%s" c.class_info_name
+    | JTYclass(non_null,c) -> fprintf fmt "%s%s" 
+	(if non_null then "" else "!") c.class_info_name
     | JTYinterface ii -> fprintf fmt "%s" ii.interface_info_name
 
 (***********************
@@ -650,7 +651,8 @@ and type_type package_env type_env ty =
 	    | TypeName ti ->
 		begin
 		  match ti with
-		    | TypeClass ci -> JTYclass(false,ci)
+		    | TypeClass ci -> JTYclass(
+			(* if non_null policy then *) true (* else false *),ci)
 		    | TypeInterface ii -> JTYinterface(ii)
 		end
 	    | _ -> assert false (* TODO *)
@@ -2293,8 +2295,8 @@ let type_constr_spec_and_body package_env type_env current_type ci =
   in
   let spec_env =
     (* spec is typed in a env that contains "this" but it will be
-       renamed to "\\result" *)
-    let vi = new_var this_type "\\result" in
+       renamed to "\\result" NO: TODO *)
+    let vi = new_var this_type "this" (* "\\result" *) in
     ci.constr_info_result <- Some vi;
     ("this",vi)::local_env
   in

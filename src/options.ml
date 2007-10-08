@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.99 2007-09-05 13:46:54 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.100 2007-10-08 11:57:18 marche Exp $ i*)
 
 open Format
 
@@ -56,6 +56,7 @@ let all_vc_ = ref false
 let prelude_ = ref true
 let arrays_ = ref true
 let floats_ = ref false
+let eval_goals_ = ref false 
 let pruning_ = ref false 
 let pruning_hyp_v_ = {contents = -1}
 let pruning_hyp_p_ = {contents = -1}
@@ -181,6 +182,7 @@ Typing/Annotations/VCG options:
   --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
   --total            total correctness
+  --eval-goals       evaluate constant expressions in goals
   --prune-theory     prunes the theory 
   --prune-hyp k      prunes the hypotheses according to the depth k  
   --modulo           displays mod in smtlib instead of pourcent
@@ -395,6 +397,8 @@ let files =
 	termination_ := Partial; parse args
     | ("-total" | "--total") :: args ->
 	termination_ := Total; parse args
+    | ("--eval-goals" | "-eval-goals") :: args ->
+	 eval_goals_ := true ; parse args
     | ("--prune-theory" | "-prune-theory") :: args ->
 	 pruning_ := true ; parse args
     | ("--prune-hyp" | "-prune-hyp"):: tp :: tv :: args ->
@@ -470,6 +474,7 @@ let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
+let eval_goals = !eval_goals_
 let pruning = !pruning_
 let pruning_hyp_p = !pruning_hyp_p_
 let pruning_hyp_v = !pruning_hyp_v_
@@ -515,18 +520,18 @@ let () =
        let l = Rc.from_file f in
        List.iter
 	 (fun (id,fs) ->
-	    let (f,l,b,e) =
+	    let (f,l,b,e,o) =
 	      List.fold_left
-		(fun (f,l,b,e) v ->
+		(fun (f,l,b,e,o) v ->
 		   match v with
-		     | "file", Rc.RCstring f -> (f,l,b,e)
-		     | "line", Rc.RCint l -> (f,l,b,e)
-		     | "begin", Rc.RCint b -> (f,l,b,e)
-		     | "end", Rc.RCint e -> (f,l,b,e)
-		     | _ -> (f,l,b,e))
-		("",0,0,0) fs
+		     | "file", Rc.RCstring f -> (f,l,b,e,o)
+		     | "line", Rc.RCint l -> (f,l,b,e,o)
+		     | "begin", Rc.RCint b -> (f,l,b,e,o)
+		     | "end", Rc.RCint e -> (f,l,b,e,o)
+		     | _ -> (f,l,b,e,v::o))
+		("",0,0,0,[]) fs
 	    in
-	    Hashtbl.add locs_table id (f,l,b,e))
+	    Hashtbl.add locs_table id (f,l,b,e,o))
 	 l)
     !locs_files
 

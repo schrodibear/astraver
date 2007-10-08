@@ -32,9 +32,21 @@ open Output
 
 (* locs table *)
 
+
+type kind =
+  | ArithOverflow
+  | DownCast
+  | IndexBounds
+  | PointerDeref
+  | UserCall
+  | DivByZero
+  | Pack
+  | Unpack
+
+
 let locs_table = Hashtbl.create 97
 let name_counter = ref 0
-let reg_loc ?name loc =
+let reg_loc ?name ?kind loc =
   let id = match name with
     | None ->  
 	incr name_counter;
@@ -42,7 +54,7 @@ let reg_loc ?name loc =
     | Some n -> n
   in
   Jc_options.lprintf "recording location for id '%s'@." id;
-  Hashtbl.add locs_table id loc;
+  Hashtbl.add locs_table id (kind,loc);
   id
 
 
@@ -192,6 +204,9 @@ let term_coerce loc tdest tsrc e =
 	"can't coerce type %a to type %a" 
 	print_type tsrc print_type tdest
 	
+let make_guarded_app (k:kind) loc f l =
+  Label(reg_loc ~kind:k loc,make_app f l)
+
 let coerce ~no_int_overflow loc tdest tsrc e =
   match tdest,tsrc with
     | JCTnative t, JCTnative u when t=u -> e
@@ -202,17 +217,17 @@ let coerce ~no_int_overflow loc tdest tsrc e =
 	if no_int_overflow then 
 	  make_app (safe_fun_enum_of_int ri1) [e]
 	else
-	  make_app (fun_enum_of_int ri1) [e]
+	  make_guarded_app ArithOverflow loc (fun_enum_of_int ri1) [e]
     | JCTnative Tinteger, JCTenum ri ->
 	make_app (logic_int_of_enum ri) [e]
     | JCTenum ri, JCTnative Tinteger ->
 	if no_int_overflow then 
 	  make_app (safe_fun_enum_of_int ri) [e]
 	else
-	  make_app (fun_enum_of_int ri) [e]
+	  make_guarded_app ArithOverflow loc (fun_enum_of_int ri) [e]
     | _ , JCTnull -> e
     | JCTpointer (st, a, b), _  -> 
-	make_app "downcast_" 
+	make_guarded_app DownCast loc "downcast_" 
 	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
 	    Var (st.jc_struct_info_name ^ "_tag") ]	
     |  _ -> 
@@ -539,7 +554,7 @@ let rec make_lets l e =
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
-let rec make_upd ~threats fi e1 v =
+let rec make_upd loc ~threats fi e1 v =
   let expr = expr ~threats and offset = offset ~threats in
   if threats then
     match destruct_pointer e1 with
@@ -547,38 +562,38 @@ let rec make_upd ~threats fi e1 v =
 	make_app "safe_upd_" 
 	  [ Var fi.jc_field_info_name ; expr e1; v ]
     | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-	make_app "lsafe_bound_upd_" 
+	make_guarded_app IndexBounds loc "lsafe_bound_upd_" 
 	  [ Var fi.jc_field_info_name ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-	make_app "rsafe_bound_upd_" 
+	make_guarded_app IndexBounds loc "rsafe_bound_upd_" 
 	  [ Var fi.jc_field_info_name ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,off,Some lb,Some rb ->
-	make_app "bound_upd_" 
+	make_guarded_app IndexBounds loc "bound_upd_" 
 	  [ Var fi.jc_field_info_name ; expr p; offset off; 
 	    Cte (Prim_int (Num.string_of_num lb)); 
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-	make_app "lsafe_lbound_upd_" 
+	make_guarded_app IndexBounds loc "lsafe_lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_name; expr p; offset off; v ]
     | p,off,Some lb,None ->
-	make_app "lbound_upd_" 
+	make_guarded_app IndexBounds loc "lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_name; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-	make_app "rsafe_rbound_upd_" 
+	make_guarded_app IndexBounds loc "rsafe_rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_name; expr p; offset off; v ]
     | p,off,None,Some rb ->
-	make_app "rbound_upd_" 
+	make_guarded_app IndexBounds loc "rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_name; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | _,_,None,None ->
-	make_app "upd_" 
+	make_guarded_app PointerDeref loc "upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_name ; expr e1; v ]
   else
@@ -593,6 +608,7 @@ and offset ~threats = function
 
 and expr ~threats e : expr =
   let expr = expr ~threats and offset = offset ~threats in
+  let loc = e.jc_expr_loc in
   match e.jc_expr_node with
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
@@ -604,7 +620,7 @@ and expr ~threats e : expr =
 	let e1' = expr e1 in
 	make_app (unary_op op) 
 	  [coerce ~no_int_overflow:(not threats) 
-	     e.jc_expr_loc (unary_arg_type op) e1.jc_expr_type e1' ]
+	     loc (unary_arg_type op) e1.jc_expr_type e1' ]
     | JCEbinary(e1,((Beq_pointer | Bneq_pointer) as op),e2) ->
 	let e1' = expr e1 in
 	let e2' = expr e2 in
@@ -622,8 +638,12 @@ and expr ~threats e : expr =
     | JCEbinary(e1,op,e2) ->
 	let e1' = expr e1 in
 	let e2' = expr e2 in
-	let t = bin_arg_type e.jc_expr_loc op in
-	make_app (bin_op op) 
+	let t = bin_arg_type loc op in
+	(match op with
+	   | Bdiv_int | Bdiv_real | Bmod_int ->
+	       make_guarded_app DivByZero loc
+	   | _ -> make_app)
+	  (bin_op op) 
 	  [ coerce ~no_int_overflow:(not threats) 
 	      e1.jc_expr_loc t e1.jc_expr_type e1'; 
 	    coerce ~no_int_overflow:(not threats) 
@@ -643,6 +663,7 @@ and expr ~threats e : expr =
     | JCEsub_pointer(e1,e2) -> 
 	let e1' = expr e1 in
 	let e2' = expr e2 in
+	(* FIXME: need to check that are in the same block *)
 	make_app "sub_pointer" [ e1'; e2']
     | JCEoffset(k,e,st) -> 
 	let alloc =
@@ -656,17 +677,20 @@ and expr ~threats e : expr =
     | JCEinstanceof(e,t) ->
 	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
+	(* always safe *)
 	make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
-    | JCEcast(e,t) ->
-	let e = expr e in
+    | JCEcast(e1,t) ->
+	let e1 = expr e1 in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
-	make_app "downcast_" [Deref tag; e; Var (tag_name t)]
-    | JCErange_cast(ri,e) ->
-	let e = expr e in
+	make_guarded_app DownCast loc "downcast_" 
+	  [Deref tag; e1; Var (tag_name t)]
+    | JCErange_cast(ri,e1) ->
+	let e1 = expr e1 in
 	if threats then 
-	  make_app (fun_enum_of_int ri) [e]	  
+	  make_guarded_app ArithOverflow loc 
+	    (fun_enum_of_int ri) [e1]
 	else
-	  make_app (safe_fun_enum_of_int ri) [e]
+	  make_app (safe_fun_enum_of_int ri) [e1]
     | JCEderef(e,fi) ->
 	if threats then
 	  match destruct_pointer e with
@@ -674,38 +698,38 @@ and expr ~threats e : expr =
 	      make_app "safe_acc_" 
 		[ Var fi.jc_field_info_name ; expr e ]
 	  | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-	      make_app "lsafe_bound_acc_" 
+	      make_guarded_app IndexBounds loc "lsafe_bound_acc_" 
 		[ Var fi.jc_field_info_name ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-	      make_app "rsafe_bound_acc_" 
+	      make_guarded_app IndexBounds loc "rsafe_bound_acc_" 
 		[ Var fi.jc_field_info_name ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,off,Some lb,Some rb ->
-	      make_app "bound_acc_" 
+	      make_guarded_app IndexBounds loc "bound_acc_" 
 		[ Var fi.jc_field_info_name ; expr p; offset off; 
 		  Cte (Prim_int (Num.string_of_num lb)); 
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-	      make_app "lsafe_lbound_acc_" 
+	      make_guarded_app IndexBounds loc "lsafe_lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_name; expr p; offset off ]
 	  | p,off,Some lb,None ->
-	      make_app "lbound_acc_" 
+	      make_guarded_app IndexBounds loc "lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_name; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-	      make_app "rsafe_rbound_acc_" 
+	      make_guarded_app IndexBounds loc "rsafe_rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_name; expr p; offset off ]
 	  | p,off,None,Some rb ->
-	      make_app "rbound_acc_" 
+	      make_guarded_app IndexBounds loc "rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_name; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | _,_,None,None ->
-	      make_app "acc_" 
+	      make_guarded_app PointerDeref loc "acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_name ; expr e ]
 	else
@@ -715,18 +739,21 @@ and expr ~threats e : expr =
     | JCEalloc (e, st) ->
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
 	let tag = st.jc_struct_info_root ^ "_tag_table" in
-	if Jc_options.inv_sem = InvOwnership then
-	  let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
-	  let com = Jc_invariants.committed_name st.jc_struct_info_root in
-	  make_app "alloc_parameter_ownership" 
-	    [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
-	     coerce ~no_int_overflow:(not threats) 
-	       e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
-	else
-	  make_app "alloc_parameter" 
-	    [Var alloc; Var tag; Var (tag_name st); 
-	     coerce ~no_int_overflow:(not threats) 
-	       e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
+	begin
+	  match Jc_options.inv_sem with
+	    | InvOwnership ->
+		let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
+		let com = Jc_invariants.committed_name st.jc_struct_info_root in
+		make_app "alloc_parameter_ownership" 
+		  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
+		   coerce ~no_int_overflow:(not threats) 
+		     e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
+	    | InvArguments | InvNone ->
+		make_app "alloc_parameter" 
+		  [Var alloc; Var tag; Var (tag_name st); 
+		   coerce ~no_int_overflow:(not threats) 
+		     e.jc_expr_loc integer_type e.jc_expr_type (expr e)]
+	end
     | JCEfree e ->
 	let st = match e.jc_expr_type with
 	  | JCTpointer(st, _, _) -> st
@@ -783,8 +810,7 @@ let rec statement ~threats s =
 	  with Invalid_argument _ -> assert false
 	in
 	let call = 
-	  Label(reg_loc loc, 
-		make_app f.jc_fun_info_name el) 
+	  make_guarded_app UserCall loc f.jc_fun_info_name el 
 	in
 	begin
 	  match vio with
@@ -811,7 +837,7 @@ let rec statement ~threats s =
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
-	let upd = make_upd ~threats fi e1 (Var tmp2) in
+	let upd = make_upd ~threats s.jc_statement_loc fi e1 (Var tmp2) in
 (* Yannick: ignore variables to be able to refine update function used. *)	
 (* 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
 (* Claude: do not ignore variable tmp2, since it may involve a coercion. 
@@ -876,9 +902,13 @@ let rec statement ~threats s =
 		    e.jc_expr_loc t e.jc_expr_type (expr e)))
 	  (Raise(jessie_return_exception,None))
     | JCSunpack(st, e, as_t) ->
-	let e = expr e in make_app ("unpack_"^st.jc_struct_info_root) [e; Var (tag_name as_t)]
+	let e = expr e in 
+	make_guarded_app Unpack s.jc_statement_loc
+	  ("unpack_"^st.jc_struct_info_root) [e; Var (tag_name as_t)]
     | JCSpack(st, e, from_t) ->
-	let e = expr e in make_app ("pack_"^st.jc_struct_info_root) [e; Var (tag_name from_t)]
+	let e = expr e in 
+	make_guarded_app Pack s.jc_statement_loc
+	  ("pack_"^st.jc_struct_info_root) [e; Var (tag_name from_t)]
     | JCSthrow (ei, Some e) -> 
 	let e = expr e in
 	Raise(ei.jc_exception_info_name,Some e)
@@ -1580,10 +1610,28 @@ let abs_fname f =
     Filename.concat (Unix.getcwd ()) f 
   else f
 
+let print_kind fmt k =
+  fprintf fmt "%s"
+    (match k with
+       | Pack -> "Pack"
+       | Unpack -> "Unpack"
+       | DivByZero -> "DivByZero"
+       | UserCall -> "UserCall"
+       | PointerDeref -> "PointerDeref"
+       | IndexBounds -> "IndexBounds"
+       | DownCast -> "DownCast"
+       | ArithOverflow -> "ArithOverflow"
+    )
+
 let print_locs fmt =
   Hashtbl.iter 
-    (fun id (b,e) ->
+    (fun id (k,(b,e)) ->
        fprintf fmt "[%s]@\n" id;
+       begin
+	 match k with
+	   | None -> ()
+	   | Some k -> fprintf fmt "kind = %a@\n" print_kind k
+       end;
        fprintf fmt "file = \"%s\"@\n" (abs_fname b.pos_fname);
        let l = b.pos_lnum in
        let fc = b.pos_cnum - b.pos_bol in

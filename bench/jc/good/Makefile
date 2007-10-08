@@ -3,7 +3,7 @@ JESSIE=../../../bin/jessie.byte
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
-EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj -inv-sem ownership
+EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -inv-sem ownership
 
 JCFILES=$(shell ls *.jc)
 WFILES=$(addprefix why/, $(JCFILES:.jc=.why))
@@ -74,12 +74,14 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 %: %.jc
 	mkdir -p why
 	rm -f why/$*.why
+	rm -f why/$*.xpl
 	make why/$*.why
 	make -f $*.makefile gui
 
 %.goals: %.jc
 	mkdir -p why
-	rm -f why/$*.why
+	rm -f why/$*_ctx.why why/$*_po*.why 
+	rm -f why/$*_po*.xpl
 	make why/$*.why
 	make -f $*.makefile goals
 

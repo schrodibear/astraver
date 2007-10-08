@@ -963,21 +963,26 @@ let tr_constr ci req behs b acc =
     create_fun ci.constr_info_tag None
       ci.constr_info_trans_name ci.constr_info_parameters
   in
-  let body = statements b @ 
+  let body = statements b 
+(*
+@ 
     [dummy_loc_statement (JCTSreturn(this.jc_var_info_type,
 				     dummy_loc_expr 
 				       this.jc_var_info_type
 				       (JCTEvar this)))] 
+*)
   in
+(* NO: TODO 
   let body = 
     dummy_loc_statement (JCTSdecl(this,None,make_block body))
   in
-  JCfun_def(this.jc_var_info_type,
+  *)
+  JCfun_def(Jc_pervasives.unit_type,
 	    nfi.jc_fun_info_name,
-	    params,
+	    this :: params,
 	    { jc_fun_requires = assertion_option req;
 	      jc_fun_behavior = List.map behavior behs},
-	    Some [body])::acc
+	    Some [make_block body])::acc
 	  
 (*s axioms *)
 

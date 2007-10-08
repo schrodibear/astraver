@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.131 2007-09-20 08:22:05 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.132 2007-10-08 11:57:18 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -946,49 +946,68 @@ let read_in_file f l b e =
   Buffer.contents buf
  
 
-let raw_loc fmt f l b e =
-  fprintf fmt "file = \"%s\"@\n" f;
-  fprintf fmt "line = %d@\n" l;
-  fprintf fmt "begin = %d@\n" b;
-  fprintf fmt "end = %d@\n" e
+let raw_loc ?(pref="") fmt f l b e =
+  fprintf fmt "%sfile = \"%s\"@\n" pref f;
+  fprintf fmt "%sline = %d@\n" pref l;
+  fprintf fmt "%sbegin = %d@\n" pref b;
+  fprintf fmt "%send = %d@\n" pref e
 
-let raw_loc_predicate fmt (loc,p) =
+let raw_loc_predicate ?(pref="") fmt (loc,p) =
   let (f,l,b,e) = 
     match p with
       | Pnamed(User n,p) -> 
 	  begin
 	    fprintf fmt "name = \"%s\"@\n" n; 
 	    try 
-	      Hashtbl.find locs_table n 
+	      let (f,l,b,e,_) = 
+		Hashtbl.find locs_table n 
+	      in (f,l,b,e)
 	    with Not_found -> Loc.extract loc 
 	  end
       | _ -> Loc.extract loc 
   in
   let s = read_in_file f l b e in
-  raw_loc fmt f l b e;
+  raw_loc ~pref fmt f l b e;
   fprintf fmt "pred = \"%s\"@\n" s
 
 let raw_explanation fmt e =
   match e with
     | VCEstring s -> 
-	fprintf fmt "kind = Other@\ntext = %s@\n" s
+	fprintf fmt "kind = String@\ntext = %s@\n" s
+    | VCEexternal s -> 
+	fprintf fmt "kind = %s@\n" s
     | VCEabsurd -> 
 	fprintf fmt "kind = Absurd@\n"
     | VCEassert p -> 
 	fprintf fmt "kind = Assert@\n";
 	List.iter (raw_loc_predicate fmt) p
     | VCEpre(lab,p) -> 
-	fprintf fmt "kind = Pre@\n";
-	fprintf fmt "call_label = %s@\n" lab;
 	begin
+	  eprintf "util: label for pre = %s@." lab;
 	  try 
-	    let (f,l,b,e) = Hashtbl.find locs_table lab in
-	    let s = read_in_file f l b e in
-	    raw_loc fmt f l b e;
-	    fprintf fmt "call = \"%s\"@\n" s
-	  with Not_found -> ()
+	    let (f,l,b,e,o) = Hashtbl.find locs_table lab in
+	    try
+	      let k = 
+		match List.assoc "kind" o with
+		  | Rc.RCident s -> s
+		  | _ -> assert false		  
+	      in
+	      fprintf fmt "kind = %s@\n" k;
+	      fprintf fmt "external_label = %s@\n" lab;
+	      let s = read_in_file f l b e in
+	      raw_loc fmt f l b e;
+	      fprintf fmt "external_expr = \"%s\"@\n" s
+	    with Not_found ->
+	      fprintf fmt "kind = Pre@\n";
+	      fprintf fmt "call_label = %s@\n" lab;
+	      let s = read_in_file f l b e in
+	      raw_loc fmt f l b e;
+	      fprintf fmt "call_expr = \"%s\"@\n" s
+	  with Not_found -> 
+	    fprintf fmt "kind = Pre@\n";
+	    fprintf fmt "call_label = %s@\n" lab;
 	end;
-	List.iter (raw_loc_predicate fmt) p
+	List.iter (raw_loc_predicate ~pref:"pre_" fmt) p
     | VCEpost p -> 
 	fprintf fmt "kind = Post@\n";  
 	raw_loc_predicate fmt p
@@ -1008,7 +1027,7 @@ let print_loc_predicate fmt (loc,p) =
     | Pnamed(User s,p) -> 
 	begin
 	  try 
-	    let (f,l,b,e) = Hashtbl.find locs_table s in
+	    let (f,l,b,e,o) = Hashtbl.find locs_table s in
 	    let s = read_in_file f l b e in
 	    fprintf fmt "(relocated from %a) %s"
 	      Loc.gen_report_line (f,l,b,e) s 
@@ -1022,6 +1041,7 @@ let print_loc_predicate fmt (loc,p) =
 let print_explanation fmt e =
   match e with
     | VCEstring s -> fprintf fmt "%s" s
+    | VCEexternal s -> fprintf fmt "explanation from front-end: %s" s
     | VCEabsurd -> fprintf fmt "absurd case"
     | VCEassert p -> 
 	fprintf fmt "assertions %a" 

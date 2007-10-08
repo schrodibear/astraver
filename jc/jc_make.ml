@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.15 2007-09-05 13:46:54 filliatr Exp $ i*)
+(*i $Id: jc_make.ml,v 1.16 2007-10-08 11:57:18 marche Exp $ i*)
 
 open Format
 open Pp
@@ -71,9 +71,17 @@ let generic f targets =
 
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
 
+       fprintf fmt "coq/%s_spec_why.v: coq/%s_ctx_why.v@\n" f f;
+       fprintf fmt "\tcp coq/%s_ctx_why.v coq/%s_spec_why.v@\n@\n" f f;
+
+       fprintf fmt "coq/%s_spec.why: coq/%s_ctx.why@\n" f f;
+       fprintf fmt "\tcp coq/%s_ctx.why coq/%s_spec.why@\n@\n" f f;
+
+       fprintf fmt "coq/%s_ctx_why.v: why/%s_ctx.why@\n" f f;
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" why/$*_ctx.why@\n@\n";
+
        fprintf fmt "coq/%%_why.v: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" $(JESSIELIBFILE) why/$*.why@\n";
-       fprintf fmt "\t@@rm coq/jessie_why.v@\n@\n";
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble \"Require Export %s_ctx_why.\" -coq-tactic \"intuition\" why/%s_ctx.why why/$*.why@\n@\n" f f;
        fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
        
        fprintf fmt "pvs: %a@\n@\n" (print_files pvs) targets;

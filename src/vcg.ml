@@ -60,6 +60,34 @@ let rec strip_name = function
   | Pnamed (_, p) -> strip_name p
   | p -> p
 
+let rec eval p = 
+  match p with
+    | Pnamed (_, p) -> eval p
+    | Papp (id, [Tconst (ConstInt a); Tconst (ConstInt b)], _) 
+	when is_int_comparison id -> 
+	assert false
+	
+(*
+    | Papp (id, l, _) ->
+	let l = List.map eval l in
+*)	
+    | Papp (_, _, _) 
+    | Pfpi (_, _, _) 
+    | Exists (_, _, _, _)
+    | Forallb (_, _, _)
+    | Forall (_, _, _, _, _, _)
+    | Pnot _
+    | Piff (_, _)
+    | Por (_, _)
+    | Pand (_, _, _, _)
+    | Pif (_, _, _)
+    | Pimplies (_, _, _)
+    | Pvar _
+    | Pfalse
+    | Ptrue -> p
+
+
+
 (* ... |- true *)
 let rec ptrue = function
   | Ptrue -> True
@@ -509,7 +537,7 @@ let boolean_case ctx concl = match ctx, concl with
 (* we try the automatic proofs successively, starting with the simplest ones *)
 let discharge_methods ctx concl =
   let ctx,concl,pr = intros ctx concl in 
-  let concl = strip_name concl in
+  let concl = (if Options.eval_goals then eval else strip_name) concl in
   let ctx = 
     List.map (function 
 		| Spred (h,p) -> Spred (h, strip_name p) 
@@ -685,9 +713,26 @@ let rec split lvl ctx = function
       let ol,prl = split (succ lvl) ctx' concl' in
       ol, (fun pl -> pr_intros (prl pl))
   | Pnamed (n, p1) as concl ->
+(*
+      begin
+	match n with
+	  | Internal i -> Format.eprintf "splitting on internal name %d@." i
+	  | User n -> Format.eprintf "splitting on user name %s@." n
+      end;
+*)
       begin match split lvl ctx p1 with
 	| [_],_ -> [ctx,concl], (function [pr] -> pr | _ -> assert false)
-	| gl,v -> List.map (fun (ctx,c) -> ctx, Pnamed(n,c)) gl, v
+	| gl,v -> 
+(*
+	    begin
+	      match n with
+		| Internal _ -> gl,v
+		| _ -> 
+*)
+List.map (fun (ctx,c) -> ctx, Pnamed(n,c)) gl, v
+(*
+	    end
+*)
       end
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)
@@ -792,26 +837,29 @@ let rec loc_for_pred = function
   | Pimplies (_,_,p)  -> loc_for_pred p
   | _ -> Loc.dummy_position
 
-let rec explain_for_pred = function
+let rec explain_for_pred acc = function
   | Forall (_,_,_,_,_,p)
-  | Pimplies (_,_,p)  -> explain_for_pred p
-  | Pnamed(Internal n,p) -> 
-      begin
-	(*Format.eprintf "looking for named explanation '%s'@." n;*)
-	try
-	  let e = Hashtbl.find Wp.explanation_table n in
-	  (*Format.eprintf "found@.";*)
-	  e
-	with
-	    Not_found ->
-	      (*Format.eprintf "not found@.";*)
-	      explain_for_pred p	
-      end
-  | p -> 
-      fprintf str_formatter 
-	"unexplained assertion `%a'" print_predicate p;
-      VCEstring(flush_str_formatter()) 
-
+  | Pimplies (_,_,p)  -> explain_for_pred acc p
+  | Pnamed(Internal n,p) -> explain_for_pred (Some n) p
+  | p ->
+      match acc with
+	| Some n ->
+	    begin
+	      Format.eprintf "looking for internal explanation '%d'@." n;
+	      try
+		let e = Hashtbl.find Wp.explanation_table n in
+		(*Format.eprintf "found@.";*)
+		e
+	      with
+		  Not_found ->
+		    (*Format.eprintf "not found@.";*)
+		    assert false
+	    end
+	| None -> 
+	    fprintf str_formatter 
+	      "unexplained assertion `%a'" print_predicate p;
+	    VCEstring(flush_str_formatter()) 
+	      
 (* Proof obligations from the WP *)
 
 let vcg_from_wp base w =
@@ -819,7 +867,7 @@ let vcg_from_wp base w =
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
     let loc = loc_for_pred concl in
-    let explain = explain_for_pred concl in
+    let explain = explain_for_pred None concl in
     try
       discharge loc ctx concl
     with Exit -> begin
