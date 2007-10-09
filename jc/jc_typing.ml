@@ -441,6 +441,8 @@ let make_logic_bin_op loc op e1 e2 =
 let rec term env e =
   let t,te =
     match e.jc_pexpr_node with
+      | JCPElabel(l,e) ->
+	  assert false (* TODO *)
       | JCPEvar id ->
 	  begin
 	    try
@@ -711,6 +713,8 @@ let tag env hierarchy t =
 let rec assertion env e =
   let te =
     match e.jc_pexpr_node with
+      | JCPElabel(l,e) ->
+	  assert false (* TODO *)
       | JCPEvar id -> 
 	  let vi = 
 	    try List.assoc id env 
@@ -935,6 +939,7 @@ let coerce t1 t2 e =
     | Tinteger,Treal -> 
 	{ jc_texpr_node = JCTEcall(real_of_integer_,[e_int]) ;
 	  jc_texpr_type = real_type;
+	  jc_texpr_label = "";
 	  jc_texpr_loc = e.jc_texpr_loc }  
     | _ -> e_int
 
@@ -1011,8 +1016,13 @@ let make_bin_op loc op e1 e2 =
 
 
 let rec expr env e =
+  let lab = ref "" in
   let t,te =
     match e.jc_pexpr_node with
+      | JCPElabel(l,e) ->
+	  let te = expr env e in
+	  Format.eprintf "Typing: label = '%s'@." l;
+	  lab := l; te.jc_texpr_type,te.jc_texpr_node
       | JCPEvar id ->
 	  begin
 	    try
@@ -1228,6 +1238,7 @@ let rec expr env e =
 
   in { jc_texpr_node = te; 
        jc_texpr_type = t;
+       jc_texpr_label = !lab;
        jc_texpr_loc = e.jc_pexpr_loc }
 
 let loop_annot = 
@@ -1730,6 +1741,8 @@ let const_zero =
 
 let rec location_set env e =
   match e.jc_pexpr_node with
+    | JCPElabel(l,e) ->	
+	  assert false (* TODO *)
     | JCPEvar id ->
 	begin
 	  try
@@ -1788,6 +1801,8 @@ let rec location_set env e =
 
 let location env e =
   match e.jc_pexpr_node with
+    | JCPElabel(l,e) ->
+	  assert false (* TODO *)
     | JCPEvar id ->
 	begin
 	  try

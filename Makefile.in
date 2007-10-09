@@ -184,11 +184,11 @@ CMO = src/lib.cmo src/rc.cmo \
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
-#	strip $@
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa nums.cmxa graph.cmxa $^
+	strip $@
 
 bin/why.byte: $(CMO) src/why.cmo
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma graph.cma $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
@@ -230,7 +230,8 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 
 
 # jessie
-JCCMO = @ATPCMO@ src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
+JCCMO = @ATPCMO@ \
+	src/lib.cmo src/rc.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_common_options.cmo jc/jc_options.cmo \
 	jc/jc_envset.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
@@ -344,11 +345,11 @@ gwhy-no:
 gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa nums.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
 	strip    $@
 
 bin/gwhy.byte: $(GCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^
 
 # tools
 bin/why2html.byte: tools/why2html.ml

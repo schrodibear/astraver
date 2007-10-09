@@ -1,4 +1,5 @@
 
+open Format
 open Jc_output
 open Jc_env
 open Jc_fenv
@@ -6,6 +7,73 @@ open Jc_ast
 open Java_env
 open Java_ast
 open Java_tast
+
+(*s locs table *)
+
+
+
+type kind =
+  | ArithOverflow
+  | DownCast
+  | IndexBounds
+  | PointerDeref
+  | UserCall
+  | DivByZero
+  | Pack
+  | Unpack
+
+
+let locs_table : (string, (kind option * Loc.position)) Hashtbl.t 
+    = Hashtbl.create 97
+let name_counter = ref 0
+let reg_loc ?name ?kind loc =
+  let id = match name with
+    | None ->  
+	incr name_counter;
+	"K_" ^ string_of_int !name_counter
+    | Some n -> n
+  in
+  Java_options.lprintf "recording location for id '%s'@." id;
+  Hashtbl.add locs_table id (kind,loc);
+  id
+
+let print_kind fmt k =
+  fprintf fmt "%s"
+    (match k with
+       | Pack -> "Pack"
+       | Unpack -> "Unpack"
+       | DivByZero -> "DivByZero"
+       | UserCall -> "UserCall"
+       | PointerDeref -> "PointerDeref"
+       | IndexBounds -> "IndexBounds"
+       | DownCast -> "DownCast"
+       | ArithOverflow -> "ArithOverflow"
+    )
+
+let abs_fname f =
+  if Filename.is_relative f then
+    Filename.concat (Unix.getcwd ()) f 
+  else f
+
+let print_locs fmt =
+  Hashtbl.iter 
+    (fun id (k,(b,e)) ->
+       fprintf fmt "[%s]@\n" id;
+       begin
+	 match k with
+	   | None -> ()
+	   | Some k -> fprintf fmt "kind = %a@\n" print_kind k
+       end;
+       fprintf fmt "file = \"%s\"@\n" (abs_fname b.Lexing.pos_fname);
+       let l = b.Lexing.pos_lnum in
+       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
+       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
+       fprintf fmt "line = %d@\n" l;
+       fprintf fmt "begin = %d@\n" fc;
+       fprintf fmt "end = %d@\n@\n" lc)
+    locs_table
+
+(*s loop tags *)
 
 let get_loop_counter = 
   let counter = ref 0 in
@@ -131,7 +199,7 @@ let rec get_array_struct t =
   try
     Hashtbl.find array_struct_table t 
   with Not_found -> 
-    Format.eprintf "Array struct for type %a not found@." 
+    eprintf "Array struct for type %a not found@." 
       Java_typing.print_type t;
     assert false
 
@@ -166,11 +234,12 @@ let get_field fi =
     Hashtbl.find fi_table fi.java_field_info_tag
   with
       Not_found -> 
-	Format.eprintf "Internal error: field '%s' not found@." fi.java_field_info_name;
+	eprintf "Internal error: field '%s' not found@." 
+	  fi.java_field_info_name;
 	assert false
 
 let create_field fi =
-  Format.eprintf "Creating JC field '%s'@." fi.java_field_info_name;
+  eprintf "Creating JC field '%s'@." fi.java_field_info_name;
   let ty = tr_type fi.java_field_info_type in
   let ci = 
     match fi.java_field_info_class_or_interface with
@@ -212,7 +281,7 @@ let get_var vi =
     Hashtbl.find vi_table vi.java_var_info_tag
   with
       Not_found -> 
-	Format.eprintf "Java_interp.get_var %s@." vi.java_var_info_name;
+	eprintf "Java_interp.get_var %s@." vi.java_var_info_name;
 	assert false
 
 let create_var ?(formal=false) vi =
@@ -283,7 +352,7 @@ let get_exception ty =
 	    Hashtbl.find exceptions_table ci.class_info_name
 	  with
 	      Not_found -> 
-		Format.eprintf "exception %s not found@." ci.class_info_name;
+		eprintf "exception %s not found@." ci.class_info_name;
 		assert false
 	end
     | _ -> assert false
@@ -515,7 +584,7 @@ let tr_interface ii acc =
 let tr_class_or_interface ti acc0 acc =
   match ti with
     | TypeClass ci -> 
-	Format.eprintf "Creating JC structure for class '%s'@." ci.class_info_name;
+	eprintf "Creating JC structure for class '%s'@." ci.class_info_name;
 	tr_class ci acc0 acc
     | TypeInterface ii -> (acc0,tr_interface ii acc)
 
@@ -723,18 +792,22 @@ let incr_op op =
     | Postdecr -> Postfix_dec
 
 let int_cast loc t e =
-   if Java_options.ignore_overflow || not (Java_typing.is_numeric t) then e else     
+   if Java_options.ignore_overflow || not (Java_typing.is_numeric t) then e 
+   else     
      JCTErange_cast(int_range, { jc_texpr_loc = loc;
 				 jc_texpr_type = Jc_pervasives.integer_type;
+				 jc_texpr_label = "";
 				 jc_texpr_node = e })
 
 let dummy_loc_expr ty e =
   { jc_texpr_loc = Loc.dummy_position; 
     jc_texpr_type = ty;
+    jc_texpr_label = "";
     jc_texpr_node = e }
 
 
 let rec expr e =
+  let lab = ref "" in
   let e' =
     match e.java_expr_node with
       | JElit l -> JCTEconst (lit l)
@@ -744,9 +817,11 @@ let rec expr e =
 	  assert false
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
+	  lab := reg_loc e.java_expr_loc;
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEunary(un_op op,e1))
       | JEbin (e1, op, e2) -> 
 	  let e1 = expr e1 and e2 = expr e2 in
+	  lab := reg_loc e.java_expr_loc;
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEbinary(e1,bin_op op,e2))
       | JEif _ -> assert false (* TODO *)
       | JEvar vi -> JCTEvar (get_var vi)
@@ -771,6 +846,7 @@ let rec expr e =
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
 		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_label = e1'.jc_texpr_label;
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
 		  in
@@ -794,6 +870,7 @@ let rec expr e =
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
 		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_label = e1'.jc_texpr_label;
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
 		  in
@@ -825,7 +902,7 @@ let rec expr e =
 		  then 
 		    (expr e).jc_texpr_node
 		  else
-		    JCTErange_cast(get_enum_info t, expr e)		  
+		    JCTErange_cast(get_enum_info t, expr e)
 	      | JTYclass(_,ci) ->
 		  let st = get_class ci in
 		  JCTEcast(expr e,st)
@@ -834,6 +911,7 @@ let rec expr e =
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type;
+       jc_texpr_label = !lab;
        jc_texpr_node = e' }
 
 let initialiser e =
@@ -893,7 +971,13 @@ let rec statement s =
 		  JCTSfor(expr e, List.map expr sl, la, statement body) }
 	  in JCTSblock [res]
       | JSexpr e -> JCTSexpr (expr e)
-      | JSassert(id,e) -> JCTSassert(id,assertion e)
+      | JSassert(id,e) -> 
+	  let name =
+	    match id with
+	      | None -> reg_loc e.java_assertion_loc
+	      | Some id -> reg_loc ~name:id e.java_assertion_loc
+	  in
+	  JCTSassert(Some name, assertion e)
       | JSswitch(e,l) -> 
 	  JCTSswitch(expr e,List.map switch_case l)
       | JStry(s, catches, finally) ->

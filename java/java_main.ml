@@ -164,7 +164,7 @@ let main () =
 	output_string cout "/*\n";
 	output_string cout "Local Variables:\n";
 	output_string cout "mode: java\n";
-	output_string cout "compile-command: \"jessie -why-opt -split-user-conj";
+	output_string cout "compile-command: \"jessie -why-opt -split-user-conj ";
 	output_string cout f;
 	output_string cout ".jc ; make -f ";
 	output_string cout f;
@@ -172,6 +172,12 @@ let main () =
 	output_string cout "End:\n";
 	output_string cout "*/\n";
 	close_out cout;
+
+	(* production phase 5.2 : produce locs file *)
+	Pp.print_in_file 
+	  Java_interp.print_locs
+	  (Lib.file "." (f ^ ".jloc"));
+
 	printf "Done.@."
 
     | _ -> Java_options.usage ()

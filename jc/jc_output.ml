@@ -229,6 +229,11 @@ let call_bin_op op =
   raise Not_found
 
 let rec expr fmt e =
+  if e.jc_texpr_label <> "" then
+    fprintf fmt "@[(%s : %a)@]" 
+      e.jc_texpr_label expr {e with jc_texpr_label =""}
+  else
+    
   match e.jc_texpr_node with
     | JCTEvar vi -> 
 	fprintf fmt "%s" vi.jc_var_info_name

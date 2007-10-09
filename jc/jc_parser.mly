@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.63 2007-10-01 14:19:19 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.64 2007-10-09 10:50:24 marche Exp $ */
 
 %{
 
@@ -145,6 +145,7 @@
 
 /* precedences on expressions  */
 
+%nonassoc COLON
 %nonassoc PRECFORALL
 /* <=> */
 %right LTEQEQGT
@@ -450,7 +451,10 @@ primary_expression:
 | STRING_LITERAL 
     { locate (CEstring_literal $1) }
 */
-| LPAR expression RPAR { $2 }
+| LPAR expression RPAR 
+    { $2 }
+| LPAR IDENTIFIER COLON expression RPAR
+    { locate_expr (JCPElabel($2,$4)) }
 ;
 
 postfix_expression: 

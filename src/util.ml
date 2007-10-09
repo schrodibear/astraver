@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.132 2007-10-08 11:57:18 marche Exp $ i*)
+(*i $Id: util.ml,v 1.133 2007-10-09 10:50:24 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -983,7 +983,7 @@ let raw_explanation fmt e =
 	List.iter (raw_loc_predicate fmt) p
     | VCEpre(lab,p) -> 
 	begin
-	  eprintf "util: label for pre = %s@." lab;
+	  if debug then eprintf "util: label for pre = %s@." lab;
 	  try 
 	    let (f,l,b,e,o) = Hashtbl.find locs_table lab in
 	    try

@@ -23,7 +23,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.12 2007-10-01 19:59:28 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.13 2007-10-09 10:50:24 marche Exp $ i*)
 
 open Format
 open Jc_env
@@ -76,9 +76,12 @@ let files_ = ref []
 let add_file f = files_ := f :: !files_
 let files () = List.rev !files_
 
+let locs_files = ref []
+let locs_table = Hashtbl.create 97
+
 let version () = 
   Printf.printf "This is Jessie version %s, compiled on %s
-Copyright (c) 2006 - Claude Marché
+Copyright (c) 2006-2007 - Romain Bardou, Claude Marché, Yannick Moy, Nicolas Rousset
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Jc_version.version Jc_version.date;
   exit 0
@@ -95,6 +98,9 @@ let _ =
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
           "  debugging mode";
+	"-locs", Arg.String (fun f -> locs_files := f :: !locs_files),
+	  "  <f> reads source locations from file f" ;
+
         "-why-opt", Arg.String add_why_opt,
 	  "  <why options>  passes options to Why";
 	"-v", Arg.Set verbose,
@@ -150,6 +156,29 @@ let parsing_error l f =
     (fun s -> 
        let s = if s="" then s else " ("^s^")" in
        raise (Jc_error(l, "syntax error" ^ s))) f
+
+(*s locs table *)
+
+let () =
+  List.iter
+    (fun f -> 
+       let l = Rc.from_file f in
+       List.iter
+	 (fun (id,fs) ->
+	    let (f,l,b,e,o) =
+	      List.fold_left
+		(fun (f,l,b,e,o) v ->
+		   match v with
+		     | "file", Rc.RCstring f -> (f,l,b,e,o)
+		     | "line", Rc.RCint l -> (f,l,b,e,o)
+		     | "begin", Rc.RCint b -> (f,l,b,e,o)
+		     | "end", Rc.RCint e -> (f,l,b,e,o)
+		     | _ -> (f,l,b,e,v::o))
+		("",0,0,0,[]) fs
+	    in
+	    Hashtbl.add locs_table id (f,l,b,e,o))
+	 l)
+    !locs_files
 
 
 (*

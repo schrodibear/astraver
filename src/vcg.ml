@@ -60,17 +60,33 @@ let rec strip_name = function
   | Pnamed (_, p) -> strip_name p
   | p -> p
 
+let rec eval_term t =
+  match t with
+    | Tconst (ConstInt a) ->
+	Num.num_of_string a
+    | Tapp(id,[Tconst (ConstInt a)], _ ) when id == t_neg_int ->
+	Num.minus_num (Num.num_of_string a)
+    | _ -> raise Exit
+	     
+
 let rec eval p = 
   match p with
     | Pnamed (_, p) -> eval p
-    | Papp (id, [Tconst (ConstInt a); Tconst (ConstInt b)], _) 
-	when is_int_comparison id -> 
-	assert false
-	
-(*
-    | Papp (id, l, _) ->
-	let l = List.map eval l in
-*)	
+    | Papp (id, [a; b], _) when is_int_comparison id -> 
+	begin
+	  try
+	    let a = eval_term a in
+	    let b = eval_term b in
+	    if 
+	      (id == t_eq_int && Num.eq_num a b) ||
+		(id == t_neq_int && not (Num.eq_num a b)) ||
+		(id == t_lt_int && Num.lt_num a b) ||
+		(id == t_le_int && Num.le_num a b) ||
+		(id == t_gt_int && Num.gt_num a b) ||
+		(id == t_ge_int && Num.ge_num a b) 
+	    then Ptrue else p
+	  with Exit -> p
+	end
     | Papp (_, _, _) 
     | Pfpi (_, _, _) 
     | Exists (_, _, _, _)

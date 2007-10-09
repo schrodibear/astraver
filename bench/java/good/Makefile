@@ -68,7 +68,7 @@ type-all:
 	$(EXECKRAKATOA) -ignore-overflow $<
 
 why/%.why: %.jc 
-	$(EXECJESSIE) $<
+	$(EXECJESSIE) -locs $*.jloc $<
 
 why/%.whyai: %.jc 
 	$(EXECJESSIE) -ai pol -main main $<

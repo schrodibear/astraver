@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.100 2007-10-08 11:57:18 marche Exp $ i*)
+(*i $Id: options.ml,v 1.101 2007-10-09 10:50:24 marche Exp $ i*)
 
 open Format
 
@@ -189,7 +189,7 @@ Typing/Annotations/VCG options:
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
   --explain          outputs explanations for VCs in file.xpl
-  --locs file        reads source locations from a file
+  --locs f           reads source locations from file f
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)

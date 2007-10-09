@@ -80,6 +80,7 @@ type offset_kind = Offset_max | Offset_min
 type quantifier = Forall | Exists
 
 type pexpr_node =
+  | JCPElabel of string * pexpr
   | JCPEconst of const
   | JCPEvar of string
   | JCPEderef of pexpr * string
@@ -304,6 +305,7 @@ and texpr =
     {
       jc_texpr_node : texpr_node;
       jc_texpr_type : jc_type;
+      jc_texpr_label : string;
       jc_texpr_loc : Loc.position;
     }
 
@@ -366,80 +368,6 @@ type fun_spec =
 (* normalized ast *)
 (******************)
 
-(*
-type term_node =
-  | JCTconst of const
-  | JCTvar of var_info
-  | JCTbinary of term * bin_op * term
-  | JCTunary of unary_op * term
-  | JCTshift of term * term
-  | JCTderef of term * field_info
-  | JCTapp of logic_info * term list
-  | JCTold of term
-  | JCToffset of offset_kind * term * struct_info
-  | JCTinstanceof of term * struct_info
-  | JCTcast of term * struct_info
-  | JCTif of term * term * term
-  | JCTrange of term * term
-
-and term =
-    {
-      jc_term_node : term_node;
-      jc_term_type : jc_type;
-      jc_term_loc : Loc.position;
-    }
-
-type tag =
-    {
-      jc_tag_node : tag_node;
-      jc_tag_loc : Loc.position;
-    }
-
-and tag_node =
-  | JCTtag of struct_info
-  | JCTbottom
-  | JCTtypeof of term * struct_info
-
-type location_set = 
-  | JCLSvar of var_info
-  | JCLSderef of location_set * field_info
-  | JCLSrange of location_set * term * term
-
-type location =
-  | JCLvar of var_info
-  | JCLderef of location_set * field_info
-
-type assertion_node =
-  | JCAtrue
-  | JCAfalse
-  | JCArelation of term * bin_op * term
-  | JCAand of assertion list
-  | JCAor of assertion list
-  | JCAimplies of assertion * assertion
-  | JCAiff of assertion * assertion
-  | JCAnot of assertion
-  | JCAapp of logic_info * term list
-  | JCAquantifier of quantifier * var_info * assertion
-  | JCAold of assertion
-  | JCAinstanceof of term * struct_info
-  | JCAbool_term of term
-  | JCAif of term * assertion * assertion
-  | JCAmutable of term * struct_info * tag
-  | JCAtagequality of tag * tag * string option
-
-and assertion =
-    {
-      jc_assertion_node : assertion_node;
-      jc_assertion_loc : Loc.position;
-    }
-*)
-
-(*
-type term_or_assertion =
-  | JCAssertion of assertion
-  | JCTerm of term
-  | JCReads of tlocation list
-*)
 
 (* application, increment and assignment are statements.
    special assignment with operation disappears.
@@ -468,6 +396,7 @@ and expr =
    {
       jc_expr_node : expr_node;
       jc_expr_type : jc_type;
+      jc_expr_label : string;
       jc_expr_loc : Loc.position;
     }
 

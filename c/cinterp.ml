@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.249 2007-09-07 14:25:32 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.250 2007-10-09 10:50:24 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -2096,7 +2096,10 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
       let post,_ = interp_predicate None "init" pred, Void in
       BlackBox (Annot_type (LTrue, unit_type, [], [], post, []))
   | NSlogic_label(l) -> 
-      Output.Label (l, Void)
+      assert false
+(*
+Output.Label (l, Void)
+*)
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
       let pre,_,post = interp_spec false eff spec in
@@ -2154,6 +2157,9 @@ and interp_block ab may_break statements =
 	  let (be,bl) = block (st::bl) in
 	  Hashtbl.add labels_table lab.label_info_name ();
 	  Raise("Goto_"^lab.label_info_name,None),(lab,be)::bl
+    | {nst_loc = loc ; nst_node = NSlogic_label(l) } :: bl -> 
+	  let (be,bl) = block bl in
+	  Output.Label(l, be), bl
     | [s] ->
 	interp_statement ab may_break s,[]
     | { nst_node = NSnop } :: bl ->

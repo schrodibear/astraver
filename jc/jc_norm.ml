@@ -54,6 +54,7 @@ let make_const loc t c =
   let node = JCEconst c in
   { jc_expr_loc = loc; 
     jc_expr_type = t;
+    jc_expr_label = "";
     jc_expr_node = node; }
 
 let void_const loc = make_const loc (JCTnative Tunit) JCCvoid
@@ -65,12 +66,14 @@ let make_var loc vi =
   let node = JCEvar vi in
   { jc_expr_loc = loc; 
     jc_expr_type = vi.jc_var_info_type;
+    jc_expr_label = "";
     jc_expr_node = node; } 
 
 let make_deref loc e fi =
   let node = JCEderef (e, fi) in
   { jc_expr_loc = loc; 
     jc_expr_type = fi.jc_field_info_type;
+    jc_expr_label = "";
     jc_expr_node = node; }
 
 let rec make_or_list_test loc = function
@@ -80,6 +83,7 @@ let rec make_or_list_test loc = function
       let node = JCEbinary (e, Blor, make_or_list_test loc r) in
       { jc_expr_loc = loc; 
         jc_expr_type = boolean_type;
+	jc_expr_label = "";
 	jc_expr_node = node; } 
 
 (* expressions on the typed AST, not the normalized AST *)
@@ -87,15 +91,24 @@ let rec make_or_list_test loc = function
 let make_tconst loc c =
   let t,c = Jc_pervasives.const c in
   let node = JCTEconst c in
-  { jc_texpr_loc = loc; jc_texpr_type = t; jc_texpr_node = node; }
+  { jc_texpr_loc = loc; 
+    jc_texpr_type = t; 
+    jc_texpr_label = "";
+    jc_texpr_node = node; }
 
 let make_tincr_local loc t op vi =
   let node =  JCTEincr_local (op, vi) in
-  { jc_texpr_loc = loc; jc_texpr_type = t; jc_texpr_node = node; }
+  { jc_texpr_loc = loc; 
+    jc_texpr_type = t; 
+    jc_texpr_label = "";
+    jc_texpr_node = node; }
 
 let make_tincr_heap loc t op e fi =
   let node = JCTEincr_heap (op, e, fi) in
-  { jc_texpr_loc = loc; jc_texpr_type = t; jc_texpr_node = node; }
+  { jc_texpr_loc = loc; 
+    jc_texpr_type = t; 
+    jc_texpr_label = "";
+    jc_texpr_node = node; }
 
 (* statements *)
 
@@ -191,6 +204,7 @@ let make_binary loc e1 t op e2 =
   in
     { jc_expr_node = JCEbinary(e1, op, e2);
       jc_expr_type = t;
+      jc_expr_label = "";
       jc_expr_loc = loc }
 
 let make_int_binary loc e1 op e2 = make_binary loc e1 integer_type op e2
@@ -204,6 +218,7 @@ let make_incr_heap loc op e fi =
   let d =
     { jc_expr_loc = loc;
       jc_expr_type = fi.jc_field_info_type;
+      jc_expr_label = "";
       jc_expr_node = JCEderef(e,fi) ;
     }
   in
@@ -409,6 +424,7 @@ let rec expr e =
 	(l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
   in (sl, tl), { jc_expr_node = ne; 
 		 jc_expr_type = e.jc_texpr_type;
+		 jc_expr_label = e.jc_texpr_label;
 		 jc_expr_loc = e.jc_texpr_loc }
 
 and call loc f el ~binder ll = 
@@ -588,7 +604,9 @@ and statement s =
 	  Hashtbl.add exceptions_table name_exc goto_exc;
 	  JCSthrow (goto_exc, None)
       | JCTSlabel (_,s) -> 
-	  (statement s).jc_statement_node
+	  assert false
+	  (* Claude: label disappears ???? -> assert false *)
+	  (* (statement s).jc_statement_node *)
       | JCTStry (s, cl, fs) ->
 	  let cl = 
 	    List.map (fun (ei, vi, s) -> (ei, vi, statement s)) cl in
