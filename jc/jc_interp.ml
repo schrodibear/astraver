@@ -59,7 +59,9 @@ let reg_loc ?name ?kind (b,e) =
 	  "JC_" ^ string_of_int !name_counter
     | Some n -> n
   in
+(*
   Format.eprintf "Jc_interp: reg_loc id = '%s'@." id;
+*)
   let (f,l,b,e) = 
     try
       match name with
@@ -67,11 +69,15 @@ let reg_loc ?name ?kind (b,e) =
 	    raise Not_found
 	| Some n -> 
 	    let (f,l,b,e,o) = Hashtbl.find Jc_options.locs_table n in
+(*
 	    Format.eprintf "Jc_interp: reg_loc id '%s' found@." id;
+*)
 	    Jc_options.lprintf "keeping old location for id '%s'@." n;
 	    (f,l,b,e)
     with Not_found ->
+(*
       Format.eprintf "Jc_interp: reg_loc id '%s' not found@." id;
+*)
       let f = abs_fname b.Lexing.pos_fname in
       let l = b.Lexing.pos_lnum in
       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
@@ -409,59 +415,66 @@ let rec assertion label oldlabel a =
   and ft = term label oldlabel
   and ftag = tag label oldlabel
   in
-  match a.jc_assertion_node with
-    | JCAtrue -> LTrue
-    | JCAfalse -> LFalse
-    | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
-    | JCAand l -> make_and_list (List.map fa l)
-    | JCAor l -> make_or_list (List.map fa l)
-    | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
-    | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
-    | JCAnot(a) -> LNot(fa a)
-    | JCArelation(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-	let t1' = ft t1 in
-	let t2' = ft t2 in
-	LPred (pred_bin_op op, [ t1'; t2'])
-    | JCArelation(t1,op,t2) ->
-	let t1' = ft t1 in
-	let t2' = ft t2 in
-	let t = bin_arg_type a.jc_assertion_loc op in
-	LPred(pred_bin_op op, 
-	      [ term_coerce t1.jc_term_loc t
-		  t1.jc_term_type t1'; 
-		term_coerce t2.jc_term_loc t 
-		  t2.jc_term_type t2'])
-    | JCAapp(f,l) -> 
-	begin try
-	  make_logic_pred_call f 
-	    (List.map2 
-	       (fun vi t -> 
-		  term_coerce t.jc_term_loc 
-		    vi.jc_var_info_type t.jc_term_type (ft t))
-	       f.jc_logic_info_parameters l)	    
-	with Invalid_argument _ -> assert false
-	end
-    | JCAquantifier(Forall,v,p) -> 
+  let a' =
+    match a.jc_assertion_node with
+      | JCAtrue -> LTrue
+      | JCAfalse -> LFalse
+      | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
+      | JCAand l -> make_and_list (List.map fa l)
+      | JCAor l -> make_or_list (List.map fa l)
+      | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
+      | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
+      | JCAnot(a) -> LNot(fa a)
+      | JCArelation(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
+	  let t1' = ft t1 in
+	  let t2' = ft t2 in
+	  LPred (pred_bin_op op, [ t1'; t2'])
+      | JCArelation(t1,op,t2) ->
+	  let t1' = ft t1 in
+	  let t2' = ft t2 in
+	  let t = bin_arg_type a.jc_assertion_loc op in
+	  LPred(pred_bin_op op, 
+		[ term_coerce t1.jc_term_loc t
+		    t1.jc_term_type t1'; 
+		  term_coerce t2.jc_term_loc t 
+		    t2.jc_term_type t2'])
+      | JCAapp(f,l) -> 
+	  begin try
+	    make_logic_pred_call f 
+	      (List.map2 
+		 (fun vi t -> 
+		    term_coerce t.jc_term_loc 
+		      vi.jc_var_info_type t.jc_term_type (ft t))
+		 f.jc_logic_info_parameters l)	    
+	  with Invalid_argument _ -> assert false
+	  end
+      | JCAquantifier(Forall,v,p) -> 
 	LForall(v.jc_var_info_final_name,
 		tr_base_type v.jc_var_info_type,
 		fa p)
-    | JCAquantifier(Exists,v,p) -> 
-	LExists(v.jc_var_info_final_name,
-		tr_base_type v.jc_var_info_type,
-		fa p)
-    | JCAold a -> assertion (Some oldlabel) oldlabel a
-    | JCAbool_term(t) -> 
+      | JCAquantifier(Exists,v,p) -> 
+	  LExists(v.jc_var_info_final_name,
+		  tr_base_type v.jc_var_info_type,
+		  fa p)
+      | JCAold a -> assertion (Some oldlabel) oldlabel a
+      | JCAbool_term(t) -> 
 	LPred("eq",[ft t;LConst(Prim_bool true)])
-    | JCAinstanceof(t,ty) -> 
-	let tag = ty.jc_struct_info_root ^ "_tag_table" in
-	LPred("instanceof",
-	      [lvar label tag; ft t; LVar (tag_name ty)])
-    | JCAmutable(te, st, ta) ->
-	let mutable_field = LVar (mutable_name st.jc_struct_info_root) in
-	let tag = ftag ta.jc_tag_node in
-	LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
-    | JCAtagequality(t1, t2, h) ->
-	LPred("eq", [ ftag t1.jc_tag_node; ftag t2.jc_tag_node ])
+      | JCAinstanceof(t,ty) -> 
+	  let tag = ty.jc_struct_info_root ^ "_tag_table" in
+	  LPred("instanceof",
+		[lvar label tag; ft t; LVar (tag_name ty)])
+      | JCAmutable(te, st, ta) ->
+	  let mutable_field = LVar (mutable_name st.jc_struct_info_root) in
+	  let tag = ftag ta.jc_tag_node in
+	  LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
+      | JCAtagequality(t1, t2, h) ->
+	  LPred("eq", [ ftag t1.jc_tag_node; ftag t2.jc_tag_node ])
+  in
+  if a.jc_assertion_label <> "" then
+    LNamed(reg_loc ~name:a.jc_assertion_label a.jc_assertion_loc,a')
+  else
+    a'
+  
 
 (****************************
 
@@ -874,6 +887,10 @@ let rec statement ~threats s =
   let expr = expr ~threats in
   match s.jc_statement_node with
     | JCScall(vio,f,l,block) -> 
+(*
+	Format.eprintf "Jc_interp: lab for call = '%s'@."
+	  s.jc_statement_label;
+*)
 	let loc = s.jc_statement_loc in
 	let el = 
 	  try
@@ -935,8 +952,10 @@ let rec statement ~threats s =
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->
 	let la' = assertion None "init" la.jc_loop_invariant in
-	let la'' = 
-	  LNamed(reg_loc la.jc_loop_invariant.jc_assertion_loc,la')
+	let la'' =
+	  if la.jc_loop_invariant.jc_assertion_label = "" then
+	    LNamed(reg_loc la.jc_loop_invariant.jc_assertion_loc,la')
+	  else la'
 	in
 	begin match la.jc_loop_variant with
 	| Some t when threats ->

@@ -269,6 +269,7 @@ and assertion =
     {
      jc_assertion_node : assertion_node;
      jc_assertion_loc : Loc.position;
+     jc_assertion_label : string;
    }
       
 type term_or_assertion =

@@ -138,6 +138,10 @@ let quantifier fmt = function
   | Exists -> fprintf fmt "exists"
 
 let rec assertion fmt a =
+  if a.jc_assertion_label <> "" then
+    fprintf fmt "@[(%s : %a)@]" 
+      a.jc_assertion_label assertion {a with jc_assertion_label =""}
+  else
   match a.jc_assertion_node with
     | JCAtrue -> fprintf fmt "true"
     | JCAif (_, _, _)-> assert false (* TODO *)
@@ -233,7 +237,6 @@ let rec expr fmt e =
     fprintf fmt "@[(%s : %a)@]" 
       e.jc_texpr_label expr {e with jc_texpr_label =""}
   else
-    
   match e.jc_texpr_node with
     | JCTEvar vi -> 
 	fprintf fmt "%s" vi.jc_var_info_name

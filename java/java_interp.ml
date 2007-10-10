@@ -411,6 +411,19 @@ let lobj_op op =
     | Beq -> Beq_pointer
     | _ -> assert false
 
+let dummy_loc_term ty t =
+  { jc_term_loc = Loc.dummy_position; 
+    jc_term_type = ty;
+    jc_term_node = t }
+
+let term_zero = 
+  dummy_loc_term Jc_pervasives.integer_type 
+    (JCTconst (JCCinteger "0"))
+
+let term_maxint = 
+  dummy_loc_term Jc_pervasives.integer_type 
+    (JCTconst (JCCinteger "2147483647"))
+
 let term_plus_one t =
   JCTbinary (t, Badd_int, { t with jc_term_node = JCTconst (JCCinteger "1") })
 
@@ -467,16 +480,12 @@ let rec term t =
        jc_term_type = tr_type t.java_term_type ;
        jc_term_node = t' }
 
-let dummy_loc_term ty t =
-  { jc_term_loc = Loc.dummy_position; 
-    jc_term_type = ty;
-    jc_term_node = t }
-
 let quantifier = function
   | Forall -> Jc_ast.Forall
   | Exists -> Jc_ast.Exists
 
 let rec assertion a =
+  let lab = ref "" in
   let a' =
     match a.java_assertion_node with
       | JAtrue -> JCAtrue
@@ -499,16 +508,16 @@ let rec assertion a =
 	  JCAand [assertion a1 ; assertion a2]
       | JAbool_expr t -> JCAbool_term(term t)
 
-  in { jc_assertion_loc = a.java_assertion_loc ; jc_assertion_node = a' }
+  in { jc_assertion_loc = a.java_assertion_loc ; 
+       jc_assertion_label = !lab;
+       jc_assertion_node = a' }
     
 let dummy_loc_assertion a =
   { jc_assertion_loc = Loc.dummy_position; 
+    jc_assertion_label = "";
     jc_assertion_node = a }
 
-let assertion_option a =
-  match a with
-    | None -> dummy_loc_assertion JCAtrue 
-    | Some a -> assertion a
+
 
 
 let create_static_var ci fi =
@@ -648,20 +657,29 @@ let array_types decls =
 	     dummy_loc_assertion 
 	       (JCArelation(nvi,Bneq_pointer,
 			    dummy_loc_term JCTnull (JCTconst JCCnull)));
-	   jc_fun_behavior = (* result == \offset_max(x) *)
+	   jc_fun_behavior = (* result == \offset_max(x)+1 *)
+	     let result_var = 
+	       dummy_loc_term vi.jc_var_info_type 
+		 (JCTvar result)
+	     in
 	     ["non_null", 
 	      { jc_behavior_assumes = None;
 		jc_behavior_assigns = Some [];
 		jc_behavior_ensures =
 		  dummy_loc_assertion
-		    (JCArelation(dummy_loc_term vi.jc_var_info_type 
-				   (JCTvar result),
-				 Beq_int,
-				 dummy_loc_term vi.jc_var_info_type 
-				   (term_plus_one
-				       (dummy_loc_term vi.jc_var_info_type 
-					   (JCToffset(Offset_max,nvi,st)))))) ;
-		jc_behavior_throws = None } ]
+		    (JCAand
+		       [ dummy_loc_assertion
+			   (JCArelation(result_var,
+				    Beq_int,
+				    dummy_loc_term vi.jc_var_info_type 
+				      (term_plus_one
+					 (dummy_loc_term vi.jc_var_info_type 
+					    (JCToffset(Offset_max,nvi,st))))));
+			 dummy_loc_assertion
+			   (JCArelation(result_var,Bge_int,term_zero)) ;
+			 dummy_loc_assertion
+			   (JCArelation(result_var,Blt_int,term_maxint))]);
+		jc_behavior_throws = None } ] 
 	     }
        in
        JCfun_def(fi.jc_fun_info_return_type,fi.jc_fun_info_name,[vi],spec,None)
@@ -883,8 +901,10 @@ let rec expr e =
 	      | _ -> assert false
 	  end
       | JEcall(e,mi,args) -> 
+	  lab := reg_loc e.java_expr_loc;
 	  JCTEcall(get_fun mi,List.map expr (e::args))
       | JEstatic_call(mi,args) -> 
+	  lab := reg_loc e.java_expr_loc;
 	  JCTEcall(get_fun mi,List.map expr args)
       | JEnew_array(ty,[e]) ->
 	  let si = get_array_struct ty in
@@ -943,9 +963,12 @@ let rec statement s =
       | JSif (e, s1, s2) ->
 	  JCTSif (expr e, statement s1, statement s2)
       | JSwhile(e,inv,dec,s) ->
+	  let inv' = assertion inv in
 	  let la =
 	    { jc_loop_tag = get_loop_counter ();
-	      jc_loop_invariant = assertion inv;
+	      jc_loop_invariant = 
+		{ inv' with 
+		    jc_assertion_label = reg_loc inv.java_assertion_loc };
 	      jc_loop_variant = Some (term dec) }
 	  in
 	  JCTSwhile(expr e, la, statement s)
@@ -1003,6 +1026,15 @@ and switch_label = function
   | Java_ast.Default -> None
   | Java_ast.Case e -> Some (expr e)
 
+let reg_assertion_option a =
+  match a with
+    | None -> dummy_loc_assertion JCAtrue 
+    | Some a -> 
+	let a' = assertion a in
+	let id = reg_loc a.java_assertion_loc in
+	Format.eprintf "adding loc '%s' on pre-condition@." id;
+	{ a' with jc_assertion_label = id }
+
 let tr_method mi req behs b acc =
   match b with
     | None -> assert false
@@ -1027,7 +1059,7 @@ let tr_method mi req behs b acc =
 	JCfun_def(tr_type_option t,
 		  nfi.jc_fun_info_name,
 		  params,
-		  { jc_fun_requires = assertion_option req;
+		  { jc_fun_requires = reg_assertion_option req;
 		    jc_fun_behavior = List.map behavior behs},
 		  Some (statements l))::acc
 	  
@@ -1064,7 +1096,7 @@ let tr_constr ci req behs b acc =
   JCfun_def(Jc_pervasives.unit_type,
 	    nfi.jc_fun_info_name,
 	    this :: params,
-	    { jc_fun_requires = assertion_option req;
+	    { jc_fun_requires = reg_assertion_option req;
 	      jc_fun_behavior = List.map behavior behs},
 	    Some [make_block body])::acc
 	  

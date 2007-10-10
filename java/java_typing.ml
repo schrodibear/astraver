@@ -2089,12 +2089,11 @@ and statements package_env type_env current_type env b =
 		match rem with
 		  | { java_pstatement_node = JPSwhile(e,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
-		      let inv = assertion package_env type_env current_type env inv in
-		      let dec = term package_env type_env current_type env dec in
-		      let e = expr package_env type_env current_type env e in
-		      let s = statement package_env type_env current_type env s in
-		      { java_statement_node = JSwhile(e,inv,dec,s);
-			java_statement_loc = loc } :: 
+		      let twhile =
+			type_while package_env type_env current_type env 
+			  s.java_pstatement_loc inv dec e s
+		      in
+		      twhile :: 
 			statements package_env type_env current_type env rem
 		  | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
@@ -2112,14 +2111,18 @@ and statements package_env type_env current_type env b =
 		  s.java_pstatement_loc vd expr_true expr_zero e sl s
 	      in
 	      tfor :: statements package_env type_env current_type env rem
-
+	  | JPSwhile(e,s) ->
+	      let twhile =
+		type_while package_env type_env current_type env 
+		  s.java_pstatement_loc expr_true expr_zero e s
+	      in
+	      twhile :: statements package_env type_env current_type env rem
 	  | _ ->
 	      let s' = statement package_env type_env current_type env s in
 	      s' :: statements package_env type_env current_type env rem
 
 
-and type_for_decl package_env type_env current_type env loc vd
-    inv dec e sl s =
+and type_for_decl package_env type_env current_type env loc vd inv dec e sl s =
   let env,decls = 
     variable_declaration package_env type_env current_type env vd 
   in
@@ -2131,6 +2134,13 @@ and type_for_decl package_env type_env current_type env loc vd
   { java_statement_node = JSfor_decl(decls,e,inv,dec,sl,s);
     java_statement_loc = loc }
 
+and type_while package_env type_env current_type env loc inv dec e s =
+  let inv = assertion package_env type_env current_type env inv in
+  let dec = term package_env type_env current_type env dec in
+  let e = expr package_env type_env current_type env e in
+  let s = statement package_env type_env current_type env s in
+  { java_statement_node = JSwhile(e,inv,dec,s);
+    java_statement_loc = loc } 
 
 and block package_env type_env current_type env b =
   match statements package_env type_env current_type env b with

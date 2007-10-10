@@ -711,10 +711,12 @@ let tag env hierarchy t =
   }
 
 let rec assertion env e =
+  let lab = ref "" in
   let te =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
-	  assert false (* TODO *)
+	  let te = assertion env e in
+	  lab := l; te.jc_assertion_node
       | JCPEvar id -> 
 	  let vi = 
 	    try List.assoc id env 
@@ -868,6 +870,7 @@ let rec assertion env e =
 	  JCAtagequality(ttag1, ttag2, st)
 
   in { jc_assertion_node = te;
+       jc_assertion_label = !lab;
        jc_assertion_loc = e.jc_pexpr_loc }
 
 and make_quantifier q loc ty idl env e : assertion =
@@ -878,7 +881,9 @@ and make_quantifier q loc ty idl env e : assertion =
 	let f = 
 	  JCAquantifier(q,vi,make_quantifier q loc ty r ((id,vi)::env) e) 
 	in
-	{jc_assertion_loc = loc ; jc_assertion_node = f }
+	{ jc_assertion_loc = loc ; 
+	  jc_assertion_label = ""; 
+	  jc_assertion_node = f }
 
 (* expressions *)
 
@@ -1021,7 +1026,6 @@ let rec expr env e =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
 	  let te = expr env e in
-	  Format.eprintf "Typing: label = '%s'@." l;
 	  lab := l; te.jc_texpr_type,te.jc_texpr_node
       | JCPEvar id ->
 	  begin
@@ -1893,6 +1897,7 @@ let param (t,id) =
 
 let assertion_true =
   { jc_assertion_node = JCAtrue;
+    jc_assertion_label = "";
     jc_assertion_loc = Loc.dummy_position }
 
 let field st root (rep, t, id) =

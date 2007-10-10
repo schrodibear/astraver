@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.133 2007-10-09 10:50:24 marche Exp $ i*)
+(*i $Id: util.ml,v 1.134 2007-10-10 07:35:08 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -967,8 +967,10 @@ let raw_loc_predicate ?(pref="") fmt (loc,p) =
       | _ -> Loc.extract loc 
   in
   let s = read_in_file f l b e in
-  raw_loc ~pref fmt f l b e;
+  raw_loc ~pref fmt f l b e
+(*;
   fprintf fmt "pred = \"%s\"@\n" s
+*)
 
 let raw_explanation fmt e =
   match e with
@@ -1004,6 +1006,7 @@ let raw_explanation fmt e =
 	      raw_loc fmt f l b e;
 	      fprintf fmt "call_expr = \"%s\"@\n" s
 	  with Not_found -> 
+	    eprintf "Util: cannot find a loc for '%s'@." lab;
 	    fprintf fmt "kind = Pre@\n";
 	    fprintf fmt "call_label = %s@\n" lab;
 	end;
