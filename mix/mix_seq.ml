@@ -163,6 +163,8 @@ let interp_stmt self prev lab s = match s.node with
       Acond (address self s.loc op, X.Assume "cmp >= 0", X.Assume "cmp < 0")
   | PSinstr (Je, op) ->
       Acond (address self s.loc op, X.Assume "cmp = 0", X.Assume "cmp <> 0")
+  | PSinstr (Jne, op) ->
+      Acond (address self s.loc op, X.Assume "cmp <> 0", X.Assume "cmp = 0")
   | PSinstr (Hlt, _) -> 
       Ahalt
   | PSinstr _ -> 

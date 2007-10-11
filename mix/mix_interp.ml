@@ -72,10 +72,10 @@ let interp_instr loc i op = match i with
       Wassign (register_name r, Tapp ("neg_int", [value_op loc op]))
   | Inc r ->
       Wassign (register_name r, 
-	      Tapp ("add_int", [Tvar (register_value r); Tconst "1"]))
+	      Tapp ("add_int", [Tvar (register_value r); value_op loc op]))
   | Dec r ->
       Wassign (register_name r, 
-	       Tapp ("sub_int", [Tvar (register_value r); Tconst "1"]))
+	       Tapp ("sub_int", [Tvar (register_value r); value_op loc op]))
   | Nop ->
       Wvoid
   | Jmp | Jsj 
