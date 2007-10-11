@@ -3,13 +3,13 @@
 
 Require Export swap_spec_why.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma swap_impl_po_1 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
+  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
@@ -19,14 +19,14 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma swap_impl_po_2 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
+  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
@@ -42,14 +42,14 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma swap_impl_po_3 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
+  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
@@ -68,14 +68,14 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma swap_impl_po_4 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
+  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
@@ -100,14 +100,14 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "swap.c", line 2, characters 14-54: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 14-52 *)
+  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
                 ((valid_index alloc t i) /\ (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
@@ -129,7 +129,7 @@ Save.
   forall (HW_12: (valid alloc result4)),
   forall (intM_global1: (memory Z global)),
   forall (HW_13: intM_global1 = (upd intM_global0 result4 result0)),
-  (* File "swap.c", line 2, characters 13-53 *)
+  (* File "swap.c", line 2, characters 12-52 *)
   ((acc intM_global1 (shift t i)) = (acc intM_global (shift t j)) /\
   (acc intM_global1 (shift t j)) = (acc intM_global (shift t i))).
 Proof.

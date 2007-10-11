@@ -32,7 +32,7 @@
   @ }
   @*/
 
-// largest element in a cycle
+// largest element in the cycle of k
 
 //@ logic int largest(int *t, int k) reads t[..]
 

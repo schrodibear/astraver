@@ -3,21 +3,21 @@
 
 Require Export binary_search_spec_why.
 
-(* Why obligation from file "binary_search.c", line 14, characters 8-149: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_1 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
                    (acc intM_global (shift t k1)) <=
                    (acc intM_global (shift t k2))))))),
-  (* File "binary_search.c", line 14, characters 7-148 *) ((((0 <= 0 /\
+  (* File "binary_search.c", line 14, characters 6-147 *) ((((0 <= 0 /\
   (n - 1) <= (n - 1)) /\ (Zopp 1) <= (Zopp 1) /\ (Zopp 1) <= (n - 1)) /\
   (((Zopp 1) = (Zopp 1) ->
     (forall (k:Z),
@@ -29,14 +29,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_2 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -46,7 +46,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -60,14 +60,14 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "binary_search.c", line 21, characters 17-28: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_3 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -77,7 +77,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -89,21 +89,21 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  (* File "binary_search.c", line 21, characters 16-27 *) (l <= result /\
+  (* File "binary_search.c", line 21, characters 15-26 *) (l <= result /\
   result <= u).
 Proof.
 intros.
 generalize (mean_1 l u); intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_4 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -113,7 +113,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -125,7 +125,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 16-27 *) (l <=
+  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
                 result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
@@ -136,14 +136,14 @@ subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_5 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -153,7 +153,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -165,7 +165,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 16-27 *) (l <=
+  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
                 result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
@@ -175,14 +175,14 @@ Save.
   forall (HW_10: result1 < v),
   forall (l0: Z),
   forall (HW_11: l0 = (result + 1)),
-  (* File "binary_search.c", line 14, characters 7-148 *) ((((0 <= l0 /\ u <=
-  (n - 1)) /\ (Zopp 1) <= p /\ p <= (n - 1)) /\
-  ((p = (Zopp 1) ->
-    (forall (k:Z),
-     (0 <= k /\ k < n ->
-      ((acc intM_global (shift t k)) = v -> l0 <= k /\ k <= u)))))) /\
-  ((p >= 0 -> (acc intM_global (shift t p)) = v))) /\
-  (Zwf 0 (u - l0) (u - l)).
+  ((* File "binary_search.c", line 14, characters 6-147 *) ((((0 <= l0 /\
+   u <= (n - 1)) /\ (Zopp 1) <= p /\ p <= (n - 1)) /\
+   ((p = (Zopp 1) ->
+     (forall (k:Z),
+      (0 <= k /\ k < n ->
+       ((acc intM_global (shift t k)) = v -> l0 <= k /\ k <= u)))))) /\
+   ((p >= 0 -> (acc intM_global (shift t p)) = v))) /\
+  (Zwf 0 (u - l0) (u - l))).
 Proof.
 intros; subst.
 generalize (mean_1 l u); intuition.
@@ -194,14 +194,14 @@ assumption.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_6 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -211,7 +211,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -223,7 +223,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 16-27 *) (l <=
+  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
                 result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
@@ -240,14 +240,14 @@ subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_7 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -257,7 +257,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -269,7 +269,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 16-27 *) (l <=
+  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
                 result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
@@ -285,26 +285,26 @@ Save.
   forall (HW_16: result3 > v),
   forall (u0: Z),
   forall (HW_17: u0 = (result - 1)),
-  (* File "binary_search.c", line 14, characters 7-148 *) ((((0 <= l /\ u0 <=
-  (n - 1)) /\ (Zopp 1) <= p /\ p <= (n - 1)) /\
-  ((p = (Zopp 1) ->
-    (forall (k:Z),
-     (0 <= k /\ k < n ->
-      ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u0)))))) /\
-  ((p >= 0 -> (acc intM_global (shift t p)) = v))) /\
-  (Zwf 0 (u0 - l) (u - l)).
+  ((* File "binary_search.c", line 14, characters 6-147 *) ((((0 <= l /\
+   u0 <= (n - 1)) /\ (Zopp 1) <= p /\ p <= (n - 1)) /\
+   ((p = (Zopp 1) ->
+     (forall (k:Z),
+      (0 <= k /\ k < n ->
+       ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u0)))))) /\
+   ((p >= 0 -> (acc intM_global (shift t p)) = v))) /\
+  (Zwf 0 (u0 - l) (u - l))).
 Proof.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "binary_search.c", line 8, characters 6-104: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_8 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -314,7 +314,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -326,7 +326,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 16-27 *) (l <=
+  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
                 result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
@@ -342,7 +342,7 @@ Save.
   forall (HW_18: result3 <= v),
   forall (p0: Z),
   forall (HW_19: p0 = result),
-  (* File "binary_search.c", line 8, characters 5-103 *) (p0 >= 0 /\
+  (* File "binary_search.c", line 8, characters 4-102 *) (p0 >= 0 /\
   (acc intM_global (shift t p0)) = v \/ p0 = (Zopp 1) /\
   (forall (k:Z), (0 <= k /\ k < n -> (acc intM_global (shift t k)) <> v))).
 Proof.
@@ -350,14 +350,14 @@ intuition.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "binary_search.c", line 8, characters 6-104: *)
+(* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma binary_search_impl_po_9 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 5-106 *) ((n >=
+  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
                 0 /\ (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
@@ -367,7 +367,7 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 7-148 *)
+  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
                 ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
                 (n - 1)) /\
                 ((p = (Zopp 1) ->
@@ -376,7 +376,7 @@ Save.
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
                 ((p >= 0 -> (acc intM_global (shift t p)) = v)))),
   forall (HW_20: l > u),
-  (* File "binary_search.c", line 8, characters 5-103 *) (p >= 0 /\
+  (* File "binary_search.c", line 8, characters 4-102 *) (p >= 0 /\
   (acc intM_global (shift t p)) = v \/ p = (Zopp 1) /\
   (forall (k:Z), (0 <= k /\ k < n -> (acc intM_global (shift t k)) <> v))).
 Proof.

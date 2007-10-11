@@ -31,7 +31,7 @@ Defined.
 (*Why axiom*) Lemma Path_cons_inv :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 52, characters 6-124 *)
+    (* File "list.h", line 52, characters 5-123 *)
     (forall (p1:(pointer global)),
      (forall (l:plist),
       (forall (p2:(pointer global)),
@@ -48,14 +48,14 @@ Defined.
 (*Why axiom*) Lemma Path_null_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 46, characters 26-58 *)
+    (* File "list.h", line 46, characters 25-57 *)
     (forall (p:(pointer global)), (lpath tl_global alloc p nil p)))).
 Admitted.
 
 (*Why axiom*) Lemma Path_null_inv_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 49, characters 6-63 *)
+    (* File "list.h", line 49, characters 5-62 *)
     (forall (p:(pointer global)),
      (forall (l:plist), ((lpath tl_global alloc p l p) -> l = nil))))).
 Admitted.
@@ -66,12 +66,12 @@ Defined.
 
 
 (*Why axiom*) Lemma app_nil_1_ax :
-  (* File "list.h", line 25, characters 26-60 *)
+  (* File "list.h", line 25, characters 25-59 *)
   (forall (l:plist), l = (app l nil)).
 Admitted.
 
 (*Why axiom*) Lemma app_nil_2_ax :
-  (* File "list.h", line 27, characters 26-60 *)
+  (* File "list.h", line 27, characters 25-59 *)
   (forall (l:plist), l = (app nil l)).
 Admitted.
 
@@ -83,12 +83,12 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma disjoint_nil1 :
-  (* File "list.h", line 29, characters 27-61 *)
+  (* File "list.h", line 29, characters 26-60 *)
   (forall (l:plist), (disjoint l nil)).
 Admitted.
 
 (*Why axiom*) Lemma disjoint_nil2 :
-  (* File "list.h", line 31, characters 27-61 *)
+  (* File "list.h", line 31, characters 26-60 *)
   (forall (l:plist), (disjoint nil l)).
 Admitted.
 
@@ -96,20 +96,18 @@ Admitted.
   (memory (pointer global) global) -> (pointer global) -> Prop.
 Admitted.
 
-(*Why predicate*) Definition llist  (tl_global:(memory (pointer global)
-  global)) (alloc:alloc_table) (p:(pointer global)) (l:plist)
-  := (* File "list.h", line 63, characters 40-56 *)
+(*Why predicate*) Definition llist  (tl_global:(memory (pointer global) global)) (alloc:alloc_table) (p:(pointer global)) (l:plist)
+  := (* File "list.h", line 63, characters 39-55 *)
      (lpath tl_global alloc p l (@null global)).
 
-(*Why predicate*) Definition is_list  (tl_global:(memory (pointer global)
-  global)) (alloc:alloc_table) (l:(pointer global))
-  := (* File "list.h", line 65, characters 33-63 *)
+(*Why predicate*) Definition is_list  (tl_global:(memory (pointer global) global)) (alloc:alloc_table) (l:(pointer global))
+  := (* File "list.h", line 65, characters 32-62 *)
      (exists pl:plist, (llist tl_global alloc l pl)).
 
 (*Why axiom*) Lemma is_list_llist_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 68, characters 6-64 *)
+    (* File "list.h", line 68, characters 5-63 *)
     (forall (p:(pointer global)),
      ((is_list tl_global alloc p) <->
       (exists l:plist, (llist tl_global alloc p l)))))).
@@ -133,7 +131,7 @@ Defined.
 (*Why axiom*) Lemma llist_function_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 71, characters 6-99 *)
+    (* File "list.h", line 71, characters 5-98 *)
     (forall (l1:plist),
      (forall (l2:plist),
       (forall (p:(pointer global)),
@@ -144,7 +142,7 @@ Admitted.
 (*Why axiom*) Lemma llist_valid :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 75, characters 6-85 *)
+    (* File "list.h", line 75, characters 5-84 *)
     (forall (p1:(pointer global)),
      (forall (l:plist),
       ((llist tl_global alloc p1 l) ->
@@ -157,6 +155,6 @@ Defined.
 
 
 (*Why axiom*) Lemma rev_nil_ax :
-  (* File "list.h", line 23, characters 24-43 *) (rev nil) = nil.
+  (* File "list.h", line 23, characters 23-42 *) (rev nil) = nil.
 Admitted.
 
