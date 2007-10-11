@@ -1,0 +1,27 @@
+
+/* sequential searching (vol. 3, page 397) */
+
+/* searches for K in KEY+1 ... KEY+N */
+	
+{{{ logic KEY,K,N:int }}}
+	
+start:	{{ N >= 1 }}
+	enta	K
+	ent1	1-N
+2H:	{{ 1 <= N and 1-N <= i1 <= 0 and a = K and
+	   forall i:int. 1 <= i < N+i1 -> K <> mem[KEY+i] }}
+	cmpa	KEY+N,1
+	je	success
+	inc1	1
+	j1np	2B
+failure:{ forall i:int. 1 <= i <= N -> K <> mem[KEY+i] }
+	hlt
+success:{ K = mem[KEY+N+i1] }
+		
+/*
+Local Variables: 
+mode: asm
+compile-command: "../../bin/demixify.opt search.mix -entry start -gwhy"
+End: 
+*/
+
