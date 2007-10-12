@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.105 2007-08-02 12:46:58 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.106 2007-10-12 15:21:24 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -1284,7 +1284,8 @@ and statement s =
   | TSswitch (texpr, tstatement) -> 
       let (used_cases,s) = st_switch tstatement in
       NSswitch(expr texpr, used_cases, s) 
-  | TScase (texpr, tstatement) -> assert false
+  | TScase (texpr, tstatement) -> 
+      unsupported s.st_loc "misplaced case statement"
   | TSdefault tstatement -> assert false
   | TSgoto(status,l) -> NSgoto(status,l)
   | TSassert p -> NSassert (predicate p)

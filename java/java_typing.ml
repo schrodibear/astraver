@@ -1064,25 +1064,6 @@ let is_object t =
 let lub_object_types t1 t2 = JTYnull
   
 (*
-let term_coerce t1 t2 e =
-  let e_int =
-    match t1 with
-      | JCTrange ri ->
-	  let (_,to_int,_,_) = 
-	    Hashtbl.find range_types_table ri.jc_range_info_name 
-	  in
-	  { jc_tterm_node = JCTTapp(to_int,[e]) ;
-	    jc_tterm_loc = e.jc_tterm_loc }  
-      | _ -> e
-  in
-  match t2 with
-    | Tinteger -> e_int
-    | Treal -> 
-	{ jc_tterm_node = JCTTapp(real_of_integer,[e_int]) ;
-	  jc_tterm_loc = e.jc_tterm_loc }  
-    | _ -> assert false
-*)
-
 let subbasetype t1 t2 =
   match t1,t2 with
     | (Tint|Tshort|Tchar|Tbyte|Tlong|Tinteger), Tinteger -> true
@@ -1091,6 +1072,7 @@ let subbasetype t1 t2 =
     | (Tshort|Tbyte), Tshort -> true
     | Tchar, Tchar -> true
     | _ -> false
+*)
 
 (*
 let subtype t1 t2 =
@@ -1099,6 +1081,7 @@ let subtype t1 t2 =
     | _ -> assert false (* TODO *)
 *)
 
+(*
 let compatible_base_types t1 t2 = true
 
 let rec compatible_types t1 t2 =
@@ -1116,7 +1099,84 @@ let rec compatible_types t1 t2 =
     | JTYclass _, JTYarray _ -> assert false
     | JTYarray _, JTYclass _ -> assert false
     | _ -> assert false
+*)
 
+let rec is_subclass c1 c2 =
+  c1 == c2 ||
+    match c1.class_info_extends with
+      | None -> false
+      | Some c -> is_subclass c c2
+
+let rec is_subinterface i1 i2 =
+  i1 == i2 ||
+    List.exists
+    (fun i' -> is_subinterface i' i2)
+    i1.interface_info_extends
+
+let rec implements c i =
+  List.exists 
+    (fun i' -> is_subinterface i' i)
+    c.class_info_implements ||
+    match c.class_info_extends with
+      | None -> false
+      | Some c -> implements c i
+
+(* JLS 5.1.1: Identity Conversion *)
+let is_identity_convertible tfrom tto =
+  tfrom = tto
+
+(* JLS 5.1.2: Widening Primitive Conversion *)
+let is_widening_primitive_convertible tfrom tto =
+  match tfrom,tto with
+    | Tbyte, (Tshort | Tint | Tlong | Tfloat | Tdouble) -> true
+    | Tshort, (Tint | Tlong | Tfloat | Tdouble) -> true
+    | Tchar, (Tint | Tlong | Tfloat | Tdouble) -> true
+    | Tint, (Tlong | Tfloat | Tdouble) -> true
+    | Tlong, (Tfloat | Tdouble) -> true
+    | Tfloat, Tdouble -> true
+    | _ -> false
+
+(* JLS 5.1.4: Widening Refernce Conversion *)
+let rec is_widening_reference_convertible tfrom tto =
+  match tfrom,tto with
+    | JTYclass(_,c1), JTYclass(_,c2) -> is_subclass c1 c2
+    | JTYclass(_,c), JTYinterface i -> implements c i
+    | JTYnull, (JTYclass _ | JTYinterface _ | JTYarray _ ) -> true
+    | JTYinterface i1, JTYinterface i2 -> is_subinterface i1 i2
+(* TODO
+    | JTYinterface _ , JTYclass(_,c) when c==object_class -> true
+    | JTYarray _ , JTYclass(_,c) when c==object_class -> true
+    | JTYarray _ , JTYinterface i when i==cloneable_interface -> true
+    | JTYarray _ , JTYinterface i when i==serializable_interface -> true
+*)
+    | JTYarray t1, JTYarray t2 -> 
+	is_widening_reference_convertible t1 t2
+    | _ -> false
+
+(* JLS 5.2: Assignment conversion  *)
+let is_assignment_convertible tfrom efrom tto =
+  is_identity_convertible tfrom tto ||
+  match tfrom,tto with
+    | JTYbase t1, JTYbase t2 -> 
+	is_widening_primitive_convertible t1 t2 ||
+	  begin
+	    match t2,efrom.java_pexpr_node with
+	      | (Tbyte | Tshort | Tchar), JPElit (Integer s) ->
+		  assert false (* TODO *)
+	      | (Tbyte | Tshort | Tchar), JPElit (Char s) ->
+		  assert false (* TODO *)
+	      | _ -> false
+	  end
+    | _ -> is_widening_reference_convertible tfrom tto
+
+(* JLS 5.3: Method invocation conversion  *)
+let is_method_invocation_convertible tfrom tto =
+  is_identity_convertible tfrom tto ||
+  match tfrom,tto with
+    | JTYbase t1, JTYbase t2 -> is_widening_primitive_convertible t1 t2
+    | _ -> is_widening_reference_convertible tfrom tto
+
+(**********************)
 let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
@@ -1374,7 +1434,7 @@ let rec assertion package_env type_env current_type env e =
 		  (fun vi e ->
 		     let ty = vi.java_var_info_type in
 		     let te = termt e in
-		     if compatible_types te.java_term_type ty then te
+		     if is_method_invocation_convertible te.java_term_type ty then te
 		     else
 		       typing_error e.java_pexpr_loc 
 			 "type %a expected" 
@@ -1541,14 +1601,15 @@ let rec expr_of_term t =
 *)
 
 let is_accessible_and_applicable mi id arg_types =
-  if mi.method_info_name = id then 
-      (* !!!!!!! TODO !!!! 
-	 check args types
-      *)
-      true
-  else 
-    false
-	
+  mi.method_info_name = id &&
+  (* check args number *) 
+  List.length arg_types = List.length mi.method_info_parameters &&
+  (* check args types *)
+  List.for_all2
+   (fun vi t -> 
+      is_method_invocation_convertible t vi.java_var_info_type)
+  mi.method_info_parameters arg_types
+
 let lookup_method ti (loc,id) arg_types = 
   let rec collect_methods_from_interface acc ii =
     check_if_interface_complete ii;
@@ -1578,11 +1639,8 @@ let lookup_method ti (loc,id) arg_types =
 	| None -> acc 
 	| Some ci -> collect_methods_from_class acc ci
     in
-    acc
-      (* What to do with methods from interfaces ???
     List.fold_left
       collect_methods_from_interface acc ci.class_info_implements
-      *)
   in
   let meths = 
     match ti with
@@ -1777,7 +1835,7 @@ let rec expr package_env type_env current_type env e =
 	    match te1.java_expr_type with
 	      | JTYarray t ->
 		  if is_numeric te2.java_expr_type then
-		    if compatible_types t te3.java_expr_type then
+		    if is_assignment_convertible te3.java_expr_type e3 t then
 		      t, JEassign_array_op(te1,te2,op,te3)
 		    else
 		    typing_error e3.java_pexpr_loc
@@ -1787,7 +1845,7 @@ let rec expr package_env type_env current_type env e =
 		      "integer expected"	
 	      | _ ->
 		  typing_error e1.java_pexpr_loc
-		    "not an array"	
+		    "not an array type"	
 	  end
 	  
       | JPEassign_field (_, _, _)-> assert false (* TODO *)
@@ -1799,7 +1857,8 @@ let rec expr package_env type_env current_type env e =
 		  begin
 		    match t.java_term_node with
 		      | JTvar vi ->
-			  if compatible_types te.java_expr_type vi.java_var_info_type
+			  if is_assignment_convertible te.java_expr_type e1 
+			    vi.java_var_info_type
 			  then 
 			    if op = Beq then
 			      (vi.java_var_info_type,
@@ -1812,7 +1871,7 @@ let rec expr package_env type_env current_type env e =
 			      print_type vi.java_var_info_type 
 			      print_type te.java_expr_type
 		      | JTfield_access(t,fi) ->
-			  if compatible_types te.java_expr_type 
+			  if is_assignment_convertible te.java_expr_type e1
 			    fi.java_field_info_type
 			  then 
 			    if op = Beq then
@@ -1943,7 +2002,7 @@ let type_initializer package_env type_env current_type env ty i =
   match ty,i with
     | _, Simple_initializer e ->
 	let te = expr package_env type_env current_type env e in	
-	if compatible_types ty te.java_expr_type then JIexpr te
+	if is_assignment_convertible te.java_expr_type e ty then JIexpr te
 	else
 	  typing_error e.java_pexpr_loc "type %a expected, got %a"
 	    print_type ty print_type te.java_expr_type
@@ -2038,7 +2097,7 @@ let rec statement package_env type_env current_type env s =
 	    try
 	      let te = exprt e in 
 	      let vi = List.assoc "\\result" env in
-	      if compatible_types te.java_expr_type vi.java_var_info_type then
+	      if is_assignment_convertible te.java_expr_type e vi.java_var_info_type then
 		JSreturn te
 	      else
 		begin
@@ -2160,8 +2219,10 @@ and switch_label package_env type_env current_type env t = function
   | Case e ->
       let te = expr package_env type_env current_type env e in
       match te.java_expr_type with
-	| JTYbase t' when subbasetype t' t -> Case te 
+	| JTYbase _ as t' when is_assignment_convertible t' e (JTYbase t) -> Case te 
+(*
 	| JTYbase Tinteger -> Case te
+*)
 	| _ ->
 	     typing_error e.java_pexpr_loc "type `%s' expected, got `%a'"
 		(string_of_base_type t) print_type te.java_expr_type
