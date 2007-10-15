@@ -62,6 +62,7 @@ let raw_term t = {
 let raw_asrt a = {
   jc_assertion_node = a;
   jc_assertion_loc = Loc.dummy_position;
+  jc_assertion_label = "";
 }
 
 let type_term t ty = {
@@ -85,30 +86,35 @@ let full_term t ty loc = {
 let full_asrt a loc = {
   jc_assertion_node = a;
   jc_assertion_loc = loc;
+  jc_assertion_label = "";
 }
 
 let raw_expr e = {
   jc_expr_node = e;
   jc_expr_type = unit_type;
   jc_expr_loc = Loc.dummy_position;
+  jc_expr_label = "";
 }
 
 let type_expr e ty = {
   jc_expr_node = e;
   jc_expr_type = ty;
   jc_expr_loc = Loc.dummy_position;
+  jc_expr_label = "";
 }
 
 let loc_expr e loc = {
   jc_expr_node = e;
   jc_expr_type = unit_type;
   jc_expr_loc = loc;
+  jc_expr_label = "";
 }
 
 let full_expr e ty loc = {
   jc_expr_node = e;
   jc_expr_type = ty;
   jc_expr_loc = loc;
+  jc_expr_label = "";
 }
 
 let equality_operator_for_type = function
