@@ -9,7 +9,7 @@
   @ }
   @*/
 
-/*@ predicate is_monochrome(int t[],int i, int j, int c) {
+/*@ predicate is_monochrome(int t[],integer i, integer j, int c) {
   @   \forall int k; i <= k && k < j ==> t[k] == c
   @ }
   @*/
@@ -28,7 +28,7 @@ class Flag {
       @ behavior decides_monochromatic:
       @   ensures \result <==> is_monochrome(t,i,j,c);
       @*/
-    private boolean isMonochrome(int i, int j, int c) {
+    public boolean isMonochrome(int i, int j, int c) {
     	/*@ loop_invariant i <= k && 
 	  @   (\forall int l; i <= l && l < k ==> t[l]==c);
     	  @ decreases j - k;

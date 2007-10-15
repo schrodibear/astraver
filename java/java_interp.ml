@@ -7,6 +7,7 @@ open Jc_ast
 open Java_env
 open Java_ast
 open Java_tast
+open Java_pervasives
 
 (*s locs table *)
 
@@ -85,40 +86,40 @@ let get_loop_counter =
 let byte_range =
   {
     jc_enum_info_name = "byte";
-    jc_enum_info_min = Num.num_of_string "-128";
-    jc_enum_info_max = Num.num_of_string "127";
+    jc_enum_info_min = min_byte;
+    jc_enum_info_max = max_byte;
   }
 
 (* short = int16 *)
 let short_range =
   {
     jc_enum_info_name = "short";
-    jc_enum_info_min = Num.num_of_string "-32768";
-    jc_enum_info_max = Num.num_of_string "32767";
+    jc_enum_info_min = min_short;
+    jc_enum_info_max = max_short;
   }
 
 (* int = int32 *)
 let int_range =
   {
     jc_enum_info_name = "int32";
-    jc_enum_info_min = Num.num_of_string "-2147483648";
-    jc_enum_info_max = Num.num_of_string "2147483647";
+    jc_enum_info_min = min_int;
+    jc_enum_info_max = max_int;
   }
 
 (* long = int64 *)
 let long_range =
   {
     jc_enum_info_name = "long";
-    jc_enum_info_min = Num.num_of_string "-9223372036854775808";
-    jc_enum_info_max = Num.num_of_string "9223372036854775807";
+    jc_enum_info_min = min_long;
+    jc_enum_info_max = max_long;
   }
 
 (* char = uint16 *)
 let char_range =
   {
     jc_enum_info_name = "char";
-    jc_enum_info_min = Num.num_of_string "0";
-    jc_enum_info_max = Num.num_of_string "65535";
+    jc_enum_info_min = min_char;
+    jc_enum_info_max = max_char;
   }
 
 let range_types acc =
@@ -810,12 +811,16 @@ let incr_op op =
     | Postdecr -> Postfix_dec
 
 let int_cast loc t e =
-   if Java_options.ignore_overflow || not (Java_typing.is_numeric t) then e 
-   else     
-     JCTErange_cast(int_range, { jc_texpr_loc = loc;
-				 jc_texpr_type = Jc_pervasives.integer_type;
-				 jc_texpr_label = "";
-				 jc_texpr_node = e })
+  if Java_options.ignore_overflow || 
+    match t with
+      | JTYbase Tint -> false
+      | _ -> true
+  then e 
+  else     
+    JCTErange_cast(int_range, { jc_texpr_loc = loc;
+				jc_texpr_type = Jc_pervasives.integer_type;
+				jc_texpr_label = "";
+				jc_texpr_node = e })
 
 let dummy_loc_expr ty e =
   { jc_texpr_loc = Loc.dummy_position; 

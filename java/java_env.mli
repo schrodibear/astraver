@@ -36,9 +36,6 @@ and java_field_info =
 *)
       java_field_info_is_static : bool;
       java_field_info_is_final : bool;
-(*
-      java_field_info_class_or_interface : java_env_entry;
-*)
       java_field_info_type : java_type;
 (*
       java_field_info_is_ghost : bool;
@@ -56,13 +53,7 @@ and method_info =
 (*
      method_info_accessibility : accessibility;
 *)
-(*
-     method_info_class_or_interface : java_env_entry;
-     mutable method_info_is_predicate : bool;
-     method_info_routine :  routine_entry;
-     method_info_sep_specs : string list;
-     mutable method_info_graph : java_env_entry list
-*)
+     method_info_class_or_interface : java_type_info;
      mutable method_info_has_this : java_var_info option;
      method_info_parameters : java_var_info list;
      method_info_result : java_var_info option ;

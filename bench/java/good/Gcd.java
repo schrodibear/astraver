@@ -30,7 +30,7 @@
   @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
   @*/
 
-static class Gcd {
+class Gcd {
 
     /*@ requires x >= 0 && y >= 0;
       @ behavior divides_both:

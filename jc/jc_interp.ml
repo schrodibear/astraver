@@ -760,11 +760,8 @@ and expr ~threats e : expr =
 	  [Deref tag; e1; Var (tag_name t)]
     | JCErange_cast(ri,e1) ->
 	let e1' = expr e1 in
-	if threats then 
-	  make_guarded_app ~name:e.jc_expr_label ArithOverflow loc 
-	    (fun_enum_of_int ri) [e1']
-	else
-	  make_app (safe_fun_enum_of_int ri) [e1']
+	coerce ~no_int_overflow:(not threats)
+	  e.jc_expr_label e.jc_expr_loc (JCTenum ri) e1.jc_expr_type e1'
     | JCEderef(e,fi) ->
 	if threats then
 	  match destruct_pointer e with

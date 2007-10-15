@@ -30,8 +30,24 @@ let null_type = JTYnull
 let unit_type = JTYbase Tunit
 let boolean_type = JTYbase Tboolean
 let integer_type = JTYbase Tinteger
+let int_type = JTYbase Tint
 let real_type = JTYbase Treal
+let double_type = JTYbase Tdouble
 
+let min_byte = Num.num_of_string "-128"
+let max_byte = Num.num_of_string "127"
+let min_short = Num.num_of_string "-32768"
+let max_short = Num.num_of_string "32767"
+let min_int = Num.num_of_string "-2147483648"
+let max_int = Num.num_of_string "2147483647"
+let min_long = Num.num_of_string "-9223372036854775808"
+let max_long = Num.num_of_string "9223372036854775807"
+let min_char = Num.num_of_string "0"
+let max_char = Num.num_of_string "65535"
+
+let in_byte_range n = Num.le_num min_byte n && Num.le_num n max_byte
+let in_short_range n = Num.le_num min_short n && Num.le_num n max_short
+let in_char_range n = Num.le_num min_char n && Num.le_num n max_char
 
 (*
 Local Variables: 

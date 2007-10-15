@@ -62,11 +62,17 @@ let typing_error l =
     (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
     str_formatter
 
-let integer_expected l = 
-  typing_error l "integer type expected"
+let integer_expected l t = 
+  typing_error l "integer type expected, got %a" print_type t
 
-let class_or_interface_expected l =
-  typing_error l "class or interface expected" 
+let array_expected l t = 
+  typing_error l "array type expected, got %a" print_type t
+
+let int_expected l t = 
+  typing_error l "int expected, got %a" print_type t
+
+let class_or_interface_expected l t =
+  typing_error l "class or interface expected, got %a" print_type t
 
 
 (**********************
@@ -276,7 +282,7 @@ let methods_env = Hashtbl.create 97
 
 let method_tag_counter = ref 0
 
-let new_method_info ~is_static id ty pars =
+let new_method_info ~is_static id ti ty pars =
   incr method_tag_counter;
   let result = 
       Option_misc.map (fun t -> new_var t "\\result") ty
@@ -284,6 +290,7 @@ let new_method_info ~is_static id ty pars =
   {
     method_info_tag = !method_tag_counter;
     method_info_name = id;
+    method_info_class_or_interface = ti;
     method_info_trans_name = id;
     method_info_has_this = None;
     method_info_parameters = pars;
@@ -445,10 +452,12 @@ and get_types cu =
     (fun (_,ti) ->
        match ti with
 	 | TypeClass ci ->
+(*
 	     eprintf "setting type env for class '%s' as:@\n" ci.class_info_name;
 	     List.iter
 	       (fun (id,_) -> eprintf "  %s@\n" id)
 	       type_env;
+*)
 	     Hashtbl.add class_type_env_table ci.class_info_tag 
 	       full_type_env
 	 | TypeInterface ii ->
@@ -515,10 +524,12 @@ and classify_name
 		      (* look for a type of that name 
 			 in the current compilation unit, or
 			 in another compilation unit of the current package *)
+(*
 		      eprintf "lookup id '%s' in type_env:@\n" id;
 		      List.iter
 			(fun (id,_) -> eprintf "  %s@\n" id)
 			type_env;
+*)
 		      let ti = List.assoc id type_env in
 		      TypeName ti 
 		    with Not_found ->
@@ -632,7 +643,7 @@ and classify_name
 		      if id="length" then
 			TermName {
 			  java_term_loc = loc;
-			  java_term_type = integer_type;
+			  java_term_type = int_type;
 			  java_term_node = JTarray_length(t)
 			}
 		      else
@@ -640,6 +651,7 @@ and classify_name
 			  "no such field in array type"
 		  | JTYnull | JTYbase _ ->
 		      class_or_interface_expected t.java_term_loc 
+			t.java_term_type
 	      end
 
 and type_type package_env type_env ty =
@@ -696,7 +708,9 @@ and type_param package_env type_env p =
 and method_header package_env type_env retty mdecl =
   match mdecl with
     | Simple_method_declarator(id,l) -> 
+(*
 	eprintf "get prototype for method %s@." (snd id);
+*)
 	id,(Option_misc.map (type_type package_env type_env) retty), 
 	List.map (type_param package_env type_env) l
     | Array_method_declarator d -> 
@@ -710,8 +724,8 @@ and method_header package_env type_env retty mdecl =
 and get_constructor_prototype package_env type_env current_type 
     req assigns behs head eci body =
   match current_type with
-    | None -> assert false
-    | Some cur ->
+    | TypeInterface _ -> assert false
+    | TypeClass cur ->
 	let id = head.constr_name in
 	let params = 
 	  List.map (type_param package_env type_env) 
@@ -731,7 +745,7 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	    head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let mi = new_method_info ~is_static (snd id) ret_ty params in
+	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
 	Hashtbl.add methods_env mi.method_info_tag (mi,None,None,[],body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
@@ -741,7 +755,7 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	    head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let mi = new_method_info ~is_static (snd id) ret_ty params in
+	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
 	Hashtbl.add methods_env mi.method_info_tag (mi,req,assigns,behs,body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
@@ -811,7 +825,7 @@ and get_class_prototypes package_env type_env ci d =
   let fields = List.fold_left (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
   ci.class_info_fields <- fields;
   let methods,constructors =
-    get_method_prototypes package_env type_env (Some ci) ([],[]) [] d.class_fields 
+    get_method_prototypes package_env type_env (TypeClass ci) ([],[]) [] d.class_fields 
   in
   ci.class_info_methods <- methods;
   ci.class_info_constructors <- constructors
@@ -874,7 +888,7 @@ and get_interface_prototypes package_env type_env ii d =
   in
   ii.interface_info_fields <- fields;
   let methods,constructors = 
-    get_method_prototypes  package_env type_env None ([],[]) [] d.interface_members
+    get_method_prototypes  package_env type_env (TypeInterface ii) ([],[]) [] d.interface_members
   in
   ii.interface_info_methods <- methods 
 
@@ -995,65 +1009,65 @@ let logic_info id ty pars =
     
 
 
-let lit l =
-  match l with
-    | Integer s -> integer_type,l
-    | Char s -> assert false (* TODO *)
-    | String s -> assert false (* TODO *)
-    | Bool b -> boolean_type,l
-    | Float s -> real_type,l
-    | Null -> null_type,l
-
-let int_type t =
-  match t with
-    | JTYbase t -> 
-	begin
-	  match t with
-	    | Tchar | Tshort | Tbyte | Tint -> t
-	    | Tlong | Tdouble | Tfloat | Treal | Tinteger
-	    | Tboolean | Tunit -> raise Not_found
-	end
-    | _ -> raise Not_found
-
-let integer_type t =
-  match t with
-    | JTYbase t -> 
-	begin
-	  match t with
-	    | Tchar | Tshort | Tbyte | Tint | Tinteger | Tlong -> t
-	    | Tdouble | Tfloat | Treal 
-	    | Tboolean | Tunit -> raise Not_found
-	end
-    | _ -> raise Not_found
-
 let is_boolean t =
   match t with
     | JTYbase Tboolean -> true
     | _ -> false
 
-let is_numeric t =
+
+(* JLS 5.6.1: Unary Numeric Promotion *)
+let unary_numeric_promotion t =
   match t with
     | JTYbase t -> 
 	begin
 	  match t with
-	    | Tinteger | Tshort | Tbyte | Tint | Tlong -> true
-	    | Treal | Tdouble | Tfloat -> true
-	    | Tchar -> assert false (* TODO *)
-	    | Tboolean | Tunit -> false
+	    | Treal | Tinteger -> assert false
+	    | Tchar | Tbyte | Tshort -> Tint
+	    | _ -> t
 	end
-    | _ -> false
-
-let lub_numeric_types t1 t2 =
-  match t1,t2 with
-  | JTYbase t1,JTYbase t2 -> 
-      begin
-	match t1,t2 with
-	| (Treal | Tdouble | Tfloat),_ 
-	| _, (Treal | Tdouble | Tfloat) -> Treal
-	| _ -> Tinteger
-	      
-      end
     | _ -> assert false
+
+let logic_unary_numeric_promotion t =
+  match t with
+    | JTYbase t -> 
+	begin
+	  match t with
+	    | Treal | Tdouble | Tfloat -> Treal
+	    | _ -> Tinteger		
+	end
+    | _ -> assert false
+
+(* JLS 5.6.2: Binary Numeric Promotion *)
+let binary_numeric_promotion t1 t2 =
+  match t1,t2 with
+    | JTYbase t1,JTYbase t2 -> 
+	begin
+	  match t1,t2 with
+	    | (Treal | Tinteger), _ 
+	    | _, (Treal | Tinteger) -> assert false
+	    | (Tboolean | Tunit),_
+	    | _, (Tboolean | Tunit) -> raise Not_found
+	    | Tdouble,_ | _, Tdouble -> Tdouble
+	    | Tfloat,_ | _, Tfloat -> Tfloat
+	    | Tlong,_ | _, Tlong -> Tlong
+	    | (Tshort | Tbyte | Tint | Tchar),
+		(Tshort | Tbyte | Tint | Tchar) -> Tint		
+	end
+    | _ -> raise Not_found
+
+let logic_binary_numeric_promotion t1 t2 =
+  match t1,t2 with
+    | JTYbase t1,JTYbase t2 -> 
+	begin
+	  match t1,t2 with
+	    | (Tboolean | Tunit),_
+	    | _, (Tboolean | Tunit) -> raise Not_found
+	    | (Treal | Tdouble | Tfloat),_ 
+	    | _, (Treal | Tdouble | Tfloat) -> Treal
+	    | _ -> Tinteger		
+	end
+    | _ -> raise Not_found
+
 
 
 let is_object t =
@@ -1063,43 +1077,6 @@ let is_object t =
 
 let lub_object_types t1 t2 = JTYnull
   
-(*
-let subbasetype t1 t2 =
-  match t1,t2 with
-    | (Tint|Tshort|Tchar|Tbyte|Tlong|Tinteger), Tinteger -> true
-    | (Tfloat|Tdouble|Treal), Treal -> true
-    | (Tshort|Tchar|Tbyte|Tint), Tint -> true
-    | (Tshort|Tbyte), Tshort -> true
-    | Tchar, Tchar -> true
-    | _ -> false
-*)
-
-(*
-let subtype t1 t2 =
-  match t1,t2 with
-    | JTYbase t1, JTYbase t2 -> subbasetype t1 t2
-    | _ -> assert false (* TODO *)
-*)
-
-(*
-let compatible_base_types t1 t2 = true
-
-let rec compatible_types t1 t2 =
-  match t1,t2 with
-    | JTYbase t1, JTYbase t2 -> compatible_base_types t1 t2
-    | JTYbase _, _ | _, JTYbase _ -> false
-    | _, JTYnull | JTYnull,  _ -> true
-    | JTYarray t1, JTYarray t2 -> compatible_types t1 t2
-    | JTYclass(_,c1), JTYclass(_,c2) -> 
-	if c1 == c2 then true else
-	  assert false
-    | JTYinterface i1, JTYinterface i2 -> 
-	if i1 == i2 then true else
-	  assert false
-    | JTYclass _, JTYarray _ -> assert false
-    | JTYarray _, JTYclass _ -> assert false
-    | _ -> assert false
-*)
 
 let rec is_subclass c1 c2 =
   c1 == c2 ||
@@ -1122,8 +1099,14 @@ let rec implements c i =
       | Some c -> implements c i
 
 (* JLS 5.1.1: Identity Conversion *)
-let is_identity_convertible tfrom tto =
-  tfrom = tto
+let rec is_identity_convertible tfrom tto =
+  match tfrom, tto with
+    | JTYbase t1, JTYbase t2 -> t1=t2
+    | JTYclass(_,c1), JTYclass(_,c2) -> c1 == c2
+    | JTYinterface i1, JTYinterface i2 -> i1 == i2
+    | JTYarray t1, JTYarray t2 -> is_identity_convertible t1 t2
+    | JTYnull, JTYnull -> true
+    | _ -> false
 
 (* JLS 5.1.2: Widening Primitive Conversion *)
 let is_widening_primitive_convertible tfrom tto =
@@ -1134,6 +1117,19 @@ let is_widening_primitive_convertible tfrom tto =
     | Tint, (Tlong | Tfloat | Tdouble) -> true
     | Tlong, (Tfloat | Tdouble) -> true
     | Tfloat, Tdouble -> true
+    | _ -> false
+
+let is_logic_widening_primitive_convertible tfrom tto =
+  match tfrom,tto with
+    | Tbyte, (Tshort | Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) 
+	-> true
+    | Tshort, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tchar, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tint, (Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tlong, (Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tfloat, (Tdouble | Treal) -> true
+    | Tinteger, Treal -> true
+    | Tdouble, Treal -> true
     | _ -> false
 
 (* JLS 5.1.4: Widening Refernce Conversion *)
@@ -1162,7 +1158,17 @@ let is_assignment_convertible tfrom efrom tto =
 	  begin
 	    match t2,efrom.java_pexpr_node with
 	      | (Tbyte | Tshort | Tchar), JPElit (Integer s) ->
-		  assert false (* TODO *)
+		  begin
+		    try
+		      let n = Num.num_of_string s in
+		      match t2 with
+			| Tbyte -> in_byte_range n
+			| Tshort -> in_short_range n
+			| Tchar -> in_char_range n
+			| _ -> assert false
+		    with Failure "num_of_string" ->
+		      typing_error efrom.java_pexpr_loc "evaluation of integer constant failed"
+		  end
 	      | (Tbyte | Tshort | Tchar), JPElit (Char s) ->
 		  assert false (* TODO *)
 	      | _ -> false
@@ -1176,6 +1182,20 @@ let is_method_invocation_convertible tfrom tto =
     | JTYbase t1, JTYbase t2 -> is_widening_primitive_convertible t1 t2
     | _ -> is_widening_reference_convertible tfrom tto
 
+let is_logic_call_convertible tfrom tto =
+  is_identity_convertible tfrom tto ||
+  match tfrom,tto with
+    | JTYbase t1, JTYbase t2 -> is_logic_widening_primitive_convertible t1 t2
+    | _ -> is_widening_reference_convertible tfrom tto
+
+(* JLS 5.5: Cast conversion *)
+
+let cast_convertible tfrom tto =
+  is_identity_convertible tfrom tto ||
+    match tfrom,tto with
+      | JTYbase t1, JTYbase t2 -> true
+      | _ -> assert false (* TODO *)
+  
 (**********************)
 let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
@@ -1184,20 +1204,31 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
 	assert false (* TODO *)
     | Bsub | Badd | Bmod | Bdiv | Bmul ->
-	if is_numeric t1 && is_numeric t2 then
-	  let t = lub_numeric_types t1 t2 in
+	try
+	  let t = logic_binary_numeric_promotion t1 t2 in
 	  (JTYbase t,
 	   JTbin(e1,t,op,e2))
-	else typing_error loc "numeric types expected for +,-,*, / and %%"
+	with Not_found ->
+	  typing_error loc "numeric types expected for +,-,*, / and %%"
 
 let make_logic_un_op loc op t1 e1 = 
   match op with
     | Uplus ->
-	if is_numeric t1 then t1, e1.java_term_node
-	else typing_error loc "numeric type expected for unary +"
+	begin
+	  try 
+	    let t = logic_unary_numeric_promotion t1 in
+	    JTYbase t, e1.java_term_node
+	  with Not_found ->
+	    typing_error loc "numeric type expected for unary +"
+	end
     | Uminus ->
-	if is_numeric t1 then t1, JTun (lub_numeric_types t1 t1, op, e1)
-	else typing_error loc "numeric type expected for unary -"
+	begin
+	  try
+	    let t = logic_unary_numeric_promotion t1 in
+	    JTYbase t, JTun (t, op, e1)
+	  with Not_found ->
+	    typing_error loc "numeric type expected for unary -"
+	end
     | Ucompl ->
 	assert false (*TODO*)
     | Unot ->
@@ -1218,7 +1249,16 @@ let rec term package_env type_env current_type env e =
   let ty,tt =
     match e.java_pexpr_node with
       | JPElit l -> 
-	  let ty,l = lit l in ty,(JTlit l)
+	  let ty,l = 
+	    match l with
+	      | Integer s -> integer_type,l
+	      | Char s -> assert false (* TODO *)
+	      | String s -> assert false (* TODO *)
+	      | Bool b -> boolean_type,l
+	      | Float s -> real_type,l
+	      | Null -> null_type,l
+	  in
+	  ty,(JTlit l)
       | JPEname n ->
 	  begin
 	    match classify_name package_env type_env current_type env n with
@@ -1263,30 +1303,49 @@ let rec term package_env type_env current_type env e =
 	  begin
 	    match te1.java_term_type with
 	      | JTYarray t ->
-		  if is_numeric te2.java_term_type then
-		    t, JTarray_access(te1,te2)
-		  else
-		    typing_error e2.java_pexpr_loc
-		      "integer expected"	
+		  begin
+		    try 
+		      match 
+			logic_unary_numeric_promotion te2.java_term_type 
+		      with 
+			| Tinteger -> t, JTarray_access(te1,te2)
+			| _ -> raise Not_found
+		    with Not_found ->
+		      integer_expected e2.java_pexpr_loc te2.java_term_type
+		  end	
 	      | _ ->
-		  typing_error e1.java_pexpr_loc
-		    "not an array"	
+		  array_expected e1.java_pexpr_loc te1.java_term_type
 	  end
       | JPEarray_range (e1, e2, e3)->
 	  let te1 = termt e1 and te2 = termt e2 and te3 = termt e3 in 
 	  begin
 	    match te1.java_term_type with
 	      | JTYarray t ->
-		  if is_numeric te2.java_term_type then 
-		    if is_numeric te3.java_term_type then
-		      t, JTarray_range(te1,te2, te3)
-		    else
-		      integer_expected e3.java_pexpr_loc
-		  else
-		    integer_expected e2.java_pexpr_loc
+		  begin
+		    try
+		      match  
+			logic_unary_numeric_promotion te2.java_term_type 
+		      with
+			| Tinteger ->
+			    begin
+			      try
+				match  
+				  logic_unary_numeric_promotion 
+				    te3.java_term_type 
+				with
+				  | Tinteger ->
+				      t, JTarray_range(te1,te2, te3)
+				  | _ -> raise Not_found
+			      with Not_found ->
+				integer_expected e3.java_pexpr_loc 
+				  te3.java_term_type
+			    end
+			| _ -> raise Not_found
+		    with Not_found ->
+		      integer_expected e2.java_pexpr_loc te2.java_term_type
+		  end
 	      | _ ->
-		  typing_error e1.java_pexpr_loc
-		    "not an array"	
+		  array_expected e1.java_pexpr_loc te1.java_term_type
 	  end
       | JPEnew_array _-> assert false (* TODO *)
       | JPEnew (_, _)-> assert false (* TODO *)
@@ -1357,19 +1416,24 @@ let rec term package_env type_env current_type env e =
 let make_predicate_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble ->
-	if is_numeric t1 && is_numeric t2 then
-	  let t = lub_numeric_types t1 t2 in
-	  JAbin(e1,t,op,e2)
-	else typing_error loc "numeric types expected for >,<,>= and <="
+	begin
+	  try 
+	    let t = logic_binary_numeric_promotion t1 t2 in
+	    JAbin(e1,t,op,e2)
+	  with Not_found ->
+	    typing_error loc "numeric types expected for >,<,>= and <="
+	end
     | Beq | Bne ->
-	if is_numeric t1 && is_numeric t2 then
-	  let t = lub_numeric_types t1 t2 in
-	  JAbin(e1,t,op,e2)
-	else 
-	  if is_object t1 && is_object t2 then
-	    JAbin_obj(e1,op,e2)
-	  else 
-	    typing_error loc "numeric or object types expected for == and !="
+	begin
+	  try
+	    let t = logic_binary_numeric_promotion t1 t2 in
+	    JAbin(e1,t,op,e2)
+	  with Not_found -> 
+	    if is_object t1 && is_object t2 then
+	      JAbin_obj(e1,op,e2)
+	    else
+	      typing_error loc "numeric or object types expected for == and !="
+	end
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
 	assert false (* TODO *)
     | Bsub | Badd | Bmod | Bdiv | Bmul ->
@@ -1434,11 +1498,11 @@ let rec assertion package_env type_env current_type env e =
 		  (fun vi e ->
 		     let ty = vi.java_var_info_type in
 		     let te = termt e in
-		     if is_method_invocation_convertible te.java_term_type ty then te
+		     if is_logic_call_convertible te.java_term_type ty then te
 		     else
 		       typing_error e.java_pexpr_loc 
-			 "type %a expected" 
-			 print_type ty) 
+			 "type %a expected, got %a" 
+			 print_type ty print_type te.java_term_type) 
 		  fi.java_logic_info_parameters args
 	      with  Invalid_argument _ ->
 		typing_error e.java_pexpr_loc 
@@ -1504,33 +1568,43 @@ and make_quantified_formula loc q ty idl package_env type_env current_type env e
 let make_bin_op loc op t1 e1 t2 e2 =
     match op with
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
-	if is_numeric t1 && is_numeric t2 then
-	  let _t = lub_numeric_types t1 t2 in
-	  Tboolean,
-	  JEbin((*coerce t1 t*) e1, op, (*coerce t2 t*) e2)
-	else
-	  typing_error loc "numeric types expected"
+	begin
+	  try
+	    let _t = binary_numeric_promotion t1 t2 in
+	    Tboolean,
+	    JEbin(e1, op, e2)
+	  with Not_found ->
+	    typing_error loc "numeric types expected"
+	end
     | Badd | Bsub | Bmul | Bdiv | Bmod ->
-	if is_numeric t1 && is_numeric t2 then
-	  let t = lub_numeric_types t1 t2 in
-	  t,
-	  JEbin((*coerce t1 t*) e1, op, (* coerce t2 t*) e2)
-	else
-	  typing_error loc "numeric types expected for +, -, *, / and %%"
+	begin
+	  try
+	    let t = binary_numeric_promotion t1 t2 in
+	    t,JEbin(e1, op, e2)
+	  with Not_found ->
+	    typing_error loc "numeric types expected for +, -, *, / and %%"
+	end
     | Band | Bor -> 
 	if is_boolean t1 && is_boolean t2 then
 	  Tboolean,JEbin(e1,op,e2)
 	else
 	  typing_error loc "booleans expected"
-	(* not allowed as expression op *)
     | Basr|Blsr|Blsl -> 
+	(* JLS 15.19: Shift Operators *)
 	begin
 	  try
-	    let t1 = integer_type t1 in
-	    let _t2 = integer_type t2 in
-	    t1, JEbin(e1, op, e2)
-	  with Not_found ->
-	    typing_error loc "integers expected"
+	    match unary_numeric_promotion t1 with
+	      | (Tint | Tlong) as t1 ->
+		  begin
+		    try
+		      match unary_numeric_promotion t2 with
+			| Tint | Tlong ->
+			    t1, JEbin(e1, op, e2)
+			| _ -> raise Not_found
+		    with Not_found -> int_expected loc t2
+		  end
+	      | _ -> raise Not_found
+	  with Not_found -> int_expected loc t1
 	end
     | Bbwxor|Bbwor|Bbwand -> 	
 	if is_boolean t1 && is_boolean t2 then
@@ -1538,13 +1612,12 @@ let make_bin_op loc op t1 e1 t2 e2 =
 	else
 	  begin
 	    try
-	      let t1 = integer_type t1 in
-	      let _t2 = integer_type t2 in
+	      let t1 = unary_numeric_promotion t1 in
+	      let _t2 = unary_numeric_promotion t2 in
 	      t1, JEbin(e1, op, e2)
 	    with Not_found ->
 	      typing_error loc "booleans or integers expected"
-	  end
-	  
+	  end	  
     | Bimpl | Biff -> assert false
 
 let make_unary_op loc op t1 e1 =
@@ -1556,12 +1629,14 @@ let make_unary_op loc op t1 e1 =
 	  typing_error loc "boolean expected"
     | Ucompl-> assert false
     | Uminus-> 
-	if is_numeric t1 then
-	  let t = lub_numeric_types t1 t1 in
-	  t,JEun(op, e1)
-	else
-	  typing_error loc "numeric types expected for -"
-      | Uplus -> assert false
+	begin
+	  try
+	    let t = unary_numeric_promotion t1 in
+	    t,JEun(op, e1)
+	  with Not_found ->
+	    typing_error loc "numeric type expected for -"
+	end
+    | Uplus -> assert false
 
 let expr_var loc vi =
   { java_expr_node = JEvar vi; 
@@ -1651,6 +1726,14 @@ let lookup_method ti (loc,id) arg_types =
     | [] -> raise Not_found
     | [mi] -> mi
     | _ -> 
+	eprintf "possible calls:@.";
+	List.iter (fun mi ->
+		     eprintf "%a.%s(%a)@." 
+		       print_type_name mi.method_info_class_or_interface
+		       mi.method_info_name
+		       (Pp.print_list Pp.comma (fun fmt vi -> print_type fmt vi.java_var_info_type)) 
+		       mi.method_info_parameters)
+	  meths;
 	typing_error loc "overloading/overriding not yet supported"
 
 let lookup_constructor ci arg_types = 
@@ -1661,7 +1744,16 @@ let rec expr package_env type_env current_type env e =
   let exprt = expr package_env type_env current_type env in
   let ty,te = 
     match e.java_pexpr_node with
-      | JPElit l -> let t,l = lit l in t,(JElit l)
+      | JPElit l -> 
+	  let t,l = 
+	    match l with
+	      | Integer s -> int_type,l
+	      | Char s -> assert false (* TODO *)
+	      | String s -> assert false (* TODO *)
+	      | Bool b -> boolean_type,l
+	      | Float s -> double_type,l
+	      | Null -> null_type,l
+	  in t,(JElit l)
       | JPEname n -> 
 	  begin
 	    match classify_name package_env type_env current_type env n with
@@ -1682,31 +1774,39 @@ let rec expr package_env type_env current_type env e =
       | JPEcast (t, e1)-> 
 	  let te1 = exprt e1 in
 	  let ty = type_type package_env type_env t in
-	  (* TODO: check if cast is allowed *)
-	  ty,JEcast(ty,te1)
+	  if cast_convertible te1.java_expr_type ty then
+	    ty,JEcast(ty,te1)
+	  else
+	    typing_error e.java_pexpr_loc "invalid cast"
       | JPEarray_access (e1, e2)-> 
 	  let te1 = exprt e1 and te2 = exprt e2 in 
 	  begin
 	    match te1.java_expr_type with
 	      | JTYarray t ->
-		  if is_numeric te2.java_expr_type then
-		    t, JEarray_access(te1,te2)
-		  else
-		    typing_error e2.java_pexpr_loc
-		      "integer expected"	
+		  begin
+		    try
+		      match
+			unary_numeric_promotion te2.java_expr_type 
+		      with
+			| Tint -> t, JEarray_access(te1,te2)
+			| _ -> raise Not_found
+		    with
+			Not_found ->
+			  int_expected e2.java_pexpr_loc te1.java_expr_type
+		  end
 	      | _ ->
-		  typing_error e1.java_pexpr_loc
-		    "not an array"	
+		  array_expected e1.java_pexpr_loc te1.java_expr_type
 	  end
       | JPEnew_array(t,dims) ->
 	  let ty = type_type package_env type_env t in 
 	  let l =
 	    List.map (fun e ->
 			let te = exprt e in
-			if is_numeric te.java_expr_type then te
-			else 
-			  typing_error e.java_pexpr_loc
-			    "integer expected")	
+			match unary_numeric_promotion te.java_expr_type with
+			  | Tint ->
+			      te
+			  | _ ->
+			      int_expected e.java_pexpr_loc te.java_expr_type)
 	      dims
 	  in
 	  JTYarray ty, JEnew_array(ty,l)
@@ -1724,7 +1824,6 @@ let rec expr package_env type_env current_type env e =
 	  end	  
       | JPEsuper_call (_, _)-> assert false (* TODO *)
       | JPEcall_name (qid, args)-> 
-	  eprintf "method call name@.";
 	  let args = List.map exprt args in
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in
 	  let ti,id,te1 =
@@ -1834,18 +1933,24 @@ let rec expr package_env type_env current_type env e =
 	  begin
 	    match te1.java_expr_type with
 	      | JTYarray t ->
-		  if is_numeric te2.java_expr_type then
-		    if is_assignment_convertible te3.java_expr_type e3 t then
-		      t, JEassign_array_op(te1,te2,op,te3)
-		    else
-		    typing_error e3.java_pexpr_loc
-		      "type `%a' expected" print_type t	
-		  else
-		    typing_error e2.java_pexpr_loc
-		      "integer expected"	
+		  begin
+		    try 
+		      match unary_numeric_promotion te2.java_expr_type with
+			| Tint ->
+			    if is_assignment_convertible 
+			      te3.java_expr_type e3 t 
+			    then
+			      t, JEassign_array_op(te1,te2,op,te3)
+			    else
+			      typing_error e3.java_pexpr_loc
+				"type `%a' expected" print_type t	
+			| _ -> raise Not_found
+		    with
+			Not_found ->
+			  int_expected e2.java_pexpr_loc te2.java_expr_type
+		  end
 	      | _ ->
-		  typing_error e1.java_pexpr_loc
-		    "not an array type"	
+		  array_expected e1.java_pexpr_loc te1.java_expr_type
 	  end
 	  
       | JPEassign_field (_, _, _)-> assert false (* TODO *)
@@ -1857,33 +1962,51 @@ let rec expr package_env type_env current_type env e =
 		  begin
 		    match t.java_term_node with
 		      | JTvar vi ->
-			  if is_assignment_convertible te.java_expr_type e1 
-			    vi.java_var_info_type
-			  then 
-			    if op = Beq then
+			  if op = Beq then
+			    if is_assignment_convertible te.java_expr_type e1 
+			      vi.java_var_info_type
+			    then 
 			      (vi.java_var_info_type,
 			       JEassign_local_var(vi,te))
-			    else 
+			    else
+			      typing_error e.java_pexpr_loc 
+				"type %a expected, got %a" 
+				print_type vi.java_var_info_type 
+				print_type te.java_expr_type
+			  else 
+			    if cast_convertible te.java_expr_type 
+			      vi.java_var_info_type
+			    then 
 			      (vi.java_var_info_type,
 			       JEassign_local_var_op(vi,op,te))
-			  else
-			    typing_error e.java_pexpr_loc "type %a expected, got %a" 
-			      print_type vi.java_var_info_type 
+			    else
+			      typing_error e.java_pexpr_loc 
+				"type %a expected, got %a" 
+				print_type vi.java_var_info_type 
 			      print_type te.java_expr_type
 		      | JTfield_access(t,fi) ->
-			  if is_assignment_convertible te.java_expr_type e1
-			    fi.java_field_info_type
-			  then 
-			    if op = Beq then
+			  if op = Beq then
+			    if is_assignment_convertible te.java_expr_type e1
+			      fi.java_field_info_type
+			    then 
 			      (fi.java_field_info_type,
 			       JEassign_field(expr_of_term t,fi,te))
-			    else 
+			    else
+			      typing_error e.java_pexpr_loc 
+				"type %a expected, got %a" 
+				print_type fi.java_field_info_type 
+				print_type te.java_expr_type
+			  else 
+			    if cast_convertible te.java_expr_type 
+			      fi.java_field_info_type
+			    then 
 			      (fi.java_field_info_type,
 			       JEassign_field_op(expr_of_term t,fi,op,te))
-			  else
-			    typing_error e.java_pexpr_loc "type %a expected, got %a" 
-			      print_type fi.java_field_info_type 
-			      print_type te.java_expr_type
+			    else
+			      typing_error e.java_pexpr_loc 
+				"type %a expected, got %a" 
+				print_type fi.java_field_info_type 
+				print_type te.java_expr_type
 		      | _ -> assert false (* TODO *)
 		  end
 	      | TypeName _ ->
@@ -2067,7 +2190,7 @@ let rec statement package_env type_env current_type env s =
 	  (* JSL, p289: switch expr must be char, byte, short or int *)
 	  begin
 	    try 
-	      let t = int_type te.java_expr_type in
+	      let t = unary_numeric_promotion te.java_expr_type in
 	      JSswitch(te,List.map (switch_case package_env type_env current_type env t) l)
 	    with Not_found ->
 	      typing_error e.java_pexpr_loc "char, byte, short or int expected"
@@ -2100,14 +2223,8 @@ let rec statement package_env type_env current_type env s =
 	      if is_assignment_convertible te.java_expr_type e vi.java_var_info_type then
 		JSreturn te
 	      else
-		begin
-		  try
-		    JSreturn ((* restrict t vi.jc_var_info_type*) te)
-		  with
-		      Invalid_argument _ ->
-			typing_error s.java_pstatement_loc "type '%a' expected"
-			  print_type vi.java_var_info_type
-		end
+		typing_error e.java_pexpr_loc "type %a expected, got %a"
+		  print_type vi.java_var_info_type print_type te.java_expr_type
 	    with
 		Not_found ->
 		  typing_error e.java_pexpr_loc "no result expected"

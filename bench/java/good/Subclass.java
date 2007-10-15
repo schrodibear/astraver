@@ -1,13 +1,13 @@
 
 
-public class A {
+class A {
     
     int x;
 
 }
 
 
-public class B extends A {
+class B extends A {
 
     int m() {
 	return x;

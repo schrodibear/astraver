@@ -1,6 +1,8 @@
 
 class NoCreditException extends Exception {
 
+    static final long serialVersionUID = 0L;
+
 }
 
 public class Purse {

@@ -108,7 +108,8 @@ PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
-            jc/jc_version.ml jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
+            jc/jc_version.ml jc/numconst.ml \
+	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
 	    jc/jc_ai.ml \
 	    java/java_version.ml \
 	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
@@ -233,7 +234,7 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 JCCMO = @ATPCMO@ \
 	src/lib.cmo src/rc.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_common_options.cmo jc/jc_options.cmo \
-	jc/jc_envset.cmo jc/jc_pervasives.cmo \
+	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_typing.cmo jc/jc_norm.cmo jc/jc_output.cmo \
 	jc/jc_ai.cmo \

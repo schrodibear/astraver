@@ -1,12 +1,12 @@
 
-class A {
+class VA {
 
     int n;
 }
 
-class B {
+class VB {
 
-    int m(A x) {
+    int m(VA x) {
 	return x.n;
     }
 
@@ -16,7 +16,7 @@ class B {
     }
 
     int main() {
-	A y = new A();
+	VA y = new VA();
 	int[] t = new int[3];
 	m1(t);
 	return m(y);

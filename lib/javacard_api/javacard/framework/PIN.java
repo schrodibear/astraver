@@ -1,5 +1,5 @@
 /*
-* $Workfile: PIN.java $	$Revision: 1.3 $, $Date: 2007-09-28 13:41:14 $
+* $Workfile: PIN.java $	$Revision: 1.4 $, $Date: 2007-10-15 09:19:27 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: PIN.java $
-// $Revision: 1.3 $
-// $Date: 2007-09-28 13:41:14 $
+// $Revision: 1.4 $
+// $Date: 2007-10-15 09:19:27 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/framework/PIN.java $
 // $Modtime: 5/02/00 7:13p $
@@ -68,9 +68,6 @@ public interface PIN {
    * @return the number of times remaining
    */
 
-    /* @ public normal_behavior
-      @   ensures true;
-      @*/
    byte getTriesRemaining();
 
   /**
@@ -101,9 +98,6 @@ public interface PIN {
    * @exception java.lang.NullPointerException - if <code>pin</code> is <code>null</code> 
    */
 
-    /* @ public normal_behavior
-      @   ensures true;
-      @*/
   public boolean check(byte[] pin, short offset, byte length)
       throws ArrayIndexOutOfBoundsException, NullPointerException;
 
@@ -114,9 +108,6 @@ public interface PIN {
    * @return <code>true</code> if validated; <code>false</code> otherwise
    */
 
-    /* @ public normal_behavior
-      @   ensures true;
-      @*/
    boolean isValidated();
 
   /**
@@ -124,8 +115,5 @@ public interface PIN {
    * If the validated flag is not set, this method does nothing.
    */
 
-    /* @ public normal_behavior
-      @   ensures true;
-      @*/
    void reset();
 }
