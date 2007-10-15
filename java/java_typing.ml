@@ -2515,6 +2515,58 @@ let type_constr_spec_and_body package_env type_env current_type ci =
 
 
 
+let final_field_values_table : (int, Num.num) Hashtbl.t 
+    = Hashtbl.create 97
+
+let rec eval_const_expression e =
+  match e.java_expr_node with
+    | JElit c ->
+	begin
+	  match c with
+	    | Integer s -> Numconst.integer s
+	    | _ -> assert false (* TODO *)
+	end
+    | JEcast(ty,e) -> 
+	let n = eval_const_expression e in
+	begin
+	  match ty with
+	    | JTYbase t ->
+		begin
+		  match t with
+		    | Tbyte -> if in_byte_range n then n else
+			typing_error e.java_expr_loc "outside the byte range: %s" (Num.string_of_num n)
+		    | Tunit|Treal|Tinteger|Tdouble|Tlong|Tfloat|Tint|Tchar|Tboolean|Tshort -> assert false (* TODO *)
+		end
+	    | JTYarray _|JTYinterface _|JTYclass (_, _)|JTYnull -> raise Not_found
+	end
+    | JEbin(e1,op,e2) -> 
+	let n1 = eval_const_expression e1 in
+	let n2 = eval_const_expression e2 in
+	begin
+	  match op with
+	    | Badd -> Num.add_num n1 n2
+	    | Bge|Ble|Blt|Bgt|Bne|Beq|Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *)
+
+	end
+    | JEstatic_field_access (_, _)
+    | JEif (_, _, _)-> assert false  (* TODO *)
+    | JEun (_, _) -> assert false  (* TODO *)
+    | JEvar _ 
+    | JEnew_object (_, _)
+    | JEnew_array (_, _)
+    | JEstatic_call (_, _)
+    | JEcall (_, _, _)
+    | JEassign_array_op (_, _, _, _)
+    | JEassign_field_op (_, _, _, _)
+    | JEassign_field (_, _, _)
+    | JEassign_local_var_op (_, _, _)
+    | JEassign_local_var (_, _)
+    | JEarray_access (_, _)
+    | JEarray_length _
+    | JEfield_access (_, _)
+    | JEincr_field (_, _, _)
+    | JEincr_local_var (_, _) -> raise Not_found
+
 let type_field_initializer package_env type_env ci fi =
   let init = 
     try
@@ -2522,7 +2574,29 @@ let type_field_initializer package_env type_env ci fi =
     with Not_found -> assert false
   in
   let tinit = 
-    Option_misc.map (type_initializer package_env type_env (Some ci) [] fi.java_field_info_type) init 
+    match init with
+      | None -> None
+      | Some i ->
+	  let ti = 
+	    type_initializer package_env type_env (Some ci) [] 
+	      fi.java_field_info_type i
+	  in
+	  if fi.java_field_info_is_final then
+	    begin
+	      match ti with
+		| JIexpr e ->
+		    begin
+		      try
+			let v = eval_const_expression e in
+			Hashtbl.add final_field_values_table 
+			  fi.java_field_info_tag v
+		      with
+			  Not_found ->
+			    typing_error e.java_expr_loc "cannot evaluate this initializer"
+		    end
+		| JIlist _ -> assert false (* TODO *)
+	    end;
+	  Some ti
   in
   Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
   
