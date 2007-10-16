@@ -429,6 +429,8 @@ logic lsl : int,int -> int
 
 logic lsr : int,int -> int
 
+logic asr : int,int -> int
+
 
 (*******************
 

@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: numconst.mli,v 1.1 2007-10-15 09:19:27 marche Exp $ i*)
+(*i $Id: numconst.mli,v 1.2 2007-10-16 07:35:12 marche Exp $ i*)
 
 (* Evaluation of constant literals: superset of C and Java
 
@@ -48,6 +48,8 @@
   extended chars a la C: 'L''"'[^'"']*'"' (TODO)
 
 *)
+
+val zero : Num.num
 
 val integer : string -> Num.num
 

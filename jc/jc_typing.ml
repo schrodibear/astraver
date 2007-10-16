@@ -255,7 +255,8 @@ let bin_op t op =
     | _, BPbw_and -> Bbw_and
     | _, BPbw_or -> Bbw_or
     | _, BPbw_xor -> Bbw_xor
-    | _, BPshift_right -> Bshift_right
+    | _, BPlogical_shift_right -> Blogical_shift_right
+    | _, BParith_shift_right -> Barith_shift_right
     | _, BPshift_left -> Bshift_left
 
     | _, BPland -> assert false
@@ -414,7 +415,7 @@ let make_logic_bin_op loc op e1 e2 =
 	else
 	  typing_error loc "unexpected types for -"
     | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
-    | BPshift_right | BPshift_left ->
+    | BPlogical_shift_right | BParith_shift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  (JCTnative t,
@@ -678,7 +679,7 @@ let make_rel_bin_op loc op e1 e2 =
 	    typing_error loc "terms should have the same type for == and !="
 	(* non propositional operators *)
     | BPadd | BPsub | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor
-    | BPshift_right | BPshift_left 
+    | BPlogical_shift_right | BParith_shift_right | BPshift_left 
 	-> assert false
 	(* already recognized as connectives *)
     | BPland | BPlor -> assert false 
@@ -995,13 +996,13 @@ let make_bin_op loc op e1 e2 =
 	else
 	  typing_error loc "unexpected types for -"
     | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
-    | BPshift_right | BPshift_left ->
+    | BPlogical_shift_right | BParith_shift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative t,
 	  JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
-	  typing_error loc "numeric types expected for *, / and %%"
+	  typing_error loc "numeric types expected for bitwaise operators"
     | BPland | BPlor -> 
 	let t=
 	  match (t1,t2) with

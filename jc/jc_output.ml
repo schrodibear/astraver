@@ -67,7 +67,8 @@ let bin_op = function
   | Bbw_and -> "&"
   | Bbw_or -> "|"
   | Bbw_xor -> "^"
-  | Bshift_right -> ">>"
+  | Blogical_shift_right -> ">>"
+  | Barith_shift_right -> ">>>"
   | Bshift_left -> "<<"
 
 let unary_op = function

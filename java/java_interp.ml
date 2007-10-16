@@ -270,7 +270,9 @@ let get_static_var ci fi =
   try
     Hashtbl.find static_fields_table fi.java_field_info_tag
   with
-      Not_found -> assert false
+      Not_found -> 
+	eprintf "Java_interp.get_static_var->Not_found: %s@." fi.java_field_info_name;
+	assert false
  
 
 (* local variables and parameters *)
@@ -398,7 +400,12 @@ let lbin_op t op =
     | Blt -> Blt_int
     | Bne -> Bneq_int
     | Beq -> Beq_int
-    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand-> assert false (* TODO *)
+    | Basr -> Barith_shift_right
+    | Blsr -> Blogical_shift_right
+    | Blsl -> Bshift_left
+    | Bbwxor -> Bbw_xor
+    | Bbwor -> Bbw_or
+    | Bbwand -> Bbw_and
     | Biff|Bimpl|Bor|Band -> assert false (* TODO *)
     | Bmod -> Bmod_int
     | Bdiv -> Bdiv_int
@@ -532,10 +539,12 @@ let create_static_var ci fi =
 
 (*s translation of structure types *)
 
-let term_of_expr e = 
+let rec term_of_expr e = 
   let t =
     match e.java_expr_node with
       | JElit l -> JTlit l
+      | JEstatic_field_access(ty,fi) -> JTstatic_field_access(ty,fi)
+      | JEbin(e1,op,e2) -> JTbin(term_of_expr e1,Tint,op,term_of_expr e2)
       | _ -> assert false (* TODO *)
   in
   { java_term_loc = e.java_expr_loc;
@@ -552,8 +561,8 @@ let tr_class ci acc0 acc =
     Option_misc.map (fun ci -> ci.class_info_name) ci.class_info_extends
   in
   let acc =
-    List.fold_right
-      (fun fi acc ->
+    List.fold_left
+      (fun acc fi ->
 	 let vi = create_static_var ci fi in
 	 if fi.java_field_info_is_final then
 	   let e = 
@@ -574,8 +583,8 @@ let tr_class ci acc0 acc =
 	   decl::acc
 	 else
 	   assert false (* TODO *))
-      static_fields
       acc
+      static_fields
   in
   (* create exceptions if subclass of Exception *)
   begin

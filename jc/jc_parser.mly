@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.64 2007-10-09 10:50:24 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.65 2007-10-16 07:35:12 marche Exp $ */
 
 %{
 
@@ -104,8 +104,8 @@
 %token BSNOTHING
 
 
-/* & ~ ^ | << >> */
-%token AMP TILDE HAT PIPE LSHIFT RSHIFT
+/* & ~ ^ | << >> >>> */
+%token AMP TILDE HAT PIPE LSHIFT LRSHIFT ARSHIFT
 
 /*
 
@@ -538,8 +538,10 @@ shift_expression:
     { $1 }
 | shift_expression LSHIFT additive_expression 
     { locate_expr (JCPEbinary ($1, BPshift_left, $3)) }
-| shift_expression RSHIFT additive_expression 
-    { locate_expr (JCPEbinary ($1, BPshift_right, $3)) }
+| shift_expression LRSHIFT additive_expression 
+    { locate_expr (JCPEbinary ($1, BPlogical_shift_right, $3)) }
+| shift_expression ARSHIFT additive_expression 
+    { locate_expr (JCPEbinary ($1, BParith_shift_right, $3)) }
 ;
 
 assignment_operator: 

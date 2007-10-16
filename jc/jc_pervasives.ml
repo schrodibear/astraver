@@ -92,7 +92,8 @@ let is_arithmetic_binary_op = function
   | _ -> false
 
 let is_bitwise_binary_op = function
-  | Bbw_and | Bbw_or | Bbw_xor | Bshift_left | Bshift_right -> true
+  | Bbw_and | Bbw_or | Bbw_xor 
+  | Bshift_left | Blogical_shift_right | Barith_shift_right -> true
   | _ -> false
 
 let is_logical_unary_op = function

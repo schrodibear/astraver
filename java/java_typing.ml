@@ -823,7 +823,7 @@ and get_class_prototypes package_env type_env ci d =
     d.class_implements;
   (* fields *)
   let fields = List.fold_left (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
-  ci.class_info_fields <- fields;
+  ci.class_info_fields <- List.rev fields;
   let methods,constructors =
     get_method_prototypes package_env type_env (TypeClass ci) ([],[]) [] d.class_fields 
   in
@@ -1150,27 +1150,125 @@ let rec is_widening_reference_convertible tfrom tto =
     | _ -> false
 
 (* JLS 5.2: Assignment conversion  *)
-let is_assignment_convertible tfrom efrom tto =
+
+let final_field_values_table : (int, Num.num) Hashtbl.t 
+    = Hashtbl.create 97
+
+let bwor_num n1 n2 =
+  try
+    let n1 = Num.int_of_num n1 in
+    let n2 = Num.int_of_num n2 in
+    Num.num_of_int (n1 lor n2)
+  with
+      _ -> assert false
+
+    
+let rec lsl_num n1 n2 =
+  if n2 = 0 then n1 else lsl_num (Num.add_num n1 n1) (n2-1)
+
+let lsr_num n1 n2 = assert false
+
+let asr_num n1 n2 = assert false
+
+
+let rec eval_const_expression const e =
+  match e.java_expr_node with
+    | JElit c ->
+	begin
+	  match c with
+	    | Integer s -> Numconst.integer s
+	    | _ -> assert false (* TODO *)
+	end
+    | JEcast(ty,e) -> 
+	let n = eval_const_expression const e in
+	begin
+	  match ty with
+	    | JTYbase t ->
+		begin
+		  match t with
+		    | Tbyte -> if in_byte_range n then n else
+			typing_error e.java_expr_loc "outside the byte range: %s" (Num.string_of_num n)
+		    | Tshort -> if in_short_range n then n else
+			typing_error e.java_expr_loc "outside the short range: %s" (Num.string_of_num n)
+		    | Tunit|Treal|Tinteger|Tdouble|Tlong|Tfloat|Tint|Tchar|Tboolean -> assert false (* TODO *)
+		end
+	    | JTYarray _|JTYinterface _|JTYclass (_, _)|JTYnull -> raise Not_found
+	end
+    | JEbin(e1,op,e2) -> 
+	let n1 = eval_const_expression const e1 in
+	let n2 = eval_const_expression const e2 in
+	begin
+	  match op with
+	    | Badd -> Num.add_num n1 n2
+	    | Bbwxor -> assert false (* TODO *)
+	    | Bbwor -> bwor_num n1 n2
+	    | Bbwand -> assert false (* TODO *)		
+	    | Blsl|Basr|Blsr -> 
+		let max =
+		  match e1.java_expr_type with
+		    | JTYbase Tint -> 31
+		    | JTYbase Tlong -> 63
+		    | _ -> assert false
+		in 
+		if Num.le_num Numconst.zero n1 && Num.le_num n1 (Num.num_of_int max) then
+		  match op with
+		    | Blsl -> lsl_num n1 (Num.int_of_num n2)
+		    | Basr -> asr_num n1 (Num.int_of_num n2)
+		    | Blsr -> lsr_num n1 (Num.int_of_num n2)
+		    | _ -> assert false
+		else
+		  typing_error e2.java_expr_loc "this expression is not in the rang 0-%d" max
+	    | Bge|Ble|Blt|Bgt|Bne|Beq
+	    |Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *)
+
+	end
+    | JEstatic_field_access (ty, fi) ->
+	begin
+	  try
+	    Hashtbl.find final_field_values_table fi.java_field_info_tag
+	  with Not_found ->
+	    if const then
+	      typing_error e.java_expr_loc "Cannot evaluate this expression"
+	    else
+	      raise Not_found
+	end
+    | JEif (_, _, _)-> assert false  (* TODO *)
+    | JEun (_, _) -> assert false  (* TODO *)
+    | JEvar _ 
+    | JEnew_object (_, _)
+    | JEnew_array (_, _)
+    | JEstatic_call (_, _)
+    | JEcall (_, _, _)
+    | JEassign_array_op (_, _, _, _)
+    | JEassign_field_op (_, _, _, _)
+    | JEassign_field (_, _, _)
+    | JEassign_local_var_op (_, _, _)
+    | JEassign_local_var (_, _)
+    | JEarray_access (_, _)
+    | JEarray_length _
+    | JEfield_access (_, _)
+    | JEincr_field (_, _, _)
+    | JEincr_local_var (_, _) -> raise Not_found
+
+let is_assignment_convertible ?(const=false) tfrom efrom tto =
   is_identity_convertible tfrom tto ||
   match tfrom,tto with
     | JTYbase t1, JTYbase t2 -> 
 	is_widening_primitive_convertible t1 t2 ||
 	  begin
-	    match t2,efrom.java_pexpr_node with
-	      | (Tbyte | Tshort | Tchar), JPElit (Integer s) ->
+	    match t2 with
+	      | Tbyte | Tshort | Tchar ->		  
 		  begin
 		    try
-		      let n = Num.num_of_string s in
+ 		      let n = eval_const_expression const efrom in
 		      match t2 with
 			| Tbyte -> in_byte_range n
 			| Tshort -> in_short_range n
 			| Tchar -> in_char_range n
 			| _ -> assert false
-		    with Failure "num_of_string" ->
-		      typing_error efrom.java_pexpr_loc "evaluation of integer constant failed"
+		    with Not_found -> 
+		      if const then raise Not_found else false
 		  end
-	      | (Tbyte | Tshort | Tchar), JPElit (Char s) ->
-		  assert false (* TODO *)
 	      | _ -> false
 	  end
     | _ -> is_widening_reference_convertible tfrom tto
@@ -1938,7 +2036,7 @@ let rec expr package_env type_env current_type env e =
 		      match unary_numeric_promotion te2.java_expr_type with
 			| Tint ->
 			    if is_assignment_convertible 
-			      te3.java_expr_type e3 t 
+			      te3.java_expr_type te3 t 
 			    then
 			      t, JEassign_array_op(te1,te2,op,te3)
 			    else
@@ -1963,7 +2061,7 @@ let rec expr package_env type_env current_type env e =
 		    match t.java_term_node with
 		      | JTvar vi ->
 			  if op = Beq then
-			    if is_assignment_convertible te.java_expr_type e1 
+			    if is_assignment_convertible te.java_expr_type te 
 			      vi.java_var_info_type
 			    then 
 			      (vi.java_var_info_type,
@@ -1986,7 +2084,7 @@ let rec expr package_env type_env current_type env e =
 			      print_type te.java_expr_type
 		      | JTfield_access(t,fi) ->
 			  if op = Beq then
-			    if is_assignment_convertible te.java_expr_type e1
+			    if is_assignment_convertible te.java_expr_type te
 			      fi.java_field_info_type
 			    then 
 			      (fi.java_field_info_type,
@@ -2125,7 +2223,8 @@ let type_initializer package_env type_env current_type env ty i =
   match ty,i with
     | _, Simple_initializer e ->
 	let te = expr package_env type_env current_type env e in	
-	if is_assignment_convertible te.java_expr_type e ty then JIexpr te
+	if is_assignment_convertible ~const:true te.java_expr_type te ty 
+	then JIexpr te
 	else
 	  typing_error e.java_pexpr_loc "type %a expected, got %a"
 	    print_type ty print_type te.java_expr_type
@@ -2220,7 +2319,7 @@ let rec statement package_env type_env current_type env s =
 	    try
 	      let te = exprt e in 
 	      let vi = List.assoc "\\result" env in
-	      if is_assignment_convertible te.java_expr_type e vi.java_var_info_type then
+	      if is_assignment_convertible te.java_expr_type te vi.java_var_info_type then
 		JSreturn te
 	      else
 		typing_error e.java_pexpr_loc "type %a expected, got %a"
@@ -2336,10 +2435,7 @@ and switch_label package_env type_env current_type env t = function
   | Case e ->
       let te = expr package_env type_env current_type env e in
       match te.java_expr_type with
-	| JTYbase _ as t' when is_assignment_convertible t' e (JTYbase t) -> Case te 
-(*
-	| JTYbase Tinteger -> Case te
-*)
+	| JTYbase _ as t' when is_assignment_convertible t' te (JTYbase t) -> Case te 
 	| _ ->
 	     typing_error e.java_pexpr_loc "type `%s' expected, got `%a'"
 		(string_of_base_type t) print_type te.java_expr_type
@@ -2515,57 +2611,6 @@ let type_constr_spec_and_body package_env type_env current_type ci =
 
 
 
-let final_field_values_table : (int, Num.num) Hashtbl.t 
-    = Hashtbl.create 97
-
-let rec eval_const_expression e =
-  match e.java_expr_node with
-    | JElit c ->
-	begin
-	  match c with
-	    | Integer s -> Numconst.integer s
-	    | _ -> assert false (* TODO *)
-	end
-    | JEcast(ty,e) -> 
-	let n = eval_const_expression e in
-	begin
-	  match ty with
-	    | JTYbase t ->
-		begin
-		  match t with
-		    | Tbyte -> if in_byte_range n then n else
-			typing_error e.java_expr_loc "outside the byte range: %s" (Num.string_of_num n)
-		    | Tunit|Treal|Tinteger|Tdouble|Tlong|Tfloat|Tint|Tchar|Tboolean|Tshort -> assert false (* TODO *)
-		end
-	    | JTYarray _|JTYinterface _|JTYclass (_, _)|JTYnull -> raise Not_found
-	end
-    | JEbin(e1,op,e2) -> 
-	let n1 = eval_const_expression e1 in
-	let n2 = eval_const_expression e2 in
-	begin
-	  match op with
-	    | Badd -> Num.add_num n1 n2
-	    | Bge|Ble|Blt|Bgt|Bne|Beq|Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *)
-
-	end
-    | JEstatic_field_access (_, _)
-    | JEif (_, _, _)-> assert false  (* TODO *)
-    | JEun (_, _) -> assert false  (* TODO *)
-    | JEvar _ 
-    | JEnew_object (_, _)
-    | JEnew_array (_, _)
-    | JEstatic_call (_, _)
-    | JEcall (_, _, _)
-    | JEassign_array_op (_, _, _, _)
-    | JEassign_field_op (_, _, _, _)
-    | JEassign_field (_, _, _)
-    | JEassign_local_var_op (_, _, _)
-    | JEassign_local_var (_, _)
-    | JEarray_access (_, _)
-    | JEarray_length _
-    | JEfield_access (_, _)
-    | JEincr_field (_, _, _)
-    | JEincr_local_var (_, _) -> raise Not_found
 
 let type_field_initializer package_env type_env ci fi =
   let init = 
@@ -2587,13 +2632,15 @@ let type_field_initializer package_env type_env ci fi =
 		| JIexpr e ->
 		    begin
 		      try
-			let v = eval_const_expression e in
+			let v = eval_const_expression false e in
 			Hashtbl.add final_field_values_table 
 			  fi.java_field_info_tag v
 		      with
 			  Not_found ->
+			    eprintf "FIXME: cannot evaluate this initializer, %a@." Loc.gen_report_position e.java_expr_loc
+(*
 			    typing_error e.java_expr_loc "cannot evaluate this initializer"
-		    end
+*)		    end
 		| JIlist _ -> assert false (* TODO *)
 	    end;
 	  Some ti

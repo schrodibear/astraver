@@ -205,7 +205,8 @@ let bin_op = function
   | Bbw_or -> "bw_or"
   | Bbw_xor -> "bw_xor"
   | Bshift_left -> "lsl"
-  | Bshift_right -> "lsr"
+  | Blogical_shift_right -> "lsr"
+  | Barith_shift_right -> "asr"
   | Blor | Bland -> assert false (* should be handled before for laziness *)
   | Biff | Bimplies -> assert false (* never in expressions *)
 
@@ -229,7 +230,8 @@ let bin_arg_type loc = function
   | Bgt_int | Blt_int | Bge_int | Ble_int 
   | Beq_int | Bneq_int 
   | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
-  | Bbw_and | Bbw_or | Bbw_xor | Bshift_right | Bshift_left -> integer_type
+  | Bbw_and | Bbw_or | Bbw_xor 
+  | Blogical_shift_right | Barith_shift_right | Bshift_left -> integer_type
   | Biff|Bimplies|Blor|Bland -> boolean_type
   | Bdiv_real | Bmul_real | Bsub_real | Badd_real
   | Bneq_real | Beq_real | Bge_real

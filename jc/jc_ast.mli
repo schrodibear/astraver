@@ -67,7 +67,8 @@ type pbin_op =
   | BPadd | BPsub | BPmul | BPdiv | BPmod
   | BPland | BPlor | BPimplies | BPiff
   (* bitwise operators *)
-  | BPbw_and | BPbw_or | BPbw_xor | BPshift_left | BPshift_right
+  | BPbw_and | BPbw_or | BPbw_xor 
+  | BPshift_left | BPlogical_shift_right | BParith_shift_right
 
 type punary_op =
   | UPplus | UPminus | UPnot 
@@ -197,7 +198,8 @@ type bin_op =
   | Bland | Blor | Bimplies | Biff
   | Beq_pointer | Bneq_pointer
   (* bitwise operators *)
-  | Bbw_and | Bbw_or | Bbw_xor | Bshift_left | Bshift_right
+  | Bbw_and | Bbw_or | Bbw_xor 
+  | Bshift_left | Blogical_shift_right | Barith_shift_right 
   
 type unary_op =
   | Uplus_int | Uminus_int | Uplus_real | Uminus_real | Unot 
