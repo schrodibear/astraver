@@ -71,6 +71,7 @@ and expr_node =
   | JEassign_local_var_op of java_var_info * bin_op * expr  
   | JEassign_field of expr * java_field_info * expr
   | JEassign_field_op of expr * java_field_info * bin_op * expr
+  | JEassign_array of expr * expr * expr
   | JEassign_array_op of expr * expr * bin_op * expr
   | JEcall of expr * method_info * expr list
   | JEstatic_call of method_info * expr list
@@ -79,12 +80,10 @@ and expr_node =
   | JEnew_object of java_class_info * expr list
       (*r class, args *)
   | JEcast of java_type * expr
+  | JEinstanceof of expr * java_type
 (*
   | Static_class of class_entry
   | Static_interface of interface_entry
-  | JPEassign_array of pexpr * pexpr * string * pexpr  
-      (*r [Assign_array(e1,e2,op,e3)] is [e1[e2] op e3] *)
-      (*r assignment op is =, +=, etc. *)
   | Super_method_call of identifier * pexpr list
   | Instanceof of pexpr * type_expr
       (* in annotations only *)
@@ -106,7 +105,8 @@ type statement =
 and statement_node =
   | JSskip                  (*r empty statement *)
   | JSif of expr * statement * statement
-  | JSreturn of expr
+  | JSreturn_void 
+  | JSreturn of expr 
   | JSvar_decl of java_var_info * initialiser option * statement
   | JSblock of block
   | JSwhile of expr * assertion * term * statement  

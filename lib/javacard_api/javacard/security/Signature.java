@@ -17,8 +17,8 @@
 
 /*
 // $Workfile: Signature.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
+// $Revision: 1.2 $
+// $Date: 2007-10-16 15:44:47 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/security/Signature.java $
 // $Modtime: 5/02/00 8:48p $
@@ -269,10 +269,10 @@ abstract public class Signature{
      * if the <code>Key</code> is inconsistent with <code>theMode</code>
      * or with the <code>Signature</code> implementation.
      * </ul>
-	*/
-    /*CM	abstract public void init ( Key theKey, byte theMode, byte[] bArray, short bOff, short bLen )
+     */
+    abstract public void init ( Key theKey, byte theMode, byte[] bArray, short bOff, short bLen )
 	throws CryptoException;
-    */
+
     /**
      * Protected Constructor
      *

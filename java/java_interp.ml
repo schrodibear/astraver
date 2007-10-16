@@ -551,62 +551,6 @@ let rec term_of_expr e =
     java_term_type = e.java_expr_type;
     java_term_node = t }
 
-let tr_class ci acc0 acc =
-  let (static_fields,fields) = 
-    List.partition 
-      (fun fi -> fi.java_field_info_is_static)
-      ci.class_info_fields
-  in
-  let super =
-    Option_misc.map (fun ci -> ci.class_info_name) ci.class_info_extends
-  in
-  let acc =
-    List.fold_left
-      (fun acc fi ->
-	 let vi = create_static_var ci fi in
-	 if fi.java_field_info_is_final then
-	   let e = 
-	     try
-	       Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
-	     with Not_found -> assert false
-	   in
-	   let body =
-	     match e with
-	       | None -> JCReads []
-	       | Some (JIexpr e) -> JCTerm (term (term_of_expr e))
-	       | Some (JIlist _) -> assert false (* TODO *)
-	   in
-	   let decl =
-	     JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_name,
-			     [], body)
-	   in
-	   decl::acc
-	 else
-	   assert false (* TODO *))
-      acc
-      static_fields
-  in
-  (* create exceptions if subclass of Exception *)
-  begin
-    if ci.class_info_is_exception then
-    ignore (create_exception (Some (tr_type (JTYclass(false,ci)))) ci.class_info_name);
-  end;
-  JCstruct_def(ci.class_info_name, super, List.map create_field fields)::acc0, acc
-
-(* interfaces *)
-
-
-let tr_interface ii acc = 
-  (* TODO *)
-  acc
-
-let tr_class_or_interface ti acc0 acc =
-  match ti with
-    | TypeClass ci -> 
-	eprintf "Creating JC structure for class '%s'@." ci.class_info_name;
-	tr_class ci acc0 acc
-    | TypeInterface ii -> (acc0,tr_interface ii acc)
-
 
 (* exceptions *)
 
@@ -893,6 +837,24 @@ let rec expr e =
 	  JCTEassign_heap(expr e1,get_field fi,expr e2)
       | JEassign_field_op(e1,fi,op,e2) ->
 	  JCTEassign_heap_op(expr e1,get_field fi,bin_op op,expr e2)
+      | JEassign_array(e1,e2,e3) ->
+	  begin
+	    match e1.java_expr_type with
+	      | JTYarray ty ->
+		  let st = get_array_struct ty in
+		  let e1' = expr e1 in
+		  let shift = {
+		      jc_texpr_loc = e.java_expr_loc;
+		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_label = e1'.jc_texpr_label;
+		      jc_texpr_node = JCTEshift(e1', expr e2)
+		    }
+		  in
+		  let fi = snd (List.hd st.jc_struct_info_fields) in
+		  let e3' = expr e3 in
+		  JCTEassign_heap(shift,fi,e3')
+	      | _ -> assert false
+	  end
       | JEassign_array_op(e1,e2,op,e3) ->
 	  begin
 	    match e1.java_expr_type with
@@ -908,10 +870,7 @@ let rec expr e =
 		  in
 		  let fi = snd (List.hd st.jc_struct_info_fields) in
 		  let e3' = expr e3 in
-		  if op = Beq then
-		    JCTEassign_heap(shift,fi,e3')
-		  else
-		    JCTEassign_heap_op(shift,fi,bin_op op,e3')
+		  JCTEassign_heap_op(shift,fi,bin_op op,e3')
 	      | _ -> assert false
 	  end
       | JEcall(e,mi,args) -> 
@@ -942,6 +901,14 @@ let rec expr e =
 		  JCTEcast(expr e,st)
 	      | _ -> assert false (* TODO *)
 	  end
+      | JEinstanceof(e,ty) ->
+	  begin
+	    match ty with
+	      | JTYclass(_,ci) ->
+		  let st = get_class ci in
+		  JCTEinstanceof(expr e,st)
+	      | _ -> assert false (* TODO *)
+	  end
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_type;
@@ -968,6 +935,7 @@ let rec statement s =
       | JSskip -> JCTSblock []
       | JSbreak None -> JCTSbreak ""
       | JSbreak (Some l) -> JCTSbreak l
+      | JSreturn_void -> JCTSreturn_void
       | JSreturn e -> JCTSreturn (tr_type e.java_expr_type,expr e)
       | JSthrow e -> JCTSthrow(get_exception e.java_expr_type,Some (expr e))
       | JSblock l -> JCTSblock (List.map statement l)	  
@@ -1138,6 +1106,77 @@ let tr_logic_fun fi b acc =
 			nfi.jc_logic_info_name,
 			nfi.jc_logic_info_parameters,
 			JCReads(List.map location l))::acc
+
+
+let tr_class ci acc0 acc =
+  let (static_fields,fields) = 
+    List.partition 
+      (fun fi -> fi.java_field_info_is_static)
+      ci.class_info_fields
+  in
+  let super =
+    Option_misc.map (fun ci -> ci.class_info_name) ci.class_info_extends
+  in
+  let acc =
+    List.fold_left
+      (fun acc fi ->
+	 let vi = create_static_var ci fi in
+	 if fi.java_field_info_is_final then
+	   try
+	     let e = 
+	       Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
+	     in
+	     let body =
+	       match e with
+		 | None -> JCReads []
+		 | Some (JIexpr e) -> JCTerm (term (term_of_expr e))
+		 | Some (JIlist _) -> assert false (* TODO *)
+	     in
+	     let decl =
+	       JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_name,
+			       [], body)
+	     in
+	     decl::acc
+	   with Not_found -> 
+	     Java_options.lprintf "Warning: final field '%s' of %a has no known value@."
+	       fi.java_field_info_name 
+	       Java_typing.print_type_name 
+	       fi.java_field_info_class_or_interface;
+	     acc
+	 else
+	   let e = 
+	     try
+	       match Hashtbl.find Java_typing.field_initializer_table 
+		       fi.java_field_info_tag with
+			 | None -> None
+			 | Some e -> Some (initialiser e)
+	     with Not_found -> None
+	   in
+	   JCvar_def(vi.jc_var_info_type,vi.jc_var_info_name,e)::acc)
+      acc
+      static_fields
+  in
+  (* create exceptions if subclass of Exception *)
+  begin
+    if ci.class_info_is_exception then
+    ignore (create_exception (Some (tr_type (JTYclass(false,ci)))) ci.class_info_name);
+  end;
+  JCstruct_def(ci.class_info_name, super, List.map create_field fields)::acc0, acc
+
+(* interfaces *)
+
+
+let tr_interface ii acc = 
+  (* TODO *)
+  acc
+
+let tr_class_or_interface ti acc0 acc =
+  match ti with
+    | TypeClass ci -> 
+	eprintf "Creating JC structure for class '%s'@." ci.class_info_name;
+	tr_class ci acc0 acc
+    | TypeInterface ii -> (acc0,tr_interface ii acc)
+
 
 
 

@@ -108,6 +108,7 @@ let rec expr acc e : 'a list =
 	(* TODO: calls constructor *)
 	List.fold_left expr acc args
     | JEif(e1,e2,e3) 
+    | JEassign_array (e1, e2, e3)
     | JEassign_array_op (e1, e2, _, e3)-> 
 	expr (expr (expr acc e1) e2) e3
     | JEassign_local_var_op (_, _, e) 
@@ -120,6 +121,7 @@ let rec expr acc e : 'a list =
     | JEassign_field_op (e1, _, _, e2)
     | JEarray_access (e1, e2) 
     | JEbin (e1, _, e2) -> expr (expr acc e1) e2
+    | JEinstanceof(e,_)
     | JEcast (_,e) -> expr acc e
 
 let initialiser acc i =
@@ -149,6 +151,7 @@ let rec statement acc s : ('a list * 'b list) =
 	Option_misc.fold 
 	  (fun b acc -> List.fold_left statement acc b) finally acc
     | JSassert (_,t) -> let (a,b) = acc in (assertion a t,b)
+    | JSreturn_void
     | JSbreak _ -> acc 
     | JSswitch (e, l)-> 
 	let (a,b) = acc in

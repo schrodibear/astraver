@@ -32,6 +32,8 @@ let name_base_type t =
 let rec name_type t =
   match t with
     | JTYbase t -> name_base_type t
+    | JTYclass(_,c) -> c.class_info_name
+    | JTYinterface i -> i.interface_info_name
     | _ -> assert false (* TODO *)
 
 let rec intro_array_struct t =
@@ -73,6 +75,7 @@ let rec expr e =
     | JEassign_field(e1,fi,e2) -> expr e1; expr e2
     | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
     | JEif(e1,e2,e3)
+    | JEassign_array(e1,e2,e3) 
     | JEassign_array_op(e1,e2,_,e3) -> expr e1; expr e2; expr e3
     | JEcall(e,mi,args) ->
 	expr e;	List.iter expr args
@@ -82,6 +85,7 @@ let rec expr e =
 	List.iter expr dims
     | JEnew_object(ci,args) ->
 	List.iter expr args
+    | JEinstanceof(e,_)
     | JEcast(_,e) -> expr e
 
 let initialiser i = 
@@ -95,7 +99,9 @@ let switch_label = function
   
 let rec statement s =
   match s.java_statement_node with
-    | JSskip | JSbreak _ -> ()
+    | JSskip 
+    | JSreturn_void
+    | JSbreak _ -> ()
     | JSblock l -> List.iter statement l	  
     | JSvar_decl (vi, init, s) ->
 	Option_misc.iter initialiser init;

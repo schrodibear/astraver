@@ -1,6 +1,8 @@
 
 val print_qualified_ident : Format.formatter -> Java_ast.qualified_ident -> unit
 
+val print_type_name : Format.formatter -> Java_env.java_type_info -> unit
+
 val print_type : Format.formatter -> Java_env.java_type -> unit
 
 val type_table : (int, Java_env.java_type_info) Hashtbl.t 
