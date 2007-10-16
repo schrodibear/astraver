@@ -96,6 +96,13 @@ let raw_expr e = {
   jc_expr_label = "";
 }
 
+let var_expr vi = {
+  jc_expr_node = JCEvar vi;
+  jc_expr_type = vi.jc_var_info_type;
+  jc_expr_loc = Loc.dummy_position;
+  jc_expr_label = "";
+}
+
 let type_expr e ty = {
   jc_expr_node = e;
   jc_expr_type = ty;
@@ -234,7 +241,8 @@ let rec term_name =
 	  | Bbw_and -> "bwand"
 	  | Bbw_or -> "bwor"
 	  | Bbw_xor -> "bwxor"
-	  | Bshift_right -> "shiftright"
+	  | Blogical_shift_right -> "logicalshiftright"
+	  | Barith_shift_right -> "arithshiftright"
 	  | Bshift_left -> "shiftleft"
 	in
 	term_name t1 ^ "_" ^ bop_name ^ "_" ^ (term_name t2)
@@ -296,7 +304,10 @@ let rec destruct_pointer t =
   | JCTbinary (t1, Bsub_int, t2) -> (* support of <new> (Nicolas) *)
       begin
 	match destruct_pointer t1 with
-	| vio, None -> vio, Some (raw_term (JCTunary (Uminus_int, raw_term (JCTconst (JCCinteger "-1")))))
+	| vio, None -> 
+	    vio, 
+	    Some (raw_term (JCTunary (Uminus_int, 
+	           raw_term (JCTconst (JCCinteger "-1")))))
 	| vio, Some offt ->
 	    let t3 = JCTbinary (offt, Bsub_int, t2) in
 	    let offt = full_term t3 integer_type t1.jc_term_loc in
@@ -785,6 +796,121 @@ let rec linearize t =
   | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ -> 
       failwith "Not linear"
 
+type zero_bounds = {
+  zlow : term;
+  zup : term;
+  zmulcst : int;
+  zconstrs : assertion list;
+}
+
+let rec zero_bounds_term t =
+  let auto_bounds t = [{
+    zlow = t; zup = t; zmulcst = 1; zconstrs = [];
+  }] in
+  match t.jc_term_node with
+  | JCTbinary(t1,bop,t2) ->
+      if is_arithmetic_binary_op bop then
+        begin match bop with
+	| Badd_int ->
+	    let add_zb zb1 zb2 =
+	      if zb1.zmulcst = zb2.zmulcst then
+		let lb = raw_term(JCTbinary(zb1.zlow,Badd_int,zb2.zlow)) in
+		let rb = raw_term(JCTbinary(zb1.zup,Badd_int,zb2.zup)) in
+		{ zlow = lb; zup = rb; zmulcst = zb1.zmulcst; 
+		  zconstrs = zb1.zconstrs @ zb2.zconstrs; }
+	      else
+		let cst1 =
+		  raw_term(JCTconst(JCCinteger(string_of_int zb1.zmulcst))) in
+		let cst2 =
+		  raw_term(JCTconst(JCCinteger(string_of_int zb2.zmulcst))) in
+		let lb1 = raw_term(JCTbinary(zb1.zlow,Bmul_int,cst2)) in
+		let lb2 = raw_term(JCTbinary(zb2.zlow,Bmul_int,cst1)) in
+		let rb1 = raw_term(JCTbinary(zb1.zup,Bmul_int,cst2)) in
+		let rb2 = raw_term(JCTbinary(zb2.zup,Bmul_int,cst1)) in
+		let lb = raw_term(JCTbinary(lb1,Badd_int,lb2)) in
+		let rb = raw_term(JCTbinary(rb1,Badd_int,rb2)) in
+		{ zlow = lb; zup = rb; zmulcst = zb1.zmulcst * zb2.zmulcst; 
+		  zconstrs = zb1.zconstrs @ zb2.zconstrs; }
+	    in
+	    let zbs1 = zero_bounds_term t1 in
+	    let zbs2 = zero_bounds_term t2 in
+	    let zbs = List.map (fun zb1 -> List.map (add_zb zb1) zbs2) zbs1 in
+	    List.flatten zbs
+	| Bsub_int ->
+	    let t2 = raw_term(JCTunary(Uminus_int,t2)) in
+	    let t = raw_term(JCTbinary(t1,Badd_int,t2)) in
+	    zero_bounds_term t
+	| Bmul_int ->
+	    (* TODO: refine when one operand is constant *)
+	    auto_bounds t
+	| Badd_real | Bsub_real | Bmul_real | Bdiv_real ->
+	    auto_bounds t
+	| Bdiv_int ->
+	    let div_zb t cst zb =
+	      let cstt =
+		raw_term(JCTconst(JCCinteger(string_of_int (cst-1)))) in
+	      let zero = raw_term(JCTconst(JCCinteger "0")) in
+	      let zbpos = {
+		zlow = raw_term(JCTbinary(zb.zlow,Bsub_int,cstt));
+		zup = zb.zup; 
+		zmulcst = zb.zmulcst * cst; 
+		zconstrs = 
+		  raw_asrt(JCArelation(t,Bge_int,zero)) :: zb.zconstrs; 
+	      } in
+	      let zbneg = {
+		zlow = zb.zlow;
+		zup = raw_term(JCTbinary(zb.zup,Badd_int,cstt)); 
+		zmulcst = zb.zmulcst * cst; 
+		zconstrs = 
+		  raw_asrt(JCArelation(t,Blt_int,zero)) :: zb.zconstrs; 
+	      } in
+	      [zbpos; zbneg]
+	    in
+	    begin match t2.jc_term_node with
+	    | JCTconst c ->
+		begin match c with
+		| JCCinteger s ->
+		    let mulcst2 = int_of_string s in
+		    let neg = mulcst2 < 0 in
+		    let mulcst2 = abs mulcst2 in
+		    let t1 =
+		      if neg then raw_term(JCTunary(Uminus_int,t1)) else t1
+		    in
+		    let zbs1 = zero_bounds_term t1 in
+		    List.flatten (List.map (div_zb t1 mulcst2) zbs1)
+		| JCCboolean _ | JCCvoid | JCCnull | JCCreal _ ->
+		    auto_bounds t
+		end
+	    | _ -> auto_bounds t
+	    end
+	| Bmod_int ->
+	    auto_bounds t
+	| _ -> assert false
+	end
+      else auto_bounds t
+  | JCTunary(uop,t1) ->
+      if is_arithmetic_unary_op uop then
+	begin match uop with
+	| Uplus_int ->
+	    zero_bounds_term t1
+	| Uminus_int ->
+	    let minus_zb zb =
+	      let lb1 = raw_term(JCTunary(Uminus_int,zb.zlow)) in
+	      let rb1 = raw_term(JCTunary(Uminus_int,zb.zup)) in
+	      { zb with zlow = rb1; zup = lb1; }
+	    in
+	    let zbs = zero_bounds_term t1 in
+	    List.map minus_zb zbs
+	| Uplus_real | Uminus_real ->
+	    auto_bounds t
+	| _ -> assert false
+	end
+      else auto_bounds t
+  | JCTconst _ | JCTvar _ | JCTderef _ | JCToffset _
+  | JCTapp _ | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
+  | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ ->
+      auto_bounds t
+
 let linstr_of_term env t =
   let mkmulstr = function
     | (va, 0) -> ""
@@ -844,49 +970,84 @@ let offset_max_linstr_of_term env t =
       in
       linstr_of_term env t
 
+(* Returns a dnf. True is [[]] and false is []. *)
 let rec linstr_of_assertion env a =
   match a.jc_assertion_node with
-  | JCAtrue -> "true"
-  | JCAfalse -> "false"
+  | JCAtrue -> [[]]
+  | JCAfalse -> []
   | JCArelation(t1,bop,t2) ->
       let subt = raw_term (JCTbinary(t1,Bsub_int,t2)) in
       begin match linstr_of_term env subt with
-      | None -> ""
+      | None -> 
+	  let zbs = zero_bounds_term subt in
+	  let zero = raw_term(JCTconst(JCCinteger "0")) in
+	  if List.length zbs <= 1 then [[]] 
+	  else
+	    begin match bop with
+	    | Beq_int ->
+		let adnf = 
+		  List.map (fun zb ->
+		    let lwcstr = 
+		      raw_asrt(JCArelation(zb.zlow,Ble_int,zero)) in
+		    let upcstr = 
+		      raw_asrt(JCArelation(zb.zup,Bge_int,zero)) in
+		    lwcstr :: upcstr :: zb.zconstrs
+		  ) zbs
+		in
+		let str_of_conjunct conj =
+		  List.fold_left (fun strconj a -> 
+		    match linstr_of_assertion env a with
+		    | [] -> assert false (* TODO *)
+		    | [[]] -> strconj
+		    | [[str]] -> str :: strconj (* base case *)
+		    | _ -> assert false (* TODO *)
+		  ) [] conj
+		in
+		let strdnf = 
+		  List.fold_left (fun strdnf conj ->
+		    match str_of_conjunct conj with
+		    | [] -> strdnf
+		| strconj -> strconj :: strdnf
+		  ) [] adnf
+		in
+		begin match strdnf with
+		| [] -> [[]] (* true *)
+		| dnf -> dnf
+		end
+	    | Bneq_int -> [[]]
+	    | _ -> assert false (* TODO *)
+	    end
       | Some (str,cst) ->
 	  let cstr = string_of_int (- cst) in
-	  (* Do not use <= and >= with APRON. Convert to equivalent strict. *)
+	  (* Do not use < and > with APRON. Convert to equivalent non-strict. *)
 	  match bop with
-	    (* Begin old version - Nicolas *)
-	    (* in cousot76.jc wrong invariant generated (i.e. i >= 102 instead of 101) *)
-	    (* | Blt_int -> str ^ " < " ^ cstr
-	       | Bgt_int -> str ^ " > " ^ cstr
-	       | Ble_int -> str ^ " < " ^ (string_of_int ((- cst) + 1))
-	       | Bge_int -> str ^ " > " ^ (string_of_int ((- cst) - 1)) *)
-	    (* End old version - Nicolas *)
-	    (* Begin new version - Nicolas *)
-	  | Blt_int -> str ^ " <= " ^ (string_of_int ((- cst) - 1))
-	  | Bgt_int -> str ^ " >= " ^ (string_of_int ((- cst) + 1))
-	  | Ble_int -> str ^ " <= " ^ cstr
-	  | Bge_int -> str ^ " >= " ^ cstr
-	   (* End new version - Nicolas *)
-	  | Beq_int -> str ^ " = " ^ cstr
-	  | Blt_real | Bgt_real | Ble_real | Bge_real -> ""
-	  | Beq_real | Beq_pointer -> ""
-	  | Bneq_int | Bneq_real | Bneq_pointer -> ""
+	  | Blt_int -> [[str ^ " <= " ^ (string_of_int ((- cst) - 1))]]
+	  | Bgt_int -> [[str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
+	  | Ble_int -> [[str ^ " <= " ^ cstr]]
+	  | Bge_int -> [[str ^ " >= " ^ cstr]]
+	  | Beq_int -> [[str ^ " = " ^ cstr]]
+	  | Blt_real | Bgt_real | Ble_real | Bge_real
+	  | Beq_real | Beq_pointer
+	  | Bneq_int | Bneq_real | Bneq_pointer -> [[]]
 	  | _ -> assert false
       end
   | JCAnot a ->
       let nota = not_asrt a in
       begin match nota.jc_assertion_node with
-      | JCAnot _ -> ""
+      | JCAnot _ -> [[]]
       | _ -> linstr_of_assertion env nota
       end
   | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAapp _ 
   | JCAquantifier _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
-  | JCAif _ | JCAmutable _ | JCAtagequality _ -> ""
+  | JCAif _ | JCAmutable _ | JCAtagequality _ -> [[]]
 
-let offset_min_linstr_of_assertion env a = "" (* TODO *)
-let offset_max_linstr_of_assertion env a = "" (* TODO *)
+let unique_linstr_of_assertion env a =
+  match linstr_of_assertion env a with
+  | [[str]] -> str
+  | _ -> assert false
+
+let offset_min_linstr_of_assertion env a = [[]] (* TODO *)
+let offset_max_linstr_of_assertion env a = [[]] (* TODO *)
 
 let linstr_of_expr env e = 
   match term_of_expr e with
@@ -947,10 +1108,10 @@ let rec strlen_linstr_of_assertion env a =
 		    match op with
 		    | Bneq_int -> 
 			let stra = str ^ " > " ^ (string_of_int (- cst)) in
-			Some (stra,env)
+			Some ([[stra]],env)
 		    | Beq_int -> 
 			let stra = str ^ " = " ^ (string_of_int (- cst)) in
-			Some (stra,env)
+			Some ([[stra]],env)
 		    | _ -> assert false
 	    end
 	| _ -> None
@@ -1112,22 +1273,101 @@ let mkinvariant mgr absval =
 (* Performing abstract interpretation.                                       *)
 (*****************************************************************************)
 
+let or_dnf dnf1 dnf2 =
+  dnf1 @ dnf2
+
+let and_dnf dnf1 dnf2 = match dnf1,dnf2 with
+  | [],_ | _,[] -> [] (* false *)
+  | _ ->
+      List.fold_left (fun acc conj1 ->
+	List.fold_left (fun acc conj2 ->
+	  (conj1 @ conj2) :: acc
+	) acc dnf2
+      ) [] dnf1
+
+let rec and_dnf_list = function
+  | [] -> [[]] (* true *)
+  | dnf::r -> and_dnf dnf (and_dnf_list r)
+
+let print_dnf fmt dnf =
+  fprintf fmt "dnf : %a" 
+    (fun fmt disj -> 
+      fprintf fmt "[%a]" (print_list comma 
+	(fun fmt conj -> fprintf fmt "[%a]" 
+	  (print_list comma (fun fmt s -> fprintf fmt "%s" s)) conj)) disj) dnf
+
+let test_dnf mgr pre dnf =
+  let env = Abstract1.env pre in
+  let test_conj cstrs =
+    let lincons =
+      try Parser.lincons1_of_lstring env cstrs
+      with Parser.Error _ -> assert false
+    in
+(*     let envprint = Environment.print ~first:"[" ~sep:"," ~last:"]" in *)
+(*     if Jc_options.debug then *)
+(*       printf "pre.env = %a@.lincons.env = %a@." *)
+(* 	envprint (Abstract1.env pre) *)
+(* 	envprint (Lincons1.array_get_env lincons); *)
+    let copy_pre = Abstract1.copy mgr pre in
+    Abstract1.meet_lincons_array_with mgr copy_pre lincons;
+    copy_pre
+  in
+  match dnf with
+  | [] -> 
+      Abstract1.bottom mgr (Abstract1.env pre)
+  | [[]] -> 
+      pre
+  | _ ->
+      let absvals = List.map test_conj dnf in
+      let bot = Abstract1.bottom mgr (Abstract1.env pre) in
+      List.iter (fun absval -> Abstract1.join_with mgr bot absval) absvals;
+      bot
+	
+let test_assertion mgr pre a =
+  let env = Abstract1.env pre in
+  let be = linstr_of_assertion env a in
+  let bemin = offset_min_linstr_of_assertion env a in
+  let bemax = offset_max_linstr_of_assertion env a in
+  let bestr,env = match strlen_linstr_of_assertion env a with
+    | None -> [[]],env
+    | Some strenv -> strenv
+  in
+  let dnf = and_dnf_list [be; bemin; bemax; bestr] in
+  if Jc_options.debug then
+    printf "[test_assertion] %a@." print_dnf dnf;
+  let res = test_dnf mgr pre dnf in
+  if debug then 
+    printf "[test_assertion] result : %a@." Abstract1.print res;
+  res
+
+let test_expr ~(neg:bool) mgr pre e =
+  let a = asrt_of_expr e in
+  let a = if neg then not_asrt a else a in
+  test_assertion mgr pre a
+
 let assignment mgr pre t e =
   let env = Abstract1.env pre in
-  let forget_vars, vars, linexprs = 
+  let forget_vars, vars, linexprs, asserts = 
     if Vai.has_variable t then
       let va = Vai.variable t in
       if Environment.mem_var env va then
 	match linstr_of_expr env e with
-	| None -> [va], [], []
+	| None -> 
+	    begin match term_of_expr e with
+	    | None ->
+		[va], [], [], []
+	    | Some te ->
+		let a = raw_asrt(JCArelation(t,Beq_int,te)) in
+		[va], [], [], [a]
+	    end
 	| Some str ->
 	    let lin = 
 	      try Parser.linexpr1_of_string env str
 	      with Parser.Error _ -> assert false
 	    in
-	    [], [va], [lin]
-      else [], [], []
-    else [], [], []
+	    [], [va], [lin], []
+      else [], [], [], []
+    else [], [], [], []
   in
   let forget_vars, vars,linexprs = 
     if Vai.has_offset_min_variable t then
@@ -1170,46 +1410,9 @@ let assignment mgr pre t e =
       let forget_vars = Array.of_list forget_vars in
       Abstract1.forget_array_with mgr pre forget_vars false
     end;
-  pre
-
-let test_assertion mgr pre a =
-  let env = Abstract1.env pre in
-  let be = linstr_of_assertion env a in
-  let bemin = offset_min_linstr_of_assertion env a in
-  let bemax = offset_max_linstr_of_assertion env a in
-  let bestr,env = match strlen_linstr_of_assertion env a with
-    | None -> "",env
-    | Some strenv -> strenv
-  in
-  if be = "false" || bemin = "false" || bemax = "false" || bestr = "false" then
-    Abstract1.bottom mgr (Abstract1.env pre)
-  else
-    let cstrs = 
-      (if be = "true" || be = "" then [] else [be])
-      @ (if bemin = "true" || bemin = "" then [] else [bemin])
-      @ (if bemax = "true" || bemax = "" then [] else [bemax])
-      @ (if bestr = "true" || bestr = "" then [] else [bestr])
-    in
-    if cstrs = [] then 
-      pre
-    else
-      let lincons = 
-	try Parser.lincons1_of_lstring env cstrs 
-	with Parser.Error _ -> assert false
-      in
-      let envprint = Environment.print ~first:"[" ~sep:"," ~last:"]" in
-      if Jc_options.debug then
-	printf "pre.env = %a@.lincons.env = %a@." 
-	  envprint (Abstract1.env pre)
-	  envprint (Lincons1.array_get_env lincons);
-      Abstract1.change_environment_with mgr pre env false;
-      Abstract1.meet_lincons_array_with mgr pre lincons;
-      pre
-
-let test_expr ~(neg:bool) mgr pre e =
-  let a = asrt_of_expr e in
-  let a = if neg then not_asrt a else a in
-  test_assertion mgr pre a
+  if asserts <> [] then
+    test_assertion mgr pre (make_and asserts)
+  else pre
 
 (* Arguments of [join] should be on the same environment. *)
 let join mgr absval1 absval2 =
@@ -1499,7 +1702,9 @@ let rec ai_statement abs curinvs s =
 	    match vi.jc_var_info_type with
 	    | JCTpointer (si, no1, no2) ->
 		(* Note: no1 is always 0 for Java programs (Nicolas) *)
-		let t = match term_of_expr e with None -> assert false | Some t -> t in
+		let t = 
+		  match term_of_expr e with None -> assert false | Some t -> t 
+		in
 		let tt = type_term t.jc_term_node e.jc_expr_type in
 		assert (Vai.has_offset_max_variable tt);
 		let offset_max = Vai.offset_max_variable t in
@@ -1626,11 +1831,11 @@ let ai_function mgr targets (fi, fs, sl) =
  	| _ -> acc
  	) [] fi.jc_fun_info_parameters
     in
-    let cstrs = List.map (linstr_of_assertion env) cstrs in
+    let cstrs = List.map (unique_linstr_of_assertion env) cstrs in
     let lincons = Parser.lincons1_of_lstring env cstrs in
     let initpre = Abstract1.top mgr env in
-    Abstract1.meet_lincons_array_with mgr initpre lincons;
-    
+    Abstract1.meet_lincons_array_with mgr initpre lincons;    
+
     (* Annotation inference on the function body. *)
     let initinvs = {
       jc_absinv_normal = initpre;
@@ -1748,8 +1953,7 @@ let atp_arithmetic_of_binop = function
   | Badd_int | Badd_real -> "+"
   | Bsub_int | Bsub_real -> "-"
   | Bmul_int | Bmul_real -> "*"
-  | Bdiv_int | Bdiv_real -> "/"
-  | _ -> assert false  
+  | _ -> failwith "Atp alien"
 
 let rec free_variables t =
   fold_term
@@ -1810,8 +2014,8 @@ let rec term_of_atp tm =
   in
   raw_term tnode
 
-let rec atp_of_asrt a = 
-  match a.jc_assertion_node with
+let rec atp_of_asrt ~(neg:bool) a = 
+  try begin match a.jc_assertion_node with
   | JCAtrue -> 
       Atp.True
   | JCAfalse -> 
@@ -1824,25 +2028,27 @@ let rec atp_of_asrt a =
   | JCAand al -> 
       let rec mkand = function
 	| [] -> Atp.True
-	| [a] -> atp_of_asrt a
-	| a :: al -> Atp.And (atp_of_asrt a, mkand al)
+	| [a] -> atp_of_asrt ~neg a
+	| a :: al -> Atp.And (atp_of_asrt ~neg a, mkand al)
       in
       mkand al
   | JCAor al -> 
       let rec mkor = function
 	| [] -> Atp.False
-	| [a] -> atp_of_asrt a
-	| a :: al -> Atp.Or (atp_of_asrt a, mkor al)
+	| [a] -> atp_of_asrt ~neg a
+	| a :: al -> Atp.Or (atp_of_asrt ~neg a, mkor al)
       in
       mkor al
   | JCAimplies(a1,a2) ->
-      Atp.Imp(atp_of_asrt a1,atp_of_asrt a2)
+      Atp.Imp(atp_of_asrt ~neg:(not neg) a1,atp_of_asrt ~neg a2)
   | JCAiff(a1,a2) ->
-      Atp.Iff(atp_of_asrt a1,atp_of_asrt a2)
+      Atp.And
+	(Atp.Imp(atp_of_asrt ~neg:(not neg) a1,atp_of_asrt ~neg a2),
+	 Atp.Imp(atp_of_asrt ~neg:(not neg) a2,atp_of_asrt ~neg a1))
   | JCAnot a ->
-      Atp.Not(atp_of_asrt a)
+      Atp.Not(atp_of_asrt ~neg:(not neg) a)
   | JCAquantifier(q,vi,a) ->
-      let f = atp_of_asrt a in
+      let f = atp_of_asrt ~neg a in
       let fvars = Atp.fv f in
       let varsets = List.map (fun v -> free_variables (Vwp.term v)) fvars in
       let vars = List.fold_left2
@@ -1862,6 +2068,9 @@ let rec atp_of_asrt a =
   | JCAapp _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
   | JCAif _ | JCAmutable _ | JCAtagequality _ ->
       assert false
+  end with Failure "Atp alien" -> if neg then Atp.True else Atp.False 
+
+let atp_of_asrt = atp_of_asrt ~neg:false
 
 let rec asrt_of_atp fm =
   let anode = match fm with
@@ -2172,7 +2381,8 @@ let rec collect_asserts targets s =
   | JCStry(s,hl,fs) ->
       let targets = collect_asserts targets s in
       let targets = 
-	List.fold_left (fun targets (_,_,s) -> collect_asserts targets s) targets hl
+	List.fold_left 
+	  (fun targets (_,_,s) -> collect_asserts targets s) targets hl
       in
       collect_asserts targets fs
   | JCSloop(_,ls) ->
@@ -2211,7 +2421,7 @@ let simplify =
       let zero = raw_term(JCTconst(JCCinteger "0")) in
       raw_asrt(JCArelation(Vai.term va,Bge_int,zero))
     ) strlen_vars in
-    let cstrs = List.map (linstr_of_assertion env) cstrs in
+    let cstrs = List.map (unique_linstr_of_assertion env) cstrs in
     let strlen_lincons = Parser.lincons1_of_lstring env cstrs in
 
     let abstract_disjuncts,other_disjuncts = 
@@ -2224,21 +2434,14 @@ let simplify =
 	      conjunct;
 	  let absval = Abstract1.top mgr env in
 	  (* Overapproximate conjunct. *)
-	  let cstrs = 
-	    List.fold_left
-	      (fun acc a -> match linstr_of_assertion env a with
-	      | "" -> acc (* failwith "Not supported" *)
-	      | s ->  s::acc) [] conjunct 
-	  in
-	  if Jc_options.debug then
-	    printf "linstr conjunct : %a@." 
-	      (Pp.print_list (fun fmt () -> printf " /\\ ") 
-		 (fun fmt s -> print_string s))
-	      cstrs;
-	  let lincons = 
-	    Parser.lincons1_of_lstring env cstrs 
-	  in
-	  Abstract1.meet_lincons_array_with mgr absval lincons;
+	  let cstrs = List.map (linstr_of_assertion env) conjunct in
+	  let dnf = and_dnf_list cstrs in
+(* 	  if Jc_options.debug then *)
+(* 	    printf "linstr conjunct : %a@."  *)
+(* 	      (Pp.print_list (fun fmt () -> printf " /\\ ")  *)
+(* 		 (fun fmt s -> print_string s)) *)
+(* 	      cstrs; *)
+	  let absval = test_dnf mgr absval dnf in
 	  if Jc_options.debug then
 	    printf "abstract conjunct : %a@." Abstract1.print absval;
 	  if Abstract1.is_bottom mgr absval = Manager.True then
@@ -2305,7 +2508,8 @@ let wp_function targets (fi,fs,sl) =
 		fi.jc_fun_info_name
 	| _ ->
 	    if Jc_options.verbose then
-	      printf "%a@[<v 2>Inferring precondition@\n%a@]@\nfor function %s@."
+	      printf 
+		"%a@[<v 2>Inferring precondition@\n%a@]@\nfor function %s@."
 		Loc.report_position target.jc_target_location
 		Jc_output.assertion qe fi.jc_fun_info_name ;
 	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; qe]
