@@ -1,0 +1,48 @@
+exception Goto__L of unit
+
+integer foo(integer s, integer n)
+  requires true;
+{  
+   integer i;
+   integer tmp;
+   {  
+      i = 0;
+      while (true)
+      invariant true;
+      {  
+         {  
+            if ((i < n)) 
+              try 
+                {  
+                   if ((0 <= i)) 
+                     if ((i < s)) 
+                       tmp = 1;
+                     else 
+                       tmp = 0;
+                   else 
+                     tmp = 0;
+                   throw Goto__L ();
+                   tmp = 0;
+                   throw Goto__L ();
+                }
+              catch Goto__L __dummy 
+                assert (tmp != 0);
+              finally
+                {  
+                }
+            else 
+              {  
+              }
+            i = (i + 1);
+         }
+      }
+      return i;
+   }
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make diverge"
+End: 
+*/
