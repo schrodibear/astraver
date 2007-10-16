@@ -5,6 +5,7 @@ import javacard.security.*;
 public class Cipher extends Object {
 
     static int MODE_DECRYPT;
+    static int MODE_ENCRYPT;
     static int ENCRYPT_MODE;
     static int PRIVATE_KEY;
     static int PUBLIC_KEY;

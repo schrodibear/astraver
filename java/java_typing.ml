@@ -1783,6 +1783,54 @@ let is_accessible_and_applicable mi id arg_types =
       is_method_invocation_convertible t vi.java_var_info_type)
   mi.method_info_parameters arg_types
 
+let method_signature mi =
+  let t =
+    match mi.method_info_class_or_interface with
+      | TypeClass ci -> JTYclass(true,ci)
+      | TypeInterface ii -> JTYinterface ii
+  in
+  t :: List.map (fun vi -> vi.java_var_info_type) mi.method_info_parameters
+
+let rec compare_signatures acc s1 s2 =
+  match s1,s2 with
+    | [],[] -> acc
+    | [],_ | _,[] -> assert false
+    | t1::r1,t2::r2 ->
+	if is_identity_convertible t1 t2 then
+	  compare_signatures acc r1 r2
+	else
+	  if is_method_invocation_convertible t1 t2 then
+	    (* t1 convertible to t2 *)
+	    if acc >= 0 then 1 else raise Not_found
+	  else
+	    if is_method_invocation_convertible t2 t1 then
+	      (* t2 convertible to t1 *)
+	      if acc <= 0 then -1 else raise Not_found
+	    else raise Not_found
+    
+let rec filter_maximally_specific_signature mi acc =
+  match acc with
+    | [] -> [mi]
+    | mi' :: rem ->
+	let s1 = method_signature mi in
+	let s2 = method_signature mi' in
+	try
+	  let c = compare_signatures 0 s1 s2 in
+	  if c = 0 then mi :: acc else
+	    if c > 0 then (* mi more specific than mi' *)
+	      filter_maximally_specific_signature mi rem
+	    else (* mi' more specific than mi *)
+	      acc 	      
+	with Not_found -> (* incomparable signatures *)
+	  mi' :: (filter_maximally_specific_signature mi rem)
+
+let rec get_maximally_specific_signatures acc meths =
+  match meths with
+    | [] -> acc
+    | mi::rem ->
+	let acc' = filter_maximally_specific_signature mi acc in
+	get_maximally_specific_signatures acc' rem
+
 let lookup_method ti (loc,id) arg_types = 
   let rec collect_methods_from_interface acc ii =
     check_if_interface_complete ii;
@@ -1832,7 +1880,20 @@ let lookup_method ti (loc,id) arg_types =
 		       (Pp.print_list Pp.comma (fun fmt vi -> print_type fmt vi.java_var_info_type)) 
 		       mi.method_info_parameters)
 	  meths;
-	typing_error loc "overloading/overriding not yet supported"
+	let meths = get_maximally_specific_signatures [] meths in
+	eprintf "maximally specific calls:@.";
+	List.iter (fun mi ->
+		     eprintf "%a.%s(%a)@." 
+		       print_type_name mi.method_info_class_or_interface
+		       mi.method_info_name
+		       (Pp.print_list Pp.comma (fun fmt vi -> print_type fmt vi.java_var_info_type)) 
+		       mi.method_info_parameters)
+	  meths;
+	match meths with
+	  | [] -> assert false
+	  | [mi] -> mi
+	  | _ -> 	
+	      typing_error loc "ambiguity in overloading/overriding"
 
 let lookup_constructor ci arg_types = 
   (* !!!!!!!!! TODO !!!!!!! *)
