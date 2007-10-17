@@ -7,3 +7,4 @@ smtlib
 coq
 simplify
 *.loc
+*.jloc

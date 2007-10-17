@@ -1,0 +1,4 @@
+*.loc
+*.makefile
+why
+gwhy.cache
