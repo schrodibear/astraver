@@ -961,14 +961,19 @@ let () =
   with
     | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
     | _ -> assert false
-
+	
 let object_class =
-  match classify_name [] [] None [] 
-    ((Loc.dummy_position,"Object") :: javalang_qid)
+  try				
+    match classify_name [] [] None [] 
+      ((Loc.dummy_position,"Object") :: javalang_qid)
+    with
+      | TypeName (TypeClass ci) -> ci
+      | _ -> assert false
   with
-    | TypeName (TypeClass ci) -> ci
-    | _ -> assert false
- 				
+    | Java_options.Java_error(l,s) ->
+	eprintf "%a: %s@." Loc.gen_report_position l s;
+	exit 1
+
 
 (*******************************
 

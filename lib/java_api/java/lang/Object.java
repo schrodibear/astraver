@@ -1,5 +1,5 @@
 /*
-* $Workfile: Object.java $	$Revision: 1.1 $, $Date: 2007-09-25 08:10:43 $
+* $Workfile: Object.java $	$Revision: 1.2 $, $Date: 2007-10-17 08:05:43 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: Object.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-25 08:10:43 $
+// $Revision: 1.2 $
+// $Date: 2007-10-17 08:05:43 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/java/lang/Object.java $
 // $Modtime: 5/02/00 7:13p $
@@ -39,7 +39,7 @@ package java.lang;
    */
 public class Object {
 
-  /*@ public normal_behavior 
+  /* @ public normal_behavior 
     @  requires true;
     @  assignable \nothing;
     @  ensures true;
@@ -77,11 +77,11 @@ public class Object {
   * @return <code>true</code> if this object is the same as the obj argument; <code>false</code> otherwise.
   */
 
-  /*@ public normal_behavior 
+  /* @ public normal_behavior 
     @  requires true;
     @  assignable \nothing;
     @  ensures \result <==> this==obj;
     @*/
-    public /*@ pure @*/ boolean equals(Object obj){ return (this==obj); }
+    public /* @ pure @*/ boolean equals(Object obj){ return (this==obj); }
 
 }

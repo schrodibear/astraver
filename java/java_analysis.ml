@@ -41,6 +41,7 @@ let rec intro_array_struct t =
     let _ = Hashtbl.find array_struct_table t in ()
   with Not_found ->
     let n = name_type t in 
+    Java_options.lprintf "Adding array struct for type %s@." n;
     Hashtbl.add array_struct_table t (n ^ "M", n ^ "P")
 
 let term t = () (* TODO *)
