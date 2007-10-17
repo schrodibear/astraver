@@ -622,37 +622,69 @@ and classify_name
 		    "no such field in %a" print_type_name ci
 	      end
 	  | TermName t -> 
-	      begin
-		match t.java_term_type with
-		  | JTYclass(_,c) ->
-		      begin
-			try
-			  let fi = lookup_class_field c id in
-			  TermName { 
-			    java_term_loc = loc;
-			    java_term_type = fi.java_field_info_type ;
-			    java_term_node = JTfield_access(t,fi)
-			  }
-			with Not_found ->
-			  typing_error loc 
-			    "no such field in class %s" c.class_info_name
-		      end
-		  | JTYinterface ii ->
-		      assert false (* TODO *)
-		  | JTYarray _ -> 
-		      if id="length" then
-			TermName {
-			  java_term_loc = loc;
-			  java_term_type = int_type;
-			  java_term_node = JTarray_length(t)
-			}
-		      else
-			typing_error loc 
-			  "no such field in array type"
-		  | JTYnull | JTYbase _ ->
-		      class_or_interface_expected t.java_term_loc 
-			t.java_term_type
-	      end
+	      type_term_field_access t loc id 
+
+and type_term_field_access t loc id = 
+  match t.java_term_type with
+    | JTYclass(_,c) ->
+	begin
+	  try
+	    let fi = lookup_class_field c id in
+	    TermName { 
+	      java_term_loc = loc;
+	      java_term_type = fi.java_field_info_type ;
+	      java_term_node = JTfield_access(t,fi)
+	    }
+	  with Not_found ->
+	    typing_error loc 
+	      "no such field in class %s" c.class_info_name
+	end
+    | JTYinterface ii ->
+	assert false (* TODO *)
+    | JTYarray _ -> 
+	if id="length" then
+	  TermName {
+	    java_term_loc = loc;
+	    java_term_type = int_type;
+	    java_term_node = JTarray_length(t)
+	  }
+	else
+	  typing_error loc 
+	    "no such field in array type"
+    | JTYnull | JTYbase _ ->
+	class_or_interface_expected t.java_term_loc 
+	  t.java_term_type
+
+and type_expr_field_access e loc id = 
+  match e.java_expr_type with
+    | JTYclass(_,c) ->
+	begin
+	  try
+	    let fi = lookup_class_field c id in
+	    { 
+	      java_expr_loc = loc;
+	      java_expr_type = fi.java_field_info_type ;
+	      java_expr_node = JEfield_access(e,fi)
+	    }
+	  with Not_found ->
+	    typing_error loc 
+	      "no such field in class %s" c.class_info_name
+	end
+    | JTYinterface ii ->
+	assert false (* TODO *)
+    | JTYarray _ -> 
+	if id="length" then
+	  {
+	    java_expr_loc = loc;
+	    java_expr_type = int_type;
+	    java_expr_node = JEarray_length(e)
+	  }
+	else
+	  typing_error loc 
+	    "no such field in array type"
+    | JTYnull | JTYbase _ ->
+	class_or_interface_expected e.java_expr_loc 
+	  e.java_expr_type
 
 and type_type package_env type_env ty =
   match ty with
@@ -2145,7 +2177,10 @@ let rec expr package_env type_env current_type env e =
 	      in
 	      ty,JEcall(te2,mi,args)
 	  end
-      | JPEfield_access _-> assert false (* TODO *)
+      | JPEfield_access(Super_access f) -> assert false (* TODO *)
+      | JPEfield_access(Primary_access(e1,(loc,id))) -> 
+	  let te = type_expr_field_access (exprt e1) loc id in
+	  te.java_expr_type,te.java_expr_node
       | JPEif (e1, e2, e3)-> 
 	  let te1 = exprt e1 in
 	  if is_boolean te1.java_expr_type then	    
@@ -2194,7 +2229,18 @@ let rec expr package_env type_env current_type env e =
 		  array_expected e1.java_pexpr_loc te1.java_expr_type
 	  end
 	  
-      | JPEassign_field (_, _, _)-> assert false (* TODO *)
+      | JPEassign_field (Super_access((loc,id)), op, e2) -> 
+	  assert false (* TODO *)
+      | JPEassign_field (Primary_access(e1,(loc,id)), op, e2)-> 
+	  let te2 = exprt e2 in
+	  begin
+	    match 
+	      (type_expr_field_access (exprt e1) loc id).java_expr_node 
+	    with
+	      | JEfield_access(t,fi) ->
+		  type_assign_field t fi op te2
+	      | _ -> assert false
+	  end
       | JPEassign_name (n, op, e1)-> 
 	  begin
 	    let te = exprt e1 in
@@ -2226,28 +2272,7 @@ let rec expr package_env type_env current_type env e =
 				print_type vi.java_var_info_type 
 			      print_type te.java_expr_type
 		      | JTfield_access(t,fi) ->
-			  if op = Beq then
-			    if is_assignment_convertible te.java_expr_type te
-			      fi.java_field_info_type
-			    then 
-			      (fi.java_field_info_type,
-			       JEassign_field(expr_of_term t,fi,te))
-			    else
-			      typing_error e.java_pexpr_loc 
-				"type %a expected, got %a" 
-				print_type fi.java_field_info_type 
-				print_type te.java_expr_type
-			  else 
-			    if cast_convertible te.java_expr_type 
-			      fi.java_field_info_type
-			    then 
-			      (fi.java_field_info_type,
-			       JEassign_field_op(expr_of_term t,fi,op,te))
-			    else
-			      typing_error e.java_pexpr_loc 
-				"type %a expected, got %a" 
-				print_type fi.java_field_info_type 
-				print_type te.java_expr_type
+			  type_assign_field (expr_of_term t) fi op te
 		      | _ -> assert false (* TODO *)
 		  end
 	      | TypeName _ ->
@@ -2288,6 +2313,30 @@ let rec expr package_env type_env current_type env e =
   in { java_expr_loc = e.java_pexpr_loc;
 	java_expr_type = ty;
 	java_expr_node = te; }
+
+and type_assign_field t fi op te =
+  if op = Beq then
+    if is_assignment_convertible te.java_expr_type te
+      fi.java_field_info_type
+    then 
+      (fi.java_field_info_type,
+       JEassign_field(t,fi,te))
+    else
+      typing_error te.java_expr_loc 
+	"type %a expected, got %a" 
+	print_type fi.java_field_info_type 
+	print_type te.java_expr_type
+  else 
+    if cast_convertible te.java_expr_type 
+      fi.java_field_info_type
+    then 
+      (fi.java_field_info_type,
+       JEassign_field_op(t,fi,op,te))
+    else
+      typing_error te.java_expr_loc 
+	"type %a expected, got %a" 
+	print_type fi.java_field_info_type 
+	print_type te.java_expr_type
 
 
 let rec initializer_loc i =
