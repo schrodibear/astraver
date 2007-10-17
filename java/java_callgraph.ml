@@ -162,6 +162,14 @@ let rec statement acc s : ('a list * 'b list) =
     | JSthrow e 
     | JSreturn e 
     | JSexpr e -> let (a,b)=acc in (a,expr b e)
+    | JSfor (inits, cond, inv, dec, updates, body)-> 
+	let (a, b) = acc in
+	let b = List.fold_left expr
+	  (List.fold_left expr (expr b cond) updates)
+	  inits
+	in
+	let a = term (assertion a inv) dec in
+	  statement (a, b) body
     | JSfor_decl (inits, cond, inv, dec, updates, body)-> 
 	let (a,b) = acc in
 	let b = List.fold_left 
@@ -170,8 +178,7 @@ let rec statement acc s : ('a list * 'b list) =
 	  inits
 	in
 	let a = term (assertion a inv) dec in
-	statement (a,b) body
-	
+	  statement (a,b) body
     | JSwhile (cond, inv, dec, body)-> 
 	let (a,b) = acc in
 	let b = expr b cond in

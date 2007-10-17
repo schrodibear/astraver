@@ -954,6 +954,25 @@ let rec statement s =
 	      jc_loop_variant = Some (term dec) }
 	  in
 	  JCTSwhile(expr e, la, statement s)
+      | JSfor (el1, e, inv, dec, el2, body) ->
+	  let exprl = 
+	    List.map
+	      (fun e -> 
+		 let e = expr e in
+		 { jc_tstatement_loc = e.jc_texpr_loc ;
+		   jc_tstatement_node = JCTSexpr e })
+	      el1
+	  in
+	  let la =
+	    { jc_loop_tag = get_loop_counter ();
+	      jc_loop_invariant = assertion inv;
+	      jc_loop_variant = Some (term dec) }
+	  in
+	  let res =
+	    { jc_tstatement_loc = s.java_statement_loc ;
+	      jc_tstatement_node = 
+		JCTSfor (expr e, List.map expr el2, la, statement body) }
+	  in JCTSblock (exprl @ [res])
       | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	  let decls = List.map
 	    (fun (vi,init) -> 

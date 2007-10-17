@@ -111,6 +111,8 @@ and statement_node =
   | JSblock of block
   | JSwhile of expr * assertion * term * statement  
       (*r condition, invariant, variant, loop body *)
+  | JSfor of expr list * expr * assertion * term * expr list * statement  
+      (*r init, condition, invariant, variant, steps, loop body *)
   | JSfor_decl of (java_var_info * initialiser option) list * expr * assertion * term * expr list * statement  
       (*r decls, condition, invariant, variant, steps, loop body *)
   | JSexpr of expr

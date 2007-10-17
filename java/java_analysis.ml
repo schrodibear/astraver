@@ -110,6 +110,13 @@ let rec statement s =
     | JSif (e, s1, s2) -> expr e; statement s1; statement s2
     | JSwhile(e,inv,dec,s) ->
 	  expr e; assertion inv; term dec; statement s
+    | JSfor (el1, e, inv, dec, el2, body) ->
+	List.iter expr el1;
+	expr e;
+	assertion inv;
+	term dec;
+	List.iter expr el2;
+	statement body
     | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	List.iter 
 	  (fun (_,init) -> Option_misc.iter initialiser init) decls;

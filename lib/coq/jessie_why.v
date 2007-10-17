@@ -709,3 +709,6 @@ Admitted.
 (*Why logic*) Definition lsr : Z -> Z -> Z.
 Admitted.
 
+(*Why logic*) Definition asr : Z -> Z -> Z.
+Admitted.
+

@@ -241,9 +241,9 @@ let rec term_name =
 	  | Bbw_and -> "bwand"
 	  | Bbw_or -> "bwor"
 	  | Bbw_xor -> "bwxor"
+	  | Bshift_left -> "shiftleft"		
 	  | Blogical_shift_right -> "logicalshiftright"
 	  | Barith_shift_right -> "arithshiftright"
-	  | Bshift_left -> "shiftleft"
 	in
 	term_name t1 ^ "_" ^ bop_name ^ "_" ^ (term_name t2)
     | JCTunary(uop,t1) ->

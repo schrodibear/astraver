@@ -46,20 +46,20 @@ and java_field_info =
 
 and method_info = 
     {
-     method_info_tag : int;
-     method_info_name : string;
-     mutable method_info_trans_name : string;
-     method_info_is_static : bool;
-(*
-     method_info_accessibility : accessibility;
-*)
-     method_info_class_or_interface : java_type_info;
-     mutable method_info_has_this : java_var_info option;
-     method_info_parameters : java_var_info list;
-     method_info_result : java_var_info option ;
-     mutable method_info_calls : method_info list;
-   }
-
+      method_info_tag : int;
+      method_info_name : string;
+      mutable method_info_trans_name : string;
+      method_info_is_static : bool;
+      (*
+	method_info_accessibility : accessibility;
+      *)
+      method_info_class_or_interface : java_type_info;
+      mutable method_info_has_this : java_var_info option;
+      method_info_parameters : java_var_info list;
+      method_info_result : java_var_info option ;
+      mutable method_info_calls : method_info list;
+    }
+      
 and constructor_info = 
     {
       constr_info_tag : int;

@@ -27,31 +27,30 @@ let parse_annot loc s f =
 
 let rec statement s =
   { s with java_pstatement_node = match s.java_pstatement_node with
-    | JPSannot(loc,s) -> parse_annot loc s Java_parser.kml_statement_annot
-    | JPSghost_local_decls _ | JPSghost_statement _ | JPSloop_annot _ 
-    | JPSassert _ -> assert false
-    | JPSsynchronized (e, s') -> JPSsynchronized(e, statements s')	
-    | JPSblock b -> JPSblock(statements b)
-    | JPSswitch(e, l) -> 
-	JPSswitch(e, List.map (fun (labs,b) -> (labs,statements b)) l)
-    | JPStry (s, l, f) -> 
-	let l = List.map (fun (p,s) -> (p,statements s)) l in
-	JPStry(statements s,l,Option_misc.map (statements) f)
-    | JPSfor_decl (d, e, sl, s) -> 
-	JPSfor_decl(d, e, sl, statement s)
-    | JPSfor (_, _, _, _) -> assert false (* TODO *)
-    | JPSdo (s', e) -> JPSdo (statement s',e)
-    | JPSwhile (e, s') -> JPSwhile(e, statement s')
-    | JPSif (e, s1, s2) -> JPSif(e, statement s1, statement s2)
-    | JPSlabel (l, s') -> JPSlabel(l,statement s')
-    | JPScontinue _
-    | JPSbreak _
-    | JPSreturn _
-    | JPSthrow _
-    | JPSvar_decl _
-    | JPSexpr _
-    | JPSskip -> s.java_pstatement_node }
-
+      | JPSannot(loc,s) -> parse_annot loc s Java_parser.kml_statement_annot
+      | JPSghost_local_decls _ | JPSghost_statement _ | JPSloop_annot _ 
+      | JPSassert _ -> assert false
+      | JPSsynchronized (e, s') -> JPSsynchronized(e, statements s')	
+      | JPSblock b -> JPSblock(statements b)
+      | JPSswitch(e, l) -> 
+	  JPSswitch(e, List.map (fun (labs,b) -> (labs,statements b)) l)
+      | JPStry (s, l, f) -> 
+	  let l = List.map (fun (p,s) -> (p,statements s)) l in
+	    JPStry(statements s,l,Option_misc.map (statements) f)
+      | JPSfor_decl (d, e, sl, s) -> JPSfor_decl(d, e, sl, statement s)
+      | JPSfor (el1, e, el2, s) -> JPSfor (el1, e, el2, statement s)
+      | JPSdo (s', e) -> JPSdo (statement s',e)
+      | JPSwhile (e, s') -> JPSwhile(e, statement s')
+      | JPSif (e, s1, s2) -> JPSif(e, statement s1, statement s2)
+      | JPSlabel (l, s') -> JPSlabel(l,statement s')
+      | JPScontinue _
+      | JPSbreak _
+      | JPSreturn _
+      | JPSthrow _
+      | JPSvar_decl _
+      | JPSexpr _
+      | JPSskip -> s.java_pstatement_node }
+    
 and statements b = List.map statement b
 
 let field_decl f = 

@@ -1181,6 +1181,44 @@ let is_logic_widening_primitive_convertible tfrom tto =
     | Tdouble, Treal -> true
     | _ -> false
 
+(* JLS 5.1.3: Narrowing Primitive Conversion *)
+let is_narrowing_primitive_convertible tfrom tto =
+  match tfrom, tto with
+    | Tshort, (Tbyte | Tchar) -> true
+    | Tchar, (Tbyte | Tshort) -> true
+    | Tint, (Tbyte | Tshort | Tchar) -> true
+    | Tlong, (Tbyte | Tshort | Tchar | Tint) -> true
+    | Tfloat, (Tbyte | Tshort | Tchar | Tint | Tlong)  -> true
+    | Tdouble, (Tbyte | Tshort | Tchar | Tint | Tlong | Tfloat)  -> true
+    | _ -> false
+
+let narrowing_primitive_conversion n tfrom tto =
+  match tfrom, tto with
+    | Tshort, (Tbyte | Tchar) -> assert false (* TODO *)
+    | Tchar, (Tbyte | Tshort) -> assert false (* TODO *)
+    | Tint, Tbyte ->
+	let i = Num.int_of_num n in
+	let i = i land 0xFF in (* discard all but 8 lower order bits *)
+	  (* if i is a byte then i else take the 2 complement of i *)
+	let i = if in_byte_range (Num.num_of_int i) then i else
+	  let i = (lnot i) land 0xFF in
+	  let i = (i + 1) land 0xFF in -i
+	in Num.num_of_int i
+    | Tint, Tshort ->
+	let i = Num.int_of_num n in
+	let i = i land 0xFFFF in (* discard all but 16 lower order bits *)
+	  (* if i is a short then i else take the 2 complement of i *)
+	let i = if in_short_range (Num.num_of_int i) then i else
+	  let i = (lnot i) land 0xFFFF in
+	  let i = (i + 1) land 0xFFFF in -i
+	in Num.num_of_int i
+    | Tint, Tchar -> assert false (* TODO *)
+    | Tlong, (Tbyte | Tshort | Tchar | Tint) -> assert false (* TODO *)
+    | Tfloat, (Tbyte | Tshort | Tchar | Tint | Tlong) -> assert false (* TODO *)
+    | Tdouble, (Tbyte | Tshort | Tchar | Tint | Tlong | Tfloat) -> assert false (* TODO *)
+    | _ -> assert false (* should never happen *)
+
+
 (* JLS 5.1.4: Widening Reference Conversion *)
 let rec is_widening_reference_convertible tfrom tto =
   
@@ -1204,7 +1242,7 @@ let rec is_widening_reference_convertible tfrom tto =
 
 (* JLS 5.2: Assignment conversion  *)
 
-let final_field_values_table : (int, Num.num) Hashtbl.t 
+let final_field_values_table : (int, Num.num list) Hashtbl.t 
     = Hashtbl.create 97
 
 let bwor_num n1 n2 =
@@ -1232,21 +1270,34 @@ let rec eval_const_expression const e =
 	    | Integer s -> Numconst.integer s
 	    | _ -> assert false (* TODO *)
 	end
-    | JEcast(ty,e) -> 
+    | JEcast (ty, e) ->
 	let n = eval_const_expression const e in
-	begin
-	  match ty with
-	    | JTYbase t ->
-		begin
-		  match t with
-		    | Tbyte -> if in_byte_range n then n else
-			typing_error e.java_expr_loc "outside the byte range: %s" (Num.string_of_num n)
-		    | Tshort -> if in_short_range n then n else
-			typing_error e.java_expr_loc "outside the short range: %s" (Num.string_of_num n)
-		    | Tunit|Treal|Tinteger|Tdouble|Tlong|Tfloat|Tint|Tchar|Tboolean -> assert false (* TODO *)
-		end
-	    | JTYarray _|JTYinterface _|JTYclass (_, _)|JTYnull -> raise Not_found
-	end
+	  begin
+	    match ty with
+	      | JTYbase t ->
+		  let te = match e.java_expr_type with
+		    | JTYbase t -> t | _ -> assert false 
+		  in
+		    begin
+		      match t with
+			| Tbyte -> if in_byte_range n then n else
+			    if is_narrowing_primitive_convertible te t then
+			      narrowing_primitive_conversion n te t
+			    else
+			      typing_error e.java_expr_loc 
+				"outside the byte range: %s" (Num.string_of_num n)
+			| Tshort -> if in_short_range n then n else
+			    if is_narrowing_primitive_convertible te t then
+			      narrowing_primitive_conversion n te t
+			    else
+			      typing_error e.java_expr_loc
+				"outside the short range: %s" (Num.string_of_num n)
+			| Tunit | Treal | Tinteger | Tdouble | Tlong 
+			| Tfloat | Tint | Tchar | Tboolean -> assert false (* TODO *)
+		    end
+	      | JTYarray _ | JTYinterface _ | JTYclass (_, _) |JTYnull
+		  -> raise Not_found
+	  end
     | JEbin(e1,op,e2) -> 
 	let n1 = eval_const_expression const e1 in
 	let n2 = eval_const_expression const e2 in
@@ -1278,7 +1329,10 @@ let rec eval_const_expression const e =
     | JEstatic_field_access (ty, fi) ->
 	begin
 	  try
-	    Hashtbl.find final_field_values_table fi.java_field_info_tag
+	    match fi.java_field_info_type with
+	      | JTYarray _ -> raise Not_found 
+	      | _ ->
+		  List.hd (Hashtbl.find final_field_values_table fi.java_field_info_tag)
 	  with Not_found ->
 	    if const then
 	      typing_error e.java_expr_loc "Cannot evaluate this expression"
@@ -1735,14 +1789,14 @@ and make_quantified_formula loc q ty idl package_env type_env current_type env e
 
 
 (* expressions *)
-
+	  
 let make_bin_op loc op t1 e1 t2 e2 =
-    match op with
+  match op with
     | Bgt | Blt | Bge | Ble ->
 	begin
 	  try
 	    let _t = binary_numeric_promotion t1 t2 in
-	    Tboolean, JEbin(e1, op, e2)
+	      Tboolean, JEbin(e1, op, e2)
 	  with Not_found ->
 	    typing_error loc "numeric types expected"
 	end
@@ -1750,10 +1804,11 @@ let make_bin_op loc op t1 e1 t2 e2 =
 	begin
 	  try
 	    let _t = binary_numeric_promotion t1 t2 in
-	    Tboolean, JEbin(e1, op, e2)
+	      Tboolean, JEbin(e1, op, e2)
 	  with Not_found ->
-	    if is_reference_type t1 && is_reference_type t2 then
-	      Tboolean, JEbin(e1,op,e2)
+	    if (is_boolean t1 && is_boolean t2) ||
+	      (is_reference_type t1 && is_reference_type t2) then
+		Tboolean, JEbin (e1, op, e2)
 	    else
 	      typing_error loc "numeric or object types expected for == and !="
 	end
@@ -1761,7 +1816,7 @@ let make_bin_op loc op t1 e1 t2 e2 =
 	begin
 	  try
 	    let t = binary_numeric_promotion t1 t2 in
-	    t,JEbin(e1, op, e2)
+	      t,JEbin(e1, op, e2)
 	  with Not_found ->
 	    typing_error loc "numeric types expected for +, -, *, / and %%"
 	end
@@ -1795,12 +1850,12 @@ let make_bin_op loc op t1 e1 t2 e2 =
 	    try
 	      let t1 = unary_numeric_promotion t1 in
 	      let _t2 = unary_numeric_promotion t2 in
-	      t1, JEbin(e1, op, e2)
+		t1, JEbin(e1, op, e2)
 	    with Not_found ->
 	      typing_error loc "booleans or integers expected"
 	  end	  
     | Bimpl | Biff -> assert false
-
+	
 let make_unary_op loc op t1 e1 =
   match op with
     | Unot -> 
@@ -2081,7 +2136,45 @@ let rec expr package_env type_env current_type env e =
 		  typing_error (fst (List.hd n))
 		    "class type expected"	
 	  end	  
-      | JPEsuper_call (_, _)-> assert false (* TODO *)
+      | JPEsuper_call (id, el) -> 
+	  (* JLS 15.12 *)
+	  let ci =
+	    match current_type with
+	      | Some (TypeClass ci) ->
+		  if ci == object_class then 
+		    typing_error e.java_pexpr_loc "cannot resolve variable super"
+		  else
+		    begin
+		      match ci.class_info_extends with
+			| None -> 
+			    typing_error e.java_pexpr_loc
+			      "cannot resolve variable super"
+			| Some ci -> TypeClass ci
+		    end
+	      | _ -> typing_error e.java_pexpr_loc "not a class"
+	  in
+	  let args = List.map exprt el in
+	  let arg_types = List.map (fun e -> e.java_expr_type) args in
+	  begin
+	    let mi = lookup_method ci id arg_types in
+	    let ty = 
+	      match mi.method_info_result with
+		| None -> unit_type
+		| Some vi -> vi.java_var_info_type
+	    in
+	      if mi.method_info_is_static then
+		ty, JEstatic_call (mi, args)
+	      else
+		let te2 =
+		  let vi = get_this e.java_pexpr_loc env in
+		    {
+		      java_expr_node = JEvar vi;
+		      java_expr_type = vi.java_var_info_type;
+		      java_expr_loc = e.java_pexpr_loc;
+		    }
+		in
+		  ty,JEcall (te2, mi, args)
+	  end
       | JPEcall_name (qid, args)-> 
 	  let args = List.map exprt args in
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in
@@ -2138,7 +2231,7 @@ let rec expr package_env type_env current_type env e =
 		      java_expr_loc = e.java_pexpr_loc;
 		    }
 	    in
-	    ty,JEcall(te2,mi,args)
+	      ty,JEcall(te2,mi,args)
 
       | JPEcall_expr (e1, id, args)-> 
 	  eprintf "method call expr@.";
@@ -2228,7 +2321,6 @@ let rec expr package_env type_env current_type env e =
 	      | _ ->
 		  array_expected e1.java_pexpr_loc te1.java_expr_type
 	  end
-	  
       | JPEassign_field (Super_access((loc,id)), op, e2) -> 
 	  assert false (* TODO *)
       | JPEassign_field (Primary_access(e1,(loc,id)), op, e2)-> 
@@ -2345,17 +2437,24 @@ let rec initializer_loc i =
     | Array_initializer (x::_) -> initializer_loc x
     | Array_initializer [] -> assert false (* TODO *)
 			   
-let type_initializer package_env type_env current_type env ty i =
-  match ty,i with
+let rec type_initializer package_env type_env current_type env ty i =
+  match ty, i with
     | _, Simple_initializer e ->
 	let te = expr package_env type_env current_type env e in	
-	if is_assignment_convertible ~const:true te.java_expr_type te ty 
-	then JIexpr te
-	else
-	  typing_error e.java_pexpr_loc "type %a expected, got %a"
-	    print_type ty print_type te.java_expr_type
-    | JTYarray t, Array_initializer l -> 
-	assert false (* TODO *)
+	  if is_assignment_convertible ~const:true te.java_expr_type te ty 
+	  then JIexpr te
+	  else
+	    typing_error e.java_pexpr_loc "type %a expected, got %a"
+	      print_type ty print_type te.java_expr_type
+    | JTYarray t, Array_initializer vil ->
+	let il =
+	  List.map
+	    (fun vi -> match vi with
+	       | Simple_initializer e ->
+		   type_initializer package_env type_env current_type env t vi
+	       | Array_initializer vil -> assert false (* TODO *))
+	    vil
+	in JIlist il
     | _, Array_initializer l -> 
 	typing_error (initializer_loc i) "wrong type for initializer"
 
@@ -2432,10 +2531,10 @@ let rec statement package_env type_env current_type env s =
 	  in
 	  JStry(ts, tl, 
 		Option_misc.map (statements package_env type_env current_type env) finally)
-      | JPSfor_decl (vd, cond, incrs, body) -> assert false
-      | JPSfor (_, _, _, _)-> assert false (* TODO *)
+      | JPSfor_decl _ -> assert false
+      | JPSfor _ -> assert false
       | JPSdo (_, _)-> assert false (* TODO *)
-      | JPSwhile (_, _)-> assert false (* TODO *)
+      | JPSwhile _ -> assert false
       | JPSlabel (_, _)-> assert false (* TODO *)
       | JPScontinue _-> assert false (* TODO *)
       | JPSbreak l -> JSbreak (Option_misc.map snd l)
@@ -2515,6 +2614,12 @@ and statements package_env type_env current_type env b =
 			statements package_env type_env current_type env rem
 		  | _ -> assert false
 	      end      
+	  | JPSfor (el1, e, el2, s) ->
+	      let tfor =
+		type_for package_env type_env current_type env 
+		  s.java_pstatement_loc el1 expr_true expr_zero e el2 s
+	      in
+		tfor :: statements package_env type_env current_type env rem
 	  | JPSfor_decl(vd,e,sl,s) ->
 	      let tfor =
 		type_for_decl package_env type_env current_type env 
@@ -2531,6 +2636,16 @@ and statements package_env type_env current_type env b =
 	      let s' = statement package_env type_env current_type env s in
 	      s' :: statements package_env type_env current_type env rem
 
+
+and type_for package_env type_env current_type env loc el1 inv dec e el2 s =
+  let el1 = List.map (expr package_env type_env current_type env) el1 in
+  let inv = assertion package_env type_env current_type env inv in
+  let dec = term package_env type_env current_type env dec in
+  let e = expr package_env type_env current_type env e in
+  let el2 = List.map (expr package_env type_env current_type env) el2 in
+  let s = statement package_env type_env current_type env s in
+    { java_statement_node = JSfor (el1, e, inv, dec, el2, s);
+      java_statement_loc = loc }
 
 and type_for_decl package_env type_env current_type env loc vd inv dec e sl s =
   let env,decls = 
@@ -2743,10 +2858,7 @@ let type_constr_spec_and_body package_env type_env current_type ci =
 	    ct_behaviors = behs;
 	    ct_body = body } 
     | Invoke_this _ | Invoke_super _ -> assert false (* TODO *)
-
-
-
-
+	
 let type_field_initializer package_env type_env ci fi =
   let init = 
     try
@@ -2761,26 +2873,37 @@ let type_field_initializer package_env type_env ci fi =
 	    type_initializer package_env type_env (Some ci) [] 
 	      fi.java_field_info_type i
 	  in
-	  if fi.java_field_info_is_final then
-	    begin
-	      match ti with
-		| JIexpr e ->
-		    begin
+	    if fi.java_field_info_is_final then
+	      begin
+		match ti with
+		  | JIexpr e ->
+		      begin
+			try
+			  let v = eval_const_expression false e in
+			    Hashtbl.add final_field_values_table 
+			      fi.java_field_info_tag [v]			with
+			    Not_found ->
+			      Java_options.lprintf
+				"FIXME: cannot evaluate this initializer, %a@."
+				Loc.gen_report_position e.java_expr_loc
+				(*
+				  typing_error e.java_expr_loc "cannot evaluate this initializer"
+				*)		    end
+		  | JIlist vil ->
 		      try
-			let v = eval_const_expression false e in
-			Hashtbl.add final_field_values_table 
-			  fi.java_field_info_tag v
-		      with
-			  Not_found ->
-			    Java_options.lprintf "FIXME: cannot evaluate this initializer, %a@." Loc.gen_report_position e.java_expr_loc
-(*
-			    typing_error e.java_expr_loc "cannot evaluate this initializer"
-*)		    end
-		| JIlist _ -> assert false (* TODO *)
-	    end;
-	  Some ti
+			let vil = List.map
+			  (fun vi -> match vi with
+			     | JIexpr e -> eval_const_expression false e
+			     | JIlist _ -> assert false (* TODO *))
+			  vil
+			in
+			  Hashtbl.add final_field_values_table 
+			    fi.java_field_info_tag vil
+		      with Not_found -> assert false 
+	      end;
+	    Some ti
   in
-  Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
+    Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
   
 let type_decl package_env type_env d = 
     match d with
