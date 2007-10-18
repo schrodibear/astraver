@@ -21,7 +21,7 @@
 
 MLFILES = lib.ml intro.ml formulas.ml prop.ml propexamples.ml           \
 	  defcnf.ml dp.ml fol.ml skolem.ml herbrand.ml qelim.ml         \
-	  cooper.ml
+	  cooper.ml fourier_motzkin.ml
 
 # The default is to build a bytecode executable
 
