@@ -266,7 +266,7 @@ let create_field fi =
 
 let static_fields_table = Hashtbl.create 97
 
-let get_static_var ci fi =
+let get_static_var fi =
   try
     Hashtbl.find static_fields_table fi.java_field_info_tag
   with
@@ -322,9 +322,9 @@ let create_logic_fun fi =
 
 let funs_table = Hashtbl.create 97
 
-let get_fun mi =
+let get_fun tag =
   try
-    Hashtbl.find funs_table mi.method_info_tag
+    Hashtbl.find funs_table tag
   with
       Not_found -> assert false
 
@@ -446,7 +446,7 @@ let rec term t =
       | JTvar vi -> JCTvar (get_var vi)
       | JTfield_access(t,fi) -> JCTderef(term t,get_field fi)
       | JTstatic_field_access(ci,fi) ->
-	  JCTvar(get_static_var ci fi)
+	  JCTvar(get_static_var fi)
       | JTarray_length(t) -> 
 	  begin
 	    match t.java_term_type with
@@ -659,7 +659,7 @@ let rec location_set t =
       | JTvar vi -> JCLSvar (get_var vi)
       | JTfield_access(t,fi) -> JCLSderef(location_set t,get_field fi)
       | JTstatic_field_access(ci,fi) ->
-	  JCLSvar(get_static_var ci fi)
+	  JCLSvar(get_static_var fi)
       | JTarray_length(t) -> assert false (* TODO *)
       | JTarray_access(t1,t2) -> 
 	  begin
@@ -697,7 +697,7 @@ let location t =
       | JTvar vi -> JCLvar (get_var vi)
       | JTfield_access(t,fi) -> JCLderef(location_set t,get_field fi)
       | JTstatic_field_access(ci,fi) ->
-	  JCLvar(get_static_var ci fi)
+	  JCLvar(get_static_var fi)
       | JTarray_length(t) -> assert false (* TODO *)
       | JTarray_access(t1,t2) -> 
 	  begin
@@ -791,6 +791,7 @@ let rec expr e =
 	  JCTEincr_local(incr_op op,get_var v)
       | JEincr_field(op,e,fi) -> 
 	  assert false
+      | JEincr_array (op, e1, e2) -> assert false (* TODO *)
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
 	  lab := reg_loc e.java_expr_loc;
@@ -802,7 +803,7 @@ let rec expr e =
       | JEif _ -> assert false (* TODO *)
       | JEvar vi -> JCTEvar (get_var vi)
       | JEstatic_field_access(ci,fi) ->
-	  JCTEvar(get_static_var ci fi)
+	  JCTEvar (get_static_var fi)
       | JEfield_access(e1,fi) -> 
 	  JCTEderef(expr e1,get_field fi)
       | JEarray_length(e) -> 
@@ -837,6 +838,10 @@ let rec expr e =
 	  JCTEassign_heap(expr e1,get_field fi,expr e2)
       | JEassign_field_op(e1,fi,op,e2) ->
 	  JCTEassign_heap_op(expr e1,get_field fi,bin_op op,expr e2)
+      | JEassign_static_field (fi, e) ->
+	  JCTEassign_var (get_static_var fi, expr e)
+      | JEassign_static_field_op (fi, op, e) ->
+	  JCTEassign_var_op (get_static_var fi, bin_op op, expr e)
       | JEassign_array(e1,e2,e3) ->
 	  begin
 	    match e1.java_expr_type with
@@ -875,10 +880,13 @@ let rec expr e =
 	  end
       | JEcall(e,mi,args) -> 
 	  lab := reg_loc e.java_expr_loc;
-	  JCTEcall(get_fun mi,List.map expr (e::args))
+	  JCTEcall (get_fun mi.method_info_tag, List.map expr (e :: args))
+      | JEconstr_call (e, ci, args) -> 
+	  lab := reg_loc e.java_expr_loc;
+	  JCTEcall (get_fun ci.constr_info_tag, List.map expr (e :: args))
       | JEstatic_call(mi,args) -> 
 	  lab := reg_loc e.java_expr_loc;
-	  JCTEcall(get_fun mi,List.map expr args)
+	  JCTEcall(get_fun mi.method_info_tag, List.map expr args)
       | JEnew_array(ty,[e]) ->
 	  let si = get_array_struct ty in
 	  JCTEalloc (expr e, si) 

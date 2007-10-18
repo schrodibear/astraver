@@ -100,6 +100,9 @@ let rec expr acc e : 'a list =
     | JEstatic_field_access _ -> acc
     | JEcall (e, mi, args) ->
 	List.fold_left expr (expr (mi::acc) e) args
+    | JEconstr_call (e, ci, args) ->
+	(* TODO: calls constructor *)
+	List.fold_left expr (expr acc e) args
     | JEstatic_call (mi, args) ->
 	List.fold_left expr (mi::acc) args
     | JEnew_array(ty, dims) ->
@@ -113,6 +116,8 @@ let rec expr acc e : 'a list =
 	expr (expr (expr acc e1) e2) e3
     | JEassign_local_var_op (_, _, e) 
     | JEassign_local_var (_, e) 
+    | JEassign_static_field ( _, e)
+    | JEassign_static_field_op ( _, _, e)
     | JEarray_length e  
     | JEfield_access (e, _) 
     | JEincr_field (_,e,_)
@@ -120,7 +125,8 @@ let rec expr acc e : 'a list =
     | JEassign_field (e1, _, e2)
     | JEassign_field_op (e1, _, _, e2)
     | JEarray_access (e1, e2) 
-    | JEbin (e1, _, e2) -> expr (expr acc e1) e2
+    | JEbin (e1, _, e2) | JEincr_array (_, e1, e2) -> 
+	expr (expr acc e1) e2
     | JEinstanceof(e,_)
     | JEcast (_,e) -> expr acc e
 

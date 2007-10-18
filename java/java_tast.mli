@@ -63,6 +63,7 @@ and expr_node =
       (*r pre-post incr/decr operations *)
   | JEincr_local_var of incr_decr_op * java_var_info
   | JEincr_field of incr_decr_op * expr * java_field_info 
+  | JEincr_array of incr_decr_op * expr * expr
   | JEstatic_field_access of java_type_info * java_field_info
   | JEfield_access of expr * java_field_info
   | JEarray_length of expr 
@@ -71,9 +72,12 @@ and expr_node =
   | JEassign_local_var_op of java_var_info * bin_op * expr  
   | JEassign_field of expr * java_field_info * expr
   | JEassign_field_op of expr * java_field_info * bin_op * expr
+  | JEassign_static_field of java_field_info * expr
+  | JEassign_static_field_op of java_field_info * bin_op * expr
   | JEassign_array of expr * expr * expr
   | JEassign_array_op of expr * expr * bin_op * expr
   | JEcall of expr * method_info * expr list
+  | JEconstr_call of expr * constructor_info * expr list
   | JEstatic_call of method_info * expr list
   | JEnew_array of java_type * expr list
       (*r elements type, dimensions *)

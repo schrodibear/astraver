@@ -54,7 +54,7 @@ let rec expr e =
     | JEincr_local_var(op,v) -> ()
     | JEincr_field(op,e1,fi) -> expr e1
     | JEun (_, e1) -> expr e1
-    | JEbin (e1, op, e2) -> expr e1; expr e2 
+    | JEbin (e1, _, e2) | JEincr_array (_, e1, e2) -> expr e1; expr e2 
     | JEvar vi -> ()
     | JEstatic_field_access(ci,fi) -> ()
     | JEfield_access(e1,fi) -> expr e1
@@ -71,8 +71,10 @@ let rec expr e =
 	    | JTYarray ty -> intro_array_struct ty
 	    | _ -> assert false
 	end
-    | JEassign_local_var(vi,e) -> expr e
-    | JEassign_local_var_op(vi,op,e) -> expr e
+    | JEassign_local_var (_, e)
+    | JEassign_local_var_op (_, _, e)
+    | JEassign_static_field (_, e) 
+    | JEassign_static_field_op (_, _, e) -> expr e
     | JEassign_field(e1,fi,e2) -> expr e1; expr e2
     | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
     | JEif(e1,e2,e3)
@@ -80,6 +82,8 @@ let rec expr e =
     | JEassign_array_op(e1,e2,_,e3) -> expr e1; expr e2; expr e3
     | JEcall(e,mi,args) ->
 	expr e;	List.iter expr args
+    | JEconstr_call (e, _, args) ->
+	expr e; List.iter expr args
     | JEstatic_call(mi,args) ->
 	List.iter expr args
     | JEnew_array(ty,dims) ->

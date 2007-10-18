@@ -12,6 +12,18 @@ let expr_true = expr_no_loc expr_node_true
 
 let expr_zero = expr_no_loc (JPElit(Integer "0"))
 
+
+open Java_tast
+
+let make_statement_no_loc node = 
+  { java_statement_loc = Loc.dummy_position ; java_statement_node = node }
+    
+let make_expr_no_loc t node = 
+  { java_expr_loc = Loc.dummy_position ;
+    java_expr_type = t ;
+    java_expr_node = node }
+    
+    
 (*
 let default_loop_annotation =
   { kml_loop_invariant = expr_true;

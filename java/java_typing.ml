@@ -475,17 +475,17 @@ and classify_name
     (name : qualified_ident) =
   match name with
     | [] -> assert false
-    | [(loc,id)] ->
+    | [(loc, id)] ->
 	(* case of a simple name (JLS p 96) *)
 	begin
 	  (* look for a local var of that name *)
 	  try
 	    let vi = List.assoc id local_env in
-	    TermName { 
-	      java_term_node = JTvar vi; 
-	      java_term_type = vi.java_var_info_type;
-	      java_term_loc = loc 
-	    }
+	      TermName { 
+		java_term_node = JTvar vi; 
+		java_term_type = vi.java_var_info_type;
+		java_term_loc = loc 
+	      }
 	  with Not_found -> 
 	    (* look for a field of that name in current class *)
 	    try
@@ -495,7 +495,7 @@ and classify_name
 		    let fi = lookup_field ti id in
 		    let facc =
 		      if fi.java_field_info_is_static then
-			JTstatic_field_access(ti,fi)
+			JTstatic_field_access (ti, fi)
 		      else
 			let vi = 
 			  try
@@ -507,7 +507,7 @@ and classify_name
 			    java_term_type = vi.java_var_info_type;
 			    java_term_loc = loc }
 			in		
-			JTfield_access(this,fi)
+			JTfield_access (this, fi)
 		    in
 		    TermName {
 		      java_term_node = facc;
@@ -1353,17 +1353,21 @@ let rec eval_const_expression const e =
     | JEnew_array (_, _)
     | JEstatic_call (_, _)
     | JEcall (_, _, _)
+    | JEconstr_call _
     | JEassign_array (_, _, _)
     | JEassign_array_op (_, _, _, _)
     | JEassign_field_op (_, _, _, _)
     | JEassign_field (_, _, _)
+    | JEassign_static_field _
+    | JEassign_static_field_op _
     | JEassign_local_var_op (_, _, _)
     | JEassign_local_var (_, _)
     | JEarray_access (_, _)
     | JEarray_length _
     | JEfield_access (_, _)
     | JEincr_field (_, _, _)
-    | JEincr_local_var (_, _) -> raise Not_found
+    | JEincr_local_var (_, _)
+    | JEincr_array _ -> raise Not_found
 
 let is_assignment_convertible ?(const=false) tfrom efrom tto =
   is_identity_convertible tfrom tto ||
@@ -1919,17 +1923,24 @@ let rec expr_of_term t =
   
 *)
 
-let is_accessible_and_applicable mi id arg_types =
+let is_accessible_and_applicable_method mi id arg_types =
   mi.method_info_name = id &&
   (* check args number *) 
   List.length arg_types = List.length mi.method_info_parameters &&
   (* check args types *)
-  let () = if id = "init" then eprintf "checking parameter types@." in
   List.for_all2
    (fun vi t -> 
-      if id = "init" then eprintf "checking parameter '%s'@." vi.java_var_info_name;
       is_method_invocation_convertible t vi.java_var_info_type)
   mi.method_info_parameters arg_types 
+  
+let is_accessible_and_applicable_constructor ci arg_types =
+  (* check args number *) 
+  List.length arg_types = List.length ci.constr_info_parameters &&
+  (* check args types *)
+  List.for_all2
+  (fun vi t -> 
+     is_method_invocation_convertible t vi.java_var_info_type)
+  ci.constr_info_parameters arg_types 
   
 let method_signature mi =
   let t =
@@ -1985,7 +1996,7 @@ let lookup_method ti (loc,id) arg_types =
     let acc = 
       List.fold_left
 	(fun acc mi -> 
-	   if is_accessible_and_applicable mi id arg_types then 
+	   if is_accessible_and_applicable_method mi id arg_types then 
 	     mi::acc 
 	   else acc)
 	acc ii.interface_info_methods
@@ -1998,7 +2009,7 @@ let lookup_method ti (loc,id) arg_types =
     let acc = 
       List.fold_left
 	(fun acc mi -> 
-	   if is_accessible_and_applicable mi id arg_types then 
+	   if is_accessible_and_applicable_method mi id arg_types then 
 	     mi::acc 
 	   else acc)
 	acc ci.class_info_methods
@@ -2044,9 +2055,21 @@ let lookup_method ti (loc,id) arg_types =
 	      typing_error loc "ambiguity in overloading/overriding"
 
 let lookup_constructor ci arg_types = 
-  (* !!!!!!!!! TODO !!!!!!! *)
-  ()
-
+  let rec collect_constructors_from_class acc ci =
+    check_if_class_complete ci;
+    List.fold_left
+      (fun acc ci -> 
+	 if is_accessible_and_applicable_constructor ci arg_types then 
+	   ci::acc 
+	 else acc)
+      acc ci.class_info_constructors
+  in
+  let constructors = collect_constructors_from_class [] ci in
+    match constructors with
+      | [] -> raise Not_found
+      | [ci] -> ci
+      | _ -> assert false
+	  
 let rec expr package_env type_env current_type env e =
   let exprt = expr package_env type_env current_type env in
   let ty,te = 
@@ -2336,54 +2359,58 @@ let rec expr package_env type_env current_type env e =
       | JPEassign_name (n, op, e1)-> 
 	  begin
 	    let te = exprt e1 in
-	    match classify_name package_env type_env current_type env n with
-	      | TermName t ->
-		  begin
-		    match t.java_term_node with
-		      | JTvar vi ->
-			  if op = Beq then
-			    if is_assignment_convertible te.java_expr_type te 
-			      vi.java_var_info_type
-			    then 
-			      (vi.java_var_info_type,
-			       JEassign_local_var(vi,te))
-			    else
-			      typing_error e.java_pexpr_loc 
-				"type %a expected, got %a" 
-				print_type vi.java_var_info_type 
-				print_type te.java_expr_type
-			  else 
-			    if cast_convertible te.java_expr_type 
-			      vi.java_var_info_type
-			    then 
-			      (vi.java_var_info_type,
-			       JEassign_local_var_op(vi,op,te))
-			    else
-			      typing_error e.java_pexpr_loc 
-				"type %a expected, got %a" 
-				print_type vi.java_var_info_type 
-			      print_type te.java_expr_type
-		      | JTfield_access(t,fi) ->
-			  type_assign_field (expr_of_term t) fi op te
-		      | _ -> assert false (* TODO *)
-		  end
-	      | TypeName _ ->
-		  typing_error e.java_pexpr_loc
-		    "lvalue expected, got a class or interface"
-	      | PackageName _ ->
-		  typing_error e.java_pexpr_loc
-		    "lvalue expected, got a package name"
+	      match classify_name package_env type_env current_type env n with
+		| TermName t ->
+		    begin
+		      match t.java_term_node with
+			| JTvar vi ->
+			    if op = Beq then
+			      if is_assignment_convertible te.java_expr_type te 
+				vi.java_var_info_type
+			      then 
+				(vi.java_var_info_type,
+				 JEassign_local_var(vi,te))
+			      else
+				typing_error e.java_pexpr_loc 
+				  "type %a expected, got %a" 
+				  print_type vi.java_var_info_type 
+				  print_type te.java_expr_type
+			    else 
+			      if cast_convertible te.java_expr_type 
+				vi.java_var_info_type
+			      then 
+				(vi.java_var_info_type,
+				 JEassign_local_var_op(vi,op,te))
+			      else
+				typing_error e.java_pexpr_loc 
+				  "type %a expected, got %a" 
+				  print_type vi.java_var_info_type 
+				  print_type te.java_expr_type
+			| JTfield_access (t, fi) ->
+			    type_assign_field (expr_of_term t) fi op te
+			| JTstatic_field_access (_, fi) ->
+			    type_assign_static_field fi op te
+			| _ -> assert false (* TODO *)
+		    end
+		| TypeName _ ->
+		    typing_error e.java_pexpr_loc
+		      "lvalue expected, got a class or interface"
+		| PackageName _ ->
+		    typing_error e.java_pexpr_loc
+		      "lvalue expected, got a package name"
 	  end
       | JPEincr (op, e)-> 
 	  let te = exprt e in 
-	  begin
-	    match te.java_expr_node with
-	      | JEvar v ->
-		  te.java_expr_type,JEincr_local_var(op,v)
-	      | JEfield_access(e1,fi) -> 
-		  fi.java_field_info_type, JEincr_field(op,e1,fi)
-	      | _ -> assert false (* TODO ? *)
-	  end	  
+	    begin
+	      match te.java_expr_node with
+		| JEvar vi ->
+		    te.java_expr_type, JEincr_local_var (op, vi)
+		| JEfield_access (e1, fi) -> 
+		    fi.java_field_info_type, JEincr_field (op, e1, fi)
+		| JEarray_access (e1, e2) ->
+		    te.java_expr_type, JEincr_array (op, e1, e2)
+		| _ -> assert false (* TODO ? *)
+	    end	  
       | JPEun (op, e1)-> 
 	  let te1 = exprt e1 in 
 	  let t,e = make_unary_op e.java_pexpr_loc op 
@@ -2411,8 +2438,7 @@ and type_assign_field t fi op te =
     if is_assignment_convertible te.java_expr_type te
       fi.java_field_info_type
     then 
-      (fi.java_field_info_type,
-       JEassign_field(t,fi,te))
+      (fi.java_field_info_type, JEassign_field (t, fi, te))
     else
       typing_error te.java_expr_loc 
 	"type %a expected, got %a" 
@@ -2422,15 +2448,35 @@ and type_assign_field t fi op te =
     if cast_convertible te.java_expr_type 
       fi.java_field_info_type
     then 
-      (fi.java_field_info_type,
-       JEassign_field_op(t,fi,op,te))
+      (fi.java_field_info_type, JEassign_field_op (t, fi, op, te))
     else
       typing_error te.java_expr_loc 
 	"type %a expected, got %a" 
 	print_type fi.java_field_info_type 
 	print_type te.java_expr_type
-
-
+	
+and type_assign_static_field fi op te =
+  if op = Beq then
+    if is_assignment_convertible te.java_expr_type te
+      fi.java_field_info_type
+    then 
+      (fi.java_field_info_type, JEassign_static_field (fi, te))
+    else
+      typing_error te.java_expr_loc 
+	"type %a expected, got %a" 
+	print_type fi.java_field_info_type 
+	print_type te.java_expr_type
+  else 
+    if cast_convertible te.java_expr_type 
+      fi.java_field_info_type
+    then 
+      (fi.java_field_info_type, JEassign_static_field_op (fi, op, te))
+    else
+      typing_error te.java_expr_loc 
+	"type %a expected, got %a" 
+	print_type fi.java_field_info_type 
+	print_type te.java_expr_type
+	
 let rec initializer_loc i =
   match i with
     | Simple_initializer e -> e.java_pexpr_loc
@@ -2809,7 +2855,7 @@ type constructor_table_info =
     }
 
 let constructors_table = Hashtbl.create 97
-
+  
 let type_constr_spec_and_body package_env type_env current_type ci =
   let (_,req,assigns,behs,eci,body) = 
     try
@@ -2831,34 +2877,64 @@ let type_constr_spec_and_body package_env type_env current_type ci =
     (* spec is typed in a env that contains "this" but it will be
        renamed to "\\result" NO: TODO *)
     let vi = new_var this_type "this" (* "\\result" *) in
-    ci.constr_info_result <- Some vi;
-    ("this",vi)::local_env
+      ci.constr_info_result <- Some vi;
+      ("this",vi)::local_env
   in
+  let this_vi = new_var this_type "this" in
   let body_env =
-    let vi = new_var this_type "this" in
-    ci.constr_info_this <- Some vi;
-    ("this",vi)::local_env
+    ci.constr_info_this <- Some this_vi;
+    ("this", this_vi)::local_env
   in
   let req = Option_misc.map (assertion package_env type_env (Some current_type) local_env) req in
-   (* Note: for constructors, the `assigns' clause is typed in
-      pre-state environnement: `this' is not allowed there *)
+    (* Note: for constructors, the `assigns' clause is typed in
+       pre-state environnement: `this' is not allowed there *)
   let assigns = 
     Option_misc.map 
       (List.map 
 	 (location package_env type_env (Some current_type) local_env)) assigns
   in
-  let behs = List.map (behavior package_env type_env (Some current_type) local_env spec_env) behs in
-  match eci with
-    | Invoke_none -> 
-	let body = statements package_env type_env (Some current_type) body_env body in
-	Hashtbl.add constructors_table ci.constr_info_tag 
-	  { ct_constr_info = ci;
-	    ct_requires = req;
-	    ct_assigns = assigns;
-	    ct_behaviors = behs;
-	    ct_body = body } 
-    | Invoke_this _ | Invoke_super _ -> assert false (* TODO *)
-	
+  let behs = List.map 
+    (behavior package_env type_env (Some current_type) local_env spec_env) behs 
+  in
+    match eci with
+      | Invoke_none -> 
+	  let body = statements package_env type_env (Some current_type) body_env body in
+	    Hashtbl.add constructors_table ci.constr_info_tag 
+	      { ct_constr_info = ci;
+		ct_requires = req;
+		ct_assigns = assigns;
+		ct_behaviors = behs;
+		ct_body = body } 
+      | Invoke_this _ -> assert false (* TODO *)
+      | Invoke_super el ->
+	  let tel = List.map (expr package_env type_env (Some current_type) body_env) el in
+	  let super_class_info =
+	    match current_type with
+	      | TypeClass ci ->
+		  begin match ci.class_info_extends with
+		    | None -> assert false
+		    | Some ci -> ci
+		  end
+	      | _ -> assert false
+	  in
+	  let arg_types = List.map (fun te -> te.java_expr_type) tel in
+	  let super_ci = lookup_constructor super_class_info arg_types in
+	  let super_call_s =
+	    make_statement_no_loc 
+	      (JSexpr (
+		 make_expr_no_loc unit_type
+		   (JEconstr_call
+		      (make_expr_no_loc
+			 (JTYclass (false, super_class_info)) (JEvar this_vi), super_ci, tel))))
+	  in
+	  let body = statements package_env type_env (Some current_type) body_env body in
+	    Hashtbl.add constructors_table ci.constr_info_tag 
+	      { ct_constr_info = ci;
+		ct_requires = req;
+		ct_assigns = assigns;
+		ct_behaviors = behs;
+		ct_body = super_call_s :: body }
+		      
 let type_field_initializer package_env type_env ci fi =
   let init = 
     try
