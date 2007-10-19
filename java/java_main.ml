@@ -40,6 +40,10 @@ let main () =
 	  Java_callgraph.compute_components 
 	    Java_typing.methods_table
 	in
+	Hashtbl.iter
+	  (fun _ ty ->
+	     Java_analysis.do_type ty)
+	  Java_typing.type_table;
 	(* analyze in any order *)
 	Hashtbl.iter
 	  (fun mi mti ->

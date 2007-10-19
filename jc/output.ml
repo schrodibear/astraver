@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.15 2007-10-09 10:50:24 marche Exp $ i*)
+(*i $Id: output.ml,v 1.16 2007-10-19 11:42:13 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -650,7 +650,7 @@ let rec do_topo decl_map iter_fun output_fun id d =
   match d.state with
     | `DONE -> ()
     | `RUNNING -> 
-	eprintf "Recursive definition of %s in generated file" id
+	eprintf "Warning: recursive definition of %s in generated file@." id
     | `TODO ->
 	d.state <- `RUNNING;
 	iter_fun

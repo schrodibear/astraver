@@ -855,6 +855,9 @@ let invariant_for_struct this st =
   make_and_list 
     (List.map (fun (li,_) -> make_logic_pred_call li [this]) invs)
 
+let exception_name ei =
+  ei.jc_exception_info_name ^ "_exc"
+
 let any_value ty = 
   match ty with
   | JCTnative t -> 
@@ -1002,19 +1005,19 @@ let rec statement ~threats s =
 	  ("pack_"^st.jc_struct_info_root) [e; Var (tag_name from_t)]
     | JCSthrow (ei, Some e) -> 
 	let e = expr e in
-	Raise(ei.jc_exception_info_name,Some e)
+	Raise(exception_name ei,Some e)
     | JCSthrow (ei, None) -> 
-	Raise(ei.jc_exception_info_name,None)
+	Raise(exception_name ei,None)
     | JCStry (s, catches, finally) -> 
 	assert (finally.jc_statement_node = JCSblock []); (* TODO *)
 	let catch s c = match c with
 	  | (ei,Some v,st) ->
 	      Try(s, 
-		  ei.jc_exception_info_name, 
+		  exception_name ei, 
 		  Some v.jc_var_info_final_name, statement st)
 	  | (ei,None,st) ->
 	      Try(s, 
-		  ei.jc_exception_info_name, 
+		  exception_name ei, 
 		  None, statement st)
 	in
 	List.fold_left catch (statement s) catches
@@ -1253,7 +1256,7 @@ let excep_posts_for_others eopt excep_posts =
   ExceptionMap.fold
     (fun ei l acc ->
        if eopt = Some ei then acc 
-       else (ei.jc_exception_info_name,LTrue)::acc)
+       else (exception_name ei,LTrue)::acc)
     excep_posts []
 
 let interp_fun_params f annot_type =
@@ -1468,7 +1471,7 @@ let tr_fun f spec body acc =
       (fun ei l acc ->
 	 let p = 
 	   List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
-	 in (ei.jc_exception_info_name,p)::acc) 
+	 in (exception_name ei,p)::acc) 
       excep_behaviors []
   in
   (* DEBUG *)
@@ -1621,7 +1624,7 @@ let tr_fun f spec body acc =
 				  requires,
 				  tblock,
 				  LTrue,
-				  (ei.jc_exception_info_name,e) :: 
+				  (exception_name ei,e) :: 
 				    excep_posts_for_others (Some ei) excep_behaviors))
 			in d::acc)
 		     l acc)
@@ -1635,11 +1638,12 @@ let tr_axiom id p acc =
   Axiom(id,assertion None "" p)::acc
 
 let tr_exception ei acc =
+  Jc_options.lprintf "producing exception '%s'@." ei.jc_exception_info_name;
   let typ = match ei.jc_exception_info_type with
     | Some tei -> Some (tr_base_type tei)
     | None -> None
   in
-  Exception(ei.jc_exception_info_name, typ) :: acc
+  Exception(exception_name ei, typ) :: acc
 
 let tr_enum_type ri (* to_int of_int *) acc =
   let n = ri.jc_enum_info_name in

@@ -1,6 +1,8 @@
 
 class NoCreditException extends Exception {
 
+    public NoCreditException();
+
 }
 
 public class Purse {

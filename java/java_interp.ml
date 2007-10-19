@@ -196,15 +196,15 @@ let num_minus_one = Num.Int (-1)
 
 let array_struct_table = Hashtbl.create 17
       
-let rec get_array_struct t = 
+let rec get_array_struct loc t = 
   try
     Hashtbl.find array_struct_table t 
   with Not_found -> 
-    eprintf "Array struct for type %a not found@." 
-      Java_typing.print_type t;
-    assert false
+    eprintf "Array struct for type %a not found: %a@." 
+      Java_typing.print_type t Loc.report_position loc;
+    raise Not_found
 
-and tr_type t =
+and tr_type loc t =
   match t with
     | JTYbase t -> tr_base_type t	
     | JTYnull -> JCTnull
@@ -218,13 +218,13 @@ and tr_type t =
 	           (* if non_null then Some num_zero else *) None)
 	
     | JTYarray t ->
-	let st = get_array_struct t in
+	let st = get_array_struct loc t in
 	JCTpointer(st,Some num_zero,None)
 
-let tr_type_option t =
+let tr_type_option loc t =
   match t with
     | None -> Jc_pervasives.unit_type
-    | Some t -> tr_type t
+    | Some t -> tr_type loc t
 
 (*s structure fields *)
 
@@ -239,9 +239,9 @@ let get_field fi =
 	  fi.java_field_info_name;
 	assert false
 
-let create_field fi =
+let create_field loc fi =
   eprintf "Creating JC field '%s'@." fi.java_field_info_name;
-  let ty = tr_type fi.java_field_info_type in
+  let ty = tr_type loc fi.java_field_info_type in
   let ci = 
     match fi.java_field_info_class_or_interface with
       | TypeClass ci -> get_class ci
@@ -287,8 +287,8 @@ let get_var vi =
 	eprintf "Java_interp.get_var %s@." vi.java_var_info_name;
 	assert false
 
-let create_var ?(formal=false) vi =
-  let ty = tr_type vi.java_var_info_type in
+let create_var ?(formal=false) loc vi =
+  let ty = tr_type loc vi.java_var_info_type in
   let nvi = Jc_pervasives.var ~formal ty vi.java_var_info_name in
   nvi.jc_var_info_assigned <- vi.java_var_info_assigned;
   Hashtbl.add vi_table vi.java_var_info_tag nvi;
@@ -304,17 +304,17 @@ let get_logic_fun fi =
   with
       Not_found -> assert false
 
-let create_logic_fun fi =
+let create_logic_fun loc fi =
   let nfi =
     match fi.java_logic_info_result_type with
       | None ->
 	  Jc_pervasives.make_rel fi.java_logic_info_name 
       | Some t ->
 	  Jc_pervasives.make_logic_fun fi.java_logic_info_name 
-	    (tr_type t) 
+	    (tr_type loc t) 
   in
   nfi.jc_logic_info_parameters <-
-    List.map create_var fi.java_logic_info_parameters;
+    List.map (create_var loc) fi.java_logic_info_parameters;
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
   nfi
 
@@ -328,7 +328,7 @@ let get_fun tag =
   with
       Not_found -> assert false
 
-let create_fun tag result name params =
+let create_fun loc tag result name params =
   let nfi =
     match result with
       | None ->
@@ -336,10 +336,10 @@ let create_fun tag result name params =
 	    Jc_pervasives.unit_type
       | Some vi ->
 	  Jc_pervasives.make_fun_info name
-	    (tr_type vi.java_var_info_type) 
+	    (tr_type loc vi.java_var_info_type) 
   in
   nfi.jc_fun_info_parameters <-
-    List.map create_var params;
+    List.map (create_var loc) params;
   Hashtbl.add funs_table tag nfi;
   nfi
 
@@ -451,7 +451,7 @@ let rec term t =
 	  begin
 	    match t.java_term_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct t.java_term_loc ty in
 		  let t = term t in
 		  term_plus_one
 		    { t with jc_term_node = JCToffset(Offset_max, t, st) }
@@ -461,7 +461,7 @@ let rec term t =
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct t.java_term_loc ty in
 		  let t1' = term t1 in
 		  let shift = {
 		      jc_term_loc = t.java_term_loc;
@@ -485,7 +485,7 @@ let rec term t =
 	  end
 
   in { jc_term_loc = t.java_term_loc ; 
-       jc_term_type = tr_type t.java_term_type ;
+       jc_term_type = tr_type  t.java_term_loc t.java_term_type ;
        jc_term_node = t' }
 
 let quantifier = function
@@ -504,7 +504,7 @@ let rec assertion a =
       | JAapp (fi, el)-> 
 	  JCAapp(get_logic_fun fi,List.map term el)
       | JAquantifier (q, vi , a)-> 
-	  let vi = create_var vi in
+	  let vi = create_var a.java_assertion_loc vi in
 	  JCAquantifier(quantifier q,vi,assertion a)
       | JAimpl (a1, a2)-> 
 	  JCAimplies(assertion a1,assertion a2)
@@ -528,8 +528,8 @@ let dummy_loc_assertion a =
 
 
 
-let create_static_var ci fi =
-  let ty = tr_type fi.java_field_info_type in
+let create_static_var loc ci fi =
+  let ty = tr_type loc fi.java_field_info_type in
   let name = ci.class_info_name ^ "_" ^ 
     fi.java_field_info_name
   in
@@ -545,7 +545,30 @@ let rec term_of_expr e =
       | JElit l -> JTlit l
       | JEstatic_field_access(ty,fi) -> JTstatic_field_access(ty,fi)
       | JEbin(e1,op,e2) -> JTbin(term_of_expr e1,Tint,op,term_of_expr e2)
-      | _ -> assert false (* TODO *)
+      | JEinstanceof (_, _) -> assert false (* TODO *)
+      | JEcast (ty, e) -> JTcast(ty,term_of_expr e)
+      | JEnew_object (_, _) -> assert false (* TODO *)
+      | JEnew_array (_, _) -> assert false (* TODO *)
+      | JEstatic_call (_, _) -> assert false (* TODO *)
+      | JEconstr_call (_, _, _) -> assert false (* TODO *)
+      | JEcall (_, _, _) -> assert false (* TODO *)
+      | JEassign_array_op (_, _, _, _) -> assert false (* TODO *)
+      | JEassign_array (_, _, _) -> assert false (* TODO *)
+      | JEassign_static_field_op (_, _, _) -> assert false (* TODO *)
+      | JEassign_static_field (_, _) -> assert false (* TODO *)
+      | JEassign_field_op (_, _, _, _) -> assert false (* TODO *)
+      | JEassign_field (_, _, _) -> assert false (* TODO *)
+      | JEassign_local_var_op (_, _, _) -> assert false (* TODO *)
+      | JEassign_local_var (_, _) -> assert false (* TODO *)
+      | JEarray_access (_, _) -> assert false (* TODO *)
+      | JEarray_length _ -> assert false (* TODO *)
+      | JEfield_access (_, _) -> assert false (* TODO *)
+      | JEincr_array (_, _, _) -> assert false (* TODO *)
+      | JEincr_field (_, _, _) -> assert false (* TODO *)
+      | JEincr_local_var (_, _) -> assert false (* TODO *)
+      | JEif (_, _, _) -> assert false (* TODO *)
+      | JEun (_, _) -> assert false (* TODO *)
+      | JEvar _ -> assert false (* TODO *)
   in
   { java_term_loc = e.java_expr_loc;
     java_term_type = e.java_expr_type;
@@ -584,7 +607,7 @@ let array_types decls =
        let fi =
 	 { jc_field_info_name = f;
 	   jc_field_info_tag = 0 (* TODO *);
-	   jc_field_info_type = tr_type t;
+	   jc_field_info_type = tr_type Loc.dummy_position t;
 	   jc_field_info_root = s;
 	   jc_field_info_struct = s;
 	   jc_field_info_rep = false;
@@ -665,7 +688,7 @@ let rec location_set t =
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
@@ -676,7 +699,7 @@ let rec location_set t =
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let t3' = term t3 in
@@ -703,7 +726,7 @@ let location t =
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
@@ -714,7 +737,7 @@ let location t =
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let t3' = term t3 in
@@ -810,7 +833,7 @@ let rec expr e =
 	  begin
 	    match e.java_expr_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct e.java_expr_loc ty in
 		  JCTEcall(java_array_length_fun st,[expr e])
 	      | _ -> assert false
 	  end
@@ -818,7 +841,7 @@ let rec expr e =
 	  begin
 	    match e1.java_expr_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
@@ -846,7 +869,7 @@ let rec expr e =
 	  begin
 	    match e1.java_expr_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
@@ -864,7 +887,7 @@ let rec expr e =
 	  begin
 	    match e1.java_expr_type with
 	      | JTYarray ty ->
-		  let st = get_array_struct ty in
+		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
@@ -887,9 +910,9 @@ let rec expr e =
       | JEstatic_call(mi,args) -> 
 	  lab := reg_loc e.java_expr_loc;
 	  JCTEcall(get_fun mi.method_info_tag, List.map expr args)
-      | JEnew_array(ty,[e]) ->
-	  let si = get_array_struct ty in
-	  JCTEalloc (expr e, si) 
+      | JEnew_array(ty,[e1]) ->
+	  let si = get_array_struct e.java_expr_loc ty in
+	  JCTEalloc (expr e1, si) 
       | JEnew_array(ty,_) ->
 	  assert false (* TODO *)
       | JEnew_object(ci,args) ->
@@ -919,7 +942,7 @@ let rec expr e =
 	  end
 
   in { jc_texpr_loc = e.java_expr_loc ; 
-       jc_texpr_type = tr_type e.java_expr_type;
+       jc_texpr_type = tr_type e.java_expr_loc e.java_expr_type;
        jc_texpr_label = !lab;
        jc_texpr_node = e' }
 
@@ -944,11 +967,12 @@ let rec statement s =
       | JSbreak None -> JCTSbreak ""
       | JSbreak (Some l) -> JCTSbreak l
       | JSreturn_void -> JCTSreturn_void
-      | JSreturn e -> JCTSreturn (tr_type e.java_expr_type,expr e)
+      | JSreturn e -> 
+	  JCTSreturn (tr_type e.java_expr_loc e.java_expr_type,expr e)
       | JSthrow e -> JCTSthrow(get_exception e.java_expr_type,Some (expr e))
       | JSblock l -> JCTSblock (List.map statement l)	  
       | JSvar_decl (vi, init, s) -> 
-	  let vi = create_var vi in
+	  let vi = create_var s.java_statement_loc vi in
 	  JCTSdecl(vi, Option_misc.map initialiser init, statement s)
       | JSif (e, s1, s2) ->
 	  JCTSif (expr e, statement s1, statement s2)
@@ -984,7 +1008,7 @@ let rec statement s =
       | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	  let decls = List.map
 	    (fun (vi,init) -> 
-	       (create_var vi, Option_misc.map initialiser init))
+	       (create_var s.java_statement_loc vi, Option_misc.map initialiser init))
 	    decls
 	  in
 	  let la =
@@ -1012,12 +1036,12 @@ let rec statement s =
 	  JCTSassert(Some name, assertion e)
       | JSswitch(e,l) -> 
 	  JCTSswitch(expr e,List.map switch_case l)
-      | JStry(s, catches, finally) ->
-	  JCTStry(block s,
+      | JStry(s1, catches, finally) ->
+	  JCTStry(block s1,
 		  List.map 
-		    (fun (vi,s) ->
+		    (fun (vi,s2) ->
 		       let e = get_exception vi.java_var_info_type in
-		       (e, Some (create_var vi), block s))
+		       (e, Some (create_var s.java_statement_loc vi), block s2))
 		    catches,
 		  make_block 
 		    (Option_misc.fold (fun s acc -> List.map statement s) finally []))
@@ -1048,24 +1072,25 @@ let tr_method mi req behs b acc =
   match b with
     | None -> assert false
     | Some l ->	
-	let params = List.map create_var mi.method_info_parameters in
+	let params = List.map (create_var Loc.dummy_position) mi.method_info_parameters in
 	let params =
 	  match mi.method_info_has_this with
 	    | None -> params
 	    | Some vi -> 
-		(create_var vi) :: params
+		(create_var Loc.dummy_position vi) :: params
 	in
 	let t = match mi.method_info_result with
 	  | None -> None
 	  | Some vi ->
-	      let _nvi = create_var vi in 
+	      let _nvi = create_var Loc.dummy_position vi in 
 	      Some vi.java_var_info_type
 	in
 	let nfi = 
-	  create_fun mi.method_info_tag mi.method_info_result 
+	  create_fun Loc.dummy_position 
+	    mi.method_info_tag mi.method_info_result 
 	    mi.method_info_name mi.method_info_parameters
 	in
-	JCfun_def(tr_type_option t,
+	JCfun_def(tr_type_option Loc.dummy_position t,
 		  nfi.jc_fun_info_name,
 		  params,
 		  { jc_fun_requires = reg_assertion_option req;
@@ -1073,19 +1098,21 @@ let tr_method mi req behs b acc =
 		  Some (statements l))::acc
 	  
 let tr_constr ci req behs b acc =
-  let params = List.map create_var ci.constr_info_parameters in
+  let params = 
+    List.map (create_var Loc.dummy_position) ci.constr_info_parameters 
+  in
   let this =
     match ci.constr_info_this with
       | None -> assert false
-      | Some vi -> (create_var vi) 
+      | Some vi -> (create_var Loc.dummy_position vi) 
   in
   let _result =
     match ci.constr_info_result with
       | None -> assert false
-      | Some vi -> (create_var vi) 
+      | Some vi -> (create_var Loc.dummy_position vi) 
   in
   let nfi = 
-    create_fun ci.constr_info_tag None
+    create_fun Loc.dummy_position ci.constr_info_tag None
       ci.constr_info_trans_name ci.constr_info_parameters
   in
   let body = statements b 
@@ -1116,7 +1143,7 @@ let tr_axiom id p acc =
 
 
 let tr_logic_fun fi b acc =   
-  let nfi = create_logic_fun fi in
+  let nfi = create_logic_fun Loc.dummy_position fi in
   match b with
     | Java_typing.JAssertion a ->
 	JClogic_fun_def(nfi.jc_logic_info_result_type,
@@ -1147,7 +1174,7 @@ let tr_class ci acc0 acc =
   let acc =
     List.fold_left
       (fun acc fi ->
-	 let vi = create_static_var ci fi in
+	 let vi = create_static_var Loc.dummy_position ci fi in
 	 if fi.java_field_info_is_final then
 	   try
 	     let e = 
@@ -1186,9 +1213,9 @@ let tr_class ci acc0 acc =
   (* create exceptions if subclass of Exception *)
   begin
     if ci.class_info_is_exception then
-    ignore (create_exception (Some (tr_type (JTYclass(false,ci)))) ci.class_info_name);
+    ignore (create_exception (Some (tr_type Loc.dummy_position (JTYclass(false,ci)))) ci.class_info_name);
   end;
-  JCstruct_def(ci.class_info_name, super, List.map create_field fields)::acc0, acc
+  JCstruct_def(ci.class_info_name, super, List.map (create_field Loc.dummy_position) fields)::acc0, acc
 
 (* interfaces *)
 

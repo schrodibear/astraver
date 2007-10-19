@@ -91,7 +91,7 @@ let main () =
 	Hashtbl.iter (fun tag x -> 
 			Hashtbl.add Jc_norm.exceptions_table tag x)
 	  Jc_typing.exceptions_table;	
-*)	  
+	*)
 	  
 	(* phase 4 : computation of call graph *)
 	Hashtbl.iter 
@@ -168,6 +168,7 @@ let main () =
 	    d_memories
 	in	       	  
 	(* production phase 1.3 : generation of Why exceptions *)
+	Jc_options.lprintf "production phase 1.3 : generation of Why exceptions@.";
 	let d_exc =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->

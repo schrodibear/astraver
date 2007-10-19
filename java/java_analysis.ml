@@ -12,6 +12,7 @@
 
 open Java_env
 open Java_tast
+open Format
 
 let array_struct_table = Hashtbl.create 17
 
@@ -77,9 +78,20 @@ let rec expr e =
     | JEassign_static_field_op (_, _, e) -> expr e
     | JEassign_field(e1,fi,e2) -> expr e1; expr e2
     | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
-    | JEif(e1,e2,e3)
+    | JEif(e1,e2,e3) -> expr e1; expr e2; expr e3
     | JEassign_array(e1,e2,e3) 
-    | JEassign_array_op(e1,e2,_,e3) -> expr e1; expr e2; expr e3
+    | JEassign_array_op(e1,e2,_,e3) -> 
+	expr e1; expr e2; expr e3;
+	begin
+	  match e1.java_expr_type with
+	    | JTYarray ty -> intro_array_struct ty
+	    | _ -> 
+		eprintf "unexpected type: e1:%a e2:%a e3:%a@." 
+		  Java_typing.print_type e1.java_expr_type
+		  Java_typing.print_type e2.java_expr_type
+		  Java_typing.print_type e3.java_expr_type;
+		assert false
+	end
     | JEcall(e,mi,args) ->
 	expr e;	List.iter expr args
     | JEconstr_call (e, _, args) ->
@@ -88,6 +100,7 @@ let rec expr e =
 	List.iter expr args
     | JEnew_array(ty,dims) ->
 	List.iter expr dims
+	(* intro_array_struct ty ??? *)
     | JEnew_object(ci,args) ->
 	List.iter expr args
     | JEinstanceof(e,_)
@@ -144,11 +157,17 @@ let rec statement s =
 	List.iter (fun (_,s) -> List.iter statement s) catches;
 	Option_misc.iter (List.iter statement) finally
 
+let param vi =
+  match vi.java_var_info_type with
+    | JTYarray ty -> intro_array_struct ty
+    | _ -> ()
+
 let do_method mi req behs body =
 (*
   Option_misc.iter assertion req;
   ... behs
 *)
+  List.iter param mi.method_info_parameters;
   Option_misc.iter (List.iter statement) body
 
 
@@ -164,6 +183,18 @@ let do_constructor ci reg behs body =
 	   ci.constr_info_parameters "")
     end;
   List.iter statement body
+
+let do_field fi =
+  match fi.java_field_info_type with
+    | JTYarray ty -> intro_array_struct ty
+    | _ -> ()
+
+let do_type ty =
+  match ty with
+    | TypeClass ci -> 
+	List.iter do_field ci.class_info_fields
+    | TypeInterface ii -> 
+	List.iter do_field ii.interface_info_fields
 
 
 (*
