@@ -313,14 +313,14 @@ let compute_components methods constrs =
 	 cti.Java_typing.ct_constr_info.constr_info_tag (ConstructorData cti))
     constrs;
   let tab_comp = CallComponents.scc_array h in
-  Java_options.lprintf "******************************\n";
-  Java_options.lprintf "Call graph: has %d components\n" (Array.length tab_comp);
-  Java_options.lprintf "******************************\n";
+  Java_options.lprintf "******************************@\n";
+  Java_options.lprintf "Call graph: has %d components@\n" (Array.length tab_comp);
+  Java_options.lprintf "******************************@\n";
   Array.iteri 
     (fun i l -> 
-       Java_options.lprintf "Component %d:\n%a@." i
+       Java_options.lprintf "Component %d:@\n%a@." i
 	 (print_list newline 
-	    (fun fmt f -> fprintf fmt " %a calls: %a\n" 
+	    (fun fmt f -> fprintf fmt " - %a calls: %a@\n" 
 	       print_method_or_constr f
 	       (print_list comma 
 		  (fun fmt f -> fprintf fmt "%a" 

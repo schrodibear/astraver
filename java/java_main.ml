@@ -73,8 +73,7 @@ let main () =
 *)
 
 	(* analyze following call graph order
-	TODO: incorporate constructors in call graph
-	+ precise the meaning of call graph with dynamic calls *)
+	TODO: precise the meaning of call graph with dynamic calls *)
 	Array.iter
 	  (List.iter 
 	    (fun mi -> 
@@ -153,6 +152,37 @@ let main () =
 	    decls
 	in	       
 	(* production phase 4 : generation of Jessie functions *)
+	let decls =
+	  Array.fold_left
+	    (fun acc l ->
+	       List.fold_left 
+		 (fun acc f -> 
+		    match f with
+		      | MethodInfo mi -> 
+			  let mt = Hashtbl.find Java_typing.methods_table
+			    mi.method_info_tag
+			  in
+			  printf "Generating Why function %s@." 
+			    mi.method_info_name;
+			  Java_interp.tr_method mi mt.Java_typing.mt_requires 
+			    mt.Java_typing.mt_behaviors 
+			    mt.Java_typing.mt_body acc
+		      | ConstructorInfo ci ->
+			  let ct = Hashtbl.find Java_typing.constructors_table
+			    ci.constr_info_tag
+			  in
+			  printf "Generating Why function %s@." 
+			    ci.constr_info_class.class_info_name;
+			  Java_interp.tr_constr ci ct.Java_typing.ct_requires 
+			    ct.Java_typing.ct_behaviors 
+			    ct.Java_typing.ct_body acc)
+		 acc
+		 l)
+	    decls
+	    components
+	in
+
+(*
 	let decls = 
 	  Hashtbl.fold 
 	    (fun _ ct acc ->
@@ -177,6 +207,7 @@ let main () =
 	    Java_typing.methods_table
 	    decls
 	in	       
+*)
 	(* production phase 5 : produce Jessie file *)
 	let decls = List.rev decls in
 	let f = Filename.chop_extension f in
