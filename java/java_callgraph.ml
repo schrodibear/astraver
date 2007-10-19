@@ -108,8 +108,7 @@ let rec expr acc e : 'a list =
     | JEnew_array(ty, dims) ->
 	List.fold_left expr acc dims
     | JEnew_object(ci,args) ->
-	(* TODO: calls constructor *)
-	List.fold_left expr acc args
+	List.fold_left expr (ConstructorInfo ci::acc) args
     | JEif(e1,e2,e3) 
     | JEassign_array (e1, e2, e3)
     | JEassign_array_op (e1, e2, _, e3)-> 

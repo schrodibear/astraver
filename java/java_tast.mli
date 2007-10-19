@@ -81,8 +81,8 @@ and expr_node =
   | JEstatic_call of method_info * expr list
   | JEnew_array of java_type * expr list
       (*r elements type, dimensions *)
-  | JEnew_object of java_class_info * expr list
-      (*r class, args *)
+  | JEnew_object of constructor_info * expr list
+      (*r constr, args *)
   | JEcast of java_type * expr
   | JEinstanceof of expr * java_type
 (*

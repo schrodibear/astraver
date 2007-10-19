@@ -2152,8 +2152,8 @@ let rec expr package_env type_env current_type env e =
 	    match classify_name package_env type_env current_type env n with
 	      | TypeName (TypeClass ci) ->
 		  eprintf "looking up constructor in class %s@." ci.class_info_name;
-		  let _constr = lookup_constructor ci arg_types in
-		  JTYclass(true,ci),JEnew_object(ci,args)
+		  let constr = lookup_constructor ci arg_types in
+		  JTYclass(true,ci),JEnew_object(constr,args)
 	      | _ ->
 		  typing_error (fst (List.hd n))
 		    "class type expected"	

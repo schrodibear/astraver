@@ -916,7 +916,7 @@ let rec expr e =
       | JEnew_array(ty,_) ->
 	  assert false (* TODO *)
       | JEnew_object(ci,args) ->
-	  let si = get_class ci in
+	  let si = get_class ci.constr_info_class in
 	  JCTEalloc (dummy_loc_expr int_type (JCTEconst (JCCinteger "1")), si) 
       | JEcast(ty,e) ->
 	  begin
