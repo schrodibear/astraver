@@ -57,7 +57,7 @@ and method_info =
       mutable method_info_has_this : java_var_info option;
       method_info_parameters : java_var_info list;
       method_info_result : java_var_info option ;
-      mutable method_info_calls : method_info list;
+      mutable method_info_calls : method_or_constructor_info list;
     }
       
 and constructor_info = 
@@ -68,11 +68,12 @@ and constructor_info =
       mutable constr_info_this : java_var_info option;
       mutable constr_info_result : java_var_info option;
       constr_info_parameters : java_var_info list;
-      constr_info_calls : method_info list;
-(*
-     mutable constructor_entry_graph : java_env_entry list
-*)
+      mutable constr_info_calls : method_or_constructor_info list;
     }
+
+and method_or_constructor_info =
+  | MethodInfo of method_info
+  | ConstructorInfo of constructor_info
 
     
 and logic_type_entry =

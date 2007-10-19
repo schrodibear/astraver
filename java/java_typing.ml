@@ -280,15 +280,15 @@ assert false (* TODO *)
 
 let methods_env = Hashtbl.create 97
 
-let method_tag_counter = ref 0
+let method_or_constr_tag_counter = ref 0
 
 let new_method_info ~is_static id ti ty pars =
-  incr method_tag_counter;
+  incr method_or_constr_tag_counter;
   let result = 
       Option_misc.map (fun t -> new_var t "\\result") ty
   in
   {
-    method_info_tag = !method_tag_counter;
+    method_info_tag = !method_or_constr_tag_counter;
     method_info_name = id;
     method_info_class_or_interface = ti;
     method_info_trans_name = id;
@@ -301,12 +301,10 @@ let new_method_info ~is_static id ti ty pars =
 
 let constructors_env = Hashtbl.create 97
 
-let constr_tag_counter = ref 0
-
 let new_constructor_info ci id pars =
-  incr constr_tag_counter;
+  incr method_or_constr_tag_counter;
   {
-    constr_info_tag = !constr_tag_counter;
+    constr_info_tag = !method_or_constr_tag_counter;
     constr_info_class = ci;
     constr_info_trans_name = ci.class_info_name;
     constr_info_this = None;

@@ -35,7 +35,8 @@ let rec name_type t =
     | JTYbase t -> name_base_type t
     | JTYclass(_,c) -> c.class_info_name
     | JTYinterface i -> i.interface_info_name
-    | _ -> assert false (* TODO *)
+    | JTYarray ty -> name_type ty ^ "A"
+    | JTYnull -> assert false
 
 let rec intro_array_struct t =
   try
@@ -172,16 +173,20 @@ let do_method mi req behs body =
 
 
 let do_constructor ci reg behs body =
+(*
   let l = ci.constr_info_class.class_info_constructors in
   if List.length l >= 2 then
     begin
+*)
       ci.constr_info_trans_name <-
-	ci.constr_info_class.class_info_name ^
+	"cons_" ^ ci.constr_info_class.class_info_name ^
 	(List.fold_right
 	   (fun vi acc ->
 	      "_" ^ name_type vi.java_var_info_type ^ acc)
-	   ci.constr_info_parameters "")
+	   ci.constr_info_parameters "");
+(*
     end;
+*)
   List.iter statement body
 
 let do_field fi =

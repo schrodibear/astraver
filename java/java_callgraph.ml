@@ -99,12 +99,12 @@ let rec expr acc e : 'a list =
     | JEincr_local_var _ 
     | JEstatic_field_access _ -> acc
     | JEcall (e, mi, args) ->
-	List.fold_left expr (expr (mi::acc) e) args
+	List.fold_left expr (expr (MethodInfo mi::acc) e) args
     | JEconstr_call (e, ci, args) ->
 	(* TODO: calls constructor *)
 	List.fold_left expr (expr acc e) args
     | JEstatic_call (mi, args) ->
-	List.fold_left expr (mi::acc) args
+	List.fold_left expr (MethodInfo mi::acc) args
     | JEnew_array(ty, dims) ->
 	List.fold_left expr acc dims
     | JEnew_object(ci,args) ->
@@ -210,6 +210,10 @@ let compute_calls f s b =
   let (a,b) = List.fold_left statement ([],[]) b in
   f.method_info_calls <- b
 
+let compute_constr_calls f s b = 
+  let (a,b) = List.fold_left statement ([],[]) b in
+  f.constr_info_calls <- b
+
       
 module LogicCallGraph = struct 
   type t = (int, (java_logic_info * Java_typing.logic_body)) Hashtbl.t 
@@ -227,18 +231,39 @@ module LogicCallGraph = struct
 
 module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
 
+type method_or_constructor_data =
+  | MethodData of Java_typing.method_table_info
+  | ConstructorData of Java_typing.constructor_table_info
+
+let method_or_constructor_tag x =
+  match x with
+    | MethodInfo mi -> mi.method_info_tag
+    | ConstructorInfo ci -> ci.constr_info_tag
+
+let method_or_constructor_info mt =
+  match mt with
+    | MethodData mti -> MethodInfo mti.Java_typing.mt_method_info
+    | ConstructorData cti -> ConstructorInfo cti.Java_typing.ct_constr_info
+
 module CallGraph = struct 
-  type t = (int, Java_typing.method_table_info) Hashtbl.t
+  type t = (int, method_or_constructor_data) Hashtbl.t
   module V = struct
-    type t = method_info
-    let compare f1 f2 = Pervasives.compare f1.method_info_tag f2.method_info_tag
-    let hash f = f.method_info_tag
-    let equal f1 f2 = f1 == f2
+    type t = method_or_constructor_info
+	
+    let compare f1 f2 = 
+      Pervasives.compare 
+	(method_or_constructor_tag f1) (method_or_constructor_tag f2)
+
+    let hash f = method_or_constructor_tag f
+    let equal f1 f2 = method_or_constructor_tag f1 == method_or_constructor_tag f2
   end
-  let iter_vertex iter =
-    Hashtbl.iter (fun _ mti -> iter mti.Java_typing.mt_method_info) 
+  let iter_vertex iter = 
+    Hashtbl.iter (fun _ mti -> iter (method_or_constructor_info mti)) 
   let iter_succ iter _ f =
-    List.iter iter f.method_info_calls 
+    List.iter iter 
+      (match f with
+	 | MethodInfo fi -> fi.method_info_calls 
+	 | ConstructorInfo ci -> ci.constr_info_calls)
   end
 
 module CallComponents = Graph.Components.Make(CallGraph)
@@ -265,8 +290,29 @@ let compute_logic_components ltable =
   tab_comp
 
 
-let compute_components table =  
-  let tab_comp = CallComponents.scc_array table in
+let print_method_or_constr fmt f =
+  match f with
+    | MethodInfo fi -> fprintf fmt "%s" fi.method_info_name
+    | ConstructorInfo ci -> fprintf fmt "%s" ci.constr_info_trans_name
+
+let method_or_constr_calls f =
+  match f with
+    | MethodInfo fi -> fi.method_info_calls
+    | ConstructorInfo ci -> ci.constr_info_calls
+
+let compute_components methods constrs =  
+  let h = Hashtbl.create 97 in
+  Hashtbl.iter
+    (fun _ mti -> 
+       Hashtbl.add h 
+	 mti.Java_typing.mt_method_info.method_info_tag (MethodData mti))
+    methods;
+  Hashtbl.iter
+    (fun _ cti -> 
+       Hashtbl.add h 
+	 cti.Java_typing.ct_constr_info.constr_info_tag (ConstructorData cti))
+    constrs;
+  let tab_comp = CallComponents.scc_array h in
   Java_options.lprintf "******************************\n";
   Java_options.lprintf "Call graph: has %d components\n" (Array.length tab_comp);
   Java_options.lprintf "******************************\n";
@@ -274,10 +320,12 @@ let compute_components table =
     (fun i l -> 
        Java_options.lprintf "Component %d:\n%a@." i
 	 (print_list newline 
-	    (fun fmt f -> fprintf fmt " %s calls: %a\n" f.method_info_name
-		 (print_list comma 
-		    (fun fmt f -> fprintf fmt "%s" f.method_info_name))
-		 f.method_info_calls))
+	    (fun fmt f -> fprintf fmt " %a calls: %a\n" 
+	       print_method_or_constr f
+	       (print_list comma 
+		  (fun fmt f -> fprintf fmt "%a" 
+		     print_method_or_constr f))
+	       (method_or_constr_calls f)))
 	 l)
     tab_comp;
   tab_comp

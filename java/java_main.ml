@@ -32,19 +32,28 @@ let main () =
 				 mt.Java_typing.mt_requires) 
 	       mt.Java_typing.mt_body)
 	  Java_typing.methods_table;
+	Hashtbl.iter 
+	  (fun _ ct -> 
+	     Java_callgraph.compute_constr_calls 
+	       ct.Java_typing.ct_constr_info
+	       ct.Java_typing.ct_requires
+	       ct.Java_typing.ct_body)
+	  Java_typing.constructors_table;
 	let _logic_components = 
 	  Java_callgraph.compute_logic_components 
 	    Java_typing.logics_table
 	in
-	let _components = 
+	let components = 
 	  Java_callgraph.compute_components 
 	    Java_typing.methods_table
+	    Java_typing.constructors_table
 	in
 	Hashtbl.iter
 	  (fun _ ty ->
 	     Java_analysis.do_type ty)
 	  Java_typing.type_table;
 	(* analyze in any order *)
+(*
 	Hashtbl.iter
 	  (fun mi mti ->
 	     Java_analysis.do_method 
@@ -61,24 +70,34 @@ let main () =
 	       cti.Java_typing.ct_behaviors 
 	       cti.Java_typing.ct_body)
 	  Java_typing.constructors_table;
+*)
 
 	(* analyze following call graph order
 	TODO: incorporate constructors in call graph
 	+ precise the meaning of call graph with dynamic calls *)
-(*
 	Array.iter
 	  (List.iter 
 	    (fun mi -> 
-	       let mti = Hashtbl.find Java_typing.methods_table
-		 mi.method_info_tag
-	       in
-	       Java_analysis.do_method 
-		 mti.Java_typing.mt_method_info 
-		 mti.Java_typing.mt_requires
-		 mti.Java_typing.mt_behaviors 
-		 mti.Java_typing.mt_body))
+	       match mi with
+		 | MethodInfo mi -> 
+		     let mti = Hashtbl.find Java_typing.methods_table
+		       mi.method_info_tag
+		     in
+		     Java_analysis.do_method 
+		       mti.Java_typing.mt_method_info 
+		       mti.Java_typing.mt_requires
+		       mti.Java_typing.mt_behaviors 
+		       mti.Java_typing.mt_body
+		 | ConstructorInfo ci ->
+		     let cti = Hashtbl.find Java_typing.constructors_table
+		       ci.constr_info_tag
+		     in
+		     Java_analysis.do_constructor
+		       cti.Java_typing.ct_constr_info 
+		       cti.Java_typing.ct_requires
+		       cti.Java_typing.ct_behaviors 
+		       cti.Java_typing.ct_body))
 	    components;
-*)
 
 	(*******************************)
 	(* production of jessie output *)

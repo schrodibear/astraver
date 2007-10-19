@@ -1,6 +1,8 @@
 
 class VA {
 
+    VA();
+
     int n;
 }
 
