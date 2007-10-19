@@ -272,7 +272,7 @@ let get_static_var fi =
   with
       Not_found -> 
 	eprintf "Java_interp.get_static_var->Not_found: %s@." fi.java_field_info_name;
-	assert false
+	raise Not_found
  
 
 (* local variables and parameters *)
@@ -322,11 +322,13 @@ let create_logic_fun loc fi =
 
 let funs_table = Hashtbl.create 97
 
-let get_fun tag =
+let get_fun loc tag =
   try
     Hashtbl.find funs_table tag
   with
-      Not_found -> assert false
+      Not_found -> 
+	eprintf "Java_interp.get_fun->Not_found: %a@." Loc.report_position loc;
+	raise Not_found
 
 let create_fun loc tag result name params =
   let nfi =
@@ -445,7 +447,7 @@ let rec term t =
 	  JCTapp(get_logic_fun fi,List.map term el)
       | JTvar vi -> JCTvar (get_var vi)
       | JTfield_access(t,fi) -> JCTderef(term t,get_field fi)
-      | JTstatic_field_access(ci,fi) ->
+      | JTstatic_field_access(ci,fi) ->	  
 	  JCTvar(get_static_var fi)
       | JTarray_length(t) -> 
 	  begin
@@ -528,11 +530,9 @@ let dummy_loc_assertion a =
 
 
 
-let create_static_var loc ci fi =
+let create_static_var loc type_name fi =
   let ty = tr_type loc fi.java_field_info_type in
-  let name = ci.class_info_name ^ "_" ^ 
-    fi.java_field_info_name
-  in
+  let name = type_name ^ "_" ^ fi.java_field_info_name in
   let vi = Jc_pervasives.var ~static:true ty name in
   Hashtbl.add static_fields_table fi.java_field_info_tag vi;
   vi
@@ -901,15 +901,15 @@ let rec expr e =
 		  JCTEassign_heap_op(shift,fi,bin_op op,e3')
 	      | _ -> assert false
 	  end
-      | JEcall(e,mi,args) -> 
+      | JEcall(e1,mi,args) -> 
 	  lab := reg_loc e.java_expr_loc;
-	  JCTEcall (get_fun mi.method_info_tag, List.map expr (e :: args))
-      | JEconstr_call (e, ci, args) -> 
+	  JCTEcall (get_fun e.java_expr_loc mi.method_info_tag, List.map expr (e1 :: args))
+      | JEconstr_call (e1, ci, args) -> 
 	  lab := reg_loc e.java_expr_loc;
-	  JCTEcall (get_fun ci.constr_info_tag, List.map expr (e :: args))
+	  JCTEcall (get_fun e.java_expr_loc ci.constr_info_tag, List.map expr (e1 :: args))
       | JEstatic_call(mi,args) -> 
 	  lab := reg_loc e.java_expr_loc;
-	  JCTEcall(get_fun mi.method_info_tag, List.map expr args)
+	  JCTEcall(get_fun e.java_expr_loc mi.method_info_tag, List.map expr args)
       | JEnew_array(ty,[e1]) ->
 	  let si = get_array_struct e.java_expr_loc ty in
 	  JCTEalloc (expr e1, si) 
@@ -1161,6 +1161,41 @@ let tr_logic_fun fi b acc =
 			nfi.jc_logic_info_parameters,
 			JCReads(List.map location l))::acc
 
+let tr_field type_name acc fi =
+  let vi = create_static_var Loc.dummy_position type_name fi in
+  if fi.java_field_info_is_final then
+    let body =
+      try
+	let e = 
+	  Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
+	in
+	match e with
+	  | None -> JCReads []
+	  | Some (JIexpr e) -> JCTerm (term (term_of_expr e))
+	  | Some (JIlist _) -> assert false (* TODO *)
+      with Not_found -> 
+	Java_options.lprintf "Warning: final field '%s' of %a has no known value@."
+	  fi.java_field_info_name 
+	  Java_typing.print_type_name 
+	  fi.java_field_info_class_or_interface;
+	JCReads []
+    in
+    let decl =
+      JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_name,
+		      [], body)
+    in
+    decl::acc      
+  else
+    let e = 
+      try
+	match Hashtbl.find Java_typing.field_initializer_table 
+	  fi.java_field_info_tag with
+	    | None -> None
+	    | Some e -> Some (initialiser e)
+      with Not_found -> None
+    in
+    JCvar_def(vi.jc_var_info_type,vi.jc_var_info_name,e)::acc
+
 
 let tr_class ci acc0 acc =
   let (static_fields,fields) = 
@@ -1171,45 +1206,7 @@ let tr_class ci acc0 acc =
   let super =
     Option_misc.map (fun ci -> ci.class_info_name) ci.class_info_extends
   in
-  let acc =
-    List.fold_left
-      (fun acc fi ->
-	 let vi = create_static_var Loc.dummy_position ci fi in
-	 if fi.java_field_info_is_final then
-	   try
-	     let e = 
-	       Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
-	     in
-	     let body =
-	       match e with
-		 | None -> JCReads []
-		 | Some (JIexpr e) -> JCTerm (term (term_of_expr e))
-		 | Some (JIlist _) -> assert false (* TODO *)
-	     in
-	     let decl =
-	       JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_name,
-			       [], body)
-	     in
-	     decl::acc
-	   with Not_found -> 
-	     Java_options.lprintf "Warning: final field '%s' of %a has no known value@."
-	       fi.java_field_info_name 
-	       Java_typing.print_type_name 
-	       fi.java_field_info_class_or_interface;
-	     acc
-	 else
-	   let e = 
-	     try
-	       match Hashtbl.find Java_typing.field_initializer_table 
-		       fi.java_field_info_tag with
-			 | None -> None
-			 | Some e -> Some (initialiser e)
-	     with Not_found -> None
-	   in
-	   JCvar_def(vi.jc_var_info_type,vi.jc_var_info_name,e)::acc)
-      acc
-      static_fields
-  in
+  let acc = List.fold_left (tr_field ci.class_info_name) acc static_fields in
   (* create exceptions if subclass of Exception *)
   begin
     if ci.class_info_is_exception then
@@ -1221,7 +1218,8 @@ let tr_class ci acc0 acc =
 
 
 let tr_interface ii acc = 
-  (* TODO *)
+  let fields = ii.interface_info_fields in
+  let acc = List.fold_left (tr_field ii.interface_info_name) acc fields in
   acc
 
 let tr_class_or_interface ti acc0 acc =
@@ -1229,7 +1227,9 @@ let tr_class_or_interface ti acc0 acc =
     | TypeClass ci -> 
 	eprintf "Creating JC structure for class '%s'@." ci.class_info_name;
 	tr_class ci acc0 acc
-    | TypeInterface ii -> (acc0,tr_interface ii acc)
+    | TypeInterface ii -> 
+	eprintf "Handling interface '%s'@." ii.interface_info_name;
+	(acc0,tr_interface ii acc)
 
 
 

@@ -2960,12 +2960,15 @@ let type_field_initializer package_env type_env ci fi =
 			    Hashtbl.add final_field_values_table 
 			      fi.java_field_info_tag [v]			with
 			    Not_found ->
+(**)
 			      Java_options.lprintf
 				"FIXME: cannot evaluate this initializer, %a@."
 				Loc.gen_report_position e.java_expr_loc
+(**)
 				(*
 				  typing_error e.java_expr_loc "cannot evaluate this initializer"
-				*)		    end
+				*)		    
+		      end
 		  | JIlist vil ->
 		      try
 			let vil = List.map
@@ -2974,8 +2977,8 @@ let type_field_initializer package_env type_env ci fi =
 			     | JIlist _ -> assert false (* TODO *))
 			  vil
 			in
-			  Hashtbl.add final_field_values_table 
-			    fi.java_field_info_tag vil
+			Hashtbl.add final_field_values_table 
+			  fi.java_field_info_tag vil
 		      with Not_found -> assert false 
 	      end;
 	    Some ti
