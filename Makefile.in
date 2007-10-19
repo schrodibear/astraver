@@ -192,7 +192,7 @@ bin/why.byte: $(CMO) src/why.cmo
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa nums.cmxa graph.cmxa $^ 
 	strip $@
 
 bin/top: $(CMO)
