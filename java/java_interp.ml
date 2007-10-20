@@ -543,38 +543,21 @@ let rec term_of_expr e =
   let t =
     match e.java_expr_node with
       | JElit l -> JTlit l
-      | JEstatic_field_access(ty,fi) -> JTstatic_field_access(ty,fi)
-      | JEbin(e1,op,e2) -> JTbin(term_of_expr e1,Tint,op,term_of_expr e2)
-      | JEinstanceof (_, _) -> assert false (* TODO *)
-      | JEcast (ty, e) -> JTcast(ty,term_of_expr e)
-      | JEnew_object (_, _) -> assert false (* TODO *)
-      | JEnew_array (_, _) -> assert false (* TODO *)
-      | JEstatic_call (_, _) -> assert false (* TODO *)
-      | JEconstr_call (_, _, _) -> assert false (* TODO *)
-      | JEcall (_, _, _) -> assert false (* TODO *)
-      | JEassign_array_op (_, _, _, _) -> assert false (* TODO *)
-      | JEassign_array (_, _, _) -> assert false (* TODO *)
-      | JEassign_static_field_op (_, _, _) -> assert false (* TODO *)
-      | JEassign_static_field (_, _) -> assert false (* TODO *)
-      | JEassign_field_op (_, _, _, _) -> assert false (* TODO *)
-      | JEassign_field (_, _, _) -> assert false (* TODO *)
-      | JEassign_local_var_op (_, _, _) -> assert false (* TODO *)
-      | JEassign_local_var (_, _) -> assert false (* TODO *)
-      | JEarray_access (_, _) -> assert false (* TODO *)
-      | JEarray_length _ -> assert false (* TODO *)
-      | JEfield_access (_, _) -> assert false (* TODO *)
-      | JEincr_array (_, _, _) -> assert false (* TODO *)
-      | JEincr_field (_, _, _) -> assert false (* TODO *)
-      | JEincr_local_var (_, _) -> assert false (* TODO *)
-      | JEif (_, _, _) -> assert false (* TODO *)
-      | JEun (_, _) -> assert false (* TODO *)
-      | JEvar _ -> assert false (* TODO *)
+      | JEvar vi -> JTvar vi
+      | JEbin (e1, op, e2) -> 
+	  JTbin (term_of_expr e1, Tint, op, term_of_expr e2)
+      | JEun (op, e) -> JTun (Tint, op, term_of_expr e)
+      | JEfield_access (e, fi) -> JTfield_access (term_of_expr e, fi)
+      | JEstatic_field_access (ty, fi) -> JTstatic_field_access (ty, fi)
+      | JEarray_access (e1, e2) ->
+	  JTarray_access (term_of_expr e1, term_of_expr e2)
+      | JEcast (t, e) -> JTcast (t, term_of_expr e)
+      | _ -> assert false
   in
-  { java_term_loc = e.java_expr_loc;
-    java_term_type = e.java_expr_type;
-    java_term_node = t }
-
-
+    { java_term_loc = e.java_expr_loc;
+      java_term_type = e.java_expr_type;
+      java_term_node = t }
+      
 (* exceptions *)
 
 let tr_exception ei acc =
@@ -603,7 +586,7 @@ let array_types decls =
   Java_options.lprintf "(* array types        *)@.";
   Java_options.lprintf "(**********************)@.";
   Hashtbl.fold
-    (fun t (s,f) acc ->
+    (fun t (s, f) acc ->
        let fi =
 	 { jc_field_info_name = f;
 	   jc_field_info_tag = 0 (* TODO *);

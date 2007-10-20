@@ -206,13 +206,12 @@ let compute_logic_calls f t =
   f.java_logic_info_calls <- calls
 
 let compute_calls f s b = 
-  let (a,b) = List.fold_left statement ([],[]) b in
-  f.method_info_calls <- b
+  let (a, b) = List.fold_left statement ([], []) b in
+    f.method_info_calls <- b
 
 let compute_constr_calls f s b = 
   let (a,b) = List.fold_left statement ([],[]) b in
   f.constr_info_calls <- b
-
       
 module LogicCallGraph = struct 
   type t = (int, (java_logic_info * Java_typing.logic_body)) Hashtbl.t 

@@ -2359,44 +2359,44 @@ let rec expr package_env type_env current_type env e =
 	  begin
 	    let te = exprt e1 in
 	    match classify_name package_env type_env current_type env n with
-	      | TermName t ->
-		  begin
-		    match t.java_term_node with
-		      | JTvar vi ->
-			  if op = Beq then
-			    if is_assignment_convertible te.java_expr_type te 
-			      vi.java_var_info_type
-			    then 
-			      (vi.java_var_info_type,
-			       JEassign_local_var(vi,te))
-			    else
-			      typing_error e.java_pexpr_loc 
-				"type %a expected, got %a" 
-				print_type vi.java_var_info_type 
-				print_type te.java_expr_type
-			  else 
-			    if cast_convertible te.java_expr_type 
-			      vi.java_var_info_type
-			    then 
-			      (vi.java_var_info_type,
-			       JEassign_local_var_op(vi,op,te))
-			    else
-			      typing_error e.java_pexpr_loc 
-				"type %a expected, got %a" 
-				print_type vi.java_var_info_type 
-				print_type te.java_expr_type
-		      | JTfield_access (t, fi) ->
-			  type_assign_field (expr_of_term t) fi op te
-		      | JTstatic_field_access (_, fi) ->
-			  type_assign_static_field fi op te
-		      | _ -> assert false (* TODO *)
-		  end
-	      | TypeName _ ->
-		  typing_error e.java_pexpr_loc
-		    "lvalue expected, got a class or interface"
-	      | PackageName _ ->
-		  typing_error e.java_pexpr_loc
-		    "lvalue expected, got a package name"
+		| TermName t ->
+		    begin
+		      match t.java_term_node with
+			| JTvar vi ->
+			    if op = Beq then
+			      if is_assignment_convertible te.java_expr_type te 
+				vi.java_var_info_type
+			      then 
+				(vi.java_var_info_type,
+				 JEassign_local_var(vi,te))
+			      else
+				typing_error e.java_pexpr_loc 
+				  "type %a expected, got %a" 
+				  print_type vi.java_var_info_type 
+				  print_type te.java_expr_type
+			    else 
+			      if cast_convertible te.java_expr_type 
+				vi.java_var_info_type
+			      then 
+				(vi.java_var_info_type,
+				 JEassign_local_var_op(vi,op,te))
+			      else
+				typing_error e.java_pexpr_loc 
+				  "type %a expected, got %a" 
+				  print_type vi.java_var_info_type 
+				  print_type te.java_expr_type
+			| JTfield_access (t, fi) ->
+			    type_assign_field (expr_of_term t) fi op te
+			| JTstatic_field_access (_, fi) ->
+			    type_assign_static_field fi op te
+			| _ -> assert false (* TODO *)
+		    end
+		| TypeName _ ->
+		    typing_error e.java_pexpr_loc
+		      "lvalue expected, got a class or interface"
+		| PackageName _ ->
+		    typing_error e.java_pexpr_loc
+		      "lvalue expected, got a package name"
 	  end
       | JPEincr (op, e)-> 
 	  let te = exprt e in 
@@ -2475,7 +2475,7 @@ and type_assign_static_field fi op te =
 	"type %a expected, got %a" 
 	print_type fi.java_field_info_type 
 	print_type te.java_expr_type
-	
+
 let rec initializer_loc i =
   match i with
     | Simple_initializer e -> e.java_pexpr_loc

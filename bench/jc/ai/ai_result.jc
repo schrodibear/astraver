@@ -1,0 +1,41 @@
+
+type intM = { integer val; }
+
+
+// post \result >= 0 is inferred
+integer sum(integer n) {
+    integer s = 0;
+    integer i = 0;
+    while (i < n) 
+      invariant true;
+      variant n - i; 
+    {
+	s += i;
+	i++;
+    }
+    return s;
+}
+
+
+// post \result >= 0 is *not* inferred
+integer max_pos(integer n, integer m) {
+    if (n <= 0 && m <= 0)
+	return 0;
+    if (n < m)
+	return m;
+    return n;
+}
+
+
+// post \offset_max(\result) >= 0 is inferred
+intM[0..] reset(intM[0] t) {
+    integer i = 0;
+    while (i < \offset_max(t)) 
+	invariant true;
+        variant \offset_max(t) - i;
+    {
+	(t + i).val = 0;
+	i++;
+    }
+    return t;
+}

@@ -359,6 +359,21 @@ let rec pre_map_term f t =
   in
   { t with jc_term_node = tnode; }
 
+
+let raw_asrt a = {
+  jc_assertion_node = a;
+  jc_assertion_loc = Loc.dummy_position;
+  jc_assertion_label = "";
+}
+
+let default_behavior = { 
+  jc_behavior_throws = None;
+  jc_behavior_assumes = None;
+  jc_behavior_assigns = None;
+  jc_behavior_ensures = raw_asrt JCAtrue
+}
+
+  
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -C .. bin/jessie.byte"

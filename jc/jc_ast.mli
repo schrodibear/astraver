@@ -363,7 +363,7 @@ type behavior =
 type fun_spec =
     {
       mutable jc_fun_requires : assertion;
-      jc_fun_behavior : (string * behavior) list;
+      mutable jc_fun_behavior : (string * behavior) list;
     }
 
 

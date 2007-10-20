@@ -5,18 +5,18 @@ open Format
 
 let main () =
   let files = Java_options.files () in
-  try
-    match files with
-    | [f] ->
-	(* phase 1 : parsing *)
-	let ast = Java_syntax.file f in
-	printf "Parsing OK.@.";
-	(* phase 2 : typing *)
-	Java_options.lprintf "(****** typing phase *****)@.";
-	let (p,t) = Java_typing.get_types ast in
-	Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
-	Java_typing.get_bodies p t ast;
-	printf "Typing OK.@.";
+    try
+      match files with
+	| [f] ->
+	    (* phase 1 : parsing *)
+	    let ast = Java_syntax.file f in
+	      printf "Parsing OK.@.";
+	      (* phase 2 : typing *)
+	      Java_options.lprintf "(****** typing phase *****)@.";
+	      let (p,t) = Java_typing.get_types ast in
+		Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
+		Java_typing.get_bodies p t ast;
+		printf "Typing OK.@.";
 
 	(************)
 	(* Analyses *)
@@ -183,15 +183,16 @@ let main () =
 	in
 
 (*
+>>>>>>> 1.28
 	let decls = 
 	  Hashtbl.fold 
 	    (fun _ ct acc ->
 	       let f = ct.Java_typing.ct_constr_info in
-	       printf "Generating Why function %s@." 
-		 f.Java_env.constr_info_class.class_info_name;
-	       Java_interp.tr_constr f ct.Java_typing.ct_requires 
-		 ct.Java_typing.ct_behaviors 
-		 ct.Java_typing.ct_body acc)
+		 printf "Generating Why function %s@." 
+		   f.Java_env.constr_info_class.class_info_name;
+		 Java_interp.tr_constr f ct.Java_typing.ct_requires 
+		   ct.Java_typing.ct_behaviors 
+		   ct.Java_typing.ct_body acc)
 	    Java_typing.constructors_table
 	    decls
 	in	       
