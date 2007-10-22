@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.12 2007-09-07 10:45:45 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.13 2007-10-22 10:38:26 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -86,6 +86,10 @@ let rec term fmt = function
       fprintf fmt "(%a - %a)" term t1 term t2
   | Tapp (id, [t1; t2], _) when id == t_mul_int ->
       fprintf fmt "(%a * %a)" term t1 term t2
+  | Tapp (id, [t1; t2], _) when id == t_div_int ->
+      fprintf fmt "(%a / %a)" term t1 term t2
+  | Tapp (id, [t1; t2], _) when id == t_mod_int ->
+      fprintf fmt "(%a %% %a)" term t1 term t2
   | Tapp (id, [t1], _) when id == t_neg_int ->
       fprintf fmt "(-%a)" term t1
   | Tapp (id, tl, _) -> 
