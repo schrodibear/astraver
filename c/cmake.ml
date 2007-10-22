@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.49 2007-04-20 12:16:15 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.50 2007-10-22 14:01:37 hubert Exp $ i*)
 
 open Format
 open Pp
@@ -34,6 +34,7 @@ let add ~file ~f =
   Hashtbl.replace files file (f :: l)
 
 let simplify fmt f = fprintf fmt "simplify/%s_why.sx" f
+let ergo fmt f = fprintf fmt "why/%s_why.why" f
 let coq_v fmt f = fprintf fmt "coq/%s_why.v" f
 let coq_vo fmt f = fprintf fmt "coq/%s_why.vo" f
 let pvs fmt f = fprintf fmt "pvs/%s_why.pvs" f
@@ -60,7 +61,7 @@ let generic f targets =
        fprintf fmt "CADULIBFILE=%s@\n@\n" Coptions.libfile;
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
        fprintf fmt "COQDEP=coqdep -I `coqc -where`/user-contrib@\n@\n";	    
-       fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
+       fprintf fmt ".PHONY: all coq pvs simplify ergo cvcl harvey smtlib zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
 
@@ -101,6 +102,12 @@ let generic f targets =
        fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir  simplify $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
+       fprintf fmt "ergo: %a@\n" (print_files ergo) targets;
+       fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "why/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why -why [...] why/$*.why' && $(WHY) -why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+
+
        fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
        fprintf fmt "why/%%_ctx.why: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;

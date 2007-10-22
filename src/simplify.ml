@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.71 2007-09-20 08:22:05 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.72 2007-10-22 14:01:37 hubert Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -246,16 +246,15 @@ let rec print_predicate pos fmt p =
       let p' = subst_in_predicate s p in
       let tl' = List.map (List.map (subst_in_pattern s)) tl in
       fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl' pp p'
-  | Forall (_,id,n,_,_,p) ->
+(*  | Forall (_,id,n,_,_,p) ->
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id' pp p'
-(*
+*)
   | Forall _ as p ->
       let bv,p = Util.decomp_forall p in
       let var fmt (x,_) = ident fmt x in
       fprintf fmt "@[(FORALL (%a)@ %a)@]" (print_list space var) bv pp p
-*)
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
