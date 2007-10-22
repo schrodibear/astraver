@@ -14,7 +14,7 @@ type instr =
   (* storing *)
   | St of register | Stj | Stz
   (* arithmetic *)
-  | Add | Sub | Mul | Div
+  | Add | Sub | Mul | Div | Srb
   (* address transfer *)
   | Ent of register
   | Enn of register

@@ -63,6 +63,12 @@ let interp_instr loc i op = match i with
 	| Mul -> "mul_int" | Div -> "div_int" | _ -> assert false
       in
       Wassign ("a", Tapp (aop, [Tvar "!a"; value_at loc op]))
+  | Srb ->
+      begin match op.pop_address, op.pop_index, op.pop_field with
+	| Some (PAconst "1"), None, None -> 
+	    Wassign ("a", Tapp ("div_int", [Tvar "!a"; Tconst "2"]))
+	| _ -> error loc UnsupportedInstruction
+      end
   | Cmp r -> 
       Wassign ("cmp", 
 	       Tapp ("sub_int", [Tvar (register_value r); value_at loc op]))

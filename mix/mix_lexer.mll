@@ -23,6 +23,7 @@
 	(* arithmetic *)
 	"add", INSTR Add; "sub", INSTR Sub; 
 	"mul", INSTR Mul; "div", INSTR Div;
+	"srb", INSTR Srb;
 	(* address transfer *)
 	"enta", INSTR (Ent A);  "entx", INSTR (Ent X);
 	"ent1", INSTR (Ent I1); "ent2", INSTR (Ent I2); "ent3", INSTR (Ent I3);
@@ -42,7 +43,7 @@
 	"cmp4", INSTR (Cmp I4); "cmp5", INSTR (Cmp I5); "cmp6", INSTR (Cmp I6);
 	(* jumps *)
 	"jmp", INSTR Jmp; "jsj", INSTR Jsj;
-	"jge", INSTR Jge; "je", INSTR Je; "jne", INSTR Jne;
+	"jg", INSTR Jg; "jge", INSTR Jge; "je", INSTR Je; "jne", INSTR Jne;
 	"jan", INSTR (Jn A);  "jxn", INSTR (Jn X);
 	"j1n", INSTR (Jn I1); "j2n", INSTR (Jn I2); "j3n", INSTR (Jn I3);
 	"j4n", INSTR (Jn I4); "j5n", INSTR (Jn I5); "j6n", INSTR (Jn I6);
