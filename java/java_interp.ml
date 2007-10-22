@@ -810,7 +810,23 @@ let rec expr e =
 	  JCTEincr_local(incr_op op,get_var v)
       | JEincr_field(op,e,fi) -> 
 	  JCTEincr_heap(incr_op op, expr e, get_field fi)
-      | JEincr_array (op, e1, e2) -> assert false (* TODO *)
+      | JEincr_array (op, e1, e2) ->
+	  begin
+	    match e1.java_expr_type with
+	      | JTYarray ty ->
+		  let st = get_array_struct e1.java_expr_loc ty in
+		  let e1' = expr e1 in
+		  let shift = {
+		    jc_texpr_loc = e.java_expr_loc;
+		    jc_texpr_type = e1'.jc_texpr_type;
+		    jc_texpr_label = e1'.jc_texpr_label;
+		    jc_texpr_node = JCTEshift(e1', expr e2)
+		  }
+		  in
+		  let fi = snd (List.hd st.jc_struct_info_fields) in
+		  JCTEincr_heap (incr_op op, shift, fi)
+	      | _ -> assert false
+	  end
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
 	  lab := reg_loc e.java_expr_loc;
@@ -1177,7 +1193,7 @@ let tr_field type_name acc fi =
 	match e with
 	  | None -> JCReads []
 	  | Some (JIexpr e) -> JCTerm (term (term_of_expr e))
-	  | Some (JIlist _) -> assert false (* TODO *)
+	  | Some (JIlist _) -> raise Not_found (* TODO: with axioms ? (Nicolas) *)
       with Not_found -> 
 	Java_options.lprintf "Warning: final field '%s' of %a has no known value@."
 	  fi.java_field_info_name 
