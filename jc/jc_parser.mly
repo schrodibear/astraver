@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.65 2007-10-16 07:35:12 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.66 2007-10-22 07:38:21 marche Exp $ */
 
 %{
 
@@ -107,21 +107,11 @@
 /* & ~ ^ | << >> >>> */
 %token AMP TILDE HAT PIPE LSHIFT LRSHIFT ARSHIFT
 
+/* |= &= ^= */
+%token BAREQ AMPEQ CARETEQ
+
 /*
-
-%token OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN 
-%token LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token XOR_ASSIGN OR_ASSIGN
-
-%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE VOID
-%token STRUCT ENUM 
-
-%token DO FOR CONTINUE 
-%token TRY CATCH FINALLY THROW 
-
-%token AMP EXL TILDE STAR SLASH PERCENT LT GT HAT PIPE
-%token QUESTION
-
+%token FLOAT DOUBLE 
 */
 
 %token EOF
@@ -554,10 +544,10 @@ assignment_operator:
 /*
 | LEFT_ASSIGN { Aleft }
 | RIGHT_ASSIGN { Aright }
-| AND_ASSIGN { Aand }
-| XOR_ASSIGN { Axor }
-| OR_ASSIGN { Aor }
 */
+| AMPEQ { `Aand }
+| CARETEQ { `Axor }
+| BAREQ { `Aor }
 ;
 
 
@@ -605,12 +595,12 @@ expression:
 		| `Amul -> JCPEassign_op ($1, BPmul, $3)
 		| `Adiv -> JCPEassign_op ($1, BPdiv, $3)
 		| `Amod -> JCPEassign_op ($1, BPmod, $3)
+		| `Aand -> JCPEassign_op ($1, BPbw_and, $3)
+		| `Axor -> JCPEassign_op ($1, BPbw_xor, $3)
+		| `Aor -> JCPEassign_op ($1, BPbw_or, $3)
 (*
 		| Aleft -> CEassign_op ($1, BPshift_left, $3)
 		| Aright -> CEassign_op ($1, BPshift_right, $3)
-		| Aand -> CEassign_op ($1, BPbw_and, $3)
-		| Axor -> CEassign_op ($1, BPbw_xor, $3)
-		| Aor -> CEassign_op ($1, BPbw_or, $3)
 *)
       in locate_expr a }
 

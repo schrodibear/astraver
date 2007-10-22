@@ -247,7 +247,18 @@ let rec expr fmt e =
 	fprintf fmt "@[(%s %a)@]" (unary_op op) expr e1
     | JCTEif (e1,e2,e3) -> 
 	fprintf fmt "@[(%a ? %a : %a)@]" expr e1 expr e2 expr e3
-    | JCTEincr_heap (_, _, _) -> assert false (* TODO *)
+    | JCTEincr_heap (op, e, fi) -> 
+	begin
+	  match op with
+	    | Prefix_inc ->
+		fprintf fmt "++(%a.%s)" expr e fi.jc_field_info_name
+	    | Prefix_dec ->
+		fprintf fmt "--(%a.%s)" expr e fi.jc_field_info_name
+	    | Postfix_inc ->
+		fprintf fmt "(%a.%s)++" expr e fi.jc_field_info_name
+	    | Postfix_dec ->
+		fprintf fmt "(%a.%s)--" expr e fi.jc_field_info_name
+	end
     | JCTEincr_local (op, v) -> 
 	begin
 	  match op with
@@ -344,10 +355,10 @@ let rec statement fmt s =
 	fprintf fmt "@\n@[<v 2>if (%a) %a@]@\n@[<v 2>else %a@]"
 	  expr e statement s1 statement s2
     | JCTSdecl (vi, None, s)-> 
-	fprintf fmt "@\n%a %s;%a" print_type vi.jc_var_info_type
+	fprintf fmt "{@\n%a %s;%a}" print_type vi.jc_var_info_type
 	  vi.jc_var_info_name statement s
     | JCTSdecl (vi, Some e, s)-> 
-	fprintf fmt "@\n%a %s = %a;%a" 
+	fprintf fmt "{@\n%a %s = %a;%a}" 
 	  print_type vi.jc_var_info_type 
 	  vi.jc_var_info_name expr e statement s
     | JCTSassert(None,a)-> 

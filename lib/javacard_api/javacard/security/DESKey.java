@@ -17,8 +17,8 @@
 
 /*
 // $Workfile: DESKey.java $
-// $Revision: 1.2 $
-// $Date: 2007-09-26 15:15:36 $
+// $Revision: 1.3 $
+// $Date: 2007-10-22 07:38:21 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/security/DESKey.java $
 // $Modtime: 5/02/00 7:13p $
@@ -37,8 +37,8 @@ package javacard.security;
  * @see javacardx.crypto.Cipher
  * @see javacardx.crypto.KeyEncryption
  */
-    public interface DESKey extends SecretKey{
-
+public interface DESKey extends SecretKey{
+    
     /**
      * Sets the <code>Key</code> data. The plaintext length of input key data is 8 bytes for DES,
      * 16 bytes for 2 key triple DES and 24 bytes for 3 key triple DES.
@@ -56,11 +56,6 @@ package javacard.security;
      * is not </em><code>null</code><em>, </em><code>keyData</code><em> is decrypted using the </em><code>Cipher</code><em> object.</em>
      * </ul>
      */
-
-    /* @ public normal_behavior
-      @   ensures true;
-      @*/
-
     void setKey( byte[] keyData, short kOff ) throws CryptoException;
 
     /**
@@ -72,12 +67,6 @@ package javacard.security;
      * @param kOff offset within <code>keyData</code> to start.
      * @return the byte length of the key data returned.
      */
-
-
-    /* @ public normal_behavior
-      @   ensures true;
-      @*/
-
     byte getKey( byte[] keyData, short kOff );
 
     }

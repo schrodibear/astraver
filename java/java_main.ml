@@ -5,19 +5,20 @@ open Format
 
 let main () =
   let files = Java_options.files () in
-    try
-      match files with
-	| [f] ->
-	    (* phase 1 : parsing *)
-	    let ast = Java_syntax.file f in
-	      printf "Parsing OK.@.";
-	      (* phase 2 : typing *)
-	      Java_options.lprintf "(****** typing phase *****)@.";
-	      let (p,t) = Java_typing.get_types ast in
-		Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
-		Java_typing.get_bodies p t ast;
-		printf "Typing OK.@.";
-
+  try
+    match files with
+      | [f] ->
+	  (* phase 1 : parsing *)
+	  let ast = Java_syntax.file f in
+	  printf "Parsing OK.@.";
+	  (* phase 2 : typing *)
+	  Java_options.lprintf "(****** typing phase *****)@.";
+	  let (p,t) = Java_typing.get_types ast in
+	  Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
+	  Java_typing.get_bodies p t ast;
+	  Java_typing.type_specs p t;
+	  printf "Typing OK.@.";
+	  
 	(************)
 	(* Analyses *)
 	(************)
@@ -102,10 +103,9 @@ let main () =
 	(* production of jessie output *)
 	(*******************************)
 
-	let decls = [] in
 (*
 	(* production phase 1.1 : generation of Jessie logic types *)
-	let d_types =
+	let decls_types =
 	  Hashtbl.fold 
 	    (fun _ id acc ->
 	       Jc_interp.tr_logic_type id acc)
@@ -114,17 +114,19 @@ let main () =
 	in	       	  
 *)
 	(* production phase 1.2 : generation of Jessie range_types *)
-	let decls = Java_interp.range_types decls in
+	let decls_range = Java_interp.range_types [] in
 	(* production phase 1.3 : generation of Jessie struct types *)
-	let decls = Java_interp.array_types decls in
-	let acc,decls =
+	let acc,decls_arrays = Java_interp.array_types [] in
+	let acc,decls_structs =
 	  Hashtbl.fold 
 	    (fun _ id (acc0,acc) ->
 	       Java_interp.tr_class_or_interface id acc0 acc)
 	    Java_typing.type_table
-	    ([],decls)
+	    (acc,decls_arrays)
 	in	
-	let decls = (Jc_output.JCrec_struct_defs acc) :: decls in
+	let decls = decls_structs @ 
+	  (Jc_output.JCrec_struct_defs acc :: decls_range)
+	in
 
 	(* production phase 1.4 : generation of Jessie exceptions *)
 	let decls =
@@ -162,7 +164,10 @@ let main () =
 			  let mt = Hashtbl.find Java_typing.methods_table
 			    mi.method_info_tag
 			  in
-			  printf "Generating Why function %s@." 
+			  printf "Generating JC function %s for method %a.%s@." 
+			    mi.method_info_name
+			    Java_typing.print_type_name 
+			    mi.method_info_class_or_interface
 			    mi.method_info_name;
 			  Java_interp.tr_method mi mt.Java_typing.mt_requires 
 			    mt.Java_typing.mt_behaviors 
@@ -171,7 +176,8 @@ let main () =
 			  let ct = Hashtbl.find Java_typing.constructors_table
 			    ci.constr_info_tag
 			  in
-			  printf "Generating Why function %s@." 
+			  printf "Generating JC function %s for constructor %s@." 
+			    ci.constr_info_trans_name
 			    ci.constr_info_class.class_info_name;
 			  Java_interp.tr_constr ci ct.Java_typing.ct_requires 
 			    ct.Java_typing.ct_behaviors 
@@ -182,8 +188,6 @@ let main () =
 	    components
 	in
 
-(*
->>>>>>> 1.28
 	let decls = 
 	  Hashtbl.fold 
 	    (fun _ ct acc ->
@@ -208,7 +212,7 @@ let main () =
 	    Java_typing.methods_table
 	    decls
 	in	       
-*)
+
 	(* production phase 5 : produce Jessie file *)
 	let decls = List.rev decls in
 	let f = Filename.chop_extension f in
@@ -217,7 +221,9 @@ let main () =
 	  (f ^ ".jc") 
 	in
 	output_string cout "/*\n";
-	output_string cout "Local Variables:\n";
+	output_string cout "Local"; 
+	(* splitted because confuses Emacs otherwise *)
+	output_string cout "Variables:\n";
 	output_string cout "mode: java\n";
 	output_string cout "compile-command: \"jessie -why-opt -split-user-conj ";
 	output_string cout f;
@@ -255,7 +261,7 @@ let _ =
 	eprintf "%s@." (Printexc.to_string exc);
 	exit 2
 
-  
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/krakatoa.byte"

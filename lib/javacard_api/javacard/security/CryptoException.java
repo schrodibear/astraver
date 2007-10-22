@@ -17,8 +17,8 @@
 
 /*
 // $Workfile: CryptoException.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
+// $Revision: 1.2 $
+// $Date: 2007-10-22 07:38:21 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/security/CryptoException.java $
 // $Modtime: 5/02/00 7:13p $
@@ -40,7 +40,6 @@ import javacard.framework.CardRuntimeException;
  * @see javacard.security.RandomData
  * @see javacardx.crypto.Cipher
  */
-
 public class CryptoException extends CardRuntimeException{
 
   // initialized when created by Dispatcher
@@ -102,4 +101,5 @@ public class CryptoException extends CardRuntimeException{
     systemInstance.setReason(reason);
     throw systemInstance;
   }
+
 }

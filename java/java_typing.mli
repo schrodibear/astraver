@@ -65,6 +65,11 @@ val get_bodies :
   (string * Java_env.java_type_info) list ->
   Java_ast.compilation_unit -> unit
 
+val type_specs : 
+  Java_env.package_info list ->
+  (string * Java_env.java_type_info) list ->
+  unit
+
 
 
 (*

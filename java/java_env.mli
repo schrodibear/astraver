@@ -20,6 +20,7 @@ and java_var_info =
     {
       java_var_info_tag : int;
       java_var_info_name : string;
+      java_var_info_decl_loc : Loc.position;
       java_var_info_type : java_type;
       mutable java_var_info_final_name : string;
       mutable java_var_info_assigned : bool;

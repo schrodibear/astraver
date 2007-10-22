@@ -223,11 +223,12 @@ let interface_decl_table :
 
 let var_tag_counter = ref 0
 
-let new_var ty id =
+let new_var loc ty id =
   incr var_tag_counter;
   let vi = {
     java_var_info_tag = !var_tag_counter;
     java_var_info_name = id;
+    java_var_info_decl_loc = loc;
     java_var_info_final_name = id;
     java_var_info_type = ty;
     java_var_info_assigned = false;
@@ -285,7 +286,7 @@ let method_or_constr_tag_counter = ref 0
 let new_method_info ~is_static id ti ty pars =
   incr method_or_constr_tag_counter;
   let result = 
-      Option_misc.map (fun t -> new_var t "\\result") ty
+      Option_misc.map (fun t -> new_var Loc.dummy_position t "\\result") ty
   in
   {
     method_info_tag = !method_or_constr_tag_counter;
@@ -344,7 +345,7 @@ let new_interface_info (p:package_info) (id:string) i =
   in
   Hashtbl.add type_table !type_counter (TypeInterface ii);
   Hashtbl.add interface_decl_table !type_counter i;
-  eprintf "adding interface %s in package '%s'@." id p.package_info_name;
+  Java_options.lprintf "adding interface %s in package '%s'@." id p.package_info_name;
   let h = get_package_contents p in
   Hashtbl.replace h id (Type (TypeInterface ii));
   ii
@@ -365,7 +366,8 @@ let new_class_info (p:package_info) (id:string) c =
   in
   Hashtbl.add type_table !type_counter (TypeClass ci);
   Hashtbl.add class_decl_table !type_counter c;
-  eprintf "adding class %s in package %s@." id p.package_info_name;
+  Java_options.lprintf 
+    "adding class %s in package %s@." id p.package_info_name;
   let h = get_package_contents p in
   Hashtbl.replace h id (Type (TypeClass ci));
   ci
@@ -410,7 +412,7 @@ let rec add_in_package_list pi l =
 let rec get_import (packages,types) imp =
     match imp with
       | Import_package qid ->
-	  eprintf "importing package %a@." print_qualified_ident qid;
+	  Java_options.lprintf "importing package %a@." print_qualified_ident qid;
 	  begin
 	    match classify_name [] [] None [] qid with
 	      | PackageName pi -> (add_in_package_list pi packages,types)
@@ -418,7 +420,7 @@ let rec get_import (packages,types) imp =
 		  "package name expected"
 	  end
       | Import_class_or_interface qid ->
-	  eprintf "importing %a@." print_qualified_ident qid;
+	  Java_options.lprintf "importing %a@." print_qualified_ident qid;
 	  begin
 	    match classify_name [] [] None [] qid with
 	      | TypeName ti -> (packages,(snd (List.hd qid),ti)::types)
@@ -728,12 +730,12 @@ and type_param package_env type_env p =
   let rec get_type p =
     match p with
       | Simple_parameter(ty,(loc,id)) -> 
-	  (type_type package_env type_env ty, id)
+	  (type_type package_env type_env ty, loc, id)
       | Array_parameter x -> 
-	  let (t,i) = get_type x in
-	  (JTYarray t,i)
+	  let (t,loc,i) = get_type x in
+	  (JTYarray t,loc,i)
   in
-  let (t,i) = get_type p in new_var t i
+  let (t,loc,i) = get_type p in new_var loc t i
 
 and method_header package_env type_env retty mdecl =
   match mdecl with
@@ -834,8 +836,15 @@ and get_class_prototypes package_env type_env ci d =
        match classify_name package_env type_env None [] id with
 	 | TypeName (TypeClass super) -> 
 	     check_if_class_complete super;
-	     ci.class_info_is_exception <-
-	       super.class_info_is_exception;
+	     Java_options.lprintf "Class %s extends class %s@." 
+	       ci.class_info_name
+	       super.class_info_name;
+	     if super.class_info_is_exception then
+	       begin
+		 Java_options.lprintf "Class %s is an exception class@." 
+		   ci.class_info_name;
+		 ci.class_info_is_exception <- true
+	       end;
 	     super
 	 | _ ->
 	     typing_error (fst (List.hd id)) "class type expected") 
@@ -1132,8 +1141,10 @@ let rec is_subinterface i1 i2 =
     (check_if_interface_complete i1;
      List.exists
 	(fun i' -> 
-eprintf "checking if interface '%s' is subinterface of '%s'@."
+(*
+	   eprintf "checking if interface '%s' is subinterface of '%s'@."
 		i'.interface_info_name i2.interface_info_name;
+*)
        is_subinterface i' i2)
     i1.interface_info_extends)
 
@@ -1224,10 +1235,7 @@ let rec is_widening_reference_convertible tfrom tto =
     | JTYclass(_,c1), JTYclass(_,c2) -> is_subclass c1 c2
     | JTYclass(_,c), JTYinterface i -> implements c i
     | JTYnull, (JTYclass _ | JTYinterface _ | JTYarray _ ) -> true
-    | JTYinterface i1, JTYinterface i2 -> 
-        if i2.interface_info_name = "Key" then
-	   eprintf "checking if '%s' is subinterface of Key@." i1.interface_info_name;
-	is_subinterface i1 i2 || (eprintf "failed@."; false)
+    | JTYinterface i1, JTYinterface i2 -> is_subinterface i1 i2
     | JTYinterface _ , JTYclass(_,c) when c==object_class -> true
     | JTYarray _ , JTYclass(_,c) when c==object_class -> true
 (* TODO
@@ -1782,7 +1790,7 @@ and make_quantified_formula loc q ty idl package_env type_env current_type env e
     | [] -> assertion package_env type_env current_type env e
     | id::r ->
 	let tyv, (loc,n) = var_type_and_id ty id in
-	let vi = new_var tyv n in
+	let vi = new_var loc tyv n in
 	let f = 
 	  make_quantified_formula loc q ty r package_env type_env current_type ((n,vi)::env) e 
 	in
@@ -2029,6 +2037,7 @@ let lookup_method ti (loc,id) arg_types =
     | [] -> raise Not_found
     | [mi] -> mi
     | _ -> 
+(*
 	eprintf "possible calls:@.";
 	List.iter (fun mi ->
 		     eprintf "%a.%s(%a)@." 
@@ -2037,7 +2046,9 @@ let lookup_method ti (loc,id) arg_types =
 		       (Pp.print_list Pp.comma (fun fmt vi -> print_type fmt vi.java_var_info_type)) 
 		       mi.method_info_parameters)
 	  meths;
+*)
 	let meths = get_maximally_specific_signatures [] meths in
+(*
 	eprintf "maximally specific calls:@.";
 	List.iter (fun mi ->
 		     eprintf "%a.%s(%a)@." 
@@ -2046,6 +2057,7 @@ let lookup_method ti (loc,id) arg_types =
 		       (Pp.print_list Pp.comma (fun fmt vi -> print_type fmt vi.java_var_info_type)) 
 		       mi.method_info_parameters)
 	  meths;
+*)
 	match meths with
 	  | [] -> assert false
 	  | [mi] -> mi
@@ -2151,7 +2163,9 @@ let rec expr package_env type_env current_type env e =
 	  begin
 	    match classify_name package_env type_env current_type env n with
 	      | TypeName (TypeClass ci) ->
+(*
 		  eprintf "looking up constructor in class %s@." ci.class_info_name;
+*)
 		  let constr = lookup_constructor ci arg_types in
 		  JTYclass(true,ci),JEnew_object(constr,args)
 	      | _ ->
@@ -2228,7 +2242,9 @@ let rec expr package_env type_env current_type env e =
 			    "expr or class or interface expected"
 		  end
 	  in
+(*
 	  eprintf "looking up method '%s' in class %a @." (snd id) print_type_name ti;
+*)
 	  let mi = 
 	    try lookup_method ti id arg_types 
 	    with Not_found ->
@@ -2256,7 +2272,6 @@ let rec expr package_env type_env current_type env e =
 	      ty,JEcall(te2,mi,args)
 
       | JPEcall_expr (e1, id, args)-> 
-	  eprintf "method call expr@.";
 	  let args = List.map exprt args in
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in
 	  begin
@@ -2524,7 +2539,7 @@ let variable_declaration package_env type_env current_type env vd =
   in
   List.fold_right
       (fun ((loc,id),ty,i) (env,decls)->
-	 let vi = new_var ty id in		     
+	 let vi = new_var loc ty id in		     
 	 (id,vi)::env,(vi,i)::decls)
       l (env,[])
 
@@ -2570,8 +2585,15 @@ let rec statement package_env type_env current_type env s =
 	    List.map
 	      (fun (p,s) ->
 		 let vi = type_param package_env type_env p in
-		 let e = (vi.java_var_info_name,vi)::env in
-		 (vi,statements package_env type_env current_type e s))
+		 match vi.java_var_info_type with
+		   | JTYclass(_,ci) when 
+		       (check_if_class_complete ci; 
+			ci.class_info_is_exception) ->
+		       let e = (vi.java_var_info_name,vi)::env in
+		       (vi,statements package_env type_env current_type e s)
+		   | _ -> 
+		       typing_error vi.java_var_info_decl_loc 
+			 "throwable class expected")
 	      catches
 	  in
 	  JStry(ts, tl, 
@@ -2793,7 +2815,11 @@ type method_table_info =
 let methods_table = Hashtbl.create 97
 
 
-let type_method_spec_and_body package_env type_env ti mi =
+let type_method_spec_and_body ?(dobody=true) 
+    package_env type_env ti mi =
+  try
+    let _ = Hashtbl.find methods_table mi.method_info_tag in ()
+  with Not_found ->
   let (_,req,assigns,behs,body) = 
     try
       Hashtbl.find methods_env mi.method_info_tag 
@@ -2806,7 +2832,7 @@ let type_method_spec_and_body package_env type_env ti mi =
 	  | TypeClass ci -> JTYclass(true,ci)
 	  | TypeInterface ii -> JTYinterface ii
       in
-      let vi = new_var this_type "this" in
+      let vi = new_var Loc.dummy_position this_type "this" in
       mi.method_info_has_this <- Some vi;
       [("this",vi)]
   in
@@ -2828,13 +2854,21 @@ let type_method_spec_and_body package_env type_env ti mi =
 	 (location package_env type_env (Some ti) env_result)) assigns
   in
   let behs = List.map (behavior package_env type_env (Some ti) local_env env_result) behs in
-  let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
-  Hashtbl.add methods_table mi.method_info_tag 
-    { mt_method_info = mi;
-      mt_requires = req;
-      mt_assigns = assigns;
-      mt_behaviors = behs;
-      mt_body = body } 
+  if dobody then
+    let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
+    Hashtbl.add methods_table mi.method_info_tag 
+      { mt_method_info = mi;
+	mt_requires = req;
+	mt_assigns = assigns;
+	mt_behaviors = behs;
+	mt_body = body } 
+  else
+    Hashtbl.add methods_table mi.method_info_tag 
+      { mt_method_info = mi;
+	mt_requires = req;
+	mt_assigns = assigns;
+	mt_behaviors = behs;
+	mt_body = None } 
 
 
 
@@ -2855,7 +2889,11 @@ type constructor_table_info =
 
 let constructors_table = Hashtbl.create 97
   
-let type_constr_spec_and_body package_env type_env current_type ci =
+let type_constr_spec_and_body ?(dobody=true) 
+    package_env type_env current_type ci =
+  try
+    let _ = Hashtbl.find constructors_table ci.constr_info_tag in ()
+  with Not_found ->
   let (_,req,assigns,behs,eci,body) = 
     try
       Hashtbl.find constructors_env ci.constr_info_tag 
@@ -2872,6 +2910,12 @@ let type_constr_spec_and_body package_env type_env current_type ci =
       | TypeClass ci -> JTYclass(true,ci)
       | TypeInterface ii -> JTYinterface ii
   in
+  let this_vi = new_var Loc.dummy_position this_type "this" in
+  let this_env =
+    ci.constr_info_this <- Some this_vi;
+    ("this", this_vi)::local_env
+  in
+(*
   let spec_env =
     (* spec is typed in a env that contains "this" but it will be
        renamed to "\\result" NO: TODO *)
@@ -2879,11 +2923,7 @@ let type_constr_spec_and_body package_env type_env current_type ci =
       ci.constr_info_result <- Some vi;
       ("this",vi)::local_env
   in
-  let this_vi = new_var this_type "this" in
-  let body_env =
-    ci.constr_info_this <- Some this_vi;
-    ("this", this_vi)::local_env
-  in
+*)
   let req = Option_misc.map (assertion package_env type_env (Some current_type) local_env) req in
     (* Note: for constructors, the `assigns' clause is typed in
        pre-state environnement: `this' is not allowed there *)
@@ -2893,20 +2933,21 @@ let type_constr_spec_and_body package_env type_env current_type ci =
 	 (location package_env type_env (Some current_type) local_env)) assigns
   in
   let behs = List.map 
-    (behavior package_env type_env (Some current_type) local_env spec_env) behs 
+    (behavior package_env type_env (Some current_type) local_env this_env) behs 
   in
+  if dobody then
     match eci with
       | Invoke_none -> 
-	  let body = statements package_env type_env (Some current_type) body_env body in
-	    Hashtbl.add constructors_table ci.constr_info_tag 
-	      { ct_constr_info = ci;
-		ct_requires = req;
-		ct_assigns = assigns;
-		ct_behaviors = behs;
-		ct_body = body } 
+	  let body = statements package_env type_env (Some current_type) this_env body in
+	  Hashtbl.add constructors_table ci.constr_info_tag 
+	    { ct_constr_info = ci;
+	      ct_requires = req;
+	      ct_assigns = assigns;
+	      ct_behaviors = behs;
+	      ct_body = body } 
       | Invoke_this _ -> assert false (* TODO *)
       | Invoke_super el ->
-	  let tel = List.map (expr package_env type_env (Some current_type) body_env) el in
+	  let tel = List.map (expr package_env type_env (Some current_type) this_env) el in
 	  let super_class_info =
 	    match current_type with
 	      | TypeClass ci ->
@@ -2924,15 +2965,23 @@ let type_constr_spec_and_body package_env type_env current_type ci =
 		 make_expr_no_loc unit_type
 		   (JEconstr_call
 		      (make_expr_no_loc
-			 (JTYclass (false, super_class_info)) (JEvar this_vi), super_ci, tel))))
+			 (JTYclass (true, super_class_info)) (JEvar this_vi), super_ci, tel))))
 	  in
-	  let body = statements package_env type_env (Some current_type) body_env body in
-	    Hashtbl.add constructors_table ci.constr_info_tag 
-	      { ct_constr_info = ci;
-		ct_requires = req;
-		ct_assigns = assigns;
-		ct_behaviors = behs;
-		ct_body = super_call_s :: body }
+	  let body = statements package_env type_env (Some current_type) this_env body in
+	  Hashtbl.add constructors_table ci.constr_info_tag 
+	    { ct_constr_info = ci;
+	      ct_requires = req;
+	      ct_assigns = assigns;
+	      ct_behaviors = behs;
+	      ct_body = super_call_s :: body }
+  else
+    Hashtbl.add constructors_table ci.constr_info_tag 
+      { ct_constr_info = ci;
+	ct_requires = req;
+	ct_assigns = assigns;
+	ct_behaviors = behs;
+	ct_body = [] }
+    
 		      
 let type_field_initializer package_env type_env ci fi =
   let init = 
@@ -3070,6 +3119,18 @@ let type_decl package_env type_env d =
 
 let get_bodies package_env type_env cu =
   List.iter (type_decl package_env type_env) cu.cu_type_decls
+
+let type_specs package_env type_env =
+  Hashtbl.iter 
+    (fun _ (mi, _, _, _,_)  ->
+       type_method_spec_and_body ~dobody:false 
+	 package_env type_env mi.method_info_class_or_interface mi) 
+    methods_env;
+  Hashtbl.iter 
+    (fun _ (ci, _, _, _,_, _)  ->
+       type_constr_spec_and_body ~dobody:false 
+	 package_env type_env (TypeClass ci.constr_info_class) ci) 
+    constructors_env
 
 
 (*

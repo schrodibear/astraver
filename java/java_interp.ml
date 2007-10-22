@@ -240,7 +240,7 @@ let get_field fi =
 	assert false
 
 let create_field loc fi =
-  eprintf "Creating JC field '%s'@." fi.java_field_info_name;
+  Java_options.lprintf "Creating JC field '%s'@." fi.java_field_info_name;
   let ty = tr_type loc fi.java_field_info_type in
   let ci = 
     match fi.java_field_info_class_or_interface with
@@ -284,8 +284,11 @@ let get_var vi =
     Hashtbl.find vi_table vi.java_var_info_tag
   with
       Not_found -> 
-	eprintf "Java_interp.get_var %s@." vi.java_var_info_name;
-	assert false
+	eprintf "Java_interp.get_var->Not_found: '%s', %a@." 
+	  vi.java_var_info_name
+	  Loc.report_position vi.java_var_info_decl_loc
+	;
+	raise Not_found
 
 let create_var ?(formal=false) loc vi =
   let ty = tr_type loc vi.java_var_info_type in
@@ -586,7 +589,7 @@ let array_types decls =
   Java_options.lprintf "(* array types        *)@.";
   Java_options.lprintf "(**********************)@.";
   Hashtbl.fold
-    (fun t (s, f) acc ->
+    (fun t (s,f) (acc,decls) ->
        let fi =
 	 { jc_field_info_name = f;
 	   jc_field_info_tag = 0 (* TODO *);
@@ -642,12 +645,12 @@ let array_types decls =
 		jc_behavior_throws = None } ] 
 	     }
        in
-       JCfun_def(fi.jc_fun_info_return_type,fi.jc_fun_info_name,[vi],spec,None)
-	::	
-       JCstruct_def(st.jc_struct_info_name, None,
-		    List.map snd st.jc_struct_info_fields) :: acc)
+       (JCstruct_def(st.jc_struct_info_name, None,
+		     List.map snd st.jc_struct_info_fields) :: acc,
+	JCfun_def(fi.jc_fun_info_return_type,
+		  fi.jc_fun_info_name,[vi],spec,None) :: decls))
     Java_analysis.array_struct_table
-    decls
+    ([],decls)
       
 
 (*****************
@@ -743,8 +746,10 @@ let behavior (id,assumes,throws,assigns,ensures) =
 
 let un_op op =
   match op with
-    | Uminus-> Uminus_int
-    | Ucompl|Unot|Uplus -> assert false (* TODO *)
+    | Uminus -> Uminus_int
+    | Ucompl -> Ubw_not
+    | Unot -> Jc_ast.Unot
+    | Uplus -> assert false (* TODO *)
 
 let bin_op op =
   match op with
@@ -753,14 +758,22 @@ let bin_op op =
     | Bdiv -> Bdiv_int
     | Bmul -> Bmul_int
     | Bsub -> Bsub_int
-    | Biff|Bor|Band|Bimpl  -> assert false (* TODO *) 
+    | Biff -> assert false
+    | Bor -> Blor
+    | Band -> Bland
+    | Bimpl -> assert false 
     | Bgt -> Bgt_int
     | Bne -> Bneq_int
     | Beq -> Beq_int
     | Bge -> Bge_int
     | Ble -> Ble_int
     | Blt -> Blt_int
-    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand -> assert false (* TODO *) 
+    | Basr -> Barith_shift_right
+    | Blsr -> Blogical_shift_right
+    | Blsl -> Bshift_left
+    | Bbwxor -> Bbw_xor
+    | Bbwor -> Bbw_or
+    | Bbwand -> Bbw_and
 
 let incr_op op =
   match op with
@@ -796,7 +809,7 @@ let rec expr e =
       | JEincr_local_var(op,v) -> 
 	  JCTEincr_local(incr_op op,get_var v)
       | JEincr_field(op,e,fi) -> 
-	  assert false
+	  JCTEincr_heap(incr_op op, expr e, get_field fi)
       | JEincr_array (op, e1, e2) -> assert false (* TODO *)
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
@@ -806,7 +819,8 @@ let rec expr e =
 	  let e1 = expr e1 and e2 = expr e2 in
 	  lab := reg_loc e.java_expr_loc;
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEbinary(e1,bin_op op,e2))
-      | JEif _ -> assert false (* TODO *)
+      | JEif (e1,e2,e3) -> 
+	  JCTEif(expr e1, expr e2, expr e3)
       | JEvar vi -> JCTEvar (get_var vi)
       | JEstatic_field_access(ci,fi) ->
 	  JCTEvar (get_static_var fi)
@@ -901,19 +915,26 @@ let rec expr e =
       | JEnew_object(ci,args) ->
 	  let si = get_class ci.constr_info_class in
 	  JCTEalloc (dummy_loc_expr int_type (JCTEconst (JCCinteger "1")), si) 
-      | JEcast(ty,e) ->
+      | JEcast(ty,e1) ->
 	  begin
 	    match ty with
 	      | JTYbase t -> 
 		  if Java_options.ignore_overflow 
 		  then 
-		    (expr e).jc_texpr_node
+		    (expr e1).jc_texpr_node
 		  else
-		    JCTErange_cast(get_enum_info t, expr e)
+		    JCTErange_cast(get_enum_info t, expr e1)
 	      | JTYclass(_,ci) ->
 		  let st = get_class ci in
-		  JCTEcast(expr e,st)
-	      | _ -> assert false (* TODO *)
+		  JCTEcast(expr e1,st)
+	      | JTYinterface ii -> 
+		  eprintf "Warning: cast to interface '%s' ignored.@."
+		    ii.interface_info_name;
+		    (expr e1).jc_texpr_node
+	      | JTYarray ty ->
+		  let st = get_array_struct e.java_expr_loc ty in
+		  JCTEcast(expr e1,st)		  
+	      | JTYnull -> assert false 
 	  end
       | JEinstanceof(e,ty) ->
 	  begin
@@ -1024,7 +1045,8 @@ let rec statement s =
 		  List.map 
 		    (fun (vi,s2) ->
 		       let e = get_exception vi.java_var_info_type in
-		       (e, Some (create_var s.java_statement_loc vi), block s2))
+		       let vti = create_var s.java_statement_loc vi in
+		       (e, Some vti, block s2))
 		    catches,
 		  make_block 
 		    (Option_misc.fold (fun s acc -> List.map statement s) finally []))
@@ -1052,33 +1074,31 @@ let reg_assertion_option a =
 	{ a' with jc_assertion_label = id }
 
 let tr_method mi req behs b acc =
-  match b with
-    | None -> assert false
-    | Some l ->	
-	let params = List.map (create_var Loc.dummy_position) mi.method_info_parameters in
-	let params =
-	  match mi.method_info_has_this with
-	    | None -> params
-	    | Some vi -> 
-		(create_var Loc.dummy_position vi) :: params
-	in
-	let t = match mi.method_info_result with
-	  | None -> None
-	  | Some vi ->
-	      let _nvi = create_var Loc.dummy_position vi in 
-	      Some vi.java_var_info_type
-	in
-	let nfi = 
-	  create_fun Loc.dummy_position 
-	    mi.method_info_tag mi.method_info_result 
-	    mi.method_info_name mi.method_info_parameters
-	in
-	JCfun_def(tr_type_option Loc.dummy_position t,
-		  nfi.jc_fun_info_name,
-		  params,
-		  { jc_fun_requires = reg_assertion_option req;
-		    jc_fun_behavior = List.map behavior behs},
-		  Some (statements l))::acc
+  let params = List.map (create_var Loc.dummy_position) mi.method_info_parameters in
+  let params =
+    match mi.method_info_has_this with
+      | None -> params
+      | Some vi -> 
+	  (create_var Loc.dummy_position vi) :: params
+  in
+  let t = match mi.method_info_result with
+    | None -> None
+    | Some vi ->
+	let _nvi = create_var Loc.dummy_position vi in 
+	Some vi.java_var_info_type
+  in
+  let nfi = 
+    create_fun Loc.dummy_position 
+      mi.method_info_tag mi.method_info_result 
+      mi.method_info_name mi.method_info_parameters
+  in
+  let body = Option_misc.map statements b in
+  JCfun_def(tr_type_option Loc.dummy_position t,
+	    nfi.jc_fun_info_name,
+	    params,
+	    { jc_fun_requires = reg_assertion_option req;
+	      jc_fun_behavior = List.map behavior behs},
+	    body)::acc
 	  
 let tr_constr ci req behs b acc =
   let params = 
@@ -1089,11 +1109,13 @@ let tr_constr ci req behs b acc =
       | None -> assert false
       | Some vi -> (create_var Loc.dummy_position vi) 
   in
+(*
   let _result =
     match ci.constr_info_result with
       | None -> assert false
       | Some vi -> (create_var Loc.dummy_position vi) 
   in
+*)
   let nfi = 
     create_fun Loc.dummy_position ci.constr_info_tag None
       ci.constr_info_trans_name ci.constr_info_parameters
@@ -1208,10 +1230,10 @@ let tr_interface ii acc =
 let tr_class_or_interface ti acc0 acc =
   match ti with
     | TypeClass ci -> 
-	eprintf "Creating JC structure for class '%s'@." ci.class_info_name;
+	Java_options.lprintf "Creating JC structure for class '%s'@." ci.class_info_name;
 	tr_class ci acc0 acc
     | TypeInterface ii -> 
-	eprintf "Handling interface '%s'@." ii.interface_info_name;
+	Java_options.lprintf "Handling interface '%s'@." ii.interface_info_name;
 	(acc0,tr_interface ii acc)
 
 

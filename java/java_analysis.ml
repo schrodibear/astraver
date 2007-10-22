@@ -107,7 +107,7 @@ let rec expr e =
     | JEinstanceof(e,_)
     | JEcast(_,e) -> expr e
 
-let initialiser i = 
+let do_initializer i = 
   match i with
     | JIexpr e -> expr e
     | _ -> assert false (* TODO *)
@@ -123,7 +123,7 @@ let rec statement s =
     | JSbreak _ -> ()
     | JSblock l -> List.iter statement l	  
     | JSvar_decl (vi, init, s) ->
-	Option_misc.iter initialiser init;
+	Option_misc.iter do_initializer init;
 	statement s
     | JSif (e, s1, s2) -> expr e; statement s1; statement s2
     | JSwhile(e,inv,dec,s) ->
@@ -137,7 +137,7 @@ let rec statement s =
 	statement body
     | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	List.iter 
-	  (fun (_,init) -> Option_misc.iter initialiser init) decls;
+	  (fun (_,init) -> Option_misc.iter do_initializer init) decls;
 	expr e;
 	assertion inv;
 	term dec;

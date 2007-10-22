@@ -17,8 +17,8 @@
 
 /*
 // $Workfile: Signature.java $
-// $Revision: 1.2 $
-// $Date: 2007-10-16 15:44:47 $
+// $Revision: 1.3 $
+// $Date: 2007-10-22 07:38:21 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/security/Signature.java $
 // $Modtime: 5/02/00 8:48p $
@@ -203,66 +203,66 @@ abstract public class Signature{
     public static final byte ALG_RSA_MD5_RFC2409          = 16;
 
     // mode options
-   /**
+    /**
      * Used in <code>init()</code> methods to indicate signature sign mode.
      */
     public static final byte MODE_SIGN                    = 1;
-
-   /**
+    
+    /**
      * Used in <code>init()</code> methods to indicate signature verify mode.
      */
     public static final byte MODE_VERIFY                  = 2;
-
-	/**
-	 * Creates a <code>Signature</code> object instance of the selected algorithm.
-	 * @param algorithm the desired Signature algorithm. See above.
-	 * @param externalAccess if <code>true</code> indicates that the instance will be shared among
-	 * multiple applet instances and that the <code>Signature</code> instance will also be accessed (via a <code>Shareable</code>
-	 * interface) when the owner of the <code>Signature</code> instance is not the currently selected applet.
-	 * @return the <code>Signature</code> object instance of the requested algorithm.
-	 * @exception CryptoException with the following reason codes:<ul>
+    
+    /**
+     * Creates a <code>Signature</code> object instance of the selected algorithm.
+     * @param algorithm the desired Signature algorithm. See above.
+     * @param externalAccess if <code>true</code> indicates that the instance will be shared among
+     * multiple applet instances and that the <code>Signature</code> instance will also be accessed (via a <code>Shareable</code>
+     * interface) when the owner of the <code>Signature</code> instance is not the currently selected applet.
+     * @return the <code>Signature</code> object instance of the requested algorithm.
+     * @exception CryptoException with the following reason codes:<ul>
      * <li><code>CryptoException.NO_SUCH_ALGORITHM</code> if the requested algorithm is not supported.</ul>
-	*/
-	public static final Signature getInstance(byte algorithm, boolean externalAccess) throws CryptoException{
-	    switch ( algorithm ){
-	        default :
-	            CryptoException.throwIt( CryptoException.NO_SUCH_ALGORITHM );
-	    }
-	    return null;
+     */
+    public static final Signature getInstance(byte algorithm, boolean externalAccess) throws CryptoException{
+	switch ( algorithm ){
+	default :
+	    CryptoException.throwIt( CryptoException.NO_SUCH_ALGORITHM );
 	}
-
-	/**
-	 * Initializes the <code>Signature</code> object with the appropriate <code>Key</code>. This method should be used
-	 * for algorithms which do not need initialization parameters or use default parameter
-	 * values.
-	 * <p>Note:<ul>
+	return null;
+    }
+    
+    /**
+     * Initializes the <code>Signature</code> object with the appropriate <code>Key</code>. This method should be used
+     * for algorithms which do not need initialization parameters or use default parameter
+     * values.
+     * <p>Note:<ul>
      * <li><em>DES and triple DES algorithms in CBC mode will use 0 for initial vector(IV) if this
      * method is used.</em>
      * </ul>
-	 * @param theKey the key object to use for signing or verifying
-	 * @param theMode one of <code>MODE_SIGN</code> or <code>MODE_VERIFY</code>
-	 * @exception CryptoException with the following reason codes:<ul>
+     * @param theKey the key object to use for signing or verifying
+     * @param theMode one of <code>MODE_SIGN</code> or <code>MODE_VERIFY</code>
+     * @exception CryptoException with the following reason codes:<ul>
      * <li><code>CryptoException.ILLEGAL_VALUE</code> if <code>theMode</code> option is an undefined value or
      * if the <code>Key</code> is inconsistent with <code>theMode</code>
      * or with the <code>Signature</code> implementation.
      * </ul>
-	 */
-	abstract public void init ( Key theKey, byte theMode ) throws CryptoException;
-
-   /*
-	 * Initializes the <code>Signature</code> object with the appropriate <code>Key</code> and algorithm specific
-	 * parameters.
-	 * <p>Note:<ul>
+     */
+    abstract public void init ( Key theKey, byte theMode ) throws CryptoException;
+    
+    /*
+     * Initializes the <code>Signature</code> object with the appropriate <code>Key</code> and algorithm specific
+     * parameters.
+     * <p>Note:<ul>
      * <li><em>DES and triple DES algorithms in outer CBC mode expect an 8 byte parameter value for
      * the initial vector(IV) in </em><code>bArray</code><em>.</em>
      * <li><em>RSA and DSA algorithms throw </em><code>CryptoException.ILLEGAL_VALUE</code><em>.</em>
      * </ul>
-	 * @param theKey the key object to use for signing
-	 * @param theMode one of <code>MODE_SIGN</code> or <code>MODE_VERIFY</code>
-	 * @param bArray byte array containing algorithm specific initialization info.
-	 * @param bOff offset within <code>bArray</code> where the algorithm specific data begins.
-	 * @param bLen byte length of algorithm specific parameter data
-	 * @exception CryptoException with the following reason codes:<ul>
+     * @param theKey the key object to use for signing
+     * @param theMode one of <code>MODE_SIGN</code> or <code>MODE_VERIFY</code>
+     * @param bArray byte array containing algorithm specific initialization info.
+     * @param bOff offset within <code>bArray</code> where the algorithm specific data begins.
+     * @param bLen byte length of algorithm specific parameter data
+     * @exception CryptoException with the following reason codes:<ul>
      * <li><code>CryptoException.ILLEGAL_VALUE</code> if <code>theMode</code> option is an undefined value
      * or if a byte array parameter option is not supported by the algorithm or if
      * the <code>bLen</code> is an incorrect byte length for the algorithm specific data or
@@ -272,73 +272,73 @@ abstract public class Signature{
      */
     abstract public void init ( Key theKey, byte theMode, byte[] bArray, short bOff, short bLen )
 	throws CryptoException;
-
+    
     /**
      * Protected Constructor
      *
      */
     protected Signature() {}
 
-	/**
-	 * Gets the Signature algorithm.
-	 * @return the algorithm code defined above.
-	*/
-	abstract public byte getAlgorithm();
-
+    /**
+     * Gets the Signature algorithm.
+     * @return the algorithm code defined above.
+     */
+    abstract public byte getAlgorithm();
+    
     /**
      * Returns the byte length of the signature data.
-	 * @return the byte length of the signature data.
-	 */
+     * @return the byte length of the signature data.
+     */
     abstract public short getLength();
 
     /**
-	 * Accumulates a signature of the input data. This method requires temporary storage of 
-	 * intermediate results. In addition, if the input data length is not block aligned
-	 * (multiple of block size)
-	 * then additional internal storage may be allocated at this time to store a partial
-	 * input data block.
-	 * This may result in additional resource consumption and/or slow performance.
-	 * This method should only be used if all the input data required for signing/verifying
-	 * is not available in one byte array. The <code>sign()</code> or
-	 * <code>verify()</code> method is recommended whenever possible.
-	 * @param inBuff the input buffer of data to be signed
-	 * @param inOffset the offset into the input buffer at which to begin signature generation
-	 * @param inLength the byte length to sign
-	 * @exception CryptoException with the following reason codes:<ul>
+     * Accumulates a signature of the input data. This method requires temporary storage of 
+     * intermediate results. In addition, if the input data length is not block aligned
+     * (multiple of block size)
+     * then additional internal storage may be allocated at this time to store a partial
+     * input data block.
+     * This may result in additional resource consumption and/or slow performance.
+     * This method should only be used if all the input data required for signing/verifying
+     * is not available in one byte array. The <code>sign()</code> or
+     * <code>verify()</code> method is recommended whenever possible.
+     * @param inBuff the input buffer of data to be signed
+     * @param inOffset the offset into the input buffer at which to begin signature generation
+     * @param inLength the byte length to sign
+     * @exception CryptoException with the following reason codes:<ul>
      * <li><code>CryptoException.UNINITIALIZED_KEY</code> if key not initialized.</ul>
      * @see #sign(byte[], short, short, byte[], short)
      * @see #verify(byte[], short, short, byte[], short, short)
-	 */
+     */
     abstract public void update(
         byte[] inBuff,
         short inOffset,
         short inLength) throws CryptoException;
 
     /**
-	 * Generates the signature of all/last input data.
-	 * A call to this method also resets this <code>Signature</code> object to the state it was in
-	 * when previously initialized via a call to <code>init()</code>.
-	 * That is, the object is reset and available to sign another message.
-	 * <p>Note:<ul>
+     * Generates the signature of all/last input data.
+     * A call to this method also resets this <code>Signature</code> object to the state it was in
+     * when previously initialized via a call to <code>init()</code>.
+     * That is, the object is reset and available to sign another message.
+     * <p>Note:<ul>
      * <li><em>DES and triple DES algorithms in outer CBC mode reset the initial vector(IV)
      * to 0. The initial vector(IV) can be re-initialized using the
      * </em><code>init(Key, byte, byte[], short, short)</code><em> method.</em>
      * </ul>
-	 * <p>The input and output buffer data may overlap.
-	 * @param inBuff the input buffer of data to be signed
-	 * @param inOffset the offset into the input buffer at which to begin signature generation
-	 * @param inLength the byte length to sign
-	 * @param sigBuff the output buffer to store signature data
-	 * @param sigOffset the offset into sigBuff at which to begin signature data
-	 * @return number of bytes of signature output in sigBuff
-	 * @exception CryptoException with the following reason codes:<ul>
+     * <p>The input and output buffer data may overlap.
+     * @param inBuff the input buffer of data to be signed
+     * @param inOffset the offset into the input buffer at which to begin signature generation
+     * @param inLength the byte length to sign
+     * @param sigBuff the output buffer to store signature data
+     * @param sigOffset the offset into sigBuff at which to begin signature data
+     * @return number of bytes of signature output in sigBuff
+     * @exception CryptoException with the following reason codes:<ul>
      * <li><code>CryptoException.UNINITIALIZED_KEY</code> if key not initialized.
      * <li><code>CryptoException.INVALID_INIT</code> if this <code>Signature</code> object is
      * not initialized or initialized for signature verify mode.
      * <li><code>CryptoException.ILLEGAL_USE</code> if this <code>Signature</code> algorithm
      * does not pad the message and the message is not block aligned.
      * </ul>
-	 */
+     */
     abstract public short sign (
         byte[] inBuff,
         short inOffset,
@@ -347,30 +347,30 @@ abstract public class Signature{
         short sigOffset) throws CryptoException;
 
     /**
-	 * Verifies the signature of all/last input data against the passed in signature.
-	 * A call to this method also resets this <code>Signature</code> object to the state it was in
-	 * when previously initialized via a call to <code>init()</code>.
-	 * That is, the object is reset and available to verify another message.
-	 * <p>Note:<ul>
+     * Verifies the signature of all/last input data against the passed in signature.
+     * A call to this method also resets this <code>Signature</code> object to the state it was in
+     * when previously initialized via a call to <code>init()</code>.
+     * That is, the object is reset and available to verify another message.
+     * <p>Note:<ul>
      * <li><em>DES and triple DES algorithms in outer CBC mode reset the initial vector(IV)
      * to 0. The initial vector(IV) can be re-initialized using the
      * </em><code>init(Key, byte, byte[], short, short)</code><em> method.</em>
      * </ul>
-	 * @param inBuff the input buffer of data to be verified
-	 * @param inOffset the offset into the input buffer at which to begin signature generation
-	 * @param inLength the byte length to sign
-	 * @param sigBuff the input buffer containing signature data
-	 * @param sigOffset the offset into sigBuff where signature data begins.
-	 * @param sigLength the byte length of the signature data
-	 * @return <code>true</code> if signature verifies <code>false</code> otherwise.
-	 * @exception CryptoException with the following reason codes:<ul>
+     * @param inBuff the input buffer of data to be verified
+     * @param inOffset the offset into the input buffer at which to begin signature generation
+     * @param inLength the byte length to sign
+     * @param sigBuff the input buffer containing signature data
+     * @param sigOffset the offset into sigBuff where signature data begins.
+     * @param sigLength the byte length of the signature data
+     * @return <code>true</code> if signature verifies <code>false</code> otherwise.
+     * @exception CryptoException with the following reason codes:<ul>
      * <li><code>CryptoException.UNINITIALIZED_KEY</code> if key not initialized.
      * <li><code>CryptoException.INVALID_INIT</code> if this <code>Signature</code> object is
      * not initialized or initialized for signature sign mode.
      * <li><code>CryptoException.ILLEGAL_USE</code> if this <code>Signature</code> algorithm
      * does not pad the message and the message is not block aligned.
      * </ul>
-	 */
+     */
     abstract public boolean verify (
         byte[] inBuff,
         short inOffset,

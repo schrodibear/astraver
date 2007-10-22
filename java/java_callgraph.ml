@@ -142,8 +142,10 @@ let loop_annot acc la =
 
 let rec statement acc s : ('a list * 'b list) = 
   match s.java_statement_node with  
-    | JSif(_, s1, s2) ->
-	statement (statement acc s1) s2
+    | JSif(e, s1, s2) ->
+	let (a,b) = acc in
+	let b = expr b e in
+	statement (statement (a,b) s1) s2
     | JSblock sl -> 
 	List.fold_left statement acc sl
     | JStry (s, catches, finally) -> 
@@ -229,6 +231,10 @@ module LogicCallGraph = struct
 
 module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
 
+open Format
+open Pp
+
+
 type method_or_constructor_data =
   | MethodData of Java_typing.method_table_info
   | ConstructorData of Java_typing.constructor_table_info
@@ -243,6 +249,19 @@ let method_or_constructor_info mt =
     | MethodData mti -> MethodInfo mti.Java_typing.mt_method_info
     | ConstructorData cti -> ConstructorInfo cti.Java_typing.ct_constr_info
 
+let print_method_or_constr fmt f =
+  match f with
+    | MethodInfo fi -> 
+	fprintf fmt "%a.%s" Java_typing.print_type_name
+	  fi.method_info_class_or_interface fi.method_info_name
+    | ConstructorInfo ci -> fprintf fmt "%s" ci.constr_info_trans_name
+
+let method_or_constr_calls f =
+  match f with
+    | MethodInfo fi -> fi.method_info_calls
+    | ConstructorInfo ci -> ci.constr_info_calls
+
+
 module CallGraph = struct 
   type t = (int, method_or_constructor_data) Hashtbl.t
   module V = struct
@@ -255,22 +274,21 @@ module CallGraph = struct
     let hash f = method_or_constructor_tag f
     let equal f1 f2 = method_or_constructor_tag f1 == method_or_constructor_tag f2
   end
-  let iter_vertex iter = 
-    Hashtbl.iter (fun _ mti -> iter (method_or_constructor_info mti)) 
+  let iter_vertex iter g = 
+    Hashtbl.iter 
+      (fun i mti -> 
+	 let f = method_or_constructor_info mti in
+	 iter f) g 
   let iter_succ iter _ f =
     List.iter iter 
       (match f with
 	 | MethodInfo fi -> fi.method_info_calls 
 	 | ConstructorInfo ci -> ci.constr_info_calls)
   end
-
 module CallComponents = Graph.Components.Make(CallGraph)
 
-open Format
-open Pp
-
 let compute_logic_components ltable =  
-  let tab_comp = LogicCallComponents.scc_array ltable in
+  let tab_comp = LogicCallComponents.scc_array ltable in  
   Java_options.lprintf "***********************************\n";
   Java_options.lprintf "Logic call graph: has %d components\n" 
     (Array.length tab_comp);
@@ -288,16 +306,6 @@ let compute_logic_components ltable =
   tab_comp
 
 
-let print_method_or_constr fmt f =
-  match f with
-    | MethodInfo fi -> fprintf fmt "%s" fi.method_info_name
-    | ConstructorInfo ci -> fprintf fmt "%s" ci.constr_info_trans_name
-
-let method_or_constr_calls f =
-  match f with
-    | MethodInfo fi -> fi.method_info_calls
-    | ConstructorInfo ci -> ci.constr_info_calls
-
 let compute_components methods constrs =  
   let h = Hashtbl.create 97 in
   Hashtbl.iter
@@ -310,6 +318,7 @@ let compute_components methods constrs =
        Hashtbl.add h 
 	 cti.Java_typing.ct_constr_info.constr_info_tag (ConstructorData cti))
     constrs;
+  let n,comp = CallComponents.scc h in
   let tab_comp = CallComponents.scc_array h in
   Java_options.lprintf "******************************@\n";
   Java_options.lprintf "Call graph: has %d components@\n" (Array.length tab_comp);
@@ -321,8 +330,8 @@ let compute_components methods constrs =
 	    (fun fmt f -> fprintf fmt " - %a calls: %a@\n" 
 	       print_method_or_constr f
 	       (print_list comma 
-		  (fun fmt f -> fprintf fmt "%a" 
-		     print_method_or_constr f))
+		  (fun fmt f -> fprintf fmt "%a(%d)" 
+		     print_method_or_constr f (comp f)))
 	       (method_or_constr_calls f)))
 	 l)
     tab_comp;
