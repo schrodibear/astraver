@@ -320,7 +320,17 @@ type target_assertion = {
   jc_target_statement : statement;
   jc_target_location : Loc.position;
   jc_target_assertion : assertion;
-  mutable jc_target_invariant : assertion;
+  mutable jc_target_regular_invariant : assertion;
+  mutable jc_target_propagated_invariant : assertion;
+}
+
+(* Abstract value made up of 2 parts:
+ * - regular abstract value
+ * - abstract value refined by previous assertions on the execution path
+ *)
+type 'a abstract_value = {
+  jc_absval_regular : 'a Abstract1.t;
+  jc_absval_propagated : 'a Abstract1.t;
 }
 
 (* Type of current invariant in abstract interpretation, made up of 3 parts:
@@ -330,9 +340,9 @@ type target_assertion = {
  * - abstract value after returning from the function
  *)
 type 'a abstract_invariants = {
-  jc_absinv_normal : 'a Abstract1.t;
-  jc_absinv_exceptional : (exception_info * 'a Abstract1.t) list;
-  jc_absinv_return : 'a Abstract1.t;
+  jc_absinv_normal : 'a abstract_value;
+  jc_absinv_exceptional : (exception_info * 'a abstract_value) list;
+  jc_absinv_return : 'a abstract_value;
 }
 
 (* Parameters of an abstract interpretation. *)
@@ -368,13 +378,20 @@ type weakest_precondition_computation = {
 (* Debug.                                                                    *)
 (*****************************************************************************)
 
+let print_abstract_value fmt absval =
+  fprintf fmt "@[<v 2>{regular: %a@\npropagated: %a@\n}@]"
+    Abstract1.print absval.jc_absval_regular 
+    Abstract1.print absval.jc_absval_propagated
+
 let print_abstract_invariants fmt invs =
   fprintf fmt "@[<v 2>{@\nnormal: %a@\nexceptional: %a@\nreturn: %a@\n}@]"
-    Abstract1.print invs.jc_absinv_normal
+    print_abstract_value invs.jc_absinv_normal
     (print_list comma (fun fmt (ei,absval) -> 
-      fprintf fmt "(%s,%a)" ei.jc_exception_info_name Abstract1.print absval))
+      fprintf fmt "(%s,%a)" ei.jc_exception_info_name
+	print_abstract_value absval))
     invs.jc_absinv_exceptional
-    Abstract1.print invs.jc_absinv_return
+    print_abstract_value invs.jc_absinv_return
+
 
 let print_modified_vars fmt posts =
   fprintf fmt "modified vars: %a" 
@@ -398,7 +415,9 @@ let term_of_expr e =
     | JCEderef (e1, fi) -> JCTderef (term e1, fi)
     | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, st)
     | JCEcast (e1, st) -> JCTcast (term e1, st)
-    | JCErange_cast _ -> failwith "Not a term"
+    | JCErange_cast(_,e1) -> 
+	(* range does not modify term value *)
+	(term e1).jc_term_node 
     | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
     | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
     | JCEalloc (e, _) -> (* support of <new> (nicolas) *)
@@ -683,6 +702,51 @@ end
 
 
 (*****************************************************************************)
+(* Conversions between assertions and DNF form.                              *)
+(*****************************************************************************)
+
+let or_dnf dnf1 dnf2 =
+  dnf1 @ dnf2
+
+let and_dnf dnf1 dnf2 = match dnf1,dnf2 with
+  | [],_ | _,[] -> [] (* false *)
+  | _ ->
+      List.fold_left (fun acc conj1 ->
+	List.fold_left (fun acc conj2 ->
+	  (conj1 @ conj2) :: acc
+	) acc dnf2
+      ) [] dnf1
+
+let rec and_dnf_list = function
+  | [] -> [[]] (* true *)
+  | dnf::r -> and_dnf dnf (and_dnf_list r)
+
+let assertion_of_dnf dnf = 
+  let disjunct al = 
+    let anode = match al with
+      | [] -> JCAtrue
+      | [a] -> a.jc_assertion_node
+      | _ -> JCAand al
+    in
+    raw_asrt anode    
+  in
+  let anode = match dnf with
+    | [] -> JCAfalse
+    | [[]] -> JCAtrue
+    | [al] -> (disjunct al).jc_assertion_node
+    | _ -> JCAor (List.map disjunct dnf)
+  in
+  raw_asrt anode
+
+let print_dnf fmt dnf =
+  fprintf fmt "dnf : %a" 
+    (fun fmt disj -> 
+      fprintf fmt "[%a]" (print_list comma 
+	(fun fmt conj -> fprintf fmt "[%a]" 
+	  (print_list comma (fun fmt s -> fprintf fmt "%s" s)) conj)) disj) dnf
+
+
+(*****************************************************************************)
 (* Extracting linear expressions and constraints from AST expressions.       *)
 (*****************************************************************************)
 
@@ -943,7 +1007,8 @@ let linstr_of_term env t =
       List.map (fun (t,c) ->
 	let va = Vai.variable_of_term t in
 	if Environment.mem_var env va then (Var.to_string va,c)
-	else failwith "Not in environment") coeffs 
+	else failwith "Not in environment"
+      ) coeffs 
     in
     Some (mkaddstr coeffs, cst)
   with Failure _ -> None
@@ -982,6 +1047,38 @@ let offset_max_linstr_of_term env t =
       in
       linstr_of_term env t
 
+let rec stronger_assertion a = 
+  match a.jc_assertion_node with
+  | JCArelation(t1,bop,t2) ->
+      let subt = raw_term (JCTbinary(t1,Bsub_int,t2)) in
+      let zbs = zero_bounds_term subt in
+      let zero = raw_term(JCTconst(JCCinteger "0")) in
+      let dnf = match bop with
+	| Beq_int ->
+	    List.map (fun zb ->
+	      let lwcstr = 
+		raw_asrt(JCArelation(zb.zlow,Beq_int,zero)) in
+	      let upcstr = 
+		raw_asrt(JCArelation(zb.zup,Beq_int,zero)) in
+	      lwcstr :: upcstr :: zb.zconstrs
+	    ) zbs
+	| Bneq_int -> []
+	| Ble_int | Blt_int ->
+	    List.map (fun zb ->
+	      let lwcstr = 
+		raw_asrt(JCArelation(zb.zup,bop,zero)) in
+	      lwcstr :: zb.zconstrs
+	    ) zbs
+	| Bge_int | Bgt_int ->
+	    List.map (fun zb ->
+	      let upcstr = 
+		raw_asrt(JCArelation(zb.zlow,Bge_int,zero)) in
+	      upcstr :: zb.zconstrs
+	    ) zbs
+	| _ -> assert false (* TODO *)
+      in assertion_of_dnf dnf
+  | _ -> a
+  
 (* Returns a dnf. True is [[]] and false is []. *)
 let rec linstr_of_assertion env a =
   match a.jc_assertion_node with
@@ -995,6 +1092,27 @@ let rec linstr_of_assertion env a =
 	  let zero = raw_term(JCTconst(JCCinteger "0")) in
 	  if List.length zbs <= 1 then [[]] 
 	  else
+	    let str_of_conjunct conj =
+	      List.fold_left (fun strconj a -> 
+		match linstr_of_assertion env a with
+		| [] -> assert false (* TODO *)
+		| [[]] -> strconj
+		| [[str]] -> str :: strconj (* base case *)
+		| _ -> assert false (* TODO *)
+	      ) [] conj
+	    in
+	    let strdnf_of_dnf adnf =
+	      let strdnf = 
+		List.fold_left (fun strdnf conj ->
+		  match str_of_conjunct conj with
+		  | [] -> strdnf
+		  | strconj -> strconj :: strdnf
+		) [] adnf
+	      in
+	      match strdnf with
+	      | [] -> [[]] (* true *)
+	      | dnf -> dnf
+	    in
 	    begin match bop with
 	    | Beq_int ->
 		let adnf = 
@@ -1005,28 +1123,24 @@ let rec linstr_of_assertion env a =
 		      raw_asrt(JCArelation(zb.zup,Bge_int,zero)) in
 		    lwcstr :: upcstr :: zb.zconstrs
 		  ) zbs
-		in
-		let str_of_conjunct conj =
-		  List.fold_left (fun strconj a -> 
-		    match linstr_of_assertion env a with
-		    | [] -> assert false (* TODO *)
-		    | [[]] -> strconj
-		    | [[str]] -> str :: strconj (* base case *)
-		    | _ -> assert false (* TODO *)
-		  ) [] conj
-		in
-		let strdnf = 
-		  List.fold_left (fun strdnf conj ->
-		    match str_of_conjunct conj with
-		    | [] -> strdnf
-		| strconj -> strconj :: strdnf
-		  ) [] adnf
-		in
-		begin match strdnf with
-		| [] -> [[]] (* true *)
-		| dnf -> dnf
-		end
+		in strdnf_of_dnf adnf
 	    | Bneq_int -> [[]]
+	    | Ble_int | Blt_int ->
+		let adnf = 
+		  List.map (fun zb ->
+		    let lwcstr = 
+		      raw_asrt(JCArelation(zb.zlow,bop,zero)) in
+		    lwcstr :: zb.zconstrs
+		  ) zbs
+		in strdnf_of_dnf adnf
+	    | Bge_int | Bgt_int ->
+		let adnf = 
+		  List.map (fun zb ->
+		    let upcstr = 
+		      raw_asrt(JCArelation(zb.zup,Bge_int,zero)) in
+		    upcstr :: zb.zconstrs
+		  ) zbs
+		in strdnf_of_dnf adnf
 	    | _ -> assert false (* TODO *)
 	    end
       | Some (str,cst) ->
@@ -1310,10 +1424,26 @@ let rec collect_expr_asserts e =
 	      let maxa = raw_asrt (JCArelation(offt,Ble_int,maxt)) in
 	      [make_and [mina;maxa]]
       end
+  | JCErange_cast(ei,e1) ->
+      begin match term_of_expr e1 with
+      | None -> []
+      | Some t1 ->
+	  let mint = raw_term(JCTconst(JCCinteger
+	    (Num.string_of_num ei.jc_enum_info_min))) 
+	  in
+	  let maxt = raw_term(JCTconst(JCCinteger
+	    (Num.string_of_num ei.jc_enum_info_max))) 
+	  in
+	  let mina = 
+	    stronger_assertion(raw_asrt(JCArelation(mint,Ble_int,t1))) in
+	  let maxa = 
+	    stronger_assertion(raw_asrt (JCArelation(t1,Ble_int,maxt))) in
+	  [make_and [mina;maxa]]
+      end
   | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) -> 
       collect_expr_asserts e1 @ (collect_expr_asserts e2)
   | JCEunary(_,e1) | JCEinstanceof(e1,_) | JCEcast(e1,_)
-  | JCErange_cast(_,e1) | JCEoffset(_,e1,_) | JCEalloc(e1,_) | JCEfree e1 ->
+  | JCEoffset(_,e1,_) | JCEalloc(e1,_) | JCEfree e1 ->
       collect_expr_asserts e1
   | JCEif(e1,e2,e3) ->
       collect_expr_asserts e1 @ (collect_expr_asserts e2) 
@@ -1340,7 +1470,8 @@ let target_of_assertion s loc a =
     jc_target_statement = s;
     jc_target_location = loc;
     jc_target_assertion = a;
-    jc_target_invariant = raw_asrt JCAfalse;
+    jc_target_regular_invariant = raw_asrt JCAfalse;
+    jc_target_propagated_invariant = raw_asrt JCAfalse;
   }
 
 let collect_expr_targets s e = 
@@ -1378,29 +1509,6 @@ let rec collect_targets targets s =
 (*****************************************************************************)
 (* Performing abstract interpretation.                                       *)
 (*****************************************************************************)
-
-let or_dnf dnf1 dnf2 =
-  dnf1 @ dnf2
-
-let and_dnf dnf1 dnf2 = match dnf1,dnf2 with
-  | [],_ | _,[] -> [] (* false *)
-  | _ ->
-      List.fold_left (fun acc conj1 ->
-	List.fold_left (fun acc conj2 ->
-	  (conj1 @ conj2) :: acc
-	) acc dnf2
-      ) [] dnf1
-
-let rec and_dnf_list = function
-  | [] -> [[]] (* true *)
-  | dnf::r -> and_dnf dnf (and_dnf_list r)
-
-let print_dnf fmt dnf =
-  fprintf fmt "dnf : %a" 
-    (fun fmt disj -> 
-      fprintf fmt "[%a]" (print_list comma 
-	(fun fmt conj -> fprintf fmt "[%a]" 
-	  (print_list comma (fun fmt s -> fprintf fmt "%s" s)) conj)) disj) dnf
 
 let test_dnf mgr pre dnf =
   let env = Abstract1.env pre in
@@ -1535,13 +1643,13 @@ let join mgr absval1 absval2 =
   Abstract1.join_with mgr absval1 absval2;
   absval1
 
-(* Arguments of [widening] should be on the same environment. *)
-let widening mgr absval1 absval2 =
-  let env1 = Abstract1.env absval1 in
-  let absval2 = Abstract1.change_environment mgr absval2 env1 false in
-  (* Join before widening so that arguments are in increasing order. *)
-  ignore (join mgr absval2 absval1);
-  Abstract1.widening mgr absval1 absval2 (* no destructive version *)
+let join_abstract_value mgr absval1 absval2 =
+  { 
+    jc_absval_regular = 
+      join mgr absval1.jc_absval_regular absval2.jc_absval_regular;
+    jc_absval_propagated = 
+      join mgr absval1.jc_absval_propagated absval2.jc_absval_propagated;
+  }
 
 let join_invariants mgr invs1 invs2 =
   if Jc_options.debug then
@@ -1551,7 +1659,7 @@ let join_invariants mgr invs1 invs2 =
     let join1 = List.fold_right (fun (ei,post1) acc ->
       try
 	let post2 = List.assoc ei postexcl2 in
-	(ei, join mgr post1 post2) :: acc
+	(ei, join_abstract_value mgr post1 post2) :: acc
       with Not_found -> (ei,post1) :: acc
     ) postexcl1 []
     in
@@ -1562,11 +1670,27 @@ let join_invariants mgr invs1 invs2 =
   in
   {
     jc_absinv_normal =
-      join mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
+      join_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
     jc_absinv_exceptional =
       join_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional;
     jc_absinv_return = 
-      join mgr invs1.jc_absinv_return invs2.jc_absinv_return;
+      join_abstract_value mgr invs1.jc_absinv_return invs2.jc_absinv_return;
+  }
+
+(* Arguments of [widening] should be on the same environment. *)
+let widening mgr absval1 absval2 =
+  let env1 = Abstract1.env absval1 in
+  let absval2 = Abstract1.change_environment mgr absval2 env1 false in
+  (* Join before widening so that arguments are in increasing order. *)
+  ignore (join mgr absval2 absval1);
+  Abstract1.widening mgr absval1 absval2 (* no destructive version *)
+
+let widening_abstract_value mgr absval1 absval2 =
+  { 
+    jc_absval_regular = 
+      widening mgr absval1.jc_absval_regular absval2.jc_absval_regular;
+    jc_absval_propagated = 
+      widening mgr absval1.jc_absval_propagated absval2.jc_absval_propagated;
   }
 
 let widen_invariants mgr invs1 invs2 =
@@ -1577,7 +1701,7 @@ let widen_invariants mgr invs1 invs2 =
     let widen1 = List.fold_right (fun (ei,post1) acc ->
       try
 	let post2 = List.assoc ei postexcl2 in
-	(ei, widening mgr post1 post2) :: acc
+	(ei, widening_abstract_value mgr post1 post2) :: acc
       with Not_found -> (ei,post1) :: acc
     ) postexcl1 []
     in
@@ -1588,12 +1712,19 @@ let widen_invariants mgr invs1 invs2 =
   in
   {
     jc_absinv_normal =
-      widening mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
+      widening_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
     jc_absinv_exceptional =
       widen_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional;
     jc_absinv_return = 
-      widening mgr invs1.jc_absinv_return invs2.jc_absinv_return;
+      widening_abstract_value mgr invs1.jc_absinv_return invs2.jc_absinv_return;
   }
+
+let eq_abstract_value mgr absval1 absval2 =
+  Abstract1.is_eq mgr absval1.jc_absval_regular absval2.jc_absval_regular
+     = Manager.True
+  && 
+  Abstract1.is_eq mgr absval1.jc_absval_propagated absval2.jc_absval_propagated
+     = Manager.True
 
 let eq_invariants mgr invs1 invs2 =
   let eq_exclists postexcl1 postexcl2 =
@@ -1602,63 +1733,79 @@ let eq_invariants mgr invs1 invs2 =
       acc &&
 	try
 	  let post2 = List.assoc ei postexcl2 in
-	  Abstract1.is_eq mgr post1 post2 = Manager.True
+	  eq_abstract_value mgr post1 post2
 	with Not_found -> false
     ) postexcl1 true
   in
-  Abstract1.is_eq mgr invs1.jc_absinv_normal invs2.jc_absinv_normal =
-      Manager.True
+  eq_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal
   && eq_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
-  && Abstract1.is_eq mgr invs1.jc_absinv_return invs2.jc_absinv_return =
-      Manager.True
+  && eq_abstract_value mgr invs1.jc_absinv_return invs2.jc_absinv_return
+
+let copy_abstract_value mgr absval =
+  {
+    jc_absval_regular = Abstract1.copy mgr absval.jc_absval_regular;
+    jc_absval_propagated = Abstract1.copy mgr absval.jc_absval_propagated;
+  }
 
 let copy_invariants mgr invs = { 
-  jc_absinv_normal = Abstract1.copy mgr invs.jc_absinv_normal;
+  jc_absinv_normal = copy_abstract_value mgr invs.jc_absinv_normal;
   jc_absinv_exceptional = 
-  List.map (fun (ei,post) -> (ei,Abstract1.copy mgr post)) 
+  List.map (fun (ei,post) -> (ei,copy_abstract_value mgr post)) 
     invs.jc_absinv_exceptional;
-  jc_absinv_return = Abstract1.copy mgr invs.jc_absinv_return;
+  jc_absinv_return = copy_abstract_value mgr invs.jc_absinv_return;
 }
 
-let rec ai_expression abs curinvs e =
-  let expr = ai_expression abs in
-  let mgr = abs.jc_absint_manager in
-  match e.jc_expr_node with
-  | JCEconst _ | JCEvar _ | JCErange_cast _ -> 
-      curinvs
-  | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) ->
-      expr (expr curinvs e1) e2
-  | JCEunary(_,e1) | JCEinstanceof(e1,_) | JCEcast(e1,_) | JCEoffset(_,e1,_) 
-  | JCEalloc (e1, _) | JCEfree e1 -> 
-      expr curinvs e1
-  | JCEif(e1,e2,e3) -> 
-      expr (expr (expr curinvs e1) e2) e3
-  | JCEderef(e1,fi) ->
-      let curinvs = expr curinvs e1 in
-      begin match term_of_expr e1 with
-      | None -> curinvs
-      | Some t1 ->
-	  match destruct_pointer t1 with
-	  | None,_ -> curinvs
-	  | Some vi,offt ->
-	      let offt = match offt with
-		| None -> raw_term(JCTconst(JCCinteger "0"))
-		| Some offt -> offt
-	      in
-	      let vt = raw_term(JCTvar vi) in
-	      let st = match vi.jc_var_info_type with
-		| JCTpointer(st,_,_) -> st
-		| _ -> assert false
-	      in
-	      let mint = raw_term(JCToffset(Offset_min,vt,st)) in
-	      let maxt = raw_term(JCToffset(Offset_max,vt,st)) in
-	      let mina = raw_asrt(JCArelation(mint,Ble_int,offt)) in
-	      let maxa = raw_asrt(JCArelation(offt,Ble_int,maxt)) in
-	      let pre = curinvs.jc_absinv_normal in
-	      let pre = test_assertion mgr pre mina in
-	      let pre = test_assertion mgr pre maxa in
-	      { curinvs with jc_absinv_normal = pre; }
-      end
+let bottom_abstract_value mgr env =
+  { 
+    jc_absval_regular = Abstract1.bottom mgr env;
+    jc_absval_propagated = Abstract1.bottom mgr env;
+  }
+
+let top_abstract_value mgr env =
+  { 
+    jc_absval_regular = Abstract1.top mgr env;
+    jc_absval_propagated = Abstract1.top mgr env;
+  }
+
+(* let rec ai_expression abs curinvs e = *)
+(*   let expr = ai_expression abs in *)
+(*   let mgr = abs.jc_absint_manager in *)
+(*   match e.jc_expr_node with *)
+(*   | JCEconst _ | JCEvar _ | JCErange_cast _ ->  *)
+(*       curinvs *)
+(*   | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) -> *)
+(*       expr (expr curinvs e1) e2 *)
+(*   | JCEunary(_,e1) | JCEinstanceof(e1,_) | JCEcast(e1,_) | JCEoffset(_,e1,_)  *)
+(*   | JCEalloc (e1, _) | JCEfree e1 ->  *)
+(*       expr curinvs e1 *)
+(*   | JCEif(e1,e2,e3) ->  *)
+(*       expr (expr (expr curinvs e1) e2) e3 *)
+(*   | JCEderef(e1,fi) -> *)
+(*       let curinvs = expr curinvs e1 in *)
+(*       begin match term_of_expr e1 with *)
+(*       | None -> curinvs *)
+(*       | Some t1 -> *)
+(* 	  match destruct_pointer t1 with *)
+(* 	  | None,_ -> curinvs *)
+(* 	  | Some vi,offt -> *)
+(* 	      let offt = match offt with *)
+(* 		| None -> raw_term(JCTconst(JCCinteger "0")) *)
+(* 		| Some offt -> offt *)
+(* 	      in *)
+(* 	      let vt = raw_term(JCTvar vi) in *)
+(* 	      let st = match vi.jc_var_info_type with *)
+(* 		| JCTpointer(st,_,_) -> st *)
+(* 		| _ -> assert false *)
+(* 	      in *)
+(* 	      let mint = raw_term(JCToffset(Offset_min,vt,st)) in *)
+(* 	      let maxt = raw_term(JCToffset(Offset_max,vt,st)) in *)
+(* 	      let mina = raw_asrt(JCArelation(mint,Ble_int,offt)) in *)
+(* 	      let maxa = raw_asrt(JCArelation(offt,Ble_int,maxt)) in *)
+(* 	      let pre = curinvs.jc_absinv_normal.jc_absval_regular in *)
+(* 	      let pre = test_assertion mgr pre mina in *)
+(* 	      let pre = test_assertion mgr pre maxa in *)
+(* 	      { curinvs with jc_absinv_normal = pre; } *)
+(*       end *)
 
 let find_target_assertions targets s =
   List.fold_left 
@@ -1666,15 +1813,27 @@ let find_target_assertions targets s =
       if target.jc_target_statement == s then target::acc else acc
     ) [] targets
 
+let change_regular_in_normal curinvs reg =
+  let absval = { curinvs.jc_absinv_normal with jc_absval_regular = reg; } in 
+  { curinvs with jc_absinv_normal = absval; }
+
+let change_propagated_in_normal curinvs reg =
+  let absval = { curinvs.jc_absinv_normal with jc_absval_propagated = reg; } in 
+  { curinvs with jc_absinv_normal = absval; }
+
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
   let targets = find_target_assertions abs.jc_absint_target_assertions s in
   List.iter
     (fun target ->
-      target.jc_target_invariant <- mkinvariant mgr curinvs.jc_absinv_normal
+      target.jc_target_regular_invariant <- 
+	mkinvariant mgr curinvs.jc_absinv_normal.jc_absval_regular;
+      target.jc_target_propagated_invariant <- 
+	mkinvariant mgr curinvs.jc_absinv_normal.jc_absval_propagated
     ) targets;
   let env = abs.jc_absint_function_environment in
-  let pre = curinvs.jc_absinv_normal in
+  let pre = curinvs.jc_absinv_normal.jc_absval_regular in
+  let preprop = curinvs.jc_absinv_normal.jc_absval_propagated in
   let postexcl = curinvs.jc_absinv_exceptional in
   let postret = curinvs.jc_absinv_return in
   let curinvs = match s.jc_statement_node with
@@ -1687,11 +1846,11 @@ let rec ai_statement abs curinvs s =
       | None -> pre
       | Some e -> assignment mgr pre vit e
       in
-      let curinvs = { curinvs with jc_absinv_normal = pre; } in
+      let curinvs = change_regular_in_normal curinvs pre in
       ai_statement abs curinvs s
   | JCSassign_var (vi, e) ->
       let vit = var_term vi in
-	{ curinvs with jc_absinv_normal = assignment mgr pre vit e; }
+      change_regular_in_normal curinvs (assignment mgr pre vit e)
   | JCSassign_heap(e1,fi,e2) ->
       begin match term_of_expr e1 with
       | None -> curinvs (* TODO *)
@@ -1710,52 +1869,78 @@ let rec ai_statement abs curinvs s =
 	    in 
 	    Abstract1.change_environment_with mgr pre env false
 	  end;
-	  { curinvs with jc_absinv_normal = assignment mgr pre dereft e2; }
+	  change_regular_in_normal curinvs (assignment mgr pre dereft e2)
       end
   | JCSassert(_,a) ->
-      { curinvs with jc_absinv_normal = test_assertion mgr pre a; }
+      change_regular_in_normal curinvs (test_assertion mgr pre a)
   | JCSblock sl ->
       List.fold_left (ai_statement abs) curinvs sl
   | JCSif (e, ts, fs) ->
       let asrts = collect_expr_asserts e in 
       let copyinvs = copy_invariants mgr curinvs in
-      let tpre = List.fold_left (test_assertion mgr) pre asrts in
-      let tpre = test_expr ~neg:false mgr tpre e in
+      let tpre = test_expr ~neg:false mgr pre e in
+      let tpre = {
+	jc_absval_regular = Abstract1.copy mgr tpre;
+	jc_absval_propagated = List.fold_left (test_assertion mgr) tpre asrts;
+      } in
       let tinvs = { curinvs with jc_absinv_normal = tpre; } in
       let tinvs = ai_statement abs tinvs ts in
-      let copy_pre = copyinvs.jc_absinv_normal in
-      let fpre = List.fold_left (test_assertion mgr) copy_pre asrts in
-      let fpre = test_expr ~neg:true mgr fpre e in
+      let copy_pre = copyinvs.jc_absinv_normal.jc_absval_regular in
+      let fpre = test_expr ~neg:true mgr copy_pre e in
+      let fpre = {
+	jc_absval_regular = Abstract1.copy mgr fpre;
+	jc_absval_propagated = List.fold_left (test_assertion mgr) fpre asrts;
+      } in
       let finvs = { copyinvs with jc_absinv_normal = fpre; } in
       let finvs = ai_statement abs finvs fs in
       join_invariants mgr tinvs finvs
   | JCSreturn_void ->
-      let pre = Abstract1.bottom mgr (Abstract1.env pre) in
-      let postret = Abstract1.top mgr env in
-      { curinvs with jc_absinv_normal = pre; jc_absinv_return = postret; }
-  | JCSreturn (t, e) -> (* <return e;> is logically equivalent to <\result = e;> *)
+      let bot = bottom_abstract_value mgr (Abstract1.env pre) in
+      let postret = curinvs.jc_absinv_normal in
+      {
+	jc_absinv_normal = bot; 
+	jc_absinv_exceptional = curinvs.jc_absinv_exceptional;
+	jc_absinv_return = postret; 
+      }
+  | JCSreturn (t, e) ->
+      (* <return e;> is logically equivalent to <\result = e;> *)
       let asrts = collect_expr_asserts e in
-      let pre = List.fold_left (test_assertion mgr) pre asrts in
+      let bot = bottom_abstract_value mgr (Abstract1.env pre) in
       let vit = var_term (var t "\\result") in
-      let pre = assignment mgr pre vit e in
-	(* let pre = Abstract1.bottom mgr (Abstract1.env pre) in *)
-      let postret = join mgr postret pre in
-	{ curinvs with jc_absinv_normal = pre; jc_absinv_return = postret; }
+      let postret = {
+	jc_absval_regular = (*assignment mgr pre vit e;*)pre;
+	jc_absval_propagated = 
+	  List.fold_left (test_assertion mgr) preprop asrts;
+      } in
+      {
+	jc_absinv_normal = bot; 
+	jc_absinv_exceptional = curinvs.jc_absinv_exceptional;
+	jc_absinv_return = postret; 
+      }
   | JCSthrow(ei,eopt) ->
-      let bot = Abstract1.bottom mgr (Abstract1.env pre) in
+      let bot = bottom_abstract_value mgr (Abstract1.env pre) in
       let postexc = match eopt with
-	| None -> pre
+	| None -> curinvs.jc_absinv_normal
 	| Some e ->
 	    let asrts = collect_expr_asserts e in
-	    List.fold_left (test_assertion mgr) pre asrts
+	    {
+	      jc_absval_regular = pre;
+	      jc_absval_propagated = 
+		List.fold_left (test_assertion mgr) 
+		  curinvs.jc_absinv_normal.jc_absval_propagated asrts;
+	    }
       in 
       (* TODO: add thrown value as abstract variable. *)
       let postexc =
-	try join mgr (List.assoc ei postexcl) postexc
+	try join_abstract_value mgr (List.assoc ei postexcl) postexc
 	with Not_found -> postexc
       in
       let postexcl = (ei, postexc) :: (List.remove_assoc ei postexcl) in
-      { curinvs with jc_absinv_normal = bot; jc_absinv_exceptional = postexcl; }
+      {
+	jc_absinv_normal = bot; 
+	jc_absinv_exceptional = postexcl; 
+	jc_absinv_return = curinvs.jc_absinv_return;
+      }
   | JCSpack _ | JCSunpack _ ->
       curinvs
   | JCStry(s,hl,fs) ->
@@ -1771,7 +1956,7 @@ let rec ai_statement abs curinvs s =
 	  (fun curinvs (ei,_,s) ->
 	    try
 	      let postexc = List.assoc ei postexcl in
-	      let postret = Abstract1.bottom mgr env in
+	      let postret = bottom_abstract_value mgr env in
 	      let excinvs = {
 		jc_absinv_normal = postexc;
 		jc_absinv_exceptional = [];
@@ -1808,7 +1993,7 @@ let rec ai_statement abs curinvs s =
 	    loop_invariants la.jc_loop_tag (copy_invariants mgr wideninvs);
 	  if eq_invariants mgr loopinvs wideninvs then
 	    (* Propagate to assertions. *)
-	    let bot = Abstract1.bottom mgr (Abstract1.env pre) in
+	    let bot = bottom_abstract_value mgr (Abstract1.env pre) in
 	    { wideninvs with jc_absinv_normal = bot; }
 	  else
 	    let nextinvs = ai_statement abs wideninvs ls in
@@ -1832,9 +2017,7 @@ let rec ai_statement abs curinvs s =
 		let tt = type_term t.jc_term_node e.jc_expr_type in
 		assert (Vai.has_offset_max_variable tt);
 		let offset_max = Vai.offset_max_variable t in
-		let interval =
-		  Abstract1.bound_variable
-		    abs.jc_absint_manager curinvs.jc_absinv_normal offset_max in
+		let interval = Abstract1.bound_variable mgr pre offset_max in
 		let inf = interval.inf in
 		if (Scalar.is_infty inf != 0) then () else
 		let n = Num.num_of_string (Scalar.to_string inf) in
@@ -1856,9 +2039,13 @@ let rec ai_statement abs curinvs s =
 	  fi.jc_fun_info_parameters el;
       curinvs
   in 
-  let asrts = collect_statement_asserts s in 
+  let asrts = collect_statement_asserts s in
   let post = curinvs.jc_absinv_normal in
-  let post = List.fold_left (test_assertion mgr) post asrts in
+  let post = {
+    jc_absval_regular = post.jc_absval_regular;
+    jc_absval_propagated = 
+      List.fold_left (test_assertion mgr) post.jc_absval_propagated asrts 
+  } in
   { curinvs with jc_absinv_normal = post; } 
 	  
 let rec record_ai_invariants abs s =
@@ -1879,7 +2066,7 @@ let rec record_ai_invariants abs s =
       let loop_invariants = abs.jc_absint_loop_invariants in
       begin try
 	let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
-	let loopinv = loopinvs.jc_absinv_normal in
+	let loopinv = loopinvs.jc_absinv_normal.jc_absval_regular in
 	(* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON *)
 	if Abstract1.is_top mgr loopinv = Manager.True then
 	  ()
@@ -1968,35 +2155,35 @@ let ai_function mgr targets (fi, fs, sl) =
     in
     let cstrs = List.map (unique_linstr_of_assertion env) cstrs in
     let lincons = Parser.lincons1_of_lstring env cstrs in
-    let initpre = Abstract1.top mgr env in
-      Abstract1.meet_lincons_array_with mgr initpre lincons;    
-      
-      (* Annotation inference on the function body. *)
-      let initinvs = {
-	jc_absinv_normal = initpre;
-	jc_absinv_exceptional = [];
-	jc_absinv_return = Abstract1.bottom mgr env;
-      } in
-      let curinvs = List.fold_left (ai_statement abs) initinvs sl in
-      List.iter (record_ai_invariants abs) sl;
-      List.iter 
-	(fun target -> 
-	  if Jc_options.verbose then
-	    printf 
-	      "%a@[<v 2>Inferring assert invariant@\n%a@]@."
-	      Loc.report_position target.jc_target_location
-		 Jc_output.assertion target.jc_target_invariant 
-	) targets;
-	
-      (* record the inferred postcondition *)
-      let postabs = curinvs.jc_absinv_return in
-	let post = mkinvariant abs.jc_absint_manager postabs in
+    let initpre = top_abstract_value mgr env in
+    Abstract1.meet_lincons_array_with mgr initpre.jc_absval_regular lincons;    
+
+    (* Annotation inference on the function body. *)
+    let initinvs = {
+      jc_absinv_normal = initpre;
+      jc_absinv_exceptional = [];
+      jc_absinv_return = bottom_abstract_value mgr env;
+    } in
+    let curinvs = List.fold_left (ai_statement abs) initinvs sl in
+    List.iter (record_ai_invariants abs) sl;
+    List.iter 
+      (fun target -> 
 	if Jc_options.verbose then
 	  printf 
-	    "@[<v 2>Inferring postcondition@\n%a@]@."
-	    Jc_output.assertion post;
-	let behavior = { default_behavior with  jc_behavior_ensures = post } in
-	fs.jc_fun_behavior <- ("inferred", behavior) :: fs.jc_fun_behavior;
+	    "%a@[<v 2>Inferring assert invariant@\n%a@]@."
+	    Loc.report_position target.jc_target_location
+	    Jc_output.assertion target.jc_target_regular_invariant 
+      ) targets;
+
+    (* record the inferred postcondition *)
+(*     let postabs = curinvs.jc_absinv_return.jc_absval_regular in *)
+(*     let post = mkinvariant abs.jc_absint_manager postabs in *)
+(*     if Jc_options.verbose then *)
+(*       printf  *)
+(* 	"@[<v 2>Inferring postcondition@\n%a@]@." *)
+(* 	Jc_output.assertion post; *)
+(*     let behavior = { default_behavior with  jc_behavior_ensures = post } in *)
+(*     fs.jc_fun_behavior <- ("inferred", behavior) :: fs.jc_fun_behavior; *)
 	
   with Manager.Error exc ->
     Manager.print_exclog std_formatter exc;
@@ -2330,11 +2517,18 @@ let simplify =
 	  let absval = test_dnf mgr absval dnf in
 	  if Jc_options.debug then
 	    printf "abstract conjunct : %a@." Abstract1.print absval;
+	  if (Abstract1.is_top mgr absval = Manager.True) then
+	    failwith "Incorrect overapproximation";
 	  if Abstract1.is_bottom mgr absval = Manager.True then
 	    abstractl, otherl
 	  else
 	    let test_absval = Abstract1.copy mgr absval in
 	    Abstract1.meet_lincons_array_with mgr test_absval strlen_lincons;
+	    if (Abstract1.is_top mgr test_absval = Manager.True) then
+	      failwith "Incorrect overapproximation";
+	    if Jc_options.debug then
+	      printf "abstract conjunct with strlen : %a@." 
+		Abstract1.print test_absval;
 	    if Abstract1.is_bottom mgr test_absval = Manager.True then
 	      abstractl, otherl
 	    else
@@ -2583,8 +2777,9 @@ let rec wp_statement weakpre =
 	curposts
     in
     if s == target.jc_target_statement then
-      let a = raw_asrt(JCAimplies(target.jc_target_invariant,
+      let a = raw_asrt(JCAimplies(target.jc_target_regular_invariant,
                                   target.jc_target_assertion)) in
+      assert (curposts.jc_post_normal = None);
       { curposts with jc_post_normal = Some (deep_raw_asrt a); }
     else curposts
 
@@ -2613,6 +2808,7 @@ let rec record_wp_invariants weakpre s =
       ()
 
 let wp_function targets (fi,fs,sl) =
+  if debug then printf "[wp_function]@.";
   let weakpre = {
     jc_weakpre_loop_invariants = Hashtbl.create 0;
   } in
@@ -2656,7 +2852,12 @@ let wp_function targets (fi,fs,sl) =
 
 let tautology a =
   let qf = Atp.generalize (atp_of_asrt a) in
-  let qe = Atp.integer_qelim qf in
+  if Jc_options.debug then
+    printf "@[<v 2>Before quantifier elimination@\n%a@]@." 
+      (fun fmt fm -> Atp.printer fm) qf; 
+  if debug then printf "[before integer_qelim]@.";
+  let qe = Atp.fourier_qelim qf in
+  if debug then printf "[after integer_qelim]@.";
   let qe = asrt_of_atp qe in
   match qe.jc_assertion_node with
   | JCAtrue -> true
@@ -2694,10 +2895,17 @@ let code_function = function
 	  end;
 	  let targets = 
 	    List.fold_right (fun target acc ->
-	      target.jc_target_invariant <- simplify target.jc_target_invariant;
-	      let impl = raw_asrt(JCAimplies(target.jc_target_invariant,
-		                             target.jc_target_assertion)) in
-	      if tautology impl then acc else target :: acc
+	      target.jc_target_regular_invariant <- 
+		simplify target.jc_target_regular_invariant;
+	      let impl = 
+		raw_asrt(JCAimplies(
+		  target.jc_target_propagated_invariant,
+		  target.jc_target_assertion)) 
+	      in
+	      if debug then printf "[before tautology]@.";
+	      let res = if tautology impl then acc else target :: acc in
+	      if debug then printf "[after tautology]@.";
+	      res
 	    ) targets []
 	  in
 	  wp_function targets (fi,fs,sl)

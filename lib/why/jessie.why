@@ -1,4 +1,7 @@
 
+axiom div_int_euclid :
+  forall i:int. forall j:int.
+    i>=0 and j>0 -> (i-j+1 <= j*(i/j) and j*(i/j) <= i)
 
 (****************************
 
@@ -77,11 +80,12 @@ access and update side-effect functions
 
 (* normal access *)
 parameter acc_ : 
-  alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer ->
-  { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
+  alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> 
+  p:'t pointer -> off:int ->
+  { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
   'v 
   reads alloc,m
-  { result = select(m,p) }
+  { result = select(m,shift(p,off)) }
 
 (* safe access *)
 parameter safe_acc_ : 
@@ -153,13 +157,14 @@ parameter rsafe_rbound_acc_ :
 
 (* normal update *)
 parameter upd_ : 
-  alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
-  { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
+  alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer ->
+   off:int -> v:'v ->
+  { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
   (* and select(mutable,p) = true *)
   unit
   reads alloc,m (* ,mutable *)
   writes m
-  { m = store(m@,p,v) }
+  { m = store(m@,shift(p,off),v) }
 
 (* safe update *)
 parameter safe_upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
