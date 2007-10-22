@@ -169,7 +169,8 @@ let do_method mi req behs body =
   ... behs
 *)
   List.iter param mi.method_info_parameters;
-  Option_misc.iter (List.iter statement) body
+  Option_misc.iter (List.iter statement) body;
+  Option_misc.iter param mi.method_info_result
 
 
 let do_constructor ci reg behs body =

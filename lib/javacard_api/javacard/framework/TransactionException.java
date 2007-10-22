@@ -1,5 +1,5 @@
 /*
-* $Workfile: TransactionException.java $	$Revision: 1.1 $, $Date: 2007-09-26 14:32:59 $
+* $Workfile: TransactionException.java $	$Revision: 1.2 $, $Date: 2007-10-22 08:58:43 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,9 +19,9 @@
 
 // /*
 // $Workfile: TransactionException.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
-// $Author: marche $
+// $Revision: 1.2 $
+// $Date: 2007-10-22 08:58:43 $
+// $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/TransactionException.java $
 // $Modtime: 5/02/00 7:13p $
 // Original author:  Ravi
@@ -90,7 +90,7 @@ public class TransactionException extends CardRuntimeException {
    * @exception TransactionException always.
    */
 
-    /*@ public exceptional_behavior
+    /* @ public exceptional_behavior
       @   requires true;
       @ 
       @   assignable systemInstance.reason;
