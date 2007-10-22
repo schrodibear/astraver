@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.37 2007-03-02 09:37:42 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.38 2007-10-22 10:39:19 filliatr Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -36,13 +36,23 @@ let batch = ref false
 let timings = ref true (* print timings *)
 let files = Queue.create ()
 
+type smt_solver = Yices | CVC3 | Z3
+let smt_solver = ref Yices
+let set_smt_solver = function
+  | "yices" -> smt_solver := Yices
+  | "cvc3" -> smt_solver := CVC3
+  | "z3" -> smt_solver := Z3
+  | s -> eprintf "unknown SMT solver %s@." s; exit 1
+
 let spec = 
   [ "-timeout", Arg.Int ((:=) timeout), "<int>  set the timeout (in seconds)";
     "-eclauses", Arg.Int ((:=) eclauses), 
     "<int>  set the max nb of clauses for the E prover";
     "-debug", Arg.Set debug, "set the debug flag";
     "-batch", Arg.Set batch, "run in batch mode";
-    "-no-timings", Arg.Clear timings, "do not display timings"]
+    "-no-timings", Arg.Clear timings, "do not display timings";
+    "-smt-solver", Arg.String set_smt_solver, "<solver>";
+  ]
 
 let usage = "usage: dp [options] files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
@@ -120,6 +130,10 @@ let call_simplify f =
   wrapper (Calldp.simplify ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_yices f = 
   wrapper (Calldp.yices ~debug:!debug ~timeout:!timeout ~filename:f ())
+let call_cvc3 f = 
+  wrapper (Calldp.cvc3 ~debug:!debug ~timeout:!timeout ~filename:f ())
+let call_z3 f = 
+  wrapper (Calldp.z3 ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_rvsat f = 
   wrapper (Calldp.rvsat ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_zenon f = 
@@ -127,6 +141,10 @@ let call_zenon f =
 let call_harvey f = 
   wrapper (Calldp.harvey ~debug:!debug ~timeout:!timeout ~filename:f ())
 
+let call_smt_solver = match !smt_solver with
+  | Yices -> call_yices
+  | CVC3 -> call_cvc3
+  | Z3 -> call_z3
 
 let split f =
   if not !batch then printf "%-30s: " f;
@@ -137,7 +155,7 @@ let split f =
   let oldf = !nfailure in
   if Filename.check_suffix f ".smt"  || Filename.check_suffix f ".smt.all" then
     begin
-      Smtlib_split.iter call_yices f 
+      Smtlib_split.iter call_smt_solver f 
     end 
   else
   if Filename.check_suffix f ".why" then

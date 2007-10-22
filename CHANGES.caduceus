@@ -1,6 +1,8 @@
 
 Note: These are the changes for Caduceus.
 
+ o dp: new option -smt-solver to set the SMT solver (Yices, Z3, CVC3)
+
 version 1.04, August 2nd, 2007
 ==============================
  o change in loop_assigns interpretation: the set of memory locations
