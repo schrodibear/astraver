@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.66 2007-10-22 07:38:21 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.67 2007-10-22 11:59:12 nrousset Exp $ */
 
 %{
 
@@ -833,13 +833,25 @@ statement:
 ;
 
 
+catch_statement: 
+| CATCH identifier IDENTIFIER statement
+    { ($2, $3, $4) }
+;
+
+catch_statement_list:
+| /* epsilon */ 
+    { [] }
+| catch_statement catch_statement_list 
+    { $1 :: $2 }
+;
+
 exception_statement:
 | THROW identifier expression_opt SEMICOLON
    { locate_statement (JCPSthrow($2,$3)) }
-| TRY statement CATCH identifier IDENTIFIER statement %prec PRECTRY
-   { locate_statement (JCPStry($2,[($4,$5,$6)],skip)) }
-| TRY statement CATCH identifier IDENTIFIER statement FINALLY statement
-   { locate_statement (JCPStry($2,[($4,$5,$6)],$8)) }
+| TRY statement catch_statement_list %prec PRECTRY
+   { locate_statement (JCPStry($2, $3, skip)) }
+| TRY statement catch_statement_list FINALLY statement
+   { locate_statement (JCPStry($2, $3, $5)) }
 ;
 
 /**********************************/
