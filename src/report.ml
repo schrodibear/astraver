@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: report.ml,v 1.17 2006-11-03 12:49:05 marche Exp $ i*)
+(*i $Id: report.ml,v 1.18 2007-10-23 07:42:11 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -154,7 +154,7 @@ let report fmt = function
   | CannotGeneralize ->
       fprintf fmt "Cannot generalize"
   | IllformedPattern ->
-      fprintf fmt "Ill-formed pattern found in trigger : predicates pattern should be atoms"
+      fprintf fmt "Ill-formed pattern found in trigger: predicates pattern should be atoms"
 
 let is_mutable = function Ref _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

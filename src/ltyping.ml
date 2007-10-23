@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.64 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.65 2007-10-23 07:42:11 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -378,8 +378,10 @@ and pattern lab env t =
 	  PPat (predicate lab env t)
       with Not_found -> 
 	raise_located t.pp_loc (UnboundVariable x))
-  | PPvar x -> TPat (fst (term lab env t))
-  | _ -> Report.raise_located t.pp_loc Error.IllformedPattern
+  | PPvar _ | PPinfix (_, (PPadd|PPsub|PPmul|PPdiv|PPmod), _) ->
+      TPat (fst (term lab env t))
+  | _ -> 
+      Report.raise_located t.pp_loc Error.IllformedPattern
   
 and triggers lab env = List.map (List.map (pattern lab env))
 
