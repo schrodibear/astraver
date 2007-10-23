@@ -42,7 +42,7 @@
 	"cmp1", INSTR (Cmp I1); "cmp2", INSTR (Cmp I2); "cmp3", INSTR (Cmp I3);
 	"cmp4", INSTR (Cmp I4); "cmp5", INSTR (Cmp I5); "cmp6", INSTR (Cmp I6);
 	(* jumps *)
-	"jmp", INSTR Jmp; "jsj", INSTR Jsj;
+	"jmp", INSTR Jmp; "jsj", INSTR Jsj; "jl", INSTR Jl;
 	"jg", INSTR Jg; "jge", INSTR Jge; "je", INSTR Je; "jne", INSTR Jne;
 	"jan", INSTR (Jn A);  "jxn", INSTR (Jn X);
 	"j1n", INSTR (Jn I1); "j2n", INSTR (Jn I2); "j3n", INSTR (Jn I3);
@@ -190,6 +190,8 @@ and verbatim = parse
       { VERBATIM (Buffer.contents string_buf) }
   | eof
       { raise (Lexical_error "unterminated verbatim") }
+  | newline 
+      { newline lexbuf; Buffer.add_char string_buf '\n'; verbatim lexbuf }
   | _ as c
       { Buffer.add_char string_buf c; verbatim lexbuf }
 
@@ -198,6 +200,8 @@ and invariant = parse
       { INVARIANT (Buffer.contents string_buf) }
   | eof
       { raise (Lexical_error "unterminated invariant") }
+  | newline 
+      { newline lexbuf; Buffer.add_char string_buf '\n'; invariant lexbuf }
   | _ as c
       { Buffer.add_char string_buf c; invariant lexbuf }
 
@@ -206,5 +210,7 @@ and assertion = parse
       { ASSERT (Buffer.contents string_buf) }
   | eof
       { raise (Lexical_error "unterminated assert") }
+  | newline 
+      { newline lexbuf; Buffer.add_char string_buf '\n'; assertion lexbuf }
   | _ as c
       { Buffer.add_char string_buf c; assertion lexbuf }
