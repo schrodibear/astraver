@@ -12,10 +12,11 @@ axiom fib_0 : fib(0) = 0
 axiom fib_1 : fib(1) = 1
 axiom fib_n : forall n:int. n >= 0 -> fib(n+2) = fib(n+1) + fib(n)
 
-(*
-axiom fib_pos :	forall n:int. fib(n) >= 0
-axiom fib_inc :	forall n1,n2:int. 0 <= n1 <= n2 -> fib(n1) <= fib(n2)
-*)
+(* derived properties *)
+axiom fib_nonneg : forall n:int. n >= 0 -> fib(n) >= 0
+axiom fib_pos :	forall n:int. n > 0 -> fib(n) > 0
+axiom fib_ge1 :	forall n:int. n >= 0 -> fib(n) >= 1 -> n >= 1
+axiom fib_2_3 :	forall n:int. n >= 0 -> fib(n) >= 2 -> n >= 3
 	
 logic k, fib_k, fib_k_1, fib_k_2 : int
 axiom k       : k >= 2
