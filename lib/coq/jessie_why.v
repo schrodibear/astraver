@@ -11,6 +11,13 @@ Set Implicit Arguments.
 
 Require Import Map. (* dans Map.v (temporairement) *)
 
+(*Why axiom*) Lemma div_int_euclid :
+  (forall (i:Z),
+   (forall (j:Z),
+    (i >= 0 /\ j > 0 -> (i - j + 1) <= (j * ((Zdiv i j))) /\
+     (j * ((Zdiv i j))) <= i))).
+Admitted.
+
 (*Why type*) Definition alloc_table: Set ->Set.
 exact (fun _ => Map Z).
 Defined.
@@ -102,7 +109,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A364:Set) (a:(alloc_table A364)) (p:(pointer A364))
+(*Why predicate*) Definition valid (A366:Set) (a:(alloc_table A366)) (p:(pointer A366))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -621,8 +628,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A399:Set) (A398:Set) (a:(alloc_table A398)) (m1:(memory A398 A399)) (m2:(memory A398 A399)) (l:(pset A398))
-  := (forall (p:(pointer A398)),
+(*Why predicate*) Definition not_assigns (A401:Set) (A400:Set) (a:(alloc_table A400)) (m1:(memory A400 A401)) (m2:(memory A400 A401)) (l:(pset A400))
+  := (forall (p:(pointer A400)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -659,7 +666,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A405:Set) (a:(tag_table A405)) (p:(pointer A405)) (t:(tag_id A405))
+(*Why predicate*) Definition instanceof (A407:Set) (a:(tag_table A407)) (p:(pointer A407)) (t:(tag_id A407))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -687,7 +694,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A410:Set) (tag_table:(tag_table A410)) (mutable:(memory A410 (tag_id A410))) (this:(pointer A410))
+(*Why predicate*) Definition fully_packed (A412:Set) (tag_table:(tag_table A412)) (mutable:(memory A412 (tag_id A412))) (this:(pointer A412))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

@@ -43,6 +43,9 @@ val constructors_table :
 val field_initializer_table : 
   (int, Java_tast.initialiser option) Hashtbl.t
 
+val final_field_values_table :
+  (int, Num.num list) Hashtbl.t
+
 val axioms_table : (string,Java_tast.assertion) Hashtbl.t
 
 type logic_body =

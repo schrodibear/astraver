@@ -28,7 +28,7 @@ integer max_pos(integer n, integer m) {
 
 
 // post \offset_max(\result) >= 0 is inferred
-intM[0..] reset(intM[0] t) {
+intM[0..] reset(intM[0..] t) {
     integer i = 0;
     while (i < \offset_max(t)) 
 	invariant true;

@@ -151,7 +151,7 @@ let tr_base_type t =
 	  logic_type_args = [ ti ] }
     | JCTnull -> assert false
 
-let tr_type t = Base_type(tr_base_type t)
+let tr_type t = Base_type (tr_base_type t)
 
  
 
@@ -201,6 +201,8 @@ let bin_op = function
   | Ble_real -> "le_real_"
   | Bgt_real -> "gt_real_"
   | Blt_real -> "lt_real_"
+  | Beq_bool -> "eq_bool_"
+  | Bneq_bool -> "neq_bool_"
   | Bbw_and -> "bw_and"
   | Bbw_or -> "bw_or"
   | Bbw_xor -> "bw_xor"
@@ -236,6 +238,7 @@ let bin_arg_type loc = function
   | Bdiv_real | Bmul_real | Bsub_real | Badd_real
   | Bneq_real | Beq_real | Bge_real
   | Ble_real | Bgt_real | Blt_real -> real_type
+  | Beq_bool | Bneq_bool -> boolean_type
   | Bneq_pointer | Beq_pointer -> assert false
 
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
@@ -274,7 +277,7 @@ let make_guarded_app ?name (k:kind) loc f l =
   Label(lab,make_app f l)
 
 let coerce ~no_int_overflow lab loc tdest tsrc e =
-  match tdest,tsrc with
+  match tdest, tsrc with
     | JCTnative t, JCTnative u when t=u -> e
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
@@ -989,12 +992,12 @@ let rec statement ~threats s =
 	    Let(vi.jc_var_info_final_name, e', statement s)
 	end
     | JCSreturn_void -> Raise(jessie_return_exception,None)	
-    | JCSreturn(t,e) -> 
+    | JCSreturn (t, e) -> 
 	append
 	  (Assign(jessie_return_variable,
 		  coerce ~no_int_overflow:(not threats) 
 		    e.jc_expr_label e.jc_expr_loc t e.jc_expr_type (expr e)))
-	  (Raise(jessie_return_exception,None))
+	  (Raise (jessie_return_exception, None))
     | JCSunpack(st, e, as_t) ->
 	let e = expr e in 
 	make_guarded_app Unpack s.jc_statement_loc

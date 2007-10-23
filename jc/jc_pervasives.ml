@@ -155,8 +155,8 @@ let newvar ty = var ty (tmp_var_name())
 
 let newrefvar ty = 
   let vi = newvar ty in
-  vi.jc_var_info_assigned <- true;
-  vi
+    vi.jc_var_info_assigned <- true;
+    vi
 
 let copyvar vi =
   incr var_tag_counter;

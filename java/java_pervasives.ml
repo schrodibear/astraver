@@ -1,7 +1,20 @@
 
+(*** Utility functions ***)
+
 
 open Java_env
+
+(* for method_info types *)
+
+let get_method_info_class_or_interface_name mi =
+  match mi.method_info_class_or_interface with
+    | TypeClass ci -> ci.class_info_name
+    | TypeInterface ii -> ii.interface_info_name
+
+
 open Java_ast
+
+(* for parsed exprs *)
 
 let expr_no_loc e = 
   { java_pexpr_loc = Loc.dummy_position ; java_pexpr_node = e }
@@ -15,9 +28,13 @@ let expr_zero = expr_no_loc (JPElit(Integer "0"))
 
 open Java_tast
 
+(* for typed statements *)
+
 let make_statement_no_loc node = 
   { java_statement_loc = Loc.dummy_position ; java_statement_node = node }
     
+(* for typed exprs *)
+
 let make_expr_no_loc t node = 
   { java_expr_loc = Loc.dummy_position ;
     java_expr_type = t ;

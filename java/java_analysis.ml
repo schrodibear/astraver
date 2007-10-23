@@ -7,9 +7,15 @@
   2) disambiguates names:
      . different constructors for the same class are named
          Class_typearg1_..._typeargn
+     . methods
+         * with same names in different classes or interfaces
+             Class_or_Interface_method_name
+         * with same names in same class or interface
+             Class_or_Interface_method_name_typearg1_..._typeargn
 
 *)
 
+open Java_pervasives
 open Java_env
 open Java_tast
 open Format
@@ -173,6 +179,10 @@ let do_method mi req behs body =
   Option_misc.iter param mi.method_info_result
 
 
+let string_of_parameters vil =
+  (List.fold_right
+     (fun vi acc -> "_" ^ name_type vi.java_var_info_type ^ acc) vil "")
+
 let do_constructor ci reg behs body =
 (*
   let l = ci.constr_info_class.class_info_constructors in
@@ -181,10 +191,7 @@ let do_constructor ci reg behs body =
 *)
       ci.constr_info_trans_name <-
 	"cons_" ^ ci.constr_info_class.class_info_name ^
-	(List.fold_right
-	   (fun vi acc ->
-	      "_" ^ name_type vi.java_var_info_type ^ acc)
-	   ci.constr_info_parameters "");
+	string_of_parameters ci.constr_info_parameters;
 (*
     end;
 *)
@@ -201,6 +208,48 @@ let do_type ty =
 	List.iter do_field ci.class_info_fields
     | TypeInterface ii -> 
 	List.iter do_field ii.interface_info_fields
+
+
+let disambiguates_method_names () =
+  let methods_list =
+    Hashtbl.fold (fun _ mt acc -> mt :: acc) Java_typing.methods_table []
+  in
+  let methods_list =
+    List.sort 
+      (fun mt1 mt2 -> 
+	 let mi1 = mt1.Java_typing.mt_method_info in
+	 let mi2 = mt2.Java_typing.mt_method_info in
+	   (* compare method names *)
+	   match String.compare mi1.method_info_name mi2.method_info_name with
+	     | 0 ->
+		 (* compare method class or interface names *)
+		 begin
+		   let ci1 = get_method_info_class_or_interface_name mi1 in
+		   let ci2 = get_method_info_class_or_interface_name mi2 in
+		     mi1.method_info_trans_name <-
+		       ci1 ^ "_" ^ mi1.method_info_name; 
+		     mi2.method_info_trans_name <-
+		       ci2 ^ "_" ^ mi2.method_info_name;
+		     match String.compare ci1 ci2
+		     with
+		       | 0 ->			 
+			   mi1.method_info_trans_name <-
+			     mi1.method_info_trans_name ^
+			     string_of_parameters
+			     mi1.method_info_parameters;
+			   mi2.method_info_trans_name <-
+			     mi2.method_info_trans_name ^
+			     string_of_parameters
+			     mi2.method_info_parameters; 0
+		       | n -> n
+		 end
+	     | n -> n)
+      methods_list 
+  in
+    List.iter
+      (fun mt -> Hashtbl.replace Java_typing.methods_table
+	 mt.Java_typing.mt_method_info.method_info_tag mt)
+      methods_list
 
 
 (*

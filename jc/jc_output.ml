@@ -53,8 +53,8 @@ let bin_op = function
   | Bgt_int | Bgt_real -> ">"
   | Ble_int | Ble_real -> "<="
   | Bge_int | Bge_real -> ">="
-  | Beq_int | Beq_real | Beq_pointer -> "=="
-  | Bneq_int | Bneq_real | Bneq_pointer -> "!="
+  | Beq_int | Beq_real | Beq_bool | Beq_pointer -> "=="
+  | Bneq_int | Bneq_real | Bneq_bool | Bneq_pointer -> "!="
   | Badd_int | Badd_real -> "+"
   | Bsub_int | Bsub_real -> "-"
   | Bmul_int | Bmul_real -> "*"
@@ -241,7 +241,7 @@ let rec expr fmt e =
   match e.jc_texpr_node with
     | JCTEvar vi -> 
 	fprintf fmt "%s" vi.jc_var_info_name
-    | JCTEbinary(e1,op,e2) ->
+    | JCTEbinary (e1, op, e2) ->
 	fprintf fmt "@[(%a %s %a)@]" expr e1 (bin_op op) expr e2
     | JCTEunary(op,e1) ->
 	fprintf fmt "@[(%s %a)@]" (unary_op op) expr e1
@@ -277,7 +277,7 @@ let rec expr fmt e =
 	fprintf fmt "%a.%s %s= %a" expr e1 fi.jc_field_info_name 
 	  (bin_op op) expr e2
     | JCTEassign_var (v, e) -> 
-	fprintf fmt "%s = %a" v.jc_var_info_name expr e
+	fprintf fmt "(%s = %a)" v.jc_var_info_name expr e
     | JCTEassign_var_op (v, op, e) -> 
 	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
     | JCTEcast (e, si) ->

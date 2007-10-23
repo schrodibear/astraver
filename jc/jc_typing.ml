@@ -92,7 +92,7 @@ let find_struct_info loc id =
 
 let is_numeric t =
   match t with
-    | JCTnative (Tinteger|Treal) -> true
+    | JCTnative (Tinteger | Treal) -> true
     | JCTenum _ -> true
     | _ -> false
 
@@ -236,6 +236,9 @@ let bin_op t op =
     | Treal, BPeq -> Beq_real
     | Treal, BPneq -> Bneq_real
 
+    | Tboolean, BPeq -> Beq_bool
+    | Tboolean, BPneq -> Bneq_bool
+
     (* use native type TUnit in place of inexistant native pointer type *)
     | Tunit, BPeq -> Beq_pointer
     | Tunit, BPneq -> Bneq_pointer
@@ -266,8 +269,6 @@ let bin_op t op =
     | _,BPiff -> assert false
     | _,BPimplies -> assert false
     | Tunit,_ -> assert false
-    | Tboolean, BPeq -> assert false
-    | Tboolean, BPneq -> assert false
     | Tboolean, _ -> assert false
 
 
@@ -962,15 +963,18 @@ let make_bin_op loc op e1 e2 =
     | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  (boolean_type,
-	   JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2))
-	else
-	  if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
 	    (boolean_type,
-	     JCTEbinary(e1, 
-			(if op = BPeq then Beq_pointer else Bneq_pointer), e2))
+	     JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2))
+	else
+	  if t1 = boolean_type && t2 = boolean_type then
+	    (boolean_type, JCTEbinary (e1, bin_op Tboolean op, e2))
 	  else
-	  typing_error loc "numeric or pointer types expected for == and !="
+	    if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
+	      (boolean_type,
+	       JCTEbinary(e1, 
+			  (if op = BPeq then Beq_pointer else Bneq_pointer), e2))
+	    else
+	      typing_error loc "numeric, boolean or pointer types expected for == and !="
     | BPadd ->
 	if is_pointer_type t1 && is_integer t2 then
 	  t1, JCTEshift(e1, coerce t2 Tinteger e2)
@@ -1493,12 +1497,12 @@ let rec statement env lz s =
       | JCPSreturn (Some e) -> 
 	  let te = expr env e in 
 	  let vi = List.assoc "\\result" env in
-	  if subtype te.jc_texpr_type vi.jc_var_info_type then
-	    JCTSreturn(vi.jc_var_info_type,te), lz
-	  else
-	    typing_error s.jc_pstatement_loc 
-	      "type '%a' expected in return instead of '%a'"
-	      print_type vi.jc_var_info_type print_type te.jc_texpr_type
+	    if subtype te.jc_texpr_type vi.jc_var_info_type then
+	      JCTSreturn (vi.jc_var_info_type, te), lz
+	    else
+	      typing_error s.jc_pstatement_loc 
+		"type '%a' expected in return instead of '%a'"
+		print_type vi.jc_var_info_type print_type te.jc_texpr_type
       | JCPSwhile(cond,inv,var,body) -> 
 	  let tc = expr env cond in
 	  if subtype tc.jc_texpr_type boolean_type then
@@ -2000,9 +2004,9 @@ let rec decl d =
 	let e = Option_misc.map (expr []) init in
 	Hashtbl.add variables_env id vi;
 	Hashtbl.add variables_table vi.jc_var_info_tag (vi,e)
-    | JCPDfun(ty,id,pl,specs,body) -> 
-	let param_env,ty,fi = 
-	  add_fundecl (ty,id.jc_identifier_loc,id.jc_identifier_name,pl) 
+    | JCPDfun (ty, id, pl, specs, body) -> 
+	let param_env, ty, fi = 
+	  add_fundecl (ty, id.jc_identifier_loc, id.jc_identifier_name, pl) 
 	in
 	let vi = var ty "\\result" in
 	vi.jc_var_info_final_name <- "result";

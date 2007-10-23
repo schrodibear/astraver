@@ -261,29 +261,29 @@ let rec expr e =
     | JCTEbinary (e1, op, e2) ->
 	let (l1, tl1), e1 = expr e1 in
 	let (l2, tl2), e2 = expr e2 in
-	begin
-	  match op with
-	  | Bland ->
-	      let tmp = newrefvar boolean_type in
-	      let e1_false_stat = make_assign_var loc tmp (false_const loc) in
-	      let e2_false_stat = make_assign_var loc tmp (false_const loc) in
-	      let true_stat = make_assign_var loc tmp (true_const loc) in
-	      let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
-	      let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
-	      let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
-	      (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
-	  | Blor ->
-	      let tmp = newrefvar boolean_type in
-	      let e1_true_stat = make_assign_var loc tmp (true_const loc) in
-	      let e2_true_stat = make_assign_var loc tmp (true_const loc) in
-	      let false_stat = make_assign_var loc tmp (false_const loc) in
-	      let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
-	      let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
-	      let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
-	      (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
-	  | _ -> (* Note: no special case for Unot *)
-	      (l1@l2, tl1@tl2), JCEbinary (e1, op, e2)
-	end
+	  begin
+	    match op with
+	      | Bland ->
+		  let tmp = newrefvar boolean_type in
+		  let e1_false_stat = make_assign_var loc tmp (false_const loc) in
+		  let e2_false_stat = make_assign_var loc tmp (false_const loc) in
+		  let true_stat = make_assign_var loc tmp (true_const loc) in
+		  let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
+		  let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
+		  let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
+		    (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
+	      | Blor ->
+		  let tmp = newrefvar boolean_type in
+		  let e1_true_stat = make_assign_var loc tmp (true_const loc) in
+		  let e2_true_stat = make_assign_var loc tmp (true_const loc) in
+		  let false_stat = make_assign_var loc tmp (false_const loc) in
+		  let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
+		  let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
+		  let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
+		    (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
+	      | _ -> (* Note: no special case for Unot *)
+		  (l1@l2, tl1@tl2), JCEbinary (e1, op, e2)
+	  end
     | JCTEshift (e1, e2) ->
 	let (l1, tl1), e1 = expr e1 in
 	let (l2, tl2), e2 = expr e2 in
@@ -414,19 +414,22 @@ let rec expr e =
 	let (l1, tl1), e1 = expr e1 in
 	let (l2, tl2), e2 = expr e2 in
 	let (l3, tl3), e3 = expr e3 in
-	(* hack because we do not have a type to rely on ... *)
-	let tmp = newrefvar integer_type in
+	let tmp = newrefvar e2.jc_expr_type in
 	let assign2 = make_assign_var loc tmp e2 in
 	let assign3 = make_assign_var loc tmp e3 in
 	let if_e1_stat = 
-	  make_if loc e1 (make_block loc (l2 @ [assign2])) 
-	    (make_block loc (l3 @ [assign3])) in
-	(l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
-  in (sl, tl), { jc_expr_node = ne; 
-		 jc_expr_type = e.jc_texpr_type;
-		 jc_expr_label = e.jc_texpr_label;
-		 jc_expr_loc = e.jc_texpr_loc }
-
+	  make_if loc e1 
+	    (make_block loc (l2 @ [assign2]))
+	    (make_block loc (l3 @ [assign3]))
+	in
+	  (l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
+  in 
+    (sl, tl), 
+  { jc_expr_node = ne;
+    jc_expr_type = e.jc_texpr_type;
+    jc_expr_label = e.jc_texpr_label;
+    jc_expr_loc = e.jc_texpr_loc }
+    
 and call loc f el ~binder ll = 
   if binder then
     let tmp = newvar f.jc_fun_info_return_type in
@@ -590,10 +593,10 @@ and statement s =
 	  try_exit.jc_statement_node
 	  
       | JCTSreturn_void -> JCSreturn_void  
-      | JCTSreturn(t,e) ->
-	  let (sl,tl),e = expr e in
+      | JCTSreturn (t, e) ->
+	  let (sl, tl), e = expr e in
 	  let return_stat = make_return loc t e in
-	  (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
+	    (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
       | JCTSbreak "" -> 
 	  JCSthrow (loop_exit, None)
       | JCTSbreak lab -> assert false (* TODO: see Claude *)

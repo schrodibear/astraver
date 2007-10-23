@@ -1,3 +1,4 @@
+
 open Java_env
 open Java_ast
 open Format
@@ -26,6 +27,10 @@ let main () =
 	Hashtbl.iter 
 	  (fun _ (f,t) -> Java_callgraph.compute_logic_calls f t)
 	  Java_typing.logics_table;
+
+	(* disambiguates method names *)
+	Java_analysis.disambiguates_method_names ();
+
 	Hashtbl.iter 
 	  (fun _ mt -> 
 	     Option_misc.iter (Java_callgraph.compute_calls 
@@ -33,6 +38,7 @@ let main () =
 				 mt.Java_typing.mt_requires) 
 	       mt.Java_typing.mt_body)
 	  Java_typing.methods_table;
+	
 	Hashtbl.iter 
 	  (fun _ ct -> 
 	     Java_callgraph.compute_constr_calls 
@@ -165,7 +171,7 @@ let main () =
 			    mi.method_info_tag
 			  in
 			  printf "Generating JC function %s for method %a.%s@." 
-			    mi.method_info_name
+			    mi.method_info_trans_name
 			    Java_typing.print_type_name 
 			    mi.method_info_class_or_interface
 			    mi.method_info_name;
@@ -188,30 +194,32 @@ let main () =
 	    components
 	in
 
-	let decls = 
+	(*
+	  let decls = 
 	  Hashtbl.fold 
-	    (fun _ ct acc ->
-	       let f = ct.Java_typing.ct_constr_info in
-		 printf "Generating Why function %s@." 
-		   f.Java_env.constr_info_class.class_info_name;
-		 Java_interp.tr_constr f ct.Java_typing.ct_requires 
-		   ct.Java_typing.ct_behaviors 
-		   ct.Java_typing.ct_body acc)
+	  (fun _ ct acc ->
+	  let f = ct.Java_typing.ct_constr_info in
+	  printf "Generating Why function %s@." 
+	  f.Java_env.constr_info_class.class_info_name;
+	  Java_interp.tr_constr f ct.Java_typing.ct_requires 
+		    ct.Java_typing.ct_behaviors 
+	   ct.Java_typing.ct_body acc)
 	    Java_typing.constructors_table
-	    decls
-	in	       
-	let decls = 
+	  decls
+	  in	       
+	  let decls = 
 	  Hashtbl.fold 
 	    (fun _ mt acc ->
-	       let f = mt.Java_typing.mt_method_info in
-	       printf "Generating Why function %s@." 
-		 f.Java_env.method_info_name;
-	       Java_interp.tr_method f mt.Java_typing.mt_requires 
+	  let f = mt.Java_typing.mt_method_info in
+	  printf "Generating Why function %s@." 
+	  f.Java_env.method_info_name;
+	        Java_interp.tr_method f mt.Java_typing.mt_requires 
 		 mt.Java_typing.mt_behaviors 
-		 mt.Java_typing.mt_body acc)
-	    Java_typing.methods_table
-	    decls
-	in	       
+	  mt.Java_typing.mt_body acc)
+	  Java_typing.methods_table
+	  decls
+	  in	       
+	*)
 
 	(* production phase 5 : produce Jessie file *)
 	let decls = List.rev decls in

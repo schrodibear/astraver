@@ -195,6 +195,7 @@ type bin_op =
   | Blt_real | Bgt_real | Ble_real | Bge_real | Beq_real | Bneq_real 
   | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
   | Badd_real | Bsub_real | Bmul_real | Bdiv_real
+  | Beq_bool | Bneq_bool
   | Bland | Blor | Bimplies | Biff
   | Beq_pointer | Bneq_pointer
   (* bitwise operators *)

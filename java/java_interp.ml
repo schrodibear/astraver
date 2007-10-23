@@ -1106,7 +1106,7 @@ let tr_method mi req behs b acc =
   let nfi = 
     create_fun Loc.dummy_position 
       mi.method_info_tag mi.method_info_result 
-      mi.method_info_name mi.method_info_parameters
+      mi.method_info_trans_name mi.method_info_parameters
   in
   let body = Option_misc.map statements b in
   JCfun_def(tr_type_option Loc.dummy_position t,
@@ -1190,9 +1190,18 @@ let tr_field type_name acc fi =
 	let e = 
 	  Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
 	in
+	let values =
+	  Hashtbl.find Java_typing.final_field_values_table fi.java_field_info_tag
+	in
 	match e with
 	  | None -> JCReads []
-	  | Some (JIexpr e) -> JCTerm (term (term_of_expr e))
+	  | Some (JIexpr e) -> (* JCTerm (term (term_of_expr e)) *)
+	      (* evaluated constant expressions are translated (Nicolas) *)
+	      assert (List.length values = 1);
+	      JCTerm (
+		{ (term (term_of_expr e)) 
+		  with jc_term_node = 
+		    (JCTconst (JCCinteger (Num.string_of_num (List.hd values)))) })
 	  | Some (JIlist _) -> raise Not_found (* TODO: with axioms ? (Nicolas) *)
       with Not_found -> 
 	Java_options.lprintf "Warning: final field '%s' of %a has no known value@."
