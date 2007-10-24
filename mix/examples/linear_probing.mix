@@ -1,0 +1,48 @@
+
+/* Linear probing and insertion (vol. 3, page 527) */
+
+/* insert K in TABLE, TABLE+1 ... TABLE+M-1 */
+	
+{{{ 
+logic TABLE,K,hK,M,VACANCIES: int 
+logic mem0: int farray	
+
+axiom separation: forall i:int. 0 <= i < M -> TABLE+i <> VACANCIES
+
+predicate In(x:int, m:int array) = 
+  exists i:int. 0 <= i < M and m[TABLE+i] = x
+}}}
+	
+start:	{{ i1 = hK and 0 <= hK < M and mem = mem0 and 
+	   mem[K] <> 0 and mem[TABLE-1] = 0 }}
+	lda	K
+	jmp	2F
+8H:	inc1	M+1
+3H:	dec1	1
+2H:	{{ -1 <= i1 < M and mem = mem0 and a = mem[K] and 
+	   mem[K] <> 0 and mem[TABLE-1] = 0 }}
+	cmpa	TABLE,1
+	je	success
+	ldx	TABLE,1
+	jxnz	3B
+	j1n	8B
+4H:	ldx	VACANCIES
+	jxz	overflow
+	decx	1
+	stx	VACANCIES
+	sta	TABLE,1
+	{ mem[TABLE+i1] = mem[K] and mem[VACANCIES] = mem0[VACANCIES]-1 }
+	hlt
+success:
+	{ mem = mem0 and mem[K] = mem[TABLE+i1] }
+	hlt
+overflow:
+	{ mem = mem0 and mem[VACANCIES] = 0 }
+	
+/*
+Local Variables: 
+mode: asm
+compile-command: "../../bin/demixify.opt linear_probing.mix -entry start -gwhy"
+End: 
+*/
+
