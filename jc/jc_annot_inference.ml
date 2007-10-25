@@ -253,7 +253,7 @@ let rec term_name =
     | JCTsub_pointer(t1,t2) ->
 	term_name t1 ^ "_sub_pointer_" ^ (term_name t2)
     | JCTderef(t1,fi) ->
-	term_name t1 ^ "_field_" ^ fi.jc_field_info_name
+	term_name t1 ^ "_field_" ^ fi.jc_field_info_final_name
     | JCTapp(li,tl) ->
 	li.jc_logic_info_name ^ "_of_" ^ 
 	  List.fold_right(fun t acc ->

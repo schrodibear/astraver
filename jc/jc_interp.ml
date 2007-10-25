@@ -326,7 +326,7 @@ let lvar_info label v =
 let logic_params li l =
   let l =
     FieldSet.fold
-      (fun fi acc -> (LVar fi.jc_field_info_name)::acc)
+      (fun fi acc -> (LVar fi.jc_field_info_final_name)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       l	    
   in
@@ -385,7 +385,7 @@ let rec term label oldlabel t =
     | JCTsub_pointer(t1,t2) -> 
 	LApp("sub_pointer",[ft t1; ft t2])
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
-    | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_name;ft t])
+    | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_final_name;ft t])
     | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
     | JCTold(t) -> term (Some oldlabel) oldlabel t
     | JCToffset(k,t,st) -> 
@@ -523,7 +523,7 @@ let tr_logic_fun li ta acc =
   let params_reads =
     FieldSet.fold
       (fun fi acc -> 
-	 (fi.jc_field_info_name, memory_field fi)::acc)
+	 (fi.jc_field_info_final_name, memory_field fi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       params
   in
@@ -637,45 +637,45 @@ let rec make_upd loc ~threats fi e1 v =
     match destruct_pointer e1 with
     | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
 	make_app "safe_upd_" 
-	  [ Var fi.jc_field_info_name ; expr e1; v ]
+	  [ Var fi.jc_field_info_final_name ; expr e1; v ]
     | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
 	make_guarded_app IndexBounds loc "lsafe_bound_upd_" 
-	  [ Var fi.jc_field_info_name ; expr p; offset off;
+	  [ Var fi.jc_field_info_final_name ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
 	make_guarded_app IndexBounds loc "rsafe_bound_upd_" 
-	  [ Var fi.jc_field_info_name ; expr p; offset off;
+	  [ Var fi.jc_field_info_final_name ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,off,Some lb,Some rb ->
 	make_guarded_app IndexBounds loc "bound_upd_" 
-	  [ Var fi.jc_field_info_name ; expr p; offset off; 
+	  [ Var fi.jc_field_info_final_name ; expr p; offset off; 
 	    Cte (Prim_int (Num.string_of_num lb)); 
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
 	make_guarded_app IndexBounds loc "lsafe_lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_name; expr p; offset off; v ]
+	    Var fi.jc_field_info_final_name; expr p; offset off; v ]
     | p,off,Some lb,None ->
 	make_guarded_app IndexBounds loc "lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_name; expr p; offset off;
+	    Var fi.jc_field_info_final_name; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
 	make_guarded_app IndexBounds loc "rsafe_rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_name; expr p; offset off; v ]
+	    Var fi.jc_field_info_final_name; expr p; offset off; v ]
     | p,off,None,Some rb ->
 	make_guarded_app IndexBounds loc "rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_name; expr p; offset off;
+	    Var fi.jc_field_info_final_name; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,off,None,None ->
 	make_guarded_app PointerDeref loc "upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_name ; expr p; offset off; v ]
+	    Var fi.jc_field_info_final_name ; expr p; offset off; v ]
   else
     make_app "safe_upd_"
-      [ Var fi.jc_field_info_name ; expr e1 ; v ]
+      [ Var fi.jc_field_info_final_name ; expr e1 ; v ]
     
 and offset ~threats = function
   | Int_offset s -> Cte (Prim_int s)
@@ -772,45 +772,45 @@ and expr ~threats e : expr =
 	  match destruct_pointer e with
 	  | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
 	      make_app "safe_acc_" 
-		[ Var fi.jc_field_info_name ; expr e ]
+		[ Var fi.jc_field_info_final_name ; expr e ]
 	  | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
 	      make_guarded_app IndexBounds loc "lsafe_bound_acc_" 
-		[ Var fi.jc_field_info_name ; expr p; offset off;
+		[ Var fi.jc_field_info_final_name ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
 	      make_guarded_app IndexBounds loc "rsafe_bound_acc_" 
-		[ Var fi.jc_field_info_name ; expr p; offset off;
+		[ Var fi.jc_field_info_final_name ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,off,Some lb,Some rb ->
 	      make_guarded_app IndexBounds loc "bound_acc_" 
-		[ Var fi.jc_field_info_name ; expr p; offset off; 
+		[ Var fi.jc_field_info_final_name ; expr p; offset off; 
 		  Cte (Prim_int (Num.string_of_num lb)); 
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
 	      make_guarded_app IndexBounds loc "lsafe_lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_name; expr p; offset off ]
+		  Var fi.jc_field_info_final_name; expr p; offset off ]
 	  | p,off,Some lb,None ->
 	      make_guarded_app IndexBounds loc "lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_name; expr p; offset off;
+		  Var fi.jc_field_info_final_name; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
 	      make_guarded_app IndexBounds loc "rsafe_rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_name; expr p; offset off ]
+		  Var fi.jc_field_info_final_name; expr p; offset off ]
 	  | p,off,None,Some rb ->
 	      make_guarded_app IndexBounds loc "rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_name; expr p; offset off;
+		  Var fi.jc_field_info_final_name; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,off,None,None ->
 	      make_guarded_app PointerDeref loc "acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_name ; expr p; offset off ]
+		  Var fi.jc_field_info_final_name ; expr p; offset off ]
 	else
 	  make_app "safe_acc_"
-	    [ Var fi.jc_field_info_name ; 
+	    [ Var fi.jc_field_info_final_name ; 
 	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (e, st) ->
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
@@ -1037,10 +1037,10 @@ let tr_struct st acc =
   (* declarations of field memories *)
   let acc = 
     List.fold_left
-      (fun acc (_,fi) ->
+      (fun acc fi ->
 	 let mem = memory_field fi in
 	 Param(false,
-	       fi.jc_field_info_name,
+	       fi.jc_field_info_final_name,
 	       Ref_type(Base_type mem))::acc)
       acc st.jc_struct_info_fields
   in 
@@ -1078,7 +1078,7 @@ let tr_struct st acc =
   let a =
     FieldSet.fold
       (fun fi a ->
-	 LForall(fi.jc_field_info_name, memory_field fi,
+	 LForall(fi.jc_field_info_final_name, memory_field fi,
 		 a))
       params a
   in 
@@ -1160,7 +1160,7 @@ locations
 let rec pset before loc = 
   match loc with
     | JCLSderef(ls,fi) ->
-	let m = lvar (Some before) fi.jc_field_info_name in
+	let m = lvar (Some before) fi.jc_field_info_final_name in
 	LApp("pset_deref", [m;pset before ls])
     | JCLSvar vi -> 
 	let m = lvar_info (Some before) vi in
@@ -1239,7 +1239,7 @@ let assigns before ef locs =
   in
   FieldMap.fold
     (fun fi p acc -> 
-       let v = fi.jc_field_info_name in
+       let v = fi.jc_field_info_final_name in
        let alloc = fi.jc_field_info_root ^ "_alloc_table" in
        make_and acc
 	 (LPred("not_assigns",
@@ -1394,7 +1394,7 @@ let tr_fun f spec body acc =
   in
   let reads =
     FieldSet.fold
-      (fun f acc -> f.jc_field_info_name::acc)
+      (fun f acc -> f.jc_field_info_final_name::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_memories
       []
   in
@@ -1430,7 +1430,7 @@ let tr_fun f spec body acc =
   in
   let writes =
     FieldSet.fold
-      (fun f acc -> f.jc_field_info_name::acc)
+      (fun f acc -> f.jc_field_info_final_name::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
   in

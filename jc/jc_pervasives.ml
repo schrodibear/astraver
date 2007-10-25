@@ -143,7 +143,7 @@ let var ?(static=false) ?(formal=false) ty id =
   let vi = {
     jc_var_info_tag = !var_tag_counter;
     jc_var_info_name = id;
-    jc_var_info_final_name = id;
+    jc_var_info_final_name = Jc_envset.get_unique_name id;
     jc_var_info_type = ty;
     jc_var_info_formal = formal;
     jc_var_info_assigned = false;

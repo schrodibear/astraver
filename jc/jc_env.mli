@@ -46,15 +46,16 @@ and struct_info =
               jc_struct_info_name : string;
       mutable jc_struct_info_parent : struct_info option;
       mutable jc_struct_info_root : string;
-      mutable jc_struct_info_fields : (string * field_info) list;
+      mutable jc_struct_info_fields : field_info list;
     }
 
 and field_info =
     {
       jc_field_info_tag : int;
       jc_field_info_name : string;
+      jc_field_info_final_name : string;
       jc_field_info_type : jc_type;
-      jc_field_info_struct: string; (* The structure in which the field is defined *)
+      jc_field_info_struct: struct_info; (* The structure in which the field is defined *)
       jc_field_info_root : string; (* The root of the structure in which the field is defined *)
       jc_field_info_rep : bool; (* "rep" flag *)
     }

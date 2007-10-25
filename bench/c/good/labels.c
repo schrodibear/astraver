@@ -51,3 +51,20 @@ int f3(int x) {
 }
 
   
+int f4() {
+  int x;
+  //@ label L
+  /*@ invariant x <= \at(x,L)
+    @ variant x
+    @*/
+  while(x > 0) x--;
+}
+
+int f5() {
+  int x;
+ L:
+  /* TODO @ invariant x <= \at(x,L)
+    @ variant x
+    @*/
+  while(x > 0) x--;
+}

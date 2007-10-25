@@ -63,26 +63,19 @@ let variables_env = Hashtbl.create 97
 
 let field_tag_counter = ref 0
 
-let create_mutable_field id =
-(*  incr field_tag_counter;
-  let fi = {
-    jc_field_info_tag = !field_tag_counter;
-    jc_field_info_name = "mutable_"^id;
-    jc_field_info_type = boolean_type;
-    jc_field_info_root = id;
-    jc_field_info_struct = id;
-  } in
-  Hashtbl.add mutable_fields_table id fi;*)
+let create_mutable_field st =
   incr field_tag_counter;
+  let name = "committed_"^st.jc_struct_info_name in
   let fi = {
     jc_field_info_tag = !field_tag_counter;
-    jc_field_info_name = "committed_"^id;
+    jc_field_info_name = name;
+    jc_field_info_final_name = Jc_envset.get_unique_name name;
     jc_field_info_type = boolean_type;
-    jc_field_info_root = id;
-    jc_field_info_struct = id;
+    jc_field_info_root = st.jc_struct_info_name;
+    jc_field_info_struct = st;
     jc_field_info_rep = false;
   } in
-  Hashtbl.add committed_fields_table id fi
+  Hashtbl.add committed_fields_table st.jc_struct_info_name fi
 
 let find_struct_info loc id =
   try
@@ -153,6 +146,14 @@ let is_pointer_type t =
     | _ -> false
 
 
+let rec list_assoc_name f id l =
+  match l with
+    | [] -> raise Not_found
+    | fi::r -> 
+	if (f fi) = id then fi
+	else list_assoc_name f id r
+
+
 let rec find_field_struct loc st allow_mutable = function
   | ("mutable" | "committed") as x ->
       if allow_mutable && !Jc_common_options.inv_sem = InvOwnership then
@@ -164,7 +165,7 @@ let rec find_field_struct loc st allow_mutable = function
       else typing_error loc "field %s cannot be used here" x
   | f ->
       try
-	List.assoc f st.jc_struct_info_fields
+	list_assoc_name (fun f -> f.jc_field_info_name) f st.jc_struct_info_fields
       with Not_found ->
 	match st.jc_struct_info_parent with
 	  | None -> 
@@ -1908,15 +1909,17 @@ let assertion_true =
 let field st root (rep, t, id) =
   let ty = type_type t in
   incr field_tag_counter;
+  let name = st.jc_struct_info_name ^ "_" ^ id in
   let fi = {
     jc_field_info_tag = !field_tag_counter;
-    jc_field_info_name = id;
+    jc_field_info_name = id ;
+    jc_field_info_final_name = Jc_envset.get_unique_name name;
     jc_field_info_type = ty;
     jc_field_info_root = root;
     jc_field_info_struct = st;
     jc_field_info_rep = rep or (not (is_pointer_type ty));
   }
-  in (id,fi)
+  in fi
 
 
 let axioms_table = Hashtbl.create 17
@@ -2066,11 +2069,12 @@ let rec decl d =
 *)
     | JCPDstructtype(id,parent,fields,inv) ->
 	(* mutable field *)
-	if parent = None && !Jc_common_options.inv_sem = InvOwnership then create_mutable_field id;
 	(* adding structure name in global environment before typing 
 	   the fields, because of possible recursive definition *)
 	let root,struct_info = add_typedecl d (id,parent) in
-	let env = List.map (field struct_info.jc_struct_info_name root) fields in
+	if parent = None && !Jc_common_options.inv_sem = InvOwnership 
+	then create_mutable_field struct_info;
+	let env = List.map (field struct_info root) fields in
 	struct_info.jc_struct_info_fields <- env;
 	(* declare invariants as logical functions *)
 	let invariants =
@@ -2100,7 +2104,7 @@ let rec decl d =
 	List.iter (fun d -> match d.jc_pdecl_node with
 		     | JCPDstructtype(id,parent,fields,_) ->
 			 let root,struct_info = add_typedecl d (id,parent) in
-			 let env = List.map (field struct_info.jc_struct_info_name root) fields in
+			 let env = List.map (field struct_info root) fields in
 			 struct_info.jc_struct_info_fields <- env;
 			 Hashtbl.replace structs_table id (struct_info,[])
 		     | _ -> assert false

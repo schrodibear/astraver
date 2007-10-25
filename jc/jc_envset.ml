@@ -22,14 +22,53 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.7 2007-03-02 16:40:56 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.8 2007-10-25 12:09:35 marche Exp $ *)
 
 open Jc_env
-
 
 module StringSet = Set.Make(String)
 
 module StringMap = Map.Make(String)
+
+(* used names (in order to rename identifiers when necessary) *)
+let used_names = Hashtbl.create 97
+
+let mark_as_used x = 
+  Hashtbl.add used_names x ()
+
+let () = 
+  List.iter mark_as_used 
+    [ (* Why keywords *)
+      "absurd"; "and"; "array"; "as"; "assert"; "axiom"; "begin";
+      "bool"; "do"; "done"; "else"; "end"; "exception"; "exists";
+      "external"; "false"; "for"; "forall"; "fun"; "function"; "goal";
+      "if"; "in"; "int"; "invariant"; "label"; "let"; "logic"; "not";
+      "of"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
+      "reads"; "real"; "rec"; "ref"; "returns"; "then"; "true"; "try";
+      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes" ;
+      (* jessie generated names *)
+      (* "global" ; "alloc"  *)
+    ]
+
+let is_used_name n = Hashtbl.mem used_names n
+
+let use_name ?local_names n = 
+  if is_used_name n then raise Exit; 
+  begin match local_names with 
+    | Some h -> if StringSet.mem n h then raise Exit 
+    | None -> () 
+  end;
+  n
+
+let rec next_name ?local_names n i = 
+  let n_i = n ^ "_" ^ string_of_int i in
+  try use_name ?local_names n_i 
+  with Exit -> next_name ?local_names n (succ i)
+
+let get_unique_name ?local_names n = 
+  try use_name ?local_names n 
+  with Exit -> next_name ?local_names n 0
+
 
 module VarSet = 
   Set.Make(struct type t = var_info

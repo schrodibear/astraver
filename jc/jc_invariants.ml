@@ -43,7 +43,7 @@ let simple_logic_type s =
 let logic_params li l =
   let l =
     FieldSet.fold
-      (fun fi acc -> (LVar fi.jc_field_info_name)::acc)
+      (fun fi acc -> (LVar fi.jc_field_info_final_name)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       l	    
   in
@@ -106,7 +106,7 @@ let tag_table_type root = {
 let logic_info_reads acc li =
   let acc =
     FieldSet.fold
-      (fun fi acc -> StringSet.add fi.jc_field_info_name acc)
+      (fun fi acc -> StringSet.add fi.jc_field_info_final_name acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
@@ -224,7 +224,7 @@ let make_select f this =
   LApp("select", [ f; this ])
 
 let make_select_fi fi =
-  make_select (LVar fi.jc_field_info_name)
+  make_select (LVar fi.jc_field_info_final_name)
 
 let make_select_committed root =
   make_select (LVar (committed_name root))
@@ -324,7 +324,7 @@ let rec term_memories aux t =
   fold_term 
     (fun aux t -> match t.jc_term_node with
     | JCTderef(t, fi) ->
-	let m = fi.jc_field_info_name in
+	let m = fi.jc_field_info_final_name in
 	StringSet.add m aux
     | _ -> aux
     ) aux t
@@ -358,7 +358,7 @@ let rec all_structures st acc =
   if StringSet.mem st.jc_struct_info_name acc then acc else
   begin
     List.fold_left
-      (fun acc (_, fi) ->
+      (fun acc fi ->
 	 match fi.jc_field_info_type with
 	   | JCTpointer(st, _, _) -> all_structures st acc
 	   | _ -> acc)
@@ -379,7 +379,7 @@ let invariant_params acc li =
   let acc =
     FieldSet.fold
       (fun fi acc -> 
-	 (fi.jc_field_info_name, memory_field fi)::acc)
+	 (fi.jc_field_info_final_name, memory_field fi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
@@ -453,7 +453,7 @@ let hierarchies () =
 (* Returns every rep fields of a structure *)
 let rep_fields st =
   List.filter
-    (fun (_, fi) -> fi.jc_field_info_rep)
+    (fun fi -> fi.jc_field_info_rep)
     st.jc_struct_info_fields
 
 (* Returns every rep fields of a hierarchy *)
@@ -496,7 +496,7 @@ let field_assocs fi =
   let mems = List.fold_left
     (fun aux (_, a) ->
        let amems = assertion_memories StringSet.empty a in
-       if StringSet.mem fi.jc_field_info_name amems then
+       if StringSet.mem fi.jc_field_info_final_name amems then
          StringSet.union amems aux
        else
 	 aux
@@ -562,7 +562,7 @@ condition on mutable. *)
 let assert_mutable e fi =
   if fi.jc_field_info_rep then
     begin
-      let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
+      let st = fi.jc_field_info_struct in
       let mutable_name = mutable_name st.jc_struct_info_root in
       (*let committed_name = committed_name st.jc_struct_info_root in*)
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
@@ -654,7 +654,7 @@ let field_invariants fi =
     List.fold_left
       (fun aux ((_, (_, a)) as x) ->
 	 let amems = assertion_memories StringSet.empty a in
-	 if StringSet.mem fi.jc_field_info_name amems then
+	 if StringSet.mem fi.jc_field_info_final_name amems then
            x::aux
 	 else
 	 aux)
@@ -700,9 +700,10 @@ let not_mutable_implies_fields_committed this st =
 
   (* fields committed *)
   let fields_pc = List.fold_left
-    (fun acc (n, fi) ->
+    (fun acc fi ->
        match fi.jc_field_info_type with
 	 | JCTpointer(fi_st, min, max) ->
+	     let n = fi.jc_field_info_final_name in
 	     let index = "jc_index" in
 	     let fi_root = fi_st.jc_struct_info_root in
 	     let committed_name = committed_name fi_root in
@@ -798,8 +799,9 @@ let owner_unicity this root =
 
   (* big "or" on all rep fields *)
   let eq_and_com_list = List.map
-    (fun (name, fi) ->
+    (fun fi ->
        try
+	 let name = fi.jc_field_info_final_name in
 	 let fi_root =
 	   (type_structure fi.jc_field_info_type).jc_struct_info_root
 	 in
@@ -848,8 +850,8 @@ let owner_unicity this root =
 
   (* params *)
   let params = List.map
-    (fun (name, fi) ->
-       [ name, memory_field fi;
+    (fun fi ->
+       [ fi.jc_field_info_final_name, memory_field fi;
 	 committed_name fi.jc_field_info_root,
 	 committed_memory_type fi.jc_field_info_root;
 	 alloc_table_name fi.jc_field_info_root,
@@ -995,7 +997,7 @@ let assume_all_invariants params =
 (* return fields that are both pointers and rep fields *)
 let components st =
   List.fold_left
-    (fun acc (_, fi) ->
+    (fun acc fi ->
        if fi.jc_field_info_rep then
 	 match fi.jc_field_info_type with
 	   | JCTpointer(si, _, _) -> (fi, si)::acc
@@ -1090,7 +1092,7 @@ let make_components_postcond this st reads writes committed =
     List.fold_left
       (fun acc (_, fields) ->
 	 List.fold_left
-	   (fun acc fi -> StringSet.add fi.jc_field_info_name acc)
+	   (fun acc fi -> StringSet.add fi.jc_field_info_final_name acc)
 	   acc
 	   fields)
       reads
@@ -1114,7 +1116,7 @@ let make_components_postcond this st reads writes committed =
 	      [ LVar committed_name;
 		List.fold_left
 		  (fun acc fi ->
-		     let this_field = LApp("select", [LVar fi.jc_field_info_name; this]) in
+		     let this_field = LApp("select", [LVar fi.jc_field_info_final_name; this]) in
 		     LApp("store", [acc; this_field; committed_value]))
 		  (LVarAtLabel(committed_name, ""))
 		  fields ])) *)
@@ -1127,7 +1129,7 @@ let make_components_precond this st reads =
   let comps = components st in
   let reads =
     List.fold_left
-      (fun acc (fi, _) -> StringSet.add fi.jc_field_info_name acc)
+      (fun acc (fi, _) -> StringSet.add fi.jc_field_info_final_name acc)
       reads
       comps
   in
@@ -1138,7 +1140,7 @@ let make_components_precond this st reads =
        let committed_name = committed_name si.jc_struct_info_name in
        (* x.f *)
        let base_field =
-	 LApp("select", [LVar fi.jc_field_info_name; this])
+	 LApp("select", [LVar fi.jc_field_info_final_name; this])
        in
        (* x.f+i *)
        let this_field =
@@ -1328,8 +1330,8 @@ let struct_depends =
 let valid_inv_params st =
   let deps = struct_depends st in
   let memories = List.fold_left (fun acc st ->
-    List.fold_left (fun acc (name, fi) ->
-      (name, memory_field fi)::acc) acc st.jc_struct_info_fields)
+    List.fold_left (fun acc (_, fi) ->
+      (fi.jc_field_info_final_name, memory_field fi)::acc) acc st.jc_struct_info_fields)
     [] deps in
   let params = List.fold_left invariants_params memories deps in
   let params = List.sort (fun (name1, _) (name2, _) ->
@@ -1361,13 +1363,13 @@ let tr_valid_inv st acc =
   let this_ty =
     { logic_type_name = "pointer";
       logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
-  let fields_valid_inv = List.map (fun (name, fi) ->
+  let fields_valid_inv = List.map (fun (_, fi) ->
     match fi.jc_field_info_type with
     | JCTpointer(st, _, _) ->
         let params = valid_inv_params st in
         let params_var = List.map (fun (name, _) -> LVar name) params in
         LPred(valid_inv_name st,
-          LApp("select", [LVar name; this_var])::params_var)
+          LApp("select", [LVar fi.jc_field_info_final_name; this_var])::params_var)
     | JCTnull -> assert false
     | JCTnative _
     | JCTlogic _

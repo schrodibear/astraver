@@ -249,10 +249,11 @@ let create_field loc fi =
   in
   let nfi =
     { jc_field_info_name = fi.java_field_info_name;
+      jc_field_info_final_name = fi.java_field_info_name;
       jc_field_info_tag  = fi.java_field_info_tag;
       jc_field_info_type = ty;
       jc_field_info_root = ci.jc_struct_info_root;
-      jc_field_info_struct = ci.jc_struct_info_root;
+      jc_field_info_struct = ci;
       jc_field_info_rep = false;
       (*
 	jc_field_info_final_name = vi.java_field_info_name;
@@ -474,7 +475,7 @@ let rec term t =
 		      jc_term_node = JCTshift(t1', term t2)
 		    }
 		  in
-		  JCTderef(shift,snd (List.hd st.jc_struct_info_fields))
+		  JCTderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
       | JTarray_range _ -> assert false
@@ -590,23 +591,25 @@ let array_types decls =
   Java_options.lprintf "(**********************)@.";
   Hashtbl.fold
     (fun t (s,f) (acc,decls) ->
-       let fi =
-	 { jc_field_info_name = f;
-	   jc_field_info_tag = 0 (* TODO *);
-	   jc_field_info_type = tr_type Loc.dummy_position t;
-	   jc_field_info_root = s;
-	   jc_field_info_struct = s;
-	   jc_field_info_rep = false;
-	 }
-       in
        let st =
 	 {
 	   jc_struct_info_name = s;
 	   jc_struct_info_parent = None;
 	   jc_struct_info_root = s;
-	   jc_struct_info_fields = [(f, fi)];
+	   jc_struct_info_fields = [];
 	 }
        in
+       let fi =
+	 { jc_field_info_name = f;
+	   jc_field_info_final_name = f;
+	   jc_field_info_tag = 0 (* TODO *);
+	   jc_field_info_type = tr_type Loc.dummy_position t;
+	   jc_field_info_root = s;
+	   jc_field_info_struct = st;
+	   jc_field_info_rep = false;
+	 }
+       in
+       st.jc_struct_info_fields <- [fi];
        Java_options.lprintf "%s@." st.jc_struct_info_name;
        Hashtbl.add array_struct_table t st;
        let fi = create_java_array_length_fun st in
@@ -646,7 +649,7 @@ let array_types decls =
 	     }
        in
        (JCstruct_def(st.jc_struct_info_name, None,
-		     List.map snd st.jc_struct_info_fields) :: acc,
+		     st.jc_struct_info_fields) :: acc,
 	JCfun_def(fi.jc_fun_info_return_type,
 		  fi.jc_fun_info_name,[vi],spec,None) :: decls))
     Java_analysis.array_struct_table
@@ -678,7 +681,7 @@ let rec location_set t =
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
-		  JCLSderef(shift,snd (List.hd st.jc_struct_info_fields))
+		  JCLSderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
       | JTarray_range(t1,t2,t3) -> 
@@ -690,7 +693,7 @@ let rec location_set t =
 		  let t2' = term t2 in
 		  let t3' = term t3 in
 		  let shift = JCLSrange(t1', Some t2', Some t3') in
-		  JCLSderef(shift,snd (List.hd st.jc_struct_info_fields))
+		  JCLSderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
@@ -716,7 +719,7 @@ let location t =
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
-		  JCLderef(shift,snd (List.hd st.jc_struct_info_fields))
+		  JCLderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
       | JTarray_range(t1,t2,t3) -> 
@@ -728,7 +731,7 @@ let location t =
 		  let t2' = term t2 in
 		  let t3' = term t3 in
 		  let shift = JCLSrange(t1', Some t2', Some t3') in
-		  JCLderef(shift,snd (List.hd st.jc_struct_info_fields))
+		  JCLderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
@@ -823,7 +826,7 @@ let rec expr e =
 		    jc_texpr_node = JCTEshift(e1', expr e2)
 		  }
 		  in
-		  let fi = snd (List.hd st.jc_struct_info_fields) in
+		  let fi = (List.hd st.jc_struct_info_fields) in
 		  JCTEincr_heap (incr_op op, shift, fi)
 	      | _ -> assert false
 	  end
@@ -863,7 +866,7 @@ let rec expr e =
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
 		  in
-		  JCTEderef(shift,snd (List.hd st.jc_struct_info_fields))
+		  JCTEderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
       | JEassign_local_var(vi,e) ->
@@ -891,7 +894,7 @@ let rec expr e =
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
 		  in
-		  let fi = snd (List.hd st.jc_struct_info_fields) in
+		  let fi = (List.hd st.jc_struct_info_fields) in
 		  let e3' = expr e3 in
 		  JCTEassign_heap(shift,fi,e3')
 	      | _ -> assert false
@@ -909,7 +912,7 @@ let rec expr e =
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
 		  in
-		  let fi = snd (List.hd st.jc_struct_info_fields) in
+		  let fi = (List.hd st.jc_struct_info_fields) in
 		  let e3' = expr e3 in
 		  JCTEassign_heap_op(shift,fi,bin_op op,e3')
 	      | _ -> assert false

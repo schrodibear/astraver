@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.52 2007-10-01 14:12:14 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.53 2007-10-25 12:09:35 marche Exp $ *)
 
 
 open Jc_env
@@ -259,7 +259,7 @@ let rec statement ef s =
 	in
 	(* Fields *)
 	let ef = List.fold_left
-	  (fun ef (_, fi) ->
+	  (fun ef fi ->
 	     match fi.jc_field_info_type with
 	       | JCTpointer(st, _, _) ->
 	           (* Assert fields fully mutable => need mutable and tag_table (of field) as reads *)
@@ -285,7 +285,7 @@ let rec statement ef s =
 	let ef = add_mutable_writes ef st.jc_struct_info_root in
 	(* Fields *)
 	let ef = List.fold_left
-	  (fun ef (_, fi) ->
+	  (fun ef fi ->
 	     match fi.jc_field_info_type with
 	       | JCTpointer(st, _, _) ->
 	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
