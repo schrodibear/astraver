@@ -181,11 +181,21 @@ let get_class ci =
     jc_struct_info_fields = [];
   }
 
+(*
 let get_interface ii =
   {
     jc_struct_info_name = ii.interface_info_name;
     jc_struct_info_parent = None;
     jc_struct_info_root = ii.interface_info_name;
+    jc_struct_info_fields = [];
+  }
+*)
+
+let st_interface = 
+  {
+    jc_struct_info_name = "interface";
+    jc_struct_info_parent = None;
+    jc_struct_info_root = "interface";
     jc_struct_info_fields = [];
   }
 
@@ -213,9 +223,12 @@ and tr_type loc t =
 	JCTpointer(st,Some num_zero,
 	           if non_null then Some num_zero else None)
     | JTYinterface ii ->
+	JCTpointer(st_interface, Some num_zero,None)
+(*
 	let st = get_interface ii in
 	JCTpointer(st,Some num_zero,
 	           (* if non_null then Some num_zero else *) None)
+*)
 	
     | JTYarray t ->
 	let st = get_array_struct loc t in
@@ -595,7 +608,7 @@ let array_types decls =
 	 {
 	   jc_struct_info_name = s;
 	   jc_struct_info_parent = None;
-	   jc_struct_info_root = s;
+	   jc_struct_info_root = "Object";
 	   jc_struct_info_fields = [];
 	 }
        in
@@ -648,12 +661,12 @@ let array_types decls =
 		jc_behavior_throws = None } ] 
 	     }
        in
-       (JCstruct_def(st.jc_struct_info_name, None,
+       (JCstruct_def(st.jc_struct_info_name, Some "Object",
 		     st.jc_struct_info_fields) :: acc,
 	JCfun_def(fi.jc_fun_info_return_type,
 		  fi.jc_fun_info_name,[vi],spec,None) :: decls))
     Java_analysis.array_struct_table
-    ([],decls)
+    ([JCstruct_def("interface", None, [])],decls)
       
 
 (*****************
@@ -947,9 +960,17 @@ let rec expr e =
 		  let st = get_class ci in
 		  JCTEcast(expr e1,st)
 	      | JTYinterface ii -> 
+		  begin
+		    match e1.java_expr_type with
+		      | JTYinterface _ ->
+			  (expr e1).jc_texpr_node
+		      | _ -> assert false (* TODO *)
+(*
 		  eprintf "Warning: cast to interface '%s' ignored.@."
 		    ii.interface_info_name;
 		    (expr e1).jc_texpr_node
+*)
+		  end
 	      | JTYarray ty ->
 		  let st = get_array_struct e.java_expr_loc ty in
 		  JCTEcast(expr e1,st)		  

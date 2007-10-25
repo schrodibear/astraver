@@ -216,9 +216,13 @@ let unary_op t op =
     | Tinteger, UPminus -> Uminus_int
     | Treal, UPplus -> Uplus_real
     | Treal, UPminus -> Uminus_real
+    | Tinteger, UPbw_not -> Ubw_not
+    | _, UPbw_not -> assert false
     | Tboolean, UPnot -> Unot
+    | _, UPnot -> assert false
     | Tunit,_ -> assert false
-    | _ -> assert false
+    | Tboolean,_ -> assert false
+
 
 let bin_op t op =
   match t,op with
@@ -923,18 +927,11 @@ let make_unary_op loc (op : Jc_ast.punary_op) e2 =
 		typing_error loc "boolean expected"
 	in JCTnative t,JCTEunary(unary_op t op, e2)
     | UPplus | UPminus | UPbw_not -> 
-	let t=
-	  match t2 with
-	    | JCTnative t2 ->
-		begin
-		  match t2 with
-		    | Tinteger -> Tinteger
-		    | Treal -> Treal
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ ->
-		typing_error loc "numeric type expected"
-	in JCTnative t,JCTEunary(unary_op t op, e2)
+	if is_numeric t2 then
+	  let t = lub_numeric_types t2 t2 in
+	  JCTnative t,JCTEunary(unary_op t op, e2)
+	else
+	  typing_error loc "numeric type expected"
 
 let coerce t1 t2 e =
   let tn1,e_int =
