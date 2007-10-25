@@ -669,8 +669,12 @@ let rec make_upd loc ~threats fi e1 v =
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
-    | p,off,None,None ->
+    | p,Int_offset s,None,None when int_of_string s = 0 ->
 	make_guarded_app PointerDeref loc "upd_" 
+	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
+	    Var fi.jc_field_info_final_name ; expr p; v ]
+    | p,off,None,None ->
+	make_guarded_app PointerDeref loc "offset_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name ; expr p; offset off; v ]
   else
@@ -804,8 +808,12 @@ and expr ~threats e : expr =
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
-	  | p,off,None,None ->
+	  | p,Int_offset s,None,None when int_of_string s = 0 ->
 	      make_guarded_app PointerDeref loc "acc_" 
+		[ Var (fi.jc_field_info_root ^ "_alloc_table");
+		  Var fi.jc_field_info_final_name ; expr p ]
+	  | p,off,None,None ->
+	      make_guarded_app PointerDeref loc "offset_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name ; expr p; offset off ]
 	else

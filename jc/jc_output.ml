@@ -147,7 +147,8 @@ let rec assertion fmt a =
     | JCAtrue -> fprintf fmt "true"
     | JCAif (_, _, _)-> assert false (* TODO *)
     | JCAbool_term t -> term fmt t
-    | JCAinstanceof (_, _)-> assert false (* TODO *)
+    | JCAinstanceof (t, st) ->
+	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAquantifier (q,vi, a)-> 
 	fprintf fmt "@[<v 3>(\\%a %a %s;@ %a)@]"

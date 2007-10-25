@@ -80,6 +80,14 @@ access and update side-effect functions
 
 (* normal access *)
 parameter acc_ : 
+  alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer -> 
+  { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
+  'v 
+  reads alloc,m
+  { result = select(m,p) }
+
+(* offset access *)
+parameter offset_acc_ : 
   alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> 
   p:'t pointer -> off:int ->
   { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
@@ -157,6 +165,16 @@ parameter rsafe_rbound_acc_ :
 
 (* normal update *)
 parameter upd_ : 
+  alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+  { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
+  (* and select(mutable,p) = true *)
+  unit
+  reads alloc,m (* ,mutable *)
+  writes m
+  { m = store(m@,p,v) }
+
+(* offset update *)
+parameter offset_upd_ : 
   alloc:'t alloc_table ref -> m : ('t,'v) memory ref -> p:'t pointer ->
    off:int -> v:'v ->
   { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
