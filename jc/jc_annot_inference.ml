@@ -2217,9 +2217,9 @@ end = struct
     let t1 = deep_raw_term t in
     let s = term_name t1 in
     begin try 
-      let t2 = Hashtbl.find variable_table s in
+      let t2 = Hashtbl.find variable_table s in ()
 (*       printf "t1 = %a t2 = %a@." Jc_output.term t1 Jc_output.term t2; *)
-      assert (t1 = t2)
+(*       assert (t1 = t2) *)
     with Not_found ->
       Hashtbl.add variable_table s t1;
       Hashtbl.add term_table s t
@@ -2230,8 +2230,8 @@ end = struct
     let t1 = deep_raw_term t in
     let s = "__jc_offset_min_" ^ (term_name t1) in
     begin try 
-      let t2 = Hashtbl.find offset_min_variable_table s in
-      assert (t1 = t2)
+      let t2 = Hashtbl.find offset_min_variable_table s in ()
+(*       assert (t1 = t2) *)
     with Not_found ->
       Hashtbl.add offset_min_variable_table s t1;
       let tmin = type_term (JCToffset(Offset_min,t,st)) integer_type in
@@ -2243,8 +2243,8 @@ end = struct
     let t1 = deep_raw_term t in
     let s = "__jc_offset_max_" ^ (term_name t1) in
     begin try 
-      let t2 = Hashtbl.find offset_max_variable_table s in
-      assert (t1 = t2)
+      let t2 = Hashtbl.find offset_max_variable_table s in ()
+(*       assert (t1 = t2) *)
     with Not_found ->
       Hashtbl.add offset_max_variable_table s t1;
       let tmax = type_term (JCToffset(Offset_max,t,st)) integer_type in
@@ -2256,8 +2256,8 @@ end = struct
     let t1 = deep_raw_term t in
     let s = "__jc_strlen_" ^ (term_name t1) in
     begin try 
-      let t2 = Hashtbl.find strlen_variable_table s in
-      assert (t1 = t2)
+      let t2 = Hashtbl.find strlen_variable_table s in ()
+(*       assert (t1 = t2) *)
     with Not_found ->
       Hashtbl.add strlen_variable_table s t1;
       let tmax = type_term (JCTapp(strlen_f (),[t])) integer_type in
@@ -2298,6 +2298,7 @@ let rec free_variables t =
     ) VarSet.empty t
 
 let rec atp_of_term t = 
+  if debug then printf "[atp_of_term] %a@." Jc_output.term t;
   match t.jc_term_node with
   | JCTconst c ->
       begin match c with
@@ -2349,6 +2350,7 @@ let rec term_of_atp tm =
   raw_term tnode
 
 let rec atp_of_asrt ~(neg:bool) a = 
+  if debug then printf "[atp_of_asrt] %a@." Jc_output.assertion a;
   try begin match a.jc_assertion_node with
   | JCAtrue -> 
       Atp.True
