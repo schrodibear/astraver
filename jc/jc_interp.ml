@@ -252,7 +252,7 @@ let term_coerce loc tdest tsrc e =
   | JCTnative t, JCTnative u when t=u -> e
   | JCTlogic t, JCTlogic u when t=u -> e
   | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
-  | JCTnative Tinteger, JCTnative Tunit -> e (* hack for ai - Nicolas *)
+(*  | JCTnative Tinteger, JCTnative Tunit -> e (* hack for ai - Nicolas *) *)
   | JCTnative Tinteger, JCTenum ri ->
       LApp(logic_int_of_enum ri,[e])
   | JCTenum ri, JCTnative Tinteger ->
@@ -321,6 +321,8 @@ let lvar ?(assigned=true) label v =
   else LVar v
 
 let lvar_info label v = 
+  if v.jc_var_info_name = "\\result" then 
+    v.jc_var_info_final_name <- "result";
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
 let logic_params li l =

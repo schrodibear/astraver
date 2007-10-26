@@ -78,8 +78,8 @@ let minus_one = Num.num_of_int (-1)
 let is_relation_binary_op = function
   | Blt_int | Blt_real | Bgt_int | Bgt_real
   | Ble_int | Ble_real | Bge_int | Bge_real
-  | Beq_int | Beq_real | Beq_pointer
-  | Bneq_int | Bneq_real | Bneq_pointer -> true
+  | Beq_int | Beq_real | Beq_pointer | Beq_bool
+  | Bneq_int | Bneq_real | Bneq_pointer | Bneq_bool -> true
   | _ -> false
 
 let is_logical_binary_op = function
@@ -108,6 +108,37 @@ let is_bitwise_unary_op = function
   | Ubw_not -> true
   | _ -> false
 
+
+let rec is_constant_term t =
+  match t.jc_term_node with
+    | JCTrange (None, None) (* CORRECT ? *)
+    | JCTconst _ -> true
+    | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
+    | JCTapp _ | JCTold _ | JCToffset _
+    | JCTinstanceof _ | JCTcast _ | JCTif _ -> false
+    | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
+	is_constant_term t1 && is_constant_term t2
+    | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
+	is_constant_term t
+
+let rec is_constant_assertion a =
+  match a.jc_assertion_node with
+    | JCAtrue | JCAfalse -> true
+    | JCArelation (t1, _, t2) -> 
+	is_constant_term t1 && is_constant_term t2
+    | JCAand al | JCAor al ->
+	List.for_all is_constant_assertion al
+    | JCAimplies (a1, a2) | JCAiff (a1, a2) ->
+	is_constant_assertion a1 && is_constant_assertion a2
+    | JCAnot a | JCAquantifier (_, _, a) | JCAold a 
+	-> is_constant_assertion a
+    | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAtagequality _
+	-> false
+    | JCAbool_term t -> is_constant_term t
+    | JCAif (t, a1, a2) ->
+	is_constant_term t &&
+	  is_constant_assertion a1 &&
+	  is_constant_assertion a2
 
 (* native types *)
 

@@ -169,19 +169,58 @@ let param vi =
     | JTYarray ty -> intro_array_struct ty
     | _ -> ()
 
+let string_of_parameters vil =
+  (List.fold_right
+     (fun vi acc -> "_" ^ name_type vi.java_var_info_type ^ acc) vil "")
+
+let disambiguates_method_names () =
+  let methods_list =
+    Hashtbl.fold (fun _ mt acc -> mt :: acc) Java_typing.methods_table []
+  in
+  let methods_list =
+    List.sort 
+      (fun mt1 mt2 -> 
+	 let mi1 = mt1.Java_typing.mt_method_info in
+	 let mi2 = mt2.Java_typing.mt_method_info in
+	   String.compare mi1.method_info_trans_name mi2.method_info_trans_name)
+      methods_list 
+  in
+  let rec disambiguates methods_list =
+    match methods_list with
+      | [] | [_] -> ()
+      | mt1::(mt2::_ as tl) ->
+	  let mi1 = mt1.Java_typing.mt_method_info in
+	  let mi2 = mt2.Java_typing.mt_method_info in
+	    if mi1.method_info_trans_name = mi2.method_info_trans_name then
+	      begin
+		mi1.method_info_trans_name <-
+		  mi1.method_info_trans_name ^
+		  string_of_parameters mi1.method_info_parameters;
+		mi2.method_info_trans_name <-
+		  mi2.method_info_trans_name ^
+		  string_of_parameters mi2.method_info_parameters;
+	      end;
+	    disambiguates tl
+  in
+    disambiguates methods_list;
+    List.iter
+      (fun mt -> Hashtbl.replace Java_typing.methods_table
+	 mt.Java_typing.mt_method_info.method_info_tag mt)
+      methods_list
+
 let do_method mi req behs body =
 (*
   Option_misc.iter assertion req;
   ... behs
 *)
+  mi.method_info_trans_name <-
+    (get_method_info_class_or_interface_name mi) ^ "_" ^
+    mi.method_info_name;
+  disambiguates_method_names ();
   List.iter param mi.method_info_parameters;
   Option_misc.iter (List.iter statement) body;
   Option_misc.iter param mi.method_info_result
 
-
-let string_of_parameters vil =
-  (List.fold_right
-     (fun vi acc -> "_" ^ name_type vi.java_var_info_type ^ acc) vil "")
 
 let do_constructor ci reg behs body =
 (*
@@ -208,48 +247,6 @@ let do_type ty =
 	List.iter do_field ci.class_info_fields
     | TypeInterface ii -> 
 	List.iter do_field ii.interface_info_fields
-
-
-let disambiguates_method_names () =
-  let methods_list =
-    Hashtbl.fold (fun _ mt acc -> mt :: acc) Java_typing.methods_table []
-  in
-  let methods_list =
-    List.sort 
-      (fun mt1 mt2 -> 
-	 let mi1 = mt1.Java_typing.mt_method_info in
-	 let mi2 = mt2.Java_typing.mt_method_info in
-	   (* compare method names *)
-	   match String.compare mi1.method_info_name mi2.method_info_name with
-	     | 0 ->
-		 (* compare method class or interface names *)
-		 begin
-		   let ci1 = get_method_info_class_or_interface_name mi1 in
-		   let ci2 = get_method_info_class_or_interface_name mi2 in
-		     mi1.method_info_trans_name <-
-		       ci1 ^ "_" ^ mi1.method_info_name; 
-		     mi2.method_info_trans_name <-
-		       ci2 ^ "_" ^ mi2.method_info_name;
-		     match String.compare ci1 ci2
-		     with
-		       | 0 ->			 
-			   mi1.method_info_trans_name <-
-			     mi1.method_info_trans_name ^
-			     string_of_parameters
-			     mi1.method_info_parameters;
-			   mi2.method_info_trans_name <-
-			     mi2.method_info_trans_name ^
-			     string_of_parameters
-			     mi2.method_info_parameters; 0
-		       | n -> n
-		 end
-	     | n -> n)
-      methods_list 
-  in
-    List.iter
-      (fun mt -> Hashtbl.replace Java_typing.methods_table
-	 mt.Java_typing.mt_method_info.method_info_tag mt)
-      methods_list
 
 
 (*

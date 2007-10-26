@@ -28,9 +28,6 @@ let main () =
 	  (fun _ (f,t) -> Java_callgraph.compute_logic_calls f t)
 	  Java_typing.logics_table;
 
-	(* disambiguates method names *)
-	Java_analysis.disambiguates_method_names ();
-
 	Hashtbl.iter 
 	  (fun _ mt -> 
 	     Option_misc.iter (Java_callgraph.compute_calls 
