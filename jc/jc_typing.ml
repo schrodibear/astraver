@@ -1868,7 +1868,6 @@ let clause env vi_result c acc =
 			"exception without value"
 		  in
 		  let vi = var tei "\\result" in
-		  (* vi.jc_var_info_final_name <- "result"; *)
 		  Some ei, (vi.jc_var_info_name,vi)::env 
 		with Not_found ->
 		  typing_error id.jc_identifier_loc 
@@ -2009,7 +2008,6 @@ let rec decl d =
 	  add_fundecl (ty, id.jc_identifier_loc, id.jc_identifier_name, pl) 
 	in
 	let vi = var ty "\\result" in
-	(* vi.jc_var_info_final_name <- "result"; *)
 	let s = List.fold_right 
 		  (clause param_env vi) specs 
 		  { jc_fun_requires = assertion_true;

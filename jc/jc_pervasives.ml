@@ -322,7 +322,7 @@ let rec fold_term f acc t =
 
 let rec post_map_term f t =
   let tnode = match t.jc_term_node with
-    | JCTconst _ | JCTvar _ | JCTrange(None,None) as tnode -> tnode
+    | JCTconst _ | JCTvar _ | JCTrange (None, None) as tnode -> tnode
     | JCTbinary(t1,bop,t2) ->
 	JCTbinary(post_map_term f t1,bop,post_map_term f t2) 
     | JCTunary(uop,t1) ->
