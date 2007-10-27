@@ -73,6 +73,9 @@ let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)
 
 
+let is_true a = (a.jc_assertion_node = JCAtrue)
+
+
 (* operators *)
 
 let is_relation_binary_op = function

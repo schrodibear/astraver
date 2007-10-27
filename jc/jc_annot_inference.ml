@@ -119,10 +119,12 @@ let equality_operator_for_type = function
   | JCTnull -> Beq_pointer
 
 let make_and al = 
+  (* optimization *)
+  let al = List.filter (fun a -> not (is_true a)) al in
   let anode = match al with
     | [] -> JCAtrue
     | [a] -> a.jc_assertion_node
-    | al -> JCAand al
+    | a::tl -> JCAand al
   in
   raw_asrt anode
 
@@ -295,7 +297,6 @@ let rec destruct_pointer t =
 				 type_term (JCTconst (JCCinteger "-1")) integer_type))
 		     integer_type)
 	    | vio, Some offt ->
-		eprintf "Some@.";
 		let t3 = JCTbinary (offt, Bsub_int, t2) in
 		let offt = full_term t3 integer_type t1.jc_term_loc in
 		  vio, Some offt 
@@ -1893,7 +1894,8 @@ let rec ai_statement abs curinvs s =
 		in 
 		  Abstract1.change_environment_with mgr pre env false
 	      end;
-	      change_regular_in_normal curinvs (assignment mgr pre dereft e2)
+	      let reg = assignment mgr pre dereft e2 in
+		change_regular_in_normal curinvs reg
       end
   | JCSassert(_,a) ->
       change_regular_in_normal curinvs (test_assertion mgr pre a)
@@ -2121,14 +2123,7 @@ let ai_function mgr targets (fi, fs, sl) =
       Hashtbl.fold (fun _ (vi, _) acc -> Vai.all_variables (var_term vi) @ acc)
 	Jc_norm.variables_table []
     in
-    let env = try Environment.add env (Array.of_list globvars) [||] with _ -> assert false in
-    
-    (* Add parameters as abstract variables in [env]. *)
-    let params =
-      List.fold_left (fun acc vi -> Vai.all_variables(var_term vi) @ acc)
-	[] fi.jc_fun_info_parameters
-    in
-    let env = try Environment.add env (Array.of_list params) [||] with _ -> assert false in
+    let env = Environment.add env (Array.of_list globvars) [||] in
     
     (* Add \result as abstract variable in [env] if any. *)
     let return_type = fi.jc_fun_info_return_type in
@@ -2136,9 +2131,29 @@ let ai_function mgr targets (fi, fs, sl) =
     let env =
       if return_type <> JCTnull then
 	let result = Vai.all_variables (var_term vi_result) in
-	  try Environment.add env (Array.of_list result) [||] with _ -> assert false
+	  Environment.add env (Array.of_list result) [||]
       else env in
-      
+
+    (* env for the postcondition contains: *)
+    (*   - global variables                *)
+    (*   -\result variable if any          *)
+    (*   - parameters of type pointer      *)
+    let post_env = env in
+
+    (* Add parameters as abstract variables in [env]. *)
+    let params, pointer_params =
+      List.fold_left
+	(fun (acc1, acc2) vi ->
+	   let vars = Vai.all_variables (var_term vi) in
+	     (vars @ acc1,
+	      match vi.jc_var_info_type with
+		| JCTpointer _ -> vars @ acc2
+		| _ -> acc2))
+	([], []) fi.jc_fun_info_parameters
+    in
+    let env = Environment.add env (Array.of_list params) [||] in
+    let post_env = Environment.add post_env (Array.of_list pointer_params) [||] in
+    
     let abs = { 
       jc_absint_manager = mgr;
       jc_absint_function_environment = env;
@@ -2202,13 +2217,23 @@ let ai_function mgr targets (fi, fs, sl) =
       ) targets;
 
     (* record the inferred postcondition *)
-    let postabs = !(curinvs.jc_absinv_return).jc_absval_regular in
-    let post = mkinvariant abs.jc_absint_manager postabs in
-    if Jc_options.verbose then
+    let postabs = curinvs.jc_absinv_normal.jc_absval_regular in
+    let postabs = Abstract1.change_environment mgr postabs post_env false in
+    let postabs = if Abstract1.is_bottom mgr postabs = Manager.True then
+      (* default postcondition is true *)
+      Abstract1.top mgr env else postabs in
+    let posta = mkinvariant abs.jc_absint_manager postabs in
+    let returnabs = !(curinvs.jc_absinv_return).jc_absval_regular in
+    let returnabs = if Abstract1.is_bottom mgr returnabs = Manager.True then
+      (* default postcondition is true *)
+      Abstract1.top mgr env else returnabs in
+    let returna = mkinvariant abs.jc_absint_manager returnabs in
+    let post = make_and [posta; returna] in
+      if Jc_options.verbose then
       printf
 	"@[<v 2>Inferring postcondition@\n%a@]@."
 	Jc_output.assertion post;
-    let behavior = { default_behavior with  jc_behavior_ensures = post } in
+    let behavior = { default_behavior with jc_behavior_ensures = post } in
     fs.jc_fun_behavior <- ("inferred", behavior) :: fs.jc_fun_behavior;
 	
   with Manager.Error exc ->

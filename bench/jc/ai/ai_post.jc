@@ -1,0 +1,55 @@
+
+type intM = { integer val; } 
+
+exception E of unit
+
+integer i;
+
+
+
+// OK: infer post <true>
+unit f0() { }
+
+// TODO
+unit f1()
+/*  behavior exc:
+    throws E;
+    ensures true; */
+{ 
+  throw E ();
+}
+
+// TODO
+unit f2() {
+    while (true)
+      variant 0; { 
+    }
+}
+
+
+// OK: infer post <i == 0>
+unit f3() { i = 0; }
+
+// OK: infer post <\result == 0 && i == 0>
+integer f3_return() { i = 0; return i; }
+
+// OK: infer post <true>
+unit f3_local() { integer n = 0; }
+
+// OK: infer post <\result == 1>
+integer f3_local_return() { integer n = 0; return 1; }
+
+// OK: infer post <true>
+unit f3_param(integer n) { n = 0; }
+
+// OK infer post <\result == 1>
+integer f4() {
+    integer m = 1;
+    f3_param(m);
+    return m;
+}
+
+// KO infer bad post => TODO assign_heap with alloc
+unit f5(intM[1] t) {
+    t = new intM[12];
+}

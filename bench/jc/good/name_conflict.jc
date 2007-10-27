@@ -1,0 +1,10 @@
+
+/* Jessie -> OK ; Why -> KO */
+
+// TODO
+
+integer i;
+
+unit f() { integer i = 0; i++; }
+
+unit g() { i = 1; }
