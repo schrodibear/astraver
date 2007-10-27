@@ -10,11 +10,8 @@ integer i;
 // OK: infer post <true>
 unit f0() { }
 
-// TODO
+// OK: infer exceptional post <E true>
 unit f1()
-/*  behavior exc:
-    throws E;
-    ensures true; */
 { 
   throw E ();
 }
@@ -49,7 +46,7 @@ integer f4() {
     return m;
 }
 
-// KO infer bad post => TODO assign_heap with alloc
+// OK infer post <true>
 unit f5(intM[1] t) {
     t = new intM[12];
 }

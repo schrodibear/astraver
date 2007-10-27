@@ -2134,25 +2134,15 @@ let ai_function mgr targets (fi, fs, sl) =
 	  Environment.add env (Array.of_list result) [||]
       else env in
 
-    (* env for the postcondition contains: *)
-    (*   - global variables                *)
-    (*   -\result variable if any          *)
-    (*   - parameters of type pointer      *)
-    let post_env = env in
+    let extern_env = env in
 
     (* Add parameters as abstract variables in [env]. *)
-    let params, pointer_params =
+    let params =
       List.fold_left
-	(fun (acc1, acc2) vi ->
-	   let vars = Vai.all_variables (var_term vi) in
-	     (vars @ acc1,
-	      match vi.jc_var_info_type with
-		| JCTpointer _ -> vars @ acc2
-		| _ -> acc2))
-	([], []) fi.jc_fun_info_parameters
+	(fun acc vi -> Vai.all_variables (var_term vi) @ acc)
+	[] fi.jc_fun_info_parameters
     in
     let env = Environment.add env (Array.of_list params) [||] in
-    let post_env = Environment.add post_env (Array.of_list pointer_params) [||] in
     
     let abs = { 
       jc_absint_manager = mgr;
@@ -2218,7 +2208,7 @@ let ai_function mgr targets (fi, fs, sl) =
 
     (* record the inferred postcondition *)
     let postabs = curinvs.jc_absinv_normal.jc_absval_regular in
-    let postabs = Abstract1.change_environment mgr postabs post_env false in
+    let postabs = Abstract1.change_environment mgr postabs extern_env false in
     let postabs = if Abstract1.is_bottom mgr postabs = Manager.True then
       (* default postcondition is true *)
       Abstract1.top mgr env else postabs in
@@ -2229,12 +2219,35 @@ let ai_function mgr targets (fi, fs, sl) =
       Abstract1.top mgr env else returnabs in
     let returna = mkinvariant abs.jc_absint_manager returnabs in
     let post = make_and [posta; returna] in
+    let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
+    let excl, excabsl =
+      List.fold_left
+	(fun (acc1, acc2) (exc, va) -> (exc :: acc1, va.jc_absval_regular :: acc2))
+	([], []) curinvs.jc_absinv_exceptional in
+    let excabsl = List.map (fun va -> Abstract1.change_environment mgr va extern_env false) excabsl in
+    let excabsl = List.map
+      (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
+	 Abstract1.top mgr env else va) excabsl in
+    let excal = List.map (mkinvariant abs.jc_absint_manager) excabsl in
+    let exc_behaviors = let exc_counter = 0 in
+      List.map2 
+	(fun exc va ->
+	   let exc_counter = exc_counter + 1 in
+	   ("inferred_exc" ^ (string_of_int exc_counter),
+	    { default_behavior with jc_behavior_throws = Some exc; jc_behavior_ensures = va }))
+	     excl excal in
       if Jc_options.verbose then
-      printf
-	"@[<v 2>Inferring postcondition@\n%a@]@."
-	Jc_output.assertion post;
-    let behavior = { default_behavior with jc_behavior_ensures = post } in
-    fs.jc_fun_behavior <- ("inferred", behavior) :: fs.jc_fun_behavior;
+	begin
+	  printf
+	    "@[<v 2>Inferring postcondition@\n%a@]@."
+	    Jc_output.assertion post;
+	  List.iter2
+	    (fun exc exca -> printf
+	       "@[<v 2>Inferring postcondition for exception %s@\n%a@]@."
+	       exc.jc_exception_info_name
+	       Jc_output.assertion exca) excl excal;
+	end;
+    fs.jc_fun_behavior <- (("inferred_normal", normal_behavior) :: exc_behaviors) @ fs.jc_fun_behavior;
 	
   with Manager.Error exc ->
     Manager.print_exclog std_formatter exc;
