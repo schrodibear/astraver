@@ -359,6 +359,8 @@ type 'a abstract_interpreter = {
   jc_absint_widening_threshold : int;
   jc_absint_loop_invariants : (int,'a abstract_invariants) Hashtbl.t;
   jc_absint_loop_iterations : (int,int) Hashtbl.t;
+  jc_absint_loop_entry_invs : (int, 'a abstract_invariants) Hashtbl.t;
+  jc_absint_loop_conditions : (int, 'a abstract_value) Hashtbl.t;
   jc_absint_target_assertions : target_assertion list;
 }
 
@@ -1699,6 +1701,47 @@ let join_invariants mgr invs1 invs2 =
     jc_absinv_return = invs1.jc_absinv_return;
   }
 
+(* Arguments of [meet] should be on the same environment. *)
+let meet mgr absval1 absval2 =
+  let env1 = Abstract1.env absval1 in
+  let absval2 = Abstract1.change_environment mgr absval2 env1 false in
+  Abstract1.meet_with mgr absval1 absval2;
+  absval1
+
+let meet_abstract_value mgr absval1 absval2 =
+  { 
+    jc_absval_regular = 
+      meet mgr absval1.jc_absval_regular absval2.jc_absval_regular;
+    jc_absval_propagated = 
+      meet mgr absval1.jc_absval_propagated absval2.jc_absval_propagated;
+  }
+
+let meet_invariants mgr invs1 invs2 =
+  if Jc_options.debug then
+    printf "@[<v 2>[meet]@\n%a@\nand@\n%a@]@." 
+      print_abstract_invariants invs1 print_abstract_invariants invs2;
+  let meet_exclists postexcl1 postexcl2 =
+    let meet1 = List.fold_right (fun (ei,post1) acc ->
+      try
+	let post2 = List.assoc ei postexcl2 in
+	(ei, meet_abstract_value mgr post1 post2) :: acc
+      with Not_found -> (ei,post1) :: acc
+    ) postexcl1 []
+    in
+    List.fold_right (fun (ei,post2) acc ->
+      if List.mem_assoc ei meet1 then acc 
+      else (ei, post2) :: acc
+    ) postexcl2 meet1
+  in
+  assert (invs1.jc_absinv_return == invs2.jc_absinv_return);
+  {
+    jc_absinv_normal =
+      meet_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
+    jc_absinv_exceptional =
+      meet_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional;
+    jc_absinv_return = invs1.jc_absinv_return;
+  }
+
 (* Arguments of [widening] should be on the same environment. *)
 let widening mgr absval1 absval2 =
   let env1 = Abstract1.env absval1 in
@@ -1843,6 +1886,19 @@ let change_propagated_in_normal curinvs reg =
   let absval = { curinvs.jc_absinv_normal with jc_absval_propagated = reg; } in 
   { curinvs with jc_absinv_normal = absval; }
 
+
+let rec get_loop_condition s =
+  match s.jc_statement_node with
+    | JCScall (_, _, _, s) | JCSdecl (_, _, s) 
+    | JCStry (s, _, _) -> get_loop_condition s
+    | JCSassign_var _ | JCSassign_heap _ | JCSassert _ 
+    | JCSloop _ | JCSreturn_void | JCSreturn _ 
+    | JCSthrow _ | JCSpack _ | JCSunpack _ -> None
+    | JCSblock sl ->
+	let s = List.find (fun s -> get_loop_condition s <> None) sl in
+	  get_loop_condition s 
+    | JCSif (e, _, _) -> Some e
+
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
   let targets = find_target_assertions abs.jc_absint_target_assertions s in
@@ -1865,7 +1921,7 @@ let rec ai_statement abs curinvs s =
       let env =	
 	try
 	  Environment.add (Abstract1.env pre) (Array.of_list vars) [||] 
-	with _ -> printf "%s@." vi.jc_var_info_name; assert false in 
+	with Failure msg -> printf "%s %s@." msg vi.jc_var_info_name; assert false in 
       Abstract1.change_environment_with mgr pre env false;
       let pre = match eo with
       | None -> pre
@@ -2000,35 +2056,39 @@ let rec ai_statement abs curinvs s =
       end
   | JCSloop (la, ls) ->
       let loop_invariants = abs.jc_absint_loop_invariants in
-      let loop_iterations = abs.jc_absint_loop_iterations in
-      let num = 
-	try Hashtbl.find loop_iterations la.jc_loop_tag 
-	with Not_found -> 0
-      in
-      Hashtbl.replace loop_iterations la.jc_loop_tag (num + 1);
-      if num < abs.jc_absint_widening_threshold then
-	let nextinvs = ai_statement abs (copy_invariants mgr curinvs) ls in
-	let joininvs = join_invariants mgr curinvs nextinvs in
-	ai_statement abs joininvs s
-      else
+      let loop_entryinvs = abs.jc_absint_loop_entry_invs in
 	begin try
 	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
-	  let wideninvs = 
-	    widen_invariants mgr (copy_invariants mgr loopinvs) curinvs in
-	  Hashtbl.replace 
-	    loop_invariants la.jc_loop_tag (copy_invariants mgr wideninvs);
-	  if eq_invariants mgr loopinvs wideninvs then
-	    (* Propagate to assertions. *)
-	    let bot = bottom_abstract_value mgr (Abstract1.env pre) in
-	    { wideninvs with jc_absinv_normal = bot; }
-	  else
+	  let wideninvs = widen_invariants mgr loopinvs curinvs in
+	    Hashtbl.replace 
+	      loop_invariants la.jc_loop_tag wideninvs;
+	    if eq_invariants mgr loopinvs wideninvs then
 	    let nextinvs = ai_statement abs wideninvs ls in
+	    let entryinvs = Hashtbl.find loop_entryinvs la.jc_loop_tag in
+	    let joininvs = join_invariants mgr entryinvs nextinvs in
+	      Hashtbl.replace 
+		loop_invariants la.jc_loop_tag joininvs;
+	      let conde = match (get_loop_condition ls) with | None -> assert false | Some e -> e in
+	      let exit_conda = test_expr true mgr (entryinvs.jc_absinv_normal.jc_absval_regular) conde in
+ 	      let exit_conda = {
+		jc_absval_regular = Abstract1.copy mgr exit_conda;
+		jc_absval_propagated = exit_conda;
+	      } in
+	      let exit_condinvs = { curinvs with jc_absinv_normal = exit_conda; } in
+	      let post = meet_invariants mgr (copy_invariants mgr joininvs) exit_condinvs in
+		post
+(*	    let bot = bottom_abstract_value mgr (Abstract1.env pre) in
+	    { joininvs with jc_absinv_normal = bot; }	      *)
+	else
+	  let nextinvs = ai_statement abs wideninvs ls in
 	    ai_statement abs nextinvs s
-	with Not_found ->
+ 	with Not_found ->
 	  Hashtbl.replace 
-	    loop_invariants la.jc_loop_tag (copy_invariants mgr curinvs);
+	    loop_entryinvs la.jc_loop_tag curinvs;
+	  Hashtbl.replace 
+	    loop_invariants la.jc_loop_tag curinvs;
 	  let nextinvs = ai_statement abs curinvs ls in
-	  ai_statement abs nextinvs s
+	    ai_statement abs nextinvs s
 	end
   | JCScall (vio, fi, el, s) ->
       if Jc_options.interprocedural then
@@ -2090,27 +2150,26 @@ let rec record_ai_invariants abs s =
       record_ai_invariants abs fs
   | JCSloop(la,ls) ->
       let loop_invariants = abs.jc_absint_loop_invariants in
-      begin try
-	let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
-	let loopinv = loopinvs.jc_absinv_normal.jc_absval_regular in
-	(* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON *)
-	if Abstract1.is_top mgr loopinv = Manager.True then
-	  ()
-	else if Abstract1.is_bottom mgr loopinv = Manager.True then
-	  la.jc_loop_invariant <- raw_asrt JCAfalse
-	else
-	  let a = mkinvariant mgr loopinv in
-	  if Jc_options.verbose then
-	    printf 
-	      "%a@[<v 2>Inferring loop invariant@\n%a@]@."
-	      Loc.report_position s.jc_statement_loc
-	      Jc_output.assertion a;
-	  la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a]
-      with Not_found -> () end
+	begin try
+	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
+	  let loopinv = loopinvs.jc_absinv_normal.jc_absval_regular in
+	    (* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON *)
+	    if Abstract1.is_top mgr loopinv = Manager.True then ()
+	    else if Abstract1.is_bottom mgr loopinv = Manager.True then
+	      la.jc_loop_invariant <- raw_asrt JCAfalse
+	    else
+	      let a = mkinvariant mgr loopinv in
+		if Jc_options.verbose then
+		  printf 
+		    "%a@[<v 2>Inferring loop invariant@\n%a@]@."
+		    Loc.report_position s.jc_statement_loc
+		    Jc_output.assertion a;
+		la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a];
+		record_ai_invariants abs ls
+	with Not_found -> () end
   | JCSassign_var _ | JCSassign_heap _ | JCSassert _ 
   | JCSreturn_void | JCSreturn _ | JCSthrow _ | JCSpack _ | JCSunpack _  
-  | JCScall _ ->
-	  ()
+  | JCScall _ -> ()
 	
 let ai_function mgr targets (fi, fs, sl) =
   if Jc_options.verbose then
@@ -2151,6 +2210,8 @@ let ai_function mgr targets (fi, fs, sl) =
       jc_absint_widening_threshold = 1;
       jc_absint_loop_invariants = Hashtbl.create 0;
       jc_absint_loop_iterations = Hashtbl.create 0;
+      jc_absint_loop_entry_invs = Hashtbl.create 0;
+      jc_absint_loop_conditions = Hashtbl.create 0;
       jc_absint_target_assertions = targets;
     } in
       

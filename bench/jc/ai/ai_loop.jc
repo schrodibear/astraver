@@ -2,7 +2,7 @@
 type integerT = { integer integerM; }
 
 
-integer test0(integerT[0..10] t) {
+unit test0(integerT[0..10] t) {
   integer x = 0;
   while (x <= 9) 
     invariant true;
@@ -13,7 +13,7 @@ integer test0(integerT[0..10] t) {
   }
 }
 
-integer test0bis(integerT[0..10] t) {
+unit test0bis(integerT[0..10] t) {
   integer x = 0;
   while (x < 10) 
     invariant true;
@@ -24,7 +24,7 @@ integer test0bis(integerT[0..10] t) {
   }
 }
 
-integer test1(integerT[0..] t, integer max) {
+unit test1(integerT[0..] t, integer max) requires \offset_max(t) == max; {
   integer x = 0;
   while (x < max) 
     invariant true;

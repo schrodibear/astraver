@@ -1510,8 +1510,8 @@ let rec statement env lz s =
 		  (LabelBlock b1::before,after)
 	      | _ -> assert false
 	    in
-	    let ts,_ = statement env lz1 body
-	    and lo = loop_annot env inv var
+	    let lo = loop_annot env inv var
+	    and ts,_ = statement env lz1 body
 	    in
 	    JCTSwhile(tc,lo,ts), lz2
 	  else 
@@ -1525,8 +1525,8 @@ let rec statement env lz s =
 		  (LabelBlock b1::before,after)
 	      | _ -> assert false
 	    in
-	    let tbody,_ = statement env lz1 body
-	    and lo = loop_annot env inv var
+	    let lo = loop_annot env inv var
+	    and tbody,_ = statement env lz1 body
 	    and tupdates = List.map (expr env) updates
 	    in
 	    match init with

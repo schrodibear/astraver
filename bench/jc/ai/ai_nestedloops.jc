@@ -1,0 +1,28 @@
+
+/* two levels of loops */
+
+
+unit f0() {
+    integer x = 0;
+    while (x < 10) variant 10 - x; {
+        integer y = 0;
+	while (y < 5) variant 5 - y; {
+	    y++;
+	}
+	x++;
+    }
+}
+
+
+unit f1() {
+  integer x = 0;
+  while(x < 10) variant 10 - x;
+  {
+    integer y = 0;
+    while(y < x) variant x - y;
+    {
+      y++;
+    }
+    x++;
+  }
+}
