@@ -39,6 +39,9 @@ integer f3_local_return() { integer n = 0; return 1; }
 // OK: infer post <true>
 unit f3_param(integer n) { n = 0; }
 
+// OK: infer <\result == 0>
+integer f3_param_return(integer n) { n = 0; return n; }
+
 // OK infer post <\result == 1>
 integer f4() {
     integer m = 1;
@@ -49,4 +52,18 @@ integer f4() {
 // OK infer post <true>
 unit f5(intM[1] t) {
     t = new intM[12];
+}
+
+
+exception Return of unit
+
+integer x;
+
+// OK infer post: <x == 0>
+unit g() {
+  try {
+   x = 0;
+    throw Return ();
+  } catch Return _ {
+  }
 }

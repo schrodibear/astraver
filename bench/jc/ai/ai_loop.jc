@@ -24,6 +24,17 @@ unit test0bis(integerT[0..10] t) {
   }
 }
 
+integer v;
+
+unit test0ter() {
+    v = 0;
+  while (v <= 9) 
+    variant 10 - v;
+  {
+    v++;
+  }
+}
+
 unit test1(integerT[0..] t, integer max) requires \offset_max(t) == max; {
   integer x = 0;
   while (x < max) 

@@ -39,3 +39,11 @@ intM[0..] reset(intM[0..] t) {
     }
     return t;
 }
+
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make cousot76"
+End: 
+*/

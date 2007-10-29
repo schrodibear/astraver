@@ -157,7 +157,7 @@ let make_decls loc sl tl =
   List.fold_right 
     (fun vi acc -> 
        (* real initial value does not matter *)
-       let t,cst =
+       let t, cst =
 	 match vi.jc_var_info_type with
 	   | JCTnative t ->
 	       begin
@@ -169,7 +169,7 @@ let make_decls loc sl tl =
 	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull
 	   | JCTlogic _ -> assert false
        in
-       make_decl loc vi (Some (make_const loc t cst)) acc)
+	 make_decl loc vi (Some (make_const loc t cst)) acc)
     tl (make_block loc sl)
 
 let make_return loc t e =
@@ -271,7 +271,7 @@ let rec expr e =
 		  let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
 		  let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
 		  let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
-		    (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
+		    (l1 @ [if_e1_stat], [tmp] @ tl1 @ tl2), JCEvar tmp
 	      | Blor ->
 		  let tmp = newrefvar boolean_type in
 		  let e1_true_stat = make_assign_var loc tmp (true_const loc) in
@@ -280,9 +280,9 @@ let rec expr e =
 		  let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
 		  let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
 		  let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
-		    (l1 @ [if_e1_stat], [tmp]), JCEvar tmp
+		    (l1 @ [if_e1_stat], [tmp] @ tl1 @ tl2), JCEvar tmp
 	      | _ -> (* Note: no special case for Unot *)
-		  (l1@l2, tl1@tl2), JCEbinary (e1, op, e2)
+		  (l1 @ l2, tl1 @ tl2), JCEbinary (e1, op, e2)
 	  end
     | JCTEshift (e1, e2) ->
 	let (l1, tl1), e1 = expr e1 in
@@ -434,13 +434,12 @@ and call loc f el ~binder ll =
   if binder then
     let tmp = newvar f.jc_fun_info_return_type in
     let stat = make_call loc (Some tmp) f el (make_block loc []) in
-    (* [tmp] will be declared in a post-treatement of the calls generated *)
-    ((List.flatten ll)@[stat], []), Some tmp
-
+      (* [tmp] will be declared in a post-treatement of the calls generated *)
+      ((List.flatten ll)@[stat], []), Some tmp
   else
     let stat = make_call loc None f el (make_block loc []) in
-    ((List.flatten ll)@[stat], []), None
-
+      ((List.flatten ll)@[stat], []), None
+	
 (* [el] is the only part not yet translated *)
 
 and if_statement loc f el st sf =
@@ -493,17 +492,16 @@ if f == not_ then
 
   else 
 *)
-    let ltl,el = List.split (List.map expr el) in
-    let ll,tl = List.split ltl in
-    let (l,etl),ecall = call loc f el ~binder:true ll in
-    let ecall = match ecall with
-      | Some b -> make_var loc b
-      | None -> assert false
-    in
-    let if_stat = make_if loc ecall st sf in
-    make_decls loc (l @ [if_stat]) ((List.flatten tl) @ etl) 
+  let ltl, el = List.split (List.map expr el) in
+  let ll, tl = List.split ltl in
+  let (l, etl), ecall = call loc f el ~binder:true ll in
+  let ecall = match ecall with
+    | Some b -> make_var loc b
+    | None -> assert false
+  in
+  let if_stat = make_if loc ecall st sf in
+    make_decls loc (l @ [if_stat]) ((List.flatten tl) @ etl)
 
-      
 and statement s =
   let loc = s.jc_tstatement_loc in
   let ns = 
@@ -545,14 +543,14 @@ and statement s =
       | JCTSif (e, st, sf) ->
 	  let st = statement st in
 	  let sf = statement sf in
-	  begin match e.jc_texpr_node with
-	    | JCTEcall (f, el) ->
-		(if_statement loc f el st sf).jc_statement_node
-	    | _ -> 
-		let (sl,tl),e = expr e in
-		let if_stat = make_if loc e st sf in
-		(make_decls loc (sl @ [if_stat]) tl).jc_statement_node
-	  end
+	    begin match e.jc_texpr_node with
+	      | JCTEcall (f, el) ->
+		  (if_statement loc f el st sf).jc_statement_node
+	      | _ -> 
+		  let (sl, tl), e = expr e in
+		  let if_stat = make_if loc e st sf in
+		    (make_decls loc (sl @ [if_stat]) tl).jc_statement_node
+	    end
       | JCTSwhile (e, la, body) ->
 	  let exit_stat = make_tthrow loc loop_exit None in
 	  let if_stat = statement (make_tif loc e body exit_stat) in
