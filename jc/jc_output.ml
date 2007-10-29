@@ -352,7 +352,7 @@ let rec statement fmt s =
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
 	  loop_annot.jc_loop_variant
 	  block [body]
-    | JCTSif (e, s1, s2)->
+    | JCTSif (e, s1, s2) | JCTScut_if (_, e, s1, s2) ->
 	fprintf fmt "@\n@[<v 2>if (%a) %a@]@\n@[<v 2>else %a@]"
 	  expr e statement s1 statement s2
     | JCTSdecl (vi, None, s)-> 

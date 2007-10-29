@@ -2,12 +2,12 @@
 type intM = { integer val; }
 
 
-// post \result >= 0 is inferred
+// OK inferred post: <\result >= 0>
 integer sum(integer n) {
     integer s = 0;
     integer i = 0;
     while (i < n) 
-      invariant true;
+	// inferred loop inv: <i >= 0 && s >= 0>
       variant n - i; 
     {
 	s += i;

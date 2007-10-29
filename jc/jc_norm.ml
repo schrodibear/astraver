@@ -141,6 +141,9 @@ let make_call loc vio f el s =
 let make_if loc e ts es =
   make_node loc (JCSif (e,ts,es))
 
+let make_cutif loc la e ts es =
+  make_node loc (JCScut_if (la,e,ts,es))
+
 let make_throw loc exc e =
   make_node loc (JCSthrow (exc,e))
 
@@ -191,8 +194,8 @@ let make_tblock loc sl =
     | [s] -> s
     | _ -> make_tnode loc (JCTSblock sl)
 
-let make_tif loc e ts es =
-  make_tnode loc (JCTSif (e,ts,es))
+let make_tcutif loc la e ts es =
+  make_tnode loc (JCTScut_if (la, e, ts, es))
 
 let make_tthrow loc exc e =
   make_tnode loc (JCTSthrow (exc,e))
@@ -443,55 +446,6 @@ and call loc f el ~binder ll =
 (* [el] is the only part not yet translated *)
 
 and if_statement loc f el st sf =
-(*
-  if f == and_ then
-    let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
-    let e1_false_stat = make_tthrow loc false_output 
-      (Some (make_tconst loc JCCvoid)) in
-    let e2_false_stat = make_tthrow loc false_output
-      (Some (make_tconst loc JCCvoid)) in
-    let true_stat = make_tthrow loc true_output
-      (Some (make_tconst loc JCCvoid)) in
-    let if_e2_stat = make_tif loc e2 true_stat e2_false_stat in
-    let if_e1_stat = make_tif loc e1 if_e2_stat e1_false_stat in
-    let try_body = statement if_e1_stat in
-    let catch_list = 
-      [(true_output, Some (newvar unit_type), st);
-       (false_output, Some (newvar unit_type), sf)] in
-    make_try loc try_body catch_list (make_block loc [])
-  else 
-  if f == or_ then
-    let e1,e2 = match el with [e1;e2] -> e1,e2 | _ -> assert false in
-    let e1_true_stat = make_tthrow loc true_output
-      (Some (make_tconst loc JCCvoid)) in
-    let e2_true_stat = make_tthrow loc true_output
-      (Some (make_tconst loc JCCvoid)) in
-    let false_stat = make_tthrow loc false_output
-      (Some (make_tconst loc JCCvoid)) in
-    let if_e2_stat = make_tif loc e2 e2_true_stat false_stat in
-    let if_e1_stat = make_tif loc e1 e1_true_stat if_e2_stat in
-    let try_body = statement if_e1_stat in
-    let catch_list = 
-      [(true_output, Some (newvar unit_type), st);
-       (false_output, Some (newvar unit_type), sf)] in
-    make_try loc try_body catch_list (make_block loc [])
-    
-  else 
-if f == not_ then
-    let e = match el with [e] -> e | _ -> assert false in
-    let true_stat = make_tthrow loc true_output
-      (Some (make_tconst loc JCCvoid)) in
-    let false_stat = make_tthrow loc false_output
-      (Some (make_tconst loc JCCvoid)) in
-    let if_stat = make_tif loc e false_stat true_stat in
-    let try_body = statement if_stat in
-    let catch_list = 
-      [(true_output, Some (newvar unit_type), st);
-       (false_output, Some (newvar unit_type), sf)] in
-    make_try loc try_body catch_list (make_block loc [])
-
-  else 
-*)
   let ltl, el = List.split (List.map expr el) in
   let ll, tl = List.split ltl in
   let (l, etl), ecall = call loc f el ~binder:true ll in
@@ -500,6 +454,17 @@ if f == not_ then
     | None -> assert false
   in
   let if_stat = make_if loc ecall st sf in
+    make_decls loc (l @ [if_stat]) ((List.flatten tl) @ etl)
+
+and cutif_statement loc la f el st sf =
+  let ltl, el = List.split (List.map expr el) in
+  let ll, tl = List.split ltl in
+  let (l, etl), ecall = call loc f el ~binder:true ll in
+  let ecall = match ecall with
+    | Some b -> make_var loc b
+    | None -> assert false
+  in
+  let if_stat = make_cutif loc la ecall st sf in
     make_decls loc (l @ [if_stat]) ((List.flatten tl) @ etl)
 
 and statement s =
@@ -551,11 +516,22 @@ and statement s =
 		  let if_stat = make_if loc e st sf in
 		    (make_decls loc (sl @ [if_stat]) tl).jc_statement_node
 	    end
+      | JCTScut_if (la, e, st, sf) ->
+	  let st = statement st in
+	  let sf = statement sf in
+	    begin match e.jc_texpr_node with
+	      | JCTEcall (f, el) ->
+		  (cutif_statement loc la f el st sf).jc_statement_node
+	      | _ -> 
+		  let (sl, tl), e = expr e in
+		  let if_stat = make_cutif loc la e st sf in
+		    (make_decls loc (sl @ [if_stat]) tl).jc_statement_node
+	    end
       | JCTSwhile (e, la, body) ->
 	  let exit_stat = make_tthrow loc loop_exit None in
-	  let if_stat = statement (make_tif loc e body exit_stat) in
+	  let cutif_stat = statement (make_tcutif loc la e body exit_stat) in
 	  let continue_stat = make_throw loc loop_continue None in
-	  let body = make_block loc [if_stat;continue_stat] in
+	  let body = make_block loc [cutif_stat;continue_stat] in
 	  let catch_continue = 
 	    [(loop_continue, None, make_block loc [])] in
 	  let try_continue = 
@@ -568,9 +544,9 @@ and statement s =
 	  try_exit.jc_statement_node
       | JCTSfor (cond, updates, la, body) ->
 	  let exit_stat = make_tthrow loc loop_exit None in
-	  let if_stat = statement (make_tif loc cond body exit_stat) in
+	  let cutif_stat = statement (make_tcutif loc la cond body exit_stat) in
 	  let continue_stat = make_throw loc loop_continue None in
-	  let body = make_block loc [if_stat;continue_stat] in
+	  let body = make_block loc [cutif_stat;continue_stat] in
 	  let updates =
 	    List.fold_right
 	      (fun e acc -> statement {
@@ -876,6 +852,8 @@ let statement s =
 	    JCSdecl (vi, eo, link_stat s)
 	| JCSif (e, st, sf) ->
 	    JCSif (e, link_stat st, link_stat sf)
+	| JCScut_if (la, e, st, sf) ->
+	    JCScut_if (la, e, link_stat st, link_stat sf)
 	| JCSloop (la, s) ->
 	    JCSloop (la, link_stat s)
 	| JCStry (s, cl, fs) ->

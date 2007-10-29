@@ -1,5 +1,5 @@
 /*
-* $Workfile: JCSystem.java $	$Revision: 1.2 $, $Date: 2007-09-26 15:15:36 $
+* $Workfile: JCSystem.java $	$Revision: 1.3 $, $Date: 2007-10-29 21:54:55 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,9 +19,9 @@
 
 // /*
 // $Workfile: JCSystem.java $
-// $Revision: 1.2 $
-// $Date: 2007-09-26 15:15:36 $
-// $Author: marche $
+// $Revision: 1.3 $
+// $Date: 2007-10-29 21:54:55 $
+// $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/JCSystem.java $
 // $Modtime: 5/02/00 7:13p $
 // Original author:  Ravi
@@ -263,8 +263,12 @@ public final class JCSystem
      * @see #abortTransaction()
      */
 
-    /* @ public normal_behavior
+    // specs to avoid Why error msg 'Exception TransactionException_exc cannot be raised' (Nicolas)
+
+    /*@ behavior normal:
       @   ensures true;
+      @ behavior exc:
+      @   signals (javacard.framework.TransactionException) true;
       @*/
 
     public static native void beginTransaction() throws TransactionException;
@@ -288,8 +292,10 @@ public final class JCSystem
      * @see #commitTransaction()
      */
 
-    /* @ public normal_behavior
+    /* @ behavior normal:
       @   ensures true;
+      @ behavior exc:
+      @   signals (TransactionException) true;
       @*/
 
     public static native void abortTransaction() throws TransactionException;
@@ -305,8 +311,10 @@ public final class JCSystem
      * @see #abortTransaction()
      */
 
-    /* @ public normal_behavior
+    /* @ behavior normal:
       @   ensures true;
+      @ behavior exc:
+      @   signals (TransactionException) true;
       @*/
 
     public static native void commitTransaction() throws TransactionException;

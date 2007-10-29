@@ -1481,7 +1481,7 @@ let collect_statement_asserts s =
     | JCSassign_heap (e1, fi, e2) ->
 	let derefe = loc_expr (JCEderef (e1, fi)) s.jc_statement_loc in
 	  (collect_expr_asserts derefe) @ (collect_expr_asserts e2)
-    | JCSdecl(_,None,_) | JCSblock _ | JCSif _ | JCStry _ | JCSloop _
+    | JCSdecl(_,None,_) | JCSblock _ | JCSif _ | JCScut_if _ | JCStry _ | JCSloop _
     | JCSreturn_void | JCSreturn _ | JCSthrow _ ->
 	[]
 	  
@@ -1507,7 +1507,7 @@ let rec collect_targets targets s =
       collect_targets targets s
   | JCSblock sl ->
       List.fold_left collect_targets targets sl
-  | JCSif(e,ts,fs) ->
+  | JCSif(e,ts,fs) | JCScut_if(_,e,ts,fs) ->
       collect_targets (collect_targets 
 	(collect_expr_targets s e @ targets) ts) fs
   | JCStry(s,hl,fs) ->
@@ -1887,18 +1887,6 @@ let change_propagated_in_normal curinvs reg =
   { curinvs with jc_absinv_normal = absval; }
 
 
-let rec get_loop_condition s =
-  match s.jc_statement_node with
-    | JCScall (_, _, _, s) | JCSdecl (_, _, s) 
-    | JCStry (s, _, _) -> get_loop_condition s
-    | JCSassign_var _ | JCSassign_heap _ | JCSassert _ 
-    | JCSloop _ | JCSreturn_void | JCSreturn _ 
-    | JCSthrow _ | JCSpack _ | JCSunpack _ -> None
-    | JCSblock sl ->
-	let s = List.find (fun s -> get_loop_condition s <> None) sl in
-	  get_loop_condition s 
-    | JCSif (e, _, _) -> Some e
-
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
   let targets = find_target_assertions abs.jc_absint_target_assertions s in
@@ -1976,6 +1964,27 @@ let rec ai_statement abs curinvs s =
 	  let finvs = { copyinvs with jc_absinv_normal = fpre; } in
 	  let finvs = ai_statement abs finvs fs in
 	    join_invariants mgr tinvs finvs
+      | JCScut_if (la, e, ts, fs) ->
+	  let asrts = collect_expr_asserts e in 
+	  let copyinvs = copy_invariants mgr curinvs in
+	  let tpre = test_expr ~neg:false mgr pre e in
+	  let tpre = {
+	    jc_absval_regular = Abstract1.copy mgr tpre;
+	    jc_absval_propagated = List.fold_left (test_assertion mgr) tpre asrts;
+	  } in
+	  let tinvs = { curinvs with jc_absinv_normal = tpre; } in
+	  let tinvs = ai_statement abs tinvs ts in
+	  let copy_pre = copyinvs.jc_absinv_normal.jc_absval_regular in
+	  let fpre = test_expr ~neg:true mgr copy_pre e in
+	  let loopinv = Hashtbl.find abs.jc_absint_loop_invariants la.jc_loop_tag in
+	  let fpre = Abstract1.meet mgr loopinv.jc_absinv_normal.jc_absval_regular fpre in
+	  let fpre = {
+	    jc_absval_regular = Abstract1.copy mgr fpre;
+	    jc_absval_propagated = List.fold_left (test_assertion mgr) fpre asrts;
+	  } in
+	  let finvs = { copyinvs with jc_absinv_normal = fpre; } in
+	  let finvs = ai_statement abs finvs fs in
+	    { tinvs with jc_absinv_exceptional = finvs.jc_absinv_exceptional @ tinvs.jc_absinv_exceptional }
       | JCSreturn_void ->
 	  let bot = bottom_abstract_value mgr (Abstract1.env pre) in
 	    postret := join_abstract_value mgr !postret curinvs.jc_absinv_normal;
@@ -2010,10 +2019,6 @@ let rec ai_statement abs curinvs s =
 			curinvs.jc_absinv_normal.jc_absval_propagated asrts; }
 	  in 
 	    (* TODO: add thrown value as abstract variable. *)
-	  let postexc =
-	    try join_abstract_value mgr (List.assoc ei postexcl) postexc
-	    with Not_found -> postexc
-	  in
 	  let postexcl = (ei, postexc) :: (List.remove_assoc ei postexcl) in
 	    { jc_absinv_normal = bot; 
 	      jc_absinv_exceptional = postexcl; 
@@ -2064,17 +2069,11 @@ let rec ai_statement abs curinvs s =
 		  let joininvs = join_invariants mgr entryinvs nextinvs in
 		    Hashtbl.replace 
 		      loop_invariants la.jc_loop_tag joininvs;
-(*		    let conde = match (get_loop_condition ls) with | None -> assert false | Some e -> e in
-		    let exit_conda = test_expr true mgr (entryinvs.jc_absinv_normal.jc_absval_regular) conde in
- 		    let exit_conda = {
-		      jc_absval_regular = Abstract1.copy mgr exit_conda;
-		      jc_absval_propagated = exit_conda;
-		    } in
-		    let exit_condinvs = { curinvs with jc_absinv_normal = exit_conda; } in
-		    let post = meet_invariants mgr (copy_invariants mgr joininvs) exit_condinvs in
-		      post *)
+		    let nextinvs = ai_statement abs wideninvs ls in
 		    let bot = bottom_abstract_value mgr (Abstract1.env pre) in
-		      { joininvs with jc_absinv_normal = bot; }
+		      { joininvs with
+			  jc_absinv_normal = bot;
+			  jc_absinv_exceptional = nextinvs.jc_absinv_exceptional @ joininvs.jc_absinv_exceptional }
 		else
 		  let nextinvs = ai_statement abs wideninvs ls in
 		    ai_statement abs nextinvs s
@@ -2137,7 +2136,7 @@ let rec record_ai_invariants abs s =
       record_ai_invariants abs s
   | JCSblock sl ->
       List.iter (record_ai_invariants abs) sl
-  | JCSif(_,ts,fs) ->
+  | JCSif(_,ts,fs) | JCScut_if(_, _,ts,fs)  ->
       record_ai_invariants abs ts;
       record_ai_invariants abs fs
   | JCStry(s,hl,fs) ->
@@ -2784,7 +2783,7 @@ let rec wp_statement weakpre =
 	{ curposts with jc_post_normal = post; }
     | JCSblock sl ->
 	List.fold_right (wp_statement weakpre target) sl curposts
-    | JCSif(e,ts,fs) ->
+    | JCSif(e,ts,fs) | JCScut_if(_, e,ts,fs) ->
 	let tposts = wp_statement weakpre target ts curposts in
 	if debug then
 	  printf "[true branch]%a@." print_modified_vars tposts;
@@ -2909,7 +2908,7 @@ let rec record_wp_invariants weakpre s =
       record_wp_invariants weakpre s
   | JCSblock sl ->
       List.iter (record_wp_invariants weakpre) sl
-  | JCSif(_,ts,fs) ->
+  | JCSif(_,ts,fs) | JCScut_if(_, _,ts,fs) ->
       record_wp_invariants weakpre ts;
       record_wp_invariants weakpre fs
   | JCStry(s,hl,fs) ->
