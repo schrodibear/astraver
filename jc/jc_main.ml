@@ -219,7 +219,7 @@ let main () =
 	  Hashtbl.fold 
 	    (fun _ (f,s,b) acc ->
 	      printf "Generating Why function %s@."
-		f.Jc_fenv.jc_fun_info_name;
+		f.Jc_fenv.jc_fun_info_final_name;
 	      Jc_interp.tr_fun f s b acc)
 	    Jc_norm.functions_table
 	    d_axioms

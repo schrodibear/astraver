@@ -278,6 +278,7 @@ let make_fun_info name ty =
   incr fun_tag_counter;
   { jc_fun_info_tag = !fun_tag_counter;
     jc_fun_info_name = name;
+    jc_fun_info_final_name = Jc_envset.get_unique_name name;
     jc_fun_info_parameters = [];
     jc_fun_info_return_type = ty;
     jc_fun_info_calls = [];

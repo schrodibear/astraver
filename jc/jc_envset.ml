@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.8 2007-10-25 12:09:35 marche Exp $ *)
+(* $Id: jc_envset.ml,v 1.9 2007-10-30 08:33:56 marche Exp $ *)
 
 open Jc_env
 
@@ -58,6 +58,7 @@ let use_name ?local_names n =
     | Some h -> if StringSet.mem n h then raise Exit 
     | None -> () 
   end;
+  mark_as_used n;
   n
 
 let rec next_name ?local_names n i = 

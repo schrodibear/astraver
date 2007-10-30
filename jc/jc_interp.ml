@@ -124,7 +124,7 @@ let const c =
     | JCCvoid -> Prim_void
     | JCCnull -> assert false
     | JCCreal s -> Prim_real s
-    | JCCinteger s -> Prim_int s
+    | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
     | JCCboolean b -> Prim_bool b
 
 let tr_native_type t =
@@ -912,7 +912,7 @@ let rec statement ~threats s =
 	  with Invalid_argument _ -> assert false
 	in
 	let call = 
-	  make_guarded_app UserCall loc f.jc_fun_info_name el 
+	  make_guarded_app UserCall loc f.jc_fun_info_final_name el 
 	in
 	begin
 	  match vio with
@@ -1496,7 +1496,7 @@ let tr_fun f spec body acc =
 		 reads,writes, normal_post, excep_posts)
     in
     let fun_type = interp_fun_params f annot_type in
-    Param(false,f.jc_fun_info_name,fun_type)
+    Param(false,f.jc_fun_info_final_name,fun_type)
   in
   match body with
     | None -> 

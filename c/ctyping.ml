@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.150 2007-09-07 13:02:53 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.151 2007-10-30 08:33:56 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -1294,7 +1294,7 @@ let type_spec_decl loc = function
       Taxiom (id, type_predicate (Env.empty ()) p)
   | LDinvariant (id, p) -> 
       Tinvariant (id, type_predicate (Env.empty ()) p)
-  | LDlogic (id, ty, pl, ll) ->
+  | LDlogic (id, ty, labels, pl, ll) ->
       let ty = type_logic_type loc (Env.empty ()) ty in
       let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
@@ -1302,7 +1302,7 @@ let type_spec_decl loc = function
       let ll = List.map (type_location env') ll in
       Cenv.add_logic id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
-  | LDlogic_def (id, ty, pl, t) ->
+  | LDlogic_def (id, ty, labels, pl, t) ->
       let ty = type_logic_type loc (Env.empty ()) ty in
       let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;

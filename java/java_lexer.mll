@@ -4,7 +4,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.10 2007-09-21 07:29:56 marche Exp $
+$Id: java_lexer.mll,v 1.11 2007-10-30 08:33:56 marche Exp $
 
 ***************************************************************************)
 
@@ -312,7 +312,7 @@ rule token = parse
       (* octal constants *)
 
   | '0'['0'-'7']+ ['l''L']? as n         
-      { INTCONSTANT ("0o" ^ n) }
+      { INTCONSTANT n }
 
       (* hexadecimal constants *)
 

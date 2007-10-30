@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.14 2007-08-09 18:04:59 nrousset Exp $ *)
+(* $Id: jc_fenv.mli,v 1.15 2007-10-30 08:33:56 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -62,6 +62,7 @@ type logic_info =
 type fun_info = {
     jc_fun_info_tag : int;
     jc_fun_info_name : string;
+    jc_fun_info_final_name : string;
     jc_fun_info_return_type : jc_type;
     mutable jc_fun_info_parameters : var_info list;
     mutable jc_fun_info_calls : fun_info list;

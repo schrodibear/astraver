@@ -19,6 +19,13 @@ class C2 {
     }
 }
 
+class C3 {
+
+    int field;
+
+    int field() { return field; }
+
+}
 
 /*
 Local Variables: 

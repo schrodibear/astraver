@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cast.mli,v 1.79 2007-02-05 13:08:25 marche Exp $ i*)
+(*i $Id: cast.mli,v 1.80 2007-10-30 08:33:56 marche Exp $ i*)
 
 (*s C types *)
 
@@ -131,11 +131,11 @@ type parsed_logic_type = logic_type
 
 type parsed_decl = 
   | LDlogic of 
-      Info.logic_info * parsed_logic_type * (parsed_logic_type * string) list
-      * parsed_term location list
+      Info.logic_info * parsed_logic_type * string list * 
+	(parsed_logic_type * string) list * parsed_term location list
   | LDlogic_def of 
-      Info.logic_info * parsed_logic_type * (parsed_logic_type * string) list
-      * parsed_term
+      Info.logic_info * parsed_logic_type * string list * 
+	(parsed_logic_type * string) list * parsed_term
   | LDpredicate_reads of 
       Info.logic_info * (parsed_logic_type * string) list 
       * parsed_term location list

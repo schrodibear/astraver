@@ -345,13 +345,24 @@ location:
   lexpr { $1 }
 ;
 
+label_parameters:
+| /* epsilon */ { [] }
+| LT IDENTIFIER label_list_end GT { $2::$3 }
+;
+
+label_list_end:
+| /* epsilon */ { [] }
+| COMMA IDENTIFIER label_list_end { $2::$3 }
+;
+ 
+
 decl:
-  LOGIC logic_type IDENTIFIER LPAR parameters RPAR 
-    { LDlogic (Info.default_logic_info $3, $2, $5, []) }
-| LOGIC logic_type IDENTIFIER LPAR parameters RPAR READS locations 
-    { LDlogic (Info.default_logic_info $3, $2, $5, $8) }
-| LOGIC logic_type IDENTIFIER LPAR parameters RPAR LBRACE lexpr RBRACE 
-    { LDlogic_def (Info.default_logic_info $3, $2, $5, $8) }
+  LOGIC logic_type IDENTIFIER label_parameters LPAR parameters RPAR 
+    { LDlogic (Info.default_logic_info $3, $2, $4, $6, []) }
+| LOGIC logic_type IDENTIFIER label_parameters LPAR parameters RPAR READS locations 
+    { LDlogic (Info.default_logic_info $3, $2, $4, $6, $9) }
+| LOGIC logic_type IDENTIFIER label_parameters LPAR parameters RPAR LBRACE lexpr RBRACE 
+    { LDlogic_def (Info.default_logic_info $3, $2, $4, $6, $9) }
 | PREDICATE IDENTIFIER LPAR parameters RPAR 
     { LDpredicate_reads (Info.default_logic_info $2, $4, []) }
 | PREDICATE IDENTIFIER LPAR parameters RPAR READS locations 
