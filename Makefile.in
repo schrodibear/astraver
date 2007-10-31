@@ -252,8 +252,8 @@ JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_envset.ml jc/jc_pervasives.ml \
 	jc/jc_typing.ml jc/jc_norm.ml jc/jc_output.ml \
 	jc/output.ml
-JCCMO_EXPORT = $(JCCMO_EXPORT:.ml=.cmo)
-JCCMX_EXPORT = $(JCCMO_EXPORT:.ml=.cmx)
+JCCMO_EXPORT = $(JCCML_EXPORT:.ml=.cmo)
+JCCMX_EXPORT = $(JCCML_EXPORT:.ml=.cmx)
 
 atp/atp.cmx: 
 	make -C atp atp.cmx
@@ -261,10 +261,10 @@ atp/atp.cmx:
 atp/atp.cmo: 
 	make -C atp atp.cmo
 
-jc/jc.cma: $(JCCML_EXPORT)
+jc/jc.cma: $(JCCMO_EXPORT)
 	$(OCAMLC) $(BFLAGS) -a -o $@ $^
 
-jc/jc.cmxa: $(JCCML_EXPORT)
+jc/jc.cmxa: $(JCCMX_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
 
 ppc: jc/jc.cma jc/jc.cmxa
