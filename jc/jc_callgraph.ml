@@ -26,6 +26,7 @@ open Jc_env
 open Jc_fenv
 open Jc_ast
 open Jc_pervasives
+open Jc_iterators
 
 let rec term acc t =
   fold_term 

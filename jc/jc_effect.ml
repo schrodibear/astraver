@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.55 2007-10-31 08:16:53 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.56 2007-10-31 17:07:11 moy Exp $ *)
 
 
 open Jc_env
@@ -31,6 +31,7 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 open Jc_pervasives
+open Jc_iterators
 
 let ef_union ef1 ef2 =
   { jc_effect_alloc_table = 

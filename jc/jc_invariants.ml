@@ -3,6 +3,7 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 open Jc_pervasives
+open Jc_iterators
 open Output
 
 (* other modifications for this extension can be found in:

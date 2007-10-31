@@ -18,6 +18,6 @@ integer cousot76() {
 /*
 Local Variables: 
 mode: java
-compile-command: "make cousot76"
+compile-command: "make ai_cousot76"
 End: 
 */

@@ -32,6 +32,7 @@ open Jc_envset
 open Jc_fenv
 open Jc_options
 open Jc_pervasives
+open Jc_iterators
 
 open Apron
 open Coeff
@@ -208,7 +209,7 @@ let rec term_name =
 	      | JCCnull -> "null" 
 	      | JCCreal s -> filter_alphanumeric s
 	    end
-	| JCTvar vi -> vi.jc_var_info_name
+	| JCTvar vi -> filter_alphanumeric vi.jc_var_info_name
 	| JCTbinary(t1,bop,t2) ->
 	    let bop_name = match bop with
 	      | Blt_int | Blt_real -> "inf"
@@ -556,49 +557,25 @@ let rec replace_term_in_assertion srct targetvi a =
 (* Abstract variables naming and creation.                                   *)
 (*****************************************************************************)
 
-let strlen_f = 
-  let fref = ref None in
-  function () ->
-    match !fref with
-    | Some f -> f
-    | None ->
-	let fopt =
-	  Hashtbl.fold (fun _ (f,_) -> function
-	    | Some f -> Some f
-	    | None -> if f.jc_logic_info_name = "strlen" then Some f else None
-	  ) Jc_typing.logic_functions_table None 
-	in
-	let f = match fopt with
-	  | None -> make_logic_fun "strlen" unit_type (* TODO: add reads *)
-	  | Some f -> f
-	in
-	fref := Some f;
-	f
-
 module Vai : sig
 
   val has_variable : term -> bool
   val has_offset_min_variable : term -> bool
   val has_offset_max_variable : term -> bool
-  val has_strlen_variable : term -> bool
 
   val variable : term -> Var.t
   val offset_min_variable : term -> Var.t
   val offset_max_variable : term -> Var.t
-  val strlen_variable : term -> Var.t
   val all_variables : term -> Var.t list
 
   val term : Var.t -> term
   val variable_of_term : term -> Var.t
-
-  val is_strlen_variable : Var.t -> bool
 
 end = struct
   
   let variable_table = TermTable.create 0
   let offset_min_variable_table = TermTable.create 0
   let offset_max_variable_table = TermTable.create 0
-  let strlen_variable_table = TermTable.create 0
   let term_table = Hashtbl.create 0
 
   let has_variable t =
@@ -617,11 +594,6 @@ end = struct
     | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull -> false
 
   let has_offset_max_variable = has_offset_min_variable
-
-  let has_strlen_variable t = 
-    match t.jc_term_type with
-    | JCTpointer _ -> true
-    | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull -> false
 
   let variable t =
     try
@@ -662,49 +634,27 @@ end = struct
       Hashtbl.add term_table va tmax;
       va
 
-  let strlen_variable t =
-    try
-      TermTable.find strlen_variable_table t
-    with Not_found ->
-      let va = Var.of_string ("__jc_strlen_" ^ (term_name t)) in
-      TermTable.add strlen_variable_table t va;
-      let tstr = type_term (JCTapp(strlen_f (),[t])) integer_type in
-      Hashtbl.add term_table va tstr;
-      va
-
   let all_variables t =
     (if has_variable t then [variable t] else [])
     @ (if has_offset_min_variable t then [offset_min_variable t] else [])
     @ (if has_offset_max_variable t then [offset_max_variable t] else [])
-    @ (if has_strlen_variable t then [strlen_variable t] else [])
 
   let term va = Hashtbl.find term_table va
 
   let variable_of_term t =
     match t.jc_term_node with
-      | JCTvar _ | JCTderef _ -> variable t
-      | JCToffset(Offset_min,t,_) ->
-	  begin match t.jc_term_node with
-	    | JCTvar vi -> offset_min_variable t
-	    | _ -> assert false
-	  end
-      | JCToffset(Offset_max,t,_) ->
-	  begin match t.jc_term_node with
-	    | JCTvar vi -> offset_max_variable t
-	    | _ -> assert false
-	  end
-      | JCTapp(f,[t]) ->
-	  if f.jc_logic_info_name = "strlen" then
-	    strlen_variable t
-	  else assert false
-      | _ -> assert false
+    | JCToffset(Offset_min,t,_) ->
+	begin match t.jc_term_node with
+	| JCTvar vi -> offset_min_variable t
+	| _ -> assert false
+	end
+    | JCToffset(Offset_max,t,_) ->
+	begin match t.jc_term_node with
+	| JCTvar vi -> offset_max_variable t
+	| _ -> assert false
+	end
+    | _ -> variable t
 	  
-  let is_strlen_variable va = 
-    match (term va).jc_term_node with
-    | JCTapp(f,[t]) ->
-	f.jc_logic_info_name = "strlen"
-    | _ -> false
-
 end      
 
 
@@ -762,7 +712,7 @@ module Dnf = struct
     let test_conj copy_pre conj =
       let lincons =
 	try Parser.lincons1_of_lstring env conj
-	with Parser.Error _ -> assert false
+	with Parser.Error msg -> printf "%s@." msg; assert false
       in
       Abstract1.meet_lincons_array_with mgr copy_pre lincons
     in
@@ -851,52 +801,52 @@ let raw_not_asrt = not_asrt
 
 let rec linearize t =
   match t.jc_term_node with
-    | JCTconst c ->
-	begin match c with
-	  | JCCinteger s -> ([], int_of_string s)
-	  | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ ->
-	      failwith "Not linear"
-	end
-    | JCTvar _ | JCTderef _ ->
-	([t, 1], 0)
-    | JCTbinary (t1, bop, t2) ->
-	if is_arithmetic_binary_op bop then
-	  let coeffs1, cst1 = linearize t1 in
-	  let coeffs2, cst2 = linearize t2 in
-            begin match bop with
-	      | Badd_int ->
-		  let coeffs = 
-		    List.fold_right (fun (vt1, c1) acc ->
-				       try 
-					 let c2 = List.assoc vt1 coeffs2 in
-					   (vt1, c1 + c2) :: acc
-				       with Not_found -> (vt1, c1) :: acc) 
-		      coeffs1 []
-		  in
-		  let coeffs = 
-		    List.fold_right (fun (vt2, c2) acc ->
-				       if List.mem_assoc vt2 coeffs then acc
-				       else (vt2, c2) :: acc) 
-		      coeffs2 coeffs
-		  in
-		    (coeffs, cst1 + cst2)
-	      | Bsub_int ->
-		  let coeffs = 
-		    List.fold_right
-		      (fun (vt1, c1) acc ->
-			 try 
-			   let c2 = List.assoc vt1 coeffs2 in
-			     (vt1,c1 - c2) :: acc
-			 with Not_found -> (vt1,c1) :: acc
-		      ) coeffs1 []
-		  in
-		  let coeffs = 
-		    List.fold_right (fun (vt2,c2) acc ->
-				       if List.mem_assoc vt2 coeffs then acc
-				       else (vt2,- c2) :: acc
-				    ) coeffs2 coeffs
-		  in
-		    (coeffs, cst1 - cst2)
+  | JCTconst c ->
+      begin match c with
+      | JCCinteger s -> ([], int_of_string s)
+      | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ ->
+	  failwith "Not linear"
+      end
+  | JCTvar _ | JCTderef _ ->
+      ([t, 1], 0)
+  | JCTbinary (t1, bop, t2) ->
+      if is_arithmetic_binary_op bop then
+	let coeffs1, cst1 = linearize t1 in
+	let coeffs2, cst2 = linearize t2 in
+        begin match bop with
+	| Badd_int ->
+	    let coeffs = 
+	      List.fold_right (fun (vt1, c1) acc ->
+		try 
+		  let c2 = List.assoc vt1 coeffs2 in
+		  (vt1, c1 + c2) :: acc
+		with Not_found -> (vt1, c1) :: acc) 
+		coeffs1 []
+	    in
+	    let coeffs = 
+	      List.fold_right (fun (vt2, c2) acc ->
+		if List.mem_assoc vt2 coeffs then acc
+		else (vt2, c2) :: acc) 
+		coeffs2 coeffs
+	    in
+	    (coeffs, cst1 + cst2)
+	| Bsub_int ->
+	    let coeffs = 
+	      List.fold_right
+		(fun (vt1, c1) acc ->
+		  try 
+		    let c2 = List.assoc vt1 coeffs2 in
+		    (vt1,c1 - c2) :: acc
+		  with Not_found -> (vt1,c1) :: acc
+		) coeffs1 []
+	    in
+	    let coeffs = 
+	      List.fold_right (fun (vt2,c2) acc ->
+		if List.mem_assoc vt2 coeffs then acc
+		else (vt2,- c2) :: acc
+	      ) coeffs2 coeffs
+	    in
+	    (coeffs, cst1 - cst2)
 	| Bmul_int ->
 	    begin match coeffs1,cst1,coeffs2,cst2 with
 	    | [],_,[],_ -> ([],cst1 * cst2)
@@ -905,7 +855,9 @@ let rec linearize t =
 		  List.map (fun (vt,c) -> (vt,c * cstmul)) coeffs
 		in
 		(coeffs,cstadd * cstmul)
-	    | _ -> failwith "Not linear"
+	    | _ -> 
+		(* Consider non-linear term as abstract variable. *)
+		([t,1],0)
 	    end
 	| Badd_real | Bsub_real | Bmul_real | Bdiv_real ->
 	    failwith "Not integer"
@@ -933,10 +885,7 @@ let rec linearize t =
       | JCTvar vi -> ([t,1],0)
       | _ -> assert false
       end
-  | JCTapp(f,_) ->
-      if f.jc_logic_info_name = "strlen" then
-	([t,1],0)
-      else failwith "Not linear"
+  | JCTapp(f,_) -> ([t,1],0)
   | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
   | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ -> 
       failwith "Not linear"
@@ -952,109 +901,109 @@ let rec zero_bounds_term t =
   let auto_bounds t = 
     [ { zlow = t; zup = t; zmulcst = 1; zconstrs = []; }]
   in
-    match t.jc_term_node with
-      | JCTbinary (t1, bop, t2) ->
-	  if is_arithmetic_binary_op bop then
-            begin match bop with
-	      | Badd_int ->
-		  let add_zb zb1 zb2 =
-		    if zb1.zmulcst = zb2.zmulcst then
-		      let lb = type_term (JCTbinary (zb1.zlow, Badd_int, zb2.zlow)) integer_type in
-		      let rb = type_term (JCTbinary (zb1.zup, Badd_int, zb2.zup)) integer_type in
-			{ zlow = lb; zup = rb; zmulcst = zb1.zmulcst; 
-			  zconstrs = zb1.zconstrs @ zb2.zconstrs; }
-		    else
-		      let cst1 =
-			type_term (JCTconst(JCCinteger(string_of_int zb1.zmulcst))) integer_type in
-		      let cst2 =
-			type_term (JCTconst(JCCinteger(string_of_int zb2.zmulcst))) integer_type in
-		      let lb1 = type_term (JCTbinary(zb1.zlow,Bmul_int,cst2)) integer_type in
-		      let lb2 = type_term (JCTbinary(zb2.zlow,Bmul_int,cst1)) integer_type in
-		      let rb1 = type_term (JCTbinary(zb1.zup,Bmul_int,cst2)) integer_type in
-		      let rb2 = type_term (JCTbinary(zb2.zup,Bmul_int,cst1)) integer_type in
-		      let lb = type_term (JCTbinary(lb1,Badd_int,lb2)) integer_type in
-		      let rb = type_term (JCTbinary(rb1,Badd_int,rb2)) integer_type in
-			{ zlow = lb; zup = rb; zmulcst = zb1.zmulcst * zb2.zmulcst; 
-			  zconstrs = zb1.zconstrs @ zb2.zconstrs; }
-		  in
-		  let zbs1 = zero_bounds_term t1 in
-		  let zbs2 = zero_bounds_term t2 in
-		  let zbs = List.map (fun zb1 -> List.map (add_zb zb1) zbs2) zbs1 in
-		    List.flatten zbs
-	      | Bsub_int ->
-		  let t2 = type_term (JCTunary (Uminus_int, t2)) integer_type in
-		  let t = type_term (JCTbinary(t1, Badd_int, t2)) integer_type in
-		    zero_bounds_term t
-	      | Bmul_int ->
-		  (* TODO: refine when one operand is constant *)
-		  auto_bounds t
-	      | Badd_real | Bsub_real | Bmul_real | Bdiv_real ->
-		  auto_bounds t
-	      | Bdiv_int ->
-		  let div_zb t cst zb =
-		    let cstt =
-		      type_term (JCTconst(JCCinteger(string_of_int (cst-1)))) integer_type in
-		    let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
-		    let zbpos = {
-		      zlow = type_term (JCTbinary(zb.zlow,Bsub_int,cstt)) integer_type;
-		      zup = zb.zup; 
-		      zmulcst = zb.zmulcst * cst; 
-		      zconstrs = 
-			raw_asrt(JCArelation(t,Bge_int,zero)) :: zb.zconstrs; 
-		    } in
-		    let zbneg = {
-		      zlow = zb.zlow;
-		      zup = type_term (JCTbinary(zb.zup,Badd_int,cstt)) integer_type; 
-		      zmulcst = zb.zmulcst * cst; 
-		      zconstrs = 
-			raw_asrt(JCArelation(t,Blt_int,zero)) :: zb.zconstrs; 
-		    } in
-		      [zbpos; zbneg]
-		  in
-		    begin match t2.jc_term_node with
-		      | JCTconst c ->
-			  begin match c with
-			    | JCCinteger s ->
-				let mulcst2 = int_of_string s in
-				let neg = mulcst2 < 0 in
-				let mulcst2 = abs mulcst2 in
-				let t1 =
-				  if neg then type_term (JCTunary(Uminus_int,t1)) integer_type else t1
-				in
-				let zbs1 = zero_bounds_term t1 in
-				  List.flatten (List.map (div_zb t1 mulcst2) zbs1)
-			    | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ ->
-				auto_bounds t
-			  end
-		      | _ -> auto_bounds t
-		    end
-	      | Bmod_int ->
-		  auto_bounds t
-	      | _ -> assert false
+  match t.jc_term_node with
+  | JCTbinary (t1, bop, t2) ->
+      if is_arithmetic_binary_op bop then
+        begin match bop with
+	| Badd_int ->
+	    let add_zb zb1 zb2 =
+	      if zb1.zmulcst = zb2.zmulcst then
+		let lb = type_term (JCTbinary (zb1.zlow, Badd_int, zb2.zlow)) integer_type in
+		let rb = type_term (JCTbinary (zb1.zup, Badd_int, zb2.zup)) integer_type in
+		{ zlow = lb; zup = rb; zmulcst = zb1.zmulcst; 
+		zconstrs = zb1.zconstrs @ zb2.zconstrs; }
+	      else
+		let cst1 =
+		  type_term (JCTconst(JCCinteger(string_of_int zb1.zmulcst))) integer_type in
+		let cst2 =
+		  type_term (JCTconst(JCCinteger(string_of_int zb2.zmulcst))) integer_type in
+		let lb1 = type_term (JCTbinary(zb1.zlow,Bmul_int,cst2)) integer_type in
+		let lb2 = type_term (JCTbinary(zb2.zlow,Bmul_int,cst1)) integer_type in
+		let rb1 = type_term (JCTbinary(zb1.zup,Bmul_int,cst2)) integer_type in
+		let rb2 = type_term (JCTbinary(zb2.zup,Bmul_int,cst1)) integer_type in
+		let lb = type_term (JCTbinary(lb1,Badd_int,lb2)) integer_type in
+		let rb = type_term (JCTbinary(rb1,Badd_int,rb2)) integer_type in
+		{ zlow = lb; zup = rb; zmulcst = zb1.zmulcst * zb2.zmulcst; 
+		zconstrs = zb1.zconstrs @ zb2.zconstrs; }
+	    in
+	    let zbs1 = zero_bounds_term t1 in
+	    let zbs2 = zero_bounds_term t2 in
+	    let zbs = List.map (fun zb1 -> List.map (add_zb zb1) zbs2) zbs1 in
+	    List.flatten zbs
+	| Bsub_int ->
+	    let t2 = type_term (JCTunary (Uminus_int, t2)) integer_type in
+	    let t = type_term (JCTbinary(t1, Badd_int, t2)) integer_type in
+	    zero_bounds_term t
+	| Bmul_int ->
+	    (* TODO: refine when one operand is constant *)
+	    auto_bounds t
+	| Badd_real | Bsub_real | Bmul_real | Bdiv_real ->
+	    auto_bounds t
+	| Bdiv_int ->
+	    let div_zb t cst zb =
+	      let cstt =
+		type_term (JCTconst(JCCinteger(string_of_int (cst-1)))) integer_type in
+	      let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
+	      let zbpos = {
+		zlow = type_term (JCTbinary(zb.zlow,Bsub_int,cstt)) integer_type;
+		zup = zb.zup; 
+		zmulcst = zb.zmulcst * cst; 
+		zconstrs = 
+		  raw_asrt(JCArelation(t,Bge_int,zero)) :: zb.zconstrs; 
+	      } in
+	      let zbneg = {
+		zlow = zb.zlow;
+		zup = type_term (JCTbinary(zb.zup,Badd_int,cstt)) integer_type; 
+		zmulcst = zb.zmulcst * cst; 
+		zconstrs = 
+		  raw_asrt(JCArelation(t,Blt_int,zero)) :: zb.zconstrs; 
+	      } in
+	      [zbpos; zbneg]
+	    in
+	    begin match t2.jc_term_node with
+	    | JCTconst c ->
+		begin match c with
+		| JCCinteger s ->
+		    let mulcst2 = int_of_string s in
+		    let neg = mulcst2 < 0 in
+		    let mulcst2 = abs mulcst2 in
+		    let t1 =
+		      if neg then type_term (JCTunary(Uminus_int,t1)) integer_type else t1
+		    in
+		    let zbs1 = zero_bounds_term t1 in
+		    List.flatten (List.map (div_zb t1 mulcst2) zbs1)
+		| JCCboolean _ | JCCvoid | JCCnull | JCCreal _ ->
+		    auto_bounds t
+		end
+	    | _ -> auto_bounds t
 	    end
-	  else auto_bounds t
-      | JCTunary (uop, t1) ->
-	  if is_arithmetic_unary_op uop then
-	    begin match uop with
-	      | Uplus_int ->
-		  zero_bounds_term t1
-	      | Uminus_int ->
-		  let minus_zb zb =
-		    let lb1 = type_term (JCTunary (Uminus_int, zb.zlow)) integer_type in
-		    let rb1 = type_term (JCTunary (Uminus_int, zb.zup)) integer_type in
-		      { zb with zlow = rb1; zup = lb1; }
-		  in
-		  let zbs = zero_bounds_term t1 in
-		    List.map minus_zb zbs
-	      | Uplus_real | Uminus_real ->
-		  auto_bounds t
-	      | _ -> assert false
-	    end
-	  else auto_bounds t
-      | JCTconst _ | JCTvar _ | JCTderef _ | JCToffset _
-      | JCTapp _ | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
-      | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ ->
-	  auto_bounds t
+	| Bmod_int ->
+	    auto_bounds t
+	| _ -> assert false
+	end
+      else auto_bounds t
+  | JCTunary (uop, t1) ->
+      if is_arithmetic_unary_op uop then
+	begin match uop with
+	| Uplus_int ->
+	    zero_bounds_term t1
+	| Uminus_int ->
+	    let minus_zb zb =
+	      let lb1 = type_term (JCTunary (Uminus_int, zb.zlow)) integer_type in
+	      let rb1 = type_term (JCTunary (Uminus_int, zb.zup)) integer_type in
+	      { zb with zlow = rb1; zup = lb1; }
+	    in
+	    let zbs = zero_bounds_term t1 in
+	    List.map minus_zb zbs
+	| Uplus_real | Uminus_real ->
+	    auto_bounds t
+	| _ -> assert false
+	end
+      else auto_bounds t
+  | JCTconst _ | JCTvar _ | JCTderef _ | JCToffset _
+  | JCTapp _ | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
+  | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ ->
+      auto_bounds t
 	    
 let linstr_of_term env t =
   let mkmulstr = function
@@ -1153,6 +1102,21 @@ let rec linstr_of_assertion env a =
   | JCArelation(t1,bop,t2) ->
       let subt = type_term (JCTbinary (t1, Bsub_int, t2)) integer_type in
       begin match linstr_of_term env subt with
+      | Some (env,str,cst) ->
+	  let cstr = string_of_int (- cst) in
+	  (* Do not use < and > with APRON. Convert to equivalent non-strict. *)
+	  let str = match bop with
+	    | Blt_int -> [[str ^ " <= " ^ (string_of_int ((- cst) - 1))]]
+	    | Bgt_int -> [[str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
+	    | Ble_int -> [[str ^ " <= " ^ cstr]]
+	    | Bge_int -> [[str ^ " >= " ^ cstr]]
+	    | Beq_int -> [[str ^ " = " ^ cstr]]
+	    | Blt_real | Bgt_real | Ble_real | Bge_real
+	    | Beq_real | Beq_pointer
+	    | Bneq_int | Bneq_real | Bneq_pointer -> Dnf.true_
+	    | _ -> assert false
+	  in
+	  env, str
       | None -> 
 	  let zbs = zero_bounds_term subt in
 	  let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
@@ -1219,21 +1183,6 @@ let rec linstr_of_assertion env a =
 		in strdnf_of_dnf env adnf
 	    | _ -> assert false (* TODO *)
 	    end
-      | Some (env,str,cst) ->
-	  let cstr = string_of_int (- cst) in
-	  (* Do not use < and > with APRON. Convert to equivalent non-strict. *)
-	  let str = match bop with
-	    | Blt_int -> [[str ^ " <= " ^ (string_of_int ((- cst) - 1))]]
-	    | Bgt_int -> [[str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
-	    | Ble_int -> [[str ^ " <= " ^ cstr]]
-	    | Bge_int -> [[str ^ " >= " ^ cstr]]
-	    | Beq_int -> [[str ^ " = " ^ cstr]]
-	    | Blt_real | Bgt_real | Ble_real | Bge_real
-	    | Beq_real | Beq_pointer
-	    | Bneq_int | Bneq_real | Bneq_pointer -> Dnf.true_
-	    | _ -> assert false
-	  in
-	  env, str
       end
   | JCAnot a ->
       let nota = not_asrt a in
@@ -1279,50 +1228,6 @@ let is_null_term t =
   match t.jc_term_node with
   | JCTconst (JCCinteger "0") -> true
   | _ -> false
-
-(* let rec strlen_linstr_of_assertion env a =  *)
-(*   match a.jc_assertion_node with *)
-(*   | JCArelation(t1,(Bneq_int | Beq_int as op),t2) -> *)
-(*       if is_null_term t2 then *)
-(* 	begin match t1.jc_term_node with *)
-(* 	| JCTderef(t1,_) ->  *)
-(* 	    begin match destruct_pointer t1 with *)
-(* 	    | None,_ -> None *)
-(* 	    | Some vi,offt -> *)
-(* 		let vit = var_term vi in *)
-(* 		let va = Vai.strlen_variable vit in *)
-(* 		let env =  *)
-(* 		  if Environment.mem_var env va then env *)
-(* 		  else Environment.add env [|va|] [||]  *)
-(* 		in  *)
-(* 		let strt = Vai.term va in *)
-(* 		let t = match offt with  *)
-(* 		  | None -> strt *)
-(* 		  | Some offt -> type_term (JCTbinary(strt,Bsub_int,offt)) integer_type  *)
-(* 		in *)
-(* 		match linstr_of_term env t with *)
-(* 		| None -> None *)
-(* 		| Some ("",_) -> assert false *)
-(* 		| Some (str,cst) -> *)
-(* 		    match op with *)
-(* 		    | Bneq_int ->  *)
-(* 			let stra = str ^ " > " ^ (string_of_int (- cst)) in *)
-(* 			Some ([[stra]],env) *)
-(* 		    | Beq_int ->  *)
-(* 			let stra = str ^ " = " ^ (string_of_int (- cst)) in *)
-(* 			Some ([[stra]],env) *)
-(* 		    | _ -> assert false *)
-(* 	    end *)
-(* 	| _ -> None *)
-(* 	end *)
-(*       else None *)
-(*   | JCAnot a -> *)
-(*       let nota = not_asrt a in *)
-(*       begin match nota.jc_assertion_node with *)
-(*       | JCAnot _ -> None *)
-(*       | _ -> strlen_linstr_of_assertion env nota *)
-(*       end *)
-(*   | _ -> None *)
 
 
 (*****************************************************************************)
@@ -1472,60 +1377,69 @@ let mkinvariant mgr absval =
 (* Collecting assertions.                                                    *)
 (*****************************************************************************)
       
-let rec collect_expr_asserts e =
-  match e.jc_expr_node with
-    | JCEconst _ | JCEvar _ -> []
-    | JCEderef (e1, fi) ->
-	begin match term_of_expr e1 with
-	  | None -> []
-	  | Some t1 ->
-	      match destruct_pointer t1 with
-		| None, _ -> []
-		| Some vi, offt ->
-		    let offt = match offt with
-		      | None -> type_term (JCTconst (JCCinteger "0")) integer_type
-		      | Some offt -> offt
-		    in
-		    let vt = type_term (JCTvar vi) vi.jc_var_info_type in
-		    let st = match vi.jc_var_info_type with
-		      | JCTpointer (st, _, _) -> st
-		      | _ -> assert false
-		    in
-		    let mint = type_term (JCToffset (Offset_min, vt, st)) integer_type in
-		    let maxt = type_term (JCToffset (Offset_max, vt, st)) integer_type in
-		    let mina = raw_asrt (JCArelation (mint, Ble_int, offt)) in
-		    let maxa = raw_asrt (JCArelation (offt, Ble_int, maxt)) in
-		    let mina = stronger_assertion mina in
-		    let maxa = stronger_assertion maxa in
-		      [make_and [mina; maxa]]
-	end
-    | JCErange_cast (ei, e1) ->
-	begin match term_of_expr e1 with
-	  | None -> []
-	  | Some t1 ->
-	      let mint = type_term
-		(JCTconst (JCCinteger (Num.string_of_num ei.jc_enum_info_min)))
-		 integer_type
-	      in
-	      let maxt = type_term
-		(JCTconst(JCCinteger (Num.string_of_num ei.jc_enum_info_max)))
-		integer_type
-	      in
-	      let mina = raw_asrt (JCArelation (mint, Ble_int, t1)) in
-	      let maxa = raw_asrt (JCArelation (t1, Ble_int, maxt)) in
-	      let mina = stronger_assertion mina in
-	      let maxa = stronger_assertion maxa in
-		[make_and [mina; maxa]]
-	end
-    | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) -> 
-	collect_expr_asserts e1 @ (collect_expr_asserts e2)
-    | JCEunary(_,e1) | JCEinstanceof(e1,_) | JCEcast(e1,_)
-    | JCEoffset(_,e1,_) | JCEalloc(e1,_) | JCEfree e1 ->
-	collect_expr_asserts e1
-    | JCEif(e1,e2,e3) ->
-	collect_expr_asserts e1 @ (collect_expr_asserts e2) 
-	@ (collect_expr_asserts e3)
-	  
+(* Collect safety assertions from the evaluation of expression [e]. 
+ * Currently, 3 kinds of assertions are collected, that check for:
+ * - memory safety 
+ * - no integer overflows
+ * - no division by zero
+ *)
+let collect_expr_asserts e =
+  (* Collect memory safety assertions. *)
+  let collect_memory_access e1 fi =
+    match term_of_expr e1 with None -> [] | Some t1 ->
+      match destruct_pointer t1 with None, _ -> [] | Some vi, offt ->
+	let offt = match offt with
+	  | None -> 
+	      type_term (JCTconst (JCCinteger "0")) integer_type
+	  | Some offt -> offt
+	in
+	let vt = type_term (JCTvar vi) vi.jc_var_info_type in
+	let st = match vi.jc_var_info_type with
+	  | JCTpointer (st, _, _) -> st
+	  | _ -> assert false
+	in
+	let mint = 
+	  type_term (JCToffset (Offset_min, vt, st)) integer_type in
+	let maxt = 
+	  type_term (JCToffset (Offset_max, vt, st)) integer_type in
+	let mina = raw_asrt (JCArelation (mint, Ble_int, offt)) in
+	let maxa = raw_asrt (JCArelation (offt, Ble_int, maxt)) in
+	let mina = stronger_assertion mina in
+	let maxa = stronger_assertion maxa in
+	[mina; maxa]
+  in
+  (* Collect absence of integer overflow assertions. *)
+  let collect_integer_overflow ei e1 =
+    match term_of_expr e1 with None -> [] | Some t1 ->
+      let mint = type_term
+	(JCTconst (JCCinteger (Num.string_of_num ei.jc_enum_info_min)))
+	integer_type
+      in
+      let maxt = type_term
+	(JCTconst(JCCinteger (Num.string_of_num ei.jc_enum_info_max)))
+	integer_type
+      in
+      let mina = raw_asrt (JCArelation (mint, Ble_int, t1)) in
+      let maxa = raw_asrt (JCArelation (t1, Ble_int, maxt)) in
+      let mina = stronger_assertion mina in
+      let maxa = stronger_assertion maxa in
+      [mina; maxa]
+  in
+  (* Collect absence of division by zero assertions. *)
+  let collect_zero_division e =
+    match term_of_expr e with None -> [] | Some t ->
+      let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
+      [raw_asrt(JCArelation(t,Bneq_int,zero))]
+  in
+  let collect e = 
+    match e.jc_expr_node with
+    | JCEderef(e1,fi) -> collect_memory_access e1 fi
+    | JCErange_cast(ei,e1) -> collect_integer_overflow ei e1
+    | JCEbinary(_,Bdiv_int,e2) -> collect_zero_division e2
+    | _ -> []
+  in
+  fold_expr (fun acc e -> collect e @ acc) [] e
+
 let collect_statement_asserts s = 
   match s.jc_statement_node with
     | JCSdecl(_,Some e1,_)
@@ -1556,82 +1470,83 @@ let collect_expr_targets s e =
   List.map (target_of_assertion s e.jc_expr_loc) asrts
 
 let rec collect_targets targets s =
-  let asrts = collect_statement_asserts s in
-  let targets = 
-    (List.map (target_of_assertion s s.jc_statement_loc) asrts) @ targets in
-  match s.jc_statement_node with
-  | JCSdecl(_,_,s) | JCScall(_,_,_,s) -> 
-      collect_targets targets s
-  | JCSblock sl ->
-      List.fold_left collect_targets targets sl
-  | JCSif(e,ts,fs) ->
-      collect_targets (collect_targets 
-	(collect_expr_targets s e @ targets) ts) fs
-  | JCStry(s,hl,fs) ->
-      let targets = collect_targets targets s in
-      let targets = 
-	List.fold_left 
-	  (fun targets (_,_,s) -> collect_targets targets s) targets hl
-      in
-      collect_targets targets fs
-  | JCSloop(_,ls) ->
-      collect_targets targets ls
-  | JCSreturn(_,e) | JCSthrow(_,Some e) ->
-      collect_expr_targets s e @ targets
-  | JCSassert _ | JCSassign_var _ | JCSthrow(_,None)
-  | JCSassign_heap _ | JCSpack _ | JCSunpack _ | JCSreturn_void ->
-      targets
+  let rec collect targets s =
+    let asrts = collect_statement_asserts s in
+    let targets = 
+      (List.map (target_of_assertion s s.jc_statement_loc) asrts) @ targets in
+    match s.jc_statement_node with
+    | JCSdecl(_,_,s) | JCScall(_,_,_,s) -> 
+	collect targets s
+    | JCSblock sl ->
+	List.fold_left collect targets sl
+    | JCSif(e,ts,fs) ->
+	collect (collect 
+	  (collect_expr_targets s e @ targets) ts) fs
+    | JCStry(s,hl,fs) ->
+	let targets = collect targets s in
+	let targets = 
+	  List.fold_left 
+	    (fun targets (_,_,s) -> collect targets s) targets hl
+	in
+	collect targets fs
+    | JCSloop(_,ls) ->
+	collect targets ls
+    | JCSreturn(_,e) | JCSthrow(_,Some e) ->
+	collect_expr_targets s e @ targets
+    | JCSassert _ | JCSassign_var _ | JCSthrow(_,None)
+    | JCSassign_heap _ | JCSpack _ | JCSunpack _ | JCSreturn_void ->
+	targets
+  in
+  List.rev (collect targets s)
 
 
 (*****************************************************************************)
 (* Performing abstract interpretation.                                       *)
 (*****************************************************************************)
 
-let test_dnf mgr pre dnf =
-  let env = Abstract1.env pre in
-  let test_conj cstrs =
-    let lincons =
-      try Parser.lincons1_of_lstring env cstrs
-      with Parser.Error _ -> assert false
-    in
-      (*     let envprint = Environment.print ~first:"[" ~sep:"," ~last:"]" in *)
-      (*     if Jc_options.debug then *)
-      (*       printf "pre.env = %a@.lincons.env = %a@." *)
-      (* 	envprint (Abstract1.env pre) *)
-      (* 	envprint (Lincons1.array_get_env lincons); *)
-    let copy_pre = Abstract1.copy mgr pre in
-      Abstract1.meet_lincons_array_with mgr copy_pre lincons;
-      copy_pre
-  in
-    match dnf with
-      | [] -> 
-	  Abstract1.bottom mgr (Abstract1.env pre)
-      | [[]] -> 
-	  pre
-      | _ ->
-	  let absvals = List.map test_conj dnf in
-	  let bot = Abstract1.bottom mgr (Abstract1.env pre) in
-	    List.iter (fun absval -> Abstract1.join_with mgr bot absval) absvals;
-	    bot
-	      
 let rec test_assertion mgr pre a =
-  (* 'constant' assertions (eg: 0 <= 1) do not have to be tested (Nicolas) *)
-  if is_constant_assertion a then () else
-  match a.jc_assertion_node with
-  | JCArelation _ ->    
-      let env = Abstract1.env pre in
-      let env, be = linstr_of_assertion env a in
-      let env, bemin = offset_min_linstr_of_assertion env a in
-      let env, bemax = offset_max_linstr_of_assertion env a in
-      let dnf = Dnf.make_and [be; bemin; bemax] in
-      Abstract1.change_environment_with mgr pre env false;
-      Dnf.test mgr pre dnf
-  | JCAand al ->
-      List.iter (test_assertion mgr pre) al
-  | JCAnot _
-  | JCAtrue | JCAfalse | JCAor _ | JCAimplies _ | JCAiff _
-  | JCAapp _ | JCAquantifier _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
-  | JCAif _ | JCAmutable _ | JCAtagequality _ -> ()
+  let env = Abstract1.env pre in
+  let rec extract_environment_and_dnf env a =
+    (* 'constant' assertions (eg: 0 <= 1) do not have to be tested (Nicolas) *)
+    if is_constant_assertion a then env,Dnf.true_ else
+      match a.jc_assertion_node with
+      | JCAtrue -> env,Dnf.true_
+      | JCAfalse -> env,Dnf.false_
+      | JCArelation(t1,Bneq_int,t2) ->
+	  let infa = raw_asrt(JCArelation(t1,Blt_int,t2)) in
+	  let supa = raw_asrt(JCArelation(t1,Bgt_int,t2)) in
+	  let env,dnf1 = extract_environment_and_dnf env infa in
+	  let env,dnf2 = extract_environment_and_dnf env supa in
+	  env,Dnf.make_or [dnf1;dnf2]
+      | JCArelation _ ->
+	  let env, be = linstr_of_assertion env a in
+	  let env, bemin = offset_min_linstr_of_assertion env a in
+	  let env, bemax = offset_max_linstr_of_assertion env a in
+	  let dnf = Dnf.make_and [be; bemin; bemax] in
+	  env,dnf
+      | JCAand al ->
+	  List.fold_left (fun (env,dnf1) a ->
+	    let env,dnf2 = extract_environment_and_dnf env a in
+	    env,Dnf.make_and [dnf1;dnf2]
+	  ) (env,Dnf.true_) al
+      | JCAor al ->
+	  List.fold_left (fun (env,dnf1) a ->
+	    let env,dnf2 = extract_environment_and_dnf env a in
+	    env,Dnf.make_or [dnf1;dnf2]
+	  ) (env,Dnf.false_) al
+      | JCAnot a ->
+	  let nota = not_asrt a in
+	  begin match nota.jc_assertion_node with
+	  | JCAnot _ -> env, Dnf.true_
+	  | _ -> extract_environment_and_dnf env nota
+	  end
+      | JCAimplies _ | JCAiff _
+      | JCAapp _ | JCAquantifier _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
+      | JCAif _ | JCAmutable _ | JCAtagequality _ -> env,Dnf.true_
+  in
+  let env,dnf = extract_environment_and_dnf env a in
+  Abstract1.change_environment_with mgr pre env false;
+  Dnf.test mgr pre dnf
 
 let test_expr ~(neg:bool) mgr pre e =
   let a = asrt_of_expr e in
@@ -1647,6 +1562,9 @@ let assign_variable mgr pre va e =
   in
   match linstr_of_expr env e with
   | Some(env,str) ->
+      
+      if debug then printf "[assign_variable] str %s@." str;
+
       (* Assignment can be treated precisely. *)
       let lin = 
 	try Parser.linexpr1_of_string env str
@@ -1655,6 +1573,9 @@ let assign_variable mgr pre va e =
       Abstract1.change_environment_with mgr pre env false;
       Abstract1.assign_linexpr_with mgr pre va lin None
   | None ->
+
+      if debug then printf "[assign_variable] no str@.";
+
       (* Try over-approximate treatment of assignment. *)
       if Environment.mem_var env0 va then
 	Abstract1.forget_array_with mgr pre [|va|] false;
@@ -1698,8 +1619,7 @@ let assign_expr mgr pre t e =
   let integer_vars = Array.to_list (fst (Environment.vars env)) in
   let forget_vars = 
     List.filter (fun va' ->
-      let t' = Vai.term va' in
-      raw_term_compare t t' <> 0 && raw_sub_term t t'
+      let t' = Vai.term va' in raw_strict_sub_term t t'
     ) integer_vars
   in
   let forget_vars = Array.of_list forget_vars in
@@ -1716,7 +1636,7 @@ let assign_expr mgr pre t e =
       in
       List.iter (fun va' ->
 	let t' = Vai.term va' in
-	if raw_sub_term te t' then 
+	if raw_strict_sub_term te t' then 
 	  let lhst = 
 	    replace_term_in_term ~source:te ~target:t.jc_term_node t' 
 	  in
@@ -1770,47 +1690,6 @@ let join_invariants mgr invs1 invs2 =
   join_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
   invs1.jc_absinv_exceptional <-
     join_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
-
-(* Arguments of [meet] should be on the same environment. *)
-let meet mgr absval1 absval2 =
-  let env1 = Abstract1.env absval1 in
-  let absval2 = Abstract1.change_environment mgr absval2 env1 false in
-  Abstract1.meet_with mgr absval1 absval2;
-  absval1
-
-let meet_abstract_value mgr absval1 absval2 =
-  { 
-    jc_absval_regular = 
-      meet mgr absval1.jc_absval_regular absval2.jc_absval_regular;
-    jc_absval_propagated = 
-      meet mgr absval1.jc_absval_propagated absval2.jc_absval_propagated;
-  }
-
-let meet_invariants mgr invs1 invs2 =
-  if Jc_options.debug then
-    printf "@[<v 2>[meet]@\n%a@\nand@\n%a@]@." 
-      print_abstract_invariants invs1 print_abstract_invariants invs2;
-  let meet_exclists postexcl1 postexcl2 =
-    let meet1 = List.fold_right (fun (ei,post1) acc ->
-      try
-	let post2 = List.assoc ei postexcl2 in
-	(ei, meet_abstract_value mgr post1 post2) :: acc
-      with Not_found -> (ei,post1) :: acc
-    ) postexcl1 []
-    in
-    List.fold_right (fun (ei,post2) acc ->
-      if List.mem_assoc ei meet1 then acc 
-      else (ei, post2) :: acc
-    ) postexcl2 meet1
-  in
-  assert (invs1.jc_absinv_return == invs2.jc_absinv_return);
-  {
-    jc_absinv_normal =
-      meet_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
-    jc_absinv_exceptional =
-      meet_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional;
-    jc_absinv_return = invs1.jc_absinv_return;
-  }
 
 (* Returns the widened value as there is no destructive version of [widening]
  * in [Abstract1]. *)
@@ -1990,7 +1869,7 @@ and intern_ai_statement abs curinvs s =
       let asrts = collect_expr_asserts e in
       List.iter (test_assertion mgr prop) asrts;
       (* <return e;> is logically equivalent to <\result = e;> *)
-      let vit = var_term (var t "result") in
+      let vit = var_term (var t "\\result") in
       assign_expr mgr pre vit e;
       join_abstract_value mgr !postret normal;
       empty_abstract_value mgr normal
@@ -2335,7 +2214,6 @@ module Vwp : sig
   val variable : term -> string
   val offset_min_variable : term -> struct_info -> string
   val offset_max_variable : term -> struct_info -> string
-  val strlen_variable : term -> string
 
   val term : string -> term
 
@@ -2344,7 +2222,6 @@ end = struct
   let variable_table = Hashtbl.create 0
   let offset_min_variable_table = Hashtbl.create 0
   let offset_max_variable_table = Hashtbl.create 0
-  let strlen_variable_table = Hashtbl.create 0
   let term_table = Hashtbl.create 0
 
   let variable t = 
@@ -2383,18 +2260,6 @@ end = struct
     end;
     s
 
-  let strlen_variable t = 
-    let s = "__jc_strlen_" ^ (term_name t) in
-    begin try 
-      let t2 = Hashtbl.find strlen_variable_table s in
-      assert (raw_term_compare t t2 = 0)
-    with Not_found ->
-      Hashtbl.add strlen_variable_table s t;
-      let tmax = type_term (JCTapp(strlen_f (),[t])) integer_type in
-      Hashtbl.add term_table s tmax
-    end;
-    s
-
   let term s = Hashtbl.find term_table s
 
 end
@@ -2429,6 +2294,9 @@ let rec free_variables t =
 
 let rec atp_of_term t = 
   if debug then printf "[atp_of_term] %a@." Jc_output.term t;
+  let is_constant_term t = 
+    match t.jc_term_node with JCTconst _ -> true | _ -> false
+  in
   match t.jc_term_node with
   | JCTconst c ->
       begin match c with
@@ -2437,22 +2305,23 @@ let rec atp_of_term t =
       | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ -> 
 	  assert false
       end
-  | JCTvar _ | JCTderef _ ->
-      Atp.Var (Vwp.variable t)
-  | JCTbinary(t1,bop,t2) ->
+  | JCTbinary(t1,(Badd_int | Bsub_int as bop),t2) ->
       Atp.Fn(atp_arithmetic_of_binop bop, List.map atp_of_term [t1;t2])
+  | JCTbinary(t1,(Bmul_int as bop),t2) 
+      when (is_constant_term t1 || is_constant_term t2) ->
+      Atp.Fn(atp_arithmetic_of_binop bop, List.map atp_of_term [t1;t2])
+  | JCTbinary(t1,(Bdiv_int as bop),t2) when (is_constant_term t2) ->
+      Atp.Fn(atp_arithmetic_of_binop bop, List.map atp_of_term [t1;t2])
+  | JCTbinary(t1,bop,t2) ->
+      Atp.Var (Vwp.variable t)
   | JCTunary(uop,t1) ->
       Atp.Fn(Jc_output.unary_op uop, [atp_of_term t1])
   | JCToffset(Offset_min,t,st) ->
       Atp.Var (Vwp.offset_min_variable t st)
   | JCToffset(Offset_max,t,st) ->
       Atp.Var (Vwp.offset_max_variable t st)
-  | JCTapp(f,[t]) ->
-      if f.jc_logic_info_name = "strlen" then
-	Atp.Var (Vwp.strlen_variable t)
-      else assert false
-  | JCTapp _ -> 
-      assert false
+  | JCTvar _ | JCTderef _ | JCTapp _ -> 
+      Atp.Var (Vwp.variable t)
   | JCTshift _ | JCTsub_pointer _ | JCTold _
   | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
       assert false
@@ -2634,6 +2503,7 @@ let contradictory a b =
 let simplify =
   let mgr = Polka.manager_alloc_strict () in
   fun a inv ->
+    if tautology a then raw_asrt JCAtrue else
     let dnf = Atp.dnf (atp_of_asrt a) in
     let vars = Atp.fv dnf in
     let vars = List.map Vwp.term vars in
@@ -2648,14 +2518,6 @@ let simplify =
 	not(contradictory (make_and conjunct) inv)
       ) disjuncts
     in
-
-    let strlen_vars = List.filter Vai.is_strlen_variable vars in
-    let cstrs = List.map (fun va ->
-      let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
-      raw_asrt(JCArelation(Vai.term va,Bge_int,zero))
-    ) strlen_vars in
-    let cstrs = List.map (unique_linstr_of_assertion env) cstrs in
-    let strlen_lincons = Parser.lincons1_of_lstring env cstrs in
 
     let abstract_disjuncts,other_disjuncts = 
       List.fold_right (fun conjunct (abstractl,otherl) ->
@@ -2683,17 +2545,7 @@ let simplify =
 	  if Abstract1.is_bottom mgr absval = Manager.True then
 	    abstractl, otherl
 	  else
-	    let test_absval = Abstract1.copy mgr absval in
-	    Abstract1.meet_lincons_array_with mgr test_absval strlen_lincons;
-	    if (Abstract1.is_top mgr test_absval = Manager.True) then
-	      failwith "Incorrect overapproximation";
-	    if Jc_options.debug then
-	      printf "abstract conjunct with strlen : %a@." 
-		Abstract1.print test_absval;
-	    if Abstract1.is_bottom mgr test_absval = Manager.True then
-	      abstractl, otherl
-	    else
-	      absval :: abstractl, otherl
+	    absval :: abstractl, otherl
 	with Parser.Error _ | Failure _ ->
 	  abstractl, make_and (List.map presentify conjunct) :: otherl
       ) disjuncts ([],[])
@@ -2976,7 +2828,6 @@ let wp_function targets (fi,fs,sl) =
   let weakpre = {
     jc_weakpre_loop_invariants = Hashtbl.create 0;
   } in
-  let fpre = fs.jc_fun_requires in
   List.iter (fun target ->
     let initposts = {
       jc_post_normal = None;
@@ -2993,7 +2844,7 @@ let wp_function targets (fi,fs,sl) =
 	let qf = 
 	  VarSet.fold (fun vi a -> raw_asrt (JCAquantifier(Forall,vi,a))) vs a
 	in
-	let qe = quantif_eliminate qf fpre in
+	let qe = quantif_eliminate qf fs.jc_fun_requires in
 	match qe.jc_assertion_node with
 	| JCAfalse ->
 	    if Jc_options.verbose then
