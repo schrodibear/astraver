@@ -94,7 +94,7 @@ let rec statement acc s =
 	let (a,b)=acc in statement (a,f::b) s
     | JCSassign_var _ | JCSassign_heap _ -> acc
     | JCSreturn _ | JCSpack _ | JCSunpack _ | JCSthrow _ -> acc
-    | JCSif(_, s1, s2) | JCScut_if(_, _, s1, s2) ->
+    | JCSif(_, s1, s2) ->
 	statement (statement acc s1) s2
     | JCSloop(spec,s) ->
 	let (a,b) = statement acc s in (loop_annot a spec,b)

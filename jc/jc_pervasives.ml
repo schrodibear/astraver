@@ -289,6 +289,99 @@ let make_fun_info name ty =
 
 let real_of_integer_ = make_fun_info "real_of_integer" real_type
 
+let option_compare comp opt1 opt2 = match opt1,opt2 with
+  | None,None -> 0
+  | None,Some _ -> -1
+  | Some _,None -> 1
+  | Some x,Some y -> comp x y
+
+let rec list_compare comp ls1 ls2 = match ls1,ls2 with
+  | [],[] -> 0
+  | [],_ -> -1
+  | _,[] -> 1
+  | x1::r1,x2::r2 -> 
+      let compx = comp x1 x2 in 
+      if compx = 0 then list_compare comp r1 r2 else compx
+
+let term_num t = match t.jc_term_node with
+  | JCTconst _ -> 1
+  | JCTvar _ -> 3
+  | JCTbinary _ -> 5
+  | JCTshift _ -> 7
+  | JCTsub_pointer _ -> 11
+  | JCTunary _ -> 13
+  | JCTderef _ -> 17
+  | JCTold _ -> 19
+  | JCToffset _ -> 23
+  | JCTinstanceof _ -> 31
+  | JCTcast _ -> 37
+  | JCTrange _ -> 41
+  | JCTapp _ -> 43
+  | JCTif _ -> 47
+
+(* Comparison based only on term structure, not types not locations. *)
+let rec raw_term_compare t1 t2 =
+  match t1.jc_term_node,t2.jc_term_node with
+  | JCTconst c1,JCTconst c2 -> 
+      Pervasives.compare c1 c2
+  | JCTvar v1,JCTvar v2 -> 
+      Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
+  | JCTbinary(t11,op1,t12),JCTbinary(t21,op2,t22) -> 
+      let compop = Pervasives.compare op1 op2 in
+      if compop = 0 then 
+	let comp1 = raw_term_compare t11 t21 in
+	if comp1 = 0 then raw_term_compare t12 t22 else comp1
+      else compop
+  | JCTshift(t11,t12),JCTshift(t21,t22)
+  | JCTsub_pointer(t11,t12),JCTshift(t21,t22) ->
+      let comp1 = raw_term_compare t11 t21 in
+      if comp1 = 0 then raw_term_compare t12 t22 else comp1
+  | JCTunary(op1,t11),JCTunary(op2,t21) ->
+      let compop = Pervasives.compare op1 op2 in
+      if compop = 0 then raw_term_compare t11 t21 else compop
+  | JCTold t11,JCTold t21 ->
+      raw_term_compare t11 t21
+  | JCTderef(t11,fi1),JCTderef(t21,fi2) ->
+      let compfi = 
+	Pervasives.compare fi1.jc_field_info_tag fi2.jc_field_info_tag
+      in
+      if compfi = 0 then raw_term_compare t11 t21 else compfi
+  | JCToffset(ok1,t11,st1),JCToffset(ok2,t21,st2) ->
+      let compok = Pervasives.compare ok1 ok2 in
+      if compok = 0 then
+	let compst = 
+	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	in
+	if compst = 0 then raw_term_compare t11 t21 else compst
+      else compok
+  | JCTinstanceof(t11,st1),JCTinstanceof(t21,st2) 
+  | JCTcast(t11,st1),JCTcast(t21,st2) ->
+      let compst = 
+	Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+      in
+      if compst = 0 then raw_term_compare t11 t21 else compst
+  | JCTrange(t11opt,t12opt),JCTrange(t21opt,t22opt) ->
+      let comp1 = option_compare raw_term_compare t11opt t21opt in
+      if comp1 = 0 then 
+	option_compare raw_term_compare t12opt t22opt
+      else comp1
+  | JCTapp(li1,ts1),JCTapp(li2,ts2) ->
+      let compli = 
+	Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
+      in
+      if compli = 0 then
+	list_compare raw_term_compare ts1 ts2
+      else compli
+  | JCTif(t11,t12,t13),JCTif(t21,t22,t23) ->
+      let comp1 = raw_term_compare t11 t21 in
+      if comp1 = 0 then 
+	let comp2 = raw_term_compare t12 t22 in
+	if comp2 = 0 then raw_term_compare t13 t23 else comp2
+      else comp1
+  | _ -> term_num t2 - term_num t1
+
+let raw_term_equal t1 t2 = raw_term_compare t1 t2 = 0
+
 let rec iter_term f t =
   f t;
   match t.jc_term_node with
@@ -394,6 +487,8 @@ let rec pre_map_term f t =
   in
   { t with jc_term_node = tnode; }
 
+let raw_sub_term subt t =
+  fold_term (fun acc t -> acc || raw_term_equal subt t) false t
 
 let raw_asrt a = {
   jc_assertion_node = a;

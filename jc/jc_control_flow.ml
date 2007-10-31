@@ -50,7 +50,7 @@ let rec statement g fun_exit_node s =
 	G.add_vertex g n;
 	G.add_edge g n fun_exit_node;
 	n,[]
-    | JCSif (e, s1, s2) | JCScut_if (_, e, s1, s2) ->
+    | JCSif (e, s1, s2) ->
 	let n = new_node s in
 	G.add_vertex g n;
 	let entry1,exits1 = statement g fun_exit_node s1 in

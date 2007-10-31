@@ -961,7 +961,7 @@ let rec statement ~threats s =
 	  lets
 (*	if Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCSblock l -> statement_list ~threats l
-    | JCSif (e, s1, s2) | JCScut_if (_, e, s1, s2) -> 
+    | JCSif (e, s1, s2) -> 
 	let e = expr e in
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->

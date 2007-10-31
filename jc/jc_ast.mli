@@ -326,7 +326,6 @@ type tstatement_node =
   | JCTSassert of string option * assertion
   | JCTSdecl of var_info * texpr option * tstatement
   | JCTSif of texpr * tstatement * tstatement
-  | JCTScut_if of loop_annot * texpr * tstatement * tstatement (* see normalized ast (i.e. statement_node) (Nicolas) *)
   | JCTSwhile of texpr * loop_annot * tstatement
   | JCTSfor of texpr * texpr list * loop_annot  * tstatement
       (*r condition, updates, loop annotations, body *)
@@ -430,9 +429,6 @@ type statement_node =
   | JCSblock of statement list
   | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement
-      (* <if> that is a cut point in ai. *)
-      (* (ie. <while c { b }> is normalized into <while true { if c then b else throw Loop_exit; }> *)
-  | JCScut_if of loop_annot * expr * statement * statement (* (Nicolas) *)
   | JCSloop of loop_annot * statement
   | JCSreturn_void 
   | JCSreturn of jc_type * expr

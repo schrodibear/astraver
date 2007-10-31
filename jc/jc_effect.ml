@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.54 2007-10-29 21:54:55 nrousset Exp $ *)
+(* $Id: jc_effect.ml,v 1.55 2007-10-31 08:16:53 moy Exp $ *)
 
 
 open Jc_env
@@ -312,7 +312,7 @@ let rec statement ef s =
     | JCSloop (la, s) -> 
 	let ef = {ef with jc_reads = loop_annot ef.jc_reads la } in
 	statement ef s
-    | JCSif (e, s1, s2) | JCScut_if (_, e, s1, s2) -> 
+    | JCSif (e, s1, s2) -> 
 	statement (statement (expr ef e) s1) s2
     | JCSdecl(vi,e,s) -> 
 	statement (Option_misc.fold_left expr ef e) s
