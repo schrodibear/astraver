@@ -6,16 +6,22 @@ type charP = {
 logic integer strlen(charP[..] p) reads (p+[0..]).charM;
 
 unit strcat(charP[..] dest, charP[..] src) {  
+    assert (0 <= strlen(src));
+    assert (0 <= strlen(dest));
     integer i = 0;
     integer j = 0;
     while (dest + i).charM != 0 ; {
+	assert (i < strlen(dest));
 	i = i + 1;
     }
+    assert (i == strlen(dest));
     while true ; {
         if ((src + j).charM != 0) {
-             (dest + i + j).charM = (src + j).charM;
-	     j = j + 1;
+	    assert (j < strlen(src));
+	    (dest + i + j).charM = (src + j).charM;
+	    j = j + 1;
 	}
+	assert (j == strlen(src));
     }
 }
 
