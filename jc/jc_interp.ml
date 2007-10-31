@@ -187,8 +187,8 @@ let bin_op = function
   | Badd_int -> "add_int"
   | Bsub_int -> "sub_int"
   | Bmul_int -> "mul_int"
-  | Bdiv_int -> "div_int"
-  | Bmod_int -> "mod_int"
+  | Bdiv_int -> "div_int_"
+  | Bmod_int -> "mod_int_"
   | Beq_pointer -> "eq_pointer"
   | Bneq_pointer -> "neq_pointer"
   | Badd_real -> "add_real"
@@ -211,6 +211,41 @@ let bin_op = function
   | Barith_shift_right -> "asr"
   | Blor | Bland -> assert false (* should be handled before for laziness *)
   | Biff | Bimplies -> assert false (* never in expressions *)
+
+let term_bin_op = function
+  | Bgt_int -> "gt_int"
+  | Blt_int -> "lt_int"
+  | Bge_int -> "ge_int"
+  | Ble_int -> "le_int"
+  | Beq_int -> "eq_int"
+  | Bneq_int -> "neq_int"
+  | Badd_int -> "add_int"
+  | Bsub_int -> "sub_int"
+  | Bmul_int -> "mul_int"
+  | Bdiv_int -> "div_int"
+  | Bmod_int -> "mod_int"
+  | Beq_pointer -> "eq_pointer"
+  | Bneq_pointer -> "neq_pointer"
+  | Badd_real -> "add_real"
+  | Bsub_real -> "sub_real"
+  | Bmul_real -> "mul_real"
+  | Bdiv_real -> "div_real"
+  | Bneq_real -> "neq_real"
+  | Beq_real -> "eq_real"
+  | Bge_real -> "ge_real"
+  | Ble_real -> "le_real"
+  | Bgt_real -> "gt_real"
+  | Blt_real -> "lt_real"
+  | Beq_bool -> "eq_bool"
+  | Bneq_bool -> "neq_bool"
+  | Bbw_and -> "bw_and"
+  | Bbw_or -> "bw_or"
+  | Bbw_xor -> "bw_xor"
+  | Bshift_left -> "lsl"
+  | Blogical_shift_right -> "lsr"
+  | Barith_shift_right -> "asr"
+  | Blor | Bland -> assert false (* should be handled before for laziness *)
+  | Biff | Bimplies -> assert false (* never in terms *)
 
 let pred_bin_op = function
   | Bgt_int -> "gt_int"
@@ -364,7 +399,7 @@ let rec term label oldlabel t =
     | JCTbinary(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
 	let t1' = ft t1 in
 	let t2' = ft t2 in
-	LApp (bin_op op, [ t1'; t2'])
+	LApp (term_bin_op op, [ t1'; t2'])
     | JCTbinary(t1,Bland,t2) ->
 	assert false (* should be an assertion *)
     | JCTbinary(t1,Blor,t2) ->
@@ -373,7 +408,7 @@ let rec term label oldlabel t =
 	let t1' = ft t1 in
 	let t2' = ft t2 in
 	let t = bin_arg_type t.jc_term_loc op in
-	LApp (bin_op op, 
+	LApp (term_bin_op op, 
 	      [ term_coerce t1.jc_term_loc t 
 		  t1.jc_term_type t1'; 
 		term_coerce t2.jc_term_loc t 
