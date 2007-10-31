@@ -147,9 +147,9 @@ TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
 
 all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
-opt: bin/why.opt bin/caduceus.opt bin/jessie.opt
+opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.op bin/krakatoa.opt
 
-byte : bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte
+byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte
 
 .PHONY: check
 
