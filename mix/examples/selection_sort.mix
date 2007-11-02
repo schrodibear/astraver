@@ -1,16 +1,18 @@
 
 /* Program S (TAOCP, vol. 3, page 140) */
 
-{{{ logic N,INPUT:	int }}}
+{{{ 
+logic N,INPUT:	int
 
-/* main invariant: a[i..N] is sorted and a[1..i-1] <= a[i..N] */
-{{{ predicate Inv(a: int array, i: int) =
-      sorted_array(a, INPUT+i, INPUT+N) and
-      forall k,l:int. 1 <= k <= i-1 -> i <= l <= N -> a[INPUT+k] <= a[INPUT+l] 
-}}}
+(* main invariant: a[i..N] is sorted and a[1..i-1]<=a[i..N] *)
+predicate Inv(a: int array, i: int) =
+  sorted_array(a, INPUT+i, INPUT+N) and
+  forall k,l:int. 
+    1 <= k <= i-1 -> i <= l <= N -> a[INPUT+k] <= a[INPUT+l] 
 
-{{{ logic mem0: int farray 
-    predicate Perm(m: int array) = sub_permut(INPUT+1, INPUT+N, m, mem0)
+logic mem0: int farray 
+predicate Perm(m: int array) = 
+  sub_permut(INPUT+1, INPUT+N, m, mem0)
 }}}
 
 	

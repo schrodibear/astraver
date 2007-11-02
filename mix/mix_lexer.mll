@@ -135,9 +135,9 @@ rule token = parse
       { INTEGER n }
   | "{{{"
       { Buffer.clear string_buf; verbatim lexbuf }
-  | "{{"
+  | "{{" | "/*i"
       { Buffer.clear string_buf; invariant lexbuf }
-  | "{"
+  | "{" | "/*a"
       { Buffer.clear string_buf; assertion lexbuf }
   | "/*"
       { comment lexbuf; token lexbuf }
@@ -196,7 +196,7 @@ and verbatim = parse
       { Buffer.add_char string_buf c; verbatim lexbuf }
 
 and invariant = parse
-  | "}}" 
+  | "}}" | "i*/"
       { INVARIANT (Buffer.contents string_buf) }
   | eof
       { raise (Lexical_error "unterminated invariant") }
@@ -206,7 +206,7 @@ and invariant = parse
       { Buffer.add_char string_buf c; invariant lexbuf }
 
 and assertion = parse
-  | "}" 
+  | "}" | "a*/"
       { ASSERT (Buffer.contents string_buf) }
   | eof
       { raise (Lexical_error "unterminated assert") }
