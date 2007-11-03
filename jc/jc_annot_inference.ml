@@ -145,39 +145,6 @@ let make_or al =
 let make_not a =
   raw_asrt(JCAnot a)
 
-let rec deep_raw_asrt a =
-  let asrt = deep_raw_asrt in
-  let anode = match a.jc_assertion_node with
-    | JCArelation (t1, bop, t2) ->
-	JCArelation (t1, bop, t2)
-    | JCAnot a -> 
-	JCAnot (asrt a)
-    | JCAand al ->
-	JCAand(List.map asrt al)
-    | JCAor al ->
-	JCAor(List.map asrt al)
-    | JCAimplies(a1,a2) ->
-	JCAimplies(asrt a1,asrt a2)
-    | JCAiff(a1,a2) ->
-	JCAiff(asrt a1,asrt a2)
-    | JCAapp (li, tl) ->
-	JCAapp (li, tl )
-    | JCAquantifier(qt,vi,a) ->
-	JCAquantifier(qt,vi,asrt a)
-    | JCAold a ->
-	JCAold(asrt a)      
-    | JCAinstanceof(t,st) ->
-	JCAinstanceof(t, st)
-    | JCAbool_term t ->
-	JCAbool_term t
-    | JCAif(t,a1,a2) ->
-	JCAif (t, asrt a1,asrt a2)
-    | JCAmutable(t,st,tag) ->
-	JCAmutable (t,st,tag)
-    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
-  in
-  raw_asrt anode
-
 let rec term_name =
   let string_explode s = 
     let rec next acc i = 
@@ -511,12 +478,10 @@ let raw_asrt_of_expr = asrt_of_expr
 (* Replacing variables in terms and assertions.                              *)
 (*****************************************************************************)
 
-(* All terms involved should be raw terms. *)
 let rec replace_term_in_term ~source ~target t = 
   pre_map_term 
     (fun t -> if raw_term_equal source t then Some target else None) t
       
-(* All assertions and terms involved should be raw. *)
 let rec replace_term_in_assertion srct targetvi a = 
   let term = replace_term_in_term ~source:srct ~target:(JCTvar targetvi) in
   let asrt = replace_term_in_assertion srct targetvi in
@@ -755,6 +720,7 @@ let assertion_of_dnf dnf =
     | _ -> JCAor (List.map disjunct dnf)
   in
   raw_asrt anode
+
 
 (*****************************************************************************)
 (* Extracting linear expressions and constraints from AST expressions.       *)
@@ -2087,6 +2053,7 @@ let ai_function mgr targets (fi, fs, sl) =
 	(fun acc vi -> Vai.all_variables (var_term vi) @ acc)
 	[] fi.jc_fun_info_parameters
     in
+    
     let env = Environment.add env (Array.of_list params) [||] in
     
     let abs = { 
@@ -2106,30 +2073,30 @@ let ai_function mgr targets (fi, fs, sl) =
     let cstrs =
       List.fold_left
  	(fun acc vi -> match vi.jc_var_info_type with
- 	   | JCTpointer (st, n1opt, n2opt) ->
- 	       let vt = type_term (JCTvar vi) vi.jc_var_info_type in
- 	       let mincstr = match n1opt with
-		 | None -> []
-		 | Some n1 ->
- 		     let mint = type_term (JCToffset(Offset_min,vt,st)) integer_type in
- 		     let n1t =
- 		       type_term (JCTconst(JCCinteger(Num.string_of_num n1))) integer_type
- 		     in
- 		     let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
- 		       [mina]
- 	       in
- 	       let maxcstr = match n2opt with
-		 | None -> []
-		 | Some n2 ->
- 		     let maxt = type_term (JCToffset(Offset_max,vt,st)) integer_type in
- 		     let n2t =
- 		       type_term (JCTconst(JCCinteger(Num.string_of_num n2))) integer_type
- 		     in
- 		     let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
- 		       [maxa]
- 	       in
- 		 mincstr @ maxcstr @ acc
- 	   | _ -> acc
+ 	| JCTpointer (st, n1opt, n2opt) ->
+ 	    let vt = type_term (JCTvar vi) vi.jc_var_info_type in
+ 	    let mincstr = match n1opt with
+	      | None -> []
+	      | Some n1 ->
+ 		  let mint = type_term (JCToffset(Offset_min,vt,st)) integer_type in
+ 		  let n1t =
+ 		    type_term (JCTconst(JCCinteger(Num.string_of_num n1))) integer_type
+ 		  in
+ 		  let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
+ 		  [mina]
+ 	    in
+ 	    let maxcstr = match n2opt with
+	      | None -> []
+	      | Some n2 ->
+ 		  let maxt = type_term (JCToffset(Offset_max,vt,st)) integer_type in
+ 		  let n2t =
+ 		    type_term (JCTconst(JCCinteger(Num.string_of_num n2))) integer_type
+ 		  in
+ 		  let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
+ 		  [maxa]
+ 	    in
+ 	    mincstr @ maxcstr @ acc
+ 	| _ -> acc
  	) [] fi.jc_fun_info_parameters
     in
     fs.jc_fun_requires <- make_and (fs.jc_fun_requires :: cstrs);
@@ -2169,7 +2136,7 @@ let ai_function mgr targets (fi, fs, sl) =
 	(* default postcondition is true *)
 	Abstract1.top mgr env else returnabs in
       let returna = mkinvariant abs.jc_absint_manager returnabs in
-      let post = make_and [posta; returna] in
+      let post = returna in (*make_and [posta; returna] in*)
       let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
       let excl, excabsl =
 	List.fold_left
@@ -2796,7 +2763,7 @@ let rec wp_statement weakpre =
       let a = raw_asrt(JCAimplies(target.jc_target_regular_invariant,
                                   target.jc_target_assertion)) in
       assert (curposts.jc_post_normal = None);
-      { curposts with jc_post_normal = Some (deep_raw_asrt a); }
+      { curposts with jc_post_normal = Some a; }
     else curposts
 
 let rec record_wp_invariants weakpre s =
@@ -2900,15 +2867,38 @@ let code_function = function
 	    List.fold_right (fun target acc ->
 	      target.jc_target_regular_invariant <- 
 		simplify target.jc_target_regular_invariant (raw_asrt JCAtrue);
-	      let impl = 
-		raw_asrt(JCAimplies(
-		  target.jc_target_propagated_invariant,
-		  target.jc_target_assertion)) 
+	      (* Build the most precise invariant known at the current 
+	       * assertion point: it is the conjunction of the regular 
+	       * invariant (from forward abstract interpretation) and 
+	       * the propagated invariant (from propagated assertions).
+	       *)
+	      let inv = 
+		make_and [target.jc_target_regular_invariant;
+		          target.jc_target_propagated_invariant]
 	      in
-	      if debug then printf "[before tautology]@.";
-	      let res = if tautology impl then acc else target :: acc in
-	      if debug then printf "[after tautology]@.";
-	      res
+	      (* Check whether the target assertion is a consequence of 
+	       * the most precise invariant. 
+	       *)
+	      let impl = 
+		raw_asrt(JCAimplies(inv,target.jc_target_assertion)) 
+	      in
+	      if tautology impl then 
+		begin
+		  if debug then
+		    printf "%a[code_function] proof of %a discharged@." 
+		      Loc.report_position target.jc_target_location
+		      Jc_output.assertion target.jc_target_assertion;
+		  acc 
+		end
+	      else 
+		begin
+		  if debug then
+		    printf "%a[code_function] precondition needed for %a@." 
+		      Loc.report_position target.jc_target_location
+		      Jc_output.assertion target.jc_target_assertion;
+		  (* Adding target to the list. *)
+		  target :: acc
+		end
 	    ) targets []
 	  in
 	  wp_function targets (fi,fs,sl)

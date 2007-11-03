@@ -1,0 +1,26 @@
+
+integer main(integer x, integer y) {
+
+ if (x >= 10) x = 10; else if (x <= 0) x = 0;
+
+ if (x*x-10 > 0) return 1/(x*x-8);
+
+ return 0;
+}
+
+
+integer main2(integer x2, integer y2) {
+
+ if (x2 >= 10) x2 = 10; else if (x2 <= 0) x2 = 0;
+
+ if (y2-10 > 0) assert (y2 < 8 || y2 > 8);
+
+ return 0;
+}
+
+/* 
+Local Variables:
+mode: C
+compile-command: "LC_ALL=C make div"
+End:
+*/
