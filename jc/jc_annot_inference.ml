@@ -1769,8 +1769,18 @@ let find_target_assertions targets s =
 let rec ai_statement abs curinvs s =
   let mgr = abs.jc_absint_manager in
   let loop_initial_invariants = abs.jc_absint_loop_initial_invariants in
+  let loop_invariants = abs.jc_absint_loop_invariants in
+  let loop_iterations = abs.jc_absint_loop_iterations in
   match s.jc_statement_node with
   | JCSloop (la, ls) ->
+      (* Reinitialize the loop iteration count and the loop invariant.
+       * Comment those lines to gain in scaling, at the cost of less precision.
+       *)
+      Hashtbl.replace loop_iterations la.jc_loop_tag 0;
+      Hashtbl.remove loop_invariants la.jc_loop_tag;
+      (* Set the initial value of invariants when entering the loop from 
+       * the outside. 
+       *)
       Hashtbl.replace 
 	loop_initial_invariants la.jc_loop_tag (copy_invariants mgr curinvs);
       intern_ai_statement abs curinvs s 
