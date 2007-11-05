@@ -1,3 +1,6 @@
+/*
+@OPTIONS: -ai oct
+*/
 
 type intM = { integer val; }
 
@@ -44,6 +47,6 @@ intM[0..] reset(intM[0..] t) {
 /*
 Local Variables: 
 mode: java
-compile-command: "make cousot76"
+compile-command: "make ai_result"
 End: 
 */

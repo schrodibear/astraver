@@ -2576,22 +2576,22 @@ let rec wp_statement weakpre =
     let curposts = match s.jc_statement_node with
     | JCSdecl(vi,eo,s) ->
 	let curposts = wp_statement weakpre target s curposts in
-	let post = match curposts.jc_post_normal with
-	  | None -> None
-	  | Some a -> 
-	      let a = match eo with
-		| None -> a
-		| Some e ->
-		    match term_of_expr e with
-		    | None -> a
-		    | Some t2 ->
-			let t1 = type_term (JCTvar vi) vi.jc_var_info_type in
-			let bop = 
-			  equality_operator_for_type vi.jc_var_info_type in
-			let eq = raw_asrt (JCArelation(t1,bop,t2)) in
-			raw_asrt (JCAimplies(eq,a))
-	      in
-	      Some (raw_asrt (JCAquantifier(Forall,vi,a)))
+	let post = 
+	  match curposts.jc_post_normal with None -> None | Some a -> 
+	    let a = 
+	      match eo with None -> a | Some e ->
+		match term_of_expr e with None -> a | Some t2 ->
+		  if vi.jc_var_info_type = boolean_type then
+		    (* TODO: take boolean variables into account. *)
+		    a
+		  else
+		    let t1 = type_term (JCTvar vi) vi.jc_var_info_type in
+		    let bop = 
+		      equality_operator_for_type vi.jc_var_info_type in
+		    let eq = raw_asrt (JCArelation(t1,bop,t2)) in
+		    raw_asrt (JCAimplies(eq,a))
+	    in
+	    Some (raw_asrt (JCAquantifier(Forall,vi,a)))
 	in
 	let curposts = remove_modified_var curposts vi in
 	{ curposts with jc_post_normal = post; }
@@ -2607,10 +2607,15 @@ let rec wp_statement weakpre =
 	      match term_of_expr e with
 	      | None -> Some a
 	      | Some t2 ->
-		  let t1 = type_term (JCTvar copyvi) copyvi.jc_var_info_type in
-		  let bop = equality_operator_for_type vi.jc_var_info_type in
-		  let eq = raw_asrt (JCArelation(t1,bop,t2)) in
-		  Some (raw_asrt (JCAimplies(eq,a)))
+		  if vi.jc_var_info_type = boolean_type then
+		    (* TODO: take boolean variables into account. *)
+		    Some a
+		  else
+		    let t1 = 
+		      type_term (JCTvar copyvi) copyvi.jc_var_info_type in
+		    let bop = equality_operator_for_type vi.jc_var_info_type in
+		    let eq = raw_asrt (JCArelation(t1,bop,t2)) in
+		    Some (raw_asrt (JCAimplies(eq,a)))
 	in
 	let curposts = add_modified_var curposts copyvi in
 	let curposts = 

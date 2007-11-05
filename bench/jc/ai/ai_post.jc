@@ -1,3 +1,6 @@
+/*
+@OPTIONS: -ai oct
+*/
 
 type intM = { integer val; } 
 
@@ -67,3 +70,10 @@ unit g() {
   } catch Return _ {
   }
 }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make ai_post"
+End: 
+*/

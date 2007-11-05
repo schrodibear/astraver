@@ -1,4 +1,8 @@
 
+/*
+@OPTIONS: -ai oct
+*/
+
 /* two levels of loops */
 
 
@@ -9,8 +13,10 @@ unit f0() {
 	while (y < 5) variant 5 - y; {
 	    y++;
 	}
+	//@ assert y == 5;
 	x++;
     }
+    //@ assert x == 10;
 }
 
 
@@ -23,6 +29,15 @@ unit f1() {
     {
       y++;
     }
+    //@ assert y == x;
     x++;
   }
+  //@ assert x == 10;
 }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make ai_nestedloops"
+End: 
+*/

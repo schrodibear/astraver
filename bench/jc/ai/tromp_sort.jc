@@ -1,3 +1,7 @@
+/*
+@OPTIONS: -ai pol
+*/
+
 /**
  * A sorting algorithm from John Tromp Programming Pearls
  * (http://homepages.cwi.nl/~tromp/pearls.html)
@@ -54,3 +58,10 @@ unit sort(integerT[0..] t, integer j)
 	(t + l).integerM = k;
     }
 }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make tromp_sort"
+End: 
+*/

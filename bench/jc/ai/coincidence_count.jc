@@ -1,3 +1,6 @@
+/*
+@OPTIONS: -ai pol
+*/
 
 /* "!=" not supported in apron0.9.6 */
 
@@ -33,3 +36,10 @@ integer coincidence_count(integerT[0..] f, integerT[0..] g)
 
     return ct;
   }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make coincidence_count"
+End: 
+*/

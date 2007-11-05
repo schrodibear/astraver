@@ -1,7 +1,9 @@
 
 /* example from Cousot's 1976 paper */
 
-
+/*
+@OPTIONS: -ai box
+*/
 
 integer cousot76() {
     integer i = 1;
@@ -11,6 +13,7 @@ integer cousot76() {
     {
         i++;
     }
+    //@ assert i == 101;
     return i;
 }
 

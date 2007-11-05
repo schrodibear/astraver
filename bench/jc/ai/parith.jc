@@ -1,3 +1,6 @@
+/*
+@OPTIONS: -ai polwp
+*/
 
 type char = {
   integer val;
@@ -16,3 +19,10 @@ unit f(char[0..10] p) {
       i++;
   }	
 }	
+
+/* 
+Local Variables:
+mode: Java
+compile-command: "LC_ALL=C make parith"
+End:
+*/

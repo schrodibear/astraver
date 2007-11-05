@@ -1,3 +1,6 @@
+/*
+@OPTIONS: -ai boxwp
+*/
 
 type intP = {
     integer intM;

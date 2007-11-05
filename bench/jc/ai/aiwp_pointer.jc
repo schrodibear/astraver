@@ -1,3 +1,7 @@
+/*
+@OPTIONS: -ai octwp
+*/
+
 type intP = {
     integer intM;
 }

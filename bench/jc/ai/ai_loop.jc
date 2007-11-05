@@ -1,4 +1,8 @@
 
+/*
+@OPTIONS: -ai oct
+*/
+
 type integerT = { integer integerM; }
 
 
@@ -33,6 +37,7 @@ unit test0ter() {
   {
     v++;
   }
+  //@ assert v == 9;
 }
 
 unit test1(integerT[0..] t, integer max) requires \offset_max(t) == max; {
@@ -49,6 +54,6 @@ unit test1(integerT[0..] t, integer max) requires \offset_max(t) == max; {
 /*
 Local Variables: 
 mode: java
-compile-command: "make loop"
+compile-command: "make ai_loop"
 End: 
 */

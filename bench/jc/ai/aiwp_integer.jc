@@ -1,3 +1,6 @@
+/*
+@OPTIONS: -ai octwp
+*/
 
 integer foo(integer s, integer n) {
     integer i = 0;
