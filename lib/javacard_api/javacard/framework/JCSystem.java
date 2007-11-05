@@ -1,5 +1,5 @@
 /*
-* $Workfile: JCSystem.java $	$Revision: 1.3 $, $Date: 2007-10-29 21:54:55 $
+* $Workfile: JCSystem.java $	$Revision: 1.4 $, $Date: 2007-11-05 14:30:10 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: JCSystem.java $
-// $Revision: 1.3 $
-// $Date: 2007-10-29 21:54:55 $
+// $Revision: 1.4 $
+// $Date: 2007-11-05 14:30:10 $
 // $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/JCSystem.java $
 // $Modtime: 5/02/00 7:13p $
@@ -265,10 +265,10 @@ public final class JCSystem
 
     // specs to avoid Why error msg 'Exception TransactionException_exc cannot be raised' (Nicolas)
 
-    /*@ behavior normal:
+    /* @ behavior normal:
       @   ensures true;
       @ behavior exc:
-      @   signals (javacard.framework.TransactionException) true;
+      @   signals (TransactionException) true;
       @*/
 
     public static native void beginTransaction() throws TransactionException;

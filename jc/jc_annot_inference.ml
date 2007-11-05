@@ -610,12 +610,12 @@ end = struct
     match t.jc_term_node with
     | JCToffset(Offset_min,t,_) ->
 	begin match t.jc_term_node with
-	| JCTvar vi -> offset_min_variable t
+	| JCTvar _ | JCTderef _ -> offset_min_variable t
 	| _ -> assert false
 	end
     | JCToffset(Offset_max,t,_) ->
 	begin match t.jc_term_node with
-	| JCTvar vi -> offset_max_variable t
+	| JCTvar _ | JCTderef _ -> offset_max_variable t
 	| _ -> assert false
 	end
     | _ -> variable t
@@ -848,7 +848,7 @@ let rec linearize t =
       else failwith "Not linear"
   | JCToffset(_,vt,_) ->
       begin match vt.jc_term_node with
-      | JCTvar vi -> ([t,1],0)
+      | JCTvar _ | JCTderef _ -> ([t,1],0)
       | _ -> assert false
       end
   | JCTapp(f,_) -> ([t,1],0)
@@ -1078,7 +1078,7 @@ let rec linstr_of_assertion env a =
 	    | Bge_int -> [[str ^ " >= " ^ cstr]]
 	    | Beq_int -> [[str ^ " = " ^ cstr]]
 	    | Blt_real | Bgt_real | Ble_real | Bge_real
-	    | Beq_real | Beq_pointer
+	    | Beq_bool | Bneq_bool | Beq_real | Beq_pointer
 	    | Bneq_int | Bneq_real | Bneq_pointer -> Dnf.true_
 	    | _ -> assert false
 	  in
@@ -2139,14 +2139,14 @@ let ai_function mgr targets (fi, fs, sl) =
       || Abstract1.is_bottom mgr postabs = Manager.True then
 	()
     else
-      let posta = mkinvariant abs.jc_absint_manager postabs in
+(*      let posta = mkinvariant abs.jc_absint_manager postabs in*)
       let returnabs = !(invs.jc_absinv_return).jc_absval_regular in
       let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
       let returnabs = if Abstract1.is_bottom mgr returnabs = Manager.True then
 	(* default postcondition is true *)
 	Abstract1.top mgr env else returnabs in
       let returna = mkinvariant abs.jc_absint_manager returnabs in
-      let post = returna in (*make_and [posta; returna] in*)
+      let post = returna in (* make_and [posta; returna] in *)
       let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
       let excl, excabsl =
 	List.fold_left
