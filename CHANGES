@@ -1,4 +1,6 @@
 
+  o simplify2why: fixed bugs
+
 version 2.04, August 2nd, 2007
 ==============================
   o gwhy: Ctrl-B successively tries all provers on all proof obligations
