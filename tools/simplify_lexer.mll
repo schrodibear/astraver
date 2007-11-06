@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_lexer.mll,v 1.6 2006-11-21 22:02:01 filliatr Exp $ i*)
+(*i $Id: simplify_lexer.mll,v 1.7 2007-11-06 14:03:51 filliatr Exp $ i*)
 
 {
 
@@ -105,7 +105,7 @@ rule token = parse
       { RPAR }
   | eof 
       { EOF }
-  | ['0'-'9']+ as s
+  | ('-'? ['0'-'9']+) as s
       { INTEGER s }
   | '|' ([^ '|']+ as s) '|'
       { atom s }

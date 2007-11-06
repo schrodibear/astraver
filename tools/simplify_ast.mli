@@ -48,5 +48,6 @@ type predicate =
 type decl =
   | Axiom of predicate
   | Goal of predicate
+  | Defpred of string * string list * predicate
 
 type t = decl list

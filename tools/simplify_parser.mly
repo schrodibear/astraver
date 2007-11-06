@@ -59,6 +59,8 @@ decl:
       | p -> [Axiom p] }
 | LPAR DEFPRED LPAR list1_ident RPAR RPAR
     { [] }
+| LPAR DEFPRED LPAR list1_ident RPAR predicate RPAR
+    { [Defpred (List.hd $4, List.tl $4, $6)] }
 | predicate
     { [Goal $1] }
 ;
