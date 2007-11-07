@@ -1,0 +1,22 @@
+type charP = {
+  integer charM;
+}
+
+type sockaddr_un = {
+  charP[0..2] sun_path;
+}
+
+charP[..] r_strncpy(charP[..] dest, integer n);
+
+unit test(sockaddr_un[0] serv_adr)
+{
+    r_strncpy(serv_adr.sun_path, 2);
+    //    serv_adr.sun_path.charM = 1;
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make instanceof"
+End: 
+*/
