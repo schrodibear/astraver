@@ -13,7 +13,7 @@ bench_jc_good () {
     options="$* -inv-sem none -why-opt -split-user-conj -why-opt -show-time"
     echo "-------------------------------------------------------------------"
     echo "Bench Jessie+Simplify/Yices/Ergo with options: $options"
-    parsing="$JCHOME/bin/jessie.opt $options"
+    common_parsing="$JCHOME/bin/jessie.opt $options"
 
     rm -f why/*.why
     rm -f simplify/*_why.sx
@@ -24,7 +24,7 @@ bench_jc_good () {
 	f=`basename $file .jc`
 	options=`grep "@OPTIONS:" $file`
 	options=`echo $options | cut -c10-`
-	parsing="$parsing $options"
+	parsing="$common_parsing $options"
 	if $parsing  $f.jc > /tmp/jessie.tmp 2>&1; then
 	    if $make -f $f.makefile simplify/${f}_why.sx > /tmp/jessie.tmp 2>&1 ; then
 		if $make -f $f.makefile smtlib/${f}_why.smt > /tmp/jessie.tmp 2>&1 ; then

@@ -12,7 +12,8 @@ unit test(sockaddr_un[0] serv_adr)
 {
     charP[..] p = serv_adr.sun_path;
     r_strncpy(serv_adr.sun_path, 2);
-    serv_adr.sun_path.charM = 1;
+    (serv_adr.sun_path + 2).charM = 1;
+    
 }
 
 /*

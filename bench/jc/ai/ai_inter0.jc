@@ -1,7 +1,7 @@
 
 /* 
-   @OPTIONS: -ai box -main main 
- */
+@OPTIONS: -ai box -main main 
+*/
 
 
 type intM = { integer val; }
@@ -17,3 +17,10 @@ unit main() {
    intM[0..] t2 = new intM[10];
    f(t2);
 }
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make ai_inter0"
+End: 
+*/

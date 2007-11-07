@@ -45,8 +45,6 @@ module TermTable =
 		      let equal = raw_term_equal
 		      let hash = Hashtbl.hash end)
 
-let call_input_output = Hashtbl.create 0
-
 (*
   usage: jessie -ai <box,oct,pol,wp,boxwp,octwp,polwp>
   

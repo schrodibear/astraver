@@ -1,0 +1,38 @@
+/*
+@OPTIONS: -ai box -main wrapper
+*/
+
+unit n(integer k) {
+    m(k);
+}
+
+and unit f(integer i) {
+  assert (0 <= i && i <= 4);
+}
+
+and unit g(integer j) {
+    f(j);
+}
+
+and unit h(integer k) {
+    g(k);
+}
+
+and unit m(integer k) {
+    h(k);
+}
+
+unit wrapper() {
+  n(4);
+  f(0);
+  g(1);
+  h(2);
+  m(3);
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make call2"
+End: 
+*/
