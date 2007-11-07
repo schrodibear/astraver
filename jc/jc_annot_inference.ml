@@ -45,6 +45,8 @@ module TermTable =
 		      let equal = raw_term_equal
 		      let hash = Hashtbl.hash end)
 
+let call_input_output = Hashtbl.create 0
+
 (*
   usage: jessie -ai <box,oct,pol,wp,boxwp,octwp,polwp>
   
@@ -342,7 +344,6 @@ type 'a abstract_interpreter = {
   jc_absint_loop_initial_invariants : (int,'a abstract_invariants) Hashtbl.t;
   jc_absint_loop_iterations : (int,int) Hashtbl.t;
   jc_absint_loop_entry_invs : (int, 'a abstract_invariants) Hashtbl.t;
-  jc_absint_loop_conditions : (int, 'a abstract_value) Hashtbl.t;
   jc_absint_target_assertions : target_assertion list;
 }
 
@@ -2099,7 +2100,6 @@ let ai_function mgr targets (fi, fs, sl) =
       jc_absint_loop_initial_invariants = Hashtbl.create 0;
       jc_absint_loop_iterations = Hashtbl.create 0;
       jc_absint_loop_entry_invs = Hashtbl.create 0;
-      jc_absint_loop_conditions = Hashtbl.create 0;
       jc_absint_target_assertions = targets;
     } in
       
