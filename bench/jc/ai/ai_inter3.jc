@@ -1,0 +1,18 @@
+
+/* 
+   @OPTIONS: -ai box -main main 
+ */
+
+
+type intM = { integer val; }
+
+
+unit f(intM[0..] t1, intM[0..] t2) {
+    (t1 + 1).val = 1;
+    (t2 + 2).val = 2;
+}
+
+unit main() {
+   intM[0..] t = new intM[5];
+   f(t, t);
+}

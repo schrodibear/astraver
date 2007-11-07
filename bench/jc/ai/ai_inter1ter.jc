@@ -1,0 +1,22 @@
+
+/* 
+   @OPTIONS: -ai box -main main 
+ */
+
+
+integer h(integer d) {
+     return 1 / d;
+}
+
+integer f(integer d) {
+     return h(d);	
+}
+
+integer g(integer d) {
+     return f(d);	
+}
+
+unit main() {
+     integer j = g(1);
+     integer i = f(2);
+}

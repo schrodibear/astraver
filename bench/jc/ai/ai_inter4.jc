@@ -1,0 +1,23 @@
+
+/* 
+   @OPTIONS: -ai box -main main 
+ */
+
+
+type byte = -128..127
+
+type byteM = { byte val; }
+
+
+unit f2(byteM[0..] t) {
+    (t + 1).val = 0;
+}
+
+unit f1(byteM[0..] t) {
+    f2(t);
+}
+
+unit main() {
+   byteM[0..] p = new byteM[5];
+   f1(p);
+}

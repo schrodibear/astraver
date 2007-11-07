@@ -1,0 +1,13 @@
+
+/* 
+   @OPTIONS: -ai box -main main 
+ */
+
+
+integer f(integer a, integer b) {
+     return a / b;
+}
+
+unit main() {
+     integer i = f(10, 1 + 1);
+}

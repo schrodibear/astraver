@@ -382,6 +382,16 @@ let rec raw_term_compare t1 t2 =
 
 let raw_term_equal t1 t2 = raw_term_compare t1 t2 = 0
 
+let rec is_numeric_term t =
+  match t.jc_term_node with
+    | JCTconst _ -> true
+    | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
+    | JCToffset _ | JCTinstanceof _ | JCTrange _ -> false
+    | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
+    | JCTunary (_, t) | JCTold t | JCTcast (t, _) -> is_numeric_term t
+    | JCTapp _ -> false (* TODO ? *)
+    | JCTif _ -> false (* TODO ? *)
+
 let raw_asrt a = {
   jc_assertion_node = a;
   jc_assertion_loc = Loc.dummy_position;
