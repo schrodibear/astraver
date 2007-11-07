@@ -1,0 +1,27 @@
+/*
+@OPTIONS: -ai box -main wrapper
+*/
+
+unit f(integer i) {
+    assert (0 <= i && i < 10);
+}
+
+unit g(integer j) {
+    f(j);
+}
+
+unit wrapper() {
+    integer k = 0;
+    while (k < 10) ; {
+        g(k);
+	k++;
+    }
+}
+
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make call"
+End: 
+*/
