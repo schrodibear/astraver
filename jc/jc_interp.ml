@@ -292,7 +292,7 @@ let term_coerce loc tdest tsrc e =
   | JCTenum ri, JCTnative Tinteger ->
       LApp(logic_enum_of_int ri,[e])
   | JCTpointer (st1, _, _), JCTpointer(st2,_,_) 
-    when Jc_typing.substruct st2 st1 -> e
+      when Jc_typing.substruct st2 st1 -> e
   | JCTpointer (st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
       LApp("downcast", 
 	   [ LVar (st.jc_struct_info_root ^ "_tag_table") ; e ;
@@ -330,7 +330,9 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	else
 	  make_guarded_app ~name:lab ArithOverflow loc (fun_enum_of_int ri) [e]
     | _ , JCTnull -> e
-    | JCTpointer (st, a, b), _  -> 
+    | JCTpointer (st1,_,_), JCTpointer (st2,_,_) 
+	when Jc_typing.substruct st2 st1 -> e
+    | JCTpointer (st,_,_), _  -> 
 	make_guarded_app ~name:lab DownCast loc "downcast_" 
 	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
 	    Var (st.jc_struct_info_name ^ "_tag") ]	
@@ -1390,11 +1392,14 @@ let tr_fun f spec body acc =
 				[LVar alloc; var]);
 			   LConst (Prim_int (Num.string_of_num b))]))
 	       in
-	       let instance =
-		 (LPred("instanceof",
-			[LVar tag; var ; LVar (tag_name st)]))
-	       in
-               make_and (make_and validity instance) acc
+	       if Jc_typing.is_root_struct st then
+		 make_and validity acc
+	       else
+		 let instance =
+		   (LPred("instanceof",
+		   [LVar tag; var ; LVar (tag_name st)]))
+		 in
+		 make_and (make_and validity instance) acc
 	       (*let invariant = invariant_for_struct var st in
 	       make_and 
 		 (make_and (make_and validity instance) invariant)

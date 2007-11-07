@@ -29,6 +29,8 @@ open Jc_ast
 val typing_error : 
     Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
+val is_root_struct : struct_info -> bool
+
 val substruct : struct_info -> struct_info -> bool
 
 val logic_type_table : (string,string) Hashtbl.t

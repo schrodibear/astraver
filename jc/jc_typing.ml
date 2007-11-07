@@ -95,6 +95,9 @@ let is_integer t =
     | JCTenum _ -> true
     | _ -> false
 
+let is_root_struct st = 
+  match st.jc_struct_info_parent with None -> true | Some _ -> false
+
 let lub_numeric_types t1 t2 =
   match t1,t2 with
     | JCTnative Treal,_ | _,JCTnative Treal -> Treal
@@ -103,6 +106,7 @@ let lub_numeric_types t1 t2 =
 let rec substruct s1 s2 =
   if s1==s2 then true else
     let st = find_struct_info Loc.dummy_position s1.jc_struct_info_name in
+    assert (s1.jc_struct_info_name <> s2.jc_struct_info_name);
     match st.jc_struct_info_parent with 
       | None -> false
       | Some s -> substruct s s2
