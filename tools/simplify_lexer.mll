@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_lexer.mll,v 1.7 2007-11-06 14:03:51 filliatr Exp $ i*)
+(*i $Id: simplify_lexer.mll,v 1.8 2007-11-08 09:54:27 filliatr Exp $ i*)
 
 {
 
@@ -43,6 +43,7 @@
     "IMPLIES", IMPLIES;
     "IFF", IFF;
     "FORALL", FORALL;
+    "EXISTS", EXISTS;
     "MPAT", MPAT;
     "PATS", PATS;
     "AND", AND;

@@ -29,8 +29,8 @@
 
 %token <string> IDENT
 %token <string> INTEGER
-%token DEFPRED BG_PUSH AT_TRUE TRUE FALSE AND IMPLIES IFF FORALL MPAT PATS 
-%token AND OR NOT LBLPOS LBLNEG DISTINCT EQ NEQ LT LE GT GE
+%token DEFPRED BG_PUSH AT_TRUE TRUE FALSE AND IMPLIES IFF FORALL EXISTS 
+%token MPAT PATS AND OR NOT LBLPOS LBLNEG DISTINCT EQ NEQ LT LE GT GE
 %token LPAR RPAR EOF
 
 %type <Simplify_ast.t> start
@@ -91,6 +91,10 @@ predicate:
     { Pforall ($4, $8, $10) }
 | LPAR FORALL LPAR list1_ident RPAR predicate RPAR
     { Pforall ($4, [], $6) }
+| LPAR EXISTS LPAR list1_ident RPAR LPAR PATS list1_trigger RPAR predicate RPAR
+    { Pexists ($4, $8, $10) }
+| LPAR EXISTS LPAR list1_ident RPAR predicate RPAR
+    { Pexists ($4, [], $6) }
 | LPAR predicate RPAR { $2 }
 | LPAR LBLPOS IDENT predicate RPAR { Plblpos ($3, $4) }
 | LPAR LBLNEG IDENT predicate RPAR { Plblneg ($3, $4) }

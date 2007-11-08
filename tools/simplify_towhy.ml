@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify_towhy.ml,v 1.6 2007-11-06 14:03:51 filliatr Exp $ i*)
+(*i $Id: simplify_towhy.ml,v 1.7 2007-11-08 09:54:27 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -53,7 +53,8 @@ let declare_funs =
 	List.iter (List.iter term) tl; predicate p
   in
   let decl = function
-    | Axiom p | Goal p | Defpred (_, _, p) -> predicate p
+    | Axiom p | Goal p -> predicate p
+    | Defpred (f, l, p) -> declare_fun f (List.length l); predicate p
   in
   List.iter decl
 
@@ -138,7 +139,8 @@ let rec print_predicate fmt = function
       print_quantifier fmt "exists" vl tl p; 
       fprintf fmt ")@]"
   | Plblneg (_, p)
-  | Plblpos (_, p) -> print_predicate fmt p (* TODO *)
+  | Plblpos (_, p) -> 
+      print_predicate fmt p (* TODO *)
   | Pdistinct l ->
       fprintf fmt "@[distinct(%a)@]" (print_list comma print_term) l
 
@@ -154,6 +156,7 @@ and print_quantifier fmt q vl tl p =
   mk_quant vl
 
 let print_binder fmt x = fprintf fmt "%a:int" ident x
+let print_var fmt x = fprintf fmt "%a" ident x
 
 let print_decl fmt = function
   | Axiom p -> 
@@ -163,8 +166,11 @@ let print_decl fmt = function
       let id = new_goal () in
       fprintf fmt "@[<hov 2>goal %s:@ %a@]@\n@\n" id print_predicate p 
   | Defpred (id, bl, p) ->
-      fprintf fmt "@[<hov 2>predicate %a(%a) = %a@]@\n@\n" 
-	ident id (print_list comma print_binder) bl print_predicate p
+      let a = new_axiom () in
+      fprintf fmt 
+	"@[<hov 2>axiom %s: forall %a:int. (%a(%a) = at_true) <-> %a@]@\n@\n" 
+	a (print_list comma print_var) bl 
+	ident id (print_list comma print_var) bl print_predicate p
 
 let print_fun fmt f n =
   fprintf fmt "@[logic %a: " ident f;
@@ -172,7 +178,8 @@ let print_fun fmt f n =
   fprintf fmt " -> int@]@\n"
 
 let report_error_and_exit f lb e =
-  eprintf "File \"%s\", character %d:@\n" f (Lexing.lexeme_start lb);
+  let loc = Lexing.lexeme_start lb in
+  eprintf "File \"%s\", character %d:@\n" f loc;
   eprintf "%s@." (Printexc.to_string e);
   exit 1
 
