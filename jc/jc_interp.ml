@@ -1300,14 +1300,15 @@ let assigns before ef locs =
 
 let parameter v =
   (v.jc_var_info_final_name,tr_type v.jc_var_info_type)
-
+    
 let excep_posts_for_others eopt excep_posts =
   ExceptionMap.fold
     (fun ei l acc ->
-       if eopt = Some ei then acc 
-       else (exception_name ei,LTrue)::acc)
+       match eopt with 
+	 | Some ei -> acc
+	 | None -> (exception_name ei, LTrue)::acc)
     excep_posts []
-
+    
 let interp_fun_params f annot_type =
   match f.jc_fun_info_parameters with
     | [] ->
@@ -1548,7 +1549,7 @@ let tr_fun f spec body acc =
 	  | [] -> ["tt", unit_type]
 	  | l -> List.map parameter l
 	in
-	(* rename formals just before body is treated *)
+	  (* rename formals just before body is treated *)
 	let list_of_refs =
 	  List.fold_right
 	    (fun id bl ->
@@ -1664,24 +1665,25 @@ let tr_fun f spec body acc =
 	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
 	       in
 	    *)
-	    (* exceptional behaviors *)
-	    let acc =
-	      ExceptionMap.fold
-		(fun ei l acc ->
-		   List.fold_right
-		     (fun (id,b,e) acc ->
-			let d =
-			  Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
-			      Fun(params,
-				  requires,
-				  tblock,
-				  LTrue,
-				  (exception_name ei,e) :: 
-				    excep_posts_for_others (Some ei) excep_behaviors))
-			in d::acc)
-		     l acc)
-		excep_behaviors acc
-	    in acc
+	      (* exceptional behaviors *)
+	      let acc =
+		ExceptionMap.fold
+		  (fun ei l acc ->
+		     List.fold_right
+		       (fun (id,b,e) acc ->
+			  let d =
+			    Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
+				Fun(params,
+				    requires,
+				    tblock,
+				    LTrue,
+				    (exception_name ei,e) :: 
+				      excep_posts_for_others (Some ei) excep_behaviors)) in
+			    d::acc)
+		       l acc)
+		  excep_behaviors acc
+	      in
+		acc
 	in why_param::acc
 
 let tr_logic_type id acc = Type(id,[])::acc

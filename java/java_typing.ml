@@ -336,7 +336,8 @@ let new_interface_info (p:package_info) (id:string) i =
   incr type_counter;
   let ii =    
     { interface_info_tag = !type_counter;
-      interface_info_name = id ;
+      interface_info_name = id;
+      interface_info_package_env = (fst i);
       interface_info_incomplete = true;
       interface_info_extends = [];
       interface_info_fields = [];
@@ -354,7 +355,8 @@ let new_class_info (p:package_info) (id:string) c =
   incr type_counter;
   let ci =    
     { class_info_tag = !type_counter;
-      class_info_name = id ;
+      class_info_name = id;
+      class_info_package_env = (fst c);
       class_info_incomplete = true;
       class_info_extends = None;
       class_info_is_exception = false;
@@ -409,24 +411,24 @@ let rec add_in_package_list pi l =
     | qi::_ when pi.package_info_tag = qi.package_info_tag -> l
     | qi::r -> qi::add_in_package_list pi r
 
-let rec get_import (packages,types) imp =
-    match imp with
-      | Import_package qid ->
-	  Java_options.lprintf "importing package %a@." print_qualified_ident qid;
-	  begin
-	    match classify_name [] [] None [] qid with
-	      | PackageName pi -> (add_in_package_list pi packages,types)
-	      | _ -> typing_error (fst (List.hd qid))
-		  "package name expected"
-	  end
-      | Import_class_or_interface qid ->
-	  Java_options.lprintf "importing %a@." print_qualified_ident qid;
-	  begin
-	    match classify_name [] [] None [] qid with
-	      | TypeName ti -> (packages,(snd (List.hd qid),ti)::types)
-	      | _ -> typing_error (fst (List.hd qid))
-		  "type name expected"
-	  end
+let rec get_import (packages, types) imp =
+  match imp with
+    | Import_package qid ->
+	Java_options.lprintf "importing package %a@." print_qualified_ident qid;
+	begin
+	  match classify_name [] [] None [] qid with
+	    | PackageName pi -> (add_in_package_list pi packages,types)
+	    | _ -> typing_error (fst (List.hd qid))
+		"package name expected"
+	end
+    | Import_class_or_interface qid ->
+	Java_options.lprintf "importing %a@." print_qualified_ident qid;
+	begin
+	  match classify_name [] [] None [] qid with
+	    | TypeName ti -> (packages, (snd (List.hd qid), ti)::types)
+	    | _ -> typing_error (fst (List.hd qid))
+		"type name expected"
+	end
 	  
 
 and get_types cu =
@@ -531,7 +533,7 @@ and classify_name
 			type_env;
 *)
 		      let ti = List.assoc id type_env in
-		      TypeName ti 
+			TypeName ti 
 		    with Not_found ->
 		      (* look for a type of that name 
 			 declared by a type-import-on-demand declaration 
@@ -541,7 +543,7 @@ and classify_name
 			  (fun acc pi ->
 			     let h = get_package_contents pi in
 			     try 
-			       (pi,h,(Hashtbl.find h id)) :: acc
+			       (pi, h, (Hashtbl.find h id)) :: acc
 			     with Not_found -> acc)
 			  [] package_env
 		      in
@@ -553,7 +555,7 @@ and classify_name
 				| Type ti -> TypeName ti
 				| File f -> 
 				    let ast = Java_syntax.file f in
-				    let (_,t) = get_types ast in
+				    let (_, t) = get_types ast in
 				    try
 				      let ti = List.assoc id t in
 				      Hashtbl.replace h id (Type ti);
@@ -2159,8 +2161,8 @@ let rec expr package_env type_env current_type env e =
 	  JTYarray ty, JEnew_array(ty,l)
       | JPEnew (n, args) -> 
 	  let args = List.map exprt args in
-	  let arg_types = List.map (fun e -> e.java_expr_type) args in
-	  begin
+	  let arg_types = List.map (fun e -> e.java_expr_type) args in	    
+	    begin
 	    match classify_name package_env type_env current_type env n with
 	      | TypeName (TypeClass ci) ->
 (*
@@ -2767,11 +2769,31 @@ let behavior package_env type_env current_type pre_state_env post_state_env (id,
   let throws,ensures_env = 
     match b.java_pbehavior_throws with
       | None -> None,post_state_env
-      | Some(c,None) -> 
+      | Some (c, None) -> 
+	  (* if [current_type] is an imported type, [c] may not be in [type_env] 
+	     so we need to add the package env of current type in [package_env]
+	     - Nicolas R. *)
+	  let package_env = 
+	    match current_type with
+	      | None -> assert false
+	      | Some (TypeClass ci) ->
+		  let p = 
+		    List.filter
+		      (fun p -> not (List.mem p package_env)) 
+		      ci.class_info_package_env in
+		    p @ package_env
+	      | Some (TypeInterface ii) -> 
+		  let p = 
+		    List.filter
+		      (fun p -> not (List.mem p package_env)) 
+		      ii.interface_info_package_env in
+		    p @ package_env
+	  in
 	  begin
 	    match classify_name package_env type_env current_type pre_state_env c with
 	      | TypeName (TypeClass ci) ->
-		  (* TODO: check it has Throwable as superclass *)
+		  check_if_class_complete ci;
+		  assert (ci.class_info_is_exception);
 		  (Some ci),post_state_env
 	      | TypeName (TypeInterface ci) ->
 		  typing_error (fst (List.hd c))

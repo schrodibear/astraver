@@ -32,43 +32,43 @@ let parse_file f =
   try
     let c = open_in f in
     let d = Jc_lexer.parse f c in
-    close_in c; d
+      close_in c; d
   with
     | Jc_lexer.Lexical_error(l,s) ->
 	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
 	exit 1
-
+	  
 
 let main () =
   let files = Jc_options.files () in
-  try
-    match files with
-    | [f] ->
-	(* phase 1 : parsing *)
-	let ast = parse_file f in
-	(* phase 2 : typing *)
-	List.iter Jc_typing.decl ast;
-	(* phase 3 : normalization *)
-(*
-	Hashtbl.iter (fun tag x -> 
-			Hashtbl.add Jc_typing.logic_type_table tag x)
-	  Jc_typing.logic_type_table;
-	Hashtbl.iter 
-	  (fun tag (f,t) -> 
-	     Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
-	  Jc_typing.logic_functions_table;
-*)
-	Hashtbl.iter 
-	  (fun tag (f,s,b) -> 
-	     let (s,b) = Jc_norm.code_function (s,b) in
-	     Hashtbl.add Jc_norm.functions_table tag (f,s,b))
-	  Jc_typing.functions_table;
-	Hashtbl.iter 
-	  (fun tag (v,e) -> 
-	     let (v,e) = Jc_norm.static_variable (v,e) in
-	     Hashtbl.add Jc_norm.variables_table tag (v,e))
-	  Jc_typing.variables_table;
-(*
+    try
+      match files with
+	| [f] ->
+	    (* phase 1 : parsing *)
+	    let ast = parse_file f in
+	      (* phase 2 : typing *)
+	      List.iter Jc_typing.decl ast;
+	      (* phase 3 : normalization *)
+	      (*
+		Hashtbl.iter (fun tag x -> 
+		Hashtbl.add Jc_typing.logic_type_table tag x)
+		Jc_typing.logic_type_table;
+		Hashtbl.iter 
+		(fun tag (f,t) -> 
+		Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
+		Jc_typing.logic_functions_table;
+	      *)
+	      Hashtbl.iter 
+		(fun tag (f,s,b) -> 
+		   let (s,b) = Jc_norm.code_function (s,b) in
+		     Hashtbl.add Jc_norm.functions_table tag (f,s,b))
+		Jc_typing.functions_table;
+	      Hashtbl.iter 
+		(fun tag (v,e) -> 
+		   let (v,e) = Jc_norm.static_variable (v,e) in
+		     Hashtbl.add Jc_norm.variables_table tag (v,e))
+		Jc_typing.variables_table;
+	      (*
 	Hashtbl.iter 
 	  (fun tag (si,l) -> 
 	     let l = List.map (fun (li, a) -> (li, Jc_norm.assertion a)) l in
@@ -152,6 +152,7 @@ let main () =
 	    Jc_typing.logic_type_table
 	    []
 	in	       	 
+
 	(* production phase 1.2 : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
@@ -172,10 +173,11 @@ let main () =
 	let d_exc =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
-	       Jc_interp.tr_exception ei acc)
+ 	       Jc_interp.tr_exception ei acc)
 	    Jc_typing.exceptions_table
 	    d_memories
-	in	       	  
+	in
+
 	(* production phase 1.4 : generation of Why enum_types *)
 	let d =
 	  Hashtbl.fold 

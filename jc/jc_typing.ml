@@ -1958,19 +1958,19 @@ let add_typedecl d (id,parent) =
 let add_fundecl (ty,loc,id,pl) =
   try
     let fi = Hashtbl.find functions_env id in
-    Format.eprintf "FIXME: Warning: ignoring second declaration of function %s@." id;
-    let ty = fi.jc_fun_info_return_type in
-    let param_env =
-      List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
-    in
-    param_env, ty, fi
+      Format.eprintf "FIXME: Warning: ignoring second declaration of function %s@." id;
+      let ty = fi.jc_fun_info_return_type in
+      let param_env =
+	List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
+      in
+	param_env, ty, fi
   with Not_found ->
     let param_env = List.map param pl in
     let ty = type_type ty in
     let fi = make_fun_info id ty in
-    fi.jc_fun_info_parameters <- List.map snd param_env;
-    Hashtbl.replace functions_env id fi;
-    param_env, ty, fi
+      fi.jc_fun_info_parameters <- List.map snd param_env;
+      Hashtbl.replace functions_env id fi;
+      param_env, ty, fi
 
 let add_logic_fundecl (ty,id,pl) =
   try

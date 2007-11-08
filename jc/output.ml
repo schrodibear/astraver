@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.16 2007-10-19 11:42:13 marche Exp $ i*)
+(*i $Id: output.ml,v 1.17 2007-11-08 18:38:02 nrousset Exp $ i*)
 
 open Lexing
 open Format
@@ -735,29 +735,57 @@ let fprintf_why_decls form decls =
   (* Why do we need a partition ?
      because one may have a type and a logic/parameter with the same name, 
      and the computation of dependencies is confused in that case
-
+     
      Type may depend on nothing 
      Logic may depend on Type, Logic and Predicate
      Predicate may depend on Type, Predicate and Logic
      Axiom may depend on Type, Predicate and Logic
      Parameter may depend on Type, Predicate and Logic
      Def may depend on Type, Parameter, Predicate, Logic, and Def
-
+     
      - Claude, 16 nov 2006
-  *)
-  let (types,defs,others) =
-    List.fold_left
-    (fun (t,d,o) decl ->
-       match decl with
-	 | Type _ -> (decl::t,d,o)
-	 | Def _ -> (t,decl::d,o)
-	 | _ -> (t,d,decl::o))
-    ([],[],[]) decls
-  in
-  output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
-  output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
-  output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
 
+  *)
+
+(*
+  let (types, defs, others) =
+    List.fold_left
+      (fun (t,d,o) decl ->
+	 match decl with
+	   | Type _ -> (decl::t,d,o)
+	   | Def _ -> (t,decl::d,o)
+	   | _ -> (t,d,decl::o))
+      ([],[],[]) decls
+  in
+    output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
+    output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
+    output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
+*)
+
+  (*
+    Additional rules :
+    
+    Exception may depend on Type
+    Parameter may depend on Exception
+    
+    - Nicolas R., 8 nov 2007
+    
+  *)
+
+  let (types, params, defs, others) =
+    List.fold_left
+      (fun (t, p, d, o) decl ->
+	 match decl with
+	   | Type _ -> (decl::t, p, d, o)
+	   | Param _ -> (t, decl::p, d, o)
+	   | Def _ -> (t, p, decl::d, o)
+	   | _ -> (t, p, d, decl::o))
+      ([], [], [], []) decls
+  in
+    output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
+    output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
+    output_decls get_why_id iter_why_decl (fprintf_why_decl form) params;
+    output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
 
 
 

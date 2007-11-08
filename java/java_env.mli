@@ -110,6 +110,7 @@ and java_class_info =
     {
       class_info_tag : int;
       class_info_name : string;
+      class_info_package_env : package_info list;
       mutable class_info_incomplete : bool;
       mutable class_info_extends : java_class_info option;
       mutable class_info_is_exception : bool;
@@ -123,6 +124,7 @@ and interface_info =
     {
       interface_info_tag : int;
       interface_info_name : string;
+      interface_info_package_env : package_info list;
       mutable interface_info_incomplete : bool;
       mutable interface_info_extends : interface_info list;
       mutable interface_info_fields : java_field_info list;
