@@ -1059,17 +1059,24 @@ let rec statement ~threats s =
 	Raise(exception_name ei,None)
     | JCStry (s, catches, finally) -> 
 	assert (finally.jc_statement_node = JCSblock []); (* TODO *)
-	let catch s c = match c with
-	  | (ei,Some v,st) ->
-	      Try(s, 
-		  exception_name ei, 
-		  Some v.jc_var_info_final_name, statement st)
-	  | (ei,None,st) ->
-	      Try(s, 
-		  exception_name ei, 
-		  None, statement st)
+	let catch (s,excs) (ei,v_opt,st) =
+	  if ExceptionSet.mem ei excs then
+	    (Try(s, 
+		 exception_name ei, 
+		 Option_misc.map (fun v -> v.jc_var_info_final_name) v_opt,
+		 statement st),
+	     ExceptionSet.remove ei excs)
+	  else
+	    begin
+	      eprintf "Warning: exception %s cannot be thrown@."
+		ei.jc_exception_info_name;
+	      (s,excs)
+	    end
 	in
-	List.fold_left catch (statement s) catches
+	let ef = Jc_effect.statement empty_fun_effect s in
+	let (s,_) =
+	  List.fold_left catch (statement s,ef.jc_raises) catches
+	in s
 
 and statement_list ~threats l = 
   List.fold_right 

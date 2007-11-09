@@ -1,5 +1,5 @@
 /*
-* $Workfile: JCSystem.java $	$Revision: 1.4 $, $Date: 2007-11-05 14:30:10 $
+* $Workfile: JCSystem.java $	$Revision: 1.5 $, $Date: 2007-11-09 14:50:17 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,9 +19,9 @@
 
 // /*
 // $Workfile: JCSystem.java $
-// $Revision: 1.4 $
-// $Date: 2007-11-05 14:30:10 $
-// $Author: nrousset $
+// $Revision: 1.5 $
+// $Date: 2007-11-09 14:50:17 $
+// $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/framework/JCSystem.java $
 // $Modtime: 5/02/00 7:13p $
 // Original author:  Ravi
@@ -270,7 +270,6 @@ public final class JCSystem
       @ behavior exc:
       @   signals (TransactionException) true;
       @*/
-
     public static native void beginTransaction() throws TransactionException;
  
     /**

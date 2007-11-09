@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.56 2007-10-31 17:07:11 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.57 2007-11-09 14:50:17 marche Exp $ *)
 
 
 open Jc_env
@@ -124,10 +124,11 @@ let same_effects ef1 ef2 =
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
   && StringSet.equal ef1.jc_effect_committed ef2.jc_effect_committed
-
+    
 let same_feffects fef1 fef2 =
-  same_effects fef1.jc_reads fef2.jc_reads &&
-  same_effects fef1.jc_writes fef2.jc_writes
+  same_effects fef1.jc_reads fef2.jc_reads 
+  && same_effects fef1.jc_writes fef2.jc_writes 
+  && ExceptionSet.equal fef1.jc_raises fef2.jc_raises
 
 
 (***********************
@@ -306,7 +307,12 @@ let rec statement ef s =
     | JCStry (s, catches, finally) -> 
 	let ef = 
 	  List.fold_left 
-	    (fun ef (_,_,s) -> statement ef s)
+	    (fun ef (excep,_,s) -> 
+	       let ef = 
+		 { ef with 
+		     jc_raises = ExceptionSet.remove excep ef.jc_raises }
+	       in
+	       statement ef s)
 	    (statement ef s) catches
 	in
 	statement ef finally
