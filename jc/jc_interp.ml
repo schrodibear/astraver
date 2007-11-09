@@ -1098,6 +1098,77 @@ let tr_struct st acc =
   let acc =
     Logic(false,tag_name st,[],tag_id_type)::acc
   in
+  let array_fields =
+    List.filter (fun fi -> 
+      match fi.jc_field_info_type with
+      | JCTpointer(_,Some _,Some _) -> true | _ -> false
+    ) st.jc_struct_info_fields
+  in
+  let obj = "object" in
+  let var = LVar obj in
+  let alloc =
+    st.jc_struct_info_root ^ "_alloc_table"
+  in
+  let safe_var =
+    make_and_list [
+      LPred("le_int",
+         [LApp("offset_min",[LVar alloc; var]);
+	 LConst (Prim_int "0")]);
+      LPred("ge_int",
+         [LApp("offset_max",[LVar alloc; var]);
+	 LConst (Prim_int "0")])]
+  in
+  let inv_fields = 
+    List.map (fun fi ->
+      let st,a,b = match fi.jc_field_info_type with
+	| JCTpointer(st,Some a,Some b) -> st,a,b
+	| _ -> assert false
+      in
+      let alloc =
+	st.jc_struct_info_root ^ "_alloc_table"
+      in
+      let var_field = LVar fi.jc_field_info_final_name in
+      let acc_var = LApp("select",[var_field;var]) in
+      (* TODO: call instead the appropriate [valid_] predicate, which implies 
+       * that the corresponding arguments must be passed on.
+       *)
+      make_and_list [
+	LPred("le_int",
+	   [LApp("offset_min",[LVar alloc; acc_var]);
+	   LConst (Prim_int (Num.string_of_num a))]);
+	LPred("ge_int",
+	   [LApp("offset_max",[LVar alloc; acc_var]);
+	   LConst (Prim_int (Num.string_of_num b))])]
+    ) array_fields
+  in
+  let a = make_and_list(safe_var::inv_fields) in
+  let t = { 
+    logic_type_args = [simple_logic_type st.jc_struct_info_root];
+    logic_type_name = "alloc_table" }
+  in
+  let params = 
+    List.fold_right (fun fi params ->
+      let st = match fi.jc_field_info_type with
+	| JCTpointer(st,_,_) -> st
+	| _ -> assert false
+      in
+      let t = { 
+	logic_type_args = [simple_logic_type st.jc_struct_info_root];
+	logic_type_name = "alloc_table" }
+      in
+      (fi.jc_field_info_final_name, memory_field fi) 
+      :: (st.jc_struct_info_root ^ "_alloc_table", t)
+      :: params
+    ) array_fields []
+  in 
+  let params = 
+    (obj,tr_base_type(JCTpointer(st,None,None))) 
+    :: (st.jc_struct_info_root ^ "_alloc_table", t) 
+    :: params 
+  in
+  let acc = 
+    Predicate(false,"valid_" ^ st.jc_struct_info_name,params,a) :: acc
+  in
   (* the invariants *)
   (*let tmp = "this" in
   let i = invariant_for_struct (LVar tmp) st in
@@ -1383,15 +1454,18 @@ let tr_fun f spec body acc =
 				[LVar alloc; var]);
 			   LConst (Prim_int (Num.string_of_num b))])
 		 | Some a,Some b ->
-		     make_and 
-		       (LPred("le_int",
-			  [LApp("offset_min",
-				[LVar alloc; var]);
-			   LConst (Prim_int (Num.string_of_num a))]))
-		       (LPred("ge_int",
-			  [LApp("offset_max",
-				[LVar alloc; var]);
-			   LConst (Prim_int (Num.string_of_num b))]))
+		     let args = 
+		       List.fold_right (fun fi args ->
+			 match fi.jc_field_info_type with
+			 | JCTpointer(st,Some a,Some b) ->
+			     LVar fi.jc_field_info_final_name
+			     :: LVar (st.jc_struct_info_root ^ "_alloc_table")
+			     :: args
+			 | _ -> args
+		       ) st.jc_struct_info_fields []
+		     in
+		     LPred("valid_" ^ st.jc_struct_info_name,
+		           var::(LVar alloc)::args)
 	       in
 	       if Jc_typing.is_root_struct st then
 		 make_and validity acc
