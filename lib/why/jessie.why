@@ -22,6 +22,9 @@ predicate valid (a:'t alloc_table, p:'t pointer) =
 logic shift : 't pointer, int -> 't pointer
 logic sub_pointer: 't pointer, 't pointer -> int
 
+axiom shift_zero :
+  forall p: 't pointer [shift(p,0)]. shift(p,0) = p
+
 axiom offset_max_shift :
  forall a:'t alloc_table.
   forall p: 't pointer. forall i:int.
@@ -462,6 +465,20 @@ logic asr : int,int -> int
 
 **********************)
 
+logic alloc_extends : 't alloc_table, 't alloc_table -> prop
+
+axiom alloc_extends_offset_min : 
+  forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
+    alloc_extends(a1,a2) -> 
+      forall p:'t pointer. forall a:int.
+        offset_min(a1,p) <= a -> offset_min(a2,p) <= a
+
+axiom alloc_extends_offset_max : 
+  forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
+    alloc_extends(a1,a2) -> 
+      forall p:'t pointer. forall b:int.
+        offset_max(a1,p) >= b -> offset_max(a2,p) >= b
+
 parameter alloc_parameter_ownership : 
   a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
@@ -469,7 +486,8 @@ parameter alloc_parameter_ownership :
   't pointer 
   reads mut, com
   writes a, at
-  { offset_min(a,result) = 0 and offset_max(a,result) = n-1 
+  { alloc_extends(a@,a)
+    and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) and select(mut,result) = bottom_tag 
     and select(com,result) = false }
 
@@ -489,7 +507,8 @@ parameter alloc_parameter :
   { n > 0 }
   't pointer 
   writes a, at
-  { offset_min(a,result) = 0 and offset_max(a,result) = n-1 
+  { alloc_extends(a@,a)
+    and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) }
 
 parameter free_parameter : 
