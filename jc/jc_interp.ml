@@ -1187,12 +1187,12 @@ let tr_struct st acc =
   in
 
   (* One element validity predicate. *)
-  (* [offset_min(alloc,x) <= 0 and offset_max(alloc,x) >= 0] *)
+  (* [offset_min(alloc,x) == 0 and offset_max(alloc,x) == 0] *)
   let top_validity =
     LAnd(
-      LPred("le_int",[
+      LPred("eq_int",[
 	LApp("offset_min",[LVar alloc;LVar "x"]);LConst(Prim_int "0")]),
-      LPred("ge_int",[
+      LPred("eq_int",[
         LApp("offset_max",[LVar alloc;LVar "x"]);LConst(Prim_int "0")]))
   in
   let field_validity_list =
@@ -1225,12 +1225,12 @@ let tr_struct st acc =
   in
 
   (* Validity predicate. *)
-  (* [offset_min(alloc,x) <= a and offset_max(alloc,x) >= b] *)
+  (* [offset_min(alloc,x) == a and offset_max(alloc,x) == b] *)
   let top_validity =
     LAnd(
-      LPred("le_int",[
+      LPred("eq_int",[
 	LApp("offset_min",[LVar alloc;LVar "x"]);LVar "a"]),
-      LPred("ge_int",[
+      LPred("eq_int",[
         LApp("offset_max",[LVar alloc;LVar "x"]);LVar "b"]))
   in
   let field_validity_list =
@@ -1608,12 +1608,8 @@ let tr_fun f spec body acc =
       (fun v acc ->
 	 match v.jc_var_info_type with
 	   | JCTpointer(st,a,b) ->
-	       let alloc =
-		 st.jc_struct_info_root ^ "_alloc_table"
-	       in
-	       let tag =
-		 st.jc_struct_info_root ^ "_tag_table"
-	       in
+	       let alloc = alloc_table_name st in
+	       let tag = tag_table_name st in
 	       let var = LVar v.jc_var_info_final_name in
 	       let validity = match a,b with
 		 | None,None -> LTrue
@@ -1627,19 +1623,28 @@ let tr_fun f spec body acc =
 			  [LApp("offset_max",
 				[LVar alloc; var]);
 			   LConst (Prim_int (Num.string_of_num b))])
+		 | Some a,Some b 
+		     when Num.eq_num a (Num.num_of_int 0)
+		       && Num.eq_num b (Num.num_of_int 0) ->
+		     let fields = embedded_struct_fields st in
+		     LPred(
+		       valid_one_pred_name st,
+		       var
+		       :: LVar alloc
+		       :: List.map 
+			 (lvar None ** alloc_table_name ** field_sinfo) fields
+		       @ List.map (lvar None ** field_memory_name) fields)
 		 | Some a,Some b ->
-		     let args = 
-		       List.fold_right (fun fi args ->
-			 match fi.jc_field_info_type with
-			 | JCTpointer(st,Some a,Some b) ->
-			     LVar fi.jc_field_info_final_name
-			     :: LVar (st.jc_struct_info_root ^ "_alloc_table")
-			     :: args
-			 | _ -> args
-		       ) st.jc_struct_info_fields []
-		     in
-		     LPred("valid_" ^ st.jc_struct_info_name,
-		           var::(LVar alloc)::args)
+		     let fields = embedded_struct_fields st in
+		     LPred(
+		       valid_pred_name st,
+		       var
+		       :: LConst(Prim_int(Num.string_of_num a))
+		       :: LConst(Prim_int(Num.string_of_num b))
+		       :: LVar alloc
+		       :: List.map 
+			 (lvar None ** alloc_table_name ** field_sinfo) fields
+		       @ List.map (lvar None ** field_memory_name) fields)
 	       in
 	       if Jc_typing.is_root_struct st then
 		 make_and validity acc

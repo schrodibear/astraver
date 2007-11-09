@@ -1,7 +1,7 @@
 
 type list = {
   integer content;
-  list[0] next;
+  list[..] next;
 }
 
 unit sum(list[0] l) {

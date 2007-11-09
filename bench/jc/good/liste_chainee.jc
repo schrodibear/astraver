@@ -83,7 +83,7 @@ and type T_2MSG41C = T_MSG with {
 type STR_MESSAGE = {
     T_MSG[0]                 PTR ;
     BOOLEAN             VISIBLE ;
-    STR_MESSAGE[0] MESSAGESUIVANT ;
+    STR_MESSAGE[..] MESSAGESUIVANT ;
 }
 
 type T_TYPE = 0..1

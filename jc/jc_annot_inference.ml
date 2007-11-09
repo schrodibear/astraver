@@ -1916,8 +1916,8 @@ and intern_ai_statement iaio abs curinvs s =
 	  end;
 	  let copy_normal = copy_abstract_value mgr normal in
 	  let postexcl = (ei, copy_normal) :: (List.remove_assoc ei postexcl) in
-	    curinvs.jc_absinv_exceptional <- postexcl; 
-	    empty_abstract_value mgr normal;
+	  curinvs.jc_absinv_exceptional <- postexcl; 
+	  empty_abstract_value mgr normal
       | JCSpack _ | JCSunpack _ ->
 	  ()
       | JCStry(s,hl,fs) ->
@@ -1926,8 +1926,8 @@ and intern_ai_statement iaio abs curinvs s =
 	    (* Filter out exceptions present in [hl]. *)
 	  let curpostexcl =
 	    List.filter (fun (ei,_) ->
-			   not (List.exists (fun (ej,_,_) ->
-					       ei.jc_exception_info_tag = ej.jc_exception_info_tag) hl)) postexcl
+	      not (List.exists (fun (ej,_,_) ->
+		ei.jc_exception_info_tag = ej.jc_exception_info_tag) hl)) postexcl
 	  in
 	    curinvs.jc_absinv_exceptional <- curpostexcl;
 	    (* Consider each handler in turn. *)
