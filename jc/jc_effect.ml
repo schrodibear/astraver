@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.57 2007-11-09 14:50:17 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.58 2007-11-09 17:08:58 moy Exp $ *)
 
 
 open Jc_env
@@ -303,7 +303,7 @@ let rec statement ef s =
     | JCSthrow (ei, Some e) -> 
 	add_exception_effect (expr ef e) ei
     | JCSthrow (ei, None) -> 
-	add_exception_effect empty_fun_effect ei
+	add_exception_effect ef ei
     | JCStry (s, catches, finally) -> 
 	let ef = 
 	  List.fold_left 
