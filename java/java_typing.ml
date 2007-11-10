@@ -430,7 +430,7 @@ let rec get_import (packages, types) imp =
 		"type name expected"
 	end
 	  
-
+(*
 and get_types cu =
   let pi = 
     match cu.cu_package with
@@ -467,6 +467,57 @@ and get_types cu =
 	       full_type_env)
     local_type_env;
   package_env,local_type_env
+*)
+
+and get_types package_env cus =
+  let pil =
+    List.map 
+      (fun cu ->
+	 match cu.cu_package with
+	   | [] -> anonymous_package
+	   | qid ->
+	       match classify_name package_env [] None [] qid with
+		 | PackageName pi -> pi
+		 | _ -> assert false)
+      cus
+  in
+  let package_env, type_env = 
+    let imports = List.flatten (List.map (fun cu -> cu.cu_imports) cus) in
+    List.fold_left get_import ([],[])
+      (Import_package javalang_qid::imports) 
+  in
+  let package_env = 
+    List.fold_left (fun acc pi -> add_in_package_list pi package_env) 
+      package_env pil 
+  in
+  let local_type_env =
+    List.flatten
+    (List.map 
+      (fun (pi, cu) -> 
+	 List.fold_left (get_type_decl pi package_env) 
+	   [] cu.cu_type_decls)
+      (List.combine pil cus))
+
+  in
+  let full_type_env = local_type_env @ type_env in
+  List.iter
+    (fun (_,ti) ->
+       match ti with
+	 | TypeClass ci ->
+(*
+	     eprintf "setting type env for class '%s' as:@\n" ci.class_info_name;
+	     List.iter
+	       (fun (id,_) -> eprintf "  %s@\n" id)
+	       type_env;
+*)
+	     Hashtbl.add class_type_env_table ci.class_info_tag 
+	       full_type_env
+	 | TypeInterface ii ->
+	     Hashtbl.add interface_type_env_table ii.interface_info_tag 
+	       full_type_env)
+    local_type_env;
+  package_env,local_type_env
+
 
 (* corresponds to JLS 2nd ed., par. 6.5.2, pp. 96--97 *)
 and classify_name 
@@ -555,7 +606,7 @@ and classify_name
 				| Type ti -> TypeName ti
 				| File f -> 
 				    let ast = Java_syntax.file f in
-				    let (_, t) = get_types ast in
+				    let (_, t) = get_types package_env [ast] in
 				    try
 				      let ti = List.assoc id t in
 				      Hashtbl.replace h id (Type ti);
@@ -592,7 +643,7 @@ and classify_name
 		    | Type ti -> TypeName ti
 		    | File f -> 
 			let ast = Java_syntax.file f in
-			let (_,t) = get_types ast in
+			let (_,t) = get_types package_env [ast] in
 			try
 			  let ti = List.assoc id t in
 			  Hashtbl.replace contents id (Type ti);

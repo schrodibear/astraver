@@ -101,8 +101,7 @@ let rec expr acc e : 'a list =
     | JEcall (e, mi, args) ->
 	List.fold_left expr (expr (MethodInfo mi::acc) e) args
     | JEconstr_call (e, ci, args) ->
-	(* TODO: calls constructor *)
-	List.fold_left expr (expr acc e) args
+	List.fold_left expr (expr (ConstructorInfo ci::acc) e) args
     | JEstatic_call (mi, args) ->
 	List.fold_left expr (MethodInfo mi::acc) args
     | JEnew_array(ty, dims) ->
@@ -145,7 +144,7 @@ let rec statement acc s : ('a list * 'b list) =
     | JSif(e, s1, s2) ->
 	let (a,b) = acc in
 	let b = expr b e in
-	statement (statement (a,b) s1) s2
+	  statement (statement (a,b) s1) s2
     | JSblock sl -> 
 	List.fold_left statement acc sl
     | JStry (s, catches, finally) -> 
@@ -155,20 +154,20 @@ let rec statement acc s : ('a list * 'b list) =
 	    (fun acc (_,s) -> List.fold_left statement acc s) 
 	    acc catches
 	in 
-	Option_misc.fold 
-	  (fun b acc -> List.fold_left statement acc b) finally acc
+	  Option_misc.fold 
+	    (fun b acc -> List.fold_left statement acc b) finally acc
     | JSassert (_,t) -> let (a,b) = acc in (assertion a t,b)
     | JSreturn_void
     | JSbreak _ -> acc 
     | JSswitch (e, l)-> 
 	let (a,b) = acc in
 	let b = expr b e in
-	List.fold_left
-	  (fun acc (cases,body) -> statements acc body)
-	  (a,b) l
+	  List.fold_left
+	    (fun acc (cases,body) -> statements acc body)
+	    (a,b) l
     | JSthrow e 
     | JSreturn e 
-    | JSexpr e -> let (a,b)=acc in (a,expr b e)
+    | JSexpr e -> let (a, b) = acc in (a, expr b e)
     | JSfor (inits, cond, inv, dec, updates, body)-> 
 	let (a, b) = acc in
 	let b = List.fold_left expr
@@ -212,8 +211,8 @@ let compute_calls f s b =
     f.method_info_calls <- b
 
 let compute_constr_calls f s b = 
-  let (a,b) = List.fold_left statement ([],[]) b in
-  f.constr_info_calls <- b
+  let (a, b) = List.fold_left statement ([], []) b in
+    f.constr_info_calls <- b
       
 module LogicCallGraph = struct 
   type t = (int, (java_logic_info * Java_typing.logic_body)) Hashtbl.t 

@@ -321,7 +321,7 @@ let term_num t = match t.jc_term_node with
 
 (* Comparison based only on term structure, not types not locations. *)
 let rec raw_term_compare t1 t2 =
-  match t1.jc_term_node,t2.jc_term_node with
+  match t1.jc_term_node, t2.jc_term_node with
   | JCTconst c1,JCTconst c2 -> 
       Pervasives.compare c1 c2
   | JCTvar v1,JCTvar v2 -> 

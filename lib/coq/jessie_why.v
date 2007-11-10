@@ -109,7 +109,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A382:Set) (a:(alloc_table A382)) (p:(pointer A382))
+(*Why predicate*) Definition valid (A401:Set) (a:(alloc_table A401)) (p:(pointer A401))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -122,6 +122,10 @@ Implicit Arguments shift.
   forall (A1:Set), (pointer A1) -> (pointer A1) -> Z.
 Admitted.
 Implicit Arguments sub_pointer.
+
+(*Why axiom*) Lemma shift_zero :
+  forall (A1:Set), (forall (p:(pointer A1)), (shift p 0) = p).
+Admitted.
 
 (*Why axiom*) Lemma offset_max_shift :
   forall (A1:Set),
@@ -628,8 +632,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A417:Set) (A416:Set) (a:(alloc_table A416)) (m1:(memory A416 A417)) (m2:(memory A416 A417)) (l:(pset A416))
-  := (forall (p:(pointer A416)),
+(*Why predicate*) Definition not_assigns (A437:Set) (A436:Set) (a:(alloc_table A436)) (m1:(memory A436 A437)) (m2:(memory A436 A437)) (l:(pset A436))
+  := (forall (p:(pointer A436)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -666,7 +670,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A423:Set) (a:(tag_table A423)) (p:(pointer A423)) (t:(tag_id A423))
+(*Why predicate*) Definition instanceof (A443:Set) (a:(tag_table A443)) (p:(pointer A443)) (t:(tag_id A443))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -694,7 +698,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A428:Set) (tag_table:(tag_table A428)) (mutable:(memory A428 (tag_id A428))) (this:(pointer A428))
+(*Why predicate*) Definition fully_packed (A448:Set) (tag_table:(tag_table A448)) (mutable:(memory A448 (tag_id A448))) (this:(pointer A448))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -717,5 +721,28 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition asr : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition alloc_extends :
+  forall (A1:Set), (alloc_table A1) -> (alloc_table A1) -> Prop.
+Admitted.
+Implicit Arguments alloc_extends.
+
+(*Why axiom*) Lemma alloc_extends_offset_min :
+  forall (A1:Set),
+  (forall (a1:(alloc_table A1)),
+   (forall (a2:(alloc_table A1)),
+    ((alloc_extends a1 a2) ->
+     (forall (p:(pointer A1)),
+      (forall (a:Z), ((offset_min a1 p) <= a -> (offset_min a2 p) <= a)))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_offset_max :
+  forall (A1:Set),
+  (forall (a1:(alloc_table A1)),
+   (forall (a2:(alloc_table A1)),
+    ((alloc_extends a1 a2) ->
+     (forall (p:(pointer A1)),
+      (forall (b:Z), ((offset_max a1 p) >= b -> (offset_max a2 p) >= b)))))).
 Admitted.
 

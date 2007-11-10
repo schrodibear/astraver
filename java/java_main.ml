@@ -8,56 +8,59 @@ let main () =
   let files = Java_options.files () in
   try
     match files with
-      | [f] ->
+      | [] -> Java_options.usage ()
+      | fl ->
 	  (* phase 1 : parsing *)
-	  let ast = Java_syntax.file f in
-	  printf "Parsing OK.@.";
-	  (* phase 2 : typing *)
-	  Java_options.lprintf "(****** typing phase *****)@.";
-	  let (p,t) = Java_typing.get_types ast in
-	  Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
-	  Java_typing.get_bodies p t ast;
-	  Java_typing.type_specs p t;
-	  printf "Typing OK.@.";
-	  
-	(************)
-	(* Analyses *)
-	(************)
-
-	Hashtbl.iter 
-	  (fun _ (f,t) -> Java_callgraph.compute_logic_calls f t)
-	  Java_typing.logics_table;
-
-	Hashtbl.iter 
-	  (fun _ mt -> 
-	     Option_misc.iter (Java_callgraph.compute_calls 
-				 mt.Java_typing.mt_method_info
-				 mt.Java_typing.mt_requires) 
-	       mt.Java_typing.mt_body)
-	  Java_typing.methods_table;
-	
-	Hashtbl.iter 
-	  (fun _ ct -> 
-	     Java_callgraph.compute_constr_calls 
-	       ct.Java_typing.ct_constr_info
-	       ct.Java_typing.ct_requires
-	       ct.Java_typing.ct_body)
-	  Java_typing.constructors_table;
-	let _logic_components = 
-	  Java_callgraph.compute_logic_components 
-	    Java_typing.logics_table
-	in
-	let components = 
-	  Java_callgraph.compute_components 
-	    Java_typing.methods_table
-	    Java_typing.constructors_table
-	in
-	Hashtbl.iter
-	  (fun _ ty ->
-	     Java_analysis.do_type ty)
-	  Java_typing.type_table;
-	(* analyze in any order *)
-(*
+	  let astl = List.map Java_syntax.file fl in
+	    printf "Parsing OK.@.";
+	    (* phase 2 : typing *)
+	    Java_options.lprintf "(****** typing phase *****)@.";
+	    let (p, t) = Java_typing.get_types [] astl in
+	      Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
+	      List.iter (Java_typing.get_bodies p t) astl;
+	      Java_typing.type_specs p t;
+	      printf "Typing OK.@.";
+	      
+	      (************)
+	      (* Analyses *)
+	      (************)
+	      
+	      Hashtbl.iter 
+		(fun _ (f,t) -> Java_callgraph.compute_logic_calls f t)
+		Java_typing.logics_table;
+	      
+	      Hashtbl.iter 
+		(fun _ mt -> 
+		   Option_misc.iter 
+		     (Java_callgraph.compute_calls 
+			mt.Java_typing.mt_method_info
+			mt.Java_typing.mt_requires) 
+		     mt.Java_typing.mt_body)
+		Java_typing.methods_table;
+	      
+	      Hashtbl.iter 
+		(fun _ ct -> 
+		   Java_callgraph.compute_constr_calls 
+		     ct.Java_typing.ct_constr_info
+		     ct.Java_typing.ct_requires
+		     ct.Java_typing.ct_body)
+		Java_typing.constructors_table;
+	      
+	      let _logic_components = 
+		Java_callgraph.compute_logic_components 
+		  Java_typing.logics_table
+	      in
+	      let components = 
+		Java_callgraph.compute_components 
+		  Java_typing.methods_table
+		  Java_typing.constructors_table
+	      in
+		Hashtbl.iter
+		  (fun _ ty ->
+		     Java_analysis.do_type ty)
+		  Java_typing.type_table;
+		(* analyze in any order *)
+		(*
 	Hashtbl.iter
 	  (fun mi mti ->
 	     Java_analysis.do_method 
@@ -220,6 +223,7 @@ let main () =
 
 	(* production phase 5 : produce Jessie file *)
 	let decls = List.rev decls in
+	let f = List.hd fl in
 	let f = Filename.chop_extension f in
 	let cout = Pp.print_in_file_no_close
 	  (fun fmt -> fprintf fmt "%a@." Jc_output.print_decls decls)
@@ -246,8 +250,6 @@ let main () =
 
 	printf "Done.@."
 
-    | _ -> Java_options.usage ()
-    
   with
     | Java_typing.Typing_error(l,s) ->
 	eprintf "%a: typing error: %s@." Loc.gen_report_position l s;

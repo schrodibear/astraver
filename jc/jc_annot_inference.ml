@@ -162,7 +162,7 @@ let rec term_name =
     let alphanum c = 
       String.contains "abcdefghijklmnopqrstuvwxyz" c
       || String.contains "ABCDEFGHIJKLMNOPQRSTUVWXYZ" c
-      || String.contains "123456789" c
+      || String.contains "0123456789" c
       || c = '_'
     in
       string_implode (List.filter alphanum (string_explode s))
@@ -575,7 +575,7 @@ end = struct
 	Hashtbl.add term_table va t;
 	va
 	  
-  let offset_min_variable t = 
+  let offset_min_variable t =
     let ty = t.jc_term_type in
       try
 	TermTable.find offset_min_variable_table t
