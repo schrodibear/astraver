@@ -1126,29 +1126,46 @@ and statement_list ~threats l =
 let ( ** ) = fun f g x -> f(g x)
 
 let direct_embedded_struct_fields st =
-  List.fold_left (fun acc fi -> 
-    match fi.jc_field_info_type with
-      | JCTpointer(_,Some _,Some _) -> fi :: acc
-      | _ -> acc
-  ) [] st.jc_struct_info_fields
-
+(* to avoid a recursive Why predicate (which is forbidden in Why) to be generated 
+   when [st] contains a field of type pointer on [st] (Nicolas) *)
+  List.fold_left 
+    (fun acc fi -> 
+       match fi.jc_field_info_type with
+	 | JCTpointer(st', Some _, Some _) -> 
+	     if st.jc_struct_info_name = st'.jc_struct_info_name then 
+	       acc else fi :: acc
+	 | _ -> acc) [] st.jc_struct_info_fields
+(*  List.fold_left 
+    (fun acc fi -> 
+       match fi.jc_field_info_type with
+	 | JCTpointer(_, Some _, Some _) -> fi :: acc
+	 | _ -> acc) [] st.jc_struct_info_fields *)
+    
 let embedded_struct_fields st =
   let rec collect st = 
     let fields = direct_embedded_struct_fields st in
     let fstructs = 
-      List.map (fun fi -> match fi.jc_field_info_type with
-	| JCTpointer(st,Some _,Some _) -> st
-	| _ -> assert false
-      ) fields 
+(* to avoid a Stack overflow 
+   when [st] contains a field of type pointer on [st] (Nicolas) *)
+      List.fold_left 
+	(fun acc fi -> match fi.jc_field_info_type with
+	   | JCTpointer (st', Some _, Some _) -> 
+	       if st.jc_struct_info_name = st'.jc_struct_info_name then 
+		 acc else st' :: acc
+	   | _ -> assert false) [] fields
+(*      List.map
+	(fun acc fi -> match fi.jc_field_info_type with
+ 	   | JCTpointer (st, Some _, Some _) -> st :: acc
+	   | _ -> assert false) fields *)
     in
-    fields @ List.flatten (List.map collect fstructs)
+      fields @ List.flatten (List.map collect fstructs)
   in
   let fields = collect st in
   let fields = 
     List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
   in
-  FieldSet.elements fields
-
+    FieldSet.elements fields
+      
 let field_sinfo fi = 
   match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
 
@@ -1171,7 +1188,7 @@ let tr_struct st acc =
   let all_fields = embedded_struct_fields st in
   let alloc = alloc_table_name st in
   let tagtab = tag_table_name st in
-  (* Declarations of field memories. *)
+    (* Declarations of field memories. *)
   let acc = 
     List.fold_left
       (fun acc fi ->
