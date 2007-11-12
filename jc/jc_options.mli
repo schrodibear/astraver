@@ -23,7 +23,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.13 2007-10-09 10:50:24 marche Exp $ *)
+(* $Id: jc_options.mli,v 1.14 2007-11-12 16:10:48 nrousset Exp $ *)
 
 (*s environment variables *)
 
@@ -39,6 +39,8 @@ val debug : bool
 val verbose : bool
 val werror : bool
 val why_opt : string
+
+val verify : string list
 
 val annot_infer : bool
 val ai_domain : string

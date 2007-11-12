@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.6 2007-09-27 14:28:59 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.7 2007-11-12 16:10:48 nrousset Exp $ i*)
 
 open Format
 
@@ -90,6 +90,7 @@ let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
 let ignore_overflow = ref false
+let non_null = ref false
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
@@ -128,6 +129,8 @@ let _ =
           "  prints version and exit";
 	"-ignore-overflow", Arg.Set ignore_overflow,
 	  "  ignore arithmetic overflow threats" ;
+	"-non-null", Arg.Set non_null,
+	  "  non-null by default" ;
       ]
       add_file usage
 
@@ -143,6 +146,7 @@ let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
 let ignore_overflow = !ignore_overflow
+let non_null = !non_null
 
 (*s error handling *)
 

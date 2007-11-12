@@ -1805,146 +1805,147 @@ let tr_fun f spec body acc =
 	(* function was only declared *)
 	why_param :: acc
     | Some body ->
-	(* why functions for each behaviors *)
-	let params = match f.jc_fun_info_parameters with
-	  | [] -> ["tt", unit_type]
-	  | l -> List.map parameter l
-	in
-	  (* rename formals just before body is treated *)
-	let list_of_refs =
-	  List.fold_right
-	    (fun id bl ->
-	       if id.jc_var_info_assigned
-	       then 
-		 let n = id.jc_var_info_final_name in
-		 let newn = "mutable_" ^ n in
-		 id.jc_var_info_final_name <- newn;
-		 (newn, n) :: bl
-	       else bl) 
-	    f.jc_fun_info_parameters [] 
-	in
-	return_void := 
-	  (match f.jc_fun_info_return_type with
-	    | JCTnative Tunit -> true
-	    | _ -> false);		
-	(* default behavior *)
-	let why_body = statement_list ~threats:true body in
-	let tblock =
-	  if Jc_options.inv_sem = InvOwnership then
-	    append
-	      (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-	      (assume_all_invariants f.jc_fun_info_parameters)
-	      why_body
-	  else
-	    why_body
-	in
-	let tblock = 
-	  if !return_void then
-	    Try(append tblock (Raise(jessie_return_exception,None)),
-		jessie_return_exception,None,Void)
-	  else
-	    let e = any_value f.jc_fun_info_return_type in
-	    Let_ref(jessie_return_variable,e,
-		    Try(append tblock Absurd,
-			jessie_return_exception,None,
-			Deref(jessie_return_variable)))
-	in
-	let tblock = make_label "init" tblock in
-	let tblock =
-	  List.fold_right
-	    (fun (mut_id,id) bl ->
-	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-	in
-	let acc =
-	  Def(
-	    f.jc_fun_info_name ^ "_safety",
-	    Fun(
-	      params,
-	      requires,
-	      tblock,
-	      invariants,
-	      excep_posts_for_others None excep_behaviors
-	    )
-	  )::acc
-	in
-	(* user behaviors *)
-	let acc = 
-	  if spec.jc_fun_behavior = [] then
-	    acc
-	  else
-	    let body = statement_list ~threats:false body in
-	    let tblock =
-	      if Jc_options.inv_sem = InvOwnership then
-		append
-		  (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-		  (assume_all_invariants f.jc_fun_info_parameters)
-		  body
-	      else
-		body
+	if Jc_options.verify <> [] && not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) then why_param :: acc else
+	    (* why functions for each behaviors *)
+	    let params = match f.jc_fun_info_parameters with
+	      | [] -> ["tt", unit_type]
+	      | l -> List.map parameter l
 	    in
-	    let tblock = 
-	      if !return_void then
-		Try(append tblock (Raise(jessie_return_exception,None)),
-		    jessie_return_exception,None,Void)
-	      else
-		let e = any_value f.jc_fun_info_return_type in
-		Let_ref(jessie_return_variable,e,
-			Try(append tblock Absurd,
-			    jessie_return_exception,None,
-			    Deref(jessie_return_variable)))
-	    in
-	    let tblock = make_label "init" tblock in
-	    let tblock =
+	      (* rename formals just before body is treated *)
+	    let list_of_refs =
 	      List.fold_right
-		(fun (mut_id,id) bl ->
-		   Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+		(fun id bl ->
+		   if id.jc_var_info_assigned
+		   then 
+		     let n = id.jc_var_info_final_name in
+		     let newn = "mutable_" ^ n in
+		       id.jc_var_info_final_name <- newn;
+		       (newn, n) :: bl
+		   else bl) 
+		f.jc_fun_info_parameters [] 
 	    in
-	    (* normal behaviors *)
-	    let acc =
-	      List.fold_right
-		(fun (id,b,e) acc ->
-		   let d =
-		     Def(
-		       f.jc_fun_info_name ^ "_ensures_" ^ id,
-		       Fun(
-			 params,
-			 requires,
-			 tblock,
-			 e,
-			 excep_posts_for_others None excep_behaviors
-		       )
-		     )
-		   in d::acc)
-		normal_behaviors acc
-	    in 
-	    (* redefine [tblock] for use in exception functions *)
-	    (* CLAUDE: pourquoi ??????
-	       let tblock = make_label "init" tblock in
-	       let tblock =
-	       List.fold_right
-	       (fun (mut_id,id) bl ->
-	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-	       in
-	    *)
-	      (* exceptional behaviors *)
-	      let acc =
-		ExceptionMap.fold
-		  (fun ei l acc ->
-		     List.fold_right
-		       (fun (id,b,e) acc ->
-			  let d =
-			    Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
-				Fun(params,
-				    requires,
-				    tblock,
-				    LTrue,
-				    (exception_name ei,e) :: 
-				      excep_posts_for_others (Some ei) excep_behaviors)) in
-			    d::acc)
-		       l acc)
-		  excep_behaviors acc
+	      return_void := 
+		(match f.jc_fun_info_return_type with
+		   | JCTnative Tunit -> true
+		   | _ -> false);		
+	      (* default behavior *)
+	      let why_body = statement_list ~threats:true body in
+	      let tblock =
+		if Jc_options.inv_sem = InvOwnership then
+		  append
+		    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+		    (assume_all_invariants f.jc_fun_info_parameters)
+		    why_body
+		else
+		  why_body
 	      in
-		acc
+	      let tblock = 
+		if !return_void then
+		  Try(append tblock (Raise(jessie_return_exception,None)),
+		      jessie_return_exception,None,Void)
+		else
+		  let e = any_value f.jc_fun_info_return_type in
+		    Let_ref(jessie_return_variable,e,
+			    Try(append tblock Absurd,
+				jessie_return_exception,None,
+				Deref(jessie_return_variable)))
+	      in
+	      let tblock = make_label "init" tblock in
+	      let tblock =
+		List.fold_right
+		  (fun (mut_id,id) bl ->
+		     Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+	      in
+	      let acc =
+		Def(
+		  f.jc_fun_info_name ^ "_safety",
+		  Fun(
+		    params,
+		    requires,
+		    tblock,
+		    invariants,
+		    excep_posts_for_others None excep_behaviors
+		  )
+		)::acc
+	      in
+		(* user behaviors *)
+	      let acc = 
+		if spec.jc_fun_behavior = [] then
+		  acc
+		else
+		  let body = statement_list ~threats:false body in
+		  let tblock =
+		    if Jc_options.inv_sem = InvOwnership then
+		      append
+			(*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+			(assume_all_invariants f.jc_fun_info_parameters)
+			body
+		    else
+		      body
+		  in
+		  let tblock = 
+		    if !return_void then
+		      Try(append tblock (Raise(jessie_return_exception,None)),
+			  jessie_return_exception,None,Void)
+		    else
+		      let e = any_value f.jc_fun_info_return_type in
+			Let_ref(jessie_return_variable,e,
+				Try(append tblock Absurd,
+				    jessie_return_exception,None,
+				    Deref(jessie_return_variable)))
+		  in
+		  let tblock = make_label "init" tblock in
+		  let tblock =
+		    List.fold_right
+		      (fun (mut_id,id) bl ->
+			 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+		  in
+		    (* normal behaviors *)
+		  let acc =
+		    List.fold_right
+		      (fun (id,b,e) acc ->
+			 let d =
+			   Def(
+			     f.jc_fun_info_name ^ "_ensures_" ^ id,
+			     Fun(
+			       params,
+			       requires,
+			       tblock,
+			       e,
+			       excep_posts_for_others None excep_behaviors
+			     )
+			   )
+			 in d::acc)
+		      normal_behaviors acc
+		  in 
+		    (* redefine [tblock] for use in exception functions *)
+		    (* CLAUDE: pourquoi ??????
+		       let tblock = make_label "init" tblock in
+		       let tblock =
+		       List.fold_right
+		       (fun (mut_id,id) bl ->
+		       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+		       in
+		    *)
+		    (* exceptional behaviors *)
+		  let acc =
+		    ExceptionMap.fold
+		      (fun ei l acc ->
+			 List.fold_right
+			   (fun (id,b,e) acc ->
+			      let d =
+				Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
+				    Fun(params,
+					requires,
+					tblock,
+					LTrue,
+					(exception_name ei,e) :: 
+					  excep_posts_for_others (Some ei) excep_behaviors)) in
+				d::acc)
+			   l acc)
+		      excep_behaviors acc
+		  in
+		    acc 
 	in why_param::acc
 
 let tr_logic_type id acc = Type(id,[])::acc

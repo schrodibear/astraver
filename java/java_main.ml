@@ -121,6 +121,7 @@ let main () =
 *)
 	(* production phase 1.2 : generation of Jessie range_types *)
 	let decls_range = Java_interp.range_types [] in
+	  
 	(* production phase 1.3 : generation of Jessie struct types *)
 	let acc,decls_arrays = Java_interp.array_types [] in
 	let acc,decls_structs =

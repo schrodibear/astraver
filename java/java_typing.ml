@@ -45,7 +45,7 @@ let rec print_type fmt t =
     | JTYbase t -> fprintf fmt "%s" (string_of_base_type t)
     | JTYnull -> fprintf fmt "(nulltype)"
     | JTYarray t -> fprintf fmt "%a[]" print_type t
-    | JTYclass(non_null,c) -> fprintf fmt "%s%s" 
+    | JTYclass (non_null, c) -> fprintf fmt "%s%s" 
 	(if non_null then "" else "!") c.class_info_name
     | JTYinterface ii -> fprintf fmt "%s" ii.interface_info_name
 
@@ -748,8 +748,7 @@ and type_type package_env type_env ty =
 	    | TypeName ti ->
 		begin
 		  match ti with
-		    | TypeClass ci -> JTYclass(
-			(* if non_null policy then *) true (* else false *),ci)
+		    | TypeClass ci -> JTYclass (Java_options.non_null, ci)
 		    | TypeInterface ii -> JTYinterface(ii)
 		end
 	    | _ -> assert false (* TODO *)
@@ -2004,7 +2003,7 @@ let is_accessible_and_applicable_constructor ci arg_types =
 let method_signature mi =
   let t =
     match mi.method_info_class_or_interface with
-      | TypeClass ci -> JTYclass(true,ci)
+      | TypeClass ci -> JTYclass (Java_options.non_null, ci)
       | TypeInterface ii -> JTYinterface ii
   in
   t :: List.map (fun vi -> vi.java_var_info_type) mi.method_info_parameters
@@ -2220,7 +2219,7 @@ let rec expr package_env type_env current_type env e =
 		  eprintf "looking up constructor in class %s@." ci.class_info_name;
 *)
 		  let constr = lookup_constructor ci arg_types in
-		  JTYclass(true,ci),JEnew_object(constr,args)
+		  JTYclass (Java_options.non_null, ci), JEnew_object(constr,args)
 	      | _ ->
 		  typing_error (fst (List.hd n))
 		    "class type expected"	
@@ -2902,7 +2901,7 @@ let type_method_spec_and_body ?(dobody=true)
     if mi.method_info_is_static then [] else
       let this_type =
 	match ti with
-	  | TypeClass ci -> JTYclass(true,ci)
+	  | TypeClass ci -> JTYclass (Java_options.non_null, ci)
 	  | TypeInterface ii -> JTYinterface ii
       in
       let vi = new_var Loc.dummy_position this_type "this" in
@@ -2980,7 +2979,7 @@ let type_constr_spec_and_body ?(dobody=true)
   in
   let this_type =
     match current_type with
-      | TypeClass ci -> JTYclass(true,ci)
+      | TypeClass ci -> JTYclass (Java_options.non_null, ci)
       | TypeInterface ii -> JTYinterface ii
   in
   let this_vi = new_var Loc.dummy_position this_type "this" in
@@ -3038,7 +3037,7 @@ let type_constr_spec_and_body ?(dobody=true)
 		 make_expr_no_loc unit_type
 		   (JEconstr_call
 		      (make_expr_no_loc
-			 (JTYclass (true, super_class_info)) (JEvar this_vi), super_ci, tel))))
+			 (JTYclass (Java_options.non_null, super_class_info)) (JEvar this_vi), super_ci, tel))))
 	  in
 	  let body = statements package_env type_env (Some current_type) this_env body in
 	  Hashtbl.add constructors_table ci.constr_info_tag 

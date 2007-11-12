@@ -23,7 +23,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.13 2007-10-09 10:50:24 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.14 2007-11-12 16:10:48 nrousset Exp $ i*)
 
 open Format
 open Jc_env
@@ -64,6 +64,8 @@ let parse_only = ref false
 let type_only = ref false
 let print_graph = ref false
 let why_opt = ref ""
+
+let verify = ref []
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
@@ -126,6 +128,8 @@ let _ =
 	     | "arguments" -> inv_sem := InvArguments
 	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
 	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
+	"-verify", Arg.String (function s -> verify := s::!verify), 
+	"verify only these functions";
       ]
       add_file usage
 
@@ -141,6 +145,8 @@ let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
 let inv_sem = !inv_sem
+
+let verify = !verify
 
 let annot_infer = !annot_infer
 let ai_domain = !ai_domain

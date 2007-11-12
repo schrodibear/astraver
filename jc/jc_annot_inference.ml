@@ -3009,13 +3009,13 @@ let rec record_ai_inter_preconditions mgr iai fi fs =
 	fi.jc_fun_info_calls
     end
       
-let ai_entrypoint_fix mgr iai (fi, fs, sl) =
+let rec ai_entrypoint_fix mgr iai (fi, fs, sl) =
   ai_entrypoint mgr (Some iai) (fi, fs, sl);
   if !state_changed then
     begin
       state_changed := false;
       inspected_functions := [];
-      ai_entrypoint mgr (Some iai) (fi, fs, sl);
+      ai_entrypoint_fix mgr iai (fi, fs, sl);
     end;
   inspected_functions := [];
   record_ai_inter_preconditions mgr iai fi fs;
