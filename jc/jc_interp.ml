@@ -1126,45 +1126,36 @@ and statement_list ~threats l =
 let ( ** ) = fun f g x -> f(g x)
 
 let direct_embedded_struct_fields st =
-(* to avoid a recursive Why predicate (which is forbidden in Why) to be generated 
-   when [st] contains a field of type pointer on [st] (Nicolas) *)
   List.fold_left 
     (fun acc fi -> 
-       match fi.jc_field_info_type with
-	 | JCTpointer(st', Some _, Some _) -> 
-	     if st.jc_struct_info_name = st'.jc_struct_info_name then 
-	       acc else fi :: acc
-	 | _ -> acc) [] st.jc_struct_info_fields
-(*  List.fold_left 
-    (fun acc fi -> 
-       match fi.jc_field_info_type with
-	 | JCTpointer(_, Some _, Some _) -> fi :: acc
-	 | _ -> acc) [] st.jc_struct_info_fields *)
+      match fi.jc_field_info_type with
+	| JCTpointer(st', Some _, Some _) -> 
+	    assert (st.jc_struct_info_name <> st'.jc_struct_info_name);
+	    fi :: acc
+	| _ -> acc
+    ) [] st.jc_struct_info_fields
     
 let embedded_struct_fields st =
-  let rec collect st = 
+  let rec collect forbidden_set st = 
+    let forbidden_set = StringSet.add st.jc_struct_info_name forbidden_set in
     let fields = direct_embedded_struct_fields st in
     let fstructs = 
-(* to avoid a Stack overflow 
-   when [st] contains a field of type pointer on [st] (Nicolas) *)
       List.fold_left 
 	(fun acc fi -> match fi.jc_field_info_type with
-	   | JCTpointer (st', Some _, Some _) -> 
-	       if st.jc_struct_info_name = st'.jc_struct_info_name then 
-		 acc else st' :: acc
-	   | _ -> assert false) [] fields
-(*      List.map
-	(fun acc fi -> match fi.jc_field_info_type with
- 	   | JCTpointer (st, Some _, Some _) -> st :: acc
-	   | _ -> assert false) fields *)
+	  | JCTpointer (st', Some _, Some _) -> 
+	      assert 
+		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
+	      st' :: acc
+	   | _ -> assert false
+	) [] fields
     in
-      fields @ List.flatten (List.map collect fstructs)
+    fields @ List.flatten (List.map (collect forbidden_set) fstructs)
   in
-  let fields = collect st in
+  let fields = collect (StringSet.singleton st.jc_struct_info_name) st in
   let fields = 
     List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
   in
-    FieldSet.elements fields
+  FieldSet.elements fields
       
 let field_sinfo fi = 
   match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
