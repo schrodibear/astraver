@@ -1,4 +1,7 @@
 
+  o gwhy: added prover Z3 (http://research.microsoft.com/projects/z3/)
+  o SMT-lib output: integer division (/) is now translated into an
+  uninterpreted function symbol div_int
   o simplify2why: fixed bugs
 
 version 2.04, August 2nd, 2007

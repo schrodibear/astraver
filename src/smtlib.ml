@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.36 2007-08-31 08:16:08 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.37 2007-11-13 12:50:47 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -57,7 +57,7 @@ let prefix id =
   else if id == t_add_int then "+"
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
-  else if id == t_div_int then "/"
+  else if id == t_div_int then "div_int"
   else if id == t_mod_int then 
     if Options.modulo then "modulo"
     else "%" 
@@ -336,6 +336,7 @@ let output_file f =
                       (= c_Boolean_true  c_Boolean_false))@\n";
     end;
   fprintf fmt "  :extrasorts (Unit)@\n";
+  fprintf fmt "  :extrafuns ((div_int Int Int Int))@\n";
   if modulo then 
     begin 
       fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
