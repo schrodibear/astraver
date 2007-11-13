@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.101 2007-10-09 10:50:24 marche Exp $ i*)
+(*i $Id: options.ml,v 1.102 2007-11-13 15:41:03 filliatr Exp $ i*)
 
 open Format
 
@@ -185,7 +185,7 @@ Typing/Annotations/VCG options:
   --eval-goals       evaluate constant expressions in goals
   --prune-theory     prunes the theory 
   --prune-hyp k      prunes the hypotheses according to the depth k  
-  --modulo           displays mod in smtlib instead of pourcent
+  --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
   --explain          outputs explanations for VCs in file.xpl

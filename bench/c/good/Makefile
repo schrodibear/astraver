@@ -88,11 +88,17 @@ simplify/%_why.sx.all: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	$(EXECCADUCEUS) $<
 	make -f $*.makefile $@
 
-smtlib/%_why.smt.all: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
+smtlib/%_why.smt: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v
 	$(EXECCADUCEUS) $<
 	make -f $*.makefile $@
 
+smtlib/%_why.smt.overflows: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
+	rm -f coq/caduceus_spec_why.v
+	rm -f why/$*.why
+	$(EXECCADUCEUS) -int-model bounded $<
+	make -f $*.makefile smtlib/$*_why.smt
+	mv smtlib/$*_why.smt $@
 
 harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v

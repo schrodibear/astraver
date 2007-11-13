@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.37 2007-11-13 12:50:47 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.38 2007-11-13 15:41:04 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -59,8 +59,7 @@ let prefix id =
   else if id == t_mul_int then "*"
   else if id == t_div_int then "div_int"
   else if id == t_mod_int then 
-    if Options.modulo then "modulo"
-    else "%" 
+    if Options.modulo then "%" else "modulo" 
   else if id == t_neg_int then "-"
   (* real ops *)
   else if id == t_add_real 
@@ -337,10 +336,9 @@ let output_file f =
     end;
   fprintf fmt "  :extrasorts (Unit)@\n";
   fprintf fmt "  :extrafuns ((div_int Int Int Int))@\n";
-  if modulo then 
-    begin 
-      fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
-      fprintf fmt "  :assumption
+  if not modulo then begin 
+    fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
+    fprintf fmt "  :assumption
                    (forall (?x Int) (?y Int) 
                               (and (<= 0 (modulo ?x ?y))
                                    (implies (<= 0 ?y ) (<   (modulo ?x ?y) ?y))
@@ -348,7 +346,7 @@ let output_file f =
                                       (< (modulo ?x ?y) (- 0 ?y)))
                                    (exists (?t Int)
                                       (= ?x (+ (* ?t ?y) (modulo ?x ?y ))))))";
-    end;
+  end;
   iter (output_elem fmt);
   
   (* end of smtlib file *)
