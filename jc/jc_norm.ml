@@ -86,6 +86,16 @@ let rec make_or_list_test loc = function
 	jc_expr_label = "";
 	jc_expr_node = node; } 
 
+let rec make_and_list_test loc = function
+  | [] -> true_const loc
+  | [e] -> e
+  | e :: r -> 
+      let node = JCEbinary (e, Bland, make_and_list_test loc r) in
+      { jc_expr_loc = loc; 
+        jc_expr_type = boolean_type;
+	jc_expr_label = "";
+	jc_expr_node = node; } 
+
 (* expressions on the typed AST, not the normalized AST *)
 
 let make_tconst loc c =
@@ -545,7 +555,7 @@ and statement s =
       | JCTSreturn (t, e) ->
 	  let (sl, tl), e = expr e in
 	  let return_stat = make_return loc t e in
-	    (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
+	  (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
       | JCTSbreak "" -> 
 	  JCSthrow (loop_exit, None)
       | JCTSbreak lab -> assert false (* TODO: see Claude *)
@@ -579,52 +589,84 @@ and statement s =
 	  (make_decls loc (sl @ [unpack_stat]) tl).jc_statement_node
       | JCTSswitch (e, csl) ->
 	  let (sl,tl),e = expr e in
+	  (* Give a temporary name to the switch expression, so that modifying
+	   * a variable on which this expression depends does not interfere 
+	   * with the control-flow. 
+	   *)
+	  let tmp = newvar e.jc_expr_type in
+	  let tmpe = make_var loc tmp in
 	  let test_one_case ~(neg:bool) c = 
 	    (* test for case considered *)
 	    let (slc,tlc),c = expr c in
 	    assert (slc = [] && tlc = []); 
 	    if neg then
-	      make_int_binary loc e Bneq_int c
+	      make_int_binary loc tmpe Bneq_int c
 	    else
-	      make_int_binary loc e Beq_int c
+	      make_int_binary loc tmpe Beq_int c
 	  in
 	  let collect_neg_case c = 
 	    List.fold_right (fun c l -> match c with
 	    | Some c -> test_one_case ~neg:true c :: l
 	    | None -> l) c []
 	  in
+	  (* Collect negative tests for [default] case. *)
 	  let all_neg_cases csl = 
-	    List.fold_right (fun (c,_) l -> collect_neg_case c @ l) csl []
+	    fst (List.fold_left (fun (l,after_default) (c,_)  -> 
+	      if after_default then
+		collect_neg_case c @ l,after_default
+	      else		
+		let has_default = List.exists (fun c -> c = None) c in
+		l,has_default
+	    ) ([],false) csl)
 	  in
 	  let test_one_case_or_default = function
 	    | Some c -> test_one_case ~neg:false c
-	    | None -> make_or_list_test loc (all_neg_cases csl)
+	    | None -> make_and_list_test loc (all_neg_cases csl)
 	  in
 	  let test_case_or_default c = 
 	    let el = List.map test_one_case_or_default c in
 	    make_or_list_test loc el
 	  in
-	  let _,ncsl = List.fold_left
-	    (fun (previous_c,statl) (c,sl) -> 
+	  let rec cannot_fall_trough s = 
+	    match s.jc_statement_node with
+	      | JCSblock [] -> 
+		  false
+	      | JCSblock sl -> 
+		  cannot_fall_trough (List.hd (List.rev sl))
+	      | JCSthrow _ | JCSreturn_void | JCSreturn _ | JCSloop _ -> 
+		  true
+	      | JCSif(_,st,sf) ->
+		  cannot_fall_trough st && cannot_fall_trough sf
+	      | _ -> false
+	  in
+	  let rec fold_case (previous_c,statl) = 
+	    function [] -> List.rev statl | (c,sl) :: next_cases ->
 	      (* statement list in case considered *)
 	      let sl = List.map statement sl in
 	      let block_stat = make_block loc sl in
-	      let empty_block = make_block loc [] in
-	      let current_c = previous_c @ c in
+	      let has_default = List.exists (fun c -> c = None) c in
+	      let current_c = if has_default then c else previous_c @ c in
 	      let etest = test_case_or_default current_c in
 	      (* case translated into if-statement *)
-	      let if_stat = make_if loc etest block_stat empty_block in
-	      current_c, if_stat :: statl
-	    ) ([],[]) csl 
+	      if cannot_fall_trough block_stat then
+		let next_statl = fold_case ([],[]) next_cases in
+		let next_block = make_block loc next_statl in
+		let if_stat = make_if loc etest block_stat next_block in
+		List.rev (if_stat :: statl)
+	      else
+		let empty_block = make_block loc [] in
+		let if_stat = make_if loc etest block_stat empty_block in
+		fold_case (current_c, if_stat :: statl) next_cases
 	  in
-	  let ncsl = List.rev ncsl in
+	  let ncsl = fold_case ([],[]) csl in
 	  let dummy_throw = make_throw loc loop_exit None in
-	  let switch_stat = make_decls loc (sl @ ncsl @ [dummy_throw]) tl in
+	  let switch_stat = make_block loc (ncsl @ [dummy_throw]) in
 	  let catch_exit =
 	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
 	    make_try loc switch_stat catch_exit (make_block loc []) in
-	  try_exit.jc_statement_node
+	  let tmp_assign = make_decl loc tmp (Some e) (make_block loc []) in
+	  (make_decls loc (sl @ [tmp_assign;try_exit]) tl).jc_statement_node
 
   in { jc_statement_node = ns;
        jc_statement_loc = loc }

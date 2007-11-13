@@ -151,7 +151,7 @@ let rec assertion fmt a =
 	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAquantifier (q,vi, a)-> 
-	fprintf fmt "@[<v 3>(\\%a %a %s;@ %a)@]"
+	fprintf fmt "@[<v 3>(\\%a %a %s;@\n%a)@]"
 	  quantifier q
 	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name

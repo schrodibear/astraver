@@ -2249,7 +2249,7 @@ end = struct
     let s = term_name t in
     begin try 
       let t2 = Hashtbl.find variable_table s in
-(*       printf "t1 = %a t2 = %a@." Jc_output.term t1 Jc_output.term t2; *)
+(*       printf "s = %s t = %a t2 = %a@." s Jc_output.term t Jc_output.term t2; *)
       assert (raw_term_compare t t2 = 0)
     with Not_found ->
       Hashtbl.add variable_table s t;
@@ -2323,7 +2323,9 @@ let rec atp_of_term t =
       begin match c with
       | JCCinteger s -> 
 	  Atp.Fn(s,[])
-      | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ -> 
+      | JCCnull  -> 
+	  Atp.Var (Vwp.variable t)
+      | JCCboolean _ | JCCvoid | JCCreal _ -> 
 	  assert false
       end
   | JCTbinary(t1,(Badd_int | Bsub_int as bop),t2) ->
@@ -2593,17 +2595,34 @@ let quantif_eliminate qf finv =
   if Jc_options.debug then
     printf "@[<v 2>Before quantifier elimination@\n%a@]@." 
       (fun fmt fm -> Atp.printer fm) qf; 
-  let qe = Atp.fourier_qelim qf in
-  if Jc_options.debug then
-    printf "@[<v 2>After quantifier elimination@\n%a@]@." 
-      (fun fmt fm -> Atp.printer fm) qe; 
-  let qe = (Atp.dnf qe) in
-  if Jc_options.debug then
-    printf "@[<v 2>After disjunctive normal form@\n%a@]@." 
-      (fun fmt fm -> Atp.printer fm) qe;
-  let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
-  simplify (asrt_of_atp qe) finv
-
+  let qf = Atp.pnf qf in
+  match qf with
+    | Atp.Forall _ | Atp.Exists _ ->
+	let qe = Atp.fourier_qelim qf in
+	if Jc_options.debug then
+	  printf "@[<v 2>After quantifier elimination@\n%a@]@." 
+	    (fun fmt fm -> Atp.printer fm) qe; 
+	begin match qe with
+	  | Atp.Not nqe ->
+	      let qe = (Atp.dnf nqe) in
+	      if Jc_options.debug then
+		printf "@[<v 2>After negative disjunctive normal form@\n%a@]@." 
+	    (fun fmt fm -> Atp.printer fm) qe;
+	      let res = simplify (asrt_of_atp qe) (raw_asrt JCAtrue) in
+	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
+	      simplify (make_not res) finv
+	  | _ ->
+	      let qe = (Atp.dnf qe) in
+	      if Jc_options.debug then
+		printf "@[<v 2>After disjunctive normal form@\n%a@]@." 
+		  (fun fmt fm -> Atp.printer fm) qe;
+	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
+	      simplify (asrt_of_atp qe) finv
+	end
+    | q -> 
+	let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
+	simplify (asrt_of_atp q) finv
+	
 let rec wp_statement weakpre = 
   let var_of_term = Hashtbl.create 0 in
   (* Terms should be raw only. *)
