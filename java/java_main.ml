@@ -34,7 +34,8 @@ let main () =
 		   Option_misc.iter 
 		     (Java_callgraph.compute_calls 
 			mt.Java_typing.mt_method_info
-			mt.Java_typing.mt_requires) 
+			mt.Java_typing.mt_requires			
+			mt.Java_typing.mt_ensures) 
 		     mt.Java_typing.mt_body)
 		Java_typing.methods_table;
 	      
@@ -43,6 +44,7 @@ let main () =
 		   Java_callgraph.compute_constr_calls 
 		     ct.Java_typing.ct_constr_info
 		     ct.Java_typing.ct_requires
+		     ct.Java_typing.ct_ensures
 		     ct.Java_typing.ct_body)
 		Java_typing.constructors_table;
 	      
@@ -66,6 +68,7 @@ let main () =
 	     Java_analysis.do_method 
 	       mti.Java_typing.mt_method_info 
 	       mti.Java_typing.mt_requires
+	       mti.Java_typing.mt_ensures
 	       mti.Java_typing.mt_behaviors 
 	       mti.Java_typing.mt_body)
 	  Java_typing.methods_table;
@@ -74,6 +77,7 @@ let main () =
 	     Java_analysis.do_constructor 
 	       cti.Java_typing.ct_constr_info 
 	       cti.Java_typing.ct_requires
+	       cti.Java_typing.ct_ensures
 	       cti.Java_typing.ct_behaviors 
 	       cti.Java_typing.ct_body)
 	  Java_typing.constructors_table;
@@ -92,6 +96,7 @@ let main () =
 		     Java_analysis.do_method 
 		       mti.Java_typing.mt_method_info 
 		       mti.Java_typing.mt_requires
+		       mti.Java_typing.mt_ensures
 		       mti.Java_typing.mt_behaviors 
 		       mti.Java_typing.mt_body
 		 | ConstructorInfo ci ->
@@ -101,6 +106,7 @@ let main () =
 		     Java_analysis.do_constructor
 		       cti.Java_typing.ct_constr_info 
 		       cti.Java_typing.ct_requires
+		       cti.Java_typing.ct_ensures
 		       cti.Java_typing.ct_behaviors 
 		       cti.Java_typing.ct_body))
 	    components;
@@ -176,7 +182,8 @@ let main () =
 			    Java_typing.print_type_name 
 			    mi.method_info_class_or_interface
 			    mi.method_info_name;
-			  Java_interp.tr_method mi mt.Java_typing.mt_requires 
+			  Java_interp.tr_method mi 
+			    mt.Java_typing.mt_requires 
 			    mt.Java_typing.mt_behaviors 
 			    mt.Java_typing.mt_body acc
 		      | ConstructorInfo ci ->
@@ -186,7 +193,9 @@ let main () =
 			  printf "Generating JC function %s for constructor %s@." 
 			    ci.constr_info_trans_name
 			    ci.constr_info_class.class_info_name;
-			  Java_interp.tr_constr ci ct.Java_typing.ct_requires 
+			  Java_interp.tr_constr ci 
+			    ct.Java_typing.ct_requires 
+			    ct.Java_typing.ct_ensures 
 			    ct.Java_typing.ct_behaviors 
 			    ct.Java_typing.ct_body acc)
 		 acc
@@ -214,8 +223,10 @@ let main () =
 	  let f = mt.Java_typing.mt_method_info in
 	  printf "Generating Why function %s@." 
 	  f.Java_env.method_info_name;
-	        Java_interp.tr_method f mt.Java_typing.mt_requires 
-		 mt.Java_typing.mt_behaviors 
+	        Java_interp.tr_method f 
+	         mt.Java_typing.mt_requires 
+  		 mt.Java_typing.mt_ensures
+  		 mt.Java_typing.mt_behaviors 
 	  mt.Java_typing.mt_body acc)
 	  Java_typing.methods_table
 	  decls

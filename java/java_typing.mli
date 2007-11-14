@@ -11,6 +11,7 @@ type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
       mt_assigns : Java_tast.term list option;
+      mt_ensures : Java_tast.assertion option;
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -26,6 +27,7 @@ type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
       ct_assigns : Java_tast.term list option;
+      ct_ensures : Java_tast.assertion option;
       ct_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *

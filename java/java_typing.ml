@@ -279,7 +279,7 @@ assert false (* TODO *)
 
 (* methods *)
 
-let methods_env = Hashtbl.create 97
+let methods_env = Hashtbl.create 97 
 
 let method_or_constr_tag_counter = ref 0
 
@@ -806,7 +806,7 @@ and method_header package_env type_env retty mdecl =
 	  | None -> typing_error (fst id) "invalid type void array"
 
 and get_constructor_prototype package_env type_env current_type 
-    req assigns behs head eci body =
+    req behs head eci body =
   match current_type with
     | TypeInterface _ -> assert false
     | TypeClass cur ->
@@ -817,7 +817,7 @@ and get_constructor_prototype package_env type_env current_type
 	in
 	let ci = new_constructor_info cur (snd id) params in
 	Hashtbl.add constructors_env ci.constr_info_tag 
-	  (ci,req,assigns,behs,eci,body);
+	  (ci,req,behs,eci,body);
 	ci
 
 and get_method_prototypes package_env type_env current_type (mis,cis) env l =
@@ -830,30 +830,31 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	in
 	let is_static = List.mem Static head.method_modifiers in
 	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
-	Hashtbl.add methods_env mi.method_info_tag (mi,None,None,[],body);
+	Hashtbl.add methods_env mi.method_info_tag (mi,None,[],body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
-    | JPFmethod_spec(req,assigns,behs) :: JPFmethod(head,body) :: rem ->
+    | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
 	let id, ret_ty, params = 
 	  method_header package_env type_env 
 	    head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
 	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
-	Hashtbl.add methods_env mi.method_info_tag (mi,req,assigns,behs,body);
+	Hashtbl.add methods_env mi.method_info_tag 
+	  (mi,req,behs,body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
     | JPFconstructor(head,eci,body) :: rem -> 
 	let ci =
 	  get_constructor_prototype package_env type_env current_type 
-	    None None [] head eci body
+	    None [] head eci body
 	in
 	get_method_prototypes package_env type_env 
 	  current_type (mis,ci::cis) env rem 
-    | JPFmethod_spec(req,assigns,behs) :: JPFconstructor(head,eci,body) :: rem ->
+    | JPFmethod_spec(req,behs) :: JPFconstructor(head,eci,body) :: rem ->
 	let ci =
 	  get_constructor_prototype package_env type_env current_type 
-	    req assigns behs head eci body
+	    req behs head eci body
 	in
 	get_method_prototypes package_env type_env 
 	  current_type (mis,ci::cis) env rem 
@@ -2874,6 +2875,7 @@ type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
       mt_assigns : Java_tast.term list option;
+      mt_ensures : Java_tast.assertion option;
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -2892,7 +2894,7 @@ let type_method_spec_and_body ?(dobody=true)
   try
     let _ = Hashtbl.find methods_table mi.method_info_tag in ()
   with Not_found ->
-  let (_,req,assigns,behs,body) = 
+  let (_,req,behs,body) = 
     try
       Hashtbl.find methods_env mi.method_info_tag 
     with Not_found -> assert false
@@ -2925,6 +2927,7 @@ let type_method_spec_and_body ?(dobody=true)
       (List.map 
 	 (location package_env type_env (Some ti) env_result)) assigns
   in
+  let ens = Option_misc.map (assertion package_env type_env (Some ti) env_result) ens in
   let behs = List.map (behavior package_env type_env (Some ti) local_env env_result) behs in
   if dobody then
     let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
@@ -2932,6 +2935,7 @@ let type_method_spec_and_body ?(dobody=true)
       { mt_method_info = mi;
 	mt_requires = req;
 	mt_assigns = assigns;
+	mt_ensures = ens;
 	mt_behaviors = behs;
 	mt_body = body } 
   else
@@ -2939,6 +2943,7 @@ let type_method_spec_and_body ?(dobody=true)
       { mt_method_info = mi;
 	mt_requires = req;
 	mt_assigns = assigns;
+	mt_ensures = ens;
 	mt_behaviors = behs;
 	mt_body = None } 
 
@@ -2948,6 +2953,7 @@ type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
       ct_assigns : Java_tast.term list option;
+      ct_ensures : Java_tast.assertion option;
       ct_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -2966,7 +2972,7 @@ let type_constr_spec_and_body ?(dobody=true)
   try
     let _ = Hashtbl.find constructors_table ci.constr_info_tag in ()
   with Not_found ->
-  let (_,req,assigns,behs,eci,body) = 
+  let (_,req,assigns,ens,behs,eci,body) = 
     try
       Hashtbl.find constructors_env ci.constr_info_tag 
     with Not_found -> assert false
@@ -3004,6 +3010,7 @@ let type_constr_spec_and_body ?(dobody=true)
       (List.map 
 	 (location package_env type_env (Some current_type) local_env)) assigns
   in
+  let ens = Option_misc.map (assertion package_env type_env (Some current_type) this_env) ens in
   let behs = List.map 
     (behavior package_env type_env (Some current_type) local_env this_env) behs 
   in
@@ -3015,6 +3022,7 @@ let type_constr_spec_and_body ?(dobody=true)
 	    { ct_constr_info = ci;
 	      ct_requires = req;
 	      ct_assigns = assigns;
+	      ct_ensures = ens;
 	      ct_behaviors = behs;
 	      ct_body = body } 
       | Invoke_this _ -> assert false (* TODO *)
@@ -3044,6 +3052,7 @@ let type_constr_spec_and_body ?(dobody=true)
 	    { ct_constr_info = ci;
 	      ct_requires = req;
 	      ct_assigns = assigns;
+	      ct_ensures = ens;
 	      ct_behaviors = behs;
 	      ct_body = super_call_s :: body }
   else
@@ -3051,6 +3060,7 @@ let type_constr_spec_and_body ?(dobody=true)
       { ct_constr_info = ci;
 	ct_requires = req;
 	ct_assigns = assigns;
+	ct_ensures = ens;
 	ct_behaviors = behs;
 	ct_body = [] }
     
@@ -3194,12 +3204,12 @@ let get_bodies package_env type_env cu =
 
 let type_specs package_env type_env =
   Hashtbl.iter 
-    (fun _ (mi, _, _, _,_)  ->
+    (fun _ (mi, _, _,_)  ->
        type_method_spec_and_body ~dobody:false 
 	 package_env type_env mi.method_info_class_or_interface mi) 
     methods_env;
   Hashtbl.iter 
-    (fun _ (ci, _, _, _,_, _)  ->
+    (fun _ (ci, _, _, _, _)  ->
        type_constr_spec_and_body ~dobody:false 
 	 package_env type_env (TypeClass ci.constr_info_class) ci) 
     constructors_env

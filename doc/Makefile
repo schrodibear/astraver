@@ -1,6 +1,6 @@
 HEVEA=hevea -charset ISO-8859-1
 
-all: manual.ps doc.ps
+all: manual.ps doc.ps caduceus.ps $(KFILES) krakatoa.pdf
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 
@@ -8,6 +8,10 @@ SRCFILES=../src/loc.mli ../src/logic.mli ../src/types.mli \
 	 ../src/ptree.mli ../src/ltyping.mli ../src/ast.mli ../src/env.mli \
          ../src/typing.mli ../src/typing.ml ../src/wp.mli ../src/wp.ml \
 	 ../src/monad.mli ../src/monad.ml ../src/mlize.mli ../src/mlize.ml
+
+KFILES=Lesson1_max.pp \
+	Lesson1_sqrt.pp Lesson1_sqrtbody.pp Lesson1_sqrtloopinv.pp \
+	Arrays_findMax.pp
 
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
@@ -38,6 +42,22 @@ caduceus.html: caduceus.tex
 	rm -f caduceus.aux
 	$(HEVEA) caduceus.tex
 	$(HEVEA) caduceus.tex
+
+krakatoa.pdf: $(KFILES)
+	pdflatex krakatoa.tex
+
+
+%.pp: %.tex pp.ml
+	ocaml pp.ml -color $< > $@
+
+%.pp: %.c pp.ml
+	ocaml pp.ml -color -c $< > $@
+
+%.pp: %.java pp.ml
+	ocaml pp.ml -color -java $< > $@
+
+pp.ml: pp.mll
+	ocamllex pp.mll
 
 %.dvi: %.tex
 	latex $< && latex $<

@@ -122,6 +122,9 @@ and ptag =
      
 type pclause =
   | JCPCrequires of pexpr
+(*
+  | JCPCensures of pexpr
+*)
   | JCPCbehavior of 
       string * identifier option * pexpr option * pexpr option 
       * pexpr list option * pexpr

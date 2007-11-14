@@ -22,7 +22,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.67 2007-10-22 11:59:12 nrousset Exp $ */
+/* $Id: jc_parser.mly,v 1.68 2007-11-14 16:05:13 marche Exp $ */
 
 %{
 
@@ -322,6 +322,10 @@ function_specification:
 spec_clause:
 | REQUIRES expression SEMICOLON
     { JCPCrequires($2) }
+/*
+| ENSURES expression SEMICOLON
+    { JCPCensures($2) }
+*/
 | BEHAVIOR IDENTIFIER COLON throws assumes requires assigns 
   ENSURES expression SEMICOLON
     { JCPCbehavior($2,$4,$5,$6,$7,$9) }

@@ -206,12 +206,12 @@ let compute_logic_calls f t =
   in
   f.java_logic_info_calls <- calls
 
-let compute_calls f s b = 
-  let (a, b) = List.fold_left statement ([], []) b in
+let compute_calls f req ens body = 
+  let (a, b) = List.fold_left statement ([], []) body in
     f.method_info_calls <- b
 
-let compute_constr_calls f s b = 
-  let (a, b) = List.fold_left statement ([], []) b in
+let compute_constr_calls f req ens body = 
+  let (a, b) = List.fold_left statement ([], []) body in
     f.constr_info_calls <- b
       
 module LogicCallGraph = struct 

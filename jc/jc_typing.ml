@@ -1857,6 +1857,11 @@ let clause env vi_result c acc =
     | JCPCrequires(e) ->
 	{ acc with 
 	    jc_fun_requires = assertion env e }
+(*
+    | JCPCensures(e) ->
+	{ acc with 
+	    jc_fun_ensures = assertion env e }
+*)
     | JCPCbehavior(id,throws,assumes,requires,assigns,ensures) ->
 	let throws,env_result = 
 	  match throws with

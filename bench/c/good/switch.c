@@ -151,4 +151,18 @@ int f7 (int x){
   return y;
 }
 
+/*@ ensures x==0 && y>=1 => \result == 0
+  @*/
+int f8 (int x, int y){
+  int z = 0;
 
+  switch (x) { 
+  case 0:
+    if (y >= 1) break;
+    z = 1;
+    break;
+  default: 
+    z = 2;
+  }
+  return z;
+}

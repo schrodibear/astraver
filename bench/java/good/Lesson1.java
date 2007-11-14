@@ -47,9 +47,8 @@ public class Lesson1 {
     }
     
     /*@ requires x >= 0 && x <= 32760;
-      @ behavior result_is_sqrt: 
-      @   ensures \result >= 0 && \result * \result <= x 
-      @      && x < (\result + 1) * (\result + 1);
+      @ ensures \result >= 0 && \result * \result <= x 
+      @    && x < (\result + 1) * (\result + 1);
       @*/
     public static short short_sqrt(short x) {
 	short count = 0, sum = 1;

@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.20 2007-09-28 13:14:39 marche Exp $
+$Id: java_parser.mly,v 1.21 2007-11-14 16:05:13 marche Exp $
 
 */
 
@@ -34,6 +34,22 @@ $Id: java_parser.mly,v 1.20 2007-09-28 13:14:39 marche Exp $
       | a::b ->
 	  Explicit_array_creation(a,(build_array_creation_expr t (b,n)))
 *)
+
+  let default_behavior assigns ensures behs =
+    match assigns,ensures with
+      | None, None -> behs
+      | a, None ->
+	  ((Loc.dummy_position,""),
+	   { java_pbehavior_assumes = None;
+	     java_pbehavior_assigns = a;
+	     java_pbehavior_throws = None;
+	     java_pbehavior_ensures = Java_pervasives.expr_true }) :: behs
+      | a, Some e -> 
+	  ((Loc.dummy_position,""),
+	   { java_pbehavior_assumes = None;
+	     java_pbehavior_assigns = a;
+	     java_pbehavior_throws = None;
+	     java_pbehavior_ensures = e }) :: behs
 
 %}
 
@@ -914,8 +930,8 @@ kml_type_decl:
     { JPTaxiom($2,$4) }
 
 kml_field_decl:
-| requires assigns behaviors EOF
-    { JPFmethod_spec($1,$2,$3) }
+| requires assigns ensures behaviors EOF
+    { JPFmethod_spec($1,default_behavior $2 $3 $4) }
 | INVARIANT ident COLON expr SEMICOLON EOF
     { JPFinvariant($2,$4) } 
 | MODEL variable_declaration
@@ -926,6 +942,13 @@ requires:
 | /* $\varepsilon$ */
     { None }
 | REQUIRES expr SEMICOLON
+    { Some $2 }
+;
+
+ensures:
+| /* $\varepsilon$ */
+    { None }
+| ENSURES expr SEMICOLON
     { Some $2 }
 ;
 
