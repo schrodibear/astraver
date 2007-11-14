@@ -2874,8 +2874,10 @@ let behavior package_env type_env current_type pre_state_env post_state_env (id,
 type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
+(*
       mt_assigns : Java_tast.term list option;
       mt_ensures : Java_tast.assertion option;
+*)
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -2922,28 +2924,34 @@ let type_method_spec_and_body ?(dobody=true)
       | None -> local_env
       | Some vi -> (vi.java_var_info_name,vi)::local_env
   in
+(*
   let assigns = 
     Option_misc.map 
       (List.map 
 	 (location package_env type_env (Some ti) env_result)) assigns
   in
   let ens = Option_misc.map (assertion package_env type_env (Some ti) env_result) ens in
+*)
   let behs = List.map (behavior package_env type_env (Some ti) local_env env_result) behs in
   if dobody then
     let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
     Hashtbl.add methods_table mi.method_info_tag 
       { mt_method_info = mi;
 	mt_requires = req;
+(*
 	mt_assigns = assigns;
 	mt_ensures = ens;
+*)
 	mt_behaviors = behs;
 	mt_body = body } 
   else
     Hashtbl.add methods_table mi.method_info_tag 
       { mt_method_info = mi;
 	mt_requires = req;
+(*
 	mt_assigns = assigns;
 	mt_ensures = ens;
+*)
 	mt_behaviors = behs;
 	mt_body = None } 
 
@@ -2952,8 +2960,10 @@ let type_method_spec_and_body ?(dobody=true)
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
+(*
       ct_assigns : Java_tast.term list option;
       ct_ensures : Java_tast.assertion option;
+*)
       ct_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
@@ -2972,7 +2982,7 @@ let type_constr_spec_and_body ?(dobody=true)
   try
     let _ = Hashtbl.find constructors_table ci.constr_info_tag in ()
   with Not_found ->
-  let (_,req,assigns,ens,behs,eci,body) = 
+  let (_,req,behs,eci,body) = 
     try
       Hashtbl.find constructors_env ci.constr_info_tag 
     with Not_found -> assert false
@@ -3005,12 +3015,14 @@ let type_constr_spec_and_body ?(dobody=true)
   let req = Option_misc.map (assertion package_env type_env (Some current_type) local_env) req in
     (* Note: for constructors, the `assigns' clause is typed in
        pre-state environnement: `this' is not allowed there *)
+(*
   let assigns = 
     Option_misc.map 
       (List.map 
 	 (location package_env type_env (Some current_type) local_env)) assigns
   in
   let ens = Option_misc.map (assertion package_env type_env (Some current_type) this_env) ens in
+*)
   let behs = List.map 
     (behavior package_env type_env (Some current_type) local_env this_env) behs 
   in
@@ -3021,8 +3033,10 @@ let type_constr_spec_and_body ?(dobody=true)
 	  Hashtbl.add constructors_table ci.constr_info_tag 
 	    { ct_constr_info = ci;
 	      ct_requires = req;
+(*
 	      ct_assigns = assigns;
 	      ct_ensures = ens;
+*)
 	      ct_behaviors = behs;
 	      ct_body = body } 
       | Invoke_this _ -> assert false (* TODO *)
@@ -3051,16 +3065,20 @@ let type_constr_spec_and_body ?(dobody=true)
 	  Hashtbl.add constructors_table ci.constr_info_tag 
 	    { ct_constr_info = ci;
 	      ct_requires = req;
+(*
 	      ct_assigns = assigns;
 	      ct_ensures = ens;
+*)
 	      ct_behaviors = behs;
 	      ct_body = super_call_s :: body }
   else
     Hashtbl.add constructors_table ci.constr_info_tag 
       { ct_constr_info = ci;
 	ct_requires = req;
+(*
 	ct_assigns = assigns;
 	ct_ensures = ens;
+*)
 	ct_behaviors = behs;
 	ct_body = [] }
     

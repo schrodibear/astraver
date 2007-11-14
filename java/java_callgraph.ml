@@ -206,11 +206,11 @@ let compute_logic_calls f t =
   in
   f.java_logic_info_calls <- calls
 
-let compute_calls f req ens body = 
+let compute_calls f req body = 
   let (a, b) = List.fold_left statement ([], []) body in
     f.method_info_calls <- b
 
-let compute_constr_calls f req ens body = 
+let compute_constr_calls f req body = 
   let (a, b) = List.fold_left statement ([], []) body in
     f.constr_info_calls <- b
       

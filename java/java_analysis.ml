@@ -208,7 +208,7 @@ let disambiguates_method_names () =
 	 mt.Java_typing.mt_method_info.method_info_tag mt)
       methods_list
 
-let do_method mi req ens behs body =
+let do_method mi req behs body =
 (*
   Option_misc.iter assertion req;
   ... behs
@@ -222,7 +222,7 @@ let do_method mi req ens behs body =
   Option_misc.iter param mi.method_info_result
 
 
-let do_constructor ci req ens behs body =
+let do_constructor ci req behs body =
 (*
   let l = ci.constr_info_class.class_info_constructors in
   if List.length l >= 2 then

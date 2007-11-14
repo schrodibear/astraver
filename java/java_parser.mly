@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.21 2007-11-14 16:05:13 marche Exp $
+$Id: java_parser.mly,v 1.22 2007-11-14 16:15:36 marche Exp $
 
 */
 
@@ -39,13 +39,13 @@ $Id: java_parser.mly,v 1.21 2007-11-14 16:05:13 marche Exp $
     match assigns,ensures with
       | None, None -> behs
       | a, None ->
-	  ((Loc.dummy_position,""),
+	  ((Loc.dummy_position,"ok"),
 	   { java_pbehavior_assumes = None;
 	     java_pbehavior_assigns = a;
 	     java_pbehavior_throws = None;
 	     java_pbehavior_ensures = Java_pervasives.expr_true }) :: behs
       | a, Some e -> 
-	  ((Loc.dummy_position,""),
+	  ((Loc.dummy_position,"ok"),
 	   { java_pbehavior_assumes = None;
 	     java_pbehavior_assigns = a;
 	     java_pbehavior_throws = None;
