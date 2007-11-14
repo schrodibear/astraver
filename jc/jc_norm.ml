@@ -881,18 +881,117 @@ let statement s =
 
   in link_stat s
 
-let code_function (spec, sl) =
-  (spec, Option_misc.map (List.map statement) sl)
 
-let static_variable (v,e) =
-  match e with
-    | None -> v,None
-    | Some e ->
-	let (sl,tl),e = expr e in
-	match sl,tl with
-	  | [],[] -> v, Some e
-	  | _ -> assert false (* TODO *)
+let invariant_for_struct this st =
+  let (_, invs) = 
+    Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
+  in
+  make_and
+    (List.map (fun (li, _) -> raw_asrt (JCAapp (li, [this]))) invs)      
 
+
+let code_function (fi, fs, sl) vil =
+  (* apply arguments invariant policy *)
+  begin
+    match Jc_options.inv_sem with
+      | InvArguments ->
+	  (* Calculate global invariants. *)
+	  let vitl = List.map (fun vi -> type_term (JCTvar vi) vi.jc_var_info_type) vil in
+	  let global_invariants =
+	    Hashtbl.fold
+	      (fun li _ acc -> 
+		 li.jc_logic_info_parameters <- vil;
+		 (raw_asrt (JCAapp (li, vitl))) :: acc)
+	      Jc_typing.global_invariants_table []
+	  in
+	  let global_invariants = make_and global_invariants in
+	  (* Calculate invariants for each parameter. *)
+	  let invariants =
+	    List.fold_left
+	      (fun acc vi ->
+		 match vi.jc_var_info_type with
+		   | JCTpointer (st, _, _) ->
+		       make_and 
+			 [acc; (invariant_for_struct 
+				  (type_term (JCTvar vi) vi.jc_var_info_type) st)]
+		   | _ -> acc)
+	      (raw_asrt JCAtrue)
+	      fi.jc_fun_info_parameters
+	  in
+	  let invariants = make_and [global_invariants; invariants] in
+	    (* add invariants to the function precondition *)
+	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
+	    (* add invariants to the function postcondition *)
+	    List.iter
+	      (fun (_, b) -> b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; invariants])
+	      fs.jc_fun_behavior;
+	    (* add the 'safety' spec *)
+	    let safety_b = { default_behavior with jc_behavior_ensures = invariants } in
+	      fs.jc_fun_behavior <- ("safety", safety_b) :: fs.jc_fun_behavior
+      | _ -> ()
+  end;
+  (* normalization of the function body *)
+  (fs, Option_misc.map (List.map statement) sl)
+
+
+let static_variable (vi, e) =
+  let invs =
+    match Jc_options.inv_sem with
+      | InvArguments ->
+	  begin
+	    match vi.jc_var_info_type with
+	      | JCTpointer (st, n1o, n2o) ->
+		  let offset_inv no offset_kind =
+		    match no with
+		      | None -> raw_asrt JCAtrue
+		      | Some n -> 
+			  raw_asrt 
+			    (JCArelation
+			       (type_term 
+				  (JCToffset 
+				     (offset_kind, 
+				      type_term 
+					(JCTvar vi) vi.jc_var_info_type, st))
+				  integer_type,
+				Beq_int,
+				type_term 
+				  (JCTconst (JCCinteger (Num.string_of_num n))) integer_type))
+		  in
+		  let offset_min_inv = offset_inv n1o Offset_min in
+		  let offset_max_inv = offset_inv n2o Offset_max in
+		    [offset_min_inv; offset_max_inv]
+	      | _ -> []    
+	  end
+      | _ -> []
+  in
+    match e with
+      | None -> vi, None, invs
+      | Some e ->
+	  let (sl, tl), e = expr e in
+	    match sl, tl with
+	      | [], [] -> vi, Some e, invs
+	      | _ -> assert false (* TODO *)
+		  
+		  
+let static_variables variables =
+  let vil, invs = 
+    Hashtbl.fold 
+      (fun tag (v, e) (acc1, acc2) -> 
+	 let (v, e, invs) = static_variable (v, e) in
+	   Hashtbl.add variables_table tag (v, e);
+	   v :: acc1, invs @ acc2)
+      variables ([], []) 
+  in
+    if Jc_options.inv_sem = InvArguments then
+      begin
+	let invs = make_and invs in
+	let li = make_rel "variables_inv" in 
+	  Hashtbl.replace Jc_typing.logic_functions_table 
+	    li.jc_logic_info_tag (li, JCAssertion invs);
+	  Hashtbl.add Jc_typing.global_invariants_table li invs;
+      end;
+    vil
+	  
 (*
 let logic_function t =
   match t with 
@@ -900,6 +999,7 @@ let logic_function t =
     | JCTReads r -> JCReads (List.map location r)
     | JCTTerm t -> JCTerm (term t)
 *)
+
 
 (*
   Local Variables: 

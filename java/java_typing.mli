@@ -46,6 +46,12 @@ type constructor_table_info =
 val constructors_table : 
   (int, constructor_table_info) Hashtbl.t
 
+val invariants_table :
+  (int, Java_env.java_var_info * (Java_ast.identifier * Java_tast.assertion) list) Hashtbl.t
+
+val static_invariants_table :
+  (int, (string * Java_tast.assertion) list) Hashtbl.t
+
 val field_initializer_table : 
   (int, Java_tast.initialiser option) Hashtbl.t
 

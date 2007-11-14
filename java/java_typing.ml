@@ -217,6 +217,11 @@ let interface_decl_table :
 	     Java_ast.interface_declaration)) Hashtbl.t
     = Hashtbl.create 97
 
+let invariants_env = Hashtbl.create 97
+let invariants_table = Hashtbl.create 97
+
+let static_invariants_env = Hashtbl.create 97
+let static_invariants_table = Hashtbl.create 97
 
 
 (* variables *)
@@ -404,14 +409,207 @@ type classified_name =
   | TypeName of java_type_info
   | PackageName of package_info
 
-
 let rec add_in_package_list pi l =
   match l with
     | [] -> [pi]
     | qi::_ when pi.package_info_tag = qi.package_info_tag -> l
     | qi::r -> qi::add_in_package_list pi r
 
-let rec get_import (packages, types) imp =
+let is_boolean t =
+  match t with
+    | JTYbase Tboolean -> true
+    | _ -> false
+
+let is_reference_type t =
+  match t with
+    | JTYbase t -> false
+    | _ -> true
+
+(* logic funs *)
+
+type logic_body =
+  | JAssertion of assertion
+  | JTerm of term
+  | JReads of term list
+
+let logics_table = Hashtbl.create 97
+let logics_env = Hashtbl.create 97
+
+let logic_tag_counter = ref 0
+
+(* JLS 5.1.1: Identity Conversion *)
+let rec is_identity_convertible tfrom tto =
+  match tfrom, tto with
+    | JTYbase t1, JTYbase t2 -> t1=t2
+    | JTYclass(_,c1), JTYclass(_,c2) -> c1 == c2
+    | JTYinterface i1, JTYinterface i2 -> i1 == i2
+    | JTYarray t1, JTYarray t2 -> is_identity_convertible t1 t2
+    | JTYnull, JTYnull -> true
+    | _ -> false
+
+(* JLS 5.1.2: Widening Primitive Conversion *)
+let is_widening_primitive_convertible tfrom tto =
+  match tfrom,tto with
+    | Tbyte, (Tshort | Tint | Tlong | Tfloat | Tdouble) -> true
+    | Tshort, (Tint | Tlong | Tfloat | Tdouble) -> true
+    | Tchar, (Tint | Tlong | Tfloat | Tdouble) -> true
+    | Tint, (Tlong | Tfloat | Tdouble) -> true
+    | Tlong, (Tfloat | Tdouble) -> true
+    | Tfloat, Tdouble -> true
+    | _ -> false
+
+let is_logic_widening_primitive_convertible tfrom tto =
+  match tfrom,tto with
+    | Tbyte, (Tshort | Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) 
+	-> true
+    | Tshort, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tchar, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tint, (Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tlong, (Tinteger | Tfloat | Tdouble | Treal) -> true
+    | Tfloat, (Tdouble | Treal) -> true
+    | Tinteger, Treal -> true
+    | Tdouble, Treal -> true
+    | _ -> false
+
+let logic_info id ty pars =
+  incr logic_tag_counter;
+  { java_logic_info_tag = !logic_tag_counter;
+    java_logic_info_name = id;
+    java_logic_info_parameters = pars;
+    java_logic_info_result_type = ty;
+    java_logic_info_calls = [];
+  }
+    
+let logic_unary_numeric_promotion t =
+  match t with
+    | JTYbase t -> 
+	begin
+	  match t with
+	    | Treal | Tdouble | Tfloat -> Treal
+	    | _ -> Tinteger		
+	end
+    | _ -> assert false
+
+let logic_binary_numeric_promotion t1 t2 =
+  match t1,t2 with
+    | JTYbase t1,JTYbase t2 -> 
+	begin
+	  match t1,t2 with
+	    | (Tboolean | Tunit),_
+	    | _, (Tboolean | Tunit) -> raise Not_found
+	    | (Treal | Tdouble | Tfloat),_ 
+	    | _, (Treal | Tdouble | Tfloat) -> Treal
+	    | _ -> Tinteger		
+	end
+    | _ -> raise Not_found
+
+let make_logic_bin_op loc op t1 e1 t2 e2 =
+  match op with
+    | Bgt | Blt | Bge | Ble | Beq | Bne ->
+	assert false (* TODO *)
+    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
+	assert false (* TODO *)
+    | Bsub | Badd | Bmod | Bdiv | Bmul ->
+	try
+	  let t = logic_binary_numeric_promotion t1 t2 in
+	  (JTYbase t,
+	   JTbin(e1,t,op,e2))
+	with Not_found ->
+	  typing_error loc "numeric types expected for +,-,*, / and %%"
+
+let make_logic_un_op loc op t1 e1 = 
+  match op with
+    | Uplus ->
+	begin
+	  try 
+	    let t = logic_unary_numeric_promotion t1 in
+	    JTYbase t, e1.java_term_node
+	  with Not_found ->
+	    typing_error loc "numeric type expected for unary +"
+	end
+    | Uminus ->
+	begin
+	  try
+	    let t = logic_unary_numeric_promotion t1 in
+	    JTYbase t, JTun (t, op, e1)
+	  with Not_found ->
+	    typing_error loc "numeric type expected for unary -"
+	end
+    | Ucompl ->
+	assert false (*TODO*)
+    | Unot ->
+	if is_boolean t1 then t1, JTun (Tboolean, op, e1)
+	else typing_error loc "boolean type expected for unary !"
+
+let make_predicate_bin_op loc op t1 e1 t2 e2 =
+  match op with
+    | Bgt | Blt | Bge | Ble ->
+	begin
+	  try 
+	    let t = logic_binary_numeric_promotion t1 t2 in
+	    JAbin(e1,t,op,e2)
+	  with Not_found ->
+	    typing_error loc "numeric types expected for >,<,>= and <="
+	end
+    | Beq | Bne ->
+	begin
+	  try
+	    let t = logic_binary_numeric_promotion t1 t2 in
+	    JAbin(e1,t,op,e2)
+	  with Not_found -> 
+	    if is_reference_type t1 && is_reference_type t2 then
+	      JAbin_obj(e1,op,e2)
+	    else
+	      typing_error loc "numeric or object types expected for == and !="
+	end
+    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
+	assert false (* TODO *)
+    | Bsub | Badd | Bmod | Bdiv | Bmul ->
+	typing_error loc "operator +,-,*, / and %% is not a predicate"
+
+let connective a1 op a2 =
+  match op with
+    | Band -> JAand(a1,a2)
+    | Bor -> JAor(a1,a2)
+    | Bimpl -> JAimpl(a1,a2)
+    | Biff -> JAiff(a1,a2)
+    | _ -> assert false
+
+
+let rec is_subclass c1 c2 =
+  c1 == c2 ||
+    (check_if_class_complete c1;
+     match c1.class_info_extends with
+      | None -> false
+      | Some c -> is_subclass c c2)
+
+and is_subinterface i1 i2 =
+  i1 == i2 ||
+    (check_if_interface_complete i1;
+     List.exists
+	(fun i' -> 
+(*
+	   eprintf "checking if interface '%s' is subinterface of '%s'@."
+		i'.interface_info_name i2.interface_info_name;
+*)
+       is_subinterface i' i2)
+    i1.interface_info_extends)
+
+and implements c i =
+  List.exists 
+    (fun i' -> is_subinterface i' i)
+    c.class_info_implements ||
+    match c.class_info_extends with
+      | None -> false
+      | Some c -> implements c i
+
+and get_this loc env =
+  try 
+    List.assoc "this" env 
+  with Not_found -> 
+    typing_error loc "this undefined in this context"
+
+and get_import (packages, types) imp =
   match imp with
     | Import_package qid ->
 	Java_options.lprintf "importing package %a@." print_qualified_ident qid;
@@ -860,26 +1058,17 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	  current_type (mis,ci::cis) env rem 
     | JPFmethod_spec _ :: _ ->
 	typing_error (assert false) "out of place method specification"
-    | JPFinvariant(id,e) :: rem ->
-(*
-	let local_env =
-(*
-	  if List.mem `STATIC head.method_modifiers then [] else
-*)
-	    let vi = var (JTYclass(true,ci)) "this" in 
-	    ("this",vi)::env
-	in
-	let p = assertion local_env e in
-	Hashtbl.add invariants_table id p;
-*)
+    | JPFinvariant (id, e) :: rem ->
 	get_method_prototypes package_env type_env
-	  current_type (mis,cis) env rem 
+	  current_type (mis, cis) env rem 
+    | JPFstatic_invariant (id, e) :: rem ->
+	get_method_prototypes package_env type_env
+	  current_type (mis, cis) env rem 
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
     | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
     | (JPFmodel_variable _ | JPFvariable _) :: rem -> 
 	get_method_prototypes package_env type_env 
 	  current_type (mis,cis) env rem 
-
 
 and get_class_prototypes package_env type_env ci d =
   (* extends *)
@@ -914,13 +1103,29 @@ and get_class_prototypes package_env type_env ci d =
 	     typing_error (fst (List.hd id)) "interface type expected") 
     d.class_implements;
   (* fields *)
-  let fields = List.fold_left (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
+  let fields = List.fold_left 
+    (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
   ci.class_info_fields <- List.rev fields;
-  let methods,constructors =
+  let methods, constructors =
     get_method_prototypes package_env type_env (TypeClass ci) ([],[]) [] d.class_fields 
   in
   ci.class_info_methods <- methods;
-  ci.class_info_constructors <- constructors
+  ci.class_info_constructors <- constructors;
+  (* invariants *)
+  let this_type = JTYclass (true, ci) (* i.e. [this] is always non-null *) in
+  let vi = new_var Loc.dummy_position this_type "this" in 
+  let invs, static_invs = 
+    List.fold_left
+      (fun (acc1, acc2) d -> 
+	 match d with
+	   | JPFinvariant (id, e) -> (id, e) :: acc1, acc2
+	   | JPFstatic_invariant (id, e) -> acc1, (snd id, e) :: acc2
+	   | _ -> acc1, acc2) ([], []) d.class_fields 
+  in
+    Hashtbl.add invariants_env
+      ci.class_info_tag (TypeClass ci, ["this", vi], vi, invs);
+    Hashtbl.add static_invariants_env
+      ci.class_info_tag (TypeClass ci, static_invs)
     
 and get_interface_field_prototypes package_env type_env ii acc d =
   match d with
@@ -1040,20 +1245,6 @@ and lookup_field ti id =
     | TypeInterface ii -> lookup_interface_field ii id
 
 
-(*
-
-  read the 'Throwable' class to initiate fields
-  class_info_is_exception
-
-*)
-
-let () =
-  match classify_name [] [] None [] 
-    ((Loc.dummy_position,"Throwable") :: javalang_qid)
-  with
-    | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
-    | _ -> assert false
-	
 let object_class =
   try				
     match classify_name [] [] None [] 
@@ -1064,226 +1255,10 @@ let object_class =
   with
     | Java_options.Java_error(l,s) ->
 	eprintf "%a: %s@." Loc.gen_report_position l s;
-	exit 1
-
-
-(*******************************
-
-Typing level 2: extract bodies
-  (logic functions definitions, axioms,
-   field initializers, method and constructors bodies)
-
-**********************************)
-
-
-
-let field_initializer_table = Hashtbl.create 17
-
-(*
-let invariants_table = Hashtbl.create 17
-*)
-let axioms_table = Hashtbl.create 17
-
-
-
-
-
-
-
-(* logic funs *)
-
-type logic_body =
-  | JAssertion of assertion
-  | JTerm of term
-  | JReads of term list
-
-let logics_table = Hashtbl.create 97
-let logics_env = Hashtbl.create 97
-
-let logic_tag_counter = ref 0
-
-let logic_info id ty pars =
-  incr logic_tag_counter;
-  { java_logic_info_tag = !logic_tag_counter;
-    java_logic_info_name = id;
-    java_logic_info_parameters = pars;
-    java_logic_info_result_type = ty;
-    java_logic_info_calls = [];
-  }
-    
-
-
-let is_boolean t =
-  match t with
-    | JTYbase Tboolean -> true
-    | _ -> false
-
-
-(* JLS 5.6.1: Unary Numeric Promotion *)
-let unary_numeric_promotion t =
-  match t with
-    | JTYbase t -> 
-	begin
-	  match t with
-	    | Treal | Tinteger -> assert false
-	    | Tchar | Tbyte | Tshort -> Tint
-	    | _ -> t
-	end
-    | _ -> assert false
-
-let logic_unary_numeric_promotion t =
-  match t with
-    | JTYbase t -> 
-	begin
-	  match t with
-	    | Treal | Tdouble | Tfloat -> Treal
-	    | _ -> Tinteger		
-	end
-    | _ -> assert false
-
-(* JLS 5.6.2: Binary Numeric Promotion *)
-let binary_numeric_promotion t1 t2 =
-  match t1,t2 with
-    | JTYbase t1,JTYbase t2 -> 
-	begin
-	  match t1,t2 with
-	    | (Treal | Tinteger), _ 
-	    | _, (Treal | Tinteger) -> assert false
-	    | (Tboolean | Tunit),_
-	    | _, (Tboolean | Tunit) -> raise Not_found
-	    | Tdouble,_ | _, Tdouble -> Tdouble
-	    | Tfloat,_ | _, Tfloat -> Tfloat
-	    | Tlong,_ | _, Tlong -> Tlong
-	    | (Tshort | Tbyte | Tint | Tchar),
-		(Tshort | Tbyte | Tint | Tchar) -> Tint		
-	end
-    | _ -> raise Not_found
-
-let logic_binary_numeric_promotion t1 t2 =
-  match t1,t2 with
-    | JTYbase t1,JTYbase t2 -> 
-	begin
-	  match t1,t2 with
-	    | (Tboolean | Tunit),_
-	    | _, (Tboolean | Tunit) -> raise Not_found
-	    | (Treal | Tdouble | Tfloat),_ 
-	    | _, (Treal | Tdouble | Tfloat) -> Treal
-	    | _ -> Tinteger		
-	end
-    | _ -> raise Not_found
-
-
-
-let is_reference_type t =
-  match t with
-    | JTYbase t -> false
-    | _ -> true
-
-let lub_object_types t1 t2 = JTYnull
-  
-
-let rec is_subclass c1 c2 =
-  c1 == c2 ||
-    (check_if_class_complete c1;
-     match c1.class_info_extends with
-      | None -> false
-      | Some c -> is_subclass c c2)
-
-let rec is_subinterface i1 i2 =
-  i1 == i2 ||
-    (check_if_interface_complete i1;
-     List.exists
-	(fun i' -> 
-(*
-	   eprintf "checking if interface '%s' is subinterface of '%s'@."
-		i'.interface_info_name i2.interface_info_name;
-*)
-       is_subinterface i' i2)
-    i1.interface_info_extends)
-
-let rec implements c i =
-  List.exists 
-    (fun i' -> is_subinterface i' i)
-    c.class_info_implements ||
-    match c.class_info_extends with
-      | None -> false
-      | Some c -> implements c i
-
-(* JLS 5.1.1: Identity Conversion *)
-let rec is_identity_convertible tfrom tto =
-  match tfrom, tto with
-    | JTYbase t1, JTYbase t2 -> t1=t2
-    | JTYclass(_,c1), JTYclass(_,c2) -> c1 == c2
-    | JTYinterface i1, JTYinterface i2 -> i1 == i2
-    | JTYarray t1, JTYarray t2 -> is_identity_convertible t1 t2
-    | JTYnull, JTYnull -> true
-    | _ -> false
-
-(* JLS 5.1.2: Widening Primitive Conversion *)
-let is_widening_primitive_convertible tfrom tto =
-  match tfrom,tto with
-    | Tbyte, (Tshort | Tint | Tlong | Tfloat | Tdouble) -> true
-    | Tshort, (Tint | Tlong | Tfloat | Tdouble) -> true
-    | Tchar, (Tint | Tlong | Tfloat | Tdouble) -> true
-    | Tint, (Tlong | Tfloat | Tdouble) -> true
-    | Tlong, (Tfloat | Tdouble) -> true
-    | Tfloat, Tdouble -> true
-    | _ -> false
-
-let is_logic_widening_primitive_convertible tfrom tto =
-  match tfrom,tto with
-    | Tbyte, (Tshort | Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) 
-	-> true
-    | Tshort, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
-    | Tchar, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
-    | Tint, (Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
-    | Tlong, (Tinteger | Tfloat | Tdouble | Treal) -> true
-    | Tfloat, (Tdouble | Treal) -> true
-    | Tinteger, Treal -> true
-    | Tdouble, Treal -> true
-    | _ -> false
-
-(* JLS 5.1.3: Narrowing Primitive Conversion *)
-let is_narrowing_primitive_convertible tfrom tto =
-  match tfrom, tto with
-    | Tshort, (Tbyte | Tchar) -> true
-    | Tchar, (Tbyte | Tshort) -> true
-    | Tint, (Tbyte | Tshort | Tchar) -> true
-    | Tlong, (Tbyte | Tshort | Tchar | Tint) -> true
-    | Tfloat, (Tbyte | Tshort | Tchar | Tint | Tlong)  -> true
-    | Tdouble, (Tbyte | Tshort | Tchar | Tint | Tlong | Tfloat)  -> true
-    | _ -> false
-
-let narrowing_primitive_conversion n tfrom tto =
-  match tfrom, tto with
-    | Tshort, (Tbyte | Tchar) -> assert false (* TODO *)
-    | Tchar, (Tbyte | Tshort) -> assert false (* TODO *)
-    | Tint, Tbyte ->
-	let i = Num.int_of_num n in
-	let i = i land 0xFF in (* discard all but 8 lower order bits *)
-	  (* if i is a byte then i else take the 2 complement of i *)
-	let i = if in_byte_range (Num.num_of_int i) then i else
-	  let i = (lnot i) land 0xFF in
-	  let i = (i + 1) land 0xFF in -i
-	in Num.num_of_int i
-    | Tint, Tshort ->
-	let i = Num.int_of_num n in
-	let i = i land 0xFFFF in (* discard all but 16 lower order bits *)
-	  (* if i is a short then i else take the 2 complement of i *)
-	let i = if in_short_range (Num.num_of_int i) then i else
-	  let i = (lnot i) land 0xFFFF in
-	  let i = (i + 1) land 0xFFFF in -i
-	in Num.num_of_int i
-    | Tint, Tchar -> assert false (* TODO *)
-    | Tlong, (Tbyte | Tshort | Tchar | Tint) -> assert false (* TODO *)
-    | Tfloat, (Tbyte | Tshort | Tchar | Tint | Tlong) -> assert false (* TODO *)
-    | Tdouble, (Tbyte | Tshort | Tchar | Tint | Tlong | Tfloat) -> assert false (* TODO *)
-    | _ -> assert false (* should never happen *)
-
+	  exit 1
 
 (* JLS 5.1.4: Widening Reference Conversion *)
 let rec is_widening_reference_convertible tfrom tto =
-  
   match tfrom,tto with
     | JTYclass(_,c1), JTYclass(_,c2) -> is_subclass c1 c2
     | JTYclass(_,c), JTYinterface i -> implements c i
@@ -1299,240 +1274,13 @@ let rec is_widening_reference_convertible tfrom tto =
 	is_widening_reference_convertible t1 t2
     | _ -> false
 
-(* JLS 5.2: Assignment conversion  *)
-
-let final_field_values_table : (int, Num.num list) Hashtbl.t 
-    = Hashtbl.create 97
-
-let bwor_num n1 n2 =
-  try
-    let n1 = Num.int_of_num n1 in
-    let n2 = Num.int_of_num n2 in
-    Num.num_of_int (n1 lor n2)
-  with
-      _ -> assert false
-
-    
-let rec lsl_num n1 n2 =
-  if n2 = 0 then n1 else lsl_num (Num.add_num n1 n1) (n2-1)
-
-let lsr_num n1 n2 = assert false
-
-let asr_num n1 n2 = assert false
-
-
-let rec eval_const_expression const e =
-  match e.java_expr_node with
-    | JElit c ->
-	begin
-	  match c with
-	    | Integer s -> Numconst.integer s
-	    | _ -> assert false (* TODO *)
-	end
-    | JEcast (ty, e) ->
-	let n = eval_const_expression const e in
-	  begin
-	    match ty with
-	      | JTYbase t ->
-		  let te = match e.java_expr_type with
-		    | JTYbase t -> t | _ -> assert false 
-		  in
-		    begin
-		      match t with
-			| Tbyte -> if in_byte_range n then n else
-			    if is_narrowing_primitive_convertible te t then
-			      narrowing_primitive_conversion n te t
-			    else
-			      typing_error e.java_expr_loc 
-				"outside the byte range: %s" (Num.string_of_num n)
-			| Tshort -> if in_short_range n then n else
-			    if is_narrowing_primitive_convertible te t then
-			      narrowing_primitive_conversion n te t
-			    else
-			      typing_error e.java_expr_loc
-				"outside the short range: %s" (Num.string_of_num n)
-			| Tunit | Treal | Tinteger | Tdouble | Tlong 
-			| Tfloat | Tint | Tchar | Tboolean -> assert false (* TODO *)
-		    end
-	      | JTYarray _ | JTYinterface _ | JTYclass (_, _) |JTYnull
-		  -> raise Not_found
-	  end
-    | JEbin(e1,op,e2) -> 
-	let n1 = eval_const_expression const e1 in
-	let n2 = eval_const_expression const e2 in
-	begin
-	  match op with
-	    | Badd -> Num.add_num n1 n2
-	    | Bbwxor -> assert false (* TODO *)
-	    | Bbwor -> bwor_num n1 n2
-	    | Bbwand -> assert false (* TODO *)		
-	    | Blsl|Basr|Blsr -> 
-		let max =
-		  match e1.java_expr_type with
-		    | JTYbase Tint -> 31
-		    | JTYbase Tlong -> 63
-		    | _ -> assert false
-		in 
-		if Num.le_num Numconst.zero n1 && Num.le_num n1 (Num.num_of_int max) then
-		  match op with
-		    | Blsl -> lsl_num n1 (Num.int_of_num n2)
-		    | Basr -> asr_num n1 (Num.int_of_num n2)
-		    | Blsr -> lsr_num n1 (Num.int_of_num n2)
-		    | _ -> assert false
-		else
-		  typing_error e2.java_expr_loc "this expression is not in the rang 0-%d" max
-	    | Bge|Ble|Blt|Bgt|Bne|Beq
-	    |Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *)
-
-	end
-    | JEstatic_field_access (ty, fi) ->
-	begin
-	  try
-	    match fi.java_field_info_type with
-	      | JTYarray _ -> raise Not_found 
-	      | _ ->
-		  List.hd (Hashtbl.find final_field_values_table fi.java_field_info_tag)
-	  with Not_found ->
-	    if const then
-	      typing_error e.java_expr_loc "Cannot evaluate this expression"
-	    else
-	      raise Not_found
-	end
-    | JEif (_, _, _)-> assert false  (* TODO *)
-    | JEun (op, e) -> 
-	let _n = eval_const_expression const e in
-	begin
-	  match op with
-	    | Ucompl -> raise Not_found (* TODO *)
-	    | _ -> assert false  (* TODO *)
-	end
-    | JEinstanceof _
-    | JEvar _ 
-    | JEnew_object (_, _)
-    | JEnew_array (_, _)
-    | JEstatic_call (_, _)
-    | JEcall (_, _, _)
-    | JEconstr_call _
-    | JEassign_array (_, _, _)
-    | JEassign_array_op (_, _, _, _)
-    | JEassign_field_op (_, _, _, _)
-    | JEassign_field (_, _, _)
-    | JEassign_static_field _
-    | JEassign_static_field_op _
-    | JEassign_local_var_op (_, _, _)
-    | JEassign_local_var (_, _)
-    | JEarray_access (_, _)
-    | JEarray_length _
-    | JEfield_access (_, _)
-    | JEincr_field (_, _, _)
-    | JEincr_local_var (_, _)
-    | JEincr_array _ -> raise Not_found
-
-let is_assignment_convertible ?(const=false) tfrom efrom tto =
-  is_identity_convertible tfrom tto ||
-  match tfrom,tto with
-    | JTYbase t1, JTYbase t2 -> 
-	is_widening_primitive_convertible t1 t2 ||
-	  begin
-	    match t2 with
-	      | Tbyte | Tshort | Tchar ->		  
-		  begin
-		    try
- 		      let n = eval_const_expression const efrom in
-		      match t2 with
-			| Tbyte -> in_byte_range n
-			| Tshort -> in_short_range n
-			| Tchar -> in_char_range n
-			| _ -> assert false
-		    with Not_found -> 
-		      if const then raise Not_found else false
-		  end
-	      | _ -> false
-	  end
-    | _ -> is_widening_reference_convertible tfrom tto
-
-(* JLS 5.3: Method invocation conversion  *)
-let is_method_invocation_convertible tfrom tto =
-  is_identity_convertible tfrom tto ||
-  match tfrom,tto with
-    | JTYbase t1, JTYbase t2 -> is_widening_primitive_convertible t1 t2
-    | _ -> is_widening_reference_convertible tfrom tto
-
-let is_logic_call_convertible tfrom tto =
+and is_logic_call_convertible tfrom tto =
   is_identity_convertible tfrom tto ||
   match tfrom,tto with
     | JTYbase t1, JTYbase t2 -> is_logic_widening_primitive_convertible t1 t2
     | _ -> is_widening_reference_convertible tfrom tto
 
-(* JLS 5.5: Cast conversion *)
-
-let cast_convertible tfrom tto =
-  is_identity_convertible tfrom tto ||
-    match tfrom,tto with
-      | JTYbase t1, JTYbase t2 -> true (* correct ? TODO *)
-      | JTYbase _,_ | _, JTYbase _ -> false
-      | JTYclass(_,cfrom), JTYclass(_,cto) ->
-	  is_subclass cfrom cto || is_subclass cto cfrom
-      | JTYclass _, JTYinterface _ -> assert false (* TODO *)
-      | JTYclass(_,c), JTYarray _ -> 
-	  c == object_class
-      | JTYinterface _,JTYclass _ -> assert false (* TODO *)
-      | JTYinterface ifrom, JTYinterface ito -> 
-	  is_subinterface ifrom ito || is_subinterface ito ifrom
-	    (* TODO: check this: JLS p73 appears to be incomplete *)
-      | JTYinterface _,JTYarray _ -> assert false (* TODO *)
-      | JTYarray _,_ -> assert false (* TODO *)
-      | JTYnull,_ | _, JTYnull -> assert false
-  
-(**********************)
-let make_logic_bin_op loc op t1 e1 t2 e2 =
-  match op with
-    | Bgt | Blt | Bge | Ble | Beq | Bne ->
-	assert false (* TODO *)
-    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
-	assert false (* TODO *)
-    | Bsub | Badd | Bmod | Bdiv | Bmul ->
-	try
-	  let t = logic_binary_numeric_promotion t1 t2 in
-	  (JTYbase t,
-	   JTbin(e1,t,op,e2))
-	with Not_found ->
-	  typing_error loc "numeric types expected for +,-,*, / and %%"
-
-let make_logic_un_op loc op t1 e1 = 
-  match op with
-    | Uplus ->
-	begin
-	  try 
-	    let t = logic_unary_numeric_promotion t1 in
-	    JTYbase t, e1.java_term_node
-	  with Not_found ->
-	    typing_error loc "numeric type expected for unary +"
-	end
-    | Uminus ->
-	begin
-	  try
-	    let t = logic_unary_numeric_promotion t1 in
-	    JTYbase t, JTun (t, op, e1)
-	  with Not_found ->
-	    typing_error loc "numeric type expected for unary -"
-	end
-    | Ucompl ->
-	assert false (*TODO*)
-    | Unot ->
-	if is_boolean t1 then t1, JTun (Tboolean, op, e1)
-	else typing_error loc "boolean type expected for unary !"
-
-let get_this loc env =
-  try 
-    List.assoc "this" env 
-  with Not_found -> 
-    typing_error loc "this undefined in this context"
-
-
-	
-  
-let rec term package_env type_env current_type env e =
+and term package_env type_env current_type env e =
   let termt = term package_env type_env current_type env in
   let ty,tt =
     match e.java_pexpr_node with
@@ -1700,42 +1448,7 @@ let rec term package_env type_env current_type env e =
        java_term_type = ty;
        java_term_loc = e.java_pexpr_loc }
 
-
-let make_predicate_bin_op loc op t1 e1 t2 e2 =
-  match op with
-    | Bgt | Blt | Bge | Ble ->
-	begin
-	  try 
-	    let t = logic_binary_numeric_promotion t1 t2 in
-	    JAbin(e1,t,op,e2)
-	  with Not_found ->
-	    typing_error loc "numeric types expected for >,<,>= and <="
-	end
-    | Beq | Bne ->
-	begin
-	  try
-	    let t = logic_binary_numeric_promotion t1 t2 in
-	    JAbin(e1,t,op,e2)
-	  with Not_found -> 
-	    if is_reference_type t1 && is_reference_type t2 then
-	      JAbin_obj(e1,op,e2)
-	    else
-	      typing_error loc "numeric or object types expected for == and !="
-	end
-    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
-	assert false (* TODO *)
-    | Bsub | Badd | Bmod | Bdiv | Bmul ->
-	typing_error loc "operator +,-,*, / and %% is not a predicate"
-
-let connective a1 op a2 =
-  match op with
-    | Band -> JAand(a1,a2)
-    | Bor -> JAor(a1,a2)
-    | Bimpl -> JAimpl(a1,a2)
-    | Biff -> JAiff(a1,a2)
-    | _ -> assert false
-
-let rec assertion package_env type_env current_type env e =
+and assertion package_env type_env current_type env e =
   let termt = term package_env type_env current_type env in
   let assertiont = assertion package_env type_env current_type env in
   let ta =
@@ -1850,6 +1563,287 @@ and make_quantified_formula loc q ty idl package_env type_env current_type env e
 	{ java_assertion_loc = loc ; 
 	  java_assertion_node = JAquantifier(q,vi,f) }
 
+
+(*
+
+  read the 'Throwable' class to initiate fields
+  class_info_is_exception
+
+*)
+
+let () =
+  match classify_name [] [] None [] 
+    ((Loc.dummy_position,"Throwable") :: javalang_qid)
+  with
+    | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
+    | _ -> assert false
+	
+(*******************************
+
+Typing level 2: extract bodies
+  (logic functions definitions, axioms,
+   field initializers, method and constructors bodies)
+
+**********************************)
+
+
+
+let field_initializer_table = Hashtbl.create 17
+
+let axioms_table = Hashtbl.create 17
+
+
+(* JLS 5.6.1: Unary Numeric Promotion *)
+let unary_numeric_promotion t =
+  match t with
+    | JTYbase t -> 
+	begin
+	  match t with
+	    | Treal | Tinteger -> assert false
+	    | Tchar | Tbyte | Tshort -> Tint
+	    | _ -> t
+	end
+    | _ -> assert false
+
+(* JLS 5.6.2: Binary Numeric Promotion *)
+let binary_numeric_promotion t1 t2 =
+  match t1,t2 with
+    | JTYbase t1,JTYbase t2 -> 
+	begin
+	  match t1,t2 with
+	    | (Treal | Tinteger), _ 
+	    | _, (Treal | Tinteger) -> assert false
+	    | (Tboolean | Tunit),_
+	    | _, (Tboolean | Tunit) -> raise Not_found
+	    | Tdouble,_ | _, Tdouble -> Tdouble
+	    | Tfloat,_ | _, Tfloat -> Tfloat
+	    | Tlong,_ | _, Tlong -> Tlong
+	    | (Tshort | Tbyte | Tint | Tchar),
+		(Tshort | Tbyte | Tint | Tchar) -> Tint		
+	end
+    | _ -> raise Not_found
+
+let lub_object_types t1 t2 = JTYnull
+  
+
+(* JLS 5.1.3: Narrowing Primitive Conversion *)
+let is_narrowing_primitive_convertible tfrom tto =
+  match tfrom, tto with
+    | Tshort, (Tbyte | Tchar) -> true
+    | Tchar, (Tbyte | Tshort) -> true
+    | Tint, (Tbyte | Tshort | Tchar) -> true
+    | Tlong, (Tbyte | Tshort | Tchar | Tint) -> true
+    | Tfloat, (Tbyte | Tshort | Tchar | Tint | Tlong)  -> true
+    | Tdouble, (Tbyte | Tshort | Tchar | Tint | Tlong | Tfloat)  -> true
+    | _ -> false
+
+let narrowing_primitive_conversion n tfrom tto =
+  match tfrom, tto with
+    | Tshort, (Tbyte | Tchar) -> assert false (* TODO *)
+    | Tchar, (Tbyte | Tshort) -> assert false (* TODO *)
+    | Tint, Tbyte ->
+	let i = Num.int_of_num n in
+	let i = i land 0xFF in (* discard all but 8 lower order bits *)
+	  (* if i is a byte then i else take the 2 complement of i *)
+	let i = if in_byte_range (Num.num_of_int i) then i else
+	  let i = (lnot i) land 0xFF in
+	  let i = (i + 1) land 0xFF in -i
+	in Num.num_of_int i
+    | Tint, Tshort ->
+	let i = Num.int_of_num n in
+	let i = i land 0xFFFF in (* discard all but 16 lower order bits *)
+	  (* if i is a short then i else take the 2 complement of i *)
+	let i = if in_short_range (Num.num_of_int i) then i else
+	  let i = (lnot i) land 0xFFFF in
+	  let i = (i + 1) land 0xFFFF in -i
+	in Num.num_of_int i
+    | Tint, Tchar -> assert false (* TODO *)
+    | Tlong, (Tbyte | Tshort | Tchar | Tint) -> assert false (* TODO *)
+    | Tfloat, (Tbyte | Tshort | Tchar | Tint | Tlong) -> assert false (* TODO *)
+    | Tdouble, (Tbyte | Tshort | Tchar | Tint | Tlong | Tfloat) -> assert false (* TODO *)
+    | _ -> assert false (* should never happen *)
+
+
+(* JLS 5.2: Assignment conversion  *)
+
+let final_field_values_table : (int, Num.num list) Hashtbl.t 
+    = Hashtbl.create 97
+
+let bwor_num n1 n2 =
+  try
+    let n1 = Num.int_of_num n1 in
+    let n2 = Num.int_of_num n2 in
+    Num.num_of_int (n1 lor n2)
+  with
+      _ -> assert false
+
+    
+let rec lsl_num n1 n2 =
+  if n2 = 0 then n1 else lsl_num (Num.add_num n1 n1) (n2-1)
+
+let lsr_num n1 n2 = assert false
+
+let asr_num n1 n2 = assert false
+
+
+let rec eval_const_expression const e =
+  match e.java_expr_node with
+    | JElit c ->
+	begin
+	  match c with
+	    | Integer s -> Numconst.integer s
+	    | _ -> assert false (* TODO *)
+	end
+    | JEcast (ty, e) ->
+	let n = eval_const_expression const e in
+	  begin
+	    match ty with
+	      | JTYbase t ->
+		  let te = match e.java_expr_type with
+		    | JTYbase t -> t | _ -> assert false 
+		  in
+		    begin
+		      match t with
+			| Tbyte -> if in_byte_range n then n else
+			    if is_narrowing_primitive_convertible te t then
+			      narrowing_primitive_conversion n te t
+			    else
+			      typing_error e.java_expr_loc 
+				"outside the byte range: %s" (Num.string_of_num n)
+			| Tshort -> if in_short_range n then n else
+			    if is_narrowing_primitive_convertible te t then
+			      narrowing_primitive_conversion n te t
+			    else
+			      typing_error e.java_expr_loc
+				"outside the short range: %s" (Num.string_of_num n)
+			| Tunit | Treal | Tinteger | Tdouble | Tlong 
+			| Tfloat | Tint | Tchar | Tboolean -> assert false (* TODO *)
+		    end
+	      | JTYarray _ | JTYinterface _ | JTYclass (_, _) |JTYnull
+		  -> raise Not_found
+	  end
+    | JEbin(e1,op,e2) -> 
+	let n1 = eval_const_expression const e1 in
+	let n2 = eval_const_expression const e2 in
+	begin
+	  match op with
+	    | Badd -> Num.add_num n1 n2
+	    | Bbwxor -> assert false (* TODO *)
+	    | Bbwor -> bwor_num n1 n2
+	    | Bbwand -> assert false (* TODO *)		
+	    | Blsl|Basr|Blsr -> 
+		let max =
+		  match e1.java_expr_type with
+		    | JTYbase Tint -> 31
+		    | JTYbase Tlong -> 63
+		    | _ -> assert false
+		in 
+		if Num.le_num Numconst.zero n1 && Num.le_num n1 (Num.num_of_int max) then
+		  match op with
+		    | Blsl -> lsl_num n1 (Num.int_of_num n2)
+		    | Basr -> asr_num n1 (Num.int_of_num n2)
+		    | Blsr -> lsr_num n1 (Num.int_of_num n2)
+		    | _ -> assert false
+		else
+		  typing_error e2.java_expr_loc "this expression is not in the rang 0-%d" max
+	    | Bge|Ble|Blt|Bgt|Bne|Beq
+	    |Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *)
+
+	end
+    | JEstatic_field_access (ty, fi) ->
+	begin
+	  try
+	    match fi.java_field_info_type with
+	      | JTYarray _ -> raise Not_found 
+	      | _ ->
+		  List.hd (Hashtbl.find final_field_values_table fi.java_field_info_tag)
+	  with Not_found ->
+	    if const then
+	      typing_error e.java_expr_loc "Cannot evaluate this expression"
+	    else
+	      raise Not_found
+	end
+    | JEif (_, _, _)-> assert false  (* TODO *)
+    | JEun (op, e) -> 
+	let _n = eval_const_expression const e in
+	begin
+	  match op with
+	    | Ucompl -> raise Not_found (* TODO *)
+	    | _ -> assert false  (* TODO *)
+	end
+    | JEinstanceof _
+    | JEvar _ 
+    | JEnew_object (_, _)
+    | JEnew_array (_, _)
+    | JEstatic_call (_, _)
+    | JEcall (_, _, _)
+    | JEconstr_call _
+    | JEassign_array (_, _, _)
+    | JEassign_array_op (_, _, _, _)
+    | JEassign_field_op (_, _, _, _)
+    | JEassign_field (_, _, _)
+    | JEassign_static_field _
+    | JEassign_static_field_op _
+    | JEassign_local_var_op (_, _, _)
+    | JEassign_local_var (_, _)
+    | JEarray_access (_, _)
+    | JEarray_length _
+    | JEfield_access (_, _)
+    | JEincr_field (_, _, _)
+    | JEincr_local_var (_, _)
+    | JEincr_array _ -> raise Not_found
+
+let is_assignment_convertible ?(const=false) tfrom efrom tto =
+  is_identity_convertible tfrom tto ||
+  match tfrom,tto with
+    | JTYbase t1, JTYbase t2 -> 
+	is_widening_primitive_convertible t1 t2 ||
+	  begin
+	    match t2 with
+	      | Tbyte | Tshort | Tchar ->		  
+		  begin
+		    try
+ 		      let n = eval_const_expression const efrom in
+		      match t2 with
+			| Tbyte -> in_byte_range n
+			| Tshort -> in_short_range n
+			| Tchar -> in_char_range n
+			| _ -> assert false
+		    with Not_found -> 
+		      if const then raise Not_found else false
+		  end
+	      | _ -> false
+	  end
+    | _ -> is_widening_reference_convertible tfrom tto
+
+(* JLS 5.3: Method invocation conversion  *)
+let is_method_invocation_convertible tfrom tto =
+  is_identity_convertible tfrom tto ||
+  match tfrom,tto with
+    | JTYbase t1, JTYbase t2 -> is_widening_primitive_convertible t1 t2
+    | _ -> is_widening_reference_convertible tfrom tto
+
+(* JLS 5.5: Cast conversion *)
+
+let cast_convertible tfrom tto =
+  is_identity_convertible tfrom tto ||
+    match tfrom,tto with
+      | JTYbase t1, JTYbase t2 -> true (* correct ? TODO *)
+      | JTYbase _,_ | _, JTYbase _ -> false
+      | JTYclass(_,cfrom), JTYclass(_,cto) ->
+	  is_subclass cfrom cto || is_subclass cto cfrom
+      | JTYclass _, JTYinterface _ -> assert false (* TODO *)
+      | JTYclass(_,c), JTYarray _ -> 
+	  c == object_class
+      | JTYinterface _,JTYclass _ -> assert false (* TODO *)
+      | JTYinterface ifrom, JTYinterface ito -> 
+	  is_subinterface ifrom ito || is_subinterface ito ifrom
+	    (* TODO: check this: JLS p73 appears to be incomplete *)
+      | JTYinterface _,JTYarray _ -> assert false (* TODO *)
+      | JTYarray _,_ -> assert false (* TODO *)
+      | JTYnull,_ | _, JTYnull -> assert false
+  
+(**********************)
 
 (* expressions *)
 	  
@@ -2004,7 +1998,7 @@ let is_accessible_and_applicable_constructor ci arg_types =
 let method_signature mi =
   let t =
     match mi.method_info_class_or_interface with
-      | TypeClass ci -> JTYclass (Java_options.non_null, ci)
+      | TypeClass ci -> JTYclass (true, ci) (* i.e. [this] is always non-null *)
       | TypeInterface ii -> JTYinterface ii
   in
   t :: List.map (fun vi -> vi.java_var_info_type) mi.method_info_parameters
@@ -2220,7 +2214,7 @@ let rec expr package_env type_env current_type env e =
 		  eprintf "looking up constructor in class %s@." ci.class_info_name;
 *)
 		  let constr = lookup_constructor ci arg_types in
-		  JTYclass (Java_options.non_null, ci), JEnew_object(constr,args)
+		  JTYclass (true, ci), JEnew_object(constr,args)
 	      | _ ->
 		  typing_error (fst (List.hd n))
 		    "class type expected"	
@@ -2905,7 +2899,7 @@ let type_method_spec_and_body ?(dobody=true)
     if mi.method_info_is_static then [] else
       let this_type =
 	match ti with
-	  | TypeClass ci -> JTYclass (Java_options.non_null, ci)
+	  | TypeClass ci -> JTYclass (true, ci) (* i.e. [this] is always non-null *)
 	  | TypeInterface ii -> JTYinterface ii
       in
       let vi = new_var Loc.dummy_position this_type "this" in
@@ -2995,7 +2989,7 @@ let type_constr_spec_and_body ?(dobody=true)
   in
   let this_type =
     match current_type with
-      | TypeClass ci -> JTYclass (Java_options.non_null, ci)
+      | TypeClass ci -> JTYclass (true, ci) (* i.e. this is always non-null *)
       | TypeInterface ii -> JTYinterface ii
   in
   let this_vi = new_var Loc.dummy_position this_type "this" in
@@ -3221,6 +3215,21 @@ let get_bodies package_env type_env cu =
   List.iter (type_decl package_env type_env) cu.cu_type_decls
 
 let type_specs package_env type_env =
+  Hashtbl.iter
+    (fun tag (current_type, env, vi, invs) -> 
+       Hashtbl.add invariants_table tag
+	 (vi, List.map 
+	    (fun (id, e) ->
+	       (id, assertion package_env type_env (Some current_type) env e))
+	    invs))
+    invariants_env;
+  Hashtbl.iter 
+    (fun tag (current_type, invs) ->
+       Hashtbl.add static_invariants_table tag
+	 (List.map 
+	    (fun (s, e) -> s, assertion package_env type_env (Some current_type) [] e)
+	 invs))
+    static_invariants_env;
   Hashtbl.iter 
     (fun _ (mi, _, _,_)  ->
        type_method_spec_and_body ~dobody:false 

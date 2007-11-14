@@ -399,7 +399,7 @@ let logic_params li l =
     FieldSet.fold
       (fun fi acc -> (LVar fi.jc_field_info_final_name)::acc)
       li.jc_logic_info_effects.jc_effect_memories
-      l	    
+      l
   in
   let l = 
     StringSet.fold
@@ -418,7 +418,7 @@ let make_logic_fun_call li l =
 
 let make_logic_pred_call li l =
   let params = logic_params li l in
-  LPred(li.jc_logic_info_name,params)
+    LPred (li.jc_logic_info_name, params)
 
 let rec term label oldlabel t =
   let ft = term label oldlabel in
@@ -619,12 +619,12 @@ let tr_logic_fun li ta acc =
       params_reads
   in
   let decl =
-    match li.jc_logic_info_result_type,ta with
-      (* Predicate *)
+    match li.jc_logic_info_result_type, ta with
+	(* Predicate *)
       | None, JCAssertion a -> 
 	  let a = assertion None "" a in
-	  Predicate(false,li.jc_logic_info_name,params_reads, a) 
-      (* Function *)
+	    Predicate (false, li.jc_logic_info_name,params_reads, a) 
+	      (* Function *)
       | Some ty, JCTerm t -> 
 	  let ret = tr_base_type ty in
 	  let t = term None "" t in
@@ -640,6 +640,7 @@ let tr_logic_fun li ta acc =
       | _ -> assert false
   in decl :: acc
   
+(*
 let tr_predicate li p acc =
   let params =
     List.map
@@ -650,7 +651,8 @@ let tr_predicate li p acc =
   in
   Predicate(false,li.jc_logic_info_name,params,
 	    assertion None "" p) :: acc
-  
+*)  
+
 (****************************
 
 expressions and statements
@@ -934,12 +936,14 @@ and expr ~threats e : expr =
 *)
     e'
 
+(*
 let invariant_for_struct this st =
-  let (_,invs) = 
+  let (_, invs) = 
     Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
   in
-  make_and_list 
-    (List.map (fun (li,_) -> make_logic_pred_call li [this]) invs)
+  make_and_list
+    (List.map (fun (li, _) -> make_logic_pred_call li [this]) invs)
+*)
 
 let exception_name ei =
   ei.jc_exception_info_name ^ "_exc"
@@ -1576,21 +1580,33 @@ let interp_fun_params f annot_type =
        
   
 let tr_fun f spec body acc =
+  (* DONE before inference of annotations (see jc_main.ml) - Nicolas *)
   (* Calculate invariants (for each parameter), that will
      be used as pre and post conditions *)
-  let invariants =
+(*  let invariants =
     if Jc_options.inv_sem = InvArguments then
       List.fold_left
 	(fun acc v ->
 	   match v.jc_var_info_type with
-	     | JCTpointer(st, _, _) ->
-		 make_and acc
-		   (invariant_for_struct
-		      (LVar v.jc_var_info_final_name) st)
+	     | JCTpointer (st, _, _) ->
+		 let params = [LVar v.jc_var_info_final_name] in
+		 let params =
+		   List.fold_left
+		     (fun acc fi -> match fi.jc_field_info_type with
+			| JCTpointer (st, _, _) ->
+			    (LVar fi.jc_field_info_final_name) :: 
+			      (LVar (alloc_table_name st)) :: acc
+			| _ -> acc)
+		     params st.jc_struct_info_fields
+		 in
+		 let fields_inv = LPred (fields_inv_name st, params) in
+		   make_and_list 
+		     [acc; (invariant_for_struct (LVar v.jc_var_info_final_name) st);
+		      fields_inv]
 	     | _ -> acc)
 	LTrue
 	f.jc_fun_info_parameters
-    else begin
+    else begin *)
     (* (* with the inv predicate (DISABLED) *)
       List.fold_right
        (fun v acc ->
@@ -1607,9 +1623,9 @@ let tr_fun f spec body acc =
        | JCTnative _ -> acc
        | JCTlogic _ -> acc)
        f.jc_fun_info_parameters *)
-      LTrue
+   (*   LTrue
     end
-  in
+  in*)
   let requires = spec.jc_fun_requires in
   let requires = 
     List.fold_right
@@ -1675,7 +1691,7 @@ let tr_fun f spec body acc =
   in
   (* Jc_options.lprintf "DEBUG: tr_fun 1@."; *)
   (* adding invariants to requires *)
-  let requires = make_and requires invariants in
+  (* let requires = make_and requires invariants in *)
   let (normal_behaviors,excep_behaviors) =
     List.fold_left
       (fun (normal,excep) (id,b) ->
@@ -1829,15 +1845,15 @@ let tr_fun f spec body acc =
 		   | JCTnative Tunit -> true
 		   | _ -> false);		
 	      (* default behavior *)
-	      let why_body = statement_list ~threats:true body in
+	      let body_safety = statement_list ~threats:true body in
 	      let tblock =
 		if Jc_options.inv_sem = InvOwnership then
 		  append
 		    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
 		    (assume_all_invariants f.jc_fun_info_parameters)
-		    why_body
+		    body_safety
 		else
-		  why_body
+		  body_safety
 	      in
 	      let tblock = 
 		if !return_void then
@@ -1851,22 +1867,27 @@ let tr_fun f spec body acc =
 				Deref(jessie_return_variable)))
 	      in
 	      let tblock = make_label "init" tblock in
-	      let tblock =
+	      let tblock_safety =
 		List.fold_right
 		  (fun (mut_id,id) bl ->
 		     Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
 	      in
-	      let acc =
+	      let safety_b = 
+		List.filter
+		  (fun (s, _) -> s = "safety")
+		  spec.jc_fun_behavior
+	      in
+	      let safety_exists = safety_b <> [] in
+	      let acc = if safety_exists then acc else
 		Def(
 		  f.jc_fun_info_name ^ "_safety",
 		  Fun(
 		    params,
 		    requires,
-		    tblock,
-		    invariants,
+		    tblock_safety,
+		    (* invariants *) LTrue,
 		    excep_posts_for_others None excep_behaviors
-		  )
-		)::acc
+		  ))::acc
 	      in
 		(* user behaviors *)
 	      let acc = 
@@ -1906,11 +1927,12 @@ let tr_fun f spec body acc =
 		      (fun (id,b,e) acc ->
 			 let d =
 			   Def(
-			     f.jc_fun_info_name ^ "_ensures_" ^ id,
+			     (if id = "safety" then f.jc_fun_info_name ^ "_" ^ id else
+			       f.jc_fun_info_name ^ "_ensures_" ^ id),
 			     Fun(
 			       params,
 			       requires,
-			       tblock,
+			       (if id = "safety" then tblock_safety else tblock),
 			       e,
 			       excep_posts_for_others None excep_behaviors
 			     )

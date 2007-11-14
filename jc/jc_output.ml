@@ -10,7 +10,8 @@ type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
       fun_spec * tstatement list option
   | JCenum_type_def of string * Num.num * Num.num
-  | JCstruct_def of string * string option * field_info list 
+  | JCstruct_def of string * string option * field_info list *
+      (string * var_info * assertion) list
   | JCrec_struct_defs of jc_decl list
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr option
@@ -403,6 +404,10 @@ let field fmt fi =
   fprintf fmt "@\n%a %s;" 
     print_type fi.jc_field_info_type fi.jc_field_info_name
 
+let invariant fmt (id, vi, a) =
+  fprintf fmt "@\ninvariant %s(%s) = %a;"
+    id vi.jc_var_info_name assertion a
+
 let term_or_assertion fmt = function
   | JCAssertion a -> 
       fprintf fmt "=@\n%a" assertion a
@@ -427,9 +432,10 @@ let rec print_decl fmt d =
     | JCenum_type_def(id,min,max) ->
 	fprintf fmt "@\n@[type %s = %s..%s@]@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
-    | JCstruct_def(id,extends,fields) ->
-	fprintf fmt "@\n@[<v 2>type %s = %a{%a@]@\n}@."
-	  id print_super extends (print_list space field) fields
+    | JCstruct_def (id, extends, fields, invs) ->
+	fprintf fmt "@\n@[<v 2>type %s = %a{%a%a@]@\n}@."
+	  id print_super extends (print_list space field) fields 
+	  (print_list space invariant) invs
     | JCrec_struct_defs dlist | JCrec_fun_defs dlist ->
 	print_list (fun fmt () -> fprintf fmt "@\nand") print_decl fmt dlist
     | JCvar_def(ty,id,init) ->

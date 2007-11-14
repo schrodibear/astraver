@@ -61,7 +61,7 @@ let field_decl f =
     | JPFvariable _ -> f 
     | JPFstatic_initializer b -> JPFstatic_initializer (statements b)
     | JPFannot (loc,s) -> parse_annot loc s Java_parser.kml_field_decl
-    | JPFinvariant _ 
+    | JPFinvariant _ | JPFstatic_invariant _ 
     | JPFmodel_variable _ 
     | JPFmethod_spec _ -> assert false
 

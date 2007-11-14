@@ -282,7 +282,7 @@ let rec destruct_pointer t =
     | JCTconst _ -> assert false
     | JCTsub_pointer _ -> assert false
     | JCTderef (_, fi) ->
-	let vi = var fi.jc_field_info_type (term_name t) in
+	let vi = var ~unique:false fi.jc_field_info_type (term_name t) in
 	  Some vi, None
     | JCTbinary _ -> assert false
     | JCTunary _ -> assert false
@@ -519,6 +519,43 @@ let rec replace_term_in_assertion srct targetvi a =
 	JCAif(term t,asrt a1,asrt a2)
     | JCAmutable(t,st,tag) ->
 	JCAmutable(term t,st,tag)
+    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+  in
+  { a with jc_assertion_node = anode; }
+
+
+let rec replace_vi_in_assertion srcvi targett a = 
+  let term = replace_term_in_term 
+    ~source:(type_term (JCTvar srcvi) srcvi.jc_var_info_type) 
+    ~target:targett.jc_term_node in
+  let asrt = replace_vi_in_assertion srcvi targett in
+  let anode = match a.jc_assertion_node with
+    | JCArelation (t1, bop, t2) ->
+	JCArelation(term t1, bop, term t2)
+    | JCAnot a -> 
+	JCAnot (asrt a)
+    | JCAand al ->
+	JCAand (List.map asrt al)
+    | JCAor al ->
+	JCAor (List.map asrt al)
+    | JCAimplies (a1, a2) ->
+	JCAimplies (asrt a1, asrt a2)
+    | JCAiff (a1, a2) ->
+	JCAiff (asrt a1, asrt a2)
+    | JCAapp (li, tl) ->
+	JCAapp (li, List.map term tl)
+    | JCAquantifier (qt, vi, a) ->
+	JCAquantifier (qt, vi, asrt a)
+    | JCAold a ->
+	JCAold (asrt a)      
+    | JCAinstanceof (t, st) ->
+	JCAinstanceof (term t, st)
+    | JCAbool_term t ->
+	JCAbool_term (term t)
+    | JCAif (t, a1, a2) ->
+	JCAif (term t, asrt a1, asrt a2)
+    | JCAmutable (t, st, tag) ->
+	JCAmutable (term t, st, tag)
     | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
   in
   { a with jc_assertion_node = anode; }
@@ -1522,11 +1559,27 @@ let rec test_assertion mgr pre a =
 	  | JCAnot _ -> env, Dnf.true_
 	  | _ -> extract_environment_and_dnf env nota
 	  end
+      | JCAapp (li, tl) ->
+	  let _, term_or_assertion = 
+	    try Hashtbl.find Jc_typing.logic_functions_table li.jc_logic_info_tag
+	    with Not_found -> assert false 
+	  in
+	    begin
+	      match term_or_assertion with
+		| JCAssertion a ->
+		    let a = List.fold_left2
+		      (fun a vi t ->
+			 replace_vi_in_assertion vi t a)
+		      a li.jc_logic_info_parameters tl
+		    in
+		      extract_environment_and_dnf env a
+		| _ -> env, Dnf.true_
+	    end
       | JCAimplies _ | JCAiff _
-      | JCAapp _ | JCAquantifier _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
+      | JCAquantifier _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
       | JCAif _ | JCAmutable _ | JCAtagequality _ -> env,Dnf.true_
   in
-  let env,dnf = extract_environment_and_dnf env a in
+  let env, dnf = extract_environment_and_dnf env a in
   Abstract1.change_environment_with mgr pre env false;
   Dnf.test mgr pre dnf
 
@@ -1898,10 +1951,10 @@ and intern_ai_statement iaio abs curinvs s =
 	  let asrts = collect_expr_asserts e in
 	    List.iter (test_assertion mgr prop) asrts;
 	    (* <return e;> is logically equivalent to <\result = e;> *)
-	    let vit = var_term (var t "\\result") in
+	    let vit = var_term (var ~unique:false t "\\result") in
 	      assign_expr mgr pre vit e;
 	      join_abstract_value mgr !postret normal;
-	      empty_abstract_value mgr normal
+	      empty_abstract_value mgr normal;
       | JCSthrow(ei,eopt) ->
 	  begin match eopt with
 	    | None -> ()
@@ -1987,7 +2040,7 @@ and intern_ai_statement iaio abs curinvs s =
 			(* This is an infinite loop, whose only exit is through return or
 			   throwing exceptions. *)
 			empty_abstract_value mgr normal;
-			curinvs.jc_absinv_exceptional <- wideninvs.jc_absinv_exceptional
+			curinvs.jc_absinv_exceptional <- wideninvs.jc_absinv_exceptional;
 		    end
 		  else
 		    begin
@@ -2062,7 +2115,7 @@ let rec record_ai_invariants abs s =
   | JCScall _ -> ()
 	
 let ai_function mgr iaio targets (fi, fs, sl) =
-  if Jc_options.verbose then
+  if Jc_options.verbose && iaio = None then
     printf "annotation inference of function %s@." fi.jc_fun_info_name;
   try
     let env = Environment.make [||] [||] in
@@ -2076,7 +2129,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     
     (* Add \result as abstract variable in [env] if any. *)
     let return_type = fi.jc_fun_info_return_type in
-    let vi_result = var return_type "\\result" in
+    let vi_result = var ~unique:false return_type "\\result" in
     let env =
       if return_type <> JCTnull then
 	let result = Vai.all_variables (var_term vi_result) in
@@ -2173,51 +2226,57 @@ let ai_function mgr iaio targets (fi, fs, sl) =
       ) targets;
 
     (* record the inferred postcondition *)
-    let postabs = !(invs.jc_absinv_return).jc_absval_regular in
-    Abstract1.change_environment_with mgr postabs env false;
-    if Abstract1.is_top mgr postabs = Manager.True 
-      || Abstract1.is_bottom mgr postabs = Manager.True then
-	()
-    else
-(*      let posta = mkinvariant abs.jc_absint_manager postabs in *)
+    if iaio = None then
       let returnabs = !(invs.jc_absinv_return).jc_absval_regular in
-      let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
-      let returnabs = if Abstract1.is_bottom mgr returnabs = Manager.True then
-	(* default postcondition is true *)
-	Abstract1.top mgr env else returnabs in
-      let returna = mkinvariant abs.jc_absint_manager returnabs in
-      let post = returna in (* make_and [posta; returna] in *)
-      let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
-      let excl, excabsl =
-	List.fold_left
-	  (fun (acc1, acc2) (exc, va) -> (exc :: acc1, va.jc_absval_regular :: acc2))
-	  ([], []) invs.jc_absinv_exceptional in
-      let excabsl = List.map
-	(fun va -> Abstract1.change_environment mgr va extern_env false) excabsl in
-      let excabsl = List.map
-	(fun va -> if Abstract1.is_bottom mgr va = Manager.True then
-	  Abstract1.top mgr env else va) excabsl in
-      let excal = List.map (mkinvariant abs.jc_absint_manager) excabsl in
-      let exc_behaviors = let exc_counter = 0 in
-      List.map2 
-	(fun exc va ->
-	  let exc_counter = exc_counter + 1 in
-	  ("inferred_exc" ^ (string_of_int exc_counter),
-	  { default_behavior with jc_behavior_throws = Some exc; jc_behavior_ensures = va }))
-	excl excal in
-      if Jc_options.verbose then
-	begin
-	  printf
-	    "@[<v 2>Inferring postcondition@\n%a@]@."
-	    Jc_output.assertion post;
-	  List.iter2
-	    (fun exc exca -> printf
-	      "@[<v 2>Inferring postcondition for exception %s@\n%a@]@."
-	      exc.jc_exception_info_name
-	      Jc_output.assertion exca) excl excal;
-	end;
-      fs.jc_fun_behavior <- 
-	(("inferred_normal", normal_behavior) :: exc_behaviors) @ fs.jc_fun_behavior;
+	if Abstract1.is_top mgr returnabs = Manager.True 
+	  || Abstract1.is_bottom mgr returnabs = Manager.True then
+	    ()
+	else
+	  let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
+	  let returnabs = if Abstract1.is_bottom mgr returnabs = Manager.True then
+	    (* default postcondition is true *)
+	  Abstract1.top mgr env else returnabs in
+	  let returna = mkinvariant abs.jc_absint_manager returnabs in
+	  let post = returna in
+	let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
+	let excl, excabsl =
+	  List.fold_left
+	    (fun (acc1, acc2) (exc, va) -> (exc :: acc1, va.jc_absval_regular :: acc2))
+	    ([], []) invs.jc_absinv_exceptional in
+	let excabsl = List.map
+	  (fun va -> Abstract1.change_environment mgr va extern_env false) excabsl in
+	let excabsl = List.map
+	  (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
+	     Abstract1.top mgr env else va) excabsl in
+	let excal = List.map (mkinvariant abs.jc_absint_manager) excabsl in
+	let exc_behaviors = let exc_counter = 0 in
+	  List.map2 
+	    (fun exc va ->
+	       let exc_counter = exc_counter + 1 in
+		 ("inferred_exc" ^ (string_of_int exc_counter),
+		  { default_behavior with jc_behavior_throws = Some exc; jc_behavior_ensures = va }))
+	    excl excal in
+	  if Jc_options.verbose then
+	    begin
+	      printf
+		"@[<v 2>Inferring postcondition@\n%a@]@."
+		Jc_output.assertion post;
+	      List.iter2
+		(fun exc exca -> printf
+		   "@[<v 2>Inferring postcondition for exception %s@\n%a@]@."
+		   exc.jc_exception_info_name
+		   Jc_output.assertion exca) excl excal;
+	    end;
+	  begin
+	    try
+	      let (s, b) = List.find (fun (s, _) -> s = "safety") fs.jc_fun_behavior in
+		b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; post];
+	    with Not_found -> 
+	      fs.jc_fun_behavior <- 
+		("safety", normal_behavior) :: fs.jc_fun_behavior
+	  end;
+	  fs.jc_fun_behavior <- exc_behaviors @ fs.jc_fun_behavior
+    else ()
       
   with Manager.Error exc ->
     Manager.print_exclog std_formatter exc;
@@ -3035,12 +3094,19 @@ let rec ai_entrypoint_fix mgr iai (fi, fs, sl) =
       state_changed := false;
       inspected_functions := [];
       ai_entrypoint_fix mgr iai (fi, fs, sl);
-    end;
-  inspected_functions := [];
-  record_ai_inter_preconditions mgr iai fi fs;
-  inspected_functions := [];
-  ai_entrypoint mgr None (fi, fs, sl)
+    end
   
+let ai_interprocedural mgr (fi, fs, sl) =
+  let iai = {
+    jc_interai_manager = mgr;
+    jc_interai_function_preconditions = Hashtbl.create 0
+  } in
+    ai_entrypoint_fix mgr iai (fi, fs, sl);
+    inspected_functions := [];
+    record_ai_inter_preconditions mgr iai fi fs;
+    inspected_functions := [];
+    ai_entrypoint mgr None (fi, fs, sl)
+      
     
 let main_function = function
   | fi, fs, None -> ()
@@ -3048,25 +3114,13 @@ let main_function = function
       begin match Jc_options.ai_domain with
       | "box" -> 
 	  let mgr = Box.manager_alloc () in
-	  let iai = {
-	    jc_interai_manager = mgr;
-	    jc_interai_function_preconditions = Hashtbl.create 0
-	  } in
-	    ai_entrypoint_fix mgr iai (fi, fs, sl)
+	    ai_interprocedural mgr (fi, fs, sl)
       | "oct" -> 
 	  let mgr = Oct.manager_alloc () in
-	  let iai = {
-	    jc_interai_manager = mgr;
-	    jc_interai_function_preconditions = Hashtbl.create 0
-	  } in
-	    ai_entrypoint_fix mgr iai (fi, fs, sl)
+	    ai_interprocedural mgr (fi, fs, sl)
       | "pol" -> 
 	  let mgr = Polka.manager_alloc_strict () in
-	  let iai = {
-	    jc_interai_manager = mgr;
-	    jc_interai_function_preconditions = Hashtbl.create 0
-	  } in
-	    ai_entrypoint_fix mgr iai (fi,fs,sl)
+	  ai_interprocedural mgr (fi, fs, sl)
       | _ -> assert false
       end
 

@@ -1,0 +1,28 @@
+
+/*
+  @OPTIONS: -ai box
+*/
+
+
+logic pos(integer x) = x > 0
+
+
+unit f(integer n) 
+  requires pos(n); 
+{
+   integer i = n;
+   while (i < 10) variant 10 - i; {
+       integer j = 1 / i;
+       i++;
+   }
+}
+
+unit f_bis(integer n) 
+  requires n > 0; 
+{
+   integer i = n;
+   while (i < 10) variant 10 - i; {
+       integer j = 1 / i;
+       i++;
+   }
+}

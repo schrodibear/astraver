@@ -661,12 +661,12 @@ let array_types decls =
 		jc_behavior_throws = None } ] 
 	     }
        in
-       (JCstruct_def(st.jc_struct_info_name, Some "Object",
-		     st.jc_struct_info_fields) :: acc,
-	JCfun_def(fi.jc_fun_info_return_type,
+	 (JCstruct_def (st.jc_struct_info_name, Some "Object",
+			st.jc_struct_info_fields, []) :: acc,
+	  JCfun_def(fi.jc_fun_info_return_type,
 		  fi.jc_fun_info_name,[vi],spec,None) :: decls))
     Java_analysis.array_struct_table
-    ([JCstruct_def("interface", None, [])],decls)
+    ([JCstruct_def("interface", None, [], [])],decls)
       
 
 (*****************
@@ -1252,7 +1252,7 @@ let tr_field type_name acc fi =
 
 
 let tr_class ci acc0 acc =
-  let (static_fields,fields) = 
+  let (static_fields, fields) = 
     List.partition 
       (fun fi -> fi.java_field_info_is_static)
       ci.class_info_fields
@@ -1261,13 +1261,27 @@ let tr_class ci acc0 acc =
     Option_misc.map (fun ci -> ci.class_info_name) ci.class_info_extends
   in
   let acc = List.fold_left (tr_field ci.class_info_name) acc static_fields in
-  (* create exceptions if subclass of Exception *)
-  begin
-    if ci.class_info_is_exception then
-    ignore (create_exception (Some (tr_type Loc.dummy_position (JTYclass(false,ci)))) ci.class_info_name);
-  end;
-  JCstruct_def(ci.class_info_name, super, List.map (create_field Loc.dummy_position) fields)::acc0, acc
-
+    (* create exceptions if subclass of Exception *)
+    begin
+      if ci.class_info_is_exception then
+	ignore (create_exception 
+		  (Some (tr_type Loc.dummy_position (JTYclass (false, ci))))
+		  ci.class_info_name);
+    end;
+    let fields = List.map (create_field Loc.dummy_position) fields in
+    let invs =
+      try
+	let (vi, invs) = Hashtbl.find Java_typing.invariants_table ci.class_info_tag in
+	  List.map
+	    (fun ((_, s), a) -> 
+	       let vi = create_var Loc.dummy_position vi in
+		 s, vi, assertion a)
+	    invs
+      with Not_found -> []
+    in
+      JCstruct_def 
+	(ci.class_info_name, super, fields, invs) :: acc0, acc
+      
 (* interfaces *)
 
 
@@ -1283,9 +1297,13 @@ let tr_class_or_interface ti acc0 acc =
 	tr_class ci acc0 acc
     | TypeInterface ii -> 
 	Java_options.lprintf "Handling interface '%s'@." ii.interface_info_name;
-	(acc0,tr_interface ii acc)
+	(acc0, tr_interface ii acc)
 
 
+(* static invariants *)
+
+let tr_static_invariant (s, a) = 
+  JCglobinv_def (s, assertion a)
 
 
 (*

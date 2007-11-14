@@ -59,10 +59,10 @@ val exceptions_table :
   (string, exception_info) Hashtbl.t
 *)
 
-val code_function : fun_spec * tstatement list option 
+val code_function : fun_info * fun_spec * tstatement list option -> var_info list
   -> fun_spec * statement list option
 
-val static_variable : var_info * texpr option -> var_info * expr option
+val static_variables : (int, Jc_env.var_info * Jc_ast.texpr option) Hashtbl.t -> var_info list
 
 
 val make_int_binary : Loc.position -> expr -> bin_op -> expr -> expr

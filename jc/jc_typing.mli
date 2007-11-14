@@ -63,7 +63,7 @@ val axioms_table :
   (string, assertion) Hashtbl.t
 
 val global_invariants_table : 
-  (string, assertion) Hashtbl.t
+  (logic_info, assertion) Hashtbl.t
 
 val exceptions_table : 
   (string, exception_info) Hashtbl.t

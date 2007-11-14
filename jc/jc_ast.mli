@@ -361,7 +361,7 @@ type behavior =
       jc_behavior_requires : assertion option ;
 *)
       jc_behavior_assigns : tlocation list option ;
-      jc_behavior_ensures : assertion;
+      mutable jc_behavior_ensures : assertion;
     }
 
 type fun_spec =

@@ -2,7 +2,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.17 2007-11-14 16:05:13 marche Exp $
+$Id: java_ast.mli,v 1.18 2007-11-14 17:42:48 nrousset Exp $
 
 ***************************************************************************)
 
@@ -216,6 +216,7 @@ type field_declaration =
   | JPFstatic_initializer of block
   | JPFannot of Lexing.position * string
   | JPFinvariant of identifier * pexpr
+  | JPFstatic_invariant of identifier * pexpr
   | JPFmethod_spec of pexpr option * (identifier * pbehavior) list
   | JPFmodel_variable of variable_declaration
 

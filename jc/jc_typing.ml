@@ -1923,9 +1923,8 @@ let field st root (rep, t, id) =
     jc_field_info_root = root;
     jc_field_info_struct = st;
     jc_field_info_rep = rep or (not (is_pointer_type ty));
-  }
-  in fi
-
+  } in
+  fi
 
 let axioms_table = Hashtbl.create 17
 let global_invariants_table = Hashtbl.create 17
@@ -2006,12 +2005,12 @@ let add_logic_constdecl (ty,id) =
 
 let rec decl d =
   match d.jc_pdecl_node with
-    | JCPDvar(ty,id,init) ->
+    | JCPDvar (ty, id, init) ->
 	let ty = type_type ty in
 	let vi = var ~static:true ty id in
 	let e = Option_misc.map (expr []) init in
-	Hashtbl.add variables_env id vi;
-	Hashtbl.add variables_table vi.jc_var_info_tag (vi,e)
+	  Hashtbl.add variables_env id vi;
+	  Hashtbl.add variables_table vi.jc_var_info_tag (vi, e);
     | JCPDfun (ty, id, pl, specs, body) -> 
 	let param_env, ty, fi = 
 	  add_fundecl (ty, id.jc_identifier_loc, id.jc_identifier_name, pl) 
@@ -2071,31 +2070,67 @@ let rec decl d =
 	Hashtbl.add enum_conversion_functions_table to_int_ id;
 	Hashtbl.add enum_conversion_functions_table of_int id
 *)
-    | JCPDstructtype(id,parent,fields,inv) ->
+    | JCPDstructtype (id, parent, fields, inv) ->
 	(* mutable field *)
 	(* adding structure name in global environment before typing 
 	   the fields, because of possible recursive definition *)
-	let root,struct_info = add_typedecl d (id,parent) in
-	if parent = None && !Jc_common_options.inv_sem = InvOwnership 
-	then create_mutable_field struct_info;
-	let env = List.map (field struct_info root) fields in
-	struct_info.jc_struct_info_fields <- env;
-	(* declare invariants as logical functions *)
-	let invariants =
-	  List.fold_left
-	    (fun acc (id,x,e) ->	
-	       let vi = var (JCTpointer(struct_info,Some zero,Some zero)) x in
-	       let p = assertion [(x,vi)] e in
-	       let pi = make_rel id in
-	       pi.jc_logic_info_parameters <- [vi];
-	       Hashtbl.replace logic_functions_table 
-		 pi.jc_logic_info_tag (pi,JCAssertion p);
-	       Hashtbl.replace logic_functions_env id pi;
-	       (pi,p) :: acc)
-	    []
-	    inv
-	in
-	Hashtbl.replace structs_table id (struct_info,invariants)
+	let root, struct_info = add_typedecl d (id, parent) in
+	  if parent = None && !Jc_common_options.inv_sem = InvOwnership 
+	  then create_mutable_field struct_info;
+	  let env = List.map (field struct_info root) fields in
+	    struct_info.jc_struct_info_fields <- env;
+	    (* declare invariants as logical functions *)
+	    let invariants =
+	      List.fold_left
+		(fun acc (id, x, e) ->	
+		   let vi = var (JCTpointer (struct_info, Some zero, Some zero)) x in
+		   let p = assertion [(x, vi)] e in
+		   let pi = make_rel id in
+		     pi.jc_logic_info_parameters <- [vi];
+		     Hashtbl.replace logic_functions_table 
+		       pi.jc_logic_info_tag (pi, JCAssertion p);
+		     Hashtbl.replace logic_functions_env id pi;
+		     (pi, p) :: acc)
+		[]
+		inv
+	    in 
+	    let vi_this = var (JCTpointer (struct_info, Some zero, Some zero)) "this" in
+	    let invs =
+	      List.fold_left
+		(fun acc fi ->
+		   match fi.jc_field_info_type with
+		     | JCTpointer (st', n1o, n2o) ->
+			 let term_this = 
+			   type_term (JCTvar vi_this)
+			     (JCTpointer (struct_info, Some zero, Some zero)) in
+			 let offset_inv no offset_kind =
+			   match no with
+			     | None -> raw_asrt JCAtrue
+			     | Some n -> 
+				 raw_asrt 
+				   (JCArelation
+				      (type_term 
+					 (JCToffset 
+					    (offset_kind, 
+					     type_term 
+					       (JCTderef (term_this, fi)) fi.jc_field_info_type, st'))
+					 integer_type,
+				       Beq_int,
+				       type_term 
+					 (JCTconst (JCCinteger (Num.string_of_num n))) integer_type))
+			 in
+			 let offset_min_inv = offset_inv n1o Offset_min in
+			 let offset_max_inv = offset_inv n2o Offset_max in
+			   Jc_pervasives.make_and [offset_min_inv; offset_max_inv; acc]
+		     | _ -> acc)
+		(raw_asrt JCAtrue) struct_info.jc_struct_info_fields
+	    in
+	    let pi = make_rel ("fields_inv_" ^ struct_info.jc_struct_info_name) in
+	      pi.jc_logic_info_parameters <- [vi_this];
+	      Hashtbl.replace logic_functions_table 
+		pi.jc_logic_info_tag (pi, JCAssertion invs);
+		Hashtbl.replace logic_functions_env id pi;
+	      Hashtbl.replace structs_table id (struct_info, (pi, invs)::invariants)
     | JCPDrectypes(pdecls) ->
         (* first pass: adding structure names *)
 	List.iter (fun d -> match d.jc_pdecl_node with
@@ -2126,9 +2161,14 @@ let rec decl d =
     | JCPDaxiom(id,e) ->
 	let te = assertion [] e in
 	Hashtbl.add axioms_table id te
-    | JCPDglobinv(id,e) ->
-	let te = assertion [] e in
-	Hashtbl.add global_invariants_table id te
+    | JCPDglobinv (id, e) ->
+	let a = assertion [] e in
+	let li = make_rel id in
+	  if Jc_options.inv_sem = InvArguments then 
+	  Hashtbl.replace logic_functions_table 
+	    li.jc_logic_info_tag (li, JCAssertion a);
+	  
+	Hashtbl.add global_invariants_table li a
     | JCPDexception(id,t) ->
 	let tt = type_type t in
 	Hashtbl.add exceptions_table id (exception_info (Some tt) id)

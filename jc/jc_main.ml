@@ -58,16 +58,12 @@ let main () =
 		Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
 		Jc_typing.logic_functions_table;
 	      *)
+	      let vil = Jc_norm.static_variables Jc_typing.variables_table in
 	      Hashtbl.iter 
 		(fun tag (f,s,b) -> 
-		   let (s,b) = Jc_norm.code_function (s,b) in
-		     Hashtbl.add Jc_norm.functions_table tag (f,s,b))
+		   let (s,b) = Jc_norm.code_function (f, s, b) vil in
+		     Hashtbl.add Jc_norm.functions_table tag (f, s, b))
 		Jc_typing.functions_table;
-	      Hashtbl.iter 
-		(fun tag (v,e) -> 
-		   let (v,e) = Jc_norm.static_variable (v,e) in
-		     Hashtbl.add Jc_norm.variables_table tag (v,e))
-		Jc_typing.variables_table;
 	      (*
 	Hashtbl.iter 
 	  (fun tag (si,l) -> 
@@ -109,23 +105,6 @@ let main () =
 	  Jc_callgraph.compute_components Jc_norm.functions_table
 	in
 
-        (* phase 4.1 (optional) : inference of annotations *)
-	if Jc_options.annot_infer then
-	  if Jc_options.interprocedural then
-	    (* interprocedural analysis over the call graph +
-	       intraprocedural analysis of each function called *)
-	    Hashtbl.iter
-	      (fun _ (fi, fs, sl) ->
-		if fi.jc_fun_info_name = Jc_options.main then
-		  Jc_ai.main_function (fi, fs, sl)
-	      ) Jc_norm.functions_table
-	  else
-            (* intraprocedural inference of annotations otherwise *)
-	    Hashtbl.iter 
-	      (fun _ (f, s, b) -> 
-		Jc_ai.code_function (f, s, b) 
-	      ) Jc_norm.functions_table;
-	  
 	(* phase 5 : computation of effects *)
 	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
 	Array.iter Jc_effect.logic_effects logic_components;
@@ -143,7 +122,24 @@ let main () =
 	    | InvNone
 	    | InvArguments -> ()
 	end;
-	
+
+        (* optional phase: inference of annotations *)
+	if Jc_options.annot_infer then
+	  if Jc_options.interprocedural then
+	    (* interprocedural analysis over the call graph +
+	       intraprocedural analysis of each function called *)
+	    Hashtbl.iter
+	      (fun _ (fi, fs, sl) ->
+		 if fi.jc_fun_info_name = Jc_options.main then
+		   Jc_ai.main_function (fi, fs, sl)
+	      ) Jc_norm.functions_table
+	  else
+            (* intraprocedural inference of annotations otherwise *)
+	    Hashtbl.iter 
+	      (fun _ (f, s, b) -> 
+		 Jc_ai.code_function (f, s, b) 
+	      ) Jc_norm.functions_table;
+
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =
 	  Hashtbl.fold 
@@ -156,7 +152,7 @@ let main () =
 	(* production phase 1.2 : generation of Why memories *)
 	let d_memories =
 	  Hashtbl.fold 
-	    (fun _ (st,_) acc ->
+	    (fun _ (st, _) acc ->
 	       Jc_interp.tr_struct st acc)
 	    Jc_typing.structs_table
 	    d_types
@@ -197,7 +193,7 @@ let main () =
 	(* production phase 2 : generation of Why logic functions *)
 	let d_lfuns = 
 	  Hashtbl.fold 
-	    (fun _ (li,p) acc ->
+	    (fun _ (li, p) acc ->
 	       Jc_interp.tr_logic_fun li p acc)
 	    Jc_typing.logic_functions_table 
 	    d

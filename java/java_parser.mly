@@ -2,7 +2,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.22 2007-11-14 16:15:36 marche Exp $
+$Id: java_parser.mly,v 1.23 2007-11-14 17:42:48 nrousset Exp $
 
 */
 
@@ -934,6 +934,8 @@ kml_field_decl:
     { JPFmethod_spec($1,default_behavior $2 $3 $4) }
 | INVARIANT ident COLON expr SEMICOLON EOF
     { JPFinvariant($2,$4) } 
+| STATIC INVARIANT ident COLON expr SEMICOLON EOF
+    { JPFstatic_invariant($3,$5) } 
 | MODEL variable_declaration
     { JPFmodel_variable($2) }
 ;

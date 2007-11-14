@@ -125,19 +125,28 @@ let main () =
 	let decls_range = Java_interp.range_types [] in
 	  
 	(* production phase 1.3 : generation of Jessie struct types *)
-	let acc,decls_arrays = Java_interp.array_types [] in
-	let acc,decls_structs =
+	let acc, decls_arrays = Java_interp.array_types [] in
+	let acc, decls_structs =
 	  Hashtbl.fold 
-	    (fun _ id (acc0,acc) ->
+	    (fun _ id (acc0, acc) ->
 	       Java_interp.tr_class_or_interface id acc0 acc)
 	    Java_typing.type_table
-	    (acc,decls_arrays)
+	    (acc, decls_arrays)
 	in	
 	let decls = decls_structs @ 
 	  (Jc_output.JCrec_struct_defs acc :: decls_range)
 	in
+	  
+	(* production phase 1.4: generation of Jessie global invariants *)
+	let decls =
+	  Hashtbl.fold
+	    (fun _ invs acc -> 
+	       (List.map (Java_interp.tr_static_invariant) invs) @ acc)
+	    Java_typing.static_invariants_table
+	    decls
+	in
 
-	(* production phase 1.4 : generation of Jessie exceptions *)
+	(* production phase 1.5 : generation of Jessie exceptions *)
 	let decls =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
@@ -146,7 +155,7 @@ let main () =
 	    decls
 	in	       	  
 
-	(* production phase 1.5 : generation of Jessie logic functions *)
+	(* production phase 1.6 : generation of Jessie logic functions *)
 	let decls = 
 	  Hashtbl.fold 
 	    (fun _ (li,p) acc ->

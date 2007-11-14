@@ -112,6 +112,12 @@ let is_bitwise_unary_op = function
   | _ -> false
 
 
+let type_term t ty = {
+  jc_term_node = t;
+  jc_term_type = ty;
+  jc_term_loc = Loc.dummy_position;
+}
+
 let rec is_constant_term t =
   match t.jc_term_node with
     | JCTrange (None, None) (* CORRECT ? *)
@@ -172,12 +178,13 @@ let const c =
 
 let var_tag_counter = ref 0
 
-let var ?(static=false) ?(formal=false) ty id =
+let var ?(unique=true) ?(static=false) ?(formal=false) ty id =
   incr var_tag_counter;
   let vi = {
     jc_var_info_tag = !var_tag_counter;
     jc_var_info_name = id;
-    jc_var_info_final_name = Jc_envset.get_unique_name id;
+    jc_var_info_final_name = 
+      if unique then Jc_envset.get_unique_name id else id;
     jc_var_info_type = ty;
     jc_var_info_formal = formal;
     jc_var_info_assigned = false;
@@ -398,6 +405,16 @@ let raw_asrt a = {
   jc_assertion_label = "";
 }
 
+let make_and al = 
+  (* optimization *)
+  let al = List.filter (fun a -> not (is_true a)) al in
+  let anode = match al with
+    | [] -> JCAtrue
+    | [a] -> a.jc_assertion_node
+    | a::tl -> JCAand al
+  in
+  raw_asrt anode
+
 let default_behavior = { 
   jc_behavior_throws = None;
   jc_behavior_assumes = None;
@@ -405,7 +422,7 @@ let default_behavior = {
   jc_behavior_ensures = raw_asrt JCAtrue
 }
 
-  
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
