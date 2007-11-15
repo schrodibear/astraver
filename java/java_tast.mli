@@ -113,11 +113,12 @@ and statement_node =
   | JSreturn of expr 
   | JSvar_decl of java_var_info * initialiser option * statement
   | JSblock of block
-  | JSwhile of expr * assertion * term * statement  
+  | JSwhile of expr * assertion * term option * statement  
       (*r condition, invariant, variant, loop body *)
-  | JSfor of expr list * expr * assertion * term * expr list * statement  
+  | JSfor of expr list * expr * assertion * term option * expr list * statement  
       (*r init, condition, invariant, variant, steps, loop body *)
-  | JSfor_decl of (java_var_info * initialiser option) list * expr * assertion * term * expr list * statement  
+  | JSfor_decl of (java_var_info * initialiser option) list * 
+      expr * assertion * term option * expr list * statement  
       (*r decls, condition, invariant, variant, steps, loop body *)
   | JSexpr of expr
   | JSassert of string option * assertion

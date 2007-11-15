@@ -985,10 +985,11 @@ let static_variables variables =
     if Jc_options.inv_sem = InvArguments then
       begin
 	let invs = make_and invs in
-	let li = make_rel "variables_inv" in 
-	  Hashtbl.replace Jc_typing.logic_functions_table 
-	    li.jc_logic_info_tag (li, JCAssertion invs);
-	  Hashtbl.add Jc_typing.global_invariants_table li invs;
+	  if is_true invs then () else 
+	    let li = make_rel "variables_inv" in 
+	      Hashtbl.replace Jc_typing.logic_functions_table 
+		li.jc_logic_info_tag (li, JCAssertion invs);
+	      Hashtbl.add Jc_typing.global_invariants_table li invs;
       end;
     vil
 	  

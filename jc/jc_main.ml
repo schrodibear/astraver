@@ -104,25 +104,7 @@ let main () =
 	let components = 
 	  Jc_callgraph.compute_components Jc_norm.functions_table
 	in
-
-	(* phase 5 : computation of effects *)
-	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
-	Array.iter Jc_effect.logic_effects logic_components;
-	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
-	Array.iter Jc_effect.function_effects components;
-
-	(* phase 6 : checking structure invariants *)
-	begin
-	  match Jc_options.inv_sem with
-	    | InvOwnership ->
-		Jc_options.lprintf "\nstarting checking structure invariants.@.";
-		Hashtbl.iter 
-		  (fun _ (_,invs) -> Jc_invariants.check invs)
-		  Jc_typing.structs_table
-	    | InvNone
-	    | InvArguments -> ()
-	end;
-
+	  
         (* optional phase: inference of annotations *)
 	if Jc_options.annot_infer then
 	  if Jc_options.interprocedural then
@@ -139,6 +121,24 @@ let main () =
 	      (fun _ (f, s, b) -> 
 		 Jc_ai.code_function (f, s, b) 
 	      ) Jc_norm.functions_table;
+
+	  (* phase 5 : computation of effects *)
+	  Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
+	  Array.iter Jc_effect.logic_effects logic_components;
+	  Jc_options.lprintf "\nstarting computation of effects of functions.@.";
+	  Array.iter Jc_effect.function_effects components;
+	  
+	  (* phase 6 : checking structure invariants *)
+	begin
+	  match Jc_options.inv_sem with
+	    | InvOwnership ->
+		Jc_options.lprintf "\nstarting checking structure invariants.@.";
+		Hashtbl.iter 
+		  (fun _ (_,invs) -> Jc_invariants.check invs)
+		  Jc_typing.structs_table
+	    | InvNone
+	    | InvArguments -> ()
+	end;
 
 	(* production phase 1.1 : generation of Why logic types *)
 	let d_types =

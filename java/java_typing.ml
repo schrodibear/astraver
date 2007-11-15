@@ -754,7 +754,7 @@ and classify_name
 			  with Not_found -> assert false
 			in
 			let this =
-			  { java_term_node = JTvar vi; 
+			  { java_term_node = JTvar vi;
 			    java_term_type = vi.java_var_info_type;
 			    java_term_loc = loc }
 			in		
@@ -1215,7 +1215,7 @@ and check_if_class_complete ci =
   if ci.class_info_incomplete then
     begin
       (* get class decls prototypes *)
-      let (p,d) = Hashtbl.find class_decl_table ci.class_info_tag in
+      let (p, d) = Hashtbl.find class_decl_table ci.class_info_tag in
       let t = Hashtbl.find class_type_env_table ci.class_info_tag in
       get_class_prototypes p t ci d;
       ci.class_info_incomplete <- false;    
@@ -1465,22 +1465,22 @@ and assertion package_env type_env current_type env e =
 	let te1 = assertiont e1
 	and te2 = assertiont e2
 	in connective te1 op te2
-    | JPEbin 
-	({java_pexpr_node = 
-	    JPEbin (_, (Beq | Bne | Bgt | Blt | Ble | Bge), a) } as p,
-	(Beq | Bne | Bgt | Blt | Ble | Bge as op), b) ->
+    | JPEbin
+	({ java_pexpr_node = 
+	     JPEbin (_, (Beq | Bne | Bgt | Blt | Ble | Bge), a) } as p,
+	 (Beq | Bne | Bgt | Blt | Ble | Bge as op), b) ->
 	let q = { e with java_pexpr_node = JPEbin (a, op, b) } in
-	JAand (assertiont p, assertiont q)
+	  JAand (assertiont p, assertiont q)
     | JPEbin(e1, op, e2) -> 
 	let te1 = termt e1 and te2 = termt e2 in 
-	make_predicate_bin_op e.java_pexpr_loc op 
-	  te1.java_term_type te1 te2.java_term_type te2
+	  make_predicate_bin_op e.java_pexpr_loc op 
+	    te1.java_term_type te1 te2.java_term_type te2
     | JPEquantifier (q, ty, idl, e)-> 
 	let tty = type_type package_env type_env ty in
 	let a = make_quantified_formula 
 	  e.java_pexpr_loc q tty idl package_env type_env current_type env e 
 	in
-	a.java_assertion_node
+	  a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
     | JPEinstanceof (_, _)-> assert false (* TODO *)
     | JPEcast (_, _)-> assert false (* TODO *)
@@ -2480,10 +2480,10 @@ let rec expr package_env type_env current_type env e =
 
       | JPEbin (e1, op, e2) -> 
 	  let te1 = exprt e1 and te2 = exprt e2 in 
-	  let t,e = make_bin_op e.java_pexpr_loc op 
-		      te1.java_expr_type te1 te2.java_expr_type te2 in
-	  JTYbase t,e
-	       (* only in terms *)
+	  let t, e = make_bin_op e.java_pexpr_loc op
+	    te1.java_expr_type te1 te2.java_expr_type te2 in
+	    JTYbase t, e
+	      (* only in terms *)
       | JPEarray_range _ 
       | JPEquantifier (_, _, _, _)
       | JPEold _
@@ -2707,43 +2707,43 @@ and statements package_env type_env current_type env b =
 			 JSvar_decl(vi,i,acc); })
 		  decls r in
 	      [s]
-	  | JPSloop_annot(inv,dec) ->
+	  | JPSloop_annot (inv, dec) ->
 	      begin
 		match rem with
 		  | { java_pstatement_node = JPSwhile(e,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
 		      let twhile =
 			type_while package_env type_env current_type env 
-			  s.java_pstatement_loc inv dec e s
+			  s.java_pstatement_loc inv (Some dec) e s
 		      in
-		      twhile :: 
-			statements package_env type_env current_type env rem
+			twhile :: 
+			  statements package_env type_env current_type env rem
 		  | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
 		      let tfor =
 			type_for_decl package_env type_env current_type env 
-			  loc vd inv dec e sl s
+			  loc vd inv (Some dec) e sl s
 		      in
-		      tfor ::
-			statements package_env type_env current_type env rem
+			tfor ::
+			  statements package_env type_env current_type env rem
 		  | _ -> assert false
 	      end      
 	  | JPSfor (el1, e, el2, s) ->
 	      let tfor =
 		type_for package_env type_env current_type env 
-		  s.java_pstatement_loc el1 expr_true expr_zero e el2 s
+		  s.java_pstatement_loc el1 expr_true None e el2 s
 	      in
 		tfor :: statements package_env type_env current_type env rem
 	  | JPSfor_decl(vd,e,sl,s) ->
 	      let tfor =
 		type_for_decl package_env type_env current_type env 
-		  s.java_pstatement_loc vd expr_true expr_zero e sl s
+		  s.java_pstatement_loc vd expr_true None e sl s
 	      in
 	      tfor :: statements package_env type_env current_type env rem
 	  | JPSwhile(e,s) ->
 	      let twhile =
 		type_while package_env type_env current_type env 
-		  s.java_pstatement_loc expr_true expr_zero e s
+		  s.java_pstatement_loc expr_true None e s
 	      in
 	      twhile :: statements package_env type_env current_type env rem
 	  | _ ->
@@ -2754,7 +2754,7 @@ and statements package_env type_env current_type env b =
 and type_for package_env type_env current_type env loc el1 inv dec e el2 s =
   let el1 = List.map (expr package_env type_env current_type env) el1 in
   let inv = assertion package_env type_env current_type env inv in
-  let dec = term package_env type_env current_type env dec in
+  let dec = Option_misc.map (term package_env type_env current_type env) dec in
   let e = expr package_env type_env current_type env e in
   let el2 = List.map (expr package_env type_env current_type env) el2 in
   let s = statement package_env type_env current_type env s in
@@ -2766,7 +2766,7 @@ and type_for_decl package_env type_env current_type env loc vd inv dec e sl s =
     variable_declaration package_env type_env current_type env vd 
   in
   let inv = assertion package_env type_env current_type env inv in
-  let dec = term package_env type_env current_type env dec in
+  let dec = Option_misc.map (term package_env type_env current_type env) dec in
   let e = expr package_env type_env current_type env e in
   let sl = List.map (expr package_env type_env current_type env) sl in
   let s = statement package_env type_env current_type env s in
@@ -2775,7 +2775,7 @@ and type_for_decl package_env type_env current_type env loc vd inv dec e sl s =
 
 and type_while package_env type_env current_type env loc inv dec e s =
   let inv = assertion package_env type_env current_type env inv in
-  let dec = term package_env type_env current_type env dec in
+  let dec = Option_misc.map (term package_env type_env current_type env) dec in
   let e = expr package_env type_env current_type env e in
   let s = statement package_env type_env current_type env s in
   { java_statement_node = JSwhile(e,inv,dec,s);
@@ -3142,7 +3142,8 @@ let type_decl package_env type_env d =
 	      List.assoc (snd c.class_name) type_env
 	    with
 		Not_found -> 
-		  eprintf "Java_typing anomaly: class '%s' not found in type_env@."  (snd c.class_name);		 
+		  eprintf "Java_typing anomaly: class '%s' not found in type_env@."  
+		    (snd c.class_name);		 
 		  List.iter
 		    (fun (id,_) -> eprintf "  '%s'@\n" id)
 		    type_env;
@@ -3217,11 +3218,14 @@ let get_bodies package_env type_env cu =
 let type_specs package_env type_env =
   Hashtbl.iter
     (fun tag (current_type, env, vi, invs) -> 
-       Hashtbl.add invariants_table tag
-	 (vi, List.map 
-	    (fun (id, e) ->
-	       (id, assertion package_env type_env (Some current_type) env e))
-	    invs))
+       match current_type with
+	 | TypeClass ci ->
+	     Hashtbl.add invariants_table tag
+	       (ci, vi, List.map 
+		  (fun (id, e) ->
+		     (id, assertion package_env type_env (Some current_type) env e))
+		  invs)
+	 | _ -> assert false)
     invariants_env;
   Hashtbl.iter 
     (fun tag (current_type, invs) ->

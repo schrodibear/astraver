@@ -2125,12 +2125,15 @@ let rec decl d =
 		     | _ -> acc)
 		(raw_asrt JCAtrue) struct_info.jc_struct_info_fields
 	    in
-	    let pi = make_rel ("fields_inv_" ^ struct_info.jc_struct_info_name) in
-	      pi.jc_logic_info_parameters <- [vi_this];
-	      Hashtbl.replace logic_functions_table 
-		pi.jc_logic_info_tag (pi, JCAssertion invs);
-		Hashtbl.replace logic_functions_env id pi;
-	      Hashtbl.replace structs_table id (struct_info, (pi, invs)::invariants)
+	      if is_true invs then 
+		Hashtbl.replace structs_table id (struct_info, invariants)
+	      else
+		let pi = make_rel ("fields_inv_" ^ struct_info.jc_struct_info_name) in
+		  pi.jc_logic_info_parameters <- [vi_this];
+		  Hashtbl.replace logic_functions_table 
+		    pi.jc_logic_info_tag (pi, JCAssertion invs);
+		  Hashtbl.replace logic_functions_env id pi;
+		  Hashtbl.replace structs_table id (struct_info, (pi, invs)::invariants)
     | JCPDrectypes(pdecls) ->
         (* first pass: adding structure names *)
 	List.iter (fun d -> match d.jc_pdecl_node with

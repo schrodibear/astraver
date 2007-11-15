@@ -1027,7 +1027,7 @@ let rec statement s =
 	      jc_loop_invariant = 
 		{ inv' with 
 		    jc_assertion_label = reg_loc inv.java_assertion_loc };
-	      jc_loop_variant = Some (term dec) }
+	      jc_loop_variant = Option_misc.map term dec }
 	  in
 	  JCTSwhile(expr e, la, statement s)
       | JSfor (el1, e, inv, dec, el2, body) ->
@@ -1042,7 +1042,7 @@ let rec statement s =
 	  let la =
 	    { jc_loop_tag = get_loop_counter ();
 	      jc_loop_invariant = assertion inv;
-	      jc_loop_variant = Some (term dec) }
+	      jc_loop_variant = Option_misc.map term dec }
 	  in
 	  let res =
 	    { jc_tstatement_loc = s.java_statement_loc ;
@@ -1058,7 +1058,7 @@ let rec statement s =
 	  let la =
 	    { jc_loop_tag = get_loop_counter ();
 	      jc_loop_invariant = assertion inv;
-	      jc_loop_variant = Some (term dec) }
+	      jc_loop_variant = Option_misc.map term dec }
 	  in
 	  let res =
 	    List.fold_right
@@ -1269,18 +1269,8 @@ let tr_class ci acc0 acc =
 		  ci.class_info_name);
     end;
     let fields = List.map (create_field Loc.dummy_position) fields in
-    let invs =
-      try
-	let (vi, invs) = Hashtbl.find Java_typing.invariants_table ci.class_info_tag in
-	  List.map
-	    (fun ((_, s), a) -> 
-	       let vi = create_var Loc.dummy_position vi in
-		 s, vi, assertion a)
-	    invs
-      with Not_found -> []
-    in
       JCstruct_def 
-	(ci.class_info_name, super, fields, invs) :: acc0, acc
+	(ci.class_info_name, super, fields, []) :: acc0, acc
       
 (* interfaces *)
 
@@ -1298,6 +1288,23 @@ let tr_class_or_interface ti acc0 acc =
     | TypeInterface ii -> 
 	Java_options.lprintf "Handling interface '%s'@." ii.interface_info_name;
 	(acc0, tr_interface ii acc)
+
+let tr_invariants ci id invs decls =
+  let invs =
+    List.map
+      (fun ((_, s), a) -> 
+	 let vi = create_var Loc.dummy_position id in
+	   s, vi, assertion a)
+      invs
+  in
+    List.map
+      (fun d -> 
+	 match d with
+	   | JCstruct_def (s, so, fil, []) when s = ci.class_info_name ->
+	       JCstruct_def (s, so, fil, invs)
+	   | _ -> d)
+      decls
+
 
 
 (* static invariants *)

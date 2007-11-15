@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.58 2007-11-09 17:08:58 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.59 2007-11-15 19:05:09 nrousset Exp $ *)
 
 
 open Jc_env
@@ -236,7 +236,7 @@ let rec statement ef s =
   match s.jc_statement_node with
     | JCSreturn_void -> ef
     | JCScall (_, fi, le, s) -> 
-	let ef = 
+	let ef =
 	  fef_union fi.jc_fun_info_effects
 	    (List.fold_left expr ef le) 
 	in
@@ -335,26 +335,30 @@ let location ef l =
 	  add_global_writes ef vi
 	else ef
 
-let behavior ef (_,b) =
+let behavior ef (_, b) =
   (* assigns *)
   let ef = Option_misc.fold
     (fun x ef -> List.fold_left location ef x) 
     b.jc_behavior_assigns ef
   in
-  (* requires: reads *)
-(*
-  let ef = match b.jc_behavior_requires with
+    (* requires: reads *)
+    (*
+      let ef = match b.jc_behavior_requires with
       None -> ef
-    | Some r ->	{ ef with jc_reads = assertion ef.jc_reads r }
-  in
-*)
-  (* assumes: reads *)
+      | Some r ->	{ ef with jc_reads = assertion ef.jc_reads r }
+      in
+    *)
+    (* assumes: reads *)
   let ef = match b.jc_behavior_assumes with
       None -> ef
     | Some a ->	{ ef with jc_reads = assertion ef.jc_reads a }
   in
-  (* ensures: reads *)
-  { ef with jc_reads = assertion ef.jc_reads b.jc_behavior_ensures }
+    (* ensures: reads *)
+  let ef = 
+    { ef with jc_reads = assertion ef.jc_reads b.jc_behavior_ensures } 
+  in
+    (* throws: raises *)
+    Option_misc.fold_left add_exception_effect ef b.jc_behavior_throws
 
 let spec ef s = 
   let ef = List.fold_left behavior ef s.jc_fun_behavior in
@@ -397,23 +401,23 @@ let logic_fun_effects f =
   end
 
 let fun_effects fi =
-  let (f,s,b) = 
+  let (f, s, b) = 
     Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
   in
   let ef = f.jc_fun_info_effects in
   let ef = spec ef s in
   let ef = Option_misc.fold_left (List.fold_left statement) ef b in
   let ef = List.fold_left parameter ef f.jc_fun_info_parameters in
-  if same_feffects ef f.jc_fun_info_effects then ()
-  else begin
-    fixpoint_reached := false;
-    f.jc_fun_info_effects <- ef
-  end
-    
-  
+    if same_feffects ef f.jc_fun_info_effects then ()
+    else begin
+      fixpoint_reached := false;
+      f.jc_fun_info_effects <- ef
+    end
+      
+      
 open Format
 open Pp
-
+      
 
 let logic_effects funs =
   fixpoint_reached := false;
@@ -446,37 +450,35 @@ let function_effects funs =
   done;
   Jc_options.lprintf "Effects: fixpoint reached@.";
   Jc_options.lprintf "Effects: removing global reads without writes@.";
-  List.iter (fun f ->
-	       f.jc_fun_info_effects <-
-		 let efw = f.jc_fun_info_effects.jc_writes.jc_effect_globals in
-		 let efr = f.jc_fun_info_effects.jc_reads.jc_effect_globals in
-		 let efg = VarSet.inter efr efw in
-		 let ef = { f.jc_fun_info_effects.jc_reads 
-			    with jc_effect_globals = efg } in
-		 { f.jc_fun_info_effects with jc_reads = ef }
-	    ) funs;
+  List.iter 
+    (fun f ->
+       f.jc_fun_info_effects <-
+	 let efw = f.jc_fun_info_effects.jc_writes.jc_effect_globals in
+	 let efr = f.jc_fun_info_effects.jc_reads.jc_effect_globals in
+	 let efg = VarSet.inter efr efw in
+	 let ef = { f.jc_fun_info_effects.jc_reads 
+		    with jc_effect_globals = efg } in
+	   { f.jc_fun_info_effects with jc_reads = ef }
+    ) funs;
   List.iter
     (fun f ->
        Jc_options.lprintf
 	 "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@\n@[ raises: %a@]@." 
 	 f.jc_fun_info_name
-	 (print_list comma (fun fmt field ->
-			     fprintf fmt "%s" field.jc_field_info_name))
+	 (print_list comma
+	    (fun fmt field -> fprintf fmt "%s" field.jc_field_info_name))
 	 (FieldSet.elements f.jc_fun_info_effects.jc_reads.jc_effect_memories)
-	 (print_list comma (fun fmt field ->
-			      fprintf fmt "%s" field.jc_field_info_name))
+	 (print_list comma
+	    (fun fmt field -> fprintf fmt "%s" field.jc_field_info_name))
 	 (FieldSet.elements f.jc_fun_info_effects.jc_writes.jc_effect_memories)
-	 (print_list comma (fun fmt ei ->
-			      fprintf fmt "%s" ei.jc_exception_info_name))
+	 (print_list comma 
+	    (fun fmt ei -> fprintf fmt "%s" ei.jc_exception_info_name))
 	 (ExceptionSet.elements f.jc_fun_info_effects.jc_raises))
     funs
-       
-
-  
 
 
 (*
-Local Variables: 
-compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-End: 
+  Local Variables: 
+  compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+  End: 
 *)

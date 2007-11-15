@@ -73,9 +73,6 @@ let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)
 
 
-let is_true a = (a.jc_assertion_node = JCAtrue)
-
-
 (* operators *)
 
 let is_relation_binary_op = function
@@ -399,11 +396,17 @@ let rec is_numeric_term t =
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ -> false (* TODO ? *)
 
+
+(* assertions *)
+
 let raw_asrt a = {
   jc_assertion_node = a;
   jc_assertion_loc = Loc.dummy_position;
   jc_assertion_label = "";
 }
+
+let true_assertion = raw_asrt JCAtrue
+let is_true a = (a.jc_assertion_node = JCAtrue)
 
 let make_and al = 
   (* optimization *)
@@ -415,6 +418,9 @@ let make_and al =
   in
   raw_asrt anode
 
+
+(* fun specs *)
+
 let default_behavior = { 
   jc_behavior_throws = None;
   jc_behavior_assumes = None;
@@ -424,8 +430,8 @@ let default_behavior = {
 
 
 (*
-Local Variables: 
-compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-End: 
+  Local Variables: 
+  compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+  End: 
 *)
 

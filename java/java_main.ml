@@ -132,7 +132,14 @@ let main () =
 	       Java_interp.tr_class_or_interface id acc0 acc)
 	    Java_typing.type_table
 	    (acc, decls_arrays)
-	in	
+	in
+	  (* class invariants *)
+	let acc = 
+	  Hashtbl.fold
+	    (fun _ (ci, id, invs) acc ->
+	       Java_interp.tr_invariants ci id invs acc)
+	    Java_typing.invariants_table acc
+	in
 	let decls = decls_structs @ 
 	  (Jc_output.JCrec_struct_defs acc :: decls_range)
 	in

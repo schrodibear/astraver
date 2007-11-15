@@ -2,13 +2,17 @@
 
 class C {
 
-    void m1() { }
-
-    void m2() {
-        try {
-            m1();
-        } catch(Exception e) { }
+    /*@ behavior exc:
+      @   signals (Exception) true;
+      @*/
+    void throwException() {
+	throw new Exception();
     }
+
+    void m() {
+	throwException();
+    }
+
 }
 
 

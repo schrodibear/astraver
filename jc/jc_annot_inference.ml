@@ -2233,9 +2233,6 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	    ()
 	else
 	  let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
-	  let returnabs = if Abstract1.is_bottom mgr returnabs = Manager.True then
-	    (* default postcondition is true *)
-	  Abstract1.top mgr env else returnabs in
 	  let returna = mkinvariant abs.jc_absint_manager returnabs in
 	  let post = returna in
 	let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
@@ -2249,11 +2246,10 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	  (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
 	     Abstract1.top mgr env else va) excabsl in
 	let excal = List.map (mkinvariant abs.jc_absint_manager) excabsl in
-	let exc_behaviors = let exc_counter = 0 in
+	let exc_behaviors = 
 	  List.map2 
 	    (fun exc va ->
-	       let exc_counter = exc_counter + 1 in
-		 ("inferred_exc" ^ (string_of_int exc_counter),
+		 ("safety",
 		  { default_behavior with jc_behavior_throws = Some exc; jc_behavior_ensures = va }))
 	    excl excal in
 	  if Jc_options.verbose then

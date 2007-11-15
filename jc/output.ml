@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.18 2007-11-14 17:42:48 nrousset Exp $ i*)
+(*i $Id: output.ml,v 1.19 2007-11-15 19:05:09 nrousset Exp $ i*)
 
 open Lexing
 open Format
@@ -220,8 +220,7 @@ let rec fprintf_assertion form a =
       fprintf form "@[%s(%a" id fprintf_term t;
       List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
       fprintf form ")@]"
-  | LPred (id, []) -> 
-      fprintf form "@[%s(void)@]" id
+  | LPred (id, []) -> assert false
   | LNamed (n, a) ->
       fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a
 ;;
@@ -694,8 +693,8 @@ let fprintf_why_decl form d =
 	  fprintf_assertion p
     | Def(id,e) ->
 	fprintf form "@[<hv 1>let %s =@ %a@]@.@." id fprintf_expr e
-    | Predicate(b,id,[],p) -> assert false
-    | Predicate(b,id,a::args,p) ->
+    | Predicate (b, id, [], p) -> assert false
+    | Predicate (b, id, a::args, p) ->
 	fprintf form "@[<hv 1>%spredicate %s(%a"
 	  (if b then "external " else "") id 
 	  fprint_logic_arg a;

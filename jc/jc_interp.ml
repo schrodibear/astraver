@@ -1580,52 +1580,6 @@ let interp_fun_params f annot_type =
        
   
 let tr_fun f spec body acc =
-  (* DONE before inference of annotations (see jc_main.ml) - Nicolas *)
-  (* Calculate invariants (for each parameter), that will
-     be used as pre and post conditions *)
-(*  let invariants =
-    if Jc_options.inv_sem = InvArguments then
-      List.fold_left
-	(fun acc v ->
-	   match v.jc_var_info_type with
-	     | JCTpointer (st, _, _) ->
-		 let params = [LVar v.jc_var_info_final_name] in
-		 let params =
-		   List.fold_left
-		     (fun acc fi -> match fi.jc_field_info_type with
-			| JCTpointer (st, _, _) ->
-			    (LVar fi.jc_field_info_final_name) :: 
-			      (LVar (alloc_table_name st)) :: acc
-			| _ -> acc)
-		     params st.jc_struct_info_fields
-		 in
-		 let fields_inv = LPred (fields_inv_name st, params) in
-		   make_and_list 
-		     [acc; (invariant_for_struct (LVar v.jc_var_info_final_name) st);
-		      fields_inv]
-	     | _ -> acc)
-	LTrue
-	f.jc_fun_info_parameters
-    else begin *)
-    (* (* with the inv predicate (DISABLED) *)
-      List.fold_right
-       (fun v acc ->
-       match v.jc_var_info_type with
-       | JCTpointer(st,_,_) ->
-       let var = LVar v.jc_var_info_final_name in
-       (*let invariant = invariant_for_struct var st in
-	 make_and invariant acc*)
-       let params = valid_inv_params st in
-       let params = List.map (fun (s, _) -> LVar s) params in
-       make_and (LPred(valid_inv_name st, var::params)) acc
-       | JCTnull -> assert false
-       | JCTrange _ -> acc
-       | JCTnative _ -> acc
-       | JCTlogic _ -> acc)
-       f.jc_fun_info_parameters *)
-   (*   LTrue
-    end
-  in*)
   let requires = spec.jc_fun_requires in
   let requires = 
     List.fold_right
@@ -1692,13 +1646,18 @@ let tr_fun f spec body acc =
   (* Jc_options.lprintf "DEBUG: tr_fun 1@."; *)
   (* adding invariants to requires *)
   (* let requires = make_and requires invariants in *)
-  let (normal_behaviors,excep_behaviors) =
+    
+  (* partition behaviors as follows:
+     - behaviors inferred by analysis (postfixed by 'safety': they will be added to fun safety)
+     - user defined behaviors 
+     TODO ?: also add inferred behaviors to other funs ? *)
+  let (normal_behaviors_safety, normal_behaviors, excep_behaviors_safety, excep_behaviors) =
     List.fold_left
-      (fun (normal,excep) (id,b) ->
+      (fun (normal_safety, normal, excep_safety, excep) (id, b) ->
 	 let post =
 	   make_and
-	     (LNamed(reg_loc b.jc_behavior_ensures.jc_assertion_loc,
-		     assertion None "" b.jc_behavior_ensures))
+	     (LNamed (reg_loc b.jc_behavior_ensures.jc_assertion_loc,
+		      assertion None "" b.jc_behavior_ensures))
 	     (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)
 	 in
 	 let a =
@@ -1707,17 +1666,38 @@ let tr_fun f spec body acc =
 	     | Some e -> 
 		 make_impl (assertion (Some "") "" e) post
 	 in
-	 match b.jc_behavior_throws with
-	   | None -> ((id,b,a)::normal,excep)
-	   | Some ei ->
-	       let eb =
-		 try
-		   ExceptionMap.find ei excep
-		 with Not_found -> []
-	       in
-	       (normal,ExceptionMap.add ei ((id,b,a)::eb) excep))
-      ([],ExceptionMap.empty)
+	   match b.jc_behavior_throws with
+	     | None -> 
+		 if id = "safety" then 
+		   ((id, b, a) :: normal_safety, normal, excep_safety, excep)
+		 else 
+		   (normal_safety, (id, b, a) :: normal, excep_safety, excep)
+	     | Some ei ->
+		 let eb =
+		   try
+		     ExceptionMap.find ei excep
+		   with Not_found -> []
+		 in
+		   if id = "safety" then 
+		     (normal_safety, normal, 
+		      ExceptionMap.add ei ((id, b, a) :: eb) excep_safety, excep)
+		   else
+		     (normal_safety, normal, excep_safety, 
+		      ExceptionMap.add ei ((id, b, a) :: eb) excep))
+      ([], [], ExceptionMap.empty, ExceptionMap.empty)
       spec.jc_fun_behavior
+  in
+  let excep_behaviors = 
+    ExceptionSet.fold
+      (fun ei acc -> 
+	 if ExceptionMap.mem ei acc then acc else
+	   let b = 
+	     { default_behavior with 
+		 jc_behavior_throws = Some ei; jc_behavior_ensures = (raw_asrt JCAtrue); } 
+	   in
+	   ExceptionMap.add ei [ei.jc_exception_info_name ^ "_b", b, LTrue] acc)
+      f.jc_fun_info_effects.jc_raises
+      excep_behaviors
   in
   let reads =
     FieldSet.fold
@@ -1796,6 +1776,11 @@ let tr_fun f spec body acc =
       (fun (_,_,e) acc -> make_and e acc)
       normal_behaviors LTrue
   in
+  let normal_post_safety =
+    List.fold_right
+      (fun (_,_,e) acc -> make_and e acc)
+      normal_behaviors_safety LTrue
+  in
   let excep_posts =
     ExceptionMap.fold
       (fun ei l acc ->
@@ -1803,6 +1788,14 @@ let tr_fun f spec body acc =
 	   List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
 	 in (exception_name ei,p)::acc) 
       excep_behaviors []
+  in
+  let excep_posts_safety =
+    ExceptionMap.fold
+      (fun ei l acc ->
+	 let p = 
+	   List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
+	 in (exception_name ei,p)::acc) 
+      excep_behaviors_safety []
   in
   (* DEBUG *)
   (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
@@ -1849,7 +1842,8 @@ let tr_fun f spec body acc =
 	      let tblock =
 		if Jc_options.inv_sem = InvOwnership then
 		  append
-		    (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+		    (* (make_assume_all_assocs (fresh_program_point ()) 
+		       f.jc_fun_info_parameters)*)
 		    (assume_all_invariants f.jc_fun_info_parameters)
 		    body_safety
 		else
@@ -1872,22 +1866,34 @@ let tr_fun f spec body acc =
 		  (fun (mut_id,id) bl ->
 		     Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
 	      in
-	      let safety_b = 
-		List.filter
+	      let safety_b, user_b = 
+		List.partition
 		  (fun (s, _) -> s = "safety")
 		  spec.jc_fun_behavior
 	      in
+		spec.jc_fun_behavior <- user_b;
 	      let safety_exists = safety_b <> [] in
-	      let acc = if safety_exists then acc else
-		Def(
-		  f.jc_fun_info_name ^ "_safety",
-		  Fun(
-		    params,
-		    requires,
-		    tblock_safety,
-		    (* invariants *) LTrue,
-		    excep_posts_for_others None excep_behaviors
-		  ))::acc
+	      let acc = 
+		if safety_exists then 
+		  Def(
+		    f.jc_fun_info_name ^ "_safety",
+		    Fun(
+		      params,
+		      requires,
+		      tblock_safety,
+		      normal_post_safety,
+		      excep_posts_safety @ excep_posts_for_others None excep_behaviors 
+		    ))::acc 
+		else
+		  Def(
+		    f.jc_fun_info_name ^ "_safety",
+		    Fun(
+		      params,
+		      requires,
+		      tblock_safety,
+		      LTrue,
+		      excep_posts_for_others None excep_behaviors
+		    ))::acc
 	      in
 		(* user behaviors *)
 	      let acc = 
@@ -1927,12 +1933,11 @@ let tr_fun f spec body acc =
 		      (fun (id,b,e) acc ->
 			 let d =
 			   Def(
-			     (if id = "safety" then f.jc_fun_info_name ^ "_" ^ id else
-			       f.jc_fun_info_name ^ "_ensures_" ^ id),
+			     f.jc_fun_info_name ^ "_ensures_" ^ id,
 			     Fun(
 			       params,
 			       requires,
-			       (if id = "safety" then tblock_safety else tblock),
+			       tblock,
 			       e,
 			       excep_posts_for_others None excep_behaviors
 			     )

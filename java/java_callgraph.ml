@@ -174,7 +174,10 @@ let rec statement acc s : ('a list * 'b list) =
 	  (List.fold_left expr (expr b cond) updates)
 	  inits
 	in
-	let a = term (assertion a inv) dec in
+	let a = match dec with 
+	  | None -> a 
+	  | Some dec -> term (assertion a inv) dec 
+	in
 	  statement (a, b) body
     | JSfor_decl (inits, cond, inv, dec, updates, body)-> 
 	let (a,b) = acc in
@@ -183,12 +186,18 @@ let rec statement acc s : ('a list * 'b list) =
 	  (List.fold_left expr (expr b cond) updates)
 	  inits
 	in
-	let a = term (assertion a inv) dec in
+	let a = match dec with 
+	  | None -> a 
+	  | Some dec -> term (assertion a inv) dec 
+	in
 	  statement (a,b) body
     | JSwhile (cond, inv, dec, body)-> 
 	let (a,b) = acc in
 	let b = expr b cond in
-	let a = term (assertion a inv) dec in
+	let a = match dec with 
+	  | None -> a 
+	  | Some dec -> term (assertion a inv) dec 
+	in
 	statement (a,b) body
     | JSvar_decl (vi, init, s)-> 
 	let (a,b)=acc in
