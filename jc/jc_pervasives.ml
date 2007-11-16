@@ -108,44 +108,6 @@ let is_bitwise_unary_op = function
   | Ubw_not -> true
   | _ -> false
 
-
-let type_term t ty = {
-  jc_term_node = t;
-  jc_term_type = ty;
-  jc_term_loc = Loc.dummy_position;
-}
-
-let rec is_constant_term t =
-  match t.jc_term_node with
-    | JCTrange (None, None) (* CORRECT ? *)
-    | JCTconst _ -> true
-    | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
-    | JCTapp _ | JCTold _ | JCToffset _
-    | JCTinstanceof _ | JCTcast _ | JCTif _ -> false
-    | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
-	is_constant_term t1 && is_constant_term t2
-    | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
-	is_constant_term t
-
-let rec is_constant_assertion a =
-  match a.jc_assertion_node with
-    | JCAtrue | JCAfalse -> true
-    | JCArelation (t1, _, t2) -> 
-	is_constant_term t1 && is_constant_term t2
-    | JCAand al | JCAor al ->
-	List.for_all is_constant_assertion al
-    | JCAimplies (a1, a2) | JCAiff (a1, a2) ->
-	is_constant_assertion a1 && is_constant_assertion a2
-    | JCAnot a | JCAquantifier (_, _, a) | JCAold a 
-	-> is_constant_assertion a
-    | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAtagequality _
-	-> false
-    | JCAbool_term t -> is_constant_term t
-    | JCAif (t, a1, a2) ->
-	is_constant_term t &&
-	  is_constant_assertion a1 &&
-	  is_constant_assertion a2
-
 (* native types *)
 
 let unit_type = JCTnative Tunit
@@ -307,6 +269,30 @@ let rec list_compare comp ls1 ls2 = match ls1,ls2 with
       let compx = comp x1 x2 in 
       if compx = 0 then list_compare comp r1 r2 else compx
 
+
+
+(* terms *)
+
+let type_term t ty = {
+  jc_term_node = t;
+  jc_term_type = ty;
+  jc_term_loc = Loc.dummy_position;
+}
+
+let zerot = type_term (JCTconst (JCCinteger "0")) integer_type
+
+let rec is_constant_term t =
+  match t.jc_term_node with
+    | JCTrange (None, None) (* CORRECT ? *)
+    | JCTconst _ -> true
+    | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
+    | JCTapp _ | JCTold _ | JCToffset _
+    | JCTinstanceof _ | JCTcast _ | JCTif _ -> false
+    | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
+	is_constant_term t1 && is_constant_term t2
+    | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
+	is_constant_term t
+
 let term_num t = match t.jc_term_node with
   | JCTconst _ -> 1
   | JCTvar _ -> 3
@@ -418,6 +404,24 @@ let make_and al =
   in
   raw_asrt anode
 
+let rec is_constant_assertion a =
+  match a.jc_assertion_node with
+    | JCAtrue | JCAfalse -> true
+    | JCArelation (t1, _, t2) -> 
+	is_constant_term t1 && is_constant_term t2
+    | JCAand al | JCAor al ->
+	List.for_all is_constant_assertion al
+    | JCAimplies (a1, a2) | JCAiff (a1, a2) ->
+	is_constant_assertion a1 && is_constant_assertion a2
+    | JCAnot a | JCAquantifier (_, _, a) | JCAold a 
+	-> is_constant_assertion a
+    | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAtagequality _
+	-> false
+    | JCAbool_term t -> is_constant_term t
+    | JCAif (t, a1, a2) ->
+	is_constant_term t &&
+	  is_constant_assertion a1 &&
+	  is_constant_assertion a2
 
 (* fun specs *)
 
