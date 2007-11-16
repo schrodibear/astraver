@@ -1853,6 +1853,8 @@ mod\_trans mod\_access mod\_after\_new
 \section{Requirements}
 \label{app:requirements}
 
+NEED UPDATE
+
 User requirements: knowing how to perform proofs using the Coq
 system. Knowing how to write JML specifications.
 
@@ -1864,7 +1866,7 @@ compiler, version 3.04 or higher.
 
 \subsection{From the sources}
 
-Get a copy of sources at the web page. 
+Get a copy of sources at the web page \url{http://why.lri.fr/}. 
 
 Decompress the archive in a directory of your choice.
 
@@ -1875,68 +1877,56 @@ make
 make install
 \end{verbatim}
 
-\subsection{Windows binary}
+\subsection{Binaries}
 
-Not yet available. Please ask if you need it urgently.
-% Run the auto-installable krakatoa-\textsl{version}-win.exe
-
-\subsection{Unix binaries}
-
-Not yet available. Please ask if you need it urgently.
-%Get the suitable binary krakatoa-\textsl{version}-\textsl{ostype}.gz
-
-\subsection{GNU/Linux i386 packages}
-
-Not yet available. Please ask if you need it urgently.
-%RPM package: krakatoa-\textsl{version}-i386.rpm
-
-%Debian package: krakatoa-\textsl{version}-i386.deb
-
+Please look at the web page \url{http://why.lri.fr/} for binaries for
+popular architectures. Krakatoa is distributed as part of the Why
+debian package, available on standard repositories of debian-based
+distributions.
+ 
 \section{Summary of features and known limitations}
 \label{sec:features}
 
 \begin{itemize}
-\item No checking of arithmetic overflow
+%\item No checking of arithmetic overflow
 
 \item Unsupported kind of statements in translation: ...
 
 \item exception NullPointerException and ArrayOutOfBoundsException are
 required NOT to be thrown, and consequently should not be catched.
 
-\item Method parameters are not modifiable.
+%\item Method parameters are not modifiable.
 
 \item For recursive or mutually recursive methods, only partial
 correctness is guaranteed.
 
-\item some valid Java identifiers should not be used in your programs,
-  unless some name clashes may occur: identifiers starting by
-  \verb|krak| ;
-  names introduced in the generated model: \verb|access|,
-  \verb|update|, etc. ; keywords of \Why: result, parameter, etc.
+%\item some valid Java identifiers should not be used in your programs,
+%  unless some name clashes may occur: identifiers starting by
+%  \verb|krak| ;
+%  names introduced in the generated model: \verb|access|,
+%  \verb|update|, etc. ; keywords of \Why: result, parameter, etc.
 \end{itemize}
 
 \section{Contacts}
 
-The web page for Krakatoa is at URL
-\begin{verbatim}
-http://krakatoa.lri.fr/
-\end{verbatim}
+The web page for Krakatoa is at URL \url{http://krakatoa.lri.fr/} and
+the wbe page for the Why platform in general is at
+\url{http://why.lri.fr}.
 
 For general questions regarding the use of the tool, please use the
-Krakatoa mailing list. You need to subscribe to the list before
-sending a message to it. To subscribe, send a mail to
-\begin{verbatim}
-majordomo@lri.fr
-\end{verbatim}
-with 
-\begin{verbatim}
-subscribe krakatoa
-\end{verbatim}
-in the body of the message. 
+Why mailing list. You need to subscribe to the list before sending a
+message to it. To subscribe, follow the instructions given on page
+\url{http://lists.gforge.inria.fr/cgi-bin/mailman/listinfo/why-discuss}
 
-Authors may be contacted directly at the following addresses:
-\verb|Claude.Marche@lri.fr|, \verb|Christine.Paulin@lri.fr| and 
-\verb|Xavier.Urbain@lri.fr|.
+For bug reports, please use the bug tracking system at
+\url{https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse}. For
+security reasons, you need to register before submitting a new
+bug. Please create an account there, where you can put "ProVal" for
+the required field "INRIA Research Project you work with or work in".
+
+In case if the mailing list above is not appropriate, you can contact
+the authors directly at the following address: \url{mailto:Claude dot
+  Marche at inria dot fr}.
 
 \cleardoublepage
 
