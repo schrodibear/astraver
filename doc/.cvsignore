@@ -1,3 +1,6 @@
+*.pp
+*.makefile
+
 code.tex
 dep.ps
 doc.ps
@@ -17,6 +20,12 @@ caduceus.ilg
 caduceus.ind
 caduceus.hind
 caduceus.html
+krakatoa.idx
+krakatoa.ilg
+krakatoa.ind
+krakatoa.out
+krakatoa.pdf
+krakatoa.toc
 
 version.tex
 caduceus.rel

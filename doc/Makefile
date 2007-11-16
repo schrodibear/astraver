@@ -11,7 +11,11 @@ SRCFILES=../src/loc.mli ../src/logic.mli ../src/types.mli \
 
 KFILES=Lesson1_max.pp \
 	Lesson1_sqrt.pp Lesson1_sqrtbody.pp Lesson1_sqrtloopinv.pp \
-	Arrays_findMax.pp
+	Arrays_findMax.pp Arrays_findMax2.pp Arrays_shift.pp \
+	Purse.pp Purse_test1.pp Purse_test2.pp Purse2.pp \
+	Purse_withdraw2.pp \
+	Flag1.pp Flag_inv.pp Flag_isMonochrome.pp Flag_flag.pp \
+	Flag_swap.pp Flag_body.pp
 
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
@@ -62,8 +66,8 @@ pp.ml: pp.mll
 %.dvi: %.tex
 	latex $< && latex $<
 
-# %.ps: %.dvi
-# 	dvips -o $@ $<
+%.ps: %.dvi
+	dvips -o $@ $<
 
 clean::
 	rm -f *~ *.dvi *.log *.aux *.toc dep.ps doc.ps manual.ps caduceus.ps

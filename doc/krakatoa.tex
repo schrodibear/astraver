@@ -7,7 +7,7 @@
 \usepackage{times}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{color}
+%\usepackage{color}
 %\usepackage{mathptm}
 %\usepackage{xspace}
 \usepackage{makeidx}
@@ -36,21 +36,16 @@
 \chead{}
 \rhead[\fancyplain{}{\bfseries\leftmark}]{\fancyplain{}{\bfseries\thepage}}
 \lfoot{\fancyplain{}{C. March\'e}}
-\cfoot{}
-\rfoot{\fancyplain{}{Krakatoa tool, Proval, \today}}
+\cfoot{\fancyplain{}{Why platform, Krakatoa tool}}
+\rfoot{\fancyplain{}{ProVal, \today}}
 
 
 \begin{document}
 \sloppy
 \hbadness=9999
 
-\begin{titlepage}
-\title{The Krakatoa Tool\\Version~\krakatoaversion}
-\author{Claude March\'e\\
-~\\
-Proval, INRIA Futurs \& LRI, CNRS UMR 8623\\ 
-4, rue Jacques Monod, 91893 Orsay cedex, France}
-\end{titlepage}
+\whytitlepage{The Krakatoa Verification Tool\\~\\for \Java{} programs}{Tutorial and Reference Manual}{\krakatoaversion}{Claude March\'e}
+
 
 \tableofcontents
 
@@ -606,38 +601,7 @@ case, where one would want to have some sort of abbreviation. In JML,
 one way to do it is to use an auxiliary \emph{pure} method. 
 Here is what can be done on the \verb|findMax| example:
 
-\begin{java}
-
-\textit{
-    /*@ public normal_behavior
-      @   requires t != null && 0 <= l && l <= t.length;
-      @   ensures 
-      @      \result <==> 0 <= i && i < l &&
-      @      (\bs{}forall int j; 0 <= j && j < l; t[j] <= t[i]);
-      @*/}
-    public static /*@ pure @*/ boolean isMax(int[] t,int i,int l);
-
-\textit{
-    /*@ public normal_behavior
-      @   requires t != null && t.length >= 1;
-      @   ensures isMax(t,\result{},t.length) ;
-      @*/}
-    public static int findMax2(int[] t) \{
-        int m = t[0];
-        int r = 0;\textit{
-        /*@ loop_invariant 
-          @   1 <= i && i <= t.length && m == t[r] && isMax(t,r,i) ;
-          @ decreases t.length-i;
-          @*/}
-        for (int i=1; i < t.length; i++) \{
-            if (t[i] > m) \{
-                r = i; 
-                m = t[i];
-            \}
-        \}
-        return r;
-    \}
-\end{java}
+\input{Arrays_findMax2.pp}
 You see that the two assertions with \verb|\forall| have been replaced
 by a call to \verb|isMax|. In JML, this is allowed because the
 \verb|isMax| method is \emph{pure}, and declared as this, meaning that
@@ -697,28 +661,7 @@ as exercise.
 So far we have seen examples of array access, we now consider array
 modification. Here is a method which shifts to the right all elements
 of an array of integers, that we add to our \verb|Arrays| class:
-\begin{java}
-\textit{
-/*@ public normal_behavior
-  @  requires t != null ;
-  @  ensures 
-  @    (\bs{}forall int i; 0 < i && i < t.length ; t[i] == \old(t[i-1]));
-  @*/}
-public static void shift(int[] t) \{\textit{
-  /*@ loop_invariant 
-    @  j < t.length &&
-    @  (t.length > 0 ==>
-    @    (0 <= j && 
-    @    (\bs{}forall int i; 0 <= i && i <= j ; t[i] == \old(t[i])) &&
-    @    (\bs{}forall int i; 
-    @         j < i && i < t.length ; t[i] == \old(t[i-1]))));
-    @ decreases j;
-    @*/}
-  for (int j=t.length-1 ; j > 0 ; j--) \{
-      t[j] = t[j-1];
-  \}
-\}
-\end{java}
+\input{Arrays_shift.pp}
 For this method, five obligations are generated. The first three are
 done by \verb|intuition|.
 
@@ -880,31 +823,7 @@ assert (arraylength alloc t > 0); [ omega | intuition ].
 
 It is time to consider true \Java{} objects. Let's consider the
 following class that implements a very simple electronic purse.
-\begin{java}
-
-package tutorial;
-
-class Purse \{
-    
-    int balance;
-
-\textit{    //@ public invariant balance >= 0; }
-
-\textit{    /*@ public normal_behavior
-      @   requires s >= 0;
-      @*/}
-    public void credit(int s) \{
-        balance += s;
-    \}
-
-\textit{    /*@ public normal_behavior
-      @   requires s >= 0 && s <= balance;
-      @*/}
-    public void withdraw(int s) \{
-        balance -= s;
-    \}
-\}
-\end{java}
+\input{Purse.pp}
 
 \begin{figure}[t]
 \newcommand{\case}{\multicolumn{1}{|r|}{\phantom{0}}}
@@ -1056,19 +975,7 @@ need must be put in its specification.
 
 Let's consider this small test program that uses a purse, that we put
 in our class \verb|Purse|:
-\begin{java}
-\textit{
-    /*@ public normal_behavior
-      @   ensures \result == 150;
-      @*/}
-    public static int test1() \{
-        Purse p = new Purse();
-        p.credit(100);
-        p.withdraw(50);
-        p.credit(100);
-        return p.balance;
-    \}
-\end{java}
+\input{Purse_test1.pp}
 This method requires five proof obligations. The first, second and
 third are to check the pre-conditions of the calls
 \verb|p.credit(100)|, \verb|p.withdraw(50)| and \verb|p.credit(100)|
@@ -1123,21 +1030,7 @@ The last proof obligation is the post-condition of
 
 Let us consider now a slightly more complicated method, that involves
 two purses.
-\begin{java}
-\textit{    
-    /*@ public normal_behavior
-      @   ensures \result == 150;
-      @*/}
-    public static int test2() {
-        Purse p1 = new Purse();
-        Purse p2 = new Purse();
-        p1.credit(100);
-        p2.credit(200);
-        p1.withdraw(50);
-        p2.withdraw(100);
-        return p1.balance+p2.balance;
-    }
-\end{java}
+\input{Purse_test2.pp}
 The first obligation, after \verb|unfold Purse_invariant, Object_invariant; intuition|,
 results in: 
 \begin{small}
@@ -1186,34 +1079,7 @@ which is the default when no assignable clause is given. The same
 problem will occur for calls to \verb|credit| and \verb|withdraw|. So
 at this stage we have to go back and put an assignable clause to each
 of these methods. The \verb|Purse| class now looks like
-\begin{java}
-\textit{
-    /*@ public normal_behavior
-      @   modifiable balance;
-      @   ensures balance == 0;
-      @*/}
-    Purse() {
-        balance = 0;
-    }
-\textit{
-    /*@ public normal_behavior
-      @   requires s >= 0;
-      @   modifiable balance;
-      @   ensures balance == \old(balance)+s;
-      @*/}
-    public void credit(int s) {
-        balance += s;
-    }
-\textit{
-    /*@ public normal_behavior
-      @   requires s >= 0 && s <= balance;
-      @   modifiable balance;
-      @   ensures balance == \old(balance) - s;
-      @*/}
-    public void withdraw(int s) {
-        balance -= s;
-    }
-\end{java}
+\input{Purse2.pp}
 Of course, since we have strengthen the specifications of these
 methods, we need to prove them again, but fortunately, in that case,
 the lemmas added to the \Coq{} \verb|Hint| base are enough to prove
@@ -1394,36 +1260,7 @@ In our next lesson we now consider a program where an exception may be
 thrown. In fact, we slightly modify our \verb|Purse| class to allow a
 call to \verb|withdraw| with a too large argument, which will results
 in an exception in such a case. Here is the new method:
-\begin{java}
-
-class NoCreditException extends Exception \{
-\textit{    
-    /*@ public normal_behavior
-      @   modifiable \bs{}nothing;
-      @*/}
-    NoCreditException() \{\}
-\}
-
-class Purse \{
-\textit{    
-    /*@ public behavior
-      @   requires s >= 0;
-      @   modifiable balance;
-      @   ensures s <= \old(balance) && balance == \old(balance) - s;
-      @   signals (NoCreditException) 
-      @     s > \old(balance) && balance == \old(balance);
-      @*/}
-  
-    public void withdraw2(int s) throws NoCreditException \{
-        if (balance >= s) \{
-            balance -= s;
-        \}
-        else \{
-            throw new NoCreditException();
-        \}
-    \}
-\}
-\end{java}
+\input{Purse_withdraw2.pp}
 There are two obligations generated. The first is exactly the
 same as for the previous version of \verb|withdraw|, the second
 corresponds to the post-condition when the method ends in
@@ -1441,77 +1278,24 @@ elements occur first, then white ones, then red ones.  To keep things
 short, we consider we have an array of such colors. 
 
 We create a new class \verb|Flag| where we first define the colors:
-\begin{java}
-
-package tutorial;
-
-public class Flag \{
-  public static final int BLUE = 1, WHITE = 2, RED = 3;
-\textit{  //@ public normal_behavior
-  //@   ensures \result <==> (i == BLUE || i == WHITE || i == RED);}
-  public static \textit{/*@ pure @*/} boolean isColor(int i);
-\end{java}
+\input{Flag1.pp}
 Our algorithm will work on an array of colors, so we introduce an
 instance variable for this array, together with an invariant to
 specify that it is made of valid colors:
-\begin{java}
-
-public int t[];
-\textit{//@ public invariant  t != null && 
-//@    (\bs{}forall int k; 0 <= k && k < t.length; isColor(t[k]));}
-\end{java}
+\input{Flag_inv.pp}
 Then we want to specify a method \verb|flag| supposed to solve the
 problem. For this purpose, it is simpler to introduce a predicate
 \verb|isMonochrome| which says that some part \verb|t[i..j-1]| of our
 array is of the same color \verb|c|:
-\begin{java}
-\textit{
-/*@ public normal_behavior
-  @  requires 0 <= i && i <= j && j <= t.length;
-  @  ensures \result <==> (\bs{}forall int k; i <= k && k < j; t[k] == c);
-  @*/}
-public \textit{/*@ pure @*/} boolean isMonochrome(int i, int j, int c);
-\end{java}
+\input{Flag_isMonochrome.pp}
 The specification of our main method is then:
-\begin{java}
-\textit{
-/*@ public normal_behavior
-  @  ensures 
-  @   (\bs{}exists int b,r; isMonochrome(0,b,BLUE) && 
-  @    isMonochrome(b,r,WHITE) && isMonochrome(r,t.length,RED));
-  @*/}
-public void flag()
-\end{java}
+\input{Flag_flag.pp}
 To provide a body to the \verb|flag| method, it is nice to have a
 method \verb|swap| for permuting two elements of array \verb|t|. Here
 is its specification:
-\begin{java}
-\textit{
-/*@ public normal_behavior
-  @  requires   0 <= i && i < t.length && 0 <= j && j < t.length;
-  @  modifiable t[i],t[j];
-  @  ensures    t[i] == \bs{}old(t[j]) && t[j] == \bs{}old(t[i]);
-  @*/}
-public void swap(int i, int j);
-\end{java}
+\input{Flag_swap.pp}
 and here is the code we consider for \verb|flag|:
-\begin{java}
-
-public void flag() \{
- int b = 0, i = 0, r = t.length;
-\textit{ /*@ loop_invariant
-   @  (\bs{}forall int k; 0 <= k && k < t.length; isColor(t[k])) &&
-   @  0 <= b && b <= i && i <= r && r <= t.length &&
-   @  isMonochrome(0,b,BLUE) && isMonochrome(b,i,WHITE) &&
-   @  isMonochrome(r,t.length,RED);
-   @ decreases r - i; 
-   @*/}
- while (i < r) \{ switch (t[i]) \{
-  case BLUE:  swap(b, i); b++; i++; break;      
-  case WHITE: i++; break;
-  case RED:   r--; swap(r, i); break;
-  \}\}\}
-\end{java}
+\input{Flag_body.pp}
 
 For method \verb|flag|, ten obligations are generated. The first one,
 after %
@@ -1717,7 +1501,6 @@ Subst; Trivial.
 \end{verbatim}
 \end{small}
 
-\endinput
 \section{\texttt{assignable} clauses and loops}
 
 \index{assignable clause@\texttt{assignable} clause!in loop}
@@ -2159,11 +1942,11 @@ Authors may be contacted directly at the following addresses:
 
 \addcontentsline{toc}{chapter}{\bibname}
 \bibliographystyle{plain}
-\input{biblio-demons}
+\bibliography{./biblio}
 \cleardoublepage
 
 \addcontentsline{toc}{chapter}{\indexname}
-\input{manual.ind}
+\printindex
 \cleardoublepage
 
 \end{document}

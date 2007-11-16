@@ -6,10 +6,9 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \input{./version.tex}
+\input{./macros.tex}
 
 \newcommand{\caml}{\textsf{Caml}}
-\newcommand{\pvs}{\textsf{PVS}\index{PVS@\textsf{PVS}}}
-\newcommand{\coq}{\textsf{Coq}\index{Coq@\textsf{Coq}}}
 \newcommand{\ergo}{\textsf{Ergo}\index{Ergo@\textsf{Ergo}}}
 \newcommand{\yices}{\textsf{Yices}\index{Yices@\textsf{Yices}}}
 \newcommand{\harvey}{\textsf{haRVey}\index{haRVey@\textsf{haRVey}}}
@@ -21,11 +20,8 @@
 \newcommand{\cvclite}{\textsf{CVC Lite}\index{CVC Lite@\textsf{CVC Lite}}}
 \newcommand{\cvcthree}{\textsf{CVC 3}\index{CVC 3@\textsf{CVC 3}}}
 \newcommand{\zenon}{\textsf{Zenon}\index{Zenon@\textsf{Zenon}}}
-\newcommand{\krakatoa}{\textsf{Krakatoa}\index{Krakatoa@\textsf{Krakatoa}}}
 \newcommand{\caduceus}{\textsf{Caduceus}\index{Caduceus@\textsf{Caduceus}}}
-\newcommand{\java}{\textsc{Java}\index{Java@\textsf{Java}}}
 \newcommand{\jml}{\textsc{JML}\index{JML@\textsf{JML}}}
-\newcommand{\why}{\textsf{Why}}
 \newcommand{\te}[1]{\texttt{#1}}
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
 \newcommand{\indexnt}[1]{\index{#1@\textsl{#1}, grammar entry}}
@@ -42,18 +38,7 @@
 \begin{document}
 
 %%% coverpage
-\thispagestyle{empty}
-\begin{center}
-~\\[3cm]
-\rule\textwidth{0.1cm}\\[0.5cm]
-{\Huge\sf The WHY verification tool}\\[1cm]
-{\Large\sf Tutorial and Reference Manual}\\[0.1cm]
-\rule\textwidth{0.1cm}\\[1cm]
-Version \whyversion\\[3cm]
-Jean-Christophe Filli\^atre
-\vfill
-\today\\
-\end{center}
+\whytitlepage{The WHY verification tool}{Tutorial and Reference Manual}{\whyversion}{Jean-Christophe Filli\^atre}
 
 
 \tableofcontents
@@ -1389,8 +1374,6 @@ A theory $\Sigma$ is a finite list of declarations $\delta$ where
 
 \subsubsection{Typing}
 
-\newcommand{\kw}[1]{\ensuremath{\mathsf{#1}}}
-\newcommand{\wf}[1]{#1~\kw{wf}}
 \newcommand{\Subst}[2]{\ensuremath{\mathsf{Subst}(#1,#2)}}
 
 Well-formed types ($\Sigma\vdash\wf{\tau}$):
@@ -1623,19 +1606,12 @@ Then we have the following deduction rule for arithmetic:
 
 \subsection{Programs}\label{semantics:programs}
 
-\newcommand{\void}{\kw{void}}
 \newcommand{\pget}[1]{\ensuremath{\texttt{!}#1}}
 \newcommand{\pset}[2]{\ensuremath{#1~\texttt{:=}~#2}}
-\newcommand{\pref}[1]{\ensuremath{\kw{ref}~#1}}
 
-\newcommand{\taccess}[2]{\ensuremath{#1\texttt{[}#2\texttt{]}}}
-\newcommand{\tassign}[3]{\ensuremath{#1\texttt{[}#2\texttt{]}~\texttt{:=}~#3}}
-\newcommand{\faccess}[2]{\ensuremath{(\mathit{access}~#1~#2)}}
-\newcommand{\fupdate}[3]{\ensuremath{(\mathit{update}~#1~#2~#3)}}
 
 \newcommand{\pblock}[1]{\ensuremath{\kw{begin}~#1~\kw{end}}}
 \newcommand{\pseq}[2]{\ensuremath{#1\texttt{;}~#2}}
-\newcommand{\plabel}[2]{\ensuremath{#1\texttt{:}#2}}
 \newcommand{\ppre}[2]{\ensuremath{\{#1\}~#2}}
 \newcommand{\passert}[2]{\ensuremath{\kw{assert}~\{#1\};~#2}}
 \newcommand{\passume}[2]{\ensuremath{\{\kw{assume}~#1\}~#2}}
@@ -1655,20 +1631,18 @@ Then we have the following deduction rule for arithmetic:
 \newcommand{\pletin}[3]{\ensuremath{\kw{let}~#1~\texttt{=}~#2~\kw{in}~#3}}
 \newcommand{\pletref}[3]{\ensuremath{\kw{let}~#1~\texttt{=}~\kw{ref}~#2~\kw{in}~#3}}
 \newcommand{\praisex}[3]{\ensuremath{\kw{raise}~({#1}~{#2}):#3}}
-\newcommand{\exn}[2]{\ensuremath{\kw{exception}~#1~\kw{of}~#2}}
+\renewcommand{\exn}[2]{\ensuremath{\kw{exception}~#1~\kw{of}~#2}}
 \newcommand{\Exit}{\ensuremath{\mathit{Exit}}}
 \newcommand{\ptrywith}[4]{\ensuremath{\kw{try}~#1~\kw{with}~#2~#3\rightarrow#4~\kw{end}}}
 \newcommand{\pcoerce}[2]{\ensuremath{(#1:#2)}}
 
-\newcommand{\unit}{\kw{unit}}
 \newcommand{\tint}{\kw{int}}
-\newcommand{\tref}[1]{\ensuremath{#1~\mathsf{ref}}}
-\newcommand{\tarray}[1]{\ensuremath{#1~\kw{array}}}
+\renewcommand{\tarray}[1]{\ensuremath{#1~\kw{array}}}
 \newcommand{\tfun}[3]{\ensuremath{#1:#2\rightarrow#3}}
 
-\newcommand{\prepost}[3]{\ensuremath{\{#1\}\,#2\,\{#3\}}}
+\renewcommand{\prepost}[3]{\ensuremath{\{#1\}\,#2\,\{#3\}}}
 \newcommand{\prepostE}[4]{\ensuremath{\{#1\}\,#2\,\{#3 ~|~ E \Rightarrow #4\}}}
-\newcommand{\result}{\ensuremath{\mathit{result}}}
+\renewcommand{\result}{\ensuremath{\mathit{result}}}
 
 \newcommand{\ptrue}{\ensuremath{\top}}
 \newcommand{\pfalse}{\ensuremath{\kw{false}}}
@@ -1793,8 +1767,8 @@ function call), with a left-to-right evaluation order.
 \subsubsection{Weakest preconditions}\label{wp}
 \index{Weakest preconditions}
 
-\newcommand{\wpre}[2]{\ensuremath{\mathit{wp}(#1,#2)}}
-\newcommand{\wprx}[3]{\ensuremath{\mathit{wp}(#1,#2;#3)}}
+\renewcommand{\wpre}[2]{\ensuremath{\mathit{wp}(#1,#2)}}
+\renewcommand{\wprx}[3]{\ensuremath{\mathit{wp}(#1,#2;#3)}}
 \newcommand{\unref}[1]{#1}
 \newcommand{\old}[1]{\ensuremath{\mathtt{old}(#1)}}
 \newcommand{\at}[2]{\ensuremath{\mathtt{at}(#1,#2)}}

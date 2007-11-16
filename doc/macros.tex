@@ -1,4 +1,30 @@
 
+% common Why title page
+
+\newcommand{\whytitlepage}[4]{%
+\begin{titlepage}
+\begin{center}
+~\vfill
+\rule\textwidth{0.1cm}\\[0.5cm]
+\begin{Huge}\sffamily
+#1 % title
+\end{Huge}
+\\[1cm]
+\begin{Large}\sffamily
+#2
+\end{Large}
+\\[0.1cm]
+\rule\textwidth{0.1cm}\\[1cm]
+Version #3\\[3cm]
+#4
+\vfill
+\today\\
+INRIA Team-Project \emph{Proval} \url{http://proval.lri.fr} \\
+INRIA Futurs \& LRI, CNRS UMR 8623\\ 
+4, rue Jacques Monod, 91893 Orsay cedex, France
+\end{center}
+\end{titlepage}}
+
 \newcommand{\why}{\textsf{Why}}
 \newcommand{\Why}{\why}
 \newcommand{\java}{\textsc{Java}\index{Java@\textsf{Java}}}
@@ -7,6 +33,7 @@
 \newcommand{\Krakatoa}{\krakatoa}
 \newcommand{\coq}{\textsf{Coq}\index{Coq@\textsf{Coq}}}
 \newcommand{\Coq}{\coq}
+\newcommand{\pvs}{\textsf{PVS}\index{PVS@\textsf{PVS}}}
 
 %
 
@@ -15,7 +42,8 @@
 % types
 \newcommand{\bool}{\kw{bool}}
 \newcommand{\unit}{\kw{unit}}
-\newcommand{\tref}[1]{\ensuremath{#1~\kw{ref}}}
+%\newcommand{\tref}[1]{\ensuremath{#1~\kw{ref}}}
+\newcommand{\tref}[1]{\ensuremath{#1~\mathsf{ref}}}
 \newcommand{\tarray}[2]{\ensuremath{\kw{array}~#1~\kw{of}~#2}}
 
 % constructs
@@ -26,13 +54,18 @@
 \newcommand{\access}[1]{\ensuremath{!#1}}
 \newcommand{\assign}[2]{\ensuremath{#1~:=~#2}}
 \newcommand{\pref}[1]{\ensuremath{\kw{ref}~#1}}
-\newcommand{\taccess}[2]{\ensuremath{#1[#2]}}
-\newcommand{\tassign}[3]{\ensuremath{#1[#2]~:=~#3}}
+\newcommand{\taccess}[2]{\ensuremath{#1\texttt{[}#2\texttt{]}}}
+\newcommand{\tassign}[3]{\ensuremath{#1\texttt{[}#2\texttt{]}~\texttt{:=}~#3}}
 \newcommand{\faccess}[2]{\ensuremath{(\mathit{access}~#1~#2)}}
 \newcommand{\fupdate}[3]{\ensuremath{(\mathit{update}~#1~#2~#3)}}
+%\newcommand{\taccess}[2]{\ensuremath{#1[#2]}}
+%\newcommand{\tassign}[3]{\ensuremath{#1[#2]~:=~#3}}
+%\newcommand{\faccess}[2]{\ensuremath{(\mathit{access}~#1~#2)}}
+%\newcommand{\fupdate}[3]{\ensuremath{(\mathit{update}~#1~#2~#3)}}
 % \newcommand{\block}[1]{\ensuremath{\kw{begin}~#1~\kw{end}}}
 \newcommand{\seq}[2]{\ensuremath{#1;~#2}}
-\newcommand{\plabel}[2]{\ensuremath{#1:#2}}
+%\newcommand{\plabel}[2]{\ensuremath{#1:#2}}
+\newcommand{\plabel}[2]{\ensuremath{#1\texttt{:}#2}}
 \newcommand{\assert}[2]{\ensuremath{\kw{assert}~\{#1\};~#2}}
 \newcommand{\while}[4]{\ensuremath{\kw{while}~#1~\kw{do}~\{\kw{invariant}~#2~\kw{variant}~#3\}~#4~\kw{done}}}
 \newcommand{\ite}[3]{\ensuremath{\kw{if}~#1~\kw{then}~#2~\kw{else}~#3}}
