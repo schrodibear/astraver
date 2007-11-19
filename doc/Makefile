@@ -1,6 +1,6 @@
 HEVEA=hevea -charset ISO-8859-1
 
-all: manual.ps doc.ps caduceus.ps $(KFILES) krakatoa.pdf
+all: main.pdf manual.ps doc.ps caduceus.ps $(KFILES) krakatoa.pdf
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 
@@ -50,6 +50,9 @@ caduceus.html: caduceus.tex
 krakatoa.pdf: $(KFILES)
 	pdflatex krakatoa.tex
 
+main.pdf: 
+	pdflatex main.tex
+
 
 %.pp: %.tex pp.ml
 	ocaml pp.ml -color $< > $@
@@ -68,6 +71,19 @@ pp.ml: pp.mll
 
 %.ps: %.dvi
 	dvips -o $@ $<
+
+%.eps: %.dia
+	dia --filter=eps-builtin $^
+
+%.pdf: %.eps
+	epstopdf $^
+
+%.tex: %.dia
+	dia --filter=tex $^
+
+%.png: %.dia
+	dia --filter=png --size=2048,1536 $^
+
 
 clean::
 	rm -f *~ *.dvi *.log *.aux *.toc dep.ps doc.ps manual.ps caduceus.ps
