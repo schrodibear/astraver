@@ -1148,25 +1148,25 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	  ) acc vd.variable_decls
     | JPFvariable vd -> 
 	(*
-	vd.variable_modifiers : modifiers ;
-	vd.variable_type : type_expr ;
-	vd.variable_decls : variable_declarator list }
+	  vd.variable_modifiers : modifiers ;
+	  vd.variable_type : type_expr ;
+	  vd.variable_decls : variable_declarator list }
 	*)
 	let ty = type_type package_env type_env vd.variable_type in
-	(* Note: no need to check if it is static and final, because 
-	   it is implicitly the case (JLS,9.3, p 203) *)
-	List.fold_left
-	  (fun acc vd -> 
-	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
-	     let fi = new_field ~is_static:true ~is_final:true 
-	       (TypeInterface ii) ty' id 
-	     in
-	     Hashtbl.add field_prototypes_table fi.java_field_info_tag 
-	       vd.variable_initializer;
-	     fi::acc
-	  ) acc vd.variable_decls
+	  (* Note: no need to check if it is static and final, because 
+	     it is implicitly the case (JLS,9.3, p 203) *)
+	  List.fold_left
+	    (fun acc vd -> 
+	       let ty',(loc,id) = var_type_and_id ty vd.variable_id in
+	       let fi = new_field ~is_static:true ~is_final:true 
+		 (TypeInterface ii) ty' id 
+	       in
+		 Hashtbl.add field_prototypes_table fi.java_field_info_tag 
+		   vd.variable_initializer;
+		 fi::acc
+	    ) acc vd.variable_decls
     | _ -> acc
-
+	
 and get_interface_prototypes package_env type_env ii d =
   (* extends *)
   ii.interface_info_extends <-
@@ -1414,25 +1414,31 @@ and term package_env type_env current_type env e =
 	    match fa with
 	      | Primary_access (e1, f) -> 
 		  let te1 = termt e1 in
-		  begin
-		    match te1.java_term_type with
-		      | JTYclass(_,ci) ->
-			  begin
-			    try
-			      let fi = lookup_field (TypeClass ci) (snd f) in
-			      fi.java_field_info_type,JTfield_access(te1,fi)
-			    with
-				Not_found ->
-				  typing_error e1.java_pexpr_loc
-				    "not such field"
-			  end
-		      | _ ->
-			  typing_error e1.java_pexpr_loc
-			    "not a class"
-		  end
-		    
+		    begin
+		      match te1.java_term_type with
+			| JTYclass (_, ci) ->
+			    begin
+			      try
+				let fi = lookup_field (TypeClass ci) (snd f) in
+				  fi.java_field_info_type,JTfield_access(te1,fi)
+			      with
+				  Not_found ->
+				    typing_error e1.java_pexpr_loc
+				      "not such field"
+			    end
+			| JTYarray _ ->
+			    if (snd f) = "length" then
+			      integer_type, JTarray_length te1
+			    else
+			      typing_error e1.java_pexpr_loc
+				"not such field"
+			| _ ->
+			    typing_error e1.java_pexpr_loc
+			      "not a class"
+		    end
+		      
 	      | Super_access _ -> assert false (* TODO *)
-	  end	
+	  end
       | JPEif (_, _, _)-> assert false (* TODO *)
       | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
       | JPEassign_field (_, _, _)-> assert false (* TODO *)
@@ -1482,7 +1488,10 @@ and assertion package_env type_env current_type env e =
 	in
 	  a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
-    | JPEinstanceof (_, _)-> assert false (* TODO *)
+    | JPEinstanceof (e, ty) ->
+	let te = termt e and tty = type_type package_env type_env ty in
+	  if is_reference_type tty then JAinstanceof (te, tty) else
+	    typing_error e.java_pexpr_loc "unexpected type"
     | JPEcast (_, _)-> assert false (* TODO *)
     | JPEarray_access (_, _)-> assert false (* TODO *)
     | JPEarray_range (_, _,_)-> assert false (* TODO *)
@@ -3216,6 +3225,14 @@ let get_bodies package_env type_env cu =
   List.iter (type_decl package_env type_env) cu.cu_type_decls
 
 let type_specs package_env type_env =
+  Hashtbl.iter
+    (fun _ ti ->
+       match ti with 
+	 | TypeInterface ii ->
+	     List.iter (type_field_initializer package_env type_env (TypeInterface ii)) 
+	       ii.interface_info_fields
+	 | _ -> ())
+  type_table;
   Hashtbl.iter
     (fun tag (current_type, env, vi, invs) -> 
        match current_type with

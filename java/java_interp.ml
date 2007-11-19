@@ -522,7 +522,7 @@ let rec assertion a =
       | JAbin_obj(e1,op,e2) -> JCArelation(term e1, lobj_op op, term e2)
       | JAapp (fi, el)-> 
 	  JCAapp(get_logic_fun fi,List.map term el)
-      | JAquantifier (q, vi , a)-> 
+      | JAquantifier (q, vi, a)-> 
 	  let vi = create_var a.java_assertion_loc vi in
 	  JCAquantifier(quantifier q,vi,assertion a)
       | JAimpl (a1, a2)-> 
@@ -534,6 +534,12 @@ let rec assertion a =
       | JAand (a1, a2)-> 
 	  JCAand [assertion a1 ; assertion a2]
       | JAbool_expr t -> JCAbool_term(term t)
+      | JAinstanceof (t, ty) ->
+	  let ty = tr_type Loc.dummy_position ty in
+	    match ty with
+	      | JCTpointer (si, _, _) ->
+		  JCAinstanceof (term t, si)
+	      | _ -> assert false
 
   in { jc_assertion_loc = a.java_assertion_loc ; 
        jc_assertion_label = !lab;

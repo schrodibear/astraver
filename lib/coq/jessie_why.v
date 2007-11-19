@@ -109,7 +109,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A401:Set) (a:(alloc_table A401)) (p:(pointer A401))
+(*Why predicate*) Definition valid (A418:Set) (a:(alloc_table A418)) (p:(pointer A418))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -632,10 +632,43 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A437:Set) (A436:Set) (a:(alloc_table A436)) (m1:(memory A436 A437)) (m2:(memory A436 A437)) (l:(pset A436))
-  := (forall (p:(pointer A436)),
+(*Why predicate*) Definition not_assigns (A454:Set) (A453:Set) (a:(alloc_table A453)) (m1:(memory A453 A454)) (m2:(memory A453 A454)) (l:(pset A453))
+  := (forall (p:(pointer A453)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
+
+(*Why logic*) Definition full_separated :
+  forall (A1:Set), (pointer A1) -> (pointer A1) -> Prop.
+Admitted.
+Implicit Arguments full_separated.
+
+(*Why axiom*) Lemma full_separated_shift1 :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pointer A1)),
+    (forall (i:Z), ((full_separated p q) -> (full_separated p (shift q i)))))).
+Admitted.
+
+(*Why axiom*) Lemma full_separated_shift2 :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pointer A1)),
+    (forall (i:Z), ((full_separated p q) -> (full_separated (shift q i) p))))).
+Admitted.
+
+(*Why axiom*) Lemma full_separated_shift3 :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pointer A1)),
+    (forall (i:Z), ((full_separated q p) -> (full_separated (shift q i) p))))).
+Admitted.
+
+(*Why axiom*) Lemma full_separated_shift4 :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pointer A1)),
+    (forall (i:Z), ((full_separated q p) -> (full_separated p (shift q i)))))).
+Admitted.
 
 (*Why type*) Definition tag_table: Set ->Set.
 Admitted.
@@ -670,7 +703,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A443:Set) (a:(tag_table A443)) (p:(pointer A443)) (t:(tag_id A443))
+(*Why predicate*) Definition instanceof (A465:Set) (a:(tag_table A465)) (p:(pointer A465)) (t:(tag_id A465))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -698,7 +731,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A448:Set) (tag_table:(tag_table A448)) (mutable:(memory A448 (tag_id A448))) (this:(pointer A448))
+(*Why predicate*) Definition fully_packed (A470:Set) (tag_table:(tag_table A470)) (mutable:(memory A470 (tag_id A470))) (this:(pointer A470))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

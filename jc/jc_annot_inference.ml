@@ -567,7 +567,65 @@ let rec replace_vi_in_assertion srcvi targett a =
   let asrt = replace_vi_in_assertion srcvi targett in
   let anode = match a.jc_assertion_node with
     | JCArelation (t1, bop, t2) ->
-	JCArelation(term t1, bop, term t2)
+	JCArelation (term t1, bop, term t2)
+    | JCAnot a -> 
+	JCAnot (asrt a)
+    | JCAand al ->
+	JCAand (List.map asrt al)
+    | JCAor al ->
+	JCAor (List.map asrt al)
+    | JCAimplies (a1, a2) ->
+	JCAimplies (asrt a1, asrt a2)
+    | JCAiff (a1, a2) ->
+	JCAiff (asrt a1, asrt a2)
+    | JCAapp (li, tl) ->
+	JCAapp (li, List.map term tl)
+    | JCAquantifier (qt, vi, a) ->
+	JCAquantifier (qt, vi, asrt a)
+    | JCAold a ->
+	JCAold (asrt a)      
+    | JCAinstanceof (t, st) ->
+	JCAinstanceof (term t, st)
+    | JCAbool_term t ->
+	JCAbool_term (term t)
+    | JCAif (t, a1, a2) ->
+	JCAif (term t, asrt a1, asrt a2)
+    | JCAmutable (t, st, tag) ->
+	JCAmutable (term t, st, tag)
+    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+  in
+  { a with jc_assertion_node = anode; }
+
+
+(* comparison on names (vs. comparison by tag in 'replace_term_in_term' ) *)
+let rec switch_vis_in_term srcvi targetvi t =
+  let term = switch_vis_in_term srcvi targetvi in
+  let node = match t.jc_term_node with
+    | JCTconst c -> JCTconst c
+    | JCTvar vi -> 
+	if vi.jc_var_info_name = srcvi.jc_var_info_name then
+	  JCTvar targetvi else JCTvar vi
+    | JCTshift (t1, t2) -> JCTshift (term t1, term t2)
+    | JCTsub_pointer (t1, t2) -> JCTsub_pointer (term t1, term t2)
+    | JCTderef (t, fi) -> JCTderef (t, fi)
+    | JCTbinary (t1, bop, t2) -> JCTbinary (term t1, bop, term t2)
+    | JCTunary (op, t) -> JCTunary (op, term t)
+    | JCTapp (li, tl) -> JCTapp (li, List.map term tl)
+    | JCTold t -> JCTold (term t)
+    | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
+    | JCTinstanceof (t, si) -> JCTinstanceof (term t, si)
+    | JCTcast (t, si) -> JCTcast (term t, si)
+    | JCTif (t1, t2, t3) -> JCTif (t1, t2, t3)
+    | JCTrange (to1, to2) -> JCTrange (Option_misc.map term to1, Option_misc.map term to2)
+  in
+    { t with jc_term_node = node; }
+ 
+let rec switch_vis_in_assertion srcvi targetvi a = 
+  let term = switch_vis_in_term srcvi targetvi in
+  let asrt = switch_vis_in_assertion srcvi targetvi in
+  let anode = match a.jc_assertion_node with
+    | JCArelation (t1, bop, t2) ->
+	JCArelation (term t1, bop, term t2)
     | JCAnot a -> 
 	JCAnot (asrt a)
     | JCAand al ->
@@ -2119,14 +2177,32 @@ and intern_ai_statement iaio abs curinvs s =
 	      end
       | JCScall (vio, fi, el, s) ->
 	  begin
-	    if Jc_options.interprocedural then
-	      begin match iaio with
-		| None -> () (* last iteration: precondition for [fi] already inferred *)
-		| Some iai -> 
-		    let copy_pre = Abstract1.copy mgr pre in
-		    ai_inter_function_call mgr iai abs copy_pre fi el
-	      end;
-	    ai_statement iaio abs curinvs s;
+	    (* add postcondition of [fi] to pre *)
+	    let _, fs, _ = Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag in
+	    let normal_behavior =
+	      List.fold_left
+		(fun acc (_, b) ->
+		   if b.jc_behavior_throws = None && b.jc_behavior_assumes = None then
+		     make_and [b.jc_behavior_ensures; acc] else acc)
+		true_assertion
+		fs.jc_fun_behavior
+	    in
+	      let normal_behavior = 
+		match vio with
+		  | None -> normal_behavior
+		  | Some vi ->
+		      let result_vi = var ~unique:false vi.jc_var_info_type "\\result" in
+			switch_vis_in_assertion result_vi vi normal_behavior 
+	      in
+		test_assertion mgr pre normal_behavior;
+		if Jc_options.interprocedural then
+		  begin match iaio with
+		    | None -> () (* last iteration: precondition for [fi] already inferred *)
+		    | Some iai -> 
+			let copy_pre = Abstract1.copy mgr pre in
+			  ai_inter_function_call mgr iai abs copy_pre fi el
+		  end;
+		ai_statement iaio abs curinvs s;
 	  end
     end;
     let normal = curinvs.jc_absinv_normal in

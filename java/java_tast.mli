@@ -29,18 +29,19 @@ and term =
 type quantifier = Java_ast.quantifier
 
 type assertion_node =
-    | JAtrue
-    | JAfalse
-    | JAnot of assertion 
-    | JAand of assertion * assertion
-    | JAor of assertion * assertion
-    | JAimpl of assertion * assertion
-    | JAiff of assertion * assertion
-    | JAquantifier of quantifier * java_var_info * assertion
-    | JAbool_expr of term
-    | JAbin of term * base_type * bin_op * term   
-    | JAbin_obj of term * bin_op * term   
-    | JAapp of java_logic_info * term list
+  | JAtrue
+  | JAfalse
+  | JAnot of assertion 
+  | JAand of assertion * assertion
+  | JAor of assertion * assertion
+  | JAimpl of assertion * assertion
+  | JAiff of assertion * assertion
+  | JAquantifier of quantifier * java_var_info * assertion
+  | JAbool_expr of term
+  | JAbin of term * base_type * bin_op * term   
+  | JAbin_obj of term * bin_op * term   
+  | JAapp of java_logic_info * term list
+  | JAinstanceof of term * java_type
 
 and assertion =
     { java_assertion_node : assertion_node;

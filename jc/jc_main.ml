@@ -59,7 +59,7 @@ let main () =
 		Jc_typing.logic_functions_table;
 	      *)
 	      let vil = Jc_norm.static_variables Jc_typing.variables_table in
-	      Hashtbl.iter 
+	      Hashtbl.iter
 		(fun tag (f,s,b) -> 
 		   let (s,b) = Jc_norm.code_function (f, s, b) vil in
 		     Hashtbl.add Jc_norm.functions_table tag (f, s, b))
@@ -223,8 +223,6 @@ let main () =
 	  let d_funs = 
 	    Hashtbl.fold 
 	      (fun _ (f,s,b) acc ->
-		 printf "Generating Why function %s@."
-		   f.Jc_fenv.jc_fun_info_final_name;
 		 Jc_interp.tr_fun f s b acc)
 	      Jc_norm.functions_table
 	      d_axioms

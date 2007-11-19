@@ -1878,7 +1878,9 @@ let tr_fun f spec body acc =
 	(* function was only declared *)
 	why_param :: acc
     | Some body ->
-	if Jc_options.verify <> [] && not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) then why_param :: acc else
+	if Jc_options.verify <> [] && 
+	  not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) then 
+	    why_param :: acc else
 	    (* why functions for each behaviors *)
 	    let params = match f.jc_fun_info_parameters with
 	      | [] -> ["tt", unit_type]
@@ -1901,6 +1903,8 @@ let tr_fun f spec body acc =
 		(match f.jc_fun_info_return_type with
 		   | JCTnative Tunit -> true
 		   | _ -> false);		
+	      printf "Generating Why function %s@."
+		f.Jc_fenv.jc_fun_info_final_name;
 	      (* default behavior *)
 	      let body_safety = statement_list ~threats:true body in
 	      let tblock =
