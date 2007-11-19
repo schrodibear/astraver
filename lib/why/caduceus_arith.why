@@ -308,7 +308,7 @@ axiom full_separated_shift3 :
   forall p: 'z pointer. forall q : 'z pointer. forall i: int.
     full_separated(q,p) -> full_separated(shift(q,i),p)
 
-axiom full_separated_shift3 :
+axiom full_separated_shift4 :
   forall p: 'z pointer. forall q : 'z pointer. forall i: int.
     full_separated(q,p) -> full_separated(p,shift(q,i))
 

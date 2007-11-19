@@ -3,11 +3,10 @@ axiom div_int_euclid :
   forall i:int. forall j:int [i/j].
     i>=0 and j>0 -> (i-j+1 <= j*(i/j) and j*(i/j) <= i)
 
-(****************************
 
- pointers, allocation, validity 
-
-*********************************)
+(*****************************************************************************)
+(* pointers, allocation, validity                                            *)
+(*****************************************************************************)
 
 type 't alloc_table
 
@@ -49,11 +48,9 @@ parameter neq_pointer :
   p: 't pointer -> q: 't pointer -> {} bool { if result then p<>q else p=q }
 
 
-(**************************************
-
-heap memories, select and store
-
-****************************)
+(*****************************************************************************)
+(* heap memories, select and store                                           *)
+(*****************************************************************************)
 
 type ('t,'v) memory
 
@@ -75,11 +72,9 @@ axiom select_store_neq :
     p1 <> p2 -> select(store(m,p1,a),p2) = select(m,p2)
 
 
-(****************************
-
-access and update side-effect functions
-
-***************************)
+(*****************************************************************************)
+(* access and update side-effect functions                                   *)
+(*****************************************************************************)
 
 (* normal access *)
 parameter acc_ : 
@@ -264,12 +259,9 @@ parameter rsafe_rbound_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 
-(*************
-
-memory locations, not_assigns predicate
-
-***************)
-
+(*****************************************************************************)
+(* memory locations, not_assigns predicate, separation                       *)
+(*****************************************************************************)
 
 type 't pset
 
@@ -341,12 +333,28 @@ predicate not_assigns
     forall p:'t pointer. 
       valid(a,p) and not in_pset(p,l) -> select(m2,p)=select(m1,p)
 
-(*******************
+logic full_separated : 't pointer, 't pointer -> prop
 
-  lattice of structures
+axiom full_separated_shift1 :
+  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
+    full_separated(p,q) -> full_separated(p,shift(q,i))
+
+axiom full_separated_shift2 :
+  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
+    full_separated(p,q) -> full_separated(shift(q,i),p)
+
+axiom full_separated_shift3 :
+  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
+    full_separated(q,p) -> full_separated(shift(q,i),p)
+
+axiom full_separated_shift4 :
+  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
+    full_separated(q,p) -> full_separated(p,shift(q,i))
 
 
-**********************)
+(*****************************************************************************)
+(* lattice of structures                                                     *)
+(*****************************************************************************)
 
 (*****
 typeof gives the dynamic type of an object.
@@ -409,11 +417,10 @@ axiom bottom_tag_axiom:
   forall t: 't tag_id.
     subtag(t, bottom_tag)
 
-(****************************
 
-structure invariants
-
-***************************)
+(*****************************************************************************)
+(* structure invariants                                                      *)
+(*****************************************************************************)
 
 predicate fully_packed(
   tag_table: 'a tag_table,
@@ -422,12 +429,9 @@ predicate fully_packed(
     select(mutable, this) = typeof(tag_table, this)
 
 
-(*******************
-
-  default values
-
-
-**********************)
+(*****************************************************************************)
+(* default values                                                            *)
+(*****************************************************************************)
 
 (* already in Why
 parameter any_int : unit -> {} int {}
@@ -436,12 +440,9 @@ parameter any_int : unit -> {} int {}
 parameter any_pointer: unit -> {} 'z pointer { true }
 
 
-(*******************
-
-  bitwise operations
-
-
-**********************)
+(*****************************************************************************)
+(* bitwise operations                                                        *)
+(*****************************************************************************)
 
 logic bw_compl : int -> int
 
@@ -458,12 +459,9 @@ logic lsr : int,int -> int
 logic asr : int,int -> int
 
 
-(*******************
-
-  dynamic allocation/deallocation
-
-
-**********************)
+(*****************************************************************************)
+(* dynamic allocation/deallocation                                           *)
+(*****************************************************************************)
 
 logic alloc_extends : 't alloc_table, 't alloc_table -> prop
 
@@ -519,10 +517,8 @@ parameter free_parameter :
   { offset_max(a,p) < offset_min(a,p) }
 
 
-(************
-
-exceptions for control flow handling
-
-*********)
+(*****************************************************************************)
+(* exceptions for control flow handling                                      *)
+(*****************************************************************************)
 
 exception Return

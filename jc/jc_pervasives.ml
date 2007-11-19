@@ -189,6 +189,7 @@ let empty_effects =
     jc_effect_tag_table = StringSet.empty;
     jc_effect_memories = FieldSet.empty;
     jc_effect_globals = VarSet.empty;
+    jc_effect_through_params = VarSet.empty;
     jc_effect_mutable = StringSet.empty;
     jc_effect_committed = StringSet.empty;
   }
@@ -216,6 +217,7 @@ let make_logic_fun name ty =
   }
 
 let real_of_integer = make_logic_fun "real_of_int" real_type
+let full_separated = make_logic_fun "full_separated" null_type
 
 (* logic predicates *)
 
@@ -432,7 +434,18 @@ let default_behavior = {
   jc_behavior_ensures = raw_asrt JCAtrue
 }
 
+let rec skip_shifts e = match e.jc_expr_node with
+  | JCEshift(e,_) -> skip_shifts e
+  | _ -> e
 
+let rec skip_term_shifts t = match t.jc_term_node with
+  | JCTshift(t,_) -> skip_term_shifts t
+  | _ -> t
+
+let rec skip_tloc_range t = match t with
+  | JCLSrange(t,_,_) -> skip_tloc_range t
+  | _ -> t
+  
 (*
   Local Variables: 
   compile-command: "LC_ALL=C make -C .. bin/jessie.byte"

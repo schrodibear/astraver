@@ -276,6 +276,16 @@ let bin_arg_type loc = function
   | Beq_bool | Bneq_bool -> boolean_type
   | Bneq_pointer | Beq_pointer -> assert false
 
+let equality_op_for_type = function
+  | JCTnative Tunit -> assert false
+  | JCTnative Tboolean -> "eq_bool"
+  | JCTnative Tinteger -> "eq_int"
+  | JCTnative Treal -> "eq_real"
+  | JCTlogic s -> (* TODO *) assert false
+  | JCTenum ei -> "eq_int"
+  | JCTpointer _ -> "eq_pointer"
+  | JCTnull ->  "eq_pointer"
+
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
 let safe_fun_enum_of_int n = "safe_" ^ n.jc_enum_info_name ^ "_of_integer_"
 let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
@@ -515,7 +525,10 @@ let rec assertion label oldlabel a =
 		  term_coerce t2.jc_term_loc t 
 		    t2.jc_term_type t2'])
       | JCAapp(f,l) -> 
-	  begin try
+	  (* No type verification for full_separated for the moment. *)
+	  if f.jc_logic_info_name = "full_separated" then
+	    make_logic_pred_call f (List.map ft l)
+	  else begin try
 	    make_logic_pred_call f 
 	      (List.map2 
 		 (fun vi t -> 
@@ -638,7 +651,58 @@ let tr_logic_fun li ta acc =
 	  Logic(false, li.jc_logic_info_name, params_reads, ret)
       (* Other *)
       | _ -> assert false
-  in decl :: acc
+  in 
+  let acc = decl :: acc in
+  (* full_separated axioms. *)
+  let sep_preds = 
+    List.fold_left (fun acc vi ->
+      match vi.jc_var_info_type with
+	| JCTpointer(st,_,_) -> 
+	    LPred("full_separated",[LVar "tmp"; LVar vi.jc_var_info_final_name])
+	    :: acc
+	| _ -> acc
+    ) [] li.jc_logic_info_parameters
+  in
+  if List.length sep_preds = 0 then acc else
+    let params_names = List.map fst params_reads in
+    let normal_params = List.map (fun name -> LVar name) params_names in
+    FieldSet.fold (fun fi acc ->
+      let update_params = 
+	List.map (fun name ->
+	  if name = field_memory_name fi then
+	    LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
+	  else LVar name
+	) params_names
+      in
+      let a = 
+	match li.jc_logic_info_result_type with
+	  | None ->
+	      LImpl(
+		make_and_list sep_preds,
+		LIff(
+		  LPred(li.jc_logic_info_name,normal_params),
+		  LPred(li.jc_logic_info_name,update_params)))
+	  | Some rety ->
+	      LImpl(
+		make_and_list sep_preds,
+		LPred(equality_op_for_type rety,[
+		  LApp(li.jc_logic_info_name,normal_params);
+		  LApp(li.jc_logic_info_name,update_params)]))
+      in
+      let a = 
+	List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+      in
+      let a = 
+	LForall(
+	  "tmp",pointer_type fi.jc_field_info_struct,
+	  LForall(
+	    "tmpval",tr_base_type fi.jc_field_info_type,
+	    a))
+      in
+      Axiom(
+	"full_separated_" ^ li.jc_logic_info_name ^ "_" ^ fi.jc_field_info_name,
+	a) :: acc
+    ) li.jc_logic_info_effects.jc_effect_memories acc
   
 (*
 let tr_predicate li p acc =
@@ -1978,7 +2042,16 @@ let tr_fun f spec body acc =
 let tr_logic_type id acc = Type(id,[])::acc
 
 let tr_axiom id p acc = 
-  Axiom(id,assertion None "" p)::acc
+  let a = assertion None "" p in
+  let ef = Jc_effect.assertion empty_effects p in
+  let a =
+    FieldSet.fold (fun fi a -> 
+      LForall (field_memory_name fi, memory_field fi, a)
+    ) ef.jc_effect_memories a 
+  in
+  (* How to add quantification on other effects (alloc, tag) without knowing 
+   * their type ? *)
+  Axiom(id,a)::acc
 
 let tr_exception ei acc =
   Jc_options.lprintf "producing exception '%s'@." ei.jc_exception_info_name;

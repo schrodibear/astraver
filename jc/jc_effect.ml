@@ -23,7 +23,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.59 2007-11-15 19:05:09 nrousset Exp $ *)
+(* $Id: jc_effect.ml,v 1.60 2007-11-19 13:08:21 moy Exp $ *)
 
 
 open Jc_env
@@ -32,6 +32,9 @@ open Jc_fenv
 open Jc_ast
 open Jc_pervasives
 open Jc_iterators
+open Format
+open Pp
+
 
 let ef_union ef1 ef2 =
   { jc_effect_alloc_table = 
@@ -46,6 +49,9 @@ let ef_union ef1 ef2 =
     jc_effect_globals = 
       VarSet.union 
 	ef1.jc_effect_globals ef2.jc_effect_globals;
+    jc_effect_through_params = 
+      VarSet.union 
+	ef1.jc_effect_through_params ef2.jc_effect_through_params;
     jc_effect_mutable =
       StringSet.union
 	ef1.jc_effect_mutable ef2.jc_effect_mutable;
@@ -65,6 +71,10 @@ let add_memory_effect ef fi =
   
 let add_global_effect ef vi =
   { ef with jc_effect_globals = VarSet.add vi ef.jc_effect_globals } 
+
+let add_through_param_effect ef vi =
+  { ef with jc_effect_through_params = 
+      VarSet.add vi ef.jc_effect_through_params } 
   
 let add_alloc_effect ef a =
   { ef with jc_effect_alloc_table = StringSet.add a ef.jc_effect_alloc_table } 
@@ -87,6 +97,9 @@ let add_field_reads fef fi =
 let add_global_reads fef vi =
   { fef with jc_reads = add_global_effect fef.jc_reads vi }
 
+let add_through_param_reads fef vi =
+  { fef with jc_reads = add_through_param_effect fef.jc_reads vi }
+
 let add_alloc_reads fef a =
   { fef with jc_reads = add_alloc_effect fef.jc_reads a }
 
@@ -105,6 +118,9 @@ let add_field_writes fef fi =
 let add_global_writes fef vi =
   { fef with jc_writes = add_global_effect fef.jc_writes vi }
 
+let add_through_param_writes fef vi =
+  { fef with jc_writes = add_through_param_effect fef.jc_writes vi }
+
 let add_alloc_writes fef a =
   { fef with jc_writes = add_alloc_effect fef.jc_writes a }
 
@@ -122,6 +138,7 @@ let same_effects ef1 ef2 =
   && StringSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && FieldSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
+  && VarSet.equal ef1.jc_effect_through_params ef2.jc_effect_through_params
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
   && StringSet.equal ef1.jc_effect_committed ef2.jc_effect_committed
     
@@ -147,7 +164,23 @@ let rec term ef t =
     | JCToffset(_,t,st) ->
 	add_alloc_effect (term ef t) st.jc_struct_info_root
     | JCTapp (li, tl) -> 
-	ef_union li.jc_logic_info_effects ef
+	let ef = 
+	  List.fold_left2 (fun ef param arg ->
+	    if VarSet.mem param 
+	      li.jc_logic_info_effects.jc_effect_through_params then
+		match (skip_term_shifts arg).jc_term_node with
+		  | JCTvar vi ->
+		      if vi.jc_var_info_formal then 
+			add_through_param_effect ef vi 
+		      else ef
+		  | _ -> ef
+	    else ef
+	  ) ef li.jc_logic_info_parameters tl 
+	in
+	let efli = { 
+	  li.jc_logic_info_effects with jc_effect_through_params = VarSet.empty;
+	} in
+	ef_union efli ef
     | JCTderef (t, fi) ->
 	add_memory_effect ef fi
     | _ -> ef
@@ -198,7 +231,14 @@ let rec expr ef e =
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) st.jc_struct_info_root
     | JCEderef (e, f) -> 
-	add_field_reads (expr ef e) f
+	let ef = add_field_reads (expr ef e) f in
+	begin match (skip_shifts e).jc_expr_node with
+	  | JCEvar vi ->
+	      if vi.jc_var_info_formal then 
+		add_through_param_reads ef vi 
+	      else ef
+	  | _ -> ef
+	end
     | JCEshift (e1, e2)
     | JCEsub_pointer (e1, e2) -> expr (expr ef e1) e2
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
@@ -236,13 +276,34 @@ let rec statement ef s =
   match s.jc_statement_node with
     | JCSreturn_void -> ef
     | JCScall (_, fi, le, s) -> 
-	let ef =
-	  fef_union fi.jc_fun_info_effects
-	    (List.fold_left expr ef le) 
+	let through_param ef = 
+	  List.fold_left2 (fun ef param arg ->
+	    if VarSet.mem param ef.jc_effect_through_params then
+	      match (skip_shifts arg).jc_expr_node with
+		| JCEvar vi ->
+		    if vi.jc_var_info_formal then 
+		      add_through_param_effect ef vi 
+		    else ef
+		| _ -> ef
+	    else ef
+	  ) empty_effects fi.jc_fun_info_parameters le
 	in
+	let effi = { 
+	  fi.jc_fun_info_effects with
+	    jc_reads = through_param fi.jc_fun_info_effects.jc_reads;
+	    jc_writes = through_param fi.jc_fun_info_effects.jc_writes;
+	} in
+	let ef = fef_union effi (List.fold_left expr ef le) in
 	statement ef s
     | JCSassign_heap (e1, fi, e2) ->
-	expr (expr (add_field_writes ef fi) e1) e2
+	let ef = expr (expr (add_field_writes ef fi) e1) e2 in
+	begin match (skip_shifts e1).jc_expr_node with
+	  | JCEvar vi ->
+	      if vi.jc_var_info_formal then 
+		add_through_param_writes ef vi 
+	      else ef	
+	  | _ -> ef
+	end
     | JCSassign_var (vi, e) ->
 	if vi.jc_var_info_static then
 	  add_global_writes (expr ef e) vi
@@ -326,13 +387,25 @@ let rec statement ef s =
     | JCSassert(_,a) -> ef
     | JCSblock l -> List.fold_left statement ef l
 
+(* Conservatively consider location is both read and written. *)
 let location ef l =
   match l with
     | JCLderef(t,fi) ->
-	add_field_writes ef fi
+	let ef = add_field_writes ef fi in
+	let ef = add_field_reads ef fi in
+	begin match skip_tloc_range t with
+	  | JCLSvar vi ->
+	      if vi.jc_var_info_formal then 
+		add_through_param_reads ef vi 
+	      else ef
+	  | _ -> ef
+	end
     | JCLvar vi ->
 	if vi.jc_var_info_static then
-	  add_global_writes ef vi
+	  begin
+	    let ef = add_global_writes ef vi in
+	    add_global_reads ef vi
+	  end
 	else ef
 
 let behavior ef (_, b) =
@@ -408,18 +481,13 @@ let fun_effects fi =
   let ef = spec ef s in
   let ef = Option_misc.fold_left (List.fold_left statement) ef b in
   let ef = List.fold_left parameter ef f.jc_fun_info_parameters in
-    if same_feffects ef f.jc_fun_info_effects then ()
-    else begin
-      fixpoint_reached := false;
-      f.jc_fun_info_effects <- ef
-    end
-      
-      
-open Format
-open Pp
-      
-
-let logic_effects funs =
+  if same_feffects ef f.jc_fun_info_effects then ()
+  else begin
+    fixpoint_reached := false;
+    f.jc_fun_info_effects <- ef
+  end
+    
+  let logic_effects funs =
   fixpoint_reached := false;
   while not !fixpoint_reached do
     fixpoint_reached := true;

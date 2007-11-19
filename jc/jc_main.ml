@@ -104,7 +104,13 @@ let main () =
 	let components = 
 	  Jc_callgraph.compute_components Jc_norm.functions_table
 	in
-	  
+
+	(* phase 5 : computation of effects *)
+	Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
+	Array.iter Jc_effect.logic_effects logic_components;
+	Jc_options.lprintf "\nstarting computation of effects of functions.@.";
+	Array.iter Jc_effect.function_effects components;
+
         (* optional phase: inference of annotations *)
 	if Jc_options.annot_infer then
 	  if Jc_options.interprocedural then
@@ -122,12 +128,6 @@ let main () =
 		 Jc_ai.code_function (f, s, b) 
 	      ) Jc_norm.functions_table;
 
-	  (* phase 5 : computation of effects *)
-	  Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
-	  Array.iter Jc_effect.logic_effects logic_components;
-	  Jc_options.lprintf "\nstarting computation of effects of functions.@.";
-	  Array.iter Jc_effect.function_effects components;
-	  
 	  (* phase 6 : checking structure invariants *)
 	  begin
 	    match Jc_options.inv_sem with

@@ -304,6 +304,30 @@ let rec destruct_pointer t =
     | JCTif _ -> assert false
     | JCTrange _ -> assert false
 
+let rec term_depends_on_term t1 t2 =
+  raw_sub_term t2 t1 ||
+    match t2.jc_term_node with
+      | JCTderef(t2',fi) ->
+	  let t2' = match fst(destruct_pointer t2') with
+	    | None -> t2' 
+	    | Some vi -> var_term vi
+	  in
+	  begin match t1.jc_term_node with
+	    | JCTapp(f,tls) -> 
+		List.fold_left2 (fun acc param arg -> acc ||
+		  term_depends_on_term arg t2'
+		  && 
+		  VarSet.mem param 
+		  f.jc_logic_info_effects.jc_effect_through_params
+		) false f.jc_logic_info_parameters tls
+	    | JCTderef(t1',fj) ->
+		(fi.jc_field_info_tag = fj.jc_field_info_tag)
+		&& term_depends_on_term t1' t2'
+	    | _ -> false
+	  end
+      | _ -> false
+
+
 
 (*****************************************************************************)
 (* Types.                                                                    *)
@@ -371,6 +395,7 @@ type 'a interprocedural_ai = {
 type weakest_postconditions = {
   jc_post_normal : assertion option;
   jc_post_exceptional : (exception_info * assertion) list;
+  jc_post_inflexion_vars : VarSet.t ref;
   jc_post_modified_vars : VarSet.t list;
 }
 
@@ -1477,6 +1502,10 @@ let collect_statement_asserts s =
 	collect_expr_asserts e1
     | JCScall(_,_,els,s) ->
 	List.flatten (List.map collect_expr_asserts els)
+    | JCSassert(Some "hint",a) -> 
+	(* Hints are not to be proved by abstract interpretation, 
+	   only added to help it. *)
+	[] 
     | JCSassert(_,a) -> 
 	[a]
     | JCSassign_heap (e1, fi, e2) ->
@@ -1537,67 +1566,71 @@ let rec collect_targets targets s =
 let rec test_assertion mgr pre a =
   let env = Abstract1.env pre in
   let rec extract_environment_and_dnf env a =
-    (* 'constant' assertions (eg: 0 <= 1) do not have to be tested (Nicolas) *)
-    if is_constant_assertion a then env, Dnf.true_ else
-      match a.jc_assertion_node with
-	| JCAtrue -> env, Dnf.true_
-	| JCAfalse -> env, Dnf.false_
-	| JCArelation (t1, Bneq_int, t2) ->
-	    let infa = raw_asrt(JCArelation(t1,Blt_int,t2)) in
-	    let supa = raw_asrt(JCArelation(t1,Bgt_int,t2)) in
-	    let env,dnf1 = extract_environment_and_dnf env infa in
-	    let env,dnf2 = extract_environment_and_dnf env supa in
-	      env,Dnf.make_or [dnf1;dnf2]
-	| JCArelation (t1, Bneq_pointer, t2) 
-	    when t2.jc_term_node = JCTconst JCCnull -> (* case <t != null> *)
-	    let si = si_of_pterm t1 in
-	    let offset_mint = type_term (JCToffset (Offset_min, t1, si)) integer_type in
-	    let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in
-	    let offset_maxt = type_term (JCToffset (Offset_max, t1, si)) integer_type in
-	    let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in
-	    let a = raw_asrt (JCAand [offset_mina; offset_maxa]) in
-	      extract_environment_and_dnf env a
-	| JCArelation _ ->
-	    let env, be = linstr_of_assertion env a in
-	    let env, bemin = offset_min_linstr_of_assertion env a in
-	    let env, bemax = offset_max_linstr_of_assertion env a in
-	    let dnf = Dnf.make_and [be; bemin; bemax] in
-	      env,dnf
-	| JCAand al ->
-	    List.fold_left (fun (env,dnf1) a ->
-			      let env,dnf2 = extract_environment_and_dnf env a in
-				env,Dnf.make_and [dnf1;dnf2]
-			   ) (env,Dnf.true_) al
-	| JCAor al ->
-	    List.fold_left (fun (env,dnf1) a ->
-			      let env,dnf2 = extract_environment_and_dnf env a in
-				env,Dnf.make_or [dnf1;dnf2]
-			   ) (env,Dnf.false_) al
-	| JCAnot a ->
-	    let nota = not_asrt a in
-	      begin match nota.jc_assertion_node with
-		| JCAnot _ -> env, Dnf.true_
-		| _ -> extract_environment_and_dnf env nota
-	      end
-	| JCAapp (li, tl) ->
-	    let _, term_or_assertion = 
-	      try Hashtbl.find Jc_typing.logic_functions_table li.jc_logic_info_tag
-	      with Not_found -> assert false 
-	    in
-	      begin
-		match term_or_assertion with
-		  | JCAssertion a ->
-		      let a = List.fold_left2
-			(fun a vi t ->
-			   replace_vi_in_assertion vi t a)
-			a li.jc_logic_info_parameters tl
-		      in
-			extract_environment_and_dnf env a
-		  | _ -> env, Dnf.true_
-	      end
-	| JCAimplies _ | JCAiff _
-	| JCAquantifier _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
-	| JCAif _ | JCAmutable _ | JCAtagequality _ -> env,Dnf.true_
+    match a.jc_assertion_node with
+      | JCAtrue -> env,Dnf.true_
+      | JCAfalse -> env,Dnf.false_
+      | _ when is_constant_assertion a ->
+	  (* 'constant' assertions (eg: 0 <= 1) do not have to be tested
+	     (Nicolas) *)
+	  env,Dnf.true_ 
+      | JCArelation(t1,Bneq_int,t2) ->
+	  let infa = raw_asrt(JCArelation(t1,Blt_int,t2)) in
+	  let supa = raw_asrt(JCArelation(t1,Bgt_int,t2)) in
+	  let env,dnf1 = extract_environment_and_dnf env infa in
+	  let env,dnf2 = extract_environment_and_dnf env supa in
+	  env,Dnf.make_or [dnf1;dnf2]
+      | JCArelation (t1, Bneq_pointer, t2) 
+	  when t2.jc_term_node = JCTconst JCCnull -> (* case <t != null> *)
+	  let si = si_of_pterm t1 in
+	  let offset_mint = type_term (JCToffset (Offset_min, t1, si)) integer_type in
+	  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in
+	  let offset_maxt = type_term (JCToffset (Offset_max, t1, si)) integer_type in
+	  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in
+	  let a = raw_asrt (JCAand [offset_mina; offset_maxa]) in
+	  extract_environment_and_dnf env a
+      | JCArelation _ ->
+	  let env, be = linstr_of_assertion env a in
+	  let env, bemin = offset_min_linstr_of_assertion env a in
+	  let env, bemax = offset_max_linstr_of_assertion env a in
+	  let dnf = Dnf.make_and [be; bemin; bemax] in
+	  env,dnf
+      | JCAand al ->
+	  List.fold_left (fun (env,dnf1) a ->
+	    let env,dnf2 = extract_environment_and_dnf env a in
+	    env,Dnf.make_and [dnf1;dnf2]
+	  ) (env,Dnf.true_) al
+      | JCAor al ->
+	  List.fold_left (fun (env,dnf1) a ->
+	    let env,dnf2 = extract_environment_and_dnf env a in
+	    env,Dnf.make_or [dnf1;dnf2]
+	  ) (env,Dnf.false_) al
+      | JCAnot a ->
+	  let nota = not_asrt a in
+	  begin match nota.jc_assertion_node with
+	  | JCAnot _ -> env, Dnf.true_
+	  | _ -> extract_environment_and_dnf env nota
+	  end
+      | JCAapp (li, tl) ->
+	  if debug then printf "[test_assertion] %a@." Jc_output.assertion a;
+	  if li.jc_logic_info_name = "full_separated" then env,Dnf.true_ else
+	  let _, term_or_assertion = 
+	    try Hashtbl.find Jc_typing.logic_functions_table li.jc_logic_info_tag
+	    with Not_found -> assert false 
+	  in
+	  begin
+	    match term_or_assertion with
+	      | JCAssertion a ->
+		  let a = List.fold_left2
+		    (fun a vi t ->
+		      replace_vi_in_assertion vi t a)
+		    a li.jc_logic_info_parameters tl
+		  in
+		  extract_environment_and_dnf env a
+	      | _ -> env, Dnf.true_
+	  end
+      | JCAimplies _ | JCAiff _
+      | JCAquantifier _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
+      | JCAif _ | JCAmutable _ | JCAtagequality _ -> env,Dnf.true_
   in
   let env, dnf = extract_environment_and_dnf env a in
     Abstract1.change_environment_with mgr pre env false;
@@ -1674,7 +1707,8 @@ let assign_expr mgr pre t e =
   let integer_vars = Array.to_list (fst (Environment.vars env)) in
   let forget_vars = 
     List.filter (fun va' ->
-      let t' = Vai.term va' in raw_strict_sub_term t t'
+      let t' = Vai.term va' in 
+      (not (raw_term_equal t t')) && term_depends_on_term t' t
     ) integer_vars
   in
   let forget_vars = Array.of_list forget_vars in
@@ -1980,7 +2014,7 @@ and intern_ai_statement iaio abs curinvs s =
 	    | None -> ()
 	    | Some e ->
 		let asrts = collect_expr_asserts e in
-		  List.iter (test_assertion mgr prop) asrts
+		List.iter (test_assertion mgr prop) asrts
 	  end;
 	  (* TODO: add thrown value as abstract variable. *)
 	  begin 
@@ -2086,9 +2120,12 @@ and intern_ai_statement iaio abs curinvs s =
       | JCScall (vio, fi, el, s) ->
 	  begin
 	    if Jc_options.interprocedural then
-	      match iaio with
+	      begin match iaio with
 		| None -> () (* last iteration: precondition for [fi] already inferred *)
-		| Some iai -> ai_inter_function_call mgr iai abs pre fi el;
+		| Some iai -> 
+		    let copy_pre = Abstract1.copy mgr pre in
+		    ai_inter_function_call mgr iai abs copy_pre fi el
+	      end;
 	    ai_statement iaio abs curinvs s;
 	  end
     end;
@@ -2245,6 +2282,28 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	    Jc_output.assertion target.jc_target_regular_invariant 
       ) targets;
 
+    (* Require isolation of parameters written through. *)
+    let write_params = 
+      fi.jc_fun_info_effects.jc_writes.jc_effect_through_params
+    in
+    let read_params = 
+      fi.jc_fun_info_effects.jc_reads.jc_effect_through_params
+    in
+    let read_params = VarSet.diff read_params write_params in
+    let write_params = VarSet.fold (fun v acc -> v::acc) write_params [] in
+    let read_params = VarSet.fold (fun v acc -> v::acc) read_params [] in
+    let rec write_sep_pred acc = function
+      | v::r ->
+	  List.fold_left (fun acc v2 ->
+	    raw_asrt(JCAapp(
+	      full_separated,[var_term v;var_term v2]))
+	    :: acc
+	  ) acc (r @ read_params)
+      | [] -> acc
+    in
+    let sep_preds = write_sep_pred [] write_params in
+    fs.jc_fun_requires <- make_and(fs.jc_fun_requires :: sep_preds);
+      
     (* record the inferred postcondition *)
     if iaio = None then
       let returnabs = !(invs.jc_absinv_return).jc_absval_regular in
@@ -2502,11 +2561,11 @@ let rec atp_of_asrt ~(neg:bool) a =
       quant f vars
   | JCAapp _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
   | JCAif _ | JCAmutable _ | JCAtagequality _ ->
-      assert false
-  end with Failure "Atp alien" -> if neg then Atp.True else Atp.False 
+      failwith "Atp alien"
+  end with Failure "Atp alien" -> if neg then Atp.False else Atp.True 
 
 let atp_of_asrt = atp_of_asrt ~neg:false
-
+  
 let rec asrt_of_atp fm =
   let anode = match fm with
     | Atp.False ->
@@ -2561,6 +2620,10 @@ let add_modified_vars posts vs =
     | [] -> assert false
   in
   { posts with jc_post_modified_vars = vars; }
+
+let add_inflexion_var posts v =
+  posts.jc_post_inflexion_vars :=
+    VarSet.add v !(posts.jc_post_inflexion_vars)
 
 let remove_modified_var posts v =
   let vars = match posts.jc_post_modified_vars with
@@ -2757,7 +2820,7 @@ let rec wp_statement weakpre =
 		    let eq = raw_asrt (JCArelation(t1,bop,t2)) in
 		    Some (raw_asrt (JCAimplies(eq,a)))
 	in
-	let curposts = add_modified_var curposts copyvi in
+	add_inflexion_var curposts copyvi;
 	let curposts = 
 	  if is_function_level curposts then curposts
 	  else
@@ -2767,8 +2830,7 @@ let rec wp_statement weakpre =
 	{ curposts with jc_post_normal = post; }
     | JCSassign_heap(e1,fi,e2) ->
 	begin match term_of_expr e1 with
-	| None -> curposts (* TODO *)
-	| Some t1 ->
+	| None -> curposts (* TODO *)	| Some t1 ->
 	    let dereft = type_term (JCTderef(t1,fi)) fi.jc_field_info_type in
 	    let vi = unique_var_for_term dereft fi.jc_field_info_type in
 	    let copyvi = copyvar vi in
@@ -2785,7 +2847,7 @@ let rec wp_statement weakpre =
 		      let eq = raw_asrt (JCArelation(t1,bop,t2)) in
 		      Some (raw_asrt (JCAimplies(eq,a)))
 	    in
-	    let curposts = add_modified_var curposts copyvi in
+	    add_inflexion_var curposts copyvi;
 	    let curposts = 
 	      if is_function_level curposts then curposts
 	      else
@@ -2876,6 +2938,7 @@ let rec wp_statement weakpre =
 	let loopposts = push_modified_vars curposts in
 	let loopposts = wp_statement weakpre target ls loopposts in
 	let vs,loopposts = pop_modified_vars loopposts in
+	let vs = VarSet.union vs !(loopposts.jc_post_inflexion_vars) in
 	let post = match loopposts.jc_post_normal with
 	  | None -> None
 	  | Some a ->
@@ -2955,10 +3018,12 @@ let wp_function targets (fi,fs,sl) =
       jc_post_normal = None;
       jc_post_exceptional = [];
       jc_post_modified_vars = [];
+      jc_post_inflexion_vars = ref VarSet.empty;
     } in
     let initposts = push_modified_vars initposts in
     let posts = List.fold_right (wp_statement weakpre target) sl initposts in
     let vs,posts = pop_modified_vars posts in
+    let vs = VarSet.union vs !(posts.jc_post_inflexion_vars) in
     assert (posts.jc_post_modified_vars = []);
     match posts.jc_post_normal with
     | None -> ()

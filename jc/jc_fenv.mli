@@ -22,7 +22,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.15 2007-10-30 08:33:56 marche Exp $ *)
+(* $Id: jc_fenv.mli,v 1.16 2007-11-19 13:08:21 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -35,6 +35,7 @@ type effect =
       jc_effect_tag_table : StringSet.t;
       jc_effect_memories : FieldSet.t;
       jc_effect_globals : VarSet.t;
+      jc_effect_through_params : VarSet.t;
       jc_effect_mutable : StringSet.t;
       jc_effect_committed : StringSet.t;
     }

@@ -1856,7 +1856,8 @@ let clause env vi_result c acc =
   match c with
     | JCPCrequires(e) ->
 	{ acc with 
-	    jc_fun_requires = assertion env e }
+	  jc_fun_requires = 
+	    raw_asrt (make_and (assertion env e) acc.jc_fun_requires); }
 (*
     | JCPCensures(e) ->
 	{ acc with 

@@ -442,9 +442,9 @@ let rec print_decl fmt d =
 	fprintf fmt "@\n@[%a %s%a;@]@." print_type ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JCaxiom_def(id,a) ->
-	fprintf fmt "@\n@[axiom %s : %a@]@." id assertion a
+	fprintf fmt "@\n@[axiom %s :@\n%a@]@." id assertion a
     | JCglobinv_def(id,a) ->
-	fprintf fmt "@\n@[invariant %s : %a@]@." id assertion a
+	fprintf fmt "@\n@[invariant %s :@\n%a@]@." id assertion a
     | JCexception_def(id,ei) ->
 	fprintf fmt "@\n@[exception %s of %a@]@." id
 	  (print_option_or_default "unit" print_type)
