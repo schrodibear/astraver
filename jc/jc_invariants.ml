@@ -312,6 +312,8 @@ let rec assertion this p =
 let check invs =
   List.iter
     (fun (li,p) -> 
+       Jc_options.lprintf
+	 "    Checking invariant: %s@." li.jc_logic_info_name;
        match li.jc_logic_info_parameters with
 	 | [this] -> assertion this p
 	 | _ -> assert false)
