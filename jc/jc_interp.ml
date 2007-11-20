@@ -527,7 +527,7 @@ let rec assertion label oldlabel a =
 		    t1.jc_term_type t1'; 
 		  term_coerce t2.jc_term_loc t 
 		    t2.jc_term_type t2'])
-      | JCAapp(f,l) -> 
+      | JCAapp (f, l) -> 
 	  (* No type verification for full_separated for the moment. *)
 	  if f.jc_logic_info_name = "full_separated" then
 	    make_logic_pred_call f (List.map ft l)

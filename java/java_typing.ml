@@ -822,21 +822,21 @@ and classify_name
 			     with Not_found -> acc)
 			  [] package_env
 		      in
-		      match l with
-			| [(pi,h,x)] ->
-			    begin
-			      match x with
-				| Subpackage pi -> assert false
-				| Type ti -> TypeName ti
-				| File f -> 
-				    let ast = Java_syntax.file f in
-				    let (_, t) = get_types package_env [ast] in
-				    try
-				      let ti = List.assoc id t in
-				      Hashtbl.replace h id (Type ti);
-				      TypeName ti
-				    with Not_found -> assert false
-			    end
+			match l with
+			  | [(pi, h, x)] ->
+			      begin
+				match x with
+				  | Subpackage pi -> assert false
+				  | Type ti -> TypeName ti
+				  | File f -> 
+				      let ast = Java_syntax.file f in
+				      let (_, t) = get_types package_env [ast] in
+					try
+					  let ti = List.assoc id t in
+					    Hashtbl.replace h id (Type ti);
+					    TypeName ti
+					with Not_found -> assert false
+			      end
 			| (pi1,_,_)::(pi2,_,_)::_ ->
 			    typing_error loc "ambiguous name from import-on-demand packages '%s' and '%s'" pi1.package_info_name pi2.package_info_name
 			| [] ->
@@ -963,7 +963,7 @@ and type_expr_field_access e loc id =
 	class_or_interface_expected e.java_expr_loc 
 	  e.java_expr_type
 
-and type_type package_env type_env ty =
+and type_type package_env type_env non_null ty =
   match ty with
     | Base_type t -> JTYbase t
     | Type_name qid -> 
@@ -972,24 +972,30 @@ and type_type package_env type_env ty =
 	    | TypeName ti ->
 		begin
 		  match ti with
-		    | TypeClass ci -> JTYclass (Java_options.non_null, ci)
+		    | TypeClass ci -> JTYclass (non_null, ci)
 		    | TypeInterface ii -> JTYinterface(ii)
 		end
 	    | _ -> assert false (* TODO *)
 	end
     | Array_type_expr t -> 
-	let ty = type_type package_env type_env t in
+	let ty = type_type package_env type_env non_null t in
 	JTYarray ty
 
 and get_field_prototypes package_env type_env ci acc d =
   match d with
     | JPFvariable vd -> 
 	(*
-	vd.variable_modifiers : modifiers ;
-	vd.variable_type : type_expr ;
-	vd.variable_decls : variable_declarator list }
+	  vd.variable_modifiers : modifiers ;
+	  vd.variable_type : type_expr ;
+	  vd.variable_decls : variable_declarator list }
 	*)
-	let ty = type_type package_env type_env vd.variable_type in
+	let ty = type_type package_env type_env Java_options.non_null vd.variable_type in
+	let ty = match ty, ci with
+	  | JTYclass (true, ci'), TypeClass ci
+	      when is_subclass ci ci' || is_subclass ci' ci ->
+	      JTYclass (false, ci')
+	  | _ -> ty
+	in
 	let is_static = List.mem Static vd.variable_modifiers in
 	let is_final = List.mem Final vd.variable_modifiers in
 	List.fold_left
@@ -1006,7 +1012,7 @@ and type_param package_env type_env p =
   let rec get_type p =
     match p with
       | Simple_parameter(ty,(loc,id)) -> 
-	  (type_type package_env type_env ty, loc, id)
+	  (type_type package_env type_env Java_options.non_null ty, loc, id)
       | Array_parameter x -> 
 	  let (t,loc,i) = get_type x in
 	  (JTYarray t,loc,i)
@@ -1019,7 +1025,7 @@ and method_header package_env type_env retty mdecl =
 (*
 	eprintf "get prototype for method %s@." (snd id);
 *)
-	id,(Option_misc.map (type_type package_env type_env) retty), 
+	id, (Option_misc.map (type_type package_env type_env Java_options.non_null) retty), 
 	List.map (type_param package_env type_env) l
     | Array_method_declarator d -> 
 	let id,t,l = 
@@ -1161,7 +1167,7 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	vd.variable_type : type_expr ;
 	vd.variable_decls : variable_declarator list }
 	*)
-	let ty = type_type package_env type_env vd.variable_type in
+	let ty = type_type package_env type_env false vd.variable_type in
 	List.fold_left
 	  (fun acc vd -> 
 	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
@@ -1178,7 +1184,7 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	  vd.variable_type : type_expr ;
 	  vd.variable_decls : variable_declarator list }
 	*)
-	let ty = type_type package_env type_env vd.variable_type in
+	let ty = type_type package_env type_env false vd.variable_type in
 	  (* Note: no need to check if it is static and final, because 
 	     it is implicitly the case (JLS,9.3, p 203) *)
 	  List.fold_left
@@ -1243,8 +1249,8 @@ and check_if_class_complete ci =
       (* get class decls prototypes *)
       let (p, d) = Hashtbl.find class_decl_table ci.class_info_tag in
       let t = Hashtbl.find class_type_env_table ci.class_info_tag in
+      ci.class_info_incomplete <- false;
       get_class_prototypes p t ci d;
-      ci.class_info_incomplete <- false;    
     end;
 
 and lookup_class_field ci id =
@@ -1357,7 +1363,7 @@ and term package_env type_env current_type env e =
       | JPEinstanceof (_, _)-> assert false (* TODO *)
       | JPEcast (t, e1)-> 
 	  let te1 = termt e1 in
-	  let ty = type_type package_env type_env t in
+	  let ty = type_type package_env type_env false t in
 	  (* TODO: check if cast allowed *)
 	  ty,JTcast(ty,te1)
       | JPEarray_access (e1, e2)-> 
@@ -1508,14 +1514,14 @@ and assertion package_env type_env current_type env e =
 	  make_predicate_bin_op e.java_pexpr_loc op 
 	    te1.java_term_type te1 te2.java_term_type te2
     | JPEquantifier (q, ty, idl, e)-> 
-	let tty = type_type package_env type_env ty in
+	let tty = type_type package_env type_env true ty in
 	let a = make_quantified_formula 
 	  e.java_pexpr_loc q tty idl package_env type_env current_type env e 
 	in
 	  a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
     | JPEinstanceof (e, ty) ->
-	let te = termt e and tty = type_type package_env type_env ty in
+	let te = termt e and tty = type_type package_env type_env false ty in
 	  if is_reference_type tty then JAinstanceof (te, tty) else
 	    typing_error e.java_pexpr_loc "unexpected type"
     | JPEcast (_, _)-> assert false (* TODO *)
@@ -2194,7 +2200,7 @@ let rec expr package_env type_env current_type env e =
 	  vi.java_var_info_type, JEvar vi
       | JPEinstanceof (e1, t)-> 
 	  let te1 = exprt e1 in
-	  let ty = type_type package_env type_env t in
+	  let ty = type_type package_env type_env false t in
 	  if is_reference_type ty && 
 	    cast_convertible te1.java_expr_type ty then
 	    boolean_type,JEinstanceof(te1,ty)
@@ -2202,7 +2208,7 @@ let rec expr package_env type_env current_type env e =
 	    typing_error e.java_pexpr_loc "invalid instanceof"
       | JPEcast (t, e1)-> 
 	  let te1 = exprt e1 in
-	  let ty = type_type package_env type_env t in
+	  let ty = type_type package_env type_env false t in
 	  if cast_convertible te1.java_expr_type ty then
 	    ty,JEcast(ty,te1)
 	  else
@@ -2227,7 +2233,7 @@ let rec expr package_env type_env current_type env e =
 		  array_expected e1.java_pexpr_loc te1.java_expr_type
 	  end
       | JPEnew_array(t,dims) ->
-	  let ty = type_type package_env type_env t in 
+	  let ty = type_type package_env type_env true t in 
 	  let l =
 	    List.map (fun e ->
 			let te = exprt e in
@@ -2604,7 +2610,7 @@ let rec type_initializer package_env type_env current_type env ty i =
 (* statements *)
 
 let variable_declaration package_env type_env current_type env vd =
-  let ty = type_type package_env type_env vd.variable_type in
+  let ty = type_type package_env type_env false vd.variable_type in
   let l =
     List.map
       (fun vd ->
@@ -3088,7 +3094,9 @@ let type_constr_spec_and_body ?(dobody=true)
 		 make_expr_no_loc unit_type
 		   (JEconstr_call
 		      (make_expr_no_loc
-			 (JTYclass (Java_options.non_null, super_class_info)) (JEvar this_vi), super_ci, tel))))
+			 (JTYclass (Java_options.non_null, super_class_info)) 
+			 (JEvar this_vi), 
+		       super_ci, tel))))
 	  in
 	  let body = statements package_env type_env (Some current_type) this_env body in
 	  Hashtbl.add constructors_table ci.constr_info_tag 
@@ -3219,7 +3227,7 @@ let type_decl package_env type_env d =
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
 	  | Some ty -> 
-	      let fi = logic_info id (Some (type_type package_env type_env ty)) pl in
+	      let fi = logic_info id (Some (type_type package_env type_env false ty)) pl in
 	      let r = List.map (location package_env type_env None env) reads in
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
@@ -3239,7 +3247,7 @@ let type_decl package_env type_env d =
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
 	  | Some t -> 
-	      let fi = logic_info id (Some (type_type package_env type_env t)) pl in
+	      let fi = logic_info id (Some (type_type package_env type_env false t)) pl in
 	      let a = term package_env type_env None env body in
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)

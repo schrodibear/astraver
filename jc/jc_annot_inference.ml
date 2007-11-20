@@ -1562,11 +1562,11 @@ let collect_statement_asserts s =
 	collect_expr_asserts e1
     | JCScall(_,_,els,s) ->
 	List.flatten (List.map collect_expr_asserts els)
-    | JCSassert(Some "hint",a) -> 
+(*    | JCSassert((*Some "hint",*)a) -> 
 	(* Hints are not to be proved by abstract interpretation, 
 	   only added to help it. *)
-	[] 
-    | JCSassert(_,a) -> 
+	[]*) 
+    | JCSassert((*_,*)a) -> 
 	[a]
     | JCSassign_heap (e1, fi, e2) ->
 	let derefe = loc_expr (JCEderef (e1, fi)) s.jc_statement_loc in
@@ -2041,7 +2041,7 @@ and intern_ai_statement iaio abs curinvs s =
 	      let dereft = type_term (JCTderef(t1,fi)) fi.jc_field_info_type in
 	      assign_expr mgr pre dereft e2
 	end
-    | JCSassert(_,a) ->
+    | JCSassert((*_,*)a) ->
 	test_assertion mgr pre a
     | JCSblock sl ->
 	List.iter (ai_statement iaio abs curinvs) sl
@@ -2178,40 +2178,49 @@ and intern_ai_statement iaio abs curinvs s =
 	    intern_ai_statement iaio abs curinvs s
 	  end
     | JCScall (vio, fi, el, s) ->
-	begin
-	  (* add postcondition of [fi] to pre *)
-	  let _, fs, _ = Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag in
-	  let normal_behavior =
-	    List.fold_left
-	      (fun acc (_, b) ->
-		if b.jc_behavior_throws = None && b.jc_behavior_assumes = None then
-		  make_and [b.jc_behavior_ensures; acc] else acc)
-	      true_assertion
-	      fs.jc_fun_behavior
-	  in
-	  let normal_behavior = 
-	    match vio with
-	      | None -> normal_behavior
-	      | Some vi ->
-		  let result_vi = var ~unique:false vi.jc_var_info_type "\\result" in
+	if Jc_options.interprocedural then
+	  begin match iaio with
+	    | None -> () (* last iteration: precondition for [fi] already inferred *)
+	    | Some iai -> 
+		let copy_pre = Abstract1.copy mgr pre in
+		  ai_inter_function_call mgr iai abs copy_pre fi el;
+	  end;
+	(* add postcondition of [fi] to pre *)
+	let _, fs, _ = Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag in
+	let normal_behavior =
+	  List.fold_left
+	    (fun acc (_, b) ->
+	       (* TODO : handle 'assumes' clauses correctly *)
+	       if b.jc_behavior_throws = None && b.jc_behavior_assumes = None then
+		 make_and [b.jc_behavior_ensures; acc] else acc)
+	    true_assertion
+	    fs.jc_fun_behavior
+	in
+	let normal_behavior = 
+	  match vio with
+	    | None -> normal_behavior
+	    | Some vi ->
+		let result_vi = var ~unique:false vi.jc_var_info_type "\\result" in
 		  switch_vis_in_assertion result_vi vi normal_behavior 
-	  in
+	in
+	let normal_behavior =
+	  List.fold_left2 
+	    (fun a e vi -> 
+	       let t = term_of_expr e in
+		 match t with
+		   | None -> assert false
+		   | Some t -> replace_vi_in_assertion vi t a)
+	    normal_behavior el fi.jc_fun_info_parameters 
+	in
 	  test_assertion mgr pre normal_behavior;
-	  if Jc_options.interprocedural then
-	    begin match iaio with
-	      | None -> () (* last iteration: precondition for [fi] already inferred *)
-	      | Some iai -> 
-		  let copy_pre = Abstract1.copy mgr pre in
-		  ai_inter_function_call mgr iai abs copy_pre fi el
-	    end;
+	  (* TODO: handle exceptional behaviors as well *)
 	  ai_statement iaio abs curinvs s;
-	end
   end;
   let normal = curinvs.jc_absinv_normal in
   let prop = normal.jc_absval_propagated in
   let asrts = collect_statement_asserts s in
-  List.iter (test_assertion mgr prop) asrts
-    
+    List.iter (test_assertion mgr prop) asrts
+
 let rec record_ai_invariants abs s =
   let mgr = abs.jc_absint_manager in
   match s.jc_statement_node with
@@ -2940,7 +2949,7 @@ let rec wp_statement weakpre =
 		in
 		{ curposts with jc_post_normal = post; }
 	  end
-      | JCSassert(_,a1) ->
+      | JCSassert((*_,*)a1) ->
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
 	    | Some a -> Some (raw_asrt (JCAimplies(a1,a)))

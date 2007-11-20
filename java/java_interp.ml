@@ -244,10 +244,10 @@ and tr_type loc t =
   match t with
     | JTYbase t -> tr_base_type t	
     | JTYnull -> JCTnull
-    | JTYclass(non_null,ci) -> 
+    | JTYclass (non_null, ci) -> 
 	let st = get_class ci in
-	JCTpointer(st,Some num_zero,
-	           if non_null then Some num_zero else None)
+	  JCTpointer 
+	    (st, Some num_zero, if non_null then Some num_zero else None)
     | JTYinterface ii ->
 	JCTpointer(st_interface, Some num_zero,None)
 (*

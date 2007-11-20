@@ -2174,7 +2174,6 @@ let rec decl d =
 	  if !Jc_common_options.inv_sem = InvArguments then 
 	  Hashtbl.replace logic_functions_table 
 	    li.jc_logic_info_tag (li, JCAssertion a);
-	  
 	Hashtbl.add global_invariants_table li a
     | JCPDexception(id,t) ->
 	let tt = type_type t in
