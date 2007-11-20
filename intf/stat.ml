@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.57 2007-11-20 14:58:58 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.58 2007-11-20 15:48:51 marche Exp $ i*)
 
 open Printf
 open Options
@@ -208,7 +208,7 @@ let show_xpl xpl (tv:GText.view) =
 	   Tags.line= string_of_int l; 
 	   Tags.sp = string_of_int b; 
 	   Tags.ep = string_of_int e} in
-       Pprinter.move_to_source (Some loc))
+       Pprinter.move_to_loc loc)
     locopt
 
 let select_obligs (model:GTree.tree_store) (tv:GText.view) 
@@ -966,7 +966,7 @@ let main () =
     load_cache "gwhy.cache";
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
-	(fun s (_,expl,o,seq) -> 
+	(fun s (_,_,o,seq) -> 
 	   let cleaned = Cache.clean seq in
 	   if in_cache cleaned then begin 
 	     let row = Hashtbl.find Model.orows o in

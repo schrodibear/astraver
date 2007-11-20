@@ -117,7 +117,7 @@ let move_to_line line =
     let it = !tv_source#buffer#get_iter (`LINE line) in 
     let mark = `MARK (!tv_source#buffer#create_mark it) 
     and y = if !tv_source#buffer#line_count < 20 then 0.23 else 0.1 in
-    !tv_source#scroll_to_mark ~use_align:true ~yalign:y mark;
+    !tv_source#scroll_to_mark ~use_align:true ~yalign:0.5 mark;
     if debug then
       begin 
 	print_endline ("     [...] Moving to line n "^(string_of_int line)); 
@@ -125,6 +125,25 @@ let move_to_line line =
       end
   end
 
+let color_tag_table = Hashtbl.create 17
+
+let color_loc file (tv:GText.view) l b e =
+  let buf = tv#buffer in
+  let orange_bg = 
+    try
+      Hashtbl.find color_tag_table file
+    with Not_found ->
+      let t = buf#create_tag ~name:"orange_bg" [`BACKGROUND "orange"] in
+      Hashtbl.add color_tag_table file t;
+      t
+  in
+  buf#remove_tag orange_bg ~start:buf#start_iter ~stop:buf#end_iter;
+  let top = buf#start_iter in
+  let start = top#forward_lines (l-1) in
+  let start = start#forward_chars b in
+  let stop = start#forward_chars (e-b) in
+  buf#apply_tag ~start ~stop orange_bg
+  
 let move_to_source = function
   | None -> ()
   | Some loc ->
@@ -141,9 +160,15 @@ let move_to_source = function
 	  !tv_source#set_buffer (GText.buffer ());
 	  read_file (Some loc);
 	  Hashtbl.add files file !tv_source#buffer;
+	  Hashtbl.remove color_tag_table file;
 	end;
 	move_to_line line
       end
+
+let move_to_loc loc =
+  move_to_source (Some loc);
+  color_loc loc.file !tv_source (int_of_string loc.line) 
+    (int_of_string loc.sp) (int_of_string loc.ep)
 
 let rec intros ctx = function 
   | Forall (true, id, n, t, _, p) ->
