@@ -333,7 +333,7 @@ predicate not_assigns
     forall p:'t pointer. 
       valid(a,p) and not in_pset(p,l) -> select(m2,p)=select(m1,p)
 
-logic full_separated : 't pointer, 't pointer -> prop
+logic full_separated : 't1 pointer, 't2 pointer -> prop
 
 axiom full_separated_shift1 :
   forall p: 'z pointer. forall q : 'z pointer. forall i: int.
