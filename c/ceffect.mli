@@ -1,13 +1,16 @@
 (**************************************************************************)
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2006                                               *)
+(*  Copyright (C) 2002-2007                                               *)
+(*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Christine PAULIN                                                    *)
+(*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -22,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.mli,v 1.34 2006-11-17 17:13:28 moy Exp $ i*)
+(*i $Id: ceffect.mli,v 1.35 2007-11-20 14:34:48 filliatr Exp $ i*)
 
 open Info
 

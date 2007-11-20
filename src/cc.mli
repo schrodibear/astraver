@@ -1,13 +1,16 @@
 (**************************************************************************)
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2006                                               *)
+(*  Copyright (C) 2002-2007                                               *)
+(*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Christine PAULIN                                                    *)
+(*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -22,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cc.mli,v 1.22 2007-10-08 11:57:18 marche Exp $ i*)
+(*i $Id: cc.mli,v 1.23 2007-11-20 14:34:51 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 

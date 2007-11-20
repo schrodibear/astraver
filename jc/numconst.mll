@@ -1,13 +1,16 @@
 (**************************************************************************)
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2006                                               *)
+(*  Copyright (C) 2002-2007                                               *)
+(*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Christine PAULIN                                                    *)
+(*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -22,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: numconst.mll,v 1.1 2007-10-15 09:19:27 marche Exp $ i*)
+(*i $Id: numconst.mll,v 1.2 2007-11-20 14:34:50 filliatr Exp $ i*)
 
 (* evaluation of integer literals *)
 

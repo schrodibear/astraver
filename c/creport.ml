@@ -1,13 +1,16 @@
 (**************************************************************************)
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2006                                               *)
+(*  Copyright (C) 2002-2007                                               *)
+(*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
+(*    Christine PAULIN                                                    *)
+(*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU General Public                   *)
@@ -22,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: creport.ml,v 1.25 2007-04-26 13:41:19 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.26 2007-11-20 14:34:49 filliatr Exp $ i*)
 
 open Format
 open Cerror

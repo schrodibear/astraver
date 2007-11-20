@@ -1,3 +1,30 @@
+/**************************************************************************/
+/*                                                                        */
+/*  The Why/Caduceus/Krakatoa tool suite for program certification        */
+/*  Copyright (C) 2002-2007                                               */
+/*    Romain BARDOU                                                       */
+/*    Jean-François COUCHOT                                               */
+/*    Mehdi DOGGUY                                                        */
+/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Thierry HUBERT                                                      */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
+/*    Christine PAULIN                                                    */
+/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU General Public                   */
+/*  License version 2, as published by the Free Software Foundation.      */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/*  See the GNU General Public License version 2 for more details         */
+/*  (enclosed in the file GPL).                                           */
+/*                                                                        */
+/**************************************************************************/
+
 /******
 int a=10000,b,c=2800,d,e,f[2801],g;main(){for(;b-c;)f[b++]=a/5;
 for(;d=0,g=c*2;c-=14,printf("%.4d",e+d/a),e=d%a)for(b=c;d+=f[b]*a,

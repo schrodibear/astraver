@@ -1,3 +1,30 @@
+/**************************************************************************/
+/*                                                                        */
+/*  The Why/Caduceus/Krakatoa tool suite for program certification        */
+/*  Copyright (C) 2002-2007                                               */
+/*    Romain BARDOU                                                       */
+/*    Jean-François COUCHOT                                               */
+/*    Mehdi DOGGUY                                                        */
+/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Thierry HUBERT                                                      */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
+/*    Christine PAULIN                                                    */
+/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU General Public                   */
+/*  License version 2, as published by the Free Software Foundation.      */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/*  See the GNU General Public License version 2 for more details         */
+/*  (enclosed in the file GPL).                                           */
+/*                                                                        */
+/**************************************************************************/
+
 /* Verification of the following 2 lines code for the N queens:
 
 t(a,b,c){int d=0,e=a&~b&~c,f=1;if(a)for(f=0;d=(e-=d)&-e;f+=t(a-d,(b+d)*2,(
