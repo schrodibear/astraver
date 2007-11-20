@@ -50,6 +50,17 @@ caduceus.html: caduceus.tex
 krakatoa.pdf: $(KFILES)
 	pdflatex krakatoa.tex
 
+krakatoa.html: krakatoa.tex
+	rm -f krakatoa.aux
+	$(HEVEA) krakatoa.tex
+	$(HEVEA) krakatoa.tex
+
+main.html: main.tex
+	rm -f main.aux
+	$(HEVEA) main.tex
+	$(HEVEA) main.tex
+
+
 main.pdf: 
 	pdflatex main.tex
 
@@ -86,5 +97,6 @@ pp.ml: pp.mll
 
 
 clean::
-	rm -f *~ *.dvi *.log *.aux *.toc dep.ps doc.ps manual.ps caduceus.ps
+	rm -f *~ *.dvi *.log *.aux *.toc \
+	dep.ps doc.ps manual.ps caduceus.ps krakatoa.pdf main.pdf 
 

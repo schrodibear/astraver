@@ -125,8 +125,10 @@ let make_tincr_heap loc t op e fi =
 
 (* statements *)
 
-let make_node loc node = 
-  { jc_statement_loc = loc; jc_statement_node = node; }
+let make_node ?(lab="") loc node = 
+  { jc_statement_loc = loc; 
+    jc_statement_label = lab;
+    jc_statement_node = node; }
 
 let make_assign_var loc vi e =
   make_node loc (JCSassign_var (vi, e))
@@ -148,8 +150,8 @@ let make_block_node loc sl snode =
     | [] -> snode
     | _ -> JCSblock (sl @ [make_node loc snode])
 
-let make_call loc vio f el s =
-  make_node loc (JCScall (vio, f, el, s)) 
+let make_call label loc vio f el s =
+  make_node ~lab:label loc (JCScall (vio, f, el, s)) 
 
 let make_if loc e ts es =
   make_node loc (JCSif (e,ts,es))
@@ -263,6 +265,7 @@ let op_of_incdec = function
 *)
 
 let rec expr e =
+  let lab = e.jc_texpr_label in
   let loc = e.jc_texpr_loc in
   let (sl, tl), ne =
     match e.jc_texpr_node with
@@ -318,7 +321,7 @@ let rec expr e =
     | JCTEcall (f, el) ->
 	let ltl, el = List.split (List.map expr el) in
 	let ll, tll = List.split ltl in
-	let (l, tl), ecall = call loc f el ~binder:true ll in
+	let (l, tl), ecall = call lab loc f el ~binder:true ll in
 	let ecall = match ecall with
 	| Some b -> JCEvar b
 	| None -> assert false
@@ -443,22 +446,22 @@ let rec expr e =
     jc_expr_label = e.jc_texpr_label;
     jc_expr_loc = e.jc_texpr_loc }
     
-and call loc f el ~binder ll = 
+and call lab loc f el ~binder ll = 
   if binder then
     let tmp = newvar f.jc_fun_info_return_type in
-    let stat = make_call loc (Some tmp) f el (make_block loc []) in
+    let stat = make_call lab loc (Some tmp) f el (make_block loc []) in
       (* [tmp] will be declared in a post-treatement of the calls generated *)
       ((List.flatten ll)@[stat], []), Some tmp
   else
-    let stat = make_call loc None f el (make_block loc []) in
+    let stat = make_call lab loc None f el (make_block loc []) in
       ((List.flatten ll)@[stat], []), None
 	
 (* [el] is the only part not yet translated *)
 
-and if_statement loc f el st sf =
+and if_statement lab loc f el st sf =
   let ltl, el = List.split (List.map expr el) in
   let ll, tl = List.split ltl in
-  let (l, etl), ecall = call loc f el ~binder:true ll in
+  let (l, etl), ecall = call lab loc f el ~binder:true ll in
   let ecall = match ecall with
     | Some b -> make_var loc b
     | None -> assert false
@@ -482,7 +485,8 @@ and statement s =
 	      | JCTEcall (f, el) ->
 		  let ltl,el = List.split (List.map expr el) in
 		  let ll,tl = List.split ltl in
-		  let sl,etl = fst (call loc f el ~binder:false ll) in
+		  let sl,etl = fst (call e.jc_texpr_label loc 
+				      f el ~binder:false ll) in
 		  sl, etl @ (List.flatten tl)
 	      | JCTEincr_local (op, vi) ->
 		  (* avoid creating a useless temporary for postfix version *)
@@ -497,7 +501,7 @@ and statement s =
 	      | _ -> fst (expr e)
 	  in
 	  (make_decls loc sl tl).jc_statement_node
-      | JCTSassert(id,a) -> JCSassert (id, a)
+      | JCTSassert( (* id, *) a) -> JCSassert ( (* id, *) a)
       | JCTSdecl (vi, Some e, s) ->
 	  let (sl,tl),e = expr e in
 	  let decl_stat = make_decl loc vi (Some e) (statement s) in
@@ -509,7 +513,7 @@ and statement s =
 	  let sf = statement sf in
 	    begin match e.jc_texpr_node with
 	      | JCTEcall (f, el) ->
-		  (if_statement loc f el st sf).jc_statement_node
+		  (if_statement e.jc_texpr_label loc f el st sf).jc_statement_node
 	      | _ -> 
 		  let (sl, tl), e = expr e in
 		  let if_stat = make_if loc e st sf in
@@ -672,6 +676,7 @@ and statement s =
 	  (make_decls loc (sl @ [tmp_assign;try_exit]) tl).jc_statement_node
 
   in { jc_statement_node = ns;
+       jc_statement_label = "";
        jc_statement_loc = loc }
 
 and block_statement statements =
@@ -836,9 +841,11 @@ let statement s =
 		(* call may be created as the result of an
 		   intermediate computation. In any case, moving the
 		   statements that follow is correct. *)
-		[make_call loc (Some vi) f el (make_block loc slnext)]
+		[make_call s.jc_statement_label loc (Some vi) 
+		   f el (make_block loc slnext)]
 	    | _ -> 
-		(make_call loc (Some vi) f el (link_stat s)) :: slnext
+		(make_call s.jc_statement_label loc (Some vi) 
+		   f el (link_stat s)) :: slnext
 	  end
       | JCSdecl (vi, eo, s) ->
 	  begin match s.jc_statement_node with 
@@ -880,6 +887,7 @@ let statement s =
 	    JCStry (link_stat s, cl, link_stat fs)
 
     in { jc_statement_node = ns;
+	 jc_statement_label = "";
 	 jc_statement_loc = loc }
 
   in link_stat s

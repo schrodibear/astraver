@@ -345,7 +345,9 @@ let get_logic_fun fi =
   try
     Hashtbl.find logics_table fi.java_logic_info_tag
   with
-      Not_found -> assert false
+      Not_found -> 
+	eprintf "Anomaly: cannot find logic symbol `%s'@." fi.java_logic_info_name;
+	assert false
 
 let create_logic_fun loc fi =
   let nfi =
@@ -783,15 +785,6 @@ let location t =
       | JTcast(ty,t) -> assert false (* TODO *)
   
 
-let behavior (id,assumes,throws,assigns,ensures) =
-  (snd id,
-  { jc_behavior_assumes = Option_misc.map assertion assumes;
-    jc_behavior_assigns = Option_misc.map (List.map location) assigns ;
-    jc_behavior_ensures = assertion ensures;
-    jc_behavior_throws = 
-      Option_misc.map (fun ci -> get_exception (JTYclass(false,ci))) throws;
-  })
-
 let un_op op =
   match op with
     | Uminus -> Uminus_int
@@ -889,6 +882,7 @@ let rec expr e =
       | JEstatic_field_access(ci,fi) ->
 	  JCTEvar (get_static_var fi)
       | JEfield_access(e1,fi) -> 
+	  lab := reg_loc e.java_expr_loc;
 	  JCTEderef(expr e1,get_field fi)
       | JEarray_length(e) -> 
 	  begin
@@ -1109,7 +1103,8 @@ let rec statement s =
 	      | None -> reg_loc e.java_assertion_loc
 	      | Some id -> reg_loc ~name:id e.java_assertion_loc
 	  in
-	  JCTSassert(Some name, assertion e)
+	  let e' = assertion e in
+	  JCTSassert((*Some name,*) { e' with jc_assertion_label = name } )
       | JSswitch(e,l) -> 
 	  JCTSswitch(expr e,List.map switch_case l)
       | JStry(s1, catches, finally) ->
@@ -1136,14 +1131,26 @@ and switch_label = function
   | Java_ast.Default -> None
   | Java_ast.Case e -> Some (expr e)
 
+let reg_assertion a =
+  let a' = assertion a in
+  let id = reg_loc a.java_assertion_loc in
+    Format.eprintf "adding loc '%s' on assertion@." id;
+    { a' with jc_assertion_label = id }
+
 let reg_assertion_option a =
   match a with
     | None -> dummy_loc_assertion JCAtrue 
-    | Some a -> 
-	let a' = assertion a in
-	let id = reg_loc a.java_assertion_loc in
-	Format.eprintf "adding loc '%s' on pre-condition@." id;
-	{ a' with jc_assertion_label = id }
+    | Some a -> reg_assertion a
+
+let behavior (id,assumes,throws,assigns,ensures) =
+  (snd id,
+  { jc_behavior_assumes = Option_misc.map assertion assumes;
+    jc_behavior_assigns = Option_misc.map (List.map location) assigns ;
+    jc_behavior_ensures = reg_assertion ensures;
+    jc_behavior_throws = 
+      Option_misc.map (fun ci -> get_exception (JTYclass(false,ci))) throws;
+  })
+
 
 let tr_method mi req behs b acc =
   let params = List.map (create_var Loc.dummy_position) mi.method_info_parameters in

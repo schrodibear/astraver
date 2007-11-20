@@ -447,9 +447,6 @@ c/cversion.ml: Version Makefile
 	echo "let date = \""`date`"\"" >> $@
 	echo "let libdir = \""$(LIBDIR)/caduceus"\"" >> $@
 
-doc:: doc/version.tex
-	cd doc; make
-
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
 
@@ -528,7 +525,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
 	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
-	cp -f bin/gvc $(BINDIR)/gvc
+	cp -f bin/gwhy.sh $(BINDIR)/gwhy
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)
@@ -537,7 +534,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(
 	cp -f $(WHYSTAT) $(BINDIR)/why-stat$(EXE)
 	cp -f $(SIMPLIFY2WHY) $(BINDIR)/simplify2why$(EXE)
 	if test -f bin/gwhy.$(OCAMLBEST); then \
-  cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy$(EXE); \
+  		cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy-bin$(EXE); \
 	fi
 
 install-lib: 
@@ -627,14 +624,20 @@ zip:
 
 # doc
 
+DOC=doc/manual.ps doc/manual.html doc/caduceus.ps doc/caduceus.html \
+	doc/krakatoa.pdf doc/krakatoa.html \
+	doc/main.pdf doc/main.html
+
+doc:: $(DOC)
+
 doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
 doc/version.tex: Version Makefile.in
-	echo '\newcommand{\whyversion}'"{$(VERSION)}" > $@
-	echo '\newcommand{\caduceusversion}'"{$(CVERSION)}" >> $@
-	echo '\newcommand{\jessieversion}'"{$(JCVERSION)}" >> $@
-	echo '\newcommand{\krakatoaversion}'"{$(KVERSION)}" >> $@
+	echo '\\newcommand{\\whyversion}'"{$(VERSION)}" > $@
+	echo '\\newcommand{\\caduceusversion}'"{$(CVERSION)}" >> $@
+	echo '\\newcommand{\\jessieversion}'"{$(JCVERSION)}" >> $@
+	echo '\\newcommand{\\krakatoaversion}'"{$(KVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
@@ -644,6 +647,18 @@ doc/caduceus.ps: doc/caduceus.tex doc/version.tex
 
 doc/caduceus.html: doc/caduceus.tex doc/version.tex
 	make -C doc caduceus.html
+
+doc/krakatoa.pdf: doc/krakatoa.tex doc/version.tex
+	make -C doc krakatoa.pdf
+
+doc/krakatoa.html: doc/krakatoa.tex doc/version.tex
+	make -C doc krakatoa.html
+
+doc/main.pdf: doc/main.tex doc/version.tex
+	make -C doc main.pdf
+
+doc/main.html: doc/main.tex doc/version.tex
+	make -C doc main.html
 
 # special rules
 ###############
@@ -743,8 +758,9 @@ wc:
 NAME=why-$(VERSION)
 EXPORT=export/$(NAME)
 
-FTP = $(HOME)/ftp/why
-WWW = $(HOME)/WWW/why
+FTP = /users/demons/filliatr/ftp/why
+WWW = /users/demons/filliatr/WWW/why
+WWWKRAKATOA = /users/demons/marche/WWW/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
        mix/*.ml* \
@@ -812,12 +828,14 @@ export-examples-c:
 	cp bench/c/good/*.c $(WWW)/caduceus/examples/bench
 	rm -f $(WWW)/caduceus/examples/bench/test.c
 
-export-doc: doc/manual.ps doc/manual.html doc/caduceus.ps doc/caduceus.html
+export-doc: $(DOC)
 	cp doc/manual.ps doc/manual.html $(WWW)/manual
 	cp doc/logic_syntax.bnf $(WWW)/manual
 	(cd $(WWW)/manual; hacha manual.html)
 	cp doc/caduceus.ps doc/caduceus.html $(WWW)/caduceus/manual
 	(cd $(WWW)/caduceus/manual; hacha caduceus.html)
+	cp doc/krakatoa.pdf doc/krakatoa.html $(WWWKRAKATOA)/manual
+	(cd $(WWWKRAKATOA)/manual; hacha krakatoa.html)
 
 BINARYNAME = $(NAME)-$(OSTYPE)
 

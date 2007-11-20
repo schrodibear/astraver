@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.69 2007-11-20 14:34:50 filliatr Exp $ */
+/* $Id: jc_parser.mly,v 1.70 2007-11-20 14:58:58 marche Exp $ */
 
 %{
 
@@ -730,9 +730,11 @@ expression_statement:
 | expression SEMICOLON 
     { locate_statement (JCPSexpr $1) }
 | ASSERT expression SEMICOLON
-    { locate_statement (JCPSassert(None,$2)) }
+    { locate_statement (JCPSassert((*None,*)$2)) }
+/*
 | ASSERT identifier COLON expression SEMICOLON
     { locate_statement (JCPSassert(Some $2,$4)) }
+*/
 ;
 
 selection_statement: 

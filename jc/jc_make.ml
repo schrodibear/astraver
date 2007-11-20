@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.17 2007-11-20 14:34:50 filliatr Exp $ i*)
+(*i $Id: jc_make.ml,v 1.18 2007-11-20 14:58:58 marche Exp $ i*)
 
 open Format
 open Pp
@@ -59,7 +59,7 @@ let generic f targets =
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";	    
        fprintf fmt "WHY=why --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
-       fprintf fmt "GWHY=gwhy --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       fprintf fmt "GWHY=gwhy-bin --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
        fprintf fmt "JESSIELIBFILE=%s@\n@\n" 
 	 (Filename.concat Jc_options.libdir 
 	    (Filename.concat "why" Jc_options.libfile));
@@ -136,7 +136,7 @@ let generic f targets =
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        fprintf fmt "@\n";
        fprintf fmt "%%.stat: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "-include %s.depend@\n@\n" f;
        fprintf fmt "depend: %a@\n" (print_files coq_v) targets;

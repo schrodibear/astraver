@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.136 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.137 2007-11-20 14:58:58 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -949,43 +949,55 @@ let read_in_file f l b e =
   Buffer.contents buf
  
 
-let raw_loc ?(pref="") fmt f l b e =
+let raw_loc ?(pref="") fmt (f,l,b,e) =
   fprintf fmt "%sfile = \"%s\"@\n" pref f;
   fprintf fmt "%sline = %d@\n" pref l;
   fprintf fmt "%sbegin = %d@\n" pref b;
   fprintf fmt "%send = %d@\n" pref e
 
-let raw_loc_predicate ?(pref="") fmt (loc,p) =
-  let (f,l,b,e) = 
-    match p with
-      | Pnamed(User n,p) -> 
-	  begin
-	    fprintf fmt "name = \"%s\"@\n" n; 
-	    try 
-	      let (f,l,b,e,_) = 
-		Hashtbl.find locs_table n 
-	      in (f,l,b,e)
-	    with Not_found -> Loc.extract loc 
-	  end
-      | _ -> Loc.extract loc 
-  in
+let reloc_xpl (loc,p) = 
+  match p with
+    | Pnamed(User n,p) -> 
+	begin
+	  try 
+	    let (f,l,b,e,_) = 
+	      Hashtbl.find locs_table n 
+	    in (Some n,(f,l,b,e))
+	  with Not_found -> (None,Loc.extract loc)
+	end
+    | _ -> (None,Loc.extract loc)
+
+(*
+let raw_loc_predicate ?(pref="") fmt locp =
+  let (name,(f,l,b,e)) = reloc_xpl locp in
+  Option_misc.iter (fun n -> fprintf fmt "name = \"%s\"@\n" n) name; 
   raw_loc ~pref fmt f l b e
 (*
   let s = read_in_file f l b e in
   fprintf fmt "pred = \"%s\"@\n" s
 *)
+*)
 
-let raw_explanation fmt e =
+
+type expl_kind = 
+  | EKAbsurd
+  | EKAssert
+  | EKLoopInvInit
+  | EKLoopInvPreserv
+  | EKPost
+  | EKPre
+  | EKRaw of string
+  | EKVarDecr
+  | EKWfRel 
+
+let raw_explanation e =
   match e with
-    | VCEstring s -> 
-	fprintf fmt "kind = String@\ntext = %s@\n" s
-    | VCEexternal s -> 
-	fprintf fmt "kind = %s@\n" s
-    | VCEabsurd -> 
-	fprintf fmt "kind = Absurd@\n"
-    | VCEassert p -> 
-	fprintf fmt "kind = Assert@\n";
-	List.iter (raw_loc_predicate fmt) p
+    | VCEstring s -> EKRaw s, None
+(*
+    | VCEexternal s -> fprintf fmt "kind = %s@\n" s
+*)
+    | VCEabsurd -> EKAbsurd, None
+    | VCEassert p -> EKAssert, Some(reloc_xpl (List.hd p))
     | VCEpre(lab,p) -> 
 	begin
 	  if debug then eprintf "util: label for pre = %s@." lab;
@@ -995,38 +1007,77 @@ let raw_explanation fmt e =
 	      let k = 
 		match List.assoc "kind" o with
 		  | Rc.RCident s -> s
-		  | _ -> assert false		  
+		  | _ -> raise Not_found		  
 	      in
+	      EKRaw k, Some(None,(f,l,b,e))
+(*
 	      fprintf fmt "kind = %s@\n" k;
 	      fprintf fmt "external_label = %s@\n" lab;
 	      let s = read_in_file f l b e in
 	      raw_loc fmt f l b e;
 	      fprintf fmt "external_expr = \"%s\"@\n" s
+*)
 	    with Not_found ->
+	      EKPre, Some(Some lab,(f,l,b,e))
+(*
 	      fprintf fmt "kind = Pre@\n";
 	      fprintf fmt "call_label = %s@\n" lab;
 	      let s = read_in_file f l b e in
 	      raw_loc fmt f l b e;
 	      fprintf fmt "call_expr = \"%s\"@\n" s
+*)
 	  with Not_found -> 
-	    eprintf "Util: cannot find a loc for '%s'@." lab;
+	    if debug then eprintf "Util: cannot find a loc for '%s'@." lab;
+	    EKPre, None
+(*
 	    fprintf fmt "kind = Pre@\n";
 	    fprintf fmt "call_label = %s@\n" lab;
-	end;
+*)
+	end
+(*
 	List.iter (raw_loc_predicate ~pref:"pre_" fmt) p
-    | VCEpost p -> 
+*)
+
+    | VCEpost p -> EKPost, Some(reloc_xpl p)
+(*
 	fprintf fmt "kind = Post@\n";  
 	raw_loc_predicate fmt p
-    | VCEwfrel -> 
+*)
+    | VCEwfrel -> EKWfRel, None
+(*
 	fprintf fmt "kind = WfRel@\n" 
-    | VCEvardecr (*loc*) -> 
+*)
+    | VCEvardecr (*loc*) -> EKVarDecr, None
+(*
 	fprintf fmt "kind = VarDecr@\n" 
-    | VCEinvinit p ->
+*)
+    | VCEinvinit p -> EKLoopInvInit, Some(reloc_xpl p)
+(*
 	fprintf fmt "kind = LoopInvInit@\n"; 
 	raw_loc_predicate fmt p 
-    | VCEinvpreserv p ->
+*)
+    | VCEinvpreserv p -> EKLoopInvPreserv, Some(reloc_xpl p)
+(*
 	fprintf fmt "kind = LoopInvPreserv@\n"; 
 	raw_loc_predicate fmt p 
+*)
+
+let print_explanation fmt e =
+  let (k,locopt) = raw_explanation e in
+  Option_misc.iter 
+    (fun (labopt,loc) ->
+       Option_misc.iter (fun lab ->  fprintf fmt "label = %s@\n" lab) labopt;
+       raw_loc fmt loc) locopt;
+  match k with
+    | EKRaw s -> fprintf fmt "kind = Raw@\ntext = %s@\n" s
+    | EKAbsurd -> fprintf fmt "kind = Absurd@\n"
+    | EKAssert -> fprintf fmt "kind = Assert@\n"
+    | EKPre -> fprintf fmt "kind = Pre@\n"
+    | EKPost -> fprintf fmt "kind = Post@\n"
+    | EKWfRel -> fprintf fmt "kind = WfRel@\n"
+    | EKVarDecr -> fprintf fmt "kind = VarDecr@\n" 
+    | EKLoopInvInit -> fprintf fmt "kind = LoopInvInit@\n" 
+    | EKLoopInvPreserv -> fprintf fmt "kind = LoopInvPreserv@\n"
 
 let print_loc_predicate fmt (loc,p) =
   match p with
@@ -1044,10 +1095,13 @@ let print_loc_predicate fmt (loc,p) =
 	fprintf fmt "(located %a) %a" 
 	  Loc.gen_report_position loc print_predicate p
 
+(*
 let print_explanation fmt e =
   match e with
     | VCEstring s -> fprintf fmt "%s" s
+(*
     | VCEexternal s -> fprintf fmt "explanation from front-end: %s" s
+*)
     | VCEabsurd -> fprintf fmt "absurd case"
     | VCEassert p -> 
 	fprintf fmt "assertions %a" 
@@ -1068,6 +1122,7 @@ let print_explanation fmt e =
     | VCEinvpreserv p ->
 	fprintf fmt "preservation of loop invariant %a" 
 	  print_loc_predicate p 
+*)
 
 let print_decl fmt = function
     Dtype (_, sl, s) -> 

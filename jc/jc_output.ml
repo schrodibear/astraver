@@ -389,10 +389,12 @@ let rec statement fmt s =
 	fprintf fmt "{@\n%a %s = %a;%a}" 
 	  print_type vi.jc_var_info_type 
 	  vi.jc_var_info_name expr e statement s
-    | JCTSassert(None,a)-> 
+    | JCTSassert((*None,*)a)-> 
 	fprintf fmt "@\nassert %a;" assertion a
+(*
     | JCTSassert(Some n,a)-> 
 	fprintf fmt "@\nassert %s: %a;" n assertion a
+*)
     | JCTSexpr e -> fprintf fmt "@\n%a;" expr e
     | JCTSblock l -> block fmt l
     | JCTSswitch (e, csl) ->

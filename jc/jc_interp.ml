@@ -568,6 +568,13 @@ let rec assertion label oldlabel a =
     a'
   
 
+let named_assertion label oldlabel a =
+  let a' = assertion label oldlabel a in
+  match a' with
+    | LNamed _ -> a'
+    | _ -> LNamed(reg_loc a.jc_assertion_loc,a')
+
+
 (****************************
 
 logic functions
@@ -771,7 +778,7 @@ let rec make_lets l e =
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
-let rec make_upd loc ~threats fi e1 v =
+let rec make_upd lab loc ~threats fi e1 v =
   let expr = expr ~threats and offset = offset ~threats in
   if threats then
     match destruct_pointer e1 with
@@ -779,42 +786,42 @@ let rec make_upd loc ~threats fi e1 v =
 	make_app "safe_upd_" 
 	  [ Var fi.jc_field_info_final_name ; expr e1; v ]
     | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-	make_guarded_app IndexBounds loc "lsafe_bound_upd_" 
+	make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
 	  [ Var fi.jc_field_info_final_name ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-	make_guarded_app IndexBounds loc "rsafe_bound_upd_" 
+	make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
 	  [ Var fi.jc_field_info_final_name ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,off,Some lb,Some rb ->
-	make_guarded_app IndexBounds loc "bound_upd_" 
+	make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
 	  [ Var fi.jc_field_info_final_name ; expr p; offset off; 
 	    Cte (Prim_int (Num.string_of_num lb)); 
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-	make_guarded_app IndexBounds loc "lsafe_lbound_upd_" 
+	make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name; expr p; offset off; v ]
     | p,off,Some lb,None ->
-	make_guarded_app IndexBounds loc "lbound_upd_" 
+	make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-	make_guarded_app IndexBounds loc "rsafe_rbound_upd_" 
+	make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name; expr p; offset off; v ]
     | p,off,None,Some rb ->
-	make_guarded_app IndexBounds loc "rbound_upd_" 
+	make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,Int_offset s,None,None when int_of_string s = 0 ->
-	make_guarded_app PointerDeref loc "upd_" 
+	make_guarded_app ~name:lab PointerDeref loc "upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name ; expr p; v ]
     | p,off,None,None ->
-	make_guarded_app PointerDeref loc "offset_upd_" 
+	make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
 	    Var fi.jc_field_info_final_name ; expr p; offset off; v ]
   else
@@ -1057,7 +1064,8 @@ let rec statement ~threats s =
 	  with Invalid_argument _ -> assert false
 	in
 	let call = 
-	  make_guarded_app UserCall loc f.jc_fun_info_final_name el 
+	  make_guarded_app ~name:s.jc_statement_label UserCall loc 
+	    f.jc_fun_info_final_name el 
 	in
 	begin
 	  match vio with
@@ -1085,7 +1093,9 @@ let rec statement ~threats s =
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
-	let upd = make_upd ~threats s.jc_statement_loc fi e1 (Var tmp2) in
+	let upd = make_upd ~threats s.jc_statement_label s.jc_statement_loc 
+	  fi e1 (Var tmp2) 
+	in
 (* Yannick: ignore variables to be able to refine update function used. *)	
 (* 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
 (* Claude: do not ignore variable tmp2, since it may involve a coercion. 
@@ -1110,26 +1120,23 @@ let rec statement ~threats s =
 	let e = expr e in
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->
-	let la' = assertion None "init" la.jc_loop_invariant in
-	let la'' =
-	  if la.jc_loop_invariant.jc_assertion_label = "" then
-	    LNamed(reg_loc la.jc_loop_invariant.jc_assertion_loc,la')
-	  else la'
-	in
+	let la' = named_assertion None "init" la.jc_loop_invariant in
 	begin match la.jc_loop_variant with
 	| Some t when threats ->
-	    While(Cte(Prim_bool true), la'',
+	    While(Cte(Prim_bool true), la',
 	          Some (term None "" t,None), [statement s])
 	| _ ->
-	    While(Cte(Prim_bool true), la'',
+	    While(Cte(Prim_bool true), la',
 	          None, [statement s])
 	end
-    | JCSassert(None, a) -> 
-	Assert(LNamed(reg_loc a.jc_assertion_loc,
-		      assertion None "init" a), Void)
+    | JCSassert((*None,*) a) -> 
+	Assert(named_assertion None "init" a, Void)
+(*
     | JCSassert(Some name, a) -> 
+	
 	Assert(LNamed(reg_loc ~name a.jc_assertion_loc,
 		      assertion None "init" a), Void)
+*)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  let e' = match e with
@@ -1708,7 +1715,7 @@ let tr_fun f spec body acc =
 	   | JCTnative _ -> acc
 	   | JCTlogic _ -> acc)
       f.jc_fun_info_parameters
-      (LNamed(reg_loc requires.jc_assertion_loc,assertion None "" requires))
+      (named_assertion None "" requires)
   in
   (* Jc_options.lprintf "DEBUG: tr_fun 1@."; *)
   (* adding invariants to requires *)
@@ -1723,8 +1730,7 @@ let tr_fun f spec body acc =
       (fun (normal_safety, normal, excep_safety, excep) (id, b) ->
 	 let post =
 	   make_and
-	     (LNamed (reg_loc b.jc_behavior_ensures.jc_assertion_loc,
-		      assertion None "" b.jc_behavior_ensures))
+	     (named_assertion None "" b.jc_behavior_ensures)
 	     (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)
 	 in
 	 let a =

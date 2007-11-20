@@ -110,7 +110,7 @@ and string_val key = parse
   | [^ '\\' '"'] as c
       { Buffer.add_char buf c;
         string_val key lexbuf }
-  | '\\' (['\\''"'] as c) 
+  | '\\' (['\\''\"'] as c)   
       { Buffer.add_char buf c;
         string_val key lexbuf }
   | '\\' 'n'
@@ -126,10 +126,15 @@ and string_val key = parse
 {
 
   let from_file f =
-    let c = open_in f in
-    let lb = from_channel c in
-    record lb;
-    close_in c;
-    List.rev !current
+      let c = 
+	try open_in f 
+	with Sys_error _ -> 
+	  Format.eprintf "Cannot open file %s@." f;
+	  exit 1
+      in
+      let lb = from_channel c in
+      record lb;
+      close_in c;
+      List.rev !current
 
 }

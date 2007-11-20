@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.56 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.57 2007-11-20 14:58:58 marche Exp $ i*)
 
 open Printf
 open Options
@@ -37,8 +37,10 @@ open Pprinter
 let _ = gui := true
 let debug = ref Options.debug
 
+(*
 let is_caduceus = 
   List.exists (fun f -> Filename.basename f = "caduceus.why") Options.files 
+*)
 
 let get_files fl = 
   let files = 
@@ -182,6 +184,33 @@ let update_buffer tv =
   tv#set_buffer buf;
   buf
 
+open Util
+
+let msg_of_kind = 
+  function
+    | EKRaw s -> "raw VC `" ^ s ^ "'"
+    | EKAbsurd -> "unreachable code"
+    | EKAssert -> "assertion"
+    | EKPre -> "precondition"
+    | EKPost -> "postcondition"
+    | EKWfRel -> "well-foundness of relation"
+    | EKVarDecr -> "variant decreasingness" 
+    | EKLoopInvInit -> "initialization of loop invariant" 
+    | EKLoopInvPreserv -> "preservation of loop invariant"
+
+let show_xpl xpl (tv:GText.view) =
+  let (k,locopt) = Util.raw_explanation xpl in
+  !display_info ("VC: " ^ msg_of_kind k);
+  Option_misc.iter
+    (fun (_,(s,l,b,e)) ->
+       let loc = 
+	 { Tags.file=s; 
+	   Tags.line= string_of_int l; 
+	   Tags.sp = string_of_int b; 
+	   Tags.ep = string_of_int e} in
+       Pprinter.move_to_source (Some loc))
+    locopt
+
 let select_obligs (model:GTree.tree_store) (tv:GText.view) 
                   (tv_s:GText.view) selected_rows = 
   List.iter
@@ -189,12 +218,13 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
        let row = model#get_iter p in
        let s = model#get ~row ~column:Model.fullname in
 	 try
-	   let o = Model.find_oblig s in
+	   let (_,xpl,_,_) as o = Model.find_oblig s in
 	   let buf = update_buffer tv in
 	   buf#set_text "";
 	   Pprinter.text_of_obligation tv o;
 	   let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
-	   tv#scroll_to_mark ~use_align:true mark
+	   tv#scroll_to_mark ~use_align:true mark;
+	   show_xpl xpl tv_s  
 	 with Not_found -> ())
     selected_rows
 
@@ -274,7 +304,7 @@ let try_proof oblig =
 let run_prover_child p (view:GTree.view) (model:GTree.tree_store) 
                      o bench alone = 
   let column_p = p.Model.pr_icon in
-  let (_, expl, oblig, seq) = o in
+  let (_, _, oblig, seq) = o in
   if bench or (try_proof seq) then
     try 
       let row = 
@@ -856,7 +886,7 @@ let main () =
 	let s = files_combo#entry#text in
 	let loc = {Tags.file=s; Tags.line="1"; Tags.sp="1"; Tags.ep="1"} in
 	Pprinter.move_to_source (Some loc);
-	Pprinter.reset_last_file ();
+	Pprinter.reset_last_file (); (* ?? pourquoi ?? *)
 	false
       end
   in
@@ -982,6 +1012,15 @@ let main () =
 
 (* Main *)
 let _ = 
+(*
   if not is_caduceus then Pprinter.desactivate ();
+*)
   main ();
   GtkThread.main ()
+
+	   
+(*
+Local Variables: 
+compile-command: "unset LANG; make -C .. bin/gwhy.byte"
+End: 
+*)

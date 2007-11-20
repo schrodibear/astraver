@@ -137,7 +137,7 @@ type pstatement_node =
   | JCPSskip
   | JCPSblock of pstatement list
   | JCPSexpr of pexpr
-  | JCPSassert of identifier option * pexpr
+  | JCPSassert of (* identifier option * *) pexpr
   | JCPSdecl of ptype * string * pexpr option
   | JCPSif of pexpr * pstatement * pstatement
   | JCPSwhile of pexpr * pexpr * pexpr option * pstatement
@@ -329,7 +329,7 @@ type loop_annot =
 type tstatement_node =
   | JCTSblock of tstatement list
   | JCTSexpr of texpr
-  | JCTSassert of string option * assertion
+  | JCTSassert of (* string option * *) assertion
   | JCTSdecl of var_info * texpr option * tstatement
   | JCTSif of texpr * tstatement * tstatement
   | JCTSwhile of texpr * loop_annot * tstatement
@@ -431,7 +431,7 @@ type statement_node =
   | JCSassign_var of var_info * expr
   | JCSassign_heap of expr * field_info * expr
     (* statements *)
-  | JCSassert of string option * assertion
+  | JCSassert of (* string option * *) assertion
   | JCSblock of statement list
   | JCSdecl of var_info * expr option * statement
   | JCSif of expr * statement * statement
@@ -446,9 +446,10 @@ type statement_node =
 
 and statement = 
     {
-     jc_statement_node : statement_node;
-     jc_statement_loc : Loc.position;
-   }
+      jc_statement_node : statement_node;
+      jc_statement_label : string;
+      jc_statement_loc : Loc.position;
+    }
 
 
 (*

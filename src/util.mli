@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.59 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.60 2007-11-20 14:58:58 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -158,6 +158,24 @@ val create_postval : predicate -> assertion option
 
 val create_post : predicate -> (assertion * 'b list) option
 
+(* explanation *)
+
+val reloc_xpl : Loc.position * predicate -> 
+  string option * (string * int * int * int)
+
+type expl_kind = 
+  | EKAbsurd
+  | EKAssert
+  | EKLoopInvInit
+  | EKLoopInvPreserv
+  | EKPost
+  | EKPre
+  | EKRaw of string
+  | EKVarDecr
+  | EKWfRel 
+      
+val raw_explanation : vc_explain -> expl_kind * (string option * (string * int * int * int)) option
+
 (*s Pretty printers. *)
 
 open Format
@@ -169,7 +187,6 @@ val print_logic_type : formatter -> logic_type -> unit
 
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
-val raw_explanation : formatter -> vc_explain -> unit
 val print_explanation : formatter -> vc_explain -> unit
 val print_assertion : formatter -> assertion -> unit
 val print_wp : formatter -> assertion option -> unit

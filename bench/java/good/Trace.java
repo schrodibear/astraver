@@ -89,6 +89,18 @@ class Trace {
 	x = (byte)(x+1); 
 	return (byte)(x+2);
     }
+
+    /* Example 7
+     * Explanation expected:
+     *   "pointer dereferencing"
+     * localized on "p.f"
+     */
+    int f; 
+    int f7(Trace p)
+    {
+	return p.f;
+    }
+
     
 }
 

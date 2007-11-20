@@ -1577,9 +1577,9 @@ let rec statement env lz s =
       | JCPSdecl (ty, id, e) -> 
 	  typing_error s.jc_pstatement_loc
 	    "decl of `%s' with statements afterwards" id, lz
-      | JCPSassert(id,e) ->
+      | JCPSassert( (*id,*) e) ->
           let a = assertion env e in
-          JCTSassert(Option_misc.map (fun x -> x.jc_identifier_name) id,a), lz
+          JCTSassert((*Option_misc.map (fun x -> x.jc_identifier_name) id,*) a), lz
       | JCPSexpr e -> 
 	  let te = expr env e in JCTSexpr te, lz
       | JCPSblock l -> 

@@ -18,7 +18,7 @@ case $1 in
 	make -f $b.makefile gui
 	;;
   *.why)
-	gwhy $1
+	gwhy-bin $1
 	;;
   *)
 	echo "don't know what to do with $1"

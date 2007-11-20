@@ -4,6 +4,6 @@ public class Lesson1 {
       @    \forall integer z; z >= x && z >= y ==> z >= \result;
       @*/
     public static int max(int x, int y) {
-        if (x>y) return x; else return y; 
+        if (x>y) return x; else return x; 
     }
 }

@@ -90,6 +90,17 @@ byte f6(byte x)
     return y+z;
 }
 
+/* Example 7
+ * Explanation expected:
+ *   "pointer dereferencing"
+ * localized on "p.f"
+ */
+type S = { integer f; }
+integer f7(S[..] p)
+{
+    return p.f;
+}
+
 
 
 

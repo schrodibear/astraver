@@ -3,7 +3,7 @@ JESSIE=../../../bin/jessie.byte
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
-EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj -inv-sem none
+EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj -inv-sem arguments
 
 KRAKATOA=ocamlrun -bt ../../../bin/krakatoa.byte
 KRAKATOALIB=$(shell pwd)/../../../lib

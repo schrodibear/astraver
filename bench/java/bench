@@ -81,7 +81,7 @@ echo "Java interp (good)"
 cd good
 
 bench_java_good () {
-    options="$* -why-opt -split-user-conj -why-opt -show-time"
+    options="$* -why-opt -split-user-conj -why-opt -show-time -inv-sem arguments"
     echo "-------------------------------------------------------------------"
     echo "Bench Krakatoa+Simplify/Yices/Ergo with options: $options"
     parsing="../../../bin/krakatoa.opt"

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.51 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.52 2007-11-20 14:58:58 marche Exp $ i*)
 
 open Format
 open Pp
@@ -59,7 +59,7 @@ let generic f targets =
        fprintf fmt "TIMEOUT ?= 10@\n@\n";
        fprintf fmt "WHY=why --no-arrays %s@\n@\n" 
 	 (Coptions.why_opt ());
-       fprintf fmt "GWHY=gwhy --no-arrays %s@\n@\n" (Coptions.why_opt ());
+       fprintf fmt "GWHY=gwhy-bin --no-arrays %s@\n@\n" (Coptions.why_opt ());
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "CADULIBFILE=%s@\n@\n" Coptions.libfile;
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
@@ -142,7 +142,7 @@ let generic f targets =
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        fprintf fmt "@\n";
        fprintf fmt "%%.stat: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "-include %s.depend@\n@\n" f;
        fprintf fmt "coq.depend: coq/%s_spec_why.v %a@\n" f

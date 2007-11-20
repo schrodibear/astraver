@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.14 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.15 2007-11-20 14:58:58 marche Exp $ i*)
 
 open Format
 open Pp
@@ -217,7 +217,7 @@ let print_file fmt = Queue.iter (decl fmt) queue
 
 let print_trace fmt id expl =
   fprintf fmt "[%s]@\n" id;
-  Util.raw_explanation fmt expl;
+  Util.print_explanation fmt expl;
   fprintf fmt "@\n"
 
 let print_traces fmt =
