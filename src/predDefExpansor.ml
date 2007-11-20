@@ -25,6 +25,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Env
+open Ident
+open Misc
+open Logic 
+open Cc 
+open Options
+open Logic_decl
+
 let pred_def = Hashtbl.create 97
 
 let rec subst_in_pure_type st = function
