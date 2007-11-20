@@ -57,17 +57,9 @@ let print_type fmt t =
 
 
 let num_of_constant loc c =
-(*
-  try
-*)
     match c with
       | JCCinteger n -> Num.num_of_string n
       | _ -> invalid_arg ""
-(*
-  with
-      Invalid_argument _ ->
-	Jc_options.parsing_error loc "invalid integer constant"
-*)
 	  
 let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)

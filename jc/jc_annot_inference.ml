@@ -2638,7 +2638,13 @@ let rec atp_of_asrt ~(neg:bool) a =
   | JCAapp _ | JCAold _ | JCAinstanceof _ | JCAbool_term _
   | JCAif _ | JCAmutable _ | JCAtagequality _ ->
       failwith "Atp alien"
-  end with Failure "Atp alien" -> if neg then Atp.False else Atp.True 
+  end with Failure "Atp alien" -> 
+    (* If alien appears in negative position, say in left-hand side of
+     * implication, then we must assume conservatively it may be true, so that
+     * the consequence of the implication must hold. Conversely, if alien 
+     * appears in positive form, we must assume it may be false.
+     *)
+    if neg then Atp.True else Atp.False 
 
 let atp_of_asrt = atp_of_asrt ~neg:false
   

@@ -2126,7 +2126,7 @@ let rec decl d =
 		     | _ -> acc)
 		(raw_asrt JCAtrue) struct_info.jc_struct_info_fields
 	    in
-	      if is_true invs || Jc_options.inv_sem <> InvArguments then 
+	      if is_true invs || !Jc_common_options.inv_sem <> InvArguments then 
 		Hashtbl.replace structs_table id (struct_info, invariants)
 	      else
 		let pi = make_rel ("fields_inv_" ^ struct_info.jc_struct_info_name) in
@@ -2168,7 +2168,7 @@ let rec decl d =
     | JCPDglobinv (id, e) ->
 	let a = assertion [] e in
 	let li = make_rel id in
-	  if Jc_options.inv_sem = InvArguments then 
+	  if !Jc_common_options.inv_sem = InvArguments then 
 	  Hashtbl.replace logic_functions_table 
 	    li.jc_logic_info_tag (li, JCAssertion a);
 	  
