@@ -315,11 +315,11 @@ let term_coerce loc tdest tsrc e =
 	"can't coerce type %a to type %a" 
 	print_type tsrc print_type tdest
 	
-let make_guarded_app ?name (k:kind) loc f l =
+let make_guarded_app ~name (k:kind) loc f l =
   let lab =
     match name with
-      | None | Some "" -> reg_loc ~kind:k loc
-      | Some n -> reg_loc ~name:n ~kind:k loc
+      | "" -> reg_loc ~kind:k loc
+      | n -> reg_loc ~name:n ~kind:k loc
   in
   Label(lab,make_app f l)
 
@@ -838,6 +838,7 @@ and offset ~threats = function
 and expr ~threats e : expr =
   let expr = expr ~threats and offset = offset ~threats in
   let loc = e.jc_expr_loc in
+  let lab = e.jc_expr_label in
   let e' =
   match e.jc_expr_node with
     | JCEconst JCCnull -> Var "null"
@@ -850,7 +851,7 @@ and expr ~threats e : expr =
 	let e1' = expr e1 in
 	make_app (unary_op op) 
 	  [coerce ~no_int_overflow:(not threats) 
-	     e1.jc_expr_label loc (unary_arg_type op) e1.jc_expr_type e1' ]
+	     lab loc (unary_arg_type op) e1.jc_expr_type e1' ]
     | JCEbinary(e1,((Beq_pointer | Bneq_pointer) as op),e2) ->
 	let e1' = expr e1 in
 	let e2' = expr e2 in
@@ -871,7 +872,7 @@ and expr ~threats e : expr =
 	let t = bin_arg_type loc op in
 	(match op with
 	   | Bdiv_int | Bdiv_real | Bmod_int ->
-	       make_guarded_app DivByZero loc
+	       make_guarded_app ~name:lab DivByZero loc
 	   | _ -> make_app)
 	  (bin_op op) 
 	  [ coerce ~no_int_overflow:(not threats) 
@@ -912,7 +913,7 @@ and expr ~threats e : expr =
     | JCEcast(e1,t) ->
 	let e1 = expr e1 in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
-	make_guarded_app DownCast loc "downcast_" 
+	make_guarded_app ~name:lab DownCast loc "downcast_" 
 	  [Deref tag; e1; Var (tag_name t)]
     | JCErange_cast(ri,e1) ->
 	let e1' = expr e1 in
@@ -925,42 +926,42 @@ and expr ~threats e : expr =
 	      make_app "safe_acc_" 
 		[ Var fi.jc_field_info_final_name ; expr e ]
 	  | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-	      make_guarded_app IndexBounds loc "lsafe_bound_acc_" 
+	      make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_acc_" 
 		[ Var fi.jc_field_info_final_name ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-	      make_guarded_app IndexBounds loc "rsafe_bound_acc_" 
+	      make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_acc_" 
 		[ Var fi.jc_field_info_final_name ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,off,Some lb,Some rb ->
-	      make_guarded_app IndexBounds loc "bound_acc_" 
+	      make_guarded_app ~name:lab IndexBounds loc "bound_acc_" 
 		[ Var fi.jc_field_info_final_name ; expr p; offset off; 
 		  Cte (Prim_int (Num.string_of_num lb)); 
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-	      make_guarded_app IndexBounds loc "lsafe_lbound_acc_" 
+	      make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name; expr p; offset off ]
 	  | p,off,Some lb,None ->
-	      make_guarded_app IndexBounds loc "lbound_acc_" 
+	      make_guarded_app ~name:lab IndexBounds loc "lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-	      make_guarded_app IndexBounds loc "rsafe_rbound_acc_" 
+	      make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name; expr p; offset off ]
 	  | p,off,None,Some rb ->
-	      make_guarded_app IndexBounds loc "rbound_acc_" 
+	      make_guarded_app ~name:lab IndexBounds loc "rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,Int_offset s,None,None when int_of_string s = 0 ->
-	      make_guarded_app PointerDeref loc "acc_" 
+	      make_guarded_app ~name:lab PointerDeref loc "acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name ; expr p ]
 	  | p,off,None,None ->
-	      make_guarded_app PointerDeref loc "offset_acc_" 
+	      make_guarded_app ~name:lab PointerDeref loc "offset_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
 		  Var fi.jc_field_info_final_name ; expr p; offset off ]
 	else
@@ -1051,6 +1052,7 @@ let rec statement ~threats s =
   (* reset_tmp_var(); *)
   let statement = statement ~threats in
   let expr = expr ~threats in
+  let lab = s.jc_statement_label in
   match s.jc_statement_node with
     | JCScall(vio,f,l,block) -> 
 (*
@@ -1064,7 +1066,7 @@ let rec statement ~threats s =
 	  with Invalid_argument _ -> assert false
 	in
 	let call = 
-	  make_guarded_app ~name:s.jc_statement_label UserCall loc 
+	  make_guarded_app ~name:lab UserCall loc 
 	    f.jc_fun_info_final_name el 
 	in
 	begin
@@ -1093,7 +1095,7 @@ let rec statement ~threats s =
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
-	let upd = make_upd ~threats s.jc_statement_label s.jc_statement_loc 
+	let upd = make_upd ~threats lab s.jc_statement_loc 
 	  fi e1 (Var tmp2) 
 	in
 (* Yannick: ignore variables to be able to refine update function used. *)	
@@ -1161,11 +1163,11 @@ let rec statement ~threats s =
 	  (Raise (jessie_return_exception, None))
     | JCSunpack(st, e, as_t) ->
 	let e = expr e in 
-	make_guarded_app Unpack s.jc_statement_loc
+	make_guarded_app ~name:lab Unpack s.jc_statement_loc
 	  ("unpack_"^st.jc_struct_info_root) [e; Var (tag_name as_t)]
     | JCSpack(st, e, from_t) ->
 	let e = expr e in 
-	make_guarded_app Pack s.jc_statement_loc
+	make_guarded_app ~name:lab Pack s.jc_statement_loc
 	  ("pack_"^st.jc_struct_info_root) [e; Var (tag_name from_t)]
     | JCSthrow (ei, Some e) -> 
 	let e = expr e in

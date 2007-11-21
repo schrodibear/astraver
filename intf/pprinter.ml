@@ -116,7 +116,8 @@ let move_to_line line =
   if line <= !tv_source#buffer#line_count && line <> 0 then begin
     let it = !tv_source#buffer#get_iter (`LINE line) in 
     let mark = `MARK (!tv_source#buffer#create_mark it) 
-    and y = if !tv_source#buffer#line_count < 20 then 0.23 else 0.1 in
+    (* and y = if !tv_source#buffer#line_count < 20 then 0.23 else 0.1  *)
+    in
     !tv_source#scroll_to_mark ~use_align:true ~yalign:0.5 mark;
     if debug then
       begin 
@@ -144,8 +145,25 @@ let color_loc file (tv:GText.view) l b e =
   let stop = start#forward_chars (e-b) in
   buf#apply_tag ~start ~stop orange_bg
   
+
+let banner () =
+"Welcome to GWhy (the Graphical VC viewer for the Why platform)
+This is Why version " ^ Version.version ^ 
+", compiled on " ^ Version.date ^ "
+Copyright (c) 2002-2007 ProVal team, INRIA
+This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)"
+
 let move_to_source = function
-  | None -> ()
+  | None -> 
+      last_file := "";
+      begin
+	try
+	  !tv_source#set_buffer (Hashtbl.find files "")
+	with Not_found ->
+	  !tv_source#set_buffer (GText.buffer ());
+	  !tv_source#buffer#set_text (banner());
+	  Hashtbl.add files "" !tv_source#buffer
+      end
   | Some loc ->
       let line = int_of_string loc.line
       and file = loc.file in
@@ -165,6 +183,7 @@ let move_to_source = function
 	move_to_line line
       end
 
+ 
 let move_to_loc loc =
   move_to_source (Some loc);
   color_loc loc.file !tv_source (int_of_string loc.line) 

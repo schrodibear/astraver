@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.58 2007-11-20 15:48:51 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.59 2007-11-21 16:41:30 marche Exp $ i*)
 
 open Printf
 open Options
@@ -188,28 +188,34 @@ open Util
 
 let msg_of_kind = 
   function
+    | EKRaw "PointerDeref" -> "pointer dereferencing"
+    | EKRaw "IndexBounds" -> "index bounds"
+    | EKRaw "ArithOverflow" -> "arithmetic overflow"
+    | EKRaw "UserCall" -> "precondition for call"
     | EKRaw s -> "raw VC `" ^ s ^ "'"
     | EKAbsurd -> "unreachable code"
     | EKAssert -> "assertion"
     | EKPre -> "precondition"
     | EKPost -> "postcondition"
     | EKWfRel -> "well-foundness of relation"
-    | EKVarDecr -> "variant decreasingness" 
+    | EKVarDecr -> "variant decrease" 
     | EKLoopInvInit -> "initialization of loop invariant" 
     | EKLoopInvPreserv -> "preservation of loop invariant"
 
 let show_xpl xpl (tv:GText.view) =
   let (k,locopt) = Util.raw_explanation xpl in
-  !display_info ("VC: " ^ msg_of_kind k);
-  Option_misc.iter
-    (fun (_,(s,l,b,e)) ->
-       let loc = 
-	 { Tags.file=s; 
-	   Tags.line= string_of_int l; 
-	   Tags.sp = string_of_int b; 
-	   Tags.ep = string_of_int e} in
-       Pprinter.move_to_loc loc)
-    locopt
+  match locopt with
+    | Some (_,(s,l,b,e)) ->
+	let loc = 
+	  { Tags.file=s; 
+	    Tags.line= string_of_int l; 
+	    Tags.sp = string_of_int b; 
+	    Tags.ep = string_of_int e} in
+	Pprinter.move_to_loc loc;
+	!display_info ("file: " ^ (Filename.basename s) ^ " VC: " ^ msg_of_kind k)
+    | None ->
+	Pprinter.move_to_source None;
+	!display_info ("(no file ?) VC: " ^ msg_of_kind k)
 
 let select_obligs (model:GTree.tree_store) (tv:GText.view) 
                   (tv_s:GText.view) selected_rows = 
@@ -883,9 +889,7 @@ let main () =
   let _ =
     files_combo#entry#event#connect#after#focus_in ~callback:
       begin fun ev -> 
-	let s = files_combo#entry#text in
-	let loc = {Tags.file=s; Tags.line="1"; Tags.sp="1"; Tags.ep="1"} in
-	Pprinter.move_to_source (Some loc);
+	Pprinter.move_to_source None;
 	Pprinter.reset_last_file (); (* ?? pourquoi ?? *)
 	false
       end

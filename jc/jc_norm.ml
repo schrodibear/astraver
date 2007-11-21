@@ -443,8 +443,8 @@ let rec expr e =
     (sl, tl), 
   { jc_expr_node = ne;
     jc_expr_type = e.jc_texpr_type;
-    jc_expr_label = e.jc_texpr_label;
-    jc_expr_loc = e.jc_texpr_loc }
+    jc_expr_label = lab;
+    jc_expr_loc = loc }
     
 and call lab loc f el ~binder ll = 
   if binder then
