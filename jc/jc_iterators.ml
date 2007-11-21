@@ -54,6 +54,71 @@ let rec fold_expr f acc e =
 
 
 (*****************************************************************************)
+(* General iterators on statements.                                          *)
+(*****************************************************************************)
+
+let rec fold_statement fpre fpost acc s =
+  let acc = fpre acc s in
+  let acc = match s.jc_statement_node with
+    | JCSdecl(_,_,s) | JCScall(_,_,_,s) -> 
+	fold_statement fpre fpost acc s
+    | JCSblock sl ->
+	List.fold_left (fold_statement fpre fpost) acc sl
+    | JCSif(_,ts,fs) ->
+	let acc = fold_statement fpre fpost acc ts in
+	fold_statement fpre fpost acc fs
+    | JCStry(s,hl,fs) ->
+	let acc = fold_statement fpre fpost acc s in
+	let acc = 
+	  List.fold_left (fun acc (_,_,s) -> 
+	    fold_statement fpre fpost acc s
+	  ) acc hl
+	in
+	fold_statement fpre fpost acc fs
+    | JCSloop(_,ls) ->
+	fold_statement fpre fpost acc ls
+    | JCSreturn _ | JCSthrow _ | JCSassert _ | JCSassign_var _
+    | JCSassign_heap _ | JCSpack _ | JCSunpack _ | JCSreturn_void ->
+	acc
+  in
+  fpost acc s
+
+let rec fold_expr_in_statement f acc s =
+  match s.jc_statement_node with
+    | JCSdecl(_,None,s) ->
+	fold_expr_in_statement f acc s
+    | JCSdecl(_,Some e,s) ->
+	let acc = fold_expr f acc e in
+	fold_expr_in_statement f acc s
+    | JCScall(_,_,els,s) -> 
+	let acc = List.fold_left (fold_expr f) acc els in
+	fold_expr_in_statement f acc s
+    | JCSblock sl ->
+	List.fold_left (fold_expr_in_statement f) acc sl
+    | JCSif(e,ts,fs) ->
+	let acc = fold_expr f acc e in
+	let acc = fold_expr_in_statement f acc ts in
+	fold_expr_in_statement f acc fs
+    | JCStry(s,hl,fs) ->
+	let acc = fold_expr_in_statement f acc s in
+	let acc = 
+	  List.fold_left 
+	    (fun acc (_,_,s) -> fold_expr_in_statement f acc s) acc hl
+	in
+	fold_expr_in_statement f acc fs
+    | JCSloop(_,ls) ->
+	fold_expr_in_statement f acc ls
+    | JCSreturn(_,e) | JCSthrow(_,Some e) | JCSassign_var(_,e) 
+    | JCSpack(_,e,_) | JCSunpack(_,e,_) ->
+	fold_expr f acc e
+    | JCSassign_heap(e1,_,e2) ->
+	let acc = fold_expr f acc e1 in
+	fold_expr f acc e2
+    | JCSthrow(_,None) | JCSassert _ | JCSreturn_void ->
+	acc
+
+
+(*****************************************************************************)
 (* General iterators on terms.                                               *)
 (*****************************************************************************)
 

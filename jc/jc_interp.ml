@@ -427,11 +427,11 @@ let logic_params li l =
 
 let make_logic_fun_call li l =
   let params = logic_params li l in
-  LApp(li.jc_logic_info_name,params)
+  LApp(li.jc_logic_info_final_name,params)
 
 let make_logic_pred_call li l =
   let params = logic_params li l in
-    LPred (li.jc_logic_info_name, params)
+    LPred (li.jc_logic_info_final_name, params)
 
 let rec term label oldlabel t =
   let ft = term label oldlabel in
@@ -646,19 +646,19 @@ let tr_logic_fun li ta acc =
 	(* Predicate *)
       | None, JCAssertion a -> 
 	  let a = assertion None "" a in
-	    Predicate (false, li.jc_logic_info_name,params_reads, a) 
+	    Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
 	      (* Function *)
       | Some ty, JCTerm t -> 
 	  let ret = tr_base_type ty in
 	  let t = term None "" t in
-	  Function(false,li.jc_logic_info_name,params_reads, ret, t) 
+	  Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
       (* Logic *)
       | tyo, JCReads r ->
 	  let ret = match tyo with
 	    | None -> simple_logic_type "prop"
 	    | Some ty -> tr_base_type ty
 	  in
-	  Logic(false, li.jc_logic_info_name, params_reads, ret)
+	  Logic(false, li.jc_logic_info_final_name, params_reads, ret)
       (* Other *)
       | _ -> assert false
   in 
@@ -690,14 +690,14 @@ let tr_logic_fun li ta acc =
 	      LImpl(
 		make_and_list sep_preds,
 		LIff(
-		  LPred(li.jc_logic_info_name,normal_params),
-		  LPred(li.jc_logic_info_name,update_params)))
+		  LPred(li.jc_logic_info_final_name,normal_params),
+		  LPred(li.jc_logic_info_final_name,update_params)))
 	  | Some rety ->
 	      LImpl(
 		make_and_list sep_preds,
 		LPred(equality_op_for_type rety,[
-		  LApp(li.jc_logic_info_name,normal_params);
-		  LApp(li.jc_logic_info_name,update_params)]))
+		  LApp(li.jc_logic_info_final_name,normal_params);
+		  LApp(li.jc_logic_info_final_name,update_params)]))
       in
       let a = 
 	List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
@@ -723,7 +723,7 @@ let tr_predicate li p acc =
 	   tr_base_type vi.jc_var_info_type))
       li.jc_logic_info_parameters
   in
-  Predicate(false,li.jc_logic_info_name,params,
+  Predicate(false,li.jc_logic_info_final_name,params,
 	    assertion None "" p) :: acc
 *)  
 

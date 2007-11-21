@@ -543,9 +543,9 @@ let rec replace_term_in_term ~source ~target t =
   pre_map_term 
     (fun t -> if raw_term_equal source t then Some target else None) t
     
-let rec replace_term_in_assertion srct targetvi a = 
-  let term = replace_term_in_term ~source:srct ~target:(JCTvar targetvi) in
-  let asrt = replace_term_in_assertion srct targetvi in
+let rec replace_term_in_assertion srct targett a = 
+  let term = replace_term_in_term ~source:srct ~target:targett in
+  let asrt = replace_term_in_assertion srct targett in
   let anode = match a.jc_assertion_node with
     | JCArelation(t1,bop,t2) ->
 	JCArelation(term t1,bop,term t2)
@@ -562,7 +562,6 @@ let rec replace_term_in_assertion srct targetvi a =
     | JCAapp(li,tl) ->
 	JCAapp(li,List.map term tl)
     | JCAquantifier(qt,vi,a) ->
-	assert(vi.jc_var_info_tag != targetvi.jc_var_info_tag);
 	JCAquantifier(qt,vi,asrt a)
     | JCAold a ->
 	JCAold(asrt a)      
@@ -2907,9 +2906,10 @@ let initialize_target curposts target =
     let copyvi = copyvar vi in
     add_inflexion_var curposts copyvi;
     target.jc_target_regular_invariant <-
-      replace_term_in_assertion vit copyvi target.jc_target_regular_invariant;
+      replace_term_in_assertion vit (JCTvar copyvi)
+      target.jc_target_regular_invariant;
     target.jc_target_assertion <-
-      replace_term_in_assertion vit copyvi target.jc_target_assertion;
+      replace_term_in_assertion vit (JCTvar copyvi) target.jc_target_assertion;
     let t1 = var_term copyvi in
     let bop = equality_operator_for_type vi.jc_var_info_type in
     let eq = raw_asrt (JCArelation(t1,bop,vit)) in
@@ -3017,7 +3017,7 @@ let rec wp_statement weakpre =
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
 	    | Some a -> 
-		let a = replace_term_in_assertion vit copyvi a in
+		let a = replace_term_in_assertion vit (JCTvar copyvi) a in
 		match term_of_expr e with
 		  | None -> Some a
 		  | Some t2 ->
@@ -3048,7 +3048,9 @@ let rec wp_statement weakpre =
 		let post = match curposts.jc_post_normal with
 		  | None -> None
 		  | Some a -> 
-		      let a = replace_term_in_assertion dereft copyvi a in
+		      let a = 
+			replace_term_in_assertion dereft (JCTvar copyvi) a 
+		      in
 		      match term_of_expr e2 with
 			| None -> Some a
 			| Some t2 ->
@@ -3179,7 +3181,7 @@ let rec wp_statement weakpre =
 	  let copyvi = copyvar vi in
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
-	    | Some a -> Some(replace_term_in_assertion vit copyvi a)
+	    | Some a -> Some(replace_term_in_assertion vit (JCTvar copyvi) a)
 	  in
 	  add_inflexion_var curposts copyvi;
 	  let curposts = 
@@ -3248,6 +3250,124 @@ let wp_function targets (fi,fs,sl) =
     
 
 (*****************************************************************************)
+(* Augmenting loop invariants.                                               *)
+(*****************************************************************************)
+
+let collect_immediate_targets targets s =
+  (* Special version of [fold_statement] different from the one 
+   * in [Jc_iterators] in that fpost is called after the body statement 
+   * of the try block.
+   *)
+  let rec fold_statement fpre fpost acc s =
+    let acc = fpre acc s in
+    let acc = match s.jc_statement_node with
+      | JCSdecl(_,_,s) | JCScall(_,_,_,s) -> 
+	  fold_statement fpre fpost acc s
+      | JCSblock sl ->
+	  List.fold_left (fold_statement fpre fpost) acc sl
+      | JCSif(_,ts,fs) ->
+	  let acc = fold_statement fpre fpost acc ts in
+	  fold_statement fpre fpost acc fs
+      | JCStry(s,hl,fs) ->
+	  let acc = fold_statement fpre fpost acc s in
+          let acc = fpost acc s in
+	  let acc = 
+	    List.fold_left (fun acc (_,_,s) -> 
+	      fold_statement fpre fpost acc s
+	    ) acc hl
+	  in
+	  fold_statement fpre fpost acc fs
+      | JCSloop(_,ls) ->
+	  fold_statement fpre fpost acc ls
+      | JCSreturn _ | JCSthrow _ | JCSassert _ | JCSassign_var _
+      | JCSassign_heap _ | JCSpack _ | JCSunpack _ | JCSreturn_void ->
+	  acc
+    in
+    fpost acc s
+  in
+  let in_select_zone = ref false in
+  let select_pre acc s =
+    match s.jc_statement_node with
+      | JCSassert a -> 
+	  if debug then printf "[select_pre] consider target@.";
+	  if debug then printf "[select_pre] in zone ? %b@." !in_select_zone;
+	  if !in_select_zone then 
+	    let target = target_of_assertion s s.jc_statement_loc a in
+	    if debug then printf "[select_pre] adding in_zone target@.";
+	    target::acc 
+	  else acc
+      | JCSloop _ -> 
+	  if debug then printf "[select_pre] in_zone true@.";
+	  in_select_zone := true; acc
+      | JCSdecl _ | JCSblock _ | JCSassign_var _
+      | JCSassign_heap _ | JCSpack _ | JCSunpack _ | JCStry _ ->
+          (* Allowed with [JCStry] thanks to patched [fold_statement]. *)
+	  acc
+      | JCScall _ | JCSif _ | JCSreturn _ | JCSthrow _
+      | JCSreturn_void ->
+	  if debug then printf "[select_pre] in_zone false@.";
+	  in_select_zone := false; acc	
+  in
+  let select_post acc s =
+    match s.jc_statement_node with
+      | JCSloop _ -> 
+	  if debug then printf "[select_post] in_zone false@.";
+	  in_select_zone := false; acc
+      | _ -> acc
+  in
+  fold_statement select_pre select_post targets s
+
+let rec backprop_statement target s curpost =
+  if debug then 
+    printf "[backprop_statement] %a@." Loc.report_position s.jc_statement_loc;
+  let curpost = match s.jc_statement_node with
+    | JCSdecl(vi,eo,s) ->
+	let curpost = backprop_statement target s curpost in
+	begin match curpost with None -> None | Some a -> 
+	  match eo with None -> Some a | Some e ->
+	    match term_of_expr e with None -> Some a | Some t2 ->
+	      let t1 = var_term vi in
+	      Some(replace_term_in_assertion t1 t2.jc_term_node a)
+	end
+    | JCSassign_var(vi,e) ->
+	begin match curpost with None -> None | Some a -> 
+	  match term_of_expr e with None -> Some a | Some t2 ->
+	    let t1 = var_term vi in
+	    Some(replace_term_in_assertion t1 t2.jc_term_node a)
+	end
+    | JCSassign_heap _ | JCSassert _ | JCSpack _ | JCSunpack _ ->
+	curpost
+    | JCSblock sl ->
+	List.fold_right (backprop_statement target) sl curpost
+    | JCSif _ | JCSreturn_void | JCSreturn _ | JCSthrow _ | JCScall _ ->
+	assert (curpost = None); curpost
+    | JCStry(s,_,_) ->
+	assert (curpost = None); 
+	backprop_statement target s curpost
+    | JCSloop(la,ls) ->
+	let curpost = backprop_statement target ls curpost in
+	begin
+          match curpost with None -> () | Some a ->
+	    if not (contradictory a la.jc_loop_invariant) then
+	      la.jc_loop_invariant <- make_and [a;la.jc_loop_invariant]
+	end;
+	None
+  in
+  if s == target.jc_target_statement then
+    begin 
+      assert (curpost = None);
+      Some target.jc_target_assertion
+    end
+  else curpost
+
+let backprop_function targets (fi,fs,sl) =
+  if debug then printf "[backprop_function]@.";
+  List.iter (fun target ->
+    ignore(List.fold_right (backprop_statement target) sl None)
+  ) targets
+
+
+(*****************************************************************************)
 (* Main function.                                                            *)
 (*****************************************************************************)
 
@@ -3268,6 +3388,8 @@ let code_function = function
 	    let targets = List.fold_left collect_targets [] sl in
 	    wp_function targets (fi,fs,sl)
 	| "boxwp" | "octwp" | "polwp" ->
+	    let targets = List.fold_left collect_immediate_targets [] sl in
+	    backprop_function targets (fi,fs,sl);
 	    let targets = List.fold_left collect_targets [] sl in
 	    begin match Jc_options.ai_domain with
 	      | "boxwp" -> 

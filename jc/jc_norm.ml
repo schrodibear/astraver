@@ -520,10 +520,22 @@ and statement s =
 		    (make_decls loc (sl @ [if_stat]) tl).jc_statement_node
 	    end
       | JCTSwhile (e, la, body) ->
-	  let exit_stat = make_tthrow loc loop_exit None in
-	  let if_stat = statement (make_tif loc e body exit_stat) in
-	  let continue_stat = make_throw loc loop_continue None in
-	  let body = make_block loc [if_stat;continue_stat] in
+	  let body = match e.jc_texpr_node with
+	    | JCTEconst(JCCboolean true) ->
+		(* Special case of an infinite loop [while(true)].
+		 * Then, no condition needs to be tested. This form is expected
+		 * for some assertions to be recognized as loop invariants
+		 * later on, in annotation inference.
+		 *)
+		let body_stat = statement body in
+		let continue_stat = make_throw loc loop_continue None in
+		make_block loc [body_stat;continue_stat] 
+	    | _ ->
+		let exit_stat = make_tthrow loc loop_exit None in
+		let if_stat = statement (make_tif loc e body exit_stat) in
+		let continue_stat = make_throw loc loop_continue None in
+		make_block loc [if_stat;continue_stat] 
+	  in
 	  let catch_continue = 
 	    [(loop_continue, None, make_block loc [])] in
 	  let try_continue = 
