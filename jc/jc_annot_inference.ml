@@ -2607,7 +2607,7 @@ let rec term_of_atp tm =
   in
   type_term tnode integer_type
 
-let rec atp_of_asrt ~(neg:bool) a = 
+let rec atp_of_asrt a = 
   if debug then printf "[atp_of_asrt] %a@." Jc_output.assertion a;
   try begin match a.jc_assertion_node with
     | JCAtrue -> 
@@ -2622,27 +2622,27 @@ let rec atp_of_asrt ~(neg:bool) a =
     | JCAand al -> 
 	let rec mkand = function
 	  | [] -> Atp.True
-	  | [a] -> atp_of_asrt ~neg a
-	  | a :: al -> Atp.And (atp_of_asrt ~neg a, mkand al)
+	  | [a] -> atp_of_asrt a
+	  | a :: al -> Atp.And (atp_of_asrt a, mkand al)
 	in
 	mkand al
     | JCAor al -> 
 	let rec mkor = function
 	  | [] -> Atp.False
-	  | [a] -> atp_of_asrt ~neg a
-	  | a :: al -> Atp.Or (atp_of_asrt ~neg a, mkor al)
+	  | [a] -> atp_of_asrt a
+	  | a :: al -> Atp.Or (atp_of_asrt a, mkor al)
 	in
 	mkor al
     | JCAimplies(a1,a2) ->
-	Atp.Imp(atp_of_asrt ~neg:(not neg) a1,atp_of_asrt ~neg a2)
+	Atp.Imp(atp_of_asrt a1,atp_of_asrt a2)
     | JCAiff(a1,a2) ->
 	Atp.And
-	  (Atp.Imp(atp_of_asrt ~neg:(not neg) a1,atp_of_asrt ~neg a2),
-	  Atp.Imp(atp_of_asrt ~neg:(not neg) a2,atp_of_asrt ~neg a1))
+	  (Atp.Imp(atp_of_asrt a1,atp_of_asrt a2),
+	  Atp.Imp(atp_of_asrt a2,atp_of_asrt a1))
     | JCAnot a ->
-	Atp.Not(atp_of_asrt ~neg:(not neg) a)
+	Atp.Not(atp_of_asrt a)
     | JCAquantifier(q,vi,a) ->
-	let f = atp_of_asrt ~neg a in
+	let f = atp_of_asrt a in
 	let fvars = Atp.fv f in
 	let varsets = List.map (fun v -> free_variables (Vwp.term v)) fvars in
 	let vars = List.fold_left2
@@ -2666,12 +2666,12 @@ let rec atp_of_asrt ~(neg:bool) a =
     (* If alien appears in negative position, say in left-hand side of
      * implication, then we must assume conservatively it may be true, so that
      * the consequence of the implication must hold. Conversely, if alien 
-     * appears in positive form, we must assume it may be false.
+     * appears in positive form, assuming it to be true allows to keep the 
+     * other part of a conjunction. It should not be part of a positive 
+     * disjunction. TODO
      *)
-    if neg then Atp.True else Atp.False 
+    Atp.True
 
-let atp_of_asrt = atp_of_asrt ~neg:false
-  
 let rec asrt_of_atp fm =
   let anode = match fm with
     | Atp.False ->
@@ -2771,9 +2771,9 @@ let contradictory a b =
 
 let simplify =
   let mgr = Polka.manager_alloc_strict () in
-  fun a inv ->
-    if tautology a then raw_asrt JCAtrue else
-      let dnf = Atp.dnf (atp_of_asrt a) in
+  fun inita inva ->
+    let simpla = if tautology inita then raw_asrt JCAtrue else
+      let dnf = Atp.dnf (atp_of_asrt inita) in
       let vars = Atp.fv dnf in
       let vars = List.map Vwp.term vars in
       let vars = List.map Vai.variable_of_term vars in
@@ -2784,7 +2784,7 @@ let simplify =
 
       let disjuncts =
 	List.filter (fun conjunct ->
-	  not(contradictory (make_and conjunct) inv)
+	  not(contradictory (make_and conjunct) inva)
 	) disjuncts
       in
 
@@ -2833,6 +2833,15 @@ let simplify =
       let abstract_disjuncts = List.map (mkinvariant mgr) abstract_disjuncts in
       let disjuncts = abstract_disjuncts @ other_disjuncts in
       make_or disjuncts
+    in
+    if debug then
+      printf "@[<v 2>[simplify] initial:@\n%a@]@." Jc_output.assertion inita;
+    if debug then
+      printf "@[<v 2>[simplify] w.r.t. invariant:@\n%a@]@." 
+	Jc_output.assertion inva;
+    if debug then
+      printf "@[<v 2>[simplify] final:@\n%a@]@." Jc_output.assertion simpla;
+    simpla
 
 let quantif_eliminate qf finv =
   if Jc_options.debug then
