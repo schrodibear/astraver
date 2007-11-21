@@ -1,0 +1,36 @@
+/*
+@OPTIONS: -ai boxwp
+*/
+
+/* The goal of this test is to check that no excessively strong loop invariant
+ * or precondition is inferred. Indeed, in the following functions, setting
+ * a precondition to [n<0] or [n2<0] allows in each case to make the assertion
+ * hold trivially, by making it unreachable.
+ * Therefore, the assertions should stay unproved.
+ */
+
+boolean rand();
+integer rand_int();
+
+unit f(integer n) {
+    integer m = 0;
+    if (n < 0) return;
+    m = rand_int();
+    assert (m < 10);
+}
+
+unit f2(integer n2) {
+    integer m2 = 0;
+    while (rand()) ; {
+        m2++;
+    }
+    if (n2 < 0) return;
+    assert (m2 < 10);
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make dead"
+End: 
+*/

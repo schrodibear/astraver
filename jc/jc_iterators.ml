@@ -173,6 +173,43 @@ let raw_sub_term subt t =
 let raw_strict_sub_term subt t =
   raw_term_compare subt t <> 0 && raw_sub_term subt t
 
+
+(*****************************************************************************)
+(* General iterators on assertions.                                          *)
+(*****************************************************************************)
+
+let rec fold_assertion f acc a =
+  let acc = f acc a in
+  match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAtagequality _ 
+    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ -> 
+	acc
+    | JCAand al | JCAor al ->
+	List.fold_left (fold_assertion f) acc al
+    | JCAimplies(a1,a2) | JCAiff(a1,a2) | JCAif(_,a1,a2) ->
+	let acc = fold_assertion f acc a1 in
+	fold_assertion f acc a2
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+	fold_assertion f acc a1
+
+let rec fold_term_in_assertion f acc a =
+  match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCAtagequality _ -> acc
+    | JCArelation(t1,_,t2) -> 
+	let acc = fold_term f acc t1 in
+	fold_term f acc t2
+    | JCAapp(_,tls) ->
+	List.fold_left (fold_term f) acc tls
+    | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+	fold_term f acc t1
+    | JCAand al | JCAor al ->
+	List.fold_left (fold_term_in_assertion f) acc al
+    | JCAimplies(a1,a2) | JCAiff(a1,a2) | JCAif(_,a1,a2) ->
+	let acc = fold_term_in_assertion f acc a1 in
+	fold_term_in_assertion f acc a2
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+	fold_term_in_assertion f acc a1
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -C .. bin/jessie.byte"

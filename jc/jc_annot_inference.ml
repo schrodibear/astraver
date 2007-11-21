@@ -47,6 +47,10 @@ module TermTable =
 		      let equal = raw_term_equal
 		      let hash = Hashtbl.hash end)
 
+module TermSet =
+  Set.Make(struct type t = term 
+		  let compare = raw_term_compare end)
+
 (*
   usage: jessie -ai <box,oct,pol,wp,boxwp,octwp,polwp>
   
@@ -124,6 +128,15 @@ let full_expr e ty loc = {
   jc_expr_loc = loc;
   jc_expr_label = "";
 }
+
+let is_integral_type = function
+  | JCTnative ty ->
+      begin match ty with
+	| Tunit | Treal | Tboolean -> false
+	| Tinteger -> true
+      end
+  | JCTenum _ -> true
+  | JCTpointer _ | JCTlogic _ | JCTnull -> false
 
 let equality_operator_for_type = function
   | JCTnative ty ->
@@ -339,7 +352,7 @@ let rec term_depends_on_term t1 t2 =
 type target_assertion = {
   jc_target_statement : statement;
   jc_target_location : Loc.position;
-  jc_target_assertion : assertion;
+  mutable jc_target_assertion : assertion;
   mutable jc_target_regular_invariant : assertion;
   mutable jc_target_propagated_invariant : assertion;
 }
@@ -2855,6 +2868,96 @@ let quantif_eliminate qf finv =
     | q -> 
 	let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
 	simplify (asrt_of_atp q) finv
+
+let initialize_target curposts target =
+  let collect_vars =
+    fold_term_in_assertion (fun acc t -> match t.jc_term_node with
+      | JCTvar vi -> VarSet.add vi acc
+      | _ -> acc
+    ) VarSet.empty 
+  in
+  let collect_sub_terms = 
+    fold_term_in_assertion (fun acc t -> match t.jc_term_node with
+      | JCTvar _ | JCTbinary(_,(Badd_int | Bsub_int),_)
+      | JCTunary((Uplus_int | Uminus_int),_) -> acc
+      | _ -> TermSet.add t acc
+    ) TermSet.empty 
+  in
+  let vs1 = collect_vars target.jc_target_regular_invariant in
+  let vs2 = collect_vars target.jc_target_assertion in
+  let vs = VarSet.union vs1 vs2 in
+  let ts1 = collect_sub_terms target.jc_target_regular_invariant in
+  let ts2 = collect_sub_terms target.jc_target_assertion in
+  let ts = TermSet.union ts1 ts2 in
+  VarSet.fold (fun vi a ->
+    let vit = var_term vi in
+    let copyvi = copyvar vi in
+    add_inflexion_var curposts copyvi;
+    target.jc_target_regular_invariant <-
+      replace_term_in_assertion vit copyvi target.jc_target_regular_invariant;
+    target.jc_target_assertion <-
+      replace_term_in_assertion vit copyvi target.jc_target_assertion;
+    let t1 = var_term copyvi in
+    let bop = equality_operator_for_type vi.jc_var_info_type in
+    let eq = raw_asrt (JCArelation(t1,bop,vit)) in
+    let eqs = 
+      TermSet.fold (fun t acc ->
+	if raw_strict_sub_term vit t then
+	  let t2 = replace_term_in_term ~source:vit ~target:(JCTvar copyvi) t in
+	  if is_integral_type t.jc_term_type then
+	    let bop = equality_operator_for_type t.jc_term_type in
+	    let eq = raw_asrt(JCArelation(t2,bop,t)) in
+	    eq::acc
+	  else acc
+	else acc
+      ) ts [eq]
+    in
+    make_and(a::eqs)
+  ) vs (raw_asrt JCAtrue) 
+
+let finalize_target ~is_function_level curposts target inva =
+  let annot_name = 
+    if is_function_level then "precondition" else "loop invariant" 
+  in
+  let vs,curposts = pop_modified_vars curposts in
+  let vs = VarSet.union vs !(curposts.jc_post_inflexion_vars) in
+  if is_function_level then assert(curposts.jc_post_modified_vars = []);
+  match curposts.jc_post_normal with None -> None | Some wpa -> 
+    (* [wpa] is the formula obtained by weakest precondition from some 
+     * formula at the assertion point.
+     *)
+    (* [patha] is the path formula. It characterizes the states from which 
+     * it is possible to reach the assertion point.
+     *)
+    let patha = make_and[wpa;target.jc_target_regular_invariant] in
+    (* [impla] is the implication formula, that guarantees the assertion holds
+     * when the assertion point is reached.
+    *)
+    let impla = raw_asrt(JCAimplies(patha,target.jc_target_assertion)) in
+    (* [quanta] is the quantified formula. It quantifies [impla] over the 
+     * variables modified.
+     *)
+    let quanta = 
+      VarSet.fold (fun vi a -> raw_asrt (JCAquantifier(Forall,vi,a))) vs impla
+    in
+    (* [elima] is the quantifier free version of [quanta].
+    *)
+    let elima = quantif_eliminate quanta inva in
+    if contradictory elima patha then
+      begin
+	if Jc_options.verbose then
+	  printf "%a@[<v 2>No inferred %s@."
+	    Loc.report_position target.jc_target_location annot_name;
+	None
+      end
+    else
+      begin
+	if Jc_options.verbose then
+	  printf "%a@[<v 2>Inferring %s@\n%a@]@."
+	    Loc.report_position target.jc_target_location
+	    annot_name Jc_output.assertion elima;
+	Some elima
+      end
 	  
 let rec wp_statement weakpre = 
   let var_of_term = Hashtbl.create 0 in
@@ -2881,20 +2984,22 @@ let rec wp_statement weakpre =
 		      (* TODO: take boolean variables into account. *)
 		      a
 		    else
-		      let t1 = type_term (JCTvar vi) vi.jc_var_info_type in
+		      let t1 = var_term vi in
 		      let bop = 
 			equality_operator_for_type vi.jc_var_info_type in
 		      let eq = raw_asrt (JCArelation(t1,bop,t2)) in
-		      raw_asrt (JCAimplies(eq,a))
+(* 		      raw_asrt (JCAimplies(eq,a)) *)
+		      make_and [eq;a]
 	      in
-	      Some (raw_asrt (JCAquantifier(Forall,vi,a)))
+(* 	      Some (raw_asrt (JCAquantifier(Forall,vi,a))) *)
+	      Some a
 	  in
-	  let curposts = remove_modified_var curposts vi in
+	  let curposts = add_modified_var curposts vi in
 	  { curposts with jc_post_normal = post; }
       | JCSassign_var(vi,e) ->
 	  if debug then
 	    printf "[assignment]%s@." vi.jc_var_info_name;
-	  let vit = type_term (JCTvar vi) vi.jc_var_info_type in
+	  let vit = var_term vi in
 	  let copyvi = copyvar vi in
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
@@ -2907,11 +3012,11 @@ let rec wp_statement weakpre =
 			(* TODO: take boolean variables into account. *)
 			Some a
 		      else
-			let t1 = 
-			  type_term (JCTvar copyvi) copyvi.jc_var_info_type in
+			let t1 = var_term copyvi in
 			let bop = equality_operator_for_type vi.jc_var_info_type in
 			let eq = raw_asrt (JCArelation(t1,bop,t2)) in
-			Some (raw_asrt (JCAimplies(eq,a)))
+(* 			Some (raw_asrt (JCAimplies(eq,a))) *)
+			Some(make_and [eq;a])
 	  in
 	  add_inflexion_var curposts copyvi;
 	  let curposts = 
@@ -2934,11 +3039,12 @@ let rec wp_statement weakpre =
 		      match term_of_expr e2 with
 			| None -> Some a
 			| Some t2 ->
-			    let t1 = type_term (JCTvar copyvi) copyvi.jc_var_info_type in
+			    let t1 = var_term copyvi in
 			    let bop = 
 			      equality_operator_for_type fi.jc_field_info_type in
 			    let eq = raw_asrt (JCArelation(t1,bop,t2)) in
-			    Some (raw_asrt (JCAimplies(eq,a)))
+(* 			    Some (raw_asrt (JCAimplies(eq,a))) *)
+			    Some(make_and [eq;a])
 		in
 		add_inflexion_var curposts copyvi;
 		let curposts = 
@@ -2952,7 +3058,8 @@ let rec wp_statement weakpre =
       | JCSassert((*_,*)a1) ->
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
-	    | Some a -> Some (raw_asrt (JCAimplies(a1,a)))
+(* 	    | Some a -> Some (raw_asrt (JCAimplies(a1,a))) *)
+	    | Some a -> Some (make_and [a1;a])
 	  in
 	  { curposts with jc_post_normal = post; }
       | JCSblock sl ->
@@ -2965,7 +3072,8 @@ let rec wp_statement weakpre =
 	    | None -> None
 	    | Some a -> 
 		let ta = raw_asrt_of_expr e in
-		Some (raw_asrt (JCAimplies(ta,a)))
+(* 		Some (raw_asrt (JCAimplies(ta,a))) *)
+		Some(make_and [ta;a])
 	  in
 	  let fposts = wp_statement weakpre target fs curposts in
 	  if debug then
@@ -2974,11 +3082,13 @@ let rec wp_statement weakpre =
 	    | None -> None
 	    | Some a -> 
 		let fa = raw_not_asrt (raw_asrt_of_expr e) in
-		Some (raw_asrt (JCAimplies(fa,a)))
+(* 		Some (raw_asrt (JCAimplies(fa,a))) *)
+		Some(make_and [fa;a])
 	  in
 	  let post = match tpost,fpost with
 	    | None,opta | opta,None -> opta
-	    | Some ta,Some fa -> Some (make_and [ta;fa])
+(* 	    | Some ta,Some fa -> Some (make_and [ta;fa]) *)
+	    | Some ta,Some fa -> Some (make_or [ta;fa])
 	  in
 	  let tvs,_ = pop_modified_vars tposts in
 	  let fvs,_ = pop_modified_vars fposts in
@@ -3030,51 +3140,52 @@ let rec wp_statement weakpre =
 	  let curposts = { curposts with jc_post_normal = None; } in
 	  let loopposts = push_modified_vars curposts in
 	  let loopposts = wp_statement weakpre target ls loopposts in
-	  let vs,loopposts = pop_modified_vars loopposts in
-	  let vs = VarSet.union vs !(loopposts.jc_post_inflexion_vars) in
-	  let post = match loopposts.jc_post_normal with
-	    | None -> None
-	    | Some a ->
-		(* Prefix by loop invariant in left-hand side of implication.*)
-		let impl = raw_asrt(JCAimplies(la.jc_loop_invariant,a)) in
-		let qf = VarSet.fold 
-		  (fun vi a -> raw_asrt (JCAquantifier(Forall,vi,a))) vs impl
+	  let post = 
+	    match finalize_target 
+	      ~is_function_level:false loopposts target la.jc_loop_invariant
+	    with None -> None | Some infera ->
+	      target.jc_target_regular_invariant <- la.jc_loop_invariant;
+	      target.jc_target_assertion <- infera;
+	      begin try
+		let a = Hashtbl.find weakpre.jc_weakpre_loop_invariants
+		  la.jc_loop_tag
 		in
-		let qe = quantif_eliminate qf la.jc_loop_invariant in
-		begin match qe.jc_assertion_node with
-		  | JCAfalse ->
-		      if Jc_options.verbose then
-			printf "%a@[<v 2>No inferred loop invariant@."
-			  Loc.report_position target.jc_target_location
-		  | _ ->
-		      if Jc_options.verbose then
-			begin 
-			  printf
-			    "%a@[<v 2>Inferring loop invariant@\n%a@]@."
-			    Loc.report_position target.jc_target_location
-			    Jc_output.assertion qe;
-			  try
-			    let a = Hashtbl.find weakpre.jc_weakpre_loop_invariants
-			      la.jc_loop_tag
-			    in
-			    Hashtbl.replace weakpre.jc_weakpre_loop_invariants
-			      la.jc_loop_tag (make_and [a; qe])
-			  with Not_found ->
-			    Hashtbl.add weakpre.jc_weakpre_loop_invariants
-			      la.jc_loop_tag qe
-			end
-		end;
-		Some qe
+		Hashtbl.replace weakpre.jc_weakpre_loop_invariants
+		  la.jc_loop_tag (make_and [a; infera])
+	      with Not_found ->
+		Hashtbl.add weakpre.jc_weakpre_loop_invariants
+		  la.jc_loop_tag infera
+	      end;
+	      let inita = initialize_target loopposts target in
+	      Some inita
 	  in
 	  { curposts with jc_post_normal = post; }
-      | JCScall(vio,f,args,s) -> 
+      | JCScall(Some vi,f,args,s) -> 
+	  let curposts = wp_statement weakpre target s curposts in
+	  let vit = var_term vi in
+	  let copyvi = copyvar vi in
+	  let post = match curposts.jc_post_normal with
+	    | None -> None
+	    | Some a -> Some(replace_term_in_assertion vit copyvi a)
+	  in
+	  add_inflexion_var curposts copyvi;
+	  let curposts = 
+	    if is_function_level curposts then curposts
+	    else
+	      (* Also add regular variable, for other branches in loop. *)
+	      add_modified_var curposts vi 
+	  in
+	  { curposts with jc_post_normal = post; }
+      | JCScall(None,f,args,s) -> 
+	  let curposts = wp_statement weakpre target s curposts in
 	  curposts
     in
     if s == target.jc_target_statement then
-      let a = raw_asrt(JCAimplies(target.jc_target_regular_invariant,
-      target.jc_target_assertion)) in
+(*       let a = raw_asrt(JCAimplies(target.jc_target_regular_invariant, *)
+(*       target.jc_target_assertion)) in *)
+      let inita = initialize_target curposts target in
       assert (curposts.jc_post_normal = None);
-      { curposts with jc_post_normal = Some a; }
+      { curposts with jc_post_normal = Some inita; }
     else curposts
 
 let rec record_wp_invariants weakpre s =
@@ -3115,29 +3226,10 @@ let wp_function targets (fi,fs,sl) =
     } in
     let initposts = push_modified_vars initposts in
     let posts = List.fold_right (wp_statement weakpre target) sl initposts in
-    let vs,posts = pop_modified_vars posts in
-    let vs = VarSet.union vs !(posts.jc_post_inflexion_vars) in
-    assert (posts.jc_post_modified_vars = []);
-    match posts.jc_post_normal with
-      | None -> ()
-      | Some a -> 
-	  let qf = 
-	    VarSet.fold (fun vi a -> raw_asrt (JCAquantifier(Forall,vi,a))) vs a
-	  in
-	  let qe = quantif_eliminate qf fs.jc_fun_requires in
-	  match qe.jc_assertion_node with
-	    | JCAfalse ->
-		if Jc_options.verbose then
-		  printf "%a@[<v 2>No inferred precondition for function %s@."
-		    Loc.report_position target.jc_target_location
-		    fi.jc_fun_info_name
-	    | _ ->
-		if Jc_options.verbose then
-		  printf
-		    "%a@[<v 2>Inferring precondition@\n%a@]@\nfor function %s@."
-		    Loc.report_position target.jc_target_location
-		    Jc_output.assertion qe fi.jc_fun_info_name ;
-		fs.jc_fun_requires <- make_and [fs.jc_fun_requires; qe]
+    match 
+      finalize_target ~is_function_level:true posts target fs.jc_fun_requires
+    with None -> () | Some infera ->
+      fs.jc_fun_requires <- make_and [fs.jc_fun_requires;infera]
   ) targets;
   List.iter (record_wp_invariants weakpre) sl
     
