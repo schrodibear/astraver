@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.39 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.40 2007-11-21 14:08:42 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -344,11 +344,11 @@ let output_file f =
     fprintf fmt "  :assumption
                    (forall (?x Int) (?y Int) 
                               (and (<= 0 (modulo ?x ?y))
-                                   (implies (<= 0 ?y ) (<   (modulo ?x ?y) ?y))
+                                   (implies (< 0 ?y ) (<   (modulo ?x ?y) ?y))
                                    (implies (< ?y 0) 
                                       (< (modulo ?x ?y) (- 0 ?y)))
-                                   (exists (?t Int)
-                                      (= ?x (+ (* ?t ?y) (modulo ?x ?y ))))))";
+                                   (implies (not (= ?y 0)) (exists (?t Int)
+                                      (= ?x (+ (* ?t ?y) (modulo ?x ?y )))))))@\n";
   end;
   iter (output_elem fmt);
   
