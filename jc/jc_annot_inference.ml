@@ -161,6 +161,10 @@ let make_and al =
   in
   raw_asrt anode
 
+let rec conjuncts a = match a.jc_assertion_node with
+  | JCAand al -> List.flatten(List.map conjuncts al)
+  | _ -> [a]
+
 let make_or al = 
   let anode = match al with
     | [] -> JCAfalse
@@ -1575,12 +1579,13 @@ let collect_statement_asserts s =
 	collect_expr_asserts e1
     | JCScall(_,_,els,s) ->
 	List.flatten (List.map collect_expr_asserts els)
-(*    | JCSassert((*Some "hint",*)a) -> 
+    | JCSassert a when a.jc_assertion_label = "hint" -> 
 	(* Hints are not to be proved by abstract interpretation, 
 	   only added to help it. *)
-	[]*) 
-    | JCSassert((*_,*)a) -> 
-	[a]
+	[]
+    | JCSassert a -> 
+	(* Consider separately each conjunct in a conjunction. *)
+	conjuncts a
     | JCSassign_heap (e1, fi, e2) ->
 	let derefe = loc_expr (JCEderef (e1, fi)) s.jc_statement_loc in
 	(collect_expr_asserts derefe) @ (collect_expr_asserts e2)
@@ -2054,7 +2059,7 @@ and intern_ai_statement iaio abs curinvs s =
 	      let dereft = type_term (JCTderef(t1,fi)) fi.jc_field_info_type in
 	      assign_expr mgr pre dereft e2
 	end
-    | JCSassert((*_,*)a) ->
+    | JCSassert a ->
 	test_assertion mgr pre a
     | JCSblock sl ->
 	List.iter (ai_statement iaio abs curinvs) sl
@@ -3064,7 +3069,7 @@ let rec wp_statement weakpre =
 		in
 		{ curposts with jc_post_normal = post; }
 	  end
-      | JCSassert((*_,*)a1) ->
+      | JCSassert a1 ->
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
 (* 	    | Some a -> Some (raw_asrt (JCAimplies(a1,a))) *)
