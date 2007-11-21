@@ -2123,15 +2123,14 @@ let tr_enum_type ri (* to_int of_int *) acc =
 let tr_variable vi e acc =
   if vi.jc_var_info_assigned then
     let t = Ref_type(tr_type vi.jc_var_info_type) in
-    Param(false,vi.jc_var_info_name,t)::acc
+      Param(false,vi.jc_var_info_name,t)::acc
   else
     let t = tr_base_type vi.jc_var_info_type in
-    Logic(false,vi.jc_var_info_name,[],t)::acc
+      Logic(false,vi.jc_var_info_name,[],t)::acc
 
-
-	   
+	
 (*
-Local Variables: 
-compile-command: "unset LANG; make -C .. bin/jessie.byte"
-End: 
+  Local Variables: 
+  compile-command: "unset LANG; make -C .. bin/jessie.byte"
+  End: 
 *)

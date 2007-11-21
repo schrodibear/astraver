@@ -989,7 +989,13 @@ and get_field_prototypes package_env type_env ci acc d =
 	  vd.variable_type : type_expr ;
 	  vd.variable_decls : variable_declarator list }
 	*)
-	let ty = type_type package_env type_env Java_options.non_null vd.variable_type in
+	let is_non_null = List.mem Non_null vd.variable_modifiers in
+	let is_nullable = List.mem Nullable vd.variable_modifiers in
+	let non_null = 
+	  (not Java_options.non_null && is_non_null) ||
+	    (Java_options.non_null && not is_nullable)
+	in
+	let ty = type_type package_env type_env non_null vd.variable_type in
 	let ty = match ty, ci with
 	  | JTYclass (true, ci'), TypeClass ci
 	      when is_subclass ci ci' || is_subclass ci' ci ->
@@ -1000,7 +1006,13 @@ and get_field_prototypes package_env type_env ci acc d =
 	let is_final = List.mem Final vd.variable_modifiers in
 	List.fold_left
 	  (fun acc vd -> 
-	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
+	     let ty', (loc, id) = var_type_and_id ty vd.variable_id in
+	       if is_non_null && Java_options.non_null then
+		 typing_error loc 
+		   "'non_null' modifier is not allowed in 'non_null by default' mode";	    
+	       if is_nullable && not Java_options.non_null then
+		 typing_error loc 
+		   "'nullable' modifier is only allowed in 'non_null by default' mode";	    
 	     let fi = new_field ~is_static ~is_final ci ty' id in	     
 	     Hashtbl.add field_prototypes_table fi.java_field_info_tag 
 	       vd.variable_initializer;
@@ -1011,25 +1023,49 @@ and get_field_prototypes package_env type_env ci acc d =
 and type_param package_env type_env p =
   let rec get_type p =
     match p with
-      | Simple_parameter(ty,(loc,id)) -> 
-	  (type_type package_env type_env Java_options.non_null ty, loc, id)
+      | Simple_parameter (mo, ty, (loc, id)) ->
+	  let non_null = 
+	    match mo with
+	      | None -> Java_options.non_null
+	      | Some Non_null -> 
+		  if Java_options.non_null then
+		    typing_error loc
+		      "'non_null' modifier is not allowed in 'non_null by default' mode";
+		  true;
+	      | Some Nullable ->
+		  if not Java_options.non_null then
+		    typing_error loc 
+		      "'nullable' modifier is only allowed in 'non_null by default' mode";
+		  false
+	      | _ -> assert false
+	  in
+	    (type_type package_env type_env non_null ty, loc, id)
       | Array_parameter x -> 
 	  let (t,loc,i) = get_type x in
 	  (JTYarray t,loc,i)
   in
   let (t,loc,i) = get_type p in new_var loc t i
 
-and method_header package_env type_env retty mdecl =
+and method_header package_env type_env modifiers retty mdecl =
   match mdecl with
-    | Simple_method_declarator(id,l) -> 
-(*
-	eprintf "get prototype for method %s@." (snd id);
-*)
-	id, (Option_misc.map (type_type package_env type_env Java_options.non_null) retty), 
+    | Simple_method_declarator (id, l) ->
+	let is_non_null = List.mem Non_null modifiers in
+	let is_nullable = List.mem Nullable modifiers in
+	  if is_non_null && Java_options.non_null then
+	    typing_error (fst id) 
+	      "'non_null' modifier is not allowed in 'non_null by default' mode";	    
+	  if is_nullable && not Java_options.non_null then
+	    typing_error (fst id)
+	      "'nullable' modifier is only allowed in 'non_null by default' mode";	    
+	  let non_null =
+	    (not Java_options.non_null && is_non_null) ||
+	      (Java_options.non_null && not is_nullable)
+	  in
+	    id, (Option_misc.map (type_type package_env type_env non_null) retty), 
 	List.map (type_param package_env type_env) l
     | Array_method_declarator d -> 
 	let id,t,l = 
-	  method_header package_env type_env retty d 
+	  method_header package_env type_env modifiers retty d 
 	in
 	match t with
 	  | Some t -> id,Some (JTYarray t),l
@@ -1056,7 +1092,7 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
     | JPFmethod(head,body) :: rem -> 
 	let id, ret_ty, params = 
 	  method_header package_env type_env 
-	    head.method_return_type head.method_declarator 
+	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
 	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
@@ -1066,7 +1102,7 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
     | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
 	let id, ret_ty, params = 
 	  method_header package_env type_env 
-	    head.method_return_type head.method_declarator 
+	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
 	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
@@ -1167,7 +1203,7 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	vd.variable_type : type_expr ;
 	vd.variable_decls : variable_declarator list }
 	*)
-	let ty = type_type package_env type_env false vd.variable_type in
+	let ty = type_type package_env type_env true vd.variable_type in
 	List.fold_left
 	  (fun acc vd -> 
 	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
@@ -1184,7 +1220,7 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	  vd.variable_type : type_expr ;
 	  vd.variable_decls : variable_declarator list }
 	*)
-	let ty = type_type package_env type_env false vd.variable_type in
+	let ty = type_type package_env type_env true vd.variable_type in
 	  (* Note: no need to check if it is static and final, because 
 	     it is implicitly the case (JLS,9.3, p 203) *)
 	  List.fold_left

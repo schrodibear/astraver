@@ -689,9 +689,9 @@ let array_types decls =
 					 (dummy_loc_term vi.jc_var_info_type 
 					    (JCToffset(Offset_max,nvi,st))))));
 			 dummy_loc_assertion
-			   (JCArelation(result_var,Bge_int,term_zero)) ;
+			   (JCArelation (result_var, Bge_int, term_zero)) ;
 			 dummy_loc_assertion
-			   (JCArelation(result_var,Blt_int,term_maxint))]);
+			   (JCArelation (result_var,Blt_int, term_maxint))]);
 		jc_behavior_throws = None } ] 
 	     }
        in

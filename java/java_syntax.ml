@@ -80,12 +80,39 @@ let rec statement s =
     
 and statements b = List.map statement b
 
+let modifier m =
+  match m with
+    | Annot_modifier (loc, s) -> parse_annot loc s Java_parser.kml_modifier
+    | _ -> m
+
+let variable_declaration vd =
+  { vd with variable_modifiers = List.map modifier vd.variable_modifiers }
+
+let rec parameter p =
+  match p with
+    | Simple_parameter (mo, ty, id) -> 
+	Simple_parameter (Option_misc.map modifier mo, ty, id)
+    | Array_parameter p ->
+	Array_parameter (parameter p)
+
+let rec method_declarator md =
+  match md with
+    | Simple_method_declarator (id, pl) ->
+	Simple_method_declarator (id, List.map parameter pl)
+    | Array_method_declarator md -> 
+	Array_method_declarator (method_declarator md)
+
+let method_declaration md =
+  { md with
+      method_modifiers = List.map modifier md.method_modifiers;
+      method_declarator = method_declarator md.method_declarator; } 
+    
 let field_decl f = 
   match f with
-    | JPFmethod(m,None) -> f
-    | JPFmethod(m,Some b) -> JPFmethod(m,Some (statements b))
+    | JPFmethod (md, None) -> JPFmethod (method_declaration md, None)
+    | JPFmethod (md, Some b) -> JPFmethod (method_declaration md, Some (statements b))
     | JPFconstructor(c,eci,b) -> JPFconstructor(c,eci,statements b)
-    | JPFvariable _ -> f 
+    | JPFvariable vd -> JPFvariable (variable_declaration vd) 
     | JPFstatic_initializer b -> JPFstatic_initializer (statements b)
     | JPFannot (loc,s) -> parse_annot loc s Java_parser.kml_field_decl
     | JPFinvariant _ | JPFstatic_invariant _ 

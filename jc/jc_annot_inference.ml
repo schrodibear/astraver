@@ -2277,8 +2277,6 @@ let rec record_ai_invariants abs s =
     | JCScall _ -> ()
 	
 let ai_function mgr iaio targets (fi, fs, sl) =
-  if Jc_options.verbose && iaio = None then
-    printf "annotation inference of function %s@." fi.jc_fun_info_name;
   try
     let env = Environment.make [||] [||] in
     
@@ -2330,21 +2328,22 @@ let ai_function mgr iaio targets (fi, fs, sl) =
  	      let mincstr = match n1opt with
 		| None -> []
 		| Some n1 ->
- 		    let mint = type_term (JCToffset(Offset_min,vt,st)) integer_type in
+ 		    let mint = type_term (JCToffset (Offset_min, vt, st)) integer_type in
  		    let n1t =
- 		      type_term (JCTconst(JCCinteger(Num.string_of_num n1))) integer_type
+ 		      type_term (JCTconst (JCCinteger (Num.string_of_num n1))) 
+			integer_type
  		    in
- 		    let mina = raw_asrt (JCArelation(mint,Ble_int,n1t)) in
+ 		    let mina = raw_asrt (JCArelation (mint, Beq_int, n1t)) in
  		    [mina]
  	      in
  	      let maxcstr = match n2opt with
 		| None -> []
 		| Some n2 ->
- 		    let maxt = type_term (JCToffset(Offset_max,vt,st)) integer_type in
+ 		    let maxt = type_term (JCToffset (Offset_max, vt, st)) integer_type in
  		    let n2t =
- 		      type_term (JCTconst(JCCinteger(Num.string_of_num n2))) integer_type
+ 		      type_term (JCTconst (JCCinteger (Num.string_of_num n2))) integer_type
  		    in
- 		    let maxa = raw_asrt (JCArelation(n2t,Ble_int,maxt)) in
+ 		    let maxa = raw_asrt (JCArelation (maxt, Beq_int, n2t)) in
  		    [maxa]
  	      in
  	      mincstr @ maxcstr @ acc

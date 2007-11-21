@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.13 2007-11-20 14:37:55 filliatr Exp $
+$Id: java_lexer.mll,v 1.14 2007-11-21 18:29:46 nrousset Exp $
 
 ***************************************************************************)
 
@@ -108,7 +108,9 @@ $Id: java_lexer.mll,v 1.13 2007-11-20 14:37:55 filliatr Exp $
 	  "model", MODEL;
 	  "native", NATIVE;
 	  "new", NEW;
+	  "non_null", NON_NULL;
 	  "null", NULL;
+	  "nullable", NULLABLE;
 	  "operator", OPERATOR;
 	  "outer", OUTER;
 	  "package", PACKAGE;
@@ -232,7 +234,7 @@ rule token = parse
       { newline lexbuf; token lexbuf }
   | "/*@"               
       { let loc = lexeme_start_p lexbuf in
-	Buffer.clear buf; ANNOT(loc,annot lexbuf) }
+	Buffer.clear buf; ANNOT(loc, annot lexbuf) }
   | "//@" ([^ '\n']* as a) '\n'  
       { let loc = lexeme_start_p lexbuf in
 	newline lexbuf;	ANNOT(loc,a) }
@@ -427,7 +429,7 @@ and annot = parse
       { newline lexbuf;  
 	Buffer.add_string buf (lexeme lexbuf);
 	annot lexbuf }
-  | ('\n' space* as s)  '@'
+  | ('\n' space* as s) '@'
       { newline lexbuf;  
 	Buffer.add_string buf s;
 	Buffer.add_char buf ' ';
@@ -435,6 +437,8 @@ and annot = parse
   | [^'@''*''\n''/']+
       { Buffer.add_string buf (lexeme lexbuf);
 	annot lexbuf }
+  | '@'
+      { annot lexbuf }
   | _                   
       { Buffer.add_string buf (lexeme lexbuf);
 	annot lexbuf }

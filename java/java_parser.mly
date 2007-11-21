@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.24 2007-11-20 14:34:50 filliatr Exp $
+$Id: java_parser.mly,v 1.25 2007-11-21 18:29:46 nrousset Exp $
 
 */
 
@@ -94,6 +94,9 @@ $Id: java_parser.mly,v 1.24 2007-11-20 14:34:50 filliatr Exp $
 %start kml_statement_annot
 %type  <Java_ast.pstatement_node> kml_statement_annot
 
+%start kml_modifier
+%type  <Java_ast.modifier> kml_modifier
+
 %type <Java_ast.qualified_ident> name
 
 /*s Tokens */
@@ -123,6 +126,7 @@ $Id: java_parser.mly,v 1.24 2007-11-20 14:34:50 filliatr Exp $
 %token INVARIANT LOOP_INVARIANT DECREASES
 %token AXIOM LOGIC TYPE PREDICATE READS
 %token BSFORALL BSEXISTS BSOLD BSRESULT BSNOTHING
+%token NON_NULL NULLABLE
 
 /* Others symbols */
 
@@ -277,13 +281,22 @@ field_declaration:
 
 variable_declaration:
 | modifiers_type_expr variable_declarators SEMICOLON
-    { let (a,b)=$1 in
-      match b with
-	| Some b ->
-	    { variable_modifiers = a ;
-	      variable_type = b ;
-	      variable_decls = $2 } 
-	| None -> raise Parse_error} 
+    { let a, b = $1 in
+	match b with
+	  | Some b ->
+	      { variable_modifiers = a ;
+		variable_type = b ;
+		variable_decls = $2 } 
+	  | None -> raise Parse_error } 
+| modifiers_type_expr ANNOT variable_declarators SEMICOLON
+    { let a, b = $1 in
+	match b with
+	  | Some b ->
+	      let loc, s = $2 in 
+	      { variable_modifiers = Annot_modifier (loc, s) :: a ;
+		variable_type = b ;
+		variable_decls = $3 } 
+	  | None -> raise Parse_error } 
 ;
 
 variable_declarators:
@@ -342,13 +355,23 @@ method_declaration:
 
 method_header:
 | modifiers_type_expr method_declarator throws_decl
-    { let (a,b)=$1 in
+    { let (a, b) = $1 in
       { 
 	method_modifiers = a ;
 	method_return_type = b ;
 	method_declarator = $2 ;
 	method_throws = $3 
       } 
+    }
+| modifiers_type_expr ANNOT method_declarator throws_decl
+    { let (a, b) = $1 in
+      let loc, s = $2 in
+	{ 
+	  method_modifiers = Annot_modifier (loc, s) :: a ;
+	  method_return_type = b ;
+	  method_declarator = $3 ;
+	  method_throws = $4 
+	} 
     }
 ;
 
@@ -376,9 +399,13 @@ parameter_comma_list:
 
 parameter:
 | type_expr ident 
-    { Simple_parameter($1,$2) }
+    { Simple_parameter (None, $1, $2) }
+| type_expr ANNOT ident
+    { let loc, s = $2 in 
+      Simple_parameter (Some (Annot_modifier (loc, s)), $1, $3) } 
 | parameter LEFTBRACKET RIGHTBRACKET
     { Array_parameter($1) }
+;
 
 throws_decl:
 | /* $\varepsilon$ */
@@ -965,6 +992,13 @@ kml_field_decl:
     { JPFstatic_invariant($3,$5) } 
 | MODEL variable_declaration
     { JPFmodel_variable($2) }
+;
+
+kml_modifier:
+| NON_NULL
+    { Non_null }
+| NULLABLE
+    { Nullable }
 ;
 
 requires:

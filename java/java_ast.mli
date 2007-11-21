@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.20 2007-11-20 14:37:55 filliatr Exp $
+$Id: java_ast.mli,v 1.21 2007-11-21 18:29:46 nrousset Exp $
 
 ***************************************************************************)
 
@@ -46,6 +46,7 @@ type qualified_ident = identifier list
 type modifier =
   | Static | Final | Ghost | Public | Private | Protected | Native 
   | Synchronized | Abstract | Transient (* "threadsafe" ? *)
+  | Non_null | Nullable | Annot_modifier of Lexing.position * string
 
 type modifiers = modifier list
 
@@ -159,7 +160,7 @@ type 'a switch_label =
   | Default
 
 type parameter =
-  | Simple_parameter of type_expr * identifier
+  | Simple_parameter of modifier option * type_expr * identifier
   | Array_parameter of parameter
 
 type pstatement =

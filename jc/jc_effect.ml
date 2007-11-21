@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.62 2007-11-20 14:58:58 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.63 2007-11-21 18:29:46 nrousset Exp $ *)
 
 
 open Jc_env
@@ -208,11 +208,11 @@ let rec assertion ef a =
 	add_tag_effect (term ef t) st.jc_struct_info_root
     | JCAnot a
     | JCAold a -> assertion ef a
-    | JCAquantifier(_,vi, a) -> assertion ef a 
-    | JCArelation (t1,_,t2) -> term (term ef t1) t2
+    | JCAquantifier (_, vi, a) -> assertion ef a 
+    | JCArelation (t1, _, t2) -> term (term ef t1) t2
     | JCAapp (li, tl) -> 
 	ef_union li.jc_logic_info_effects
-	  (List.fold_left term ef tl)	
+	  (List.fold_left term ef tl)
     | JCAiff (a1, a2)
     | JCAimplies (a1, a2) -> assertion (assertion ef a1) a2
     | JCAand al | JCAor al -> List.fold_left assertion ef al
@@ -438,7 +438,7 @@ let behavior ef (_, b) =
 
 let spec ef s = 
   let ef = List.fold_left behavior ef s.jc_fun_behavior in
-  { ef with jc_reads = assertion ef.jc_reads s.jc_fun_requires }
+    { ef with jc_reads = assertion ef.jc_reads s.jc_fun_requires }
 
 let parameter ef vi =
   match vi.jc_var_info_type with
@@ -452,7 +452,7 @@ let parameter ef vi =
 let fixpoint_reached = ref false
 
 let logic_fun_effects f = 
-  let (f,ta) = 
+  let (f, ta) = 
     Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
   in
   let ef = f.jc_logic_info_effects in
@@ -484,13 +484,13 @@ let fun_effects fi =
   let ef = spec ef s in
   let ef = Option_misc.fold_left (List.fold_left statement) ef b in
   let ef = List.fold_left parameter ef f.jc_fun_info_parameters in
-  if same_feffects ef f.jc_fun_info_effects then ()
-  else begin
+    if same_feffects ef f.jc_fun_info_effects then ()
+    else begin
     fixpoint_reached := false;
-    f.jc_fun_info_effects <- ef
-  end
-    
-  let logic_effects funs =
+      f.jc_fun_info_effects <- ef
+    end
+      
+let logic_effects funs =
   fixpoint_reached := false;
   while not !fixpoint_reached do
     fixpoint_reached := true;
@@ -508,10 +508,10 @@ let fun_effects fi =
 	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
 	 (StringSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
 	 (print_list comma (fun fmt field ->
-			     fprintf fmt "%s" field.jc_field_info_name))
+			      fprintf fmt "%s" field.jc_field_info_name))
 	 (FieldSet.elements f.jc_logic_info_effects.jc_effect_memories))
     funs
-
+    
 let function_effects funs =
   fixpoint_reached := false;
   while not !fixpoint_reached do
@@ -520,14 +520,15 @@ let function_effects funs =
     List.iter fun_effects funs
   done;
   Jc_options.lprintf "Effects: fixpoint reached@.";
-  Jc_options.lprintf "Effects: removing global reads without writes@.";
+  Jc_options.lprintf "Effects: removing global reads with writes@.";
   List.iter 
     (fun f ->
        f.jc_fun_info_effects <-
 	 let efw = f.jc_fun_info_effects.jc_writes.jc_effect_globals in
 	 let efr = f.jc_fun_info_effects.jc_reads.jc_effect_globals in
-	 let efg = VarSet.inter efr efw in
-	 let ef = { f.jc_fun_info_effects.jc_reads 
+	 let efg = VarSet.diff efr (VarSet.inter efr efw) in
+	 let efg = VarSet.filter (fun vi -> vi.jc_var_info_assigned) efg in
+	 let ef = { f.jc_fun_info_effects.jc_reads
 		    with jc_effect_globals = efg } in
 	   { f.jc_fun_info_effects with jc_reads = ef }
     ) funs;

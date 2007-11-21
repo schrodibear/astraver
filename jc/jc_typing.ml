@@ -2172,9 +2172,9 @@ let rec decl d =
 	let a = assertion [] e in
 	let li = make_rel id in
 	  if !Jc_common_options.inv_sem = InvArguments then 
-	  Hashtbl.replace logic_functions_table 
-	    li.jc_logic_info_tag (li, JCAssertion a);
-	Hashtbl.add global_invariants_table li a
+	    Hashtbl.replace logic_functions_table 
+	      li.jc_logic_info_tag (li, JCAssertion a);
+	  Hashtbl.add global_invariants_table li a
     | JCPDexception(id,t) ->
 	let tt = type_type t in
 	Hashtbl.add exceptions_table id (exception_info (Some tt) id)
