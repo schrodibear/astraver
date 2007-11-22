@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.15 2007-11-20 14:58:58 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.16 2007-11-22 08:39:37 marche Exp $ i*)
 
 open Format
 open Pp
@@ -97,6 +97,9 @@ let rec term fmt = function
       fprintf fmt "(-%a)" term t1
   | Tapp (id, tl, _) -> 
       fprintf fmt "%a(%a)" ident id (print_list comma term) tl
+  | Tnamed (User n, t) ->
+      fprintf fmt "@[(%S:@ %a)@]" n term t
+  | Tnamed (_, t) -> term fmt t
 
 let int_relation_string id =
   if id == t_lt_int then "<" 

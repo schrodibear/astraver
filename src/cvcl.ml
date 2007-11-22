@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.50 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.51 2007-11-22 08:39:37 marche Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -129,6 +129,8 @@ let rec print_term fmt = function
       fprintf fmt "%s" (Encoding.symbol (id, i))
   | Tapp (id, tl, i) ->
       fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl
+  | Tnamed (_, t) -> (* TODO: print name *)
+      print_term fmt t
 
 and print_terms fmt tl = 
   print_list comma print_term fmt tl

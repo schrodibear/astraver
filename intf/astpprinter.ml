@@ -89,6 +89,17 @@ let print_term fmt t =
 	fprintf fmt "(@[if %a then@ %a else@ %a@])" print0 a print0 b print0 c
     | Tapp (id, tl, _) -> 
 	fprintf fmt "@[%s(%a)@]" (Ident.string id) print_terms tl
+    | Tnamed (User n, t) ->
+	(match (Tools.grab_infos n) with
+	   | None -> fprintf fmt "@[%a@]" print3 t
+	   | Some l ->
+	       let n = new_tag l in
+	       pp_open_tag fmt n;
+	       fprintf fmt "@[%a@]" print3 t;
+	       pp_close_tag fmt ()
+	)
+    | Tnamed (Internal n, t) ->
+	fprintf fmt "@[%a@]" print3 t
   and print_terms fmt tl =
     print_list comma print3 fmt tl
   and is_shift = function 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ocaml.ml,v 1.23 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.24 2007-11-22 08:39:37 marche Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -147,6 +147,9 @@ let rec expression fmt = function
       fprintf fmt "(%a %s %a)" expression a (infix id) expression b
   | Tapp (id, tl, _) -> 
       fprintf fmt "(%a %a)" Ident.print id (print_list space expression) tl
+  | Tnamed (User n, t) ->
+      fprintf fmt "@[(* %s: *)@ %a@]" (String.escaped n) expression t
+  | Tnamed (_, t) -> expression fmt t
 
 (*s program expressions *)
 

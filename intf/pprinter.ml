@@ -162,6 +162,13 @@ let move_to_source = function
 	with Not_found ->
 	  !tv_source#set_buffer (GText.buffer ());
 	  !tv_source#buffer#set_text (banner());
+(* TODO: logo
+	  let image = lib_ide_file "coq.png" in
+	  let startup_image = GdkPixbuf.from_file image in
+	  b#insert_pixbuf ~iter:b#start_iter 
+	    ~pixbuf:startup_image;
+	  b#insert ~iter:b#start_iter "\t\t";
+*)
 	  Hashtbl.add files "" !tv_source#buffer
       end
   | Some loc ->

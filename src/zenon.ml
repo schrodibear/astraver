@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.24 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.25 2007-11-22 08:39:37 marche Exp $ i*)
 
 (*s Zenon output *)
 
@@ -168,6 +168,8 @@ let rec print_term fmt = function
       symbol fmt (id,i)
   | Tapp (id, tl, i) ->
       fprintf fmt "@[(%a %a)@]" symbol (id,i) print_terms tl
+  | Tnamed (_, t) -> (* TODO: print name *)
+      print_term fmt t
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl

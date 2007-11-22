@@ -198,6 +198,9 @@ let rec print_term fmt = function
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	ident id (print_list space print_term) tl
+  | Tnamed (User n, t) ->
+      fprintf fmt "@[(* %s: *)@ %a@]" (String.escaped n) print_term t
+  | Tnamed (_, t) -> print_term fmt t
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
