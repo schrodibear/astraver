@@ -1,0 +1,126 @@
+
+(* Example 1 
+ * We want the message: 
+ *  "assertion `x < 9' cannot be established"
+ * localized on `x < 9' 
+ *)
+let f1 = fun (x : int) ->
+  { x > 0 }
+  assert { x >= 0 and x < 9};
+  x+1
+  { true }
+
+(* Example 2 
+ * We want the message: 
+ *  "post-condition `result > 10' of function f2 cannot be established"
+ * localized on `x+1'
+ * Bonus: all lines involved in the execution path should be ~underlined 
+ *)
+
+let f2 = fun (x : int) ->
+  { x > 0 and x < 100 }
+  if x < 50 then x+1 else x-1
+  { result <> 0 and result > 10 }
+
+(* Example 3 
+ * We want the message: 
+ *  "pre-condition `x > 0' for call to function f2 cannot be established"
+ * localized on `(f2 x)' 
+ *)
+
+let f3 = fun (x : int) ->
+  { x >= 0 and x < 50 }
+  (f2 x)
+  { true }
+
+(* Example 4 
+ * Explanation expected: 
+ *   "validity of loop invariant `0 <= y' at loop entrance"
+ * localized on `while ...' 
+ *)
+let f4 = fun (x : int) ->
+  { true }
+  let y = ref x in
+  while !y > 0 do
+    { invariant 0 <= y and y <= x variant y }
+    y := !y - 1
+  done
+  { true }
+
+(*
+let f5_safety =
+ fun (x_3 : int) ->
+  { (JC_9: true) }
+  (init:
+  try
+   begin
+     (let y_1 = ref x_3 in
+     try
+      while true do
+      { invariant (JC_10: (y_1 = x_3))  }
+       try
+        begin
+          (if ((gt_int_ !y_1) 0)
+          then (y_1 := ((sub_int !y_1) 1))
+          else (raise Loop_exit_exc));
+         (raise Loop_continue_exc)
+        end
+        with
+        Loop_continue_exc ->
+        void end
+      done
+      with
+      Loop_exit_exc ->
+      void end);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { true }
+
+let f6_safety =
+ fun (x_4 : byte) ->
+  { (JC_11: true) }
+  (init:
+  (let jessie_returned_value = ref (any_byte void) in
+  try
+   begin
+     (let y_2 = (JC_12:
+                (byte_of_integer_ ((add_int (integer_of_byte x_4)) 1))) in
+     (let z = (JC_13:
+              (byte_of_integer_ ((add_int (integer_of_byte x_4)) (integer_of_byte y_2)))) in
+     begin
+       (jessie_returned_value := (JC_14:
+                                 (byte_of_integer_ ((add_int (integer_of_byte y_2)) 
+                                                    (integer_of_byte z)))));
+      (raise Return)
+     end));
+    absurd 
+   end
+   with
+   Return ->
+   !jessie_returned_value end))
+  { true }
+
+let f7_safety =
+ fun (p : S pointer) ->
+  { (JC_15: true) }
+  (init:
+  (let jessie_returned_value = ref (any_int void) in
+  try
+   begin
+     [ { } unit reads S_alloc_table,S_f,S_tag_table,committed_S,mutable_S
+       { global_invariant_S(S_alloc_table, S_f, S_tag_table, committed_S,
+         mutable_S) } ];
+    (jessie_returned_value := (JC_16: (((acc_ S_alloc_table) S_f) p)));
+    (raise Return);
+    absurd 
+   end
+   with
+   Return ->
+   !jessie_returned_value end))
+  { true }
+
+
+*)
