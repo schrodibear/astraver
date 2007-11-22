@@ -279,6 +279,12 @@ let type_term t ty = {
   jc_term_loc = Loc.dummy_position;
 }
 
+let var_term vi = {
+  jc_term_node = JCTvar vi;
+  jc_term_type = vi.jc_var_info_type;
+  jc_term_loc = Loc.dummy_position;
+}
+
 let zerot = type_term (JCTconst (JCCinteger "0")) integer_type
 
 let rec is_constant_term t =
@@ -422,6 +428,35 @@ let rec is_constant_assertion a =
 	is_constant_term t &&
 	  is_constant_assertion a1 &&
 	  is_constant_assertion a2
+
+let type_range_of_term ty t =
+  match ty with
+    | JCTpointer (st, n1opt, n2opt) ->
+	let instanceofcstr = raw_asrt (JCAinstanceof (t, st)) in
+ 	let mincstr = match n1opt with
+	  | None -> true_assertion
+	  | Some n1 ->
+ 	      let mint = 
+		type_term (JCToffset (Offset_min, t, st)) integer_type in
+ 	      let n1t =
+ 		type_term (JCTconst (JCCinteger (Num.string_of_num n1))) 
+		  integer_type
+ 	      in
+ 	      raw_asrt (JCArelation (mint, Beq_int, n1t))
+ 	in
+ 	let maxcstr = match n2opt with
+	  | None -> true_assertion
+	  | Some n2 ->
+ 	      let maxt = 
+		type_term (JCToffset (Offset_max, t, st)) integer_type in
+ 	      let n2t =
+ 		type_term (JCTconst (JCCinteger (Num.string_of_num n2)))
+		  integer_type
+ 	      in
+ 	      raw_asrt (JCArelation (maxt, Beq_int, n2t))
+ 	in
+ 	  make_and [instanceofcstr; mincstr; maxcstr]
+    | _ -> true_assertion
 
 (* fun specs *)
 

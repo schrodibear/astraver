@@ -1876,10 +1876,12 @@ let tr_fun f spec body acc =
   (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
   (* why parameter for calling the function *)
   let ret_type = tr_type f.jc_fun_info_return_type in
+  let param_normal_post = make_and normal_post normal_post_safety in
+  let param_excep_posts = excep_posts @ excep_posts_safety in
   let why_param = 
     let annot_type =
       Annot_type(requires,ret_type,
-		 reads,writes, normal_post, excep_posts)
+		 reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = interp_fun_params f annot_type in
     Param(false,f.jc_fun_info_final_name,fun_type)

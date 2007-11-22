@@ -2101,32 +2101,12 @@ let rec decl d =
 	    let vi_this = var (JCTpointer (struct_info, Some zero, Some zero)) "this" in
 	    let invs =
 	      List.fold_left
-		(fun acc fi ->
-		   match fi.jc_field_info_type with
-		     | JCTpointer (st', n1o, n2o) ->
-			 let term_this = 
-			   type_term (JCTvar vi_this)
-			     (JCTpointer (struct_info, Some zero, Some zero)) in
-			 let offset_inv no offset_kind =
-			   match no with
-			     | None -> raw_asrt JCAtrue
-			     | Some n -> 
-				 raw_asrt 
-				   (JCArelation
-				      (type_term 
-					 (JCToffset 
-					    (offset_kind, 
-					     type_term 
-					       (JCTderef (term_this, fi)) fi.jc_field_info_type, st'))
-					 integer_type,
-				       Beq_int,
-				       type_term 
-					 (JCTconst (JCCinteger (Num.string_of_num n))) integer_type))
-			 in
-			 let offset_min_inv = offset_inv n1o Offset_min in
-			 let offset_max_inv = offset_inv n2o Offset_max in
-			   Jc_pervasives.make_and [offset_min_inv; offset_max_inv; acc]
-		     | _ -> acc)
+		(fun acc fi -> 
+		   let term_this = 
+		     type_term (JCTvar vi_this)
+		       (JCTpointer (struct_info, Some zero, Some zero)) in
+		   let t = type_term (JCTderef (term_this, fi)) fi.jc_field_info_type in
+		     Jc_pervasives.make_and [type_range_of_term fi.jc_field_info_type t; acc])
 		(raw_asrt JCAtrue) struct_info.jc_struct_info_fields
 	    in
 	      if is_true invs || !Jc_common_options.inv_sem <> InvArguments then 

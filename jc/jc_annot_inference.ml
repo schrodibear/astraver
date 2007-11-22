@@ -25,6 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_annot_inference.ml,v 1.70 2007-11-22 19:05:06 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -80,12 +81,6 @@ let si_of_pterm t =
 let type_term t ty = {
   jc_term_node = t;
   jc_term_type = ty;
-  jc_term_loc = Loc.dummy_position;
-}
-
-let var_term vi = {
-  jc_term_node = JCTvar vi;
-  jc_term_type = vi.jc_var_info_type;
   jc_term_loc = Loc.dummy_position;
 }
 
@@ -2218,7 +2213,12 @@ and intern_ai_statement iaio abs curinvs s =
 	    | None -> normal_behavior
 	    | Some vi ->
 		let result_vi = var ~unique:false vi.jc_var_info_type "\\result" in
+		let normal_behavior =
 		  switch_vis_in_assertion result_vi vi normal_behavior 
+		in
+		  (* add result type spec to [fi] postcondition *)
+		let cstrs = type_range_of_term vi.jc_var_info_type (var_term vi) in
+		  make_and [normal_behavior; cstrs];
 	in
 	let normal_behavior =
 	  List.fold_left2 
@@ -2321,33 +2321,8 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     (* Add parameters specs to the function precondition *)
     let cstrs =
       List.fold_left
- 	(fun acc vi -> match vi.jc_var_info_type with
- 	  | JCTpointer (st, n1opt, n2opt) ->
- 	      let vt = type_term (JCTvar vi) vi.jc_var_info_type in
- 	      let mincstr = match n1opt with
-		| None -> []
-		| Some n1 ->
- 		    let mint = type_term (JCToffset (Offset_min, vt, st)) integer_type in
- 		    let n1t =
- 		      type_term (JCTconst (JCCinteger (Num.string_of_num n1))) 
-			integer_type
- 		    in
- 		    let mina = raw_asrt (JCArelation (mint, Beq_int, n1t)) in
- 		    [mina]
- 	      in
- 	      let maxcstr = match n2opt with
-		| None -> []
-		| Some n2 ->
- 		    let maxt = type_term (JCToffset (Offset_max, vt, st)) integer_type in
- 		    let n2t =
- 		      type_term (JCTconst (JCCinteger (Num.string_of_num n2))) integer_type
- 		    in
- 		    let maxa = raw_asrt (JCArelation (maxt, Beq_int, n2t)) in
- 		    [maxa]
- 	      in
- 	      mincstr @ maxcstr @ acc
- 	  | _ -> acc
- 	) [] fi.jc_fun_info_parameters
+ 	(fun acc vi -> type_range_of_term vi.jc_var_info_type (var_term vi) :: acc) 
+	[] fi.jc_fun_info_parameters
     in
     fs.jc_fun_requires <- make_and (fs.jc_fun_requires :: cstrs);
     (* Take the function precondition as init pre *)
@@ -2416,7 +2391,8 @@ let ai_function mgr iaio targets (fi, fs, sl) =
       else
 	let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
 	let returna = mkinvariant abs.jc_absint_manager returnabs in
-	let post = returna in
+	let post = make_and 
+	  [returna; type_range_of_term vi_result.jc_var_info_type (var_term vi_result)] in
 	let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
 	let excl, excabsl =
 	  List.fold_left
