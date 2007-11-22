@@ -147,7 +147,9 @@ let color_loc file (tv:GText.view) l b e =
   
 
 let banner () =
-"Welcome to GWhy (the Graphical VC viewer for the Why platform)
+"
+
+Welcome to GWhy (the Graphical VC viewer for the Why platform)
 This is Why version " ^ Version.version ^ 
 ", compiled on " ^ Version.date ^ "
 Copyright (c) 2002-2007 ProVal team, INRIA
@@ -161,15 +163,19 @@ let move_to_source = function
 	  !tv_source#set_buffer (Hashtbl.find files "")
 	with Not_found ->
 	  !tv_source#set_buffer (GText.buffer ());
-	  !tv_source#buffer#set_text (banner());
-(* TODO: logo
-	  let image = lib_ide_file "coq.png" in
-	  let startup_image = GdkPixbuf.from_file image in
-	  b#insert_pixbuf ~iter:b#start_iter 
-	    ~pixbuf:startup_image;
-	  b#insert ~iter:b#start_iter "\t\t";
+	  let b = !tv_source#buffer in
+	  b#set_text (banner());
+	  begin
+(*	    try
+*)	      let why_logo_image = Options.lib_file "logo-why-small.png" in
+	      let why_logo = GdkPixbuf.from_file why_logo_image in
+	      b#insert_pixbuf ~iter:b#start_iter ~pixbuf:why_logo;
+	      b#insert ~iter:b#start_iter "\n\t\t"
+(*
+	    with _ -> ()
 *)
-	  Hashtbl.add files "" !tv_source#buffer
+	  end;
+	  Hashtbl.add files "" b
       end
   | Some loc ->
       let line = int_of_string loc.line

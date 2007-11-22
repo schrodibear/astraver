@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.79 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.80 2007-11-22 09:48:09 marche Exp $ i*)
 
 (*s General options *)
 
@@ -124,6 +124,10 @@ val file : string -> string
    or [file f] otherwise *)
 
 val out_file : string -> string
+
+(* [lib_file f] appends [f] to the lib directory *)
+
+val lib_file : string -> string
 
 (*s Files given on the command line *)
 

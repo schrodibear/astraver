@@ -23,6 +23,14 @@ dep.ps:
 code.tex: $(SRCFILES)
 	ocamlweb --no-preamble -o $@ $(SRCFILES)
 
+logo-why.pdf: logos.tex
+	pdflatex logos.tex
+
+logo-why.png: logo-why.pdf
+	pdftoppm logos.pdf | pnmcrop | pnmtopng > logowhy.png
+
+logo-why-small.png:
+
 manual.ps: manual.tex
 	latex manual
 	latex manual

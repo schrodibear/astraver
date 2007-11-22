@@ -124,3 +124,11 @@ let f7_safety =
 
 
 *)
+
+
+(*
+Local Variables: 
+mode: why
+compile-command: "../../bin/gwhy.byte trace.why"
+End: 
+*)
