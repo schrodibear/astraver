@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic.mli,v 1.41 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.42 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Logic. *)
 
@@ -54,19 +54,20 @@ and type_var =
 
 type instance = pure_type list
 
+type term_label = User of string | Internal of int
+
 type term =
   | Tconst of constant
   | Tvar of Ident.t
   | Tderef of Ident.t
   | Tapp of Ident.t * term list * instance
+  | Tnamed of term_label * term
 
 type substitution = term Ident.map
 type var_substitution = Ident.t Ident.map
 
 type is_wp = bool
 type is_sym = bool
-
-type pname = User of string | Internal of int
 
 type predicate =
   | Pvar of Ident.t
@@ -83,7 +84,7 @@ type predicate =
   | Forallb of is_wp * predicate * predicate
   | Exists of Ident.t * Ident.t * pure_type * predicate
   | Pfpi of term * real_constant * real_constant
-  | Pnamed of pname * predicate
+  | Pnamed of term_label * predicate
 and pattern = TPat of term | PPat of predicate
 and trigger = pattern list
 and triggers = trigger list

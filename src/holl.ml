@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: holl.ml,v 1.42 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.43 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -157,6 +157,9 @@ let rec print_term fmt = function
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	Ident.print id (print_list space print_term) tl
+  | Tnamed (User n, t) ->
+      fprintf fmt "@[(* %s: *) %a@]" n print_term t
+  | Tnamed (_, t) -> print_term fmt t
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl

@@ -109,6 +109,6 @@ class Trace {
 /*
 Local Variables: 
 mode: java
-compile-command: "make Trace.goals"
+compile-command: "make Trace.io"
 End: 
 */

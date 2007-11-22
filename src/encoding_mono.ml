@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.16 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.17 2007-11-22 08:32:42 marche Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -569,7 +569,8 @@ let isBuiltInType t= match t with
     
 **)
 let rec translate_term fv lv term doTheCast= 
-  let translate fv lv term = match term with 
+  let rec translate fv lv term = match term with 
+    | Tnamed(_,t) -> translate fv lv t
     | Tvar id as t -> 
         let t = typedPlunge fv  (Tvar id) (getTermType t lv) in 
 	t

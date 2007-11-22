@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.25 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.26 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -365,7 +365,7 @@ and wp0 e s =
       let i0 = subst_inv s0 in 
       let decphi = match var with
 	| None -> Ptrue
-	| Some (phi,_,r) -> Papp (r, [Subst.term s1 phi;Subst.term s0 phi], [])
+	| Some (_,phi,_,r) -> Papp (r, [Subst.term s1 phi;Subst.term s0 phi], [])
       in
       let ok = 
 	wpands

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.107 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.108 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -101,8 +101,8 @@ let while_post_block env inv var e =
   let lab = e.info.t_label in
   let decphi = match var with
     | None -> Ptrue
-    | Some (phi,_,r) -> 
-	let id = reg_explanation Cc.VCEvardecr in
+    | Some (loc,phi,_,r) -> 
+	let id = reg_explanation (Cc.VCEvardecr(loc,phi)) in
 	Pnamed(id, Papp (r, [phi; put_label_term env lab phi], [])) 
   in
   let ql = default_exns_post (effect e) in
@@ -118,7 +118,7 @@ let while_post_block env inv var e =
 
 let well_founded_rel = function
   | None -> Ptrue
-  | Some (_,_,r) -> Papp (well_founded, [Tvar r], [])
+  | Some (_,_,_,r) -> Papp (well_founded, [Tvar r], [])
 
 (*s [saturate_post k a q] makes a postcondition for a program of type [k]
     out of a normal postcondition [a] and the exc. postconditions from [q] *)

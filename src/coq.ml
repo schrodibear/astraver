@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.165 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.166 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Options
 open Logic
@@ -200,6 +200,9 @@ let print_term_v7 fmt t =
 	fprintf fmt "(@[%s@ %a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl, _) -> 
 	fprintf fmt "(@[%a@ %a@])" ident id print_terms tl
+    | Tnamed (User n, t) ->
+	fprintf fmt "@[((* %s *)@ %a)@]" n print3 t
+    | Tnamed (_, t) -> print3 fmt t
   and print_terms fmt tl =
     print_list space print0 fmt tl
   in
@@ -496,6 +499,9 @@ let print_term_v8 fmt t =
 	fprintf fmt "(@[%s@ %a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl, _) -> 
 	fprintf fmt "(@[%a@ %a@])" ident id print_terms tl
+    | Tnamed (User n, t) ->
+	fprintf fmt "@[((* %s *)@ %a)@]" n print3 t
+    | Tnamed (_, t) -> print3 fmt t
   and print_terms fmt tl =
     print_list space print3 fmt tl
   in

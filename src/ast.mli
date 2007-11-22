@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ast.mli,v 1.58 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.59 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -36,7 +36,7 @@ type variable = Ident.t
 
 type label = string
 
-type variant = term * pure_type * variable
+type variant = Loc.position * term * pure_type * variable
 
 type exn_pattern = Ptree.exn_pattern
 

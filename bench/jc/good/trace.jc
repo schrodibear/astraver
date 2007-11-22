@@ -34,7 +34,7 @@ integer f2 (integer x)
 
 /* Example 3 
  * We want the message: 
- *  "pre-condition `x > 0' for call to function f3 cannot be established"
+ *  "pre-condition `x > 0' for call to function f2 cannot be established"
  * localized on `(f2 x)' 
  */
 integer f3 (integer x)  
@@ -55,6 +55,7 @@ unit f4 (integer x)
  integer y = x;
  while (y > 0)
      invariant 0 <= y && y <= x;
+     variant y;
  {
      y = y - 1;
  }

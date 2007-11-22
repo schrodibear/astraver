@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.42 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.43 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -175,6 +175,8 @@ let rec print_term fmt t =
 	fprintf fmt "%s(@[%a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl, _) ->
 	fprintf fmt "%a(@[%a@])" Ident.print id print_terms tl
+    | Tnamed (_, t) -> (* TODO: print name *)
+	print3 fmt t
   in
   print0 fmt t
 

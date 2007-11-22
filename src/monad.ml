@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monad.ml,v 1.75 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.76 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Format
 open Misc
@@ -484,7 +484,7 @@ let fresh id e ren =
     \end{verbatim}
 *)
 
-let wfrec_with_binders bl (phi,a,r) pre info f ren =
+let wfrec_with_binders bl (_,phi,a,r) pre info f ren =
   let env = info.t_env in
   let vphi = variant_name () in
   let wr = get_writes info.t_effect in

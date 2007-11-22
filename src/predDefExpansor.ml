@@ -54,6 +54,7 @@ let rec subst_in_term s st = function
       Tapp (x, List.map (subst_in_term s st) l, subst_in_instance st i)
   | Tconst _ | Tderef _ as t -> 
       t
+  | Tnamed(lab,t) -> Tnamed(lab,subst_in_term s st t)
 
 let rec subst_in_predicate s st = function
   | Papp (id, l, i) -> 

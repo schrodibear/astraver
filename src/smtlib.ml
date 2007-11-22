@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.40 2007-11-21 14:08:42 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.41 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -144,6 +144,8 @@ let rec print_term fmt = function
   | Tapp (id, tl, i) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	idents (Encoding.symbol (id, i)) (print_list space print_term) tl
+  | Tnamed (_, t) -> (* TODO: print name *)
+      print_term fmt t
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl

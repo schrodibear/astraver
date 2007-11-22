@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.118 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.119 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Options
 open Ident
@@ -249,11 +249,12 @@ let optasst_app f = option_app (asst_app f)
 
 (*s Functions on terms and predicates. *)
 
-let applist f l = match (f,l) with
+let rec applist f l = match (f,l) with
   | f, [] -> f
   | Tvar id, l -> Tapp (id, l, [])
   | Tapp (id, l, il), l' -> assert (il = []); Tapp (id, l @ l', [])
   | (Tconst _ | Tderef _), _ -> assert false
+  | Tnamed(lab,t),l -> Tnamed(lab,applist t l)
 
 let papplist f l = match (f,l) with
   | f, [] -> f
@@ -270,6 +271,7 @@ let rec collect_term s = function
   | Tvar id | Tderef id -> Idset.add id s
   | Tapp (_, l, _) -> List.fold_left collect_term s l
   | Tconst _ -> s
+  | Tnamed(_,t) -> collect_term s t
 
 let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
@@ -317,6 +319,7 @@ let rec tsubst_in_term s = function
       Tapp (x, List.map (tsubst_in_term s) l, i)
   | Tconst _ as t -> 
       t
+  | Tnamed(lab,t) -> Tnamed(lab,tsubst_in_term s t)
 
 let rec tsubst_in_predicate s = function
   | Papp (id, l, i) -> Papp (id, List.map (tsubst_in_term s) l, i)
@@ -344,6 +347,8 @@ let rec subst_in_term s = function
       Tapp (x, List.map (subst_in_term s) l, i)
   | Tconst _ as t -> 
       t
+  | Tnamed(lab,t) -> Tnamed(lab,subst_in_term s t)
+      
 
 (***
     let subst_in_predicate s = 
@@ -391,6 +396,7 @@ let rec unref_term = function
   | Tderef id -> Tvar id
   | Tapp (id, tl, i) -> Tapp (id, List.map unref_term tl, i)
   | Tvar _ | Tconst _ as t -> t
+  | Tnamed(lab,t) -> Tnamed(lab,unref_term t)
 
 let equals_true = function
   | Tapp (id, _, _) as t when is_relation id -> t
@@ -634,6 +640,7 @@ module Size = struct
   let rec term = function
     | Tconst _ | Tvar _ | Tderef _ -> 1 
     | Tapp (_, tl, _) -> List.fold_left (fun s t -> s + term t) 1 tl
+    | Tnamed(_,t) -> term t
 
   let rec predicate = function
     | Pvar _ | Ptrue | Pfalse -> 1

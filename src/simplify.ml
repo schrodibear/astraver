@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.73 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.74 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -156,6 +156,9 @@ let rec print_term fmt = function
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	ident id (print_list space print_term) tl
+  | Tnamed (n, t) ->
+      (*fprintf fmt "@[;;%s@\n%a@]" n pp p*) 
+      print_term fmt t
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.13 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.14 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -165,7 +165,8 @@ let rec translate_term fv lv = function
   | Tconst (ConstUnit) as t -> plunge [] t PTunit
   | Tconst (ConstFloat f) as t -> plunge [] t PTreal
   | Tderef id as t -> print_endline ("id in Tderef : "^(Ident.string id)); t
-	
+  | Tnamed(_,t) -> translate_term fv lv t
+
 (* Generalizing a predicate scheme with foralls (can add a trigger) *)
 let rec lifted  l p t =
   match l with [] -> p

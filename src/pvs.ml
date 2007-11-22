@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.82 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.83 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -133,6 +133,7 @@ let print_term fmt t =
     | Tapp (id, tl, i) -> 
 	fprintf fmt "%a%a(@[%a@])" 
 	  ident id print_instance (List.rev i) (print_list comma print0) tl
+    | Tnamed(lab,t) -> print3 fmt t
   in
   print0 fmt t
 

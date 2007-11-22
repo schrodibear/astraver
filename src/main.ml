@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.135 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.136 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -374,7 +374,7 @@ let interp_decl ?(prelude=false) d =
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
-	let dg = Dgoal (loc, VCEstring "user goal", Ident.string id, s) in
+	let dg = Dgoal (loc, VCEexternal "user goal", Ident.string id, s) in
 	if Options.pruning_hyp_v != -1 then
 	  push_decl (Hypotheses_filtering.reduce dg declarationQueue)
 	else	  

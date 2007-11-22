@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.16 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.17 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -176,6 +176,7 @@ let rec term e = function
   (* anything else is discarded *)
   | Tapp _ -> 
       raise NotGappa
+  | Tnamed(_,t) -> term e t
 
 let termo e t = try Some (term e t) with NotGappa -> None
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.131 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.132 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Typing. *)
 
@@ -213,10 +213,10 @@ let state_var loc lab env = function
 	(AnyMessage "a variant is required here (since -total is set)")
   | None -> 
       None, Effect.bottom
-  | Some (phi,r) ->
-      let phi,tphi = Ltyping.term lab env phi in
+  | Some (pphi,r) ->
+      let phi,tphi = Ltyping.term lab env pphi in
       let ids = term_refs env phi in
-      (if termination = Partial then None else Some (phi,tphi,r)), 
+      (if termination = Partial then None else Some (pphi.pp_loc,phi,tphi,r)), 
       Effect.add_reads ids Effect.bottom
 	
 (*s Typing preconditions.
@@ -656,7 +656,7 @@ let rec typef lab env expr =
       let varinfo,env' = match var with
 	| None -> 
 	    None, env'
-	| Some (phi,tphi,r) ->
+	| Some (loc,phi,tphi,r) ->
 	    let vphi0 = variant_name () in
 	    let tphi = PureType tphi in
 	    let env' = Env.add vphi0 tphi env' in

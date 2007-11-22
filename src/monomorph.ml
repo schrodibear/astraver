@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.ml,v 1.31 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.32 2007-11-22 08:32:42 marche Exp $ i*)
 
 (* monomorphic output *)
 
@@ -284,6 +284,7 @@ module OpenInstances = struct
   let rec term s = function
     | Tvar _ | Tderef _ | Tconst _ -> s
     | Tapp (id, l, i) -> List.fold_left term (add (id,i) s) l
+    | Tnamed(_,t) -> term s t
 
   let rec pattern s = function
     | TPat t -> term s t

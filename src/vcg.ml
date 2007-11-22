@@ -878,7 +878,7 @@ let rec explain_for_pred acc = function
 	| None -> 
 	    fprintf str_formatter 
 	      "unexplained assertion `%a'" print_predicate p;
-	    VCEstring(flush_str_formatter()) 
+	    VCEexternal(flush_str_formatter()) 
 	      
 (* Proof obligations from the WP *)
 

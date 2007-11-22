@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.137 2007-11-20 14:58:58 marche Exp $ i*)
+(*i $Id: util.ml,v 1.138 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -207,6 +207,7 @@ let rec occur_term id = function
   | Tvar id' | Tderef id' -> id = id'
   | Tapp (_, l, _) -> List.exists (occur_term id) l
   | Tconst _ -> false
+  | Tnamed(_,t) -> occur_term id t
 
 let rec occur_pattern id = function
   | TPat t -> occur_term id t
@@ -534,6 +535,10 @@ let rec print_term fmt = function
       fprintf fmt "%s(%a)[%a]" 
 	(Ident.string id) (print_list comma print_term) tl
 	(print_list comma print_pure_type) i
+  | Tnamed(User lab,t) ->
+      fprintf fmt "(%s : %a)" lab print_term t
+  | Tnamed(Internal n,t) ->
+      fprintf fmt "((%d) : %a)" n print_term t
 
 let relation_string id =
   if id == t_lt || id == t_lt_int || id == t_lt_real then "<" 
@@ -955,6 +960,18 @@ let raw_loc ?(pref="") fmt (f,l,b,e) =
   fprintf fmt "%sbegin = %d@\n" pref b;
   fprintf fmt "%send = %d@\n" pref e
 
+let reloc_xpl_term (loc,t) = 
+  match t with
+    | Tnamed(User n,p) -> 
+	begin
+	  try 
+	    let (f,l,b,e,_) = 
+	      Hashtbl.find locs_table n 
+	    in (Some n,(f,l,b,e))
+	  with Not_found -> (None,Loc.extract loc)
+	end
+    | _ -> (None,Loc.extract loc)
+
 let reloc_xpl (loc,p) = 
   match p with
     | Pnamed(User n,p) -> 
@@ -966,17 +983,6 @@ let reloc_xpl (loc,p) =
 	  with Not_found -> (None,Loc.extract loc)
 	end
     | _ -> (None,Loc.extract loc)
-
-(*
-let raw_loc_predicate ?(pref="") fmt locp =
-  let (name,(f,l,b,e)) = reloc_xpl locp in
-  Option_misc.iter (fun n -> fprintf fmt "name = \"%s\"@\n" n) name; 
-  raw_loc ~pref fmt f l b e
-(*
-  let s = read_in_file f l b e in
-  fprintf fmt "pred = \"%s\"@\n" s
-*)
-*)
 
 
 type expl_kind = 
@@ -992,10 +998,7 @@ type expl_kind =
 
 let raw_explanation e =
   match e with
-    | VCEstring s -> EKRaw s, None
-(*
-    | VCEexternal s -> fprintf fmt "kind = %s@\n" s
-*)
+    | VCEexternal s -> EKRaw s, None
     | VCEabsurd -> EKAbsurd, None
     | VCEassert p -> EKAssert, Some(reloc_xpl (List.hd p))
     | VCEpre(lab,p) -> 
@@ -1039,28 +1042,10 @@ let raw_explanation e =
 *)
 
     | VCEpost p -> EKPost, Some(reloc_xpl p)
-(*
-	fprintf fmt "kind = Post@\n";  
-	raw_loc_predicate fmt p
-*)
     | VCEwfrel -> EKWfRel, None
-(*
-	fprintf fmt "kind = WfRel@\n" 
-*)
-    | VCEvardecr (*loc*) -> EKVarDecr, None
-(*
-	fprintf fmt "kind = VarDecr@\n" 
-*)
+    | VCEvardecr p -> EKVarDecr, Some(reloc_xpl_term p)
     | VCEinvinit p -> EKLoopInvInit, Some(reloc_xpl p)
-(*
-	fprintf fmt "kind = LoopInvInit@\n"; 
-	raw_loc_predicate fmt p 
-*)
     | VCEinvpreserv p -> EKLoopInvPreserv, Some(reloc_xpl p)
-(*
-	fprintf fmt "kind = LoopInvPreserv@\n"; 
-	raw_loc_predicate fmt p 
-*)
 
 let print_explanation fmt e =
   let (k,locopt) = raw_explanation e in
@@ -1094,35 +1079,6 @@ let print_loc_predicate fmt (loc,p) =
     | _ -> 
 	fprintf fmt "(located %a) %a" 
 	  Loc.gen_report_position loc print_predicate p
-
-(*
-let print_explanation fmt e =
-  match e with
-    | VCEstring s -> fprintf fmt "%s" s
-(*
-    | VCEexternal s -> fprintf fmt "explanation from front-end: %s" s
-*)
-    | VCEabsurd -> fprintf fmt "absurd case"
-    | VCEassert p -> 
-	fprintf fmt "assertions %a" 
-	  (print_list comma print_loc_predicate) p 
-    | VCEpre(lab, p) -> 
-	fprintf fmt "pre-conditions for call %s: %a" lab
-	  (print_list comma print_loc_predicate) p 
-    | VCEpost p -> 
-	fprintf fmt "post-condition %a" 
-	  print_loc_predicate p 
-    | VCEwfrel -> 
-	fprintf fmt "well-foundedness of relation" 
-    | VCEvardecr (*loc*) -> 
-	fprintf fmt "decreasingness of variant" 
-    | VCEinvinit p ->
-	fprintf fmt "initialization of loop invariant %a" 
-	  print_loc_predicate p 
-    | VCEinvpreserv p ->
-	fprintf fmt "preservation of loop invariant %a" 
-	  print_loc_predicate p 
-*)
 
 let print_decl fmt = function
     Dtype (_, sl, s) -> 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.72 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.73 2007-11-22 08:32:42 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -91,6 +91,7 @@ let rec find_term_vars acc = function
   | Tapp (_, tl, i) ->
       List.fold_left find_term_vars 
 	(List.fold_left find_pure_type_vars acc i) tl
+  | Tnamed(_,t) -> find_term_vars acc t
 
 let rec find_pattern_vars acc = function
   | TPat t -> find_term_vars acc t
@@ -174,6 +175,7 @@ let rec subst_term s = function
       Tapp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
   | Tconst _ | Tvar _ | Tderef _ as t -> 
       t
+  | Tnamed (lab,t) -> Tnamed(lab,subst_term s t)
 
 let rec subst_pattern s = function
   | TPat t -> TPat (subst_term s t)

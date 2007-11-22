@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.48 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.49 2007-11-22 08:32:42 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -169,6 +169,8 @@ let rec print_term fmt = function
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	ident id (print_list space print_term) tl
+  | Tnamed (_, t) -> (* TODO: print name *)
+      print_term fmt t
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
