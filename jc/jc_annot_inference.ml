@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.72 2007-11-23 14:18:45 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.73 2007-11-23 16:36:23 marche Exp $ *)
 
 open Pp
 open Format
@@ -146,6 +146,7 @@ let equality_operator_for_type = function
   | JCTpointer _ -> Beq_pointer
   | JCTnull -> Beq_pointer
 
+(*
 let make_and al = 
   (* optimization *)
   let al = List.filter (fun a -> not (is_true a)) al in
@@ -155,6 +156,7 @@ let make_and al =
     | a::tl -> JCAand al
   in
   raw_asrt anode
+*)
 
 let rec conjuncts a = match a.jc_assertion_node with
   | JCAand al -> List.flatten(List.map conjuncts al)

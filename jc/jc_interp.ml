@@ -492,6 +492,15 @@ let rec term label oldlabel t =
 	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
 
+
+let named_term label oldlabel t =
+  let t' = term label oldlabel t in
+  match t' with
+    | Tnamed _ -> t'
+    | _ -> 
+	let n = reg_loc t.jc_term_loc in
+	Tnamed(n,t')
+
 let tag label oldlabel = function
   | JCTtag st -> LVar (st.jc_struct_info_root^"_tag")
   | JCTbottom -> LVar "bottom_tag"
@@ -573,7 +582,9 @@ let named_assertion label oldlabel a =
   let a' = assertion label oldlabel a in
   match a' with
     | LNamed _ -> a'
-    | _ -> LNamed(reg_loc a.jc_assertion_loc,a')
+    | _ -> 
+	let n = reg_loc a.jc_assertion_loc in
+	LNamed(n,a')
 
 
 (****************************
@@ -1123,14 +1134,16 @@ let rec statement ~threats s =
 	let e = expr e in
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->
-	let la' = named_assertion None "init" la.jc_loop_invariant in
-	begin match la.jc_loop_variant with
-	| Some t when threats ->
-	    While(Cte(Prim_bool true), la',
-	          Some (term None "" t,None), [statement s])
-	| _ ->
-	    While(Cte(Prim_bool true), la',
-	          None, [statement s])
+	let inv = named_assertion None "init" la.jc_loop_invariant in
+	begin 
+	  match la.jc_loop_variant with
+	    | Some t when threats ->
+		let variant = named_term None "" t in
+		While(Cte(Prim_bool true), inv,
+	              Some (variant,None), [statement s])
+	    | _ ->
+		While(Cte(Prim_bool true), inv,
+	              None, [statement s])
 	end
     | JCSassert((*None,*) a) -> 
 	Assert(named_assertion None "init" a, Void)

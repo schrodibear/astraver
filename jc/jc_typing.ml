@@ -730,7 +730,8 @@ let rec assertion env e =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
 	  let te = assertion env e in
-	  lab := l; te.jc_assertion_node
+	  lab := l; 
+	  te.jc_assertion_node
       | JCPEvar id -> 
 	  let vi = 
 	    try List.assoc id env 
@@ -1901,6 +1902,8 @@ let clause env vi_result c acc =
 	  jc_behavior_assigns = assigns;
 	  jc_behavior_ensures = assertion env_result ensures }
 	in
+	eprintf "loc for ensures: %a@."
+	  Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
 	{ acc with jc_fun_behavior = (id,b)::acc.jc_fun_behavior }
 	  
 
@@ -2015,9 +2018,9 @@ let type_range_of_term ty t =
 	  | None -> true_assertion
 	  | Some n1 ->
  	      let mint = 
-		type_term (JCToffset (Offset_min, t, st)) integer_type in
+		term_no_loc (JCToffset (Offset_min, t, st)) integer_type in
  	      let n1t =
- 		type_term (JCTconst (JCCinteger (Num.string_of_num n1))) 
+ 		term_no_loc (JCTconst (JCCinteger (Num.string_of_num n1))) 
 		  integer_type
  	      in
  	      raw_asrt (JCArelation (mint, Beq_int, n1t))
@@ -2026,9 +2029,9 @@ let type_range_of_term ty t =
 	  | None -> true_assertion
 	  | Some n2 ->
  	      let maxt = 
-		type_term (JCToffset (Offset_max, t, st)) integer_type in
+		term_no_loc (JCToffset (Offset_max, t, st)) integer_type in
  	      let n2t =
- 		type_term (JCTconst (JCCinteger (Num.string_of_num n2)))
+ 		term_no_loc (JCTconst (JCCinteger (Num.string_of_num n2)))
 		  integer_type
  	      in
  	      raw_asrt (JCArelation (maxt, Beq_int, n2t))
@@ -2136,9 +2139,9 @@ let rec decl d =
 	      List.fold_left
 		(fun acc fi -> 
 		   let term_this = 
-		     type_term (JCTvar vi_this)
+		     term_no_loc (JCTvar vi_this)
 		       (JCTpointer (struct_info, Some zero, Some zero)) in
-		   let t = type_term (JCTderef (term_this, fi)) fi.jc_field_info_type in
+		   let t = term_no_loc (JCTderef (term_this, fi)) fi.jc_field_info_type in
 		     Jc_pervasives.make_and [type_range_of_term fi.jc_field_info_type t; acc])
 		(raw_asrt JCAtrue) struct_info.jc_struct_info_fields
 	    in

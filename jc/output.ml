@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.20 2007-11-20 14:34:50 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.21 2007-11-23 16:36:23 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -51,6 +51,7 @@ type term =
   | LApp of string * term list
   | LVar of string
   | LVarAtLabel of string * string     (*r x@L *)
+  | Tnamed of string * term
 ;;
 
 let rec iter_term f t =
@@ -59,6 +60,7 @@ let rec iter_term f t =
   | LApp(id,l) -> f id; List.iter (iter_term f) l
   | LVar(id) -> f id
   | LVarAtLabel(id,l) -> f id
+  | Tnamed(_,t) -> iter_term f t
 ;;
 
 let rec fprintf_term form t =
@@ -79,7 +81,7 @@ let rec fprintf_term form t =
   | LApp(id,[])
   | LVar(id) -> fprintf form "%s" id
   | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
-;;
+  | Tnamed(lab,t) -> fprintf form "(%s : %a)" lab fprintf_term t
 
 type logic_type = 
     { logic_type_name : string;

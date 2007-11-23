@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.66 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.67 2007-11-23 16:36:23 marche Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -303,7 +303,10 @@ and desc_term loc lab env = function
 	 | ta, ty when unify ty PTint -> Tapp (t_neg_int, [ta], []), PTint
 	 | ta, ty when unify ty PTreal -> Tapp (t_neg_real, [ta], []), PTreal
 	 | _ -> expected_num loc)
-  | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ | PPnamed _ ->
+  | PPnamed(n, t) -> 
+      let tt,ty = term lab env t in Tnamed(User n, tt), ty
+
+  | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ ->
       term_expected loc
 
 and type_if lab env a b c =

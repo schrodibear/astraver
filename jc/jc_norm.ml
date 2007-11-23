@@ -715,130 +715,6 @@ and block_statement statements =
        make_try loc acc catch_goto (make_block loc [])
     ) (make_block Loc.dummy_position be) bl
        
-(*
-and assertion a =
-  let loc = a.jc_tassertion_loc in
-  let na =
-    match a.jc_tassertion_node with
-      | JCTAtrue ->
-	  JCAtrue
-      | JCTAfalse ->
-	  JCAfalse
-      | JCTAand al ->
-	  JCAand (List.map assertion al)
-      | JCTAor al ->
-	  JCAor (List.map assertion al)
-      | JCTAimplies (a1, a2) ->
-	  JCAimplies (assertion a1, assertion a2)
-      | JCTAiff (a1, a2) ->
-	  JCAiff (assertion a1, assertion a2)
-      | JCTAnot a ->
-	  JCAnot (assertion a)
-      | JCTArelation (t1, op, t2) ->
-	  JCArelation (term t1, op, term t2)
-      | JCTAapp (li, tl) ->
-	  JCAapp (li, List.map term tl)
-      | JCTAquantifier(q, vi, a) ->
-	  JCAquantifier(q,vi, assertion a)
-      | JCTAold a ->
-	  JCAold (assertion a)
-      | JCTAinstanceof (t, si) ->
-	  JCAinstanceof (term t, si)
-      | JCTAbool_term t ->
-	  JCAbool_term (term t)
-      | JCTAif (t, at, af) ->
-	  JCAif (term t, assertion at, assertion af)
-      | JCTAmutable (t, st, v) ->
-	  JCAmutable (term t, st, tag v)
-      | JCTAtagequality (t1, t2, h) ->
-	  JCAtagequality (tag t1, tag t2, h)
-
-  in { jc_assertion_node = na;
-       jc_assertion_loc =  loc }
-
-and tag t =
-  let loc = t.jc_ttag_loc in
-  let tag = match t.jc_ttag_node with
-    | JCTTtag st -> JCTtag st
-    | JCTTbottom -> JCTbottom
-    | JCTTtypeof(t, st) -> JCTtypeof(term t, st)
-  in {
-    jc_tag_node = tag;
-    jc_tag_loc = loc;
-  }
-
-and term t =
-  let loc = t.jc_tterm_loc in
-  let nt = 
-    match t.jc_tterm_node with
-      | JCTTconst c -> JCTconst c
-      | JCTTvar vi -> JCTvar vi
-      | JCTTunary(op,t1) -> JCTunary (op, term t1)
-      | JCTTbinary (t1, op, t2) -> JCTbinary (term t1, op, term t2)
-      | JCTTshift (t1, t2) -> JCTshift (term t1, term t2)
-      | JCTTderef (t, fi) -> JCTderef (term t, fi)
-      | JCTTapp (li, tl) -> JCTapp (li, List.map term tl)
-      | JCTTold (t) -> JCTold (term t)
-      | JCTToffset(k, t, si) -> JCToffset(k, term t, si)
-      | JCTTinstanceof (t, si) -> JCTinstanceof (term t, si)
-      | JCTTcast (t, si) -> JCTcast (term t, si)
-      | JCTTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
-      | JCTTrange (t1, t2) -> JCTrange (term t1, term t2)
-  in { jc_term_node = nt;
-       jc_term_type = t.jc_tterm_type;
-       jc_term_loc =  loc }
-
-and loop_annot la =
-  {
-    jc_loop_invariant = assertion la.jc_tloop_invariant;
-    jc_loop_variant = term la.jc_tloop_variant;
-  }
-    
-and location_set ls=
-  match ls with
-    | JCTLSvar vi -> JCLSvar vi
-    | JCTLSderef (ls, fi) -> JCLSderef (location_set ls, fi)
-    | JCTLSrange (ls, t1, t2) -> JCLSrange (location_set ls, term t1, term t2)
-
-
-and location l =
-  match l with
-    | JCTLvar vi -> JCLvar vi
-    | JCTLderef (ls, fi) -> JCLderef (location_set ls, fi)
-
-
-and behavior b =
-  let a = match b.jc_tbehavior_assumes with
-    | None -> None
-    | Some a -> Some (assertion a)
-  in
-(*
-  let requires = match b.jc_tbehavior_requires with
-    | None -> None
-    | Some a -> Some (assertion a)
-  in
-*)
-  let assigns = match b.jc_tbehavior_assigns with
-    | None -> None
-    | Some ll -> Some (List.map location ll)
-  in
-  { 
-    jc_behavior_throws = b.jc_tbehavior_throws;
-    jc_behavior_assumes = a;
-(*
-    jc_behavior_requires = requires;
-*)
-    jc_behavior_assigns = assigns;
-    jc_behavior_ensures = assertion b.jc_tbehavior_ensures;
-  }
-
-and fun_spec spec =
-  {
-    jc_fun_requires = assertion spec.jc_tfun_requires;
-    jc_fun_behavior = 
-      List.map (fun (s, b) -> (s, behavior b)) spec.jc_tfun_behavior;
-  }
-*)
 
 
 let statement s =
@@ -915,56 +791,61 @@ let invariant_for_struct this st =
 
 let code_function (fi, fs, sl) vil =
   let vi_result = var ~unique: false fi.jc_fun_info_return_type "\\result" in
-  let vit_result = var_term vi_result in
-  let result_type_range = Jc_typing.type_range_of_term fi.jc_fun_info_return_type vit_result in
-  (* apply arguments invariant policy *)
-  let invariants =
+  let vit_result = var_no_loc vi_result in
+  let result_type_range = 
+    Jc_typing.type_range_of_term fi.jc_fun_info_return_type vit_result 
+  in
+  begin
     match Jc_options.inv_sem with
       | InvArguments ->
-	  (* Calculate global invariants. *)
-	  let vitl = List.map (fun vi -> type_term (JCTvar vi) vi.jc_var_info_type) vil in
-	  let global_invariants =
-	    Hashtbl.fold
-	      (fun li _ acc -> 
-		 li.jc_logic_info_parameters <- vil;
-		 (raw_asrt (JCAapp (li, vitl))) :: acc)
-	      Jc_typing.global_invariants_table []
-	  in
-	  let global_invariants = make_and global_invariants in
-	  (* Calculate invariants for each parameter. *)
+	  (* apply arguments invariant policy *)
 	  let invariants =
-	    List.fold_left
-	      (fun acc vi ->
-		 match vi.jc_var_info_type with
-		   | JCTpointer (st, _, _) ->
-		       make_and 
-			 [acc; (invariant_for_struct 
-				  (type_term (JCTvar vi) vi.jc_var_info_type) st)]
-		   | _ -> acc)
-	      (raw_asrt JCAtrue)
-	      fi.jc_fun_info_parameters
-	  in
+	    (* Calculate global invariants. *)
+	    let vitl = List.map (fun vi -> term_no_loc (JCTvar vi) vi.jc_var_info_type) vil in
+	    let global_invariants =
+	      Hashtbl.fold
+		(fun li _ acc -> 
+		   li.jc_logic_info_parameters <- vil;
+		   (raw_asrt (JCAapp (li, vitl))) :: acc)
+		Jc_typing.global_invariants_table []
+	    in
+	    let global_invariants = make_and global_invariants in
+	    (* Calculate invariants for each parameter. *)
+	    let invariants =
+	      List.fold_left
+		(fun acc vi ->
+		   match vi.jc_var_info_type with
+		     | JCTpointer (st, _, _) ->
+			 make_and 
+			   [acc; (invariant_for_struct 
+				    (term_no_loc (JCTvar vi) vi.jc_var_info_type) st)]
+		     | _ -> acc)
+		(raw_asrt JCAtrue)
+		fi.jc_fun_info_parameters
+	    in
 	    make_and [global_invariants; invariants]
-      | _ -> true_assertion
-  in
-    (* add invariants to the function precondition *)
-    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
-    (* add result_type info and invariants to the function postcondition *)
-    let post = make_and [invariants; result_type_range] in
-      List.iter
-	(fun (_, b) -> b.jc_behavior_ensures <- make_and 
-	   [b.jc_behavior_ensures; post])
-	fs.jc_fun_behavior;
-      (* add the 'safety' spec *)
-      let safety_b = { default_behavior with jc_behavior_ensures = post } in
-	fs.jc_fun_behavior <- ("safety", safety_b) :: fs.jc_fun_behavior;
-	  (* normalization of the function body *)
-	  (fs, Option_misc.map (List.map statement) sl)
-	  
+	  in
+	  (* add invariants to the function precondition *)
+	  fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
+	  (* add result_type info and invariants to the function postcondition *)
+	  let post = make_and [invariants; result_type_range] in
+	  List.iter
+	    (fun (_, b) -> b.jc_behavior_ensures <- make_and 
+	       [b.jc_behavior_ensures; post])
+	    fs.jc_fun_behavior;
+	  (* add the 'safety' spec *)
+	  let safety_b = { default_behavior with jc_behavior_ensures = post } in
+	  fs.jc_fun_behavior <- ("safety", safety_b) :: fs.jc_fun_behavior;
+
+      | _ -> ()
+  end;
+  (* normalization of the function body *)
+  (fs, Option_misc.map (List.map statement) sl)
+    
 let static_variable (vi, e) =
   let invs =
     match Jc_options.inv_sem with
-      | InvArguments -> Jc_typing.type_range_of_term vi.jc_var_info_type (var_term vi)
+      | InvArguments -> Jc_typing.type_range_of_term vi.jc_var_info_type (var_no_loc vi)
       | _ -> true_assertion
   in
     match e with
@@ -996,13 +877,6 @@ let static_variables variables =
       end;
     vil
 	  
-(*
-let logic_function t =
-  match t with 
-    | JCTAssertion p -> JCAssertion ertion p) 
-    | JCTReads r -> JCReads (List.map location r)
-    | JCTTerm t -> JCTerm (term t)
-*)
 
 
 (*

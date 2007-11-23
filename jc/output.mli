@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.12 2007-11-20 14:34:50 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.13 2007-11-23 16:36:23 marche Exp $ i*)
 
 type constant =
   | Prim_void
@@ -47,6 +47,7 @@ type term =
   | LApp of string * term list
   | LVar of string
   | LVarAtLabel of string * string     (*r x@L *)
+  | Tnamed of string * term
 ;;
 
 val fprintf_term : Format.formatter -> term -> unit

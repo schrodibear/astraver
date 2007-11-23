@@ -273,19 +273,19 @@ let rec list_compare comp ls1 ls2 = match ls1,ls2 with
 
 (* terms *)
 
-let type_term t ty = {
+let term_no_loc t ty = {
   jc_term_node = t;
   jc_term_type = ty;
   jc_term_loc = Loc.dummy_position;
 }
 
-let var_term vi = {
+let var_no_loc vi = {
   jc_term_node = JCTvar vi;
   jc_term_type = vi.jc_var_info_type;
   jc_term_loc = Loc.dummy_position;
 }
 
-let zerot = type_term (JCTconst (JCCinteger "0")) integer_type
+let zerot = term_no_loc (JCTconst (JCCinteger "0")) integer_type
 
 let rec is_constant_term t =
   match t.jc_term_node with
@@ -488,11 +488,14 @@ let rec is_numeric_term t =
 
 (* assertions *)
 
-let raw_asrt a = {
+let raw_asrt a = 
+  eprintf "Warning: calling raw_asrt may lose tracability@.";
+{
   jc_assertion_node = a;
   jc_assertion_loc = Loc.dummy_position;
   jc_assertion_label = "";
 }
+
 
 let true_assertion = raw_asrt JCAtrue
 let is_true a = (a.jc_assertion_node = JCAtrue)
