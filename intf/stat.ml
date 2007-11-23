@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.60 2007-11-23 09:05:40 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.61 2007-11-23 11:02:21 marche Exp $ i*)
 
 open Printf
 open Options
@@ -240,7 +240,7 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
 	       Tags.sp = string_of_int b; 
 	       Tags.ep = string_of_int e} in
 	   Pprinter.move_to_loc loc;
-	   !display_info ("Function " ^ id);
+	   !display_info ("file: " ^ (Filename.basename f) ^ " Function " ^ id);
 	 with Not_found ->
 	   Pprinter.move_to_source None;	 
 	   !display_info "(nothing selected ??)";
