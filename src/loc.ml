@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.ml,v 1.22 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.23 2007-11-23 09:05:40 marche Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -68,6 +68,8 @@ let dummy_position = Lexing.dummy_pos, Lexing.dummy_pos
 let gen_report_line fmt (f,l,b,e) = 
   fprintf fmt "File \"%s\", " f;
   fprintf fmt "line %d, characters %d-%d" l b e
+
+type floc = string * int * int * int
 
 let extract (b,e) = 
   let f = b.pos_fname in

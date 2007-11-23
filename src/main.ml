@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.136 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: main.ml,v 1.137 2007-11-23 09:05:40 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -197,7 +197,7 @@ let encode q =
 
 let print_if_debug p x = if_debug_3 eprintf "  @[%a@]@." p x
 
-let interp_program id p =
+let interp_program loc id p =
   reset_names ();
   let ploc = p.ploc in
   if_verbose_3 eprintf "*** interpreting program %a@." Ident.print id;
@@ -243,6 +243,23 @@ let interp_program id p =
 
   if_debug eprintf "* generating obligations@.";
   let ids = Ident.string id in
+
+  let vloc =
+    try 
+      let (f,l,b,e,o) = 
+	Hashtbl.find locs_table ids 
+      in 
+      let name = 
+	match List.assoc "name" o with
+	  | Rc.RCident s -> s
+	  | _ -> raise Not_found		  
+      in
+      (name,(f,l,b,e))
+    with Not_found -> (ids,Loc.extract loc)
+      
+  in
+  Hashtbl.add program_locs ids vloc;
+
   (*let ol,v = Vcg.vcg ids cc in*)
   begin match wp with
     | None -> 
@@ -296,9 +313,9 @@ let logic_type_is_var = function
 let interp_decl ?(prelude=false) d = 
   let lab = Label.empty in
   match d with 
-    | Program (id, p) ->
+    | Program (loc,id, p) ->
 	if Env.is_global id then raise_located p.ploc (Clash id);
-	(try interp_program id p with Exit -> ())
+	(try interp_program loc id p with Exit -> ())
     | Parameter (loc, ext, ids, v) ->
 	let env = Env.empty_progs () in
 	let v = Ltyping.type_v loc lab env v in

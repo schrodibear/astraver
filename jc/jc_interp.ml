@@ -88,7 +88,7 @@ let reg_loc ?name ?kind (b,e) =
       (f,l,fc,lc)
   in
   Jc_options.lprintf "recording location for id '%s'@." id;
-  Hashtbl.replace locs_table id (kind,f,l,b,e);
+  Hashtbl.replace locs_table id (kind,name,f,l,b,e);
   id
     
 let print_kind fmt k =
@@ -106,13 +106,12 @@ let print_kind fmt k =
 
 let print_locs fmt =
   Hashtbl.iter 
-    (fun id (k,f,l,b,e) ->
+    (fun id (kind,name,f,l,b,e) ->
        fprintf fmt "[%s]@\n" id;
-       begin
-	 match k with
-	   | None -> ()
-	   | Some k -> fprintf fmt "kind = %a@\n" print_kind k
-       end;
+       Option_misc.iter
+	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
+      Option_misc.iter
+	(fun n -> fprintf fmt "name = %s@\n" n) name;
        fprintf fmt "file = \"%s\"@\n" f;
        fprintf fmt "line = %d@\n" l;
        fprintf fmt "begin = %d@\n" b;
@@ -1655,7 +1654,7 @@ let interp_fun_params f annot_type =
 	  l annot_type
        
   
-let tr_fun f spec body acc =
+let tr_fun f loc spec body acc =
   let requires = spec.jc_fun_requires in
   let requires = 
     List.fold_right
@@ -1892,8 +1891,10 @@ let tr_fun f spec body acc =
 	why_param :: acc
     | Some body ->
 	if Jc_options.verify <> [] && 
-	  not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) then 
-	    why_param :: acc else
+	  not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) 
+	then 
+	  why_param :: acc 
+	else
 	    (* why functions for each behaviors *)
 	    let params = match f.jc_fun_info_parameters with
 	      | [] -> ["tt", unit_type]
@@ -1954,10 +1955,12 @@ let tr_fun f spec body acc =
 	      in
 		spec.jc_fun_behavior <- user_b;
 	      let safety_exists = safety_b <> [] in
+	      let name = f.jc_fun_info_name ^ "_safety" in
+	      let _ = reg_loc ~name loc in
 	      let acc = 
 		if safety_exists then 
 		  Def(
-		    f.jc_fun_info_name ^ "_safety",
+		    name,
 		    Fun(
 		      params,
 		      requires,
@@ -1967,7 +1970,7 @@ let tr_fun f spec body acc =
 		    ))::acc 
 		else
 		  Def(
-		    f.jc_fun_info_name ^ "_safety",
+		    name,
 		    Fun(
 		      params,
 		      requires,
@@ -2012,9 +2015,11 @@ let tr_fun f spec body acc =
 		  let acc =
 		    List.fold_right
 		      (fun (id,b,e) acc ->
+			 let name = f.jc_fun_info_name ^ "_ensures_" ^ id in
+			 let _ = reg_loc ~name loc in
 			 let d =
 			   Def(
-			     f.jc_fun_info_name ^ "_ensures_" ^ id,
+			     name,
 			     Fun(
 			       params,
 			       requires,
@@ -2041,8 +2046,12 @@ let tr_fun f spec body acc =
 		      (fun ei l acc ->
 			 List.fold_right
 			   (fun (id,b,e) acc ->
+			      let name = 
+				f.jc_fun_info_name ^ "_exsures_" ^ id 
+			      in
+			      let _ = reg_loc ~name loc in
 			      let d =
-				Def(f.jc_fun_info_name ^ "_exsures_" ^ id,
+				Def(name,
 				    Fun(params,
 					requires,
 					tblock,

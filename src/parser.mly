@@ -175,11 +175,11 @@ list1_decl:
 
 decl:
 | LET ident EQUAL expr
-   { Program ($2, $4) }
+   { Program (loc_i 2,$2, $4) }
 | LET ident binders EQUAL list0_bracket_assertion expr
-   { Program ($2, locate (Slam ($3, $5, force_function_post $6))) }
+   { Program (loc_i 2,$2, locate (Slam ($3, $5, force_function_post $6))) }
 | LET REC recfun
-   { Program (rec_name $3, locate $3) }
+   { let (loc,p) = $3 in Program (loc,rec_name p, locate p) }
 | EXCEPTION ident
    { Exception (loc (), $2, None) }
 | EXCEPTION ident OF primitive_type
@@ -520,9 +520,9 @@ expr:
    { let b =  force_function_post ~warn:true $6 in
      locate (Sletin ($2, locate (Slam ($3, $5, b)), $8)) }
 | LET REC recfun %prec prec_letrec
-   { locate $3 }
+   { let loc,p = $3 in locate p }
 | LET REC recfun IN expr
-   { locate (Sletin (rec_name $3, locate $3, $5)) }
+   { let loc,p = $3 in locate (Sletin (rec_name p, locate p, $5)) }
 | RAISE ident opt_cast
    { locate (Sraise ($2, None, $3)) }
 | RAISE LEFTPAR ident expr RIGHTPAR opt_cast
@@ -629,7 +629,7 @@ opt_invariant:
 recfun:
 | ident binders COLON type_v opt_variant EQUAL 
   list0_bracket_assertion expr %prec prec_recfun
-   { Srec ($1, $2, $4, $5, $7, force_function_post $8) }
+   { (loc_i 1),Srec ($1, $2, $4, $5, $7, force_function_post $8) }
 ;
 
 opt_variant:

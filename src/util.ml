@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.138 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: util.ml,v 1.139 2007-11-23 09:05:40 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -917,7 +917,7 @@ and print_phandler fmt = function
 let print_external fmt b = if b then fprintf fmt "external "
 
 let print_decl fmt = function
-  | Program (id, p) -> fprintf fmt "let %a = %a" Ident.print id print_ptree p
+  | Program (_,id, p) -> fprintf fmt "let %a = %a" Ident.print id print_ptree p
   | Parameter (_, e, ids, v) -> 
       fprintf fmt "%aparameter <...>" print_external e
   | Exception (_, id, pto) -> fprintf fmt "exception %a <...>" Ident.print id
@@ -938,6 +938,8 @@ let print_decl fmt = function
 let print_pfile = print_list newline print_decl
 
 (*s explanation *)
+
+let program_locs = Hashtbl.create 17
 
 let read_in_file f l b e = 
   let ch = open_in f in

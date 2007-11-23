@@ -417,7 +417,7 @@ let logic_type fmt = function
       fprintf fmt "%a -> %a" (print_list comma ppure_type) ptl ppure_type pt
 
 let decl fmt = function
-  | Program (id, p) -> 
+  | Program (_,id, p) -> 
       rename_global id;
       fprintf fmt "@[<hov 2>let %a =@ %a@]" gident id (program M.empty) p
   | Parameter (_, e, ids, v) -> 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.59 2007-11-21 16:41:30 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.60 2007-11-23 09:05:40 marche Exp $ i*)
 
 open Printf
 open Options
@@ -223,15 +223,29 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
     (fun p ->
        let row = model#get_iter p in
        let s = model#get ~row ~column:Model.fullname in
+       try
+	 let (_,xpl,_,_) as o = Model.find_oblig s in
+	 let buf = update_buffer tv in
+	 buf#set_text "";
+	 Pprinter.text_of_obligation tv o;
+	 let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
+	 tv#scroll_to_mark ~use_align:true mark;
+	 show_xpl xpl tv_s  
+       with Not_found -> 
 	 try
-	   let (_,xpl,_,_) as o = Model.find_oblig s in
-	   let buf = update_buffer tv in
-	   buf#set_text "";
-	   Pprinter.text_of_obligation tv o;
-	   let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
-	   tv#scroll_to_mark ~use_align:true mark;
-	   show_xpl xpl tv_s  
-	 with Not_found -> ())
+	   let (id,(f,l,b,e)) = Hashtbl.find Util.program_locs s in
+	   let loc = 
+	     { Tags.file=f; 
+	       Tags.line= string_of_int l; 
+	       Tags.sp = string_of_int b; 
+	       Tags.ep = string_of_int e} in
+	   Pprinter.move_to_loc loc;
+	   !display_info ("Function " ^ id);
+	 with Not_found ->
+	   Pprinter.move_to_source None;	 
+	   !display_info "(nothing selected ??)";
+	 
+    )
     selected_rows
 
 let prove fct = 

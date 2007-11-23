@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ptree.mli,v 1.36 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.37 2007-11-23 09:05:40 marche Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -144,7 +144,7 @@ type plogic_type =
   | PFunction of ppure_type list * ppure_type
 
 type decl = 
-  | Program of Ident.t * parsed_program
+  | Program of loc * Ident.t * parsed_program
   | Parameter of loc * external_ * Ident.t list * ptype_v
   | Exception of loc * Ident.t * ppure_type option
   | Logic of loc * external_ * Ident.t list * plogic_type

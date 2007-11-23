@@ -2016,8 +2016,9 @@ let rec decl d =
 	  Hashtbl.add variables_env id vi;
 	  Hashtbl.add variables_table vi.jc_var_info_tag (vi, e);
     | JCPDfun (ty, id, pl, specs, body) -> 
+	let loc = id.jc_identifier_loc in
 	let param_env, ty, fi = 
-	  add_fundecl (ty, id.jc_identifier_loc, id.jc_identifier_name, pl) 
+	  add_fundecl (ty, loc, id.jc_identifier_name, pl) 
 	in
 	let vi = var ty "\\result" in
 	let s = List.fold_right 
@@ -2040,7 +2041,7 @@ let rec decl d =
 		 statement_list (("\\result",vi)::param_env) ([],lz) body
 	    ) body
 	in
-	  Hashtbl.add functions_table fi.jc_fun_info_tag (fi,s,b)
+	  Hashtbl.add functions_table fi.jc_fun_info_tag (fi,loc,s,b)
     | JCPDrecfuns pdecls ->
         (* first pass: adding function names *)
 	List.iter 

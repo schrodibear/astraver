@@ -29,43 +29,17 @@ open Jc_env
 open Jc_fenv
 open Jc_ast
 
-(*
-val logic_type_table : (string,string) Hashtbl.t
-  
-val logic_functions_table : 
-  (int, logic_info * term_or_assertion) Hashtbl.t
-*)
-
 val functions_table : 
-  (int, fun_info * fun_spec * statement list option) Hashtbl.t
+  (int, fun_info * Loc.position * fun_spec * statement list option) Hashtbl.t
 
 val variables_table : 
   (int, var_info * expr option) Hashtbl.t
 
-(*
-val structs_table : 
-  (string, struct_info * (logic_info * assertion) list) Hashtbl.t
-*)
+val code_function : fun_info * fun_spec * tstatement list option 
+  -> var_info list -> fun_spec * statement list option
 
-(*
-val enum_types_table : 
-  (string, enum_info) Hashtbl.t
-*)
-
-(*
-val axioms_table : 
-  (string, assertion) Hashtbl.t
-*)
-
-(*
-val exceptions_table : 
-  (string, exception_info) Hashtbl.t
-*)
-
-val code_function : fun_info * fun_spec * tstatement list option -> var_info list
-  -> fun_spec * statement list option
-
-val static_variables : (int, Jc_env.var_info * Jc_ast.texpr option) Hashtbl.t -> var_info list
+val static_variables : (int, Jc_env.var_info * Jc_ast.texpr option) Hashtbl.t 
+  -> var_info list
 
 
 val make_int_binary : Loc.position -> expr -> bin_op -> expr -> expr

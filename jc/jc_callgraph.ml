@@ -145,7 +145,7 @@ module LogicCallGraph = struct
 module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
 
 module CallGraph = struct 
-  type t = (int, (fun_info * fun_spec * statement list option)) Hashtbl.t
+  type t = (int, (fun_info * Loc.position * fun_spec * statement list option)) Hashtbl.t
   module V = struct
     type t = fun_info
     let compare f1 f2 = Pervasives.compare f1.jc_fun_info_tag f2.jc_fun_info_tag
@@ -153,7 +153,7 @@ module CallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    Hashtbl.iter (fun _ (f,spec,b) -> iter f) 
+    Hashtbl.iter (fun _ (f,loc,spec,b) -> iter f) 
   let iter_succ iter _ f =
     List.iter iter f.jc_fun_info_calls 
   end

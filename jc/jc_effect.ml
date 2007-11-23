@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.63 2007-11-21 18:29:46 nrousset Exp $ *)
+(* $Id: jc_effect.ml,v 1.64 2007-11-23 09:05:40 marche Exp $ *)
 
 
 open Jc_env
@@ -477,7 +477,7 @@ let logic_fun_effects f =
   end
 
 let fun_effects fi =
-  let (f, s, b) = 
+  let (f, _, s, b) = 
     Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
   in
   let ef = f.jc_fun_info_effects in

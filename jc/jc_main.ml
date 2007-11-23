@@ -62,9 +62,9 @@ let main () =
 	      *)
 	      let vil = Jc_norm.static_variables Jc_typing.variables_table in
 	      Hashtbl.iter
-		(fun tag (f,s,b) -> 
+		(fun tag (f,loc,s,b) -> 
 		   let (s,b) = Jc_norm.code_function (f, s, b) vil in
-		     Hashtbl.add Jc_norm.functions_table tag (f, s, b))
+		     Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
 		Jc_typing.functions_table;
 	      (*
 	Hashtbl.iter 
@@ -96,7 +96,7 @@ let main () =
 	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
 	  Jc_typing.logic_functions_table;
 	Hashtbl.iter 
-	  (fun _ (f,s,b) -> 
+	  (fun _ (f,loc,s,b) -> 
 	     Option_misc.iter (Jc_callgraph.compute_calls f s) b)
 	  Jc_norm.functions_table;
 	let logic_components = 
@@ -113,14 +113,14 @@ let main () =
 	      (* interprocedural analysis over the call graph +
 		 intraprocedural analysis of each function called *)
 	      Hashtbl.iter
-	      (fun _ (fi, fs, sl) ->
+	      (fun _ (fi, loc, fs, sl) ->
 		 if fi.jc_fun_info_name = Jc_options.main then
 		   Jc_ai.main_function (fi, fs, sl)
 	      ) Jc_norm.functions_table
 	    else
               (* intraprocedural inference of annotations otherwise *)
 	      Hashtbl.iter 
-		(fun _ (f, s, b) -> 
+		(fun _ (f, loc, s, b) -> 
 		   Jc_ai.code_function (f, s, b) 
 		) Jc_norm.functions_table;
 	  
@@ -224,8 +224,8 @@ let main () =
 	    "production phase 4 : generation of Why functions@.";
 	  let d_funs = 
 	    Hashtbl.fold 
-	      (fun _ (f,s,b) acc ->
-		 Jc_interp.tr_fun f s b acc)
+	      (fun _ (f,loc,s,b) acc ->
+		 Jc_interp.tr_fun f loc s b acc)
 	      Jc_norm.functions_table
 	      d_axioms
 	  in
