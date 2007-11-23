@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.71 2007-11-23 09:51:51 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.72 2007-11-23 14:18:45 moy Exp $ *)
 
 open Pp
 open Format
@@ -760,12 +760,12 @@ end = struct
       | JCToffset(Offset_min,t,_) ->
 	  begin match t.jc_term_node with
 	    | JCTvar _ | JCTderef _ -> offset_min_variable t
-	    | _ -> assert false
+	    | _ -> (*assert false*) offset_min_variable t
 	  end
       | JCToffset(Offset_max,t,_) ->
 	  begin match t.jc_term_node with
 	    | JCTvar _ | JCTderef _ -> offset_max_variable t
-	    | _ -> assert false
+	    | _ -> (*assert false*) offset_max_variable t
 	  end
       | _ -> variable t
 	  
@@ -998,7 +998,7 @@ let rec linearize t =
     | JCToffset(_,vt,_) ->
 	begin match vt.jc_term_node with
 	  | JCTvar _ | JCTderef _ -> ([t,1],0)
-	  | _ -> assert false
+	  | _ -> (*assert false*) ([t,1],0)
 	end
     | JCTapp(f,_) -> ([t,1],0)
     | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
@@ -1611,7 +1611,7 @@ let collect_expr_targets s e =
   let asrts = collect_expr_asserts e in
   List.map (target_of_assertion s e.jc_expr_loc) asrts
 
-let rec collect_targets targets s =
+let rec collect_targets filter_asrt targets s =
   let rec collect targets s =
     let asrts = collect_statement_asserts s in
     let targets = 
@@ -1639,7 +1639,8 @@ let rec collect_targets targets s =
       | JCSassign_heap _ | JCSpack _ | JCSunpack _ | JCSreturn_void ->
 	  targets
   in
-  List.rev (collect targets s)
+  let candidates = List.rev (collect targets s) in
+  List.filter (fun target -> filter_asrt target.jc_target_assertion) candidates
 
 
 (*****************************************************************************)
@@ -2248,7 +2249,7 @@ and intern_ai_statement iaio abs curinvs s =
 		  switch_vis_in_assertion result_vi vi normal_behavior 
 		in
 		  (* add result type spec to [fi] postcondition *)
-		let cstrs = type_range_of_term vi.jc_var_info_type (var_term vi) in
+		let cstrs = Jc_typing.type_range_of_term vi.jc_var_info_type (var_term vi) in
 		  make_and [normal_behavior; cstrs];
 	in
 	let normal_behavior =
@@ -2357,7 +2358,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     (* Add parameters specs to the function precondition *)
     let cstrs =
       List.fold_left
- 	(fun acc vi -> type_range_of_term vi.jc_var_info_type (var_term vi) :: acc) 
+ 	(fun acc vi -> Jc_typing.type_range_of_term vi.jc_var_info_type (var_term vi) :: acc) 
 	[] fi.jc_fun_info_parameters
     in
     fs.jc_fun_requires <- make_and (fs.jc_fun_requires :: cstrs);
@@ -2428,7 +2429,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
 	let returna = mkinvariant abs.jc_absint_manager returnabs in
 	let post = make_and 
-	  [returna; type_range_of_term vi_result.jc_var_info_type (var_term vi_result)] in
+	  [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type (var_term vi_result)] in
 	let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
 	let excl, excabsl =
 	  List.fold_left
@@ -3366,9 +3367,16 @@ let rec backprop_statement target s curpost =
     | JCSloop(la,ls) ->
 	let curpost = backprop_statement target ls curpost in
 	begin
-          match curpost with None -> () | Some a ->
-	    if not (contradictory a la.jc_loop_invariant) then
-	      la.jc_loop_invariant <- make_and [a;la.jc_loop_invariant]
+          match curpost with None -> () | Some propa ->
+	    if not (contradictory propa la.jc_loop_invariant) then
+              begin
+                if Jc_options.verbose then
+                  printf 
+	            "%a@[<v 2>Back-propagating loop invariant@\n%a@]@."
+                    Loc.report_position s.jc_statement_loc
+                    Jc_output.assertion propa;
+	        la.jc_loop_invariant <- make_and [propa;la.jc_loop_invariant]
+              end
 	end;
 	None
     | JCScall(_,_,_,s) ->
@@ -3380,7 +3388,7 @@ let rec backprop_statement target s curpost =
 	let curpost = backprop_statement target ts None in
 	assert (curpost = None);
 	let curpost = backprop_statement target fs None in
-	assert (curpost = None); curpost
+	assert (curpost = None); None
   in
   if s == target.jc_target_statement then
     begin 
@@ -3403,6 +3411,12 @@ let backprop_function targets (fi,fs,sl) =
 let code_function = function
   | fi,fs,None -> ()
   | fi,fs,Some sl ->
+      let wp_filter canda =
+        (* Only propagate candidate assertions for targets if Atp can make 
+	 * sense of them.
+	 *)
+        raw_assertion_equal canda (asrt_of_atp(atp_of_asrt canda))
+      in
       begin match Jc_options.ai_domain with
 	| "box" -> 
 	    let mgr = Box.manager_alloc () in
@@ -3414,12 +3428,12 @@ let code_function = function
 	    let mgr = Polka.manager_alloc_strict () in
 	    ai_function mgr None [] (fi,fs,sl)
 	| "wp" ->
-	    let targets = List.fold_left collect_targets [] sl in
+	    let targets = List.fold_left (collect_targets wp_filter) [] sl in
 	    wp_function targets (fi,fs,sl)
 	| "boxwp" | "octwp" | "polwp" ->
 	    let targets = List.fold_left collect_immediate_targets [] sl in
 	    backprop_function targets (fi,fs,sl);
-	    let targets = List.fold_left collect_targets [] sl in
+	    let targets = List.fold_left (collect_targets wp_filter) [] sl in
 	    begin match Jc_options.ai_domain with
 	      | "boxwp" -> 
 		  let mgr = Box.manager_alloc () in

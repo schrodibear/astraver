@@ -77,6 +77,8 @@ val coerce : jc_type -> native_type -> texpr -> texpr
 
 val decl : pdecl -> unit
 
+val type_range_of_term : jc_type -> term -> assertion
+
 (*
 Local Variables: 
 compile-command: "make -C .. bin/jessie.byte"

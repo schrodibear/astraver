@@ -2007,6 +2007,38 @@ let add_logic_constdecl (ty,id) =
     Hashtbl.add logic_constants_env id vi;
     ty, vi
 
+let type_range_of_term ty t =
+  match ty with
+    | JCTpointer (st, n1opt, n2opt) ->
+	let instanceofcstr = raw_asrt (JCAinstanceof (t, st)) in
+ 	let mincstr = match n1opt with
+	  | None -> true_assertion
+	  | Some n1 ->
+ 	      let mint = 
+		type_term (JCToffset (Offset_min, t, st)) integer_type in
+ 	      let n1t =
+ 		type_term (JCTconst (JCCinteger (Num.string_of_num n1))) 
+		  integer_type
+ 	      in
+ 	      raw_asrt (JCArelation (mint, Beq_int, n1t))
+ 	in
+ 	let maxcstr = match n2opt with
+	  | None -> true_assertion
+	  | Some n2 ->
+ 	      let maxt = 
+		type_term (JCToffset (Offset_max, t, st)) integer_type in
+ 	      let n2t =
+ 		type_term (JCTconst (JCCinteger (Num.string_of_num n2)))
+		  integer_type
+ 	      in
+ 	      raw_asrt (JCArelation (maxt, Beq_int, n2t))
+ 	in
+        if is_root_struct st then
+ 	  Jc_pervasives.make_and [mincstr; maxcstr]
+        else
+ 	  Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr]
+    | _ -> true_assertion
+
 let rec decl d =
   match d.jc_pdecl_node with
     | JCPDvar (ty, id, init) ->

@@ -916,7 +916,7 @@ let invariant_for_struct this st =
 let code_function (fi, fs, sl) vil =
   let vi_result = var ~unique: false fi.jc_fun_info_return_type "\\result" in
   let vit_result = var_term vi_result in
-  let result_type_range = type_range_of_term fi.jc_fun_info_return_type vit_result in
+  let result_type_range = Jc_typing.type_range_of_term fi.jc_fun_info_return_type vit_result in
   (* apply arguments invariant policy *)
   let invariants =
     match Jc_options.inv_sem with
@@ -964,7 +964,7 @@ let code_function (fi, fs, sl) vil =
 let static_variable (vi, e) =
   let invs =
     match Jc_options.inv_sem with
-      | InvArguments -> type_range_of_term vi.jc_var_info_type (var_term vi)
+      | InvArguments -> Jc_typing.type_range_of_term vi.jc_var_info_type (var_term vi)
       | _ -> true_assertion
   in
     match e with

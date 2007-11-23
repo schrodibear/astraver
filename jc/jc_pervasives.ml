@@ -378,6 +378,103 @@ let rec raw_term_compare t1 t2 =
 
 let raw_term_equal t1 t2 = raw_term_compare t1 t2 = 0
 
+let tag_num tag = match tag.jc_tag_node with
+  | JCTtag _ -> 1
+  | JCTbottom -> 3
+  | JCTtypeof _ -> 5
+
+let raw_tag_compare tag1 tag2 =
+  match tag1.jc_tag_node,tag2.jc_tag_node with
+    | JCTtag st1,JCTtag st2 ->
+        Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+    | JCTbottom,JCTbottom -> 0
+    | JCTtypeof(t1,st1),JCTtypeof(t2,st2) ->
+        let compst = 
+	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+        in
+        if compst = 0 then raw_term_compare t1 t2 else compst
+  | _ -> tag_num tag2 - tag_num tag1
+
+let assertion_num a = match a.jc_assertion_node with
+  | JCAtrue -> 1
+  | JCAfalse -> 3
+  | JCArelation _ -> 5
+  | JCAand _ -> 7
+  | JCAor _ -> 11
+  | JCAimplies _ -> 13
+  | JCAiff _ -> 17
+  | JCAnot _ -> 19
+  | JCAapp _ -> 23
+  | JCAquantifier _ -> 31
+  | JCAold _ -> 37
+  | JCAinstanceof  _ -> 41
+  | JCAbool_term _ -> 43
+  | JCAif _ -> 47
+  | JCAmutable _ -> 49
+  | JCAtagequality _ -> 51
+
+(* Comparison based only on assertion structure, not locations. *)
+let rec raw_assertion_compare a1 a2 =
+  match a1.jc_assertion_node, a2.jc_assertion_node with
+    | JCAtrue,JCAtrue | JCAfalse,JCAfalse -> 0
+    | JCArelation(t11,op1,t12),JCArelation(t21,op2,t22) ->
+        let compop = Pervasives.compare op1 op2 in
+        if compop = 0 then 
+	  let comp1 = raw_term_compare t11 t21 in
+	  if comp1 = 0 then raw_term_compare t12 t22 else comp1
+        else compop
+    | JCAand als1,JCAand als2 | JCAor als1,JCAor als2 ->
+	list_compare raw_assertion_compare als1 als2
+    | JCAimplies(a11,a12),JCAimplies(a21,a22) 
+    | JCAiff(a11,a12),JCAiff(a21,a22) ->
+        let comp1 = raw_assertion_compare a11 a21 in
+        if comp1 = 0 then raw_assertion_compare a12 a22 else comp1
+    | JCAnot a1,JCAnot a2 | JCAold a1,JCAold a2 ->
+        raw_assertion_compare a1 a2
+    | JCAapp(li1,tls1),JCAapp(li2,tls2) ->
+        let compli = 
+	  Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
+        in
+        if compli = 0 then
+  	  list_compare raw_term_compare tls1 tls2
+        else compli
+    | JCAquantifier(q1,vi1,a1),JCAquantifier(q2,vi2,a2) ->
+        let compq = Pervasives.compare q1 q2 in
+        if compq = 0 then 
+	  let compvi = Pervasives.compare vi1 vi2 in
+	  if compvi = 0 then raw_assertion_compare a1 a2 else compvi
+        else compq
+    | JCAinstanceof(t1,st1),JCAinstanceof(t2,st2) ->
+        let compst = 
+	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+        in
+        if compst = 0 then raw_term_compare t1 t2 else compst
+    | JCAbool_term t1,JCAbool_term t2 ->
+        raw_term_compare t1 t2
+    | JCAif(t1,a11,a12),JCAif(t2,a21,a22) ->
+        let comp0 = raw_term_compare t1 t2 in
+        if comp0 = 0 then 
+	  let comp1 = raw_assertion_compare a11 a21 in
+	  if comp1 = 0 then raw_assertion_compare a12 a22 else comp1
+        else comp0
+    | JCAmutable(t1,st1,tag1),JCAmutable(t2,st2,tag2) ->
+        let compst = 
+	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+        in
+        if compst = 0 then
+	  let comptag = raw_tag_compare tag1 tag2 in
+	  if comptag = 0 then raw_term_compare t1 t2 else comptag
+        else compst
+    | JCAtagequality(tag11,tag12,so1),JCAtagequality(tag21,tag22,so2) ->
+        let compso = option_compare Pervasives.compare so1 so2 in
+        if compso = 0 then
+	  let comptag = raw_tag_compare tag11 tag21 in
+	  if comptag = 0 then raw_tag_compare tag12 tag22 else comptag
+        else compso
+    | _ -> assertion_num a1 - assertion_num a2
+
+let raw_assertion_equal a1 a2 = raw_assertion_compare a1 a2 = 0
+
 let rec is_numeric_term t =
   match t.jc_term_node with
     | JCTconst _ -> true
@@ -428,35 +525,6 @@ let rec is_constant_assertion a =
 	is_constant_term t &&
 	  is_constant_assertion a1 &&
 	  is_constant_assertion a2
-
-let type_range_of_term ty t =
-  match ty with
-    | JCTpointer (st, n1opt, n2opt) ->
-	let instanceofcstr = raw_asrt (JCAinstanceof (t, st)) in
- 	let mincstr = match n1opt with
-	  | None -> true_assertion
-	  | Some n1 ->
- 	      let mint = 
-		type_term (JCToffset (Offset_min, t, st)) integer_type in
- 	      let n1t =
- 		type_term (JCTconst (JCCinteger (Num.string_of_num n1))) 
-		  integer_type
- 	      in
- 	      raw_asrt (JCArelation (mint, Beq_int, n1t))
- 	in
- 	let maxcstr = match n2opt with
-	  | None -> true_assertion
-	  | Some n2 ->
- 	      let maxt = 
-		type_term (JCToffset (Offset_max, t, st)) integer_type in
- 	      let n2t =
- 		type_term (JCTconst (JCCinteger (Num.string_of_num n2)))
-		  integer_type
- 	      in
- 	      raw_asrt (JCArelation (maxt, Beq_int, n2t))
- 	in
- 	  make_and [instanceofcstr; mincstr; maxcstr]
-    | _ -> true_assertion
 
 (* fun specs *)
 
