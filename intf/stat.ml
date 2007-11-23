@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.61 2007-11-23 11:02:21 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.62 2007-11-23 14:17:35 marche Exp $ i*)
 
 open Printf
 open Options
@@ -233,14 +233,14 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
 	 show_xpl xpl tv_s  
        with Not_found -> 
 	 try
-	   let (id,(f,l,b,e)) = Hashtbl.find Util.program_locs s in
+	   let (id,beh,(f,l,b,e)) = Hashtbl.find Util.program_locs s in
 	   let loc = 
 	     { Tags.file=f; 
 	       Tags.line= string_of_int l; 
 	       Tags.sp = string_of_int b; 
 	       Tags.ep = string_of_int e} in
 	   Pprinter.move_to_loc loc;
-	   !display_info ("file: " ^ (Filename.basename f) ^ " Function " ^ id);
+	   !display_info ("file: " ^ (Filename.basename f) ^ " " ^ beh);
 	 with Not_found ->
 	   Pprinter.move_to_source None;	 
 	   !display_info "(nothing selected ??)";

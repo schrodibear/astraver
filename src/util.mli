@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.61 2007-11-23 09:05:40 marche Exp $ i*)
+(*i $Id: util.mli,v 1.62 2007-11-23 14:17:35 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -176,7 +176,7 @@ type expl_kind =
 val raw_explanation : 
   vc_explain -> expl_kind * (string option * Loc.floc) option
 
-val program_locs : (string,(string * Loc.floc)) Hashtbl.t
+val program_locs : (string,(string * string * Loc.floc)) Hashtbl.t
 
 (*s Pretty printers. *)
 

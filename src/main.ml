@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.137 2007-11-23 09:05:40 marche Exp $ i*)
+(*i $Id: main.ml,v 1.138 2007-11-23 14:17:35 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -254,8 +254,13 @@ let interp_program loc id p =
 	  | Rc.RCident s -> s
 	  | _ -> raise Not_found		  
       in
-      (name,(f,l,b,e))
-    with Not_found -> (ids,Loc.extract loc)
+      let beh = 
+	match List.assoc "behavior" o with
+	  | Rc.RCstring s -> s
+	  | _ -> raise Not_found		  
+      in
+      (name,beh,(f,l,b,e))
+    with Not_found -> (ids,"Correctness of function " ^ ids, Loc.extract loc)
       
   in
   Hashtbl.add program_locs ids vloc;

@@ -55,7 +55,7 @@ let abs_fname f =
     Filename.concat (Unix.getcwd ()) f 
   else f
 
-let reg_loc ?name ?kind (b,e) =  
+let reg_loc ?name ?kind ?beh (b,e) =  
   let id = match name with
     | None ->  
 	incr name_counter;
@@ -88,7 +88,7 @@ let reg_loc ?name ?kind (b,e) =
       (f,l,fc,lc)
   in
   Jc_options.lprintf "recording location for id '%s'@." id;
-  Hashtbl.replace locs_table id (kind,name,f,l,b,e);
+  Hashtbl.replace locs_table id (kind,name,beh,f,l,b,e);
   id
     
 let print_kind fmt k =
@@ -106,12 +106,14 @@ let print_kind fmt k =
 
 let print_locs fmt =
   Hashtbl.iter 
-    (fun id (kind,name,f,l,b,e) ->
+    (fun id (kind,name,beh,f,l,b,e) ->
        fprintf fmt "[%s]@\n" id;
        Option_misc.iter
 	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
-      Option_misc.iter
-	(fun n -> fprintf fmt "name = %s@\n" n) name;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "name = %s@\n" n) name;
+       Option_misc.iter
+	 (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
        fprintf fmt "file = \"%s\"@\n" f;
        fprintf fmt "line = %d@\n" l;
        fprintf fmt "begin = %d@\n" b;
@@ -1956,7 +1958,9 @@ let tr_fun f loc spec body acc =
 		spec.jc_fun_behavior <- user_b;
 	      let safety_exists = safety_b <> [] in
 	      let name = f.jc_fun_info_name ^ "_safety" in
-	      let _ = reg_loc ~name loc in
+	      let _ = reg_loc ~name 
+		~beh:("Safety of function "^f.jc_fun_info_name) loc 
+	      in
 	      let acc = 
 		if safety_exists then 
 		  Def(
@@ -2016,7 +2020,10 @@ let tr_fun f loc spec body acc =
 		    List.fold_right
 		      (fun (id,b,e) acc ->
 			 let name = f.jc_fun_info_name ^ "_ensures_" ^ id in
-			 let _ = reg_loc ~name loc in
+			 let _ = reg_loc ~name 
+			   ~beh:("Normal behavior `"^id^"' of function "^f.jc_fun_info_name)  
+			   loc 
+			 in
 			 let d =
 			   Def(
 			     name,
@@ -2049,7 +2056,9 @@ let tr_fun f loc spec body acc =
 			      let name = 
 				f.jc_fun_info_name ^ "_exsures_" ^ id 
 			      in
-			      let _ = reg_loc ~name loc in
+			      let _ = reg_loc ~name 
+				~beh:("Exceptional behavior `"^id^"' of function "^f.jc_fun_info_name)  
+				loc in
 			      let d =
 				Def(name,
 				    Fun(params,
