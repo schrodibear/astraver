@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.70 2007-11-22 19:05:06 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.71 2007-11-23 09:51:51 moy Exp $ *)
 
 open Pp
 open Format
@@ -340,7 +340,6 @@ let rec term_depends_on_term t1 t2 =
 	    | _ -> false
 	  end
       | _ -> false
-
 
 
 (*****************************************************************************)
@@ -1571,8 +1570,20 @@ let collect_statement_asserts s =
     | JCSdecl(_,Some e1,_)
     | JCSassign_var(_,e1) | JCSpack(_,e1,_) | JCSunpack(_,e1,_) ->
 	collect_expr_asserts e1
-    | JCScall(_,_,els,s) ->
-	List.flatten (List.map collect_expr_asserts els)
+    | JCScall(_,fi,els,s) ->
+	let _,_,fs,_ = 
+          Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
+        in
+        (* Collect preconditions of functions called. *)
+        let reqa = fs.jc_fun_requires in
+        let reqa = 
+	   List.fold_left2 (fun a param arg ->
+             match term_of_expr arg with None -> raw_asrt JCAtrue | Some targ ->
+               replace_term_in_assertion (var_term param) targ.jc_term_node a
+	   ) reqa fi.jc_fun_info_parameters els
+        in
+        (conjuncts reqa)
+	@ List.flatten (List.map collect_expr_asserts els)
     | JCSassert a when a.jc_assertion_label = "hint" -> 
 	(* Hints are not to be proved by abstract interpretation, 
 	   only added to help it. *)
@@ -1945,6 +1956,20 @@ let copy_invariants mgr invs = {
   jc_absinv_return = invs.jc_absinv_return;
 }
 
+let forget mgr val1 vls =
+  let vls = List.filter (Environment.mem_var (Abstract1.env val1)) vls in
+  let varr = Array.of_list vls in
+  Abstract1.forget_array_with mgr val1 varr false
+
+let forget_abstract_value mgr absval vls =
+  forget mgr absval.jc_absval_regular vls;
+  forget mgr absval.jc_absval_propagated vls
+
+let forget_invariants mgr invs vls =
+  forget_abstract_value mgr invs.jc_absinv_normal vls;
+  List.iter (fun (ei,post) -> forget_abstract_value mgr post vls)
+    invs.jc_absinv_exceptional
+
 let bottom_abstract_value mgr env =
   { 
     jc_absval_regular = Abstract1.bottom mgr env;
@@ -2043,7 +2068,11 @@ and intern_ai_statement iaio abs curinvs s =
 	ai_statement iaio abs curinvs s
     | JCSdecl (vi, Some e, s) ->
 	assign_expr mgr pre (var_term vi) e;
-	ai_statement iaio abs curinvs s
+	ai_statement iaio abs curinvs s;
+        (* To keep information on variable [vi], declaration should be turned
+	 * into assignment before analysis.
+	 *)
+        forget_invariants mgr curinvs (Vai.all_variables (var_term vi))
     | JCSassign_var (vi, e) ->
 	assign_expr mgr pre (var_term vi) e
     | JCSassign_heap(e1,fi,e2) ->
@@ -2198,7 +2227,9 @@ and intern_ai_statement iaio abs curinvs s =
 		  ai_inter_function_call mgr iai abs copy_pre fi el;
 	  end;
 	(* add postcondition of [fi] to pre *)
-	let _, fs, _ = Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag in
+	let _,_,fs,_ = 
+          Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
+        in
 	let normal_behavior =
 	  List.fold_left
 	    (fun acc (_, b) ->
@@ -2229,9 +2260,14 @@ and intern_ai_statement iaio abs curinvs s =
 		   | Some t -> replace_vi_in_assertion vi t a)
 	    normal_behavior el fi.jc_fun_info_parameters 
 	in
-	  test_assertion mgr pre normal_behavior;
-	  (* TODO: handle exceptional behaviors as well *)
-	  ai_statement iaio abs curinvs s;
+	test_assertion mgr pre normal_behavior;
+	(* TODO: handle exceptional behaviors as well *)
+	ai_statement iaio abs curinvs s;
+        (* To keep information on variable [vi], declaration should be turned
+	 * into assignment before analysis.
+	 *)
+        match vio with None -> () | Some vi ->
+          forget_invariants mgr curinvs (Vai.all_variables (var_term vi))
   end;
   let normal = curinvs.jc_absinv_normal in
   let prop = normal.jc_absval_propagated in
@@ -2562,7 +2598,8 @@ let rec atp_of_term t =
 	Atp.Var (Vwp.variable t)
     | JCTshift _ | JCTsub_pointer _ | JCTold _
     | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
-	assert false
+        failwith "Atp alien"
+(*	assert false*)
 
 let rec term_of_atp tm =
   let tnode = match tm with
@@ -3315,11 +3352,17 @@ let rec backprop_statement target s curpost =
 	curpost
     | JCSblock sl ->
 	List.fold_right (backprop_statement target) sl curpost
-    | JCSif _ | JCSreturn_void | JCSreturn _ | JCSthrow _ | JCScall _ ->
+    | JCSreturn_void | JCSreturn _ | JCSthrow _ ->
 	assert (curpost = None); curpost
-    | JCStry(s,_,_) ->
+    | JCStry(s,hl,fs) ->
 	assert (curpost = None); 
-	backprop_statement target s curpost
+	let curpost = backprop_statement target fs None in
+	assert (curpost = None);
+        List.iter (fun (_,_,s) ->
+  	  let curpost = backprop_statement target s None in
+	  assert (curpost = None);
+	) hl;
+	backprop_statement target s None
     | JCSloop(la,ls) ->
 	let curpost = backprop_statement target ls curpost in
 	begin
@@ -3328,6 +3371,16 @@ let rec backprop_statement target s curpost =
 	      la.jc_loop_invariant <- make_and [a;la.jc_loop_invariant]
 	end;
 	None
+    | JCScall(_,_,_,s) ->
+	assert (curpost = None);
+	let curpost = backprop_statement target s None in
+	assert (curpost = None); curpost
+    | JCSif(_,ts,fs) ->
+	assert (curpost = None);
+	let curpost = backprop_statement target ts None in
+	assert (curpost = None);
+	let curpost = backprop_statement target fs None in
+	assert (curpost = None); curpost
   in
   if s == target.jc_target_statement then
     begin 
@@ -3432,7 +3485,7 @@ let rec ai_entrypoint mgr iaio (fi, fs, sl) =
   List.iter
     (fun fi ->
       Hashtbl.iter
-	(fun _ (fi', fs, slo) ->
+	(fun _ (fi',_,fs,slo) ->
 	  match slo with
 	    | None -> ()
 	    | Some sl ->
@@ -3458,7 +3511,7 @@ let rec record_ai_inter_preconditions mgr iai fi fs =
     List.iter 
       (fun fi ->
 	Hashtbl.iter
-	  (fun _ (fi', fs, _) ->
+	  (fun _ (fi',_,fs,_) ->
 	    if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
 	      (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
 		record_ai_inter_preconditions mgr iai fi' fs;)

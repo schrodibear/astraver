@@ -222,7 +222,7 @@ let make_rel name =
   incr logic_fun_tag_counter;
   { jc_logic_info_tag = !logic_fun_tag_counter;
     jc_logic_info_name = name;
-    jc_logic_info_final_name = (* Jc_envset.get_unique_name ? *) name;
+    jc_logic_info_final_name = Jc_envset.get_unique_name name;
     jc_logic_info_result_type = None;
     jc_logic_info_parameters = [];
     jc_logic_info_effects = empty_effects;
