@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.62 2007-11-23 14:17:35 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.63 2007-11-25 12:57:21 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -913,23 +913,23 @@ let main () =
    * Running obligation 
    *)
   ignore 
-    (view#event#connect#button_release ~callback:
-       (fun ev -> 
-	  if GdkEvent.Button.button ev = 3 then 
-	    List.iter 
-	      (fun p -> 
-		 let row = model#get_iter p in
-		 let s = model#get ~row ~column:Model.fullname in
-		 (if model#iter_has_child row then
-		    prove (run_prover_fct (Model.get_default_prover ()) 
-			     view model s false)
-		  else 
-		    prove (run_prover_oblig (Model.get_default_prover ()) 
-			     view model s false true));
-	      )
-	      view#selection#get_selected_rows;
-	  false
-       ));
+    (view#connect#row_activated ~callback:
+       (fun p col -> 
+	  let row = model#get_iter p in
+          let name = col#title in
+          let prover = 
+            try Model.get_prover name 
+            with Model.No_such_prover -> Model.get_default_prover ()
+          in
+	  let s = model#get ~row ~column:Model.fullname in
+	  (if model#iter_has_child row then
+	     prove (run_prover_fct prover 
+		      view model s false)
+	   else 
+	     prove (run_prover_oblig prover
+		      view model s false true));
+       )
+    );
 
   (*
    * Remove default pango menu for textviews 
