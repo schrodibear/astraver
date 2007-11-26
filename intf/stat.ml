@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.64 2007-11-26 11:07:06 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.65 2007-11-26 15:24:40 marche Exp $ i*)
 
 open Printf
 open Options
@@ -251,9 +251,7 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
 let prove fct = 
   ignore (Thread.create fct ())
 
-let update_statistics p (model:GTree.tree_store) row result = 
-  model#set ~row ~column:p.Model.pr_result result
-
+(*
 let get_statistics (model:GTree.tree_store) row = 
   let sl = 
     List.map 
@@ -261,6 +259,7 @@ let get_statistics (model:GTree.tree_store) row =
       (Model.get_provers ())
   in
   "[" ^ String.concat "|" sl ^ "]"
+*)
 
 let get_all_results f (model:GTree.tree_store) = 
   let mychildren = Model.find_fobligs f in
@@ -270,6 +269,21 @@ let get_all_results f (model:GTree.tree_store) =
        result + nb)
     0
     mychildren
+
+let update_statistics (model:GTree.tree_store) row f children =
+(*
+  let statistics = get_statistics model row in
+*)
+  let total = string_of_int (get_all_results f model) in
+  let name =
+    try
+      let (id,beh,(f,l,b,e)) = Hashtbl.find Util.program_locs f in
+      beh ^ " of " ^ id
+    with Not_found -> "unknown function " ^ f
+  in
+  model#set 
+    ~row ~column:Model.name (name^" "^" ("^total^"/"^(string_of_int children)^")")
+
 
 let build_statistics (model:GTree.tree_store) f = 
   try
@@ -288,11 +302,20 @@ let build_statistics (model:GTree.tree_store) f =
 	      and u = model#get ~row ~column:p.Model.pr_result in
 	      model#set ~row ~column:p.Model.pr_result (u+r)) 
 	   (Model.get_provers ()));
-    let statistics = get_statistics model row 
-    and total = string_of_int (get_all_results f model) 
+    update_statistics model row f !children
+      (*
+    let statistics = get_statistics model row in
+    let total = string_of_int (get_all_results f model) 
     and children = string_of_int !children in
+    let name =
+      try
+	let (id,beh,(f,l,b,e)) = Hashtbl.find Util.program_locs f in
+	beh ^ " of " ^ id
+      with Not_found -> "unknown function " ^ f
+    in
     model#set 
-      ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
+      ~row ~column:Model.name (name^" "^" "^total^"/"^children)
+    *)
   with e -> 
     begin 
       print_endline ("     [...] Error: unexcepted exception: " ^ 
@@ -979,7 +1002,7 @@ let main () =
 	  select_obligs model tv1 tv2 [path]; 
   in
 
-  (* Setting special icons for prooved obligation in cache *)
+  (* Setting special icons for proved obligation in cache *)
   let _ = 
     load_cache "gwhy.cache";
     if not (Cache.is_empty ()) then 
@@ -1017,11 +1040,7 @@ let main () =
   let _ = (* update statistics for functions *)
     Hashtbl.iter 
       (fun k row -> 
-	 let success = (string_of_int (get_all_results k model))
-	 and n = (string_of_int (model#iter_n_children (Some(row))))
-	 in let s = get_statistics model (Hashtbl.find Model.frows k)
-	 in model#set ~row ~column:Model.name (k^" "^" "^success^"/"^n^" "^s)
-      )
+	 update_statistics model row k (model#iter_n_children (Some row)))
       Model.frows
   in
   w#add_accel_group accel_group;
