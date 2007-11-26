@@ -55,25 +55,26 @@ let abs_fname f =
     Filename.concat (Unix.getcwd ()) f 
   else f
 
-let reg_loc ?id ?kind ?name ?beh (b,e) =  
-  let newid = match id with
-    | None ->  
+let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =  
+  let id,oldid = match id,oldid with
+    | None,_ ->  
 	incr name_counter;
-	  "JC_" ^ string_of_int !name_counter
-    | Some n -> n
+	"JC_" ^ string_of_int !name_counter, oldid
+    | Some n, None -> n,Some n
+    | Some n, Some o -> n, Some o
   in
 (*
   Format.eprintf "Jc_interp: reg_loc id = '%s'@." id;
 *)
   let (name,f,l,b,e) = 
     try
-      match id with
+      match oldid with
 	| None -> 
 	    raise Not_found
 	| Some n -> 
 	    let (f,l,b,e,o) = Hashtbl.find Jc_options.locs_table n in
 (*
-	    Format.eprintf "Jc_interp: reg_loc id '%s' found@." id;
+	    Format.eprintf "Jc_interp: reg_loc id '%s' found@." oldid;
 *)
 	    Jc_options.lprintf "keeping old location for id '%s'@." n;
 	    let n =
@@ -94,9 +95,9 @@ let reg_loc ?id ?kind ?name ?beh (b,e) =
       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
       (name,f,l,fc,lc)
   in
-  Jc_options.lprintf "recording location for id '%s'@." newid;
-  Hashtbl.replace locs_table newid (kind,name,beh,f,l,b,e);
-  newid
+  Jc_options.lprintf "recording location for id '%s'@." id;
+  Hashtbl.replace locs_table id (kind,name,beh,f,l,b,e);
+  id
     
 let print_kind fmt k =
   fprintf fmt "%s"
@@ -1977,15 +1978,17 @@ let tr_fun f loc spec body acc =
 	      in
 		spec.jc_fun_behavior <- user_b;
 	      let safety_exists = safety_b <> [] in
-	      let id = f.jc_fun_info_name ^ "_safety" in
-	      let _ = reg_loc ~id 
+	      let newid = f.jc_fun_info_name ^ "_safety" in
+	      let _ = reg_loc 
+		~id:newid
+		~oldid:f.jc_fun_info_name
 		~name:("function " ^ f.jc_fun_info_name)
 		~beh:"Safety" loc 
 	      in
 	      let acc = 
 		if safety_exists then 
 		  Def(
-		    id,
+		    newid,
 		    Fun(
 		      params,
 		      requires,
@@ -1995,7 +1998,7 @@ let tr_fun f loc spec body acc =
 		    ))::acc 
 		else
 		  Def(
-		    id,
+		    newid,
 		    Fun(
 		      params,
 		      requires,
@@ -2041,7 +2044,9 @@ let tr_fun f loc spec body acc =
 		    List.fold_right
 		      (fun (id,b,e) acc ->
 			 let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
-			 let _ = reg_loc ~id:newid
+			 let _ = reg_loc 
+			   ~id:newid
+			   ~oldid:f.jc_fun_info_name
 			   ~name:("function "^f.jc_fun_info_name)
 			   ~beh:("Normal behavior `"^id^"'")  
 			   loc 
@@ -2078,7 +2083,9 @@ let tr_fun f loc spec body acc =
 			      let newid = 
 				f.jc_fun_info_name ^ "_exsures_" ^ id 
 			      in
-			      let _ = reg_loc ~id:newid 
+			      let _ = reg_loc 
+				~id:newid
+				~oldid:f.jc_fun_info_name
 				~name:("function "^f.jc_fun_info_name)
 				~beh:("Exceptional behavior `"^id^"'")  
 				loc in
