@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.139 2007-11-23 09:05:40 marche Exp $ i*)
+(*i $Id: util.ml,v 1.140 2007-11-26 11:07:06 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -1003,9 +1003,10 @@ let raw_explanation e =
     | VCEexternal s -> EKRaw s, None
     | VCEabsurd -> EKAbsurd, None
     | VCEassert p -> EKAssert, Some(reloc_xpl (List.hd p))
-    | VCEpre(lab,p) -> 
+    | VCEpre(lab,loc,p) -> 
 	begin
-	  if debug then eprintf "util: label for pre = %s@." lab;
+	  if debug then eprintf "util: label,loc for pre = %s,%a@." lab
+	    Loc.gen_report_position loc;
 	  try 
 	    let (f,l,b,e,o) = Hashtbl.find locs_table lab in
 	    try
@@ -1033,7 +1034,7 @@ let raw_explanation e =
 *)
 	  with Not_found -> 
 	    if debug then eprintf "Util: cannot find a loc for '%s'@." lab;
-	    EKPre, None
+	    EKPre, Some(None,Loc.extract loc)
 (*
 	    fprintf fmt "kind = Pre@\n";
 	    fprintf fmt "call_label = %s@\n" lab;

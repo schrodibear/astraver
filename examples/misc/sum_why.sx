@@ -183,11 +183,21 @@
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
 (FORALL (s0)
-(IMPLIES (EQ s0 (+ s i0))
-(AND (AND (EQ (* 2 s0) (* i0 (+ i0 1))) (<= i0 n))
-(AND (<= 0 (- n i)) (< (- n i0) (- n i))))))))))))))
+(IMPLIES (EQ s0 (+ s i0)) (AND (EQ (* 2 s0) (* i0 (+ i0 1))) (<= i0 n))))))))))))
 
 ;; sum_po_3, Why obligation from file "", line 0, characters -1--1:
+(FORALL (n)
+(IMPLIES (>= n 0)
+(FORALL (i)
+(FORALL (s)
+(IMPLIES (AND (EQ (* 2 s) (* i (+ i 1))) (<= i n))
+(IMPLIES (< i n)
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(FORALL (s0)
+(IMPLIES (EQ s0 (+ s i0)) (AND (<= 0 (- n i)) (< (- n i0) (- n i)))))))))))))
+
+;; sum_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (i)

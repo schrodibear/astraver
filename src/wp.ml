@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.108 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: wp.ml,v 1.109 2007-11-26 11:07:06 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -102,6 +102,8 @@ let while_post_block env inv var e =
   let decphi = match var with
     | None -> Ptrue
     | Some (loc,phi,_,r) -> 
+	if debug then 
+	  Format.eprintf "Loc for variant = %a@." Loc.gen_report_position loc;
 	let id = reg_explanation (Cc.VCEvardecr(loc,phi)) in
 	Pnamed(id, Papp (r, [phi; put_label_term env lab phi], [])) 
   in
@@ -110,8 +112,12 @@ let while_post_block env inv var e =
     | None -> 
 	anonymous e.info.t_loc decphi, ql
     | Some i -> 
+	if debug then 
+	  Format.eprintf 
+	    "Loc for invariant = %a@." Loc.gen_report_position i.a_loc;
 	let id = reg_explanation (Cc.VCEinvpreserv(i.a_loc,i.a_value)) in
-	{ a_value = pand (Pnamed(id,i.a_value)) decphi; (* is_wp:true ? *)
+	(* Claude: pand -> wpand to split the conjunct *)
+	{ a_value = wpand (Pnamed(id,i.a_value)) decphi; 
 	  a_name = post_name_from (Name i.a_name);
 	  a_loc = e.info.t_loc;
 	  a_proof = None }, ql
@@ -148,11 +154,6 @@ let is_while p =
     (forall y,v. Q' => Q) and ... and (forall y,x. Q'k => Qk)
     \end{verbatim} *)
 
-(*
-let loc_name loc = function
-  | Pnamed _ as p -> p
-  | p -> Pnamed (User (Loc.string loc), p)
-*)
 
 let abstract_wp loc (q',ql') (q,ql) res out =
   assert (List.length ql' = List.length ql);
@@ -395,10 +396,12 @@ and wp_desc info d q =
 		Cc.VCEassert (List.map (fun a -> (a.a_loc,a.a_value)) l) 
 	    | `PRE ->
 		let lab = info.t_userlabel in
+		let loc = info.t_loc in
 		if debug then 
 		  Format.eprintf 
-		    "wp: set label for `PRE explanation: %s@." lab;
-		Cc.VCEpre (lab,List.map (fun a -> (a.a_loc,a.a_value)) l) 
+		    "wp: `PRE explanation: lab=`%s', loc=%a@." lab
+		    Loc.gen_report_position loc;
+		Cc.VCEpre (lab,loc,List.map (fun a -> (a.a_loc,a.a_value)) l) 
 	in
 	let id = reg_explanation expl in
 	Assertion (k, l, e'), add_to_wp info.t_loc id l w
@@ -410,7 +413,8 @@ and wp_desc info d q =
 	let pre = List.map (pre_named info.t_loc) k.c_pre in
 	let l = List.map (fun a -> (a.a_loc,a.a_value)) pre in
 	let lab = info.t_userlabel in
-	let id = reg_explanation (Cc.VCEpre(lab,l)) in
+	let loc = info.t_loc in
+	let id = reg_explanation (Cc.VCEpre(lab,loc,l)) in
 	let w = add_to_wp info.t_loc id pre w in
 	d, w
     | Post (e, qe, Transparent) ->

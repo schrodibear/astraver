@@ -185,10 +185,21 @@
 (FORALL (x1)
 (IMPLIES (EQ x1 (+ x0 1))
 (FORALL (z0)
-(IMPLIES (EQ z0 (- z 1))
-(AND (AND (<= 0 z0) (EQ x1 (+ x (- y z0)))) (AND (<= 0 z) (< z0 z))))))))))))))
+(IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z0) (EQ x1 (+ x (- y z0)))))))))))))))
 
 ;; add1_po_3, Why obligation from file "", line 0, characters -1--1:
+(FORALL (y)
+(FORALL (x)
+(IMPLIES (>= y 0)
+(FORALL (x0)
+(FORALL (z)
+(IMPLIES (AND (<= 0 z) (EQ x0 (+ x (- y z))))
+(IMPLIES (> z 0)
+(FORALL (x1)
+(IMPLIES (EQ x1 (+ x0 1))
+(FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z) (< z0 z)))))))))))))
+
+;; add1_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
@@ -260,10 +271,24 @@
 (FORALL (x2)
 (IMPLIES (EQ x2 (+ x1 x))
 (FORALL (z0)
-(IMPLIES (EQ z0 (- z 1))
-(AND (AND (<= 0 z0) (EQ x2 (* x (- y z0)))) (AND (<= 0 z) (< z0 z)))))))))))))))))
+(IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z0) (EQ x2 (* x (- y z0))))))))))))))))))
 
 ;; mult1_po_3, Why obligation from file "", line 0, characters -1--1:
+(FORALL (y)
+(FORALL (x)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (x0)
+(IMPLIES (EQ x0 0)
+(FORALL (x1)
+(FORALL (z)
+(IMPLIES (AND (<= 0 z) (EQ x1 (* x (- y z))))
+(IMPLIES (> z 0)
+(IMPLIES (>= x 0)
+(FORALL (x2)
+(IMPLIES (EQ x2 (+ x1 x))
+(FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z) (< z0 z))))))))))))))))
+
+;; mult1_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (AND (>= x 0) (>= y 0))

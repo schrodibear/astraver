@@ -205,8 +205,7 @@
 (FORALL (a0)
 (IMPLIES (EQ a0 result)
 (FORALL (b0)
-(IMPLIES (EQ b0 (* 2 b))
-(AND (AND (>= a0 0) (EQ (+ p0 (* a0 b0)) (* x y))) (AND (<= 0 a) (< a0 a)))))))))))))))))))))
+(IMPLIES (EQ b0 (* 2 b)) (AND (>= a0 0) (EQ (+ p0 (* a0 b0)) (* x y)))))))))))))))))))))
 
 ;; mult_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
@@ -216,9 +215,28 @@
 (FORALL (b)
 (FORALL (p)
 (IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
-(IMPLIES (NEQ a 0) (IMPLIES (NEQ (int_mod a 2) 1) (NEQ 2 0))))))))))
+(IMPLIES (NEQ a 0)
+(IMPLIES (EQ (int_mod a 2) 1)
+(FORALL (p0)
+(IMPLIES (EQ p0 (+ p b))
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div a 2))
+(FORALL (a0)
+(IMPLIES (EQ a0 result)
+(FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (AND (<= 0 a) (< a0 a))))))))))))))))))))
 
 ;; mult_po_5, Why obligation from file "", line 0, characters -1--1:
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a)
+(FORALL (b)
+(FORALL (p)
+(IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
+(IMPLIES (NEQ a 0) (IMPLIES (NEQ (int_mod a 2) 1) (NEQ 2 0))))))))))
+
+;; mult_po_6, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -234,10 +252,26 @@
 (FORALL (a0)
 (IMPLIES (EQ a0 result)
 (FORALL (b0)
-(IMPLIES (EQ b0 (* 2 b))
-(AND (AND (>= a0 0) (EQ (+ p (* a0 b0)) (* x y))) (AND (<= 0 a) (< a0 a)))))))))))))))))))
+(IMPLIES (EQ b0 (* 2 b)) (AND (>= a0 0) (EQ (+ p (* a0 b0)) (* x y)))))))))))))))))))
 
-;; mult_po_6, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_7, Why obligation from file "", line 0, characters -1--1:
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a)
+(FORALL (b)
+(FORALL (p)
+(IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
+(IMPLIES (NEQ a 0)
+(IMPLIES (NEQ (int_mod a 2) 1)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div a 2))
+(FORALL (a0)
+(IMPLIES (EQ a0 result)
+(FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (AND (<= 0 a) (< a0 a))))))))))))))))))
+
+;; mult_po_8, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))

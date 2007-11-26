@@ -74,6 +74,7 @@ and java_field_info =
 and method_info = 
     {
       method_info_tag : int;
+      method_info_loc : Loc.position;
       method_info_name : string;
       mutable method_info_trans_name : string;
       method_info_is_static : bool;

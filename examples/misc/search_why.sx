@@ -211,13 +211,27 @@
 (IMPLIES (NEQ result0 0)
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
-(AND
 (AND (<= 0 i0)
-(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (access t k) 0))))
-(AND (<= 0 (- (array_length t) i))
-(< (- (array_length t) i0) (- (array_length t) i))))))))))))))))
+(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (access t k) 0))))))))))))))))
 
 ;; search1_po_5, Why obligation from file "", line 0, characters -1--1:
+(FORALL (t)
+(FORALL (i)
+(IMPLIES (AND (<= 0 i)
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
+(FORALL (result)
+(IMPLIES (EQ result (array_length t))
+(IMPLIES (< i result)
+(IMPLIES (AND (<= 0 i) (< i (array_length t)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (access t i))
+(IMPLIES (NEQ result0 0)
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(AND (<= 0 (- (array_length t) i))
+(< (- (array_length t) i0) (- (array_length t) i)))))))))))))))
+
+;; search1_po_6, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
@@ -269,13 +283,27 @@
 (IMPLIES (NEQ result0 0)
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
-(AND
 (AND (<= 0 i0)
-(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (access t k) 0))))
-(AND (<= 0 (- (array_length t) i))
-(< (- (array_length t) i0) (- (array_length t) i))))))))))))))))
+(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (access t k) 0))))))))))))))))
 
 ;; search2_po_5, Why obligation from file "", line 0, characters -1--1:
+(FORALL (t)
+(FORALL (i)
+(IMPLIES (AND (<= 0 i)
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
+(FORALL (result)
+(IMPLIES (EQ result (array_length t))
+(IMPLIES (< i result)
+(IMPLIES (AND (<= 0 i) (< i (array_length t)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (access t i))
+(IMPLIES (NEQ result0 0)
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(AND (<= 0 (- (array_length t) i))
+(< (- (array_length t) i0) (- (array_length t) i)))))))))))))))
+
+;; search2_po_6, Why obligation from file "", line 0, characters -1--1:
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)

@@ -314,13 +314,14 @@ let methods_env = Hashtbl.create 97
 
 let method_or_constr_tag_counter = ref 0
 
-let new_method_info ~is_static id ti ty pars =
+let new_method_info ~is_static loc id ti ty pars =
   incr method_or_constr_tag_counter;
   let result = 
       Option_misc.map (fun t -> new_var Loc.dummy_position t "\\result") ty
   in
   {
     method_info_tag = !method_or_constr_tag_counter;
+    method_info_loc = loc;
     method_info_name = id;
     method_info_class_or_interface = ti;
     method_info_trans_name = id;
@@ -1090,22 +1091,22 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
   match l with
     | [] -> (mis,cis)
     | JPFmethod(head,body) :: rem -> 
-	let id, ret_ty, params = 
+	let (loc,id), ret_ty, params = 
 	  method_header package_env type_env 
 	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
+	let mi = new_method_info ~is_static loc id current_type ret_ty params in
 	Hashtbl.add methods_env mi.method_info_tag (mi,None,[],body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
     | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
-	let id, ret_ty, params = 
+	let (loc,id), ret_ty, params = 
 	  method_header package_env type_env 
 	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let mi = new_method_info ~is_static (snd id) current_type ret_ty params in
+	let mi = new_method_info ~is_static loc id current_type ret_ty params in
 	Hashtbl.add methods_env mi.method_info_tag 
 	  (mi,req,behs,body);
 	get_method_prototypes package_env type_env 

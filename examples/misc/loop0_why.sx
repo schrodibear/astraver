@@ -179,11 +179,17 @@
 (FORALL (x0)
 (IMPLIES (AND (<= 0 x0) (<= x0 x))
 (IMPLIES (> x0 0)
-(FORALL (x1)
-(IMPLIES (EQ x1 (- x0 1))
-(AND (AND (<= 0 x1) (<= x1 x)) (AND (<= 0 x0) (< x1 x0))))))))))
+(FORALL (x1) (IMPLIES (EQ x1 (- x0 1)) (AND (<= 0 x1) (<= x1 x)))))))))
 
 ;; p_po_3, Why obligation from file "", line 0, characters -1--1:
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (x0)
+(IMPLIES (AND (<= 0 x0) (<= x0 x))
+(IMPLIES (> x0 0)
+(FORALL (x1) (IMPLIES (EQ x1 (- x0 1)) (AND (<= 0 x0) (< x1 x0)))))))))
+
+;; p_po_4, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (x0)

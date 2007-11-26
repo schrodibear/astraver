@@ -9,14 +9,14 @@ class Trace {
     
     /*@ requires x > 0;
       @*/
-    int f1(int x) {
+    int m1(int x) {
 	//@ assert x >= 0 && x < 9; 
 	return x+1;
     }
 
     /* Example 2 
      * We want the message: 
-     *  "post-condition `\result > 10' of function f2 cannot be established"
+     *  "post-condition `\result > 10' of function m2 cannot be established"
      * localized on `return x+1'
      * Bonus: all lines involved in the execution path should be ~underlined 
      */
@@ -24,7 +24,7 @@ class Trace {
       @ behavior ok:
       @   ensures \result != 0 && \result > 10;  
       @*/
-    int f2(int x) {
+    int m2(int x) {
 	int y;
 	if (x<50) 
 	    return x+1;
@@ -36,13 +36,13 @@ class Trace {
 
     /* Example 3 
      * We want the message: 
-     *  "pre-condition `x > 0' for call to function f3 cannot be established"
-     * localized on `(f2 x)' 
+     *  "pre-condition `x > 0' for call to function m3 cannot be established"
+     * localized on `m2(x)' 
      */
     /*@ requires x >= 0 && x < 50;
       @*/
-    int f3(int x) {
-	return f2(x);
+    int m3(int x) {
+	return m2(x);
     }
 
 
@@ -51,7 +51,7 @@ class Trace {
      *   "validity of loop invariant `0 <= y' at loop entrance"
      * localized on `while ...' 
      */
-    void f4(int x) { 
+    void m4(int x) { 
 	int y = x;
 	/*@ loop_invariant 0 <= y && y <= x;
 	  @ decreases y;
@@ -69,7 +69,7 @@ class Trace {
      * localized on the '}' closing the loop body 
      */
     
-    void f5(int x) {
+    void m5(int x) {
 	int y = x;
 	/*@ loop_invariant y == x;
 	  @ decreases y;
@@ -84,7 +84,7 @@ class Trace {
      *   "arithmetic overflow"
      * localized on first "x", on "(byte)(x+1)" and on "(byte)(x+2)"
      */
-    byte f6(byte x) {
+    byte m6(byte x) {
 	x += x+1;
 	x = (byte)(x+1); 
 	return (byte)(x+2);
@@ -96,7 +96,7 @@ class Trace {
      * localized on "p.f"
      */
     int f; 
-    int f7(Trace p)
+    int m7(Trace p)
     {
 	return p.f;
     }

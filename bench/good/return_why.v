@@ -64,13 +64,33 @@ Save.
   forall (HW_9: result <> 0),
   forall (i1: Z),
   forall (HW_10: i1 = (i0 + 1)),
-  (0 <= i1 /\ (Zwf 0 (N - i1) (N - i0))).
+  0 <= i1.
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters -1--1: *)
 (*Why goal*) Lemma p_po_5 : 
+  forall (t: (array Z)),
+  forall (HW_1: (array_length t) = N),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (i0: Z),
+  forall (HW_3: 0 <= i0),
+  forall (HW_4: i0 < N),
+  forall (HW_5: 0 <= i0 /\ i0 < (array_length t)),
+  forall (result: Z),
+  forall (HW_6: result = (access t i0)),
+  forall (HW_9: result <> 0),
+  forall (i1: Z),
+  forall (HW_10: i1 = (i0 + 1)),
+  (Zwf 0 (N - i1) (N - i0)).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters -1--1: *)
+(*Why goal*) Lemma p_po_6 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
   forall (i: Z),

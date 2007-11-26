@@ -50,18 +50,19 @@ type kind =
   | Unpack
 
 
-let locs_table : (string, (kind option * Loc.position)) Hashtbl.t 
+let locs_table : 
+    (string, (kind option * string option * Loc.position)) Hashtbl.t 
     = Hashtbl.create 97
 let name_counter = ref 0
-let reg_loc ?name ?kind loc =
-  let id = match name with
+let reg_loc ?id ?kind ?name loc =
+  let id = match id with
     | None ->  
 	incr name_counter;
 	"K_" ^ string_of_int !name_counter
     | Some n -> n
   in
   Java_options.lprintf "recording location for id '%s'@." id;
-  Hashtbl.add locs_table id (kind,loc);
+  Hashtbl.add locs_table id (kind,name,loc);
   id
 
 let print_kind fmt k =
@@ -84,13 +85,12 @@ let abs_fname f =
 
 let print_locs fmt =
   Hashtbl.iter 
-    (fun id (k,(b,e)) ->
+    (fun id (kind,name,(b,e)) ->
        fprintf fmt "[%s]@\n" id;
-       begin
-	 match k with
-	   | None -> ()
-	   | Some k -> fprintf fmt "kind = %a@\n" print_kind k
-       end;
+       Option_misc.iter
+	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
        fprintf fmt "file = \"%s\"@\n" (abs_fname b.Lexing.pos_fname);
        let l = b.Lexing.pos_lnum in
        let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
@@ -1101,7 +1101,7 @@ let rec statement s =
 	  let name =
 	    match id with
 	      | None -> reg_loc e.java_assertion_loc
-	      | Some id -> reg_loc ~name:id e.java_assertion_loc
+	      | Some id -> reg_loc ~id e.java_assertion_loc
 	  in
 	  let e' = assertion e in
 	  JCTSassert((*Some name,*) { e' with jc_assertion_label = name } )
@@ -1172,6 +1172,11 @@ let tr_method mi req behs b acc =
       mi.method_info_trans_name mi.method_info_parameters
   in
   let body = Option_misc.map statements b in
+  let _ = 
+    reg_loc ~id:nfi.jc_fun_info_name 
+      ~name:("Method "^mi.method_info_name)
+      mi.method_info_loc 
+  in
   JCfun_def(tr_type_option Loc.dummy_position t,
 	    nfi.jc_fun_info_name,
 	    params,

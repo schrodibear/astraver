@@ -55,8 +55,8 @@ let abs_fname f =
     Filename.concat (Unix.getcwd ()) f 
   else f
 
-let reg_loc ?name ?kind ?beh (b,e) =  
-  let id = match name with
+let reg_loc ?id ?kind ?name ?beh (b,e) =  
+  let newid = match id with
     | None ->  
 	incr name_counter;
 	  "JC_" ^ string_of_int !name_counter
@@ -65,9 +65,9 @@ let reg_loc ?name ?kind ?beh (b,e) =
 (*
   Format.eprintf "Jc_interp: reg_loc id = '%s'@." id;
 *)
-  let (f,l,b,e) = 
+  let (name,f,l,b,e) = 
     try
-      match name with
+      match id with
 	| None -> 
 	    raise Not_found
 	| Some n -> 
@@ -76,7 +76,14 @@ let reg_loc ?name ?kind ?beh (b,e) =
 	    Format.eprintf "Jc_interp: reg_loc id '%s' found@." id;
 *)
 	    Jc_options.lprintf "keeping old location for id '%s'@." n;
-	    (f,l,b,e)
+	    let n =
+	      try 
+		match List.assoc "name" o with
+		  | Rc.RCident s | Rc.RCstring s -> Some s
+		  | _ -> raise Not_found
+	      with Not_found -> name
+	    in
+	    (n,f,l,b,e)
     with Not_found ->
 (*
       Format.eprintf "Jc_interp: reg_loc id '%s' not found@." id;
@@ -85,11 +92,11 @@ let reg_loc ?name ?kind ?beh (b,e) =
       let l = b.Lexing.pos_lnum in
       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
-      (f,l,fc,lc)
+      (name,f,l,fc,lc)
   in
-  Jc_options.lprintf "recording location for id '%s'@." id;
-  Hashtbl.replace locs_table id (kind,name,beh,f,l,b,e);
-  id
+  Jc_options.lprintf "recording location for id '%s'@." newid;
+  Hashtbl.replace locs_table newid (kind,name,beh,f,l,b,e);
+  newid
     
 let print_kind fmt k =
   fprintf fmt "%s"
@@ -111,7 +118,7 @@ let print_locs fmt =
        Option_misc.iter
 	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
        Option_misc.iter
-	 (fun n -> fprintf fmt "name = %s@\n" n) name;
+	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
        Option_misc.iter
 	 (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
        fprintf fmt "file = \"%s\"@\n" f;
@@ -320,7 +327,7 @@ let make_guarded_app ~name (k:kind) loc f l =
   let lab =
     match name with
       | "" -> reg_loc ~kind:k loc
-      | n -> reg_loc ~name:n ~kind:k loc
+      | n -> reg_loc ~id:n ~kind:k loc
   in
   Label(lab,make_app f l)
 
@@ -573,7 +580,7 @@ let rec assertion label oldlabel a =
 	  LPred("eq", [ ftag t1.jc_tag_node; ftag t2.jc_tag_node ])
   in
   if a.jc_assertion_label <> "" then
-    LNamed(reg_loc ~name:a.jc_assertion_label a.jc_assertion_loc,a')
+    LNamed(reg_loc ~id:a.jc_assertion_label a.jc_assertion_loc,a')
   else
     a'
   
@@ -1970,14 +1977,15 @@ let tr_fun f loc spec body acc =
 	      in
 		spec.jc_fun_behavior <- user_b;
 	      let safety_exists = safety_b <> [] in
-	      let name = f.jc_fun_info_name ^ "_safety" in
-	      let _ = reg_loc ~name 
-		~beh:("Safety of function "^f.jc_fun_info_name) loc 
+	      let id = f.jc_fun_info_name ^ "_safety" in
+	      let _ = reg_loc ~id 
+		~name:("function " ^ f.jc_fun_info_name)
+		~beh:"Safety" loc 
 	      in
 	      let acc = 
 		if safety_exists then 
 		  Def(
-		    name,
+		    id,
 		    Fun(
 		      params,
 		      requires,
@@ -1987,7 +1995,7 @@ let tr_fun f loc spec body acc =
 		    ))::acc 
 		else
 		  Def(
-		    name,
+		    id,
 		    Fun(
 		      params,
 		      requires,
@@ -2032,14 +2040,15 @@ let tr_fun f loc spec body acc =
 		  let acc =
 		    List.fold_right
 		      (fun (id,b,e) acc ->
-			 let name = f.jc_fun_info_name ^ "_ensures_" ^ id in
-			 let _ = reg_loc ~name 
-			   ~beh:("Normal behavior `"^id^"' of function "^f.jc_fun_info_name)  
+			 let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
+			 let _ = reg_loc ~id:newid
+			   ~name:("function "^f.jc_fun_info_name)
+			   ~beh:("Normal behavior `"^id^"'")  
 			   loc 
 			 in
 			 let d =
 			   Def(
-			     name,
+			     newid,
 			     Fun(
 			       params,
 			       requires,
@@ -2066,14 +2075,15 @@ let tr_fun f loc spec body acc =
 		      (fun ei l acc ->
 			 List.fold_right
 			   (fun (id,b,e) acc ->
-			      let name = 
+			      let newid = 
 				f.jc_fun_info_name ^ "_exsures_" ^ id 
 			      in
-			      let _ = reg_loc ~name 
-				~beh:("Exceptional behavior `"^id^"' of function "^f.jc_fun_info_name)  
+			      let _ = reg_loc ~id:newid 
+				~name:("function "^f.jc_fun_info_name)
+				~beh:("Exceptional behavior `"^id^"'")  
 				loc in
 			      let d =
-				Def(name,
+				Def(newid,
 				    Fun(params,
 					requires,
 					tblock,

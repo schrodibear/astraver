@@ -198,10 +198,25 @@
 (IMPLIES (< x (* mil mil))
 (FORALL (sup0)
 (IMPLIES (EQ sup0 mil)
-(AND (AND (<= (* inf inf) x) (AND (< x (* sup0 sup0)) (< inf sup0)))
-(AND (<= 0 (- sup inf)) (< (- sup0 inf) (- sup inf))))))))))))))))))
+(AND (<= (* inf inf) x) (AND (< x (* sup0 sup0)) (< inf sup0)))))))))))))))))
 
 ;; sqrt_po_4, Why obligation from file "", line 0, characters -1--1:
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (< x (* mil mil))
+(FORALL (sup0)
+(IMPLIES (EQ sup0 mil) (AND (<= 0 (- sup inf)) (< (- sup0 inf) (- sup inf)))))))))))))))))
+
+;; sqrt_po_5, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -216,10 +231,25 @@
 (IMPLIES (>= x (* mil mil))
 (FORALL (inf0)
 (IMPLIES (EQ inf0 mil)
-(AND (AND (<= (* inf0 inf0) x) (AND (< x (* sup sup)) (< inf0 sup)))
-(AND (<= 0 (- sup inf)) (< (- sup inf0) (- sup inf))))))))))))))))))
+(AND (<= (* inf0 inf0) x) (AND (< x (* sup sup)) (< inf0 sup)))))))))))))))))
 
-;; sqrt_po_5, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_6, Why obligation from file "", line 0, characters -1--1:
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (>= x (* mil mil))
+(FORALL (inf0)
+(IMPLIES (EQ inf0 mil) (AND (<= 0 (- sup inf)) (< (- sup inf0) (- sup inf)))))))))))))))))
+
+;; sqrt_po_7, Why obligation from file "", line 0, characters -1--1:
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
