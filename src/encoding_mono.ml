@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.17 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.18 2007-11-26 11:10:47 marche Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -514,7 +514,7 @@ let typedPlunge fv term pt =
    @param term is the term we want the type
    @param lv is the list of (var,type) of the problem 
 **)
-let getTermType term lv = 
+let rec getTermType term lv = 
   (*Format.eprintf 
     "getTermType  : %a \n List " 
     Util.print_term term ;
@@ -551,8 +551,8 @@ let getTermType term lv =
   | Tconst (ConstBool _)  -> PTbool
   | Tconst (ConstUnit)  ->  PTunit
   | Tconst (ConstFloat f) ->  PTreal
-  | _ -> assert false
-      
+  | Tderef _ -> assert false
+  | Tnamed(_,t) ->  getTermType t lv 
 
 let isBuiltInType t= match t with 
     PTint | PTreal | PTbool  -> true
