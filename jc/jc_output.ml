@@ -112,6 +112,10 @@ let offset_kind fmt k =
 
 
 let rec term fmt t =
+  if t.jc_term_label <> "" then
+    fprintf fmt "@[(%s : %a)@]" 
+      t.jc_term_label term {t with jc_term_label =""}
+  else
   match t.jc_term_node with
     | JCTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
     | JCTbinary(t1,op,t2) ->

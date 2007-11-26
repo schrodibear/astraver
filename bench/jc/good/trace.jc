@@ -55,7 +55,7 @@ unit f4 (integer x)
  integer y = x;
  while (y > 0)
      invariant 0 <= y && y <= x;
-     variant y;
+ variant (K:y);
  {
      y = y - 1;
  }

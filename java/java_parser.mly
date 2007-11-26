@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.25 2007-11-21 18:29:46 nrousset Exp $
+$Id: java_parser.mly,v 1.26 2007-11-26 14:45:02 marche Exp $
 
 */
 
@@ -62,17 +62,19 @@ $Id: java_parser.mly,v 1.25 2007-11-21 18:29:46 nrousset Exp $
 	  Explicit_array_creation(a,(build_array_creation_expr t (b,n)))
 *)
 
+  let default_behavior_name = "_"
+
   let default_behavior assigns ensures behs =
     match assigns,ensures with
       | None, None -> behs
       | a, None ->
-	  ((Loc.dummy_position,"ok"),
+	  ((Loc.dummy_position,default_behavior_name),
 	   { java_pbehavior_assumes = None;
 	     java_pbehavior_assigns = a;
 	     java_pbehavior_throws = None;
 	     java_pbehavior_ensures = Java_pervasives.expr_true }) :: behs
       | a, Some e -> 
-	  ((Loc.dummy_position,"ok"),
+	  ((Loc.dummy_position,default_behavior_name),
 	   { java_pbehavior_assumes = None;
 	     java_pbehavior_assigns = a;
 	     java_pbehavior_throws = None;

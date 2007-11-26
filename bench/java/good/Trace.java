@@ -1,6 +1,18 @@
 
 class Trace {
 
+    /* Example 0
+     * We want the message: 
+     *  "assertion `x < 9' cannot be established"
+     * localized on `x < 9' 
+     */
+
+    /*@ ensures this.f == 0;
+      @*/
+    Trace() {
+	f = 0;
+    }
+
     /* Example 1 
      * We want the message: 
      *  "assertion `x < 9' cannot be established"

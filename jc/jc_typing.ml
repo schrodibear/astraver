@@ -351,7 +351,9 @@ let term_coerce t1 t2 e =
     | Tinteger, Treal -> 
 	{ jc_term_node = JCTapp(real_of_integer,[e_int]) ;
 	  jc_term_type = real_type;
-	  jc_term_loc = e.jc_term_loc }  
+	  jc_term_loc = e.jc_term_loc;
+	  jc_term_label = e.jc_term_label;
+	}  
     | _ -> e_int
 
 let logic_bin_op t op =
@@ -453,10 +455,13 @@ let make_logic_bin_op loc op e1 e2 =
 
 	  
 let rec term env e =
+  let lab = ref "" in
   let t,te =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
-	  assert false (* TODO *)
+	  let tt = term env e in
+	  lab := l; 
+	  tt.jc_term_type,tt.jc_term_node
       | JCPEvar id ->
 	  begin
 	    try
@@ -616,7 +621,9 @@ let rec term env e =
 	    
   in { jc_term_node = te;
        jc_term_type = t;
-       jc_term_loc = e.jc_pexpr_loc }
+       jc_term_loc = e.jc_pexpr_loc;
+       jc_term_label = !lab;
+     }
 
   
 let rel_unary_op loc op t =
@@ -744,6 +751,7 @@ let rec assertion env e =
 	    match vi.jc_var_info_type with
 	      | JCTnative Tboolean ->
 		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
+				 jc_term_label = "";
 				  jc_term_type = vi.jc_var_info_type;
 				  jc_term_node = JCTvar vi }
 	      | _ ->
@@ -812,6 +820,7 @@ let rec assertion env e =
 	    match fi.jc_field_info_type with
 	      | JCTnative Tboolean ->
 		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
+				 jc_term_label = "";
 				  jc_term_type = fi.jc_field_info_type;
 				  jc_term_node = JCTderef(te,fi) }
 	      | _ ->
@@ -1749,6 +1758,7 @@ and statement_list env lz l : tstatement list =
 
 let const_zero = 
   { jc_term_loc = Loc.dummy_position;
+    jc_term_label = "";
     jc_term_type = integer_type;
     jc_term_node = JCTconst (JCCinteger "0");
   }

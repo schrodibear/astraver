@@ -334,10 +334,11 @@ let new_method_info ~is_static loc id ti ty pars =
 
 let constructors_env = Hashtbl.create 97
 
-let new_constructor_info ci id pars =
+let new_constructor_info ci loc id pars =
   incr method_or_constr_tag_counter;
   {
     constr_info_tag = !method_or_constr_tag_counter;
+    constr_info_loc = loc;
     constr_info_class = ci;
     constr_info_trans_name = ci.class_info_name;
     constr_info_this = None;
@@ -1077,12 +1078,12 @@ and get_constructor_prototype package_env type_env current_type
   match current_type with
     | TypeInterface _ -> assert false
     | TypeClass cur ->
-	let id = head.constr_name in
+	let loc,id = head.constr_name in
 	let params = 
 	  List.map (type_param package_env type_env) 
 	    head.constr_parameters 
 	in
-	let ci = new_constructor_info cur (snd id) params in
+	let ci = new_constructor_info cur loc id params in
 	Hashtbl.add constructors_env ci.constr_info_tag 
 	  (ci,req,behs,eci,body);
 	ci

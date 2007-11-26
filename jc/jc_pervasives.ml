@@ -277,13 +277,10 @@ let term_no_loc t ty = {
   jc_term_node = t;
   jc_term_type = ty;
   jc_term_loc = Loc.dummy_position;
+  jc_term_label = "";
 }
 
-let var_no_loc vi = {
-  jc_term_node = JCTvar vi;
-  jc_term_type = vi.jc_var_info_type;
-  jc_term_loc = Loc.dummy_position;
-}
+let var_no_loc vi = term_no_loc (JCTvar vi) vi.jc_var_info_type
 
 let zerot = term_no_loc (JCTconst (JCCinteger "0")) integer_type
 

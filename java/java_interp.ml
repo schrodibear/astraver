@@ -468,6 +468,7 @@ let lobj_op op =
 
 let dummy_loc_term ty t =
   { jc_term_loc = Loc.dummy_position; 
+    jc_term_label = "";
     jc_term_type = ty;
     jc_term_node = t }
 
@@ -511,10 +512,11 @@ let rec term t =
 		  let st = get_array_struct t.java_term_loc ty in
 		  let t1' = term t1 in
 		  let shift = {
-		      jc_term_loc = t.java_term_loc;
-		      jc_term_type = t1'.jc_term_type;
-		      jc_term_node = JCTshift(t1', term t2)
-		    }
+		    jc_term_loc = t.java_term_loc;
+		    jc_term_label = "";
+		    jc_term_type = t1'.jc_term_type;
+		    jc_term_node = JCTshift(t1', term t2)
+		  }
 		  in
 		  JCTderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
@@ -532,6 +534,7 @@ let rec term t =
 	  end
 
   in { jc_term_loc = t.java_term_loc ; 
+       jc_term_label = "";
        jc_term_type = tr_type  t.java_term_loc t.java_term_type ;
        jc_term_node = t' }
 
@@ -540,7 +543,9 @@ let quantifier = function
   | Exists -> Jc_ast.Exists
 
 let rec assertion a =
+(*
   let lab = ref "" in
+*)
   let a' =
     match a.java_assertion_node with
       | JAtrue -> JCAtrue
@@ -570,7 +575,7 @@ let rec assertion a =
 	      | _ -> assert false
 
   in { jc_assertion_loc = a.java_assertion_loc ; 
-       jc_assertion_label = !lab;
+       jc_assertion_label = ""; (*!lab;*)
        jc_assertion_node = a' }
     
 let dummy_loc_assertion a =
@@ -1053,7 +1058,12 @@ let rec statement s =
 	      jc_loop_invariant = 
 		{ inv' with 
 		    jc_assertion_label = reg_loc inv.java_assertion_loc };
-	      jc_loop_variant = Option_misc.map term dec }
+	      jc_loop_variant = 
+		Option_misc.map 
+		  (fun t -> 
+		     let t' = term t in
+		     { t' with jc_term_label = reg_loc t.java_term_loc }) dec 
+	    }
 	  in
 	  JCTSwhile(expr e, la, statement s)
       | JSfor (el1, e, inv, dec, el2, body) ->
@@ -1218,6 +1228,11 @@ let tr_constr ci req behs b acc =
     dummy_loc_statement (JCTSdecl(this,None,make_block body))
   in
   *)
+  let _ = 
+    reg_loc ~id:nfi.jc_fun_info_name 
+      ~name:("Constructor of class "^ci.constr_info_class.class_info_name)
+      ci.constr_info_loc 
+  in
   JCfun_def(Jc_pervasives.unit_type,
 	    nfi.jc_fun_info_name,
 	    this :: params,

@@ -91,6 +91,7 @@ and method_info =
 and constructor_info = 
     {
       constr_info_tag : int;
+      constr_info_loc : Loc.position;
       constr_info_class : java_class_info;
       mutable constr_info_trans_name : string;
       mutable constr_info_this : java_var_info option;

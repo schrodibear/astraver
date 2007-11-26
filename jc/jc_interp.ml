@@ -444,6 +444,7 @@ let make_logic_pred_call li l =
 
 let rec term label oldlabel t =
   let ft = term label oldlabel in
+  let t' =
   match t.jc_term_node with
     | JCTconst JCCnull -> LVar "null"
     | JCTvar v -> lvar_info label v
@@ -499,7 +500,11 @@ let rec term label oldlabel t =
 	LApp("downcast",
 	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
-
+in
+  if t.jc_term_label <> "" then
+    Tnamed(reg_loc ~id:t.jc_term_label t.jc_term_loc,t')
+  else
+    t'
 
 let named_term label oldlabel t =
   let t' = term label oldlabel t in

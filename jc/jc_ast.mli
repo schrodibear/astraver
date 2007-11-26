@@ -234,6 +234,7 @@ and term =
       jc_term_node : term_node;
       jc_term_type : jc_type;
       jc_term_loc : Loc.position;
+      jc_term_label : string;
     }
 
 type tag =
