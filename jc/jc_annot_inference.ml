@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.74 2007-11-27 14:53:39 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.75 2007-11-27 17:02:16 moy Exp $ *)
 
 open Pp
 open Format
@@ -2224,7 +2224,7 @@ and intern_ai_statement iaio abs curinvs s =
         in
 	let normal_behavior =
 	  List.fold_left
-	    (fun acc (_, b) ->
+	    (fun acc (_,_,b) ->
 	       (* TODO : handle 'assumes' clauses correctly *)
 	       if b.jc_behavior_throws = None && b.jc_behavior_assumes = None then
 		 make_and [b.jc_behavior_ensures; acc] else acc)
@@ -2437,7 +2437,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	let exc_behaviors = 
 	  List.map2 
 	    (fun exc va ->
-	      ("safety",
+	      (Loc.dummy_position,"safety",
 	      { default_behavior with 
 		jc_behavior_throws = Some exc; 
 		jc_behavior_ensures = va }))
@@ -2455,11 +2455,11 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	  end;
 	begin
 	  try
-	    let (s, b) = List.find (fun (s, _) -> s = "safety") fs.jc_fun_behavior in
+	    let (_,s,b) = List.find (fun (_,s,_) -> s = "safety") fs.jc_fun_behavior in
 	    b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; post];
 	  with Not_found -> 
 	    fs.jc_fun_behavior <- 
-	      ("safety", normal_behavior) :: fs.jc_fun_behavior
+	      (Loc.dummy_position,"safety", normal_behavior) :: fs.jc_fun_behavior
 	end;
 	fs.jc_fun_behavior <- exc_behaviors @ fs.jc_fun_behavior
     else ()
