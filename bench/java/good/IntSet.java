@@ -13,7 +13,8 @@
 public class IntSet {
 
     public int t[];
-    //@ invariant t_is_sorted: is_sorted(t);
+    // pb with recursive def of type and logic in Jessie
+    // @ invariant t_is_sorted: is_sorted(t);
     
     /*@	requires t.length <= 2147483647 && is_sorted(t);
       @ behavior search_success:

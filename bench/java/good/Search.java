@@ -10,7 +10,8 @@
 public class Search {
 
     long t[];
-    //@ invariant t_sorted: t != null && sorted(t);
+    // pb with recursive def of type and logic in Jessie
+    // @ invariant t_sorted: t != null && sorted(t);
 
     /*@ requires t != null && t.length < 2147483647 && sorted(t);
       @ behavior search_success:

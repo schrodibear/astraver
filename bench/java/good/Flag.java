@@ -22,7 +22,8 @@ class Flag {
     
     int t[];
     //@ invariant t_non_null: t != null;
-    //@ invariant is_color_array_inv: is_color_array(t);
+    // pb with recursive def of type and logic in Jessie
+    // @ invariant is_color_array_inv: is_color_array(t);
 
     /*@ requires 0 <= i && i <= j && j <= t.length ;
       @ behavior decides_monochromatic:

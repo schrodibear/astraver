@@ -159,18 +159,28 @@ let main () =
 	    Java_typing.type_table
 	    (acc, decls_arrays)
 	in
-	  (* class invariants *)
+
+	(* production phase 1.4 : generation of Jessie logic functions *)
+	let decls_fun = 
+	  Hashtbl.fold 
+	    (fun _ (li,p) acc ->
+	       Java_interp.tr_logic_fun li p acc)
+	    Java_typing.logics_table 
+	    []
+	in
+
+	(* class invariants *)
 	let acc = 
 	  Hashtbl.fold
 	    (fun _ (ci, id, invs) acc ->
 	       Java_interp.tr_invariants ci id invs acc)
 	    Java_typing.invariants_table acc
 	in
-	let decls = decls_structs @ 
+	let decls = decls_fun @ decls_structs @ 
 	  (Jc_output.JCrec_struct_defs acc :: decls_range)
 	in
 	  
-	(* production phase 1.4: generation of Jessie global invariants *)
+	(* production phase 1.5: generation of Jessie global invariants *)
 	let decls =
 	  Hashtbl.fold
 	    (fun _ invs acc -> 
@@ -179,7 +189,7 @@ let main () =
 	    decls
 	in
 
-	(* production phase 1.5 : generation of Jessie exceptions *)
+	(* production phase 1.6 : generation of Jessie exceptions *)
 	let decls =
 	  Hashtbl.fold 
 	    (fun _ ei acc ->
@@ -188,14 +198,6 @@ let main () =
 	    decls
 	in	       	  
 
-	(* production phase 1.6 : generation of Jessie logic functions *)
-	let decls = 
-	  Hashtbl.fold 
-	    (fun _ (li,p) acc ->
-	       Java_interp.tr_logic_fun li p acc)
-	    Java_typing.logics_table 
-	    decls
-	in
 	(* production phase 3 : generation of Jessie axioms *)
 	let decls = 
 	  Hashtbl.fold 
