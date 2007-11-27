@@ -125,12 +125,13 @@ and ptag =
      
 type pclause =
   | JCPCrequires of pexpr
-(*
-  | JCPCensures of pexpr
-*)
-  | JCPCbehavior of 
-      string * identifier option * pexpr option * pexpr option 
-      * pexpr list option * pexpr
+  | JCPCbehavior of Loc.position * string 
+      * identifier option 
+      * pexpr option 
+      * pexpr option 
+      * (Loc.position * pexpr list) option 
+      * pexpr
+      (*r loc, name, throws, assumes,requires,assigns,ensures *)
 
 
 type pstatement_node =
@@ -364,14 +365,14 @@ type behavior =
 (*
       jc_behavior_requires : assertion option ;
 *)
-      jc_behavior_assigns : tlocation list option ;
+      jc_behavior_assigns : (Loc.position * tlocation list) option ;
       mutable jc_behavior_ensures : assertion;
     }
 
 type fun_spec =
     {
       mutable jc_fun_requires : assertion;
-      mutable jc_fun_behavior : (string * behavior) list;
+      mutable jc_fun_behavior : (Loc.position * string * behavior) list;
     }
 
 

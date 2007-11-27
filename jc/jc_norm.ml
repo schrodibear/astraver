@@ -850,12 +850,12 @@ let code_function (fi, fs, sl) vil =
 	  (* add result_type info and invariants to the function postcondition *)
 	  let post = make_and [invariants; result_type_range] in
 	  List.iter
-	    (fun (_, b) -> b.jc_behavior_ensures <- make_and 
+	    (fun (_,_, b) -> b.jc_behavior_ensures <- make_and 
 	       [b.jc_behavior_ensures; post])
 	    fs.jc_fun_behavior;
 	  (* add the 'safety' spec *)
 	  let safety_b = { default_behavior with jc_behavior_ensures = post } in
-	  fs.jc_fun_behavior <- ("safety", safety_b) :: fs.jc_fun_behavior;
+	  fs.jc_fun_behavior <- (Loc.dummy_position,"safety", safety_b) :: fs.jc_fun_behavior;
 
       | _ -> ()
   end;

@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.71 2007-11-27 08:31:15 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.72 2007-11-27 16:33:48 marche Exp $ */
 
 %{
 
@@ -331,7 +331,7 @@ spec_clause:
 */
 | BEHAVIOR ident_or_default COLON throws assumes requires assigns 
   ENSURES expression SEMICOLON
-    { JCPCbehavior($2,$4,$5,$6,$7,$9) }
+    { JCPCbehavior(loc_i 2,$2,$4,$5,$6,$7,$9) }
 ;
 
 ident_or_default:
@@ -363,9 +363,9 @@ assigns:
 | /* epsilon */
     { None }
 | ASSIGNS argument_expression_list SEMICOLON
-    { Some $2 }
+    { Some(loc_i 2,$2) }
 | ASSIGNS BSNOTHING SEMICOLON
-    { Some [] }
+    { Some (loc_i 2,[]) }
 ;
 
 reads:

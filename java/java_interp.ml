@@ -680,9 +680,9 @@ let array_types decls =
 	       dummy_loc_term vi.jc_var_info_type 
 		 (JCTvar result)
 	     in
-	     ["non_null", 
+	     [Loc.dummy_position,"non_null", 
 	      { jc_behavior_assumes = None;
-		jc_behavior_assigns = Some [];
+		jc_behavior_assigns = Some (Loc.dummy_position,[]);
 		jc_behavior_ensures =
 		  dummy_loc_assertion
 		    (JCAand
@@ -1155,9 +1155,11 @@ let reg_assertion_option a =
     | Some a -> reg_assertion a
 
 let behavior (id,assumes,throws,assigns,ensures) =
-  (snd id,
+  (fst id,snd id,
   { jc_behavior_assumes = Option_misc.map assertion assumes;
-    jc_behavior_assigns = Option_misc.map (List.map location) assigns ;
+    jc_behavior_assigns = 
+      Option_misc.map 
+	(fun (loc,a) -> (loc,List.map location a)) assigns ;
     jc_behavior_ensures = reg_assertion ensures;
     jc_behavior_throws = 
       Option_misc.map (fun ci -> get_exception (JTYclass(false,ci))) throws;

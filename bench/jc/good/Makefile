@@ -78,6 +78,13 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	make why/$*.why
 	make -f $*.makefile gui
 
+%.split: %.jc
+	mkdir -p why
+	rm -f why/$*.why
+	rm -f why/$*.xpl
+	$(EXECJESSIE) -why-opt -split-user-conj $<
+	make -f $*.makefile gui
+
 %.goals: %.jc
 	mkdir -p why
 	rm -f why/$*_ctx.why why/$*_po*.why 

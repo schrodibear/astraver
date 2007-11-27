@@ -2937,7 +2937,9 @@ let behavior package_env type_env current_type pre_state_env post_state_env (id,
    throws,
    (* Note: for constructors, the `assigns' clause is typed in
       pre-state environnement: `this' is not allowed there *)
-   Option_misc.map (List.map (location package_env type_env current_type pre_state_env)) b.java_pbehavior_assigns,
+   Option_misc.map 
+     (fun (loc,l) ->
+	(loc,List.map (location package_env type_env current_type pre_state_env) l)) b.java_pbehavior_assigns,
    assertion package_env type_env current_type ensures_env b.java_pbehavior_ensures)
     
 
@@ -2954,7 +2956,7 @@ type method_table_info =
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
-			Java_tast.term list option * 
+			(Loc.position * Java_tast.term list) option * 
 			Java_tast.assertion) list ;
       mt_body : Java_tast.block option;
     }
@@ -3040,7 +3042,7 @@ type constructor_table_info =
       ct_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
-			Java_tast.term list option * 
+			(Loc.position * Java_tast.term list) option * 
 			Java_tast.assertion) list ;
 (*
       ct_eci : int;

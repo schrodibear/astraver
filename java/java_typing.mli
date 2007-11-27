@@ -36,14 +36,10 @@ val type_table : (int, Java_env.java_type_info) Hashtbl.t
 type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
-(*
-      mt_assigns : Java_tast.term list option;
-      mt_ensures : Java_tast.assertion option;
-*)
       mt_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
-			Java_tast.term list option * 
+			(Loc.position * Java_tast.term list) option * 
 			Java_tast.assertion) list ;
       mt_body : Java_tast.block option;
     }
@@ -54,14 +50,10 @@ val methods_table :
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
-(*
-      ct_assigns : Java_tast.term list option;
-      ct_ensures : Java_tast.assertion option;
-*)
       ct_behaviors : (Java_ast.identifier * 
 			Java_tast.assertion option * 
 			Java_env.java_class_info option *
-			Java_tast.term list option * 
+			(Loc.position * Java_tast.term list) option * 
 			Java_tast.assertion) list ;
 (*
       ct_eci : int;

@@ -112,6 +112,19 @@ class Trace {
 	return p.f;
     }
 
+    /* Example 8
+     * Explanation expected:
+     *   "pointer dereferencing"
+     * localized on "p.f"
+     */
+    /*@ assigns p.f;
+      @ ensures p.f == 0;
+      @*/
+    void m8(Trace p)
+    {
+	p.f = 0;
+    }
+
     
 }
 

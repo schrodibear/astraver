@@ -1877,7 +1877,7 @@ let clause env vi_result c acc =
 	{ acc with 
 	    jc_fun_ensures = assertion env e }
 *)
-    | JCPCbehavior(id,throws,assumes,requires,assigns,ensures) ->
+    | JCPCbehavior(loc,id,throws,assumes,requires,assigns,ensures) ->
 	let throws,env_result = 
 	  match throws with
 	    | None -> None, (vi_result.jc_var_info_name,vi_result)::env 
@@ -1902,7 +1902,10 @@ let clause env vi_result c acc =
 	let requires = Option_misc.map (assertion env) requires in
 *)
 	let assigns = 
-	  Option_misc.map (List.map (fun a -> snd (location env a))) assigns in
+	  Option_misc.map 
+	    (fun (loc,l) -> (loc,List.map (fun a -> snd (location env a)) l)) 
+	    assigns 
+	in
 	let b = {
 	  jc_behavior_throws = throws;
 	  jc_behavior_assumes = assumes;
@@ -1916,7 +1919,7 @@ let clause env vi_result c acc =
 	eprintf "loc for ensures: %a@."
 	  Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
 *)
-	{ acc with jc_fun_behavior = (id,b)::acc.jc_fun_behavior }
+	{ acc with jc_fun_behavior = (loc,id,b)::acc.jc_fun_behavior }
 	  
 
   

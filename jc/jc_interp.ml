@@ -128,7 +128,6 @@ let print_locs fmt =
        fprintf fmt "end = %d@\n@\n" e)
     locs_table
 
-
 (* consts *)
 
 let const c =
@@ -591,13 +590,15 @@ let rec assertion label oldlabel a =
     a'
   
 
+let named_jc_assertion loc a =
+  match a with
+    | LNamed _ -> a
+    | _ -> let n = reg_loc loc in LNamed(n,a)
+
+
 let named_assertion label oldlabel a =
   let a' = assertion label oldlabel a in
-  match a' with
-    | LNamed _ -> a'
-    | _ -> 
-	let n = reg_loc a.jc_assertion_loc in
-	LNamed(n,a')
+  named_jc_assertion a.jc_assertion_loc a'
 
 
 (****************************
@@ -611,14 +612,14 @@ let tr_logic_const vi init acc =
     Logic(false,vi.jc_var_info_name,[], tr_base_type vi.jc_var_info_type) :: acc
   in
   match init with
-      | None -> decl
-      | Some t ->
-	  Axiom(vi.jc_var_info_name ^ "_value_axiom" , 
-		LPred("eq",[term_coerce Loc.dummy_position integer_type
-			      vi.jc_var_info_type (LVar vi.jc_var_info_name); 
-			    term_coerce t.jc_term_loc integer_type 
-			      t.jc_term_type (term None "" t)])) 
-	  :: decl 
+    | None -> decl
+    | Some t ->
+	Axiom(vi.jc_var_info_name ^ "_value_axiom" , 
+	      LPred("eq",[term_coerce Loc.dummy_position integer_type
+			    vi.jc_var_info_type (LVar vi.jc_var_info_name); 
+			  term_coerce t.jc_term_loc integer_type 
+			    t.jc_term_type (term None "" t)])) 
+	:: decl 
 
 let memory_type t v =
   { logic_type_name = "memory";
@@ -1756,11 +1757,18 @@ let tr_fun f loc spec body acc =
      TODO ?: also add inferred behaviors to other funs ? *)
   let (normal_behaviors_safety, normal_behaviors, excep_behaviors_safety, excep_behaviors) =
     List.fold_left
-      (fun (normal_safety, normal, excep_safety, excep) (id, b) ->
+      (fun (normal_safety, normal, excep_safety, excep) (loc, id, b) ->
 	 let post =
-	   make_and
-	     (named_assertion None "" b.jc_behavior_ensures)
-	     (assigns "" f.jc_fun_info_effects b.jc_behavior_assigns)
+	   match b.jc_behavior_assigns with
+	     | None ->
+		 (named_assertion None "" b.jc_behavior_ensures)		
+	     | Some(locassigns,a) ->
+		 named_jc_assertion loc
+		   (make_and
+		      (named_assertion None "" b.jc_behavior_ensures)		
+		      (named_jc_assertion
+			 locassigns
+			 (assigns "" f.jc_fun_info_effects (Some a))))
 	 in
 	 let a =
 	   match b.jc_behavior_assumes with
@@ -1768,24 +1776,24 @@ let tr_fun f loc spec body acc =
 	     | Some e -> 
 		 make_impl (assertion (Some "") "" e) post
 	 in
-	   match b.jc_behavior_throws with
-	     | None -> 
-		 if id = "safety" then 
-		   ((id, b, a) :: normal_safety, normal, excep_safety, excep)
-		 else 
-		   (normal_safety, (id, b, a) :: normal, excep_safety, excep)
-	     | Some ei ->
-		 let eb =
-		   try
-		     ExceptionMap.find ei excep
-		   with Not_found -> []
-		 in
-		   if id = "safety" then 
-		     (normal_safety, normal, 
-		      ExceptionMap.add ei ((id, b, a) :: eb) excep_safety, excep)
-		   else
-		     (normal_safety, normal, excep_safety, 
-		      ExceptionMap.add ei ((id, b, a) :: eb) excep))
+	 match b.jc_behavior_throws with
+	   | None -> 
+	       if id = "safety" then 
+		 ((id, b, a) :: normal_safety, normal, excep_safety, excep)
+	       else 
+		 (normal_safety, (id, b, a) :: normal, excep_safety, excep)
+	   | Some ei ->
+	       let eb =
+		 try
+		   ExceptionMap.find ei excep
+		 with Not_found -> []
+	       in
+	       if id = "safety" then 
+		 (normal_safety, normal, 
+		  ExceptionMap.add ei ((id, b, a) :: eb) excep_safety, excep)
+	       else
+		 (normal_safety, normal, excep_safety, 
+		  ExceptionMap.add ei ((id, b, a) :: eb) excep))
       ([], [], ExceptionMap.empty, ExceptionMap.empty)
       spec.jc_fun_behavior
   in
@@ -1978,7 +1986,7 @@ let tr_fun f loc spec body acc =
 	      in
 	      let safety_b, user_b = 
 		List.partition
-		  (fun (s, _) -> s = "safety")
+		  (fun (_,s, _) -> s = "safety")
 		  spec.jc_fun_behavior
 	      in
 		spec.jc_fun_behavior <- user_b;

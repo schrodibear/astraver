@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.21 2007-11-21 18:29:46 nrousset Exp $
+$Id: java_ast.mli,v 1.22 2007-11-27 16:33:48 marche Exp $
 
 ***************************************************************************)
 
@@ -231,7 +231,7 @@ type constructor_declaration =
 
 type pbehavior =
     { java_pbehavior_assumes : pexpr option;
-      java_pbehavior_assigns : pexpr list option;
+      java_pbehavior_assigns : (Loc.position * pexpr list) option;
       java_pbehavior_throws : (qualified_ident * identifier option) option;
       java_pbehavior_ensures : pexpr
     }

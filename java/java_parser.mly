@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.27 2007-11-27 08:31:15 marche Exp $
+$Id: java_parser.mly,v 1.28 2007-11-27 16:33:48 marche Exp $
 
 */
 
@@ -41,6 +41,7 @@ $Id: java_parser.mly,v 1.27 2007-11-27 08:31:15 marche Exp $
   open Java_ast
 
   let loc () = (symbol_start_pos (), symbol_end_pos ())
+  let loc_i i = (rhs_start_pos i, rhs_end_pos i)
 
   let locate_expr e =
     { java_pexpr_node = e ; java_pexpr_loc = loc () }
@@ -1058,9 +1059,9 @@ assigns:
 | /* $\varepsilon$ */
     { None }
 | ASSIGNS BSNOTHING SEMICOLON
-    { Some [] }
+    { Some (loc_i 2,[]) }
 | ASSIGNS expr_comma_list SEMICOLON
-    { Some $2 }
+    { Some (loc_i 2,$2) }
 ;
 
 kml_statement_annot:

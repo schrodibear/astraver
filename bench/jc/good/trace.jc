@@ -109,6 +109,18 @@ integer f7(S[..] p)
 }
 
 
+/* Example 8
+ *  assigns clause
+ */
+
+unit f8(S[0] p) 
+  behavior default:
+    assigns p.f;
+    ensures p.f == 0;
+{
+    p.f = 0;
+}
+
 
 
 /*

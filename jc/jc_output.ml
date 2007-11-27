@@ -240,7 +240,7 @@ let location fmt = function
   | JCLderef (locset, fi) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
 
-let behavior fmt (id,b) =
+let behavior fmt (loc,id,b) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;
   Option_misc.iter
     (fun a -> fprintf fmt "@\nassumes %a;" assertion a) 
@@ -249,7 +249,7 @@ let behavior fmt (id,b) =
   (fun a -> fprintf fmt "@\nthrows %s;" a.jc_exception_info_name) 
     b.jc_behavior_throws;    
   Option_misc.iter 
-    (fun locs -> fprintf fmt "@\nassigns %a;" 
+    (fun (_,locs) -> fprintf fmt "@\nassigns %a;" 
        (print_list_or_default "\\nothing" comma location) locs)
     b.jc_behavior_assigns;
   fprintf fmt "@\nensures %a;@]" assertion b.jc_behavior_ensures

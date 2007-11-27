@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.64 2007-11-23 09:05:40 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.65 2007-11-27 16:33:48 marche Exp $ *)
 
 
 open Jc_env
@@ -411,10 +411,10 @@ let location ef l =
 	  end
 	else ef
 
-let behavior ef (_, b) =
+let behavior ef (_,_, b) =
   (* assigns *)
   let ef = Option_misc.fold
-    (fun x ef -> List.fold_left location ef x) 
+    (fun (_,x) ef -> List.fold_left location ef x) 
     b.jc_behavior_assigns ef
   in
     (* requires: reads *)
