@@ -559,7 +559,7 @@ install-lib:
 	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
 	mkdir -p $(LIBDIR)/krakatoa
 	cd lib; cp --parents java_api/java/*/*.java $(LIBDIR)/krakatoa
-	cp -f lib/logo-why*.png $(LIBDIR)/why
+	cp -f lib/why-logo-*.png $(LIBDIR)/why
 
 install-man:
 	mkdir -p $(MANDIR)/man1

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.65 2007-11-26 15:24:40 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.66 2007-11-27 08:31:15 marche Exp $ i*)
 
 open Printf
 open Options
@@ -276,6 +276,7 @@ let update_statistics (model:GTree.tree_store) row f children =
 *)
   let total = string_of_int (get_all_results f model) in
   let name =
+    if f="" then "User goals" else
     try
       let (id,beh,(f,l,b,e)) = Hashtbl.find Util.program_locs f in
       beh ^ " of " ^ id

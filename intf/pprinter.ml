@@ -166,15 +166,14 @@ let move_to_source = function
 	  let b = !tv_source#buffer in
 	  b#set_text (banner());
 	  begin
-(*	    try
-*)	      let why_logo_image = Options.lib_file "logo-why-small.png" in
+	    try
+	      let why_logo_image = Options.lib_file "why-logo-1.png" in
 	      let why_logo = GdkPixbuf.from_file why_logo_image in
-	      b#insert_pixbuf ~iter:b#start_iter ~pixbuf:why_logo;
-	      b#insert ~iter:b#start_iter "\n\t\t"
-(*
-	    with _ -> ()
-*)
+	      b#insert_pixbuf ~iter:b#start_iter ~pixbuf:why_logo 
+	    with _ -> 
+	      b#insert ~iter:b#start_iter "(Why logo: image not found)"	      
 	  end;
+	  b#insert ~iter:b#start_iter "\n\t";
 	  Hashtbl.add files "" b
       end
   | Some loc ->

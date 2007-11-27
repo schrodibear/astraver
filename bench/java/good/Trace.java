@@ -33,8 +33,7 @@ class Trace {
      * Bonus: all lines involved in the execution path should be ~underlined 
      */
     /*@ requires x > 0 && x < 100;
-      @ behavior ok:
-      @   ensures \result != 0 && \result > 10;  
+      @ ensures \result != 0 && \result > 10;  
       @*/
     int m2(int x) {
 	int y;

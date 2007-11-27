@@ -1,4 +1,18 @@
 
+
+
+(* Example 0 
+ * We want the message: 
+ *  "goal cannot be proved"
+ * localized on the goal 
+ *)
+
+goal g1: forall x:int. x+1 = x
+goal g2: forall x:int. x+1 = x+3
+
+(* a small bug: if goal name matches .*_po_[0-9]+ *)
+goal gwhybug_po_1234 : forall x:int. x=x-1
+
 (* Example 1 
  * We want the message: 
  *  "assertion `x < 9' cannot be established"

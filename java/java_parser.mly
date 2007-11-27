@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.26 2007-11-26 14:45:02 marche Exp $
+$Id: java_parser.mly,v 1.27 2007-11-27 08:31:15 marche Exp $
 
 */
 
@@ -62,7 +62,7 @@ $Id: java_parser.mly,v 1.26 2007-11-26 14:45:02 marche Exp $
 	  Explicit_array_creation(a,(build_array_creation_expr t (b,n)))
 *)
 
-  let default_behavior_name = "_"
+  let default_behavior_name = "default"
 
   let default_behavior assigns ensures behs =
     match assigns,ensures with

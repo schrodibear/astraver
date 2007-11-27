@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.139 2007-11-26 11:07:06 marche Exp $ i*)
+(*i $Id: main.ml,v 1.140 2007-11-27 08:31:15 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -398,6 +398,27 @@ let interp_decl ?(prelude=false) d =
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
 	let dg = Dgoal (loc, VCEexternal "user goal", Ident.string id, s) in
+	let ids = Ident.string id in
+	let vloc =
+	  try 
+	    let (f,l,b,e,o) = Hashtbl.find locs_table ids in 
+	    let name = 
+	      match List.assoc "name" o with
+		| Rc.RCident s -> s
+		| Rc.RCstring s -> s
+		| _ -> raise Not_found		  
+	    in
+(*
+	    let beh = 
+	      match List.assoc "behavior" o with
+		| Rc.RCstring s -> s
+		| _ -> raise Not_found		  
+	    in
+*)
+	    (name,"Validity",(f,l,b,e))
+	  with Not_found -> ("goal "^ids,"Validity", Loc.extract loc)
+	in
+	Hashtbl.add program_locs ids vloc;
 	if Options.pruning_hyp_v != -1 then
 	  push_decl (Hypotheses_filtering.reduce dg declarationQueue)
 	else	  

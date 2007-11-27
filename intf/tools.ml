@@ -49,7 +49,7 @@ let decomp_name =
     if Str.string_match r s 0 then
       Str.matched_group 1 s, Str.matched_group 2 s
     else
-      "goals", s
+      "", s
 
 let get_home () = 
   try Sys.getenv "HOME"

@@ -2049,11 +2049,15 @@ let tr_fun f loc spec body acc =
 		    List.fold_right
 		      (fun (id,b,e) acc ->
 			 let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
+			 let beh = 
+			   if id="default" then "Behavior" else
+			     "Normal behavior `"^id^"'"
+			 in
 			 let _ = reg_loc 
 			   ~id:newid
 			   ~oldid:f.jc_fun_info_name
 			   ~name:("function "^f.jc_fun_info_name)
-			   ~beh:("Normal behavior `"^id^"'")  
+			   ~beh  
 			   loc 
 			 in
 			 let d =

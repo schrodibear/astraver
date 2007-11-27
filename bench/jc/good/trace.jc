@@ -1,4 +1,10 @@
 
+/* Example 0
+ * Explanation expected: "validity of lemma"
+ * localized on "l1"
+ */
+// lemma l1: \forall integer x; x+1 == x+2
+
 /* Example 1 
  * We want the message: 
  *  "assertion `x < 9' cannot be established"
@@ -20,7 +26,7 @@ integer f1(integer x)
  */
 integer f2 (integer x) 
   requires x > 0 && x < 100;
-  behavior ok:
+  behavior default:
     ensures \result != 0 && \result > 10;  
 {
   integer y;
@@ -55,7 +61,7 @@ unit f4 (integer x)
  integer y = x;
  while (y > 0)
      invariant 0 <= y && y <= x;
- variant (K:y);
+ variant y;
  {
      y = y - 1;
  }
