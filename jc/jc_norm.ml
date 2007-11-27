@@ -811,12 +811,12 @@ let invariant_for_struct this st =
 
 let code_function (fi, fs, sl) vil =
   let vi_result = var ~unique: false fi.jc_fun_info_return_type "\\result" in
-  let vit_result = var_no_loc vi_result in
+  let vit_result = term_var_no_loc vi_result in
   let result_type_range = 
     Jc_typing.type_range_of_term fi.jc_fun_info_return_type vit_result 
   in
   begin
-    match Jc_options.inv_sem with
+    match !Jc_common_options.inv_sem with
       | InvArguments ->
 	  (* apply arguments invariant policy *)
 	  let invariants =
@@ -864,8 +864,8 @@ let code_function (fi, fs, sl) vil =
     
 let static_variable (vi, e) =
   let invs =
-    match Jc_options.inv_sem with
-      | InvArguments -> Jc_typing.type_range_of_term vi.jc_var_info_type (var_no_loc vi)
+    match !Jc_common_options.inv_sem with
+      | InvArguments -> Jc_typing.type_range_of_term vi.jc_var_info_type (term_var_no_loc vi)
       | _ -> true_assertion
   in
     match e with
@@ -886,7 +886,7 @@ let static_variables variables =
 	   v :: acc1, invs :: acc2)
       variables ([], []) 
   in
-    if Jc_options.inv_sem = InvArguments then
+    if !Jc_common_options.inv_sem = InvArguments then
       begin
 	let invs = make_and invs in
 	  if is_true invs then () else 

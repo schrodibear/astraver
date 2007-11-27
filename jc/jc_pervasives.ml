@@ -280,7 +280,7 @@ let term_no_loc t ty = {
   jc_term_label = "";
 }
 
-let var_no_loc vi = term_no_loc (JCTvar vi) vi.jc_var_info_type
+let term_var_no_loc vi = term_no_loc (JCTvar vi) vi.jc_var_info_type
 
 let zerot = term_no_loc (JCTconst (JCCinteger "0")) integer_type
 
@@ -548,6 +548,10 @@ let rec skip_term_shifts t = match t.jc_term_node with
 let rec skip_tloc_range t = match t with
   | JCLSrange(t,_,_) -> skip_tloc_range t
   | _ -> t
+
+(* option *)
+
+let select_option opt default = match opt with Some v -> v | None -> default
   
 (*
   Local Variables: 

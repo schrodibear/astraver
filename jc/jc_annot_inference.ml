@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.73 2007-11-23 16:36:23 marche Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.74 2007-11-27 14:53:39 moy Exp $ *)
 
 open Pp
 open Format
@@ -52,6 +52,10 @@ module TermSet =
   Set.Make(struct type t = term 
 		  let compare = raw_term_compare end)
 
+module TermMap =
+  Map.Make(struct type t = term 
+		  let compare = raw_term_compare end)
+
 (*
   usage: jessie -ai <box,oct,pol,wp,boxwp,octwp,polwp>
   
@@ -70,24 +74,21 @@ let state_changed = ref false
 (* Utility functions *)
   
 (* return the struct_info of (assumed) pointer t *)
-let si_of_pterm t =
+let struct_of_term t =
   match t.jc_term_type with
-    | JCTpointer (si, _, _) -> si
-    | _ -> assert false
+    | JCTpointer(st,_,_) -> st
+    | _ -> 
+      if debug then printf "[struct_of_term] %a@." Jc_output.term t;
+      assert false
 
 
 (* Constructors *)
-
-let type_term t ty = {
-  jc_term_node = t;
-  jc_term_type = ty;
-  jc_term_loc = Loc.dummy_position;
-}
 
 let full_term t ty loc = {
   jc_term_node = t;
   jc_term_type = ty;
   jc_term_loc = loc;
+  jc_term_label = "";
 }
 
 let full_asrt a loc = {
@@ -271,63 +272,72 @@ let rec term_name =
 	  "none_range_" ^ (term_name t2)
       | JCTrange(None,None) ->
 	  "none_range_none"
-	    
-let rec destruct_pointer t = 
+
+(* support of <new> (Nicolas) *)
+let rec destruct_alloc t = 
   match t.jc_term_node with
-    | JCTconst JCCnull -> None, None
-    | JCTconst (JCCinteger str) -> None, Some t (* support of <new> (Nicolas) *)
+    | JCTconst (JCCinteger str) -> None, Some t 
     | JCTvar vi -> Some vi, None
-    | JCTshift (t1, t2) ->
-	begin match destruct_pointer t1 with
-	  | viopt, None -> viopt, Some t2
-	  | viopt, Some offt -> 
-	      let tnode = JCTbinary (offt, Badd_int,t2) in
-	      let offt = full_term tnode integer_type t2.jc_term_loc in
-	      viopt,Some offt
-	end
-    | JCTbinary (t1, Bsub_int, t2) -> (* support of <new> (Nicolas) *)
+    | JCTbinary (t1, Bsub_int, t2) ->
 	begin
-	  match destruct_pointer t1 with
+	  match destruct_alloc t1 with
 	    | None, None ->
 		None, Some 
-		  (type_term
-		    (JCTunary (Uminus_int, type_term (JCTconst (JCCinteger "-1")) integer_type))
+		  (term_no_loc
+		    (JCTunary (Uminus_int, term_no_loc (JCTconst (JCCinteger "-1")) integer_type))
 		    integer_type)
 	    | Some vi, None ->
 		None, Some 
-		  (type_term
-		    (JCTbinary	(type_term (JCTvar vi) integer_type,
+		  (term_no_loc
+		    (JCTbinary	(term_no_loc (JCTvar vi) integer_type,
 		    Bsub_int,
-		    type_term (JCTconst (JCCinteger "-1")) integer_type))
+		    term_no_loc (JCTconst (JCCinteger "-1")) integer_type))
 		    integer_type)
 	    | vio, Some offt ->
 		let t3 = JCTbinary (offt, Bsub_int, t2) in
 		let offt = full_term t3 integer_type t1.jc_term_loc in
 		vio, Some offt 
 	end
-    | JCTcast (t, si) -> destruct_pointer t (* Correct ? *)
-    | JCTconst _ -> assert false
-    | JCTsub_pointer _ -> assert false
-    | JCTderef (_, fi) ->
-	let vi = var ~unique:false fi.jc_field_info_type (term_name t) in
-	Some vi, None
-    | JCTbinary _ -> assert false
-    | JCTunary _ -> assert false
-    | JCTapp _ -> assert false
-    | JCTold _ -> assert false
-    | JCToffset _ -> assert false
-    | JCTinstanceof _ -> assert false
-    | JCTif _ -> assert false
-    | JCTrange _ -> assert false
+    | _ -> assert false
+
+(* Deconstruct a pointer term into a base pointer term and an integer offset.
+ *)
+let rec destruct_pointer t = 
+  match t.jc_term_node with
+    | JCTconst JCCnull ->
+        (* If changing this, make sure [struct_of_term] is not called on
+         * a null term.
+         *)
+        None,None
+    | JCTvar _ | JCTderef _ ->
+        Some t,None
+    | JCTshift(t1,t2) ->
+	begin match destruct_pointer t1 with
+	  | topt,None -> topt,Some t2
+	  | topt,Some offt -> 
+	      let tnode = JCTbinary(offt,Badd_int,t2) in
+	      let offt = full_term tnode integer_type t2.jc_term_loc in
+	      topt,Some offt
+	end
+    | JCTcast(t,_) -> 
+        (* Pointer arithmetic in Jessie is not related to the size of 
+	 * the underlying type, like in C. This makes it possible to commute
+	 * cast and arithmetic.
+         *)
+        destruct_pointer t
+    | JCTapp _ | JCTold _ | JCTif _ | JCTrange _ -> 
+        (* Not supported yet. *)
+        assert false
+    | JCTconst _ | JCTsub_pointer _ | JCTbinary _ 
+    | JCTunary _ | JCToffset _ | JCTinstanceof _ -> 
+        (* Not of a pointer type. *)
+        assert false
 
 let rec term_depends_on_term t1 t2 =
   raw_sub_term t2 t1 ||
     match t2.jc_term_node with
       | JCTderef(t2',fi) ->
-	  let t2' = match fst(destruct_pointer t2') with
-	    | None -> t2' 
-	    | Some vi -> var_term vi
-	  in
+	  let t2' = select_option (fst(destruct_pointer t2')) t2' in
 	  begin match t1.jc_term_node with
 	    | JCTapp(f,tls) -> 
 		List.fold_left2 (fun acc param arg -> acc ||
@@ -467,10 +477,10 @@ let term_of_expr e =
       | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
       | JCEalloc (e, _) -> (* support of <new> (nicolas) *)
 	  (* Note: \offset_max(t) = length(t) - 1 *)
-	  JCTbinary (term e, Bsub_int, type_term (JCTconst (JCCinteger "1")) integer_type)
+	  JCTbinary (term e, Bsub_int, term_no_loc (JCTconst (JCCinteger "1")) integer_type)
       | JCEfree _ -> failwith "Not a term"
     in
-    type_term tnode e.jc_expr_type
+    term_no_loc tnode e.jc_expr_type
   in
   try Some (term e) with Failure _ -> None
     
@@ -576,7 +586,7 @@ let rec replace_term_in_assertion srct targett a =
 
 let rec replace_vi_in_assertion srcvi targett a = 
   let term = replace_term_in_term 
-    ~source:(type_term (JCTvar srcvi) srcvi.jc_var_info_type) 
+    ~source:(term_no_loc (JCTvar srcvi) srcvi.jc_var_info_type) 
     ~target:targett.jc_term_node in
   let asrt = replace_vi_in_assertion srcvi targett in
   let anode = match a.jc_assertion_node with
@@ -721,32 +731,24 @@ end = struct
       va
 	
   let offset_min_variable t =
-    let ty = t.jc_term_type in
     try
       TermTable.find offset_min_variable_table t
     with Not_found ->
       let va = Var.of_string ("__jc_offset_min_" ^ (term_name t)) in
       TermTable.add offset_min_variable_table t va;
-      let st = match ty with
-	| JCTpointer (st, _, _) -> st
-	| _ -> assert false
-      in
-      let tmin = type_term (JCToffset(Offset_min,t,st)) integer_type in
+      let st = struct_of_term t in
+      let tmin = term_no_loc (JCToffset(Offset_min,t,st)) integer_type in
       Hashtbl.add term_table va tmin;
       va
 	
   let offset_max_variable t = 
-    let ty = t.jc_term_type in
     try
       TermTable.find offset_max_variable_table t
     with Not_found ->
       let va = Var.of_string ("__jc_offset_max_" ^ (term_name t)) in
       TermTable.add offset_max_variable_table t va;
-      let st = match ty with
-	| JCTpointer (st, _, _) -> st
-	| _ -> assert false
-      in
-      let tmax = type_term (JCToffset(Offset_max,t,st)) integer_type in
+      let st = struct_of_term t in
+      let tmax = term_no_loc (JCToffset(Offset_max,t,st)) integer_type in
       Hashtbl.add term_table va tmax;
       va
 
@@ -920,12 +922,12 @@ let rec linearize t =
   match t.jc_term_node with
     | JCTconst c ->
 	begin match c with
-	  | JCCinteger s -> ([], int_of_string s)
+	  | JCCinteger s -> (TermMap.empty, int_of_string s)
 	  | JCCboolean _ | JCCvoid | JCCnull | JCCreal _ ->
 	      failwith "Not linear"
 	end
     | JCTvar _ | JCTderef _ ->
-	([t, 1], 0)
+	(TermMap.add t 1 TermMap.empty, 0)
     | JCTbinary (t1, bop, t2) ->
 	if is_arithmetic_binary_op bop then
 	  let coeffs1, cst1 = linearize t1 in
@@ -933,48 +935,50 @@ let rec linearize t =
           begin match bop with
 	    | Badd_int ->
 		let coeffs = 
-		  List.fold_right (fun (vt1, c1) acc ->
+		  TermMap.fold (fun vt1 c1 acc ->
 		    try 
-		      let c2 = List.assoc vt1 coeffs2 in
-		      (vt1, c1 + c2) :: acc
-		    with Not_found -> (vt1, c1) :: acc) 
-		    coeffs1 []
+		      let c2 = TermMap.find vt1 coeffs2 in
+		      TermMap.add vt1 (c1 + c2) acc
+		    with Not_found -> TermMap.add vt1 c1 acc
+		  ) coeffs1 TermMap.empty
 		in
 		let coeffs = 
-		  List.fold_right (fun (vt2, c2) acc ->
-		    if List.mem_assoc vt2 coeffs then acc
-		    else (vt2, c2) :: acc) 
-		    coeffs2 coeffs
+		  TermMap.fold (fun vt2 c2 acc ->
+		    if TermMap.mem vt2 coeffs then acc
+		    else TermMap.add vt2 c2 acc
+		  ) coeffs2 coeffs
 		in
 		(coeffs, cst1 + cst2)
 	    | Bsub_int ->
 		let coeffs = 
-		  List.fold_right
-		    (fun (vt1, c1) acc ->
-		      try 
-			let c2 = List.assoc vt1 coeffs2 in
-			(vt1,c1 - c2) :: acc
-		      with Not_found -> (vt1,c1) :: acc
-		    ) coeffs1 []
+		  TermMap.fold (fun vt1 c1 acc ->
+		    try 
+		      let c2 = TermMap.find vt1 coeffs2 in
+		      TermMap.add vt1 (c1 - c2) acc
+		    with Not_found -> TermMap.add vt1 c1 acc
+		  ) coeffs1 TermMap.empty
 		in
 		let coeffs = 
-		  List.fold_right (fun (vt2,c2) acc ->
-		    if List.mem_assoc vt2 coeffs then acc
-		    else (vt2,- c2) :: acc
+		  TermMap.fold (fun vt2 c2 acc ->
+		    if TermMap.mem vt2 coeffs then acc
+		    else TermMap.add vt2 (- c2) acc
 		  ) coeffs2 coeffs
 		in
 		(coeffs, cst1 - cst2)
 	    | Bmul_int ->
-		begin match coeffs1,cst1,coeffs2,cst2 with
-		  | [],_,[],_ -> ([],cst1 * cst2)
-		  | [],cstmul,coeffs,cstadd | coeffs,cstadd,[],cstmul -> 
-		      let coeffs = 
-			List.map (fun (vt,c) -> (vt,c * cstmul)) coeffs
-		      in
-		      (coeffs,cstadd * cstmul)
-		  | _ -> 
-		      (* Consider non-linear term as abstract variable. *)
-		      ([t,1],0)
+		begin match 
+		  TermMap.is_empty coeffs1,cst1,
+		  TermMap.is_empty coeffs2,cst2 with
+		    | true,_,true,_ -> (TermMap.empty,cst1 * cst2)
+		    | true,cstmul,_,cstadd ->
+			let coeffs = TermMap.map (fun c -> c*cstmul) coeffs2 in
+			(coeffs,cstadd * cstmul)
+		    | _,cstadd,true,cstmul -> 
+			let coeffs = TermMap.map (fun c -> c*cstmul) coeffs1 in
+			(coeffs,cstadd * cstmul)
+		    | _ -> 
+			(* Consider non-linear term as abstract variable. *)
+			(TermMap.add t 1 TermMap.empty,0)
 		end
 	    | Badd_real | Bsub_real | Bmul_real | Bdiv_real ->
 		failwith "Not integer"
@@ -990,7 +994,7 @@ let rec linearize t =
 	    | Uplus_int -> 
 		(coeffs1,cst1)
 	    | Uminus_int -> 
-		let coeffs = List.map (fun (vt,c) -> (vt,-c)) coeffs1 in
+		let coeffs = TermMap.map (fun c -> -c) coeffs1 in
 		(coeffs,- cst1)
 	    | Uplus_real | Uminus_real ->
 		failwith "Not integer"
@@ -999,10 +1003,10 @@ let rec linearize t =
 	else failwith "Not linear"
     | JCToffset(_,vt,_) ->
 	begin match vt.jc_term_node with
-	  | JCTvar _ | JCTderef _ -> ([t,1],0)
-	  | _ -> (*assert false*) ([t,1],0)
+	  | JCTvar _ | JCTderef _ -> (TermMap.add t 1 TermMap.empty,0)
+	  | _ -> (*assert false*) (TermMap.add t 1 TermMap.empty,0)
 	end
-    | JCTapp(f,_) -> ([t,1],0)
+    | JCTapp(f,_) -> (TermMap.add t 1 TermMap.empty,0)
     | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
     | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ -> 
 	failwith "Not linear"
@@ -1025,21 +1029,21 @@ let rec zero_bounds_term t =
 	    | Badd_int ->
 		let add_zb zb1 zb2 =
 		  if zb1.zmulcst = zb2.zmulcst then
-		    let lb = type_term (JCTbinary (zb1.zlow, Badd_int, zb2.zlow)) integer_type in
-		    let rb = type_term (JCTbinary (zb1.zup, Badd_int, zb2.zup)) integer_type in
+		    let lb = term_no_loc (JCTbinary (zb1.zlow, Badd_int, zb2.zlow)) integer_type in
+		    let rb = term_no_loc (JCTbinary (zb1.zup, Badd_int, zb2.zup)) integer_type in
 		    { zlow = lb; zup = rb; zmulcst = zb1.zmulcst; 
 		    zconstrs = zb1.zconstrs @ zb2.zconstrs; }
 		  else
 		    let cst1 =
-		      type_term (JCTconst(JCCinteger(string_of_int zb1.zmulcst))) integer_type in
+		      term_no_loc (JCTconst(JCCinteger(string_of_int zb1.zmulcst))) integer_type in
 		    let cst2 =
-		      type_term (JCTconst(JCCinteger(string_of_int zb2.zmulcst))) integer_type in
-		    let lb1 = type_term (JCTbinary(zb1.zlow,Bmul_int,cst2)) integer_type in
-		    let lb2 = type_term (JCTbinary(zb2.zlow,Bmul_int,cst1)) integer_type in
-		    let rb1 = type_term (JCTbinary(zb1.zup,Bmul_int,cst2)) integer_type in
-		    let rb2 = type_term (JCTbinary(zb2.zup,Bmul_int,cst1)) integer_type in
-		    let lb = type_term (JCTbinary(lb1,Badd_int,lb2)) integer_type in
-		    let rb = type_term (JCTbinary(rb1,Badd_int,rb2)) integer_type in
+		      term_no_loc (JCTconst(JCCinteger(string_of_int zb2.zmulcst))) integer_type in
+		    let lb1 = term_no_loc (JCTbinary(zb1.zlow,Bmul_int,cst2)) integer_type in
+		    let lb2 = term_no_loc (JCTbinary(zb2.zlow,Bmul_int,cst1)) integer_type in
+		    let rb1 = term_no_loc (JCTbinary(zb1.zup,Bmul_int,cst2)) integer_type in
+		    let rb2 = term_no_loc (JCTbinary(zb2.zup,Bmul_int,cst1)) integer_type in
+		    let lb = term_no_loc (JCTbinary(lb1,Badd_int,lb2)) integer_type in
+		    let rb = term_no_loc (JCTbinary(rb1,Badd_int,rb2)) integer_type in
 		    { zlow = lb; zup = rb; zmulcst = zb1.zmulcst * zb2.zmulcst; 
 		    zconstrs = zb1.zconstrs @ zb2.zconstrs; }
 		in
@@ -1048,8 +1052,8 @@ let rec zero_bounds_term t =
 		let zbs = List.map (fun zb1 -> List.map (add_zb zb1) zbs2) zbs1 in
 		List.flatten zbs
 	    | Bsub_int ->
-		let t2 = type_term (JCTunary (Uminus_int, t2)) integer_type in
-		let t = type_term (JCTbinary(t1, Badd_int, t2)) integer_type in
+		let t2 = term_no_loc (JCTunary (Uminus_int, t2)) integer_type in
+		let t = term_no_loc (JCTbinary(t1, Badd_int, t2)) integer_type in
 		zero_bounds_term t
 	    | Bmul_int ->
 		(* TODO: refine when one operand is constant *)
@@ -1059,10 +1063,10 @@ let rec zero_bounds_term t =
 	    | Bdiv_int ->
 		let div_zb t cst zb =
 		  let cstt =
-		    type_term (JCTconst(JCCinteger(string_of_int (cst-1)))) integer_type in
-		  let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
+		    term_no_loc (JCTconst(JCCinteger(string_of_int (cst-1)))) integer_type in
+		  let zero = term_no_loc (JCTconst(JCCinteger "0")) integer_type in
 		  let zbpos = {
-		    zlow = type_term (JCTbinary(zb.zlow,Bsub_int,cstt)) integer_type;
+		    zlow = term_no_loc (JCTbinary(zb.zlow,Bsub_int,cstt)) integer_type;
 		    zup = zb.zup; 
 		    zmulcst = zb.zmulcst * cst; 
 		    zconstrs = 
@@ -1070,7 +1074,7 @@ let rec zero_bounds_term t =
 		  } in
 		  let zbneg = {
 		    zlow = zb.zlow;
-		    zup = type_term (JCTbinary(zb.zup,Badd_int,cstt)) integer_type; 
+		    zup = term_no_loc (JCTbinary(zb.zup,Badd_int,cstt)) integer_type; 
 		    zmulcst = zb.zmulcst * cst; 
 		    zconstrs = 
 		      raw_asrt(JCArelation(t,Blt_int,zero)) :: zb.zconstrs; 
@@ -1085,7 +1089,7 @@ let rec zero_bounds_term t =
 			    let neg = mulcst2 < 0 in
 			    let mulcst2 = abs mulcst2 in
 			    let t1 =
-			      if neg then type_term (JCTunary(Uminus_int,t1)) integer_type else t1
+			      if neg then term_no_loc (JCTunary(Uminus_int,t1)) integer_type else t1
 			    in
 			    let zbs1 = zero_bounds_term t1 in
 			    List.flatten (List.map (div_zb t1 mulcst2) zbs1)
@@ -1106,8 +1110,8 @@ let rec zero_bounds_term t =
 		zero_bounds_term t1
 	    | Uminus_int ->
 		let minus_zb zb =
-		  let lb1 = type_term (JCTunary (Uminus_int, zb.zlow)) integer_type in
-		  let rb1 = type_term (JCTunary (Uminus_int, zb.zup)) integer_type in
+		  let lb1 = term_no_loc (JCTunary (Uminus_int, zb.zlow)) integer_type in
+		  let rb1 = term_no_loc (JCTunary (Uminus_int, zb.zup)) integer_type in
 		  { zb with zlow = rb1; zup = lb1; }
 		in
 		let zbs = zero_bounds_term t1 in
@@ -1139,16 +1143,16 @@ let linstr_of_term env t =
   try
     let coeffs, cst = linearize t in
     let env = 
-      List.fold_left (fun env (t,_) ->
+      TermMap.fold (fun t _ env  ->
 	let va = Vai.variable_of_term t in
 	if Environment.mem_var env va then env
 	else Environment.add env [|va|] [||]
-      ) env coeffs
+      ) coeffs env 
     in
     let coeffs = 
-      List.map (fun (t,c) ->
-	let va = Vai.variable_of_term t in (Var.to_string va,c)
-      ) coeffs 
+      TermMap.fold (fun t c acc ->
+	let va = Vai.variable_of_term t in (Var.to_string va,c)::acc
+      ) coeffs []
     in
     Some (env, mkaddstr coeffs, cst)
   with Failure _ -> None
@@ -1157,34 +1161,26 @@ type offset_kind = Offset_min_kind | Offset_max_kind
 
 let offset_linstr_of_term env ok t =
   match destruct_pointer t with
-    | None, None -> None
-    | None, Some t -> (* support of <new> (Nicolas) *)
-	linstr_of_term env t
-    | Some vi, offt ->
-	let vt = type_term (JCTvar vi) vi.jc_var_info_type in
-	let st = match vi.jc_var_info_type with
-	  | JCTpointer (st, _, _) -> st
-	  | _ -> assert false
-	in
+    | None, _ -> None
+    | Some ptrt, offt ->
+	let st = struct_of_term ptrt in
 	let minmaxt = match ok with
 	  | Offset_min_kind ->  
-	      type_term (JCToffset(Offset_min,vt,st)) integer_type
+	      term_no_loc (JCToffset(Offset_min,ptrt,st)) integer_type
 	  | Offset_max_kind -> 
-	      type_term (JCToffset(Offset_max,vt,st)) integer_type
+	      term_no_loc (JCToffset(Offset_max,ptrt,st)) integer_type
 	in
-	let t = match offt with 
-	  | None -> minmaxt
-	  | Some offt -> 
-	      type_term (JCTbinary(minmaxt,Bsub_int,offt)) integer_type
+	let t = match offt with None -> minmaxt | Some offt -> 
+	  term_no_loc (JCTbinary(minmaxt,Bsub_int,offt)) integer_type
 	in
 	linstr_of_term env t
 	  
 let rec stronger_assertion a = 
   match a.jc_assertion_node with
     | JCArelation(t1,bop,t2) ->
-	let subt = type_term (JCTbinary (t1, Bsub_int, t2)) integer_type in
+	let subt = term_no_loc (JCTbinary (t1, Bsub_int, t2)) integer_type in
 	let zbs = zero_bounds_term subt in
-	let zero = type_term (JCTconst (JCCinteger "0")) integer_type in
+	let zero = term_no_loc (JCTconst (JCCinteger "0")) integer_type in
 	let dnf = match bop with
 	  | Beq_int ->
 	      List.map (fun zb ->
@@ -1217,7 +1213,7 @@ let rec linstr_of_assertion env a =
     | JCAtrue -> env, Dnf.true_
     | JCAfalse -> env, Dnf.false_
     | JCArelation (t1, bop, t2) ->
-	let subt = type_term (JCTbinary (t1, Bsub_int, t2)) integer_type in
+	let subt = term_no_loc (JCTbinary (t1, Bsub_int, t2)) integer_type in
 	begin match linstr_of_term env subt with
 	  | Some (env,str,cst) ->
 	      let cstr = string_of_int (- cst) in
@@ -1236,7 +1232,7 @@ let rec linstr_of_assertion env a =
 	      env, str
 	  | None -> 
 	      let zbs = zero_bounds_term subt in
-	      let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
+	      let zero = term_no_loc (JCTconst(JCCinteger "0")) integer_type in
 	      if List.length zbs <= 1 then 
 		(* If [zero_bounds_term] found an integer division on which 
 		   to split, length of resulting list must be pair, 
@@ -1337,7 +1333,7 @@ let offset_linstr_of_expr env ok e =
 	    match term_of_expr e with
 	      | None -> None
 	      | Some t -> 
-		  match offset_linstr_of_term env ok t with
+		  match linstr_of_term env t with
 		    | None -> None
 		    | Some (env,"",cst) -> Some (env,string_of_int cst)
 		    | Some (env,str,cst) -> Some (env,str ^ " + " ^ (string_of_int cst))
@@ -1373,13 +1369,13 @@ let mkterm linexpr =
 	    | "1" -> Some (Vai.term va)
 	    | "-1" -> 
 		let tnode = JCTunary (Uminus_int, Vai.term va) in
-		let t = type_term tnode integer_type in
+		let t = term_no_loc tnode integer_type in
 		Some t
 	    | s -> 
 		let ctnode = JCTconst (JCCinteger s) in
-		let ct = type_term ctnode integer_type in
+		let ct = term_no_loc ctnode integer_type in
 		let tnode = JCTbinary (ct, Bmul_int, Vai.term va) in
-		let t = type_term tnode integer_type in
+		let t = term_no_loc tnode integer_type in
 		Some t
 	  in
 	  begin match t,vt with
@@ -1387,7 +1383,7 @@ let mkterm linexpr =
 	    | t,None -> t
 	    | Some t,Some vt ->
 		let tnode = JCTbinary (t, Badd_int, vt) in
-		let t = type_term tnode integer_type in
+		let t = term_no_loc tnode integer_type in
 		Some t
 	  end
       | Interval _ -> assert false
@@ -1398,7 +1394,7 @@ let mkterm linexpr =
 	  | "0." | "0" -> None
 	  | s -> 
 	      let ctnode = JCTconst (JCCinteger s) in
-	      let ct = type_term ctnode integer_type in
+	      let ct = term_no_loc ctnode integer_type in
 	      Some ct
 	end
     | Interval _ -> assert false
@@ -1416,7 +1412,7 @@ let mkassertion lincons =
     | DISEQ -> Bneq_int, JCCinteger "0"
     | EQMOD scalar -> Bmod_int, JCCinteger (Scalar.to_string scalar)
   in
-  let t2 = type_term (JCTconst c2) integer_type in
+  let t2 = term_no_loc (JCTconst c2) integer_type in
   raw_asrt (JCArelation(t1,op,t2)) 
 
 let presentify a =
@@ -1425,10 +1421,10 @@ let presentify a =
       | (t,0) -> None
       | (t,1) -> Some t
       | (t,-1) ->
-	  Some(type_term (JCTunary(Uminus_int,t)) integer_type)
+	  Some(term_no_loc (JCTunary(Uminus_int,t)) integer_type)
       | (t,c) ->
-	  let c = type_term (JCTconst(JCCinteger(string_of_int c))) integer_type in
-	  Some(type_term (JCTbinary(c,Bmul_int,t)) integer_type)
+	  let c = term_no_loc (JCTconst(JCCinteger(string_of_int c))) integer_type in
+	  Some(term_no_loc (JCTbinary(c,Bmul_int,t)) integer_type)
     in
     let rec mkaddterm = function
       | [] -> None
@@ -1437,29 +1433,29 @@ let presentify a =
 	  match mkmulterm (t,c), mkaddterm r with
 	    | None,None -> None
 	    | Some t,None | None,Some t -> Some t
-	    | Some t1,Some t2 -> Some(type_term (JCTbinary(t1,Badd_int,t2)) integer_type)
+	    | Some t1,Some t2 -> Some(term_no_loc (JCTbinary(t1,Badd_int,t2)) integer_type)
     in
     try
       let coeffs,cst = linearize t in
       let posl,negl =
-	List.fold_right (fun (t,c) (pl,nl) ->
+	TermMap.fold (fun t c (pl,nl) ->
 	  if c > 0 then (t,c) :: pl, nl
 	  else if c < 0 then pl, (t,-c) :: nl
 	  else pl, nl
 	) coeffs ([],[])
       in
-      let cstt = type_term (JCTconst(JCCinteger(string_of_int(abs cst)))) integer_type in
+      let cstt = term_no_loc (JCTconst(JCCinteger(string_of_int(abs cst)))) integer_type in
       let post = match mkaddterm posl with
 	| None -> 
-	    if cst > 0 then cstt else type_term (JCTconst(JCCinteger "0")) integer_type
+	    if cst > 0 then cstt else term_no_loc (JCTconst(JCCinteger "0")) integer_type
 	| Some t -> 
-	    if cst > 0 then type_term (JCTbinary(t,Badd_int,cstt)) integer_type else t
+	    if cst > 0 then term_no_loc (JCTbinary(t,Badd_int,cstt)) integer_type else t
       in
       let negt = match mkaddterm negl with
 	| None ->
-	    if cst < 0 then cstt else type_term (JCTconst(JCCinteger "0")) integer_type
+	    if cst < 0 then cstt else term_no_loc (JCTconst(JCCinteger "0")) integer_type
 	| Some t ->
-	    if cst < 0 then type_term (JCTbinary(t,Badd_int,cstt)) integer_type else t
+	    if cst < 0 then term_no_loc (JCTbinary(t,Badd_int,cstt)) integer_type else t
       in
       Some (post,negt)
     with Failure _ -> None
@@ -1467,7 +1463,7 @@ let presentify a =
   let rec linasrt_of_assertion a =
     match a.jc_assertion_node with
       | JCArelation(t1,bop,t2) ->
-	  let subt = type_term (JCTbinary(t1,Bsub_int,t2)) integer_type in
+	  let subt = term_no_loc (JCTbinary(t1,Bsub_int,t2)) integer_type in
 	  begin match linterms_of_term subt with
 	    | None -> a
 	    | Some (post,negt) -> raw_asrt(JCArelation(post,bop,negt))
@@ -1514,35 +1510,28 @@ let collect_expr_asserts e =
   (* Collect memory safety assertions. *)
   let collect_memory_access e1 fi =
     match term_of_expr e1 with None -> [] | Some t1 ->
-      match destruct_pointer t1 with None, _ -> [] | Some vi, offt ->
-	let offt = match offt with
-	  | None -> 
-	      type_term (JCTconst (JCCinteger "0")) integer_type
+      match destruct_pointer t1 with None,_ -> [] | Some ptrt,offopt ->
+	let offt = match offopt with
+	  | None -> term_no_loc (JCTconst(JCCinteger"0")) integer_type
 	  | Some offt -> offt
 	in
-	let vt = type_term (JCTvar vi) vi.jc_var_info_type in
-	let st = match vi.jc_var_info_type with
-	  | JCTpointer (st, _, _) -> st
-	  | _ -> assert false
-	in
-	let mint = 
-	  type_term (JCToffset (Offset_min, vt, st)) integer_type in
-	let maxt = 
-	  type_term (JCToffset (Offset_max, vt, st)) integer_type in
-	let mina = raw_asrt (JCArelation (mint, Ble_int, offt)) in
-	let maxa = raw_asrt (JCArelation (offt, Ble_int, maxt)) in
+	let st = struct_of_term ptrt in
+	let mint = term_no_loc (JCToffset(Offset_min,ptrt,st)) integer_type in
+	let maxt = term_no_loc (JCToffset(Offset_max,ptrt,st)) integer_type in
+	let mina = raw_asrt(JCArelation(mint,Ble_int,offt)) in
+	let maxa = raw_asrt(JCArelation(offt,Ble_int,maxt)) in
 	let mina = stronger_assertion mina in
 	let maxa = stronger_assertion maxa in
-	[mina; maxa]
+	[mina;maxa]
   in
   (* Collect absence of integer overflow assertions. *)
   let collect_integer_overflow ei e1 =
     match term_of_expr e1 with None -> [] | Some t1 ->
-      let mint = type_term
+      let mint = term_no_loc
 	(JCTconst (JCCinteger (Num.string_of_num ei.jc_enum_info_min)))
 	integer_type
       in
-      let maxt = type_term
+      let maxt = term_no_loc
 	(JCTconst(JCCinteger (Num.string_of_num ei.jc_enum_info_max)))
 	integer_type
       in
@@ -1555,7 +1544,7 @@ let collect_expr_asserts e =
   (* Collect absence of division by zero assertions. *)
   let collect_zero_division e =
     match term_of_expr e with None -> [] | Some t ->
-      let zero = type_term (JCTconst(JCCinteger "0")) integer_type in
+      let zero = term_no_loc (JCTconst(JCCinteger "0")) integer_type in
       [raw_asrt(JCArelation(t,Bneq_int,zero))]
   in
   let collect e = 
@@ -1581,7 +1570,7 @@ let collect_statement_asserts s =
         let reqa = 
 	   List.fold_left2 (fun a param arg ->
              match term_of_expr arg with None -> raw_asrt JCAtrue | Some targ ->
-               replace_term_in_assertion (var_term param) targ.jc_term_node a
+               replace_term_in_assertion (term_var_no_loc param) targ.jc_term_node a
 	   ) reqa fi.jc_fun_info_parameters els
         in
         (conjuncts reqa)
@@ -1667,10 +1656,10 @@ let rec test_assertion mgr pre a =
 	  env,Dnf.make_or [dnf1;dnf2]
       | JCArelation (t1, Bneq_pointer, t2) 
 	  when t2.jc_term_node = JCTconst JCCnull -> (* case <t != null> *)
-	  let si = si_of_pterm t1 in
-	  let offset_mint = type_term (JCToffset (Offset_min, t1, si)) integer_type in
+	  let si = struct_of_term t1 in
+	  let offset_mint = term_no_loc (JCToffset (Offset_min, t1, si)) integer_type in
 	  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in
-	  let offset_maxt = type_term (JCToffset (Offset_max, t1, si)) integer_type in
+	  let offset_maxt = term_no_loc (JCToffset (Offset_max, t1, si)) integer_type in
 	  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in
 	  let a = raw_asrt (JCAand [offset_mina; offset_maxa]) in
 	  extract_environment_and_dnf env a
@@ -1989,7 +1978,7 @@ let ai_inter_function_call mgr iai abs pre fi el =
   let formal_vars =
     List.fold_left2
       (fun (acc) vi e ->
-	let t = var_term vi in
+	let t = term_var_no_loc vi in
 	let acc = if Vai.has_variable t then 
 	  (Vai.variable t)::acc else acc in
 	let acc = if Vai.has_offset_min_variable t then
@@ -2070,19 +2059,19 @@ and intern_ai_statement iaio abs curinvs s =
     | JCSdecl (vi, None, s) ->
 	ai_statement iaio abs curinvs s
     | JCSdecl (vi, Some e, s) ->
-	assign_expr mgr pre (var_term vi) e;
+	assign_expr mgr pre (term_var_no_loc vi) e;
 	ai_statement iaio abs curinvs s;
         (* To keep information on variable [vi], declaration should be turned
 	 * into assignment before analysis.
 	 *)
-        forget_invariants mgr curinvs (Vai.all_variables (var_term vi))
+        forget_invariants mgr curinvs (Vai.all_variables (term_var_no_loc vi))
     | JCSassign_var (vi, e) ->
-	assign_expr mgr pre (var_term vi) e
+	assign_expr mgr pre (term_var_no_loc vi) e
     | JCSassign_heap(e1,fi,e2) ->
 	begin match term_of_expr e1 with
 	  | None -> () (* TODO *)
 	  | Some t1 ->
-	      let dereft = type_term (JCTderef(t1,fi)) fi.jc_field_info_type in
+	      let dereft = term_no_loc (JCTderef(t1,fi)) fi.jc_field_info_type in
 	      assign_expr mgr pre dereft e2
 	end
     | JCSassert a ->
@@ -2109,7 +2098,7 @@ and intern_ai_statement iaio abs curinvs s =
 	let asrts = collect_expr_asserts e in
 	List.iter (test_assertion mgr prop) asrts;
 	(* <return e;> is logically equivalent to <\result = e;> *)
-	let vit = var_term (var ~unique:false t "\\result") in
+	let vit = term_var_no_loc (Jc_pervasives.var ~unique:false t "\\result") in
 	assign_expr mgr pre vit e;
 	join_abstract_value mgr !postret normal;
 	empty_abstract_value mgr normal;
@@ -2246,12 +2235,14 @@ and intern_ai_statement iaio abs curinvs s =
 	  match vio with
 	    | None -> normal_behavior
 	    | Some vi ->
-		let result_vi = var ~unique:false vi.jc_var_info_type "\\result" in
+		let result_vi = 
+                  Jc_pervasives.var ~unique:false vi.jc_var_info_type "\\result"
+                in
 		let normal_behavior =
 		  switch_vis_in_assertion result_vi vi normal_behavior 
 		in
 		  (* add result type spec to [fi] postcondition *)
-		let cstrs = Jc_typing.type_range_of_term vi.jc_var_info_type (var_term vi) in
+		let cstrs = Jc_typing.type_range_of_term vi.jc_var_info_type (term_var_no_loc vi) in
 		  make_and [normal_behavior; cstrs];
 	in
 	let normal_behavior =
@@ -2270,7 +2261,7 @@ and intern_ai_statement iaio abs curinvs s =
 	 * into assignment before analysis.
 	 *)
         match vio with None -> () | Some vi ->
-          forget_invariants mgr curinvs (Vai.all_variables (var_term vi))
+          forget_invariants mgr curinvs (Vai.all_variables (term_var_no_loc vi))
   end;
   let normal = curinvs.jc_absinv_normal in
   let prop = normal.jc_absval_propagated in
@@ -2320,17 +2311,17 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     
     (* Add global variables as abstract variables in [env]. *)
     let globvars =
-      Hashtbl.fold (fun _ (vi, _) acc -> Vai.all_variables (var_term vi) @ acc)
+      Hashtbl.fold (fun _ (vi, _) acc -> Vai.all_variables (term_var_no_loc vi) @ acc)
 	Jc_norm.variables_table []
     in
     let env = Environment.add env (Array.of_list globvars) [||] in
     
     (* Add \result as abstract variable in [env] if any. *)
     let return_type = fi.jc_fun_info_return_type in
-    let vi_result = var ~unique:false return_type "\\result" in
+    let vi_result = Jc_pervasives.var ~unique:false return_type "\\result" in
     let env =
       if return_type <> JCTnull then
-	let result = Vai.all_variables (var_term vi_result) in
+	let result = Vai.all_variables (term_var_no_loc vi_result) in
 	Environment.add env (Array.of_list result) [||]
       else env in
 
@@ -2339,7 +2330,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     (* Add parameters as abstract variables in [env]. *)
     let params =
       List.fold_left
-	(fun acc vi -> Vai.all_variables (var_term vi) @ acc)
+	(fun acc vi -> Vai.all_variables (term_var_no_loc vi) @ acc)
 	[] fi.jc_fun_info_parameters
     in
     
@@ -2360,7 +2351,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     (* Add parameters specs to the function precondition *)
     let cstrs =
       List.fold_left
- 	(fun acc vi -> Jc_typing.type_range_of_term vi.jc_var_info_type (var_term vi) :: acc) 
+ 	(fun acc vi -> Jc_typing.type_range_of_term vi.jc_var_info_type (term_var_no_loc vi) :: acc) 
 	[] fi.jc_fun_info_parameters
     in
     fs.jc_fun_requires <- make_and (fs.jc_fun_requires :: cstrs);
@@ -2413,7 +2404,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
       | v::r ->
 	  List.fold_left (fun acc v2 ->
 	    raw_asrt(JCAapp(
-	      full_separated,[var_term v;var_term v2]))
+	      full_separated,[term_var_no_loc v;term_var_no_loc v2]))
 	    :: acc
 	  ) acc (r @ read_params)
       | [] -> acc
@@ -2431,7 +2422,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
 	let returna = mkinvariant abs.jc_absint_manager returnabs in
 	let post = make_and 
-	  [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type (var_term vi_result)] in
+	  [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type (term_var_no_loc vi_result)] in
 	let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
 	let excl, excabsl =
 	  List.fold_left
@@ -2518,7 +2509,7 @@ end = struct
       assert (raw_term_compare t t2 = 0)
     with Not_found ->
       Hashtbl.add offset_min_variable_table s t;
-      let tmin = type_term (JCToffset(Offset_min,t,st)) integer_type in
+      let tmin = term_no_loc (JCToffset(Offset_min,t,st)) integer_type in
       Hashtbl.add term_table s tmin
     end;
     s
@@ -2527,10 +2518,11 @@ end = struct
     let s = "__jc_offset_max_" ^ (term_name t) in
     begin try 
       let t2 = Hashtbl.find offset_max_variable_table s in
+      if debug then printf "%a,%a@." Jc_output.term t Jc_output.term t2;
       assert (raw_term_compare t t2 = 0)
     with Not_found ->
       Hashtbl.add offset_max_variable_table s t;
-      let tmax = type_term (JCToffset(Offset_max,t,st)) integer_type in
+      let tmax = term_no_loc (JCToffset(Offset_max,t,st)) integer_type in
       Hashtbl.add term_table s tmax
     end;
     s
@@ -2624,7 +2616,7 @@ let rec term_of_atp tm =
 	printf "Unexpected ATP term %a@." (fun fmt tm -> Atp.printert tm) tm;
 	assert false
   in
-  type_term tnode integer_type
+  term_no_loc tnode integer_type
 
 let rec atp_of_asrt a = 
   if debug then printf "[atp_of_asrt] %a@." Jc_output.assertion a;
@@ -2918,7 +2910,7 @@ let initialize_target curposts target =
   let ts2 = collect_sub_terms target.jc_target_assertion in
   let ts = TermSet.union ts1 ts2 in
   VarSet.fold (fun vi a ->
-    let vit = var_term vi in
+    let vit = term_var_no_loc vi in
     let copyvi = copyvar vi in
     add_inflexion_var curposts copyvi;
     target.jc_target_regular_invariant <-
@@ -2926,7 +2918,7 @@ let initialize_target curposts target =
       target.jc_target_regular_invariant;
     target.jc_target_assertion <-
       replace_term_in_assertion vit (JCTvar copyvi) target.jc_target_assertion;
-    let t1 = var_term copyvi in
+    let t1 = term_var_no_loc copyvi in
     let bop = equality_operator_for_type vi.jc_var_info_type in
     let eq = raw_asrt (JCArelation(t1,bop,vit)) in
     let eqs = 
@@ -2994,7 +2986,7 @@ let rec wp_statement weakpre =
   let unique_var_for_term t ty =
     try Hashtbl.find var_of_term t
     with Not_found ->
-      let vi = var ty (term_name t) in
+      let vi = Jc_pervasives.var ty (term_name t) in
       Hashtbl.add var_of_term t vi;
       vi
   in
@@ -3013,7 +3005,7 @@ let rec wp_statement weakpre =
 		      (* TODO: take boolean variables into account. *)
 		      a
 		    else
-		      let t1 = var_term vi in
+		      let t1 = term_var_no_loc vi in
 		      let bop = 
 			equality_operator_for_type vi.jc_var_info_type in
 		      let eq = raw_asrt (JCArelation(t1,bop,t2)) in
@@ -3028,7 +3020,7 @@ let rec wp_statement weakpre =
       | JCSassign_var(vi,e) ->
 	  if debug then
 	    printf "[assignment]%s@." vi.jc_var_info_name;
-	  let vit = var_term vi in
+	  let vit = term_var_no_loc vi in
 	  let copyvi = copyvar vi in
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
@@ -3041,7 +3033,7 @@ let rec wp_statement weakpre =
 			(* TODO: take boolean variables into account. *)
 			Some a
 		      else
-			let t1 = var_term copyvi in
+			let t1 = term_var_no_loc copyvi in
 			let bop = equality_operator_for_type vi.jc_var_info_type in
 			let eq = raw_asrt (JCArelation(t1,bop,t2)) in
 (* 			Some (raw_asrt (JCAimplies(eq,a))) *)
@@ -3058,7 +3050,7 @@ let rec wp_statement weakpre =
       | JCSassign_heap(e1,fi,e2) ->
 	  begin match term_of_expr e1 with
 	    | None -> curposts (* TODO *)	| Some t1 ->
-		let dereft = type_term (JCTderef(t1,fi)) fi.jc_field_info_type in
+		let dereft = term_no_loc (JCTderef(t1,fi)) fi.jc_field_info_type in
 		let vi = unique_var_for_term dereft fi.jc_field_info_type in
 		let copyvi = copyvar vi in
 		let post = match curposts.jc_post_normal with
@@ -3070,7 +3062,7 @@ let rec wp_statement weakpre =
 		      match term_of_expr e2 with
 			| None -> Some a
 			| Some t2 ->
-			    let t1 = var_term copyvi in
+			    let t1 = term_var_no_loc copyvi in
 			    let bop = 
 			      equality_operator_for_type fi.jc_field_info_type in
 			    let eq = raw_asrt (JCArelation(t1,bop,t2)) in
@@ -3193,7 +3185,7 @@ let rec wp_statement weakpre =
 	  { curposts with jc_post_normal = post; }
       | JCScall(Some vi,f,args,s) -> 
 	  let curposts = wp_statement weakpre target s curposts in
-	  let vit = var_term vi in
+	  let vit = term_var_no_loc vi in
 	  let copyvi = copyvar vi in
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
@@ -3342,13 +3334,13 @@ let rec backprop_statement target s curpost =
 	begin match curpost with None -> None | Some a -> 
 	  match eo with None -> Some a | Some e ->
 	    match term_of_expr e with None -> Some a | Some t2 ->
-	      let t1 = var_term vi in
+	      let t1 = term_var_no_loc vi in
 	      Some(replace_term_in_assertion t1 t2.jc_term_node a)
 	end
     | JCSassign_var(vi,e) ->
 	begin match curpost with None -> None | Some a -> 
 	  match term_of_expr e with None -> Some a | Some t2 ->
-	    let t1 = var_term vi in
+	    let t1 = term_var_no_loc vi in
 	    Some(replace_term_in_assertion t1 t2.jc_term_node a)
 	end
     | JCSassign_heap _ | JCSassert _ | JCSpack _ | JCSunpack _ ->
