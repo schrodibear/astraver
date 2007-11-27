@@ -486,7 +486,9 @@ let rec is_numeric_term t =
 (* assertions *)
 
 let raw_asrt a = 
+(*
   eprintf "Warning: calling raw_asrt may lose tracability@.";
+*)
 {
   jc_assertion_node = a;
   jc_assertion_loc = Loc.dummy_position;

@@ -1144,7 +1144,9 @@ and switch_label = function
 let reg_assertion a =
   let a' = assertion a in
   let id = reg_loc a.java_assertion_loc in
+(*
     Format.eprintf "adding loc '%s' on assertion@." id;
+*)
     { a' with jc_assertion_label = id }
 
 let reg_assertion_option a =

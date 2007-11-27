@@ -1912,8 +1912,10 @@ let clause env vi_result c acc =
 	  jc_behavior_assigns = assigns;
 	  jc_behavior_ensures = assertion env_result ensures }
 	in
+(*
 	eprintf "loc for ensures: %a@."
 	  Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
+*)
 	{ acc with jc_fun_behavior = (id,b)::acc.jc_fun_behavior }
 	  
 
@@ -2244,6 +2246,6 @@ let rec decl d =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. byte"
 End: 
 *)

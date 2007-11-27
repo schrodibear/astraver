@@ -64,7 +64,7 @@ let main () =
 	      Hashtbl.iter
 		(fun tag (f,loc,s,b) -> 
 		   let (s,b) = Jc_norm.code_function (f, s, b) vil in
-		     Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
+		   Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
 		Jc_typing.functions_table;
 	      (*
 	Hashtbl.iter 
@@ -299,8 +299,8 @@ let main () =
 	  exit 1
 	    
 	    
-let _ =   Sys.catch_break true;
-  Printexc.catch main ()
+let _ = Sys.catch_break true;
+  (* Printexc.catch *) main ()
 
   
 (*

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.42 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.43 2007-11-27 10:42:32 marche Exp $ i*)
 
 open Printf
 open Options
@@ -327,7 +327,8 @@ let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
 	CannotDecide (t, None)
       else if Sys.command (sprintf "grep -q -w \"Invalid\" %s" out) = 0
       then
-	Invalid (t,None)
+	(* ergo 0.6 never really say 'invalid' *)
+	CannotDecide (t,None)
       else
 	ProverFailure(t,"command failed: " ^ cmd)
     in

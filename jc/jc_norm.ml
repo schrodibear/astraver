@@ -125,48 +125,55 @@ let make_tincr_heap loc t op e fi =
 
 (* statements *)
 
-let make_node ?(lab="") loc node = 
+let make_node lab loc node = 
+(*
+  Format.eprintf "Jc_norm.make_node: lab = '%s'@." lab;
+*)
   { jc_statement_loc = loc; 
     jc_statement_label = lab;
     jc_statement_node = node; }
 
 let make_assign_var loc vi e =
-  make_node loc (JCSassign_var (vi, e))
+  make_node "Lassign_var" loc (JCSassign_var (vi, e))
 
 let make_assign_heap loc e1 fi e2 =
-  make_node loc (JCSassign_heap (e1, fi, e2))
+  make_node "Lassign_heap" loc (JCSassign_heap (e1, fi, e2))
 
 let make_block loc sl =
   match sl with 
     | [s] -> s
     | s :: l -> 
-	make_node s.jc_statement_loc (JCSblock sl)
+	make_node s.jc_statement_label s.jc_statement_loc (JCSblock sl)
     | [] -> 
-	make_node loc (JCSblock sl)
+	make_node "Lempty_block" loc (JCSblock sl)
 	
 
-let make_block_node loc sl snode =
+let make_block_node lab loc sl snode =
   match sl with
     | [] -> snode
-    | _ -> JCSblock (sl @ [make_node loc snode])
+    | _ -> JCSblock (sl @ [make_node lab loc snode])
 
-let make_call label loc vio f el s =
-  make_node ~lab:label loc (JCScall (vio, f, el, s)) 
+let make_call lab loc vio f el s =
+(*
+  Format.eprintf "Jc_norm.make_call: lab for call = '%s'@."
+    lab;
+*)
+  make_node lab loc (JCScall (vio, f, el, s)) 
 
 let make_if loc e ts es =
-  make_node loc (JCSif (e,ts,es))
+  make_node "Lif" loc (JCSif (e,ts,es))
 
 let make_throw loc exc e =
-  make_node loc (JCSthrow (exc,e))
+  make_node "Lthrow" loc (JCSthrow (exc,e))
 
 let make_loop loc la s =
-  make_node loc (JCSloop (la,s))
+  make_node "Lloop" loc (JCSloop (la,s))
 
 let make_try loc s exl fs =
-  make_node loc (JCStry (s, exl, fs))
+  make_node "Ltry" loc (JCStry (s, exl, fs))
 
 let make_decl loc vi eo s =
-  make_node loc (JCSdecl (vi, eo, s))
+  make_node "Ldecl" loc (JCSdecl (vi, eo, s))
 
 let make_decls loc sl tl =
   List.fold_right 
@@ -188,13 +195,13 @@ let make_decls loc sl tl =
     tl (make_block loc sl)
 
 let make_return loc t e =
-  make_node loc (JCSreturn (t,e))
+  make_node "Lreturn" loc (JCSreturn (t,e))
 
 let make_pack loc si e as_t =
-  make_node loc (JCSpack (si, e, as_t))
+  make_node "Lpack" loc (JCSpack (si, e, as_t))
 
 let make_unpack loc si e from_t =
-  make_node loc (JCSunpack (si, e, from_t))
+  make_node "Lunpack" loc (JCSunpack (si, e, from_t))
 
 (* statements on the typed AST, not the normalized AST *)
 
@@ -321,6 +328,9 @@ let rec expr e =
     | JCTEcall (f, el) ->
 	let ltl, el = List.split (List.map expr el) in
 	let ll, tll = List.split ltl in
+(*
+	Format.eprintf "Jc_norm.expr: lab for call = '%s'@." lab;
+*)
 	let (l, tl), ecall = call lab loc f el ~binder:true ll in
 	let ecall = match ecall with
 	| Some b -> JCEvar b
@@ -440,7 +450,10 @@ let rec expr e =
 	in
 	  (l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
   in 
-    (sl, tl), 
+(*
+  Format.eprintf "Jc_norm.expr: lab for returned expr = '%s'@." lab;
+*)
+  (sl, tl), 
   { jc_expr_node = ne;
     jc_expr_type = e.jc_texpr_type;
     jc_expr_label = lab;
@@ -471,6 +484,7 @@ and if_statement lab loc f el st sf =
 
 and statement s =
   let loc = s.jc_tstatement_loc in
+  let lab = ref "" in
   let ns = 
     match s.jc_tstatement_node with
       | JCTSblock sl ->
@@ -584,10 +598,9 @@ and statement s =
 	  let goto_exc = exception_info None name_exc in
 	  Hashtbl.add exceptions_table name_exc goto_exc;
 	  JCSthrow (goto_exc, None)
-      | JCTSlabel (_,s) -> 
-	  assert false
-	  (* Claude: label disappears ???? -> assert false *)
-	  (* (statement s).jc_statement_node *)
+      | JCTSlabel (l,s) -> 
+	  lab := l;
+	  (statement s).jc_statement_node
       | JCTStry (s, cl, fs) ->
 	  let cl = 
 	    List.map (fun (ei, vi, s) -> (ei, vi, statement s)) cl in
@@ -688,7 +701,7 @@ and statement s =
 	  (make_decls loc (sl @ [tmp_assign;try_exit]) tl).jc_statement_node
 
   in { jc_statement_node = ns;
-       jc_statement_label = "";
+       jc_statement_label = !lab;
        jc_statement_loc = loc }
 
 and block_statement statements =
@@ -718,32 +731,39 @@ and block_statement statements =
 
 
 let statement s =
-  let s = statement s in
 
   let rec link_call s slnext =
     let loc = s.jc_statement_loc in
     match s.jc_statement_node with
-      | JCScall (Some vi, f, el, s) -> 
-	  begin match s.jc_statement_node with 
+      | JCScall (Some vi, f, el, s') -> 
+	  begin match s'.jc_statement_node with 
 	    | JCSblock [] ->
 		(* call may be created as the result of an
 		   intermediate computation. In any case, moving the
 		   statements that follow is correct. *)
+(*
+		Format.eprintf "Jc_interp.link_call(1): lab for call = '%s'@."
+		  s.jc_statement_label;
+*)
 		[make_call s.jc_statement_label loc (Some vi) 
 		   f el (make_block loc slnext)]
 	    | _ -> 
+(*
+		Format.eprintf "Jc_interp.link_call(2): lab for call = '%s'@."
+		  s.jc_statement_label;
+*)
 		(make_call s.jc_statement_label loc (Some vi) 
-		   f el (link_stat s)) :: slnext
+		   f el (link_stat s')) :: slnext
 	  end
-      | JCSdecl (vi, eo, s) ->
-	  begin match s.jc_statement_node with 
+      | JCSdecl (vi, eo, s') ->
+	  begin match s'.jc_statement_node with 
 	    | JCSblock [] ->
 		(* declaration may be created as the result of an
 		   intermediate computation. In any case, moving the
 		   statements that follow is correct. *)
 		[make_decl loc vi eo (make_block loc slnext)]
 	    | _ -> 
-		(make_decl loc vi eo (link_stat s)) :: slnext
+		(make_decl loc vi eo (link_stat s')) :: slnext
 	  end
       | _ -> (link_stat s) :: slnext
 
@@ -775,10 +795,10 @@ let statement s =
 	    JCStry (link_stat s, cl, link_stat fs)
 
     in { jc_statement_node = ns;
-	 jc_statement_label = "";
+	 jc_statement_label = s.jc_statement_label;
 	 jc_statement_loc = loc }
 
-  in link_stat s
+  in link_stat (statement s)
 
 
 let invariant_for_struct this st =
