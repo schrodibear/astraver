@@ -11,36 +11,32 @@ public class Purse {
 
     //@ invariant balance_non_negative: balance >= 0;
 
-    /*@ behavior created:
-      @   assigns \nothing;
-      @   ensures balance == 0;
+    /*@ assigns \nothing;
+      @ ensures balance == 0;
       @*/
     public Purse() {
 	balance = 0;
     }
 
     /*@ requires s >= 0;
-      @ behavior done:
-      @   assigns balance;
-      @   ensures balance == \old(balance)+s;
+      @ assigns balance;
+      @ ensures balance == \old(balance)+s;
       @*/
     public void credit(int s) {
 	balance += s;
     }
 
     /*@ requires s >= 0 && s <= balance;
-      @ behavior done:
-      @   assigns balance;
-      @   ensures balance == \old(balance) - s;
+      @ assigns balance;
+      @ ensures balance == \old(balance) - s;
       @*/
     public void withdraw(int s) {
 	balance -= s;
     }
     
     /*@ requires s >= 0;
-      @ behavior done:
-      @   assigns balance;
-      @   ensures s <= \old(balance) && balance == \old(balance) - s;
+      @ assigns balance;
+      @ ensures s <= \old(balance) && balance == \old(balance) - s;
       @ behavior amount_too_large:
       @   assigns \nothing;
       @   signals (NoCreditException) s > \old(balance) ;
@@ -55,9 +51,8 @@ public class Purse {
     }
 
     /*@ requires p1 != null && p2 != null && p1 != p2;
-      @ behavior ok:
-      @   assigns p1.balance,p2.balance;
-      @   ensures \result == 0;
+      @ assigns p1.balance,p2.balance;
+      @ ensures \result == 0;
       @*/
     public static int test(Purse p1, Purse p2) {
 	p1.balance = 0;
@@ -66,9 +61,8 @@ public class Purse {
     }
 
 
-    /*@ behavior ok:
-      @   assigns \nothing;
-      @   ensures \result == 150;
+    /*@ assigns \nothing;
+      @ ensures \result == 150;
       @*/
     public static int test2() {
 	Purse p1 = new Purse();
@@ -81,9 +75,8 @@ public class Purse {
     }
 
     /*@ requires p1 != null && p2 != null && p1 != p2;
-      @ behavior ok:
-      @   assigns p2.balance;
-      @   ensures \result == \old(p1.balance);
+      @ assigns p2.balance;
+      @ ensures \result == \old(p1.balance);
       @*/
     public static int test3(Purse p1,Purse p2) {
 	p2.credit(100);
@@ -91,9 +84,8 @@ public class Purse {
     }
 
     /*@ requires p != null;
-      @ behavior ok:
-      @   assigns p.balance ;
-      @   ensures \result <==> (\old(p.balance) >= 1000);
+      @ assigns p.balance ;
+      @ ensures \result <==> (\old(p.balance) >= 1000);
       @*/
     public static boolean test4(Purse p) {
 	try {

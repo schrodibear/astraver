@@ -1,17 +1,24 @@
 class Purse {
     
     int balance;
-    //@ public invariant balance >= 0; 
+    //@ invariant balance_non_negative: balance >= 0; 
 
-    /*@ public normal_behavior
-      @   requires s >= 0;
+    
+    /*@ ensures balance == 0;
+      @*/
+    Purse() {
+        balance = 0;
+    }
+
+    /*@ requires s >= 0;
+      @ ensures balance == \old(balance)+s;
       @*/
     public void credit(int s) {
         balance += s;
     }
 
-    /*@ public normal_behavior
-      @   requires s >= 0 && s <= balance;
+    /*@ requires s >= 0 && s <= balance;
+      @ ensures balance == \old(balance)-s;
       @*/
     public void withdraw(int s) {
         balance -= s;

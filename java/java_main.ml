@@ -285,9 +285,11 @@ let main () =
 	(* splitted because confuses Emacs otherwise *)
 	output_string cout "Variables:\n";
 	output_string cout "mode: java\n";
-	output_string cout "compile-command: \"jessie -why-opt -split-user-conj ";
+	output_string cout "compile-command: \"jessie -why-opt -split-user-conj -locs ";
 	output_string cout f;
-	output_string cout ".jc ; make -f ";
+	output_string cout ".jloc ";
+	output_string cout f;
+	output_string cout ".jc && make -f ";
 	output_string cout f;
 	output_string cout ".makefile gui\"\n";
 	output_string cout "End:\n";

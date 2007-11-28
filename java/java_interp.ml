@@ -1035,6 +1035,20 @@ let make_block l =
     | [s] -> s
     | _ -> dummy_loc_statement (JCTSblock l)
 
+let loop_annot inv dec =
+  let inv' = assertion inv in
+  { jc_loop_tag = get_loop_counter ();
+    jc_loop_invariant = 
+      { inv' with 
+	  jc_assertion_label = reg_loc inv.java_assertion_loc };
+    jc_loop_variant = 
+      Option_misc.map 
+	(fun t -> 
+	   let t' = term t in
+	   { t' with jc_term_label = reg_loc t.java_term_loc }) dec 
+  }
+
+
 let rec statement s =
   let s' =
     match s.java_statement_node with
@@ -1052,19 +1066,7 @@ let rec statement s =
       | JSif (e, s1, s2) ->
 	  JCTSif (expr e, statement s1, statement s2)
       | JSwhile(e,inv,dec,s) ->
-	  let inv' = assertion inv in
-	  let la =
-	    { jc_loop_tag = get_loop_counter ();
-	      jc_loop_invariant = 
-		{ inv' with 
-		    jc_assertion_label = reg_loc inv.java_assertion_loc };
-	      jc_loop_variant = 
-		Option_misc.map 
-		  (fun t -> 
-		     let t' = term t in
-		     { t' with jc_term_label = reg_loc t.java_term_loc }) dec 
-	    }
-	  in
+	  let la = loop_annot inv dec in
 	  JCTSwhile(expr e, la, statement s)
       | JSfor (el1, e, inv, dec, el2, body) ->
 	  let exprl = 
@@ -1075,11 +1077,7 @@ let rec statement s =
 		   jc_tstatement_node = JCTSexpr e })
 	      el1
 	  in
-	  let la =
-	    { jc_loop_tag = get_loop_counter ();
-	      jc_loop_invariant = assertion inv;
-	      jc_loop_variant = Option_misc.map term dec }
-	  in
+	  let la = loop_annot inv dec in
 	  let res =
 	    { jc_tstatement_loc = s.java_statement_loc ;
 	      jc_tstatement_node = 
@@ -1091,11 +1089,7 @@ let rec statement s =
 	       (create_var s.java_statement_loc vi, Option_misc.map initialiser init))
 	    decls
 	  in
-	  let la =
-	    { jc_loop_tag = get_loop_counter ();
-	      jc_loop_invariant = assertion inv;
-	      jc_loop_variant = Option_misc.map term dec }
-	  in
+	  let la = loop_annot inv dec in
 	  let res =
 	    List.fold_right
 	      (fun (vi,init) acc -> 
