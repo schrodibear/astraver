@@ -26,8 +26,6 @@ axiom fst_pair : forall x:'a. forall y:'b. fst(pair(x,y)) = x
 axiom snd_pair : forall x:'a. forall y:'b. snd(pair(x,y)) = y
 axiom fst_snd : forall x:('a, 'b) pair. x = pair(fst(x), snd(x))
 
-goal goal1 : fst(pair(1,2)) = 1
-
 predicate divides(d : int, n : int) = exists k:int. n = k * d
 axiom divides_1_n : forall n:int. divides(1, n)
 
@@ -192,6 +190,19 @@ axiom alloc_valid_pointer_inv: (* proved by Ergo *)
   forall m':mem. forall ty:memtype. forall b':block. forall ofs:int. 
   alloc(m, lo, hi) = Some(pair (b, m')) ->
   valid_pointer(ty, m, b', ofs) -> valid_pointer(ty, m', b', ofs)
+
+axiom store_valid_pointer_inv: (* proved by Ergo *)
+  forall ty:memtype. forall m:mem. forall b:block. forall ofs:int. 
+  forall v:val. forall m':mem. forall ty':memtype. forall b':block.
+  forall ofs':int. 
+  store(ty, m, b, ofs, v) = Some(m') ->
+  (valid_pointer(ty', m', b', ofs') <-> valid_pointer(ty', m, b', ofs'))
+
+axiom free_valid_pointer_inv: (* proved by Ergo *)
+  forall m:mem. forall b:block. forall m':mem. forall ty:memtype. 
+  forall b':block. forall ofs:int. 
+  free(m, b) = Some(m') -> b' <> b ->
+  (valid_pointer(ty, m', b', ofs) <-> valid_pointer(ty, m, b', ofs))
 
 (* C types *)
 
