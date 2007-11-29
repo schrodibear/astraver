@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.74 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.75 2007-11-29 16:31:05 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -105,6 +105,7 @@ let is_simplify_ident s =
     false
 
 let idents fmt s =
+  if s = "store" then fprintf fmt "|why__store|" else
   if is_simplify_ident s then fprintf fmt "%s" s else fprintf fmt "|%s|" s
 
 let ident fmt id = idents fmt (Ident.string id)

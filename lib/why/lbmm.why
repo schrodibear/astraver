@@ -207,10 +207,15 @@ axiom free_valid_pointer_inv: (* proved by Ergo *)
 (* C types *)
 
 logic int32 : memtype
+logic char : memtype
 axiom sizeof_int32: sizeof(int32) = 4
 axiom alignof_int32 : alignof(int32) = 1
+axiom sizeof_char: sizeof(char) = 1
+axiom alignof_char : alignof(char) = 1
 
 logic val_of_int : int -> val
+logic int_of_val : val -> int
+axiom int_val_int : forall n:int. int_of_val(val_of_int(n)) = n
 
 (* ADDED *)
 axiom convert_int32 : forall v:val. convert(int32, v) = v
@@ -266,7 +271,51 @@ let test1 (m:mem) =
            load(int32,m,y,0) = Some(val_of_int(0)) };
   void
   { true | Undef => false }
- 
+
+
+(*
+   int x[4];
+   int y[2];
+   x[0] = 42;
+   y[0] = 1;
+   //@ assert x[0] - y[0] == 41;
+*)
+
+let test2 
+  (memx:mem) (x:block) 
+  (memy:mem) (y:block) = 
+  { (forall i:int. 0 <= i <= 3 -> valid_pointer(int32, memx, x, i)) and
+    (forall i:int. 0 <= i <= 1 -> valid_pointer(int32, memy, y, i)) }
+  let memx = store int32 memx x 0 (val_of_int 42) in
+  let memx = out_some_or_fail memx in
+
+  let memy = store int32 memy y 0 (val_of_int 1) in
+  let memy = out_some_or_fail memy in
+  
+  assert { forall vx,vy:val.
+           load(int32, memx, x, 0) = Some(vx) ->
+	   load(int32, memy, y, 0) = Some(vy) ->
+	   int_of_val(vx) - int_of_val(vy) = 41 };
+
+  void
+
+(*
+  //@ requires \valid(x)
+  void change_endianness(int * x) {
+    char * p = (char* ) x;
+    int t = *(p+3) + *(p+2)<<8 + *(p+1)<<16 + *p<<24;
+    *x = t;
+  }
+*)
+
+let test3 (m : mem ref) (bx:block) (ofsx:int) =
+  { valid_pointer(int32, m, bx, ofsx) }
+  let bp = bx in
+  let ofsp = ofsx in
+  let t = load char !m bp (ofsp+3) (* + ... *) in
+  let t = out_some t in
+  let m' = store int32 !m bx ofsx t in
+  m := out_some m'
 
 (* Problèmes avec Ergo *)
 
@@ -277,6 +326,7 @@ axiom alloc_valid_pointer_inv_pair:
   forall ty:memtype. forall b':block. forall ofs:int. 
   alloc(m, lo, hi) = Some(bm') ->
   valid_pointer(ty, m, b', ofs) -> valid_pointer(ty, snd(bm'), b', ofs)
+
 
 let ergo1 (m:mem) =
   let xm = alloc m 0 8 in
