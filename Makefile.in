@@ -3,11 +3,11 @@
 #  The Why/Caduceus/Krakatoa tool suite for program certification        #
 #  Copyright (C) 2002-2007                                               #
 #    Romain BARDOU                                                       #
-#    Jean-FranÃ§ois COUCHOT                                               #
+#    Jean-François COUCHOT                                               #
 #    Mehdi DOGGUY                                                        #
-#    Jean-Christophe FILLIÃTRE                                           #
+#    Jean-Christophe FILLIÂTRE                                           #
 #    Thierry HUBERT                                                      #
-#    Claude MARCHÃ                                                       #
+#    Claude MARCHÃÂ                                                       #
 #    Yannick MOY                                                         #
 #    Christine PAULIN                                                    #
 #    Xavier URBAIN                                                       #
@@ -70,7 +70,7 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib
+INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib -I ml
 BFLAGS   = -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
@@ -116,6 +116,8 @@ GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
 	    jc/jc_ai.ml \
 	    java/java_version.ml \
 	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
+	    ml/parsing/parser.mli ml/parsing/parser.ml ml/parsing/lexer.ml \
+	    ml/parsing/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    c/cint.ml \
@@ -301,6 +303,64 @@ bin/krakatoa.opt: $(KCMX)
 	strip    $@
 
 bin/krakatoa.byte: $(KCMO) 
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
+	 	 unix.cma nums.cma graph.cma $^
+
+
+# ml
+# CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
+MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
+	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
+	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo \
+	ml/ocaml.cmo
+MLCMX = $(MLCMO:.cmo=.cmx)
+
+# The following files must be compiled with different includes and with the
+# -for-pack option
+OCAMLCMO = ml/utils/misc.cmo ml/utils/terminfo.cmo ml/utils/warnings.cmo \
+	ml/parsing/linenum.cmo \
+	ml/parsing/location.cmo ml/parsing/syntaxerr.cmo \
+	ml/parsing/longident.cmo ml/parsing/parser.cmo ml/parsing/lexer.cmo
+OCAMLCMI = ml/utils/misc.cmi ml/utils/terminfo.cmi ml/utils/warnings.cmi \
+	ml/parsing/linenum.cmi \
+	ml/parsing/asttypes.cmi ml/parsing/location.cmi \
+	ml/parsing/parsetree.cmi ml/parsing/parser.cmi \
+	ml/parsing/lexer.cmi ml/parsing/longident.cmi \
+	ml/parsing/syntaxerr.cmi
+OCAMLCMX = $(OCAMLCMO:.cmo=.cmx)
+
+MLINCLUDES = -I ml/utils -I ml/parsing -I ml/typing
+
+ml/parsing/parsetree.cmi: ml/parsing/asttypes.cmi
+ml/parsing/parser.cmi: ml/parsing/parsetree.cmi
+ml/parsing/lexer.cmi: ml/parsing/parser.cmi
+
+$(OCAMLCMI): $(@:.cmi=.mli)
+	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ocaml -o $@ $(@:.cmi=.mli)
+
+$(OCAMLCMX): $(@:.cmx=.ml)
+	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
+		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ocaml -o $@ $(@:.cmx=.ml)
+
+$(OCAMLCMO): $(@:.cmo=.ml)
+	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
+		$(OCAMLC) -c $(MLINCLUDES) -o $@ $(@:.cmo=.ml)
+
+ml/ocaml.cmx: $(OCAMLCMX)
+	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
+		$(OCAMLOPT) $(MLINCLUDES) -pack -o $@ $^
+
+ml/ocaml.cmo: $(OCAMLCMO)
+	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
+		$(OCAMLC) $(MLINCLUDES) -pack -o $@ $^
+
+bin/mltojc.opt: $(MLCMX) 
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
+		unix.cmxa nums.cmxa graph.cmxa $^
+	strip    $@
+
+bin/mltojc.byte: $(MLCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
 	 	 unix.cma nums.cma graph.cma $^
 
@@ -764,7 +824,7 @@ WWW = /users/demons/filliatr/WWW/why
 WWWKRAKATOA = /users/demons/marche/WWW/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
-       mix/*.ml* \
+       mix/*.ml* ml/*.ml* ml/parsing/*.ml* ml/typing/*.ml* ml/utils/*.ml* \
        Version Makefile.in configure.in configure .depend .depend.coq \
        config/check_ocamlgraph.ml \
        README INSTALL COPYING GPL CHANGES \
@@ -885,6 +945,10 @@ clean::
 	rm -f tools/*.cm[iox] tools/*.o tools/*~
 	rm -f jc/*.cm[iox] jc/*.o jc/*~
 	rm -f java/*.cm[iox] java/*.o java/*~
+	rm -f ml/*.cm[iox] ml/*.o ml/*~
+	rm -f ml/parsing/*.cm[iox] ml/parsing/*.o ml/parsing/*~
+	rm -f ml/utils/*.cm[iox] ml/utils/*.o ml/utils/*~
+	rm -f ml/typing/*.cm[iox] ml/typing/*.o ml/typing/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f bin/caduceus.opt bin/caduceus.byte
 	rm -f bin/jessie.opt bin/jessie.byte
@@ -913,7 +977,8 @@ coq-clean::
 
 .depend depend:: $(GENERATED)
 	rm -f .depend
-	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml > .depend
+	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend
+	$(OCAMLDEP) -slash ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend
 
 .depend.coq: #lib/coq*/*.v
 	if test @COQ@ = yes; then \
