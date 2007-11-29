@@ -13,8 +13,10 @@ axiom None_neq_Some : forall v:'a. None <> Some(v)
 axiom Some_inj : forall x, y:'a. Some(x) = Some(y) -> x=y
 
 exception Undef
-parameter out_some : 
+parameter out_some_or_fail : 
   x:'a option -> {} 'a raises Undef { x = Some(result) | Undef => x = None }
+parameter out_some : 
+  x:'a option -> { x <> None } 'a { x = Some(result) }
 
 type ('a, 'b) pair
 logic pair : 'a, 'b -> ('a, 'b) pair
@@ -27,6 +29,7 @@ axiom fst_snd : forall x:('a, 'b) pair. x = pair(fst(x), snd(x))
 goal goal1 : fst(pair(1,2)) = 1
 
 predicate divides(d : int, n : int) = exists k:int. n = k * d
+axiom divides_1_n : forall n:int. divides(1, n)
 
 (* 2. Values and types *)
 
@@ -126,10 +129,75 @@ axiom valid_block_free:
   forall m:mem. forall b:block.
   valid_block(m, b) -> exists m':mem. free(m, b) = Some(m')
 
+logic bounds: mem, block -> (int, int) pair
+
+axiom alloc_result_bounds:
+  forall m:mem. forall lo, hi:int. forall b:block. forall m':mem.
+  alloc(m, lo, hi) = Some(pair (b, m')) -> bounds(m', b) = pair (lo, hi)
+axiom alloc_bounds_inv:
+  forall m:mem. forall lo, hi:int. forall b:block. forall m':mem.
+  forall b':block.
+  alloc(m, lo, hi) = Some(pair (b, m')) -> b' <> b -> 
+  bounds(m', b') = bounds(m, b')
+axiom store_bounds_inv:
+  forall ty:memtype. forall m:mem. forall b:block.
+  forall ofs:int. forall v:val. forall m':mem. forall b':block.
+  store(ty, m, b, ofs, v) = Some(m') -> bounds(m', b') = bounds(m, b')
+axiom free_bounds_inv:
+  forall m:mem. forall b:block. forall m':mem. forall b':block.
+  free(m, b) = Some(m') -> b' <> b -> bounds(m', b') = bounds(m, b')
+
+predicate valid_pointer (ty: memtype, m: mem, b: block, ofs: int) =
+  valid_block(m, b)
+  and divides(alignof(ty), ofs)
+  and fst (bounds(m, b)) <= ofs
+  and ofs + sizeof(ty) <= snd (bounds(m, b))
+
+axiom valid_pointer_store:
+  forall ty:memtype. forall m: mem. forall b: block. forall ofs: int.
+  forall v:val.
+  valid_pointer(ty, m, b, ofs) ->
+  exists m':mem. store(ty, m, b, ofs, v) = Some(m')
+
+(* Derived properties *)
+
+axiom alloc_valid_block_inv: (* proved by Ergo *)
+  forall m:mem. forall lo, hi:int. forall b:block. 
+  forall m':mem. forall b':block.
+  alloc(m, lo, hi) = Some(pair (b, m')) -> 
+  valid_block(m, b') -> valid_block(m', b')
+
+axiom alloc_not_valid_block_2: (* proved by Ergo *)
+  forall m:mem. forall lo, hi:int. forall b:block. 
+  forall m':mem. forall b':block.
+  alloc(m, lo, hi) = Some(pair (b, m')) -> valid_block(m, b') -> b' <> b
+
+axiom load_alloc_other_2: (* proved by Ergo *)
+  forall m:mem. forall lo, hi:int. forall b:block. 
+  forall m':mem. forall b':block.
+  forall ty:memtype. forall ofs:int. forall v:val.
+  alloc(m, lo, hi) = Some(pair (b, m')) ->
+  load(ty, m, b', ofs) = Some(v) ->
+  load(ty, m', b', ofs) = Some(v)
+
+axiom alloc_result_valid_pointer: (* proved by Ergo *)
+  forall m:mem. forall lo, hi:int. forall b:block. 
+  forall m':mem. forall ty:memtype. forall ofs:int. 
+  alloc(m, lo, hi) = Some(pair (b, m')) ->
+  divides(alignof(ty), ofs) -> lo <= ofs -> ofs + sizeof(ty) <= hi ->
+  valid_pointer(ty, m', b, ofs)
+
+axiom alloc_valid_pointer_inv: (* proved by Ergo *)
+  forall m:mem. forall lo, hi:int. forall b:block. 
+  forall m':mem. forall ty:memtype. forall b':block. forall ofs:int. 
+  alloc(m, lo, hi) = Some(pair (b, m')) ->
+  valid_pointer(ty, m, b', ofs) -> valid_pointer(ty, m', b', ofs)
+
 (* C types *)
 
 logic int32 : memtype
 axiom sizeof_int32: sizeof(int32) = 4
+axiom alignof_int32 : alignof(int32) = 1
 
 logic val_of_int : int -> val
 
@@ -143,38 +211,71 @@ axiom compat_refl : forall ty:memtype. compat(ty,ty)
 
 let test1 (m:mem) =
   let xm = alloc m 0 8 in
-  let xm = out_some xm in
+  let xm = out_some_or_fail xm in
   let x = fst xm in
   let m = snd xm in
-  assert { valid_block(m, x) };
+  assert { valid_pointer(int32, m, x, 0) };
   let ym = alloc m 0 4 in
-  let ym = out_some ym in
+  let ym = out_some_or_fail ym in
   let y = fst ym in
   let m = snd ym in
-  assert { x <> y and valid_block(m, y) };
+  assert { x <> y and 
+	   valid_pointer(int32, m, x, 0) and
+	   valid_pointer(int32, m, y, 0) };
   let m = store int32 m x 0 (val_of_int 0) in
-  let m = out_some m in
+  let m = out_some_or_fail m in
   assert { load(int32,m,x,0) = Some(val_of_int(0)) };
   let m = store int32 m x 4 (val_of_int 1) in
-  let m = out_some m in
+  let m = out_some_or_fail m in
   assert { load(int32,m,x,0) = Some(val_of_int(0)) and
            load(int32,m,x,4) = Some(val_of_int(1)) };
   let t = load int32 m x 0 in
-  let t = out_some t in
+  let t = out_some_or_fail t in
   assert { t = val_of_int(0) };
   let m = store int32 m y 0 t in
-  let m = out_some m in
+  let m = out_some_or_fail m in
   assert { load(int32,m,x,0) = Some(val_of_int(0)) and
            load(int32,m,x,4) = Some(val_of_int(1)) and
            load(int32,m,y,0) = Some(val_of_int(0)) };
   let t = load int32 m x 4 in
-  let t = out_some t in
+  let t = out_some_or_fail t in
   assert { t = val_of_int(1) };
   let m = store int32 m x 0 t in
-  let m = out_some m in
+  let m = out_some_or_fail m in
   assert { load(int32,m,x,0) = Some(val_of_int(1)) and
            load(int32,m,x,4) = Some(val_of_int(1)) and
            load(int32,m,y,0) = Some(val_of_int(0)) };
+  let t = load int32 m y 0 in
+  let t = out_some_or_fail t in
+  assert { t = val_of_int(0) };
+  let m = store int32 m x 4 t in
+  let m = out_some_or_fail m in
+  assert { load(int32,m,x,0) = Some(val_of_int(1)) and
+           load(int32,m,x,4) = Some(val_of_int(0)) and
+           load(int32,m,y,0) = Some(val_of_int(0)) };
   void
-  { true | Undef => true }
+  { true | Undef => false }
  
+
+(* Problèmes avec Ergo *)
+
+(* pour Sylvain : c'est une copie de l'axiome alloc_valid_pointer_inv, 
+   pour contourner le fait que ergo utilise mal l'axiome fst_snd *)
+axiom alloc_valid_pointer_inv_pair:
+  forall m:mem. forall lo, hi:int. forall bm':(block, mem) pair.
+  forall ty:memtype. forall b':block. forall ofs:int. 
+  alloc(m, lo, hi) = Some(bm') ->
+  valid_pointer(ty, m, b', ofs) -> valid_pointer(ty, snd(bm'), b', ofs)
+
+let ergo1 (m:mem) =
+  let xm = alloc m 0 8 in
+  let xm = out_some_or_fail xm in
+  let x = fst xm in
+  let m = snd xm in
+  assert { valid_pointer(int32, m, x, 0) };
+  let ym = alloc m 0 4 in
+  let ym = out_some_or_fail ym in
+  let y = fst ym in
+  let m = snd ym in
+  assert { valid_pointer(int32, m, x, 0) };
+  void
