@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.41 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.42 2007-11-30 09:11:25 moy Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -80,8 +80,6 @@ let prefix id =
     Ident.string id
   else (eprintf "%a@." Ident.print id; assert false)
 
-let print_bvar fmt id = fprintf fmt "?%a" Ident.print id
-
 let is_smtlib_keyword =
   let ht = Hashtbl.create 50  in
   List.iter (fun kw -> Hashtbl.add ht kw ()) 
@@ -94,8 +92,10 @@ let is_smtlib_keyword =
      "Array";"U";"select";"store"];
   Hashtbl.mem ht
 
+let leading_underscore s = s <> "" && s.[0] = '_'
+
 let removeChar =
-  let lc = ('\'','p')::[] in 
+  let lc = ('\'','p')::('_','u')::[] in 
   function s ->
     for i=0 to (String.length s)-1 do
       let c = (String.get s i) in 
@@ -107,12 +107,15 @@ let removeChar =
     s
 	
 let idents fmt s = 
-  if is_smtlib_keyword s then
+  (* Yices does not expect names to begin with an underscore. *)
+  if is_smtlib_keyword s || leading_underscore s then
     fprintf fmt "smtlib__%s" s
   else 
     fprintf fmt "%s" s
 
 let ident fmt id = idents fmt (Ident.string id)
+
+let print_bvar fmt id = fprintf fmt "?%a" ident id
 
 let rec print_term fmt = function
   | Tvar id -> 
