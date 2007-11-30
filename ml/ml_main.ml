@@ -39,7 +39,7 @@ let file env (file_kind, file_name) =
 	in
   
         (* Normalize to our simplified AST *)
-	ignore typed_tree;
+	let _ = Ml_norm.structure new_env typed_tree in
 
         (* Interpret to a Jessie typed AST *)
         (* Open the output file *)

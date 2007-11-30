@@ -25,6 +25,9 @@ let log x =
   Printf.ksprintf
     (fun s -> Printf.printf "%s\n%!" s) x
 
+let not_implemented loc =
+  Printf.ksprintf (locate_error loc "Not implemented (%s)")
+
 
 (*
 Local Variables: 

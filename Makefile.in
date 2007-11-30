@@ -311,7 +311,7 @@ bin/krakatoa.byte: $(KCMO)
 # jessica
 
 JESSICACMO = ml/ml_misc.cmo ml/ml_options.cmo ml/ml_pervasives.ml \
-	ml/ml_interp.cmo ml/ml_main.cmo
+	ml/ml_norm.cmo ml/ml_interp.cmo ml/ml_main.cmo
 JESSICACMI = ml/ml_options.cmi ml/ml_ast.cmi
 
 JESSICACMX = $(JESSICACMO:.cmo=.cmx)
@@ -341,7 +341,7 @@ OCAMLCMO = ml/utils/config.cmo ml/utils/clflags.cmo \
 	ml/typing/includemod.cmo ml/typing/typemod.cmo
 OCAMLCMINOIMPL = ml/parsing/asttypes.cmi ml/parsing/parsetree.cmi \
 	ml/typing/outcometree.cmi
-OCAMLCMI = ml/utils/config.cmi ml/utils/clflags.cmi \
+OCAMLCMI = $(OCAMLCMINOIMPL) ml/utils/config.cmi ml/utils/clflags.cmi \
 	ml/utils/misc.cmi ml/utils/terminfo.cmi ml/utils/warnings.cmi \
 	ml/utils/consistbl.cmi ml/utils/tbl.cmi \
 	ml/parsing/linenum.cmi ml/parsing/location.cmi ml/parsing/parser.cmi \
@@ -354,7 +354,7 @@ OCAMLCMI = ml/utils/config.cmi ml/utils/clflags.cmi \
 	ml/typing/printtyp.cmi ml/typing/stypes.cmi ml/typing/subst.cmi \
 	ml/typing/typeclass.cmi ml/typing/typecore.cmi ml/typing/typedecl.cmi \
 	ml/typing/typedtree.cmi ml/typing/typemod.cmi ml/typing/types.cmi \
-	ml/typing/typetexp.cmi ml/typing/unused_var.cmi $(OCAMLCMINOIMPL)
+	ml/typing/typetexp.cmi ml/typing/unused_var.cmi
 OCAMLCMX = $(OCAMLCMO:.cmo=.cmx)
 
 MLINCLUDES = -I ml/utils -I ml/parsing -I ml/typing
@@ -380,11 +380,11 @@ $(OCAMLCMO): $(@:.cmo=.ml)
 		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml \
 			 -o $@ $(@:.cmo=.ml)
 
-ml/ml_ocaml.cmx: $(OCAMLCMX) $(OCAMLCMINOIMPL)
+ml/ml_ocaml.cmx: $(OCAMLCMINOIMPL) $(OCAMLCMX)
 	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
 		$(OCAMLOPT) -c $(MLINCLUDES) -pack -o $@ $^
 
-ml/ml_ocaml.cmo: $(OCAMLCMO) $(OCAMLCMINOIMPL)
+ml/ml_ocaml.cmo: $(OCAMLCMINOIMPL) $(OCAMLCMO)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
 		$(OCAMLC) -c $(MLINCLUDES) -pack -o $@ $^
 
