@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.75 2007-11-27 17:02:16 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.76 2007-11-30 09:12:39 moy Exp $ *)
 
 open Pp
 open Format
@@ -2712,7 +2712,8 @@ let rec asrt_of_atp fm =
 	JCAimplies(asrt_of_atp fm1,asrt_of_atp fm2)
     | Atp.Iff(fm1,fm2) ->
 	JCAiff(asrt_of_atp fm1,asrt_of_atp fm2)
-    | Atp.Forall _ | Atp.Exists _ -> assert false
+    | Atp.Forall _ | Atp.Exists _ -> 
+	JCAtrue
   in
   raw_asrt anode
 

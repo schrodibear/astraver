@@ -1272,8 +1272,7 @@ let field_bounds fi =
   match fi.jc_field_info_type with 
     | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
 
-let field_alloc_arg fi =
-  let st = field_sinfo fi in
+let struct_alloc_arg st =
   alloc_table_name st, alloc_table_type st
 
 let field_memory_arg fi =
@@ -1285,6 +1284,11 @@ let tr_struct st acc =
   let ptr_type = pointer_type st in
   let direct_fields = direct_embedded_struct_fields st in
   let all_fields = embedded_struct_fields st in
+  let all_structs = 
+    List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+      StructSet.empty all_fields
+  in
+  let all_structs = StructSet.fold (fun st acc -> st :: acc) all_structs [] in
   let alloc = alloc_table_name st in
   let tagtab = tag_table_name st in
     (* Declarations of field memories. *)
@@ -1317,6 +1321,11 @@ let tr_struct st acc =
       let a,b = field_bounds fi in
       let alloc = alloc_table_name st in
       let fields = embedded_struct_fields st in
+      let structs = 
+	List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+	  StructSet.empty fields
+      in
+      let structs = StructSet.fold (fun st acc -> st :: acc) structs [] in
       (* [valid_st(select(fi,x),a,b,alloc...)] *)
       LPred(
 	valid_pred_name st,
@@ -1324,7 +1333,7 @@ let tr_struct st acc =
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar None ** alloc_table_name ** field_sinfo) fields
+	:: List.map (lvar None ** alloc_table_name) structs
 	@ List.map (lvar None ** field_memory_name) fields)
     ) direct_fields
   in
@@ -1333,7 +1342,7 @@ let tr_struct st acc =
   let params = 
     ("x",ptr_type)
     :: (alloc,alloc_type)
-    :: List.map field_alloc_arg all_fields
+    :: List.map struct_alloc_arg all_structs
     @ List.map field_memory_arg all_fields
   in
   let acc = 
@@ -1355,6 +1364,11 @@ let tr_struct st acc =
       let a,b = field_bounds fi in
       let alloc = alloc_table_name st in
       let fields = embedded_struct_fields st in
+      let structs = 
+	List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+	  StructSet.empty fields
+      in
+      let structs = StructSet.fold (fun st acc -> st :: acc) structs [] in
       (* [valid_st(select(fi,x+i),a,b,alloc...)] *)
       LPred(
 	valid_pred_name st,
@@ -1363,7 +1377,7 @@ let tr_struct st acc =
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar None ** alloc_table_name ** field_sinfo) fields
+	:: List.map (lvar None ** alloc_table_name) structs
 	@ List.map (lvar None ** field_memory_name) fields)
     ) direct_fields
   in
@@ -1386,7 +1400,7 @@ let tr_struct st acc =
     :: ("a",why_integer_type)
     :: ("b",why_integer_type)
     :: (alloc,alloc_type)
-    :: List.map field_alloc_arg all_fields
+    :: List.map struct_alloc_arg all_structs
     @ List.map field_memory_arg all_fields
   in
   let acc = 
@@ -1409,13 +1423,14 @@ let tr_struct st acc =
 	  valid_one_pred_name st,
 	  LVar "result"
 	  :: LVar alloc
-	  :: List.map (lvar None ** alloc_table_name ** field_sinfo) 
-	    all_fields
+	  :: List.map (lvar None ** alloc_table_name) all_structs
 	  @ List.map (lvar None ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
 	(* [alloc_extends(old(alloc),alloc)] *)
-	LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc])
+	LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
+	(* [alloc_extern(old(alloc),result)] *)
+	LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
       ],
       (* no exceptional post *)
       [])
@@ -1443,13 +1458,14 @@ let tr_struct st acc =
 	  :: LConst(Prim_int "0")
 	  :: LApp("sub_int",[LVar "n";LConst(Prim_int "1")])
 	  :: LVar alloc
-	  :: List.map (lvar None ** alloc_table_name ** field_sinfo) 
-	    all_fields
+	  :: List.map (lvar None ** alloc_table_name) all_structs
 	  @ List.map (lvar None ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
 	(* [alloc_extends(old(alloc),alloc)] *)
-	LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc])
+	LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
+	(* [alloc_extern(old(alloc),result)] *)
+	LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
       ],
       (* no exceptional post *)
       [])
@@ -1709,15 +1725,33 @@ let tr_fun f loc spec body acc =
 		     when Num.eq_num a (Num.num_of_int 0)
 		       && Num.eq_num b (Num.num_of_int 0) ->
 		     let fields = embedded_struct_fields st in
+		     let structs = 
+		       List.fold_left 
+			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			 StructSet.empty fields
+		     in
+		     let structs = 
+		       StructSet.fold 
+			 (fun st acc -> st :: acc) structs [] 
+		     in
 		     LPred(
 		       valid_one_pred_name st,
 		       var
 		       :: LVar alloc
 		       :: List.map 
-			 (lvar None ** alloc_table_name ** field_sinfo) fields
+			 (lvar None ** alloc_table_name) structs
 		       @ List.map (lvar None ** field_memory_name) fields)
 		 | Some a,Some b ->
 		     let fields = embedded_struct_fields st in
+		     let structs = 
+		       List.fold_left 
+			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			 StructSet.empty fields
+		     in
+		     let structs = 
+		       StructSet.fold 
+			 (fun st acc -> st :: acc) structs [] 
+		     in
 		     LPred(
 		       valid_pred_name st,
 		       var
@@ -1725,7 +1759,7 @@ let tr_fun f loc spec body acc =
 		       :: LConst(Prim_int(Num.string_of_num b))
 		       :: LVar alloc
 		       :: List.map 
-			 (lvar None ** alloc_table_name ** field_sinfo) fields
+			 (lvar None ** alloc_table_name) structs
 		       @ List.map (lvar None ** field_memory_name) fields)
 	       in
 	       if Jc_typing.is_root_struct st then
