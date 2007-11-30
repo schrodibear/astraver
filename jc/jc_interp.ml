@@ -1154,7 +1154,8 @@ let rec statement ~threats s =
 	    | Some t when threats ->
 		let variant = named_term None "" t in
 		While(Cte(Prim_bool true), inv,
-	              Some (variant,None), [statement s])
+	              Some (term_coerce t.jc_term_loc integer_type 
+			    t.jc_term_type variant,None), [statement s])
 	    | _ ->
 		While(Cte(Prim_bool true), inv,
 	              None, [statement s])
@@ -2230,8 +2231,9 @@ let tr_variable vi e acc =
       Logic(false,vi.jc_var_info_name,[],t)::acc
 
 	
+
 (*
   Local Variables: 
-  compile-command: "unset LANG; make -C .. bin/jessie.byte"
+  compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
   End: 
 *)
