@@ -331,10 +331,6 @@ OCAMLCMX = $(OCAMLCMO:.cmo=.cmx)
 
 MLINCLUDES = -I ml/utils -I ml/parsing -I ml/typing
 
-ml/parsing/parsetree.cmi: ml/parsing/asttypes.cmi
-ml/parsing/parser.cmi: ml/parsing/parsetree.cmi
-ml/parsing/lexer.cmi: ml/parsing/parser.cmi
-
 $(OCAMLCMI): $(@:.cmi=.mli)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
 		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ocaml -o $@ $(@:.cmi=.mli)
@@ -978,7 +974,7 @@ coq-clean::
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend
-	$(OCAMLDEP) -slash ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend
+	$(OCAMLDEP) -slash $(MLINCLUDES) ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend
 
 .depend.coq: #lib/coq*/*.v
 	if test @COQ@ = yes; then \
