@@ -138,6 +138,7 @@ BINARY=bin/why.$(OCAMLBEST)
 CADUCEUS=bin/caduceus.$(OCAMLBEST)
 JESSIE=bin/jessie.$(OCAMLBEST)
 KRAKATOA=bin/krakatoa.$(OCAMLBEST)
+JESSICA=bin/jessica.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 WHY2HTML=bin/why2html.$(OCAMLBEST)
 RVMERGE=bin/rv_merge.$(OCAMLBEST)
@@ -150,11 +151,11 @@ SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT)
 
-all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
+all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(JESSICA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
-opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt
+opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt bin/jessica.opt
 
-byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte
+byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte bin/jessica.byte
 
 .PHONY: check
 
@@ -307,7 +308,7 @@ bin/krakatoa.byte: $(KCMO)
 	 	 unix.cma nums.cma graph.cma $^
 
 
-# ml
+# jessica
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
@@ -317,16 +318,42 @@ MLCMX = $(MLCMO:.cmo=.cmx)
 
 # The following files must be compiled with different includes and with the
 # -for-pack option
-OCAMLCMO = ml/utils/misc.cmo ml/utils/terminfo.cmo ml/utils/warnings.cmo \
+OCAMLCMO = ml/utils/config.cmo ml/utils/clflags.cmo \
+	ml/utils/misc.cmo ml/utils/terminfo.cmo ml/utils/warnings.cmo \
+	ml/utils/consistbl.cmo ml/utils/tbl.cmo \
 	ml/parsing/linenum.cmo \
 	ml/parsing/location.cmo ml/parsing/syntaxerr.cmo \
-	ml/parsing/longident.cmo ml/parsing/parser.cmo ml/parsing/lexer.cmo
-OCAMLCMI = ml/utils/misc.cmi ml/utils/terminfo.cmi ml/utils/warnings.cmi \
+	ml/parsing/longident.cmo ml/parsing/parser.cmo ml/parsing/lexer.cmo \
+	ml/typing/ident.cmo ml/typing/path.cmo ml/typing/types.cmo \
+	ml/typing/oprint.cmo \
+	ml/typing/btype.cmo ml/typing/predef.cmo ml/typing/datarepr.cmo \
+	ml/typing/subst.cmo ml/typing/env.cmo \
+	ml/typing/primitive.cmo ml/typing/ctype.cmo ml/typing/printtyp.cmo \
+	ml/typing/includeclass.cmo ml/typing/parmatch.cmo \
+	ml/typing/stypes.cmo ml/typing/typedtree.cmo \
+	ml/typing/includecore.cmo \
+	ml/typing/typetexp.cmo \
+	ml/typing/mtype.cmo \
+	ml/typing/typedecl.cmo ml/typing/unused_var.cmo \
+	ml/typing/typecore.cmo ml/typing/typeclass.cmo \
+	ml/typing/includemod.cmo ml/typing/typemod.cmo
+OCAMLCMI = ml/utils/config.cmi ml/utils/clflags.cmi \
+	ml/utils/misc.cmi ml/utils/terminfo.cmi ml/utils/warnings.cmi \
+	ml/utils/consistbl.cmi ml/utils/tbl.cmi \
 	ml/parsing/linenum.cmi \
 	ml/parsing/asttypes.cmi ml/parsing/location.cmi \
 	ml/parsing/parsetree.cmi ml/parsing/parser.cmi \
 	ml/parsing/lexer.cmi ml/parsing/longident.cmi \
-	ml/parsing/syntaxerr.cmi
+	ml/parsing/syntaxerr.cmi \
+	ml/typing/btype.cmi ml/typing/ctype.cmi ml/typing/datarepr.cmi \
+	ml/typing/env.cmi ml/typing/ident.cmi ml/typing/includeclass.cmi \
+	ml/typing/includecore.cmi ml/typing/includemod.cmi ml/typing/mtype.cmi \
+	ml/typing/oprint.cmi ml/typing/outcometree.cmi ml/typing/parmatch.cmi \
+	ml/typing/path.cmi ml/typing/predef.cmi ml/typing/primitive.cmi \
+	ml/typing/printtyp.cmi ml/typing/stypes.cmi ml/typing/subst.cmi \
+	ml/typing/typeclass.cmi ml/typing/typecore.cmi ml/typing/typedecl.cmi \
+	ml/typing/typedtree.cmi ml/typing/typemod.cmi ml/typing/types.cmi \
+	ml/typing/typetexp.cmi ml/typing/unused_var.cmi
 OCAMLCMX = $(OCAMLCMO:.cmo=.cmx)
 
 MLINCLUDES = -I ml/utils -I ml/parsing -I ml/typing
@@ -351,12 +378,12 @@ ml/ocaml.cmo: $(OCAMLCMO)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
 		$(OCAMLC) $(MLINCLUDES) -pack -o $@ $^
 
-bin/mltojc.opt: $(MLCMX) 
+bin/jessica.opt: $(MLCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
 	strip    $@
 
-bin/mltojc.byte: $(MLCMO) 
+bin/jessica.byte: $(MLCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
 	 	 unix.cma nums.cma graph.cma $^
 
@@ -948,6 +975,7 @@ clean::
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f bin/caduceus.opt bin/caduceus.byte
 	rm -f bin/jessie.opt bin/jessie.byte
+	rm -f bin/jessica.opt bin/jessica.byte
 	rm -f bin/why-obfuscator.opt bin/why-obfuscator.byte
 	rm -f bin/rv_merge.opt bin/rv_merge.byte
 	rm -f bin/why-stat.opt bin/why-stat.byte
