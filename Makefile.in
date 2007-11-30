@@ -151,11 +151,11 @@ SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT)
 
-all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(JESSICA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
+all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
-opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt bin/jessica.opt
+opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt
 
-byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte bin/jessica.byte
+byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte
 
 .PHONY: check
 
@@ -313,9 +313,10 @@ bin/krakatoa.byte: $(KCMO)
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
-	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo
+	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo \
+	ml/ml_interp.cmo
 MLCMX = $(MLCMO:.cmo=.cmx)
-MLCMI = ml/ml_normast.cmi
+MLCMI = ml/ml_ast.cmi
 
 # The following files must be compiled with different includes and with the
 # -for-pack option
