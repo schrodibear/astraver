@@ -109,7 +109,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A427:Set) (a:(alloc_table A427)) (p:(pointer A427))
+(*Why predicate*) Definition valid (A438:Set) (a:(alloc_table A438)) (p:(pointer A438))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -632,8 +632,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A463:Set) (A462:Set) (a:(alloc_table A462)) (m1:(memory A462 A463)) (m2:(memory A462 A463)) (l:(pset A462))
-  := (forall (p:(pointer A462)),
+(*Why predicate*) Definition not_assigns (A474:Set) (A473:Set) (a:(alloc_table A473)) (m1:(memory A473 A474)) (m2:(memory A473 A474)) (l:(pset A473))
+  := (forall (p:(pointer A473)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -703,7 +703,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A475:Set) (a:(tag_table A475)) (p:(pointer A475)) (t:(tag_id A475))
+(*Why predicate*) Definition instanceof (A486:Set) (a:(tag_table A486)) (p:(pointer A486)) (t:(tag_id A486))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -731,7 +731,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A480:Set) (tag_table:(tag_table A480)) (mutable:(memory A480 (tag_id A480))) (this:(pointer A480))
+(*Why predicate*) Definition fully_packed (A491:Set) (tag_table:(tag_table A491)) (mutable:(memory A491 (tag_id A491))) (this:(pointer A491))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -761,6 +761,11 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
+(*Why logic*) Definition alloc_extern :
+  forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Prop.
+Admitted.
+Implicit Arguments alloc_extern.
+
 (*Why axiom*) Lemma alloc_extends_offset_min :
   forall (A1:Set),
   (forall (a1:(alloc_table A1)),
@@ -777,5 +782,14 @@ Admitted.
     ((alloc_extends a1 a2) ->
      (forall (p:(pointer A1)),
       (forall (b:Z), ((offset_max a1 p) >= b -> (offset_max a2 p) >= b)))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extern_def :
+  forall (A1:Set),
+  (forall (a:(alloc_table A1)),
+   (forall (p:(pointer A1)),
+    ((alloc_extern a p) ->
+     (forall (q:(pointer A1)),
+      ((offset_min a q) <= (offset_max a q) -> (full_separated p q)))))).
 Admitted.
 

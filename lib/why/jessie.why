@@ -465,6 +465,8 @@ logic asr : int,int -> int
 
 logic alloc_extends : 't alloc_table, 't alloc_table -> prop
 
+logic alloc_extern : 't alloc_table, 't pointer -> prop
+
 axiom alloc_extends_offset_min : 
   forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
     alloc_extends(a1,a2) -> 
@@ -477,6 +479,12 @@ axiom alloc_extends_offset_max :
       forall p:'t pointer. forall b:int.
         offset_max(a1,p) >= b -> offset_max(a2,p) >= b
 
+axiom alloc_extern_def :
+  forall a:'t alloc_table. forall p:'t pointer [alloc_extern(a,p)]. 
+    alloc_extern(a,p) -> 
+      forall q:'t pointer.
+        offset_min(a,q) <= offset_max(a,q) -> full_separated(p,q)
+
 parameter alloc_parameter_ownership : 
   a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
@@ -484,7 +492,7 @@ parameter alloc_parameter_ownership :
   't pointer 
   reads mut, com
   writes a, at
-  { alloc_extends(a@,a)
+  { alloc_extends(a@,a) and alloc_extern(a@,result)
     and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) and select(mut,result) = bottom_tag 
     and select(com,result) = false }
@@ -505,7 +513,7 @@ parameter alloc_parameter :
   { n > 0 }
   't pointer 
   writes a, at
-  { alloc_extends(a@,a)
+  { alloc_extends(a@,a) and alloc_extern(a@,result)
     and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) }
 
