@@ -310,15 +310,16 @@ bin/krakatoa.byte: $(KCMO)
 
 # jessica
 
-# CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
-JESSICACMO = ml/ml_interp.cmo ml/ml_main.cmo
+JESSICACMO = ml/ml_misc.cmo ml/ml_options.cmo ml/ml_pervasives.ml \
+	ml/ml_interp.cmo ml/ml_main.cmo
+JESSICACMI = ml/ml_options.cmi ml/ml_ast.cmi
+
 JESSICACMX = $(JESSICACMO:.cmo=.cmx)
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
 	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo \
 	$(JESSICACMO)
 MLCMX = $(MLCMO:.cmo=.cmx)
-JESSICACMI = ml/ml_ast.cmi
 
 # The following files must be compiled with different includes and with the
 # -for-pack option
@@ -387,12 +388,12 @@ ml/ml_ocaml.cmo: $(OCAMLCMO) $(OCAMLCMINOIMPL)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
 		$(OCAMLC) -c $(MLINCLUDES) -pack -o $@ $^
 
-bin/jessica.opt: $(MLCMX) ml/ml_ocaml.cmx
+bin/jessica.opt: ml/ml_ocaml.cmx $(MLCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
 	strip    $@
 
-bin/jessica.byte: $(MLCMO) ml/ml_ocaml.cmo
+bin/jessica.byte: ml/ml_ocaml.cmo $(MLCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
 	 	 unix.cma nums.cma graph.cma $^
 
