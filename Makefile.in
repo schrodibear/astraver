@@ -309,81 +309,87 @@ bin/krakatoa.byte: $(KCMO)
 
 
 # jessica
+
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
-	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo \
-	ml/ocaml.cmo
+	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo
 MLCMX = $(MLCMO:.cmo=.cmx)
+MLCMI = ml/ml_normast.cmi
 
 # The following files must be compiled with different includes and with the
 # -for-pack option
 OCAMLCMO = ml/utils/config.cmo ml/utils/clflags.cmo \
 	ml/utils/misc.cmo ml/utils/terminfo.cmo ml/utils/warnings.cmo \
 	ml/utils/consistbl.cmo ml/utils/tbl.cmo \
-	ml/parsing/linenum.cmo \
-	ml/parsing/location.cmo ml/parsing/syntaxerr.cmo \
+	ml/parsing/linenum.cmo ml/parsing/location.cmo \
+	ml/parsing/syntaxerr.cmo \
 	ml/parsing/longident.cmo ml/parsing/parser.cmo ml/parsing/lexer.cmo \
 	ml/typing/ident.cmo ml/typing/path.cmo ml/typing/types.cmo \
-	ml/typing/oprint.cmo \
-	ml/typing/btype.cmo ml/typing/predef.cmo ml/typing/datarepr.cmo \
-	ml/typing/subst.cmo ml/typing/env.cmo \
+	ml/typing/oprint.cmo ml/typing/btype.cmo ml/typing/predef.cmo \
+	ml/typing/datarepr.cmo ml/typing/subst.cmo ml/typing/env.cmo \
 	ml/typing/primitive.cmo ml/typing/ctype.cmo ml/typing/printtyp.cmo \
 	ml/typing/includeclass.cmo ml/typing/parmatch.cmo \
 	ml/typing/stypes.cmo ml/typing/typedtree.cmo \
-	ml/typing/includecore.cmo \
-	ml/typing/typetexp.cmo \
-	ml/typing/mtype.cmo \
+	ml/typing/includecore.cmo ml/typing/typetexp.cmo ml/typing/mtype.cmo \
 	ml/typing/typedecl.cmo ml/typing/unused_var.cmo \
 	ml/typing/typecore.cmo ml/typing/typeclass.cmo \
 	ml/typing/includemod.cmo ml/typing/typemod.cmo
+OCAMLCMINOIMPL = ml/parsing/asttypes.cmi ml/parsing/parsetree.cmi \
+	ml/typing/outcometree.cmi
 OCAMLCMI = ml/utils/config.cmi ml/utils/clflags.cmi \
 	ml/utils/misc.cmi ml/utils/terminfo.cmi ml/utils/warnings.cmi \
 	ml/utils/consistbl.cmi ml/utils/tbl.cmi \
-	ml/parsing/linenum.cmi \
-	ml/parsing/asttypes.cmi ml/parsing/location.cmi \
-	ml/parsing/parsetree.cmi ml/parsing/parser.cmi \
-	ml/parsing/lexer.cmi ml/parsing/longident.cmi \
-	ml/parsing/syntaxerr.cmi \
+	ml/parsing/linenum.cmi ml/parsing/location.cmi ml/parsing/parser.cmi \
+	ml/parsing/lexer.cmi ml/parsing/longident.cmi ml/parsing/syntaxerr.cmi \
 	ml/typing/btype.cmi ml/typing/ctype.cmi ml/typing/datarepr.cmi \
 	ml/typing/env.cmi ml/typing/ident.cmi ml/typing/includeclass.cmi \
 	ml/typing/includecore.cmi ml/typing/includemod.cmi ml/typing/mtype.cmi \
-	ml/typing/oprint.cmi ml/typing/outcometree.cmi ml/typing/parmatch.cmi \
+	ml/typing/oprint.cmi ml/typing/parmatch.cmi \
 	ml/typing/path.cmi ml/typing/predef.cmi ml/typing/primitive.cmi \
 	ml/typing/printtyp.cmi ml/typing/stypes.cmi ml/typing/subst.cmi \
 	ml/typing/typeclass.cmi ml/typing/typecore.cmi ml/typing/typedecl.cmi \
 	ml/typing/typedtree.cmi ml/typing/typemod.cmi ml/typing/types.cmi \
-	ml/typing/typetexp.cmi ml/typing/unused_var.cmi
+	ml/typing/typetexp.cmi ml/typing/unused_var.cmi $(OCAMLCMINOIMPL)
 OCAMLCMX = $(OCAMLCMO:.cmo=.cmx)
 
 MLINCLUDES = -I ml/utils -I ml/parsing -I ml/typing
 
+# The following dependencies are not found by ocamldep because there is no
+# file ml/ml_ocaml.ml or ml/ml_ocaml.mli.
+$(MLCMO): ml/ml_ocaml.cmo
+$(MLCMX): ml/ml_ocaml.cmx
+$(MLCMI): ml/ml_ocaml.cmo
+
 $(OCAMLCMI): $(@:.cmi=.mli)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ocaml -o $@ $(@:.cmi=.mli)
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml \
+			 -o $@ $(@:.cmi=.mli)
 
 $(OCAMLCMX): $(@:.cmx=.ml)
 	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
-		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ocaml -o $@ $(@:.cmx=.ml)
+		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml \
+			 -o $@ $(@:.cmx=.ml)
 
 $(OCAMLCMO): $(@:.cmo=.ml)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -o $@ $(@:.cmo=.ml)
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml \
+			 -o $@ $(@:.cmo=.ml)
 
-ml/ocaml.cmx: $(OCAMLCMX)
+ml/ml_ocaml.cmx: $(OCAMLCMX) $(OCAMLCMINOIMPL)
 	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
-		$(OCAMLOPT) $(MLINCLUDES) -pack -o $@ $^
+		$(OCAMLOPT) -c $(MLINCLUDES) -pack -o $@ $^
 
-ml/ocaml.cmo: $(OCAMLCMO)
+ml/ml_ocaml.cmo: $(OCAMLCMO) $(OCAMLCMINOIMPL)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) $(MLINCLUDES) -pack -o $@ $^
+		$(OCAMLC) -c $(MLINCLUDES) -pack -o $@ $^
 
-bin/jessica.opt: $(MLCMX) 
+bin/jessica.opt: $(MLCMX) ml/ml_ocaml.cmx
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
 	strip    $@
 
-bin/jessica.byte: $(MLCMO) 
+bin/jessica.byte: $(MLCMO) ml/ml_ocaml.cmo
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
 	 	 unix.cma nums.cma graph.cma $^
 
