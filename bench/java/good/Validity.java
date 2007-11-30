@@ -25,3 +25,29 @@ class VB {
     }
 
 }
+
+class T {
+
+    int p[];
+
+    //@ requires t != null && t.length >= 1;
+    static int m(int t[]) {
+	return t[0];
+    }
+
+    //@ ensures \result == 0;
+    public int test() {
+	p = new int [1];
+	return m(p);
+    }
+	
+}
+
+
+
+/*
+Local Variables: 
+compile-command: "make Validity.io"
+End: 
+*/
+
