@@ -311,12 +311,14 @@ bin/krakatoa.byte: $(KCMO)
 # jessica
 
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
+JESSICACMO = ml/ml_interp.cmo ml/ml_main.cmo
+JESSICACMX = $(JESSICACMO:.cmo=.cmx)
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
 	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo \
-	ml/ml_interp.cmo
+	$(JESSICACMO)
 MLCMX = $(MLCMO:.cmo=.cmx)
-MLCMI = ml/ml_ast.cmi
+JESSICACMI = ml/ml_ast.cmi
 
 # The following files must be compiled with different includes and with the
 # -for-pack option
@@ -358,9 +360,9 @@ MLINCLUDES = -I ml/utils -I ml/parsing -I ml/typing
 
 # The following dependencies are not found by ocamldep because there is no
 # file ml/ml_ocaml.ml or ml/ml_ocaml.mli.
-$(MLCMO): ml/ml_ocaml.cmo
-$(MLCMX): ml/ml_ocaml.cmx
-$(MLCMI): ml/ml_ocaml.cmo
+$(JESSICACMO): ml/ml_ocaml.cmo
+$(JESSICACMX): ml/ml_ocaml.cmx
+$(JESSICACMI): ml/ml_ocaml.cmo
 
 $(OCAMLCMI): $(@:.cmi=.mli)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
