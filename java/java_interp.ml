@@ -846,6 +846,10 @@ let dummy_loc_expr ty e =
     jc_texpr_label = "";
     jc_texpr_node = e }
 
+let expr_one =
+  dummy_loc_expr Jc_pervasives.integer_type 
+    (JCTEconst (JCCinteger "1"))
+
 
 let rec expr e =
   let lab = ref "" in
@@ -977,7 +981,16 @@ let rec expr e =
 	  assert false (* TODO *)
       | JEnew_object(ci,args) ->
 	  let si = get_class ci.constr_info_class in
-	  JCTEalloc (dummy_loc_expr int_type (JCTEconst (JCCinteger "1")), si) 
+	  let ty = JCTpointer(si, Some num_zero, Some num_zero) in
+	  let this = Jc_pervasives.var ~formal:true ty "this" in
+	  let args = (dummy_loc_expr ty (JCTEvar this)):: List.map expr args in
+	  JCTElet(this,
+		  dummy_loc_expr ty (JCTEalloc(expr_one, si)),
+		  dummy_loc_expr ty (JCTEvar this)
+	    (*
+		  dummy_loc_expr ty (JCTEcall(get_fun e.java_expr_loc 
+						ci.constr_info_tag,
+					      args)) *) )
       | JEcast(ty,e1) ->
 	  begin
 	    match ty with
