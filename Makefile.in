@@ -311,8 +311,8 @@ bin/krakatoa.byte: $(KCMO)
 # jessica
 
 JESSICACMO = ml/ml_misc.cmo ml/ml_options.cmo ml/ml_pervasives.ml \
-	ml/ml_norm.cmo ml/ml_interp.cmo ml/ml_main.cmo
-JESSICACMI = ml/ml_options.cmi ml/ml_ast.cmi
+	ml/ml_env.cmo ml/ml_interp.cmo ml/ml_main.cmo
+JESSICACMI = ml/ml_options.cmi ml/ml_env.cmi
 
 JESSICACMX = $(JESSICACMO:.cmo=.cmx)
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \

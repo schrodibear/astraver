@@ -1,6 +1,10 @@
 open Lexing
 open Ml_ocaml.Location
 
+module StringMap = Map.Make(String)
+
+(******************************************************************************)
+
 let error x =
   Printf.ksprintf
     (fun s -> Printf.fprintf stderr "%s\n%!" s; exit 1) x
@@ -28,6 +32,25 @@ let log x =
 let not_implemented loc =
   Printf.ksprintf (locate_error loc "Not implemented (%s)")
 
+let fresh_int = let c = ref(-1) in fun () -> incr c; !c
+
+(******************************************************************************)
+
+open Jc_ast
+open Jc_env
+
+let make_expr ?(loc=Loc.dummy_position) ?(label="") ~node ~ty = {
+  jc_texpr_node = node;
+  jc_texpr_loc = loc;
+  jc_texpr_type = ty;
+  jc_texpr_label = label; (* ? *)
+}
+
+let make_bool_expr ?(loc=Loc.dummy_position) ?(label="") ~node =
+  make_expr ~loc:loc ~label:label ~node:node ~ty:(JCTnative Tboolean)
+
+let make_int_expr ?(loc=Loc.dummy_position) ?(label="") ~node =
+  make_expr ~loc:loc ~label:label ~node:node ~ty:(JCTnative Tinteger)
 
 (*
 Local Variables: 

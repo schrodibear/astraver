@@ -38,12 +38,20 @@ let file env (file_kind, file_name) =
 	      caml_error loc Ml_ocaml.Typecore.report_error error
 	in
   
-        (* Normalize to our simplified AST *)
-	let _ = Ml_norm.structure new_env typed_tree in
-
         (* Interpret to a Jessie typed AST *)
+        let jessie_ast, _ = Ml_interp.structure Ml_env.empty typed_tree in
+
         (* Open the output file *)
+	log "Output file: %s" Ml_options.output_file;
+	let fd = try
+	  openfile Ml_options.output_file [ O_WRONLY; O_CREAT; O_TRUNC ] 0o640
+	with
+	  | Unix_error _ -> error "Could not open or create file: %s" file_name
+	in
+	let chan = out_channel_of_descr fd in
+
         (* Output our translation *)
+	Jc_output.print_decls (Format.formatter_of_out_channel chan) jessie_ast;
 
 	(* Return the new environment *)
 	new_env
@@ -62,8 +70,7 @@ let file env (file_kind, file_name) =
 	(* Return the new environment *)
 	Ml_ocaml.Env.add_signature typed_tree env
 
-let _ = List.fold_left file Ml_pervasives.default_env
-  (List.rev Ml_options.input_files)
+let _ = List.fold_left file Ml_pervasives.default_env Ml_options.input_files
 
 (*
 Local Variables: 
