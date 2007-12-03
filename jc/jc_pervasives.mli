@@ -74,3 +74,4 @@ val is_logical_unary_op : Jc_ast.unary_op -> bool
 val is_arithmetic_unary_op : Jc_ast.unary_op -> bool
 val is_constant_assertion : Jc_ast.assertion -> bool
 val zerot : Jc_ast.term
+val minusonet : Jc_ast.term

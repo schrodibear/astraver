@@ -60,7 +60,14 @@ let main () =
 		Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
 		Jc_typing.logic_functions_table;
 	      *)
-	      let vil = Jc_norm.static_variables Jc_typing.variables_table in
+	      let vil = 
+		Hashtbl.fold
+		  (fun tag (vi, eo) acc ->
+		     let vi, eo = Jc_norm.static_variable (vi, eo) in 
+		       Hashtbl.add Jc_norm.variables_table tag (vi, eo);
+		       vi :: acc)
+		  Jc_typing.variables_table []
+	      in
 	      Hashtbl.iter
 		(fun tag (f,loc,s,b) -> 
 		   let (s,b) = Jc_norm.code_function (f, s, b) vil in

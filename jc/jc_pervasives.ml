@@ -283,6 +283,7 @@ let term_no_loc t ty = {
 let term_var_no_loc vi = term_no_loc (JCTvar vi) vi.jc_var_info_type
 
 let zerot = term_no_loc (JCTconst (JCCinteger "0")) integer_type
+let minusonet = term_no_loc (JCTconst (JCCinteger "-1")) integer_type
 
 let rec is_constant_term t =
   match t.jc_term_node with

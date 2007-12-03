@@ -323,13 +323,13 @@ let term_coerce loc tdest tsrc e =
 	"can't coerce type %a to type %a" 
 	print_type tsrc print_type tdest
 	
-let make_guarded_app ~name (k:kind) loc f l =
+let make_guarded_app ~name (k : kind) loc f l =
   let lab =
     match name with
       | "" -> reg_loc ~kind:k loc
       | n -> reg_loc ~id:n ~kind:k loc
   in
-  Label(lab,make_app f l)
+  Label (lab, make_app f l)
 
 let coerce ~no_int_overflow lab loc tdest tsrc e =
   match tdest, tsrc with
@@ -1069,49 +1069,112 @@ let jessie_return_variable = "jessie_returned_value"
 let jessie_return_exception = "Return"
 let return_void = ref false
 
+let rec term_of_expr e =
+  let node = match e.jc_expr_node with
+    | JCEconst c -> JCTconst c
+    | JCEvar vi -> JCTvar vi
+    | JCEbinary (e1, op, e2) -> JCTbinary (term_of_expr e1, op, term_of_expr e2) 
+    | JCEunary (op, e) -> JCTunary (op, term_of_expr e)
+    | JCEshift (e1, e2) -> JCTshift (term_of_expr e1, term_of_expr e2)
+    | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term_of_expr e1, term_of_expr e2)
+    | JCEderef (e, fi) -> JCTderef (term_of_expr e, fi)
+    | JCEinstanceof (e, si) -> JCTinstanceof (term_of_expr e, si)
+    | JCEcast (e, si) -> JCTcast (term_of_expr e, si)
+    | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
+    | JCEoffset (ok, e, si) -> JCToffset (ok, term_of_expr e, si)
+    | JCErange_cast _ | JCEalloc _ | JCEfree _ -> assert false
+  in
+    { jc_term_node = node;
+      jc_term_type = e.jc_expr_type;
+      jc_term_loc = e.jc_expr_loc;
+      jc_term_label = "" }
+
+let rec is_substruct si1 si2 =
+  if si1.jc_struct_info_name = si2.jc_struct_info_name then true else
+    match si1.jc_struct_info_parent with
+      | None -> false
+      | Some si -> is_substruct si si2
+
+let type_assert vi e =
+  match vi.jc_var_info_type, e.jc_expr_type with
+    | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
+	let tag = tag_table_name si in
+	let et = term None "" (term_of_expr e) in
+	let typea =
+	  if is_substruct si' si then LTrue else
+	    LPred ("instanceof", [LVar tag; et; LVar (tag_name si)])
+	in
+	let alloc = alloc_table_name si in
+	let offset_mina = match n1o, n1o' with
+	  | None, _ -> LTrue
+	  | Some n, Some n' when Num.le_num n' n -> LTrue
+	  | Some n, _ -> 
+	      LPred ("le_int",
+		     [LApp ("offset_min", [LVar alloc; et]);
+		      LConst (Prim_int (Num.string_of_num n))])
+	in
+	let offset_maxa = match n2o, n2o' with
+	  | None, _ -> LTrue 
+	  | Some n, Some n' when Num.le_num n n' -> LTrue
+	  | Some n, _ -> 
+	      LPred ("ge_int",
+		     [LApp ("offset_max", [LVar alloc; et]);
+		      LConst (Prim_int (Num.string_of_num n))])
+	in
+	  make_and_list [typea; offset_mina; offset_maxa]
+    | _ -> LTrue
+	
 let expr_coerce ~threats vi e =
-  coerce ~no_int_overflow:(not threats) 
+  coerce ~no_int_overflow:(not threats)
     e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type 
     e.jc_expr_type (expr ~threats e)
-  
+    
 let rec statement ~threats s = 
   (* reset_tmp_var(); *)
   let statement = statement ~threats in
   let expr = expr ~threats in
   let lab = s.jc_statement_label in
-  match s.jc_statement_node with
-    | JCScall(vio,f,l,block) -> 
-(*
-	Format.eprintf "Jc_interp: lab for call = '%s'@."
-	  s.jc_statement_label;
-*)
-	let loc = s.jc_statement_loc in
-	let el = 
-	  try
-	    List.map2 (expr_coerce ~threats) f.jc_fun_info_parameters l 
-	  with Invalid_argument _ -> assert false
-	in
-	let call = 
-	  make_guarded_app ~name:lab UserCall loc 
-	    f.jc_fun_info_final_name el 
-	in
-	begin
-	  match vio with
-	    | None -> 
-		(* check that associated statement is empty *)
-		begin match block.jc_statement_node with
-		  | JCSblock [] -> () (* ok *)
-		  | _ -> assert false
-		end;
-		begin match f.jc_fun_info_return_type with
-		| JCTnative Tunit -> call
-		| _ -> let tmp = tmp_var_name () in Let(tmp,call,Void)
-		end
-	    | Some vi ->
-		Let(vi.jc_var_info_final_name,call, statement block)
-	end
-    | JCSassign_var (vi, e2) -> 
-	let e2' = expr e2 in
+    match s.jc_statement_node with
+      | JCScall (vio, f, l, block) -> 
+	  (*
+	    Format.eprintf "Jc_interp: lab for call = '%s'@."
+	    s.jc_statement_label;
+	  *)
+	  let loc = s.jc_statement_loc in
+	  let arg_types_assert = 
+	    List.fold_left2 (fun acc vi e -> make_and (type_assert vi e) acc) 
+	      LTrue f.jc_fun_info_parameters l 
+	  in
+	  let el =
+	    try
+	      List.map2 (expr_coerce ~threats) f.jc_fun_info_parameters l 
+	    with Invalid_argument _ -> assert false
+	  in
+	  let call = 
+	    make_guarded_app ~name:lab UserCall loc 
+	      f.jc_fun_info_final_name el 
+	  in
+	  let call = 
+	    if arg_types_assert = LTrue then call else
+	      Assert (arg_types_assert, call) 
+	  in
+	    begin
+	      match vio with
+		| None -> 
+		    (* check that associated statement is empty *)
+		    begin match block.jc_statement_node with
+		      | JCSblock [] -> () (* ok *)
+		      | _ -> assert false
+		    end;
+		    begin match f.jc_fun_info_return_type with
+		      | JCTnative Tunit -> call
+		      | _ -> let tmp = tmp_var_name () in Let(tmp,call,Void)
+		    end
+		| Some vi ->
+		    Let(vi.jc_var_info_final_name,call, statement block)
+	    end
+      | JCSassign_var (vi, e2) -> 
+	  let e2' = expr e2 in
 	let n = vi.jc_var_info_final_name in
 	Assign(n, coerce ~no_int_overflow:(not threats) 
 		 e2.jc_expr_label e2.jc_expr_loc vi.jc_var_info_type 
@@ -1711,57 +1774,29 @@ let tr_fun f loc spec body acc =
 	       let tag = tag_table_name st in
 	       let var = LVar v.jc_var_info_final_name in
 	       let validity = match a,b with
-		 | None,None -> LTrue
-		 | Some a,None ->
-		     LPred("le_int",
-			  [LApp("offset_min",
-				[LVar alloc; var]);
-			   LConst (Prim_int (Num.string_of_num a))])
-		 | None, Some b ->
-		     LPred("ge_int",
-			  [LApp("offset_max",
-				[LVar alloc; var]);
-			   LConst (Prim_int (Num.string_of_num b))])
 		 | Some a,Some b 
 		     when Num.eq_num a (Num.num_of_int 0)
 		       && Num.eq_num b (Num.num_of_int 0) ->
 		     let fields = embedded_struct_fields st in
-		     let structs = 
-		       List.fold_left 
-			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-			 StructSet.empty fields
-		     in
-		     let structs = 
-		       StructSet.fold 
-			 (fun st acc -> st :: acc) structs [] 
-		     in
-		     LPred(
-		       valid_one_pred_name st,
-		       var
-		       :: LVar alloc
-		       :: List.map 
-			 (lvar None ** alloc_table_name) structs
-		       @ List.map (lvar None ** field_memory_name) fields)
+		       LPred(
+			 valid_one_pred_name st,
+			 var
+			 :: LVar alloc
+			 :: List.map 
+			 (lvar None ** alloc_table_name ** field_sinfo) fields
+			 @ List.map (lvar None ** field_memory_name) fields)
 		 | Some a,Some b ->
 		     let fields = embedded_struct_fields st in
-		     let structs = 
-		       List.fold_left 
-			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-			 StructSet.empty fields
-		     in
-		     let structs = 
-		       StructSet.fold 
-			 (fun st acc -> st :: acc) structs [] 
-		     in
-		     LPred(
-		       valid_pred_name st,
-		       var
-		       :: LConst(Prim_int(Num.string_of_num a))
+		       LPred(
+			 valid_pred_name st,
+			 var
+			 :: LConst(Prim_int(Num.string_of_num a))
 		       :: LConst(Prim_int(Num.string_of_num b))
-		       :: LVar alloc
-		       :: List.map 
-			 (lvar None ** alloc_table_name) structs
-		       @ List.map (lvar None ** field_memory_name) fields)
+			 :: LVar alloc
+			 :: List.map 
+			   (lvar None ** alloc_table_name ** field_sinfo) fields
+			 @ List.map (lvar None ** field_memory_name) fields)
+		 | _ -> LTrue
 	       in
 	       if Jc_typing.is_root_struct st then
 		 make_and validity acc
@@ -1782,10 +1817,7 @@ let tr_fun f loc spec body acc =
       f.jc_fun_info_parameters
       (named_assertion None "" requires)
   in
-  (* Jc_options.lprintf "DEBUG: tr_fun 1@."; *)
-  (* adding invariants to requires *)
-  (* let requires = make_and requires invariants in *)
-    
+
   (* partition behaviors as follows:
      - behaviors inferred by analysis (postfixed by 'safety': they will be added to fun safety)
      - user defined behaviors 

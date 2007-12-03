@@ -2162,26 +2162,7 @@ let rec decl d =
 		[]
 		inv
 	    in 
-	    let vi_this = var (JCTpointer (struct_info, Some zero, Some zero)) "this" in
-	    let invs =
-	      List.fold_left
-		(fun acc fi -> 
-		   let term_this = 
-		     term_no_loc (JCTvar vi_this)
-		       (JCTpointer (struct_info, Some zero, Some zero)) in
-		   let t = term_no_loc (JCTderef (term_this, fi)) fi.jc_field_info_type in
-		     Jc_pervasives.make_and [type_range_of_term fi.jc_field_info_type t; acc])
-		(raw_asrt JCAtrue) struct_info.jc_struct_info_fields
-	    in
-	      if is_true invs || !Jc_common_options.inv_sem <> InvArguments then 
-		Hashtbl.replace structs_table id (struct_info, invariants)
-	      else
-		let pi = make_rel ("fields_inv_" ^ struct_info.jc_struct_info_name) in
-		  pi.jc_logic_info_parameters <- [vi_this];
-		  Hashtbl.replace logic_functions_table 
-		    pi.jc_logic_info_tag (pi, JCAssertion invs);
-		  Hashtbl.replace logic_functions_env id pi;
-		  Hashtbl.replace structs_table id (struct_info, (pi, invs)::invariants)
+	      Hashtbl.replace structs_table id (struct_info, invariants)
     | JCPDrectypes(pdecls) ->
         (* first pass: adding structure names *)
 	List.iter (fun d -> match d.jc_pdecl_node with

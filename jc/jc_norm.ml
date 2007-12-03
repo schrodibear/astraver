@@ -837,76 +837,34 @@ let code_function (fi, fs, sl) vil =
 		   (raw_asrt (JCAapp (li, vitl))) :: acc)
 		Jc_typing.global_invariants_table []
 	    in
-	    let global_invariants = make_and global_invariants in
-	    (* Calculate invariants for each parameter. *)
-	    let invariants =
-	      List.fold_left
-		(fun acc vi ->
-		   match vi.jc_var_info_type with
-		     | JCTpointer (st, _, _) ->
-			 make_and 
-			   [acc; (invariant_for_struct 
-				    (term_no_loc (JCTvar vi) vi.jc_var_info_type) st)]
-		     | _ -> acc)
-		(raw_asrt JCAtrue)
-		fi.jc_fun_info_parameters
-	    in
-	    make_and [global_invariants; invariants]
+	      make_and global_invariants
 	  in
-	  (* add invariants to the function precondition *)
-	  fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
-	  (* add result_type info and invariants to the function postcondition *)
-	  let post = make_and [invariants; result_type_range] in
-	  List.iter
-	    (fun (_,_, b) -> b.jc_behavior_ensures <- make_and 
-	       [b.jc_behavior_ensures; post])
-	    fs.jc_fun_behavior;
-	  (* add the 'safety' spec *)
-	  let safety_b = { default_behavior with jc_behavior_ensures = post } in
-	  fs.jc_fun_behavior <- (Loc.dummy_position,"safety", safety_b) :: fs.jc_fun_behavior;
-
+	    (* add invariants to the function precondition *)
+	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
+	    (* add result_type info and invariants to the function postcondition *)
+	    let post = make_and [invariants; result_type_range] in
+	      List.iter
+		(fun (_,_, b) -> b.jc_behavior_ensures <- make_and 
+		   [b.jc_behavior_ensures; post])
+		fs.jc_fun_behavior;
+	      (* add the 'safety' spec *)
+	      let safety_b = { default_behavior with jc_behavior_ensures = post } in
+		fs.jc_fun_behavior <- (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
       | _ -> ()
   end;
-  (* normalization of the function body *)
-  (fs, Option_misc.map (List.map statement) sl)
+    (* normalization of the function body *)
+    (fs, Option_misc.map (List.map statement) sl)
     
-let static_variable (vi, e) =
-  let invs =
-    match !Jc_common_options.inv_sem with
-      | InvArguments -> Jc_typing.type_range_of_term vi.jc_var_info_type (term_var_no_loc vi)
-      | _ -> true_assertion
-  in
-    match e with
-      | None -> vi, None, invs
-      | Some e ->
-	  let (sl, tl), e = expr e in
-	    match sl, tl with
-	      | [], [] -> vi, Some e, invs
-	      | _ -> assert false (* TODO *)
+let static_variable (vi, eo) =
+  match eo with
+    | None -> vi, None
+    | Some e ->
+	let (sl, tl), e = expr e in
+	  match sl, tl with
+	    | [], [] -> vi, Some e
+	    | _ -> assert false (* TODO *)
 		  
 		  
-let static_variables variables =
-  let vil, invs = 
-    Hashtbl.fold 
-      (fun tag (v, e) (acc1, acc2) -> 
-	 let (v, e, invs) = static_variable (v, e) in
-	   Hashtbl.add variables_table tag (v, e);
-	   v :: acc1, invs :: acc2)
-      variables ([], []) 
-  in
-    if !Jc_common_options.inv_sem = InvArguments then
-      begin
-	let invs = make_and invs in
-	  if is_true invs then () else 
-	    let li = make_rel "variables_inv" in 
-	      Hashtbl.replace Jc_typing.logic_functions_table 
-		li.jc_logic_info_tag (li, JCAssertion invs);
-	      Hashtbl.add Jc_typing.global_invariants_table li invs;
-      end;
-    vil
-	  
-
-
 (*
   Local Variables: 
   compile-command: "LC_ALL=C make -C .. bin/jessie.byte"

@@ -109,7 +109,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A438:Set) (a:(alloc_table A438)) (p:(pointer A438))
+(*Why predicate*) Definition valid (A443:Set) (a:(alloc_table A443)) (p:(pointer A443))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -193,6 +193,12 @@ unfold null.
 unfold valid.
 intuition.
 Defined.
+
+(*Why axiom*) Lemma null_pointer :
+  forall (A1:Set),
+  (forall (a:(alloc_table A1)), (offset_min a (@null A1)) <= 0 /\
+   (offset_max a (@null A1)) <= (Zopp 2)).
+Admitted.
 
 (*Why type*) Definition memory: Set -> Set ->Set.
 exact (fun S T => prod (blocks T) T).
@@ -632,8 +638,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A474:Set) (A473:Set) (a:(alloc_table A473)) (m1:(memory A473 A474)) (m2:(memory A473 A474)) (l:(pset A473))
-  := (forall (p:(pointer A473)),
+(*Why predicate*) Definition not_assigns (A480:Set) (A479:Set) (a:(alloc_table A479)) (m1:(memory A479 A480)) (m2:(memory A479 A480)) (l:(pset A479))
+  := (forall (p:(pointer A479)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -703,7 +709,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A486:Set) (a:(tag_table A486)) (p:(pointer A486)) (t:(tag_id A486))
+(*Why predicate*) Definition instanceof (A492:Set) (a:(tag_table A492)) (p:(pointer A492)) (t:(tag_id A492))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -731,7 +737,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A491:Set) (tag_table:(tag_table A491)) (mutable:(memory A491 (tag_id A491))) (this:(pointer A491))
+(*Why predicate*) Definition fully_packed (A497:Set) (tag_table:(tag_table A497)) (mutable:(memory A497 (tag_id A497))) (this:(pointer A497))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

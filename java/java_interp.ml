@@ -30,6 +30,7 @@ open Jc_output
 open Jc_env
 open Jc_fenv
 open Jc_ast
+open Jc_pervasives
 open Java_env
 open Java_ast
 open Java_tast
@@ -543,21 +544,48 @@ let quantifier = function
   | Exists -> Jc_ast.Exists
 
 let rec assertion a =
-(*
-  let lab = ref "" in
-*)
+  (*
+    let lab = ref "" in
+  *)
   let a' =
     match a.java_assertion_node with
       | JAtrue -> JCAtrue
       | JAfalse -> JCAfalse
-      | JAnot a -> JCAnot(assertion a)
-      | JAbin(e1,t,op,e2) -> JCArelation(term e1, lbin_op t op, term e2)
-      | JAbin_obj(e1,op,e2) -> JCArelation(term e1, lobj_op op, term e2)
+      | JAnot a -> JCAnot (assertion a)
+      | JAbin (e1, t, op, e2) -> JCArelation(term e1, lbin_op t op, term e2)
+      | JAbin_obj (e1, op, e2) -> 
+	  if op = Bne && e2.java_term_node = JTlit Null then
+	    let t1 = term e1 in
+	    match e1.java_term_type with
+	      | JTYbase _ | JTYnull -> assert false
+	      | JTYclass (_, ci) ->
+		  let st = get_class ci in
+		  let offset_mint = term_no_loc (JCToffset (Offset_min, t1, st)) Jc_pervasives.integer_type in
+		  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in
+		  let offset_maxt = term_no_loc (JCToffset (Offset_max, t1, st)) Jc_pervasives.integer_type in
+		  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in
+		    JCAand [offset_mina; offset_maxa]
+	      | JTYinterface ii ->
+		  let st = st_interface in
+		  let offset_mint = term_no_loc (JCToffset (Offset_min, t1, st)) Jc_pervasives.integer_type in
+		  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in
+		  let offset_maxt = term_no_loc (JCToffset (Offset_max, t1, st)) Jc_pervasives.integer_type in
+		  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in
+		    JCAand [offset_mina; offset_maxa]
+	      | JTYarray t ->
+		  let st = get_array_struct Loc.dummy_position t in
+		  let offset_mint = term_no_loc (JCToffset (Offset_min, t1, st)) Jc_pervasives.integer_type in
+		  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in
+		  let offset_maxt = term_no_loc (JCToffset (Offset_max, t1, st)) Jc_pervasives.integer_type in
+		  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, minusonet)) in
+		    JCAand [offset_mina; offset_maxa]
+	  else
+	    JCArelation (term e1, lobj_op op, term e2)
       | JAapp (fi, el)-> 
 	  JCAapp(get_logic_fun fi,List.map term el)
       | JAquantifier (q, vi, a)-> 
 	  let vi = create_var a.java_assertion_loc vi in
-	  JCAquantifier(quantifier q,vi,assertion a)
+	    JCAquantifier(quantifier q,vi,assertion a)
       | JAimpl (a1, a2)-> 
 	  JCAimplies(assertion a1,assertion a2)
       | JAiff (a1, a2)-> 

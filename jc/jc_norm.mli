@@ -38,8 +38,7 @@ val variables_table :
 val code_function : fun_info * fun_spec * tstatement list option 
   -> var_info list -> fun_spec * statement list option
 
-val static_variables : (int, Jc_env.var_info * Jc_ast.texpr option) Hashtbl.t 
-  -> var_info list
+val static_variable : Jc_env.var_info * Jc_ast.texpr option -> var_info * Jc_ast.expr option
 
 val make_int_binary : Loc.position -> expr -> bin_op -> expr -> expr
 

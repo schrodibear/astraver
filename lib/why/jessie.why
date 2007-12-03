@@ -40,6 +40,10 @@ logic null : 't pointer
 
 axiom null_not_valid : forall a:'t alloc_table. not valid(a,null)
 
+axiom null_pointer : 
+  forall a : 't alloc_table.
+    offset_min(a, null) <= 0 and offset_max(a, null) <= -2
+
 (* pointer comparison *)
 
 parameter eq_pointer : 
