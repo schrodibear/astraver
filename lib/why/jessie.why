@@ -470,14 +470,14 @@ logic alloc_extern : 't alloc_table, 't pointer -> prop
 axiom alloc_extends_offset_min : 
   forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
     alloc_extends(a1,a2) -> 
-      forall p:'t pointer. forall a:int.
-        offset_min(a1,p) <= a -> offset_min(a2,p) <= a
+      forall p:'t pointer. 
+        offset_min(a1,p) = offset_min(a2,p)
 
 axiom alloc_extends_offset_max : 
   forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
     alloc_extends(a1,a2) -> 
-      forall p:'t pointer. forall b:int.
-        offset_max(a1,p) >= b -> offset_max(a2,p) >= b
+      forall p:'t pointer.
+        offset_max(a1,p) = offset_max(a2,p)
 
 axiom alloc_extern_def :
   forall a:'t alloc_table. forall p:'t pointer [alloc_extern(a,p)]. 

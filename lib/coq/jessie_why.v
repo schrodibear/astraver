@@ -771,8 +771,7 @@ Implicit Arguments alloc_extern.
   (forall (a1:(alloc_table A1)),
    (forall (a2:(alloc_table A1)),
     ((alloc_extends a1 a2) ->
-     (forall (p:(pointer A1)),
-      (forall (a:Z), ((offset_min a1 p) <= a -> (offset_min a2 p) <= a)))))).
+     (forall (p:(pointer A1)), (offset_min a1 p) = (offset_min a2 p))))).
 Admitted.
 
 (*Why axiom*) Lemma alloc_extends_offset_max :
@@ -780,8 +779,7 @@ Admitted.
   (forall (a1:(alloc_table A1)),
    (forall (a2:(alloc_table A1)),
     ((alloc_extends a1 a2) ->
-     (forall (p:(pointer A1)),
-      (forall (b:Z), ((offset_max a1 p) >= b -> (offset_max a2 p) >= b)))))).
+     (forall (p:(pointer A1)), (offset_max a1 p) = (offset_max a2 p))))).
 Admitted.
 
 (*Why axiom*) Lemma alloc_extern_def :

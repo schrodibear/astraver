@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.76 2007-11-30 09:12:39 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.77 2007-12-03 12:15:43 moy Exp $ *)
 
 open Pp
 open Format
@@ -162,6 +162,11 @@ let make_and al =
 let rec conjuncts a = match a.jc_assertion_node with
   | JCAand al -> List.flatten(List.map conjuncts al)
   | _ -> [a]
+
+let rec without_disjunct a = 
+  fold_assertion (fun acc a -> match a.jc_assertion_node with
+    | JCAor _ -> false
+    | _ -> acc) true a
 
 let make_or al = 
   let anode = match al with
@@ -1654,15 +1659,16 @@ let rec test_assertion mgr pre a =
 	  let env,dnf1 = extract_environment_and_dnf env infa in
 	  let env,dnf2 = extract_environment_and_dnf env supa in
 	  env,Dnf.make_or [dnf1;dnf2]
-      | JCArelation (t1, Bneq_pointer, t2) 
-	  when t2.jc_term_node = JCTconst JCCnull -> (* case <t != null> *)
-	  let si = struct_of_term t1 in
-	  let offset_mint = term_no_loc (JCToffset (Offset_min, t1, si)) integer_type in
-	  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in
-	  let offset_maxt = term_no_loc (JCToffset (Offset_max, t1, si)) integer_type in
-	  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in
-	  let a = raw_asrt (JCAand [offset_mina; offset_maxa]) in
-	  extract_environment_and_dnf env a
+(* A VOIR AVEC NICOLAS. Yannick *)
+(*       | JCArelation (t1, Bneq_pointer, t2)  *)
+(* 	  when t2.jc_term_node = JCTconst JCCnull -> (\* case <t != null> *\) *)
+(* 	  let si = struct_of_term t1 in *)
+(* 	  let offset_mint = term_no_loc (JCToffset (Offset_min, t1, si)) integer_type in *)
+(* 	  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in *)
+(* 	  let offset_maxt = term_no_loc (JCToffset (Offset_max, t1, si)) integer_type in *)
+(* 	  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in *)
+(* 	  let a = raw_asrt (JCAand [offset_mina; offset_maxa]) in *)
+(* 	  extract_environment_and_dnf env a *)
       | JCArelation _ ->
 	  let env, be = linstr_of_assertion env a in
 	  let env, bemin = offset_min_linstr_of_assertion env a in
