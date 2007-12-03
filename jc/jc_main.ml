@@ -297,10 +297,13 @@ let main () =
       | Jc_options.Jc_error(l,s) ->
 	  eprintf "%a: %s@." Loc.gen_report_position l s;
 	  exit 1
-	    
+      | Assert_failure(f,l,c) as exn -> 
+	  eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
+	  raise exn
+	  
 	    
 let _ = Sys.catch_break true;
-  (* Printexc.catch *) main ()
+  Printexc.catch main ()
 
   
 (*

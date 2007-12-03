@@ -449,6 +449,14 @@ let rec expr e =
 	    (make_block loc (l3 @ [assign3]))
 	in
 	  (l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
+    | JCTElet(vi,e1,e2) -> 
+	let (l1, tl1), e1' = expr e1 in
+	let (l2, tl2), e2' = expr e2 in
+	vi.jc_var_info_assigned <- true;
+	let assign = make_assign_var loc vi e1' in
+	(l1@[assign]@l2, tl1@[vi]@tl2), e2'.jc_expr_node
+	
+
   in 
 (*
   Format.eprintf "Jc_norm.expr: lab for returned expr = '%s'@." lab;

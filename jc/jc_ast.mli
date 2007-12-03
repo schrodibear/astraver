@@ -99,6 +99,7 @@ type pexpr_node =
   | JCPEold of pexpr
   | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
+  | JCPElet of string * pexpr * pexpr
   | JCPErange of pexpr option * pexpr option
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
@@ -310,6 +311,7 @@ type texpr_node =
   | JCTEincr_local of tincr_op * var_info 
   | JCTEincr_heap of tincr_op * texpr * field_info 
   | JCTEif of texpr * texpr * texpr
+  | JCTElet of var_info * texpr * texpr
   | JCTEalloc of texpr * struct_info
   | JCTEfree of texpr
 
@@ -439,7 +441,7 @@ type statement_node =
   | JCSif of expr * statement * statement
   | JCSloop of loop_annot * statement
   | JCSreturn_void 
-  | JCSreturn of jc_type * expr
+  | JCSreturn of jc_type * expr (*r expected return type *)
   | JCStry of statement 
       * (exception_info * var_info option * statement) list * statement
   | JCSthrow of exception_info * expr option

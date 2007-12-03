@@ -583,6 +583,11 @@ let rec term env e =
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
 	  end
+      | JCPElet(id,e1,e2) ->
+	  let te1 = term env e1 in
+	  let vi = var te1.jc_term_type id in
+	  let te2 = term ((id,vi)::env) e2 in
+	  te2.jc_term_type, te2.jc_term_node
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
       | JCPEassign _ -> 
@@ -854,6 +859,7 @@ let rec assertion env e =
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
 	  end
+      | JCPElet _ -> assert false
 	  (* non propositional expressions *)
       | JCPEoffset _ | JCPErange _ ->
 	  typing_error e.jc_pexpr_loc "offsets and range are not propositions"
@@ -1243,6 +1249,11 @@ let rec expr env e =
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
 	  end
+      | JCPElet(id,e1,e2) ->
+	  let te1 = expr env e1 in
+	  let vi = var te1.jc_texpr_type id in
+	  let te2 = expr ((id,vi)::env) e2 in
+	  te2.jc_texpr_type, JCTElet(vi,te1,te2)
 	  (* logic expressions, not allowed as program expressions *)
       | JCPEoffset(k, e) ->
 	  let te = expr env e in
@@ -1808,6 +1819,7 @@ let rec location_set env e =
 	fi.jc_field_info_type, JCLSderef(tls,fi)	  
 
     | JCPEif (_, _, _)
+    | JCPElet _
     | JCPEoffset _
     | JCPEold _
     | JCPEquantifier (_,_, _, _)
@@ -1848,6 +1860,7 @@ let location env e =
     | JCPEshift (_, _)  -> assert false (* TODO *)
 *)
     | JCPEif _ 
+    | JCPElet _ 
     | JCPEcast _
     | JCPEinstanceof _
     | JCPEold _ 

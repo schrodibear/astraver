@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.72 2007-11-27 16:33:48 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.73 2007-12-03 15:33:35 marche Exp $ */
 
 %{
 
@@ -85,8 +85,8 @@
 /* if else return while break for fo break continue case switch default goto */
 %token IF ELSE RETURN WHILE FOR DO BREAK CONTINUE CASE SWITCH DEFAULT GOTO
 
-/* exception of throw try catch finally new free */
-%token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE
+/* exception of throw try catch finally new free let in */
+%token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE LET IN
 
 /* pack unpack assert */
 %token PACK UNPACK ASSERT
@@ -139,7 +139,7 @@
 /* precedences on expressions  */
 
 %nonassoc COLON
-%nonassoc PRECFORALL
+%nonassoc PRECFORALL 
 /* <=> */
 %right LTEQEQGT
 /* => */
@@ -596,6 +596,8 @@ expression:
     { locate_expr (JCPEbinary($1, BPlor, $3)) }
 | expression QUESTION expression COLON expression %prec QUESTION
     { locate_expr (JCPEif ($1, $3, $5)) }
+| LET IDENTIFIER EQ expression IN expression %prec PRECFORALL
+    { locate_expr (JCPElet ($2, $4, $6)) }
 | postfix_expression assignment_operator expression %prec ASSIGNOP
     { let a  =
 	match $2 with

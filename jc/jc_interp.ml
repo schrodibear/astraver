@@ -1184,7 +1184,7 @@ let rec statement ~threats s =
 	    Let(vi.jc_var_info_final_name, e', statement s)
 	end
     | JCSreturn_void -> Raise(jessie_return_exception,None)	
-    | JCSreturn (t, e) -> 
+    | JCSreturn(t,e) -> 
 	append
 	  (Assign(jessie_return_variable,
 		  coerce ~no_int_overflow:(not threats) 
