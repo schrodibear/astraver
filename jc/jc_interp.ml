@@ -357,10 +357,11 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	make_guarded_app ~name:lab DownCast loc "downcast_" 
 	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
 	    Var (st.jc_struct_info_name ^ "_tag") ]	
-    |  _ -> 
-	 Jc_typing.typing_error loc 
-	   "can't coerce type %a to type %a" 
-	   print_type tsrc print_type tdest
+    | _ -> 
+	raise Not_found;
+	Jc_typing.typing_error loc 
+	  "can't coerce type %a to type %a" 
+	  print_type tsrc print_type tdest
 
 (**************************
 
@@ -1237,6 +1238,7 @@ let rec statement ~threats s =
 	    | None -> 
 		any_value vi.jc_var_info_type
 	    | Some e -> 
+		eprintf "decl of vi=%s@." vi.jc_var_info_name;
 		coerce ~no_int_overflow:(not threats) 
 		  e.jc_expr_label s.jc_statement_loc vi.jc_var_info_type e.jc_expr_type 
 		  (expr e)

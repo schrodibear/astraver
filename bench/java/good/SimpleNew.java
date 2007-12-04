@@ -8,12 +8,11 @@ public class SimpleNew {
       @   ensures this.simple_val == 0;
       @*/
     SimpleNew() {
-	/* this(0); */
-	simple_val = 0;
+	this(0);
     }
 
     /*@ behavior normal:
-      @   assigns \nothing;
+      @   assigns \nothing; 
       @   ensures this.simple_val == n;
       @*/
     SimpleNew(int n) {
@@ -25,8 +24,7 @@ public class SimpleNew {
       @   ensures this.simple_val == n + m;
       @*/
     SimpleNew(int n,int m) {
-	/* this(n+m); */
-	simple_val = n+m;
+	this(n+m); 
     }
 
     /*@ behavior normal:

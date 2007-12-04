@@ -1011,14 +1011,17 @@ let rec expr e =
 	  let si = get_class ci.constr_info_class in
 	  let ty = JCTpointer(si, Some num_zero, Some num_zero) in
 	  let this = Jc_pervasives.var ~formal:true ty "this" in
+	  let tt = Jc_pervasives.var ~formal:true Jc_pervasives.unit_type "tt" in
 	  let args = (dummy_loc_expr ty (JCTEvar this)):: List.map expr args in
 	  JCTElet(this,
 		  dummy_loc_expr ty (JCTEalloc(expr_one, si)),
-		  dummy_loc_expr ty (JCTEvar this)
-	    (*
-		  dummy_loc_expr ty (JCTEcall(get_fun e.java_expr_loc 
-						ci.constr_info_tag,
-					      args)) *) )
+		  dummy_loc_expr ty
+		    (JCTElet(tt,
+			     dummy_loc_expr ty 
+			       (JCTEcall(get_fun e.java_expr_loc 
+					   ci.constr_info_tag,
+					 args)),
+			     dummy_loc_expr ty (JCTEvar this))))
       | JEcast(ty,e1) ->
 	  begin
 	    match ty with

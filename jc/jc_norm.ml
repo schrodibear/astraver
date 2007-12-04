@@ -185,7 +185,9 @@ let make_decls loc sl tl =
 	       begin
 		 match t with
 		   | Tboolean -> boolean_type, JCCboolean false
-		   | _ -> integer_type, JCCinteger "0"
+		   | Tunit -> unit_type, JCCvoid
+		   | Tinteger -> integer_type, JCCinteger "0"
+		   | Treal -> real_type, JCCreal "0.0"
 	       end
 	   | JCTenum _ ->  integer_type, JCCinteger "0"
 	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull

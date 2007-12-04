@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.107 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.108 2007-12-04 13:41:26 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -424,12 +424,25 @@ and expr_node loc ty t =
       | TEassign_op (lvalue ,binary_operator, texpr) ->
 	  NEassign_op ((expr lvalue),binary_operator , (expr texpr))
       | TEunary (Ustar ,texpr) -> 
-	  let info = make_field ty in
-	  let info = declare_arrow_var info in
-	  let expr = expr texpr in
-	  let zone = find_zone expr in
-	  let () = type_why_new_zone zone info in
-	  NEarrow (expr, zone, info)
+	  begin
+	    match texpr.texpr_type.Ctypes.ctype_node with
+	      | Tvoid -> assert false
+	      | Ctypes.Tvar _ -> assert false
+	      | Tstruct _ 
+	      | Tfun (_, _) 
+	      | Tunion _ -> 
+		  unsupported loc "normalization failed"
+	      | Tenum _
+	      | Tpointer (_, _)
+	      | Tarray (_, _, _)
+	      | Tfloat _|Tint _ ->
+		  let info = make_field ty in
+		  let info = declare_arrow_var info in
+		  let expr = expr texpr in
+		  let zone = find_zone expr in
+		  let () = type_why_new_zone zone info in
+		  NEarrow (expr, zone, info)
+	  end
       | TEunary (Uamp ,texpr) ->
 	  (match texpr.texpr_node with
 	     | TEvar v -> NEvar v

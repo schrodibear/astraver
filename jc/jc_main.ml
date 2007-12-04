@@ -310,7 +310,7 @@ let main () =
 	  
 	    
 let _ = Sys.catch_break true;
-  Printexc.catch main ()
+  (* Printexc.catch *)main ()
 
   
 (*

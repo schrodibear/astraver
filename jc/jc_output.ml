@@ -280,7 +280,7 @@ let rec expr fmt e =
     | JCTEif (e1,e2,e3) -> 
 	fprintf fmt "@[(%a ? %a : %a)@]" expr e1 expr e2 expr e3
     | JCTElet(vi,e1,e2) -> 
-	fprintf fmt "@[(let %s = %a in %a)@]" 
+	fprintf fmt "@[(let %s =@ %a@ in %a)@]" 
 	  vi.jc_var_info_name expr e1 expr e2 
     | JCTEincr_heap (op, e, fi) -> 
 	begin

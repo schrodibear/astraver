@@ -3114,17 +3114,32 @@ let type_constr_spec_and_body ?(dobody=true)
 *)
 	      ct_behaviors = behs;
 	      ct_body = body } 
-      | Invoke_this _ -> assert false (* TODO *)
+      | Invoke_this el -> 
+	  let tel = List.map (expr package_env type_env (Some current_type) this_env) el in
+	  let arg_types = List.map (fun te -> te.java_expr_type) tel in
+	  let this_ci = lookup_constructor ci.constr_info_class arg_types in
+	  let this_call_s =
+	    make_statement_no_loc 
+	      (JSexpr (
+		 make_expr_no_loc unit_type
+		   (JEconstr_call
+		      (make_expr_no_loc
+			 this_vi.java_var_info_type			
+			 (JEvar this_vi), 
+		       this_ci, tel))))
+	  in
+	  let body = statements package_env type_env (Some current_type) this_env body in
+	  Hashtbl.add constructors_table ci.constr_info_tag 
+	    { ct_constr_info = ci;
+	      ct_requires = req;
+	      ct_behaviors = behs;
+	      ct_body = this_call_s :: body }
       | Invoke_super el ->
 	  let tel = List.map (expr package_env type_env (Some current_type) this_env) el in
-	  let super_class_info =
-	    match current_type with
-	      | TypeClass ci ->
-		  begin match ci.class_info_extends with
-		    | None -> assert false
-		    | Some ci -> ci
-		  end
-	      | _ -> assert false
+	  let super_class_info = 
+	    match ci.constr_info_class.class_info_extends with
+	      | None -> assert false
+	      | Some ci -> ci
 	  in
 	  let arg_types = List.map (fun te -> te.java_expr_type) tel in
 	  let super_ci = lookup_constructor super_class_info arg_types in
@@ -3142,20 +3157,12 @@ let type_constr_spec_and_body ?(dobody=true)
 	  Hashtbl.add constructors_table ci.constr_info_tag 
 	    { ct_constr_info = ci;
 	      ct_requires = req;
-(*
-	      ct_assigns = assigns;
-	      ct_ensures = ens;
-*)
 	      ct_behaviors = behs;
 	      ct_body = super_call_s :: body }
   else
     Hashtbl.add constructors_table ci.constr_info_tag 
       { ct_constr_info = ci;
 	ct_requires = req;
-(*
-	ct_assigns = assigns;
-	ct_ensures = ens;
-*)
 	ct_behaviors = behs;
 	ct_body = [] }
     
