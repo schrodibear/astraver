@@ -358,7 +358,6 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	  [ Deref (st.jc_struct_info_root ^ "_tag_table") ; e ;
 	    Var (st.jc_struct_info_name ^ "_tag") ]	
     | _ -> 
-	raise Not_found;
 	Jc_typing.typing_error loc 
 	  "can't coerce type %a to type %a" 
 	  print_type tsrc print_type tdest
