@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.3 2007-12-05 16:39:00 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -52,7 +52,7 @@ and behavior = {
   b_ensures: expression;
 }
 
-and function_spec = expression * behavior list
+and function_spec = expression option * behavior list
 
 and expression_desc =
     Texp_ident of Path.t * value_description

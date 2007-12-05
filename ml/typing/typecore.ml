@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.ml,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
+(* $Id: typecore.ml,v 1.3 2007-12-05 16:39:00 bardou Exp $ *)
 
 (* Typechecking for the core language *)
 
@@ -60,6 +60,7 @@ type error =
   | Not_a_variant_type of Longident.t
   | Incoherent_label_order
   | Less_general of string * (type_expr * type_expr) list
+  | Assertion_not_bool of (type_expr * type_expr) list
 
 exception Error of Location.t * error
 
@@ -1512,21 +1513,12 @@ and type_argument env sarg ty_expected' =
          Texp_ident(Path.Pident id,{val_type = ty; val_kind = Val_reg})}
       in
       let eta_pat, eta_var = var_pair "eta" ty_arg in
-      let spec =
-	{ exp_desc = Texp_construct(
-	    Env.lookup_constructor (Longident.Lident "true") env, []);
-	  exp_loc = Location.none;
-	  exp_env = env;
-	  exp_type = Predef.type_bool;
-	},
-	[]
-      in
       let func texp =
         { texp with exp_type = ty_fun; exp_desc =
           Texp_function([eta_pat, {texp with exp_type = ty_res; exp_desc =
                                    Texp_apply (texp, args@
                                                [Some eta_var, Required])}],
-                        Total, spec) } in
+                        Total, (None, [])) } in
       if warn then Location.prerr_warning texp.exp_loc
           (Warnings.Without_principality "eliminated optional argument");
       if is_nonexpansive texp then func texp else
@@ -1842,7 +1834,7 @@ and type_expect ?in_function env sexp ty_expected =
       if is_optional l && not_function ty_res then
         Location.prerr_warning (fst (List.hd cases)).pat_loc
           Warnings.Unerasable_optional_argument;
-      let typed_spec = type_function_spec env ty_arg ty_res spec caselist in
+      let typed_spec = type_function_spec env spec in
       re {
         exp_desc = Texp_function(cases, partial, typed_spec);
         exp_loc = sexp.pexp_loc;
@@ -1891,9 +1883,25 @@ and type_expect ?in_function env sexp ty_expected =
 
 (* Typing of function specifications *)
 
-and type_function_spec env ty_arg ty_res (requires, behaviors) caselist =
-  let typed_requires = type_exp env requires in
-  typed_requires, []
+and type_assertion env e =
+  let te = type_exp env e in
+  begin
+    try unify env te.exp_type Predef.type_bool with
+      | Unify trace -> raise (Error(te.exp_loc, Assertion_not_bool trace))
+  end;
+  te
+
+and type_behavior env b = {
+  b_name = b.pb_name;
+  b_ensures = type_assertion env b.pb_ensures;
+}
+
+and type_function_spec env (requires, behaviors) =
+  let typed_requires = match requires with
+    | None -> None
+    | Some e ->	Some (type_assertion env e)
+  in
+  typed_requires, List.map (type_behavior env) behaviors
 
 (* Typing of statements (expressions whose values are discarded) *)
 
@@ -2189,3 +2197,8 @@ let report_error ppf = function
       report_unification_error ppf trace
         (fun ppf -> fprintf ppf "This %s has type" kind)
         (fun ppf -> fprintf ppf "which is less general than")
+  | Assertion_not_bool trace ->
+      fprintf ppf "This assertion should have type bool.@ ";
+      report_unification_error ppf trace
+	(fun ppf -> fprintf ppf "Type")
+	(fun ppf -> fprintf ppf "cannot be unified with type")

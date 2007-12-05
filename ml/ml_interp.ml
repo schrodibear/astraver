@@ -33,8 +33,8 @@ let rec type_ env t = match t.desc with
   | Tpoly _ -> JCTlogic "ocaml_Tpoly"
 
 let constant = function
-  | Const_int i -> JCTEconst(JCCinteger(string_of_int i))
-  | Const_float s -> JCTEconst(JCCreal s)
+  | Const_int i -> JCCinteger(string_of_int i)
+  | Const_float s -> JCCreal s
   | _ -> not_implemented Ml_ocaml.Location.none "ml_interp.ml: constant"
 
 let rec binary_op loc op = function
@@ -46,7 +46,7 @@ and expression env e =
   match e.exp_desc with
     | Texp_ident(Pident id, { val_kind = Val_reg }) ->
 	JCTEvar(Ml_env.find_var (name id) env)
-    | Texp_constant c -> constant c
+    | Texp_constant c -> JCTEconst(constant c)
 (*  | Texp_let of rec_flag * (pattern * expression) list * expression
   | Texp_function of (pattern * expression) list * partial *)
     | Texp_apply(f, args) ->
@@ -106,18 +106,82 @@ and expression env e =
   | Texp_object of class_structure * class_signature * string list *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: expression"
 
+let rec assertion env e =
+  match e.exp_desc with
+    | Texp_ident(Pident id, { val_kind = Val_reg }) ->
+	let vtn = JCTvar(Ml_env.find_var (name id) env) in
+	JCAbool_term(make_term vtn (type_ env e.exp_type))
+(*    | Texp_constant c
+    | Texp_let of rec_flag * (pattern * expression) list * expression
+    | Texp_function of (pattern * expression) list * partial*)
+    | Texp_apply(f, args) ->
+	let args' = List.map
+	  (function
+	     | Some arg, Required ->
+		 make_assertion (assertion env arg)
+	     | _ -> not_implemented e.exp_loc "apply with optional arguments")
+	  args
+	in
+	begin match f.exp_desc with
+	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
+	      begin match name id with
+		| "&&" -> (make_and_list args').jc_assertion_node
+		| _ -> not_implemented e.exp_loc "unsupported application"
+	      end
+	  | _ -> not_implemented e.exp_loc "unsupported application"
+	end
+(*    | Texp_match of expression * (pattern * expression) list * partial
+    | Texp_try of expression * (pattern * expression) list
+    | Texp_tuple of expression list
+    | Texp_construct of constructor_description * expression list
+    | Texp_variant of label * expression option
+    | Texp_record of (label_description * expression) list * expression option
+    | Texp_field of expression * label_description
+    | Texp_setfield of expression * label_description * expression
+    | Texp_array of expression list
+    | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
+    | Texp_sequence of expression * expression
+    | Texp_while of expression * expression
+    | Texp_for of
+	Ident.t * expression * expression * direction_flag * expression
+    | Texp_when of expression * expression
+    | Texp_send of expression * meth
+    | Texp_new of Path.t * class_declaration
+    | Texp_instvar of Path.t * Path.t
+    | Texp_setinstvar of Path.t * Path.t * expression
+    | Texp_override of Path.t * (Path.t * expression) list
+    | Texp_letmodule of Ident.t * module_expr * expression
+    | Texp_assert of expression
+    | Texp_assertfalse
+    | Texp_lazy of expression
+    | Texp_object of class_structure * class_signature * string list *)
+    | _ -> not_implemented e.exp_loc "ml_interp.ml: assertion"
+
+let behavior env b =
+  Loc.dummy_position,
+  b.b_name,
+  { 
+    jc_behavior_throws = None;
+    jc_behavior_assumes = None;
+    jc_behavior_assigns = None;
+    jc_behavior_ensures = make_assertion(assertion env b.b_ensures);
+  }
+
 let rec function_decl env e = match e.exp_desc with
   | Texp_function([ { pat_desc = Tpat_var pid;
 		      pat_type = pty },
-		    body ], _, _) ->
-      let params, body' = function_decl env body in
-      (pid, pty)::params, body'
-  | _ -> [], e
+		    body ], _, (requires, behaviors)) ->
+      let params, body', requires', behaviors' = function_decl env body in
+      (pid, pty)::params,
+      body',
+      requires :: requires',
+      behaviors @ behaviors'
+  | _ -> [], e, [], []
 
 let structure_item env = function
   | Tstr_value(_, [ { pat_desc = Tpat_var id },
 		    ({ exp_desc = Texp_function _ } as expr) ]) ->
-      let params, body = function_decl env expr in
+      let params, body, requires, behaviors = function_decl env expr in
       let return_type = type_ env body.exp_type in
       let new_env = List.fold_left
 	(fun env (pid, pty) -> Ml_env.add_var (name pid) (type_ env pty) env)
@@ -133,6 +197,12 @@ let structure_item env = function
       let params' =
 	List.map (fun (pid, _) -> Ml_env.find_var (name pid) new_env) params
       in
+      let requires' = make_and_list
+	(List.map
+	   (function
+	      | None -> make_assertion JCAtrue
+	      | Some x -> make_assertion (assertion new_env x)) requires) in
+      let behaviors' = List.map (behavior new_env) behaviors in
       JCfun_def(
 	(* return type *)
 	return_type,
@@ -143,11 +213,11 @@ let structure_item env = function
 	(* pre and post-conditions *)
 	{
 	  jc_fun_requires = {
-	    jc_assertion_node = JCAtrue;
+	    jc_assertion_node = requires'.jc_assertion_node;
 	    jc_assertion_loc = Loc.dummy_position;
 	    jc_assertion_label = "";
 	  };
-	  jc_fun_behavior = [];
+	  jc_fun_behavior = behaviors';
 	},
 	(* body *)
 	Some [ body' ]

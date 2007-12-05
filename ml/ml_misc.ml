@@ -46,11 +46,32 @@ let make_expr ?(loc=Loc.dummy_position) ?(label="") ~node ~ty = {
   jc_texpr_label = label; (* ? *)
 }
 
+let make_assertion ?(loc=Loc.dummy_position) ?(label="") ~node = {
+  jc_assertion_node = node;
+  jc_assertion_loc = loc;
+  jc_assertion_label = label; (* ? *)
+}
+
+let make_term ?(loc=Loc.dummy_position) ?(label="") ~node ~ty = {
+  jc_term_node = node;
+  jc_term_type = ty;
+  jc_term_loc = loc;
+  jc_term_label = label;
+}
+
 let make_bool_expr ?(loc=Loc.dummy_position) ?(label="") ~node =
   make_expr ~loc:loc ~label:label ~node:node ~ty:(JCTnative Tboolean)
 
 let make_int_expr ?(loc=Loc.dummy_position) ?(label="") ~node =
   make_expr ~loc:loc ~label:label ~node:node ~ty:(JCTnative Tinteger)
+
+let make_and a b = match a.jc_assertion_node, b.jc_assertion_node with
+  | JCAand al, JCAand bl -> make_assertion (JCAand(al@bl))
+  | JCAtrue, _ -> b
+  | _, JCAtrue -> a
+  | _ -> make_assertion (JCAand [ a; b ])
+
+let make_and_list = List.fold_left make_and (make_assertion JCAtrue)
 
 (*
 Local Variables: 

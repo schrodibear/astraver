@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.2 2007-12-05 15:12:51 bardou Exp $ */
+/* $Id: parser.mly,v 1.3 2007-12-05 16:39:00 bardou Exp $ */
 
 /* The parser definition */
 
@@ -1548,9 +1548,9 @@ subtractive:
 
 function_requires:
   | REQUIRES expr
-      { $2 }
+      { Some $2 }
   |
-      { mkexp(Pexp_construct(Lident "true", None, false)) }
+      { None }
 ;
 
 function_behaviors:
@@ -1567,7 +1567,7 @@ function_spec:
   | LANNOT function_requires function_behaviors RANNOT
       { $2, $3 }
   |
-      { mkexp(Pexp_construct(Lident "true", None, false)), [] }
+      { None, [] }
 ;
 
 %%

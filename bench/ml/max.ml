@@ -1,10 +1,9 @@
 let max x y
-  (*@ requires true
-      behavior ok:
-        ensures 0 >= x
-(*           && \result >= y && (\result = x || \result = y) *) *)
+  (*@ behavior ok:
+        ensures x && x
+(*          && \result >= y && (\result = x || \result = y) *) *)
     =
-  if x >= y then x else y
+  if x then y >= 0 else 0 >= y
 
 (*let test x =
   (*@ ensures \result >= 0 *)

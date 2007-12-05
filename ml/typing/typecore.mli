@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.mli,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: typecore.mli,v 1.2 2007-12-05 16:39:00 bardou Exp $ *)
 
 (* Type inference for the core language *)
 
@@ -98,6 +98,7 @@ type error =
   | Not_a_variant_type of Longident.t
   | Incoherent_label_order
   | Less_general of string * (type_expr * type_expr) list
+  | Assertion_not_bool of (type_expr * type_expr) list
 
 exception Error of Location.t * error
 
