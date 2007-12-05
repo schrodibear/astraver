@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: numconst.mll,v 1.2 2007-11-20 14:34:50 filliatr Exp $ i*)
+(*i $Id: numconst.mll,v 1.3 2007-12-05 19:30:19 moy Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -113,6 +113,7 @@ rule eval_int = parse
   | "'" { eval_char lexbuf }
   | '0' { eval_octa zero lexbuf}
   | ['1'-'9'] as d { eval_deci (val_char d) lexbuf}
+  | "-" { minus_num(eval_int lexbuf) }
   | 'L' { invalid_arg "extended characters not yet implemented" } 
   | eof { invalid_arg "empty literal" }
   | _   { invalid_arg ("Illegal character " ^ lexeme lexbuf) }

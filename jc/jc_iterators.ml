@@ -189,7 +189,7 @@ let rec post_map_term f t =
     | JCTrange(None,Some t2) ->
 	JCTrange(None,Some (post_map_term f t2))
   in
-  f tnode
+  f { t with jc_term_node = tnode; }
 
 let rec pre_map_term f t =
   let tnode = match f t with
@@ -269,11 +269,76 @@ let rec fold_term_in_assertion f acc a =
 	fold_term f acc t1
     | JCAand al | JCAor al ->
 	List.fold_left (fold_term_in_assertion f) acc al
-    | JCAimplies(a1,a2) | JCAiff(a1,a2) | JCAif(_,a1,a2) ->
+    | JCAimplies(a1,a2) | JCAiff(a1,a2) ->
+	let acc = fold_term_in_assertion f acc a1 in
+	fold_term_in_assertion f acc a2
+    | JCAif(t1,a1,a2) ->
+	let acc = fold_term f acc t1 in
 	let acc = fold_term_in_assertion f acc a1 in
 	fold_term_in_assertion f acc a2
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
 	fold_term_in_assertion f acc a1
+
+let rec post_map_term_in_assertion f a =
+  let anode = match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+    | JCArelation(t1,op,t2) -> 
+	JCArelation(post_map_term f t1,op,post_map_term f t2)
+    | JCAapp(li,tls) ->
+	JCAapp(li,List.map (post_map_term f) tls)
+    | JCAinstanceof(t1,st) ->
+	JCAinstanceof(post_map_term f t1,st)
+    | JCAbool_term t1 ->
+	JCAbool_term(post_map_term f t1)
+    | JCAmutable(t1,st,tag) ->
+	JCAmutable(post_map_term f t1,st,tag)
+    | JCAand al ->
+	JCAand(List.map (post_map_term_in_assertion f) al)
+    | JCAor al ->
+	JCAor(List.map (post_map_term_in_assertion f) al)
+    | JCAimplies(a1,a2) ->
+	JCAimplies
+	  (post_map_term_in_assertion f a1,post_map_term_in_assertion f a2)
+    | JCAiff(a1,a2) ->
+	JCAiff
+	  (post_map_term_in_assertion f a1,post_map_term_in_assertion f a2)
+    | JCAif(t1,a1,a2) ->
+	JCAif(
+	  post_map_term f t1,
+	  post_map_term_in_assertion f a1,
+	  post_map_term_in_assertion f a2)
+    | JCAnot a1 ->
+	JCAnot(post_map_term_in_assertion f a1)
+    | JCAquantifier(q,vi,a1) ->
+	JCAquantifier(q,vi,post_map_term_in_assertion f a1)
+    | JCAold a1 ->
+	JCAold(post_map_term_in_assertion f a1)
+  in
+  { a with jc_assertion_node = anode; }
+
+let rec post_map_assertion f a =
+  let anode = match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAtagequality _ 
+    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ as anode -> 
+	anode
+    | JCAand al ->
+	JCAand(List.map (post_map_assertion f) al)
+    | JCAor al ->
+	JCAor(List.map (post_map_assertion f) al)
+    | JCAimplies(a1,a2) ->
+	JCAimplies(post_map_assertion f a1,post_map_assertion f a2)
+    | JCAiff(a1,a2) ->
+	JCAiff(post_map_assertion f a1,post_map_assertion f a2)
+    | JCAif(t,a1,a2) ->
+	JCAif(t,post_map_assertion f a1,post_map_assertion f a2)
+    | JCAnot a1 ->
+	JCAnot(post_map_assertion f a1)
+    | JCAquantifier(q,vi,a1) ->
+	JCAquantifier(q,vi,post_map_assertion f a1)
+    | JCAold a1 ->
+	JCAold(post_map_assertion f a1)
+  in
+  f { a with jc_assertion_node = anode; }
 
 (*
 Local Variables: 

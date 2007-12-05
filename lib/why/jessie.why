@@ -51,6 +51,19 @@ parameter eq_pointer :
 parameter neq_pointer : 
   p: 't pointer -> q: 't pointer -> {} bool { if result then p<>q else p=q }
 
+axiom sub_pointer_self:
+  forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
+
+axiom sub_pointer_shift_left :
+  forall p:'t pointer. forall q:'t pointer. 
+    forall i:int [sub_pointer(shift(p,i),q)].
+      sub_pointer(shift(p,i),q) = sub_pointer(p,q) + i
+
+axiom sub_pointer_shift_right :
+  forall p:'t pointer. forall q:'t pointer. 
+    forall i:int [sub_pointer(p,shift(q,i))].
+    sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
+
 
 (*****************************************************************************)
 (* heap memories, select and store                                           *)
@@ -65,14 +78,14 @@ axiom select_store_eq:
   forall m: ('t,'v) memory. 
   forall p1: 't pointer. 
   forall p2: 't pointer. 
-  forall a: 'v [select(store(m,p1,a),p2)].
+  forall a: 'v [store(m,p1,a),p2].
     p1=p2 -> select(store(m,p1,a),p2) = a
  
 axiom select_store_neq : 
   forall m: ('t,'v) memory. 
   forall p1: 't pointer. 
   forall p2: 't pointer. 
-  forall a: 'v [select(store(m,p1,a),p2)].
+  forall a: 'v [store(m,p1,a),p2].
     p1 <> p2 -> select(store(m,p1,a),p2) = select(m,p2)
 
 
@@ -340,20 +353,24 @@ predicate not_assigns
 logic full_separated : 't1 pointer, 't2 pointer -> prop
 
 axiom full_separated_shift1 :
-  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
-    full_separated(p,q) -> full_separated(p,shift(q,i))
+  forall p: 'z pointer. forall q : 'z pointer.
+    forall i: int [full_separated(p,q),shift(q,i)].
+      full_separated(p,q) -> full_separated(p,shift(q,i))
 
 axiom full_separated_shift2 :
-  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
-    full_separated(p,q) -> full_separated(shift(q,i),p)
+  forall p: 'z pointer. forall q : 'z pointer. 
+    forall i: int [full_separated(p,q),shift(q,i)].
+      full_separated(p,q) -> full_separated(shift(q,i),p)
 
 axiom full_separated_shift3 :
-  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
-    full_separated(q,p) -> full_separated(shift(q,i),p)
+  forall p: 'z pointer. forall q : 'z pointer. 
+    forall i: int [full_separated(q,p),shift(q,i)].
+      full_separated(q,p) -> full_separated(shift(q,i),p)
 
 axiom full_separated_shift4 :
-  forall p: 'z pointer. forall q : 'z pointer. forall i: int.
-    full_separated(q,p) -> full_separated(p,shift(q,i))
+  forall p: 'z pointer. forall q : 'z pointer.
+    forall i: int [full_separated(q,p),shift(q,i)].
+      full_separated(q,p) -> full_separated(p,shift(q,i))
 
 
 (*****************************************************************************)

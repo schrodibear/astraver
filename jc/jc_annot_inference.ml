@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.77 2007-12-03 12:15:43 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.78 2007-12-05 19:30:19 moy Exp $ *)
 
 open Pp
 open Format
@@ -71,17 +71,6 @@ let inspected_functions = ref []
 let state_changed = ref false
 
 
-(* Utility functions *)
-  
-(* return the struct_info of (assumed) pointer t *)
-let struct_of_term t =
-  match t.jc_term_type with
-    | JCTpointer(st,_,_) -> st
-    | _ -> 
-      if debug then printf "[struct_of_term] %a@." Jc_output.term t;
-      assert false
-
-
 (* Constructors *)
 
 let full_term t ty loc = {
@@ -125,6 +114,55 @@ let full_expr e ty loc = {
   jc_expr_label = "";
 }
 
+(* Utility functions *)
+  
+(* return the struct_info of (assumed) pointer t *)
+let struct_of_term t =
+  match t.jc_term_type with
+    | JCTpointer(st,_,_) -> st
+    | _ -> 
+      if debug then printf "[struct_of_term] %a@." Jc_output.term t;
+      assert false
+
+let rec conjuncts a = match a.jc_assertion_node with
+  | JCAand al -> List.flatten(List.map conjuncts al)
+  | _ -> [a]
+
+let rec disjuncts a = match a.jc_assertion_node with
+  | JCAor al -> List.flatten(List.map disjuncts al)
+  | _ -> [a]
+
+let rec without_disjunct a = 
+  fold_assertion (fun acc a -> match a.jc_assertion_node with
+    | JCAor _ -> false
+    | _ -> acc) true a
+
+let normalize_term t =
+  post_map_term (fun t -> 
+    let tnode = match t.jc_term_node with
+      | JCToffset(off,t',st) as tnode ->
+	  begin match t'.jc_term_node with
+	    | JCTshift(t1,t2) ->
+		let offt1 = { t with jc_term_node = JCToffset(off,t1,st); } in
+		JCTbinary(offt1,Bsub_int,t2)
+	    | _ -> tnode
+	  end
+      | tnode -> tnode
+    in
+    { t with jc_term_node = tnode; }) t
+
+let normalize_assertion a =
+  let a = post_map_term_in_assertion normalize_term a in
+  post_map_assertion (fun a -> 
+    let anode = match a.jc_assertion_node with
+      | JCAand al ->
+	  JCAand(List.flatten (List.map conjuncts al))
+      | JCAor al ->
+	  JCAor(List.flatten (List.map disjuncts al))
+      | anode -> anode
+    in
+    { a with jc_assertion_node = anode; }) a
+
 let is_integral_type = function
   | JCTnative ty ->
       begin match ty with
@@ -158,15 +196,6 @@ let make_and al =
   in
   raw_asrt anode
 *)
-
-let rec conjuncts a = match a.jc_assertion_node with
-  | JCAand al -> List.flatten(List.map conjuncts al)
-  | _ -> [a]
-
-let rec without_disjunct a = 
-  fold_assertion (fun acc a -> match a.jc_assertion_node with
-    | JCAor _ -> false
-    | _ -> acc) true a
 
 let make_or al = 
   let anode = match al with
@@ -1605,11 +1634,17 @@ let target_of_assertion s loc a =
 
 let collect_expr_targets s e = 
   let asrts = collect_expr_asserts e in
+  let asrts = List.map normalize_assertion asrts in
   List.map (target_of_assertion s e.jc_expr_loc) asrts
 
 let rec collect_targets filter_asrt targets s =
   let rec collect targets s =
     let asrts = collect_statement_asserts s in
+    let asrts = List.map normalize_assertion asrts in
+    
+    if debug then printf "[collecting] %a@." 
+      (print_list comma Jc_output.assertion) asrts;
+
     let targets = 
       (List.map (target_of_assertion s s.jc_statement_loc) asrts) @ targets in
     match s.jc_statement_node with
@@ -2595,9 +2630,9 @@ let rec atp_of_term t =
 	Atp.Var (Vwp.offset_min_variable t st)
     | JCToffset(Offset_max,t,st) ->
 	Atp.Var (Vwp.offset_max_variable t st)
-    | JCTvar _ | JCTderef _ | JCTapp _ -> 
+    | JCTvar _ | JCTderef _ | JCTapp _ | JCTsub_pointer _ ->
 	Atp.Var (Vwp.variable t)
-    | JCTshift _ | JCTsub_pointer _ | JCTold _
+    | JCTshift _ | JCTold _
     | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
         failwith "Atp alien"
 (*	assert false*)
@@ -3416,7 +3451,9 @@ let code_function = function
         (* Only propagate candidate assertions for targets if Atp can make 
 	 * sense of them.
 	 *)
-        raw_assertion_equal canda (asrt_of_atp(atp_of_asrt canda))
+	(* TODO : make sure ident on common logic formulas. *)
+(*         raw_assertion_equal canda (asrt_of_atp(atp_of_asrt canda)) *)
+	true
       in
       begin match Jc_options.ai_domain with
 	| "box" -> 
@@ -3449,8 +3486,17 @@ let code_function = function
 	    end;
  	    let targets = 
 	      List.fold_right (fun target acc ->
+
+		if debug then 
+		  printf "[code_function] target %a@."  Jc_output.assertion target.jc_target_assertion;
+
 		target.jc_target_regular_invariant <- 
 		  simplify target.jc_target_regular_invariant (raw_asrt JCAtrue);
+
+		if debug then 
+		  printf "[code_function] target2 %a@." Jc_output.assertion  target.jc_target_regular_invariant;
+
+
 		(* Build the most precise invariant known at the current 
 		 * assertion point: it is the conjunction of the regular 
 		 * invariant (from forward abstract interpretation) and 
