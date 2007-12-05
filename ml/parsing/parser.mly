@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.1 2007-11-29 15:11:19 bardou Exp $ */
+/* $Id: parser.mly,v 1.2 2007-12-05 15:12:51 bardou Exp $ */
 
 /* The parser definition */
 
@@ -298,6 +298,13 @@ let bigarray_set arr arg newval =
 %token WHEN
 %token WHILE
 %token WITH
+
+%token BEHAVIOR
+%token BSRESULT
+%token ENSURES
+%token LANNOT
+%token RANNOT
+%token REQUIRES
 
 /* Precedences and associativities.
 
@@ -815,10 +822,10 @@ expr:
       { mkexp(Pexp_let($2, List.rev $3, $5)) }
   | LET MODULE UIDENT module_binding IN seq_expr
       { mkexp(Pexp_letmodule($3, $4, $6)) }
-  | FUNCTION opt_bar match_cases
-      { mkexp(Pexp_function("", None, List.rev $3)) }
-  | FUN labeled_simple_pattern fun_def
-      { let (l,o,p) = $2 in mkexp(Pexp_function(l, o, [p, $3])) }
+  | FUNCTION function_spec opt_bar match_cases
+      { mkexp(Pexp_function("", None, List.rev $4, $2)) }
+  | FUN labeled_simple_pattern function_spec fun_def
+      { let (l,o,p) = $2 in mkexp(Pexp_function(l, o, [p, $4], $3)) }
   | MATCH seq_expr WITH opt_bar match_cases
       { mkexp(Pexp_match($2, List.rev $5)) }
   | TRY seq_expr WITH opt_bar match_cases
@@ -1012,8 +1019,8 @@ fun_binding:
 strict_binding:
     EQUAL seq_expr
       { $2 }
-  | labeled_simple_pattern fun_binding
-      { let (l, o, p) = $1 in ghexp(Pexp_function(l, o, [p, $2])) }
+  | labeled_simple_pattern function_spec fun_binding
+      { let (l, o, p) = $1 in ghexp(Pexp_function(l, o, [p, $3], $2)) }
 ;
 match_cases:
     pattern match_action                        { [$1, $2] }
@@ -1021,8 +1028,8 @@ match_cases:
 ;
 fun_def:
     match_action                                { $1 }
-  | labeled_simple_pattern fun_def
-      { let (l,o,p) = $1 in ghexp(Pexp_function(l, o, [p, $2])) }
+  | labeled_simple_pattern function_spec fun_def
+      { let (l,o,p) = $1 in ghexp(Pexp_function(l, o, [p, $3], $2)) }
 ;
 match_action:
     MINUSGREATER seq_expr                       { $2 }
@@ -1536,4 +1543,31 @@ subtractive:
   | MINUS                                       { "-" }
   | MINUSDOT                                    { "-." }
 ;
+
+/* Annotations */
+
+function_requires:
+  | REQUIRES expr
+      { $2 }
+  |
+      { mkexp(Pexp_construct(Lident "true", None, false)) }
+;
+
+function_behaviors:
+  | BEHAVIOR LIDENT COLON ENSURES expr function_behaviors
+      { {
+	  pb_name = $2;
+	  pb_ensures = $5;
+	}::$6 }
+  |
+      { [] }
+;
+
+function_spec:
+  | LANNOT function_requires function_behaviors RANNOT
+      { $2, $3 }
+  |
+      { mkexp(Pexp_construct(Lident "true", None, false)), [] }
+;
+
 %%

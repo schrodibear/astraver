@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.ml,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: typecore.ml,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
 
 (* Typechecking for the core language *)
 
@@ -813,9 +813,9 @@ let rec approx_type env sty =
 let rec type_approx env sexp =
   match sexp.pexp_desc with
     Pexp_let (_, _, e) -> type_approx env e
-  | Pexp_function (p,_,(_,e)::_) when is_optional p ->
+  | Pexp_function (p,_,(_,e)::_,_) when is_optional p ->
        newty (Tarrow(p, type_option (newvar ()), type_approx env e, Cok))
-  | Pexp_function (p,_,(_,e)::_) ->
+  | Pexp_function (p,_,(_,e)::_,_) ->
        newty (Tarrow(p, newvar (), type_approx env e, Cok))
   | Pexp_match (_, (_,e)::_) -> type_approx env e
   | Pexp_try (e, _) -> type_approx env e
@@ -1469,7 +1469,7 @@ and type_argument env sarg ty_expected' =
   in
   let ty_expected = instance ty_expected' in
   match expand_head env ty_expected', sarg with
-  | _, {pexp_desc = Pexp_function(l,_,_)} when not (is_optional l) ->
+  | _, {pexp_desc = Pexp_function(l,_,_,_)} when not (is_optional l) ->
       type_expect env sarg ty_expected
   | {desc = Tarrow("",ty_arg,ty_res,_); level = lv}, _ ->
       (* apply optional arguments when expected type is "" *)
@@ -1512,12 +1512,21 @@ and type_argument env sarg ty_expected' =
          Texp_ident(Path.Pident id,{val_type = ty; val_kind = Val_reg})}
       in
       let eta_pat, eta_var = var_pair "eta" ty_arg in
+      let spec =
+	{ exp_desc = Texp_construct(
+	    Env.lookup_constructor (Longident.Lident "true") env, []);
+	  exp_loc = Location.none;
+	  exp_env = env;
+	  exp_type = Predef.type_bool;
+	},
+	[]
+      in
       let func texp =
         { texp with exp_type = ty_fun; exp_desc =
           Texp_function([eta_pat, {texp with exp_type = ty_res; exp_desc =
                                    Texp_apply (texp, args@
                                                [Some eta_var, Required])}],
-                        Total) } in
+                        Total, spec) } in
       if warn then Location.prerr_warning texp.exp_loc
           (Warnings.Without_principality "eliminated optional argument");
       if is_nonexpansive texp then func texp else
@@ -1774,7 +1783,7 @@ and type_expect ?in_function env sexp ty_expected =
         exp_loc = sexp.pexp_loc;
         exp_type = exp2.exp_type;
         exp_env = env }
-  | Pexp_function (l, Some default, [spat, sbody]) ->
+  | Pexp_function (l, Some default, [spat, sbody], spec) ->
       let loc = default.pexp_loc in
       let scases =
         [{ppat_loc = loc; ppat_desc =
@@ -1794,10 +1803,11 @@ and type_expect ?in_function env sexp ty_expected =
         {pexp_loc = sexp.pexp_loc; pexp_desc =
          Pexp_function(l, None,[{ppat_loc = loc; ppat_desc = Ppat_var"*opt*"},
                                 {pexp_loc = sexp.pexp_loc; pexp_desc =
-                                 Pexp_let(Default, [spat, smatch], sbody)}])}
+                                 Pexp_let(Default, [spat, smatch], sbody)}],
+		      spec)}
       in
       type_expect ?in_function env sfun ty_expected
-  | Pexp_function (l, _, caselist) ->
+  | Pexp_function (l, _, caselist, spec) ->
       let (loc, ty_fun) =
         match in_function with Some p -> p
         | None -> (sexp.pexp_loc, ty_expected)
@@ -1832,8 +1842,9 @@ and type_expect ?in_function env sexp ty_expected =
       if is_optional l && not_function ty_res then
         Location.prerr_warning (fst (List.hd cases)).pat_loc
           Warnings.Unerasable_optional_argument;
+      let typed_spec = type_function_spec env ty_arg ty_res spec caselist in
       re {
-        exp_desc = Texp_function(cases, partial);
+        exp_desc = Texp_function(cases, partial, typed_spec);
         exp_loc = sexp.pexp_loc;
         exp_type = newty (Tarrow(l, ty_arg, ty_res, Cok));
         exp_env = env }
@@ -1877,6 +1888,12 @@ and type_expect ?in_function env sexp ty_expected =
       let exp = type_exp env sexp in
       unify_exp env exp ty_expected;
       exp
+
+(* Typing of function specifications *)
+
+and type_function_spec env ty_arg ty_res (requires, behaviors) caselist =
+  let typed_requires = type_exp env requires in
+  typed_requires, []
 
 (* Typing of statements (expressions whose values are discarded) *)
 

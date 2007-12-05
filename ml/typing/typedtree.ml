@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -47,11 +47,18 @@ type expression =
     exp_type: type_expr;
     exp_env: Env.t }
 
+and behavior = {
+  b_name: string;
+  b_ensures: expression;
+}
+
+and function_spec = expression * behavior list
+
 and expression_desc =
     Texp_ident of Path.t * value_description
   | Texp_constant of constant
   | Texp_let of rec_flag * (pattern * expression) list * expression
-  | Texp_function of (pattern * expression) list * partial
+  | Texp_function of (pattern * expression) list * partial * function_spec
   | Texp_apply of expression * (expression option * optional) list
   | Texp_match of expression * (pattern * expression) list * partial
   | Texp_try of expression * (pattern * expression) list

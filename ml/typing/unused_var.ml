@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: unused_var.ml,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: unused_var.ml,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
 
 open Parsetree
 
@@ -116,7 +116,7 @@ and expression ppf tbl e =
   | Pexp_constant _ -> ()
   | Pexp_let (recflag, pel, e) ->
       let_pel ppf tbl recflag pel (Some (fun ppf tbl -> expression ppf tbl e));
-  | Pexp_function (_, eo, pel) ->
+  | Pexp_function (_, eo, pel, _) ->
       expression_option ppf tbl eo;
       match_pel ppf tbl pel;
   | Pexp_apply (e, lel) ->

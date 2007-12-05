@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: lexer.mll,v 1.1 2007-11-29 15:11:19 bardou Exp $ *)
+(* $Id: lexer.mll,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
 
 (* The lexer definition *)
 
@@ -27,9 +27,13 @@ type error =
   | Unterminated_string_in_comment
   | Keyword_as_label of string
   | Literal_overflow of string
+  | Unknown_backslash_identifer of string
+  | Not_in_annotation
 ;;
 
 exception Error of error * Location.t;;
+
+let in_annotation = ref false
 
 (* The table of keywords *)
 
@@ -93,6 +97,16 @@ let keyword_table =
     "lsr", INFIXOP4("lsr");
     "asr", INFIXOP4("asr")
 ]
+
+(* The table of annotation-specific keywords *)
+
+let annot_keyword_table =
+  create_hashtable 149 [
+    "requires", REQUIRES;
+    "ensures", ENSURES;
+    "behavior", BEHAVIOR;
+    "\\result", BSRESULT;
+  ]
 
 (* To buffer string literals *)
 
@@ -201,6 +215,10 @@ let report_error ppf = function
       fprintf ppf "`%s' is a keyword, it cannot be used as label name" kwd
   | Literal_overflow ty ->
       fprintf ppf "Integer literal exceeds the range of representable integers of type %s" ty
+  | Unknown_backslash_identifer id ->
+      fprintf ppf "Unknown annotation identifier (%s)" id
+  | Not_in_annotation ->
+      fprintf ppf "Not in an annotation"
 ;;
 
 }
@@ -257,7 +275,16 @@ rule token = parse
           try
             Hashtbl.find keyword_table s
           with Not_found ->
-            LIDENT s }
+            if !in_annotation then
+	      try Hashtbl.find annot_keyword_table s with Not_found -> LIDENT s
+	    else LIDENT s }
+  | "\\" identchar *
+      { if !in_annotation then
+	  let s = Lexing.lexeme lexbuf in
+	  try Hashtbl.find annot_keyword_table s with Not_found ->
+	    raise (Error(Unknown_backslash_identifer s, Location.curr lexbuf))
+	else
+	  raise (Error(Not_in_annotation, Location.curr lexbuf)) }
   | uppercase identchar *
       { UIDENT(Lexing.lexeme lexbuf) }       (* No capitalized keywords *)
   | int_literal
@@ -310,6 +337,8 @@ rule token = parse
         let esc = String.sub l 1 (String.length l - 1) in
         raise (Error(Illegal_escape esc, Location.curr lexbuf))
       }
+  | "(*@"
+      { in_annotation := true; LANNOT }
   | "(*"
       { comment_start_loc := [Location.curr lexbuf];
         comment lexbuf;
@@ -322,12 +351,17 @@ rule token = parse
         token lexbuf
       }
   | "*)"
-      { let loc = Location.curr lexbuf in
-        Location.prerr_warning loc Warnings.Comment_not_end;
-        lexbuf.Lexing.lex_curr_pos <- lexbuf.Lexing.lex_curr_pos - 1;
-        let curpos = lexbuf.lex_curr_p in
-        lexbuf.lex_curr_p <- { curpos with pos_cnum = curpos.pos_cnum - 1 };
-        STAR
+      { if !in_annotation then begin
+	  in_annotation := false;
+	  RANNOT
+	end else begin
+	  let loc = Location.curr lexbuf in
+          Location.prerr_warning loc Warnings.Comment_not_end;
+          lexbuf.Lexing.lex_curr_pos <- lexbuf.Lexing.lex_curr_pos - 1;
+          let curpos = lexbuf.lex_curr_p in
+          lexbuf.lex_curr_p <- { curpos with pos_cnum = curpos.pos_cnum - 1 };
+          STAR
+	end
       }
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
         ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?

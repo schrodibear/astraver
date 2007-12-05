@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: parsetree.mli,v 1.1 2007-11-29 15:11:19 bardou Exp $ *)
+(* $Id: parsetree.mli,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
 
 (* Abstract syntax tree produced by parsing *)
 
@@ -80,11 +80,19 @@ type expression =
   { pexp_desc: expression_desc;
     pexp_loc: Location.t }
 
+and behavior = {
+  pb_name: string;
+  pb_ensures: expression;
+}
+
+and function_spec = expression * behavior list
+
 and expression_desc =
     Pexp_ident of Longident.t
   | Pexp_constant of constant
   | Pexp_let of rec_flag * (pattern * expression) list * expression
-  | Pexp_function of label * expression option * (pattern * expression) list
+  | Pexp_function of label * expression option * (pattern * expression) list *
+      function_spec
   | Pexp_apply of expression * (label * expression) list
   | Pexp_match of expression * (pattern * expression) list
   | Pexp_try of expression * (pattern * expression) list

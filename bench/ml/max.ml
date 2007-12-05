@@ -1,10 +1,14 @@
-let max x y =
-  (*@ ensures \result >= x && \result >= y && (\result = x || \result = y) *)
+let max x y
+  (*@ requires true
+      behavior ok:
+        ensures 0 >= x
+(*           && \result >= y && (\result = x || \result = y) *) *)
+    =
   if x >= y then x else y
 
-let test x =
+(*let test x =
   (*@ ensures \result >= 0 *)
-  max x 0
+  max x 0*)
 
 (*
 Local Variables: 

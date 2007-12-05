@@ -109,7 +109,7 @@ and expression env e =
 let rec function_decl env e = match e.exp_desc with
   | Texp_function([ { pat_desc = Tpat_var pid;
 		      pat_type = pty },
-		    body ], _) ->
+		    body ], _, _) ->
       let params, body' = function_decl env body in
       (pid, pty)::params, body'
   | _ -> [], e

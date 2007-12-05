@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: lexer.mli,v 1.1 2007-11-29 15:11:19 bardou Exp $ *)
+(* $Id: lexer.mli,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
 
 (* The lexical analyzer *)
 
@@ -25,6 +25,8 @@ type error =
   | Unterminated_string_in_comment
   | Keyword_as_label of string
   | Literal_overflow of string
+  | Unknown_backslash_identifer of string
+  | Not_in_annotation
 ;;
 
 exception Error of error * Location.t
