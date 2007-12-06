@@ -2,14 +2,23 @@ open Ml_misc
 open Jc_env
 open Jc_fenv
 
+module IdentMap = Map.Make(
+  struct
+    type t = Ml_ocaml.Ident.t
+    let compare x y = String.compare (Ml_ocaml.Ident.unique_name x)
+      (Ml_ocaml.Ident.unique_name y)
+  end)
+
 type t = {
   vars: Jc_env.var_info StringMap.t;
   funs: Jc_fenv.fun_info StringMap.t;
+  specs: Ml_ocaml.Typedtree.function_spec IdentMap.t;
 }
 
 let empty = {
   vars = StringMap.empty;
   funs = StringMap.empty;
+  specs = IdentMap.empty;
 }
 
 let add_var name ty env =
@@ -37,8 +46,12 @@ let add_fun name params return_type env =
   } in
   { env with funs = StringMap.add name fi env.funs }
 
+let add_spec id spec env =
+  { env with specs = IdentMap.add id spec env.specs }
+
 let find_var name env = StringMap.find name env.vars
 let find_fun name env = StringMap.find name env.funs
+let find_spec id env = IdentMap.find id env.specs
 
 (*
 Local Variables: 

@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: lexer.mll,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
+(* $Id: lexer.mll,v 1.3 2007-12-06 15:14:51 bardou Exp $ *)
 
 (* The lexer definition *)
 
@@ -251,6 +251,11 @@ rule token = parse
       { update_loc lexbuf None 1 false 0;
         token lexbuf
       }
+  | newline (blank * as spaces) "@"
+      { if not !in_annotation then
+	  raise (Error(Not_in_annotation, Location.curr lexbuf));
+	update_loc lexbuf None 1 false (String.length spaces + 1);
+	token lexbuf }
   | blank +
       { token lexbuf }
   | "_"

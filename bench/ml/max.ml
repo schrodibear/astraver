@@ -1,13 +1,11 @@
-let max x y
-  (*@ behavior ok:
-        ensures x && x
-(*          && \result >= y && (\result = x || \result = y) *) *)
-    =
-  if x then y >= 0 else 0 >= y
+let max x y =
+  if x >= y then x else y
 
-(*let test x =
-  (*@ ensures \result >= 0 *)
-  max x 0*)
+(*@ function max x y:
+  @ requires x >= x
+  @ ensures \result >= x && \result >= y
+  @ behavior test:
+  @   ensures \result >= \result *)
 
 (*
 Local Variables: 

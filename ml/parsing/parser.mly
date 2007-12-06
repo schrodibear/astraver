@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.3 2007-12-05 16:39:00 bardou Exp $ */
+/* $Id: parser.mly,v 1.4 2007-12-06 15:14:51 bardou Exp $ */
 
 /* The parser definition */
 
@@ -364,7 +364,7 @@ The precedences must be listed from low to high.
 /* Finally, the first tokens of simple_expr are above everything else. */
 %nonassoc BACKQUOTE BEGIN CHAR FALSE FLOAT INT INT32 INT64
           LBRACE LBRACELESS LBRACKET LBRACKETBAR LIDENT LPAREN
-          NEW NATIVEINT PREFIXOP STRING TRUE UIDENT
+          NEW NATIVEINT PREFIXOP STRING TRUE UIDENT BSRESULT
 
 
 /* Entry points */
@@ -474,6 +474,8 @@ structure_item:
       { mkstr(Pstr_class_type (List.rev $3)) }
   | INCLUDE module_expr
       { mkstr(Pstr_include $2) }
+  | LANNOT function_spec RANNOT
+      { mkstr(Pstr_function_spec $2) }
 ;
 module_binding:
     EQUAL module_expr
@@ -822,10 +824,10 @@ expr:
       { mkexp(Pexp_let($2, List.rev $3, $5)) }
   | LET MODULE UIDENT module_binding IN seq_expr
       { mkexp(Pexp_letmodule($3, $4, $6)) }
-  | FUNCTION function_spec opt_bar match_cases
-      { mkexp(Pexp_function("", None, List.rev $4, $2)) }
-  | FUN labeled_simple_pattern function_spec fun_def
-      { let (l,o,p) = $2 in mkexp(Pexp_function(l, o, [p, $4], $3)) }
+  | FUNCTION opt_bar match_cases
+      { mkexp(Pexp_function("", None, List.rev $3)) }
+  | FUN labeled_simple_pattern fun_def
+      { let (l,o,p) = $2 in mkexp(Pexp_function(l, o, [p, $3])) }
   | MATCH seq_expr WITH opt_bar match_cases
       { mkexp(Pexp_match($2, List.rev $5)) }
   | TRY seq_expr WITH opt_bar match_cases
@@ -974,6 +976,8 @@ simple_expr:
       { mkexp(Pexp_override []) }
   | simple_expr SHARP label
       { mkexp(Pexp_send($1, $3)) }
+  | BSRESULT
+      { mkexp Pexp_result }
 ;
 simple_labeled_expr_list:
     labeled_simple_expr
@@ -1019,8 +1023,8 @@ fun_binding:
 strict_binding:
     EQUAL seq_expr
       { $2 }
-  | labeled_simple_pattern function_spec fun_binding
-      { let (l, o, p) = $1 in ghexp(Pexp_function(l, o, [p, $3], $2)) }
+  | labeled_simple_pattern fun_binding
+      { let (l, o, p) = $1 in ghexp(Pexp_function(l, o, [p, $2])) }
 ;
 match_cases:
     pattern match_action                        { [$1, $2] }
@@ -1028,8 +1032,8 @@ match_cases:
 ;
 fun_def:
     match_action                                { $1 }
-  | labeled_simple_pattern function_spec fun_def
-      { let (l,o,p) = $1 in ghexp(Pexp_function(l, o, [p, $3], $2)) }
+  | labeled_simple_pattern fun_def
+      { let (l,o,p) = $1 in ghexp(Pexp_function(l, o, [p, $2])) }
 ;
 match_action:
     MINUSGREATER seq_expr                       { $2 }
@@ -1553,6 +1557,13 @@ function_requires:
       { None }
 ;
 
+function_ensures:
+  | ENSURES expr
+      { Some $2 }
+  |
+      { None }
+;
+
 function_behaviors:
   | BEHAVIOR LIDENT COLON ENSURES expr function_behaviors
       { {
@@ -1563,11 +1574,23 @@ function_behaviors:
       { [] }
 ;
 
+val_ident_list_colon:
+  | val_ident_colon
+      { [ $1 ] }
+  | val_ident val_ident_list_colon
+      { $1::$2 }
+;
+
 function_spec:
-  | LANNOT function_requires function_behaviors RANNOT
-      { $2, $3 }
-  |
-      { None, [] }
+  | FUNCTION val_ident_list_colon function_requires function_ensures
+      function_behaviors
+      { { pfs_name = List.hd $2;
+	  pfs_arguments = List.tl $2;
+	  pfs_requires = $3;
+	  pfs_behaviors =
+	    match $4 with
+	      | None -> $5
+	      | Some x -> { pb_name = "default"; pb_ensures = x }::$5; } }
 ;
 
 %%

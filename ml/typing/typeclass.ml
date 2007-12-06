@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typeclass.ml,v 1.3 2007-12-05 16:39:00 bardou Exp $ *)
+(* $Id: typeclass.ml,v 1.4 2007-12-06 15:14:51 bardou Exp $ *)
 
 open Misc
 open Parsetree
@@ -295,7 +295,7 @@ let make_method cl_num expr =
       Pexp_function ("", None,
                      [mkpat (Ppat_alias (mkpat(Ppat_var "self-*"),
                                          "self-" ^ cl_num)),
-                      expr], (None, []));
+                      expr]);
     pexp_loc = expr.pexp_loc }
 
 (*******************************)

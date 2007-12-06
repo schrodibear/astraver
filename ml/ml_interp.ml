@@ -37,12 +37,16 @@ let constant = function
   | Const_float s -> JCCreal s
   | _ -> not_implemented Ml_ocaml.Location.none "ml_interp.ml: constant"
 
-let rec binary_op loc op = function
+let binary_op_expr loc op = function
   | [ x; y ] -> JCTEbinary(x, op, y)
   | l -> locate_error loc "2 arguments required, %d found" (List.length l)
 
-and expression env e =
-  let binary_op = binary_op e.exp_loc in
+let binary_op_term loc op = function
+  | [ x; y ] -> JCTbinary(x, op, y)
+  | l -> locate_error loc "2 arguments required, %d found" (List.length l)
+
+let rec expression env e =
+  let binary_op = binary_op_expr e.exp_loc in
   match e.exp_desc with
     | Texp_ident(Pident id, { val_kind = Val_reg }) ->
 	JCTEvar(Ml_env.find_var (name id) env)
@@ -106,11 +110,11 @@ and expression env e =
   | Texp_object of class_structure * class_signature * string list *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: expression"
 
-let rec assertion env e =
+let rec term env e =
+  let binary_op = binary_op_term e.exp_loc in
   match e.exp_desc with
     | Texp_ident(Pident id, { val_kind = Val_reg }) ->
-	let vtn = JCTvar(Ml_env.find_var (name id) env) in
-	JCAbool_term(make_term vtn (type_ env e.exp_type))
+	JCTvar(Ml_env.find_var (name id) env)
 (*    | Texp_constant c
     | Texp_let of rec_flag * (pattern * expression) list * expression
     | Texp_function of (pattern * expression) list * partial*)
@@ -118,14 +122,14 @@ let rec assertion env e =
 	let args' = List.map
 	  (function
 	     | Some arg, Required ->
-		 make_assertion (assertion env arg)
+		 make_term (term env arg) (type_ env arg.exp_type)
 	     | _ -> not_implemented e.exp_loc "apply with optional arguments")
 	  args
 	in
 	begin match f.exp_desc with
 	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
 	      begin match name id with
-		| "&&" -> (make_and_list args').jc_assertion_node
+		| ">=" -> binary_op Bge_int args'
 		| _ -> not_implemented e.exp_loc "unsupported application"
 	      end
 	  | _ -> not_implemented e.exp_loc "unsupported application"
@@ -155,9 +159,65 @@ let rec assertion env e =
     | Texp_assertfalse
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
+    | Texp_result ->
+	JCTvar (Jc_pervasives.var (type_ env e.exp_type) "\\result")
+    | _ -> not_implemented e.exp_loc "ml_interp.ml: term"
+
+let rec assertion env e =
+  match e.exp_desc with
+    | Texp_ident _ ->
+	JCAbool_term(make_term (term env e) (type_ env e.exp_type))
+(*    | Texp_constant c
+    | Texp_let of rec_flag * (pattern * expression) list * expression
+    | Texp_function of (pattern * expression) list * partial*)
+    | Texp_apply(f, args) ->
+	let args_assertion () = List.map
+	  (function
+	     | Some arg, Required ->
+		 make_assertion (assertion env arg)
+	     | _ -> not_implemented e.exp_loc "apply with optional arguments")
+	  args
+	in
+	begin match f.exp_desc with
+	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
+	      begin match name id with
+		| "&&" -> (make_and_list (args_assertion ())).jc_assertion_node
+		| _ ->
+		    JCAbool_term(make_term (term env e) (type_ env e.exp_type))
+	      end
+	  | _ -> not_implemented e.exp_loc "unsupported application"
+	end
+(*    | Texp_match of expression * (pattern * expression) list * partial
+    | Texp_try of expression * (pattern * expression) list
+    | Texp_tuple of expression list
+    | Texp_construct of constructor_description * expression list
+    | Texp_variant of label * expression option
+    | Texp_record of (label_description * expression) list * expression option
+    | Texp_field of expression * label_description
+    | Texp_setfield of expression * label_description * expression
+    | Texp_array of expression list
+    | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
+    | Texp_sequence of expression * expression
+    | Texp_while of expression * expression
+    | Texp_for of
+	Ident.t * expression * expression * direction_flag * expression
+    | Texp_when of expression * expression
+    | Texp_send of expression * meth
+    | Texp_new of Path.t * class_declaration
+    | Texp_instvar of Path.t * Path.t
+    | Texp_setinstvar of Path.t * Path.t * expression
+    | Texp_override of Path.t * (Path.t * expression) list
+    | Texp_letmodule of Ident.t * module_expr * expression
+    | Texp_assert of expression
+    | Texp_assertfalse
+    | Texp_lazy of expression
+    | Texp_object of class_structure * class_signature * string list *)
+    | Texp_result ->
+	assert false
     | _ -> not_implemented e.exp_loc "ml_interp.ml: assertion"
 
 let behavior env b =
+  log "        Behavior %s..." b.b_name;
   Loc.dummy_position,
   b.b_name,
   { 
@@ -170,40 +230,55 @@ let behavior env b =
 let rec function_decl env e = match e.exp_desc with
   | Texp_function([ { pat_desc = Tpat_var pid;
 		      pat_type = pty },
-		    body ], _, (requires, behaviors)) ->
-      let params, body', requires', behaviors' = function_decl env body in
-      (pid, pty)::params,
-      body',
-      requires :: requires',
-      behaviors @ behaviors'
-  | _ -> [], e, [], []
+		    body ], _) ->
+      let params, body' = function_decl env body in
+      (pid, pty)::params, body'
+  | _ -> [], e
 
 let structure_item env = function
   | Tstr_value(_, [ { pat_desc = Tpat_var id },
 		    ({ exp_desc = Texp_function _ } as expr) ]) ->
-      let params, body, requires, behaviors = function_decl env expr in
+      log "    Function %s:" (name id);
+      let params, body = function_decl env expr in
+      log "      Looking for spec...";
+      let spec =
+	try
+	  Ml_env.find_spec id env
+	with Not_found -> {
+	  fs_function = Pident id;
+	  fs_arguments = []; (* unused *)
+	  fs_requires = None;
+	  fs_behaviors = [];
+	}
+      in
+      log "      Return type...";
       let return_type = type_ env body.exp_type in
+      log "      Building environment...";
       let new_env = List.fold_left
 	(fun env (pid, pty) -> Ml_env.add_var (name pid) (type_ env pty) env)
 	env
 	params
       in
+      log "      Body...";
       let body' = {
 	jc_tstatement_node = JCTSreturn(
 	  return_type,
 	  make_expr (expression new_env body) return_type);
 	jc_tstatement_loc = Loc.dummy_position;
       } in
+      log "      Parameters...";
       let params' =
 	List.map (fun (pid, _) -> Ml_env.find_var (name pid) new_env) params
       in
-      let requires' = make_and_list
-	(List.map
-	   (function
-	      | None -> make_assertion JCAtrue
-	      | Some x -> make_assertion (assertion new_env x)) requires) in
-      let behaviors' = List.map (behavior new_env) behaviors in
-      JCfun_def(
+      log "      Requires...";
+      let requires = match spec.fs_requires with
+	| None -> JCAtrue
+	| Some x -> assertion new_env x
+      in
+      log "      Behaviors...";
+      let behaviors = List.map (behavior new_env) spec.fs_behaviors in
+      log "      Finalizing...";
+      Some(JCfun_def(
 	(* return type *)
 	return_type,
 	(* name *)
@@ -213,25 +288,33 @@ let structure_item env = function
 	(* pre and post-conditions *)
 	{
 	  jc_fun_requires = {
-	    jc_assertion_node = requires'.jc_assertion_node;
+	    jc_assertion_node = requires;
 	    jc_assertion_loc = Loc.dummy_position;
 	    jc_assertion_label = "";
 	  };
-	  jc_fun_behavior = behaviors';
+	  jc_fun_behavior = behaviors;
 	},
 	(* body *)
 	Some [ body' ]
-      ), Ml_env.add_fun (name id) params' return_type new_env
+      )), Ml_env.add_fun (name id) params' return_type new_env
+  | Tstr_function_spec _ -> None, env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
-
-let structure env = List.map (structure_item env)
 
 let rec structure env = function
   | [] -> [], env
   | si::tl ->
       let si', env' = structure_item env si in
       let sil, env'' = structure env' tl in
-      si'::sil, env''
+      match si' with
+	| None -> sil, env'
+	| Some x -> x::sil, env'
+
+let add_structure_specs env = List.fold_left
+  (fun env -> function
+     | Tstr_function_spec ({ fs_function = Pident id } as spec) ->
+	 Ml_env.add_spec id spec env
+     | _ -> env)
+  env
 
 (*
 Local Variables: 

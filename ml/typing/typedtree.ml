@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.3 2007-12-05 16:39:00 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.4 2007-12-06 15:14:51 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -47,18 +47,11 @@ type expression =
     exp_type: type_expr;
     exp_env: Env.t }
 
-and behavior = {
-  b_name: string;
-  b_ensures: expression;
-}
-
-and function_spec = expression option * behavior list
-
 and expression_desc =
     Texp_ident of Path.t * value_description
   | Texp_constant of constant
   | Texp_let of rec_flag * (pattern * expression) list * expression
-  | Texp_function of (pattern * expression) list * partial * function_spec
+  | Texp_function of (pattern * expression) list * partial
   | Texp_apply of expression * (expression option * optional) list
   | Texp_match of expression * (pattern * expression) list * partial
   | Texp_try of expression * (pattern * expression) list
@@ -85,6 +78,7 @@ and expression_desc =
   | Texp_assertfalse
   | Texp_lazy of expression
   | Texp_object of class_structure * class_signature * string list
+  | Texp_result
 
 and meth =
     Tmeth_name of string
@@ -151,6 +145,19 @@ and structure_item =
       (Ident.t * int * string list * class_expr * virtual_flag) list
   | Tstr_cltype of (Ident.t * cltype_declaration) list
   | Tstr_include of module_expr * Ident.t list
+  | Tstr_function_spec of function_spec
+
+and behavior = {
+  b_name: string;
+  b_ensures: expression;
+}
+
+and function_spec = {
+  fs_function: Path.t;
+  fs_arguments: Ident.t list;
+  fs_requires: expression option;
+  fs_behaviors: behavior list;
+}
 
 and module_coercion =
     Tcoerce_none

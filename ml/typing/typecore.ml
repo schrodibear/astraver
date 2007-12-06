@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.ml,v 1.3 2007-12-05 16:39:00 bardou Exp $ *)
+(* $Id: typecore.ml,v 1.4 2007-12-06 15:14:51 bardou Exp $ *)
 
 (* Typechecking for the core language *)
 
@@ -60,7 +60,6 @@ type error =
   | Not_a_variant_type of Longident.t
   | Incoherent_label_order
   | Less_general of string * (type_expr * type_expr) list
-  | Assertion_not_bool of (type_expr * type_expr) list
 
 exception Error of Location.t * error
 
@@ -814,9 +813,9 @@ let rec approx_type env sty =
 let rec type_approx env sexp =
   match sexp.pexp_desc with
     Pexp_let (_, _, e) -> type_approx env e
-  | Pexp_function (p,_,(_,e)::_,_) when is_optional p ->
+  | Pexp_function (p,_,(_,e)::_) when is_optional p ->
        newty (Tarrow(p, type_option (newvar ()), type_approx env e, Cok))
-  | Pexp_function (p,_,(_,e)::_,_) ->
+  | Pexp_function (p,_,(_,e)::_) ->
        newty (Tarrow(p, newvar (), type_approx env e, Cok))
   | Pexp_match (_, (_,e)::_) -> type_approx env e
   | Pexp_try (e, _) -> type_approx env e
@@ -1461,6 +1460,12 @@ let rec type_exp env sexp =
       }
   | Pexp_poly _ ->
       assert false
+  | Pexp_result ->
+      let tr =
+	type_exp env { sexp with pexp_desc =
+	    Pexp_ident (Longident.Lident "\\result") }
+      in
+      { tr with exp_desc = Texp_result }
 
 and type_argument env sarg ty_expected' =
   (* ty_expected' may be generic *)
@@ -1470,7 +1475,7 @@ and type_argument env sarg ty_expected' =
   in
   let ty_expected = instance ty_expected' in
   match expand_head env ty_expected', sarg with
-  | _, {pexp_desc = Pexp_function(l,_,_,_)} when not (is_optional l) ->
+  | _, {pexp_desc = Pexp_function(l,_,_)} when not (is_optional l) ->
       type_expect env sarg ty_expected
   | {desc = Tarrow("",ty_arg,ty_res,_); level = lv}, _ ->
       (* apply optional arguments when expected type is "" *)
@@ -1518,7 +1523,7 @@ and type_argument env sarg ty_expected' =
           Texp_function([eta_pat, {texp with exp_type = ty_res; exp_desc =
                                    Texp_apply (texp, args@
                                                [Some eta_var, Required])}],
-                        Total, (None, [])) } in
+                        Total) } in
       if warn then Location.prerr_warning texp.exp_loc
           (Warnings.Without_principality "eliminated optional argument");
       if is_nonexpansive texp then func texp else
@@ -1775,7 +1780,7 @@ and type_expect ?in_function env sexp ty_expected =
         exp_loc = sexp.pexp_loc;
         exp_type = exp2.exp_type;
         exp_env = env }
-  | Pexp_function (l, Some default, [spat, sbody], spec) ->
+  | Pexp_function (l, Some default, [spat, sbody]) ->
       let loc = default.pexp_loc in
       let scases =
         [{ppat_loc = loc; ppat_desc =
@@ -1795,11 +1800,10 @@ and type_expect ?in_function env sexp ty_expected =
         {pexp_loc = sexp.pexp_loc; pexp_desc =
          Pexp_function(l, None,[{ppat_loc = loc; ppat_desc = Ppat_var"*opt*"},
                                 {pexp_loc = sexp.pexp_loc; pexp_desc =
-                                 Pexp_let(Default, [spat, smatch], sbody)}],
-		      spec)}
+                                 Pexp_let(Default, [spat, smatch], sbody)}])}
       in
       type_expect ?in_function env sfun ty_expected
-  | Pexp_function (l, _, caselist, spec) ->
+  | Pexp_function (l, _, caselist) ->
       let (loc, ty_fun) =
         match in_function with Some p -> p
         | None -> (sexp.pexp_loc, ty_expected)
@@ -1834,9 +1838,8 @@ and type_expect ?in_function env sexp ty_expected =
       if is_optional l && not_function ty_res then
         Location.prerr_warning (fst (List.hd cases)).pat_loc
           Warnings.Unerasable_optional_argument;
-      let typed_spec = type_function_spec env spec in
       re {
-        exp_desc = Texp_function(cases, partial, typed_spec);
+        exp_desc = Texp_function(cases, partial);
         exp_loc = sexp.pexp_loc;
         exp_type = newty (Tarrow(l, ty_arg, ty_res, Cok));
         exp_env = env }
@@ -1880,28 +1883,6 @@ and type_expect ?in_function env sexp ty_expected =
       let exp = type_exp env sexp in
       unify_exp env exp ty_expected;
       exp
-
-(* Typing of function specifications *)
-
-and type_assertion env e =
-  let te = type_exp env e in
-  begin
-    try unify env te.exp_type Predef.type_bool with
-      | Unify trace -> raise (Error(te.exp_loc, Assertion_not_bool trace))
-  end;
-  te
-
-and type_behavior env b = {
-  b_name = b.pb_name;
-  b_ensures = type_assertion env b.pb_ensures;
-}
-
-and type_function_spec env (requires, behaviors) =
-  let typed_requires = match requires with
-    | None -> None
-    | Some e ->	Some (type_assertion env e)
-  in
-  typed_requires, List.map (type_behavior env) behaviors
 
 (* Typing of statements (expressions whose values are discarded) *)
 
@@ -2197,8 +2178,3 @@ let report_error ppf = function
       report_unification_error ppf trace
         (fun ppf -> fprintf ppf "This %s has type" kind)
         (fun ppf -> fprintf ppf "which is less general than")
-  | Assertion_not_bool trace ->
-      fprintf ppf "This assertion should have type bool.@ ";
-      report_unification_error ppf trace
-	(fun ppf -> fprintf ppf "Type")
-	(fun ppf -> fprintf ppf "cannot be unified with type")

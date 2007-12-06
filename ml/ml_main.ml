@@ -27,22 +27,30 @@ let parse f file_name =
 let file env (file_kind, file_name) =
   match file_kind with
     | Ml_options.Ml ->
-	log "Implementation %s" file_name;
+	log "Implementation %s:" file_name;
 	let parse_tree = parse Ml_ocaml.Parser.implementation file_name in
 	
         (* Type with the OCaml typer *)
+	log "  Typing...";
 	let typed_tree, _, new_env = try
 	  Ml_ocaml.Typemod.type_structure env parse_tree
 	with
 	  | Ml_ocaml.Typecore.Error(loc, error) ->
 	      caml_error loc Ml_ocaml.Typecore.report_error error
 	in
+
+	(* Add specifications to the environment *)
+	log "  Listing specifications...";
+	let spec_env =
+	  Ml_interp.add_structure_specs Ml_env.empty typed_tree
+	in
   
         (* Interpret to a Jessie typed AST *)
-        let jessie_ast, _ = Ml_interp.structure Ml_env.empty typed_tree in
+	log "  Interpreting...";
+        let jessie_ast, _ = Ml_interp.structure spec_env typed_tree in
 
         (* Open the output file *)
-	log "Output file: %s" Ml_options.output_file;
+	log "  Output file: %s" Ml_options.output_file;
 	let fd = try
 	  openfile Ml_options.output_file [ O_WRONLY; O_CREAT; O_TRUNC ] 0o640
 	with
@@ -54,9 +62,10 @@ let file env (file_kind, file_name) =
 	Jc_output.print_decls (Format.formatter_of_out_channel chan) jessie_ast;
 
 	(* Return the new environment *)
+	log "  Done.";
 	new_env
     | Ml_options.Mli ->
-	log "Interface %s" file_name;
+	log "Interface %s:" file_name;
 	let parse_tree = parse Ml_ocaml.Parser.interface file_name in
 
 	(* Type with the OCaml typer *)

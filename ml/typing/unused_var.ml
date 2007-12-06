@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: unused_var.ml,v 1.2 2007-12-05 15:12:51 bardou Exp $ *)
+(* $Id: unused_var.ml,v 1.3 2007-12-06 15:14:51 bardou Exp $ *)
 
 open Parsetree
 
@@ -105,6 +105,7 @@ and structure_item ppf tbl s =
   | Pstr_class cdl -> List.iter (class_declaration ppf tbl) cdl;
   | Pstr_class_type _ -> ()
   | Pstr_include _ -> ()
+  | Pstr_function_spec _ -> ()
 
 and expression ppf tbl e =
   match e.pexp_desc with
@@ -116,7 +117,7 @@ and expression ppf tbl e =
   | Pexp_constant _ -> ()
   | Pexp_let (recflag, pel, e) ->
       let_pel ppf tbl recflag pel (Some (fun ppf tbl -> expression ppf tbl e));
-  | Pexp_function (_, eo, pel, _) ->
+  | Pexp_function (_, eo, pel) ->
       expression_option ppf tbl eo;
       match_pel ppf tbl pel;
   | Pexp_apply (e, lel) ->
@@ -172,6 +173,7 @@ and expression ppf tbl e =
   | Pexp_lazy e -> expression ppf tbl e;
   | Pexp_poly (e, _) -> expression ppf tbl e;
   | Pexp_object cs -> class_structure ppf tbl cs;
+  | Pexp_result -> assert false
 
 and expression_option ppf tbl eo =
   match eo with

@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: parsetree.mli,v 1.3 2007-12-05 16:39:00 bardou Exp $ *)
+(* $Id: parsetree.mli,v 1.4 2007-12-06 15:14:51 bardou Exp $ *)
 
 (* Abstract syntax tree produced by parsing *)
 
@@ -80,19 +80,11 @@ type expression =
   { pexp_desc: expression_desc;
     pexp_loc: Location.t }
 
-and behavior = {
-  pb_name: string;
-  pb_ensures: expression;
-}
-
-and function_spec = expression option * behavior list
-
 and expression_desc =
     Pexp_ident of Longident.t
   | Pexp_constant of constant
   | Pexp_let of rec_flag * (pattern * expression) list * expression
-  | Pexp_function of label * expression option * (pattern * expression) list *
-      function_spec
+  | Pexp_function of label * expression option * (pattern * expression) list
   | Pexp_apply of expression * (label * expression) list
   | Pexp_match of expression * (pattern * expression) list
   | Pexp_try of expression * (pattern * expression) list
@@ -119,6 +111,7 @@ and expression_desc =
   | Pexp_lazy of expression
   | Pexp_poly of expression * core_type option
   | Pexp_object of class_structure
+  | Pexp_result
 
 (* Value descriptions *)
 
@@ -268,6 +261,19 @@ and structure_item_desc =
   | Pstr_class of class_declaration list
   | Pstr_class_type of class_type_declaration list
   | Pstr_include of module_expr
+  | Pstr_function_spec of function_spec
+
+and behavior = {
+  pb_name: string;
+  pb_ensures: expression;
+}
+
+and function_spec = {
+  pfs_name: string;
+  pfs_arguments: string list;
+  pfs_requires: expression option;
+  pfs_behaviors: behavior list;
+}
 
 (* Toplevel phrases *)
 

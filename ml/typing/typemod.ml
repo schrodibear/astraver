@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typemod.ml,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: typemod.ml,v 1.2 2007-12-06 15:14:51 bardou Exp $ *)
 
 (* Type-checking of the module language *)
 
@@ -722,6 +722,59 @@ and type_structure anchor env sstr =
         (Tstr_include (modl, bound_value_identifiers sg) :: str_rem,
          sg @ sig_rem,
          final_env)
+    | {pstr_desc = Pstr_function_spec fs; pstr_loc = loc} :: srem ->
+	(* function *)
+	let fun_path, fun_vd = try
+	  Env.lookup_value (Lident fs.pfs_name) env;
+	with Not_found ->
+	  raise (Typecore.Error(loc, Typecore.Unbound_value
+				  (Lident fs.pfs_name)))
+	in
+	(* arguments *)
+	let args, spec_env = List.fold_left
+	  (fun (args, env) name ->
+	     let desc = {
+	       val_type = Ctype.newvar ();
+	       val_kind = Val_reg;
+	     } in
+	     let id, new_env = Env.enter_value name desc env in
+	     id::args, new_env)
+	  ([], env)
+	  fs.pfs_arguments
+	in
+	(* \result *)
+	let res_ty =
+	  let rec rightmost_type te = match te.desc with
+	    | Tarrow(_, _, x, _) -> rightmost_type x
+	    | Tlink x -> rightmost_type x
+	    | x -> te
+	  in
+	  rightmost_type fun_vd.val_type
+	in
+	let res_vd = {
+	  val_type = res_ty;
+	  val_kind = Val_reg;
+	} in
+	let _, result_env = Env.enter_value "\\result" res_vd spec_env in
+	(* typed spec *)
+	let tfs = {
+	  fs_function = fun_path;
+	  fs_arguments = List.rev args;
+	  fs_requires =
+	    begin match fs.pfs_requires with
+	      | None -> None
+	      | Some x -> Some (Typecore.type_expression spec_env x)
+	    end;
+	  fs_behaviors = List.map
+	    (fun b -> {
+	       b_name = b.pb_name;
+	       b_ensures = Typecore.type_expression result_env b.pb_ensures;
+	     })
+	    fs.pfs_behaviors;
+	} in
+	(* finish *)
+        let (str_rem, sig_rem, final_env) = type_struct env srem in
+        (Tstr_function_spec tfs :: str_rem, sig_rem, final_env)
   in
   if !Clflags.save_types
   then List.iter (function {pstr_loc = l} -> Stypes.record_phrase l) sstr;
