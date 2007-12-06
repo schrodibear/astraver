@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_output.ml,v 1.71 2007-12-06 15:26:17 nrousset Exp $ *)
+
 open Format
 open Jc_env
 open Jc_fenv
@@ -176,7 +178,8 @@ let rec assertion fmt a =
   else
   match a.jc_assertion_node with
     | JCAtrue -> fprintf fmt "true"
-    | JCAif (_, _, _)-> assert false (* TODO *)
+    | JCAif (t, a1, a2) ->
+	fprintf fmt "@[(%a ? %a : %a)@]" term t assertion a1 assertion a2
     | JCAbool_term t -> term fmt t
     | JCAinstanceof (t, st) ->
 	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name

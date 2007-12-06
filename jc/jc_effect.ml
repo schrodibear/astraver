@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.65 2007-11-27 16:33:48 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.66 2007-12-06 15:26:17 nrousset Exp $ *)
 
 
 open Jc_env
@@ -202,7 +202,7 @@ let tag ef t h =
 let rec assertion ef a =
   match a.jc_assertion_node with
     | JCAtrue | JCAfalse -> ef
-    | JCAif (_, _, _) -> assert false (* TODO *)
+    | JCAif (t, a1, a2) -> assertion (assertion (term ef t) a1) a2
     | JCAbool_term t -> term ef t
     | JCAinstanceof (t, st) -> 
 	add_tag_effect (term ef t) st.jc_struct_info_root
@@ -217,7 +217,10 @@ let rec assertion ef a =
     | JCAimplies (a1, a2) -> assertion (assertion ef a1) a2
     | JCAand al | JCAor al -> List.fold_left assertion ef al
     | JCAmutable (t, st, ta) ->
-	term (add_mutable_effect (tag ef ta (Some st.jc_struct_info_root)) st.jc_struct_info_root) t
+	term 
+	  (add_mutable_effect 
+	     (tag ef ta (Some st.jc_struct_info_root)) 
+	     st.jc_struct_info_root) t
     | JCAtagequality (t1, t2, h) ->
 	tag (tag ef t1 h) t2 h
 
@@ -442,11 +445,11 @@ let spec ef s =
 
 let parameter ef vi =
   match vi.jc_var_info_type with
-    | JCTpointer(st, _, _) ->
+    | JCTpointer (st, _, _) ->
 	let name = st.jc_struct_info_root in
-	add_alloc_reads (add_tag_reads ef name) name
+	  add_alloc_reads (add_tag_reads ef name) name
     | _ -> ef
-
+	
 (* computing the fixpoint *)
 
 let fixpoint_reached = ref false

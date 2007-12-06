@@ -25,6 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_env.mli,v 1.36 2007-12-06 15:26:17 nrousset Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 

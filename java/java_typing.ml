@@ -334,7 +334,7 @@ let new_method_info ~is_static loc id ti ty pars =
 
 let constructors_env = Hashtbl.create 97
 
-let new_constructor_info ci loc id pars =
+let new_constructor_info ci loc pars =
   incr method_or_constr_tag_counter;
   {
     constr_info_tag = !method_or_constr_tag_counter;
@@ -346,7 +346,7 @@ let new_constructor_info ci loc id pars =
     constr_info_parameters = pars;
     constr_info_calls = [];
   }
-
+    
 let rec list_assoc_name f id l =
   match l with
     | [] -> raise Not_found
@@ -1078,15 +1078,15 @@ and get_constructor_prototype package_env type_env current_type
   match current_type with
     | TypeInterface _ -> assert false
     | TypeClass cur ->
-	let loc,id = head.constr_name in
+	let loc, id = head.constr_name in
 	let params = 
 	  List.map (type_param package_env type_env) 
 	    head.constr_parameters 
 	in
-	let ci = new_constructor_info cur loc id params in
-	Hashtbl.add constructors_env ci.constr_info_tag 
-	  (ci,req,behs,eci,body);
-	ci
+	let ci = new_constructor_info cur loc params in
+	  Hashtbl.add constructors_env ci.constr_info_tag 
+	    (ci,req,behs,eci,body);
+	  ci
 
 and get_method_prototypes package_env type_env current_type (mis,cis) env l =
   match l with
@@ -1175,28 +1175,37 @@ and get_class_prototypes package_env type_env ci d =
   (* fields *)
   let fields = List.fold_left 
     (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
-  ci.class_info_fields <- List.rev fields;
-  let methods, constructors =
-    get_method_prototypes package_env type_env (TypeClass ci) ([],[]) [] d.class_fields 
-  in
-  ci.class_info_methods <- methods;
-  ci.class_info_constructors <- constructors;
-  (* invariants *)
-  let this_type = JTYclass (true, ci) (* i.e. [this] is always non-null *) in
-  let vi = new_var Loc.dummy_position this_type "this" in 
-  let invs, static_invs = 
-    List.fold_left
-      (fun (acc1, acc2) d -> 
-	 match d with
-	   | JPFinvariant (id, e) -> (id, e) :: acc1, acc2
-	   | JPFstatic_invariant (id, e) -> acc1, (snd id, e) :: acc2
-	   | _ -> acc1, acc2) ([], []) d.class_fields 
-  in
-    Hashtbl.add invariants_env
-      ci.class_info_tag (TypeClass ci, ["this", vi], vi, invs);
-    Hashtbl.add static_invariants_env
-      ci.class_info_tag (TypeClass ci, static_invs)
-    
+    ci.class_info_fields <- List.rev fields;
+    let methods, constructors =
+      get_method_prototypes package_env type_env (TypeClass ci) ([],[]) [] d.class_fields 
+    in
+    let constructors = 
+      (* if no constructor explicitly declared, 
+	 then there is always an implicit default constructor *)
+      if constructors <> [] then constructors else
+	let default_constructor = new_constructor_info ci Loc.dummy_position [] in
+	  Hashtbl.add constructors_env default_constructor.constr_info_tag 
+	    (default_constructor, None, [], Invoke_none, []);
+	[default_constructor]
+    in
+      ci.class_info_methods <- methods;
+      ci.class_info_constructors <- constructors;
+      (* invariants *)
+      let this_type = JTYclass (true, ci) (* i.e. [this] is always non-null *) in
+      let vi = new_var Loc.dummy_position this_type "this" in 
+      let invs, static_invs = 
+	List.fold_left
+	  (fun (acc1, acc2) d -> 
+	     match d with
+	       | JPFinvariant (id, e) -> (id, e) :: acc1, acc2
+	       | JPFstatic_invariant (id, e) -> acc1, (snd id, e) :: acc2
+	       | _ -> acc1, acc2) ([], []) d.class_fields 
+      in
+	Hashtbl.add invariants_env
+	  ci.class_info_tag (TypeClass ci, ["this", vi], vi, invs);
+	Hashtbl.add static_invariants_env
+	  ci.class_info_tag (TypeClass ci, static_invs)
+	  
 and get_interface_field_prototypes package_env type_env ii acc d =
   match d with
     | JPFmodel_variable vd -> 
@@ -2202,7 +2211,6 @@ let lookup_constructor ci arg_types =
   in
   let constructors = collect_constructors_from_class [] ci in
     match constructors with
-      | [] -> raise Not_found
       | [ci] -> ci
       | _ -> assert false
 	  
@@ -2772,7 +2780,7 @@ and statements package_env type_env current_type env b =
 	match s.java_pstatement_node with
 	  | JPSskip -> statements package_env type_env current_type env rem
 	  | JPSghost_local_decls vd 
-	  | JPSvar_decl vd -> 
+	  | JPSvar_decl vd ->
 	      let env,decls = 
 		variable_declaration package_env type_env 
 		  current_type env vd 
@@ -2971,67 +2979,66 @@ let type_method_spec_and_body ?(dobody=true)
   try
     let _ = Hashtbl.find methods_table mi.method_info_tag in ()
   with Not_found ->
-  let (_,req,behs,body) = 
-    try
-      Hashtbl.find methods_env mi.method_info_tag 
-    with Not_found -> assert false
-  in
-  let local_env =
-    if mi.method_info_is_static then [] else
-      let this_type =
-	match ti with
-	  | TypeClass ci -> JTYclass (true, ci) (* i.e. [this] is always non-null *)
-	  | TypeInterface ii -> JTYinterface ii
-      in
-      let vi = new_var Loc.dummy_position this_type "this" in
-      mi.method_info_has_this <- Some vi;
-      [("this",vi)]
-  in
-  let local_env = 
-    List.fold_left
-      (fun acc vi -> 
-	 (vi.java_var_info_name,vi)::acc)
-      local_env mi.method_info_parameters
-  in
-  let req = Option_misc.map (assertion package_env type_env (Some ti) local_env) req in
-  let env_result =
-    match mi.method_info_result with
-      | None -> local_env
-      | Some vi -> (vi.java_var_info_name,vi)::local_env
-  in
-(*
-  let assigns = 
-    Option_misc.map 
-      (List.map 
-	 (location package_env type_env (Some ti) env_result)) assigns
-  in
-  let ens = Option_misc.map (assertion package_env type_env (Some ti) env_result) ens in
-*)
-  let behs = List.map (behavior package_env type_env (Some ti) local_env env_result) behs in
-  if dobody then
-    let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
-    Hashtbl.add methods_table mi.method_info_tag 
-      { mt_method_info = mi;
-	mt_requires = req;
-(*
-	mt_assigns = assigns;
-	mt_ensures = ens;
-*)
-	mt_behaviors = behs;
-	mt_body = body } 
-  else
-    Hashtbl.add methods_table mi.method_info_tag 
-      { mt_method_info = mi;
-	mt_requires = req;
-(*
-	mt_assigns = assigns;
-	mt_ensures = ens;
-*)
-	mt_behaviors = behs;
-	mt_body = None } 
-
-
-
+    let (_,req,behs,body) = 
+      try
+	Hashtbl.find methods_env mi.method_info_tag 
+      with Not_found -> assert false
+    in
+    let local_env =
+      if mi.method_info_is_static then [] else
+	let this_type =
+	  match ti with
+	    | TypeClass ci -> JTYclass (true, ci) (* i.e. [this] is always non-null *)
+	    | TypeInterface ii -> JTYinterface ii
+	in
+	let vi = new_var Loc.dummy_position this_type "this" in
+	  mi.method_info_has_this <- Some vi;
+	  [("this",vi)]
+    in
+    let local_env = 
+      List.fold_left
+	(fun acc vi -> 
+	   (vi.java_var_info_name,vi)::acc)
+	local_env mi.method_info_parameters
+    in
+    let req = Option_misc.map (assertion package_env type_env (Some ti) local_env) req in
+    let env_result =
+      match mi.method_info_result with
+	| None -> local_env
+	| Some vi -> (vi.java_var_info_name,vi)::local_env
+    in
+      (*
+	let assigns = 
+	Option_misc.map 
+	(List.map 
+	(location package_env type_env (Some ti) env_result)) assigns
+	in
+	let ens = Option_misc.map (assertion package_env type_env (Some ti) env_result) ens in
+      *)
+    let behs = List.map (behavior package_env type_env (Some ti) local_env env_result) behs in
+      if dobody then
+	let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
+	  Hashtbl.add methods_table mi.method_info_tag 
+	    { mt_method_info = mi;
+	      mt_requires = req;
+	      (*
+		mt_assigns = assigns;
+		mt_ensures = ens;
+	      *)
+	      mt_behaviors = behs;
+	      mt_body = body }
+      else
+	Hashtbl.add methods_table mi.method_info_tag 
+	  { mt_method_info = mi;
+	    mt_requires = req;
+	    (*
+	      mt_assigns = assigns;
+	      mt_ensures = ens;
+	    *)
+	    mt_behaviors = behs;
+	    mt_body = None } 
+	  
+	  
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
@@ -3217,7 +3224,7 @@ let type_field_initializer package_env type_env ci fi =
     Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
   
 let type_decl package_env type_env d = 
-    match d with
+  match d with
     | JPTclass c -> 
 	(*
 	  class_modifiers : modifiers;
@@ -3251,7 +3258,7 @@ let type_decl package_env type_env d =
 		List.iter (type_method_spec_and_body package_env full_type_env ti) 
 		  ci.class_info_methods;
 		List.iter (type_constr_spec_and_body package_env full_type_env ti) 
-		  ci.class_info_constructors
+		  ci.class_info_constructors;
 	end
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.79 2007-12-06 11:30:27 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.80 2007-12-06 15:26:17 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -2499,6 +2499,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	    let (_,s,b) = List.find (fun (_,s,_) -> s = "safety") fs.jc_fun_behavior in
 	    b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; post];
 	  with Not_found -> 
+	    if is_purely_exceptional_fun fs then () else
 	    fs.jc_fun_behavior <- 
 	      (Loc.dummy_position,"safety", normal_behavior) :: fs.jc_fun_behavior
 	end;

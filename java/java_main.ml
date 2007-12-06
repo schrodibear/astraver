@@ -44,6 +44,7 @@ let main () =
 	    let (p, t) = Java_typing.get_types [] astl in
 	      Java_options.lprintf "(****** typing phase 2 : get bodies *****)@.";
 	      List.iter (Java_typing.get_bodies p t) astl;
+	      Java_options.lprintf "(****** typing phase 3 : type specs *****)@.";
 	      Java_typing.type_specs p t;
 	      printf "Typing OK.@.";
 	      

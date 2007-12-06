@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: java_env.mli,v 1.26 2007-12-06 15:26:17 nrousset Exp $ *)
+
 (*s types and environments *)
 
 type accessibility = Apublic | Aprotected | Aprivate | Anone

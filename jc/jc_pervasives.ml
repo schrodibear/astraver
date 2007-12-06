@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_pervasives.ml,v 1.60 2007-12-06 15:26:17 nrousset Exp $ *)
+
 open Format
 open Jc_env
 open Jc_envset
@@ -280,10 +282,31 @@ let term_no_loc t ty = {
   jc_term_label = "";
 }
 
+let rec term_of_expr e =
+  let node = match e.jc_expr_node with
+    | JCEconst c -> JCTconst c
+    | JCEvar vi -> JCTvar vi
+    | JCEbinary (e1, op, e2) -> JCTbinary (term_of_expr e1, op, term_of_expr e2) 
+    | JCEunary (op, e) -> JCTunary (op, term_of_expr e)
+    | JCEshift (e1, e2) -> JCTshift (term_of_expr e1, term_of_expr e2)
+    | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term_of_expr e1, term_of_expr e2)
+    | JCEderef (e, fi) -> JCTderef (term_of_expr e, fi)
+    | JCEinstanceof (e, si) -> JCTinstanceof (term_of_expr e, si)
+    | JCEcast (e, si) -> JCTcast (term_of_expr e, si)
+    | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
+    | JCEoffset (ok, e, si) -> JCToffset (ok, term_of_expr e, si)
+    | JCErange_cast _ | JCEalloc _ | JCEfree _ -> assert false
+  in
+    { jc_term_node = node;
+      jc_term_type = e.jc_expr_type;
+      jc_term_loc = e.jc_expr_loc;
+      jc_term_label = "" }
+
 let term_var_no_loc vi = term_no_loc (JCTvar vi) vi.jc_var_info_type
 
 let zerot = term_no_loc (JCTconst (JCCinteger "0")) integer_type
 let minusonet = term_no_loc (JCTconst (JCCinteger "-1")) integer_type
+let nullt = term_no_loc (JCTconst (JCCnull)) JCTnull
 
 let rec is_constant_term t =
   match t.jc_term_node with
@@ -537,6 +560,21 @@ let default_behavior = {
   jc_behavior_assigns = None;
   jc_behavior_ensures = raw_asrt JCAtrue
 }
+
+let contains_normal_behavior fs =
+  List.exists 
+    (fun (_, _, b) -> b.jc_behavior_throws = None) 
+    fs.jc_fun_behavior
+
+let contains_exceptional_behavior fs =
+  List.exists
+    (fun (_, _, b) -> b.jc_behavior_throws <> None)
+    fs.jc_fun_behavior
+
+let is_purely_exceptional_fun fs =
+  not (contains_normal_behavior fs) && 
+    contains_exceptional_behavior fs
+
 
 let rec skip_shifts e = match e.jc_expr_node with
   | JCEshift(e,_) -> skip_shifts e

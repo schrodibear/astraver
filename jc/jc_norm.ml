@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_norm.ml,v 1.62 2007-12-06 15:26:17 nrousset Exp $ *)
+
 open Jc_env
 open Jc_envset
 open Jc_fenv
@@ -820,18 +822,17 @@ let invariant_for_struct this st =
 
 
 let code_function (fi, fs, sl) vil =
-  let vi_result = var ~unique: false fi.jc_fun_info_return_type "\\result" in
-  let vit_result = term_var_no_loc vi_result in
-  let result_type_range = 
-    Jc_typing.type_range_of_term fi.jc_fun_info_return_type vit_result 
-  in
   begin
     match !Jc_common_options.inv_sem with
       | InvArguments ->
 	  (* apply arguments invariant policy *)
 	  let invariants =
 	    (* Calculate global invariants. *)
-	    let vitl = List.map (fun vi -> term_no_loc (JCTvar vi) vi.jc_var_info_type) vil in
+	    let vitl = 
+	      List.map 
+		(fun vi -> term_no_loc (JCTvar vi) 
+		   vi.jc_var_info_type) vil 
+	    in
 	    let global_invariants =
 	      Hashtbl.fold
 		(fun li _ acc -> 
@@ -839,19 +840,37 @@ let code_function (fi, fs, sl) vil =
 		   (raw_asrt (JCAapp (li, vitl))) :: acc)
 		Jc_typing.global_invariants_table []
 	    in
-	      make_and global_invariants
+	    let global_invariants = make_and global_invariants in
+	      (* Calculate invariants for each parameter. *)
+	    let invariants =
+	      List.fold_left
+		(fun acc vi ->
+		   match vi.jc_var_info_type with
+		     | JCTpointer (st, _, _) ->
+			 make_and 
+			   [acc; (invariant_for_struct 
+				    (term_no_loc (JCTvar vi) vi.jc_var_info_type) st)]
+		     | _ -> acc)
+		(raw_asrt JCAtrue)
+		fi.jc_fun_info_parameters
+	    in
+	      make_and [global_invariants; invariants]
 	  in
 	    (* add invariants to the function precondition *)
 	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
-	    (* add result_type info and invariants to the function postcondition *)
-	    let post = make_and [invariants; result_type_range] in
+	    (* add invariants to the function postcondition *)
+	    let post = invariants in
 	      List.iter
 		(fun (_,_, b) -> b.jc_behavior_ensures <- make_and 
 		   [b.jc_behavior_ensures; post])
 		fs.jc_fun_behavior;
-	      (* add the 'safety' spec *)
-	      let safety_b = { default_behavior with jc_behavior_ensures = post } in
-		fs.jc_fun_behavior <- (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
+	      if is_purely_exceptional_fun fs then () else
+		begin
+		  (* add the 'safety' spec *)
+		  let safety_b = { default_behavior with jc_behavior_ensures = post } in
+		    fs.jc_fun_behavior <- 
+		      (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
+		end
       | _ -> ()
   end;
     (* normalization of the function body *)

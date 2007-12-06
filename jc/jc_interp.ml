@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_interp.ml,v 1.185 2007-12-06 15:26:17 nrousset Exp $ *)
+
 open Jc_env
 open Jc_envset
 open Jc_fenv
@@ -759,6 +761,13 @@ expressions and statements
 
 ****************************)
 
+
+let rec is_substruct si1 si2 =
+  if si1.jc_struct_info_name = si2.jc_struct_info_name then true else
+    match si1.jc_struct_info_parent with
+      | None -> false
+      | Some si -> is_substruct si si2
+
 type interp_lvalue =
   | LocalRef of var_info
   | HeapRef of field_info * expr
@@ -936,11 +945,23 @@ and expr ~threats e : expr =
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
 	(* always safe *)
 	make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
-    | JCEcast(e1,t) ->
-	let e1 = expr e1 in
-	let tag = t.jc_struct_info_root ^ "_tag_table" in
-	make_guarded_app ~name:lab DownCast loc "downcast_" 
-	  [Deref tag; e1; Var (tag_name t)]
+    | JCEcast (e, si) ->
+	let tag = tag_table_name si in
+	let et = term None "" (term_of_expr e) in
+	let typea = 
+	  match e.jc_expr_type with
+	    | JCTpointer (si', _, _) -> 
+		if is_substruct si' si then LTrue else
+		  LPred ("instanceof", [LVar tag; et; LVar (tag_name si)])
+	    | _ -> LTrue
+	in
+	let e = expr e in
+	let tag = si.jc_struct_info_root ^ "_tag_table" in
+	let call = 
+	  make_guarded_app ~name:lab DownCast loc "downcast_" 
+	    [Deref tag; e; Var (tag_name si)]
+	in
+	  if typea = LTrue then call else Assert (typea, call)
     | JCErange_cast(ri,e1) ->
 	let e1' = expr e1 in
 	coerce ~no_int_overflow:(not threats)
@@ -1069,41 +1090,10 @@ let jessie_return_variable = "jessie_returned_value"
 let jessie_return_exception = "Return"
 let return_void = ref false
 
-let rec term_of_expr e =
-  let node = match e.jc_expr_node with
-    | JCEconst c -> JCTconst c
-    | JCEvar vi -> JCTvar vi
-    | JCEbinary (e1, op, e2) -> JCTbinary (term_of_expr e1, op, term_of_expr e2) 
-    | JCEunary (op, e) -> JCTunary (op, term_of_expr e)
-    | JCEshift (e1, e2) -> JCTshift (term_of_expr e1, term_of_expr e2)
-    | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term_of_expr e1, term_of_expr e2)
-    | JCEderef (e, fi) -> JCTderef (term_of_expr e, fi)
-    | JCEinstanceof (e, si) -> JCTinstanceof (term_of_expr e, si)
-    | JCEcast (e, si) -> JCTcast (term_of_expr e, si)
-    | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
-    | JCEoffset (ok, e, si) -> JCToffset (ok, term_of_expr e, si)
-    | JCErange_cast _ | JCEalloc _ | JCEfree _ -> assert false
-  in
-    { jc_term_node = node;
-      jc_term_type = e.jc_expr_type;
-      jc_term_loc = e.jc_expr_loc;
-      jc_term_label = "" }
-
-let rec is_substruct si1 si2 =
-  if si1.jc_struct_info_name = si2.jc_struct_info_name then true else
-    match si1.jc_struct_info_parent with
-      | None -> false
-      | Some si -> is_substruct si si2
-
 let type_assert vi e =
   match vi.jc_var_info_type, e.jc_expr_type with
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
-	let tag = tag_table_name si in
 	let et = term None "" (term_of_expr e) in
-	let typea =
-	  if is_substruct si' si then LTrue else
-	    LPred ("instanceof", [LVar tag; et; LVar (tag_name si)])
-	in
 	let alloc = alloc_table_name si in
 	let offset_mina = match n1o, n1o' with
 	  | None, _ -> LTrue
@@ -1121,7 +1111,7 @@ let type_assert vi e =
 		     [LApp ("offset_max", [LVar alloc; et]);
 		      LConst (Prim_int (Num.string_of_num n))])
 	in
-	  make_and_list [typea; offset_mina; offset_maxa]
+	  make_and_list [offset_mina; offset_maxa]
     | _ -> LTrue
 	
 let expr_coerce ~threats vi e =
@@ -1479,8 +1469,9 @@ let tr_struct st acc =
       LTrue,
       (* [st_root pointer] *)
       Base_type ptr_type,
-      (* [reads nothing writes alloc,tagtab] *)
-      [],[alloc;tagtab],
+      (* [reads all_fields writes alloc,tagtab] *)
+      (List.map (fun si -> alloc_table_name si) all_structs
+	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields),[alloc;tagtab],
       (* normal post *)
       make_and_list [
 	(* [valid_one_st(result,alloc...)] *)
@@ -1512,8 +1503,9 @@ let tr_struct st acc =
       LPred("gt_int",[LVar "n";LConst(Prim_int "0")]),
       (* [st_root pointer] *)
       Base_type ptr_type,
-      (* [reads nothing writes alloc,tagtab] *)
-      [],[alloc;tagtab],
+      (* [reads all_fields; writes alloc,tagtab] *)
+      (List.map (fun si -> alloc_table_name si) all_structs
+	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields), [alloc; tagtab],
       (* normal post *)
       make_and_list [
 	(* [valid_st(result,0,n-1,alloc...)] *)
@@ -1539,45 +1531,6 @@ let tr_struct st acc =
   let acc = 
     Param(false,alloc_param_name st,alloc_type) :: acc
   in
-
-  (* the invariants *)
-  (*let tmp = "this" in
-  let i = invariant_for_struct (LVar tmp) st in
-  let a =
-    LImpl(LPred("instanceof",
-		[LVar "a";
-		 LVar tmp;
-		 LVar st.jc_struct_info_name]),
-	  LOr(LPred("eq",
-		    [LApp("select",[LVar "mutable"; LVar tmp]);
-		     LConst (Prim_bool true)])
-		,i))
-  in
-  let (_,invs) = 
-    Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
-  in
-  let params =
-    List.fold_left
-      (fun acc (li,_) -> 
-	 FieldSet.union li.jc_logic_info_effects.jc_reads_fields acc)
-      FieldSet.empty
-      invs
-  in
-  let a =
-    FieldSet.fold
-      (fun fi a ->
-	 LForall(fi.jc_field_info_final_name, memory_field fi,
-		 a))
-      params a
-  in 
-  let a =
-    LForall("a",simple_logic_type "alloc_table",
-	    LForall("mutable",memory_type (simple_logic_type "bool"),
-		    LForall(tmp,simple_logic_type "pointer",a)))
-  in
-  let acc =
-    Axiom("global_invariant_for_" ^ st.jc_struct_info_name, a) :: acc
-  in*)
   match st.jc_struct_info_parent with
     | None ->
 	(* declaration of root type and the allocation table *)
@@ -1772,13 +1725,16 @@ let tr_fun f loc spec body acc =
 	 match v.jc_var_info_type with
 	   | JCTpointer(st,a,b) ->
 	       let alloc = alloc_table_name st in
-	       let tag = tag_table_name st in
 	       let var = LVar v.jc_var_info_final_name in
+	       let fields = embedded_struct_fields st in
+		 f.jc_fun_info_effects <-
+		   Jc_effect.fef_union 
+		   f.jc_fun_info_effects
+		   (List.fold_left Jc_effect.add_field_reads f.jc_fun_info_effects fields);
 	       let validity = match a,b with
-		 | Some a,Some b 
+		 | Some a, Some b 
 		     when Num.eq_num a (Num.num_of_int 0)
 		       && Num.eq_num b (Num.num_of_int 0) ->
-		     let fields = embedded_struct_fields st in
 		     let structs = 
 		       List.fold_left 
 			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
@@ -1793,7 +1749,6 @@ let tr_fun f loc spec body acc =
 		       :: List.map (lvar None ** alloc_table_name) structs
 		       @ List.map (lvar None ** field_memory_name) fields)
 		 | Some a,Some b ->
-		     let fields = embedded_struct_fields st in
 		     let structs = 
 		       List.fold_left 
 			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
@@ -1811,18 +1766,7 @@ let tr_fun f loc spec body acc =
 		       @ List.map (lvar None ** field_memory_name) fields)
 		 | _ -> LTrue
 	       in
-	       if Jc_typing.is_root_struct st then
 		 make_and validity acc
-	       else
-		 let instance =
-		   (LPred("instanceof",
-		   [LVar tag; var ; LVar (tag_name st)]))
-		 in
-		 make_and (make_and validity instance) acc
-	       (*let invariant = invariant_for_struct var st in
-	       make_and 
-		 (make_and (make_and validity instance) invariant)
-		 acc*)
            | JCTnull -> assert false
 	   | JCTenum _ -> acc
 	   | JCTnative _ -> acc
@@ -1991,15 +1935,18 @@ let tr_fun f loc spec body acc =
   (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
   (* why parameter for calling the function *)
   let ret_type = tr_type f.jc_fun_info_return_type in
-  let param_normal_post = make_and normal_post normal_post_safety in
+  let param_normal_post = 
+    if is_purely_exceptional_fun spec then LFalse else
+      make_and normal_post normal_post_safety 
+  in
   let param_excep_posts = excep_posts @ excep_posts_safety in
   let why_param = 
     let annot_type =
-      Annot_type(requires,ret_type,
+      Annot_type(requires, ret_type,
 		 reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = interp_fun_params f annot_type in
-    Param(false,f.jc_fun_info_final_name,fun_type)
+      Param (false, f.jc_fun_info_final_name, fun_type)
   in
   match body with
     | None -> 
@@ -2079,6 +2026,7 @@ let tr_fun f loc spec body acc =
 		~beh:"Safety" loc 
 	      in
 	      let acc = 
+		if is_purely_exceptional_fun spec then acc else
 		if safety_exists then 
 		  Def(
 		    newid,
