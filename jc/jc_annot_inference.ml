@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.78 2007-12-05 19:30:19 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.79 2007-12-06 11:30:27 moy Exp $ *)
 
 open Pp
 open Format
@@ -2932,11 +2932,15 @@ let quantif_eliminate qf finv =
 	simplify (asrt_of_atp q) finv
 
 let initialize_target curposts target =
-  let collect_vars =
-    fold_term_in_assertion (fun acc t -> match t.jc_term_node with
-      | JCTvar vi -> VarSet.add vi acc
-      | _ -> acc
-    ) VarSet.empty 
+  let collect_free_vars = 
+    fold_term_and_assertion 
+      (fun acc t -> match t.jc_term_node with
+	| JCTvar vi -> VarSet.add vi acc
+	| _ -> acc) 
+      (fun acc a -> match a.jc_assertion_node with
+	| JCAquantifier(_,vi,a) -> VarSet.remove vi acc
+	| _ -> acc)
+      VarSet.empty
   in
   let collect_sub_terms = 
     fold_term_in_assertion (fun acc t -> match t.jc_term_node with
@@ -2945,8 +2949,8 @@ let initialize_target curposts target =
       | _ -> TermSet.add t acc
     ) TermSet.empty 
   in
-  let vs1 = collect_vars target.jc_target_regular_invariant in
-  let vs2 = collect_vars target.jc_target_assertion in
+  let vs1 = collect_free_vars target.jc_target_regular_invariant in
+  let vs2 = collect_free_vars target.jc_target_assertion in
   let vs = VarSet.union vs1 vs2 in
   let ts1 = collect_sub_terms target.jc_target_regular_invariant in
   let ts2 = collect_sub_terms target.jc_target_assertion in
@@ -3486,17 +3490,8 @@ let code_function = function
 	    end;
  	    let targets = 
 	      List.fold_right (fun target acc ->
-
-		if debug then 
-		  printf "[code_function] target %a@."  Jc_output.assertion target.jc_target_assertion;
-
 		target.jc_target_regular_invariant <- 
 		  simplify target.jc_target_regular_invariant (raw_asrt JCAtrue);
-
-		if debug then 
-		  printf "[code_function] target2 %a@." Jc_output.assertion  target.jc_target_regular_invariant;
-
-
 		(* Build the most precise invariant known at the current 
 		 * assertion point: it is the conjunction of the regular 
 		 * invariant (from forward abstract interpretation) and 

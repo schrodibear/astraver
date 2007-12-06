@@ -279,6 +279,30 @@ let rec fold_term_in_assertion f acc a =
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
 	fold_term_in_assertion f acc a1
 
+let rec fold_term_and_assertion ft fa acc a =
+  let acc = match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCAtagequality _ -> acc
+    | JCArelation(t1,_,t2) -> 
+	let acc = fold_term ft acc t1 in
+	fold_term ft acc t2
+    | JCAapp(_,tls) ->
+	List.fold_left (fold_term ft) acc tls
+    | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+	fold_term ft acc t1
+    | JCAand al | JCAor al ->
+	List.fold_left (fold_term_and_assertion ft fa) acc al
+    | JCAimplies(a1,a2) | JCAiff(a1,a2) ->
+	let acc = fold_term_and_assertion ft fa acc a1 in
+	fold_term_and_assertion ft fa acc a2
+    | JCAif(t1,a1,a2) ->
+	let acc = fold_term ft acc t1 in
+	let acc = fold_term_and_assertion ft fa acc a1 in
+	fold_term_and_assertion ft fa acc a2
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+	fold_term_and_assertion ft fa acc a1
+  in
+  fa acc a
+
 let rec post_map_term_in_assertion f a =
   let anode = match a.jc_assertion_node with
     | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
