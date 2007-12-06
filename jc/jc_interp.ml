@@ -1779,24 +1779,36 @@ let tr_fun f loc spec body acc =
 		     when Num.eq_num a (Num.num_of_int 0)
 		       && Num.eq_num b (Num.num_of_int 0) ->
 		     let fields = embedded_struct_fields st in
-		       LPred(
-			 valid_one_pred_name st,
-			 var
-			 :: LVar alloc
-			 :: List.map 
-			 (lvar None ** alloc_table_name ** field_sinfo) fields
-			 @ List.map (lvar None ** field_memory_name) fields)
+		     let structs = 
+		       List.fold_left 
+			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			 StructSet.empty fields
+		     in
+		     let structs = 
+		       StructSet.fold (fun st acc -> st :: acc) structs [] in
+		     LPred(
+		       valid_one_pred_name st,
+		       var
+		       :: LVar alloc
+		       :: List.map (lvar None ** alloc_table_name) structs
+		       @ List.map (lvar None ** field_memory_name) fields)
 		 | Some a,Some b ->
 		     let fields = embedded_struct_fields st in
-		       LPred(
-			 valid_pred_name st,
-			 var
-			 :: LConst(Prim_int(Num.string_of_num a))
+		     let structs = 
+		       List.fold_left 
+			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			 StructSet.empty fields
+		     in
+		     let structs = 
+		       StructSet.fold (fun st acc -> st :: acc) structs [] in
+		     LPred(
+		       valid_pred_name st,
+		       var
+		       :: LConst(Prim_int(Num.string_of_num a))
 		       :: LConst(Prim_int(Num.string_of_num b))
-			 :: LVar alloc
-			 :: List.map 
-			   (lvar None ** alloc_table_name ** field_sinfo) fields
-			 @ List.map (lvar None ** field_memory_name) fields)
+		       :: LVar alloc
+		       :: List.map (lvar None ** alloc_table_name) structs
+		       @ List.map (lvar None ** field_memory_name) fields)
 		 | _ -> LTrue
 	       in
 	       if Jc_typing.is_root_struct st then
