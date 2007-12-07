@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.185 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.186 2007-12-07 12:55:55 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1227,7 +1227,9 @@ let rec statement ~threats s =
 	    | None -> 
 		any_value vi.jc_var_info_type
 	    | Some e -> 
+(*
 		eprintf "decl of vi=%s@." vi.jc_var_info_name;
+*)
 		coerce ~no_int_overflow:(not threats) 
 		  e.jc_expr_label s.jc_statement_loc vi.jc_var_info_type e.jc_expr_type 
 		  (expr e)

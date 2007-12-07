@@ -339,21 +339,6 @@ generalize (mem_block_get_set_eq mem a
 apply block_get_set_eq.
 Qed.
 
-(*Why axiom*) Lemma select_store_eq :
-  forall (A1:Set), forall (A2:Set),
-  (forall (m:(memory A1 A2)),
-   (forall (p1:(pointer A1)),
-    (forall (p2:(pointer A1)),
-     (forall (a:A2), (p1 = p2 -> (select (store m p1 a) p2) = a))))).
-Proof.
-intros S T m p q x peq.
-rewrite <- peq.
-clear q peq.
-unfold select.
-unfold store.
-apply mem_get_set_eq.
-Qed.
-
 Lemma Ndiff: forall a b, a <> b -> Ndec.Neqb a b = false.
 Proof.
 intros a b diff.
@@ -523,6 +508,21 @@ apply (injective_projections p q); auto.
 intro eq.
 rewrite eq in H.
 destruct H; apply H; trivial.
+Qed.
+
+(*Why axiom*) Lemma select_store_eq :
+  forall (A1:Set), forall (A2:Set),
+  (forall (m:(memory A1 A2)),
+   (forall (p1:(pointer A1)),
+    (forall (p2:(pointer A1)),
+     (forall (a:A2), (p1 = p2 -> (select (store m p1 a) p2) = a))))).
+Proof.
+intros S T m p q x peq.
+rewrite <- peq.
+clear q peq.
+unfold select.
+unfold store.
+apply mem_get_set_eq.
 Qed.
 
 (*Why axiom*) Lemma select_store_neq :
