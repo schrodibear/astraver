@@ -35,7 +35,7 @@ let add_var name ty env =
     jc_var_info_assigned = false; (* ? *)
     jc_var_info_static = false; (* ? *)
   } in
-  { env with vars = StringMap.add name vi env.vars }
+  { env with vars = StringMap.add name vi env.vars }, vi
 
 let add_fun name params return_type env =
   let fi = {

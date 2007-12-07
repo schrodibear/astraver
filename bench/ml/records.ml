@@ -4,7 +4,8 @@ type test = {
 }
 
 let foo x =
-  { foo = 42; bar = x.foo }.bar <- x.bar
+  let r = { foo = 42; bar = x.foo } in
+  r.bar <- x.bar
 
 (*
 Local Variables: 
