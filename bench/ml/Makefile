@@ -1,4 +1,18 @@
-.SUFFIXES: .ml .jc
+WHYDIR=../../
+EXT=.opt
+JESSIE=$(WHYDIR)bin/jessie$(EXT)
+JESSICA=$(WHYDIR)bin/jessica$(EXT)
 
-.ml.jc:
-	../../bin/jessica.byte pervasives.mli $<
+$(WHYDIR)%:
+	make -j -C $(WHYDIR) $*
+
+.SUFFIXES: .ml .jc .why
+
+%.jc: %.ml $(JESSICA)
+	$(JESSICA) pervasives.mli $*.ml
+
+%.why: %.jc $(JESSIE)
+	$(JESSIE) $*.jc
+
+%: %.why
+	make -f $*.makefile gui

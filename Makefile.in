@@ -857,7 +857,7 @@ WWW = /users/demons/filliatr/WWW/why
 WWWKRAKATOA = /users/demons/marche/WWW/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
-       mix/*.ml* ml/*.ml* ml/parsing/*.ml* ml/typing/*.ml* ml/utils/*.ml* \
+       mix/*.ml* \
        Version Makefile.in configure.in configure .depend .depend.coq \
        config/check_ocamlgraph.ml \
        README INSTALL COPYING GPL CHANGES \

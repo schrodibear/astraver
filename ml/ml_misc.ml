@@ -34,6 +34,19 @@ let not_implemented loc =
 
 let fresh_int = let c = ref(-1) in fun () -> incr c; !c
 
+let rec list_filter_option acc = function
+  | [] -> List.rev acc
+  | None::rem -> list_filter_option acc rem
+  | (Some x)::rem -> list_filter_option (x::acc) rem
+let list_filter_option l = list_filter_option [] l
+
+let rec list_fold_map acc f useracc = function
+  | [] -> useracc, List.rev acc
+  | x::rem ->
+      let useracc', y = f useracc x in
+      list_fold_map (y::acc) f useracc' rem
+let list_fold_map x = list_fold_map [] x
+
 (******************************************************************************)
 
 open Jc_ast
@@ -72,6 +85,42 @@ let make_and a b = match a.jc_assertion_node, b.jc_assertion_node with
   | _ -> make_assertion (JCAand [ a; b ])
 
 let make_and_list = List.fold_left make_and (make_assertion JCAtrue)
+
+let make_pointer_type si =
+  JCTpointer(si, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
+
+let expr_of_int i = make_int_expr(JCTEconst(JCCinteger(string_of_int i)))
+
+(* Jc_pervasives produces names that will be used by Jessie too, which is bad *)
+let new_var = let var_cnt = ref 0 in fun ty ->
+  incr var_cnt;
+  let id = "jessica_"^(string_of_int !var_cnt) in
+  {
+    jc_var_info_tag = fresh_int ();
+    jc_var_info_name = id;
+    jc_var_info_final_name = id;
+    jc_var_info_type = ty;
+    jc_var_info_formal = false;
+    jc_var_info_assigned = false;
+    jc_var_info_static = false;
+  }
+
+let ignored_var ty = {
+  jc_var_info_tag = fresh_int ();
+  jc_var_info_name = "jessica_ignored";
+  jc_var_info_final_name = "jessica_ignored";
+  jc_var_info_type = ty;
+  jc_var_info_formal = false;
+  jc_var_info_assigned = false;
+  jc_var_info_static = false;
+}
+
+let expr_seq_to_let =
+  List.fold_right
+    (fun e acc ->
+       make_expr
+	 (JCTElet(ignored_var e.jc_texpr_type, e, acc))
+	 acc.jc_texpr_type)
 
 (*
 Local Variables: 

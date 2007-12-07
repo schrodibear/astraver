@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: datarepr.ml,v 1.1 2007-11-30 10:16:43 bardou Exp $ *)
+(* $Id: datarepr.ml,v 1.2 2007-12-07 15:42:00 bardou Exp $ *)
 
 (* Compute constructor and label descriptions from type declarations,
    determining their representation. *)
@@ -59,7 +59,7 @@ let none = {desc = Ttuple []; level = -1; id = -1}
 let dummy_label =
   { lbl_res = none; lbl_arg = none; lbl_mut = Immutable;
     lbl_pos = (-1); lbl_all = [||]; lbl_repres = Record_regular;
-    lbl_private = Public }
+    lbl_private = Public; lbl_name = "" }
 
 let label_descrs ty_res lbls repres priv =
   let all_labels = Array.create (List.length lbls) dummy_label in
@@ -73,7 +73,8 @@ let label_descrs ty_res lbls repres priv =
             lbl_pos = num;
             lbl_all = all_labels;
             lbl_repres = repres;
-            lbl_private = priv } in
+            lbl_private = priv;
+	    lbl_name = name } in
         all_labels.(num) <- lbl;
         (name, lbl) :: describe_labels (num+1) rest in
   describe_labels 0 lbls

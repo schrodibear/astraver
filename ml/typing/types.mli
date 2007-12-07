@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: types.mli,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: types.mli,v 1.2 2007-12-07 15:42:00 bardou Exp $ *)
 
 (* Representation of types and declarations *)
 
@@ -124,7 +124,8 @@ type label_description =
     lbl_pos: int;                       (* Position in block *)
     lbl_all: label_description array;   (* All the labels in this type *)
     lbl_repres: record_representation;  (* Representation for this record *)
-    lbl_private: private_flag }         (* Read-only field? *)
+    lbl_private: private_flag;          (* Read-only field? *)
+    lbl_name: string }                  (* Used by Jessica *)
 
 and record_representation =
     Record_regular                      (* All fields are boxed / tagged *)

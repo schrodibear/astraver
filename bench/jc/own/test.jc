@@ -4,7 +4,12 @@ type Point = {
 }
 
 type ColorPoint = Point with { integer color; }
- 
+
+unit f()
+  requires true;
+{
+  (let x = (new Point[0]) in x).x = 0;
+} 
 
 /*
 Local Variables: 
