@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.94 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_ast.mli,v 1.95 2007-12-10 17:05:43 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -482,6 +482,6 @@ type fun_spec =
     
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
 End: 
 *)

@@ -2,6 +2,8 @@ open Ml_misc
 open Jc_env
 open Jc_fenv
 
+exception Not_found_str of string
+
 module IdentMap = Map.Make(
   struct
     type t = Ml_ocaml.Ident.t
@@ -68,11 +70,17 @@ let add_field name ty si env =
 let add_struct si env =
   { env with structs = StringMap.add si.jc_struct_info_name si env.structs }
 
-let find_var name env = StringMap.find name env.vars
-let find_fun name env = StringMap.find name env.funs
-let find_spec id env = IdentMap.find id env.specs
-let find_field name env = StringMap.find name env.fields
-let find_struct name env = StringMap.find name env.structs
+let nf s f k m =
+  try
+    f k m
+  with Not_found ->
+    raise (Not_found_str s)
+
+let find_var name env = nf name StringMap.find name env.vars
+let find_fun name env = nf name StringMap.find name env.funs
+let find_spec id env = nf (Ml_ocaml.Ident.name id) IdentMap.find id env.specs
+let find_field name env = nf name StringMap.find name env.fields
+let find_struct name env = nf name StringMap.find name env.structs
 
 (*
 Local Variables: 

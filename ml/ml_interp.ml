@@ -26,11 +26,11 @@ let rec type_ env t = match t.desc with
 	| s ->
 	    begin try
 	      type_in_env env s
-	    with Not_found ->
+	    with Ml_env.Not_found_str _ ->
 	      JCTlogic("ocaml_Tconstr_"^s)
 	    end
       end
-  | Tvar -> JCTlogic "ocaml_Tvar"
+  | Tvar -> JCTnative Tunit
   | Tarrow _ -> JCTlogic "ocaml_Tarrow"
   | Ttuple _ -> JCTlogic "ocaml_Ttuple"
   | Tconstr _ -> JCTlogic "ocaml_Tconstr"
@@ -55,6 +55,8 @@ let binary_op_expr loc op = function
 let binary_op_term loc op = function
   | [ x; y ] -> JCTbinary(x, op, y)
   | l -> locate_error loc "2 arguments required, %d found" (List.length l)
+
+exception Not_an_expression
 
 let rec expression env e =
   let binary_op = binary_op_expr e.exp_loc in
@@ -91,7 +93,7 @@ let rec expression env e =
 		| x -> let fi = try
 		    Ml_env.find_fun x env
 		  with
-		    | Not_found -> locate_error e.exp_loc
+		    | Ml_env.Not_found_str x -> locate_error e.exp_loc
 			"unknown function: %s" x
 		  in
 		  JCTEcall(fi, args')
@@ -99,10 +101,10 @@ let rec expression env e =
 	  | _ -> not_implemented e.exp_loc "unsupported application"
 	end
 (*  | Texp_match of expression * (pattern * expression) list * partial
-  | Texp_try of expression * (pattern * expression) list
-  | Texp_tuple of expression list
-  | Texp_construct of constructor_description * expression list
-  | Texp_variant of label * expression option *)
+    | Texp_try of expression * (pattern * expression) list
+    | Texp_tuple of expression list
+    | Texp_construct of constructor_description * expression list
+    | Texp_variant of label * expression option *)
     | Texp_record(lbls, None) ->
 	let si = match lbls with
 	  | [] ->
@@ -127,7 +129,7 @@ let rec expression env e =
 	in
 	JCTElet(
 	  tmp_var,
-	  make_int_expr (JCTEalloc(expr_of_int 1, si)),
+	  make_expr (JCTEalloc(expr_of_int 1, si)) tmp_ty,
 	  expr_seq_to_let assigns (make_expr (JCTEvar tmp_var) tmp_ty)
 	)
     | Texp_record(_, Some _) ->
@@ -151,21 +153,20 @@ let rec expression env e =
 	  make_expr (expression env if_expr) (type_ env if_expr.exp_type),
 	make_expr (expression env then_expr) (type_ env if_expr.exp_type),
 	  make_expr else' else_type)
-(*  | Texp_sequence of expression * expression
-  | Texp_while of expression * expression
-  | Texp_for of
-      Ident.t * expression * expression * direction_flag * expression
-  | Texp_when of expression * expression
-  | Texp_send of expression * meth
-  | Texp_new of Path.t * class_declaration
-  | Texp_instvar of Path.t * Path.t
-  | Texp_setinstvar of Path.t * Path.t * expression
-  | Texp_override of Path.t * (Path.t * expression) list
-  | Texp_letmodule of Ident.t * module_expr * expression
-  | Texp_assert of expression
-  | Texp_assertfalse
-  | Texp_lazy of expression
-  | Texp_object of class_structure * class_signature * string list *)
+(*  | Texp_sequence of expression * expression *)
+    | Texp_while _
+    | Texp_for _ -> raise Not_an_expression
+(*  | Texp_when of expression * expression
+    | Texp_send of expression * meth
+    | Texp_new of Path.t * class_declaration
+    | Texp_instvar of Path.t * Path.t
+    | Texp_setinstvar of Path.t * Path.t * expression
+    | Texp_override of Path.t * (Path.t * expression) list
+    | Texp_letmodule of Ident.t * module_expr * expression
+    | Texp_assert of expression
+    | Texp_assertfalse
+    | Texp_lazy of expression
+    | Texp_object of class_structure * class_signature * string list *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: expression"
 
 let rec term env e =
@@ -271,8 +272,134 @@ let rec assertion env e =
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
     | Texp_result ->
-	assert false
+	assert false (* impossible *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: assertion"
+
+let rec statement env e cont =
+  match e.exp_desc with
+    | Texp_ident _
+    | Texp_constant _ ->
+	cont (make_expr (expression env e) (type_ env e.exp_type))
+    | Texp_let((Nonrecursive | Default),
+	       [ { pat_desc = Tpat_var id }, eq_expr ], in_expr) ->
+	let ty = type_ env eq_expr.exp_type in
+	let new_env, vi =
+	  Ml_env.add_var (name id) ty env
+	in
+	let tmp = new_var ty in
+	statement env eq_expr
+	  (fun eq_res ->
+	     make_var_decl tmp None
+	       (make_statement_block [
+		  make_var_decl vi (Some eq_res)
+		    (statement new_env in_expr (make_affect tmp));
+		  cont (make_expr (JCTEvar tmp) ty);
+	       ]))
+    | Texp_let(Recursive, _, _) ->
+	not_implemented e.exp_loc "recursive let"
+(*    | Texp_function of (pattern * expression) list * partial
+    | Texp_apply(f, args) ->
+    | Texp_match of expression * (pattern * expression) list * partial
+    | Texp_try of expression * (pattern * expression) list
+    | Texp_tuple of expression list
+    | Texp_construct of constructor_description * expression list
+    | Texp_variant of label * expression option*)
+    | Texp_record(lbls, None) ->
+	let si = match lbls with
+	  | [] ->
+	      locate_error e.exp_loc "empty record"
+	  | (lbl, _)::_ ->
+	      (Ml_env.find_field lbl.lbl_name env).jc_field_info_struct
+	in
+	let tmp_ty = make_pointer_type si in
+	let tmp_var = new_var tmp_ty in
+	let tmp_expr = make_expr (JCTEvar tmp_var) tmp_ty in
+	let tmp_init = Some (make_expr (JCTEalloc(expr_of_int 1, si)) tmp_ty) in
+	let affect fi v =
+	  make_statement
+	    (JCTSexpr(make_expr (JCTEassign_heap(tmp_expr, fi, v))
+			fi.jc_field_info_type))
+	in
+	let affects = List.map
+	  (fun (ld, e) ->
+	     let fi = Ml_env.find_field ld.lbl_name env in
+	     statement env e (affect fi))
+	  lbls
+	in
+	make_var_decl tmp_var tmp_init
+	  (make_statement_block (affects @ [ cont tmp_expr ]))
+    | Texp_record(_, Some _) ->
+	not_implemented e.exp_loc "record with"
+    | Texp_field(e, lbl) ->
+	let fi = Ml_env.find_field lbl.lbl_name env in
+	statement env e
+	  (fun res -> cont
+	     (make_expr (JCTEderef(res, fi))
+		fi.jc_field_info_type))
+    | Texp_setfield(e, lbl, v) ->
+	let fi = Ml_env.find_field lbl.lbl_name env in
+	statement env e
+	  (fun res ->
+	     statement env v
+	       (fun res2 -> cont
+		  (make_expr (JCTEassign_heap(res, fi, res2))
+		     fi.jc_field_info_type)))
+(*    | Texp_array of expression list*)
+    | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
+	let ty = type_ env then_expr.exp_type in
+	if is_unit ty then begin
+	  (* no temporary variable for the result, as it is discarded *)
+	  statement env if_expr
+	    (fun if_res ->
+	       let if_statement =
+		 JCTSif(
+		   if_res,
+		   statement env then_expr cont,
+		   match else_expr with
+		     | None -> make_statement (JCTSblock [])
+		     | Some e -> statement env e cont)
+	       in
+	       make_statement if_statement)
+	end else begin
+	  let tmp = new_var ty in
+	  statement env if_expr
+	    (fun if_res ->
+	       let if_statement =
+		 JCTSif(
+		   if_res,
+		   statement env then_expr (make_affect tmp),
+		   match else_expr with
+		     | None -> make_statement (JCTSblock [])
+		     | Some e -> statement env e (make_affect tmp))
+	       in
+	       make_var_decl tmp None
+		 (make_statement_block [
+		    make_statement if_statement;
+		    cont (make_expr (JCTEvar tmp) ty);
+		  ]))
+	end
+    | Texp_sequence(e1, e2) ->
+	make_statement_block [
+	  statement env e1 make_discard;
+	  statement env e2 cont;
+	]
+(*    | Texp_while of expression * expression
+    | Texp_for of
+	Ident.t * expression * expression * direction_flag * expression
+    | Texp_when of expression * expression
+    | Texp_send of expression * meth
+    | Texp_new of Path.t * class_declaration
+    | Texp_instvar of Path.t * Path.t
+    | Texp_setinstvar of Path.t * Path.t * expression
+    | Texp_override of Path.t * (Path.t * expression) list
+    | Texp_letmodule of Ident.t * module_expr * expression
+    | Texp_assert of expression
+    | Texp_assertfalse
+    | Texp_lazy of expression
+    | Texp_object of class_structure * class_signature * string list *)
+    | Texp_result ->
+	assert false (* impossible *)
+    | _ -> not_implemented e.exp_loc "ml_interp.ml: statement"
 
 let behavior env b =
   log "        Behavior %s..." b.b_name;
@@ -330,7 +457,7 @@ let structure_item env = function
       let spec =
 	try
 	  Ml_env.find_spec id env
-	with Not_found -> {
+	with Ml_env.Not_found_str _ -> {
 	  fs_function = Pident id;
 	  fs_arguments = []; (* unused *)
 	  fs_requires = None;
@@ -346,15 +473,9 @@ let structure_item env = function
 	params
       in
       log "      Body...";
-      let body_expr = make_expr (expression new_env body) return_type in
-      let body' = {
-	jc_tstatement_node =
-	  if is_unit return_type then
-	    JCTSexpr body_expr
-	  else
-	    JCTSreturn(return_type, body_expr);
-	jc_tstatement_loc = Loc.dummy_position;
-      } in
+      let body' = statement new_env body
+	(if is_unit return_type then make_discard else make_return)
+      in
       log "      Requires...";
       let requires = match spec.fs_requires with
 	| None -> JCAtrue

@@ -1,5 +1,7 @@
 type t
 
+exception Not_found_str of string
+
 val empty: t
 
 val add_var: string -> Jc_env.jc_type -> t -> t * Jc_env.var_info

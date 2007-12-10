@@ -122,6 +122,29 @@ let expr_seq_to_let =
 	 (JCTElet(ignored_var e.jc_texpr_type, e, acc))
 	 acc.jc_texpr_type)
 
+let make_statement ?(loc=Loc.dummy_position) s = {
+  jc_tstatement_node = s;
+  jc_tstatement_loc = loc;
+}
+
+let make_statement_block ?(loc=Loc.dummy_position) = function
+  | ([] as l)
+  | ([ { jc_tstatement_node = JCTSdecl _ } ] as l)
+  | (_::_::_ as l) -> make_statement ~loc:loc (JCTSblock l)
+  | [ x ] -> x
+
+let make_affect vi e =
+  make_statement (JCTSexpr({ e with jc_texpr_node = JCTEassign_var(vi, e) }))
+
+let make_discard e =
+  make_statement (JCTSexpr e)
+
+let make_return e =
+  make_statement (JCTSreturn(e.jc_texpr_type, e))
+
+let make_var_decl vi init s =
+  make_statement (JCTSdecl(vi, init, s))
+
 (*
 Local Variables: 
 compile-command: "unset LANG; make -j -C .. bin/jessica.byte"
