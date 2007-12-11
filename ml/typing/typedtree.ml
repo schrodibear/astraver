@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.4 2007-12-06 15:14:51 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.5 2007-12-11 12:40:16 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -146,6 +146,7 @@ and structure_item =
   | Tstr_cltype of (Ident.t * cltype_declaration) list
   | Tstr_include of module_expr * Ident.t list
   | Tstr_function_spec of function_spec
+  | Tstr_type_spec of type_spec
 
 and behavior = {
   b_name: string;
@@ -157,6 +158,17 @@ and function_spec = {
   fs_arguments: Ident.t list;
   fs_requires: expression option;
   fs_behaviors: behavior list;
+}
+
+and type_invariant = {
+  ti_name: Ident.t;
+  ti_argument: Ident.t;
+  ti_body: expression;
+}
+
+and type_spec = {
+  ts_type: Path.t;
+  ts_invariants: type_invariant list;
 }
 
 and module_coercion =

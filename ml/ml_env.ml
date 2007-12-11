@@ -14,17 +14,19 @@ module IdentMap = Map.Make(
 type t = {
   vars: Jc_env.var_info StringMap.t;
   funs: Jc_fenv.fun_info StringMap.t;
-  specs: Ml_ocaml.Typedtree.function_spec IdentMap.t;
   fields: Jc_env.field_info StringMap.t;
   structs: Jc_env.struct_info StringMap.t;
+  fun_specs: Ml_ocaml.Typedtree.function_spec IdentMap.t;
+  type_specs: Ml_ocaml.Typedtree.type_spec IdentMap.t;
 }
 
 let empty = {
   vars = StringMap.empty;
   funs = StringMap.empty;
-  specs = IdentMap.empty;
   fields = StringMap.empty;
   structs = StringMap.empty;
+  fun_specs = IdentMap.empty;
+  type_specs = IdentMap.empty;
 }
 
 let add_var name ty env =
@@ -52,9 +54,6 @@ let add_fun name params return_type env =
   } in
   { env with funs = StringMap.add name fi env.funs }
 
-let add_spec id spec env =
-  { env with specs = IdentMap.add id spec env.specs }
-
 let add_field name ty si env =
   let fi = {
     jc_field_info_tag = fresh_int ();
@@ -70,6 +69,12 @@ let add_field name ty si env =
 let add_struct si env =
   { env with structs = StringMap.add si.jc_struct_info_name si env.structs }
 
+let add_fun_spec id spec env =
+  { env with fun_specs = IdentMap.add id spec env.fun_specs }
+
+let add_type_spec id spec env =
+  { env with type_specs = IdentMap.add id spec env.type_specs }
+
 let nf s f k m =
   try
     f k m
@@ -78,9 +83,12 @@ let nf s f k m =
 
 let find_var name env = nf name StringMap.find name env.vars
 let find_fun name env = nf name StringMap.find name env.funs
-let find_spec id env = nf (Ml_ocaml.Ident.name id) IdentMap.find id env.specs
 let find_field name env = nf name StringMap.find name env.fields
 let find_struct name env = nf name StringMap.find name env.structs
+let find_fun_spec id env =
+  nf (Ml_ocaml.Ident.name id) IdentMap.find id env.fun_specs
+let find_type_spec id env =
+  nf (Ml_ocaml.Ident.name id) IdentMap.find id env.type_specs
 
 (*
 Local Variables: 

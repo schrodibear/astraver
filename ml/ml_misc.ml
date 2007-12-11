@@ -52,6 +52,15 @@ let list_fold_map x = list_fold_map [] x
 open Jc_ast
 open Jc_env
 
+let is_unit t = t = JCTnative Tunit
+
+let is_void_statement_node = function
+  | JCTSblock []
+  | JCTSexpr({ jc_texpr_node = JCTEconst JCCvoid }) -> true
+  | _ -> false
+
+let is_void_statement s = is_void_statement_node s.jc_tstatement_node
+
 let make_expr ?(loc=Loc.dummy_position) ?(label="") ~node ~ty = {
   jc_texpr_node = node;
   jc_texpr_loc = loc;
@@ -127,14 +136,18 @@ let make_statement ?(loc=Loc.dummy_position) s = {
   jc_tstatement_loc = loc;
 }
 
-let make_statement_block ?(loc=Loc.dummy_position) = function
-  | ([] as l)
-  | ([ { jc_tstatement_node = JCTSdecl _ } ] as l)
-  | (_::_::_ as l) -> make_statement ~loc:loc (JCTSblock l)
-  | [ x ] -> x
+let make_statement_block ?(loc=Loc.dummy_position) sl =
+  match List.filter (fun s -> not (is_void_statement s)) sl with
+    | ([] as l)
+    | ([ { jc_tstatement_node = JCTSdecl _ } ] as l)
+    | (_::_::_ as l) -> make_statement ~loc:loc (JCTSblock l)
+    | [ x ] -> x
 
 let make_affect vi e =
-  make_statement (JCTSexpr({ e with jc_texpr_node = JCTEassign_var(vi, e) }))
+  if is_unit e.jc_texpr_type then
+    (log "affect unit: %s" vi.jc_var_info_name; make_statement (JCTSexpr e))
+  else
+    (log "affect not unit: %s" vi.jc_var_info_name; make_statement (JCTSexpr({ e with jc_texpr_node = JCTEassign_var(vi, e) })))
 
 let make_discard e =
   make_statement (JCTSexpr e)
@@ -144,6 +157,8 @@ let make_return e =
 
 let make_var_decl vi init s =
   make_statement (JCTSdecl(vi, init, s))
+
+let void = make_expr (JCTEconst JCCvoid) (JCTnative Tunit)
 
 (*
 Local Variables: 

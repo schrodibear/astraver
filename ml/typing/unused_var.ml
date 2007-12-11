@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: unused_var.ml,v 1.3 2007-12-06 15:14:51 bardou Exp $ *)
+(* $Id: unused_var.ml,v 1.4 2007-12-11 12:40:16 bardou Exp $ *)
 
 open Parsetree
 
@@ -106,6 +106,7 @@ and structure_item ppf tbl s =
   | Pstr_class_type _ -> ()
   | Pstr_include _ -> ()
   | Pstr_function_spec _ -> ()
+  | Pstr_type_spec _ -> ()
 
 and expression ppf tbl e =
   match e.pexp_desc with

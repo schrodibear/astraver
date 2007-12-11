@@ -14,8 +14,6 @@ let type_in_env env s =
   let si = Ml_env.find_struct s env in
   make_pointer_type si
 
-let is_unit t = t = JCTnative Tunit
-
 let rec type_ env t = match t.desc with
   | Tconstr(Pident id, params, abbrev) ->
       begin match name id with
@@ -198,9 +196,12 @@ let rec term env e =
     | Texp_tuple of expression list
     | Texp_construct of constructor_description * expression list
     | Texp_variant of label * expression option
-    | Texp_record of (label_description * expression) list * expression option
-    | Texp_field of expression * label_description
-    | Texp_setfield of expression * label_description * expression
+    | Texp_record of (label_description * expression) list * expression option*)
+    | Texp_field(e, lbl) ->
+	let te = term env e in
+	let fi = Ml_env.find_field lbl.lbl_name env in
+	JCTderef(make_term te (type_ env e.exp_type), fi)
+(*    | Texp_setfield of expression * label_description * expression
     | Texp_array of expression list
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
     | Texp_sequence of expression * expression
@@ -282,19 +283,30 @@ let rec statement env e cont =
 	cont (make_expr (expression env e) (type_ env e.exp_type))
     | Texp_let((Nonrecursive | Default),
 	       [ { pat_desc = Tpat_var id }, eq_expr ], in_expr) ->
-	let ty = type_ env eq_expr.exp_type in
 	let new_env, vi =
-	  Ml_env.add_var (name id) ty env
+	  Ml_env.add_var (name id) (type_ env eq_expr.exp_type) env
 	in
-	let tmp = new_var ty in
-	statement env eq_expr
-	  (fun eq_res ->
-	     make_var_decl tmp None
-	       (make_statement_block [
-		  make_var_decl vi (Some eq_res)
-		    (statement new_env in_expr (make_affect tmp));
-		  cont (make_expr (JCTEvar tmp) ty);
-	       ]))
+	let in_ty = type_ new_env in_expr.exp_type in
+	if is_unit in_ty then begin
+	  (* no need for a temporary variable for the result *)
+	  statement env eq_expr
+	    (fun eq_res ->
+	       make_statement_block [
+		 make_var_decl vi (Some eq_res)
+		   (statement new_env in_expr make_discard);
+		 cont void;
+	       ])
+	end else begin
+	  let in_tmp = new_var in_ty in
+	  statement env eq_expr
+	    (fun eq_res ->
+	       make_var_decl in_tmp None
+		 (make_statement_block [
+		    make_var_decl vi (Some eq_res)
+		      (statement new_env in_expr (make_affect in_tmp));
+		    cont (make_expr (JCTEvar in_tmp) in_ty);
+		  ]))
+	end
     | Texp_let(Recursive, _, _) ->
 	not_implemented e.exp_loc "recursive let"
 (*    | Texp_function of (pattern * expression) list * partial
@@ -343,7 +355,7 @@ let rec statement env e cont =
 	     statement env v
 	       (fun res2 -> cont
 		  (make_expr (JCTEassign_heap(res, fi, res2))
-		     fi.jc_field_info_type)))
+		     (JCTnative Tunit))))
 (*    | Texp_array of expression list*)
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
 	let ty = type_ env then_expr.exp_type in
@@ -413,6 +425,18 @@ let behavior env b =
   }
 
 let record_decl env (id, labels) =
+  log "    Record type %s:" (name id);
+  log "      Looking for spec...";
+  let spec =
+    try
+      Ml_env.find_type_spec id env
+    with Ml_env.Not_found_str _ ->
+      log "        Not found";
+      {
+	ts_type = Pident id;
+	ts_invariants = [];
+      }
+  in
   let struct_name = name id in
   let struct_info = {
     jc_struct_info_name = struct_name;
@@ -420,6 +444,7 @@ let record_decl env (id, labels) =
     jc_struct_info_root = struct_name;
     jc_struct_info_fields = []; (* set after *)
   } in
+  log "      Fields...";
   let env, field_infos = list_fold_map
     (fun env (lbl, _, ty) ->
        Ml_env.add_field lbl (type_ env ty) struct_info env)
@@ -427,11 +452,38 @@ let record_decl env (id, labels) =
     labels
   in
   struct_info.jc_struct_info_fields <- field_infos;
-  let invariants = [] in
+  log "      Invariants...";
+  let invariants = List.map
+    (fun i ->
+       let inv_env, vi =
+	 Ml_env.add_var 
+	   (name i.ti_argument)
+	   (make_pointer_type struct_info)
+	   env
+       in
+       name i.ti_name,
+       vi,
+       make_assertion (assertion inv_env i.ti_body))
+    spec.ts_invariants
+  in
   JCstruct_def(struct_name, None, field_infos, invariants),
   Ml_env.add_struct struct_info env
 
 let record_decls env l =
+  (* add types to the environment (they will be overriden after) *)
+  let env = List.fold_left
+    (fun env (id, _) ->
+       let struct_name = name id in
+       let si = {
+	 jc_struct_info_name = struct_name; (* only this field is important *)
+	 jc_struct_info_parent = None;
+	 jc_struct_info_root = struct_name;
+	 jc_struct_info_fields = [];
+       } in
+       Ml_env.add_struct si env)
+    env
+    l
+  in
   let decls, env = List.fold_left
     (fun (acc, env) r ->
        let d, env = record_decl env r in
@@ -456,13 +508,15 @@ let structure_item env = function
       log "      Looking for spec...";
       let spec =
 	try
-	  Ml_env.find_spec id env
-	with Ml_env.Not_found_str _ -> {
-	  fs_function = Pident id;
-	  fs_arguments = []; (* unused *)
-	  fs_requires = None;
-	  fs_behaviors = [];
-	}
+	  Ml_env.find_fun_spec id env
+	with Ml_env.Not_found_str _ ->
+	  log "        Not found";
+	  {
+	    fs_function = Pident id;
+	    fs_arguments = []; (* unused *)
+	    fs_requires = None;
+	    fs_behaviors = [];
+	  }
       in
       log "      Return type...";
       let return_type = type_ env body.exp_type in
@@ -502,7 +556,6 @@ let structure_item env = function
 	)
       in
       [ jc_fun_def ], Ml_env.add_fun (name id) params' return_type new_env
-  | Tstr_function_spec _ -> [], env
   | Tstr_type l ->
       let records = List.map
 	(fun (id, td) ->
@@ -513,6 +566,8 @@ let structure_item env = function
       in
       let records = list_filter_option records in
       record_decls env records
+  | Tstr_function_spec _
+  | Tstr_type_spec _ -> [], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
 let rec structure env = function
@@ -525,7 +580,14 @@ let rec structure env = function
 let add_structure_specs env = List.fold_left
   (fun env -> function
      | Tstr_function_spec ({ fs_function = Pident id } as spec) ->
-	 Ml_env.add_spec id spec env
+	 Ml_env.add_fun_spec id spec env
+     | _ -> env)
+  env
+
+let add_type_specs env = List.fold_left
+  (fun env -> function
+     | Tstr_type_spec ({ ts_type = Pident id } as spec) ->
+	 Ml_env.add_type_spec id spec env
      | _ -> env)
   env
 

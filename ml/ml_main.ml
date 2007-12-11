@@ -37,12 +37,20 @@ let file env (file_kind, file_name) =
 	with
 	  | Ml_ocaml.Typecore.Error(loc, error) ->
 	      caml_error loc Ml_ocaml.Typecore.report_error error
+	  | Ml_ocaml.Typetexp.Error(loc, error) ->
+	      caml_error loc Ml_ocaml.Typetexp.report_error error
+	  | Ml_ocaml.Typemod.Error(loc, error) ->
+	      caml_error loc Ml_ocaml.Typemod.report_error error
 	in
 
 	(* Add specifications to the environment *)
-	log "  Listing specifications...";
+	log "  Listing function specifications...";
 	let spec_env =
 	  Ml_interp.add_structure_specs Ml_env.empty typed_tree
+	in
+	log "  Listing type specifications...";
+	let spec_env =
+	  Ml_interp.add_type_specs spec_env typed_tree
 	in
   
         (* Interpret to a Jessie typed AST *)
@@ -72,8 +80,12 @@ let file env (file_kind, file_name) =
 	let typed_tree = try
 	  Ml_ocaml.Typemod.transl_signature env parse_tree
 	with
+	  | Ml_ocaml.Typecore.Error(loc, error) ->
+	      caml_error loc Ml_ocaml.Typecore.report_error error
 	  | Ml_ocaml.Typetexp.Error(loc, error) ->
 	      caml_error loc Ml_ocaml.Typetexp.report_error error
+	  | Ml_ocaml.Typemod.Error(loc, error) ->
+	      caml_error loc Ml_ocaml.Typemod.report_error error
 	in
 
 	(* Return the new environment *)

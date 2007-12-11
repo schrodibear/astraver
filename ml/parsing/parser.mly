@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.4 2007-12-06 15:14:51 bardou Exp $ */
+/* $Id: parser.mly,v 1.5 2007-12-11 12:40:16 bardou Exp $ */
 
 /* The parser definition */
 
@@ -305,6 +305,7 @@ let bigarray_set arr arg newval =
 %token LANNOT
 %token RANNOT
 %token REQUIRES
+%token INVARIANT
 
 /* Precedences and associativities.
 
@@ -476,6 +477,8 @@ structure_item:
       { mkstr(Pstr_include $2) }
   | LANNOT function_spec RANNOT
       { mkstr(Pstr_function_spec $2) }
+  | LANNOT type_spec RANNOT
+      { mkstr(Pstr_type_spec $2) }
 ;
 module_binding:
     EQUAL module_expr
@@ -1591,6 +1594,26 @@ function_spec:
 	    match $4 with
 	      | None -> $5
 	      | Some x -> { pb_name = "default"; pb_ensures = x }::$5; } }
+;
+
+type_invariant:
+  | INVARIANT val_ident val_ident EQUAL expr
+      { { pti_name = $2;
+	  pti_argument = $3;
+	  pti_body = $5; } }
+;
+
+type_invariants:
+  | type_invariant type_invariants
+      { $1::$2 }
+  |
+      { [] }
+;
+
+type_spec:
+  | TYPE val_ident_colon type_invariants
+      { { pts_name = $2;
+	  pts_invariants = $3 } }
 ;
 
 %%

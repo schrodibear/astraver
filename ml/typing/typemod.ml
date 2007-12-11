@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typemod.ml,v 1.2 2007-12-06 15:14:51 bardou Exp $ *)
+(* $Id: typemod.ml,v 1.3 2007-12-11 12:40:16 bardou Exp $ *)
 
 (* Type-checking of the module language *)
 
@@ -775,6 +775,55 @@ and type_structure anchor env sstr =
 	(* finish *)
         let (str_rem, sig_rem, final_env) = type_struct env srem in
         (Tstr_function_spec tfs :: str_rem, sig_rem, final_env)
+    | {pstr_desc = Pstr_type_spec ts; pstr_loc = loc} :: srem ->
+	(* function *)
+	let type_path, type_decl = try
+	  Env.lookup_type (Lident ts.pts_name) env;
+	with Not_found ->
+	  raise (Typetexp.Error(loc, Typetexp.Unbound_type_constructor
+				  (Lident ts.pts_name)))
+	in
+	(* invariants *)
+	let invariants, new_env = List.fold_left
+	  (fun (acc, env) i ->
+	     (* the argument's type is "type_decl" *)
+	     let arg_desc = {
+	       val_type = Ctype.newconstr type_path [];
+	       val_kind = Val_reg;
+	     } in
+	     let arg_id, body_env =
+	       Env.enter_value i.pti_argument arg_desc env in
+	     (* type the body *)
+	     let typed_body = Typecore.type_expression body_env i.pti_body in
+	     (* declare the predicate *)
+	     let pred_desc = {
+	       val_type =
+		 Btype.newgenty
+		   (Tarrow(
+		      "",
+		      arg_desc.val_type,
+		      Predef.type_bool,
+		      Cunknown
+		    ));
+	       val_kind = Val_reg;
+	     } in
+	     let inv_id, new_env = Env.enter_value i.pti_name pred_desc env in
+	     {
+	       ti_name = inv_id;
+	       ti_argument = arg_id;
+	       ti_body = typed_body;
+	     } :: acc, new_env)
+	  ([], env)
+	  ts.pts_invariants
+	in
+	(* typed spec *)
+	let tts = {
+	  ts_type = type_path;
+	  ts_invariants = List.rev invariants;
+	} in
+	(* finish *)
+        let (str_rem, sig_rem, final_env) = type_struct new_env srem in
+        (Tstr_type_spec tts :: str_rem, sig_rem, final_env)
   in
   if !Clflags.save_types
   then List.iter (function {pstr_loc = l} -> Stypes.record_phrase l) sstr;

@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: parsetree.mli,v 1.4 2007-12-06 15:14:51 bardou Exp $ *)
+(* $Id: parsetree.mli,v 1.5 2007-12-11 12:40:16 bardou Exp $ *)
 
 (* Abstract syntax tree produced by parsing *)
 
@@ -262,6 +262,7 @@ and structure_item_desc =
   | Pstr_class_type of class_type_declaration list
   | Pstr_include of module_expr
   | Pstr_function_spec of function_spec
+  | Pstr_type_spec of type_spec
 
 and behavior = {
   pb_name: string;
@@ -273,6 +274,17 @@ and function_spec = {
   pfs_arguments: string list;
   pfs_requires: expression option;
   pfs_behaviors: behavior list;
+}
+
+and type_invariant = {
+  pti_name: string;
+  pti_argument: string;
+  pti_body: expression;
+}
+
+and type_spec = {
+  pts_name: string;
+  pts_invariants: type_invariant list;
 }
 
 (* Toplevel phrases *)

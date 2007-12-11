@@ -365,6 +365,11 @@ $(JESSICACMO): ml/ml_ocaml.cmo
 $(JESSICACMX): ml/ml_ocaml.cmx
 $(JESSICACMI): ml/ml_ocaml.cmo
 
+# The following dependencies are not handled correctly by the default options
+# of the Makefile.
+ml/parsing/parser.cmo: ml/parsing/parser.ml ml/parsing/parsetree.cmi
+ml/parsing/parsetree.cmi: ml/parsing/parsetree.mli
+
 $(OCAMLCMI): $(@:.cmi=.mli)
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
 		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml \

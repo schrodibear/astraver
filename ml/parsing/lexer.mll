@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: lexer.mll,v 1.3 2007-12-06 15:14:51 bardou Exp $ *)
+(* $Id: lexer.mll,v 1.4 2007-12-11 12:40:16 bardou Exp $ *)
 
 (* The lexer definition *)
 
@@ -105,6 +105,7 @@ let annot_keyword_table =
     "requires", REQUIRES;
     "ensures", ENSURES;
     "behavior", BEHAVIOR;
+    "invariant", INVARIANT;
     "\\result", BSRESULT;
   ]
 
