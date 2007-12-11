@@ -54,6 +54,10 @@ let binary_op_term loc op = function
   | [ x; y ] -> JCTbinary(x, op, y)
   | l -> locate_error loc "2 arguments required, %d found" (List.length l)
 
+let apply_op id args binary_op not_found = match (name id) with
+  | ">=" -> binary_op Bge_int args
+  |  x -> not_found x
+
 exception Not_an_expression
 
 let rec expression env e =
@@ -86,16 +90,14 @@ let rec expression env e =
 	in
 	begin match f.exp_desc with
 	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
-	      begin match name id with
-		| ">=" -> binary_op Bge_int args'
-		| x -> let fi = try
+	      apply_op id args' binary_op
+		(fun x -> let fi = try
 		    Ml_env.find_fun x env
 		  with
 		    | Ml_env.Not_found_str x -> locate_error e.exp_loc
 			"unknown function: %s" x
 		  in
-		  JCTEcall(fi, args')
-	      end
+		  JCTEcall(fi, args'))
 	  | _ -> not_implemented e.exp_loc "unsupported application"
 	end
 (*  | Texp_match of expression * (pattern * expression) list * partial
@@ -185,10 +187,12 @@ let rec term env e =
 	in
 	begin match f.exp_desc with
 	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
-	      begin match name id with
-		| ">=" -> binary_op Bge_int args'
-		| _ -> not_implemented e.exp_loc "unsupported application"
-	      end
+	      apply_op id args' binary_op
+		(fun x -> try
+		   let li = Ml_env.find_logic_fun x env in
+		   JCTapp(li, args')
+		 with Ml_env.Not_found_str x ->
+		   locate_error e.exp_loc "unknown logic function: %s" x)
 	  | _ -> not_implemented e.exp_loc "unsupported application"
 	end
 (*    | Texp_match of expression * (pattern * expression) list * partial
@@ -453,44 +457,80 @@ let record_decl env (id, labels) =
   in
   struct_info.jc_struct_info_fields <- field_infos;
   log "      Invariants...";
-  let invariants = List.map
-    (fun i ->
+  let env, invariants = list_fold_map
+    (fun env i ->
        let inv_env, vi =
-	 Ml_env.add_var 
+	 Ml_env.add_var
 	   (name i.ti_argument)
 	   (make_pointer_type struct_info)
 	   env
        in
-       name i.ti_name,
-       vi,
-       make_assertion (assertion inv_env i.ti_body))
+       let final_env, _ =
+	 Ml_env.add_logic_fun (name i.ti_name) [ vi ] None env
+       in
+       final_env,
+       (name i.ti_name, vi, make_assertion (assertion inv_env i.ti_body)))
+    env
     spec.ts_invariants
   in
-  JCstruct_def(struct_name, None, field_infos, invariants),
-  Ml_env.add_struct struct_info env
+  Ml_env.add_struct struct_info env, (* replace existing structure *)
+  JCstruct_def(struct_name, None, field_infos, invariants)
 
-let record_decls env l =
-  (* add types to the environment (they will be overriden after) *)
-  let env = List.fold_left
-    (fun env (id, _) ->
-       let struct_name = name id in
-       let si = {
-	 jc_struct_info_name = struct_name; (* only this field is important *)
-	 jc_struct_info_parent = None;
-	 jc_struct_info_root = struct_name;
-	 jc_struct_info_fields = [];
-       } in
-       Ml_env.add_struct si env)
-    env
-    l
+let variant_decl env (id, constrs) =
+  log "    Variant type %s:" (name id);
+(*  log "      Looking for spec...";
+  let spec =
+    try
+      Ml_env.find_type_spec id env
+    with Ml_env.Not_found_str _ ->
+      log "        Not found";
+      {
+	ts_type = Pident id;
+	ts_invariants = [];
+      }
+  in*)
+  let struct_name = name id in
+  let struct_info = {
+    jc_struct_info_name = struct_name;
+    jc_struct_info_parent = None;
+    jc_struct_info_root = struct_name;
+    jc_struct_info_fields = []; (* set after *)
+  } in
+  log "      Constructors...";
+  let enum_info = {
+    jc_enum_info_name = "variant_tag_"^struct_name;
+    jc_enum_info_min = Num.num_of_int 0;
+    jc_enum_info_max = Num.num_of_int (List.length constrs - 1);
+  } in
+  let env, tag_fi = Ml_env.add_field
+    ("tag_"^struct_name)
+    (JCTenum enum_info)
+    struct_info env
   in
-  let decls, env = List.fold_left
-    (fun (acc, env) r ->
-       let d, env = record_decl env r in
-       d::acc, env)
-    ([], env)
-    l
-  in [ JCrec_struct_defs decls ], env
+  let env, field_infos = list_fold_map
+    (fun env (c, tyl) ->
+       Ml_env.add_constructor c (List.map (type_ env) tyl) struct_info env)
+    env
+    constrs
+  in
+  let field_infos = tag_fi :: (List.flatten field_infos) in
+  struct_info.jc_struct_info_fields <- field_infos;
+  let invariants = [] in
+  Ml_env.add_struct struct_info env, (* replace existing structure *)
+  [ JCenum_type_def(
+      enum_info.jc_enum_info_name,
+      enum_info.jc_enum_info_min,
+      enum_info.jc_enum_info_max);
+    JCstruct_def(struct_name, None, field_infos, invariants) ]
+
+let pre_declare_type name env =
+  let si = {
+    jc_struct_info_name = name; (* only this field is important *)
+    jc_struct_info_parent = None;
+    jc_struct_info_root = name;
+    jc_struct_info_fields = [];
+  } in
+  Ml_env.add_struct si env
 
 let rec function_decl env e = match e.exp_desc with
   | Texp_function([ { pat_desc = Tpat_var pid;
@@ -557,15 +597,28 @@ let structure_item env = function
       in
       [ jc_fun_def ], Ml_env.add_fun (name id) params' return_type new_env
   | Tstr_type l ->
-      let records = List.map
-	(fun (id, td) ->
+      (* pre-declare types and split them between kinds *)
+      let env, records, variants = List.fold_left
+	(fun (env, records, variants) (id, td) ->
+	   let name = name id in
 	   match td.type_kind with
-	     | Type_record(labels, _, _) -> Some(id, labels)
-	     | _ -> None)
+	     | Type_record(labels, _, _) ->
+		 pre_declare_type name env,
+		 (id, labels)::records,
+		 variants
+	     | Type_variant(constrs, _) ->
+		 pre_declare_type name env,
+		 records,
+		 (id, constrs)::variants
+	     | _ ->
+		 not_implemented Ml_ocaml.Location.none
+		   "unsupported type declaration kind for type %s" name)
+	(env, [], [])
 	l
       in
-      let records = list_filter_option records in
-      record_decls env records
+      let env, rd = (list_fold_map record_decl) env (List.rev records) in
+      let env, vd = (list_fold_map variant_decl) env (List.rev variants) in
+      [ JCrec_struct_defs(rd @ (List.flatten vd)) ], env
   | Tstr_function_spec _
   | Tstr_type_spec _ -> [], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"

@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typemod.ml,v 1.3 2007-12-11 12:40:16 bardou Exp $ *)
+(* $Id: typemod.ml,v 1.4 2007-12-11 16:03:54 bardou Exp $ *)
 
 (* Type-checking of the module language *)
 
@@ -786,13 +786,55 @@ and type_structure anchor env sstr =
 	(* invariants *)
 	let invariants, new_env = List.fold_left
 	  (fun (acc, env) i ->
-	     (* the argument's type is "type_decl" *)
-	     let arg_desc = {
-	       val_type = Ctype.newconstr type_path [];
-	       val_kind = Val_reg;
-	     } in
-	     let arg_id, body_env =
-	       Env.enter_value i.pti_argument arg_desc env in
+	     (* type the arguments *)
+	     let body_env, arg_tia = match i.pti_argument with
+	       | PTIAident x ->
+		   let arg_desc = {
+		     val_type = Ctype.newconstr type_path [];
+		     val_kind = Val_reg;
+		   } in
+		   let id, env = Env.enter_value x arg_desc env in
+		   env, TIAident id
+	       | PTIAconstr(c, vars) ->
+		   match type_decl.type_kind with
+		     | Type_variant(cl, _) ->
+			 (* look for constructor c in cl *)
+			 let _, args =
+			   try
+			     List.find (fun (c', _) -> c = c') cl
+			   with Not_found ->
+			     raise (Typecore.Error(
+				      loc,
+				      Typecore.Unbound_constructor(Lident c)))
+			 in
+			 (* compute one desc for each argument *)
+			 let args = try
+			   List.combine vars args
+			 with Invalid_argument _ ->
+			   raise (Typecore.Error(
+				    loc,
+				    Typecore.Constructor_arity_mismatch(
+				      Lident c,
+				      List.length args,
+				      List.length vars)))
+			 in
+			 let env, idl = List.fold_left
+			   (fun (env, idl) (x, ty) ->
+			      let d = {
+				val_type = ty;
+				val_kind = Val_reg;
+			      } in
+			      let id, env = Env.enter_value x d env in
+			      env, id::idl)
+			   (env, [])
+			   args
+			 in
+			 env, TIAconstr(c, idl)
+		     | _ -> raise
+			 (Typecore.Error(
+			    loc,
+			    Typecore.Not_a_variant_type (Lident ts.pts_name)))
+	     in
 	     (* type the body *)
 	     let typed_body = Typecore.type_expression body_env i.pti_body in
 	     (* declare the predicate *)
@@ -801,7 +843,7 @@ and type_structure anchor env sstr =
 		 Btype.newgenty
 		   (Tarrow(
 		      "",
-		      arg_desc.val_type,
+		      Ctype.newconstr type_path [],
 		      Predef.type_bool,
 		      Cunknown
 		    ));
@@ -810,7 +852,7 @@ and type_structure anchor env sstr =
 	     let inv_id, new_env = Env.enter_value i.pti_name pred_desc env in
 	     {
 	       ti_name = inv_id;
-	       ti_argument = arg_id;
+	       ti_argument = arg_tia;
 	       ti_body = typed_body;
 	     } :: acc, new_env)
 	  ([], env)

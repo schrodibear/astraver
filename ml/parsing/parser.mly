@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.5 2007-12-11 12:40:16 bardou Exp $ */
+/* $Id: parser.mly,v 1.6 2007-12-11 16:03:54 bardou Exp $ */
 
 /* The parser definition */
 
@@ -1577,27 +1577,40 @@ function_behaviors:
       { [] }
 ;
 
-val_ident_list_colon:
-  | val_ident_colon
+lident_list:
+  | LIDENT
       { [ $1 ] }
-  | val_ident val_ident_list_colon
+  | LIDENT lident_list
       { $1::$2 }
 ;
 
 function_spec:
-  | FUNCTION val_ident_list_colon function_requires function_ensures
+  | FUNCTION lident_list COLON function_requires function_ensures
       function_behaviors
       { { pfs_name = List.hd $2;
 	  pfs_arguments = List.tl $2;
-	  pfs_requires = $3;
+	  pfs_requires = $4;
 	  pfs_behaviors =
-	    match $4 with
-	      | None -> $5
-	      | Some x -> { pb_name = "default"; pb_ensures = x }::$5; } }
+	    match $5 with
+	      | None -> $6
+	      | Some x -> { pb_name = "default"; pb_ensures = x }::$6; } }
+;
+
+invariant_argument:
+  | LIDENT
+      { PTIAident $1 }
+  | UIDENT
+      { PTIAconstr($1, []) }
+  | UIDENT lident_list
+      { PTIAconstr($1, $2) }
+  | UIDENT LPAREN lident_list RPAREN
+      { PTIAconstr($1, $3) }
+  | LPAREN invariant_argument RPAREN
+      { $2 }
 ;
 
 type_invariant:
-  | INVARIANT val_ident val_ident EQUAL expr
+  | INVARIANT LIDENT invariant_argument EQUAL expr
       { { pti_name = $2;
 	  pti_argument = $3;
 	  pti_body = $5; } }
@@ -1611,9 +1624,9 @@ type_invariants:
 ;
 
 type_spec:
-  | TYPE val_ident_colon type_invariants
+  | TYPE LIDENT COLON type_invariants
       { { pts_name = $2;
-	  pts_invariants = $3 } }
+	  pts_invariants = $4 } }
 ;
 
 %%
