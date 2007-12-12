@@ -67,6 +67,7 @@ public class Purse {
     public static int test2() {
 	Purse p1 = new Purse();
 	Purse p2 = new Purse();
+	//@ assert p1 != p2;
 	p1.credit(100);
 	p2.credit(200);
 	p1.withdraw(50);

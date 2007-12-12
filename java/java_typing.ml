@@ -924,7 +924,7 @@ and type_term_field_access t loc id =
 	if id="length" then
 	  TermName {
 	    java_term_loc = loc;
-	    java_term_type = int_type;
+	    java_term_type = integer_type;
 	    java_term_node = JTarray_length(t)
 	  }
 	else
@@ -2033,6 +2033,7 @@ let expr_var loc vi =
     java_expr_loc = loc }
 
 let rec expr_of_term t =
+  let ty = ref t.java_term_type in
   let n =
     match t.java_term_node with
       | JTvar vi -> JEvar vi
@@ -2042,6 +2043,7 @@ let rec expr_of_term t =
       | JTstatic_field_access(ci, fi) -> 
 	  JEstatic_field_access(ci,fi)
       | JTarray_length(t) -> 
+	  ty := int_type;
 	  JEarray_length(expr_of_term t)
       | JTarray_access(t1,t2) -> 
 	  JEarray_access(expr_of_term t1, expr_of_term t2)
@@ -2053,7 +2055,7 @@ let rec expr_of_term t =
       | JTcast(ty,t) -> JEcast(ty,expr_of_term t)
   in
   { java_expr_loc = t.java_term_loc;
-    java_expr_type = t.java_term_type;
+    java_expr_type = !ty;
     java_expr_node = n ;
   }
 

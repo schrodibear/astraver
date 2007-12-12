@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.186 2007-12-07 12:55:55 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.187 2007-12-12 16:13:55 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -299,7 +299,9 @@ let equality_op_for_type = function
   | JCTpointer _ -> "eq_pointer"
   | JCTnull ->  "eq_pointer"
 
+(*
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
+*)
 let safe_fun_enum_of_int n = "safe_" ^ n.jc_enum_info_name ^ "_of_integer_"
 let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
 let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
@@ -313,7 +315,8 @@ let term_coerce loc tdest tsrc e =
   | JCTnative Tinteger, JCTenum ri ->
       LApp(logic_int_of_enum ri,[e])
   | JCTenum ri, JCTnative Tinteger ->
-      LApp(logic_enum_of_int ri,[e])
+      assert false (* a explicit cast should be required by jc_typing *)
+      (* LApp(logic_enum_of_int ri,[e]) *)
   | JCTpointer (st1, _, _), JCTpointer(st2,_,_) 
       when Jc_typing.substruct st2 st1 -> e
   | JCTpointer (st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
@@ -2207,8 +2210,10 @@ let tr_enum_type ri (* to_int of_int *) acc =
   Type(n,[]) ::
     Logic(false,logic_int_of_enum ri,
 	  [("",simple_logic_type n)],why_integer_type) :: 
+(*
     Logic(false,logic_enum_of_int ri,
 	  [("",why_integer_type)],simple_logic_type n) :: 
+*)
     Param(false,fun_enum_of_int ri,of_int_type) ::
     Param(false,safe_fun_enum_of_int ri,safe_of_int_type) ::
     Param(false,fun_any_enum ri,any_type) ::

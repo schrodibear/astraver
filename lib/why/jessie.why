@@ -24,6 +24,10 @@ logic sub_pointer: 't pointer, 't pointer -> int
 axiom shift_zero :
   forall p: 't pointer [shift(p,0)]. shift(p,0) = p
 
+axiom shift_shift :
+  forall p: 't pointer. forall i:int. forall j:int [shift(shift(p,i),j)].
+  shift(shift(p,i),j) = shift(p,i+j)
+
 axiom offset_max_shift :
  forall a:'t alloc_table.
   forall p: 't pointer. forall i:int.
@@ -33,6 +37,11 @@ axiom offset_min_shift :
  forall a:'t alloc_table.
   forall p: 't pointer. forall i:int.
 	offset_min(a,shift(p,i)) = offset_min(a,p)-i
+
+axiom neq_shift:
+  forall p: 't pointer. forall i:int. forall j:int [shift(p,i),shift(p,j)].
+  i <> j -> shift(p,i) <> shift(p,j) 
+
 
 (* the null pointer *)
 

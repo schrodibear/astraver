@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.147 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.148 2007-12-12 16:13:55 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -116,7 +116,7 @@ let rec substruct s1 s2 =
       | None -> false
       | Some s -> substruct s s2
 
-let subtype t1 t2 =
+let subtype ?(allow_implicit_cast=true) t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
     | JCTenum ri1, JCTenum ri2 -> 
@@ -126,13 +126,16 @@ let subtype t1 t2 =
 	Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max
 	  *)
     | JCTenum _, JCTnative Tinteger -> true
-    | JCTnative Tinteger, JCTenum _ -> true
+    | JCTnative Tinteger, JCTenum _ -> 
+	allow_implicit_cast 
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
 	  substruct s1 s2
     | JCTnull, JCTnull -> true
     | JCTnull, JCTpointer _ -> true
     | _ -> false
+
+let subtype_strict = subtype ~allow_implicit_cast:false
 
 let comparable_types t1 t2 =
   match t1,t2 with
@@ -527,7 +530,7 @@ let rec term env e =
 			    (fun vi e ->
 			       let ty = vi.jc_var_info_type in
 			       let te = term env e in
-			       if subtype te.jc_term_type ty then te
+			       if subtype_strict te.jc_term_type ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
 				   "type %a expected instead of %a" 
@@ -575,8 +578,8 @@ let rec term env e =
 	      | JCTnative Tboolean ->
 		  let t =
 		    let t2 = te2.jc_term_type and t3 = te3.jc_term_type in
-		    if subtype t2 t3 then t3 else
-		      if subtype t3 t2 then t2 else
+		    if subtype_strict t2 t3 then t3 else
+		      if subtype_strict t3 t2 then t2 else
 			typing_error e.jc_pexpr_loc 
 			  "incompatible result types"
 		  in
@@ -802,7 +805,7 @@ let rec assertion env e =
 			    (fun vi e ->
 			       let ty = vi.jc_var_info_type in
 			       let te = term env e in
-			       if subtype te.jc_term_type ty then te
+			       if subtype_strict te.jc_term_type ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
 				   "type %a expected instead of %a" 

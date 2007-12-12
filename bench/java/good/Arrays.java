@@ -1,4 +1,8 @@
-/*@ predicate is_max(int[] t,int i,int l) {
+/* is_max(t,i,l) is true whenever t[i] is the maximum of t[0]..t[l-1]
+ * l is an integer and not an int, because used as t.length which 
+ * (in the logic) returns an integer and not an int 
+ */
+/*@ predicate is_max(int[] t,int i,integer l) {
   @   t != null && 0 <= i < l <= t.length &&
   @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i])
   @ }
