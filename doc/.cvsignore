@@ -1,3 +1,7 @@
+*.haux
+*.hind
+*.htoc
+
 pp.ml
 *.pp
 *.makefile
@@ -12,14 +16,12 @@ manual.ps
 manual.idx
 manual.ilg
 manual.ind
-manual.hind
 manual.html
 caduceus.toc
 caduceus.ps
 caduceus.idx
 caduceus.ilg
 caduceus.ind
-caduceus.hind
 caduceus.html
 krakatoa.idx
 krakatoa.ilg
@@ -27,8 +29,9 @@ krakatoa.ind
 krakatoa.out
 krakatoa.pdf
 krakatoa.toc
-
+krakatoa.html
 version.tex
 caduceus.rel
-manual.haux manual.htoc semantic.cache
+semantic.cache
+gwhy.cache
 manual.image.tex
