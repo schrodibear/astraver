@@ -459,9 +459,13 @@ let record_decl env (id, labels) =
   log "      Invariants...";
   let env, invariants = list_fold_map
     (fun env i ->
+       let arg_id = match i.ti_argument with
+	 | TIAident id -> id
+	 | TIAconstr _ -> assert false (* typing prevent this *)
+       in
        let inv_env, vi =
 	 Ml_env.add_var
-	   (name i.ti_argument)
+	   (name arg_id)
 	   (make_pointer_type struct_info)
 	   env
        in
@@ -497,14 +501,15 @@ let variant_decl env (id, constrs) =
     jc_struct_info_fields = []; (* set after *)
   } in
   log "      Constructors...";
-  let enum_info = {
+  (*let enum_info = {
     jc_enum_info_name = "variant_tag_"^struct_name;
     jc_enum_info_min = Num.num_of_int 0;
     jc_enum_info_max = Num.num_of_int (List.length constrs - 1);
-  } in
+  } in*)
   let env, tag_fi = Ml_env.add_field
     ("tag_"^struct_name)
-    (JCTenum enum_info)
+(*    (JCTenum enum_info)*)
+    (JCTnative Tinteger)
     struct_info env
   in
   let env, field_infos = list_fold_map
@@ -517,10 +522,10 @@ let variant_decl env (id, constrs) =
   struct_info.jc_struct_info_fields <- field_infos;
   let invariants = [] in
   Ml_env.add_struct struct_info env, (* replace existing structure *)
-  [ JCenum_type_def(
+  [(* JCenum_type_def(
       enum_info.jc_enum_info_name,
       enum_info.jc_enum_info_min,
-      enum_info.jc_enum_info_max);
+      enum_info.jc_enum_info_max);*)
     JCstruct_def(struct_name, None, field_infos, invariants) ]
 
 let pre_declare_type name env =

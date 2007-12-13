@@ -365,25 +365,41 @@ $(JESSICACMO): ml/ml_ocaml.cmo
 $(JESSICACMX): ml/ml_ocaml.cmx
 $(JESSICACMI): ml/ml_ocaml.cmo
 
-# The following dependencies are not handled correctly by the default options
-# of the Makefile.
-ml/parsing/parser.cmo: ml/parsing/parser.ml ml/parsing/parsetree.cmi
-ml/parsing/parsetree.cmi: ml/parsing/parsetree.mli
-
-$(OCAMLCMI): $(@:.cmi=.mli)
+ml/parsing/%.cmi: ml/parsing/%.mli
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml \
-			 -o $@ $(@:.cmi=.mli)
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/parsing/$*.mli
 
-$(OCAMLCMX): $(@:.cmx=.ml)
+ml/parsing/%.cmx: ml/parsing/%.ml
 	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
-		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml \
-			 -o $@ $(@:.cmx=.ml)
+		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/parsing/$*.ml
 
-$(OCAMLCMO): $(@:.cmo=.ml)
+ml/parsing/%.cmo: ml/parsing/%.ml
 	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml \
-			 -o $@ $(@:.cmo=.ml)
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/parsing/$*.ml
+
+ml/typing/%.cmi: ml/typing/%.mli
+	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/typing/$*.mli
+
+ml/typing/%.cmx: ml/typing/%.ml
+	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
+		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/typing/$*.ml
+
+ml/typing/%.cmo: ml/typing/%.ml
+	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/typing/$*.ml
+
+ml/utils/%.cmi: ml/utils/%.mli
+	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/utils/$*.mli
+
+ml/utils/%.cmx: ml/utils/%.ml
+	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
+		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/utils/$*.ml
+
+ml/utils/%.cmo: ml/utils/%.ml
+	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
+		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/utils/$*.ml
 
 ml/ml_ocaml.cmx: $(OCAMLCMINOIMPL) $(OCAMLCMX)
 	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \

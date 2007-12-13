@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typemod.ml,v 1.4 2007-12-11 16:03:54 bardou Exp $ *)
+(* $Id: typemod.ml,v 1.5 2007-12-13 12:55:31 bardou Exp $ *)
 
 (* Type-checking of the module language *)
 
@@ -837,6 +837,12 @@ and type_structure anchor env sstr =
 	     in
 	     (* type the body *)
 	     let typed_body = Typecore.type_expression body_env i.pti_body in
+	     begin try
+	       Ctype.unify body_env typed_body.exp_type Predef.type_bool
+	     with Ctype.Unify trace ->
+	       raise (Typecore.Error(i.pti_body.pexp_loc,
+				     Typecore.Expr_type_clash trace))
+	     end;
 	     (* declare the predicate *)
 	     let pred_desc = {
 	       val_type =
