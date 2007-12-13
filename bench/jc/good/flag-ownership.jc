@@ -21,7 +21,8 @@ logic isMonochrome(colorT[..] t, integer i, integer j, color c) =
 unit swap(colorT[..] t, integer i, integer j) 
   requires
     \offset_min(t) <= i && i <= \offset_max(t) &&
-    \offset_min(t) <= j && j <= \offset_max(t)  ;
+    \offset_min(t) <= j && j <= \offset_max(t) &&
+    \forall integer k; \mutable(t+k, colorT);    
   behavior swaps_i_and_j:
     assigns (t+i).colorM,(t+j).colorM;
     ensures (t+i).colorM == \old((t+j).colorM) && 
@@ -32,9 +33,8 @@ unit swap(colorT[..] t, integer i, integer j)
     (t+j).colorM = z;
 }
 
-unit flag(colorT[0..] t, integer length) 
-    requires \offset_min(t) == 0 && // devrait etre inutile
-      0 <= length && length <= \offset_max(t)+1;
+unit flag(colorT[..] t, integer length) 
+    requires 0 <= length && length <= \offset_max(t)+1;
     behavior sorts_t:
       ensures 
         \exists integer b,r; 

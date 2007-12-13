@@ -3,8 +3,7 @@ type A = {
 }
 
 unit test(A[0] a)
-  requires true;
-  behavior ok:
+  behavior default:
     assigns a.i;
     ensures true;
 {
