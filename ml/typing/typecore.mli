@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.mli,v 1.3 2007-12-06 15:14:51 bardou Exp $ *)
+(* $Id: typecore.mli,v 1.4 2007-12-13 16:42:57 bardou Exp $ *)
 
 (* Type inference for the core language *)
 
@@ -50,6 +50,9 @@ val type_approx:
         Env.t -> Parsetree.expression -> type_expr
 val type_argument:
         Env.t -> Parsetree.expression -> type_expr -> Typedtree.expression
+val type_invariant:
+  Env.t -> Types.type_expr -> Parsetree.type_invariant ->
+  Env.t * Typedtree.type_invariant
 
 val option_some: Typedtree.expression -> Typedtree.expression
 val option_none: type_expr -> Location.t -> Typedtree.expression

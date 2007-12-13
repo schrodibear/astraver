@@ -47,6 +47,13 @@ let rec list_fold_map acc f useracc = function
       list_fold_map (y::acc) f useracc' rem
 let list_fold_map x = list_fold_map [] x
 
+let rec list_fold_mapi i acc f useracc = function
+  | [] -> useracc, List.rev acc
+  | x::rem ->
+      let useracc', y = f useracc i x in
+      list_fold_mapi (i+1) (y::acc) f useracc' rem
+let list_fold_mapi x = list_fold_mapi 0 [] x
+
 (******************************************************************************)
 
 open Jc_ast
@@ -87,13 +94,37 @@ let make_bool_expr ?(loc=Loc.dummy_position) ?(label="") ~node =
 let make_int_expr ?(loc=Loc.dummy_position) ?(label="") ~node =
   make_expr ~loc:loc ~label:label ~node:node ~ty:(JCTnative Tinteger)
 
+let make_bool_term ?(loc=Loc.dummy_position) ?(label="") ~node =
+  make_term ~loc:loc ~label:label ~node:node ~ty:(JCTnative Tboolean)
+
+let make_int_term ?(loc=Loc.dummy_position) ?(label="") ~node =
+  make_term ~loc:loc ~label:label ~node:node ~ty:(JCTnative Tinteger)
+
+let make_eq_term a b =
+  (* it shouldn't always be "int"... but for the output it works *)
+  make_bool_term (JCTbinary(a, Beq_int, b))
+
+let make_eq_assertion a b =
+  make_assertion (JCAbool_term(make_eq_term a b))
+
+let make_var_term vi =
+  make_term (JCTvar vi) vi.jc_var_info_type
+
 let make_and a b = match a.jc_assertion_node, b.jc_assertion_node with
   | JCAand al, JCAand bl -> make_assertion (JCAand(al@bl))
   | JCAtrue, _ -> b
   | _, JCAtrue -> a
   | _ -> make_assertion (JCAand [ a; b ])
 
+let make_or a b = match a.jc_assertion_node, b.jc_assertion_node with
+  | JCAor al, JCAor bl -> make_assertion (JCAor(al@bl))
+  | JCAfalse, _ -> b
+  | _, JCAfalse -> a
+  | _ -> make_assertion (JCAor [ a; b ])
+
 let make_and_list = List.fold_left make_and (make_assertion JCAtrue)
+
+let make_or_list = List.fold_left make_or (make_assertion JCAfalse)
 
 let make_pointer_type si =
   JCTpointer(si, Some (Num.num_of_int 0), Some (Num.num_of_int 0))

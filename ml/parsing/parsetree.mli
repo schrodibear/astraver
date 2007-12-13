@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: parsetree.mli,v 1.6 2007-12-11 16:03:54 bardou Exp $ *)
+(* $Id: parsetree.mli,v 1.7 2007-12-13 16:42:57 bardou Exp $ *)
 
 (* Abstract syntax tree produced by parsing *)
 
@@ -276,13 +276,9 @@ and function_spec = {
   pfs_behaviors: behavior list;
 }
 
-and type_inv_argument =
-  | PTIAident of string
-  | PTIAconstr of string * string list
-
 and type_invariant = {
   pti_name: string;
-  pti_argument: type_inv_argument;
+  pti_argument: pattern;
   pti_body: expression;
 }
 

@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: types.ml,v 1.2 2007-12-07 15:42:00 bardou Exp $ *)
+(* $Id: types.ml,v 1.3 2007-12-13 16:42:57 bardou Exp $ *)
 
 (* Representation of types and declarations *)
 
@@ -107,7 +107,8 @@ type constructor_description =
     cstr_tag: constructor_tag;          (* Tag for heap blocks *)
     cstr_consts: int;                   (* Number of constant constructors *)
     cstr_nonconsts: int;                (* Number of non-const constructors *)
-    cstr_private: private_flag }        (* Read-only constructor? *)
+    cstr_private: private_flag;         (* Read-only constructor? *)
+    cstr_name: string }                 (* Used by Jessica *)
 
 and constructor_tag =
     Cstr_constant of int                (* Constant constructor (an int) *)

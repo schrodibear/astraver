@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: datarepr.ml,v 1.2 2007-12-07 15:42:00 bardou Exp $ *)
+(* $Id: datarepr.ml,v 1.3 2007-12-13 16:42:57 bardou Exp $ *)
 
 (* Compute constructor and label descriptions from type declarations,
    determining their representation. *)
@@ -41,7 +41,8 @@ let constructor_descrs ty_res cstrs priv =
             cstr_tag = tag;
             cstr_consts = !num_consts;
             cstr_nonconsts = !num_nonconsts;
-            cstr_private = priv } in
+            cstr_private = priv;
+	    cstr_name = name } in
         (name, cstr) :: descr_rem in
   describe_constructors 0 0 cstrs
 
@@ -52,7 +53,8 @@ let exception_descr path_exc decl =
     cstr_tag = Cstr_exception path_exc;
     cstr_consts = -1;
     cstr_nonconsts = -1;
-    cstr_private = Public }
+    cstr_private = Public;
+    cstr_name = Path.name path_exc }
 
 let none = {desc = Ttuple []; level = -1; id = -1}
                                         (* Clearly ill-formed type *)

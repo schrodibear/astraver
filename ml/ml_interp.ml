@@ -1,6 +1,9 @@
 (* Interpretation of Ocaml programs to Jessie *)
 
 open Ml_misc
+open Ml_type
+open Ml_pattern
+open Ml_constant
 open Ml_ocaml.Asttypes
 open Ml_ocaml.Typedtree
 open Ml_ocaml.Types
@@ -9,42 +12,6 @@ open Ml_ocaml.Ident
 open Jc_ast
 open Jc_output
 open Jc_env
-
-let type_in_env env s =
-  let si = Ml_env.find_struct s env in
-  make_pointer_type si
-
-let rec type_ env t = match t.desc with
-  | Tconstr(Pident id, params, abbrev) ->
-      begin match name id with
-	| "unit" -> JCTnative Tunit
-	| "bool" -> JCTnative Tboolean
-	| "int" -> JCTnative Tinteger
-	| "float" -> JCTnative Treal
-	| s ->
-	    begin try
-	      type_in_env env s
-	    with Ml_env.Not_found_str _ ->
-	      JCTlogic("ocaml_Tconstr_"^s)
-	    end
-      end
-  | Tvar -> JCTnative Tunit
-  | Tarrow _ -> JCTlogic "ocaml_Tarrow"
-  | Ttuple _ -> JCTlogic "ocaml_Ttuple"
-  | Tconstr _ -> JCTlogic "ocaml_Tconstr"
-  | Tobject _ -> JCTlogic "ocaml_Tobject"
-  | Tfield _ -> JCTlogic "ocaml_Tfield"
-  | Tnil -> JCTlogic "ocaml_Tnil"
-  | Tlink ty -> type_ env ty
-  | Tsubst _ -> JCTlogic "ocaml_Tsubst"
-  | Tvariant _ -> JCTlogic "ocaml_Tvariant"
-  | Tunivar -> JCTlogic "ocaml_Tunivar"
-  | Tpoly _ -> JCTlogic "ocaml_Tpoly"
-
-let constant = function
-  | Const_int i -> JCCinteger(string_of_int i)
-  | Const_float s -> JCCreal s
-  | _ -> not_implemented Ml_ocaml.Location.none "ml_interp.ml: constant"
 
 let binary_op_expr loc op = function
   | [ x; y ] -> JCTEbinary(x, op, y)
@@ -56,6 +23,7 @@ let binary_op_term loc op = function
 
 let apply_op id args binary_op not_found = match (name id) with
   | ">=" -> binary_op Bge_int args
+  | "=" -> binary_op Beq_int args
   |  x -> not_found x
 
 exception Not_an_expression
@@ -428,6 +396,36 @@ let behavior env b =
     jc_behavior_ensures = make_assertion(assertion env b.b_ensures);
   }
 
+let invariants env spec struct_info =
+  list_fold_map
+    (fun env i ->
+       let ty = make_pointer_type struct_info in
+       let body_env, arg_vi, condk = match i.ti_argument.pat_desc with
+	 | Tpat_var id ->
+	     let arg_name = name id in
+	     let env, vi = Ml_env.add_var arg_name ty env in
+	     env, vi, fun x -> x
+	 | _ ->
+	     let env, vi = Ml_env.add_var "jessica_arg" ty env in
+	     let arg = make_var_term vi in
+	     let env, vars, tr = pattern_assertion env arg i.ti_argument in
+	     let quantify body =
+	       List.fold_left
+		 (fun acc vi -> make_assertion (JCAquantifier(Forall, vi, acc)))
+		 (make_and tr body)
+		 vars
+	     in
+	     env, vi, quantify
+       in
+       let final_env, _ =
+	 Ml_env.add_logic_fun (name i.ti_name) [ arg_vi ] None env
+       in
+       let body = condk (make_assertion (assertion body_env i.ti_body)) in
+       final_env,
+       (name i.ti_name, arg_vi, body))
+    env
+    spec.ts_invariants
+  
 let record_decl env (id, labels) =
   log "    Record type %s:" (name id);
   log "      Looking for spec...";
@@ -457,32 +455,13 @@ let record_decl env (id, labels) =
   in
   struct_info.jc_struct_info_fields <- field_infos;
   log "      Invariants...";
-  let env, invariants = list_fold_map
-    (fun env i ->
-       let arg_id = match i.ti_argument with
-	 | TIAident id -> id
-	 | TIAconstr _ -> assert false (* typing prevent this *)
-       in
-       let inv_env, vi =
-	 Ml_env.add_var
-	   (name arg_id)
-	   (make_pointer_type struct_info)
-	   env
-       in
-       let final_env, _ =
-	 Ml_env.add_logic_fun (name i.ti_name) [ vi ] None env
-       in
-       final_env,
-       (name i.ti_name, vi, make_assertion (assertion inv_env i.ti_body)))
-    env
-    spec.ts_invariants
-  in
+  let env, invariants = invariants env spec struct_info in
   Ml_env.add_struct struct_info env, (* replace existing structure *)
   JCstruct_def(struct_name, None, field_infos, invariants)
 
 let variant_decl env (id, constrs) =
   log "    Variant type %s:" (name id);
-(*  log "      Looking for spec...";
+  log "      Looking for spec...";
   let spec =
     try
       Ml_env.find_type_spec id env
@@ -492,7 +471,7 @@ let variant_decl env (id, constrs) =
 	ts_type = Pident id;
 	ts_invariants = [];
       }
-  in*)
+  in
   let struct_name = name id in
   let struct_info = {
     jc_struct_info_name = struct_name;
@@ -501,26 +480,17 @@ let variant_decl env (id, constrs) =
     jc_struct_info_fields = []; (* set after *)
   } in
   log "      Constructors...";
-  (*let enum_info = {
-    jc_enum_info_name = "variant_tag_"^struct_name;
-    jc_enum_info_min = Num.num_of_int 0;
-    jc_enum_info_max = Num.num_of_int (List.length constrs - 1);
-  } in*)
-  let env, tag_fi = Ml_env.add_field
-    ("tag_"^struct_name)
-(*    (JCTenum enum_info)*)
-    (JCTnative Tinteger)
-    struct_info env
-  in
-  let env, field_infos = list_fold_map
-    (fun env (c, tyl) ->
-       Ml_env.add_constructor c (List.map (type_ env) tyl) struct_info env)
+  let env, tag_fi = Ml_env.add_tag struct_info env in
+  let env, field_infos = list_fold_mapi
+    (fun env i (c, tyl) ->
+       Ml_env.add_constructor c (List.map (type_ env) tyl) struct_info i env)
     env
     constrs
   in
   let field_infos = tag_fi :: (List.flatten field_infos) in
   struct_info.jc_struct_info_fields <- field_infos;
-  let invariants = [] in
+  log "      Invariants...";
+  let env, invariants = invariants env spec struct_info in
   Ml_env.add_struct struct_info env, (* replace existing structure *)
   [(* JCenum_type_def(
       enum_info.jc_enum_info_name,
@@ -651,6 +621,6 @@ let add_type_specs env = List.fold_left
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make -j -C .. bin/jessica.byte"
+compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
 End: 
 *)

@@ -15,9 +15,10 @@ type t = {
   vars: Jc_env.var_info StringMap.t;
   funs: Jc_fenv.fun_info StringMap.t;
   fields: Jc_env.field_info StringMap.t;
-  constructors: (Jc_env.struct_info * Jc_env.field_info list) StringMap.t;
+  constructors: (Jc_env.struct_info * int * Jc_env.field_info list) StringMap.t;
   structs: Jc_env.struct_info StringMap.t;
   logic_funs: Jc_fenv.logic_info StringMap.t;
+  tags: Jc_env.field_info StringMap.t;
   fun_specs: Ml_ocaml.Typedtree.function_spec IdentMap.t;
   type_specs: Ml_ocaml.Typedtree.type_spec IdentMap.t;
 }
@@ -29,6 +30,7 @@ let empty = {
   constructors = StringMap.empty;
   structs = StringMap.empty;
   logic_funs = StringMap.empty;
+  tags = StringMap.empty;
   fun_specs = IdentMap.empty;
   type_specs = IdentMap.empty;
 }
@@ -70,7 +72,7 @@ let add_field name ty si env =
   } in
   { env with fields = StringMap.add name fi env.fields }, fi
 
-let add_constructor name tyl si env =
+let add_constructor name tyl si i env =
   let _, fil = list_fold_map
     (fun cnt ty -> cnt + 1,
        let name = name^"_"^string_of_int cnt in
@@ -85,11 +87,23 @@ let add_constructor name tyl si env =
        })
     0 tyl
   in
-  { env with constructors = StringMap.add name (si, fil) env.constructors },
+  { env with constructors = StringMap.add name (si, i, fil) env.constructors },
   fil
 
 let add_struct si env =
   { env with structs = StringMap.add si.jc_struct_info_name si env.structs }
+
+let add_tag si env =
+  let fi = {
+    jc_field_info_tag = fresh_int ();
+    jc_field_info_name = "tag";
+    jc_field_info_final_name = "tag";
+    jc_field_info_type = JCTnative Tinteger;
+    jc_field_info_struct = si;
+    jc_field_info_root = si.jc_struct_info_root;
+    jc_field_info_rep = false;
+  } in
+  { env with tags = StringMap.add si.jc_struct_info_name fi env.tags }, fi
 
 let add_logic_fun name params return_type env =
   let li = {
@@ -121,6 +135,9 @@ let find_field name env = nf name StringMap.find name env.fields
 let find_constructor name env = nf name StringMap.find name env.constructors
 let find_struct name env = nf name StringMap.find name env.structs
 let find_logic_fun name env = nf name StringMap.find name env.logic_funs
+let find_tag si env =
+  let name = si.jc_struct_info_name in
+  nf name StringMap.find name env.tags
 let find_fun_spec id env =
   nf (Ml_ocaml.Ident.name id) IdentMap.find id env.fun_specs
 let find_type_spec id env =

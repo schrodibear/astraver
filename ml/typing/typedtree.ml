@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.6 2007-12-11 16:03:54 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.7 2007-12-13 16:42:57 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -160,13 +160,9 @@ and function_spec = {
   fs_behaviors: behavior list;
 }
 
-and type_inv_argument =
-  | TIAident of Ident.t
-  | TIAconstr of string * Ident.t list
-
 and type_invariant = {
   ti_name: Ident.t;
-  ti_argument: type_inv_argument;
+  ti_argument: pattern;
   ti_body: expression;
 }
 

@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.ml,v 1.4 2007-12-06 15:14:51 bardou Exp $ *)
+(* $Id: typecore.ml,v 1.5 2007-12-13 16:42:57 bardou Exp $ *)
 
 (* Typechecking for the core language *)
 
@@ -2019,6 +2019,39 @@ let type_expression env sexp =
   if is_nonexpansive exp then generalize exp.exp_type
   else generalize_expansive env exp.exp_type;
   exp
+
+(* Typing of type invariants *)
+
+let type_invariant env ty pti =
+  (* type the pattern (ie: bind variables) *)
+  let (pat, body_env, force) = type_pattern env pti.pti_argument in
+  unify_pat body_env pat ty;
+  (* Polymorphic variant processing (copied from "type_let") *)
+  if has_variants pat then begin
+    Parmatch.pressure_variants env [pat];
+    iter_pattern finalize_variant pat
+  end;
+  (* Copied from type_let (???) *)
+  List.iter (fun f -> f()) force;
+  (* Type the body *)
+  let body = type_expression body_env pti.pti_body in
+  begin try
+    unify body_env body.exp_type Predef.type_bool
+  with Unify trace ->
+    raise (Error(pti.pti_body.pexp_loc, Expr_type_clash trace))
+  end;
+  (* Add the invariant to the environment *)
+  let d = {
+    val_type = newgenty
+      (Tarrow("", ty, Predef.type_bool, Cunknown));
+    val_kind = Val_reg;
+  } in
+  let id, new_env = Env.enter_value pti.pti_name d env in
+  new_env, {
+    ti_name = id;
+    ti_argument = pat;
+    ti_body = body;
+  }
 
 (* Error report *)
 

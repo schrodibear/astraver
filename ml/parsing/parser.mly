@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.6 2007-12-11 16:03:54 bardou Exp $ */
+/* $Id: parser.mly,v 1.7 2007-12-13 16:42:57 bardou Exp $ */
 
 /* The parser definition */
 
@@ -1596,21 +1596,8 @@ function_spec:
 	      | Some x -> { pb_name = "default"; pb_ensures = x }::$6; } }
 ;
 
-invariant_argument:
-  | LIDENT
-      { PTIAident $1 }
-  | UIDENT
-      { PTIAconstr($1, []) }
-  | UIDENT lident_list
-      { PTIAconstr($1, $2) }
-  | UIDENT LPAREN lident_list RPAREN
-      { PTIAconstr($1, $3) }
-  | LPAREN invariant_argument RPAREN
-      { $2 }
-;
-
 type_invariant:
-  | INVARIANT LIDENT invariant_argument EQUAL expr
+  | INVARIANT LIDENT pattern EQUAL expr
       { { pti_name = $2;
 	  pti_argument = $3;
 	  pti_body = $5; } }
