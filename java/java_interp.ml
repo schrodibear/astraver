@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.82 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.83 2007-12-14 14:28:55 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -473,6 +473,7 @@ let dummy_loc_term ty t =
   { jc_term_loc = Loc.dummy_position; 
     jc_term_label = "";
     jc_term_type = ty;
+    jc_term_region = Jc_region.dummy_region;
     jc_term_node = t }
 
 let term_zero = 
@@ -518,6 +519,7 @@ let rec term t =
 		    jc_term_loc = t.java_term_loc;
 		    jc_term_label = "";
 		    jc_term_type = t1'.jc_term_type;
+		    jc_term_region = Jc_region.dummy_region;
 		    jc_term_node = JCTshift(t1', term t2)
 		  }
 		  in
@@ -539,6 +541,7 @@ let rec term t =
   in { jc_term_loc = t.java_term_loc ; 
        jc_term_label = "";
        jc_term_type = tr_type  t.java_term_loc t.java_term_type ;
+       jc_term_region = Jc_region.dummy_region;
        jc_term_node = t' }
 
 let quantifier = function
@@ -933,12 +936,14 @@ let int_cast loc t e =
   else     
     JCTErange_cast(int_range, { jc_texpr_loc = loc;
 				jc_texpr_type = Jc_pervasives.integer_type;
+				jc_texpr_region = Jc_region.dummy_region;
 				jc_texpr_label = "";
 				jc_texpr_node = e })
 
 let dummy_loc_expr ty e =
   { jc_texpr_loc = Loc.dummy_position; 
     jc_texpr_type = ty;
+    jc_texpr_region = Jc_region.dummy_region;
     jc_texpr_label = "";
     jc_texpr_node = e }
 
@@ -965,6 +970,7 @@ let rec expr e =
 		  let shift = {
 		    jc_texpr_loc = e.java_expr_loc;
 		    jc_texpr_type = e1'.jc_texpr_type;
+		    jc_texpr_region = Jc_region.dummy_region;
 		    jc_texpr_label = e1'.jc_texpr_label;
 		    jc_texpr_node = JCTEshift(e1', expr e2)
 		  }
@@ -1024,6 +1030,7 @@ let rec expr e =
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
 		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_region = Jc_region.dummy_region;
 		      jc_texpr_label = e1'.jc_texpr_label;
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
@@ -1052,6 +1059,7 @@ let rec expr e =
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
 		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_region = Jc_region.dummy_region;
 		      jc_texpr_label = e1'.jc_texpr_label;
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
@@ -1070,6 +1078,7 @@ let rec expr e =
 		  let shift = {
 		      jc_texpr_loc = e.java_expr_loc;
 		      jc_texpr_type = e1'.jc_texpr_type;
+		      jc_texpr_region = Jc_region.dummy_region;
 		      jc_texpr_label = e1'.jc_texpr_label;
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
@@ -1148,6 +1157,7 @@ let rec expr e =
 
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_loc e.java_expr_type;
+       jc_texpr_region = Jc_region.dummy_region;
        jc_texpr_label = !lab;
        jc_texpr_node = e' }
 

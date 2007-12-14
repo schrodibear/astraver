@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.95 2007-12-10 17:05:43 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.96 2007-12-14 14:28:06 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -236,6 +236,7 @@ and term =
     {
       jc_term_node : term_node;
       jc_term_type : jc_type;
+      jc_term_region : region;
       jc_term_loc : Loc.position;
       jc_term_label : string;
     }
@@ -320,6 +321,7 @@ and texpr =
     {
       jc_texpr_node : texpr_node;
       jc_texpr_type : jc_type;
+      jc_texpr_region : region;
       jc_texpr_label : string;
       jc_texpr_loc : Loc.position;
     }
@@ -383,7 +385,6 @@ type fun_spec =
 (* normalized ast *)
 (******************)
 
-
 (* application, increment and assignment are statements.
    special assignment with operation disappears.
  *)
@@ -411,6 +412,7 @@ and expr =
     {
       jc_expr_node : expr_node;
       jc_expr_type : jc_type;
+      jc_expr_region : region;
       jc_expr_label : string;
       jc_expr_loc : Loc.position;
     }

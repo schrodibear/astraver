@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.80 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.81 2007-12-14 14:28:06 moy Exp $ *)
 
 open Pp
 open Format
@@ -36,6 +36,7 @@ open Jc_fenv
 open Jc_options
 open Jc_pervasives
 open Jc_iterators
+open Jc_region
 
 open Apron
 open Coeff
@@ -76,6 +77,7 @@ let state_changed = ref false
 let full_term t ty loc = {
   jc_term_node = t;
   jc_term_type = ty;
+  jc_term_region = dummy_region; (* TODO *)
   jc_term_loc = loc;
   jc_term_label = "";
 }
@@ -89,6 +91,7 @@ let full_asrt a loc = {
 let var_expr vi = {
   jc_expr_node = JCEvar vi;
   jc_expr_type = vi.jc_var_info_type;
+  jc_expr_region = vi.jc_var_info_region;
   jc_expr_loc = Loc.dummy_position;
   jc_expr_label = "";
 }
@@ -96,6 +99,7 @@ let var_expr vi = {
 let type_expr e ty = {
   jc_expr_node = e;
   jc_expr_type = ty;
+  jc_expr_region = dummy_region; (* TODO *)
   jc_expr_loc = Loc.dummy_position;
   jc_expr_label = "";
 }
@@ -103,6 +107,7 @@ let type_expr e ty = {
 let loc_expr e loc = {
   jc_expr_node = e;
   jc_expr_type = unit_type;
+  jc_expr_region = dummy_region; (* TODO *)
   jc_expr_loc = loc;
   jc_expr_label = "";
 }
@@ -110,6 +115,7 @@ let loc_expr e loc = {
 let full_expr e ty loc = {
   jc_expr_node = e;
   jc_expr_type = ty;
+  jc_expr_region = dummy_region; (* TODO *)
   jc_expr_loc = loc;
   jc_expr_label = "";
 }
@@ -2808,6 +2814,10 @@ let tautology a =
   if Jc_options.debug then
     printf "@[<v 2>Before quantifier elimination@\n%a@]@." 
       (fun fmt fm -> Atp.printer fm) qf; 
+  let dnf = Atp.dnf qf in
+  if Jc_options.debug then
+    printf "@[<v 2>After dnf@\n%a@]@." 
+      (fun fmt fm -> Atp.printer fm) dnf; 
   if debug then printf "[before integer_qelim]@.";
   let qe = Atp.fourier_qelim qf in
   if debug then printf "[after integer_qelim]@.";

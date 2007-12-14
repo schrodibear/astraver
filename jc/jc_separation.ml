@@ -3,11 +3,11 @@
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
 (*  Copyright (C) 2002-2007                                               *)
 (*    Romain BARDOU                                                       *)
-(*    Jean-François COUCHOT                                               *)
+(*    Jean-FranÃ§ois COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
-(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Jean-Christophe FILLIÃ‚TRE                                           *)
 (*    Thierry HUBERT                                                      *)
-(*    Claude MARCHÉ                                                       *)
+(*    Claude MARCHÃ‰                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
 (*    Xavier URBAIN                                                       *)
@@ -25,33 +25,30 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.11 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.1 2007-12-14 14:28:06 moy Exp $ *)
 
 open Jc_env
+open Jc_envset
+open Jc_fenv
+open Jc_ast
+open Format
+open Jc_iterators
+open Jc_region
 
-module StringSet : Set.S with type elt = string
+(* let statement return_ty s =  *)
+(*   iter_expr_and_statement expr *)
+(*     (fun s -> match s.jc_statement_node with *)
+(*       | JCSreturn(ty,e) -> *)
+	  
+(*     ) *)
 
-module StringMap : Map.S with type key = string 
+(* let expr e = match e.jc_expr_node with *)
+    
 
-val get_unique_name : ?local_names:StringSet.t -> string -> string
 
-module VarSet : Set.S with type elt = var_info
-
-module StructSet : Set.S with type elt = struct_info
-
-module ExceptionSet : Set.S with type elt = exception_info
-
-module ExceptionMap : Map.S with type key = exception_info
-
-module FieldSet : Set.S with type elt = field_info
-
-module FieldMap : Map.S with type key = field_info
-
-module FieldTable : Hashtbl.S with type key = field_info
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)
-

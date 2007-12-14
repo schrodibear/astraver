@@ -11,13 +11,15 @@ val boolean_type : Jc_env.jc_type
 val real_type : Jc_env.jc_type
 val unit_type : Jc_env.jc_type
 
+val is_pointer_type : Jc_env.jc_type -> bool
+
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
 
 (* constants *)
 
 val zero: Num.num
 val num_of_constant : 'a -> Jc_ast.const -> Num.num
-val const : Jc_ast.const -> Jc_env.jc_type * Jc_ast.const
+val const : Jc_ast.const -> Jc_env.jc_type * Jc_env.region * Jc_ast.const
 
 (* environment infos *)
 

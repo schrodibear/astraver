@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.62 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.63 2007-12-14 14:28:06 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -33,6 +33,7 @@ open Jc_fenv
 open Jc_pervasives
 open Jc_ast
 open Format
+open Jc_region
 
 let functions_table = Hashtbl.create 97
 let variables_table = Hashtbl.create 97
@@ -55,22 +56,25 @@ let () = Hashtbl.add exceptions_table "Loop_continue" loop_continue
 
 (* expressions *)
 
-let make_const loc t c =
+let make_const loc c =
+  let t,tr,c = Jc_pervasives.const c in
   let node = JCEconst c in
   { jc_expr_loc = loc; 
     jc_expr_type = t;
+    jc_expr_region = tr;
     jc_expr_label = "";
     jc_expr_node = node; }
 
-let void_const loc = make_const loc (JCTnative Tunit) JCCvoid
-let true_const loc = make_const loc boolean_type (JCCboolean true)
-let false_const loc = make_const loc boolean_type (JCCboolean false)
-let one_const loc = make_const loc integer_type (JCCinteger "1")
+let void_const loc = make_const loc JCCvoid
+let true_const loc = make_const loc (JCCboolean true)
+let false_const loc = make_const loc (JCCboolean false)
+let one_const loc = make_const loc (JCCinteger "1")
 
 let make_var loc vi =
   let node = JCEvar vi in
   { jc_expr_loc = loc; 
     jc_expr_type = vi.jc_var_info_type;
+    jc_expr_region = vi.jc_var_info_region;
     jc_expr_label = "";
     jc_expr_node = node; } 
 
@@ -78,6 +82,7 @@ let make_deref loc e fi =
   let node = JCEderef (e, fi) in
   { jc_expr_loc = loc; 
     jc_expr_type = fi.jc_field_info_type;
+    jc_expr_region = Region.make_field e.jc_expr_region fi;
     jc_expr_label = "";
     jc_expr_node = node; }
 
@@ -88,6 +93,7 @@ let rec make_or_list_test loc = function
       let node = JCEbinary (e, Blor, make_or_list_test loc r) in
       { jc_expr_loc = loc; 
         jc_expr_type = boolean_type;
+        jc_expr_region = dummy_region;
 	jc_expr_label = "";
 	jc_expr_node = node; } 
 
@@ -98,16 +104,18 @@ let rec make_and_list_test loc = function
       let node = JCEbinary (e, Bland, make_and_list_test loc r) in
       { jc_expr_loc = loc; 
         jc_expr_type = boolean_type;
+	jc_expr_region = dummy_region;
 	jc_expr_label = "";
 	jc_expr_node = node; } 
 
 (* expressions on the typed AST, not the normalized AST *)
 
 let make_tconst loc c =
-  let t,c = Jc_pervasives.const c in
+  let t,tr,c = Jc_pervasives.const c in
   let node = JCTEconst c in
   { jc_texpr_loc = loc; 
     jc_texpr_type = t; 
+    jc_texpr_region = tr; 
     jc_texpr_label = "";
     jc_texpr_node = node; }
 
@@ -115,6 +123,7 @@ let make_tincr_local loc t op vi =
   let node =  JCTEincr_local (op, vi) in
   { jc_texpr_loc = loc; 
     jc_texpr_type = t; 
+    jc_texpr_region = vi.jc_var_info_region; 
     jc_texpr_label = "";
     jc_texpr_node = node; }
 
@@ -122,6 +131,7 @@ let make_tincr_heap loc t op e fi =
   let node = JCTEincr_heap (op, e, fi) in
   { jc_texpr_loc = loc; 
     jc_texpr_type = t; 
+    jc_texpr_region = Region.make_field e.jc_texpr_region fi; 
     jc_texpr_label = "";
     jc_texpr_node = node; }
 
@@ -195,7 +205,7 @@ let make_decls loc sl tl =
 	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull
 	   | JCTlogic _ -> assert false
        in
-	 make_decl loc vi (Some (make_const loc t cst)) acc)
+	 make_decl loc vi (Some (make_const loc cst)) acc)
     tl (make_block loc sl)
 
 let make_return loc t e =
@@ -228,8 +238,10 @@ let make_binary loc e1 t op e2 =
     | JCTenum _ -> integer_type
     | _ -> t
   in
+  assert(not(is_pointer_type t));
     { jc_expr_node = JCEbinary(e1, op, e2);
       jc_expr_type = t;
+      jc_expr_region = dummy_region;
       jc_expr_label = "";
       jc_expr_loc = loc }
 
@@ -244,6 +256,7 @@ let make_incr_heap loc op e fi =
   let d =
     { jc_expr_loc = loc;
       jc_expr_type = fi.jc_field_info_type;
+      jc_expr_region = Region.make_field e.jc_expr_region fi;
       jc_expr_label = "";
       jc_expr_node = JCEderef(e,fi) ;
     }
@@ -468,6 +481,7 @@ let rec expr e =
   (sl, tl), 
   { jc_expr_node = ne;
     jc_expr_type = e.jc_texpr_type;
+    jc_expr_region = e.jc_texpr_region;
     jc_expr_label = lab;
     jc_expr_loc = loc }
     

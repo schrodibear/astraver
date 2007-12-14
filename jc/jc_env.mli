@@ -25,11 +25,18 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.36 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_env.mli,v 1.37 2007-12-14 14:28:06 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
 type inv_sem = InvNone | InvOwnership | InvArguments
+
+type region = 
+    {
+      jc_reg_variable : bool;
+      jc_reg_id : int;
+      jc_reg_name : string;
+    }
 
 type jc_type =
   | JCTnative of native_type
@@ -69,6 +76,7 @@ type var_info = {
     jc_var_info_name : string;
     mutable jc_var_info_final_name : string;
     mutable jc_var_info_type : jc_type;
+    mutable jc_var_info_region : region;
     mutable jc_var_info_formal : bool;
     mutable jc_var_info_assigned : bool;
     jc_var_info_static : bool;

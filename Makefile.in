@@ -240,9 +240,10 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 JCCMO = @ATPCMO@ \
 	src/lib.cmo src/rc.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_version.cmo jc/jc_common_options.cmo jc/jc_options.cmo \
-	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
+	jc/jc_envset.cmo jc/numconst.cmo jc/jc_region.cmo \
+	jc/jc_pervasives.cmo \
 	jc/jc_iterators.cmo jc/jc_parser.cmo jc/jc_lexer.cmo \
-	jc/jc_typing.cmo jc/jc_norm.cmo jc/jc_output.cmo \
+	jc/jc_separation.cmo jc/jc_typing.cmo jc/jc_norm.cmo jc/jc_output.cmo \
 	jc/jc_ai.cmo \
 	jc/jc_control_flow.cmo \
 	jc/jc_callgraph.cmo \
@@ -255,8 +256,8 @@ JCCMX = $(JCCMO:.cmo=.cmx)
 
 JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_version.ml jc/jc_common_options.ml \
-	jc/jc_envset.ml jc/jc_pervasives.ml jc/jc_iterators.ml \
-	jc/jc_typing.ml jc/jc_norm.ml jc/jc_output.ml \
+	jc/jc_envset.ml jc/jc_region.ml jc/jc_pervasives.ml jc/jc_iterators.ml \
+	jc/jc_separation.cmo jc/jc_typing.ml jc/jc_norm.ml jc/jc_output.ml \
 	jc/output.ml
 JCCMO_EXPORT = $(JCCML_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCML_EXPORT:.ml=.cmx)
@@ -288,7 +289,7 @@ bin/jessie.byte: $(JCCMO)
 # krakatoa
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
+	jc/jc_envset.cmo jc/numconst.cmo jc/jc_region.cmo jc/jc_pervasives.cmo \
 	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo \
 	java/java_version.cmo \
 	java/java_options.cmo java/java_pervasives.cmo \
@@ -317,7 +318,7 @@ JESSICACMI = ml/ml_options.cmi ml/ml_env.cmi
 
 JESSICACMX = $(JESSICACMO:.cmo=.cmx)
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/jc_envset.cmo jc/numconst.cmo jc/jc_pervasives.cmo \
+	jc/jc_envset.cmo jc/numconst.cmo jc/jc_region.cmo jc/jc_pervasives.cmo \
 	jc/jc_iterators.cmo jc/jc_common_options.cmo jc/jc_output.cmo \
 	$(JESSICACMO)
 MLCMX = $(MLCMO:.cmo=.cmx)
@@ -835,7 +836,8 @@ c/cint.ml: c/cint.ml4 Makefile
 
 jc/jc_ai.ml: jc/jc_annot_inference.ml Makefile
 	if test "@enable_apron@" = "yes" ; then \
-	  cp jc/jc_annot_inference.ml jc/jc_ai.ml; \
+	  echo "# 1 \"jc/jc_annot_inference.ml\"" > jc/jc_ai.ml; \
+	  cat jc/jc_annot_inference.ml >> jc/jc_ai.ml; \
 	else \
 	  echo "let fail _ = failwith " > jc/jc_ai.ml; \
 	  echo "\"Not compiled with --enable-apron.\"" >> jc/jc_ai.ml; \

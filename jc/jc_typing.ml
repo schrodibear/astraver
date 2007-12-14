@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.148 2007-12-12 16:13:55 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.149 2007-12-14 14:28:06 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -33,6 +33,7 @@ open Jc_fenv
 open Jc_pervasives
 open Jc_ast
 open Format
+open Jc_region
 
 exception Typing_error of Loc.position * string
 
@@ -149,12 +150,6 @@ let comparable_types t1 t2 =
     | JCTnull, JCTnull -> true
     | JCTnull, JCTpointer _
     | JCTpointer _, JCTnull -> true
-    | _ -> false
-
-let is_pointer_type t =
-  match t with
-    | JCTnull -> true
-    | JCTpointer _ -> true
     | _ -> false
 
 
@@ -332,7 +327,7 @@ let make_logic_unary_op loc (op : Jc_ast.punary_op) e =
 		end
 	    | _ ->
 		typing_error loc "numeric type expected for unary + and -"
-	in JCTnative t,num_un_op t op e
+	in JCTnative t,dummy_region,num_un_op t op e
     | UPpostfix_dec | UPpostfix_inc | UPprefix_dec | UPprefix_inc ->
 	typing_error loc "pre/post incr/decr not allowed as logical term"
 
@@ -356,6 +351,7 @@ let term_coerce t1 t2 e =
     | Tinteger, Treal -> 
 	{ jc_term_node = JCTapp(real_of_integer,[e_int]) ;
 	  jc_term_type = real_type;
+	  jc_term_region = e.jc_term_region;
 	  jc_term_loc = e.jc_term_loc;
 	  jc_term_label = e.jc_term_label;
 	}  
@@ -391,7 +387,7 @@ let make_logic_bin_op loc op e1 e2 =
     | BPgt | BPlt | BPge | BPle ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  boolean_type,
+	  boolean_type,dummy_region,
 	  JCTbinary(term_coerce t1 t e1, logic_bin_op t op, 
 		     term_coerce t2 t e2)
 	else
@@ -399,38 +395,38 @@ let make_logic_bin_op loc op e1 e2 =
     | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  boolean_type,
+	  boolean_type,dummy_region,
 	  JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
 		     term_coerce t2 t e2)
 	else
 	if is_pointer_type t1 && is_pointer_type t2 && (comparable_types t1 t2) then
-	  boolean_type,
+	  boolean_type,dummy_region,
 	  JCTbinary(e1, logic_bin_op Tunit op, e2)
 	else
 	  typing_error loc "numeric or pointer types expected for == and !="
     | BPadd ->
 	if is_pointer_type t1 && is_integer t2 then
-	  t1, JCTshift(e1, term_coerce t2 Tinteger e2)
+	  t1,e1.jc_term_region,JCTshift(e1, term_coerce t2 Tinteger e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t, JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
+	  JCTnative t,dummy_region, JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
 	                         term_coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for +"
     | BPsub ->
 	if is_pointer_type t1 && is_integer t2 then
 	  let e2 = { e2 with 
-	    jc_term_node = snd (make_logic_unary_op loc UPminus e2);
+	    jc_term_node = let _,_,te = make_logic_unary_op loc UPminus e2 in te;
 	  } in
-	  t1, JCTshift(e1, term_coerce t2 Tinteger e2)
+	  t1,e1.jc_term_region,JCTshift(e1, term_coerce t2 Tinteger e2)
 	else if 
 	  is_pointer_type t1 && is_pointer_type t2 
 	  && comparable_types t1 t2 
 	then
-	  integer_type, JCTsub_pointer(e1, e2)
+	  integer_type,dummy_region, JCTsub_pointer(e1, e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t, JCTbinary(term_coerce t1 t e1, logic_bin_op t op, 
+	  JCTnative t,dummy_region, JCTbinary(term_coerce t1 t e1, logic_bin_op t op, 
 	                         term_coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for -"
@@ -438,7 +434,7 @@ let make_logic_bin_op loc op e1 e2 =
     | BPlogical_shift_right | BParith_shift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  (JCTnative t,
+	  (JCTnative t,dummy_region,
 	   JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
 		      term_coerce t2 t e2))
 	else typing_error loc "numeric types expected for *, / and %%"
@@ -453,7 +449,7 @@ let make_logic_bin_op loc op e1 e2 =
 		end
 	    | _ ->
 		typing_error loc "booleans expected"
-	in JCTnative t,JCTbinary(e1, logic_bin_op t op, e2)
+	in JCTnative t,dummy_region,JCTbinary(e1, logic_bin_op t op, e2)
 
 	(* not allowed as term op *)
     | BPimplies | BPiff -> assert false
@@ -461,39 +457,39 @@ let make_logic_bin_op loc op e1 e2 =
 	  
 let rec term env e =
   let lab = ref "" in
-  let t,te =
+  let t,tr,te =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
 	  let tt = term env e in
 	  lab := l; 
-	  tt.jc_term_type,tt.jc_term_node
+	  tt.jc_term_type,tt.jc_term_region,tt.jc_term_node
       | JCPEvar id ->
 	  begin
 	    try
 	      let vi = List.assoc id env
-	      in vi.jc_var_info_type,JCTvar vi
+	      in vi.jc_var_info_type,vi.jc_var_info_region,JCTvar vi
 	    with Not_found -> 
 	      try 
 		let vi = Hashtbl.find variables_env id 
-		in vi.jc_var_info_type,JCTvar vi
+		in vi.jc_var_info_type,vi.jc_var_info_region,JCTvar vi
 	      with Not_found -> 
 		try 
 		  let vi = Hashtbl.find logic_constants_env id 
-		  in vi.jc_var_info_type,JCTvar vi
+		  in vi.jc_var_info_type,vi.jc_var_info_region,JCTvar vi
 		with Not_found -> 
 		  typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1,t) -> 
 	  let te1 = term env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  boolean_type, JCTinstanceof(te1,st)
+	  boolean_type,dummy_region, JCTinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let te1 = term env e1 in
 	  begin
 	    try
 	      let ri = Hashtbl.find enum_types_table t in
 	      if is_numeric te1.jc_term_type then
-		JCTenum ri, te1.jc_term_node
+		JCTenum ri,dummy_region, te1.jc_term_node
 	      else
 		typing_error e.jc_pexpr_loc "numeric type expected"
 	    with Not_found ->
@@ -501,7 +497,7 @@ let rec term env e =
 	      match te1.jc_term_type with
 		| JCTpointer(st1,a,b) ->
 		    if substruct st st1 then
-		      JCTpointer(st,a,b), JCTcast(te1,st)
+		      JCTpointer(st,a,b),te1.jc_term_region, JCTcast(te1,st)
 		    else
 		      typing_error e.jc_pexpr_loc "invalid cast"
 		| _ ->
@@ -520,7 +516,7 @@ let rec term env e =
 	      | JCPEvar id ->
 		  if List.length args = 0 then
 		    let vi = Hashtbl.find logic_constants_env id in
-		    vi.jc_var_info_type, JCTvar vi
+		    vi.jc_var_info_type,vi.jc_var_info_region,JCTvar vi
 		  else begin
 		    try
 		      let pi = find_logic_info id in
@@ -543,7 +539,7 @@ let rec term env e =
 		      let ty = match pi.jc_logic_info_result_type with
 			| None -> assert false | Some ty -> ty
 		      in
-		      ty, JCTapp(pi, tl)
+		      ty,pi.jc_logic_info_result_region, JCTapp(pi, tl)
 		    with Not_found ->
 		      typing_error e.jc_pexpr_loc 
 			"unbound logic function identifier %s" id
@@ -554,17 +550,19 @@ let rec term env e =
       | JCPEderef (e1, f) -> 
 	  let te = term env e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_term_type f true in
-	  fi.jc_field_info_type, JCTderef(te,fi)	  
+	  fi.jc_field_info_type, 
+	  Region.make_field te.jc_term_region fi,
+	  JCTderef(te,fi)	  
       | JCPEconst c -> 
-	  let t,c = const c in t,JCTconst c
+	  let t,tr,c = const c in t,tr,JCTconst c
       | JCPEold e -> 
-	  let te = term env e in te.jc_term_type,JCTold(te)
+	  let te = term env e in te.jc_term_type,te.jc_term_region,JCTold(te)
       | JCPEoffset(k,e) -> 
 	  let te = term env e in 
 	  begin
 	    match te.jc_term_type with 
 	      | JCTpointer(st,_,_) ->
-		  integer_type,JCToffset(k,te,st)
+		  integer_type,dummy_region,JCToffset(k,te,st)
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
@@ -583,7 +581,7 @@ let rec term env e =
 			typing_error e.jc_pexpr_loc 
 			  "incompatible result types"
 		  in
-		  t, JCTif(te1,te2,te3)
+		  t,te1.jc_term_region, JCTif(te1,te2,te3)
 	      | _ ->
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
@@ -592,7 +590,7 @@ let rec term env e =
 	  let te1 = term env e1 in
 	  let vi = var te1.jc_term_type id in
 	  let te2 = term ((id,vi)::env) e2 in
-	  te2.jc_term_type, te2.jc_term_node
+	  te2.jc_term_type,te2.jc_term_region, te2.jc_term_node
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
       | JCPEassign _ -> 
@@ -610,20 +608,20 @@ let rec term env e =
 	  let t1 = e1.jc_term_type and t2 = e2.jc_term_type in
 	  assert (is_numeric t1 && is_numeric t2);
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t, 
-	  JCTrange(Some (term_coerce t1 t e1), Some (term_coerce t2 t e2))
+	  JCTnative t, dummy_region, 
+	  JCTrange(Some (term_coerce t1 t e1),Some (term_coerce t2 t e2))
       | JCPErange(Some e,None) ->
 	  let e = term env e in
 	  let t = e.jc_term_type in
 	  assert (is_numeric t);
-	  t, JCTrange(Some e,None)
+	  t, dummy_region,JCTrange(Some e,None)
       | JCPErange(None,Some e) ->
 	  let e = term env e in
 	  let t = e.jc_term_type in
 	  assert (is_numeric t);
-	  t, JCTrange(None,Some e)
+	  t,dummy_region, JCTrange(None,Some e)
       | JCPErange(None,None) ->
-	  integer_type, JCTrange(None,None)
+	  integer_type, dummy_region,JCTrange(None,None)
       | JCPEmutable(e, t) ->
 	  assert false (* TODO *)
       | JCPEtagequality _ ->
@@ -631,6 +629,7 @@ let rec term env e =
 	    
   in { jc_term_node = te;
        jc_term_type = t;
+       jc_term_region = tr;
        jc_term_loc = e.jc_pexpr_loc;
        jc_term_label = !lab;
      }
@@ -763,6 +762,7 @@ let rec assertion env e =
 		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
 				 jc_term_label = "";
 				  jc_term_type = vi.jc_var_info_type;
+				  jc_term_region = vi.jc_var_info_region;
 				  jc_term_node = JCTvar vi }
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non boolean expression"
@@ -832,6 +832,8 @@ let rec assertion env e =
 		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
 				 jc_term_label = "";
 				  jc_term_type = fi.jc_field_info_type;
+				  jc_term_region = 
+		                    Region.make_field te.jc_term_region fi;
 				  jc_term_node = JCTderef(te,fi) }
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non boolean expression"
@@ -937,9 +939,9 @@ let make_unary_op loc (op : Jc_ast.punary_op) e2 =
 	  match e2.jc_texpr_node with
 	    | JCTEvar v ->
 		set_assigned v;
-		t2,JCTEincr_local(incr_op op,v)
+		t2,v.jc_var_info_region,JCTEincr_local(incr_op op,v)
 	    | JCTEderef(e,f) ->
-		t2,JCTEincr_heap(incr_op op, e, f)
+		t2,e2.jc_texpr_region,JCTEincr_heap(incr_op op, e, f)
 	    | _ -> typing_error e2.jc_texpr_loc "not an lvalue"
 	end
     | UPnot -> 
@@ -953,11 +955,11 @@ let make_unary_op loc (op : Jc_ast.punary_op) e2 =
 		end
 	    | _ ->
 		typing_error loc "boolean expected"
-	in JCTnative t,JCTEunary(unary_op t op, e2)
+	in JCTnative t,dummy_region,JCTEunary(unary_op t op, e2)
     | UPplus | UPminus | UPbw_not -> 
 	if is_numeric t2 then
 	  let t = lub_numeric_types t2 t2 in
-	  JCTnative t,JCTEunary(unary_op t op, e2)
+	  JCTnative t,dummy_region,JCTEunary(unary_op t op, e2)
 	else
 	  typing_error loc "numeric type expected"
 
@@ -972,6 +974,7 @@ let coerce t1 t2 e =
     | Tinteger,Treal -> 
 	{ jc_texpr_node = JCTEcall(real_of_integer_,[e_int]) ;
 	  jc_texpr_type = real_type;
+	  jc_texpr_region = dummy_region;
 	  jc_texpr_label = "";
 	  jc_texpr_loc = e.jc_texpr_loc }  
     | _ -> e_int
@@ -982,54 +985,54 @@ let make_bin_op loc op e1 e2 =
     | BPgt | BPlt | BPge | BPle ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  boolean_type,
+	  boolean_type,dummy_region,
 	  JCTEbinary (coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "numeric types expected for <, >, <= and >="
     | BPeq | BPneq ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	    (boolean_type,
+	    (boolean_type,dummy_region,
 	     JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2))
 	else
 	  if t1 = boolean_type && t2 = boolean_type then
-	    (boolean_type, JCTEbinary (e1, bin_op Tboolean op, e2))
+	    (boolean_type,dummy_region,JCTEbinary (e1, bin_op Tboolean op, e2))
 	  else
 	    if is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 then
-	      (boolean_type,
+	      (boolean_type,dummy_region,
 	       JCTEbinary(e1, 
 			  (if op = BPeq then Beq_pointer else Bneq_pointer), e2))
 	    else
 	      typing_error loc "numeric, boolean or pointer types expected for == and !="
     | BPadd ->
 	if is_pointer_type t1 && is_integer t2 then
-	  t1, JCTEshift(e1, coerce t2 Tinteger e2)
+	  t1,e1.jc_texpr_region,JCTEshift(e1, coerce t2 Tinteger e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t, JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
+	  JCTnative t,dummy_region,JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for +"
     | BPsub ->
 	if is_pointer_type t1 && is_integer t2 then
 	  let e2 = { e2 with
-	    jc_texpr_node = snd (make_unary_op loc UPminus e2);
+	    jc_texpr_node = let _,_,te = make_unary_op loc UPminus e2 in te;
 	  } in
-	  t1, JCTEshift(e1, coerce t2 Tinteger e2)
+	  t1,e1.jc_texpr_region,JCTEshift(e1, coerce t2 Tinteger e2)
 	else if 
 	  is_pointer_type t1 && is_pointer_type t2 
 	  && comparable_types t1 t2 
 	then
-	  integer_type, JCTEsub_pointer(e1, e2)
+	  integer_type,dummy_region,JCTEsub_pointer(e1, e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t, JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
+	  JCTnative t,dummy_region,JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for -"
     | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
     | BPlogical_shift_right | BParith_shift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t,
+	  JCTnative t,dummy_region,
 	  JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "numeric types expected for bitwaise operators"
@@ -1044,7 +1047,7 @@ let make_bin_op loc op e1 e2 =
 		end
 	    | _ ->
 		typing_error loc "booleans expected"
-	in JCTnative t,JCTEbinary(e1, bin_op t op, e2)
+	in JCTnative t,dummy_region,JCTEbinary(e1, bin_op t op, e2)
 
 	(* not allowed as expression op *)
     | BPimplies | BPiff -> assert false
@@ -1053,38 +1056,39 @@ let make_bin_op loc op e1 e2 =
 
 let rec expr env e =
   let lab = ref "" in
-  let t,te =
+  let t,tr,te =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
 	  let te = expr env e in
-	  lab := l; te.jc_texpr_type,te.jc_texpr_node
+	  lab := l; 
+	  te.jc_texpr_type,te.jc_texpr_region,te.jc_texpr_node
       | JCPEvar id ->
 	  begin
 	    try
 	      let vi = List.assoc id env
-	      in vi.jc_var_info_type,JCTEvar vi
+	      in vi.jc_var_info_type,vi.jc_var_info_region,JCTEvar vi
 	    with Not_found -> 
 	      try 
 		let vi = Hashtbl.find variables_env id
-		in vi.jc_var_info_type,JCTEvar vi
+		in vi.jc_var_info_type,vi.jc_var_info_region,JCTEvar vi
 	      with Not_found -> 
 		try 
 		  let vi = Hashtbl.find logic_constants_env id 
-		  in vi.jc_var_info_type,JCTEvar vi
+		  in vi.jc_var_info_type,vi.jc_var_info_region,JCTEvar vi
 		with Not_found -> 
 		  typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1, t) -> 
 	  let te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  boolean_type, JCTEinstanceof(te1,st)
+	  boolean_type,dummy_region, JCTEinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
 	  let te1 = expr env e1 in
 	  begin
 	    try
 	      let ri = Hashtbl.find enum_types_table t in
 	      if is_numeric te1.jc_texpr_type then
-		JCTenum ri, JCTErange_cast(ri,te1)
+		JCTenum ri,te1.jc_texpr_region, JCTErange_cast(ri,te1)
 	      else
 		typing_error e.jc_pexpr_loc "numeric type expected"
 	    with Not_found ->
@@ -1092,7 +1096,7 @@ let rec expr env e =
 	      match te1.jc_texpr_type with
 		| JCTpointer(st1,a,b) ->
 		    if substruct st st1 then
-		      JCTpointer(st,a,b), JCTEcast(te1,st)
+		      JCTpointer(st,a,b),te1.jc_texpr_region, JCTEcast(te1,st)
 		    else
 		      typing_error e.jc_pexpr_loc "invalid cast"
 		| _ ->
@@ -1101,10 +1105,11 @@ let rec expr env e =
       | JCPEalloc (e1, t) ->
 	  let te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTpointer (st,Some zero,None), JCTEalloc (te1, st)
+	  JCTpointer (st,Some zero,None), 
+	  Region.make_const "alloc", JCTEalloc (te1, st)
       | JCPEfree e1 ->
 	  let e1 = expr env e1 in
-	  unit_type, JCTEfree e1
+	  unit_type,dummy_region, JCTEfree e1
       | JCPEbinary (e1, op, e2) -> 
 	  let e1 = expr env e1 and e2 = expr env e2 in
 	  make_bin_op e.jc_pexpr_loc op e1 e2
@@ -1119,9 +1124,9 @@ let rec expr env e =
 	      match te1.jc_texpr_node with
 		| JCTEvar v ->
 		    set_assigned v;
-		    t1,JCTEassign_var(v,te2)
+		    t1,te2.jc_texpr_region,JCTEassign_var(v,te2)
 		| JCTEderef(e,f) ->
-		    t1,JCTEassign_heap(e, f, te2)
+		    t1,te2.jc_texpr_region,JCTEassign_heap(e, f, te2)
 		| _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	    else
 	      typing_error e2.jc_pexpr_loc 
@@ -1135,22 +1140,22 @@ let rec expr env e =
 	    match te1.jc_texpr_node with
 	      | JCTEvar v ->
 		  set_assigned v;
-		  let t,res = make_bin_op e.jc_pexpr_loc op te1 te2 in
+		  let t,tr,res = make_bin_op e.jc_pexpr_loc op te1 te2 in
 		  if subtype t t1 then
 		    match res with
 		      | JCTEbinary(_,op,_) ->
-			  t1,JCTEassign_var_op(v, op, te2)
+			  t1,tr,JCTEassign_var_op(v, op, te2)
 		      | _ -> assert false
 		  else
 		    typing_error e2.jc_pexpr_loc 
 		      "type '%a' expected in op-assignment instead of '%a'"
 		      print_type t1 print_type t
 	      | JCTEderef(te,f) ->
-		  let t,res = make_bin_op e.jc_pexpr_loc op te1 te2 in
+		  let t,tr,res = make_bin_op e.jc_pexpr_loc op te1 te2 in
 		  if subtype t t1 then
 		    match res with
 		      | JCTEbinary(_,op,_) ->
-			  t1,JCTEassign_heap_op(te, f, op, te2)
+			  t1,tr,JCTEassign_heap_op(te, f, op, te2)
 		      | _ -> assert false
 		  else
 		    typing_error e2.jc_pexpr_loc 
@@ -1218,7 +1223,8 @@ let rec expr env e =
 			  typing_error e.jc_pexpr_loc 
 			    "wrong number of arguments for %s" id
 		      in
-		      fi.jc_fun_info_return_type,JCTEcall(fi, tl)
+		      fi.jc_fun_info_return_type,fi.jc_fun_info_return_region,
+		      JCTEcall(fi, tl)
 		    with Not_found ->
 		      typing_error e.jc_pexpr_loc 
 			"unbound function identifier %s" id
@@ -1229,11 +1235,13 @@ let rec expr env e =
       | JCPEderef (e1, f) -> 
 	  let te = expr env e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_texpr_type f false in
-	  fi.jc_field_info_type,JCTEderef(te,fi)
+	  fi.jc_field_info_type,
+	  Region.make_field te.jc_texpr_region fi,
+	  JCTEderef(te,fi)
 (*
       | JCPEshift (_, _) -> assert false
 *)
-      | JCPEconst c -> let t,tc = const c in t,JCTEconst tc
+      | JCPEconst c -> let t,tr,tc = const c in t,tr,JCTEconst tc
       | JCPEif(e1,e2,e3) ->
 	  let te1 = expr env e1 
 	  and te2 = expr env e2
@@ -1249,7 +1257,7 @@ let rec expr env e =
 			typing_error e.jc_pexpr_loc 
 			  "incompatible result types"
 		  in
-		  t, JCTEif(te1,te2,te3)
+		  t,te1.jc_texpr_region, JCTEif(te1,te2,te3)
 	      | _ ->
 		  typing_error e1.jc_pexpr_loc 
 		    "boolean expression expected"
@@ -1258,14 +1266,14 @@ let rec expr env e =
 	  let te1 = expr env e1 in
 	  let vi = var te1.jc_texpr_type id in
 	  let te2 = expr ((id,vi)::env) e2 in
-	  te2.jc_texpr_type, JCTElet(vi,te1,te2)
+	  te2.jc_texpr_type,te2.jc_texpr_region,JCTElet(vi,te1,te2)
 	  (* logic expressions, not allowed as program expressions *)
       | JCPEoffset(k, e) ->
 	  let te = expr env e in
 	  begin
 	    match te.jc_texpr_type with 
 	      | JCTpointer(st,_,_) ->
-		  integer_type,JCTEoffset(k,te,st)
+		  integer_type,dummy_region,JCTEoffset(k,te,st)
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
@@ -1278,6 +1286,7 @@ let rec expr env e =
 
   in { jc_texpr_node = te; 
        jc_texpr_type = t;
+       jc_texpr_region = tr;
        jc_texpr_label = !lab;
        jc_texpr_loc = e.jc_pexpr_loc }
 
@@ -1776,6 +1785,7 @@ let const_zero =
   { jc_term_loc = Loc.dummy_position;
     jc_term_label = "";
     jc_term_type = integer_type;
+    jc_term_region = dummy_region;
     jc_term_node = JCTconst (JCCinteger "0");
   }
 
@@ -2248,6 +2258,6 @@ let rec decl d =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -C .. byte"
+compile-command: "LC_ALL=C make -C .. jessie.byte"
 End: 
 *)
