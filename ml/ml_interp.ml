@@ -1,7 +1,6 @@
 (* Interpretation of Ocaml programs to Jessie *)
 
 open Ml_misc
-open Ml_type
 open Ml_pattern
 open Ml_constant
 open Ml_ocaml.Asttypes
@@ -9,6 +8,7 @@ open Ml_ocaml.Typedtree
 open Ml_ocaml.Types
 open Ml_ocaml.Path
 open Ml_ocaml.Ident
+open Ml_type
 open Jc_ast
 open Jc_output
 open Jc_env
@@ -61,12 +61,12 @@ let rec expression env e =
     | Texp_let((Nonrecursive | Default),
 	       [ { pat_desc = Tpat_var id }, eq_expr ], in_expr) ->
 	let new_env, vi =
-	  Ml_env.add_var (name id) (type_ env eq_expr.exp_type) env
+	  Ml_env.add_var (name id) (make eq_expr.exp_type) env
 	in
 	JCTElet(
 	  vi,
-	  make_expr (expression env eq_expr) (type_ env eq_expr.exp_type),
-	  make_expr (expression new_env in_expr) (type_ env in_expr.exp_type))
+	  make_expr (expression env eq_expr) (make eq_expr.exp_type),
+	  make_expr (expression new_env in_expr) (make in_expr.exp_type))
     | Texp_let(Recursive, _, _) ->
 	not_implemented e.exp_loc "recursive let"
     | Texp_function _ ->
@@ -76,7 +76,7 @@ let rec expression env e =
 	let args' = List.map
 	  (function
 	     | Some arg, Required ->
-		 make_expr (expression env arg) (type_ env arg.exp_type)
+		 make_expr (expression env arg) (make arg.exp_type)
 	     | _ -> not_implemented e.exp_loc "apply with optional arguments")
 	  args
 	in
@@ -102,11 +102,11 @@ let rec expression env e =
 	  | [] ->
 	      locate_error e.exp_loc "empty record"
 	  | (lbl, _)::_ ->
-	      (Ml_env.find_field lbl.lbl_name env).jc_field_info_struct
+	      (label lbl).ml_li_structure
 	in
 	let lbls = List.map
 	  (fun (ld, e) ->
-	     ld.lbl_name, make_expr (expression env e) (type_ env e.exp_type))
+	     label ld, make_expr (expression env e) (make e.exp_type))
 	  lbls
 	in
 	let tmp_ty = make_pointer_type si in
@@ -115,7 +115,7 @@ let rec expression env e =
 	let assigns = List.map
 	  (fun (lbl, e) ->
 	     make_expr
-	       (JCTEassign_heap(tmp_expr, Ml_env.find_field lbl env, e))
+	       (JCTEassign_heap(tmp_expr, lbl.ml_li_field, e))
 	       e.jc_texpr_type)
 	  lbls
 	in
@@ -127,23 +127,23 @@ let rec expression env e =
     | Texp_record(_, Some _) ->
 	not_implemented e.exp_loc "record with"
     | Texp_field(x, lbl) ->
-	let tx = make_expr (expression env x) (type_ env x.exp_type) in
-	let fi = Ml_env.find_field lbl.lbl_name env in
+	let tx = make_expr (expression env x) (make x.exp_type) in
+	let fi = (label lbl).ml_li_field in
 	JCTEderef(tx, fi)
     | Texp_setfield(x, lbl, v) ->
-	let tx = make_expr (expression env x) (type_ env x.exp_type) in
-	let tv = make_expr (expression env v) (type_ env v.exp_type) in
-	let fi = Ml_env.find_field lbl.lbl_name env in
+	let tx = make_expr (expression env x) (make x.exp_type) in
+	let tv = make_expr (expression env v) (make v.exp_type) in
+	let fi = (label lbl).ml_li_field in
 	JCTEassign_heap(tx, fi, tv)
 (*  | Texp_array of expression list *)
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
 	let else', else_type = match else_expr with
 	  | None -> JCTEconst JCCvoid, JCTnative Tunit
-	  | Some expr -> expression env expr, type_ env expr.exp_type
+	  | Some expr -> expression env expr, make expr.exp_type
 	in
 	JCTEif(
-	  make_expr (expression env if_expr) (type_ env if_expr.exp_type),
-	make_expr (expression env then_expr) (type_ env if_expr.exp_type),
+	  make_expr (expression env if_expr) (make if_expr.exp_type),
+	make_expr (expression env then_expr) (make if_expr.exp_type),
 	  make_expr else' else_type)
 (*  | Texp_sequence of expression * expression *)
     | Texp_while _
@@ -173,7 +173,7 @@ let rec term env e =
 	let args' = List.map
 	  (function
 	     | Some arg, Required ->
-		 make_term (term env arg) (type_ env arg.exp_type)
+		 make_term (term env arg) (make arg.exp_type)
 	     | _ -> not_implemented e.exp_loc "apply with optional arguments")
 	  args
 	in
@@ -195,8 +195,8 @@ let rec term env e =
     | Texp_record of (label_description * expression) list * expression option*)
     | Texp_field(e, lbl) ->
 	let te = term env e in
-	let fi = Ml_env.find_field lbl.lbl_name env in
-	JCTderef(make_term te (type_ env e.exp_type), fi)
+	let fi = (label lbl).ml_li_field in
+	JCTderef(make_term te (make e.exp_type), fi)
 (*    | Texp_setfield of expression * label_description * expression
     | Texp_array of expression list
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
@@ -216,15 +216,15 @@ let rec term env e =
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
     | Texp_old e ->
-	JCTold (make_term (term env e) (type_ env e.exp_type))
+	JCTold (make_term (term env e) (make e.exp_type))
     | Texp_result ->
-	JCTvar (Jc_pervasives.var (type_ env e.exp_type) "\\result")
+	JCTvar (Jc_pervasives.var (make e.exp_type) "\\result")
     | _ -> not_implemented e.exp_loc "ml_interp.ml: term"
 
 let rec assertion env e =
   match e.exp_desc with
     | Texp_ident _ ->
-	JCAbool_term(make_term (term env e) (type_ env e.exp_type))
+	JCAbool_term(make_term (term env e) (make e.exp_type))
 (*    | Texp_constant c
     | Texp_let of rec_flag * (pattern * expression) list * expression
     | Texp_function of (pattern * expression) list * partial*)
@@ -241,7 +241,7 @@ let rec assertion env e =
 	      begin match name id with
 		| "&&" -> (make_and_list (args_assertion ())).jc_assertion_node
 		| _ ->
-		    JCAbool_term(make_term (term env e) (type_ env e.exp_type))
+		    JCAbool_term(make_term (term env e) (make e.exp_type))
 	      end
 	  | _ -> not_implemented e.exp_loc "unsupported application (assertion)"
 	end
@@ -280,7 +280,7 @@ type jessie_or_caml_expr =
 
 let try_expression env e =
   try
-    Jessie_expr(make_expr (expression env e) (type_ env e.exp_type))
+    Jessie_expr(make_expr (expression env e) (make e.exp_type))
   with Not_an_expression ->
     Caml_expr e
 
@@ -288,13 +288,13 @@ let rec statement env e cont =
   match e.exp_desc with
     | Texp_ident _
     | Texp_constant _ ->
-	cont (make_expr (expression env e) (type_ env e.exp_type))
+	cont (make_expr (expression env e) (make e.exp_type))
     | Texp_let((Nonrecursive | Default),
 	       [ { pat_desc = Tpat_var id }, eq_expr ], in_expr) ->
 	let new_env, vi =
-	  Ml_env.add_var (name id) (type_ env eq_expr.exp_type) env
+	  Ml_env.add_var (name id) (make eq_expr.exp_type) env
 	in
-	let in_ty = type_ new_env in_expr.exp_type in
+	let in_ty = make in_expr.exp_type in
 	if is_unit in_ty then begin
 	  (* no need for a temporary variable for the result *)
 	  statement env eq_expr
@@ -345,19 +345,21 @@ let rec statement env e cont =
     | Texp_try of expression * (pattern * expression) list
     | Texp_tuple of expression list*)
     | Texp_construct(cd, el) ->
-	let si, tag, fil = Ml_env.find_constructor cd.cstr_name env in
-	make_alloc_tmp si
+	let ci = constructor cd in
+	make_alloc_tmp ci.ml_ci_structure
 	  (fun _ tmp_e ->
 	     make_statement_block [
-	       make_affect_field tmp_e (Ml_env.find_tag si env)
-		 (expr_of_int tag);
+	       make_affect_field tmp_e ci.ml_ci_tag_field
+		 (expr_of_int ci.ml_ci_tag);
 	       statement_list env el
-		 (List.map (fun fi -> make_affect_field tmp_e fi) fil);
+		 (List.map (fun fi -> make_affect_field tmp_e fi)
+		    ci.ml_ci_arguments);
 	       cont tmp_e;
 	     ])
 (*    | Texp_variant of label * expression option*)
     | Texp_record(lbls, None) ->
-	let si = match lbls with
+	not_implemented e.exp_loc "TO REDO: ml_interp, statement, record"
+(*	let si = match lbls with
 	  | [] ->
 	      locate_error e.exp_loc "empty record"
 	  | (lbl, _)::_ ->
@@ -379,17 +381,17 @@ let rec statement env e cont =
 	  lbls
 	in
 	make_var_decl tmp_var tmp_init
-	  (make_statement_block (affects @ [ cont tmp_expr ]))
+	  (make_statement_block (affects @ [ cont tmp_expr ]))*)
     | Texp_record(_, Some _) ->
 	not_implemented e.exp_loc "record with"
     | Texp_field(e, lbl) ->
-	let fi = Ml_env.find_field lbl.lbl_name env in
+	let fi = (label lbl).ml_li_field in
 	statement env e
 	  (fun res -> cont
 	     (make_expr (JCTEderef(res, fi))
 		fi.jc_field_info_type))
     | Texp_setfield(e, lbl, v) ->
-	let fi = Ml_env.find_field lbl.lbl_name env in
+	let fi = (label lbl).ml_li_field in
 	statement env e
 	  (fun res ->
 	     statement env v
@@ -398,7 +400,7 @@ let rec statement env e cont =
 		     (JCTnative Tunit))))
 (*    | Texp_array of expression list*)
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
-	let ty = type_ env then_expr.exp_type in
+	let ty = make then_expr.exp_type in
 	if is_unit ty then begin
 	  (* no temporary variable for the result, as it is discarded *)
 	  statement env if_expr
@@ -446,7 +448,7 @@ let rec statement env e cont =
 	    (match annot.ws_variant with
 	       | None -> None
 	       | Some x -> Some(
-		   make_term (term env x) (type_ env x.exp_type)));
+		   make_term (term env x) (make x.exp_type)));
 	} in
 	statement env cond
 	  (fun e -> make_statement_block [
@@ -523,7 +525,7 @@ let invariants env spec struct_info =
     env
     spec.ts_invariants
   
-let record_decl env (id, labels) =
+(*let record_decl env (id, labels) =
   log "    Record type %s:" (name id);
   log "      Looking for spec...";
   let spec =
@@ -546,7 +548,7 @@ let record_decl env (id, labels) =
   log "      Fields...";
   let env, field_infos = list_fold_map
     (fun env (lbl, _, ty) ->
-       Ml_env.add_field lbl (type_ env ty) struct_info env)
+       Ml_env.add_field lbl (make ty) struct_info env)
     env
     labels
   in
@@ -580,7 +582,7 @@ let variant_decl env (id, constrs) =
   let env, tag_fi = Ml_env.add_tag struct_info env in
   let env, field_infos = list_fold_mapi
     (fun env i (c, tyl) ->
-       Ml_env.add_constructor c (List.map (type_ env) tyl) struct_info i env)
+       Ml_env.add_constructor c (List.map (make) tyl) struct_info i env)
     env
     constrs
   in
@@ -602,7 +604,7 @@ let pre_declare_type name env =
     jc_struct_info_root = name;
     jc_struct_info_fields = [];
   } in
-  Ml_env.add_struct si env
+  Ml_env.add_struct si env*)
 
 let rec function_decl env e = match e.exp_desc with
   | Texp_function([ { pat_desc = Tpat_var pid;
@@ -632,10 +634,10 @@ let structure_item env = function
 	  }
       in
       log "      Return type...";
-      let return_type = type_ env body.exp_type in
+      let return_type = make body.exp_type in
       log "      Building environment...";
       let new_env, params' = list_fold_map
-	(fun env (pid, pty) -> Ml_env.add_var (name pid) (type_ env pty) env)
+	(fun env (pid, pty) -> Ml_env.add_var (name pid) (make pty) env)
 	env
 	params
       in
@@ -670,7 +672,7 @@ let structure_item env = function
       in
       [ jc_fun_def ], Ml_env.add_fun (name id) params' return_type new_env
   | Tstr_type l ->
-      (* pre-declare types and split them between kinds *)
+(*      (* pre-declare types and split them between kinds *)
       let env, records, variants = List.fold_left
 	(fun (env, records, variants) (id, td) ->
 	   let name = name id in
@@ -691,7 +693,9 @@ let structure_item env = function
       in
       let env, rd = (list_fold_map record_decl) env (List.rev records) in
       let env, vd = (list_fold_map variant_decl) env (List.rev variants) in
-      [ JCrec_struct_defs(rd @ (List.flatten vd)) ], env
+      [ JCrec_struct_defs(rd @ (List.flatten vd)) ], env*)
+      List.iter (fun (id, td) -> declare id td) l;
+      [], env
   | Tstr_function_spec _
   | Tstr_type_spec _ -> [], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"

@@ -1,16 +1,16 @@
 (* Interpretation of pattern-matching *)
 
 open Ml_misc
-open Ml_type
 open Ml_constant
 open Ml_ocaml.Typedtree
 open Ml_ocaml.Types
 open Ml_ocaml.Ident
+open Ml_type
 open Jc_ast
 open Jc_env
 
 let rec pattern_assertion env arg pat =
-  let ty = type_ env pat.pat_type in
+  let ty = Ml_type.make pat.pat_type in
   match pat.pat_desc with
     | Tpat_any ->
 	env, [], make_assertion JCAtrue
@@ -35,10 +35,10 @@ let rec pattern_assertion env arg pat =
 	not_implemented pat.pat_loc
 	  "ml_pattern.ml: pattern_assertion: tuples"
     | Tpat_construct(cd, pl) ->
-	let si, tag, fields = Ml_env.find_constructor cd.cstr_name env in
+	let ci = constructor cd in
 	let env, tpl = list_fold_mapi
 	  (fun env i pat ->
-	     let fi = List.nth fields i in
+	     let fi = List.nth ci.ml_ci_arguments i in
 	     let arg = make_term
 	       (JCTderef(arg, fi))
 	       fi.jc_field_info_type
@@ -50,8 +50,8 @@ let rec pattern_assertion env arg pat =
 	in
 	let vars = List.fold_left (fun acc (b, _) -> acc @ b) [] tpl in
 	let tag_cond = make_eq_assertion
-	  (make_int_term (JCTderef(arg, Ml_env.find_tag si env)))
-	  (make_int_term (JCTconst(JCCinteger (string_of_int tag))))
+	  (make_int_term (JCTderef(arg, ci.ml_ci_tag_field)))
+	  (make_int_term (JCTconst(JCCinteger (string_of_int ci.ml_ci_tag))))
 	in
 	let tr = make_and_list (tag_cond :: (List.map snd tpl)) in
 	env, vars, tr
@@ -61,7 +61,8 @@ let rec pattern_assertion env arg pat =
     | Tpat_record lbls ->
 	List.fold_left
 	  (fun (env, vars, tr) (ld, pat) ->
-	     let fi = Ml_env.find_field ld.lbl_name env in
+	     let li = label ld in
+	     let fi = li.ml_li_field in
 	     let arg_fi = make_term (JCTderef(arg, fi)) fi.jc_field_info_type in
 	     let pat_env, pat_vars, pat_tr = pattern_assertion env arg_fi pat in
 	     pat_env, vars @ pat_vars, make_and tr pat_tr)

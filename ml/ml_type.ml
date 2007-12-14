@@ -1,47 +1,87 @@
 (* Interpretation of Ocaml types to Jessie *)
 
 open Ml_misc
-open Ml_ocaml.Asttypes
-open Ml_ocaml.Typedtree
-open Ml_ocaml.Types
-open Ml_ocaml.Path
-open Ml_ocaml.Ident
-open Jc_ast
-open Jc_output
 open Jc_env
+open Ml_ocaml.Types
+open Format
 
-(* Return the Jessie structure associated with a given type. *)
-(* Instanciate the structure if needed. *)
-let type_struct_info env t = match t.desc with
-  | Tconstr(Pident id, _, _) ->
-      begin try
-	Ml_env.find_struct (name id) env
-      with Ml_env.Not_found_str s ->
-	failwith ("ml_type.ml: type_struct_info ("^s^")")
-      end
-  | _ -> failwith "ml_type.ml: type_struct_info"
+let rec print_type fmt t =
+  fprintf fmt "(level %d, id %d: " t.level t.id;
+  begin match t.desc with
+    | Tvar ->
+	fprintf fmt "Tvar"
+    | Tarrow(_, a, b, _) ->
+	print_type fmt a;
+	fprintf fmt " -> ";
+	print_type fmt b
+    | Ttuple tl ->
+	List.iter (fun t -> print_type fmt t; fprintf fmt " * ") tl
+    | Tconstr(path, tl, _) ->
+	fprintf fmt "Tconstr %s [ " (Ml_ocaml.Path.name path);
+	List.iter (fun t -> print_type fmt t; fprintf fmt "; ") tl;
+	fprintf fmt "]";
+    | Tobject _ ->
+	fprintf fmt "Tobject"
+    | Tfield _ ->
+	fprintf fmt "Tfield"
+    | Tnil ->
+	fprintf fmt "Tnil"
+    | Tlink lt ->
+	fprintf fmt "Tlink";
+	print_type fmt lt
+    | Tsubst _ ->
+	fprintf fmt "Tsubst"
+    | Tvariant _ ->
+	fprintf fmt "Tvariant"
+    | Tunivar ->
+	fprintf fmt "Tunivar"
+    | Tpoly _ ->
+	fprintf fmt "Tpoly"
+  end;
+  fprintf fmt ")"
 
-let rec type_ env t = match t.desc with
-  | Tconstr(Pident id, params, abbrev) ->
-      begin match name id with
-	| "unit" -> JCTnative Tunit
-	| "bool" -> JCTnative Tboolean
-	| "int" -> JCTnative Tinteger
-	| "float" -> JCTnative Treal
-	| _ -> make_pointer_type(type_struct_info env t)
-      end
-  | Tvar -> JCTnative Tunit
-  | Tarrow _ -> JCTlogic "ocaml_Tarrow"
-  | Ttuple _ -> JCTlogic "ocaml_Ttuple"
-  | Tconstr _ -> JCTlogic "ocaml_Tconstr"
-  | Tobject _ -> JCTlogic "ocaml_Tobject"
-  | Tfield _ -> JCTlogic "ocaml_Tfield"
-  | Tnil -> JCTlogic "ocaml_Tnil"
-  | Tlink ty -> type_ env ty
-  | Tsubst _ -> JCTlogic "ocaml_Tsubst"
-  | Tvariant _ -> JCTlogic "ocaml_Tvariant"
-  | Tunivar -> JCTlogic "ocaml_Tunivar"
-  | Tpoly _ -> JCTlogic "ocaml_Tpoly"
+let print_type t =
+  let fmt = formatter_of_out_channel stdout in
+  print_type fmt t;
+  fprintf fmt "@."
+
+type ml_label_info = {
+  ml_li_name: string;
+  ml_li_structure: Jc_env.struct_info;
+  ml_li_field: Jc_env.field_info;
+}
+
+type ml_constructor_info = {
+  ml_ci_name: string;
+  ml_ci_tag: int;
+  ml_ci_structure: Jc_env.struct_info;
+  ml_ci_tag_field: Jc_env.field_info;
+  ml_ci_arguments: Jc_env.field_info list;
+}
+
+let declare id td =
+  log "Type declaration parameters:";
+  List.iter (fun t -> print_type t) td.type_params;
+  match td.type_kind with
+    | Type_abstract -> log "Type_abstract"
+    | Type_variant(cl, _) ->
+	List.iter
+	  (fun (n, args) ->
+	     log "Constructor %s:" n;
+	     List.iter print_type args) cl
+    | Type_record(fl, _, _) ->
+	List.iter
+	  (fun (n, _, t) ->
+	     log "Label %s:" n;
+	     print_type t) fl
+
+let make mlt = assert false
+
+let label ld = assert false
+
+let constructor cd = assert false
+
+let jc_decls () = assert false
 
 (*
 Local Variables: 
