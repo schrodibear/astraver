@@ -48,10 +48,11 @@ let add_var name ty env =
   { env with vars = StringMap.add name vi env.vars }, vi
 
 let add_fun name params return_type env =
+  let jc_name = identifier_of_symbol name in
   let fi = {
     jc_fun_info_tag = fresh_int ();
-    jc_fun_info_name = name;
-    jc_fun_info_final_name = name; (* ? *)
+    jc_fun_info_name = jc_name;
+    jc_fun_info_final_name = jc_name; (* ? *)
     jc_fun_info_return_type = return_type;
     jc_fun_info_parameters = params;
     jc_fun_info_calls = []; (* ? *)
@@ -96,8 +97,8 @@ let add_struct si env =
 let add_tag si env =
   let fi = {
     jc_field_info_tag = fresh_int ();
-    jc_field_info_name = "tag";
-    jc_field_info_final_name = "tag";
+    jc_field_info_name = "jessica_tag";
+    jc_field_info_final_name = "jessica_tag";
     jc_field_info_type = JCTnative Tinteger;
     jc_field_info_struct = si;
     jc_field_info_root = si.jc_struct_info_root;
@@ -145,6 +146,6 @@ let find_type_spec id env =
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make -j -C .. bin/jessica.byte"
+compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
 End: 
 *)

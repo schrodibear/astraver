@@ -72,7 +72,7 @@ unit flag(colorT[..] t, integer length)
 /*
 Local Variables: 
 mode: java
-compile-command: "make flag"
+compile-command: "make flag-ownership"
 End: 
 */
 

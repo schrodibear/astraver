@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: lexer.mll,v 1.4 2007-12-11 12:40:16 bardou Exp $ *)
+(* $Id: lexer.mll,v 1.5 2007-12-14 14:31:29 bardou Exp $ *)
 
 (* The lexer definition *)
 
@@ -106,7 +106,9 @@ let annot_keyword_table =
     "ensures", ENSURES;
     "behavior", BEHAVIOR;
     "invariant", INVARIANT;
+    "variant", VARIANT;
     "\\result", BSRESULT;
+    "\\old", BSOLD;
   ]
 
 (* To buffer string literals *)

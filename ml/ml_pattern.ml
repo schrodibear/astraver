@@ -33,7 +33,7 @@ let rec pattern_assertion env arg pat =
 	make_eq_assertion arg (constant_term c)
     | Tpat_tuple _ ->
 	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_assertion: polymorphic variants"
+	  "ml_pattern.ml: pattern_assertion: tuples"
     | Tpat_construct(cd, pl) ->
 	let si, tag, fields = Ml_env.find_constructor cd.cstr_name env in
 	let env, tpl = list_fold_mapi
@@ -58,9 +58,15 @@ let rec pattern_assertion env arg pat =
     | Tpat_variant _ ->
 	not_implemented pat.pat_loc
 	  "ml_pattern.ml: pattern_assertion: polymorphic variants"
-    | Tpat_record _ ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_assertion: records"
+    | Tpat_record lbls ->
+	List.fold_left
+	  (fun (env, vars, tr) (ld, pat) ->
+	     let fi = Ml_env.find_field ld.lbl_name env in
+	     let arg_fi = make_term (JCTderef(arg, fi)) fi.jc_field_info_type in
+	     let pat_env, pat_vars, pat_tr = pattern_assertion env arg_fi pat in
+	     pat_env, vars @ pat_vars, make_and tr pat_tr)
+	  (env, [], make_assertion JCAtrue)
+	  lbls
     | Tpat_array _ ->
 	not_implemented pat.pat_loc
 	  "ml_pattern.ml: pattern_assertion: arrays"

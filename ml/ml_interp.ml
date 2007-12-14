@@ -12,6 +12,17 @@ open Ml_ocaml.Ident
 open Jc_ast
 open Jc_output
 open Jc_env
+open Jc_fenv
+
+let binary_op_of_string = function
+  | ">=" -> Bge_int
+  | "=" -> Beq_int
+  | "<>" -> Bneq_int
+  | "*" -> Bmul_int
+  | "/" -> Bdiv_int
+  | "+" -> Badd_int
+  | "-" -> Bsub_int
+  | _ -> raise Not_found
 
 let binary_op_expr loc op = function
   | [ x; y ] -> JCTEbinary(x, op, y)
@@ -21,10 +32,23 @@ let binary_op_term loc op = function
   | [ x; y ] -> JCTbinary(x, op, y)
   | l -> locate_error loc "2 arguments required, %d found" (List.length l)
 
-let apply_op id args binary_op not_found = match (name id) with
-  | ">=" -> binary_op Bge_int args
-  | "=" -> binary_op Beq_int args
-  |  x -> not_found x
+let apply_op id args binary_op not_found =
+  try
+    binary_op (binary_op_of_string (name id)) args
+  with Not_found ->
+    not_found (name id)
+
+let binary_op_type = function
+  | Bge_int -> JCTnative Tboolean
+  | Beq_int -> JCTnative Tboolean
+  | _ -> failwith "binary_op_type"
+
+let apply_op_expr id args binary_op not_found =
+  try
+    let op = binary_op_of_string (name id) in
+    make_expr (binary_op op args) (binary_op_type op)
+  with Not_found ->
+    not_found (name id)
 
 exception Not_an_expression
 
@@ -66,7 +90,7 @@ let rec expression env e =
 			"unknown function: %s" x
 		  in
 		  JCTEcall(fi, args'))
-	  | _ -> not_implemented e.exp_loc "unsupported application"
+	  | _ -> not_implemented e.exp_loc "unsupported application (expression)"
 	end
 (*  | Texp_match of expression * (pattern * expression) list * partial
     | Texp_try of expression * (pattern * expression) list
@@ -161,7 +185,7 @@ let rec term env e =
 		   JCTapp(li, args')
 		 with Ml_env.Not_found_str x ->
 		   locate_error e.exp_loc "unknown logic function: %s" x)
-	  | _ -> not_implemented e.exp_loc "unsupported application"
+	  | _ -> not_implemented e.exp_loc "unsupported application (term)"
 	end
 (*    | Texp_match of expression * (pattern * expression) list * partial
     | Texp_try of expression * (pattern * expression) list
@@ -191,6 +215,8 @@ let rec term env e =
     | Texp_assertfalse
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
+    | Texp_old e ->
+	JCTold (make_term (term env e) (type_ env e.exp_type))
     | Texp_result ->
 	JCTvar (Jc_pervasives.var (type_ env e.exp_type) "\\result")
     | _ -> not_implemented e.exp_loc "ml_interp.ml: term"
@@ -217,7 +243,7 @@ let rec assertion env e =
 		| _ ->
 		    JCAbool_term(make_term (term env e) (type_ env e.exp_type))
 	      end
-	  | _ -> not_implemented e.exp_loc "unsupported application"
+	  | _ -> not_implemented e.exp_loc "unsupported application (assertion)"
 	end
 (*    | Texp_match of expression * (pattern * expression) list * partial
     | Texp_try of expression * (pattern * expression) list
@@ -247,6 +273,16 @@ let rec assertion env e =
     | Texp_result ->
 	assert false (* impossible *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: assertion"
+
+type jessie_or_caml_expr =
+  | Jessie_expr of Jc_ast.texpr
+  | Caml_expr of Ml_ocaml.Typedtree.expression
+
+let try_expression env e =
+  try
+    Jessie_expr(make_expr (expression env e) (type_ env e.exp_type))
+  with Not_an_expression ->
+    Caml_expr e
 
 let rec statement env e cont =
   match e.exp_desc with
@@ -281,13 +317,45 @@ let rec statement env e cont =
 	end
     | Texp_let(Recursive, _, _) ->
 	not_implemented e.exp_loc "recursive let"
-(*    | Texp_function of (pattern * expression) list * partial
+(*    | Texp_function of (pattern * expression) list * partial*)
     | Texp_apply(f, args) ->
-    | Texp_match of expression * (pattern * expression) list * partial
+	let args = list_filter_option (List.map fst args) in
+	let args_try = List.map (try_expression env) args in
+	let args_final = List.map
+	  (function
+	     | Jessie_expr e -> e
+	     | Caml_expr e -> not_implemented e.exp_loc
+		 "while loop in argument")
+	  args_try
+	in
+	cont (match f.exp_desc with
+	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
+	      apply_op_expr id args_final (binary_op_expr e.exp_loc)
+		(fun x -> let fi = try
+		   Ml_env.find_fun x env
+		 with
+		   | Ml_env.Not_found_str x -> locate_error e.exp_loc
+		       "unknown function: %s" x
+		 in
+		 make_expr (JCTEcall(fi, args_final))
+		   fi.jc_fun_info_return_type)
+	  | _ -> not_implemented e.exp_loc "unsupported application (statement)"
+	)
+(*    | Texp_match of expression * (pattern * expression) list * partial
     | Texp_try of expression * (pattern * expression) list
-    | Texp_tuple of expression list
-    | Texp_construct of constructor_description * expression list
-    | Texp_variant of label * expression option*)
+    | Texp_tuple of expression list*)
+    | Texp_construct(cd, el) ->
+	let si, tag, fil = Ml_env.find_constructor cd.cstr_name env in
+	make_alloc_tmp si
+	  (fun _ tmp_e ->
+	     make_statement_block [
+	       make_affect_field tmp_e (Ml_env.find_tag si env)
+		 (expr_of_int tag);
+	       statement_list env el
+		 (List.map (fun fi -> make_affect_field tmp_e fi) fil);
+	       cont tmp_e;
+	     ])
+(*    | Texp_variant of label * expression option*)
     | Texp_record(lbls, None) ->
 	let si = match lbls with
 	  | [] ->
@@ -367,8 +435,26 @@ let rec statement env e cont =
 	  statement env e1 make_discard;
 	  statement env e2 cont;
 	]
-(*    | Texp_while of expression * expression
-    | Texp_for of
+    | Texp_while(cond, annot, body) ->
+	let annot = {
+	  jc_loop_tag = fresh_int ();
+	  jc_loop_invariant =
+	    (match annot.ws_invariant with
+	       | None -> make_assertion JCAtrue
+	       | Some x -> make_assertion (assertion env x)); 
+	  jc_loop_variant =
+	    (match annot.ws_variant with
+	       | None -> None
+	       | Some x -> Some(
+		   make_term (term env x) (type_ env x.exp_type)));
+	} in
+	statement env cond
+	  (fun e -> make_statement_block [
+	     make_statement (JCTSwhile(e, annot,
+				       statement env body make_discard));
+	     cont void;
+	   ])
+(*    | Texp_for of
 	Ident.t * expression * expression * direction_flag * expression
     | Texp_when of expression * expression
     | Texp_send of expression * meth
@@ -384,6 +470,17 @@ let rec statement env e cont =
     | Texp_result ->
 	assert false (* impossible *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: statement"
+
+and statement_list env l conts =
+  let stl = List.fold_left2
+    (fun stl e cont -> match e with
+       | Jessie_expr e -> (cont e)::stl
+       | Caml_expr e -> (statement env e cont)::stl)
+    []
+    (List.map (try_expression env) l)
+    conts
+  in
+  make_statement_block (List.rev stl)
 
 let behavior env b =
   log "        Behavior %s..." b.b_name;
@@ -518,7 +615,8 @@ let rec function_decl env e = match e.exp_desc with
 let structure_item env = function
   | Tstr_value(_, [ { pat_desc = Tpat_var id },
 		    ({ exp_desc = Texp_function _ } as expr) ]) ->
-      log "    Function %s:" (name id);
+      let fun_name = identifier_of_symbol (name id) in
+      log "    Function %s (%s):" (name id) fun_name;
       let params, body = function_decl env expr in
       log "      Looking for spec...";
       let spec =
@@ -527,7 +625,7 @@ let structure_item env = function
 	with Ml_env.Not_found_str _ ->
 	  log "        Not found";
 	  {
-	    fs_function = Pident id;
+	    fs_function = Pident id; (* unused *)
 	    fs_arguments = []; (* unused *)
 	    fs_requires = None;
 	    fs_behaviors = [];
@@ -564,7 +662,7 @@ let structure_item env = function
       let jc_fun_def =
 	JCfun_def(
 	  return_type,
-	  name id,
+	  fun_name,
 	  params',
 	  jc_spec,
 	  Some [ body' ]

@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.7 2007-12-13 16:42:57 bardou Exp $ */
+/* $Id: parser.mly,v 1.8 2007-12-14 14:31:29 bardou Exp $ */
 
 /* The parser definition */
 
@@ -300,12 +300,14 @@ let bigarray_set arr arg newval =
 %token WITH
 
 %token BEHAVIOR
+%token BSOLD
 %token BSRESULT
 %token ENSURES
+%token INVARIANT
 %token LANNOT
 %token RANNOT
 %token REQUIRES
-%token INVARIANT
+%token VARIANT
 
 /* Precedences and associativities.
 
@@ -360,6 +362,7 @@ The precedences must be listed from low to high.
 %nonassoc prec_constr_appl              /* above AS BAR COLONCOLON COMMA */
 %nonassoc below_SHARP
 %nonassoc SHARP                         /* simple_expr/toplevel_directive */
+%nonassoc BSOLD
 %nonassoc below_DOT
 %nonassoc DOT
 /* Finally, the first tokens of simple_expr are above everything else. */
@@ -847,8 +850,8 @@ expr:
       { mkexp(Pexp_ifthenelse($2, $4, Some $6)) }
   | IF seq_expr THEN expr
       { mkexp(Pexp_ifthenelse($2, $4, None)) }
-  | WHILE seq_expr DO seq_expr DONE
-      { mkexp(Pexp_while($2, $4)) }
+  | WHILE seq_expr DO while_spec seq_expr DONE
+      { mkexp(Pexp_while($2, $4, $5)) }
   | FOR val_ident EQUAL seq_expr direction_flag seq_expr DO seq_expr DONE
       { mkexp(Pexp_for($2, $4, $6, $5, $8)) }
   | expr COLONCOLON expr
@@ -981,6 +984,8 @@ simple_expr:
       { mkexp(Pexp_send($1, $3)) }
   | BSRESULT
       { mkexp Pexp_result }
+  | BSOLD simple_expr
+      { mkexp(Pexp_old $2) }
 ;
 simple_labeled_expr_list:
     labeled_simple_expr
@@ -1578,22 +1583,22 @@ function_behaviors:
 ;
 
 lident_list:
-  | LIDENT
-      { [ $1 ] }
+  |
+      { [] }
   | LIDENT lident_list
       { $1::$2 }
 ;
 
 function_spec:
-  | FUNCTION lident_list COLON function_requires function_ensures
+  | FUNCTION val_ident lident_list COLON function_requires function_ensures
       function_behaviors
-      { { pfs_name = List.hd $2;
-	  pfs_arguments = List.tl $2;
-	  pfs_requires = $4;
+      { { pfs_name = $2;
+	  pfs_arguments = $3;
+	  pfs_requires = $5;
 	  pfs_behaviors =
-	    match $5 with
-	      | None -> $6
-	      | Some x -> { pb_name = "default"; pb_ensures = x }::$6; } }
+	    match $6 with
+	      | None -> $7
+	      | Some x -> { pb_name = "default"; pb_ensures = x }::$7; } }
 ;
 
 type_invariant:
@@ -1614,6 +1619,27 @@ type_spec:
   | TYPE LIDENT COLON type_invariants
       { { pts_name = $2;
 	  pts_invariants = $4 } }
+;
+
+while_spec:
+  | LANNOT INVARIANT expr VARIANT expr RANNOT
+      { { pws_invariant = Some $3;
+	  pws_variant = Some $5 } }
+  | LANNOT VARIANT expr INVARIANT expr RANNOT
+      { { pws_invariant = Some $5;
+	  pws_variant = Some $3 } }
+  | LANNOT INVARIANT expr RANNOT
+      { { pws_invariant = Some $3;
+	  pws_variant = None } }
+  | LANNOT VARIANT expr RANNOT
+      { { pws_invariant = None;
+	  pws_variant = Some $3 } }
+  | LANNOT RANNOT
+      { { pws_invariant = None;
+	  pws_variant = None } }
+  |
+      { { pws_invariant = None;
+	  pws_variant = None } }
 ;
 
 %%

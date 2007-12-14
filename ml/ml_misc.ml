@@ -56,6 +56,23 @@ let list_fold_mapi x = list_fold_mapi 0 [] x
 
 (******************************************************************************)
 
+let identifier_of_symbol_char = function
+  | '!' -> "bang"
+  | ':' -> "colon"
+  | '=' -> "equal"
+  | c -> String.make 1 c
+
+let identifier_of_symbol = function
+  | "ref" -> "jessica_ref"
+  | s ->
+      let buf = Buffer.create 10 in
+      for i = 0 to String.length s - 1 do
+	Buffer.add_string buf (identifier_of_symbol_char s.[i])
+      done;
+      Buffer.contents buf
+
+(******************************************************************************)
+
 open Jc_ast
 open Jc_env
 
@@ -168,7 +185,16 @@ let make_statement ?(loc=Loc.dummy_position) s = {
 }
 
 let make_statement_block ?(loc=Loc.dummy_position) sl =
-  match List.filter (fun s -> not (is_void_statement s)) sl with
+  (* remove voids and flatten blocks *)
+  let sl = List.map
+    (fun s ->
+       if is_void_statement s then [] else
+	 match s with
+	   | { jc_tstatement_node = JCTSblock l } -> l
+	   | _ -> [ s ])
+    sl
+  in
+  match List.flatten sl with
     | ([] as l)
     | ([ { jc_tstatement_node = JCTSdecl _ } ] as l)
     | (_::_::_ as l) -> make_statement ~loc:loc (JCTSblock l)
@@ -176,9 +202,16 @@ let make_statement_block ?(loc=Loc.dummy_position) sl =
 
 let make_affect vi e =
   if is_unit e.jc_texpr_type then
-    (log "affect unit: %s" vi.jc_var_info_name; make_statement (JCTSexpr e))
+    make_statement (JCTSexpr e)
   else
-    (log "affect not unit: %s" vi.jc_var_info_name; make_statement (JCTSexpr({ e with jc_texpr_node = JCTEassign_var(vi, e) })))
+    make_statement (JCTSexpr({ e with jc_texpr_node = JCTEassign_var(vi, e) }))
+
+let make_affect_field x fi e =
+  if is_unit e.jc_texpr_type then
+    make_statement (JCTSexpr e)
+  else
+    make_statement (JCTSexpr({ e with jc_texpr_node =
+				 JCTEassign_heap(x, fi, e) }))
 
 let make_discard e =
   make_statement (JCTSexpr e)
@@ -189,10 +222,17 @@ let make_return e =
 let make_var_decl vi init s =
   make_statement (JCTSdecl(vi, init, s))
 
+let make_alloc_tmp si cont =
+  let tmp_ty = make_pointer_type si in
+  let tmp_var = new_var tmp_ty in
+  let tmp_expr = make_expr (JCTEvar tmp_var) tmp_ty in
+  let tmp_init = make_expr (JCTEalloc(expr_of_int 1, si)) tmp_ty in
+  make_var_decl tmp_var (Some tmp_init) (cont tmp_var tmp_expr)
+
 let void = make_expr (JCTEconst JCCvoid) (JCTnative Tunit)
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make -j -C .. bin/jessica.byte"
+compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
 End: 
 *)

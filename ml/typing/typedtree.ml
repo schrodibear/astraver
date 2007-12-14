@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.7 2007-12-13 16:42:57 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.8 2007-12-14 14:31:29 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -64,7 +64,7 @@ and expression_desc =
   | Texp_array of expression list
   | Texp_ifthenelse of expression * expression * expression option
   | Texp_sequence of expression * expression
-  | Texp_while of expression * expression
+  | Texp_while of expression * while_spec * expression
   | Texp_for of
       Ident.t * expression * expression * direction_flag * expression
   | Texp_when of expression * expression
@@ -79,6 +79,12 @@ and expression_desc =
   | Texp_lazy of expression
   | Texp_object of class_structure * class_signature * string list
   | Texp_result
+  | Texp_old of expression
+
+and while_spec = {
+  ws_invariant: expression option;
+  ws_variant: expression option;
+}
 
 and meth =
     Tmeth_name of string

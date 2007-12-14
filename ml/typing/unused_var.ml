@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: unused_var.ml,v 1.4 2007-12-11 12:40:16 bardou Exp $ *)
+(* $Id: unused_var.ml,v 1.5 2007-12-14 14:31:29 bardou Exp $ *)
 
 open Parsetree
 
@@ -148,7 +148,7 @@ and expression ppf tbl e =
   | Pexp_sequence (e1, e2) ->
       expression ppf tbl e1;
       expression ppf tbl e2;
-  | Pexp_while (e1, e2) ->
+  | Pexp_while (e1, _, e2) ->
       expression ppf tbl e1;
       expression ppf tbl e2;
   | Pexp_for (id, e1, e2, _, e3) ->

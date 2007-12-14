@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.ml,v 1.5 2007-12-13 16:42:57 bardou Exp $ *)
+(* $Id: typecore.ml,v 1.6 2007-12-14 14:31:29 bardou Exp $ *)
 
 (* Typechecking for the core language *)
 
@@ -1165,11 +1165,19 @@ let rec type_exp env sexp =
         exp_loc = sexp.pexp_loc;
         exp_type = exp2.exp_type;
         exp_env = env }
-  | Pexp_while(scond, sbody) ->
+  | Pexp_while(scond, sannot, sbody) ->
       let cond = type_expect env scond (instance Predef.type_bool) in
+      let annot = {
+	ws_invariant = (match sannot.pws_invariant with
+	  | None -> None
+	  | Some x -> Some(type_exp env x));
+	ws_variant = (match sannot.pws_variant with
+	  | None -> None
+	  | Some x -> Some(type_exp env x));
+      } in
       let body = type_statement env sbody in
       re {
-        exp_desc = Texp_while(cond, body);
+        exp_desc = Texp_while(cond, annot, body);
         exp_loc = sexp.pexp_loc;
         exp_type = instance Predef.type_unit;
         exp_env = env }
@@ -1466,6 +1474,14 @@ let rec type_exp env sexp =
 	    Pexp_ident (Longident.Lident "\\result") }
       in
       { tr with exp_desc = Texp_result }
+  | Pexp_old e ->
+      let te = type_exp env e in
+      re {
+        exp_desc = Texp_old te;
+        exp_loc = sexp.pexp_loc;
+        exp_type = te.exp_type;
+        exp_env = env;
+      }
 
 and type_argument env sarg ty_expected' =
   (* ty_expected' may be generic *)

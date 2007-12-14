@@ -3,7 +3,7 @@ JESSIE=../../../bin/jessie.byte
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
-EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -inv-sem arguments -why-opt -split-user-conj
+EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -inv-sem ownership -why-opt -split-user-conj
 
 JCFILES=$(shell ls *.jc)
 WFILES=$(addprefix why/, $(JCFILES:.jc=.why))

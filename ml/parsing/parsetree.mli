@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: parsetree.mli,v 1.7 2007-12-13 16:42:57 bardou Exp $ *)
+(* $Id: parsetree.mli,v 1.8 2007-12-14 14:31:29 bardou Exp $ *)
 
 (* Abstract syntax tree produced by parsing *)
 
@@ -97,7 +97,7 @@ and expression_desc =
   | Pexp_array of expression list
   | Pexp_ifthenelse of expression * expression * expression option
   | Pexp_sequence of expression * expression
-  | Pexp_while of expression * expression
+  | Pexp_while of expression * while_spec * expression
   | Pexp_for of string * expression * expression * direction_flag * expression
   | Pexp_constraint of expression * core_type option * core_type option
   | Pexp_when of expression * expression
@@ -112,6 +112,12 @@ and expression_desc =
   | Pexp_poly of expression * core_type option
   | Pexp_object of class_structure
   | Pexp_result
+  | Pexp_old of expression
+
+and while_spec = {
+  pws_invariant: expression option;
+  pws_variant: expression option;
+}
 
 (* Value descriptions *)
 
