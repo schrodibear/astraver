@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: unused_var.ml,v 1.5 2007-12-14 14:31:29 bardou Exp $ *)
+(* $Id: unused_var.ml,v 1.6 2007-12-14 15:53:23 bardou Exp $ *)
 
 open Parsetree
 
@@ -174,7 +174,8 @@ and expression ppf tbl e =
   | Pexp_lazy e -> expression ppf tbl e;
   | Pexp_poly (e, _) -> expression ppf tbl e;
   | Pexp_object cs -> class_structure ppf tbl cs;
-  | Pexp_result -> assert false
+  | Pexp_result
+  | Pexp_old _ -> ()
 
 and expression_option ppf tbl eo =
   match eo with

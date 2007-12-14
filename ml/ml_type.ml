@@ -10,9 +10,16 @@ open Jc_ast
 open Jc_output
 open Jc_env
 
-let type_in_env env s =
-  let si = Ml_env.find_struct s env in
-  make_pointer_type si
+(* Return the Jessie structure associated with a given type. *)
+(* Instanciate the structure if needed. *)
+let type_struct_info env t = match t.desc with
+  | Tconstr(Pident id, _, _) ->
+      begin try
+	Ml_env.find_struct (name id) env
+      with Ml_env.Not_found_str s ->
+	failwith ("ml_type.ml: type_struct_info ("^s^")")
+      end
+  | _ -> failwith "ml_type.ml: type_struct_info"
 
 let rec type_ env t = match t.desc with
   | Tconstr(Pident id, params, abbrev) ->
@@ -21,12 +28,7 @@ let rec type_ env t = match t.desc with
 	| "bool" -> JCTnative Tboolean
 	| "int" -> JCTnative Tinteger
 	| "float" -> JCTnative Treal
-	| s ->
-	    begin try
-	      type_in_env env s
-	    with Ml_env.Not_found_str _ ->
-	      JCTlogic("ocaml_Tconstr_"^s)
-	    end
+	| _ -> make_pointer_type(type_struct_info env t)
       end
   | Tvar -> JCTnative Tunit
   | Tarrow _ -> JCTlogic "ocaml_Tarrow"
@@ -40,15 +42,6 @@ let rec type_ env t = match t.desc with
   | Tvariant _ -> JCTlogic "ocaml_Tvariant"
   | Tunivar -> JCTlogic "ocaml_Tunivar"
   | Tpoly _ -> JCTlogic "ocaml_Tpoly"
-
-let type_struct_info env t = match t.desc with
-  | Tconstr(Pident id, _, _) ->
-      begin try
-	Ml_env.find_struct (name id) env
-      with Ml_env.Not_found_str s ->
-	failwith ("ml_type.ml: type_struct_info ("^s^")")
-      end
-  | _ -> failwith "ml_type.ml: type_struct_info"
 
 (*
 Local Variables: 
