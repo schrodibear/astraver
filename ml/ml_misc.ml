@@ -76,6 +76,12 @@ let identifier_of_symbol = function
 open Jc_ast
 open Jc_env
 
+let default_region = {
+  jc_reg_variable = false;
+  jc_reg_id = 0;
+  jc_reg_name = "jessica_region";
+}
+
 let is_unit t = t = JCTnative Tunit
 
 let is_void_statement_node = function
@@ -90,6 +96,7 @@ let make_expr ?(loc=Loc.dummy_position) ?(label="") ~node ~ty = {
   jc_texpr_loc = loc;
   jc_texpr_type = ty;
   jc_texpr_label = label; (* ? *)
+  jc_texpr_region = default_region;
 }
 
 let make_assertion ?(loc=Loc.dummy_position) ?(label="") ~node = {
@@ -103,6 +110,7 @@ let make_term ?(loc=Loc.dummy_position) ?(label="") ~node ~ty = {
   jc_term_type = ty;
   jc_term_loc = loc;
   jc_term_label = label;
+  jc_term_region = default_region;
 }
 
 let make_bool_expr ?(loc=Loc.dummy_position) ?(label="") ~node =
@@ -160,6 +168,7 @@ let new_var = let var_cnt = ref 0 in fun ty ->
     jc_var_info_formal = false;
     jc_var_info_assigned = false;
     jc_var_info_static = false;
+    jc_var_info_region = default_region;
   }
 
 let ignored_var ty = {
@@ -170,6 +179,7 @@ let ignored_var ty = {
   jc_var_info_formal = false;
   jc_var_info_assigned = false;
   jc_var_info_static = false;
+  jc_var_info_region = default_region;
 }
 
 let expr_seq_to_let =

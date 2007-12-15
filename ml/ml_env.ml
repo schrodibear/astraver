@@ -44,6 +44,7 @@ let add_var name ty env =
     jc_var_info_formal = false; (* ? *)
     jc_var_info_assigned = false; (* ? *)
     jc_var_info_static = false; (* ? *)
+    jc_var_info_region = default_region;
   } in
   { env with vars = StringMap.add name vi env.vars }, vi
 
@@ -58,6 +59,7 @@ let add_fun name params return_type env =
     jc_fun_info_calls = []; (* ? *)
     jc_fun_info_logic_apps = []; (* ? *)
     jc_fun_info_effects = Jc_pervasives.empty_fun_effect; (* ! *)
+    jc_fun_info_return_region = default_region;
   } in
   { env with funs = StringMap.add name fi env.funs }
 
@@ -115,6 +117,7 @@ let add_logic_fun name params return_type env =
     jc_logic_info_parameters = params;
     jc_logic_info_effects = Jc_pervasives.empty_effects; (* ! *)
     jc_logic_info_calls = [];
+    jc_logic_info_result_region = default_region;
   } in
   { env with logic_funs = StringMap.add name li env.logic_funs }, li
 
