@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.190 2007-12-17 14:21:45 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.191 2007-12-17 15:05:00 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -370,6 +370,7 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	  "can't coerce type %a to type %a" 
 	  print_type tsrc print_type tdest
 
+
 (**************************
 
 terms and assertions 
@@ -406,6 +407,8 @@ let lvar ?(assigned=true) label v =
       | None -> LVar v 
       | Some l -> LVarAtLabel(v,l)
   else LVar v
+
+let var v = Var v
 
 let lvar_info label v = 
   if v.jc_var_info_name = "\\result" then 
@@ -598,6 +601,54 @@ let named_jc_assertion loc a =
 let named_assertion label oldlabel a =
   let a' = assertion label oldlabel a in
   named_jc_assertion a.jc_assertion_loc a'
+
+
+let ( ** ) = fun f g x -> f(g x)
+
+let direct_embedded_struct_fields st =
+  List.fold_left 
+    (fun acc fi -> 
+      match fi.jc_field_info_type with
+	| JCTpointer(st', Some _, Some _) -> 
+	    assert (st.jc_struct_info_name <> st'.jc_struct_info_name);
+	    fi :: acc
+	| _ -> acc
+    ) [] st.jc_struct_info_fields
+    
+let embedded_struct_fields st =
+  let rec collect forbidden_set st = 
+    let forbidden_set = StringSet.add st.jc_struct_info_name forbidden_set in
+    let fields = direct_embedded_struct_fields st in
+    let fstructs = 
+      List.fold_left 
+	(fun acc fi -> match fi.jc_field_info_type with
+	  | JCTpointer (st', Some _, Some _) -> 
+	      assert 
+		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
+	      st' :: acc
+	   | _ -> assert false
+	) [] fields
+    in
+    fields @ List.flatten (List.map (collect forbidden_set) fstructs)
+  in
+  let fields = collect (StringSet.singleton st.jc_struct_info_name) st in
+  let fields = 
+    List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
+  in
+  FieldSet.elements fields
+      
+let field_sinfo fi = 
+  match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
+
+let field_bounds fi = 
+  match fi.jc_field_info_type with 
+    | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
+
+let struct_alloc_arg st =
+  alloc_table_name st, alloc_table_type st
+
+let field_memory_arg fi =
+  field_memory_name fi, memory_field fi
 
 
 (****************************
@@ -1014,9 +1065,11 @@ and expr ~threats e : expr =
 	  make_app "safe_acc_"
 	    [ Var mem ; 
 	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
-    | JCEalloc (e, st) ->
+    | JCEalloc (siz, st) ->
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
 	let tag = st.jc_struct_info_root ^ "_tag_table" in
+	let fields = embedded_struct_fields st in
+	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
 	begin
 	  match Jc_options.inv_sem with
 	    | InvOwnership ->
@@ -1025,17 +1078,19 @@ and expr ~threats e : expr =
 		make_app "alloc_parameter_ownership" 
 		  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
 		   coerce ~no_int_overflow:(not threats) 
-		     e.jc_expr_label e.jc_expr_loc integer_type 
-		     e.jc_expr_type (expr e)]
+		     siz.jc_expr_label siz.jc_expr_loc integer_type 
+		     siz.jc_expr_type (expr siz)]
 	    | InvArguments | InvNone ->
-		begin match e.jc_expr_node with 
+		begin match siz.jc_expr_node with 
 		  | JCEconst(JCCinteger "1") ->
-		      make_app (alloc_one_param_name st) [Void]
+		      make_app (alloc_one_param_name st) 
+			((List.map (var ** field_region_memory_name) fields)
+			@ [Void])
 		  | _ ->
 		      make_app (alloc_param_name st)
 			[coerce ~no_int_overflow:(not threats) 
-			  e.jc_expr_label e.jc_expr_loc integer_type 
-			  e.jc_expr_type (expr e)]
+			  siz.jc_expr_label siz.jc_expr_loc integer_type 
+			  siz.jc_expr_type (expr siz)]
 		end
 	end
     | JCEfree e ->
@@ -1305,53 +1360,6 @@ and statement_list ~threats l =
  structures
 ******************)
 
-let ( ** ) = fun f g x -> f(g x)
-
-let direct_embedded_struct_fields st =
-  List.fold_left 
-    (fun acc fi -> 
-      match fi.jc_field_info_type with
-	| JCTpointer(st', Some _, Some _) -> 
-	    assert (st.jc_struct_info_name <> st'.jc_struct_info_name);
-	    fi :: acc
-	| _ -> acc
-    ) [] st.jc_struct_info_fields
-    
-let embedded_struct_fields st =
-  let rec collect forbidden_set st = 
-    let forbidden_set = StringSet.add st.jc_struct_info_name forbidden_set in
-    let fields = direct_embedded_struct_fields st in
-    let fstructs = 
-      List.fold_left 
-	(fun acc fi -> match fi.jc_field_info_type with
-	  | JCTpointer (st', Some _, Some _) -> 
-	      assert 
-		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
-	      st' :: acc
-	   | _ -> assert false
-	) [] fields
-    in
-    fields @ List.flatten (List.map (collect forbidden_set) fstructs)
-  in
-  let fields = collect (StringSet.singleton st.jc_struct_info_name) st in
-  let fields = 
-    List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
-  in
-  FieldSet.elements fields
-      
-let field_sinfo fi = 
-  match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
-
-let field_bounds fi = 
-  match fi.jc_field_info_type with 
-    | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
-
-let struct_alloc_arg st =
-  alloc_table_name st, alloc_table_type st
-
-let field_memory_arg fi =
-  field_memory_name fi, memory_field fi
-
 let tr_struct st acc =
   let alloc_type = alloc_table_type st in
   let tagid_type = tag_id_type st in
@@ -1512,6 +1520,11 @@ let tr_struct st acc =
       (* no exceptional post *)
       [])
   in
+  let alloc_type =
+    List.fold_left (fun acc fi ->
+      Prod_type(field_memory_name fi,Ref_type(Base_type(memory_field fi)),acc)
+    ) alloc_type all_fields
+  in
   let alloc_type = Prod_type("tt",unit_type,alloc_type) in
   let acc = 
     Param(false,alloc_one_param_name st,alloc_type) :: acc
@@ -1547,6 +1560,11 @@ let tr_struct st acc =
       ],
       (* no exceptional post *)
       [])
+  in
+  let alloc_type =
+    List.fold_left (fun acc fi ->
+      Prod_type(field_memory_name fi,Ref_type(Base_type(memory_field fi)),acc)
+    ) alloc_type all_fields
   in
   let alloc_type = Prod_type("n",Base_type why_integer_type,alloc_type) in
   let acc = 

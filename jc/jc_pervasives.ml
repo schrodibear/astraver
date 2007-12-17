@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.62 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.63 2007-12-17 15:05:00 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -59,7 +59,6 @@ let print_type fmt t =
 	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
 	    (Num.string_of_num a) (Num.string_of_num b)
     | JCTnull -> fprintf fmt "(nulltype)"  
-
 
 let num_of_constant loc c =
     match c with

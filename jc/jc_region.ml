@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.2 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.3 2007-12-17 15:05:00 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -233,8 +233,10 @@ struct
 	let t = RegionTable.find global_region_table r in
 	try FieldTable.find t fi 
 	with Not_found -> 
-	  let fr = 
-	    if r.jc_reg_variable then
+	  let fr =
+	    if is_embedded_field fi then
+	      r
+	    else if r.jc_reg_variable then
 	      make_var fi.jc_field_info_type fi.jc_field_info_name 
 	    else
 	      make_const fi.jc_field_info_type fi.jc_field_info_name 
@@ -243,7 +245,9 @@ struct
 	  fr
       with Not_found ->
 	let fr = 
-	  if r.jc_reg_variable then
+	  if is_embedded_field fi then
+	    r
+	  else if r.jc_reg_variable then
 	    make_var fi.jc_field_info_type fi.jc_field_info_name 
 	  else
 	    make_const fi.jc_field_info_type fi.jc_field_info_name

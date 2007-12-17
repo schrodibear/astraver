@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.12 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.13 2007-12-17 15:05:00 moy Exp $ *)
 
 open Jc_env
 
@@ -36,6 +36,8 @@ module StringMap : Map.S with type key = string
 val get_unique_name : ?local_names:StringSet.t -> string -> string
 
 val is_pointer_type : Jc_env.jc_type -> bool
+
+val is_embedded_field : Jc_env.field_info -> bool
 
 module VarSet : Set.S with type elt = var_info
 

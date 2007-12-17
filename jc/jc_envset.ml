@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.14 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.15 2007-12-17 15:05:00 moy Exp $ *)
 
 open Jc_env
 
@@ -77,6 +77,11 @@ let is_pointer_type t =
   match t with
     | JCTnull -> true
     | JCTpointer _ -> true
+    | _ -> false
+
+let is_embedded_field fi =
+  match fi.jc_field_info_type with
+    | JCTpointer(_,Some _,Some _) -> true
     | _ -> false
 
 module VarSet = 
