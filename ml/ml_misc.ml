@@ -59,6 +59,13 @@ let rec list_mapi f index acc = function
   | x::rem -> list_mapi f (index + 1) ((f index x)::acc) rem
 let list_mapi f = list_mapi f 0 []
 
+let rec list_iteri f index = function
+  | [] -> ()
+  | x::rem ->
+      f index x;
+      list_iteri f (index + 1) rem
+let list_iteri f = list_iteri f 0
+
 (******************************************************************************)
 
 let identifier_of_symbol_char = function
@@ -92,6 +99,7 @@ let fresh_ident base =
 
 open Jc_ast
 open Jc_env
+open Jc_output
 
 let default_region = {
   jc_reg_variable = false;
@@ -279,6 +287,16 @@ let make_field si name jcty =
   fi
 
 let dummy_struct = make_struct "dummy_struct"
+
+let make_struct_def si invs =
+  JCstruct_def(
+    si.jc_struct_info_name,
+    (match si.jc_struct_info_parent with
+       | None -> None
+       | Some si -> Some si.jc_struct_info_name),
+    si.jc_struct_info_fields,
+    invs
+  )
 
 (*
 Local Variables: 

@@ -27,6 +27,8 @@ type ml_constructor_info = {
 val constructor: Ml_ocaml.Types.type_expr -> 
   Ml_ocaml.Types.constructor_description -> ml_constructor_info
 
+val proj: Ml_ocaml.Types.type_expr -> int -> Jc_env.field_info
+
 val jc_decls: unit -> Jc_output.jc_decl list
 
 (*

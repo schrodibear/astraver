@@ -75,6 +75,7 @@ type ml_jessie_type =
   | MLTrecord of Jc_env.struct_info * (string * ml_label_info) list
   | MLTvariant of Jc_env.struct_info * Jc_env.field_info *
       (string * ml_constructor_info) list
+  | MLTtuple of Jc_env.struct_info
 
 type ml_caml_type = {
   ml_ty_name: string;
@@ -83,7 +84,8 @@ type ml_caml_type = {
   mutable ml_ty_invariants: (string * Jc_env.var_info * Jc_ast.assertion) list;
 }
 
-let ml_types = Hashtbl.create 11
+let ml_types = Hashtbl.create 11 (* string -> ml_caml_type *)
+let ml_tuples = ref ParamMap.empty (* Ml_env.struct_info *)
 
 let declare id td =
   let n = name id in
@@ -105,7 +107,14 @@ let rec make_type mlt =
   match mlt.desc with
     | Tvar -> raise Not_closed
     | Tarrow _ -> not_implemented "ml_type.ml: make_type: Tarrow"
-    | Ttuple _ -> not_implemented "ml_type.ml: make_type: Ttuple"
+    | Ttuple tl ->
+	begin try
+	  MLTtuple(ParamMap.find tl !ml_tuples)
+	with Not_found ->
+	  let jcty = tuple tl in
+	  ml_tuples := ParamMap.add tl jcty !ml_tuples;
+	  MLTtuple jcty
+	end
     | Tconstr(path, args, _) ->
 	begin match Ml_ocaml.Path.name path with
 	  | "unit" -> MLTnative Tunit
@@ -142,7 +151,8 @@ and make mlt =
     | MLTnative t ->
 	JCTnative t
     | MLTrecord(si, _)
-    | MLTvariant(si, _, _) ->
+    | MLTvariant(si, _, _)
+    | MLTtuple si ->
 	JCTpointer(si, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
 
 and instance args ty =
@@ -194,10 +204,19 @@ and instance args ty =
 	in
 	MLTvariant(si, tagfi, constrs)
 
+and tuple tl =
+  let si = make_struct (fresh_ident "jessica_tuple") in
+  list_iteri
+    (fun i ty -> ignore (make_field si ("f"^string_of_int i) (make ty)))
+    tl;
+  si.jc_struct_info_fields <- List.rev si.jc_struct_info_fields;
+  si
+
 let structure ty =
   match make_type ty with
     | MLTrecord(si, _)
-    | MLTvariant(si, _, _) -> si
+    | MLTvariant(si, _, _)
+    | MLTtuple si -> si
     | _ -> failwith "ml_type.ml: structure: not translated to a structure type"
 
 let label recty ld =
@@ -209,6 +228,11 @@ let constructor varty cd =
   match make_type varty with
     | MLTvariant(_, _, constrs) -> List.assoc cd.cstr_name constrs
     | _ -> failwith "ml_type.ml: constructor: not a variant type"
+
+let proj tty index =
+  match make_type tty with
+    | MLTtuple si -> List.nth si.jc_struct_info_fields index
+    | _ -> failwith "ml_type.ml: constructor: not a tuple type"
 
 let jc_decl mlty = function
   | MLTnot_closed ->
@@ -234,19 +258,25 @@ let jc_decl mlty = function
 	  List.flatten (List.map (fun (_, l) -> l.ml_ci_arguments) constrs),
 	mlty.ml_ty_invariants
       )
+  | MLTtuple si ->
+      make_struct_def si mlty.ml_ty_invariants
 
 let jc_decls () =
-  let decls = Hashtbl.fold
+  let decls1 = ParamMap.fold
+    (fun _ si acc -> (make_struct_def si [])::acc)
+    !ml_tuples
+    []
+  in
+  let decls2 = Hashtbl.fold
     (fun _ ty acc ->
        ParamMap.fold
-	 (fun _ ity acc ->
-	    (jc_decl ty ity)::acc)
+	 (fun _ ity acc -> (jc_decl ty ity)::acc)
 	 ty.ml_ty_instances
 	 acc)
     ml_types
     []
   in
-  List.rev decls
+  decls1 @ List.rev decls2
 
 (*
 Local Variables: 

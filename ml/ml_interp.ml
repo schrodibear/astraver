@@ -160,6 +160,9 @@ let rec expression env e =
     | Texp_assertfalse
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
+    | Texp_result
+    | Texp_old _ ->
+	assert false (* impossible *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: expression"
 
 let rec term env e =
@@ -216,10 +219,10 @@ let rec term env e =
     | Texp_assertfalse
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
-    | Texp_old e ->
-	JCTold (make_term (term env e) (make e.exp_type))
     | Texp_result ->
 	JCTvar (Jc_pervasives.var (make e.exp_type) "\\result")
+    | Texp_old e ->
+	JCTold (make_term (term env e) (make e.exp_type))
     | _ -> not_implemented e.exp_loc "ml_interp.ml: term"
 
 let rec assertion env e =
@@ -271,7 +274,8 @@ let rec assertion env e =
     | Texp_assertfalse
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
-    | Texp_result ->
+    | Texp_result
+    | Texp_old _ ->
 	assert false (* impossible *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: assertion"
 
@@ -343,8 +347,20 @@ let rec statement env e cont =
 	  | _ -> not_implemented e.exp_loc "unsupported application (statement)"
 	)
 (*    | Texp_match of expression * (pattern * expression) list * partial
-    | Texp_try of expression * (pattern * expression) list
-    | Texp_tuple of expression list*)
+    | Texp_try of expression * (pattern * expression) list*)
+    | Texp_tuple el ->
+	let si = structure e.exp_type in
+	make_alloc_tmp si
+	  (fun _ tmp_e ->
+	     make_statement_block [
+	       statement_list env el
+		 (list_mapi
+		    (fun i _ ->
+		       let fi = proj e.exp_type i in
+		       make_affect_field tmp_e fi)
+		    el);
+	       cont tmp_e;
+	     ])
     | Texp_construct(cd, el) ->
 	let ci = constructor e.exp_type cd in
 	make_alloc_tmp ci.ml_ci_structure
@@ -458,7 +474,8 @@ let rec statement env e cont =
     | Texp_assertfalse
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
-    | Texp_result ->
+    | Texp_result
+    | Texp_old _ ->
 	assert false (* impossible *)
     | _ -> not_implemented e.exp_loc "ml_interp.ml: statement"
 
