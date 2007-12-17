@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.189 2007-12-17 14:14:45 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.190 2007-12-17 14:21:45 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -36,7 +36,6 @@ open Jc_invariants
 open Output
 open Format
 open Jc_name
-open Jc_envreg
 open Jc_region
 open Jc_separation
 
