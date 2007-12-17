@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.188 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.189 2007-12-17 14:14:45 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1142,6 +1142,22 @@ let rec statement ~threats s =
 	      List.map2 (expr_coerce ~threats) f.jc_fun_info_parameters l 
 	    with Invalid_argument _ -> assert false
 	  in
+	  let mems =
+	    FieldRegionSet.fold
+	      (fun (fi,r) acc ->
+		if r.jc_reg_variable then
+		  let r = 
+		    try Region.assoc r call.jc_call_region_assoc
+		    with Not_found -> assert false
+		  in
+		  (Var(field_region_memory_name(fi,r)))::acc 
+		else acc)
+	      (FieldRegionSet.union
+		f.jc_fun_info_effects.jc_reads.jc_effect_memories 
+		f.jc_fun_info_effects.jc_writes.jc_effect_memories)
+	      []
+	  in
+	  let el = el @ mems in
 	  let call = 
 	    make_guarded_app ~name:lab UserCall loc 
 	      f.jc_fun_info_final_name el 
@@ -1712,7 +1728,7 @@ let excep_posts_for_others eopt excep_posts =
     
 let interp_fun_params f memories annot_type =
   let annot_type = 
-    if Jc_options.separation then annot_type else
+    if not Jc_options.separation then annot_type else
       List.fold_left (fun acc (name,ty) ->
 	Prod_type(name,Ref_type(Base_type ty),acc)
       ) annot_type memories

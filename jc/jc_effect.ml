@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.67 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.68 2007-12-17 14:14:45 moy Exp $ *)
 
 
 open Jc_env
@@ -301,6 +301,7 @@ let rec statement ef s =
 	let efcall = 
 	  fef_assoc fi.jc_fun_info_effects call.jc_call_region_assoc in
 	let through_param ef =
+	  let efno = { ef with jc_effect_through_params = VarSet.empty; } in
 	  List.fold_left2 (fun ef param arg ->
 	    if VarSet.mem param ef.jc_effect_through_params then
 	      match (skip_shifts arg).jc_expr_node with
@@ -310,12 +311,12 @@ let rec statement ef s =
 		    else ef
 		| _ -> ef
 	    else ef
-	  ) empty_effects fi.jc_fun_info_parameters le
+	  ) efno fi.jc_fun_info_parameters le
 	in
 	let efcall = {
 	  efcall with
-	    jc_reads = through_param fi.jc_fun_info_effects.jc_reads;
-	    jc_writes = through_param fi.jc_fun_info_effects.jc_writes;
+	    jc_reads = through_param efcall.jc_reads;
+	    jc_writes = through_param efcall.jc_writes;
 	} in
 	let ef = fef_union efcall (List.fold_left expr ef le) in
 	statement ef s

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.82 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.83 2007-12-17 14:14:45 moy Exp $ *)
 
 open Pp
 open Format
@@ -74,10 +74,10 @@ let state_changed = ref false
 
 (* Constructors *)
 
-let full_term t ty loc = {
+let full_term t ty r loc = {
   jc_term_node = t;
   jc_term_type = ty;
-  jc_term_region = dummy_region; (* TODO *)
+  jc_term_region = r;
   jc_term_loc = loc;
   jc_term_label = "";
 }
@@ -335,7 +335,7 @@ let rec destruct_alloc t =
 		    integer_type)
 	    | vio, Some offt ->
 		let t3 = JCTbinary (offt, Bsub_int, t2) in
-		let offt = full_term t3 integer_type t1.jc_term_loc in
+		let offt = full_term t3 integer_type dummy_region t1.jc_term_loc in
 		vio, Some offt 
 	end
     | _ -> assert false
@@ -356,7 +356,7 @@ let rec destruct_pointer t =
 	  | topt,None -> topt,Some t2
 	  | topt,Some offt -> 
 	      let tnode = JCTbinary(offt,Badd_int,t2) in
-	      let offt = full_term tnode integer_type t2.jc_term_loc in
+	      let offt = full_term tnode integer_type dummy_region t2.jc_term_loc in
 	      topt,Some offt
 	end
     | JCTcast(t,_) -> 
@@ -520,7 +520,7 @@ let term_of_expr e =
 	  JCTbinary (term e, Bsub_int, term_no_loc (JCTconst (JCCinteger "1")) integer_type)
       | JCEfree _ -> failwith "Not a term"
     in
-    term_no_loc tnode e.jc_expr_type
+    full_term tnode e.jc_expr_type e.jc_expr_region e.jc_expr_loc 
   in
   try Some (term e) with Failure _ -> None
     
@@ -2649,26 +2649,30 @@ let rec atp_of_term t =
 (*	assert false*)
 
 let rec term_of_atp tm =
-  let tnode = match tm with
+  match tm with
     | Atp.Var s -> 
-	(Vwp.term s).jc_term_node
+	Vwp.term s
     | Atp.Fn("+",[tm1;tm2]) ->
-	JCTbinary(term_of_atp tm1,Badd_int,term_of_atp tm2)
+	let tnode = JCTbinary(term_of_atp tm1,Badd_int,term_of_atp tm2) in
+	term_no_loc tnode integer_type
     | Atp.Fn("-",[tm1;tm2]) ->
-	JCTbinary(term_of_atp tm1,Bsub_int,term_of_atp tm2)
+	let tnode = JCTbinary(term_of_atp tm1,Bsub_int,term_of_atp tm2) in
+	term_no_loc tnode integer_type
     | Atp.Fn("*",[tm1;tm2]) ->
-	JCTbinary(term_of_atp tm1,Bmul_int,term_of_atp tm2)
+	let tnode = JCTbinary(term_of_atp tm1,Bmul_int,term_of_atp tm2) in
+	term_no_loc tnode integer_type
     | Atp.Fn("/",[tm1;tm2]) ->
-	JCTbinary(term_of_atp tm1,Bdiv_int,term_of_atp tm2)
+	let tnode = JCTbinary(term_of_atp tm1,Bdiv_int,term_of_atp tm2) in
+	term_no_loc tnode integer_type
     | Atp.Fn("-",[tm1]) ->
-	JCTunary(Uminus_int,term_of_atp tm1)
+	let tnode = JCTunary(Uminus_int,term_of_atp tm1) in
+	term_no_loc tnode integer_type
     | Atp.Fn(s,[]) ->
-	JCTconst (JCCinteger s)
+	let tnode = JCTconst (JCCinteger s) in
+	term_no_loc tnode integer_type
     | tm -> 
 	printf "Unexpected ATP term %a@." (fun fmt tm -> Atp.printert tm) tm;
 	assert false
-  in
-  term_no_loc tnode integer_type
 
 let rec atp_of_asrt a = 
   if debug then printf "[atp_of_asrt] %a@." Jc_output.assertion a;
