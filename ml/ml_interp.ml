@@ -16,6 +16,9 @@ open Jc_fenv
 
 let binary_op_of_string = function
   | ">=" -> Bge_int
+  | ">" -> Bgt_int
+  | "<=" -> Ble_int
+  | "<" -> Blt_int
   | "=" -> Beq_int
   | "<>" -> Bneq_int
   | "*" -> Bmul_int
@@ -23,6 +26,19 @@ let binary_op_of_string = function
   | "+" -> Badd_int
   | "-" -> Bsub_int
   | _ -> raise Not_found
+
+let binary_op_type = function
+  | Bge_int
+  | Bgt_int
+  | Ble_int
+  | Blt_int
+  | Beq_int
+  | Bneq_int -> JCTnative Tboolean
+  | Bmul_int
+  | Bdiv_int
+  | Badd_int
+  | Bsub_int -> JCTnative Tinteger
+  | _ -> failwith "binary_op_type"
 
 let binary_op_expr loc op = function
   | [ x; y ] -> JCTEbinary(x, op, y)
@@ -37,11 +53,6 @@ let apply_op id args binary_op not_found =
     binary_op (binary_op_of_string (name id)) args
   with Not_found ->
     not_found (name id)
-
-let binary_op_type = function
-  | Bge_int -> JCTnative Tboolean
-  | Beq_int -> JCTnative Tboolean
-  | _ -> failwith "binary_op_type"
 
 let apply_op_expr id args binary_op not_found =
   try
@@ -469,10 +480,18 @@ let rec statement env e cont =
     | Texp_instvar of Path.t * Path.t
     | Texp_setinstvar of Path.t * Path.t * expression
     | Texp_override of Path.t * (Path.t * expression) list
-    | Texp_letmodule of Ident.t * module_expr * expression
-    | Texp_assert of expression
-    | Texp_assertfalse
-    | Texp_lazy of expression
+    | Texp_letmodule of Ident.t * module_expr * expression*)
+    | Texp_assert e ->
+	make_statement_block [
+	  make_statement (JCTSassert (make_assertion (assertion env e)));
+	  cont void;
+	]
+    | Texp_assertfalse ->
+	make_statement_block [
+	  make_statement (JCTSassert (make_assertion JCAfalse));
+	  cont void;
+	]
+(*    | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
     | Texp_result
     | Texp_old _ ->

@@ -2,38 +2,24 @@ type int_ref = {
   mutable contents: int;
 }
 
-let (!) x = x.contents
-
-(*@ function (!) x:
-  @   ensures \result = x.contents
-  @*)
-
-let (:=) x v = x.contents <- v
-
-(*@ function (:=) x v:
-  @   ensures x.contents = v
-  @*)
-
-let ref v = { contents = v }
-
-(*@ function ref v:
-  @   ensures \result.contents = v
-  @*)
-
 let double x =
+  let tmp = { contents = x.contents } in
   let result = { contents = 0 } in
-  while !x >= 0 do
-  (*@ variant x.contents
-    @ invariant result.contents + 2 * x.contents = 2 * \old x.contents
+  assert (x <> result && tmp <> result && x <> tmp);
+  while tmp.contents > 0 do
+  (*@ variant tmp.contents
+    @ invariant result.contents + 2 * tmp.contents = 2 * x.contents &&
+    @   tmp.contents >= 0 && x.contents = \old x.contents
     @*)
-    result := !result + 2;
-    x := !x - 1;
+    result.contents <- result.contents + 2;
+    tmp.contents <- tmp.contents - 1;
   done;
-  !result
+  result.contents
 
 (*@ function double x:
   @   requires x.contents >= 0
-  @   ensures \result = x.contents * 2
+  @   ensures \result = x.contents * 2 &&
+  @     x.contents = \old x.contents
   @*)
 
 (*

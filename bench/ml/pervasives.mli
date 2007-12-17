@@ -1,4 +1,7 @@
 val (>=): int -> int -> bool
+val (>): int -> int -> bool
+val (<=): int -> int -> bool
+val (<): int -> int -> bool
 
 val (=): 'a -> 'a -> bool
 val (<>): 'a -> 'a -> bool
