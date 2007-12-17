@@ -54,6 +54,11 @@ let rec list_fold_mapi i acc f useracc = function
       list_fold_mapi (i+1) (y::acc) f useracc' rem
 let list_fold_mapi x = list_fold_mapi 0 [] x
 
+let rec list_mapi f index acc = function
+  | [] -> List.rev acc
+  | x::rem -> list_mapi f (index + 1) ((f index x)::acc) rem
+let list_mapi f = list_mapi f 0 []
+
 (******************************************************************************)
 
 let identifier_of_symbol_char = function
@@ -70,6 +75,18 @@ let identifier_of_symbol = function
 	Buffer.add_string buf (identifier_of_symbol_char s.[i])
       done;
       Buffer.contents buf
+
+let idents = Hashtbl.create 111 (* 111 = 42 + 69 *)
+
+let fresh_ident base =
+  if Hashtbl.mem idents base then begin
+    let i = Hashtbl.find idents base + 1 in
+    Hashtbl.replace idents base i;
+    identifier_of_symbol base ^ string_of_int i
+  end else begin
+    Hashtbl.add idents base 0;
+    identifier_of_symbol base
+  end
 
 (******************************************************************************)
 
@@ -240,6 +257,26 @@ let make_alloc_tmp si cont =
   make_var_decl tmp_var (Some tmp_init) (cont tmp_var tmp_expr)
 
 let void = make_expr (JCTEconst JCCvoid) (JCTnative Tunit)
+
+let make_struct name = {
+  jc_struct_info_name = name;
+  jc_struct_info_parent = None;
+  jc_struct_info_root = name;
+  jc_struct_info_fields = [];
+}
+
+let make_field si name jcty =
+  let fi = {
+    jc_field_info_tag = fresh_int ();
+    jc_field_info_name = name;
+    jc_field_info_final_name = name;
+    jc_field_info_type = jcty;
+    jc_field_info_struct = si;
+    jc_field_info_root = si.jc_struct_info_root;
+    jc_field_info_rep = false;
+  } in
+  si.jc_struct_info_fields <- fi::si.jc_struct_info_fields;
+  fi
 
 (*
 Local Variables: 

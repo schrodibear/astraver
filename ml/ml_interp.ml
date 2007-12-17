@@ -98,11 +98,12 @@ let rec expression env e =
     | Texp_construct of constructor_description * expression list
     | Texp_variant of label * expression option *)
     | Texp_record(lbls, None) ->
-	let si = match lbls with
+	not_implemented e.exp_loc "TO REDO: ml_interp.ml: expression: records (make_tmp_var, label, ...)";
+	(*let si = match lbls with
 	  | [] ->
 	      locate_error e.exp_loc "empty record"
 	  | (lbl, _)::_ ->
-	      (label lbl).ml_li_structure
+	      (label e.exp_type lbl).ml_li_structure
 	in
 	let lbls = List.map
 	  (fun (ld, e) ->
@@ -123,17 +124,17 @@ let rec expression env e =
 	  tmp_var,
 	  make_expr (JCTEalloc(expr_of_int 1, si)) tmp_ty,
 	  expr_seq_to_let assigns (make_expr (JCTEvar tmp_var) tmp_ty)
-	)
+	)*)
     | Texp_record(_, Some _) ->
 	not_implemented e.exp_loc "record with"
     | Texp_field(x, lbl) ->
 	let tx = make_expr (expression env x) (make x.exp_type) in
-	let fi = (label lbl).ml_li_field in
+	let fi = (label x.exp_type lbl).ml_li_field in
 	JCTEderef(tx, fi)
     | Texp_setfield(x, lbl, v) ->
 	let tx = make_expr (expression env x) (make x.exp_type) in
 	let tv = make_expr (expression env v) (make v.exp_type) in
-	let fi = (label lbl).ml_li_field in
+	let fi = (label x.exp_type lbl).ml_li_field in
 	JCTEassign_heap(tx, fi, tv)
 (*  | Texp_array of expression list *)
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
@@ -195,7 +196,7 @@ let rec term env e =
     | Texp_record of (label_description * expression) list * expression option*)
     | Texp_field(e, lbl) ->
 	let te = term env e in
-	let fi = (label lbl).ml_li_field in
+	let fi = (label e.exp_type lbl).ml_li_field in
 	JCTderef(make_term te (make e.exp_type), fi)
 (*    | Texp_setfield of expression * label_description * expression
     | Texp_array of expression list
@@ -345,7 +346,7 @@ let rec statement env e cont =
     | Texp_try of expression * (pattern * expression) list
     | Texp_tuple of expression list*)
     | Texp_construct(cd, el) ->
-	let ci = constructor cd in
+	let ci = constructor e.exp_type cd in
 	make_alloc_tmp ci.ml_ci_structure
 	  (fun _ tmp_e ->
 	     make_statement_block [
@@ -357,41 +358,32 @@ let rec statement env e cont =
 	       cont tmp_e;
 	     ])
 (*    | Texp_variant of label * expression option*)
-    | Texp_record(lbls, None) ->
-	not_implemented e.exp_loc "TO REDO: ml_interp, statement, record"
-(*	let si = match lbls with
-	  | [] ->
-	      locate_error e.exp_loc "empty record"
-	  | (lbl, _)::_ ->
-	      (Ml_env.find_field lbl.lbl_name env).jc_field_info_struct
+    | Texp_record(lel, None) ->
+	let si = match lel with
+	  | [] -> assert false
+	  | (ld, _)::_ -> (label e.exp_type ld).ml_li_structure
 	in
-	let tmp_ty = make_pointer_type si in
-	let tmp_var = new_var tmp_ty in
-	let tmp_expr = make_expr (JCTEvar tmp_var) tmp_ty in
-	let tmp_init = Some (make_expr (JCTEalloc(expr_of_int 1, si)) tmp_ty) in
-	let affect fi v =
-	  make_statement
-	    (JCTSexpr(make_expr (JCTEassign_heap(tmp_expr, fi, v))
-			fi.jc_field_info_type))
-	in
-	let affects = List.map
-	  (fun (ld, e) ->
-	     let fi = Ml_env.find_field ld.lbl_name env in
-	     statement env e (affect fi))
-	  lbls
-	in
-	make_var_decl tmp_var tmp_init
-	  (make_statement_block (affects @ [ cont tmp_expr ]))*)
+	make_alloc_tmp si
+	  (fun _ tmp_e ->
+	     make_statement_block [
+	       statement_list env (List.map snd lel)
+		 (List.map
+		    (fun (ld, _) ->
+		       let li = label e.exp_type ld in
+		       make_affect_field tmp_e li.ml_li_field)
+		    lel);
+	       cont tmp_e;
+	     ])
     | Texp_record(_, Some _) ->
 	not_implemented e.exp_loc "record with"
     | Texp_field(e, lbl) ->
-	let fi = (label lbl).ml_li_field in
+	let fi = (label e.exp_type lbl).ml_li_field in
 	statement env e
 	  (fun res -> cont
 	     (make_expr (JCTEderef(res, fi))
 		fi.jc_field_info_type))
     | Texp_setfield(e, lbl, v) ->
-	let fi = (label lbl).ml_li_field in
+	let fi = (label e.exp_type lbl).ml_li_field in
 	statement env e
 	  (fun res ->
 	     statement env v

@@ -8,7 +8,8 @@ type ml_label_info = {
   ml_li_field: Jc_env.field_info;
 }
 
-val label: Ml_ocaml.Types.label_description -> ml_label_info
+val label: Ml_ocaml.Types.type_expr -> Ml_ocaml.Types.label_description ->
+  ml_label_info
 
 type ml_constructor_info = {
   ml_ci_name: string;
@@ -18,7 +19,8 @@ type ml_constructor_info = {
   ml_ci_arguments: Jc_env.field_info list;
 }
 
-val constructor: Ml_ocaml.Types.constructor_description -> ml_constructor_info
+val constructor: Ml_ocaml.Types.type_expr -> 
+  Ml_ocaml.Types.constructor_description -> ml_constructor_info
 
 val jc_decls: unit -> Jc_output.jc_decl list
 
