@@ -20,7 +20,7 @@ type t = {
   logic_funs: Jc_fenv.logic_info StringMap.t;
   (*tags: Jc_env.field_info StringMap.t;*)
   fun_specs: Ml_ocaml.Typedtree.function_spec IdentMap.t;
-  type_specs: Ml_ocaml.Typedtree.type_spec IdentMap.t;
+  (*type_specs: Ml_ocaml.Typedtree.type_spec IdentMap.t;*)
 }
 
 let empty = {
@@ -32,7 +32,7 @@ let empty = {
   logic_funs = StringMap.empty;
   (*tags = StringMap.empty;*)
   fun_specs = IdentMap.empty;
-  type_specs = IdentMap.empty;
+  (*type_specs = IdentMap.empty;*)
 }
 
 let add_var name ty env =
@@ -124,8 +124,8 @@ let add_logic_fun name params return_type env =
 let add_fun_spec id spec env =
   { env with fun_specs = IdentMap.add id spec env.fun_specs }
 
-let add_type_spec id spec env =
-  { env with type_specs = IdentMap.add id spec env.type_specs }
+(*let add_type_spec id spec env =
+  { env with type_specs = IdentMap.add id spec env.type_specs }*)
 
 let nf s f k m =
   try
@@ -144,8 +144,8 @@ let find_logic_fun name env = nf name StringMap.find name env.logic_funs
   nf name StringMap.find name env.tags*)
 let find_fun_spec id env =
   nf (Ml_ocaml.Ident.name id) IdentMap.find id env.fun_specs
-let find_type_spec id env =
-  nf (Ml_ocaml.Ident.name id) IdentMap.find id env.type_specs
+(*let find_type_spec id env =
+  nf (Ml_ocaml.Ident.name id) IdentMap.find id env.type_specs*)
 
 (*
 Local Variables: 

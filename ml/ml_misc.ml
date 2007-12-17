@@ -278,6 +278,8 @@ let make_field si name jcty =
   si.jc_struct_info_fields <- fi::si.jc_struct_info_fields;
   fi
 
+let dummy_struct = make_struct "dummy_struct"
+
 (*
 Local Variables: 
 compile-command: "unset LANG; make -j -C .. bin/jessica.opt"

@@ -1,6 +1,11 @@
 val declare: Ml_ocaml.Ident.t -> Ml_ocaml.Types.type_declaration -> unit
 
+val add_invariant: Ml_ocaml.Ident.t ->
+  (string * Jc_env.var_info * Jc_ast.assertion) -> unit
+
 val make: Ml_ocaml.Types.type_expr -> Jc_env.jc_type
+
+val structure: Ml_ocaml.Types.type_expr -> Jc_env.struct_info
 
 type ml_label_info = {
   ml_li_name: string;

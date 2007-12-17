@@ -22,7 +22,6 @@ let ref v = { contents = v }
 
 let double x =
   let result = { contents = 0 } in
-  (*@ assert x <> result *)
   while !x >= 0 do
   (*@ variant x.contents
     @ invariant result.contents + 2 * x.contents = 2 * \old x.contents

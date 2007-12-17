@@ -22,7 +22,7 @@ type v =
 
 (*@ type v:
   @   invariant plop (One x | Two(x, _)) = x >= 0
-  @   invariant bla Three(A(_, x), A(_, y), B) = x = y
+(*  @   invariant bla Three(A(_, x), A(_, y), B) = x = y*)
   @*)
 
 (*

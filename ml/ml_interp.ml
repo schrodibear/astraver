@@ -359,10 +359,7 @@ let rec statement env e cont =
 	     ])
 (*    | Texp_variant of label * expression option*)
     | Texp_record(lel, None) ->
-	let si = match lel with
-	  | [] -> assert false
-	  | (ld, _)::_ -> (label e.exp_type ld).ml_li_structure
-	in
+	let si = structure e.exp_type in
 	make_alloc_tmp si
 	  (fun _ tmp_e ->
 	     make_statement_block [
@@ -487,10 +484,10 @@ let behavior env b =
     jc_behavior_ensures = make_assertion(assertion env b.b_ensures);
   }
 
-let invariants env spec struct_info =
+let invariants env spec (*struct_info*) =
   list_fold_map
     (fun env i ->
-       let ty = make_pointer_type struct_info in
+       let ty = make_pointer_type dummy_struct(*struct_info*) in
        let body_env, arg_vi, condk = match i.ti_argument.pat_desc with
 	 | Tpat_var id ->
 	     let arg_name = name id in
@@ -688,8 +685,11 @@ let structure_item env = function
       [ JCrec_struct_defs(rd @ (List.flatten vd)) ], env*)
       List.iter (fun (id, td) -> declare id td) l;
       [], env
-  | Tstr_function_spec _
-  | Tstr_type_spec _ -> [], env
+  | Tstr_function_spec _ -> [], env (* done before (see add_structure_specs) *)
+  | Tstr_type_spec ({ ts_type = Pident id } as spec) ->
+      let env, invariants = invariants env spec in
+      List.iter (add_invariant id) invariants;
+      [], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
 let rec structure env = function
@@ -706,12 +706,12 @@ let add_structure_specs env = List.fold_left
      | _ -> env)
   env
 
-let add_type_specs env = List.fold_left
+(*let add_type_specs env = List.fold_left
   (fun env -> function
      | Tstr_type_spec ({ ts_type = Pident id } as spec) ->
 	 Ml_env.add_type_spec id spec env
      | _ -> env)
-  env
+  env*)
 
 (*
 Local Variables: 

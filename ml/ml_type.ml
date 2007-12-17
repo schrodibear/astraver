@@ -80,6 +80,7 @@ type ml_caml_type = {
   ml_ty_name: string;
   ml_ty_decl: Ml_ocaml.Types.type_declaration;
   mutable ml_ty_instances: ml_jessie_type ParamMap.t;
+  mutable ml_ty_invariants: (string * Jc_env.var_info * Jc_ast.assertion) list;
 }
 
 let ml_types = Hashtbl.create 11
@@ -90,7 +91,12 @@ let declare id td =
     ml_ty_name = n;
     ml_ty_decl = td;
     ml_ty_instances = ParamMap.empty;
+    ml_ty_invariants = [];
   }
+
+let add_invariant id inv =
+  let mlty = Hashtbl.find ml_types (name id) in
+  mlty.ml_ty_invariants <- inv::mlty.ml_ty_invariants
 
 exception Not_closed
 
@@ -188,6 +194,12 @@ and instance args ty =
 	in
 	MLTvariant(si, tagfi, constrs)
 
+let structure ty =
+  match make_type ty with
+    | MLTrecord(si, _)
+    | MLTvariant(si, _, _) -> si
+    | _ -> failwith "ml_type.ml: structure: not translated to a structure type"
+
 let label recty ld =
   match make_type recty with
     | MLTrecord(_, lbls) -> List.assoc ld.lbl_name lbls
@@ -198,11 +210,11 @@ let constructor varty cd =
     | MLTvariant(_, _, constrs) -> List.assoc cd.cstr_name constrs
     | _ -> failwith "ml_type.ml: constructor: not a variant type"
 
-let jc_decl name = function
+let jc_decl mlty = function
   | MLTnot_closed ->
       assert false
   | MLTnative t ->
-      JClogic_type_def name
+      JClogic_type_def mlty.ml_ty_name
   | MLTrecord(si, lbls) ->
       JCstruct_def(
 	si.jc_struct_info_name,
@@ -210,7 +222,7 @@ let jc_decl name = function
 	   | None -> None
 	   | Some si -> Some si.jc_struct_info_name),
 	List.map (fun (_, l) -> l.ml_li_field) lbls,
-	[] (* TODO: invariants *)
+	mlty.ml_ty_invariants
       )
   | MLTvariant(si, tagfi, constrs) ->
       JCstruct_def(
@@ -220,19 +232,21 @@ let jc_decl name = function
 	   | Some si -> Some si.jc_struct_info_name),
 	tagfi::
 	  List.flatten (List.map (fun (_, l) -> l.ml_ci_arguments) constrs),
-	[] (* TODO: invariants *)
+	mlty.ml_ty_invariants
       )
 
 let jc_decls () =
-  Hashtbl.fold
-    (fun name ty acc ->
+  let decls = Hashtbl.fold
+    (fun _ ty acc ->
        ParamMap.fold
-	 (fun _ ty acc ->
-	    (jc_decl name ty)::acc)
+	 (fun _ ity acc ->
+	    (jc_decl ty ity)::acc)
 	 ty.ml_ty_instances
 	 acc)
     ml_types
     []
+  in
+  List.rev decls
 
 (*
 Local Variables: 

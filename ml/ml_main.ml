@@ -48,10 +48,10 @@ let file env (file_kind, file_name) =
 	let spec_env =
 	  Ml_interp.add_structure_specs Ml_env.empty typed_tree
 	in
-	log "  Listing type specifications...";
+	(*log "  Listing type specifications...";
 	let spec_env =
 	  Ml_interp.add_type_specs spec_env typed_tree
-	in
+	in*)
   
         (* Interpret to a Jessie typed AST *)
 	log "  Interpreting...";
