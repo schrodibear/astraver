@@ -493,6 +493,7 @@ let rec term tyf t =
 	       | Pointer z as ty -> 
 		   begin
 		     try
+		       let z = repr z in
 		       Pointer (assoc_zone z assoc)
 		     with
 			 Not_found -> ty
@@ -551,6 +552,7 @@ let rec predicate tyf p =
 		 | Pointer z as ty -> 
 		     begin
 		       try
+			 let z = repr z in
 			 Pointer (assoc_zone z assoc)
 		       with
 			   Not_found -> ty
