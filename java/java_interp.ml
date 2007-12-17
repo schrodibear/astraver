@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.83 2007-12-14 14:28:55 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.84 2007-12-17 13:18:58 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -820,7 +820,8 @@ let rec location_set t =
       | JTbin(e1,t,op,e2) -> assert false (* TODO *)
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCLSvar (get_var vi)
-      | JTfield_access(t,fi) -> JCLSderef(location_set t,get_field fi)
+      | JTfield_access(t,fi) -> 
+	  JCLSderef(location_set t,get_field fi,Jc_region.dummy_region)
       | JTstatic_field_access(ci,fi) ->
 	  JCLSvar(get_static_var fi)
       | JTarray_length(t) -> assert false (* TODO *)
@@ -832,7 +833,9 @@ let rec location_set t =
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
-		  JCLSderef(shift,(List.hd st.jc_struct_info_fields))
+		  JCLSderef(
+		    shift,(List.hd st.jc_struct_info_fields),
+		    Jc_region.dummy_region)
 	      | _ -> assert false
 	  end
       | JTarray_range(t1,t2,t3) -> 
@@ -844,7 +847,9 @@ let rec location_set t =
 		  let t2' = term t2 in
 		  let t3' = term t3 in
 		  let shift = JCLSrange(t1', Some t2', Some t3') in
-		  JCLSderef(shift,(List.hd st.jc_struct_info_fields))
+		  JCLSderef(
+		    shift,(List.hd st.jc_struct_info_fields),
+		    Jc_region.dummy_region)
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
@@ -858,7 +863,8 @@ let location t =
       | JTbin(e1,t,op,e2) -> assert false (* TODO *)
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCLvar (get_var vi)
-      | JTfield_access(t,fi) -> JCLderef(location_set t,get_field fi)
+      | JTfield_access(t,fi) -> 
+	  JCLderef(location_set t,get_field fi,Jc_region.dummy_region)
       | JTstatic_field_access(ci,fi) ->
 	  JCLvar(get_static_var fi)
       | JTarray_length(t) -> assert false (* TODO *)
@@ -870,7 +876,9 @@ let location t =
 		  let t1' = location_set t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
-		  JCLderef(shift,(List.hd st.jc_struct_info_fields))
+		  JCLderef(
+		    shift,(List.hd st.jc_struct_info_fields),
+		    Jc_region.dummy_region)
 	      | _ -> assert false
 	  end
       | JTarray_range(t1,t2,t3) -> 
@@ -882,7 +890,9 @@ let location t =
 		  let t2' = term t2 in
 		  let t3' = term t3 in
 		  let shift = JCLSrange(t1', Some t2', Some t3') in
-		  JCLderef(shift,(List.hd st.jc_struct_info_fields))
+		  JCLderef(
+		    shift,(List.hd st.jc_struct_info_fields),
+		    Jc_region.dummy_region)
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)

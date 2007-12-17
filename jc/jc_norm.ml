@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.63 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.64 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -170,7 +170,12 @@ let make_call lab loc vio f el s =
   Format.eprintf "Jc_norm.make_call: lab for call = '%s'@."
     lab;
 *)
-  make_node lab loc (JCScall (vio, f, el, s)) 
+  let call = {
+    jc_call_fun = f;
+    jc_call_args = el;
+    jc_call_region_assoc = [];
+  } in
+  make_node lab loc (JCScall (vio, call, s)) 
 
 let make_if loc e ts es =
   make_node "Lif" loc (JCSif (e,ts,es))
@@ -761,7 +766,7 @@ let statement s =
   let rec link_call s slnext =
     let loc = s.jc_statement_loc in
     match s.jc_statement_node with
-      | JCScall (Some vi, f, el, s') -> 
+      | JCScall (Some vi, call, s') -> 
 	  begin match s'.jc_statement_node with 
 	    | JCSblock [] ->
 		(* call may be created as the result of an
@@ -772,14 +777,14 @@ let statement s =
 		  s.jc_statement_label;
 *)
 		[make_call s.jc_statement_label loc (Some vi) 
-		   f el (make_block loc slnext)]
+		   call.jc_call_fun call.jc_call_args (make_block loc slnext)]
 	    | _ -> 
 (*
 		Format.eprintf "Jc_interp.link_call(2): lab for call = '%s'@."
 		  s.jc_statement_label;
 *)
 		(make_call s.jc_statement_label loc (Some vi) 
-		   f el (link_stat s')) :: slnext
+		  call.jc_call_fun call.jc_call_args (link_stat s')) :: slnext
 	  end
       | JCSdecl (vi, eo, s') ->
 	  begin match s'.jc_statement_node with 
@@ -797,8 +802,8 @@ let statement s =
     let loc = s.jc_statement_loc in
     let ns =
       match s.jc_statement_node with
-	| JCScall (vio, fi, el, s) ->
-	    JCScall (vio, fi, el, link_stat s)
+	| JCScall (vio, call, s) ->
+	    JCScall (vio, call, link_stat s)
 	| JCSblock sl ->
 	    JCSblock (List.fold_right link_call sl [])
 	| JCSassign_var (_, _)

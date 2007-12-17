@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.71 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_output.ml,v 1.72 2007-12-17 13:18:48 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -231,7 +231,7 @@ let rec assertion fmt a =
 let rec location_set fmt = function
   | JCLSvar vi-> 
       fprintf fmt "%s" vi.jc_var_info_name
-  | JCLSderef (locset, fi) ->
+  | JCLSderef (locset, fi, _) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
   | JCLSrange (locset, t1, t2) ->
       fprintf fmt "(%a + [%a..%a])" location_set locset 
@@ -240,7 +240,7 @@ let rec location_set fmt = function
 let location fmt = function
   | JCLvar vi -> 
       fprintf fmt "%s" vi.jc_var_info_name
-  | JCLderef (locset, fi) ->
+  | JCLderef (locset, fi,_) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
 
 let behavior fmt (loc,id,b) =

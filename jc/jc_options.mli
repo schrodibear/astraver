@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.15 2007-11-20 14:34:50 filliatr Exp $ *)
+(* $Id: jc_options.mli,v 1.16 2007-12-17 13:18:48 moy Exp $ *)
 
 (*s environment variables *)
 
@@ -43,6 +43,7 @@ val werror : bool
 val why_opt : string
 
 val verify : string list
+val separation : bool
 
 val annot_infer : bool
 val ai_domain : string

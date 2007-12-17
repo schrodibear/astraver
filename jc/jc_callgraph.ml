@@ -94,7 +94,9 @@ let loop_annot acc la =
 
 let rec statement acc s = 
   match s.jc_statement_node with  
-    | JCScall (_, f, le, s) ->
+    | JCScall (_, call, s) ->
+	let f = call.jc_call_fun in
+	let le = call.jc_call_args in
 	let (a,b)=acc in statement (a,f::b) s
     | JCSassign_var _ | JCSassign_heap _ -> acc
     | JCSreturn _ | JCSpack _ | JCSunpack _ | JCSthrow _ -> acc

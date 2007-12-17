@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.96 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.97 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -254,12 +254,12 @@ and tag_node =
 
 type tlocation_set = 
   | JCLSvar of var_info
-  | JCLSderef of tlocation_set * field_info
+  | JCLSderef of tlocation_set * field_info * region
   | JCLSrange of tlocation_set * term option * term option
 
 type tlocation =
   | JCLvar of var_info
-  | JCLderef of tlocation_set * field_info
+  | JCLderef of tlocation_set * field_info * region
 
 type assertion_node =
   | JCAtrue
@@ -432,9 +432,16 @@ type incr_op = Stat_inc | Stat_dec
    break, continue, goto are translated with exceptions.
 *)
 
+type call = 
+    {
+      jc_call_fun : fun_info;
+      jc_call_args : expr list;
+      mutable jc_call_region_assoc : (region * region) list;
+    }
+
 type statement_node =
     (* instructions *)
-  | JCScall of var_info option * fun_info * expr list * statement
+  | JCScall of var_info option * call * statement
   | JCSassign_var of var_info * expr
   | JCSassign_heap of expr * field_info * expr
     (* statements *)

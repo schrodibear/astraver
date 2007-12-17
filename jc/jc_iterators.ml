@@ -37,30 +37,74 @@ open Jc_pervasives
 (* General iterators on expressions.                                         *)
 (*****************************************************************************)
 
+let rec iter_expr f e =
+  f e;
+  match e.jc_expr_node with
+    | JCEconst _ | JCEvar _ -> ()
+    | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) ->
+	iter_expr f e1; iter_expr f e2
+    | JCEunary(_,e1) | JCEderef(e1,_) | JCEoffset(_,e1,_) | JCEinstanceof(e1,_)
+    | JCEcast(e1,_) | JCErange_cast(_,e1) | JCEalloc(e1,_) | JCEfree e1 ->
+	iter_expr f e1
+    | JCEif(e1,e2,e3) ->
+	iter_expr f e1; iter_expr f e2; iter_expr f e3
+  
 let rec fold_expr f acc e =
   let acc = f acc e in
   match e.jc_expr_node with
-  | JCEconst _ | JCEvar _ -> acc
-  | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) ->
-      let acc = fold_expr f acc e1 in
-      fold_expr f acc e2
-  | JCEunary(_,e1) | JCEderef(e1,_) | JCEoffset(_,e1,_) | JCEinstanceof(e1,_)
-  | JCEcast(e1,_) | JCErange_cast(_,e1) | JCEalloc(e1,_) | JCEfree e1 ->
-      fold_expr f acc e1
-  | JCEif(e1,e2,e3) ->
-      let acc = fold_expr f acc e1 in
-      let acc = fold_expr f acc e2 in
-      fold_expr f acc e3
+    | JCEconst _ | JCEvar _ -> acc
+    | JCEbinary(e1,_,e2) | JCEshift(e1,e2) | JCEsub_pointer(e1,e2) ->
+	let acc = fold_expr f acc e1 in
+	fold_expr f acc e2
+    | JCEunary(_,e1) | JCEderef(e1,_) | JCEoffset(_,e1,_) | JCEinstanceof(e1,_)
+    | JCEcast(e1,_) | JCErange_cast(_,e1) | JCEalloc(e1,_) | JCEfree e1 ->
+	fold_expr f acc e1
+    | JCEif(e1,e2,e3) ->
+	let acc = fold_expr f acc e1 in
+	let acc = fold_expr f acc e2 in
+	fold_expr f acc e3
 
 
 (*****************************************************************************)
 (* General iterators on statements.                                          *)
 (*****************************************************************************)
 
+let rec iter_expr_and_statement fexpr fstat s =
+  fstat s;
+  match s.jc_statement_node with
+    | JCSdecl(_,None,s) ->
+	iter_expr_and_statement fexpr fstat s
+    | JCSdecl(_,Some e,s) ->
+	iter_expr fexpr e;
+	iter_expr_and_statement fexpr fstat s
+    | JCScall(_,call,s) -> 
+	List.iter (iter_expr fexpr) call.jc_call_args;
+	iter_expr_and_statement fexpr fstat s
+    | JCSblock sl ->
+	List.iter (iter_expr_and_statement fexpr fstat) sl
+    | JCSif(e,ts,fs) ->
+	iter_expr fexpr e;
+	iter_expr_and_statement fexpr fstat ts;
+	iter_expr_and_statement fexpr fstat fs
+    | JCStry(s,hl,fs) ->
+	iter_expr_and_statement fexpr fstat s;
+	List.iter (fun (_,_,s) -> iter_expr_and_statement fexpr fstat s) hl;
+	iter_expr_and_statement fexpr fstat fs
+    | JCSloop(_,ls) ->
+	iter_expr_and_statement fexpr fstat ls
+    | JCSreturn(_,e) | JCSthrow(_,Some e) | JCSassign_var(_,e) 
+    | JCSpack(_,e,_) | JCSunpack(_,e,_) ->
+	iter_expr fexpr e
+    | JCSassign_heap(e1,_,e2) ->
+	iter_expr fexpr e1;
+	iter_expr fexpr e2
+    | JCSthrow(_,None) | JCSassert _ | JCSreturn_void ->
+	()
+
 let rec fold_statement fpre fpost acc s =
   let acc = fpre acc s in
   let acc = match s.jc_statement_node with
-    | JCSdecl(_,_,s) | JCScall(_,_,_,s) -> 
+    | JCSdecl(_,_,s) | JCScall(_,_,s) -> 
 	fold_statement fpre fpost acc s
     | JCSblock sl ->
 	List.fold_left (fold_statement fpre fpost) acc sl
@@ -90,8 +134,8 @@ let rec fold_expr_in_statement f acc s =
     | JCSdecl(_,Some e,s) ->
 	let acc = fold_expr f acc e in
 	fold_expr_in_statement f acc s
-    | JCScall(_,_,els,s) -> 
-	let acc = List.fold_left (fold_expr f) acc els in
+    | JCScall(_,call,s) -> 
+	let acc = List.fold_left (fold_expr f) acc call.jc_call_args in
 	fold_expr_in_statement f acc s
     | JCSblock sl ->
 	List.fold_left (fold_expr_in_statement f) acc sl

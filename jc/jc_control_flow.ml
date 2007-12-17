@@ -92,7 +92,7 @@ let rec statement g fun_exit_node s =
 	n,[n]	
     | JCSassign_heap (_, _, _)
     | JCSassign_var (_, _)
-    | JCScall (_, _, _, _)
+    | JCScall (_, _, _)
     | JCSunpack (_, _, _)
     | JCSpack (_, _, _)
     | JCSthrow (_, _)

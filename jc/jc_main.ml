@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.79 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.80 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -51,6 +51,7 @@ let main () =
 	    (* phase 1 : parsing *)
 	    let ast = parse_file f in
 	      (* phase 2 : typing *)
+	    Jc_options.lprintf "Typing@.";
 	      List.iter Jc_typing.decl ast;
 	      (* phase 3 : normalization *)
 	      (*
@@ -115,6 +116,13 @@ let main () =
 	let components = 
 	  Jc_callgraph.compute_components Jc_norm.functions_table
 	in
+
+	(* phase : computation of regions *)
+	if Jc_options.separation then
+	  begin
+	    Jc_options.lprintf "Computation of regions@.";
+	    Array.iter Jc_separation.code_component components
+	  end;
 
 	  (* phase 5 : computation of effects *)
 	  Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";

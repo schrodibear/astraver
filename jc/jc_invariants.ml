@@ -32,6 +32,8 @@ open Jc_ast
 open Jc_pervasives
 open Jc_iterators
 open Output
+open Jc_region
+open Jc_name
 
 (* other modifications for this extension can be found in:
      ast, typing, norm, interp: about pack / unpack, and mutable
@@ -70,8 +72,8 @@ let simple_logic_type s =
 (* same as in jc_interp.ml *)
 let logic_params li l =
   let l =
-    FieldSet.fold
-      (fun fi acc -> (LVar fi.jc_field_info_final_name)::acc)
+    FieldRegionSet.fold
+      (fun (fi,r) acc -> (LVar(field_region_memory_name(fi,r)))::acc)
       li.jc_logic_info_effects.jc_effect_memories
       l	    
   in
@@ -133,8 +135,8 @@ let tag_table_type root = {
 
 let logic_info_reads acc li =
   let acc =
-    FieldSet.fold
-      (fun fi acc -> StringSet.add fi.jc_field_info_final_name acc)
+    FieldRegionSet.fold
+      (fun (fi,r) acc -> StringSet.add (field_region_memory_name(fi,r)) acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
@@ -295,7 +297,7 @@ let term this t =
     (fun t -> match t.jc_term_node with
     | JCTif (_, _, _) -> assert false (* TODO *)
     | JCTapp (id, l) ->
-	if not (FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories) 
+	if not (FieldRegionSet.is_empty id.jc_logic_info_effects.jc_effect_memories) 
 	then
 	  Jc_typing.typing_error t.jc_term_loc
 	    "this call is not allowed in structure invariant"
@@ -319,7 +321,7 @@ let rec assertion this p =
     | JCAold p -> assertion this p
     | JCAquantifier(_,id, p) -> assertion this p
     | JCAapp (id, l) ->
-	if FieldSet.is_empty id.jc_logic_info_effects.jc_effect_memories
+	if FieldRegionSet.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) l
 	else
 	  Jc_typing.typing_error p.jc_assertion_loc
@@ -407,9 +409,9 @@ let struct_inv_memories acc st =
 (* Returns the parameters needed by an invariant, "this" not included *)
 let invariant_params acc li =
   let acc =
-    FieldSet.fold
-      (fun fi acc -> 
-	 (fi.jc_field_info_final_name, memory_field fi)::acc)
+    FieldRegionSet.fold
+      (fun (fi,r) acc -> 
+	 (field_region_memory_name(fi,r), memory_field fi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in

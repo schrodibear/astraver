@@ -11,8 +11,6 @@ val boolean_type : Jc_env.jc_type
 val real_type : Jc_env.jc_type
 val unit_type : Jc_env.jc_type
 
-val is_pointer_type : Jc_env.jc_type -> bool
-
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
 
 (* constants *)
@@ -39,6 +37,8 @@ val make_fun_info : string -> Jc_env.jc_type -> Jc_fenv.fun_info
 val make_rel : string -> Jc_fenv.logic_info
 
 val make_logic_fun : string -> Jc_env.jc_type -> Jc_fenv.logic_info
+
+val location_set_region : Jc_ast.tlocation_set -> Jc_env.region
 
 (* predefined functions *)
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.81 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.82 2007-12-17 13:18:48 moy Exp $ *)
 
 open Pp
 open Format
@@ -1601,7 +1601,9 @@ let collect_statement_asserts s =
     | JCSdecl(_,Some e1,_)
     | JCSassign_var(_,e1) | JCSpack(_,e1,_) | JCSunpack(_,e1,_) ->
 	collect_expr_asserts e1
-    | JCScall(_,fi,els,s) ->
+    | JCScall(_,call,s) ->
+	let fi = call.jc_call_fun in
+	let els = call.jc_call_args in
 	let _,_,fs,_ = 
           Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
         in
@@ -1654,7 +1656,7 @@ let rec collect_targets filter_asrt targets s =
     let targets = 
       (List.map (target_of_assertion s s.jc_statement_loc) asrts) @ targets in
     match s.jc_statement_node with
-      | JCSdecl(_,_,s) | JCScall(_,_,_,s) -> 
+      | JCSdecl(_,_,s) | JCScall(_,_,s) -> 
 	  collect targets s
       | JCSblock sl ->
 	  List.fold_left collect targets sl
@@ -2257,7 +2259,9 @@ and intern_ai_statement iaio abs curinvs s =
 	    (* Perform fixpoint computation on the loop. *)
 	    intern_ai_statement iaio abs curinvs s
 	  end
-    | JCScall (vio, fi, el, s) ->
+    | JCScall (vio, call, s) ->
+	let fi = call.jc_call_fun in
+	let el = call.jc_call_args in
 	if Jc_options.interprocedural then
 	  begin match iaio with
 	    | None -> () (* last iteration: precondition for [fi] already inferred *)
@@ -3240,7 +3244,9 @@ let rec wp_statement weakpre =
 	      Some inita
 	  in
 	  { curposts with jc_post_normal = post; }
-      | JCScall(Some vi,f,args,s) -> 
+      | JCScall(Some vi,call,s) -> 
+	  let f = call.jc_call_fun in
+	  let args = call.jc_call_args in
 	  let curposts = wp_statement weakpre target s curposts in
 	  let vit = term_var_no_loc vi in
 	  let copyvi = copyvar vi in
@@ -3256,7 +3262,9 @@ let rec wp_statement weakpre =
 	      add_modified_var curposts vi 
 	  in
 	  { curposts with jc_post_normal = post; }
-      | JCScall(None,f,args,s) -> 
+      | JCScall(None,call,s) -> 
+	  let f = call.jc_call_fun in
+	  let args = call.jc_call_args in
 	  let curposts = wp_statement weakpre target s curposts in
 	  curposts
     in
@@ -3326,7 +3334,7 @@ let collect_immediate_targets targets s =
   let rec fold_statement fpre fpost acc s =
     let acc = fpre acc s in
     let acc = match s.jc_statement_node with
-      | JCSdecl(_,_,s) | JCScall(_,_,_,s) -> 
+      | JCSdecl(_,_,s) | JCScall(_,_,s) -> 
 	  fold_statement fpre fpost acc s
       | JCSblock sl ->
 	  List.fold_left (fold_statement fpre fpost) acc sl
@@ -3430,7 +3438,7 @@ let rec backprop_statement target s curpost =
               end
 	end;
 	None
-    | JCScall(_,_,_,s) ->
+    | JCScall(_,_,s) ->
 	assert (curpost = None);
 	let curpost = backprop_statement target s None in
 	assert (curpost = None); curpost

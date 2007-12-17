@@ -25,10 +25,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.19 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_fenv.mli,v 1.20 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
+open Jc_region
 
 (* When adding fields for effects, change accordingly function [same_effects]
    in [jc_effect.ml]. *)
@@ -36,7 +37,7 @@ type effect =
     {
       jc_effect_alloc_table : StringSet.t;
       jc_effect_tag_table : StringSet.t;
-      jc_effect_memories : FieldSet.t;
+      jc_effect_memories : FieldRegionSet.t;
       jc_effect_globals : VarSet.t;
       jc_effect_through_params : VarSet.t;
       jc_effect_mutable : StringSet.t;
@@ -72,6 +73,7 @@ type fun_info = {
     jc_fun_info_return_type : jc_type;
     jc_fun_info_return_region : region;
     mutable jc_fun_info_parameters : var_info list;
+    mutable jc_fun_info_regions : region list;
     mutable jc_fun_info_calls : fun_info list;
     mutable jc_fun_info_logic_apps : logic_info list;
     mutable jc_fun_info_effects : fun_effect;
@@ -81,6 +83,6 @@ type fun_info = {
 
 (*
   Local Variables: 
-  compile-command: "make -C .. bin/jessie.byte"
+  compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
   End: 
  *)

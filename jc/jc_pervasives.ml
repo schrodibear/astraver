@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.61 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.62 2007-12-17 13:18:48 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -33,12 +33,6 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 open Jc_region
-
-let is_pointer_type t =
-  match t with
-    | JCTnull -> true
-    | JCTpointer _ -> true
-    | _ -> false
 
 let string_of_native t =
   match t with
@@ -75,6 +69,14 @@ let num_of_constant loc c =
 let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)
 
+let rec location_set_region = function
+  | JCLSvar vi -> vi.jc_var_info_region
+  | JCLSderef(_,_,r) -> r
+  | JCLSrange(ls,_,_) -> location_set_region ls
+
+type tlocation =
+  | JCLvar of var_info
+  | JCLderef of tlocation_set * field_info * region
 
 (* operators *)
 
@@ -134,7 +136,7 @@ let const c =
     | JCCinteger _ -> integer_type,dummy_region,c
     | JCCreal _ -> real_type,dummy_region,c
     | JCCboolean _ -> boolean_type,dummy_region,c
-    | JCCnull -> null_type,Region.make_const "null",c
+    | JCCnull -> null_type,Region.make_var JCTnull "null",c
 
 (* variables *)
 
@@ -148,9 +150,7 @@ let var ?(unique=true) ?(static=false) ?(formal=false) ty id =
     jc_var_info_final_name = 
       if unique then Jc_envset.get_unique_name id else id;
     jc_var_info_region = 
-      if is_pointer_type ty then 
-	if formal then Region.make_var id else Region.make_const id
-      else dummy_region;
+      if static then Region.make_const ty id else Region.make_var ty id;
     jc_var_info_type = ty;
     jc_var_info_formal = formal;
     jc_var_info_assigned = false;
@@ -194,7 +194,7 @@ let exception_info ty id =
 let empty_effects = 
   { jc_effect_alloc_table = StringSet.empty;
     jc_effect_tag_table = StringSet.empty;
-    jc_effect_memories = FieldSet.empty;
+    jc_effect_memories = FieldRegionSet.empty;
     jc_effect_globals = VarSet.empty;
     jc_effect_through_params = VarSet.empty;
     jc_effect_mutable = StringSet.empty;
@@ -221,7 +221,7 @@ let make_logic_fun name ty =
     jc_logic_info_name = name;
     jc_logic_info_final_name = Jc_envset.get_unique_name name;
     jc_logic_info_result_type = Some ty;
-    jc_logic_info_result_region = Region.make_var name;
+    jc_logic_info_result_region = Region.make_var ty name;
     jc_logic_info_parameters = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
@@ -238,7 +238,7 @@ let make_rel name =
     jc_logic_info_name = name;
     jc_logic_info_final_name = Jc_envset.get_unique_name name;
     jc_logic_info_result_type = None;
-    jc_logic_info_result_region = Region.make_var name;
+    jc_logic_info_result_region = dummy_region;
     jc_logic_info_parameters = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
@@ -262,8 +262,8 @@ let make_fun_info name ty =
     jc_fun_info_final_name = Jc_envset.get_unique_name name;
     jc_fun_info_parameters = [];
     jc_fun_info_return_type = ty;
-    jc_fun_info_return_region = 
-      if is_pointer_type ty then Region.make_var name else dummy_region;
+    jc_fun_info_return_region = Region.make_var ty name;
+    jc_fun_info_regions = [];
     jc_fun_info_calls = [];
     jc_fun_info_logic_apps = [];
     jc_fun_info_effects = empty_fun_effect;

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.15 2007-11-20 14:34:50 filliatr Exp $ i*)
+(*i $Id: jc_options.ml,v 1.16 2007-12-17 13:18:48 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -131,7 +131,9 @@ let _ =
 	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
 	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
 	"-verify", Arg.String (function s -> verify := s::!verify), 
-	"verify only these functions";
+	  "verify only these functions";
+	"-separation", Arg.Set separation,
+          "  performs separation analysis";
       ]
       add_file usage
 
@@ -149,6 +151,7 @@ let why_opt = !why_opt
 let inv_sem = !inv_sem
 
 let verify = !verify
+let separation = !separation
 
 let annot_infer = !annot_infer
 let ai_domain = !ai_domain

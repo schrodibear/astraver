@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.11 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.12 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 
@@ -35,6 +35,8 @@ module StringMap : Map.S with type key = string
 
 val get_unique_name : ?local_names:StringSet.t -> string -> string
 
+val is_pointer_type : Jc_env.jc_type -> bool
+
 module VarSet : Set.S with type elt = var_info
 
 module StructSet : Set.S with type elt = struct_info
@@ -42,6 +44,8 @@ module StructSet : Set.S with type elt = struct_info
 module ExceptionSet : Set.S with type elt = exception_info
 
 module ExceptionMap : Map.S with type key = exception_info
+
+module FieldOrd : Set.OrderedType with type t = field_info
 
 module FieldSet : Set.S with type elt = field_info
 

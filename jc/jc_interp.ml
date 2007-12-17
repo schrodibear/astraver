@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.187 2007-12-12 16:13:55 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.188 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -35,6 +35,10 @@ open Jc_ast
 open Jc_invariants
 open Output
 open Format
+open Jc_name
+open Jc_envreg
+open Jc_region
+open Jc_separation
 
 (* locs table *)
 
@@ -373,17 +377,6 @@ terms and assertions
 
 *************************)
 
-let tag_name st = st.jc_struct_info_name ^ "_tag"
-
-let alloc_table_name st = st.jc_struct_info_root ^ "_alloc_table"
-let tag_table_name st = st.jc_struct_info_root ^ "_tag_table"
-let field_memory_name fi = fi.jc_field_info_final_name
-
-let valid_pred_name st = "valid_" ^ st.jc_struct_info_name
-let valid_one_pred_name st = "valid_one_" ^ st.jc_struct_info_name
-let alloc_param_name st = "alloc_" ^ st.jc_struct_info_name
-let alloc_one_param_name st = "alloc_one_" ^ st.jc_struct_info_name
-
 let alloc_table_type st = 
   {
     logic_type_name = "alloc_table";
@@ -422,8 +415,8 @@ let lvar_info label v =
 
 let logic_params li l =
   let l =
-    FieldSet.fold
-      (fun fi acc -> (LVar fi.jc_field_info_final_name)::acc)
+    FieldRegionSet.fold
+      (fun (fi,r) acc -> (LVar(field_region_memory_name(fi,r)))::acc)
       li.jc_logic_info_effects.jc_effect_memories
       l
   in
@@ -483,7 +476,9 @@ let rec term label oldlabel t =
     | JCTsub_pointer(t1,t2) -> 
 	LApp("sub_pointer",[ft t1; ft t2])
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
-    | JCTderef(t,f) -> LApp("select",[lvar label f.jc_field_info_final_name;ft t])
+    | JCTderef(t,fi) -> 
+	let mem = field_region_memory_name(fi,t.jc_term_region) in
+	LApp("select",[lvar label mem;ft t])
     | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
     | JCTold(t) -> term (Some oldlabel) oldlabel t
     | JCToffset(k,t,st) -> 
@@ -646,9 +641,9 @@ let tr_logic_fun li ta acc =
       li.jc_logic_info_parameters
   in
   let params_reads =
-    FieldSet.fold
-      (fun fi acc -> 
-	 (fi.jc_field_info_final_name, memory_field fi)::acc)
+    FieldRegionSet.fold
+      (fun (fi,r) acc -> 
+	 (field_region_memory_name(fi,r), memory_field fi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       params
   in
@@ -707,10 +702,10 @@ let tr_logic_fun li ta acc =
   if List.length sep_preds = 0 then acc else
     let params_names = List.map fst params_reads in
     let normal_params = List.map (fun name -> LVar name) params_names in
-    FieldSet.fold (fun fi acc ->
+    FieldRegionSet.fold (fun (fi,r) acc ->
       let update_params = 
 	List.map (fun name ->
-	  if name = field_memory_name fi then
+	  if name = field_region_memory_name(fi,r) then
 	    LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
 	  else LVar name
 	) params_names
@@ -818,53 +813,54 @@ let rec make_lets l e =
 
 let rec make_upd lab loc ~threats fi e1 v =
   let expr = expr ~threats and offset = offset ~threats in
+  let mem = field_region_memory_name(fi,e1.jc_expr_region) in
   if threats then
     match destruct_pointer e1 with
     | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
 	make_app "safe_upd_" 
-	  [ Var fi.jc_field_info_final_name ; expr e1; v ]
+	  [ Var mem ; expr e1; v ]
     | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
 	make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
-	  [ Var fi.jc_field_info_final_name ; expr p; offset off;
+	  [ Var mem ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
 	make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
-	  [ Var fi.jc_field_info_final_name ; expr p; offset off;
+	  [ Var mem ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,off,Some lb,Some rb ->
 	make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
-	  [ Var fi.jc_field_info_final_name ; expr p; offset off; 
+	  [ Var mem ; expr p; offset off; 
 	    Cte (Prim_int (Num.string_of_num lb)); 
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
 	make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_final_name; expr p; offset off; v ]
+	    Var mem; expr p; offset off; v ]
     | p,off,Some lb,None ->
 	make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_final_name; expr p; offset off;
+	    Var mem; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
 	make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_final_name; expr p; offset off; v ]
+	    Var mem; expr p; offset off; v ]
     | p,off,None,Some rb ->
 	make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_final_name; expr p; offset off;
+	    Var mem; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,Int_offset s,None,None when int_of_string s = 0 ->
 	make_guarded_app ~name:lab PointerDeref loc "upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_final_name ; expr p; v ]
+	    Var mem ; expr p; v ]
     | p,off,None,None ->
 	make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
 	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var fi.jc_field_info_final_name ; expr p; offset off; v ]
+	    Var mem ; expr p; offset off; v ]
   else
     make_app "safe_upd_"
-      [ Var fi.jc_field_info_final_name ; expr e1 ; v ]
+      [ Var mem ; expr e1 ; v ]
     
 and offset ~threats = function
   | Int_offset s -> Cte (Prim_int s)
@@ -970,53 +966,54 @@ and expr ~threats e : expr =
 	coerce ~no_int_overflow:(not threats)
 	  e.jc_expr_label e.jc_expr_loc (JCTenum ri) e1.jc_expr_type e1'
     | JCEderef(e,fi) ->
+	let mem = field_region_memory_name(fi,e.jc_expr_region) in
 	if threats then
 	  match destruct_pointer e with
 	  | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
 	      make_app "safe_acc_" 
-		[ Var fi.jc_field_info_final_name ; expr e ]
+		[ Var mem ; expr e ]
 	  | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_acc_" 
-		[ Var fi.jc_field_info_final_name ; expr p; offset off;
+		[ Var mem ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_acc_" 
-		[ Var fi.jc_field_info_final_name ; expr p; offset off;
+		[ Var mem ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,off,Some lb,Some rb ->
 	      make_guarded_app ~name:lab IndexBounds loc "bound_acc_" 
-		[ Var fi.jc_field_info_final_name ; expr p; offset off; 
+		[ Var mem ; expr p; offset off; 
 		  Cte (Prim_int (Num.string_of_num lb)); 
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_final_name; expr p; offset off ]
+		  Var mem; expr p; offset off ]
 	  | p,off,Some lb,None ->
 	      make_guarded_app ~name:lab IndexBounds loc "lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_final_name; expr p; offset off;
+		  Var mem; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_final_name; expr p; offset off ]
+		  Var mem; expr p; offset off ]
 	  | p,off,None,Some rb ->
 	      make_guarded_app ~name:lab IndexBounds loc "rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_final_name; expr p; offset off;
+		  Var mem; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,Int_offset s,None,None when int_of_string s = 0 ->
 	      make_guarded_app ~name:lab PointerDeref loc "acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_final_name ; expr p ]
+		  Var mem ; expr p ]
 	  | p,off,None,None ->
 	      make_guarded_app ~name:lab PointerDeref loc "offset_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var fi.jc_field_info_final_name ; expr p; offset off ]
+		  Var mem ; expr p; offset off ]
 	else
 	  make_app "safe_acc_"
-	    [ Var fi.jc_field_info_final_name ; 
+	    [ Var mem ; 
 	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (e, st) ->
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
@@ -1128,7 +1125,9 @@ let rec statement ~threats s =
   let expr = expr ~threats in
   let lab = s.jc_statement_label in
     match s.jc_statement_node with
-      | JCScall (vio, f, l, block) -> 
+      | JCScall (vio, call, block) -> 
+	  let f = call.jc_call_fun in
+	  let l = call.jc_call_args in
 	  (*
 	    Format.eprintf "Jc_interp: lab for call = '%s'@."
 	    s.jc_statement_label;
@@ -1352,15 +1351,17 @@ let tr_struct st acc =
   let alloc = alloc_table_name st in
   let tagtab = tag_table_name st in
     (* Declarations of field memories. *)
-  let acc = 
-    List.fold_left
-      (fun acc fi ->
-	 let mem = memory_field fi in
-	 Param(false,
-	       fi.jc_field_info_final_name,
-	       Ref_type(Base_type mem))::acc)
-      acc st.jc_struct_info_fields
-  in 
+  let acc =
+    if Jc_options.separation then acc else
+      List.fold_left
+	(fun acc fi ->
+	  let mem = memory_field fi in
+	  Param(
+	    false,
+	    field_memory_name fi,
+	    Ref_type(Base_type mem))::acc)
+	acc st.jc_struct_info_fields
+  in
   (* declaration of the tag_id *)
   let acc =
     Logic(false,tag_name st,[],tagid_type)::acc
@@ -1605,8 +1606,8 @@ locations
 
 let rec pset before loc = 
   match loc with
-    | JCLSderef(ls,fi) ->
-	let m = lvar (Some before) fi.jc_field_info_final_name in
+    | JCLSderef(ls,fi,r) ->
+	let m = lvar (Some before) (field_region_memory_name(fi,r)) in
 	LApp("pset_deref", [m;pset before ls])
     | JCLSvar vi -> 
 	let m = lvar_info (Some before) vi in
@@ -1637,15 +1638,15 @@ let rec pset before loc =
 	
 let collect_locations before (refs,mems) loc =
   match loc with
-    | JCLderef(e,fi) -> 
+    | JCLderef(e,fi,fr) -> 
 	let iloc = pset before e in
 	let l =
 	  try
-	    let l = FieldMap.find fi mems in
+	    let l = FieldRegionMap.find (fi,location_set_region e) mems in
 	    iloc::l
 	  with Not_found -> [iloc]
 	in
-	(refs, FieldMap.add fi l mems)
+	(refs, FieldRegionMap.add (fi,location_set_region e) l mems)
     | JCLvar vi -> 
 	let var = vi.jc_var_info_final_name in
 	(StringMap.add var true refs,mems)
@@ -1668,10 +1669,10 @@ let assigns before ef locs =
     *) StringMap.empty 
   in
   let mems = 
-    FieldSet.fold
-      (fun fi m -> 
-	 FieldMap.add fi [] m)
-      ef.jc_writes.jc_effect_memories FieldMap.empty 
+    FieldRegionSet.fold
+      (fun (fi,r) m -> 
+	 FieldRegionMap.add (fi,r) [] m)
+      ef.jc_writes.jc_effect_memories FieldRegionMap.empty 
   in
   let refs,mems = 
     List.fold_left (collect_locations before) (refs,mems) locs
@@ -1683,9 +1684,9 @@ let assigns before ef locs =
 	 make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)])))
     refs LTrue
   in
-  FieldMap.fold
-    (fun fi p acc -> 
-       let v = fi.jc_field_info_final_name in
+  FieldRegionMap.fold
+    (fun (fi,r) p acc -> 
+       let v = field_region_memory_name(fi,r) in
        let alloc = fi.jc_field_info_root ^ "_alloc_table" in
        make_and acc
 	 (LPred("not_assigns",
@@ -1709,7 +1710,13 @@ let excep_posts_for_others eopt excep_posts =
 	 | None -> (exception_name ei, LTrue)::acc)
     excep_posts []
     
-let interp_fun_params f annot_type =
+let interp_fun_params f memories annot_type =
+  let annot_type = 
+    if Jc_options.separation then annot_type else
+      List.fold_left (fun acc (name,ty) ->
+	Prod_type(name,Ref_type(Base_type ty),acc)
+      ) annot_type memories
+  in
   match f.jc_fun_info_parameters with
     | [] ->
 	Prod_type("tt",unit_type, annot_type)
@@ -1732,17 +1739,20 @@ let tr_fun f loc spec body acc =
 	       let alloc = alloc_table_name st in
 	       let var = LVar v.jc_var_info_final_name in
 	       let fields = embedded_struct_fields st in
-		 f.jc_fun_info_effects <-
-		   Jc_effect.fef_union 
-		   f.jc_fun_info_effects
-		   (List.fold_left Jc_effect.add_field_reads f.jc_fun_info_effects fields);
+	       let fields = List.map (fun fi -> 
+		 (fi,Region.make_field v.jc_var_info_region fi)) fields 
+	       in
+	       f.jc_fun_info_effects <-
+		 Jc_effect.fef_union 
+		 f.jc_fun_info_effects
+		 (List.fold_left Jc_effect.add_field_reads f.jc_fun_info_effects fields);
 	       let validity = match a,b with
 		 | Some a, Some b 
 		     when Num.eq_num a (Num.num_of_int 0)
 		       && Num.eq_num b (Num.num_of_int 0) ->
 		     let structs = 
 		       List.fold_left 
-			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			 (fun acc (fi,_) -> StructSet.add (field_sinfo fi) acc) 
 			 StructSet.empty fields
 		     in
 		     let structs = 
@@ -1752,11 +1762,11 @@ let tr_fun f loc spec body acc =
 		       var
 		       :: LVar alloc
 		       :: List.map (lvar None ** alloc_table_name) structs
-		       @ List.map (lvar None ** field_memory_name) fields)
+		       @ List.map (lvar None ** field_region_memory_name) fields)
 		 | Some a,Some b ->
 		     let structs = 
 		       List.fold_left 
-			 (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			 (fun acc (fi,_) -> StructSet.add (field_sinfo fi) acc) 
 			 StructSet.empty fields
 		     in
 		     let structs = 
@@ -1768,7 +1778,7 @@ let tr_fun f loc spec body acc =
 		       :: LConst(Prim_int(Num.string_of_num b))
 		       :: LVar alloc
 		       :: List.map (lvar None ** alloc_table_name) structs
-		       @ List.map (lvar None ** field_memory_name) fields)
+		       @ List.map (lvar None ** field_region_memory_name) fields)
 		 | _ -> LTrue
 	       in
 		 make_and validity acc
@@ -1839,8 +1849,8 @@ let tr_fun f loc spec body acc =
       excep_behaviors
   in
   let reads =
-    FieldSet.fold
-      (fun f acc -> f.jc_field_info_final_name::acc)
+    FieldRegionSet.fold
+      (fun (f,r) acc -> (field_region_memory_name(f,r))::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_memories
       []
   in
@@ -1875,8 +1885,8 @@ let tr_fun f loc spec body acc =
       reads
   in
   let writes =
-    FieldSet.fold
-      (fun f acc -> f.jc_field_info_final_name::acc)
+    FieldRegionSet.fold
+      (fun (f,r) acc -> (field_region_memory_name(f,r))::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
   in
@@ -1909,6 +1919,17 @@ let tr_fun f loc spec body acc =
       (fun v acc -> (committed_name v)::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_committed
       writes
+  in
+  let memories =
+    FieldRegionSet.fold
+      (fun (fi,r) acc ->
+	if r.jc_reg_variable then
+	  (field_region_memory_name(fi,r),memory_field fi)::acc 
+	else acc)
+      (FieldRegionSet.union
+	f.jc_fun_info_effects.jc_reads.jc_effect_memories 
+	f.jc_fun_info_effects.jc_writes.jc_effect_memories)
+      []
   in
   let normal_post =
     List.fold_right
@@ -1950,7 +1971,7 @@ let tr_fun f loc spec body acc =
       Annot_type(requires, ret_type,
 		 reads,writes, param_normal_post, param_excep_posts)
     in
-    let fun_type = interp_fun_params f annot_type in
+    let fun_type = interp_fun_params f memories annot_type in
       Param (false, f.jc_fun_info_final_name, fun_type)
   in
   match body with
@@ -1963,11 +1984,15 @@ let tr_fun f loc spec body acc =
 	then 
 	  why_param :: acc 
 	else
-	    (* why functions for each behaviors *)
+	  (* why functions for each behaviors *)
+	    let mem_params = 
+	      List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) memories
+	    in
 	    let params = match f.jc_fun_info_parameters with
 	      | [] -> ["tt", unit_type]
 	      | l -> List.map parameter l
 	    in
+	    let params = params @ mem_params in
 	      (* rename formals just before body is treated *)
 	    let list_of_refs =
 	      List.fold_right
@@ -2160,8 +2185,8 @@ let tr_axiom id p acc =
   let a = assertion None "" p in
   let ef = Jc_effect.assertion empty_effects p in
   let a =
-    FieldSet.fold (fun fi a -> 
-      LForall (field_memory_name fi, memory_field fi, a)
+    FieldRegionSet.fold (fun (fi,r) a -> 
+      LForall (field_region_memory_name(fi,r), memory_field fi, a)
     ) ef.jc_effect_memories a 
   in
   (* How to add quantification on other effects (alloc, tag) without knowing 

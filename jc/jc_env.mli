@@ -25,18 +25,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.37 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.38 2007-12-17 13:18:48 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
 type inv_sem = InvNone | InvOwnership | InvArguments
-
-type region = 
-    {
-      jc_reg_variable : bool;
-      jc_reg_id : int;
-      jc_reg_name : string;
-    }
 
 type jc_type =
   | JCTnative of native_type
@@ -69,6 +62,15 @@ and field_info =
       jc_field_info_struct: struct_info; (* The structure in which the field is defined *)
       jc_field_info_root : string; (* The root of the structure in which the field is defined *)
       jc_field_info_rep : bool; (* "rep" flag *)
+    }
+
+type region = 
+    {
+      jc_reg_variable : bool;
+      jc_reg_id : int;
+      jc_reg_name : string;
+      jc_reg_final_name : string;
+      jc_reg_type : jc_type;
     }
 
 type var_info = {

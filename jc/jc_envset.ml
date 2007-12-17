@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.13 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.14 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 
@@ -73,6 +73,11 @@ let get_unique_name ?local_names n =
   try use_name ?local_names n 
   with Exit -> next_name ?local_names n 0
 
+let is_pointer_type t =
+  match t with
+    | JCTnull -> true
+    | JCTpointer _ -> true
+    | _ -> false
 
 module VarSet = 
   Set.Make(struct type t = var_info

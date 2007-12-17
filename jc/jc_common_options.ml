@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_common_options.ml,v 1.2 2007-11-20 14:34:50 filliatr Exp $ i*)
+(*i $Id: jc_common_options.ml,v 1.3 2007-12-17 13:18:48 moy Exp $ i*)
 
 (*s command-line options *)
 
@@ -34,6 +34,7 @@ open Jc_env
 let debug = ref false
 let verbose = ref false
 let werror = ref false
+let separation = ref false
 
 let inv_sem = ref InvOwnership
 

@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.66 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: jc_effect.ml,v 1.67 2007-12-17 13:18:48 moy Exp $ *)
 
 
 open Jc_env
@@ -37,7 +37,7 @@ open Jc_pervasives
 open Jc_iterators
 open Format
 open Pp
-
+open Jc_region
 
 let ef_union ef1 ef2 =
   { jc_effect_alloc_table = 
@@ -47,7 +47,7 @@ let ef_union ef1 ef2 =
       StringSet.union
 	ef1.jc_effect_tag_table ef2.jc_effect_tag_table;
     jc_effect_memories = 
-      FieldSet.union 
+      FieldRegionSet.union 
 	ef1.jc_effect_memories ef2.jc_effect_memories;
     jc_effect_globals = 
       VarSet.union 
@@ -63,14 +63,28 @@ let ef_union ef1 ef2 =
 	ef1.jc_effect_committed ef2.jc_effect_committed;
   }
 
+let ef_assoc ef assoc =
+  { ef with jc_effect_memories =
+      FieldRegionSet.fold (fun (fi,r) acc ->
+	try FieldRegionSet.add (fi,Region.assoc r assoc) acc 
+	with Not_found -> assert false
+      ) ef.jc_effect_memories FieldRegionSet.empty
+  }
+
 let fef_union fef1 fef2 =
   { jc_reads = ef_union fef1.jc_reads fef2.jc_reads ;
     jc_writes = ef_union fef1.jc_writes fef2.jc_writes ;
     jc_raises = ExceptionSet.union fef1.jc_raises fef2.jc_raises;
   }
 
-let add_memory_effect ef fi =
-  { ef with jc_effect_memories = FieldSet.add fi ef.jc_effect_memories } 
+let fef_assoc fef assoc =
+  { jc_reads = ef_assoc fef.jc_reads assoc;
+    jc_writes = ef_assoc fef.jc_writes assoc;
+    jc_raises = fef.jc_raises;
+  }
+
+let add_memory_effect ef (fi,r) =
+  { ef with jc_effect_memories = FieldRegionSet.add (fi,r) ef.jc_effect_memories } 
   
 let add_global_effect ef vi =
   { ef with jc_effect_globals = VarSet.add vi ef.jc_effect_globals } 
@@ -94,8 +108,8 @@ let add_committed_effect ef st =
 let add_exception_effect ef a =
   { ef with jc_raises = ExceptionSet.add a ef.jc_raises }
   
-let add_field_reads fef fi =
-  { fef with jc_reads = add_memory_effect fef.jc_reads fi }
+let add_field_reads fef (fi,r) =
+  { fef with jc_reads = add_memory_effect fef.jc_reads (fi,r) }
 
 let add_global_reads fef vi =
   { fef with jc_reads = add_global_effect fef.jc_reads vi }
@@ -115,8 +129,8 @@ let add_mutable_reads fef st =
 let add_committed_reads fef st =
   { fef with jc_reads = add_committed_effect fef.jc_reads st }
 
-let add_field_writes fef fi =
-  { fef with jc_writes = add_memory_effect fef.jc_writes fi }
+let add_field_writes fef (fi,r) =
+  { fef with jc_writes = add_memory_effect fef.jc_writes (fi,r) }
 
 let add_global_writes fef vi =
   { fef with jc_writes = add_global_effect fef.jc_writes vi }
@@ -139,7 +153,7 @@ let add_committed_writes fef st =
 let same_effects ef1 ef2 =
   StringSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
   && StringSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
-  && FieldSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
+  && FieldRegionSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
   && VarSet.equal ef1.jc_effect_through_params ef2.jc_effect_through_params
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
@@ -185,7 +199,7 @@ let rec term ef t =
 	} in
 	ef_union efli ef
     | JCTderef (t, fi) ->
-	add_memory_effect ef fi
+	add_memory_effect ef (fi,t.jc_term_region)
     | _ -> ef
     ) ef t
 
@@ -237,7 +251,7 @@ let rec expr ef e =
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) st.jc_struct_info_root
     | JCEderef (e, f) -> 
-	let ef = add_field_reads (expr ef e) f in
+	let ef = add_field_reads (expr ef e) (f,e.jc_expr_region) in
 	begin match (skip_shifts e).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -281,28 +295,32 @@ let rec loop_annot ef la =
 let rec statement ef s =
   match s.jc_statement_node with
     | JCSreturn_void -> ef
-    | JCScall (_, fi, le, s) -> 
-	let through_param ef = 
+    | JCScall (_, call, s) -> 
+	let fi = call.jc_call_fun in
+	let le = call.jc_call_args in
+	let efcall = 
+	  fef_assoc fi.jc_fun_info_effects call.jc_call_region_assoc in
+	let through_param ef =
 	  List.fold_left2 (fun ef param arg ->
 	    if VarSet.mem param ef.jc_effect_through_params then
 	      match (skip_shifts arg).jc_expr_node with
 		| JCEvar vi ->
-		    if vi.jc_var_info_formal then 
-		      add_through_param_effect ef vi 
+		    if vi.jc_var_info_formal then
+		      add_through_param_effect ef vi
 		    else ef
 		| _ -> ef
 	    else ef
 	  ) empty_effects fi.jc_fun_info_parameters le
 	in
-	let effi = { 
-	  fi.jc_fun_info_effects with
+	let efcall = {
+	  efcall with
 	    jc_reads = through_param fi.jc_fun_info_effects.jc_reads;
 	    jc_writes = through_param fi.jc_fun_info_effects.jc_writes;
 	} in
-	let ef = fef_union effi (List.fold_left expr ef le) in
+	let ef = fef_union efcall (List.fold_left expr ef le) in
 	statement ef s
     | JCSassign_heap (e1, fi, e2) ->
-	let ef = expr (expr (add_field_writes ef fi) e1) e2 in
+	let ef = expr (expr (add_field_writes ef (fi,e1.jc_expr_region)) e1) e2 in
 	begin match (skip_shifts e1).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -338,7 +356,7 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef st.jc_struct_info_root in
 		   let ef = add_committed_writes ef st.jc_struct_info_root in
 		   (* ...and field as reads *)
-		   add_field_reads ef fi
+		   add_field_reads ef (fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
@@ -361,7 +379,7 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef st.jc_struct_info_root in
 		   let ef = add_committed_writes ef st.jc_struct_info_root in
 		   (* ...and field as reads *)
-		   add_field_reads ef fi
+		   add_field_reads ef (fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
@@ -396,9 +414,9 @@ let rec statement ef s =
 (* Conservatively consider location is both read and written. *)
 let location ef l =
   match l with
-    | JCLderef(t,fi) ->
-	let ef = add_field_writes ef fi in
-	let ef = add_field_reads ef fi in
+    | JCLderef(t,fi,r) ->
+	let ef = add_field_writes ef (fi,location_set_region t) in
+	let ef = add_field_reads ef (fi,location_set_region t) in
 	begin match skip_tloc_range t with
 	  | JCLSvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -510,9 +528,10 @@ let logic_effects funs =
 	 (StringSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
 	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
 	 (StringSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
-	 (print_list comma (fun fmt field ->
-			      fprintf fmt "%s" field.jc_field_info_name))
-	 (FieldSet.elements f.jc_logic_info_effects.jc_effect_memories))
+	 (print_list comma (fun fmt (fi,r) ->
+			      fprintf fmt "%s,%s" fi.jc_field_info_name
+				r.jc_reg_name))
+	 (FieldRegionSet.elements f.jc_logic_info_effects.jc_effect_memories))
     funs
     
 let function_effects funs =
@@ -540,12 +559,14 @@ let function_effects funs =
        Jc_options.lprintf
 	 "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@\n@[ raises: %a@]@." 
 	 f.jc_fun_info_name
-	 (print_list comma
-	    (fun fmt field -> fprintf fmt "%s" field.jc_field_info_name))
-	 (FieldSet.elements f.jc_fun_info_effects.jc_reads.jc_effect_memories)
-	 (print_list comma
-	    (fun fmt field -> fprintf fmt "%s" field.jc_field_info_name))
-	 (FieldSet.elements f.jc_fun_info_effects.jc_writes.jc_effect_memories)
+	 (print_list comma (fun fmt (fi,r) ->
+			      fprintf fmt "%s,%s" fi.jc_field_info_name
+				r.jc_reg_name))
+	 (FieldRegionSet.elements f.jc_fun_info_effects.jc_reads.jc_effect_memories)
+	 (print_list comma (fun fmt (fi,r) ->
+			      fprintf fmt "%s,%s" fi.jc_field_info_name
+				r.jc_reg_name))
+	 (FieldRegionSet.elements f.jc_fun_info_effects.jc_writes.jc_effect_memories)
 	 (print_list comma 
 	    (fun fmt ei -> fprintf fmt "%s" ei.jc_exception_info_name))
 	 (ExceptionSet.elements f.jc_fun_info_effects.jc_raises))
@@ -553,7 +574,7 @@ let function_effects funs =
 
 
 (*
-  Local Variables: 
-  compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-  End: 
+Local Variables: 
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
+End: 
 *)

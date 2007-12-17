@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.149 2007-12-14 14:28:06 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.150 2007-12-17 13:18:48 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1105,8 +1105,8 @@ let rec expr env e =
       | JCPEalloc (e1, t) ->
 	  let te1 = expr env e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCTpointer (st,Some zero,None), 
-	  Region.make_const "alloc", JCTEalloc (te1, st)
+	  let ty = JCTpointer (st,Some zero,None) in
+	  ty,Region.make_var ty "alloc", JCTEalloc (te1, st)
       | JCPEfree e1 ->
 	  let e1 = expr env e1 in
 	  unit_type,dummy_region, JCTEfree e1
@@ -1223,7 +1223,8 @@ let rec expr env e =
 			  typing_error e.jc_pexpr_loc 
 			    "wrong number of arguments for %s" id
 		      in
-		      fi.jc_fun_info_return_type,fi.jc_fun_info_return_region,
+		      fi.jc_fun_info_return_type,
+		      Region.make_var fi.jc_fun_info_return_type fi.jc_fun_info_name,
 		      JCTEcall(fi, tl)
 		    with Not_found ->
 		      typing_error e.jc_pexpr_loc 
@@ -1800,27 +1801,27 @@ let rec location_set env e =
 	    let vi = List.assoc id env in 
 	    match vi.jc_var_info_type with
 	      | JCTpointer(st,_,_) ->
-		  vi.jc_var_info_type,JCLSvar(vi)
+		  vi.jc_var_info_type,vi.jc_var_info_region,JCLSvar(vi)
 	      | _ -> assert false
 	  with Not_found -> 
 	    try 
 	      let vi = Hashtbl.find variables_env id in
 	      match vi.jc_var_info_type with
 		| JCTpointer(st,_,_) ->
-		    vi.jc_var_info_type,JCLSvar(vi)
+		    vi.jc_var_info_type,vi.jc_var_info_region,JCLSvar(vi)
 		| _ -> assert false
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	end
     | JCPEbinary(e,BPadd,i) ->
-	let ty,te = location_set env e in
+	let ty,tr,te = location_set env e in
 	let ti = term env i in
 	begin
 	  match ty,ti.jc_term_type with 
 	    | JCTpointer(st,_,_), JCTnative Tinteger ->
 		begin match ti.jc_term_node with
-		  | JCTrange(t1,t2) -> ty,JCLSrange(te,t1,t2)
-		  | _ -> ty,JCLSrange(te,Some ti,Some ti)
+		  | JCTrange(t1,t2) -> ty,tr,JCLSrange(te,t1,t2)
+		  | _ -> ty,tr,JCLSrange(te,Some ti,Some ti)
 		end
 	    | JCTpointer _, _ -> 
 		typing_error i.jc_pexpr_loc "integer expected, got %a" print_type ti.jc_term_type
@@ -1829,10 +1830,10 @@ let rec location_set env e =
 	end
     | JCPEbinary _ -> assert false
     | JCPEderef (ls, f) -> 
-	let t,tls = location_set env ls in
+	let t,tr,tls = location_set env ls in
 	let fi = find_field e.jc_pexpr_loc t f false in
-	fi.jc_field_info_type, JCLSderef(tls,fi)	  
-
+	let fr = Region.make_field tr fi in
+	fi.jc_field_info_type,fr,JCLSderef(tls,fi,fr)	  
     | JCPEif (_, _, _)
     | JCPElet _
     | JCPEoffset _
@@ -1859,18 +1860,19 @@ let location env e =
 	begin
 	  try
 	    let vi = List.assoc id env in
-	    vi.jc_var_info_type,JCLvar vi
+	    vi.jc_var_info_type,vi.jc_var_info_region,JCLvar vi
 	  with Not_found -> 
 	    try 
 	      let vi = Hashtbl.find variables_env id in
-	      vi.jc_var_info_type,JCLvar vi
+	      vi.jc_var_info_type,vi.jc_var_info_region,JCLvar vi
 	    with Not_found -> 
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
     | JCPEderef(ls,f) ->
-	let t,tls = location_set env ls in
+	let t,tr,tls = location_set env ls in
 	let fi = find_field e.jc_pexpr_loc t f false in
-	fi.jc_field_info_type, JCLderef(tls,fi)	  
+	let fr = Region.make_field tr fi in
+	fi.jc_field_info_type,fr,JCLderef(tls,fi,fr)	  
 (*
     | JCPEshift (_, _)  -> assert false (* TODO *)
 *)
@@ -1931,7 +1933,8 @@ let clause env vi_result c acc =
 *)
 	let assigns = 
 	  Option_misc.map 
-	    (fun (loc,l) -> (loc,List.map (fun a -> snd (location env a)) l)) 
+	    (fun (loc,l) -> 
+	      (loc,List.map (fun a -> let _,_,tl = location env a in tl) l)) 
 	    assigns 
 	in
 	let b = {
@@ -2236,7 +2239,8 @@ let rec decl d =
 	let param_env,ty,pi = add_logic_fundecl (None,id,pl) in
 	let p = match body with
 	  | JCPReads reads ->
-	      JCReads ((List.map (fun a -> snd (location param_env a))) reads)
+	      JCReads (
+		(List.map (fun a -> let _,_,tl = location param_env a in tl)) reads)
 	  | JCPExpr body ->
 	      JCAssertion(assertion param_env body)
 	in
@@ -2246,7 +2250,8 @@ let rec decl d =
 	let ty = match ty with Some ty -> ty | None -> assert false in
 	let t = match body with
 	  | JCPReads reads ->
-	      JCReads ((List.map (fun a -> snd (location param_env a))) reads)
+	      JCReads (
+		(List.map (fun a -> let _,_,tl = location param_env a in tl)) reads)
 	  | JCPExpr body ->
               let t = term param_env body in
               if not (subtype t.jc_term_type ty) then 
@@ -2258,6 +2263,6 @@ let rec decl d =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -C .. jessie.byte"
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
 End: 
 *)
