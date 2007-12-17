@@ -105,6 +105,8 @@ let default_region = {
   jc_reg_variable = false;
   jc_reg_id = 0;
   jc_reg_name = "jessica_region";
+  jc_reg_final_name = "jessica_region";
+  jc_reg_type = JCTnative Tunit;
 }
 
 let is_unit t = t = JCTnative Tunit
