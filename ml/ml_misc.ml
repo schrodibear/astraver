@@ -156,11 +156,17 @@ let make_eq_term a b =
   (* it shouldn't always be "int"... but for the output it works *)
   make_bool_term (JCTbinary(a, Beq_int, b))
 
+let make_eq_expr a b =
+  make_expr (JCTEbinary(a, Beq_int, b)) (JCTnative Tboolean)
+
 let make_eq_assertion a b =
   make_assertion (JCAbool_term(make_eq_term a b))
 
 let make_var_term vi =
   make_term (JCTvar vi) vi.jc_var_info_type
+
+let make_var_expr vi =
+  make_expr (JCTEvar vi) vi.jc_var_info_type
 
 let make_and a b = match a.jc_assertion_node, b.jc_assertion_node with
   | JCAand al, JCAand bl -> make_assertion (JCAand(al@bl))
@@ -168,15 +174,51 @@ let make_and a b = match a.jc_assertion_node, b.jc_assertion_node with
   | _, JCAtrue -> a
   | _ -> make_assertion (JCAand [ a; b ])
 
+let make_implies a b = match a.jc_assertion_node with
+  | JCAtrue -> b
+  | _ -> make_assertion (JCAimplies(a, b))
+
+let make_and_expr a b = match a.jc_texpr_node, b.jc_texpr_node with
+  | JCTEconst JCCboolean true, _ -> b
+  | _, JCTEconst JCCboolean true -> a
+  | _ -> make_bool_expr (JCTEbinary(a, Bland, b))
+
+let make_and_term a b = match a.jc_term_node, b.jc_term_node with
+  | JCTconst JCCboolean true, _ -> b
+  | _, JCTconst JCCboolean true -> a
+  | _ -> make_bool_term (JCTbinary(a, Bland, b))
+
 let make_or a b = match a.jc_assertion_node, b.jc_assertion_node with
   | JCAor al, JCAor bl -> make_assertion (JCAor(al@bl))
   | JCAfalse, _ -> b
   | _, JCAfalse -> a
   | _ -> make_assertion (JCAor [ a; b ])
 
+let make_or_expr a b = match a.jc_texpr_node, b.jc_texpr_node with
+  | JCTEconst JCCboolean false, _ -> b
+  | _, JCTEconst JCCboolean false -> a
+  | _ -> make_bool_expr (JCTEbinary(a, Blor, b))
+
+let make_or_term a b = match a.jc_term_node, b.jc_term_node with
+  | JCTconst JCCboolean false, _ -> b
+  | _, JCTconst JCCboolean false -> a
+  | _ -> make_bool_term (JCTbinary(a, Blor, b))
+
 let make_and_list = List.fold_left make_and (make_assertion JCAtrue)
 
+let make_and_list_expr = List.fold_left make_and_expr
+  (make_bool_expr (JCTEconst(JCCboolean true)))
+
+let make_and_list_term = List.fold_left make_and_term
+  (make_bool_term (JCTconst(JCCboolean true)))
+
 let make_or_list = List.fold_left make_or (make_assertion JCAfalse)
+
+let make_or_list_expr = List.fold_left make_or_expr
+  (make_bool_expr (JCTEconst(JCCboolean false)))
+
+let make_or_list_term = List.fold_left make_or_term
+  (make_bool_term (JCTconst(JCCboolean false)))
 
 let make_pointer_type si =
   JCTpointer(si, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
@@ -259,12 +301,24 @@ let make_return e =
 let make_var_decl vi init s =
   make_statement (JCTSdecl(vi, init, s))
 
-let make_alloc_tmp si cont =
+let make_var_decls =
+  List.fold_left (fun acc vi -> make_var_decl vi None acc)
+
+let make_var_tmp ty init cont =
+  let vi = new_var ty in
+  make_var_decl vi init (cont vi (make_expr (JCTEvar vi) ty))
+
+let make_alloc_tmp si =
+  let ty = make_pointer_type si in
+  let init = make_expr (JCTEalloc(expr_of_int 1, si)) ty in
+  make_var_tmp ty (Some init)
+
+(*let make_alloc_tmp si cont =
   let tmp_ty = make_pointer_type si in
   let tmp_var = new_var tmp_ty in
   let tmp_expr = make_expr (JCTEvar tmp_var) tmp_ty in
   let tmp_init = make_expr (JCTEalloc(expr_of_int 1, si)) tmp_ty in
-  make_var_decl tmp_var (Some tmp_init) (cont tmp_var tmp_expr)
+  make_var_decl tmp_var (Some tmp_init) (cont tmp_var tmp_expr)*)
 
 let void = make_expr (JCTEconst JCCvoid) (JCTnative Tunit)
 
@@ -299,6 +353,14 @@ let make_struct_def si invs =
     si.jc_struct_info_fields,
     invs
   )
+
+let make_app li args = {
+  jc_app_fun = li;
+  jc_app_args = args;
+  jc_app_region_assoc = [];
+}
+
+let make_app_term_node li args = JCTapp (make_app li args)
 
 (*
 Local Variables: 

@@ -17,3 +17,12 @@ let constant_type = function
 
 let constant_term c =
   make_term (JCTconst (constant c)) (constant_type c)
+
+let constant_expr c =
+  make_expr (JCTEconst (constant c)) (constant_type c)
+
+(*
+Local Variables: 
+compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
+End: 
+*)

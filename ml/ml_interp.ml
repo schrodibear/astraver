@@ -197,7 +197,7 @@ let rec term env e =
 	      apply_op id args' binary_op
 		(fun x -> try
 		   let li = Ml_env.find_logic_fun x env in
-		   JCTapp(li, args')
+		   make_app_term_node li args'
 		 with Ml_env.Not_found_str x ->
 		   locate_error e.exp_loc "unknown logic function: %s" x)
 	  | _ -> not_implemented e.exp_loc "unsupported application (term)"
@@ -357,8 +357,28 @@ let rec statement env e cont =
 		   fi.jc_fun_info_return_type)
 	  | _ -> not_implemented e.exp_loc "unsupported application (statement)"
 	)
-(*    | Texp_match of expression * (pattern * expression) list * partial
-    | Texp_try of expression * (pattern * expression) list*)
+    | Texp_match(me, pel, _) ->
+(*	statement env me
+	  (fun res ->
+	     make_var_tmp (make me.exp_type) (Some res)
+	       (fun _ arg ->
+		  make_var_tmp (make e.exp_type) None
+		    (fun resvi _ ->
+		       let pats = pattern_expr_list
+			 (fun env e -> statement env e (make_affect resvi))
+			 pattern_expr
+			 env
+			 arg
+			 pel
+		       in
+		       List.fold_right
+			 (fun (vars, cond, body) acc ->
+			    let s = JCTSif(cond, body, acc) in
+			    make_var_decls s vars)
+			 
+		    )))*)
+	assert false
+(*    | Texp_try of expression * (pattern * expression) list*)
     | Texp_tuple el ->
 	let si = structure e.exp_type in
 	make_alloc_tmp si
@@ -524,29 +544,26 @@ let invariants env spec (*struct_info*) =
   list_fold_map
     (fun env i ->
        let ty = make_pointer_type dummy_struct(*struct_info*) in
-       let body_env, arg_vi, condk = match i.ti_argument.pat_desc with
+       let arg_vi, body = match i.ti_argument.pat_desc with
 	 | Tpat_var id ->
 	     let arg_name = name id in
-	     let env, vi = Ml_env.add_var arg_name ty env in
-	     env, vi, fun x -> x
+	     let body_env, vi = Ml_env.add_var arg_name ty env in
+	     vi, make_assertion (assertion body_env i.ti_body)
 	 | _ ->
-	     let env, vi = Ml_env.add_var "jessica_arg" ty env in
-	     let arg = make_var_term vi in
-	     let env, vars, tr = pattern_assertion env arg i.ti_argument in
-	     let quantify body =
-	       List.fold_left
-		 (fun acc vi -> make_assertion (JCAquantifier(Forall, vi, acc)))
-		 (make_and tr body)
-		 vars
+	     let _, vi = Ml_env.add_var "jessica_arg" ty env in
+	     let cond, body = PatAssertion.pattern_expr
+	       env
+	       (make_var_term vi)
+	       i.ti_argument
+	       (fun env -> make_assertion (assertion env i.ti_body))
 	     in
-	     env, vi, quantify
+	     let conda = make_assertion (JCAbool_term cond) in
+	     vi, make_implies conda body
        in
        let final_env, _ =
 	 Ml_env.add_logic_fun (name i.ti_name) [ arg_vi ] None env
        in
-       let body = condk (make_assertion (assertion body_env i.ti_body)) in
-       final_env,
-       (name i.ti_name, arg_vi, body))
+       final_env, (name i.ti_name, arg_vi, body))
     env
     spec.ts_invariants
   
