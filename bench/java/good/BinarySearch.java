@@ -1,5 +1,5 @@
 
-//@+ ArithOverflow = no
+//@+ ArithOverflow = yes
 
 /*@ axiom mean_1 : 
       \forall int x, y; x <= y ==> x <= x+(y-x)/2 <= y; */

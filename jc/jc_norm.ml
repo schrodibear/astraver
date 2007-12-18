@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.64 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.65 2007-12-18 13:35:11 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -119,20 +119,20 @@ let make_tconst loc c =
     jc_texpr_label = "";
     jc_texpr_node = node; }
 
-let make_tincr_local loc t op vi =
+let make_tincr_local lab loc t op vi =
   let node =  JCTEincr_local (op, vi) in
   { jc_texpr_loc = loc; 
     jc_texpr_type = t; 
     jc_texpr_region = vi.jc_var_info_region; 
-    jc_texpr_label = "";
+    jc_texpr_label = lab;
     jc_texpr_node = node; }
 
-let make_tincr_heap loc t op e fi =
+let make_tincr_heap lab loc t op e fi =
   let node = JCTEincr_heap (op, e, fi) in
   { jc_texpr_loc = loc; 
     jc_texpr_type = t; 
     jc_texpr_region = Region.make_field e.jc_texpr_region fi; 
-    jc_texpr_label = "";
+    jc_texpr_label = lab;
     jc_texpr_node = node; }
 
 (* statements *)
@@ -238,7 +238,7 @@ let make_tblock loc sl =
 let make_tthrow loc exc e =
   make_tnode loc (JCTSthrow (exc,e))
 
-let make_binary loc e1 t op e2 =
+let make_binary lab loc e1 t op e2 =
   let t = match t with
     | JCTenum _ -> integer_type
     | _ -> t
@@ -247,17 +247,17 @@ let make_binary loc e1 t op e2 =
     { jc_expr_node = JCEbinary(e1, op, e2);
       jc_expr_type = t;
       jc_expr_region = dummy_region;
-      jc_expr_label = "";
+      jc_expr_label = lab;
       jc_expr_loc = loc }
 
-let make_int_binary loc e1 op e2 = make_binary loc e1 integer_type op e2
+let make_int_binary lab loc e1 op e2 = make_binary lab loc e1 integer_type op e2
 
 
-let make_incr_local loc op vi =
+let make_incr_local lab loc op vi =
   make_assign_var loc vi
-    (make_int_binary loc (make_var loc vi) op (one_const loc))
+    (make_int_binary lab loc (make_var loc vi) op (one_const loc))
 
-let make_incr_heap loc op e fi = 
+let make_incr_heap lab loc op e fi = 
   let d =
     { jc_expr_loc = loc;
       jc_expr_type = fi.jc_field_info_type;
@@ -267,7 +267,7 @@ let make_incr_heap loc op e fi =
     }
   in
   make_assign_heap loc e fi
-    (make_int_binary loc d op (one_const loc))
+    (make_int_binary lab loc d op (one_const loc))
   
 
 let op_of_incdec = function
@@ -396,7 +396,7 @@ let rec expr e =
 	in
 	let (l, tl), e = expr e in
 	let e = 
-	  make_binary loc (make_var loc tmp) vi.jc_var_info_type op e 
+	  make_binary lab loc (make_var loc tmp) vi.jc_var_info_type op e 
 	in
 	let stat = make_assign_var loc vi e in
 	(stat0::l@[stat], tmp::tl), JCEvar vi
@@ -421,7 +421,7 @@ let rec expr e =
 	let stat1 = make_assign_var loc tmp1 e1 in
 	let (l2, tl2), e2 = expr e2 in
 	let e3 = 
-	  make_binary loc 
+	  make_binary lab loc 
 	    (make_deref loc (make_var loc tmp1) fi) 
 	    fi.jc_field_info_type op e2
 	in
@@ -434,20 +434,20 @@ let rec expr e =
     | JCTEincr_local (op, vi) ->
 	begin match op with
 	| Prefix_inc | Prefix_dec ->
-	    ([make_incr_local loc (op_of_incdec op) vi], []), JCEvar vi
+	    ([make_incr_local lab loc (op_of_incdec op) vi], []), JCEvar vi
 	| Postfix_inc | Postfix_dec ->
 	    let tmp = newrefvar vi.jc_var_info_type in
 	    let stat0 = 
 	      make_assign_var loc tmp (make_var loc vi) 
 	    in
-	    ([stat0; make_incr_local loc (op_of_incdec op) vi], [tmp]), 
+	    ([stat0; make_incr_local lab loc (op_of_incdec op) vi], [tmp]), 
 	    JCEvar tmp
 	end
     | JCTEincr_heap (op, e, fi) ->
 	begin match op with
 	| Prefix_inc | Prefix_dec ->
 	    let (l, tl), e = expr e in
-	    (l@[make_incr_heap loc (op_of_incdec op) e fi], tl), 
+	    (l@[make_incr_heap lab loc (op_of_incdec op) e fi], tl), 
 	    JCEderef (e, fi)
 	| Postfix_inc | Postfix_dec ->
 	    let (l, tl), e = expr e in
@@ -455,7 +455,7 @@ let rec expr e =
 	    let stat0 = 
 	      make_assign_var loc tmp (make_deref loc e fi) 
 	    in
-	    (l@stat0::[make_incr_heap loc Badd_int e fi], tl@[tmp]), 
+	    (l@stat0::[make_incr_heap lab loc Badd_int e fi], tl@[tmp]), 
 	    JCEvar tmp
 	end
     | JCTEif (e1, e2, e3) ->
@@ -536,12 +536,12 @@ and statement s =
 	      | JCTEincr_local (op, vi) ->
 		  (* avoid creating a useless temporary for postfix version *)
 		  let typ = e.jc_texpr_type in
-		  let e = make_tincr_local loc typ (prefix op) vi in
+		  let e = make_tincr_local e.jc_texpr_label loc typ (prefix op) vi in
 		  fst (expr e)
 	      | JCTEincr_heap (op, se, fi) ->
 		  (* avoid creating a useless temporary for postfix version *)
 		  let typ = e.jc_texpr_type in
-		  let e = make_tincr_heap loc typ (prefix op) se fi in
+		  let e = make_tincr_heap e.jc_texpr_label loc typ (prefix op) se fi in
 		  fst (expr e)
 	      | _ -> fst (expr e)
 	  in
@@ -663,9 +663,9 @@ and statement s =
 	    let (slc,tlc),c = expr c in
 	    assert (slc = [] && tlc = []); 
 	    if neg then
-	      make_int_binary loc tmpe Bneq_int c
+	      make_int_binary "" loc tmpe Bneq_int c
 	    else
-	      make_int_binary loc tmpe Beq_int c
+	      make_int_binary "" loc tmpe Beq_int c
 	  in
 	  let collect_neg_case c = 
 	    List.fold_right (fun c l -> match c with

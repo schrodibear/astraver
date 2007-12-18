@@ -40,7 +40,9 @@ val code_function : fun_info * fun_spec * tstatement list option
 
 val static_variable : Jc_env.var_info * Jc_ast.texpr option -> var_info * Jc_ast.expr option
 
-val make_int_binary : Loc.position -> expr -> bin_op -> expr -> expr
+(*
+val make_int_binary : string -> Loc.position -> expr -> bin_op -> expr -> expr
+*)
 
 val one_const : Loc.position -> expr
 

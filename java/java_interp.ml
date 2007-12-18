@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.86 2007-12-18 09:52:19 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.87 2007-12-18 13:35:11 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -966,9 +966,11 @@ let rec expr e =
     match e.java_expr_node with
       | JElit l -> JCTEconst (lit l)
       | JEincr_local_var(op,v) -> 
+	  lab := reg_loc e.java_expr_loc;
 	  JCTEincr_local(incr_op op,get_var v)
-      | JEincr_field(op,e,fi) -> 
-	  JCTEincr_heap(incr_op op, expr e, get_field fi)
+      | JEincr_field(op,e1,fi) -> 
+	  lab := reg_loc e.java_expr_loc;
+	  JCTEincr_heap(incr_op op, expr e1, get_field fi)
       | JEincr_array (op, e1, e2) ->
 	  begin
 	    match e1.java_expr_type with
