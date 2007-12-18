@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.3 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.4 2007-12-18 16:43:57 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -46,7 +46,6 @@ let term rresult t =
 	Region.unify t1.jc_term_region t2.jc_term_region
     | JCTapp app ->
 	let li = app.jc_app_fun in
-	let tls = app.jc_app_args in
 	let regions = li.jc_logic_info_param_regions in
 	let assoc = Region.copy_list regions in
 	app.jc_app_region_assoc <- assoc;

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.85 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.86 2007-12-18 16:43:56 moy Exp $ *)
 
 open Pp
 open Format
@@ -2446,15 +2446,15 @@ let ai_function mgr iaio targets (fi, fs, sl) =
       ) targets;
 
     (* Require isolation of parameters written through. *)
-    let write_params = 
-      fi.jc_fun_info_effects.jc_writes.jc_effect_through_params
-    in
-    let read_params = 
-      fi.jc_fun_info_effects.jc_reads.jc_effect_through_params
-    in
-    let read_params = VarSet.diff read_params write_params in
-    let write_params = VarSet.fold (fun v acc -> v::acc) write_params [] in
-    let read_params = VarSet.fold (fun v acc -> v::acc) read_params [] in
+(*     let write_params =  *)
+(*       fi.jc_fun_info_effects.jc_writes.jc_effect_through_params *)
+(*     in *)
+(*     let read_params =  *)
+(*       fi.jc_fun_info_effects.jc_reads.jc_effect_through_params *)
+(*     in *)
+(*     let read_params = VarSet.diff read_params write_params in *)
+(*     let write_params = VarSet.fold (fun v acc -> v::acc) write_params [] in *)
+(*     let read_params = VarSet.fold (fun v acc -> v::acc) read_params [] in *)
 (*     let rec write_sep_pred acc = function *)
 (*       | v::r -> *)
 (* 	  List.fold_left (fun acc v2 -> *)
@@ -3253,8 +3253,6 @@ let rec wp_statement weakpre =
 	  in
 	  { curposts with jc_post_normal = post; }
       | JCScall(Some vi,call,s) -> 
-	  let f = call.jc_call_fun in
-	  let args = call.jc_call_args in
 	  let curposts = wp_statement weakpre target s curposts in
 	  let vit = term_var_no_loc vi in
 	  let copyvi = copyvar vi in
@@ -3271,8 +3269,6 @@ let rec wp_statement weakpre =
 	  in
 	  { curposts with jc_post_normal = post; }
       | JCScall(None,call,s) -> 
-	  let f = call.jc_call_fun in
-	  let args = call.jc_call_args in
 	  let curposts = wp_statement weakpre target s curposts in
 	  curposts
     in
