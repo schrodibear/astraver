@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.194 2007-12-18 16:00:01 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.195 2007-12-18 16:16:18 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -316,7 +316,12 @@ let term_coerce loc tdest tsrc e =
   | JCTlogic t, JCTlogic u when t=u -> e
   | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
   | JCTnative Tinteger, JCTenum ri ->
-      LApp(logic_int_of_enum ri,[e])
+      let e' = LApp(logic_int_of_enum ri,[e]) in
+      begin
+	match e with
+	  | Tnamed(n,_) -> Tnamed(n,e')
+	  | _ -> e'
+      end
   | JCTenum ri, JCTnative Tinteger ->
       assert false (* a explicit cast should be required by jc_typing *)
       (* LApp(logic_enum_of_int ri,[e]) *)
