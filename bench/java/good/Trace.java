@@ -133,6 +133,6 @@ class Trace {
 /*
 Local Variables: 
 mode: java
-compile-command: "make Trace.io"
+compile-command: "make Trace"
 End: 
 */
