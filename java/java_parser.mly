@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.28 2007-11-27 16:33:48 marche Exp $
+$Id: java_parser.mly,v 1.29 2007-12-18 10:40:53 filliatr Exp $
 
 */
 
@@ -1067,6 +1067,8 @@ assigns:
 kml_statement_annot:
 | LOOP_INVARIANT expr SEMICOLON DECREASES expr SEMICOLON EOF
     { JPSloop_annot($2,$5) }
+| DECREASES expr SEMICOLON EOF
+    { JPSloop_annot(locate_lit (Bool true),$2) }
 | ASSERT expr SEMICOLON EOF
     { JPSassert(None,$2) }
 | ASSERT ident COLON expr SEMICOLON EOF

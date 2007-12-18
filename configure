@@ -1923,7 +1923,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_OCAMLDEP="ocamldep.opt"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -2123,6 +2123,8 @@ fi
 
 #looking for ocamlgraph library
 
+LOCALOCAMLGRAPH=no
+
 as_ac_File=`echo "ac_cv_file_$OCAMLLIB/graph.cmi" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $OCAMLLIB/graph.cmi" >&5
 echo $ECHO_N "checking for $OCAMLLIB/graph.cmi... $ECHO_C" >&6; }
@@ -2205,16 +2207,7 @@ echo "$as_me: error: Cannot find ocamlgraph library. Please install the *libocam
       else
 	 OCAMLGRAPHLIB="-I ocamlgraph"
 	 OCAMLGRAPHVER=" in local subdir ocamlgraph"
-	 { echo "$as_me:$LINENO: checking ocamlgraph compilation" >&5
-echo $ECHO_N "checking ocamlgraph compilation... $ECHO_C" >&6; }
-	 if (cd ocamlgraph; ./configure && make) > /dev/null 2>&1; then
-	    { echo "$as_me:$LINENO: result: ok" >&5
-echo "${ECHO_T}ok" >&6; }
-	 else
-	    { { echo "$as_me:$LINENO: error: cannot compile ocamlgraph in ocamlgraph" >&5
-echo "$as_me: error: cannot compile ocamlgraph in ocamlgraph" >&2;}
-   { (exit 1); exit 1; }; }
-	 fi
+	 LOCALOCAMLGRAPH=yes
       fi
    else
       OCAMLGRAPHLIB="-I +ocamlgraph"
@@ -2222,21 +2215,46 @@ echo "$as_me: error: cannot compile ocamlgraph in ocamlgraph" >&2;}
    fi
 else
    OCAMLGRAPHLIB=""
-      OCAMLGRAPHVER=" in Ocaml lib, main dir"
+   OCAMLGRAPHVER=" in Ocaml lib, main dir"
 fi
 
 # checking ocamlgraph version
 
 { echo "$as_me:$LINENO: checking ocamlgraph version" >&5
 echo $ECHO_N "checking ocamlgraph version... $ECHO_C" >&6; }
-if $OCAMLC $OCAMLGRAPHLIB graph.cma config/check_ocamlgraph.ml > /dev/null 2>&1; then
+if $OCAMLC $OCAMLGRAPHLIB graph.cma config/check_ocamlgraph.ml > /dev/null 2>&1 && (test "$OCAMLBEST" = "byte" || $OCAMLOPT $OCAMLGRAPHLIB graph.cmxa config/check_ocamlgraph.ml > /dev/null 2>&1); then
    { echo "$as_me:$LINENO: result: ok" >&5
 echo "${ECHO_T}ok" >&6; }
    OCAMLGRAPHVER="0.99"$OCAMLGRAPHVER
 else
-   { { echo "$as_me:$LINENO: error: OcamlGraph$OCAMLGRAPHVER is too old. You need ocamlgraph 0.99 or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*" >&5
-echo "$as_me: error: OcamlGraph$OCAMLGRAPHVER is too old. You need ocamlgraph 0.99 or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*" >&2;}
+   { echo "$as_me:$LINENO: result: failed" >&5
+echo "${ECHO_T}failed" >&6; }
+   if test -d ocamlgraph; then
+      { echo "$as_me:$LINENO: result: Switching to local ocamlgraph" >&5
+echo "${ECHO_T}Switching to local ocamlgraph" >&6; }
+      OCAMLGRAPHLIB="-I ocamlgraph"
+      OCAMLGRAPHVER=" in local subdir ocamlgraph"
+      LOCALOCAMLGRAPH=yes
+   else
+      { { echo "$as_me:$LINENO: error: You need ocamlgraph 0.99b or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*" >&5
+echo "$as_me: error: You need ocamlgraph 0.99b or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*" >&2;}
    { (exit 1); exit 1; }; }
+   fi
+fi
+
+# checking local ocamlgraph compilation
+
+if test "$LOCALOCAMLGRAPH" = yes; then
+   { echo "$as_me:$LINENO: checking ocamlgraph compilation" >&5
+echo $ECHO_N "checking ocamlgraph compilation... $ECHO_C" >&6; }
+   if (cd ocamlgraph; ./configure && make) > /dev/null 2>&1; then
+      { echo "$as_me:$LINENO: result: ok" >&5
+echo "${ECHO_T}ok" >&6; }
+   else
+      { { echo "$as_me:$LINENO: error: cannot compile ocamlgraph in ocamlgraph" >&5
+echo "$as_me: error: cannot compile ocamlgraph in ocamlgraph" >&2;}
+   { (exit 1); exit 1; }; }
+   fi
 fi
 
 # checking for lablgtk2

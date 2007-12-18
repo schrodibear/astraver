@@ -317,26 +317,3 @@ let test3 (m : mem ref) (bx:block) (ofsx:int) =
   let m' = store int32 !m bx ofsx t in
   m := out_some m'
 
-(* Problèmes avec Ergo *)
-
-(* pour Sylvain : c'est une copie de l'axiome alloc_valid_pointer_inv, 
-   pour contourner le fait que ergo utilise mal l'axiome fst_snd *)
-axiom alloc_valid_pointer_inv_pair:
-  forall m:mem. forall lo, hi:int. forall bm':(block, mem) pair.
-  forall ty:memtype. forall b':block. forall ofs:int. 
-  alloc(m, lo, hi) = Some(bm') ->
-  valid_pointer(ty, m, b', ofs) -> valid_pointer(ty, snd(bm'), b', ofs)
-
-
-let ergo1 (m:mem) =
-  let xm = alloc m 0 8 in
-  let xm = out_some_or_fail xm in
-  let x = fst xm in
-  let m = snd xm in
-  assert { valid_pointer(int32, m, x, 0) };
-  let ym = alloc m 0 4 in
-  let ym = out_some_or_fail ym in
-  let y = fst ym in
-  let m = snd ym in
-  assert { valid_pointer(int32, m, x, 0) };
-  void
