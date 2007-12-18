@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.88 2007-12-18 16:36:06 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.89 2007-12-18 16:37:47 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -965,16 +965,16 @@ let expr_one =
     (JCTEconst (JCCinteger "1"))
 
 
-let rec expr e =
-  let lab = ref "" in
+let rec expr ?(reg=false) e =
+  let reg = ref reg in
   let e' =
     match e.java_expr_node with
       | JElit l -> JCTEconst (lit l)
       | JEincr_local_var(op,v) -> 
-	  lab := reg_loc e.java_expr_loc;
+	  reg := true;
 	  JCTEincr_local(incr_op op,get_var v)
       | JEincr_field(op,e1,fi) -> 
-	  lab := reg_loc e.java_expr_loc;
+	  reg := true;
 	  JCTEincr_heap(incr_op op, expr e1, get_field fi)
       | JEincr_array (op, e1, e2) ->
 	  begin
@@ -996,7 +996,7 @@ let rec expr e =
 	  end
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
-	  lab := reg_loc e.java_expr_loc;
+	  reg := true;
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEunary(un_op op,e1))
       | JEbin (e1, op, e2) (* case e1 != null *)
 	  when op = Bne && e2.java_expr_node = JElit Null ->
@@ -1018,7 +1018,7 @@ let rec expr e =
 	    end
       | JEbin (e1, op, e2) ->
 	  let e1 = expr e1 and e2 = expr e2 in
-	    lab := reg_loc e.java_expr_loc;
+	    reg := true;
 	    int_cast e.java_expr_loc e.java_expr_type (JCTEbinary(e1,bin_op op,e2))
       | JEif (e1,e2,e3) -> 
 	  JCTEif(expr e1, expr e2, expr e3)
@@ -1026,14 +1026,15 @@ let rec expr e =
       | JEstatic_field_access(ci,fi) ->
 	  JCTEvar (get_static_var fi)
       | JEfield_access(e1,fi) -> 
-	  lab := reg_loc e.java_expr_loc;
+	  reg := true;
 	  JCTEderef(expr e1,get_field fi)
       | JEarray_length e -> 
 	  begin
 	    match e.java_expr_type with
 	      | JTYarray ty ->
 		  let st = get_array_struct e.java_expr_loc ty in
-		    JCTEcall (java_array_length_fun st, [expr e])
+		  reg := true;
+		  JCTEcall (java_array_length_fun st, [expr e])
 	      | _ -> assert false
 	  end
       | JEarray_access(e1,e2) -> 
@@ -1050,6 +1051,7 @@ let rec expr e =
 		      jc_texpr_node = JCTEshift(e1', expr e2)
 		    }
 		  in
+		  reg := true;
 		  JCTEderef(shift,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
@@ -1104,13 +1106,13 @@ let rec expr e =
 	      | _ -> assert false
 	  end
       | JEcall(e1,mi,args) -> 
-	  lab := reg_loc e.java_expr_loc;
+	  reg := true;
 	  JCTEcall (get_fun e.java_expr_loc mi.method_info_tag, List.map expr (e1 :: args))
       | JEconstr_call (e1, ci, args) -> 
-	  lab := reg_loc e.java_expr_loc;
+	  reg := true;
 	  JCTEcall (get_fun e.java_expr_loc ci.constr_info_tag, List.map expr (e1 :: args))
       | JEstatic_call(mi,args) -> 
-	  lab := reg_loc e.java_expr_loc;
+	  reg := true;
 	  JCTEcall(get_fun e.java_expr_loc mi.method_info_tag, List.map expr args)
       | JEnew_array(ty,[e1]) ->
 	  let si = get_array_struct e.java_expr_loc ty in
@@ -1173,12 +1175,12 @@ let rec expr e =
   in { jc_texpr_loc = e.java_expr_loc ; 
        jc_texpr_type = tr_type e.java_expr_loc e.java_expr_type;
        jc_texpr_region = Jc_region.dummy_region;
-       jc_texpr_label = !lab;
+       jc_texpr_label = if !reg then reg_loc e.java_expr_loc else "";
        jc_texpr_node = e' }
 
 let initialiser e =
   match e with
-    | JIexpr e -> expr e
+    | JIexpr e -> expr ~reg:true e
     | _ -> assert false (* TODO *)
 
 let dummy_loc_statement s =
