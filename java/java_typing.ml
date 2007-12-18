@@ -1554,8 +1554,16 @@ and assertion package_env type_env current_type env e =
 	({ java_pexpr_node = 
 	     JPEbin (_, (Beq | Bne | Bgt | Blt | Ble | Bge), a) } as p,
 	 (Beq | Bne | Bgt | Blt | Ble | Bge as op), b) ->
-	let q = { e with java_pexpr_node = JPEbin (a, op, b) } in
+	let q = { java_pexpr_loc = fst a.java_pexpr_loc, snd b.java_pexpr_loc ;
+		  java_pexpr_node = JPEbin (a, op, b) } in
 	  JAand (assertiont p, assertiont q)
+    | JPEbin
+	(a, (Beq | Bne | Bgt | Blt | Ble | Bge as op),
+	({ java_pexpr_node = 
+	    JPEbin (b, (Beq | Bne | Bgt | Blt | Ble | Bge), _) } as p)) ->
+	let q = { java_pexpr_loc = fst a.java_pexpr_loc, snd b.java_pexpr_loc ;
+		  java_pexpr_node = JPEbin (a, op, b) } in
+	  JAand (assertiont q, assertiont p)
     | JPEbin(e1, op, e2) -> 
 	let te1 = termt e1 and te2 = termt e2 in 
 	  make_predicate_bin_op e.java_pexpr_loc op 
