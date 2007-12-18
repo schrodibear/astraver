@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.83 2007-12-17 14:14:45 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.84 2007-12-18 08:55:18 moy Exp $ *)
 
 open Pp
 open Format
@@ -2451,17 +2451,17 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     let read_params = VarSet.diff read_params write_params in
     let write_params = VarSet.fold (fun v acc -> v::acc) write_params [] in
     let read_params = VarSet.fold (fun v acc -> v::acc) read_params [] in
-    let rec write_sep_pred acc = function
-      | v::r ->
-	  List.fold_left (fun acc v2 ->
-	    raw_asrt(JCAapp(
-	      full_separated,[term_var_no_loc v;term_var_no_loc v2]))
-	    :: acc
-	  ) acc (r @ read_params)
-      | [] -> acc
-    in
-    let sep_preds = write_sep_pred [] write_params in
-    fs.jc_fun_requires <- make_and(fs.jc_fun_requires :: sep_preds);
+(*     let rec write_sep_pred acc = function *)
+(*       | v::r -> *)
+(* 	  List.fold_left (fun acc v2 -> *)
+(* 	    raw_asrt(JCAapp( *)
+(* 	      full_separated,[term_var_no_loc v;term_var_no_loc v2])) *)
+(* 	    :: acc *)
+(* 	  ) acc (r @ read_params) *)
+(*       | [] -> acc *)
+(*     in *)
+(*     let sep_preds = write_sep_pred [] write_params in *)
+(*     fs.jc_fun_requires <- make_and(fs.jc_fun_requires :: sep_preds); *)
     
     (* record the inferred postcondition *)
     if iaio = None then

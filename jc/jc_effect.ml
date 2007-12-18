@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.69 2007-12-17 15:05:00 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.70 2007-12-18 08:55:18 moy Exp $ *)
 
 
 open Jc_env
@@ -78,8 +78,12 @@ let fef_union fef1 fef2 =
   }
 
 let fef_assoc fef assoc =
-  { jc_reads = ef_assoc fef.jc_reads assoc;
-    jc_writes = ef_assoc fef.jc_writes assoc;
+  { jc_reads = 
+      if Jc_options.separation then ef_assoc fef.jc_reads assoc 
+      else fef.jc_reads;
+    jc_writes = 
+      if Jc_options.separation then ef_assoc fef.jc_writes assoc
+      else fef.jc_writes;
     jc_raises = fef.jc_raises;
   }
 
