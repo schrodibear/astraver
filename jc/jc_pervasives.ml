@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.63 2007-12-17 15:05:00 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.64 2007-12-18 15:58:37 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -542,12 +542,10 @@ let is_true a = (a.jc_assertion_node = JCAtrue)
 let make_and al = 
   (* optimization *)
   let al = List.filter (fun a -> not (is_true a)) al in
-  let anode = match al with
-    | [] -> JCAtrue
-    | [a] -> a.jc_assertion_node
-    | a::tl -> JCAand al
-  in
-  raw_asrt anode
+  match al with
+    | [] -> true_assertion
+    | [a] -> a
+    | a::tl -> raw_asrt (JCAand al)
 
 let rec is_constant_assertion a =
   match a.jc_assertion_node with

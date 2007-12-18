@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.193 2007-12-18 15:58:37 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.194 2007-12-18 16:00:01 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -588,12 +588,16 @@ let rec assertion label oldlabel a =
   in
   if a.jc_assertion_label <> "" then
     begin
+(*
       eprintf "Assertion has label %s@." a.jc_assertion_label;
+*)
       LNamed(reg_loc ~id:a.jc_assertion_label a.jc_assertion_loc,a')
     end
   else
     begin
-      eprintf "Assertion has no label@.";
+      (*
+	eprintf "Assertion has no label@.";
+      *)
       a'
     end
   
@@ -601,11 +605,15 @@ let rec assertion label oldlabel a =
 let named_jc_assertion loc a =
   match a with
     | LNamed (lab,_) -> 
+(*
 	eprintf "Assertion already named %s@." lab;
+*)
 	a
     | _ -> 
 	let n = reg_loc loc in 
+(*
 	eprintf "Registering new name %s for assertion@." n;
+*)
 	LNamed(n,a)
 
 
@@ -1845,9 +1853,11 @@ let tr_fun f loc spec body acc =
 	 let post =
 	   match b.jc_behavior_assigns with
 	     | None ->
+(*
 		 eprintf "lab,loc for ensures: \"%s\", %a@."
 		   b.jc_behavior_ensures.jc_assertion_label
 		   Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
+*)
 		 (named_assertion None "" b.jc_behavior_ensures)		
 	     | Some(locassigns,a) ->
 		 named_jc_assertion loc

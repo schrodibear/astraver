@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.151 2007-12-18 08:55:39 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.152 2007-12-18 15:58:37 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1947,7 +1947,8 @@ let clause env vi_result c acc =
 	  jc_behavior_ensures = assertion env_result ensures }
 	in
 (*
-	eprintf "loc for ensures: %a@."
+	eprintf "lab,loc for ensures: \"%s\", %a@."
+	  b.jc_behavior_ensures.jc_assertion_label
 	  Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
 *)
 	{ acc with jc_fun_behavior = (loc,id,b)::acc.jc_fun_behavior }

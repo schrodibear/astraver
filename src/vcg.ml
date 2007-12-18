@@ -861,7 +861,9 @@ let rec explain_for_pred internal user = function
       (match user with
 	| None -> None
 	| Some lab -> 
-	   try Some(Util.loc_of_label lab) with Not_found -> None),
+	   try Some(Util.loc_of_label lab) with Not_found -> 
+	     eprintf "Warning: no loc found for label %s@." lab;
+	     None),
       (match internal with
 	| Some n ->
 	    begin
@@ -892,7 +894,7 @@ let vcg_from_wp base w =
 *)
     let loc, raw_explain = explain_for_pred None None concl in	
     let explain =  Util.cook_explanation loc raw_explain in
-    let loc = Option_misc.fold (fun l a -> l) loc Loc.dummy_floc in
+    let loc = Option_misc.fold (fun l _ -> l) loc Loc.dummy_floc in
     try
       discharge loc ctx concl
     with Exit -> begin
