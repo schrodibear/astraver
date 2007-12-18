@@ -179,7 +179,7 @@ and instance args ty =
 	MLTrecord(si, lbls)
     | Type_variant(cl, _) ->
 	let si = make_struct (fresh_ident ty.ml_ty_name) in
-	let tagfi = make_field si "jessica_tag" (JCTnative Tinteger) in
+	let tagfi = make_field si "vtag" (JCTnative Tinteger) in
 	let constrs = list_mapi
 	  (fun tag (name, cargs) ->
 	     let app_cargs = List.map

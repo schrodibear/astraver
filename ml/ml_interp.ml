@@ -357,27 +357,28 @@ let rec statement env e cont =
 		   fi.jc_fun_info_return_type)
 	  | _ -> not_implemented e.exp_loc "unsupported application (statement)"
 	)
-    | Texp_match(me, pel, _) ->
-(*	statement env me
+    | Texp_match(me, pel, partial) ->
+	statement env me
 	  (fun res ->
 	     make_var_tmp (make me.exp_type) (Some res)
 	       (fun _ arg ->
 		  make_var_tmp (make e.exp_type) None
-		    (fun resvi _ ->
-		       let pats = pattern_expr_list
-			 (fun env e -> statement env e (make_affect resvi))
-			 pattern_expr
-			 env
-			 arg
-			 pel
-		       in
-		       List.fold_right
-			 (fun (vars, cond, body) acc ->
-			    let s = JCTSif(cond, body, acc) in
-			    make_var_decls s vars)
-			 
-		    )))*)
-	assert false
+		    (fun resvi rese ->
+		       make_statement_block [
+			 (let pfl = List.map
+			   (fun (pat, e) ->
+			      pat,
+			      (fun env -> statement env e (make_affect resvi)))
+			   pel
+			 in
+			 let catchall = match partial with
+			   | Partial -> not_implemented e.exp_loc
+			       "partial pattern-matching (statement)"
+			   | Total -> None
+			 in
+			 PatStatement.pattern_expr_list env arg pfl catchall);
+			 cont rese
+		       ])))
 (*    | Texp_try of expression * (pattern * expression) list*)
     | Texp_tuple el ->
 	let si = structure e.exp_type in

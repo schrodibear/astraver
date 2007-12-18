@@ -159,7 +159,7 @@ module PAAssertion = struct
   let make_int i = make_int_term (JCTconst(JCCinteger(string_of_int i)))
 end
 
-module type TPattern = functor (A: TPatternArg) -> sig
+module type TPatternF = functor (A: TPatternArg) -> sig
   val pattern: Ml_env.t -> A.expr -> Ml_ocaml.Typedtree.pattern ->
     A.condition * Ml_env.t * (Jc_env.var_info * A.expr) list
 
@@ -170,7 +170,7 @@ module type TPattern = functor (A: TPatternArg) -> sig
     (Ml_ocaml.Typedtree.pattern * (Ml_env.t -> A.t)) list -> A.t option -> A.t
 end
 
-module Pattern: TPattern = functor (A: TPatternArg) -> struct
+module Pattern: TPatternF = functor (A: TPatternArg) -> struct
   open A
 
   let sort_vars = List.sort
