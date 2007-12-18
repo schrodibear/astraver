@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_common_options.ml,v 1.3 2007-12-17 13:18:48 moy Exp $ i*)
+(*i $Id: jc_common_options.ml,v 1.4 2007-12-18 08:55:39 marche Exp $ i*)
 
 (*s command-line options *)
 
@@ -36,7 +36,7 @@ let verbose = ref false
 let werror = ref false
 let separation = ref false
 
-let inv_sem = ref InvOwnership
+let inv_sem = ref InvNone
 
 (*
 Local Variables: 

@@ -25,14 +25,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_rec.ml,v 1.10 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: encoding_rec.ml,v 1.11 2007-12-18 08:55:40 marche Exp $ i*)
 
 open Options
 open Cc
 open Logic
 open Logic_decl
 
-let loc = Loc.dummy_position
+let loc = Loc.dummy_floc
 
 let prefix = "c_"
 let suffix = "_c"

@@ -25,13 +25,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.14 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.15 2007-12-18 08:55:40 marche Exp $ i*)
 
 open Cc
 open Logic
 open Logic_decl
 
-let loc = Loc.dummy_position
+let loc = Loc.dummy_floc
 
 let prefix = "c_"
 let suffix = "_c"

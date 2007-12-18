@@ -41,7 +41,7 @@ val log_print_function : (Format.formatter -> sequent -> unit) ref
 
 (* obligations from the WP *)
 
-val vcg_from_wp : string -> Ast.assertion -> obligation list * proof
+val vcg_from_wp : string -> Ast.assertion -> Logic_decl.obligation list * proof
 
 (* functions to be reused in module [Coq] *)
 

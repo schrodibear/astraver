@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.73 2007-12-03 15:33:35 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.74 2007-12-18 08:55:39 marche Exp $ */
 
 %{
 
@@ -254,7 +254,7 @@ field_declaration:
 ;
 
 invariant:
-| INVARIANT IDENTIFIER LPAR IDENTIFIER RPAR EQ expression SEMICOLON
+| INVARIANT identifier LPAR IDENTIFIER RPAR EQ expression SEMICOLON
     { ($2,$4,$7) }
 ;
 

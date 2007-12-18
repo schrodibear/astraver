@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.97 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.98 2007-12-18 08:55:39 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -174,7 +174,7 @@ type pdecl_node =
   | JCPDfun of ptype * identifier * (ptype * string) list * pclause list
       * pstatement list option
   | JCPDstructtype of string * 
-      string option * (bool * ptype * string) list * (string * string * pexpr) list
+      string option * (bool * ptype * string) list * (identifier * string * pexpr) list
   (* use to define recursively a set of types *)
   | JCPDrectypes of pdecl list
   (* use to define recursively a set of functions *)

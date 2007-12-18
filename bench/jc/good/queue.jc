@@ -1,3 +1,4 @@
+# InvariantPolicy = Arguments
 
 type char = 0..127
 

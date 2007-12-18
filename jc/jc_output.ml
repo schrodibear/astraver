@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.72 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.73 2007-12-18 08:55:39 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -50,7 +50,8 @@ type jc_decl =
   | JCglobinv_def of string * assertion
   | JClogic_const_def of jc_type * string * term option
   | JClogic_type_def of string
-
+  | JCinvariant_policy of Jc_env.inv_sem
+   
 let const fmt c =
   match c with
     | JCCinteger s -> fprintf fmt "%s" s
@@ -460,8 +461,16 @@ let print_super fmt = function
   | None -> ()
   | Some id -> fprintf fmt "%s with " id
 
+let string_of_invariant_policy p =
+  match p with
+    | Jc_env.InvNone -> "None"
+    | Jc_env.InvArguments -> "Arguments"
+    | Jc_env.InvOwnership -> "Ownership"
+
 let rec print_decl fmt d =
   match d with
+    | JCinvariant_policy p ->
+        fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)  
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
 	  (print_list comma param) params 

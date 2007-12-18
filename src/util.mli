@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.62 2007-11-23 14:17:35 marche Exp $ i*)
+(*i $Id: util.mli,v 1.63 2007-12-18 08:55:40 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -158,23 +158,12 @@ val create_postval : predicate -> assertion option
 
 val create_post : predicate -> (assertion * 'b list) option
 
-(* explanation *)
+(* explanations *)
 
-val reloc_xpl : Loc.position * predicate -> string option * Loc.floc
+val loc_of_label: string -> Loc.floc
 
-type expl_kind = 
-  | EKAbsurd
-  | EKAssert
-  | EKLoopInvInit
-  | EKLoopInvPreserv
-  | EKPost
-  | EKPre
-  | EKRaw of string
-  | EKVarDecr
-  | EKWfRel 
-      
-val raw_explanation : 
-  vc_explain -> expl_kind * (string option * Loc.floc) option
+val cook_explanation : 
+    Loc.floc option -> raw_vc_explain -> Logic_decl.vc_explain
 
 val program_locs : (string,(string * string * Loc.floc)) Hashtbl.t
 
@@ -189,7 +178,7 @@ val print_logic_type : formatter -> logic_type -> unit
 
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
-val print_explanation : formatter -> vc_explain -> unit
+val print_explanation : formatter -> Logic_decl.vc_explain -> unit
 val print_assertion : formatter -> assertion -> unit
 val print_wp : formatter -> assertion option -> unit
 

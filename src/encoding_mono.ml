@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono.ml,v 1.18 2007-11-26 11:10:47 marche Exp $ i*)
+(*i $Id: encoding_mono.ml,v 1.19 2007-12-18 08:55:40 marche Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -51,7 +51,7 @@ open Logic
 open Logic_decl
 open Util 
 
-let loc = Loc.dummy_position
+let loc = Loc.dummy_floc
 
 let prefix = "c_"
 let suffix = "_c"

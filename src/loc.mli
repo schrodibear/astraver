@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.mli,v 1.21 2007-11-23 09:05:40 marche Exp $ i*)
+(*i $Id: loc.mli,v 1.22 2007-12-18 08:55:40 marche Exp $ i*)
 
 open Format
 
@@ -46,11 +46,13 @@ val dummy_position : position
 
 type floc = string * int * int * int
 
+val dummy_floc : floc
+
 val extract :  position -> floc
 val gen_report_line : formatter -> floc -> unit
 val gen_report_position : formatter -> position -> unit
 val report_position : formatter -> position -> unit
-val report_obligation_position : formatter -> position -> unit
+val report_obligation_position : formatter -> floc -> unit
 
 
 (* for both type [t] and [position] *)
@@ -62,5 +64,5 @@ val reloc : Lexing.position -> Lexing.position
 
 (* Identifiers localization *)
 
-val add_ident : string -> position -> unit
-val ident : string -> position
+val add_ident : string -> floc -> unit
+val ident : string -> floc

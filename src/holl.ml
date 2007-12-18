@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: holl.ml,v 1.43 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: holl.ml,v 1.44 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -253,7 +253,9 @@ let print_predicate fmt id p =
     id id (print_list space Ident.print) (List.map fst bl) print_predicate p
 
 let print_obligation fmt loc id sq =
+(*
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
+*)
   fprintf fmt "@[<hov 2>let %s =@ `%a`;;@\n@\n@]" id print_sequent sq
 
 let print_elem fmt = function

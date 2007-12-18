@@ -274,7 +274,9 @@ let main () =
 	*)
 
 	(* production phase 5 : produce Jessie file *)
-	let decls = List.rev decls in
+	let decls = Jc_output.JCinvariant_policy Jc_env.InvArguments 
+	            :: List.rev decls 
+	in
 	let f = List.hd fl in
 	let f = Filename.chop_extension f in
 	let cout = Pp.print_in_file_no_close

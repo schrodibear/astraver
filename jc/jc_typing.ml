@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.150 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.151 2007-12-18 08:55:39 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2164,18 +2164,20 @@ let rec decl d =
 	  if parent = None && !Jc_common_options.inv_sem = InvOwnership 
 	  then create_mutable_field struct_info;
 	  let env = List.map (field struct_info root) fields in
-	    struct_info.jc_struct_info_fields <- env;
+	  struct_info.jc_struct_info_fields <- env;
 	    (* declare invariants as logical functions *)
 	    let invariants =
 	      List.fold_left
-		(fun acc (id, x, e) ->	
+		(fun acc (id, x, e) ->
+		   if !Jc_common_options.inv_sem = InvNone then
+		   typing_error id.jc_identifier_loc "use of structure invariants requires declaration of an invariant policy";
 		   let vi = var (JCTpointer (struct_info, Some zero, Some zero)) x in
 		   let p = assertion [(x, vi)] e in
-		   let pi = make_rel id in
+		   let pi = make_rel id.jc_identifier_name in
 		     pi.jc_logic_info_parameters <- [vi];
 		     Hashtbl.replace logic_functions_table 
 		       pi.jc_logic_info_tag (pi, JCAssertion p);
-		     Hashtbl.replace logic_functions_env id pi;
+		     Hashtbl.replace logic_functions_env id.jc_identifier_name pi;
 		     (pi, p) :: acc)
 		[]
 		inv

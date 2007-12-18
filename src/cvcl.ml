@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.52 2007-11-27 10:06:11 marche Exp $ i*)
+(*i $Id: cvcl.ml,v 1.53 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -251,7 +251,7 @@ let print_axiom fmt id p =
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
 let print_obligation fmt loc expl o s = 
-  fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation_position loc;
+  fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.gen_report_line loc;
   fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
 (*;
   fprintf fmt "@[%%%% %a@]@\n" Util.print_explanation expl

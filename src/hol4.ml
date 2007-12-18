@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.20 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: hol4.ml,v 1.21 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -251,7 +251,9 @@ let print_axiom fmt id v =
   fprintf fmt "(* axiom %s *);;" id
 
 let print_obligation fmt loc id sq =
+(*
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
+*)
   fprintf fmt "val %s = Parse.Term `%a`;;@\n@\n" id print_sequent sq
 
 let print_elem fmt = function

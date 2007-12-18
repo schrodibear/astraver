@@ -1,3 +1,4 @@
+# InvariantPolicy = Ownership
 
 type Point = {
     integer x;

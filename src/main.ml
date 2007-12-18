@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.140 2007-11-27 08:31:15 marche Exp $ i*)
+(*i $Id: main.ml,v 1.141 2007-12-18 08:55:40 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -361,7 +361,7 @@ let interp_decl ?(prelude=false) d =
 	    end
 	  else
 	    begin
-	      push_decl (Dlogic (loc, Ident.string id, t));
+	      push_decl (Dlogic (Loc.extract loc, Ident.string id, t));
 	    end 
 	in
 	List.iter add ids
@@ -374,7 +374,7 @@ let interp_decl ?(prelude=false) d =
 	let p = Ltyping.predicate lab env' p in
 	add_global_logic id (generalize_logic_type t);
 	let p = generalize_predicate_def (pl,p) in
-	push_decl (Dpredicate_def (loc, Ident.string id, p))
+	push_decl (Dpredicate_def (Loc.extract loc, Ident.string id, p))
     | Function_def (loc, id, pl, ty, e) ->
 	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);
@@ -387,17 +387,20 @@ let interp_decl ?(prelude=false) d =
 	  Ltyping.expected_type loc (PureType ty);
 	add_global_logic id (generalize_logic_type t);
 	let f = generalize_function_def (pl,ty,e) in
-	push_decl (Dfunction_def (loc, Ident.string id, f))
+	push_decl (Dfunction_def (Loc.extract loc, Ident.string id, f))
     | Axiom (loc, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let p = generalize_predicate p in
-	push_decl (Daxiom (loc, Ident.string id, p))
+	push_decl (Daxiom (Loc.extract loc, Ident.string id, p))
     | Goal (loc, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
-	let dg = Dgoal (loc, VCEexternal "user goal", Ident.string id, s) in
+	let l = Loc.extract loc in
+	let dg = 
+	  Dgoal (l, (EKRaw "user goal", Some (None,l)), Ident.string id, s) 
+	in
 	let ids = Ident.string id in
 	let vloc =
 	  try 
@@ -427,7 +430,7 @@ let interp_decl ?(prelude=false) d =
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in
 	if not ext then 
-	  push_decl (Dtype (loc, vl, Ident.string id))
+	  push_decl (Dtype (Loc.extract loc, vl, Ident.string id))
 	    
 (*s Prelude *)
 

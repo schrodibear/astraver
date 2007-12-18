@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.84 2007-12-17 13:18:58 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.85 2007-12-18 08:55:39 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -548,10 +548,7 @@ let quantifier = function
   | Forall -> Jc_ast.Forall
   | Exists -> Jc_ast.Exists
 
-let rec assertion a =
-  (*
-    let lab = ref "" in
-  *)
+let rec assertion ?(reg=0) a =
   let a' =
     match a.java_assertion_node with
       | JAtrue -> JCAtrue
@@ -616,7 +613,8 @@ let rec assertion a =
       | JAor (a1, a2)-> 
 	  JCAor [assertion a1 ; assertion a2]
       | JAand (a1, a2)-> 
-	  JCAand [assertion a1 ; assertion a2]
+          let reg = if reg > 0 then 2 else 0 in
+	  JCAand [assertion ~reg a1 ; assertion ~reg a2]
       | JAbool_expr t -> JCAbool_term(term t)
       | JAinstanceof (t, ty) ->
 	  let ty = tr_type Loc.dummy_position ty in
@@ -626,7 +624,7 @@ let rec assertion a =
 	      | _ -> assert false
 
   in { jc_assertion_loc = a.java_assertion_loc ; 
-       jc_assertion_label = ""; (*!lab;*)
+       jc_assertion_label = if reg=2 then reg_loc a.java_assertion_loc else "";
        jc_assertion_node = a' }
     
 let dummy_loc_assertion a =
@@ -1185,12 +1183,22 @@ let make_block l =
     | [s] -> s
     | _ -> dummy_loc_statement (JCTSblock l)
 
+let reg_assertion a = 
+  let a' = assertion ~reg:1 a  in
+  let id = reg_loc a.java_assertion_loc in
+(*
+    Format.eprintf "adding loc '%s' on assertion@." id;
+*)
+    { a' with jc_assertion_label = id }
+
+let reg_assertion_option a =
+  match a with
+    | None -> dummy_loc_assertion JCAtrue 
+    | Some a -> reg_assertion a
+
 let loop_annot inv dec =
-  let inv' = assertion inv in
   { jc_loop_tag = get_loop_counter ();
-    jc_loop_invariant = 
-      { inv' with 
-	  jc_assertion_label = reg_loc inv.java_assertion_loc };
+    jc_loop_invariant = reg_assertion inv;
     jc_loop_variant = 
       Option_misc.map 
 	(fun t -> 
@@ -1257,7 +1265,7 @@ let rec statement s =
 	      | None -> reg_loc e.java_assertion_loc
 	      | Some id -> reg_loc ~id e.java_assertion_loc
 	  in
-	  let e' = assertion e in
+	  let e' = reg_assertion e in
 	  JCTSassert((*Some name,*) { e' with jc_assertion_label = name } )
       | JSswitch(e,l) -> 
 	  JCTSswitch(expr e,List.map switch_case l)
@@ -1284,19 +1292,6 @@ and switch_case (labels,b) =
 and switch_label = function
   | Java_ast.Default -> None
   | Java_ast.Case e -> Some (expr e)
-
-let reg_assertion a =
-  let a' = assertion a in
-  let id = reg_loc a.java_assertion_loc in
-(*
-    Format.eprintf "adding loc '%s' on assertion@." id;
-*)
-    { a' with jc_assertion_label = id }
-
-let reg_assertion_option a =
-  match a with
-    | None -> dummy_loc_assertion JCAtrue 
-    | Some a -> reg_assertion a
 
 let behavior (id,assumes,throws,assigns,ensures) =
   (fst id,snd id,

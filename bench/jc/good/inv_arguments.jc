@@ -1,3 +1,5 @@
+# InvariantPolicy = Arguments
+
 type A = {
   integer i;
   invariant invA(x) = x.i > 0;

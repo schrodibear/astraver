@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.16 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.17 2007-12-18 08:55:39 marche Exp $ *)
 
 (*s environment variables *)
 
@@ -53,7 +53,7 @@ val main : string
 val files : unit -> string list 
 val usage : unit -> unit
 
-val inv_sem: Jc_env.inv_sem
+val inv_sem: Jc_env.inv_sem ref
 
 (*s The log file *)
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.44 2007-12-03 15:33:35 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.45 2007-12-18 08:55:39 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -67,6 +67,18 @@
 
   exception Dotdot of string
 
+  let pragma lexbuf id v =
+    match id with
+    | "InvariantPolicy" ->
+     begin
+       Jc_options.inv_sem :=
+       match v with	  
+       | "None" -> Jc_env.InvNone
+       | "Arguments" -> Jc_env.InvArguments
+       | "Ownership" -> Jc_env.InvOwnership
+       | _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
+     end  
+    | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 }
 
 let space = [' ' '\t' '\012' '\r']
@@ -151,14 +163,17 @@ rule token = parse
   | "\\typeeq"              { BSTYPEEQ }
   | "\\typeof"              { BSTYPEOF }
   | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
-
+(*
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
         ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?
         [^ '\010' '\013'] * '\n'
       { update_loc lexbuf name (int_of_string num) true 0;
         token lexbuf }
   | '#' [^'\n']* '\n'       { newline lexbuf; token lexbuf }
-
+*)
+  | '#' space* ((rL | rD)+ as id) space* "=" 
+        space* ((rL | rD)+ as v) space* '\n'
+      { pragma lexbuf id v; newline lexbuf; token lexbuf } 
   | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
 
   | '0'['x''X'] rH+ rIS?    { CONSTANT (JCCinteger (lexeme lexbuf)) }

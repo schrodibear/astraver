@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.42 2007-11-30 09:11:25 moy Exp $ i*)
+(*i $Id: smtlib.ml,v 1.43 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -286,7 +286,7 @@ let output_sequent fmt (hyps,concl) =
 
 let print_obligation fmt loc o s = 
   fprintf fmt "@[:formula@\n"; 
-  fprintf fmt "  @[;; %a@]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "  @[;; %a@]@\n" Loc.gen_report_line loc;
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
   fprintf fmt "@]@\n@\n" 
 

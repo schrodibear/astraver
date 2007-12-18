@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.66 2007-11-27 08:31:15 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.67 2007-12-18 08:55:39 marche Exp $ i*)
 
 open Printf
 open Options
@@ -184,7 +184,7 @@ let update_buffer tv =
   tv#set_buffer buf;
   buf
 
-open Util
+open Logic_decl
 
 let msg_of_kind = 
   function
@@ -203,7 +203,7 @@ let msg_of_kind =
     | EKLoopInvPreserv -> "preservation of loop invariant"
 
 let show_xpl xpl (tv:GText.view) =
-  let (k,locopt) = Util.raw_explanation xpl in
+  let (k,locopt) = (* Util.raw_explanation *) xpl in
   match locopt with
     | Some (_,(s,l,b,e)) ->
 	let loc = 

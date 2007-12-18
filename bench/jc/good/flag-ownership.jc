@@ -1,6 +1,6 @@
+# InvariantPolicy = Ownership
 
-/* Dijkstra's dutch flag */
-
+/* Dijkstra's dutch flag: with ownership policy */
 
 type color = 1..3
    

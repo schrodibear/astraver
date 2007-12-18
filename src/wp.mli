@@ -25,13 +25,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.mli,v 1.17 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: wp.mli,v 1.18 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
 open Env
 
-val explanation_table : (int,Cc.vc_explain) Hashtbl.t
+val explanation_table : (int,Cc.raw_vc_explain) Hashtbl.t
 val wp : typed_expr -> typed_expr * Ast.assertion option
 
 (**

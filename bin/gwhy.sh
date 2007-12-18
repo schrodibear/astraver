@@ -4,7 +4,7 @@ case $1 in
   *.java)
 	b=`basename $1 .java`
 	krakatoa -ignore-overflow $1 || exit 1
-	jessie -locs $b.jloc -inv-sem arguments -why-opt -split-user-conj $b.jc || exit 2
+	jessie -locs $b.jloc -why-opt -split-user-conj $b.jc || exit 2
 	make -f $b.makefile gui
 	;;
   *.c)

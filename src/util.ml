@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.140 2007-11-26 11:07:06 marche Exp $ i*)
+(*i $Id: util.ml,v 1.141 2007-12-18 08:55:40 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -962,14 +962,15 @@ let raw_loc ?(pref="") fmt (f,l,b,e) =
   fprintf fmt "%sbegin = %d@\n" pref b;
   fprintf fmt "%send = %d@\n" pref e
 
+let loc_of_label n =
+  let (f,l,b,e,_) = Hashtbl.find locs_table n in
+  (f,l,b,e)
+    
 let reloc_xpl_term (loc,t) = 
   match t with
-    | Tnamed(User n,p) -> 
+    | Tnamed(User n,p) ->     
 	begin
-	  try 
-	    let (f,l,b,e,_) = 
-	      Hashtbl.find locs_table n 
-	    in (Some n,(f,l,b,e))
+	  try (Some n,loc_of_label n)
 	  with Not_found -> (None,Loc.extract loc)
 	end
     | _ -> (None,Loc.extract loc)
@@ -978,27 +979,14 @@ let reloc_xpl (loc,p) =
   match p with
     | Pnamed(User n,p) -> 
 	begin
-	  try 
-	    let (f,l,b,e,_) = 
-	      Hashtbl.find locs_table n 
-	    in (Some n,(f,l,b,e))
+	  try (Some n,loc_of_label n)
 	  with Not_found -> (None,Loc.extract loc)
 	end
     | _ -> (None,Loc.extract loc)
 
 
-type expl_kind = 
-  | EKAbsurd
-  | EKAssert
-  | EKLoopInvInit
-  | EKLoopInvPreserv
-  | EKPost
-  | EKPre
-  | EKRaw of string
-  | EKVarDecr
-  | EKWfRel 
-
-let raw_explanation e =
+let cook_explanation loc e =
+  let e,l =
   match e with
     | VCEexternal s -> EKRaw s, None
     | VCEabsurd -> EKAbsurd, None
@@ -1049,9 +1037,14 @@ let raw_explanation e =
     | VCEvardecr p -> EKVarDecr, Some(reloc_xpl_term p)
     | VCEinvinit p -> EKLoopInvInit, Some(reloc_xpl p)
     | VCEinvpreserv p -> EKLoopInvPreserv, Some(reloc_xpl p)
-
+  in 
+  match loc,l with
+   | None,_ -> e,l
+   | Some loc, None -> e,Some(None,loc)
+   | Some loc, Some(lab,_) -> e,Some(lab,loc) 
+    
 let print_explanation fmt e =
-  let (k,locopt) = raw_explanation e in
+  let (k,locopt) = (* raw_explanation *) e in
   Option_misc.iter 
     (fun (labopt,loc) ->
        Option_misc.iter (fun lab ->  fprintf fmt "label = %s@\n" lab) labopt;

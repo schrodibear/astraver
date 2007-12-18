@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.49 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: harvey.ml,v 1.50 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -271,7 +271,7 @@ let output_sequent fmt (ctx, concl) =
   print_seq fmt ctx
 
 let output_obligation fmt (loc, expl, o, s) = 
-  fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "@\n@[;; %a@]@\n" Loc.gen_report_line loc;
   fprintf fmt "@[%a@]@\n" output_sequent s
 
 let decl_to_elem = function

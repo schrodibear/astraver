@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.80 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.81 2007-12-18 08:55:39 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -149,7 +149,7 @@ let main () =
 	  
 	  (* phase 6 : checking structure invariants *)
 	  begin
-	    match Jc_options.inv_sem with
+	    match !Jc_options.inv_sem with
 	      | InvOwnership ->
 		  Jc_options.lprintf
 		    "\nstarting checking structure invariants.@.";
@@ -233,7 +233,7 @@ let main () =
 	  in	       
 	  (* production phase 3.5 : generation of globalinvariant predicates *)
 	  let d_axioms =
-	    if Jc_options.inv_sem = InvOwnership then
+	    if !Jc_options.inv_sem = InvOwnership then
 	      Jc_invariants.make_global_invariants d_axioms
 	    else d_axioms
 	  in
@@ -247,7 +247,7 @@ let main () =
 	      d_axioms
 	  in
 	  let d_inv =
-	    if Jc_options.inv_sem = InvOwnership then
+	    if !Jc_options.inv_sem = InvOwnership then
 	      begin
 		Jc_options.lprintf "production phase 5 : (invariants tools)@.";
 	        (* production phase 5.1 : "assoc" declaration *)

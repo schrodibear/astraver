@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.75 2007-11-29 16:31:05 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.76 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -40,7 +40,7 @@ open Format
 open Pp
 
 type elem = 
-  | Oblig of Loc.position * vc_explain * string * sequent Env.scheme
+  | Oblig of Loc.floc * Logic_decl.vc_explain * string * sequent Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
   | FunctionDef of string * function_def Env.scheme
@@ -306,7 +306,7 @@ let print_sequent fmt (hyps,concl) =
   print_seq fmt hyps
 
 let print_obligation fmt loc o s = 
-  fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation_position loc;
+  fprintf fmt "@[;; %s, %a@]@\n" o Loc.gen_report_line loc;
   fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s.Env.scheme_type
 
 let push_foralls p =

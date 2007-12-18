@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.191 2007-12-17 15:05:00 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.192 2007-12-18 08:55:39 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1071,7 +1071,7 @@ and expr ~threats e : expr =
 	let fields = embedded_struct_fields st in
 	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
 	begin
-	  match Jc_options.inv_sem with
+	  match !Jc_options.inv_sem with
 	    | InvOwnership ->
 		let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
 		let com = Jc_invariants.committed_name st.jc_struct_info_root in
@@ -1081,6 +1081,7 @@ and expr ~threats e : expr =
 		     siz.jc_expr_label siz.jc_expr_loc integer_type 
 		     siz.jc_expr_type (expr siz)]
 	    | InvArguments | InvNone ->
+	      (* Claude : pourquoi un cas particulier pour taille 1 ?? *)
 		begin match siz.jc_expr_node with 
 		  | JCEconst(JCCinteger "1") ->
 		      make_app (alloc_one_param_name st) 
@@ -1099,7 +1100,7 @@ and expr ~threats e : expr =
 	  | _ -> assert false
 	in	
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
-	if Jc_options.inv_sem = InvOwnership then
+	if !Jc_options.inv_sem = InvOwnership then
 	  let com = Jc_invariants.committed_name st.jc_struct_info_root in
 	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
 	else
@@ -1253,7 +1254,7 @@ let rec statement ~threats s =
 (* 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
 (* Claude: do not ignore variable tmp2, since it may involve a coercion. 
    Anyway, safety of the update do not depend on e2 *)
-	let upd = if threats && Jc_options.inv_sem = InvOwnership then
+	let upd = if threats && !Jc_options.inv_sem = InvOwnership then
 	  append (assert_mutable (LVar tmp1) fi) upd else upd in
 	let lets =
 	  (make_lets
@@ -1263,11 +1264,11 @@ let rec statement ~threats s =
 				 e2.jc_expr_type e2') ])
 	     upd)
 	in
-	if Jc_options.inv_sem = InvOwnership then
+	if !Jc_options.inv_sem = InvOwnership then
 	  append lets (assume_field_invariants fi)
 	else
 	  lets
-(*	if Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
+(*	if !Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCSblock l -> statement_list ~threats l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
@@ -2048,7 +2049,7 @@ let tr_fun f loc spec body acc =
 	      (* default behavior *)
 	      let body_safety = statement_list ~threats:true body in
 	      let tblock =
-		if Jc_options.inv_sem = InvOwnership then
+		if !Jc_options.inv_sem = InvOwnership then
 		  append
 		    (* (make_assume_all_assocs (fresh_program_point ()) 
 		       f.jc_fun_info_parameters)*)
@@ -2118,7 +2119,7 @@ let tr_fun f loc spec body acc =
 		else
 		  let body = statement_list ~threats:false body in
 		  let tblock =
-		    if Jc_options.inv_sem = InvOwnership then
+		    if !Jc_options.inv_sem = InvOwnership then
 		      append
 			(*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
 			(assume_all_invariants f.jc_fun_info_parameters)

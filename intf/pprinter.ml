@@ -368,11 +368,11 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
   let text = buf#get_text ~start ~stop () in
   if start <> stop && text <> "" then begin
     try 
-      let pos = fst (Loc.ident text) in
-      let loc = {file=pos.Lexing.pos_fname; 
-		 line=(string_of_int pos.Lexing.pos_lnum); 
-		 sp=(string_of_int pos.Lexing.pos_bol); 
-		 ep=(string_of_int pos.Lexing.pos_cnum)} 
+      let (f,l,b,e) = Loc.ident text in
+      let loc = {file=f; 
+		 line=(string_of_int l); 
+		 sp=(string_of_int b); 
+		 ep=(string_of_int e)} 
       in 
       (*
        * print_endline (text ^ "  " ^ (print_loc (Some(loc)))); 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic_decl.mli,v 1.9 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.10 2007-12-18 08:55:40 marche Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers
@@ -34,8 +34,24 @@
 open Cc
 open Logic
 
-type loc = Loc.position
+type loc = Loc.floc
 type 'a scheme = 'a Env.scheme
+
+type expl_kind = 
+  | EKAbsurd
+  | EKAssert
+  | EKLoopInvInit
+  | EKLoopInvPreserv
+  | EKPost
+  | EKPre
+  | EKRaw of string
+  | EKVarDecr
+  | EKWfRel 
+      
+type vc_explain = expl_kind * (string option * Loc.floc) option
+
+type obligation = Loc.floc * vc_explain * string * sequent
+    (* loc, explanation, id, sequent *) 
 
 type t =
   | Dtype          of loc * string list * string

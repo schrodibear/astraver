@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.ml,v 1.23 2007-11-23 09:05:40 marche Exp $ i*)
+(*i $Id: loc.ml,v 1.24 2007-12-18 08:55:40 marche Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -71,6 +71,8 @@ let gen_report_line fmt (f,l,b,e) =
 
 type floc = string * int * int * int
 
+let dummy_floc = ("",0,0,0)
+
 let extract (b,e) = 
   let f = b.pos_fname in
   let l = b.pos_lnum in
@@ -103,7 +105,7 @@ let parse s =
        { p with pos_cnum = c1 }, { p with pos_cnum = c2 })
 
 let report_obligation_position fmt loc =
-  let (f,l,b,e) = extract loc in
+  let (f,l,b,e) = loc in
   fprintf fmt "Why obligation from file \"%s\", " f;
   fprintf fmt "line %d, characters %d-%d:" l b e
 

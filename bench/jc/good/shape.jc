@@ -1,3 +1,4 @@
+# InvariantPolicy = Arguments
 
 /*
 example taken from "Coping with Type Casts in C"
@@ -29,7 +30,6 @@ real rect_area(Rectangle[0] s) {
 }
 
 real area(Shape[0] s)
-  requires \mutable(s, Shape);
 {
     if (s.kind == 0) {
     return circ_area(s:>Circle);

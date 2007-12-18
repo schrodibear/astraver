@@ -44,7 +44,7 @@ let log_print_function =
   ref (fun fmt (_,p) -> fprintf fmt "@[%a@]@?" print_predicate p)
 
 let log l sq lemma_name =
-  let l = l.Lexing.pos_cnum in
+  let (_,l,_,_) = l in
   if wol then
     let s = 
       let buf = Buffer.create 1024 in
@@ -592,7 +592,7 @@ let count = ref 0
 
 let discharge loc ctx concl =
   let pr = (if all_vc then raise Exit else discharge_methods) ctx concl in
-  log (snd loc) (ctx, concl) None;
+  log loc (ctx, concl) None;
   incr count;
   if_verbose_2 eprintf "one obligation trivially discharged [%d]@." !count;
   pr
@@ -679,12 +679,6 @@ let conj = match prover () with
 let asym_conj = Ident.create "why_asym_conj"
 let split_iff = Ident.create "why_split_iff"
 
-(*
-let name n = function
-  | Pnamed _ as p -> p
-  | p -> Pnamed (n, p)
-*)
-
 let rec split lvl ctx = function
   | Pand (wp, true, p1, p2) 
       when (wp || Options.split_user_conj) ->
@@ -740,7 +734,7 @@ let rec split lvl ctx = function
       end;
 *)
       begin match split lvl ctx p1 with
-	| [_],_ -> [ctx,concl], (function [pr] -> pr | _ -> assert false)
+	| [_],_ -> [ctx,Pnamed(n,concl)], (function [pr] -> pr | _ -> assert false)
 	| gl,v -> 
 (*
 	    begin
@@ -748,7 +742,7 @@ let rec split lvl ctx = function
 		| Internal _ -> gl,v
 		| _ -> 
 *)
-List.map (fun (ctx,c) -> ctx, Pnamed(n,c)) gl, v
+	List.map (fun (ctx,c) -> ctx, Pnamed(n,c)) gl, v
 (*
 	    end
 *)
@@ -850,18 +844,25 @@ let vcg base t =
   List.rev !po, cc'
 ***)
 
+(*
 let rec loc_for_pred = function
   | Pnamed (User s, _) -> begin try Loc.parse s with _ -> Loc.dummy_position end
   | Forall (_,_,_,_,_,p)
   | Pimplies (_,_,p)  -> loc_for_pred p
   | _ -> Loc.dummy_position
+*)
 
-let rec explain_for_pred acc = function
+let rec explain_for_pred internal user = function
   | Forall (_,_,_,_,_,p)
-  | Pimplies (_,_,p)  -> explain_for_pred acc p
-  | Pnamed(Internal n,p) -> explain_for_pred (Some n) p
+  | Pimplies (_,_,p)  -> explain_for_pred internal user p
+  | Pnamed(Internal n,p) -> explain_for_pred (Some n) user p
+  | Pnamed(User n,p) -> explain_for_pred internal (Some n) p
   | p ->
-      match acc with
+      (match user with
+	| None -> None
+	| Some lab -> 
+	   try Some(Util.loc_of_label lab) with Not_found -> None),
+      (match internal with
 	| Some n ->
 	    begin
 	      if debug then 
@@ -878,7 +879,7 @@ let rec explain_for_pred acc = function
 	| None -> 
 	    fprintf str_formatter 
 	      "unexplained assertion `%a'" print_predicate p;
-	    VCEexternal(flush_str_formatter()) 
+	    VCEexternal(flush_str_formatter())) 
 	      
 (* Proof obligations from the WP *)
 
@@ -886,8 +887,12 @@ let vcg_from_wp base w =
   let po = ref [] in
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
+(*
     let loc = loc_for_pred concl in
-    let explain = explain_for_pred None concl in
+*)
+    let loc, raw_explain = explain_for_pred None None concl in	
+    let explain =  Util.cook_explanation loc raw_explain in
+    let loc = Option_misc.fold (fun l a -> l) loc Loc.dummy_floc in
     try
       discharge loc ctx concl
     with Exit -> begin
@@ -895,9 +900,9 @@ let vcg_from_wp base w =
       let id = base ^ "_po_" ^ string_of_int !cpt in
       let ctx' = clean_sequent (List.rev ctx) concl in
       let sq = (ctx', concl) in
-      log (snd loc) sq (Some id);
+      log loc sq (Some id);
       (*Format.eprintf "Vcg.push_one: %a@." Loc.report_position loc;*)
-      po := (loc,explain, id, sq) :: !po;
+      po := (loc, explain, id, sq) :: !po;
       Lemma (id, hyps_names ctx')
     end
   in

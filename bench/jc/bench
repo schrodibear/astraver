@@ -80,7 +80,7 @@ echo "JC interp (good)"
 cd good
 
 bench_jc_good () {
-    options="$* -inv-sem arguments -why-opt -split-user-conj -why-opt -show-time"
+    options="$* -why-opt -split-user-conj -why-opt -show-time"
     echo "-------------------------------------------------------------------"
     echo "Bench Jessie+Simplify/Yices/Ergo with options: $options"
     parsing="../../../bin/jessie.opt $options"

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.16 2007-12-17 13:18:48 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.17 2007-12-18 08:55:39 marche Exp $ i*)
 
 open Format
 open Jc_env
@@ -123,6 +123,7 @@ let _ =
           "  treats warnings as errors";
 	"--version", Arg.Unit version,
           "  prints version and exit";
+(*
 	"-inv-sem", Arg.String
 	  (function
 	     | "none" -> inv_sem := InvNone
@@ -130,6 +131,7 @@ let _ =
 	     | "arguments" -> inv_sem := InvArguments
 	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
 	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
+*)
 	"-verify", Arg.String (function s -> verify := s::!verify), 
 	  "verify only these functions";
 	"-separation", Arg.Set separation,
@@ -148,7 +150,7 @@ let debug = !debug
 let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
-let inv_sem = !inv_sem
+let inv_sem = inv_sem
 
 let verify = !verify
 let separation = !separation
