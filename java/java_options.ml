@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.8 2007-11-20 14:34:50 filliatr Exp $ i*)
+(*i $Id: java_options.ml,v 1.9 2007-12-18 09:52:19 marche Exp $ i*)
 
 open Format
 
@@ -130,8 +130,10 @@ let _ =
           "  treats warnings as errors";
 	"-version", Arg.Unit version,
           "  prints version and exit";
+(*
 	"-ignore-overflow", Arg.Set ignore_overflow,
 	  "  ignore arithmetic overflow threats" ;
+*)
 	"-non-null", Arg.Set non_null,
 	  "  non-null by default" ;
       ]
@@ -148,7 +150,6 @@ let debug = !debug
 let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
-let ignore_overflow = !ignore_overflow
 let non_null = !non_null
 
 (*s error handling *)

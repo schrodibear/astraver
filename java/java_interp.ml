@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.85 2007-12-18 08:55:39 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.86 2007-12-18 09:52:19 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -152,7 +152,7 @@ let char_range =
   }
 
 let range_types acc =
-  if Java_options.ignore_overflow then acc else
+  if !Java_options.ignore_overflow then acc else
   List.fold_left
     (fun acc ri ->
        JCenum_type_def(ri.jc_enum_info_name,
@@ -182,19 +182,19 @@ let tr_base_type t =
     | Tboolean -> Jc_pervasives.boolean_type
     | Tinteger -> Jc_pervasives.integer_type
     | Tshort -> 
-	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	short_type
     | Tint -> 
-	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	int_type
     | Tlong -> 
-	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	long_type
     | Tchar -> 
-	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	char_type
     | Tbyte  -> 
-	if Java_options.ignore_overflow then Jc_pervasives.integer_type else
+	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	byte_type
     | Treal -> Jc_pervasives.real_type
     | Tfloat -> assert false (* TODO *)
@@ -936,7 +936,7 @@ let incr_op op =
     | Postdecr -> Postfix_dec
 
 let int_cast loc t e =
-  if Java_options.ignore_overflow || 
+  if !Java_options.ignore_overflow || 
     match t with
       | JTYbase Tint -> false
       | _ -> true
@@ -1129,7 +1129,7 @@ let rec expr e =
 	  begin
 	    match ty with
 	      | JTYbase t -> 
-		  if Java_options.ignore_overflow 
+		  if !Java_options.ignore_overflow 
 		  then 
 		    (expr e1).jc_texpr_node
 		  else

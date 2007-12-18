@@ -64,9 +64,6 @@ type-all:
 %.jc: %.java 
 	$(EXECKRAKATOA) $<
 
-%.jcio: %.java 
-	$(EXECKRAKATOA) -ignore-overflow $<
-
 why/%.why: %.jc 
 	$(EXECJESSIE) -locs $*.jloc $<
 
@@ -84,12 +81,6 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 %: %.java
 	rm -f $*.jc
 	make $*.jc
-	make why/$*.why
-	make -f $*.makefile gui
-
-%.io: %.java
-	rm -f $*.jc
-	make $*.jcio
 	make why/$*.why
 	make -f $*.makefile gui
 

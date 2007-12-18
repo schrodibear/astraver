@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.14 2007-11-21 18:29:46 nrousset Exp $
+$Id: java_lexer.mll,v 1.15 2007-12-18 09:52:19 marche Exp $
 
 ***************************************************************************)
 
@@ -214,6 +214,17 @@ i*)
       { pos with pos_lnum = pos.pos_lnum + 1; 
 	  pos_bol = pos.pos_cnum }
 
+  let pragma lexbuf id v =
+    match id with
+      | "ArithOverflow" ->
+	  begin
+	    match String.lowercase v with	  
+	      | "yes" -> Java_options.ignore_overflow := false
+	      | "no" -> Java_options.ignore_overflow := true
+	      | _ -> lex_error lexbuf "yes or no expected"
+	  end  
+      | _ -> lex_error lexbuf ("unknown pragma " ^ id)
+
 }
 
 let space = [' ' '\t' '\r']
@@ -232,6 +243,9 @@ rule token = parse
       { token lexbuf }
   | '\n' 
       { newline lexbuf; token lexbuf }
+  | "//@+" space* ((rL | rD)+ as id) space* "=" 
+        space* ((rL | rD)+ as v) space* '\n'
+      { pragma lexbuf id v; newline lexbuf; token lexbuf } 
   | "/*@"               
       { let loc = lexeme_start_p lexbuf in
 	Buffer.clear buf; ANNOT(loc, annot lexbuf) }

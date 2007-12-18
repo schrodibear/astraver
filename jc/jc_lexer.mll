@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.45 2007-12-18 08:55:39 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.46 2007-12-18 09:52:19 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -69,16 +69,16 @@
 
   let pragma lexbuf id v =
     match id with
-    | "InvariantPolicy" ->
-     begin
-       Jc_options.inv_sem :=
-       match v with	  
-       | "None" -> Jc_env.InvNone
-       | "Arguments" -> Jc_env.InvArguments
-       | "Ownership" -> Jc_env.InvOwnership
-       | _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
-     end  
-    | _ -> lex_error lexbuf ("unknown pragma " ^ id)
+      | "InvariantPolicy" ->
+	  begin
+	    Jc_options.inv_sem :=
+	      match v with	  
+		| "None" -> Jc_env.InvNone
+		| "Arguments" -> Jc_env.InvArguments
+		| "Ownership" -> Jc_env.InvOwnership
+		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
+	  end  
+      | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 }
 
 let space = [' ' '\t' '\012' '\r']
