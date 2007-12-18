@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.195 2007-12-18 16:16:18 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.196 2007-12-18 16:35:43 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -420,10 +420,20 @@ let lvar_info label v =
     v.jc_var_info_final_name <- "result";
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
-let logic_params li l =
+let logic_params li l assoc =
   let l =
     FieldRegionSet.fold
-      (fun (fi,r) acc -> (LVar(field_region_memory_name(fi,r)))::acc)
+      (fun (fi,r) acc -> 
+	let r =
+	  if Region.polymorphic r then
+	    begin
+	      Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
+	      Jc_options.lprintf "r:%a@." Region.print r;
+	      try Region.assoc r assoc with Not_found -> assert false
+	    end
+	  else r
+	in
+	(LVar(field_region_memory_name(fi,r)))::acc)
       li.jc_logic_info_effects.jc_effect_memories
       l
   in
@@ -438,12 +448,12 @@ let logic_params li l =
     li.jc_logic_info_effects.jc_effect_tag_table
     l	    
 
-let make_logic_fun_call li l =
-  let params = logic_params li l in
+let make_logic_fun_call li l assoc =
+  let params = logic_params li l assoc in
   LApp(li.jc_logic_info_final_name,params)
 
 let make_logic_pred_call li l =
-  let params = logic_params li l in
+  let params = logic_params li l [] in (* TODO: add assoc *)
     LPred (li.jc_logic_info_final_name, params)
 
 let rec term label oldlabel t =
@@ -486,7 +496,9 @@ let rec term label oldlabel t =
     | JCTderef(t,fi) -> 
 	let mem = field_region_memory_name(fi,t.jc_term_region) in
 	LApp("select",[lvar label mem;ft t])
-    | JCTapp(f,l) -> make_logic_fun_call f (List.map ft l)	    
+    | JCTapp app ->
+	let f = app.jc_app_fun and l = app.jc_app_args in
+	make_logic_fun_call f (List.map ft l) app.jc_app_region_assoc
     | JCTold(t) -> term (Some oldlabel) oldlabel t
     | JCToffset(k,t,st) -> 
 	let alloc =
@@ -885,8 +897,8 @@ let rec make_lets l e =
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
-let rec make_upd lab loc ~threats fi e1 v =
-  let expr = expr ~threats and offset = offset ~threats in
+let rec make_upd lab loc ~infunction ~threats fi e1 v =
+  let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
   let mem = field_region_memory_name(fi,e1.jc_expr_region) in
   if threats then
     match destruct_pointer e1 with
@@ -936,15 +948,15 @@ let rec make_upd lab loc ~threats fi e1 v =
     make_app "safe_upd_"
       [ Var mem ; expr e1 ; v ]
     
-and offset ~threats = function
+and offset ~infunction ~threats = function
   | Int_offset s -> Cte (Prim_int s)
   | Expr_offset e -> 
       coerce ~no_int_overflow:(not threats) 
 	e.jc_expr_label e.jc_expr_loc integer_type e.jc_expr_type 
-	(expr ~threats e)
+	(expr ~infunction ~threats e)
 
-and expr ~threats e : expr =
-  let expr = expr ~threats and offset = offset ~threats in
+and expr ~infunction ~threats e : expr =
+  let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
   let loc = e.jc_expr_loc in
   let lab = e.jc_expr_label in
   let e' =
@@ -1041,53 +1053,61 @@ and expr ~threats e : expr =
 	  e.jc_expr_label e.jc_expr_loc (JCTenum ri) e1.jc_expr_type e1'
     | JCEderef(e,fi) ->
 	let mem = field_region_memory_name(fi,e.jc_expr_region) in
+	let mem = 
+	  if Jc_options.separation then
+	    if FieldRegionSet.mem (fi,e.jc_expr_region)
+	      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+	    then Deref mem
+	    else Var mem
+	  else Deref mem
+	in
 	if threats then
 	  match destruct_pointer e with
 	  | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
 	      make_app "safe_acc_" 
-		[ Var mem ; expr e ]
+		[ mem ; expr e ]
 	  | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_acc_" 
-		[ Var mem ; expr p; offset off;
+		[ mem ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_acc_" 
-		[ Var mem ; expr p; offset off;
+		[ mem ; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,off,Some lb,Some rb ->
 	      make_guarded_app ~name:lab IndexBounds loc "bound_acc_" 
-		[ Var mem ; expr p; offset off; 
+		[ mem ; expr p; offset off; 
 		  Cte (Prim_int (Num.string_of_num lb)); 
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var mem; expr p; offset off ]
+		  mem; expr p; offset off ]
 	  | p,off,Some lb,None ->
 	      make_guarded_app ~name:lab IndexBounds loc "lbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var mem; expr p; offset off;
+		  mem; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var mem; expr p; offset off ]
+		  mem; expr p; offset off ]
 	  | p,off,None,Some rb ->
 	      make_guarded_app ~name:lab IndexBounds loc "rbound_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var mem; expr p; offset off;
+		  mem; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,Int_offset s,None,None when int_of_string s = 0 ->
 	      make_guarded_app ~name:lab PointerDeref loc "acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var mem ; expr p ]
+		  mem ; expr p ]
 	  | p,off,None,None ->
 	      make_guarded_app ~name:lab PointerDeref loc "offset_acc_" 
 		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  Var mem ; expr p; offset off ]
+		  mem ; expr p; offset off ]
 	else
 	  make_app "safe_acc_"
-	    [ Var mem ; 
+	    [ mem ; 
 	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (siz, st) ->
 	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
@@ -1193,15 +1213,15 @@ let type_assert vi e =
 	  make_and_list [offset_mina; offset_maxa]
     | _ -> LTrue
 	
-let expr_coerce ~threats vi e =
+let expr_coerce ~infunction ~threats vi e =
   coerce ~no_int_overflow:(not threats)
     e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type 
-    e.jc_expr_type (expr ~threats e)
+    e.jc_expr_type (expr ~infunction ~threats e)
     
-let rec statement ~threats s = 
+let rec statement ~infunction ~threats s = 
   (* reset_tmp_var(); *)
-  let statement = statement ~threats in
-  let expr = expr ~threats in
+  let statement = statement ~infunction ~threats in
+  let expr = expr ~infunction ~threats in
   let lab = s.jc_statement_label in
     match s.jc_statement_node with
       | JCScall (vio, call, block) -> 
@@ -1218,25 +1238,43 @@ let rec statement ~threats s =
 	  in
 	  let el =
 	    try
-	      List.map2 (expr_coerce ~threats) f.jc_fun_info_parameters l 
+	      List.map2 (expr_coerce ~infunction ~threats) f.jc_fun_info_parameters l 
 	    with Invalid_argument _ -> assert false
 	  in
-	  let mems =
+	  let write_mems =
 	    FieldRegionSet.fold
 	      (fun (fi,r) acc ->
-		if r.jc_reg_variable then
-		  let r = 
-		    try Region.assoc r call.jc_call_region_assoc
-		    with Not_found -> assert false
-		  in
-		  (Var(field_region_memory_name(fi,r)))::acc 
+		if Region.polymorphic r then
+		  try 
+		    let r = Region.assoc r call.jc_call_region_assoc in
+	      	    (Var(field_region_memory_name(fi,r)))::acc 
+		  with Not_found -> 
+		    (* Local memory. Not passed in argument by the caller. *)
+		    acc
 		else acc)
-	      (FieldRegionSet.union
-		f.jc_fun_info_effects.jc_reads.jc_effect_memories 
+	      f.jc_fun_info_effects.jc_writes.jc_effect_memories
+	      []
+	  in
+	  let read_mems =
+	    FieldRegionSet.fold
+	      (fun (fi,r) acc ->
+		if Region.polymorphic r then
+		  try 
+		    let r = Region.assoc r call.jc_call_region_assoc in
+		    if FieldRegionSet.mem (fi,r) 
+		      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+		    then (Deref(field_region_memory_name(fi,r)))::acc 
+		    else (Var(field_region_memory_name(fi,r)))::acc 
+		  with Not_found -> 
+		    (* Local memory. Not passed in argument by the caller. *)
+		    acc
+		else acc)
+	      (FieldRegionSet.diff
+		f.jc_fun_info_effects.jc_reads.jc_effect_memories
 		f.jc_fun_info_effects.jc_writes.jc_effect_memories)
 	      []
 	  in
-	  let el = el @ mems in
+	  let el = el @ write_mems @ read_mems in
 	  let call = 
 	    make_guarded_app ~name:lab UserCall loc 
 	      f.jc_fun_info_final_name el 
@@ -1271,7 +1309,7 @@ let rec statement ~threats s =
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
 	let tmp2 = tmp_var_name () in
-	let upd = make_upd ~threats lab s.jc_statement_loc 
+	let upd = make_upd ~infunction ~threats lab s.jc_statement_loc 
 	  fi e1 (Var tmp2) 
 	in
 (* Yannick: ignore variables to be able to refine update function used. *)	
@@ -1293,7 +1331,7 @@ let rec statement ~threats s =
 	else
 	  lets
 (*	if !Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
-    | JCSblock l -> statement_list ~threats l
+    | JCSblock l -> statement_list ~infunction ~threats l
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
 	If(e, statement s1, statement s2)
@@ -1377,9 +1415,9 @@ let rec statement ~threats s =
 	  List.fold_left catch (statement s,ef.jc_raises) catches
 	in s
 
-and statement_list ~threats l = 
+and statement_list ~infunction ~threats l = 
   List.fold_right 
-    (fun s acc -> append (statement ~threats s) acc) l Void
+    (fun s acc -> append (statement ~infunction ~threats s) acc) l Void
 
 (******************
  structures
@@ -1768,12 +1806,18 @@ let excep_posts_for_others eopt excep_posts =
 	 | None -> (exception_name ei, LTrue)::acc)
     excep_posts []
     
-let interp_fun_params f memories annot_type =
+let interp_fun_params f write_mems read_mems annot_type =
   let annot_type = 
     if not Jc_options.separation then annot_type else
-      List.fold_left (fun acc (name,ty) ->
+      List.fold_right (fun (name,ty) acc ->
+	Prod_type(name,Base_type ty,acc)
+      ) read_mems annot_type
+  in
+  let annot_type = 
+    if not Jc_options.separation then annot_type else
+      List.fold_right (fun (name,ty) acc ->
 	Prod_type(name,Ref_type(Base_type ty),acc)
-      ) annot_type memories
+      ) write_mems annot_type
   in
   match f.jc_fun_info_parameters with
     | [] ->
@@ -1913,7 +1957,11 @@ let tr_fun f loc spec body acc =
   in
   let reads =
     FieldRegionSet.fold
-      (fun (f,r) acc -> (field_region_memory_name(f,r))::acc)
+      (fun (fi,r) acc -> 
+	let mem = field_region_memory_name(fi,r) in
+	if Region.polymorphic r then
+	  if Region.mem r f.jc_fun_info_param_regions then mem::acc else acc
+	else mem::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_memories
       []
   in
@@ -1949,7 +1997,11 @@ let tr_fun f loc spec body acc =
   in
   let writes =
     FieldRegionSet.fold
-      (fun (f,r) acc -> (field_region_memory_name(f,r))::acc)
+      (fun (fi,r) acc ->
+	let mem = field_region_memory_name(fi,r) in
+	if Region.polymorphic r then
+	  if Region.mem r f.jc_fun_info_param_regions then mem::acc else acc
+	else mem::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
   in
@@ -1983,16 +2035,33 @@ let tr_fun f loc spec body acc =
       f.jc_fun_info_effects.jc_writes.jc_effect_committed
       writes
   in
-  let memories =
+  let param_write_mems,local_write_mems =
     FieldRegionSet.fold
-      (fun (fi,r) acc ->
-	if r.jc_reg_variable then
-	  (field_region_memory_name(fi,r),memory_field fi)::acc 
-	else acc)
-      (FieldRegionSet.union
-	f.jc_fun_info_effects.jc_reads.jc_effect_memories 
+      (fun (fi,r) (param_acc,local_acc) ->
+	if Region.polymorphic r then
+	  let mem = field_region_memory_name(fi,r),memory_field fi in
+	  if Region.mem r f.jc_fun_info_param_regions then
+	    mem::param_acc,local_acc
+	  else
+	    param_acc,mem::local_acc
+	else param_acc,local_acc)
+      f.jc_fun_info_effects.jc_writes.jc_effect_memories
+      ([],[])
+  in
+  let param_read_mems,local_read_mems =
+    FieldRegionSet.fold
+      (fun (fi,r) (param_acc,local_acc) ->
+	if Region.polymorphic r then
+	  let mem = field_region_memory_name(fi,r),memory_field fi in
+	  if Region.mem r f.jc_fun_info_param_regions then
+	    mem::param_acc,local_acc
+	  else
+	    param_acc,mem::local_acc
+	else param_acc,local_acc)
+      (FieldRegionSet.diff 
+	f.jc_fun_info_effects.jc_reads.jc_effect_memories
 	f.jc_fun_info_effects.jc_writes.jc_effect_memories)
-      []
+      ([],[])
   in
   let normal_post =
     List.fold_right
@@ -2032,9 +2101,11 @@ let tr_fun f loc spec body acc =
   let why_param = 
     let annot_type =
       Annot_type(requires, ret_type,
-		 reads,writes, param_normal_post, param_excep_posts)
+		 (*reads*)[],writes, param_normal_post, param_excep_posts)
     in
-    let fun_type = interp_fun_params f memories annot_type in
+    let fun_type = 
+      interp_fun_params f param_write_mems param_read_mems annot_type 
+    in
       Param (false, f.jc_fun_info_final_name, fun_type)
   in
   match body with
@@ -2048,14 +2119,19 @@ let tr_fun f loc spec body acc =
 	  why_param :: acc 
 	else
 	  (* why functions for each behaviors *)
-	    let mem_params = 
-	      List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) memories
+	    let write_mems = 
+	      List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) 
+		param_write_mems
+	    in
+	    let read_mems = 
+	      List.map (fun (name,ty) -> name,Base_type ty) 
+		param_read_mems
 	    in
 	    let params = match f.jc_fun_info_parameters with
 	      | [] -> ["tt", unit_type]
 	      | l -> List.map parameter l
 	    in
-	    let params = params @ mem_params in
+	    let params = params @ write_mems @ read_mems in
 	      (* rename formals just before body is treated *)
 	    let list_of_refs =
 	      List.fold_right
@@ -2076,7 +2152,8 @@ let tr_fun f loc spec body acc =
 	      printf "Generating Why function %s@."
 		f.Jc_fenv.jc_fun_info_final_name;
 	      (* default behavior *)
-	      let body_safety = statement_list ~threats:true body in
+	      let body_safety = 
+		statement_list ~infunction:f ~threats:true body in
 	      let tblock =
 		if !Jc_options.inv_sem = InvOwnership then
 		  append
@@ -2086,6 +2163,11 @@ let tr_fun f loc spec body acc =
 		    body_safety
 		else
 		  body_safety
+	      in
+	      let tblock =
+		List.fold_left (fun acc (mem_name,mem_ty) ->
+		  Let_ref(mem_name,App(Var "any_memory",Void),acc)
+		) tblock (local_read_mems @ local_write_mems)
 	      in
 	      let tblock = 
 		if !return_void then
@@ -2146,7 +2228,7 @@ let tr_fun f loc spec body acc =
 		if spec.jc_fun_behavior = [] then
 		  acc
 		else
-		  let body = statement_list ~threats:false body in
+		  let body = statement_list ~infunction:f ~threats:false body in
 		  let tblock =
 		    if !Jc_options.inv_sem = InvOwnership then
 		      append

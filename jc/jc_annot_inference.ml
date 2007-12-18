@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.84 2007-12-18 08:55:18 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.85 2007-12-18 16:35:43 moy Exp $ *)
 
 open Pp
 open Format
@@ -285,7 +285,8 @@ let rec term_name =
 	  term_name t1 ^ "_sub_pointer_" ^ (term_name t2)
       | JCTderef (t1, fi) ->
 	  term_name t1 ^ "_field_" ^ fi.jc_field_info_final_name
-      | JCTapp(li,tl) ->
+      | JCTapp app ->
+	  let li = app.jc_app_fun and tl = app.jc_app_args in
 	  li.jc_logic_info_name ^ "_of_" ^ 
 	    List.fold_right(fun t acc ->
 	      if acc = "" then term_name t
@@ -379,7 +380,8 @@ let rec term_depends_on_term t1 t2 =
       | JCTderef(t2',fi) ->
 	  let t2' = select_option (fst(destruct_pointer t2')) t2' in
 	  begin match t1.jc_term_node with
-	    | JCTapp(f,tls) -> 
+	    | JCTapp app -> 
+		let f = app.jc_app_fun and tls = app.jc_app_args in
 		List.fold_left2 (fun acc param arg -> acc ||
 		  term_depends_on_term arg t2'
 		  && 
@@ -674,7 +676,9 @@ let rec switch_vis_in_term srcvi targetvi t =
     | JCTderef (t, fi) -> JCTderef (t, fi)
     | JCTbinary (t1, bop, t2) -> JCTbinary (term t1, bop, term t2)
     | JCTunary (op, t) -> JCTunary (op, term t)
-    | JCTapp (li, tl) -> JCTapp (li, List.map term tl)
+    | JCTapp app -> 
+	let tl = app.jc_app_args in
+	JCTapp { app with jc_app_args = List.map term tl; }
     | JCTold t -> JCTold (term t)
     | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
     | JCTinstanceof (t, si) -> JCTinstanceof (term t, si)
@@ -1046,7 +1050,7 @@ let rec linearize t =
 	  | JCTvar _ | JCTderef _ -> (TermMap.add t 1 TermMap.empty,0)
 	  | _ -> (*assert false*) (TermMap.add t 1 TermMap.empty,0)
 	end
-    | JCTapp(f,_) -> (TermMap.add t 1 TermMap.empty,0)
+    | JCTapp _ -> (TermMap.add t 1 TermMap.empty,0)
     | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
     | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ -> 
 	failwith "Not linear"

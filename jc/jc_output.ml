@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.73 2007-12-18 08:55:39 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.74 2007-12-18 16:35:43 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -134,7 +134,9 @@ let rec term fmt t =
     | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
-    | JCTapp (op, [t1]) ->
+    | JCTapp app when List.length app.jc_app_args = 1 ->
+	let op = app.jc_app_fun in
+	let t1 = List.hd app.jc_app_args in
 (*
 	begin try 
 	  ignore 
@@ -147,7 +149,10 @@ let rec term fmt t =
 (*
 	end
 *)
-    | JCTapp (op, ([t1;t2] as l)) ->
+    | JCTapp app when List.length app.jc_app_args = 2 ->
+	let op = app.jc_app_fun in
+	let l = app.jc_app_args in
+	let t1 = List.hd l and t2 = List.nth l 1 in
 	begin try
 	  let s = lbin_op op in
 	  fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
@@ -155,7 +160,8 @@ let rec term fmt t =
 	  fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	    (print_list comma term) l 
 	end
-    | JCTapp (op, l) ->
+    | JCTapp app ->
+	let op = app.jc_app_fun and l = app.jc_app_args in
 	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
 	  (print_list comma term) l 
     | JCTderef (t, fi)-> 

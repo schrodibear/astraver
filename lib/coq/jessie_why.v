@@ -109,7 +109,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A495:Set) (a:(alloc_table A495)) (p:(pointer A495))
+(*Why predicate*) Definition valid (A499:Set) (a:(alloc_table A499)) (p:(pointer A499))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -668,8 +668,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A537:Set) (A536:Set) (a:(alloc_table A536)) (m1:(memory A536 A537)) (m2:(memory A536 A537)) (l:(pset A536))
-  := (forall (p:(pointer A536)),
+(*Why predicate*) Definition not_assigns (A541:Set) (A540:Set) (a:(alloc_table A540)) (m1:(memory A540 A541)) (m2:(memory A540 A541)) (l:(pset A540))
+  := (forall (p:(pointer A540)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -739,7 +739,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A549:Set) (a:(tag_table A549)) (p:(pointer A549)) (t:(tag_id A549))
+(*Why predicate*) Definition instanceof (A553:Set) (a:(tag_table A553)) (p:(pointer A553)) (t:(tag_id A553))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -767,7 +767,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A554:Set) (tag_table:(tag_table A554)) (mutable:(memory A554 (tag_id A554))) (this:(pointer A554))
+(*Why predicate*) Definition fully_packed (A558:Set) (tag_table:(tag_table A558)) (mutable:(memory A558 (tag_id A558))) (this:(pointer A558))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

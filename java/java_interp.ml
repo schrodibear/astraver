@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.87 2007-12-18 13:35:11 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.88 2007-12-18 16:36:06 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -494,7 +494,12 @@ let rec term t =
       | JTun (t,op,e1) -> JCTunary (lun_op t op, term e1)
       | JTbin(e1,t,op,e2) -> JCTbinary(term e1, lbin_op t op, term e2)
       | JTapp (fi, el) -> 
-	  JCTapp(get_logic_fun fi,List.map term el)
+	  let app = {
+	    jc_app_fun = get_logic_fun fi;
+	    jc_app_args = List.map term el;
+	    jc_app_region_assoc = [];
+	  } in
+	  JCTapp app
       | JTvar vi -> JCTvar (get_var vi)
       | JTfield_access(t,fi) -> JCTderef(term t,get_field fi)
       | JTstatic_field_access(ci,fi) ->	  

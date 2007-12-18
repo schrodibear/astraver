@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.81 2007-12-18 08:55:39 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.82 2007-12-18 16:35:43 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -121,15 +121,14 @@ let main () =
 	if Jc_options.separation then
 	  begin
 	    Jc_options.lprintf "Computation of regions@.";
+	    (* Analyze logic functions before axioms, so that parameter 
+	     * regions are known before a function is applied. 
+	     *)
+	    Array.iter Jc_separation.logic_component logic_components;
+	    Hashtbl.iter Jc_separation.axiom Jc_typing.axioms_table;
 	    Array.iter Jc_separation.code_component components
 	  end;
 
-	  (* phase 5 : computation of effects *)
-	  Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
-	  Array.iter Jc_effect.logic_effects logic_components;
-	  Jc_options.lprintf "\nstarting computation of effects of functions.@.";
-	  Array.iter Jc_effect.function_effects components;
-	  
           (* optional phase: inference of annotations *)
 	  if Jc_options.annot_infer then
 	    if Jc_options.interprocedural then
@@ -146,7 +145,13 @@ let main () =
 		(fun _ (f, loc, s, b) -> 
 		   Jc_ai.code_function (f, s, b) 
 		) Jc_norm.functions_table;
-	  
+
+	  (* phase 5 : computation of effects *)
+	  Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
+	  Array.iter Jc_effect.logic_effects logic_components;
+	  Jc_options.lprintf "\nstarting computation of effects of functions.@.";
+	  Array.iter Jc_effect.function_effects components;
+	  	  
 	  (* phase 6 : checking structure invariants *)
 	  begin
 	    match !Jc_options.inv_sem with

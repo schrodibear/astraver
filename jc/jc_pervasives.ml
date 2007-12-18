@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.64 2007-12-18 15:58:37 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.65 2007-12-18 16:35:43 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -208,6 +208,7 @@ let empty_logic_info =
     jc_logic_info_result_type = None;
     jc_logic_info_result_region = dummy_region; (* TODO *)
     jc_logic_info_parameters = [];
+    jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = []; 
   }
@@ -222,6 +223,7 @@ let make_logic_fun name ty =
     jc_logic_info_result_type = Some ty;
     jc_logic_info_result_region = Region.make_var ty name;
     jc_logic_info_parameters = [];
+    jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
   }
@@ -239,6 +241,7 @@ let make_rel name =
     jc_logic_info_result_type = None;
     jc_logic_info_result_region = dummy_region;
     jc_logic_info_parameters = [];
+    jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
   }
@@ -262,7 +265,7 @@ let make_fun_info name ty =
     jc_fun_info_parameters = [];
     jc_fun_info_return_type = ty;
     jc_fun_info_return_region = Region.make_var ty name;
-    jc_fun_info_regions = [];
+    jc_fun_info_param_regions = [];
     jc_fun_info_calls = [];
     jc_fun_info_logic_apps = [];
     jc_fun_info_effects = empty_fun_effect;
@@ -398,7 +401,9 @@ let rec raw_term_compare t1 t2 =
       if comp1 = 0 then 
 	option_compare raw_term_compare t12opt t22opt
       else comp1
-  | JCTapp(li1,ts1),JCTapp(li2,ts2) ->
+  | JCTapp app1,JCTapp app2 ->
+      let li1 = app1.jc_app_fun and ts1 = app1.jc_app_args in
+      let li2 = app2.jc_app_fun and ts2 = app2.jc_app_args in
       let compli = 
 	Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
       in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.152 2007-12-18 15:58:37 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.153 2007-12-18 16:35:43 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -349,7 +349,12 @@ let term_coerce t1 t2 e =
   in
   match tn1,t2 with
     | Tinteger, Treal -> 
-	{ jc_term_node = JCTapp(real_of_integer,[e_int]) ;
+	let app = {
+	  jc_app_fun = real_of_integer;
+	  jc_app_args = [e_int];
+	  jc_app_region_assoc = [];
+	} in
+	{ jc_term_node = JCTapp app;
 	  jc_term_type = real_type;
 	  jc_term_region = e.jc_term_region;
 	  jc_term_loc = e.jc_term_loc;
@@ -539,7 +544,12 @@ let rec term env e =
 		      let ty = match pi.jc_logic_info_result_type with
 			| None -> assert false | Some ty -> ty
 		      in
-		      ty,pi.jc_logic_info_result_region, JCTapp(pi, tl)
+		      let app = {
+			jc_app_fun = pi;
+			jc_app_args = tl;
+			jc_app_region_assoc = [];
+		      } in
+		      ty,Region.make_var ty pi.jc_logic_info_name,JCTapp app
 		    with Not_found ->
 		      typing_error e.jc_pexpr_loc 
 			"unbound logic function identifier %s" id

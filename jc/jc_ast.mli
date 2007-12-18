@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.98 2007-12-18 08:55:39 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.99 2007-12-18 16:35:43 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -216,7 +216,14 @@ type unary_op =
   (* bitwise operator *)
   | Ubw_not
 
-type term_node =
+type app = 
+    {
+      jc_app_fun : logic_info;
+      jc_app_args : term list;
+      mutable jc_app_region_assoc : (region * region) list;
+    }
+
+and term_node =
   | JCTconst of const
   | JCTvar of var_info
   | JCTshift of term * term
@@ -224,7 +231,7 @@ type term_node =
   | JCTderef of term * field_info
   | JCTbinary of term * bin_op * term
   | JCTunary of unary_op * term
-  | JCTapp of logic_info * term list
+  | JCTapp of app
   | JCTold of term
   | JCToffset of offset_kind * term * struct_info 
   | JCTinstanceof of term * struct_info

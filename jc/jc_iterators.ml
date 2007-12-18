@@ -177,7 +177,8 @@ let rec iter_term f t =
   | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
   | JCTrange(None,Some t1) ->
       iter_term f t1
-  | JCTapp(_,tl) ->
+  | JCTapp app ->
+      let tl = app.jc_app_args in
       List.iter (iter_term f) tl
   | JCTif(t1,t2,t3) ->
       iter_term f t1; iter_term f t2; iter_term f t3
@@ -194,7 +195,8 @@ let rec fold_term f acc t =
   | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
   | JCTrange(None,Some t1) ->
       fold_term f acc t1
-  | JCTapp(_,tl) ->
+  | JCTapp app ->
+      let tl = app.jc_app_args in
       List.fold_left (fold_term f) acc tl
   | JCTif(t1,t2,t3) ->
       let acc = fold_term f acc t1 in
@@ -214,8 +216,9 @@ let rec post_map_term f t =
 	JCTsub_pointer(post_map_term f t1,post_map_term f t2)
     | JCTderef(t1,fi) ->
 	JCTderef(post_map_term f t1,fi)
-    | JCTapp(li,tl) ->
-	JCTapp(li,List.map (post_map_term f) tl)
+    | JCTapp app ->
+	let tl = app.jc_app_args in
+	JCTapp { app with jc_app_args = List.map (post_map_term f) tl; }
     | JCTold t ->
 	JCTold(post_map_term f t)
     | JCToffset(off,t,st) ->
@@ -250,8 +253,9 @@ let rec pre_map_term f t =
 	  JCTsub_pointer(pre_map_term f t1,pre_map_term f t2)
       | JCTderef(t1,fi) ->
 	  JCTderef(pre_map_term f t1,fi)
-      | JCTapp(li,tl) ->
-	  JCTapp(li,List.map (pre_map_term f) tl)
+      | JCTapp app ->
+	  let tl = app.jc_app_args in
+	  JCTapp { app with jc_app_args = List.map (pre_map_term f) tl; }
       | JCTold t ->
 	  JCTold(pre_map_term f t)
       | JCToffset(off,t,st) ->
@@ -286,6 +290,43 @@ let raw_strict_sub_term subt t =
 (*****************************************************************************)
 (* General iterators on assertions.                                          *)
 (*****************************************************************************)
+
+let rec iter_term_and_assertion ft fa a =
+  fa a;
+  match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCAtagequality _ -> ()
+    | JCArelation(t1,_,t2) -> 
+	iter_term ft t1;
+	iter_term ft t2
+    | JCAapp(_,tls) ->
+	List.iter (iter_term ft) tls
+    | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+	iter_term ft t1
+    | JCAand al | JCAor al ->
+	List.iter (iter_term_and_assertion ft fa) al
+    | JCAimplies(a1,a2) | JCAiff(a1,a2) ->
+	iter_term_and_assertion ft fa a1;
+	iter_term_and_assertion ft fa a2
+    | JCAif(t1,a1,a2) ->
+	iter_term ft t1;
+	iter_term_and_assertion ft fa a1;
+	iter_term_and_assertion ft fa a2
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+	iter_term_and_assertion ft fa a1
+
+let iter_term_and_assertion_in_loop_annot ft fa la =
+  iter_term_and_assertion ft fa la.jc_loop_invariant;
+  Option_misc.iter (iter_term ft) la.jc_loop_variant
+
+let iter_term_and_assertion_in_behavior ft fa bv =
+  Option_misc.iter (iter_term_and_assertion ft fa) bv.jc_behavior_assumes;
+  (* TODO: assigns *)
+  iter_term_and_assertion ft fa bv.jc_behavior_ensures
+
+let iter_term_and_assertion_in_fun_spec ft fa spec =
+  iter_term_and_assertion ft fa spec.jc_fun_requires;
+  List.iter (fun (_,_,bv) -> iter_term_and_assertion_in_behavior ft fa bv)
+    spec.jc_fun_behavior
 
 let rec fold_assertion f acc a =
   let acc = f acc a in

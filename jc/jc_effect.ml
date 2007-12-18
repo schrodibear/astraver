@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.70 2007-12-18 08:55:18 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.71 2007-12-18 16:35:43 moy Exp $ *)
 
 
 open Jc_env
@@ -67,7 +67,9 @@ let ef_assoc ef assoc =
   { ef with jc_effect_memories =
       FieldRegionSet.fold (fun (fi,r) acc ->
 	try FieldRegionSet.add (fi,Region.assoc r assoc) acc 
-	with Not_found -> assert false
+	with Not_found -> 
+	  (* Local memory. Not counted as effect for the caller. *)
+	  acc
       ) ef.jc_effect_memories FieldRegionSet.empty
   }
 
@@ -184,24 +186,12 @@ let rec term ef t =
 	else ef
     | JCToffset(_,t,st) ->
 	add_alloc_effect (term ef t) st.jc_struct_info_root
-    | JCTapp (li, tl) -> 
-	let ef = 
-	  List.fold_left2 (fun ef param arg ->
-	    if VarSet.mem param 
-	      li.jc_logic_info_effects.jc_effect_through_params then
-		match (skip_term_shifts arg).jc_term_node with
-		  | JCTvar vi ->
-		      if vi.jc_var_info_formal then 
-			add_through_param_effect ef vi 
-		      else ef
-		  | _ -> ef
-	    else ef
-	  ) ef li.jc_logic_info_parameters tl 
+    | JCTapp app -> 
+	let li = app.jc_app_fun and tls = app.jc_app_args in
+	let efapp = 
+	  ef_assoc li.jc_logic_info_effects app.jc_app_region_assoc 
 	in
-	let efli = { 
-	  li.jc_logic_info_effects with jc_effect_through_params = VarSet.empty;
-	} in
-	ef_union efli ef
+	ef_union efapp (List.fold_left term ef tls)
     | JCTderef (t, fi) ->
 	add_memory_effect ef (fi,t.jc_term_region)
     | _ -> ef

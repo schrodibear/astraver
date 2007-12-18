@@ -10,7 +10,7 @@ make="make WHYCOQ=$WHYCOQ"
 echo "JC interp (good)"
 
 bench_jc_good () {
-    options="$* -inv-sem none -why-opt -split-user-conj -why-opt -show-time"
+    options="$* -separation -why-opt -split-user-conj -why-opt -show-time"
     echo "-------------------------------------------------------------------"
     echo "Bench Jessie+Simplify/Yices/Ergo with options: $options"
     common_parsing="$JCHOME/bin/jessie.opt $options"

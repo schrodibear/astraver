@@ -25,11 +25,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.3 2007-12-17 15:05:00 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.4 2007-12-18 16:35:43 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
 open Format
+open Pp
 
 let dummy_region = 
   {
@@ -168,6 +169,9 @@ struct
 
   include InternalRegion
 
+  let polymorphic r = 
+    let r = RegionUF.repr r in r.jc_reg_variable
+
   let count = ref 1 
   let next_count () = let tmp = !count in incr count; tmp
 
@@ -197,6 +201,10 @@ struct
 	
   let print fmt r =
     fprintf fmt "%s" r.jc_reg_final_name
+
+  let print_assoc fmt assocl =
+    fprintf fmt "%a" (print_list comma 
+      (fun fmt (r1,r2) -> fprintf fmt "%a->%a" print r1 print r2)) assocl
 
   let equal r1 r2 =
     InternalRegion.equal (RegionUF.repr r1) (RegionUF.repr r2)
@@ -290,13 +298,14 @@ struct
 
   let reachable_list rls =
     let rec collect acc r =
-      let r = RegionUF.repr r in
-      if mem r acc then acc else
-	let acc = r :: acc in
-	try
-	  let t = RegionTable.find global_region_table r in
-	  FieldTable.fold (fun fi fr acc -> collect acc fr) t acc
-	with Not_found -> acc
+      if is_dummy_region r then acc else
+	let r = RegionUF.repr r in
+	if mem r acc then acc else
+	  let acc = r :: acc in
+	  try
+	    let t = RegionTable.find global_region_table r in
+	    FieldTable.fold (fun fi fr acc -> collect acc fr) t acc
+	  with Not_found -> acc
     in
     List.fold_left collect [] rls
 

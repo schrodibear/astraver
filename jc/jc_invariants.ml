@@ -296,7 +296,8 @@ let term this t =
   iter_term
     (fun t -> match t.jc_term_node with
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTapp (id, l) ->
+    | JCTapp app ->
+	let id = app.jc_app_fun and l = app.jc_app_args in
 	if not (FieldRegionSet.is_empty id.jc_logic_info_effects.jc_effect_memories) 
 	then
 	  Jc_typing.typing_error t.jc_term_loc

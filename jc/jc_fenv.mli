@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.20 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_fenv.mli,v 1.21 2007-12-18 16:35:43 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -62,6 +62,7 @@ type logic_info =
          (*r None for predicates *)
       mutable jc_logic_info_result_region : region;
       mutable jc_logic_info_parameters : var_info list;
+      mutable jc_logic_info_param_regions : region list;
       mutable jc_logic_info_effects : effect;
       mutable jc_logic_info_calls : logic_info list;
     }
@@ -73,7 +74,7 @@ type fun_info = {
     jc_fun_info_return_type : jc_type;
     jc_fun_info_return_region : region;
     mutable jc_fun_info_parameters : var_info list;
-    mutable jc_fun_info_regions : region list;
+    mutable jc_fun_info_param_regions : region list;
     mutable jc_fun_info_calls : fun_info list;
     mutable jc_fun_info_logic_apps : logic_info list;
     mutable jc_fun_info_effects : fun_effect;

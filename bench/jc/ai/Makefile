@@ -4,7 +4,7 @@ JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
 EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) \
-	-inv-sem none -why-opt -split-user-conj  -ai polwp  -d -v
+	-separation -why-opt -split-user-conj  -ai polwp  -d -v
 
 JCFILES=$(shell ls *.jc)
 WFILES=$(addprefix why/, $(JCFILES:.jc=.why))

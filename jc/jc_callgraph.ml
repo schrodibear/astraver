@@ -34,7 +34,7 @@ open Jc_iterators
 let rec term acc t =
   fold_term 
     (fun acc t -> match t.jc_term_node with
-    | JCTapp (f,lt) -> f::acc
+    | JCTapp app -> app.jc_app_fun::acc
     | _ -> acc
     ) acc t
 
