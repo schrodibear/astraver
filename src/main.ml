@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.141 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: main.ml,v 1.142 2007-12-19 15:45:57 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -399,7 +399,7 @@ let interp_decl ?(prelude=false) d =
 	let s = generalize_sequent ([], p) in
 	let l = Loc.extract loc in
 	let dg = 
-	  Dgoal (l, (EKRaw "user goal", Some (None,l)), Ident.string id, s) 
+	  Dgoal (l, EKOther "user goal", Ident.string id, s) 
 	in
 	let ids = Ident.string id in
 	let vloc =

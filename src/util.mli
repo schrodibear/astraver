@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.63 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: util.mli,v 1.64 2007-12-19 15:45:57 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -163,7 +163,7 @@ val create_post : predicate -> (assertion * 'b list) option
 val loc_of_label: string -> Loc.floc
 
 val cook_explanation : 
-    Loc.floc option -> raw_vc_explain -> Logic_decl.vc_explain
+    Loc.floc option -> raw_vc_explain -> Logic_decl.expl_kind * Loc.floc 
 
 val program_locs : (string,(string * string * Loc.floc)) Hashtbl.t
 
@@ -178,7 +178,7 @@ val print_logic_type : formatter -> logic_type -> unit
 
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
-val print_explanation : formatter -> Logic_decl.vc_explain -> unit
+val print_explanation : formatter -> (Loc.floc * Logic_decl.expl_kind) -> unit
 val print_assertion : formatter -> assertion -> unit
 val print_wp : formatter -> assertion option -> unit
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.67 2007-12-18 08:55:39 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.68 2007-12-19 15:45:57 marche Exp $ i*)
 
 open Printf
 open Options
@@ -188,24 +188,24 @@ open Logic_decl
 
 let msg_of_kind = 
   function
-    | EKRaw "PointerDeref" -> "pointer dereferencing"
-    | EKRaw "IndexBounds" -> "index bounds"
-    | EKRaw "ArithOverflow" -> "arithmetic overflow"
-    | EKRaw "UserCall" -> "precondition for call"
-    | EKRaw s -> "raw VC `" ^ s ^ "'"
+    | EKPre "PointerDeref" -> "pointer dereferencing"
+    | EKPre "IndexBounds" -> "index bounds"
+    | EKPre "ArithOverflow" -> "arithmetic overflow"
+    | EKPre "UserCall" -> "precondition for user call"
+    | EKPre "" -> "precondition"
+    | EKPre s -> "unclassified precondition `" ^ s ^ "'"
+    | EKOther s -> "unclassified obligation `" ^ s ^ "'"
     | EKAbsurd -> "unreachable code"
     | EKAssert -> "assertion"
-    | EKPre -> "precondition"
     | EKPost -> "postcondition"
     | EKWfRel -> "well-foundness of relation"
     | EKVarDecr -> "variant decrease" 
     | EKLoopInvInit -> "initialization of loop invariant" 
     | EKLoopInvPreserv -> "preservation of loop invariant"
 
-let show_xpl xpl (tv:GText.view) =
-  let (k,locopt) = (* Util.raw_explanation *) xpl in
-  match locopt with
-    | Some (_,(s,l,b,e)) ->
+let show_xpl (loc,k) (tv:GText.view) =
+  match loc with
+    | (s,l,b,e) ->
 	let loc = 
 	  { Tags.file=s; 
 	    Tags.line= string_of_int l; 
@@ -213,10 +213,6 @@ let show_xpl xpl (tv:GText.view) =
 	    Tags.ep = string_of_int e} in
 	Pprinter.move_to_loc loc;
 	!display_info ("file: " ^ (Filename.basename s) ^ " VC: " ^ msg_of_kind k)
-    | None ->
-	Pprinter.move_to_source None;
-	!display_info ("(no file ?) VC: " ^ msg_of_kind k)
-
 let select_obligs (model:GTree.tree_store) (tv:GText.view) 
                   (tv_s:GText.view) selected_rows = 
   List.iter
@@ -224,13 +220,13 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
        let row = model#get_iter p in
        let s = model#get ~row ~column:Model.fullname in
        try
-	 let (_,xpl,_,_) as o = Model.find_oblig s in
+	 let (loc,xpl,_,_) as o = Model.find_oblig s in
 	 let buf = update_buffer tv in
 	 buf#set_text "";
 	 Pprinter.text_of_obligation tv o;
 	 let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
 	 tv#scroll_to_mark ~use_align:true mark;
-	 show_xpl xpl tv_s  
+	 show_xpl (loc,xpl) tv_s  
        with Not_found -> 
 	 try
 	   let (id,beh,(f,l,b,e)) = Hashtbl.find Util.program_locs s in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.141 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: util.ml,v 1.142 2007-12-19 15:45:57 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -970,40 +970,42 @@ let reloc_xpl_term (loc,t) =
   match t with
     | Tnamed(User n,p) ->     
 	begin
-	  try (Some n,loc_of_label n)
-	  with Not_found -> (None,Loc.extract loc)
+	  try ((*Some n,*)loc_of_label n)
+	  with Not_found -> ((*None,*)Loc.extract loc)
 	end
-    | _ -> (None,Loc.extract loc)
+    | _ -> ((*None,*)Loc.extract loc)
 
 let reloc_xpl (loc,p) = 
   match p with
     | Pnamed(User n,p) -> 
 	begin
-	  try (Some n,loc_of_label n)
-	  with Not_found -> (None,Loc.extract loc)
+	  try ((*Some n,*)loc_of_label n)
+	  with Not_found -> ((*None,*)Loc.extract loc)
 	end
-    | _ -> (None,Loc.extract loc)
+    | _ -> ((*None,*)Loc.extract loc)
 
+let dummy_reloc = Loc.dummy_floc
 
-let cook_explanation loc e =
+let cook_explanation (loc : Loc.floc option) e =
   let e,l =
   match e with
-    | VCEexternal s -> EKRaw s, None
-    | VCEabsurd -> EKAbsurd, None
-    | VCEassert p -> EKAssert, Some(reloc_xpl (List.hd p))
+    | VCEexternal s -> EKOther s, dummy_reloc 
+    | VCEabsurd -> EKAbsurd, dummy_reloc
+    | VCEassert p -> EKAssert, (reloc_xpl (List.hd p))
     | VCEpre(lab,loc,p) -> 
 	begin
-	  if debug then eprintf "util: label,loc for pre = %s,%a@." lab
+	  if debug then eprintf "Util.cook_explanation: label,loc for pre = %s,%a@." lab
 	    Loc.gen_report_position loc;
 	  try 
 	    let (f,l,b,e,o) = Hashtbl.find locs_table lab in
 	    try
 	      let k = 
 		match List.assoc "kind" o with
-		  | Rc.RCident s -> s
+		  | Rc.RCident s | Rc.RCstring s -> s
 		  | _ -> raise Not_found		  
 	      in
-	      EKRaw k, Some(None,(f,l,b,e))
+	      if debug then eprintf "Util: kind for '%s' is '%s'@." lab k;
+	      EKPre k, (f,l,b,e)
 (*
 	      fprintf fmt "kind = %s@\n" k;
 	      fprintf fmt "external_label = %s@\n" lab;
@@ -1012,7 +1014,8 @@ let cook_explanation loc e =
 	      fprintf fmt "external_expr = \"%s\"@\n" s
 *)
 	    with Not_found ->
-	      EKPre, Some(Some lab,(f,l,b,e))
+	      if debug then eprintf "Util: cannot find a kind for '%s'@." lab;
+	      EKPre "", (f,l,b,e)
 (*
 	      fprintf fmt "kind = Pre@\n";
 	      fprintf fmt "call_label = %s@\n" lab;
@@ -1022,7 +1025,7 @@ let cook_explanation loc e =
 *)
 	  with Not_found -> 
 	    if debug then eprintf "Util: cannot find a loc for '%s'@." lab;
-	    EKPre, Some(None,Loc.extract loc)
+	    EKPre "", Loc.extract loc
 (*
 	    fprintf fmt "kind = Pre@\n";
 	    fprintf fmt "call_label = %s@\n" lab;
@@ -1032,28 +1035,31 @@ let cook_explanation loc e =
 	List.iter (raw_loc_predicate ~pref:"pre_" fmt) p
 *)
 
-    | VCEpost p -> EKPost, Some(reloc_xpl p)
-    | VCEwfrel -> EKWfRel, None
-    | VCEvardecr p -> EKVarDecr, Some(reloc_xpl_term p)
-    | VCEinvinit p -> EKLoopInvInit, Some(reloc_xpl p)
-    | VCEinvpreserv p -> EKLoopInvPreserv, Some(reloc_xpl p)
+    | VCEpost p -> EKPost, (reloc_xpl p)
+    | VCEwfrel -> EKWfRel, dummy_reloc 
+    | VCEvardecr p -> EKVarDecr, (reloc_xpl_term p)
+    | VCEinvinit p -> EKLoopInvInit, (reloc_xpl p) 
+    | VCEinvpreserv p -> EKLoopInvPreserv, (reloc_xpl p) 
   in 
-  match loc,l with
-   | None,_ -> e,l
-   | Some loc, None -> e,Some(None,loc)
-   | Some loc, Some(lab,_) -> e,Some(lab,loc) 
+  match e with
+    | EKPre _ -> 
+	(* for pre-conditions, we want to focus on the call *)
+	e,l
+    | _ -> e, 
+	match loc with
+	  | None -> l
+	  | Some l -> l
     
-let print_explanation fmt e =
-  let (k,locopt) = (* raw_explanation *) e in
-  Option_misc.iter 
-    (fun (labopt,loc) ->
-       Option_misc.iter (fun lab ->  fprintf fmt "label = %s@\n" lab) labopt;
-       raw_loc fmt loc) locopt;
+let print_explanation fmt (loc,k) =
+  (* 
+     Option_misc.iter (fun lab ->  fprintf fmt "label = %s@\n" lab) labopt; 
+  *)
+  raw_loc fmt loc;
   match k with
-    | EKRaw s -> fprintf fmt "kind = Raw@\ntext = %s@\n" s
+    | EKOther s -> fprintf fmt "kind = Other@\ntext = %s@\n" s
     | EKAbsurd -> fprintf fmt "kind = Absurd@\n"
     | EKAssert -> fprintf fmt "kind = Assert@\n"
-    | EKPre -> fprintf fmt "kind = Pre@\n"
+    | EKPre s -> fprintf fmt "kind = Pre@\ntext = %s@\n" s
     | EKPost -> fprintf fmt "kind = Post@\n"
     | EKWfRel -> fprintf fmt "kind = WfRel@\n"
     | EKVarDecr -> fprintf fmt "kind = VarDecr@\n" 
@@ -1105,7 +1111,7 @@ let print_decl fmt = function
 	   | Cc.Spred (id, pred) -> 
 	       fprintf fmt "%a <=> %a" Ident.print id print_predicate pred)) cel
 	print_predicate pred;
-      fprintf fmt "(* %a *)@\n" print_explanation expl 
+      fprintf fmt "(* %a *)@\n" print_explanation (loc,expl)
 
 (* debug *)
 

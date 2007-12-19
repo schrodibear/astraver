@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.ml,v 1.22 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: regen.ml,v 1.23 2007-12-19 15:45:57 marche Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -50,7 +50,7 @@ type element_id = element_kind * string
 
 type element = 
   | Parameter of string * cc_type
-  | Obligation of Loc.floc * Logic_decl.vc_explain * string * sequent Env.scheme
+  | Obligation of Loc.floc * Logic_decl.expl_kind * string * sequent Env.scheme
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme

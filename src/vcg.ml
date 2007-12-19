@@ -871,11 +871,11 @@ let rec explain_for_pred internal user = function
 		Format.eprintf "looking for internal explanation '%d'@." n;
 	      try
 		let e = Hashtbl.find Wp.explanation_table n in
-		(*Format.eprintf "found@.";*)
+		if debug then Format.eprintf "found@.";
 		e
 	      with
 		  Not_found ->
-		    (*Format.eprintf "not found@.";*)
+		    if debug then Format.eprintf "not found@.";
 		    assert false
 	    end
 	| None -> 
@@ -893,8 +893,7 @@ let vcg_from_wp base w =
     let loc = loc_for_pred concl in
 *)
     let loc, raw_explain = explain_for_pred None None concl in	
-    let explain =  Util.cook_explanation loc raw_explain in
-    let loc = Option_misc.fold (fun l _ -> l) loc Loc.dummy_floc in
+    let explain,loc =  Util.cook_explanation loc raw_explain in
     try
       discharge loc ctx concl
     with Exit -> begin

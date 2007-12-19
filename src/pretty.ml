@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.16 2007-11-22 08:39:37 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.17 2007-12-19 15:45:57 marche Exp $ i*)
 
 open Format
 open Pp
@@ -226,7 +226,7 @@ let print_trace fmt id expl =
 let print_traces fmt =
   Queue.iter
     (function
-       | Dgoal (_, expl, id, _) -> print_trace fmt id expl
+       | Dgoal (loc, expl, id, _) -> print_trace fmt id (loc,expl)
        | _ -> ())
     queue
 
@@ -240,13 +240,13 @@ let output_files f =
     (fun ctxfmt ->
        Queue.iter 
 	 (function 
-	    | Dgoal (_,expl,id,_) as d -> 
+	    | Dgoal (loc,expl,id,_) as d -> 
 		incr po;
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
 		if explain_vc then
 		  let ftr = f ^ "_po" ^ string_of_int !po ^ ".xpl" in
-		  print_in_file (fun fmt -> print_trace fmt id expl) ftr
+		  print_in_file (fun fmt -> print_trace fmt id (loc,expl)) ftr
 	    | d -> 
 		decl ctxfmt d)
 	 queue)

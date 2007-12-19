@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic_decl.mli,v 1.10 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.11 2007-12-19 15:45:57 marche Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers
@@ -43,14 +43,12 @@ type expl_kind =
   | EKLoopInvInit
   | EKLoopInvPreserv
   | EKPost
-  | EKPre
-  | EKRaw of string
+  | EKPre of string
+  | EKOther of string
   | EKVarDecr
   | EKWfRel 
       
-type vc_explain = expl_kind * (string option * Loc.floc) option
-
-type obligation = Loc.floc * vc_explain * string * sequent
+type obligation = Loc.floc * expl_kind * string * sequent
     (* loc, explanation, id, sequent *) 
 
 type t =
@@ -59,5 +57,5 @@ type t =
   | Dpredicate_def of loc * string * predicate_def scheme
   | Dfunction_def  of loc * string * function_def scheme
   | Daxiom         of loc * string * predicate scheme
-  | Dgoal          of loc * vc_explain * string * sequent scheme
+  | Dgoal          of loc * expl_kind * string * sequent scheme
 

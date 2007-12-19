@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.76 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.77 2007-12-19 15:45:57 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -40,7 +40,7 @@ open Format
 open Pp
 
 type elem = 
-  | Oblig of Loc.floc * Logic_decl.vc_explain * string * sequent Env.scheme
+  | Oblig of Loc.floc * Logic_decl.expl_kind * string * sequent Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
   | FunctionDef of string * function_def Env.scheme
