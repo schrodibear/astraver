@@ -64,7 +64,37 @@ type ml_constructor_info = {
 
 module ComparableCamlTypeList = struct
   type t = type_expr list
-  let compare = Pervasives.compare (* maybe this should be changed *)
+
+  let rec compare_lists f l1 l2 = match l1, l2 with
+    | [], [] -> 0
+    | x1::rem1, x2::rem2 ->
+	let r = f x1 x2 in
+	if r = 0 then compare_lists f rem1 rem2 else r
+    | _::_, [] -> 1
+    | [], _::_ -> -1
+
+  let rec compare_types a b = match a.desc, b.desc with
+    | Tvar, Tvar -> Pervasives.compare a.id b.id
+    | Tlink a', _ -> compare_types a' b
+    | _, Tlink b' -> compare_types a b'
+    | Tconstr(p1, al1, _), Tconstr(p2, al2, _) ->
+	let r = String.compare
+	  (Ml_ocaml.Path.name p1)
+	  (Ml_ocaml.Path.name p2)
+	in
+	if r = 0 then compare_lists compare_types al1 al2 else r
+    | _ -> Pervasives.compare a b
+
+  (*let compare_types a b =
+    let r = compare_types a b in
+    log "******* Comparing type:";
+    print_type a;
+    log "**** with type:";
+    print_type b;
+    log "**** result: %d" r;
+    r*)
+
+  let rec compare = compare_lists compare_types
 end
 
 module ParamMap = Map.Make(ComparableCamlTypeList)

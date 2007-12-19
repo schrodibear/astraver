@@ -66,6 +66,12 @@ let rec list_iteri f index = function
       list_iteri f (index + 1) rem
 let list_iteri f = list_iteri f 0
 
+let rec list_fold_lefti f i acc = function
+  | [] -> acc
+  | x::rem ->
+      list_fold_lefti f (i+1) (f i acc x) rem
+let list_fold_lefti f = list_fold_lefti f 0
+
 (******************************************************************************)
 
 let identifier_of_symbol_char = function

@@ -191,8 +191,14 @@ module Pattern: TPatternF = functor (A: TPatternArg) -> struct
 	  cond, env3, (vi, arg)::vars
       | Tpat_constant c ->
 	  make_equal arg (make_constant c), env, []
-      | Tpat_tuple _ ->
-	  not_implemented pat.pat_loc "tuple pattern"
+      | Tpat_tuple pl ->
+	  list_fold_lefti
+	    (fun i (cond, env2, vars) pat2 ->
+	       let fi = proj pat.pat_type i in
+	       let cond2, env3, vars2 = pattern env2 (make_deref arg fi) pat2 in
+	       make_and cond cond2, env3, vars @ vars2)
+	    (make_bool true, env, [])
+	    pl
       | Tpat_construct(cd, pl) ->
 	  let ci = constructor pat.pat_type cd in
 	  let cond, env2, vars = List.fold_left2
