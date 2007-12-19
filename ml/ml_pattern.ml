@@ -9,79 +9,6 @@ open Ml_type
 open Jc_ast
 open Jc_env
 
-(*let rec pattern_assertion env arg pat =
-  let ty = Ml_type.make pat.pat_type in
-  match pat.pat_desc with
-    | Tpat_any ->
-	env, [], make_assertion JCAtrue
-    | Tpat_var id ->
-	let env, vi = Ml_env.add_var (name id) ty env in
-	env,
-	[ vi ],
-	make_eq_assertion (make_var_term vi) arg
-    | Tpat_alias(pat, id) ->
-	let env, pat_vars, pat_tr = pattern_assertion env arg pat in
-	let env, vi = Ml_env.add_var (name id) ty env in
-	env,
-	vi::pat_vars,
-	make_and
-	  (make_eq_assertion (make_var_term vi) arg)
-	  pat_tr
-    | Tpat_constant c ->
-	env,
-	[],
-	make_eq_assertion arg (constant_term c)
-    | Tpat_tuple _ ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_assertion: tuples"
-    | Tpat_construct(cd, pl) ->
-	let ci = constructor pat.pat_type cd in
-	let env, tpl = list_fold_mapi
-	  (fun env i pat ->
-	     let fi = List.nth ci.ml_ci_arguments i in
-	     let arg = make_term
-	       (JCTderef(arg, fi))
-	       fi.jc_field_info_type
-	     in
-	     let env, vars, tpat = pattern_assertion env arg pat in
-	     env, (vars, tpat))
-	  env
-	  pl
-	in
-	let vars = List.fold_left (fun acc (b, _) -> acc @ b) [] tpl in
-	let tag_cond = make_eq_assertion
-	  (make_int_term (JCTderef(arg, ci.ml_ci_tag_field)))
-	  (make_int_term (JCTconst(JCCinteger (string_of_int ci.ml_ci_tag))))
-	in
-	let tr = make_and_list (tag_cond :: (List.map snd tpl)) in
-	env, vars, tr
-    | Tpat_variant _ ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_assertion: polymorphic variants"
-    | Tpat_record lbls ->
-	List.fold_left
-	  (fun (env, vars, tr) (ld, pat2) ->
-	     let li = label pat.pat_type ld in
-	     let fi = li.ml_li_field in
-	     let arg_fi = make_term (JCTderef(arg, fi)) fi.jc_field_info_type in
-	     let pat_env, pat_vars, pat_tr = pattern_assertion env arg_fi pat2 in
-	     pat_env, vars @ pat_vars, make_and tr pat_tr)
-	  (env, [], make_assertion JCAtrue)
-	  lbls
-    | Tpat_array _ ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_assertion: arrays"
-    | Tpat_or(p1, p2, None) ->
-	(* p1 and p2 have the same variables *)
-	let env, vars, p1_tr = pattern_assertion env arg p1 in
-	let env, _, p2_tr = pattern_assertion env arg p2 in
-	env,
-	vars,
-	make_or p1_tr p2_tr
-    | Tpat_or(p1, p2, Some path) ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_assertion: or-pattern with path"*)
-
 module type TPatternArg = sig
   type t
   type expr
@@ -98,79 +25,32 @@ module type TPatternArg = sig
   val make_int: int -> expr
 end
 
-module PAStatement = struct
-  type t = Jc_ast.tstatement
-  type expr = Jc_ast.texpr
-  type condition = Jc_ast.texpr
-  let make_if cond th el =
-    make_statement (JCTSif(cond, th, el))
-  let make_if_expr cond th el =
-    make_expr (JCTEif(cond, th, el)) th.jc_texpr_type
-  let make_var vi init body =
-    make_statement (JCTSdecl(vi, Some init, body))
-  let make_equal = make_eq_expr
-  let make_and = make_and_expr
-  let make_or = make_or_expr
-  let make_deref x fi =
-    make_expr (JCTEderef(x, fi)) fi.jc_field_info_type
-  let make_constant = constant_expr
-  let make_bool b = make_bool_expr (JCTEconst(JCCboolean b))
-  let make_int i = make_int_expr (JCTEconst(JCCinteger(string_of_int i)))
+module type TPattern = sig
+  type t
+  type expr
+  type condition
+
+  val pattern: Ml_env.t -> expr -> Ml_ocaml.Typedtree.pattern ->
+    condition * Ml_env.t * (Jc_env.var_info * expr) list
+
+  val pattern_expr: Ml_env.t -> expr -> Ml_ocaml.Typedtree.pattern ->
+    (Ml_env.t -> t) -> condition * t
+
+  val pattern_expr_list: Ml_env.t -> expr ->
+    (Ml_ocaml.Typedtree.pattern * (Ml_env.t -> t)) list -> t option -> t
 end
 
-module PAExpression = struct
-  type t = Jc_ast.texpr
-  type expr = Jc_ast.texpr
-  type condition = Jc_ast.texpr
-  let make_if cond th el =
-    make_expr (JCTEif(cond, th, el)) th.jc_texpr_type
-  let make_if_expr cond th el =
-    make_expr (JCTEif(cond, th, el)) th.jc_texpr_type
-  let make_var vi init body =
-    make_expr (JCTElet(vi, init, body)) body.jc_texpr_type
-  let make_equal = make_eq_expr
-  let make_and = make_and_expr
-  let make_or = make_or_expr
-  let make_deref x fi =
-    make_expr (JCTEderef(x, fi)) fi.jc_field_info_type
-  let make_constant = constant_expr
-  let make_bool b = make_bool_expr (JCTEconst(JCCboolean b))
-  let make_int i = make_int_expr (JCTEconst(JCCinteger(string_of_int i)))
-end
-
-module PAAssertion = struct
-  type t = Jc_ast.assertion
-  type expr = Jc_ast.term
-  type condition = Jc_ast.term
-  let make_if cond th el =
-    make_assertion (JCAif(cond, th, el))
-  let make_if_expr cond th el =
-    make_term (JCTif(cond, th, el)) th.jc_term_type
-  let make_var vi init body =
-    let body = make_implies (make_eq_assertion (make_var_term vi) init) body in
-    make_assertion (JCAquantifier(Forall, vi, body))
-  let make_equal = make_eq_term
-  let make_and = make_and_term
-  let make_or = make_or_term
-  let make_deref x fi =
-    make_term (JCTderef(x, fi)) fi.jc_field_info_type
-  let make_constant = constant_term
-  let make_bool b = make_bool_term (JCTconst(JCCboolean b))
-  let make_int i = make_int_term (JCTconst(JCCinteger(string_of_int i)))
-end
-
-module type TPatternF = functor (A: TPatternArg) -> sig
-  val pattern: Ml_env.t -> A.expr -> Ml_ocaml.Typedtree.pattern ->
-    A.condition * Ml_env.t * (Jc_env.var_info * A.expr) list
-
-  val pattern_expr: Ml_env.t -> A.expr -> Ml_ocaml.Typedtree.pattern ->
-    (Ml_env.t -> A.t) -> A.condition * A.t
-
-  val pattern_expr_list: Ml_env.t -> A.expr ->
-    (Ml_ocaml.Typedtree.pattern * (Ml_env.t -> A.t)) list -> A.t option -> A.t
-end
+module type TPatternF = functor (A: TPatternArg) ->
+  TPattern
+    with type t = A.t
+    with type expr = A.expr
+    with type condition = A.condition
 
 module Pattern: TPatternF = functor (A: TPatternArg) -> struct
+  type t = A.t
+  type expr = A.expr
+  type condition = A.condition
+
   open A
 
   let sort_vars = List.sort
@@ -263,90 +143,71 @@ module Pattern: TPatternF = functor (A: TPatternArg) -> struct
 		  (fun acc (cond, body) -> make_if cond body acc) last_body tl
 end
 
+
+module PAStatement = struct
+  type t = Jc_ast.tstatement
+  type expr = Jc_ast.texpr
+  type condition = Jc_ast.texpr
+  let make_if cond th el =
+    make_statement (JCTSif(cond, th, el))
+  let make_if_expr cond th el =
+    make_expr (JCTEif(cond, th, el)) th.jc_texpr_type
+  let make_var vi init body =
+    make_statement (JCTSdecl(vi, Some init, body))
+  let make_equal = make_eq_expr
+  let make_and = make_and_expr
+  let make_or = make_or_expr
+  let make_deref x fi =
+    make_expr (JCTEderef(x, fi)) fi.jc_field_info_type
+  let make_constant = constant_expr
+  let make_bool b = make_bool_expr (JCTEconst(JCCboolean b))
+  let make_int i = make_int_expr (JCTEconst(JCCinteger(string_of_int i)))
+end
+
+module PAExpression = struct
+  type t = Jc_ast.texpr
+  type expr = Jc_ast.texpr
+  type condition = Jc_ast.texpr
+  let make_if cond th el =
+    make_expr (JCTEif(cond, th, el)) th.jc_texpr_type
+  let make_if_expr cond th el =
+    make_expr (JCTEif(cond, th, el)) th.jc_texpr_type
+  let make_var vi init body =
+    make_expr (JCTElet(vi, init, body)) body.jc_texpr_type
+  let make_equal = make_eq_expr
+  let make_and = make_and_expr
+  let make_or = make_or_expr
+  let make_deref x fi =
+    make_expr (JCTEderef(x, fi)) fi.jc_field_info_type
+  let make_constant = constant_expr
+  let make_bool b = make_bool_expr (JCTEconst(JCCboolean b))
+  let make_int i = make_int_expr (JCTEconst(JCCinteger(string_of_int i)))
+end
+
+module PAAssertion = struct
+  type t = Jc_ast.assertion
+  type expr = Jc_ast.term
+  type condition = Jc_ast.term
+  let make_if cond th el =
+    make_assertion (JCAif(cond, th, el))
+  let make_if_expr cond th el =
+    make_term (JCTif(cond, th, el)) th.jc_term_type
+  let make_var vi init body =
+    let body = make_implies (make_eq_assertion (make_var_term vi) init) body in
+    make_assertion (JCAquantifier(Forall, vi, body))
+  let make_equal = make_eq_term
+  let make_and = make_and_term
+  let make_or = make_or_term
+  let make_deref x fi =
+    make_term (JCTderef(x, fi)) fi.jc_field_info_type
+  let make_constant = constant_term
+  let make_bool b = make_bool_term (JCTconst(JCCboolean b))
+  let make_int i = make_int_term (JCTconst(JCCinteger(string_of_int i)))
+end
+
 module PatStatement = Pattern(PAStatement)
 module PatExpression = Pattern(PAExpression)
 module PatAssertion = Pattern(PAAssertion)
-
-(*let rec pattern_expr env arg pat =
-  let ty = Ml_type.make pat.pat_type in
-  match pat.pat_desc with
-    | Tpat_any ->
-	env, [], make_bool_expr (JCTEconst(JCCboolean true))
-    | Tpat_var id ->
-	let env, vi = Ml_env.add_var (name id) ty env in
-	env,
-	[ vi ],
-	make_eq_expr (make_var_expr vi) arg
-    | Tpat_alias(pat, id) ->
-	let env, pat_vars, pat_tr = pattern_expr env arg pat in
-	let env, vi = Ml_env.add_var (name id) ty env in
-	env,
-	vi::pat_vars,
-	make_and_expr
-	  (make_eq_expr (make_var_expr vi) arg)
-	  pat_tr
-    | Tpat_constant c ->
-	env,
-	[],
-	make_eq_expr arg (constant_expr c)
-    | Tpat_tuple _ ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_expr: tuples"
-    | Tpat_construct(cd, pl) ->
-	let ci = constructor pat.pat_type cd in
-	let env, tpl = list_fold_mapi
-	  (fun env i pat ->
-	     let fi = List.nth ci.ml_ci_arguments i in
-	     let arg = make_expr
-	       (JCTEderef(arg, fi))
-	       fi.jc_field_info_type
-	     in
-	     let env, vars, tpat = pattern_expr env arg pat in
-	     env, (vars, tpat))
-	  env
-	  pl
-	in
-	let vars = List.fold_left (fun acc (b, _) -> acc @ b) [] tpl in
-	let tag_cond = make_eq_expr
-	  (make_int_expr (JCTEderef(arg, ci.ml_ci_tag_field)))
-	  (make_int_expr (JCTEconst(JCCinteger (string_of_int ci.ml_ci_tag))))
-	in
-	let tr = make_and_list_expr (tag_cond :: (List.map snd tpl)) in
-	env, vars, tr
-    | Tpat_variant _ ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_expr: polymorphic variants"
-    | Tpat_record lbls ->
-	List.fold_left
-	  (fun (env, vars, tr) (ld, pat2) ->
-	     let li = label pat.pat_type ld in
-	     let fi = li.ml_li_field in
-	     let arg_fi = make_expr (JCTEderef(arg, fi))
-	       fi.jc_field_info_type in
-	     let pat_env, pat_vars, pat_tr = pattern_expr env arg_fi pat2 in
-	     pat_env, vars @ pat_vars, make_and_expr tr pat_tr)
-	  (env, [], make_bool_expr (JCTEconst (JCCboolean true)))
-	  lbls
-    | Tpat_array _ ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_expr: arrays"
-    | Tpat_or(p1, p2, None) ->
-	(* p1 and p2 have the same variables *)
-	let env, vars, p1_tr = pattern_expr env arg p1 in
-	let env, _, p2_tr = pattern_expr env arg p2 in
-	env,
-	vars,
-	make_or_expr p1_tr p2_tr
-    | Tpat_or(p1, p2, Some path) ->
-	not_implemented pat.pat_loc
-	  "ml_pattern.ml: pattern_expr: or-pattern with path"
-
-let pattern_expr_list expr pattern env arg pel =
-  List.map
-    (fun (p, e) ->
-       let env, vars, tr = pattern env arg p in
-       vars, tr, expr env e)
-    pel*)
 
 (*
 Local Variables: 

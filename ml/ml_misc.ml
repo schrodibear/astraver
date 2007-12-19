@@ -298,6 +298,9 @@ let make_affect_field x fi e =
     make_statement (JCTSexpr({ e with jc_texpr_node =
 				 JCTEassign_heap(x, fi, e) }))
 
+let make_affect_field_expr x fi e =
+  make_expr (JCTEassign_heap(x, fi, e)) (JCTnative Tunit)
+
 let make_discard e =
   make_statement (JCTSexpr e)
 
@@ -313,6 +316,24 @@ let make_var_decls =
 let make_var_tmp ty init cont =
   let vi = new_var ty in
   make_var_decl vi init (cont vi (make_expr (JCTEvar vi) ty))
+
+let make_let_tmp ty f =
+  let vi = new_var ty in
+  let ve = make_expr (JCTEvar vi) ty in
+  let a, b = f vi ve in
+  JCTElet(vi, a, b)
+
+let make_let_alloc_tmp si f =
+  let ty = make_pointer_type si in
+  let init = make_expr (JCTEalloc(expr_of_int 1, si)) ty in
+  make_let_tmp ty (fun vi ve -> init, f vi ve)
+
+let make_seq_expr el acc =
+  let ty = acc.jc_texpr_type in
+  List.fold_left
+    (fun acc e -> make_expr (JCTElet(ignored_var e.jc_texpr_type, e, acc)) ty)
+    acc
+    (List.rev el)
 
 let make_alloc_tmp si =
   let ty = make_pointer_type si in

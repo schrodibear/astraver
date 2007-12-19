@@ -103,13 +103,43 @@ let rec expression env e =
 		  JCTEcall(fi, args'))
 	  | _ -> not_implemented e.exp_loc "unsupported application (expression)"
 	end
-(*  | Texp_match of expression * (pattern * expression) list * partial
-    | Texp_try of expression * (pattern * expression) list
-    | Texp_tuple of expression list
-    | Texp_construct of constructor_description * expression list
-    | Texp_variant of label * expression option *)
+    | Texp_match(e, pel, partial) ->
+	let e = PatExpression.pattern_expr_list
+	  env
+	  (make_expr (expression env e) (make e.exp_type))
+	  (List.map
+	     (fun (pat, expr) ->
+		pat,
+		fun env2 ->
+		  make_expr (expression env2 expr) (make expr.exp_type))
+	     pel)
+	  (match partial with
+	     | Partial ->
+		 not_implemented e.exp_loc
+		   "partial pattern-matching (expression)"
+	     | Total ->
+		 None)
+	in e.jc_texpr_node
+(*    | Texp_try of expression * (pattern * expression) list
+    | Texp_tuple of expression list*)
+    | Texp_construct(cd, el) ->
+	let ci = constructor e.exp_type cd in
+	make_let_alloc_tmp ci.ml_ci_structure
+	  (fun vi ve ->
+	     make_seq_expr
+	       ((make_affect_field_expr ve ci.ml_ci_tag_field
+		   (expr_of_int ci.ml_ci_tag))::
+		   (List.map2
+		      (make_affect_field_expr ve)
+		      ci.ml_ci_arguments
+		      (List.map
+			 (fun e ->
+			    make_expr (expression env e) (make e.exp_type))
+			 el)))
+	       ve)
+(*    | Texp_variant of label * expression option *)
     | Texp_record(lbls, None) ->
-	not_implemented e.exp_loc "TO REDO: ml_interp.ml: expression: records (make_tmp_var, label, ...)";
+	not_implemented e.exp_loc "TO REDO: ml_interp.ml: expression: records (make_let_tmp, label, ...)";
 	(*let si = match lbls with
 	  | [] ->
 	      locate_error e.exp_loc "empty record"
@@ -658,7 +688,7 @@ let rec function_decl env e = match e.exp_desc with
   | _ -> [], e
 
 let structure_item env = function
-  | Tstr_value(_, [ { pat_desc = Tpat_var id },
+  | Tstr_value(recflag, [ { pat_desc = Tpat_var id },
 		    ({ exp_desc = Texp_function _ } as expr) ]) ->
       let fun_name = identifier_of_symbol (name id) in
       log "    Function %s (%s):" (name id) fun_name;
@@ -684,17 +714,24 @@ let structure_item env = function
 	env
 	params
       in
+      let body_env = match recflag with
+	| Nonrecursive
+	| Default ->
+	    new_env
+	| Recursive ->
+	    Ml_env.add_fun (name id) params' return_type new_env
+      in
       log "      Body...";
-      let body' = statement new_env body
+      let body' = statement body_env body
 	(if is_unit return_type then make_discard else make_return)
       in
       log "      Requires...";
       let requires = match spec.fs_requires with
 	| None -> JCAtrue
-	| Some x -> assertion new_env x
+	| Some x -> assertion env x
       in
       log "      Behaviors...";
-      let behaviors = List.map (behavior new_env) spec.fs_behaviors in
+      let behaviors = List.map (behavior env) spec.fs_behaviors in
       log "      Finalizing...";
       let jc_spec = {
 	jc_fun_requires = {
@@ -713,7 +750,7 @@ let structure_item env = function
 	  Some [ body' ]
 	)
       in
-      [ jc_fun_def ], Ml_env.add_fun (name id) params' return_type new_env
+      [ jc_fun_def ], Ml_env.add_fun (name id) params' return_type env
   | Tstr_type l ->
 (*      (* pre-declare types and split them between kinds *)
       let env, records, variants = List.fold_left

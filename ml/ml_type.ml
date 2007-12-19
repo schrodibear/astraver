@@ -193,6 +193,9 @@ and instance args ty =
 	not_implemented none "ml_type.ml: instance: Type_abstract"
     | Type_record(ll, _, _) ->
 	let si = make_struct (fresh_ident ty.ml_ty_name) in
+	(* temporary declaration in case of recursive type definition *)
+	ty.ml_ty_instances <-
+	  ParamMap.add args (MLTrecord(si, [])) ty.ml_ty_instances;
 	let lbls = List.map
 	  (fun (name, _, lty) ->
 	     let app_ty = Ml_ocaml.Ctype.apply (Ml_ocaml.Env.empty)
@@ -210,6 +213,9 @@ and instance args ty =
     | Type_variant(cl, _) ->
 	let si = make_struct (fresh_ident ty.ml_ty_name) in
 	let tagfi = make_field si "vtag" (JCTnative Tinteger) in
+	(* temporary declaration in case of recursive type definition *)
+	ty.ml_ty_instances <-
+	  ParamMap.add args (MLTvariant(si, tagfi, [])) ty.ml_ty_instances;
 	let constrs = list_mapi
 	  (fun tag (name, cargs) ->
 	     let app_cargs = List.map

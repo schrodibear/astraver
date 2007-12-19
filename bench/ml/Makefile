@@ -1,5 +1,7 @@
 WHYDIR=../../
 EXT=.opt
+FASTWP=-why-opt --fast-wp
+ALLVC=-why-opt --all-vc
 JESSIE=$(WHYDIR)bin/jessie$(EXT)
 JESSICA=$(WHYDIR)bin/jessica$(EXT)
 
