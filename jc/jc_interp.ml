@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.198 2007-12-19 10:29:52 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.199 2007-12-19 10:39:02 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1584,9 +1584,9 @@ let tr_struct st acc =
       [])
   in
   let alloc_type =
-    List.fold_left (fun acc fi ->
+    List.fold_right (fun fi acc ->
       Prod_type(field_memory_name fi,Ref_type(Base_type(memory_field fi)),acc)
-    ) alloc_type all_fields
+    ) all_fields alloc_type 
   in
   let alloc_type = Prod_type("tt",unit_type,alloc_type) in
   let acc = 
@@ -1625,9 +1625,9 @@ let tr_struct st acc =
       [])
   in
   let alloc_type =
-    List.fold_left (fun acc fi ->
+    List.fold_right (fun fi acc ->
       Prod_type(field_memory_name fi,Ref_type(Base_type(memory_field fi)),acc)
-    ) alloc_type all_fields
+    ) all_fields alloc_type
   in
   let alloc_type = Prod_type("n",Base_type why_integer_type,alloc_type) in
   let acc = 
@@ -1960,7 +1960,12 @@ let tr_fun f loc spec body acc =
       (fun (fi,r) acc -> 
 	let mem = field_region_memory_name(fi,r) in
 	if Region.polymorphic r then
-	  if Region.mem r f.jc_fun_info_param_regions then mem::acc else acc
+	  if Region.mem r f.jc_fun_info_param_regions then
+	    if FieldRegionSet.mem (fi,r) 
+	      f.jc_fun_info_effects.jc_writes.jc_effect_memories 
+	    then mem::acc 
+	    else acc
+	  else acc
 	else mem::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_memories
       []
@@ -2101,7 +2106,7 @@ let tr_fun f loc spec body acc =
   let why_param = 
     let annot_type =
       Annot_type(requires, ret_type,
-		 (*reads*)[],writes, param_normal_post, param_excep_posts)
+		 reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = 
       interp_fun_params f param_write_mems param_read_mems annot_type 
