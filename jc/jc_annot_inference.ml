@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.86 2007-12-18 16:43:56 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.87 2007-12-19 10:29:52 moy Exp $ *)
 
 open Pp
 open Format
@@ -37,6 +37,7 @@ open Jc_options
 open Jc_pervasives
 open Jc_iterators
 open Jc_region
+open Jc_separation
 
 open Apron
 open Coeff
@@ -144,7 +145,7 @@ let rec without_disjunct a =
     | _ -> acc) true a
 
 let normalize_term t =
-  post_map_term (fun t -> 
+  map_term (fun t -> 
     let tnode = match t.jc_term_node with
       | JCToffset(off,t',st) as tnode ->
 	  begin match t'.jc_term_node with
@@ -158,8 +159,8 @@ let normalize_term t =
     { t with jc_term_node = tnode; }) t
 
 let normalize_assertion a =
-  let a = post_map_term_in_assertion normalize_term a in
-  post_map_assertion (fun a -> 
+  let a = map_term_in_assertion normalize_term a in
+  map_assertion (fun a -> 
     let anode = match a.jc_assertion_node with
       | JCAand al ->
 	  JCAand(List.flatten (List.map conjuncts al))
@@ -588,8 +589,7 @@ let raw_asrt_of_expr = asrt_of_expr
 (*****************************************************************************)
 
 let rec replace_term_in_term ~source ~target t = 
-  pre_map_term 
-    (fun t -> if raw_term_equal source t then Some target else None) t
+  map_term (fun t -> if raw_term_equal source t then target else t) t
     
 let rec replace_term_in_assertion srct targett a = 
   let term = replace_term_in_term ~source:srct ~target:targett in
@@ -629,7 +629,7 @@ let rec replace_term_in_assertion srct targett a =
 let rec replace_vi_in_assertion srcvi targett a = 
   let term = replace_term_in_term 
     ~source:(term_no_loc (JCTvar srcvi) srcvi.jc_var_info_type) 
-    ~target:targett.jc_term_node in
+    ~target:targett in
   let asrt = replace_vi_in_assertion srcvi targett in
   let anode = match a.jc_assertion_node with
     | JCArelation (t1, bop, t2) ->
@@ -1616,9 +1616,10 @@ let collect_statement_asserts s =
         let reqa = 
 	   List.fold_left2 (fun a param arg ->
              match term_of_expr arg with None -> raw_asrt JCAtrue | Some targ ->
-               replace_term_in_assertion (term_var_no_loc param) targ.jc_term_node a
+               replace_term_in_assertion (term_var_no_loc param) targ a
 	   ) reqa fi.jc_fun_info_parameters els
         in
+	let reqa = regionalize_assertion reqa call.jc_call_region_assoc in
         (conjuncts reqa)
 	@ List.flatten (List.map collect_expr_asserts els)
     | JCSassert a when a.jc_assertion_label = "hint" -> 
@@ -1855,7 +1856,7 @@ let assign_expr mgr pre t e =
 	  let t' = Vai.term va' in
 	  if raw_strict_sub_term te t' then 
 	    let lhst = 
-	      replace_term_in_term ~source:te ~target:t.jc_term_node t' 
+	      replace_term_in_term ~source:te ~target:t t' 
 	    in
 	    let a = raw_asrt(JCArelation(lhst,Beq_int,t')) in
 	    test_assertion mgr pre a
@@ -2982,18 +2983,17 @@ let initialize_target curposts target =
     let vit = term_var_no_loc vi in
     let copyvi = copyvar vi in
     add_inflexion_var curposts copyvi;
-    target.jc_target_regular_invariant <-
-      replace_term_in_assertion vit (JCTvar copyvi)
-      target.jc_target_regular_invariant;
-    target.jc_target_assertion <-
-      replace_term_in_assertion vit (JCTvar copyvi) target.jc_target_assertion;
     let t1 = term_var_no_loc copyvi in
+    target.jc_target_regular_invariant <-
+      replace_term_in_assertion vit t1 target.jc_target_regular_invariant;
+    target.jc_target_assertion <-
+      replace_term_in_assertion vit t1 target.jc_target_assertion;
     let bop = equality_operator_for_type vi.jc_var_info_type in
     let eq = raw_asrt (JCArelation(t1,bop,vit)) in
     let eqs = 
       TermSet.fold (fun t acc ->
 	if raw_strict_sub_term vit t then
-	  let t2 = replace_term_in_term ~source:vit ~target:(JCTvar copyvi) t in
+	  let t2 = replace_term_in_term ~source:vit ~target:t1 t in
 	  if is_integral_type t.jc_term_type then
 	    let bop = equality_operator_for_type t.jc_term_type in
 	    let eq = raw_asrt(JCArelation(t2,bop,t)) in
@@ -3091,10 +3091,11 @@ let rec wp_statement weakpre =
 	    printf "[assignment]%s@." vi.jc_var_info_name;
 	  let vit = term_var_no_loc vi in
 	  let copyvi = copyvar vi in
+	  let t1 = term_var_no_loc copyvi in
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
 	    | Some a -> 
-		let a = replace_term_in_assertion vit (JCTvar copyvi) a in
+		let a = replace_term_in_assertion vit t1 a in
 		match term_of_expr e with
 		  | None -> Some a
 		  | Some t2 ->
@@ -3102,7 +3103,6 @@ let rec wp_statement weakpre =
 			(* TODO: take boolean variables into account. *)
 			Some a
 		      else
-			let t1 = term_var_no_loc copyvi in
 			let bop = equality_operator_for_type vi.jc_var_info_type in
 			let eq = raw_asrt (JCArelation(t1,bop,t2)) in
 (* 			Some (raw_asrt (JCAimplies(eq,a))) *)
@@ -3122,16 +3122,16 @@ let rec wp_statement weakpre =
 		let dereft = term_no_loc (JCTderef(t1,fi)) fi.jc_field_info_type in
 		let vi = unique_var_for_term dereft fi.jc_field_info_type in
 		let copyvi = copyvar vi in
+		let t1 = term_var_no_loc copyvi in
 		let post = match curposts.jc_post_normal with
 		  | None -> None
 		  | Some a -> 
 		      let a = 
-			replace_term_in_assertion dereft (JCTvar copyvi) a 
+			replace_term_in_assertion dereft t1 a 
 		      in
 		      match term_of_expr e2 with
 			| None -> Some a
 			| Some t2 ->
-			    let t1 = term_var_no_loc copyvi in
 			    let bop = 
 			      equality_operator_for_type fi.jc_field_info_type in
 			    let eq = raw_asrt (JCArelation(t1,bop,t2)) in
@@ -3256,9 +3256,10 @@ let rec wp_statement weakpre =
 	  let curposts = wp_statement weakpre target s curposts in
 	  let vit = term_var_no_loc vi in
 	  let copyvi = copyvar vi in
+	  let t1 = term_var_no_loc copyvi in
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
-	    | Some a -> Some(replace_term_in_assertion vit (JCTvar copyvi) a)
+	    | Some a -> Some(replace_term_in_assertion vit t1 a)
 	  in
 	  add_inflexion_var curposts copyvi;
 	  let curposts = 
@@ -3404,13 +3405,13 @@ let rec backprop_statement target s curpost =
 	  match eo with None -> Some a | Some e ->
 	    match term_of_expr e with None -> Some a | Some t2 ->
 	      let t1 = term_var_no_loc vi in
-	      Some(replace_term_in_assertion t1 t2.jc_term_node a)
+	      Some(replace_term_in_assertion t1 t2 a)
 	end
     | JCSassign_var(vi,e) ->
 	begin match curpost with None -> None | Some a -> 
 	  match term_of_expr e with None -> Some a | Some t2 ->
 	    let t1 = term_var_no_loc vi in
-	    Some(replace_term_in_assertion t1 t2.jc_term_node a)
+	    Some(replace_term_in_assertion t1 t2 a)
 	end
     | JCSassign_heap _ | JCSassert _ | JCSpack _ | JCSunpack _ ->
 	curpost

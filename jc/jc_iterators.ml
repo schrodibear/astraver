@@ -203,77 +203,40 @@ let rec fold_term f acc t =
       let acc = fold_term f acc t2 in
       fold_term f acc t3
 
-let rec post_map_term f t =
+let rec map_term f t =
   let tnode = match t.jc_term_node with
     | JCTconst _ | JCTvar _ | JCTrange (None, None) as tnode -> tnode
     | JCTbinary(t1,bop,t2) ->
-	JCTbinary(post_map_term f t1,bop,post_map_term f t2) 
+	JCTbinary(map_term f t1,bop,map_term f t2) 
     | JCTunary(uop,t1) ->
-	JCTunary(uop,post_map_term f t1)
+	JCTunary(uop,map_term f t1)
     | JCTshift(t1,t2) ->
-	JCTshift(post_map_term f t1,post_map_term f t2)
+	JCTshift(map_term f t1,map_term f t2)
     | JCTsub_pointer(t1,t2) ->
-	JCTsub_pointer(post_map_term f t1,post_map_term f t2)
+	JCTsub_pointer(map_term f t1,map_term f t2)
     | JCTderef(t1,fi) ->
-	JCTderef(post_map_term f t1,fi)
+	JCTderef(map_term f t1,fi)
     | JCTapp app ->
 	let tl = app.jc_app_args in
-	JCTapp { app with jc_app_args = List.map (post_map_term f) tl; }
+	JCTapp { app with jc_app_args = List.map (map_term f) tl; }
     | JCTold t ->
-	JCTold(post_map_term f t)
+	JCTold(map_term f t)
     | JCToffset(off,t,st) ->
-	JCToffset(off,post_map_term f t,st)
+	JCToffset(off,map_term f t,st)
     | JCTinstanceof(t,st) ->
-	JCTinstanceof(post_map_term f t,st)
+	JCTinstanceof(map_term f t,st)
     | JCTcast(t,st) ->
-	JCTcast(post_map_term f t,st)
+	JCTcast(map_term f t,st)
     | JCTif(t1,t2,t3) ->
-	JCTif(post_map_term f t1,post_map_term f t2,post_map_term f t3)
+	JCTif(map_term f t1,map_term f t2,map_term f t3)
     | JCTrange(Some t1,Some t2) ->
-	JCTrange(Some (post_map_term f t1),Some (post_map_term f t2))
+	JCTrange(Some (map_term f t1),Some (map_term f t2))
     | JCTrange(Some t1,None) ->
-	JCTrange(Some (post_map_term f t1),None)
+	JCTrange(Some (map_term f t1),None)
     | JCTrange(None,Some t2) ->
-	JCTrange(None,Some (post_map_term f t2))
+	JCTrange(None,Some (map_term f t2))
   in
   f { t with jc_term_node = tnode; }
-
-let rec pre_map_term f t =
-  let tnode = match f t with
-    | Some tnode -> tnode
-    | None -> match t.jc_term_node with
-      | JCTconst _ | JCTvar _ | JCTrange(None,None) as tnode -> tnode
-      | JCTbinary(t1,bop,t2) ->
-	  JCTbinary(pre_map_term f t1,bop,pre_map_term f t2) 
-      | JCTunary(uop,t1) ->
-	  JCTunary(uop,pre_map_term f t1)
-      | JCTshift(t1,t2) ->
-	  JCTshift(pre_map_term f t1,pre_map_term f t2)
-      | JCTsub_pointer(t1,t2) ->
-	  JCTsub_pointer(pre_map_term f t1,pre_map_term f t2)
-      | JCTderef(t1,fi) ->
-	  JCTderef(pre_map_term f t1,fi)
-      | JCTapp app ->
-	  let tl = app.jc_app_args in
-	  JCTapp { app with jc_app_args = List.map (pre_map_term f) tl; }
-      | JCTold t ->
-	  JCTold(pre_map_term f t)
-      | JCToffset(off,t,st) ->
-	  JCToffset(off,pre_map_term f t,st)
-      | JCTinstanceof(t,st) ->
-	  JCTinstanceof(pre_map_term f t,st)
-      | JCTcast(t,st) ->
-	  JCTcast(pre_map_term f t,st)
-      | JCTif(t1,t2,t3) ->
-	  JCTif(pre_map_term f t1,pre_map_term f t2,pre_map_term f t3)
-      | JCTrange(Some t1,Some t2) ->
-	  JCTrange(Some (pre_map_term f t1),Some (pre_map_term f t2))
-      | JCTrange(Some t1,None) ->
-	  JCTrange(Some (pre_map_term f t1),None)
-      | JCTrange(None,Some t2) ->
-	  JCTrange(None,Some (pre_map_term f t2))
-  in
-  { t with jc_term_node = tnode; }
 
 
 (*****************************************************************************)
@@ -388,66 +351,104 @@ let rec fold_term_and_assertion ft fa acc a =
   in
   fa acc a
 
-let rec post_map_term_in_assertion f a =
-  let anode = match a.jc_assertion_node with
-    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
-    | JCArelation(t1,op,t2) -> 
-	JCArelation(post_map_term f t1,op,post_map_term f t2)
-    | JCAapp(li,tls) ->
-	JCAapp(li,List.map (post_map_term f) tls)
-    | JCAinstanceof(t1,st) ->
-	JCAinstanceof(post_map_term f t1,st)
-    | JCAbool_term t1 ->
-	JCAbool_term(post_map_term f t1)
-    | JCAmutable(t1,st,tag) ->
-	JCAmutable(post_map_term f t1,st,tag)
-    | JCAand al ->
-	JCAand(List.map (post_map_term_in_assertion f) al)
-    | JCAor al ->
-	JCAor(List.map (post_map_term_in_assertion f) al)
-    | JCAimplies(a1,a2) ->
-	JCAimplies
-	  (post_map_term_in_assertion f a1,post_map_term_in_assertion f a2)
-    | JCAiff(a1,a2) ->
-	JCAiff
-	  (post_map_term_in_assertion f a1,post_map_term_in_assertion f a2)
-    | JCAif(t1,a1,a2) ->
-	JCAif(
-	  post_map_term f t1,
-	  post_map_term_in_assertion f a1,
-	  post_map_term_in_assertion f a2)
-    | JCAnot a1 ->
-	JCAnot(post_map_term_in_assertion f a1)
-    | JCAquantifier(q,vi,a1) ->
-	JCAquantifier(q,vi,post_map_term_in_assertion f a1)
-    | JCAold a1 ->
-	JCAold(post_map_term_in_assertion f a1)
-  in
-  { a with jc_assertion_node = anode; }
-
-let rec post_map_assertion f a =
+let rec map_assertion f a =
   let anode = match a.jc_assertion_node with
     | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAtagequality _ 
     | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ as anode -> 
 	anode
     | JCAand al ->
-	JCAand(List.map (post_map_assertion f) al)
+	JCAand(List.map (map_assertion f) al)
     | JCAor al ->
-	JCAor(List.map (post_map_assertion f) al)
+	JCAor(List.map (map_assertion f) al)
     | JCAimplies(a1,a2) ->
-	JCAimplies(post_map_assertion f a1,post_map_assertion f a2)
+	JCAimplies(map_assertion f a1,map_assertion f a2)
     | JCAiff(a1,a2) ->
-	JCAiff(post_map_assertion f a1,post_map_assertion f a2)
+	JCAiff(map_assertion f a1,map_assertion f a2)
     | JCAif(t,a1,a2) ->
-	JCAif(t,post_map_assertion f a1,post_map_assertion f a2)
+	JCAif(t,map_assertion f a1,map_assertion f a2)
     | JCAnot a1 ->
-	JCAnot(post_map_assertion f a1)
+	JCAnot(map_assertion f a1)
     | JCAquantifier(q,vi,a1) ->
-	JCAquantifier(q,vi,post_map_assertion f a1)
+	JCAquantifier(q,vi,map_assertion f a1)
     | JCAold a1 ->
-	JCAold(post_map_assertion f a1)
+	JCAold(map_assertion f a1)
   in
   f { a with jc_assertion_node = anode; }
+
+let rec map_term_in_assertion f a =
+  let anode = match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+    | JCArelation(t1,op,t2) -> 
+	JCArelation(map_term f t1,op,map_term f t2)
+    | JCAapp(li,tls) ->
+	JCAapp(li,List.map (map_term f) tls)
+    | JCAinstanceof(t1,st) ->
+	JCAinstanceof(map_term f t1,st)
+    | JCAbool_term t1 ->
+	JCAbool_term(map_term f t1)
+    | JCAmutable(t1,st,tag) ->
+	JCAmutable(map_term f t1,st,tag)
+    | JCAand al ->
+	JCAand(List.map (map_term_in_assertion f) al)
+    | JCAor al ->
+	JCAor(List.map (map_term_in_assertion f) al)
+    | JCAimplies(a1,a2) ->
+	JCAimplies
+	  (map_term_in_assertion f a1,map_term_in_assertion f a2)
+    | JCAiff(a1,a2) ->
+	JCAiff
+	  (map_term_in_assertion f a1,map_term_in_assertion f a2)
+    | JCAif(t1,a1,a2) ->
+	JCAif(
+	  map_term f t1,
+	  map_term_in_assertion f a1,
+	  map_term_in_assertion f a2)
+    | JCAnot a1 ->
+	JCAnot(map_term_in_assertion f a1)
+    | JCAquantifier(q,vi,a1) ->
+	JCAquantifier(q,vi,map_term_in_assertion f a1)
+    | JCAold a1 ->
+	JCAold(map_term_in_assertion f a1)
+  in
+  { a with jc_assertion_node = anode; }
+
+let rec map_term_in_assertion f a =
+  let anode = match a.jc_assertion_node with
+    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+    | JCArelation(t1,op,t2) -> 
+	JCArelation(map_term f t1,op,map_term f t2)
+    | JCAapp(li,tls) ->
+	JCAapp(li,List.map (map_term f) tls)
+    | JCAinstanceof(t1,st) ->
+	JCAinstanceof(map_term f t1,st)
+    | JCAbool_term t1 ->
+	JCAbool_term(map_term f t1)
+    | JCAmutable(t1,st,tag) ->
+	JCAmutable(map_term f t1,st,tag)
+    | JCAand al ->
+	JCAand(List.map (map_term_in_assertion f) al)
+    | JCAor al ->
+	JCAor(List.map (map_term_in_assertion f) al)
+    | JCAimplies(a1,a2) ->
+	JCAimplies
+	  (map_term_in_assertion f a1,map_term_in_assertion f a2)
+    | JCAiff(a1,a2) ->
+	JCAiff
+	  (map_term_in_assertion f a1,map_term_in_assertion f a2)
+    | JCAif(t1,a1,a2) ->
+	JCAif(
+	  map_term f t1,
+	  map_term_in_assertion f a1,
+	  map_term_in_assertion f a2)
+    | JCAnot a1 ->
+	JCAnot(map_term_in_assertion f a1)
+    | JCAquantifier(q,vi,a1) ->
+	JCAquantifier(q,vi,map_term_in_assertion f a1)
+    | JCAold a1 ->
+	JCAold(map_term_in_assertion f a1)
+  in
+  { a with jc_assertion_node = anode; }
+
 
 (*
 Local Variables: 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.4 2007-12-18 16:43:57 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.5 2007-12-19 10:29:52 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -184,6 +184,26 @@ let code_component fls =
 
 let axiom id a = assertion dummy_region a
 
+let regionalize_assertion a assoc =
+  map_term_in_assertion (fun t ->
+    let t = match t.jc_term_node with
+      | JCTapp app ->
+	  let app_assoc = 
+	    List.map (fun (rdist,rloc) -> 
+	      try (rdist,Region.assoc rloc assoc) with Not_found -> (rdist,rloc)
+	    ) app.jc_app_region_assoc
+	  in
+	  let tnode = JCTapp { app with jc_app_region_assoc = app_assoc; } in
+	  { t with jc_term_node = tnode; }
+      | JCTconst _ | JCTvar _ | JCTshift _ | JCTsub_pointer _ 
+      | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCToffset _
+      | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
+	  t
+    in
+    try { t with jc_term_region = Region.assoc t.jc_term_region assoc; }
+    with Not_found -> t
+  ) a
+  
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

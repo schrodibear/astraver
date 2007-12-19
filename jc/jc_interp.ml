@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.197 2007-12-18 16:37:47 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.198 2007-12-19 10:29:52 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1129,8 +1129,8 @@ and expr ~infunction ~threats e : expr =
 		begin match siz.jc_expr_node with 
 		  | JCEconst(JCCinteger "1") ->
 		      make_app (alloc_one_param_name st) 
-			((List.map (var ** field_region_memory_name) fields)
-			@ [Void])
+			(Void :: 
+			  (List.map (var ** field_region_memory_name) fields))
 		  | _ ->
 		      make_app (alloc_param_name st)
 			[coerce ~no_int_overflow:(not threats) 
@@ -2166,8 +2166,13 @@ let tr_fun f loc spec body acc =
 	      in
 	      let tblock =
 		List.fold_left (fun acc (mem_name,mem_ty) ->
+		  Let(mem_name,App(Var "any_memory",Void),acc)
+		) tblock local_read_mems
+	      in
+	      let tblock =
+		List.fold_left (fun acc (mem_name,mem_ty) ->
 		  Let_ref(mem_name,App(Var "any_memory",Void),acc)
-		) tblock (local_read_mems @ local_write_mems)
+		) tblock local_write_mems
 	      in
 	      let tblock = 
 		if !return_void then
