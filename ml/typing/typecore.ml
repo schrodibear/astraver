@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.ml,v 1.6 2007-12-14 14:31:29 bardou Exp $ *)
+(* $Id: typecore.ml,v 1.7 2007-12-20 15:00:39 bardou Exp $ *)
 
 (* Typechecking for the core language *)
 
@@ -60,8 +60,16 @@ type error =
   | Not_a_variant_type of Longident.t
   | Incoherent_label_order
   | Less_general of string * (type_expr * type_expr) list
+  | Cannot_infer_logic_function_type of string
 
 exception Error of Location.t * error
+
+(* Used by Jessica patches *)
+let try_unify env loc x y =
+  try
+    unify env x y
+  with Unify trace ->
+    raise (Error(loc, Expr_type_clash trace))
 
 (* Forward declaration, to be filled in by Typemod.type_module *)
 
@@ -1482,6 +1490,17 @@ let rec type_exp env sexp =
         exp_type = te.exp_type;
         exp_env = env;
       }
+  | Pexp_implies(a, b) ->
+      let ta = type_exp env a in
+      try_unify env a.pexp_loc ta.exp_type Predef.type_bool;
+      let tb = type_exp env b in
+      try_unify env b.pexp_loc tb.exp_type Predef.type_bool;
+      re {
+	exp_desc = Texp_implies(ta, tb);
+	exp_loc = sexp.pexp_loc;
+	exp_type = Predef.type_bool;
+	exp_env = env;
+      }
 
 and type_argument env sarg ty_expected' =
   (* ty_expected' may be generic *)
@@ -2036,37 +2055,113 @@ let type_expression env sexp =
   else generalize_expansive env exp.exp_type;
   exp
 
-(* Typing of type invariants *)
+(* Typing of specifications *)
 
-let type_invariant env ty pti =
+let type_pattern_with env pat ty =
   (* type the pattern (ie: bind variables) *)
-  let (pat, body_env, force) = type_pattern env pti.pti_argument in
-  unify_pat body_env pat ty;
+  let (typed_pat, body_env, force) = type_pattern env pat in
+  unify_pat body_env typed_pat ty;
   (* Polymorphic variant processing (copied from "type_let") *)
-  if has_variants pat then begin
-    Parmatch.pressure_variants env [pat];
-    iter_pattern finalize_variant pat
+  if has_variants typed_pat then begin
+    Parmatch.pressure_variants env [ typed_pat ];
+    iter_pattern finalize_variant typed_pat
   end;
   (* Copied from type_let (???) *)
   List.iter (fun f -> f()) force;
-  (* Type the body *)
-  let body = type_expression body_env pti.pti_body in
-  begin try
-    unify body_env body.exp_type Predef.type_bool
-  with Unify trace ->
-    raise (Error(pti.pti_body.pexp_loc, Expr_type_clash trace))
+  typed_pat, body_env
+
+let type_pattern_force env pat =
+  (* type the pattern (ie: bind variables) *)
+  let (typed_pat, body_env, force) = type_pattern env pat in
+  (* Polymorphic variant processing (copied from "type_let") *)
+  if has_variants typed_pat then begin
+    Parmatch.pressure_variants env [ typed_pat ];
+    iter_pattern finalize_variant typed_pat
   end;
-  (* Add the invariant to the environment *)
+  (* Copied from type_let (???) *)
+  List.iter (fun f -> f()) force;
+  typed_pat, body_env
+
+let type_pattern_list_force env pats =
+  List.fold_right
+    (fun pat (env, args) ->
+       let pat2, env2 = type_pattern_force env pat in
+       env2, pat2::args)
+    pats
+    (env, [])
+
+let type_expression_with env expr ty =
+  let te = type_expression env expr in
+  try_unify env te.exp_loc te.exp_type ty;
+  te
+
+let env_enter_function name args body env =
+  let ty = List.fold_right
+    (fun arg acc -> newgenty (Tarrow("", arg, acc, Cunknown)))
+    args
+    body
+  in
   let d = {
-    val_type = newgenty
-      (Tarrow("", ty, Predef.type_bool, Cunknown));
+    val_type = ty;
     val_kind = Val_reg;
   } in
-  let id, new_env = Env.enter_value pti.pti_name d env in
+  Env.enter_value name d env
+
+let type_invariant env ty pti =
+  let pat, body_env = type_pattern_with env pti.pti_argument ty in
+  let body = type_expression_with body_env pti.pti_body Predef.type_bool in
+  let id, new_env =
+    env_enter_function pti.pti_name [ ty ] Predef.type_bool env in
   new_env, {
     ti_name = id;
     ti_argument = pat;
     ti_body = body;
+  }
+
+let type_axiom env axs =
+  let body_env, args = type_pattern_list_force env axs.pas_arguments in
+  let body = type_expression_with body_env axs.pas_body Predef.type_bool in
+  {
+    as_name = axs.pas_name;
+    as_arguments = args;
+    as_body = body;
+  }
+
+let rec type_read_location env = function
+  | PRLvar x ->
+      let path, _ = Env.lookup_value (Longident.Lident x) env in
+      RLvar path
+  | PRLderef(rl, lbl) ->
+      let tlbl = Env.lookup_label (Longident.Lident lbl) env in
+      RLderef(type_read_location env rl, tlbl)
+
+let type_logic_function env loc lfs =
+  let body_env, args = type_pattern_list_force env lfs.plfs_arguments in
+  let body, return_type = match lfs.plfs_body, lfs.plfs_return_type with
+    | POBreads _, None ->
+	raise (Error(loc, Cannot_infer_logic_function_type lfs.plfs_name))
+    | POBreads rll, Some ty ->
+	OBreads(List.map (type_read_location body_env) rll),
+	Typetexp.transl_simple_type env false ty
+    | POBbody e, None ->
+	let te = type_expression body_env e in
+	OBbody(te), te.exp_type
+    | POBbody e, Some ty ->
+	let tty = Typetexp.transl_simple_type env false ty in
+	let te = type_expression_with body_env e tty in
+	OBbody(te), te.exp_type
+  in
+  let id, new_env = env_enter_function
+    lfs.plfs_name
+    (List.map (fun pat -> pat.pat_type) args)
+    return_type
+    env
+  in
+  new_env, {
+    lfs_name = id;
+    lfs_arguments = args;
+    lfs_return_type = return_type;
+    lfs_body = body;
   }
 
 (* Error report *)
@@ -2227,3 +2322,5 @@ let report_error ppf = function
       report_unification_error ppf trace
         (fun ppf -> fprintf ppf "This %s has type" kind)
         (fun ppf -> fprintf ppf "which is less general than")
+  | Cannot_infer_logic_function_type id ->
+      fprintf ppf "Cannot infer return type for logic function %s" id

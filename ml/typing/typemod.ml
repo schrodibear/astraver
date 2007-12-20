@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typemod.ml,v 1.6 2007-12-13 16:42:57 bardou Exp $ *)
+(* $Id: typemod.ml,v 1.7 2007-12-20 15:00:39 bardou Exp $ *)
 
 (* Type-checking of the module language *)
 
@@ -800,6 +800,25 @@ and type_structure anchor env sstr =
 	(* finish *)
         let (str_rem, sig_rem, final_env) = type_struct new_env srem in
         (Tstr_type_spec tts :: str_rem, sig_rem, final_env)
+    | {pstr_desc = Pstr_logic_function_spec lfs; pstr_loc = loc} :: srem ->
+	let new_env, tlfs = Typecore.type_logic_function env loc lfs in
+        let (str_rem, sig_rem, final_env) = type_struct new_env srem in
+        (Tstr_logic_function_spec tlfs :: str_rem, sig_rem, final_env)
+    | {pstr_desc = Pstr_logic_type_spec lts; pstr_loc = loc} :: srem ->
+	let td = {
+	  type_params = [];
+	  type_arity = 0;
+	  type_kind = Type_abstract;
+	  type_manifest = None;
+	  type_variance = [];
+	} in
+	let type_id, new_env = Env.enter_type lts td env in
+        let (str_rem, sig_rem, final_env) = type_struct new_env srem in
+        (Tstr_logic_type_spec type_id :: str_rem, sig_rem, final_env)
+    | {pstr_desc = Pstr_axiom_spec axs; pstr_loc = loc} :: srem ->
+	let taxs = Typecore.type_axiom env axs in
+        let (str_rem, sig_rem, final_env) = type_struct env srem in
+        (Tstr_axiom_spec taxs :: str_rem, sig_rem, final_env)
   in
   if !Clflags.save_types
   then List.iter (function {pstr_loc = l} -> Stypes.record_phrase l) sstr;

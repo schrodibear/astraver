@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.8 2007-12-14 14:31:29 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.9 2007-12-20 15:00:39 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -80,6 +80,7 @@ and expression_desc =
   | Texp_object of class_structure * class_signature * string list
   | Texp_result
   | Texp_old of expression
+  | Texp_implies of expression * expression
 
 and while_spec = {
   ws_invariant: expression option;
@@ -153,6 +154,9 @@ and structure_item =
   | Tstr_include of module_expr * Ident.t list
   | Tstr_function_spec of function_spec
   | Tstr_type_spec of type_spec
+  | Tstr_logic_function_spec of logic_function_spec
+  | Tstr_logic_type_spec of Ident.t
+  | Tstr_axiom_spec of axiom_spec
 
 and behavior = {
   b_name: string;
@@ -175,6 +179,27 @@ and type_invariant = {
 and type_spec = {
   ts_type: Path.t;
   ts_invariants: type_invariant list;
+}
+
+and read_location =
+  | RLvar of Path.t
+  | RLderef of read_location * label_description
+
+and optional_body =
+  | OBreads of read_location list
+  | OBbody of expression
+
+and logic_function_spec = {
+  lfs_name: Ident.t;
+  lfs_arguments: pattern list;
+  lfs_return_type: type_expr;
+  lfs_body: optional_body;
+}
+
+and axiom_spec = {
+  as_name: string;
+  as_arguments: pattern list;
+  as_body: expression;
 }
 
 and module_coercion =

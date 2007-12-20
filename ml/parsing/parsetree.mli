@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: parsetree.mli,v 1.8 2007-12-14 14:31:29 bardou Exp $ *)
+(* $Id: parsetree.mli,v 1.9 2007-12-20 15:00:39 bardou Exp $ *)
 
 (* Abstract syntax tree produced by parsing *)
 
@@ -113,6 +113,7 @@ and expression_desc =
   | Pexp_object of class_structure
   | Pexp_result
   | Pexp_old of expression
+  | Pexp_implies of expression * expression
 
 and while_spec = {
   pws_invariant: expression option;
@@ -269,6 +270,9 @@ and structure_item_desc =
   | Pstr_include of module_expr
   | Pstr_function_spec of function_spec
   | Pstr_type_spec of type_spec
+  | Pstr_logic_function_spec of logic_function_spec
+  | Pstr_logic_type_spec of string
+  | Pstr_axiom_spec of axiom_spec
 
 and behavior = {
   pb_name: string;
@@ -291,6 +295,27 @@ and type_invariant = {
 and type_spec = {
   pts_name: string;
   pts_invariants: type_invariant list;
+}
+
+and read_location =
+  | PRLvar of string
+  | PRLderef of read_location * string
+
+and optional_body =
+  | POBreads of read_location list
+  | POBbody of expression
+
+and logic_function_spec = {
+  plfs_name: string;
+  plfs_arguments: pattern list;
+  plfs_return_type: core_type option;
+  plfs_body: optional_body;
+}
+
+and axiom_spec = {
+  pas_name: string;
+  pas_arguments: pattern list;
+  pas_body: expression;
 }
 
 (* Toplevel phrases *)

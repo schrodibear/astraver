@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.mli,v 1.4 2007-12-13 16:42:57 bardou Exp $ *)
+(* $Id: typecore.mli,v 1.5 2007-12-20 15:00:39 bardou Exp $ *)
 
 (* Type inference for the core language *)
 
@@ -50,9 +50,15 @@ val type_approx:
         Env.t -> Parsetree.expression -> type_expr
 val type_argument:
         Env.t -> Parsetree.expression -> type_expr -> Typedtree.expression
+
 val type_invariant:
   Env.t -> Types.type_expr -> Parsetree.type_invariant ->
   Env.t * Typedtree.type_invariant
+val type_axiom:
+  Env.t -> Parsetree.axiom_spec -> Typedtree.axiom_spec
+val type_logic_function:
+  Env.t -> Location.t -> Parsetree.logic_function_spec ->
+  Env.t * Typedtree.logic_function_spec
 
 val option_some: Typedtree.expression -> Typedtree.expression
 val option_none: type_expr -> Location.t -> Typedtree.expression
@@ -101,6 +107,7 @@ type error =
   | Not_a_variant_type of Longident.t
   | Incoherent_label_order
   | Less_general of string * (type_expr * type_expr) list
+  | Cannot_infer_logic_function_type of string
 
 exception Error of Location.t * error
 

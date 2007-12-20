@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.8 2007-12-14 14:31:29 bardou Exp $ */
+/* $Id: parser.mly,v 1.9 2007-12-20 15:00:39 bardou Exp $ */
 
 /* The parser definition */
 
@@ -299,13 +299,20 @@ let bigarray_set arr arg newval =
 %token WHILE
 %token WITH
 
+%token AXIOM
 %token BEHAVIOR
 %token BSOLD
 %token BSRESULT
 %token ENSURES
+%token EQUALEQUALGREATER
 %token INVARIANT
 %token LANNOT
+%token LESSEQUALEQUAL
+%token LESSEQUALGREATER
+%token LOGIC
+%token PREDICATE
 %token RANNOT
+%token READS
 %token REQUIRES
 %token VARIANT
 
@@ -351,6 +358,8 @@ The precedences must be listed from low to high.
 %right    OR BARBAR                     /* expr (e || e || e) */
 %right    AMPERSAND AMPERAMPER          /* expr (e && e && e) */
 %nonassoc below_EQUAL
+%right    EQUALEQUALGREATER
+%left     LESSEQUALEQUAL LESSEQUALGREATER
 %left     INFIXOP0 EQUAL LESS GREATER   /* expr (e OP e OP e) */
 %right    INFIXOP1                      /* expr (e OP e OP e) */
 %right    COLONCOLON                    /* expr (e :: e :: e) */
@@ -482,6 +491,12 @@ structure_item:
       { mkstr(Pstr_function_spec $2) }
   | LANNOT type_spec RANNOT
       { mkstr(Pstr_type_spec $2) }
+  | LANNOT logic_type_spec RANNOT
+      { mkstr(Pstr_logic_type_spec $2) }
+  | LANNOT logic_function_spec RANNOT
+      { mkstr(Pstr_logic_function_spec $2) }
+  | LANNOT axiom_spec RANNOT
+      { mkstr(Pstr_axiom_spec $2) }
 ;
 module_binding:
     EQUAL module_expr
@@ -918,6 +933,14 @@ expr:
       { mkexp (Pexp_object($2)) }
   | OBJECT class_structure error
       { unclosed "object" 1 "end" 3 }
+  | expr EQUALEQUALGREATER expr
+      { mkexp (Pexp_implies($1, $3)) }
+  | expr LESSEQUALEQUAL expr
+      { mkexp (Pexp_implies($3, $1)) }
+  | expr LESSEQUALGREATER expr
+      { mkexp (Pexp_apply(ghexp(Pexp_ident(Lident "&&")),
+			  [ "", mkexp (Pexp_implies($1, $3));
+			    "", mkexp (Pexp_implies($3, $1)) ])) }
 ;
 simple_expr:
     val_longident
@@ -1640,6 +1663,80 @@ while_spec:
   |
       { { pws_invariant = None;
 	  pws_variant = None } }
+;
+
+pattern_list:
+  | LPAREN pattern RPAREN pattern_list
+      { $2::$4 }
+  | LIDENT pattern_list
+      { (mkpat (Ppat_var $1))::$2 }
+  | pattern
+      { [ $1 ] }
+;
+
+read_location:
+  | LIDENT
+      { PRLvar $1 }
+  | read_location DOT LIDENT
+      { PRLderef($1, $3) }
+;
+
+read_location_list:
+  | read_location COMMA read_location_list
+      { $1::$3 }
+  | read_location
+      { [ $1 ] }
+;
+
+logic_type_spec:
+  | LOGIC TYPE LIDENT
+      { $3 }
+;
+
+optional_body:
+  | READS read_location_list
+      { POBreads $2 }
+  | EQUAL expr
+      { POBbody $2 }
+  |
+      { POBreads [] }
+;
+
+optional_type:
+  | COLON core_type
+      { Some $2 }
+  |
+      { None }
+;
+
+logic_function_spec:
+  | PREDICATE LIDENT pattern_list optional_body
+      { { plfs_name = $2;
+	  plfs_arguments = $3;
+	  plfs_return_type = Some(mktyp (Ptyp_constr(Lident "bool", [])));
+	  plfs_body = $4; } }
+  | LOGIC FUN LIDENT pattern_list optional_type optional_body
+      { { plfs_name = $3;
+	  plfs_arguments = $4;
+	  plfs_return_type = $5;
+	  plfs_body = $6; } }
+  | LOGIC FUNCTION LIDENT pattern_list optional_type optional_body
+      { { plfs_name = $3;
+	  plfs_arguments = $4;
+	  plfs_return_type = $5;
+	  plfs_body = $6; } }
+  | LOGIC VAL LIDENT COLON core_type
+      { { plfs_name = $3;
+	  plfs_arguments = [];
+	  plfs_return_type = Some $5;
+	  plfs_body = POBreads []; } }
+;
+
+axiom_spec:
+  | AXIOM LIDENT pattern_list EQUAL expr
+      { { pas_name = $2;
+	  pas_arguments = $3;
+	  pas_body = $5; } }
 ;
 
 %%

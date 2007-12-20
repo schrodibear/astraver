@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: lexer.mll,v 1.5 2007-12-14 14:31:29 bardou Exp $ *)
+(* $Id: lexer.mll,v 1.6 2007-12-20 15:00:39 bardou Exp $ *)
 
 (* The lexer definition *)
 
@@ -102,10 +102,14 @@ let keyword_table =
 
 let annot_keyword_table =
   create_hashtable 149 [
-    "requires", REQUIRES;
-    "ensures", ENSURES;
+    "axiom", AXIOM;
     "behavior", BEHAVIOR;
+    "ensures", ENSURES;
     "invariant", INVARIANT;
+    "logic", LOGIC;
+    "predicate", PREDICATE;
+    "reads", READS;
+    "requires", REQUIRES;
     "variant", VARIANT;
     "\\result", BSRESULT;
     "\\old", BSOLD;
@@ -412,6 +416,10 @@ rule token = parse
   | ">]" { GREATERRBRACKET }
   | "}"  { RBRACE }
   | ">}" { GREATERRBRACE }
+
+  | "==>" { if !in_annotation then EQUALEQUALGREATER else INFIXOP0 "==>" }
+  | "<==" { if !in_annotation then LESSEQUALEQUAL else INFIXOP0 "<==" }
+  | "<=>" { if !in_annotation then LESSEQUALGREATER else INFIXOP0 "<=>" }
 
   | "!=" { INFIXOP0 "!=" }
   | "+"  { PLUS }
