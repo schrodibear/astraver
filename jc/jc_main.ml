@@ -25,10 +25,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.82 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.83 2007-12-20 13:22:23 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
+open Jc_region
 open Jc_ast
 open Format
 
@@ -192,6 +193,17 @@ let main () =
 	      Jc_norm.variables_table
 	      d_memories
 	  in	       	  
+	  let d_memories,_ =
+	    FieldRegionSet.fold 
+	      (fun (fi,r) (acc,regions) -> 
+		let acc = 
+		  if RegionSet.mem r regions then acc else
+		    Jc_interp.tr_region r acc 
+		in
+		Jc_interp.tr_memory (fi,r) acc,RegionSet.add r regions)
+	      (FieldRegionSet.map_repr !Jc_region.global_mem_set)
+	      (d_memories,RegionSet.singleton dummy_region)
+	  in	       	  
 
 	  (* production phase 1.3 : generation of Why exceptions *)
 	  Jc_options.lprintf
@@ -330,6 +342,6 @@ let _ = Sys.catch_break true;
   
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
 End: 
 *)

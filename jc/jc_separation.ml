@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.5 2007-12-19 10:29:52 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.6 2007-12-20 13:22:23 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -47,12 +47,12 @@ let term rresult t =
     | JCTapp app ->
 	let li = app.jc_app_fun in
 	let regions = li.jc_logic_info_param_regions in
-	let assoc = Region.copy_list regions in
+	let assoc = RegionList.duplicate regions in
 	app.jc_app_region_assoc <- assoc;
 	let param_regions =
 	  List.map (fun vi -> 
 	    if is_dummy_region vi.jc_var_info_region then dummy_region else
-	      try Region.assoc vi.jc_var_info_region assoc
+	      try RegionList.assoc vi.jc_var_info_region assoc
 	      with Not_found -> assert false)
 	    li.jc_logic_info_parameters
 	in
@@ -63,7 +63,7 @@ let term rresult t =
 	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
 	List.iter2 Region.unify param_regions arg_regions;
 	let result_region = 
-	  try Region.assoc li.jc_logic_info_result_region assoc
+	  try RegionList.assoc li.jc_logic_info_result_region assoc
 	  with Not_found -> assert false
 	in
 	Jc_options.lprintf "param:%a@." Region.print result_region;
@@ -110,12 +110,12 @@ let statement rresult s =
     | JCScall(vio,call,s) -> 
 	let f = call.jc_call_fun in
 	let regions = f.jc_fun_info_param_regions in
-	let assoc = Region.copy_list regions in
+	let assoc = RegionList.duplicate regions in
 	call.jc_call_region_assoc <- assoc;
 	let param_regions =
 	  List.map (fun vi -> 
 	    if is_dummy_region vi.jc_var_info_region then dummy_region else
-	      try Region.assoc vi.jc_var_info_region assoc
+	      try RegionList.assoc vi.jc_var_info_region assoc
 	      with Not_found -> assert false)
 	    f.jc_fun_info_parameters
 	in
@@ -129,7 +129,7 @@ let statement rresult s =
 	  let result_region = 
 	    if is_dummy_region f.jc_fun_info_return_region then dummy_region
 	    else
-	      try Region.assoc f.jc_fun_info_return_region assoc
+	      try RegionList.assoc f.jc_fun_info_return_region assoc
 	      with Not_found -> assert false
 	  in
 	  Jc_options.lprintf "param:%a@." Region.print result_region;
@@ -161,7 +161,7 @@ let logic_function f =
   let param_regions =
     List.map (fun vi -> vi.jc_var_info_region) f.jc_logic_info_parameters in
   let fun_regions = f.jc_logic_info_result_region :: param_regions in
-  f.jc_logic_info_param_regions <- Region.reachable_list fun_regions
+  f.jc_logic_info_param_regions <- RegionList.reachable fun_regions
 
 let logic_component fls =
   List.iter logic_function fls
@@ -177,7 +177,7 @@ let code_function f =
   let param_regions =
     List.map (fun vi -> vi.jc_var_info_region) f.jc_fun_info_parameters in
   let fun_regions = f.jc_fun_info_return_region :: param_regions in
-  f.jc_fun_info_param_regions <- Region.reachable_list fun_regions
+  f.jc_fun_info_param_regions <- RegionList.reachable fun_regions
 
 let code_component fls =
   List.iter code_function fls
@@ -190,7 +190,7 @@ let regionalize_assertion a assoc =
       | JCTapp app ->
 	  let app_assoc = 
 	    List.map (fun (rdist,rloc) -> 
-	      try (rdist,Region.assoc rloc assoc) with Not_found -> (rdist,rloc)
+	      try (rdist,RegionList.assoc rloc assoc) with Not_found -> (rdist,rloc)
 	    ) app.jc_app_region_assoc
 	  in
 	  let tnode = JCTapp { app with jc_app_region_assoc = app_assoc; } in
@@ -200,7 +200,7 @@ let regionalize_assertion a assoc =
       | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
 	  t
     in
-    try { t with jc_term_region = Region.assoc t.jc_term_region assoc; }
+    try { t with jc_term_region = RegionList.assoc t.jc_term_region assoc; }
     with Not_found -> t
   ) a
   

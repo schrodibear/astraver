@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.71 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.72 2007-12-20 13:22:23 moy Exp $ *)
 
 
 open Jc_env
@@ -66,7 +66,7 @@ let ef_union ef1 ef2 =
 let ef_assoc ef assoc =
   { ef with jc_effect_memories =
       FieldRegionSet.fold (fun (fi,r) acc ->
-	try FieldRegionSet.add (fi,Region.assoc r assoc) acc 
+	try FieldRegionSet.add (fi,RegionList.assoc r assoc) acc 
 	with Not_found -> 
 	  (* Local memory. Not counted as effect for the caller. *)
 	  acc

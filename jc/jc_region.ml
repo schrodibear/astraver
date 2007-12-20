@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.4 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.5 2007-12-20 13:22:23 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -118,6 +118,8 @@ end
 
 module RegionTable = Hashtbl.Make(InternalRegion)
 
+module RegionSet = Set.Make(InternalRegion)
+
 module PairOrd(A : Set.OrderedType)(B : Set.OrderedType) =
 struct
   type t = A.t * B.t
@@ -146,6 +148,9 @@ struct
   let singleton (fi,r) = S.singleton (fi,RegionUF.repr r)
   let remove (fi,r) s = S.remove (fi,RegionUF.repr r) s
   let split (fi,r) s = S.split (fi,RegionUF.repr r) s
+    (* Added w.r.t. standard Set. *)
+  let map_repr s = 
+    S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
 end
 
 (* Maps should be computed after unification takes place, so that operations
@@ -163,6 +168,11 @@ end
 
 let global_region_table : (InternalRegion.t FieldTable.t) RegionTable.t 
     = RegionTable.create 73
+
+(* Constant memories. Their region should be declared in Why. 
+ * They should be passed to Why as global parameters. 
+ *)
+let global_mem_set = ref FieldRegionSet.empty
 
 module Region =
 struct
@@ -234,9 +244,12 @@ struct
       RegionTable.replace global_region_table rep t2
 
   let make_field r fi =
+    let r = RegionUF.repr r in
+    (* If region is constant, add memory for [fi] to constant memories. *)
+    if not r.jc_reg_variable then
+      global_mem_set := FieldRegionSet.add (fi,r) !global_mem_set;
     if not !Jc_common_options.separation then dummy_region
     else if not(is_pointer_type fi.jc_field_info_type) then dummy_region else
-      let r = RegionUF.repr r in
       try 
 	let t = RegionTable.find global_region_table r in
 	try FieldTable.find t fi 
@@ -247,7 +260,7 @@ struct
 	    else if r.jc_reg_variable then
 	      make_var fi.jc_field_info_type fi.jc_field_info_name 
 	    else
-	      make_const fi.jc_field_info_type fi.jc_field_info_name 
+	      make_const fi.jc_field_info_type fi.jc_field_info_name
 	  in
 	  FieldTable.replace t fi fr;
 	  fr
@@ -265,21 +278,27 @@ struct
 	RegionTable.replace global_region_table r t;
 	fr
 
+end
+
+module RegionList =
+struct
+
   let rec assoc r assocl = 
     if is_dummy_region r then dummy_region else
       match assocl with
 	| [] -> raise Not_found
-	| (r1,r2)::ls -> if equal r r1 then r2 else assoc r ls
-
+	| (r1,r2)::ls -> 
+	    if Region.equal r r1 then RegionUF.repr r2 else assoc r ls
+	    
   let rec mem r = function
     | [] -> false
-    | r1::ls -> equal r r1 || mem r ls
+    | r1::ls -> Region.equal r r1 || mem r ls
 
-  let copy_list rls =
+  let duplicate rls =
     let assocl = 
       List.fold_left (fun acc r ->
 	if is_dummy_region r then acc 
-	else (r,make_var r.jc_reg_type r.jc_reg_name) :: acc
+	else (r,Region.make_var r.jc_reg_type r.jc_reg_name) :: acc
       ) [] rls
     in
     List.iter (fun (r1,r2) ->
@@ -296,7 +315,7 @@ struct
     ) assocl;
     assocl
 
-  let reachable_list rls =
+  let reachable rls =
     let rec collect acc r =
       if is_dummy_region r then acc else
 	let r = RegionUF.repr r in
@@ -308,6 +327,16 @@ struct
 	  with Not_found -> acc
     in
     List.fold_left collect [] rls
+
+end
+
+module FieldRegionList =
+struct
+
+  let rec mem (fi,r) = function
+    | [] -> false
+    | (fi',r')::rest -> 
+	FieldOrd.equal fi fi' && Region.equal r r' || mem (fi,r) rest
 
 end
 

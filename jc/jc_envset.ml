@@ -25,9 +25,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.15 2007-12-17 15:05:00 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.16 2007-12-20 13:22:23 moy Exp $ *)
 
 open Jc_env
+
+module type OrderedHashedType =
+sig
+  type t
+  val equal : t -> t -> bool
+  val compare : t -> t -> int
+  val hash : t -> int
+end
 
 module StringSet = Set.Make(String)
 

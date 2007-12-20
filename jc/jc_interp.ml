@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.199 2007-12-19 10:39:02 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.200 2007-12-20 13:22:23 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -429,7 +429,7 @@ let logic_params li l assoc =
 	    begin
 	      Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
 	      Jc_options.lprintf "r:%a@." Region.print r;
-	      try Region.assoc r assoc with Not_found -> assert false
+	      try RegionList.assoc r assoc with Not_found -> assert false
 	    end
 	  else r
 	in
@@ -1243,11 +1243,17 @@ let rec statement ~infunction ~threats s =
 	  in
 	  let write_mems =
 	    FieldRegionSet.fold
-	      (fun (fi,r) acc ->
-		if Region.polymorphic r then
+	      (fun (fi,distr) acc ->
+		if Region.polymorphic distr then
 		  try 
-		    let r = Region.assoc r call.jc_call_region_assoc in
-	      	    (Var(field_region_memory_name(fi,r)))::acc 
+		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
+		    (* Check that we do not pass a same memory twice as 
+		     * a pointer.
+		     *)
+		    begin
+		      assert(not(FieldRegionList.mem (fi,locr) acc));
+	      	      (fi,locr)::acc 
+		    end
 		  with Not_found -> 
 		    (* Local memory. Not passed in argument by the caller. *)
 		    acc
@@ -1257,14 +1263,41 @@ let rec statement ~infunction ~threats s =
 	  in
 	  let read_mems =
 	    FieldRegionSet.fold
-	      (fun (fi,r) acc ->
-		if Region.polymorphic r then
+	      (fun (fi,distr) acc ->
+		if Region.polymorphic distr then
+		  (* Distant region is polymorphic. It should be passed as
+		   * argument to the function. 
+		   *)
 		  try 
-		    let r = Region.assoc r call.jc_call_region_assoc in
-		    if FieldRegionSet.mem (fi,r) 
-		      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-		    then (Deref(field_region_memory_name(fi,r)))::acc 
-		    else (Var(field_region_memory_name(fi,r)))::acc 
+		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
+		    if Region.polymorphic locr then
+		      if FieldRegionSet.mem (fi,locr) 
+			infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+		      then 
+			begin
+			  (* Check that we do not pass a same memory as 
+			   * a pointer and a dereference. 
+			   *)
+			  assert(not(FieldRegionList.mem (fi,locr) write_mems));
+			  (Deref(field_region_memory_name(fi,locr)))::acc 
+			end
+		      else (Var(field_region_memory_name(fi,locr)))::acc 
+		    else
+		      begin
+			(* Check that we do not pass in argument a constant 
+			 * memory that is also read/written directly by 
+			 * the function called.
+			 *)
+			let fmems = FieldRegionSet.union
+			  f.jc_fun_info_effects.jc_reads.jc_effect_memories
+			  f.jc_fun_info_effects.jc_writes.jc_effect_memories
+			in
+			assert(not(FieldRegionSet.mem (fi,locr) fmems));
+			if FieldRegionSet.mem (fi,locr) 
+			  f.jc_fun_info_effects.jc_writes.jc_effect_memories
+			then (Var(field_region_memory_name(fi,locr)))::acc 
+			else (Deref(field_region_memory_name(fi,locr)))::acc 
+		      end
 		  with Not_found -> 
 		    (* Local memory. Not passed in argument by the caller. *)
 		    acc
@@ -1274,6 +1307,9 @@ let rec statement ~infunction ~threats s =
 		f.jc_fun_info_effects.jc_writes.jc_effect_memories)
 	      []
 	  in
+	  let write_mems = 
+	    List.map (fun (fi,r) -> Var(field_region_memory_name(fi,r))) 
+	      write_mems in
 	  let el = el @ write_mems @ read_mems in
 	  let call = 
 	    make_guarded_app ~name:lab UserCall loc 
@@ -1960,7 +1996,7 @@ let tr_fun f loc spec body acc =
       (fun (fi,r) acc -> 
 	let mem = field_region_memory_name(fi,r) in
 	if Region.polymorphic r then
-	  if Region.mem r f.jc_fun_info_param_regions then
+	  if RegionList.mem r f.jc_fun_info_param_regions then
 	    if FieldRegionSet.mem (fi,r) 
 	      f.jc_fun_info_effects.jc_writes.jc_effect_memories 
 	    then mem::acc 
@@ -2005,7 +2041,7 @@ let tr_fun f loc spec body acc =
       (fun (fi,r) acc ->
 	let mem = field_region_memory_name(fi,r) in
 	if Region.polymorphic r then
-	  if Region.mem r f.jc_fun_info_param_regions then mem::acc else acc
+	  if RegionList.mem r f.jc_fun_info_param_regions then mem::acc else acc
 	else mem::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
@@ -2045,7 +2081,7 @@ let tr_fun f loc spec body acc =
       (fun (fi,r) (param_acc,local_acc) ->
 	if Region.polymorphic r then
 	  let mem = field_region_memory_name(fi,r),memory_field fi in
-	  if Region.mem r f.jc_fun_info_param_regions then
+	  if RegionList.mem r f.jc_fun_info_param_regions then
 	    mem::param_acc,local_acc
 	  else
 	    param_acc,mem::local_acc
@@ -2058,7 +2094,7 @@ let tr_fun f loc spec body acc =
       (fun (fi,r) (param_acc,local_acc) ->
 	if Region.polymorphic r then
 	  let mem = field_region_memory_name(fi,r),memory_field fi in
-	  if Region.mem r f.jc_fun_info_param_regions then
+	  if RegionList.mem r f.jc_fun_info_param_regions then
 	    mem::param_acc,local_acc
 	  else
 	    param_acc,mem::local_acc
@@ -2410,7 +2446,13 @@ let tr_variable vi e acc =
     let t = tr_base_type vi.jc_var_info_type in
       Logic(false,vi.jc_var_info_name,[],t)::acc
 
-	
+let tr_region r acc =
+  Type(r.jc_reg_final_name,[]) :: acc
+
+let tr_memory (fi,r) acc =
+  Param(
+    false,field_region_memory_name(fi,r),
+    Ref_type(Base_type(memory_field fi))) :: acc
 
 (*
   Local Variables: 

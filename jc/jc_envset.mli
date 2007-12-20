@@ -25,7 +25,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.13 2007-12-17 15:05:00 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.14 2007-12-20 13:22:23 moy Exp $ *)
+
+module type OrderedHashedType =
+sig
+  type t
+  val equal : t -> t -> bool
+  val compare : t -> t -> int
+  val hash : t -> int
+end
 
 open Jc_env
 
@@ -47,7 +55,7 @@ module ExceptionSet : Set.S with type elt = exception_info
 
 module ExceptionMap : Map.S with type key = exception_info
 
-module FieldOrd : Set.OrderedType with type t = field_info
+module FieldOrd : OrderedHashedType with type t = field_info
 
 module FieldSet : Set.S with type elt = field_info
 
