@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typedtree.ml,v 1.9 2007-12-20 15:00:39 bardou Exp $ *)
+(* $Id: typedtree.ml,v 1.10 2007-12-20 17:10:01 bardou Exp $ *)
 
 (* Abstract syntax tree after typing *)
 
@@ -155,7 +155,7 @@ and structure_item =
   | Tstr_function_spec of function_spec
   | Tstr_type_spec of type_spec
   | Tstr_logic_function_spec of logic_function_spec
-  | Tstr_logic_type_spec of Ident.t
+  | Tstr_logic_type_spec of Ident.t * Types.type_declaration
   | Tstr_axiom_spec of axiom_spec
 
 and behavior = {
@@ -194,6 +194,7 @@ and logic_function_spec = {
   lfs_arguments: pattern list;
   lfs_return_type: type_expr;
   lfs_body: optional_body;
+  lfs_predicate: bool;
 }
 
 and axiom_spec = {

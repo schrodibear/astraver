@@ -10,7 +10,7 @@
 /*                                                                     */
 /***********************************************************************/
 
-/* $Id: parser.mly,v 1.9 2007-12-20 15:00:39 bardou Exp $ */
+/* $Id: parser.mly,v 1.10 2007-12-20 17:10:01 bardou Exp $ */
 
 /* The parser definition */
 
@@ -1665,13 +1665,15 @@ while_spec:
 	  pws_variant = None } }
 ;
 
-pattern_list:
-  | LPAREN pattern RPAREN pattern_list
+let_pattern_list:
+  | LPAREN let_pattern RPAREN let_pattern_list
       { $2::$4 }
-  | LIDENT pattern_list
+  | LIDENT let_pattern_list
       { (mkpat (Ppat_var $1))::$2 }
-  | pattern
-      { [ $1 ] }
+  | LPAREN let_pattern RPAREN
+      { [ $2 ] }
+  | LIDENT
+      { [ mkpat (Ppat_var $1) ] }
 ;
 
 read_location:
@@ -1710,30 +1712,40 @@ optional_type:
 ;
 
 logic_function_spec:
-  | PREDICATE LIDENT pattern_list optional_body
+  | PREDICATE LIDENT let_pattern_list optional_body
       { { plfs_name = $2;
 	  plfs_arguments = $3;
 	  plfs_return_type = Some(mktyp (Ptyp_constr(Lident "bool", [])));
-	  plfs_body = $4; } }
-  | LOGIC FUN LIDENT pattern_list optional_type optional_body
+	  plfs_body = $4;
+	  plfs_predicate = true; } }
+  | LOGIC FUN LIDENT let_pattern_list optional_type optional_body
       { { plfs_name = $3;
 	  plfs_arguments = $4;
 	  plfs_return_type = $5;
-	  plfs_body = $6; } }
-  | LOGIC FUNCTION LIDENT pattern_list optional_type optional_body
+	  plfs_body = $6;
+	  plfs_predicate = false; } }
+  | LOGIC FUNCTION LIDENT let_pattern_list optional_type optional_body
       { { plfs_name = $3;
 	  plfs_arguments = $4;
 	  plfs_return_type = $5;
-	  plfs_body = $6; } }
+	  plfs_body = $6;
+	  plfs_predicate = false; } }
   | LOGIC VAL LIDENT COLON core_type
       { { plfs_name = $3;
 	  plfs_arguments = [];
 	  plfs_return_type = Some $5;
-	  plfs_body = POBreads []; } }
+	  plfs_body = POBreads [];
+	  plfs_predicate = false; } }
+  | LOGIC VAL LIDENT COLON core_type EQUAL expr
+      { { plfs_name = $3;
+	  plfs_arguments = [];
+	  plfs_return_type = Some $5;
+	  plfs_body = POBbody $7;
+	  plfs_predicate = false; } }
 ;
 
 axiom_spec:
-  | AXIOM LIDENT pattern_list EQUAL expr
+  | AXIOM LIDENT let_pattern_list EQUAL expr
       { { pas_name = $2;
 	  pas_arguments = $3;
 	  pas_body = $5; } }

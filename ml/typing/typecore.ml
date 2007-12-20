@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typecore.ml,v 1.7 2007-12-20 15:00:39 bardou Exp $ *)
+(* $Id: typecore.ml,v 1.8 2007-12-20 17:10:01 bardou Exp $ *)
 
 (* Typechecking for the core language *)
 
@@ -2162,6 +2162,7 @@ let type_logic_function env loc lfs =
     lfs_arguments = args;
     lfs_return_type = return_type;
     lfs_body = body;
+    lfs_predicate = lfs.plfs_predicate;
   }
 
 (* Error report *)

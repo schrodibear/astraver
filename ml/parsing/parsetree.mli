@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: parsetree.mli,v 1.9 2007-12-20 15:00:39 bardou Exp $ *)
+(* $Id: parsetree.mli,v 1.10 2007-12-20 17:10:01 bardou Exp $ *)
 
 (* Abstract syntax tree produced by parsing *)
 
@@ -310,6 +310,7 @@ and logic_function_spec = {
   plfs_arguments: pattern list;
   plfs_return_type: core_type option;
   plfs_body: optional_body;
+  plfs_predicate: bool;
 }
 
 and axiom_spec = {

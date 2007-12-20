@@ -106,10 +106,12 @@ type ml_jessie_type =
   | MLTvariant of Jc_env.struct_info * Jc_env.field_info *
       (string * ml_constructor_info) list
   | MLTtuple of Jc_env.struct_info
+  | MLTlogic of string
 
 type ml_caml_type = {
   ml_ty_name: string;
   ml_ty_decl: Ml_ocaml.Types.type_declaration;
+  ml_ty_logic: bool; (* unused, actually (using "Type_abstract" instead) *)
   mutable ml_ty_instances: ml_jessie_type ParamMap.t;
   mutable ml_ty_invariants: (string * Jc_env.var_info * Jc_ast.assertion) list;
 }
@@ -117,11 +119,12 @@ type ml_caml_type = {
 let ml_types = Hashtbl.create 11 (* string -> ml_caml_type *)
 let ml_tuples = ref ParamMap.empty (* Ml_env.struct_info *)
 
-let declare id td =
+let declare id td logic =
   let n = name id in
   Hashtbl.add ml_types n {
     ml_ty_name = n;
     ml_ty_decl = td;
+    ml_ty_logic = logic;
     ml_ty_instances = ParamMap.empty;
     ml_ty_invariants = [];
   }
@@ -183,14 +186,17 @@ and make mlt =
     | MLTrecord(si, _)
     | MLTvariant(si, _, _)
     | MLTtuple si ->
-	JCTpointer(si, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
+(*	JCTpointer(si, Some(Num.num_of_int 0), Some(Num.num_of_int 0))*)
+	JCTpointer(si, None, None)
+    | MLTlogic x ->
+	JCTlogic x
 
 and instance args ty =
   log "Instanciate type %s with %d/%d arguments." ty.ml_ty_name
     (List.length args) ty.ml_ty_decl.type_arity;
   match ty.ml_ty_decl.type_kind with
     | Type_abstract ->
-	not_implemented none "ml_type.ml: instance: Type_abstract"
+	MLTlogic(fresh_ident ty.ml_ty_name)
     | Type_record(ll, _, _) ->
 	let si = make_struct (fresh_ident ty.ml_ty_name) in
 	(* temporary declaration in case of recursive type definition *)
@@ -296,6 +302,8 @@ let jc_decl mlty = function
       )
   | MLTtuple si ->
       make_struct_def si mlty.ml_ty_invariants
+  | MLTlogic x ->
+      JClogic_type_def x
 
 let jc_decls () =
   let decls1 = ParamMap.fold

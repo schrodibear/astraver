@@ -261,9 +261,14 @@ let rec term env e =
     | Texp_lazy of expression
     | Texp_object of class_structure * class_signature * string list *)
     | Texp_result ->
-	JCTvar (Jc_pervasives.var (make e.exp_type) "\\result")
+	JCTvar(Jc_pervasives.var (make e.exp_type) "\\result")
     | Texp_old e ->
-	JCTold (make_term (term env e) (make e.exp_type))
+	JCTold(make_term (term env e) (make e.exp_type))
+    | Texp_implies(a, b) ->
+	JCTif(
+	  make_term (term env a) (make a.exp_type),
+	  make_term (term env b) (make b.exp_type),
+	  make_term (JCTconst (JCCboolean true)) (JCTnative Tboolean))
     | _ -> not_implemented e.exp_loc "ml_interp.ml: term"
 
 let rec assertion env e =
@@ -318,6 +323,10 @@ let rec assertion env e =
     | Texp_result
     | Texp_old _ ->
 	assert false (* impossible *)
+    | Texp_implies(a, b) ->
+	JCAimplies(
+	  make_assertion (assertion env a),
+	  make_assertion (assertion env b))
     | _ -> not_implemented e.exp_loc "ml_interp.ml: assertion"
 
 type jessie_or_caml_expr =
@@ -687,6 +696,18 @@ let rec function_decl env e = match e.exp_desc with
       (pid, pty)::params, body'
   | _ -> [], e
 
+let rec read_location_set env = function
+  | RLvar id ->
+      JCLSvar(Ml_env.find_var (Ml_ocaml.Path.name id) env)
+  | RLderef(rl, ld) ->
+      not_implemented Ml_ocaml.Location.none "deref in reads"
+
+let rec read_location env = function
+  | RLvar id ->
+      JCLvar(Ml_env.find_var (Ml_ocaml.Path.name id) env)
+  | RLderef(rl, ld) ->
+      not_implemented Ml_ocaml.Location.none "deref in reads"
+
 let structure_item env = function
   | Tstr_value(recflag, [ { pat_desc = Tpat_var id },
 		    ({ exp_desc = Texp_function _ } as expr) ]) ->
@@ -728,10 +749,10 @@ let structure_item env = function
       log "      Requires...";
       let requires = match spec.fs_requires with
 	| None -> JCAtrue
-	| Some x -> assertion env x
+	| Some x -> assertion body_env x
       in
       log "      Behaviors...";
-      let behaviors = List.map (behavior env) spec.fs_behaviors in
+      let behaviors = List.map (behavior body_env) spec.fs_behaviors in
       log "      Finalizing...";
       let jc_spec = {
 	jc_fun_requires = {
@@ -752,35 +773,76 @@ let structure_item env = function
       in
       [ jc_fun_def ], Ml_env.add_fun (name id) params' return_type env
   | Tstr_type l ->
-(*      (* pre-declare types and split them between kinds *)
-      let env, records, variants = List.fold_left
-	(fun (env, records, variants) (id, td) ->
-	   let name = name id in
-	   match td.type_kind with
-	     | Type_record(labels, _, _) ->
-		 pre_declare_type name env,
-		 (id, labels)::records,
-		 variants
-	     | Type_variant(constrs, _) ->
-		 pre_declare_type name env,
-		 records,
-		 (id, constrs)::variants
-	     | _ ->
-		 not_implemented Ml_ocaml.Location.none
-		   "unsupported type declaration kind for type %s" name)
-	(env, [], [])
-	l
-      in
-      let env, rd = (list_fold_map record_decl) env (List.rev records) in
-      let env, vd = (list_fold_map variant_decl) env (List.rev variants) in
-      [ JCrec_struct_defs(rd @ (List.flatten vd)) ], env*)
-      List.iter (fun (id, td) -> declare id td) l;
+      List.iter (fun (id, td) -> declare id td false) l;
       [], env
   | Tstr_function_spec _ -> [], env (* done before (see add_structure_specs) *)
   | Tstr_type_spec ({ ts_type = Pident id } as spec) ->
       let env, invariants = invariants env spec in
       List.iter (add_invariant id) invariants;
       [], env
+  | Tstr_logic_function_spec lfs ->
+      begin match lfs.lfs_arguments with
+	| [] ->
+	    (* logic constant *)
+	    let ty = make lfs.lfs_return_type in
+	    let id = name lfs.lfs_name in
+	    [ JClogic_const_def(
+		ty,
+		id,
+		match lfs.lfs_body with
+		  | OBbody e -> Some(make_term (term env e) (make e.exp_type))
+		  | OBreads [] -> None
+		  | OBreads _ -> assert false) ],
+	    fst (Ml_env.add_var id ty env)
+	| _ ->
+	    (* logic function *)
+	    let rty = if lfs.lfs_predicate then None else
+	      Some(make lfs.lfs_return_type) in
+	    let id = name lfs.lfs_name in
+	    let body_env, args = list_fold_mapi
+	      (fun env i -> function
+		 | { pat_desc = Tpat_var id; pat_type = ty } ->
+		     Ml_env.add_var (name id) (make ty) env
+		 | { pat_loc = loc } ->
+		     not_implemented loc "pattern in logic function argument")
+	      env
+	      lfs.lfs_arguments
+	    in
+	    [ JClogic_fun_def(
+		rty,
+		id,
+		args,
+		match lfs.lfs_body with
+		  | OBbody e ->
+		      JCTerm(make_term (term body_env e) (make e.exp_type))
+		  | OBreads rl ->
+		      JCReads(List.map (read_location body_env) rl)) ],
+	    fst (Ml_env.add_logic_fun id args rty env)
+      end
+  | Tstr_logic_type_spec(id, td) ->
+      declare id td true;
+      [], env
+  | Tstr_axiom_spec axs ->
+      let body_env, args = list_fold_mapi
+	(fun env i pat ->
+	   Ml_env.add_var "jessica_arg" (make pat.pat_type) env)
+	env
+	axs.as_arguments
+      in
+      let cond, _, body = PatAssertion.pattern_list_expr
+	env
+	(List.map make_var_term args)
+	axs.as_arguments
+	(fun env -> make_assertion (assertion env axs.as_body))
+      in
+      let conda = make_assertion (JCAbool_term cond) in
+      let a = make_assertion (JCAimplies(conda, body)) in
+      let qa = List.fold_left
+	(fun acc vi -> make_assertion (JCAquantifier(Forall, vi, acc)))
+	a
+	args
+      in
+      [ JCaxiom_def(axs.as_name, qa) ], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
 let rec structure env = function

@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: typemod.ml,v 1.7 2007-12-20 15:00:39 bardou Exp $ *)
+(* $Id: typemod.ml,v 1.8 2007-12-20 17:10:01 bardou Exp $ *)
 
 (* Type-checking of the module language *)
 
@@ -814,7 +814,7 @@ and type_structure anchor env sstr =
 	} in
 	let type_id, new_env = Env.enter_type lts td env in
         let (str_rem, sig_rem, final_env) = type_struct new_env srem in
-        (Tstr_logic_type_spec type_id :: str_rem, sig_rem, final_env)
+        (Tstr_logic_type_spec(type_id, td) :: str_rem, sig_rem, final_env)
     | {pstr_desc = Pstr_axiom_spec axs; pstr_loc = loc} :: srem ->
 	let taxs = Typecore.type_axiom env axs in
         let (str_rem, sig_rem, final_env) = type_struct env srem in

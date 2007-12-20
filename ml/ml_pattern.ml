@@ -38,6 +38,13 @@ module type TPattern = sig
 
   val pattern_expr_list: Ml_env.t -> expr ->
     (Ml_ocaml.Typedtree.pattern * (Ml_env.t -> t)) list -> t option -> t
+
+  val pattern_list: Ml_env.t -> expr list -> Ml_ocaml.Typedtree.pattern list ->
+    condition * Ml_env.t * (Jc_env.var_info * expr) list
+
+  val pattern_list_expr: Ml_env.t -> expr list ->
+    Ml_ocaml.Typedtree.pattern list -> (Ml_env.t -> t) ->
+    condition * Ml_env.t * t
 end
 
 module type TPatternF = functor (A: TPatternArg) ->
@@ -121,13 +128,13 @@ module Pattern: TPatternF = functor (A: TPatternArg) -> struct
       | Tpat_or(_, _, Some _) ->
 	  not_implemented pat.pat_loc "or pattern with path"
 
+  let quantify =
+    List.fold_left
+      (fun acc (vi, init) -> make_var vi init acc)
+
   let pattern_expr env arg pat body =
     let cond, env2, vars = pattern env arg pat in
-    let final_body = List.fold_left
-      (fun acc (vi, init) -> make_var vi init acc)
-      (body env2)
-      vars
-    in
+    let final_body = quantify (body env2) vars in
     cond, final_body
 
   let pattern_expr_list env arg pel catchall =
@@ -141,6 +148,20 @@ module Pattern: TPatternF = functor (A: TPatternArg) -> struct
 	    | (_, last_body)::tl ->
 		List.fold_left
 		  (fun acc (cond, body) -> make_if cond body acc) last_body tl
+
+  let pattern_list env args pats =
+    List.fold_right2
+      (fun pat arg (cond, env2, vars) ->
+	 let cond2, env3, vars2 = pattern env2 arg pat in
+	 make_and cond cond2, env3, vars @ vars2)
+      pats
+      args
+      (make_bool true, env, [])
+
+  let pattern_list_expr env args pats body =
+    let cond, env2, vars = pattern_list env args pats in
+    let final_body = quantify (body env2) vars in
+    cond, env2, final_body
 end
 
 

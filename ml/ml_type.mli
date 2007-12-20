@@ -1,4 +1,4 @@
-val declare: Ml_ocaml.Ident.t -> Ml_ocaml.Types.type_declaration -> unit
+val declare: Ml_ocaml.Ident.t -> Ml_ocaml.Types.type_declaration -> bool -> unit
 
 val add_invariant: Ml_ocaml.Ident.t ->
   (string * Jc_env.var_info * Jc_ast.assertion) -> unit
