@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.73 2007-12-21 10:14:10 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.74 2007-12-21 16:23:12 moy Exp $ *)
 
 
 open Jc_env
@@ -75,17 +75,21 @@ let ef_assoc ef assoc =
   { ef with 
     jc_effect_memories =
       FieldRegionSet.fold (fun (fi,r) acc ->
-	try FieldRegionSet.add (fi,RegionList.assoc r assoc) acc 
-	with Not_found -> 
-	  (* Local memory. Not counted as effect for the caller. *)
-	  acc
+	if Region.polymorphic r then
+	  try FieldRegionSet.add (fi,RegionList.assoc r assoc) acc 
+	  with Not_found -> 
+	    (* Local memory. Not counted as effect for the caller. *)
+	    acc
+	else FieldRegionSet.add (fi,r) acc 
       ) ef.jc_effect_memories FieldRegionSet.empty;
     jc_effect_alloc_table =
       StringRegionSet.fold (fun (a,r) acc ->
-	try StringRegionSet.add (a,RegionList.assoc r assoc) acc 
-	with Not_found -> 
-	  (* Local alloc table. Not counted as effect for the caller. *)
-	  acc
+	if Region.polymorphic r then
+	  try StringRegionSet.add (a,RegionList.assoc r assoc) acc 
+	  with Not_found -> 
+	    (* Local alloc table. Not counted as effect for the caller. *)
+	    acc
+	else StringRegionSet.add (a,r) acc
       ) ef.jc_effect_alloc_table StringRegionSet.empty;
   }
 
