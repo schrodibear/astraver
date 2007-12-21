@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.200 2007-12-20 13:22:23 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.201 2007-12-21 10:14:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -382,10 +382,10 @@ terms and assertions
 
 *************************)
 
-let alloc_table_type st = 
+let alloc_table_type a = 
   {
     logic_type_name = "alloc_table";
-    logic_type_args = [simple_logic_type st.jc_struct_info_root];
+    logic_type_args = [simple_logic_type a];
   }
 
 let pointer_type st = 
@@ -438,8 +438,8 @@ let logic_params li l assoc =
       l
   in
   let l = 
-    StringSet.fold
-      (fun v acc -> (LVar (v ^ "_alloc_table"))::acc)
+    StringRegionSet.fold
+      (fun (a,r) acc -> (LVar (alloc_region_table_name(a,r)))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
@@ -501,8 +501,8 @@ let rec term label oldlabel t =
 	make_logic_fun_call f (List.map ft l) app.jc_app_region_assoc
     | JCTold(t) -> term (Some oldlabel) oldlabel t
     | JCToffset(k,t,st) -> 
-	let alloc =
-	  st.jc_struct_info_root ^ "_alloc_table"
+	let alloc = 
+	  alloc_region_table_name(st.jc_struct_info_root,t.jc_term_region)
 	in
 	let f = match k with
 	  | Offset_min -> "offset_min"
@@ -672,7 +672,7 @@ let embedded_struct_fields st =
     List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
   in
   FieldSet.elements fields
-      
+
 let field_sinfo fi = 
   match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
 
@@ -680,12 +680,26 @@ let field_bounds fi =
   match fi.jc_field_info_type with 
     | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
 
-let struct_alloc_arg st =
-  alloc_table_name st, alloc_table_type st
+let struct_alloc_arg a =
+  alloc_table_name a, alloc_table_type a
 
 let field_memory_arg fi =
   field_memory_name fi, memory_field fi
 
+let embedded_struct_roots st =
+  let fields = embedded_struct_fields st in
+  let structs = 
+    List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+      StructSet.empty fields
+  in
+  let structs = StructSet.elements structs in
+  let roots = 
+    List.fold_left 
+      (fun acc st -> StringSet.add st.jc_struct_info_root acc) 
+      StringSet.empty structs
+  in
+  StringSet.elements roots
+      
 
 (****************************
 
@@ -734,12 +748,9 @@ let tr_logic_fun li ta acc =
       params
   in
   let params_reads =
-    StringSet.fold
-      (fun v acc -> 
-	 let t = { logic_type_args = [simple_logic_type v];
-		   logic_type_name = "alloc_table" }
-	 in
-	 (v ^ "_alloc_table", t)::acc)
+    StringRegionSet.fold
+      (fun (a,r) acc -> 
+	 (alloc_region_table_name(a,r),alloc_table_type a)::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       params_reads
   in
@@ -899,54 +910,59 @@ let rec make_lets l e =
 
 let rec make_upd lab loc ~infunction ~threats fi e1 v =
   let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
-  let mem = field_region_memory_name(fi,e1.jc_expr_region) in
+  let mem = Var(field_region_memory_name(fi,e1.jc_expr_region)) in
+  let alloc = 
+    alloc_region_table_name(fi.jc_field_info_root,e1.jc_expr_region)
+  in
+  let alloc = 
+    if Jc_options.separation then
+      if StringRegionSet.mem (fi.jc_field_info_root,e1.jc_expr_region)
+	infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+      then Deref alloc
+      else Var alloc
+    else Deref alloc
+  in
   if threats then
     match destruct_pointer e1 with
     | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
 	make_app "safe_upd_" 
-	  [ Var mem ; expr e1; v ]
+	  [ mem ; expr e1; v ]
     | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
 	make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
-	  [ Var mem ; expr p; offset off;
+	  [ mem ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
 	make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
-	  [ Var mem ; expr p; offset off;
+	  [ mem ; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,off,Some lb,Some rb ->
 	make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
-	  [ Var mem ; expr p; offset off; 
+	  [ mem ; expr p; offset off; 
 	    Cte (Prim_int (Num.string_of_num lb)); 
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
 	make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
-	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var mem; expr p; offset off; v ]
+	  [ alloc; mem; expr p; offset off; v ]
     | p,off,Some lb,None ->
 	make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
-	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var mem; expr p; offset off;
+	  [ alloc; mem; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num lb)); v ]
     | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
 	make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
-	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var mem; expr p; offset off; v ]
+	  [ alloc; mem; expr p; offset off; v ]
     | p,off,None,Some rb ->
 	make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
-	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var mem; expr p; offset off;
+	  [ alloc; mem; expr p; offset off;
 	    Cte (Prim_int (Num.string_of_num rb)); v ]
     | p,Int_offset s,None,None when int_of_string s = 0 ->
 	make_guarded_app ~name:lab PointerDeref loc "upd_" 
-	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var mem ; expr p; v ]
+	  [ alloc; mem ; expr p; v ]
     | p,off,None,None ->
 	make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
-	  [ Var (fi.jc_field_info_root ^ "_alloc_table");
-	    Var mem ; expr p; offset off; v ]
+	  [ alloc; mem ; expr p; offset off; v ]
   else
     make_app "safe_upd_"
-      [ Var mem ; expr e1 ; v ]
+      [ mem ; expr e1 ; v ]
     
 and offset ~infunction ~threats = function
   | Int_offset s -> Cte (Prim_int s)
@@ -1017,14 +1033,21 @@ and expr ~infunction ~threats e : expr =
 	(* FIXME: need to check that are in the same block *)
 	make_app "sub_pointer" [ e1'; e2']
     | JCEoffset(k,e,st) -> 
-	let alloc =
-	  st.jc_struct_info_root ^ "_alloc_table"
+	let alloc = 
+	  alloc_region_table_name(st.jc_struct_info_root,e.jc_expr_region) in
+	let alloc = 
+	  if Jc_options.separation then
+	    if StringRegionSet.mem (st.jc_struct_info_root,e.jc_expr_region)
+	      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+	    then Deref alloc
+	    else Var alloc
+	  else Deref alloc
 	in
 	let f = match k with
 	  | Offset_min -> "offset_min"
 	  | Offset_max -> "offset_max"
 	in
-	make_app f [Deref alloc; expr e] 
+	make_app f [alloc; expr e] 
     | JCEinstanceof(e,t) ->
 	let e = expr e in
 	let tag = t.jc_struct_info_root ^ "_tag_table" in
@@ -1061,6 +1084,17 @@ and expr ~infunction ~threats e : expr =
 	    else Var mem
 	  else Deref mem
 	in
+	let alloc = 
+	  alloc_region_table_name(fi.jc_field_info_root,e.jc_expr_region)
+	in
+	let alloc = 
+	  if Jc_options.separation then
+	    if StringRegionSet.mem (fi.jc_field_info_root,e.jc_expr_region)
+	      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+	    then Deref alloc
+	    else Var alloc
+	  else Deref alloc
+	in
 	if threats then
 	  match destruct_pointer e with
 	  | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
@@ -1081,39 +1115,36 @@ and expr ~infunction ~threats e : expr =
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_acc_" 
-		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  mem; expr p; offset off ]
+		[ alloc; mem; expr p; offset off ]
 	  | p,off,Some lb,None ->
 	      make_guarded_app ~name:lab IndexBounds loc "lbound_acc_" 
-		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  mem; expr p; offset off;
+		[ alloc; mem; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num lb)) ]
 	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
 	      make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_acc_" 
-		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  mem; expr p; offset off ]
+		[ alloc; mem; expr p; offset off ]
 	  | p,off,None,Some rb ->
 	      make_guarded_app ~name:lab IndexBounds loc "rbound_acc_" 
-		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  mem; expr p; offset off;
+		[ alloc; mem; expr p; offset off;
 		  Cte (Prim_int (Num.string_of_num rb)) ]
 	  | p,Int_offset s,None,None when int_of_string s = 0 ->
 	      make_guarded_app ~name:lab PointerDeref loc "acc_" 
-		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  mem ; expr p ]
+		[ alloc; mem ; expr p ]
 	  | p,off,None,None ->
 	      make_guarded_app ~name:lab PointerDeref loc "offset_acc_" 
-		[ Var (fi.jc_field_info_root ^ "_alloc_table");
-		  mem ; expr p; offset off ]
+		[ alloc; mem ; expr p; offset off ]
 	else
 	  make_app "safe_acc_"
 	    [ mem ; 
 	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (siz, st) ->
-	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
+	let alloc = 
+	  alloc_region_table_name(st.jc_struct_info_root,e.jc_expr_region) in
 	let tag = st.jc_struct_info_root ^ "_tag_table" in
 	let fields = embedded_struct_fields st in
 	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
+	let roots = embedded_struct_roots st in
+	let roots = List.map (fun a -> (a,e.jc_expr_region)) roots in
 	begin
 	  match !Jc_options.inv_sem with
 	    | InvOwnership ->
@@ -1129,13 +1160,17 @@ and expr ~infunction ~threats e : expr =
 		begin match siz.jc_expr_node with 
 		  | JCEconst(JCCinteger "1") ->
 		      make_app (alloc_one_param_name st) 
-			(Void :: 
-			  (List.map (var ** field_region_memory_name) fields))
+			([Void; Var alloc]
+			@ (List.map (var ** alloc_region_table_name) roots)
+			@ (List.map (var ** field_region_memory_name) fields))
 		  | _ ->
 		      make_app (alloc_param_name st)
-			[coerce ~no_int_overflow:(not threats) 
+			([coerce ~no_int_overflow:(not threats) 
 			  siz.jc_expr_label siz.jc_expr_loc integer_type 
-			  siz.jc_expr_type (expr siz)]
+			  siz.jc_expr_type (expr siz); Var alloc]
+			@ (List.map (var ** alloc_region_table_name) roots)
+			@ (List.map (var ** field_region_memory_name) fields))
+
 		end
 	end
     | JCEfree e ->
@@ -1143,7 +1178,8 @@ and expr ~infunction ~threats e : expr =
 	  | JCTpointer(st, _, _) -> st
 	  | _ -> assert false
 	in	
-	let alloc = st.jc_struct_info_root ^ "_alloc_table" in
+	let alloc = 
+	  alloc_region_table_name(st.jc_struct_info_root,e.jc_expr_region) in
 	if !Jc_options.inv_sem = InvOwnership then
 	  let com = Jc_invariants.committed_name st.jc_struct_info_root in
 	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
@@ -1193,7 +1229,7 @@ let type_assert vi e =
   match vi.jc_var_info_type, e.jc_expr_type with
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
 	let et = term None "" (term_of_expr e) in
-	let alloc = alloc_table_name si in
+	let alloc = alloc_table_name si.jc_struct_info_root in
 	let offset_mina = match n1o, n1o' with
 	  | None, _ -> LTrue
 	  | Some n, Some n' when Num.le_num n' n -> LTrue
@@ -1310,7 +1346,79 @@ let rec statement ~infunction ~threats s =
 	  let write_mems = 
 	    List.map (fun (fi,r) -> Var(field_region_memory_name(fi,r))) 
 	      write_mems in
-	  let el = el @ write_mems @ read_mems in
+	  let write_allocs =
+	    StringRegionSet.fold
+	      (fun (a,distr) acc ->
+		if Region.polymorphic distr then
+		  try 
+		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
+		    (* Check that we do not pass a same allocation table 
+		     * twice as a pointer.
+		     *)
+		    begin
+		      assert(not(StringRegionList.mem (a,locr) acc));
+	      	      (a,locr)::acc 
+		    end
+		  with Not_found -> 
+		    (* Local allocation table. 
+		     * Not passed in argument by the caller. 
+		     *)
+		    acc
+		else acc)
+	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+	      []
+	  in
+	  let read_allocs =
+	    StringRegionSet.fold
+	      (fun (a,distr) acc ->
+		if Region.polymorphic distr then
+		  (* Distant region is polymorphic. It should be passed as
+		   * argument to the function. 
+		   *)
+		  try 
+		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
+		    if Region.polymorphic locr then
+		      if StringRegionSet.mem (a,locr) 
+			infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+		      then 
+			begin
+			  (* Check that we do not pass a same allocation table
+			   * as a pointer and a dereference. 
+			   *)
+			  assert(not(StringRegionList.mem (a,locr) write_allocs));
+			  (Deref(alloc_region_table_name(a,locr)))::acc 
+			end
+		      else (Var(alloc_region_table_name(a,locr)))::acc 
+		    else
+		      begin
+			(* Check that we do not pass in argument a constant 
+			 * allocation table that is also read/written directly
+			 * by the function called.
+			 *)
+			let fallocs = StringRegionSet.union
+			  f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
+			  f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+			in
+			assert(not(StringRegionSet.mem (a,locr) fallocs));
+			if StringRegionSet.mem (a,locr) 
+			  f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+			then (Var(alloc_region_table_name(a,locr)))::acc 
+			else (Deref(alloc_region_table_name(a,locr)))::acc 
+		      end
+		  with Not_found -> 
+		    (* Local allocation table.
+		     * Not passed in argument by the caller. *)
+		    acc
+		else acc)
+	      (StringRegionSet.diff
+		f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
+		f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)
+	      []
+	  in
+	  let write_allocs = 
+	    List.map (fun (a,r) -> Var(alloc_region_table_name(a,r))) 
+	      write_allocs in
+	  let el = el @ write_allocs @ write_mems @ read_allocs @ read_mems in
 	  let call = 
 	    make_guarded_app ~name:lab UserCall loc 
 	      f.jc_fun_info_final_name el 
@@ -1460,17 +1568,13 @@ and statement_list ~infunction ~threats l =
 ******************)
 
 let tr_struct st acc =
-  let alloc_type = alloc_table_type st in
+  let alloc_ty = alloc_table_type st.jc_struct_info_root in
   let tagid_type = tag_id_type st in
   let ptr_type = pointer_type st in
   let direct_fields = direct_embedded_struct_fields st in
   let all_fields = embedded_struct_fields st in
-  let all_structs = 
-    List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-      StructSet.empty all_fields
-  in
-  let all_structs = StructSet.fold (fun st acc -> st :: acc) all_structs [] in
-  let alloc = alloc_table_name st in
+  let all_roots = embedded_struct_roots st in
+  let alloc = alloc_table_name st.jc_struct_info_root in
   let tagtab = tag_table_name st in
     (* Declarations of field memories. *)
   let acc =
@@ -1502,13 +1606,9 @@ let tr_struct st acc =
     List.map (fun fi ->
       let st = field_sinfo fi in
       let a,b = field_bounds fi in
-      let alloc = alloc_table_name st in
+      let alloc = alloc_table_name st.jc_struct_info_root in
       let fields = embedded_struct_fields st in
-      let structs = 
-	List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-	  StructSet.empty fields
-      in
-      let structs = StructSet.fold (fun st acc -> st :: acc) structs [] in
+      let roots = embedded_struct_roots st in
       (* [valid_st(select(fi,x),a,b,alloc...)] *)
       LPred(
 	valid_pred_name st,
@@ -1516,7 +1616,7 @@ let tr_struct st acc =
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar None ** alloc_table_name) structs
+	:: List.map (lvar None ** alloc_table_name) roots
 	@ List.map (lvar None ** field_memory_name) fields)
     ) direct_fields
   in
@@ -1524,8 +1624,8 @@ let tr_struct st acc =
   let validity = LAnd(top_validity,field_validity) in
   let params = 
     ("x",ptr_type)
-    :: (alloc,alloc_type)
-    :: List.map struct_alloc_arg all_structs
+    :: (alloc,alloc_ty)
+    :: List.map struct_alloc_arg all_roots
     @ List.map field_memory_arg all_fields
   in
   let acc = 
@@ -1545,13 +1645,9 @@ let tr_struct st acc =
     List.map (fun fi ->
       let st = field_sinfo fi in
       let a,b = field_bounds fi in
-      let alloc = alloc_table_name st in
+      let alloc = alloc_table_name st.jc_struct_info_root in
       let fields = embedded_struct_fields st in
-      let structs = 
-	List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-	  StructSet.empty fields
-      in
-      let structs = StructSet.fold (fun st acc -> st :: acc) structs [] in
+      let roots = embedded_struct_roots st in
       (* [valid_st(select(fi,x+i),a,b,alloc...)] *)
       LPred(
 	valid_pred_name st,
@@ -1560,7 +1656,7 @@ let tr_struct st acc =
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar None ** alloc_table_name) structs
+	:: List.map (lvar None ** alloc_table_name) roots
 	@ List.map (lvar None ** field_memory_name) fields)
     ) direct_fields
   in
@@ -1582,8 +1678,8 @@ let tr_struct st acc =
     ("x",ptr_type)
     :: ("a",why_integer_type)
     :: ("b",why_integer_type)
-    :: (alloc,alloc_type)
-    :: List.map struct_alloc_arg all_structs
+    :: (alloc,alloc_ty)
+    :: List.map struct_alloc_arg all_roots
     @ List.map field_memory_arg all_fields
   in
   let acc = 
@@ -1598,7 +1694,7 @@ let tr_struct st acc =
       (* [st_root pointer] *)
       Base_type ptr_type,
       (* [reads all_fields writes alloc,tagtab] *)
-      (List.map (fun si -> alloc_table_name si) all_structs
+      (List.map alloc_table_name all_roots
 	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields),[alloc;tagtab],
       (* normal post *)
       make_and_list [
@@ -1607,7 +1703,7 @@ let tr_struct st acc =
 	  valid_one_pred_name st,
 	  LVar "result"
 	  :: LVar alloc
-	  :: List.map (lvar None ** alloc_table_name) all_structs
+	  :: List.map (lvar None ** alloc_table_name) all_roots
 	  @ List.map (lvar None ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
@@ -1624,6 +1720,12 @@ let tr_struct st acc =
       Prod_type(field_memory_name fi,Ref_type(Base_type(memory_field fi)),acc)
     ) all_fields alloc_type 
   in
+  let alloc_type =
+    List.fold_right (fun a acc ->
+      Prod_type(alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc)
+    ) all_roots alloc_type
+  in
+  let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in
   let alloc_type = Prod_type("tt",unit_type,alloc_type) in
   let acc = 
     Param(false,alloc_one_param_name st,alloc_type) :: acc
@@ -1637,7 +1739,7 @@ let tr_struct st acc =
       (* [st_root pointer] *)
       Base_type ptr_type,
       (* [reads all_fields; writes alloc,tagtab] *)
-      (List.map (fun si -> alloc_table_name si) all_structs
+      (List.map alloc_table_name all_roots
 	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields), [alloc; tagtab],
       (* normal post *)
       make_and_list [
@@ -1648,7 +1750,7 @@ let tr_struct st acc =
 	  :: LConst(Prim_int "0")
 	  :: LApp("sub_int",[LVar "n";LConst(Prim_int "1")])
 	  :: LVar alloc
-	  :: List.map (lvar None ** alloc_table_name) all_structs
+	  :: List.map (lvar None ** alloc_table_name) all_roots
 	  @ List.map (lvar None ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
@@ -1665,10 +1767,17 @@ let tr_struct st acc =
       Prod_type(field_memory_name fi,Ref_type(Base_type(memory_field fi)),acc)
     ) all_fields alloc_type
   in
+  let alloc_type =
+    List.fold_right (fun a acc ->
+      Prod_type(alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc)
+    ) all_roots alloc_type
+  in
+  let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in
   let alloc_type = Prod_type("n",Base_type why_integer_type,alloc_type) in
   let acc = 
     Param(false,alloc_param_name st,alloc_type) :: acc
   in
+
   match st.jc_struct_info_parent with
     | None ->
 	(* declaration of root type and the allocation table *)
@@ -1819,7 +1928,7 @@ let assigns before ef locs =
   FieldRegionMap.fold
     (fun (fi,r) p acc -> 
        let v = field_region_memory_name(fi,r) in
-       let alloc = fi.jc_field_info_root ^ "_alloc_table" in
+       let alloc = alloc_region_table_name(fi.jc_field_info_root,r) in
        make_and acc
 	 (LPred("not_assigns",
 		[LVarAtLabel(alloc,before); 
@@ -1874,9 +1983,11 @@ let tr_fun f loc spec body acc =
       (fun v acc ->
 	 match v.jc_var_info_type with
 	   | JCTpointer(st,a,b) ->
-	       let alloc = alloc_table_name st in
+	       let alloc = 
+		 alloc_region_table_name (st.jc_struct_info_root,v.jc_var_info_region) in
 	       let var = LVar v.jc_var_info_final_name in
 	       let fields = embedded_struct_fields st in
+	       let roots = embedded_struct_roots st in
 	       let fields = List.map (fun fi -> 
 		 (fi,Region.make_field v.jc_var_info_region fi)) fields 
 	       in
@@ -1888,34 +1999,20 @@ let tr_fun f loc spec body acc =
 		 | Some a, Some b 
 		     when Num.eq_num a (Num.num_of_int 0)
 		       && Num.eq_num b (Num.num_of_int 0) ->
-		     let structs = 
-		       List.fold_left 
-			 (fun acc (fi,_) -> StructSet.add (field_sinfo fi) acc) 
-			 StructSet.empty fields
-		     in
-		     let structs = 
-		       StructSet.fold (fun st acc -> st :: acc) structs [] in
 		     LPred(
 		       valid_one_pred_name st,
 		       var
 		       :: LVar alloc
-		       :: List.map (lvar None ** alloc_table_name) structs
+		       :: List.map (lvar None ** alloc_table_name) roots
 		       @ List.map (lvar None ** field_region_memory_name) fields)
 		 | Some a,Some b ->
-		     let structs = 
-		       List.fold_left 
-			 (fun acc (fi,_) -> StructSet.add (field_sinfo fi) acc) 
-			 StructSet.empty fields
-		     in
-		     let structs = 
-		       StructSet.fold (fun st acc -> st :: acc) structs [] in
 		     LPred(
 		       valid_pred_name st,
 		       var
 		       :: LConst(Prim_int(Num.string_of_num a))
 		       :: LConst(Prim_int(Num.string_of_num b))
 		       :: LVar alloc
-		       :: List.map (lvar None ** alloc_table_name) structs
+		       :: List.map (lvar None ** alloc_table_name) roots
 		       @ List.map (lvar None ** field_region_memory_name) fields)
 		 | _ -> LTrue
 	       in
@@ -2013,8 +2110,17 @@ let tr_fun f loc spec body acc =
       reads
   in
   let reads =
-    StringSet.fold
-      (fun v acc -> (v ^ "_alloc_table")::acc)
+    StringRegionSet.fold
+      (fun (a,r) acc -> 
+	let alloc = alloc_region_table_name(a,r) in
+	if Region.polymorphic r then
+	  if RegionList.mem r f.jc_fun_info_param_regions then
+	    if StringRegionSet.mem (a,r) 
+	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table 
+	    then alloc::acc 
+	    else acc
+	  else acc
+	else alloc::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
       reads
   in
@@ -2053,8 +2159,12 @@ let tr_fun f loc spec body acc =
       writes
   in
   let writes =
-    StringSet.fold
-      (fun v acc -> (v ^ "_alloc_table")::acc)
+    StringRegionSet.fold
+      (fun (a,r) acc ->
+	let alloc = alloc_region_table_name(a,r) in
+	if Region.polymorphic r then
+	  if RegionList.mem r f.jc_fun_info_param_regions then alloc::acc else acc
+	else alloc::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
       writes
   in
@@ -2104,6 +2214,34 @@ let tr_fun f loc spec body acc =
 	f.jc_fun_info_effects.jc_writes.jc_effect_memories)
       ([],[])
   in
+  let param_write_allocs,local_write_allocs =
+    StringRegionSet.fold
+      (fun (a,r) (param_acc,local_acc) ->
+	if Region.polymorphic r then
+	  let alloc = alloc_region_table_name(a,r),alloc_table_type a in
+	  if RegionList.mem r f.jc_fun_info_param_regions then
+	    alloc::param_acc,local_acc
+	  else
+	    param_acc,alloc::local_acc
+	else param_acc,local_acc)
+      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+      ([],[])
+  in
+  let param_read_allocs,local_read_allocs =
+    StringRegionSet.fold
+      (fun (a,r) (param_acc,local_acc) ->
+	if Region.polymorphic r then
+	  let alloc = alloc_region_table_name(a,r),alloc_table_type a in
+	  if RegionList.mem r f.jc_fun_info_param_regions then
+	    alloc::param_acc,local_acc
+	  else
+	    param_acc,alloc::local_acc
+	else param_acc,local_acc)
+      (StringRegionSet.diff 
+	f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
+	f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)
+      ([],[])
+  in
   let normal_post =
     List.fold_right
       (fun (_,_,e) acc -> make_and e acc)
@@ -2145,7 +2283,7 @@ let tr_fun f loc spec body acc =
 		 reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = 
-      interp_fun_params f param_write_mems param_read_mems annot_type 
+      interp_fun_params f (param_write_allocs @ param_write_mems) (param_read_allocs @ param_read_mems) annot_type 
     in
       Param (false, f.jc_fun_info_final_name, fun_type)
   in
@@ -2162,11 +2300,11 @@ let tr_fun f loc spec body acc =
 	  (* why functions for each behaviors *)
 	    let write_mems = 
 	      List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) 
-		param_write_mems
+		(param_write_mems @ param_write_allocs)
 	    in
 	    let read_mems = 
 	      List.map (fun (name,ty) -> name,Base_type ty) 
-		param_read_mems
+		(param_read_mems @ param_read_allocs)
 	    in
 	    let params = match f.jc_fun_info_parameters with
 	      | [] -> ["tt", unit_type]
@@ -2206,14 +2344,24 @@ let tr_fun f loc spec body acc =
 		  body_safety
 	      in
 	      let tblock =
-		List.fold_left (fun acc (mem_name,mem_ty) ->
+		List.fold_left (fun acc (mem_name,_) ->
 		  Let(mem_name,App(Var "any_memory",Void),acc)
 		) tblock local_read_mems
 	      in
 	      let tblock =
-		List.fold_left (fun acc (mem_name,mem_ty) ->
+		List.fold_left (fun acc (mem_name,_) ->
 		  Let_ref(mem_name,App(Var "any_memory",Void),acc)
 		) tblock local_write_mems
+	      in
+	      let tblock =
+		List.fold_left (fun acc (alloc_name,_) ->
+		  Let(alloc_name,App(Var "any_alloc_table",Void),acc)
+		) tblock local_read_allocs
+	      in
+	      let tblock =
+		List.fold_left (fun acc (alloc_name,_) ->
+		  Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
+		) tblock local_write_allocs
 	      in
 	      let tblock = 
 		if !return_void then
@@ -2453,6 +2601,11 @@ let tr_memory (fi,r) acc =
   Param(
     false,field_region_memory_name(fi,r),
     Ref_type(Base_type(memory_field fi))) :: acc
+
+let tr_alloc_table (a,r) acc =
+  Param(
+    false,alloc_region_table_name(a,r),
+    Ref_type(Base_type(alloc_table_type a))) :: acc
 
 (*
   Local Variables: 

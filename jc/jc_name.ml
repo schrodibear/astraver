@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.1 2007-12-17 14:18:55 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.2 2007-12-21 10:14:10 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -33,18 +33,28 @@ open Jc_region
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 
-let alloc_table_name st = st.jc_struct_info_root ^ "_alloc_table"
-let tag_table_name st = st.jc_struct_info_root ^ "_tag_table"
-let field_region_memory_name (fi,r) = 
+let alloc_table_name a = a ^ "_alloc_table"
+
+let alloc_region_table_name (a,r) = 
   if !Jc_common_options.separation then 
-    let fi,r = FieldRegion.repr (fi,r) in
-    fi.jc_field_info_final_name ^ "_" ^ r.jc_reg_final_name
-  else fi.jc_field_info_final_name
+    a ^ "_" ^ (Region.name r) ^ "_alloc_table"
+  else alloc_table_name a
+
+let tag_table_name st = st.jc_struct_info_root ^ "_tag_table"
+
 let field_memory_name fi = fi.jc_field_info_final_name
 
+let field_region_memory_name (fi,r) = 
+  if !Jc_common_options.separation then 
+    fi.jc_field_info_final_name ^ "_" ^ (Region.name r)
+  else field_memory_name fi
+
 let valid_pred_name st = "valid_" ^ st.jc_struct_info_name
+
 let valid_one_pred_name st = "valid_one_" ^ st.jc_struct_info_name
+
 let alloc_param_name st = "alloc_" ^ st.jc_struct_info_name
+
 let alloc_one_param_name st = "alloc_one_" ^ st.jc_struct_info_name
 
 (*

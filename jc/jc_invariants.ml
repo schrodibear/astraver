@@ -78,10 +78,10 @@ let logic_params li l =
       l	    
   in
   let l = 
-    StringSet.fold
-      (fun v acc -> (LVar (v ^ "_alloc_table"))::acc)
+    StringRegionSet.fold
+      (fun (a,r) acc -> (LVar(alloc_region_table_name(a,r))::acc))
       li.jc_logic_info_effects.jc_effect_alloc_table
-      l	    
+      l
   in
   StringSet.fold
     (fun v acc -> (LVar (v ^ "_tag_table"))::acc)
@@ -141,8 +141,8 @@ let logic_info_reads acc li =
       acc
   in
   let acc =
-    StringSet.fold
-      (fun v acc -> StringSet.add (v^"_alloc_table") acc)
+    StringRegionSet.fold
+      (fun (a,r) acc -> StringSet.add (alloc_region_table_name(a,r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -185,9 +185,9 @@ let tag_table_name root =
 let alloc_table_name root =
   root^"_alloc_table"
 
-let alloc_table_type root = {
+let alloc_table_type a = {
   logic_type_name = "alloc_table";
-  logic_type_args = [ simple_logic_type root ];
+  logic_type_args = [ simple_logic_type a ];
 }
 
 
@@ -417,12 +417,9 @@ let invariant_params acc li =
       acc
   in
   let acc =
-    StringSet.fold
-      (fun v acc -> 
-	 let t = { logic_type_args = [simple_logic_type v];
-		   logic_type_name = "alloc_table" }
-	 in
-	 (v ^ "_alloc_table", t)::acc)
+    StringRegionSet.fold
+      (fun (a,r) acc -> 
+	(alloc_region_table_name(a,r),alloc_table_type a)::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in

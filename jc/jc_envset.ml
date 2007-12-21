@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.16 2007-12-20 13:22:23 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.17 2007-12-21 10:14:10 moy Exp $ *)
 
 open Jc_env
 
@@ -99,12 +99,18 @@ module VarSet =
 		      v1.jc_var_info_tag v2.jc_var_info_tag
 	   end)
 
-module StructSet = 
-  Set.Make(struct type t = struct_info
-		  let compare st1 st2 = 
-		    Pervasives.compare 
-		      st1.jc_struct_info_name st2.jc_struct_info_name
-	   end)
+module StructOrd =
+  struct type t = struct_info
+	 let compare st1 st2 = 
+	   Pervasives.compare 
+	     st1.jc_struct_info_name st2.jc_struct_info_name
+	 let equal st1 st2 =
+	   st1.jc_struct_info_name = st2.jc_struct_info_name
+	 let hash st =
+	   Hashtbl.hash st.jc_struct_info_name 
+  end
+
+module StructSet = Set.Make(StructOrd)
 
 module FieldOrd =
   struct type t = field_info

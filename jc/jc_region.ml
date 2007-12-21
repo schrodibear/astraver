@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.5 2007-12-20 13:22:23 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.6 2007-12-21 10:14:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -130,18 +130,17 @@ end
 
 module RegionUF = UnionFind(InternalRegion)(RegionTable)
 
-module FieldRegion = 
-struct
-  include PairOrd(FieldOrd)(InternalRegion)
-  let repr (fi,r) = (fi,RegionUF.repr r)
-end
+module FieldRegion = PairOrd(FieldOrd)(InternalRegion)
+
+module StringRegion = PairOrd(String)(InternalRegion)
 
 (* Sets should be computed after unification takes place, so that operations
  * can maintain easily the invariant that only representative regions are used.
  *)
-module FieldRegionSet = 
+module PairRegionSet
+  (T : sig type t end)(P : Set.OrderedType with type t = T.t * region) = 
 struct
-  module S = Set.Make(FieldRegion)
+  module S = Set.Make(P)
   include S
   let mem (fi,r) s = S.mem (fi,RegionUF.repr r) s
   let add (fi,r) s = S.add (fi,RegionUF.repr r) s
@@ -153,12 +152,17 @@ struct
     S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
 end
 
+module FieldRegionSet = PairRegionSet(FieldOrd)(FieldRegion)
+
+module StringRegionSet = PairRegionSet(String)(StringRegion)
+
 (* Maps should be computed after unification takes place, so that operations
  * can maintain easily the invariant that only representative regions are used.
  *)
-module FieldRegionMap = 
+module PairRegionMap
+  (T : sig type t end)(P : Set.OrderedType with type t = T.t * region) = 
 struct
-  module M = Map.Make(FieldRegion)
+  module M = Map.Make(P)
   include M
   let add (fi,r) s = M.add (fi,RegionUF.repr r) s
   let find (fi,r) s = M.find (fi,RegionUF.repr r) s
@@ -166,18 +170,19 @@ struct
   let mem (fi,r) s = M.mem (fi,RegionUF.repr r) s
 end
 
+module FieldRegionMap = PairRegionMap(FieldOrd)(FieldRegion)
+
+module StringRegionMap = PairRegionMap(String)(StringRegion)
+
 let global_region_table : (InternalRegion.t FieldTable.t) RegionTable.t 
     = RegionTable.create 73
-
-(* Constant memories. Their region should be declared in Why. 
- * They should be passed to Why as global parameters. 
- *)
-let global_mem_set = ref FieldRegionSet.empty
 
 module Region =
 struct
 
   include InternalRegion
+
+  let name r = (RegionUF.repr r).jc_reg_final_name
 
   let polymorphic r = 
     let r = RegionUF.repr r in r.jc_reg_variable
@@ -245,9 +250,6 @@ struct
 
   let make_field r fi =
     let r = RegionUF.repr r in
-    (* If region is constant, add memory for [fi] to constant memories. *)
-    if not r.jc_reg_variable then
-      global_mem_set := FieldRegionSet.add (fi,r) !global_mem_set;
     if not !Jc_common_options.separation then dummy_region
     else if not(is_pointer_type fi.jc_field_info_type) then dummy_region else
       try 
@@ -337,6 +339,16 @@ struct
     | [] -> false
     | (fi',r')::rest -> 
 	FieldOrd.equal fi fi' && Region.equal r r' || mem (fi,r) rest
+
+end
+
+module StringRegionList =
+struct
+
+  let rec mem (a,r) = function
+    | [] -> false
+    | (a',r')::rest -> 
+	a = a' && Region.equal r r' || mem (a,r) rest
 
 end
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.83 2007-12-20 13:22:23 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.84 2007-12-21 10:14:10 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -193,7 +193,7 @@ let main () =
 	      Jc_norm.variables_table
 	      d_memories
 	  in	       	  
-	  let d_memories,_ =
+	  let d_memories,regions =
 	    FieldRegionSet.fold 
 	      (fun (fi,r) (acc,regions) -> 
 		let acc = 
@@ -201,8 +201,19 @@ let main () =
 		    Jc_interp.tr_region r acc 
 		in
 		Jc_interp.tr_memory (fi,r) acc,RegionSet.add r regions)
-	      (FieldRegionSet.map_repr !Jc_region.global_mem_set)
+	      (FieldRegionSet.map_repr !Jc_effect.constant_memories_set)
 	      (d_memories,RegionSet.singleton dummy_region)
+	  in	       	  
+	  let d_memories,_ =
+	    StringRegionSet.fold 
+	      (fun (a,r) (acc,regions) -> 
+		let acc = 
+		  if RegionSet.mem r regions then acc else
+		    Jc_interp.tr_region r acc 
+		in
+		Jc_interp.tr_alloc_table (a,r) acc,RegionSet.add r regions)
+	      (StringRegionSet.map_repr !Jc_effect.alloc_region_table_set)
+	      (d_memories,regions)
 	  in	       	  
 
 	  (* production phase 1.3 : generation of Why exceptions *)

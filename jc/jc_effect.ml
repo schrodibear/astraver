@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.72 2007-12-20 13:22:23 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.73 2007-12-21 10:14:10 moy Exp $ *)
 
 
 open Jc_env
@@ -39,9 +39,17 @@ open Format
 open Pp
 open Jc_region
 
+
+(* Constant memories. Their region should be declared in Why. 
+ * They should be passed to Why as global parameters. 
+ *)
+let constant_memories_set = ref FieldRegionSet.empty
+
+let alloc_region_table_set = ref StringRegionSet.empty
+
 let ef_union ef1 ef2 =
   { jc_effect_alloc_table = 
-      StringSet.union
+      StringRegionSet.union
 	ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table;
     jc_effect_tag_table = 
       StringSet.union
@@ -64,13 +72,21 @@ let ef_union ef1 ef2 =
   }
 
 let ef_assoc ef assoc =
-  { ef with jc_effect_memories =
+  { ef with 
+    jc_effect_memories =
       FieldRegionSet.fold (fun (fi,r) acc ->
 	try FieldRegionSet.add (fi,RegionList.assoc r assoc) acc 
 	with Not_found -> 
 	  (* Local memory. Not counted as effect for the caller. *)
 	  acc
-      ) ef.jc_effect_memories FieldRegionSet.empty
+      ) ef.jc_effect_memories FieldRegionSet.empty;
+    jc_effect_alloc_table =
+      StringRegionSet.fold (fun (a,r) acc ->
+	try StringRegionSet.add (a,RegionList.assoc r assoc) acc 
+	with Not_found -> 
+	  (* Local alloc table. Not counted as effect for the caller. *)
+	  acc
+      ) ef.jc_effect_alloc_table StringRegionSet.empty;
   }
 
 let fef_union fef1 fef2 =
@@ -90,6 +106,9 @@ let fef_assoc fef assoc =
   }
 
 let add_memory_effect ef (fi,r) =
+  (* If region is constant, add memory for [fi] to constant memories. *)
+  if not(Region.polymorphic r) then
+    constant_memories_set := FieldRegionSet.add (fi,r) !constant_memories_set;
   { ef with jc_effect_memories = FieldRegionSet.add (fi,r) ef.jc_effect_memories } 
   
 let add_global_effect ef vi =
@@ -99,8 +118,11 @@ let add_through_param_effect ef vi =
   { ef with jc_effect_through_params = 
       VarSet.add vi ef.jc_effect_through_params } 
   
-let add_alloc_effect ef a =
-  { ef with jc_effect_alloc_table = StringSet.add a ef.jc_effect_alloc_table } 
+let add_alloc_effect ef (a,r) =
+  if not(Region.polymorphic r) then
+    alloc_region_table_set := StringRegionSet.add (a,r) !alloc_region_table_set;
+  { ef with jc_effect_alloc_table = 
+      StringRegionSet.add (a,r) ef.jc_effect_alloc_table } 
   
 let add_tag_effect ef a =
   { ef with jc_effect_tag_table = StringSet.add a ef.jc_effect_tag_table } 
@@ -123,8 +145,8 @@ let add_global_reads fef vi =
 let add_through_param_reads fef vi =
   { fef with jc_reads = add_through_param_effect fef.jc_reads vi }
 
-let add_alloc_reads fef a =
-  { fef with jc_reads = add_alloc_effect fef.jc_reads a }
+let add_alloc_reads fef (a,r) =
+  { fef with jc_reads = add_alloc_effect fef.jc_reads (a,r) }
 
 let add_tag_reads fef a =
   { fef with jc_reads = add_tag_effect fef.jc_reads a }
@@ -144,8 +166,8 @@ let add_global_writes fef vi =
 let add_through_param_writes fef vi =
   { fef with jc_writes = add_through_param_effect fef.jc_writes vi }
 
-let add_alloc_writes fef a =
-  { fef with jc_writes = add_alloc_effect fef.jc_writes a }
+let add_alloc_writes fef (a,r) =
+  { fef with jc_writes = add_alloc_effect fef.jc_writes (a,r) }
 
 let add_tag_writes fef a =
   { fef with jc_writes = add_tag_effect fef.jc_writes a }
@@ -157,7 +179,7 @@ let add_committed_writes fef st =
   { fef with jc_writes = add_committed_effect fef.jc_writes st }
 
 let same_effects ef1 ef2 =
-  StringSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
+  StringRegionSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
   && StringSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && FieldRegionSet.equal ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
@@ -185,7 +207,7 @@ let rec term ef t =
 	  add_global_effect ef vi
 	else ef
     | JCToffset(_,t,st) ->
-	add_alloc_effect (term ef t) st.jc_struct_info_root
+	add_alloc_effect (term ef t) (st.jc_struct_info_root,t.jc_term_region)
     | JCTapp app -> 
 	let li = app.jc_app_fun and tls = app.jc_app_args in
 	let efapp = 
@@ -263,10 +285,11 @@ let rec expr ef e =
     | JCErange_cast(_,e1)
     | JCEunary(_,e1) -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
-    | JCEoffset(k,e,st) -> expr ef e
-    | JCEalloc(e,st) ->
+    | JCEoffset(k,e,st) ->
+	add_alloc_reads (expr ef e) (st.jc_struct_info_root,e.jc_expr_region)
+    | JCEalloc(_,st) ->
 	let name = st.jc_struct_info_root in
-	add_alloc_writes (add_tag_writes ef name) name
+	add_alloc_writes (add_tag_writes ef name) (name,e.jc_expr_region)
 (*
 	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
 	add_global_writes ef mut
@@ -276,7 +299,7 @@ let rec expr ef e =
 	  | JCTpointer(st, _, _) ->
 	      let name = st.jc_struct_info_root in
 	      (* write tag table ? *)
-	      add_alloc_writes (add_tag_writes ef name) name
+	      add_alloc_writes (add_tag_writes ef name) (name,e.jc_expr_region)
 	  | _ -> assert false
 	end
 
@@ -460,7 +483,7 @@ let parameter ef vi =
   match vi.jc_var_info_type with
     | JCTpointer (st, _, _) ->
 	let name = st.jc_struct_info_root in
-	  add_alloc_reads (add_tag_reads ef name) name
+	  add_alloc_reads (add_tag_reads ef name) (name,vi.jc_var_info_region)
     | _ -> ef
 	
 (* computing the fixpoint *)
@@ -519,8 +542,9 @@ let logic_effects funs =
        Jc_options.lprintf
 	 "Effects for logic function %s:@\n@[ reads alloc_table: %a@]@\n@[ reads tag_table: %a@]@\n@[ reads memories: %a@]@." 
 	 f.jc_logic_info_name
-	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
-	 (StringSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
+	 (print_list comma (fun fmt (a,r) ->
+			      fprintf fmt "%s,%s" a r.jc_reg_name))
+	 (StringRegionSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
 	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
 	 (StringSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
 	 (print_list comma (fun fmt (fi,r) ->
