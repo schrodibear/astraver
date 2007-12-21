@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.87 2007-12-19 10:29:52 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.88 2007-12-21 20:13:34 moy Exp $ *)
 
 open Pp
 open Format
@@ -2376,12 +2376,10 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     let return_type = fi.jc_fun_info_return_type in
     let vi_result = Jc_pervasives.var ~unique:false return_type "\\result" in
     let env =
-      if return_type <> JCTnull then
+      if return_type <> JCTnative Tunit then
 	let result = Vai.all_variables (term_var_no_loc vi_result) in
 	Environment.add env (Array.of_list result) [||]
       else env in
-
-    let extern_env = env in
 
     (* Add parameters as abstract variables in [env]. *)
     let params =
@@ -2468,14 +2466,37 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 (*     let sep_preds = write_sep_pred [] write_params in *)
 (*     fs.jc_fun_requires <- make_and(fs.jc_fun_requires :: sep_preds); *)
     
+    let keep_extern post =
+      let integer_vars = 
+	Array.to_list(fst(Environment.vars(Abstract1.env post)))
+	in
+      let term_has_local_var t =
+	fold_term (fun acc t -> match t.jc_term_node with
+	  | JCTvar vi -> acc || not vi.jc_var_info_static
+	  | _ -> acc
+	) false t
+      in
+      let extern_vars = 
+	List.filter (fun va ->
+	  let t = Vai.term va in not (term_has_local_var t)
+	) integer_vars
+      in
+      let extern_vars = Array.of_list extern_vars in
+      let extern_env = Environment.make extern_vars [||] in
+      Abstract1.change_environment_with mgr post extern_env false;
+      post
+    in
+
+    (* Update the return postcondition for procedure with no last return. *)
+    if return_type = JCTnative Tunit then
+      join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
     (* record the inferred postcondition *)
     if iaio = None then
-      let returnabs = !(invs.jc_absinv_return).jc_absval_regular in
+      let returnabs = keep_extern !(invs.jc_absinv_return).jc_absval_regular in
       if Abstract1.is_top mgr returnabs = Manager.True 
 	|| Abstract1.is_bottom mgr returnabs = Manager.True then
 	  ()
       else
-	let returnabs = Abstract1.change_environment mgr returnabs extern_env false in
 	let returna = mkinvariant abs.jc_absint_manager returnabs in
 	let post = make_and 
 	  [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type (term_var_no_loc vi_result)] in
@@ -2484,8 +2505,7 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	  List.fold_left
 	    (fun (acc1, acc2) (exc, va) -> (exc :: acc1, va.jc_absval_regular :: acc2))
 	    ([], []) invs.jc_absinv_exceptional in
-	let excabsl = List.map
-	  (fun va -> Abstract1.change_environment mgr va extern_env false) excabsl in
+	let excabsl = List.map (fun va -> keep_extern va) excabsl in
 	let excabsl = List.map
 	  (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
 	    Abstract1.top mgr env else va) excabsl in

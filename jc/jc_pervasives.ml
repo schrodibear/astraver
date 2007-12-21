@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.66 2007-12-21 10:14:10 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.67 2007-12-21 20:13:34 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -321,7 +321,13 @@ let rec term_of_expr e =
       jc_term_loc = e.jc_expr_loc;
       jc_term_label = "" }
 
-let term_var_no_loc vi = term_no_loc (JCTvar vi) vi.jc_var_info_type
+let term_var_no_loc vi = {
+  jc_term_node = JCTvar vi;
+  jc_term_type = vi.jc_var_info_type;
+  jc_term_region = vi.jc_var_info_region;
+  jc_term_loc = Loc.dummy_position;
+  jc_term_label = "";
+}
 
 let zerot = term_no_loc (JCTconst (JCCinteger "0")) integer_type
 let minusonet = term_no_loc (JCTconst (JCCinteger "-1")) integer_type
