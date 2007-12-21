@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.103 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.104 2007-12-21 10:54:55 filliatr Exp $ i*)
 
 open Format
 
@@ -177,22 +177,24 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
+  --fast-wp          use WP quadratic algorithm 
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
   --split-user-conj  splits also user conjunctions in goals 
   --split n          splits conditions into several pieces up to n levels
-  --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
   --total            total correctness
+  --explain          outputs explanations for VCs in file.xpl
+  --locs f           reads source locations from file f
+
+VC transformation options:
+  --all-vc           outputs all verification conditions (no auto discharge)
   --eval-goals       evaluate constant expressions in goals
   --prune-theory     prunes the theory 
   --prune-hyp k      prunes the hypotheses according to the depth k  
-  --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
-  --explain          outputs explanations for VCs in file.xpl
-  --locs f           reads source locations from file f
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -207,7 +209,6 @@ Encoding for types in untyped logic:
   --encoding rec     encodes types with typing axioms
   --encoding mono    encodes types using monomorphisation
   --encoding sstrat  encodes types using some types  + strat
-
 
 Prover selection:
   --coq       selects COQ prover (default)
@@ -235,6 +236,9 @@ Coq-specific options:
               gives some Coq preamble to be substituted to \"Require Why\"
   --coq-fp-model <Module>
               sets the Coq model for floating-point arithmetic
+
+SMT-lib-specific options:
+  --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
 
 PVS-specific options:
   --pvs-preamble <text>

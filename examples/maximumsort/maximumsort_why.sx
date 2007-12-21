@@ -240,7 +240,7 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2)))))
 
-;; swap_po_1, Why obligation from file "", line 0, characters -1--1:
+;; swap_po_1, File "maximumsort.mlw", line 10, characters 5-14
 (FORALL (i)
 (FORALL (j)
 (FORALL (t)
@@ -256,7 +256,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t i result0)) (AND (<= 0 j) (< j (array_length t0))))))))))))))))
 
-;; swap_po_2, Why obligation from file "", line 0, characters -1--1:
+;; swap_po_2, File "maximumsort.mlw", line 12, characters 4-22
 (FORALL (i)
 (FORALL (j)
 (FORALL (t)
@@ -277,7 +277,7 @@
 (DEFPRED (Maximize t n x k)
   (FORALL (i) (IMPLIES (AND (<= k i) (<= i n)) (<= (access t k) x))))
 
-;; maximum_po_1, Why obligation from file "", line 0, characters -1--1:
+;; maximum_po_1, File "maximumsort.mlw", line 31, characters 4-50
 (FORALL (n)
 (FORALL (k)
 (FORALL (i)
@@ -288,7 +288,7 @@
 (IMPLIES (EQ k 0)
 (AND (AND (<= 0 i) (<= i n)) (Maximize t n (access t i) 0))))))))
 
-;; maximum_po_2, Why obligation from file "", line 0, characters -1--1:
+;; maximum_po_2, File "maximumsort.mlw", line 28, characters 10-15
 (FORALL (n)
 (FORALL (k)
 (FORALL (i)
@@ -298,7 +298,7 @@
          (AND (< n (array_length t)) (Maximize t n (access t i) k))))
 (IMPLIES (NEQ k 0) (AND (<= 0 (- k 1)) (< (- k 1) (array_length t)))))))))
 
-;; maximum_po_3, Why obligation from file "", line 0, characters -1--1:
+;; maximum_po_3, File "maximumsort.mlw", line 28, characters 16-20
 (FORALL (n)
 (FORALL (k)
 (FORALL (i)
@@ -312,7 +312,7 @@
 (IMPLIES (EQ result (access t (- k 1)))
 (AND (<= 0 i) (< i (array_length t))))))))))))
 
-;; maximum_po_4, Why obligation from file "", line 0, characters -1--1:
+;; maximum_po_4, File "maximumsort.mlw", line 29, characters 9-26
 (FORALL (n)
 (FORALL (k)
 (FORALL (i)
@@ -329,7 +329,7 @@
 (IMPLIES (EQ result0 (access t i))
 (IMPLIES (> result result0) (AND (<= 0 k) (< (- k 1) k)))))))))))))))
 
-;; maximum_po_5, Why obligation from file "", line 0, characters -1--1:
+;; maximum_po_5, File "maximumsort.mlw", line 29, characters 9-26
 (FORALL (n)
 (FORALL (k)
 (FORALL (i)
@@ -350,7 +350,7 @@
 (AND (<= (- k 1) n)
 (AND (< n (array_length t)) (Maximize t n (access t (- k 1)) (- k 1)))))))))))))))))))
 
-;; maximum_po_6, Why obligation from file "", line 0, characters -1--1:
+;; maximum_po_6, File "maximumsort.mlw", line 30, characters 9-25
 (FORALL (n)
 (FORALL (k)
 (FORALL (i)
@@ -367,7 +367,7 @@
 (IMPLIES (EQ result0 (access t i))
 (IMPLIES (<= result result0) (AND (<= 0 k) (< (- k 1) k)))))))))))))))
 
-;; maximum_po_7, Why obligation from file "", line 0, characters -1--1:
+;; maximum_po_7, File "maximumsort.mlw", line 30, characters 9-25
 (FORALL (n)
 (FORALL (k)
 (FORALL (i)
@@ -388,7 +388,7 @@
 (AND (<= i n)
 (AND (< n (array_length t)) (Maximize t n (access t i) (- k 1)))))))))))))))))))
 
-;; maxisort_po_1, Why obligation from file "", line 0, characters -1--1:
+;; maxisort_po_1, File "maximumsort.mlw", line 39, characters 18-193
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
@@ -399,7 +399,7 @@
 (IMPLIES (< (+ (- result 1) 1) (array_length t))
 (Maximize t (- result 1) (access t (+ (- result 1) 1)) 0)))))))))
 
-;; maxisort_po_2, Why obligation from file "", line 0, characters -1--1:
+;; maxisort_po_2, File "maximumsort.mlw", line 44, characters 16-34
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
@@ -415,7 +415,7 @@
 (AND (AND (<= 0 i) (<= i i))
 (AND (<= i i) (AND (< i (array_length t0)) (Maximize t0 i (access t0 i) i))))))))))))
 
-;; maxisort_po_3, Why obligation from file "", line 0, characters -1--1:
+;; maxisort_po_3, File "maximumsort.mlw", line 45, characters 8-19
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
@@ -437,7 +437,7 @@
 (AND (AND (<= 0 i) (< i (array_length t0)))
 (AND (<= 0 result0) (< result0 (array_length t0)))))))))))))))
 
-;; maxisort_po_4, Why obligation from file "", line 0, characters -1--1:
+;; maxisort_po_4, File "maximumsort.mlw", line 39, characters 18-193
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
@@ -468,7 +468,7 @@
 (IMPLIES (< (+ i0 1) (array_length t1))
 (Maximize t1 i0 (access t1 (+ i0 1)) 0)))))))))))))))))))))
 
-;; maxisort_po_5, Why obligation from file "", line 0, characters -1--1:
+;; maxisort_po_5, File "maximumsort.mlw", line 43, characters 16-19
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)
@@ -494,7 +494,7 @@
 (FORALL (i0)
 (IMPLIES (EQ i0 (- i 1)) (AND (<= 0 (+ i 1)) (< (+ i0 1) (+ i 1)))))))))))))))))))
 
-;; maxisort_po_6, Why obligation from file "", line 0, characters -1--1:
+;; maxisort_po_6, File "maximumsort.mlw", line 48, characters 4-56
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (result)

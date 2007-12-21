@@ -1,7 +1,14 @@
 
+version 2.10, December 20th, 2007
+=================================
+  o the Krakatoa front-end for Java programs is now distributed with Why
+  o dp: new option -smt-solver to set the SMT solver (Yices, Z3, CVC3)
+  o new option --fast-wp to use quadratic WP algorithm
+  o localization of VC wrt source code (options --locs and --explain) and
+    visualization in gwhy
   o gwhy: added prover Z3 (http://research.microsoft.com/projects/z3/)
   o SMT-lib output: integer division (/) is now translated into an
-  uninterpreted function symbol div_int
+    uninterpreted function symbol div_int
   o simplify2why: fixed bugs
 
 version 2.04, August 2nd, 2007

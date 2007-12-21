@@ -231,22 +231,22 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2)))))
 
-;; sqrt_po_1, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_1, File "sqrt.mlw", line 34, characters 4-54
 (FORALL (x)
 (IMPLIES (>= x 0)
 (IMPLIES (EQ x 0) (AND (<= (* 0 0) x) (< x (* (+ 0 1) (+ 0 1)))))))
 
-;; sqrt_po_2, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_2, File "sqrt.mlw", line 34, characters 4-54
 (FORALL (x)
 (IMPLIES (>= x 0)
 (IMPLIES (NEQ x 0)
 (IMPLIES (<= x 3) (AND (<= (* 1 1) x) (< x (* (+ 1 1) (+ 1 1))))))))
 
-;; sqrt_po_3, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_3, File "sqrt.mlw", line 18, characters 16-23
 (FORALL (x)
 (IMPLIES (>= x 0) (IMPLIES (NEQ x 0) (IMPLIES (> x 3) (NEQ 2 0)))))
 
-;; sqrt_po_4, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_4, File "sqrt.mlw", line 22, characters 7-95
 (FORALL (x)
 (IMPLIES (>= x 0)
 (IMPLIES (NEQ x 0)
@@ -259,7 +259,7 @@
 (AND (EQ result (int_div (+ (int_div x x) x) 2))
 (AND (< x (* (+ x 1) (+ x 1))) (< x (* (+ result 1) (+ result 1))))))))))))))
 
-;; sqrt_po_5, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_5, File "sqrt.mlw", line 29, characters 9-15
 (FORALL (x)
 (IMPLIES (>= x 0)
 (IMPLIES (NEQ x 0)
@@ -275,7 +275,7 @@
          (AND (< x (* (+ y 1) (+ y 1))) (< x (* (+ z 1) (+ z 1)))))))
 (IMPLIES (< z y) (FORALL (y0) (IMPLIES (EQ y0 z) (NEQ z 0))))))))))))))
 
-;; sqrt_po_6, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_6, File "sqrt.mlw", line 22, characters 7-95
 (FORALL (x)
 (IMPLIES (>= x 0)
 (IMPLIES (NEQ x 0)
@@ -305,7 +305,7 @@
 (AND (EQ z0 (int_div (+ (int_div x y0) y0) 2))
 (AND (< x (* (+ y0 1) (+ y0 1))) (< x (* (+ z0 1) (+ z0 1))))))))))))))))))))))))))))
 
-;; sqrt_po_7, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_7, File "sqrt.mlw", line 27, characters 15-16
 (FORALL (x)
 (IMPLIES (>= x 0)
 (IMPLIES (NEQ x 0)
@@ -330,7 +330,7 @@
 (IMPLIES (EQ result1 (int_div (+ result0 z) 2))
 (FORALL (z0) (IMPLIES (EQ z0 result1) (AND (<= 0 y) (< y0 y)))))))))))))))))))))))
 
-;; sqrt_po_8, Why obligation from file "", line 0, characters -1--1:
+;; sqrt_po_8, File "sqrt.mlw", line 34, characters 4-54
 (FORALL (x)
 (IMPLIES (>= x 0)
 (IMPLIES (NEQ x 0)

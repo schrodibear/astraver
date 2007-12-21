@@ -174,7 +174,7 @@
  ;; Why axiom l_pos
  (< 0 l))
 
-;; pgm_max_end_po_1, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_1, File "max.mlw", line 24, characters 18-102
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -185,7 +185,7 @@
 (AND (AND (<= 0 x) (< x l))
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))))))))
 
-;; pgm_max_end_po_2, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_2, File "max.mlw", line 27, characters 9-14
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -200,7 +200,7 @@
          (IMPLIES (AND (<= 0 k) (< k y0)) (<= (access a k) (access a x0))))))
 (IMPLIES (< y0 l) (AND (<= 0 y0) (< y0 (array_length a)))))))))))))
 
-;; pgm_max_end_po_3, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_3, File "max.mlw", line 27, characters 17-22
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -218,7 +218,7 @@
 (FORALL (result)
 (IMPLIES (EQ result (access a y0)) (AND (<= 0 x0) (< x0 (array_length a))))))))))))))))
 
-;; pgm_max_end_po_4, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_4, File "max.mlw", line 24, characters 18-102
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -248,7 +248,7 @@
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k y1)) (<= (access a k) (access a x1)))))))))))))))))))))))))))
 
-;; pgm_max_end_po_5, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_5, File "max.mlw", line 26, characters 16-19
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -274,7 +274,7 @@
 (FORALL (y1)
 (IMPLIES (EQ y1 (+ y0 1)) (AND (<= 0 (- l y0)) (< (- l y1) (- l y0))))))))))))))))))))))))
 
-;; pgm_max_end_po_6, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_6, File "max.mlw", line 24, characters 18-102
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -302,7 +302,7 @@
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k y1)) (<= (access a k) (access a x0)))))))))))))))))))))))))
 
-;; pgm_max_end_po_7, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_7, File "max.mlw", line 26, characters 16-19
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -326,7 +326,7 @@
 (FORALL (y1)
 (IMPLIES (EQ y1 (+ y0 1)) (AND (<= 0 (- l y0)) (< (- l y1) (- l y0))))))))))))))))))))))
 
-;; pgm_max_end_po_8, Why obligation from file "", line 0, characters -1--1:
+;; pgm_max_end_po_8, File "max.mlw", line 32, characters 4-155
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)

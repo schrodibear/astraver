@@ -244,25 +244,6 @@ fi
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
-# Octagon library
-default_octagon=no
-AC_ARG_ENABLE(octagon,[  --enable-octagon=[no/yes]  using abstract interpretation [default=$default_octagon]],,enable_octagon=$default_octagon)
-
-if test "$enable_octagon" = "yes" ; then
-  cd octagon
-  ./configure --with-num=float --with-ocaml=$OCAMLLIB
-  if test $? -ne 0; then
-    AC_MSG_ERROR(Problem with octagon configuration (did you install g++ ?))
-  fi
-  chmod 755 oct-config
-  cd ..
-  OCTAGONLIB=octagon/ocamllib/oct.cma
-  STATIC="-cclib -static"
-else
-  OCTAGONLIB=
-  STATIC=
-fi
-
 # apron library
 default_apron=no
 APRONLIBS=
@@ -419,10 +400,6 @@ AC_SUBST(INCLUDEGTK2)
 AC_SUBST(OCAMLWEB)
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
-
-AC_SUBST(enable_octagon)
-AC_SUBST(OCTAGONLIB)
-AC_SUBST(STATIC)
 
 AC_SUBST(enable_apron)
 AC_SUBST(APRONLIB)

@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 9, characters 52-62: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (x: Z),
   forall (HW_2: x = 0 /\ x <> 0),
@@ -13,7 +13,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 17, characters 16-22: *)
 (*Why goal*) Lemma p2_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -28,7 +28,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 17, characters 31-32: *)
 (*Why goal*) Lemma p2_po_2 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -43,7 +43,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 20, characters 4-9: *)
 (*Why goal*) Lemma p2_po_3 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -56,7 +56,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 25, characters 16-22: *)
 (*Why goal*) Lemma p3_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -71,7 +71,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 25, characters 31-32: *)
 (*Why goal*) Lemma p3_po_2 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -86,7 +86,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 28, characters 4-9: *)
 (*Why goal*) Lemma p3_po_3 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -99,7 +99,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 33, characters 16-22: *)
 (*Why goal*) Lemma p4_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 1),
@@ -114,7 +114,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 33, characters 31-32: *)
 (*Why goal*) Lemma p4_po_2 : 
   forall (y: Z),
   forall (HW_1: y >= 1),
@@ -129,7 +129,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/set.mlw", line 36, characters 4-9: *)
 (*Why goal*) Lemma p4_po_3 : 
   forall (y: Z),
   forall (HW_1: y >= 1),

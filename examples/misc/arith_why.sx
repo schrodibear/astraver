@@ -170,12 +170,12 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2)))))
 
-;; mult_po_1, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_1, File "arith.mlw", line 12, characters 19-48
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0)) (AND (>= x 0) (EQ (+ 0 (* x y)) (* x y))))))
 
-;; mult_po_2, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_2, File "arith.mlw", line 14, characters 12-18
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -187,7 +187,7 @@
 (IMPLIES (EQ (int_mod a 2) 1)
 (FORALL (p0) (IMPLIES (EQ p0 (+ p b)) (NEQ 2 0))))))))))))
 
-;; mult_po_3, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_3, File "arith.mlw", line 12, characters 19-48
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -207,7 +207,7 @@
 (FORALL (b0)
 (IMPLIES (EQ b0 (* 2 b)) (AND (>= a0 0) (EQ (+ p0 (* a0 b0)) (* x y)))))))))))))))))))))
 
-;; mult_po_4, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_4, File "arith.mlw", line 12, characters 59-60
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -226,7 +226,7 @@
 (IMPLIES (EQ a0 result)
 (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (AND (<= 0 a) (< a0 a))))))))))))))))))))
 
-;; mult_po_5, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_5, File "arith.mlw", line 14, characters 12-18
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -236,7 +236,7 @@
 (IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
 (IMPLIES (NEQ a 0) (IMPLIES (NEQ (int_mod a 2) 1) (NEQ 2 0))))))))))
 
-;; mult_po_6, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_6, File "arith.mlw", line 12, characters 19-48
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -254,7 +254,7 @@
 (FORALL (b0)
 (IMPLIES (EQ b0 (* 2 b)) (AND (>= a0 0) (EQ (+ p (* a0 b0)) (* x y)))))))))))))))))))
 
-;; mult_po_7, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_7, File "arith.mlw", line 12, characters 59-60
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -271,7 +271,7 @@
 (IMPLIES (EQ a0 result)
 (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (AND (<= 0 a) (< a0 a))))))))))))))))))
 
-;; mult_po_8, Why obligation from file "", line 0, characters -1--1:
+;; mult_po_8, File "arith.mlw", line 19, characters 4-18
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))

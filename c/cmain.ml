@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.98 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.99 2007-12-21 10:54:54 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -66,9 +66,6 @@ let main () =
   let nfiles = on_all_files Cnorm.file tfiles in
   (* local aliasing analysis *)
   if local_aliasing then Cptr.local_aliasing_transform ();
-  (* local abstract interpretation over integers *)
-  if abstract_interp || gen_invariant then
-    Array.iter Cint.local_int_analysis_attach tab_comp;
   (* separation *)  
   lprintf "starting separation of variables.@.";
   List.iter (fun (_,p) -> Cseparation.file p)  nfiles;

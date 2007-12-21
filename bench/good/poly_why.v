@@ -10,7 +10,7 @@ Admitted.
 Admitted.
 Implicit Arguments f.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (result: bool),
   forall (HW_1: result = true),

@@ -170,7 +170,7 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2)))))
 
-;; power1_po_1, Why obligation from file "", line 0, characters -1--1:
+;; power1_po_1, File "power.mlw", line 23, characters 18-63
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -178,7 +178,7 @@
 (FORALL (y)
 (IMPLIES (EQ y 1) (AND (EQ (Zpower x n) (* y (Zpower m n))) (>= n 0))))))))
 
-;; power1_po_2, Why obligation from file "", line 0, characters -1--1:
+;; power1_po_2, File "power.mlw", line 23, characters 18-63
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -199,7 +199,7 @@
 (IMPLIES (EQ n1 (div2 n0))
 (AND (EQ (Zpower x n) (* y1 (Zpower m1 n1))) (>= n1 0))))))))))))))))))))
 
-;; power1_po_3, Why obligation from file "", line 0, characters -1--1:
+;; power1_po_3, File "power.mlw", line 24, characters 16-17
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -218,7 +218,7 @@
 (IMPLIES (EQ m1 (* m0 m0))
 (FORALL (n1) (IMPLIES (EQ n1 (div2 n0)) (AND (<= 0 n0) (< n1 n0))))))))))))))))))))
 
-;; power1_po_4, Why obligation from file "", line 0, characters -1--1:
+;; power1_po_4, File "power.mlw", line 23, characters 18-63
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -237,7 +237,7 @@
 (IMPLIES (EQ n1 (div2 n0))
 (AND (EQ (Zpower x n) (* y0 (Zpower m1 n1))) (>= n1 0))))))))))))))))))
 
-;; power1_po_5, Why obligation from file "", line 0, characters -1--1:
+;; power1_po_5, File "power.mlw", line 24, characters 16-17
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)
@@ -254,7 +254,7 @@
 (IMPLIES (EQ m1 (* m0 m0))
 (FORALL (n1) (IMPLIES (EQ n1 (div2 n0)) (AND (<= 0 n0) (< n1 n0))))))))))))))))))
 
-;; power1_po_6, Why obligation from file "", line 0, characters -1--1:
+;; power1_po_6, File "power.mlw", line 30, characters 4-20
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m)

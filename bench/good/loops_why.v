@@ -2,7 +2,7 @@
 Require Import Why.
 Require Import Omega.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 9, characters 16-23: *)
 (*Why goal*) Lemma loop1_po_1 : 
   forall (i: Z),
   forall (HW_1: i <= 10),
@@ -16,7 +16,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 9, characters 32-36: *)
 (*Why goal*) Lemma loop1_po_2 : 
   forall (i: Z),
   forall (HW_1: i <= 10),
@@ -32,7 +32,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 12, characters 4-10: *)
 (*Why goal*) Lemma loop1_po_3 : 
   forall (i: Z),
   forall (HW_1: i <= 10),
@@ -44,7 +44,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 19, characters 34-41: *)
 (*Why goal*) Lemma oppose_po_1 : 
   forall (x0: Z),
   forall (x: Z),
@@ -56,7 +56,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 24, characters 33-40: *)
 (*Why goal*) Lemma loop2_po_1 : 
   forall (x: Z),
   forall (HW_1: x <= 10),
@@ -70,7 +70,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 24, characters 49-53: *)
 (*Why goal*) Lemma loop2_po_2 : 
   forall (x: Z),
   forall (HW_1: x <= 10),
@@ -84,7 +84,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 25, characters 6-14: *)
 (*Why goal*) Lemma loop2_po_3 : 
   forall (x: Z),
   forall (HW_1: x <= 10),
@@ -96,7 +96,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 27, characters 6-13: *)
 (*Why goal*) Lemma loop2_po_4 : 
   forall (x: Z),
   forall (HW_1: x <= 10),
@@ -113,7 +113,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/loops.mlw", line 27, characters 6-13: *)
 (*Why goal*) Lemma loop2_po_5 : 
   forall (x: Z),
   forall (HW_1: x <= 10),

@@ -231,7 +231,7 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2)))))
 
-;; distance_po_1, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_1, File "distance.mlw", line 55, characters 20-119
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -243,7 +243,7 @@
 (AND (EQ (array_length t) (+ n2 1))
 (FORALL (j) (IMPLIES (AND (<= 0 j) (< j i)) (EQ (access t j) (- n2 j))))))))))))
 
-;; distance_po_2, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_2, File "distance.mlw", line 58, characters 8-24
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -259,7 +259,7 @@
          (IMPLIES (AND (<= 0 j) (< j i0)) (EQ (access t0 j) (- n2 j))))))
 (IMPLIES (<= i0 n2) (AND (<= 0 i0) (< i0 (array_length t0)))))))))))))
 
-;; distance_po_3, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_3, File "distance.mlw", line 55, characters 20-119
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -283,7 +283,7 @@
 (AND (EQ (array_length t1) (+ n2 1))
 (FORALL (j) (IMPLIES (AND (<= 0 j) (< j i1)) (EQ (access t1 j) (- n2 j)))))))))))))))))))))
 
-;; distance_po_4, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_4, File "distance.mlw", line 57, characters 18-24
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -305,7 +305,7 @@
 (IMPLIES (EQ i1 (+ i0 1))
 (AND (<= 0 (- (+ n2 1) i0)) (< (- (+ n2 1) i1) (- (+ n2 1) i0))))))))))))))))))
 
-;; distance_po_5, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_5, File "distance.mlw", line 64, characters 20-139
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -328,7 +328,7 @@
 (IMPLIES (AND (<= 0 j) (<= j n2))
 (EQ (min_suffix w1 w2 (+ i1 1) j (access t0 j)) |@true|)))))))))))))))))
 
-;; distance_po_6, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_6, File "distance.mlw", line 67, characters 15-20
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -354,7 +354,7 @@
          (EQ (min_suffix w1 w2 (+ i2 1) j (access t1 j)) |@true|)))))
 (IMPLIES (>= i2 0) (AND (<= 0 n2) (< n2 (array_length t1)))))))))))))))))))
 
-;; distance_po_7, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_7, File "distance.mlw", line 72, characters 22-270
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -404,7 +404,7 @@
 (EQ (min_suffix w1 w2 (+ i2 1) k (access t2 k)) |@true|)))
 (EQ (min_suffix w1 w2 (+ i2 1) (+ j 1) old) |@true|))))))))))))))))))))))))))))))))))
 
-;; distance_po_8, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_8, File "distance.mlw", line 79, characters 19-24
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -458,7 +458,7 @@
          (EQ (min_suffix w1 w2 (+ i2 1) (+ j0 1) old0) |@true|)))))
 (IMPLIES (>= j0 0) (AND (<= 0 j0) (< j0 (array_length t3)))))))))))))))))))))))))))))))))))))
 
-;; distance_po_9, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_9, File "distance.mlw", line 80, characters 19-25
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -517,7 +517,7 @@
 (FORALL (old1)
 (IMPLIES (EQ old1 result1) (AND (<= 0 i2) (< i2 (array_length w1))))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_10, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_10, File "distance.mlw", line 80, characters 26-32
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -580,7 +580,7 @@
 (IMPLIES (EQ result2 (access w1 i2))
 (AND (<= 0 j0) (< j0 (array_length w2)))))))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_11, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_11, File "distance.mlw", line 72, characters 22-270
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -662,7 +662,7 @@
 (EQ (min_suffix w1 w2 (+ i2 1) k (access t4 k)) |@true|)))
 (EQ (min_suffix w1 w2 (+ i2 1) (+ j1 1) old1) |@true|))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_12, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_12, File "distance.mlw", line 76, characters 13-16
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -733,7 +733,7 @@
 (FORALL (j1)
 (IMPLIES (EQ j1 (- j0 1)) (AND (<= 0 (+ j0 1)) (< (+ j1 1) (+ j0 1))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_13, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_13, File "distance.mlw", line 83, characters 28-35
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -803,7 +803,7 @@
 (IMPLIES (EQ result4 (access t3 j0))
 (AND (<= 0 (+ j0 1)) (< (+ j0 1) (array_length t3))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_14, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_14, File "distance.mlw", line 72, characters 22-270
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -891,7 +891,7 @@
 (EQ (min_suffix w1 w2 (+ i2 1) k (access t4 k)) |@true|)))
 (EQ (min_suffix w1 w2 (+ i2 1) (+ j1 1) old1) |@true|))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_15, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_15, File "distance.mlw", line 76, characters 13-16
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -968,7 +968,7 @@
 (FORALL (j1)
 (IMPLIES (EQ j1 (- j0 1)) (AND (<= 0 (+ j0 1)) (< (+ j1 1) (+ j0 1))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_16, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_16, File "distance.mlw", line 64, characters 20-139
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -1029,7 +1029,7 @@
 (IMPLIES (AND (<= 0 j) (<= j n2))
 (EQ (min_suffix w1 w2 (+ i3 1) j (access t3 j)) |@true|)))))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_17, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_17, File "distance.mlw", line 66, characters 18-21
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -1085,7 +1085,7 @@
 (FORALL (i3)
 (IMPLIES (EQ i3 (- i2 1)) (AND (<= 0 (+ i2 1)) (< (+ i3 1) (+ i2 1)))))))))))))))))))))))))))))))))))))))
 
-;; distance_po_18, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_18, File "distance.mlw", line 89, characters 6-10
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)
@@ -1111,7 +1111,7 @@
          (EQ (min_suffix w1 w2 (+ i2 1) j (access t1 j)) |@true|)))))
 (IMPLIES (< i2 0) (AND (<= 0 0) (< 0 (array_length t1)))))))))))))))))))
 
-;; distance_po_19, Why obligation from file "", line 0, characters -1--1:
+;; distance_po_19, File "distance.mlw", line 91, characters 4-64
 (FORALL (t)
 (FORALL (w1)
 (FORALL (w2)

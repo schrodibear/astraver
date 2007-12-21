@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/opaque.mlw", line 4, characters 33-38: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (x: Z),
   x = 1.

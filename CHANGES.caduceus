@@ -1,7 +1,12 @@
 
 Note: These are the changes for Caduceus.
 
- o dp: new option -smt-solver to set the SMT solver (Yices, Z3, CVC3)
+version 1.10, December 20th, 2007
+=================================
+ o new target 'ergo' in generated makefile
+ o fixed bug with modulo arithmetic model
+ o fixed bug with separation analysis
+ o fixed arithmetic promotions according to ANSI C
 
 version 1.04, August 2nd, 2007
 ==============================

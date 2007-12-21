@@ -170,34 +170,34 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2)))))
 
-;; swap1_po_1, Why obligation from file "", line 0, characters -1--1:
+;; swap1_po_1, File "swap0.mlw", line 12, characters 4-21
 (FORALL (x0)
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (EQ x y)
 (FORALL (y0) (IMPLIES (EQ y0 x0) (AND (EQ x y) (EQ y0 x0))))))))
 
-;; swap2_po_1, Why obligation from file "", line 0, characters -1--1:
+;; swap2_po_1, File "swap0.mlw", line 24, characters 4-21
 (FORALL (x0)
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (EQ x y)
 (FORALL (y0) (IMPLIES (EQ y0 x0) (AND (EQ x y) (EQ y0 x0))))))))
 
-;; swap3_po_1, Why obligation from file "", line 0, characters -1--1:
+;; swap3_po_1, File "swap0.mlw", line 32, characters 4-21
 (FORALL (a0)
 (FORALL (b)
 (FORALL (a)
 (IMPLIES (EQ a b)
 (FORALL (b0) (IMPLIES (EQ b0 a0) (AND (EQ a b) (EQ b0 a0))))))))
 
-;; call_swap3_y_x_po_1, Why obligation from file "", line 0, characters -1--1:
+;; call_swap3_y_x_po_1, File "swap0.mlw", line 42, characters 41-58
 (FORALL (x0)
 (FORALL (y0)
 (FORALL (x)
 (FORALL (y) (IMPLIES (AND (EQ y x0) (EQ x y0)) (AND (EQ x y0) (EQ y x0)))))))
 
-;; swap4_po_1, Why obligation from file "", line 0, characters -1--1:
+;; swap4_po_1, File "swap0.mlw", line 52, characters 4-21
 (FORALL (a)
 (FORALL (b)
 (FORALL (tmp)
@@ -206,13 +206,13 @@
 (IMPLIES (EQ a0 b)
 (FORALL (b0) (IMPLIES (EQ b0 tmp) (AND (EQ a0 b) (EQ b0 a))))))))))
 
-;; call_swap4_x_y_po_1, Why obligation from file "", line 0, characters -1--1:
+;; call_swap4_x_y_po_1, File "swap0.mlw", line 61, characters 48-53
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (EQ x 3)
 (FORALL (x0) (FORALL (y0) (IMPLIES (AND (EQ x0 y) (EQ y0 x)) (EQ y0 3)))))))
 
-;; call_swap4_y_x_po_1, Why obligation from file "", line 0, characters -1--1:
+;; call_swap4_y_x_po_1, File "swap0.mlw", line 62, characters 48-53
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (EQ x 3)

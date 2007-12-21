@@ -17,7 +17,7 @@ Require Import Why.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 45, characters 51-56: *)
 (*Why goal*) Lemma p7_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -29,7 +29,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 49, characters 17-37: *)
 (*Why goal*) Lemma p8_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -41,7 +41,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 53, characters 17-37: *)
 (*Why goal*) Lemma p9_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -59,7 +59,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 75, characters 4-9: *)
 (*Why goal*) Lemma p13_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 2),
@@ -71,7 +71,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 84, characters 4-10: *)
 (*Why goal*) Lemma p13a_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -85,7 +85,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 98, characters 9-37: *)
 (*Why goal*) Lemma p14_po_1 : 
   forall (x: Z),
   forall (HW_2: x <> 1),
@@ -99,7 +99,7 @@ Save.
 
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 101, characters 40-48: *)
 (*Why goal*) Lemma p15_po_1 : 
   forall (x: Z),
   forall (HW_2: x <> 0),
@@ -110,7 +110,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 103, characters 58-61: *)
 (*Why goal*) Lemma p16_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),
@@ -121,7 +121,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "good/exns.mlw", line 105, characters 56-59: *)
 (*Why goal*) Lemma p17_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),

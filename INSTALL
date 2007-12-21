@@ -6,6 +6,7 @@ INSTALLATION
  
   To compile the graphical user interface gwhy (optional) you also need the 
   Lablgtk2 library (http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/lablgtk.html)
+  There is a Debian package (liblablgtk2-ocaml-dev).
 
   1. Configure with "./configure"
 

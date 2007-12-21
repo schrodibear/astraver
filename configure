@@ -623,9 +623,6 @@ OCAMLV
 OCAMLLIB
 OCAMLGRAPHLIB
 INCLUDEGTK2
-enable_octagon
-OCTAGONLIB
-STATIC
 enable_apron
 APRONLIB
 APRONLIBS
@@ -1218,7 +1215,6 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-verbosemake    verbose makefile commands
-  --enable-octagon=no/yes  using abstract interpretation default=$default_octagon
   --enable-apron=no/yes  use APRON library for abstract interpretation default=$default_apron
 
 _ACEOF
@@ -2343,33 +2339,6 @@ fi
 
 
 
-# Octagon library
-default_octagon=no
-# Check whether --enable-octagon was given.
-if test "${enable_octagon+set}" = set; then
-  enableval=$enable_octagon;
-else
-  enable_octagon=$default_octagon
-fi
-
-
-if test "$enable_octagon" = "yes" ; then
-  cd octagon
-  ./configure --with-num=float --with-ocaml=$OCAMLLIB
-  if test $? -ne 0; then
-    { { echo "$as_me:$LINENO: error: Problem with octagon configuration (did you install g++ ?)" >&5
-echo "$as_me: error: Problem with octagon configuration (did you install g++ ?)" >&2;}
-   { (exit 1); exit 1; }; }
-  fi
-  chmod 755 oct-config
-  cd ..
-  OCTAGONLIB=octagon/ocamllib/oct.cma
-  STATIC="-cclib -static"
-else
-  OCTAGONLIB=
-  STATIC=
-fi
-
 # apron library
 default_apron=no
 APRONLIBS=
@@ -2842,10 +2811,6 @@ fi
 
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
-
-
-
-
 
 
 
@@ -3552,9 +3517,6 @@ OCAMLV!$OCAMLV$ac_delim
 OCAMLLIB!$OCAMLLIB$ac_delim
 OCAMLGRAPHLIB!$OCAMLGRAPHLIB$ac_delim
 INCLUDEGTK2!$INCLUDEGTK2$ac_delim
-enable_octagon!$enable_octagon$ac_delim
-OCTAGONLIB!$OCTAGONLIB$ac_delim
-STATIC!$STATIC$ac_delim
 enable_apron!$enable_apron$ac_delim
 APRONLIB!$APRONLIB$ac_delim
 APRONLIBS!$APRONLIBS$ac_delim
@@ -3576,7 +3538,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 83; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 80; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

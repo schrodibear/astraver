@@ -70,7 +70,7 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I octagon/ocamllib -I ml
+INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ml
 BFLAGS   = -w Aelyz -warn-error A -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
@@ -120,7 +120,6 @@ GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
 	    ml/parsing/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
-	    c/cint.ml \
 	    intf/hilight.ml intf/whyhilight.ml \
 	    intf/tagsplit.ml intf/config.ml \
 	    tools/why2html.ml src/float_lexer.ml tools/cvcl_split.ml \
@@ -217,19 +216,19 @@ CCMO = src/lib.cmo src/linenum.cmo \
 	c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
 	c/invariant.cmo c/ceffect.cmo \
 	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cabsint.cmo c/cptr.cmo \
-	c/csymbol.cmo c/cint.cmo c/cmain.cmo 
-CCMA = @OCTAGONLIB@
+	c/csymbol.cmo c/cmain.cmo 
+CCMA = 
 CCMX = $(CCMO:.cmo=.cmx)
 CCMXA = $(CCMA:.cma=.cmxa)
 
 bin/caduceus.opt: $(CCMXA) $(CCMX) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
-	      @STATIC@ $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
+	      $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
 	strip    $@
 
 bin/caduceus.byte: $(CCMA) $(CCMO) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
-	      @STATIC@ $(BFLAGS) -o $@ unix.cma str.cma graph.cma $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) \
+	      $(BFLAGS) -o $@ unix.cma str.cma graph.cma $^
 
 bin/caduceus.static: $(CCMXA) $(CCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
@@ -438,14 +437,6 @@ bin/demixify.opt: $(MIXCMX)
 
 bin/demixify.byte: $(MIXCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ $^
-
-# octagon
-
-octagon/ocamllib/oct.cmxa: octagon/ocamllib/*.ml*
-	(cd octagon; make)
-
-octagon/ocamllib/oct.cma: octagon/ocamllib/*.ml*
-	(cd octagon; make)
 
 # graphical interface
 WVCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
@@ -831,14 +822,6 @@ lib/coq/%.vo: lib/coq/%.v
 lib/coq-v7/%.vo: lib/coq-v7/%.v
 	$(COQC7) -I lib/coq-v7 $<
 
-c/cint.ml: c/cint.ml4 Makefile
-	if test "@enable_octagon@" = "yes" ; then \
-	  $(CAMLP4) -impl c/cint.ml4 > c/cint.ml; \
-	else \
-	  echo "let local_int_analysis_attach _ = failwith " > c/cint.ml; \
-	  echo "\"Not compiled with --enable-octagon.\"" >> c/cint.ml; \
-	fi
-
 jc/jc_ai.ml: jc/jc_annot_inference.ml Makefile
 	if test "@enable_apron@" = "yes" ; then \
 	  echo "# 1 \"jc/jc_annot_inference.ml\"" > jc/jc_ai.ml; \
@@ -885,7 +868,7 @@ FTP = /users/demons/filliatr/ftp/why
 WWW = /users/demons/filliatr/WWW/why
 WWWKRAKATOA = /users/demons/marche/WWW/krakatoa
 
-FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
+FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tools/*.ml* tools/*.c bin/gwhy.sh \
        mix/*.ml* \
        Version Makefile.in configure.in configure .depend .depend.coq \
        config/check_ocamlgraph.ml \
@@ -899,24 +882,15 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
 	examples/*/.depend examples/*/Makefile \
 	bench/bench.in bench/good*/*.mlw bench/good*/*.v \
         bench/c/bench bench/c/bench-files bench/c/*/*.c bench/c/*/*/*.c \
+	bench/java/bench bench/java/*/*.java \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
-	octagon/aclocal.m4 octagon/AUTHORS octagon/ChangeLog \
-	octagon/clib/Makefile* octagon/clib/*.c octagon/clib/*.h \
-	octagon/clib/README octagon/config* octagon/COPYING octagon/depcomp \
-	octagon/doc/bib_oct.bib octagon/doc/doc_oct.tex octagon/doc/Makefile* \
-	octagon/doc/README octagon/ocamlanal/Makefile* octagon/ocamlanal/*.ml* \
-	octagon/ocamlanal/README octagon/ocamlanal/oct_anal_examples \
-	octagon/INSTALL octagon/install-sh octagon/libtool octagon/ltconfig \
-	octagon/ltmain.sh octagon/missing octagon/mkinstalldirs \
-	octagon/Makefile* octagon/ocamllib/Makefile* \
-	octagon/ocamllib/*.c octagon/ocamllib/*.h octagon/ocamllib/*.ml* \
-	octagon/ocamllib/README octagon/oct-config* octagon/oct_config* \
-	octagon/README octagon/test/Makefile* octagon/test/oct_test.c \
-	octagon/test/README \
+	lib/java_api/java/*/*.java lib/*.png \
 	atp/cooper.ml atp/fol.ml atp/formulas.ml atp/intro.ml atp/lib.ml \
 	atp/LICENSE.txt atp/Makefile atp/Mk_ml_file atp/prop.ml \
-	atp/qelim.ml atp/Quotexpander.ml atp/skolem.ml
+	atp/qelim.ml atp/Quotexpander.ml atp/skolem.ml \
+	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
+	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml*
 
 distrib export: source export-doc export-examples export-examples-c linux
 	make -C $(HOME)/www/why install
@@ -928,6 +902,7 @@ source: doc/manual.ps export/$(NAME).tar.gz
 	echo "<#def jcversion>$(JCVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
 
 export/$(NAME).tar.gz:
+	rm -rf $(EXPORT)
 	mkdir -p $(EXPORT)/bin
 	cp --parents $(FILES) $(EXPORT)
 	cd $(EXPORT); rm -f $(GENERATED)
@@ -1023,9 +998,6 @@ clean::
 	rm -f bin/cpulimit
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)
-	if test "@enable_octagon@" = "yes" ; then \
-		make -C octagon clean; \
-	fi
 	make -C atp clean
 	make -C doc clean
 	make -C examples-v7 clean
