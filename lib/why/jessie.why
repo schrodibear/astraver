@@ -480,6 +480,10 @@ logic bw_compl : int -> int
 
 logic bw_and : int,int -> int
 
+(* Yannick: added for CVE-2003-0161-min-ok *)
+axiom bw_and_not_null:
+  forall a:int. forall b:int. bw_and(a,b) <> 0 -> a <> 0 and b <> 0
+
 logic bw_xor : int,int -> int
 
 logic bw_or : int,int -> int

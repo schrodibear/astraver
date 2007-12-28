@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.201 2007-12-21 10:14:10 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.202 2007-12-28 20:52:51 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -439,7 +439,17 @@ let logic_params li l assoc =
   in
   let l = 
     StringRegionSet.fold
-      (fun (a,r) acc -> (LVar (alloc_region_table_name(a,r)))::acc)
+      (fun (a,r) acc ->
+	let r =
+	  if Region.polymorphic r then
+	    begin
+	      Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
+	      Jc_options.lprintf "r:%a@." Region.print r;
+	      try RegionList.assoc r assoc with Not_found -> assert false
+	    end
+	  else r
+	in
+	(LVar(alloc_region_table_name(a,r)))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
@@ -638,67 +648,13 @@ let named_assertion label oldlabel a =
   let a' = assertion label oldlabel a in
   named_jc_assertion a.jc_assertion_loc a'
 
-
-let ( ** ) = fun f g x -> f(g x)
-
-let direct_embedded_struct_fields st =
-  List.fold_left 
-    (fun acc fi -> 
-      match fi.jc_field_info_type with
-	| JCTpointer(st', Some _, Some _) -> 
-	    assert (st.jc_struct_info_name <> st'.jc_struct_info_name);
-	    fi :: acc
-	| _ -> acc
-    ) [] st.jc_struct_info_fields
-    
-let embedded_struct_fields st =
-  let rec collect forbidden_set st = 
-    let forbidden_set = StringSet.add st.jc_struct_info_name forbidden_set in
-    let fields = direct_embedded_struct_fields st in
-    let fstructs = 
-      List.fold_left 
-	(fun acc fi -> match fi.jc_field_info_type with
-	  | JCTpointer (st', Some _, Some _) -> 
-	      assert 
-		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
-	      st' :: acc
-	   | _ -> assert false
-	) [] fields
-    in
-    fields @ List.flatten (List.map (collect forbidden_set) fstructs)
-  in
-  let fields = collect (StringSet.singleton st.jc_struct_info_name) st in
-  let fields = 
-    List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
-  in
-  FieldSet.elements fields
-
-let field_sinfo fi = 
-  match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
-
-let field_bounds fi = 
-  match fi.jc_field_info_type with 
-    | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
-
 let struct_alloc_arg a =
   alloc_table_name a, alloc_table_type a
 
 let field_memory_arg fi =
   field_memory_name fi, memory_field fi
 
-let embedded_struct_roots st =
-  let fields = embedded_struct_fields st in
-  let structs = 
-    List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-      StructSet.empty fields
-  in
-  let structs = StructSet.elements structs in
-  let roots = 
-    List.fold_left 
-      (fun acc st -> StringSet.add st.jc_struct_info_root acc) 
-      StringSet.empty structs
-  in
-  StringSet.elements roots
+let ( ** ) = fun f g x -> f(g x)
       
 
 (****************************
@@ -1919,11 +1875,11 @@ let assigns before ef locs =
     List.fold_left (collect_locations before) (refs,mems) locs
   in
   let a =
-  StringMap.fold
-    (fun v p acc -> 
-       if p then acc else
-	 make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)])))
-    refs LTrue
+    StringMap.fold
+      (fun v p acc -> 
+	if p then acc else
+	  make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)])))
+      refs LTrue
   in
   FieldRegionMap.fold
     (fun (fi,r) p acc -> 
@@ -2527,6 +2483,11 @@ let tr_axiom id p acc =
     FieldRegionSet.fold (fun (fi,r) a -> 
       LForall (field_region_memory_name(fi,r), memory_field fi, a)
     ) ef.jc_effect_memories a 
+  in
+  let a =
+    StringRegionSet.fold (fun (alloc,r) a -> 
+      LForall (alloc_region_table_name(alloc,r), alloc_table_type alloc, a)
+    ) ef.jc_effect_alloc_table a 
   in
   (* How to add quantification on other effects (alloc, tag) without knowing 
    * their type ? *)

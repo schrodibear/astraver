@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.88 2007-12-21 20:13:34 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.89 2007-12-28 20:52:51 moy Exp $ *)
 
 open Pp
 open Format
@@ -876,7 +876,9 @@ module Dnf = struct
 	try Parser.lincons1_of_lstring env conj
 	with Parser.Error msg -> printf "%s@." msg; assert false
       in
-      Abstract1.meet_lincons_array_with mgr copy_pre lincons
+      Abstract1.meet_lincons_array_with mgr copy_pre lincons;
+      if debug then printf "[Dnf.test_conj] %a@." print [conj];
+      if debug then printf "[Dnf.test_conj] %a@." Abstract1.print copy_pre
     in
     if is_false dnf then
       (* Make [pre] be the bottom abstract value. *)
@@ -1268,9 +1270,12 @@ let rec linstr_of_assertion env a =
 		| Ble_int -> [[str ^ " <= " ^ cstr]]
 		| Bge_int -> [[str ^ " >= " ^ cstr]]
 		| Beq_int -> [[str ^ " = " ^ cstr]]
+		| Bneq_int ->
+		    [[str ^ " <= " ^ (string_of_int ((- cst) - 1))];
+		    [str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
 		| Blt_real | Bgt_real | Ble_real | Bge_real
 		| Beq_bool | Bneq_bool | Beq_real | Beq_pointer
-		| Bneq_int | Bneq_real | Bneq_pointer -> Dnf.true_
+		| Bneq_real | Bneq_pointer -> Dnf.true_
 		| _ -> assert false
 	      in
 	      env, str

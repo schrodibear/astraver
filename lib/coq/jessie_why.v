@@ -777,6 +777,10 @@ Admitted.
 (*Why logic*) Definition bw_and : Z -> Z -> Z.
 Admitted.
 
+(*Why axiom*) Lemma bw_and_not_null :
+  (forall (a:Z), (forall (b:Z), ((bw_and a b) <> 0 -> a <> 0 /\ b <> 0))).
+Admitted.
+
 (*Why logic*) Definition bw_xor : Z -> Z -> Z.
 Admitted.
 

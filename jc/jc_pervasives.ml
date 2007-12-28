@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.67 2007-12-21 20:13:34 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.68 2007-12-28 20:52:51 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -617,10 +617,63 @@ let rec skip_tloc_range t = match t with
 
 let select_option opt default = match opt with Some v -> v | None -> default
 
+
+let direct_embedded_struct_fields st =
+  List.fold_left 
+    (fun acc fi -> 
+      match fi.jc_field_info_type with
+	| JCTpointer(st', Some _, Some _) -> 
+	    assert (st.jc_struct_info_name <> st'.jc_struct_info_name);
+	    fi :: acc
+	| _ -> acc
+    ) [] st.jc_struct_info_fields
+    
+let embedded_struct_fields st =
+  let rec collect forbidden_set st = 
+    let forbidden_set = StringSet.add st.jc_struct_info_name forbidden_set in
+    let fields = direct_embedded_struct_fields st in
+    let fstructs = 
+      List.fold_left 
+	(fun acc fi -> match fi.jc_field_info_type with
+	  | JCTpointer (st', Some _, Some _) -> 
+	      assert 
+		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
+	      st' :: acc
+	   | _ -> assert false
+	) [] fields
+    in
+    fields @ List.flatten (List.map (collect forbidden_set) fstructs)
+  in
+  let fields = collect (StringSet.singleton st.jc_struct_info_name) st in
+  let fields = 
+    List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
+  in
+  FieldSet.elements fields
+
+let field_sinfo fi = 
+  match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
+
+let field_bounds fi = 
+  match fi.jc_field_info_type with 
+    | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
+
+let embedded_struct_roots st =
+  let fields = embedded_struct_fields st in
+  let structs = 
+    List.fold_left (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+      StructSet.empty fields
+  in
+  let structs = StructSet.elements structs in
+  let roots = 
+    List.fold_left 
+      (fun acc st -> StringSet.add st.jc_struct_info_root acc) 
+      StringSet.empty structs
+  in
+  StringSet.elements roots
   
 (*
-  Local Variables: 
-  compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-  End: 
+Local Variables: 
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
+End: 
 *)
 

@@ -40,6 +40,12 @@ val make_logic_fun : string -> Jc_env.jc_type -> Jc_fenv.logic_info
 
 val location_set_region : Jc_ast.tlocation_set -> Jc_env.region
 
+val direct_embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
+val embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
+val field_sinfo : Jc_env.field_info -> Jc_env.struct_info
+val field_bounds : Jc_env.field_info -> Num.num * Num.num
+val embedded_struct_roots : Jc_env.struct_info -> string list
+
 (* predefined functions *)
 
 val true_assertion : Jc_ast.assertion
@@ -90,3 +96,9 @@ val is_constant_assertion : Jc_ast.assertion -> bool
 val contains_normal_behavior : Jc_ast.fun_spec -> bool
 val contains_exceptional_behavior : Jc_ast.fun_spec -> bool
 val is_purely_exceptional_fun : Jc_ast.fun_spec -> bool
+
+(*
+Local Variables: 
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
+End: 
+*)

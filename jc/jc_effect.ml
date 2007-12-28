@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.74 2007-12-21 16:23:12 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.75 2007-12-28 20:52:51 moy Exp $ *)
 
 
 open Jc_env
@@ -143,6 +143,11 @@ let add_exception_effect ef a =
 let add_field_reads fef (fi,r) =
   { fef with jc_reads = add_memory_effect fef.jc_reads (fi,r) }
 
+let add_field_alloc_reads fef (fi,r) =
+  let ef = add_memory_effect fef.jc_reads (fi,r) in
+  let ef = add_alloc_effect ef (fi.jc_field_info_root,r) in
+  { fef with jc_reads = ef }
+
 let add_global_reads fef vi =
   { fef with jc_reads = add_global_effect fef.jc_reads vi }
 
@@ -163,6 +168,11 @@ let add_committed_reads fef st =
 
 let add_field_writes fef (fi,r) =
   { fef with jc_writes = add_memory_effect fef.jc_writes (fi,r) }
+
+let add_field_alloc_writes fef (fi,r) =
+  let efw = add_memory_effect fef.jc_writes (fi,r) in
+  let efr = add_alloc_effect fef.jc_reads (fi.jc_field_info_root,r) in
+  { fef with jc_reads = efr; jc_writes = efw; }
 
 let add_global_writes fef vi =
   { fef with jc_writes = add_global_effect fef.jc_writes vi }
@@ -271,7 +281,7 @@ let rec expr ef e =
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) st.jc_struct_info_root
     | JCEderef (e, f) -> 
-	let ef = add_field_reads (expr ef e) (f,e.jc_expr_region) in
+	let ef = add_field_alloc_reads (expr ef e) (f,e.jc_expr_region) in
 	begin match (skip_shifts e).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -293,7 +303,18 @@ let rec expr ef e =
 	add_alloc_reads (expr ef e) (st.jc_struct_info_root,e.jc_expr_region)
     | JCEalloc(_,st) ->
 	let name = st.jc_struct_info_root in
-	add_alloc_writes (add_tag_writes ef name) (name,e.jc_expr_region)
+	let fields = embedded_struct_fields st in 
+	let roots = embedded_struct_roots st in 
+	let ef = 
+	  List.fold_left 
+	    (fun ef fi -> add_field_writes ef (fi,e.jc_expr_region)) ef fields
+	in
+	let ef = 
+	  List.fold_left (fun ef a -> add_alloc_writes ef (a,e.jc_expr_region))
+	    ef (name::roots)
+	in
+	List.fold_left add_tag_writes ef (name::roots)
+	
 (*
 	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
 	add_global_writes ef mut
@@ -342,7 +363,7 @@ let rec statement ef s =
 	let ef = fef_union efcall (List.fold_left expr ef le) in
 	statement ef s
     | JCSassign_heap (e1, fi, e2) ->
-	let ef = expr (expr (add_field_writes ef (fi,e1.jc_expr_region)) e1) e2 in
+	let ef = expr (expr (add_field_alloc_writes ef (fi,e1.jc_expr_region)) e1) e2 in
 	begin match (skip_shifts e1).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
