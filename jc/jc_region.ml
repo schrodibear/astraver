@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.6 2007-12-21 10:14:10 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.7 2007-12-28 23:20:28 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -244,7 +244,7 @@ struct
 	      let r2 = FieldTable.find t2 fi in
 	      unify r1 r2
 	    end
-	  with Not_found -> FieldTable.add t2 fi r2
+	  with Not_found -> FieldTable.add t2 fi r1
 	) t1;
       RegionTable.replace global_region_table rep t2
 
@@ -254,7 +254,7 @@ struct
     else if not(is_pointer_type fi.jc_field_info_type) then dummy_region else
       try 
 	let t = RegionTable.find global_region_table r in
-	try FieldTable.find t fi 
+	try FieldTable.find t fi
 	with Not_found -> 
 	  let fr =
 	    if is_embedded_field fi then

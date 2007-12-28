@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.89 2007-12-28 20:52:51 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.90 2007-12-28 23:20:28 moy Exp $ *)
 
 open Pp
 open Format
@@ -1052,8 +1052,8 @@ let rec linearize t =
 	  | JCTvar _ | JCTderef _ -> (TermMap.add t 1 TermMap.empty,0)
 	  | _ -> (*assert false*) (TermMap.add t 1 TermMap.empty,0)
 	end
-    | JCTapp _ -> (TermMap.add t 1 TermMap.empty,0)
-    | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
+    | JCTapp _ | JCTsub_pointer _ -> (TermMap.add t 1 TermMap.empty,0)
+    | JCTshift _ | JCTinstanceof _
     | JCTold _ | JCTcast _ | JCTrange _ | JCTif _ -> 
 	failwith "Not linear"
 
