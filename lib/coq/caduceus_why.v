@@ -22,9 +22,6 @@ Admitted.
 (*Why logic*) Definition lsr : Z -> Z -> Z.
 Admitted.
 
-(*Why logic*) Definition non_int : Z -> Z.
-Admitted.
-
 (*Why type*) Definition pointer: Set ->Set.
 Admitted.
 

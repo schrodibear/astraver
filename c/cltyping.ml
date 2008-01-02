@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.120 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.121 2008-01-02 12:07:55 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -235,14 +235,14 @@ and type_term_node loc env = function
       let t = type_term env t in
       set_referenced t;
       Tunop (Uamp, t), noattr (Tpointer(Valid(Int64.zero,Int64.one), t.term_type))   
-  | PLunop (Unot, t) -> 
+  | PLnot t -> 
       let t = type_term env t in
       Tunop (Unot, t), t.term_type   
   | PLunop (Uround_error | Utotal_error | Uexact | Umodel as op, t) ->
       let t = type_float_term env t in
       Tunop (op, t), c_real
   | PLunop ((Ufloat_of_int | Uint_of_float | 
-	     Ufloat_conversion | Uint_conversion), _) ->
+	     Ufloat_conversion | Uint_conversion | Unot), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
       let t1 = type_term env t1 in
@@ -422,7 +422,7 @@ and type_term_node loc env = function
 	    warning loc "ignored cast in annotation"; t.term_node, tt
       end
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ | PLseparated _ 
-  | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _ | PLfalse
+  | PLexists _ | PLforall _ | PLimplies _ | PLiff _ | PLfalse
   | PLfullseparated _ | PLor _ | PLand _ | PLrel _ | PLtrue | PLnamed _ 
   | PLbound_separated _ | PLfull_separated _ ->
       raise_located loc (AnyMessage "predicates are not allowed here")

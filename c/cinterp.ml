@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.251 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.252 2008-01-02 12:07:55 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -318,7 +318,10 @@ let rec interp_term label old_label t =
 	interp_term_un_op t1.nterm_type op (f t1)
     | NTunop (Uplus, t1) ->
 	(f t1)
-    | NTunop (Unot, t1) -> LApp ("non_int", [f t])
+    | NTunop (Unot, t1) -> 
+	LApp ("ite", 
+	      [interp_boolean_term label old_label t1; 
+	       LConst (Prim_int "0"); LConst (Prim_int "1")])
     | NTunop (Ufloat_of_int, t1) ->
 	let e = LApp ("real_of_int", [f t1]) in
 	begin match t.nterm_type.ctype_node with
@@ -384,8 +387,8 @@ let rec interp_term label old_label t =
 	  v.logic_heap_zone [] in
 	let targs = List.map f tl in
 	let targs = HeapVarSet.fold 
-		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
-		 v.logic_heap_args targs in
+	  (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
+	  v.logic_heap_args targs in
 	let targs = List.fold_right 
 	  (fun (z,s,_) l -> (interp_var label (zoned_name s (Pointer z)))::l)
 	  reads targs 
@@ -434,6 +437,20 @@ and interp_term_address  label old_label e = match e.nterm_node with
       interp_term_address  label old_label e1
   | _ -> 
       assert false (* not a left value *)
+
+and interp_boolean_term label old_label t = 
+  (* t <> 0 *)
+  let cmp,zero = match t.nterm_type.Ctypes.ctype_node with
+    | Tenum _ | Tint _ -> 
+	"neq_int_bool", LConst (Prim_int "0")
+    | Tfloat fk -> 
+	assert false (* TODO *)
+    | Tarray _ | Tpointer _ -> 
+	assert false (* TODO *)
+    | _ -> 
+	assert false
+  in
+  LApp (cmp, [interp_term label old_label t; zero])
 
 let has_prefix p s = 
   let n = String.length p in String.length s >= n && String.sub s 0 n = p
@@ -964,6 +981,9 @@ let interp_bin_op = function
   | Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor ->
       assert false
 
+let int_one = Cte(Prim_int "1")
+let int_minus_one = Cte(Prim_int "(-1)")
+
 let any_float fk = 
   if floats then match fk with
     | Float -> "any_single"
@@ -972,9 +992,6 @@ let any_float fk =
     | Real -> "any_real"
   else 
     "any_real"
-
-let int_one = Cte(Prim_int "1")
-let int_minus_one = Cte(Prim_int "(-1)")
 
 let float_of_real r fk = 
   if floats then match fk with
