@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.202 2007-12-28 20:52:51 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.203 2008-01-02 15:45:47 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -871,7 +871,7 @@ let rec make_upd lab loc ~infunction ~threats fi e1 v =
     alloc_region_table_name(fi.jc_field_info_root,e1.jc_expr_region)
   in
   let alloc = 
-    if Jc_options.separation then
+    if Region.polymorphic e1.jc_expr_region then
       if StringRegionSet.mem (fi.jc_field_info_root,e1.jc_expr_region)
 	infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
       then Deref alloc
@@ -992,7 +992,7 @@ and expr ~infunction ~threats e : expr =
 	let alloc = 
 	  alloc_region_table_name(st.jc_struct_info_root,e.jc_expr_region) in
 	let alloc = 
-	  if Jc_options.separation then
+	  if Region.polymorphic e.jc_expr_region then
 	    if StringRegionSet.mem (st.jc_struct_info_root,e.jc_expr_region)
 	      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
 	    then Deref alloc
@@ -1033,7 +1033,7 @@ and expr ~infunction ~threats e : expr =
     | JCEderef(e,fi) ->
 	let mem = field_region_memory_name(fi,e.jc_expr_region) in
 	let mem = 
-	  if Jc_options.separation then
+	  if Region.polymorphic e.jc_expr_region then
 	    if FieldRegionSet.mem (fi,e.jc_expr_region)
 	      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
 	    then Deref mem
@@ -1044,7 +1044,7 @@ and expr ~infunction ~threats e : expr =
 	  alloc_region_table_name(fi.jc_field_info_root,e.jc_expr_region)
 	in
 	let alloc = 
-	  if Jc_options.separation then
+	  if Region.polymorphic e.jc_expr_region then
 	    if StringRegionSet.mem (fi.jc_field_info_root,e.jc_expr_region)
 	      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
 	    then Deref alloc
