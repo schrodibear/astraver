@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.65 2007-12-18 13:35:11 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.66 2008-01-03 08:17:44 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -832,12 +832,23 @@ let statement s =
   in link_stat (statement s)
 
 
-let invariant_for_struct this st =
+let rec invariant_for_struct this si =
   let (_, invs) = 
-    Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
+    Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
   in
-  make_and
-    (List.map (fun (li, _) -> raw_asrt (JCAapp (li, [this]))) invs)      
+  let invs = make_and
+    (List.map (fun (li, _) -> raw_asrt (JCAapp (li, [this]))) invs) 
+  in
+    match si.jc_struct_info_parent with
+      | None -> invs
+      | Some si -> (* add invariants from the type hierarchy *)
+	  let this =
+	    match this.jc_term_type with
+	      | JCTpointer (_, a, b) ->
+		  { this with jc_term_type = JCTpointer (si, a, b) }
+	      | _ -> assert false (* never happen *)
+	  in
+	    make_and [invs; (invariant_for_struct this si)]
 
 
 let code_function (fi, fs, sl) vil =

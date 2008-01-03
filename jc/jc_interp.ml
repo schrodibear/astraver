@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.203 2008-01-02 15:45:47 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.204 2008-01-03 08:17:44 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1186,23 +1186,73 @@ let type_assert vi e =
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
 	let et = term None "" (term_of_expr e) in
 	let alloc = alloc_table_name si.jc_struct_info_root in
-	let offset_mina = match n1o, n1o' with
-	  | None, _ -> LTrue
-	  | Some n, Some n' when Num.le_num n' n -> LTrue
-	  | Some n, _ -> 
-	      LPred ("le_int",
-		     [LApp ("offset_min", [LVar alloc; et]);
-		      LConst (Prim_int (Num.string_of_num n))])
-	in
-	let offset_maxa = match n2o, n2o' with
-	  | None, _ -> LTrue 
-	  | Some n, Some n' when Num.le_num n n' -> LTrue
-	  | Some n, _ -> 
-	      LPred ("ge_int",
-		     [LApp ("offset_max", [LVar alloc; et]);
-		      LConst (Prim_int (Num.string_of_num n))])
-	in
-	  make_and_list [offset_mina; offset_maxa]
+	let fields = embedded_struct_fields si in
+	  begin
+	    match n1o, n2o with
+	      | None, None -> LTrue
+	      | Some n, None -> 
+		  begin match n1o' with
+		    | Some n' when Num.le_num n' n -> LTrue
+		    | _ -> 
+			LPred ("le_int",
+			       [LApp ("offset_min", [LVar alloc; et]);
+				LConst (Prim_int (Num.string_of_num n))])
+		  end
+	      | None, Some n -> 
+		  begin match n2o' with
+		    | Some n' when Num.le_num n n' -> LTrue
+		    | _ -> 
+			LPred ("ge_int",
+			       [LApp ("offset_max", [LVar alloc; et]);
+				LConst (Prim_int (Num.string_of_num n))])
+		  end
+	      | Some n1, Some n2 
+		  when Num.eq_num n1 (Num.num_of_int 0)
+		    && Num.eq_num n2 (Num.num_of_int 0) ->
+		  begin match n1o', n2o' with
+		    | Some n1', Some n2'
+			when Num.eq_num n1' (Num.num_of_int 0)
+			  && Num.eq_num n2' (Num.num_of_int 0) -> LTrue
+		    | Some n1', None when Num.eq_num n1' (Num.num_of_int 0) ->
+			LPred ("eq_int",
+			       [LApp ("offset_max", [LVar alloc; et]);
+				LConst (Prim_int "0")])
+		    | None, Some n2' when Num.eq_num n2' (Num.num_of_int 0) ->
+			LPred ("eq_int",
+			       [LApp ("offset_min", [LVar alloc; et]);
+				LConst (Prim_int "0")])
+		    | _ ->
+			let structs = 
+			  List.fold_left 
+			    (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			    StructSet.empty fields
+			in
+			let structs = 
+			  StructSet.fold (fun si acc -> si :: acc) structs [] in
+			  LPred (
+			    valid_one_pred_name si,
+			    et
+			    :: LVar alloc
+			    :: List.map (fun si -> (lvar None ** alloc_table_name) si.jc_struct_info_root) structs
+			    @ List.map (lvar None ** field_memory_name) fields)
+		  end
+	      | Some n1, Some n2 ->
+		  let structs = 
+		    List.fold_left 
+		      (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+		      StructSet.empty fields
+		  in
+		  let structs = 
+		    StructSet.fold (fun si acc -> si :: acc) structs [] in
+		    LPred (
+		      valid_pred_name si,
+		      et
+		      :: LConst(Prim_int(Num.string_of_num n1))
+		      :: LConst(Prim_int(Num.string_of_num n2))
+		      :: LVar alloc
+		      :: List.map (fun si -> (lvar None ** alloc_table_name) si.jc_struct_info_root) structs
+		      @ List.map (lvar None ** field_memory_name) fields)
+	  end
     | _ -> LTrue
 	
 let expr_coerce ~infunction ~threats vi e =
@@ -1518,6 +1568,7 @@ let rec statement ~infunction ~threats s =
 and statement_list ~infunction ~threats l = 
   List.fold_right 
     (fun s acc -> append (statement ~infunction ~threats s) acc) l Void
+
 
 (******************
  structures
@@ -1933,54 +1984,7 @@ let interp_fun_params f write_mems read_mems annot_type =
        
   
 let tr_fun f loc spec body acc =
-  let requires = spec.jc_fun_requires in
-  let requires = 
-    List.fold_right
-      (fun v acc ->
-	 match v.jc_var_info_type with
-	   | JCTpointer(st,a,b) ->
-	       let alloc = 
-		 alloc_region_table_name (st.jc_struct_info_root,v.jc_var_info_region) in
-	       let var = LVar v.jc_var_info_final_name in
-	       let fields = embedded_struct_fields st in
-	       let roots = embedded_struct_roots st in
-	       let fields = List.map (fun fi -> 
-		 (fi,Region.make_field v.jc_var_info_region fi)) fields 
-	       in
-	       f.jc_fun_info_effects <-
-		 Jc_effect.fef_union 
-		 f.jc_fun_info_effects
-		 (List.fold_left Jc_effect.add_field_reads f.jc_fun_info_effects fields);
-	       let validity = match a,b with
-		 | Some a, Some b 
-		     when Num.eq_num a (Num.num_of_int 0)
-		       && Num.eq_num b (Num.num_of_int 0) ->
-		     LPred(
-		       valid_one_pred_name st,
-		       var
-		       :: LVar alloc
-		       :: List.map (lvar None ** alloc_table_name) roots
-		       @ List.map (lvar None ** field_region_memory_name) fields)
-		 | Some a,Some b ->
-		     LPred(
-		       valid_pred_name st,
-		       var
-		       :: LConst(Prim_int(Num.string_of_num a))
-		       :: LConst(Prim_int(Num.string_of_num b))
-		       :: LVar alloc
-		       :: List.map (lvar None ** alloc_table_name) roots
-		       @ List.map (lvar None ** field_region_memory_name) fields)
-		 | _ -> LTrue
-	       in
-		 make_and validity acc
-           | JCTnull -> assert false
-	   | JCTenum _ -> acc
-	   | JCTnative _ -> acc
-	   | JCTlogic _ -> acc)
-      f.jc_fun_info_parameters
-      (named_assertion None "" requires)
-  in
-
+  let requires = (named_assertion None "" spec.jc_fun_requires) in
   (* partition behaviors as follows:
      - behaviors inferred by analysis (postfixed by 'safety': they will be added to fun safety)
      - user defined behaviors 

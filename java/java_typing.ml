@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: java_typing.ml,v 1.86 2008-01-03 08:17:44 nrousset Exp $ *)
+
 open Java_env
 open Java_ast
 open Java_tast
@@ -819,16 +821,16 @@ and classify_name
 			List.fold_left
 			  (fun acc pi ->
 			     let h = get_package_contents pi in
-			     try 
-			       (pi, h, (Hashtbl.find h id)) :: acc
-			     with Not_found -> acc)
+			       try 
+				 (pi, h, (Hashtbl.find h id)) :: acc
+			       with Not_found -> acc)
 			  [] package_env
 		      in
 			match l with
 			  | [(pi, h, x)] ->
 			      begin
 				match x with
-				  | Subpackage pi -> assert false
+				  | Subpackage pi -> PackageName pi
 				  | Type ti -> TypeName ti
 				  | File f -> 
 				      let ast = Java_syntax.file f in
@@ -840,7 +842,10 @@ and classify_name
 					with Not_found -> assert false
 			      end
 			| (pi1,_,_)::(pi2,_,_)::_ ->
-			    typing_error loc "ambiguous name from import-on-demand packages '%s' and '%s'" pi1.package_info_name pi2.package_info_name
+			    typing_error loc 
+			      "ambiguous name from import-on-demand packages '%s' and '%s'"
+			      pi1.package_info_name 
+			      pi2.package_info_name
 			| [] ->
 			    (* otherwise look for a toplevel package 
 			       of that name *)

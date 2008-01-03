@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.89 2007-12-18 16:37:47 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.90 2008-01-03 08:17:44 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -567,17 +567,17 @@ let rec assertion ?(reg=0) a =
 	      | JTYbase _ | JTYnull -> assert false
 	      | JTYclass (_, ci) ->
 		  let st = get_class ci in
-              	  let offset_mint = term_no_loc 
+(*              	  let offset_mint = term_no_loc 
 		    (JCToffset (Offset_min, t1, st)) Jc_pervasives.integer_type in
 		  let offset_mina =
 		    raw_asrt (JCArelation (offset_mint, Beq_int, zerot)) 
-		  in
+		  in*)
               	  let offset_maxt = term_no_loc 
 		    (JCToffset (Offset_max, t1, st)) Jc_pervasives.integer_type in
-		  let offset_maxa =
-		    raw_asrt (JCArelation (offset_maxt, Beq_int, zerot)) 
+(*		  let offset_maxa =
+		    raw_asrt ( *) JCArelation (offset_maxt, Beq_int, zerot) (* ) 
 		  in
-		    JCAand [offset_mina; offset_maxa]
+		    JCAand [offset_mina; offset_maxa]*)
 	      | JTYinterface ii ->
 		  let st = st_interface in
               	  let offset_mint = term_no_loc 
@@ -746,6 +746,9 @@ let array_types decls =
        in
        let result = Jc_pervasives.var Jc_pervasives.integer_type "\\result" in
        let vit = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
+       let offset_mint = dummy_loc_term Jc_pervasives.integer_type 
+	 (JCToffset (Offset_min, vit, st))
+       in
        let offset_maxt = dummy_loc_term Jc_pervasives.integer_type 
 	 (JCToffset (Offset_max, vit, st))
        in
@@ -784,8 +787,12 @@ let array_types decls =
        let non_null_spec =
 	 { jc_fun_requires = dummy_loc_assertion JCAtrue;
 	   jc_fun_behavior = 
-	     (* result ? \offset_min(x) <= 0 && \offset_max(x) >= -1 : x = null *)
+	     (* result ? \offset_min(x) == 0 && \offset_max(x) >= -1 : x = null *)
 	     let resultt = dummy_loc_term vi.jc_var_info_type (JCTvar result) in
+	     let offset_mina = dummy_loc_assertion
+	       (JCArelation (offset_mint, Beq_int, zerot)) in
+	     let offset_maxa = dummy_loc_assertion
+	       (JCArelation (offset_maxt, Bge_int, minusonet)) in
 	     [Loc.dummy_position, "normal",
 	      { jc_behavior_assumes = None;
 		jc_behavior_assigns = None;
@@ -793,8 +800,7 @@ let array_types decls =
 		  dummy_loc_assertion
 		    (JCAif
 		       (resultt,
-			dummy_loc_assertion
-			  (JCArelation (offset_maxt, Bge_int, minusonet)),
+			dummy_loc_assertion (JCAand [offset_mina; offset_maxa]),
 			dummy_loc_assertion
 			  (JCArelation (vit, Beq_pointer, nullt))));
 		jc_behavior_throws = None }] 
@@ -998,6 +1004,28 @@ let rec expr ?(reg=false) e =
 	  let e1 = expr e1 in
 	  reg := true;
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEunary(un_op op,e1))
+      | JEbin (e1, op, e2) (* case e1 == null *)
+	  when op = Beq && e2.java_expr_node = JElit Null ->
+	  let e = expr e1 in
+	    begin
+	      match e1.java_expr_type with
+		| JTYclass _ | JTYinterface _ -> 
+		    let st = {
+		      jc_struct_info_name = "Object";
+		      jc_struct_info_parent = None;
+		      jc_struct_info_root = "Object";
+		      jc_struct_info_fields = []; }
+		    in
+		      JCTEunary (Jc_ast.Unot, 
+				 dummy_loc_expr Jc_pervasives.boolean_type 
+				   (JCTEcall (non_null_fun st, [e])))
+		| JTYarray t ->
+		    let st = get_array_struct e1.java_expr_loc t in
+		      JCTEunary (Jc_ast.Unot, 
+				 dummy_loc_expr Jc_pervasives.boolean_type 
+				   (JCTEcall (non_null_fun st, [e])))
+		| _ -> assert false
+	    end
       | JEbin (e1, op, e2) (* case e1 != null *)
 	  when op = Bne && e2.java_expr_node = JElit Null ->
 	  let e = expr e1 in
@@ -1366,7 +1394,7 @@ let tr_constr ci req behs b acc =
     create_fun Loc.dummy_position ci.constr_info_tag None
       ci.constr_info_trans_name ci.constr_info_parameters
   in
-  let body = statements b 
+  let body = statements b
 (*
 @ 
     [dummy_loc_statement (JCTSreturn(this.jc_var_info_type,
@@ -1380,6 +1408,10 @@ let tr_constr ci req behs b acc =
     dummy_loc_statement (JCTSdecl(this,None,make_block body))
   in
   *)
+  let body = match body with
+    | [] -> None
+    | _ -> Some [make_block body]
+  in
   let _ = 
     reg_loc ~id:nfi.jc_fun_info_name 
       ~name:("Constructor of class "^ci.constr_info_class.class_info_name)
@@ -1389,8 +1421,8 @@ let tr_constr ci req behs b acc =
 	    nfi.jc_fun_info_name,
 	    this :: params,
 	    { jc_fun_requires = reg_assertion_option req;
-	      jc_fun_behavior = List.map behavior behs},
-	    Some [make_block body])::acc
+	      jc_fun_behavior = List.map behavior behs}, 
+	    body)::acc
 	  
 (*s axioms *)
 
@@ -1471,8 +1503,11 @@ let tr_class ci acc0 acc =
       ci.class_info_fields
   in
   let super =
-    Option_misc.map (fun ci -> ci.class_info_name)
-	ci.class_info_extends
+    let superclass = Option_misc.map (fun ci -> ci.class_info_name)
+      ci.class_info_extends in
+      match superclass with 
+	| None -> if ci.class_info_name = "Object" then None else Some "Object"
+	| _ -> superclass
   in
   let acc = List.fold_left (tr_field ci.class_info_name) acc static_fields in
     (* create exceptions if subclass of Exception *)
@@ -1493,12 +1528,17 @@ let tr_class ci acc0 acc =
 	let non_null_spec =
 	  { jc_fun_requires = dummy_loc_assertion JCAtrue;
 	    jc_fun_behavior = 
-	      (* result ? \offset_max(x) >= 0 : x = null *)
+	      (* result ? \offset_min(x) == 0 && \offset_max(x) == 0 : x = null *)
 	      let resultt = dummy_loc_term vi.jc_var_info_type (JCTvar result) in
 	      let vit = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
+	      let offset_mint = dummy_loc_term Jc_pervasives.integer_type 
+		(JCToffset (Offset_min, vit, si)) in
 	      let offset_maxt = dummy_loc_term Jc_pervasives.integer_type 
-		(JCToffset (Offset_max, vit, si))
-	      in
+		(JCToffset (Offset_max, vit, si)) in
+	      let offset_mina = dummy_loc_assertion
+		(JCArelation (offset_mint, Beq_int, zerot)) in
+	      let offset_maxa = dummy_loc_assertion
+		(JCArelation (offset_maxt, Beq_int, zerot)) in
 		[Loc.dummy_position, "normal",
 		 { jc_behavior_assumes = None;
 		   jc_behavior_assigns = None;
@@ -1506,8 +1546,7 @@ let tr_class ci acc0 acc =
 		     dummy_loc_assertion
 		       (JCAif
 			 (resultt,
-			  dummy_loc_assertion
-			    (JCArelation (offset_maxt, Bge_int, zerot)),
+			  dummy_loc_assertion (JCAand [offset_mina; offset_maxa]),
 			  dummy_loc_assertion
 			    (JCArelation (vit, Beq_pointer, nullt))));
 		   jc_behavior_throws = None }] 

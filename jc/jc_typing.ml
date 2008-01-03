@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.153 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.154 2008-01-03 08:17:44 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2070,8 +2070,8 @@ let add_logic_constdecl (ty,id) =
 let type_range_of_term ty t =
   match ty with
     | JCTpointer (st, n1opt, n2opt) ->
-	let instanceofcstr = raw_asrt (JCAinstanceof (t, st)) in
- 	let mincstr = match n1opt with
+(*	let instanceofcstr = raw_asrt (JCAinstanceof (t, st)) in *)
+(* 	let mincstr = match n1opt with
 	  | None -> true_assertion
 	  | Some n1 ->
  	      let mint = 
@@ -2081,7 +2081,7 @@ let type_range_of_term ty t =
 		  integer_type
  	      in
  	      raw_asrt (JCArelation (mint, Beq_int, n1t))
- 	in
+ 	in *)
  	let maxcstr = match n2opt with
 	  | None -> true_assertion
 	  | Some n2 ->
@@ -2091,12 +2091,13 @@ let type_range_of_term ty t =
  		term_no_loc (JCTconst (JCCinteger (Num.string_of_num n2)))
 		  integer_type
  	      in
- 	      raw_asrt (JCArelation (maxt, Beq_int, n2t))
+ 		raw_asrt (JCArelation (maxt, Beq_int, n2t))
  	in
-        if is_root_struct st then
- 	  Jc_pervasives.make_and [mincstr; maxcstr]
-        else
- 	  Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr]
+	  maxcstr
+(*        if is_root_struct st then *)
+(* 	  Jc_pervasives.make_and [mincstr; maxcstr] *)
+(*        else
+ 	  Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr] *)
     | _ -> true_assertion
 
 let rec decl d =

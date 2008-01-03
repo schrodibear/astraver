@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.17 2007-12-18 08:55:39 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.18 2008-01-03 08:17:44 nrousset Exp $ i*)
 
 open Format
 open Jc_env
@@ -64,6 +64,7 @@ let libfile = "jessie.why"
 
 let parse_only = ref false
 let type_only = ref false
+let user_annot_only = ref false
 let print_graph = ref false
 let why_opt = ref ""
 
@@ -98,6 +99,8 @@ let _ =
 	  "  stops after parsing";
         "-type-only", Arg.Set type_only, 
 	  "  stops after typing";
+        "-user-annot-only", Arg.Set user_annot_only, 
+	  "  check only user-defined annotations (i.e. safety is assumed)";
         "-print-call-graph", Arg.Set print_graph, 
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
@@ -145,6 +148,7 @@ let usage () =
 
 let parse_only = !parse_only
 let type_only = !type_only
+let user_annot_only = !user_annot_only
 let print_graph = !print_graph
 let debug = !debug
 let verbose = !verbose

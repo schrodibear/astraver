@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.90 2007-12-28 23:20:28 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.91 2008-01-03 08:17:44 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -1712,16 +1712,6 @@ let rec test_assertion mgr pre a =
 	  let env,dnf1 = extract_environment_and_dnf env infa in
 	  let env,dnf2 = extract_environment_and_dnf env supa in
 	  env,Dnf.make_or [dnf1;dnf2]
-(* A VOIR AVEC NICOLAS. Yannick *)
-(*       | JCArelation (t1, Bneq_pointer, t2)  *)
-(* 	  when t2.jc_term_node = JCTconst JCCnull -> (\* case <t != null> *\) *)
-(* 	  let si = struct_of_term t1 in *)
-(* 	  let offset_mint = term_no_loc (JCToffset (Offset_min, t1, si)) integer_type in *)
-(* 	  let offset_mina = raw_asrt (JCArelation (offset_mint, Ble_int, zerot)) in *)
-(* 	  let offset_maxt = term_no_loc (JCToffset (Offset_max, t1, si)) integer_type in *)
-(* 	  let offset_maxa = raw_asrt (JCArelation (offset_maxt, Bge_int, zerot)) in *)
-(* 	  let a = raw_asrt (JCAand [offset_mina; offset_maxa]) in *)
-(* 	  extract_environment_and_dnf env a *)
       | JCArelation _ ->
 	  let env, be = linstr_of_assertion env a in
 	  let env, bemin = offset_min_linstr_of_assertion env a in
@@ -2280,12 +2270,12 @@ and intern_ai_statement iaio abs curinvs s =
 		  ai_inter_function_call mgr iai abs copy_pre fi el;
 	  end;
 	(* add postcondition of [fi] to pre *)
-	let _,_,fs,_ = 
+	let _, _, fs, _ = 
           Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
         in
 	let normal_behavior =
 	  List.fold_left
-	    (fun acc (_,_,b) ->
+	    (fun acc (_, _, b) ->
 	       (* TODO : handle 'assumes' clauses correctly *)
 	       if b.jc_behavior_throws = None && b.jc_behavior_assumes = None then
 		 make_and [b.jc_behavior_ensures; acc] else acc)
@@ -2303,7 +2293,9 @@ and intern_ai_statement iaio abs curinvs s =
 		  switch_vis_in_assertion result_vi vi normal_behavior 
 		in
 		  (* add result type spec to [fi] postcondition *)
-		let cstrs = Jc_typing.type_range_of_term vi.jc_var_info_type (term_var_no_loc vi) in
+		let cstrs = Jc_typing.type_range_of_term 
+		  vi.jc_var_info_type (term_var_no_loc vi) 
+		in
 		  make_and [normal_behavior; cstrs];
 	in
 	let normal_behavior =
@@ -2410,7 +2402,8 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     (* Add parameters specs to the function precondition *)
     let cstrs =
       List.fold_left
- 	(fun acc vi -> Jc_typing.type_range_of_term vi.jc_var_info_type (term_var_no_loc vi) :: acc) 
+ 	(fun acc vi -> Jc_typing.type_range_of_term 
+	   vi.jc_var_info_type (term_var_no_loc vi) :: acc) 
 	[] fi.jc_fun_info_parameters
     in
     fs.jc_fun_requires <- make_and (fs.jc_fun_requires :: cstrs);

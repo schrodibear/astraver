@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.84 2007-12-21 10:14:10 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.85 2008-01-03 08:17:44 nrousset Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -56,7 +56,7 @@ let main () =
 	      List.iter Jc_typing.decl ast;
 	      (* phase 3 : normalization *)
 	      (*
-		Hashtbl.iter (fun tag x -> 
+		Hashtbl.iter (fun tag x ->
 		Hashtbl.add Jc_typing.logic_type_table tag x)
 		Jc_typing.logic_type_table;
 		Hashtbl.iter 
