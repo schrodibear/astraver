@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.90 2008-01-03 08:17:44 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.91 2008-01-07 09:24:18 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -949,7 +949,7 @@ let incr_op op =
 let int_cast loc t e =
   if !Java_options.ignore_overflow || 
     match t with
-      | JTYbase Tint -> false
+      | JTYbase (Tinteger | Tint) -> false
       | _ -> true
   then e 
   else     
@@ -1086,16 +1086,21 @@ let rec expr ?(reg=false) e =
       | JEassign_local_var(vi,e) ->
 	  JCTEassign_var(get_var vi,expr e)
       | JEassign_local_var_op(vi,op,e) ->
+	  reg := true;
 	  JCTEassign_var_op(get_var vi,bin_op op, expr e)
       | JEassign_field(e1,fi,e2) ->
+	  reg := true;
 	  JCTEassign_heap(expr e1,get_field fi,expr e2)
       | JEassign_field_op(e1,fi,op,e2) ->
+	  reg := true;
 	  JCTEassign_heap_op(expr e1,get_field fi,bin_op op,expr e2)
       | JEassign_static_field (fi, e) ->
 	  JCTEassign_var (get_static_var fi, expr e)
       | JEassign_static_field_op (fi, op, e) ->
+	  reg := true;
 	  JCTEassign_var_op (get_static_var fi, bin_op op, expr e)
       | JEassign_array(e1,e2,e3) ->
+	  reg := true;
 	  begin
 	    match e1.java_expr_type with
 	      | JTYarray ty ->
@@ -1170,9 +1175,13 @@ let rec expr ?(reg=false) e =
 		  then 
 		    (expr e1).jc_texpr_node
 		  else
-		    JCTErange_cast(get_enum_info t, expr e1)
+		    begin
+		      reg := true;	    
+		      JCTErange_cast(get_enum_info t, expr e1)
+		    end
 	      | JTYclass(_,ci) ->
 		  let st = get_class ci in
+		  reg := true;	    
 		  JCTEcast(expr e1,st)
 	      | JTYinterface ii -> 
 		  begin
@@ -1188,6 +1197,7 @@ let rec expr ?(reg=false) e =
 		  end
 	      | JTYarray ty ->
 		  let st = get_array_struct e.java_expr_loc ty in
+		  reg := true;	    
 		  JCTEcast(expr e1,st)		  
 	      | JTYnull -> assert false 
 	  end

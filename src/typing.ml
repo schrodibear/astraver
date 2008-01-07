@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.132 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: typing.ml,v 1.133 2008-01-07 09:24:18 marche Exp $ i*)
 
 (*s Typing. *)
 
@@ -171,10 +171,10 @@ let type_un_poly id =
 
 (*s Making nodes *)
 
-let gmake_node loc env l ?(post=None) p rt e = 
+let gmake_node loc env userlabel l ?(post=None) p rt e = 
   { desc = p; 
     info = { t_loc = loc; t_env = env; t_label = l; 
-	     t_userlabel = "";
+	     t_userlabel = userlabel;
 	     t_result_name = result; 
 	     t_result_type = rt; t_effect = e; t_post = post } }
 
@@ -409,10 +409,10 @@ let without_exn_check f x =
     and [expr] the program. [pre] indicates whether preconditions are true 
     preconditions or obligations *)
 
-let rec typef lab env expr =
+let rec typef ?(userlabel="") lab env expr =
   let toplabel = label_name () in
   let loc = expr.ploc in
-  let make_node = gmake_node loc env in
+  let make_node = gmake_node loc env userlabel in
   match expr.pdesc with
   | Sconst c ->
       make_node toplabel (Expression (Tconst c)) (typing_const c) Effect.bottom
@@ -586,7 +586,7 @@ let rec typef lab env expr =
 		    in
 		    let kfv = k_add_effects kapp (effect t_f) in
 		    let app_f_v = 
-		      gmake_node loc env' label_f_v app_f_v  
+		      gmake_node loc env' userlabel label_f_v app_f_v  
 			~post:kfv.t_post kfv.t_result_type kfv.t_effect
 		    in
 		    let app = loop_args app_f_v (result_type app_f_v) ra in
@@ -599,7 +599,7 @@ let rec typef lab env expr =
 		    make 
 		      (LetIn (v, t_a, 
 			      let make n = 
-				gmake_node loc env' (label_name ()) n tapp ef
+				gmake_node loc env' userlabel (label_name ()) n tapp ef
 			      in
 			      make (Assertion 
 				      (`PRE,
@@ -701,7 +701,7 @@ let rec typef lab env expr =
       let tf = make_arrow bl' (type_c_of_typing_info p' t_e.info) in
       let t_e = match varinfo with
 	| Some (vphi0,phi,tphi,_) ->
-	    let mk_node_e = gmake_node loc_e env' in
+	    let mk_node_e = gmake_node loc_e env' "" in
 	    mk_node_e (label_name ()) 
 	      (LetIn 
 		 (vphi0,
@@ -778,7 +778,7 @@ let rec typef lab env expr =
       let q = saturation loc e q in
       let e' = Effect.union e eq in
       let d = Post (t_e, q, tr) in
-      gmake_node loc env toplabel d v e' ~post:(Some q)
+      gmake_node loc env userlabel toplabel d v e' ~post:(Some q)
 
   | Sassert (p, e) ->
       let ep,p = state_pre lab env loc p in
@@ -788,8 +788,7 @@ let rec typef lab env expr =
 
   | Slabel (s, e) ->
       let lab' = Label.add s lab in
-      let t_e = typef lab' env e in
-      t_e.info.t_userlabel <- s;
-      if debug then eprintf "Typing: set label for node: %s@." s;
+      let t_e = typef ~userlabel:s lab' env e in
       make_node toplabel (Label (s, t_e)) (result_type t_e) (effect t_e)
 
+let typef = typef ~userlabel:""

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.mli,v 1.19 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.20 2008-01-07 09:24:18 marche Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 
@@ -44,13 +44,16 @@ val type_c_of_typing_info : assertion list -> typing_info -> type_c
 val typing_info_of_type_c : 
   Loc.position -> local_env -> label -> type_c -> typing_info
 
+(*
 val gmake_node : 
   Loc.position ->
     local_env ->
+    label -> (* userlabel *)
     label ->
     ?post:postcondition option ->
     typing_info t_desc ->
     type_v -> Effect.t -> typed_expr
+*)
 
 val conj : postcondition option -> postcondition option -> postcondition option
 
