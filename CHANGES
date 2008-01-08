@@ -1,4 +1,7 @@
 
+  o configuration: fixed detection of ocamldep when ocamldep.opt is
+    not installed
+
 version 2.10, December 20th, 2007
 =================================
   o the Krakatoa front-end for Java programs is now distributed with Why

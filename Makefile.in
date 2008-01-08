@@ -940,7 +940,7 @@ BINARYNAME = $(NAME)-$(OSTYPE)
 linux: binary
 
 BINARYFILES = $(FILES) bin/why.opt bin/caduceus.opt \
-	bin/why.static bin/caduceus.static
+	bin/krakatoa.opt bin/jessie.opt
 # README INSTALL COPYING GPL $(VO7) $(VO8) \
 # 	bin/why.static bin/caduceus.static \
 # 	doc/why.1 doc/manual.ps \
