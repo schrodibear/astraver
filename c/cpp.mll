@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cpp.mll,v 1.13 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: cpp.mll,v 1.14 2008-01-10 09:43:15 stoulsn Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -38,21 +38,26 @@
   let channel_out = ref stdout
   let print s = output_string !channel_out s
 
-  let start_of_comment_string = "start_of_comment_string"
+  let start_of_comment_string = "start_of_comment_string_multiple_lines"
+  let start_of_comment_string_one_line = "start_of_comment_string_one_line"
   let end_of_comment_string = "end_of_comment_string"
 
 }
 
-let start_of_comment_string = "start_of_comment_string"
+let start_of_comment_string = "start_of_comment_string_multiple_lines"
+let start_of_comment_string_one_line = "start_of_comment_string_one_line"
 let end_of_comment_string = "end_of_comment_string"
 
 rule before = parse
   | "/*@" { print start_of_comment_string; before lexbuf }
 (*  | "*/" { print end_of_comment_string; before lexbuf } *)
+  | "//@" { print start_of_comment_string_one_line; before lexbuf }
+  | "# 1 \"<interne>\"\n#define" [^'\n']* '\n' { before lexbuf }
   | _    { print (lexeme lexbuf); before lexbuf }
   | eof  { () }
 
 and after = parse
+  | start_of_comment_string_one_line { print "//@"; after lexbuf }
   | start_of_comment_string { print "/*@"; after lexbuf }
   | end_of_comment_string   { print "*/"; after lexbuf }
   | _    { print (lexeme lexbuf); after lexbuf }
@@ -89,12 +94,22 @@ and after = parse
     ignore (Sys.command (sprintf "%s %s > %s" cpp_command f ppf));
     ppf
 
+  (* [first_cpp f] runs an external C preprocessor on file [f] and preserves the definitions in trace;
+     returns the preprocessed file. *)
+  let first_cpp f = 
+    let ppf = local_temp_file (Filename.basename f) ".c" in
+    ignore (Sys.command (sprintf "%s -dD %s > %s" cpp_command f ppf));
+    ppf
+
+
   (* [translate f] preprocesses file [f]; returns the preprocessed file and a 
      finalizer to be called when the preprocessed file has been used. *)
   let translate f =
     if with_cpp then begin
-      let pf = before_cpp f in
+      let inlinedf = first_cpp f in
+      let pf = before_cpp inlinedf in
       let ppf = external_cpp pf in
+      Sys.remove inlinedf; 
       Sys.remove pf; 
       let pppf = after_cpp ppf in
       Sys.remove ppf; 
