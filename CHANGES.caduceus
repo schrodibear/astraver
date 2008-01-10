@@ -1,6 +1,8 @@
 
 Note: These are the changes for Caduceus.
 
+ o C preprocessing: fixed bug with #include and preprocessing in //@ comments
+
 version 1.10, December 20th, 2007
 =================================
  o new target 'ergo' in generated makefile
