@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.23 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_fenv.mli,v 1.24 2008-01-11 16:38:26 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -65,6 +65,7 @@ type logic_info =
       mutable jc_logic_info_param_regions : region list;
       mutable jc_logic_info_effects : effect;
       mutable jc_logic_info_calls : logic_info list;
+      mutable jc_logic_info_labels : label list;
     }
 
 type fun_info = {

@@ -48,7 +48,7 @@ let rec assertion acc p =
   | JCAfalse -> acc
   | JCArelation(t1,op,t2) ->
       term (term acc t1) t2
-  | JCAapp(f,lt) -> f::(List.fold_left term acc lt)
+  | JCAapp app -> app.jc_app_fun :: (List.fold_left term acc app.jc_app_args)
   | JCAand(pl) | JCAor(pl) -> List.fold_left assertion acc pl
   | JCAimplies (p1,p2) | JCAiff(p1,p2) -> 
       assertion (assertion acc p1) p2

@@ -265,8 +265,8 @@ let rec iter_term_and_assertion ft fa a =
     | JCArelation(t1,_,t2) -> 
 	iter_term ft t1;
 	iter_term ft t2
-    | JCAapp(_,tls) ->
-	List.iter (iter_term ft) tls
+    | JCAapp app ->
+	List.iter (iter_term ft) app.jc_app_args
     | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	iter_term ft t1
     | JCAand al | JCAor al ->
@@ -315,8 +315,8 @@ let rec fold_term_in_assertion f acc a =
     | JCArelation(t1,_,t2) -> 
 	let acc = fold_term f acc t1 in
 	fold_term f acc t2
-    | JCAapp(_,tls) ->
-	List.fold_left (fold_term f) acc tls
+    | JCAapp app ->
+	List.fold_left (fold_term f) acc app.jc_app_args
     | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	fold_term f acc t1
     | JCAand al | JCAor al ->
@@ -337,8 +337,8 @@ let rec fold_term_and_assertion ft fa acc a =
     | JCArelation(t1,_,t2) -> 
 	let acc = fold_term ft acc t1 in
 	fold_term ft acc t2
-    | JCAapp(_,tls) ->
-	List.fold_left (fold_term ft) acc tls
+    | JCAapp app ->
+	List.fold_left (fold_term ft) acc app.jc_app_args
     | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	fold_term ft acc t1
     | JCAand al | JCAor al ->
@@ -386,8 +386,8 @@ let rec map_term_in_assertion f a =
     | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
     | JCArelation(t1,op,t2) -> 
 	JCArelation(map_term f t1,op,map_term f t2)
-    | JCAapp(li,tls) ->
-	JCAapp(li,List.map (map_term f) tls)
+    | JCAapp app ->
+	JCAapp { app with jc_app_args = List.map (map_term f) app.jc_app_args }
     | JCAinstanceof(t1,st) ->
 	JCAinstanceof(map_term f t1,st)
     | JCAbool_term t1 ->
@@ -425,8 +425,8 @@ let rec map_term_in_assertion f a =
     | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
     | JCArelation(t1,op,t2) -> 
 	JCArelation(map_term f t1,op,map_term f t2)
-    | JCAapp(li,tls) ->
-	JCAapp(li,List.map (map_term f) tls)
+    | JCAapp app ->
+	JCAapp { app with jc_app_args = List.map (map_term f) app.jc_app_args }
     | JCAinstanceof(t1,st) ->
 	JCAinstanceof(map_term f t1,st)
     | JCAbool_term t1 ->

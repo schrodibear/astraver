@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.100 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.101 2008-01-11 16:38:26 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -42,13 +42,6 @@ type const =
 type identifier = 
     { jc_identifier_loc : Loc.position;
       jc_identifier_name : string;
-    }
-
-type label = string
-
-type label_info =
-    { label_info_name : string;
-      mutable times_used : int;
     }
 
 (***************)
@@ -182,10 +175,10 @@ type pdecl_node =
   | JCPDrecfuns of pdecl list
   | JCPDenumtype of string * Num.num * Num.num
   | JCPDlogictype of string 
-  | JCPDaxiom of string * pexpr
+  | JCPDaxiom of string * label list * pexpr
   | JCPDexception of string * ptype
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCPDlogic of ptype option * string * (ptype * string) list 
+  | JCPDlogic of ptype option * string * label list * (ptype * string) list 
       * preads_or_pexpr
   (* global invariant *)
   | JCPDglobinv of string * pexpr
@@ -222,6 +215,7 @@ type app =
       jc_app_fun : logic_info;
       jc_app_args : term list;
       mutable jc_app_region_assoc : (region * region) list;
+      jc_app_label_assoc : (label * label) list;
     }
 
 and term_node =
@@ -280,7 +274,7 @@ type assertion_node =
   | JCAimplies of assertion * assertion
   | JCAiff of assertion * assertion
   | JCAnot of assertion
-  | JCAapp of logic_info * term list
+  | JCAapp of app
   | JCAquantifier of quantifier * var_info * assertion
   | JCAold of assertion
   | JCAat of assertion * label

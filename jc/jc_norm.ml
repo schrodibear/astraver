@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.67 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.68 2008-01-11 16:38:26 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -837,7 +837,14 @@ let rec invariant_for_struct this si =
     Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
   in
   let invs = make_and
-    (List.map (fun (li, _) -> raw_asrt (JCAapp (li, [this]))) invs) 
+    (List.map 
+       (fun (li, _) -> 
+	  let a = { jc_app_fun = li;
+		    jc_app_args = [this];
+		    jc_app_label_assoc = [];
+		    jc_app_region_assoc = [] }
+	  in
+	  raw_asrt (JCAapp a)) invs) 
   in
     match si.jc_struct_info_parent with
       | None -> invs
@@ -867,7 +874,12 @@ let code_function (fi, fs, sl) vil =
 	      Hashtbl.fold
 		(fun li _ acc -> 
 		   li.jc_logic_info_parameters <- vil;
-		   (raw_asrt (JCAapp (li, vitl))) :: acc)
+		   let a = { jc_app_fun = li;
+			     jc_app_args = vitl;
+			     jc_app_label_assoc = [];
+			     jc_app_region_assoc = [] }
+		   in
+		   (raw_asrt (JCAapp a)) :: acc)
 		Jc_typing.global_invariants_table []
 	    in
 	    let global_invariants = make_and global_invariants in

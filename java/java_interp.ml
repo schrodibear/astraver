@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.92 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.93 2008-01-11 16:38:26 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -498,6 +498,7 @@ let rec term t =
 	    jc_app_fun = get_logic_fun fi;
 	    jc_app_args = List.map term el;
 	    jc_app_region_assoc = [];
+	    jc_app_label_assoc = [] ;
 	  } in
 	  JCTapp app
       | JTvar vi -> JCTvar (get_var vi)
@@ -607,7 +608,13 @@ let rec assertion ?(reg=0) a =
 	  else
 	    JCArelation (term e1, lobj_op op, term e2)
       | JAapp (fi, el)-> 
-	  JCAapp(get_logic_fun fi,List.map term el)
+	  let app = {
+	    jc_app_fun = get_logic_fun fi;
+	    jc_app_args = List.map term el;
+	    jc_app_region_assoc = [];
+	    jc_app_label_assoc = [] ;
+	  } in
+	  JCAapp app
       | JAquantifier (q, vi, a)-> 
 	  let vi = create_var a.java_assertion_loc vi in
 	    JCAquantifier(quantifier q,vi,assertion a)

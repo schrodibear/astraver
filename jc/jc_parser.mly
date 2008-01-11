@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.75 2008-01-11 12:43:45 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.76 2008-01-11 16:38:26 marche Exp $ */
 
 %{
 
@@ -409,7 +409,7 @@ variable_definition:
 
 axiom_definition:
 | AXIOM IDENTIFIER label_binders COLON expression
-    { locate_decl( JCPDaxiom($2,$5)) }
+    { locate_decl( JCPDaxiom($2,$3,$5)) }
 ;
 
 
@@ -888,22 +888,22 @@ exception_statement:
 logic_definition:
 /* constants def */
 | LOGIC type_expr IDENTIFIER EQ expression
-    { locate_decl (JCPDlogic(Some $2, $3, [], JCPExpr $5)) }
+    { locate_decl (JCPDlogic(Some $2, $3, [], [], JCPExpr $5)) }
 /* constants no def */
 | LOGIC type_expr IDENTIFIER 
-    { locate_decl (JCPDlogic(Some $2, $3, [], JCPReads [])) }
+    { locate_decl (JCPDlogic(Some $2, $3, [], [], JCPReads [])) }
 /* logic fun def */
 | LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
-    { locate_decl (JCPDlogic(Some $2, $3, $5, JCPExpr $7)) }
+    { locate_decl (JCPDlogic(Some $2, $3, $4, $5, JCPExpr $7)) }
 /* logic pred def */
 | LOGIC IDENTIFIER label_binders parameters EQ expression
-    { locate_decl (JCPDlogic(None, $2, $4, JCPExpr $6)) }
+    { locate_decl (JCPDlogic(None, $2, $3, $4, JCPExpr $6)) }
 /* logic fun reads */
 | LOGIC type_expr IDENTIFIER label_binders parameters reads %prec PRECLOGIC
-    { locate_decl (JCPDlogic(Some $2, $3, $5, JCPReads $6)) }
+    { locate_decl (JCPDlogic(Some $2, $3, $4, $5, JCPReads $6)) }
 /* logic pred reads */
 | LOGIC IDENTIFIER label_binders parameters reads %prec PRECLOGIC
-    { locate_decl (JCPDlogic(None, $2, $4, JCPReads $5)) }
+    { locate_decl (JCPDlogic(None, $2, $3, $4, JCPReads $5)) }
 ;
 
 logic_rec_definitions:

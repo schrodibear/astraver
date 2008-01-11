@@ -14,21 +14,40 @@ open Jc_region
 open Jc_name
 
 
-let logic_params ?assoc li =
+let logic_params ~label_in_name ?region_assoc ?label_assoc li =
   let l =
     FieldRegionMap.fold
-      (fun (fi,r) labs acc -> 
-	let r =
-	  match assoc with 
-	    | Some assoc when Region.polymorphic r ->
-		begin
-		  Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
-		  Jc_options.lprintf "r:%a@." Region.print r;
-		  try RegionList.assoc r assoc with Not_found -> assert false
-		end
-	    | _ -> r
-	in
-	(field_region_memory_name(fi,r), memory_field fi)::acc)
+      (fun (fi,r) labs acc ->
+	 let r =
+	   match region_assoc with 
+	     | Some region_assoc when Region.polymorphic r ->
+		 begin
+		   Jc_options.lprintf "assoc:%a@." Region.print_assoc region_assoc;
+		   Jc_options.lprintf "r:%a@." Region.print r;
+		   try RegionList.assoc r region_assoc with Not_found -> assert false
+		 end
+	     | _ -> r
+	 in
+	 let name = field_region_memory_name(fi,r) in
+	 StringSet.fold
+	   (fun lab acc ->
+	      let name =
+		match label_assoc with
+		  | None -> (* assert false *) name 
+		  | Some a ->
+		      try
+			let l = List.assoc lab a in
+			if label_in_name then
+			  name ^ "_at_" ^ l
+			else
+			  match l with
+			    | "Pre" -> name ^ "@"
+			    | "Post" -> name
+			    | _ -> name ^ "@" ^ l
+		      with Not_found -> (* assert false *) name (**)
+	      in
+	      (name, memory_field fi)::acc)
+	   labs acc)
       li.jc_logic_info_effects.jc_effect_memories
       []
   in
@@ -36,7 +55,7 @@ let logic_params ?assoc li =
     StringRegionSet.fold
       (fun (a,r) acc ->
 	let r =
-	  match assoc with
+	  match region_assoc with
 	    | Some assoc when Region.polymorphic r ->
 		begin
 		  Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
@@ -58,17 +77,17 @@ let logic_params ?assoc li =
     li.jc_logic_info_effects.jc_effect_tag_table
     l	    
 
-let logic_params_call li l assoc =
+let logic_params_call ~label_in_name li l region_assoc label_assoc =
   List.map 
     (fun (id,t) -> LVar id)
-    (logic_params ~assoc li) @ l
+    (logic_params ~label_in_name ~region_assoc ~label_assoc li) @ l
 
-let make_logic_fun_call li l assoc =
-  let params = logic_params_call li l assoc in
+let make_logic_fun_call ~label_in_name li l region_assoc label_assoc =
+  let params = logic_params_call ~label_in_name li l region_assoc label_assoc in
   LApp(li.jc_logic_info_final_name,params)
 
-let make_logic_pred_call li l =
-  let params = logic_params_call li l [] in (* TODO: add assoc *)
+let make_logic_pred_call ~label_in_name li l region_assoc label_assoc =
+  let params = logic_params_call ~label_in_name li l region_assoc label_assoc in 
     LPred (li.jc_logic_info_final_name, params)
 
 

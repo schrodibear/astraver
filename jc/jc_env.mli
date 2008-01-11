@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.38 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.39 2008-01-11 16:38:26 marche Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
@@ -89,6 +89,13 @@ type exception_info =
       jc_exception_info_tag : int;
       jc_exception_info_name : string;
       jc_exception_info_type : jc_type option;
+    }
+
+type label = string
+
+type label_info =
+    { label_info_name : string;
+      mutable times_used : int;
     }
 
 

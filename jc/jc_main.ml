@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.85 2008-01-03 08:17:44 nrousset Exp $ *)
+(* $Id: jc_main.ml,v 1.86 2008-01-11 16:38:26 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -254,8 +254,8 @@ let main () =
 	  (* production phase 3 : generation of Why axioms *)
 	  let d_axioms = 
 	    Hashtbl.fold 
-	      (fun id p acc ->
-		 Jc_interp.tr_axiom id p acc)
+	      (fun id (labels,p) acc ->
+		 Jc_interp.tr_axiom id (* labels *) p acc)
 	      Jc_typing.axioms_table
 	      d_lfuns
 	  in	       

@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.76 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.77 2008-01-11 16:38:26 marche Exp $ *)
 
 
 open Jc_env
@@ -84,17 +84,32 @@ let ef_union ef1 ef2 =
 	ef1.jc_effect_committed ef2.jc_effect_committed;
   }
 
-let ef_assoc ef assoc =
+let ef_assoc ?label_assoc ef assoc =
   { ef with 
     jc_effect_memories =
-      FieldRegionMap.fold (fun (fi,r) labels acc ->
-	if Region.polymorphic r then
-	  try FieldRegionMap.add (fi,RegionList.assoc r assoc) labels acc 
-	  with Not_found -> 
-	    (* Local memory. Not counted as effect for the caller. *)
-	    acc
-	else FieldRegionMap.add (fi,r) labels acc 
-      ) ef.jc_effect_memories FieldRegionMap.empty;
+      FieldRegionMap.fold 
+	(fun (fi,r) labels acc ->
+	   let labels =
+	     match label_assoc with
+	       | None -> labels
+	       | Some a ->
+		   eprintf "label assoc:@.";
+		   StringSet.fold
+		     (fun lab acc ->
+			try
+			  let l = List.assoc lab a in
+			  eprintf " %s -> %s@." lab l;
+			  StringSet.add l acc
+			with Not_found -> StringSet.add lab acc (* assert false*))
+		     labels StringSet.empty
+	   in
+	   if Region.polymorphic r then
+	     try FieldRegionMap.add (fi,RegionList.assoc r assoc) labels acc 
+	     with Not_found -> 
+	       (* Local memory. Not counted as effect for the caller. *)
+	       acc
+	   else FieldRegionMap.add (fi,r) labels acc 
+	) ef.jc_effect_memories FieldRegionMap.empty;
     jc_effect_alloc_table =
       StringRegionSet.fold (fun (a,r) acc ->
 	if Region.polymorphic r then
@@ -246,7 +261,7 @@ let rec term label =
     | JCTapp app -> 
 	let li = app.jc_app_fun and tls = app.jc_app_args in
 	let efapp = 
-	  ef_assoc li.jc_logic_info_effects app.jc_app_region_assoc 
+	  ef_assoc li.jc_logic_info_effects ~label_assoc:app.jc_app_label_assoc app.jc_app_region_assoc 
 	in
 	ef_union efapp (List.fold_left (term label) ef tls)
     | JCTderef (t, fi) ->
@@ -288,9 +303,12 @@ let rec assertion label ef a =
     | JCAat(a,lab) -> assertion lab ef a
     | JCAquantifier (_, vi, a) -> assertion label ef a 
     | JCArelation (t1, _, t2) -> term label (term label ef t1) t2
-    | JCAapp (li, tl) -> 
-	ef_union li.jc_logic_info_effects
-	  (List.fold_left (term label) ef tl)
+    | JCAapp app -> 
+	let li = app.jc_app_fun and tls = app.jc_app_args in
+	let efapp = 
+	  ef_assoc li.jc_logic_info_effects ~label_assoc:app.jc_app_label_assoc app.jc_app_region_assoc 
+	in
+	ef_union efapp (List.fold_left (term label) ef tls)
     | JCAiff (a1, a2)
     | JCAimplies (a1, a2) -> 
 	assertion label (assertion label ef a1) a2

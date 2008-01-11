@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.155 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.156 2008-01-11 16:38:26 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -353,6 +353,7 @@ let term_coerce t1 t2 e =
 	  jc_app_fun = real_of_integer;
 	  jc_app_args = [e_int];
 	  jc_app_region_assoc = [];
+	  jc_app_label_assoc = [];
 	} in
 	{ jc_term_node = JCTapp app;
 	  jc_term_type = real_type;
@@ -546,10 +547,20 @@ let rec term env e =
 		      let ty = match pi.jc_logic_info_result_type with
 			| None -> assert false | Some ty -> ty
 		      in
+		      let label_assoc =
+			try
+			  List.map2
+			    (fun l1 l2 -> (l1,l2))
+			    pi.jc_logic_info_labels labs
+			with Invalid_argument _ ->
+			  typing_error e.jc_pexpr_loc 
+			    "wrong number of labels for %s" id
+		      in
 		      let app = {
 			jc_app_fun = pi;
 			jc_app_args = tl;
 			jc_app_region_assoc = [];
+			jc_app_label_assoc = label_assoc;
 		      } in
 		      ty,Region.make_var ty pi.jc_logic_info_name,JCTapp app
 		    with Not_found ->
@@ -808,8 +819,12 @@ let rec assertion env e =
 	  let e1 = term env e1 and e2 = term env e2 in
 	  make_rel_bin_op e.jc_pexpr_loc op e1 e2
       | JCPEunary(op, e2) -> 
+	  assert false
+(*
 	  let e2 = term env e2 in
-	  JCAapp(rel_unary_op e.jc_pexpr_loc op e2.jc_term_type,[e2])
+	  JCAapp { jc_app_fun = rel_unary_op e.jc_pexpr_loc op e2.jc_term_type;
+		   jc_app_args = [e2])
+*)
       | JCPEapp (id, labs, args) ->
 (*
 	  begin
@@ -835,7 +850,22 @@ let rec assertion env e =
 			  typing_error e.jc_pexpr_loc 
 			    "wrong number of arguments for %s" id
 		      in
-		      JCAapp(pi, tl)
+		      let label_assoc =
+			try
+			  List.map2
+			    (fun l1 l2 -> (l1,l2))
+			    pi.jc_logic_info_labels labs
+			with Invalid_argument _ ->
+			  typing_error e.jc_pexpr_loc 
+			    "wrong number of labels for %s" id
+		      in
+		      let app = {
+			jc_app_fun = pi;
+			jc_app_args = tl;
+			jc_app_region_assoc = [];
+			jc_app_label_assoc = label_assoc;
+		      } in
+		      JCAapp app
 		    with Not_found ->
 		      typing_error e.jc_pexpr_loc 
 			"unbound predicate identifier %s" id
@@ -2063,7 +2093,7 @@ let add_fundecl (ty,loc,id,pl) =
       Hashtbl.replace functions_env id fi;
       param_env, fi
 
-let add_logic_fundecl (ty,id,pl) =
+let add_logic_fundecl (ty,id,labels,pl) =
   try
     let pi = Hashtbl.find logic_functions_env id in
     let ty = pi.jc_logic_info_result_type in
@@ -2077,6 +2107,7 @@ let add_logic_fundecl (ty,id,pl) =
     let pi = make_rel id in
     pi.jc_logic_info_parameters <- List.map snd param_env;
     pi.jc_logic_info_result_type <- ty;
+    pi.jc_logic_info_labels <- labels;
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
 
@@ -2165,10 +2196,10 @@ let rec decl d =
 	     | JCPDfun(ty,id,pl,_,_) ->
 		 ignore (add_fundecl (ty,id.jc_identifier_loc,
 				      id.jc_identifier_name,pl))
-	     | JCPDlogic(Some ty,id,[],_) ->
+	     | JCPDlogic(Some ty,id,labels,[],_) ->
 		 ignore (add_logic_constdecl (ty,id))
-	     | JCPDlogic(ty,id,pl,_) ->
-		 ignore (add_logic_fundecl (ty,id,pl))
+	     | JCPDlogic(ty,id,labels,pl,_) ->
+		 ignore (add_logic_fundecl (ty,id,labels,pl))
 	     | _ -> assert false
 	  ) pdecls;
         (* second pass: type function body *)
@@ -2245,9 +2276,9 @@ let rec decl d =
 	  with Not_found ->
 	    Hashtbl.add logic_type_table id id
 	end
-    | JCPDaxiom(id,e) ->
-	let te = assertion [] e in
-	Hashtbl.add axioms_table id te
+    | JCPDaxiom(id,labels,e) ->
+	let te = assertion (* TODO: labels *) [] e in
+	Hashtbl.add axioms_table id (labels,te)
     | JCPDglobinv (id, e) ->
 	let a = assertion [] e in
 	let li = make_rel id in
@@ -2258,7 +2289,7 @@ let rec decl d =
     | JCPDexception(id,t) ->
 	let tt = type_type t in
 	Hashtbl.add exceptions_table id (exception_info (Some tt) id)
-    | JCPDlogic(Some ty, id, [], body) ->
+    | JCPDlogic(Some ty, id, labels, [], body) ->
 	let ty,vi = add_logic_constdecl (ty,id) in
 	let t = match body with
 	  | JCPReads reads -> 
@@ -2272,18 +2303,18 @@ let rec decl d =
 	      else Some t
 	in
 	Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t)
-    | JCPDlogic(None, id, pl, body) ->
-	let param_env,ty,pi = add_logic_fundecl (None,id,pl) in
+    | JCPDlogic(None, id, labels, pl, body) ->
+	let param_env,ty,pi = add_logic_fundecl (None,id,labels,pl) in
 	let p = match body with
 	  | JCPReads reads ->
 	      JCReads (
 		(List.map (fun a -> let _,_,tl = location param_env a in tl)) reads)
 	  | JCPExpr body ->
-	      JCAssertion(assertion param_env body)
+	      JCAssertion(assertion (* labels *) param_env body)
 	in
         Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p)
-    | JCPDlogic(Some ty, id, pl, body) ->
-	let param_env,ty,pi = add_logic_fundecl (Some ty,id,pl) in
+    | JCPDlogic(Some ty, id, labels, pl, body) ->
+	let param_env,ty,pi = add_logic_fundecl (Some ty,id,labels,pl) in
 	let ty = match ty with Some ty -> ty | None -> assert false in
 	let t = match body with
 	  | JCPReads reads ->

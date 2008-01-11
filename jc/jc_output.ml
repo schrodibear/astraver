@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.75 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.76 2008-01-11 16:38:26 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -61,8 +61,8 @@ let const fmt c =
     | JCCvoid -> fprintf fmt "()"
 
 
-let lbin_op op =
 (*
+let lbin_op op =
   if op == Jc_pervasives.ge_int then ">=" else
   if op == Jc_pervasives.le_int then "<=" else
   if op == Jc_pervasives.gt_int then ">" else
@@ -75,8 +75,8 @@ let lbin_op op =
   if op == Jc_pervasives.div_int then "/" else
   if op == Jc_pervasives.mod_int then "%" else
   if op == Jc_pervasives.shift then "+" else
-*)
   raise Not_found
+*)
 
 let bin_op = function
   | Blt_int | Blt_real -> "<"
@@ -154,13 +154,16 @@ let rec term fmt t =
 	let op = app.jc_app_fun in
 	let l = app.jc_app_args in
 	let t1 = List.hd l and t2 = List.nth l 1 in
-	begin try
+	(*
+	  begin try
 	  let s = lbin_op op in
 	  fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
 	with Not_found ->
-	  fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
+	*)	  fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	    (print_list comma term) l 
+(*
 	end
+*)
     | JCTapp app ->
 	let op = app.jc_app_fun and l = app.jc_app_args in
 	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
@@ -201,6 +204,7 @@ let rec assertion fmt a =
 	  assertion a
     | JCArelation (t1, op, t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
+(*
     | JCAapp (op, ([t1;t2] as l)) ->
 	begin
 	  try
@@ -210,9 +214,10 @@ let rec assertion fmt a =
 	    fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	      (print_list comma term) l 
 	end
-    | JCAapp (op, l) ->
-	 fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
-	      (print_list comma term) l 
+*)
+    | JCAapp app ->
+	 fprintf fmt "@[%s(%a)@]" app.jc_app_fun.jc_logic_info_name
+	      (print_list comma term) app.jc_app_args 
     | JCAnot a1 ->
 	fprintf fmt "@[(!@ %a)@]" assertion a1
     | JCAiff (a1, a2)-> 

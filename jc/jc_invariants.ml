@@ -98,7 +98,9 @@ let invariant_for_struct this st =
   let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
   let inv =
     make_and_list
-      (List.map (fun (li, _) -> make_logic_pred_call li [this]) invs)
+      (List.map 
+	 (fun (li, _) -> 
+	    make_logic_pred_call ~label_in_name:false li [this] [] []) invs)
   in
   let reads =
     List.fold_left
@@ -263,9 +265,10 @@ let rec assertion this p =
     | JCAold p -> assertion this p
     | JCAat(p,_) -> assertion this p
     | JCAquantifier(_,id, p) -> assertion this p
-    | JCAapp (id, l) ->
+    | JCAapp app ->
+	let id = app.jc_app_fun in
 	if FieldRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories
-	then List.iter (term this) l
+	then List.iter (term this) app.jc_app_args
 	else
 	  Jc_typing.typing_error p.jc_assertion_loc
 	    "this call is not allowed in structure invariant"
@@ -320,7 +323,7 @@ let rec assertion_memories aux a = match a.jc_assertion_node with
   | JCAold a
   | JCAat(a,_)
   | JCAquantifier(_,_, a) -> assertion_memories aux a
-  | JCAapp(_, l) -> List.fold_left term_memories aux l
+  | JCAapp app -> List.fold_left term_memories aux app.jc_app_args
   | JCAinstanceof(t, _)
   | JCAbool_term t -> term_memories aux t
   | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
@@ -648,7 +651,9 @@ let not_mutable_implies_invariant this st (li, _) =
   in
 
   (* invariant *)
-  let invariant = make_logic_pred_call li [LVar this] in
+  let invariant = 
+    make_logic_pred_call ~label_in_name:false li [LVar this] [] [] 
+  in
 
   (* implies *)
   let impl = LImpl(mutable_io, invariant) in

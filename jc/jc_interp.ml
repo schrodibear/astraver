@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.205 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.206 2008-01-11 16:38:26 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -445,7 +445,8 @@ let rec term ~global_assertion label oldlabel t =
 	LApp("select",[lvar ~label_in_name:global_assertion label mem;ft t])
     | JCTapp app ->
 	let f = app.jc_app_fun and l = app.jc_app_args in
-	make_logic_fun_call f (List.map ft l) app.jc_app_region_assoc
+	make_logic_fun_call ~label_in_name:global_assertion f (List.map ft l) 
+	  app.jc_app_region_assoc app.jc_app_label_assoc
     | JCTold(t) -> term ~global_assertion (Some oldlabel) oldlabel t
     | JCTat(t,lab) -> term ~global_assertion (Some lab) oldlabel t
     | JCToffset(k,t,st) -> 
@@ -516,17 +517,21 @@ let rec assertion ~global_assertion label oldlabel a =
 		    t1.jc_term_type t1'; 
 		  term_coerce t2.jc_term_loc t 
 		    t2.jc_term_type t2'])
-      | JCAapp (f, l) -> 
+      | JCAapp app -> 
+	  let f = app.jc_app_fun in
+	  let l = app.jc_app_args in
 	  (* No type verification for full_separated for the moment. *)
 	  if f.jc_logic_info_name = "full_separated" then
-	    make_logic_pred_call f (List.map ft l)
+	    make_logic_pred_call ~label_in_name:false f (List.map ft l) [] []
 	  else begin try
-	    make_logic_pred_call f 
+	    make_logic_pred_call ~label_in_name:global_assertion f  
 	      (List.map2 
 		 (fun vi t -> 
 		    term_coerce t.jc_term_loc 
 		      vi.jc_var_info_type t.jc_term_type (ft t))
-		 f.jc_logic_info_parameters l)	    
+		 f.jc_logic_info_parameters l)
+	      app.jc_app_region_assoc
+	      app.jc_app_label_assoc
 	  with Invalid_argument _ -> assert false
 	  end
       | JCAquantifier(Forall,v,p) -> 
@@ -625,7 +630,9 @@ let tr_logic_fun li ta acc =
 	   tr_base_type vi.jc_var_info_type))
       li.jc_logic_info_parameters
   in  
-  let params_reads = Jc_interp_misc.logic_params li @ params in
+  let params_reads = 
+    Jc_interp_misc.logic_params ~label_in_name:true li @ params 
+  in
 (*
     FieldRegionSet.fold
       (fun (fi,r) acc -> 
@@ -2415,7 +2422,7 @@ let tr_fun f loc spec body acc =
 
 let tr_logic_type id acc = Type(id,[])::acc
 
-let tr_axiom id p acc = 
+let tr_axiom id (* labels *) p acc = 
   (* TODO: use labels for this axiom *)
   let ef = Jc_effect.assertion "Current" empty_effects p in
   let a = assertion ~global_assertion:true None "" p in

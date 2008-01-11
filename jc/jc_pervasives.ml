@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.69 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.70 2008-01-11 16:38:26 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -211,6 +211,7 @@ let empty_logic_info =
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = []; 
+    jc_logic_info_labels = [];
   }
 
 let logic_fun_tag_counter = ref 0
@@ -226,6 +227,7 @@ let make_logic_fun name ty =
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
+    jc_logic_info_labels = [];
   }
 
 let real_of_integer = make_logic_fun "real_of_int" real_type
@@ -244,6 +246,7 @@ let make_rel name =
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
+    jc_logic_info_labels = [];
   }
 
     
@@ -484,11 +487,15 @@ let rec raw_assertion_compare a1 a2 =
         if comp1 = 0 then raw_assertion_compare a12 a22 else comp1
     | JCAnot a1,JCAnot a2 | JCAold a1,JCAold a2 ->
         raw_assertion_compare a1 a2
-    | JCAapp(li1,tls1),JCAapp(li2,tls2) ->
+    | JCAapp app1, JCAapp app2 ->
+	let li1 = app1.jc_app_fun in
+	let li2 = app2.jc_app_fun in
         let compli = 
 	  Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
         in
         if compli = 0 then
+	  let tls1 = app1.jc_app_args in
+	  let tls2 = app2.jc_app_args in
   	  list_compare raw_term_compare tls1 tls2
         else compli
     | JCAquantifier(q1,vi1,a1),JCAquantifier(q2,vi2,a2) ->
