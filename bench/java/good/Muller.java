@@ -1,7 +1,7 @@
 
 //@ logic integer num_of_pos(integer i,integer j,int t[]) reads t[i..j] ;
 
-/*@ axiom num_of_pos_empty :
+/* @ axiom num_of_pos_empty :
   @   \forall integer i, j; \forall int t[];
   @       i > j ==> num_of_pos(i,j,t) == 0;
   @*/
