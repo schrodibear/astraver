@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.mli,v 1.38 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: info.mli,v 1.39 2008-01-11 12:43:45 marche Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -94,15 +94,26 @@ val set_const_value : var_info -> int64 -> unit
 
 module HeapVarSet : Set.S with type elt = var_info
 
+module HeapVarMap : Map.S with type key = var_info
+
 module ZoneSet : Set.S with type elt = zone * string * why_type
 
 val print_hvs : Format.formatter -> HeapVarSet.t -> unit
+
+type label =
+  | Label_current
+  | Label_name of string
+
+module LabelSet : Set.S with type elt = label
 
 type logic_info =
     {
       logic_name : string;
       mutable logic_heap_zone : ZoneSet.t;
       mutable logic_heap_args : HeapVarSet.t;
+(* see the .ml
+      mutable logic_heap_args : LabelSet.t HeapVarMap.t;
+*)
       mutable logic_args : var_info list;
       mutable logic_why_type : why_type;
       mutable logic_args_zones : zone list;

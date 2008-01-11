@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.68 2007-12-28 20:52:51 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.69 2008-01-11 12:43:45 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -193,7 +193,7 @@ let exception_info ty id =
 let empty_effects = 
   { jc_effect_alloc_table = StringRegionSet.empty;
     jc_effect_tag_table = StringSet.empty;
-    jc_effect_memories = FieldRegionSet.empty;
+    jc_effect_memories = FieldRegionMap.empty;
     jc_effect_globals = VarSet.empty;
     jc_effect_through_params = VarSet.empty;
     jc_effect_mutable = StringSet.empty;
@@ -259,11 +259,13 @@ let fun_tag_counter = ref 0
 
 let make_fun_info name ty =
   incr fun_tag_counter;
+  let vi = var ty "\\result" in
+  vi.jc_var_info_final_name <- "result";
   { jc_fun_info_tag = !fun_tag_counter;
     jc_fun_info_name = name;
     jc_fun_info_final_name = Jc_envset.get_unique_name name;
     jc_fun_info_parameters = [];
-    jc_fun_info_return_type = ty;
+    jc_fun_info_result = vi;
     jc_fun_info_return_region = Region.make_var ty name;
     jc_fun_info_param_regions = [];
     jc_fun_info_calls = [];
@@ -338,7 +340,7 @@ let rec is_constant_term t =
     | JCTrange (None, None) (* CORRECT ? *)
     | JCTconst _ -> true
     | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
-    | JCTapp _ | JCTold _ | JCToffset _
+    | JCTapp _ | JCTold _ | JCTat _ | JCToffset _
     | JCTinstanceof _ | JCTcast _ | JCTif _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
 	is_constant_term t1 && is_constant_term t2
@@ -360,6 +362,7 @@ let term_num t = match t.jc_term_node with
   | JCTrange _ -> 41
   | JCTapp _ -> 43
   | JCTif _ -> 47
+  | JCTat _ -> 53
 
 (* Comparison based only on term structure, not types not locations. *)
 let rec raw_term_compare t1 t2 =
@@ -458,8 +461,10 @@ let assertion_num a = match a.jc_assertion_node with
   | JCAinstanceof  _ -> 41
   | JCAbool_term _ -> 43
   | JCAif _ -> 47
+  (* ??? are these supposed to be prime numbers ? *)
   | JCAmutable _ -> 49
   | JCAtagequality _ -> 51
+  | JCAat _ -> 53
 
 (* Comparison based only on assertion structure, not locations. *)
 let rec raw_assertion_compare a1 a2 =
@@ -529,7 +534,7 @@ let rec is_numeric_term t =
     | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
     | JCToffset _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
-    | JCTunary (_, t) | JCTold t | JCTcast (t, _) -> is_numeric_term t
+    | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ -> false (* TODO ? *)
 
@@ -567,7 +572,7 @@ let rec is_constant_assertion a =
 	List.for_all is_constant_assertion al
     | JCAimplies (a1, a2) | JCAiff (a1, a2) ->
 	is_constant_assertion a1 && is_constant_assertion a2
-    | JCAnot a | JCAquantifier (_, _, a) | JCAold a 
+    | JCAnot a | JCAquantifier (_, _, a) | JCAold a | JCAat(a,_)
 	-> is_constant_assertion a
     | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAtagequality _
 	-> false

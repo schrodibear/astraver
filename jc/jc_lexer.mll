@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.46 2007-12-18 09:52:19 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.47 2008-01-11 12:43:45 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -151,6 +151,7 @@ rule token = parse
   | "variant"               { VARIANT }
   | "while"                 { WHILE }
   | "with"                  { WITH }
+  | "\\at"                  { BSAT }
   | "\\bottom"              { BSBOTTOM }
   | "\\forall"              { BSFORALL }
   | "\\exists"              { BSEXISTS }

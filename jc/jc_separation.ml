@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.6 2007-12-20 13:22:23 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.7 2008-01-11 12:43:45 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -70,7 +70,7 @@ let term rresult t =
 	Jc_options.lprintf "arg:%a@." Region.print t.jc_term_region;
 	Region.unify result_region t.jc_term_region
     | JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
-    | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCToffset _
+    | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ | JCToffset _
     | JCTinstanceof _ | JCTcast _ ->
 	()
   ) t
@@ -82,7 +82,7 @@ let assertion rresult a =
       | JCAtrue | JCAfalse | JCArelation _  | JCAtagequality _ 
       | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
       | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _
-      | JCAnot _ | JCAquantifier _ | JCAold _ ->
+      | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ ->
 	  ()
     ) a
 
@@ -196,7 +196,7 @@ let regionalize_assertion a assoc =
 	  let tnode = JCTapp { app with jc_app_region_assoc = app_assoc; } in
 	  { t with jc_term_node = tnode; }
       | JCTconst _ | JCTvar _ | JCTshift _ | JCTsub_pointer _ 
-      | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCToffset _
+      | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
       | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
 	  t
     in

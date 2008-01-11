@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.99 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.100 2008-01-11 12:43:45 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -89,7 +89,7 @@ type pexpr_node =
   | JCPEconst of const
   | JCPEvar of string
   | JCPEderef of pexpr * string
-  | JCPEapp of pexpr * pexpr list
+  | JCPEapp of string * label list * pexpr list
   | JCPEassign of pexpr * pexpr
   | JCPEassign_op of pexpr * pbin_op * pexpr
   | JCPEbinary of pexpr * pbin_op * pexpr
@@ -98,6 +98,7 @@ type pexpr_node =
   | JCPEcast of pexpr * string
   | JCPEquantifier of quantifier * ptype * string list * pexpr
   | JCPEold of pexpr
+  | JCPEat of pexpr * label
   | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
   | JCPElet of string * pexpr * pexpr
@@ -233,6 +234,7 @@ and term_node =
   | JCTunary of unary_op * term
   | JCTapp of app
   | JCTold of term
+  | JCTat of term * label
   | JCToffset of offset_kind * term * struct_info 
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
@@ -267,6 +269,7 @@ type tlocation_set =
 type tlocation =
   | JCLvar of var_info
   | JCLderef of tlocation_set * field_info * region
+  | JCLat of tlocation * label
 
 type assertion_node =
   | JCAtrue
@@ -280,6 +283,7 @@ type assertion_node =
   | JCAapp of logic_info * term list
   | JCAquantifier of quantifier * var_info * assertion
   | JCAold of assertion
+  | JCAat of assertion * label
   | JCAinstanceof of term * struct_info
   | JCAbool_term of term
   | JCAif of term * assertion * assertion

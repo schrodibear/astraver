@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.74 2007-12-18 08:55:39 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.75 2008-01-11 12:43:45 marche Exp $ */
 
 %{
 
@@ -101,7 +101,8 @@
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
 /* \forall \exists \offset_max \offset_min \old \result \mutable \typeof \bottom \typeeq */
-%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSAT 
+%token BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ
 
 /* \nothing */
 %token BSNOTHING
@@ -407,8 +408,8 @@ variable_definition:
 /**********/
 
 axiom_definition:
-| AXIOM IDENTIFIER COLON expression
-    { locate_decl( JCPDaxiom($2,$4)) }
+| AXIOM IDENTIFIER label_binders COLON expression
+    { locate_decl( JCPDaxiom($2,$5)) }
 ;
 
 
@@ -460,12 +461,14 @@ primary_expression:
 postfix_expression: 
 | primary_expression 
     { $1 }
-| primary_expression LPAR argument_expression_list_opt RPAR 
-    { locate_expr (JCPEapp($1, $3)) }
-| primary_expression LPARRPAR 
-    { locate_expr (JCPEapp($1, [])) }
+| IDENTIFIER label_binders LPAR argument_expression_list_opt RPAR 
+    { locate_expr (JCPEapp($1, $2, $4)) }
+| IDENTIFIER label_binders LPARRPAR 
+    { locate_expr (JCPEapp($1, $2, [])) }
 | BSOLD LPAR expression RPAR 
     { locate_expr (JCPEold($3)) }
+| BSAT LPAR expression COMMA IDENTIFIER RPAR 
+    { locate_expr (JCPEat($3,$5)) }
 | BSOFFSET_MAX LPAR expression RPAR 
     { locate_expr (JCPEoffset(Offset_max,$3)) }
 | BSOFFSET_MIN LPAR expression RPAR 
@@ -496,6 +499,16 @@ postfix_expression:
     { locate_expr (JCPErange(Some $2,None)) }
 | LSQUARE DOTDOT RSQUARE 
     { locate_expr (JCPErange(None,None)) }
+;
+
+label_binders:
+| /* epsilon */ { [] }
+| LBRACE IDENTIFIER label_list_end RBRACE { $2::$3 }
+;
+
+label_list_end:
+| /* epsilon */ { [] }
+| COMMA IDENTIFIER label_list_end { $2::$3 }
 ;
 
 argument_expression_list: 
@@ -880,17 +893,17 @@ logic_definition:
 | LOGIC type_expr IDENTIFIER 
     { locate_decl (JCPDlogic(Some $2, $3, [], JCPReads [])) }
 /* logic fun def */
-| LOGIC type_expr IDENTIFIER parameters EQ expression
-    { locate_decl (JCPDlogic(Some $2, $3, $4, JCPExpr $6)) }
+| LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
+    { locate_decl (JCPDlogic(Some $2, $3, $5, JCPExpr $7)) }
 /* logic pred def */
-| LOGIC IDENTIFIER parameters EQ expression
-    { locate_decl (JCPDlogic(None, $2, $3, JCPExpr $5)) }
+| LOGIC IDENTIFIER label_binders parameters EQ expression
+    { locate_decl (JCPDlogic(None, $2, $4, JCPExpr $6)) }
 /* logic fun reads */
-| LOGIC type_expr IDENTIFIER parameters reads %prec PRECLOGIC
-    { locate_decl (JCPDlogic(Some $2, $3, $4, JCPReads $5)) }
+| LOGIC type_expr IDENTIFIER label_binders parameters reads %prec PRECLOGIC
+    { locate_decl (JCPDlogic(Some $2, $3, $5, JCPReads $6)) }
 /* logic pred reads */
-| LOGIC IDENTIFIER parameters reads %prec PRECLOGIC
-    { locate_decl (JCPDlogic(None, $2, $3, JCPReads $4)) }
+| LOGIC IDENTIFIER label_binders parameters reads %prec PRECLOGIC
+    { locate_decl (JCPDlogic(None, $2, $4, JCPReads $5)) }
 ;
 
 logic_rec_definitions:

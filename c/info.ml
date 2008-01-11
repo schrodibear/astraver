@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.ml,v 1.43 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.44 2008-01-11 12:43:45 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -177,6 +177,21 @@ module HeapVarSet =
 		      i1.var_uniq_tag i2.var_uniq_tag 
 	   end)
 
+type label =
+  | Label_current
+  | Label_name of string
+
+module LabelSet = 
+  Set.Make(struct type t = label
+		  let compare = compare end)
+		    
+module HeapVarMap = 
+  Map.Make(struct type t = var_info 
+		  let compare i1 i2 = 
+		    Pervasives.compare
+		      i1.var_uniq_tag i2.var_uniq_tag 
+	   end)
+
 let print_hvs fmt s =
   HeapVarSet.iter (fun v -> Format.fprintf fmt "%s," v.var_unique_name) s
 
@@ -194,6 +209,14 @@ type logic_info =
       logic_name : string;
       mutable logic_heap_zone : ZoneSet.t;
       mutable logic_heap_args : HeapVarSet.t;
+(* 
+      mutable logic_heap_args : LabelSet.t HeapVarMap.t;
+
+   does not work because of hack in effect.mli, effect of logic funs:
+     reads_var = id.logic_heap_args;
+   which confuses global vars with heap vars 
+ 
+*)
       mutable logic_args : var_info list;
       mutable logic_why_type : why_type;
       mutable logic_args_zones : zone list;

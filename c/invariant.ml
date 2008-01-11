@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: invariant.ml,v 1.47 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: invariant.ml,v 1.48 2008-01-11 12:43:45 marche Exp $ i*)
 
 open Coptions
 open Creport
@@ -252,6 +252,24 @@ let rec fold_2 f l =
 let noattr_located n =  
   { Cast.node = n; Cast.loc = Loc.dummy_position }
 
+(*
+let heap_var_add v label m =
+  try
+    let l = HeapVarMap.find v m in
+    HeapVarMap.add v (LabelSet.add label l) m 
+  with Not_found ->
+    HeapVarMap.add v (LabelSet.singleton label) m 
+*)
+    
+let single v =  HeapVarSet.singleton v
+(*
+  heap_var_add v Label_current HeapVarMap.empty
+*)
+
+let pair v1 v2 = HeapVarSet.add v1 (single v2)
+(*
+  heap_var_add v1 Label_current (single v2)
+*)  
 
 let separation_first mark diag v1 v2 =
   let sep = if mark then "%separation1" else "%separation2" in
@@ -265,7 +283,7 @@ let separation_first mark diag v1 v2 =
     | Tstruct _ , Tstruct _ ->
 	let pre = sep ^ n1 ^ "_" ^ n2 in
 	let info = Info.default_logic_info (pre) in
-	info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	info.logic_heap_args <- pair v1 v2;
 	Cenv.add_pred (pre)  ([], info);
 	[noattr_located (
 	   Cast.Ninvariant_strong (
@@ -275,7 +293,7 @@ let separation_first mark diag v1 v2 =
 	if compatible_type ty v2.var_type then
 	  let pre = sep ^ "_range1_" ^ n1 ^ "_" ^ n2 in 
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- pair v1 v2; 
 	  Cenv.add_pred (pre)  ([], info);
 	  [noattr_located 
 	     (Cast.Ninvariant_strong (
@@ -291,7 +309,7 @@ let separation_first mark diag v1 v2 =
 	if compatible_type ty v1.var_type then
 	  let pre = sep ^ "_range1_" ^ n1 ^ "_" ^ n2 in 
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- pair v1 v2; 
 	  Cenv.add_pred (pre)  ([], info);
 	  [noattr_located
 	     (Cast.Ninvariant_strong (
@@ -312,7 +330,7 @@ let separation_first mark diag v1 v2 =
 	if mark then
 	  let pre = sep ^ n1 ^ "_" ^ n2 in
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- pair v1 v2; 
 	  Cenv.add_pred (pre)  ([], info);
 	  let ty = noattr_type (Tpointer (Not_valid,noattr_type (Tvoid))) in
 	  let var = default_var_info (fresh_index()) in
@@ -333,7 +351,7 @@ let separation_first mark diag v1 v2 =
 	else
  	  let pre = sep ^ n1 ^ "_" ^ n2 in
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- pair v1 v2; 
 	  Cenv.add_pred (pre)  ([], info);
 	  let ty = noattr_type (Tpointer (Not_valid,noattr_type (Tvoid))) in
 	  let var1 = default_var_info (fresh_index()) in
@@ -401,7 +419,7 @@ let rec separation_intern n =
 	      | Tstruct _ -> 
 		  let pre = "%separation1_range_" ^ n1  in 
 		  let info = Info.default_logic_info (pre) in
-		  info.logic_heap_args <- HeapVarSet.singleton v1 ; 
+		  info.logic_heap_args <- single v1; 
 		  Cenv.add_pred (pre)  ([], info);
 		  [noattr_located (Cast.Ninvariant_strong (
 				    "internal_separation_" ^ n1 ^ "_array1" , 
@@ -416,7 +434,7 @@ let rec separation_intern n =
 	      | Tarray _ ->	
 		 let pre = "%separation1_range_" ^ n1  in 
 		 let info = Info.default_logic_info (pre) in
-		 info.logic_heap_args <- HeapVarSet.singleton v1 ; 
+		 info.logic_heap_args <- single v1 ; 
 		 Cenv.add_pred (pre)  ([], info);
 		 noattr_located (Cast.Ninvariant_strong (
 				   "internal_separation_" ^ n1 ^ "_array1" , 
@@ -464,7 +482,7 @@ let add_predicates l =
 	     | Tstruct n ->
 		 let pre = "%valid_acc_" ^ n  in 
 		 let info = Info.default_logic_info (pre) in
-		 info.logic_heap_args <- HeapVarSet.singleton f; 
+		 info.logic_heap_args <- single f; 
 		 Cenv.add_pred (pre)  ([], info);
 		 [noattr_located (
 		    Cast.Ninvariant_strong (
@@ -473,11 +491,11 @@ let add_predicates l =
 		 let n1 = f.var_unique_name in
 		 let pre = "%valid_acc_" ^ n1 in 
 		 let info = Info.default_logic_info (pre) in
-		 info.logic_heap_args <- HeapVarSet.singleton f; 
+		 info.logic_heap_args <- single f; 
 		 Cenv.add_pred (pre)  ([], info);
 		 let pre2 = "%valid_acc_range_" ^ n1  in 
 		 let info2 = Info.default_logic_info (pre2) in
-		 info2.logic_heap_args <- HeapVarSet.singleton f; 
+		 info2.logic_heap_args <- single f; 
 		 Cenv.add_pred (pre2)  ([], info2);
 		 noattr_located (
 		 Cast.Ninvariant_strong ("valid_array"^ n1,

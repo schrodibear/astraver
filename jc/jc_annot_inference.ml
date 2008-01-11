@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.91 2008-01-03 08:17:44 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.92 2008-01-11 12:43:45 marche Exp $ *)
 
 open Pp
 open Format
@@ -2286,8 +2286,10 @@ and intern_ai_statement iaio abs curinvs s =
 	  match vio with
 	    | None -> normal_behavior
 	    | Some vi ->
-		let result_vi = 
+		let result_vi = fi.jc_fun_info_result 
+(*
                   Jc_pervasives.var ~unique:false vi.jc_var_info_type "\\result"
+*)
                 in
 		let normal_behavior =
 		  switch_vis_in_assertion result_vi vi normal_behavior 
@@ -2370,8 +2372,11 @@ let ai_function mgr iaio targets (fi, fs, sl) =
     let env = Environment.add env (Array.of_list globvars) [||] in
     
     (* Add \result as abstract variable in [env] if any. *)
-    let return_type = fi.jc_fun_info_return_type in
+    let vi_result = fi.jc_fun_info_result in
+    let return_type = vi_result.jc_var_info_type in
+(*
     let vi_result = Jc_pervasives.var ~unique:false return_type "\\result" in
+*)
     let env =
       if return_type <> JCTnative Tunit then
 	let result = Vai.all_variables (term_var_no_loc vi_result) in

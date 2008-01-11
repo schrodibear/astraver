@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.154 2008-01-03 08:17:44 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.155 2008-01-11 12:43:45 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -515,10 +515,12 @@ let rec term env e =
 	  let te2 = term env e2
 	  in
 	  make_logic_unary_op e.jc_pexpr_loc op te2
-      | JCPEapp (e1, args) ->
+      | JCPEapp (id, labs, args) ->
+(*
 	  begin
 	    match e1.jc_pexpr_node with
 	      | JCPEvar id ->
+*)
 		  if List.length args = 0 then
 		    let vi = Hashtbl.find logic_constants_env id in
 		    vi.jc_var_info_type,vi.jc_var_info_region,JCTvar vi
@@ -554,9 +556,11 @@ let rec term env e =
 		      typing_error e.jc_pexpr_loc 
 			"unbound logic function identifier %s" id
 		  end
+(*
 	      | _ -> 
 		  typing_error e.jc_pexpr_loc "unsupported logic function application"
 	  end
+*)
       | JCPEderef (e1, f) -> 
 	  let te = term env e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_term_type f true in
@@ -567,6 +571,10 @@ let rec term env e =
 	  let t,tr,c = const c in t,tr,JCTconst c
       | JCPEold e -> 
 	  let te = term env e in te.jc_term_type,te.jc_term_region,JCTold(te)
+      | JCPEat(e,lab) -> 
+	  let te = term env e in 
+	  (* TODO: check lab exists *)
+	  te.jc_term_type,te.jc_term_region,JCTat(te,lab)
       | JCPEoffset(k,e) -> 
 	  let te = term env e in 
 	  begin
@@ -802,10 +810,12 @@ let rec assertion env e =
       | JCPEunary(op, e2) -> 
 	  let e2 = term env e2 in
 	  JCAapp(rel_unary_op e.jc_pexpr_loc op e2.jc_term_type,[e2])
-      | JCPEapp (e1, args) ->
+      | JCPEapp (id, labs, args) ->
+(*
 	  begin
 	    match e1.jc_pexpr_node with
 	      | JCPEvar id ->
+*)
 		  begin
 		    try
 		      let pi = find_logic_info id in
@@ -830,9 +840,11 @@ let rec assertion env e =
 		      typing_error e.jc_pexpr_loc 
 			"unbound predicate identifier %s" id
 		  end
+(*
 	      | _ -> 
 		  typing_error e.jc_pexpr_loc "unsupported predicate application"
 	  end
+*)
       | JCPEderef (e, id) -> 
 	  let te = term env e in
 	  let fi = find_field e.jc_pexpr_loc te.jc_term_type id true in
@@ -863,6 +875,9 @@ let rec assertion env e =
 	  let ty = type_type ty in
 	  (make_quantifier q e.jc_pexpr_loc ty idl env e1).jc_assertion_node
       | JCPEold e -> JCAold(assertion env e)
+      | JCPEat(e,lab) -> 
+	  (* TODO: check if lab exists *)
+	  JCAat(assertion env e,lab)
       | JCPEif(e1,e2,e3) ->
 	  let te1 = term env e1 
 	  and te2 = assertion env e2
@@ -1210,11 +1225,14 @@ let rec expr env e =
 	      | _ -> typing_error e1.jc_pexpr_loc "not an lvalue"
 	  end
 
-      | JCPEapp (e1, l) -> 
+      | JCPEapp (id, labs, l) -> 
+(*
 	  begin
 	    match e1.jc_pexpr_node with
 	      | JCPEvar id ->
-		  begin
+*)
+	  begin
+	    assert (labs = []);
 		    try
 		      let fi = find_fun_info id in
 		      let tl =
@@ -1233,16 +1251,19 @@ let rec expr env e =
 			  typing_error e.jc_pexpr_loc 
 			    "wrong number of arguments for %s" id
 		      in
-		      fi.jc_fun_info_return_type,
-		      Region.make_var fi.jc_fun_info_return_type fi.jc_fun_info_name,
+		      let ty = fi.jc_fun_info_result.jc_var_info_type in
+		      ty,
+		      Region.make_var ty fi.jc_fun_info_name,
 		      JCTEcall(fi, tl)
 		    with Not_found ->
 		      typing_error e.jc_pexpr_loc 
 			"unbound function identifier %s" id
 		  end
+(*
 	      | _ -> 
 		  typing_error e.jc_pexpr_loc "unsupported function call"
 	  end
+*)
       | JCPEderef (e1, f) -> 
 	  let te = expr env e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_texpr_type f false in
@@ -1290,6 +1311,7 @@ let rec expr env e =
 	  end
       | JCPEquantifier _ 
       | JCPEold _ 
+      | JCPEat _
       | JCPErange _
       | JCPEmutable _
       | JCPEtagequality _ ->
@@ -1848,13 +1870,14 @@ let rec location_set env e =
     | JCPElet _
     | JCPEoffset _
     | JCPEold _
+    | JCPEat _
     | JCPEquantifier (_,_, _, _)
     | JCPEcast (_, _)
     | JCPEinstanceof (_, _)
     | JCPEunary (_, _)
     | JCPEassign_op (_, _, _)
     | JCPEassign (_, _)
-    | JCPEapp (_, _)
+    | JCPEapp _
     | JCPEconst _
     | JCPErange (_,_)
     | JCPEalloc (_,_)
@@ -1862,7 +1885,7 @@ let rec location_set env e =
     | JCPEtagequality _
     | JCPEfree _ -> assert false
 
-let location env e =
+let rec location env e =
   match e.jc_pexpr_node with
     | JCPElabel(l,e) ->
 	  assert false (* TODO *)
@@ -1883,21 +1906,25 @@ let location env e =
 	let fi = find_field e.jc_pexpr_loc t f false in
 	let fr = Region.make_field tr fi in
 	fi.jc_field_info_type,fr,JCLderef(tls,fi,fr)	  
-(*
-    | JCPEshift (_, _)  -> assert false (* TODO *)
-*)
+    | JCPEat(e,lab) ->
+	let t,tr,tl = location env e in
+	(* TODO: check label exists *)
+	t,tr,JCLat(tl,lab)
+	
+	
+    | JCPEold _ -> assert false (* TODO *)
+
     | JCPEif _ 
     | JCPElet _ 
     | JCPEcast _
     | JCPEinstanceof _
-    | JCPEold _ 
     | JCPEoffset _
     | JCPEquantifier (_,_, _, _)
     | JCPEunary _
     | JCPEbinary (_, _, _)
     | JCPEassign_op (_, _, _)
     | JCPEassign (_, _)
-    | JCPEapp (_, _)
+    | JCPEapp _
     | JCPEconst _ 
     | JCPErange (_,_)
     | JCPEalloc (_,_)
@@ -1912,11 +1939,6 @@ let clause env vi_result c acc =
 	{ acc with 
 	  jc_fun_requires = 
 	    raw_asrt (make_and (assertion env e) acc.jc_fun_requires); }
-(*
-    | JCPCensures(e) ->
-	{ acc with 
-	    jc_fun_ensures = assertion env e }
-*)
     | JCPCbehavior(loc,id,throws,assumes,requires,assigns,ensures) ->
 	let throws,env_result = 
 	  match throws with
@@ -1932,6 +1954,7 @@ let clause env vi_result c acc =
 			"exception without value"
 		  in
 		  let vi = var tei "\\result" in
+		  vi.jc_var_info_final_name <- "result";
 		  Some ei, (vi.jc_var_info_name,vi)::env 
 		with Not_found ->
 		  typing_error id.jc_identifier_loc 
@@ -2026,19 +2049,19 @@ let add_typedecl d (id,parent) =
 let add_fundecl (ty,loc,id,pl) =
   try
     let fi = Hashtbl.find functions_env id in
-      Format.eprintf "FIXME: Warning: ignoring second declaration of function %s@." id;
-      let ty = fi.jc_fun_info_return_type in
-      let param_env =
-	List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
-      in
-	param_env, ty, fi
+    Format.eprintf 
+      "FIXME: Warning: ignoring second declaration of function %s@." id;
+    let param_env =
+      List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
+    in
+    param_env, fi
   with Not_found ->
     let param_env = List.map param pl in
     let ty = type_type ty in
     let fi = make_fun_info id ty in
       fi.jc_fun_info_parameters <- List.map snd param_env;
       Hashtbl.replace functions_env id fi;
-      param_env, ty, fi
+      param_env, fi
 
 let add_logic_fundecl (ty,id,pl) =
   try
@@ -2110,10 +2133,10 @@ let rec decl d =
 	  Hashtbl.add variables_table vi.jc_var_info_tag (vi, e);
     | JCPDfun (ty, id, pl, specs, body) -> 
 	let loc = id.jc_identifier_loc in
-	let param_env, ty, fi = 
+	let param_env, fi = 
 	  add_fundecl (ty, loc, id.jc_identifier_name, pl) 
 	in
-	let vi = var ty "\\result" in
+	let vi = fi.jc_fun_info_result in
 	let s = List.fold_right 
 		  (clause param_env vi) specs 
 		  { jc_fun_requires = assertion_true;

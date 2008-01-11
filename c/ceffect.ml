@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.164 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.165 2008-01-11 12:43:45 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -193,9 +193,22 @@ type effect =
     }
 
 let ef_empty = { reads = empty; assigns = empty ; 
-		 reads_var = HeapVarSet.empty ; assigns_var = HeapVarSet.empty;
+		 reads_var = HeapVarSet.empty ; 
+		 assigns_var = HeapVarSet.empty;
 		 reads_under_pointer = HeapVarSet.empty;
 		 assigns_under_pointer = HeapVarSet.empty; }
+
+(*
+let merge_var_map m1 m2 =
+  HeapVarMap.fold
+    (fun v labs acc ->
+       try
+	 let l = HeapVarMap.find v m2 in
+	 HeapVarMap.add v (LabelSet.union labs l) acc
+       with Not_found ->
+	   HeapVarMap.add v labs acc)
+    m1 m2
+*)
 
 let ef_union e1 e2 = 
   { reads = union e1.reads e2.reads;

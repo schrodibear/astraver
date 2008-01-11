@@ -247,7 +247,7 @@ JCCMO = @ATPCMO@ \
 	jc/jc_control_flow.cmo \
 	jc/jc_callgraph.cmo \
 	jc/output.cmo \
-	jc/jc_invariants.cmo \
+	jc/jc_interp_misc.cmo jc/jc_invariants.cmo \
 	jc/jc_effect.cmo \
 	jc/jc_interp.cmo \
 	jc/jc_make.cmo jc/jc_main.cmo

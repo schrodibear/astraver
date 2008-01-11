@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.74 2007-12-18 16:35:43 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.75 2008-01-11 12:43:45 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -134,6 +134,7 @@ let rec term fmt t =
     | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
+    | JCTat(t,lab) -> fprintf fmt "@[\\at(%a,%s)@]" term t lab
     | JCTapp app when List.length app.jc_app_args = 1 ->
 	let op = app.jc_app_fun in
 	let t1 = List.hd app.jc_app_args in
@@ -191,6 +192,7 @@ let rec assertion fmt a =
     | JCAinstanceof (t, st) ->
 	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
+    | JCAat(a,lab) -> fprintf fmt "\\at(%a,%s)" assertion a lab
     | JCAquantifier (q,vi, a)-> 
 	fprintf fmt "@[<v 3>(\\%a %a %s;@\n%a)@]"
 	  quantifier q
@@ -244,11 +246,13 @@ let rec location_set fmt = function
       fprintf fmt "(%a + [%a..%a])" location_set locset 
 	(print_option term) t1 (print_option term) t2
 
-let location fmt = function
+let rec location fmt = function
   | JCLvar vi -> 
       fprintf fmt "%s" vi.jc_var_info_name
   | JCLderef (locset, fi,_) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
+  | JCLat (loc, lab) ->
+      fprintf fmt "\\at(%a,%s)" location loc lab
 
 let behavior fmt (loc,id,b) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;

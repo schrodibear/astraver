@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.204 2008-01-03 08:17:44 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.205 2008-01-11 12:43:45 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -38,6 +38,7 @@ open Format
 open Jc_name
 open Jc_region
 open Jc_separation
+open Jc_interp_misc
 
 (* locs table *)
 
@@ -143,30 +144,8 @@ let const c =
     | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
     | JCCboolean b -> Prim_bool b
 
-let tr_native_type t =
-  match t with
-    | Tunit -> "unit"
-    | Tboolean -> "bool"
-    | Tinteger -> "int"
-    | Treal -> "real"
-
-let simple_logic_type s =
-  { logic_type_name = s; logic_type_args = [] }
-
 let why_integer_type = simple_logic_type "int"
   
-let tr_base_type t =
-  match t with
-    | JCTnative t -> simple_logic_type (tr_native_type t)
-    | JCTlogic s -> simple_logic_type s
-    | JCTenum ri -> 
-	simple_logic_type ri.jc_enum_info_name
-    | JCTpointer (st, a, b) -> 
-	let ti = simple_logic_type (st.jc_struct_info_root) in
-	{ logic_type_name = "pointer";
-	  logic_type_args = [ ti ] }
-    | JCTnull -> assert false
-
 let tr_type t = Base_type (tr_base_type t)
 
  
@@ -382,12 +361,6 @@ terms and assertions
 
 *************************)
 
-let alloc_table_type a = 
-  {
-    logic_type_name = "alloc_table";
-    logic_type_args = [simple_logic_type a];
-  }
-
 let pointer_type st = 
   {
     logic_type_name = "pointer";
@@ -406,68 +379,32 @@ let tag_id_type st =
     logic_type_args = [simple_logic_type st.jc_struct_info_root];
   }
 
-let lvar ?(assigned=true) label v =
-  if assigned then
-    match label with 
-      | None -> LVar v 
-      | Some l -> LVarAtLabel(v,l)
-  else LVar v
+let lvar ?(assigned=true) ?(label_in_name=false) label v =
+  if label_in_name then
+      match label with 
+	| None -> (* assert false *) LVar(v (* ^ "_at_unknown_label" *)) (**)
+	| Some l -> LVar(v ^ "_at_" ^ l)    
+  else
+    if assigned then
+      match label with 
+	| None -> LVar v 
+	| Some l -> LVarAtLabel(v,l)
+    else LVar v
 
 let var v = Var v
 
 let lvar_info label v = 
+(* ?? utile ? -> reporter ailleurs !
   if v.jc_var_info_name = "\\result" then 
     v.jc_var_info_final_name <- "result";
+*)
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
-let logic_params li l assoc =
-  let l =
-    FieldRegionSet.fold
-      (fun (fi,r) acc -> 
-	let r =
-	  if Region.polymorphic r then
-	    begin
-	      Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
-	      Jc_options.lprintf "r:%a@." Region.print r;
-	      try RegionList.assoc r assoc with Not_found -> assert false
-	    end
-	  else r
-	in
-	(LVar(field_region_memory_name(fi,r)))::acc)
-      li.jc_logic_info_effects.jc_effect_memories
-      l
-  in
-  let l = 
-    StringRegionSet.fold
-      (fun (a,r) acc ->
-	let r =
-	  if Region.polymorphic r then
-	    begin
-	      Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
-	      Jc_options.lprintf "r:%a@." Region.print r;
-	      try RegionList.assoc r assoc with Not_found -> assert false
-	    end
-	  else r
-	in
-	(LVar(alloc_region_table_name(a,r)))::acc)
-      li.jc_logic_info_effects.jc_effect_alloc_table
-      l	    
-  in
-  StringSet.fold
-    (fun v acc -> (LVar (v ^ "_tag_table"))::acc)
-    li.jc_logic_info_effects.jc_effect_tag_table
-    l	    
 
-let make_logic_fun_call li l assoc =
-  let params = logic_params li l assoc in
-  LApp(li.jc_logic_info_final_name,params)
 
-let make_logic_pred_call li l =
-  let params = logic_params li l [] in (* TODO: add assoc *)
-    LPred (li.jc_logic_info_final_name, params)
 
-let rec term label oldlabel t =
-  let ft = term label oldlabel in
+let rec term ~global_assertion label oldlabel t =
+  let ft = term ~global_assertion label oldlabel in
   let t' =
   match t.jc_term_node with
     | JCTconst JCCnull -> LVar "null"
@@ -505,11 +442,12 @@ let rec term label oldlabel t =
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,fi) -> 
 	let mem = field_region_memory_name(fi,t.jc_term_region) in
-	LApp("select",[lvar label mem;ft t])
+	LApp("select",[lvar ~label_in_name:global_assertion label mem;ft t])
     | JCTapp app ->
 	let f = app.jc_app_fun and l = app.jc_app_args in
 	make_logic_fun_call f (List.map ft l) app.jc_app_region_assoc
-    | JCTold(t) -> term (Some oldlabel) oldlabel t
+    | JCTold(t) -> term ~global_assertion (Some oldlabel) oldlabel t
+    | JCTat(t,lab) -> term ~global_assertion (Some lab) oldlabel t
     | JCToffset(k,t,st) -> 
 	let alloc = 
 	  alloc_region_table_name(st.jc_struct_info_root,t.jc_term_region)
@@ -534,26 +472,26 @@ in
   else
     t'
 
-let named_term label oldlabel t =
-  let t' = term label oldlabel t in
+let named_term ~global_assertion label oldlabel t =
+  let t' = term ~global_assertion label oldlabel t in
   match t' with
     | Tnamed _ -> t'
     | _ -> 
 	let n = reg_loc t.jc_term_loc in
 	Tnamed(n,t')
 
-let tag label oldlabel = function
+let tag ~global_assertion label oldlabel = function
   | JCTtag st -> LVar (st.jc_struct_info_root^"_tag")
   | JCTbottom -> LVar "bottom_tag"
   | JCTtypeof(t, st) ->
-      let te = term label oldlabel t in
+      let te = term ~global_assertion label oldlabel t in
       LApp("typeof", [ LVar (st.jc_struct_info_root^"_tag_table"); te ])
 	     
 
-let rec assertion label oldlabel a =
-  let fa = assertion label oldlabel 
-  and ft = term label oldlabel
-  and ftag = tag label oldlabel
+let rec assertion ~global_assertion label oldlabel a =
+  let fa = assertion ~global_assertion label oldlabel 
+  and ft = term ~global_assertion label oldlabel
+  and ftag = tag ~global_assertion label oldlabel
   in
   let a' =
     match a.jc_assertion_node with
@@ -599,7 +537,8 @@ let rec assertion label oldlabel a =
 	  LExists(v.jc_var_info_final_name,
 		  tr_base_type v.jc_var_info_type,
 		  fa p)
-      | JCAold a -> assertion (Some oldlabel) oldlabel a
+      | JCAold a -> assertion ~global_assertion (Some oldlabel) oldlabel a
+      | JCAat(a,lab) -> assertion ~global_assertion (Some lab) oldlabel a
       | JCAbool_term(t) -> 
 	LPred("eq",[ft t;LConst(Prim_bool true)])
       | JCAinstanceof(t,ty) -> 
@@ -644,8 +583,8 @@ let named_jc_assertion loc a =
 	LNamed(n,a)
 
 
-let named_assertion label oldlabel a =
-  let a' = assertion label oldlabel a in
+let named_assertion ~global_assertion label oldlabel a =
+  let a' = assertion ~global_assertion label oldlabel a in
   named_jc_assertion a.jc_assertion_loc a'
 
 let struct_alloc_arg a =
@@ -674,19 +613,9 @@ let tr_logic_const vi init acc =
 	      LPred("eq",[term_coerce Loc.dummy_position integer_type
 			    vi.jc_var_info_type (LVar vi.jc_var_info_name); 
 			  term_coerce t.jc_term_loc integer_type 
-			    t.jc_term_type (term None "" t)])) 
+			    t.jc_term_type (term ~global_assertion:true None "" t)])) 
 	:: decl 
 
-let memory_type t v =
-  { logic_type_name = "memory";
-    logic_type_args = [t;v] }
-
-let memory_field fi =
-  memory_type 
-    (simple_logic_type fi.jc_field_info_root)
-    (tr_base_type fi.jc_field_info_type)
-let _ = Jc_invariants.memory_field' := memory_field
-	 
 
 let tr_logic_fun li ta acc =
   let params =
@@ -695,8 +624,9 @@ let tr_logic_fun li ta acc =
 	 (vi.jc_var_info_final_name,
 	   tr_base_type vi.jc_var_info_type))
       li.jc_logic_info_parameters
-  in
-  let params_reads =
+  in  
+  let params_reads = Jc_interp_misc.logic_params li @ params in
+(*
     FieldRegionSet.fold
       (fun (fi,r) acc -> 
 	 (field_region_memory_name(fi,r), memory_field fi)::acc)
@@ -720,16 +650,17 @@ let tr_logic_fun li ta acc =
       li.jc_logic_info_effects.jc_effect_tag_table
       params_reads
   in
+*)
   let decl =
     match li.jc_logic_info_result_type, ta with
 	(* Predicate *)
       | None, JCAssertion a -> 
-	  let a = assertion None "" a in
+	  let a = assertion ~global_assertion:true None "" a in
 	    Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
 	      (* Function *)
       | Some ty, JCTerm t -> 
 	  let ret = tr_base_type ty in
-	  let t = term None "" t in
+	  let t = term ~global_assertion:true None "" t in
 	  Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
       (* Logic *)
       | tyo, JCReads r ->
@@ -755,7 +686,7 @@ let tr_logic_fun li ta acc =
   if List.length sep_preds = 0 then acc else
     let params_names = List.map fst params_reads in
     let normal_params = List.map (fun name -> LVar name) params_names in
-    FieldRegionSet.fold (fun (fi,r) acc ->
+    FieldRegionMap.fold (fun (fi,r) labels acc ->
       let update_params = 
 	List.map (fun name ->
 	  if name = field_region_memory_name(fi,r) then
@@ -1011,7 +942,9 @@ and expr ~infunction ~threats e : expr =
 	make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
     | JCEcast (e, si) ->
 	let tag = tag_table_name si in
-	let et = term None "" (term_of_expr e) in
+	(* ??? TODO faire ca correctement: on peut tre bien caster des expressions qui ne sont pas des termes !!! *)
+
+	let et = term ~global_assertion:false None "" (term_of_expr e) in
 	let typea = 
 	  match e.jc_expr_type with
 	    | JCTpointer (si', _, _) -> 
@@ -1034,7 +967,7 @@ and expr ~infunction ~threats e : expr =
 	let mem = field_region_memory_name(fi,e.jc_expr_region) in
 	let mem = 
 	  if Region.polymorphic e.jc_expr_region then
-	    if FieldRegionSet.mem (fi,e.jc_expr_region)
+	    if FieldRegionMap.mem (fi,e.jc_expr_region)
 	      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
 	    then Deref mem
 	    else Var mem
@@ -1184,7 +1117,7 @@ let return_void = ref false
 let type_assert vi e =
   match vi.jc_var_info_type, e.jc_expr_type with
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
-	let et = term None "" (term_of_expr e) in
+	let et = term ~global_assertion:false None "" (term_of_expr e) in
 	let alloc = alloc_table_name si.jc_struct_info_root in
 	let fields = embedded_struct_fields si in
 	  begin
@@ -1284,8 +1217,8 @@ let rec statement ~infunction ~threats s =
 	    with Invalid_argument _ -> assert false
 	  in
 	  let write_mems =
-	    FieldRegionSet.fold
-	      (fun (fi,distr) acc ->
+	    FieldRegionMap.fold
+	      (fun (fi,distr) labels acc ->
 		if Region.polymorphic distr then
 		  try 
 		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
@@ -1304,8 +1237,9 @@ let rec statement ~infunction ~threats s =
 	      []
 	  in
 	  let read_mems =
-	    FieldRegionSet.fold
-	      (fun (fi,distr) acc ->
+	    FieldRegionMap.fold
+	      (fun (fi,distr) labels acc ->
+		 if FieldRegionMap.mem (fi,distr) f.jc_fun_info_effects.jc_writes.jc_effect_memories then acc else
 		if Region.polymorphic distr then
 		  (* Distant region is polymorphic. It should be passed as
 		   * argument to the function. 
@@ -1313,7 +1247,7 @@ let rec statement ~infunction ~threats s =
 		  try 
 		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
 		    if Region.polymorphic locr then
-		      if FieldRegionSet.mem (fi,locr) 
+		      if FieldRegionMap.mem (fi,locr) 
 			infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
 		      then 
 			begin
@@ -1330,12 +1264,11 @@ let rec statement ~infunction ~threats s =
 			 * memory that is also read/written directly by 
 			 * the function called.
 			 *)
-			let fmems = FieldRegionSet.union
-			  f.jc_fun_info_effects.jc_reads.jc_effect_memories
-			  f.jc_fun_info_effects.jc_writes.jc_effect_memories
-			in
-			assert(not(FieldRegionSet.mem (fi,locr) fmems));
-			if FieldRegionSet.mem (fi,locr) 
+			assert(not(FieldRegionMap.mem (fi,locr) f.jc_fun_info_effects.jc_reads.jc_effect_memories
+			  ));
+			assert(not(FieldRegionMap.mem (fi,locr) f.jc_fun_info_effects.jc_writes.jc_effect_memories
+			));
+			if FieldRegionMap.mem (fi,locr) 
 			  f.jc_fun_info_effects.jc_writes.jc_effect_memories
 			then (Var(field_region_memory_name(fi,locr)))::acc 
 			else (Deref(field_region_memory_name(fi,locr)))::acc 
@@ -1344,9 +1277,7 @@ let rec statement ~infunction ~threats s =
 		    (* Local memory. Not passed in argument by the caller. *)
 		    acc
 		else acc)
-	      (FieldRegionSet.diff
-		f.jc_fun_info_effects.jc_reads.jc_effect_memories
-		f.jc_fun_info_effects.jc_writes.jc_effect_memories)
+	      f.jc_fun_info_effects.jc_reads.jc_effect_memories
 	      []
 	  in
 	  let write_mems = 
@@ -1441,7 +1372,7 @@ let rec statement ~infunction ~threats s =
 		      | JCSblock [] -> () (* ok *)
 		      | _ -> assert false
 		    end;
-		    begin match f.jc_fun_info_return_type with
+		    begin match f.jc_fun_info_result.jc_var_info_type with
 		      | JCTnative Tunit -> call
 		      | _ -> let tmp = tmp_var_name () in Let(tmp,call,Void)
 		    end
@@ -1486,11 +1417,11 @@ let rec statement ~infunction ~threats s =
 	let e = expr e in
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->
-	let inv = named_assertion None "init" la.jc_loop_invariant in
+	let inv = named_assertion ~global_assertion:false None "init" la.jc_loop_invariant in
 	begin 
 	  match la.jc_loop_variant with
 	    | Some t when threats ->
-		let variant = named_term None "" t in
+		let variant = named_term ~global_assertion:false None "" t in
 		While(Cte(Prim_bool true), inv,
 	              Some (term_coerce t.jc_term_loc integer_type 
 			    t.jc_term_type variant,None), [statement s])
@@ -1499,7 +1430,7 @@ let rec statement ~infunction ~threats s =
 	              None, [statement s])
 	end
     | JCSassert((*None,*) a) -> 
-	Assert(named_assertion None "init" a, Void)
+	Assert(named_assertion ~global_assertion:false None "init" a, Void)
 (*
     | JCSassert(Some name, a) -> 
 	
@@ -1852,42 +1783,43 @@ let tr_struct st acc =
 locations
 *********)
 
-let rec pset before loc = 
+let rec pset ~global_assertion before loc = 
+  let fpset = pset ~global_assertion before in
   match loc with
     | JCLSderef(ls,fi,r) ->
-	let m = lvar (Some before) (field_region_memory_name(fi,r)) in
-	LApp("pset_deref", [m;pset before ls])
+	let m = lvar ~label_in_name:global_assertion (Some before) (field_region_memory_name(fi,r)) in
+	LApp("pset_deref", [m;fpset ls])
     | JCLSvar vi -> 
 	let m = lvar_info (Some before) vi in
 	LApp("pset_singleton", [m])
     | JCLSrange(ls,None,None) ->
-	let ls = pset before ls in
+	let ls = fpset ls in
 	LApp("pset_all", [ls])
     | JCLSrange(ls,None,Some b) ->
-	let ls = pset before ls in
-	let b' = term (Some before) before b in
+	let ls = fpset ls in
+	let b' = term ~global_assertion (Some before) before b in
 	LApp("pset_range_left", 
 	     [ls; 
 	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
     | JCLSrange(ls,Some a,None) ->
-	let ls = pset before ls in
-	let a' = term (Some before) before a in
+	let ls = fpset ls in
+	let a' = term ~global_assertion (Some before) before a in
 	LApp("pset_range_right", 
 	     [ls; 
 	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'])
     | JCLSrange(ls,Some a,Some b) ->
-	let ls = pset before ls in
-	let a' = term (Some before) before a in
-	let b' = term (Some before) before b in
+	let ls = fpset ls in
+	let a' = term ~global_assertion (Some before) before a in
+	let b' = term ~global_assertion (Some before) before b in
 	LApp("pset_range", 
 	     [ls; 
 	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'; 
 	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
 	
-let collect_locations before (refs,mems) loc =
+let rec collect_locations ~global_assertion before (refs,mems) loc =
   match loc with
     | JCLderef(e,fi,fr) -> 
-	let iloc = pset before e in
+	let iloc = pset ~global_assertion before e in
 	let l =
 	  try
 	    let l = FieldRegionMap.find (fi,location_set_region e) mems in
@@ -1898,6 +1830,8 @@ let collect_locations before (refs,mems) loc =
     | JCLvar vi -> 
 	let var = vi.jc_var_info_final_name in
 	(StringMap.add var true refs,mems)
+    | JCLat(loc,lab) ->
+	collect_locations ~global_assertion before (refs,mems) loc
 
 let rec make_union_loc = function
   | [] -> LVar "pset_empty"
@@ -1917,13 +1851,13 @@ let assigns before ef locs =
     *) StringMap.empty 
   in
   let mems = 
-    FieldRegionSet.fold
-      (fun (fi,r) m -> 
+    FieldRegionMap.fold
+      (fun (fi,r) labels m -> 
 	 FieldRegionMap.add (fi,r) [] m)
       ef.jc_writes.jc_effect_memories FieldRegionMap.empty 
   in
   let refs,mems = 
-    List.fold_left (collect_locations before) (refs,mems) locs
+    List.fold_left (collect_locations ~global_assertion:false before) (refs,mems) locs
   in
   let a =
     StringMap.fold
@@ -1984,7 +1918,7 @@ let interp_fun_params f write_mems read_mems annot_type =
        
   
 let tr_fun f loc spec body acc =
-  let requires = (named_assertion None "" spec.jc_fun_requires) in
+  let requires = (named_assertion ~global_assertion:false None "" spec.jc_fun_requires) in
   (* partition behaviors as follows:
      - behaviors inferred by analysis (postfixed by 'safety': they will be added to fun safety)
      - user defined behaviors 
@@ -2000,11 +1934,11 @@ let tr_fun f loc spec body acc =
 		   b.jc_behavior_ensures.jc_assertion_label
 		   Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
 *)
-		 (named_assertion None "" b.jc_behavior_ensures)		
+		 (named_assertion ~global_assertion:false None "" b.jc_behavior_ensures)		
 	     | Some(locassigns,a) ->
 		 named_jc_assertion loc
 		   (make_and
-		      (named_assertion None "" b.jc_behavior_ensures)		
+		      (named_assertion ~global_assertion:false None "" b.jc_behavior_ensures)		
 		      (named_jc_assertion
 			 locassigns
 			 (assigns "" f.jc_fun_info_effects (Some a))))
@@ -2013,7 +1947,7 @@ let tr_fun f loc spec body acc =
 	   match b.jc_behavior_assumes with
 	     | None -> post
 	     | Some e -> 
-		 make_impl (assertion (Some "") "" e) post
+		 make_impl (assertion ~global_assertion:false (Some "") "" e) post
 	 in
 	 match b.jc_behavior_throws with
 	   | None -> 
@@ -2049,12 +1983,12 @@ let tr_fun f loc spec body acc =
       excep_behaviors
   in
   let reads =
-    FieldRegionSet.fold
-      (fun (fi,r) acc -> 
+    FieldRegionMap.fold
+      (fun (fi,r) labels acc -> 
 	let mem = field_region_memory_name(fi,r) in
 	if Region.polymorphic r then
 	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    if FieldRegionSet.mem (fi,r) 
+	    if FieldRegionMap.mem (fi,r) 
 	      f.jc_fun_info_effects.jc_writes.jc_effect_memories 
 	    then mem::acc 
 	    else acc
@@ -2103,8 +2037,8 @@ let tr_fun f loc spec body acc =
       reads
   in
   let writes =
-    FieldRegionSet.fold
-      (fun (fi,r) acc ->
+    FieldRegionMap.fold
+      (fun (fi,r) labels acc ->
 	let mem = field_region_memory_name(fi,r) in
 	if Region.polymorphic r then
 	  if RegionList.mem r f.jc_fun_info_param_regions then mem::acc else acc
@@ -2147,8 +2081,8 @@ let tr_fun f loc spec body acc =
       writes
   in
   let param_write_mems,local_write_mems =
-    FieldRegionSet.fold
-      (fun (fi,r) (param_acc,local_acc) ->
+    FieldRegionMap.fold
+      (fun (fi,r) labels (param_acc,local_acc) ->
 	if Region.polymorphic r then
 	  let mem = field_region_memory_name(fi,r),memory_field fi in
 	  if RegionList.mem r f.jc_fun_info_param_regions then
@@ -2160,18 +2094,19 @@ let tr_fun f loc spec body acc =
       ([],[])
   in
   let param_read_mems,local_read_mems =
-    FieldRegionSet.fold
-      (fun (fi,r) (param_acc,local_acc) ->
-	if Region.polymorphic r then
+    FieldRegionMap.fold
+      (fun (fi,r) labels ((param_acc,local_acc) as acc) ->
+	 if FieldRegionMap.mem (fi,r) 
+	   f.jc_fun_info_effects.jc_writes.jc_effect_memories
+	 then acc else
+	   if Region.polymorphic r then
 	  let mem = field_region_memory_name(fi,r),memory_field fi in
 	  if RegionList.mem r f.jc_fun_info_param_regions then
 	    mem::param_acc,local_acc
 	  else
 	    param_acc,mem::local_acc
 	else param_acc,local_acc)
-      (FieldRegionSet.diff 
-	f.jc_fun_info_effects.jc_reads.jc_effect_memories
-	f.jc_fun_info_effects.jc_writes.jc_effect_memories)
+      f.jc_fun_info_effects.jc_reads.jc_effect_memories
       ([],[])
   in
   let param_write_allocs,local_write_allocs =
@@ -2231,7 +2166,7 @@ let tr_fun f loc spec body acc =
   (* DEBUG *)
   (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
   (* why parameter for calling the function *)
-  let ret_type = tr_type f.jc_fun_info_return_type in
+  let ret_type = tr_type f.jc_fun_info_result.jc_var_info_type in
   let param_normal_post = 
     if is_purely_exceptional_fun spec then LFalse else
       make_and normal_post normal_post_safety 
@@ -2285,7 +2220,7 @@ let tr_fun f loc spec body acc =
 		f.jc_fun_info_parameters [] 
 	    in
 	      return_void := 
-		(match f.jc_fun_info_return_type with
+		(match f.jc_fun_info_result.jc_var_info_type with
 		   | JCTnative Tunit -> true
 		   | _ -> false);		
 	      printf "Generating Why function %s@."
@@ -2328,7 +2263,7 @@ let tr_fun f loc spec body acc =
 		  Try(append tblock (Raise(jessie_return_exception,None)),
 		      jessie_return_exception,None,Void)
 		else
-		  let e = any_value f.jc_fun_info_return_type in
+		  let e = any_value f.jc_fun_info_result.jc_var_info_type in
 		    Let_ref(jessie_return_variable,e,
 			    Try(append tblock Absurd,
 				jessie_return_exception,None,
@@ -2397,7 +2332,7 @@ let tr_fun f loc spec body acc =
 		      Try(append tblock (Raise(jessie_return_exception,None)),
 			  jessie_return_exception,None,Void)
 		    else
-		      let e = any_value f.jc_fun_info_return_type in
+		      let e = any_value f.jc_fun_info_result.jc_var_info_type in
 			Let_ref(jessie_return_variable,e,
 				Try(append tblock Absurd,
 				    jessie_return_exception,None,
@@ -2481,12 +2416,18 @@ let tr_fun f loc spec body acc =
 let tr_logic_type id acc = Type(id,[])::acc
 
 let tr_axiom id p acc = 
-  let a = assertion None "" p in
-  let ef = Jc_effect.assertion empty_effects p in
+  (* TODO: use labels for this axiom *)
+  let ef = Jc_effect.assertion "Current" empty_effects p in
+  let a = assertion ~global_assertion:true None "" p in
   let a =
-    FieldRegionSet.fold (fun (fi,r) a -> 
-      LForall (field_region_memory_name(fi,r), memory_field fi, a)
-    ) ef.jc_effect_memories a 
+    FieldRegionMap.fold 
+      (fun (fi,r) labels a -> 
+	 StringSet.fold
+	   (fun lab a ->
+	      LForall (field_region_memory_name(fi,r) ^ "_at_" ^ lab, 
+		       memory_field fi, a))
+	   labels a)
+      ef.jc_effect_memories a 
   in
   let a =
     StringRegionSet.fold (fun (alloc,r) a -> 

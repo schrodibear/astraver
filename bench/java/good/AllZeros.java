@@ -1,7 +1,7 @@
 
 class AllZeros {
 
-    /* @ requires t != null;
+    /*@ // requires t != null;
       @ ensures \result <==> \forall integer i; 0<=i<t.length ==> t[i]==0; 
       @*/
     static boolean all_zeros(int t[]) {

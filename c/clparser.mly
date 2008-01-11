@@ -70,14 +70,15 @@
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH ARRLEN STRLEN BASE_ADDR OFFSET
 %token SEPARATED BOUND_SEPARATED FULL_SEPARATED FULLSEPARATED 
 %token VALID VALID_INDEX VALID_RANGE FRESH THEN AT
-%token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
-%token INVARIANT VARIANT DECREASES FOR LABEL ASSERT ASSUME SEMICOLON NULL
+%token QUESTION MINUS PLUS STAR AMP SLASH 1PERCENT LSQUARE RSQUARE EOF
+%token DATA INVARIANT VARIANT DECREASES FOR LABEL ASSERT ASSUME SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE GHOST SET
 %token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION TYPE
 %token ROUNDERROR TOTALERROR EXACT MODEL MIN MAX MININT MAXINT
 
-%right prec_named
+%nonassoc prec_id_lower_than_colon
+%right COLON
 %nonassoc prec_forall prec_exists
 %right IFF
 %right IMPLIES
@@ -105,7 +106,7 @@
 
 %%
 
-lexpr:
+lexpr_no_name:
   /* predicates */
   lexpr IMPLIES lexpr { info (PLimplies ($1, $3)) }
 | lexpr IFF lexpr { info (PLiff ($1, $3)) }
@@ -179,16 +180,22 @@ lexpr:
 | RESULT { info PLresult }
 /* both terms and predicates */
 | LPAR lexpr RPAR %prec prec_par { $2 }
-| IDENTIFIER { info (PLvar (Info.default_var_info $1)) }
-| IDENTIFIER LPAR lexpr_list RPAR 
-    { info (PLapp (Info.default_logic_info $1, $3)) }
+| IDENTIFIER %prec prec_id_lower_than_colon
+    { info (PLvar (Info.default_var_info $1)) }
+| IDENTIFIER label_parameters LPAR lexpr_list RPAR 
+    { info (PLapp (Info.default_logic_info $1, $4)) }
 /* Cast. TODO: (identifier *) lexpr needs TYPENAME (see below) */
 | LPAR logic_type_not_id RPAR lexpr %prec prec_cast { info (PLcast ($2, $4)) }
 | LPAR lexpr RPAR lexpr %prec prec_cast
     { match $2.lexpr_node with
 	| PLvar x -> info (PLcast (LTvar x.Info.var_name, $4))
 	| _ -> raise Parse_error }
-| IDENTIFIER COLONCOLON lexpr %prec prec_named { info (PLnamed ($1, $3)) }
+;
+
+lexpr:
+| IDENTIFIER COLON lexpr 
+    { info (PLnamed ($1, $3)) }
+| lexpr_no_name { $1 }
 ;
 
 lexpr_option:
@@ -313,8 +320,8 @@ annotation:
 | ghost_decl       { Adecl $1 }
 | spec             { Aspec $1 }
 | loop_annot       { Aloop_annot $1 }
-| ASSERT lexpr     { Acode_annot (Assert $2) }
-| ASSUME lexpr     { Acode_annot (Assume $2) }
+| ASSERT lexpr   { Acode_annot (Assert $2) }
+| ASSUME lexpr   { Acode_annot (Assume $2) }
 | LABEL IDENTIFIER { Acode_annot (Label $2) }
 | SET ghost_lvalue EQUAL lexpr 
                    { Acode_annot(GhostSet($2,$4)) }
@@ -350,7 +357,7 @@ location:
 
 label_parameters:
 | /* epsilon */ { [] }
-| LT IDENTIFIER label_list_end GT { $2::$3 }
+| LBRACE IDENTIFIER label_list_end RBRACE { $2::$3 }
 ;
 
 label_list_end:
@@ -366,14 +373,14 @@ decl:
     { LDlogic (Info.default_logic_info $3, $2, $4, $6, $9) }
 | LOGIC logic_type IDENTIFIER label_parameters LPAR parameters RPAR LBRACE lexpr RBRACE 
     { LDlogic_def (Info.default_logic_info $3, $2, $4, $6, $9) }
-| PREDICATE IDENTIFIER LPAR parameters RPAR 
-    { LDpredicate_reads (Info.default_logic_info $2, $4, []) }
-| PREDICATE IDENTIFIER LPAR parameters RPAR READS locations 
-    { LDpredicate_reads (Info.default_logic_info $2, $4, $7) }
-| PREDICATE IDENTIFIER LPAR parameters RPAR LBRACE lexpr RBRACE 
-    { LDpredicate_def (Info.default_logic_info $2, $4, $7) }
-| AXIOM IDENTIFIER COLON lexpr { LDaxiom ($2, $4) }
-| INVARIANT IDENTIFIER COLON lexpr { LDinvariant ($2, $4) }
+| PREDICATE IDENTIFIER label_parameters LPAR parameters RPAR 
+    { LDpredicate_reads (Info.default_logic_info $2, $5, []) }
+| PREDICATE IDENTIFIER label_parameters LPAR parameters RPAR READS locations 
+    { LDpredicate_reads (Info.default_logic_info $2, $5, $8) }
+| PREDICATE IDENTIFIER label_parameters LPAR parameters RPAR LBRACE lexpr RBRACE 
+    { LDpredicate_def (Info.default_logic_info $2, $5, $8) }
+| AXIOM IDENTIFIER label_parameters COLON lexpr { LDaxiom ($2, $5) }
+| DATA INVARIANT IDENTIFIER COLON lexpr { LDinvariant ($3,$5) }
 | TYPE IDENTIFIER { LDtype ($2, loc_i 2) }
 ;
 

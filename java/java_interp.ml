@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.91 2008-01-07 09:24:18 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.92 2008-01-11 12:43:45 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -808,9 +808,9 @@ let array_types decls =
        in
 	 (JCstruct_def (st.jc_struct_info_name, Some "Object",
 			st.jc_struct_info_fields, []) :: acc,
-	  JCfun_def (fi.jc_fun_info_return_type,
+	  JCfun_def (fi.jc_fun_info_result.jc_var_info_type,
 		     fi.jc_fun_info_name, [vi], spec, None) :: 
-	    JCfun_def (non_null_fi.jc_fun_info_return_type,
+	    JCfun_def (non_null_fi.jc_fun_info_result.jc_var_info_type,
 		       non_null_fi.jc_fun_info_name, [vi], non_null_spec, None) :: decls))
     Java_analysis.array_struct_table
     ([JCstruct_def("interface", None, [], [])],decls)

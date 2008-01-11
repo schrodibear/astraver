@@ -173,7 +173,8 @@ let rec iter_term f t =
   | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2) 
   | JCTrange(Some t1,Some t2) ->
       iter_term f t1; iter_term f t2
-  | JCTunary(_,t1) | JCTderef(t1,_) | JCTold t1 | JCToffset(_,t1,_)
+  | JCTunary(_,t1) | JCTderef(t1,_) | JCTold t1 | JCTat(t1,_) 
+  | JCToffset(_,t1,_)
   | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
   | JCTrange(None,Some t1) ->
       iter_term f t1
@@ -191,7 +192,8 @@ let rec fold_term f acc t =
   | JCTrange(Some t1,Some t2) ->
       let acc = fold_term f acc t1 in
       fold_term f acc t2
-  | JCTunary(_,t1) | JCTderef(t1,_) | JCTold t1 | JCToffset(_,t1,_)
+  | JCTunary(_,t1) | JCTderef(t1,_) | JCTold t1 | JCTat(t1,_) 
+  | JCToffset(_,t1,_)
   | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
   | JCTrange(None,Some t1) ->
       fold_term f acc t1
@@ -221,6 +223,8 @@ let rec map_term f t =
 	JCTapp { app with jc_app_args = List.map (map_term f) tl; }
     | JCTold t ->
 	JCTold(map_term f t)
+    | JCTat(t,lab) ->
+	JCTat(map_term f t,lab)
     | JCToffset(off,t,st) ->
 	JCToffset(off,map_term f t,st)
     | JCTinstanceof(t,st) ->
@@ -274,7 +278,7 @@ let rec iter_term_and_assertion ft fa a =
 	iter_term ft t1;
 	iter_term_and_assertion ft fa a1;
 	iter_term_and_assertion ft fa a2
-    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	iter_term_and_assertion ft fa a1
 
 let iter_term_and_assertion_in_loop_annot ft fa la =
@@ -302,7 +306,7 @@ let rec fold_assertion f acc a =
     | JCAimplies(a1,a2) | JCAiff(a1,a2) | JCAif(_,a1,a2) ->
 	let acc = fold_assertion f acc a1 in
 	fold_assertion f acc a2
-    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_assertion f acc a1
 
 let rec fold_term_in_assertion f acc a =
@@ -324,7 +328,7 @@ let rec fold_term_in_assertion f acc a =
 	let acc = fold_term f acc t1 in
 	let acc = fold_term_in_assertion f acc a1 in
 	fold_term_in_assertion f acc a2
-    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_term_in_assertion f acc a1
 
 let rec fold_term_and_assertion ft fa acc a =
@@ -346,7 +350,7 @@ let rec fold_term_and_assertion ft fa acc a =
 	let acc = fold_term ft acc t1 in
 	let acc = fold_term_and_assertion ft fa acc a1 in
 	fold_term_and_assertion ft fa acc a2
-    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 ->
+    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_term_and_assertion ft fa acc a1
   in
   fa acc a
@@ -372,6 +376,8 @@ let rec map_assertion f a =
 	JCAquantifier(q,vi,map_assertion f a1)
     | JCAold a1 ->
 	JCAold(map_assertion f a1)
+    | JCAat(a1,lab) ->
+	JCAat(map_assertion f a1,lab)
   in
   f { a with jc_assertion_node = anode; }
 
@@ -409,6 +415,8 @@ let rec map_term_in_assertion f a =
 	JCAquantifier(q,vi,map_term_in_assertion f a1)
     | JCAold a1 ->
 	JCAold(map_term_in_assertion f a1)
+    | JCAat(a1,lab) ->
+	JCAat(map_term_in_assertion f a1,lab)
   in
   { a with jc_assertion_node = anode; }
 
@@ -446,6 +454,8 @@ let rec map_term_in_assertion f a =
 	JCAquantifier(q,vi,map_term_in_assertion f a1)
     | JCAold a1 ->
 	JCAold(map_term_in_assertion f a1)
+    | JCAat(a1,lab) ->
+	JCAat(map_term_in_assertion f a1,lab)
   in
   { a with jc_assertion_node = anode; }
 

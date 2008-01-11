@@ -34,6 +34,7 @@ open Jc_iterators
 open Output
 open Jc_region
 open Jc_name
+open Jc_interp_misc
 
 (* other modifications for this extension can be found in:
      ast, typing, norm, interp: about pack / unpack, and mutable
@@ -58,49 +59,6 @@ mutable and committed.
      Arrays and global invariant.
 *)
 
-(********)
-(* Misc *)
-(********)
-
-(* same as in jc_interp.ml *)
-let tag_name st = st.jc_struct_info_name ^ "_tag"
-
-(* same as in jc_interp.ml *)
-let simple_logic_type s =
-  { logic_type_name = s; logic_type_args = [] }
-
-(* same as in jc_interp.ml *)
-let logic_params li l =
-  let l =
-    FieldRegionSet.fold
-      (fun (fi,r) acc -> (LVar(field_region_memory_name(fi,r)))::acc)
-      li.jc_logic_info_effects.jc_effect_memories
-      l	    
-  in
-  let l = 
-    StringRegionSet.fold
-      (fun (a,r) acc -> (LVar(alloc_region_table_name(a,r))::acc))
-      li.jc_logic_info_effects.jc_effect_alloc_table
-      l
-  in
-  StringSet.fold
-    (fun v acc -> (LVar (v ^ "_tag_table"))::acc)
-    li.jc_logic_info_effects.jc_effect_tag_table
-    l	    
-
-(* same as in jc_interp.ml *)
-let make_logic_fun_call li l =
-  let params = logic_params li l in
-  LApp(li.jc_logic_info_name,params)
-
-(* same as in jc_interp.ml *)
-let make_logic_pred_call li l =
-  let params = logic_params li l in
-  LPred(li.jc_logic_info_name,params)
-
-(* will be set by jc_interp.ml (defining modules recursively is not possible in separate files) *)
-let memory_field' = ref (fun _ -> raise (Failure "memory_field in jc_invariants.ml should be set by jc_interp.ml"))
-let memory_field x = !memory_field' x
 
 let prop_type = simple_logic_type "prop"
 
@@ -133,23 +91,6 @@ let tag_table_type root = {
   ]
 }
 
-let logic_info_reads acc li =
-  let acc =
-    FieldRegionSet.fold
-      (fun (fi,r) acc -> StringSet.add (field_region_memory_name(fi,r)) acc)
-      li.jc_logic_info_effects.jc_effect_memories
-      acc
-  in
-  let acc =
-    StringRegionSet.fold
-      (fun (a,r) acc -> StringSet.add (alloc_region_table_name(a,r)) acc)
-      li.jc_logic_info_effects.jc_effect_alloc_table
-      acc
-  in
-  StringSet.fold
-    (fun v acc -> StringSet.add (v^"_tag_table") acc)
-    li.jc_logic_info_effects.jc_effect_tag_table
-    acc
 
 (* returns (inv, reads) where i is the assertion of the invariants of the structure
 and r is a StringSet of the "reads" needed by these invariants *)
@@ -298,7 +239,7 @@ let term this t =
     | JCTif (_, _, _) -> assert false (* TODO *)
     | JCTapp app ->
 	let id = app.jc_app_fun in
-	if not (FieldRegionSet.is_empty id.jc_logic_info_effects.jc_effect_memories) 
+	if not (FieldRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories) 
 	then
 	  Jc_typing.typing_error t.jc_term_loc
 	    "this call is not allowed in structure invariant"
@@ -320,9 +261,10 @@ let rec assertion this p =
     | JCAinstanceof(t,_)
     | JCAbool_term t -> term this t
     | JCAold p -> assertion this p
+    | JCAat(p,_) -> assertion this p
     | JCAquantifier(_,id, p) -> assertion this p
     | JCAapp (id, l) ->
-	if FieldRegionSet.is_empty id.jc_logic_info_effects.jc_effect_memories
+	if FieldRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) l
 	else
 	  Jc_typing.typing_error p.jc_assertion_loc
@@ -376,6 +318,7 @@ let rec assertion_memories aux a = match a.jc_assertion_node with
   | JCArelation(t1,_,t2) -> term_memories (term_memories aux t1) t2
   | JCAnot a
   | JCAold a
+  | JCAat(a,_)
   | JCAquantifier(_,_, a) -> assertion_memories aux a
   | JCAapp(_, l) -> List.fold_left term_memories aux l
   | JCAinstanceof(t, _)
@@ -410,8 +353,8 @@ let struct_inv_memories acc st =
 (* Returns the parameters needed by an invariant, "this" not included *)
 let invariant_params acc li =
   let acc =
-    FieldRegionSet.fold
-      (fun (fi,r) acc -> 
+    FieldRegionMap.fold
+      (fun (fi,r) labels acc -> 
 	 (field_region_memory_name(fi,r), memory_field fi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc

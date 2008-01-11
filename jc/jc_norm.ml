@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.66 2008-01-03 08:17:44 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.67 2008-01-11 12:43:45 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -492,7 +492,7 @@ let rec expr e =
     
 and call lab loc f el ~binder ll = 
   if binder then
-    let tmp = newvar f.jc_fun_info_return_type in
+    let tmp = newvar f.jc_fun_info_result.jc_var_info_type in
     let stat = make_call lab loc (Some tmp) f el (make_block loc []) in
       (* [tmp] will be declared in a post-treatement of the calls generated *)
       ((List.flatten ll)@[stat], []), Some tmp
