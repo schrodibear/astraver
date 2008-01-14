@@ -1,6 +1,7 @@
 
 Note: These are the changes for Caduceus.
 
+ o local static variables: fixed bug with global and local declaration
  o C preprocessing: fixed bug with #include and preprocessing in //@ comments
 
 version 1.10, December 20th, 2007

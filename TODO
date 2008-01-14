@@ -31,6 +31,8 @@ CADUCEUS
 
  - struct forward reference: breaks Cenv.eq_type (e.g. line 27)
 
+ - allowing invariants for local static variables
+
 WHY FEATURES
 ============
 
