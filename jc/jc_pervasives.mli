@@ -1,9 +1,3 @@
-
-
-
-
-
-
 (* types *)
 
 val integer_type : Jc_env.jc_type
@@ -46,6 +40,10 @@ val field_sinfo : Jc_env.field_info -> Jc_env.struct_info
 val field_bounds : Jc_env.field_info -> Num.num * Num.num
 val embedded_struct_roots : Jc_env.struct_info -> string list
 
+val root_name : Jc_env.struct_info -> string
+val field_root_name : Jc_env.field_info -> string
+val struct_variant : Jc_env.struct_info -> Jc_env.variant_info
+
 (* predefined functions *)
 
 val true_assertion : Jc_ast.assertion
@@ -58,7 +56,6 @@ val default_behavior : Jc_ast.behavior
 val empty_fun_effect : Jc_fenv.fun_effect
 val empty_effects : Jc_fenv.effect
 
-
 (* terms *)
 
 val term_no_loc :  Jc_ast.term_node -> Jc_env.jc_type -> Jc_ast.term
@@ -69,7 +66,6 @@ val raw_term_compare : Jc_ast.term -> Jc_ast.term -> int
 val zerot : Jc_ast.term
 val minusonet : Jc_ast.term
 val nullt : Jc_ast.term
-
 
 (* assertions *)
 
@@ -89,7 +85,6 @@ val is_arithmetic_binary_op : Jc_ast.bin_op -> bool
 val is_logical_unary_op : Jc_ast.unary_op -> bool
 val is_arithmetic_unary_op : Jc_ast.unary_op -> bool
 val is_constant_assertion : Jc_ast.assertion -> bool
-
 
 (* fun specs *)
 

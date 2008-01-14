@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.93 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.94 2008-01-14 15:26:30 bardou Exp $ *)
 
 open Format
 open Jc_output
@@ -202,12 +202,26 @@ let tr_base_type t =
 
 (*s class types *)
 
+let rec object_variant = {
+  jc_variant_info_name = "Object";
+  jc_variant_info_roots = [ object_root ];
+}
+
+and object_root = {
+  jc_struct_info_name = "Object";
+  jc_struct_info_parent = None;
+  jc_struct_info_root = object_root;
+  jc_struct_info_fields = [];
+  jc_struct_info_variant = Some object_variant;
+}
+
 let get_class ci =
   {
     jc_struct_info_name = ci.class_info_name;
     jc_struct_info_parent = None;
-    jc_struct_info_root = "Object";
+    jc_struct_info_root = object_root;
     jc_struct_info_fields = [];
+    jc_struct_info_variant = Some object_variant;
   }
 
 (*
@@ -220,12 +234,21 @@ let get_interface ii =
   }
 *)
 
+let rec interface_root = {
+  jc_struct_info_name = "interface";
+  jc_struct_info_parent = None;
+  jc_struct_info_root = interface_root;
+  jc_struct_info_fields = [];
+  jc_struct_info_variant = Some object_variant;
+}
+
 let st_interface = 
   {
     jc_struct_info_name = "interface";
     jc_struct_info_parent = None;
-    jc_struct_info_root = "interface";
+    jc_struct_info_root = interface_root;
     jc_struct_info_fields = [];
+    jc_struct_info_variant = Some object_variant;
   }
 
 (*s array types *)
@@ -728,8 +751,9 @@ let array_types decls =
 	 {
 	   jc_struct_info_name = s;
 	   jc_struct_info_parent = None;
-	   jc_struct_info_root = "Object";
+	   jc_struct_info_root = object_root;
 	   jc_struct_info_fields = [];
+	   jc_struct_info_variant = Some object_variant;
 	 }
        in
        let fi =
@@ -737,7 +761,7 @@ let array_types decls =
 	   jc_field_info_final_name = f;
 	   jc_field_info_tag = 0 (* TODO *);
 	   jc_field_info_type = tr_type Loc.dummy_position t;
-	   jc_field_info_root = s;
+	   jc_field_info_root = object_root;
 	   jc_field_info_struct = st;
 	   jc_field_info_rep = false;
 	 }
@@ -820,7 +844,11 @@ let array_types decls =
 	    JCfun_def (non_null_fi.jc_fun_info_result.jc_var_info_type,
 		       non_null_fi.jc_fun_info_name, [vi], non_null_spec, None) :: decls))
     Java_analysis.array_struct_table
-    ([JCstruct_def("interface", None, [], [])],decls)
+    ([
+       JCstruct_def("interface", None, [], []);
+       JCvariant_type_def("interface", [ "interface" ]);
+       JCvariant_type_def("Object", [ "Object" ]);
+     ],decls)
       
 
 (*****************
@@ -1017,15 +1045,10 @@ let rec expr ?(reg=false) e =
 	    begin
 	      match e1.java_expr_type with
 		| JTYclass _ | JTYinterface _ -> 
-		    let st = {
-		      jc_struct_info_name = "Object";
-		      jc_struct_info_parent = None;
-		      jc_struct_info_root = "Object";
-		      jc_struct_info_fields = []; }
-		    in
-		      JCTEunary (Jc_ast.Unot, 
-				 dummy_loc_expr Jc_pervasives.boolean_type 
-				   (JCTEcall (non_null_fun st, [e])))
+		    let st = object_root in
+		    JCTEunary (Jc_ast.Unot, 
+			       dummy_loc_expr Jc_pervasives.boolean_type 
+				 (JCTEcall (non_null_fun st, [e])))
 		| JTYarray t ->
 		    let st = get_array_struct e1.java_expr_loc t in
 		      JCTEunary (Jc_ast.Unot, 
@@ -1039,13 +1062,8 @@ let rec expr ?(reg=false) e =
 	    begin
 	      match e1.java_expr_type with
 		| JTYclass _ | JTYinterface _ -> 
-		    let st = {
-		      jc_struct_info_name = "Object";
-		      jc_struct_info_parent = None;
-		      jc_struct_info_root = "Object";
-		      jc_struct_info_fields = []; }
-		    in
-		      JCTEcall (non_null_fun st, [e])
+		    let st = object_root in
+		    JCTEcall (non_null_fun st, [e])
 		| JTYarray t ->
 		    let st = get_array_struct e1.java_expr_loc t in
 		      JCTEcall (non_null_fun st, [e])

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.156 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.157 2008-01-14 15:26:30 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -54,6 +54,7 @@ let enum_conversion_logic_functions_table = Hashtbl.create 97
 *)
 
 let structs_table = Hashtbl.create 97
+let variants_table = Hashtbl.create 97
 
 let mutable_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
 let committed_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
@@ -77,7 +78,7 @@ let create_mutable_field st =
     jc_field_info_name = name;
     jc_field_info_final_name = Jc_envset.get_unique_name name;
     jc_field_info_type = boolean_type;
-    jc_field_info_root = st.jc_struct_info_name;
+    jc_field_info_root = st.jc_struct_info_root;
     jc_field_info_struct = st;
     jc_field_info_rep = false;
   } in
@@ -88,6 +89,11 @@ let find_struct_info loc id =
     let st,_ = Hashtbl.find structs_table id in st
   with Not_found ->
     typing_error loc "undeclared structure %s" id
+
+let find_struct_variant st =
+  match st.jc_struct_info_root.jc_struct_info_variant with
+    | None -> raise Not_found
+    | Some vi -> vi
 
 let is_numeric t =
   match t with
@@ -146,7 +152,7 @@ let comparable_types t1 t2 =
     | JCTnative Tinteger, JCTenum _ -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
     | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
-	  s1.jc_struct_info_root = s2.jc_struct_info_root
+	  s1.jc_struct_info_root == s2.jc_struct_info_root
     | JCTnull, JCTnull -> true
     | JCTnull, JCTpointer _
     | JCTpointer _, JCTnull -> true
@@ -168,11 +174,12 @@ let rec find_field_struct loc st allow_mutable = function
 	  if x = "mutable" then mutable_fields_table
 	  else committed_fields_table
 	in
-	Hashtbl.find table st.jc_struct_info_root
+	Hashtbl.find table (root_name st)
       else typing_error loc "field %s cannot be used here" x
   | f ->
       try
-	list_assoc_name (fun f -> f.jc_field_info_name) f st.jc_struct_info_fields
+	list_assoc_name
+	  (fun f -> f.jc_field_info_name) f st.jc_struct_info_fields
       with Not_found ->
 	match st.jc_struct_info_parent with
 	  | None -> 
@@ -184,6 +191,7 @@ let rec find_field_struct loc st allow_mutable = function
 let find_field loc ty f allow_mutable =
   match ty with
     | JCTpointer(st,_,_) -> find_field_struct loc st allow_mutable f
+    | JCTvariant_pointer _
     | JCTnative _ 
     | JCTenum _
     | JCTlogic _
@@ -200,8 +208,17 @@ let type_type t =
   match t.jc_ptype_node with
     | JCPTnative n -> JCTnative n
     | JCPTpointer (id, a, b) -> 
-	let st = find_struct_info t.jc_ptype_loc id in
-	JCTpointer(st, a, b)
+	(* first we try the most precise type (the tag) *)
+	begin try
+	  let st, _ = Hashtbl.find structs_table id in
+	  JCTpointer(st, a, b)
+	with Not_found ->
+	  try
+	    let vi = Hashtbl.find variants_table id in
+	    JCTvariant_pointer(vi, a, b)
+	  with Not_found ->
+	    typing_error t.jc_ptype_loc "unknown type or tag: %s" id
+	end
     | JCPTidentifier id -> 
 	try
 	  let _ = Hashtbl.find logic_type_table id in
@@ -746,10 +763,12 @@ let make_rel_bin_op loc op e1 e2 =
 
 let tag env hierarchy t =
   let check_hierarchy loc st =
-    if hierarchy <> "" && st.jc_struct_info_root != hierarchy then
-      typing_error loc
-	"this is in the hierarchy of %s, while it should be in the hierarchy of %s"
-	st.jc_struct_info_root hierarchy
+    if hierarchy <> "" &&
+      root_name st != hierarchy then
+	typing_error loc
+	  "this is in the hierarchy of %s, while it should be in the hierarchy \
+of %s"
+	  (root_name st) hierarchy
   in
   let tt = match t.jc_ptag_node with
     | JCPTtag id ->
@@ -938,7 +957,7 @@ let rec assertion env e =
 	    | JCTpointer(st, _, _) -> st
 	    | _ -> typing_error e.jc_pexpr_loc "pointer expression expected"
 	  in
-	  let tt = tag env te_st.jc_struct_info_root t in
+	  let tt = tag env (root_name te_st) t in
 	  JCAmutable(te, te_st, tt)
       | JCPEtagequality(tag1, tag2) ->
 	  let ttag1 = tag env "" tag1 in
@@ -948,18 +967,21 @@ let rec assertion env e =
 	    | JCTbottom, JCTtag st
 	    | JCTtag st, JCTbottom
 	    | JCTbottom, JCTtypeof(_, st)
-	    | JCTtypeof(_, st), JCTbottom -> Some st.jc_struct_info_root
+	    | JCTtypeof(_, st), JCTbottom -> Some (root_name st)
 	    | JCTtag st1, JCTtag st2
 	    | JCTtypeof(_, st1), JCTtag st2
 	    | JCTtag st1, JCTtypeof(_, st2)
 	    | JCTtypeof(_, st1), JCTtypeof(_, st2) ->
-		if st1.jc_struct_info_root <> st2.jc_struct_info_root then
-		  typing_error e.jc_pexpr_loc "the hierarchy %s and %s are different"
-		    st1.jc_struct_info_root st2.jc_struct_info_root
+		if st1.jc_struct_info_root != st2.jc_struct_info_root then
+		  typing_error e.jc_pexpr_loc "the hierarchy %s and %s are \
+different"
+		    (root_name st1)
+		    (root_name st2)
 		else
-		  Some st1.jc_struct_info_root
+		  Some (root_name st1)
 	  in
-	  JCAtagequality(ttag1, ttag2, st)
+	  JCAtagequality(
+	    ttag1, ttag2, st)
 
   in { jc_assertion_node = te;
        jc_assertion_label = !lab;
@@ -1708,12 +1730,14 @@ let rec statement env lz s =
 		let from_t = match t with
 		  | Some t -> find_struct_info t.jc_identifier_loc t.jc_identifier_name
 		  | None -> (*st*)
-		      { 
+		      let rec res = {
 			jc_struct_info_name = "bottom";
 			jc_struct_info_parent = None;
-			jc_struct_info_root = "";
+			jc_struct_info_root = res;
 			jc_struct_info_fields = [];
+			jc_struct_info_variant = None;
 		      }
+		      in res
 		in
 		JCTSunpack(st, te, from_t), lz
 	    | _ ->
@@ -1862,7 +1886,8 @@ let rec location_set env e =
 	  try
 	    let vi = List.assoc id env in 
 	    match vi.jc_var_info_type with
-	      | JCTpointer(st,_,_) ->
+	      | JCTpointer(_,_,_)
+	      | JCTvariant_pointer _ ->
 		  vi.jc_var_info_type,vi.jc_var_info_region,JCLSvar(vi)
 	      | _ -> assert false
 	  with Not_found -> 
@@ -2046,35 +2071,41 @@ let field st root (rep, t, id) =
 let axioms_table = Hashtbl.create 17
 let global_invariants_table = Hashtbl.create 17
 
-let add_typedecl d (id,parent) =
+(*let add_typedecl d (id, parent) =
   let root,par = 
     match parent with
       | None -> 
-	  (id,None)
+	  (None, None)
       | Some p ->
 	  let st = find_struct_info d.jc_pdecl_loc p in
-	  (st.jc_struct_info_root,Some st)
+	  (Some st.jc_struct_info_root, Some st)
   in
-  let struct_info =
+  let struct_info, root =
     try
       let struct_info,_ = Hashtbl.find structs_table id in
+      let root = match root with
+	| Some x -> x
+	| None -> struct_info
+      in
       struct_info.jc_struct_info_root <- root;
       struct_info.jc_struct_info_parent <- par;
-      struct_info
+      struct_info, root
     with Not_found ->
-      let struct_info =
+      assert false (* cannot happen, thanks to the function decl_declare *)
+(*      let rec struct_info =
 	{ jc_struct_info_name = id;
 	  jc_struct_info_fields = [];
 	  jc_struct_info_parent = par;
-	  jc_struct_info_root = root;
+	  jc_struct_info_root = struct_info;
+	  jc_struct_info_variant = None;
 	}
       in
       (* adding structure name in global environment before typing 
 	 the fields, because of possible recursive definition *)
       Hashtbl.replace structs_table id (struct_info,[]);
-      struct_info
+      struct_info, struct_info*)
   in
-  root,struct_info
+  root, struct_info*)
 
 let add_fundecl (ty,loc,id,pl) =
   try
@@ -2154,6 +2185,45 @@ let type_range_of_term ty t =
  	  Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr] *)
     | _ -> true_assertion
 
+(* First pass: declare everything with no typing
+ * (use dummy values that will be replaced by "decl")
+ * (declare identifiers so that previous definitions can (possibly recursively)
+ * use them) *)
+(*let rec decl_declare d =
+  match d.jc_pdecl_node with
+    | JCPDtag(id, parent, fields, inv) ->
+	(* declare structure name *)
+	let rec struct_info = {
+	  jc_struct_info_name = id;
+	  jc_struct_info_fields = [];
+	  jc_struct_info_parent = None;
+	  jc_struct_info_root = struct_info;
+	  jc_struct_info_variant = None;
+	} in
+	Hashtbl.add structs_table id (struct_info, []);
+	(* declare mutable field (if needed) *)
+	if parent = None && !Jc_common_options.inv_sem = InvOwnership then
+	  create_mutable_field struct_info;
+	(* TODO: declare fields *)
+        (* TODO: declare invariants *)
+	Hashtbl.replace structs_table id (struct_info, [])
+    | JCPDvarianttype(id, _) ->
+	Hashtbl.replace variants_table id {
+	  jc_variant_info_name = id;
+	  jc_variant_info_roots = [];
+	}
+    | JCPDvar _
+    | JCPDfun _
+    | JCPDrecfuns _
+    | JCPDenumtype _
+    | JCPDlogictype _
+    | JCPDaxiom _
+    | JCPDexception _
+    | JCPDlogic _
+    | JCPDglobinv _ ->
+	() (* TODO *)
+*)
+
 let rec decl d =
   match d.jc_pdecl_node with
     | JCPDvar (ty, id, init) ->
@@ -2222,34 +2292,38 @@ let rec decl d =
 	Hashtbl.add enum_conversion_functions_table to_int_ id;
 	Hashtbl.add enum_conversion_functions_table of_int id
 *)
-    | JCPDstructtype (id, parent, fields, inv) ->
-	(* mutable field *)
-	(* adding structure name in global environment before typing 
-	   the fields, because of possible recursive definition *)
-	let root, struct_info = add_typedecl d (id, parent) in
-	  if parent = None && !Jc_common_options.inv_sem = InvOwnership 
-	  then create_mutable_field struct_info;
-	  let env = List.map (field struct_info root) fields in
-	  struct_info.jc_struct_info_fields <- env;
-	    (* declare invariants as logical functions *)
-	    let invariants =
-	      List.fold_left
-		(fun acc (id, x, e) ->
-		   if !Jc_common_options.inv_sem = InvNone then
-		   typing_error id.jc_identifier_loc "use of structure invariants requires declaration of an invariant policy";
-		   let vi = var (JCTpointer (struct_info, Some zero, Some zero)) x in
-		   let p = assertion [(x, vi)] e in
-		   let pi = make_rel id.jc_identifier_name in
-		     pi.jc_logic_info_parameters <- [vi];
-		     Hashtbl.replace logic_functions_table 
-		       pi.jc_logic_info_tag (pi, JCAssertion p);
-		     Hashtbl.replace logic_functions_env id.jc_identifier_name pi;
-		     (pi, p) :: acc)
-		[]
-		inv
-	    in 
-	      Hashtbl.replace structs_table id (struct_info, invariants)
-    | JCPDrectypes(pdecls) ->
+
+    | JCPDtag(id, parent, fields, inv) ->
+	let struct_info, _ = Hashtbl.find structs_table id in
+	let root = struct_info.jc_struct_info_root in
+	(* fields *)
+	let env = List.map (field struct_info root) fields in
+	struct_info.jc_struct_info_fields <- env;
+        (* declare invariants as logical functions *)
+	let invariants =
+	  List.fold_left
+	    (fun acc (id, x, e) ->
+	       if !Jc_common_options.inv_sem = InvNone then
+		 typing_error id.jc_identifier_loc
+		   "use of structure invariants requires declaration \
+of an invariant policy";
+	       let vi =
+		 var (JCTpointer (struct_info, Some zero, Some zero)) x in
+	       let p = assertion [(x, vi)] e in
+	       let pi = make_rel id.jc_identifier_name in
+	       pi.jc_logic_info_parameters <- [vi];
+	       Hashtbl.replace logic_functions_table 
+		 pi.jc_logic_info_tag (pi, JCAssertion p);
+	       Hashtbl.replace logic_functions_env id.jc_identifier_name pi;
+	       (pi, p) :: acc)
+	    []
+	    inv
+	in 
+	Hashtbl.replace structs_table id (struct_info, invariants)
+
+    | JCPDvarianttype(id, tags) -> ()
+
+(*    | JCPDrectypes(pdecls) ->
         (* first pass: adding structure names *)
 	List.iter (fun d -> match d.jc_pdecl_node with
 		     | JCPDstructtype(id,_,_,_) ->
@@ -2267,7 +2341,8 @@ let rec decl d =
 		     | _ -> assert false
 		  ) pdecls;
         (* third pass: typing invariants *)
-	List.iter decl pdecls
+	List.iter decl pdecls*)
+
     | JCPDlogictype(id) ->
 	begin 
 	  try
@@ -2328,6 +2403,89 @@ let rec decl d =
 	      else JCTerm t
 	in
 	Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t)
+
+let declare_struct_info d = match d.jc_pdecl_node with
+  | JCPDtag(id, parent, _, _) ->
+      let rec si = {
+	jc_struct_info_name = id;
+	jc_struct_info_fields = [];
+	jc_struct_info_parent = None;
+	jc_struct_info_root = si;
+	jc_struct_info_variant = None;
+      } in
+      Hashtbl.add structs_table id (si, []);
+      (* declare the "mutable" field (if needed) *)
+      if parent = None && !Jc_common_options.inv_sem = InvOwnership then
+	create_mutable_field si
+  | _ -> ()
+
+let compute_struct_info_parent d = match d.jc_pdecl_node with
+  | JCPDtag(id, Some parent, _, _) ->
+      let si, _ = Hashtbl.find structs_table id in
+      let psi, _ = Hashtbl.find structs_table parent in
+      si.jc_struct_info_parent <- Some psi
+  | _ -> ()
+
+let fixpoint_struct_info_roots () =
+  let modified = ref false in
+  Hashtbl.iter
+    (fun _ (si, _) ->
+       match si.jc_struct_info_parent with
+	 | Some psi ->
+	     if si.jc_struct_info_root != psi.jc_struct_info_root then begin
+	       si.jc_struct_info_root <- psi.jc_struct_info_root;
+	       modified := true
+	     end
+	 | None -> ())
+    structs_table;
+  !modified
+
+let type_variant d = match d.jc_pdecl_node with
+  | JCPDvarianttype(id, tags) ->
+      (* declare the variant *)
+      let vi = {
+	jc_variant_info_name = id;
+	jc_variant_info_roots = [];
+      } in
+      Hashtbl.add variants_table id vi;
+      (* tags *)
+      let roots = List.map
+	(fun tag ->
+	   (* find the structure *)
+	   let st, _ = try
+	     Hashtbl.find structs_table tag.jc_identifier_name
+	   with Not_found ->
+	     typing_error tag.jc_identifier_loc
+	       "undefined tag: %s" tag.jc_identifier_name
+	   in
+	   (* the structure must be root *)
+	   if st.jc_struct_info_parent <> None then
+	     typing_error tag.jc_identifier_loc
+	       "the tag %s is not root" tag.jc_identifier_name;
+	   (* the structure must not be used by another variant *)
+	   match st.jc_struct_info_variant with
+	     | None ->
+		 (* update the structure variant and return the root *)
+		 st.jc_struct_info_variant <- Some vi;
+		 st
+	     | Some prev -> typing_error tag.jc_identifier_loc
+		 "tag %s is already used by type %s" tag.jc_identifier_name
+		   prev.jc_variant_info_name)
+	tags
+      in
+      (* update the variant *)
+      vi.jc_variant_info_roots <- roots
+  | _ -> ()
+
+(* type declarations in the right order *)
+let type_file ast =
+  (* records and variants *)
+  List.iter declare_struct_info ast;
+  List.iter compute_struct_info_parent ast;
+  while fixpoint_struct_info_roots () do () done;
+  List.iter type_variant ast;
+  (* remaining declarations *)
+  List.iter decl ast
 
 (*
 Local Variables: 

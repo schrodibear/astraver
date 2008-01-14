@@ -26,11 +26,11 @@ type realT = { real r; }
 type packet_uni = {
 }
 
-type packet_uni_int = packet_uni with {
+tag packet_uni_int = packet_uni with {
     integer val1;
 }
 
-type packet_uni_float = packet_uni with {
+tag packet_uni_float = packet_uni with {
     real val2;
 }
 

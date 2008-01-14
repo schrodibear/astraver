@@ -7,7 +7,7 @@ type A = {
     invariant is_b_inv(this) = this.is_b ==> this <: B;
 }
 
-and type B = A with {
+tag B = A with {
     integer j;
 }
 

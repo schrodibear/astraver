@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.86 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.87 2008-01-14 15:26:30 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -51,11 +51,11 @@ let main () =
 	| [f] ->
 	    (* phase 1 : parsing *)
 	    let ast = parse_file f in
-	      (* phase 2 : typing *)
+            (* phase 2 : typing *)
 	    Jc_options.lprintf "Typing@.";
-	      List.iter Jc_typing.decl ast;
-	      (* phase 3 : normalization *)
-	      (*
+	    Jc_typing.type_file ast;
+	    (* phase 3 : normalization *)
+	    (*
 		Hashtbl.iter (fun tag x ->
 		Hashtbl.add Jc_typing.logic_type_table tag x)
 		Jc_typing.logic_type_table;
@@ -63,20 +63,20 @@ let main () =
 		(fun tag (f,t) -> 
 		Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
 		Jc_typing.logic_functions_table;
-	      *)
-	      let vil = 
-		Hashtbl.fold
-		  (fun tag (vi, eo) acc ->
-		     let vi, eo = Jc_norm.static_variable (vi, eo) in 
-		       Hashtbl.add Jc_norm.variables_table tag (vi, eo);
-		       vi :: acc)
-		  Jc_typing.variables_table []
-	      in
-	      Hashtbl.iter
-		(fun tag (f,loc,s,b) -> 
-		   let (s,b) = Jc_norm.code_function (f, s, b) vil in
-		   Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
-		Jc_typing.functions_table;
+	    *)
+	    let vil = 
+	      Hashtbl.fold
+		(fun tag (vi, eo) acc ->
+		   let vi, eo = Jc_norm.static_variable (vi, eo) in 
+		   Hashtbl.add Jc_norm.variables_table tag (vi, eo);
+		   vi :: acc)
+		Jc_typing.variables_table []
+	    in
+	    Hashtbl.iter
+	      (fun tag (f,loc,s,b) -> 
+		 let (s,b) = Jc_norm.code_function (f, s, b) vil in
+		 Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
+	      Jc_typing.functions_table;
 	      (*
 	Hashtbl.iter 
 	  (fun tag (si,l) -> 
@@ -187,6 +187,12 @@ let main () =
 	      d_types
 	  in	       	  
 	  let d_memories =
+	    Hashtbl.fold
+	      (fun _ -> Jc_interp.tr_variant)
+	      Jc_typing.variants_table
+	      d_memories
+	  in
+	  let d_memories =
 	    Hashtbl.fold 
 	      (fun _ (v,e) acc ->
 		 Jc_interp.tr_variable v e acc)
@@ -211,7 +217,7 @@ let main () =
 		  if RegionSet.mem r regions then acc else
 		    Jc_interp.tr_region r acc 
 		in
-		Jc_interp.tr_alloc_table (a,r) acc,RegionSet.add r regions)
+		Jc_interp.tr_alloc_table2 (a,r) acc,RegionSet.add r regions)
 	      (StringRegionSet.map_repr !Jc_effect.alloc_region_table_set)
 	      (d_memories,regions)
 	  in	       	  

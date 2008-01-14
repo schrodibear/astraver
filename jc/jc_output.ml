@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.76 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.77 2008-01-14 15:26:30 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -38,9 +38,11 @@ type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
       fun_spec * tstatement list option
   | JCenum_type_def of string * Num.num * Num.num
+  | JCvariant_type_def of string * string list
   | JCstruct_def of string * string option * field_info list *
       (string * var_info * assertion) list
   | JCrec_struct_defs of jc_decl list
+      (* deprecated, all tag definitions of a file are mutually recursive *)
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr option
   | JCaxiom_def of string * assertion
@@ -153,8 +155,7 @@ let rec term fmt t =
     | JCTapp app when List.length app.jc_app_args = 2 ->
 	let op = app.jc_app_fun in
 	let l = app.jc_app_args in
-	let t1 = List.hd l and t2 = List.nth l 1 in
-	(*
+(*	let t1 = List.hd l and t2 = List.nth l 1 in
 	  begin try
 	  let s = lbin_op op in
 	  fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
@@ -494,12 +495,20 @@ let rec print_decl fmt d =
     | JCenum_type_def(id,min,max) ->
 	fprintf fmt "@\n@[type %s = %s..%s@]@."
 	  id (Num.string_of_num min) (Num.string_of_num max)
+    | JCvariant_type_def(id, tags) ->
+	fprintf fmt "@\n@[type %s = [" id;
+	print_list
+	  (fun fmt () -> fprintf fmt " | ")
+	  (fun fmt tag -> fprintf fmt "%s" tag)
+	  fmt tags;
+	fprintf fmt "]@]@."
     | JCstruct_def (id, extends, fields, invs) ->
-	fprintf fmt "@\n@[<v 2>type %s = %a{%a%a@]@\n}@."
+	fprintf fmt "@\n@[<v 2>tag %s = %a{%a%a@]@\n}@."
 	  id print_super extends (print_list space field) fields 
 	  (print_list space invariant) invs
     | JCrec_struct_defs dlist | JCrec_fun_defs dlist ->
-	print_list (fun fmt () -> fprintf fmt "@\nand") print_decl fmt dlist
+	print_list (fun fmt () -> ()(*fprintf fmt "@\nand"*))
+	  print_decl fmt dlist
     | JCvar_def(ty,id,init) ->
 	fprintf fmt "@\n@[%a %s%a;@]@." print_type ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.47 2008-01-11 12:43:45 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.48 2008-01-14 15:26:30 bardou Exp $ i*)
 
 {
   open Jc_ast
@@ -141,6 +141,7 @@ rule token = parse
   | "requires"              { REQUIRES }
   | "return"                { RETURN }
   | "switch"                { SWITCH }
+  | "tag"                   { TAG }
   | "throw"                 { THROW }
   | "throws"                { THROWS }
   | "true"                  { CONSTANT (JCCboolean true) }
@@ -232,6 +233,7 @@ rule token = parse
   | "]"                     { RSQUARE }
   | "."                     { DOT }
   | ".."                    { DOTDOT }
+  | "..."                   { DOTDOTDOT }
   | "<:"                    { LTCOLON } 
   | ":>"                    { COLONGT } 
   | "&"                     { AMP }

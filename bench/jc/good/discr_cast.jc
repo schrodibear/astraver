@@ -33,11 +33,11 @@ type header = {
     invariant discr1(this) = this.discr == 1 ==> this <: packet2;
 }
 
-and type packet1 = header with {
+tag packet1 = header with {
     integer val1;
 }
 
-and type packet2 = header with {
+tag packet2 = header with {
     real val2;
 }
 

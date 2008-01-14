@@ -12,11 +12,11 @@ type Shape = {
 		   && (s.kind == 1 ==> s <: Rectangle);
 }
 
-and type Circle = Shape with {
+tag Circle = Shape with {
   real radius;
 }
 
-and type Rectangle = Shape with {
+tag Rectangle = Shape with {
   real length;
   real width;
 }

@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.76 2008-01-11 16:38:26 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.77 2008-01-14 15:26:30 bardou Exp $ */
 
 %{
 
@@ -64,8 +64,8 @@
 %token <string> STRING_LITERAL 
 %token NULL
 
-/* ( ) () { } [ ] .. */
-%token LPAR RPAR LPARRPAR LBRACE RBRACE LSQUARE RSQUARE DOTDOT
+/* ( ) () { } [ ] .. ... */
+%token LPAR RPAR LPARRPAR LBRACE RBRACE LSQUARE RSQUARE DOTDOT DOTDOTDOT
 
 /* ; , : . ? */
 %token SEMICOLON COMMA COLON DOT QUESTION
@@ -91,8 +91,8 @@
 /* pack unpack assert */
 %token PACK UNPACK ASSERT
 
-/* type invariant logic with variant and axiom */
-%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM
+/* type invariant logic with variant and axiom tag */
+%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM TAG
 
 /* integer boolean real unit void rep */
 %token INTEGER BOOLEAN REAL UNIT REP
@@ -171,13 +171,13 @@ file:
     { $1::$2 }
 | rec_decls file 
     { $1::$2 }
+| tag_and_type_decl file
+    { let tag, ty = $1 in tag::ty::$2 }
 | EOF 
     { [] }
 ;
 
 rec_decls:
-| type_rec_definitions %prec PRECTYPE
-    { locate_decl (JCPDrectypes($1)) }
 | function_rec_definitions %prec PRECTYPE
     { locate_decl (JCPDrecfuns($1)) }
 | logic_rec_definitions %prec PRECTYPE
@@ -187,6 +187,8 @@ decl:
 | variable_definition
     { $1 }
 | function_definition 
+    { $1 }
+| tag_definition 
     { $1 }
 | type_definition 
     { $1 }
@@ -209,20 +211,14 @@ decl:
 /* type definition */	      
 /*******************/
 
-type_rec_definitions:
-| type_definition AND type_rec_definitions %prec PRECTYPE
-    { $1::$3 }
-| type_definition AND type_definition %prec PRECTYPE
-    { $1::[$3] }
-
 type_definition:
 | TYPE IDENTIFIER EQ int_constant DOTDOT int_constant
     { locate_decl (JCPDenumtype($2,$4,$6)) }
-| TYPE IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
-    { let (f,i) = $6 in locate_decl (JCPDstructtype($2,$4,f,i)) }
 | LOGIC TYPE IDENTIFIER
     { locate_decl (JCPDlogictype($3)) }
-; 
+| TYPE IDENTIFIER EQ LSQUARE tag_list RSQUARE
+    { locate_decl (JCPDvarianttype($2, $5)) }
+;
 
 int_constant:
 | CONSTANT 
@@ -230,6 +226,22 @@ int_constant:
 | MINUS CONSTANT
     { Num.minus_num (num_of_constant (loc_i 2) $2) }
 ;
+
+tag_list:
+| identifier PIPE tag_list
+    { $1::$3 }
+| identifier
+    { [ $1 ] }
+;
+
+/******************/
+/* tag definition */
+/******************/
+
+tag_definition:
+| TAG IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
+    { let (f,i) = $6 in locate_decl (JCPDtag($2,$4,f,i)) }
+; 
 
 extends:
 | /* epsilon */
@@ -259,7 +271,20 @@ invariant:
     { ($2,$4,$7) }
 ;
 
+/********************************/
+/* tag and type syntactic suger */
+/********************************/
 
+tag_and_type_decl:
+| TYPE IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
+    { let (f,i) = $6 in
+      let id = {
+	jc_identifier_name = $2;
+	jc_identifier_loc = loc ();
+      } in
+      locate_decl (JCPDtag($2, $4, f, i)),
+      locate_decl (JCPDvarianttype($2, [id])) }
+;
 
 /***********************/
 /* Function definition */

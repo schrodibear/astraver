@@ -73,11 +73,11 @@ type T_MSG = {
                        && (msg.NATURE == 1 ==> msg <: T_2MSG41C);
 }
 
-and type T_1MSG16C = T_MSG with {
+tag T_1MSG16C = T_MSG with {
     char[0..15]            TEXTE ;
 } 
 
-and type T_2MSG41C = T_MSG with {
+tag T_2MSG41C = T_MSG with {
     char[0..40]            TEXTE1 ;
     char[0..40]            TEXTE2 ;
 } 

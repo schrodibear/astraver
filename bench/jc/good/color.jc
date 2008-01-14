@@ -10,7 +10,7 @@ type Point = {
 
 type color = 0..1
 
-type ColorPoint = Point with {
+tag ColorPoint = Point with {
   color c;
 }
 

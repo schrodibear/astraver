@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.70 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.71 2008-01-14 15:26:30 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -33,6 +33,12 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 open Jc_region
+
+let root_name st =
+  st.jc_struct_info_root.jc_struct_info_name
+
+let field_root_name fi =
+  fi.jc_field_info_root.jc_struct_info_name
 
 let string_of_native t =
   match t with
@@ -46,17 +52,21 @@ let print_type fmt t =
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
     | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
-    | JCTpointer (s,None,None) -> 
-	fprintf fmt "%s[..]" s.jc_struct_info_name
-    | JCTpointer (s,Some a,None) -> 
-	fprintf fmt "%s[%s..]" s.jc_struct_info_name (Num.string_of_num a)
-    | JCTpointer (s,None,Some b) -> 
-	fprintf fmt "%s[..%s]" s.jc_struct_info_name (Num.string_of_num b)
-    | JCTpointer (s,Some a,Some b) -> 
+    | JCTpointer ({ jc_struct_info_name = name }, None, None)
+    | JCTvariant_pointer ({ jc_variant_info_name = name }, None, None) ->
+	fprintf fmt "%s[..]" name
+    | JCTpointer ({ jc_struct_info_name = name }, Some a, None)
+    | JCTvariant_pointer ({ jc_variant_info_name = name }, Some a, None) ->
+	fprintf fmt "%s[%s..]" name (Num.string_of_num a)
+    | JCTpointer ({ jc_struct_info_name = name }, None, Some b)
+    | JCTvariant_pointer ({ jc_variant_info_name = name }, None, Some b) ->
+	fprintf fmt "%s[..%s]" name (Num.string_of_num b)
+    | JCTpointer ({ jc_struct_info_name = name }, Some a, Some b)
+    | JCTvariant_pointer ({ jc_variant_info_name = name }, Some a, Some b) ->
 	if Num.eq_num a b then
-	  fprintf fmt "%s[%s]" s.jc_struct_info_name (Num.string_of_num a)
+	  fprintf fmt "%s[%s]" name (Num.string_of_num a)
 	else
-	  fprintf fmt "%s[%s..%s]" s.jc_struct_info_name
+	  fprintf fmt "%s[%s..%s]" name
 	    (Num.string_of_num a) (Num.string_of_num b)
     | JCTnull -> fprintf fmt "(nulltype)"  
 
@@ -669,6 +679,9 @@ let field_bounds fi =
   match fi.jc_field_info_type with 
     | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
 
+let map_elements map =
+  StringMap.fold (fun _ i acc -> i::acc) map []
+
 let embedded_struct_roots st =
   let fields = embedded_struct_fields st in
   let structs = 
@@ -678,10 +691,21 @@ let embedded_struct_roots st =
   let structs = StructSet.elements structs in
   let roots = 
     List.fold_left 
-      (fun acc st -> StringSet.add st.jc_struct_info_root acc) 
+      (fun acc st -> StringSet.add (root_name st) acc) 
       StringSet.empty structs
   in
   StringSet.elements roots
+
+let struct_variant st =
+  match st.jc_struct_info_root.jc_struct_info_variant with
+    | Some vi -> vi
+    | None ->
+	raise (Invalid_argument
+		 ("struct_variant in jc_pervasives.ml ("
+		  ^st.jc_struct_info_name^", "
+		  ^st.jc_struct_info_root.jc_struct_info_name^")"))
+	(* don't use struct_variant before checking that every tag is used
+         * in a type *)
   
 (*
 Local Variables: 

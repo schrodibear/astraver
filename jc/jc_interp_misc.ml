@@ -8,11 +8,70 @@ open Jc_pervasives
 open Jc_iterators
 *)
 
+open Jc_pervasives
 open Jc_envset
+open Jc_env
 open Jc_fenv
 open Jc_region
 open Jc_name
 
+let struct_model_type2 name =
+  let st, _ = Hashtbl.find Jc_typing.structs_table name in
+  struct_model_type st
+
+let pointer_type st = 
+  {
+    logic_type_name = pointer_type_name;
+    logic_type_args = [struct_model_type st];
+  }
+
+let tag_table_type st = 
+  {
+    logic_type_name = tag_table_type_name;
+    logic_type_args = [struct_model_type st];
+  }
+
+let tag_id_type st = 
+  {
+    logic_type_name = tag_id_type_name;
+    logic_type_args = [struct_model_type st];
+  }
+
+let alloc_table_type st =
+  {
+    logic_type_name = alloc_table_type_name;
+    logic_type_args = [struct_model_type st];
+  }
+
+let tr_native_type t =
+  match t with
+    | Tunit -> "unit"
+    | Tboolean -> "bool"
+    | Tinteger -> "int"
+    | Treal -> "real"
+
+let tr_base_type t =
+  match t with
+    | JCTnative t -> simple_logic_type (tr_native_type t)
+    | JCTlogic s -> simple_logic_type s
+    | JCTenum ri -> 
+	simple_logic_type ri.jc_enum_info_name
+    | JCTpointer (st, a, b) ->
+	{ logic_type_name = pointer_type_name;
+	  logic_type_args = [struct_model_type st] }
+    | JCTvariant_pointer (vi, a, b) ->
+	{ logic_type_name = pointer_type_name;
+	  logic_type_args = [variant_model_type vi] }
+    | JCTnull -> assert false
+
+let memory_type t v =
+  { logic_type_name = memory_type_name;
+    logic_type_args = [t;v] }
+
+let memory_field fi =
+  memory_type 
+    (struct_model_type fi.jc_field_info_root)
+    (tr_base_type fi.jc_field_info_type)
 
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
   let l =
@@ -64,7 +123,8 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 		end
 	    | _ -> r
 	in
-	(alloc_region_table_name(a,r),alloc_table_type a)::acc)
+	let st, _ = Hashtbl.find Jc_typing.structs_table a in
+	(alloc_region_table_name (st, r), alloc_table_type st)::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
@@ -102,7 +162,9 @@ let logic_info_reads acc li =
   in
   let acc =
     StringRegionSet.fold
-      (fun (a,r) acc -> StringSet.add (alloc_region_table_name(a,r)) acc)
+      (fun (a,r) acc ->
+	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
+	 StringSet.add (alloc_region_table_name (st, r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -137,4 +199,42 @@ let logic_params li l =
     li.jc_logic_info_effects.jc_effect_tag_table
     l	    
 
+*)
+
+let stringmap_elements map =
+  StringMap.fold (fun _ i acc -> i::acc) map []
+
+(* The following functions should be eliminated eventually, but before,
+ * effect.ml must be redone.
+ * They are here, and not in Jc_name, so that Krakatoa do not depends on
+ * Jc_typing. *)
+
+let find_struct a =
+  fst (Hashtbl.find Jc_typing.structs_table a)
+
+let tag_table_name2 a =
+  tag_table_name (find_struct a)
+
+let alloc_table_name2 a =
+  alloc_table_name (find_struct a)
+
+let alloc_region_table_name2 (a, r) =
+  alloc_region_table_name (find_struct a, r)
+
+let mutable_name2 a =
+  mutable_name (find_struct a)
+
+let committed_name2 a =
+  committed_name (find_struct a)
+
+let alloc_table_type2 a =
+  {
+    logic_type_name = alloc_table_type_name;
+    logic_type_args = [struct_model_type (find_struct a)];
+  }
+
+(*
+Local Variables: 
+compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
+End: 
 *)

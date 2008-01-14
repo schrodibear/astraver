@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.68 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.69 2008-01-14 15:26:30 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -207,7 +207,7 @@ let make_decls loc sl tl =
 		   | Treal -> real_type, JCCreal "0.0"
 	       end
 	   | JCTenum _ ->  integer_type, JCCinteger "0"
-	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull
+	   | JCTnull | JCTpointer _ | JCTvariant_pointer _ -> JCTnull, JCCnull
 	   | JCTlogic _ -> assert false
        in
 	 make_decl loc vi (Some (make_const loc cst)) acc)

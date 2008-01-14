@@ -59,37 +59,7 @@ mutable and committed.
      Arrays and global invariant.
 *)
 
-
 let prop_type = simple_logic_type "prop"
-
-let memory_type st_type f_type = {
-  logic_type_name = "memory";
-  logic_type_args = [
-    simple_logic_type st_type;
-    f_type;
-  ];
-}
-
-let pointer_type st_type = {
-  logic_type_name = "pointer";
-  logic_type_args = [
-    simple_logic_type st_type;
-  ];
-}
-
-let tag_type root = {
-  logic_type_name = "tag_id";
-  logic_type_args = [
-    simple_logic_type root;
-  ];
-}
-
-let tag_table_type root = {
-  logic_type_name = "tag_table";
-  logic_type_args = [
-    simple_logic_type root
-  ]
-}
 
 
 (* returns (inv, reads) where i is the assertion of the invariants of the structure
@@ -113,27 +83,6 @@ let invariant_for_struct this st =
 let make_assume reads assume =
   BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, []))
 
-let mutable_name root_structure_name =
-  "mutable_"^root_structure_name
-
-let committed_name root_structure_name =
-  "committed_"^root_structure_name
-
-let fully_packed_name root =
-  "fully_packed_"^root
-
-let tag_table_name root =
-  root^"_tag_table"
-
-let alloc_table_name root =
-  root^"_alloc_table"
-
-let alloc_table_type a = {
-  logic_type_name = "alloc_table";
-  logic_type_args = [ simple_logic_type a ];
-}
-
-
 let make_subtag t u =
   LPred("subtag", [ t; u ])
 
@@ -155,8 +104,6 @@ let range_min = function
 let range_max = function
   | JCTpointer(_, _, x) -> x
   | _ -> failwith "range_max"
-
-let hierarchy_invariant_name h = "global_invariant_"^h
 
 (*let mutable_instance_of_name root_structure_name =
   (mutable_name root_structure_name)^"_instance_of"*)
@@ -335,15 +282,13 @@ Assumes the structures whose name is in acc have already been visited
 and won't be visited again. *)
 let rec all_structures st acc =
   if StringSet.mem st.jc_struct_info_name acc then acc else
-  begin
     List.fold_left
       (fun acc fi ->
 	 match fi.jc_field_info_type with
 	   | JCTpointer(st, _, _) -> all_structures st acc
 	   | _ -> acc)
       (StringSet.add st.jc_struct_info_name acc)
-      st.jc_struct_info_fields
-  end
+      st.jc_struct_info_fields   
 
 (* Returns all memories used by the structure invariants. *)
 let struct_inv_memories acc st =
@@ -365,7 +310,8 @@ let invariant_params acc li =
   let acc =
     StringRegionSet.fold
       (fun (a,r) acc -> 
-	(alloc_region_table_name(a,r),alloc_table_type a)::acc)
+	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
+	 (alloc_region_table_name (st, r), alloc_table_type st)::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -409,22 +355,24 @@ let function_structures params =
 
 let hierarchy_structures h =
   Hashtbl.fold
-    (fun _ (st, _) acc -> if st.jc_struct_info_root = h then st::acc else acc)
+    (fun _ (st, _) acc ->
+       (* don't use equality directly on st and h, as it might not terminate *)
+       (* we could use == instead though *)
+       if root_name st = root_name h then st::acc else acc)
     Jc_typing.structs_table
     []
   
-let structure_root st =
-  try
-    let st, _ = Hashtbl.find Jc_typing.structs_table st in
-    st.jc_struct_info_root
-  with Not_found -> failwith "Jc_invariants.structure_root"
-
 let hierarchies () =
   let h = Hashtbl.fold
-    (fun _ (st, _) acc -> StringSet.add st.jc_struct_info_root acc)
+    (fun _ (st, _) acc ->
+       StringMap.add (root_name st) st.jc_struct_info_root acc)
     Jc_typing.structs_table
-    StringSet.empty
-  in StringSet.elements h
+    StringMap.empty
+  in
+  StringMap.fold
+    (fun _ st acc -> st::acc)
+    h
+    []
 
 (* Returns every rep fields of a structure *)
 let rep_fields st =
@@ -506,24 +454,23 @@ let make_assume_all_assocs pp params =
 (***********)
 
 let mutable_memory_type root =
-  memory_type root (tag_type root)
+  memory_type (struct_model_type root) (tag_id_type root)
 
 let committed_memory_type root =
-  memory_type root (simple_logic_type "bool")
+  memory_type (struct_model_type root) (simple_logic_type "bool")
 
 let mutable_declaration st acc =
-  let root = st.jc_struct_info_root in
   if st.jc_struct_info_parent = None then
     (* mutable_T: T tag_id *)
     Param(
       false,
-      mutable_name st.jc_struct_info_name,
-      Ref_type(Base_type (mutable_memory_type root)))
+      mutable_name st,
+      Ref_type(Base_type (mutable_memory_type st)))
     (* committed_T: bool *)
     ::Param(
       false,
-      committed_name st.jc_struct_info_name,
-      Ref_type(Base_type (committed_memory_type root)))
+      committed_name st,
+      Ref_type(Base_type (committed_memory_type st)))
     ::acc
   else
     acc
@@ -539,7 +486,7 @@ let assert_mutable e fi =
   if fi.jc_field_info_rep then
     begin
       let st = fi.jc_field_info_struct in
-      let mutable_name = mutable_name st.jc_struct_info_root in
+      let mutable_name = mutable_name st in
       (*let committed_name = committed_name st.jc_struct_info_root in*)
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
       (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
@@ -641,10 +588,9 @@ let field_invariants fi =
 (* (the invariant li must be declared in st) *)
 let not_mutable_implies_invariant this st (li, _) =
   let params = invariant_params [] li in
-  let root = st.jc_struct_info_root in
   
   (* this.mutable <: st *)
-  let mutable_name = mutable_name root in
+  let mutable_name = mutable_name st in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
@@ -659,18 +605,17 @@ let not_mutable_implies_invariant this st (li, _) =
   let impl = LImpl(mutable_io, invariant) in
 
   (* params *)
-  let params = (mutable_name, mutable_memory_type root)::params in
-  let params = (tag_table_name root, tag_table_type root)::params in
+  let params = (mutable_name, mutable_memory_type st)::params in
+  let params = (tag_table_name st, tag_table_type st)::params in
 
   params, impl
 
 (* this.mutable <: st => this.fields.committed *)
 let not_mutable_implies_fields_committed this st =
-  let root = st.jc_struct_info_root in
   let fields = rep_fields st in
 
   (* this.mutable <: st *)
-  let mutable_name = mutable_name root in
+  let mutable_name = mutable_name st in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
@@ -688,12 +633,12 @@ let not_mutable_implies_fields_committed this st =
 	     let alloc = alloc_table_name fi_root in
 	     let params =
 	       [ n, memory_field fi;
-		 committed_name, committed_memory_type fi_root;
-		 alloc, alloc_table_type fi_root; ]
+		 committed_name, committed_memory_type fi_st;
+		 alloc, alloc_table_type fi_st; ]
 	     in
 	     let this_fi = make_select (LVar n) (LVar this) in
 	     let f = make_shift this_fi (LVar index) in
-	     let eq = make_eq (make_select_committed fi_root f)
+	     let eq = make_eq (make_select_committed fi_st f)
 	       (make_bool true)
 	     in
 	     let omin, omax = omin_omax (LVar alloc) this_fi min max in
@@ -711,8 +656,8 @@ let not_mutable_implies_fields_committed this st =
     make_and_list (List.map snd fields_pc) in
 
   (* additional params *)
-  let params = (mutable_name, mutable_memory_type root)::params in
-  let params = (tag_table_name root, tag_table_type root)::params in
+  let params = (mutable_name, mutable_memory_type st)::params in
+  let params = (tag_table_name st, tag_table_type st)::params in
 
   (* implies *)
   let impl = LImpl(mutable_io, coms) in
@@ -843,15 +788,14 @@ let owner_unicity this root =
 let make_hierarchy_global_invariant acc root =
   (* this *)
   let this = "this" in
-  let this_ty =
-    { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type root] } in
+  let this_ty = pointer_type root in
 
   (* not mutable => invariant, and their parameters *)
   let structs = hierarchy_structures root in
   let mut_inv = List.map
     (fun st ->
-       let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+       let _, invs =
+	 Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
        List.map (fun inv -> not_mutable_implies_invariant this st inv) invs)
     structs
   in
@@ -889,7 +833,7 @@ let make_hierarchy_global_invariant acc root =
   let params = List.sort lex2 params in
 
   (* fill hash table *)
-  Hashtbl.add hierarchy_invariants root params;
+  Hashtbl.add hierarchy_invariants root.jc_struct_info_name params;
 
   (* return the predicate *)
   match params with
@@ -900,18 +844,21 @@ let make_global_invariants acc =
   let h = hierarchies () in
   List.fold_left make_hierarchy_global_invariant acc h
 
-let assume_global_invariant root =
+let assume_global_invariant st =
   let params =
     try
-      Hashtbl.find hierarchy_invariants root
-    with Not_found -> failwith ("Jc_invariants.assume_global_invariant: "^root^" not found")
+      Hashtbl.find hierarchy_invariants (root_name st)
+    with Not_found ->
+      failwith
+	("Jc_invariants.assume_global_invariant: "^
+	   (root_name st)^" not found")
   in
   match params with
     | [] -> Void
     | _ ->
 	let reads = List.map fst params in
 	let params = List.map (fun (n, _) -> LVar n) params in
-	let inv = LPred(hierarchy_invariant_name root, params) in
+	let inv = LPred(hierarchy_invariant_name st, params) in
 	make_assume reads inv
 
 let assume_global_invariants hl =
@@ -923,11 +870,12 @@ let assume_field_invariants fi =
   let invs = field_invariants fi in
   (* keep hierarchies only once *)
   let hl = List.fold_left
-    (fun acc (st, _) -> StringSet.add st.jc_struct_info_root acc)
-    StringSet.empty
+    (fun acc (st, _) ->
+       StringMap.add (root_name st) st.jc_struct_info_root acc)
+    StringMap.empty
     invs
   in
-  assume_global_invariants (StringSet.elements hl)
+  assume_global_invariants (stringmap_elements hl)
 
 (* Given the parameters of a function, assume all potentially useful
 forall this: st, not this.mutable => invariant *)
@@ -935,11 +883,13 @@ let assume_all_invariants params =
   let structures = function_structures params in
   (* keep hierarchies only once *)
   let hl = List.fold_left
-    (fun acc st -> StringSet.add (structure_root st) acc)
+    (fun acc st ->
+       StringSet.add (root_name (find_struct st)) acc)
     StringSet.empty
     structures
   in
-  assume_global_invariants (StringSet.elements hl)
+  let roots = List.map find_struct (StringSet.elements hl) in
+  assume_global_invariants roots
 
 (*(* Given a field that has just been modified, assume all potentially
 useful invariant for all objects that is not mutable *)
@@ -1062,7 +1012,7 @@ let make_components_postcond this st reads writes committed =
   let comps = components_by_type st in
   let writes =
     List.fold_left
-      (fun acc (si, _) -> StringSet.add (committed_name si.jc_struct_info_name) acc)
+      (fun acc (si, _) -> StringSet.add (committed_name si) acc)
       writes
       comps
   in
@@ -1079,7 +1029,7 @@ let make_components_postcond this st reads writes committed =
   let reads = StringSet.union reads writes in
   let reads = List.fold_left
     (fun acc (si, fields) -> StringSet.add
-       (alloc_table_name si.jc_struct_info_root) acc)
+       (alloc_table_name si) acc)
     reads comps
   in
   let postcond =
@@ -1087,7 +1037,7 @@ let make_components_postcond this st reads writes committed =
       (* for each hierarchy... *)
       (List.map
 	 (fun (si, fields) -> hierarchy_committed_postcond
-	    this si.jc_struct_info_root fields committed)
+	    this si fields committed)
 (*	    let committed_name = committed_name si.jc_struct_info_root in
 	    LPred(
 	      "eq",
@@ -1114,8 +1064,8 @@ let make_components_precond this st reads =
   let l, reads = List.fold_left
     (fun (l, reads) (fi, si) ->
        let index_name = "jc_index" in
-       let mutable_name = mutable_name si.jc_struct_info_name in
-       let committed_name = committed_name si.jc_struct_info_name in
+       let mutable_name = mutable_name si in
+       let committed_name = committed_name si in
        (* x.f *)
        let base_field =
 	 LApp("select", [LVar fi.jc_field_info_final_name; this])
@@ -1125,13 +1075,13 @@ let make_components_precond this st reads =
 	 LApp("shift", [ base_field; LVar index_name ])
        in
        let fi_st = type_structure fi.jc_field_info_type in
-       let alloc = alloc_table_name fi_st.jc_struct_info_root in
-       let reads = StringSet.add (tag_table_name fi_st.jc_struct_info_root) reads in
+       let alloc = alloc_table_name fi_st in
+       let reads = StringSet.add (tag_table_name fi_st) reads in
        let reads = StringSet.add alloc reads in
        let reads = StringSet.add mutable_name reads in
        (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
        let body = make_and
-	 (fully_packed (fi_st.jc_struct_info_root) this_field)
+	 (fully_packed fi_st this_field)
 	 (LPred(
 	    "eq",
 	    [ LApp("select", [LVar committed_name; this_field]);
@@ -1152,11 +1102,10 @@ let make_components_precond this st reads =
 
 let pack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type st.jc_struct_info_root in
+  let this_type = pointer_type st in
   let tag = "tag" in
-  let tag_type = tag_type st.jc_struct_info_root in
-  let name = st.jc_struct_info_root in
-  let mutable_name = mutable_name name in
+  let tag_type = tag_id_type st in
+  let mutable_name = mutable_name st in
   let inv, reads = invariant_for_struct (LVar this) st in
   let writes = StringSet.empty in
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes true in
@@ -1198,7 +1147,7 @@ let pack_declaration st acc =
   if st.jc_struct_info_parent = None then
     Param(
       false,
-      "pack_"^st.jc_struct_info_root,
+      pack_name st,
       Prod_type(
 	this,
 	Base_type this_type,
@@ -1215,12 +1164,11 @@ let pack_declaration st acc =
 (* Unlike Boogie, Jessie has "unpack to S" instead of "unpack from T" *)
 let unpack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type st.jc_struct_info_root in
+  let this_type = pointer_type st in
   let tag = "tag" in
-  let tag_type = tag_type st.jc_struct_info_root in
-  let name = st.jc_struct_info_root in
-  let mutable_name = mutable_name name in
-  let committed_name = committed_name name in
+  let tag_type = tag_id_type st in
+  let mutable_name = mutable_name st in
+  let committed_name = committed_name st in
   let reads = StringSet.singleton mutable_name in
   let writes = StringSet.singleton mutable_name in
   let reads = StringSet.add committed_name reads in
@@ -1262,7 +1210,7 @@ let unpack_declaration st acc =
   if st.jc_struct_info_parent = None then
     Param(
       false,
-      "unpack_"^st.jc_struct_info_root,
+      "unpack_"^(root_name st),
       Prod_type(
 	this,
 	Base_type this_type,

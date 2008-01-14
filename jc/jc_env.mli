@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.39 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_env.mli,v 1.40 2008-01-14 15:26:30 bardou Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
@@ -36,6 +36,7 @@ type jc_type =
   | JCTlogic of string
   | JCTenum of enum_info
   | JCTpointer of struct_info * Num.num option * Num.num option
+  | JCTvariant_pointer of variant_info * Num.num option * Num.num option
   | JCTnull
 
 and enum_info =
@@ -49,8 +50,18 @@ and struct_info =
     { 
               jc_struct_info_name : string;
       mutable jc_struct_info_parent : struct_info option;
-      mutable jc_struct_info_root : string;
+      mutable jc_struct_info_root : struct_info;
       mutable jc_struct_info_fields : field_info list;
+      mutable jc_struct_info_variant : variant_info option;
+        (* only valid for root structures *)
+    }
+
+and variant_info =
+    {
+      jc_variant_info_name : string;
+(*      mutable jc_variant_info_tags : struct_info list;*)
+      mutable jc_variant_info_roots : struct_info list;
+(*      jc_variant_info_open : bool;*)
     }
 
 and field_info =
@@ -59,8 +70,10 @@ and field_info =
       jc_field_info_name : string;
       jc_field_info_final_name : string;
       jc_field_info_type : jc_type;
-      jc_field_info_struct: struct_info; (* The structure in which the field is defined *)
-      jc_field_info_root : string; (* The root of the structure in which the field is defined *)
+      jc_field_info_struct: struct_info;
+        (* The structure in which the field is defined *)
+      jc_field_info_root : struct_info;
+        (* The root of the structure in which the field is defined *)
       jc_field_info_rep : bool; (* "rep" flag *)
     }
 
@@ -97,7 +110,6 @@ type label_info =
     { label_info_name : string;
       mutable times_used : int;
     }
-
 
 (*
 Local Variables: 

@@ -28,7 +28,7 @@ class ColoredPoint extends Point {
 
 type Point = { integer x; integer y; }
 
-type ColoredPoint = Point with { integer col; }
+tag ColoredPoint = Point with { integer col; }
 
 
 unit Point_move(Point[0] this, integer dx, integer dy) 

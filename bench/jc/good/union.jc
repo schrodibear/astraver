@@ -15,8 +15,8 @@ struct T {
 */
 
 type U = { } 
-type U_x = U with { integer x; }
-type U_y = U with { real y; }
+tag U_x = U with { integer x; }
+tag U_y = U with { real y; }
 
 
 type T = { 	

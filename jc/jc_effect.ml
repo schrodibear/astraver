@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.77 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.78 2008-01-14 15:26:30 bardou Exp $ *)
 
 
 open Jc_env
@@ -181,7 +181,7 @@ let add_field_reads label fef (fi,r) =
 
 let add_field_alloc_reads label fef (fi,r) =
   let ef = add_memory_effect label fef.jc_reads (fi,r) in
-  let ef = add_alloc_effect ef (fi.jc_field_info_root,r) in
+  let ef = add_alloc_effect ef (fi.jc_field_info_root.jc_struct_info_name,r) in
   { fef with jc_reads = ef }
 
 let add_global_reads fef vi =
@@ -197,17 +197,19 @@ let add_tag_reads fef a =
   { fef with jc_reads = add_tag_effect fef.jc_reads a }
 
 let add_mutable_reads fef st =
-  { fef with jc_reads = add_mutable_effect fef.jc_reads st }
+  { fef with jc_reads = add_mutable_effect fef.jc_reads st.jc_struct_info_name }
 
 let add_committed_reads fef st =
-  { fef with jc_reads = add_committed_effect fef.jc_reads st }
+  { fef with jc_reads = add_committed_effect fef.jc_reads
+      st.jc_struct_info_name }
 
 let add_field_writes label fef (fi,r) =
   { fef with jc_writes = add_memory_effect label fef.jc_writes (fi,r) }
 
 let add_field_alloc_writes label fef (fi,r) =
   let efw = add_memory_effect label fef.jc_writes (fi,r) in
-  let efr = add_alloc_effect fef.jc_reads (fi.jc_field_info_root,r) in
+  let efr = add_alloc_effect fef.jc_reads
+    (fi.jc_field_info_root.jc_struct_info_name, r) in
   { fef with jc_reads = efr; jc_writes = efw; }
 
 let add_global_writes fef vi =
@@ -223,10 +225,12 @@ let add_tag_writes fef a =
   { fef with jc_writes = add_tag_effect fef.jc_writes a }
 
 let add_mutable_writes fef st =
-  { fef with jc_writes = add_mutable_effect fef.jc_writes st }
+  { fef with jc_writes = add_mutable_effect fef.jc_writes
+      st.jc_struct_info_name }
 
 let add_committed_writes fef st =
-  { fef with jc_writes = add_committed_effect fef.jc_writes st }
+  { fef with jc_writes = add_committed_effect fef.jc_writes
+      st.jc_struct_info_name }
 
 let same_effects ef1 ef2 =
   StringRegionSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
@@ -257,7 +261,9 @@ let rec term label =
 	  add_global_effect ef vi
 	else ef
     | JCToffset(_,t,st) ->
-	add_alloc_effect (term label ef t) (st.jc_struct_info_root,t.jc_term_region)
+	add_alloc_effect
+	  (term label ef t)
+	  (root_name st, t.jc_term_region)
     | JCTapp app -> 
 	let li = app.jc_app_fun and tls = app.jc_app_args in
 	let efapp = 
@@ -297,7 +303,7 @@ let rec assertion label ef a =
 	assertion label (assertion label (term label ef t) a1) a2
     | JCAbool_term t -> term label ef t
     | JCAinstanceof (t, st) -> 
-	add_tag_effect (term label ef t) st.jc_struct_info_root
+	add_tag_effect (term label ef t) (root_name st)
     | JCAnot a
     | JCAold a -> assertion "Pre" ef a
     | JCAat(a,lab) -> assertion lab ef a
@@ -317,8 +323,9 @@ let rec assertion label ef a =
     | JCAmutable (t, st, ta) ->
 	term label
 	  (add_mutable_effect 
-	     (tag label ef ta (Some st.jc_struct_info_root)) 
-	     st.jc_struct_info_root) t
+	     (tag label ef ta
+		(Some (root_name st)))
+	     (root_name st)) t
     | JCAtagequality (t1, t2, h) ->
 	tag label (tag label ef t1 h) t2 h
 
@@ -333,7 +340,7 @@ let rec expr ef e =
     | JCEconst _ -> ef
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
-	add_tag_reads (expr ef e) st.jc_struct_info_root
+	add_tag_reads (expr ef e) (root_name st)
     | JCEderef (e, f) -> 
 	let ef = add_field_alloc_reads "Current" (expr ef e) (f,e.jc_expr_region) in
 	begin match (skip_shifts e).jc_expr_node with
@@ -354,11 +361,12 @@ let rec expr ef e =
     | JCEunary(_,e1) -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) ->
-	add_alloc_reads (expr ef e) (st.jc_struct_info_root,e.jc_expr_region)
+	add_alloc_reads (expr ef e)
+	  (root_name st, e.jc_expr_region)
     | JCEalloc(_,st) ->
-	let name = st.jc_struct_info_root in
+	let name = root_name st in
 	let fields = embedded_struct_fields st in 
-	let roots = embedded_struct_roots st in 
+	let roots = embedded_struct_roots st in
 	let ef = 
 	  List.fold_left 
 	    (fun ef fi -> add_field_writes "Current" ef (fi,e.jc_expr_region)) ef fields
@@ -376,7 +384,7 @@ let rec expr ef e =
     | JCEfree e ->
 	begin match e.jc_expr_type with
 	  | JCTpointer(st, _, _) ->
-	      let name = st.jc_struct_info_root in
+	      let name = root_name st in
 	      (* write tag table ? *)
 	      add_alloc_writes (add_tag_writes ef name) (name,e.jc_expr_region)
 	  | _ -> assert false
@@ -447,34 +455,34 @@ let rec statement ef s =
 	     match fi.jc_field_info_type with
 	       | JCTpointer(st, _, _) ->
 	           (* Assert fields fully mutable => need mutable and tag_table (of field) as reads *)
-		   let ef = add_mutable_reads ef st.jc_struct_info_root in
-		   let ef = add_tag_reads ef st.jc_struct_info_root in
+		   let ef = add_mutable_reads ef st in
+		   let ef = add_tag_reads ef (root_name st) in
 	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
-		   let ef = add_committed_reads ef st.jc_struct_info_root in
-		   let ef = add_committed_writes ef st.jc_struct_info_root in
+		   let ef = add_committed_reads ef st in
+		   let ef = add_committed_writes ef st in
 		   (* ...and field as reads *)
 		   add_field_reads "Current" ef (fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
 	(* Change structure mutable => need mutable as reads and writes *)
-	let ef = add_mutable_reads ef st.jc_struct_info_root in
-	let ef = add_mutable_writes ef st.jc_struct_info_root in
+	let ef = add_mutable_reads ef st in
+	let ef = add_mutable_writes ef st in
         (* And that's all *)
 	ef
     | JCSunpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Change structure mutable => need mutable as reads and writes *)
-	let ef = add_mutable_reads ef st.jc_struct_info_root in
-	let ef = add_mutable_writes ef st.jc_struct_info_root in
+	let ef = add_mutable_reads ef st in
+	let ef = add_mutable_writes ef st in
 	(* Fields *)
 	let ef = List.fold_left
 	  (fun ef fi ->
 	     match fi.jc_field_info_type with
 	       | JCTpointer(st, _, _) ->
 	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
-		   let ef = add_committed_reads ef st.jc_struct_info_root in
-		   let ef = add_committed_writes ef st.jc_struct_info_root in
+		   let ef = add_committed_reads ef st in
+		   let ef = add_committed_writes ef st in
 		   (* ...and field as reads *)
 		   add_field_reads "Current" ef (fi,e.jc_expr_region)
 	       | _ -> ef)
@@ -564,7 +572,7 @@ let spec ef s =
 let parameter ef vi =
   match vi.jc_var_info_type with
     | JCTpointer (st, _, _) ->
-	let name = st.jc_struct_info_root in
+	let name = root_name st in
 	  add_alloc_reads (add_tag_reads ef name) (name,vi.jc_var_info_region)
     | _ -> ef
 	

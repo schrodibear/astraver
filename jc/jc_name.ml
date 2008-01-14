@@ -25,52 +25,50 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.3 2008-01-11 12:43:45 marche Exp $ *)
+(* $Id: jc_name.ml,v 1.4 2008-01-14 15:26:30 bardou Exp $ *)
 
 open Jc_env
 open Jc_ast
 open Jc_region
+open Jc_pervasives
 open Output
+
+let alloc_table_type_name = "alloc_table"
+let tag_table_type_name = "tag_table"
+let pointer_type_name = "pointer"
+let memory_type_name = "memory"
+let tag_id_type_name = "tag_id"
 
 let simple_logic_type s =
   { logic_type_name = s; logic_type_args = [] }
 
-let tr_native_type t =
-  match t with
-    | Tunit -> "unit"
-    | Tboolean -> "bool"
-    | Tinteger -> "int"
-    | Treal -> "real"
+let variant_type_name vi = vi.jc_variant_info_name
 
-let tr_base_type t =
-  match t with
-    | JCTnative t -> simple_logic_type (tr_native_type t)
-    | JCTlogic s -> simple_logic_type s
-    | JCTenum ri -> 
-	simple_logic_type ri.jc_enum_info_name
-    | JCTpointer (st, a, b) -> 
-	let ti = simple_logic_type (st.jc_struct_info_root) in
-	{ logic_type_name = "pointer";
-	  logic_type_args = [ ti ] }
-    | JCTnull -> assert false
+let struct_type_name st = variant_type_name (struct_variant st)
 
+(* Why type which modelises a variant. *)
+let variant_model_type vi =
+  simple_logic_type (variant_type_name vi)
+
+(* Why type which modelises a structure "root". *)
+let struct_model_type st = variant_model_type (struct_variant st)
+
+let variant_alloc_table_name vi = vi.jc_variant_info_name ^ "_alloc_table"
+
+let variant_tag_table_name vi = vi.jc_variant_info_name ^ "_tag_table"
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 
-let alloc_table_name a = a ^ "_alloc_table"
+let tag_table_name st =
+  (struct_type_name st) ^ "_tag_table"
 
-let alloc_table_type a = 
-  {
-    logic_type_name = "alloc_table";
-    logic_type_args = [simple_logic_type a];
-  }
+let alloc_table_name st =
+  (struct_type_name st) ^ "_alloc_table"
 
-let alloc_region_table_name (a,r) = 
+let alloc_region_table_name (a, r) = 
   if !Jc_common_options.separation then 
-    a ^ "_" ^ (Region.name r) ^ "_alloc_table"
+    (root_name a) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else alloc_table_name a
-
-let tag_table_name st = st.jc_struct_info_root ^ "_tag_table"
 
 let field_memory_name fi = fi.jc_field_info_final_name
 
@@ -79,16 +77,6 @@ let field_region_memory_name (fi,r) =
     fi.jc_field_info_final_name ^ "_" ^ (Region.name r)
   else field_memory_name fi
 
-let memory_type t v =
-  { logic_type_name = "memory";
-    logic_type_args = [t;v] }
-
-let memory_field fi =
-  memory_type 
-    (simple_logic_type fi.jc_field_info_root)
-    (tr_base_type fi.jc_field_info_type)
-
-
 let valid_pred_name st = "valid_" ^ st.jc_struct_info_name
 
 let valid_one_pred_name st = "valid_one_" ^ st.jc_struct_info_name
@@ -96,6 +84,30 @@ let valid_one_pred_name st = "valid_one_" ^ st.jc_struct_info_name
 let alloc_param_name st = "alloc_" ^ st.jc_struct_info_name
 
 let alloc_one_param_name st = "alloc_one_" ^ st.jc_struct_info_name
+
+let jessie_return_variable = "jessie_returned_value"
+let jessie_return_exception = "Return"
+
+let exception_name ei =
+  ei.jc_exception_info_name ^ "_exc"
+
+let mutable_name st =
+  "mutable_"^(root_name st)
+
+let committed_name st =
+  "committed_"^(root_name st)
+
+let fully_packed_name st =
+  "fully_packed_"^(root_name st)
+
+let hierarchy_invariant_name st =
+  "global_invariant_"^(root_name st)
+
+let pack_name st =
+  "pack_"^(root_name st)
+
+let unpack_name st =
+  "unpack_"^(root_name st)
 
 (*
 Local Variables: 

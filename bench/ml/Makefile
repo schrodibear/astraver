@@ -2,6 +2,7 @@ WHYDIR=../../
 EXT=.opt
 FASTWP=-why-opt --fast-wp
 ALLVC=-why-opt --all-vc
+SPLIT=-why-opt --split-user-conj
 JESSIE=$(WHYDIR)bin/jessie$(EXT)
 JESSICA=$(WHYDIR)bin/jessica$(EXT)
 
@@ -14,7 +15,7 @@ $(WHYDIR)%:
 	$(JESSICA) pervasives.mli $*.ml
 
 %.why: %.jc $(JESSIE)
-	$(JESSIE) $*.jc
+	$(JESSIE) $(SPLIT) $*.jc
 
 %: %.why
 	make -f $*.makefile gui
