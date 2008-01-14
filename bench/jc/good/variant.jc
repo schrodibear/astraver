@@ -1,0 +1,46 @@
+#InvariantPolicy = Ownership
+
+tag Parallelogram = {
+  integer l1;
+  integer l2;
+  integer l3;
+  integer l4;
+}
+
+tag Rectangle = Parallelogram with {
+  integer smallsidelen;
+  integer greatsidelen;
+  invariant rect_inv(x) =
+    x.l1 == x.l3 &&
+    x.l1 == x.smallsidelen &&
+    x.l2 == x.l4 &&
+    x.l2 == x.greatsidelen;
+}
+
+tag Circle = {
+  integer radius;
+}
+
+type shape = [Parallelogram | Circle]
+
+integer parallelogram_perimeter(Parallelogram[0] P) {
+  return P.l1 + P.l2 + P.l3 + P.l4;
+}
+
+integer circle_perimeter(Circle[0] C) {
+  return 3 * C.radius * C.radius;
+}
+
+integer perimeter(shape[0] S) {
+  return 0;
+/*  match S with
+    | Parallelogram P -> return parallelogram_perimeter(P)
+    | Circle C -> return circle_perimeter(C)*/
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make variant"
+End: 
+*/
