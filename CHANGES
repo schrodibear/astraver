@@ -1,4 +1,6 @@
 
+version 2.10a, January 14th, 2008
+=================================
   o configuration: fixed detection of ocamldep when ocamldep.opt is
     not installed / fixed detection of local ocamlgraph
 
