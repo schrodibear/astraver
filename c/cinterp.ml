@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.252 2008-01-02 12:07:55 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.253 2008-01-14 10:10:50 stoulsn Exp $ i*)
 
 open Format
 open Coptions
@@ -2156,12 +2156,16 @@ Output.Label (l, Void)
       let decl = List.fold_left (fun acc x ->
 				   acc@[interp_statement ab may_break x]) 
 		   [] decl in
-      if v.var_is_assigned then
-	Let_ref(v.var_unique_name,tinit,
-		Block (decl@[interp_statement ab may_break rem]))
+      if v.var_is_static then (* if static then still globally declared *)
+	Block (decl@[interp_statement ab may_break rem])
       else
-	Let(v.var_unique_name,tinit,
-	    Block (decl@[interp_statement ab may_break rem]))
+	if v.var_is_assigned then
+	  Let_ref(v.var_unique_name,tinit,
+		 Block (decl@[interp_statement ab may_break rem]))
+	else
+	  Let(v.var_unique_name,tinit,
+	     Block (decl@[interp_statement ab may_break rem]))
+
 
 and interp_block ab may_break statements =
   let rec block = function
