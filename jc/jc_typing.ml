@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.159 2008-01-15 14:44:11 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.160 2008-01-15 16:29:36 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -117,6 +117,8 @@ let lub_numeric_types t1 t2 =
 
 let rec substruct s1 s2 =
   if s1==s2 then true else
+    (* Remarque de Romain : Pourquoi rechercher dans la table alors qu'on l'a
+     * sous la main ? *)
     let st = find_struct_info Loc.dummy_position s1.jc_struct_info_name in
     assert (s1.jc_struct_info_name <> s2.jc_struct_info_name);
     match st.jc_struct_info_parent with 
@@ -309,8 +311,64 @@ let incr_op op =
     | UPprefix_dec -> Prefix_dec
     | _ -> assert false
 
+(******************************************************************************)
+(*                                  patterns                                  *)
+(******************************************************************************)
 
-(* terms *)
+let tag_subtype_tag_or_variant st = function
+  | JCtag st' -> substruct st st'
+  | JCvariant vi -> struct_variant st == vi
+
+let valid_pointer_type st =
+  JCTpointer(st, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
+
+let rec pattern env pat ety =
+  let tpn, ty, newenv = match pat.jc_ppattern_node with
+    | JCPPstruct(id, lpl) ->
+	let tov = tag_or_variant
+	  ~error:(fun () -> typing_error pat.jc_ppattern_loc
+		    "this pattern doesn't match a structure nor a variant")
+	  ety
+	in
+	(* tag *)
+	let st = find_struct_info id.jc_identifier_loc id.jc_identifier_name in
+	if not (tag_subtype_tag_or_variant st tov) then
+	  typing_error id.jc_identifier_loc
+	    "tag %s is not a subtag of %s"
+	    st.jc_struct_info_name (tag_or_variant_name tov);
+	(* fields *)
+	let env, tlpl = List.fold_left
+	  (fun (env, acc) (l, p) ->
+	     let fi = find_field_struct l.jc_identifier_loc st false
+	       l.jc_identifier_name
+	     in
+	     let env, tp = pattern env p fi.jc_field_info_type in
+	     env, (fi, tp)::acc)
+	  (env, []) lpl
+	in
+	JCPstruct(st, List.rev tlpl), valid_pointer_type st, env
+    | JCPPvar id ->
+	let vi = var ety id.jc_identifier_name in
+	JCPvar vi, ety, (id.jc_identifier_name, vi)::env
+    | JCPPor(p1, p2) ->
+	let env, tp1 = pattern env p1 ety in
+	let env, tp2 = pattern env p2 ety in
+	JCPor(tp1, tp2), ety, env
+    | JCPPas(p, id) ->
+	let env, tp = pattern env p ety in
+	let vi = var tp.jc_pattern_type id.jc_identifier_name in
+	JCPas(tp, vi), ety, (id.jc_identifier_name, vi)::env
+    | JCPPany ->
+	JCPany, ety, env
+  in newenv, {
+    jc_pattern_node = tpn;
+    jc_pattern_loc = pat.jc_ppattern_loc;
+    jc_pattern_type = ty;
+  }
+
+(******************************************************************************)
+(*                                   terms                                    *)
+(******************************************************************************)
 
 let num_op op =
   match op with
@@ -1837,12 +1895,24 @@ let rec statement label_env env lz s =
 	  else 
 	    typing_error s.jc_pstatement_loc "integer expected"
       | JCPSmatch(e, psl) ->
-	  assert false (* TODO *)
+	  let te = expr env e in
+	  (* type patterns and bodies *)
+	  let tpsl = List.map
+	    (fun (p, sl) ->
+	       let newenv, tp = pattern env p te.jc_texpr_type in
+	       let tsl = statement_list label_env newenv lz sl in
+	       tp, tsl)
+	    psl
+	  in
+	  JCTSmatch(te, tpsl),
+	  lz (* TODO *)
   in 
   let ts = { jc_tstatement_node = ts;
 	     jc_tstatement_loc = s.jc_pstatement_loc } in
   ts, lz
 
+(* Remarque de Romain : Pourquoi statement renvoie-t-il un "lz" mais pas
+ * statement_list ? *)
 and statement_list label_env env lz l : tstatement list =
   let rec block label_env env lz = function
     | [] -> [], []
@@ -2558,6 +2628,15 @@ let type_variant d = match d.jc_pdecl_node with
       vi.jc_variant_info_roots <- roots
   | _ -> ()
 
+let check_struct d = match d.jc_pdecl_node with
+  | JCPDtag(id, _, _, _) ->
+      let loc = d.jc_pdecl_loc in
+      let st = find_struct_info loc id in
+      if st.jc_struct_info_root.jc_struct_info_variant = None then
+	typing_error loc "the tag %s is not used by any type"
+	  st.jc_struct_info_name
+  | _ -> ()
+
 (* type declarations in the right order *)
 let type_file ast =
   (* records and variants *)
@@ -2565,6 +2644,7 @@ let type_file ast =
   List.iter compute_struct_info_parent ast;
   while fixpoint_struct_info_roots () do () done;
   List.iter type_variant ast;
+  List.iter check_struct ast;
   (* remaining declarations *)
   List.iter decl ast
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.104 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.105 2008-01-15 16:29:36 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -226,10 +226,10 @@ type unary_op =
   | Ubw_not
 
 type pattern_node =
-  | JCPstruct of identifier * (identifier * pattern) list
-  | JCPvar of identifier
+  | JCPstruct of struct_info * (field_info * pattern) list
+  | JCPvar of var_info
   | JCPor of pattern * pattern
-  | JCPas of pattern * identifier
+  | JCPas of pattern * var_info
   | JCPany
 
 and pattern = {

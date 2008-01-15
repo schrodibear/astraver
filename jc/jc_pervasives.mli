@@ -7,6 +7,9 @@ val unit_type : Jc_env.jc_type
 
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
 
+val tag_or_variant : ?error:(unit -> Jc_env.tag_or_variant) ->
+  Jc_env.jc_type -> Jc_env.tag_or_variant
+
 (* constants *)
 
 val zero: Num.num
@@ -43,6 +46,7 @@ val embedded_struct_roots : Jc_env.struct_info -> string list
 val root_name : Jc_env.struct_info -> string
 val field_root_name : Jc_env.field_info -> string
 val struct_variant : Jc_env.struct_info -> Jc_env.variant_info
+val tag_or_variant_name : Jc_env.tag_or_variant -> string
 
 (* predefined functions *)
 

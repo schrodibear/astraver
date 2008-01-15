@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.79 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.80 2008-01-15 16:29:36 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -125,19 +125,19 @@ let label fmt l =
 
 let rec pattern fmt p =
   match p.jc_pattern_node with
-    | JCPstruct(tag, lbls) ->
-	fprintf fmt "@[<hv 2>%s{@ " tag.jc_identifier_name;
+    | JCPstruct(st, lbls) ->
+	fprintf fmt "@[<hv 2>%s{@ " st.jc_struct_info_name;
 	List.iter
 	  (fun (lbl, pat) ->
-	     fprintf fmt "%s = %a;@ " lbl.jc_identifier_name pattern pat)
+	     fprintf fmt "%s = %a;@ " lbl.jc_field_info_name pattern pat)
 	  lbls;
 	fprintf fmt "}@]"
-    | JCPvar id ->
-	fprintf fmt "%s" id.jc_identifier_name
+    | JCPvar vi ->
+	fprintf fmt "%s" vi.jc_var_info_name
     | JCPor(p1, p2) ->
 	fprintf fmt "(%a)@ | (%a)" pattern p1 pattern p2
-    | JCPas(pat, id) ->
-	fprintf fmt "(%a as %s)" pattern pat id.jc_identifier_name
+    | JCPas(pat, vi) ->
+	fprintf fmt "(%a as %s)" pattern pat vi.jc_var_info_name
     | JCPany ->
 	fprintf fmt "_"
 

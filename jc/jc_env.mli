@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.41 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_env.mli,v 1.42 2008-01-15 16:29:36 bardou Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
@@ -76,6 +76,10 @@ and field_info =
         (* The root of the structure in which the field is defined *)
       jc_field_info_rep : bool; (* "rep" flag *)
     }
+
+type tag_or_variant =
+  | JCtag of struct_info
+  | JCvariant of variant_info
 
 type region = 
     {

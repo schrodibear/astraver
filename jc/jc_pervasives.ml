@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.73 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.74 2008-01-15 16:29:36 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -69,6 +69,11 @@ let print_type fmt t =
 	  fprintf fmt "%s[%s..%s]" name
 	    (Num.string_of_num a) (Num.string_of_num b)
     | JCTnull -> fprintf fmt "(nulltype)"  
+
+let tag_or_variant ?(error=fun () -> assert false) = function
+  | JCTpointer(st, _, _) -> JCtag st
+  | JCTvariant_pointer(vi, _, _) -> JCvariant vi
+  | _ -> error ()
 
 let num_of_constant loc c =
     match c with
@@ -716,6 +721,10 @@ let struct_variant st =
 	(* don't use struct_variant before checking that every tag is used
          * in a type *)
   
+let tag_or_variant_name = function
+  | JCtag st -> st.jc_struct_info_name
+  | JCvariant vi -> vi.jc_variant_info_name
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

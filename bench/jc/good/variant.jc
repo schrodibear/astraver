@@ -21,6 +21,10 @@ tag Circle = {
   integer radius;
 }
 
+type Test = {
+  integer plouf;
+}
+
 type shape = [Parallelogram | Circle]
 
 integer parallelogram_perimeter(Parallelogram[0] P) {
@@ -33,9 +37,14 @@ integer circle_perimeter(Circle[0] C) {
 
 integer perimeter(shape[0] S) {
   return 0;
-/*  match S with
-    | Parallelogram P -> return parallelogram_perimeter(P)
-    | Circle C -> return circle_perimeter(C)*/
+  /*match S with
+    Parallelogram{} as P -> {
+      return parallelogram_perimeter(P);
+    }
+    Circle{} as C -> {
+      return circle_perimeter(C);
+    }
+  end;*/
 }
 
 /*
