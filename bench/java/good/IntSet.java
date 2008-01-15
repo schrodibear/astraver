@@ -3,7 +3,7 @@
   @   \forall integer x,y; x <= y ==> x <= (x+y)/2 && (x+y)/2 <= y ;
   @*/
 
-/*@ predicate is_sorted(int[] t) {
+/*@ predicate is_sorted{L}(int[] t) {
   @   t != null && 
   @   \forall integer i,j; 
   @     0 <= i && i <= j && j < t.length ==> t[i] <= t[j]

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.94 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: java_interp.ml,v 1.95 2008-01-15 14:44:10 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -375,6 +375,12 @@ let get_logic_fun fi =
 	eprintf "Anomaly: cannot find logic symbol `%s'@." fi.java_logic_info_name;
 	assert false
 
+let tr_logic_label = function
+  | LabelPre -> Jc_env.LabelPre
+  | LabelHere -> Jc_env.LabelHere
+  | LabelPost -> Jc_env.LabelPost
+  | LabelName s -> Jc_env.LabelName s
+
 let create_logic_fun loc fi =
   let nfi =
     match fi.java_logic_info_result_type with
@@ -386,6 +392,8 @@ let create_logic_fun loc fi =
   in
   nfi.jc_logic_info_parameters <-
     List.map (create_var loc) fi.java_logic_info_parameters;
+  nfi.jc_logic_info_labels <- 
+    List.map tr_logic_label fi.java_logic_info_labels;
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
   nfi
 
@@ -525,7 +533,7 @@ let rec term t =
 	  } in
 	  JCTapp app
       | JTvar vi -> JCTvar (get_var vi)
-      | JTfield_access(t,fi) -> JCTderef(term t,get_field fi)
+      | JTfield_access(t,fi) -> JCTderef(term t,Jc_env.LabelHere,get_field fi)
       | JTstatic_field_access(ci,fi) ->	  
 	  JCTvar(get_static_var fi)
       | JTarray_length(t) -> 
@@ -552,7 +560,7 @@ let rec term t =
 		    jc_term_node = JCTshift(t1', term t2)
 		  }
 		  in
-		  JCTderef(shift,(List.hd st.jc_struct_info_fields))
+		  JCTderef(shift,Jc_env.LabelHere,(List.hd st.jc_struct_info_fields))
 	      | _ -> assert false
 	  end
       | JTarray_range _ -> assert false
@@ -655,7 +663,7 @@ let rec assertion ?(reg=0) a =
 	  let ty = tr_type Loc.dummy_position ty in
 	    match ty with
 	      | JCTpointer (si, _, _) ->
-		  JCAinstanceof (term t, si)
+		  JCAinstanceof (term t, LabelNone, si)
 	      | _ -> assert false
 
   in { jc_assertion_loc = a.java_assertion_loc ; 
@@ -1283,8 +1291,8 @@ let rec statement s =
   let s' =
     match s.java_statement_node with
       | JSskip -> JCTSblock []
-      | JSbreak None -> JCTSbreak ""
-      | JSbreak (Some l) -> JCTSbreak l
+      | JSbreak None -> JCTSbreak { label_info_name = ""; times_used = 0 }
+      | JSbreak (Some l) -> JCTSbreak { label_info_name = l ; times_used = 0 }
       | JSreturn_void -> JCTSreturn_void
       | JSreturn e -> 
 	  JCTSreturn (tr_type e.java_expr_loc e.java_expr_type,expr e)
@@ -1471,16 +1479,19 @@ let tr_logic_fun fi b acc =
     | Java_typing.JAssertion a ->
 	JClogic_fun_def(nfi.jc_logic_info_result_type,
 			nfi.jc_logic_info_name,
+			nfi.jc_logic_info_labels,
 			nfi.jc_logic_info_parameters,
 			JCAssertion(assertion a))::acc
     | Java_typing.JTerm t -> 
 	JClogic_fun_def(nfi.jc_logic_info_result_type,
 			nfi.jc_logic_info_name,
+			nfi.jc_logic_info_labels,
 			nfi.jc_logic_info_parameters,
 			JCTerm(term t))::acc
     | Java_typing.JReads l ->
 	JClogic_fun_def(nfi.jc_logic_info_result_type,
 			nfi.jc_logic_info_name,
+			nfi.jc_logic_info_labels,
 			nfi.jc_logic_info_parameters,
 			JCReads(List.map location l))::acc
 
@@ -1514,7 +1525,7 @@ let tr_field type_name acc fi =
     in
     let decl =
       JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_name,
-		      [], body)
+		      [], [], body)
     in
     decl::acc      
   else

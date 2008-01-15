@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.103 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.104 2008-01-15 14:44:10 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -94,7 +94,7 @@ type pexpr_node =
   | JCPEconst of const
   | JCPEvar of string
   | JCPEderef of pexpr * string
-  | JCPEapp of string * label list * pexpr list
+  | JCPEapp of string * logic_label list * pexpr list
   | JCPEassign of pexpr * pexpr
   | JCPEassign_op of pexpr * pbin_op * pexpr
   | JCPEbinary of pexpr * pbin_op * pexpr
@@ -103,7 +103,7 @@ type pexpr_node =
   | JCPEcast of pexpr * string
   | JCPEquantifier of quantifier * ptype * string list * pexpr
   | JCPEold of pexpr
-  | JCPEat of pexpr * label
+  | JCPEat of pexpr * logic_label
   | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
   | JCPElet of string * pexpr * pexpr
@@ -156,10 +156,10 @@ type pstatement_node =
       pexpr list * pexpr * pexpr list * pexpr * pexpr option * pstatement
       (*r inits, condition, updates, invariant, variant, body *)
   | JCPSreturn of pexpr option
-  | JCPSbreak of label
-  | JCPScontinue of label
-  | JCPSgoto of label
-  | JCPSlabel of label * pstatement
+  | JCPSbreak of string
+  | JCPScontinue of string
+  | JCPSgoto of string
+  | JCPSlabel of string * pstatement
   | JCPStry of pstatement * (identifier * string * pstatement) list * pstatement
   | JCPSthrow of identifier * pexpr option
   | JCPSpack of pexpr * identifier option
@@ -190,10 +190,10 @@ type pdecl_node =
   | JCPDrecfuns of pdecl list
   | JCPDenumtype of string * Num.num * Num.num
   | JCPDlogictype of string 
-  | JCPDaxiom of string * label list * pexpr
+  | JCPDaxiom of string * logic_label list * pexpr
   | JCPDexception of string * ptype
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCPDlogic of ptype option * string * label list * (ptype * string) list 
+  | JCPDlogic of ptype option * string * logic_label list * (ptype * string) list 
       * preads_or_pexpr
   (* global invariant *)
   | JCPDglobinv of string * pexpr
@@ -243,7 +243,7 @@ type app =
       jc_app_fun : logic_info;
       jc_app_args : term list;
       mutable jc_app_region_assoc : (region * region) list;
-      jc_app_label_assoc : (label * label) list;
+      jc_app_label_assoc : (logic_label * logic_label) list;
     }
 
 and term_node =
@@ -251,12 +251,12 @@ and term_node =
   | JCTvar of var_info
   | JCTshift of term * term
   | JCTsub_pointer of term * term
-  | JCTderef of term * field_info
+  | JCTderef of term * logic_label * field_info
   | JCTbinary of term * bin_op * term
   | JCTunary of unary_op * term
   | JCTapp of app
   | JCTold of term
-  | JCTat of term * label
+  | JCTat of term * logic_label
   | JCToffset of offset_kind * term * struct_info 
   | JCTinstanceof of term * struct_info
   | JCTcast of term * struct_info
@@ -292,7 +292,7 @@ type tlocation_set =
 type tlocation =
   | JCLvar of var_info
   | JCLderef of tlocation_set * field_info * region
-  | JCLat of tlocation * label
+  | JCLat of tlocation * logic_label
 
 type assertion_node =
   | JCAtrue
@@ -306,8 +306,8 @@ type assertion_node =
   | JCAapp of app
   | JCAquantifier of quantifier * var_info * assertion
   | JCAold of assertion
-  | JCAat of assertion * label
-  | JCAinstanceof of term * struct_info
+  | JCAat of assertion * logic_label
+  | JCAinstanceof of term * logic_label * struct_info
   | JCAbool_term of term
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
@@ -381,10 +381,10 @@ type tstatement_node =
       (*r inits must be given before using JCTSexpr or JCTSdecl *)
   | JCTSreturn_void 
   | JCTSreturn of jc_type * texpr
-  | JCTSbreak of label
-  | JCTScontinue of label
-  | JCTSgoto of label
-  | JCTSlabel of label * tstatement
+  | JCTSbreak of label_info
+  | JCTScontinue of label_info
+  | JCTSgoto of label_info
+  | JCTSlabel of label_info * tstatement
   | JCTStry of tstatement 
       * (exception_info * var_info option * tstatement) list * tstatement
   | JCTSthrow of exception_info * texpr option
@@ -489,7 +489,8 @@ type statement_node =
   | JCSif of expr * statement * statement
   | JCSloop of loop_annot * statement
   | JCSreturn_void 
-  | JCSreturn of jc_type * expr (*r expected return type *)
+  | JCSreturn of jc_type * expr (*r expected return type *) 
+  | JCSlabel of label_info * statement
   | JCStry of statement 
       * (exception_info * var_info option * statement) list * statement
   | JCSthrow of exception_info * expr option

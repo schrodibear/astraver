@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.79 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.80 2008-01-15 14:44:10 marche Exp $ *)
 
 
 open Jc_env
@@ -52,7 +52,7 @@ let mergeRegionMap m1 m2 =
     (fun v labs acc ->
        try
 	 let l = FieldRegionMap.find v m2 in
-	 FieldRegionMap.add v (StringSet.union labs l) acc
+	 FieldRegionMap.add v (LogicLabelSet.union labs l) acc
        with Not_found ->
 	   FieldRegionMap.add v labs acc)
     m1 m2
@@ -93,15 +93,19 @@ let ef_assoc ?label_assoc ef assoc =
 	     match label_assoc with
 	       | None -> labels
 	       | Some a ->
+(*
 		   eprintf "label assoc:@.";
-		   StringSet.fold
+*)
+		   LogicLabelSet.fold
 		     (fun lab acc ->
 			try
 			  let l = List.assoc lab a in
-			  eprintf " %s -> %s@." lab l;
-			  StringSet.add l acc
-			with Not_found -> StringSet.add lab acc (* assert false*))
-		     labels StringSet.empty
+(*
+			  eprintf " %a -> %a@." Jc_output.label lab Jc_output.label l;
+*)
+			  LogicLabelSet.add l acc
+			with Not_found -> LogicLabelSet.add lab acc (* assert false*))
+		     labels LogicLabelSet.empty
 	   in
 	   if Region.polymorphic r then
 	     try FieldRegionMap.add (fi,RegionList.assoc r assoc) labels acc 
@@ -141,8 +145,8 @@ let fieldRegionMap_add key lab m =
   let s = 
     try
       let s = FieldRegionMap.find key m in
-      StringSet.add lab s
-    with Not_found -> StringSet.singleton lab
+      LogicLabelSet.add lab s
+    with Not_found -> LogicLabelSet.singleton lab
   in FieldRegionMap.add key s m
     
 let add_memory_effect label ef (fi,r) =
@@ -253,41 +257,40 @@ terms and assertions
 
 **************************)
 
-let rec term label =
-  fold_term
-    (fun ef t -> match t.jc_term_node with
+let rec term ef t =
+  match t.jc_term_node with
     | JCTvar vi ->
 	if vi.jc_var_info_static then
 	  add_global_effect ef vi
 	else ef
     | JCToffset(_,t,st) ->
 	add_alloc_effect
-	  (term label ef t)
+	  (term ef t)
 	  (root_name st, t.jc_term_region)
     | JCTapp app -> 
 	let li = app.jc_app_fun and tls = app.jc_app_args in
 	let efapp = 
 	  ef_assoc li.jc_logic_info_effects ~label_assoc:app.jc_app_label_assoc app.jc_app_region_assoc 
 	in
-	ef_union efapp (List.fold_left (term label) ef tls)
-    | JCTderef (t, fi) ->
-	add_memory_effect label ef (fi,t.jc_term_region)
+	ef_union efapp (List.fold_left term ef tls)
+    | JCTderef (t, lab, fi) ->
+	add_memory_effect lab ef (fi,t.jc_term_region)
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTcast (t1, ty) ->  term label ef t1
+    | JCTcast (t1, ty) ->  term ef t1
     | JCTinstanceof (_, _) -> assert false (* TODO *)
-    | JCTat (t1, lab) -> term lab ef t1
-    | JCTold t1 -> term "Pre" ef t1
-    | JCTunary (_, t1) -> term label ef t1
+    | JCTat (t1, lab) -> term ef t1
+    | JCTold t1 -> term ef t1
+    | JCTunary (_, t1) -> term ef t1
     | JCTshift (t1, t2) 
     | JCTbinary (t1, _, t2) -> 
-	term label (term label ef t1) t2
+	term (term ef t1) t2
     | JCTsub_pointer (_, _) -> assert false (* TODO *)
     | JCTconst _ -> ef
     | JCTmatch _ -> assert false (* TODO *)
-    ) 
+     
 
-let tag label ef t h =
+let tag ef t h =
   let ef = match h with
     | None -> ef
     | Some h -> add_tag_effect ef h
@@ -295,43 +298,43 @@ let tag label ef t h =
   match t.jc_tag_node with
     | JCTtag _
     | JCTbottom -> ef
-    | JCTtypeof(t, _) -> term label ef t
+    | JCTtypeof(t, _) -> term ef t
 
-let rec assertion label ef a =
+let rec assertion ef a =
   match a.jc_assertion_node with
     | JCAtrue | JCAfalse -> ef
     | JCAif (t, a1, a2) -> 
-	assertion label (assertion label (term label ef t) a1) a2
-    | JCAbool_term t -> term label ef t
-    | JCAinstanceof (t, st) -> 
-	add_tag_effect (term label ef t) (root_name st)
+	assertion (assertion (term ef t) a1) a2
+    | JCAbool_term t -> term ef t
+    | JCAinstanceof (t, lab, st) -> 
+	add_tag_effect (term ef t) (root_name st)
     | JCAnot a
-    | JCAold a -> assertion "Pre" ef a
-    | JCAat(a,lab) -> assertion lab ef a
-    | JCAquantifier (_, vi, a) -> assertion label ef a 
-    | JCArelation (t1, _, t2) -> term label (term label ef t1) t2
+    | JCAold a -> assertion ef a
+    | JCAat(a,lab) -> assertion ef a
+    | JCAquantifier (_, vi, a) -> assertion ef a 
+    | JCArelation (t1, _, t2) -> term (term ef t1) t2
     | JCAapp app -> 
 	let li = app.jc_app_fun and tls = app.jc_app_args in
 	let efapp = 
 	  ef_assoc li.jc_logic_info_effects ~label_assoc:app.jc_app_label_assoc app.jc_app_region_assoc 
 	in
-	ef_union efapp (List.fold_left (term label) ef tls)
+	ef_union efapp (List.fold_left term ef tls)
     | JCAiff (a1, a2)
     | JCAimplies (a1, a2) -> 
-	assertion label (assertion label ef a1) a2
+	assertion (assertion ef a1) a2
     | JCAand al | JCAor al -> 
-	List.fold_left (assertion label) ef al
+	List.fold_left assertion ef al
     | JCAmutable (t, st, ta) ->
-	term label
+	term 
 	  (add_mutable_effect 
-	     (tag label ef ta
+	     (tag ef ta
 		(Some (root_name st)))
 	     (root_name st)) t
     | JCAtagequality (t1, t2, h) ->
-	tag label (tag label ef t1 h) t2 h
+	tag (tag ef t1 h) t2 h
     | JCAmatch (t, pal) ->
-	term label
-	  (List.fold_left (fun acc (_, a) -> assertion label acc a) ef pal)
+	term 
+	  (List.fold_left (fun acc (_, a) -> assertion acc a) ef pal)
 	  t
 
 (********************
@@ -347,7 +350,7 @@ let rec expr ef e =
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) (root_name st)
     | JCEderef (e, f) -> 
-	let ef = add_field_alloc_reads "Current" (expr ef e) (f,e.jc_expr_region) in
+	let ef = add_field_alloc_reads LabelHere (expr ef e) (f,e.jc_expr_region) in
 	begin match (skip_shifts e).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -374,7 +377,7 @@ let rec expr ef e =
 	let roots = embedded_struct_roots st in
 	let ef = 
 	  List.fold_left 
-	    (fun ef fi -> add_field_writes "Current" ef (fi,e.jc_expr_region)) ef fields
+	    (fun ef fi -> add_field_writes LabelHere ef (fi,e.jc_expr_region)) ef fields
 	in
 	let ef = 
 	  List.fold_left (fun ef a -> add_alloc_writes ef (a,e.jc_expr_region))
@@ -398,10 +401,10 @@ let rec expr ef e =
 	expr (List.fold_left expr ef (List.map snd pel)) e
 
 let rec loop_annot ef la = 
-  let ef = assertion "Current" ef la.jc_loop_invariant in
+  let ef = assertion ef la.jc_loop_invariant in
   match la.jc_loop_variant with
   | None -> ef
-  | Some t -> term "Current" ef t
+  | Some t -> term ef t
 
 let rec statement ef s =
   match s.jc_statement_node with
@@ -432,7 +435,7 @@ let rec statement ef s =
 	let ef = fef_union efcall (List.fold_left expr ef le) in
 	statement ef s
     | JCSassign_heap (e1, fi, e2) ->
-	let ef = expr (expr (add_field_alloc_writes "Current" ef (fi,e1.jc_expr_region)) e1) e2 in
+	let ef = expr (expr (add_field_alloc_writes LabelHere ef (fi,e1.jc_expr_region)) e1) e2 in
 	begin match (skip_shifts e1).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -446,6 +449,7 @@ let rec statement ef s =
 	else 
 	  expr ef e
     | JCSreturn(_,e) -> expr ef e
+    | JCSlabel(_,s) -> statement ef s
     | JCSpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Assert the invariants of the structure => need the reads of the invariants *)
@@ -468,7 +472,7 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef st in
 		   let ef = add_committed_writes ef st in
 		   (* ...and field as reads *)
-		   add_field_reads "Current" ef (fi,e.jc_expr_region)
+		   add_field_reads LabelHere ef (fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
@@ -491,7 +495,7 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef st in
 		   let ef = add_committed_writes ef st in
 		   (* ...and field as reads *)
-		   add_field_reads "Current" ef (fi,e.jc_expr_region)
+		   add_field_reads LabelHere ef (fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
@@ -521,7 +525,7 @@ let rec statement ef s =
     | JCSdecl(vi,e,s) -> 
 	statement (Option_misc.fold_left expr ef e) s
     | JCSassert((*_,*)a) -> 
-	{ ef with jc_reads = assertion "Current" ef.jc_reads a; }
+	{ ef with jc_reads = assertion ef.jc_reads a; }
     | JCSblock l -> List.fold_left statement ef l
     | JCSmatch(e, psl) ->
 	expr (List.fold_left statement ef (List.map snd psl)) e
@@ -530,14 +534,20 @@ let rec statement ef s =
 let rec location label ef l =
   match l with
     | JCLderef(t,fi,r) ->
-	let ef = add_field_writes label ef (fi,location_set_region t) in
-	let ef = add_field_reads label ef (fi,location_set_region t) in
-	begin match skip_tloc_range t with
-	  | JCLSvar vi ->
-	      if vi.jc_var_info_formal then 
-		add_through_param_reads ef vi 
-	      else ef
-	  | _ -> ef
+	begin
+	  match label with
+	    | None ->
+		Jc_typing.typing_error Loc.dummy_position "No memory state for this dereferenciation (\\at missing ?)"
+	    | Some l ->
+		let ef = add_field_writes l ef (fi,location_set_region t) in
+		let ef = add_field_reads l ef (fi,location_set_region t) in
+		begin match skip_tloc_range t with
+		  | JCLSvar vi ->
+		      if vi.jc_var_info_formal then 
+			add_through_param_reads ef vi 
+		      else ef
+		  | _ -> ef
+		end
 	end
     | JCLvar vi ->
 	if vi.jc_var_info_static then
@@ -547,12 +557,12 @@ let rec location label ef l =
 	  end
 	else ef
     | JCLat(loc,lab) ->
-	location lab ef loc
+	location (Some lab) ef loc
 
 let behavior ef (_,_, b) =
   (* assigns *)
   let ef = Option_misc.fold
-    (fun (_,x) ef -> List.fold_left (location "Current") ef x) 
+    (fun (_,x) ef -> List.fold_left (location (Some LabelHere)) ef x) 
     b.jc_behavior_assigns ef
   in
     (* requires: reads *)
@@ -565,18 +575,18 @@ let behavior ef (_,_, b) =
     (* assumes: reads *)
   let ef = match b.jc_behavior_assumes with
       None -> ef
-    | Some a ->	{ ef with jc_reads = assertion "Pre" ef.jc_reads a }
+    | Some a ->	{ ef with jc_reads = assertion ef.jc_reads a }
   in
     (* ensures: reads *)
   let ef = 
-    { ef with jc_reads = assertion "Current" ef.jc_reads b.jc_behavior_ensures } 
+    { ef with jc_reads = assertion ef.jc_reads b.jc_behavior_ensures } 
   in
     (* throws: raises *)
     Option_misc.fold_left add_exception_effect ef b.jc_behavior_throws
 
 let spec ef s = 
   let ef = List.fold_left behavior ef s.jc_fun_behavior in
-    { ef with jc_reads = assertion "Pre" ef.jc_reads s.jc_fun_requires }
+    { ef with jc_reads = assertion ef.jc_reads s.jc_fun_requires }
 
 let parameter ef vi =
   match vi.jc_var_info_type with
@@ -595,8 +605,8 @@ let logic_fun_effects f =
   in
   let ef = f.jc_logic_info_effects in
   let ef = match ta with
-    | JCTerm t -> term "None" ef t (* TODO: use label for this fun def *)
-    | JCAssertion a -> assertion "None" ef a
+    | JCTerm t -> term ef t 
+    | JCAssertion a -> assertion ef a
     | JCReads r ->
 	List.fold_left
 	  (fun ef l ->
@@ -605,7 +615,7 @@ let logic_fun_effects f =
 	       jc_writes = ef; (* could be anything *)
 	       jc_raises = ExceptionSet.empty;
 	     }
-	     in (location "None" ef l).jc_reads)
+	     in (location None ef l).jc_reads)
 	  ef r
   in
   if same_effects ef f.jc_logic_info_effects then ()
@@ -629,7 +639,7 @@ let fun_effects fi =
     end
 
 let mapElements m =
-  FieldRegionMap.fold (fun key _ acc -> key::acc) m []
+  FieldRegionMap.fold (fun key labels acc -> (key,labels)::acc) m []
       
 let logic_effects funs =
   fixpoint_reached := false;
@@ -649,9 +659,11 @@ let logic_effects funs =
 	 (StringRegionSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
 	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
 	 (StringSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
-	 (print_list comma (fun fmt (fi,r) ->
-			      fprintf fmt "%s,%s" fi.jc_field_info_name
-				r.jc_reg_name))
+	 (print_list comma (fun fmt ((fi,r),labels) ->
+			      fprintf fmt "%s,%s (%a)" fi.jc_field_info_name
+				r.jc_reg_name
+				(print_list comma Jc_output.label) (LogicLabelSet.elements labels)  
+			   ))
 	 (mapElements f.jc_logic_info_effects.jc_effect_memories))
     funs
     
@@ -680,11 +692,11 @@ let function_effects funs =
        Jc_options.lprintf
 	 "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@\n@[ raises: %a@]@." 
 	 f.jc_fun_info_name
-	 (print_list comma (fun fmt (fi,r) ->
+	 (print_list comma (fun fmt ((fi,r),_) ->
 			      fprintf fmt "%s,%s" fi.jc_field_info_name
 				r.jc_reg_name))
 	 (mapElements f.jc_fun_info_effects.jc_reads.jc_effect_memories)
-	 (print_list comma (fun fmt (fi,r) ->
+	 (print_list comma (fun fmt ((fi,r),_) ->
 			      fprintf fmt "%s,%s" fi.jc_field_info_name
 				r.jc_reg_name))
 	 (mapElements f.jc_fun_info_effects.jc_writes.jc_effect_memories)

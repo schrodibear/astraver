@@ -91,6 +91,7 @@ let rec iter_expr_and_statement fexpr fstat s =
 	iter_expr fexpr e;
 	iter_expr_and_statement fexpr fstat ts;
 	iter_expr_and_statement fexpr fstat fs
+    | JCSlabel(lab,s) -> iter_expr_and_statement fexpr fstat s
     | JCStry(s,hl,fs) ->
 	iter_expr_and_statement fexpr fstat s;
 	List.iter (fun (_,_,s) -> iter_expr_and_statement fexpr fstat s) hl;
@@ -119,6 +120,7 @@ let rec fold_statement fpre fpost acc s =
     | JCSif(_,ts,fs) ->
 	let acc = fold_statement fpre fpost acc ts in
 	fold_statement fpre fpost acc fs
+    | JCSlabel(lab,s) -> fold_statement fpre fpost acc s
     | JCStry(s,hl,fs) ->
 	let acc = fold_statement fpre fpost acc s in
 	let acc = 
@@ -154,6 +156,7 @@ let rec fold_expr_in_statement f acc s =
 	let acc = fold_expr f acc e in
 	let acc = fold_expr_in_statement f acc ts in
 	fold_expr_in_statement f acc fs
+    | JCSlabel(lab,s) -> fold_expr_in_statement f acc s
     | JCStry(s,hl,fs) ->
 	let acc = fold_expr_in_statement f acc s in
 	let acc = 
@@ -187,7 +190,7 @@ let rec iter_term f t =
   | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2) 
   | JCTrange(Some t1,Some t2) ->
       iter_term f t1; iter_term f t2
-  | JCTunary(_,t1) | JCTderef(t1,_) | JCTold t1 | JCTat(t1,_) 
+  | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_) 
   | JCToffset(_,t1,_)
   | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
   | JCTrange(None,Some t1) ->
@@ -209,7 +212,7 @@ let rec fold_term f acc t =
   | JCTrange(Some t1,Some t2) ->
       let acc = fold_term f acc t1 in
       fold_term f acc t2
-  | JCTunary(_,t1) | JCTderef(t1,_) | JCTold t1 | JCTat(t1,_) 
+  | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_) 
   | JCToffset(_,t1,_)
   | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
   | JCTrange(None,Some t1) ->
@@ -236,8 +239,8 @@ let rec map_term f t =
 	JCTshift(map_term f t1,map_term f t2)
     | JCTsub_pointer(t1,t2) ->
 	JCTsub_pointer(map_term f t1,map_term f t2)
-    | JCTderef(t1,fi) ->
-	JCTderef(map_term f t1,fi)
+    | JCTderef(t1,lab,fi) ->
+	JCTderef(map_term f t1,lab,fi)
     | JCTapp app ->
 	let tl = app.jc_app_args in
 	JCTapp { app with jc_app_args = List.map (map_term f) tl; }
@@ -289,7 +292,7 @@ let rec iter_term_and_assertion ft fa a =
 	iter_term ft t2
     | JCAapp app ->
 	List.iter (iter_term ft) app.jc_app_args
-    | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	iter_term ft t1
     | JCAand al | JCAor al ->
 	List.iter (iter_term_and_assertion ft fa) al
@@ -344,7 +347,7 @@ let rec fold_term_in_assertion f acc a =
 	fold_term f acc t2
     | JCAapp app ->
 	List.fold_left (fold_term f) acc app.jc_app_args
-    | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	fold_term f acc t1
     | JCAand al | JCAor al ->
 	List.fold_left (fold_term_in_assertion f) acc al
@@ -370,7 +373,7 @@ let rec fold_term_and_assertion ft fa acc a =
 	fold_term ft acc t2
     | JCAapp app ->
 	List.fold_left (fold_term ft) acc app.jc_app_args
-    | JCAinstanceof(t1,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	fold_term ft acc t1
     | JCAand al | JCAor al ->
 	List.fold_left (fold_term_and_assertion ft fa) acc al
@@ -425,8 +428,8 @@ let rec map_term_in_assertion f a =
 	JCArelation(map_term f t1,op,map_term f t2)
     | JCAapp app ->
 	JCAapp { app with jc_app_args = List.map (map_term f) app.jc_app_args }
-    | JCAinstanceof(t1,st) ->
-	JCAinstanceof(map_term f t1,st)
+    | JCAinstanceof(t1,lab,st) ->
+	JCAinstanceof(map_term f t1,lab,st)
     | JCAbool_term t1 ->
 	JCAbool_term(map_term f t1)
     | JCAmutable(t1,st,tag) ->
@@ -470,8 +473,8 @@ let rec map_term_in_assertion f a =
 	JCArelation(map_term f t1,op,map_term f t2)
     | JCAapp app ->
 	JCAapp { app with jc_app_args = List.map (map_term f) app.jc_app_args }
-    | JCAinstanceof(t1,st) ->
-	JCAinstanceof(map_term f t1,st)
+    | JCAinstanceof(t1,lab,st) ->
+	JCAinstanceof(map_term f t1,lab,st)
     | JCAbool_term t1 ->
 	JCAbool_term(map_term f t1)
     | JCAmutable(t1,st,tag) ->

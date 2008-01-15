@@ -73,6 +73,15 @@ let memory_field fi =
     (struct_model_type fi.jc_field_info_root)
     (tr_base_type fi.jc_field_info_type)
 
+let label_var lab name =
+  match lab with
+    | LabelNone -> assert false
+    | LabelHere -> name
+    | LabelPre -> name ^ "_at_Pre"
+    | LabelInit -> name ^ "_at_Init"
+    | LabelPost -> name ^ "_at_Post"
+    | LabelName l -> name ^ "_at_" ^ l
+	
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
   let l =
     FieldRegionMap.fold
@@ -88,22 +97,25 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	     | _ -> r
 	 in
 	 let name = field_region_memory_name(fi,r) in
-	 StringSet.fold
+	 LogicLabelSet.fold
 	   (fun lab acc ->
-	      let name =
+	      let label =
 		match label_assoc with
-		  | None -> (* assert false *) name 
+		  | None -> lab 
 		  | Some a ->
-		      try
-			let l = List.assoc lab a in
-			if label_in_name then
-			  name ^ "_at_" ^ l
-			else
-			  match l with
-			    | "Pre" -> name ^ "@"
-			    | "Post" -> name
-			    | _ -> name ^ "@" ^ l
-		      with Not_found -> (* assert false *) name (**)
+		      try List.assoc lab a
+		      with Not_found -> lab
+	      in			
+	      let name =
+		if label_in_name then label_var label name
+		else
+		  match label with (* hack ?? *)
+		    | LabelNone -> assert false
+		    | LabelHere -> name
+		    | LabelPost -> name
+		    | LabelPre -> name ^ "@"
+		    | LabelInit -> name ^ "@init"
+		    | LabelName l -> name ^ "@" ^ l
 	      in
 	      (name, memory_field fi)::acc)
 	   labs acc)

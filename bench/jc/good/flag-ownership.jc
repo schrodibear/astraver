@@ -12,9 +12,9 @@ type colorT = {
     color colorM;
 }
 
-logic isMonochrome(colorT[..] t, integer i, integer j, color c) =
+    logic isMonochrome{L}(colorT[..] t, integer i, integer j, color c) =
     //    \offset_min(t) <= i && i <= j && j <= \offset_max(t) &&
-    \forall integer k; i <= k && k <= j ==> (t+k).colorM == c
+	\forall integer k; i <= k && k <= j ==> (t+k).colorM == c
 
 
 

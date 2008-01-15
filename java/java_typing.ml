@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.86 2008-01-03 08:17:44 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.87 2008-01-15 14:44:10 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -430,8 +430,8 @@ let get_type_decl package package_env acc d =
     | JPTannot(loc,s) -> assert false
     | JPTaxiom((loc,id),e) -> acc
     | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads((loc,id),ret_type,params,reads) -> acc 
-    | JPTlogic_def((loc,id),ret_type,params,body) -> acc
+    | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> acc 
+    | JPTlogic_def((loc,id),ret_type,labels,params,body) -> acc
 
 
 type classified_name =
@@ -501,10 +501,11 @@ let is_logic_widening_primitive_convertible tfrom tto =
     | Tdouble, Treal -> true
     | _ -> false
 
-let logic_info id ty pars =
+let logic_info id ty labels pars =
   incr logic_tag_counter;
   { java_logic_info_tag = !logic_tag_counter;
     java_logic_info_name = id;
+    java_logic_info_labels = labels;
     java_logic_info_parameters = pars;
     java_logic_info_result_type = ty;
     java_logic_info_calls = [];
@@ -3281,7 +3282,7 @@ let type_decl package_env type_env d =
 	let te = assertion package_env type_env None [] e in
 	Hashtbl.add axioms_table id te
     | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads((loc,id),ret_type,params,reads) -> 
+    | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> 
 	let pl = List.map (type_param package_env type_env) params in
 	let env = 
 	  List.fold_left
@@ -3291,17 +3292,17 @@ let type_decl package_env type_env d =
 	in
 	begin match ret_type with
 	  | None ->
-	      let fi = logic_info id None pl in
+	      let fi = logic_info id None labels pl in
 	      let r = List.map (location package_env type_env None env) reads in
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
 	  | Some ty -> 
-	      let fi = logic_info id (Some (type_type package_env type_env false ty)) pl in
+	      let fi = logic_info id (Some (type_type package_env type_env false ty)) labels pl in
 	      let r = List.map (location package_env type_env None env) reads in
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
 	end
-    | JPTlogic_def((loc,id),ret_type,params,body) -> 
+    | JPTlogic_def((loc,id),ret_type,labels,params,body) -> 
 	let pl = List.map (type_param package_env type_env) params in
 	let env = 
 	  List.fold_left
@@ -3311,12 +3312,12 @@ let type_decl package_env type_env d =
 	in
 	begin match ret_type with
 	  | None ->
-	      let fi = logic_info id None pl in
+	      let fi = logic_info id None labels pl in
 	      let a = assertion package_env type_env None env body in
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
 	  | Some t -> 
-	      let fi = logic_info id (Some (type_type package_env type_env false t)) pl in
+	      let fi = logic_info id (Some (type_type package_env type_env false t)) labels pl in
 	      let a = term package_env type_env None env body in
 	      Hashtbl.add logics_env id fi;
 	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)

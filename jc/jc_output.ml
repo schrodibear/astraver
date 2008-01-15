@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.78 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_output.ml,v 1.79 2008-01-15 14:44:10 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -46,7 +46,7 @@ type jc_decl =
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr option
   | JCaxiom_def of string * assertion
-  | JClogic_fun_def of jc_type option * string 
+  | JClogic_fun_def of jc_type option * string * logic_label list 
       * var_info list * term_or_assertion      
   | JCexception_def of string * exception_info
   | JCglobinv_def of string * assertion
@@ -114,6 +114,15 @@ let offset_kind fmt k =
     | Offset_max -> fprintf fmt "ax"
     | Offset_min -> fprintf fmt "in"
 
+let label fmt l =
+  match l with
+    | LabelNone -> fprintf fmt "None"
+    | LabelName s -> fprintf fmt "%s" s
+    | LabelHere -> fprintf fmt "Here" 
+    | LabelPre -> fprintf fmt "Pre" 
+    | LabelPost -> fprintf fmt "Post" 
+    | LabelInit -> fprintf fmt "Init" 
+
 let rec pattern fmt p =
   match p.jc_pattern_node with
     | JCPstruct(tag, lbls) ->
@@ -152,40 +161,35 @@ let rec term fmt t =
     | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
-    | JCTat(t,lab) -> fprintf fmt "@[\\at(%a,%s)@]" term t lab
+    | JCTat(t,lab) -> fprintf fmt "@[\\at(%a,%a)@]" term t label lab
+(*
     | JCTapp app when List.length app.jc_app_args = 1 ->
 	let op = app.jc_app_fun in
 	let t1 = List.hd app.jc_app_args in
-(*
 	begin try 
 	  ignore 
 	    (Hashtbl.find Jc_typing.enum_conversion_logic_functions_table op);
 	  (* conversion due to enumeration. Ignore it. *)
 	  term fmt t1
 	with Not_found ->
-*)
 	  fprintf fmt "%s(@[%a@])" op.jc_logic_info_name term t1
-(*
 	end
-*)
     | JCTapp app when List.length app.jc_app_args = 2 ->
 	let op = app.jc_app_fun in
 	let l = app.jc_app_args in
-(*	let t1 = List.hd l and t2 = List.nth l 1 in
 	  begin try
 	  let s = lbin_op op in
 	  fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
 	with Not_found ->
-	*)	  fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
+	  fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
 	    (print_list comma term) l 
-(*
 	end
 *)
     | JCTapp app ->
 	let op = app.jc_app_fun and l = app.jc_app_args in
 	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
 	  (print_list comma term) l 
-    | JCTderef (t, fi)-> 
+    | JCTderef (t, label, fi)-> 
 	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
     | JCTshift (t1, t2) -> 
 	fprintf fmt "@[(%a + %a)@]" term t1 term t2
@@ -215,10 +219,10 @@ let rec assertion fmt a =
     | JCAif (t, a1, a2) ->
 	fprintf fmt "@[(%a ? %a : %a)@]" term t assertion a1 assertion a2
     | JCAbool_term t -> term fmt t
-    | JCAinstanceof (t, st) ->
+    | JCAinstanceof (t, lab, st) ->
 	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
-    | JCAat(a,lab) -> fprintf fmt "\\at(%a,%s)" assertion a lab
+    | JCAat(a,lab) -> fprintf fmt "\\at(%a,%a)" assertion a label lab
     | JCAquantifier (q,vi, a)-> 
 	fprintf fmt "@[<v 3>(\\%a %a %s;@\n%a)@]"
 	  quantifier q
@@ -286,7 +290,7 @@ let rec location fmt = function
   | JCLderef (locset, fi,_) ->
       fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
   | JCLat (loc, lab) ->
-      fprintf fmt "\\at(%a,%s)" location loc lab
+      fprintf fmt "\\at(%a,%a)" location loc label lab
 
 let behavior fmt (loc,id,b) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;
@@ -420,13 +424,13 @@ let rec statement fmt s =
 	  (print_list nothing handler) hl
 	  statement fs
     | JCTSgoto lab -> 
-	fprintf fmt "@\ngoto %s;" lab
+	fprintf fmt "@\ngoto %s;" lab.label_info_name
     | JCTSlabel (lab, s) -> 
-	fprintf fmt "@\n%s:%a" lab statement s
+	fprintf fmt "@\n%s:%a" lab.label_info_name statement s
     | JCTScontinue lab -> 
-	fprintf fmt "@\ncontinue %s;" lab
+	fprintf fmt "@\ncontinue %s;" lab.label_info_name
     | JCTSbreak lab -> 
-	fprintf fmt "@\nbreak %s;" lab
+	fprintf fmt "@\nbreak %s;" lab.label_info_name
     | JCTSwhile (e, la, s)-> 
 	fprintf fmt "@\n@[while (%a)@\ninvariant %a;%a%a@]"
 	  expr e assertion la.jc_loop_invariant 
@@ -565,17 +569,24 @@ let rec print_decl fmt d =
     | JClogic_const_def(ty,id,Some t) ->
 	fprintf fmt "@\n@[logic %a %s = %a@]@." print_type ty id
 	  term t
-    | JClogic_fun_def(ty,id,[],JCReads l) ->
+    | JClogic_fun_def(ty,id,labels,[],JCReads l) ->
 	assert (l=[]);
+	assert (labels=[]);
 	fprintf fmt "@\n@[logic %a %s@]@." 
 	  (print_option print_type) ty id
-    | JClogic_fun_def(ty,id,[],JCTerm t) ->
+    | JClogic_fun_def(ty,id,labels,[],JCTerm t) ->
+	assert (labels=[]);
 	fprintf fmt "@\n@[logic %a %s = %a@]@." 
 	  (print_option print_type) ty id term t
-    | JClogic_fun_def(ty,id,params,body) ->
+    | JClogic_fun_def(ty,id,[],params,body) ->
 	fprintf fmt "@\n@[logic %a %s(@[%a@]) %a@]@." 
 	  (print_option print_type) ty 
 	  id (print_list comma param) params
+	  term_or_assertion body 
+    | JClogic_fun_def(ty,id,labels,params,body) ->
+	fprintf fmt "@\n@[logic %a %s{%a}(@[%a@]) %a@]@." 
+	  (print_option print_type) ty 
+	  id (print_list comma label) labels (print_list comma param) params
 	  term_or_assertion body 
     | JClogic_type_def id ->
 	fprintf fmt "@\n@[logic type %s@]@." id

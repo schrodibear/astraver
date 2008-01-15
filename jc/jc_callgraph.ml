@@ -56,7 +56,7 @@ let rec assertion acc p =
       assertion (assertion (term acc t1) p2) p3
   | JCAnot p | JCAold p | JCAat(p,_) | JCAquantifier (_,_,p) -> 
       assertion acc p
-  | JCAinstanceof(t,_)
+  | JCAinstanceof(t,_,_)
   | JCAmutable(t,_,_)
   | JCAbool_term t -> term acc t
   | JCAtagequality(t1, t2, _) ->
@@ -108,6 +108,7 @@ let rec statement acc s =
 	let (a,b) = statement acc s in (loop_annot a spec,b)
     | JCSblock sl -> 
 	List.fold_left statement acc sl
+    | JCSlabel(lab,s) -> statement acc s
     | JCStry (s, catches, finally) -> 
 	let acc =
 	  List.fold_left 

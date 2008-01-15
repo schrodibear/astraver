@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.29 2007-12-18 10:40:53 filliatr Exp $
+$Id: java_parser.mly,v 1.30 2008-01-15 14:44:10 marche Exp $
 
 */
 
@@ -80,6 +80,12 @@ $Id: java_parser.mly,v 1.29 2007-12-18 10:40:53 filliatr Exp $
 	     java_pbehavior_assigns = a;
 	     java_pbehavior_throws = None;
 	     java_pbehavior_ensures = e }) :: behs
+
+  let label (loc,s) = match s with
+    | "Pre" -> LabelPre
+    | "Here" -> LabelHere
+    | "Post" -> LabelPost
+    | _ -> LabelName s
 
 %}
 
@@ -977,14 +983,25 @@ ident:
 /*s parsing of annotations: KML */
 
 kml_type_decl:
-| PREDICATE ident method_parameters LEFTBRACE expr RIGHTBRACE EOF
-    { JPTlogic_def($2,None,$3,$5) }
-| LOGIC type_expr ident method_parameters LEFTBRACE expr RIGHTBRACE EOF
-    { JPTlogic_def($3,Some $2,$4,$6) }
-| LOGIC type_expr ident method_parameters READS expr_comma_list SEMICOLON EOF
-    { JPTlogic_reads($3,Some $2,$4,$6) }
+| PREDICATE ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
+    { JPTlogic_def($2,None,$3,$4,$6) }
+| LOGIC type_expr ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
+    { JPTlogic_def($3,Some $2,$4, $5,$7) }
+| LOGIC type_expr ident label_binders method_parameters READS expr_comma_list SEMICOLON EOF
+    { JPTlogic_reads($3,Some $2,$4,$5,$7) }
 | AXIOM ident COLON expr SEMICOLON EOF
     { JPTaxiom($2,$4) }
+
+label_binders:
+| /* epsilon */ { [] }
+| LEFTBRACE ident label_list_end RIGHTBRACE { (label $2)::$3 }
+;
+
+label_list_end:
+| /* epsilon */ { [] }
+| COMMA ident label_list_end { (label $2)::$3 }
+;
+
 
 kml_field_decl:
 | requires assigns ensures behaviors EOF

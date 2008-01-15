@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.9 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_separation.ml,v 1.10 2008-01-15 14:44:11 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -150,6 +150,7 @@ let statement rresult s =
 	end
     | JCSreturn(ty,e) ->
 	Region.unify rresult e.jc_expr_region
+    | JCSlabel(lab,s) -> ()
     | JCSassert a ->
 	assertion rresult a
     | JCSloop(la,_) ->

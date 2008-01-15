@@ -172,7 +172,7 @@ let field fi this loc =
 let rec check_rep ?(must_deref=false) this loc t =
   match t.jc_term_node with
     | JCTvar vi when vi == this && not must_deref -> ()
-    | JCTderef (t, fi) ->
+    | JCTderef (t, lab, fi) ->
 	field fi this loc;
 	check_rep ~must_deref:false this loc t
     | JCTcast (t, _)
@@ -207,7 +207,7 @@ let rec assertion this p =
   match p.jc_assertion_node with
     | JCAtrue | JCAfalse -> ()
     | JCAif (_, _, _) -> assert false (* TODO *)
-    | JCAinstanceof(t,_)
+    | JCAinstanceof(t,_,_)
     | JCAbool_term t -> term this t
     | JCAold p -> assertion this p
     | JCAat(p,_) -> assertion this p
@@ -251,7 +251,7 @@ let check invs =
 let rec term_memories aux t = 
   fold_term 
     (fun aux t -> match t.jc_term_node with
-    | JCTderef(t, fi) ->
+    | JCTderef(t, lab, fi) ->
 	let m = fi.jc_field_info_final_name in
 	StringSet.add m aux
     | _ -> aux
@@ -274,7 +274,7 @@ let rec assertion_memories aux a = match a.jc_assertion_node with
   | JCAat(a,_)
   | JCAquantifier(_,_, a) -> assertion_memories aux a
   | JCAapp app -> List.fold_left term_memories aux app.jc_app_args
-  | JCAinstanceof(t, _)
+  | JCAinstanceof(t, _, _ )
   | JCAbool_term t -> term_memories aux t
   | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
   | JCAmutable(t, _, _) -> term_memories aux t

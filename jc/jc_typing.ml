@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.158 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.159 2008-01-15 14:44:11 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -478,12 +478,13 @@ let make_logic_bin_op loc op e1 e2 =
     | BPimplies | BPiff -> assert false
 
 	  
-let rec term env e =
+let rec term label_env logic_label env e =
+  let ft = term label_env logic_label env in
   let lab = ref "" in
   let t,tr,te =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
-	  let tt = term env e in
+	  let tt = ft e in
 	  lab := l; 
 	  tt.jc_term_type,tt.jc_term_region,tt.jc_term_node
       | JCPEvar id ->
@@ -503,11 +504,11 @@ let rec term env e =
 		  typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1,t) -> 
-	  let te1 = term env e1 in
+	  let te1 = ft e1 in
 	  let st = find_struct_info e.jc_pexpr_loc t in
 	  boolean_type,dummy_region, JCTinstanceof(te1,st)
       | JCPEcast(e1, t) -> 
-	  let te1 = term env e1 in
+	  let te1 = ft e1 in
 	  begin
 	    try
 	      let ri = Hashtbl.find enum_types_table t in
@@ -527,13 +528,17 @@ let rec term env e =
 		    typing_error e.jc_pexpr_loc "only structures can be cast"
 	  end
       | JCPEbinary (e1, op, e2) -> 
-	  let e1 = term env e1 and e2 = term env e2 in
+	  let e1 = ft e1 and e2 = ft e2 in
 	  make_logic_bin_op e.jc_pexpr_loc op e1 e2 
       | JCPEunary(op, e2) -> 
-	  let te2 = term env e2
+	  let te2 = ft e2
 	  in
 	  make_logic_unary_op e.jc_pexpr_loc op te2
       | JCPEapp (id, labs, args) ->
+	  List.iter
+	    (fun l -> if List.mem l label_env then () else
+	       typing_error e.jc_pexpr_loc "label `%a' not found" Jc_output.label l)
+	    labs;
 (*
 	  begin
 	    match e1.jc_pexpr_node with
@@ -550,7 +555,7 @@ let rec term env e =
 			  List.map2
 			    (fun vi e ->
 			       let ty = vi.jc_var_info_type in
-			       let te = term env e in
+			       let te = ft e in
 			       if subtype_strict te.jc_term_type ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
@@ -564,14 +569,17 @@ let rec term env e =
 		      let ty = match pi.jc_logic_info_result_type with
 			| None -> assert false | Some ty -> ty
 		      in
-		      let label_assoc =
-			try
-			  List.map2
-			    (fun l1 l2 -> (l1,l2))
-			    pi.jc_logic_info_labels labs
-			with Invalid_argument _ ->
-			  typing_error e.jc_pexpr_loc 
-			    "wrong number of labels for %s" id
+		      let label_assoc = 
+			match logic_label, pi.jc_logic_info_labels, labs with
+			  | Some l, [lf], [] -> [lf,l]
+			  | _ ->
+			      try
+				List.map2
+				  (fun l1 l2 -> (l1,l2))
+				  pi.jc_logic_info_labels labs
+			      with Invalid_argument _ ->
+				typing_error e.jc_pexpr_loc 
+				  "wrong number of labels for %s" id
 		      in
 		      let app = {
 			jc_app_fun = pi;
@@ -590,21 +598,33 @@ let rec term env e =
 	  end
 *)
       | JCPEderef (e1, f) -> 
-	  let te = term env e1 in
+	  let te = ft e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_term_type f true in
-	  fi.jc_field_info_type, 
-	  Region.make_field te.jc_term_region fi,
-	  JCTderef(te,fi)	  
+	  begin
+	    match logic_label with
+	      | None ->
+		  typing_error e.jc_pexpr_loc "No memory state for this dereferenciation (\\at missing ?)"
+	      | Some l ->
+		  fi.jc_field_info_type, 
+		  Region.make_field te.jc_term_region fi,
+		  JCTderef(te,l,fi)	  
+	  end
       | JCPEconst c -> 
 	  let t,tr,c = const c in t,tr,JCTconst c
       | JCPEold e -> 
-	  let te = term env e in te.jc_term_type,te.jc_term_region,JCTold(te)
+	  if List.mem LabelPre label_env then
+	    let te = term label_env (Some LabelPre) env e in 
+	    te.jc_term_type,te.jc_term_region,JCTold(te)
+	  else
+	    typing_error e.jc_pexpr_loc "\\old not defined in this context"
       | JCPEat(e,lab) -> 
-	  let te = term env e in 
-	  (* TODO: check lab exists *)
-	  te.jc_term_type,te.jc_term_region,JCTat(te,lab)
+	  if List.mem lab label_env then
+	    let te = term label_env (Some lab) env e in 
+	    te.jc_term_type,te.jc_term_region,JCTat(te,lab)
+	  else
+	    typing_error e.jc_pexpr_loc "label `%a' not found" Jc_output.label lab
       | JCPEoffset(k,e) -> 
-	  let te = term env e in 
+	  let te = ft e in 
 	  begin
 	    match te.jc_term_type with 
 	      | JCTpointer(st,_,_) ->
@@ -613,10 +633,7 @@ let rec term env e =
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
       | JCPEif(e1,e2,e3) ->
-	  let te1 = term env e1 
-	  and te2 = term env e2
-	  and te3 = term env e3 
-	  in
+	  let te1 = ft e1 and te2 = ft e2 and te3 = ft e3 in
 	  begin
 	    match te1.jc_term_type with
 	      | JCTnative Tboolean ->
@@ -633,9 +650,9 @@ let rec term env e =
 		    "boolean expression expected"
 	  end
       | JCPElet(id,e1,e2) ->
-	  let te1 = term env e1 in
+	  let te1 = ft e1 in
 	  let vi = var te1.jc_term_type id in
-	  let te2 = term ((id,vi)::env) e2 in
+	  let te2 = term label_env logic_label ((id,vi)::env) e2 in
 	  te2.jc_term_type,te2.jc_term_region, te2.jc_term_node
 	  (* non-pure expressions *)
       | JCPEassign_op _ 
@@ -650,19 +667,19 @@ let rec term env e =
 	  typing_error e.jc_pexpr_loc 
 	    "memory (de-)allocation not allowed as logic term"
       | JCPErange(Some e1,Some e2) ->
-	  let e1 = term env e1 and e2 = term env e2 in
+	  let e1 = ft e1 and e2 = ft e2 in
 	  let t1 = e1.jc_term_type and t2 = e2.jc_term_type in
 	  assert (is_numeric t1 && is_numeric t2);
 	  let t = lub_numeric_types t1 t2 in
 	  JCTnative t, dummy_region, 
 	  JCTrange(Some (term_coerce t1 t e1),Some (term_coerce t2 t e2))
       | JCPErange(Some e,None) ->
-	  let e = term env e in
+	  let e = ft e in
 	  let t = e.jc_term_type in
 	  assert (is_numeric t);
 	  t, dummy_region,JCTrange(Some e,None)
       | JCPErange(None,Some e) ->
-	  let e = term env e in
+	  let e = ft e in
 	  let t = e.jc_term_type in
 	  assert (is_numeric t);
 	  t,dummy_region, JCTrange(None,Some e)
@@ -763,7 +780,7 @@ let make_rel_bin_op loc op e1 e2 =
     | BPimplies -> assert false
     | BPiff -> assert false
 
-let tag env hierarchy t =
+let tag label_env logic_label env hierarchy t =
   let check_hierarchy loc st =
     if hierarchy <> "" &&
       root_name st != hierarchy then
@@ -779,7 +796,7 @@ of %s"
 	JCTtag st
     | JCPTbottom -> JCTbottom
     | JCPTtypeof tof ->
-	let ttof = term env tof in
+	let ttof = term label_env logic_label env tof in
 	match ttof.jc_term_type with
 	  | JCTpointer(st, _, _) ->
 	      check_hierarchy tof.jc_pexpr_loc st;
@@ -790,12 +807,14 @@ of %s"
     jc_tag_loc = t.jc_ptag_loc
   }
 
-let rec assertion env e =
+let rec assertion label_env logic_label env e =
+  let fa = assertion label_env logic_label env in
+  let ft = term label_env logic_label env in
   let lab = ref "" in
   let te =
     match e.jc_pexpr_node with
       | JCPElabel(l,e) ->
-	  let te = assertion env e in
+	  let te = fa e in
 	  lab := l; 
 	  te.jc_assertion_node
       | JCPEvar id -> 
@@ -818,26 +837,30 @@ let rec assertion env e =
 		  typing_error e.jc_pexpr_loc "non boolean expression"
 	  end
       | JCPEinstanceof(e1, t) -> 
-	  let te1 = term env e1 in
-	  let st = find_struct_info e.jc_pexpr_loc t in
-	  JCAinstanceof(te1,st) 
+	  begin
+	    match logic_label with
+	      | None ->
+		  typing_error e.jc_pexpr_loc "No memory state for this instanceof (\\at missing ?)"
+	      | Some l ->
+		  let te1 = ft e1 in
+		  let st = find_struct_info e.jc_pexpr_loc t in
+		  JCAinstanceof(te1,l,st) 
+	  end
       | JCPEcast(e, t) -> assert false
       | JCPEbinary (e1, BPland, e2) -> 
-	  let a1 = assertion env e1 in
-	  let a2 = assertion env e2 in
+	  let a1 = fa e1 and a2 = fa e2 in
 	  make_and a1 a2
       | JCPEbinary (e1, BPlor, e2) -> 
-	  make_or (assertion env e1) (assertion env e2)
+	  make_or (fa e1) (fa e2)
       | JCPEbinary (e1, BPimplies, e2) -> 
-	  let a1 = assertion env e1 in
-	  let a2 = assertion env e2 in
+	  let a1 = fa e1 and a2 = fa e2 in
 	  JCAimplies(a1,a2)
       | JCPEbinary (e1, BPiff, e2) -> 
-	  JCAiff(assertion env e1,assertion env e2)
+	  JCAiff(fa e1,fa e2)
       | JCPEunary (UPnot, e2) -> 
-	  JCAnot(assertion env e2)
+	  JCAnot(fa e2)
       | JCPEbinary (e1, op, e2) -> 
-	  let e1 = term env e1 and e2 = term env e2 in
+	  let e1 = ft e1 and e2 = ft e2 in
 	  make_rel_bin_op e.jc_pexpr_loc op e1 e2
       | JCPEunary(op, e2) -> 
 	  assert false
@@ -847,6 +870,10 @@ let rec assertion env e =
 		   jc_app_args = [e2])
 *)
       | JCPEapp (id, labs, args) ->
+	  List.iter
+	    (fun l -> if List.mem l label_env then () else
+	       typing_error e.jc_pexpr_loc "label `%a' not found" Jc_output.label l)
+	    labs;
 (*
 	  begin
 	    match e1.jc_pexpr_node with
@@ -860,7 +887,7 @@ let rec assertion env e =
 			  List.map2
 			    (fun vi e ->
 			       let ty = vi.jc_var_info_type in
-			       let te = term env e in
+			       let te = ft e in
 			       if subtype_strict te.jc_term_type ty then te
 			       else
 				 typing_error e.jc_pexpr_loc 
@@ -872,13 +899,16 @@ let rec assertion env e =
 			    "wrong number of arguments for %s" id
 		      in
 		      let label_assoc =
-			try
-			  List.map2
-			    (fun l1 l2 -> (l1,l2))
-			    pi.jc_logic_info_labels labs
-			with Invalid_argument _ ->
-			  typing_error e.jc_pexpr_loc 
-			    "wrong number of labels for %s" id
+			match logic_label, pi.jc_logic_info_labels, labs with
+			  | Some l, [lf], [] -> [lf,l]
+			  | _ ->
+			      try
+				List.map2
+				  (fun l1 l2 -> (l1,l2))
+				  pi.jc_logic_info_labels labs
+			      with Invalid_argument _ ->
+				typing_error e.jc_pexpr_loc 
+				  "wrong number of labels for %s" id
 		      in
 		      let app = {
 			jc_app_fun = pi;
@@ -897,19 +927,23 @@ let rec assertion env e =
 	  end
 *)
       | JCPEderef (e, id) -> 
-	  let te = term env e in
-	  let fi = find_field e.jc_pexpr_loc te.jc_term_type id true in
 	  begin
-	    match fi.jc_field_info_type with
-	      | JCTnative Tboolean ->
-		  JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
-				 jc_term_label = "";
-				  jc_term_type = fi.jc_field_info_type;
-				  jc_term_region = 
-		                    Region.make_field te.jc_term_region fi;
-				  jc_term_node = JCTderef(te,fi) }
-	      | _ ->
-		  typing_error e.jc_pexpr_loc "non boolean expression"
+	    match logic_label with
+	      | None ->
+		  typing_error e.jc_pexpr_loc "No memory state for this dereferenciation (\\at missing ?)"
+	      | Some l ->
+		  let te = ft e in
+		  let fi = find_field e.jc_pexpr_loc te.jc_term_type id true in
+		  match fi.jc_field_info_type with
+		    | JCTnative Tboolean ->
+			JCAbool_term { jc_term_loc = e.jc_pexpr_loc;
+				       jc_term_label = "";
+				       jc_term_type = fi.jc_field_info_type;
+				       jc_term_region = 
+		            Region.make_field te.jc_term_region fi;
+				       jc_term_node = JCTderef(te,l,fi) }
+		    | _ ->
+			typing_error e.jc_pexpr_loc "non boolean expression"
 	  end
 (*
       | JCPEshift (_, _) -> assert false
@@ -924,16 +958,19 @@ let rec assertion env e =
 	  end
       | JCPEquantifier(q,ty,idl,e1) -> 
 	  let ty = type_type ty in
-	  (make_quantifier q e.jc_pexpr_loc ty idl env e1).jc_assertion_node
-      | JCPEold e -> JCAold(assertion env e)
+	  (make_quantifier q e.jc_pexpr_loc ty idl label_env logic_label env e1).jc_assertion_node
+      | JCPEold e -> 
+	  if List.mem LabelPre label_env then
+	    JCAold(assertion label_env (Some LabelPre) env e)
+	  else
+	    typing_error e.jc_pexpr_loc "\\old not defined in this context"
       | JCPEat(e,lab) -> 
-	  (* TODO: check if lab exists *)
-	  JCAat(assertion env e,lab)
+	  if List.mem lab label_env then
+	    JCAat(assertion label_env (Some lab) env e,lab)
+	  else
+	    typing_error e.jc_pexpr_loc "label `%a' not found" Jc_output.label lab
       | JCPEif(e1,e2,e3) ->
-	  let te1 = term env e1 
-	  and te2 = assertion env e2
-	  and te3 = assertion env e3 
-	  in
+	  let te1 = ft e1 and te2 = fa e2 and te3 = fa e3 in
 	  begin
 	    match te1.jc_term_type with
 	      | JCTnative Tboolean ->
@@ -954,16 +991,16 @@ let rec assertion env e =
 	  typing_error e.jc_pexpr_loc 
 	    "memory (de-)allocation not allowed as logic term"
       | JCPEmutable(e, t) ->
-	  let te = term env e in
+	  let te = ft e in
 	  let te_st = match te.jc_term_type with
 	    | JCTpointer(st, _, _) -> st
 	    | _ -> typing_error e.jc_pexpr_loc "pointer expression expected"
 	  in
-	  let tt = tag env (root_name te_st) t in
+	  let tt = tag label_env logic_label env (root_name te_st) t in
 	  JCAmutable(te, te_st, tt)
       | JCPEtagequality(tag1, tag2) ->
-	  let ttag1 = tag env "" tag1 in
-	  let ttag2 = tag env "" tag2 in
+	  let ttag1 = tag label_env logic_label env "" tag1 in
+	  let ttag2 = tag label_env logic_label env "" tag2 in
 	  let st = match ttag1.jc_tag_node, ttag2.jc_tag_node with
 	    | JCTbottom, JCTbottom -> None
 	    | JCTbottom, JCTtag st
@@ -991,13 +1028,13 @@ different"
        jc_assertion_label = !lab;
        jc_assertion_loc = e.jc_pexpr_loc }
 
-and make_quantifier q loc ty idl env e : assertion =
+and make_quantifier q loc ty idl label_env logic_label env e : assertion =
   match idl with
-    | [] -> assertion env e
+    | [] -> assertion label_env logic_label env e
     | id::r ->
 	let vi = var ty id in
 	let f = 
-	  JCAquantifier(q,vi,make_quantifier q loc ty r ((id,vi)::env) e) 
+	  JCAquantifier(q,vi,make_quantifier q loc ty r label_env logic_label ((id,vi)::env) e) 
 	in
 	{ jc_assertion_loc = loc ; 
 	  jc_assertion_label = ""; 
@@ -1385,8 +1422,10 @@ let loop_annot =
   let globtag = ref 0 in
   let get() = let tag = !globtag in incr globtag; tag in
   fun env i v ->
-    let ti = assertion env i
-    and tv = match v with None -> None | Some v -> Some (term env v)
+    let ti = assertion [LabelPre] (Some LabelHere) env i
+    and tv = match v with 
+      | None -> None 
+      | Some v -> Some (term [LabelPre] (Some LabelHere) env v)
     in
     (* TODO: check variant is integer, or other order ? *) 
     { 
@@ -1513,7 +1552,7 @@ let build_label_tree sl : label_tree list =
     | [LabelBlock l] -> l
     | _ -> assert false
 
-let rec statement env lz s =
+let rec statement label_env env lz s =
   let ts,lz =
     match s.jc_pstatement_node with
       | JCPSskip -> JCTSblock [], lz
@@ -1550,7 +1589,7 @@ let rec statement env lz s =
 		(LabelBlock b1::LabelBlock b2::LabelBlock b3::before,after)
 	    | _ -> assert false
 	  in
-	  let ts,_ = statement env lz1 s in
+	  let ts,_ = statement label_env env lz1 s in
 	  let catches,_ = 
 	    List.fold_left
 	      (fun (acc,lz) (id,v,st) ->
@@ -1573,11 +1612,11 @@ let rec statement env lz s =
 		 in
 		 let vi = var tei v in
 		 let env' = (v,vi) :: env in
-		 let s,_ = statement env' lz1 st in
+		 let s,_ = statement label_env env' lz1 st in
 		 (ei,Some vi,s)::acc, lz2)
 	      ([],lz2) catches
 	  in
-	  let fs,_ = statement env lz3 finally in
+	  let fs,_ = statement label_env env lz3 finally in
 	  JCTStry(ts,catches,fs), lz4
       | JCPSgoto lab -> 
 	  let before,after = lz in
@@ -1614,7 +1653,7 @@ let rec statement env lz s =
 	  if info.times_used = 0 then
 	    begin
 	      (* unused label *)
-	      let ts,lz2 = statement env lz1 s in
+	      let ts,lz2 = statement (LabelName lab::label_env) env lz1 s in
 	      ts.jc_tstatement_node, lz2
 	    end
 	  else
@@ -1629,7 +1668,8 @@ let rec statement env lz s =
 	    JCTSthrow(ei, None), lz1
       | JCPScontinue _ -> assert false
       | JCPSbreak l -> (* TODO: check l exists, check enclosing loop exists, *)
-	  JCTSbreak l, lz 
+	  let li = { label_info_name = l ; times_used = 0 } in
+	  JCTSbreak li, lz 
       | JCPSreturn None ->
 	  JCTSreturn_void, lz
       | JCPSreturn (Some e) -> 
@@ -1651,7 +1691,7 @@ let rec statement env lz s =
 	      | _ -> assert false
 	    in
 	    let lo = loop_annot env inv var
-	    and ts,_ = statement env lz1 body
+	    and ts,_ = statement label_env env lz1 body
 	    in
 	    JCTSwhile(tc,lo,ts), lz2
 	  else 
@@ -1666,7 +1706,7 @@ let rec statement env lz s =
 	      | _ -> assert false
 	    in
 	    let lo = loop_annot env inv var
-	    and tbody,_ = statement env lz1 body
+	    and tbody,_ = statement label_env env lz1 body
 	    and tupdates = List.map (expr env) updates
 	    in
 	    match init with
@@ -1701,8 +1741,8 @@ let rec statement env lz s =
 		  printf "after if: %a" printf_label_tree (LabelBlock after);
 		  assert false
 	    in
-	    let ts1,_ = statement env lz1 s1
-	    and ts2,_ = statement env lz2 s2
+	    let ts1,_ = statement label_env env lz1 s1
+	    and ts2,_ = statement label_env env lz2 s2
 	    in
 	    JCTSif(tc,ts1,ts2), lz3
 	  else 
@@ -1711,7 +1751,7 @@ let rec statement env lz s =
 	  typing_error s.jc_pstatement_loc
 	    "decl of `%s' with statements afterwards" id, lz
       | JCPSassert( (*id,*) e) ->
-          let a = assertion env e in
+          let a = assertion label_env (Some LabelHere) env e in
           JCTSassert((*Option_misc.map (fun x -> x.jc_identifier_name) id,*) a), lz
       | JCPSexpr e -> 
 	  let te = expr env e in JCTSexpr te, lz
@@ -1722,7 +1762,7 @@ let rec statement env lz s =
 		(LabelBlock b1::before,after)
 	    | _ -> assert false
 	  in
-	  make_block (statement_list env lz1 l), lz2
+	  make_block (statement_list label_env env lz1 l), lz2
       | JCPSpack (e, t) ->
 	  let te = expr env e in
 	  begin match te.jc_texpr_type with
@@ -1789,7 +1829,7 @@ let rec statement env lz s =
 			    | None -> None)
 		       labels
 		   in
-		   let ts = statement_list env lz1 sl in
+		   let ts = statement_list label_env env lz1 sl in
 		   (labels,ts) :: acc, lz2
 		) ([],lz1) csl
 	    in
@@ -1803,12 +1843,12 @@ let rec statement env lz s =
 	     jc_tstatement_loc = s.jc_pstatement_loc } in
   ts, lz
 
-and statement_list env lz l : tstatement list =
-  let rec block env lz = function
+and statement_list label_env env lz l : tstatement list =
+  let rec block label_env env lz = function
     | [] -> [], []
     | s :: r -> 
 	match s.jc_pstatement_node with
-	  | JCPSskip -> block env lz r
+	  | JCPSskip -> block label_env env lz r
 	  | JCPSdecl (ty, id, e) ->
 	      let ty = type_type ty in
 	      let vi = var ty id in
@@ -1824,7 +1864,7 @@ and statement_list env lz l : tstatement list =
 			 print_type ty print_type te.jc_texpr_type)
 		  e
 	      in
-	      let tr,bl = block ((id,vi)::env) lz r in
+	      let tr,bl = block label_env ((id,vi)::env) lz r in
 	      let tr = { jc_tstatement_loc = s.jc_pstatement_loc;
 			 jc_tstatement_node = make_block tr } 
 	      in
@@ -1832,19 +1872,23 @@ and statement_list env lz l : tstatement list =
 		  jc_tstatement_node = JCTSdecl(vi, te, tr); } ], bl
 
 	  | JCPSlabel (lab,s) ->
-	      let info,lz1 = match lz with
+	      let lab_info,lz1 = match lz with
 		| before,LabelItem lab'::after ->
 		    assert (lab=lab'.label_info_name);
 		    lab',(LabelItem lab'::before,after)
 		| _ -> assert false
 	      in
-	      if info.times_used = 0 then
-		begin
+	      let (bs,bl) = block (LabelName lab::label_env) env lz1 (s::r) in
+	      let bs = { jc_tstatement_node = make_block bs;
+			 jc_tstatement_loc = s.jc_pstatement_loc } 
+	      in
+	      if lab_info.times_used = 0 then
+		begin		  
 		  (* unused label *)
-		  block env lz1 (s::r)
+		  [{ jc_tstatement_loc = s.jc_pstatement_loc;
+		    jc_tstatement_node = JCTSlabel (lab_info,bs)}], bl
 		end
 	      else
-		let (bs,bl) = block env lz1 (s::r) in
 		let id = "Goto_" ^ lab in
 		let ei =
 		  try Hashtbl.find exceptions_table id
@@ -1853,16 +1897,14 @@ and statement_list env lz l : tstatement list =
 		    Hashtbl.add exceptions_table id ei;
 		    ei
 		in
-		let bs = { jc_tstatement_node = make_block bs;
-			   jc_tstatement_loc = s.jc_pstatement_loc } in
 		[ { jc_tstatement_loc = s.jc_pstatement_loc;
 		    jc_tstatement_node = JCTSthrow(ei, None); } ], (lab,bs)::bl
 	  | _ -> 
-	      let s,lz' = statement env lz s in
-	      let r,bl = block env lz' r in
+	      let s,lz' = statement label_env env lz s in
+	      let r,bl = block label_env env lz' r in
 	      s :: r, bl
   in
-  let bs,bl = block env lz l in
+  let bs,bl = block label_env env lz l in
   let bs = { jc_tstatement_node = make_block bs;
 	     jc_tstatement_loc = Loc.dummy_position } in
   let ts = List.fold_left 
@@ -1892,7 +1934,7 @@ let const_zero =
   }
 
 
-let rec location_set env e =
+let rec location_set label_env logic_label env e =
   match e.jc_pexpr_node with
     | JCPElabel(l,e) ->	
 	  assert false (* TODO *)
@@ -1916,8 +1958,8 @@ let rec location_set env e =
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	end
     | JCPEbinary(e,BPadd,i) ->
-	let ty,tr,te = location_set env e in
-	let ti = term env i in
+	let ty,tr,te = location_set label_env logic_label env e in
+	let ti = term label_env logic_label env i in
 	begin
 	  match ty,ti.jc_term_type with 
 	    | JCTpointer(st,_,_), JCTnative Tinteger ->
@@ -1932,7 +1974,7 @@ let rec location_set env e =
 	end
     | JCPEbinary _ -> assert false
     | JCPEderef (ls, f) -> 
-	let t,tr,tls = location_set env ls in
+	let t,tr,tls = location_set label_env logic_label env ls in
 	let fi = find_field e.jc_pexpr_loc t f false in
 	let fr = Region.make_field tr fi in
 	fi.jc_field_info_type,fr,JCLSderef(tls,fi,fr)	  
@@ -1956,7 +1998,7 @@ let rec location_set env e =
     | JCPEfree _
     | JCPEmatch _ -> assert false
 
-let rec location env e =
+let rec location label_env logic_label env e =
   match e.jc_pexpr_node with
     | JCPElabel(l,e) ->
 	  assert false (* TODO *)
@@ -1973,14 +2015,21 @@ let rec location env e =
 	      typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
     | JCPEderef(ls,f) ->
-	let t,tr,tls = location_set env ls in
-	let fi = find_field e.jc_pexpr_loc t f false in
-	let fr = Region.make_field tr fi in
-	fi.jc_field_info_type,fr,JCLderef(tls,fi,fr)	  
+	begin
+	  match logic_label with
+	    | None -> typing_error e.jc_pexpr_loc "No label for this dereferenciation (\\at missing ?)"
+	    | Some l ->
+		let t,tr,tls = location_set label_env logic_label env ls in
+		let fi = find_field e.jc_pexpr_loc t f false in
+		let fr = Region.make_field tr fi in
+		fi.jc_field_info_type,fr,JCLderef(tls,fi,fr)	  
+	end
     | JCPEat(e,lab) ->
-	let t,tr,tl = location env e in
-	(* TODO: check label exists *)
-	t,tr,JCLat(tl,lab)
+	if List.mem lab label_env then
+	  let t,tr,tl = location label_env (Some lab) env e in
+	  t,tr,JCLat(tl,lab)
+	else
+	  typing_error e.jc_pexpr_loc "label `%a' not found" Jc_output.label lab
 	
 	
     | JCPEold _ -> assert false (* TODO *)
@@ -2010,7 +2059,7 @@ let clause env vi_result c acc =
     | JCPCrequires(e) ->
 	{ acc with 
 	  jc_fun_requires = 
-	    raw_asrt (make_and (assertion env e) acc.jc_fun_requires); }
+	    raw_asrt (make_and (assertion [] (Some LabelHere) env e) acc.jc_fun_requires); }
     | JCPCbehavior(loc,id,throws,assumes,requires,assigns,ensures) ->
 	let throws,env_result = 
 	  match throws with
@@ -2032,14 +2081,14 @@ let clause env vi_result c acc =
 		  typing_error id.jc_identifier_loc 
 		    "undeclared exception %s" id.jc_identifier_name
 	in
-	let assumes = Option_misc.map (assertion env) assumes in
+	let assumes = Option_misc.map (assertion [] (Some LabelHere) env) assumes in
 (*
-	let requires = Option_misc.map (assertion env) requires in
+	let requires = Option_misc.map (assertion (Some "Here") env) requires in
 *)
 	let assigns = 
 	  Option_misc.map 
 	    (fun (loc,l) -> 
-	      (loc,List.map (fun a -> let _,_,tl = location env a in tl) l)) 
+	      (loc,List.map (fun a -> let _,_,tl = location [LabelPre] (Some LabelHere) env a in tl) l)) 
 	    assigns 
 	in
 	let b = {
@@ -2049,7 +2098,7 @@ let clause env vi_result c acc =
 	  jc_behavior_requires = requires;
 *)
 	  jc_behavior_assigns = assigns;
-	  jc_behavior_ensures = assertion env_result ensures }
+	  jc_behavior_ensures = assertion [LabelPre;LabelHere] (Some LabelHere) env_result ensures }
 	in
 (*
 	eprintf "lab,loc for ensures: \"%s\", %a@."
@@ -2241,6 +2290,11 @@ let type_range_of_term ty t =
 	() (* TODO *)
 *)
 
+let default_label l =
+  match l with
+    | [l] -> Some l
+    | _ -> None
+
 let rec decl d =
   match d.jc_pdecl_node with
     | JCPDvar (ty, id, init) ->
@@ -2272,7 +2326,7 @@ let rec decl d =
 		  if Jc_options.debug then 
 		    printf "%a" printf_label_tree (LabelBlock lz); 
 	        *)
-		 statement_list (("\\result",vi)::param_env) ([],lz) body
+		 statement_list [] (("\\result",vi)::param_env) ([],lz) body
 	    ) body
 	in
 	  Hashtbl.add functions_table fi.jc_fun_info_tag (fi,loc,s,b)
@@ -2326,9 +2380,12 @@ let rec decl d =
 of an invariant policy";
 	       let vi =
 		 var (JCTpointer (struct_info, Some zero, Some zero)) x in
-	       let p = assertion [(x, vi)] e in
+	       let p = assertion [] (Some LabelHere) [(x, vi)] e in
 	       let pi = make_rel id.jc_identifier_name in
 	       pi.jc_logic_info_parameters <- [vi];
+	       pi.jc_logic_info_labels <- [LabelHere];
+	       eprintf "generating logic fun %s with one default label@."
+		 pi.jc_logic_info_name;
 	       Hashtbl.replace logic_functions_table 
 		 pi.jc_logic_info_tag (pi, JCAssertion p);
 	       Hashtbl.replace logic_functions_env id.jc_identifier_name pi;
@@ -2369,10 +2426,10 @@ of an invariant policy";
 	    Hashtbl.add logic_type_table id id
 	end
     | JCPDaxiom(id,labels,e) ->
-	let te = assertion (* TODO: labels *) [] e in
+	let te = assertion labels (default_label labels) [] e in
 	Hashtbl.add axioms_table id (labels,te)
     | JCPDglobinv (id, e) ->
-	let a = assertion [] e in
+	let a = assertion [] None [] e in
 	let li = make_rel id in
 	  if !Jc_common_options.inv_sem = InvArguments then 
 	    Hashtbl.replace logic_functions_table 
@@ -2388,7 +2445,7 @@ of an invariant policy";
 	      assert (reads =[]);
 	      None
 	  | JCPExpr body ->
-              let t = term [] body in
+              let t = term labels (default_label labels) [] body in
               if not (subtype t.jc_term_type ty) then 
 		typing_error d.jc_pdecl_loc 
 		  "inferred type differs from declared type" 
@@ -2400,9 +2457,13 @@ of an invariant policy";
 	let p = match body with
 	  | JCPReads reads ->
 	      JCReads (
-		(List.map (fun a -> let _,_,tl = location param_env a in tl)) reads)
+		(List.map 
+		   (fun a -> 
+		      let _,_,tl = 
+			location labels (default_label labels) param_env a 
+		      in tl)) reads)
 	  | JCPExpr body ->
-	      JCAssertion(assertion (* labels *) param_env body)
+	      JCAssertion(assertion labels (default_label labels) param_env body)
 	in
         Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p)
     | JCPDlogic(Some ty, id, labels, pl, body) ->
@@ -2411,9 +2472,12 @@ of an invariant policy";
 	let t = match body with
 	  | JCPReads reads ->
 	      JCReads (
-		(List.map (fun a -> let _,_,tl = location param_env a in tl)) reads)
+		(List.map 
+		   (fun a -> 
+		      let _,_,tl = location labels (default_label labels) param_env a 
+		      in tl)) reads)
 	  | JCPExpr body ->
-              let t = term param_env body in
+              let t = term labels (default_label labels) param_env body in
               if not (subtype t.jc_term_type ty) then 
 		typing_error d.jc_pdecl_loc 
 		  "inferred type differs from declared type" 

@@ -59,3 +59,13 @@ class C5 {
 	int i = C4.t[0]; 
     }
 }
+
+
+
+/*
+Local Variables: 
+compile-command: "make Invariants"
+End: 
+*/
+
+

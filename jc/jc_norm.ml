@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.70 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_norm.ml,v 1.71 2008-01-15 14:44:10 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -620,18 +620,18 @@ and statement s =
 	  let (sl, tl), e = expr e in
 	  let return_stat = make_return loc t e in
 	  (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
-      | JCTSbreak "" -> 
+      | JCTSbreak { label_info_name = "" } -> 
 	  JCSthrow (loop_exit, None)
       | JCTSbreak lab -> assert false (* TODO: see Claude *)
       | JCTScontinue lab -> assert false (* TODO: see Claude *)
       | JCTSgoto lab ->
-	  let name_exc = "Goto_" ^ lab in
+	  let name_exc = "Goto_" ^ lab.label_info_name in
 	  let goto_exc = exception_info None name_exc in
 	  Hashtbl.add exceptions_table name_exc goto_exc;
 	  JCSthrow (goto_exc, None)
       | JCTSlabel (l,s) -> 
-	  lab := l;
-	  (statement s).jc_statement_node
+	  lab := l.label_info_name;
+	  JCSlabel(l,statement s)
       | JCTStry (s, cl, fs) ->
 	  let cl = 
 	    List.map (fun (ei, vi, s) -> (ei, vi, statement s)) cl in
@@ -744,7 +744,7 @@ and block_statement statements =
     | { jc_tstatement_node = JCTSlabel(lab,st) } as s :: bl ->
 	let loc = s.jc_tstatement_loc in
 	let (be,bl) = block (st::bl) in
-	let name_exc = "Goto_" ^ lab in
+	let name_exc = "Goto_" ^ lab.label_info_name in
 	let goto_exc = exception_info None name_exc in
 	Hashtbl.add exceptions_table name_exc goto_exc;
 	[make_throw loc goto_exc None],(goto_exc,make_block loc be)::bl
@@ -822,6 +822,8 @@ let statement s =
 	    JCSif (e, link_stat st, link_stat sf)
 	| JCSloop (la, s) ->
 	    JCSloop (la, link_stat s)
+	| JCSlabel(lab,s) ->
+	    JCSlabel(lab,link_stat s)
 	| JCStry (s, cl, fs) ->
 	    let cl = 
 	      List.map (fun (ei, vio, s) -> (ei, vio, link_stat s)) cl in

@@ -2,7 +2,7 @@
  * l is an integer and not an int, because used as t.length which 
  * (in the logic) returns an integer and not an int 
  */
-/*@ predicate is_max(int[] t,int i,integer l) {
+/*@ predicate is_max{L}(int[] t,int i,integer l) {
   @   t != null && 0 <= i < l <= t.length &&
   @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i])
   @ }
@@ -63,7 +63,7 @@ public class Arrays {
       @   \forall int i; 0 < i < t.length ==> t[i] == \old(t[i-1]);
       @*/
     public static void arrayShift(int[] t) {
-	/*@ loop_invariant 
+	/* @ loop_invariant 
 	  @   j < t.length &&
 	  @   (t.length > 0 ==>
 	  @     (0 <= j && 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.26 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: java_env.mli,v 1.27 2008-01-15 14:44:10 marche Exp $ *)
 
 (*s types and environments *)
 
@@ -35,6 +35,18 @@ type base_type =
     | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
 	  (* native logic types *)
     | Tinteger | Treal | Tunit
+
+type logic_label = 
+(*
+  | LabelNone
+*)
+  | LabelName of string
+  | LabelHere
+  | LabelPost
+  | LabelPre
+(*
+  | LabelInit
+*)
 
 type java_type =
     | JTYbase of base_type
@@ -117,6 +129,7 @@ and java_logic_info =
       java_logic_info_name : string;
       java_logic_info_tag : int;
       java_logic_info_result_type : java_type option;
+      java_logic_info_labels : logic_label list;
       java_logic_info_parameters : java_var_info list;
       mutable java_logic_info_calls : java_logic_info list;
     }

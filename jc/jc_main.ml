@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.87 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_main.ml,v 1.88 2008-01-15 14:44:10 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -348,13 +348,14 @@ let main () =
       | Jc_options.Jc_error(l,s) ->
 	  eprintf "%a: %s@." Loc.gen_report_position l s;
 	  exit 1
+(*
       | Assert_failure(f,l,c) as exn -> 
 	  eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
 	  raise exn
-	  
+*)	  
 	    
 let _ = Sys.catch_break true;
-  (* Printexc.catch *)main ()
+   (* Printexc.catch *)main ()
 
   
 (*

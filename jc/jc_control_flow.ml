@@ -98,6 +98,7 @@ let rec statement g fun_exit_node s =
     | JCSunpack (_, _, _)
     | JCSpack (_, _, _)
     | JCSthrow (_, _)
+    | JCSlabel _
     | JCStry (_, _, _)
     | JCSdecl (_, _, _)
     | JCSassert _

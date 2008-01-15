@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.72 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.73 2008-01-15 14:44:10 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -323,7 +323,7 @@ let rec term_of_expr e =
     | JCEunary (op, e) -> JCTunary (op, term_of_expr e)
     | JCEshift (e1, e2) -> JCTshift (term_of_expr e1, term_of_expr e2)
     | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term_of_expr e1, term_of_expr e2)
-    | JCEderef (e, fi) -> JCTderef (term_of_expr e, fi)
+    | JCEderef (e, fi) -> JCTderef (term_of_expr e, LabelHere, fi)
     | JCEinstanceof (e, si) -> JCTinstanceof (term_of_expr e, si)
     | JCEcast (e, si) -> JCTcast (term_of_expr e, si)
     | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
@@ -403,7 +403,7 @@ let rec raw_term_compare t1 t2 =
       if compop = 0 then raw_term_compare t11 t21 else compop
   | JCTold t11,JCTold t21 ->
       raw_term_compare t11 t21
-  | JCTderef(t11,fi1),JCTderef(t21,fi2) ->
+  | JCTderef(t11,_,fi1),JCTderef(t21,_,fi2) ->
       let compfi = 
 	Pervasives.compare fi1.jc_field_info_tag fi2.jc_field_info_tag
       in
@@ -519,7 +519,7 @@ let rec raw_assertion_compare a1 a2 =
 	  let compvi = Pervasives.compare vi1 vi2 in
 	  if compvi = 0 then raw_assertion_compare a1 a2 else compvi
         else compq
-    | JCAinstanceof(t1,st1),JCAinstanceof(t2,st2) ->
+    | JCAinstanceof(t1,_,st1),JCAinstanceof(t2,_,st2) ->
         let compst = 
 	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
         in

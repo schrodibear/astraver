@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.22 2007-11-27 16:33:48 marche Exp $
+$Id: java_ast.mli,v 1.23 2008-01-15 14:44:10 marche Exp $
 
 ***************************************************************************)
 
@@ -285,8 +285,8 @@ type type_declaration =
   | JPTannot of Lexing.position * string
   | JPTaxiom of identifier * pexpr
   | JPTlogic_type_decl of identifier 
-  | JPTlogic_reads of identifier * type_expr option * parameter list * pexpr list 
-  | JPTlogic_def of identifier * type_expr option * parameter list * pexpr 
+  | JPTlogic_reads of identifier * type_expr option * logic_label list * parameter list * pexpr list 
+  | JPTlogic_def of identifier * type_expr option * logic_label list * parameter list * pexpr 
 
 type import_statement =
   | Import_package of qualified_ident

@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.78 2008-01-15 13:12:28 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.79 2008-01-15 14:44:10 marche Exp $ */
 
 %{
 
@@ -58,7 +58,11 @@
     { jc_ppattern_node = p; jc_ppattern_loc = loc () }
 
   let skip = locate_statement JCPSskip
-      
+
+  let label s = match s with
+    | "Pre" -> LabelPre
+    | "Here" -> LabelHere
+    | _ -> LabelName s
 
 %}
 
@@ -499,7 +503,7 @@ postfix_expression:
 | BSOLD LPAR expression RPAR 
     { locate_expr (JCPEold($3)) }
 | BSAT LPAR expression COMMA IDENTIFIER RPAR 
-    { locate_expr (JCPEat($3,$5)) }
+    { locate_expr (JCPEat($3,LabelName $5)) }
 | BSOFFSET_MAX LPAR expression RPAR 
     { locate_expr (JCPEoffset(Offset_max,$3)) }
 | BSOFFSET_MIN LPAR expression RPAR 
@@ -534,12 +538,12 @@ postfix_expression:
 
 label_binders:
 | /* epsilon */ { [] }
-| LBRACE IDENTIFIER label_list_end RBRACE { $2::$3 }
+| LBRACE IDENTIFIER label_list_end RBRACE { (label $2)::$3 }
 ;
 
 label_list_end:
 | /* epsilon */ { [] }
-| COMMA IDENTIFIER label_list_end { $2::$3 }
+| COMMA IDENTIFIER label_list_end { (label $2)::$3 }
 ;
 
 argument_expression_list: 

@@ -3,7 +3,7 @@
   @   \forall integer x, y; x <= y ==> x <= (x+y)/2 && (x+y)/2 <= y; */
 
 
-/*@ predicate sorted(long t[]) {
+/*@ predicate sorted{L}(long t[]) {
   @   \forall integer i,j; 0 <= i && i <= j && j < t.length ==>
   @          t[i] <= t[j] } */
 

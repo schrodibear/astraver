@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.17 2007-12-21 10:14:10 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.18 2008-01-15 14:44:10 marche Exp $ *)
 
 open Jc_env
 
@@ -139,6 +139,12 @@ module ExceptionSet = Set.Make(ExceptionOrd)
 
 module ExceptionMap = Map.Make(ExceptionOrd)
 
+module LogicLabelOrd =
+  struct type t = logic_label
+	 let compare = (Pervasives.compare : logic_label -> logic_label -> int)
+  end
+
+module LogicLabelSet = Set.Make(LogicLabelOrd)
 
 (*
 Local Variables: 

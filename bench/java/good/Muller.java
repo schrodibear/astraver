@@ -1,5 +1,5 @@
 
-//@ logic integer num_of_pos(integer i,integer j,int t[]) reads t[i..j] ;
+//@ logic integer num_of_pos{L}(integer i,integer j,int t[]) reads t[i..j] ;
 
 /* @ axiom num_of_pos_empty :
   @   \forall integer i, j; \forall int t[];

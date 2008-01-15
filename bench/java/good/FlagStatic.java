@@ -3,13 +3,13 @@
 
 //@ predicate is_color(int c) { FlagStatic.BLUE <= c && c <= FlagStatic.RED }
 
-/*@ predicate is_color_array(int t[]) { 
+/*@ predicate is_color_array{L}(int t[]) { 
   @   t != null && 
   @   \forall int i; 0 <= i && i < t.length ==> is_color(t[i])
   @ }
   @*/
 
-/*@ predicate is_monochrome(int t[],integer i, integer j, int c) {
+/*@ predicate is_monochrome{L}(int t[],integer i, integer j, int c) {
   @   \forall int k; i <= k && k < j ==> t[k] == c
   @ }
   @*/
@@ -85,6 +85,6 @@ class FlagStatic {
 
 /*
 Local Variables: 
-compile-command: "make FlagStatic.io"
+compile-command: "make FlagStatic"
 End: 
 */

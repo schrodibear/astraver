@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.208 2008-01-15 13:12:28 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.209 2008-01-15 14:44:10 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -362,16 +362,19 @@ terms and assertions
 
 *************************)
 
+
 let lvar ?(assigned=true) ?(label_in_name=false) label v =
   if label_in_name then
-      match label with 
-	| None -> (* assert false *) LVar(v (* ^ "_at_unknown_label" *)) (**)
-	| Some l -> LVar(v ^ "_at_" ^ l)    
+    LVar(label_var label v)
   else
     if assigned then
       match label with 
-	| None -> LVar v 
-	| Some l -> LVarAtLabel(v,l)
+	| LabelNone -> (* assert false *) LVar(v) 
+	| LabelHere -> LVar v
+	| LabelInit -> LVarAtLabel(v,"init")
+	| LabelPre -> LVarAtLabel(v,"")
+	| LabelPost -> LVar v
+	| LabelName l -> LVarAtLabel(v,l)
     else LVar v
 
 let var v = Var v
@@ -423,15 +426,15 @@ let rec term ~global_assertion label oldlabel t =
     | JCTsub_pointer(t1,t2) -> 
 	LApp("sub_pointer",[ft t1; ft t2])
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
-    | JCTderef(t,fi) -> 
+    | JCTderef(t,lab,fi) -> 
 	let mem = field_region_memory_name(fi,t.jc_term_region) in
-	LApp("select",[lvar ~label_in_name:global_assertion label mem;ft t])
+	LApp("select",[lvar ~label_in_name:global_assertion lab mem;ft t])
     | JCTapp app ->
 	let f = app.jc_app_fun and l = app.jc_app_args in
 	make_logic_fun_call ~label_in_name:global_assertion f (List.map ft l) 
 	  app.jc_app_region_assoc app.jc_app_label_assoc
-    | JCTold(t) -> term ~global_assertion (Some oldlabel) oldlabel t
-    | JCTat(t,lab) -> term ~global_assertion (Some lab) oldlabel t
+    | JCTold(t) -> term ~global_assertion oldlabel oldlabel t
+    | JCTat(t,lab) -> term ~global_assertion lab oldlabel t
     | JCToffset(k,t,st) -> 
 	let alloc = 
 	  alloc_region_table_name (st, t.jc_term_region)
@@ -526,14 +529,14 @@ let rec assertion ~global_assertion label oldlabel a =
 	  LExists(v.jc_var_info_final_name,
 		  tr_base_type v.jc_var_info_type,
 		  fa p)
-      | JCAold a -> assertion ~global_assertion (Some oldlabel) oldlabel a
-      | JCAat(a,lab) -> assertion ~global_assertion (Some lab) oldlabel a
+      | JCAold a -> assertion ~global_assertion oldlabel oldlabel a
+      | JCAat(a,lab) -> assertion ~global_assertion lab oldlabel a
       | JCAbool_term(t) -> 
 	LPred("eq",[ft t;LConst(Prim_bool true)])
-      | JCAinstanceof(t,ty) -> 
+      | JCAinstanceof(t,lab,ty) -> 
 	  let tag = tag_table_name ty in
 	  LPred("instanceof",
-		[lvar label tag; ft t; LVar (tag_name ty)])
+		[lvar lab tag; ft t; LVar (tag_name ty)])
       | JCAmutable(te, st, ta) ->
 	  let mutable_field = LVar (mutable_name st) in
 	  let tag = ftag ta.jc_tag_node in
@@ -603,7 +606,7 @@ let tr_logic_const vi init acc =
 	      LPred("eq",[term_coerce Loc.dummy_position integer_type
 			    vi.jc_var_info_type (LVar vi.jc_var_info_name); 
 			  term_coerce t.jc_term_loc integer_type 
-			    t.jc_term_type (term ~global_assertion:true None "" t)])) 
+			    t.jc_term_type (term ~global_assertion:true LabelNone LabelHere t)])) 
 	:: decl 
 
 let tr_logic_fun li ta acc =
@@ -647,12 +650,12 @@ let tr_logic_fun li ta acc =
     match li.jc_logic_info_result_type, ta with
 	(* Predicate *)
       | None, JCAssertion a -> 
-	  let a = assertion ~global_assertion:true None "" a in
+	  let a = assertion ~global_assertion:true LabelNone LabelNone a in
 	    Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
 	      (* Function *)
       | Some ty, JCTerm t -> 
 	  let ret = tr_base_type ty in
-	  let t = term ~global_assertion:true None "" t in
+	  let t = term ~global_assertion:true LabelNone LabelNone t in
 	  Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
       (* Logic *)
       | tyo, JCReads r ->
@@ -934,9 +937,9 @@ and expr ~infunction ~threats e : expr =
 	make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
     | JCEcast (e, si) ->
 	let tag = tag_table_name si in
-	(* ??? TODO faire ca correctement: on peut tre bien caster des expressions qui ne sont pas des termes !!! *)
+	(* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
 
-	let et = term ~global_assertion:false None "" (term_of_expr e) in
+	let et = term ~global_assertion:false LabelNone LabelNone (term_of_expr e) in
 	let typea = 
 	  match e.jc_expr_type with
 	    | JCTpointer (si', _, _) -> 
@@ -1106,7 +1109,7 @@ let return_void = ref false
 let type_assert vi e =
   match vi.jc_var_info_type, e.jc_expr_type with
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
-	let et = term ~global_assertion:false None "" (term_of_expr e) in
+	let et = term ~global_assertion:false LabelHere LabelNone (term_of_expr e) in
 	let alloc = alloc_table_name si in
 	let fields = embedded_struct_fields si in
 	  begin
@@ -1155,8 +1158,8 @@ let type_assert vi e =
 			    valid_one_pred_name si,
 			    et
 			    :: LVar alloc
-			    :: List.map (fun si -> (lvar None ** alloc_table_name) si) structs
-			    @ List.map (lvar None ** field_memory_name) fields)
+			    :: List.map (fun si -> (lvar LabelHere ** alloc_table_name) si) structs
+			    @ List.map (lvar LabelHere ** field_memory_name) fields)
 		  end
 	      | Some n1, Some n2 ->
 		  let structs = 
@@ -1172,8 +1175,8 @@ let type_assert vi e =
 		      :: LConst(Prim_int(Num.string_of_num n1))
 		      :: LConst(Prim_int(Num.string_of_num n2))
 		      :: LVar alloc
-		      :: List.map (fun si -> (lvar None ** alloc_table_name) si) structs
-		      @ List.map (lvar None ** field_memory_name) fields)
+		      :: List.map (fun si -> (lvar LabelHere ** alloc_table_name) si) structs
+		      @ List.map (lvar LabelHere ** field_memory_name) fields)
 	  end
     | _ -> LTrue
 	
@@ -1370,11 +1373,11 @@ let rec statement ~infunction ~threats s =
 	    end
       | JCSassign_var (vi, e2) -> 
 	  let e2' = expr e2 in
-	let n = vi.jc_var_info_final_name in
-	Assign(n, coerce ~no_int_overflow:(not threats) 
-		 e2.jc_expr_label e2.jc_expr_loc vi.jc_var_info_type 
-		 e2.jc_expr_type e2')
-    | JCSassign_heap(e1,fi,e2) -> 
+	  let n = vi.jc_var_info_final_name in
+	  Assign(n, coerce ~no_int_overflow:(not threats) 
+		   e2.jc_expr_label e2.jc_expr_loc vi.jc_var_info_type 
+		   e2.jc_expr_type e2')
+      | JCSassign_heap(e1,fi,e2) -> 
 	let e1' = expr e1 in
 	let e2' = expr e2 in
 	let tmp1 = tmp_var_name () in
@@ -1402,15 +1405,17 @@ let rec statement ~infunction ~threats s =
 	  lets
 (*	if !Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCSblock l -> statement_list ~infunction ~threats l
+    | JCSlabel(lab,s) ->
+	Label(lab.label_info_name, statement s)
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->
-	let inv = named_assertion ~global_assertion:false None "init" la.jc_loop_invariant in
+	let inv = named_assertion ~global_assertion:false LabelHere LabelInit la.jc_loop_invariant in
 	begin 
 	  match la.jc_loop_variant with
 	    | Some t when threats ->
-		let variant = named_term ~global_assertion:false None "" t in
+		let variant = named_term ~global_assertion:false LabelHere LabelInit t in
 		While(Cte(Prim_bool true), inv,
 	              Some (term_coerce t.jc_term_loc integer_type 
 			    t.jc_term_type variant,None), [statement s])
@@ -1419,7 +1424,7 @@ let rec statement ~infunction ~threats s =
 	              None, [statement s])
 	end
     | JCSassert((*None,*) a) -> 
-	Assert(named_assertion ~global_assertion:false None "init" a, Void)
+	Assert(named_assertion ~global_assertion:false LabelHere LabelInit a, Void)
 (*
     | JCSassert(Some name, a) -> 
 	
@@ -1546,8 +1551,8 @@ let tr_struct st acc =
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar None ** alloc_table_name) roots
-	@ List.map (lvar None ** field_memory_name) fields)
+	:: List.map (lvar LabelHere ** alloc_table_name) roots
+	@ List.map (lvar LabelHere ** field_memory_name) fields)
     ) direct_fields
   in
   let field_validity = make_and_list field_validity_list in
@@ -1587,8 +1592,8 @@ let tr_struct st acc =
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar None ** alloc_table_name) roots
-	@ List.map (lvar None ** field_memory_name) fields)
+	:: List.map (lvar LabelHere ** alloc_table_name) roots
+	@ List.map (lvar LabelHere ** field_memory_name) fields)
     ) direct_fields
   in
   let field_validity = make_and_list field_validity_list in
@@ -1634,8 +1639,8 @@ let tr_struct st acc =
 	  valid_one_pred_name st,
 	  LVar "result"
 	  :: LVar alloc
-	  :: List.map (lvar None ** alloc_table_name) all_roots
-	  @ List.map (lvar None ** field_memory_name) all_fields);
+	  :: List.map (lvar LabelHere ** alloc_table_name) all_roots
+	  @ List.map (lvar LabelHere ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
 	(* [alloc_extends(old(alloc),alloc)] *)
@@ -1681,8 +1686,8 @@ let tr_struct st acc =
 	  :: LConst(Prim_int "0")
 	  :: LApp("sub_int",[LVar "n";LConst(Prim_int "1")])
 	  :: LVar alloc
-	  :: List.map (lvar None ** alloc_table_name) all_roots
-	  @ List.map (lvar None ** field_memory_name) all_fields);
+	  :: List.map (lvar LabelHere ** alloc_table_name) all_roots
+	  @ List.map (lvar LabelHere ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
 	(* [alloc_extends(old(alloc),alloc)] *)
@@ -1777,30 +1782,30 @@ let rec pset ~global_assertion before loc =
   let fpset = pset ~global_assertion before in
   match loc with
     | JCLSderef(ls,fi,r) ->
-	let m = lvar ~label_in_name:global_assertion (Some before) (field_region_memory_name(fi,r)) in
+	let m = lvar ~label_in_name:global_assertion before (field_region_memory_name(fi,r)) in
 	LApp("pset_deref", [m;fpset ls])
     | JCLSvar vi -> 
-	let m = lvar_info (Some before) vi in
+	let m = lvar_info before vi in
 	LApp("pset_singleton", [m])
     | JCLSrange(ls,None,None) ->
 	let ls = fpset ls in
 	LApp("pset_all", [ls])
     | JCLSrange(ls,None,Some b) ->
 	let ls = fpset ls in
-	let b' = term ~global_assertion (Some before) before b in
+	let b' = term ~global_assertion before before b in
 	LApp("pset_range_left", 
 	     [ls; 
 	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
     | JCLSrange(ls,Some a,None) ->
 	let ls = fpset ls in
-	let a' = term ~global_assertion (Some before) before a in
+	let a' = term ~global_assertion before before a in
 	LApp("pset_range_right", 
 	     [ls; 
 	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'])
     | JCLSrange(ls,Some a,Some b) ->
 	let ls = fpset ls in
-	let a' = term ~global_assertion (Some before) before a in
-	let b' = term ~global_assertion (Some before) before b in
+	let a' = term ~global_assertion before before a in
+	let b' = term ~global_assertion before before b in
 	LApp("pset_range", 
 	     [ls; 
 	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'; 
@@ -1853,7 +1858,7 @@ let assigns before ef locs =
     StringMap.fold
       (fun v p acc -> 
 	if p then acc else
-	  make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)])))
+	  make_and acc (LPred("eq", [LVar v; lvar before v])))
       refs LTrue
   in
   FieldRegionMap.fold
@@ -1862,8 +1867,8 @@ let assigns before ef locs =
        let alloc = alloc_region_table_name(fi.jc_field_info_root,r) in
        make_and acc
 	 (LPred("not_assigns",
-		[LVarAtLabel(alloc,before); 
-		 LVarAtLabel(v,before);
+		[lvar before alloc; 
+		 lvar before v;
 		 LVar v; make_union_loc p])))
     mems a
 
@@ -1908,7 +1913,7 @@ let interp_fun_params f write_mems read_mems annot_type =
        
   
 let tr_fun f loc spec body acc =
-  let requires = (named_assertion ~global_assertion:false None "" spec.jc_fun_requires) in
+  let requires = (named_assertion ~global_assertion:false LabelHere LabelNone spec.jc_fun_requires) in
   (* partition behaviors as follows:
      - behaviors inferred by analysis (postfixed by 'safety': they will be added to fun safety)
      - user defined behaviors 
@@ -1924,20 +1929,20 @@ let tr_fun f loc spec body acc =
 		   b.jc_behavior_ensures.jc_assertion_label
 		   Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
 *)
-		 (named_assertion ~global_assertion:false None "" b.jc_behavior_ensures)		
+		 (named_assertion ~global_assertion:false LabelPost LabelPre b.jc_behavior_ensures)		
 	     | Some(locassigns,a) ->
 		 named_jc_assertion loc
 		   (make_and
-		      (named_assertion ~global_assertion:false None "" b.jc_behavior_ensures)		
+		      (named_assertion ~global_assertion:false LabelPost LabelPre b.jc_behavior_ensures)		
 		      (named_jc_assertion
 			 locassigns
-			 (assigns "" f.jc_fun_info_effects (Some a))))
+			 (assigns LabelHere f.jc_fun_info_effects (Some a))))
 	 in
 	 let a =
 	   match b.jc_behavior_assumes with
 	     | None -> post
 	     | Some e -> 
-		 make_impl (assertion ~global_assertion:false (Some "") "" e) post
+		 make_impl (assertion ~global_assertion:false LabelHere LabelNone e) post
 	 in
 	 match b.jc_behavior_throws with
 	   | None -> 
@@ -2405,16 +2410,15 @@ let tr_fun f loc spec body acc =
 
 let tr_logic_type id acc = Type(id,[])::acc
 
-let tr_axiom id (* labels *) p acc = 
-  (* TODO: use labels for this axiom *)
-  let ef = Jc_effect.assertion "Current" empty_effects p in
-  let a = assertion ~global_assertion:true None "" p in
+let tr_axiom id p acc = 
+  let ef = Jc_effect.assertion empty_effects p in
+  let a = assertion ~global_assertion:true LabelNone LabelNone p in
   let a =
     FieldRegionMap.fold 
       (fun (fi,r) labels a -> 
-	 StringSet.fold
+	 LogicLabelSet.fold
 	   (fun lab a ->
-	      LForall (field_region_memory_name(fi,r) ^ "_at_" ^ lab, 
+	      LForall (label_var lab (field_region_memory_name(fi,r)), 
 		       memory_field fi, a))
 	   labels a)
       ef.jc_effect_memories a 
