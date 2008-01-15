@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.207 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.208 2008-01-15 13:12:28 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -450,6 +450,7 @@ let rec term ~global_assertion label oldlabel t =
 	LApp("downcast",
 	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
+    | JCTmatch _ -> assert false (* TODO *)
 in
   if t.jc_term_label <> "" then
     Tnamed(reg_loc ~id:t.jc_term_label t.jc_term_loc,t')
@@ -539,6 +540,7 @@ let rec assertion ~global_assertion label oldlabel a =
 	  LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
       | JCAtagequality(t1, t2, h) ->
 	  LPred("eq", [ ftag t1.jc_tag_node; ftag t2.jc_tag_node ])
+      | JCAmatch _ -> assert false (* TODO *)
   in
   if a.jc_assertion_label <> "" then
     begin
@@ -1064,6 +1066,7 @@ and expr ~infunction ~threats e : expr =
 	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
 	else
 	  make_app "free_parameter" [Var alloc; expr e]
+    | JCEmatch _ -> assert false (* TODO *)
   in
 (*
   if lab <> "" then
@@ -1481,6 +1484,7 @@ let rec statement ~infunction ~threats s =
 	let (s,_) =
 	  List.fold_left catch (statement s,ef.jc_raises) catches
 	in s
+    | JCSmatch _ -> assert false (* TODO *)
 
 and statement_list ~infunction ~threats l = 
   List.fold_right 

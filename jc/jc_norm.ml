@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.69 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_norm.ml,v 1.70 2008-01-15 13:12:28 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -477,8 +477,8 @@ let rec expr e =
 	vi.jc_var_info_assigned <- true;
 	let assign = make_assign_var loc vi e1' in
 	(l1@[assign]@l2, tl1@[vi]@tl2), e2'.jc_expr_node
-	
-
+    | JCTEmatch(e1, pel) ->
+	assert false (* TODO *)
   in 
 (*
   Format.eprintf "Jc_norm.expr: lab for returned expr = '%s'@." lab;
@@ -730,6 +730,8 @@ and statement s =
 	    make_try loc switch_stat catch_exit (make_block loc []) in
 	  let tmp_assign = make_decl loc tmp (Some e) (make_block loc []) in
 	  (make_decls loc (sl @ [tmp_assign;try_exit]) tl).jc_statement_node
+      | JCTSmatch _ ->
+	  assert false (* TODO *)
 
   in { jc_statement_node = ns;
        jc_statement_label = !lab;
@@ -824,6 +826,8 @@ let statement s =
 	    let cl = 
 	      List.map (fun (ei, vio, s) -> (ei, vio, link_stat s)) cl in
 	    JCStry (link_stat s, cl, link_stat fs)
+	| JCSmatch (e, psl) ->
+	    JCSmatch (e, List.map (fun (p, s) -> p, link_stat s) psl)
 
     in { jc_statement_node = ns;
 	 jc_statement_label = s.jc_statement_label;

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.48 2008-01-14 15:26:30 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.49 2008-01-15 13:12:28 bardou Exp $ i*)
 
 {
   open Jc_ast
@@ -96,6 +96,7 @@ rule token = parse
   | "/*"                    { comment lexbuf; token lexbuf }
   | "//" [^ '\n']* '\n'     { newline lexbuf; token lexbuf }
   | "and"                   { AND }
+  | "as"                    { AS }
   | "assert"                { ASSERT }
   | "assigns"               { ASSIGNS }
   | "assumes"               { ASSUMES }
@@ -113,6 +114,7 @@ rule token = parse
 *)
   | "else"                  { ELSE }
   | "ensures"               { ENSURES }
+  | "end"                   { END }
 (*
   | "enum"                  { ENUM }
 *)
@@ -131,6 +133,7 @@ rule token = parse
   | "invariant"             { INVARIANT }
   | "let"                   { LET }
   | "logic"                 { LOGIC }
+  | "match"                 { MATCH }
   | "new"                   { NEW }
   | "null"                  { NULL }
   | "of"                    { OF }
@@ -249,6 +252,8 @@ rule token = parse
   | "^"                     { HAT }
   | "|"                     { PIPE }
   | "?"                     { QUESTION }
+  | "_"                     { UNDERSCORE }
+  | "->"                    { MINUSGT }
   | eof { EOF }
   | '"' { lex_error lexbuf "unterminated string" }
   | _   { lex_error lexbuf ("illegal character " ^ lexeme lexbuf) }

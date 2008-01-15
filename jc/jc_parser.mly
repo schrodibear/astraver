@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.77 2008-01-14 15:26:30 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.78 2008-01-15 13:12:28 bardou Exp $ */
 
 %{
 
@@ -53,6 +53,9 @@
 
   let locate_decl d =
     { jc_pdecl_node = d ; jc_pdecl_loc = loc () }
+
+  let locate_pattern p =
+    { jc_ppattern_node = p; jc_ppattern_loc = loc () }
 
   let skip = locate_statement JCPSskip
       
@@ -92,7 +95,7 @@
 %token PACK UNPACK ASSERT
 
 /* type invariant logic with variant and axiom tag */
-%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM TAG
+%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM TAG MATCH
 
 /* integer boolean real unit void rep */
 %token INTEGER BOOLEAN REAL UNIT REP
@@ -107,6 +110,8 @@
 /* \nothing */
 %token BSNOTHING
 
+/* as _ match -> end */
+%token AS UNDERSCORE MATCH MINUSGT END
 
 /* & ~ ^ | << >> >>> */
 %token AMP TILDE HAT PIPE LSHIFT LRSHIFT ARSHIFT
@@ -149,6 +154,7 @@
 %left BARBAR
 %left AMPAMP
 %left PIPE
+%left AS
 %left HAT
 %left AMP
 %left LT GT LTEQ GTEQ EQEQ BANGEQ COLONGT LTCOLON
@@ -428,7 +434,7 @@ variable_definition:
     { locate_decl (JCPDvar($1,$2,None)) }
 ;
 
-/***************/
+/**********/
 /* axioms */
 /**********/
 
@@ -673,6 +679,8 @@ expression:
     { locate_expr (JCPEmutable($3, locate_tag JCPTbottom)) }
 | BSTYPEEQ LPAR tag COMMA tag RPAR
     { locate_expr (JCPEtagequality($3, $5)) }
+| MATCH expression WITH pattern_expression_list END
+    { locate_expr (JCPEmatch($2, $4)) }
 ;
 
 expression_opt: 
@@ -882,6 +890,8 @@ statement:
 */
 | pack_statement { $1 }
 | exception_statement { $1 }
+| MATCH expression WITH pattern_statement_list END
+    { locate_statement (JCPSmatch($2, $4)) }
 ;
 
 
@@ -937,6 +947,45 @@ logic_rec_definitions:
 | logic_definition AND logic_definition %prec PRECTYPE
     { $1::[$3] }
 
+/************/
+/* patterns */
+/************/
+
+pattern:
+| identifier LBRACE field_patterns RBRACE
+    { locate_pattern (JCPPstruct($1, $3)) }
+| identifier
+    { locate_pattern (JCPPvar $1) }
+| LPAR pattern RPAR
+    { $2 }
+| pattern PIPE pattern
+    { locate_pattern (JCPPor($1, $3)) }
+| pattern AS identifier
+    { locate_pattern (JCPPas($1, $3)) }
+| UNDERSCORE
+    { locate_pattern JCPPany }
+;
+
+field_patterns:
+| identifier EQ pattern SEMICOLON field_patterns
+    { ($1, $3)::$5 }
+|
+    { [] }
+;
+
+pattern_expression_list:
+| pattern MINUSGT expression SEMICOLON pattern_expression_list
+    { ($1, $3)::$5 }
+| pattern MINUSGT expression SEMICOLON
+    { [$1, $3] }
+;
+
+pattern_statement_list:
+| pattern MINUSGT compound_statement pattern_statement_list
+    { ($1, $3)::$4 }
+| pattern MINUSGT compound_statement
+    { [$1, $3] }
+;
 
 /*
 Local Variables: 

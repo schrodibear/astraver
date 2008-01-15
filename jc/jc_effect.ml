@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.78 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.79 2008-01-15 13:12:28 bardou Exp $ *)
 
 
 open Jc_env
@@ -284,6 +284,7 @@ let rec term label =
 	term label (term label ef t1) t2
     | JCTsub_pointer (_, _) -> assert false (* TODO *)
     | JCTconst _ -> ef
+    | JCTmatch _ -> assert false (* TODO *)
     ) 
 
 let tag label ef t h =
@@ -328,6 +329,10 @@ let rec assertion label ef a =
 	     (root_name st)) t
     | JCAtagequality (t1, t2, h) ->
 	tag label (tag label ef t1 h) t2 h
+    | JCAmatch (t, pal) ->
+	term label
+	  (List.fold_left (fun acc (_, a) -> assertion label acc a) ef pal)
+	  t
 
 (********************
 
@@ -389,6 +394,8 @@ let rec expr ef e =
 	      add_alloc_writes (add_tag_writes ef name) (name,e.jc_expr_region)
 	  | _ -> assert false
 	end
+    | JCEmatch(e, pel) ->
+	expr (List.fold_left expr ef (List.map snd pel)) e
 
 let rec loop_annot ef la = 
   let ef = assertion "Current" ef la.jc_loop_invariant in
@@ -516,6 +523,8 @@ let rec statement ef s =
     | JCSassert((*_,*)a) -> 
 	{ ef with jc_reads = assertion "Current" ef.jc_reads a; }
     | JCSblock l -> List.fold_left statement ef l
+    | JCSmatch(e, psl) ->
+	expr (List.fold_left statement ef (List.map snd psl)) e
 
 (* Conservatively consider location is both read and written. *)
 let rec location label ef l =

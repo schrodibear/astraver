@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.8 2008-01-11 16:38:26 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.9 2008-01-15 13:12:28 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -44,6 +44,12 @@ let term rresult t =
 	  Region.unify rresult vi.jc_var_info_region
     | JCTsub_pointer(t1,t2) | JCTif(_,t1,t2) ->
 	Region.unify t1.jc_term_region t2.jc_term_region
+    | JCTmatch(_, (_, t1)::rem) ->
+	List.iter
+	  (fun (_, t2) -> Region.unify t1.jc_term_region t2.jc_term_region)
+	  rem
+    | JCTmatch(_, []) ->
+	()
     | JCTapp app ->
 	let li = app.jc_app_fun in
 	let regions = li.jc_logic_info_param_regions in
@@ -81,7 +87,7 @@ let assertion rresult a =
       | JCAapp _ -> () (* TODO *)
       | JCAtrue | JCAfalse | JCArelation _  | JCAtagequality _ 
       | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
-      | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _
+      | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ | JCAmatch _
       | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ ->
 	  ()
     ) a
@@ -90,6 +96,12 @@ let expr e =
   iter_expr (fun e -> match e.jc_expr_node with
     | JCEsub_pointer(e1,e2) | JCEif(_,e1,e2) ->
 	Region.unify e1.jc_expr_region e2.jc_expr_region
+    | JCEmatch(_, (_, e1)::rem) ->
+	List.iter
+	  (fun (_, e2) -> Region.unify e1.jc_expr_region e2.jc_expr_region)
+	  rem
+    | JCEmatch(_, []) ->
+	()
     | JCEconst _ | JCEvar _ | JCEbinary _ | JCEshift _ | JCEunary _
     | JCEderef _ | JCEoffset _ | JCEinstanceof _ | JCEcast _ 
     | JCErange_cast _ | JCEalloc _ | JCEfree _ ->
@@ -143,7 +155,7 @@ let statement rresult s =
     | JCSloop(la,_) ->
 	iter_term_and_assertion_in_loop_annot 
 	  (term rresult) (assertion rresult) la
-    | JCSdecl _ | JCSblock _ | JCSif _ | JCStry _ 
+    | JCSdecl _ | JCSblock _ | JCSif _ | JCSmatch _ | JCStry _ 
     | JCSreturn_void | JCSpack _ | JCSunpack _ -> 
 	()
   ) s
@@ -197,7 +209,7 @@ let regionalize_assertion a assoc =
 	  { t with jc_term_node = tnode; }
       | JCTconst _ | JCTvar _ | JCTshift _ | JCTsub_pointer _ 
       | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
-      | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
+      | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTmatch _ | JCTrange _ ->
 	  t
     in
     try { t with jc_term_region = RegionList.assoc t.jc_term_region assoc; }

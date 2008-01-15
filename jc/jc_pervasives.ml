@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.71 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.72 2008-01-15 13:12:28 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -328,6 +328,9 @@ let rec term_of_expr e =
     | JCEcast (e, si) -> JCTcast (term_of_expr e, si)
     | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
     | JCEoffset (ok, e, si) -> JCToffset (ok, term_of_expr e, si)
+    | JCEmatch (e, pel) ->
+	let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in
+	JCTmatch (term_of_expr e, ptl)
     | JCErange_cast _ | JCEalloc _ | JCEfree _ -> assert false
   in
     { jc_term_node = node;
@@ -354,7 +357,7 @@ let rec is_constant_term t =
     | JCTconst _ -> true
     | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
     | JCTapp _ | JCTold _ | JCTat _ | JCToffset _
-    | JCTinstanceof _ | JCTcast _ | JCTif _ -> false
+    | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
 	is_constant_term t1 && is_constant_term t2
     | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
@@ -376,6 +379,7 @@ let term_num t = match t.jc_term_node with
   | JCTapp _ -> 43
   | JCTif _ -> 47
   | JCTat _ -> 53
+  | JCTmatch _ -> 59
 
 (* Comparison based only on term structure, not types not locations. *)
 let rec raw_term_compare t1 t2 =
@@ -478,6 +482,7 @@ let assertion_num a = match a.jc_assertion_node with
   | JCAmutable _ -> 49
   | JCAtagequality _ -> 51
   | JCAat _ -> 53
+  | JCAmatch _ -> 59
 
 (* Comparison based only on assertion structure, not locations. *)
 let rec raw_assertion_compare a1 a2 =
@@ -553,7 +558,7 @@ let rec is_numeric_term t =
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
     | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
-    | JCTif _ -> false (* TODO ? *)
+    | JCTif _ | JCTmatch _ -> false (* TODO ? *)
 
 
 (* assertions *)
@@ -598,6 +603,10 @@ let rec is_constant_assertion a =
 	is_constant_term t &&
 	  is_constant_assertion a1 &&
 	  is_constant_assertion a2
+    | JCAmatch (t, pal) ->
+	is_constant_term t &&
+	  (List.fold_left (fun acc (_, a) -> acc && is_constant_assertion a)
+	     true pal)
 
 (* fun specs *)
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.102 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.103 2008-01-15 13:12:28 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -77,6 +77,18 @@ type offset_kind = Offset_max | Offset_min
 
 type quantifier = Forall | Exists
 
+type ppattern_node =
+  | JCPPstruct of identifier * (identifier * ppattern) list
+  | JCPPvar of identifier
+  | JCPPor of ppattern * ppattern
+  | JCPPas of ppattern * identifier
+  | JCPPany
+
+and ppattern = {
+  jc_ppattern_node: ppattern_node;
+  jc_ppattern_loc: Loc.position;
+}
+
 type pexpr_node =
   | JCPElabel of string * pexpr
   | JCPEconst of const
@@ -100,6 +112,7 @@ type pexpr_node =
   | JCPEfree of pexpr
   | JCPEmutable of pexpr * ptag
   | JCPEtagequality of ptag * ptag
+  | JCPEmatch of pexpr * (ppattern * pexpr) list
 
 and pexpr =
     {
@@ -152,6 +165,7 @@ type pstatement_node =
   | JCPSpack of pexpr * identifier option
   | JCPSunpack of pexpr * identifier option
   | JCPSswitch of pexpr * (pexpr option list * pstatement list) list
+  | JCPSmatch of pexpr * (ppattern * pstatement list) list
 
 and pstatement = 
     {
@@ -211,6 +225,19 @@ type unary_op =
   (* bitwise operator *)
   | Ubw_not
 
+type pattern_node =
+  | JCPstruct of identifier * (identifier * pattern) list
+  | JCPvar of identifier
+  | JCPor of pattern * pattern
+  | JCPas of pattern * identifier
+  | JCPany
+
+and pattern = {
+  jc_pattern_node: pattern_node;
+  jc_pattern_loc: Loc.position;
+  jc_pattern_type: jc_type;
+}
+
 type app = 
     {
       jc_app_fun : logic_info;
@@ -235,6 +262,7 @@ and term_node =
   | JCTcast of term * struct_info
   | JCTif of term * term * term
   | JCTrange of term option * term option
+  | JCTmatch of term * (pattern * term) list
 
 and term =
     {
@@ -284,6 +312,7 @@ type assertion_node =
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
   | JCAtagequality of tag * tag * string option
+  | JCAmatch of term * (pattern * assertion) list
 	
 and assertion =
     {
@@ -322,6 +351,7 @@ type texpr_node =
   | JCTElet of var_info * texpr * texpr
   | JCTEalloc of texpr * struct_info
   | JCTEfree of texpr
+  | JCTEmatch of texpr * (pattern * texpr) list
 
 and texpr =
     {
@@ -361,6 +391,7 @@ type tstatement_node =
   | JCTSpack of struct_info * texpr * struct_info
   | JCTSunpack of struct_info * texpr * struct_info
   | JCTSswitch of texpr * (texpr option list * tstatement list) list
+  | JCTSmatch of texpr * (pattern * tstatement list) list
 
 and tstatement = 
     {
@@ -409,6 +440,7 @@ type expr_node =
   | JCEoffset of offset_kind * expr * struct_info
   | JCEalloc of expr * struct_info
   | JCEfree of expr
+  | JCEmatch of expr * (pattern * expr) list
 (*
   - enlever JCEif et le mettre au niveau des statements comme
       l'appel de fonction : A VOIR
@@ -463,6 +495,7 @@ type statement_node =
   | JCSthrow of exception_info * expr option
   | JCSpack of struct_info * expr * struct_info
   | JCSunpack of struct_info * expr * struct_info
+  | JCSmatch of expr * (pattern * statement) list
 
 and statement = 
     {

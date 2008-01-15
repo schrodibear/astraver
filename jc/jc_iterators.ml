@@ -48,6 +48,9 @@ let rec iter_expr f e =
 	iter_expr f e1
     | JCEif(e1,e2,e3) ->
 	iter_expr f e1; iter_expr f e2; iter_expr f e3
+    | JCEmatch(e, pel) ->
+	iter_expr f e;
+	List.iter (fun (_, e) -> iter_expr f e) pel
   
 let rec fold_expr f acc e =
   let acc = f acc e in
@@ -63,7 +66,9 @@ let rec fold_expr f acc e =
 	let acc = fold_expr f acc e1 in
 	let acc = fold_expr f acc e2 in
 	fold_expr f acc e3
-
+    | JCEmatch(e, pel) ->
+	let acc = fold_expr f acc e in
+	List.fold_left (fun acc (_, e) -> fold_expr f acc e) acc pel
 
 (*****************************************************************************)
 (* General iterators on statements.                                          *)
@@ -100,6 +105,9 @@ let rec iter_expr_and_statement fexpr fstat s =
 	iter_expr fexpr e2
     | JCSthrow(_,None) | JCSassert _ | JCSreturn_void ->
 	()
+    | JCSmatch(e, psl) ->
+	iter_expr fexpr e;
+	List.iter (fun (_, s) -> iter_expr_and_statement fexpr fstat s) psl
 
 let rec fold_statement fpre fpost acc s =
   let acc = fpre acc s in
@@ -121,6 +129,9 @@ let rec fold_statement fpre fpost acc s =
 	fold_statement fpre fpost acc fs
     | JCSloop(_,ls) ->
 	fold_statement fpre fpost acc ls
+    | JCSmatch(_, psl) ->
+	List.fold_left (fun acc (_, s) -> fold_statement fpre fpost acc s)
+	  acc psl
     | JCSreturn _ | JCSthrow _ | JCSassert _ | JCSassign_var _
     | JCSassign_heap _ | JCSpack _ | JCSunpack _ | JCSreturn_void ->
 	acc
@@ -158,9 +169,12 @@ let rec fold_expr_in_statement f acc s =
     | JCSassign_heap(e1,_,e2) ->
 	let acc = fold_expr f acc e1 in
 	fold_expr f acc e2
+    | JCSmatch(e, psl) ->
+	let acc = fold_expr f acc e in
+	List.fold_left (fun acc (_, s) -> fold_expr_in_statement f acc s)
+	  acc psl
     | JCSthrow(_,None) | JCSassert _ | JCSreturn_void ->
 	acc
-
 
 (*****************************************************************************)
 (* General iterators on terms.                                               *)
@@ -183,6 +197,9 @@ let rec iter_term f t =
       List.iter (iter_term f) tl
   | JCTif(t1,t2,t3) ->
       iter_term f t1; iter_term f t2; iter_term f t3
+  | JCTmatch(t, ptl) ->
+      iter_term f t;
+      List.iter (fun (_, t) -> iter_term f t) ptl
 
 let rec fold_term f acc t =
   let acc = f acc t in
@@ -204,6 +221,9 @@ let rec fold_term f acc t =
       let acc = fold_term f acc t1 in
       let acc = fold_term f acc t2 in
       fold_term f acc t3
+  | JCTmatch(t, ptl) ->
+      let acc = fold_term f acc t in
+      List.fold_left (fun acc (_, t) -> fold_term f acc t) acc ptl
 
 let rec map_term f t =
   let tnode = match t.jc_term_node with
@@ -239,6 +259,8 @@ let rec map_term f t =
 	JCTrange(Some (map_term f t1),None)
     | JCTrange(None,Some t2) ->
 	JCTrange(None,Some (map_term f t2))
+    | JCTmatch(t, ptl) ->
+	JCTmatch(map_term f t, List.map (fun (p, t) -> p, map_term f t) ptl)
   in
   f { t with jc_term_node = tnode; }
 
@@ -280,6 +302,9 @@ let rec iter_term_and_assertion ft fa a =
 	iter_term_and_assertion ft fa a2
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	iter_term_and_assertion ft fa a1
+    | JCAmatch(t, pal) ->
+	iter_term ft t;
+	List.iter (fun (_, a) -> iter_term_and_assertion ft fa a) pal
 
 let iter_term_and_assertion_in_loop_annot ft fa la =
   iter_term_and_assertion ft fa la.jc_loop_invariant;
@@ -308,6 +333,8 @@ let rec fold_assertion f acc a =
 	fold_assertion f acc a2
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_assertion f acc a1
+    | JCAmatch(_, pal) ->
+	List.fold_left (fun acc (_, a) -> fold_assertion f acc a) acc pal
 
 let rec fold_term_in_assertion f acc a =
   match a.jc_assertion_node with
@@ -330,6 +357,10 @@ let rec fold_term_in_assertion f acc a =
 	fold_term_in_assertion f acc a2
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_term_in_assertion f acc a1
+    | JCAmatch(t, pal) ->
+	let acc = fold_term f acc t in
+	List.fold_left (fun acc (_, a) -> fold_term_in_assertion f acc a)
+	  acc pal
 
 let rec fold_term_and_assertion ft fa acc a =
   let acc = match a.jc_assertion_node with
@@ -352,6 +383,10 @@ let rec fold_term_and_assertion ft fa acc a =
 	fold_term_and_assertion ft fa acc a2
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_term_and_assertion ft fa acc a1
+    | JCAmatch(t, pal) ->
+	let acc = fold_term ft acc t in
+	List.fold_left (fun acc (_, a) -> fold_term_and_assertion ft fa acc a)
+	  acc pal
   in
   fa acc a
 
@@ -378,6 +413,8 @@ let rec map_assertion f a =
 	JCAold(map_assertion f a1)
     | JCAat(a1,lab) ->
 	JCAat(map_assertion f a1,lab)
+    | JCAmatch(t, pal) ->
+	JCAmatch(t, List.map (fun (p, a) -> p, map_assertion f a) pal)
   in
   f { a with jc_assertion_node = anode; }
 
@@ -417,9 +454,15 @@ let rec map_term_in_assertion f a =
 	JCAold(map_term_in_assertion f a1)
     | JCAat(a1,lab) ->
 	JCAat(map_term_in_assertion f a1,lab)
+    | JCAmatch(t, pal) ->
+	JCAmatch(map_term f t,
+		 List.map (fun (p, a) -> p, map_term_in_assertion f a) pal)
   in
   { a with jc_assertion_node = anode; }
 
+(* Remarque de Romain :
+ * C'est un copier-coller d'au-dessus ?
+ * Ca devrait pas plutôt être "map_term_and_assertion" ? *)
 let rec map_term_in_assertion f a =
   let anode = match a.jc_assertion_node with
     | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
@@ -456,6 +499,9 @@ let rec map_term_in_assertion f a =
 	JCAold(map_term_in_assertion f a1)
     | JCAat(a1,lab) ->
 	JCAat(map_term_in_assertion f a1,lab)
+    | JCAmatch(t, pal) ->
+	JCAmatch(map_term f t,
+		 List.map (fun (p, a) -> p, map_term_in_assertion f a) pal)
   in
   { a with jc_assertion_node = anode; }
 

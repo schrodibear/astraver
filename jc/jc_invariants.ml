@@ -230,6 +230,9 @@ let rec assertion this p =
     | JCAtagequality(t1, t2, _) ->
 	tag this t1;
 	tag this t2
+    | JCAmatch(t, pal) ->
+	term this t;
+	List.iter (fun (_, a) -> assertion this a) pal
 
 let check invs =
   List.iter
@@ -276,6 +279,8 @@ let rec assertion_memories aux a = match a.jc_assertion_node with
   | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
   | JCAmutable(t, _, _) -> term_memories aux t
   | JCAtagequality(t1, t2, _) -> tag_memories (tag_memories aux t2) t1
+  | JCAmatch(t, pal) ->
+      term_memories (List.fold_left assertion_memories aux (List.map snd pal)) t
 
 (* Returns (as a StringSet.t) every structure name that can be reached from st.
 Assumes the structures whose name is in acc have already been visited

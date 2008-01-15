@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.77 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_output.ml,v 1.78 2008-01-15 13:12:28 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -114,7 +114,23 @@ let offset_kind fmt k =
     | Offset_max -> fprintf fmt "ax"
     | Offset_min -> fprintf fmt "in"
 
-
+let rec pattern fmt p =
+  match p.jc_pattern_node with
+    | JCPstruct(tag, lbls) ->
+	fprintf fmt "@[<hv 2>%s{@ " tag.jc_identifier_name;
+	List.iter
+	  (fun (lbl, pat) ->
+	     fprintf fmt "%s = %a;@ " lbl.jc_identifier_name pattern pat)
+	  lbls;
+	fprintf fmt "}@]"
+    | JCPvar id ->
+	fprintf fmt "%s" id.jc_identifier_name
+    | JCPor(p1, p2) ->
+	fprintf fmt "(%a)@ | (%a)" pattern p1 pattern p2
+    | JCPas(pat, id) ->
+	fprintf fmt "(%a as %s)" pattern pat id.jc_identifier_name
+    | JCPany ->
+	fprintf fmt "_"
 
 let rec term fmt t =
   if t.jc_term_label <> "" then
@@ -178,6 +194,12 @@ let rec term fmt t =
     | JCTconst c -> const fmt c
     | JCTrange (t1,t2) -> 
 	fprintf fmt "@[[%a..%a]@]" (print_option term) t1 (print_option term) t2
+    | JCTmatch (t, ptl) ->
+	fprintf fmt "@[<v 2>match %a with@ " term t;
+	List.iter
+	  (fun (p, t) -> fprintf fmt "  | @[<v 2>%a ->@ %a;@]@ "
+	     pattern p term t) ptl;
+	fprintf fmt "end@]"
 
 let quantifier fmt = function
   | Forall -> fprintf fmt "forall"
@@ -242,6 +264,12 @@ let rec assertion fmt a =
     | JCAfalse -> fprintf fmt "false"
     | JCAmutable _ -> assert false (* TODO *)
     | JCAtagequality _ -> assert false (* TODO *)
+    | JCAmatch (t, pal) ->
+	fprintf fmt "@[<v 2>match %a with@ " term t;
+	List.iter
+	  (fun (p, a) -> fprintf fmt "  | @[<v 2>%a ->@ %a;@]@ "
+	     pattern p assertion a) pal;
+	fprintf fmt "end@]"
 
 let rec location_set fmt = function
   | JCLSvar vi-> 
@@ -366,6 +394,12 @@ let rec expr fmt e =
     | JCTEsub_pointer (e1, e2) -> 
 	fprintf fmt "@[(%a - %a)@]" expr e1 expr e2
     | JCTEconst c -> const fmt c
+    | JCTEmatch (e, pel) ->
+	fprintf fmt "@[<v 2>match %a with@ " expr e;
+	List.iter
+	  (fun (p, e) -> fprintf fmt "  | @[<v 2>%a ->@ %a;@]@ "
+	     pattern p expr e) pel;
+	fprintf fmt "end@]"
 
 let rec statement fmt s =
   match s.jc_tstatement_node with
@@ -427,6 +461,12 @@ let rec statement fmt s =
     | JCTSswitch (e, csl) ->
 	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
 	  expr e (print_list nothing case) csl
+    | JCTSmatch (e, psl) ->
+	fprintf fmt "@[<v 2>match %a with@ " expr e;
+	List.iter
+	  (fun (p, s) -> fprintf fmt "  | @[<v 2>%a -> {@ %a@ @]}@ "
+	     pattern p statements s) psl;
+	fprintf fmt "end@]"
 	
 and case fmt (c,sl) =
   let onecase fmt = function

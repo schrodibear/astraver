@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.157 2008-01-14 15:26:30 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.158 2008-01-15 13:12:28 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -672,6 +672,8 @@ let rec term env e =
 	  assert false (* TODO *)
       | JCPEtagequality _ ->
 	  assert false (* TODO *)
+      | JCPEmatch(e, pel) ->
+	  assert false (* TODO *)	  
 	    
   in { jc_term_node = te;
        jc_term_type = t;
@@ -982,6 +984,8 @@ different"
 	  in
 	  JCAtagequality(
 	    ttag1, ttag2, st)
+      | JCPEmatch(e, pel) ->
+	  assert false (* TODO *)
 
   in { jc_assertion_node = te;
        jc_assertion_label = !lab;
@@ -1361,6 +1365,8 @@ let rec expr env e =
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
+      | JCPEmatch(e, pel) ->
+	  assert false (* TODO *)
       | JCPEquantifier _ 
       | JCPEold _ 
       | JCPEat _
@@ -1457,6 +1463,13 @@ let build_label_tree s : label_tree list =
 	  let l1,fwdl1 = build_bwd s1 ([],fwdacc) in
 	  let l2,fwdl2 = build_bwd s2 ([],fwdl1) in 
 	  (LabelBlock l1) :: (LabelBlock l2) :: acc, fwdl2
+      | JCPSmatch (e, psl) ->
+	  List.fold_left
+	    (fun (acc, fwdacc) (_, sl) ->
+	       let l, fwdl = List.fold_right build_bwd sl ([], fwdacc) in
+	       (LabelBlock l)::acc, fwdl)
+	    (acc, fwdacc)
+	    psl
       | JCPSlabel (lab, s) ->
 	  let info = { label_info_name = lab; times_used = 0 } in
 	  let l,fwdl = build_bwd s (acc,fwdacc) in
@@ -1783,6 +1796,8 @@ let rec statement env lz s =
 	    JCTSswitch(tc,List.rev tcsl), lz2
 	  else 
 	    typing_error s.jc_pstatement_loc "integer expected"
+      | JCPSmatch(e, psl) ->
+	  assert false (* TODO *)
   in 
   let ts = { jc_tstatement_node = ts;
 	     jc_tstatement_loc = s.jc_pstatement_loc } in
@@ -1938,7 +1953,8 @@ let rec location_set env e =
     | JCPEalloc (_,_)
     | JCPEmutable _
     | JCPEtagequality _
-    | JCPEfree _ -> assert false
+    | JCPEfree _
+    | JCPEmatch _ -> assert false
 
 let rec location env e =
   match e.jc_pexpr_node with
@@ -1970,6 +1986,7 @@ let rec location env e =
     | JCPEold _ -> assert false (* TODO *)
 
     | JCPEif _ 
+    | JCPEmatch _
     | JCPElet _ 
     | JCPEcast _
     | JCPEinstanceof _

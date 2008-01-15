@@ -90,6 +90,8 @@ let rec statement g fun_exit_node s =
 	let entry1,exits1 = statement g fun_exit_node s1 in
 	List.iter (fun v -> G.add_edge g v n) exits1;
 	n,[n]	
+    | JCSmatch(e, psl) ->
+	assert false (* TODO *)
     | JCSassign_heap (_, _, _)
     | JCSassign_var (_, _)
     | JCScall (_, _, _)
