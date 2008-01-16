@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.88 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.89 2008-01-16 11:46:12 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -45,82 +45,49 @@ let parse_file f =
 	  
 
 let main () =
-  let files = Jc_options.files () in
-    try
-      match files with
-	| [f] ->
-	    (* phase 1 : parsing *)
-	    let ast = parse_file f in
-            (* phase 2 : typing *)
-	    Jc_options.lprintf "Typing@.";
-	    Jc_typing.type_file ast;
-	    (* phase 3 : normalization *)
-	    (*
-		Hashtbl.iter (fun tag x ->
-		Hashtbl.add Jc_typing.logic_type_table tag x)
-		Jc_typing.logic_type_table;
-		Hashtbl.iter 
-		(fun tag (f,t) -> 
-		Hashtbl.add Jc_norm.logic_functions_table tag (f,t))
-		Jc_typing.logic_functions_table;
-	    *)
-	    let vil = 
-	      Hashtbl.fold
-		(fun tag (vi, eo) acc ->
-		   let vi, eo = Jc_norm.static_variable (vi, eo) in 
-		   Hashtbl.add Jc_norm.variables_table tag (vi, eo);
-		   vi :: acc)
-		Jc_typing.variables_table []
-	    in
-	    Hashtbl.iter
-	      (fun tag (f,loc,s,b) -> 
-		 let (s,b) = Jc_norm.code_function (f, s, b) vil in
-		 Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
-	      Jc_typing.functions_table;
-	      (*
-	Hashtbl.iter 
-	  (fun tag (si,l) -> 
-	     let l = List.map (fun (li, a) -> (li, Jc_norm.assertion a)) l in
-	     Hashtbl.add Jc_norm.structs_table tag (si,l))
-	  Jc_typing.structs_table;
-*)
-(*
-	Hashtbl.iter (fun tag x -> 
-			Hashtbl.add Jc_norm.enum_types_table tag x)
-	  Jc_typing.enum_types_table;
-*)
-(*
-	Hashtbl.iter 
-	  (fun tag a -> 
-	     let a = Jc_norm.assertion a in
-	     Hashtbl.add Jc_norm.axioms_table tag a)
-	  Jc_typing.axioms_table;
-*)
-(*
-	Hashtbl.iter (fun tag x -> 
-			Hashtbl.add Jc_norm.exceptions_table tag x)
-	  Jc_typing.exceptions_table;	
-	*)
-	  
-	(* phase 4 : computation of call graph *)
-	Hashtbl.iter 
-	  (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
-	  Jc_typing.logic_functions_table;
-	Hashtbl.iter 
-	  (fun _ (f,loc,s,b) -> 
-	     Option_misc.iter (Jc_callgraph.compute_calls f s) b)
-	  Jc_norm.functions_table;
-	let logic_components = 
-	  Jc_callgraph.compute_logic_components
-	    Jc_typing.logic_functions_table
-	in
-	let components = 
-	  Jc_callgraph.compute_components Jc_norm.functions_table
-	in
+  let files = Jc_options.files () in try
+    match files with
+      | [f] ->
+	  (* phase 1: parsing *)
+	  let ast = parse_file f in
 
-	(* phase : computation of regions *)
-	if Jc_options.separation then
-	  begin
+          (* phase 2: typing *)
+	  Jc_options.lprintf "Typing@.";
+	  Jc_typing.type_file ast;
+
+	  (* phase 3: normalization *)
+	  let vil = 
+	    Hashtbl.fold
+	      (fun tag (vi, eo) acc ->
+		 let vi, eo = Jc_norm.static_variable (vi, eo) in 
+		 Hashtbl.add Jc_norm.variables_table tag (vi, eo);
+		 vi :: acc)
+	      Jc_typing.variables_table []
+	  in
+	  Hashtbl.iter
+	    (fun tag (f,loc,s,b) -> 
+	       let (s,b) = Jc_norm.code_function (f, s, b) vil in
+	       Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
+	    Jc_typing.functions_table;
+
+	  (* phase 4: computation of call graph *)
+	  Hashtbl.iter 
+	    (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
+	    Jc_typing.logic_functions_table;
+	  Hashtbl.iter 
+	    (fun _ (f,loc,s,b) -> 
+	       Option_misc.iter (Jc_callgraph.compute_calls f s) b)
+	    Jc_norm.functions_table;
+	  let logic_components = 
+	    Jc_callgraph.compute_logic_components
+	      Jc_typing.logic_functions_table
+	  in
+	  let components = 
+	    Jc_callgraph.compute_components Jc_norm.functions_table
+	  in
+
+	  (* phase 5: computation of regions *)
+	  if Jc_options.separation then begin
 	    Jc_options.lprintf "Computation of regions@.";
 	    (* Analyze logic functions before axioms, so that parameter 
 	     * regions are known before a function is applied. 
@@ -130,7 +97,7 @@ let main () =
 	    Array.iter Jc_separation.code_component components
 	  end;
 
-          (* optional phase: inference of annotations *)
+          (* (optional) phase 6: inference of annotations *)
 	  if Jc_options.annot_infer then
 	    if Jc_options.interprocedural then
 	      (* interprocedural analysis over the call graph +
@@ -147,13 +114,15 @@ let main () =
 		   Jc_ai.code_function (f, s, b) 
 		) Jc_norm.functions_table;
 
-	  (* phase 5 : computation of effects *)
-	  Jc_options.lprintf "\nstarting computation of effects of logic functions.@.";
+	  (* phase 7: computation of effects *)
+	  Jc_options.lprintf
+	    "\nstarting computation of effects of logic functions.@.";
 	  Array.iter Jc_effect.logic_effects logic_components;
-	  Jc_options.lprintf "\nstarting computation of effects of functions.@.";
+	  Jc_options.lprintf
+	    "\nstarting computation of effects of functions.@.";
 	  Array.iter Jc_effect.function_effects components;
 	  	  
-	  (* phase 6 : checking structure invariants *)
+	  (* phase 8: checking structure invariants *)
 	  begin
 	    match !Jc_options.inv_sem with
 	      | InvOwnership ->

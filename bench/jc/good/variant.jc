@@ -37,7 +37,7 @@ integer circle_perimeter(Circle[0] C) {
 
 integer perimeter(shape[0] S) {
   return 0;
-  /*match S with
+/*  match S with
     Parallelogram{} as P -> {
       return parallelogram_perimeter(P);
     }

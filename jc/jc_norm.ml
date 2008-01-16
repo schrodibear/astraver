@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.71 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.72 2008-01-16 11:46:12 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -179,6 +179,9 @@ let make_call lab loc vio f el s =
 
 let make_if loc e ts es =
   make_node "Lif" loc (JCSif (e,ts,es))
+
+let make_match loc e psl =
+  make_node "Lmatch" loc (JCSmatch (e, psl))
 
 let make_throw loc exc e =
   make_node "Lthrow" loc (JCSthrow (exc,e))
@@ -730,8 +733,11 @@ and statement s =
 	    make_try loc switch_stat catch_exit (make_block loc []) in
 	  let tmp_assign = make_decl loc tmp (Some e) (make_block loc []) in
 	  (make_decls loc (sl @ [tmp_assign;try_exit]) tl).jc_statement_node
-      | JCTSmatch _ ->
-	  assert false (* TODO *)
+      | JCTSmatch (e, psl) ->
+	  let (sl, tl), e = expr e in
+	  let psl = List.map (fun (p, sl) -> p, block_statement sl) psl in
+	  let match_node = make_match loc e psl in
+	  (make_decls loc (sl @ [match_node]) tl).jc_statement_node
 
   in { jc_statement_node = ns;
        jc_statement_label = !lab;
