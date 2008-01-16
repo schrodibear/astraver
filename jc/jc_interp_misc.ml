@@ -73,14 +73,6 @@ let memory_field fi =
     (struct_model_type fi.jc_field_info_root)
     (tr_base_type fi.jc_field_info_type)
 
-let label_var lab name =
-  match lab with
-    | LabelNone -> assert false
-    | LabelHere -> name
-    | LabelPre -> name ^ "_at_Pre"
-    | LabelInit -> name ^ "_at_Init"
-    | LabelPost -> name ^ "_at_Post"
-    | LabelName l -> name ^ "_at_" ^ l
 	
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
   let l =

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.209 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.210 2008-01-16 14:39:35 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1178,7 +1178,8 @@ let type_assert vi e =
 		      :: List.map (fun si -> (lvar LabelHere ** alloc_table_name) si) structs
 		      @ List.map (lvar LabelHere ** field_memory_name) fields)
 	  end
-    | _ -> LTrue
+  | JCTvariant_pointer (vi, n1o, n2o), JCTvariant_pointer (vi', n1o', n2o') -> assert false (* TODO *)
+  | _ -> LTrue
 	
 let expr_coerce ~infunction ~threats vi e =
   coerce ~no_int_overflow:(not threats)

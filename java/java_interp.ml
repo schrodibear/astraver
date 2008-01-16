@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.95 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.96 2008-01-16 14:39:35 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -351,14 +351,14 @@ let get_var vi =
   with
       Not_found -> 
 	eprintf "Java_interp.get_var->Not_found: '%s', %a@." 
-	  vi.java_var_info_name
+	  vi.java_var_info_final_name
 	  Loc.report_position vi.java_var_info_decl_loc
 	;
 	raise Not_found
 
 let create_var ?(formal=false) loc vi =
   let ty = tr_type loc vi.java_var_info_type in
-  let nvi = Jc_pervasives.var ~formal ty vi.java_var_info_name in
+  let nvi = Jc_pervasives.var ~formal ty vi.java_var_info_final_name in
   nvi.jc_var_info_assigned <- vi.java_var_info_assigned;
   Hashtbl.add vi_table vi.java_var_info_tag nvi;
   nvi
@@ -1524,7 +1524,7 @@ let tr_field type_name acc fi =
 	JCReads []
     in
     let decl =
-      JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_name,
+      JClogic_fun_def(Some vi.jc_var_info_type, vi.jc_var_info_final_name,
 		      [], [], body)
     in
     decl::acc      
@@ -1537,7 +1537,7 @@ let tr_field type_name acc fi =
 	    | Some e -> Some (initialiser e)
       with Not_found -> None
     in
-    JCvar_def(vi.jc_var_info_type,vi.jc_var_info_name,e)::acc
+    JCvar_def(vi.jc_var_info_type,vi.jc_var_info_final_name,e)::acc
 
 
 (* class *)

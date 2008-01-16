@@ -6,7 +6,7 @@ type charP = {
     integer charM;
 }
 
-logic integer strlen(charP[..] p) reads (p+[0..]).charM;
+logic integer strlen{L}(charP[..] p) reads (p+[0..]).charM;
 
 unit strcat(charP[..] dest, charP[..] src) {  
     assert (0 <= strlen(src));

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.74 2008-01-15 16:29:36 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.75 2008-01-16 14:39:35 nrousset Exp $ *)
 
 open Format
 open Jc_env
@@ -33,6 +33,15 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 open Jc_region
+
+let label_var lab name =
+  match lab with
+    | LabelNone -> assert false
+    | LabelHere -> name
+    | LabelPre -> name ^ "_at_Pre"
+    | LabelInit -> name ^ "_at_Init"
+    | LabelPost -> name ^ "_at_Post"
+    | LabelName l -> name ^ "_at_" ^ l
 
 let root_name st =
   st.jc_struct_info_root.jc_struct_info_name

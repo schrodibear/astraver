@@ -1,3 +1,8 @@
+
+(* labels *)
+
+val label_var : Jc_env.logic_label -> string -> string
+
 (* types *)
 
 val integer_type : Jc_env.jc_type

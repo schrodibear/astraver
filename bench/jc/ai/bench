@@ -34,22 +34,22 @@ bench_jc_good () {
 		    else
 			echo "why FAILED :"
 			cat /tmp/jessie.tmp
-			exit 1
+			#exit 1
 		    fi
 		else
 		    echo "why FAILED :"
 		    cat /tmp/jessie.tmp
-		    exit 1
+		    #exit 1
 		fi
 	    else
 		echo "why FAILED :"
 		cat /tmp/jessie.tmp
-		exit 1
+		#exit 1
 	    fi
 	else
 	    echo "jessie FAILED (rejected a good file) :"
 	    cat /tmp/jessie.tmp
-	    exit 1
+	    #exit 1
 	fi
     done
     $JCHOME/bin/dp.opt -timeout 10 $VCS 2>/dev/null || true

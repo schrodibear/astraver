@@ -1,6 +1,7 @@
 
+# InvariantPolicy = Arguments
 /*
-  @OPTIONS: -inv-sem arguments -ai box -main main
+  @OPTIONS:  -ai box -main main
 */
 
 

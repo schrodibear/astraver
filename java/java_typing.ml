@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.87 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.88 2008-01-16 14:39:35 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -254,6 +254,43 @@ let static_invariants_table = Hashtbl.create 97
 
 (* variables *)
 
+module StringSet = Set.Make(String)
+
+(* used names (in order to rename identifiers when necessary) *)
+let used_names = Hashtbl.create 97
+
+let mark_as_used x = 
+  Hashtbl.add used_names x ()
+
+let () = 
+  List.iter mark_as_used 
+    [ "tag" ]
+
+let is_used_name n = Hashtbl.mem used_names n
+
+let use_name ?local_names n = 
+  if is_used_name n then raise Exit; 
+  begin match local_names with 
+    | Some h -> if StringSet.mem n h then raise Exit 
+    | None -> () 
+  end;
+  mark_as_used n;
+  n
+
+let rec next_name ?local_names n i = 
+  let n_i = n ^ "_" ^ string_of_int i in
+  try use_name ?local_names n_i 
+  with Exit -> next_name ?local_names n (succ i)
+
+let get_unique_name ?local_names n = 
+  try use_name ?local_names n 
+  with Exit -> next_name ?local_names n 0
+
+let get_final_name id =
+  if id = "\\result" then id else
+    get_unique_name id
+
+
 let var_tag_counter = ref 0
 
 let new_var loc ty id =
@@ -262,7 +299,7 @@ let new_var loc ty id =
     java_var_info_tag = !var_tag_counter;
     java_var_info_name = id;
     java_var_info_decl_loc = loc;
-    java_var_info_final_name = id;
+    java_var_info_final_name = get_final_name id;
     java_var_info_type = ty;
     java_var_info_assigned = false;
   }

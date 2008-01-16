@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.160 2008-01-15 16:29:36 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.161 2008-01-16 14:39:35 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2639,6 +2639,7 @@ let check_struct d = match d.jc_pdecl_node with
 
 (* type declarations in the right order *)
 let type_file ast =
+  (* TODO: type enums before *)
   (* records and variants *)
   List.iter declare_struct_info ast;
   List.iter compute_struct_info_parent ast;
