@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.210 2008-01-16 14:39:35 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.211 2008-01-16 16:54:30 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -355,6 +355,84 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	  "can't coerce type %a to type %a" 
 	  print_type tsrc print_type tdest
 
+(******************************************************************************)
+(*                                  patterns                                  *)
+(******************************************************************************)
+
+let make_blackbox_annot pre ty reads writes post exn_posts =
+  BlackBox(Annot_type(pre, ty, reads, writes, post, exn_posts))
+
+let destroy_tuple_in tuple vars body =
+  assert false
+
+(** [pattern arg ty pat] translates the pattern [pat] applied to the term [arg]
+  which have a [jc_type] of [ty].
+  Returns [notcond, cond, vars] where:
+  [notcond] is an assertion equivalent to "the pattern cannot be applied";
+  [cond] is an assertion equivalent to "the pattern can be applied" and giving
+    the values of each binded variable;
+  [vars] is a list of [name, user_name, ty] where [user_name] is a variable
+    binded by the pattern, [name] its unique name used in [cond], and
+    [ty] its [jc_type]. *)
+let rec pattern arg ty pat = match pat.jc_pattern_node with
+  | JCPstruct(st, fpl) ->
+      let subtag = make_subtag (make_typeof st arg) (LVar (tag_name st)) in
+      List.fold_left
+	(fun (accnotcond, acccond, accvars) (fi, pat) ->
+	   let arg = make_select_fi fi arg in
+	   let ty = fi.jc_field_info_type in
+	   let notcond, cond, vars = pattern arg ty pat in
+	   LOr(accnotcond, notcond),
+	   LAnd(acccond, cond),
+	   accvars @ vars)
+	(LNot subtag, subtag, [])
+	fpl
+  | JCPvar vi ->
+      LFalse,
+      make_eq (LVar vi.jc_var_info_final_name) arg,
+      [vi.jc_var_info_final_name, ty]
+  | JCPor(p1, p2) ->
+      (* typing ensures that both patterns bind the same variables *)
+      let notcond1, cond1, vars = pattern arg ty p1 in
+      let notcond2, cond2, _ = pattern arg ty p2 in
+      LAnd(notcond1, notcond2),
+      LOr(cond1, cond2),
+      vars
+  | JCPas(p, vi) ->
+      let notcond, cond, vars = pattern arg ty p in
+      notcond,
+      LAnd(cond, make_eq (LVar vi.jc_var_info_final_name) arg),
+      (vi.jc_var_info_final_name, ty)::vars
+  | JCPany ->
+      LFalse,
+      LTrue,
+      []
+
+let pattern_list_expr translate_body arg ty pbl =
+  List.fold_left
+    (fun accbody (pat, body) ->
+       let notcond, cond, vars = pattern arg ty pat in
+       let body = translate_body body in
+(*       let body = List.fold_left
+	 (fun acc (name, user_name, _) -> Let(user_name, Deref name, acc))
+	 body vars
+       in*)
+       let reads =
+	 let region = dummy_region in (* TODO *)
+	 let ef = Jc_effect.pattern empty_effects LabelNone region pat in
+	 all_effects ef
+       in
+       let writes = List.map fst vars in
+       let post = LIf(LVar "result", cond, notcond) in
+       let bbox = make_blackbox_annot LTrue bool_type reads writes post [] in
+       let branch = List.fold_left
+	 (fun acc (name, ty) -> Let_ref(name, any_value ty, acc))
+	 (If(bbox, body, accbody))
+	 vars
+       in
+       branch)
+    Absurd
+    (List.rev pbl)
 
 (**************************
 
@@ -473,8 +551,7 @@ let tag ~global_assertion label oldlabel = function
   | JCTbottom -> LVar "bottom_tag"
   | JCTtypeof(t, st) ->
       let te = term ~global_assertion label oldlabel t in
-      LApp("typeof", [ LVar (tag_table_name st); te ])
-	     
+      make_typeof st te
 
 let rec assertion ~global_assertion label oldlabel a =
   let fa = assertion ~global_assertion label oldlabel 
@@ -1087,23 +1164,6 @@ let invariant_for_struct this st =
     (List.map (fun (li, _) -> make_logic_pred_call li [this]) invs)
 *)
 
-let any_value ty = 
-  match ty with
-  | JCTnative t -> 
-      begin match t with
-	| Tunit -> Void
-	| Tboolean -> App (Var "any_bool", Void)
-	| Tinteger -> App (Var "any_int", Void)
-	| Treal -> App (Var "any_real", Void)
-      end
-  | JCTnull 
-  | JCTpointer _
-  | JCTvariant_pointer _ -> App (Var "any_pointer", Void)
-  | JCTenum ri -> 
-      App (Var ("any_" ^ ri.jc_enum_info_name), Void)
-  | JCTlogic _ -> assert false
-
-  
 let return_void = ref false
 
 let type_assert vi e =
@@ -1490,12 +1550,14 @@ let rec statement ~infunction ~threats s =
 	let (s,_) =
 	  List.fold_left catch (statement s,ef.jc_raises) catches
 	in s
-    | JCSmatch _ -> assert false (* TODO *)
+    | JCSmatch (e, psl) ->
+	let tmp = tmp_var_name () in
+	let body = pattern_list_expr statement (LVar tmp) e.jc_expr_type psl in
+	Let(tmp, expr e, body)
 
 and statement_list ~infunction ~threats l = 
   List.fold_right 
     (fun s acc -> append (statement ~infunction ~threats s) acc) l Void
-
 
 (******************
  structures

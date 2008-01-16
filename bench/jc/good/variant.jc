@@ -27,24 +27,29 @@ type Test = {
 
 type shape = [Parallelogram | Circle]
 
-integer parallelogram_perimeter(Parallelogram[0] P) {
+integer parallelogram_perimeter(Parallelogram[0] P)
+  behavior ok: ensures \result >= 0;
+{
   return P.l1 + P.l2 + P.l3 + P.l4;
 }
 
-integer circle_perimeter(Circle[0] C) {
+integer circle_perimeter(Circle[0] C)
+  behavior ok: ensures \result >= 0;
+{
   return 3 * C.radius * C.radius;
 }
 
-integer perimeter(shape[0] S) {
-  return 0;
-/*  match S with
+integer perimeter(shape[0] S)
+  behavior ok: ensures \result >= 0;
+{
+  match S with
     Parallelogram{} as P -> {
       return parallelogram_perimeter(P);
     }
-    Circle{} as C -> {
-      return circle_perimeter(C);
+    Circle{radius = r;} as C -> {
+      return 3 * r * r;
     }
-  end;*/
+  end;
 }
 
 /*

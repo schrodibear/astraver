@@ -14,7 +14,8 @@ struct T {
 
 */
 
-type U = [ U_x | U_y ] 
+/*type U = [ U_x | U_y ] */
+type U = {}
 tag U_x = U with { integer x; }
 tag U_y = U with { real y; }
 

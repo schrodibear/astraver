@@ -156,7 +156,7 @@ let make_logic_pred_call ~label_in_name li l region_assoc label_assoc =
 
 
 
-(**)
+(* *)
 let logic_info_reads acc li = 
   let acc =
     FieldRegionMap.fold
@@ -176,7 +176,7 @@ let logic_info_reads acc li =
     (fun v acc -> StringSet.add (v^"_tag_table") acc)
     li.jc_logic_info_effects.jc_effect_tag_table
     acc
-(**)
+(* *)
 
 
 (*
@@ -236,6 +236,105 @@ let alloc_table_type2 a =
     logic_type_name = alloc_table_type_name;
     logic_type_args = [struct_model_type (find_struct a)];
   }
+
+(* fold all effects into a list *)
+let all_effects ef =
+  let res =
+    FieldRegionMap.fold
+      (fun (fi,r) labels acc -> 
+	let mem = field_region_memory_name(fi,r) in
+	if Region.polymorphic r then
+(*	  if RegionList.mem r f.jc_fun_info_param_regions then
+	    if FieldRegionMap.mem (fi,r) 
+	      f.jc_fun_info_effects.jc_writes.jc_effect_memories 
+	    then mem::acc 
+	    else acc
+	  else acc*)
+	  assert false (* TODO *)
+	else mem::acc)
+      ef.jc_effect_memories
+      []
+  in
+  let res =
+    VarSet.fold
+      (fun v acc -> v.jc_var_info_final_name::acc)
+      ef.jc_effect_globals
+      res
+  in
+  let res =
+    StringRegionSet.fold
+      (fun (a,r) acc -> 
+	let alloc = alloc_region_table_name2(a,r) in
+	if Region.polymorphic r then
+(*	  if RegionList.mem r f.jc_fun_info_param_regions then
+	    if StringRegionSet.mem (a,r) 
+	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table 
+	    then alloc::acc 
+	    else acc
+	  else acc*)
+	  assert false (* TODO *)
+	else alloc::acc)
+      ef.jc_effect_alloc_table
+      res
+  in
+  let res =
+    StringSet.fold
+      (fun v acc -> (tag_table_name2 v)::acc)
+      ef.jc_effect_tag_table
+      res
+  in
+  let res =
+    StringSet.fold
+      (fun v acc -> (mutable_name2 v)::acc)
+      ef.jc_effect_mutable
+      res
+  in
+  let res =
+    StringSet.fold
+      (fun v acc -> (committed_name2 v)::acc)
+      ef.jc_effect_committed
+      res
+  in
+  res
+
+(* functions to make Why expressions *)
+
+let make_eq a b =
+  LPred("eq", [ a; b ])
+
+let make_select f this =
+  LApp("select", [ f; this ])
+
+let make_select_fi fi =
+  make_select (LVar fi.jc_field_info_final_name)
+
+let make_select_committed root =
+  make_select (LVar (committed_name root))
+
+let make_typeof_vi vi x =
+  LApp("typeof", [ LVar (tag_table_name_vi vi); x ])
+
+let make_typeof st x =
+  make_typeof_vi (struct_variant st) x
+
+let make_subtag t u =
+  LPred("subtag", [ t; u ])
+
+let any_value ty = 
+  match ty with
+  | JCTnative t -> 
+      begin match t with
+	| Tunit -> Void
+	| Tboolean -> App (Var "any_bool", Void)
+	| Tinteger -> App (Var "any_int", Void)
+	| Treal -> App (Var "any_real", Void)
+      end
+  | JCTnull 
+  | JCTpointer _
+  | JCTvariant_pointer _ -> App (Var "any_pointer", Void)
+  | JCTenum ri -> 
+      App (Var ("any_" ^ ri.jc_enum_info_name), Void)
+  | JCTlogic _ -> assert false
 
 (*
 Local Variables: 

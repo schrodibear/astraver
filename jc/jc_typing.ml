@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.161 2008-01-16 14:39:35 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.162 2008-01-16 16:54:30 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -349,14 +349,17 @@ let rec pattern env pat ety =
 	JCPstruct(st, List.rev tlpl), valid_pointer_type st, env
     | JCPPvar id ->
 	let vi = var ety id.jc_identifier_name in
+	vi.jc_var_info_assigned <- true;
 	JCPvar vi, ety, (id.jc_identifier_name, vi)::env
     | JCPPor(p1, p2) ->
 	let env, tp1 = pattern env p1 ety in
 	let env, tp2 = pattern env p2 ety in
+	(* TODO: check that both pattern bind the same variables *)
 	JCPor(tp1, tp2), ety, env
     | JCPPas(p, id) ->
 	let env, tp = pattern env p ety in
 	let vi = var tp.jc_pattern_type id.jc_identifier_name in
+	vi.jc_var_info_assigned <- true;
 	JCPas(tp, vi), ety, (id.jc_identifier_name, vi)::env
     | JCPPany ->
 	JCPany, ety, env
@@ -2573,7 +2576,7 @@ let declare_struct_info d = match d.jc_pdecl_node with
 let compute_struct_info_parent d = match d.jc_pdecl_node with
   | JCPDtag(id, Some parent, _, _) ->
       let si, _ = Hashtbl.find structs_table id in
-      let psi, _ = Hashtbl.find structs_table parent in
+      let psi = find_struct_info d.jc_pdecl_loc parent in
       si.jc_struct_info_parent <- Some psi
   | _ -> ()
 

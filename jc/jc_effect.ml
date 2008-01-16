@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.80 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.81 2008-01-16 16:54:30 bardou Exp $ *)
 
 
 open Jc_env
@@ -250,6 +250,27 @@ let same_feffects fef1 fef2 =
   && same_effects fef1.jc_writes fef2.jc_writes 
   && ExceptionSet.equal fef1.jc_raises fef2.jc_raises
 
+(******************************************************************************)
+(*                                  patterns                                  *)
+(******************************************************************************)
+
+(* TODO: check the use of "label" and "r" *)
+let rec pattern ef label r p =
+  match p.jc_pattern_node with
+    | JCPstruct(st, fpl) ->
+	let ef = add_tag_effect ef (root_name st) in
+	List.fold_left
+	  (fun ef (fi, pat) ->
+	     let ef = add_memory_effect label ef (fi, r) in
+	     pattern ef label r pat)
+	  ef fpl
+    | JCPor(p1, p2) ->
+	pattern (pattern ef label r p1) label r p2
+    | JCPas(p, _) ->
+	pattern ef label r p
+    | JCPvar _
+    | JCPany ->
+	ef
 
 (***********************
 

@@ -83,9 +83,6 @@ let invariant_for_struct this st =
 let make_assume reads assume =
   BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, []))
 
-let make_subtag t u =
-  LPred("subtag", [ t; u ])
-
 let fully_packed root e =
   LPred(
     "fully_packed",
@@ -140,20 +137,8 @@ let pset_union_list = function
 let pset_range s a b =
   LApp("pset_range", [ s; a; b ])
 
-let make_select f this =
-  LApp("select", [ f; this ])
-
-let make_select_fi fi =
-  make_select (LVar fi.jc_field_info_final_name)
-
-let make_select_committed root =
-  make_select (LVar (committed_name root))
-
 let make_shift p i =
   LApp("shift", [ p; i ])
-
-let make_eq a b =
-  LPred("eq", [ a; b ])
 
 let make_not_assigns alloc old_mem new_mem pset =
   LPred("not_assigns", [ alloc; old_mem; new_mem; pset ])
