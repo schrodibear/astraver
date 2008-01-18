@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.93 2008-01-16 14:39:35 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.94 2008-01-18 16:33:21 moy Exp $ *)
 
 open Pp
 open Format
@@ -870,6 +870,8 @@ module Dnf = struct
   let get_singleton_disjunct = function
     | [[x]] -> x
     | _ -> assert false
+
+  let make_singleton conj = [conj]
 
   let rec make_and =
     let pair_and dnf1 dnf2 = 
@@ -1905,6 +1907,34 @@ let assign_expr mgr pre t e =
       assign_offset_variable mgr pre va Offset_max_kind e
     end
 
+(* Could be more precise by assigning region and field *)
+let assign_region mgr pre r =
+  if debug then 
+    printf "[assign_region]%a@." Region.print r;
+  let env = Abstract1.env pre in
+  let integer_vars = Array.to_list (fst (Environment.vars env)) in
+  let forget_vars = 
+    List.filter (fun va ->
+      let t = Vai.term va in
+      let rec has_region acc t =
+	if acc || Region.equal t.jc_term_region r then
+	  (* cont = *)false,(* acc = *)true
+	else
+	  match t.jc_term_node with
+	    | JCToffset(_,t',_) -> false,has_sub_region acc t'
+	    | _ -> true,acc
+      and has_sub_region acc t =
+	fold_sub_term fold_rec_term has_region acc t
+      in
+      let res = fold_rec_term has_region false t in
+      if debug then 
+	printf "[assign_region]%a:%b@." Var.print va res;
+      res
+    ) integer_vars
+  in
+  let forget_vars = Array.of_list forget_vars in
+  Abstract1.forget_array_with mgr pre forget_vars false
+
 let meet mgr val1 val2 =
   let env = Environment.lce (Abstract1.env val1) (Abstract1.env val2) in
   Abstract1.change_environment_with mgr val1 env false;
@@ -2153,6 +2183,7 @@ and intern_ai_statement iaio abs curinvs s =
     | JCSassign_var (vi, e) ->
 	assign_expr mgr pre (term_var_no_loc vi) e
     | JCSassign_heap(e1,fi,e2) ->
+	assign_region mgr pre e1.jc_expr_region;
 	begin match term_of_expr e1 with
 	  | None -> () (* TODO *)
 	  | Some t1 ->
@@ -2679,7 +2710,7 @@ let rec free_variables t =
     ) VarSet.empty t
 
 let rec atp_of_term t = 
-  if debug then printf "[atp_of_term] %a@." Jc_output.term t;
+(*   if debug then printf "[atp_of_term] %a@." Jc_output.term t; *)
   let is_constant_term t = 
     match t.jc_term_node with JCTconst _ -> true | _ -> false
   in
@@ -2742,7 +2773,7 @@ let rec term_of_atp tm =
 	assert false
 
 let rec atp_of_asrt a = 
-  if debug then printf "[atp_of_asrt] %a@." Jc_output.assertion a;
+(*   if debug then printf "[atp_of_asrt] %a@." Jc_output.assertion a; *)
   try begin match a.jc_assertion_node with
     | JCAtrue -> 
 	Atp.True
@@ -2806,6 +2837,11 @@ let rec atp_of_asrt a =
      *)
     Atp.True
 
+let atp_of_asrt a =
+  if Jc_options.debug then
+    printf "@[<v 2>[atp_of_asrt]@\n%a@]@." Jc_output.assertion a;
+  atp_of_asrt a
+
 let rec asrt_of_atp fm =
   let anode = match fm with
     | Atp.False ->
@@ -2840,6 +2876,10 @@ let rec asrt_of_atp fm =
   in
   raw_asrt anode
 
+let asrt_of_atp fm =
+  if Jc_options.debug then
+    printf "@[<v 2>[asrt_of_atp]@\n%a@]@." (fun fmt fm -> Atp.printer fm) fm;
+  asrt_of_atp fm
 
 (*****************************************************************************)
 (* Computing weakest preconditions.                                          *)
@@ -2887,12 +2927,12 @@ let pop_modified_vars posts =
 let tautology a =
   let qf = Atp.generalize (atp_of_asrt a) in
   if Jc_options.debug then
-    printf "@[<v 2>Before quantifier elimination@\n%a@]@." 
-      (fun fmt fm -> Atp.printer fm) qf; 
+    printf "@[<v 2>Before quantifier elimination@\n%a@]@."
+      (fun fmt fm -> Atp.printer fm) qf;
   let dnf = Atp.dnf qf in
   if Jc_options.debug then
-    printf "@[<v 2>After dnf@\n%a@]@." 
-      (fun fmt fm -> Atp.printer fm) dnf; 
+    printf "@[<v 2>After dnf@\n%a@]@."
+      (fun fmt fm -> Atp.printer fm) dnf;
   if debug then printf "[before integer_qelim]@.";
   let qe = Atp.fourier_qelim qf in
   if debug then printf "[after integer_qelim]@.";
@@ -2901,16 +2941,47 @@ let tautology a =
     | JCAtrue -> true
     | _ -> false
 
-let contradictory a b =
-  let res = tautology(make_not(make_and [a;b])) in
-  if debug then 
-    printf "@[<v 2>contradictory@\n%a@\n%a?%b@]@." 
-      Jc_output.assertion a Jc_output.assertion b res;
-  res
+(* For scaling: Dnf(make_and(a,b)) + emptiness test by Apron on each disjunct *)
+let contradictory =
+  let mgr = Polka.manager_alloc_strict () in
+  fun a b ->
+    (* tautology(make_not(make_and [a;b])) *)
+    if Jc_options.debug then
+      printf "@[<v 2>[contradictory]@\n%a@\n%a@]@."
+	Jc_output.assertion a Jc_output.assertion b;
+    let dnf = Atp.dnf(atp_of_asrt(make_and[a;b])) in
+    let vars = Atp.fv dnf in
+    let vars = List.map Vwp.term vars in
+    let vars = List.map Vai.variable_of_term vars in
+    let env = Environment.make (Array.of_list vars) [||] in
+    let disjuncts = Atp.disjuncts dnf in
+    let disjuncts = List.map Atp.conjuncts disjuncts in
+    let disjuncts = List.map (List.map asrt_of_atp) disjuncts in
+    assert(List.length disjuncts > 0);
+    let res = List.fold_left 
+      (fun acc conjunct -> acc &&
+	try
+	  let cstrs = List.map (linstr_of_assertion env) conjunct in
+	  let cstrs = List.map snd cstrs in
+	  let dnf = Dnf.make_and cstrs in
+	  let absval = Abstract1.top mgr env in
+	  Dnf.test mgr absval dnf;
+	  Abstract1.is_bottom mgr absval = Manager.True
+	with Parser.Error _ | Failure _ -> false
+      ) true disjuncts
+    in
+    if debug then 
+      printf "@[<v 2>[contradictory] %b@]@." res;
+    res
 
 let simplify =
+(*   a _ = if Jc_options.debug then *)
+(*     printf "@[<v 2>[simplify]@\n%a@]@." Jc_output.assertion a; *)
+(*   a *)
   let mgr = Polka.manager_alloc_strict () in
   fun inita inva ->
+    if Jc_options.debug then
+      printf "@[<v 2>[simplify]@\n%a@]@." Jc_output.assertion inita;
     let simpla = if tautology inita then raw_asrt JCAtrue else
       let dnf = Atp.dnf (atp_of_asrt inita) in
       let vars = Atp.fv dnf in
@@ -2927,12 +2998,12 @@ let simplify =
 	) disjuncts
       in
 
-      let abstract_disjuncts,other_disjuncts = 
+      let abstract_disjuncts,other_disjuncts =
 	List.fold_right (fun conjunct (abstractl,otherl) ->
-	  try 
+	  try
 	    if Jc_options.debug then
 	      printf "asrt conjunct : %a@."
-		(Pp.print_list (fun fmt () -> printf " /\\ ") 
+		(Pp.print_list (fun fmt () -> printf " /\\ ")
 		  Jc_output.assertion)
 		conjunct;
 	    let absval = Abstract1.top mgr env in
@@ -2958,12 +3029,12 @@ let simplify =
 	    abstractl, make_and (List.map presentify conjunct) :: otherl
 	) disjuncts ([],[])
       in
-      let abstract_disjuncts = 
+      let abstract_disjuncts =
 	List.fold_right (fun absval acc ->
-	  let acc = List.filter 
+	  let acc = List.filter
 	    (fun av -> not (Abstract1.is_leq mgr av absval = Manager.True)) acc
 	  in
-	  if List.exists 
+	  if List.exists
 	    (fun av -> Abstract1.is_leq mgr absval av = Manager.True) acc then acc
 	  else absval :: acc
 	) abstract_disjuncts []
@@ -2976,7 +3047,7 @@ let simplify =
     if debug then
       printf "@[<v 2>[simplify] initial:@\n%a@]@." Jc_output.assertion inita;
     if debug then
-      printf "@[<v 2>[simplify] w.r.t. invariant:@\n%a@]@." 
+      printf "@[<v 2>[simplify] w.r.t. invariant:@\n%a@]@."
 	Jc_output.assertion inva;
     if debug then
       printf "@[<v 2>[simplify] final:@\n%a@]@." Jc_output.assertion simpla;
@@ -3210,6 +3281,10 @@ let rec wp_statement weakpre =
 		in
 		{ curposts with jc_post_normal = post; }
 	  end
+      | JCSassert a when a.jc_assertion_label = "hint" -> 
+	  (* Hints are not to be used in wp computation,
+	     only added to help it. *)
+	  curposts
       | JCSassert a1 ->
 	  let post = match curposts.jc_post_normal with
 	    | None -> None
@@ -3376,6 +3451,7 @@ let wp_function targets (fi,fs,sl) =
   let weakpre = {
     jc_weakpre_loop_invariants = Hashtbl.create 0;
   } in
+  let init_req = fs.jc_fun_requires in
   List.iter (fun target ->
     let initposts = {
       jc_post_normal = None;
@@ -3385,8 +3461,9 @@ let wp_function targets (fi,fs,sl) =
     } in
     let initposts = push_modified_vars initposts in
     let posts = List.fold_right (wp_statement weakpre target) sl initposts in
+(*     let init_req = fs.jc_fun_requires in  *)
     match 
-      finalize_target ~is_function_level:true posts target fs.jc_fun_requires
+      finalize_target ~is_function_level:true posts target init_req
     with None -> () | Some infera ->
       fs.jc_fun_requires <- make_and [fs.jc_fun_requires;infera]
   ) targets;

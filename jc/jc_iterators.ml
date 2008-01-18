@@ -204,29 +204,35 @@ let rec iter_term f t =
       iter_term f t;
       List.iter (fun (_, t) -> iter_term f t) ptl
 
+let fold_sub_term it f acc t =
+  match t.jc_term_node with
+    | JCTconst _ | JCTvar _ | JCTrange(None,None) -> acc
+    | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2) 
+    | JCTrange(Some t1,Some t2) ->
+	let acc = it f acc t1 in
+	it f acc t2
+    | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCToffset(_,t1,_)
+    | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
+    | JCTrange(None,Some t1) | JCTat(t1,_) ->
+	it f acc t1
+    | JCTapp app ->
+	let tl = app.jc_app_args in
+	List.fold_left (it f) acc tl
+    | JCTif(t1,t2,t3) ->
+	let acc = it f acc t1 in
+	let acc = it f acc t2 in
+	it f acc t3
+    | JCTmatch(t, ptl) ->
+	let acc = it f acc t in
+	List.fold_left (fun acc (_, t) -> it f acc t) acc ptl
+
 let rec fold_term f acc t =
   let acc = f acc t in
-  match t.jc_term_node with
-  | JCTconst _ | JCTvar _ | JCTrange(None,None) -> acc
-  | JCTbinary(t1,_,t2) | JCTshift(t1,t2) | JCTsub_pointer(t1,t2) 
-  | JCTrange(Some t1,Some t2) ->
-      let acc = fold_term f acc t1 in
-      fold_term f acc t2
-  | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_) 
-  | JCToffset(_,t1,_)
-  | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
-  | JCTrange(None,Some t1) ->
-      fold_term f acc t1
-  | JCTapp app ->
-      let tl = app.jc_app_args in
-      List.fold_left (fold_term f) acc tl
-  | JCTif(t1,t2,t3) ->
-      let acc = fold_term f acc t1 in
-      let acc = fold_term f acc t2 in
-      fold_term f acc t3
-  | JCTmatch(t, ptl) ->
-      let acc = fold_term f acc t in
-      List.fold_left (fun acc (_, t) -> fold_term f acc t) acc ptl
+  fold_sub_term fold_term f acc t
+
+let rec fold_rec_term f acc t =
+  let cont,acc = f acc t in
+  if cont then fold_sub_term fold_rec_term f acc t else acc
 
 let rec map_term f t =
   let tnode = match t.jc_term_node with
