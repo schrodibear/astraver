@@ -879,11 +879,11 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	examples-c/Makefile examples-c/*/Makefile \
 	examples-c/*/coq/*.v \
 	examples/Makefile* \
-	examples/*/*.mlw examples/*/*.v examples/*/*.sx \
+	examples/*/*.mlw examples/*/*.why examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/bench.in bench/good*/*.mlw bench/good*/*.v \
         bench/c/bench bench/c/bench-files bench/c/*/*.c bench/c/*/*/*.c \
-	bench/java/bench bench/java/*/*.java \
+	bench/java/bench bench/java/*/*.java bench/provers/*.mlw \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
 	lib/java_api/java/*/*.java lib/*.png \
