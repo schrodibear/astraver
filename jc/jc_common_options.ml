@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_common_options.ml,v 1.4 2007-12-18 08:55:39 marche Exp $ i*)
+(*i $Id: jc_common_options.ml,v 1.5 2008-01-18 17:06:38 moy Exp $ i*)
 
 (*s command-line options *)
 
@@ -34,9 +34,9 @@ open Jc_env
 let debug = ref false
 let verbose = ref false
 let werror = ref false
-let separation = ref false
 
 let inv_sem = ref InvNone
+let separation_sem = ref SepNone
 
 (*
 Local Variables: 

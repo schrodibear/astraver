@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.211 2008-01-16 16:54:30 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.212 2008-01-18 17:06:38 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1575,7 +1575,7 @@ let tr_struct st acc =
   let tagtab = tag_table_name st in
     (* Declarations of field memories. *)
   let acc =
-    if Jc_options.separation then acc else
+    if !Jc_options.separation_sem = SepRegionInference then acc else
       List.fold_left
 	(fun acc fi ->
 	  let mem = memory_field fi in
@@ -1952,13 +1952,13 @@ let excep_posts_for_others eopt excep_posts =
     
 let interp_fun_params f write_mems read_mems annot_type =
   let annot_type = 
-    if not Jc_options.separation then annot_type else
+    if !Jc_options.separation_sem = SepNone then annot_type else
       List.fold_right (fun (name,ty) acc ->
 	Prod_type(name,Base_type ty,acc)
       ) read_mems annot_type
   in
   let annot_type = 
-    if not Jc_options.separation then annot_type else
+    if !Jc_options.separation_sem = SepNone then annot_type else
       List.fold_right (fun (name,ty) acc ->
 	Prod_type(name,Ref_type(Base_type ty),acc)
       ) write_mems annot_type

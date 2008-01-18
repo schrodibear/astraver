@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.18 2008-01-03 08:17:44 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.19 2008-01-18 17:06:38 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -137,8 +137,6 @@ let _ =
 *)
 	"-verify", Arg.String (function s -> verify := s::!verify), 
 	  "verify only these functions";
-	"-separation", Arg.Set separation,
-          "  performs separation analysis";
       ]
       add_file usage
 
@@ -155,10 +153,9 @@ let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
 let inv_sem = inv_sem
+let separation_sem = separation_sem
 
 let verify = !verify
-let separation = !separation
-
 let annot_infer = !annot_infer
 let ai_domain = !ai_domain
 let interprocedural = !interprocedural

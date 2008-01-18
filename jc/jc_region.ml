@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.7 2007-12-28 23:20:28 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.8 2008-01-18 17:06:38 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -191,7 +191,7 @@ struct
   let next_count () = let tmp = !count in incr count; tmp
 
   let make_const ty name =
-    if not !Jc_common_options.separation then dummy_region
+    if !Jc_common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
@@ -203,7 +203,7 @@ struct
       }
 
   let make_var ty name =
-    if not !Jc_common_options.separation then dummy_region
+    if !Jc_common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
@@ -250,7 +250,7 @@ struct
 
   let make_field r fi =
     let r = RegionUF.repr r in
-    if not !Jc_common_options.separation then dummy_region
+    if !Jc_common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type fi.jc_field_info_type) then dummy_region else
       try 
 	let t = RegionTable.find global_region_table r in

@@ -1,5 +1,6 @@
 
-JESSIE=ocamlrun -bt ../../../bin/jessie.byte
+# JESSIE=ocamlrun -bt ../../../bin/jessie.byte
+JESSIE=../../../bin/jessie.byte
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 

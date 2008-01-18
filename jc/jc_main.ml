@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.89 2008-01-16 11:46:12 bardou Exp $ *)
+(* $Id: jc_main.ml,v 1.90 2008-01-18 17:06:38 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -87,7 +87,7 @@ let main () =
 	  in
 
 	  (* phase 5: computation of regions *)
-	  if Jc_options.separation then begin
+	  if !Jc_options.separation_sem = SepRegionInference then begin
 	    Jc_options.lprintf "Computation of regions@.";
 	    (* Analyze logic functions before axioms, so that parameter 
 	     * regions are known before a function is applied. 

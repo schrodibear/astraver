@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_common_options.mli,v 1.3 2007-12-17 13:18:48 moy Exp $ *)
+(* $Id: jc_common_options.mli,v 1.4 2008-01-18 17:06:38 moy Exp $ *)
 
 (*s command-line options *)
 
@@ -36,7 +36,7 @@ val verbose : bool ref
 val werror : bool ref
 
 val inv_sem: inv_sem ref
-val separation : bool ref
+val separation_sem : separation_sem ref
 
 (*
 Local Variables: 

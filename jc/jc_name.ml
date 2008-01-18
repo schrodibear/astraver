@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.5 2008-01-16 16:54:30 bardou Exp $ *)
+(* $Id: jc_name.ml,v 1.6 2008-01-18 17:06:38 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -69,14 +69,14 @@ let alloc_table_name st =
   (struct_type_name st) ^ "_alloc_table"
 
 let alloc_region_table_name (a, r) = 
-  if !Jc_common_options.separation then 
+  if !Jc_common_options.separation_sem = SepRegionInference then 
     (root_name a) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else alloc_table_name a
 
 let field_memory_name fi = fi.jc_field_info_final_name
 
 let field_region_memory_name (fi,r) = 
-  if !Jc_common_options.separation then 
+  if !Jc_common_options.separation_sem = SepRegionInference then 
     fi.jc_field_info_final_name ^ "_" ^ (Region.name r)
   else field_memory_name fi
 

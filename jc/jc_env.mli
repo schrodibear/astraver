@@ -25,11 +25,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.42 2008-01-15 16:29:36 bardou Exp $ *)
+(* $Id: jc_env.mli,v 1.43 2008-01-18 17:06:38 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
 type inv_sem = InvNone | InvOwnership | InvArguments
+
+type separation_sem = SepNone | SepRegionInference
 
 type jc_type =
   | JCTnative of native_type

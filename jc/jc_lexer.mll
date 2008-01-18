@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.49 2008-01-15 13:12:28 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.50 2008-01-18 17:06:38 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -77,6 +77,14 @@
 		| "Arguments" -> Jc_env.InvArguments
 		| "Ownership" -> Jc_env.InvOwnership
 		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
+	  end  
+      | "SeparationPolicy" ->
+	  begin
+	    Jc_options.separation_sem :=
+	      match v with
+		| "None" -> Jc_env.SepNone
+		| "RegionInference" -> Jc_env.SepRegionInference
+		| _ -> lex_error lexbuf ("unknown separation policy " ^ v)
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 }
