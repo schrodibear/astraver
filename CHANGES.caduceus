@@ -1,6 +1,10 @@
 
 Note: These are the changes for Caduceus.
 
+version 1.10b, January 18th, 2008
+=================================
+ o gcc warnings in C preprocessing fixed for every LANG configuration
+
 version 1.10a, January 14th, 2008
 =================================
  o local static variables: fixed bug with global and local declaration

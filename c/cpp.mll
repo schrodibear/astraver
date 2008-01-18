@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cpp.mll,v 1.15 2008-01-18 11:31:52 filliatr Exp $ i*)
+(*i $Id: cpp.mll,v 1.16 2008-01-18 13:15:56 stoulsn Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -52,8 +52,7 @@ rule before = parse
   | "/*@" { print start_of_comment_string; before lexbuf }
 (*  | "*/" { print end_of_comment_string; before lexbuf } *)
   | "//@" { print start_of_comment_string_one_line; before lexbuf }
-  | "# 1 \"<interne>\"\n#define" [^'\n']* '\n' { before lexbuf }
-  | "# 1 \"<built-in>\"\n#define" [^'\n']* '\n' { before lexbuf }
+  | "# 1 \"<built-in>\"\n#define" [^'\n']* '\n' { before lexbuf } 
   | _    { print (lexeme lexbuf); before lexbuf }
   | eof  { () }
 
@@ -99,7 +98,7 @@ and after = parse
      returns the preprocessed file. *)
   let first_cpp f = 
     let ppf = local_temp_file (Filename.basename f) ".c" in
-    ignore (Sys.command (sprintf "%s -dD %s > %s" cpp_command f ppf));
+    ignore (Sys.command (sprintf "LANG=en ; %s -dD %s > %s" cpp_command f ppf));
     ppf
 
 
