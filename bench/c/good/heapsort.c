@@ -106,7 +106,11 @@ void sift_down(int* a, unsigned int low, unsigned int high) {
   unsigned int i = low, child;
   /*@ invariant 
     @   low <= i <= high && 
-    @   Permut(contents(a), \at(contents(a), init), low, high)
+    @   Permut(contents(a), \at(contents(a), init), low, high) &&
+    @   (\forall int k; low <= k <= high => k != i => Hnode(a, k, high)) &&
+    @   ((low < i && low <= (i-1)/2) => 
+    @      ((2*i+1 <= high => a[(i-1)/2] >= a[2*i+1]) &&
+    @       (2*i+2 <= high => a[(i-1)/2] >= a[2*i+2])))
     @ loop_assigns
     @   a[low..high]
     @ variant 
