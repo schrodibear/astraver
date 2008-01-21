@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.152 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.153 2008-01-21 16:15:58 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -307,9 +307,21 @@ let float_constant_type s =
     | 'l' | 'L' -> String.sub s 0 (n-1), LongDouble
     | _ -> s, Double
 
+let has_suffix ~suf s =
+  let nsuf = String.length suf in
+  let n = String.length s  in
+  n >= nsuf && String.lowercase (String.sub s (n - nsuf) nsuf) = suf
+
 let int_constant_type s =
-   (* TODO *)
-   Signed, Int
+  if has_suffix ~suf:"ul" s || has_suffix ~suf:"lu" s then
+    Unsigned, Long
+  else if has_suffix ~suf:"u" s then
+    Unsigned, Int
+  else if has_suffix ~suf:"l" s then
+    Signed, Long
+  else
+    (* TODO: cf K&R *)
+    Signed, Int
 
 (* type the assignment of [e2] into a left value of type [ty1] *)
 let type_assignment loc ty1 e2 =

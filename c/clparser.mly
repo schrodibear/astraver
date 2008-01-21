@@ -70,15 +70,14 @@
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH ARRLEN STRLEN BASE_ADDR OFFSET
 %token SEPARATED BOUND_SEPARATED FULL_SEPARATED FULLSEPARATED 
 %token VALID VALID_INDEX VALID_RANGE FRESH THEN AT
-%token QUESTION MINUS PLUS STAR AMP SLASH 1PERCENT LSQUARE RSQUARE EOF
-%token DATA INVARIANT VARIANT DECREASES FOR LABEL ASSERT ASSUME SEMICOLON NULL
+%token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
+%token INVARIANT VARIANT DECREASES FOR LABEL ASSERT ASSUME SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE GHOST SET
 %token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION TYPE
 %token ROUNDERROR TOTALERROR EXACT MODEL MIN MAX MININT MAXINT
 
-%nonassoc prec_id_lower_than_colon
-%right COLON
+%right prec_named
 %nonassoc prec_forall prec_exists
 %right IFF
 %right IMPLIES
@@ -106,7 +105,7 @@
 
 %%
 
-lexpr_no_name:
+lexpr:
   /* predicates */
   lexpr IMPLIES lexpr { info (PLimplies ($1, $3)) }
 | lexpr IFF lexpr { info (PLiff ($1, $3)) }
@@ -180,7 +179,7 @@ lexpr_no_name:
 | RESULT { info PLresult }
 /* both terms and predicates */
 | LPAR lexpr RPAR %prec prec_par { $2 }
-| IDENTIFIER %prec prec_id_lower_than_colon
+| IDENTIFIER
     { info (PLvar (Info.default_var_info $1)) }
 | IDENTIFIER label_parameters LPAR lexpr_list RPAR 
     { info (PLapp (Info.default_logic_info $1, $4)) }
@@ -190,12 +189,8 @@ lexpr_no_name:
     { match $2.lexpr_node with
 	| PLvar x -> info (PLcast (LTvar x.Info.var_name, $4))
 	| _ -> raise Parse_error }
-;
-
-lexpr:
-| IDENTIFIER COLON lexpr 
+| IDENTIFIER COLONCOLON lexpr %prec prec_named
     { info (PLnamed ($1, $3)) }
-| lexpr_no_name { $1 }
 ;
 
 lexpr_option:
@@ -380,7 +375,7 @@ decl:
 | PREDICATE IDENTIFIER label_parameters LPAR parameters RPAR LBRACE lexpr RBRACE 
     { LDpredicate_def (Info.default_logic_info $2, $5, $8) }
 | AXIOM IDENTIFIER label_parameters COLON lexpr { LDaxiom ($2, $5) }
-| DATA INVARIANT IDENTIFIER COLON lexpr { LDinvariant ($3,$5) }
+| INVARIANT IDENTIFIER COLON lexpr { LDinvariant ($2,$4) }
 | TYPE IDENTIFIER { LDtype ($2, loc_i 2) }
 ;
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cllexer.mll,v 1.54 2008-01-11 12:43:45 marche Exp $ i*)
+(*i $Id: cllexer.mll,v 1.55 2008-01-21 16:15:58 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -49,7 +49,6 @@
 	"if", IF;
 	"then", THEN;
 	"else", ELSE;
-	"data", DATA;
 	"invariant", INVARIANT;
 	"variant", VARIANT;
 	"decreases", DECREASES;

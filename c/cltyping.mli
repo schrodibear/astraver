@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.mli,v 1.37 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: cltyping.mli,v 1.38 2008-01-21 16:15:58 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -41,7 +41,8 @@ val type_predicate : Env.t -> parsed_predicate -> Cast.predicate
 val type_location : Env.t -> parsed_term location -> tterm location
 val type_spec : tctype option -> Env.t -> parsed_spec -> Cast.spec
 val type_loop_annot : Env.t -> parsed_loop_annot -> Cast.loop_annot
-val type_logic_type : Loc.position -> Env.t -> parsed_logic_type -> tctype
+val type_logic_type : 
+  ?machine_ints:bool -> Loc.position -> Env.t -> parsed_logic_type -> tctype
 val int_constant : string -> tterm
 val zero : tterm
 val coerce : tctype -> tterm -> tterm

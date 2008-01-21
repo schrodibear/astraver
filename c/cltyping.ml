@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.121 2008-01-02 12:07:55 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.122 2008-01-21 16:15:58 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -63,7 +63,7 @@ let retype_typedef = function
   | Tint _ when not machine_ints -> Tint (Signed, ExactInt)
   | tn -> tn
 
-let rec type_logic_type loc env = function
+let rec type_logic_type ?(machine_ints=machine_ints) loc env = function
   | LTvoid -> c_void
   | LTchar _ | LTshort _ | LTint _ | LTlong _ | LTlonglong _ 
     when not machine_ints ->
@@ -78,8 +78,10 @@ let rec type_logic_type loc env = function
   | LTdouble -> use_floats := true; c_float Ctypes.Double
   | LTlongdouble -> use_floats := true; c_float Ctypes.LongDouble
   | LTreal -> c_real
-  | LTarray ty -> c_array Not_valid (type_logic_type loc env ty)
-  | LTpointer ty -> c_pointer Not_valid (type_logic_type loc env ty)
+  | LTarray ty -> 
+      c_array Not_valid (type_logic_type ~machine_ints loc env ty)
+  | LTpointer ty -> 
+      c_pointer Not_valid (type_logic_type ~machine_ints loc env ty)
   | LTvar id ->  
       noattr 
 	(try 
@@ -254,9 +256,9 @@ and type_term_node loc env = function
 	    let t1,t2,ty = arith_conversion t1 t2 in
 	    Tbinop (t1, Badd, t2), ty
 	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
-	    Tbinop (t1, Badd, t2), ty1
+	    Tbinop (t1, Badd, coerce c_exact_int t2), ty1
 	| (Tenum _ | Tint _), (Tpointer _ | Tarray _) ->
-	    Tbinop (t2, Badd, t1), ty2
+	    Tbinop (coerce c_exact_int t2, Badd, t1), ty2
 	| _ -> 
 	    error loc "invalid operands to binary +"
       end
@@ -379,7 +381,7 @@ and type_term_node loc env = function
       let t2 = type_int_term env t2 in
       Tmax (t1,t2), c_exact_int
   | PLminint ty ->
-      let ty = type_logic_type loc env ty in
+      let ty = type_logic_type ~machine_ints:true loc env ty in
       begin match ty.ctype_node with
 	| Tint (_, (Char | Short | Ctypes.Int | Long | LongLong)) -> 
 	    Tminint ty, c_exact_int
@@ -387,7 +389,7 @@ and type_term_node loc env = function
 	    error loc "argument must be a C integer type"
       end
   | PLmaxint ty ->
-      let ty = type_logic_type loc env ty in
+      let ty = type_logic_type ~machine_ints:true loc env ty in
       begin match ty.ctype_node with
 	| Tint (_, (Char | Short | Ctypes.Int | Long | LongLong)) -> 
 	    Tmaxint ty, c_exact_int

@@ -7,7 +7,7 @@
 
 //@ axiom div2_2 : \forall unsigned int i; 0 < i => 0 <= i/2 < i
 
-// @ axiom div2_3 : \forall int i; 0 <= i => i-1 < 2*(i/2)+1
+// @ axiom div2_3 : \forall int i; 0 <= i => 2*(i/2) <= i
 
 /*****************************************************************************/
 
@@ -30,7 +30,7 @@ void sift_down(int* a, unsigned int low, unsigned int high) {
     @ variant 
     @   high - i
     @*/
-  while ((child = 2u*i+1u) <= high) {
+  while ((child = 2*i+1) <= high) {
     if (child+1 <= high && a[child+1] >= a[child]) child++;
     if (a[i] >= a[child]) break;
     swap(a, i, child);
@@ -39,7 +39,7 @@ void sift_down(int* a, unsigned int low, unsigned int high) {
 }
 
 /*@ requires 
-  @   0 <= n && \valid_range(a, 0, n-1)
+  @   0 <= n  && 2*(n-1) <= \max_range(unsigned int) && \valid_range(a, 0, n-1)
   @*/
 void heapsort(int* a, unsigned int n) {
   unsigned int i;
