@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.105 2008-01-15 16:29:36 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.106 2008-01-21 16:06:43 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -440,10 +440,12 @@ type expr_node =
   | JCEoffset of offset_kind * expr * struct_info
   | JCEalloc of expr * struct_info
   | JCEfree of expr
-  | JCEmatch of expr * (pattern * expr) list
+(*  | JCEmatch of expr * (pattern * expr) list*)
 (*
   - enlever JCEif et le mettre au niveau des statements comme
       l'appel de fonction : A VOIR
+    Remarque : JCEif est toujours dans l'ast mais n'est jamais produit,
+      on peut l'enlever ?
 *)
 
 and expr =

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.75 2008-01-16 14:39:35 nrousset Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.76 2008-01-21 16:06:43 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -342,9 +342,9 @@ let rec term_of_expr e =
     | JCEcast (e, si) -> JCTcast (term_of_expr e, si)
     | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
     | JCEoffset (ok, e, si) -> JCToffset (ok, term_of_expr e, si)
-    | JCEmatch (e, pel) ->
+(*    | JCEmatch (e, pel) ->
 	let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in
-	JCTmatch (term_of_expr e, ptl)
+	JCTmatch (term_of_expr e, ptl)*)
     | JCErange_cast _ | JCEalloc _ | JCEfree _ -> assert false
   in
     { jc_term_node = node;

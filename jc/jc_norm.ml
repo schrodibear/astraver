@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.72 2008-01-16 11:46:12 bardou Exp $ *)
+(* $Id: jc_norm.ml,v 1.73 2008-01-21 16:06:43 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -481,7 +481,19 @@ let rec expr e =
 	let assign = make_assign_var loc vi e1' in
 	(l1@[assign]@l2, tl1@[vi]@tl2), e2'.jc_expr_node
     | JCTEmatch(e1, pel) ->
-	assert false (* TODO *)
+	let (l1, tl1), e1 = expr e1 in
+	let tmp = newrefvar e.jc_texpr_type in
+	let pel_tl, psl = List.fold_left
+	  (fun (acctl, accpsl) (p, e) ->
+	     let (l, tl), e = expr e in
+	     let assign = make_assign_var loc tmp e in
+	     let block = make_block loc (l@[assign]) in
+	     tl@acctl, (p, block)::accpsl)
+	  ([], [])
+	  (List.rev pel)
+	in
+	let match_st = make_match loc e1 psl in
+	(l1@[match_st], tl1@pel_tl@[tmp]), JCEvar tmp
   in 
 (*
   Format.eprintf "Jc_norm.expr: lab for returned expr = '%s'@." lab;

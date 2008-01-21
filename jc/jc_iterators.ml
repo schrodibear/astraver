@@ -48,9 +48,9 @@ let rec iter_expr f e =
 	iter_expr f e1
     | JCEif(e1,e2,e3) ->
 	iter_expr f e1; iter_expr f e2; iter_expr f e3
-    | JCEmatch(e, pel) ->
+(*    | JCEmatch(e, pel) ->
 	iter_expr f e;
-	List.iter (fun (_, e) -> iter_expr f e) pel
+	List.iter (fun (_, e) -> iter_expr f e) pel*)
   
 let rec fold_expr f acc e =
   let acc = f acc e in
@@ -66,9 +66,9 @@ let rec fold_expr f acc e =
 	let acc = fold_expr f acc e1 in
 	let acc = fold_expr f acc e2 in
 	fold_expr f acc e3
-    | JCEmatch(e, pel) ->
+(*    | JCEmatch(e, pel) ->
 	let acc = fold_expr f acc e in
-	List.fold_left (fun acc (_, e) -> fold_expr f acc e) acc pel
+	List.fold_left (fun acc (_, e) -> fold_expr f acc e) acc pel*)
 
 (*****************************************************************************)
 (* General iterators on statements.                                          *)

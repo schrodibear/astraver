@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.162 2008-01-16 16:54:30 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.163 2008-01-21 16:06:43 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -145,6 +145,11 @@ let subtype ?(allow_implicit_cast=true) t1 t2 =
     | _ -> false
 
 let subtype_strict = subtype ~allow_implicit_cast:false
+
+let maxtype loc t u =
+  if subtype t u then u else
+    if subtype u t then t else
+      typing_error loc "incompatible result types"
 
 let comparable_types t1 t2 =
   match t1,t2 with
@@ -1436,13 +1441,8 @@ let rec expr env e =
 	  begin
 	    match te1.jc_texpr_type with
 	      | JCTnative Tboolean ->
-		  let t =
-		    let t2 = te2.jc_texpr_type and t3 = te3.jc_texpr_type in
-		    if subtype t2 t3 then t3 else
-		      if subtype t3 t2 then t2 else
-			typing_error e.jc_pexpr_loc 
-			  "incompatible result types"
-		  in
+		  let t = maxtype e.jc_pexpr_loc 
+		    te2.jc_texpr_type te3.jc_texpr_type in
 		  t,te1.jc_texpr_region, JCTEif(te1,te2,te3)
 	      | _ ->
 		  typing_error e1.jc_pexpr_loc 
@@ -1463,8 +1463,25 @@ let rec expr env e =
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "pointer expected"
 	  end
-      | JCPEmatch(e, pel) ->
-	  assert false (* TODO *)
+      | JCPEmatch(arg, pel) ->
+	  let targ = expr env arg in
+	  let rty, tpel = match pel with
+	    | [] -> assert false (* should not be allowed by the parser *)
+	    | (p1, e1)::rem ->
+		(* type the first item *)
+		let newenv, tp1 = pattern env p1 targ.jc_texpr_type in
+		let te1 = expr newenv e1 in
+		(* type the remaining items *)
+		List.fold_left
+		  (fun (accrty, acctpel) (p, e2) ->
+		     let newenv, tp = pattern env p targ.jc_texpr_type in
+		     let te2 = expr newenv e2 in
+		     maxtype e.jc_pexpr_loc accrty te2.jc_texpr_type,
+		     (tp, te2)::acctpel)
+		  (te1.jc_texpr_type, [tp1, te1])
+		  rem
+	  in
+	  rty, targ.jc_texpr_region, JCTEmatch(targ, List.rev tpel)
       | JCPEquantifier _ 
       | JCPEold _ 
       | JCPEat _

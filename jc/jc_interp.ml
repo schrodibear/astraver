@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.212 2008-01-18 17:06:38 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.213 2008-01-21 16:06:43 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -408,7 +408,7 @@ let rec pattern arg ty pat = match pat.jc_pattern_node with
       LTrue,
       []
 
-let pattern_list_expr translate_body arg ty pbl =
+let pattern_list_expr translate_body arg r ty pbl =
   List.fold_left
     (fun accbody (pat, body) ->
        let notcond, cond, vars = pattern arg ty pat in
@@ -418,7 +418,7 @@ let pattern_list_expr translate_body arg ty pbl =
 	 body vars
        in*)
        let reads =
-	 let region = dummy_region in (* TODO *)
+	 let region = r in
 	 let ef = Jc_effect.pattern empty_effects LabelNone region pat in
 	 all_effects ef
        in
@@ -1146,7 +1146,7 @@ and expr ~infunction ~threats e : expr =
 	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
 	else
 	  make_app "free_parameter" [Var alloc; expr e]
-    | JCEmatch _ -> assert false (* TODO *)
+(*    | JCEmatch _ -> assert false *)
   in
 (*
   if lab <> "" then
@@ -1552,7 +1552,8 @@ let rec statement ~infunction ~threats s =
 	in s
     | JCSmatch (e, psl) ->
 	let tmp = tmp_var_name () in
-	let body = pattern_list_expr statement (LVar tmp) e.jc_expr_type psl in
+	let body = pattern_list_expr statement (LVar tmp) e.jc_expr_region
+	  e.jc_expr_type psl in
 	Let(tmp, expr e, body)
 
 and statement_list ~infunction ~threats l = 

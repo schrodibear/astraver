@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.82 2008-01-18 17:06:38 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.83 2008-01-21 16:06:43 bardou Exp $ *)
 
 
 open Jc_env
@@ -420,8 +420,8 @@ let rec expr ef e =
 	      add_alloc_writes (add_tag_writes ef name) (name,e.jc_expr_region)
 	  | _ -> assert false
 	end
-    | JCEmatch(e, pel) ->
-	expr (List.fold_left expr ef (List.map snd pel)) e
+(*    | JCEmatch(e, pel) ->
+	expr (List.fold_left expr ef (List.map snd pel)) e*)
 
 let rec loop_annot ef la = 
   let ef = assertion ef la.jc_loop_invariant in

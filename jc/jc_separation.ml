@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.10 2008-01-15 14:44:11 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.11 2008-01-21 16:06:43 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -96,12 +96,12 @@ let expr e =
   iter_expr (fun e -> match e.jc_expr_node with
     | JCEsub_pointer(e1,e2) | JCEif(_,e1,e2) ->
 	Region.unify e1.jc_expr_region e2.jc_expr_region
-    | JCEmatch(_, (_, e1)::rem) ->
+(*    | JCEmatch(_, (_, e1)::rem) ->
 	List.iter
 	  (fun (_, e2) -> Region.unify e1.jc_expr_region e2.jc_expr_region)
 	  rem
     | JCEmatch(_, []) ->
-	()
+	()*)
     | JCEconst _ | JCEvar _ | JCEbinary _ | JCEshift _ | JCEunary _
     | JCEderef _ | JCEoffset _ | JCEinstanceof _ | JCEcast _ 
     | JCErange_cast _ | JCEalloc _ | JCEfree _ ->
