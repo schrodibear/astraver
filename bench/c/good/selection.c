@@ -42,12 +42,6 @@
   @   l <= i <= h => l <= j <= h => Swap(a1, a2, i, j) => Permut(a1, a2, l, h)
   @*/
 
-/*@ axiom Permut_extend: 
-  @   \forall int_array a1, int_array a2;
-  @   \forall integer l, integer h, integer ll, integer hh; 
-  @     Permut(a1, a2, l, h) => ll <= l => h <= hh => Permut(a1, a2, ll, hh)
-  @*/
-
 /*** sorted property *********************************************************/
 
 /*@ predicate Sorted(int* a, integer l, integer h) {
