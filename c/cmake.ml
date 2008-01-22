@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.53 2008-01-22 14:11:22 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.54 2008-01-22 14:18:21 oudot Exp $ i*)
 
 open Format
 open Pp
@@ -57,8 +57,8 @@ let generic f targets =
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";
-       fprintf fmt "WHY=why --no-arrays %s@\n@\n" 
-	 (Coptions.why_opt ());
+       fprintf fmt "WHY=why --no-arrays -explain -locs %s.loc %s@\n@\n" 
+	 f (Coptions.why_opt ());
        fprintf fmt "GWHY=gwhy-bin --no-arrays -explain -locs %s.loc %s@\n@\n" 
 	 f (Coptions.why_opt ());
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
