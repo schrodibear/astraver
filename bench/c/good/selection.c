@@ -70,7 +70,7 @@ void selection(int a[], unsigned int n) {
   if (n <= 1) return;
   /*@ // a[0..i-1] is already sorted 
     @ invariant 
-    @   (0 <= i <= n-1) &&
+    @   0 <= i <= n-1 &&
     @   Sorted(a, 0, i-1) && 
     @   Permut(contents(a), \at(contents(a), init), 0, n-1) &&
     @   \forall integer k; \forall integer l; 
