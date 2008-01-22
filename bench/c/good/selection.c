@@ -3,12 +3,12 @@
 
 //@ type int_array
 
-//@ logic int access(int_array a, integer i)
+//@ logic integer access(int_array a, integer i)
 
 //@ logic int_array contents(int* a) reads a[..]
 
 /*@ axiom access_contents : 
-  @   \forall int* a; \forall int i; access(contents(a), i) == a[i]
+  @   \forall int* a; \forall integer i; access(contents(a), i) == a[i]
   @*/
 
 /*** permutation ************************************************************/
@@ -16,7 +16,7 @@
 /*@ predicate Swap(int_array a1, int_array a2, integer i, integer j) {
   @   access(a1, i) == access(a2, j) &&
   @   access(a1, j) == access(a2, i) &&
-  @   \forall int k; k != i => k != j => access(a1, k) == access(a2, k)
+  @   \forall integer k; k != i => k != j => access(a1, k) == access(a2, k)
   @ }
   @*/
 
@@ -55,21 +55,22 @@
   @ assigns  a[i], a[j]
   @ ensures  Swap(contents(a), \old(contents(a)), i, j)
   @*/
-void swap(int* a, int i, int j) {
+void swap(int* a, unsigned int i, unsigned int j) {
   int tmp = a[i];
   a[i] = a[j];
   a[j] = tmp;
 }
 
-/*@ requires n >= 1 && \valid_range(a, 0, n-1) 
+/*@ requires n >= 0 && \valid_range(a, 0, n-1) 
   @ assigns  a[0..n-1]
   @ ensures  Sorted(a,0,n-1) && Permut(contents(a), \old(contents(a)), 0, n-1)
   @*/
 void selection(int a[], unsigned int n) {
   unsigned int i, j, min;
+  if (n <= 1) return;
   /*@ // a[0..i-1] is already sorted 
     @ invariant 
-    @   0 <= i <= n-1 &&
+    @   (0 <= i <= n-1) &&
     @   Sorted(a, 0, i-1) && 
     @   Permut(contents(a), \at(contents(a), init), 0, n-1) &&
     @   \forall integer k; \forall integer l; 
@@ -102,7 +103,7 @@ void selection(int a[], unsigned int n) {
 int main() {
   int i;
   int t[10] = { 3,5,1,0,6,8,4,2,9,7 };
-  insertion_sort(t, 10);
+  selection(t, 10);
   for (i = 0; i < 10; i++) printf("%d ", t[i]);
 }
 */
