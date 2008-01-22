@@ -6,3 +6,4 @@ jc_parser.ml
 jc_version.ml
 jc_ai.ml
 numconst.ml
+jc.cma jc.cmxa
