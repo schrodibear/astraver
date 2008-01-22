@@ -25,3 +25,4 @@ gwhy.cache
 smtlib
 semantic.cache
 *.time
+binary_search.loc heapsort.loc heapsort_safety.loc purse.loc selection.loc
