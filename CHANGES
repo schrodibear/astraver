@@ -1,4 +1,6 @@
 
+  o gwhy: benchmark does not verify all functions in parallel anymore
+
 version 2.10a, January 14th, 2008
 =================================
   o configuration: fixed detection of ocamldep when ocamldep.opt is

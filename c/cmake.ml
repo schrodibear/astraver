@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.52 2007-11-20 14:58:58 marche Exp $ i*)
+(*i $Id: cmake.ml,v 1.53 2008-01-22 14:11:22 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -59,7 +59,8 @@ let generic f targets =
        fprintf fmt "TIMEOUT ?= 10@\n@\n";
        fprintf fmt "WHY=why --no-arrays %s@\n@\n" 
 	 (Coptions.why_opt ());
-       fprintf fmt "GWHY=gwhy-bin --no-arrays %s@\n@\n" (Coptions.why_opt ());
+       fprintf fmt "GWHY=gwhy-bin --no-arrays -explain -locs %s.loc %s@\n@\n" 
+	 f (Coptions.why_opt ());
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "CADULIBFILE=%s@\n@\n" Coptions.libfile;
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    

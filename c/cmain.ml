@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.99 2007-12-21 10:54:54 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.100 2008-01-22 14:11:22 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -169,6 +169,8 @@ let main () =
       (fun fmt -> Output.fprintf_why_decls fmt why_code) (file ^ ".tmp");
     Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why")
   end;
+  (* print locs *)
+  Pp.print_in_file Cinterp.print_locs (Lib.file "." (first_file ^ ".loc"));
   (* makefile *)
   Cmake.makefile first_file;
   if show_time then

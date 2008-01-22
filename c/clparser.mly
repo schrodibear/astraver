@@ -33,7 +33,7 @@
   open Clogic
 
   let loc () = (Loc.reloc (symbol_start_pos ()), Loc.reloc (symbol_end_pos ()))
-  let loc_i i = (rhs_start_pos i, rhs_end_pos i)
+  let loc_i i = (Loc.reloc (rhs_start_pos i), Loc.reloc (rhs_end_pos i))
   let info x = { Clogic.lexpr_node = x; lexpr_loc = loc () }
 
   type ghost_decl =
@@ -327,8 +327,8 @@ ghost_lvalue: lexpr { $1 }
 
 effects:
   /* epsilon */ { None }
-| ASSIGNS locations { Some $2 }
-| ASSIGNS NOTHING { Some [] }
+| ASSIGNS locations { Some (loc_i 2, $2) }
+| ASSIGNS NOTHING { Some (loc_i 2, []) }
 ;
 
 loop_effects:
@@ -337,8 +337,8 @@ loop_effects:
 ;
 
 ne_loop_effects:
-| LOOP_ASSIGNS locations { $2 }
-| LOOP_ASSIGNS NOTHING { [] }
+| LOOP_ASSIGNS locations { loc_i 2, $2 }
+| LOOP_ASSIGNS NOTHING { loc_i 2, [] }
 ;
 
 locations:

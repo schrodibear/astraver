@@ -1,6 +1,8 @@
 
 Note: These are the changes for Caduceus.
 
+ o verification condition localization output in file f.loc; 
+   used in gwhy to color the origin of each VC
  o fixed typing of arithmetic constants (such as 12u, 34l, etc.) when
    used with modulo/bounded arithmetic models
 

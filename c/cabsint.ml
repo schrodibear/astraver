@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.24 2007-11-20 14:34:48 filliatr Exp $ *)
+(* $Id: cabsint.ml,v 1.25 2008-01-22 14:11:22 filliatr Exp $ *)
 
 (* TO DO:
 
@@ -3023,7 +3023,7 @@ end = struct
     let new_ass = match logic_children new_ass with
       | [new_ass] ->
 	  let new_ass = List.map get_t (logic_children new_ass) in
-	  Some new_ass
+	  Some (Loc.dummy_position, new_ass)
       | [] -> None
       | _ -> assert false (* bad encoding *)
     in
@@ -3057,7 +3057,7 @@ end = struct
     let new_ass = match logic_children new_ass with
       | [new_ass] ->
 	  let new_ass = List.map get_t (logic_children new_ass) in
-	  Some new_ass
+	  Some (Loc.dummy_position, new_ass)
       | [] -> None
       | _ -> assert false (* bad encoding *)
     in
@@ -3250,7 +3250,7 @@ end = struct
     in
     let assigns_node = create_node (Nintern InternLogical) in
     begin match s.assigns with
-      | Some tl ->
+      | Some (_, tl) ->
 	  (* differenciate [None] from [Some([])] *)
 	  let assnode = create_node (Nintern InternLogical) in
 	  (* logic *) add_logedge assigns_node [assnode];
@@ -3280,7 +3280,7 @@ end = struct
   let from_annot (a : nloop_annot) writes =
     let assigns_node = create_node (Nintern InternLogical) in
     begin match a.loop_assigns with
-      | Some tl ->
+      | Some (_,tl) ->
 	  (* differenciate [None] from [Some([])] *)
 	  let assnode = create_node (Nintern InternLogical) in
 	  (* logic *) add_logedge assigns_node [assnode];

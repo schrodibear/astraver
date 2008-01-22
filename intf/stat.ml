@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.68 2007-12-19 15:45:57 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.69 2008-01-22 14:11:23 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -484,7 +484,7 @@ let run_benchmark_fct (view:GTree.view) (model:GTree.tree_store) f () =
     end
 
 let run_benchmark (view:GTree.view) (model:GTree.tree_store) () =
-  Queue.iter (fun f -> prove (run_benchmark_fct view model f)) Model.fq
+  Queue.iter (fun f -> run_benchmark_fct view model f ()) Model.fq
 
 let main () = 
   let w = GWindow.window 
@@ -667,7 +667,7 @@ let main () =
   let _ = 
     proof_factory#add_image_item ~label:"Start _benchmark" 
       ~key:GdkKeysyms._B 
-      ~callback:(run_benchmark view model)
+      ~callback:(fun () -> prove (run_benchmark view model))
                 (***
                 (fun () -> 
 		   List.iter

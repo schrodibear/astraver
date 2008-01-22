@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.108 2007-12-04 13:41:26 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.109 2008-01-22 14:11:22 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -778,7 +778,8 @@ let loop_annot a =
     invariant = Option_misc.map predicate a.invariant;
     assume_invariant = Option_misc.map predicate a.assume_invariant;
     loop_assigns = 
-     Option_misc.map (List.map nlocation) a.loop_assigns;
+     Option_misc.map (fun (loc, l) -> loc, List.map nlocation l) 
+       a.loop_assigns;
     variant = Option_misc.map nvariant a.variant;
   }
 
@@ -849,7 +850,9 @@ let spec ?(add=nptrue) s =
   let pred = if pred = nptrue then None else Some pred in
   { 
     requires = pred;
-    assigns  = Option_misc.map (List.map (fun x -> nlocation x)) s.assigns;
+    assigns  = 
+      Option_misc.map 
+	(fun (loc,l) -> loc, List.map (fun x -> nlocation x) l) s.assigns;
     ensures = Option_misc.map predicate s.ensures;
     decreases = Option_misc.map variant s.decreases;
   }

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.48 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.49 2008-01-22 14:11:23 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -412,7 +412,7 @@ let spec fmt = function
       ()
   | s ->
       let requires fmt p = fprintf fmt "@[requires %a@]@\n" npredicate p in
-      let assigns fmt a = fprintf fmt "@[assigns %a@]@\n" locations a in
+      let assigns fmt (_,a) = fprintf fmt "@[assigns %a@]@\n" locations a in
       let ensures fmt p = fprintf fmt "@[ensures %a@]@\n" npredicate p in
       let decreases fmt = function
 	| (t, None) -> fprintf fmt "@[decreases %a@]@\n" nterm t
@@ -432,7 +432,8 @@ let loop_annot fmt = function
       let invariant fmt p = fprintf fmt "@[invariant %a@]@\n" npredicate p in
       let assume_invariant fmt p = 
 	fprintf fmt "@[assume invariant %a@]@\n" npredicate p in
-      let loop_assigns fmt a = fprintf fmt "@[assigns %a@]@\n" locations a in
+      let loop_assigns fmt (_,a) = 
+	fprintf fmt "@[assigns %a@]@\n" locations a in
       let variant fmt = function
 	| (t, None) -> fprintf fmt "@[variant %a@]@\n" nterm t
 	| (t, Some r) -> fprintf fmt "@[variant %a for %s@]@\n" nterm t r

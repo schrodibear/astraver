@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.165 2008-01-11 12:43:45 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.166 2008-01-22 14:11:22 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -548,8 +548,9 @@ let spec sp =
 	   (ef_option predicate sp.ensures))
 	(ef_option variant sp.decreases))
     (ef_option 
-       (List.fold_left
-	  (fun acc l -> ef_union acc (assign_location l)) ef_empty)
+       (fun (_,l) -> 
+	 List.fold_left
+	   (fun acc l -> ef_union acc (assign_location l)) ef_empty l)
        sp.Clogic.assigns)
 
 open Cast

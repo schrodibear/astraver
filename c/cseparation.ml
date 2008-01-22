@@ -693,7 +693,7 @@ let option_iter f x =
 
 let loop_annot tyf la =
   option_iter (predicate tyf) la.invariant;
-  option_iter (List.iter (term tyf)) la.loop_assigns;
+  option_iter (fun (_,l) -> List.iter (term tyf) l) la.loop_assigns;
   option_iter (fun (t,_) -> term tyf t) la.variant
 
 let spec tyf sp =
@@ -706,7 +706,7 @@ let spec tyf sp =
   begin
   match sp.assigns with
     | None -> ()
-    | Some l -> List.iter (term tyf) l
+    | Some (_,l) -> List.iter (term tyf) l
   end;
   begin
     match sp.ensures with

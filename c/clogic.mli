@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: clogic.mli,v 1.67 2007-11-20 14:34:48 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.68 2008-01-22 14:11:22 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -196,7 +196,7 @@ type 'term variant = 'term * string option
 
 type ('term,'pred) spec = { 
   mutable requires : 'pred option;
-  mutable assigns : 'term location list option;    
+  mutable assigns : (Loc.position * 'term location list) option;    
   mutable ensures : 'pred option;
   mutable decreases : 'term variant option
 }
@@ -205,7 +205,7 @@ type ('term,'pred) loop_annot = {
   invariant : 'pred option;
     (* part of the invariant already proved by program analysis *)
   assume_invariant : 'pred option;
-  loop_assigns : 'term location list option;
+  loop_assigns : (Loc.position * 'term location list) option;
   variant : 'term variant option
 }
 

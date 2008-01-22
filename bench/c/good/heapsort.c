@@ -3,7 +3,18 @@
 
 //@ type int_array
 
-//@ logic int access(int_array a, int i)
+//@ logic int access(int_array a, integer i)
+
+//@ logic int_array update(int_array a, integer i, int v)
+
+/*@ axiom access_update_eq : 
+  @   \forall int_array a, integer i, int v; access(update(a, i, v), i) == v
+  @*/
+
+/*@ axiom access_update_neq : 
+  @   \forall int_array a, integer i, integer j, int v; 
+  @      i != j => access(update(a, i, v), j) == access(a, j)
+  @*/
 
 //@ logic int_array contents(int* a) reads a[..]
 
@@ -81,36 +92,35 @@
 
 //@ axiom div2_2 : \forall int i; 0 < i => 0 <= i/2 < i
 
-//@ axiom div2_3 : \forall int i; 0 <= i => i-1 < 2*(i/2)+1
+// @ axiom div2_3 : \forall int i; 0 <= i => i-1 < 2*(i/2)+1
+
+/*@ axiom div2_4 : \forall int i, int k; 
+  @   0 <= i => 0 <= k => k != (i-1)/2 => 2*k+1 != i
+  @*/
+
+/*@ axiom div2_5 : \forall int i, int k; 
+  @   0 <= i => 0 <= k => k != (i-1)/2 => 2*k+2 != i
+  @*/
 
 /*****************************************************************************/
 
-/*@ requires \valid(a+i) && \valid(a+j)
-  @ assigns  a[i], a[j]
-  @ ensures  Swap(contents(a), \old(contents(a)), i, j)
-  @*/
-void swap(int* a, int i, int j) {
-  int tmp = a[i];
-  a[i] = a[j];
-  a[j] = tmp;
-}
-
 /*@ requires 
-  @   0 <= low <= high && \valid_range(a, low, high) && H(a, low+1, high)
+  @   0 <= low <= high && \valid_range(a, low, high) && 
+  @   H(a, low+1, high)
   @ assigns  
   @   a[low..high]
   @ ensures  
-  @   Permut(contents(a), \old(contents(a)), low, high) && H(a, low, high)
+  @   // Permut(contents(a), \old(update(contents(a), low, v)), low, high) && 
+  @   H(a, low, high)
   @*/
-void sift_down(int* a, unsigned int low, unsigned int high) {
+void down_heap(int* a, unsigned int low, unsigned int high, int v) {
   unsigned int i = low, child;
   /*@ invariant 
     @   low <= i <= high && 
-    @   Permut(contents(a), \at(contents(a), init), low, high) &&
-    @   (\forall int k; low <= k <= high => k != i => Hnode(a, k, high)) &&
-    @   ((low < i && low <= (i-1)/2) => 
-    @      ((2*i+1 <= high => a[(i-1)/2] >= a[2*i+1]) &&
-    @       (2*i+2 <= high => a[(i-1)/2] >= a[2*i+2])))
+    @   // Permut(contents(a), \at(contents(a), init), low, high) &&
+    @   (\forall int k; low < k <= high => Hnode(a, k, high)) &&
+    @   (low < i => Hnode(a, low, high)) &&
+    @   (low <= (i-1)/2 => a[(i-1)/2] >= v)
     @ loop_assigns
     @   a[low..high]
     @ variant 
@@ -118,35 +128,49 @@ void sift_down(int* a, unsigned int low, unsigned int high) {
     @*/
   while ((child = 2*i+1) <= high) {
     if (child+1 <= high && a[child+1] >= a[child]) child++;
-    if (a[i] >= a[child]) break;
-    swap(a, i, child);
+    if (v >= a[child]) break;
+    a[i] = a[child];
+    //@ assert Hnode(a, i, high)
     i = child;
   }
+  a[i] = v;
 }
 
 /*@ requires 
   @   0 <= n && \valid_range(a, 0, n-1)
   @ ensures  
-  @   Permut(contents(a), \old(contents(a)), 0, n-1) && Sorted(a, 0, n-1)
+  @   // Permut(contents(a), \old(contents(a)), 0, n-1) && 
+  @   Sorted(a, 0, n-1)
   @*/
 void heapsort(int* a, unsigned int n) {
   unsigned int i;
   if (n <= 1) return;
   /*@ invariant 
-    @   0 <= i < n && Permut(contents(a), \at(contents(a), init), 0, n-1) &&
+    @   0 <= i < n && 
+    @   // Permut(contents(a), \at(contents(a), init), 0, n-1) &&
     @   H(a, i, n-1)
     @ variant i
     @*/
-  for (i = n/2; i >= 1; i--) sift_down(a, i-1, n-1);
+  for (i = n/2; i >= 1; i--) down_heap(a, i-1, n-1, a[i-1]);
   /*@ invariant 
-    @   0 <= i < n && Permut(contents(a), \at(contents(a), init), 0, n-1) &&
+    @   0 <= i < n && 
+    @   // Permut(contents(a), \at(contents(a), init), 0, n-1) &&
     @   H(a, 0, i) && Sorted(a, i+1, n-1) &&
     @   \forall int k1, int k2; 0 <= k1 <= i => i < k2 < n => a[k1] <= a[k2]
     @ variant i
     @*/
   for (i = n-1; i >= 1; i--) { 
-    swap(a, 0, i); 
-    //@ assert H(a, 1, i-1)
-    sift_down(a, 0, i-1); 
+    int tmp = a[i];
+    a[i] = a[0];
+    down_heap(a, 0, i-1, tmp); 
   }
 }
+
+/* test 
+int main() {
+  int i;
+  int t[10] = { 3,5,1,0,6,8,4,2,9,7 };
+  heapsort(t, 10);
+  for (i = 0; i < 10; i++) printf("%d ", t[i]);
+}
+*/

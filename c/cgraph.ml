@@ -77,7 +77,7 @@ let spec s =
   begin
   match s.assigns with
     | None -> []
-    | Some l -> List.fold_left (fun acc t -> (term t) @acc)  [] l
+    | Some (_, l) -> List.fold_left (fun acc t -> (term t) @acc)  [] l
   end @
   begin
     match s.ensures with
@@ -99,7 +99,7 @@ let loop_annot la =
   begin
   match la.loop_assigns with
     | None -> []
-    | Some l -> List.fold_left (fun acc t -> (term t) @acc)  [] l
+    | Some (_,l) -> List.fold_left (fun acc t -> (term t) @acc)  [] l
   end @
   begin
     match la.variant with

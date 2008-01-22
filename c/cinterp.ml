@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.253 2008-01-14 10:10:50 stoulsn Exp $ i*)
+(*i $Id: cinterp.ml,v 1.254 2008-01-22 14:11:22 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -38,6 +38,75 @@ open Ctypes
 open Cseparation
 open Pp
 
+(* locs table *)
+
+type kind =
+  | ArithOverflow
+  | DownCast
+  | IndexBounds
+  | PointerDeref
+  | UserCall
+  | DivByZero
+  | Pack
+  | Unpack
+
+let locs_table = Hashtbl.create 97
+let name_counter = ref 0
+
+let abs_fname f =
+  if Filename.is_relative f then
+    Filename.concat (Unix.getcwd ()) f 
+  else f
+
+let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =  
+  let id,oldid = match id,oldid with
+    | None,_ ->  
+	incr name_counter;
+	"CADUCEUS_" ^ string_of_int !name_counter, oldid
+    | Some n, None -> n,Some n
+    | Some n, Some o -> n, Some o
+  in
+  let (name,f,l,b,e) = 
+      let f = abs_fname b.Lexing.pos_fname in
+      let l = b.Lexing.pos_lnum in
+      let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
+      let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
+      (name,f,l,fc,lc)
+  in
+  Coptions.lprintf "recording location for id '%s'@." id;
+  Hashtbl.replace locs_table id (kind,name,beh,f,l,b,e);
+  id
+    
+let print_kind fmt k =
+  fprintf fmt "%s"
+    (match k with
+       | Pack -> "Pack"
+       | Unpack -> "Unpack"
+       | DivByZero -> "DivByZero"
+       | UserCall -> "UserCall"
+       | PointerDeref -> "PointerDeref"
+       | IndexBounds -> "IndexBounds"
+       | DownCast -> "DownCast"
+       | ArithOverflow -> "ArithOverflow"
+    )
+
+let print_locs fmt =
+  Hashtbl.iter 
+    (fun id (kind,name,beh,f,l,b,e) ->
+       fprintf fmt "[%s]@\n" id;
+       Option_misc.iter
+	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
+       Option_misc.iter
+	 (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
+       fprintf fmt "file = \"%s\"@\n" f;
+       fprintf fmt "line = %d@\n" l;
+       fprintf fmt "begin = %d@\n" b;
+       fprintf fmt "end = %d@\n@\n" e)
+    locs_table
+
+(* end locs table *)
 
 let print_effects2 fmt l =
   fprintf fmt "@[%a@]"
@@ -568,12 +637,22 @@ let rec interp_predicate label old_label p =
     | NPbound_separated (t1,t2,t3,t4) ->
 	LPred("bound_separated",[ft t1;ft t2;ft t3;ft t4])
 
+(*
 let interp_predicate label old_label p = 
   let w = interp_predicate label old_label p in
   if p.npred_loc = Loc.dummy_position then
     w
   else
     LNamed ("\"" ^ String.escaped (Loc.string p.npred_loc) ^ "\"", w)
+*)
+
+let named_predicate loc = function
+  | LNamed _ as a -> a
+  | a -> let n = reg_loc loc in LNamed (n,a)
+
+let interp_predicate label oldlabel a =
+  let a' = interp_predicate label oldlabel a in
+  named_predicate a.npred_loc a'
 
 let interp_predicate_opt label old_label pred =
   match pred with
@@ -1057,13 +1136,20 @@ let bin_op op t1 t2 = match op, t1, t2 with
   | _ ->
       build_minimal_app (interp_bin_op op) [t1; t2]
 
+let guarded_app f kind loc x y =
+  Output.Label (reg_loc ~kind loc, f x y)
 
+let guarded_make_app = guarded_app Output.make_app
+
+let guarded_build_complex_app = 
+  guarded_make_app (*guarded_app build_complex_app*)
 
 let rec interp_expr e =
   let w = interp_expr_loc e in
   if e.nexpr_loc = Loc.dummy_position then w else Loc (fst e.nexpr_loc, w)
 
 and interp_expr_loc e =
+  let loc = e.nexpr_loc in
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
 	let t = Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c))) in
@@ -1122,16 +1208,18 @@ and interp_expr_loc e =
 		else
 		  Let(tmp1, e1,
 		      Let(tmp2, interp_expr e2,
-			  append (build_complex_app (Var "upd_")
-				    [Var var; Var tmp1; Var tmp2])
+			  append (guarded_build_complex_app 
+				     PointerDeref loc "upd_"
+				     [Var var; Var tmp1; Var tmp2])
 			    (Var tmp2)))
 	    | HeapRef (Not_valid,var,e1) ->	
 		let tmp1 = tmp_var () in
 		let tmp2 = tmp_var () in
 		Let(tmp1, e1,
 		    Let(tmp2, interp_expr e2,
-			append (build_complex_app (Var "upd_")
-				  [Var var; Var tmp1; Var tmp2])
+			append (guarded_build_complex_app 
+				   PointerDeref loc "upd_"
+				   [Var var; Var tmp1; Var tmp2])
 			  (Var tmp2)))
 	end 
     | NEincr(op,e) -> 
@@ -1203,8 +1291,9 @@ and interp_expr_loc e =
 	    | Valid (a,b) ->
 		if (a<= Int64.zero && b>Int64.one)
 		then Output.make_app "safe_acc_" [Var(var);te] 
-		else Output.make_app "acc_" [Var(var);te]
-	    | Not_valid -> Output.make_app "acc_" [Var(var);te] 
+		else guarded_make_app PointerDeref loc "acc_" [Var(var);te]
+	    | Not_valid -> 
+		guarded_make_app PointerDeref loc "acc_" [Var(var);te] 
 	end
     | NEunary (Ustar, e) -> assert false
     | NEunary (Uplus, e) ->
@@ -1400,6 +1489,7 @@ and interp_address e = match e.nexpr_node with
       assert false (* not a left value *)
 
 and interp_statement_expr e =
+  let loc = e.nexpr_loc in
   match e.nexpr_node with
     | NEseq(e1,e2) ->
 	append (interp_statement_expr e1) (interp_statement_expr e2)
@@ -1411,16 +1501,14 @@ and interp_statement_expr e =
 	    | LocalRef(v) ->
 		Assign(v.var_unique_name,interp_expr e)
 	    | HeapRef(valid,var,e1) ->
-		begin
 		  match valid with 
-		    | Valid(a,b) -> if (a<= Int64.zero && Int64.zero <b) 
-		      then (build_complex_app (Var "safe_upd_")
-				  [Var var;e1; interp_expr e])
-		      else(build_complex_app (Var "upd_" )
-				      [Var var;e1; interp_expr e]) 
-		    | Not_valid -> (build_complex_app (Var "upd_" )
-				      [Var var;e1; interp_expr e])
-		end
+		    | Valid (a,b) when a<= Int64.zero && Int64.zero <b ->
+			build_complex_app
+			  (Var "safe_upd_") [Var var;e1; interp_expr e]
+		    | Valid _ | Not_valid -> 
+			guarded_build_complex_app PointerDeref l.nexpr_loc
+			  "upd_" 
+			  [Var var;e1; interp_expr e]
 	end 
     | NEincr(op,e) ->
 	let top,one = interp_incr_op e.nexpr_type op in
@@ -1641,41 +1729,43 @@ let rec make_union_loc = function
   | l::r -> LApp("pset_union",[l;make_union_loc r])
 
 let interp_assigns label old_label assigns = function
-  | Some locl ->
+  | Some (loc, locl) ->
       let m = HeapVarSet.fold
 	(fun v m -> 
-	   if Ceffect.is_alloc v then m 
-	   else StringMap.add (heap_var_name v) (Reference false) m)
+	  if Ceffect.is_alloc v then m 
+	  else StringMap.add (heap_var_name v) (Reference false) m)
 	assigns.Ceffect.assigns_var StringMap.empty 
       in
       let m = ZoneSet.fold
 	(fun (z,s,ty) m -> 
-	   StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
+	  StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
 	assigns.Ceffect.assigns m 
       in
-      
       let l = 
 	List.fold_left (collect_locations label old_label) m locl
       in
-      StringMap.fold
-	(fun v p acc -> match p with
-	   | Memory p ->
-	       if no_alloc_table then
-		 make_and acc
-		   (LPred("not_assigns",
+      let p = 
+	StringMap.fold
+	  (fun v p acc -> match p with
+	    | Memory p ->
+		if no_alloc_table then
+		  make_and acc
+		    (LPred("not_assigns",
 			  [interp_var (Some old_label) v;
 			   LVar v; make_union_loc p]))
-	       else
-		 make_and acc
-		   (LPred("not_assigns",
+		else
+		  make_and acc
+		    (LPred("not_assigns",
 			  [interp_var None "alloc"; 
 			   interp_var (Some old_label) v;
 			   LVar v; make_union_loc p]))
-	   | Reference false ->
-	       make_and acc (LPred("eq", [LVar v; interp_var (Some old_label) v]))
-	   | Reference true ->
-	       acc)
-	l LTrue
+	    | Reference false ->
+		make_and acc (LPred("eq", [LVar v; interp_var (Some old_label) v]))
+	    | Reference true ->
+		acc)
+	  l LTrue
+      in
+      named_predicate loc p
   | None ->
       LTrue
 
