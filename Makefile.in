@@ -258,7 +258,7 @@ JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_version.ml jc/jc_common_options.ml \
 	jc/jc_envset.ml jc/jc_region.ml jc/jc_name.ml \
 	jc/jc_pervasives.ml jc/jc_iterators.ml \
-	jc/jc_typing.ml jc/jc_norm.ml jc/jc_output.ml \
+	jc/jc_output.ml jc/jc_typing.ml jc/jc_norm.ml \
 	jc/output.ml
 JCCMO_EXPORT = $(JCCML_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCML_EXPORT:.ml=.cmx)
