@@ -57,3 +57,9 @@ void heapsort(int* a, unsigned int n) {
     @*/
   for (i = n-1; i >= 1; i--) { swap(a, 0, i); sift_down(a, 0, i-1); }
 }
+
+/*
+Local Variables: 
+compile-command: "make heapsort_swap_safety.overflows"
+End: 
+*/

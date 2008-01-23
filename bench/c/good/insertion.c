@@ -26,8 +26,11 @@ void insertion_sort(int* a, unsigned int n) {
     unsigned int j = i;
     /*@ invariant
       @   0 <= j <= i &&
-      @   Permut(update(contents(a), j+1, v), \at(contents(a), init), 0,n-1) &&
-      @   1 // TODO: Sorted...
+      @   Permut(update(contents(a), j, v), \at(contents(a), init), 0, n-1) &&
+      @   Sorted(a, 0, j-1) &&
+      @   Sorted(a, j+1, i) &&
+      @   (j < i => v < a[j+1]) &&
+      @   (0 < j < i => a[j-1] <= a[j+1])
       @ loop_assigns
       @   a[0..i]
       @ variant
