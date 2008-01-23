@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.153 2008-01-21 16:15:58 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.154 2008-01-23 08:54:34 stoulsn Exp $ i*)
 
 open Format
 open Coptions
@@ -411,6 +411,10 @@ and type_type_node ?(ghost=false) ?(parameters=false) loc env ty =
       Tint (s, type_integer loc env i)
   | CTvar x -> 
       (* TODO: les attributs sont perdus *)
+      (* Cas d'erreur associés observés en pratique : 
+            -> utilisation d'un type non déclarer (pour déclarer une variable ghost 
+               ou la signature d'une fonction logique)
+            -> déclaration d'une variable ghost avec un type logique *)
       (try (find_typedef x).ctype_node with Not_found -> assert false)
   | CTarray (tyn, None) ->
       Tarray (Not_valid,type_type loc env tyn, None)
