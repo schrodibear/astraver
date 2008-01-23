@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.163 2008-01-21 16:06:43 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.164 2008-01-23 15:18:12 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -755,8 +755,25 @@ let rec term label_env logic_label env e =
 	  assert false (* TODO *)
       | JCPEtagequality _ ->
 	  assert false (* TODO *)
-      | JCPEmatch(e, pel) ->
-	  assert false (* TODO *)	  
+      | JCPEmatch(arg, pel) ->
+	  let targ = ft arg in
+	  let rty, tpel = match pel with
+	    | [] -> assert false (* should not be allowed by the parser *)
+	    | (p1, e1)::rem ->
+		(* type the first item *)
+		let newenv, tp1 = pattern env p1 targ.jc_term_type in
+		let te1 = term label_env logic_label newenv e1 in
+		(* type the remaining items *)
+		List.fold_left
+		  (fun (accrty, acctpel) (p, e2) ->
+		     let newenv, tp = pattern env p targ.jc_term_type in
+		     let te2 = term label_env logic_label newenv e2 in
+		     maxtype e.jc_pexpr_loc accrty te2.jc_term_type,
+		     (tp, te2)::acctpel)
+		  (te1.jc_term_type, [tp1, te1])
+		  rem
+	  in
+	  rty, targ.jc_term_region, JCTmatch(targ, List.rev tpel)
 	    
   in { jc_term_node = te;
        jc_term_type = t;
@@ -996,7 +1013,8 @@ let rec assertion label_env logic_label env e =
 	  begin
 	    match logic_label with
 	      | None ->
-		  typing_error e.jc_pexpr_loc "No memory state for this dereferenciation (\\at missing ?)"
+		  typing_error e.jc_pexpr_loc "No memory state for this \
+dereferenciation (\\at missing ?)"
 	      | Some l ->
 		  let te = ft e in
 		  let fi = find_field e.jc_pexpr_loc te.jc_term_type id true in
@@ -1087,8 +1105,12 @@ different"
 	  in
 	  JCAtagequality(
 	    ttag1, ttag2, st)
-      | JCPEmatch(e, pel) ->
-	  assert false (* TODO *)
+      | JCPEmatch _ ->
+	  let te = ft e in
+	  if te.jc_term_type = JCTnative Tboolean then
+	    JCAbool_term(ft e)
+	  else
+	    typing_error e.jc_pexpr_loc "This term should have type bool"
 
   in { jc_assertion_node = te;
        jc_assertion_label = !lab;

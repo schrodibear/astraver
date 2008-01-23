@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.213 2008-01-21 16:06:43 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.214 2008-01-23 15:18:11 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -413,10 +413,6 @@ let pattern_list_expr translate_body arg r ty pbl =
     (fun accbody (pat, body) ->
        let notcond, cond, vars = pattern arg ty pat in
        let body = translate_body body in
-(*       let body = List.fold_left
-	 (fun acc (name, user_name, _) -> Let(user_name, Deref name, acc))
-	 body vars
-       in*)
        let reads =
 	 let region = r in
 	 let ef = Jc_effect.pattern empty_effects LabelNone region pat in
@@ -531,7 +527,7 @@ let rec term ~global_assertion label oldlabel t =
 	LApp("downcast",
 	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
-    | JCTmatch _ -> assert false (* TODO *)
+    | JCTmatch(t, ptl) -> assert false (* TODO *)
 in
   if t.jc_term_label <> "" then
     Tnamed(reg_loc ~id:t.jc_term_label t.jc_term_loc,t')
@@ -620,7 +616,7 @@ let rec assertion ~global_assertion label oldlabel a =
 	  LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
       | JCAtagequality(t1, t2, h) ->
 	  LPred("eq", [ ftag t1.jc_tag_node; ftag t2.jc_tag_node ])
-      | JCAmatch _ -> assert false (* TODO *)
+(*      | JCAmatch _ -> assert false *)
   in
   if a.jc_assertion_label <> "" then
     begin

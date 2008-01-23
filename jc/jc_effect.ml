@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.83 2008-01-21 16:06:43 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.84 2008-01-23 15:18:11 bardou Exp $ *)
 
 
 open Jc_env
@@ -310,8 +310,8 @@ let rec term ef t =
 	term (term ef t1) t2
     | JCTsub_pointer (_, _) -> assert false (* TODO *)
     | JCTconst _ -> ef
-    | JCTmatch _ -> assert false (* TODO *)
-     
+    | JCTmatch (t, ptl) ->
+	term (List.fold_left term ef (List.map snd ptl)) t
 
 let tag ef t h =
   let ef = match h with
@@ -355,10 +355,10 @@ let rec assertion ef a =
 	     (root_name st)) t
     | JCAtagequality (t1, t2, h) ->
 	tag (tag ef t1 h) t2 h
-    | JCAmatch (t, pal) ->
+(*    | JCAmatch (t, pal) ->
 	term 
 	  (List.fold_left (fun acc (_, a) -> assertion acc a) ef pal)
-	  t
+	  t*)
 
 (********************
 
