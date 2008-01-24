@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.96 2008-01-16 14:39:35 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.97 2008-01-24 14:54:43 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -1305,7 +1305,7 @@ let rec statement s =
 	  JCTSif (expr e, statement s1, statement s2)
       | JSwhile(e,inv,dec,s) ->
 	  let la = loop_annot inv dec in
-	  JCTSwhile(expr e, la, statement s)
+	  JCTSwhile("", expr e, la, statement s)
       | JSfor (el1, e, inv, dec, el2, body) ->
 	  let exprl = 
 	    List.map
@@ -1319,7 +1319,7 @@ let rec statement s =
 	  let res =
 	    { jc_tstatement_loc = s.java_statement_loc ;
 	      jc_tstatement_node = 
-		JCTSfor (expr e, List.map expr el2, la, statement body) }
+		JCTSfor ("", expr e, List.map expr el2, la, statement body) }
 	  in JCTSblock (exprl @ [res])
       | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	  let decls = List.map
@@ -1336,7 +1336,7 @@ let rec statement s =
 	      decls
 	      { jc_tstatement_loc = s.java_statement_loc ;
 		jc_tstatement_node = 
-		  JCTSfor(expr e, List.map expr sl, la, statement body) }
+		  JCTSfor("", expr e, List.map expr sl, la, statement body) }
 	  in JCTSblock [res]
       | JSexpr e -> JCTSexpr (expr e)
       | JSassert(id,e) -> 
