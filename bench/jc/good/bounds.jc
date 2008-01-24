@@ -1,4 +1,7 @@
 
+# AnnotationPolicy = StrongPre
+# AbstractDomain = Box
+
 type T = {
     integer i;
 }
@@ -24,6 +27,7 @@ unit init(U[0] u) {
     if ((u.ub + 4).i == 0) return;
 
     /* read variable offset */
+    L1: 
     for(k = 0; k < 5; ++k) invariant 0 <= k && k <= 5; {
 	if ((u.b + k).i == 0) return;
 	if ((u.lb + k).i == 0) return;
@@ -42,6 +46,7 @@ unit init(U[0] u) {
     (u.ub + 4).i = 0;
 
     /* write variable offset */
+    L2:
     for(k = 0; k < 5; ++k) invariant 0 <= k && k <= 5; {
 	(u.b + k).i = 0;
 	(u.lb + k).i = 0;

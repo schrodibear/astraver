@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.50 2008-01-18 17:06:38 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.51 2008-01-24 14:08:24 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -83,8 +83,28 @@
 	    Jc_options.separation_sem :=
 	      match v with
 		| "None" -> Jc_env.SepNone
-		| "RegionInference" -> Jc_env.SepRegionInference
+		| "Regions" -> Jc_env.SepRegions
 		| _ -> lex_error lexbuf ("unknown separation policy " ^ v)
+	  end  
+      | "AnnotationPolicy" ->
+	  begin
+	    Jc_options.annotation_sem :=
+	      match v with
+		| "None" -> Jc_env.AnnotNone
+		| "Invariants" -> Jc_env.AnnotInvariants
+		| "WeakPre" -> Jc_env.AnnotWeakPre
+		| "StrongPre" -> Jc_env.AnnotStrongPre
+		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
+	  end  
+      | "AbstractDomain" ->
+	  begin
+	    Jc_options.ai_domain :=
+	      match v with
+		| "None" -> Jc_env.AbsNone 
+		| "Box" -> Jc_env.AbsBox 
+		| "Oct" -> Jc_env.AbsOct 
+		| "Pol" -> Jc_env.AbsPol 
+		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 }

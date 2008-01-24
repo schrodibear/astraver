@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.19 2008-01-18 17:06:38 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.20 2008-01-24 14:08:24 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -72,8 +72,8 @@ let verify = ref []
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
-let annot_infer = ref false
-let ai_domain = ref ""
+let annotation_sem = ref AnnotNone
+let ai_domain = ref AbsNone
 let interprocedural = ref false
 let main = ref ""
 
@@ -114,13 +114,13 @@ let _ =
           "  verbose mode";
 	"-q", Arg.Clear verbose,
           "  quiet mode (default)";
-	"-ai", Arg.Tuple [
-	  Arg.String (fun s -> ai_domain := s); 
-	  Arg.Set annot_infer],
-          "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference"
-          ^ " with abstract interpretation using the Box, Octagon"
-          ^ " or Polyhedron domain, or with weakest preconditions or with both";
-	"-main", Arg.Tuple [Arg.Set annot_infer; Arg.Set interprocedural; Arg.Set_string main],
+(* 	"-ai", Arg.Tuple [ *)
+(* 	  Arg.String (fun s -> ai_domain := s);  *)
+(* 	  Arg.Set annot_infer], *)
+(*           "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference" *)
+(*           ^ " with abstract interpretation using the Box, Octagon" *)
+(*           ^ " or Polyhedron domain, or with weakest preconditions or with both"; *)
+	"-main", Arg.Tuple [Arg.Set interprocedural; Arg.Set_string main],
 	  "  main function for interprocedural abstract interpretation (needs -ai <domain>)";
 	"--werror", Arg.Set werror,
           "  treats warnings as errors";
@@ -156,8 +156,6 @@ let inv_sem = inv_sem
 let separation_sem = separation_sem
 
 let verify = !verify
-let annot_infer = !annot_infer
-let ai_domain = !ai_domain
 let interprocedural = !interprocedural
 let main = !main
 

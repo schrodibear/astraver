@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai pol
-*/
+
+# AnnotationPolicy = Invariants
+# AbstractDomain = Pol
 
 /**
  * A sorting algorithm from John Tromp Programming Pearls

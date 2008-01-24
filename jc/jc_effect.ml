@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.84 2008-01-23 15:18:11 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.85 2008-01-24 14:08:24 moy Exp $ *)
 
 
 open Jc_env
@@ -133,11 +133,11 @@ let fef_union fef1 fef2 =
 
 let fef_assoc fef assoc =
   { jc_reads = 
-      if !Jc_options.separation_sem = SepRegionInference then 
+      if !Jc_options.separation_sem = SepRegions then 
 	ef_assoc fef.jc_reads assoc 
       else fef.jc_reads;
     jc_writes = 
-      if !Jc_options.separation_sem = SepRegionInference then
+      if !Jc_options.separation_sem = SepRegions then
 	ef_assoc fef.jc_writes assoc
       else fef.jc_writes;
     jc_raises = fef.jc_raises;

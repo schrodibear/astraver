@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai oct
-*/
+
+# AnnotationPolicy = Invariants
+# AbstractDomain = Oct
 
 type intM = { integer val; }
 

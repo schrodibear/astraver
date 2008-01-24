@@ -1,5 +1,9 @@
+
+# AnnotationPolicy = Invariants
+# AbstractDomain = Box
+
 /*
-@OPTIONS: -ai box -main wrapper
+@OPTIONS: -main wrapper
 */
 
 unit f(integer i) {

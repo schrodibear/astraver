@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.79 2008-01-15 14:44:10 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.80 2008-01-24 14:08:24 moy Exp $ */
 
 %{
 
@@ -828,7 +828,7 @@ switch_label:
 iteration_statement: 
 | WHILE expression loop_annot_opt statement 
     { let (i,v) = $3 in 
-      locate_statement (JCPSwhile ($2, i, v, $4)) }
+      locate_statement (JCPSwhile ("", $2, i, v, $4)) }
 /*
 | loop_annot DO statement WHILE LPAR expression RPAR SEMICOLON 
     { locate (CSdowhile ($1, $3, $6)) }
@@ -836,7 +836,7 @@ iteration_statement:
 | FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
     argument_expression_list_opt RPAR loop_annot_opt statement
     { let (i,v) = $9 in 
-      locate_statement (JCPSfor($3, $5, $7, i, v, $10)) }
+      locate_statement (JCPSfor("", $3, $5, $7, i, v, $10)) }
 ;
 
 loop_annot_opt:

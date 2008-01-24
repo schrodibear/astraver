@@ -25,13 +25,18 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.43 2008-01-18 17:06:38 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.44 2008-01-24 14:08:24 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
 type inv_sem = InvNone | InvOwnership | InvArguments
 
-type separation_sem = SepNone | SepRegionInference
+type separation_sem = SepNone | SepRegions
+
+type annotation_sem = 
+    AnnotNone | AnnotInvariants | AnnotWeakPre | AnnotStrongPre
+
+type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
 
 type jc_type =
   | JCTnative of native_type

@@ -1,3 +1,4 @@
+# 1 "jc/jc_annot_inference.mli"
 (**************************************************************************)
 (*                                                                        *)
 (*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
@@ -33,12 +34,14 @@ open Jc_fenv
 (* intraprocedural analysis *)
 val code_function : fun_info * fun_spec * statement list option -> unit
 
+
 (* interprocedural analysis *)
 val main_function : fun_info * fun_spec * statement list option -> unit
 
+val print_annots : Format.formatter -> unit
 
 (*
-  Local Variables: 
-  compile-command: "make -C .. bin/jessie.byte"
-  End: 
+Local Variables: 
+compile-command: "make -C .. bin/jessie.byte"
+End: 
 *)

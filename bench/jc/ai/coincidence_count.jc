@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai pol
-*/
+
+# AnnotationPolicy = Invariants
+# AbstractDomain = Pol
 
 /* "!=" not supported in apron0.9.6 */
 

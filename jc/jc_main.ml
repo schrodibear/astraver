@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.90 2008-01-18 17:06:38 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.91 2008-01-24 14:08:24 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -47,9 +47,11 @@ let parse_file f =
 let main () =
   let files = Jc_options.files () in try
     match files with
-      | [f] ->
+      | [file] ->
+	  let filename = Filename.chop_extension file in
+
 	  (* phase 1: parsing *)
-	  let ast = parse_file f in
+	  let ast = parse_file file in
 
           (* phase 2: typing *)
 	  Jc_options.lprintf "Typing@.";
@@ -87,7 +89,7 @@ let main () =
 	  in
 
 	  (* phase 5: computation of regions *)
-	  if !Jc_options.separation_sem = SepRegionInference then begin
+	  if !Jc_options.separation_sem = SepRegions then begin
 	    Jc_options.lprintf "Computation of regions@.";
 	    (* Analyze logic functions before axioms, so that parameter 
 	     * regions are known before a function is applied. 
@@ -98,7 +100,9 @@ let main () =
 	  end;
 
           (* (optional) phase 6: inference of annotations *)
-	  if Jc_options.annot_infer then
+	  let annot_file = Lib.file "." (filename ^ ".annot") in
+	  let annot_out,annot_fmt = Pp.open_file_and_formatter annot_file in
+	  if !Jc_options.annotation_sem <> AnnotNone then
 	    if Jc_options.interprocedural then
 	      (* interprocedural analysis over the call graph +
 		 intraprocedural analysis of each function called *)
@@ -113,6 +117,8 @@ let main () =
 		(fun _ (f, loc, s, b) -> 
 		   Jc_ai.code_function (f, s, b) 
 		) Jc_norm.functions_table;
+	  Jc_ai.print_annots annot_fmt;
+	  Pp.close_file_and_formatter (annot_out,annot_fmt);
 
 	  (* phase 7: computation of effects *)
 	  Jc_options.lprintf
@@ -296,16 +302,15 @@ let main () =
 	      d_funs
 	  in
 	  (* production phase 6.1 : produce Why file *)
-	  let f = Filename.chop_extension f in
 	  Pp.print_in_file 
 	    (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_inv)
-	    (Lib.file "why" (f ^ ".why"));
+	    (Lib.file "why" (filename ^ ".why"));
 	  (* production phase 6.2 : produce locs file *)
 	  Pp.print_in_file 
 	    Jc_interp.print_locs
-	    (Lib.file "." (f ^ ".loc"));
+	    (Lib.file "." (filename ^ ".loc"));
 	  (* production phase 6.3 : produce makefile *)
-	  Jc_make.makefile f
+	  Jc_make.makefile filename
 	    
 	    
 	| _ -> Jc_options.usage ()

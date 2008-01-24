@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.81 2008-01-23 15:18:12 bardou Exp $ *)
+(* $Id: jc_output.ml,v 1.82 2008-01-24 14:08:24 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -431,13 +431,13 @@ let rec statement fmt s =
 	fprintf fmt "@\ncontinue %s;" lab.label_info_name
     | JCTSbreak lab -> 
 	fprintf fmt "@\nbreak %s;" lab.label_info_name
-    | JCTSwhile (e, la, s)-> 
+    | JCTSwhile (_,e, la, s)-> 
 	fprintf fmt "@\n@[while (%a)@\ninvariant %a;%a%a@]"
 	  expr e assertion la.jc_loop_invariant 
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
 	  la.jc_loop_variant
 	  block [s]
-    | JCTSfor (cond, updates, loop_annot, body)-> 
+    | JCTSfor (_,cond, updates, loop_annot, body)-> 
 	fprintf fmt "@\n@[for ( ; %a ; %a)@\ninvariant %a;%a%a@]"
 	  expr cond (print_list comma expr) updates
 	  assertion loop_annot.jc_loop_invariant 

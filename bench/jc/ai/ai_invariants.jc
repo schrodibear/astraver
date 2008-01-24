@@ -1,7 +1,10 @@
 
 # InvariantPolicy = Arguments
+# AnnotationPolicy = Invariants
+# AbstractDomain = Box
+
 /*
-  @OPTIONS:  -ai box -main main
+  @OPTIONS: -main main
 */
 
 

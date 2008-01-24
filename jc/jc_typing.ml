@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.164 2008-01-23 15:18:12 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.165 2008-01-24 14:08:24 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1616,8 +1616,8 @@ let build_label_tree s : label_tree list =
       | JCPSblock sl ->
 	  let l,fwdl = List.fold_right build_bwd sl ([],fwdacc) in
 	  (LabelBlock l) :: acc, fwdl
-      | JCPSfor (_, _, _, _, _, s) 
-      | JCPSwhile (_, _, _, s) ->
+      | JCPSfor (_,_, _, _, _, _, s) 
+      | JCPSwhile (_,_, _, _, s) ->
 	  let l,fwdl = build_bwd s ([],fwdacc) in
 	  (LabelBlock l) :: acc, fwdl
       | JCPSswitch (_, cl) ->
@@ -1781,7 +1781,7 @@ let rec statement label_env env lz s =
 	      typing_error s.jc_pstatement_loc 
 		"type '%a' expected in return instead of '%a'"
 		print_type vi.jc_var_info_type print_type te.jc_texpr_type
-      | JCPSwhile(cond,inv,var,body) -> 
+      | JCPSwhile(lab,cond,inv,var,body) -> 
 	  let tc = expr env cond in
 	  if subtype tc.jc_texpr_type boolean_type then
 	    let lz1,lz2 = match lz with
@@ -1793,10 +1793,10 @@ let rec statement label_env env lz s =
 	    let lo = loop_annot env inv var
 	    and ts,_ = statement label_env env lz1 body
 	    in
-	    JCTSwhile(tc,lo,ts), lz2
+	    JCTSwhile(lab,tc,lo,ts), lz2
 	  else 
 	    typing_error cond.jc_pexpr_loc "boolean expected"
-      | JCPSfor(init,cond,updates,inv,var,body) -> 
+      | JCPSfor(lab,init,cond,updates,inv,var,body) -> 
 	  let tcond = expr env cond in
 	  if subtype tcond.jc_texpr_type boolean_type then
 	    let lz1,lz2 = match lz with
@@ -1811,7 +1811,7 @@ let rec statement label_env env lz s =
 	    in
 	    match init with
 	      |	[] ->
-		  JCTSfor(tcond,tupdates,lo,tbody), lz2
+		  JCTSfor(lab,tcond,tupdates,lo,tbody), lz2
 	      | _ ->
 		  let l =
 		    List.fold_right
@@ -1822,7 +1822,7 @@ let rec statement label_env env lz s =
 		      init
 		      [ { jc_tstatement_loc = s.jc_pstatement_loc;
 			  jc_tstatement_node = 
-			    JCTSfor(tcond,tupdates,lo,tbody) 
+			    JCTSfor(lab,tcond,tupdates,lo,tbody) 
 			} ]
 		  in JCTSblock l, lz2
 	  else 
@@ -2036,6 +2036,43 @@ and statement_list label_env env lz l : tstatement list =
 	 jc_tstatement_loc = Loc.dummy_position }
     ) bs bl
   in [ts]
+
+(* Push labels of loops inside the loop structure, so that no program 
+ * transformation can break this link between a label and a loop.
+ *)
+let rec pstatement ?(label="") s = 
+  let pnode = match s.jc_pstatement_node with
+    | JCPSlabel(lab,s) -> JCPSlabel(lab,pstatement ~label:lab s)
+    | JCPSwhile(lab,cond,inv,var,body) -> 
+	assert(lab = "");
+	JCPSwhile(label,cond,inv,var,pstatement body)
+    | JCPSfor(lab,init,cond,updates,inv,var,body) -> 
+	assert(lab = "");
+	JCPSfor(label,init,cond,updates,inv,var,pstatement body)
+    | JCPStry(s,catches,finally) -> 
+	let catches =
+	  List.map (fun (ei,vio,s) -> (ei,vio,pstatement s)) catches
+	in
+	JCPStry(pstatement s,catches,pstatement finally)
+    | JCPSif(c,s1,s2) -> 
+	JCPSif(c,pstatement s1,pstatement s2)
+    | JCPSblock ls -> 
+	JCPSblock(pstatement_list ls)
+    | JCPSswitch(e,cases) ->
+	let cases = 
+	  List.map (fun (values,ls) -> values,pstatement_list ls) cases in
+	JCPSswitch(e,cases)
+    | JCPSmatch(e,psl) ->
+	let psl = List.map (fun (pat,ls) -> pat,pstatement_list ls) psl in
+	JCPSmatch(e,psl)
+    | JCPSskip | JCPSthrow _ | JCPSgoto _ | JCPScontinue _ | JCPSbreak _ 
+    | JCPSreturn _ | JCPSdecl _ | JCPSassert _ | JCPSexpr _ | JCPSpack _ 
+    | JCPSunpack _ ->
+	s.jc_pstatement_node
+  in 
+  { s with jc_pstatement_node = pnode; }
+
+and pstatement_list ls = List.map (fun s -> pstatement s) ls
 
 let const_zero = 
   { jc_term_loc = Loc.dummy_position;
@@ -2426,6 +2463,7 @@ let rec decl d =
 		  { jc_fun_requires = assertion_true;
 		    jc_fun_behavior = [] }
 	in
+	let body = Option_misc.map pstatement_list body in
 	let b = 
 	  Option_misc.map 
 	    (fun body ->

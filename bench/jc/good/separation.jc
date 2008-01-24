@@ -1,5 +1,5 @@
 
-# SeparationPolicy = RegionInference
+# SeparationPolicy = Regions
 
 type intP = {
     integer intM;

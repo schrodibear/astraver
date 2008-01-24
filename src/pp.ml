@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.12 2008-01-24 08:11:14 regisgia Exp $ i*)
+(*i $Id: pp.ml,v 1.13 2008-01-24 14:08:24 moy Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -63,12 +63,29 @@ let string fmt s = fprintf fmt "%s" s
 
 let hov n fmt f x = pp_open_hovbox fmt n; f x; pp_close_box fmt ()
 
-let print_in_file_no_close ?(margin=78) p f =
-  let cout = open_out f in
+let open_formatter ?(margin=78) cout =
   let fmt = formatter_of_out_channel cout in
   pp_set_margin fmt margin;
-  pp_open_box fmt 0; p fmt; pp_close_box fmt ();
-  pp_print_flush fmt ();
+  pp_open_box fmt 0; 
+  fmt
+
+let close_formatter fmt = 
+  pp_close_box fmt ();
+  pp_print_flush fmt ()
+
+let open_file_and_formatter ?(margin=78) f =
+  let cout = open_out f in
+  let fmt = open_formatter ~margin cout in
+  cout,fmt
+
+let close_file_and_formatter (cout,fmt) =
+  close_formatter fmt;
+  close_out cout
+
+let print_in_file_no_close ?(margin=78) p f =
+  let cout,fmt = open_file_and_formatter ~margin f in
+  p fmt;
+  close_formatter fmt;
   cout
 
 let print_in_file ?(margin=78) p f =

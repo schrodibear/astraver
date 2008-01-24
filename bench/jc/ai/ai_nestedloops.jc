@@ -1,7 +1,6 @@
 
-/*
-@OPTIONS: -ai oct
-*/
+# AnnotationPolicy = Invariants
+# AbstractDomain = Oct
 
 /* two levels of loops */
 

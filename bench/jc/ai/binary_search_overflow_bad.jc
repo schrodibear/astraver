@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai polwp
-*/
+
+# AnnotationPolicy = WeakPre
+# AbstractDomain = Pol
 
 type intP = {
     integer intM;

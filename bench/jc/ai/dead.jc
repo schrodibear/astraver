@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai boxwp
-*/
+
+# AnnotationPolicy = WeakPre
+# AbstractDomain = Box
 
 /* The goal of this test is to check that no excessively strong loop invariant
  * or precondition is inferred. Indeed, in the following functions, setting

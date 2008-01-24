@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai boxwp
-*/
+
+# AnnotationPolicy = WeakPre
+# AbstractDomain = Box
 
 type intP = {
     integer intM;

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.11 2008-01-24 08:11:14 regisgia Exp $ i*)
+(*i $Id: pp.mli,v 1.12 2008-01-24 14:08:24 moy Exp $ i*)
 
 open Format
 
@@ -51,5 +51,9 @@ val arrow : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 
+val open_formatter : ?margin:int -> out_channel -> formatter
+val close_formatter : formatter -> unit
+val open_file_and_formatter : ?margin:int -> string -> out_channel * formatter
+val close_file_and_formatter : out_channel * formatter -> unit
 val print_in_file_no_close : ?margin:int -> (Format.formatter -> unit) -> string -> out_channel
 val print_in_file : ?margin:int -> (Format.formatter -> unit) -> string -> unit

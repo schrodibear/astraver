@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.107 2008-01-23 15:18:11 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.108 2008-01-24 14:08:24 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -150,11 +150,11 @@ type pstatement_node =
   | JCPSassert of (* identifier option * *) pexpr
   | JCPSdecl of ptype * string * pexpr option
   | JCPSif of pexpr * pstatement * pstatement
-  | JCPSwhile of pexpr * pexpr * pexpr option * pstatement
-      (*r condition, invariant, variant, body *)
-  | JCPSfor of 
-      pexpr list * pexpr * pexpr list * pexpr * pexpr option * pstatement
-      (*r inits, condition, updates, invariant, variant, body *)
+  | JCPSwhile of string * pexpr * pexpr * pexpr option * pstatement
+      (*r label, condition, invariant, variant, body *)
+  | JCPSfor of string * pexpr list * pexpr * pexpr list * pexpr 
+      * pexpr option * pstatement
+      (*r label, inits, condition, updates, invariant, variant, body *)
   | JCPSreturn of pexpr option
   | JCPSbreak of string
   | JCPScontinue of string
@@ -375,8 +375,8 @@ type tstatement_node =
   | JCTSassert of (* string option * *) assertion
   | JCTSdecl of var_info * texpr option * tstatement
   | JCTSif of texpr * tstatement * tstatement
-  | JCTSwhile of texpr * loop_annot * tstatement
-  | JCTSfor of texpr * texpr list * loop_annot  * tstatement
+  | JCTSwhile of string * texpr * loop_annot * tstatement
+  | JCTSfor of string * texpr * texpr list * loop_annot  * tstatement
       (*r condition, updates, loop annotations, body *)
       (*r inits must be given before using JCTSexpr or JCTSdecl *)
   | JCTSreturn_void 

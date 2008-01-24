@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai octwp
-*/
+
+# AnnotationPolicy = WeakPre
+# AbstractDomain = Oct
 
 integer foo(integer s, integer n) {
     integer i = 0;

@@ -37,6 +37,7 @@ val code_function : fun_info * fun_spec * statement list option -> unit
 (* interprocedural analysis *)
 val main_function : fun_info * fun_spec * statement list option -> unit
 
+val print_annots : Format.formatter -> unit
 
 (*
 Local Variables: 

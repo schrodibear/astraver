@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.18 2008-01-18 17:06:38 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.19 2008-01-24 14:08:24 moy Exp $ *)
 
 (*s environment variables *)
 
@@ -44,8 +44,6 @@ val why_opt : string
 
 val verify : string list
 
-val annot_infer : bool
-val ai_domain : string
 val interprocedural : bool
 val main : string
 
@@ -54,6 +52,8 @@ val usage : unit -> unit
 
 val inv_sem: Jc_env.inv_sem ref
 val separation_sem : Jc_env.separation_sem ref
+val annotation_sem : Jc_env.annotation_sem ref
+val ai_domain : Jc_env.abstract_domain ref
 
 (*s The log file *)
 

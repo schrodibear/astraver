@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai octwp
-*/
+
+# AnnotationPolicy = WeakPre
+# AbstractDomain = Oct
 
 type charP = {
     integer charM;

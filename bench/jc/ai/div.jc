@@ -1,6 +1,6 @@
-/*
-@OPTIONS: -ai box
-*/
+
+# AnnotationPolicy = Invariants
+# AbstractDomain = Box
 
 integer main(integer x, integer y) {
 

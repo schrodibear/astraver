@@ -113,7 +113,7 @@ GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
             jc/jc_version.ml jc/numconst.ml \
 	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
-	    jc/jc_ai.ml \
+	    jc/jc_ai.ml jc/jc_ai.mli \
 	    java/java_version.ml \
 	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
 	    ml/parsing/parser.mli ml/parsing/parser.ml ml/parsing/lexer.ml \
@@ -833,6 +833,10 @@ jc/jc_ai.ml: jc/jc_annot_inference.ml Makefile
 	  echo "let code_function = fail" >> jc/jc_ai.ml; \
 	  echo "let main_function = fail" >> jc/jc_ai.ml; \
 	fi
+
+jc/jc_ai.mli: jc/jc_annot_inference.mli Makefile
+	echo "# 1 \"jc/jc_annot_inference.mli\"" > jc/jc_ai.mli; \
+	cat jc/jc_annot_inference.mli >> jc/jc_ai.mli
 
 # %_why.v: %.mlw $(BINARY)
 # 	$(BINARY) -coq $*.mlw

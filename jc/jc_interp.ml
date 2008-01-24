@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.215 2008-01-24 10:50:07 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.216 2008-01-24 14:08:24 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1261,8 +1261,9 @@ let rec statement ~infunction ~threats s =
 	      LTrue f.jc_fun_info_parameters l 
 	  in
 	  let el =
-	    try
-	      List.map2 (expr_coerce ~infunction ~threats) f.jc_fun_info_parameters l 
+	    try match f.jc_fun_info_parameters with
+	      | [] -> [Void]
+	      | params -> List.map2 (expr_coerce ~infunction ~threats) params l 
 	    with Invalid_argument _ -> assert false
 	  in
 	  let write_mems =
@@ -1572,7 +1573,7 @@ let tr_struct st acc =
   let tagtab = tag_table_name st in
     (* Declarations of field memories. *)
   let acc =
-    if !Jc_options.separation_sem = SepRegionInference then acc else
+    if !Jc_options.separation_sem = SepRegions then acc else
       List.fold_left
 	(fun acc fi ->
 	  let mem = memory_field fi in

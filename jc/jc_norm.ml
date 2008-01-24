@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.73 2008-01-21 16:06:43 bardou Exp $ *)
+(* $Id: jc_norm.ml,v 1.74 2008-01-24 14:08:24 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -186,8 +186,8 @@ let make_match loc e psl =
 let make_throw loc exc e =
   make_node "Lthrow" loc (JCSthrow (exc,e))
 
-let make_loop loc la s =
-  make_node "Lloop" loc (JCSloop (la,s))
+let make_loop lab loc la s =
+  make_node lab loc (JCSloop (la,s))
 
 let make_try loc s exl fs =
   make_node "Ltry" loc (JCStry (s, exl, fs))
@@ -534,7 +534,7 @@ and statement s =
   let ns = 
     match s.jc_tstatement_node with
       | JCTSblock sl ->
-	  JCSblock (List.map statement sl)
+	  JCSblock (List.map (fun s -> statement s) sl)
       | JCTSexpr e ->
 	  let prefix op = match op with 
 	    | Prefix_inc | Postfix_inc -> Prefix_inc
@@ -579,7 +579,7 @@ and statement s =
 		  let if_stat = make_if loc e st sf in
 		    (make_decls loc (sl @ [if_stat]) tl).jc_statement_node
 	    end
-      | JCTSwhile (e, la, body) ->
+      | JCTSwhile (lab, e, la, body) ->
 	  let body = match e.jc_texpr_node with
 	    | JCTEconst(JCCboolean true) ->
 		(* Special case of an infinite loop [while(true)].
@@ -600,13 +600,13 @@ and statement s =
 	    [(loop_continue, None, make_block loc [])] in
 	  let try_continue = 
 	    make_try loc body catch_continue (make_block loc []) in
-	  let while_stat = make_loop loc la try_continue in
+	  let while_stat = make_loop lab loc la try_continue in
 	  let catch_exit =
 	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
 	    make_try loc while_stat catch_exit (make_block loc []) in
 	  try_exit.jc_statement_node
-      | JCTSfor (cond, updates, la, body) ->
+      | JCTSfor (lab, cond, updates, la, body) ->
 	  let exit_stat = make_tthrow loc loop_exit None in
 	  let if_stat = statement (make_tif loc cond body exit_stat) in
 	  let continue_stat = make_throw loc loop_continue None in
@@ -623,7 +623,7 @@ and statement s =
 	    [(loop_continue, None, make_block loc updates)] in
 	  let try_continue = 
 	    make_try loc body catch_continue (make_block loc []) in
-	  let for_stat = make_loop loc la try_continue in
+	  let for_stat = make_loop lab loc la try_continue in
 	  let catch_exit =
 	    [(loop_exit, None, make_block loc [])] in
 	  let try_exit = 
