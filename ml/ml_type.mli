@@ -1,5 +1,8 @@
+(** Add a type declaration like [type t = ...] so that type [t] is known and
+can be instanciated. *)
 val declare: Ml_ocaml.Ident.t -> Ml_ocaml.Types.type_declaration -> bool -> unit
 
+(** Add an invariant to a declared type. *)
 val add_invariant: Ml_ocaml.Ident.t ->
   (string * Jc_env.var_info * Jc_ast.assertion) -> unit
 

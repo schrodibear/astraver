@@ -1,5 +1,9 @@
 (* Interpretation of Ocaml programs to Jessie *)
 
+open Jc_ast
+open Jc_output
+open Jc_env
+open Jc_fenv
 open Ml_misc
 open Ml_pattern
 open Ml_constant
@@ -9,10 +13,6 @@ open Ml_ocaml.Types
 open Ml_ocaml.Path
 open Ml_ocaml.Ident
 open Ml_type
-open Jc_ast
-open Jc_output
-open Jc_env
-open Jc_fenv
 
 let binary_op_of_string = function
   | ">=" -> Bge_int
@@ -241,7 +241,7 @@ let rec term env e =
     | Texp_field(e, lbl) ->
 	let te = term env e in
 	let fi = (label e.exp_type lbl).ml_li_field in
-	JCTderef(make_term te (make e.exp_type), fi)
+	JCTderef(make_term te (make e.exp_type), LabelNone, fi)
 (*    | Texp_setfield of expression * label_description * expression
     | Texp_array of expression list
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
@@ -393,7 +393,7 @@ let rec statement env e cont =
 		       "unknown function: %s" x
 		 in
 		 make_expr (JCTEcall(fi, args_final))
-		   fi.jc_fun_info_return_type)
+		   fi.jc_fun_info_result.jc_var_info_type)
 	  | _ -> not_implemented e.exp_loc "unsupported application (statement)"
 	)
     | Texp_match(me, pel, partial) ->
@@ -811,6 +811,7 @@ let structure_item env = function
 	    [ JClogic_fun_def(
 		rty,
 		id,
+		[],
 		args,
 		match lfs.lfs_body with
 		  | OBbody e ->

@@ -220,7 +220,7 @@ module PAAssertion = struct
   let make_and = make_and_term
   let make_or = make_or_term
   let make_deref x fi =
-    make_term (JCTderef(x, fi)) fi.jc_field_info_type
+    make_term (JCTderef(x, LabelNone, fi)) fi.jc_field_info_type
   let make_constant = constant_term
   let make_bool b = make_bool_term (JCTconst(JCCboolean b))
   let make_int i = make_int_term (JCTconst(JCCinteger(string_of_int i)))

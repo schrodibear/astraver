@@ -107,13 +107,7 @@ open Jc_ast
 open Jc_env
 open Jc_output
 
-let default_region = {
-  jc_reg_variable = false;
-  jc_reg_id = 0;
-  jc_reg_name = "jessica_region";
-  jc_reg_final_name = "jessica_region";
-  jc_reg_type = JCTnative Tunit;
-}
+let default_region = Jc_region.dummy_region
 
 let is_unit t = t = JCTnative Tunit
 
@@ -349,12 +343,18 @@ let make_alloc_tmp si =
 
 let void = make_expr (JCTEconst JCCvoid) (JCTnative Tunit)
 
-let make_struct name = {
-  jc_struct_info_name = name;
-  jc_struct_info_parent = None;
-  jc_struct_info_root = name;
-  jc_struct_info_fields = [];
-}
+let make_struct name =
+  let rec vi = {
+    jc_variant_info_name = name;
+    jc_variant_info_roots = [si];
+  }
+  and si = {
+    jc_struct_info_name = name;
+    jc_struct_info_parent = None;
+    jc_struct_info_root = si;
+    jc_struct_info_fields = [];
+    jc_struct_info_variant = Some vi;
+  } in si
 
 let make_field si name jcty =
   let fi = {
@@ -368,6 +368,17 @@ let make_field si name jcty =
   } in
   si.jc_struct_info_fields <- fi::si.jc_struct_info_fields;
   fi
+
+let make_var name ty = {
+  jc_var_info_tag = fresh_int ();
+  jc_var_info_name = name;
+  jc_var_info_final_name = name;
+  jc_var_info_type = ty;
+  jc_var_info_region = default_region;
+  jc_var_info_formal = false;
+  jc_var_info_assigned = false;
+  jc_var_info_static = false;
+}
 
 let dummy_struct = make_struct "dummy_struct"
 
@@ -385,6 +396,7 @@ let make_app li args = {
   jc_app_fun = li;
   jc_app_args = args;
   jc_app_region_assoc = [];
+  jc_app_label_assoc = [];
 }
 
 let make_app_term_node li args = JCTapp (make_app li args)

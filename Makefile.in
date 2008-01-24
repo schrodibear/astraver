@@ -323,7 +323,7 @@ JESSICACMX = $(JESSICACMO:.cmo=.cmx)
 MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_envset.cmo jc/jc_common_options.cmo \
 	jc/jc_region.cmo jc/numconst.cmo \
-	jc/jc_name.cmo jc/jc_pervasives.cmo \
+	jc/jc_pervasives.cmo jc/jc_name.cmo \
 	jc/jc_iterators.cmo jc/jc_output.cmo \
 	$(JESSICACMO)
 MLCMX = $(MLCMO:.cmo=.cmx)

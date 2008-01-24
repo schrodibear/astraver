@@ -36,16 +36,7 @@ let empty = {
 }
 
 let add_var name ty env =
-  let vi = {
-    jc_var_info_tag = fresh_int ();
-    jc_var_info_name = name;
-    jc_var_info_final_name = name; (* ? *)
-    jc_var_info_type = ty;
-    jc_var_info_formal = false; (* ? *)
-    jc_var_info_assigned = false; (* ? *)
-    jc_var_info_static = false; (* ? *)
-    jc_var_info_region = default_region;
-  } in
+  let vi = make_var name ty in
   { env with vars = StringMap.add name vi env.vars }, vi
 
 let add_fun name params return_type env =
@@ -54,7 +45,7 @@ let add_fun name params return_type env =
     jc_fun_info_tag = fresh_int ();
     jc_fun_info_name = jc_name;
     jc_fun_info_final_name = jc_name; (* ? *)
-    jc_fun_info_return_type = return_type;
+    jc_fun_info_result = make_var ("jessica_"^name^"_result") return_type;
     jc_fun_info_parameters = params;
     jc_fun_info_calls = []; (* ? *)
     jc_fun_info_logic_apps = []; (* ? *)
@@ -120,6 +111,7 @@ let add_logic_fun name params return_type env =
     jc_logic_info_calls = [];
     jc_logic_info_result_region = default_region;
     jc_logic_info_param_regions = [];
+    jc_logic_info_labels = [];
   } in
   { env with logic_funs = StringMap.add name li env.logic_funs }, li
 
