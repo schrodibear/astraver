@@ -276,45 +276,54 @@ let proj tty index =
     | MLTtuple si -> List.nth si.jc_struct_info_fields index
     | _ -> failwith "ml_type.ml: constructor: not a tuple type"
 
+let get_variant si = match si.jc_struct_info_variant with
+  | None -> raise (Invalid_argument "ml_type.ml, get_variant")
+  | Some vi -> vi
+
 let jc_decl mlty = function
   | MLTnot_closed ->
       assert false
   | MLTnative t ->
-      JClogic_type_def mlty.ml_ty_name
+      [ JClogic_type_def mlty.ml_ty_name ]
   | MLTrecord(si, lbls) ->
-      JCstruct_def(
-	si.jc_struct_info_name,
-	(match si.jc_struct_info_parent with
-	   | None -> None
-	   | Some si -> Some si.jc_struct_info_name),
-	List.map (fun (_, l) -> l.ml_li_field) lbls,
-	mlty.ml_ty_invariants
-      )
+      [ make_variant_def (get_variant si);
+	JCstruct_def(
+	  si.jc_struct_info_name,
+	  (match si.jc_struct_info_parent with
+	     | None -> None
+	     | Some si -> Some si.jc_struct_info_name),
+	  List.map (fun (_, l) -> l.ml_li_field) lbls,
+	  mlty.ml_ty_invariants
+	)]
   | MLTvariant(si, tagfi, constrs) ->
-      JCstruct_def(
-	si.jc_struct_info_name,
-	(match si.jc_struct_info_parent with
-	   | None -> None
-	   | Some si -> Some si.jc_struct_info_name),
-	tagfi::
-	  List.flatten (List.map (fun (_, l) -> l.ml_ci_arguments) constrs),
-	mlty.ml_ty_invariants
-      )
+      [ make_variant_def (get_variant si);
+	JCstruct_def(
+	  si.jc_struct_info_name,
+	  (match si.jc_struct_info_parent with
+	     | None -> None
+	     | Some si -> Some si.jc_struct_info_name),
+	  tagfi::
+	    List.flatten (List.map (fun (_, l) -> l.ml_ci_arguments) constrs),
+	 mlty.ml_ty_invariants
+	)]
   | MLTtuple si ->
-      make_struct_def si mlty.ml_ty_invariants
+      [ make_variant_def (get_variant si);
+	make_struct_def si mlty.ml_ty_invariants]
   | MLTlogic x ->
-      JClogic_type_def x
+      [ JClogic_type_def x]
 
 let jc_decls () =
   let decls1 = ParamMap.fold
-    (fun _ si acc -> (make_struct_def si [])::acc)
+    (fun _ si acc ->
+       (make_variant_def (get_variant si)::
+	 (make_struct_def si [])::acc))
     !ml_tuples
     []
   in
   let decls2 = Hashtbl.fold
     (fun _ ty acc ->
        ParamMap.fold
-	 (fun _ ity acc -> (jc_decl ty ity)::acc)
+	 (fun _ ity acc -> (jc_decl ty ity)@acc)
 	 ty.ml_ty_instances
 	 acc)
     ml_types

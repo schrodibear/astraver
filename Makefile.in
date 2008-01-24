@@ -596,6 +596,9 @@ JAVABENCHLOG=krakatoa-bench-`date +%d-%m-%y`.log
 java-bench:: $(KRAKATOA) bin/cadlog.opt
 	(cd bench/java; sh ./bench 2>&1) | bin/cadlog.opt -java $(JAVABENCHLOG)
 
+ml-bench::
+	make -C bench/ml -f Makefile good.bench
+
 BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log
 
 bench-c:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
@@ -832,6 +835,7 @@ jc/jc_ai.ml: jc/jc_annot_inference.ml Makefile
 	  echo "\"Not compiled with --enable-apron.\"" >> jc/jc_ai.ml; \
 	  echo "let code_function = fail" >> jc/jc_ai.ml; \
 	  echo "let main_function = fail" >> jc/jc_ai.ml; \
+	  echo "let print_annots = fail" >> jc/jc_ai.ml; \
 	fi
 
 jc/jc_ai.mli: jc/jc_annot_inference.mli Makefile

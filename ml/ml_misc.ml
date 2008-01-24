@@ -392,6 +392,12 @@ let make_struct_def si invs =
     invs
   )
 
+let make_variant_def vi =
+  JCvariant_type_def(
+    vi.jc_variant_info_name,
+    List.map (fun root -> root.jc_struct_info_name) vi.jc_variant_info_roots
+  )
+
 let make_app li args = {
   jc_app_fun = li;
   jc_app_args = args;

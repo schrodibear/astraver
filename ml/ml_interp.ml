@@ -528,7 +528,7 @@ let rec statement env e cont =
 	} in
 	statement env cond
 	  (fun e -> make_statement_block [
-	     make_statement (JCTSwhile(e, annot,
+	     make_statement (JCTSwhile("", e, annot,
 				       statement env body make_discard));
 	     cont void;
 	   ])
