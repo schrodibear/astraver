@@ -586,6 +586,9 @@ JCBENCHLOG=jessie-bench-`date +%d-%m-%y`.log
 jc-bench:: $(JESSIE) bin/cadlog.opt
 	(cd bench/jc; sh ./bench 2>&1) | bin/cadlog.opt -jc $(JCBENCHLOG)
 
+jc-fast-bench:: $(JESSIE)
+	make -C bench/jc -f Makefile good.bench
+
 JCAIBENCHLOG=jessie-ai-bench-`date +%d-%m-%y`.log
 
 jc-ai-bench:: $(JESSIE) bin/cadlog.opt
