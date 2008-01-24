@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.ml,v 1.80 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.81 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -208,7 +208,8 @@ and trad_desc info d ren = match d with
       cross_label s (trad e) ren
 
   | Post (e, q, _) ->
-      assert false (*TODO*)
+      (* TODO *)
+      trad e ren 
 
 and trad_binders ren env = function
   | [] -> 

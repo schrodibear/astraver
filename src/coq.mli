@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.mli,v 1.26 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: coq.mli,v 1.27 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 open Cc
 open Vcg
@@ -35,6 +35,8 @@ val reset : unit -> unit
 val push_decl : Logic_decl.t -> unit
 
 val push_validation : string -> cc_type -> validation -> unit
+
+val push_program : string -> cc_type -> cc_functional_program -> unit
 
 val push_parameter : string -> cc_type -> unit
 

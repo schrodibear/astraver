@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.mli,v 1.20 2007-12-19 15:45:57 marche Exp $ i*)
+(*i $Id: regen.mli,v 1.21 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -37,6 +37,7 @@ open Vcg
 type element_kind = 
   | Param
   | Oblig
+  | Prog
   | Valid (* obsolete but helps porting from old versions *)
   | Lg
   | Ax
@@ -48,6 +49,7 @@ type element_id = element_kind * string
 
 type element = 
   | Parameter of string * cc_type
+  | Program of string * cc_type * cc_functional_program
   | Obligation of Loc.floc * Logic_decl.expl_kind * string * sequent Env.scheme
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme

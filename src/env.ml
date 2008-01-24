@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.73 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: env.ml,v 1.74 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 open Ident
 open Misc
@@ -304,39 +304,41 @@ let generalize_sequent s =
 
 let specialize_sequent = specialize_scheme subst_sequent
 
-let rec find_cc_term_vars acc = function
-  | CC_var _ ->
-      acc
-  | CC_letin (_, bl, t1, t2) ->
-      List.fold_left find_cc_binder_vars
-	(find_cc_term_vars (find_cc_term_vars acc t1) t2) bl
-  | CC_lam (b, t) ->
-      find_cc_binder_vars (find_cc_term_vars acc t) b
-  | CC_app (t1, t2) ->
-      find_cc_term_vars (find_cc_term_vars acc t1) t2
-  | CC_tuple (tl, top) ->
-      List.fold_left find_cc_term_vars
-	(match top with None -> acc | Some t -> find_cc_type_vars acc t) tl
-  | CC_if (t1, t2, t3) ->
-      find_cc_term_vars (find_cc_term_vars (find_cc_term_vars acc t1) t2) t3
-  | CC_case (t, pl) ->
-      let find_case_vars acc (p, t) =
-	find_cc_pattern_vars (find_cc_term_vars acc t) p
-      in
-      List.fold_left find_case_vars (find_cc_term_vars acc t) pl
-  | CC_term t ->
-      find_term_vars acc t
-  | CC_hole pr ->
-      find_proof_vars acc pr
-  | CC_type cc
-  | CC_any cc ->
-      find_cc_type_vars acc cc
+let rec find_gen_cc_term_vars hole_fun acc t = 
+  let find_cc_term_vars = find_gen_cc_term_vars hole_fun in
+    match t with
+      | CC_var _ ->
+	  acc
+      | CC_letin (_, bl, t1, t2) ->
+	  List.fold_left find_cc_binder_vars
+	    (find_cc_term_vars (find_cc_term_vars acc t1) t2) bl
+      | CC_lam (b, t) ->
+	  find_cc_binder_vars (find_cc_term_vars acc t) b
+      | CC_app (t1, t2) ->
+	  find_cc_term_vars (find_cc_term_vars acc t1) t2
+      | CC_tuple (tl, top) ->
+	  List.fold_left find_cc_term_vars
+	    (match top with None -> acc | Some t -> find_cc_type_vars acc t) tl
+      | CC_if (t1, t2, t3) ->
+	  find_cc_term_vars (find_cc_term_vars (find_cc_term_vars acc t1) t2) t3
+      | CC_case (t, pl) ->
+	  let find_case_vars acc (p, t) =
+	    find_cc_pattern_vars (find_cc_term_vars acc t) p
+	  in
+	    List.fold_left find_case_vars (find_cc_term_vars acc t) pl
+      | CC_term t ->
+	  find_term_vars acc t
+      | CC_hole pr ->
+	  hole_fun acc pr
+      | CC_type cc
+      | CC_any cc ->
+	  find_cc_type_vars acc cc
 
 and find_cc_pattern_vars acc = function
   | PPvariable b -> find_cc_binder_vars acc b
   | PPcons (_, pl) -> List.fold_left find_cc_pattern_vars acc pl
 
-and find_proof_vars acc = function
+let rec find_proof_vars acc = function
   | Lemma _
   | True
   | Proj1 _
@@ -353,31 +355,37 @@ and find_proof_vars acc = function
   | ProofTerm cc ->
       find_cc_term_vars acc cc
 
+and find_cc_term_vars x = find_gen_cc_term_vars find_proof_vars x
 
-let rec subst_cc_term s = function
-  | CC_var _ as cc -> cc
-  | CC_letin (b, bl, t1, t2) -> 
-      CC_letin (b, List.map (subst_cc_binder s) bl, 
-		subst_cc_term s t1, subst_cc_term s t2)
-  | CC_lam (b, t) -> CC_lam (subst_cc_binder s b, subst_cc_term s t)
-  | CC_app (t1, t2) -> CC_app (subst_cc_term s t1, subst_cc_term s t2)
-  | CC_tuple (tl, top) -> CC_tuple (List.map (subst_cc_term s) tl,
-				    option_app (subst_cc_type s) top)
-  | CC_if (t1, t2, t3) ->
-      CC_if (subst_cc_term s t1, subst_cc_term s t2, subst_cc_term s t3)
-  | CC_case (t, cl) ->
-      let subst_case (p, t) = subst_cc_pattern s p, subst_cc_term s t in
-      CC_case (subst_cc_term s t, List.map subst_case cl)
-  | CC_term t -> CC_term (subst_term s t)
-  | CC_hole pr -> CC_hole (subst_proof s pr)
-  | CC_type t -> CC_type (subst_cc_type s t)
-  | CC_any t -> CC_any (subst_cc_type s t)
+and find_cc_functional_program_vars = 
+  find_gen_cc_term_vars (fun accu (loc, pred) -> find_predicate_vars accu pred)
+
+let rec subst_gen_cc_term subst_hole s t = 
+  let subst_cc_term = subst_gen_cc_term subst_hole in
+    match t with
+      | CC_var _ as cc -> cc
+      | CC_letin (b, bl, t1, t2) -> 
+	  CC_letin (b, List.map (subst_cc_binder s) bl, 
+		    subst_cc_term s t1, subst_cc_term s t2)
+      | CC_lam (b, t) -> CC_lam (subst_cc_binder s b, subst_cc_term s t)
+      | CC_app (t1, t2) -> CC_app (subst_cc_term s t1, subst_cc_term s t2)
+      | CC_tuple (tl, top) -> CC_tuple (List.map (subst_cc_term s) tl,
+					option_app (subst_cc_type s) top)
+      | CC_if (t1, t2, t3) ->
+	  CC_if (subst_cc_term s t1, subst_cc_term s t2, subst_cc_term s t3)
+      | CC_case (t, cl) ->
+	  let subst_case (p, t) = subst_cc_pattern s p, subst_cc_term s t in
+	    CC_case (subst_cc_term s t, List.map subst_case cl)
+      | CC_term t -> CC_term (subst_term s t)
+      | CC_hole pr -> CC_hole (subst_hole s pr)
+      | CC_type t -> CC_type (subst_cc_type s t)
+      | CC_any t -> CC_any (subst_cc_type s t)
 
 and subst_cc_pattern s = function
   | PPvariable b -> PPvariable (subst_cc_binder s b)
   | PPcons (id, pl) -> PPcons (id, List.map (subst_cc_pattern s) pl)
 
-and subst_proof s = function
+let rec subst_proof s = function
   | Lemma _
   | True
   | Proj1 _
@@ -392,6 +400,11 @@ and subst_proof s = function
   | WfZwf t -> WfZwf (subst_term s t)
   | ProofTerm cc -> ProofTerm (subst_cc_term s cc)
 
+and subst_cc_term x = subst_gen_cc_term subst_proof x
+
+let subst_cc_functional_program = 
+  subst_gen_cc_term (fun s (loc, pred) -> (loc, subst_predicate s pred))
+
 let specialize_cc_type tt = 
   let l = find_cc_type_vars Vset.empty tt in
   specialize_scheme subst_cc_type {scheme_vars=l; scheme_type=tt}
@@ -405,6 +418,16 @@ let specialize_validation tt cc =
       Vset.fold (fun x l -> Vmap.add x (new_type_var()) l) l Vmap.empty 
     in 
     (env, subst_cc_type env tt, subst_cc_term env cc)
+
+let specialize_cc_functional_program tt cc =
+  let l = find_cc_functional_program_vars (find_cc_type_vars Vset.empty tt) cc in
+  if Vset.is_empty l then
+    Vmap.empty, tt, cc
+  else
+    let env = 
+      Vset.fold (fun x l -> Vmap.add x (new_type_var()) l) l Vmap.empty 
+    in 
+    (env, subst_cc_type env tt, subst_cc_functional_program env cc)
 
 let type_var_names = Hashtbl.create 97
 let type_var_name v = Hashtbl.find type_var_names v.tag

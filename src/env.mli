@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.48 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.49 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -152,6 +152,10 @@ val subst_sequent : var_subst -> sequent -> sequent
 val specialize_cc_type : Cc.cc_type -> var_subst * Cc.cc_type
 val specialize_validation : 
   Cc.cc_type -> Cc.validation -> var_subst * Cc.cc_type * Cc.validation
+
+val specialize_cc_functional_program : 
+  Cc.cc_type -> Cc.cc_functional_program 
+  -> var_subst * Cc.cc_type * Cc.cc_functional_program
 
 (*s Labels *)
 

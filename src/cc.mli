@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cc.mli,v 1.27 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: cc.mli,v 1.28 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -90,6 +90,9 @@ type proof_term = proof cc_term
 
 type validation = proof cc_term
 
+(* Functional programs. *)
+
+type cc_functional_program = (Loc.position * predicate) cc_term
 
 (*s Sequents and obligations. *)
 

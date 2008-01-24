@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.11 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: pp.ml,v 1.12 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -47,6 +47,9 @@ let rec print_list sep print fmt = function
 let print_list_or_default default sep print fmt = function
   | [] -> fprintf fmt "%s" default
   | l -> print_list sep print fmt l
+
+let print_list_par sep pr fmt l =
+  print_list sep (fun fmt x -> fprintf fmt "(%a)" pr x) fmt l
 
 let comma fmt () = fprintf fmt ",@ "
 let underscore fmt () = fprintf fmt "_"
@@ -71,3 +74,5 @@ let print_in_file_no_close ?(margin=78) p f =
 let print_in_file ?(margin=78) p f =
   let cout = print_in_file_no_close ~margin p f in
   close_out cout
+
+

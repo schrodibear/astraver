@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.43 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: mizar.ml,v 1.44 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 (*s Mizar output *)
 
@@ -318,6 +318,7 @@ struct
   let print_element fmt e = 
     begin match e with
       | Parameter _ -> assert false
+      | Program _ -> assert false
       | Obligation (loc, expl, id, s) -> print_obligation fmt loc expl id s
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
@@ -329,6 +330,7 @@ struct
       
   let reprint_element fmt = function
     | Parameter _ -> assert false
+    | Program _ -> assert false
     | Obligation (loc, expl, id, s) -> reprint_obligation fmt loc expl id s
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p

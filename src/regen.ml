@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.ml,v 1.23 2007-12-19 15:45:57 marche Exp $ i*)
+(*i $Id: regen.ml,v 1.24 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -39,6 +39,7 @@ open Misc
 type element_kind = 
   | Param
   | Oblig
+  | Prog
   | Valid (* obsolete but helps porting from old versions *)
   | Lg
   | Ax
@@ -50,6 +51,7 @@ type element_id = element_kind * string
 
 type element = 
   | Parameter of string * cc_type
+  | Program of string * cc_type * cc_functional_program
   | Obligation of Loc.floc * Logic_decl.expl_kind * string * sequent Env.scheme
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
@@ -81,6 +83,7 @@ module Make(X : S) = struct
 
   let print_element_kind fmt = function
     | Param, s -> fprintf fmt "parameter %s" s
+    | Prog, s -> fprintf fmt "program %s" s
     | Oblig, s -> fprintf fmt "obligation %s" s
     | Valid, s -> fprintf fmt "validation %s" s
     | Lg, s -> fprintf fmt "logic %s" s

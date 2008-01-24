@@ -378,6 +378,7 @@ struct
   let print_element fmt e = 
     begin match e with
       | Parameter _-> assert false
+      | Program _ -> assert false
       | Obligation (loc, expl, id, s) -> 
 	  print_obligation fmt loc expl id s.Env.scheme_type
       | Logic (id, t) -> print_logic fmt id t
@@ -390,6 +391,7 @@ struct
       
   let reprint_element fmt = function
     | Parameter _ -> assert false
+    | Program _ -> assert false
     | Obligation (loc, expl, id, s) -> 
 	reprint_obligation fmt loc expl id s.Env.scheme_type
     | Logic (id, t) -> reprint_logic fmt id t

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.166 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.167 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 open Options
 open Logic
@@ -132,12 +132,12 @@ let rec collect_app l = function
 
 let print_binder_id fmt (id,_) = ident fmt id
 
-let collect_lambdas = 
+let collect_lambdas x = 
   let rec collect bl = function
     | CC_lam (b,c) -> collect (b :: bl) c
     | c -> List.rev bl, c
   in
-  collect []
+  collect [] x
 
 (* printers for Coq V7 *)
 
@@ -342,65 +342,68 @@ let print_sequent_v7 fmt (hyps,concl) =
 
 let print_lambdas_v7 = print_list semi print_binder_v7
 
-let rec print_cc_term_v7 fmt = function
-  | CC_var id -> 
-      ident fmt id
-  | CC_lam _ as t ->
-      let bl,c = collect_lambdas t in
-      fprintf fmt "@[<hov 2>[@[%a@]]@,%a@]" 
-	print_lambdas_v7 bl print_cc_term_v7 c
-  | CC_app (f,a) ->
-      let tl = collect_app [a] f in
-      fprintf fmt "@[<hov 2>(%a)@]" (print_list space print_cc_term_v7) tl
-  | CC_tuple (cl, None) ->
-      fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
-	(print_list space print_cc_term_v7) cl
-  | CC_tuple (cl, Some q) ->
-      fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
-	print_cc_type_v7 q (print_list space print_cc_term_v7) cl
-  (* special treatment for the if-then-else *)
-  | CC_letin (_, bl, e1, 
-	      CC_if (CC_var idb,
-		     CC_lam ((idt, CC_pred_binder _), brt),
-		     CC_lam ((idf, CC_pred_binder _), brf)))
-    when annotated_if idb bl ->
-      let qb, q = annotation_if bl in
-      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n@[<hov 2>Cases@ (@[btest@ @[[%a:bool]@,%a@] %a@ %a@]) of@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
-      (print_list comma print_binder_id) bl print_cc_term_v7 e1 
-	ident idb print_predicate_v7 q ident idb ident qb
-	ident idt print_cc_term_v7 brt
-	ident idf print_cc_term_v7 brf
-  (* non-dependent boolean if-then-else (probably not of use) *)
-  | CC_if (b,e1,e2) ->
-      fprintf fmt "@[if "; print_cc_term_v7 fmt b; fprintf fmt " then@\n  ";
-      hov 0 fmt (print_cc_term_v7 fmt) e1;
-      fprintf fmt "@\nelse@\n  ";
-      hov 0 fmt (print_cc_term_v7 fmt) e2;
-      fprintf fmt "@]"
-  | CC_case (e, pl) ->
-      fprintf fmt "@[Cases %a of@\n%a@\nend@]" print_cc_term_v7 e
-	(print_list newline print_case_v7) pl
-  | CC_letin (_,[id,_],c,c1) ->
-      fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
-      ident id print_cc_term_v7 c print_cc_term_v7 c1
-  | CC_letin (_,bl,c,c1) ->
-      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n%a@]"
-      (print_list comma print_binder_id) bl
-      print_cc_term_v7 c print_cc_term_v7 c1
-  | CC_term c ->
-      fprintf fmt "@[%a@]" print_term_v7 c
-  | CC_hole pr ->
-      print_proof_v7 fmt pr
-  | CC_type t ->
-      print_cc_type_v7 fmt t
-  | CC_any _ ->
-      Report.raise_unlocated 
-      (Error.AnyMessage "can't produce a validation for an incomplete program")
-
-and print_case_v7 fmt (p,e) =
-  fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term_v7 e
-
-and print_proof_v7 fmt = function
+let rec print_gen_cc_term_v7 print_hole fmt t = 
+  let print_cc_term_v7 = print_gen_cc_term_v7 print_hole in
+    match t with
+      | CC_var id ->  
+ 	  ident fmt id 
+      | CC_lam _ as t ->
+	  let bl,c = collect_lambdas t in
+	    fprintf fmt "@[<hov 2>[@[%a@]]@,%a@]"
+	      print_lambdas_v7 bl print_cc_term_v7 c
+      | CC_app (f,a) ->
+	  let tl = collect_app [a] f in
+	    fprintf fmt "@[<hov 2>(%a)@]" (print_list space print_cc_term_v7) tl
+      | CC_tuple (cl, None) -> 
+	  fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
+	    (print_list space print_cc_term_v7) cl
+      | CC_tuple (cl, Some q) ->
+	  fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
+	    print_cc_type_v7 q (print_list space print_cc_term_v7) cl
+	    (* special treatment for the if-then-else *)
+      | CC_letin (_, bl, e1,
+		  CC_if (CC_var idb,
+			 CC_lam ((idt, CC_pred_binder _), brt),
+			 CC_lam ((idf, CC_pred_binder _), brf)))
+	  when annotated_if idb bl ->
+	  let qb, q = annotation_if bl in
+	    fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n@[<hov 2>Cases@ (@[btest@ @[[%a:bool]@,%a@] %a@ %a@]) of@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
+	      (print_list comma print_binder_id) bl print_cc_term_v7 e1
+	      ident idb print_predicate_v7 q ident idb ident qb
+	      ident idt print_cc_term_v7 brt
+	      ident idf print_cc_term_v7 brf
+	      (* non-dependent boolean if-then-else (probably not of use) *)
+      | CC_if (b,e1,e2) ->
+	  fprintf fmt "@[if "; print_cc_term_v7 fmt b; fprintf fmt " then@\n  ";
+	  hov 0 fmt (print_cc_term_v7 fmt) e1;
+	  fprintf fmt "@\nelse@\n  ";
+	  hov 0 fmt (print_cc_term_v7 fmt) e2;
+	  fprintf fmt "@]"
+      | CC_case (e, pl) ->
+	  let print_case_v7 fmt (p,e) =
+	    fprintf fmt "@[<hov 2>| %a =>@ %a@]"
+	      print_cc_pattern p print_cc_term_v7 e
+	  in
+	    fprintf fmt "@[Cases %a of@\n%a@\nend@]" print_cc_term_v7 e
+	      (print_list newline print_case_v7) pl
+      | CC_letin (_,[id,_],c,c1) ->
+	  fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
+	    ident id print_cc_term_v7 c print_cc_term_v7 c1
+      | CC_letin (_,bl,c,c1) ->
+	  fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n%a@]"
+	    (print_list comma print_binder_id) bl
+	    print_cc_term_v7 c print_cc_term_v7 c1
+      | CC_term c ->
+	  fprintf fmt "@[%a@]" print_term_v7 c
+       | CC_hole pr -> 
+ 	  print_hole fmt pr 
+      | CC_type t ->
+	  print_cc_type_v7 fmt t
+      | CC_any _ ->
+	  Report.raise_unlocated
+	    (Error.AnyMessage "can't produce a validation for an incomplete program")
+	    
+let rec print_proof_v7 fmt = function
   | Lemma (s, []) ->
       fprintf fmt "%s" s
   | Lemma (s, vl) ->
@@ -427,7 +430,12 @@ and print_proof_v7 fmt = function
       fprintf fmt "@[%a@]" print_cc_term_v7 t
   | ShouldBeAWp ->
       Report.raise_unlocated 
-      (Error.AnyMessage "can't produce a validation for an incomplete program")
+	(Error.AnyMessage "can't produce a validation for an incomplete program")
+
+and print_cc_term_v7 x = print_gen_cc_term_v7 print_proof_v7 x
+
+let print_cc_functional_program_v7 = 
+  print_gen_cc_term_v7 (fun fmt (loc, p) -> print_predicate_v7 fmt p)
 
 (* printers for Coq V8 *)
 
@@ -642,65 +650,69 @@ let print_sequent_v8 fmt (hyps,concl) =
 
 let print_lambdas_v8 = print_list space print_binder_v8
 
-let rec print_cc_term_v8 fmt = function
-  | CC_var id -> 
-      ident fmt id
-  | CC_lam _ as t ->
-      let bl,c = collect_lambdas t in
-      fprintf fmt "(@[<hov 2>fun @[%a@] =>@ %a@])" 
-	print_lambdas_v8 bl print_cc_term_v8 c
-  | CC_app (f,a) ->
-      let tl = collect_app [a] f in
-      fprintf fmt "@[<hov 2>(%a)@]" (print_list_par space print_cc_term_v8) tl
-  | CC_tuple (cl, None) ->
-      fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
-	(print_list_par space print_cc_term_v8) cl
-  | CC_tuple (cl, Some q) ->
-      fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
-	print_cc_type_v8 q (print_list_par space print_cc_term_v8) cl
-  (* special treatment for the if-then-else *)
-  | CC_letin (_, bl, e1, 
-	      CC_if (CC_var idb,
-		     CC_lam ((idt, CC_pred_binder _), brt),
-		     CC_lam ((idf, CC_pred_binder _), brf)))
-    when annotated_if idb bl ->
-      let qb, q = annotation_if bl in
-      fprintf fmt "@[@[<hov 2>let (%a) :=@ %a in@]@\n@[<hov 2>match@ (@[btest@ (@[fun (%a:bool) =>@ %a@]) %a@ %a@]) with@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
-      (print_list comma print_binder_id) bl print_cc_term_v8 e1 
-	ident idb print_predicate_v8 q ident idb ident qb
-	ident idt print_cc_term_v8 brt
-	ident idf print_cc_term_v8 brf
-  (* non-dependent boolean if-then-else (probably not of use) *)
-  | CC_if (b,e1,e2) ->
-      fprintf fmt "@[if "; print_cc_term_v8 fmt b; fprintf fmt " then@\n  ";
-      hov 0 fmt (print_cc_term_v8 fmt) e1;
-      fprintf fmt "@\nelse@\n  ";
-      hov 0 fmt (print_cc_term_v8 fmt) e2;
-      fprintf fmt "@]"
-  | CC_case (e, pl) ->
-      fprintf fmt "@[match %a with@\n%a@\nend@]" print_cc_term_v8 e
-	(print_list newline print_case_v8) pl
-  | CC_letin (_,[id,_],c,c1) ->
-      fprintf fmt "@[@[<hov 2>let %a :=@ %a in@]@\n%a@]"
-      ident id print_cc_term_v8 c print_cc_term_v8 c1
-  | CC_letin (_,bl,c,c1) ->
-      fprintf fmt "@[@[<hov 2>let (%a) :=@ %a in@]@\n%a@]"
-      (print_list comma print_binder_id) bl
-      print_cc_term_v8 c print_cc_term_v8 c1
-  | CC_term c ->
-      fprintf fmt "@[%a@]" print_term_v8 c
-  | CC_hole pr ->
-      print_proof_v8 fmt pr
-  | CC_type t ->
-      print_cc_type_v8 fmt t
-  | CC_any _ ->
-      Report.raise_unlocated 
-      (Error.AnyMessage "can't produce a validation for an incomplete program")
+let rec print_gen_cc_term_v8 print_hole fmt t = 
+  let print_cc_term_v8 = print_gen_cc_term_v8 print_hole in
+    match t with
+      | CC_var id -> 
+	  ident fmt id
+      | CC_lam _ as t ->
+	  let bl,c = collect_lambdas t in
+	    fprintf fmt "(@[<hov 2>fun @[%a@] =>@ %a@])" 
+	      print_lambdas_v8 bl print_cc_term_v8 c
+      | CC_app (f,a) ->
+	  let tl = collect_app [a] f in
+	    fprintf fmt "@[<hov 2>(%a)@]" 
+	      (print_list_par space print_cc_term_v8) tl
+      | CC_tuple (cl, None) ->
+	  fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
+	    (print_list_par space print_cc_term_v8) cl
+      | CC_tuple (cl, Some q) ->
+	  fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
+	    print_cc_type_v8 q (print_list_par space print_cc_term_v8) cl
+	    (* special treatment for the if-then-else *)
+      | CC_letin (_, bl, e1, 
+		  CC_if (CC_var idb,
+			 CC_lam ((idt, CC_pred_binder _), brt),
+			 CC_lam ((idf, CC_pred_binder _), brf)))
+	  when annotated_if idb bl ->
+	  let qb, q = annotation_if bl in
+	    fprintf fmt "@[@[<hov 2>let (%a) :=@ %a in@]@\n@[<hov 2>match@ (@[btest@ (@[fun (%a:bool) =>@ %a@]) %a@ %a@]) with@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
+	      (print_list comma print_binder_id) bl print_cc_term_v8 e1 
+	      ident idb print_predicate_v8 q ident idb ident qb
+	      ident idt print_cc_term_v8 brt
+	      ident idf print_cc_term_v8 brf
+	      (* non-dependent boolean if-then-else (probably not of use) *)
+      | CC_if (b,e1,e2) ->
+	  fprintf fmt "@[if "; print_cc_term_v8 fmt b; fprintf fmt " then@\n  ";
+	  hov 0 fmt (print_cc_term_v8 fmt) e1;
+	  fprintf fmt "@\nelse@\n  ";
+	  hov 0 fmt (print_cc_term_v8 fmt) e2;
+	  fprintf fmt "@]"
+      | CC_case (e, pl) ->
+	  let print_case_v8 fmt (p,e) =
+	    fprintf fmt "@[<hov 2>| %a =>@ %a@]" 
+	      print_cc_pattern p print_cc_term_v8 e
+	  in
+	    fprintf fmt "@[match %a with@\n%a@\nend@]" print_cc_term_v8 e
+	      (print_list newline print_case_v8) pl
+      | CC_letin (_,[id,_],c,c1) ->
+	  fprintf fmt "@[@[<hov 2>let %a :=@ %a in@]@\n%a@]"
+	    ident id print_cc_term_v8 c print_cc_term_v8 c1
+      | CC_letin (_,bl,c,c1) ->
+	  fprintf fmt "@[@[<hov 2>let (%a) :=@ %a in@]@\n%a@]"
+	    (print_list comma print_binder_id) bl
+	    print_cc_term_v8 c print_cc_term_v8 c1
+      | CC_term c ->
+	  fprintf fmt "@[%a@]" print_term_v8 c
+      | CC_hole pr ->
+	  print_hole fmt pr
+      | CC_type t ->
+	  print_cc_type_v8 fmt t
+      | CC_any _ ->
+	  Report.raise_unlocated 
+	    (Error.AnyMessage "can't produce a validation for an incomplete program")
 
-and print_case_v8 fmt (p,e) =
-  fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term_v8 e
-
-and print_proof_v8 fmt = function
+let rec print_proof_v8 fmt = function
   | Lemma (s, []) ->
       fprintf fmt "%s" s
   | Lemma (s, vl) ->
@@ -728,10 +740,12 @@ and print_proof_v8 fmt = function
   | ShouldBeAWp ->
       if debug then Report.raise_unlocated (Error.AnyMessage "should be a WP");
       Report.raise_unlocated 
-      (Error.AnyMessage "can't produce a validation for an incomplete program")
+	(Error.AnyMessage "can't produce a validation for an incomplete program")
 
-and print_list_par sep pr fmt l =
-   print_list sep (fun fmt x -> fprintf fmt "(%a)" pr x) fmt l
+and print_cc_term_v8 x = print_gen_cc_term_v8 print_proof_v8 x
+
+let print_cc_functional_program_v8 = 
+  print_gen_cc_term_v8 (fun fmt (loc, p) -> print_predicate_v8 fmt p)
 
 (* printers selection *)
 
@@ -742,6 +756,8 @@ let print_predicate = if v8 then print_predicate_v8 else print_predicate_v7
 let print_sequent = if v8 then print_sequent_v8 else print_sequent_v7
 let print_cc_type = if v8 then print_cc_type_v8 else print_cc_type_v7
 let print_cc_term = if v8 then print_cc_term_v8 else print_cc_term_v7
+let print_cc_functional_program = 
+  if v8 then print_cc_functional_program_v8 else print_cc_functional_program_v7
 
 (* while printing scheme, we rename type variables (for more stability 
    of the Coq source); this is safe only because we throw away the types
@@ -902,6 +918,37 @@ let print_function fmt id p =
       if b then fprintf fmt "Unset Contextual Implicit.@\n";
     end
 
+let print_lam_scheme fmt l =
+  List.iter
+    (fun v -> match v with
+       | {type_val=Some (PTvar {type_val=None; tag=x})} -> 
+	   if v8 then fprintf fmt "fun (A%d:Set) =>@ " x
+	   else fprintf fmt "[A%d:Set]@ " x
+       | _ ->
+	   assert false)
+    l
+
+let print_validation fmt (id, tt, v) =
+  let (l,tt,v) = Env.specialize_validation tt v in
+  let print_cc_type fmt t = print_scheme fmt l; print_cc_type fmt t in
+  let l = Env.Vmap.fold (fun _ t acc -> t :: acc) l [] in
+  let print_cc_term fmt c = print_lam_scheme fmt l; print_cc_term fmt c in
+  fprintf fmt 
+    "@[Definition %a (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n@\n" 
+    idents id print_cc_type tt print_cc_term v
+
+let print_cc_functional_program fmt (id, tt, v) =
+  let (l,tt,v) = Env.specialize_cc_functional_program tt v in
+  let print_cc_type fmt t = print_scheme fmt l; print_cc_type fmt t in
+  let l = Env.Vmap.fold (fun _ t acc -> t :: acc) l [] in
+  let print_cc_functional_program fmt c = 
+    print_lam_scheme fmt l; print_cc_functional_program fmt c 
+  in
+  fprintf fmt 
+    "@[Definition %a (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n@\n" 
+    idents id print_cc_type tt print_cc_functional_program v 
+
+
 open Regen
 
 module Gen = Regen.Make(
@@ -910,6 +957,7 @@ struct
   let print_element fmt e = 
     begin match e with
       | Parameter (id, c) -> print_parameter fmt id c
+      | Program (id, tt, v) -> print_cc_functional_program fmt (id, tt, v)
       | Obligation (loc, expl, id, s) -> print_obligation fmt loc expl id s
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
@@ -921,6 +969,7 @@ struct
       
   let reprint_element fmt = function
     | Parameter (id, c) -> reprint_parameter fmt id c
+    | Program (id, tt, v) -> print_cc_functional_program fmt (id, tt, v)
     | Obligation (loc, expl, id, s) -> reprint_obligation fmt loc expl id s
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
@@ -959,6 +1008,9 @@ let push_decl = function
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))
 
+let push_program id tt v = 
+  Gen.add_elem (Prog, id) (Program (id, tt, v))
+
 let _ = 
   Gen.add_regexp 
     "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
@@ -979,6 +1031,8 @@ let _ =
   Gen.add_regexp 
     "(\\*Why function\\*) Definition[ ]+\\([^ ]*\\) " Fun;
   Gen.add_regexp 
+    "(\\*Why program\\*) Definition[ ]+\\([^ ]*\\) " Fun;
+  Gen.add_regexp 
     "(\\*Why type\\*) Parameter[ ]+\\([^ ]*\\):" Ty;
   Gen.add_regexp 
     "(\\*Why type\\*) Definition[ ]+\\([^ ]*\\):" Ty
@@ -991,25 +1045,6 @@ let deps_q = Queue.create ()
 let add_dep f = Queue.add f deps_q
 
 let push_validation id tt v = Queue.add (id,tt,v) valid_q 
-
-let print_lam_scheme fmt l =
-  List.iter
-    (fun v -> match v with
-       | {type_val=Some (PTvar {type_val=None; tag=x})} -> 
-	   if v8 then fprintf fmt "fun (A%d:Set) =>@ " x
-	   else fprintf fmt "[A%d:Set]@ " x
-       | _ ->
-	   assert false)
-    l
-
-let print_validation fmt (id, tt, v) =
-  let (l,tt,v) = Env.specialize_validation tt v in
-  let print_cc_type fmt t = print_scheme fmt l; print_cc_type fmt t in
-  let l = Env.Vmap.fold (fun _ t acc -> t :: acc) l [] in
-  let print_cc_term fmt c = print_lam_scheme fmt l; print_cc_term fmt c in
-  fprintf fmt 
-    "@[Definition %a (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n@\n" 
-    idents id print_cc_type tt print_cc_term v
 
 let print_validations fwe fmt =
   fprintf fmt "(* This file is generated by Why; do not edit *)@\n@\n";
@@ -1025,9 +1060,13 @@ let output_validations fwe =
   print_in_file (print_validations m) f;
   add_dep m
 
+(* output file. *)
+
 let output_file fwe =
   let f = fwe ^ "_why.v" in
   Gen.output_file f;
-  if valid then output_validations fwe
+  if valid then begin
+    output_validations fwe
+  end
 
    

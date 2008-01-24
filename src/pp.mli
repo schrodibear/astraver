@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.10 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: pp.mli,v 1.11 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 open Format
 
@@ -38,6 +38,9 @@ val print_list :
 val print_list_or_default :
   string -> (formatter -> unit -> unit) -> 
   (formatter -> 'a -> unit) -> formatter -> 'a list -> unit
+val print_list_par :
+  (Format.formatter -> unit -> 'a) ->
+  (Format.formatter -> 'b -> unit) -> Format.formatter -> 'b list -> unit
 val space : formatter -> unit -> unit
 val alt : formatter -> unit -> unit
 val newline : formatter -> unit -> unit

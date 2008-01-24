@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.142 2007-12-19 15:45:57 marche Exp $ i*)
+(*i $Id: main.ml,v 1.143 2008-01-24 08:11:14 regisgia Exp $ i*)
 
 open Options
 open Ptree
@@ -281,7 +281,10 @@ let interp_program loc id p =
   if valid then
     let ren = initial_renaming env in
     let tt = Monad.trad_type_c ren env c in
-    Coq.push_parameter (ids ^ "_valid") tt;
+    let ren = initial_renaming env in
+    let cc = Red.red (Mlize.trad p ren) in
+(*    Coq.push_parameter (ids ^ "_valid") tt; *)
+      Coq.push_program (ids ^ "_functional") tt cc;
     (*** TODO
 	 push_validation ids tt v;
 	 if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
