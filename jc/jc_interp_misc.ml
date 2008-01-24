@@ -25,10 +25,22 @@ let pointer_type st =
     logic_type_args = [struct_model_type st];
   }
 
+let pointer_type_vi vi = 
+  {
+    logic_type_name = pointer_type_name;
+    logic_type_args = [variant_model_type vi];
+  }
+
 let tag_table_type st = 
   {
     logic_type_name = tag_table_type_name;
     logic_type_args = [struct_model_type st];
+  }
+
+let tag_table_type_vi vi = 
+  {
+    logic_type_name = tag_table_type_name;
+    logic_type_args = [variant_model_type vi];
   }
 
 let tag_id_type st = 
@@ -319,6 +331,9 @@ let make_typeof st x =
 
 let make_subtag t u =
   LPred("subtag", [ t; u ])
+
+let make_instanceof tt p st =
+  LPred("instanceof", [ tt; p; LVar (tag_name st) ])
 
 let any_value ty = 
   match ty with

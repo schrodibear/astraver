@@ -71,7 +71,7 @@ OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
 INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ml
-BFLAGS   = -w Aelyz -warn-error A -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+BFLAGS   = -w Aelyz -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.214 2008-01-23 15:18:11 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.215 2008-01-24 10:50:07 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2596,7 +2596,24 @@ let tr_variant vi acc =
 	}))
   in
   let type_def = Type(variant_type_name vi, []) in
-  type_def::alloc_table::tag_table::acc
+  let axiom_on_tags =
+    let v = "x" in
+    let tag_table = tag_table_name_vi vi in
+    Axiom(
+      variant_axiom_on_tags_name vi,
+      LForall(
+	v,
+	pointer_type_vi vi,
+	LForall(
+	  tag_table,
+	  tag_table_type_vi vi,
+	  make_or_list
+	    (List.map
+	       (make_instanceof (LVar tag_table) (LVar v))
+	       vi.jc_variant_info_roots)
+      )))
+  in
+  type_def::alloc_table::tag_table::axiom_on_tags::acc
 
 (*
   Local Variables: 

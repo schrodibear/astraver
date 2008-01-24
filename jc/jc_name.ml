@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.6 2008-01-18 17:06:38 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.7 2008-01-24 10:50:08 bardou Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -56,6 +56,8 @@ let struct_model_type st = variant_model_type (struct_variant st)
 let variant_alloc_table_name vi = vi.jc_variant_info_name ^ "_alloc_table"
 
 let variant_tag_table_name vi = vi.jc_variant_info_name ^ "_tag_table"
+
+let variant_axiom_on_tags_name vi = vi.jc_variant_info_name ^ "_tags"
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 

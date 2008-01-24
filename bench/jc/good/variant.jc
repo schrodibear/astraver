@@ -5,6 +5,7 @@ tag Parallelogram = {
   integer l2;
   integer l3;
   integer l4;
+  invariant par_inv(x) = x.l1 >= 0 && x.l2 >= 0 && x.l3 >= 0 && x.l4 >= 0;
 }
 
 tag Rectangle = Parallelogram with {
@@ -52,6 +53,8 @@ integer perimeter(shape[0] S)
       3 * r * r;
   end;
 }
+
+axiom test: \forall integer r; 3*r*r >= 0
 
 /*
 Local Variables: 

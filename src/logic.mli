@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic.mli,v 1.42 2007-11-22 08:32:42 marche Exp $ i*)
+(*i $Id: logic.mli,v 1.43 2008-01-24 10:50:08 bardou Exp $ i*)
 
 (*s Logic. *)
 
@@ -62,6 +62,7 @@ type term =
   | Tderef of Ident.t
   | Tapp of Ident.t * term list * instance
   | Tnamed of term_label * term
+  | Tif of term * term * term
 
 type substitution = term Ident.map
 type var_substitution = Ident.t Ident.map
