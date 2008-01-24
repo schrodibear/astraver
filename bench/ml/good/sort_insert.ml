@@ -44,7 +44,7 @@ let rec sort l = match l with
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make sort_insert"
+compile-command: "unset LANG; make -C .. sort_insert.gui"
 End: 
 *)
 

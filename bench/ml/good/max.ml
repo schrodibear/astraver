@@ -9,6 +9,6 @@ let max x y =
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make max"
+compile-command: "unset LANG; make -C .. max.gui"
 End: 
 *)

@@ -15,6 +15,6 @@ let j x y z t (u: int) =
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make test"
+compile-command: "unset LANG; make -C .. test.gui"
 End: 
 *)

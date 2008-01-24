@@ -14,6 +14,6 @@ let test_bool y = y.contents <- (42 >= 69)
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make ref"
+compile-command: "unset LANG; make -C .. ref.gui"
 End: 
 *)

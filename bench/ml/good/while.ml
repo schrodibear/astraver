@@ -24,6 +24,6 @@ let double x =
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make while"
+compile-command: "unset LANG; make -C .. while.gui"
 End: 
 *)

@@ -28,6 +28,6 @@ let i (x: bool) = (Plop(x, 1): (bool, int, int) plop)
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make typeparam"
+compile-command: "unset LANG; make -C .. typeparam.gui"
 End: 
 *)

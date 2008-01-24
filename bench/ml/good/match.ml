@@ -8,6 +8,6 @@ let f x = match x with
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make match"
+compile-command: "unset LANG; make -C .. match.gui"
 End: 
 *)

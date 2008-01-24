@@ -15,6 +15,6 @@ let plop y x =
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make records"
+compile-command: "unset LANG; make -C .. records.gui"
 End: 
 *)

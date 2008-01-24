@@ -11,8 +11,10 @@ then
     if ../../../bin/jessie.opt $1.jc 2>> $JCLOG >> $JCLOG
     then
 	echo "why     $1.why"
-	if ! make -f $1.makefile goals 2>> $WHYLOG >> $WHYLOG
+	if make -f $1.makefile goals 2>> $WHYLOG >> $WHYLOG
 	then
+	    mv $1.ml $1.ml.bak
+	else
 	    echo "  /!\\ ERROR in $1.why"
 	fi
     else

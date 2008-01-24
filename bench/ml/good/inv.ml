@@ -27,6 +27,6 @@ type v =
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make inv"
+compile-command: "unset LANG; make -C .. inv.gui"
 End: 
 *)

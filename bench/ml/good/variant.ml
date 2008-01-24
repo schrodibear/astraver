@@ -7,6 +7,6 @@ let f x b = Two(x, b)
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make variant"
+compile-command: "unset LANG; make -C .. variant.gui"
 End: 
 *)
