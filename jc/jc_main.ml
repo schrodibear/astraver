@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.91 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.92 2008-01-24 16:13:21 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -103,21 +103,23 @@ let main () =
 	  let annot_file = Lib.file "." (filename ^ ".annot") in
 	  let annot_out,annot_fmt = Pp.open_file_and_formatter annot_file in
 	  if !Jc_options.annotation_sem <> AnnotNone then
-	    if Jc_options.interprocedural then
-	      (* interprocedural analysis over the call graph +
-		 intraprocedural analysis of each function called *)
-	      Hashtbl.iter
-	      (fun _ (fi, loc, fs, sl) ->
-		 if fi.jc_fun_info_name = Jc_options.main then
-		   Jc_ai.main_function (fi, fs, sl)
-	      ) Jc_norm.functions_table
-	    else
-              (* intraprocedural inference of annotations otherwise *)
-	      Hashtbl.iter 
-		(fun _ (f, loc, s, b) -> 
-		   Jc_ai.code_function (f, s, b) 
-		) Jc_norm.functions_table;
-	  Jc_ai.print_annots annot_fmt;
+	    begin
+	      if Jc_options.interprocedural then
+		(* interprocedural analysis over the call graph +
+		   intraprocedural analysis of each function called *)
+		Hashtbl.iter
+		  (fun _ (fi, loc, fs, sl) ->
+		    if fi.jc_fun_info_name = Jc_options.main then
+		      Jc_ai.main_function (fi, fs, sl)
+		  ) Jc_norm.functions_table
+	      else
+		(* intraprocedural inference of annotations otherwise *)
+		Hashtbl.iter 
+		  (fun _ (f, loc, s, b) -> 
+		    Jc_ai.code_function (f, s, b) 
+		  ) Jc_norm.functions_table;
+	      Jc_ai.print_annots annot_fmt
+	    end;
 	  Pp.close_file_and_formatter (annot_out,annot_fmt);
 
 	  (* phase 7: computation of effects *)
