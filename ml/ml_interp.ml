@@ -104,7 +104,8 @@ let rec expression env e =
 	  | _ -> not_implemented e.exp_loc "unsupported application (expression)"
 	end
     | Texp_match(e, pel, partial) ->
-	let e = PatExpression.pattern_expr_list
+	assert false (* TODO *)
+(*	let e = PatExpression.pattern_expr_list
 	  env
 	  (make_expr (expression env e) (make e.exp_type))
 	  (List.map
@@ -119,11 +120,12 @@ let rec expression env e =
 		   "partial pattern-matching (expression)"
 	     | Total ->
 		 None)
-	in e.jc_texpr_node
+	in e.jc_texpr_node*)
 (*    | Texp_try of expression * (pattern * expression) list
     | Texp_tuple of expression list*)
     | Texp_construct(cd, el) ->
-	let ci = constructor e.exp_type cd in
+	assert false (* TODO *)
+(*	let ci = constructor e.exp_type cd in
 	make_let_alloc_tmp ci.ml_ci_structure
 	  (fun vi ve ->
 	     make_seq_expr
@@ -136,7 +138,7 @@ let rec expression env e =
 			 (fun e ->
 			    make_expr (expression env e) (make e.exp_type))
 			 el)))
-	       ve)
+	       ve)*)
 (*    | Texp_variant of label * expression option *)
     | Texp_record(lbls, None) ->
 	not_implemented e.exp_loc "TO REDO: ml_interp.ml: expression: records (make_let_tmp, label, ...)";
@@ -396,27 +398,23 @@ let rec statement env e cont =
 		   fi.jc_fun_info_result.jc_var_info_type)
 	  | _ -> not_implemented e.exp_loc "unsupported application (statement)"
 	)
-    | Texp_match(me, pel, partial) ->
+    | Texp_match(me, pel, _) ->
 	statement env me
 	  (fun res ->
 	     make_var_tmp (make me.exp_type) (Some res)
 	       (fun _ arg ->
 		  make_var_tmp (make e.exp_type) None
 		    (fun resvi rese ->
+		       let psl = List.map
+			 (fun (p, e) ->
+			    let newenv, p = Ml_pattern.pattern env p in
+			    let s = statement newenv e (make_affect resvi) in
+			    p, [s])
+			 pel
+		       in
 		       make_statement_block [
-			 (let pfl = List.map
-			   (fun (pat, e) ->
-			      pat,
-			      (fun env -> statement env e (make_affect resvi)))
-			   pel
-			 in
-			 let catchall = match partial with
-			   | Partial -> not_implemented e.exp_loc
-			       "partial pattern-matching (statement)"
-			   | Total -> None
-			 in
-			 PatStatement.pattern_expr_list env arg pfl catchall);
-			 cont rese
+			 make_statement (JCTSmatch(arg, psl));
+			 cont rese;
 		       ])))
 (*    | Texp_try of expression * (pattern * expression) list*)
     | Texp_tuple el ->
@@ -437,8 +435,6 @@ let rec statement env e cont =
 	make_alloc_tmp ci.ml_ci_structure
 	  (fun _ tmp_e ->
 	     make_statement_block [
-	       make_affect_field tmp_e ci.ml_ci_tag_field
-		 (expr_of_int ci.ml_ci_tag);
 	       statement_list env el
 		 (List.map (fun fi -> make_affect_field tmp_e fi)
 		    ci.ml_ci_arguments);
@@ -590,7 +586,8 @@ let invariants env spec (*struct_info*) =
 	     let body_env, vi = Ml_env.add_var arg_name ty env in
 	     vi, make_assertion (assertion body_env i.ti_body)
 	 | _ ->
-	     let _, vi = Ml_env.add_var "jessica_arg" ty env in
+	     assert false (* TODO *)
+(*	     let _, vi = Ml_env.add_var "jessica_arg" ty env in
 	     let cond, body = PatAssertion.pattern_expr
 	       env
 	       (make_var_term vi)
@@ -598,7 +595,7 @@ let invariants env spec (*struct_info*) =
 	       (fun env -> make_assertion (assertion env i.ti_body))
 	     in
 	     let conda = make_assertion (JCAbool_term cond) in
-	     vi, make_implies conda body
+	     vi, make_implies conda body*)
        in
        let final_env, _ =
 	 Ml_env.add_logic_fun (name i.ti_name) [ arg_vi ] None env
@@ -830,12 +827,13 @@ let structure_item env = function
 	env
 	axs.as_arguments
       in
-      let cond, _, body = PatAssertion.pattern_list_expr
+      let cond, _, body = assert false in (* TODO *)
+	(*PatAssertion.pattern_list_expr
 	env
 	(List.map make_var_term args)
 	axs.as_arguments
 	(fun env -> make_assertion (assertion env axs.as_body))
-      in
+      in*)
       let conda = make_assertion (JCAbool_term cond) in
       let a = make_assertion (JCAimplies(conda, body)) in
       let qa = List.fold_left
@@ -860,12 +858,9 @@ let add_structure_specs env = List.fold_left
      | _ -> env)
   env
 
-(*let add_type_specs env = List.fold_left
-  (fun env -> function
-     | Tstr_type_spec ({ ts_type = Pident id } as spec) ->
-	 Ml_env.add_type_spec id spec env
-     | _ -> env)
-  env*)
+let base_decls = [
+  JCinvariant_policy InvOwnership;
+]
 
 (*
 Local Variables: 

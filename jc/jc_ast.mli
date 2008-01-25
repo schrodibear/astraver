@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.108 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.109 2008-01-25 17:18:47 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -83,6 +83,7 @@ type ppattern_node =
   | JCPPor of ppattern * ppattern
   | JCPPas of ppattern * identifier
   | JCPPany
+  | JCPPconst of const
 
 and ppattern = {
   jc_ppattern_node: ppattern_node;
@@ -231,6 +232,7 @@ type pattern_node =
   | JCPor of pattern * pattern
   | JCPas of pattern * var_info
   | JCPany
+  | JCPconst of const
 
 and pattern = {
   jc_pattern_node: pattern_node;

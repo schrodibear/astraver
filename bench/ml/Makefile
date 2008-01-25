@@ -9,6 +9,8 @@ FASTWP=-why-opt --fast-wp
 ALLVC=-why-opt --all-vc
 SPLIT=-why-opt --split-user-conj
 
+default: good.bench
+
 # Special, preferred targets:
 # %.bench, ex: good.bench, to test all files in directory "good"
 # %.gui, ex: max.gui, to test the file "good/max.ml" with gWhy

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.51 2008-01-24 14:08:24 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.52 2008-01-25 17:18:47 bardou Exp $ i*)
 
 {
   open Jc_ast
@@ -207,7 +207,9 @@ rule token = parse
   | '#' space* ((rL | rD)+ as id) space* "=" 
         space* ((rL | rD)+ as v) space* '\n'
       { pragma lexbuf id v; newline lexbuf; token lexbuf } 
-  | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
+  | rL (rL | rD)*           { match lexeme lexbuf with
+				| "_" -> UNDERSCORE
+				| s -> IDENTIFIER s }
 
   | '0'['x''X'] rH+ rIS?    { CONSTANT (JCCinteger (lexeme lexbuf)) }
   | '0' rD+ rIS?            { CONSTANT (JCCinteger (lexeme lexbuf)) }
@@ -280,7 +282,6 @@ rule token = parse
   | "^"                     { HAT }
   | "|"                     { PIPE }
   | "?"                     { QUESTION }
-  | "_"                     { UNDERSCORE }
   | "->"                    { MINUSGT }
   | eof { EOF }
   | '"' { lex_error lexbuf "unterminated string" }

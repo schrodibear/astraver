@@ -56,11 +56,17 @@ type ml_label_info = {
 
 type ml_constructor_info = {
   ml_ci_name: string;
-  ml_ci_tag: int;
   ml_ci_structure: Jc_env.struct_info;
-  ml_ci_tag_field: Jc_env.field_info;
   ml_ci_arguments: Jc_env.field_info list;
 }
+
+type ml_jessie_type =
+  | MLTnot_closed
+  | MLTnative of native_type
+  | MLTrecord of Jc_env.struct_info * (string * ml_label_info) list
+  | MLTvariant of Jc_env.variant_info * (string * ml_constructor_info) list
+  | MLTtuple of Jc_env.struct_info
+  | MLTlogic of string
 
 module ComparableCamlTypeList = struct
   type t = type_expr list
@@ -85,28 +91,10 @@ module ComparableCamlTypeList = struct
 	if r = 0 then compare_lists compare_types al1 al2 else r
     | _ -> Pervasives.compare a b
 
-  (*let compare_types a b =
-    let r = compare_types a b in
-    log "******* Comparing type:";
-    print_type a;
-    log "**** with type:";
-    print_type b;
-    log "**** result: %d" r;
-    r*)
-
   let rec compare = compare_lists compare_types
 end
 
 module ParamMap = Map.Make(ComparableCamlTypeList)
-
-type ml_jessie_type =
-  | MLTnot_closed
-  | MLTnative of native_type
-  | MLTrecord of Jc_env.struct_info * (string * ml_label_info) list
-  | MLTvariant of Jc_env.struct_info * Jc_env.field_info *
-      (string * ml_constructor_info) list
-  | MLTtuple of Jc_env.struct_info
-  | MLTlogic of string
 
 type ml_caml_type = {
   ml_ty_name: string;
@@ -184,10 +172,11 @@ and make mlt =
     | MLTnative t ->
 	JCTnative t
     | MLTrecord(si, _)
-    | MLTvariant(si, _, _)
     | MLTtuple si ->
-(*	JCTpointer(si, Some(Num.num_of_int 0), Some(Num.num_of_int 0))*)
-	JCTpointer(si, None, None)
+	JCTpointer(si, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
+(*	JCTpointer(si, None, None)*)
+    | MLTvariant(vi, _) ->
+	JCTvariant_pointer(vi, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
     | MLTlogic x ->
 	JCTlogic x
 
@@ -198,10 +187,11 @@ and instance args ty =
     | Type_abstract ->
 	MLTlogic(fresh_ident ty.ml_ty_name)
     | Type_record(ll, _, _) ->
-	let si = make_struct (fresh_ident ty.ml_ty_name) in
+	let vi = make_variant (fresh_ident ty.ml_ty_name) in
+	let si = make_root_struct vi (fresh_ident ty.ml_ty_name) in
 	(* temporary declaration in case of recursive type definition *)
-	ty.ml_ty_instances <-
-	  ParamMap.add args (MLTrecord(si, [])) ty.ml_ty_instances;
+	ty.ml_ty_instances <- ParamMap.add
+	  args (MLTrecord(si, [])) ty.ml_ty_instances;
 	let lbls = List.map
 	  (fun (name, _, lty) ->
 	     let app_ty = Ml_ocaml.Ctype.apply (Ml_ocaml.Env.empty)
@@ -217,13 +207,13 @@ and instance args ty =
 	in
 	MLTrecord(si, lbls)
     | Type_variant(cl, _) ->
-	let si = make_struct (fresh_ident ty.ml_ty_name) in
-	let tagfi = make_field si "vtag" (JCTnative Tinteger) in
+	let vi = make_variant (fresh_ident ty.ml_ty_name) in
 	(* temporary declaration in case of recursive type definition *)
-	ty.ml_ty_instances <-
-	  ParamMap.add args (MLTvariant(si, tagfi, [])) ty.ml_ty_instances;
-	let constrs = list_mapi
-	  (fun tag (name, cargs) ->
+	ty.ml_ty_instances <- ParamMap.add
+	  args (MLTvariant(vi, [])) ty.ml_ty_instances;
+	let constrs = List.map
+	  (fun (name, cargs) ->
+	     let si = make_root_struct vi (fresh_ident name) in
 	     let app_cargs = List.map
 	       (fun caty ->
 		  Ml_ocaml.Ctype.apply (Ml_ocaml.Env.empty)
@@ -236,18 +226,17 @@ and instance args ty =
 	     in
 	     let ci = {
 	       ml_ci_name = name;
-	       ml_ci_tag = tag;
 	       ml_ci_structure = si;
-	       ml_ci_tag_field = tagfi;
 	       ml_ci_arguments = fi_args;
 	     } in
 	     name, ci)
 	  cl
 	in
-	MLTvariant(si, tagfi, constrs)
+	MLTvariant(vi, constrs)
 
 and tuple tl =
-  let si = make_struct (fresh_ident "jessica_tuple") in
+  let vi = make_variant (fresh_ident "jessica_tuple") in
+  let si = make_root_struct vi (fresh_ident "jessica_tuple") in
   list_iteri
     (fun i ty -> ignore (make_field si ("f"^string_of_int i) (make ty)))
     tl;
@@ -257,7 +246,6 @@ and tuple tl =
 let structure ty =
   match make_type ty with
     | MLTrecord(si, _)
-    | MLTvariant(si, _, _)
     | MLTtuple si -> si
     | _ -> failwith "ml_type.ml: structure: not translated to a structure type"
 
@@ -268,7 +256,7 @@ let label recty ld =
 
 let constructor varty cd =
   match make_type varty with
-    | MLTvariant(_, _, constrs) -> List.assoc cd.cstr_name constrs
+    | MLTvariant(_, constrs) -> List.assoc cd.cstr_name constrs
     | _ -> failwith "ml_type.ml: constructor: not a variant type"
 
 let proj tty index =
@@ -280,6 +268,7 @@ let get_variant si = match si.jc_struct_info_variant with
   | None -> raise (Invalid_argument "ml_type.ml, get_variant")
   | Some vi -> vi
 
+(** Type interpretation *)
 let jc_decl mlty = function
   | MLTnot_closed ->
       assert false
@@ -295,17 +284,19 @@ let jc_decl mlty = function
 	  List.map (fun (_, l) -> l.ml_li_field) lbls,
 	  mlty.ml_ty_invariants
 	)]
-  | MLTvariant(si, tagfi, constrs) ->
-      [ make_variant_def (get_variant si);
-	JCstruct_def(
-	  si.jc_struct_info_name,
-	  (match si.jc_struct_info_parent with
-	     | None -> None
-	     | Some si -> Some si.jc_struct_info_name),
-	  tagfi::
-	    List.flatten (List.map (fun (_, l) -> l.ml_ci_arguments) constrs),
-	 mlty.ml_ty_invariants
-	)]
+  | MLTvariant(vi, constrs) ->
+      let c_defs = List.map
+	(fun (_, ci) ->
+	   let si = ci.ml_ci_structure in
+	   JCstruct_def(
+	     si.jc_struct_info_name,
+	     None,
+	     ci.ml_ci_arguments,
+	     mlty.ml_ty_invariants
+	   ))
+	constrs
+      in
+      (make_variant_def vi)::c_defs
   | MLTtuple si ->
       [ make_variant_def (get_variant si);
 	make_struct_def si mlty.ml_ty_invariants]

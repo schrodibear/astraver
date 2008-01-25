@@ -47,6 +47,14 @@ let rec list_fold_map acc f useracc = function
       list_fold_map (y::acc) f useracc' rem
 let list_fold_map x = list_fold_map [] x
 
+let rec list_fold_map2 acc f useracc l1 l2 = match l1, l2 with
+  | [], [] -> useracc, List.rev acc
+  | x1::rem1, x2::rem2 ->
+      let useracc', y = f useracc x1 x2 in
+      list_fold_map2 (y::acc) f useracc' rem1 rem2
+  | _::_, [] | [], _::_ -> raise (Invalid_argument "list_fold_map2")
+let list_fold_map2 x = list_fold_map2 [] x
+
 let rec list_fold_mapi i acc f useracc = function
   | [] -> useracc, List.rev acc
   | x::rem ->
@@ -343,18 +351,21 @@ let make_alloc_tmp si =
 
 let void = make_expr (JCTEconst JCCvoid) (JCTnative Tunit)
 
-let make_struct name =
-  let rec vi = {
-    jc_variant_info_name = name;
-    jc_variant_info_roots = [si];
-  }
-  and si = {
+let make_variant name = {
+  jc_variant_info_name = name;
+  jc_variant_info_roots = [];
+}
+
+let make_root_struct vi name =
+  let rec si = {
     jc_struct_info_name = name;
     jc_struct_info_parent = None;
     jc_struct_info_root = si;
     jc_struct_info_fields = [];
     jc_struct_info_variant = Some vi;
-  } in si
+  } in
+  vi.jc_variant_info_roots <- si::vi.jc_variant_info_roots;
+  si
 
 let make_field si name jcty =
   let fi = {
@@ -380,7 +391,8 @@ let make_var name ty = {
   jc_var_info_static = false;
 }
 
-let dummy_struct = make_struct "dummy_struct"
+let dummy_variant = make_variant "dummy_variant"
+let dummy_struct = make_root_struct dummy_variant "dummy_struct"
 
 let make_struct_def si invs =
   JCstruct_def(

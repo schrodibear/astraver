@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.80 2008-01-24 14:08:24 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.81 2008-01-25 17:18:47 bardou Exp $ */
 
 %{
 
@@ -968,6 +968,12 @@ pattern:
     { locate_pattern (JCPPas($1, $3)) }
 | UNDERSCORE
     { locate_pattern JCPPany }
+| CONSTANT 
+    { locate_pattern (JCPPconst $1) }
+| LPARRPAR 
+    { locate_pattern (JCPPconst JCCvoid) }
+| NULL 
+    { locate_pattern (JCPPconst JCCnull) }
 ;
 
 field_patterns:

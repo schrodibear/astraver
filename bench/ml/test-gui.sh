@@ -6,6 +6,10 @@ mkdir -p $TMPDIR/why
 cp good/$*.ml $TMPDIR
 cd $TMPDIR
 
-../../../bin/jessica.opt ../pervasives.mli $1.ml
-../../../bin/jessie.opt -why-opt --split-user-conj $1.jc
-make -f $*.makefile gui
+if ../../../bin/jessica.opt ../pervasives.mli $1.ml
+then
+    if ../../../bin/jessie.opt -why-opt --split-user-conj $1.jc
+    then
+	make -f $1.makefile gui
+    fi
+fi

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.216 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.217 2008-01-25 17:18:47 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -311,6 +311,7 @@ let term_coerce loc tdest tsrc e =
       LApp("downcast", 
 	   [ LVar (tag_table_name st) ; e ;
 	     LVar (tag_name st) ])	
+  | JCTvariant_pointer _, (JCTpointer _ | JCTvariant_pointer _) -> e
   |  _ -> 
       Jc_typing.typing_error loc 
 	"can't coerce type %a to type %a" 
@@ -350,6 +351,7 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	make_guarded_app ~name:lab DownCast loc "downcast_" 
 	  [ Deref (tag_table_name st) ; e ;
 	    Var (tag_name st) ]	
+  | JCTvariant_pointer _, (JCTpointer _ | JCTvariant_pointer _) -> e
     | _ -> 
 	Jc_typing.typing_error loc 
 	  "can't coerce type %a to type %a" 
@@ -403,9 +405,21 @@ let rec pattern arg ty pat = match pat.jc_pattern_node with
       notcond,
       LAnd(cond, make_eq (LVar vi.jc_var_info_final_name) arg),
       (vi.jc_var_info_final_name, ty)::vars
-  | JCPany ->
+  | JCPany | JCPconst JCCvoid ->
       LFalse,
       LTrue,
+      []
+  | JCPconst c ->
+(*      let pred = match c with
+	| JCCvoid -> assert false
+	| JCCnull -> "eq_pointer"
+	| JCCboolean _ -> "eq_bool"
+	| JCCinteger _ -> "eq_int"
+	| JCCreal _ -> "eq_real"
+      in*)
+      let eq = make_eq arg (LConst (const c)) in
+      LNot eq,
+      eq,
       []
 
 let pattern_list_expr translate_body arg r ty pbl =

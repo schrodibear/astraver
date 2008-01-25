@@ -57,7 +57,7 @@ let file env (file_kind, file_name) =
 	log "  Interpreting...";
         let code_decls, _ = Ml_interp.structure spec_env typed_tree in
 	let type_decls = Ml_type.jc_decls () in
-	let jessie_ast = type_decls @ code_decls in
+	let jessie_ast = Ml_interp.base_decls @ type_decls @ code_decls in
 
         (* Open the output file *)
 	log "  Output file: %s" Ml_options.output_file;

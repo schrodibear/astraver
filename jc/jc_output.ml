@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.84 2008-01-25 16:27:48 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.85 2008-01-25 17:18:47 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -140,6 +140,8 @@ let rec pattern fmt p =
 	fprintf fmt "(%a as %s)" pattern pat vi.jc_var_info_name
     | JCPany ->
 	fprintf fmt "_"
+    | JCPconst c ->
+	fprintf fmt "%a" const c
 
 let rec term fmt t =
   if t.jc_term_label <> "" then
@@ -201,7 +203,7 @@ let rec term fmt t =
     | JCTmatch (t, ptl) ->
 	fprintf fmt "@[<v 2>match %a with@ " term t;
 	List.iter
-	  (fun (p, t) -> fprintf fmt "  | @[<v 2>%a ->@ %a;@]@ "
+	  (fun (p, t) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
 	     pattern p term t) ptl;
 	fprintf fmt "end@]"
 
@@ -271,7 +273,7 @@ let rec assertion fmt a =
 (*    | JCAmatch (t, pal) ->
 	fprintf fmt "@[<v 2>match %a with@ " term t;
 	List.iter
-	  (fun (p, a) -> fprintf fmt "  | @[<v 2>%a ->@ %a;@]@ "
+	  (fun (p, a) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
 	     pattern p assertion a) pal;
 	fprintf fmt "end@]"*)
 
@@ -401,7 +403,7 @@ let rec expr fmt e =
     | JCTEmatch (e, pel) ->
 	fprintf fmt "@[<v 2>match %a with@ " expr e;
 	List.iter
-	  (fun (p, e) -> fprintf fmt "  | @[<v 2>%a ->@ %a;@]@ "
+	  (fun (p, e) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
 	     pattern p expr e) pel;
 	fprintf fmt "end@]"
 
@@ -468,7 +470,7 @@ let rec statement fmt s =
     | JCTSmatch (e, psl) ->
 	fprintf fmt "@[<v 2>match %a with@ " expr e;
 	List.iter
-	  (fun (p, s) -> fprintf fmt "  | @[<v 2>%a -> {@ %a@ @]}@ "
+	  (fun (p, s) -> fprintf fmt "  @[<v 2>%a -> {@ %a@ @]}@ "
 	     pattern p statements s) psl;
 	fprintf fmt "end@]"
 	

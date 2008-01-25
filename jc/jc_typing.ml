@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.166 2008-01-25 16:29:57 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.167 2008-01-25 17:18:47 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -127,22 +127,30 @@ let rec substruct s1 s2 =
 
 let subtype ?(allow_implicit_cast=true) t1 t2 =
   match t1,t2 with
-    | JCTnative t1, JCTnative t2 -> t1=t2
+    | JCTnative t1, JCTnative t2 ->
+	t1=t2
     | JCTenum ri1, JCTenum ri2 -> 
 	true
 	  (*
 	Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min 	&&
 	Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max
 	  *)
-    | JCTenum _, JCTnative Tinteger -> true
+    | JCTenum _, JCTnative Tinteger ->
+	true
     | JCTnative Tinteger, JCTenum _ -> 
 	allow_implicit_cast 
-    | JCTlogic s1, JCTlogic s2 -> s1=s2
+    | JCTlogic s1, JCTlogic s2 ->
+	s1=s2
     | JCTpointer(s1,_,_), JCTpointer(s2,_,_) -> 
-	  substruct s1 s2
-    | JCTnull, JCTnull -> true
-    | JCTnull, JCTpointer _ -> true
-    | _ -> false
+	substruct s1 s2
+    | JCTnull, (JCTnull | JCTpointer _ | JCTvariant_pointer _) ->
+	true
+    | JCTvariant_pointer(v1, _, _), JCTvariant_pointer(v2, _, _) ->
+	v1 == v2
+    | JCTpointer(s, _, _), JCTvariant_pointer(v, _, _) ->
+	(struct_variant s) == v
+    | _ ->
+	false
 
 let subtype_strict = subtype ~allow_implicit_cast:false
 
@@ -328,6 +336,12 @@ let valid_pointer_type st =
   JCTpointer(st, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
 
 let rec pattern env pat ety =
+  let check_var id =
+    let id = id.jc_identifier_name in
+    if List.mem_assoc id env then
+      typing_error pat.jc_ppattern_loc
+	"the variable %s appears twice in the pattern" id
+  in
   let tpn, ty, newenv = match pat.jc_ppattern_node with
     | JCPPstruct(id, lpl) ->
 	let tov = tag_or_variant
@@ -353,26 +367,35 @@ let rec pattern env pat ety =
 	in
 	JCPstruct(st, List.rev tlpl), valid_pointer_type st, env
     | JCPPvar id ->
+	check_var id;
 	let vi = var ety id.jc_identifier_name in
 	vi.jc_var_info_assigned <- true;
 	JCPvar vi, ety, (id.jc_identifier_name, vi)::env
     | JCPPor(p1, p2) ->
-	let env, tp1 = pattern env p1 ety in
+	let _, tp1 = pattern env p1 ety in
 	let env, tp2 = pattern env p2 ety in
 	(* TODO: check that both pattern bind the same variables *)
 	JCPor(tp1, tp2), ety, env
     | JCPPas(p, id) ->
+	check_var id;
 	let env, tp = pattern env p ety in
 	let vi = var tp.jc_pattern_type id.jc_identifier_name in
 	vi.jc_var_info_assigned <- true;
 	JCPas(tp, vi), ety, (id.jc_identifier_name, vi)::env
     | JCPPany ->
 	JCPany, ety, env
+    | JCPPconst c ->
+	let ty, _, c = const c in
+	if not (subtype_strict ty ety) then
+	  typing_error pat.jc_ppattern_loc
+	    "type %a is not a subtype of %a" print_type ty print_type ety;
+	JCPconst c, ety, env
   in newenv, {
     jc_pattern_node = tpn;
     jc_pattern_loc = pat.jc_ppattern_loc;
     jc_pattern_type = ty;
   }
+let pattern = pattern []
 
 (******************************************************************************)
 (*                                   terms                                    *)
@@ -761,12 +784,14 @@ let rec term label_env logic_label env e =
 	    | [] -> assert false (* should not be allowed by the parser *)
 	    | (p1, e1)::rem ->
 		(* type the first item *)
-		let newenv, tp1 = pattern env p1 targ.jc_term_type in
+		let penv, tp1 = pattern p1 targ.jc_term_type in
+		let newenv = penv @ env in
 		let te1 = term label_env logic_label newenv e1 in
 		(* type the remaining items *)
 		List.fold_left
 		  (fun (accrty, acctpel) (p, e2) ->
-		     let newenv, tp = pattern env p targ.jc_term_type in
+		     let penv, tp = pattern p targ.jc_term_type in
+		     let newenv = penv @ env in
 		     let te2 = term label_env logic_label newenv e2 in
 		     maxtype e.jc_pexpr_loc accrty te2.jc_term_type,
 		     (tp, te2)::acctpel)
@@ -1491,12 +1516,14 @@ let rec expr env e =
 	    | [] -> assert false (* should not be allowed by the parser *)
 	    | (p1, e1)::rem ->
 		(* type the first item *)
-		let newenv, tp1 = pattern env p1 targ.jc_texpr_type in
+		let penv, tp1 = pattern p1 targ.jc_texpr_type in
+		let newenv = penv @ env in
 		let te1 = expr newenv e1 in
 		(* type the remaining items *)
 		List.fold_left
 		  (fun (accrty, acctpel) (p, e2) ->
-		     let newenv, tp = pattern env p targ.jc_texpr_type in
+		     let penv, tp = pattern p targ.jc_texpr_type in
+		     let newenv = penv @ env in
 		     let te2 = expr newenv e2 in
 		     maxtype e.jc_pexpr_loc accrty te2.jc_texpr_type,
 		     (tp, te2)::acctpel)
@@ -1941,7 +1968,8 @@ let rec statement label_env env lz s =
 	  (* type patterns and bodies *)
 	  let tpsl = List.map
 	    (fun (p, sl) ->
-	       let newenv, tp = pattern env p te.jc_texpr_type in
+	       let penv, tp = pattern p te.jc_texpr_type in
+	       let newenv = penv @ env in
 	       let tsl = statement_list label_env newenv lz sl in
 	       tp, tsl)
 	    psl

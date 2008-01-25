@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.85 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.86 2008-01-25 17:18:47 bardou Exp $ *)
 
 
 open Jc_env
@@ -271,7 +271,8 @@ let rec pattern ef label r p =
     | JCPas(p, _) ->
 	pattern ef label r p
     | JCPvar _
-    | JCPany ->
+    | JCPany
+    | JCPconst _ ->
 	ef
 
 (***********************

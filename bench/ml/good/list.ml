@@ -1,4 +1,4 @@
-let f x = [ x ]
+let f x = 1::[x]
 
 (*
 Local Variables: 
