@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.31 2008-01-25 13:31:40 bardou Exp $
+$Id: java_parser.mly,v 1.32 2008-01-25 16:29:57 marche Exp $
 
 */
 
@@ -134,7 +134,7 @@ $Id: java_parser.mly,v 1.31 2008-01-25 13:31:40 bardou Exp $
 %token REQUIRES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
 %token INVARIANT LOOP_INVARIANT DECREASES
 %token AXIOM LOGIC TYPE PREDICATE READS
-%token BSFORALL BSEXISTS BSOLD BSRESULT BSNOTHING
+%token BSFORALL BSEXISTS BSOLD BSAT BSRESULT BSNOTHING
 %token NON_NULL NULLABLE
 
 /* Others symbols */
@@ -767,6 +767,8 @@ primary_no_new_array:
     { let (a,b,c)=$1 in locate_expr (JPEarray_range(a,b,c)) }
 | BSOLD LEFTPAR expr RIGHTPAR
     { locate_expr (JPEold $3) }
+| BSAT LEFTPAR expr COMMA ident RIGHTPAR
+    { locate_expr (JPEat($3,$5)) }
 ;
 
 array_access:

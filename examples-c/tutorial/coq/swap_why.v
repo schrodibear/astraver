@@ -3,7 +3,7 @@
 
 Require Export swap_spec_why.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/swap.why", line 6, characters 14-113: *)
 (*Why goal*) Lemma swap_impl_po_1 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -19,7 +19,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/swap.why", line 11, characters 40-165: *)
 (*Why goal*) Lemma swap_impl_po_2 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -42,7 +42,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/swap.why", line 11, characters 7-166: *)
 (*Why goal*) Lemma swap_impl_po_3 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -68,7 +68,7 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/swap.why", line 14, characters 6-41: *)
 (*Why goal*) Lemma swap_impl_po_4 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -100,7 +100,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/swap.why", line 17, characters 4-204: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
   forall (t: (pointer global)),
   forall (i: Z),

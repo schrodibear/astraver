@@ -5,66 +5,9 @@ export JESSIELIB=`pwd`/../../lib
 export WHYCOQ=`pwd`/../../lib/coq
 make="make WHYCOQ=$WHYCOQ"
 
-# JC files to parse with success
-echo "JC parsing (good)"
-# cd good/syntax
-parsing="../../../../bin/jessie.opt -parse-only"
-for f in *.jc; do
-    echo -n "  "$f"... "
-    if ! $parsing  $f > /dev/null 2>&1; then
-	echo "jessie FAILED"
-	$parsing $f
-	# exit 1
-    else
-	echo "jessie ok... "
-    fi
-done
-
-echo "JC parsing (bad)"
-# cd ../../bad-syn
-parsing="../../../bin/jessie.opt -parse-only"
-for f in *.jc; do
-    echo -n "  "$f"... "
-    if $parsing  $f > /dev/null 2>&1; then
-	echo "jessie FAILED (accepted a bad file)"
-	$parsing $f
-	exit 1
-    else
-	echo "jessie ok... "
-    fi
-done
-
 echo "JC parsing/typing (bad)"
-# cd ../bad-sem
+cd bad
 parsing="../../../bin/jessie.opt -type-only"
-for f in *.jc; do
-    echo -n "  "$f"... "
-    if $parsing  $f > /dev/null 2>&1; then
-	echo "jessie FAILED (accepted a bad file)"
-	$parsing $f
-	exit 1
-    else
-	echo "jessie ok... "
-    fi
-done
-
-echo "JC parsing/typing (good)"
-# cd ../good
-parsing="../../../bin/jessie.opt -type-only"
-for f in *.jc; do
-    echo -n "  "$f"... "
-    if ! $parsing  $f > /dev/null 2>&1; then
-	echo "jessie FAILED"
-	$parsing $f
-	# exit 1
-    else
-	echo "jessie ok... "
-    fi
-done
-
-echo "JC interp (bad)"
-# cd ../bad-interp
-parsing="../../../bin/jessie.opt"
 for f in *.jc; do
     echo -n "  "$f"... "
     if $parsing  $f > /dev/null 2>&1; then
@@ -77,7 +20,7 @@ for f in *.jc; do
 done
 
 echo "JC interp (good)"
-cd good
+cd ../good
 
 bench_jc_good () {
     options="$* -why-opt -split-user-conj -why-opt -show-time"

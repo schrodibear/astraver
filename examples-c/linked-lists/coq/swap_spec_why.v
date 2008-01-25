@@ -31,7 +31,7 @@ Defined.
 (*Why axiom*) Lemma Path_cons_inv :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 52, characters 5-123 *)
+    (* CADUCEUS_8 *)
     (forall (p1:(pointer global)),
      (forall (l:plist),
       (forall (p2:(pointer global)),
@@ -48,14 +48,14 @@ Defined.
 (*Why axiom*) Lemma Path_null_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 46, characters 25-57 *)
+    (* CADUCEUS_6 *)
     (forall (p:(pointer global)), (lpath tl_global alloc p nil p)))).
 Admitted.
 
 (*Why axiom*) Lemma Path_null_inv_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 49, characters 5-62 *)
+    (* CADUCEUS_7 *)
     (forall (p:(pointer global)),
      (forall (l:plist), ((lpath tl_global alloc p l p) -> l = nil))))).
 Admitted.
@@ -66,13 +66,11 @@ Defined.
 
 
 (*Why axiom*) Lemma app_nil_1_ax :
-  (* File "list.h", line 25, characters 25-59 *)
-  (forall (l:plist), l = (app l nil)).
+  (* CADUCEUS_2 *) (forall (l:plist), l = (app l nil)).
 Admitted.
 
 (*Why axiom*) Lemma app_nil_2_ax :
-  (* File "list.h", line 27, characters 25-59 *)
-  (forall (l:plist), l = (app nil l)).
+  (* CADUCEUS_3 *) (forall (l:plist), l = (app nil l)).
 Admitted.
 
 (*Why logic*) Definition cyclic :
@@ -83,13 +81,11 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma disjoint_nil1 :
-  (* File "list.h", line 29, characters 26-60 *)
-  (forall (l:plist), (disjoint l nil)).
+  (* CADUCEUS_4 *) (forall (l:plist), (disjoint l nil)).
 Admitted.
 
 (*Why axiom*) Lemma disjoint_nil2 :
-  (* File "list.h", line 31, characters 26-60 *)
-  (forall (l:plist), (disjoint nil l)).
+  (* CADUCEUS_5 *) (forall (l:plist), (disjoint nil l)).
 Admitted.
 
 (*Why logic*) Definition finite :
@@ -97,17 +93,15 @@ Admitted.
 Admitted.
 
 (*Why predicate*) Definition llist  (tl_global:(memory (pointer global) global)) (alloc:alloc_table) (p:(pointer global)) (l:plist)
-  := (* File "list.h", line 63, characters 39-55 *)
-     (lpath tl_global alloc p l (@null global)).
+  := (* CADUCEUS_9 *) (lpath tl_global alloc p l (@null global)).
 
 (*Why predicate*) Definition is_list  (tl_global:(memory (pointer global) global)) (alloc:alloc_table) (l:(pointer global))
-  := (* File "list.h", line 65, characters 32-62 *)
-     (exists pl:plist, (llist tl_global alloc l pl)).
+  := (* CADUCEUS_10 *) (exists pl:plist, (llist tl_global alloc l pl)).
 
 (*Why axiom*) Lemma is_list_llist_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 68, characters 5-63 *)
+    (* CADUCEUS_11 *)
     (forall (p:(pointer global)),
      ((is_list tl_global alloc p) <->
       (exists l:plist, (llist tl_global alloc p l)))))).
@@ -131,7 +125,7 @@ Defined.
 (*Why axiom*) Lemma llist_function_ax :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 71, characters 5-98 *)
+    (* CADUCEUS_12 *)
     (forall (l1:plist),
      (forall (l2:plist),
       (forall (p:(pointer global)),
@@ -142,7 +136,7 @@ Admitted.
 (*Why axiom*) Lemma llist_valid :
   (forall (tl_global:(memory (pointer global) global)),
    (forall (alloc:alloc_table),
-    (* File "list.h", line 75, characters 5-84 *)
+    (* CADUCEUS_13 *)
     (forall (p1:(pointer global)),
      (forall (l:plist),
       ((llist tl_global alloc p1 l) ->
@@ -154,7 +148,6 @@ exact (fun l => rev l).
 Defined.
 
 
-(*Why axiom*) Lemma rev_nil_ax :
-  (* File "list.h", line 23, characters 23-42 *) (rev nil) = nil.
+(*Why axiom*) Lemma rev_nil_ax : (* CADUCEUS_1 *) (rev nil) = nil.
 Admitted.
 

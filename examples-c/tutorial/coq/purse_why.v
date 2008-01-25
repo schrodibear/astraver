@@ -17,7 +17,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 9, characters 4-170: *)
+(* Why obligation from file "why/purse.why", line 9, characters 4-169: *)
 (*Why goal*) Lemma credit0_impl_po_2 : 
   forall (p: (pointer global)),
   forall (s: Z),
@@ -31,7 +31,7 @@ Save.
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result + s))),
-  (* File "purse.c", line 10, characters 12-62 *)
+  (* File "purse.c", line 9, characters 12-62 *)
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
   ((acc balance_global p) + s)).
 Proof.
@@ -65,7 +65,7 @@ Save.
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result + s))),
-  ((* File "purse.c", line 40, characters 12-62 *)
+  ((* File "purse.c", line 38, characters 12-62 *)
    ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
    ((acc balance_global p) + s)) /\
   (not_assigns alloc balance_global balance_global0 (pset_singleton p))).
@@ -130,7 +130,7 @@ Save.
   forall (HW_4: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global0 alloc p2) /\ 100 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_5: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_5: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global1 alloc p2) /\
                 (acc balance_global1 p2) = ((acc balance_global0 p2) + 100)) /\
                 (not_assigns
@@ -138,7 +138,7 @@ Save.
   forall (HW_6: (valid alloc p1)),
   forall (result: Z),
   forall (HW_7: result = (acc balance_global1 p1)),
-  (* File "purse.c", line 55, characters 12-24 *) result = 0.
+  (* File "purse.c", line 54, characters 12-24 *) result = 0.
 Proof.
 unfold purse_inv; intuition.
 unfold purse_inv; intuition.
@@ -193,7 +193,7 @@ Save.
   forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
@@ -239,7 +239,7 @@ Save.
   forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
@@ -248,7 +248,7 @@ Save.
   forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
@@ -292,7 +292,7 @@ Save.
   forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
@@ -301,7 +301,7 @@ Save.
   forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
@@ -312,7 +312,7 @@ Save.
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 48, characters 12-62 *)
+  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
@@ -346,7 +346,7 @@ Admitted.
   forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
@@ -355,7 +355,7 @@ Admitted.
   forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
@@ -366,7 +366,7 @@ Admitted.
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 48, characters 12-62 *)
+  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
@@ -377,7 +377,7 @@ Admitted.
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
   forall (balance_global3: (memory Z global)),
-  forall (HW_10: (* File "purse.c", line 48, characters 12-62 *)
+  forall (HW_10: (* File "purse.c", line 46, characters 12-62 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
                  ((acc balance_global2 result0) - 100)) /\
@@ -408,7 +408,7 @@ Save.
   forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
@@ -417,7 +417,7 @@ Save.
   forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
@@ -428,7 +428,7 @@ Save.
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 48, characters 12-62 *)
+  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
@@ -439,7 +439,7 @@ Save.
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
   forall (balance_global3: (memory Z global)),
-  forall (HW_10: (* File "purse.c", line 48, characters 12-62 *)
+  forall (HW_10: (* File "purse.c", line 46, characters 12-62 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
                  ((acc balance_global2 result0) - 100)) /\
@@ -473,7 +473,7 @@ Save.
   forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
@@ -482,7 +482,7 @@ Save.
   forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 40, characters 12-62 *)
+  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
@@ -493,7 +493,7 @@ Save.
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 48, characters 12-62 *)
+  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
@@ -504,7 +504,7 @@ Save.
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
   forall (balance_global3: (memory Z global)),
-  forall (HW_10: (* File "purse.c", line 48, characters 12-62 *)
+  forall (HW_10: (* File "purse.c", line 46, characters 12-62 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
                  ((acc balance_global2 result0) - 100)) /\
@@ -565,7 +565,7 @@ Save.
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result - s))),
-  (* File "purse.c", line 17, characters 12-62 *)
+  (* File "purse.c", line 16, characters 12-62 *)
   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
   ((acc balance_global p) - s)).
 Proof.
@@ -603,7 +603,7 @@ Save.
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result - s))),
-  ((* File "purse.c", line 48, characters 12-62 *)
+  ((* File "purse.c", line 46, characters 12-62 *)
    ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
    ((acc balance_global p) - s)) /\
   (not_assigns alloc balance_global balance_global0 (pset_singleton p))).

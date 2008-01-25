@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.15 2007-12-18 09:52:19 marche Exp $
+$Id: java_lexer.mll,v 1.16 2008-01-25 16:29:57 marche Exp $
 
 ***************************************************************************)
 
@@ -164,7 +164,7 @@ $Id: java_lexer.mll,v 1.15 2007-12-18 09:52:19 marche Exp $
     let _ = 
       List.iter
 	(fun (s,t) -> Hashtbl.add table s t)
-	[ (* "everything", BSEVERYTHING ; *)
+	[ "at", BSAT;
 	  "exists", BSEXISTS ;
 	  (* "fresh", BSFRESH ; *)
 	  "forall", BSFORALL ;

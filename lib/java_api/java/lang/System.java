@@ -103,14 +103,13 @@ public class System {
 static void arraycopy(Object src, int srcPos, Object dst, int dstPos, int length);
     */
  
-    /*@ public normal_behavior
-      @  requires src != null &&  srcPos >= 0 &&
+    /*@ requires src != null &&  srcPos >= 0 &&
       @    srcPos+length <= src.length && dst != null && 
       @    dstPos >= 0 && dstPos+length <= dst.length &&
       @    length >= 0;
-      @  modifiable dst[dstPos..dstPos+length-1];
-      @     ensures (\forall int i ; 0 <= i && i < length ;
-      @                    dst[dstPos+i] == \old(src[srcPos+i]));
+      @ assigns dst[dstPos..dstPos+length-1];
+      @ ensures \forall int i ; 0 <= i && i < length ==>
+      @                 dst[dstPos+i] == \old(src[srcPos+i]);
       @*/
     /* INCOMPLETE : exceptional_behavior
      */

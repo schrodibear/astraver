@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.98 2008-01-25 13:31:40 bardou Exp $ *)
+(* $Id: java_interp.ml,v 1.99 2008-01-25 16:29:57 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -565,6 +565,7 @@ let rec term t =
 	  end
       | JTarray_range _ -> assert false
       | JTold t -> JCTold(term t)
+      | JTat(t,lab) -> JCTat(term t,tr_logic_label lab)
       | JTcast(ty,t) ->
 	  begin
 	    match ty with
@@ -905,6 +906,7 @@ let rec location_set t =
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
+      | JTat _ -> assert false (* TODO *)
       | JTcast(ty,t) -> assert false (* TODO *)
 
 
@@ -948,6 +950,7 @@ let location t =
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
+      | JTat _ -> assert false (* TODO *)
       | JTcast(ty,t) -> assert false (* TODO *)
   
 

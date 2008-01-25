@@ -5,7 +5,7 @@ class ArrayLength {
       @*/
     int getLength(int[] t) {
 	int[] p = new int[0];
-	System.out.println(p.length);
+	// System.out.println(p.length);
 	return t.length;
     }
 

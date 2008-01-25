@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.165 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.166 2008-01-25 16:29:57 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1521,11 +1521,11 @@ let rec expr env e =
 let loop_annot = 
   let globtag = ref 0 in
   let get() = let tag = !globtag in incr globtag; tag in
-  fun env i v ->
-    let ti = assertion [LabelPre] (Some LabelHere) env i
+  fun label_env env i v ->
+    let ti = assertion label_env (Some LabelHere) env i
     and tv = match v with 
       | None -> None 
-      | Some v -> Some (term [LabelPre] (Some LabelHere) env v)
+      | Some v -> Some (term label_env (Some LabelHere) env v)
     in
     (* TODO: check variant is integer, or other order ? *) 
     { 
@@ -1790,7 +1790,7 @@ let rec statement label_env env lz s =
 		  (LabelBlock b1::before,after)
 	      | _ -> assert false
 	    in
-	    let lo = loop_annot env inv var
+	    let lo = loop_annot label_env env inv var
 	    and ts,_ = statement label_env env lz1 body
 	    in
 	    JCTSwhile(lab,tc,lo,ts), lz2
@@ -1805,7 +1805,7 @@ let rec statement label_env env lz s =
 		  (LabelBlock b1::before,after)
 	      | _ -> assert false
 	    in
-	    let lo = loop_annot env inv var
+	    let lo = loop_annot label_env env inv var
 	    and tbody,_ = statement label_env env lz1 body
 	    and tupdates = List.map (expr env) updates
 	    in

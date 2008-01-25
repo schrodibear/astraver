@@ -3,7 +3,7 @@
 
 Require Export abs_spec_why.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/abs.why", line 5, characters 25-45: *)
 (*Why goal*) Lemma abs1_impl_po_1 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -12,7 +12,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/abs.why", line 10, characters 4-84: *)
 (*Why goal*) Lemma abs1_impl_po_2 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -33,7 +33,7 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/abs.why", line 10, characters 4-84: *)
 (*Why goal*) Lemma abs1_impl_po_3 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -48,7 +48,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/abs.why", line 22, characters 4-84: *)
 (*Why goal*) Lemma abs2_impl_po_1 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -71,7 +71,7 @@ subst intM_global0.
 caduceus.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/abs.why", line 22, characters 4-84: *)
 (*Why goal*) Lemma abs2_impl_po_2 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),

@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.24 2008-01-25 13:31:40 bardou Exp $
+$Id: java_ast.mli,v 1.25 2008-01-25 16:29:57 marche Exp $
 
 ***************************************************************************)
 
@@ -115,6 +115,7 @@ and pexpr_node =
       (* in annotations only *)
   | JPEresult  
   | JPEold of pexpr 
+  | JPEat of pexpr * identifier 
 (*
   | JPEfresh of expr 
   | Type of type_expr 

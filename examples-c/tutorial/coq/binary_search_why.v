@@ -3,7 +3,7 @@
 
 Require Export binary_search_spec_why.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 24, characters 18-606: *)
 (*Why goal*) Lemma binary_search_impl_po_1 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -29,7 +29,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 37, characters 25-48: *)
 (*Why goal*) Lemma binary_search_impl_po_2 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -60,7 +60,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 41, characters 21-130: *)
 (*Why goal*) Lemma binary_search_impl_po_3 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -89,6 +89,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
+  (* File "binary_search.c", line 21, characters 15-26 *)
   (* File "binary_search.c", line 21, characters 15-26 *) (l <= result /\
   result <= u).
 Proof.
@@ -96,7 +97,7 @@ intros.
 generalize (mean_1 l u); intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 44, characters 41-167: *)
 (*Why goal*) Lemma binary_search_impl_po_4 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -136,7 +137,7 @@ subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 24, characters 18-606: *)
 (*Why goal*) Lemma binary_search_impl_po_5 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -193,7 +194,7 @@ assumption.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 34, characters 24-37: *)
 (*Why goal*) Lemma binary_search_impl_po_6 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -239,7 +240,7 @@ subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 50, characters 42-169: *)
 (*Why goal*) Lemma binary_search_impl_po_7 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -283,7 +284,7 @@ Proof.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 24, characters 18-606: *)
 (*Why goal*) Lemma binary_search_impl_po_8 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -340,7 +341,7 @@ intuition.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 34, characters 24-37: *)
 (*Why goal*) Lemma binary_search_impl_po_9 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -391,7 +392,7 @@ intuition.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 72, characters 4-302: *)
 (*Why goal*) Lemma binary_search_impl_po_10 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -444,7 +445,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/binary_search.why", line 72, characters 4-302: *)
 (*Why goal*) Lemma binary_search_impl_po_11 : 
   forall (t: (pointer global)),
   forall (n: Z),

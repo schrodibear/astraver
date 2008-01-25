@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.89 2008-01-25 13:31:40 bardou Exp $ *)
+(* $Id: java_typing.ml,v 1.90 2008-01-25 16:29:57 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1449,7 +1449,13 @@ and term package_env type_env current_type env e =
 	  typing_error e.java_pexpr_loc
 	    "quantified formulas not allowed in term position"
       | JPEold e1 -> 
-	  let te1 = termt e1 in te1.java_term_type,JTold te1	
+	  (* TODO : check label Pre exists *)
+	  let te1 = termt e1 in 
+	  te1.java_term_type,JTat(te1,LabelPre)
+      | JPEat(e1,lab) -> 
+	  let te1 = termt e1 in 
+	  (* TODO : check label exists *)
+	  te1.java_term_type,JTat(te1,LabelName (snd lab))	
       | JPEinstanceof (_, _)-> assert false (* TODO *)
       | JPEcast (t, e1)-> 
 	  let te1 = termt e1 in
@@ -1618,6 +1624,7 @@ and assertion package_env type_env current_type env e =
 	in
 	  a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
+    | JPEat _-> assert false (* TODO *)
     | JPEinstanceof (e, ty) ->
 	let te = termt e and tty = type_type package_env type_env false ty in
 	  if is_reference_type tty then JAinstanceof (te, tty) else
@@ -2089,6 +2096,7 @@ let rec expr_of_term t =
     match t.java_term_node with
       | JTvar vi -> JEvar vi
       | JTold _ -> assert false (* TODO *)
+      | JTat _ -> assert false (* TODO *)
       | JTfield_access(t, fi) -> 
 	  JEfield_access(expr_of_term t,fi)
       | JTstatic_field_access(ci, fi) -> 
@@ -2626,6 +2634,7 @@ let rec expr package_env type_env current_type env e =
 	      (* only in terms *)
       | JPEarray_range _ 
       | JPEquantifier (_, _, _, _)
+      | JPEat _
       | JPEold _
       | JPEresult -> 
 	  typing_error e.java_pexpr_loc "not allowed in expressions"

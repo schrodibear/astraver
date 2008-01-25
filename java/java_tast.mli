@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.31 2007-12-06 15:26:17 nrousset Exp $ *)
+(* $Id: java_tast.mli,v 1.32 2008-01-25 16:29:57 marche Exp $ *)
 
 open Java_env
 
@@ -37,6 +37,7 @@ type term_node =
     | JTlit of literal
     | JTvar of java_var_info
     | JTold of term
+    | JTat of term * logic_label
     | JTbin of term * base_type * bin_op * term   
     | JTun of base_type * un_op * term
     | JTapp of java_logic_info * term list

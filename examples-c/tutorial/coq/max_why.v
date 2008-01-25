@@ -3,7 +3,7 @@
 
 Require Export max_spec_why.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/max.why", line 15, characters 4-184: *)
 (*Why goal*) Lemma max_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -15,7 +15,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "why/max.why", line 15, characters 4-184: *)
 (*Why goal*) Lemma max_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),

@@ -45,8 +45,8 @@ class Gcd {
         //@ ghost int a = 1, b = 0, c = 0, d = 1;
         /*@ loop_invariant 
           @    x >= 0 && y >= 0 &&  
-          @    a*\old(x)+b*\old(y) == x && 
-          @    c*\old(x)+d*\old(y) == y ;
+          @    a*\at(x,Pre)+b*\at(y,Pre) == x && 
+          @    c*\at(x,Pre)+d*\at(y,Pre) == y ;
           @ decreases y;
           @*/
         while (y > 0) {
@@ -68,7 +68,7 @@ class Gcd {
 
 /*
 Local Variables: 
-compile-command: "make Gcd.io"
+compile-command: "make Gcd"
 End: 
 */
 

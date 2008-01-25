@@ -3,12 +3,12 @@
 
 Require Export swap_spec_why.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/swap.c", line 12, characters 8-15: *)
 (*Why goal*) Lemma swap_impl_po_1 : 
   forall (c: (pointer global)),
   forall (alloc: alloc_table),
   forall (tl_global: (memory (pointer global) global)),
-  forall (HW_1: (* File "swap.c", line 3, characters 13-63 *)
+  forall (HW_1: (* CADUCEUS_14 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
   forall (HW_3: ~(c = (@null global))),
@@ -21,12 +21,12 @@ inversion_clear HW_1; intuition.
 inversion H0; intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/swap.c", line 13, characters 14-21: *)
 (*Why goal*) Lemma swap_impl_po_2 : 
   forall (c: (pointer global)),
   forall (alloc: alloc_table),
   forall (tl_global: (memory (pointer global) global)),
-  forall (HW_1: (* File "swap.c", line 3, characters 13-63 *)
+  forall (HW_1: (* CADUCEUS_14 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
   forall (HW_3: ~(c = (@null global))),
@@ -49,12 +49,12 @@ simpl in H1.
 auto.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/swap.c", line 13, characters 4-11: *)
 (*Why goal*) Lemma swap_impl_po_3 : 
   forall (c: (pointer global)),
   forall (alloc: alloc_table),
   forall (tl_global: (memory (pointer global) global)),
-  forall (HW_1: (* File "swap.c", line 3, characters 13-63 *)
+  forall (HW_1: (* CADUCEUS_14 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
   forall (HW_3: ~(c = (@null global))),
@@ -74,12 +74,12 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/swap.c", line 4, characters 12-145: *)
 (*Why goal*) Lemma swap_impl_po_4 : 
   forall (c: (pointer global)),
   forall (alloc: alloc_table),
   forall (tl_global: (memory (pointer global) global)),
-  forall (HW_1: (* File "swap.c", line 3, characters 13-63 *)
+  forall (HW_1: (* CADUCEUS_14 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
   forall (HW_3: ~(c = (@null global))),
@@ -105,7 +105,7 @@ Save.
   forall (c1: (pointer global)),
   forall (c2: (pointer global)),
   forall (HW_15: (llist tl_global alloc c (cons c1 (cons c2 l)))),
-  (* File "swap.c", line 4, characters 12-145 *)
+  (* CADUCEUS_15 *)
   (llist tl_global1 alloc caduceus_return (cons c2 (cons c1 l))).
 Proof.
 unfold cons ,llist, lpath; intuition; subst; auto.
@@ -129,12 +129,12 @@ red; auto.
 apply llist_not_starting with (next := acc tl_global) (1:=H6).
 Save.
 
-(* Why obligation from file "", line 0, characters -1--1: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/swap.c", line 4, characters 12-145: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
   forall (c: (pointer global)),
   forall (alloc: alloc_table),
   forall (tl_global: (memory (pointer global) global)),
-  forall (HW_1: (* File "swap.c", line 3, characters 13-63 *)
+  forall (HW_1: (* CADUCEUS_14 *)
                 (exists l:plist, (llist tl_global alloc c l) /\
                  (list_length l) >= 2)),
   forall (HW_16: c = (@null global)),
@@ -144,7 +144,7 @@ Save.
   forall (c1: (pointer global)),
   forall (c2: (pointer global)),
   forall (HW_18: (llist tl_global alloc c (cons c1 (cons c2 l)))),
-  (* File "swap.c", line 4, characters 12-145 *)
+  (* CADUCEUS_15 *)
   (llist tl_global alloc caduceus_return (cons c2 (cons c1 l))).
 Proof.
 intuition.
