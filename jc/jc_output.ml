@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.83 2008-01-25 13:31:40 bardou Exp $ *)
+(* $Id: jc_output.ml,v 1.84 2008-01-25 16:27:48 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -189,7 +189,7 @@ let rec term fmt t =
 	let op = app.jc_app_fun and l = app.jc_app_args in
 	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
 	  (print_list comma term) l 
-    | JCTderef (t, label, fi)-> 
+    | JCTderef (t, _label, fi)-> 
 	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
     | JCTshift (t1, t2) -> 
 	fprintf fmt "@[(%a + %a)@]" term t1 term t2
@@ -219,7 +219,7 @@ let rec assertion fmt a =
     | JCAif (t, a1, a2) ->
 	fprintf fmt "@[(%a ? %a : %a)@]" term t assertion a1 assertion a2
     | JCAbool_term t -> term fmt t
-    | JCAinstanceof (t, lab, st) ->
+    | JCAinstanceof (t, _lab, st) ->
 	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAat(a,lab) -> fprintf fmt "\\at(%a,%a)" assertion a label lab
@@ -292,7 +292,7 @@ let rec location fmt = function
   | JCLat (loc, lab) ->
       fprintf fmt "\\at(%a,%a)" location loc label lab
 
-let behavior fmt (loc,id,b) =
+let behavior fmt (_loc,id,b) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;
   Option_misc.iter
     (fun a -> fprintf fmt "@\nassumes %a;" assertion a) 
@@ -311,7 +311,7 @@ let print_spec fmt s =
   List.iter (behavior fmt) s.jc_fun_behavior;
   fprintf fmt "@]"
 
-let call_bin_op op =
+let call_bin_op _op =
 (*
   if op == Jc_pervasives.shift_ then "+" else
 *)
@@ -407,7 +407,7 @@ let rec expr fmt e =
 
 let rec statement fmt s =
   match s.jc_tstatement_node with
-    | JCTSreturn (t,e) ->
+    | JCTSreturn (_t,e) ->
 	fprintf fmt "@\nreturn %a;" expr e
     | JCTSreturn_void ->
 	fprintf fmt "@\nreturn;"
@@ -551,7 +551,7 @@ let rec print_decl fmt d =
 	  id print_super extends (print_list space field) fields 
 	  (print_list space invariant) invs
     | JCrec_struct_defs dlist | JCrec_fun_defs dlist ->
-	print_list (fun fmt () -> ()(*fprintf fmt "@\nand"*))
+	print_list (fun _fmt () -> ()(*fprintf fmt "@\nand"*))
 	  print_decl fmt dlist
     | JCvar_def(ty,id,init) ->
 	fprintf fmt "@\n@[%a %s%a;@]@." print_type ty id
