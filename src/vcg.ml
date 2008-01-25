@@ -862,7 +862,8 @@ let rec explain_for_pred internal user = function
 	| None -> None
 	| Some lab -> 
 	   try Some(Util.loc_of_label lab) with Not_found -> 
-	     eprintf "Warning: no loc found for label %s@." lab;
+	     if debug then
+	       eprintf "Warning: no loc found for label %s@." lab;
 	     None),
       (match internal with
 	| Some n ->

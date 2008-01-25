@@ -107,6 +107,101 @@ including a \verb|makefile|.
 % about a possible missing assignable clause, you can ignore it, this will be
 % explained in Section~\ref{sec:subprograms}.
 
+
+\chapter{Appendices}
+
+\section{Requirements}
+\label{app:requirements}
+
+NEED UPDATE
+
+User requirements: knowing how to perform proofs using the Coq
+system. Knowing how to write JML specifications.
+
+System requirements: \Coq{} version 8.0, \Why{} version 1.32 or higher. For
+compiling \Krakatoa{} from sources, you need also the Objective Caml
+compiler, version 3.04 or higher.
+
+\section{Installation procedure}
+
+\subsection{From the sources}
+
+Get a copy of sources at the web page \url{http://why.lri.fr/}. 
+
+Decompress the archive in a directory of your choice.
+
+Run commands
+\begin{verbatim}
+./configure
+make
+make install
+\end{verbatim}
+
+\subsection{Binaries}
+
+Please look at the web page \url{http://why.lri.fr/} for binaries for
+popular architectures. Krakatoa is distributed as part of the Why
+debian package, available on standard repositories of debian-based
+distributions.
+ 
+\section{Summary of features and known limitations}
+\label{sec:features}
+
+\begin{itemize}
+%\item No checking of arithmetic overflow
+
+\item Unsupported kind of statements in translation: ...
+
+\item exception NullPointerException and ArrayOutOfBoundsException are
+required NOT to be thrown, and consequently should not be catched.
+
+%\item Method parameters are not modifiable.
+
+\item For recursive or mutually recursive methods, only partial
+correctness is guaranteed.
+
+%\item some valid Java identifiers should not be used in your programs,
+%  unless some name clashes may occur: identifiers starting by
+%  \verb|krak| ;
+%  names introduced in the generated model: \verb|access|,
+%  \verb|update|, etc. ; keywords of \Why: result, parameter, etc.
+\end{itemize}
+
+\section{Contacts}
+
+The web page for Krakatoa is at URL \url{http://krakatoa.lri.fr/} and
+the wbe page for the Why platform in general is at
+\url{http://why.lri.fr}.
+
+For general questions regarding the use of the tool, please use the
+Why mailing list. You need to subscribe to the list before sending a
+message to it. To subscribe, follow the instructions given on page
+\url{http://lists.gforge.inria.fr/cgi-bin/mailman/listinfo/why-discuss}
+
+For bug reports, please use the bug tracking system at
+\url{https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse}. For
+security reasons, you need to register before submitting a new
+bug. Please create an account there, where you can put "ProVal" for
+the required field "INRIA Research Project you work with or work in".
+
+In case if the mailing list above is not appropriate, you can contact
+the authors directly at the following address: \url{mailto:Claude dot
+  Marche at inria dot fr}.
+
+\cleardoublepage
+
+\addcontentsline{toc}{chapter}{\bibname}
+\bibliographystyle{plain}
+\bibliography{./biblio}
+\cleardoublepage
+
+\addcontentsline{toc}{chapter}{\indexname}
+\printindex
+\cleardoublepage
+
+\end{document}
+
+
 The next step is the generation of proof obligations, for that purpose
 we use the \Why{} tool. This can be done using the generated
 \texttt{makefile}, you simply need to type
@@ -187,6 +282,8 @@ Congratulations! You've made your first \Krakatoa{}-certified program!
 % that is, a function whose type is the specification of
 % \verb|Lesson1.max|. The whole compilation of all the files generated
 % will check that this type is actually the type of \verb|<body>|.
+
+
 
 \section{Loop invariants}
 \index{loop invariant}
@@ -592,6 +689,8 @@ subst; auto with *.
 \end{verbatim}
 \end{small}
 
+
+
 \section{Calling pure methods in annotations}
 
 In the previous lessons, we wrote twice an assertion stating that some
@@ -654,6 +753,7 @@ as exercise.
 % \end{verbatim}
 % \end{small}
 % to globally unfold the definition of the predicate.
+
 
 \section{Array updates, the \texttt{Krakatoa} tactic}
 \index{Krakatoa tactic@\texttt{Krakatoa} tactic}
@@ -1847,99 +1947,6 @@ mod\_trans mod\_access mod\_after\_new
 \subsection{\Coq{} tactics}
 
 \texttt{krakatoa} \index{krakatoa tactic@\texttt{krakatoa} tactic}
-
-\chapter{Appendices}
-
-\section{Requirements}
-\label{app:requirements}
-
-NEED UPDATE
-
-User requirements: knowing how to perform proofs using the Coq
-system. Knowing how to write JML specifications.
-
-System requirements: \Coq{} version 8.0, \Why{} version 1.32 or higher. For
-compiling \Krakatoa{} from sources, you need also the Objective Caml
-compiler, version 3.04 or higher.
-
-\section{Installation procedure}
-
-\subsection{From the sources}
-
-Get a copy of sources at the web page \url{http://why.lri.fr/}. 
-
-Decompress the archive in a directory of your choice.
-
-Run commands
-\begin{verbatim}
-./configure
-make
-make install
-\end{verbatim}
-
-\subsection{Binaries}
-
-Please look at the web page \url{http://why.lri.fr/} for binaries for
-popular architectures. Krakatoa is distributed as part of the Why
-debian package, available on standard repositories of debian-based
-distributions.
- 
-\section{Summary of features and known limitations}
-\label{sec:features}
-
-\begin{itemize}
-%\item No checking of arithmetic overflow
-
-\item Unsupported kind of statements in translation: ...
-
-\item exception NullPointerException and ArrayOutOfBoundsException are
-required NOT to be thrown, and consequently should not be catched.
-
-%\item Method parameters are not modifiable.
-
-\item For recursive or mutually recursive methods, only partial
-correctness is guaranteed.
-
-%\item some valid Java identifiers should not be used in your programs,
-%  unless some name clashes may occur: identifiers starting by
-%  \verb|krak| ;
-%  names introduced in the generated model: \verb|access|,
-%  \verb|update|, etc. ; keywords of \Why: result, parameter, etc.
-\end{itemize}
-
-\section{Contacts}
-
-The web page for Krakatoa is at URL \url{http://krakatoa.lri.fr/} and
-the wbe page for the Why platform in general is at
-\url{http://why.lri.fr}.
-
-For general questions regarding the use of the tool, please use the
-Why mailing list. You need to subscribe to the list before sending a
-message to it. To subscribe, follow the instructions given on page
-\url{http://lists.gforge.inria.fr/cgi-bin/mailman/listinfo/why-discuss}
-
-For bug reports, please use the bug tracking system at
-\url{https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse}. For
-security reasons, you need to register before submitting a new
-bug. Please create an account there, where you can put "ProVal" for
-the required field "INRIA Research Project you work with or work in".
-
-In case if the mailing list above is not appropriate, you can contact
-the authors directly at the following address: \url{mailto:Claude dot
-  Marche at inria dot fr}.
-
-\cleardoublepage
-
-\addcontentsline{toc}{chapter}{\bibname}
-\bibliographystyle{plain}
-\bibliography{./biblio}
-\cleardoublepage
-
-\addcontentsline{toc}{chapter}{\indexname}
-\printindex
-\cleardoublepage
-
-\end{document}
 
 %%% Local Variables:
 %%% mode: latex
