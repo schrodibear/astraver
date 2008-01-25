@@ -8,8 +8,7 @@ let double x =
   assert (x <> result && tmp <> result && x <> tmp);
   while tmp.contents > 0 do
   (*@ variant tmp.contents
-    @ invariant result.contents + 2 * tmp.contents = 2 * x.contents &&
-    @   tmp.contents >= 0 && x.contents = \old x.contents
+    @ invariant result.contents >= 0
     @*)
     result.contents <- result.contents + 2;
     tmp.contents <- tmp.contents - 1;
@@ -18,8 +17,7 @@ let double x =
 
 (*@ function double x:
   @   requires x.contents >= 0
-  @   ensures \result = x.contents * 2 &&
-  @     x.contents = \old x.contents
+  @   ensures \result >= 0
   @*)
 
 (*

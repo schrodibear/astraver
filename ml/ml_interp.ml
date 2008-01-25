@@ -843,7 +843,7 @@ let structure_item env = function
 	a
 	args
       in
-      [ JCaxiom_def(axs.as_name, qa) ], env
+      [ JCaxiom_def(axs.as_name, [LabelName "L"], qa) ], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
 let rec structure env = function

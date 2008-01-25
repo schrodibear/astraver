@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.97 2008-01-24 14:54:43 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.98 2008-01-25 13:31:40 bardou Exp $ *)
 
 open Format
 open Jc_output
@@ -1469,8 +1469,8 @@ let tr_constr ci req behs b acc =
 	  
 (*s axioms *)
 
-let tr_axiom id p acc =
-  JCaxiom_def(id,assertion p)::acc
+let tr_axiom id lab p acc =
+  JCaxiom_def(id,List.map tr_logic_label lab,assertion p)::acc
 
 
 let tr_logic_fun fi b acc =   

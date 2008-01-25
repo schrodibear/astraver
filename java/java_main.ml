@@ -202,8 +202,8 @@ let main () =
 	(* production phase 3 : generation of Jessie axioms *)
 	let decls = 
 	  Hashtbl.fold 
-	    (fun id p acc ->
-	       Java_interp.tr_axiom id p acc)
+	    (fun id (lab,p) acc ->
+	       Java_interp.tr_axiom id lab p acc)
 	    Java_typing.axioms_table
 	    decls
 	in	       

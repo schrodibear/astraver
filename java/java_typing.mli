@@ -77,7 +77,7 @@ val field_initializer_table :
 val final_field_values_table :
   (int, Num.num list) Hashtbl.t
 
-val axioms_table : (string,Java_tast.assertion) Hashtbl.t
+val axioms_table : (string,(Java_env.logic_label list * Java_tast.assertion)) Hashtbl.t
 
 type logic_body =
   | JAssertion of Java_tast.assertion

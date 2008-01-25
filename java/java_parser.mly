@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.30 2008-01-15 14:44:10 marche Exp $
+$Id: java_parser.mly,v 1.31 2008-01-25 13:31:40 bardou Exp $
 
 */
 
@@ -989,8 +989,8 @@ kml_type_decl:
     { JPTlogic_def($3,Some $2,$4, $5,$7) }
 | LOGIC type_expr ident label_binders method_parameters READS expr_comma_list SEMICOLON EOF
     { JPTlogic_reads($3,Some $2,$4,$5,$7) }
-| AXIOM ident COLON expr SEMICOLON EOF
-    { JPTaxiom($2,$4) }
+| AXIOM ident label_binders COLON expr SEMICOLON EOF
+    { JPTaxiom($2,$3,$5) }
 
 label_binders:
 | /* epsilon */ { [] }

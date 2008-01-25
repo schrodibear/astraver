@@ -1,26 +1,27 @@
 
 //@ logic integer num_of_pos{L}(integer i,integer j,int t[]) reads t[i..j] ;
 
-/* @ axiom num_of_pos_empty :
+/*@ axiom num_of_pos_empty{L} :
   @   \forall integer i, j; \forall int t[];
   @       i > j ==> num_of_pos(i,j,t) == 0;
   @*/
  
-/* @ axiom num_of_pos_true_case :
+/*@ axiom num_of_pos_true_case{L} :
   @   \forall integer i, j, k; \forall int t[];
   @       i <= j && t[j] > 0 ==> 
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t) + 1;
   @*/
 
-/* @ axiom num_of_pos_false_case :
+/*@ axiom num_of_pos_false_case{L} :
   @   \forall integer i, j, k; \forall int t[];
   @       i <= j && ! (t[j] > 0) ==> 
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t);
   @*/
 
-/* @ axiom num_of_pos_strictly_increasing:
+/*@ axiom num_of_pos_strictly_increasing{L} :
   @   \forall integer i, j, k, l; \forall int t[];
-  @       j < k && k <= l && t[k] > 0 ==> num_of_pos(i,j,t) < num_of_pos(i,l,t);
+  @       j < k && k <= l && t[k] > 0 ==> 
+  @       num_of_pos(i,j,t) < num_of_pos(i,l,t);
   @*/
 
 public class Muller {
@@ -57,6 +58,6 @@ public class Muller {
 
 /*
 Local Variables: 
-compile-command: "make Muller.io"
+compile-command: "make Muller"
 End: 
 */

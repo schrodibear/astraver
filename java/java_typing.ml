@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.88 2008-01-16 14:39:35 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.89 2008-01-25 13:31:40 bardou Exp $ *)
 
 open Java_env
 open Java_ast
@@ -465,7 +465,7 @@ let get_type_decl package package_env acc d =
 	let ii = new_interface_info package id (package_env,i) in 
 	(id,TypeInterface ii)::acc
     | JPTannot(loc,s) -> assert false
-    | JPTaxiom((loc,id),e) -> acc
+    | JPTaxiom((loc,id),labels,e) -> acc
     | JPTlogic_type_decl _ -> assert false (* TODO *)
     | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> acc 
     | JPTlogic_def((loc,id),ret_type,labels,params,body) -> acc
@@ -3315,9 +3315,10 @@ let type_decl package_env type_env d =
 	end
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false
-    | JPTaxiom((loc,id),e) -> 
+    | JPTaxiom((loc,id),labels,e) -> 
+	(* TODO: add labels env *)
 	let te = assertion package_env type_env None [] e in
-	Hashtbl.add axioms_table id te
+	Hashtbl.add axioms_table id (labels,te)
     | JPTlogic_type_decl _ -> assert false (* TODO *)
     | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> 
 	let pl = List.map (type_param package_env type_env) params in
