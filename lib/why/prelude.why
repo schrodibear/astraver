@@ -2,6 +2,20 @@
 (* Built-in types: unit, bool, int, real *)
 (* Built-in type constructor: 'a ref *)
 
+(* Equality over types bool and unit *)
+
+logic eq_bool : bool,bool -> prop
+logic neq_bool : bool,bool -> prop
+
+parameter eq_bool_ : x:bool -> y:bool -> {} bool {if result then x=y else x<>y}
+parameter neq_bool_: x:bool -> y:bool -> {} bool {if result then x<>y else x=y}
+
+logic eq_unit : unit,unit -> prop
+logic neq_unit : unit,unit -> prop
+
+parameter eq_unit_ : x:unit -> y:unit -> {} bool {if result then x=y else x<>y}
+parameter neq_unit_: x:unit -> y:unit -> {} bool {if result then x<>y else x=y}
+
 (* Integers *)
 
 logic add_int : int,int -> int (* + *)
@@ -85,20 +99,6 @@ parameter gt_real_ : x:real -> y:real -> {} bool {if result then x>y else x<=y}
 parameter ge_real_ : x:real -> y:real -> {} bool {if result then x>=y else x<y}
 parameter eq_real_ : x:real -> y:real -> {} bool {if result then x=y else x<>y}
 parameter neq_real_: x:real -> y:real -> {} bool {if result then x<>y else x=y}
-
-(* Equality over types bool and unit *)
-
-logic eq_bool : bool,bool -> prop
-logic neq_bool : bool,bool -> prop
-
-parameter eq_bool_ : x:bool -> y:bool -> {} bool {if result then x=y else x<>y}
-parameter neq_bool_: x:bool -> y:bool -> {} bool {if result then x<>y else x=y}
-
-logic eq_unit : unit,unit -> prop
-logic neq_unit : unit,unit -> prop
-
-parameter eq_unit_ : x:unit -> y:unit -> {} bool {if result then x=y else x<>y}
-parameter neq_unit_: x:unit -> y:unit -> {} bool {if result then x<>y else x=y}
 
 (* if-then-else function symbol *)
 
