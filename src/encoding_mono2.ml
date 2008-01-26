@@ -9,10 +9,9 @@ let prefix = fun s -> "c_"^s
 (* let var = "x" *)
 let tvar = "t"
 (* let cpt = ref 0 *)
+let injec c = c^"_injective"
 (* let axiom c = c ^ "_to_" ^ (c^suffix) *)
 let def c = "def_"^c
-
-let arities = ref []
 
 (* The names for the new function symbols *)
 let sort =  prefix "sort"
@@ -43,6 +42,10 @@ let tt = PTexternal ([], Ident.create ttname)
 
 (* The prelude is a set of declarations that must be added
    to the context every time the encoding is used :*)
+let eq_arity = (Ident.string Ident.t_eq, Env.empty_scheme (Predicate [st; st]))
+let neq_arity = (Ident.string Ident.t_neq, Env.empty_scheme (Predicate [st; st]))
+let arities = ref [eq_arity; neq_arity]
+
 let prelude = [
   (* first the three new types *)
   (Dtype (loc, [], utname));
@@ -50,7 +53,7 @@ let prelude = [
   (Dtype (loc, [], ttname))]
   (* the function symbols representing constant types *)
   @
-  (List.map (fun t -> (Dlogic (loc, prefix (cname t),
+ (List.map (fun t -> (Dlogic (loc, prefix (cname t),
 			       Env.empty_scheme (Function ([], tt)))))
      htypes)
   (* the sorting and conversion functions *)
@@ -59,7 +62,7 @@ let prelude = [
   @
   (List.map (fun t ->
 	       (Dlogic (loc, c2u t, 
-			Env.empty_scheme (Function ([tt], ut)))))
+			Env.empty_scheme (Function ([t], ut)))))
      htypes)
   @
   (List.map (fun t ->
@@ -77,7 +80,8 @@ let prelude = [
 	let sort_t_t2u_x = Tapp (Ident.create sort, [t_term; t2u_x], []) in
 	let lhs = Tapp (Ident.create (s2c t), [sort_t_t2u_x], []) in
 	let peq = Papp (Ident.t_eq,[lhs;Tvar x], []) in
-          Env.empty_scheme (Forall (false, x, x, t, [[TPat lhs]], peq)))))
+	let pat = [[TPat sort_t_t2u_x]] in
+          Env.empty_scheme (Forall (false, x, x, t, pat, peq)))))
      htypes)
   @
   (** \forall x: U .  T2u(s2T(sort(T, x))) = x  **)
@@ -89,7 +93,7 @@ let prelude = [
 	let s2t_sort_t_x = Tapp (Ident.create (s2c t), [sort_t_x], []) in 
 	let lhs = Tapp (Ident.create (c2u t), [s2t_sort_t_x], []) in
 	let peq = Papp (Ident.t_eq,[lhs;Tvar x], []) in
-          Env.empty_scheme (Forall (false, x, x, t, [[TPat lhs]], peq)))))
+          Env.empty_scheme (Forall (false, x, x, ut, [[TPat lhs]], peq)))))
      htypes)
 
 (* Functions that replace polymorphic types by S,T,U and constants *)
@@ -125,9 +129,9 @@ let plunge fv term pt =
 	    try List.assoc var.tag fv
 	    with Not_found ->
 	      let s = string_of_int var.tag in
-		(print_endline ("unknown vartype : "^s); s) 
+		(print_endline ("[plunge] unknown vartype : "^s); s)
 	  in
-	    Tapp (Ident.create t, [], [])
+	    Tvar (Ident.create t)
       | PTvar {type_val = Some pt} -> leftt pt
       | PTexternal (ptl, id) -> Tapp (id, List.map (fun pt -> leftt pt) ptl, [])
   in
@@ -137,8 +141,7 @@ let get_arity id =
   let arity =
     try List.assoc (Ident.string id) !arities
     with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
-  let (_, log_type) = Env.specialize_logic_type arity in
-    match log_type with
+    match arity.Env.scheme_type with
 	Function (ptl, rt) -> ptl, rt
       | Predicate ptl -> ptl, PTbool (* ce PTbool est arbitraire et inutilisé *)
 
@@ -148,14 +151,21 @@ let instantiate_arity id inst =
     try List.assoc (Ident.string id) !arities
     with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
-  match log_type with
-    Function (ptl, rt) ->
-      ignore (Env.Vmap.fold (fun _ v l ->
-	(match l with [] -> []
-	| _ -> (v.type_val <- Some (List.hd l); (List.tl l))))
-		vs (List.rev inst));
-      rt
-    | _ -> assert false
+    match log_type with
+	Function (ptl, rt) ->
+	  ignore 
+	    (Env.Vmap.fold (fun _ v l -> 
+			      (match l with [] -> []
+				 | a::q -> (v.type_val <- Some a; q)))
+	       vs (List.rev inst));
+	  rt
+      | Predicate ptl ->
+	  ignore 
+	    (Env.Vmap.fold (fun _ v l -> 
+			      (match l with [] -> []
+				 | a::q -> (v.type_val <- Some a; q)))
+	       vs (List.rev inst));
+	  PTbool
 
 (* Translation of a term *)
 (* [fv] is a map for type variables, [lv] for term variables,
@@ -177,10 +187,10 @@ let rec translate_term fv lv rt = function
 	(match is_const rt, is_const pt with
 	     true, true -> trans_term
 	   | true, false -> Tapp (Ident.create (s2c rt), 
-				  [plunge fv trans_term ground_type], [])
+				  [plunge fv trans_term rt], [])
 	   | false, true -> plunge [] 
 	       (Tapp (Ident.create (c2u pt), [trans_term], [])) pt
-	   | false, false -> plunge fv trans_term ground_type 
+	   | false, false -> plunge fv trans_term ground_type
 	)
   | Tconst (_) as t when is_const rt -> t
   | Tconst (c) as t -> 
@@ -205,7 +215,7 @@ let rec lifted_t l p tr =
     | (a,t)::q ->  (Forall(false, a, a, t, [], lifted_t q p tr))
 
 let rec lifted_ctxt l cel =
-  (List.map (fun (_,s) -> Svar(Ident.create s, ut)) l)@cel
+  (List.map (fun (_,s) -> Svar(Ident.create s, tt)) l)@cel
 
 (* Translation of a predicate *)
 let rec translate_pred fv lv = function
@@ -227,14 +237,12 @@ let rec translate_pred fv lv = function
       Pnot (translate_pred fv lv p)
   | Forall (iswp, id, n, pt, tl, p) ->
       let lv' = (n,pt)::lv in
-(*       print_endline "----"; *)
-(*       ignore (List.iter (fun (n, _) -> print_endline (Ident.string n)) lv'); *)
 (*       let tl' = List.map (List.map (translate_pattern fv lv')) tl in *)
-	Forall (iswp, id, n, ut, [], translate_pred fv lv' p)
+	Forall (iswp, id, n, sortify ut pt, [], translate_pred fv lv' p)
   | Forallb (iswp, p1, p2) ->
       Forallb (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
   | Exists (id, n, pt, p) ->
-      Exists (id, n, ut, translate_pred fv ((n,pt)::lv) p)
+      Exists (id, n, sortify ut pt, translate_pred fv ((n,pt)::lv) p)
   | Pnamed (s, p) ->
       Pnamed (s, translate_pred fv lv p)
   | _ as d -> d
@@ -246,17 +254,21 @@ let rec translate_pred fv lv = function
 (* The core *)
 let queue = Queue.create ()
 
+let debug = false
+let f2s (s,l,b,e) = Printf.sprintf "File %s, line %d, characters %d-%d" s l b e
+
 let rec push d = 
   try (match d with
 (* A type declaration is translated as new logical function, the arity of *)
 (* which depends on the number of type variables in the declaration *)
   | Dtype (loc, vars, ident) ->
-      Queue.add (Dlogic (loc, ident, 
-			 Env.empty_scheme (Function (typify vars, ut)))) queue
+      if debug then Printf.printf "Encoding type %s, %s...\n" ident (f2s loc);
+      Queue.add (Dlogic (loc, ident,
+			 Env.empty_scheme (Function (typify vars, tt)))) queue
 (* In the case of a logic definition, we redefine the logic symbol  *)
 (* with types u and s, and its complete arity is stored for the encoding *)
   | Dlogic (loc, ident, arity) -> 
-      print_endline ident;
+      if debug then Printf.printf "Encoding logic %s, %s...\n" ident (f2s loc);
       arities := (ident, arity)::!arities;
       let newarity = match arity.Env.scheme_type with
 	  Predicate ptl -> Predicate (monoify ptl)
@@ -280,28 +292,41 @@ let rec push d =
 			 (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]]))))
 (* Axiom definitions *)
   | Daxiom (loc, ident, pred_sch) ->
-       let cpt = ref 0 in
-       let fv = Env.Vset.fold
-	 (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
-	 (pred_sch.Env.scheme_vars) [] in
-       let new_axiom = Env.empty_scheme
-	 (lifted fv (translate_pred fv [] pred_sch.Env.scheme_type) []) in
-	 Queue.add (Daxiom (loc, ident, new_axiom)) queue
+      if debug then Printf.printf "Encoding axiom %s, %s...\n" ident (f2s loc);
+      let cpt = ref 0 in
+      let fv = Env.Vset.fold
+	(fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
+	(pred_sch.Env.scheme_vars) [] in
+      let new_axiom = Env.empty_scheme
+	(lifted fv (translate_pred fv [] pred_sch.Env.scheme_type) []) in
+	Queue.add (Daxiom (loc, ident, new_axiom)) queue
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
   | Dgoal (loc, expl, ident, s_sch) ->
+      if debug then Printf.printf "Encoding goal %s, %s...\n" ident (f2s loc);
       let cpt = ref 0 in
       let fv = Env.Vset.fold
 	(fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
 	(s_sch.Env.scheme_vars) [] in
+	if debug then
+	  (Printf.printf "Goal environment :\n";
+	   List.iter (fun (n,id) -> Printf.printf "\tIn env : %s tagged %d\n" id n) fv;
+	   Printf.printf "=========\n");
       let (context, new_cel) =
 	List.fold_left
 	  (fun (acc_c, acc_new_cel) s -> 
 	     match s with
 		 Spred (id, p) -> 
 		   (acc_c, (Spred (id, translate_pred fv acc_c p))::acc_new_cel)
-	       | Svar (id, t) -> ((id,t)::acc_c, (Svar (id, ut))::acc_new_cel))
+	       | Svar (id, t) -> ((id,t)::acc_c, (Svar (id, sortify ut t))::acc_new_cel))
 	  ([], [])
 	  (fst (s_sch.Env.scheme_type)) in
+	if debug then
+	  (Printf.printf "Goal context :\n";
+	   List.iter (fun ce -> match ce with 
+			| Svar (id, pt) -> Printf.printf "\tvar %s : ??\n" (Ident.string id)
+			| Spred(id, _) -> Printf.printf "\thyp %s : ...\n" (Ident.string id)
+		     ) new_cel;
+	   Printf.printf "=========\n");
       let new_sequent =
 	Env.empty_scheme
 	  (lifted_ctxt fv (List.rev new_cel),
@@ -318,7 +343,5 @@ let iter f =
   Queue.iter f queue
 
 let reset () = 
-  arities := [];
+  arities := [eq_arity; neq_arity];
   Queue.clear queue
-(*   Env.iter_global_logic (fun id _ -> print_endline (Ident.string id)); *)
-(*   Env.iter_global_logic (fun id lts -> push (Dlogic (loc, Ident.string id, lts))) *)

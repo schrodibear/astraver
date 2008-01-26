@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.43 2007-12-18 08:55:40 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.44 2008-01-26 13:51:48 lescuyer Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -330,18 +330,18 @@ let output_file f =
   fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
   fprintf fmt "  :status unknown@\n";
   fprintf fmt "  :logic AUFLIA@\n";
-  if (Options.get_types_encoding() != SortedStratified) then  
-    begin
-      fprintf fmt "  :extrasorts (c_Boolean)@\n";
-      fprintf fmt "  :extrafuns ((c_Boolean_true c_Boolean))@\n";
-      fprintf fmt "  :extrafuns ((c_Boolean_false c_Boolean))@\n";
-      fprintf fmt "  :assumption
+(*   if (Options.get_types_encoding() != SortedStratified) then   *)
+  begin
+    fprintf fmt "  :extrasorts (c_Boolean)@\n";
+    fprintf fmt "  :extrafuns ((c_Boolean_true c_Boolean))@\n";
+    fprintf fmt "  :extrafuns ((c_Boolean_false c_Boolean))@\n";
+    fprintf fmt "  :assumption
                    (forall (?bcd c_Boolean) (or (= ?bcd c_Boolean_true) 
                                             (= ?bcd c_Boolean_false)))@\n";
-      fprintf fmt "  :assumption
+    fprintf fmt "  :assumption
                    (not 
                       (= c_Boolean_true  c_Boolean_false))@\n";
-    end;
+  end;
   fprintf fmt "  :extrasorts (Unit)@\n";
   fprintf fmt "  :extrafuns ((div_int Int Int Int))@\n";
   if not modulo then begin 
