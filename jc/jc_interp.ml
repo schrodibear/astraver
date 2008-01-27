@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.217 2008-01-25 17:18:47 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.218 2008-01-27 18:11:02 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1181,7 +1181,6 @@ let type_assert vi e =
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
 	let et = term ~global_assertion:false LabelHere LabelNone (term_of_expr e) in
 	let alloc = alloc_table_name si in
-	let fields = embedded_struct_fields si in
 	  begin
 	    match n1o, n2o with
 	      | None, None -> LTrue
@@ -1216,39 +1215,12 @@ let type_assert vi e =
 			LPred ("eq_int",
 			       [LApp ("offset_min", [LVar alloc; et]);
 				LConst (Prim_int "0")])
-		    | _ ->
-			let structs = 
-			  List.fold_left 
-			    (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-			    StructSet.empty fields
-			in
-			let structs = 
-			  StructSet.fold (fun si acc -> si :: acc) structs [] in
-			  LPred (
-			    valid_one_pred_name si,
-			    et
-			    :: LVar alloc
-			    :: List.map (fun si -> (lvar LabelHere ** alloc_table_name) si) structs
-			    @ List.map (lvar LabelHere ** field_memory_name) fields)
+		    | _ -> LTrue
 		  end
-	      | Some n1, Some n2 ->
-		  let structs = 
-		    List.fold_left 
-		      (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-		      StructSet.empty fields
-		  in
-		  let structs = 
-		    StructSet.fold (fun si acc -> si :: acc) structs [] in
-		    LPred (
-		      valid_pred_name si,
-		      et
-		      :: LConst(Prim_int(Num.string_of_num n1))
-		      :: LConst(Prim_int(Num.string_of_num n2))
-		      :: LVar alloc
-		      :: List.map (fun si -> (lvar LabelHere ** alloc_table_name) si) structs
-		      @ List.map (lvar LabelHere ** field_memory_name) fields)
+	      | Some n1, Some n2 -> LTrue
 	  end
-  | JCTvariant_pointer (vi, n1o, n2o), JCTvariant_pointer (vi', n1o', n2o') -> assert false (* TODO *)
+  | JCTvariant_pointer (vi, n1o, n2o), JCTvariant_pointer (vi', n1o', n2o') -> 
+      assert false (* TODO *)
   | _ -> LTrue
 	
 let expr_coerce ~infunction ~threats vi e =
@@ -1988,22 +1960,92 @@ let interp_fun_params f write_mems read_mems annot_type =
        
   
 let tr_fun f loc spec body acc =
-  let requires = (named_assertion ~global_assertion:false LabelHere LabelNone spec.jc_fun_requires) in
+  let requires_param = 
+    (named_assertion 
+       ~global_assertion:false 
+       LabelHere 
+       LabelNone 
+       spec.jc_fun_requires) 
+  in
+  let free_requires = 
+    (named_assertion 
+       ~global_assertion:false 
+       LabelHere 
+       LabelNone 
+       spec.jc_fun_free_requires)
+  in
+  let requires = make_and requires_param free_requires in
+  let requires =
+    List.fold_left 
+      (fun acc vi ->
+	 make_and
+	   (match vi.jc_var_info_type with
+	      | JCTpointer (si, n1o, n2o) ->
+		  let vit = 
+		    term ~global_assertion:false LabelHere LabelNone (term_var_no_loc vi) 
+		  in
+		  let alloc = alloc_table_name si in
+		  let fields = embedded_struct_fields si in
+		    begin
+		      match n1o, n2o with
+			| None, _ | _, None -> LTrue
+			| Some n1, Some n2 
+			    when Num.eq_num n1 (Num.num_of_int 0)
+			      && Num.eq_num n2 (Num.num_of_int 0) ->
+			    let structs = 
+			   List.fold_left 
+			     (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+			     StructSet.empty fields
+			    in
+			    let structs = 
+			      StructSet.fold (fun si acc -> si :: acc) structs [] in
+			      LPred (
+				valid_one_pred_name si,
+				vit
+				:: LVar alloc
+				:: List.map 
+				  (fun si -> (lvar LabelHere ** alloc_table_name) si) 
+				  structs
+				@ List.map (lvar LabelHere ** field_memory_name) fields)
+			| Some n1, Some n2 ->
+			    let structs = 
+			      List.fold_left 
+				(fun acc fi -> StructSet.add (field_sinfo fi) acc) 
+				StructSet.empty fields
+			    in
+			    let structs = 
+			      StructSet.fold (fun si acc -> si :: acc) structs [] in
+			      LPred (
+				valid_pred_name si,
+				vit
+				:: LConst(Prim_int(Num.string_of_num n1))
+				:: LConst(Prim_int(Num.string_of_num n2))
+				:: LVar alloc
+				:: List.map 
+				  (fun si -> (lvar LabelHere ** alloc_table_name) si) 
+				  structs
+				@ List.map (lvar LabelHere ** field_memory_name) fields)
+		    end
+	      | JCTvariant_pointer (vi, n1o, n2o) -> assert false (* TODO ? *)
+	      | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull -> LTrue)
+	   acc)
+      requires
+      f.jc_fun_info_parameters
+  in
   (* partition behaviors as follows:
-     - behaviors inferred by analysis (postfixed by 'safety': they will be added to fun safety)
-     - user defined behaviors 
-     TODO ?: also add inferred behaviors to other funs ? *)
-  let (normal_behaviors_safety, normal_behaviors, excep_behaviors_safety, excep_behaviors) =
+     - behaviors inferred by analysis (postfixed by 'inferred')
+     - user defined behaviors *)
+  let (normal_behaviors_inferred, normal_behaviors, excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
-      (fun (normal_safety, normal, excep_safety, excep) (loc, id, b) ->
+      (fun (normal_inferred, normal, excep_inferred, excep) (loc, id, b) ->
 	 let post =
 	   match b.jc_behavior_assigns with
 	     | None ->
-(*
-		 eprintf "lab,loc for ensures: \"%s\", %a@."
+		 (*
+		   eprintf "lab,loc for ensures: \"%s\", %a@."
 		   b.jc_behavior_ensures.jc_assertion_label
 		   Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
-*)
+		 *)
 		 (named_assertion ~global_assertion:false LabelPost LabelPre b.jc_behavior_ensures)		
 	     | Some(locassigns,a) ->
 		 named_jc_assertion loc
@@ -2019,27 +2061,28 @@ let tr_fun f loc spec body acc =
 	     | Some e -> 
 		 make_impl (assertion ~global_assertion:false LabelHere LabelNone e) post
 	 in
-	 match b.jc_behavior_throws with
-	   | None -> 
-	       if id = "safety" then 
-		 ((id, b, a) :: normal_safety, normal, excep_safety, excep)
+	   match b.jc_behavior_throws with
+	     | None -> 
+	       if id = "inferred" then 
+		 ((id, b, a) :: normal_inferred, normal, excep_inferred, excep)
 	       else 
-		 (normal_safety, (id, b, a) :: normal, excep_safety, excep)
-	   | Some ei ->
-	       let eb =
-		 try
-		   ExceptionMap.find ei excep
-		 with Not_found -> []
-	       in
-	       if id = "safety" then 
-		 (normal_safety, normal, 
-		  ExceptionMap.add ei ((id, b, a) :: eb) excep_safety, excep)
-	       else
-		 (normal_safety, normal, excep_safety, 
-		  ExceptionMap.add ei ((id, b, a) :: eb) excep))
+		 (normal_inferred, (id, b, a) :: normal, excep_inferred, excep)
+	     | Some ei ->
+		 let eb =
+		   try
+		     ExceptionMap.find ei excep
+		   with Not_found -> []
+		 in
+		   if id = "inferred" then 
+		     (normal_inferred, normal, 
+		      ExceptionMap.add ei ((id, b, a) :: eb) excep_inferred, excep)
+		   else
+		     (normal_inferred, normal, excep_inferred, 
+		      ExceptionMap.add ei ((id, b, a) :: eb) excep))
       ([], [], ExceptionMap.empty, ExceptionMap.empty)
       spec.jc_fun_behavior
   in
+  let user_excep_behaviors = excep_behaviors in
   let excep_behaviors = 
     ExceptionSet.fold
       (fun ei acc -> 
@@ -2048,7 +2091,7 @@ let tr_fun f loc spec body acc =
 	     { default_behavior with 
 		 jc_behavior_throws = Some ei; jc_behavior_ensures = (raw_asrt JCAtrue); } 
 	   in
-	   ExceptionMap.add ei [ei.jc_exception_info_name ^ "_b", b, LTrue] acc)
+	     ExceptionMap.add ei [ei.jc_exception_info_name ^ "_b", b, LTrue] acc)
       f.jc_fun_info_effects.jc_raises
       excep_behaviors
   in
@@ -2212,10 +2255,10 @@ let tr_fun f loc spec body acc =
       (fun (_,_,e) acc -> make_and e acc)
       normal_behaviors LTrue
   in
-  let normal_post_safety =
+  let normal_post_inferred =
     List.fold_right
       (fun (_,_,e) acc -> make_and e acc)
-      normal_behaviors_safety LTrue
+      normal_behaviors_inferred LTrue
   in
   let excep_posts =
     ExceptionMap.fold
@@ -2225,26 +2268,26 @@ let tr_fun f loc spec body acc =
 	 in (exception_name ei,p)::acc) 
       excep_behaviors []
   in
-  let excep_posts_safety =
+  let excep_posts_inferred =
     ExceptionMap.fold
       (fun ei l acc ->
 	 let p = 
 	   List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
 	 in (exception_name ei,p)::acc) 
-      excep_behaviors_safety []
+      excep_behaviors_inferred []
   in
-  (* DEBUG *)
-  (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
-  (* why parameter for calling the function *)
+    (* DEBUG *)
+    (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
+    (* why parameter for calling the function *)
   let ret_type = tr_type f.jc_fun_info_result.jc_var_info_type in
   let param_normal_post = 
     if is_purely_exceptional_fun spec then LFalse else
-      make_and normal_post normal_post_safety 
+      make_and normal_post normal_post_inferred 
   in
-  let param_excep_posts = excep_posts @ excep_posts_safety in
+  let param_excep_posts = excep_posts @ excep_posts_inferred in
   let why_param = 
     let annot_type =
-      Annot_type(requires, ret_type,
+      Annot_type(requires_param, ret_type,
 		 reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = 
@@ -2345,13 +2388,6 @@ let tr_fun f loc spec body acc =
 		  (fun (mut_id,id) bl ->
 		     Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
 	      in
-	      let safety_b, user_b = 
-		List.partition
-		  (fun (_,s, _) -> s = "safety")
-		  spec.jc_fun_behavior
-	      in
-		spec.jc_fun_behavior <- user_b;
-	      let safety_exists = safety_b <> [] in
 	      let newid = f.jc_fun_info_name ^ "_safety" in
 	      let _ = reg_loc 
 		~id:newid
@@ -2361,17 +2397,6 @@ let tr_fun f loc spec body acc =
 	      in
 	      let acc = 
 		if is_purely_exceptional_fun spec then acc else
-		if safety_exists then 
-		  Def(
-		    newid,
-		    Fun(
-		      params,
-		      requires,
-		      tblock_safety,
-		      normal_post_safety,
-		      excep_posts_safety @ excep_posts_for_others None excep_behaviors 
-		    ))::acc 
-		else
 		  Def(
 		    newid,
 		    Fun(
@@ -2478,7 +2503,7 @@ let tr_fun f loc spec body acc =
 					  excep_posts_for_others (Some ei) excep_behaviors)) in
 				d::acc)
 			   l acc)
-		      excep_behaviors acc
+		      user_excep_behaviors acc
 		  in
 		    acc 
 	in why_param::acc

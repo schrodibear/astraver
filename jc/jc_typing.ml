@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.167 2008-01-25 17:18:47 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.168 2008-01-27 18:11:02 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -982,44 +982,45 @@ let rec assertion label_env logic_label env e =
 	    (fun l -> if List.mem l label_env then () else
 	       typing_error e.jc_pexpr_loc "label `%a' not found" Jc_output.label l)
 	    labs;
-(*
-	  begin
+	  (*
+	    begin
 	    match e1.jc_pexpr_node with
-	      | JCPEvar id ->
-*)
-		  begin
-		    try
-		      let pi = find_logic_info id in
-		      let tl =
-			try
-			  List.map2
-			    (fun vi e ->
-			       let ty = vi.jc_var_info_type in
-			       let te = ft e in
-			       if subtype_strict te.jc_term_type ty then te
-			       else
-				 typing_error e.jc_pexpr_loc 
-				   "type %a expected instead of %a" 
-				   print_type ty print_type te.jc_term_type) 
-			    pi.jc_logic_info_parameters args
-			with  Invalid_argument _ ->
-			  typing_error e.jc_pexpr_loc 
-			    "wrong number of arguments for %s" id
-		      in
-		      let label_assoc =
-			match logic_label, pi.jc_logic_info_labels, labs with
-			  | Some l, [lf], [] -> [lf,l]
-			  | _ ->
-			      try
-				List.map2
-				  (fun l1 l2 -> (l1,l2))
-				  pi.jc_logic_info_labels labs
-			      with Invalid_argument _ ->
-				typing_error e.jc_pexpr_loc 
-				  "wrong number of labels for %s" id
-		      in
-		      let app = {
-			jc_app_fun = pi;
+	    | JCPEvar id ->
+	  *)
+	  begin
+	    try
+	      let pi = find_logic_info id in
+	      let tl =
+		try
+		  List.map2
+		    (fun vi e ->
+		       let ty = vi.jc_var_info_type in
+		       let te = ft e in
+			 if subtype_strict te.jc_term_type ty then te
+			 else
+			   typing_error e.jc_pexpr_loc 
+			     "type %a expected instead of %a" 
+			     print_type ty print_type te.jc_term_type) 
+		    pi.jc_logic_info_parameters args
+		with  Invalid_argument _ ->
+		  typing_error e.jc_pexpr_loc 
+		    "wrong number of arguments for %s" id
+	      in
+	      let label_assoc =
+		match logic_label, pi.jc_logic_info_labels, labs with
+		  | None, [lf], [] -> [lf,lf] (* CORRECT ? *)
+		  | Some l, [lf], [] -> [lf,l]
+		  | _ ->
+		      try
+			List.map2
+			  (fun l1 l2 -> (l1,l2))
+			  pi.jc_logic_info_labels labs
+		      with Invalid_argument _ ->
+			typing_error e.jc_pexpr_loc 
+			  "wrong number of labels for %s" id
+	      in
+	      let app = {
+		jc_app_fun = pi;
 			jc_app_args = tl;
 			jc_app_region_assoc = [];
 			jc_app_label_assoc = label_assoc;
@@ -2489,6 +2490,7 @@ let rec decl d =
 	let s = List.fold_right 
 		  (clause param_env vi) specs 
 		  { jc_fun_requires = assertion_true;
+		    jc_fun_free_requires = assertion_true;
 		    jc_fun_behavior = [] }
 	in
 	let body = Option_misc.map pstatement_list body in
@@ -2607,7 +2609,7 @@ of an invariant policy";
 	let te = assertion labels (default_label labels) [] e in
 	Hashtbl.add axioms_table id (labels,te)
     | JCPDglobinv (id, e) ->
-	let a = assertion [] None [] e in
+	let a = assertion [] (Some LabelHere) (* None *) [] e in
 	let li = make_rel id in
 	  if !Jc_common_options.inv_sem = InvArguments then 
 	    Hashtbl.replace logic_functions_table 

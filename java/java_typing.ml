@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.90 2008-01-25 16:29:57 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.91 2008-01-27 18:11:01 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -422,7 +422,7 @@ let new_interface_info (p:package_info) (id:string) i =
   let h = get_package_contents p in
   Hashtbl.replace h id (Type (TypeInterface ii));
   ii
-
+    
 let new_class_info (p:package_info) (id:string) c =
   incr type_counter;
   let ci =    
@@ -438,13 +438,13 @@ let new_class_info (p:package_info) (id:string) c =
       class_info_constructors = [];
     }
   in
-  Hashtbl.add type_table !type_counter (TypeClass ci);
-  Hashtbl.add class_decl_table !type_counter c;
-  Java_options.lprintf 
+    Hashtbl.add type_table !type_counter (TypeClass ci);
+    Hashtbl.add class_decl_table !type_counter c;
+    Java_options.lprintf 
     "adding class %s in package %s@." id p.package_info_name;
-  let h = get_package_contents p in
-  Hashtbl.replace h id (Type (TypeClass ci));
-  ci
+    let h = get_package_contents p in
+      Hashtbl.replace h id (Type (TypeClass ci));
+      ci
 
 
 let get_type_decl package package_env acc d = 

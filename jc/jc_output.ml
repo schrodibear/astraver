@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.85 2008-01-25 17:18:47 bardou Exp $ *)
+(* $Id: jc_output.ml,v 1.86 2008-01-27 18:11:02 nrousset Exp $ *)
 
 open Format
 open Jc_env
@@ -53,7 +53,7 @@ type jc_decl =
   | JClogic_const_def of jc_type * string * term option
   | JClogic_type_def of string
   | JCinvariant_policy of Jc_env.inv_sem
-   
+      
 let const fmt c =
   match c with
     | JCCinteger s -> fprintf fmt "%s" s

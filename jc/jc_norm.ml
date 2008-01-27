@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.74 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.75 2008-01-27 18:11:02 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -930,13 +930,13 @@ let code_function (fi, fs, sl) vil =
 		(fun (_,_, b) -> b.jc_behavior_ensures <- make_and 
 		   [b.jc_behavior_ensures; post])
 		fs.jc_fun_behavior;
-	      if is_purely_exceptional_fun fs then () else
+(*	      if is_purely_exceptional_fun fs then () else
 		begin
 		  (* add the 'safety' spec *)
 		  let safety_b = { default_behavior with jc_behavior_ensures = post } in
 		    fs.jc_fun_behavior <- 
 		      (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
-		end
+		end *)
       | _ -> ()
   end;
     (* normalization of the function body *)

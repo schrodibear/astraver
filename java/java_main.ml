@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: java_main.ml,v 1.45 2008-01-27 18:11:01 nrousset Exp $ *)
+
 open Java_env
 open Java_ast
 open Format
@@ -152,7 +154,7 @@ let main () =
 	let decls_range = Java_interp.range_types [] in
 	  
 	(* production phase 1.3 : generation of Jessie struct types *)
-	let acc, decls_arrays = Java_interp.array_types [] in
+	let non_null_preds, acc, decls_arrays = Java_interp.array_types [] in
 	let acc, decls_structs =
 	  Hashtbl.fold 
 	    (fun _ id (acc0, acc) ->
@@ -180,6 +182,7 @@ let main () =
 	let decls = decls_fun @ decls_structs @ 
 	  (Jc_output.JCrec_struct_defs acc :: decls_range)
 	in
+	let decls = decls @ non_null_preds in
 	  
 	(* production phase 1.5: generation of Jessie global invariants *)
 	let decls =

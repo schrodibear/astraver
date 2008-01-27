@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.109 2008-01-25 17:18:47 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.110 2008-01-27 18:11:02 nrousset Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -416,6 +416,8 @@ type behavior =
 type fun_spec =
     {
       mutable jc_fun_requires : assertion;
+      (* free precondition : used to prove the fun correctness, but not checked at call locations *)
+      mutable jc_fun_free_requires : assertion; 
       mutable jc_fun_behavior : (Loc.position * string * behavior) list;
     }
 

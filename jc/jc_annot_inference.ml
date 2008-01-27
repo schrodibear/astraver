@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.95 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.96 2008-01-27 18:11:02 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -2669,15 +2669,17 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	let exc_behaviors = 
 	  List.map2 
 	    (fun exc va ->
-	      (Loc.dummy_position,"safety",
+	       (Loc.dummy_position, "inferred",
 	      { default_behavior with 
-		jc_behavior_throws = Some exc; 
-		jc_behavior_ensures = va }))
-	    excl excal in
+		  jc_behavior_throws = Some exc; 
+		  jc_behavior_ensures = va }))
+	    excl excal 
+	in
 	if Jc_options.verbose then
 	  begin
 	    printf
-	      "@[<v 2>Inferring postcondition@\n%a@]@."
+	      "@[<v 2>Inferring postcondition for function %s@\n%a@]@."
+	      fi.jc_fun_info_name
 	      Jc_output.assertion post;
 	    List.iter2
 	      (fun exc exca -> printf
@@ -2686,13 +2688,9 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 		Jc_output.assertion exca) excl excal;
 	  end;
 	begin
-	  try
-	    let (_,s,b) = List.find (fun (_,s,_) -> s = "safety") fs.jc_fun_behavior in
-	    b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; post];
-	  with Not_found -> 
-	    if is_purely_exceptional_fun fs then () else
+	  if is_purely_exceptional_fun fs then () else
 	    fs.jc_fun_behavior <- 
-	      (Loc.dummy_position,"safety", normal_behavior) :: fs.jc_fun_behavior
+	      (Loc.dummy_position,"inferred", normal_behavior) :: fs.jc_fun_behavior
 	end;
 	fs.jc_fun_behavior <- exc_behaviors @ fs.jc_fun_behavior
     else ()
@@ -3845,15 +3843,15 @@ let rec ai_entrypoint mgr iaio (fi, fs, sl) =
   inspected_functions := fi.jc_fun_info_tag::!inspected_functions;
   List.iter
     (fun fi ->
-      Hashtbl.iter
-	(fun _ (fi',_,fs,slo) ->
-	  match slo with
-	    | None -> ()
-	    | Some sl ->
-		if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
-		  (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
-		    ai_entrypoint mgr iaio (fi, fs, sl))
-	Jc_norm.functions_table)
+       Hashtbl.iter
+	 (fun _ (fi', _, fs, slo) ->
+	    match slo with
+	      | None -> ()
+	      | Some sl ->
+		  if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
+		    (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
+		      ai_entrypoint mgr iaio (fi, fs, sl))
+	 Jc_norm.functions_table)
     fi.jc_fun_info_calls
     
 let rec record_ai_inter_preconditions mgr iai fi fs =
@@ -3867,15 +3865,18 @@ let rec record_ai_inter_preconditions mgr iai fi fs =
       printf 
 	"@[<v 2>Inferring precondition for function %s@\n%a@]@."
 	fi.jc_fun_info_name Jc_output.assertion a;
-    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; a];
+    fs.jc_fun_free_requires <- make_and [fs.jc_fun_free_requires; a];
     inspected_functions := fi.jc_fun_info_tag::!inspected_functions;
     List.iter 
       (fun fi ->
 	Hashtbl.iter
-	  (fun _ (fi',_,fs,_) ->
-	    if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
-	      (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
-		record_ai_inter_preconditions mgr iai fi' fs;)
+	  (fun _ (fi', _, fs, slo) ->
+	     match slo with
+	       | None -> ()
+	       | Some _ ->
+		   if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
+		     (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
+		       record_ai_inter_preconditions mgr iai fi' fs;)
 	  Jc_norm.functions_table)
       fi.jc_fun_info_calls
   end
