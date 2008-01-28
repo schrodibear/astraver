@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.101 2008-01-28 11:37:02 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.102 2008-01-28 14:12:52 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -39,70 +39,7 @@ open Java_tast
 open Java_pervasives
 open Java_typing
 
-(*s locs table *)
-
-
-
-type kind =
-  | ArithOverflow
-  | DownCast
-  | IndexBounds
-  | PointerDeref
-  | UserCall
-  | DivByZero
-  | Pack
-  | Unpack
-
-
-let locs_table : 
-    (string, (kind option * string option * Loc.position)) Hashtbl.t 
-    = Hashtbl.create 97
-let name_counter = ref 0
-let reg_loc ?id ?kind ?name loc =
-  let id = match id with
-    | None ->  
-	incr name_counter;
-	"K_" ^ string_of_int !name_counter
-    | Some n -> n
-  in
-  Java_options.lprintf "recording location for id '%s'@." id;
-  Hashtbl.add locs_table id (kind,name,loc);
-  id
-
-let print_kind fmt k =
-  fprintf fmt "%s"
-    (match k with
-       | Pack -> "Pack"
-       | Unpack -> "Unpack"
-       | DivByZero -> "DivByZero"
-       | UserCall -> "UserCall"
-       | PointerDeref -> "PointerDeref"
-       | IndexBounds -> "IndexBounds"
-       | DownCast -> "DownCast"
-       | ArithOverflow -> "ArithOverflow"
-    )
-
-let abs_fname f =
-  if Filename.is_relative f then
-    Filename.concat (Unix.getcwd ()) f 
-  else f
-
-let print_locs fmt =
-  Hashtbl.iter 
-    (fun id (kind,name,(b,e)) ->
-       fprintf fmt "[%s]@\n" id;
-       Option_misc.iter
-	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
-       Option_misc.iter
-	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
-       fprintf fmt "file = \"%s\"@\n" (abs_fname b.Lexing.pos_fname);
-       let l = b.Lexing.pos_lnum in
-       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
-       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
-       fprintf fmt "line = %d@\n" l;
-       fprintf fmt "begin = %d@\n" fc;
-       fprintf fmt "end = %d@\n@\n" lc)
-    locs_table
+let reg_loc ?id ?kind ?name loc = Output.reg_loc "K" ?id ?kind ?name loc
 
 (*s loop tags *)
 
