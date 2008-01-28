@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.87 2008-01-28 15:55:22 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.88 2008-01-28 16:03:16 bardou Exp $ *)
 
 open Jc_name
 open Jc_env
@@ -615,9 +615,11 @@ let spec ef s =
 
 let parameter ef vi =
   match vi.jc_var_info_type with
-    | JCTpointer (st, _, _) ->
-	let name = tag_or_variant_type_name st in
-	  add_alloc_reads (add_tag_reads ef name) (name,vi.jc_var_info_region)
+    | JCTpointer (JCtag st, _, _) ->
+	let name = root_name st in
+	add_alloc_reads (add_tag_reads ef name) (name,vi.jc_var_info_region)
+    | JCTpointer (JCvariant _, _, _) ->
+	assert false (* TODO *)
     | _ -> ef
 	
 (* computing the fixpoint *)
