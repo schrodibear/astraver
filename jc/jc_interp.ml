@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.218 2008-01-27 18:11:02 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.219 2008-01-28 11:11:33 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2510,7 +2510,7 @@ let tr_fun f loc spec body acc =
 
 let tr_logic_type id acc = Type(id,[])::acc
 
-let tr_axiom id p acc = 
+let tr_axiom id is_axiom p acc = 
   let ef = Jc_effect.assertion empty_effects p in
   let a = assertion ~global_assertion:true LabelNone LabelNone p in
   let a =
@@ -2530,7 +2530,7 @@ let tr_axiom id p acc =
   in
   (* How to add quantification on other effects (alloc, tag) without knowing 
    * their type ? *)
-  Axiom(id,a)::acc
+  if is_axiom then Axiom(id,a)::acc else Axiom(id,a)::Goal(id,a)::acc
 
 let tr_exception ei acc =
   Jc_options.lprintf "producing exception '%s'@." ei.jc_exception_info_name;

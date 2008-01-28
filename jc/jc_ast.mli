@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.110 2008-01-27 18:11:02 nrousset Exp $ *)
+(* $Id: jc_ast.mli,v 1.111 2008-01-28 11:11:33 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -191,7 +191,8 @@ type pdecl_node =
   | JCPDrecfuns of pdecl list
   | JCPDenumtype of string * Num.num * Num.num
   | JCPDlogictype of string 
-  | JCPDaxiom of string * logic_label list * pexpr
+  | JCPDlemma of bool * string * logic_label list * pexpr
+      (* first arg is true if it is an axiom *)
   | JCPDexception of string * ptype
   (* logic functions and predicates (return type: None if predicate) *)
   | JCPDlogic of ptype option * string * logic_label list * (ptype * string) list 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.52 2008-01-25 17:18:47 bardou Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.53 2008-01-28 11:11:33 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -159,6 +159,7 @@ rule token = parse
   | "in"                    { IN }
   | "integer"               { INTEGER }
   | "invariant"             { INVARIANT }
+  | "lemma"                 { LEMMA }
   | "let"                   { LET }
   | "logic"                 { LOGIC }
   | "match"                 { MATCH }

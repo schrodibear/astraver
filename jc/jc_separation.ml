@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.12 2008-01-23 15:18:12 bardou Exp $ *)
+(* $Id: jc_separation.ml,v 1.13 2008-01-28 11:11:33 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -195,7 +195,7 @@ let code_function f =
 let code_component fls =
   List.iter code_function fls
 
-let axiom id (labels,a) = assertion (* labels *) dummy_region a
+let axiom id (is_axiom,labels,a) = assertion (* labels *) dummy_region a
 
 let regionalize_assertion a assoc =
   map_term_in_assertion (fun t ->

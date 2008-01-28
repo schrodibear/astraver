@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.81 2008-01-25 17:18:47 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.82 2008-01-28 11:11:33 marche Exp $ */
 
 %{
 
@@ -99,7 +99,7 @@
 %token PACK UNPACK ASSERT
 
 /* type invariant logic with variant and axiom tag */
-%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM TAG MATCH
+%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM LEMMA TAG MATCH
 
 /* integer boolean real unit void rep */
 %token INTEGER BOOLEAN REAL UNIT REP
@@ -444,7 +444,9 @@ variable_definition:
 
 axiom_definition:
 | AXIOM IDENTIFIER label_binders COLON expression
-    { locate_decl( JCPDaxiom($2,$3,$5)) }
+    { locate_decl( JCPDlemma(true,$2,$3,$5)) }
+| LEMMA IDENTIFIER label_binders COLON expression
+    { locate_decl( JCPDlemma(false,$2,$3,$5)) }
 ;
 
 

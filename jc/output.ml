@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.21 2007-11-23 16:36:23 marche Exp $ i*)
+(*i $Id: output.ml,v 1.22 2008-01-28 11:11:33 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -602,6 +602,7 @@ type why_decl =
   | Def of string * expr               (*r global let in why *)
   | Logic of bool * string * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Axiom of string * assertion         (*r Axiom *)
+  | Goal of string * assertion         (*r Goal *)
   | Predicate of bool * string * (string * logic_type) list * assertion  
   | Function of bool * string * (string * logic_type) list * logic_type * term
   | Type of string * string list
@@ -611,13 +612,14 @@ type why_decl =
 
 let get_why_id d =
   match d with
-    | Param(_,id,_) -> id
-    | Logic(_,id,_,_) -> id
-    | Def(id,_) -> id
-    | Axiom(id,_) -> id
-    | Predicate(_,id,_,_) -> id
-    | Function(_,id,_,_,_) -> id
-    | Type (id,_) -> id
+    | Param(_,id,_) 
+    | Logic(_,id,_,_)
+    | Def(id,_) 
+    | Axiom(id,_) 
+    | Goal(id,_) 
+    | Predicate(_,id,_,_) 
+    | Function(_,id,_,_,_) 
+    | Type (id,_) 
     | Exception(id,_) -> id
 
 let iter_why_decl f d =
@@ -627,7 +629,7 @@ let iter_why_decl f d =
     | Logic(_,id,args,t) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t
-    | Axiom(id,t) -> iter_assertion f t
+    | Goal(id,t) | Axiom(id,t) -> iter_assertion f t
     | Predicate(_,id,args,p) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_assertion f p
@@ -695,6 +697,9 @@ let fprintf_why_decl form d =
 	  fprintf_logic_type t 
     | Axiom(id,p) ->
 	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 
+	  fprintf_assertion p
+    | Goal(id,p) ->
+	fprintf form "@[<hv 1>goal %s :@ %a@]@.@." id 
 	  fprintf_assertion p
     | Def(id,e) ->
 	fprintf form "@[<hv 1>let %s =@ %a@]@.@." id fprintf_expr e

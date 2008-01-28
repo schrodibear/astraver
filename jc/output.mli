@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.13 2007-11-23 16:36:23 marche Exp $ i*)
+(*i $Id: output.mli,v 1.14 2008-01-28 11:11:33 marche Exp $ i*)
 
 type constant =
   | Prim_void
@@ -177,6 +177,7 @@ type why_decl =
   | Def of string * expr               (*r global let in why *)
   | Logic of bool * string * (string * logic_type) list * logic_type  (*r logic decl in why *)
   | Axiom of string * assertion            (*r Axiom *)
+  | Goal of string * assertion            (*r Goal *)
   | Predicate of bool * string * (string * logic_type) list * assertion  
   | Function of bool * string * (string * logic_type) list * logic_type * term
   | Type of string * string list
