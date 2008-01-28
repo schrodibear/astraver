@@ -83,15 +83,15 @@ let invariant_for_struct this st =
 let make_assume reads assume =
   BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, []))
 
-let fully_packed root e =
+let fully_packed tov e =
   LPred(
-    "fully_packed",
-    [ LVar (tag_table_name root);
-      LVar (mutable_name root);
+    fully_packed_name,
+    [ LVar (tag_table_name tov);
+      LVar (mutable_name tov);
       e ])
 
 let type_structure = function
-  | JCTpointer(st, _, _) -> st
+  | JCTpointer(JCtag st, _, _) -> st
   | _ -> failwith "type_structure"
 
 let range_min = function
@@ -275,7 +275,7 @@ let rec all_structures st acc =
     List.fold_left
       (fun acc fi ->
 	 match fi.jc_field_info_type with
-	   | JCTpointer(st, _, _) -> all_structures st acc
+	   | JCTpointer(JCtag st, _, _) -> all_structures st acc
 	   | _ -> acc)
       (StringSet.add st.jc_struct_info_name acc)
       st.jc_struct_info_fields   
@@ -301,7 +301,7 @@ let invariant_params acc li =
     StringRegionSet.fold
       (fun (a,r) acc -> 
 	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 (alloc_region_table_name (st, r), alloc_table_type st)::acc)
+	 (alloc_region_table_name (st, r), alloc_table_type (JCtag st))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -329,14 +329,16 @@ let rec parents acc st =
     | Some p -> parents (st::acc) p
 let parents = parents []
 
-(* Returns every structure (name) that can be used by a function, given its parameters *)
+(* Returns every structure (name) that can be used by a function,
+given its parameters *)
 let function_structures params =
-  (* structures that can be used by the function *)
   let structures = List.fold_left
     (fun acc vi ->
        match vi.jc_var_info_type with
-	 | JCTpointer(st, _, _) ->
+	 | JCTpointer(JCtag st, _, _) ->
 	     all_structures st acc
+	 | JCTpointer(JCvariant vi, _, _) ->
+	     List.fold_right all_structures vi.jc_variant_info_roots acc
 	 | _ -> acc)
     StringSet.empty
     params
@@ -443,14 +445,15 @@ let make_assume_all_assocs pp params =
 (* mutable *)
 (***********)
 
-let mutable_memory_type root =
-  memory_type (struct_model_type root) (tag_id_type root)
+let mutable_memory_type tov =
+  memory_type (tag_or_variant_model_type tov) (tag_id_type tov)
 
-let committed_memory_type root =
-  memory_type (struct_model_type root) (simple_logic_type "bool")
+let committed_memory_type tov =
+  memory_type (tag_or_variant_model_type tov) (simple_logic_type "bool")
 
 let mutable_declaration st acc =
   if st.jc_struct_info_parent = None then
+    let st = JCtag st in
     (* mutable_T: T tag_id *)
     Param(
       false,
@@ -476,7 +479,7 @@ let assert_mutable e fi =
   if fi.jc_field_info_rep then
     begin
       let st = fi.jc_field_info_struct in
-      let mutable_name = mutable_name st in
+      let mutable_name = mutable_name (JCtag st) in
       (*let committed_name = committed_name st.jc_struct_info_root in*)
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
       (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
@@ -580,7 +583,7 @@ let not_mutable_implies_invariant this st (li, _) =
   let params = invariant_params [] li in
   
   (* this.mutable <: st *)
-  let mutable_name = mutable_name st in
+  let mutable_name = mutable_name (JCtag st) in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
@@ -595,8 +598,8 @@ let not_mutable_implies_invariant this st (li, _) =
   let impl = LImpl(mutable_io, invariant) in
 
   (* params *)
-  let params = (mutable_name, mutable_memory_type st)::params in
-  let params = (tag_table_name st, tag_table_type st)::params in
+  let params = (mutable_name, mutable_memory_type (JCtag st))::params in
+  let params = (tag_table_name (JCtag st), tag_table_type (JCtag st))::params in
 
   params, impl
 
@@ -605,7 +608,7 @@ let not_mutable_implies_fields_committed this st =
   let fields = rep_fields st in
 
   (* this.mutable <: st *)
-  let mutable_name = mutable_name st in
+  let mutable_name = mutable_name (JCtag st) in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
@@ -615,20 +618,19 @@ let not_mutable_implies_fields_committed this st =
   let fields_pc = List.fold_left
     (fun acc fi ->
        match fi.jc_field_info_type with
-	 | JCTpointer(fi_st, min, max) ->
+	 | JCTpointer(fi_tov, min, max) ->
 	     let n = fi.jc_field_info_final_name in
 	     let index = "jc_index" in
-	     let fi_root = fi_st.jc_struct_info_root in
-	     let committed_name = committed_name fi_root in
-	     let alloc = alloc_table_name fi_root in
+	     let committed_name = committed_name fi_tov in
+	     let alloc = alloc_table_name fi_tov in
 	     let params =
 	       [ n, memory_field fi;
-		 committed_name, committed_memory_type fi_st;
-		 alloc, alloc_table_type fi_st; ]
+		 committed_name, committed_memory_type fi_tov;
+		 alloc, alloc_table_type fi_tov; ]
 	     in
 	     let this_fi = make_select (LVar n) (LVar this) in
 	     let f = make_shift this_fi (LVar index) in
-	     let eq = make_eq (make_select_committed fi_st f)
+	     let eq = make_eq (make_select_committed fi_tov f)
 	       (make_bool true)
 	     in
 	     let omin, omax = omin_omax (LVar alloc) this_fi min max in
@@ -646,8 +648,8 @@ let not_mutable_implies_fields_committed this st =
     make_and_list (List.map snd fields_pc) in
 
   (* additional params *)
-  let params = (mutable_name, mutable_memory_type st)::params in
-  let params = (tag_table_name st, tag_table_type st)::params in
+  let params = (mutable_name, mutable_memory_type (JCtag st))::params in
+  let params = (tag_table_name (JCtag st), tag_table_type (JCtag st))::params in
 
   (* implies *)
   let impl = LImpl(mutable_io, coms) in
@@ -675,7 +677,7 @@ let committed_implies_fully_packed this root =
 
   (* fully_packed(this) *)
   let packed = LPred(
-    "fully_packed",
+    fully_packed_name,
     [ LVar tag_table;
       LVar mutable_name;
       LVar this ])
@@ -718,12 +720,12 @@ let owner_unicity this root =
 	 let fi_root =
 	   (type_structure fi.jc_field_info_type).jc_struct_info_root
 	 in
-	 let committed_name = committed_name fi_root in
+	 let committed_name = committed_name (JCtag fi_root) in
 	 let this_dot_f = make_select (LVar name) (LVar this) in
 	 let x_dot_f = make_select (LVar name) (LVar x_name) in
 
 	 (* indexes, ranges *)
-	 let alloc = alloc_table_name fi_root in
+	 let alloc = alloc_table_name (JCtag fi_root) in
 	 let omin1, omax1 = omin_omax (LVar alloc) this_dot_f
 	   (range_min fi.jc_field_info_type)
 	   (range_max fi.jc_field_info_type)
@@ -765,10 +767,10 @@ let owner_unicity this root =
   let params = List.map
     (fun fi ->
        [ fi.jc_field_info_final_name, memory_field fi;
-	 committed_name fi.jc_field_info_root,
-	 committed_memory_type fi.jc_field_info_root;
-	 alloc_table_name fi.jc_field_info_root,
-	 alloc_table_type fi.jc_field_info_root ])
+	 committed_name (JCtag fi.jc_field_info_root),
+	 committed_memory_type (JCtag fi.jc_field_info_root);
+	 alloc_table_name (JCtag fi.jc_field_info_root),
+	 alloc_table_type (JCtag fi.jc_field_info_root) ])
     reps
   in
   let params = List.flatten params in
@@ -803,7 +805,7 @@ let make_hierarchy_global_invariant acc root =
   in
 
   (* committed => fully packed *)
-  let params_cfp, com_fp = committed_implies_fully_packed this root in
+  let params_cfp, com_fp = committed_implies_fully_packed this (JCtag root) in
   let params = params_cfp@params in
 
   (* unicity of the owner: x.f == y.f && x.f.committed ==> x == y *)
@@ -918,7 +920,8 @@ let components st =
     (fun acc fi ->
        if fi.jc_field_info_rep then
 	 match fi.jc_field_info_type with
-	   | JCTpointer(si, _, _) -> (fi, si)::acc
+	   | JCTpointer(JCtag si, _, _) -> (fi, si)::acc
+	   | JCTpointer(JCvariant _, _, _) -> assert false (* TODO *)
 	   | _ -> acc
        else acc)
     []
@@ -987,7 +990,7 @@ let hierarchy_committed_postcond this root fields value =
        let index = "jc_index" in
        let range = make_range (LVar index) omin omax in
        let new_value = make_eq
-	 (make_select_committed fi_root
+	 (make_select_committed (JCtag fi_root)
 	    (make_shift this_fi (LVar index)))
 	 (LConst(Prim_bool value))
        in
@@ -1002,7 +1005,7 @@ let make_components_postcond this st reads writes committed =
   let comps = components_by_type st in
   let writes =
     List.fold_left
-      (fun acc (si, _) -> StringSet.add (committed_name si) acc)
+      (fun acc (si, _) -> StringSet.add (committed_name (JCtag si)) acc)
       writes
       comps
   in
@@ -1019,7 +1022,7 @@ let make_components_postcond this st reads writes committed =
   let reads = StringSet.union reads writes in
   let reads = List.fold_left
     (fun acc (si, fields) -> StringSet.add
-       (alloc_table_name si) acc)
+       (alloc_table_name (JCtag si)) acc)
     reads comps
   in
   let postcond =
@@ -1027,7 +1030,7 @@ let make_components_postcond this st reads writes committed =
       (* for each hierarchy... *)
       (List.map
 	 (fun (si, fields) -> hierarchy_committed_postcond
-	    this si fields committed)
+	    this (JCtag si) fields committed)
 (*	    let committed_name = committed_name si.jc_struct_info_root in
 	    LPred(
 	      "eq",
@@ -1053,6 +1056,7 @@ let make_components_precond this st reads =
   in
   let l, reads = List.fold_left
     (fun (l, reads) (fi, si) ->
+       let si = JCtag si in
        let index_name = "jc_index" in
        let mutable_name = mutable_name si in
        let committed_name = committed_name si in
@@ -1065,13 +1069,13 @@ let make_components_precond this st reads =
 	 LApp("shift", [ base_field; LVar index_name ])
        in
        let fi_st = type_structure fi.jc_field_info_type in
-       let alloc = alloc_table_name fi_st in
-       let reads = StringSet.add (tag_table_name fi_st) reads in
+       let alloc = alloc_table_name (JCtag fi_st) in
+       let reads = StringSet.add (tag_table_name (JCtag fi_st)) reads in
        let reads = StringSet.add alloc reads in
        let reads = StringSet.add mutable_name reads in
        (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
        let body = make_and
-	 (fully_packed fi_st this_field)
+	 (fully_packed (JCtag fi_st) this_field)
 	 (LPred(
 	    "eq",
 	    [ LApp("select", [LVar committed_name; this_field]);
@@ -1094,8 +1098,8 @@ let pack_declaration st acc =
   let this = "this" in
   let this_type = pointer_type st in
   let tag = "tag" in
-  let tag_type = tag_id_type st in
-  let mutable_name = mutable_name st in
+  let tag_type = tag_id_type (JCtag st) in
+  let mutable_name = mutable_name (JCtag st) in
   let inv, reads = invariant_for_struct (LVar this) st in
   let writes = StringSet.empty in
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes true in
@@ -1156,9 +1160,9 @@ let unpack_declaration st acc =
   let this = "this" in
   let this_type = pointer_type st in
   let tag = "tag" in
-  let tag_type = tag_id_type st in
-  let mutable_name = mutable_name st in
-  let committed_name = committed_name st in
+  let tag_type = tag_id_type (JCtag st) in
+  let mutable_name = mutable_name (JCtag st) in
+  let committed_name = committed_name (JCtag st) in
   let reads = StringSet.singleton mutable_name in
   let writes = StringSet.singleton mutable_name in
   let reads = StringSet.add committed_name reads in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.220 2008-01-28 11:37:02 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.221 2008-01-28 15:55:22 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -279,7 +279,6 @@ let equality_op_for_type = function
   | JCTlogic s -> (* TODO *) assert false
   | JCTenum ei -> "eq_int"
   | JCTpointer _
-  | JCTvariant_pointer _
   | JCTnull ->  "eq_pointer"
 
 (*
@@ -305,13 +304,13 @@ let term_coerce loc tdest tsrc e =
   | JCTenum ri, JCTnative Tinteger ->
       assert false (* a explicit cast should be required by jc_typing *)
       (* LApp(logic_enum_of_int ri,[e]) *)
-  | JCTpointer (st1, _, _), JCTpointer(st2,_,_) 
+  | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
+  | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
       when Jc_typing.substruct st2 st1 -> e
-  | JCTpointer (st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
+  | JCTpointer (JCtag st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
       LApp("downcast", 
-	   [ LVar (tag_table_name st) ; e ;
+	   [ LVar (tag_table_name (JCtag st)) ; e ;
 	     LVar (tag_name st) ])	
-  | JCTvariant_pointer _, (JCTpointer _ | JCTvariant_pointer _) -> e
   |  _ -> 
       Jc_typing.typing_error loc 
 	"can't coerce type %a to type %a" 
@@ -345,13 +344,13 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	else
 	  make_guarded_app ~name:lab ArithOverflow loc (fun_enum_of_int ri) [e]
     | _ , JCTnull -> e
-    | JCTpointer (st1,_,_), JCTpointer (st2,_,_) 
+    | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
+    | JCTpointer (st1,_,_), JCTpointer (JCtag st2,_,_) 
 	when Jc_typing.substruct st2 st1 -> e
-    | JCTpointer (st,_,_), _  -> 
+    | JCTpointer (JCtag st,_,_), _  -> 
 	make_guarded_app ~name:lab DownCast loc "downcast_" 
-	  [ Deref (tag_table_name st) ; e ;
+	  [ Deref (tag_table_name (JCtag st)) ; e ;
 	    Var (tag_name st) ]	
-  | JCTvariant_pointer _, (JCTpointer _ | JCTvariant_pointer _) -> e
     | _ -> 
 	Jc_typing.typing_error loc 
 	  "can't coerce type %a to type %a" 
@@ -533,11 +532,11 @@ let rec term ~global_assertion label oldlabel t =
 	in
 	LApp(f,[LVar alloc; ft t]) 
     | JCTinstanceof(t,ty) ->
-	let tag = tag_table_name ty in
+	let tag = tag_table_name (JCtag ty) in
 	LApp("instanceof_bool",
 	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTcast(t,ty) ->
-	let tag = tag_table_name ty in
+	let tag = tag_table_name (JCtag ty) in
 	LApp("downcast",
 	     [lvar label tag; ft t;LVar (tag_name ty)])
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
@@ -621,11 +620,11 @@ let rec assertion ~global_assertion label oldlabel a =
       | JCAbool_term(t) -> 
 	LPred("eq",[ft t;LConst(Prim_bool true)])
       | JCAinstanceof(t,lab,ty) -> 
-	  let tag = tag_table_name ty in
+	  let tag = tag_table_name (JCtag ty) in
 	  LPred("instanceof",
 		[lvar lab tag; ft t; LVar (tag_name ty)])
       | JCAmutable(te, st, ta) ->
-	  let mutable_field = LVar (mutable_name st) in
+	  let mutable_field = LVar (mutable_name (JCtag st)) in
 	  let tag = ftag ta.jc_tag_node in
 	  LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
       | JCAtagequality(t1, t2, h) ->
@@ -1019,23 +1018,24 @@ and expr ~infunction ~threats e : expr =
 	make_app f [alloc; expr e] 
     | JCEinstanceof(e,t) ->
 	let e = expr e in
-	let tag = tag_table_name t in
+	let tag = tag_table_name (JCtag t) in
 	(* always safe *)
 	make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
     | JCEcast (e, si) ->
-	let tag = tag_table_name si in
+	let tag = tag_table_name (JCtag si) in
 	(* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
 
 	let et = term ~global_assertion:false LabelNone LabelNone (term_of_expr e) in
 	let typea = 
 	  match e.jc_expr_type with
-	    | JCTpointer (si', _, _) -> 
+	    | JCTpointer (JCtag si', _, _) -> 
 		if is_substruct si' si then LTrue else
 		  LPred ("instanceof", [LVar tag; et; LVar (tag_name si)])
+	    | JCTpointer (JCvariant _, _, _) -> assert false (* TODO *)
 	    | _ -> LTrue
 	in
 	let e = expr e in
-	let tag = tag_table_name si in
+	let tag = tag_table_name (JCtag si) in
 	let call = 
 	  make_guarded_app ~name:lab DownCast loc "downcast_" 
 	    [Deref tag; e; Var (tag_name si)]
@@ -1110,7 +1110,7 @@ and expr ~infunction ~threats e : expr =
 	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (siz, st) ->
 	let alloc = alloc_region_table_name (st, e.jc_expr_region) in
-	let tag = tag_table_name st in
+	let tag = tag_table_name (JCtag st) in
 	let fields = embedded_struct_fields st in
 	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
 	let roots = embedded_struct_roots st in
@@ -1119,8 +1119,8 @@ and expr ~infunction ~threats e : expr =
 	begin
 	  match !Jc_options.inv_sem with
 	    | InvOwnership ->
-		let mut = mutable_name st in
-		let com = committed_name st in
+		let mut = mutable_name (JCtag st) in
+		let com = committed_name (JCtag st) in
 		make_app "alloc_parameter_ownership" 
 		  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
 		   coerce ~no_int_overflow:(not threats) 
@@ -1146,13 +1146,14 @@ and expr ~infunction ~threats e : expr =
 	end
     | JCEfree e ->
 	let st = match e.jc_expr_type with
-	  | JCTpointer(st, _, _) -> st
+	  | JCTpointer(JCtag st, _, _) -> st
+	  | JCTpointer(JCvariant vi, _, _) -> assert false (* TODO *)
 	  | _ -> assert false
 	in	
 	let alloc = 
 	  alloc_region_table_name (st, e.jc_expr_region) in
 	if !Jc_options.inv_sem = InvOwnership then
-	  let com = committed_name st in
+	  let com = committed_name (JCtag st) in
 	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
 	else
 	  make_app "free_parameter" [Var alloc; expr e]
@@ -1219,8 +1220,6 @@ let type_assert vi e =
 		  end
 	      | Some n1, Some n2 -> LTrue
 	  end
-  | JCTvariant_pointer (vi, n1o, n2o), JCTvariant_pointer (vi', n1o', n2o') -> 
-      assert false (* TODO *)
   | _ -> LTrue
 	
 let expr_coerce ~infunction ~threats vi e =
@@ -1548,15 +1547,16 @@ and statement_list ~infunction ~threats l =
 ******************)
 
 let tr_struct st acc =
-  let alloc_ty = alloc_table_type st in
-  let tagid_type = tag_id_type st in
+  let alloc_ty = alloc_table_type (JCtag st) in
+  let tagid_type = tag_id_type (JCtag st) in
   let ptr_type = pointer_type st in
   let direct_fields = direct_embedded_struct_fields st in
   let all_fields = embedded_struct_fields st in
   let all_roots = embedded_struct_roots st in
   let all_roots = List.map find_struct all_roots in
-  let alloc = alloc_table_name st in
-  let tagtab = tag_table_name st in
+  let all_tovs = List.map (fun st -> JCtag st) all_roots in
+  let alloc = alloc_table_name (JCtag st) in
+  let tagtab = tag_table_name (JCtag st) in
     (* Declarations of field memories. *)
   let acc =
     if !Jc_options.separation_sem = SepRegions then acc else
@@ -1587,18 +1587,19 @@ let tr_struct st acc =
     List.map (fun fi ->
       let st = field_sinfo fi in
       let a,b = field_bounds fi in
-      let alloc = alloc_table_name st in
+      let alloc = alloc_table_name (JCtag st) in
       let fields = embedded_struct_fields st in
       let roots = embedded_struct_roots st in
       let roots = List.map find_struct roots in
+      let tovs = List.map (fun st -> JCtag st) roots in
       (* [valid_st(select(fi,x),a,b,alloc...)] *)
       LPred(
-	valid_pred_name st,
+	valid_pred_name (JCtag st),
 	LApp("select",[LVar(field_memory_name fi);LVar "x"])
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar LabelHere ** alloc_table_name) roots
+	:: List.map (lvar LabelHere ** alloc_table_name) tovs
 	@ List.map (lvar LabelHere ** field_memory_name) fields)
     ) direct_fields
   in
@@ -1607,11 +1608,11 @@ let tr_struct st acc =
   let params = 
     ("x",ptr_type)
     :: (alloc,alloc_ty)
-    :: List.map struct_alloc_arg all_roots
+    :: List.map struct_alloc_arg all_tovs
     @ List.map field_memory_arg all_fields
   in
   let acc = 
-    Predicate(false,valid_one_pred_name st,params,validity) :: acc
+    Predicate(false,valid_one_pred_name (JCtag st),params,validity) :: acc
   in
 
   (* Validity predicate. *)
@@ -1627,19 +1628,20 @@ let tr_struct st acc =
     List.map (fun fi ->
       let st = field_sinfo fi in
       let a,b = field_bounds fi in
-      let alloc = alloc_table_name st in
+      let alloc = alloc_table_name (JCtag st) in
       let fields = embedded_struct_fields st in
       let roots = embedded_struct_roots st in
       let roots = List.map find_struct roots in
+      let tovs = List.map (fun st -> JCtag st) roots in
       (* [valid_st(select(fi,x+i),a,b,alloc...)] *)
       LPred(
-	valid_pred_name st,
+	valid_pred_name (JCtag st),
 	LApp("select",[
 	  LVar(field_memory_name fi);LApp("shift",[LVar "x";LVar "i"])])
 	:: LConst(Prim_int(Num.string_of_num a))
 	:: LConst(Prim_int(Num.string_of_num b))
 	:: LVar alloc
-	:: List.map (lvar LabelHere ** alloc_table_name) roots
+	:: List.map (lvar LabelHere ** alloc_table_name) tovs
 	@ List.map (lvar LabelHere ** field_memory_name) fields)
     ) direct_fields
   in
@@ -1662,11 +1664,11 @@ let tr_struct st acc =
     :: ("a",why_integer_type)
     :: ("b",why_integer_type)
     :: (alloc,alloc_ty)
-    :: List.map struct_alloc_arg all_roots
+    :: List.map struct_alloc_arg all_tovs
     @ List.map field_memory_arg all_fields
   in
   let acc = 
-    Predicate(false,valid_pred_name st,params,validity) :: acc
+    Predicate(false,valid_pred_name (JCtag st),params,validity) :: acc
   in
 
   (* Allocation of one element parameter. *)
@@ -1677,16 +1679,16 @@ let tr_struct st acc =
       (* [st_root pointer] *)
       Base_type ptr_type,
       (* [reads all_fields writes alloc,tagtab] *)
-      (List.map alloc_table_name all_roots
+      (List.map alloc_table_name all_tovs
 	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields),[alloc;tagtab],
       (* normal post *)
       make_and_list [
 	(* [valid_one_st(result,alloc...)] *)
 	LPred(
-	  valid_one_pred_name st,
+	  valid_one_pred_name (JCtag st),
 	  LVar "result"
 	  :: LVar alloc
-	  :: List.map (lvar LabelHere ** alloc_table_name) all_roots
+	  :: List.map (lvar LabelHere ** alloc_table_name) all_tovs
 	  @ List.map (lvar LabelHere ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
@@ -1706,7 +1708,7 @@ let tr_struct st acc =
   let alloc_type =
     List.fold_right (fun a acc ->
       Prod_type(alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc)
-    ) all_roots alloc_type
+    ) all_tovs alloc_type
   in
   let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in
   let alloc_type = Prod_type("tt",unit_type,alloc_type) in
@@ -1722,18 +1724,18 @@ let tr_struct st acc =
       (* [st_root pointer] *)
       Base_type ptr_type,
       (* [reads all_fields; writes alloc,tagtab] *)
-      (List.map alloc_table_name all_roots
+      (List.map alloc_table_name all_tovs
 	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields), [alloc; tagtab],
       (* normal post *)
       make_and_list [
 	(* [valid_st(result,0,n-1,alloc...)] *)
 	LPred(
-	  valid_pred_name st,
+	  valid_pred_name (JCtag st),
 	  LVar "result"
 	  :: LConst(Prim_int "0")
 	  :: LApp("sub_int",[LVar "n";LConst(Prim_int "1")])
 	  :: LVar alloc
-	  :: List.map (lvar LabelHere ** alloc_table_name) all_roots
+	  :: List.map (lvar LabelHere ** alloc_table_name) all_tovs
 	  @ List.map (lvar LabelHere ** field_memory_name) all_fields);
 	(* [instanceof(tagtab,result,tag_st)] *)
 	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
@@ -1753,7 +1755,7 @@ let tr_struct st acc =
   let alloc_type =
     List.fold_right (fun a acc ->
       Prod_type(alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc)
-    ) all_roots alloc_type
+    ) all_tovs alloc_type
   in
   let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in
   let alloc_type = Prod_type("n",Base_type why_integer_type,alloc_type) in
@@ -1980,53 +1982,62 @@ let tr_fun f loc spec body acc =
       (fun acc vi ->
 	 make_and
 	   (match vi.jc_var_info_type with
-	      | JCTpointer (si, n1o, n2o) ->
+	      | JCTpointer (tov, n1o, n2o) ->
 		  let vit = 
-		    term ~global_assertion:false LabelHere LabelNone (term_var_no_loc vi) 
+		    term ~global_assertion:false LabelHere LabelNone
+		      (term_var_no_loc vi) 
 		  in
-		  let alloc = alloc_table_name si in
-		  let fields = embedded_struct_fields si in
-		    begin
-		      match n1o, n2o with
-			| None, _ | _, None -> LTrue
-			| Some n1, Some n2 
-			    when Num.eq_num n1 (Num.num_of_int 0)
-			      && Num.eq_num n2 (Num.num_of_int 0) ->
-			    let structs = 
-			   List.fold_left 
-			     (fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-			     StructSet.empty fields
-			    in
-			    let structs = 
-			      StructSet.fold (fun si acc -> si :: acc) structs [] in
-			      LPred (
-				valid_one_pred_name si,
-				vit
-				:: LVar alloc
-				:: List.map 
-				  (fun si -> (lvar LabelHere ** alloc_table_name) si) 
-				  structs
-				@ List.map (lvar LabelHere ** field_memory_name) fields)
-			| Some n1, Some n2 ->
-			    let structs = 
-			      List.fold_left 
-				(fun acc fi -> StructSet.add (field_sinfo fi) acc) 
-				StructSet.empty fields
-			    in
-			    let structs = 
-			      StructSet.fold (fun si acc -> si :: acc) structs [] in
-			      LPred (
-				valid_pred_name si,
-				vit
-				:: LConst(Prim_int(Num.string_of_num n1))
-				:: LConst(Prim_int(Num.string_of_num n2))
-				:: LVar alloc
-				:: List.map 
-				  (fun si -> (lvar LabelHere ** alloc_table_name) si) 
-				  structs
-				@ List.map (lvar LabelHere ** field_memory_name) fields)
-		    end
-	      | JCTvariant_pointer (vi, n1o, n2o) -> assert false (* TODO ? *)
+		  let alloc = alloc_table_name tov in
+		  let fields = match tov with
+		    | JCtag si -> embedded_struct_fields si
+		    | JCvariant _ -> []
+		  in begin
+		    match n1o, n2o with
+		      | None, _ | _, None -> LTrue
+		      | Some n1, Some n2 
+			  when Num.eq_num n1 (Num.num_of_int 0)
+			    && Num.eq_num n2 (Num.num_of_int 0) ->
+			  let structs = 
+			    List.fold_left 
+			      (fun acc fi ->
+				 StructSet.add (field_sinfo fi) acc) 
+			      StructSet.empty fields
+			  in
+			  let structs = 
+			    StructSet.fold
+			      (fun si acc -> si :: acc) structs [] in
+			  LPred (
+			    valid_one_pred_name tov,
+			    vit
+			    :: LVar alloc
+			    :: List.map 
+			      (fun si -> (lvar LabelHere ** alloc_table_name)
+				 (JCtag si)) 
+			      structs
+			    @ List.map (lvar LabelHere ** field_memory_name)
+			      fields)
+		      | Some n1, Some n2 ->
+			  let structs = 
+			    List.fold_left 
+			      (fun acc fi ->
+				 StructSet.add (field_sinfo fi) acc) 
+			      StructSet.empty fields
+			  in
+			  let structs = StructSet.fold
+			    (fun si acc -> si :: acc) structs [] in
+			  LPred (
+			    valid_pred_name tov,
+			    vit
+			    :: LConst(Prim_int(Num.string_of_num n1))
+			    :: LConst(Prim_int(Num.string_of_num n2))
+			    :: LVar alloc
+			    :: List.map 
+			      (fun si -> (lvar LabelHere ** alloc_table_name)
+				 (JCtag si)) 
+			      structs
+			    @ List.map (lvar LabelHere ** field_memory_name)
+			      fields)
+		  end
 	      | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull -> LTrue)
 	   acc)
       requires
@@ -2605,9 +2616,10 @@ let tr_memory (fi,r) acc =
 let tr_alloc_table (a,r) acc =
   Param(
     false,alloc_region_table_name(a,r),
-    Ref_type(Base_type(alloc_table_type a))) :: acc
+    Ref_type(Base_type(alloc_table_type (JCtag a)))) :: acc
 
 let tr_alloc_table2 (a,r) acc =
+  Jc_options.lprintf "Looking for %s in Jc_interp.tr_alloc_table2@." a;
   tr_alloc_table (find_struct a, r) acc
 
 (*************************

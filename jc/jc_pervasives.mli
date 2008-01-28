@@ -12,9 +12,6 @@ val unit_type : Jc_env.jc_type
 
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
 
-val tag_or_variant : ?error:(unit -> Jc_env.tag_or_variant) ->
-  Jc_env.jc_type -> Jc_env.tag_or_variant
-
 (* constants *)
 
 val zero: Num.num

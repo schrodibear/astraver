@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.78 2008-01-28 10:52:17 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.79 2008-01-28 15:55:22 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -61,28 +61,25 @@ let print_type fmt t =
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
     | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
-    | JCTpointer ({ jc_struct_info_name = name }, None, None)
-    | JCTvariant_pointer ({ jc_variant_info_name = name }, None, None) ->
-	fprintf fmt "%s[..]" name
-    | JCTpointer ({ jc_struct_info_name = name }, Some a, None)
-    | JCTvariant_pointer ({ jc_variant_info_name = name }, Some a, None) ->
-	fprintf fmt "%s[%s..]" name (Num.string_of_num a)
-    | JCTpointer ({ jc_struct_info_name = name }, None, Some b)
-    | JCTvariant_pointer ({ jc_variant_info_name = name }, None, Some b) ->
-	fprintf fmt "%s[..%s]" name (Num.string_of_num b)
-    | JCTpointer ({ jc_struct_info_name = name }, Some a, Some b)
-    | JCTvariant_pointer ({ jc_variant_info_name = name }, Some a, Some b) ->
-	if Num.eq_num a b then
-	  fprintf fmt "%s[%s]" name (Num.string_of_num a)
-	else
-	  fprintf fmt "%s[%s..%s]" name
-	    (Num.string_of_num a) (Num.string_of_num b)
+    | JCTpointer (
+	( JCtag { jc_struct_info_name = name }
+	| JCvariant { jc_variant_info_name = name }),
+	ao, bo) ->
+	begin match ao, bo with
+	  | None, None ->
+	      fprintf fmt "%s[..]" name
+	  | Some a, None ->
+	      fprintf fmt "%s[%s..]" name (Num.string_of_num a)
+	  | None, Some b ->
+	      fprintf fmt "%s[..%s]" name (Num.string_of_num b)
+	  | Some a, Some b ->
+	      if Num.eq_num a b then
+		fprintf fmt "%s[%s]" name (Num.string_of_num a)
+	      else
+		fprintf fmt "%s[%s..%s]" name
+		  (Num.string_of_num a) (Num.string_of_num b)
+	end
     | JCTnull -> fprintf fmt "(nulltype)"  
-
-let tag_or_variant ?(error=fun () -> assert false) = function
-  | JCTpointer(st, _, _) -> JCtag st
-  | JCTvariant_pointer(vi, _, _) -> JCvariant vi
-  | _ -> error ()
 
 let num_of_constant loc c =
     match c with
@@ -667,9 +664,11 @@ let direct_embedded_struct_fields st =
   List.fold_left 
     (fun acc fi -> 
       match fi.jc_field_info_type with
-	| JCTpointer(st', Some _, Some _) -> 
+	| JCTpointer(JCtag st', Some _, Some _) -> 
 	    assert (st.jc_struct_info_name <> st'.jc_struct_info_name);
 	    fi :: acc
+	| JCTpointer(JCvariant st', Some _, Some _) -> 
+	    assert false (* TODO *)
 	| _ -> acc
     ) [] st.jc_struct_info_fields
     
@@ -680,10 +679,12 @@ let embedded_struct_fields st =
     let fstructs = 
       List.fold_left 
 	(fun acc fi -> match fi.jc_field_info_type with
-	  | JCTpointer (st', Some _, Some _) -> 
+	  | JCTpointer (JCtag st', Some _, Some _) -> 
 	      assert 
 		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
 	      st' :: acc
+	   | JCTpointer (JCvariant vi, Some _, Some _) ->
+	       assert false (* TODO *)
 	   | _ -> assert false (* bug ? pas acc plutot ? *)
 	       (* en plus c'est un pattern-matching fragile *)
 	) [] fields
@@ -697,7 +698,9 @@ let embedded_struct_fields st =
   FieldSet.elements fields
 
 let field_sinfo fi = 
-  match fi.jc_field_info_type with JCTpointer(st,_,_) -> st | _ -> assert false
+  match fi.jc_field_info_type with
+    | JCTpointer(JCtag st, _, _) -> st
+    | _ -> assert false
 
 let field_bounds fi = 
   match fi.jc_field_info_type with 

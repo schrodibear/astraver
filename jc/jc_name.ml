@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.8 2008-01-24 14:08:24 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.9 2008-01-28 15:55:22 bardou Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -46,12 +46,9 @@ let variant_type_name vi = vi.jc_variant_info_name
 
 let struct_type_name st = variant_type_name (struct_variant st)
 
-(* Why type which modelises a variant. *)
-let variant_model_type vi =
-  simple_logic_type (variant_type_name vi)
-
-(* Why type which modelises a structure "root". *)
-let struct_model_type st = variant_model_type (struct_variant st)
+let tag_or_variant_type_name = function
+  | JCtag st -> struct_type_name st
+  | JCvariant vi -> variant_type_name vi
 
 let variant_alloc_table_name vi = vi.jc_variant_info_name ^ "_alloc_table"
 
@@ -64,16 +61,17 @@ let tag_name st = st.jc_struct_info_name ^ "_tag"
 let tag_table_name_vi vi =
   (variant_type_name vi) ^ "_tag_table"
 
-let tag_table_name st =
-  tag_table_name_vi (struct_variant st)
+let tag_table_name = function
+  | JCtag st -> tag_table_name_vi (struct_variant st)
+  | JCvariant vi -> tag_table_name_vi vi
 
-let alloc_table_name st =
-  (struct_type_name st) ^ "_alloc_table"
+let alloc_table_name tov =
+  (tag_or_variant_type_name tov) ^ "_alloc_table"
 
 let alloc_region_table_name (a, r) = 
   if !Jc_common_options.separation_sem = SepRegions then 
     (root_name a) ^ "_" ^ (Region.name r) ^ "_alloc_table"
-  else alloc_table_name a
+  else alloc_table_name (JCtag a)
 
 let field_memory_name fi = fi.jc_field_info_final_name
 
@@ -82,9 +80,13 @@ let field_region_memory_name (fi,r) =
     fi.jc_field_info_final_name ^ "_" ^ (Region.name r)
   else field_memory_name fi
 
-let valid_pred_name st = "valid_" ^ st.jc_struct_info_name
+let valid_pred_name = function
+  | JCtag st -> "valid_" ^ st.jc_struct_info_name
+  | JCvariant vi -> "valid_" ^ vi.jc_variant_info_name
 
-let valid_one_pred_name st = "valid_one_" ^ st.jc_struct_info_name
+let valid_one_pred_name = function
+  | JCtag st -> "valid_one_" ^ st.jc_struct_info_name
+  | JCvariant vi -> "valid_one_" ^ vi.jc_variant_info_name
 
 let alloc_param_name st = "alloc_" ^ st.jc_struct_info_name
 
@@ -96,11 +98,11 @@ let jessie_return_exception = "Return"
 let exception_name ei =
   ei.jc_exception_info_name ^ "_exc"
 
-let mutable_name st =
-  "mutable_"^(root_name st)
+let mutable_name tov =
+  "mutable_"^(tag_or_variant_type_name tov)
 
-let committed_name st =
-  "committed_"^(root_name st)
+let committed_name tov =
+  "committed_"^(tag_or_variant_type_name tov)
 
 let fully_packed_name st =
   "fully_packed_"^(root_name st)
@@ -113,6 +115,8 @@ let pack_name st =
 
 let unpack_name st =
   "unpack_"^(root_name st)
+
+let fully_packed_name = "fully_packed"
 
 (*
 Local Variables: 

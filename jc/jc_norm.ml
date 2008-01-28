@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.75 2008-01-27 18:11:02 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.76 2008-01-28 15:55:22 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -210,7 +210,7 @@ let make_decls loc sl tl =
 		   | Treal -> real_type, JCCreal "0.0"
 	       end
 	   | JCTenum _ ->  integer_type, JCCinteger "0"
-	   | JCTnull | JCTpointer _ | JCTvariant_pointer _ -> JCTnull, JCCnull
+	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull
 	   | JCTlogic _ -> assert false
        in
 	 make_decl loc vi (Some (make_const loc cst)) acc)
@@ -876,7 +876,7 @@ let rec invariant_for_struct this si =
 	  let this =
 	    match this.jc_term_type with
 	      | JCTpointer (_, a, b) ->
-		  { this with jc_term_type = JCTpointer (si, a, b) }
+		  { this with jc_term_type = JCTpointer (JCtag si, a, b) }
 	      | _ -> assert false (* never happen *)
 	  in
 	    make_and [invs; (invariant_for_struct this si)]
@@ -912,7 +912,7 @@ let code_function (fi, fs, sl) vil =
 	      List.fold_left
 		(fun acc vi ->
 		   match vi.jc_var_info_type with
-		     | JCTpointer (st, _, _) ->
+		     | JCTpointer (JCtag st, _, _) ->
 			 make_and 
 			   [acc; (invariant_for_struct 
 				    (term_no_loc (JCTvar vi) vi.jc_var_info_type) st)]

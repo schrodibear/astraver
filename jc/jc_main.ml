@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.94 2008-01-28 11:11:33 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.95 2008-01-28 15:55:22 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -51,6 +51,7 @@ let main () =
 	  let filename = Filename.chop_extension file in
 
 	  (* phase 1: parsing *)
+	  Jc_options.lprintf "Parsing@.";
 	  let ast = parse_file file in
 
           (* phase 2: typing *)
@@ -58,6 +59,7 @@ let main () =
 	  Jc_typing.type_file ast;
 
 	  (* phase 3: normalization *)
+	  Jc_options.lprintf "Normalization@.";
 	  let vil = 
 	    Hashtbl.fold
 	      (fun tag (vi, eo) acc ->
@@ -73,6 +75,7 @@ let main () =
 	    Jc_typing.functions_table;
 
 	  (* phase 4: computation of call graph *)
+	  Jc_options.lprintf "Computation of call graph@.";
 	  Hashtbl.iter 
 	    (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
 	    Jc_typing.logic_functions_table;
@@ -104,6 +107,7 @@ let main () =
 	  let annot_out,annot_fmt = Pp.open_file_and_formatter annot_file in
 	  if !Jc_options.annotation_sem <> AnnotNone then
 	    begin
+	      Jc_options.lprintf "Inference of annotations@.";
 	      if Jc_options.interprocedural then
 		(* interprocedural analysis over the call graph +
 		   intraprocedural analysis of each function called *)
@@ -147,6 +151,8 @@ let main () =
 	  end;
 	  
 	  (* production phase 1.1 : generation of Why logic types *)
+	  Jc_options.lprintf
+	    "production phase 1.1: generation of Why logic types@.";
 	  let d_types =
 	    Hashtbl.fold 
 	      (fun _ id acc ->
@@ -156,6 +162,9 @@ let main () =
 	  in	       	 
 
 	  (* production phase 1.2 : generation of Why memories *)
+	  Jc_options.lprintf
+	    "production phase 1.2: generation of Why memories \
+(structs_table)@.";
 	  let d_memories =
 	    Hashtbl.fold 
 	      (fun _ (st, _) acc ->
@@ -163,12 +172,18 @@ let main () =
 	      Jc_typing.structs_table
 	      d_types
 	  in	       	  
+	  Jc_options.lprintf
+	    "production phase 1.2: generation of Why memories \
+(variants_table)@.";
 	  let d_memories =
 	    Hashtbl.fold
 	      (fun _ -> Jc_interp.tr_variant)
 	      Jc_typing.variants_table
 	      d_memories
 	  in
+	  Jc_options.lprintf
+	    "production phase 1.2: generation of Why memories \
+(variables_table)@.";
 	  let d_memories =
 	    Hashtbl.fold 
 	      (fun _ (v,e) acc ->
@@ -176,6 +191,9 @@ let main () =
 	      Jc_norm.variables_table
 	      d_memories
 	  in	       	  
+	  Jc_options.lprintf
+	    "production phase 1.2: generation of Why memories \
+(constant_memories_set)@.";
 	  let d_memories,regions =
 	    FieldRegionSet.fold 
 	      (fun (fi,r) (acc,regions) -> 
@@ -187,15 +205,21 @@ let main () =
 	      (FieldRegionSet.map_repr !Jc_effect.constant_memories_set)
 	      (d_memories,RegionSet.singleton dummy_region)
 	  in	       	  
+	  Jc_options.lprintf
+	    "production phase 1.2: generation of Why memories \
+(alloc_region_table_set)@.";
 	  let d_memories,_ =
+	    let arts = StringRegionSet.map_repr
+	      !Jc_effect.alloc_region_table_set
+	    in
 	    StringRegionSet.fold 
 	      (fun (a,r) (acc,regions) -> 
 		let acc = 
 		  if RegionSet.mem r regions then acc else
 		    Jc_interp.tr_region r acc 
 		in
-		Jc_interp.tr_alloc_table2 (a,r) acc,RegionSet.add r regions)
-	      (StringRegionSet.map_repr !Jc_effect.alloc_region_table_set)
+		Jc_interp.tr_alloc_table2 (a,r) acc, RegionSet.add r regions)
+	      arts
 	      (d_memories,regions)
 	  in	       	  
 
@@ -211,6 +235,7 @@ let main () =
 	  in
 
 	  (* production phase 1.4 : generation of Why enum_types *)
+	  Jc_options.lprintf "Generation of Why enum_types@.";
 	  let d =
 	    Hashtbl.fold 
 	      (fun _ (ri (* ,to_int,to_int_,of_int *)) acc ->
@@ -219,6 +244,7 @@ let main () =
 	      d_exc
 	  in	       	  
 	  (* production phase x.x : generation of Why logic constants *)
+	  Jc_options.lprintf "Generation of Why logic constants@.";
 	  let d =
 	    Hashtbl.fold 
 	      (fun _ (vi,init) acc ->
@@ -227,6 +253,7 @@ let main () =
 	      d
 	  in	       	  
 	  (* production phase 2 : generation of Why logic functions *)
+	  Jc_options.lprintf "Generation of Why logic functions@.";
 	  let d_lfuns = 
 	    Hashtbl.fold 
 	      (fun _ (li, p) acc ->
@@ -235,6 +262,7 @@ let main () =
 	      d
 	  in
 	  (* production phase 3 : generation of Why axioms *)
+	  Jc_options.lprintf "Generation of Why axioms@.";
 	  let d_axioms = 
 	    Hashtbl.fold 
 	      (fun id (is_axiom,labels,p) acc ->
@@ -243,6 +271,7 @@ let main () =
 	      d_lfuns
 	  in	       
 	  (* production phase 3.5 : generation of globalinvariant predicates *)
+	  Jc_options.lprintf "Generation of globalinvariant predicates@.";
 	  let d_axioms =
 	    if !Jc_options.inv_sem = InvOwnership then
 	      Jc_invariants.make_global_invariants d_axioms
@@ -266,6 +295,7 @@ let main () =
 		let d_inv = d_funs in
 	        (* production phase 5.2 :
                   "mutable" and "committed" declarations *)
+		Jc_options.lprintf "mutable and committed declarations@.";
 		let d_inv =
 		  Hashtbl.fold
 		    (fun _ (st, _) acc ->
@@ -283,6 +313,7 @@ let main () =
                     d_inv
                 in*)
 	        (* production phase 5.4 : pack *)
+		Jc_options.lprintf "production phase 5.4: pack@.";
 		let d_inv =
 		  Hashtbl.fold
 		    (fun _ (st, _) acc ->
@@ -291,6 +322,7 @@ let main () =
 		    d_inv
 		in
 	        (* production phase 5.5 : unpack *)
+		Jc_options.lprintf "production phase 5.5: pack@.";
 		let d_inv =
 		  Hashtbl.fold
 		    (fun _ (st, _) acc ->
@@ -304,17 +336,18 @@ let main () =
 	      d_funs
 	  in
 	  (* production phase 6.1 : produce Why file *)
+	  Jc_options.lprintf "production phase 6.1: produce Why file@.";
 	  Pp.print_in_file 
 	    (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_inv)
 	    (Lib.file "why" (filename ^ ".why"));
 	  (* production phase 6.2 : produce locs file *)
+	  Jc_options.lprintf "production phase 6.2: produce locs file@.";
 	  Pp.print_in_file 
 	    Jc_interp.print_locs
 	    (Lib.file "." (filename ^ ".loc"));
 	  (* production phase 6.3 : produce makefile *)
+	  Jc_options.lprintf "production phase 6.3: produce makefile@.";
 	  Jc_make.makefile filename
-	    
-	    
 	| _ -> Jc_options.usage ()
 	    
     with

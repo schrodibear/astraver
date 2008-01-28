@@ -26,9 +26,9 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.86 2008-01-25 17:18:47 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.87 2008-01-28 15:55:22 bardou Exp $ *)
 
-
+open Jc_name
 open Jc_env
 open Jc_envset
 open Jc_fenv
@@ -173,11 +173,13 @@ let add_alloc_effect ef (a,r) =
 let add_tag_effect ef a =
   { ef with jc_effect_tag_table = StringSet.add a ef.jc_effect_tag_table } 
 
-let add_mutable_effect ef st =
-  { ef with jc_effect_mutable = StringSet.add st ef.jc_effect_mutable }
+let add_mutable_effect ef tov =
+  { ef with jc_effect_mutable = StringSet.add
+      (tag_or_variant_type_name tov) ef.jc_effect_mutable }
   
-let add_committed_effect ef st =
-  { ef with jc_effect_committed = StringSet.add st ef.jc_effect_committed }
+let add_committed_effect ef tov =
+  { ef with jc_effect_committed = StringSet.add
+      (tag_or_variant_type_name tov) ef.jc_effect_committed }
 
 let add_exception_effect ef a =
   { ef with jc_raises = ExceptionSet.add a ef.jc_raises }
@@ -202,12 +204,11 @@ let add_alloc_reads fef (a,r) =
 let add_tag_reads fef a =
   { fef with jc_reads = add_tag_effect fef.jc_reads a }
 
-let add_mutable_reads fef st =
-  { fef with jc_reads = add_mutable_effect fef.jc_reads st.jc_struct_info_name }
+let add_mutable_reads fef tov =
+  { fef with jc_reads = add_mutable_effect fef.jc_reads tov }
 
-let add_committed_reads fef st =
-  { fef with jc_reads = add_committed_effect fef.jc_reads
-      st.jc_struct_info_name }
+let add_committed_reads fef tov =
+  { fef with jc_reads = add_committed_effect fef.jc_reads tov }
 
 let add_field_writes label fef (fi,r) =
   { fef with jc_writes = add_memory_effect label fef.jc_writes (fi,r) }
@@ -230,13 +231,11 @@ let add_alloc_writes fef (a,r) =
 let add_tag_writes fef a =
   { fef with jc_writes = add_tag_effect fef.jc_writes a }
 
-let add_mutable_writes fef st =
-  { fef with jc_writes = add_mutable_effect fef.jc_writes
-      st.jc_struct_info_name }
+let add_mutable_writes fef tov =
+  { fef with jc_writes = add_mutable_effect fef.jc_writes tov }
 
-let add_committed_writes fef st =
-  { fef with jc_writes = add_committed_effect fef.jc_writes
-      st.jc_struct_info_name }
+let add_committed_writes fef tov =
+  { fef with jc_writes = add_committed_effect fef.jc_writes tov }
 
 let same_effects ef1 ef2 =
   StringRegionSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
@@ -353,7 +352,7 @@ let rec assertion ef a =
 	  (add_mutable_effect 
 	     (tag ef ta
 		(Some (root_name st)))
-	     (root_name st)) t
+	     (JCtag st)) t
     | JCAtagequality (t1, t2, h) ->
 	tag (tag ef t1 h) t2 h
 (*    | JCAmatch (t, pal) ->
@@ -415,10 +414,12 @@ let rec expr ef e =
 *)
     | JCEfree e ->
 	begin match e.jc_expr_type with
-	  | JCTpointer(st, _, _) ->
+	  | JCTpointer(JCtag st, _, _) ->
 	      let name = root_name st in
 	      (* write tag table ? *)
 	      add_alloc_writes (add_tag_writes ef name) (name,e.jc_expr_region)
+	  | JCTpointer(JCvariant vi, _, _) ->
+	      assert false (* TODO *)
 	  | _ -> assert false
 	end
 (*    | JCEmatch(e, pel) ->
@@ -488,28 +489,28 @@ let rec statement ef s =
 	let ef = List.fold_left
 	  (fun ef fi ->
 	     match fi.jc_field_info_type with
-	       | JCTpointer(st, _, _) ->
+	       | JCTpointer(tov, _, _) ->
 	           (* Assert fields fully mutable => need mutable and tag_table (of field) as reads *)
-		   let ef = add_mutable_reads ef st in
-		   let ef = add_tag_reads ef (root_name st) in
+		   let ef = add_mutable_reads ef tov in
+		   let ef = add_tag_reads ef (tag_or_variant_type_name tov) in
 	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
-		   let ef = add_committed_reads ef st in
-		   let ef = add_committed_writes ef st in
+		   let ef = add_committed_reads ef tov in
+		   let ef = add_committed_writes ef tov in
 		   (* ...and field as reads *)
 		   add_field_reads LabelHere ef (fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
 	(* Change structure mutable => need mutable as reads and writes *)
-	let ef = add_mutable_reads ef st in
-	let ef = add_mutable_writes ef st in
+	let ef = add_mutable_reads ef (JCtag st) in
+	let ef = add_mutable_writes ef (JCtag st) in
         (* And that's all *)
 	ef
     | JCSunpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Change structure mutable => need mutable as reads and writes *)
-	let ef = add_mutable_reads ef st in
-	let ef = add_mutable_writes ef st in
+	let ef = add_mutable_reads ef (JCtag st) in
+	let ef = add_mutable_writes ef (JCtag st) in
 	(* Fields *)
 	let ef = List.fold_left
 	  (fun ef fi ->
@@ -615,7 +616,7 @@ let spec ef s =
 let parameter ef vi =
   match vi.jc_var_info_type with
     | JCTpointer (st, _, _) ->
-	let name = root_name st in
+	let name = tag_or_variant_type_name st in
 	  add_alloc_reads (add_tag_reads ef name) (name,vi.jc_var_info_region)
     | _ -> ef
 	

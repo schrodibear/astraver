@@ -15,6 +15,17 @@ open Jc_fenv
 open Jc_region
 open Jc_name
 
+(* Why type which modelises a variant. *)
+let variant_model_type vi =
+  simple_logic_type (variant_type_name vi)
+
+(* Why type which modelises a structure "root". *)
+let struct_model_type st = variant_model_type (struct_variant st)
+
+let tag_or_variant_model_type = function
+  | JCtag st -> struct_model_type st
+  | JCvariant vi -> variant_model_type vi
+
 let struct_model_type2 name =
   let st, _ = Hashtbl.find Jc_typing.structs_table name in
   struct_model_type st
@@ -31,10 +42,10 @@ let pointer_type_vi vi =
     logic_type_args = [variant_model_type vi];
   }
 
-let tag_table_type st = 
+let tag_table_type tov = 
   {
     logic_type_name = tag_table_type_name;
-    logic_type_args = [struct_model_type st];
+    logic_type_args = [tag_or_variant_model_type tov];
   }
 
 let tag_table_type_vi vi = 
@@ -43,16 +54,16 @@ let tag_table_type_vi vi =
     logic_type_args = [variant_model_type vi];
   }
 
-let tag_id_type st = 
+let tag_id_type tov = 
   {
     logic_type_name = tag_id_type_name;
-    logic_type_args = [struct_model_type st];
+    logic_type_args = [tag_or_variant_model_type tov];
   }
 
-let alloc_table_type st =
+let alloc_table_type tov =
   {
     logic_type_name = alloc_table_type_name;
-    logic_type_args = [struct_model_type st];
+    logic_type_args = [tag_or_variant_model_type tov];
   }
 
 let tr_native_type t =
@@ -68,10 +79,10 @@ let tr_base_type t =
     | JCTlogic s -> simple_logic_type s
     | JCTenum ri -> 
 	simple_logic_type ri.jc_enum_info_name
-    | JCTpointer (st, a, b) ->
+    | JCTpointer (JCtag st, _, _) ->
 	{ logic_type_name = pointer_type_name;
 	  logic_type_args = [struct_model_type st] }
-    | JCTvariant_pointer (vi, a, b) ->
+    | JCTpointer (JCvariant vi, _, _) ->
 	{ logic_type_name = pointer_type_name;
 	  logic_type_args = [variant_model_type vi] }
     | JCTnull -> assert false
@@ -140,7 +151,7 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	    | _ -> r
 	in
 	let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	(alloc_region_table_name (st, r), alloc_table_type st)::acc)
+	(alloc_region_table_name (st, r), alloc_table_type (JCtag st))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
@@ -229,19 +240,19 @@ let find_struct a =
   fst (Hashtbl.find Jc_typing.structs_table a)
 
 let tag_table_name2 a =
-  tag_table_name (find_struct a)
+  tag_table_name (JCtag (find_struct a))
 
 let alloc_table_name2 a =
-  alloc_table_name (find_struct a)
+  alloc_table_name (JCtag (find_struct a))
 
 let alloc_region_table_name2 (a, r) =
   alloc_region_table_name (find_struct a, r)
 
 let mutable_name2 a =
-  mutable_name (find_struct a)
+  mutable_name (JCtag (find_struct a))
 
 let committed_name2 a =
-  committed_name (find_struct a)
+  committed_name (JCtag (find_struct a))
 
 let alloc_table_type2 a =
   {
@@ -320,8 +331,8 @@ let make_select f this =
 let make_select_fi fi =
   make_select (LVar fi.jc_field_info_final_name)
 
-let make_select_committed root =
-  make_select (LVar (committed_name root))
+let make_select_committed tov =
+  make_select (LVar (committed_name tov))
 
 let make_typeof_vi vi x =
   LApp("typeof", [ LVar (tag_table_name_vi vi); x ])
@@ -345,8 +356,7 @@ let any_value ty =
 	| Treal -> App (Var "any_real", Void)
       end
   | JCTnull 
-  | JCTpointer _
-  | JCTvariant_pointer _ -> App (Var "any_pointer", Void)
+  | JCTpointer _ -> App (Var "any_pointer", Void)
   | JCTenum ri -> 
       App (Var ("any_" ^ ri.jc_enum_info_name), Void)
   | JCTlogic _ -> assert false

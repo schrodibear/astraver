@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.102 2008-01-28 14:12:52 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.103 2008-01-28 15:55:22 bardou Exp $ *)
 
 open Format
 open Jc_output
@@ -198,7 +198,7 @@ let array_struct_table = Hashtbl.create 17
       
 let rec get_array_struct loc t = 
   try
-    Hashtbl.find array_struct_table t 
+    (Hashtbl.find array_struct_table t: struct_info)
   with Not_found -> 
     eprintf "Array struct for type %a not found: %a@." 
       Java_typing.print_type t Loc.report_position loc;
@@ -211,9 +211,9 @@ and tr_type loc t =
     | JTYclass (non_null, ci) -> 
 	let st = get_class ci in
 	  JCTpointer 
-	    (st, Some num_zero, if non_null then Some num_zero else None)
+	    (JCtag st, Some num_zero, if non_null then Some num_zero else None)
     | JTYinterface ii ->
-	JCTpointer(st_interface, Some num_zero,None)
+	JCTpointer(JCtag st_interface, Some num_zero,None)
 (*
 	let st = get_interface ii in
 	JCTpointer(st,Some num_zero,
@@ -222,7 +222,7 @@ and tr_type loc t =
 	
     | JTYarray t ->
 	let st = get_array_struct loc t in
-	JCTpointer(st,Some num_zero,None)
+	JCTpointer(JCtag st,Some num_zero,None)
 
 let tr_type_option loc t =
   match t with
@@ -640,7 +640,7 @@ let rec assertion ?(reg=0) a =
       | JAinstanceof (t, ty) ->
 	  let ty = tr_type Loc.dummy_position ty in
 	    match ty with
-	      | JCTpointer (si, _, _) ->
+	      | JCTpointer (JCtag si, _, _) ->
 		  JCAinstanceof (term t, LabelNone, si)
 	      | _ -> assert false
 
@@ -740,7 +740,7 @@ let array_types decls =
        (* java_array_length fun *)
        let fi = create_java_array_length_fun st in
        let vi = Jc_pervasives.var 
-	 (JCTpointer(st,Some num_zero,None)) "x" 
+	 (JCTpointer(JCtag st,Some num_zero,None)) "x" 
        in
        let result = Jc_pervasives.var Jc_pervasives.integer_type "\\result" in
        let vit = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
@@ -1155,7 +1155,7 @@ let rec expr ?(reg=false) e =
 	  assert false (* TODO *)
       | JEnew_object(ci,args) ->
 	  let si = get_class ci.constr_info_class in
-	  let ty = JCTpointer(si, Some num_zero, Some num_zero) in
+	  let ty = JCTpointer(JCtag si, Some num_zero, Some num_zero) in
 	  let this = Jc_pervasives.var ~formal:true ty "this" in
 	  let tt = Jc_pervasives.var ~formal:true Jc_pervasives.unit_type "tt" in
 	  let args = (dummy_loc_expr ty (JCTEvar this)):: List.map expr args in
@@ -1503,7 +1503,7 @@ let tr_field type_name acc fi =
 		  let n = List.length il in
 		    assert (List.length values = n);
 		    let si = match vi_ty with
-		      | JCTpointer (si, _, _) -> si
+		      | JCTpointer (JCtag si, _, _) -> si
 		      | _ -> assert false
 		    in
 		    let vit = dummy_loc_term vi_ty (JCTvar vi) in
@@ -1628,7 +1628,8 @@ let tr_class ci acc0 acc =
     let acc = 
       if ci.class_info_name = "Object" then
 	let non_null_fi = create_non_null_fun si in
-	let vi = Jc_pervasives.var (JCTpointer (si, Some num_zero, None)) "x" in
+	let vi = Jc_pervasives.var
+	  (JCTpointer (JCtag si, Some num_zero, None)) "x" in
 	let result = Jc_pervasives.var Jc_pervasives.boolean_type "\\result" in
 	let vit = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
 	let offset_maxt = dummy_loc_term Jc_pervasives.integer_type
