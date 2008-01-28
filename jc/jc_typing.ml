@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.169 2008-01-28 11:11:33 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.170 2008-01-28 11:43:12 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2605,7 +2605,7 @@ of an invariant policy";
 	  with Not_found ->
 	    Hashtbl.add logic_type_table id id
 	end
-    | JCPDlemma(is_axiom,id,labels,e) ->
+    | JCPDlemma(id,is_axiom,labels,e) ->
 	let te = assertion labels (default_label labels) [] e in
 	Hashtbl.add axioms_table id (is_axiom,labels,te)
     | JCPDglobinv (id, e) ->

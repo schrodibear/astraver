@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.83 2008-01-28 11:37:02 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.84 2008-01-28 11:43:12 marche Exp $ */
 
 %{
 
@@ -444,9 +444,9 @@ variable_definition:
 
 axiom_definition:
 | AXIOM IDENTIFIER label_binders COLON expression
-    { locate_decl( JCPDlemma(true,$2,$3,$5)) }
+    { locate_decl( JCPDlemma($2,true,$3,$5)) }
 | LEMMA IDENTIFIER label_binders COLON expression
-    { locate_decl( JCPDlemma(false,$2,$3,$5)) }
+    { locate_decl( JCPDlemma($2,false,$3,$5)) }
 ;
 
 
