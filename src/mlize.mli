@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.mli,v 1.13 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: mlize.mli,v 1.14 2008-01-28 13:16:50 regisgia Exp $ i*)
 
 (*s translation of imperative programs into intermediate functional programs *)
 
@@ -34,5 +34,5 @@ open Cc
 open Env
 open Logic
 
-val trad : typed_expr -> Rename.t -> (Loc.position * predicate) cc_term
+val trad : typed_expr -> Rename.t -> cc_functional_program
 
