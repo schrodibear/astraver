@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.77 2008-01-23 15:18:12 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.78 2008-01-28 10:52:17 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -684,7 +684,8 @@ let embedded_struct_fields st =
 	      assert 
 		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
 	      st' :: acc
-	   | _ -> assert false
+	   | _ -> assert false (* bug ? pas acc plutot ? *)
+	       (* en plus c'est un pattern-matching fragile *)
 	) [] fields
     in
     fields @ List.flatten (List.map (collect forbidden_set) fstructs)
