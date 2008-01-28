@@ -1,17 +1,17 @@
 /* complements for non-linear integer arithmetic */
 
-//@ axiom zero_right: \forall integer x; x*0 == 0;  
-//@ axiom zero_left: \forall integer x; 0*x == 0; 
-//@ axiom one_right: \forall integer x; x*1 == x; 
-//@ axiom one_left: \forall integer x; 1*x == x; 
-//@ axiom two_right: \forall integer x; x*2 == x+x; 
-//@ axiom two_left: \forall integer x; 2*x == x+x; 
+//@ lemma zero_right: \forall integer x; x*0 == 0;  
+//@ lemma zero_left: \forall integer x; 0*x == 0; 
+//@ lemma one_right: \forall integer x; x*1 == x; 
+//@ lemma one_left: \forall integer x; 1*x == x; 
+//@ lemma two_right: \forall integer x; x*2 == x+x; 
+//@ lemma two_left: \forall integer x; 2*x == x+x; 
 
-/*@ axiom distr_right: 
+/*@ lemma distr_right: 
   @   \forall integer x,y,z; x*(y+z) == (x*y)+(x*z); 
   @*/
 
-/*@ axiom distr_left: 
+/*@ lemma distr_left: 
   @   \forall integer x,y,z; (x+y)*z == (x*z)+(y*z);
   @*/
 
@@ -20,12 +20,12 @@
   @ }
   @*/
 
-/*@ axiom div_mod_property:
+/*@ lemma div_mod_property:
   @  \forall integer x,y; 
   @    x >=0 && y > 0 ==> x%y  == x - y*(x/y);  
   @*/
 
-/*@ axiom mod_property:
+/*@ lemma mod_property:
   @  \forall integer x,y; 
   @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
   @*/

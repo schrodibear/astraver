@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.86 2008-01-27 18:11:02 nrousset Exp $ *)
+(* $Id: jc_output.ml,v 1.87 2008-01-28 11:37:02 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -45,7 +45,7 @@ type jc_decl =
       (* deprecated, all tag definitions of a file are mutually recursive *)
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * texpr option
-  | JCaxiom_def of string * logic_label list * assertion
+  | JClemma_def of string * bool * logic_label list * assertion
   | JClogic_fun_def of jc_type option * string * logic_label list 
       * var_info list * term_or_assertion      
   | JCexception_def of string * exception_info
@@ -558,12 +558,10 @@ let rec print_decl fmt d =
     | JCvar_def(ty,id,init) ->
 	fprintf fmt "@\n@[%a %s%a;@]@." print_type ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
-    | JCaxiom_def(id,[],a) ->
-	fprintf fmt "@\n@[axiom %s :@\n%a@]@." id assertion a
-    | JCaxiom_def(id,lab,a) ->
-	fprintf fmt "@\n@[axiom %s{%a} :@\n%a@]@." id 
-	  (print_list comma label) lab
-	  assertion a
+    | JClemma_def(id,is_axiom,lab,a) ->
+	fprintf fmt "@\n@[%s %s" (if is_axiom then "axiom" else "lemma") id;
+	if lab <> [] then fprintf fmt "{%a}" (print_list comma label) lab;
+	fprintf fmt " :@\n%a@]@." assertion a
     | JCglobinv_def(id,a) ->
 	fprintf fmt "@\n@[invariant %s :@\n%a@]@." id assertion a
     | JCexception_def(id,ei) ->

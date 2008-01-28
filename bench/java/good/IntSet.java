@@ -1,6 +1,6 @@
 
-/*@ axiom mean_property : 
-  @   \forall integer x,y; x <= y ==> x <= (x+y)/2 && (x+y)/2 <= y ;
+/*@ lemma mean_property : 
+  @   \forall integer x,y; x <= y ==> x <= (x+y)/2 <= y ;
   @*/
 
 /*@ predicate is_sorted{L}(int[] t) {

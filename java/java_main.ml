@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.45 2008-01-27 18:11:01 nrousset Exp $ *)
+(* $Id: java_main.ml,v 1.46 2008-01-28 11:37:02 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -205,8 +205,8 @@ let main () =
 	(* production phase 3 : generation of Jessie axioms *)
 	let decls = 
 	  Hashtbl.fold 
-	    (fun id (lab,p) acc ->
-	       Java_interp.tr_axiom id lab p acc)
+	    (fun id (is_axiom,lab,p) acc ->
+	       Java_interp.tr_axiom id is_axiom lab p acc)
 	    Java_typing.axioms_table
 	    decls
 	in	       

@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.32 2008-01-25 16:29:57 marche Exp $
+$Id: java_parser.mly,v 1.33 2008-01-28 11:37:02 marche Exp $
 
 */
 
@@ -133,7 +133,7 @@ $Id: java_parser.mly,v 1.32 2008-01-25 16:29:57 marche Exp $
 
 %token REQUIRES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
 %token INVARIANT LOOP_INVARIANT DECREASES
-%token AXIOM LOGIC TYPE PREDICATE READS
+%token AXIOM LEMMA LOGIC TYPE PREDICATE READS
 %token BSFORALL BSEXISTS BSOLD BSAT BSRESULT BSNOTHING
 %token NON_NULL NULLABLE
 
@@ -992,7 +992,9 @@ kml_type_decl:
 | LOGIC type_expr ident label_binders method_parameters READS expr_comma_list SEMICOLON EOF
     { JPTlogic_reads($3,Some $2,$4,$5,$7) }
 | AXIOM ident label_binders COLON expr SEMICOLON EOF
-    { JPTaxiom($2,$3,$5) }
+    { JPTlemma($2,true,$3,$5) }
+| LEMMA ident label_binders COLON expr SEMICOLON EOF
+    { JPTlemma($2,false,$3,$5) }
 
 label_binders:
 | /* epsilon */ { [] }

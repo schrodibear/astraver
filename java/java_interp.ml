@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.100 2008-01-27 18:11:01 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.101 2008-01-28 11:37:02 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1502,8 +1502,8 @@ let tr_constr ci req behs b acc =
 	  
 (*s axioms *)
 
-let tr_axiom id lab p acc =
-  JCaxiom_def(id,List.map tr_logic_label lab,assertion p)::acc
+let tr_axiom id is_axiom lab p acc =
+  JClemma_def(id,is_axiom,List.map tr_logic_label lab,assertion p)::acc
 
 
 let tr_logic_fun fi b acc =   
@@ -1645,7 +1645,9 @@ let tr_field type_name acc fi =
       let decl = match axiom_body with
 	| None -> [decl]
 	| Some a -> 
-	    [JCaxiom_def (fi.java_field_info_name ^ "_values", [Jc_env.LabelHere], a); decl]
+	    [JClemma_def (fi.java_field_info_name ^ "_values", 
+			  true, [Jc_env.LabelHere], a); 
+	     decl]
       in
 	decl @ acc      
     else

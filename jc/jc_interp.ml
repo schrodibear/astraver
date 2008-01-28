@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.219 2008-01-28 11:11:33 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.220 2008-01-28 11:37:02 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2530,7 +2530,7 @@ let tr_axiom id is_axiom p acc =
   in
   (* How to add quantification on other effects (alloc, tag) without knowing 
    * their type ? *)
-  if is_axiom then Axiom(id,a)::acc else Axiom(id,a)::Goal(id,a)::acc
+  if is_axiom then Axiom(id,a)::acc else Goal(id,a)::Axiom(id ^ "_as_axiom",a)::acc
 
 let tr_exception ei acc =
   Jc_options.lprintf "producing exception '%s'@." ei.jc_exception_info_name;

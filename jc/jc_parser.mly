@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.82 2008-01-28 11:11:33 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.83 2008-01-28 11:37:02 marche Exp $ */
 
 %{
 
@@ -505,7 +505,7 @@ postfix_expression:
 | BSOLD LPAR expression RPAR 
     { locate_expr (JCPEold($3)) }
 | BSAT LPAR expression COMMA IDENTIFIER RPAR 
-    { locate_expr (JCPEat($3,LabelName $5)) }
+    { locate_expr (JCPEat($3,label $5)) }
 | BSOFFSET_MAX LPAR expression RPAR 
     { locate_expr (JCPEoffset(Offset_max,$3)) }
 | BSOFFSET_MIN LPAR expression RPAR 

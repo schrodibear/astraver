@@ -131,7 +131,7 @@ let type_decl d =
     | JPTclass c -> JPTclass (class_decl c)
     | JPTinterface i -> JPTinterface (interface_decl i)
     | JPTannot(loc,s) -> parse_annot loc s Java_parser.kml_type_decl
-    | JPTaxiom _ 
+    | JPTlemma _ 
     | JPTlogic_type_decl _
     | JPTlogic_reads _ 
     | JPTlogic_def _ -> assert false

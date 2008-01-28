@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.16 2008-01-25 16:29:57 marche Exp $
+$Id: java_lexer.mll,v 1.17 2008-01-28 11:37:02 marche Exp $
 
 ***************************************************************************)
 
@@ -102,6 +102,7 @@ $Id: java_lexer.mll,v 1.16 2008-01-25 16:29:57 marche Exp $
 	  "integer", INTEGER;
 	  "interface", INTERFACE;
 	  "invariant", INVARIANT;
+	  "lemma", LEMMA;
 	  "logic", LOGIC;
 	  "long", LONG;
 	  "loop_invariant", LOOP_INVARIANT;

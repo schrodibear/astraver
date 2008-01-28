@@ -1,34 +1,34 @@
 
 /* complements for non-linear integer arithmetic */
 
-//@ axiom zero_right: \forall integer x; x*0 == 0;
-//@ axiom zero_left: \forall integer x; 0*x == 0;
-//@ axiom one_right: \forall integer x; x*1 == x;
-//@ axiom one_left: \forall integer x; 1*x == x;
-//@ axiom two_right: \forall integer x; x*2 == x+x;
-//@ axiom two_left: \forall integer x; 2*x == x+x;
+//@ lemma zero_right: \forall integer x; x*0 == 0;
+//@ lemma zero_left: \forall integer x; 0*x == 0;
+//@ lemma one_right: \forall integer x; x*1 == x;
+//@ lemma one_left: \forall integer x; 1*x == x;
+//@ lemma two_right: \forall integer x; x*2 == x+x;
+//@ lemma two_left: \forall integer x; 2*x == x+x;
 
-/*@ axiom distr_right: 
+/*@ lemma distr_right: 
   @   \forall integer x,y,z; x*(y+z) == (x*y)+(x*z);
   @*/
 
-/*@ axiom distr_left: 
+/*@ lemma distr_left: 
   @   \forall integer x,y,z; (x+y)*z == (x*z)+(y*z);
   @*/
 
-/*@ axiom sqr_short_elim: 
+/*@ lemma sqr_short_elim: 
   @   \forall integer x; x*x <= 32760 ==> x <= 180;
   @*/
 
-/*@ axiom sqr_short_intro: 
+/*@ lemma sqr_short_intro: 
   @   \forall integer x; 0 <= x && x <= 181 ==> x*x <= 32761;
   @*/
 
-/*@ axiom sqr_int_elim: 
+/*@ lemma sqr_int_elim: 
   @   \forall integer x; x*x <= 2147395599 ==> x <= 46339;
   @*/
 
-/*@ axiom sqr_int_intro: 
+/*@ lemma sqr_int_intro: 
   @   \forall integer x; 0 <= x && x <= 46340 ==> x*x <= 2147395600;
   @*/
 
