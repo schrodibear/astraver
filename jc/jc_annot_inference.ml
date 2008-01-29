@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.96 2008-01-27 18:11:02 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.97 2008-01-29 08:48:10 moy Exp $ *)
 
 open Pp
 open Format
@@ -128,7 +128,11 @@ let full_expr e ty loc = {
 (* return the struct_info of (assumed) pointer t *)
 let struct_of_term t =
   match t.jc_term_type with
-    | JCTpointer(st,_,_) -> st
+    | JCTpointer(st,_,_) -> 
+	begin match st with 
+	  | JCtag st -> st
+	  | JCvariant _ -> assert false (* TODO *)
+ 	end
     | _ -> 
       if debug then printf "[struct_of_term] %a@." Jc_output.term t;
       assert false
@@ -179,7 +183,6 @@ let is_integral_type = function
 	| Tinteger -> true
       end
   | JCTenum _ -> true
-  | JCTvariant_pointer _
   | JCTpointer _ | JCTlogic _ | JCTnull -> false
 
 let equality_operator_for_type = function
@@ -192,7 +195,6 @@ let equality_operator_for_type = function
       end
   | JCTlogic _ -> assert false
   | JCTenum _ -> Beq_int
-  | JCTvariant_pointer _ -> Beq_pointer
   | JCTpointer _ -> Beq_pointer
   | JCTnull -> Beq_pointer
 
@@ -854,12 +856,11 @@ end = struct
 	    | Tboolean | Tinteger -> true
 	  end
       | JCTenum _ -> true
-      | JCTvariant_pointer _ 
       | JCTpointer _ | JCTlogic _ | JCTnull -> false
 
   let has_offset_min_variable t =
     match t.jc_term_type with
-      | JCTvariant_pointer _ | JCTpointer _ -> true
+      | JCTpointer _ -> true
       | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull -> false
 
   let has_offset_max_variable = has_offset_min_variable
