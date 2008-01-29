@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.109 2007-11-26 11:07:06 marche Exp $ i*)
+(*i $Id: wp.ml,v 1.110 2008-01-29 16:54:47 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -80,15 +80,6 @@ let filter_post k =
   option_app (fun (q, ql) -> (q, List.filter keep ql))
 
 
-let explanation_table = Hashtbl.create 97
-let explanation_counter = ref 0
-
-let reg_explanation e =
-  incr explanation_counter;
-  let id = !explanation_counter in
-  if debug then Format.eprintf "registering internal explanation '%d'@." id;
-  Hashtbl.add explanation_table id e;
-  Internal id
 
 
 (*s post-condition for a loop body *)
@@ -104,7 +95,7 @@ let while_post_block env inv var e =
     | Some (loc,phi,_,r) -> 
 	if debug then 
 	  Format.eprintf "Loc for variant = %a@." Loc.gen_report_position loc;
-	let id = reg_explanation (Cc.VCEvardecr(loc,phi)) in
+	let id = Util.reg_explanation (Cc.VCEvardecr(loc,phi)) in
 	Pnamed(id, Papp (r, [phi; put_label_term env lab phi], [])) 
   in
   let ql = default_exns_post (effect e) in

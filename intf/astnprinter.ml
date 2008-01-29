@@ -98,7 +98,7 @@ let print_term fmt t =
     | Tnamed (Internal n, t) ->
 	begin
 	  try
-	    let _xpl = Hashtbl.find Wp.explanation_table n in
+	    let _xpl = Hashtbl.find Util.explanation_table n in
 	    (* TODO *)
 	    (* let n = new_tag xpl in
 	    pp_open_tag fmt n;
@@ -186,7 +186,7 @@ let print_predicate fmt p =
     | Pnamed (Internal n, p) ->
 	begin
 	  try
-	    let _xpl = Hashtbl.find Wp.explanation_table n in
+	    let _xpl = Hashtbl.find Util.explanation_table n in
 	    (* TODO *)
 	    (* let n = new_tag xpl in
 	    pp_open_tag fmt n;

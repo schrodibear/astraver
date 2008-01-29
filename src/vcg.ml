@@ -871,7 +871,7 @@ let rec explain_for_pred internal user = function
 	      if debug then 
 		Format.eprintf "looking for internal explanation '%d'@." n;
 	      try
-		let e = Hashtbl.find Wp.explanation_table n in
+		let e = Hashtbl.find Util.explanation_table n in
 		if debug then Format.eprintf "found@.";
 		e
 	      with

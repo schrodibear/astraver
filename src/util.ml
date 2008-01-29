@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.142 2007-12-19 15:45:57 marche Exp $ i*)
+(*i $Id: util.ml,v 1.143 2008-01-29 16:54:47 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -1065,6 +1065,16 @@ let print_explanation fmt (loc,k) =
     | EKVarDecr -> fprintf fmt "kind = VarDecr@\n" 
     | EKLoopInvInit -> fprintf fmt "kind = LoopInvInit@\n" 
     | EKLoopInvPreserv -> fprintf fmt "kind = LoopInvPreserv@\n"
+
+let explanation_table = Hashtbl.create 97
+let explanation_counter = ref 0
+
+let reg_explanation e =
+  incr explanation_counter;
+  let id = !explanation_counter in
+  if debug then Format.eprintf "registering internal explanation '%d'@." id;
+  Hashtbl.add explanation_table id e;
+  Internal id
 
 let print_loc_predicate fmt (loc,p) =
   match p with
