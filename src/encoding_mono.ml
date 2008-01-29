@@ -3,6 +3,8 @@ open Logic
 open Logic_decl
 
 let loc = Loc.dummy_floc
+let debug = false
+let f2s (s,l,b,e) = Printf.sprintf "File %s, line %d, characters %d-%d" s l b e
 
 let prefix = fun s -> "c_"^s
 (* let suffix = "_c" *)
@@ -151,8 +153,14 @@ let instantiate_arity id inst =
     try List.assoc (Ident.string id) !arities
     with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
+    if debug then 
+      (print_string "\t{";
+       Env.Vmap.iter (fun _ v -> Printf.printf "%d" v.tag) vs;
+       print_endline "}");
     match log_type with
 	Function (ptl, rt) ->
+	  if debug then Printf.printf "Instantiate : %d vars - %d types\n"
+	    (Env.Vmap.fold (fun _ _ n -> n + 1) vs 0) (List.length inst);
 	  ignore 
 	    (Env.Vmap.fold (fun _ v l -> 
 			      (match l with [] -> []
@@ -220,6 +228,7 @@ let rec lifted_ctxt l cel =
 (* Translation of a predicate *)
 let rec translate_pred fv lv = function
   | Papp (id, tl, inst) ->
+      let _ = instantiate_arity id inst in
       let arity,_ = get_arity id in
 	Papp (id, List.map2 (translate_term fv lv) arity tl, [])
   | Pimplies (iswp, p1, p2) ->
@@ -254,21 +263,16 @@ let rec translate_pred fv lv = function
 (* The core *)
 let queue = Queue.create ()
 
-let debug = false
-let f2s (s,l,b,e) = Printf.sprintf "File %s, line %d, characters %d-%d" s l b e
-
 let rec push d = 
   try (match d with
 (* A type declaration is translated as new logical function, the arity of *)
 (* which depends on the number of type variables in the declaration *)
   | Dtype (loc, vars, ident) ->
-      if debug then Printf.printf "Encoding type %s, %s...\n" ident (f2s loc);
       Queue.add (Dlogic (loc, ident,
 			 Env.empty_scheme (Function (typify vars, tt)))) queue
 (* In the case of a logic definition, we redefine the logic symbol  *)
 (* with types u and s, and its complete arity is stored for the encoding *)
   | Dlogic (loc, ident, arity) -> 
-      if debug then Printf.printf "Encoding logic %s, %s...\n" ident (f2s loc);
       arities := (ident, arity)::!arities;
       let newarity = match arity.Env.scheme_type with
 	  Predicate ptl -> Predicate (monoify ptl)
@@ -292,7 +296,6 @@ let rec push d =
 			 (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]]))))
 (* Axiom definitions *)
   | Daxiom (loc, ident, pred_sch) ->
-      if debug then Printf.printf "Encoding axiom %s, %s...\n" ident (f2s loc);
       let cpt = ref 0 in
       let fv = Env.Vset.fold
 	(fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
