@@ -326,7 +326,7 @@ let make_let_tmp ty f =
   JCTElet(vi, a, b)
 
 let make_let_alloc_tmp si f =
-  let ty = make_pointer_type si in
+  let ty = make_pointer_type (JCtag si) in
   let init = make_expr (JCTEalloc(expr_of_int 1, si)) ty in
   make_let_tmp ty (fun vi ve -> init, f vi ve)
 
@@ -338,7 +338,7 @@ let make_seq_expr el acc =
     (List.rev el)
 
 let make_alloc_tmp si =
-  let ty = make_pointer_type si in
+  let ty = make_pointer_type (JCtag si) in
   let init = make_expr (JCTEalloc(expr_of_int 1, si)) ty in
   make_var_tmp ty (Some init)
 
@@ -418,6 +418,9 @@ let make_app li args = {
 }
 
 let make_app_term_node li args = JCTapp (make_app li args)
+
+let make_valid_pointer tov =
+  JCTpointer(tov, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
 
 (*
 Local Variables: 

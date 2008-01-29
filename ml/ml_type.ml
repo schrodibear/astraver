@@ -173,10 +173,9 @@ and make mlt =
 	JCTnative t
     | MLTrecord(si, _)
     | MLTtuple si ->
-	JCTpointer(si, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
-(*	JCTpointer(si, None, None)*)
+	make_valid_pointer (JCtag si)
     | MLTvariant(vi, _) ->
-	JCTvariant_pointer(vi, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
+	make_valid_pointer (JCvariant vi)
     | MLTlogic x ->
 	JCTlogic x
 

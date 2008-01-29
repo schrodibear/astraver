@@ -579,7 +579,7 @@ let behavior env b =
 let invariants env spec (*struct_info*) =
   list_fold_map
     (fun env i ->
-       let ty = make_pointer_type dummy_struct(*struct_info*) in
+       let ty = make_pointer_type (JCtag dummy_struct)(*struct_info*) in
        let arg_vi, body = match i.ti_argument.pat_desc with
 	 | Tpat_var id ->
 	     let arg_name = name id in
@@ -758,6 +758,7 @@ let structure_item env = function
 	  jc_assertion_label = "";
 	};
 	jc_fun_behavior = behaviors;
+	jc_fun_free_requires = make_assertion JCAtrue;
       } in
       let jc_fun_def =
 	JCfun_def(
@@ -841,7 +842,7 @@ let structure_item env = function
 	a
 	args
       in
-      [ JCaxiom_def(axs.as_name, [LabelName "L"], qa) ], env
+      [ JClemma_def(axs.as_name, true, [LabelName "L"], qa) ], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
 let rec structure env = function
