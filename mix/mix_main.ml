@@ -119,7 +119,7 @@ let () =
   let ofile = (Filename.chop_extension file) ^ ".why" in
   Pp.print_in_file print_code ofile;
   if !gwhy then 
-    let cmd = sprintf "gwhy -split-user-conj -lib-file mix.why %s" ofile in
+    let cmd = sprintf "gwhy-bin -split-user-conj -lib-file mix.why %s" ofile in
     exit (Sys.command cmd)
 
 
