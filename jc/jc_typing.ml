@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.171 2008-01-28 15:55:22 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.172 2008-01-29 15:18:00 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -834,29 +834,29 @@ let rel_bin_op t op =
 
 let make_and a1 a2 =
   match (a1.jc_assertion_node,a2.jc_assertion_node) with
-    | (JCAtrue,a2) -> a2
-    | (a1,JCAtrue) -> a1
+    | (JCAtrue,_) -> a2
+    | (_,JCAtrue) -> a1
 (*
     | (LFalse,_) -> LFalse
     | (_,LFalse) -> LFalse
 *)
-    | (JCAand l1 , JCAand l2) -> JCAand(l1@l2)
-    | (JCAand l1 , _ ) -> JCAand(l1@[a2])
-    | (_ , JCAand l2) -> JCAand(a1::l2)
-    | _ -> JCAand [a1;a2]
+    | (JCAand l1 , JCAand l2) -> raw_asrt(JCAand(l1@l2))
+    | (JCAand l1 , _ ) -> raw_asrt(JCAand(l1@[a2]))
+    | (_ , JCAand l2) -> raw_asrt(JCAand(a1::l2))
+    | _ -> raw_asrt(JCAand [a1;a2])
 
 let make_or a1 a2 =
   match (a1.jc_assertion_node,a2.jc_assertion_node) with
-    | (JCAfalse,a2) -> a2
-    | (a1,JCAfalse) -> a1
+    | (JCAfalse,_) -> a2
+    | (_,JCAfalse) -> a1
 (*
     | (LFalse,_) -> LFalse
     | (_,LFalse) -> LFalse
 *)
-    | (JCAor l1 , JCAor l2) -> JCAor(l1@l2)
-    | (JCAor l1 , _ ) -> JCAor(l1@[a2])
-    | (_ , JCAor l2) -> JCAor(a1::l2)
-    | _ -> JCAor [a1;a2]
+    | (JCAor l1 , JCAor l2) -> raw_asrt(JCAor(l1@l2))
+    | (JCAor l1 , _ ) -> raw_asrt(JCAor(l1@[a2]))
+    | (_ , JCAor l2) -> raw_asrt(JCAor(a1::l2))
+    | _ -> raw_asrt(JCAor [a1;a2])
 
 
 let make_rel_bin_op loc op e1 e2 =
@@ -956,9 +956,9 @@ let rec assertion label_env logic_label env e =
       | JCPEcast(e, t) -> assert false
       | JCPEbinary (e1, BPland, e2) -> 
 	  let a1 = fa e1 and a2 = fa e2 in
-	  make_and a1 a2
+	  (make_and a1 a2).jc_assertion_node
       | JCPEbinary (e1, BPlor, e2) -> 
-	  make_or (fa e1) (fa e2)
+	  (make_or (fa e1) (fa e2)).jc_assertion_node
       | JCPEbinary (e1, BPimplies, e2) -> 
 	  let a1 = fa e1 and a2 = fa e2 in
 	  JCAimplies(a1,a2)
@@ -2236,7 +2236,7 @@ let clause env vi_result c acc =
     | JCPCrequires(e) ->
 	{ acc with 
 	  jc_fun_requires = 
-	    raw_asrt (make_and (assertion [] (Some LabelHere) env e) acc.jc_fun_requires); }
+	    make_and (assertion [] (Some LabelHere) env e) acc.jc_fun_requires; }
     | JCPCbehavior(loc,id,throws,assumes,requires,assigns,ensures) ->
 	let throws,env_result = 
 	  match throws with
