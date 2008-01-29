@@ -151,7 +151,8 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	    | _ -> r
 	in
 	let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	(alloc_region_table_name (st, r), alloc_table_type (JCtag st))::acc)
+	(alloc_region_table_name (JCtag st, r),
+	 alloc_table_type (JCtag st))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
@@ -191,7 +192,7 @@ let logic_info_reads acc li =
     StringRegionSet.fold
       (fun (a,r) acc ->
 	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 StringSet.add (alloc_region_table_name (st, r)) acc)
+	 StringSet.add (alloc_region_table_name (JCtag st, r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -239,14 +240,23 @@ let stringmap_elements map =
 let find_struct a =
   fst (Hashtbl.find Jc_typing.structs_table a)
 
+let find_variant a =
+  Hashtbl.find Jc_typing.variants_table a
+
+let find_tag_or_variant a =
+  try
+    JCtag (find_struct a)
+  with Not_found ->
+    JCvariant (find_variant a)
+
 let tag_table_name2 a =
-  tag_table_name (JCtag (find_struct a))
+  tag_table_name (find_tag_or_variant a)
 
 let alloc_table_name2 a =
-  alloc_table_name (JCtag (find_struct a))
+  alloc_table_name (find_tag_or_variant a)
 
 let alloc_region_table_name2 (a, r) =
-  alloc_region_table_name (find_struct a, r)
+  alloc_region_table_name (find_tag_or_variant a, r)
 
 let mutable_name2 a =
   mutable_name (JCtag (find_struct a))
@@ -360,6 +370,8 @@ let any_value ty =
   | JCTenum ri -> 
       App (Var ("any_" ^ ri.jc_enum_info_name), Void)
   | JCTlogic _ -> assert false
+
+let tov_of_name name = JCtag (find_struct name)
 
 (*
 Local Variables: 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.221 2008-01-28 15:55:22 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.222 2008-01-29 11:47:41 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -524,7 +524,7 @@ let rec term ~global_assertion label oldlabel t =
     | JCTat(t,lab) -> term ~global_assertion lab oldlabel t
     | JCToffset(k,t,st) -> 
 	let alloc = 
-	  alloc_region_table_name (st, t.jc_term_region)
+	  alloc_region_table_name (JCtag st, t.jc_term_region)
 	in
 	let f = match k with
 	  | Offset_min -> "offset_min"
@@ -880,7 +880,7 @@ let rec make_upd lab loc ~infunction ~threats fi e1 v =
   let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
   let mem = Var(field_region_memory_name(fi,e1.jc_expr_region)) in
   let alloc = 
-    alloc_region_table_name (fi.jc_field_info_root, e1.jc_expr_region)
+    alloc_region_table_name (JCtag fi.jc_field_info_root, e1.jc_expr_region)
   in
   let alloc = 
     if Region.polymorphic e1.jc_expr_region then
@@ -1002,7 +1002,7 @@ and expr ~infunction ~threats e : expr =
 	make_app "sub_pointer" [ e1'; e2']
     | JCEoffset(k,e,st) -> 
 	let alloc = 
-	  alloc_region_table_name (st, e.jc_expr_region) in
+	  alloc_region_table_name (JCtag st, e.jc_expr_region) in
 	let alloc = 
 	  if Region.polymorphic e.jc_expr_region then
 	    if StringRegionSet.mem (root_name st, e.jc_expr_region)
@@ -1056,7 +1056,8 @@ and expr ~infunction ~threats e : expr =
 	  else Deref mem
 	in
 	let alloc = 
-	  alloc_region_table_name (fi.jc_field_info_root, e.jc_expr_region)
+	  alloc_region_table_name (JCtag fi.jc_field_info_root,
+				   e.jc_expr_region)
 	in
 	let alloc = 
 	  if Region.polymorphic e.jc_expr_region then
@@ -1109,12 +1110,12 @@ and expr ~infunction ~threats e : expr =
 	    [ mem ; 
 	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
     | JCEalloc (siz, st) ->
-	let alloc = alloc_region_table_name (st, e.jc_expr_region) in
+	let alloc = alloc_region_table_name (JCtag st, e.jc_expr_region) in
 	let tag = tag_table_name (JCtag st) in
 	let fields = embedded_struct_fields st in
 	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
 	let roots = embedded_struct_roots st in
-	let roots = List.map find_struct roots in
+	let roots = List.map find_tag_or_variant roots in
 	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in
 	begin
 	  match !Jc_options.inv_sem with
@@ -1151,7 +1152,7 @@ and expr ~infunction ~threats e : expr =
 	  | _ -> assert false
 	in	
 	let alloc = 
-	  alloc_region_table_name (st, e.jc_expr_region) in
+	  alloc_region_table_name (JCtag st, e.jc_expr_region) in
 	if !Jc_options.inv_sem = InvOwnership then
 	  let com = committed_name (JCtag st) in
 	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
@@ -1913,7 +1914,7 @@ let assigns before ef locs =
   FieldRegionMap.fold
     (fun (fi,r) p acc -> 
        let v = field_region_memory_name(fi,r) in
-       let alloc = alloc_region_table_name(fi.jc_field_info_root,r) in
+       let alloc = alloc_region_table_name(JCtag fi.jc_field_info_root,r) in
        make_and acc
 	 (LPred("not_assigns",
 		[lvar before alloc; 
@@ -2613,14 +2614,14 @@ let tr_memory (fi,r) acc =
     false,field_region_memory_name(fi,r),
     Ref_type(Base_type(memory_field fi))) :: acc
 
-let tr_alloc_table (a,r) acc =
+let tr_alloc_table (tov,r) acc =
   Param(
-    false,alloc_region_table_name(a,r),
-    Ref_type(Base_type(alloc_table_type (JCtag a)))) :: acc
+    false,alloc_region_table_name(tov,r),
+    Ref_type(Base_type(alloc_table_type tov))) :: acc
 
 let tr_alloc_table2 (a,r) acc =
   Jc_options.lprintf "Looking for %s in Jc_interp.tr_alloc_table2@." a;
-  tr_alloc_table (find_struct a, r) acc
+  tr_alloc_table (find_tag_or_variant a, r) acc
 
 (*************************
         Variants

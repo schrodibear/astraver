@@ -301,7 +301,8 @@ let invariant_params acc li =
     StringRegionSet.fold
       (fun (a,r) acc -> 
 	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 (alloc_region_table_name (st, r), alloc_table_type (JCtag st))::acc)
+	 (alloc_region_table_name (JCtag st, r),
+	  alloc_table_type (JCtag st))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in

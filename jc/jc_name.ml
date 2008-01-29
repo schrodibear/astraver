@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.9 2008-01-28 15:55:22 bardou Exp $ *)
+(* $Id: jc_name.ml,v 1.10 2008-01-29 11:47:41 bardou Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -68,10 +68,10 @@ let tag_table_name = function
 let alloc_table_name tov =
   (tag_or_variant_type_name tov) ^ "_alloc_table"
 
-let alloc_region_table_name (a, r) = 
+let alloc_region_table_name (tov, r) = 
   if !Jc_common_options.separation_sem = SepRegions then 
-    (root_name a) ^ "_" ^ (Region.name r) ^ "_alloc_table"
-  else alloc_table_name (JCtag a)
+    (tag_or_variant_type_name tov) ^ "_" ^ (Region.name r) ^ "_alloc_table"
+  else alloc_table_name tov
 
 let field_memory_name fi = fi.jc_field_info_final_name
 
