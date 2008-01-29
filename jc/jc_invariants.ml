@@ -293,7 +293,7 @@ let invariant_params acc li =
   let acc =
     FieldRegionMap.fold
       (fun (fi,r) labels acc -> 
-	 (field_region_memory_name(fi,r), memory_field fi)::acc)
+	 (field_region_memory_name(fi,r), field_memory_type fi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
@@ -625,7 +625,7 @@ let not_mutable_implies_fields_committed this st =
 	     let committed_name = committed_name fi_tov in
 	     let alloc = alloc_table_name fi_tov in
 	     let params =
-	       [ n, memory_field fi;
+	       [ n, field_memory_type fi;
 		 committed_name, committed_memory_type fi_tov;
 		 alloc, alloc_table_type fi_tov; ]
 	     in
@@ -707,7 +707,7 @@ let owner_unicity this root =
 
   (* x name and type *)
   let x_name = this^"_2" in
-  let x_type = pointer_type root in
+  let x_type = pointer_type (JCtag root) in
 
   (* shift indexes *)
   let index1 = "jc_index" in
@@ -767,7 +767,7 @@ let owner_unicity this root =
   (* params *)
   let params = List.map
     (fun fi ->
-       [ fi.jc_field_info_final_name, memory_field fi;
+       [ fi.jc_field_info_final_name, field_memory_type fi;
 	 committed_name (JCtag fi.jc_field_info_root),
 	 committed_memory_type (JCtag fi.jc_field_info_root);
 	 alloc_table_name (JCtag fi.jc_field_info_root),
@@ -781,7 +781,7 @@ let owner_unicity this root =
 let make_hierarchy_global_invariant acc root =
   (* this *)
   let this = "this" in
-  let this_ty = pointer_type root in
+  let this_ty = pointer_type (JCtag root) in
 
   (* not mutable => invariant, and their parameters *)
   let structs = hierarchy_structures root in
@@ -1097,7 +1097,7 @@ let make_components_precond this st reads =
 
 let pack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type st in
+  let this_type = pointer_type (JCtag st) in
   let tag = "tag" in
   let tag_type = tag_id_type (JCtag st) in
   let mutable_name = mutable_name (JCtag st) in
@@ -1159,7 +1159,7 @@ let pack_declaration st acc =
 (* Unlike Boogie, Jessie has "unpack to S" instead of "unpack from T" *)
 let unpack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type st in
+  let this_type = pointer_type (JCtag st) in
   let tag = "tag" in
   let tag_type = tag_id_type (JCtag st) in
   let mutable_name = mutable_name (JCtag st) in

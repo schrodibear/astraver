@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.79 2008-01-28 15:55:22 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.80 2008-01-29 16:26:41 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -33,6 +33,8 @@ open Jc_envset
 open Jc_fenv
 open Jc_ast
 open Jc_region
+
+let ( ** ) = fun f g x -> f(g x)
 
 let label_var lab name =
   match lab with
@@ -735,8 +737,8 @@ let struct_variant st =
          * in a type *)
   
 let tag_or_variant_name = function
-  | JCtag st -> st.jc_struct_info_name
-  | JCvariant vi -> vi.jc_variant_info_name
+  | JCtag st -> "tag "^st.jc_struct_info_name
+  | JCvariant vi -> "variant "^vi.jc_variant_info_name
 
 (*
 Local Variables: 

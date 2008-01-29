@@ -30,28 +30,16 @@ let struct_model_type2 name =
   let st, _ = Hashtbl.find Jc_typing.structs_table name in
   struct_model_type st
 
-let pointer_type st = 
+let pointer_type tov = 
   {
     logic_type_name = pointer_type_name;
-    logic_type_args = [struct_model_type st];
-  }
-
-let pointer_type_vi vi = 
-  {
-    logic_type_name = pointer_type_name;
-    logic_type_args = [variant_model_type vi];
+    logic_type_args = [tag_or_variant_model_type tov];
   }
 
 let tag_table_type tov = 
   {
     logic_type_name = tag_table_type_name;
     logic_type_args = [tag_or_variant_model_type tov];
-  }
-
-let tag_table_type_vi vi = 
-  {
-    logic_type_name = tag_table_type_name;
-    logic_type_args = [variant_model_type vi];
   }
 
 let tag_id_type tov = 
@@ -91,11 +79,10 @@ let memory_type t v =
   { logic_type_name = memory_type_name;
     logic_type_args = [t;v] }
 
-let memory_field fi =
+let field_memory_type fi =
   memory_type 
     (struct_model_type fi.jc_field_info_root)
     (tr_base_type fi.jc_field_info_type)
-
 	
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
   let l =
@@ -132,7 +119,7 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 		    | LabelInit -> name ^ "@init"
 		    | LabelName l -> name ^ "@" ^ l
 	      in
-	      (name, memory_field fi)::acc)
+	      (name, field_memory_type fi)::acc)
 	   labs acc)
       li.jc_logic_info_effects.jc_effect_memories
       []
@@ -356,6 +343,12 @@ let make_subtag t u =
 let make_instanceof tt p st =
   LPred("instanceof", [ tt; p; LVar (tag_name st) ])
 
+let make_offset_min tov p =
+  LApp("offset_min", [LVar(alloc_table_name tov); p])
+
+let make_offset_max tov p =
+  LApp("offset_max", [LVar(alloc_table_name tov); p])
+
 let any_value ty = 
   match ty with
   | JCTnative t -> 
@@ -372,6 +365,35 @@ let any_value ty =
   | JCTlogic _ -> assert false
 
 let tov_of_name name = JCtag (find_struct name)
+
+let fully_allocated fi =
+  match fi.jc_field_info_type with
+    | JCTpointer(_, Some _, Some _) -> true
+    | JCTpointer(_, None, Some _)
+    | JCTpointer(_, Some _, None)
+    | JCTpointer(_, None, None)
+    | JCTnull
+    | JCTenum _
+    | JCTlogic _
+    | JCTnative _ -> false
+
+(* see make_valid_pred in jc_interp.ml *)
+let make_valid_pred_app tov p a b =
+  let allocs = List.map
+    (fun vi -> LVar(alloc_table_name (JCvariant vi)))
+    (Jc_struct_tools.all_types ~select:fully_allocated tov)
+  in
+  let memories = List.map
+    (fun fi -> LVar(field_memory_name fi))
+    (Jc_struct_tools.all_memories ~select:fully_allocated tov)
+  in
+  LPred(valid_pred_name tov, p::a::b::allocs@memories)
+
+let make_valid_one_pred_app tov p =
+  let zero = LConst(Prim_int "0") in
+  make_valid_pred_app tov p zero zero
+
+let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
 (*
 Local Variables: 

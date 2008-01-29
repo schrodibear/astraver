@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.10 2008-01-29 11:47:41 bardou Exp $ *)
+(* $Id: jc_name.ml,v 1.11 2008-01-29 16:26:41 bardou Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -81,13 +81,13 @@ let field_region_memory_name (fi,r) =
   else field_memory_name fi
 
 let valid_pred_name = function
-  | JCtag st -> "valid_" ^ st.jc_struct_info_name
-  | JCvariant vi -> "valid_" ^ vi.jc_variant_info_name
-
+  | JCtag st -> "valid_struct_" ^ st.jc_struct_info_name
+  | JCvariant vi -> "valid_variant_" ^ vi.jc_variant_info_name
+(*
 let valid_one_pred_name = function
   | JCtag st -> "valid_one_" ^ st.jc_struct_info_name
   | JCvariant vi -> "valid_one_" ^ vi.jc_variant_info_name
-
+*)
 let alloc_param_name st = "alloc_" ^ st.jc_struct_info_name
 
 let alloc_one_param_name st = "alloc_one_" ^ st.jc_struct_info_name

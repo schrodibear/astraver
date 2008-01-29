@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.95 2008-01-28 15:55:22 bardou Exp $ *)
+(* $Id: jc_main.ml,v 1.96 2008-01-29 16:26:41 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -161,10 +161,9 @@ let main () =
 	      []
 	  in	       	 
 
-	  (* production phase 1.2 : generation of Why memories *)
+	  (* production phase 1.2 : translate stuff *)
 	  Jc_options.lprintf
-	    "production phase 1.2: generation of Why memories \
-(structs_table)@.";
+	    "production phase 1.2.1: translate structures@.";
 	  let d_memories =
 	    Hashtbl.fold 
 	      (fun _ (st, _) acc ->
@@ -173,8 +172,7 @@ let main () =
 	      d_types
 	  in	       	  
 	  Jc_options.lprintf
-	    "production phase 1.2: generation of Why memories \
-(variants_table)@.";
+	    "production phase 1.2.2: translate variants@.";
 	  let d_memories =
 	    Hashtbl.fold
 	      (fun _ -> Jc_interp.tr_variant)
@@ -182,8 +180,7 @@ let main () =
 	      d_memories
 	  in
 	  Jc_options.lprintf
-	    "production phase 1.2: generation of Why memories \
-(variables_table)@.";
+	    "production phase 1.2.3: translate variables@.";
 	  let d_memories =
 	    Hashtbl.fold 
 	      (fun _ (v,e) acc ->
@@ -192,8 +189,7 @@ let main () =
 	      d_memories
 	  in	       	  
 	  Jc_options.lprintf
-	    "production phase 1.2: generation of Why memories \
-(constant_memories_set)@.";
+	    "production phase 1.2.3: translate regions and memories@.";
 	  let d_memories,regions =
 	    FieldRegionSet.fold 
 	      (fun (fi,r) (acc,regions) -> 
@@ -206,8 +202,7 @@ let main () =
 	      (d_memories,RegionSet.singleton dummy_region)
 	  in	       	  
 	  Jc_options.lprintf
-	    "production phase 1.2: generation of Why memories \
-(alloc_region_table_set)@.";
+	    "production phase 1.2.4: translate regions and allocation tables@.";
 	  let d_memories,_ =
 	    let arts = StringRegionSet.map_repr
 	      !Jc_effect.alloc_region_table_set
