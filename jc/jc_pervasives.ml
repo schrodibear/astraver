@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.80 2008-01-29 16:26:41 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.81 2008-01-30 12:24:50 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -739,6 +739,21 @@ let struct_variant st =
 let tag_or_variant_name = function
   | JCtag st -> "tag "^st.jc_struct_info_name
   | JCvariant vi -> "variant "^vi.jc_variant_info_name
+
+let rec pattern_vars acc pat =
+  match pat.jc_pattern_node with
+    | JCPstruct(_, fpl) ->
+	List.fold_left
+	  (fun acc (_, pat) -> pattern_vars acc pat)
+	  acc fpl
+    | JCPvar vi ->
+	StringMap.add vi.jc_var_info_name vi acc
+    | JCPor(pat, _) ->
+	pattern_vars acc pat
+    | JCPas(pat, vi) ->
+	pattern_vars (StringMap.add vi.jc_var_info_name vi acc) pat
+    | JCPany | JCPconst _ ->
+	acc
 
 (*
 Local Variables: 

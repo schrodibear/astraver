@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.172 2008-01-29 15:18:00 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.173 2008-01-30 12:24:50 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -330,12 +330,23 @@ let valid_pointer_type st =
   JCTpointer(st, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
 
 (* ety = expected type *)
-let rec pattern env pat ety =
-  let check_var id =
+(* env: the variables already bound *)
+(* vars: the var_info to use if encountering a given variable *)
+(* Return: (env, pat) where:
+     env is the new environment (i.e. the union of the old env and of vars)
+     pat is the typed pattern. *)
+let rec pattern env vars pat ety =
+  let get_var ety id =
     let id = id.jc_identifier_name in
     if List.mem_assoc id env then
       typing_error pat.jc_ppattern_loc
-	"the variable %s appears twice in the pattern" id
+	"the variable %s appears twice in the pattern" id;
+    try
+      StringMap.find id vars
+    with Not_found ->
+      let vi = var ety id in
+      vi.jc_var_info_assigned <- true;
+      vi
   in
   let tpn, ty, newenv = match pat.jc_ppattern_node with
     | JCPPstruct(id, lpl) ->
@@ -357,26 +368,22 @@ let rec pattern env pat ety =
 	     let fi = find_field_struct l.jc_identifier_loc st false
 	       l.jc_identifier_name
 	     in
-	     let env, tp = pattern env p fi.jc_field_info_type in
+	     let env, tp = pattern env vars p fi.jc_field_info_type in
 	     env, (fi, tp)::acc)
 	  (env, []) lpl
 	in
 	JCPstruct(st, List.rev tlpl), valid_pointer_type (JCtag st), env
     | JCPPvar id ->
-	check_var id;
-	let vi = var ety id.jc_identifier_name in
-	vi.jc_var_info_assigned <- true;
+	let vi = get_var ety id in
 	JCPvar vi, ety, (id.jc_identifier_name, vi)::env
     | JCPPor(p1, p2) ->
-	let _, tp1 = pattern env p1 ety in
-	let env, tp2 = pattern env p2 ety in
-	(* TODO: check that both pattern bind the same variables *)
+	let _, tp1 = pattern env vars p1 ety in
+	let vars = pattern_vars vars tp1 in
+	let env, tp2 = pattern env vars p2 ety in
 	JCPor(tp1, tp2), ety, env
     | JCPPas(p, id) ->
-	check_var id;
-	let env, tp = pattern env p ety in
-	let vi = var tp.jc_pattern_type id.jc_identifier_name in
-	vi.jc_var_info_assigned <- true;
+	let env, tp = pattern env vars p ety in
+	let vi = get_var tp.jc_pattern_type id in
 	JCPas(tp, vi), ety, (id.jc_identifier_name, vi)::env
     | JCPPany ->
 	JCPany, ety, env
@@ -391,7 +398,7 @@ let rec pattern env pat ety =
     jc_pattern_loc = pat.jc_ppattern_loc;
     jc_pattern_type = ty;
   }
-let pattern = pattern []
+let pattern = pattern [] StringMap.empty
 
 (******************************************************************************)
 (*                                   terms                                    *)

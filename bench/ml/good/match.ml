@@ -6,6 +6,9 @@ let f x = match x with
   | B(69 as i, _) -> i
   | B(_, (i, _)) -> i
 
+(*@ function f x:
+  @ ensures \result >= 0 *)
+
 (*
 Local Variables: 
 compile-command: "unset LANG; make -C .. match.gui"

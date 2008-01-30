@@ -99,6 +99,12 @@ val contains_normal_behavior : Jc_ast.fun_spec -> bool
 val contains_exceptional_behavior : Jc_ast.fun_spec -> bool
 val is_purely_exceptional_fun : Jc_ast.fun_spec -> bool
 
+(* patterns *)
+
+(** The set of variables bound by a pattern. *)
+val pattern_vars : Jc_env.var_info Jc_envset.StringMap.t -> Jc_ast.pattern ->
+  Jc_env.var_info Jc_envset.StringMap.t
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
