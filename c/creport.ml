@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: creport.ml,v 1.26 2007-11-20 14:34:49 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.27 2008-01-30 09:52:41 stoulsn Exp $ i*)
 
 open Format
 open Cerror
@@ -85,7 +85,7 @@ let report fmt = function
   | TooManyArguments ->
       fprintf fmt "Error: too many arguments"
   | PartialApp ->
-      fprintf fmt "Error: this application is partial"
+      fprintf fmt "Error: this application is partial (Argument missing?)"
   | Unsupported s ->
       fprintf fmt "Error: unsupported feature (%s)" s
 
