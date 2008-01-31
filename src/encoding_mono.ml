@@ -115,7 +115,7 @@ let sort_of_c = function
   | ConstUnit -> PTunit
   | ConstFloat _ -> PTreal
 
-let is_const = function
+let is_const t = match Misc.normalize_pure_type t with
   | PTint | PTbool | PTreal | PTunit -> true
   | _ -> false
 
@@ -227,6 +227,8 @@ let rec lifted_ctxt l cel =
 
 (* Translation of a predicate *)
 let rec translate_pred fv lv = function
+  | Papp (id, [a; b], [t]) when Ident.is_eq id && is_const t ->
+      Papp (id, [translate_term fv lv t a; translate_term fv lv t b], [])
   | Papp (id, tl, inst) ->
       let _ = instantiate_arity id inst in
       let arity,_ = get_arity id in

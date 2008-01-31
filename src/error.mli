@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: error.mli,v 1.28 2007-11-20 14:34:51 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.29 2008-01-31 14:34:59 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -81,3 +81,5 @@ type t =
   | GlobalWithEffects of Ident.t * Effect.t
   | IllformedPattern
   | CannotGeneralize
+  | IllegalComparison of (formatter -> unit)
+

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: report.ml,v 1.19 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.20 2008-01-31 14:34:59 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -158,6 +158,8 @@ let report fmt = function
       fprintf fmt "Cannot generalize"
   | IllformedPattern ->
       fprintf fmt "Ill-formed pattern found in trigger: predicates pattern should be atoms"
+  | IllegalComparison f ->
+      fprintf fmt "comparison on type "; f fmt; fprintf fmt " is not allowed"
 
 let is_mutable = function Ref _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

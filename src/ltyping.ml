@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.67 2007-11-23 16:36:23 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.68 2008-01-31 14:34:59 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -120,22 +120,27 @@ let rec unify t1 t2 = match (t1,t2) with
     (PTunit | PTreal | PTbool | PTint | PTvar {user=true}) -> 
       t1 = t2
 
-let make_comparison loc = function
-  | (a,PTint), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTint) ->
+let make_comparison loc (a,ta) r (b,tb) = 
+  match normalize_pure_type ta, r, normalize_pure_type tb with
+  | PTint, (PPlt|PPle|PPgt|PPge|PPeq|PPneq), PTint ->
       Papp (int_cmp r, [a; b], [])
-  | (a,PTreal), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTreal) ->
+  | PTreal, (PPlt|PPle|PPgt|PPge|PPeq|PPneq), PTreal ->
       Papp (real_cmp r, [a; b], [])
-  | (a,ta), r, (b,tb) ->
+  | (PTbool | PTunit as ta), (PPeq|PPneq), (PTbool | PTunit) ->
+      Papp (other_cmp (ta,r), [a; b], [])
+  | ta, (PPeq|PPneq), tb ->
       if unify ta tb then
 	match normalize_pure_type ta, normalize_pure_type tb with
 	  | PTint, PTint -> Papp (int_cmp r, [a;b], [])
 	  | PTreal, PTreal -> Papp (real_cmp r, [a;b], [])
-	  | _ -> Papp (other_cmp (ta,r), [a; b], [])
+	  | _ -> Papp (other_cmp (ta,r), [a; b], [ta])
       else
 	raise_located loc 
 	  (ExpectedType2 
 	     ((fun f -> Util.print_pure_type f (normalize_pure_type ta)),
 	      (fun f -> Util.print_pure_type f (normalize_pure_type tb))))
+  | ta, _, _ ->
+      raise_located loc (IllegalComparison (fun fmt -> print_pure_type fmt ta))
 
 let int_arith = function
   | PPadd -> t_add_int
@@ -222,7 +227,7 @@ and desc_predicate loc lab env = function
       let q = { pp_desc = PPinfix (a, r, b); pp_loc = loc } in
       Pand (false, true, predicate lab env p, predicate lab env q)
   | PPinfix (a, (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
-      make_comparison a.pp_loc (term lab env a, r, term lab env b)
+      make_comparison a.pp_loc (term lab env a) r (term lab env b)
   | PPinfix (_, (PPadd | PPsub | PPmul | PPdiv | PPmod), _) -> 
       predicate_expected loc
   | PPprefix (PPneg, _) ->
