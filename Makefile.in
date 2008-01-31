@@ -1046,26 +1046,23 @@ include .depend.coq
 # Building the Why platform with ocamlbuild (OCaml 3.10 needed) #
 #################################################################
 
+# This part does not depend on the rest of the Makefile.
+
 # Just compiling the Makefile is enough to pollute the source tree
 # (with lexers and parsers). So for now, we need the -no-hygiene option.
 OCAMLBUILD=ocamlbuild -no-hygiene
 
-jessica.byte.build:
-	$(OCAMLBUILD) -libs unix,str,nums -Is ml,jc,src ml/ml_main.byte
-	cp _build/ml/ml_main.byte bin/jessica.byte
-
-jessica.opt.build:
-	$(OCAMLBUILD) -libs unix,str,nums -Is ml,jc,src ml/ml_main.native
-	cp _build/ml/ml_main.native bin/jessica.opt
-
-jessica.build: jessica.byte.build jessica.opt.build
-
-why.byte.build:
-	$(OCAMLBUILD) -libs unix,str,nums,graph -Is src,tools src/main.byte
+all.build:
+	$(OCAMLBUILD) -libs unix,str,nums,graph -Is src,tools,jc,java,ml \
+		src/main.byte src/main.native \
+		jc/jc_main.byte jc/jc_main.native \
+		java/java_main.byte java/java_main.native \
+		ml/ml_main.byte ml/ml_main.native
 	cp _build/src/main.byte bin/why.byte
-
-why.opt.build:
-	$(OCAMLBUILD) -libs unix,str,nums,graph -Is src,tools src/main.native
+	cp _build/jc/jc_main.byte bin/jessie.byte
+	cp _build/java/java_main.byte bin/krakatoa.byte
+	cp _build/ml/ml_main.byte bin/jessica.byte
 	cp _build/src/main.native bin/why.opt
-
-why.build: why.byte.build why.opt.build
+	cp _build/jc/jc_main.native bin/jessie.opt
+	cp _build/java/java_main.native bin/krakatoa.opt
+	cp _build/ml/ml_main.native bin/jessica.opt
