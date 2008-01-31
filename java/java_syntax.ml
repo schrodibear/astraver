@@ -144,8 +144,8 @@ let file f =
   try
     let c = open_in f in
     let d = Java_lexer.parse f c in
-    close_in c; 
-    compilation_unit d 
+      close_in c; 
+      compilation_unit d
   with
     | Java_lexer.Lexical_error(l,s) ->
 	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;

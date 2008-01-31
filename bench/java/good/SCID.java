@@ -1,3 +1,4 @@
+
 //@+ ArithOverflow = no
 
 // Smart Card ID - Example for a Smart Card based Identification and Authentication Application
@@ -186,6 +187,8 @@
 import  javacard.framework.*;    // import all neccessary packages for the java card framework
 import  javacard.security.*;     // import all neccessary packages for the java card security
 
+//@ axiom a1: \forall int b; 0 <= b <= 127 ==> (b & 0x00FF) == b;
+
 public class SCID extends Applet {
     // definitions for the classes and commands
     final static byte    PROP_CLASS  = (byte) 0x80;     // Class of the proprietary APDU commands
@@ -338,32 +341,32 @@ public class SCID extends Applet {
     }  // else
   }  // process
 
-  //---------------------------------------------------------------------------------------
-  //----- program code for the APDU command SELECT FILE
-  private void cmdSELECT(APDU apdu) {
-    byte[] cmd_apdu = apdu.getBuffer();
-
-    //----- check preconditions in the APDU header
-    // check if P1='04'
-    if (cmd_apdu[ISO7816.OFFSET_P1] != 0x04) {
-      ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
-    } // if
-    // check if P2='00'
-    if (cmd_apdu[ISO7816.OFFSET_P2] != 0x00) {
-      ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
-    } // if
-    short lc = (short)(cmd_apdu[ISO7816.OFFSET_LC] & 0x00FF);  // get Lc (command length)
-    receiveAPDUBody(apdu);                                     // get the command body
-
-    //----- command functionality
-    if (JCSystem.getAID().equals(cmd_apdu, ISO7816.OFFSET_CDATA, (byte) lc) == false) {
-      ISOException.throwIt(ISO7816.SW_APPLET_SELECT_FAILED);
-    } // if
-
-    //----- prepare response APDU
-    ISOException.throwIt(ISO7816.SW_NO_ERROR);   // command proper executed
-  }  // cmdSELECT
-
+    //---------------------------------------------------------------------------------------
+    //----- program code for the APDU command SELECT FILE
+    private void cmdSELECT(APDU apdu) {
+	byte[] cmd_apdu = apdu.getBuffer();
+	
+	//----- check preconditions in the APDU header
+	// check if P1='04'
+	if (cmd_apdu[ISO7816.OFFSET_P1] != 0x04) {
+	    ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
+	} // if
+	// check if P2='00'
+	if (cmd_apdu[ISO7816.OFFSET_P2] != 0x00) {
+	    ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
+	} // if
+	short lc = (short)(cmd_apdu[ISO7816.OFFSET_LC] & 0x00FF);  // get Lc (command length)
+	receiveAPDUBody(apdu);                                     // get the command body
+	
+	//----- command functionality
+	if (JCSystem.getAID().equals(cmd_apdu, ISO7816.OFFSET_CDATA, (byte) lc) == false) {
+	    ISOException.throwIt(ISO7816.SW_APPLET_SELECT_FAILED);
+	} // if
+	
+	//----- prepare response APDU
+	ISOException.throwIt(ISO7816.SW_NO_ERROR);   // command proper executed
+    }  // cmdSELECT
+    
   //---------------------------------------------------------------------------------------
   //----- program code for the APDU command VERIFY
   private void cmdVERIFY(APDU apdu) {
@@ -542,16 +545,16 @@ public class SCID extends Applet {
     apdu.sendBytesLong(workarray, (short) 0, LEN_RAPDU_AUTHSC);  // send the requested the number of bytes to the IFD, data field of the DO
   }  // cmdAUTHSC
 
-  //---------------------------------------------------------------------------------------
-  //----- receive the body of the command APDU
-  public void receiveAPDUBody(APDU apdu) {
-    byte[] buffer = apdu.getBuffer();
-    short lc = (short)(buffer[ISO7816.OFFSET_LC] & 0x00FF);  // calculate Lc (command length)
-    // check if Lc != number of received bytes of the command APDU body
-    if (lc != apdu.setIncomingAndReceive()) {
-      ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-    } // if
-  }  // receiveAPDUBody
-
+    //---------------------------------------------------------------------------------------
+    //----- receive the body of the command APDU
+    public void receiveAPDUBody(APDU apdu) {
+	byte[] buffer = apdu.getBuffer();
+	short lc = (short)(buffer[ISO7816.OFFSET_LC] & 0x00FF);  // calculate Lc (command length)
+	// check if Lc != number of received bytes of the command APDU body
+	if (lc != apdu.setIncomingAndReceive()) {
+	    ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+	} // if
+    }  // receiveAPDUBody
+    
 }  // class
 

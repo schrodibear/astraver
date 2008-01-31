@@ -1,6 +1,6 @@
 
 # AnnotationPolicy = Invariants
-# AbstractDomain = Oct
+# AbstractDomain = Box
 
 type integerT = { integer integerM; }
 

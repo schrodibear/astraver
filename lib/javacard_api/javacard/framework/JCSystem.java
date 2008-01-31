@@ -1,5 +1,5 @@
 /*
-* $Workfile: JCSystem.java $	$Revision: 1.5 $, $Date: 2007-11-09 14:50:17 $
+* $Workfile: JCSystem.java $	$Revision: 1.6 $, $Date: 2008-01-31 18:27:25 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,9 +19,9 @@
 
 // /*
 // $Workfile: JCSystem.java $
-// $Revision: 1.5 $
-// $Date: 2007-11-09 14:50:17 $
-// $Author: marche $
+// $Revision: 1.6 $
+// $Date: 2008-01-31 18:27:25 $
+// $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/JCSystem.java $
 // $Modtime: 5/02/00 7:13p $
 // Original author:  Ravi
@@ -147,10 +147,11 @@ public final class JCSystem
      * </ul>
      */
 
-    /* @ public normal_behavior
-      @   ensures true;
+    /*@ behavior normal:
+      @   ensures \result.length == length;
       @*/
-    public static native byte[] makeTransientByteArray(short length, byte event) throws SystemException;
+    public static native byte[] /*@ non_null @*/ makeTransientByteArray(short length, byte event) 
+	throws SystemException;
     
      /**
      * Create a transient short array with the specified array length.
@@ -207,7 +208,8 @@ public final class JCSystem
      * <p>See <em>Java Card Runtime Environment (JCRE) Specification</em>, section 6.2.1 for details.
      * @return the <code>AID</code> object.
      */
-    public static AID getAID()
+    
+    public static AID /*@ non_null @*/ getAID()
     {
 	    return thePrivAccess.getAID( PrivAccess.getCurrentAppID() );
     }

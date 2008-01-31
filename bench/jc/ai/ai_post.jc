@@ -1,6 +1,7 @@
 
 # AnnotationPolicy = Invariants
-# AbstractDomain = Oct
+# AbstractDomain = Box
+
 
 type intM = { integer val; } 
 
@@ -63,13 +64,13 @@ exception Return of unit
 integer x;
 
 // OK infer post: <x == 0>
-unit g() {
+/*unit g() {
   try {
    x = 0;
     throw Return ();
   } catch Return _ {
   }
-}
+  }*/
 
 /*
 Local Variables: 

@@ -67,6 +67,7 @@ val empty_effects : Jc_fenv.effect
 
 val term_no_loc :  Jc_ast.term_node -> Jc_env.jc_type -> Jc_ast.term
 val term_of_expr : Jc_ast.expr -> Jc_ast.term
+val term_var : Loc.position -> Jc_env.var_info -> Jc_ast.term
 val term_var_no_loc : Jc_env.var_info -> Jc_ast.term
 val raw_term_equal : Jc_ast.term -> Jc_ast.term -> bool
 val raw_term_compare : Jc_ast.term -> Jc_ast.term -> int
@@ -89,6 +90,7 @@ val select_option : 'a option -> 'a -> 'a
 val is_relation_binary_op : Jc_ast.bin_op -> bool
 val is_logical_binary_op : Jc_ast.bin_op -> bool
 val is_arithmetic_binary_op : Jc_ast.bin_op -> bool
+val is_bitwise_binary_op : Jc_ast.bin_op -> bool
 val is_logical_unary_op : Jc_ast.unary_op -> bool
 val is_arithmetic_unary_op : Jc_ast.unary_op -> bool
 val is_constant_assertion : Jc_ast.assertion -> bool

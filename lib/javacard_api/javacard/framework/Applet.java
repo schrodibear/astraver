@@ -1,5 +1,5 @@
 /*
-* $Workfile: Applet.java $	$Revision: 1.1 $, $Date: 2007-09-26 14:32:59 $
+* $Workfile: Applet.java $	$Revision: 1.2 $, $Date: 2008-01-31 18:27:25 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,9 +19,9 @@
 
 // /*
 // $Workfile: Applet.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
-// $Author: marche $
+// $Revision: 1.2 $
+// $Date: 2008-01-31 18:27:25 $
+// $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/Applet.java $
 // $Modtime: 5/02/00 7:13p $
 // Original author:  Ravi
@@ -249,11 +249,10 @@ abstract public class Applet
      * <code>register()</code> methods or if a JCRE initiated <code>install()</code> method execution is not in progress.
      * </ul>
      */
-    /*CM protected final void register() throws SystemException
+    protected final void register() throws SystemException
     {
-        thePrivAccess.register(this);
+	thePrivAccess.register(this);
     }
-    CM*/
 
     /**
      * This method is used by the applet to register <code>this</code> applet instance with the JCRE and

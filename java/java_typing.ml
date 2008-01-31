@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.92 2008-01-28 11:37:02 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.93 2008-01-31 18:27:25 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -575,16 +575,28 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
 	assert false (* TODO *)
-    | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
+    | Basr | Blsr | Blsl | Bimpl | Bor | Band | Biff ->
 	assert false (* TODO *)
+    | Bbwxor | Bbwor | Bbwand -> 	
+	if is_boolean t1 && is_boolean t2 then
+	  boolean_type, JTbin (e1, Tboolean, op, e2)
+	else
+	  begin
+	    try
+	      let t1 = logic_unary_numeric_promotion t1 in
+	      let t2 = logic_unary_numeric_promotion t2 in
+		assert (t1 = t2);
+		JTYbase t1, JTbin (e1, t1, op, e2)
+	    with Not_found ->
+	      typing_error loc "booleans or integers expected"
+	  end	  
     | Bsub | Badd | Bmod | Bdiv | Bmul ->
 	try
 	  let t = logic_binary_numeric_promotion t1 t2 in
-	  (JTYbase t,
-	   JTbin(e1,t,op,e2))
+	    JTYbase t, JTbin (e1, t, op, e2)
 	with Not_found ->
 	  typing_error loc "numeric types expected for +,-,*, / and %%"
-
+	    
 let make_logic_un_op loc op t1 e1 = 
   match op with
     | Uplus ->
@@ -888,7 +900,6 @@ and classify_name
 			    (* otherwise look for a toplevel package 
 			       of that name *)
 			    try
-			      
 			      match Hashtbl.find toplevel_packages id with
 				| Subpackage pi -> PackageName pi 
 				| Type ti -> assert false 
@@ -2850,12 +2861,12 @@ and statements package_env type_env current_type env b =
 	      let r = block package_env type_env current_type env rem in
 	      let s =
 		List.fold_right
-		  (fun (vi,i) acc -> 
+		  (fun (vi, i) acc -> 
 		     { java_statement_loc = s.java_pstatement_loc ;
 		       java_statement_node =
 			 JSvar_decl(vi,i,acc); })
 		  decls r in
-	      [s]
+		[s]
 	  | JPSloop_annot (inv, dec) ->
 	      begin
 		match rem with
@@ -2888,18 +2899,18 @@ and statements package_env type_env current_type env b =
 		type_for_decl package_env type_env current_type env 
 		  s.java_pstatement_loc vd expr_true None e sl s
 	      in
-	      tfor :: statements package_env type_env current_type env rem
+		tfor :: statements package_env type_env current_type env rem
 	  | JPSwhile(e,s) ->
 	      let twhile =
 		type_while package_env type_env current_type env 
 		  s.java_pstatement_loc expr_true None e s
 	      in
-	      twhile :: statements package_env type_env current_type env rem
+		twhile :: statements package_env type_env current_type env rem
 	  | _ ->
 	      let s' = statement package_env type_env current_type env s in
-	      s' :: statements package_env type_env current_type env rem
-
-
+		s' :: statements package_env type_env current_type env rem
+		  
+		  
 and type_for package_env type_env current_type env loc el1 inv dec e el2 s =
   let el1 = List.map (expr package_env type_env current_type env) el1 in
   let inv = assertion package_env type_env current_type env inv in
@@ -3063,7 +3074,9 @@ let type_method_spec_and_body ?(dobody=true)
 	   (vi.java_var_info_name,vi)::acc)
 	local_env mi.method_info_parameters
     in
-    let req = Option_misc.map (assertion package_env type_env (Some ti) local_env) req in
+    let req = 
+      Option_misc.map (assertion package_env type_env (Some ti) local_env) req 
+    in
     let env_result =
       match mi.method_info_result with
 	| None -> local_env
@@ -3077,9 +3090,13 @@ let type_method_spec_and_body ?(dobody=true)
 	in
 	let ens = Option_misc.map (assertion package_env type_env (Some ti) env_result) ens in
       *)
-    let behs = List.map (behavior package_env type_env (Some ti) local_env env_result) behs in
+    let behs = List.map 
+      (behavior package_env type_env (Some ti) local_env env_result) behs 
+    in
       if dobody then
-	let body = Option_misc.map (statements package_env type_env (Some ti) env_result) body in
+	let body = 
+	  Option_misc.map (statements package_env type_env (Some ti) env_result) body 
+	in
 	  Hashtbl.add methods_table mi.method_info_tag 
 	    { mt_method_info = mi;
 	      mt_requires = req;
@@ -3258,16 +3275,16 @@ let type_field_initializer package_env type_env ci fi =
 			try
 			  let v = eval_const_expression false e in
 			    Hashtbl.add final_field_values_table 
-			      fi.java_field_info_tag [v]			with
-			    Not_found ->
-(**)
-			      Java_options.lprintf
-				"FIXME: cannot evaluate this initializer, %a@."
-				Loc.gen_report_position e.java_expr_loc
-(**)
-				(*
-				  typing_error e.java_expr_loc "cannot evaluate this initializer"
-				*)		    
+			      fi.java_field_info_tag [v]
+			with Not_found ->
+			  (**)
+			  Java_options.lprintf
+			    "FIXME: cannot evaluate this initializer, %a@."
+			    Loc.gen_report_position e.java_expr_loc
+			    (**)
+			    (*
+			      typing_error e.java_expr_loc "cannot evaluate this initializer"
+			    *)		    
 		      end
 		  | JIlist vil ->
 		      try
@@ -3277,14 +3294,14 @@ let type_field_initializer package_env type_env ci fi =
 			     | JIlist _ -> assert false (* TODO *))
 			  vil
 			in
-			Hashtbl.add final_field_values_table 
-			  fi.java_field_info_tag vil
+			  Hashtbl.add final_field_values_table 
+			    fi.java_field_info_tag vil
 		      with Not_found -> assert false 
 	      end;
 	    Some ti
   in
     Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
-  
+      
 let type_decl package_env type_env d = 
   match d with
     | JPTclass c -> 
@@ -3313,14 +3330,15 @@ let type_decl package_env type_env d =
 	    | TypeClass ci as ti ->
 		check_if_class_complete ci;
 		let full_type_env =
-		  Hashtbl.find class_type_env_table ci.class_info_tag
+		  try Hashtbl.find class_type_env_table ci.class_info_tag
+		  with Not_found -> assert false
 		in
-		List.iter (type_field_initializer package_env full_type_env ti) 
-		  ci.class_info_fields;
-		List.iter (type_method_spec_and_body package_env full_type_env ti) 
-		  ci.class_info_methods;
-		List.iter (type_constr_spec_and_body package_env full_type_env ti) 
-		  ci.class_info_constructors;
+		  List.iter (type_field_initializer package_env full_type_env ti) 
+		    ci.class_info_fields;
+		  List.iter (type_method_spec_and_body package_env full_type_env ti) 
+		    ci.class_info_methods;
+		  List.iter (type_constr_spec_and_body package_env full_type_env ti) 
+		    ci.class_info_constructors;
 	end
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false
@@ -3329,7 +3347,7 @@ let type_decl package_env type_env d =
 	let te = assertion package_env type_env None [] e in
 	Hashtbl.add axioms_table id (is_axiom,labels,te)
     | JPTlogic_type_decl _ -> assert false (* TODO *)
-    | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> 
+    | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
 	let pl = List.map (type_param package_env type_env) params in
 	let env = 
 	  List.fold_left
@@ -3337,19 +3355,23 @@ let type_decl package_env type_env d =
 	       (vi.java_var_info_name,vi)::acc)
 	    [] pl
 	in
-	begin match ret_type with
-	  | None ->
-	      let fi = logic_info id None labels pl in
-	      let r = List.map (location package_env type_env None env) reads in
-	      Hashtbl.add logics_env id fi;
-	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
-	  | Some ty -> 
-	      let fi = logic_info id (Some (type_type package_env type_env false ty)) labels pl in
-	      let r = List.map (location package_env type_env None env) reads in
-	      Hashtbl.add logics_env id fi;
-	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
-	end
-    | JPTlogic_def((loc,id),ret_type,labels,params,body) -> 
+	  begin match ret_type with
+	    | None ->
+		let fi = logic_info id None labels pl in
+		let r = List.map (location package_env type_env None env) reads in
+		  Hashtbl.add logics_env id fi;
+		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
+	    | Some ty -> 
+		let fi = 
+		  logic_info id 
+		    (Some (type_type package_env type_env false ty)) 
+		    labels pl 
+		in
+		let r = List.map (location package_env type_env None env) reads in
+		  Hashtbl.add logics_env id fi;
+		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
+	  end
+    | JPTlogic_def ((loc, id), ret_type, labels, params, body) -> 
 	let pl = List.map (type_param package_env type_env) params in
 	let env = 
 	  List.fold_left
@@ -3357,19 +3379,21 @@ let type_decl package_env type_env d =
 	       (vi.java_var_info_name,vi)::acc)
 	    [] pl
 	in
-	begin match ret_type with
-	  | None ->
-	      let fi = logic_info id None labels pl in
-	      let a = assertion package_env type_env None env body in
-	      Hashtbl.add logics_env id fi;
-	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
-	  | Some t -> 
-	      let fi = logic_info id (Some (type_type package_env type_env false t)) labels pl in
-	      let a = term package_env type_env None env body in
-	      Hashtbl.add logics_env id fi;
-	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
-	end
-	
+	  begin match ret_type with
+	    | None ->
+		let fi = logic_info id None labels pl in
+		let a = assertion package_env type_env None env body in
+		  Hashtbl.add logics_env id fi;
+		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
+	    | Some t -> 
+		let fi = 
+		  logic_info id 
+		    (Some (type_type package_env type_env false t)) labels pl 
+		in
+		let a = term package_env type_env None env body in
+		  Hashtbl.add logics_env id fi;
+		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
+	  end
 
 
 let get_bodies package_env type_env cu =

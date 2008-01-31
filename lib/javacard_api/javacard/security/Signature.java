@@ -17,9 +17,9 @@
 
 /*
 // $Workfile: Signature.java $
-// $Revision: 1.3 $
-// $Date: 2007-10-22 07:38:21 $
-// $Author: marche $
+// $Revision: 1.4 $
+// $Date: 2008-01-31 18:27:25 $
+// $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/security/Signature.java $
 // $Modtime: 5/02/00 8:48p $
 // Original author:  Andy
@@ -223,7 +223,12 @@ abstract public class Signature{
      * @exception CryptoException with the following reason codes:<ul>
      * <li><code>CryptoException.NO_SUCH_ALGORITHM</code> if the requested algorithm is not supported.</ul>
      */
-    public static final Signature getInstance(byte algorithm, boolean externalAccess) throws CryptoException{
+
+    /*@ behavior normal:
+      @   ensures \result != null;
+      @*/
+    public static final Signature getInstance(byte algorithm, boolean externalAccess) 
+	throws CryptoException{
 	switch ( algorithm ){
 	default :
 	    CryptoException.throwIt( CryptoException.NO_SUCH_ALGORITHM );

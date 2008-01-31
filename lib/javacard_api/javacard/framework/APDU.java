@@ -1,5 +1,5 @@
 /*
-* $Workfile: APDU.java $	$Revision: 1.1 $, $Date: 2007-09-26 14:32:59 $
+* $Workfile: APDU.java $	$Revision: 1.2 $, $Date: 2008-01-31 18:27:25 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,9 +19,9 @@
 
 // /*
 // $Workfile: APDU.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
-// $Author: marche $
+// $Revision: 1.2 $
+// $Date: 2008-01-31 18:27:25 $
+// $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/APDU.java $
 // $Modtime: 5/02/00 7:13p $
 // Original author:  Ravi
@@ -136,6 +136,9 @@ public final class APDU{
    * to store data for input and output.
    */
     private /* @  spec_public @*/ byte[] buffer;
+
+    // Nicolas (for SCID.java)
+    //@ invariant buffer_inv: buffer != null && buffer.length >= 37;
 
     // Added by Xavier
     /* @ invariant 
@@ -252,18 +255,22 @@ public final class APDU{
     theAPDU = this;
   }
 
- /**
-   * Returns the APDU buffer byte array.
-   * <p>Notes:<ul>
-   * <li><em>References to the APDU buffer byte array
-   * cannot be stored in class variables or instance variables or array components.
-   * See <em>Java Card Runtime Environment (JCRE) Specification</em>, section 6.2.2 for details.</em>
-   * </ul>
-   * @return byte array containing the APDU buffer
-   */
-    /* @ public normal_behavior ensures \result==buffer; */
-    public /* @ pure @*/ byte[] getBuffer() {
-    return buffer;
+    /**
+     * Returns the APDU buffer byte array.
+     * <p>Notes:<ul>
+     * <li><em>References to the APDU buffer byte array
+     * cannot be stored in class variables or instance variables or array components.
+     * See <em>Java Card Runtime Environment (JCRE) Specification</em>, section 6.2.2 for details.</em>
+     * </ul>
+     * @return byte array containing the APDU buffer
+     */
+    
+    /*@ behavior normal:
+      @   ensures \result == buffer; 
+      @*/
+    
+    public byte[] getBuffer() {
+	return buffer;
     }
 
  /**
