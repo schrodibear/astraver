@@ -31,11 +31,11 @@ open Jc_fenv
 
 
 (* intraprocedural analysis *)
-val code_function : fun_info * fun_spec * statement list option -> unit
+val code_function : fun_info * Loc.position * fun_spec * statement list option -> unit
 
 
 (* interprocedural analysis *)
-val main_function : fun_info * fun_spec * statement list option -> unit
+val main_function : fun_info * Loc.position * fun_spec * statement list option -> unit
 
 (*
 Local Variables: 

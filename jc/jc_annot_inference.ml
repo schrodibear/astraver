@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.98 2008-01-31 15:22:20 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.99 2008-01-31 16:04:42 marche Exp $ *)
 
 open Pp
 open Format
@@ -510,22 +510,27 @@ let print_modified_vars fmt posts =
 (* Logging annotations inferred.                                             *)
 (*****************************************************************************)
 
-let reg_annot ?id ?kind ?name ~anchor a = 
-  try
-    let (f,l,b,e,_) = Hashtbl.find Jc_options.locs_table anchor in
-    let pos = Lexing.dummy_pos in
-    let pos = { pos with 
-      Lexing.pos_fname = f; 
-      Lexing.pos_lnum = l; 
-      Lexing.pos_bol = 0; } in
-    let loc = 
-      { pos with Lexing.pos_cnum = b; },
-      { pos with Lexing.pos_cnum = e; } in
-    Format.fprintf Format.str_formatter "%a" Jc_output.assertion a;
-    let formula = Format.flush_str_formatter () in
-    let lab = Output.reg_loc "G" ?id ?kind ?name ~formula loc in
-    { a with jc_assertion_label = lab; }
-  with Not_found -> a
+let reg_annot ?id ?kind ?name ~loc ~anchor a = 
+  let (f,l,b,e) =
+    try
+      let (f,l,b,e,_) = Hashtbl.find Jc_options.locs_table anchor in
+      (f,l,b,e)
+    with Not_found -> Loc.extract loc
+  in
+  let pos = Lexing.dummy_pos in
+  let pos = { pos with 
+		Lexing.pos_fname = f; 
+		Lexing.pos_lnum = l; 
+		Lexing.pos_bol = 0; } 
+  in
+  let loc = 
+    { pos with Lexing.pos_cnum = b; },
+    { pos with Lexing.pos_cnum = e; } 
+  in
+  Format.fprintf Format.str_formatter "%a" Jc_output.assertion a;
+  let formula = Format.flush_str_formatter () in
+  let lab = Output.reg_loc "G" ?id ?kind ?name ~formula loc in
+  { a with jc_assertion_label = lab; }
 
 
 (*****************************************************************************)
@@ -2453,7 +2458,7 @@ let rec record_ai_invariants abs s =
 		"%a@[<v 2>Inferring loop invariant@\n%a@]@."
 		Loc.report_position s.jc_statement_loc
 		Jc_output.assertion a;
-	    let a = reg_annot ~anchor:s.jc_statement_label a in
+	    let a = reg_annot ~loc:s.jc_statement_loc ~anchor:s.jc_statement_label a in
 	    la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a];
 	    record_ai_invariants abs ls
 	with Not_found -> () end
@@ -2461,7 +2466,7 @@ let rec record_ai_invariants abs s =
     | JCSreturn_void | JCSreturn _ | JCSthrow _ | JCSpack _ | JCSunpack _  
     | JCScall _ -> ()
 	
-let ai_function mgr iaio targets (fi, fs, sl) =
+let ai_function mgr iaio targets (fi, loc, fs, sl) =
   try
     let env = Environment.make [||] [||] in
     
@@ -2615,8 +2620,8 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	    Abstract1.top mgr env else va) excabsl in
 	let excal = List.map (mkinvariant abs.jc_absint_manager) excabsl in
 
-	let post = reg_annot ~anchor:fi.jc_fun_info_name post in
-	let excal = List.map (reg_annot ~anchor:fi.jc_fun_info_name) excal in
+	let post = reg_annot ~loc ~anchor:fi.jc_fun_info_name post in
+	let excal = List.map (reg_annot ~loc ~anchor:fi.jc_fun_info_name) excal in
 
 	let exc_behaviors = 
 	  List.map2 
@@ -3171,7 +3176,7 @@ let initialize_target curposts target =
     make_and(a::eqs)
   ) vs (raw_asrt JCAtrue) 
 
-let finalize_target ~is_function_level ~anchor curposts target inva =
+let finalize_target ~is_function_level ~loc ~anchor curposts target inva =
   if Jc_options.debug then
     printf "@[<v 2>[finalize_target]@\n%a@]@." Jc_output.assertion inva;
   let annot_name = 
@@ -3214,7 +3219,7 @@ let finalize_target ~is_function_level ~anchor curposts target inva =
 	  printf "%a@[<v 2>Inferring %s@\n%a@]@."
 	    Loc.report_position target.jc_target_location
 	    annot_name Jc_output.assertion elima;
-	let elima = reg_annot ~anchor elima in
+	let elima = reg_annot ~loc ~anchor elima in
 	Some elima
       end
 	  
@@ -3454,7 +3459,7 @@ let rec wp_statement weakpre =
 	  let loopposts = wp_statement weakpre target ls loopposts in
 	  let post = 
 	    match finalize_target 
-	      ~is_function_level:false ~anchor:s.jc_statement_label
+	      ~is_function_level:false ~loc:s.jc_statement_loc ~anchor:s.jc_statement_label
 	      loopposts target la.jc_loop_invariant
 	    with None -> None | Some infera ->
 	      target.jc_target_regular_invariant <- la.jc_loop_invariant;
@@ -3528,7 +3533,7 @@ let rec record_wp_invariants weakpre s =
     | JCScall _ ->
 	()
 
-let wp_function targets (fi,fs,sl) =
+let wp_function targets (fi,loc,fs,sl) =
   if debug then printf "[wp_function]@.";
   let weakpre = {
     jc_weakpre_loop_invariants = Hashtbl.create 0;
@@ -3544,7 +3549,7 @@ let wp_function targets (fi,fs,sl) =
     let initposts = push_modified_vars initposts in
     let posts = List.fold_right (wp_statement weakpre target) sl initposts in
 (*     let init_req = fs.jc_fun_requires in  *)
-    match finalize_target ~is_function_level:true ~anchor:fi.jc_fun_info_name
+    match finalize_target ~is_function_level:true ~loc ~anchor:fi.jc_fun_info_name
       posts target init_req
     with None -> () | Some infera ->
       fs.jc_fun_requires <- make_and [fs.jc_fun_requires;infera]
@@ -3704,8 +3709,8 @@ let backprop_function targets (fi,fs,sl) =
 (*****************************************************************************)
 
 let code_function = function
-  | fi,fs,None -> ()
-  | fi,fs,Some sl ->
+  | fi,loc,fs,None -> ()
+  | fi,loc,fs,Some sl ->
       let wp_filter canda =
         (* Only propagate candidate assertions for targets if Atp can make 
 	 * sense of them.
@@ -3725,13 +3730,13 @@ let code_function = function
 		  ()
 	      | AbsBox -> 
 		  let mgr = Box.manager_alloc () in
-		  ai_function mgr None targets (fi,fs,sl)
+		  ai_function mgr None targets (fi,loc,fs,sl)
 	      | AbsOct -> 
 		  let mgr = Oct.manager_alloc () in
-		  ai_function mgr None targets (fi,fs,sl)
+		  ai_function mgr None targets (fi,loc,fs,sl)
 	      | AbsPol -> 
 		  let mgr = Polka.manager_alloc_strict () in
-		  ai_function mgr None targets (fi,fs,sl)
+		  ai_function mgr None targets (fi,loc,fs,sl)
 	    end;
 	    begin match !Jc_options.annotation_sem with 
 	      | AnnotNone -> assert false
@@ -3775,7 +3780,7 @@ let code_function = function
 			end
 		    ) targets []
 		  in
-		  wp_function targets (fi,fs,sl)
+		  wp_function targets (fi,loc,fs,sl)
 	    end
       end
 	
@@ -3784,8 +3789,8 @@ let code_function = function
 (* Interprocedural analysis.                                                 *)
 (*****************************************************************************)
 
-let rec ai_entrypoint mgr iaio (fi, fs, sl) =
-  ai_function mgr iaio [] (fi, fs, sl);
+let rec ai_entrypoint mgr iaio (fi, loc, fs, sl) =
+  ai_function mgr iaio [] (fi, loc, fs, sl);
   inspected_functions := fi.jc_fun_info_tag::!inspected_functions;
   List.iter
     (fun fi ->
@@ -3796,7 +3801,7 @@ let rec ai_entrypoint mgr iaio (fi, fs, sl) =
 	      | Some sl ->
 		  if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
 		    (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
-		      ai_entrypoint mgr iaio (fi, fs, sl))
+		      ai_entrypoint mgr iaio (fi, loc, fs, sl))
 	 Jc_norm.functions_table)
     fi.jc_fun_info_calls
     
@@ -3827,40 +3832,40 @@ let rec record_ai_inter_preconditions mgr iai fi fs =
       fi.jc_fun_info_calls
   end
     
-let rec ai_entrypoint_fix mgr iai (fi, fs, sl) =
-  ai_entrypoint mgr (Some iai) (fi, fs, sl);
+let rec ai_entrypoint_fix mgr iai (fi, loc, fs, sl) =
+  ai_entrypoint mgr (Some iai) (fi, loc, fs, sl);
   if !state_changed then
     begin
       state_changed := false;
       inspected_functions := [];
-      ai_entrypoint_fix mgr iai (fi, fs, sl);
+      ai_entrypoint_fix mgr iai (fi, loc, fs, sl);
     end
       
-let ai_interprocedural mgr (fi, fs, sl) =
+let ai_interprocedural mgr (fi, loc, fs, sl) =
   let iai = {
     jc_interai_manager = mgr;
     jc_interai_function_preconditions = Hashtbl.create 0
   } in
-  ai_entrypoint_fix mgr iai (fi, fs, sl);
+  ai_entrypoint_fix mgr iai (fi, loc, fs, sl);
   inspected_functions := [];
   record_ai_inter_preconditions mgr iai fi fs;
   inspected_functions := [];
-  ai_entrypoint mgr None (fi, fs, sl)
+  ai_entrypoint mgr None (fi, loc, fs, sl)
     
     
 let main_function = function
-  | fi, fs, None -> ()
-  | fi, fs, Some sl ->
+  | fi, loc, fs, None -> ()
+  | fi, loc, fs, Some sl ->
       begin match !Jc_options.ai_domain with
 	| AbsBox ->
 	    let mgr = Box.manager_alloc () in
-	    ai_interprocedural mgr (fi, fs, sl)
+	    ai_interprocedural mgr (fi, loc, fs, sl)
 	| AbsOct -> 
 	    let mgr = Oct.manager_alloc () in
-	    ai_interprocedural mgr (fi, fs, sl)
+	    ai_interprocedural mgr (fi, loc, fs, sl)
 	| AbsPol -> 
 	    let mgr = Polka.manager_alloc_strict () in
-	    ai_interprocedural mgr (fi, fs, sl)
+	    ai_interprocedural mgr (fi, loc, fs, sl)
 	| AbsNone -> assert false
       end
 

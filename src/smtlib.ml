@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.45 2008-01-31 12:30:25 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.46 2008-01-31 16:04:43 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -141,6 +141,8 @@ let rec print_term fmt = function
       else
 	fprintf fmt "@[(ite@ (= %a c_Boolean_true) @ %a@ %a)@]" 
 	  print_term a print_term b print_term c
+  | Tapp (id, [a], _) when id = t_real_of_int ->
+      print_term fmt a
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, [], i) -> 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.97 2008-01-31 15:22:20 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.98 2008-01-31 16:04:43 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -112,13 +112,13 @@ let main () =
 		Hashtbl.iter
 		  (fun _ (fi, loc, fs, sl) ->
 		    if fi.jc_fun_info_name = Jc_options.main then
-		      Jc_ai.main_function (fi, fs, sl)
+		      Jc_ai.main_function (fi, loc, fs, sl)
 		  ) Jc_norm.functions_table
 	      else
 		(* intraprocedural inference of annotations otherwise *)
 		Hashtbl.iter 
 		  (fun _ (f, loc, s, b) -> 
-		    Jc_ai.code_function (f, s, b) 
+		    Jc_ai.code_function (f, loc, s, b) 
 		  ) Jc_norm.functions_table
 	    end;
 
