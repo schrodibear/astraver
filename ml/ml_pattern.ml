@@ -62,6 +62,41 @@ let rec pattern env pat =
     jc_pattern_type = JCTnull;
   }
 
+let pattern_term env body pat =
+  let ty = make pat.pat_type in
+  match pat.pat_desc with
+    | Tpat_var id ->
+	let benv, vi = Ml_env.add_var (name id) ty env in
+	vi, body benv
+    | _ ->
+	let _, vi = Ml_env.add_var "jessica_arg" ty env in
+	let benv, tpat = pattern env pat in
+	let matchterm =
+	  JCTmatch(
+	    make_term (JCTvar vi) ty,
+	    [ tpat, body benv ]
+	  )
+	in
+	vi, make_bool_term matchterm
+(*
+let rec pattern_list_term env body pats =
+  List.fold_right
+    (fun pat (vars, body) ->
+       let vi, tpat = pattern_term env body pat in
+       vi::vars, 
+
+let rec pattern_list_term env body = function
+  | [] ->
+      [], body env
+  | pat::rem ->
+      let vi, body =
+	pattern_term env
+	  (fun env -> pattern_list_term env body rem)
+	  pat
+      in
+*)
+let pattern_list_term _ = assert false      
+
 (*
 Local Variables: 
 compile-command: "unset LANG; make -j -C .. bin/jessica.opt"

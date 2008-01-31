@@ -576,123 +576,20 @@ let behavior env b =
     jc_behavior_ensures = make_assertion(assertion env b.b_ensures);
   }
 
-let invariants env spec (*struct_info*) =
+let invariants env spec =
   list_fold_map
     (fun env i ->
-       let ty = make_pointer_type (JCtag dummy_struct)(*struct_info*) in
-       let arg_vi, body = match i.ti_argument.pat_desc with
-	 | Tpat_var id ->
-	     let arg_name = name id in
-	     let body_env, vi = Ml_env.add_var arg_name ty env in
-	     vi, make_assertion (assertion body_env i.ti_body)
-	 | _ ->
-	     let _, vi = Ml_env.add_var "jessica_arg" ty env in
-	     let newenv, tpat = pattern env i.ti_argument in
-	     let matchterm =
-	       JCTmatch(
-		 make_term (JCTvar vi) ty,
-		 [ tpat, make_bool_term (term newenv i.ti_body) ]
-	       )
-	     in
-	     let matchpat = JCAbool_term(make_bool_term matchterm) in
-	     vi, make_assertion matchpat
-(*	     let _, vi = Ml_env.add_var "jessica_arg" ty env in
-	     let cond, body = PatAssertion.pattern_expr
-	       env
-	       (make_var_term vi)
-	       i.ti_argument
-	       (fun env -> make_assertion (assertion env i.ti_body))
-	     in
-	     let conda = make_assertion (JCAbool_term cond) in
-	     vi, make_implies conda body*)
+       let arg_vi, body = pattern_term env
+	 (fun env -> make_bool_term (term env i.ti_body))
+	 i.ti_argument
        in
+       let body = make_assertion (JCAbool_term body) in
        let final_env, _ =
 	 Ml_env.add_logic_fun (name i.ti_name) [ arg_vi ] None env
        in
        final_env, (name i.ti_name, arg_vi, body))
     env
     spec.ts_invariants
-  
-(*let record_decl env (id, labels) =
-  log "    Record type %s:" (name id);
-  log "      Looking for spec...";
-  let spec =
-    try
-      Ml_env.find_type_spec id env
-    with Ml_env.Not_found_str _ ->
-      log "        Not found";
-      {
-	ts_type = Pident id;
-	ts_invariants = [];
-      }
-  in
-  let struct_name = name id in
-  let struct_info = {
-    jc_struct_info_name = struct_name;
-    jc_struct_info_parent = None;
-    jc_struct_info_root = struct_name;
-    jc_struct_info_fields = []; (* set after *)
-  } in
-  log "      Fields...";
-  let env, field_infos = list_fold_map
-    (fun env (lbl, _, ty) ->
-       Ml_env.add_field lbl (make ty) struct_info env)
-    env
-    labels
-  in
-  struct_info.jc_struct_info_fields <- field_infos;
-  log "      Invariants...";
-  let env, invariants = invariants env spec struct_info in
-  Ml_env.add_struct struct_info env, (* replace existing structure *)
-  JCstruct_def(struct_name, None, field_infos, invariants)
-
-let variant_decl env (id, constrs) =
-  log "    Variant type %s:" (name id);
-  log "      Looking for spec...";
-  let spec =
-    try
-      Ml_env.find_type_spec id env
-    with Ml_env.Not_found_str _ ->
-      log "        Not found";
-      {
-	ts_type = Pident id;
-	ts_invariants = [];
-      }
-  in
-  let struct_name = name id in
-  let struct_info = {
-    jc_struct_info_name = struct_name;
-    jc_struct_info_parent = None;
-    jc_struct_info_root = struct_name;
-    jc_struct_info_fields = []; (* set after *)
-  } in
-  log "      Constructors...";
-  let env, tag_fi = Ml_env.add_tag struct_info env in
-  let env, field_infos = list_fold_mapi
-    (fun env i (c, tyl) ->
-       Ml_env.add_constructor c (List.map (make) tyl) struct_info i env)
-    env
-    constrs
-  in
-  let field_infos = tag_fi :: (List.flatten field_infos) in
-  struct_info.jc_struct_info_fields <- field_infos;
-  log "      Invariants...";
-  let env, invariants = invariants env spec struct_info in
-  Ml_env.add_struct struct_info env, (* replace existing structure *)
-  [(* JCenum_type_def(
-      enum_info.jc_enum_info_name,
-      enum_info.jc_enum_info_min,
-      enum_info.jc_enum_info_max);*)
-    JCstruct_def(struct_name, None, field_infos, invariants) ]
-
-let pre_declare_type name env =
-  let si = {
-    jc_struct_info_name = name; (* only this field is important *)
-    jc_struct_info_parent = None;
-    jc_struct_info_root = name;
-    jc_struct_info_fields = [];
-  } in
-  Ml_env.add_struct si env*)
 
 let rec function_decl env e = match e.exp_desc with
   | Texp_function([ { pat_desc = Tpat_var pid;
@@ -831,27 +728,29 @@ let structure_item env = function
       declare id td true;
       [], env
   | Tstr_axiom_spec axs ->
-      let body_env, args = list_fold_mapi
+      let benv, args = list_fold_mapi
 	(fun env i pat ->
-	   Ml_env.add_var "jessica_arg" (make pat.pat_type) env)
+	   Ml_env.add_var ("jessica_arg"^string_of_int i)
+	     (make pat.pat_type) env)
 	env
 	axs.as_arguments
       in
-      let cond, _, body = assert false in (* TODO *)
-	(*PatAssertion.pattern_list_expr
+      let body = assert false in (* TODO *)
+      (*let cond, _, body =
+	PatAssertion.pattern_list_expr
 	env
 	(List.map make_var_term args)
 	axs.as_arguments
 	(fun env -> make_assertion (assertion env axs.as_body))
-      in*)
+      in
       let conda = make_assertion (JCAbool_term cond) in
       let a = make_assertion (JCAimplies(conda, body)) in
       let qa = List.fold_left
 	(fun acc vi -> make_assertion (JCAquantifier(Forall, vi, acc)))
 	a
 	args
-      in
-      [ JClemma_def(axs.as_name, true, [LabelName "L"], qa) ], env
+      in*)
+      [ JClemma_def(axs.as_name, true, [LabelName "L"], body) ], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
 let rec structure env = function

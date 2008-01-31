@@ -1041,3 +1041,31 @@ alldepend:
 
 include .depend
 include .depend.coq
+
+#################################################################
+# Building the Why platform with ocamlbuild (OCaml 3.10 needed) #
+#################################################################
+
+# Just compiling the Makefile is enough to pollute the source tree
+# (with lexers and parsers). So for now, we need the -no-hygiene option.
+OCAMLBUILD=ocamlbuild -no-hygiene
+
+jessica.byte.build:
+	$(OCAMLBUILD) -libs unix,str,nums -Is ml,jc,src ml/ml_main.byte
+	cp _build/ml/ml_main.byte bin/jessica.byte
+
+jessica.opt.build:
+	$(OCAMLBUILD) -libs unix,str,nums -Is ml,jc,src ml/ml_main.native
+	cp _build/ml/ml_main.native bin/jessica.opt
+
+jessica.build: jessica.byte.build jessica.opt.build
+
+why.byte.build:
+	$(OCAMLBUILD) -libs unix,str,nums,graph -Is src,tools src/main.byte
+	cp _build/src/main.byte bin/why.byte
+
+why.opt.build:
+	$(OCAMLBUILD) -libs unix,str,nums,graph -Is src,tools src/main.native
+	cp _build/src/main.native bin/why.opt
+
+why.build: why.byte.build why.opt.build
