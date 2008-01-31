@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.16 2008-01-31 15:22:20 moy Exp $ i*)
+(*i $Id: output.mli,v 1.17 2008-01-31 17:26:34 moy Exp $ i*)
 
 type constant =
   | Prim_void
@@ -196,6 +196,10 @@ type kind =
   | DivByZero
   | Pack
   | Unpack
+
+val locs_table : 
+    (string, (kind option * string option * string option * Loc.position)) 
+    Hashtbl.t 
 
 val reg_loc : string -> ?id:string -> ?kind:kind -> ?name:string
   -> ?formula:string -> Loc.position -> string

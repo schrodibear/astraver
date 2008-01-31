@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.223 2008-01-29 16:26:41 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.224 2008-01-31 17:26:34 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -62,6 +62,15 @@ let abs_fname f =
   else f
 
 let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =  
+  try 
+    (* If label already refered to in [Output.locs_table], do not reference it
+     * more. This is the case for generated annotations. 
+     *)
+    match id with None -> raise Not_found | Some id ->
+      ignore (Hashtbl.find Output.locs_table id);
+      id
+  with Not_found ->
+
   let id,oldid = match id,oldid with
     | None,_ ->  
 	incr name_counter;

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.173 2008-01-30 12:24:50 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.174 2008-01-31 17:26:34 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2075,16 +2075,17 @@ and statement_list label_env env lz l : tstatement list =
 
 (* Push labels of loops inside the loop structure, so that no program 
  * transformation can break this link between a label and a loop.
+ * If a label is already associated to the loop, do not change it.
  *)
 let rec pstatement ?(label="") s = 
   let pnode = match s.jc_pstatement_node with
     | JCPSlabel(lab,s) -> JCPSlabel(lab,pstatement ~label:lab s)
     | JCPSwhile(lab,cond,inv,var,body) -> 
-	assert(lab = "");
-	JCPSwhile(label,cond,inv,var,pstatement body)
+	let lab = if lab = "" then label else lab in
+	JCPSwhile(lab,cond,inv,var,pstatement body)
     | JCPSfor(lab,init,cond,updates,inv,var,body) -> 
-	assert(lab = "");
-	JCPSfor(label,init,cond,updates,inv,var,pstatement body)
+	let lab = if lab = "" then label else lab in
+	JCPSfor(lab,init,cond,updates,inv,var,pstatement body)
     | JCPStry(s,catches,finally) -> 
 	let catches =
 	  List.map (fun (ei,vio,s) -> (ei,vio,pstatement s)) catches

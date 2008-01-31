@@ -117,8 +117,9 @@ and string_val key = parse
       { Buffer.add_char buf '\n';
         string_val key lexbuf }
   | '\\' (_ as c)
-      { failwith ("Rc: invalid escape character " ^ 
-		    String.make 1 c ^ " in string") }
+      { Buffer.add_char buf '\\';
+        Buffer.add_char buf c;
+        string_val key lexbuf }
   | eof
       { failwith "Rc: unterminated string" }
 
