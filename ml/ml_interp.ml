@@ -586,7 +586,16 @@ let invariants env spec (*struct_info*) =
 	     let body_env, vi = Ml_env.add_var arg_name ty env in
 	     vi, make_assertion (assertion body_env i.ti_body)
 	 | _ ->
-	     assert false (* TODO *)
+	     let _, vi = Ml_env.add_var "jessica_arg" ty env in
+	     let newenv, tpat = pattern env i.ti_argument in
+	     let matchterm =
+	       JCTmatch(
+		 make_term (JCTvar vi) ty,
+		 [ tpat, make_bool_term (term newenv i.ti_body) ]
+	       )
+	     in
+	     let matchpat = JCAbool_term(make_bool_term matchterm) in
+	     vi, make_assertion matchpat
 (*	     let _, vi = Ml_env.add_var "jessica_arg" ty env in
 	     let cond, body = PatAssertion.pattern_expr
 	       env
