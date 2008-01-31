@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.96 2008-01-29 16:26:41 bardou Exp $ *)
+(* $Id: jc_main.ml,v 1.97 2008-01-31 15:22:20 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -103,8 +103,6 @@ let main () =
 	  end;
 
           (* (optional) phase 6: inference of annotations *)
-	  let annot_file = Lib.file "." (filename ^ ".annot") in
-	  let annot_out,annot_fmt = Pp.open_file_and_formatter annot_file in
 	  if !Jc_options.annotation_sem <> AnnotNone then
 	    begin
 	      Jc_options.lprintf "Inference of annotations@.";
@@ -121,10 +119,8 @@ let main () =
 		Hashtbl.iter 
 		  (fun _ (f, loc, s, b) -> 
 		    Jc_ai.code_function (f, s, b) 
-		  ) Jc_norm.functions_table;
-	      Jc_ai.print_annots annot_fmt
+		  ) Jc_norm.functions_table
 	    end;
-	  Pp.close_file_and_formatter (annot_out,annot_fmt);
 
 	  (* phase 7: computation of effects *)
 	  Jc_options.lprintf
@@ -337,9 +333,11 @@ let main () =
 	    (Lib.file "why" (filename ^ ".why"));
 	  (* production phase 6.2 : produce locs file *)
 	  Jc_options.lprintf "production phase 6.2: produce locs file@.";
-	  Pp.print_in_file 
-	    Jc_interp.print_locs
-	    (Lib.file "." (filename ^ ".loc"));
+	  let cout_locs,fmt_locs = 
+	    Pp.open_file_and_formatter (Lib.file "." (filename ^ ".loc")) in
+	  Jc_interp.print_locs fmt_locs;
+	  Output.print_locs fmt_locs; (* Generated annotations. *)
+	  Pp.close_file_and_formatter (cout_locs,fmt_locs);
 	  (* production phase 6.3 : produce makefile *)
 	  Jc_options.lprintf "production phase 6.3: produce makefile@.";
 	  Jc_make.makefile filename

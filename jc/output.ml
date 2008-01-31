@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.23 2008-01-28 14:12:52 moy Exp $ i*)
+(*i $Id: output.ml,v 1.24 2008-01-31 15:22:20 moy Exp $ i*)
 
 open Lexing
 open Format
@@ -811,17 +811,18 @@ type kind =
 
 
 let locs_table : 
-    (string, (kind option * string option * Loc.position)) Hashtbl.t 
+    (string, (kind option * string option * string option * Loc.position)) 
+    Hashtbl.t 
     = Hashtbl.create 97
 let name_counter = ref 0
-let reg_loc prefix ?id ?kind ?name loc =
+let reg_loc prefix ?id ?kind ?name ?formula loc =
   let id = match id with
     | None ->  
 	incr name_counter;
 	prefix ^ "_" ^ string_of_int !name_counter
     | Some n -> n
   in
-  Hashtbl.add locs_table id (kind,name,loc);
+  Hashtbl.add locs_table id (kind,name,formula,loc);
   id
 
 let print_kind fmt k =
@@ -844,12 +845,14 @@ let abs_fname f =
 
 let print_locs fmt =
   Hashtbl.iter 
-    (fun id (kind,name,(b,e)) ->
+    (fun id (kind,name,formula,(b,e)) ->
        fprintf fmt "[%s]@\n" id;
        Option_misc.iter
 	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
        Option_misc.iter
 	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "formula = \"%s\"@\n" n) formula;
        fprintf fmt "file = \"%s\"@\n" (abs_fname b.Lexing.pos_fname);
        let l = b.Lexing.pos_lnum in
        let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in

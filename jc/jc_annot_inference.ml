@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.97 2008-01-29 08:48:10 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.98 2008-01-31 15:22:20 moy Exp $ *)
 
 open Pp
 open Format
@@ -510,62 +510,22 @@ let print_modified_vars fmt posts =
 (* Logging annotations inferred.                                             *)
 (*****************************************************************************)
 
-type kind =
-  | LoopInvariant
-  | Precondition
-  | Postcondition
-  | ExcPostcondition
-
-type technique =
-  | FwdAbstractInterp
-  | WeakestPre
-  | InferWeakPre
-  | InferStrongPre
-
-let annot_table = Hashtbl.create 97
-let name_counter = ref 0
-
-let annot_id num = "A_" ^ string_of_int num
-
-let reg_annot kind technique ~anchor ?origin a =
-  incr name_counter;
-  Hashtbl.add annot_table !name_counter (kind,technique,anchor,origin,a);
-  { a with jc_assertion_label = annot_id !name_counter; }
-
-let print_kind fmt k =
-  fprintf fmt "%s"
-    (match k with
-       | LoopInvariant -> "LoopInvariant"
-       | Precondition -> "Precondition"
-       | Postcondition -> "Postcondition"
-       | ExcPostcondition -> "ExcPostcondition"
-    )
-
-let print_technique fmt k =
-  fprintf fmt "%s"
-    (match k with
-       | FwdAbstractInterp -> "FwdAbstractInterp"
-       | WeakestPre -> "WeakestPre"
-       | InferWeakPre -> "InferWeakPre"
-       | InferStrongPre -> "InferStrongPre"
-    )
-
-let print_annots fmt =
-  let annots = 
-    Hashtbl.fold (fun id info acc -> (id,info)::acc) annot_table [] in
-  let annots = 
-    List.sort (fun a1 a2 -> Pervasives.compare (fst a1) (fst a2)) annots in
-  List.iter
-    (fun (num,(kind,technique,anchor,origin,a)) ->
-      let id = annot_id num in
-      fprintf fmt "[%s]@\n" id;
-      fprintf fmt "kind = %a@\n" print_kind kind;
-      fprintf fmt "technique = %a@\n" print_technique technique;
-      if anchor <> "" then fprintf fmt "anchor = \"%s\"@\n" anchor;
-      Option_misc.iter
-	(fun n -> fprintf fmt "origin = \"%s\"@\n" n) origin;
-      fprintf fmt "formula = \"%a\"@\n@\n" Jc_output.assertion a
-    ) annots
+let reg_annot ?id ?kind ?name ~anchor a = 
+  try
+    let (f,l,b,e,_) = Hashtbl.find Jc_options.locs_table anchor in
+    let pos = Lexing.dummy_pos in
+    let pos = { pos with 
+      Lexing.pos_fname = f; 
+      Lexing.pos_lnum = l; 
+      Lexing.pos_bol = 0; } in
+    let loc = 
+      { pos with Lexing.pos_cnum = b; },
+      { pos with Lexing.pos_cnum = e; } in
+    Format.fprintf Format.str_formatter "%a" Jc_output.assertion a;
+    let formula = Format.flush_str_formatter () in
+    let lab = Output.reg_loc "G" ?id ?kind ?name ~formula loc in
+    { a with jc_assertion_label = lab; }
+  with Not_found -> a
 
 
 (*****************************************************************************)
@@ -2493,10 +2453,7 @@ let rec record_ai_invariants abs s =
 		"%a@[<v 2>Inferring loop invariant@\n%a@]@."
 		Loc.report_position s.jc_statement_loc
 		Jc_output.assertion a;
-	    let a = 
-	      reg_annot LoopInvariant FwdAbstractInterp 
-		~anchor:s.jc_statement_label a
-	    in
+	    let a = reg_annot ~anchor:s.jc_statement_label a in
 	    la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a];
 	    record_ai_invariants abs ls
 	with Not_found -> () end
@@ -2658,14 +2615,8 @@ let ai_function mgr iaio targets (fi, fs, sl) =
 	    Abstract1.top mgr env else va) excabsl in
 	let excal = List.map (mkinvariant abs.jc_absint_manager) excabsl in
 
-	let post = reg_annot Postcondition FwdAbstractInterp 
-	  ~anchor:fi.jc_fun_info_name post
-	in
-	let excal = 
-	  List.map (reg_annot ExcPostcondition FwdAbstractInterp 
-	    ~anchor:fi.jc_fun_info_name
-	  ) excal
-	in
+	let post = reg_annot ~anchor:fi.jc_fun_info_name post in
+	let excal = List.map (reg_annot ~anchor:fi.jc_fun_info_name) excal in
 
 	let exc_behaviors = 
 	  List.map2 
@@ -3263,13 +3214,7 @@ let finalize_target ~is_function_level ~anchor curposts target inva =
 	  printf "%a@[<v 2>Inferring %s@\n%a@]@."
 	    Loc.report_position target.jc_target_location
 	    annot_name Jc_output.assertion elima;
-	let kind = if is_function_level then Precondition else LoopInvariant in
-	let technique = match !Jc_options.annotation_sem with
-	  | AnnotWeakPre -> InferWeakPre
-	  | AnnotStrongPre -> InferStrongPre
-	  | AnnotInvariants | AnnotNone -> assert false
-	in
-	let elima = reg_annot kind technique ~anchor elima in
+	let elima = reg_annot ~anchor elima in
 	Some elima
       end
 	  

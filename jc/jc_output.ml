@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.87 2008-01-28 11:37:02 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.88 2008-01-31 15:22:20 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -53,6 +53,9 @@ type jc_decl =
   | JClogic_const_def of jc_type * string * term option
   | JClogic_type_def of string
   | JCinvariant_policy of Jc_env.inv_sem
+  | JCseparation_policy of Jc_env.separation_sem
+  | JCannotation_policy of Jc_env.annotation_sem
+  | JCabstract_domain of Jc_env.abstract_domain 
       
 let const fmt c =
   match c with
@@ -529,10 +532,35 @@ let string_of_invariant_policy p =
     | Jc_env.InvArguments -> "Arguments"
     | Jc_env.InvOwnership -> "Ownership"
 
+let string_of_separation_policy p =
+  match p with
+    | Jc_env.SepNone -> "None"
+    | Jc_env.SepRegions -> "Regions"
+
+let string_of_annotation_policy p =
+  match p with
+    | Jc_env.AnnotNone -> "None"
+    | Jc_env.AnnotInvariants -> "Invariants"
+    | Jc_env.AnnotWeakPre -> "WeakPre"
+    | Jc_env.AnnotStrongPre -> "StrongPre"
+
+let string_of_abstract_domain p =
+  match p with
+    | Jc_env.AbsNone -> "None"
+    | Jc_env.AbsBox -> "Box"
+    | Jc_env.AbsOct -> "Oct"
+    | Jc_env.AbsPol -> "Pol"
+
 let rec print_decl fmt d =
   match d with
     | JCinvariant_policy p ->
         fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)  
+    | JCseparation_policy p ->
+        fprintf fmt "# SeparationPolicy = %s@\n" (string_of_separation_policy p)
+    | JCannotation_policy p ->
+        fprintf fmt "# AnnotationPolicy = %s@\n" (string_of_annotation_policy p)
+    | JCabstract_domain p ->
+        fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
 	  (print_list comma param) params 
