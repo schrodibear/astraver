@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.43 2007-11-27 10:42:32 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.44 2008-01-31 12:30:25 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -242,7 +242,9 @@ let yices ?(debug=false) ?(timeout=30) ~filename:f () =
     r
 
 let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
-  let cmd = sprintf "cvc3 -lang smt < %s" f in
+  let cmd = 
+    sprintf "cvc3 +arith-new +quant-polarity -quant-new -lang smt < %s" f 
+  in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> 0 then 
     if c==1 && 
@@ -254,8 +256,9 @@ let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
     let r = 
       if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
 	Valid t
-      else
-	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
+      else if Sys.command (sprintf "grep -q -w sat %s" out) = 0 then
+	Invalid (t, None)
+      else if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
 	CannotDecide (t, None)
       else
 	ProverFailure(t,"command failed: " ^ cmd)

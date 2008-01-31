@@ -1,5 +1,10 @@
 
-  o gwhy: benchmark does not verify all functions in parallel anymore
+version 2.10b, January 31st, 2008
+=================================
+  o CVC3: now called with options +arith-new +quant-polarity -quant-new
+    (requires version 1.2.1)
+  o SMT-lib output: fixed bug with reals
+  o gwhy: benchmark (Ctrl-B) does not verify all functions in parallel anymore
 
 version 2.10a, January 14th, 2008
 =================================

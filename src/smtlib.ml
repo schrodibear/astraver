@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.44 2008-01-26 13:51:48 lescuyer Exp $ i*)
+(*i $Id: smtlib.ml,v 1.45 2008-01-31 12:30:25 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -65,17 +65,17 @@ let prefix id =
     if Options.modulo then "%" else "modulo" 
   else if id == t_neg_int then "-"
   (* real ops *)
-  else if id == t_add_real 
-       || id == t_sub_real 
-       || id == t_mul_real 
-       || id == t_div_real 
-       || id == t_neg_real 
+  else if id == t_add_real then "+" 
+  else if id == t_sub_real then "-" 
+  else if id == t_mul_real then "*"
+  else if id == t_neg_real then "-" 
+  else if id == t_lt_real then "<"
+  else if id == t_le_real then "<="
+  else if id == t_gt_real then ">"
+  else if id == t_ge_real then ">="
+  else if id == t_div_real 
        || id == t_sqrt_real 
        || id == t_real_of_int 
-       || id == t_lt_real
-       || id == t_le_real
-       || id == t_gt_real
-       || id == t_ge_real
   then
     Ident.string id
   else (eprintf "%a@." Ident.print id; assert false)
@@ -127,6 +127,7 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat (i,f,e)) ->
+      let f = if f = "" then "0" else f in
       fprintf fmt "%s.%s" i f ;
       if not (e = "") then
 	failwith "exposant notation not yet suported "

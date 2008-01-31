@@ -59,6 +59,10 @@ cvcl:
 	../bin/why.opt --cvcl -d -V test.mlw
 	../bin/dp.opt test_why.cvc
 
+cvc3:
+	../bin/why.opt --cvcl -d -V test.mlw
+	../bin/dp.opt test_why.cvc
+
 mizar:
 	../bin/why.opt --mizar -d -V test.mlw
 	mzf test_why.miz

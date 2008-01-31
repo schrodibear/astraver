@@ -1,13 +1,12 @@
 
 Note: These are the changes for Caduceus.
 
+version 1.10b, January 31st, 2008
+=================================
  o verification condition localization output in file f.loc; 
    used in gwhy to color the origin of each VC
  o fixed typing of arithmetic constants (such as 12u, 34l, etc.) when
    used with modulo/bounded arithmetic models
-
-version 1.10b, January 18th, 2008
-=================================
  o gcc warnings in C preprocessing fixed for every LANG configuration
 
 version 1.10a, January 14th, 2008
