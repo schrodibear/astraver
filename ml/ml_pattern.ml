@@ -62,40 +62,34 @@ let rec pattern env pat =
     jc_pattern_type = JCTnull;
   }
 
-let pattern_term env body pat =
-  let ty = make pat.pat_type in
-  match pat.pat_desc with
-    | Tpat_var id ->
-	let benv, vi = Ml_env.add_var (name id) ty env in
-	vi, body benv
-    | _ ->
-	let _, vi = Ml_env.add_var "jessica_arg" ty env in
-	let benv, tpat = pattern env pat in
-	let matchterm =
-	  JCTmatch(
-	    make_term (JCTvar vi) ty,
-	    [ tpat, body benv ]
-	  )
-	in
-	vi, make_bool_term matchterm
-(*
-let rec pattern_list_term env body pats =
-  List.fold_right
-    (fun pat (vars, body) ->
-       let vi, tpat = pattern_term env body pat in
-       vi::vars, 
+let pattern_list_term env body pats =
+  let benv, pats = list_fold_map pattern env pats in
+  let args = List.map
+    (fun pat -> match pat.jc_pattern_node with
+       | JCPvar vi | JCPas(_, vi) -> vi
+       | JCPor _ | JCPconst _ | JCPany | JCPstruct _ ->
+	   new_var ~add:"arg" pat.jc_pattern_type)
+    pats
+  in
+  let result = List.fold_right2
+    (fun pat vi body ->
+       make_term
+	 (JCTmatch(
+	    make_var_term vi,
+	    [ pat, body ]
+	  ))
+	 body.jc_term_type)
+    pats args (body benv)
+  in
+  args, result
 
-let rec pattern_list_term env body = function
-  | [] ->
-      [], body env
-  | pat::rem ->
-      let vi, body =
-	pattern_term env
-	  (fun env -> pattern_list_term env body rem)
-	  pat
-      in
-*)
-let pattern_list_term _ = assert false      
+let pattern_term env body pat =
+  let args, result = pattern_list_term env body [pat] in
+  let arg = match args with
+    | [vi] -> vi
+    | _ -> assert false (* impossible *)
+  in
+  arg, result
 
 (*
 Local Variables: 

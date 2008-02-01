@@ -234,9 +234,13 @@ let make_pointer_type si =
 let expr_of_int i = make_int_expr(JCTEconst(JCCinteger(string_of_int i)))
 
 (* Jc_pervasives produces names that will be used by Jessie too, which is bad *)
-let new_var = let var_cnt = ref 0 in fun ty ->
+let new_var = let var_cnt = ref 0 in fun ?add ty ->
+  let add = match add with
+    | None -> "_"
+    | Some s -> "_"^s^"_"
+  in
   incr var_cnt;
-  let id = "jessica_"^(string_of_int !var_cnt) in
+  let id = "jessica"^add^(string_of_int !var_cnt) in
   {
     jc_var_info_tag = fresh_int ();
     jc_var_info_name = id;
@@ -421,6 +425,12 @@ let make_app_term_node li args = JCTapp (make_app li args)
 
 let make_valid_pointer tov =
   JCTpointer(tov, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
+
+let quantify q vi body =
+  make_assertion (JCAquantifier(q, vi, body))
+
+let quantify_list q =
+  List.fold_right (quantify q)
 
 (*
 Local Variables: 

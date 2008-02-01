@@ -1046,7 +1046,8 @@ include .depend.coq
 # Building the Why platform with ocamlbuild (OCaml 3.10 needed) #
 #################################################################
 
-# This part does not depend on the rest of the Makefile.
+# This part does not depend on the rest of the Makefile, except for the
+# automatically generated files such as module Version.
 
 # Just compiling the Makefile is enough to pollute the source tree
 # (with lexers and parsers). So for now, we need the -no-hygiene option.

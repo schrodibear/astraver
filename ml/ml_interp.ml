@@ -728,28 +728,12 @@ let structure_item env = function
       declare id td true;
       [], env
   | Tstr_axiom_spec axs ->
-      let benv, args = list_fold_mapi
-	(fun env i pat ->
-	   Ml_env.add_var ("jessica_arg"^string_of_int i)
-	     (make pat.pat_type) env)
-	env
+      let args, body = pattern_list_term env
+	(fun env -> make_bool_term (term env axs.as_body))
 	axs.as_arguments
       in
-      let body = assert false in (* TODO *)
-      (*let cond, _, body =
-	PatAssertion.pattern_list_expr
-	env
-	(List.map make_var_term args)
-	axs.as_arguments
-	(fun env -> make_assertion (assertion env axs.as_body))
-      in
-      let conda = make_assertion (JCAbool_term cond) in
-      let a = make_assertion (JCAimplies(conda, body)) in
-      let qa = List.fold_left
-	(fun acc vi -> make_assertion (JCAquantifier(Forall, vi, acc)))
-	a
-	args
-      in*)
+      let body = make_assertion (JCAbool_term body) in
+      let body = quantify_list Forall args body in
       [ JClemma_def(axs.as_name, true, [LabelName "L"], body) ], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
