@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.69 2008-01-22 14:11:23 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.70 2008-02-01 12:55:27 marche Exp $ i*)
 
 open Printf
 open Options
@@ -186,6 +186,10 @@ let update_buffer tv =
 
 open Logic_decl
 
+let msg_of_loopinv = function
+  | "" -> " of loop invariant"
+  | s -> " of generated loop inv.: " ^ s
+
 let msg_of_kind = 
   function
     | EKPre "PointerDeref" -> "pointer dereferencing"
@@ -200,8 +204,8 @@ let msg_of_kind =
     | EKPost -> "postcondition"
     | EKWfRel -> "well-foundness of relation"
     | EKVarDecr -> "variant decrease" 
-    | EKLoopInvInit -> "initialization of loop invariant" 
-    | EKLoopInvPreserv -> "preservation of loop invariant"
+    | EKLoopInvInit s -> "initialization" ^ msg_of_loopinv s
+    | EKLoopInvPreserv s -> "preservation" ^ msg_of_loopinv s
 
 let show_xpl (loc,k) (tv:GText.view) =
   match loc with

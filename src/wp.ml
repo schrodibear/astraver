@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.110 2008-01-29 16:54:47 marche Exp $ i*)
+(*i $Id: wp.ml,v 1.111 2008-02-01 12:55:27 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -106,7 +106,7 @@ let while_post_block env inv var e =
 	if debug then 
 	  Format.eprintf 
 	    "Loc for invariant = %a@." Loc.gen_report_position i.a_loc;
-	let id = reg_explanation (Cc.VCEinvpreserv(i.a_loc,i.a_value)) in
+	let id = reg_explanation (Cc.VCEinvpreserv("",(i.a_loc,i.a_value))) in
 	(* Claude: pand -> wpand to split the conjunct *)
 	{ a_value = wpand (Pnamed(id,i.a_value)) decphi; 
 	  a_name = post_name_from (Name i.a_name);
@@ -324,19 +324,20 @@ and wp_desc info d q =
 	let qe = while_post_block info.t_env inv var e in
 	let qe = sup (Some qe) q in (* exc. posts taken from [q] *)
 	let e',we = wp e qe in
+	let lab = info.t_userlabel in
 	let w = match inv, we with
 	  | None, None ->
 	      wfr
 	  | Some i, None ->
-	      let id = reg_explanation (Cc.VCEinvinit(i.a_loc,i.a_value)) in
-	      wpand wfr (Pnamed(id,i.a_value))
+	      let id = reg_explanation (Cc.VCEinvinit(lab,(i.a_loc,i.a_value)))
+	      in wpand wfr (Pnamed(id,i.a_value))
 	  | None, Some {a_value=we} ->
 	      let vars = output_info info in
 	      wpand wfr (foralls ~is_wp:true vars we)
 	  | Some i, Some {a_value=we} ->
 	      let vars = output_info info in
-	      let id = reg_explanation (Cc.VCEinvinit(i.a_loc,i.a_value)) in
-	      wpand wfr
+	      let id = reg_explanation (Cc.VCEinvinit(lab,(i.a_loc,i.a_value))) 
+	      in wpand wfr
 		(wpand ~is_sym:true
 		   (Pnamed(id,i.a_value))
 		   (foralls ~is_wp:true vars (Pimplies (true, i.a_value, we))))

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cc.mli,v 1.28 2008-01-24 08:11:14 regisgia Exp $ i*)
+(*i $Id: cc.mli,v 1.29 2008-02-01 12:55:27 marche Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -114,8 +114,10 @@ type raw_vc_explain =
   | VCEpost of loc_predicate
   | VCEwfrel
   | VCEvardecr of loc_term
-  | VCEinvinit of loc_predicate
-  | VCEinvpreserv of loc_predicate 
+  | VCEinvinit of string * loc_predicate
+      (*r label for the loop, then loop invariant *)
+  | VCEinvpreserv of string * loc_predicate 
+      (*r label for the loop, then loop invariant *)
 
 (*
 type obligation = Loc.floc * vc_explain * string * sequent

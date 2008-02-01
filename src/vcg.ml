@@ -858,13 +858,18 @@ let rec explain_for_pred internal user = function
   | Pnamed(Internal n,p) -> explain_for_pred (Some n) user p
   | Pnamed(User n,p) -> explain_for_pred internal (Some n) p
   | p ->
+      (if debug then
+	 eprintf "User label for explanation: `%a'@." (Pp.print_option pp_print_string)user;
+       user)
+(*
       (match user with
 	| None -> None
 	| Some lab -> 
 	   try Some(Util.loc_of_label lab) with Not_found -> 
 	     if debug then
 	       eprintf "Warning: no loc found for label %s@." lab;
-	     None),
+	     None)
+*),
       (match internal with
 	| Some n ->
 	    begin
@@ -890,11 +895,8 @@ let vcg_from_wp base w =
   let po = ref [] in
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
-(*
-    let loc = loc_for_pred concl in
-*)
-    let loc, raw_explain = explain_for_pred None None concl in	
-    let explain,loc =  Util.cook_explanation loc raw_explain in
+    let lab, raw_explain = explain_for_pred None None concl in	
+    let explain,loc =  Util.cook_explanation lab raw_explain in
     try
       discharge loc ctx concl
     with Exit -> begin
