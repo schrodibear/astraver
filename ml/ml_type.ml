@@ -107,8 +107,7 @@ type ml_caml_type = {
 let ml_types = Hashtbl.create 11 (* string -> ml_caml_type *)
 let ml_tuples = ref ParamMap.empty (* Ml_env.struct_info *)
 
-let declare id td logic =
-  let n = name id in
+let declare_str n td logic =
   Hashtbl.add ml_types n {
     ml_ty_name = n;
     ml_ty_decl = td;
@@ -117,6 +116,12 @@ let declare id td logic =
     ml_ty_invariants = [];
   }
 
+let declare id = declare_str (name id)
+
+(* declare pervasive types *)
+let _ =
+  declare_str "list" Ml_ocaml.Predef.decl_list false
+
 let add_invariant id inv =
   let mlty = Hashtbl.find ml_types (name id) in
   mlty.ml_ty_invariants <- inv::mlty.ml_ty_invariants
@@ -124,7 +129,7 @@ let add_invariant id inv =
 exception Not_closed
 
 let rec make_type mlt =
-  let not_implemented = not_implemented none in
+  let not_implemented x = not_implemented none x in
   match mlt.desc with
     | Tvar -> raise Not_closed
     | Tarrow _ -> not_implemented "ml_type.ml: make_type: Tarrow"
@@ -143,7 +148,11 @@ let rec make_type mlt =
 	  | "float" -> MLTnative Treal
 	  | "bool" -> MLTnative Tboolean
 	  | name ->
-	      let ty = Hashtbl.find ml_types name in
+	      let ty = try
+		Hashtbl.find ml_types name
+	      with Not_found ->
+		not_implemented "ml_type.ml: make_type: predefined type %s" name
+	      in
 	      begin try
 		ParamMap.find args ty.ml_ty_instances
 	      with Not_found ->

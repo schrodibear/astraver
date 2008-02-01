@@ -86,6 +86,8 @@ let identifier_of_symbol_char = function
   | '!' -> "bang"
   | ':' -> "colon"
   | '=' -> "equal"
+  | '[' -> "lsquare"
+  | ']' -> "rsquare"
   | c -> String.make 1 c
 
 let identifier_of_symbol = function
@@ -355,12 +357,14 @@ let make_alloc_tmp si =
 
 let void = make_expr (JCTEconst JCCvoid) (JCTnative Tunit)
 
-let make_variant name = {
-  jc_variant_info_name = name;
-  jc_variant_info_roots = [];
-}
+let make_variant name =
+  let name = identifier_of_symbol name in {
+    jc_variant_info_name = name;
+    jc_variant_info_roots = [];
+  }
 
 let make_root_struct vi name =
+  let name = identifier_of_symbol name in
   let rec si = {
     jc_struct_info_name = name;
     jc_struct_info_parent = None;
@@ -372,6 +376,7 @@ let make_root_struct vi name =
   si
 
 let make_field si name jcty =
+  let name = identifier_of_symbol name in
   let fi = {
     jc_field_info_tag = fresh_int ();
     jc_field_info_name = name;

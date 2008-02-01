@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: predef.ml,v 1.1 2007-11-30 10:16:43 bardou Exp $ *)
+(* $Id: predef.ml,v 1.2 2008-02-01 12:18:49 bardou Exp $ *)
 
 (* Predefined type constructors (with special typing rules in typecore) *)
 
@@ -84,75 +84,74 @@ let path_match_failure = Pident ident_match_failure
 and path_assert_failure = Pident ident_assert_failure
 and path_undefined_recursive_module = Pident ident_undefined_recursive_module
 
-let build_initial_env add_type add_exception empty_env =
-  let decl_abstr =
-    {type_params = [];
-     type_arity = 0;
-     type_kind = Type_abstract;
-     type_manifest = None;
-     type_variance = []}
-  and decl_bool =
-    {type_params = [];
-     type_arity = 0;
-     type_kind = Type_variant(["false",[]; "true",[]], Public);
-     type_manifest = None;
-     type_variance = []}
-  and decl_unit =
-    {type_params = []; 
-     type_arity = 0;
-     type_kind = Type_variant(["()",[]], Public);
-     type_manifest = None;
-     type_variance = []}
-  and decl_exn =
-    {type_params = [];
-     type_arity = 0;
-     type_kind = Type_variant([], Public);
-     type_manifest = None;
-     type_variance = []}
-  and decl_array =
-    let tvar = newgenvar() in
-    {type_params = [tvar];
-     type_arity = 1;
-     type_kind = Type_abstract;
-     type_manifest = None;
-     type_variance = [true, true, true]}
-  and decl_list =
-    let tvar = newgenvar() in
-    {type_params = [tvar];
-     type_arity = 1;
-     type_kind =
-       Type_variant(["[]", []; "::", [tvar; type_list tvar]], Public);
-     type_manifest = None;
-     type_variance = [true, false, false]}
-  and decl_format6 =
-    {type_params = [
-       newgenvar(); newgenvar(); newgenvar();
-       newgenvar(); newgenvar(); newgenvar();
-     ];
-     type_arity = 6;
-     type_kind = Type_abstract;
-     type_manifest = None;
-     type_variance = [
-       true, true, true; true, true, true;
-       true, true, true; true, true, true;
-       true, true, true; true, true, true;
-     ]}
-  and decl_option =
-    let tvar = newgenvar() in
-    {type_params = [tvar];
-     type_arity = 1;
-     type_kind = Type_variant(["None", []; "Some", [tvar]], Public);
-     type_manifest = None;
-     type_variance = [true, false, false]}
-  and decl_lazy_t =
-    let tvar = newgenvar() in
-    {type_params = [tvar];
-     type_arity = 1;
-     type_kind = Type_abstract;
-     type_manifest = None;
-     type_variance = [true, false, false]}
-  in
+let decl_abstr =
+  {type_params = [];
+   type_arity = 0;
+   type_kind = Type_abstract;
+   type_manifest = None;
+   type_variance = []}
+let decl_bool =
+  {type_params = [];
+   type_arity = 0;
+   type_kind = Type_variant(["false",[]; "true",[]], Public);
+   type_manifest = None;
+   type_variance = []}
+let decl_unit =
+  {type_params = []; 
+   type_arity = 0;
+   type_kind = Type_variant(["()",[]], Public);
+   type_manifest = None;
+   type_variance = []}
+let decl_exn =
+  {type_params = [];
+   type_arity = 0;
+   type_kind = Type_variant([], Public);
+   type_manifest = None;
+   type_variance = []}
+let decl_array =
+  let tvar = newgenvar() in
+  {type_params = [tvar];
+   type_arity = 1;
+   type_kind = Type_abstract;
+   type_manifest = None;
+   type_variance = [true, true, true]}
+let decl_list =
+  let tvar = newgenvar() in
+  {type_params = [tvar];
+   type_arity = 1;
+   type_kind =
+      Type_variant(["[]", []; "::", [tvar; type_list tvar]], Public);
+   type_manifest = None;
+   type_variance = [true, false, false]}
+let decl_format6 =
+  {type_params = [
+     newgenvar(); newgenvar(); newgenvar();
+     newgenvar(); newgenvar(); newgenvar();
+   ];
+   type_arity = 6;
+   type_kind = Type_abstract;
+   type_manifest = None;
+   type_variance = [
+     true, true, true; true, true, true;
+     true, true, true; true, true, true;
+     true, true, true; true, true, true;
+   ]}
+let decl_option =
+  let tvar = newgenvar() in
+  {type_params = [tvar];
+   type_arity = 1;
+   type_kind = Type_variant(["None", []; "Some", [tvar]], Public);
+   type_manifest = None;
+   type_variance = [true, false, false]}
+let decl_lazy_t =
+  let tvar = newgenvar() in
+  {type_params = [tvar];
+   type_arity = 1;
+   type_kind = Type_abstract;
+   type_manifest = None;
+   type_variance = [true, false, false]}
 
+let build_initial_env add_type add_exception empty_env =
   add_exception ident_match_failure
                          [newgenty (Ttuple[type_string; type_int; type_int])] (
   add_exception ident_out_of_memory [] (

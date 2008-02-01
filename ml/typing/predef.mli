@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: predef.mli,v 1.1 2007-11-30 10:16:43 bardou Exp $ *)
+(* $Id: predef.mli,v 1.2 2008-02-01 12:18:49 bardou Exp $ *)
 
 (* Predefined type constructors (with special typing rules in typecore) *)
 
@@ -46,6 +46,9 @@ val path_nativeint: Path.t
 val path_int32: Path.t
 val path_int64: Path.t
 val path_lazy_t: Path.t
+
+(* Jessica needs the following declarations *)
+val decl_list: type_declaration
 
 val path_match_failure: Path.t
 val path_assert_failure : Path.t

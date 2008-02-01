@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.82 2008-01-31 18:27:25 nrousset Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.83 2008-02-01 12:18:49 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -669,7 +669,7 @@ let rec skip_tloc_range t = match t with
 
 let select_option opt default = match opt with Some v -> v | None -> default
 
-
+(*
 let direct_embedded_struct_fields st =
   List.fold_left 
     (fun acc fi -> 
@@ -706,7 +706,7 @@ let embedded_struct_fields st =
     List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
   in
   FieldSet.elements fields
-
+*)
 let field_sinfo fi = 
   match fi.jc_field_info_type with
     | JCTpointer(JCtag st, _, _) -> st
@@ -718,7 +718,7 @@ let field_bounds fi =
 
 let map_elements map =
   StringMap.fold (fun _ i acc -> i::acc) map []
-
+(*
 let embedded_struct_roots st =
   let fields = embedded_struct_fields st in
   let structs = 
@@ -732,7 +732,7 @@ let embedded_struct_roots st =
       StringSet.empty structs
   in
   StringSet.elements roots
-
+*)
 let struct_variant st =
   match st.jc_struct_info_root.jc_struct_info_variant with
     | Some vi -> vi

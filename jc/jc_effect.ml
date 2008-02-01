@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.89 2008-01-29 11:47:41 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.90 2008-02-01 12:18:48 bardou Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -39,7 +39,7 @@ open Jc_iterators
 open Format
 open Pp
 open Jc_region
-
+open Jc_struct_tools
 
 (* Constant memories. Their region should be declared in Why. 
  * They should be passed to Why as global parameters. 
@@ -402,12 +402,11 @@ let rec expr ef e =
 	add_alloc_reads (expr ef e)
 	  (JCtag st, e.jc_expr_region)
     | JCEalloc(_,st) ->
-	let fields = embedded_struct_fields st in 
-	let roots = embedded_struct_roots st in
-	let roots = List.map
-	  (fun x -> JCtag (Jc_interp_misc.find_struct x))
-	  roots
-	in
+(*	let fields = embedded_struct_fields st in 
+	let roots = embedded_struct_roots st in*)
+	let fields = all_memories ~select:fully_allocated (JCtag st) in
+	let roots = all_types ~select:fully_allocated (JCtag st) in
+	let roots = List.map (fun x -> JCvariant x) roots in
 	let ef = 
 	  List.fold_left 
 	    (fun ef fi -> add_field_writes LabelHere ef (fi,e.jc_expr_region))

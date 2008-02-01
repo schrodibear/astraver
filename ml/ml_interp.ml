@@ -25,6 +25,11 @@ let binary_op_of_string = function
   | "/" -> Bdiv_int
   | "+" -> Badd_int
   | "-" -> Bsub_int
+  | "&&" -> Bland
+  | "||" -> Blor
+  (* Note: the following cases don't exist in OCaml *)
+  | "==>" -> Bimplies
+  | "<=>" -> Biff
   | _ -> raise Not_found
 
 let binary_op_type = function
@@ -124,21 +129,18 @@ let rec expression env e =
 (*    | Texp_try of expression * (pattern * expression) list
     | Texp_tuple of expression list*)
     | Texp_construct(cd, el) ->
-	assert false (* TODO *)
-(*	let ci = constructor e.exp_type cd in
+	let ci = constructor e.exp_type cd in
 	make_let_alloc_tmp ci.ml_ci_structure
 	  (fun vi ve ->
 	     make_seq_expr
-	       ((make_affect_field_expr ve ci.ml_ci_tag_field
-		   (expr_of_int ci.ml_ci_tag))::
-		   (List.map2
+	       (List.map2
 		      (make_affect_field_expr ve)
 		      ci.ml_ci_arguments
 		      (List.map
 			 (fun e ->
 			    make_expr (expression env e) (make e.exp_type))
-			 el)))
-	       ve)*)
+			 el))
+	       ve)
 (*    | Texp_variant of label * expression option *)
     | Texp_record(lbls, None) ->
 	not_implemented e.exp_loc "TO REDO: ml_interp.ml: expression: records (make_let_tmp, label, ...)";

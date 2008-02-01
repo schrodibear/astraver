@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.224 2008-01-31 17:26:34 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.225 2008-02-01 12:18:48 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -39,6 +39,7 @@ open Jc_name
 open Jc_region
 open Jc_separation
 open Jc_interp_misc
+open Jc_struct_tools
 
 (* locs table *)
 
@@ -1118,11 +1119,15 @@ and expr ~infunction ~threats e : expr =
     | JCEalloc (siz, st) ->
 	let alloc = alloc_region_table_name (JCtag st, e.jc_expr_region) in
 	let tag = tag_table_name (JCtag st) in
-	let fields = embedded_struct_fields st in
+(*	let fields = embedded_struct_fields st in
 	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
 	let roots = embedded_struct_roots st in
 	let roots = List.map find_tag_or_variant roots in
-	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in
+	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in*)
+	let fields = all_memories ~select:fully_allocated (JCtag st) in
+	let fields = List.map (fun fi -> (fi, e.jc_expr_region)) fields in
+	let roots = all_types ~select:fully_allocated (JCtag st) in
+	let roots = List.map (fun a -> (JCvariant a, e.jc_expr_region)) roots in
 	begin
 	  match !Jc_options.inv_sem with
 	    | InvOwnership ->
@@ -1624,10 +1629,12 @@ let tr_struct st acc =
   let alloc_ty = alloc_table_type (JCtag st) in
   let tagid_type = tag_id_type (JCtag st) in
   let ptr_type = pointer_type (JCtag st) in
-  let all_fields = embedded_struct_fields st in
+(*  let all_fields = embedded_struct_fields st in
   let all_roots = embedded_struct_roots st in
-  let all_roots = List.map find_struct all_roots in
-  let all_tovs = List.map (fun st -> JCtag st) all_roots in
+  let all_roots = List.map find_struct all_roots in*)
+  let all_fields = all_memories ~select:fully_allocated (JCtag st) in
+  let all_roots = all_types ~select:fully_allocated (JCtag st) in
+  let all_tovs = List.map (fun st -> JCvariant st) all_roots in
   let alloc = alloc_table_name (JCtag st) in
   let tagtab = tag_table_name (JCtag st) in
     (* Declarations of field memories. *)
