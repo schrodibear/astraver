@@ -5,6 +5,6 @@ dispatch begin function
       Pathname.define_context "ml/parsing"
 	["ml/parsing"; "ml/utils"];
       Pathname.define_context "ml/typing"
-	["ml/parsing"; "ml/utils"]
+	["ml/typing"; "ml/parsing"; "ml/utils"]
   | _ -> ()
 end
