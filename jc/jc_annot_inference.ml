@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.100 2008-01-31 18:27:25 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.101 2008-02-01 12:52:18 moy Exp $ *)
 
 open Pp
 open Format
@@ -1963,28 +1963,36 @@ let assign_expr mgr pre t e =
 	  assign_offset_variable mgr pre va Offset_max_kind e
       end
 	
-(* Could be more precise by assigning region and field *)
-let assign_region mgr pre r =
+let assign_heap mgr pre r fi =
   if debug then 
-    printf "[assign_region]%a@." Region.print r;
+    printf "[assign_heap]%a@." Region.print r;
+  if !Jc_options.separation_sem = SepRegions then
+    assert (not (is_dummy_region r));
   let env = Abstract1.env pre in
   let integer_vars = Array.to_list (fst (Environment.vars env)) in
   let forget_vars = List.filter 
     (fun va ->
        let t = Vai.term va in
-       let rec has_region acc t =
-	 if acc || Region.equal t.jc_term_region r then
+       let is_deref_field t = match t.jc_term_node with
+	 | JCTderef(_,_,fi') -> FieldOrd.equal fi fi'
+	 | _ -> false
+       in
+       let rec has_memory acc t =
+	 if acc || 
+	   (is_deref_field t &&
+	     (not (!Jc_options.separation_sem = SepRegions)
+	     || Region.equal t.jc_term_region r)) then
 	   (* cont = *)false,(* acc = *)true
 	 else
 	   match t.jc_term_node with
-	     | JCToffset(_,t',_) -> false,has_sub_region acc t'
+	     | JCToffset(_,t',_) -> false,has_sub_memory acc t'
 	     | _ -> true,acc
-       and has_sub_region acc t =
-	 fold_sub_term fold_rec_term has_region acc t
+       and has_sub_memory acc t =
+	 fold_sub_term fold_rec_term has_memory acc t
        in
-       let res = fold_rec_term has_region false t in
+       let res = fold_rec_term has_memory false t in
       if debug then 
-	printf "[assign_region]%a:%b@." Var.print va res;
+	printf "[assign_heap]%a:%b@." Var.print va res;
       res
     ) integer_vars
   in
@@ -2238,7 +2246,7 @@ and intern_ai_statement iaio abs curinvs s =
     | JCSassign_var (vi, e) ->
 	assign_expr mgr pre (term_var_no_loc vi) e
     | JCSassign_heap (e1, fi, e2) ->
-	assign_region mgr pre e1.jc_expr_region;
+	assign_heap mgr pre e1.jc_expr_region fi;
 	begin match term_of_expr e1 with
 	  | None -> () (* TODO *)
 	  | Some t1 ->
