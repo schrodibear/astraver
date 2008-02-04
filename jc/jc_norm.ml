@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.76 2008-01-28 15:55:22 bardou Exp $ *)
+(* $Id: jc_norm.ml,v 1.77 2008-02-04 08:39:27 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -561,7 +561,7 @@ and statement s =
 	      | _ -> fst (expr e)
 	  in
 	  (make_decls loc sl tl).jc_statement_node
-      | JCTSassert( (* id, *) a) -> JCSassert ( (* id, *) a)
+      | JCTSassert a -> JCSassert a
       | JCTSdecl (vi, Some e, s) ->
 	  let (sl,tl),e = expr e in
 	  let decl_stat = make_decl loc vi (Some e) (statement s) in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.225 2008-02-01 12:18:48 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.226 2008-02-04 08:39:27 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1478,14 +1478,8 @@ let rec statement ~infunction ~threats s =
 		While(Cte(Prim_bool true), inv,
 	              None, [statement s])
 	end
-    | JCSassert((*None,*) a) -> 
+    | JCSassert a -> 
 	Assert(named_assertion ~global_assertion:false LabelHere LabelInit a, Void)
-(*
-    | JCSassert(Some name, a) -> 
-	
-	Assert(LNamed(reg_loc ~name a.jc_assertion_loc,
-		      assertion None "init" a), Void)
-*)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  let e' = match e with

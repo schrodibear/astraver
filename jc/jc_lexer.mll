@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.53 2008-01-28 11:11:33 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.54 2008-02-04 08:39:27 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -121,6 +121,7 @@ let rIS = ('u'|'U'|'l'|'L')*
 rule token = parse
   | [' ' '\t' '\012' '\r']+ { token lexbuf }
   | '\n'                    { newline lexbuf; token lexbuf }
+  | "/*@" | "//@"           { lex_error lexbuf "annotations should not be in @ comments" }
   | "/*"                    { comment lexbuf; token lexbuf }
   | "//" [^ '\n']* '\n'     { newline lexbuf; token lexbuf }
   | "and"                   { AND }

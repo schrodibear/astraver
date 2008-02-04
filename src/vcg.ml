@@ -895,8 +895,8 @@ let vcg_from_wp base w =
   let po = ref [] in
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
-    let lab, raw_explain = explain_for_pred None None concl in	
-    let explain,loc =  Util.cook_explanation lab raw_explain in
+    let formula_userlab, raw_explain = explain_for_pred None None concl in	
+    let explain,loc =  Util.cook_explanation formula_userlab raw_explain in
     try
       discharge loc ctx concl
     with Exit -> begin

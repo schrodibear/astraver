@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.84 2008-01-28 11:43:12 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.85 2008-02-04 08:39:27 marche Exp $ */
 
 %{
 
@@ -828,27 +828,25 @@ switch_label:
 ;
 
 iteration_statement: 
-| WHILE expression loop_annot_opt statement 
-    { let (i,v) = $3 in 
-      locate_statement (JCPSwhile ("", $2, i, v, $4)) }
-/*
+| loop_annot WHILE LPAR expression RPAR statement 
+    { let (i,v) = $1 in 
+      locate_statement (JCPSwhile ("", $4, i, v, $6)) }
 | loop_annot DO statement WHILE LPAR expression RPAR SEMICOLON 
-    { locate (CSdowhile ($1, $3, $6)) }
-*/
-| FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
-    argument_expression_list_opt RPAR loop_annot_opt statement
-    { let (i,v) = $9 in 
-      locate_statement (JCPSfor("", $3, $5, $7, i, v, $10)) }
+    { assert false (* TODO locate_statement (JCPSdowhile ($1, $3, $6)) *) }
+| loop_annot FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
+    argument_expression_list_opt RPAR statement
+    { let (i,v) = $1 in 
+      locate_statement (JCPSfor("", $4, $6, $8, i, v, $10)) }
 ;
 
-loop_annot_opt:
+loop_annot:
 | INVARIANT expression SEMICOLON VARIANT expression SEMICOLON
     { ($2, Some $5) }
 | INVARIANT expression SEMICOLON
     { ($2, None) }
 | VARIANT expression SEMICOLON
     { (locate_expr (JCPEconst(JCCboolean true)), Some $2) }
-| SEMICOLON
+| 
     { (locate_expr (JCPEconst(JCCboolean true)), None) }
 ;
 
