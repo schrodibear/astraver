@@ -27,7 +27,8 @@ unit init(U[0] u) {
     if ((u.ub + 4).i == 0) return;
 
     /* read variable offset */
-    for(k = 0; k < 5; ++k) invariant 0 <= k && k <= 5; {
+    invariant 0 <= k && k <= 5; 
+    for(k = 0; k < 5; ++k) {
 	if ((u.b + k).i == 0) return;
 	if ((u.lb + k).i == 0) return;
 	if ((u.rb + k).i == 0) return;
@@ -45,7 +46,8 @@ unit init(U[0] u) {
     (u.ub + 4).i = 0;
 
     /* write variable offset */
-    for(k = 0; k < 5; ++k) invariant 0 <= k && k <= 5; {
+    invariant 0 <= k && k <= 5; 
+    for(k = 0; k < 5; ++k) {
 	(u.b + k).i = 0;
 	(u.lb + k).i = 0;
 	(u.rb + k).i = 0;

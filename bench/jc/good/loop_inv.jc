@@ -13,9 +13,9 @@ unit f()
 {
   {
     {
-      while (true)
       invariant (i >= 0);
       variant i;
+      while (true)
       {
         {
           if ((i > 0)) {

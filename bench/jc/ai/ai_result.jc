@@ -9,9 +9,9 @@ type intM = { integer val; }
 integer sum(integer n) {
     integer s = 0;
     integer i = 0;
+    // inferred loop inv: <i >= 0 && s >= 0>
+    variant n - i; 
     while (i < n) 
-	// inferred loop inv: <i >= 0 && s >= 0>
-      variant n - i; 
     {
 	s += i;
 	i++;
@@ -33,9 +33,9 @@ integer max_pos(integer n, integer m) {
 // post \offset_max(\result) >= 0 is inferred
 intM[0..] reset(intM[0..] t) {
     integer i = 0;
+    invariant true;
+    variant \offset_max(t) - i;
     while (i < \offset_max(t)) 
-	invariant true;
-        variant \offset_max(t) - i;
     {
 	(t + i).val = 0;
 	i++;

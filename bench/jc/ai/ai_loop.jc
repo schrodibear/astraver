@@ -7,9 +7,9 @@ type integerT = { integer integerM; }
 
 unit test0(integerT[0..10] t) {
   integer x = 0;
+  invariant true;
+  variant 10 - x;
   while (x <= 9) 
-    invariant true;
-    variant 10 - x;
   {
     (t + x).integerM = x;
     x++;
@@ -18,9 +18,9 @@ unit test0(integerT[0..10] t) {
 
 unit test0bis(integerT[0..10] t) {
   integer x = 0;
+  invariant true;
+  variant 10 - x;
   while (x < 10) 
-    invariant true;
-    variant 10 - x;
   {
     (t + x).integerM = x;
     x++;
@@ -31,8 +31,8 @@ integer v;
 
 unit test0ter() {
     v = 0;
-  while (v <= 9) 
     variant 10 - v;
+  while (v <= 9) 
   {
     v++;
   }
@@ -41,9 +41,9 @@ unit test0ter() {
 
 unit test1(integerT[0..] t, integer max) requires \offset_max(t) == max; {
   integer x = 0;
+  invariant true;
+  variant max - x;
   while (x < max) 
-    invariant true;
-    variant max - x;
   {
     (t + x).integerM = x;
     x++;

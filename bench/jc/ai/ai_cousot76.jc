@@ -1,7 +1,7 @@
 
 /* example from Cousot's 1976 paper */
 
-//# AnnotationPolicy = Invariants
+# AnnotationPolicy = Invariants
 # AbstractDomain = Box
 
 /* inferred invariant: 1 <= i && i <= 101;

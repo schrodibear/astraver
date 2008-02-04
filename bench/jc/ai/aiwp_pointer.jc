@@ -8,7 +8,7 @@ type intP = {
 
 integer bar(intP[..] p, integer n) {
     integer i = 0;
-    while true ; {
+    while (true) {
         if (i < n) {
 	    (p + i).intM = 0;
         }

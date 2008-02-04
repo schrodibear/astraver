@@ -45,13 +45,13 @@ unit flag(colorT[..] t, integer length)
     integer b = 0;
     integer i = 0;
     integer r = length;
+    invariant
+	0 <= b && b <= i && i <= r && r <= length &&
+	isMonochrome(t,0,b-1,BLUE) &&
+	isMonochrome(t,b,i-1,WHITE) &&
+	isMonochrome(t,r,length-1,RED);
+    variant r - i; 
     while (i < r) 
-	invariant
-	    0 <= b && b <= i && i <= r && r <= length &&
-	    isMonochrome(t,0,b-1,BLUE) &&
-	    isMonochrome(t,b,i-1,WHITE) &&
-	    isMonochrome(t,r,length-1,RED);
-        variant r - i; 
 	{
 	    switch ((t+i).colorM) {
 	    case BLUE:  

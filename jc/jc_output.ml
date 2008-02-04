@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.89 2008-01-31 17:26:34 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.90 2008-02-04 09:20:20 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -437,19 +437,19 @@ let rec statement fmt s =
     | JCTSbreak lab -> 
 	fprintf fmt "@\nbreak %s;" lab.label_info_name
     | JCTSwhile (lab, e, la, s)-> 
-	fprintf fmt "@\n@[%swhile (%a)@\ninvariant %a;%a%a@]"
+	fprintf fmt "@\n@[%s@\ninvariant %a;%a@\nwhile (%a)%a@]"
 	  (if lab = "" then "" else lab ^ ": ")
-	  expr e assertion la.jc_loop_invariant 
+	  assertion la.jc_loop_invariant 
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
 	  la.jc_loop_variant
-	  block [s]
+	  expr e block [s]
     | JCTSfor (lab,cond, updates, loop_annot, body)-> 
-	fprintf fmt "@\n@[%sfor ( ; %a ; %a)@\ninvariant %a;%a%a@]"
+	fprintf fmt "@\n@[%s@\ninvariant %a;%a@\nfor ( ; %a ; %a)%a@]"
 	  (if lab = "" then "" else lab ^ ": ")
-	  expr cond (print_list comma expr) updates
 	  assertion loop_annot.jc_loop_invariant 
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
 	  loop_annot.jc_loop_variant
+	  expr cond (print_list comma expr) updates
 	  block [body]
     | JCTSif (e, s1, s2) ->
 	fprintf fmt "@\n@[<v 2>if (%a) %a@]@\n@[<v 2>else %a@]"

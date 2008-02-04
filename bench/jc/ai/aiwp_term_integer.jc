@@ -9,7 +9,7 @@ type intP = {
 integer foo(integer s, intP[..] n) {
     intP[0] i = new intP[1];
     i.intM = 0;
-    while true ; {
+    while (true) {
         if (i.intM < n.intM) {
             assert (0 <= i.intM && i.intM < s);
         }

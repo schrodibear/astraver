@@ -25,7 +25,8 @@ unit init(U[0] u) {
 
     /* read variable offset */
     L1: 
-    for(k = 0; k < 5; ++k) invariant 0 <= k && k <= 5; {
+    invariant 0 <= k && k <= 5; 
+    for(k = 0; k < 5; ++k) {
 	if ((u.b + k).i == 0) return;
 	if ((u.lb + k).i == 0) return;
 	if ((u.rb + k).i == 0) return;
@@ -44,7 +45,8 @@ unit init(U[0] u) {
 
     /* write variable offset */
     L2:
-    for(k = 0; k < 5; ++k) invariant 0 <= k && k <= 5; {
+    invariant 0 <= k && k <= 5; 
+    for(k = 0; k < 5; ++k) {
 	(u.b + k).i = 0;
 	(u.lb + k).i = 0;
 	(u.rb + k).i = 0;

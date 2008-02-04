@@ -49,11 +49,11 @@ shortint isqrt(shortint x)
 {
     shortint count = 0;
     shortint sum = 1;
-    while (sum <= x) 
-      invariant 
+    invariant 
         count >= 0 && x >= count*count && sum == (count+1)*(count+1) &&
         count <= 180 && sum <= 32761;
-      variant x - sum;
+    variant x - sum;
+    while (sum <= x) 
     { 
 	count++; 
 	assert (count+2 <= 181);

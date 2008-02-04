@@ -29,9 +29,9 @@ real power(real x, integer n)
   real r = 1.;
   real t = x;
   integer i = n;
-  while (i > 0)
     invariant r * lpower(t, i) == lpower(x, n) && i >= 0;
     variant i;
+  while (i > 0)
   {
     if (i % 2 == 1) r = r * t;
     t = t * t;

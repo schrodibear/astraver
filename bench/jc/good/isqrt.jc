@@ -20,10 +20,10 @@ integer isqrt(integer x)
 {
     integer count = 0;
     integer sum = 1;
-    while (sum <= x) 
-      invariant 
+    invariant 
         count >= 0 && x >= count*count && sum == (count+1)*(count+1);
-      variant x - sum;
+    variant x - sum;
+    while (sum <= x) 
     { 
 	count++;
 	sum = sum + 2*count+1;

@@ -30,9 +30,9 @@ unit sort(integerT[0..] t, integer j)
     integer m = 0;
 
     integer i = j / 2;
+    invariant true;
+    variant 0;
     while (j > 1)
-      invariant true;
-      variant 0;
     {
 	if (i < 0) {
 	    k = (t + i--).integerM; 
@@ -44,9 +44,9 @@ unit sort(integerT[0..] t, integer j)
 	    (t + j--).integerM = (t + 1).integerM; 
 	}
         l = i + 1;
+	invariant true;
+	variant 0;
 	while ((m = 2 * l) <= j)
-	    invariant true;
-	    variant 0;
         {
 	   if (m < j && (t + m).integerM < (t + m + 1).integerM)
 	       m++;

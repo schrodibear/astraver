@@ -4,7 +4,7 @@
 
 integer foo(integer s, integer n) {
     integer i = 0;
-    while true ; {
+    while (true) {
         if (i < n) {
             assert (0 <= i && i < s);
         }

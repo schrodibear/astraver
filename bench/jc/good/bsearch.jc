@@ -19,12 +19,12 @@ byte binary_search(shortT[0..] t, byte n, short v)
 {
   byte l = 0;
   byte u = n-1;
+  invariant 
+      0 <= l && u <= n-1 &&  
+      \forall byte k; 0 <= k && k < n ==> 
+			  (t+k).shortM == v ==> l <= k && k <= u;
+  variant u-l; 
   while (l <= u ) 
-    invariant 
-	0 <= l && u <= n-1 &&  
-	\forall byte k; 0 <= k && k < n ==> 
-	     (t+k).shortM == v ==> l <= k && k <= u;
-    variant u-l; 
   {
     byte m = (l + u :> byte) / 2;
     // @ assert l <= m <= u

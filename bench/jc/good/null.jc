@@ -6,9 +6,9 @@ type list = {
 
 unit sum(list[0] l) {
     integer s = 0;
+    invariant true;
+    variant 0;
     while (l != null) 
-	invariant true;
-        variant 0;
     {
 	s += l.content;
 	l = l.next;
@@ -16,9 +16,9 @@ unit sum(list[0] l) {
 }
 
 unit nullify(list[0] l) {
+    invariant true;
+    variant 0;
     while (l != null) 
-	invariant true;
-        variant 0;
     {
 	l.content = 0;
 	l = l.next;

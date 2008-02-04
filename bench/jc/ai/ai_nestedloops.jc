@@ -7,9 +7,11 @@
 
 unit f0() {
     integer x = 0;
-    while (x < 10) variant 10 - x; {
+    variant 10 - x; 
+    while (x < 10) {
         integer y = 0;
-	while (y < 5) variant 5 - y; {
+	variant 5 - y; 
+	while (y < 5) {
 	    y++;
 	}
 	//@ assert y == 5;
@@ -21,10 +23,12 @@ unit f0() {
 
 unit f1() {
   integer x = 0;
-  while(x < 10) variant 10 - x;
+  variant 10 - x;
+  while(x < 10) 
   {
     integer y = 0;
-    while(y < x) variant x - y;
+    variant x - y;
+    while(y < x) 
     {
       y++;
     }

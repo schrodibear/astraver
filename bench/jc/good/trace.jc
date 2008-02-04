@@ -59,9 +59,9 @@ integer f3 (integer x)
 unit f4 (integer x) 
 { 
  integer y = x;
- while (y > 0)
-     invariant 0 <= y && y <= x;
+ invariant 0 <= y && y <= x;
  variant y;
+ while (y > 0)
  {
      y = y - 1;
  }
@@ -77,8 +77,8 @@ unit f4 (integer x)
 unit f5 (integer x)  
 {
  integer y = x;
- while (y > 0)
  invariant y == x;
+ while (y > 0)
  {
  y = y - 1;
  }

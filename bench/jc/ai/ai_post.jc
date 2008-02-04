@@ -22,8 +22,9 @@ unit f1()
 
 // TODO
 unit f2() {
+    variant 0; 
     while (true)
-      variant 0; { 
+      { 
     }
 }
 
