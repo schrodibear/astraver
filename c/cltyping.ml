@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.123 2008-01-22 14:11:22 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.124 2008-02-04 10:33:25 stoulsn Exp $ i*)
 
 open Coptions
 open Format
@@ -338,8 +338,13 @@ and type_term_node loc env = function
 	 | _ ->
 	     error loc "subscripted value must be either array or pointer")
   | PLif (t1, t2, t3) ->
-      (* TODO type de t1 ? *)
-      unsupported loc "logic if-then-else"
+      let tt1 = type_term env t1 in
+      expected_num_pointer t1.lexpr_loc tt1;
+      let t2 = type_term env t2 in
+      let t3 = type_term env t3 in
+      expected_term_type loc t3 t2.term_type;
+      expected_term_type loc t2 t3.term_type;
+      Tif (tt1, t2, t3), t2.term_type
   | PLold t ->
       let t = type_term env t in
       Told t, t.term_type

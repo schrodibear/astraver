@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.254 2008-01-22 14:11:22 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.255 2008-02-04 10:33:25 stoulsn Exp $ i*)
 
 open Format
 open Coptions
@@ -370,8 +370,8 @@ let rec interp_term label old_label t =
 	assert false
     | NTat (t, l) -> 
 	interp_term (Some l) old_label t
-    | NTif (_, _, _) -> 
-	unsupported t.nterm_loc "logic if-then-else"
+    | NTif (t1, t2, t3) -> 
+	LApp ("ite", [interp_boolean_term label old_label t1; f t2; f t3])
     | NTarrow (t,z, field) -> 
 	let te = f t in
 	let var = zoned_name field.var_unique_name (Cnorm.type_why_for_term t)
