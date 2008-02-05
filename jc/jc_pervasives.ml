@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.84 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.85 2008-02-05 14:00:04 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -95,7 +95,7 @@ let minus_one = Num.num_of_int (-1)
 
 let rec location_set_region = function
   | JCLSvar vi -> vi.jc_var_info_region
-  | JCLSderef(_,_,r) -> r
+  | JCLSderef(_,_,_,r) -> r
   | JCLSrange(ls,_,_) -> location_set_region ls
 
 type tlocation =

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.175 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.176 2008-02-05 14:00:04 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2164,7 +2164,13 @@ let rec location_set label_env logic_label env e =
 	let t,tr,tls = location_set label_env logic_label env ls in
 	let fi = find_field e.jc_pexpr_loc t f false in
 	let fr = Region.make_field tr fi in
-	fi.jc_field_info_type,fr,JCLSderef(tls,fi,fr)	  
+	begin match logic_label with
+	  | None ->
+	      typing_error e.jc_pexpr_loc "No memory state for this \
+dereferenciation (\\at missing ?)"
+	  | Some lab ->
+	      fi.jc_field_info_type,fr,JCLSderef(tls,lab,fi,fr)	  
+	end
     | JCPEif (_, _, _)
     | JCPElet _
     | JCPEoffset _
@@ -2209,7 +2215,7 @@ let rec location label_env logic_label env e =
 		let t,tr,tls = location_set label_env logic_label env ls in
 		let fi = find_field e.jc_pexpr_loc t f false in
 		let fr = Region.make_field tr fi in
-		fi.jc_field_info_type,fr,JCLderef(tls,fi,fr)	  
+		fi.jc_field_info_type,fr,JCLderef(tls,l,fi,fr)	  
 	end
     | JCPEat(e,lab) ->
 	if List.mem lab label_env then

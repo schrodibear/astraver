@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.91 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.92 2008-02-05 14:00:04 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -566,23 +566,19 @@ let rec statement ef s =
 	expr (List.fold_left statement ef (List.map snd psl)) e
 
 (* Conservatively consider location is both read and written. *)
-let rec location label ef l =
+let rec location ef l =
   match l with
-    | JCLderef(t,fi,r) ->
+    | JCLderef(t,lab,fi,r) ->
 	begin
-	  match label with
-	    | None ->
-		Jc_typing.typing_error Loc.dummy_position "No memory state for this dereferenciation (\\at missing ?)"
-	    | Some l ->
-		let ef = add_field_writes l ef (fi,location_set_region t) in
-		let ef = add_field_reads l ef (fi,location_set_region t) in
-		begin match skip_tloc_range t with
-		  | JCLSvar vi ->
-		      if vi.jc_var_info_formal then 
-			add_through_param_reads ef vi 
-		      else ef
-		  | _ -> ef
-		end
+	  let ef = add_field_writes lab ef (fi,location_set_region t) in
+	  let ef = add_field_reads lab ef (fi,location_set_region t) in
+	  begin match skip_tloc_range t with
+	    | JCLSvar vi ->
+		if vi.jc_var_info_formal then 
+		  add_through_param_reads ef vi 
+		else ef
+	    | _ -> ef
+	  end
 	end
     | JCLvar vi ->
 	if vi.jc_var_info_static then
@@ -591,13 +587,13 @@ let rec location label ef l =
 	    add_global_reads ef vi
 	  end
 	else ef
-    | JCLat(loc,lab) ->
-	location (Some lab) ef loc
+    | JCLat(loc,_) ->
+	location ef loc
 
 let behavior ef (_,_, b) =
   (* assigns *)
   let ef = Option_misc.fold
-    (fun (_,x) ef -> List.fold_left (location (Some LabelHere)) ef x) 
+    (fun (_,x) ef -> List.fold_left location ef x) 
     b.jc_behavior_assigns ef
   in
     (* requires: reads *)
@@ -649,7 +645,7 @@ let logic_fun_effects f =
 	       jc_writes = ef; (* could be anything *)
 	       jc_raises = ExceptionSet.empty;
 	     }
-	     in (location None ef l).jc_reads)
+	     in (location ef l).jc_reads)
 	  ef r
   in
   if same_effects ef f.jc_logic_info_effects then ()

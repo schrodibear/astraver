@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.104 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.105 2008-02-05 14:00:18 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -833,7 +833,7 @@ let array_types decls =
 
 ***************)
 
-let rec location_set t =
+let rec location_set logic_label t =
   match t.java_term_node with
       | JTlit l -> assert false (* TODO *)
       | JTun(t,op,e1) -> assert false (* TODO *)
@@ -841,7 +841,13 @@ let rec location_set t =
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCLSvar (get_var vi)
       | JTfield_access(t,fi) -> 
-	  JCLSderef(location_set t,get_field fi,Jc_region.dummy_region)
+	  begin match logic_label with
+	    | None -> assert false
+	    | Some lab ->
+		JCLSderef(
+		  location_set logic_label t,tr_logic_label lab,
+		  get_field fi,Jc_region.dummy_region)
+	  end
       | JTstatic_field_access(ci,fi) ->
 	  JCLSvar(get_static_var fi)
       | JTarray_length(t) -> assert false (* TODO *)
@@ -850,12 +856,17 @@ let rec location_set t =
 	    match t1.java_term_type with
 	      | JTYarray ty ->
 		  let st = get_array_struct t1.java_term_loc ty in
-		  let t1' = location_set t1 in
+		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
-		  JCLSderef(
-		    shift,(List.hd st.jc_struct_info_fields),
-		    Jc_region.dummy_region)
+		  begin match logic_label with
+		    | None -> assert false
+		    | Some lab ->
+			JCLSderef(
+			  shift,tr_logic_label lab,
+			  (List.hd st.jc_struct_info_fields),
+			  Jc_region.dummy_region)
+		  end
 	      | _ -> assert false
 	  end
       | JTarray_range(t1,t2,t3) -> 
@@ -863,21 +874,26 @@ let rec location_set t =
 	    match t1.java_term_type with
 	      | JTYarray ty ->
 		  let st = get_array_struct t1.java_term_loc ty in
-		  let t1' = location_set t1 in
+		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
 		  let t3' = term t3 in
 		  let shift = JCLSrange(t1', Some t2', Some t3') in
-		  JCLSderef(
-		    shift,(List.hd st.jc_struct_info_fields),
-		    Jc_region.dummy_region)
+		  begin match logic_label with
+		    | None -> assert false
+		    | Some lab ->
+			JCLSderef(
+			  shift,tr_logic_label lab,
+			  (List.hd st.jc_struct_info_fields),
+			  Jc_region.dummy_region)
+		  end
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
-      | JTat _ -> assert false (* TODO *)
+      | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
       | JTcast(ty,t) -> assert false (* TODO *)
 
 
-let location t =
+let location logic_label t =
   match t.java_term_node with
       | JTlit l -> assert false (* TODO *)
       | JTun(t,op,e1) -> assert false (* TODO *)
@@ -885,7 +901,14 @@ let location t =
       | JTapp (_, _) -> assert false (* TODO *)
       | JTvar vi -> JCLvar (get_var vi)
       | JTfield_access(t,fi) -> 
-	  JCLderef(location_set t,get_field fi,Jc_region.dummy_region)
+	  begin match logic_label with
+	    | None -> assert false
+	    | Some lab ->
+		JCLderef(
+		  location_set logic_label t,
+		  tr_logic_label lab,
+		  get_field fi,Jc_region.dummy_region)
+	  end
       | JTstatic_field_access(ci,fi) ->
 	  JCLvar(get_static_var fi)
       | JTarray_length(t) -> assert false (* TODO *)
@@ -894,12 +917,18 @@ let location t =
 	    match t1.java_term_type with
 	      | JTYarray ty ->
 		  let st = get_array_struct t1.java_term_loc ty in
-		  let t1' = location_set t1 in
+		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
 		  let shift = JCLSrange(t1', Some t2', Some t2') in
-		  JCLderef(
-		    shift,(List.hd st.jc_struct_info_fields),
-		    Jc_region.dummy_region)
+		  begin match logic_label with
+		    | None -> assert false
+		    | Some lab ->
+			JCLderef(
+			  shift,
+			  tr_logic_label lab,
+			  (List.hd st.jc_struct_info_fields),
+			  Jc_region.dummy_region)
+		  end
 	      | _ -> assert false
 	  end
       | JTarray_range(t1,t2,t3) -> 
@@ -907,17 +936,23 @@ let location t =
 	    match t1.java_term_type with
 	      | JTYarray ty ->
 		  let st = get_array_struct t1.java_term_loc ty in
-		  let t1' = location_set t1 in
+		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
 		  let t3' = term t3 in
 		  let shift = JCLSrange(t1', Some t2', Some t3') in
-		  JCLderef(
-		    shift,(List.hd st.jc_struct_info_fields),
-		    Jc_region.dummy_region)
+		  begin match logic_label with
+		    | None -> assert false
+		    | Some lab ->
+			JCLderef(
+			  shift,
+			  tr_logic_label lab,
+			  (List.hd st.jc_struct_info_fields),
+			  Jc_region.dummy_region)
+		  end
 	      | _ -> assert false
 	  end
       | JTold t -> assert false (* TODO *)
-      | JTat _ -> assert false (* TODO *)
+      | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
       | JTcast(ty,t) -> assert false (* TODO *)
   
 
@@ -1348,7 +1383,8 @@ let behavior (id,assumes,throws,assigns,ensures) =
   { jc_behavior_assumes = Option_misc.map assertion assumes;
     jc_behavior_assigns = 
       Option_misc.map 
-	(fun (loc,a) -> (loc,List.map location a)) assigns ;
+	(fun (loc,a) -> 
+	  (loc,List.map (location (Some LabelPre)) a)) assigns ;
     jc_behavior_ensures = reg_assertion ensures;
     jc_behavior_throws = 
       Option_misc.map (fun ci -> get_exception (JTYclass(false,ci))) throws;
@@ -1444,6 +1480,10 @@ let tr_constr ci req behs b acc =
 let tr_axiom id is_axiom lab p acc =
   JClemma_def(id,is_axiom,List.map tr_logic_label lab,assertion p)::acc
 
+let default_label l =
+  match l with
+    | [l] -> Some l
+    | _ -> None
 
 let tr_logic_fun fi b acc =   
   let nfi = create_logic_fun Loc.dummy_position fi in
@@ -1461,11 +1501,12 @@ let tr_logic_fun fi b acc =
 			nfi.jc_logic_info_parameters,
 			JCTerm(term t))::acc
     | Java_typing.JReads l ->
+	let logic_label = default_label fi.java_logic_info_labels in
 	JClogic_fun_def(nfi.jc_logic_info_result_type,
 			nfi.jc_logic_info_name,
 			nfi.jc_logic_info_labels,
 			nfi.jc_logic_info_parameters,
-			JCReads(List.map location l))::acc
+			JCReads(List.map (location logic_label) l))::acc
 
 let tr_field type_name acc fi =
   let vi = create_static_var Loc.dummy_position type_name fi in

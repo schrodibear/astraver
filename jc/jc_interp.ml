@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.228 2008-02-05 13:31:04 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.229 2008-02-05 14:00:04 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -836,7 +836,7 @@ let tr_logic_fun li ta acc =
 	  | Some rety ->
 	      LImpl(
 		make_and_list sep_preds,
-		LPred(equality_op_for_type rety,[
+		LPred("eq",[
 		  LApp(li.jc_logic_info_final_name,normal_params);
 		  LApp(li.jc_logic_info_final_name,update_params)]))
       in
@@ -1831,8 +1831,8 @@ locations
 let rec pset ~global_assertion before loc = 
   let fpset = pset ~global_assertion before in
   match loc with
-    | JCLSderef(ls,fi,r) ->
-	let m = lvar ~label_in_name:global_assertion before (field_region_memory_name(fi,r)) in
+    | JCLSderef(ls,lab,fi,r) ->
+	let m = lvar ~label_in_name:global_assertion lab (field_region_memory_name(fi,r)) in
 	LApp("pset_deref", [m;fpset ls])
     | JCLSvar vi -> 
 	let m = lvar_info before vi in
@@ -1866,8 +1866,8 @@ let rec pset ~global_assertion before loc =
 	
 let rec collect_locations ~global_assertion before (refs,mems) loc =
   match loc with
-    | JCLderef(e,fi,fr) -> 
-	let iloc = pset ~global_assertion before e in
+    | JCLderef(e,lab,fi,fr) -> 
+	let iloc = pset ~global_assertion lab e in
 	let l =
 	  try
 	    let l = FieldRegionMap.find (fi,location_set_region e) mems in

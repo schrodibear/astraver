@@ -31,6 +31,8 @@ open Jc_env
 open Jc_fenv
 open Jc_ast
 
+val default_label : logic_label list -> logic_label option
+ 
 val typing_error : 
     Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 

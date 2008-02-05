@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.99 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.100 2008-02-05 14:00:04 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -346,7 +346,7 @@ let main () =
 	| _ -> Jc_options.usage ()
 	    
     with
-      | Jc_typing.Typing_error(l,s) ->
+      | Jc_typing.Typing_error(l,s) when not Jc_options.debug ->
 	  eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
 	  exit 1
       | Jc_options.Jc_error(l,s) ->

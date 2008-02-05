@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.114 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.115 2008-02-05 14:00:04 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -291,12 +291,12 @@ and tag_node =
 
 type tlocation_set = 
   | JCLSvar of var_info
-  | JCLSderef of tlocation_set * field_info * region
+  | JCLSderef of tlocation_set * logic_label * field_info * region
   | JCLSrange of tlocation_set * term option * term option
 
 type tlocation =
   | JCLvar of var_info
-  | JCLderef of tlocation_set * field_info * region
+  | JCLderef of tlocation_set * logic_label * field_info * region
   | JCLat of tlocation * logic_label
 
 type assertion_node =
