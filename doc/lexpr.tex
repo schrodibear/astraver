@@ -1,0 +1,78 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                        %
+%  The Why platform for program certification                            %
+%  Copyright (C) 2002-2008                                               %
+%    Romain BARDOU                                                       %
+%    Jean-François COUCHOT                                               %
+%    Mehdi DOGGUY                                                        %
+%    Jean-Christophe FILLIÂTRE                                           %
+%    Thierry HUBERT                                                      %
+%    Claude MARCHÉ                                                       %
+%    Yannick MOY                                                         %
+%    Christine PAULIN                                                    %
+%    Yann RÉGIS-GIANAS                                                   %
+%    Nicolas ROUSSET                                                     %
+%    Xavier URBAIN                                                       %
+%                                                                        %
+%  This software is free software; you can redistribute it and/or        %
+%  modify it under the terms of the GNU General Public                   %
+%  License version 2, as published by the Free Software Foundation.      %
+%                                                                        %
+%  This software is distributed in the hope that it will be useful,      %
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of        %
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  %
+%                                                                        %
+%  See the GNU General Public License version 2 for more details         %
+%  (enclosed in the file GPL).                                           %
+%                                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{syntax}
+  rel-op ::= "==" | "!=" | "<=" | ">=" | ">" | "<"
+       \
+  bin-op ::= "+" | "-" | "*" | "/" | "%" ;
+       | "&&" | "||" |   ; boolean operations
+       | "&" | "|" ; bitwise operations
+       | "==>" ; boolean implication
+       | "<==>" ; boolean equivalence
+       \
+  unary-op ::= "+" | "-" ; unary plus and minus
+       | "!" ; boolean negation
+       | "~" ;  bitwise complementation
+       \
+  lexpr ::= "true" | "false" ;
+       | integer ; integer constants
+       | real ; real constants
+       | id ; variables
+       | unary-op lexpr ;
+       | lexpr bin-op lexpr ;
+       | lexpr (rel-op lexpr)+ ; comparisons, see remark below
+       | lexpr "[" lexpr "]" ; array access
+       | lexpr "." id  ; object field access
+       | "(" type-expr ")" lexpr  ; cast
+       | id "(" lexpr ("," lexpr)* ")" ; function application
+       | "(" lexpr ")" ; parentheses
+       | lexpr "?" lexpr ":" lexpr ;
+       | "\let" id "=" lexpr ";" lexpr ; local binding
+       | "\forall" binders ";" lexpr ; universal quantification
+       | "\exists" binders ";" lexpr ; existential quantification
+       | id ":" lexpr ; syntactic naming
+       \
+  binders ::= type-expr variable-ident ;
+  ("," type-expr variable-ident)*
+  \
+  type-expr ::= logic-type-expr | Java-type-expr
+  \
+  logic-type-expr ::= built-in-logic-type ;
+  | id ; logic type identifier
+  \
+  built-in-logic-type ::= "integer" | "real" 
+  \
+  variable-ident ::= id 
+  | variable-ident "[]"
+\end{syntax}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
