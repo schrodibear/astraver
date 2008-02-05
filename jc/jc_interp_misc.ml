@@ -423,6 +423,11 @@ let make_valid_one_pred_app tov p =
 
 let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
+let make_pred_lets lets body =
+  List.fold_left
+    (fun body (id, value) -> LLet(id, value, body))
+    body (List.rev lets)
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

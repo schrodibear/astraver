@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.227 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.228 2008-02-05 13:31:04 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -485,53 +485,64 @@ let lvar_info label v =
 *)
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
-
-
-
+(* Return (t, lets) where:
+ * t is the Why term
+ * lets is a list of (id, value), which should be binded
+ * at the assertion level. *)
 let rec term ~global_assertion label oldlabel t =
   let ft = term ~global_assertion label oldlabel in
-  let t' =
+  let t', lets =
   match t.jc_term_node with
-    | JCTconst JCCnull -> LVar "null"
-    | JCTvar v -> lvar_info label v
-    | JCTconst c -> LConst(const c)
+    | JCTconst JCCnull -> LVar "null", []
+    | JCTvar v -> lvar_info label v, []
+    | JCTconst c -> LConst(const c), []
     | JCTunary(op,t1) ->
-	let t1' = ft t1 in
+	let t1', lets = ft t1 in
 	LApp (unary_op op, 
 	      [term_coerce t.jc_term_loc 
-		 (unary_arg_type op) t1.jc_term_type t1' ])
+		 (unary_arg_type op) t1.jc_term_type t1' ]), lets
     | JCTbinary(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-	let t1' = ft t1 in
-	let t2' = ft t2 in
-	LApp (term_bin_op op, [ t1'; t2'])
+	let t1', lets1 = ft t1 in
+	let t2', lets2 = ft t2 in
+	LApp (term_bin_op op, [ t1'; t2']), lets1@lets2
     | JCTbinary(t1,Bland,t2) ->
 	assert false (* should be an assertion *)
     | JCTbinary(t1,Blor,t2) ->
 	assert false (* should be an assertion *)
     | JCTbinary(t1,op,t2) ->
-	let t1' = ft t1 in
-	let t2' = ft t2 in
+	let t1', lets1 = ft t1 in
+	let t2', lets2 = ft t2 in
 	let t = bin_arg_type t.jc_term_loc op in
 	LApp (term_bin_op op, 
 	      [ term_coerce t1.jc_term_loc t 
 		  t1.jc_term_type t1'; 
 		term_coerce t2.jc_term_loc t 
-		  t2.jc_term_type t2'])
+		  t2.jc_term_type t2']), lets1@lets2
     | JCTshift(t1,t2) -> 
-	let t2' = ft t2 in
-	LApp("shift",[ft t1; 
+	let t1', lets1 = ft t1 in
+	let t2', lets2 = ft t2 in
+	LApp("shift",[t1'; 
 		      term_coerce t2.jc_term_loc integer_type 
-			t2.jc_term_type t2'])
+			t2.jc_term_type t2']), lets1@lets2
     | JCTsub_pointer(t1,t2) -> 
-	LApp("sub_pointer",[ft t1; ft t2])
+	let t1', lets1 = ft t1 in
+	let t2', lets2 = ft t2 in
+	LApp("sub_pointer",[t1'; t2']), lets1@lets2
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,lab,fi) -> 
+	let t', lets = ft t in
 	let mem = field_region_memory_name(fi,t.jc_term_region) in
-	LApp("select",[lvar ~label_in_name:global_assertion lab mem;ft t])
+	LApp("select",[lvar ~label_in_name:global_assertion lab mem; t']), lets
     | JCTapp app ->
 	let f = app.jc_app_fun and l = app.jc_app_args in
-	make_logic_fun_call ~label_in_name:global_assertion f (List.map ft l) 
-	  app.jc_app_region_assoc app.jc_app_label_assoc
+	let args, lets = List.fold_right
+	  (fun arg (args, lets) ->
+	     let arg', arglets = ft arg in
+	     arg'::args, arglets@lets)
+	  l ([], [])
+	in
+	make_logic_fun_call ~label_in_name:global_assertion f args
+	  app.jc_app_region_assoc app.jc_app_label_assoc, []
     | JCTold(t) -> term ~global_assertion oldlabel oldlabel t
     | JCTat(t,lab) -> term ~global_assertion lab oldlabel t
     | JCToffset(k,t,st) -> 
@@ -542,107 +553,125 @@ let rec term ~global_assertion label oldlabel t =
 	  | Offset_min -> "offset_min"
 	  | Offset_max -> "offset_max"
 	in
-	LApp(f,[LVar alloc; ft t]) 
+	let t', lets = ft t in
+	LApp(f,[LVar alloc; t']), lets
     | JCTinstanceof(t,ty) ->
+	let t', lets = ft t in
 	let tag = tag_table_name (JCtag ty) in
 	LApp("instanceof_bool",
-	     [lvar label tag; ft t;LVar (tag_name ty)])
+	     [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTcast(t,ty) ->
+	let t', lets = ft t in
 	let tag = tag_table_name (JCtag ty) in
 	LApp("downcast",
-	     [lvar label tag; ft t;LVar (tag_name ty)])
+	     [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
     | JCTmatch(t, ptl) -> assert false (* TODO *)
-in
-  if t.jc_term_label <> "" then
-    Tnamed(reg_loc ~id:t.jc_term_label t.jc_term_loc,t')
-  else
-    t'
+  in
+  (if t.jc_term_label <> "" then
+     Tnamed(reg_loc ~id:t.jc_term_label t.jc_term_loc,t')
+   else
+     t'), lets
 
 let named_term ~global_assertion label oldlabel t =
-  let t' = term ~global_assertion label oldlabel t in
+  let t', lets = term ~global_assertion label oldlabel t in
   match t' with
-    | Tnamed _ -> t'
+    | Tnamed _ -> t', lets
     | _ -> 
 	let n = reg_loc t.jc_term_loc in
-	Tnamed(n,t')
+	Tnamed(n,t'), lets
 
 let tag ~global_assertion label oldlabel = function
-  | JCTtag st -> LVar (tag_name st)
-  | JCTbottom -> LVar "bottom_tag"
+  | JCTtag st -> LVar (tag_name st), []
+  | JCTbottom -> LVar "bottom_tag", []
   | JCTtypeof(t, st) ->
-      let te = term ~global_assertion label oldlabel t in
-      make_typeof st te
+      let te, lets = term ~global_assertion label oldlabel t in
+      make_typeof st te, lets
 
 let rec assertion ~global_assertion label oldlabel a =
   let fa = assertion ~global_assertion label oldlabel 
   and ft = term ~global_assertion label oldlabel
   and ftag = tag ~global_assertion label oldlabel
   in
-  let a' =
+  let a', lets =
     match a.jc_assertion_node with
-      | JCAtrue -> LTrue
-      | JCAfalse -> LFalse
-      | JCAif(t1,p2,p3) -> LIf(ft t1,fa p2,fa p3)
-      | JCAand l -> make_and_list (List.map fa l)
-      | JCAor l -> make_or_list (List.map fa l)
-      | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2)
-      | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2)
-      | JCAnot(a) -> LNot(fa a)
+      | JCAtrue -> LTrue, []
+      | JCAfalse -> LFalse, []
+      | JCAif(t1,p2,p3) ->
+	  let t1', lets = ft t1 in
+	  LIf(t1', fa p2, fa p3), lets
+      | JCAand l -> make_and_list (List.map fa l), []
+      | JCAor l -> make_or_list (List.map fa l), []
+      | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2), []
+      | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2), []
+      | JCAnot(a) -> LNot(fa a), []
       | JCArelation(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-	  let t1' = ft t1 in
-	  let t2' = ft t2 in
-	  LPred (pred_bin_op op, [ t1'; t2'])
+	  let t1', lets1 = ft t1 in
+	  let t2', lets2 = ft t2 in
+	  LPred (pred_bin_op op, [ t1'; t2']), lets1@lets2
       | JCArelation(t1,op,t2) ->
-	  let t1' = ft t1 in
-	  let t2' = ft t2 in
+	  let t1', lets1 = ft t1 in
+	  let t2', lets2 = ft t2 in
 	  let t = bin_arg_type a.jc_assertion_loc op in
 	  LPred(pred_bin_op op, 
 		[ term_coerce t1.jc_term_loc t
 		    t1.jc_term_type t1'; 
 		  term_coerce t2.jc_term_loc t 
-		    t2.jc_term_type t2'])
+		    t2.jc_term_type t2']), lets1@lets2
       | JCAapp app -> 
 	  let f = app.jc_app_fun in
 	  let l = app.jc_app_args in
+	  let args, lets = List.fold_right
+	    (fun arg (args, lets) ->
+	       let arg', arglets = ft arg in
+	       arg'::args, arglets@lets)
+	    l ([], [])
+	  in
+	  let args' = List.map2 (fun x y -> x, y) l args in
 	  (* No type verification for full_separated for the moment. *)
 	  if f.jc_logic_info_name = "full_separated" then
-	    make_logic_pred_call ~label_in_name:false f (List.map ft l) [] []
+	    make_logic_pred_call ~label_in_name:false f args [] [], lets
 	  else begin try
 	    make_logic_pred_call ~label_in_name:global_assertion f  
 	      (List.map2 
-		 (fun vi t -> 
+		 (fun vi (t, t') -> 
 		    term_coerce t.jc_term_loc 
-		      vi.jc_var_info_type t.jc_term_type (ft t))
-		 f.jc_logic_info_parameters l)
+		      vi.jc_var_info_type t.jc_term_type t')
+		 f.jc_logic_info_parameters args')
 	      app.jc_app_region_assoc
-	      app.jc_app_label_assoc
+	      app.jc_app_label_assoc, lets
 	  with Invalid_argument _ -> assert false
 	  end
       | JCAquantifier(Forall,v,p) -> 
 	LForall(v.jc_var_info_final_name,
 		tr_base_type v.jc_var_info_type,
-		fa p)
+		fa p), []
       | JCAquantifier(Exists,v,p) -> 
 	  LExists(v.jc_var_info_final_name,
 		  tr_base_type v.jc_var_info_type,
-		  fa p)
-      | JCAold a -> assertion ~global_assertion oldlabel oldlabel a
-      | JCAat(a,lab) -> assertion ~global_assertion lab oldlabel a
-      | JCAbool_term(t) -> 
-	LPred("eq",[ft t;LConst(Prim_bool true)])
+		  fa p), []
+      | JCAold a -> assertion ~global_assertion oldlabel oldlabel a, []
+      | JCAat(a,lab) -> assertion ~global_assertion lab oldlabel a, []
+      | JCAbool_term(t) ->
+	  let t', lets = ft t in
+	  LPred("eq",[t'; LConst(Prim_bool true)]), lets
       | JCAinstanceof(t,lab,ty) -> 
+	  let t', lets = ft t in
 	  let tag = tag_table_name (JCtag ty) in
-	  LPred("instanceof",
-		[lvar lab tag; ft t; LVar (tag_name ty)])
+	  LPred("instanceof", [lvar lab tag; t'; LVar (tag_name ty)]), lets
       | JCAmutable(te, st, ta) ->
+	  let te', lets1 = ft te in
+	  let tag, lets2 = ftag ta.jc_tag_node in
 	  let mutable_field = LVar (mutable_name (JCtag st)) in
-	  let tag = ftag ta.jc_tag_node in
-	  LPred("eq", [ LApp("select", [ mutable_field; ft te ]); tag ])
+	  LPred("eq", [ LApp("select", [ mutable_field; te' ]); tag ]),
+	  lets1@lets2
       | JCAtagequality(t1, t2, h) ->
-	  LPred("eq", [ ftag t1.jc_tag_node; ftag t2.jc_tag_node ])
+	  let t1', lets1 = ftag t1.jc_tag_node in
+	  let t2', lets2 = ftag t2.jc_tag_node in
+	  LPred("eq", [ t1'; t2' ]), lets1@lets2
 (*      | JCAmatch _ -> assert false *)
   in
+  let a' = make_pred_lets lets a' in
   if a.jc_assertion_label <> "" then
     begin
 (*
@@ -697,12 +726,23 @@ let tr_logic_const vi init acc =
   match init with
     | None -> decl
     | Some t ->
-	Axiom(vi.jc_var_info_name ^ "_value_axiom" , 
-	      LPred("eq",[term_coerce Loc.dummy_position integer_type
-			    vi.jc_var_info_type (LVar vi.jc_var_info_name); 
-			  term_coerce t.jc_term_loc integer_type 
-			    t.jc_term_type (term ~global_assertion:true LabelNone LabelHere t)])) 
-	:: decl 
+	let t', lets = term ~global_assertion:true LabelNone LabelHere t in
+	let pred =
+	  LPred(
+	    "eq",
+	    [term_coerce Loc.dummy_position integer_type
+	       vi.jc_var_info_type (LVar vi.jc_var_info_name); 
+	     term_coerce t.jc_term_loc integer_type 
+	       t.jc_term_type t']
+	  )
+	in
+	let ax =
+	  Axiom(
+	    vi.jc_var_info_name ^ "_value_axiom",
+	    make_pred_lets lets pred
+	  )
+	in
+	ax::decl
 
 let tr_logic_fun li ta acc =
   let params =
@@ -750,7 +790,8 @@ let tr_logic_fun li ta acc =
 	      (* Function *)
       | Some ty, JCTerm t -> 
 	  let ret = tr_base_type ty in
-	  let t = term ~global_assertion:true LabelNone LabelNone t in
+	  let t, lets = term ~global_assertion:true LabelNone LabelNone t in
+	  assert (lets = []);
 	  Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
       (* Logic *)
       | tyo, JCReads r ->
@@ -1033,8 +1074,7 @@ and expr ~infunction ~threats e : expr =
     | JCEcast (e, si) ->
 	let tag = tag_table_name (JCtag si) in
 	(* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
-
-	let et = term ~global_assertion:false LabelNone LabelNone (term_of_expr e) in
+	let et, _ = term ~global_assertion:false LabelNone LabelNone (term_of_expr e) in
 	let typea = 
 	  match e.jc_expr_type with
 	    | JCTpointer (JCtag si', _, _) -> 
@@ -1194,7 +1234,8 @@ let return_void = ref false
 let type_assert vi e =
   match vi.jc_var_info_type, e.jc_expr_type with
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
-	let et = term ~global_assertion:false LabelHere LabelNone (term_of_expr e) in
+	let et, lets =
+	  term ~global_assertion:false LabelHere LabelNone (term_of_expr e) in
 	let alloc = alloc_table_name si in
 	  begin
 	    match n1o, n2o with
@@ -1203,17 +1244,23 @@ let type_assert vi e =
 		  begin match n1o' with
 		    | Some n' when Num.le_num n' n -> LTrue
 		    | _ -> 
-			LPred ("le_int",
-			       [LApp ("offset_min", [LVar alloc; et]);
-				LConst (Prim_int (Num.string_of_num n))])
+			let pred =
+			  LPred ("le_int",
+				 [LApp ("offset_min", [LVar alloc; et]);
+				  LConst (Prim_int (Num.string_of_num n))])
+			in
+			make_pred_lets lets pred
 		  end
 	      | None, Some n -> 
 		  begin match n2o' with
 		    | Some n' when Num.le_num n n' -> LTrue
 		    | _ -> 
-			LPred ("ge_int",
-			       [LApp ("offset_max", [LVar alloc; et]);
-				LConst (Prim_int (Num.string_of_num n))])
+			let pred =
+			  LPred ("ge_int",
+				 [LApp ("offset_max", [LVar alloc; et]);
+				  LConst (Prim_int (Num.string_of_num n))])
+			in
+			make_pred_lets lets pred
 		  end
 	      | Some n1, Some n2 
 		  when Num.eq_num n1 (Num.num_of_int 0)
@@ -1223,13 +1270,19 @@ let type_assert vi e =
 			when Num.eq_num n1' (Num.num_of_int 0)
 			  && Num.eq_num n2' (Num.num_of_int 0) -> LTrue
 		    | Some n1', None when Num.eq_num n1' (Num.num_of_int 0) ->
-			LPred ("eq_int",
-			       [LApp ("offset_max", [LVar alloc; et]);
-				LConst (Prim_int "0")])
+			let pred =
+			  LPred ("eq_int",
+				 [LApp ("offset_max", [LVar alloc; et]);
+				  LConst (Prim_int "0")])
+			in
+			make_pred_lets lets pred
 		    | None, Some n2' when Num.eq_num n2' (Num.num_of_int 0) ->
-			LPred ("eq_int",
-			       [LApp ("offset_min", [LVar alloc; et]);
-				LConst (Prim_int "0")])
+			let pred =
+			  LPred ("eq_int",
+				 [LApp ("offset_min", [LVar alloc; et]);
+				  LConst (Prim_int "0")])
+			in
+			make_pred_lets lets pred
 		    | _ -> LTrue
 		  end
 	      | Some n1, Some n2 -> LTrue
@@ -1468,11 +1521,21 @@ let rec statement ~infunction ~threats s =
 	let e = expr e in
 	If(e, statement s1, statement s2)
     | JCSloop (la, s) ->
-	let inv = named_assertion ~global_assertion:false LabelHere LabelInit la.jc_loop_invariant in
-	begin 
+	let inv = named_assertion
+	  ~global_assertion:false
+	  LabelHere
+	  LabelInit
+	  la.jc_loop_invariant
+	in begin 
 	  match la.jc_loop_variant with
 	    | Some t when threats ->
-		let variant = named_term ~global_assertion:false LabelHere LabelInit t in
+		let variant, lets = named_term
+		  ~global_assertion:false
+		  LabelHere
+		  LabelInit
+		  t
+		in
+		assert (lets = []);
 		While(Cte(Prim_bool true), inv,
 	              Some (term_coerce t.jc_term_loc integer_type 
 			    t.jc_term_type variant,None), [statement s])
@@ -1481,7 +1544,12 @@ let rec statement ~infunction ~threats s =
 	              None, [statement s])
 	end
     | JCSassert a -> 
-	Assert(named_assertion ~global_assertion:false LabelHere LabelInit a, Void)
+	Assert(named_assertion
+		 ~global_assertion:false
+		 LabelHere
+		 LabelInit
+		 a,
+	       Void)
     | JCSdecl(vi,e,s) -> 
 	begin
 	  let e' = match e with
@@ -1774,20 +1842,23 @@ let rec pset ~global_assertion before loc =
 	LApp("pset_all", [ls])
     | JCLSrange(ls,None,Some b) ->
 	let ls = fpset ls in
-	let b' = term ~global_assertion before before b in
+	let b', lets = term ~global_assertion before before b in
+	assert (lets = []);
 	LApp("pset_range_left", 
 	     [ls; 
 	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
     | JCLSrange(ls,Some a,None) ->
 	let ls = fpset ls in
-	let a' = term ~global_assertion before before a in
+	let a', lets = term ~global_assertion before before a in
+	assert (lets = []);
 	LApp("pset_range_right", 
 	     [ls; 
 	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'])
     | JCLSrange(ls,Some a,Some b) ->
 	let ls = fpset ls in
-	let a' = term ~global_assertion before before a in
-	let b' = term ~global_assertion before before b in
+	let a', lets1 = term ~global_assertion before before a in
+	let b', lets2 = term ~global_assertion before before b in
+	assert (lets1 = [] && lets2 = []);
 	LApp("pset_range", 
 	     [ls; 
 	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'; 
@@ -1916,64 +1987,20 @@ let tr_fun f loc spec body acc =
 	 make_and
 	   (match vi.jc_var_info_type with
 	      | JCTpointer (tov, n1o, n2o) ->
-		  let vit = 
+		  let vit, lets = 
 		    term ~global_assertion:false LabelHere LabelNone
 		      (term_var_no_loc vi) 
 		  in
-(*		  let alloc = alloc_table_name tov in
-		  let fields = match tov with
-		    | JCtag si -> embedded_struct_fields si
-		    | JCvariant _ -> []
-		  in *)begin
-		    match n1o, n2o with
-		      | None, _ | _, None -> LTrue
-(*		      | Some n1, Some n2 
-			  when Num.eq_num n1 (Num.num_of_int 0)
-			    && Num.eq_num n2 (Num.num_of_int 0) ->
-			  let structs = 
-			    List.fold_left 
-			      (fun acc fi ->
-				 StructSet.add (field_sinfo fi) acc) 
-			      StructSet.empty fields
-			  in
-			  let structs = 
-			    StructSet.fold
-			      (fun si acc -> si :: acc) structs [] in
-			  LPred (
-			    valid_one_pred_name tov,
-			    vit
-			    :: LVar alloc
-			    :: List.map 
-			      (fun si -> (lvar LabelHere ** alloc_table_name)
-				 (JCtag si)) 
-			      structs
-			    @ List.map (lvar LabelHere ** field_memory_name)
-			      fields)*)
-		      | Some n1, Some n2 ->
-(*			  let structs = 
-			    List.fold_left 
-			      (fun acc fi ->
-				 StructSet.add (field_sinfo fi) acc) 
-			      StructSet.empty fields
-			  in
-			  let structs = StructSet.fold
-			    (fun si acc -> si :: acc) structs [] in*)
+		  begin match n1o, n2o with
+		    | None, _ | _, None -> LTrue
+		    | Some n1, Some n2 ->
+			let pred =
 			  make_valid_pred_app tov
 			    vit
 			    (const_of_num n1)
 			    (const_of_num n2)
-(*			  LPred (
-			    valid_pred_name tov,
-			    vit
-			    :: LConst(Prim_int(Num.string_of_num n1))
-			    :: LConst(Prim_int(Num.string_of_num n2))
-			    :: LVar alloc
-			    :: List.map 
-			      (fun si -> (lvar LabelHere ** alloc_table_name)
-				 (JCtag si)) 
-			      structs
-			    @ List.map (lvar LabelHere ** field_memory_name)
-			      fields)*)
+			in
+			make_pred_lets lets pred
 		  end
 	      | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull -> LTrue)
 	   acc)
