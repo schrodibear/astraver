@@ -15,7 +15,8 @@ KFILES=Lesson1_max.pp \
 	Purse.pp Purse_test1.pp Purse_test2.pp Purse2.pp \
 	Purse_withdraw2.pp \
 	Flag1.pp Flag_inv.pp Flag_isMonochrome.pp Flag_flag.pp \
-	Flag_swap.pp Flag_body.pp
+	Flag_swap.pp Flag_body.pp \
+	contracts.bnf lexpr.bnf
 
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
@@ -73,17 +74,14 @@ main.pdf:
 	pdflatex main.tex
 
 
-%.pp: %.tex pp.ml
-	ocaml pp.ml -color $< > $@
+%.pp: %.tex pp
+	./pp -color $< > $@
 
-%.pp: %.c pp.ml
-	ocaml pp.ml -color -c $< > $@
+%.pp: %.c pp
+	./pp -color -c $< > $@
 
-%.pp: %.java pp.ml
-	ocaml pp.ml -color -java $< > $@
-
-pp.ml: pp.mll
-	ocamllex pp.mll
+%.pp: %.java pp
+	./pp -color -java $< > $@
 
 %.dvi: %.tex
 	latex $< && latex $<
@@ -103,6 +101,17 @@ pp.ml: pp.mll
 %.png: %.dia
 	dia --filter=png --size=2048,1536 $^
 
+%.bnf: %.tex tex2bnf
+	./tex2bnf < $< > $@
+
+tex2bnf: tex2bnf.ml
+	ocamlopt.opt -o $@ $^
+
+pp: pp.ml
+	ocamlopt.opt -o $@ $^
+
+%.ml: %.mll
+	ocamllex.opt $<
 
 clean::
 	rm -f *~ *.dvi *.log *.aux *.toc \

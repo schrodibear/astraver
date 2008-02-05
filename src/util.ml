@@ -1,7 +1,7 @@
 (**************************************************************************)
 (*                                                                        *)
-(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2007                                               *)
+(*  The Why platform for program certification                            *)
+(*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
@@ -10,6 +10,8 @@
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
+(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -25,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.145 2008-02-04 08:39:27 marche Exp $ i*)
+(*i $Id: util.ml,v 1.146 2008-02-05 12:10:50 marche Exp $ i*)
 
 open Logic
 open Ident

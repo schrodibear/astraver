@@ -1,7 +1,7 @@
 (**************************************************************************)
 (*                                                                        *)
-(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2007                                               *)
+(*  The Why platform for program certification                            *)
+(*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
@@ -10,6 +10,8 @@
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
+(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -25,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: rename.mli,v 1.8 2007-11-20 14:34:52 filliatr Exp $ i*)
+(*i $Id: rename.mli,v 1.9 2008-02-05 12:10:50 marche Exp $ i*)
 
 (* Abstract type for renamings 
  * 

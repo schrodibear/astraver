@@ -1,7 +1,7 @@
 (**************************************************************************)
 (*                                                                        *)
-(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2007                                               *)
+(*  The Why platform for program certification                            *)
+(*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
@@ -10,6 +10,8 @@
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
+(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -25,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.16 2008-01-15 14:44:10 marche Exp $ *)
+(* $Id: jc_envset.mli,v 1.17 2008-02-05 12:10:48 marche Exp $ *)
 
 module type OrderedHashedType =
 sig

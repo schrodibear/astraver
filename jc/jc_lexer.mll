@@ -1,7 +1,7 @@
 (**************************************************************************)
 (*                                                                        *)
-(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2007                                               *)
+(*  The Why platform for program certification                            *)
+(*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
@@ -10,6 +10,8 @@
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
+(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -25,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.54 2008-02-04 08:39:27 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.55 2008-02-05 12:10:48 marche Exp $ i*)
 
 {
   open Jc_ast

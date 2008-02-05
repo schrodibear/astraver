@@ -1,7 +1,7 @@
 (**************************************************************************)
 (*                                                                        *)
-(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2007                                               *)
+(*  The Why platform for program certification                            *)
+(*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
 (*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
@@ -10,6 +10,8 @@
 (*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
+(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -25,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib_split.mll,v 1.6 2007-11-20 14:34:53 filliatr Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.7 2008-02-05 12:10:50 marche Exp $ i*)
 
 {
 

@@ -1,15 +1,17 @@
 ##########################################################################
 #                                                                        #
-#  The Why/Caduceus/Krakatoa tool suite for program certification        #
-#  Copyright (C) 2002-2007                                               #
+#  The Why platform for program certification                            #
+#  Copyright (C) 2002-2008                                               #
 #    Romain BARDOU                                                       #
-#    Jean-FranÃ§ois COUCHOT                                               #
+#    Jean-François COUCHOT                                               #
 #    Mehdi DOGGUY                                                        #
-#    Jean-Christophe FILLIÃ‚TRE                                           #
+#    Jean-Christophe FILLIÂTRE                                           #
 #    Thierry HUBERT                                                      #
-#    Claude MARCHÃƒÂƒÃ‚Â‰                                                       #
+#    Claude MARCHÉ                                                       #
 #    Yannick MOY                                                         #
 #    Christine PAULIN                                                    #
+#    Yann RÉGIS-GIANAS                                                   #
+#    Nicolas ROUSSET                                                     #
 #    Xavier URBAIN                                                       #
 #                                                                        #
 #  This software is free software; you can redistribute it and/or        #
@@ -970,7 +972,9 @@ binary: $(BINARYFILES)
 headers:
 	headache -c doc/headache_config.txt -h doc/header.txt \
 		Makefile.in configure.in README \
-		*/*.ml */*.ml[ily4] tools/*.c bench/c/good/*.c
+		*/*.ml */*.ml[ily4] tools/*.c bench/c/good/*.c \
+		bench/java/good/*.java \
+		doc/*.tex
 
 # myself
 ########

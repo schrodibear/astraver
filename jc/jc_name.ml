@@ -1,15 +1,17 @@
 (**************************************************************************)
 (*                                                                        *)
-(*  The Why/Caduceus/Krakatoa tool suite for program certification        *)
-(*  Copyright (C) 2002-2007                                               *)
+(*  The Why platform for program certification                            *)
+(*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
-(*    Jean-FranÃ§ois COUCHOT                                               *)
+(*    Jean-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
-(*    Jean-Christophe FILLIÃ‚TRE                                           *)
+(*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
-(*    Claude MARCHÃ‰                                                       *)
+(*    Claude MARCHÉ                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
+(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -25,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.11 2008-01-29 16:26:41 bardou Exp $ *)
+(* $Id: jc_name.ml,v 1.12 2008-02-05 12:10:48 marche Exp $ *)
 
 open Jc_env
 open Jc_ast

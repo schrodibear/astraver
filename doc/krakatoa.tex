@@ -1,3 +1,32 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                        %
+%  The Why platform for program certification                            %
+%  Copyright (C) 2002-2008                                               %
+%    Romain BARDOU                                                       %
+%    Jean-François COUCHOT                                               %
+%    Mehdi DOGGUY                                                        %
+%    Jean-Christophe FILLIÂTRE                                           %
+%    Thierry HUBERT                                                      %
+%    Claude MARCHÉ                                                       %
+%    Yannick MOY                                                         %
+%    Christine PAULIN                                                    %
+%    Yann RÉGIS-GIANAS                                                   %
+%    Nicolas ROUSSET                                                     %
+%    Xavier URBAIN                                                       %
+%                                                                        %
+%  This software is free software; you can redistribute it and/or        %
+%  modify it under the terms of the GNU General Public                   %
+%  License version 2, as published by the Free Software Foundation.      %
+%                                                                        %
+%  This software is distributed in the hope that it will be useful,      %
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of        %
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  %
+%                                                                        %
+%  See the GNU General Public License version 2 for more details         %
+%  (enclosed in the file GPL).                                           %
+%                                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \documentclass[a4paper,11pt,twoside,openright]{report}
 
 \usepackage[a4paper=true,pdftex,colorlinks=true,urlcolor=blue,pdfstartview=FitH]{hyperref}
@@ -74,13 +103,8 @@ get help.
 \chapter{Tutorial}
 \label{chap:tutorial}
 
-Before going to the first lesson, please start by creating a new
-directory \verb|tutorial|.
-
-%Notice that the examples of this tutorial are done with version 2.05
-%of \Why{}. We recommend to use this version, since with other versions,
-%significant differences may exist in the generated proof obligations,
-%in particular with hypothesis names, or even the number of proof obligations.
+Before going to the first lesson, we recommend to start by creating a new
+directory \verb|tutorial|, and code each example in that directory. 
 
 \section{The basics of the methodology}
 
@@ -91,21 +115,708 @@ following \Java{} program
 into a new file \verb|Lesson1.java|.
 \input{Lesson1_max.pp}
 Our aim is to verify that the body of method \texttt{max} is a correct
-implementation, in the sense that it satisfies the JML specification
+implementation, in the sense that it satisfies the specification
 given.
 
-The first step to do is running the \Krakatoa{} tool: execute the
-following command in the directory \verb|tutorial|: 
+Running the verification process can be done by executing the
+following command, in the directory \verb|tutorial|: 
 \begin{verbatim}
-gvc Lesson1.java
+gwhy Lesson1.java
 \end{verbatim}
-The arguments of that command means that we want to certify the method
-\verb|Lesson1.max| in the package \verb|tutorial|. The execution of
-that command generates several files in directory \verb|tutorial|,
-including a \verb|makefile|. 
-% Notice that \Krakatoa{} issues a warning
-% about a possible missing assignable clause, you can ignore it, this will be
-% explained in Section~\ref{sec:subprograms}.
+The command will read the given file, and generate a set of logic
+formulas call \emph{verification conditions}, which express the
+validity of the program. The generated formulas are then displayed
+into the common graphical VC viewer of the Why platform, as shown in
+Figure~\ref{fig:gwhy}
+
+\begin{figure}[p]
+  \begin{center}
+    input{}
+  \end{center}
+  \caption{Verification conditions displayed in GWhy}
+\label{fig:gwhy}
+\end{figure}
+
+
+
+
+\chapter{Specification Language: Reference}
+
+
+\section{Logic expressions}
+\label{sec:expressions}
+
+We present the language of expressions one can use in
+annotations. These are called \emph{logic expressions}. 
+
+This language is essentially the standard multi-sorted first-order
+logic. It is a two-valued logic language, made of \emph{propositions}
+with standard first-order connectives, built upon a language
+of atoms called \emph{terms}. 
+
+As far as possible, the syntax of Java expressions is reused:
+conjunction is denoted as \verb|&&|, disjunction as \verb+||+ and
+negation as \verb|!|.  Additional connectives are \verb|==>| for
+implication, \verb|<==>| for equivalence. Universal quantification is
+denoted by $\bskw{forall} \tau~x_1,\ldots,\tau~x_n; e$ and existential
+quantification by $\bskw{exists} \tau~x_1,\ldots,\tau~x_n; e$.
+
+Terms are built on 
+\begin{itemize}
+\item integer and real arithmetic
+\item Java array access and field access
+\item Java cast
+\item user-defined logic types, and user-defined predicate and logic
+  functions, described in Section~\ref{sec:logicspec}
+\end{itemize}
+In essence, terms correspond to pure Java expressions, with additional
+constructs that we will introduce progressively, except that method
+and constructor calls are not allowed.
+
+Figure~\ref{fig:gram:term} presents the grammar for the basic
+construction of logic expressions.  
+
+\begin{figure}[p]
+  \fbox{\begin{minipage}{0.97\textwidth} \input{lexpr.bnf}
+    \end{minipage}}
+  \caption{Grammar of logic expressions}
+\label{fig:gram:lexpr}
+\end{figure}
+
+Basic additional constructs are as follows:
+\begin{description}
+\item[Local binding] $\bskw{let} x = e_1 ; e_2$
+  introduces the name $x$ for
+  expression $e_1$ which can be used in expression $e_2$.
+
+\item[Conditional] $c ? e_1 : e_2$. There is a subtlety
+  here: the condition may be either a boolean term or a proposition.  In
+  case of a proposition, the two branches must be also proposition, so
+  that this construct acts as a connective with the following
+  semantics: $ c ? e_1 : e_2$ is equivalent to $(c
+  \verb|==>| e_1) \verb|&&| (\verb|!| c \verb|==>| e_2)$
+
+\item[Syntactic naming] $id \verb|:| e$ is a term or a proposition
+  equivalent to $e$. It is different from local naming with $\bskw{let}$:
+  the name cannot be reused in other terms or proposition. It is only
+  for readibility purposes.
+
+\item[Consecutive comparison operators] the construct $t_1~relop_1~t_2~relop_2~t_3 \cdots t_k$ with
+  several consecutive comparison operators is a shortcut for
+  $t_1~relop_1~t_2 ~\verb|&&|~ t_2~relop_2~t_3 ~\verb|&&|~ \cdots $.
+  Nevertheless, it is required that the $relop_i$ operators must be in
+  the same ``direction'', \emph{i.e.} they must all belong either to
+  $\{\verb|<|, \verb|<=|, \verb|==|\}$ or to
+  $\{\verb|>|,\verb|>=|,\verb|==|\}$. For example, expressions
+  \verb|x < y > z| and \verb|x != y != z| are forbidden.
+
+\end{description}
+
+\subsection{Operator precedence}
+
+The precedence of Java operators is conservatively extended with
+additional operators, as shown Figure~\ref{fig:precedence}. In this
+table, operators are sorted from highest to lowest priority. Operators
+of same priority are presented on the same line.
+
+
+\begin{figure}[t]
+  \begin{center}
+    \begin{tabular}{|l|l|l|}
+      \hline
+      class 	& associativity & operators \\
+      \hline
+      selection & left & $\verb|[|\cdots\verb|]|$ \verb|.| \\
+      unary 	& right & \verb|!| \verb|~| \verb|+| \verb|-| (cast) \\
+      multiplicative & left & \verb|*| \verb|/|  \verb|%| \\
+      additive & left & \verb|+| \verb|-| \\
+      shift 	& left & \verb|<<| \verb|>>| \verb|>>>| \\
+      comparison & left & \verb|<| \verb|<=| \verb|>| \verb|>=| \\
+      comparison & left & \verb|==| \verb|!=| \\
+      bitwise and & left & \verb|&| \\
+      bitwise xor & left & \verb|^| \\
+      bitwise or & left & \verb+|+ \\
+      connective and     & left & \verb|&&| \\
+      connective xor & left & \verb+^^+ \\
+      connective or & left & \verb+||+ \\
+      connective implies & right & \verb|==>| \\
+      connective equiv & left & \verb|<==>| \\
+      ternary connective & right & $\cdots\verb|?|\cdots\verb|:|\cdots$ \\
+      binding & left & \bskw{forall} \bskw{exists} \bskw{let} \\
+      naming & right & \verb|:| \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Operator precedence}
+\label{fig:precedence}
+\end{figure}
+
+There is an additional ambiguity between the connective
+\verb|..?..:..| and the naming with \verb|:|. For example, in the
+expression \verb|x?y:z:t|, the precedence table does not enforce
+whether this should be seen as \verb|x?(y:z):t| or \verb|x?y:(z:t)|. 
+Such a case must considered as a syntax error, and should be fixed
+by explicitly using parentheses.
+
+\subsection{Semantics}
+\label{sec:twovaluedlogic}
+
+The semantics of logic expressions is based on
+mathematical first-order
+logic~(\url{http://en.wikipedia.org/wiki/First_order_logic}), thus it
+is a 2-valued logic with only total functions. Consequently,
+expressions are never ``undefined''.
+
+This design choice has to be emphasized because it is not
+straightforward, and specification writer should be aware of that. The
+issues are shared with JML. A comprehensive list of issues has been
+compiled by Patrice Chalin~\cite{chalin05ftfjp,chalin07icse}.
+
+The choice of having only total functions allows to write for example
+the term \verb|1/0|, or \verb|p.f| when p is null, or \verb|t[n]|
+where n is outside the array bounds. In
+particular, the predicates
+\begin{eqnarray*}
+  1/0 &\verb|==|& 1/0 \\\relax
+  p.f &\verb|==|& p.f
+\end{eqnarray*}
+are true, since they are instances of the general axiom $\forall x,
+x\verb|==|x$ of first-order logic.
+
+So, it is up to the writer of specification to take care of writing
+consistent assertions. 
+
+\subsection{Typing}
+
+The language of logic expressions is typed (as for \emph{multi-sorted}
+first-order logic). Types are either C types or \emph{logic types}
+defined as follows:
+\begin{itemize}
+\item ``Mathematical'' types: \verb|integer| for unbounded,
+  mathematical integers; \verb|real| for real numbers, \verb|boolean|
+  for booleans (with values written as \verb|\true| and \verb|\false|).
+\item Logic types introduced by specification writer (see
+  Section~\ref{sec:logicspec}).
+\end{itemize}
+There are implicit coercions for numeric types:
+\begin{itemize}
+\item integer types \verb|char|, \verb|byte|, \verb|short|, \verb|int| and
+  \verb|long| are all subtypes of type \verb|integer|,
+\item \verb|integer| is itself a subtype of type \verb|real|,
+\item types \verb|float| and \verb|double| are subtypes of type \verb|real|.
+\end{itemize}
+Notes:
+\begin{itemize}
+\item There is a distinction between booleans and propositions. An
+  expression like $x<y$, in a term position returns a boolean, and is
+  also allowed in a proposition position.
+\item Quantification can be made over any type: logic types and any Java
+  types. Quantification over objects must be carefully designed,
+  regarding the memory state where field accesses are done: see
+  Section~\ref{sec:quantification} and
+  Section~\ref{sec:logicalstates}.
+\end{itemize}
+
+Formal typing rules for terms are given in appendix~\ref{sec:typingrules}
+
+
+\subsection{Integer arithmetic and machine integers}
+
+The following integer arithmetic operations apply to
+\emph{mathematical integers}: addition, subtraction, multiplication,
+unary minus, division and modulo. The value of a Java variable of an
+integer type is promoted to a mathematical integer. As a consequence,
+there is no such thing as ``overflow'' in logic expressions.
+
+For division and modulo, the results are not specified if divisor is
+zero, otherwise if $q$ and $r$ are the quotient and the remainder of
+$n$ divided by $d$ then:
+\begin{itemize}
+\item $|d.q| \leq |n|$, and $|q|$ is maximal for this property ;
+\item $q$ is zero if $|n|<|d|$ ;
+\item $q$ is positive if $|n|\geq|d|$ and $n$ and $d$ have the same sign ;
+\item $q$ is negative if $|n|\geq|d|$ and $n$ and $d$ have the opposite signs ;
+\item $q.d+r = n$ ;
+\item $|r|<|d|$ ;
+\item $r$ is zero or has the same sign as $d$.
+\end{itemize}
+
+\begin{example}
+  The following examples illustrates the results of division and modulo depending on signs of arguments:
+  \begin{itemize}
+  \item \verb|5/3| is 1 and \verb|5%3| is 2
+  \item \verb|(-5)/3| is -1 and \verb|(-5)%3| is -2
+  \item \verb|5/(-3)| is -1 and \verb|5%(-3)| is 2
+  \item \verb|(-5)/(-3)| is 1 and \verb|(-5)%(-3)| is -2
+  \end{itemize}
+\end{example}
+
+\subsubsection{Hexadecimal and octal constants}
+
+Hexadecimal and octal constants always denote non-negative integers. 
+
+\subsubsection{Casts and overflow}
+
+In logic expressions, casting operations from mathematical integers
+towards a Java integer type $t$ (among \texttt{char}, \texttt{byte},
+\texttt{short}, \texttt{int} and \texttt{long}) is
+allowed, and is interpreted as follows: the result is the unique value
+of the corresponding type that is congruent to the mathematical result
+modulo the cardinal of this type.
+\begin{example}
+  \texttt{(byte)1000} is $1000 \bmod 256$ \emph{i.e.} $232$.
+\end{example}
+
+If one wants to express, in the logic, the result of the Java
+computations of an expression, one should add all necessary casts. For
+example, the logic expression which denotes the result of Java
+computation of $x*y+z$ is \texttt{(int)((int)(x*y)+z)}.
+
+TODO Si la conjecture suivante est vraie, alors il
+  faudrait en parler: Si e1 et e2 sont des expressions d'un type
+  entier de C, quels qu'ils soient et si op est une operation binaire
+  sur entiers, alors l'operation C $e1~op~e2$ (de type $\tau$),donne
+  le meme resultat que l'expression logique $(\tau)(e_1~op~e_2)$ ou
+  $op$ est l'operation logique sur $Z$. Ce cast permet donc a
+  l'utilisateur de parler du resultat du calcul C d'une expressions
+  dans la logique
+
+
+Important: implicit casts from integers to Java integer type are forbidden.
+input{integer-cast.pp}
+
+
+
+\subsubsection{Quantification}
+\label{sec:quantification}
+
+Quantification can be either on mathematical \verb|integer| or bounded
+types \verb|short|, \verb|char|, etc. In the latter case,
+quantification corresponds to integer quantification over the
+corresponding interval.
+\begin{example}
+The formula
+  \begin{center}
+    \verb|\forall byte b; b <= 1000|
+  \end{center}
+is valid since it is equivalent to
+\begin{center}
+  \verb|\forall integer b; -128 <= b <= 127 ==> b <= 1000|
+\end{center}
+\end{example}
+
+\subsubsection{Bitwise operations}
+
+Like arithmetic operations, bitwise operations apply to any
+mathematical integers: any mathematical integer as a unique infinite
+2-complement binary representation with infinitely many 0 (for
+non-negative numbers) or 1 (for negative numbers) on the left. Then
+bitwise operations apply to these representation.
+\begin{example}
+  \begin{itemize}
+  \item \verb|7 & 12| = $\cdots 00111 \verb|&| \cdots 001100$ =
+    $\cdots 00100$ = 4
+  \item \verb+-8 | 5+ = $\cdots 11000 \verb+|+ \cdots 00101$ = $\cdots
+    11101$ = -3
+  \item \verb+~5+ = $\verb|~|\cdots 00101$ = $\cdots 111010$ = -6
+  \item \verb+-5 << 2+ = $\cdots 11011 \verb|<<| 2$ = $\cdots
+    11101100$ = -20
+  \item \verb+5 >> 2+ = $\cdots 00101 \verb|>>| 2$ = $\cdots 0001$ = 1
+  \item \verb+-5 >> 2+ = $\cdots 11011 \verb|>>| 2$ = $\cdots 1110$ =
+    -2
+  \end{itemize}
+\end{example}
+
+\subsection{Real numbers and floating point numbers}
+
+Floating-point constants and operations are interpreted as
+mathematical real numbers. A Java variable of type float or double is
+implicitly promoted to a real. Integers are promoted to reals if necessary.
+\begin{example}
+$2 * 3.5$ denotes the real number 7
+\end{example}
+Comparisons operators are interpreted as real operators too.
+
+TODO  syntaxe pour abs et power ? a priori non, on peut
+  fournir une library pour les reels avec abs(), power(), mais
+  proposer des syntaxes speciales parait difficile
+
+  mais: on pourrait permettre des definition d'operateurs infixes
+
+
+\subsubsection{Casts, infinity and NaNs}
+
+Casting from an integer type or a float type to a float or a double is
+as in Java: same conversion operations applies.
+
+Casting a real number $x$ to a float (resp. a double) results in a
+float value $y$ with the nearest-even rounding mode (see IEEE 754
+norm), which is the closest to $x$ real number which is representable
+in the float (resp. double) type. If the source real number is too
+large, this may also result into one of the special values +infinity
+and -infinity. This semantics ensures that the float result of a Java
+operation $e_1 op e_2$ on floats, if the default rounding mode is not
+changed in the program, might be obtained in the logic under the form
+$(float)(e_1 op e_2)$.
+
+\begin{example}
+  We have
+  \verb|(float)0.1| = $13421773 \times 2 ^{-27}$ which is equal to
+  $0.10000000149006473916$
+\end{example}
+
+Rounding of real number towards a float with other rounding modes
+might be obtained via specific logic functions given in external
+libraries. As well, classical mathematical operations like
+exponential, sine, cosine, etc. are supposed to be available in some
+library (see Section~\ref{sec:libreal}).
+
+
+\subsubsection{Quantification}
+
+Quantification over a variable of type \verb|real| is of course usual
+quantification over real numbers.
+
+Quantification over float (resp. double) types is allowed too, and are
+supposed to range over all real numbers representable as floats (resp
+doubles). In particular, this does not include NaN, +infinity and
+-infinity in the considered range.
+
+\section{Simple contracts}
+
+
+A simple contract is an annotation that can be given to constructors
+and methods (not depending on whether they are given a body or are
+abstract). It is a contract between the caller and the callee, made of
+a precondition and a postcondition:
+\begin{itemize}
+\item Precondition:
+  \begin{itemize}
+  \item The caller is responsible for ensuring it before call
+  \item The callee assumes it at entrance of its body
+  \end{itemize}
+\item Postcondition:
+  \begin{itemize}
+  \item The callee must guarantee it at normal exit
+  \item The caller can then assume it after the call
+  \end{itemize}
+\end{itemize}
+Additionally, a contract can be completed with a \emph{frame clause}
+which describes side-effects, and acts as a postcondition. 
+
+Note that post-conditions of simple contracts only concern normal
+exit: exiting with exceptions can be specified using additional
+\emph{behavior clauses} described in Section~\ref{sec:behaviors}
+
+\begin{figure}[t]
+  \fbox{\begin{minipage}{0.97\textwidth}
+      \input{contracts.bnf}
+    \end{minipage}}
+    \caption{Grammar of simple contracts}
+  \label{fig:gram:contracts}
+\end{figure}
+
+The syntax of simple contracts syntax is given
+Figure~\ref{fig:gram:contracts}. Let's consider a simple contract of the following
+generic form:
+\begin{flushleft}\ttfamily
+/*@ requires $P_1$; \\
+~~@ requires $P_2$; \\
+~~@ assigns $L_1$; \\
+~~@ assigns $L_2$; \\
+~~@ ensures $E_1$; \\
+~~@ ensures $E_2$; \\
+~~@*/
+\end{flushleft}
+the semantics of such a contract can be rephrased as follows:
+\begin{itemize}
+\item The caller must guarantee that the callee it is called in a
+  state (called \emph{prestate})  where the property $P_1 \verb|&&| P_2$ holds.
+\item When the callee returns normally, the property
+  $E_1 \verb|&&| E_2$ must hold in the corresponding \emph{poststate}.
+\item All memory locations of the prestate that do not belong to the
+  set $L_1 \cup L_2$ remain allocated and are left unchanged in the
+  poststate.
+\end{itemize}
+Thus, the contract above is equivalent to the following
+simplified one:
+\begin{flushleft}\ttfamily
+/*@ requires $P_1 \verb|&&| P_2$; \\
+~~@ assigns $L_1,L_2$; \\
+~~@ ensures $E_1 \verb|&&| E_2$; \\
+~~@*/
+\end{flushleft}
+The multiplicity of clauses are proposed mainly to improve
+readibility. Also, if no clause \bkw{requires} is given, it defaults
+to requiring `true', and similarly for \bkw{ensures} clause. Giving no
+\bkw{assigns} clause means that side-effects are not specified: it
+potentially modifies everything.
+
+
+\section{Behavior clauses}
+
+A simple contract can be augmented with \emph{behaviors}.
+
+
+A behavior without throws clause as the form
+\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{slshape}\color{blue}\textbf{behavior}~\textsl{id}~:~\\
+~~\textbf{assumes}~\textsl{A}~;~\\
+~~\textbf{assigns}~~\textsl{L}~;~\\
+~~\textbf{ensures}~~\textsl{E}~;~\end{slshape}
+\end{flushleft}
+The semantics of such a behavior is as follows. The callee guarantees
+that if it returns normally, then in the post-state:
+\begin{itemize}
+\item $\bskw{old}(A) \Rightarrow E$ holds
+\item If $\bskw{old}(A)$ holds, each location of the pre-state not
+  in $L$ remains allocated and unchanged in
+  the post-state
+\end{itemize}
+
+A behavior with a throws clause as the form
+\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{slshape}\color{blue}\textbf{behavior}~\textsl{id}~:~\\
+~~\textbf{assumes}~\textsl{A}~;~\\
+~~\textbf{throws}~\textsl{Exc}~;~\\
+~~\textbf{assigns}~~\textsl{L}~;~\\
+~~\textbf{ensures}~~\textsl{E}~;~\end{slshape}
+\end{flushleft}
+The semantics of such a behavior is as follows. The callee guarantees
+that if it exits with exception Exc, then in the post-state:
+\begin{itemize}
+\item $\bskw{old}(A) \Rightarrow E$ holds
+\item If $\bskw{old}(A)$ holds, each location of the pre-state not
+  in $L$ remains allocated and unchanged in
+  the post-state
+\end{itemize}
+Notice that in $E$, \bskw{result} is bound to the exception object thrown.
+
+
+\section{Code annotations}
+
+\subsection{Assertions}
+
+  \begin{itemize}
+  \item Additional clause:
+    \begin{flushleft}\ttfamily\color{blue}
+      //@ assert \textsl{prop}
+    \end{flushleft}
+  \item Specify that the given property is true at the corresponding
+    program point
+  \item Assertions can be associated to behaviors, as:
+    \begin{flushleft}\ttfamily\color{blue}
+      //@ for $b_1,\ldots,b_n$: assert \textsl{prop}
+    \end{flushleft}
+
+  \end{itemize}
+
+\subsection{Loop annotations}
+
+  \begin{itemize}
+  \item Additional clauses for loops:
+    \begin{flushleft}\ttfamily\color{blue}
+      /*@ loop invariant \textsl{prop} \\
+      ~~@ loop assigns \textsl{tset} \\
+      ~~@*/
+    \end{flushleft}
+  \item Specify that
+    \begin{itemize}
+    \item the given property is an inductive loop invariant for the
+      loop: 
+      \begin{itemize}
+      \item true at loop entrance
+      \item preserved by loop body
+      \end{itemize}
+    \item side-effect of the loop are included in the given tset
+    \end{itemize}
+  \item Can be associated to behaviors too
+  \end{itemize}
+
+\subsection{Statement contracts}
+  
+  \begin{itemize}
+  \item Same as function contracts, associated to statements
+  \item Acts as embedding the corresponding statement in a black box,
+    as if it was a function call 
+  \item May have additional clauses in behaviors, to be used in place
+    of the throws clause:
+    \begin{flushleft}\ttfamily\color{blue}
+      /*@ breaks \textsl{prop} \\
+      ~~@ continues \textsl{prop} \\
+      ~~@ returns \textsl{prop} \\
+      ~~@*/
+    \end{flushleft}
+    to deal with corresponding abrupt termination
+      
+  \item Can be associated to behaviors too
+  \end{itemize}
+
+
+\subsection{Code Invariants}
+
+  \begin{itemize}
+  \item Purpose: support for arbitrary \texttt{goto}s    
+  \item Similar to assertions, but acts as inductive properties like
+    loop invariants.
+  \item Inductive scheme is guided by the control flow graph
+    \cite{Filliatre07}
+  \end{itemize}
+
+
+
+\section{Data invariants}
+
+
+  Are properties on data supposed to hold ``permanently''.
+
+  An invariant may be either
+  \begin{itemize}
+  \item a \emph{global} invariant: on global variables
+  \item or a \emph{type} invariant: apply on any variable of this type.
+  \end{itemize}
+  Independently, it can be either
+  \begin{itemize}
+  \item a \emph{strong} invariant: true at execution step
+  \item a \emph{weak} invariant: true at function boundaries
+  \end{itemize}
+
+
+
+\section{Advanced modeling language}
+
+\subsection{Logic definitions}
+
+  \begin{itemize}
+  \item New logic functions and predicates can be defined
+  input{module.c.pp}
+  \item Arbitrary recursion is allowed
+  input{fib.c.pp} 
+  \end{itemize}
+
+\subsection{Hybrid predicates}
+
+  \begin{itemize}
+  \item Logic functions and predicates may depend on C heap
+  \item In such a case, logic labels are required:
+    input{max\_index.c.pp}
+  \item Indeed, with only one label, the following is allowed too:
+    input{max\_index2.c.pp}
+  \end{itemize}
+
+\subsection{Abstract data types}
+
+  New logic data types (i.e. immutable) can be introduced abstractly
+  by giving
+  \begin{itemize}
+  \item a type name
+  \item the profile of logic functions and predicates operating on it
+  \item a set of axioms 
+  \end{itemize}
+
+
+\subsection{Concrete data types}
+
+  \begin{itemize}
+  \item logic types may be defined using
+    \begin{itemize}
+    \item sum types
+    \item record types
+    \end{itemize}
+  \item For sum types: pattern matching
+  \item For record types: $t.f$ notation
+  \item Also built-in: pairs
+  \end{itemize}
+
+\subsection{Parametric polymorphism}
+
+  \begin{itemize}
+  \item Parametric polymorphism is proposed, with a C++-like syntax
+
+  \end{itemize}
+
+\subsection{Higher-order functions}
+
+  \begin{itemize}
+  \item The term $\bskw{lambda} ~\textsl{type}~ \textsl{x} ~;~
+    \textsl{t}$
+  stands for the function mapping $x$ to $t$
+  \item Special constructs:
+\begin{eqnarray*}
+    \bskw{max}(i,j,f) &=& \max \{ f(i),f(i+1), \ldots, f(j) \} \\
+    \bskw{min}(i,j,f) &=& \min \{ f(i),f(i+1), \ldots, f(j) \} \\
+    \bskw{sum}(i,j,f) &=& f(i)+f(i+1)+\cdots+f(j) \\
+    \bskw{product}(i,j,f) &=& f(i)\times f(i+1) \times \cdots \times f(j) \\
+    \bskw{numof}(i,j,f) &=& \# \{ k \mid i \leq k \leq j ~\land~ f(k) \} \\
+&=& \bskw{sum}(i,j,\bskw{lambda}~\kw{integer}~k ; \\
+&& \hspace*{20mm} f(k) ? 1 : 0)
+  \end{eqnarray*}
+  \end{itemize}
+  
+\section{Termination}
+
+\subsection{Loop variants}
+
+  \begin{itemize}
+  \item A loop can be annotated with a \emph{variant}: an integer
+    expression that decreases at each iteration
+  \item Example:
+    input{bsearchvariant.c.pp}
+  \end{itemize}
+
+
+\subsection{Recursive functions}
+
+  \begin{itemize}
+  \item A recursive function can be also annotated with a variant
+
+    input{fact.c.pp}
+
+  \item Mutual recursion supported too 
+  \end{itemize}
+
+\subsection{Arbitrary termination order}
+
+  \begin{itemize}
+  \item Termination order can different from the default
+  \item Order introduced as:
+    \begin{flushleft}\ttfamily\color{blue}
+      //@ predicate $R(\tau x,\tau y)$
+    \end{flushleft}
+  \item Loop variants:
+    \begin{flushleft}\ttfamily\color{blue}
+      //@ loop variant \textsl{term} \kw{for} $R$
+    \end{flushleft}
+  \item Recursive functions:
+    \begin{flushleft}\ttfamily\color{blue}
+      //@ decreases \textsl{term} \kw{for} $R$
+    \end{flushleft}
+  \item For mutual recursion: the same $R$ is required
+  \end{itemize}
+
+
+\section{Ghost code}
+
+  \begin{itemize}
+  \item Goal: code instrumentation
+  \item Code is augmented with
+    \begin{itemize}
+    \item global ghost declarations of variables and functions
+    \item In regular function code:
+      \begin{itemize}
+      \item ghost parameters
+      \item local ghost variables
+      \item ghost statements (include ghost \kw{else})
+      \end{itemize}
+    \end{itemize}
+  \item Semantics:
+    \begin{center}\color{red}
+      ghost statements must not change the regular program execution
+    \end{center}
+  \end{itemize}
+
+
+\section{Model variables}
 
 
 \chapter{Appendices}
@@ -192,7 +903,8 @@ the authors directly at the following address: \url{mailto:Claude dot
 
 \addcontentsline{toc}{chapter}{\bibname}
 \bibliographystyle{plain}
-\bibliography{./biblio}
+%\bibliography{./biblio}
+\input{biblio-demons}
 \cleardoublepage
 
 \addcontentsline{toc}{chapter}{\indexname}
@@ -200,6 +912,19 @@ the authors directly at the following address: \url{mailto:Claude dot
 \cleardoublepage
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 The next step is the generation of proof obligations, for that purpose

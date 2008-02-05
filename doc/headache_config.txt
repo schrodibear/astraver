@@ -3,6 +3,10 @@
 | ".*\\.mly"      -> frame open:"/*" line:"*" close:"*/"
 # C source 
 | ".*\\.c"      -> frame open:"/*" line:"*" close:"*/"
+# Java source 
+| ".*\\.java"      -> frame open:"/*" line:"*" close:"*/"
+# LaTeX source 
+| ".*\\.tex"      -> frame open:"%" line:"%" close:"%"
 # Misc
 | "configure.in" -> frame open:"#"  line:"#" close:"#"
 | "Makefile.in" -> frame open:"#"  line:"#" close:"#"

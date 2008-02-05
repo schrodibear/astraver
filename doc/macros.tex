@@ -1,3 +1,34 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                        %
+%  The Why platform for program certification                            %
+%  Copyright (C) 2002-2008                                               %
+%    Romain BARDOU                                                       %
+%    Jean-François COUCHOT                                               %
+%    Mehdi DOGGUY                                                        %
+%    Jean-Christophe FILLIÂTRE                                           %
+%    Thierry HUBERT                                                      %
+%    Claude MARCHÉ                                                       %
+%    Yannick MOY                                                         %
+%    Christine PAULIN                                                    %
+%    Yann RÉGIS-GIANAS                                                   %
+%    Nicolas ROUSSET                                                     %
+%    Xavier URBAIN                                                       %
+%                                                                        %
+%  This software is free software; you can redistribute it and/or        %
+%  modify it under the terms of the GNU General Public                   %
+%  License version 2, as published by the Free Software Foundation.      %
+%                                                                        %
+%  This software is distributed in the hope that it will be useful,      %
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of        %
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  %
+%                                                                        %
+%  See the GNU General Public License version 2 for more details         %
+%  (enclosed in the file GPL).                                           %
+%                                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newtheorem{example}{Example}[chapter]
 
 % common Why title page
 
@@ -20,7 +51,7 @@ Version #3\\[3cm]
 \vfill
 \today\\
 INRIA Team-Project \emph{Proval} \url{http://proval.lri.fr} \\
-INRIA Futurs \& LRI, CNRS UMR 8623\\ 
+INRIA Saclay - Île-de-France \& LRI, CNRS UMR 8623\\ 
 4, rue Jacques Monod, 91893 Orsay cedex, France
 \end{center}
 \end{titlepage}}
@@ -102,6 +133,37 @@ INRIA Futurs \& LRI, CNRS UMR 8623\\
 \newcommand{\wprx}[3]{\ensuremath{\mathit{wp}(#1,#2,#3)}}
 
 \newcommand{\barre}[1]{\ensuremath{\overline{#1}}}
+
+
+% BNF grammar
+
+\newif\ifspace
+\newif\ifnewentry
+\newcommand{\addspace}{\ifspace \; \spacefalse \fi}
+\newcommand{\term}[1]{\addspace\hbox{\texttt{#1}} \spacetrue}
+\newcommand{\nonterm}[1]{%
+\addspace\hbox{\textsl{#1}\ifnewentry\index{#1@\textsl{#1}!non-terminal}\fi}\spacetrue}
+\newcommand{\repetstar}{^*\spacetrue}
+\newcommand{\repetplus}{^+\spacetrue}
+\newcommand{\repetone}{^?\spacetrue}
+\newcommand{\lparen}{\addspace(}
+\newcommand{\rparen}{)}
+\newcommand{\orelse}{\addspace\mid\spacetrue}
+\newcommand{\sep}{ \\[2mm] \spacefalse\newentrytrue}
+\newcommand{\newl}{ \\ & & \spacefalse}
+\newcommand{\alt}{ \\ & \mid & \spacefalse}
+\newcommand{\is}{ & ::= & \newentryfalse}
+\newenvironment{syntax}{$$\begin{array}{rrll}\spacefalse}{\end{array}$$}
+\newcommand{\synt}[1]{$\spacefalse#1$}
+\newcommand{\emptystring}{\epsilon}
+\newcommand{\below}{See\; below}
+
+% backslash keywords
+
+\newcommand{\ttkw}[1]{\texttt{\color{blue}#1}}
+\newcommand{\bskw}[1]{\ttkw{\char'134 #1}}
+\newcommand{\bkw}[1]{\ttkw{\textbf{#1}}}
+
 
 %%% Local Variables: 
 %%% mode: latex
