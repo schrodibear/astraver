@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.20 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_options.mli,v 1.21 2008-02-05 20:24:05 nrousset Exp $ *)
 
 (*s environment variables *)
 
@@ -56,6 +56,7 @@ val inv_sem: Jc_env.inv_sem ref
 val separation_sem : Jc_env.separation_sem ref
 val annotation_sem : Jc_env.annotation_sem ref
 val ai_domain : Jc_env.abstract_domain ref
+val trust_ai : bool
 
 (*s The log file *)
 

@@ -1,6 +1,6 @@
 
 # AnnotationPolicy = Invariants
-# AbstractDomain = Pol
+# AbstractDomain = Box
 
 /* example from Leino and Monahan "Automatic verification of textbook programs" */
 

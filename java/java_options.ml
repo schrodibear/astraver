@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.11 2008-02-05 12:10:48 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.12 2008-02-05 20:24:05 nrousset Exp $ i*)
 
 open Format
 
@@ -98,6 +98,11 @@ let werror = ref false
 let why_opt = ref ""
 let ignore_overflow = ref false
 let non_null = ref false
+
+(* Jessie options *)
+let inv_sem = ref Jc_env.InvArguments
+let annotation_sem = ref Jc_env.AnnotNone
+let ai_domain = ref Jc_env.AbsNone
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 

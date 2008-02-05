@@ -28,6 +28,9 @@
 /**************************************************************************/
 
 //@+ ArithOverflow = no
+//@+ InvariantPolicy = Arguments
+//@+ AnnotationPolicy = Invariants
+//@+ AbstractDomain = Box
 
 // Smart Card ID - Example for a Smart Card based Identification and Authentication Application
 // File: SCID.java

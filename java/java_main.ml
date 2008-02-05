@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.48 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: java_main.ml,v 1.49 2008-02-05 20:24:05 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -279,8 +279,10 @@ let main () =
 	*)
 
 	(* production phase 5 : produce Jessie file *)
-	let decls = Jc_output.JCinvariant_policy Jc_env.InvArguments 
-	            :: List.rev decls 
+	let decls = Jc_output.JCinvariant_policy !Java_options.inv_sem 
+	  :: Jc_output.JCannotation_policy !Java_options.annotation_sem
+	  :: Jc_output.JCabstract_domain !Java_options.ai_domain
+	  :: List.rev decls 
 	in
 	let f = List.hd fl in
 	let f = Filename.chop_extension f in

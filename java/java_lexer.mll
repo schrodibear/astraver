@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.18 2008-02-05 12:10:48 marche Exp $
+$Id: java_lexer.mll,v 1.19 2008-02-05 20:24:05 nrousset Exp $
 
 ***************************************************************************)
 
@@ -225,6 +225,35 @@ i*)
 	      | "yes" -> Java_options.ignore_overflow := false
 	      | "no" -> Java_options.ignore_overflow := true
 	      | _ -> lex_error lexbuf "yes or no expected"
+	  end  
+      | "InvariantPolicy" ->
+	  begin
+	    Java_options.inv_sem :=
+	      match v with	  
+		| "None" -> Jc_env.InvNone
+		| "Arguments" -> Jc_env.InvArguments
+		| "Ownership" -> Jc_env.InvOwnership
+		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
+	  end  
+      | "AnnotationPolicy" ->
+	  begin
+	    Java_options.annotation_sem :=
+	      match v with
+		| "None" -> Jc_env.AnnotNone
+		| "Invariants" -> Jc_env.AnnotInvariants
+		| "WeakPre" -> Jc_env.AnnotWeakPre
+		| "StrongPre" -> Jc_env.AnnotStrongPre
+		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
+	  end  
+      | "AbstractDomain" ->
+	  begin
+	    Java_options.ai_domain :=
+	      match v with
+		| "None" -> Jc_env.AbsNone 
+		| "Box" -> Jc_env.AbsBox 
+		| "Oct" -> Jc_env.AbsOct 
+		| "Pol" -> Jc_env.AbsPol 
+		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.105 2008-02-05 14:00:18 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.106 2008-02-05 20:24:05 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1282,8 +1282,10 @@ let reg_assertion_option a =
     | Some a -> reg_assertion a
 
 let loop_annot inv dec =
-  { jc_loop_tag = get_loop_counter ();
+  { 
+    jc_loop_tag = get_loop_counter ();
     jc_loop_invariant = reg_assertion inv;
+    jc_free_loop_invariant = dummy_loc_assertion JCAtrue;
     jc_loop_variant = 
       Option_misc.map 
 	(fun t -> 
@@ -1291,7 +1293,7 @@ let loop_annot inv dec =
 	   { t' with jc_term_label = reg_loc t.java_term_loc }) dec 
   }
 
-
+    
 let rec statement s =
   let s' =
     match s.java_statement_node with

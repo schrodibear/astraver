@@ -1,0 +1,29 @@
+
+# AnnotationPolicy = Invariants
+# AbstractDomain = Box
+
+/* 
+   @OPTIONS: -main main 
+ */
+
+
+type intM = { integer val; }
+
+
+unit g(integer n) {
+     integer j = 1 / (3 - n);
+}
+
+unit f(intM[0..] t, integer offset) {
+    integer i = offset;
+    while (i <= 4) variant 4 - i; {
+        (t + i).val = 0;
+	i++;
+    }
+    g(i);
+}
+
+unit main() {
+   intM[0..] t1 = new intM[5];
+   f(t1, 0);
+}

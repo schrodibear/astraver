@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.115 2008-02-05 14:00:04 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.116 2008-02-05 20:24:05 nrousset Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -371,6 +371,7 @@ type loop_annot =
     {
       jc_loop_tag : int;
       mutable jc_loop_invariant : assertion;
+      mutable jc_free_loop_invariant : assertion;
       jc_loop_variant : term option;
     }
 

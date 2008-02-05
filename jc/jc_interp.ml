@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.229 2008-02-05 14:00:04 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.230 2008-02-05 20:24:05 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1526,23 +1526,37 @@ let rec statement ~infunction ~threats s =
 	  LabelHere
 	  LabelInit
 	  la.jc_loop_invariant
-	in begin 
-	  match la.jc_loop_variant with
-	    | Some t when threats ->
-		let variant, lets = named_term
-		  ~global_assertion:false
-		  LabelHere
-		  LabelInit
-		  t
-		in
-		assert (lets = []);
-		While(Cte(Prim_bool true), inv,
-	              Some (term_coerce t.jc_term_loc integer_type 
-			    t.jc_term_type variant,None), [statement s])
-	    | _ ->
-		While(Cte(Prim_bool true), inv,
-	              None, [statement s])
-	end
+	in 
+	let free_inv = named_assertion 
+	  ~global_assertion:false 
+	  LabelHere 
+	  LabelInit 
+	  la.jc_free_loop_invariant 
+	in
+	let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
+	let body = [statement s] in
+	let body = 
+	  if Jc_options.trust_ai then
+	    BlackBox (Annot_type (LTrue, unit_type, [], [], free_inv, [])) :: body 
+	  else body
+	in
+	  begin 
+	    match la.jc_loop_variant with
+	      | Some t when threats ->
+		  let variant, lets = named_term
+		    ~global_assertion:false
+		    LabelHere
+		    LabelInit
+		    t
+		  in
+		    assert (lets = []);
+		    While(Cte(Prim_bool true), inv,
+			  Some (term_coerce t.jc_term_loc integer_type 
+				  t.jc_term_type variant,None), body)
+	      | _ ->
+		  While(Cte(Prim_bool true), inv,
+			None, body)
+	  end
     | JCSassert a -> 
 	Assert(named_assertion
 		 ~global_assertion:false
@@ -1981,6 +1995,7 @@ let tr_fun f loc spec body acc =
        spec.jc_fun_free_requires)
   in
   let requires = make_and requires_param free_requires in
+  let requires_param = if Jc_options.trust_ai then requires_param else requires in
   let requires =
     List.fold_left 
       (fun acc vi ->
@@ -2010,7 +2025,8 @@ let tr_fun f loc spec body acc =
   (* partition behaviors as follows:
      - behaviors inferred by analysis (postfixed by 'inferred')
      - user defined behaviors *)
-  let (normal_behaviors_inferred, normal_behaviors, excep_behaviors_inferred, excep_behaviors) =
+  let (normal_behaviors_inferred, normal_behaviors, 
+       excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
       (fun (normal_inferred, normal, excep_inferred, excep) (loc, id, b) ->
 	 let post =
@@ -2021,11 +2037,13 @@ let tr_fun f loc spec body acc =
 		   b.jc_behavior_ensures.jc_assertion_label
 		   Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
 		 *)
-		 (named_assertion ~global_assertion:false LabelPost LabelPre b.jc_behavior_ensures)		
-	     | Some(locassigns,a) ->
+		 (named_assertion ~global_assertion:false LabelPost LabelPre 
+		    b.jc_behavior_ensures)		
+	     | Some (locassigns, a) ->
 		 named_jc_assertion loc
 		   (make_and
-		      (named_assertion ~global_assertion:false LabelPost LabelPre b.jc_behavior_ensures)		
+		      (named_assertion ~global_assertion:false LabelPost LabelPre 
+			 b.jc_behavior_ensures)		
 		      (named_jc_assertion
 			 locassigns
 			 (assigns LabelHere f.jc_fun_info_effects (Some a))))
@@ -2038,10 +2056,12 @@ let tr_fun f loc spec body acc =
 	 in
 	   match b.jc_behavior_throws with
 	     | None -> 
-	       if id = "inferred" then 
-		 ((id, b, a) :: normal_inferred, normal, excep_inferred, excep)
-	       else 
-		 (normal_inferred, (id, b, a) :: normal, excep_inferred, excep)
+		 if id = "inferred" then 
+		   ((id, b, a) :: normal_inferred, 
+		    (if Jc_options.trust_ai then normal else (id, b, a) :: normal), 
+		    excep_inferred, excep)
+		 else 
+		   (normal_inferred, (id, b, a) :: normal, excep_inferred, excep)
 	     | Some ei ->
 		 let eb =
 		   try
@@ -2050,7 +2070,9 @@ let tr_fun f loc spec body acc =
 		 in
 		   if id = "inferred" then 
 		     (normal_inferred, normal, 
-		      ExceptionMap.add ei ((id, b, a) :: eb) excep_inferred, excep)
+		      ExceptionMap.add ei ((id, b, a) :: eb) excep_inferred, 
+		      if Jc_options.trust_ai then excep else 
+			ExceptionMap.add ei ((id, b, a) :: eb) excep)
 		   else
 		     (normal_inferred, normal, excep_inferred, 
 		      ExceptionMap.add ei ((id, b, a) :: eb) excep))

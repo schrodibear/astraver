@@ -7,19 +7,13 @@
  */
 
 
-integer h(integer d) {
-     return 1 / d;
-}
+unit h(integer n) { }
 
-integer f(integer d) {
-     return h(d);	
-}
+unit f(integer n) { h(n); }
 
-integer g(integer d) {
-     return f(d);	
-}
+unit g(integer n) { f(n); }
 
 unit main() {
-     integer j = g(1);
-     integer i = f(2);
+    g(1);
+    f(2);
 }

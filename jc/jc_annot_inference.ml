@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.102 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.103 2008-02-05 20:24:05 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -2504,26 +2504,29 @@ let rec record_ai_invariants abs s =
 	record_ai_invariants abs s;
 	List.iter (fun (_,_,s) -> record_ai_invariants abs s) hl;
 	record_ai_invariants abs fs
-    | JCSloop(la,ls) ->
+    | JCSloop (la, ls) ->
 	let loop_invariants = abs.jc_absint_loop_invariants in
-	begin try
-	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
-	  let loopinv = loopinvs.jc_absinv_normal.jc_absval_regular in
-	  (* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON *)
-	  if Abstract1.is_top mgr loopinv = Manager.True then ()
-	  else if Abstract1.is_bottom mgr loopinv = Manager.True then
-	    la.jc_loop_invariant <- raw_asrt JCAfalse
-	  else
-	    let a = mkinvariant mgr loopinv in
-	    if Jc_options.verbose then
-	      printf 
-		"%a@[<v 2>Inferring loop invariant@\n%a@]@."
-		Loc.report_position s.jc_statement_loc
-		Jc_output.assertion a;
-	    let a = reg_annot ~loc:s.jc_statement_loc ~anchor:s.jc_statement_label a in
-	    la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a];
-	    record_ai_invariants abs ls
-	with Not_found -> () end
+	  begin try
+	    let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
+	    let loopinv = loopinvs.jc_absinv_normal.jc_absval_regular in
+	      (* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON *)
+	      if Abstract1.is_top mgr loopinv = Manager.True then ()
+	      else if Abstract1.is_bottom mgr loopinv = Manager.True then
+		la.jc_loop_invariant <- raw_asrt JCAfalse
+	      else
+		let a = mkinvariant mgr loopinv in
+		  if Jc_options.verbose then
+		    printf 
+		      "%a@[<v 2>Inferring loop invariant@\n%a@]@."
+		      Loc.report_position s.jc_statement_loc
+		      Jc_output.assertion a;
+		  let a = 
+		    reg_annot ~loc:s.jc_statement_loc ~anchor:s.jc_statement_label a 
+		  in
+		    if Jc_options.trust_ai then la.jc_free_loop_invariant <- a else
+		      la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a];
+		    record_ai_invariants abs ls
+	  with Not_found -> () end
     | JCSassign_var _ | JCSassign_heap _ | JCSassert _ 
     | JCSreturn_void | JCSreturn _ | JCSthrow _ | JCSpack _ | JCSunpack _  
     | JCScall _ -> ()
@@ -2707,10 +2710,6 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
     (* record the inferred postcondition *)
     if iaio = None then
       let returnabs = keep_extern !(invs.jc_absinv_return).jc_absval_regular in
-      if Abstract1.is_top mgr returnabs = Manager.True 
-	|| Abstract1.is_bottom mgr returnabs = Manager.True then
-	  ()
-      else
 	let returna = mkinvariant abs.jc_absint_manager returnabs in
 	let post = make_and 
 	  [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type 
@@ -3956,15 +3955,15 @@ let ai_interprocedural mgr (fi, loc, fs, sl) =
     jc_interai_function_preconditions = Hashtbl.create 0
   } in
   let time = Unix.gettimeofday () in
-  ai_entrypoint_fix mgr iai (fi, loc, fs, sl);
-  inspected_functions := [];
-  record_ai_inter_preconditions mgr iai fi fs;
-  inspected_functions := [];
-  ai_entrypoint mgr None (fi, loc, fs, sl);
+    ai_entrypoint_fix mgr iai (fi, loc, fs, sl);
+    inspected_functions := [];
+    record_ai_inter_preconditions mgr iai fi fs;
+    inspected_functions := [];
+    ai_entrypoint mgr None (fi, loc, fs, sl);
     let time = Unix.gettimeofday () -. time in
-    if Jc_options.verbose then 
-      printf "Interprocedural analysis: %d iterations, %f seconds@." 
-	!nb_iterations time
+      if Jc_options.verbose then 
+	printf "Interprocedural analysis: %d iterations, %f seconds@." 
+	  !nb_iterations time
     
     
 let main_function = function
@@ -3973,16 +3972,16 @@ let main_function = function
       begin match !Jc_options.ai_domain with
 	| AbsBox ->
 	    let mgr = Box.manager_alloc () in
-	    ai_interprocedural mgr (fi, loc, fs, sl)
+	      ai_interprocedural mgr (fi, loc, fs, sl)
 	| AbsOct -> 
 	    let mgr = Oct.manager_alloc () in
-	    ai_interprocedural mgr (fi, loc, fs, sl)
+	      ai_interprocedural mgr (fi, loc, fs, sl)
 	| AbsPol -> 
 	    let mgr = Polka.manager_alloc_strict () in
-	    ai_interprocedural mgr (fi, loc, fs, sl)
+	      ai_interprocedural mgr (fi, loc, fs, sl)
 	| AbsNone -> assert false
       end
-
+	
 	
 (*
   Local Variables: 

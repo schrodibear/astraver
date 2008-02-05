@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.176 2008-02-05 14:00:04 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.177 2008-02-05 20:24:05 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1567,7 +1567,8 @@ let loop_annot =
     (* TODO: check variant is integer, or other order ? *) 
     { 
       jc_loop_tag = get();
-      jc_loop_invariant = ti ;
+      jc_loop_invariant = ti;
+      jc_free_loop_invariant = true_assertion;
       jc_loop_variant = tv;
     }
 
