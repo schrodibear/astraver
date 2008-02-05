@@ -1,5 +1,5 @@
 
-JESSIE=../../../bin/jessie.byte
+JESSIE=../../../bin/jessie.opt
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 

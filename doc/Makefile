@@ -56,7 +56,7 @@ caduceus.html: caduceus.tex
 	$(HEVEA) caduceus.tex
 	$(HEVEA) caduceus.tex
 
-krakatoa.pdf: $(KFILES)
+krakatoa.pdf: $(KFILES) 
 	pdflatex krakatoa.tex
 
 krakatoa.html: krakatoa.tex
@@ -75,13 +75,13 @@ main.pdf:
 
 
 %.pp: %.tex pp
-	./pp -color $< > $@
+	./pp $< > $@
 
 %.pp: %.c pp
-	./pp -color -c $< > $@
+	./pp -c $< > $@
 
 %.pp: %.java pp
-	./pp -color -java $< > $@
+	./pp -java $< > $@
 
 %.dvi: %.tex
 	latex $< && latex $<

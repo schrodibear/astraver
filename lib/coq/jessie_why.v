@@ -6,6 +6,7 @@ Ltac caseeq name :=
   generalize (refl_equal name); pattern name at -1 in |- *; case name.
 
 Require Export Why.
+Require Export WhyReal.
 
 Set Implicit Arguments.
 

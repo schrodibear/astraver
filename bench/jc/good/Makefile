@@ -97,7 +97,9 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	mkdir -p why
 	rm -f why/$*.why
 	make why/$*.why
-	make -f $*.makefile coq
+	make -f $*.makefile goals
+	make -f $*.makefile coq/$*_ctx_why.vo
+	for f in why/$*_po*.why; do make -f $*.makefile coq/`basename $$f .why`_why.v ; done
 
 %.ergo: %.jc
 	mkdir -p why

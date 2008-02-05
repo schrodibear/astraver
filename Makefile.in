@@ -52,6 +52,7 @@ endif
 
 # where to install the binaries
 prefix=@prefix@
+datarootdir=@datarootdir@
 exec_prefix=@exec_prefix@
 BINDIR=@bindir@
 LIBDIR=@libdir@
