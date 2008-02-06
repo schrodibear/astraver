@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.92 2008-02-05 14:00:04 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.93 2008-02-06 11:44:05 bardou Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -261,19 +261,20 @@ let same_feffects fef1 fef2 =
 (******************************************************************************)
 
 (* TODO: check the use of "label" and "r" *)
-let rec pattern ef label r p =
+let rec pattern ef (*label r*) p =
+  let r = dummy_region in
   match p.jc_pattern_node with
     | JCPstruct(st, fpl) ->
 	let ef = add_tag_effect ef (JCtag st) in
 	List.fold_left
 	  (fun ef (fi, pat) ->
-	     let ef = add_memory_effect label ef (fi, r) in
-	     pattern ef label r pat)
+	     let ef = add_memory_effect (*label*)LabelHere ef (fi, r) in
+	     pattern ef (*label r*) pat)
 	  ef fpl
     | JCPor(p1, p2) ->
-	pattern (pattern ef label r p1) label r p2
+	pattern (pattern ef (*label r*) p1) (*label r*) p2
     | JCPas(p, _) ->
-	pattern ef label r p
+	pattern ef (*label r*) p
     | JCPvar _
     | JCPany
     | JCPconst _ ->
@@ -316,6 +317,7 @@ let rec term ef t =
     | JCTsub_pointer (_, _) -> assert false (* TODO *)
     | JCTconst _ -> ef
     | JCTmatch (t, ptl) ->
+	let ef = List.fold_left pattern ef (List.map fst ptl) in
 	term (List.fold_left term ef (List.map snd ptl)) t
 
 let tag ef t h =
@@ -563,7 +565,9 @@ let rec statement ef s =
 	{ ef with jc_reads = assertion ef.jc_reads a; }
     | JCSblock l -> List.fold_left statement ef l
     | JCSmatch(e, psl) ->
-	expr (List.fold_left statement ef (List.map snd psl)) e
+	let pef = List.fold_left pattern empty_effects (List.map fst psl) in
+	let ef = expr (List.fold_left statement ef (List.map snd psl)) e in
+	{ ef with jc_reads = ef_union ef.jc_reads pef }
 
 (* Conservatively consider location is both read and written. *)
 let rec location ef l =

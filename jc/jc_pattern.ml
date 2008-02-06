@@ -134,8 +134,7 @@ let pattern_list_expr translate_body arg r ty pbl =
        let notcond, cond, vars = PatternAssertion.pattern arg ty pat in
        let body = translate_body body in
        let reads =
-	 let region = r in
-	 let ef = Jc_effect.pattern empty_effects LabelHere region pat in
+	 let ef = Jc_effect.pattern empty_effects (*LabelHere region*) pat in
 	 all_effects ef
        in
        let writes = List.map fst vars in
