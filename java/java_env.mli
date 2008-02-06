@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.28 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: java_env.mli,v 1.29 2008-02-06 16:53:56 marche Exp $ *)
 
 (*s types and environments *)
 
@@ -39,16 +39,10 @@ type base_type =
     | Tinteger | Treal | Tunit
 
 type logic_label = 
-(*
-  | LabelNone
-*)
   | LabelName of string
   | LabelHere
-  | LabelPost
+  | LabelOld
   | LabelPre
-(*
-  | LabelInit
-*)
 
 type java_type =
     | JTYbase of base_type

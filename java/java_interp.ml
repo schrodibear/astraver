@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.108 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.109 2008-02-06 16:53:56 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -318,7 +318,7 @@ let get_logic_fun fi =
 let tr_logic_label = function
   | LabelPre -> Jc_env.LabelPre
   | LabelHere -> Jc_env.LabelHere
-  | LabelPost -> Jc_env.LabelPost
+  | LabelOld -> Jc_env.LabelOld
   | LabelName s -> Jc_env.LabelName s
 
 let create_logic_fun loc fi =

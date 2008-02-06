@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.95 2008-02-06 08:40:59 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.96 2008-02-06 16:53:56 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1471,9 +1471,9 @@ and term env current_label e =
 	  typing_error e.java_pexpr_loc
 	    "quantified formulas not allowed in term position"
       | JPEold e1 -> 
-	  (* TODO : check label Pre exists *)
+	  (* TODO : check label Old exists *)
 	  let te1 = termt e1 in 
-	  te1.java_term_type,JTat(te1,LabelPre)
+	  te1.java_term_type,JTat(te1,LabelOld)
       | JPEat(e1,lab) -> 
 	  let te1 = termt e1 in 
 	  (* TODO : check label exists *)

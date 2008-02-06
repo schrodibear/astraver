@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.34 2008-02-05 12:10:48 marche Exp $
+$Id: java_parser.mly,v 1.35 2008-02-06 16:53:56 marche Exp $
 
 */
 
@@ -86,7 +86,7 @@ $Id: java_parser.mly,v 1.34 2008-02-05 12:10:48 marche Exp $
   let label (loc,s) = match s with
     | "Pre" -> LabelPre
     | "Here" -> LabelHere
-    | "Post" -> LabelPost
+    | "Old" -> LabelOld
     | _ -> LabelName s
 
 %}
