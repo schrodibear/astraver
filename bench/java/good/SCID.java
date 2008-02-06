@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-//@+ ArithOverflow = no
+//@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
 //@+ AnnotationPolicy = Invariants
 //@+ AbstractDomain = Box

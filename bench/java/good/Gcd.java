@@ -27,6 +27,8 @@
 /*                                                                        */
 /**************************************************************************/
 
+//@+ CheckArithOverflow = no
+
 /* complements for non-linear integer arithmetic */
 
 //@ lemma zero_right: \forall integer x; x*0 == 0;  
@@ -42,6 +44,10 @@
 
 /*@ lemma distr_left: 
   @   \forall integer x,y,z; (x+y)*z == (x*z)+(y*z);
+  @*/
+
+/*@ lemma mul_assoc: 
+  @   \forall integer x,y,z; x*(y*z) == (x*y)*z; 
   @*/
 
 /*@ predicate divides(integer x, integer y) {
@@ -74,7 +80,7 @@ class Gcd {
         //@ ghost int a = 1, b = 0, c = 0, d = 1;
         /*@ loop_invariant 
           @    x >= 0 && y >= 0 &&  
-          @    a*\old(x)+b*\at(y,Pre) == x && 
+          @    a*\at(x,Pre)+b*\at(y,Pre) == x && 
           @    c*\at(x,Pre)+d*\at(y,Pre) == y ;
           @ decreases y;
           @*/

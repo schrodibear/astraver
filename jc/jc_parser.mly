@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.86 2008-02-05 12:10:48 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.87 2008-02-06 16:50:44 marche Exp $ */
 
 %{
 
@@ -63,6 +63,7 @@
 
   let label s = match s with
     | "Pre" -> LabelPre
+    | "Old" -> LabelOld
     | "Here" -> LabelHere
     | _ -> LabelName s
 

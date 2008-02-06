@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.232 2008-02-06 10:14:41 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.233 2008-02-06 16:50:44 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -52,6 +52,7 @@ type kind =
   | DownCast
   | IndexBounds
   | PointerDeref
+  | AllocSize
   | UserCall
   | DivByZero
   | Pack
@@ -124,6 +125,7 @@ let print_kind fmt k =
        | Pack -> "Pack"
        | Unpack -> "Unpack"
        | DivByZero -> "DivByZero"
+       | AllocSize -> "AllocSize"
        | UserCall -> "UserCall"
        | PointerDeref -> "PointerDeref"
        | IndexBounds -> "IndexBounds"
@@ -374,15 +376,9 @@ let lvar ?(assigned=true) ?(label_in_name=false) label v =
   else
     if assigned then
       match label with 
-(*
-	| LabelNone -> (* assert false *) LVar(v) 
-*)
 	| LabelHere -> LVar v
-(*
-	| LabelInit -> LVarAtLabel(v,"init")
-*)
 	| LabelOld -> LVarAtLabel(v,"")
-	| LabelPre -> LVarAtLabel(v,"")
+	| LabelPre -> LVarAtLabel(v,"init")
 	| LabelPost -> LVar v
 	| LabelName l -> LVarAtLabel(v,l)
     else LVar v
@@ -390,10 +386,6 @@ let lvar ?(assigned=true) ?(label_in_name=false) label v =
 let var v = Var v
 
 let lvar_info label v = 
-(* ?? utile ? -> reporter ailleurs !
-  if v.jc_var_info_name = "\\result" then 
-    v.jc_var_info_final_name <- "result";
-*)
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
 (* Return (t, lets) where:
@@ -466,12 +458,12 @@ let rec term ~global_assertion label oldlabel t =
 	in
 	let t', lets = ft t in
 	LApp(f,[LVar alloc; t']), lets
-    | JCTinstanceof(t,ty) ->
+    | JCTinstanceof(t,label,ty) ->
 	let t', lets = ft t in
 	let tag = tag_table_name (JCtag ty) in
 	LApp("instanceof_bool",
 	     [lvar label tag; t';LVar (tag_name ty)]), lets
-    | JCTcast(t,ty) ->
+    | JCTcast(t,label,ty) ->
 	let t', lets = ft t in
 	let tag = tag_table_name (JCtag ty) in
 	LApp("downcast",
@@ -1078,11 +1070,13 @@ and expr ~infunction ~threats e : expr =
     | JCEalloc (siz, st) ->
 	let alloc = alloc_region_table_name (JCtag st, e.jc_expr_region) in
 	let tag = tag_table_name (JCtag st) in
-(*	let fields = embedded_struct_fields st in
+(*	
+	let fields = embedded_struct_fields st in
 	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
 	let roots = embedded_struct_roots st in
 	let roots = List.map find_tag_or_variant roots in
-	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in*)
+	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in
+*)
 	let fields = all_memories ~select:fully_allocated (JCtag st) in
 	let fields = List.map (fun fi -> (fi, e.jc_expr_region)) fields in
 	let roots = all_types ~select:fully_allocated (JCtag st) in
@@ -1106,7 +1100,9 @@ and expr ~infunction ~threats e : expr =
 			@ (List.map (var ** alloc_region_table_name) roots)
 			@ (List.map (var ** field_region_memory_name) fields))
 		  | _ ->
-		      make_app (alloc_param_name st)
+		      make_guarded_app 
+			~name:lab AllocSize loc
+			(alloc_param_name st)
 			([coerce ~no_int_overflow:(not threats) 
 			  siz.jc_expr_label siz.jc_expr_loc integer_type 
 			  siz.jc_expr_type (expr siz); Var alloc]
@@ -1697,7 +1693,7 @@ let tr_struct st acc =
   let alloc_type = 
     Annot_type(
       (* [n >= 0] *)
-      LPred("gt_int",[LVar "n";LConst(Prim_int "0")]),
+      LPred("ge_int",[LVar "n";LConst(Prim_int "0")]),
       (* [st_root pointer] *)
       Base_type ptr_type,
       (* [reads all_fields; writes alloc,tagtab] *)

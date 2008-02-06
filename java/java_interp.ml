@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.107 2008-02-06 08:40:59 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.108 2008-02-06 16:50:44 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -540,13 +540,13 @@ let rec term t =
       | JTarray_range _ -> assert false
       | JTold t -> JCTold(term t)
       | JTat(t,lab) -> JCTat(term t,tr_logic_label lab)
-      | JTcast(ty,t) ->
+      | JTcast(ty,(*lab,*)t) ->
 	  begin
 	    match ty with
 	      | JTYbase _ -> (term t).jc_term_node
 	      | JTYclass(_,ci) ->
 		  let st = get_class ci in
-		  JCTcast(term t,st)
+		  JCTcast(term t,Jc_env.LabelHere (*tr_logic_label lab*),st)
 	      | _ -> assert false (* TODO *)
 	  end
 

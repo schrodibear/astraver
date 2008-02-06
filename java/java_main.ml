@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.49 2008-02-05 20:24:05 nrousset Exp $ *)
+(* $Id: java_main.ml,v 1.50 2008-02-06 16:50:44 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -279,7 +279,9 @@ let main () =
 	*)
 
 	(* production phase 5 : produce Jessie file *)
-	let decls = Jc_output.JCinvariant_policy !Java_options.inv_sem 
+	let decls = 
+	     Jc_output.JCinvariant_policy !Java_options.inv_sem 
+	  :: Jc_output.JCseparation_policy Jc_env.SepNone (* Regions : bug *)
 	  :: Jc_output.JCannotation_policy !Java_options.annotation_sem
 	  :: Jc_output.JCabstract_domain !Java_options.ai_domain
 	  :: List.rev decls 

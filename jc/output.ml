@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.25 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: output.ml,v 1.26 2008-02-06 16:50:44 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -808,6 +808,7 @@ type kind =
   | PointerDeref
   | UserCall
   | DivByZero
+  | AllocSize
   | Pack
   | Unpack
 
@@ -833,6 +834,7 @@ let print_kind fmt k =
        | Pack -> "Pack"
        | Unpack -> "Unpack"
        | DivByZero -> "DivByZero"
+       | AllocSize -> "AllocSize"
        | UserCall -> "UserCall"
        | PointerDeref -> "PointerDeref"
        | IndexBounds -> "IndexBounds"

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.94 2008-02-06 10:14:41 bardou Exp $ *)
+(* $Id: jc_output.ml,v 1.95 2008-02-06 16:50:44 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -166,9 +166,9 @@ let rec term fmt t =
 	fprintf fmt "@[(%s %a)@]" (unary_op op) term t1
     | JCTif (t1,t2,t3) -> 
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
-    | JCTcast (t, si) ->
+    | JCTcast (t, _, si) ->
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
-    | JCTinstanceof (t, si) ->
+    | JCTinstanceof (t, _, si) ->
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
     | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t

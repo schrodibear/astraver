@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-//@+ ArithOverflow = yes
+//@+ CheckArithOverflow = yes
 
 /*@ lemma mean_1 : 
       \forall int x, y; x <= y ==> x <= x+(y-x)/2 <= y; */
@@ -97,6 +97,6 @@ class BinarySearch {
     
 /*
 Local Variables: 
-compile-command: "make BinarySearch.io"
+compile-command: "make BinarySearch"
 End: 
 */

@@ -194,7 +194,7 @@ let rec iter_term f t =
       iter_term f t1; iter_term f t2
   | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_) 
   | JCToffset(_,t1,_)
-  | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
+  | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTrange(Some t1,None)
   | JCTrange(None,Some t1) ->
       iter_term f t1
   | JCTapp app ->
@@ -214,7 +214,7 @@ let fold_sub_term it f acc t =
 	let acc = it f acc t1 in
 	it f acc t2
     | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCToffset(_,t1,_)
-    | JCTinstanceof(t1,_) | JCTcast(t1,_) | JCTrange(Some t1,None)
+    | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTrange(Some t1,None)
     | JCTrange(None,Some t1) | JCTat(t1,_) ->
 	it f acc t1
     | JCTapp app ->
@@ -258,10 +258,10 @@ let rec map_term f t =
 	JCTat(map_term f t,lab)
     | JCToffset(off,t,st) ->
 	JCToffset(off,map_term f t,st)
-    | JCTinstanceof(t,st) ->
-	JCTinstanceof(map_term f t,st)
-    | JCTcast(t,st) ->
-	JCTcast(map_term f t,st)
+    | JCTinstanceof(t,lab,st) ->
+	JCTinstanceof(map_term f t,lab,st)
+    | JCTcast(t,lab,st) ->
+	JCTcast(map_term f t,lab,st)
     | JCTif(t1,t2,t3) ->
 	JCTif(map_term f t1,map_term f t2,map_term f t3)
     | JCTrange(Some t1,Some t2) ->

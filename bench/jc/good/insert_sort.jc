@@ -39,7 +39,7 @@ unit swap(realP[0..] t, integer i, integer j)
   requires 0 <= j && j <= \offset_max(t);
   behavior default:
     ensures 
-	permut{Pre,Here}(t,t,\offset_max(t)+1);
+	permut{Old,Here}(t,t,\offset_max(t)+1);
 {
     L:
      real tmp = (t+i).realM;

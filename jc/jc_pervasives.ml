@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.87 2008-02-06 08:41:00 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.88 2008-02-06 16:50:44 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -344,8 +344,8 @@ let rec term_of_expr e =
     | JCEshift (e1, e2) -> JCTshift (term_of_expr e1, term_of_expr e2)
     | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term_of_expr e1, term_of_expr e2)
     | JCEderef (e, fi) -> JCTderef (term_of_expr e, LabelHere, fi)
-    | JCEinstanceof (e, si) -> JCTinstanceof (term_of_expr e, si)
-    | JCEcast (e, si) -> JCTcast (term_of_expr e, si)
+    | JCEinstanceof (e, si) -> JCTinstanceof (term_of_expr e, LabelHere, si)
+    | JCEcast (e, si) -> JCTcast (term_of_expr e, LabelHere, si)
     | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
     | JCEoffset (ok, e, si) -> JCToffset (ok, term_of_expr e, si)
 (*    | JCEmatch (e, pel) ->
@@ -446,12 +446,17 @@ let rec raw_term_compare t1 t2 =
 	in
 	if compst = 0 then raw_term_compare t11 t21 else compst
       else compok
-  | JCTinstanceof(t11,st1),JCTinstanceof(t21,st2) 
-  | JCTcast(t11,st1),JCTcast(t21,st2) ->
+  | JCTinstanceof(t11,lab1,st1),JCTinstanceof(t21,lab2,st2) 
+  | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2) ->
       let compst = 
 	Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
       in
-      if compst = 0 then raw_term_compare t11 t21 else compst
+      if compst <> 0 then compst else
+	let compst = 
+	  Pervasives.compare lab1 lab2
+	in
+	if compst <> 0 then compst else
+	  raw_term_compare t11 t21 
   | JCTrange(t11opt,t12opt),JCTrange(t21opt,t22opt) ->
       let comp1 = option_compare raw_term_compare t11opt t21opt in
       if comp1 = 0 then 
@@ -586,7 +591,7 @@ let rec is_numeric_term t =
     | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
     | JCToffset _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
-    | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _) -> is_numeric_term t
+    | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ | JCTmatch _ -> false (* TODO ? *)
 

@@ -167,7 +167,7 @@ let rec check_rep ?(must_deref=false) this loc t =
     | JCTderef (t, lab, fi) ->
 	field fi this loc;
 	check_rep ~must_deref:false this loc t
-    | JCTcast (t, _)
+    | JCTcast (t, _, _) -> assert false (* TODO *)
     | JCTshift (t, _) ->
 	(* t must not be this, but might be a field of this if it is a table (? TODO) *)
 	check_rep ~must_deref:true this loc t

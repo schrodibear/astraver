@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.18 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: output.mli,v 1.19 2008-02-06 16:50:44 marche Exp $ i*)
 
 type constant =
   | Prim_void
@@ -196,6 +196,7 @@ type kind =
   | PointerDeref
   | UserCall
   | DivByZero
+  | AllocSize
   | Pack
   | Unpack
 

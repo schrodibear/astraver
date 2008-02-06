@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.177 2008-02-05 20:24:05 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.178 2008-02-06 16:50:44 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -49,11 +49,6 @@ let logic_type_table = Hashtbl.create 97
 let exceptions_table = Hashtbl.create 97
 
 let enum_types_table = Hashtbl.create 97
-
-(*
-let enum_conversion_functions_table = Hashtbl.create 97
-let enum_conversion_logic_functions_table = Hashtbl.create 97
-*)
 
 let structs_table = Hashtbl.create 97
 let variants_table = Hashtbl.create 97
@@ -598,9 +593,15 @@ let rec term label_env logic_label env e =
 		  typing_error e.jc_pexpr_loc "unbound identifier %s" id
 	  end
       | JCPEinstanceof(e1,t) -> 
-	  let te1 = ft e1 in
-	  let st = find_struct_info e.jc_pexpr_loc t in
-	  boolean_type,dummy_region, JCTinstanceof(te1,st)
+	  begin
+	    match logic_label with
+	      | None ->
+		  typing_error e.jc_pexpr_loc "No memory state for this instanceof (\\at missing ?)"
+	      | Some l ->
+		  let te1 = ft e1 in
+		  let st = find_struct_info e.jc_pexpr_loc t in
+		  boolean_type,dummy_region, JCTinstanceof(te1,l,st)
+	  end
       | JCPEcast(e1, t) -> 
 	  let te1 = ft e1 in
 	  begin
@@ -611,16 +612,20 @@ let rec term label_env logic_label env e =
 	      else
 		typing_error e.jc_pexpr_loc "numeric type expected"
 	    with Not_found ->
-	      let st = find_struct_info e.jc_pexpr_loc t in
-	      match te1.jc_term_type with
-		| JCTpointer(st1,a,b) ->
-		    if substruct st st1 then
-		      (JCTpointer(JCtag st,a,b),
-		       te1.jc_term_region, JCTcast(te1,st))
-		    else
-		      typing_error e.jc_pexpr_loc "invalid cast"
-		| _ ->
-		    typing_error e.jc_pexpr_loc "only structures can be cast"
+	      match logic_label with
+		| None ->
+		    typing_error e.jc_pexpr_loc "No memory state for this cast (\\at missing ?)"
+		| Some l ->
+		    let st = find_struct_info e.jc_pexpr_loc t in
+		    match te1.jc_term_type with
+		      | JCTpointer(st1,a,b) ->
+			  if substruct st st1 then
+			    (JCTpointer(JCtag st,a,b),
+			     te1.jc_term_region, JCTcast(te1,l,st))
+			  else
+			    typing_error e.jc_pexpr_loc "invalid cast"
+		      | _ ->
+			  typing_error e.jc_pexpr_loc "only structures can be cast"
 	  end
       | JCPEbinary (e1, op, e2) -> 
 	  let e1 = ft e1 and e2 = ft e2 in
@@ -707,8 +712,8 @@ let rec term label_env logic_label env e =
       | JCPEconst c -> 
 	  let t,tr,c = const c in t,tr,JCTconst c
       | JCPEold e -> 
-	  if List.mem LabelPre label_env then
-	    let te = term label_env (Some LabelPre) env e in 
+	  if List.mem LabelOld label_env then
+	    let te = term label_env (Some LabelOld) env e in 
 	    te.jc_term_type,te.jc_term_region,JCTold(te)
 	  else
 	    typing_error e.jc_pexpr_loc "\\old not defined in this context"
@@ -1078,8 +1083,8 @@ dereferenciation (\\at missing ?)"
 	  let ty = type_type ty in
 	  (make_quantifier q e.jc_pexpr_loc ty idl label_env logic_label env e1).jc_assertion_node
       | JCPEold e -> 
-	  if List.mem LabelPre label_env then
-	    JCAold(assertion label_env (Some LabelPre) env e)
+	  if List.mem LabelOld label_env then
+	    JCAold(assertion label_env (Some LabelOld) env e)
 	  else
 	    typing_error e.jc_pexpr_loc "\\old not defined in this context"
       | JCPEat(e,lab) -> 
@@ -1559,6 +1564,7 @@ let loop_annot =
   let globtag = ref 0 in
   let get() = let tag = !globtag in incr globtag; tag in
   fun label_env env i v ->
+    let label_env = LabelHere::LabelPre::label_env in
     let ti = assertion label_env (Some LabelHere) env i
     and tv = match v with 
       | None -> None 
@@ -2282,7 +2288,7 @@ let clause env vi_result c acc =
 	let assigns = 
 	  Option_misc.map 
 	    (fun (loc,l) -> 
-	      (loc,List.map (fun a -> let _,_,tl = location [LabelPre] (Some LabelHere) env a in tl) l)) 
+	      (loc,List.map (fun a -> let _,_,tl = location [LabelOld] (Some LabelHere) env a in tl) l)) 
 	    assigns 
 	in
 	let b = {
@@ -2292,7 +2298,7 @@ let clause env vi_result c acc =
 	  jc_behavior_requires = requires;
 *)
 	  jc_behavior_assigns = assigns;
-	  jc_behavior_ensures = assertion [LabelPre;LabelHere] (Some LabelHere) env_result ensures }
+	  jc_behavior_ensures = assertion [LabelOld;LabelHere] (Some LabelHere) env_result ensures }
 	in
 (*
 	eprintf "lab,loc for ensures: \"%s\", %a@."

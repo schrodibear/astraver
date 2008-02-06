@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-//@+ ArithOverflow = yes
+//@+ CheckArithOverflow = yes
 
 class Termination {
 

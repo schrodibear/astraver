@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.19 2008-02-05 20:24:05 nrousset Exp $
+$Id: java_lexer.mll,v 1.20 2008-02-06 16:50:44 marche Exp $
 
 ***************************************************************************)
 
@@ -219,7 +219,7 @@ i*)
 
   let pragma lexbuf id v =
     match id with
-      | "ArithOverflow" ->
+      | "CheckArithOverflow" ->
 	  begin
 	    match String.lowercase v with	  
 	      | "yes" -> Java_options.ignore_overflow := false

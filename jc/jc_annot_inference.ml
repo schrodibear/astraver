@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.103 2008-02-05 20:24:05 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.104 2008-02-06 16:50:44 marche Exp $ *)
 
 open Pp
 open Format
@@ -318,9 +318,9 @@ let rec term_name =
 	  "offset_max_" ^ (term_name t)
       | JCToffset(Offset_min,t,st) ->
 	  "offset_min_" ^ (term_name t)
-      | JCTinstanceof(t,st) ->
+      | JCTinstanceof(t,_,st) ->
 	  (term_name t) ^ "_instanceof_" ^ st.jc_struct_info_name
-      | JCTcast(t,st) ->
+      | JCTcast(t,_,st) ->
 	  (term_name t) ^ "_cast_" ^ st.jc_struct_info_name
       | JCTif(t1,t2,t3) ->
 	  "if_" ^ (term_name t1) ^ "_then_" ^ (term_name t2) 
@@ -381,7 +381,7 @@ let rec destruct_pointer t =
 	      let offt = full_term_no_loc tnode integer_type dummy_region in
 	      topt,Some offt
 	end
-    | JCTcast(t,_) -> 
+    | JCTcast(t,_,_) -> 
         (* Pointer arithmetic in Jessie is not related to the size of 
 	 * the underlying type, like in C. This makes it possible to commute
 	 * cast and arithmetic.
@@ -558,8 +558,8 @@ let term_of_expr e =
       | JCEshift (e1, e2) -> JCTshift (term e1, term e2)
       | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term e1, term e2)
       | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
-      | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, st)
-      | JCEcast (e1, st) -> JCTcast (term e1, st)
+      | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
+      | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
       | JCErange_cast(_,e1) -> 
 	  (* range does not modify term value *)
 	  (term e1).jc_term_node 
@@ -747,8 +747,8 @@ let rec switch_vis_in_term srcvi targetvi t =
     | JCTold t -> JCTold (term t)
     | JCTat (t, lab) -> JCTat (term t, lab)
     | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
-    | JCTinstanceof (t, si) -> JCTinstanceof (term t, si)
-    | JCTcast (t, si) -> JCTcast (term t, si)
+    | JCTinstanceof (t, lab, si) -> JCTinstanceof (term t, lab, si)
+    | JCTcast (t, lab, si) -> JCTcast (term t, lab, si)
     | JCTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
     | JCTrange (to1, to2) -> JCTrange (Option_misc.map term to1, Option_misc.map term to2)
     | JCTmatch _ -> assert false (* TODO *)
