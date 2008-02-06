@@ -140,11 +140,16 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 		if label_in_name then label_var label name
 		else
 		  match label with (* hack ?? *)
-		    | LabelNone -> assert false
+	(*
+	    | LabelNone -> assert false
+	*)
 		    | LabelHere -> name
 		    | LabelPost -> name
 		    | LabelPre -> name ^ "@"
+		    | LabelOld -> name ^ "@"
+(*
 		    | LabelInit -> name ^ "@init"
+*)
 		    | LabelName l -> name ^ "@" ^ l
 	      in
 	      (name, field_memory_type fi)::acc)

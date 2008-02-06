@@ -69,7 +69,7 @@ let rec assertion acc p =
   | JAold p 
 *)
   | JAquantifier (_,_,p) -> assertion acc p
-  | JAbool_expr t | JAinstanceof (t, _) -> term acc t
+  | JAbool_expr t | JAinstanceof (t, _, _) -> term acc t
 
 (*
 let spec s = 

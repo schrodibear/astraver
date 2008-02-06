@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.33 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.34 2008-02-06 08:40:59 marche Exp $ *)
 
 open Java_env
 
@@ -72,7 +72,7 @@ type assertion_node =
   | JAbin of term * base_type * bin_op * term   
   | JAbin_obj of term * bin_op * term   
   | JAapp of java_logic_info * term list
-  | JAinstanceof of term * java_type
+  | JAinstanceof of term * logic_label * java_type
 
 and assertion =
     { java_assertion_node : assertion_node;

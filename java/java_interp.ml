@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.106 2008-02-05 20:24:05 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.107 2008-02-06 08:40:59 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -639,11 +639,11 @@ let rec assertion ?(reg=0) a =
           let reg = if reg > 0 then 2 else 0 in
 	  JCAand [assertion ~reg a1 ; assertion ~reg a2]
       | JAbool_expr t -> JCAbool_term(term t)
-      | JAinstanceof (t, ty) ->
+      | JAinstanceof (t, lab, ty) ->
 	  let ty = tr_type Loc.dummy_position ty in
 	    match ty with
 	      | JCTpointer (JCtag si, _, _) ->
-		  JCAinstanceof (term t, LabelNone, si)
+		  JCAinstanceof (term t, tr_logic_label lab, si)
 	      | _ -> assert false
 
   in { jc_assertion_loc = a.java_assertion_loc ; 

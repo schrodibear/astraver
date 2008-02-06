@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.92 2008-02-05 14:00:04 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.93 2008-02-06 08:41:00 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -121,12 +121,17 @@ let offset_kind fmt k =
 
 let label fmt l =
   match l with
+(*
     | LabelNone -> fprintf fmt "None"
+*)
     | LabelName s -> fprintf fmt "%s" s
     | LabelHere -> fprintf fmt "Here" 
     | LabelPre -> fprintf fmt "Pre" 
+    | LabelOld -> fprintf fmt "Old" 
     | LabelPost -> fprintf fmt "Post" 
+(*
     | LabelInit -> fprintf fmt "Init" 
+*)
 
 let rec pattern fmt p =
   match p.jc_pattern_node with

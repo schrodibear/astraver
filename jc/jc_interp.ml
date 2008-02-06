@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.230 2008-02-05 20:24:05 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.231 2008-02-06 08:40:59 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -440,7 +440,7 @@ let pattern_list_expr translate_body arg r ty pbl =
        let body = translate_body body in
        let reads =
 	 let region = r in
-	 let ef = Jc_effect.pattern empty_effects LabelNone region pat in
+	 let ef = Jc_effect.pattern empty_effects LabelHere region pat in
 	 all_effects ef
        in
        let writes = List.map fst vars in
@@ -468,9 +468,14 @@ let lvar ?(assigned=true) ?(label_in_name=false) label v =
   else
     if assigned then
       match label with 
+(*
 	| LabelNone -> (* assert false *) LVar(v) 
+*)
 	| LabelHere -> LVar v
+(*
 	| LabelInit -> LVarAtLabel(v,"init")
+*)
+	| LabelOld -> LVarAtLabel(v,"")
 	| LabelPre -> LVarAtLabel(v,"")
 	| LabelPost -> LVar v
 	| LabelName l -> LVarAtLabel(v,l)
@@ -726,7 +731,7 @@ let tr_logic_const vi init acc =
   match init with
     | None -> decl
     | Some t ->
-	let t', lets = term ~global_assertion:true LabelNone LabelHere t in
+	let t', lets = term ~global_assertion:true LabelHere LabelHere t in
 	let pred =
 	  LPred(
 	    "eq",
@@ -785,12 +790,12 @@ let tr_logic_fun li ta acc =
     match li.jc_logic_info_result_type, ta with
 	(* Predicate *)
       | None, JCAssertion a -> 
-	  let a = assertion ~global_assertion:true LabelNone LabelNone a in
+	  let a = assertion ~global_assertion:true LabelHere LabelHere a in
 	    Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
 	      (* Function *)
       | Some ty, JCTerm t -> 
 	  let ret = tr_base_type ty in
-	  let t, lets = term ~global_assertion:true LabelNone LabelNone t in
+	  let t, lets = term ~global_assertion:true LabelHere LabelHere t in
 	  assert (lets = []);
 	  Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
       (* Logic *)
@@ -1074,7 +1079,7 @@ and expr ~infunction ~threats e : expr =
     | JCEcast (e, si) ->
 	let tag = tag_table_name (JCtag si) in
 	(* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
-	let et, _ = term ~global_assertion:false LabelNone LabelNone (term_of_expr e) in
+	let et, _ = term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in
 	let typea = 
 	  match e.jc_expr_type with
 	    | JCTpointer (JCtag si', _, _) -> 
@@ -1235,7 +1240,7 @@ let type_assert vi e =
   match vi.jc_var_info_type, e.jc_expr_type with
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
 	let et, lets =
-	  term ~global_assertion:false LabelHere LabelNone (term_of_expr e) in
+	  term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in
 	let alloc = alloc_table_name si in
 	  begin
 	    match n1o, n2o with
@@ -1524,13 +1529,13 @@ let rec statement ~infunction ~threats s =
 	let inv = named_assertion
 	  ~global_assertion:false
 	  LabelHere
-	  LabelInit
+	  LabelPre
 	  la.jc_loop_invariant
 	in 
 	let free_inv = named_assertion 
 	  ~global_assertion:false 
 	  LabelHere 
-	  LabelInit 
+	  LabelPre 
 	  la.jc_free_loop_invariant 
 	in
 	let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
@@ -1546,7 +1551,7 @@ let rec statement ~infunction ~threats s =
 		  let variant, lets = named_term
 		    ~global_assertion:false
 		    LabelHere
-		    LabelInit
+		    LabelPre
 		    t
 		  in
 		    assert (lets = []);
@@ -1561,7 +1566,7 @@ let rec statement ~infunction ~threats s =
 	Assert(named_assertion
 		 ~global_assertion:false
 		 LabelHere
-		 LabelInit
+		 LabelPre
 		 a,
 	       Void)
     | JCSdecl(vi,e,s) -> 
@@ -1984,14 +1989,14 @@ let tr_fun f loc spec body acc =
     (named_assertion 
        ~global_assertion:false 
        LabelHere 
-       LabelNone 
+       LabelHere 
        spec.jc_fun_requires) 
   in
   let free_requires = 
     (named_assertion 
        ~global_assertion:false 
        LabelHere 
-       LabelNone 
+       LabelHere 
        spec.jc_fun_free_requires)
   in
   let requires = make_and requires_param free_requires in
@@ -2003,7 +2008,7 @@ let tr_fun f loc spec body acc =
 	   (match vi.jc_var_info_type with
 	      | JCTpointer (tov, n1o, n2o) ->
 		  let vit, lets = 
-		    term ~global_assertion:false LabelHere LabelNone
+		    term ~global_assertion:false LabelHere LabelHere
 		      (term_var_no_loc vi) 
 		  in
 		  begin match n1o, n2o with
@@ -2052,7 +2057,7 @@ let tr_fun f loc spec body acc =
 	   match b.jc_behavior_assumes with
 	     | None -> post
 	     | Some e -> 
-		 make_impl (assertion ~global_assertion:false LabelHere LabelNone e) post
+		 make_impl (assertion ~global_assertion:false LabelHere LabelHere e) post
 	 in
 	   match b.jc_behavior_throws with
 	     | None -> 
@@ -2509,7 +2514,7 @@ let tr_logic_type id acc = Type(id,[])::acc
 
 let tr_axiom id is_axiom p acc = 
   let ef = Jc_effect.assertion empty_effects p in
-  let a = assertion ~global_assertion:true LabelNone LabelNone p in
+  let a = assertion ~global_assertion:true LabelHere LabelHere p in
   let a =
     FieldRegionMap.fold 
       (fun (fi,r) labels a -> 

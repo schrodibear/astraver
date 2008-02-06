@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.46 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_env.mli,v 1.47 2008-02-06 08:40:59 marche Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
@@ -117,12 +117,11 @@ type exception_info =
     }
 
 type logic_label = 
-  | LabelNone
   | LabelName of string
   | LabelHere
   | LabelPost
   | LabelPre
-  | LabelInit
+  | LabelOld
 
 type label_info =
     { label_info_name : string;

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.86 2008-02-05 16:57:14 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.87 2008-02-06 08:41:00 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -40,10 +40,15 @@ let ( ** ) = fun f g x -> f(g x)
 
 let label_var lab name =
   match lab with
+(*
     | LabelNone -> assert false
+*)
     | LabelHere -> name
     | LabelPre -> name ^ "_at_Pre"
+    | LabelOld -> assert false (* name ^ "_at_Old" *)
+(*
     | LabelInit -> name ^ "_at_Init"
+*)
     | LabelPost -> name ^ "_at_Post"
     | LabelName l -> name ^ "_at_" ^ l
 

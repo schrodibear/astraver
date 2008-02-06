@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.94 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.95 2008-02-06 08:40:59 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1392,6 +1392,15 @@ let object_class =
 	eprintf "%a: %s@." Loc.gen_report_position l s;
 	  exit 1
 
+type typing_env =
+    {
+      package_env : Java_env.package_info list;
+      type_env : (string * Java_env.java_type_info) list;
+      current_type : Java_env.java_type_info option;
+      label_env : logic_label list;
+      env : (string * Java_env.java_var_info) list;
+    }
+
 (* JLS 5.1.4: Widening Reference Conversion *)
 let rec is_widening_reference_convertible tfrom tto =
   match tfrom,tto with
@@ -1415,8 +1424,8 @@ and is_logic_call_convertible tfrom tto =
     | JTYbase t1, JTYbase t2 -> is_logic_widening_primitive_convertible t1 t2
     | _ -> is_widening_reference_convertible tfrom tto
 
-and term package_env type_env current_type env e =
-  let termt = term package_env type_env current_type env in
+and term env current_label e =
+  let termt = term env current_label in
   let ty,tt =
     match e.java_pexpr_node with
       | JPElit l -> 
@@ -1432,7 +1441,7 @@ and term package_env type_env current_type env e =
 	  ty,(JTlit l)
       | JPEname n ->
 	  begin
-	    match classify_name package_env type_env current_type env n with
+	    match classify_name env.package_env env.type_env env.current_type env.env n with
 	      | TermName t ->
 		  t.java_term_type, t.java_term_node
 	      | TypeName _ ->
@@ -1446,13 +1455,13 @@ and term package_env type_env current_type env e =
       | JPEresult -> 
 	  begin
 	    try
-	      let vi = List.assoc "\\result" env in
+	      let vi = List.assoc "\\result" env.env in
 	      vi.java_var_info_type,JTvar vi
 	    with Not_found -> 
 	      typing_error e.java_pexpr_loc "\\result undefined in this context"
 	  end
       | JPEthis -> 
-	  let vi = get_this e.java_pexpr_loc env in
+	  let vi = get_this e.java_pexpr_loc env.env in
 	  vi.java_var_info_type, JTvar vi
       | JPEbin (e1, op, e2) -> 
 	  let te1 = termt e1 and te2 = termt e2 in 
@@ -1472,7 +1481,7 @@ and term package_env type_env current_type env e =
       | JPEinstanceof (_, _)-> assert false (* TODO *)
       | JPEcast (t, e1)-> 
 	  let te1 = termt e1 in
-	  let ty = type_type package_env type_env false t in
+	  let ty = type_type env.package_env env.type_env false t in
 	  (* TODO: check if cast allowed *)
 	  ty,JTcast(ty,te1)
       | JPEarray_access (e1, e2)-> 
@@ -1595,9 +1604,9 @@ and term package_env type_env current_type env e =
        java_term_type = ty;
        java_term_loc = e.java_pexpr_loc }
 
-and assertion package_env type_env current_type env e =
-  let termt = term package_env type_env current_type env in
-  let assertiont = assertion package_env type_env current_type env in
+and assertion env current_label e =
+  let termt = term env current_label in
+  let assertiont = assertion env current_label in
   let ta =
   match e.java_pexpr_node with
     | JPElit (Bool true) -> JAtrue
@@ -1631,17 +1640,23 @@ and assertion package_env type_env current_type env e =
 	  make_predicate_bin_op e.java_pexpr_loc op 
 	    te1.java_term_type te1 te2.java_term_type te2
     | JPEquantifier (q, ty, idl, e)-> 
-	let tty = type_type package_env type_env true ty in
+	let tty = type_type env.package_env env.type_env true ty in
 	let a = make_quantified_formula 
-	  e.java_pexpr_loc q tty idl package_env type_env current_type env e 
+	  e.java_pexpr_loc q tty idl env current_label e 
 	in
-	  a.java_assertion_node
+	a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
     | JPEat _-> assert false (* TODO *)
     | JPEinstanceof (e, ty) ->
-	let te = termt e and tty = type_type package_env type_env false ty in
-	  if is_reference_type tty then JAinstanceof (te, tty) else
-	    typing_error e.java_pexpr_loc "unexpected type"
+	begin
+	  match current_label with
+	    | None ->
+		typing_error e.java_pexpr_loc "No memory state for this instanceof (\\at missing ?)"
+	    | Some l ->
+		let te = termt e and tty = type_type env.package_env env.type_env false ty in
+		if is_reference_type tty then JAinstanceof (te, l, tty) else
+		  typing_error e.java_pexpr_loc "unexpected type"
+	end
     | JPEcast (_, _)-> assert false (* TODO *)
     | JPEarray_access (_, _)-> assert false (* TODO *)
     | JPEarray_range (_, _,_)-> assert false (* TODO *)
@@ -1688,7 +1703,7 @@ and assertion package_env type_env current_type env e =
     | JPEresult -> 
 	begin
 	  try
-	    let vi = List.assoc "\\result" env in
+	    let vi = List.assoc "\\result" env.env in
 	    match vi.java_var_info_type with
 	      | JTYbase Tboolean ->
 		  JAbool_expr {
@@ -1710,14 +1725,15 @@ and assertion package_env type_env current_type env e =
   in { java_assertion_node = ta;
        java_assertion_loc = e.java_pexpr_loc }
 
-and make_quantified_formula loc q ty idl package_env type_env current_type env e : assertion =
+and make_quantified_formula loc q ty idl env current_label e : assertion =
   match idl with
-    | [] -> assertion package_env type_env current_type env e
+    | [] -> assertion env current_label e
     | id::r ->
 	let tyv, (loc,n) = var_type_and_id ty id in
 	let vi = new_var loc tyv n in
 	let f = 
-	  make_quantified_formula loc q ty r package_env type_env current_type ((n,vi)::env) e 
+	  make_quantified_formula loc q ty r { env with env = (n,vi)::env.env } 
+	    current_label e 
 	in
 	{ java_assertion_loc = loc ; 
 	  java_assertion_node = JAquantifier(q,vi,f) }
@@ -2288,8 +2304,8 @@ let lookup_constructor ci arg_types =
       | [ci] -> ci
       | _ -> assert false
 	  
-let rec expr package_env type_env current_type env e =
-  let exprt = expr package_env type_env current_type env in
+let rec expr env e =
+  let exprt = expr env in
   let ty,te = 
     match e.java_pexpr_node with
       | JPElit l -> 
@@ -2304,7 +2320,7 @@ let rec expr package_env type_env current_type env e =
 	  in t,(JElit l)
       | JPEname n -> 
 	  begin
-	    match classify_name package_env type_env current_type env n with
+	    match classify_name env.package_env env.type_env env.current_type env.env n with
 	      | TermName t ->
 		  let e = expr_of_term t in
 		  e.java_expr_type, e.java_expr_node
@@ -2316,11 +2332,11 @@ let rec expr package_env type_env current_type env e =
 		    "expression expected, got a package name"
 	  end
       | JPEthis -> 
-	  let vi = get_this e.java_pexpr_loc env in
+	  let vi = get_this e.java_pexpr_loc env.env in
 	  vi.java_var_info_type, JEvar vi
       | JPEinstanceof (e1, t)-> 
 	  let te1 = exprt e1 in
-	  let ty = type_type package_env type_env false t in
+	  let ty = type_type env.package_env env.type_env false t in
 	  if is_reference_type ty && 
 	    cast_convertible te1.java_expr_type ty then
 	    boolean_type,JEinstanceof(te1,ty)
@@ -2328,7 +2344,7 @@ let rec expr package_env type_env current_type env e =
 	    typing_error e.java_pexpr_loc "invalid instanceof"
       | JPEcast (t, e1)-> 
 	  let te1 = exprt e1 in
-	  let ty = type_type package_env type_env false t in
+	  let ty = type_type env.package_env env.type_env false t in
 	  if cast_convertible te1.java_expr_type ty then
 	    ty,JEcast(ty,te1)
 	  else
@@ -2353,7 +2369,7 @@ let rec expr package_env type_env current_type env e =
 		  array_expected e1.java_pexpr_loc te1.java_expr_type
 	  end
       | JPEnew_array(t,dims) ->
-	  let ty = type_type package_env type_env true t in 
+	  let ty = type_type env.package_env env.type_env true t in 
 	  let l =
 	    List.map (fun e ->
 			let te = exprt e in
@@ -2369,7 +2385,7 @@ let rec expr package_env type_env current_type env e =
 	  let args = List.map exprt args in
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in	    
 	    begin
-	    match classify_name package_env type_env current_type env n with
+	    match classify_name env.package_env env.type_env env.current_type env.env n with
 	      | TypeName (TypeClass ci) ->
 (*
 		  eprintf "looking up constructor in class %s@." ci.class_info_name;
@@ -2383,7 +2399,7 @@ let rec expr package_env type_env current_type env e =
       | JPEsuper_call (id, el) -> 
 	  (* JLS 15.12 *)
 	  let ci =
-	    match current_type with
+	    match env.current_type with
 	      | Some (TypeClass ci) ->
 		  if ci == object_class then 
 		    typing_error e.java_pexpr_loc "cannot resolve variable super"
@@ -2410,7 +2426,7 @@ let rec expr package_env type_env current_type env e =
 		ty, JEstatic_call (mi, args)
 	      else
 		let te2 =
-		  let vi = get_this e.java_pexpr_loc env in
+		  let vi = get_this e.java_pexpr_loc env.env in
 		    {
 		      java_expr_node = JEvar vi;
 		      java_expr_type = vi.java_var_info_type;
@@ -2427,14 +2443,14 @@ let rec expr package_env type_env current_type env e =
 	      | [] -> assert false
 	      | [id] ->
 		  begin
-		    match current_type with
+		    match env.current_type with
 		      | None -> assert false
 		      | Some ti -> ti,id,None
 		  end
 	      | id::n ->
 		  begin
 		    match 
-		      classify_name package_env type_env current_type env n
+		      classify_name env.package_env env.type_env env.current_type env.env n
 		    with
 		      | TypeName ti -> ti, id, None
 		      | TermName te -> 
@@ -2470,7 +2486,7 @@ let rec expr package_env type_env current_type env e =
 	      match te1 with
 		| Some e -> e
 		| None ->
-		    let vi = get_this e.java_pexpr_loc env in
+		    let vi = get_this e.java_pexpr_loc env.env in
 		    {
 		      java_expr_node = JEvar vi;
 		      java_expr_type = vi.java_var_info_type;
@@ -2484,7 +2500,7 @@ let rec expr package_env type_env current_type env e =
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in
 	  begin
 	    let ci,te1 =
-	      let te = expr package_env type_env current_type env e1 in
+	      let te = exprt e1 in
 	      begin
 		match te.java_expr_type with
 		  | JTYclass(_,ci) -> (TypeClass ci),Some te
@@ -2506,7 +2522,7 @@ let rec expr package_env type_env current_type env e =
 		match te1 with
 		  | Some e -> e
 		  | None ->
-		      let vi = get_this e.java_pexpr_loc env in
+		      let vi = get_this e.java_pexpr_loc env.env in
 		      {
 			java_expr_node = JEvar vi;
 			java_expr_type = vi.java_var_info_type;
@@ -2581,7 +2597,7 @@ let rec expr package_env type_env current_type env e =
       | JPEassign_name (n, op, e1)-> 
 	  begin
 	    let te = exprt e1 in
-	    match classify_name package_env type_env current_type env n with
+	    match classify_name env.package_env env.type_env env.current_type env.env n with
 		| TermName t ->
 		    begin
 		      match t.java_term_node with
@@ -2706,10 +2722,10 @@ let rec initializer_loc i =
     | Array_initializer (x::_) -> initializer_loc x
     | Array_initializer [] -> assert false (* TODO *)
 			   
-let rec type_initializer package_env type_env current_type env ty i =
+let rec type_initializer env ty i =
   match ty, i with
     | _, Simple_initializer e ->
-	let te = expr package_env type_env current_type env e in	
+	let te = expr env e in	
 	  if is_assignment_convertible ~const:true te.java_expr_type te ty 
 	  then JIexpr te
 	  else
@@ -2719,8 +2735,7 @@ let rec type_initializer package_env type_env current_type env ty i =
 	let il =
 	  List.map
 	    (fun vi -> match vi with
-	       | Simple_initializer e ->
-		   type_initializer package_env type_env current_type env t vi
+	       | Simple_initializer e -> type_initializer env t vi
 	       | Array_initializer vil -> assert false (* TODO *))
 	    vil
 	in JIlist il
@@ -2730,8 +2745,8 @@ let rec type_initializer package_env type_env current_type env ty i =
 
 (* statements *)
 
-let variable_declaration package_env type_env current_type env vd =
-  let ty = type_type package_env type_env false vd.variable_type in
+let variable_declaration env vd =
+  let ty = type_type env.package_env env.type_env false vd.variable_type in
   let l =
     List.map
       (fun vd ->
@@ -2739,10 +2754,7 @@ let variable_declaration package_env type_env current_type env vd =
 	 match vd.variable_initializer with
 	   | None -> (id,ty',None)
 	   | Some e -> 
-	       let i = 
-		 type_initializer package_env type_env
-		   current_type env ty' e 
-	       in
+	       let i = type_initializer env ty' e in
 	       (id,ty',Some i))
       vd.variable_decls
   in
@@ -2750,12 +2762,12 @@ let variable_declaration package_env type_env current_type env vd =
       (fun ((loc,id),ty,i) (env,decls)->
 	 let vi = new_var loc ty id in		     
 	 (id,vi)::env,(vi,i)::decls)
-      l (env,[])
+      l (env.env,[])
 
-let rec statement package_env type_env current_type env s =
-  let assertiont = assertion package_env type_env current_type env in
-  let exprt = expr package_env type_env current_type env in
-  let statementt = statement package_env type_env current_type env in
+let rec statement env s =
+  let assertiont = assertion env in
+  let exprt = expr env in
+  let statementt = statement env in
   let s' =
     match s.java_pstatement_node with
       | JPSskip -> JSskip
@@ -2774,39 +2786,39 @@ let rec statement package_env type_env current_type env s =
       | JPSexpr e -> 
 	  let te = exprt e in JSexpr te
       | JPSassert(id,a) ->
-	  let ta = assertiont a in
+	  let ta = assertiont (Some LabelHere) a in
 	  JSassert(Option_misc.map snd id,ta)
       | JPSsynchronized (_, _)-> assert false (* TODO *)
-      | JPSblock l -> (block package_env type_env current_type env l).java_statement_node
+      | JPSblock l -> (block env l).java_statement_node
       | JPSswitch (e, l)-> 
 	  let te = exprt e in
 	  (* JSL, p289: switch expr must be char, byte, short or int *)
 	  begin
 	    try 
 	      let t = unary_numeric_promotion te.java_expr_type in
-	      JSswitch(te,List.map (switch_case package_env type_env current_type env t) l)
+	      JSswitch(te,List.map (switch_case env t) l)
 	    with Not_found ->
 	      typing_error e.java_pexpr_loc "char, byte, short or int expected"
 	  end
       | JPStry (s, catches, finally)-> 
-	  let ts = statements package_env type_env current_type env s in
+	  let ts = statements env s in
 	  let tl =
 	    List.map
 	      (fun (p,s) ->
-		 let vi = type_param package_env type_env p in
+		 let vi = type_param env.package_env env.type_env p in
 		 match vi.java_var_info_type with
 		   | JTYclass(_,ci) when 
 		       (check_if_class_complete ci; 
 			ci.class_info_is_exception) ->
-		       let e = (vi.java_var_info_name,vi)::env in
-		       (vi,statements package_env type_env current_type e s)
+		       let e = (vi.java_var_info_name,vi)::env.env in
+		       (vi,statements {env with env = e } s)
 		   | _ -> 
 		       typing_error vi.java_var_info_decl_loc 
 			 "throwable class expected")
 	      catches
 	  in
 	  JStry(ts, tl, 
-		Option_misc.map (statements package_env type_env current_type env) finally)
+		Option_misc.map (statements env) finally)
       | JPSfor_decl _ -> assert false
       | JPSfor _ -> assert false
       | JPSdo (_, _)-> assert false (* TODO *)
@@ -2817,7 +2829,7 @@ let rec statement package_env type_env current_type env s =
       | JPSreturn None -> 
 	  begin
 	    try
-	      let _vi = List.assoc "\\result" env in
+	      let _vi = List.assoc "\\result" env.env in
 	      typing_error s.java_pstatement_loc "missing return value"
 	    with
 		Not_found ->
@@ -2828,7 +2840,7 @@ let rec statement package_env type_env current_type env s =
 	  begin
 	    try
 	      let te = exprt e in 
-	      let vi = List.assoc "\\result" env in
+	      let vi = List.assoc "\\result" env.env in
 	      if is_assignment_convertible te.java_expr_type te vi.java_var_info_type then
 		JSreturn te
 	      else
@@ -2848,19 +2860,16 @@ let rec statement package_env type_env current_type env s =
     java_statement_node = s' }
 
 
-and statements package_env type_env current_type env b =
+and statements env b =
   match b with
     | [] -> []
     | s :: rem ->
 	match s.java_pstatement_node with
-	  | JPSskip -> statements package_env type_env current_type env rem
+	  | JPSskip -> statements env rem
 	  | JPSghost_local_decls vd 
 	  | JPSvar_decl vd ->
-	      let env,decls = 
-		variable_declaration package_env type_env 
-		  current_type env vd 
-	      in
-	      let r = block package_env type_env current_type env rem in
+	      let e,decls = variable_declaration env vd in
+	      let r = block { env with env = e } rem in
 	      let s =
 		List.fold_right
 		  (fun (vi, i) acc -> 
@@ -2875,76 +2884,79 @@ and statements package_env type_env current_type env b =
 		  | { java_pstatement_node = JPSwhile(e,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
 		      let twhile =
-			type_while package_env type_env current_type env 
-			  s.java_pstatement_loc inv (Some dec) e s
+			type_while env s.java_pstatement_loc inv (Some dec) e s
 		      in
-			twhile :: 
-			  statements package_env type_env current_type env rem
+			twhile :: statements env rem
 		  | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
 		      let tfor =
-			type_for_decl package_env type_env current_type env 
-			  loc vd inv (Some dec) e sl s
+			type_for_decl env loc vd inv (Some dec) e sl s
 		      in
-			tfor ::
-			  statements package_env type_env current_type env rem
+			tfor :: statements env rem
 		  | _ -> assert false
 	      end      
 	  | JPSfor (el1, e, el2, s) ->
 	      let tfor =
-		type_for package_env type_env current_type env 
+		type_for env 
 		  s.java_pstatement_loc el1 expr_true None e el2 s
 	      in
-		tfor :: statements package_env type_env current_type env rem
+		tfor :: statements env rem
 	  | JPSfor_decl(vd,e,sl,s) ->
 	      let tfor =
-		type_for_decl package_env type_env current_type env 
+		type_for_decl env 
 		  s.java_pstatement_loc vd expr_true None e sl s
 	      in
-		tfor :: statements package_env type_env current_type env rem
+		tfor :: statements env rem
 	  | JPSwhile(e,s) ->
 	      let twhile =
-		type_while package_env type_env current_type env 
+		type_while env 
 		  s.java_pstatement_loc expr_true None e s
 	      in
-		twhile :: statements package_env type_env current_type env rem
+		twhile :: statements env rem
 	  | _ ->
-	      let s' = statement package_env type_env current_type env s in
-		s' :: statements package_env type_env current_type env rem
+	      let s' = statement env s in
+		s' :: statements env rem
 		  
-		  
-and type_for package_env type_env current_type env loc el1 inv dec e el2 s =
-  let el1 = List.map (expr package_env type_env current_type env) el1 in
-  let inv = assertion package_env type_env current_type env inv in
-  let dec = Option_misc.map (term package_env type_env current_type env) dec in
-  let e = expr package_env type_env current_type env e in
-  let el2 = List.map (expr package_env type_env current_type env) el2 in
-  let s = statement package_env type_env current_type env s in
+	
+and add_Pre_Here e = { e with label_env = LabelPre::LabelHere::e.label_env }
+	  	  
+and type_for env loc el1 inv dec e el2 s =
+  let el1 = List.map (expr env) el1 in
+  let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
+  let dec = 
+    Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
+  in
+  let e = expr env e in
+  let el2 = List.map (expr env) el2 in
+  let s = statement env s in
     { java_statement_node = JSfor (el1, e, inv, dec, el2, s);
       java_statement_loc = loc }
 
-and type_for_decl package_env type_env current_type env loc vd inv dec e sl s =
-  let env,decls = 
-    variable_declaration package_env type_env current_type env vd 
+and type_for_decl env loc vd inv dec e sl s =
+  let env',decls = variable_declaration env vd in
+  let env = { env with env = env'} in
+  let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
+  let dec = 
+    Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
   in
-  let inv = assertion package_env type_env current_type env inv in
-  let dec = Option_misc.map (term package_env type_env current_type env) dec in
-  let e = expr package_env type_env current_type env e in
-  let sl = List.map (expr package_env type_env current_type env) sl in
-  let s = statement package_env type_env current_type env s in
+  let e = expr env e in
+  let sl = List.map (expr env) sl in
+  let s = statement env s in
   { java_statement_node = JSfor_decl(decls,e,inv,dec,sl,s);
     java_statement_loc = loc }
 
-and type_while package_env type_env current_type env loc inv dec e s =
-  let inv = assertion package_env type_env current_type env inv in
-  let dec = Option_misc.map (term package_env type_env current_type env) dec in
-  let e = expr package_env type_env current_type env e in
-  let s = statement package_env type_env current_type env s in
+and type_while env loc inv dec e s =
+  let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
+  let dec = 
+    Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
+  in
+  let e = expr env e in
+  let s = statement env s in
   { java_statement_node = JSwhile(e,inv,dec,s);
     java_statement_loc = loc } 
 
-and block package_env type_env current_type env b =
-  match statements package_env type_env current_type env b with
+and block env b =
+  match statements env b with
     | [] -> { java_statement_loc = Loc.dummy_position ; 
 	      java_statement_node = JSskip }
     | [s] -> s
@@ -2952,14 +2964,14 @@ and block package_env type_env current_type env b =
 	{ java_statement_loc = s.java_statement_loc ; 
 	  java_statement_node = JSblock l }
 
-and switch_case package_env type_env current_type env t (labels,b) =
-  (List.map (switch_label package_env type_env current_type env t) labels, 
-   statements package_env type_env current_type env b)
+and switch_case env t (labels,b) =
+  (List.map (switch_label env t) labels, 
+   statements env b)
 
-and switch_label package_env type_env current_type env t = function
+and switch_label env t = function
   | Default -> Default
   | Case e ->
-      let te = expr package_env type_env current_type env e in
+      let te = expr env e in
       match te.java_expr_type with
 	| JTYbase _ as t' when is_assignment_convertible t' te (JTYbase t) -> Case te 
 	| _ ->
@@ -2972,7 +2984,7 @@ and switch_label package_env type_env current_type env t = function
 let location env a = term env a 
   
 
-let behavior package_env type_env current_type pre_state_env post_state_env (id,b) = 
+let behavior env pre_state_env post_state_env (id,b) = 
   let throws,ensures_env = 
     match b.java_pbehavior_throws with
       | None -> None,post_state_env
@@ -2981,23 +2993,23 @@ let behavior package_env type_env current_type pre_state_env post_state_env (id,
 	     so we need to add the package env of current type in [package_env]
 	     - Nicolas R. *)
 	  let package_env = 
-	    match current_type with
+	    match env.current_type with
 	      | None -> assert false
 	      | Some (TypeClass ci) ->
 		  let p = 
 		    List.filter
-		      (fun p -> not (List.mem p package_env)) 
+		      (fun p -> not (List.mem p env.package_env)) 
 		      ci.class_info_package_env in
-		    p @ package_env
+		    p @ env.package_env
 	      | Some (TypeInterface ii) -> 
 		  let p = 
 		    List.filter
-		      (fun p -> not (List.mem p package_env)) 
+		      (fun p -> not (List.mem p env.package_env)) 
 		      ii.interface_info_package_env in
-		    p @ package_env
+		    p @ env.package_env
 	  in
 	  begin
-	    match classify_name package_env type_env current_type pre_state_env c with
+	    match classify_name package_env env.type_env env.current_type pre_state_env  c with
 	      | TypeName (TypeClass ci) ->
 		  check_if_class_complete ci;
 		  assert (ci.class_info_is_exception);
@@ -3016,14 +3028,14 @@ let behavior package_env type_env current_type pre_state_env post_state_env (id,
 	  assert false (* TODO *)
   in
   (id,
-   Option_misc.map (assertion package_env type_env current_type pre_state_env) b.java_pbehavior_assumes,
+   Option_misc.map (assertion { env with env = pre_state_env} (Some LabelHere)) b.java_pbehavior_assumes,
    throws,
    (* Note: for constructors, the `assigns' clause is typed in
       pre-state environnement: `this' is not allowed there *)
    Option_misc.map 
      (fun (loc,l) ->
-	(loc,List.map (location package_env type_env current_type pre_state_env) l)) b.java_pbehavior_assigns,
-   assertion package_env type_env current_type ensures_env b.java_pbehavior_ensures)
+	(loc,List.map (location { env with env = pre_state_env} (Some LabelHere)) l)) b.java_pbehavior_assigns,
+   assertion {env with env = ensures_env} (Some LabelHere) b.java_pbehavior_ensures)
     
 
 
@@ -3076,9 +3088,13 @@ let type_method_spec_and_body ?(dobody=true)
 	   (vi.java_var_info_name,vi)::acc)
 	local_env mi.method_info_parameters
     in
-    let req = 
-      Option_misc.map (assertion package_env type_env (Some ti) local_env) req 
+    let env = { package_env = package_env ;
+		type_env = type_env;
+		current_type = (Some ti);
+		label_env = [LabelHere];
+		env = local_env }
     in
+    let req = Option_misc.map (assertion env (Some LabelHere)) req in
     let env_result =
       match mi.method_info_result with
 	| None -> local_env
@@ -3092,12 +3108,10 @@ let type_method_spec_and_body ?(dobody=true)
 	in
 	let ens = Option_misc.map (assertion package_env type_env (Some ti) env_result) ens in
       *)
-    let behs = List.map 
-      (behavior package_env type_env (Some ti) local_env env_result) behs 
-    in
+    let behs = List.map (behavior env local_env env_result) behs in
       if dobody then
 	let body = 
-	  Option_misc.map (statements package_env type_env (Some ti) env_result) body 
+	  Option_misc.map (statements { env with env = env_result}) body 
 	in
 	  Hashtbl.add methods_table mi.method_info_tag 
 	    { mt_method_info = mi;
@@ -3175,9 +3189,17 @@ let type_constr_spec_and_body ?(dobody=true)
       ("this",vi)::local_env
   in
 *)
-  let req = Option_misc.map (assertion package_env type_env (Some current_type) local_env) req in
+  let env = { package_env = package_env ;
+	      type_env = type_env;
+	      current_type = (Some current_type);
+	      label_env = [LabelHere];
+	      env = this_env }
+  in
+  let req = Option_misc.map (assertion { env with env = local_env } (Some LabelHere)) req in
     (* Note: for constructors, the `assigns' clause is typed in
-       pre-state environnement: `this' is not allowed there *)
+       pre-state environnement: `this' is not allowed there 
+       Claude: pourquoi pas ?
+    *)
 (*
   let assigns = 
     Option_misc.map 
@@ -3186,13 +3208,12 @@ let type_constr_spec_and_body ?(dobody=true)
   in
   let ens = Option_misc.map (assertion package_env type_env (Some current_type) this_env) ens in
 *)
-  let behs = List.map 
-    (behavior package_env type_env (Some current_type) local_env this_env) behs 
+  let behs = List.map (behavior env local_env this_env) behs 
   in
   if dobody then
     match eci with
       | Invoke_none -> 
-	  let body = statements package_env type_env (Some current_type) this_env body in
+	  let body = statements { env with env = this_env } body in
 	  Hashtbl.add constructors_table ci.constr_info_tag 
 	    { ct_constr_info = ci;
 	      ct_requires = req;
@@ -3203,7 +3224,7 @@ let type_constr_spec_and_body ?(dobody=true)
 	      ct_behaviors = behs;
 	      ct_body = body } 
       | Invoke_this el -> 
-	  let tel = List.map (expr package_env type_env (Some current_type) this_env) el in
+	  let tel = List.map (expr env) el in
 	  let arg_types = List.map (fun te -> te.java_expr_type) tel in
 	  let this_ci = lookup_constructor ci.constr_info_class arg_types in
 	  let this_call_s =
@@ -3216,14 +3237,14 @@ let type_constr_spec_and_body ?(dobody=true)
 			 (JEvar this_vi), 
 		       this_ci, tel))))
 	  in
-	  let body = statements package_env type_env (Some current_type) this_env body in
+	  let body = statements env body in
 	  Hashtbl.add constructors_table ci.constr_info_tag 
 	    { ct_constr_info = ci;
 	      ct_requires = req;
 	      ct_behaviors = behs;
 	      ct_body = this_call_s :: body }
       | Invoke_super el ->
-	  let tel = List.map (expr package_env type_env (Some current_type) this_env) el in
+	  let tel = List.map (expr env) el in
 	  let super_class_info = 
 	    match ci.constr_info_class.class_info_extends with
 	      | None -> assert false
@@ -3241,7 +3262,7 @@ let type_constr_spec_and_body ?(dobody=true)
 			 (JEvar this_vi), 
 		       super_ci, tel))))
 	  in
-	  let body = statements package_env type_env (Some current_type) this_env body in
+	  let body = statements env body in
 	  Hashtbl.add constructors_table ci.constr_info_tag 
 	    { ct_constr_info = ci;
 	      ct_requires = req;
@@ -3261,13 +3282,20 @@ let type_field_initializer package_env type_env ci fi =
       Hashtbl.find field_prototypes_table fi.java_field_info_tag 
     with Not_found -> assert false
   in
+  let env = 
+    { package_env = package_env;
+      type_env = type_env;
+      current_type = Some ci;
+      label_env = [];
+      env = [];
+    }
+  in
   let tinit = 
     match init with
       | None -> None
       | Some i ->
 	  let ti = 
-	    type_initializer package_env type_env (Some ci) [] 
-	      fi.java_field_info_type i
+	    type_initializer env fi.java_field_info_type i
 	  in
 	    if fi.java_field_info_is_final then
 	      begin
@@ -3345,8 +3373,16 @@ let type_decl package_env type_env d =
     | JPTinterface i -> assert false (* TODO *)
     | JPTannot(loc,s) -> assert false
     | JPTlemma((loc,id),is_axiom, labels,e) -> 
-	(* TODO: add labels env *)
-	let te = assertion package_env type_env None [] e in
+	let env =
+	  { package_env = package_env;
+	    type_env = type_env;
+	    current_type = None;
+	    label_env = labels;
+	    env = [];
+	  }
+	in
+	(* TODO: si un seul label, c'est celui par defaut *)
+	let te = assertion env None e in
 	Hashtbl.add axioms_table id (is_axiom,labels,te)
     | JPTlogic_type_decl _ -> assert false (* TODO *)
     | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
@@ -3357,10 +3393,19 @@ let type_decl package_env type_env d =
 	       (vi.java_var_info_name,vi)::acc)
 	    [] pl
 	in
+	let env =
+	  { package_env = package_env;
+	    type_env = type_env;
+	    current_type = None;
+	    label_env = labels;
+	    env = env;
+	  }
+	in
 	  begin match ret_type with
-	    | None ->
+	    | None ->(* TODO: si un seul label, c'est celui par defaut *)
 		let fi = logic_info id None labels pl in
-		let r = List.map (location package_env type_env None env) reads in
+		(* TODO: si un seul label, c'est celui par defaut *)
+		let r = List.map (location env None) reads in
 		  Hashtbl.add logics_env id fi;
 		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
 	    | Some ty -> 
@@ -3369,7 +3414,8 @@ let type_decl package_env type_env d =
 		    (Some (type_type package_env type_env false ty)) 
 		    labels pl 
 		in
-		let r = List.map (location package_env type_env None env) reads in
+		(* TODO: si un seul label, c'est celui par defaut *)
+		let r = List.map (location env None) reads in
 		  Hashtbl.add logics_env id fi;
 		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
 	  end
@@ -3381,21 +3427,29 @@ let type_decl package_env type_env d =
 	       (vi.java_var_info_name,vi)::acc)
 	    [] pl
 	in
-	  begin match ret_type with
-	    | None ->
-		let fi = logic_info id None labels pl in
-		let a = assertion package_env type_env None env body in
-		  Hashtbl.add logics_env id fi;
-		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
-	    | Some t -> 
-		let fi = 
-		  logic_info id 
-		    (Some (type_type package_env type_env false t)) labels pl 
-		in
-		let a = term package_env type_env None env body in
-		  Hashtbl.add logics_env id fi;
-		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
-	  end
+	let env =
+	  { package_env = package_env;
+	    type_env = type_env;
+	    current_type = None;
+	    label_env = labels;
+	    env = env;
+	  }
+	in
+	begin match ret_type with
+	  | None ->
+	      let fi = logic_info id None labels pl in
+	      let a = assertion env None body in
+	      Hashtbl.add logics_env id fi;
+	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
+	  | Some t -> 
+	      let fi = 
+		logic_info id 
+		  (Some (type_type package_env type_env false t)) labels pl 
+	      in
+	      let a = term env None body in
+	      Hashtbl.add logics_env id fi;
+	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
+	end
 
 
 let get_bodies package_env type_env cu =
@@ -3414,18 +3468,34 @@ let type_specs package_env type_env =
     (fun tag (current_type, env, vi, invs) -> 
        match current_type with
 	 | TypeClass ci ->
+	     let env =
+	       { package_env = package_env;
+		 type_env = type_env;
+		 current_type = (Some current_type);
+		 label_env = [];
+		 env = env;
+	       }
+	     in
 	     Hashtbl.add invariants_table tag
 	       (ci, vi, List.map 
 		  (fun (id, e) ->
-		     (id, assertion package_env type_env (Some current_type) env e))
+		     (id, assertion env None e))
 		  invs)
 	 | _ -> assert false)
     invariants_env;
   Hashtbl.iter 
     (fun tag (current_type, invs) ->
+       let env =
+	 { package_env = package_env;
+	   type_env = type_env;
+	   current_type = (Some current_type);
+	   label_env = [];
+	   env = [];
+	 }
+       in
        Hashtbl.add static_invariants_table tag
 	 (List.map 
-	    (fun (s, e) -> s, assertion package_env type_env (Some current_type) [] e)
+	    (fun (s, e) -> s, assertion env None e)
 	 invs))
     static_invariants_env;
   Hashtbl.iter 
