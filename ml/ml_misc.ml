@@ -413,7 +413,7 @@ let make_field si name jcty =
     jc_field_info_type = jcty;
     jc_field_info_struct = si;
     jc_field_info_root = si.jc_struct_info_root;
-    jc_field_info_rep = false;
+    jc_field_info_rep = true;
   } in
   si.jc_struct_info_fields <- fi::si.jc_struct_info_fields;
   fi

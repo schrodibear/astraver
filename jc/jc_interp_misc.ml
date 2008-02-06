@@ -36,6 +36,7 @@ open Jc_pervasives
 open Jc_iterators
 *)
 
+open Jc_ast
 open Jc_pervasives
 open Jc_envset
 open Jc_env
@@ -352,6 +353,29 @@ let all_effects ef =
 
 (* functions to make Why expressions *)
 
+let make_if_term cond a b =
+  LApp("ite", [ cond; a; b ])
+
+let make_eq_term ty a b =
+  let eq = match ty with
+    | JCTpointer _ | JCTnull -> "eq_pointer_bool"
+    | JCTenum _ | JCTlogic _ -> assert false
+    | JCTnative Tunit -> "eq_unit_bool"
+    | JCTnative Tboolean -> "eq_bool_bool"
+    | JCTnative Tinteger -> "eq_int_bool"
+    | JCTnative Treal -> "eq_real_bool"
+  in
+  LApp(eq, [a; b])
+
+let make_and_term a b =
+  make_if_term a b (LConst(Prim_bool false))
+
+let make_or_term a b =
+  make_if_term a (LConst(Prim_bool true)) b
+
+let make_not_term a =
+  make_if_term a (LConst(Prim_bool false)) (LConst(Prim_bool true))
+
 let make_eq a b =
   LPred("eq", [ a; b ])
 
@@ -372,6 +396,9 @@ let make_typeof st x =
 
 let make_subtag t u =
   LPred("subtag", [ t; u ])
+
+let make_subtag_bool t u =
+  LApp("subtag_bool", [ t; u ])
 
 let make_instanceof tt p st =
   LPred("instanceof", [ tt; p; LVar (tag_name st) ])
@@ -428,10 +455,25 @@ let make_valid_one_pred_app tov p =
 
 let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
-let make_pred_lets lets body =
+type forall_or_let =
+  | JCforall of string * Output.logic_type
+  | JClet of string * Output.term
+
+let make_pred_binds binds body =
   List.fold_left
-    (fun body (id, value) -> LLet(id, value, body))
-    body (List.rev lets)
+    (fun body bind ->
+       match bind with
+	 | JCforall(id, ty) -> LForall(id, ty, body)
+	 | JClet(id, value) -> LLet(id, value, body))
+    body (List.rev binds)
+
+let const c =
+  match c with
+    | JCCvoid -> Prim_void
+    | JCCnull -> assert false
+    | JCCreal s -> Prim_real s
+    | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
+    | JCCboolean b -> Prim_bool b
 
 (*
 Local Variables: 

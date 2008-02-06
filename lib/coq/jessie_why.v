@@ -110,7 +110,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A501:Set) (a:(alloc_table A501)) (p:(pointer A501))
+(*Why predicate*) Definition valid (A505:Set) (a:(alloc_table A505)) (p:(pointer A505))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -669,8 +669,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A543:Set) (A542:Set) (a:(alloc_table A542)) (m1:(memory A542 A543)) (m2:(memory A542 A543)) (l:(pset A542))
-  := (forall (p:(pointer A542)),
+(*Why predicate*) Definition not_assigns (A547:Set) (A546:Set) (a:(alloc_table A546)) (m1:(memory A546 A547)) (m2:(memory A546 A547)) (l:(pset A546))
+  := (forall (p:(pointer A546)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -728,6 +728,17 @@ Implicit Arguments parenttag.
 Admitted.
 Implicit Arguments subtag.
 
+(*Why logic*) Definition subtag_bool :
+  forall (A1:Set), (tag_id A1) -> (tag_id A1) -> bool.
+Admitted.
+Implicit Arguments subtag_bool.
+
+(*Why axiom*) Lemma subtag_bool_def :
+  forall (A1:Set),
+  (forall (t1:(tag_id A1)),
+   (forall (t2:(tag_id A1)), ((subtag_bool t1 t2) = true <-> (subtag t1 t2)))).
+Admitted.
+
 (*Why axiom*) Lemma subtag_refl :
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t t)).
 Admitted.
@@ -740,7 +751,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A555:Set) (a:(tag_table A555)) (p:(pointer A555)) (t:(tag_id A555))
+(*Why predicate*) Definition instanceof (A561:Set) (a:(tag_table A561)) (p:(pointer A561)) (t:(tag_id A561))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -768,7 +779,7 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A560:Set) (tag_table:(tag_table A560)) (mutable:(memory A560 (tag_id A560))) (this:(pointer A560))
+(*Why predicate*) Definition fully_packed (A566:Set) (tag_table:(tag_table A566)) (mutable:(memory A566 (tag_id A566))) (this:(pointer A566))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

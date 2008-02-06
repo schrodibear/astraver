@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.231 2008-02-06 08:40:59 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.232 2008-02-06 10:14:41 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -42,6 +42,7 @@ open Jc_region
 open Jc_separation
 open Jc_interp_misc
 open Jc_struct_tools
+open Jc_pattern
 
 (* locs table *)
 
@@ -148,14 +149,6 @@ let print_locs fmt =
 
 (* consts *)
 
-let const c =
-  match c with
-    | JCCvoid -> Prim_void
-    | JCCnull -> assert false
-    | JCCreal s -> Prim_real s
-    | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
-    | JCCboolean b -> Prim_bool b
-
 let why_integer_type = simple_logic_type "int"
   
 let tr_type t = Base_type (tr_base_type t)
@@ -220,12 +213,12 @@ let bin_op = function
   | Biff | Bimplies -> assert false (* never in expressions *)
 
 let term_bin_op = function
-  | Bgt_int -> "gt_int"
-  | Blt_int -> "lt_int"
-  | Bge_int -> "ge_int"
-  | Ble_int -> "le_int"
-  | Beq_int -> "eq_int"
-  | Bneq_int -> "neq_int"
+  | Bgt_int -> "gt_int_bool"
+  | Blt_int -> "lt_int_bool"
+  | Bge_int -> "ge_int_bool"
+  | Ble_int -> "le_int_bool"
+  | Beq_int -> "eq_int_bool"
+  | Bneq_int -> "neq_int_bool"
   | Badd_int -> "add_int"
   | Bsub_int -> "sub_int"
   | Bmul_int -> "mul_int"
@@ -368,93 +361,6 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
 	  "can't coerce type %a to type %a" 
 	  print_type tsrc print_type tdest
 
-(******************************************************************************)
-(*                                  patterns                                  *)
-(******************************************************************************)
-
-let make_blackbox_annot pre ty reads writes post exn_posts =
-  BlackBox(Annot_type(pre, ty, reads, writes, post, exn_posts))
-
-let destroy_tuple_in tuple vars body =
-  assert false
-
-(** [pattern arg ty pat] translates the pattern [pat] applied to the term [arg]
-  which have a [jc_type] of [ty].
-  Returns [notcond, cond, vars] where:
-  [notcond] is an assertion equivalent to "the pattern cannot be applied";
-  [cond] is an assertion equivalent to "the pattern can be applied" and giving
-    the values of each binded variable;
-  [vars] is a list of [name, user_name, ty] where [user_name] is a variable
-    binded by the pattern, [name] its unique name used in [cond], and
-    [ty] its [jc_type]. *)
-let rec pattern arg ty pat = match pat.jc_pattern_node with
-  | JCPstruct(st, fpl) ->
-      let subtag = make_subtag (make_typeof st arg) (LVar (tag_name st)) in
-      List.fold_left
-	(fun (accnotcond, acccond, accvars) (fi, pat) ->
-	   let arg = make_select_fi fi arg in
-	   let ty = fi.jc_field_info_type in
-	   let notcond, cond, vars = pattern arg ty pat in
-	   LOr(accnotcond, notcond),
-	   LAnd(acccond, cond),
-	   accvars @ vars)
-	(LNot subtag, subtag, [])
-	fpl
-  | JCPvar vi ->
-      LFalse,
-      make_eq (LVar vi.jc_var_info_final_name) arg,
-      [vi.jc_var_info_final_name, ty]
-  | JCPor(p1, p2) ->
-      (* typing ensures that both patterns bind the same variables *)
-      let notcond1, cond1, vars = pattern arg ty p1 in
-      let notcond2, cond2, _ = pattern arg ty p2 in
-      LAnd(notcond1, notcond2),
-      LOr(cond1, cond2),
-      vars
-  | JCPas(p, vi) ->
-      let notcond, cond, vars = pattern arg ty p in
-      notcond,
-      LAnd(cond, make_eq (LVar vi.jc_var_info_final_name) arg),
-      (vi.jc_var_info_final_name, ty)::vars
-  | JCPany | JCPconst JCCvoid ->
-      LFalse,
-      LTrue,
-      []
-  | JCPconst c ->
-(*      let pred = match c with
-	| JCCvoid -> assert false
-	| JCCnull -> "eq_pointer"
-	| JCCboolean _ -> "eq_bool"
-	| JCCinteger _ -> "eq_int"
-	| JCCreal _ -> "eq_real"
-      in*)
-      let eq = make_eq arg (LConst (const c)) in
-      LNot eq,
-      eq,
-      []
-
-let pattern_list_expr translate_body arg r ty pbl =
-  List.fold_left
-    (fun accbody (pat, body) ->
-       let notcond, cond, vars = pattern arg ty pat in
-       let body = translate_body body in
-       let reads =
-	 let region = r in
-	 let ef = Jc_effect.pattern empty_effects LabelHere region pat in
-	 all_effects ef
-       in
-       let writes = List.map fst vars in
-       let post = LIf(LVar "result", cond, notcond) in
-       let bbox = make_blackbox_annot LTrue bool_type reads writes post [] in
-       let branch = List.fold_left
-	 (fun acc (name, ty) -> Let_ref(name, any_value ty, acc))
-	 (If(bbox, body, accbody))
-	 vars
-       in
-       branch)
-    Absurd
-    (List.rev pbl)
-
 (**************************
 
 terms and assertions 
@@ -571,7 +477,13 @@ let rec term ~global_assertion label oldlabel t =
 	LApp("downcast",
 	     [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
-    | JCTmatch(t, ptl) -> assert false (* TODO *)
+    | JCTmatch(t, ptl) ->
+	let t', lets1 = ft t in
+	(* TODO: use a temporary variable for t' *)
+	(* if the pattern-matching is incomplete, default value is true *)
+	let ptl', lets2 =
+	  pattern_list_term ft t' t.jc_term_type ptl (LConst(Prim_bool true)) in
+	ptl', lets1@lets2
   in
   (if t.jc_term_label <> "" then
      Tnamed(reg_loc ~id:t.jc_term_label t.jc_term_loc,t')
@@ -676,7 +588,7 @@ let rec assertion ~global_assertion label oldlabel a =
 	  LPred("eq", [ t1'; t2' ]), lets1@lets2
 (*      | JCAmatch _ -> assert false *)
   in
-  let a' = make_pred_lets lets a' in
+  let a' = make_pred_binds lets a' in
   if a.jc_assertion_label <> "" then
     begin
 (*
@@ -744,7 +656,7 @@ let tr_logic_const vi init acc =
 	let ax =
 	  Axiom(
 	    vi.jc_var_info_name ^ "_value_axiom",
-	    make_pred_lets lets pred
+	    make_pred_binds lets pred
 	  )
 	in
 	ax::decl
@@ -1254,7 +1166,7 @@ let type_assert vi e =
 				 [LApp ("offset_min", [LVar alloc; et]);
 				  LConst (Prim_int (Num.string_of_num n))])
 			in
-			make_pred_lets lets pred
+			make_pred_binds lets pred
 		  end
 	      | None, Some n -> 
 		  begin match n2o' with
@@ -1265,7 +1177,7 @@ let type_assert vi e =
 				 [LApp ("offset_max", [LVar alloc; et]);
 				  LConst (Prim_int (Num.string_of_num n))])
 			in
-			make_pred_lets lets pred
+			make_pred_binds lets pred
 		  end
 	      | Some n1, Some n2 
 		  when Num.eq_num n1 (Num.num_of_int 0)
@@ -1280,14 +1192,14 @@ let type_assert vi e =
 				 [LApp ("offset_max", [LVar alloc; et]);
 				  LConst (Prim_int "0")])
 			in
-			make_pred_lets lets pred
+			make_pred_binds lets pred
 		    | None, Some n2' when Num.eq_num n2' (Num.num_of_int 0) ->
 			let pred =
 			  LPred ("eq_int",
 				 [LApp ("offset_min", [LVar alloc; et]);
 				  LConst (Prim_int "0")])
 			in
-			make_pred_lets lets pred
+			make_pred_binds lets pred
 		    | _ -> LTrue
 		  end
 	      | Some n1, Some n2 -> LTrue
@@ -2020,7 +1932,7 @@ let tr_fun f loc spec body acc =
 			    (const_of_num n1)
 			    (const_of_num n2)
 			in
-			make_pred_lets lets pred
+			make_pred_binds lets pred
 		  end
 	      | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull -> LTrue)
 	   acc)

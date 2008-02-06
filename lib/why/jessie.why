@@ -393,6 +393,8 @@ parenttag is defined by axioms in jc_interp, and defines the hierarchy.
 subtag is axiomatized from parenttag, and is the reflexive, transitive
   closure of parenttag.
 
+subtag_ is the same as subtag but for booleans.
+
 instanceof is defined from typeof and subtag.
 *****)
 
@@ -405,6 +407,13 @@ logic typeof: 't tag_table, 't pointer -> 't tag_id
 logic parenttag: 't tag_id, 't tag_id -> prop
 
 logic subtag: 't tag_id, 't tag_id -> prop
+
+logic subtag_bool: 't tag_id, 't tag_id -> bool
+
+axiom subtag_bool_def:
+  forall t1: 't tag_id.
+  forall t2: 't tag_id.
+    subtag_bool(t1, t2) = true <-> subtag(t1, t2)
 
 axiom subtag_refl:
   forall t: 't tag_id.

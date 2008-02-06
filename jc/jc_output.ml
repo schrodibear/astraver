@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.93 2008-02-06 08:41:00 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.94 2008-02-06 10:14:41 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -514,7 +514,10 @@ let param fmt vi =
   fprintf fmt "%a %s" print_type vi.jc_var_info_type vi.jc_var_info_name
 
 let field fmt fi =
-  fprintf fmt "@\n%a %s;" 
+  fprintf fmt "@\n";
+  if fi.jc_field_info_rep then
+    fprintf fmt "rep ";
+  fprintf fmt "%a %s;" 
     print_type fi.jc_field_info_type fi.jc_field_info_name
 
 let invariant fmt (id, vi, a) =

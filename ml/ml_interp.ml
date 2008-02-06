@@ -274,7 +274,7 @@ let rec term env e =
     | Texp_field(e, lbl) ->
 	let te = term env e in
 	let fi = (label e.exp_type lbl).ml_li_field in
-	JCTderef(make_term te (make e.exp_type), LabelNone, fi)
+	JCTderef(make_term te (make e.exp_type), LabelHere, fi)
 (*    | Texp_setfield of expression * label_description * expression
     | Texp_array of expression list
     | Texp_ifthenelse(if_expr, then_expr, else_expr) ->
@@ -552,6 +552,7 @@ let rec statement env e cont =
 	       | None -> None
 	       | Some x -> Some(
 		   make_term (term env x) (make x.exp_type)));
+	  jc_free_loop_invariant = make_assertion JCAtrue;
 	} in
 	statement env cond
 	  (fun e -> make_statement_block [
