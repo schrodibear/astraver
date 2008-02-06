@@ -116,7 +116,7 @@ GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
             jc/jc_version.ml jc/numconst.ml \
 	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
-	    jc/jc_ai.ml jc/jc_ai.mli \
+	    jc/jc_ai.ml \
 	    java/java_version.ml \
 	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
 	    ml/parsing/parser.mli ml/parsing/parser.ml ml/parsing/lexer.ml \
@@ -130,8 +130,7 @@ GENERATED = src/version.ml src/rc.ml src/lexer.ml src/parser.mli \
 	    tools/zenon_split.ml tools/ergo_split.ml \
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
 	    tools/simplify_parser.ml \
-	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml \
-	    jc/jc_ai.ml
+	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml 
 
 # main targets
 ##############
@@ -834,20 +833,14 @@ lib/coq/%.vo: lib/coq/%.v
 lib/coq-v7/%.vo: lib/coq-v7/%.v
 	$(COQC7) -I lib/coq-v7 $<
 
-jc/jc_ai.ml: jc/jc_annot_inference.ml Makefile
+jc/jc_ai.ml: jc/jc_annot_inference.ml jc/jc_annot_fail.ml Makefile
 	if test "@enable_apron@" = "yes" ; then \
 	  echo "# 1 \"jc/jc_annot_inference.ml\"" > jc/jc_ai.ml; \
 	  cat jc/jc_annot_inference.ml >> jc/jc_ai.ml; \
 	else \
-	  echo "let fail _ = failwith " > jc/jc_ai.ml; \
-	  echo "\"Not compiled with --enable-apron.\"" >> jc/jc_ai.ml; \
-	  echo "let code_function = fail" >> jc/jc_ai.ml; \
-	  echo "let main_function = fail" >> jc/jc_ai.ml; \
+	  echo "# 1 \"jc/jc_annot_fail.ml\"" > jc/jc_ai.ml; \
+	  cat jc/jc_annot_fail.ml >> jc/jc_ai.ml; \
 	fi
-
-jc/jc_ai.mli: jc/jc_annot_inference.mli Makefile
-	echo "# 1 \"jc/jc_annot_inference.mli\"" > jc/jc_ai.mli; \
-	cat jc/jc_annot_inference.mli >> jc/jc_ai.mli
 
 # %_why.v: %.mlw $(BINARY)
 # 	$(BINARY) -coq $*.mlw

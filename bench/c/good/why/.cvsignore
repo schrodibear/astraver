@@ -1,4 +1,5 @@
 *.why
+*.xpl
 *_why.pvs
 *.prf
 .pvscontext
