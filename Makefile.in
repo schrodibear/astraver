@@ -238,25 +238,7 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 
 
 # jessie
-JCCMO = @ATPCMO@ \
-	src/lib.cmo src/rc.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/output.cmo \
-	jc/jc_version.cmo jc/jc_common_options.cmo jc/jc_options.cmo \
-	jc/jc_envset.cmo jc/jc_region.cmo jc/numconst.cmo \
-	jc/jc_pervasives.cmo \
-	jc/jc_iterators.cmo jc/jc_parser.cmo jc/jc_lexer.cmo \
-	jc/jc_output.cmo jc/jc_typing.cmo jc/jc_norm.cmo jc/jc_separation.cmo \
-	jc/jc_name.cmo \
-	jc/jc_ai.cmo \
-	jc/jc_control_flow.cmo \
-	jc/jc_callgraph.cmo \
-	jc/jc_struct_tools.cmo jc/jc_interp_misc.cmo jc/jc_invariants.cmo \
-	jc/jc_effect.cmo jc/jc_pattern.cmo \
-	jc/jc_interp.cmo \
-	jc/jc_make.cmo jc/jc_main.cmo
-JCCMX = $(JCCMO:.cmo=.cmx)
-
-JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
+JCCML_EXPORT = src/lib.ml src/rc.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/output.ml \
 	jc/jc_version.ml jc/jc_common_options.ml \
 	jc/jc_envset.ml jc/jc_region.ml \
@@ -266,19 +248,35 @@ JCCML_EXPORT = src/lib.ml src/loc.ml src/pp.ml src/option_misc.ml \
 JCCMO_EXPORT = $(JCCML_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCML_EXPORT:.ml=.cmx)
 
+JCCMO = @ATPCMO@ $(JCCMO_EXPORT) \
+	jc/jc_options.cmo \
+	jc/numconst.cmo \
+	jc/jc_parser.cmo jc/jc_lexer.cmo \
+	jc/jc_separation.cmo \
+	jc/jc_ai.cmo \
+	jc/jc_control_flow.cmo \
+	jc/jc_callgraph.cmo \
+	jc/jc_struct_tools.cmo jc/jc_interp_misc.cmo jc/jc_invariants.cmo \
+	jc/jc_effect.cmo jc/jc_pattern.cmo \
+	jc/jc_interp.cmo \
+	jc/jc_make.cmo jc/jc_main.cmo
+JCCMX = $(JCCMO:.cmo=.cmx)
+
+$(JCCMX_EXPORT): OFLAGS:=$(OFLAGS) -for-pack Jc
+
 atp/atp.cmx: 
 	make -C atp atp.cmx
 
 atp/atp.cmo: 
 	make -C atp atp.cmo
 
-jc/jc.cma: $(JCCMO_EXPORT)
-	$(OCAMLC) $(BFLAGS) -a -o $@ $^
+jc/jc.cmo: $(JCCMO_EXPORT)
+	$(OCAMLC) $(BFLAGS) -pack -o $@ $^
 
-jc/jc.cmxa: $(JCCMX_EXPORT)
-	$(OCAMLOPT) $(OFLAGS) -a -o $@ $^
+jc/jc.cmx: $(JCCMX_EXPORT)
+	$(OCAMLOPT) $(OFLAGS) -pack -o $@ $^
 
-ppc: jc/jc.cma jc/jc.cmxa
+ppc: jc/jc.cmo jc/jc.cmx
 
 bin/jessie.opt: $(JCCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
@@ -660,11 +658,12 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(
 		cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy-bin$(EXE); \
 	fi
 
-install-lib: 
+install-lib: jc/jc.cmo jc/jc.cmx
 	mkdir -p $(LIBDIR)/why
 	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/jessie/why
+	cp -f jc/jc.cmo jc/jc.cmx $(LIBDIR)/jessie
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/jessie.why $(LIBDIR)/jessie/why
