@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.110 2008-02-07 19:22:03 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.111 2008-02-07 22:08:32 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1757,11 +1757,12 @@ let tr_class ci acc0 acc =
 		 | _ -> acc)
 	  true_assertion fields jc_fields
       in
-	(ci.class_info_name ^ "_non_null_inv", this, a)
+	if a = true_assertion then [] else
+	  [(ci.class_info_name ^ "_non_null_inv", this, a)]
     in
     let inv = 
       if !Java_options.non_null & !Java_options.inv_sem = Jc_env.InvArguments then 
-	[non_null_inv] else [] in
+	non_null_inv else [] in
     let acc = 
       if ci.class_info_name = "Object" then
 	let non_null_fi = create_non_null_fun si in
@@ -1830,8 +1831,8 @@ let tr_invariants ci id invs decls =
     List.map
       (fun d -> 
 	 match d with
-	   | JCstruct_def (s, so, fil, []) when s = ci.class_info_name ->
-	       JCstruct_def (s, so, fil, invs)
+	   | JCstruct_def (s, so, fil, struct_invs) when s = ci.class_info_name ->
+	       JCstruct_def (s, so, fil, struct_invs @ invs)
 	   | _ -> d)
       decls
 

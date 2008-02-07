@@ -1,5 +1,5 @@
 /*
-* $Workfile: JCSystem.java $	$Revision: 1.6 $, $Date: 2008-01-31 18:27:25 $
+* $Workfile: JCSystem.java $	$Revision: 1.7 $, $Date: 2008-02-07 22:08:32 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: JCSystem.java $
-// $Revision: 1.6 $
-// $Date: 2008-01-31 18:27:25 $
+// $Revision: 1.7 $
+// $Date: 2008-02-07 22:08:32 $
 // $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/JCSystem.java $
 // $Modtime: 5/02/00 7:13p $
@@ -150,7 +150,7 @@ public final class JCSystem
     /*@ behavior normal:
       @   ensures \result.length == length;
       @*/
-    public static native byte[] /*@ non_null @*/ makeTransientByteArray(short length, byte event) 
+    public static native byte[] makeTransientByteArray(short length, byte event) 
 	throws SystemException;
     
      /**
@@ -209,7 +209,7 @@ public final class JCSystem
      * @return the <code>AID</code> object.
      */
     
-    public static AID /*@ non_null @*/ getAID()
+    public static AID getAID()
     {
 	    return thePrivAccess.getAID( PrivAccess.getCurrentAppID() );
     }

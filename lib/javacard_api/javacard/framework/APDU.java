@@ -1,5 +1,5 @@
 /*
-* $Workfile: APDU.java $	$Revision: 1.2 $, $Date: 2008-01-31 18:27:25 $
+* $Workfile: APDU.java $	$Revision: 1.3 $, $Date: 2008-02-07 22:08:32 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: APDU.java $
-// $Revision: 1.2 $
-// $Date: 2008-01-31 18:27:25 $
+// $Revision: 1.3 $
+// $Date: 2008-02-07 22:08:32 $
 // $Author: nrousset $
 // $Archive: /Products/Europa/api21/javacard/framework/APDU.java $
 // $Modtime: 5/02/00 7:13p $
@@ -138,7 +138,7 @@ public final class APDU{
     private /* @  spec_public @*/ byte[] buffer;
 
     // Nicolas (for SCID.java)
-    //@ invariant buffer_inv: buffer != null && buffer.length >= 37;
+    //@ invariant buffer_inv: buffer.length >= 37;
 
     // Added by Xavier
     /* @ invariant 

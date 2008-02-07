@@ -1,6 +1,6 @@
 
 
-//@+ ArithOverflow = no
+//@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
 //@+ NonNullByDefault = yes
 
@@ -10,6 +10,7 @@ class NonNullByDefault {
     
     int[] t;
     C c;
+
 
     int[] m1() {
 	return t;
