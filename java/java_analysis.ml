@@ -199,7 +199,7 @@ let param vi =
 
 let string_of_parameters vil =
   (List.fold_right
-     (fun vi acc -> "_" ^ name_type vi.java_var_info_type ^ acc) vil "")
+     (fun (vi, _) acc -> "_" ^ name_type vi.java_var_info_type ^ acc) vil "")
 
 let disambiguates_method_names () =
   let methods_list =
@@ -245,7 +245,7 @@ let do_method mi req behs body =
     (get_method_info_class_or_interface_name mi) ^ "_" ^
     mi.method_info_name;
   disambiguates_method_names ();
-  List.iter param mi.method_info_parameters;
+  List.iter param (List.map fst mi.method_info_parameters);
   Option_misc.iter (List.iter statement) body;
   Option_misc.iter param mi.method_info_result
 

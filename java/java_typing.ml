@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.96 2008-02-06 16:53:56 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.97 2008-02-07 19:22:03 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -320,8 +320,8 @@ let field_prototypes_table : (int, variable_initializer option) Hashtbl.t
     = Hashtbl.create 97
 
 let field_tag_counter = ref 0
-
-let new_field ~is_static ~is_final ti ty id =
+  
+let new_field ~is_static ~is_final ~is_nullable ti ty id =
   incr field_tag_counter;
   let fi = {
     java_field_info_tag = !field_tag_counter;
@@ -330,9 +330,9 @@ let new_field ~is_static ~is_final ti ty id =
     java_field_info_class_or_interface = ti;
     java_field_info_is_static = is_static;
     java_field_info_is_final = is_final;
-  }
-  in fi
-
+    java_field_info_is_nullable = is_nullable;
+  } in fi
+	 
 
 let new_model_field ii ty id =
 (*
@@ -355,7 +355,7 @@ let methods_env = Hashtbl.create 97
 
 let method_or_constr_tag_counter = ref 0
 
-let new_method_info ~is_static loc id ti ty pars =
+let new_method_info ~is_static ~result_is_nullable loc id ti ty pars =
   incr method_or_constr_tag_counter;
   let result = 
       Option_misc.map (fun t -> new_var Loc.dummy_position t "\\result") ty
@@ -369,6 +369,7 @@ let new_method_info ~is_static loc id ti ty pars =
     method_info_has_this = None;
     method_info_parameters = pars;
     method_info_result = result;
+    method_info_result_is_nullable = result_is_nullable;
     method_info_calls = [];
     method_info_is_static = is_static;
   }
@@ -1050,8 +1051,8 @@ and get_field_prototypes package_env type_env ci acc d =
 	let is_non_null = List.mem Non_null vd.variable_modifiers in
 	let is_nullable = List.mem Nullable vd.variable_modifiers in
 	let non_null = 
-	  (not Java_options.non_null && is_non_null) ||
-	    (Java_options.non_null && not is_nullable)
+	  (not !Java_options.non_null && is_non_null) ||
+	    (!Java_options.non_null && not is_nullable)
 	in
 	let ty = type_type package_env type_env non_null vd.variable_type in
 	let ty = match ty, ci with
@@ -1065,13 +1066,13 @@ and get_field_prototypes package_env type_env ci acc d =
 	List.fold_left
 	  (fun acc vd -> 
 	     let ty', (loc, id) = var_type_and_id ty vd.variable_id in
-	       if is_non_null && Java_options.non_null then
+	       if is_non_null && !Java_options.non_null then
 		 typing_error loc 
 		   "'non_null' modifier is not allowed in 'non_null by default' mode";	    
-	       if is_nullable && not Java_options.non_null then
+	       if is_nullable && not !Java_options.non_null then
 		 typing_error loc 
 		   "'nullable' modifier is only allowed in 'non_null by default' mode";	    
-	     let fi = new_field ~is_static ~is_final ci ty' id in	     
+	     let fi = new_field ~is_static ~is_final ~is_nullable ci ty' id in	     
 	     Hashtbl.add field_prototypes_table fi.java_field_info_tag 
 	       vd.variable_initializer;
 	     fi::acc
@@ -1079,19 +1080,24 @@ and get_field_prototypes package_env type_env ci acc d =
     | _ -> acc
 
 and type_param package_env type_env p =
+  let nullable = ref false in
   let rec get_type p =
     match p with
       | Simple_parameter (mo, ty, (loc, id)) ->
 	  let non_null = 
 	    match mo with
-	      | None -> Java_options.non_null
+	      | None -> 
+		  nullable := not !Java_options.non_null;
+		  !Java_options.non_null
 	      | Some Non_null -> 
-		  if Java_options.non_null then
+		  nullable := false;
+		  if !Java_options.non_null then
 		    typing_error loc
 		      "'non_null' modifier is not allowed in 'non_null by default' mode";
 		  true;
-	      | Some Nullable ->
-		  if not Java_options.non_null then
+	      | Some Nullable -> 
+		  nullable := true;
+		  if not !Java_options.non_null then
 		    typing_error loc 
 		      "'nullable' modifier is only allowed in 'non_null by default' mode";
 		  false
@@ -1102,22 +1108,22 @@ and type_param package_env type_env p =
 	  let (t,loc,i) = get_type x in
 	  (JTYarray t,loc,i)
   in
-  let (t,loc,i) = get_type p in new_var loc t i
+  let (t,loc,i) = get_type p in (new_var loc t i, !nullable)
 
 and method_header package_env type_env modifiers retty mdecl =
   match mdecl with
     | Simple_method_declarator (id, l) ->
 	let is_non_null = List.mem Non_null modifiers in
 	let is_nullable = List.mem Nullable modifiers in
-	  if is_non_null && Java_options.non_null then
+	  if is_non_null && !Java_options.non_null then
 	    typing_error (fst id) 
 	      "'non_null' modifier is not allowed in 'non_null by default' mode";	    
-	  if is_nullable && not Java_options.non_null then
+	  if is_nullable && not !Java_options.non_null then
 	    typing_error (fst id)
 	      "'nullable' modifier is only allowed in 'non_null by default' mode";	    
 	  let non_null =
-	    (not Java_options.non_null && is_non_null) ||
-	      (Java_options.non_null && not is_nullable)
+	    (not !Java_options.non_null && is_non_null) ||
+	      (!Java_options.non_null && not is_nullable)
 	  in
 	    id, (Option_misc.map (type_type package_env type_env non_null) retty), 
 	List.map (type_param package_env type_env) l
@@ -1129,8 +1135,8 @@ and method_header package_env type_env modifiers retty mdecl =
 	  | Some t -> id,Some (JTYarray t),l
 	  | None -> typing_error (fst id) "invalid type void array"
 
-and get_constructor_prototype package_env type_env current_type 
-    req behs head eci body =
+and get_constructor_prototype 
+    package_env type_env current_type req behs head eci body =
   match current_type with
     | TypeInterface _ -> assert false
     | TypeClass cur ->
@@ -1153,7 +1159,10 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let mi = new_method_info ~is_static loc id current_type ret_ty params in
+	let result_is_nullable = List.mem Nullable head.method_modifiers in
+	let mi = new_method_info 
+	  ~is_static ~result_is_nullable loc id current_type ret_ty params 
+	in
 	Hashtbl.add methods_env mi.method_info_tag (mi,None,[],body);
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
@@ -1163,7 +1172,10 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let mi = new_method_info ~is_static loc id current_type ret_ty params in
+	let result_is_nullable = List.mem Nullable head.method_modifiers in
+	let mi = new_method_info 
+	  ~is_static ~result_is_nullable loc id current_type ret_ty params 
+	in
 	Hashtbl.add methods_env mi.method_info_tag 
 	  (mi,req,behs,body);
 	get_method_prototypes package_env type_env 
@@ -1293,7 +1305,7 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	  List.fold_left
 	    (fun acc vd -> 
 	       let ty',(loc,id) = var_type_and_id ty vd.variable_id in
-	       let fi = new_field ~is_static:true ~is_final:true 
+	       let fi = new_field ~is_static:true ~is_final:true ~is_nullable:true 
 		 (TypeInterface ii) ty' id 
 	       in
 		 Hashtbl.add field_prototypes_table fi.java_field_info_tag 
@@ -2162,7 +2174,7 @@ let is_accessible_and_applicable_method mi id arg_types =
   List.for_all2
    (fun vi t -> 
       is_method_invocation_convertible t vi.java_var_info_type)
-  mi.method_info_parameters arg_types 
+  (List.map fst mi.method_info_parameters) arg_types 
   
 let is_accessible_and_applicable_constructor ci arg_types =
   (* check args number *) 
@@ -2171,7 +2183,7 @@ let is_accessible_and_applicable_constructor ci arg_types =
   List.for_all2
   (fun vi t -> 
      is_method_invocation_convertible t vi.java_var_info_type)
-  ci.constr_info_parameters arg_types 
+  (List.map fst ci.constr_info_parameters) arg_types 
   
 let method_signature mi =
   let t =
@@ -2179,7 +2191,7 @@ let method_signature mi =
       | TypeClass ci -> JTYclass (true, ci) (* i.e. [this] is always non-null *)
       | TypeInterface ii -> JTYinterface ii
   in
-  t :: List.map (fun vi -> vi.java_var_info_type) mi.method_info_parameters
+  t :: List.map (fun (vi, _) -> vi.java_var_info_type) mi.method_info_parameters
 
 let rec compare_signatures acc s1 s2 =
   match s1,s2 with
@@ -2805,7 +2817,7 @@ let rec statement env s =
 	  let tl =
 	    List.map
 	      (fun (p,s) ->
-		 let vi = type_param env.package_env env.type_env p in
+		 let vi, _ = type_param env.package_env env.type_env p in
 		 match vi.java_var_info_type with
 		   | JTYclass(_,ci) when 
 		       (check_if_class_complete ci; 
@@ -3086,7 +3098,7 @@ let type_method_spec_and_body ?(dobody=true)
       List.fold_left
 	(fun acc vi -> 
 	   (vi.java_var_info_name,vi)::acc)
-	local_env mi.method_info_parameters
+	local_env (List.map fst mi.method_info_parameters)
     in
     let env = { package_env = package_env ;
 		type_env = type_env;
@@ -3166,7 +3178,7 @@ let type_constr_spec_and_body ?(dobody=true)
   in
   let local_env = 
     List.fold_left
-      (fun acc vi -> 
+      (fun acc (vi, _) -> 
 	 (vi.java_var_info_name,vi)::acc)
       [] ci.constr_info_parameters
   in
@@ -3258,7 +3270,7 @@ let type_constr_spec_and_body ?(dobody=true)
 		 make_expr_no_loc unit_type
 		   (JEconstr_call
 		      (make_expr_no_loc
-			 (JTYclass (Java_options.non_null, super_class_info)) 
+			 (JTYclass (!Java_options.non_null, super_class_info)) 
 			 (JEvar this_vi), 
 		       super_ci, tel))))
 	  in
@@ -3386,7 +3398,7 @@ let type_decl package_env type_env d =
 	Hashtbl.add axioms_table id (is_axiom,labels,te)
     | JPTlogic_type_decl _ -> assert false (* TODO *)
     | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
-	let pl = List.map (type_param package_env type_env) params in
+	let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
 	let env = 
 	  List.fold_left
 	    (fun acc vi -> 
@@ -3420,7 +3432,7 @@ let type_decl package_env type_env d =
 		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
 	  end
     | JPTlogic_def ((loc, id), ret_type, labels, params, body) -> 
-	let pl = List.map (type_param package_env type_env) params in
+	let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
 	let env = 
 	  List.fold_left
 	    (fun acc vi -> 

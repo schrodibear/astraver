@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.12 2008-02-05 20:24:05 nrousset Exp $ i*)
+(*i $Id: java_options.ml,v 1.13 2008-02-07 19:22:03 nrousset Exp $ i*)
 
 open Format
 
@@ -159,7 +159,6 @@ let debug = !debug
 let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
-let non_null = !non_null
 
 (*s error handling *)
 

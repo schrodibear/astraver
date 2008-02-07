@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.78 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.79 2008-02-07 19:22:03 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -927,18 +927,18 @@ let code_function (fi, fs, sl) vil =
 	    (* add invariants to the function precondition *)
 	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
 	    (* add invariants to the function postcondition *)
+	    let safety_exists = ref false in
 	    let post = invariants in
 	      List.iter
-		(fun (_,_, b) -> b.jc_behavior_ensures <- make_and 
-		   [b.jc_behavior_ensures; post])
+		(fun (_, s, b) ->
+		   if s = "safety" then safety_exists := true;
+		   b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; post])
 		fs.jc_fun_behavior;
-(*	      if is_purely_exceptional_fun fs then () else
-		begin
-		  (* add the 'safety' spec *)
-		  let safety_b = { default_behavior with jc_behavior_ensures = post } in
-		    fs.jc_fun_behavior <- 
-		      (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
-		end *)
+	      (* add the 'safety' spec if it does not exist (e.g. from Krakatoa) *)
+	      if not !safety_exists then 
+		let safety_b = { default_behavior with jc_behavior_ensures = post } in
+		  fs.jc_fun_behavior <- 
+		    (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
       | _ -> ()
   end;
     (* normalization of the function body *)

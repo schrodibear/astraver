@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.29 2008-02-06 16:53:56 marche Exp $ *)
+(* $Id: java_env.mli,v 1.30 2008-02-07 19:22:03 nrousset Exp $ *)
 
 (*s types and environments *)
 
@@ -73,6 +73,7 @@ and java_field_info =
 *)
       java_field_info_is_static : bool;
       java_field_info_is_final : bool;
+      java_field_info_is_nullable : bool;
       java_field_info_type : java_type;
 (*
       java_field_info_is_ghost : bool;
@@ -93,8 +94,9 @@ and method_info =
       *)
       method_info_class_or_interface : java_type_info;
       mutable method_info_has_this : java_var_info option;
-      method_info_parameters : java_var_info list;
+      method_info_parameters : (java_var_info * (* nullable *) bool) list;
       method_info_result : java_var_info option ;
+      method_info_result_is_nullable : bool ;
       mutable method_info_calls : method_or_constructor_info list;
     }
       
@@ -106,7 +108,7 @@ and constructor_info =
       mutable constr_info_trans_name : string;
       mutable constr_info_this : java_var_info option;
       mutable constr_info_result : java_var_info option;
-      constr_info_parameters : java_var_info list;
+      constr_info_parameters : (java_var_info * (* nullable : *) bool) list;
       mutable constr_info_calls : method_or_constructor_info list;
     }
 

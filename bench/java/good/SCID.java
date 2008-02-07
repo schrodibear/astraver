@@ -27,10 +27,14 @@
 /*                                                                        */
 /**************************************************************************/
 
+/* $Id: SCID.java,v 1.7 2008-02-07 19:22:03 nrousset Exp $ */
+
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
 //@+ AnnotationPolicy = Invariants
-//@+ AbstractDomain = Box
+
+// @+ AbstractDomain = Box
+//@+ AbstractDomain = Oct
 
 // Smart Card ID - Example for a Smart Card based Identification and Authentication Application
 // File: SCID.java
@@ -218,7 +222,9 @@
 import  javacard.framework.*;    // import all neccessary packages for the java card framework
 import  javacard.security.*;     // import all neccessary packages for the java card security
 
-//@ lemma a1: \forall integer b; 0 <= b <= 127 ==> (b & 0x00FF) == b;
+// Bug with lemma ? : gwhy blocked ?
+// @ lemma a1: \forall integer b; 0 <= b <= 127 ==> (b & 0x00FF) == b;
+//@ axiom a1: \forall integer b; 0 <= b <= 127 ==> (b & 0x00FF) == b;
 
 public class SCID extends Applet {
     // definitions for the classes and commands
@@ -251,16 +257,15 @@ public class SCID extends Applet {
     final static short   SIZE_AUTHCNTR  = (short)  2;     // size of the authentication counter in byte
     static byte[]        scid;                            // the smart card ID
     final static short   SIZE_SCID      = (short)  4;     // size of the unique smart card identifier in byte
-    //@ static invariant scid_inv: scid != null && scid.length == SIZE_SCID;
-    
+    //@ static invariant scid_inv: scid.length == SIZE_SCID;
+
     static byte[]        workarray;                       // workarray
     final static short   SIZE_WORKARRAY = (short) 30;     // size of the workarray 
-    //@ static invariant workarray_inv: workarray != null && workarray.length == SIZE_WORKARRAY;
+    //@ static invariant workarray_inv: workarray.length == SIZE_WORKARRAY;
     
     static DESKey        authkey;                         // authentication key
     final static short   SIZE_AUTHKEY   = (short)  8;     // authentication key is a 8 byte long DES key
     static Signature     mac;                             // MAC (message authentication code)
-    //@ static invariant mac_inv: mac != null;
     
     // definitions for the storage of the data elements
     final static short TAG_USERPIN  = (short) 0x51;   // tag for the user PIN
@@ -276,7 +281,6 @@ public class SCID extends Applet {
     final static byte    DEFAULT_ADMINPIN_MAXEC = (byte) 2;   // default value of the PIN error counter
     final static byte    ADMINPIN_ID            = (byte) 2;   // PIN identifier, PIN 2 = admin PIN
     static OwnerPIN      adminpin;                            // the PIN object
-    //@ static invariant adminpin_inv: adminpin != null;
     
     // constants and variables for the user PIN management
     final static byte[]  DEFAULT_USERPIN                      // default user PIN value
@@ -285,7 +289,6 @@ public class SCID extends Applet {
     final static byte    DEFAULT_USERPIN_MAXEC = (byte) 3;    // default value of the PIN error counter
     final static byte    USERPIN_ID            = (byte) 1;    // PIN identifier, PIN 1 = user PIN
     static OwnerPIN      userpin;                             // the PIN object
-    //@ static invariant userpin_inv: userpin != null;
     
     // constants and variables for the key management
     final static byte[]  DEFAULT_AUTHKEY            // default authentication key
@@ -324,7 +327,7 @@ public class SCID extends Applet {
     
     //---------------------------------------------------------------------------------------
     //----- this is the command dispatcher
-    public void process(APDU /*@ non_null @*/ apdu) {
+    public void process(APDU apdu) {
       byte[] cmd_apdu = apdu.getBuffer();
       
     // delete global used variables, for better robustness

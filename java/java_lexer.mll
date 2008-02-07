@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.20 2008-02-06 16:50:44 marche Exp $
+$Id: java_lexer.mll,v 1.21 2008-02-07 19:22:03 nrousset Exp $
 
 ***************************************************************************)
 
@@ -219,6 +219,26 @@ i*)
 
   let pragma lexbuf id v =
     match id with
+      | "AbstractDomain" ->
+	  begin
+	    Java_options.ai_domain :=
+	      match v with
+		| "None" -> Jc_env.AbsNone 
+		| "Box" -> Jc_env.AbsBox 
+		| "Oct" -> Jc_env.AbsOct 
+		| "Pol" -> Jc_env.AbsPol 
+		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
+	  end  
+      | "AnnotationPolicy" ->
+	  begin
+	    Java_options.annotation_sem :=
+	      match v with
+		| "None" -> Jc_env.AnnotNone
+		| "Invariants" -> Jc_env.AnnotInvariants
+		| "WeakPre" -> Jc_env.AnnotWeakPre
+		| "StrongPre" -> Jc_env.AnnotStrongPre
+		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
+	  end  
       | "CheckArithOverflow" ->
 	  begin
 	    match String.lowercase v with	  
@@ -235,25 +255,12 @@ i*)
 		| "Ownership" -> Jc_env.InvOwnership
 		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
 	  end  
-      | "AnnotationPolicy" ->
+      | "NonNullByDefault" ->
 	  begin
-	    Java_options.annotation_sem :=
-	      match v with
-		| "None" -> Jc_env.AnnotNone
-		| "Invariants" -> Jc_env.AnnotInvariants
-		| "WeakPre" -> Jc_env.AnnotWeakPre
-		| "StrongPre" -> Jc_env.AnnotStrongPre
-		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
-	  end  
-      | "AbstractDomain" ->
-	  begin
-	    Java_options.ai_domain :=
-	      match v with
-		| "None" -> Jc_env.AbsNone 
-		| "Box" -> Jc_env.AbsBox 
-		| "Oct" -> Jc_env.AbsOct 
-		| "Pol" -> Jc_env.AbsPol 
-		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
+	    match String.lowercase v with	  
+	      | "yes" -> Java_options.non_null := true
+	      | "no" -> Java_options.non_null := false
+	      | _ -> lex_error lexbuf "yes or no expected"
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 

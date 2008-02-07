@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.95 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.96 2008-02-07 19:22:03 nrousset Exp $ *)
 
 open Format
 open Jc_env
@@ -627,9 +627,13 @@ let rec print_decl fmt d =
 	  (print_option print_type) ty 
 	  id (print_list comma param) params
 	  term_or_assertion body 
-    | JClogic_fun_def(ty,id,labels,params,body) ->
+    | JClogic_fun_def (None, id, labels, params, body) ->
+	fprintf fmt "@\n@[logic %s{%a}(@[%a@]) %a@]@." 
+	  id (print_list comma label) labels (print_list comma param) params
+	  term_or_assertion body 
+    | JClogic_fun_def (Some ty, id, labels, params, body) ->
 	fprintf fmt "@\n@[logic %a %s{%a}(@[%a@]) %a@]@." 
-	  (print_option print_type) ty 
+	  print_type ty 
 	  id (print_list comma label) labels (print_list comma param) params
 	  term_or_assertion body 
     | JClogic_type_def id ->

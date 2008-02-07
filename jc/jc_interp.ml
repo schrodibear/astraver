@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.233 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.234 2008-02-07 19:22:03 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1569,7 +1569,7 @@ let make_valid_pred tov =
     let allocs = List.map
       (fun vi ->
 	 let tov = JCvariant vi in
-	 alloc_table_name tov,
+	   alloc_table_name tov,
 	 alloc_table_type tov)
       (Jc_struct_tools.all_types ~select:fully_allocated tov)
     in
@@ -1582,7 +1582,7 @@ let make_valid_pred tov =
     let p = p, pointer_type tov in
     let a = a, why_integer_type in
     let b = b, why_integer_type in
-    p::a::b::allocs@memories
+      p::a::b::allocs@memories
   in
   let validity =
     let omin, omax, super_valid = match tov with
@@ -1593,7 +1593,7 @@ let make_valid_pred tov =
       | JCtag { jc_struct_info_parent = None }
       | JCvariant _ ->
 	  make_eq (make_offset_min tov (LVar p)) (LVar a),
-	  make_eq (make_offset_max tov (LVar p)) (LVar a),
+	  make_eq (make_offset_max tov (LVar p)) (LVar b),
 	  LTrue
     in
     let fields_valid = match tov with
@@ -1936,12 +1936,14 @@ let tr_fun f loc spec body acc =
       f.jc_fun_info_parameters
   in
   (* partition behaviors as follows:
-     - behaviors inferred by analysis (postfixed by 'inferred')
+     - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)
+     - (optional) 'inferred' behaviors (calculated by analysis)
      - user defined behaviors *)
-  let (normal_behaviors_inferred, normal_behaviors, 
+  let (safety_behavior,
+       normal_behaviors_inferred, normal_behaviors, 
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
-      (fun (normal_inferred, normal, excep_inferred, excep) (loc, id, b) ->
+      (fun (safety, normal_inferred, normal, excep_inferred, excep) (loc, id, b) ->
 	 let post =
 	   match b.jc_behavior_assigns with
 	     | None ->
@@ -1969,12 +1971,20 @@ let tr_fun f loc spec body acc =
 	 in
 	   match b.jc_behavior_throws with
 	     | None -> 
-		 if id = "inferred" then 
-		   ((id, b, a) :: normal_inferred, 
-		    (if Jc_options.trust_ai then normal else (id, b, a) :: normal), 
-		    excep_inferred, excep)
-		 else 
-		   (normal_inferred, (id, b, a) :: normal, excep_inferred, excep)
+		 begin match id with
+		   | "safety" ->
+		       ((id, b, a) :: safety, 
+			normal_inferred, normal, excep_inferred, excep)
+		   | "inferred" -> 
+		       (safety,
+			(id, b, a) :: normal_inferred, 
+			(if Jc_options.trust_ai then normal else (id, b, a) :: normal), 
+			excep_inferred, excep)
+		   | _ -> 
+		       (safety, 
+			normal_inferred, (id, b, a) :: normal, 
+			excep_inferred, excep)
+		 end
 	     | Some ei ->
 		 let eb =
 		   try
@@ -1982,14 +1992,14 @@ let tr_fun f loc spec body acc =
 		   with Not_found -> []
 		 in
 		   if id = "inferred" then 
-		     (normal_inferred, normal, 
+		     (safety, normal_inferred, normal, 
 		      ExceptionMap.add ei ((id, b, a) :: eb) excep_inferred, 
 		      if Jc_options.trust_ai then excep else 
 			ExceptionMap.add ei ((id, b, a) :: eb) excep)
 		   else
-		     (normal_inferred, normal, excep_inferred, 
+		     (safety, normal_inferred, normal, excep_inferred, 
 		      ExceptionMap.add ei ((id, b, a) :: eb) excep))
-      ([], [], ExceptionMap.empty, ExceptionMap.empty)
+      ([], [], [], ExceptionMap.empty, ExceptionMap.empty)
       spec.jc_fun_behavior
   in
   let user_excep_behaviors = excep_behaviors in
@@ -2160,6 +2170,11 @@ let tr_fun f loc spec body acc =
 	f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)
       ([],[])
   in
+  let safety_post =
+    List.fold_right
+      (fun (_, _, e) acc -> make_and e acc)
+      safety_behavior LTrue
+  in
   let normal_post =
     List.fold_right
       (fun (_,_,e) acc -> make_and e acc)
@@ -2192,7 +2207,7 @@ let tr_fun f loc spec body acc =
   let ret_type = tr_type f.jc_fun_info_result.jc_var_info_type in
   let param_normal_post = 
     if is_purely_exceptional_fun spec then LFalse else
-      make_and normal_post normal_post_inferred 
+      make_and_list [safety_post; normal_post; normal_post_inferred] 
   in
   let param_excep_posts = excep_posts @ excep_posts_inferred in
   let why_param = 
@@ -2313,7 +2328,7 @@ let tr_fun f loc spec body acc =
 		      params,
 		      requires,
 		      tblock_safety,
-		      LTrue,
+		      safety_post,
 		      excep_posts_for_others None excep_behaviors
 		    ))::acc
 	      in

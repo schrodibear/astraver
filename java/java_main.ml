@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.50 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: java_main.ml,v 1.51 2008-02-07 19:22:03 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -157,6 +157,7 @@ let main () =
 	  
 	(* production phase 1.3 : generation of Jessie struct types *)
 	let non_null_preds, acc, decls_arrays = Java_interp.array_types [] in
+	let non_null_preds = Java_interp.tr_non_null_logic_fun () :: non_null_preds in
 	let acc, decls_structs =
 	  Hashtbl.fold 
 	    (fun _ id (acc0, acc) ->
