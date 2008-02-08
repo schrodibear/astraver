@@ -102,12 +102,18 @@ let pattern_list_term env body pats =
   in
   let result = List.fold_right2
     (fun pat vi body ->
-       make_term
-	 (JCTmatch(
-	    make_var_term vi,
-	    [ pat, body ]
-	  ))
-	 body.jc_term_type)
+       match pat.jc_pattern_node with
+	 | JCPvar _ ->
+	     (* Special case to avoid having "match x with y -> ..." *)
+	     (* Actually, x=y thanks to how args is built *)
+	     body
+	 | _ ->
+	     make_term
+	       (JCTmatch(
+		  make_var_term vi,
+		  [ pat, body ]
+		))
+	       body.jc_term_type)
     pats args (body benv)
   in
   args, result

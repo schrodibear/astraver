@@ -438,7 +438,7 @@ let rec statement env e cont =
 		    (fun resvi rese ->
 		       let psl = List.map
 			 (fun (p, e) ->
-			    let newenv, p = Ml_pattern.pattern env p in
+			    let newenv, p = pattern env p in
 			    let s = statement newenv e (make_affect resvi) in
 			    p, [s])
 			 pel
