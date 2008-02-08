@@ -65,14 +65,26 @@
   @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
   @*/
 
+/*@ predicate isGcd(integer a, integer b, integer d) {
+  @   divides(d,a) && divides(d,b) && 
+  @     \forall integer z;
+  @     divides(z,a) && divides(z,b) ==> divides(z,d) }
+  @*/
+
+/*@ lemma gcd_zero :
+  @   \forall integer a; isGcd(a,0,a) ;
+  @*/
+
+/*@ lemma gcd_property :
+  @   \forall integer a, b, d, q;
+  @      isGcd(b,a-q*b,d) ==> isGcd(a,b,d) ;
+  @*/
+
 class Gcd {
 
     /*@ requires x >= 0 && y >= 0;
-      @ behavior divides_both:
-      @   ensures divides(\result,x) && divides(\result,y);
-      @ behavior is_greatest_divisor:
-      @   ensures \forall integer z;
-      @     z>0 && divides(z,x) && divides(z,y) ==> z>=\result;
+      @ behavior isGcd: 
+      @   ensures isGcd(x,y,\result) ;
       @ behavior bezout_property:
       @   ensures \exists integer a,b; a*x+b*y == \result;
       @*/
@@ -80,6 +92,8 @@ class Gcd {
         //@ ghost int a = 1, b = 0, c = 0, d = 1;
         /*@ loop_invariant 
           @    x >= 0 && y >= 0 &&  
+	  @    (\forall integer d ;  isGcd(x,y,d) ==> 
+	  @        isGcd(\at(x,Pre),\at(y,Pre),d)) && 
           @    a*\at(x,Pre)+b*\at(y,Pre) == x && 
           @    c*\at(x,Pre)+d*\at(y,Pre) == y ;
           @ decreases y;
