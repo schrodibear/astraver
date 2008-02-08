@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.46 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.47 2008-02-08 09:24:24 filliatr Exp $ i*)
 
 open Format
 
@@ -138,7 +138,12 @@ let set_integer_size r s =
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let files_ = ref []
-let add_file f = files_ := f :: !files_
+let add_file f = 
+  if not (Sys.file_exists f) then begin
+    eprintf "caduceus: %s: no such file@." f;
+    exit 1
+  end;
+  files_ := f :: !files_
 let files () = List.rev !files_
 
 let version () = 
@@ -171,85 +176,91 @@ let assume s =
   verification := Assume;
   List.iter (fun f -> Hashtbl.add functions f ()) (split s)
 
-let _ = 
-  Arg.parse 
-      [ "-parse-only", Arg.Set parse_only, 
-	  "  stops after parsing";
-        "-type-only", Arg.Set type_only, 
-	  "  stops after typing";
-        "-print-norm", Arg.Set print_norm, 
-	  "  stops after normalization and print C tree";
-        "-print-call-graph", Arg.Set print_graph, 
-	  "  stops after call graph and print call graph";
-        "-no-cpp", Arg.Clear with_cpp, 
-	  "  no C preprocessor";
-        "-ccp", Arg.String ((:=) cpp_command), 
-	  " <cmd>  sets the C preprocessor";
-	"-E", Arg.Set cpp_dump,
-	  "  stops after pre-processing and dump pre-processed file";
-	"-d", Arg.Set debug,
-          "  debugging mode";
-        "-why-opt", Arg.String add_why_opt,
-	  " <why options>  passes options to Why";
-	"-coq-tactic", Arg.String ((:=) coq_tactic),
-	  " <coq tactic>  Coq tactic for new goals";
-	"-v", Arg.Set verbose,
-          "  verbose mode";
-	"-q", Arg.Clear verbose,
-          "  quiet mode (default)";
-	"--werror", Arg.Set werror,
-          "  treats warnings as errors";
-	"--version", Arg.Unit version,
-          "  prints version and exit";
-	"-s", Arg.Set separate,
-	  "  a separate file for each function";
-	"-verify", Arg.String verify,
-	  " <f,g,h...>  specifies the functions to verify; implies -s";
-	"-assume", Arg.String assume,
-	  " <f,g,h...>  specifies functions not to be verified (i.e. assumed)";
-	"-closed", Arg.Set closed_program,
-	  "  assumes a closed program";
-	"-separation", 
-	  Arg.Unit(fun () -> zones := true; closed_program := true),
-	  "  separates pointers into several zones (implies -closed)";	
-	"-show-time", 
-	  Arg.Unit(fun () -> show_time := true;),
-	  " prints execution time ";
-	"-no-zone-type", 
-	  Arg.Set no_zone_type,
-	  "  zones do not generate different why types";
-	"--no-fp", Arg.Clear floats,
-	  "  do not use floating-point arithmetic";
-	"--fp-rounding-mode", Arg.String set_fp_rounding_mode,
-	  "  set the default FP rounding mode";
-	"--fp-overflow", Arg.Set fp_overflow_check,
-	  "  check for FP overflows";
-	"-int-model", Arg.String set_int_model, 
-          "  set the model for integer arithmetic (exact, bounded or modulo)";
-	"-check-enum", Arg.Set enum_check,
-	  "  check for enum values";
-	"-char-size", Arg.Int (set_integer_size char_size_),
-	  "<n>  set the size of type `char' (default is 8)";
-	"-short-size", Arg.Int (set_integer_size short_size_),
-	  "  set the size of type `short' (default is 16)";
-	"-int-size", Arg.Int (set_integer_size int_size_),
-	  "  set the size of type `int' (default is 32)";
-	"-long-size", Arg.Int (set_integer_size long_size_),
-	  "  set the size of type `long' (default is 32)";
-	"-long-long-size", Arg.Int (set_integer_size long_long_size_),
-	  "  set the size of type `long long' (default is 64)";
-	"--loc-alias", Arg.Set local_aliasing,
-	  "  local aliasing analysis (experimental)";
-	"--arith-mem", Arg.Set arith_memory_model,
-	  "  alternate arithmetic memory model (experimental)";
-	"--abs-int", Arg.Set abstract_interp,
-	  "  local abstract interpretation over integers (experimental)";
-	"--inv-gen", Arg.Set gen_invariant,
-	  "  invariant generation by local abstract interpretation over integers (experimental)";
-	"--abs-int-proof", Arg.Set absint_as_proof,
-	  "  proof by local abstract interpretation over integers (experimental)";
-      ]
-      add_file "caduceus [options] file..."
+let spec =
+  [ "-parse-only", Arg.Set parse_only, 
+  "  stops after parsing";
+    "-type-only", Arg.Set type_only, 
+  "  stops after typing";
+    "-print-norm", Arg.Set print_norm, 
+  "  stops after normalization and print C tree";
+    "-print-call-graph", Arg.Set print_graph, 
+  "  stops after call graph and print call graph";
+    "-no-cpp", Arg.Clear with_cpp, 
+  "  no C preprocessor";
+    "-ccp", Arg.String ((:=) cpp_command), 
+  " <cmd>  sets the C preprocessor";
+    "-E", Arg.Set cpp_dump,
+  "  stops after pre-processing and dump pre-processed file";
+    "-d", Arg.Set debug,
+  "  debugging mode";
+    "-why-opt", Arg.String add_why_opt,
+  " <why options>  passes options to Why";
+    "-coq-tactic", Arg.String ((:=) coq_tactic),
+  " <coq tactic>  Coq tactic for new goals";
+    "-v", Arg.Set verbose,
+  "  verbose mode";
+    "-q", Arg.Clear verbose,
+  "  quiet mode (default)";
+    "--werror", Arg.Set werror,
+  "  treats warnings as errors";
+    "--version", Arg.Unit version,
+  "  prints version and exit";
+    "-s", Arg.Set separate,
+  "  a separate file for each function";
+    "-verify", Arg.String verify,
+  " <f,g,h...>  specifies the functions to verify; implies -s";
+    "-assume", Arg.String assume,
+  " <f,g,h...>  specifies functions not to be verified (i.e. assumed)";
+    "-closed", Arg.Set closed_program,
+  "  assumes a closed program";
+    "-separation", 
+  Arg.Unit(fun () -> zones := true; closed_program := true),
+  "  separates pointers into several zones (implies -closed)";	
+    "-show-time", 
+  Arg.Unit(fun () -> show_time := true;),
+  " prints execution time ";
+    "-no-zone-type", 
+  Arg.Set no_zone_type,
+  "  zones do not generate different why types";
+    "--no-fp", Arg.Clear floats,
+  "  do not use floating-point arithmetic";
+    "--fp-rounding-mode", Arg.String set_fp_rounding_mode,
+  "  set the default FP rounding mode";
+    "--fp-overflow", Arg.Set fp_overflow_check,
+  "  check for FP overflows";
+    "-int-model", Arg.String set_int_model, 
+  "  set the model for integer arithmetic (exact, bounded or modulo)";
+    "-check-enum", Arg.Set enum_check,
+  "  check for enum values";
+    "-char-size", Arg.Int (set_integer_size char_size_),
+  "<n>  set the size of type `char' (default is 8)";
+    "-short-size", Arg.Int (set_integer_size short_size_),
+  "  set the size of type `short' (default is 16)";
+    "-int-size", Arg.Int (set_integer_size int_size_),
+  "  set the size of type `int' (default is 32)";
+    "-long-size", Arg.Int (set_integer_size long_size_),
+  "  set the size of type `long' (default is 32)";
+    "-long-long-size", Arg.Int (set_integer_size long_long_size_),
+  "  set the size of type `long long' (default is 64)";
+    "--loc-alias", Arg.Set local_aliasing,
+  "  local aliasing analysis (experimental)";
+    "--arith-mem", Arg.Set arith_memory_model,
+  "  alternate arithmetic memory model (experimental)";
+    "--abs-int", Arg.Set abstract_interp,
+  "  local abstract interpretation over integers (experimental)";
+    "--inv-gen", Arg.Set gen_invariant,
+  "  invariant generation by local abstract interpretation over integers (experimental)";
+    "--abs-int-proof", Arg.Set absint_as_proof,
+  "  proof by local abstract interpretation over integers (experimental)";
+  ]
+
+let () = Arg.parse spec add_file "caduceus [options] file..."
+
+let () = 
+  if !files_ = [] then begin
+    Arg.usage spec "usage: caduceus [options] file...\nOptions are:";
+    exit 1
+  end
 
 let zones = !zones
 let show_time = !show_time

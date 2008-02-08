@@ -872,8 +872,8 @@ wc:
 NAME=why-$(VERSION)
 EXPORT=export/$(NAME)
 
-FTP = /users/demons/filliatr/ftp/why
-WWW = /users/demons/filliatr/WWW/why
+WWW = /users/www-perso/projets/why
+FTP = $(WWW)/download
 WWWKRAKATOA = /users/demons/marche/WWW/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tools/*.ml* tools/*.c bin/gwhy.sh \
