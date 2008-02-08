@@ -152,7 +152,9 @@ SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT)
 
-all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
+JCLIB=jc/jc.cmo jc/jc.cmx
+
+all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB)
 
 opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt
 
@@ -658,7 +660,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(
 		cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy-bin$(EXE); \
 	fi
 
-install-lib: jc/jc.cmo jc/jc.cmx
+install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/why
 	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
