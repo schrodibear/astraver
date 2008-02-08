@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.104 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.105 2008-02-08 18:26:52 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -76,6 +76,11 @@ module TermMap =
 let inspected_functions = ref []
 let state_changed = ref false
 let nb_iterations = ref 0
+let nb_conj_atoms_inferred = ref 0
+let nb_loop_inv = ref 0
+let nb_fun_pre = ref 0
+let nb_fun_post = ref 0
+let nb_fun_excep_post = ref 0
 
 
 (* Constructors *)
@@ -148,6 +153,13 @@ let struct_of_term t =
       if debug then printf "[struct_of_term] %a@." Jc_output.term t;
       assert false
 
+let rec nb_conj_atoms a = match a.jc_assertion_node with
+  | JCAand al -> List.fold_left (fun acc a -> nb_conj_atoms a + acc) 0 al
+  | JCAtrue | JCAfalse | JCArelation _ | JCAapp _  
+  | JCAimplies _ | JCAiff _ | JCAquantifier _ | JCAinstanceof _ 
+  | JCAbool_term _ | JCAif _ | JCAmutable _ | JCAtagequality _
+  | JCAor _ | JCAnot _ | JCAold _ | JCAat _ -> 1
+      
 let rec conjuncts a = match a.jc_assertion_node with
   | JCAand al -> List.flatten(List.map conjuncts al)
   | _ -> [a]
@@ -458,7 +470,7 @@ type 'a abstract_invariants = {
 type 'a abstract_interpreter = {
   jc_absint_manager : 'a Manager.t;
   jc_absint_function_environment : Environment.t;
-  jc_absint_function_name : string;
+  jc_absint_function : fun_info;
   jc_absint_widening_threshold : int;
   jc_absint_loop_invariants : (int,'a abstract_invariants) Hashtbl.t;
   jc_absint_loop_initial_invariants : (int,'a abstract_invariants) Hashtbl.t;
@@ -2278,12 +2290,12 @@ and intern_ai_statement iaio abs curinvs s =
 	empty_abstract_value mgr normal
     | JCSreturn (t, e) ->
 	let asrts = collect_expr_asserts e in
-	List.iter (test_assertion mgr prop) asrts;
-	(* <return e;> is logically equivalent to <\result = e;> *)
-	let vit = term_var_no_loc (Jc_pervasives.var ~unique:false t "\\result") in
-	assign_expr mgr pre vit e;
-	join_abstract_value mgr !postret normal;
-	empty_abstract_value mgr normal;
+	  List.iter (test_assertion mgr prop) asrts;
+	  let result_vi = abs.jc_absint_function.jc_fun_info_result in
+	  let result_vit = term_var_no_loc result_vi in
+	    assign_expr mgr pre result_vit e;
+	    join_abstract_value mgr !postret normal;
+	    empty_abstract_value mgr normal;
     | JCSthrow (ei, eopt) ->
 	begin match eopt with
 	  | None -> ()
@@ -2515,6 +2527,8 @@ let rec record_ai_invariants abs s =
 		la.jc_loop_invariant <- raw_asrt JCAfalse
 	      else
 		let a = mkinvariant mgr loopinv in
+		  nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a;
+		  nb_loop_inv := !nb_loop_inv + 1;
 		  if Jc_options.verbose then
 		    printf 
 		      "%a@[<v 2>Inferring loop invariant@\n%a@]@."
@@ -2545,9 +2559,6 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
     (* Add \result as abstract variable in [env] if any. *)
     let vi_result = fi.jc_fun_info_result in
     let return_type = vi_result.jc_var_info_type in
-(*
-    let vi_result = Jc_pervasives.var ~unique:false return_type "\\result" in
-*)
     let env =
       if return_type <> JCTnative Tunit then
 	let result = Vai.all_variables (term_var_no_loc vi_result) in
@@ -2566,7 +2577,7 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
     let abs = { 
       jc_absint_manager = mgr;
       jc_absint_function_environment = env;
-      jc_absint_function_name = fi.jc_fun_info_name;
+      jc_absint_function = fi;
       jc_absint_widening_threshold = 1;
       jc_absint_loop_invariants = Hashtbl.create 0;
       jc_absint_loop_initial_invariants = Hashtbl.create 0;
@@ -2669,6 +2680,10 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 	       in
 	       let vars = List.map Vai.variable tl in
 	       let vars = List.filter (fun va -> not (List.mem va acc1)) vars in
+	       let vars = List.fold_left 
+		 (fun acc va -> if (List.mem va acc) then acc else va :: acc) 
+		 [] vars 
+	       in
 	       let strl = List.map 
 		 (fun v -> (Var.to_string v) ^ "=" ^ (Var.to_string va)) 
 		 vars 
@@ -2678,7 +2693,7 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 	  (integer_vars, []) integer_vars
       in
       let env = try Environment.make (Array.of_list integer_vars) [||] 
-      with Failure _ -> assert false in
+      with Failure msg -> printf "%s@." msg; assert false in
 	Abstract1.change_environment_with mgr post env false;
 	let lincons = Parser.lincons1_of_lstring env strl in
 	let post = Abstract1.meet mgr post 
@@ -2689,7 +2704,8 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 	  (fun acc t -> match t.jc_term_node with
 	     | JCTvar vi -> 
 		 acc || (not vi.jc_var_info_static  &&
-		   not (List.mem vi fi.jc_fun_info_parameters))
+			   not (vi == fi.jc_fun_info_result) &&
+			   not (List.mem vi fi.jc_fun_info_parameters))
 	     | _ -> acc
 	  ) false t
       in
@@ -2704,12 +2720,12 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 	post
     in
 
-    (* Update the return postcondition for procedure with no last return. *)
-    if return_type = JCTnative Tunit then
-      join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
-    (* record the inferred postcondition *)
-    if iaio = None then
-      let returnabs = keep_extern !(invs.jc_absinv_return).jc_absval_regular in
+      (* Update the return postcondition for procedure with no last return. *)
+      if return_type = JCTnative Tunit then
+	join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
+      (* record the inferred postcondition *)
+      if iaio = None then
+	let returnabs = keep_extern !(invs.jc_absinv_return).jc_absval_regular in
 	let returna = mkinvariant abs.jc_absint_manager returnabs in
 	let post = make_and 
 	  [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type 
@@ -2727,6 +2743,8 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 	let excal = List.map (mkinvariant abs.jc_absint_manager) excabsl in
 
 	let post = reg_annot ~loc ~anchor:fi.jc_fun_info_name post in
+	  nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms post;
+	  nb_fun_post := !nb_fun_post + 1;
 	let excal = List.map (reg_annot ~loc ~anchor:fi.jc_fun_info_name) excal in
 
 	let exc_behaviors = 
@@ -2745,7 +2763,10 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 		fi.jc_fun_info_name
 		Jc_output.assertion post;
 	      List.iter2
-		(fun exc exca -> printf
+		(fun exc exca -> 
+		   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms exca;
+		   nb_fun_excep_post := !nb_fun_excep_post + 1;
+		   printf
 		"@[<v 2>Inferring exceptional postcondition (for exception %s) for function %s@\n%a@]@."
 		   exc.jc_exception_info_name
 		 fi.jc_fun_info_name
@@ -3918,6 +3939,8 @@ let rec record_ai_inter_preconditions mgr iai fi fs =
   with Not_found -> Abstract1.top mgr (Environment.make [||] [||])
   in
   let a = mkinvariant mgr pre in
+    nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a;
+    nb_fun_pre := !nb_fun_pre + 1;
   begin
     if Jc_options.verbose then
       printf 
@@ -3962,8 +3985,16 @@ let ai_interprocedural mgr (fi, loc, fs, sl) =
     ai_entrypoint mgr None (fi, loc, fs, sl);
     let time = Unix.gettimeofday () -. time in
       if Jc_options.verbose then 
-	printf "Interprocedural analysis: %d iterations, %f seconds@." 
-	  !nb_iterations time
+	printf "Interprocedural analysis stats: \
+               @.    %d function preconditions inferred \
+               @.    %d function postconditions inferred \
+               @.    %d function exceptional postconditions inferred \
+               @.    %d loop invariants inferred \
+               @.    %d conjonction atoms inferred \
+               @.    %d iterations \
+               @.    %f seconds@." 
+	  !nb_fun_pre !nb_fun_post !nb_fun_excep_post !nb_loop_inv
+	  !nb_conj_atoms_inferred !nb_iterations time
     
     
 let main_function = function

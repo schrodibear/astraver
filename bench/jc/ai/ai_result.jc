@@ -1,8 +1,11 @@
 
 # AnnotationPolicy = Invariants
-# AbstractDomain = Oct
+# AbstractDomain = Box
 
 type intM = { integer val; }
+
+
+integer f() { return 0; }
 
 
 // OK inferred post: <\result >= 0>

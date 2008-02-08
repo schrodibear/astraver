@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.111 2008-02-07 22:08:32 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.112 2008-02-08 18:26:52 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1371,7 +1371,7 @@ let behavior (id,assumes,throws,assigns,ensures) =
   })
 
 
-let get_non_null_assertion si ty t =
+let get_non_null_assertion ty t =
   let node = 
     match ty with
       | JTYbase _ | JTYnull -> assert false
@@ -1384,10 +1384,8 @@ let get_non_null_assertion si ty t =
 	  } in
 	    JCAapp app
       | JTYinterface ii ->
-	  let si = st_interface in
 	  let offset_maxt = term_no_loc 
-	    (JCToffset (Offset_max, t, si)) 
-	    Jc_pervasives.integer_type in
+	    (JCToffset (Offset_max, t, st_interface)) Jc_pervasives.integer_type in
 	    JCArelation (offset_maxt, Beq_int, zerot)
       | JTYarray ty ->
 	  let si = get_array_struct Loc.dummy_position ty in
@@ -1409,9 +1407,9 @@ let tr_method mi req behs b acc =
 	(fun acc vi (java_vi, nullable) -> 
 	   if nullable then acc else
 	     match vi.jc_var_info_type with
-	       | JCTpointer (JCtag si, _, _) ->
+	       | JCTpointer _ ->
 		   let vit = term_no_loc (JCTvar vi) vi.jc_var_info_type in
-		     make_and [acc; get_non_null_assertion si java_vi.java_var_info_type vit]
+		     make_and [acc; get_non_null_assertion java_vi.java_var_info_type vit]
 	       | _ -> acc)
 	true_assertion params java_params
     else 
@@ -1431,9 +1429,9 @@ let tr_method mi req behs b acc =
 	let ao = 
 	  if !Java_options.non_null & not mi.method_info_result_is_nullable then
 	    match _nvi.jc_var_info_type with
-	      | JCTpointer (JCtag si, _, _) ->
+	      | JCTpointer _ ->
 		  let vit = term_no_loc (JCTvar _nvi) _nvi.jc_var_info_type in
-		    Some (get_non_null_assertion si ty vit)
+		    Some (get_non_null_assertion ty vit)
 	      | _ -> None
 	  else None
 	in
@@ -1582,8 +1580,9 @@ let tr_logic_fun fi b acc =
 
 let tr_field type_name acc fi =
   let vi = create_static_var Loc.dummy_position type_name fi in
+  let vi_ty = vi.jc_var_info_type in
+  let fi_ty = fi.java_field_info_type in
     if fi.java_field_info_is_final then
-      let vi_ty = vi.jc_var_info_type in
       let logic_body, axiom_body =
 	try
 	  let e = 
@@ -1592,7 +1591,7 @@ let tr_field type_name acc fi =
 	  let values =
 	    Hashtbl.find Java_typing.final_field_values_table fi.java_field_info_tag
 	  in
-	  let get_value value = match fi.java_field_info_type with
+	  let get_value value = match fi_ty with
 	    | JTYarray (JTYbase t) | JTYbase t -> 
 		begin match t with
 		  | Tshort | Tbyte | Tchar | Tint 
@@ -1641,7 +1640,7 @@ let tr_field type_name acc fi =
 			      dummy_loc_term Jc_pervasives.integer_type 
 				(JCTconst (JCCinteger (string_of_int (n - 1))))))]
 		    in
-		    let beq = match fi.java_field_info_type with
+		    let beq = match fi_ty with
 		      | JTYarray jt -> 
 			  begin match jt with
 			    | JTYbase (Tshort | Tbyte | Tchar | Tint 
@@ -1704,14 +1703,23 @@ let tr_field type_name acc fi =
 	decl @ acc      
     else
       let e = 
-	try
-	  match Hashtbl.find Java_typing.field_initializer_table 
-	    fi.java_field_info_tag with
-	      | None -> None
-	      | Some e -> Some (initialiser e)
+	try match Hashtbl.find Java_typing.field_initializer_table 
+	  fi.java_field_info_tag with
+	    | None -> None
+	    | Some e -> Some (initialiser e)
 	with Not_found -> None
       in
-	JCvar_def(vi.jc_var_info_type,vi.jc_var_info_final_name,e)::acc
+      let acc = JCvar_def (vi_ty, vi.jc_var_info_final_name, e) :: acc in
+      let acc =
+	if !Java_options.non_null && not fi.java_field_info_is_nullable then
+	  match vi_ty with
+	    | JCTpointer _ -> 
+		let a = get_non_null_assertion fi_ty (term_no_loc (JCTvar vi) vi_ty) in
+		  JCglobinv_def (vi.jc_var_info_name ^ "_non_null_inv", a) :: acc
+	    | _ -> acc
+	else acc
+      in
+	acc
 	  
 
 (* class *)
@@ -1750,9 +1758,9 @@ let tr_class ci acc0 acc =
 	     let ty = jc_fi.jc_field_info_type in
 	     let fit = term_no_loc (JCTderef (thist, Jc_env.LabelHere, jc_fi)) ty in
 	       match ty with
-		 | JCTpointer (JCtag si, _, _) -> 
+		 | JCTpointer _ -> 
 		     if fi.java_field_info_is_nullable then acc else
-		       let a = get_non_null_assertion si fi.java_field_info_type fit in 
+		       let a = get_non_null_assertion fi.java_field_info_type fit in 
 			 make_and [acc; a] 
 		 | _ -> acc)
 	  true_assertion fields jc_fields

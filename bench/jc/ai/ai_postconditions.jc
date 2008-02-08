@@ -1,3 +1,4 @@
+
 # InvariantPolicy = Arguments
 # AnnotationPolicy = Invariants
 # AbstractDomain = Oct
@@ -25,7 +26,7 @@ integer getN()
 
 unit f0() {
    integer tmp = getN();
-   if (tmp != h()) g();
+   if (n < 0) g();
 }
 
 

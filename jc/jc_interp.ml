@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.234 2008-02-07 19:22:03 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.235 2008-02-08 18:26:52 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1908,7 +1908,11 @@ let tr_fun f loc spec body acc =
        spec.jc_fun_free_requires)
   in
   let requires = make_and requires_param free_requires in
-  let requires_param = if Jc_options.trust_ai then requires_param else requires in
+  let requires_param = 
+    if !Jc_options.annotation_sem = AnnotNone || Jc_options.trust_ai then 
+      requires_param 
+    else requires 
+  in
   let requires =
     List.fold_left 
       (fun acc vi ->
@@ -2216,7 +2220,10 @@ let tr_fun f loc spec body acc =
 		 reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = 
-      interp_fun_params f (param_write_allocs @ param_write_mems) (param_read_allocs @ param_read_mems) annot_type 
+      interp_fun_params f 
+	(param_write_allocs @ param_write_mems) 
+	(param_read_allocs @ param_read_mems) 
+	annot_type 
     in
       Param (false, f.jc_fun_info_final_name, fun_type)
   in

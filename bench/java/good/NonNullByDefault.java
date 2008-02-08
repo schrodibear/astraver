@@ -10,7 +10,7 @@ class NonNullByDefault {
     
     int[] t;
     C c;
-
+    static C sc;
 
     int[] m1() {
 	return t;
@@ -39,4 +39,8 @@ class NonNullByDefault {
 	this.c = c;
     }
     
+    void m4() {
+	int n = sc.x;
+    }
+
 }

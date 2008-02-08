@@ -27,13 +27,11 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: SCID.java,v 1.8 2008-02-07 22:08:32 nrousset Exp $ */
+/* $Id: SCID.java,v 1.9 2008-02-08 18:26:52 nrousset Exp $ */
 
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
-//@+ AnnotationPolicy = Invariants
-//@+ NonNullByDefault = yes
-
+// @+ AnnotationPolicy = Invariants
 // @+ AbstractDomain = Box
 //@+ AbstractDomain = Oct
 
@@ -258,16 +256,19 @@ public class SCID extends Applet {
     final static short   SIZE_AUTHCNTR  = (short)  2;     // size of the authentication counter in byte
     static byte[]        scid;                            // the smart card ID
     final static short   SIZE_SCID      = (short)  4;     // size of the unique smart card identifier in byte
-    //@ static invariant scid_inv: scid.length == SIZE_SCID;
+    //@ static invariant scid_inv: scid != null && scid.length == SIZE_SCID;
 
     static byte[]        workarray;                       // workarray
     final static short   SIZE_WORKARRAY = (short) 30;     // size of the workarray 
-    //@ static invariant workarray_inv: workarray.length == SIZE_WORKARRAY;
+    //@ static invariant workarray_inv: workarray != null && workarray.length == SIZE_WORKARRAY;
     
     static DESKey        authkey;                         // authentication key
+    //@ static invariant authkey_inv: authkey != null;
+
     final static short   SIZE_AUTHKEY   = (short)  8;     // authentication key is a 8 byte long DES key
     static Signature     mac;                             // MAC (message authentication code)
-    
+    //@ static invariant mac_inv: mac != null;
+
     // definitions for the storage of the data elements
     final static short TAG_USERPIN  = (short) 0x51;   // tag for the user PIN
     final static short TAG_ADMINPIN = (short) 0x52;   // tag for the administrative PIN
@@ -282,6 +283,7 @@ public class SCID extends Applet {
     final static byte    DEFAULT_ADMINPIN_MAXEC = (byte) 2;   // default value of the PIN error counter
     final static byte    ADMINPIN_ID            = (byte) 2;   // PIN identifier, PIN 2 = admin PIN
     static OwnerPIN      adminpin;                            // the PIN object
+    //@ static invariant adminpin_inv: adminpin != null;
     
     // constants and variables for the user PIN management
     final static byte[]  DEFAULT_USERPIN                      // default user PIN value
@@ -290,7 +292,8 @@ public class SCID extends Applet {
     final static byte    DEFAULT_USERPIN_MAXEC = (byte) 3;    // default value of the PIN error counter
     final static byte    USERPIN_ID            = (byte) 1;    // PIN identifier, PIN 1 = user PIN
     static OwnerPIN      userpin;                             // the PIN object
-    
+    //@ static invariant userpin_inv: userpin != null;
+
     // constants and variables for the key management
     final static byte[]  DEFAULT_AUTHKEY            // default authentication key
 	= {(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
@@ -328,6 +331,8 @@ public class SCID extends Applet {
     
     //---------------------------------------------------------------------------------------
     //----- this is the command dispatcher
+
+    //@ requires apdu != null;
     public void process(APDU apdu) {
       byte[] cmd_apdu = apdu.getBuffer();
       
@@ -545,21 +550,22 @@ public class SCID extends Applet {
   //----- program code for the APDU command AUTH SC
   private void cmdAUTHSC(APDU apdu) {
     byte[] cmd_apdu = apdu.getBuffer();
-
     //----- check preconditions in the APDU header
     // check if P1=0
-    if (cmd_apdu[ISO7816.OFFSET_P1] != 0) ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
+    if (cmd_apdu[ISO7816.OFFSET_P1] != 0) 
+	ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
     // check if P2=0
-    if (cmd_apdu[ISO7816.OFFSET_P2] != 0) ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
-    short lc = (short)(cmd_apdu[ISO7816.OFFSET_LC] & 0x00FF);  // get Lc (command length)
-    if (lc != LEN_CAPDU_AUTHSC) ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-    receiveAPDUBody(apdu);     // get the command body
-
+    if (cmd_apdu[ISO7816.OFFSET_P2] != 0) 
+	ISOException.throwIt(ISO7816.SW_WRONG_P1P2);
+    short lc = (short)(cmd_apdu[ISO7816.OFFSET_LC] & 0x00FF); // get Lc (command length)
+    if (lc != LEN_CAPDU_AUTHSC) 
+	ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+    receiveAPDUBody(apdu); // get the command body
     //----- check security preconditions
-    if (authcntr < 0) ISOException.throwIt(SW_PIN_FAILED);  // Test!  
-
+    if (authcntr < 0) 
+	ISOException.throwIt(SW_PIN_FAILED);  // Test!
     //----- collect all data for the signature
-    Util.arrayCopy(cmd_apdu, (short) ISO7816.OFFSET_CDATA, workarray, INDEX_RND, lc);  // RND from IFD
+    Util.arrayCopy(cmd_apdu, (short) ISO7816.OFFSET_CDATA, workarray, INDEX_RND, lc); // RND from IFD
     Util.arrayCopy(scid, (short) (0), workarray, INDEX_SCID, SIZE_SCID);     // smart card ID
     Util.setShort(workarray, INDEX_AuthCntr, authcntr);                      // authentication counter
     workarray[INDEX_APINTries] = adminpin.getTriesRemaining();
@@ -592,4 +598,3 @@ public class SCID extends Applet {
     }  // receiveAPDUBody
     
 }  // class
-
