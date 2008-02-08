@@ -60,7 +60,13 @@ parameter eq_pointer :
 parameter neq_pointer : 
   p: 't pointer -> q: 't pointer -> {} bool { if result then p<>q else p=q }
 
-axiom sub_pointer_self:
+logic eq_pointer_bool : 't pointer, 't pointer -> bool
+
+axiom eq_pointer_bool_def :
+  forall p1: 't pointer. forall p2: 't pointer.
+    eq_pointer_bool(p1, p2) = true <-> p1 = p2
+
+axiom sub_pointer_self :
   forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
 
 axiom sub_pointer_shift_left :

@@ -516,6 +516,37 @@ let rec map_term_in_assertion f a =
   in
   { a with jc_assertion_node = anode; }
 
+(*****************************************************************************)
+(* General iterators on patterns.                                            *)
+(*****************************************************************************)
+
+let rec iter_pattern f p =
+  f p;
+  match p.jc_pattern_node with
+    | JCPstruct(_, fipl) ->
+	List.iter (iter_pattern f) (List.map snd fipl)
+    | JCPor(p1, p2) ->
+	iter_pattern f p1;
+	iter_pattern f p2
+    | JCPas(p, _) ->
+	iter_pattern f p
+    | JCPvar _
+    | JCPany
+    | JCPconst _ -> ()
+
+let rec fold_pattern f acc p =
+  let acc = f acc p in
+  match p.jc_pattern_node with
+    | JCPstruct(_, fipl) ->
+	List.fold_left (fold_pattern f) acc (List.rev (List.map snd fipl))
+    | JCPor(p1, p2) ->
+	let acc = fold_pattern f acc p1 in
+	fold_pattern f acc p2
+    | JCPas(p, _) ->
+	fold_pattern f acc p
+    | JCPvar _
+    | JCPany
+    | JCPconst _ -> ()
 
 (*
 Local Variables: 

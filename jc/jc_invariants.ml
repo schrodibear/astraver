@@ -157,11 +157,12 @@ let make_bool b = LConst(Prim_bool b)
 (************************************)
 
 (* Typing imposes non pointer fields to have the flag "rep" *)
-let field fi this loc =
+let field this loc fi =
   if not fi.jc_field_info_rep then
-    Jc_typing.typing_error loc "this term is not a rep field of %s" this.jc_var_info_name
+    Jc_typing.typing_error loc "this term is not a rep field of %s"
+      this.jc_var_info_name
 
-let rec check_rep ?(must_deref=false) this loc t =
+(*let rec check_rep ?(must_deref=false) this loc t =
   match t.jc_term_node with
     | JCTvar vi when vi == this && not must_deref -> ()
     | JCTderef (t, lab, fi) ->
@@ -169,24 +170,79 @@ let rec check_rep ?(must_deref=false) this loc t =
 	check_rep ~must_deref:false this loc t
     | JCTcast (t, _, _) -> assert false (* TODO *)
     | JCTshift (t, _) ->
-	(* t must not be this, but might be a field of this if it is a table (? TODO) *)
+	(* t must not be this, but might be a field of this if it is a table *)
+	(* (? TODO) *)
 	check_rep ~must_deref:true this loc t
     | _ ->
-	Jc_typing.typing_error loc "this term is not a rep field of %s" this.jc_var_info_name
+	Jc_typing.typing_error loc "this term is not a rep field of %s"
+	  this.jc_var_info_name*)
 
+(* A pattern may hide some dereferencing. *)
+let pattern this p =
+  iter_pattern
+    (fun p -> match p.jc_pattern_node with
+       | JCPstruct(_, fipl) ->
+	   List.iter (field this p.jc_pattern_loc) (List.map fst fipl)
+       | _ -> ())
+    p
+
+(* When typing the body of the invariant, the only pointer in the environment
+is the argument of the pointer. Thus, it is sufficient to check that all
+dereferencing is done on a rep field AND that all applications do not read
+any memory (else one could hide dereferencing in logic functions). *)
 let term this t =
   iter_term
     (fun t -> match t.jc_term_node with
-    | JCTapp app ->
-	let id = app.jc_app_fun in
-	if not (FieldRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories) 
-	then
-	  Jc_typing.typing_error t.jc_term_loc
-	    "this call is not allowed in structure invariant"
-    | JCTderef _ ->
-	check_rep this t.jc_term_loc t
-    | _ -> ()
-    ) t
+       | JCTapp app ->
+	   let id = app.jc_app_fun in
+	   if not (FieldRegionMap.is_empty
+		     id.jc_logic_info_effects.jc_effect_memories) then
+	     Jc_typing.typing_error t.jc_term_loc
+	       "this call is not allowed in structure invariant"
+       | JCTderef(_, _, fi) ->
+	   field this t.jc_term_loc fi
+       | JCTmatch(_, ptl) ->
+	   List.iter (pattern this) (List.map fst ptl)
+       | _ -> ())
+    t
+
+(*let term this t =
+  iter_term
+    (fun t -> match t.jc_term_node with
+       | JCTconst _
+       | JCTvar _
+       | JCTrange(None, None) -> ()
+       | JCTbinary(t1, _, t2)
+       | JCTrange(Some t1, Some t2) ->
+	   term this t1;
+	   term this t2
+       | JCTunary(_, t)
+       | JCTold t
+       | JCTat(t, _)
+       | JCToffset(_, t, _)
+       | JCTinstanceof(t, _, _)
+       | JCTcast(t, _, _)
+       | JCTrange(Some t, None)
+       | JCTrange(None, Some t) ->
+	   term this t
+       | JCTif(t1, t2, t3) ->
+	   term this t1
+	   term this t2
+	   term this t3
+       | JCTmatch of term * (pattern * term) list
+       | JCTshift(t1, t2) ->
+       | JCTsub_pointer(t1, t2) ->
+       | JCTderef(t, _, fi) ->
+       | JCTapp app ->
+	   let id = app.jc_app_fun in
+	   if not (FieldRegionMap.is_empty
+		     id.jc_logic_info_effects.jc_effect_memories) then
+	     Jc_typing.typing_error t.jc_term_loc
+	       "this call is not allowed in structure invariant"
+       | JCTderef _ ->
+	   check_rep this t.jc_term_loc t
+       | _ -> ()
+    ) t*)
 
 let tag this t =
   match t.jc_tag_node with
