@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.97 2008-02-07 19:22:03 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.98 2008-02-11 20:58:30 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -266,7 +266,8 @@ let mark_as_used x =
 
 let () = 
   List.iter mark_as_used 
-    [ "tag" ]
+    (* Jessie reserved names *)
+    [ "tag"; "type" ]
 
 let is_used_name n = Hashtbl.mem used_names n
 
@@ -1879,7 +1880,12 @@ let rec eval_const_expression const e =
 	begin
 	  match c with
 	    | Integer s -> Numconst.integer s
-	    | _ -> assert false (* TODO *)
+	    | Float _ -> assert false (* TODO *)
+	    | Bool false -> Num.Int 0
+	    | Bool true -> Num.Int 1
+	    | String _ -> assert false (* TODO *)
+	    | Char _ -> assert false (* TODO *) 
+	    | Null -> assert false (* TODO *)
 	end
     | JEcast (ty, e) ->
 	let n = eval_const_expression const e in
@@ -1955,8 +1961,10 @@ let rec eval_const_expression const e =
 	let _n = eval_const_expression const e in
 	begin
 	  match op with
+	    | Uplus -> assert false  (* TODO *)
+	    | Uminus -> Num.minus_num _n
+	    | Unot -> assert false  (* TODO *)
 	    | Ucompl -> raise Not_found (* TODO *)
-	    | _ -> assert false  (* TODO *)
 	end
     | JEinstanceof _
     | JEvar _ 
@@ -2318,18 +2326,17 @@ let lookup_constructor ci arg_types =
 	  
 let rec expr env e =
   let exprt = expr env in
-  let ty,te = 
+  let ty, te = 
     match e.java_pexpr_node with
       | JPElit l -> 
-	  let t,l = 
+	  let t, l = 
 	    match l with
-	      | Integer s -> int_type,l
-	      | Char s -> assert false (* TODO *)
+	      | Integer s | Char s -> int_type, l
 	      | String s -> assert false (* TODO *)
-	      | Bool b -> boolean_type,l
-	      | Float s -> double_type,l
-	      | Null -> null_type,l
-	  in t,(JElit l)
+	      | Bool b -> boolean_type, l
+	      | Float s -> double_type, l
+	      | Null -> null_type, l
+	  in t, (JElit l)
       | JPEname n -> 
 	  begin
 	    match classify_name env.package_env env.type_env env.current_type env.env n with
@@ -2996,8 +3003,8 @@ and switch_label env t = function
 let location env a = term env a 
   
 
-let behavior env pre_state_env post_state_env (id,b) = 
-  let throws,ensures_env = 
+let behavior env pre_state_env post_state_env (id, b) = 
+  let throws, ensures_env = 
     match b.java_pbehavior_throws with
       | None -> None,post_state_env
       | Some (c, None) -> 
@@ -3021,7 +3028,7 @@ let behavior env pre_state_env post_state_env (id,b) =
 		    p @ env.package_env
 	  in
 	  begin
-	    match classify_name package_env env.type_env env.current_type pre_state_env  c with
+	    match classify_name package_env env.type_env env.current_type pre_state_env c with
 	      | TypeName (TypeClass ci) ->
 		  check_if_class_complete ci;
 		  assert (ci.class_info_is_exception);
@@ -3036,7 +3043,7 @@ let behavior env pre_state_env post_state_env (id,b) =
 		  typing_error (fst (List.hd c))
 		    "class type expected"
 	  end
-      | Some(c,Some id) -> 
+      | Some (c, Some id) -> 
 	  assert false (* TODO *)
   in
   (id,

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.235 2008-02-08 18:26:52 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.236 2008-02-11 20:58:30 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -298,31 +298,31 @@ let fun_any_enum n = "any_" ^ n.jc_enum_info_name
 
 let term_coerce loc tdest tsrc e =
   match tdest, tsrc with
-  | JCTnative t, JCTnative u when t=u -> e
-  | JCTlogic t, JCTlogic u when t=u -> e
-  | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
-  | JCTnative Tinteger, JCTenum ri ->
-      let e' = LApp(logic_int_of_enum ri,[e]) in
-      begin
-	match e with
-	  | Tnamed(n,_) -> Tnamed(n,e')
-	  | _ -> e'
-      end
-  | JCTenum ri, JCTnative Tinteger ->
-      assert false (* a explicit cast should be required by jc_typing *)
-      (* LApp(logic_enum_of_int ri,[e]) *)
-  | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
-  | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
-      when Jc_typing.substruct st2 st1 -> e
-  | JCTpointer (JCtag st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
-      LApp("downcast", 
-	   [ LVar (tag_table_name (JCtag st)) ; e ;
-	     LVar (tag_name st) ])	
-  |  _ -> 
-      Jc_typing.typing_error loc 
-	"can't coerce type %a to type %a" 
-	print_type tsrc print_type tdest
-	
+    | JCTnative t, JCTnative u when t=u -> e
+    | JCTlogic t, JCTlogic u when t=u -> e
+    | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
+    | JCTnative Tinteger, JCTenum ri ->
+	let e' = LApp(logic_int_of_enum ri,[e]) in
+	  begin
+	    match e with
+	      | Tnamed(n,_) -> Tnamed(n,e')
+	      | _ -> e'
+	  end
+    | JCTenum ri, JCTnative Tinteger ->
+	assert false (* a explicit cast should be required by jc_typing *)
+	  (* LApp(logic_enum_of_int ri,[e]) *)
+    | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
+    | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
+	when Jc_typing.substruct st2 st1 -> e
+    | JCTpointer (JCtag st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
+	LApp("downcast", 
+	     [ LVar (tag_table_name (JCtag st)) ; e ;
+	       LVar (tag_name st) ])	
+    |  _ -> 
+	 Jc_typing.typing_error loc 
+	   "can't coerce type %a to type %a" 
+	   print_type tsrc print_type tdest
+	   
 let make_guarded_app ~name (k : kind) loc f l =
   let lab =
     match name with
@@ -630,21 +630,20 @@ logic functions
 
 let tr_logic_const vi init acc =
   let decl =
-    Logic(false,vi.jc_var_info_name,[], tr_base_type vi.jc_var_info_type) :: acc
+    Logic (false, vi.jc_var_info_name, [], tr_base_type vi.jc_var_info_type) :: acc
   in
-  match init with
-    | None -> decl
-    | Some t ->
-	let t', lets = term ~global_assertion:true LabelHere LabelHere t in
-	let pred =
-	  LPred(
-	    "eq",
-	    [term_coerce Loc.dummy_position integer_type
-	       vi.jc_var_info_type (LVar vi.jc_var_info_name); 
-	     term_coerce t.jc_term_loc integer_type 
-	       t.jc_term_type t']
-	  )
-	in
+    match init with
+      | None -> decl
+      | Some t ->
+	  let t', lets = term ~global_assertion:true LabelHere LabelHere t in
+	  let vi_ty = vi.jc_var_info_type in
+	  let t_ty = t.jc_term_type in
+	  let pred =
+	    LPred (
+	      "eq",
+	      [term_coerce Loc.dummy_position vi_ty t_ty (LVar vi.jc_var_info_name); 
+	       term_coerce t.jc_term_loc vi_ty t_ty t'])
+	  in
 	let ax =
 	  Axiom(
 	    vi.jc_var_info_name ^ "_value_axiom",

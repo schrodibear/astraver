@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.112 2008-02-08 18:26:52 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.113 2008-02-11 20:58:30 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -398,21 +398,33 @@ let create_exception ty n =
 
 let lit l =
   match l with
-  | Integer s -> JCCinteger s
+  | Integer s | Char s -> JCCinteger s
   | Float s -> JCCreal s
   | Bool b -> JCCboolean b
   | String s -> assert false (* TODO *)
-  | Char s -> assert false (* TODO *)
   | Null  -> JCCnull
 
 let lun_op t op =
   match op with
     | Unot -> Jc_ast.Unot
-    | Uminus when t = Tinteger -> Uminus_int
-    | Uminus -> assert false (* TODO *)
+    | Uminus when (t = Tinteger || t = Tint) -> Uminus_int
+    | Uminus -> 
+	begin match t with
+	  | Tshort  -> assert false (* TODO *)
+	  | Tboolean  -> assert false (* TODO *)
+	  | Tbyte  -> assert false (* TODO *)
+	  | Tchar  -> assert false (* TODO *)
+	  | Tint  -> assert false (* should never happen *)
+	  | Tfloat  -> assert false (* TODO *)
+	  | Tlong  -> assert false (* TODO *)
+	  | Tdouble  -> assert false (* TODO *)
+	  | Treal  -> assert false (* TODO *)
+	  | Tunit -> assert false (* TODO *)
+	  | Tinteger -> assert false (* should never happen *)
+	end
     | Uplus -> assert false
     | Ucompl -> Ubw_not
-
+	
 let lbin_op t op =
   match op with
     | Bgt -> Bgt_int
@@ -1597,7 +1609,12 @@ let tr_field type_name acc fi =
 		  | Tshort | Tbyte | Tchar | Tint 
 		    | Tlong | Tdouble | Tinteger -> 
 		      JCCinteger (Num.string_of_num value)
-		  | Tboolean -> assert false (* TODO *)
+		  | Tboolean -> 
+		      let b = match Num.string_of_num value with
+			| "0" -> false
+			| "1" -> true
+			| _ -> assert false (* should never happen *)
+		      in JCCboolean b
 		  | Tfloat | Treal -> assert false (* TODO *) 
 		  | Tunit -> assert false
 		end
@@ -1611,7 +1628,8 @@ let tr_field type_name acc fi =
 		  (* evaluated constant expressions are translated *)
 		  JCTerm (
 		    { (term (term_of_expr e)) with 
-			jc_term_node = JCTconst (get_value (List.hd values)) }),
+			jc_term_node = JCTconst (get_value (List.hd values));
+			jc_term_type = vi_ty }),
 		  None
 	      | Some (JIlist il) ->
 		  let n = List.length il in

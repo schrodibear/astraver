@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.178 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.179 2008-02-11 20:58:30 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -710,7 +710,7 @@ let rec term label_env logic_label env e =
 		  JCTderef(te,l,fi)	  
 	  end
       | JCPEconst c -> 
-	  let t,tr,c = const c in t,tr,JCTconst c
+	  let t, tr, c = const c in t, tr, JCTconst c
       | JCPEold e -> 
 	  if List.mem LabelOld label_env then
 	    let te = term label_env (Some LabelOld) env e in 
@@ -2408,16 +2408,16 @@ let add_logic_fundecl (ty,id,labels,pl) =
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
 
-let add_logic_constdecl (ty,id) =
+let add_logic_constdecl (ty, id) =
   try
     let vi = Hashtbl.find logic_constants_env id in
-    vi.jc_var_info_type, vi 
+      vi.jc_var_info_type, vi 
   with Not_found ->
     let ty = type_type ty in
     let vi = var ~static:true ty id in
-    Hashtbl.add logic_constants_env id vi;
-    ty, vi
-
+      Hashtbl.add logic_constants_env id vi;
+      ty, vi
+	
 let type_range_of_term ty t =
   match ty with
     | JCTpointer (JCtag st, n1opt, n2opt) ->
@@ -2642,20 +2642,20 @@ of an invariant policy";
     | JCPDexception(id,t) ->
 	let tt = type_type t in
 	Hashtbl.add exceptions_table id (exception_info (Some tt) id)
-    | JCPDlogic(Some ty, id, labels, [], body) ->
-	let ty,vi = add_logic_constdecl (ty,id) in
+    | JCPDlogic (Some ty, id, labels, [], body) ->
+	let ty, vi = add_logic_constdecl (ty, id) in
 	let t = match body with
 	  | JCPReads reads -> 
-	      assert (reads =[]);
+	      assert (reads = []);
 	      None
 	  | JCPExpr body ->
               let t = term labels (default_label labels) [] body in
-              if not (subtype t.jc_term_type ty) then 
-		typing_error d.jc_pdecl_loc 
-		  "inferred type differs from declared type" 
-	      else Some t
+		if not (subtype t.jc_term_type ty) then 
+		  typing_error d.jc_pdecl_loc 
+		    "inferred type differs from declared type" 
+		else Some t
 	in
-	Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t)
+	  Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t)
     | JCPDlogic(None, id, labels, pl, body) ->
 	let param_env,ty,pi = add_logic_fundecl (None,id,labels,pl) in
 	let p = match body with

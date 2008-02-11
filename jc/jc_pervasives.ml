@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.88 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.89 2008-02-11 20:58:30 nrousset Exp $ *)
 
 open Format
 open Jc_env
@@ -164,7 +164,7 @@ let const c =
     | JCCvoid -> unit_type,dummy_region,c
     | JCCinteger _ -> integer_type,dummy_region,c
     | JCCreal _ -> real_type,dummy_region,c
-    | JCCboolean _ -> boolean_type,dummy_region,c
+    | JCCboolean _ -> boolean_type, dummy_region, c
     | JCCnull -> null_type,Region.make_var JCTnull "null",c
 
 (* variables *)

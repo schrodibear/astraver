@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_pervasives.ml,v 1.13 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: java_pervasives.ml,v 1.14 2008-02-11 20:58:30 nrousset Exp $ *)
 
 (*** Utility functions ***)
 
@@ -107,6 +107,7 @@ let max_char = Num.num_of_string "65535"
 let in_byte_range n = Num.le_num min_byte n && Num.le_num n max_byte
 let in_short_range n = Num.le_num min_short n && Num.le_num n max_short
 let in_char_range n = Num.le_num min_char n && Num.le_num n max_char
+
 
 (*
 Local Variables: 
