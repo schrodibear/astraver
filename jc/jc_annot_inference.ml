@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.105 2008-02-08 18:26:52 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.106 2008-02-12 18:51:40 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -74,8 +74,6 @@ module TermMap =
 
 (* Variables used in the interprocedural analysis *)
 let inspected_functions = ref []
-let state_changed = ref false
-let nb_iterations = ref 0
 let nb_conj_atoms_inferred = ref 0
 let nb_loop_inv = ref 0
 let nb_fun_pre = ref 0
@@ -482,7 +480,10 @@ type 'a abstract_interpreter = {
 (* Parameters of an interprocedural abstract interpretation. *)
 type 'a interprocedural_ai = {
   jc_interai_manager : 'a Manager.t;
-  jc_interai_function_preconditions : (int, 'a Abstract1.t) Hashtbl.t
+  jc_interai_function_preconditions : (int, 'a Abstract1.t) Hashtbl.t;
+  jc_interai_function_pre_has_changed : (int, bool) Hashtbl.t;
+  jc_interai_function_nb_iterations : (int, int) Hashtbl.t;
+  jc_interai_function_init_pre : (int, 'a Abstract1.t) Hashtbl.t;
 }
     
 (* Type of current postcondition in weakest precondition computation:
@@ -2165,18 +2166,84 @@ let top_abstract_value mgr env =
     jc_absval_propagated = Abstract1.top mgr env;
   }
 
+let keep_extern mgr fi post =
+  let integer_vars = 
+    Array.to_list (fst (Environment.vars (Abstract1.env post)))
+  in
+  let to_duplicate t =
+    fold_term 
+      (fun (acc1, acc2) t -> try 
+	 let tl = Hashtbl.find !pointer_terms_table t.jc_term_node in
+	   t :: acc1, tl :: acc2
+       with Not_found -> acc1, acc2) 
+      ([], []) t
+  in
+  let integer_vars, strl =
+    List.fold_left 
+      (fun (acc1, acc2) va ->
+	 try
+	   let t = Vai.term va in
+	   let tl1, tl2 = to_duplicate t in
+	   let tl = List.fold_left2
+	     (fun acc t1 tl ->
+		if t1 == t then acc else
+		  (List.map (fun t2 -> replace_term_in_term t1 t2 t) tl) @ acc)
+	     [] tl1 tl2
+	   in
+	   let vars = List.map Vai.variable tl in
+	   let vars = List.filter (fun va -> not (List.mem va acc1)) vars in
+	   let vars = List.fold_left 
+	     (fun acc va -> if (List.mem va acc) then acc else va :: acc) 
+	     [] vars 
+	   in
+	   let strl = List.map 
+	     (fun v -> (Var.to_string v) ^ "=" ^ (Var.to_string va)) 
+	     vars 
+	   in
+	     vars @ acc1, strl @ acc2
+	 with Not_found -> acc1, acc2)
+      (integer_vars, []) integer_vars
+  in
+  let env = try Environment.make (Array.of_list integer_vars) [||] 
+  with Failure msg -> printf "%s@." msg; assert false in
+    Abstract1.change_environment_with mgr post env false;
+    let lincons = Parser.lincons1_of_lstring env strl in
+    let post = Abstract1.meet mgr post 
+      (Abstract1.of_lincons_array mgr env lincons) 
+    in
+    let term_has_local_var t =
+      fold_term 
+	(fun acc t -> match t.jc_term_node with
+	   | JCTvar vi -> 
+	       acc || (not vi.jc_var_info_static  &&
+			 not (vi == fi.jc_fun_info_result) &&
+			 not (List.mem vi fi.jc_fun_info_parameters))
+	   | _ -> acc
+	) false t
+    in
+    let extern_vars = 
+      List.filter (fun va ->
+		     let t = Vai.term va in not (term_has_local_var t)
+		  ) integer_vars
+      in
+    let extern_vars = Array.of_list extern_vars in
+    let extern_env = Environment.make extern_vars [||] in
+      Abstract1.change_environment_with mgr post extern_env false;
+      post
+
+
 let ai_inter_function_call mgr iai abs pre fi el =
   let formal_vars =
     List.fold_left2
       (fun (acc) vi e ->
-	let t = term_var_no_loc vi in
-	let acc = if Vai.has_variable t then 
-	  (Vai.variable t)::acc else acc in
-	let acc = if Vai.has_offset_min_variable t then
+	 let t = term_var_no_loc vi in
+	 let acc = if Vai.has_variable t then 
+	   (Vai.variable t)::acc else acc in
+	 let acc = if Vai.has_offset_min_variable t then
 	  (Vai.offset_min_variable t)::acc else acc in
-	let acc = if Vai.has_offset_max_variable t then
-	  (Vai.offset_max_variable t)::acc else acc in
-        assign_expr mgr pre t e; acc)
+	 let acc = if Vai.has_offset_max_variable t then
+	   (Vai.offset_max_variable t)::acc else acc in
+           assign_expr mgr pre t e; acc)
       [] fi.jc_fun_info_parameters el
   in
   let formal_vars = Array.of_list formal_vars in
@@ -2185,17 +2252,55 @@ let ai_inter_function_call mgr iai abs pre fi el =
     Abstract1.change_environment mgr pre env false 
   with _ -> assert false in
   let function_preconditions = iai.jc_interai_function_preconditions in
-  let function_pre = try 
-    Hashtbl.find function_preconditions fi.jc_fun_info_tag 
-  with Not_found -> Abstract1.bottom mgr env in
-  begin
-    let old_pre = Abstract1.copy mgr function_pre in
-    join mgr function_pre pre;
-    if not (is_eq mgr old_pre function_pre) then
-      state_changed := true;
-    Hashtbl.replace function_preconditions fi.jc_fun_info_tag function_pre;
-  end
-    
+  let function_pre = 
+    try Hashtbl.find function_preconditions fi.jc_fun_info_tag 
+    with Not_found -> Abstract1.bottom mgr (Abstract1.env pre) 
+  in
+    begin
+      let old_pre = Abstract1.copy mgr function_pre in
+      let function_pre = 
+	if fi.jc_fun_info_is_recursive then 
+	  let num = 
+	    try Hashtbl.find iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag
+	    with Not_found -> 0
+	  in
+	    Hashtbl.replace iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag 
+	      (num + 1);
+	    if num < abs.jc_absint_widening_threshold then
+	      begin
+		join mgr function_pre pre;
+		if num = 0 then 
+		  Hashtbl.replace iai.jc_interai_function_init_pre 
+		    fi.jc_fun_info_tag function_pre;
+		function_pre
+	      end
+	    else
+	      begin
+		let copy_pre = Abstract1.copy mgr pre in
+		let function_pre = widening mgr function_pre pre in
+		    if is_eq mgr old_pre function_pre then
+		      begin
+			let init_pre = 
+			  Hashtbl.find iai.jc_interai_function_init_pre fi.jc_fun_info_tag in
+			  join mgr copy_pre init_pre;
+			  copy_pre
+		      end
+		    else
+		      function_pre
+	      end
+	else
+	  begin
+	    join mgr function_pre pre;
+	    function_pre;
+	  end
+      in
+	if not (is_eq mgr old_pre function_pre) then
+	  begin
+	    Hashtbl.replace iai.jc_interai_function_pre_has_changed fi.jc_fun_info_tag true;
+	    Hashtbl.replace function_preconditions fi.jc_fun_info_tag function_pre;
+	  end;
+    end
+      
 let find_target_assertions targets s =
   List.fold_left 
     (fun acc target -> 
@@ -2409,7 +2514,7 @@ and intern_ai_statement iaio abs curinvs s =
 	let el = call.jc_call_args in
 	  if Jc_options.interprocedural then
 	    begin match iaio with
-	      | None -> () (* last iteration: precondition for [fi] already inferred *)
+	      | None -> () (* intraprocedural analysis only *)
 	      | Some iai -> 
 		  let copy_pre = Abstract1.copy mgr pre in
 		    ai_inter_function_call mgr iai abs copy_pre fi el;
@@ -2521,7 +2626,7 @@ let rec record_ai_invariants abs s =
 	  begin try
 	    let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
 	    let loopinv = loopinvs.jc_absinv_normal.jc_absval_regular in
-	      (* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON *)
+	      (* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON*)
 	      if Abstract1.is_top mgr loopinv = Manager.True then ()
 	      else if Abstract1.is_bottom mgr loopinv = Manager.True then
 		la.jc_loop_invariant <- raw_asrt JCAfalse
@@ -2544,7 +2649,8 @@ let rec record_ai_invariants abs s =
     | JCSassign_var _ | JCSassign_heap _ | JCSassert _ 
     | JCSreturn_void | JCSreturn _ | JCSthrow _ | JCSpack _ | JCSunpack _  
     | JCScall _ -> ()
-	
+
+
 let ai_function mgr iaio targets (fi, loc, fs, sl) =
   try
     let env = Environment.make [||] [||] in
@@ -2595,6 +2701,7 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
     in
     fs.jc_fun_free_requires <- 
       make_and (fs.jc_fun_requires :: fs.jc_fun_free_requires :: cstrs);
+
     (* Take the function precondition as init pre *)
     let initpre = top_abstract_value mgr env in
     test_assertion mgr initpre.jc_absval_regular fs.jc_fun_free_requires;
@@ -2619,7 +2726,7 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
     List.iter (ai_statement iaio abs invs) sl;
     (* [iaio] is equal to [None] in two cases:
        1) intraprocedural analysis
-       2) last iteration of interprocedural analysis
+       2) second iteration of interprocedural analysis
        (i.e. inference of loop invariant once preconditions have been inferred) *)
     if iaio = None then
       List.iter (record_ai_invariants abs) sl;
@@ -2654,78 +2761,12 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 (*     let sep_preds = write_sep_pred [] write_params in *)
 (*     fs.jc_fun_requires <- make_and(fs.jc_fun_requires :: sep_preds); *)
     
-    let keep_extern post =
-      let integer_vars = 
-	Array.to_list (fst (Environment.vars (Abstract1.env post)))
-      in
-      let to_duplicate t =
-	fold_term 
-	  (fun (acc1, acc2) t -> try 
-	     let tl = Hashtbl.find !pointer_terms_table t.jc_term_node in
-	       t :: acc1, tl :: acc2
-	   with Not_found -> acc1, acc2) 
-	  ([], []) t
-      in
-      let integer_vars, strl =
-	List.fold_left 
-	  (fun (acc1, acc2) va ->
-	     try
-	       let t = Vai.term va in
-	       let tl1, tl2 = to_duplicate t in
-	       let tl = List.fold_left2
-		 (fun acc t1 tl ->
-		    if t1 == t then acc else
-		      (List.map (fun t2 -> replace_term_in_term t1 t2 t) tl) @ acc)
-		 [] tl1 tl2
-	       in
-	       let vars = List.map Vai.variable tl in
-	       let vars = List.filter (fun va -> not (List.mem va acc1)) vars in
-	       let vars = List.fold_left 
-		 (fun acc va -> if (List.mem va acc) then acc else va :: acc) 
-		 [] vars 
-	       in
-	       let strl = List.map 
-		 (fun v -> (Var.to_string v) ^ "=" ^ (Var.to_string va)) 
-		 vars 
-	       in
-		 vars @ acc1, strl @ acc2
-	     with Not_found -> acc1, acc2)
-	  (integer_vars, []) integer_vars
-      in
-      let env = try Environment.make (Array.of_list integer_vars) [||] 
-      with Failure msg -> printf "%s@." msg; assert false in
-	Abstract1.change_environment_with mgr post env false;
-	let lincons = Parser.lincons1_of_lstring env strl in
-	let post = Abstract1.meet mgr post 
-	  (Abstract1.of_lincons_array mgr env lincons) 
-      in
-      let term_has_local_var t =
-	fold_term 
-	  (fun acc t -> match t.jc_term_node with
-	     | JCTvar vi -> 
-		 acc || (not vi.jc_var_info_static  &&
-			   not (vi == fi.jc_fun_info_result) &&
-			   not (List.mem vi fi.jc_fun_info_parameters))
-	     | _ -> acc
-	  ) false t
-      in
-      let extern_vars = 
-	List.filter (fun va ->
-	  let t = Vai.term va in not (term_has_local_var t)
-	) integer_vars
-      in
-      let extern_vars = Array.of_list extern_vars in
-      let extern_env = Environment.make extern_vars [||] in
-	Abstract1.change_environment_with mgr post extern_env false;
-	post
-    in
-
       (* Update the return postcondition for procedure with no last return. *)
       if return_type = JCTnative Tunit then
 	join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
       (* record the inferred postcondition *)
       if iaio = None then
-	let returnabs = keep_extern !(invs.jc_absinv_return).jc_absval_regular in
+	let returnabs = keep_extern mgr fi !(invs.jc_absinv_return).jc_absval_regular in
 	let returna = mkinvariant abs.jc_absint_manager returnabs in
 	let post = make_and 
 	  [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type 
@@ -2736,7 +2777,7 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 	  List.fold_left
 	    (fun (acc1, acc2) (exc, va) -> (exc :: acc1, va.jc_absval_regular :: acc2))
 	    ([], []) invs.jc_absinv_exceptional in
-	let excabsl = List.map (fun va -> keep_extern va) excabsl in
+	let excabsl = List.map (fun va -> keep_extern mgr fi va) excabsl in
 	let excabsl = List.map
 	  (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
 	    Abstract1.top mgr env else va) excabsl in
@@ -3919,18 +3960,32 @@ let code_function = function
 
 let rec ai_entrypoint mgr iaio (fi, loc, fs, sl) =
   ai_function mgr iaio [] (fi, loc, fs, sl);
-  inspected_functions := fi.jc_fun_info_tag::!inspected_functions;
+  inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
   List.iter
     (fun fi ->
-       Hashtbl.iter
-	 (fun _ (fi', _, fs, slo) ->
-	    match slo with
-	      | None -> ()
-	      | Some sl ->
-		  if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
-		    (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
-		      ai_entrypoint mgr iaio (fi, loc, fs, sl))
-	 Jc_norm.functions_table)
+       let fi, _, fs, slo = 
+	 try Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag
+	 with Not_found -> assert false (* should never happen *)
+       in
+	 match slo with
+	   | None -> ()
+	   | Some sl ->
+	       let inspected = List.mem fi.jc_fun_info_tag !inspected_functions in
+	       let pre_has_changed = 
+		 match iaio with
+		   | None -> false
+		   | Some iai ->
+		       let pre_has_changed =
+			 try Hashtbl.find iai.jc_interai_function_pre_has_changed 
+			   fi.jc_fun_info_tag
+			 with Not_found -> false
+		       in
+			 Hashtbl.replace iai.jc_interai_function_pre_has_changed
+			   fi.jc_fun_info_tag false;
+			 pre_has_changed
+	       in
+		 if (not inspected) || (iaio <> None && pre_has_changed) then
+		   ai_entrypoint mgr iaio (fi, loc, fs, sl))
     fi.jc_fun_info_calls
     
 let rec record_ai_inter_preconditions mgr iai fi fs =
@@ -3950,35 +4005,29 @@ let rec record_ai_inter_preconditions mgr iai fi fs =
     inspected_functions := fi.jc_fun_info_tag::!inspected_functions;
     List.iter 
       (fun fi ->
-	Hashtbl.iter
-	  (fun _ (fi', _, fs, slo) ->
-	     match slo with
-	       | None -> ()
-	       | Some _ ->
-		   if fi'.jc_fun_info_name = fi.jc_fun_info_name && 
-		     (not (List.mem fi.jc_fun_info_tag !inspected_functions)) then
-		       record_ai_inter_preconditions mgr iai fi' fs;)
-	  Jc_norm.functions_table)
+	 let fi, _, fs, slo = 
+	   try
+	     Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag
+	   with Not_found -> assert false (* should never happen *)
+	 in
+	   match slo with
+	     | None -> ()
+	     | Some _ ->
+		 if not (List.mem fi.jc_fun_info_tag !inspected_functions) then
+		   record_ai_inter_preconditions mgr iai fi fs)
       fi.jc_fun_info_calls
   end
     
-let rec ai_entrypoint_fix mgr iai (fi, loc, fs, sl) =
-  incr nb_iterations;
-  ai_entrypoint mgr (Some iai) (fi, loc, fs, sl);
-  if !state_changed then
-    begin
-      state_changed := false;
-      inspected_functions := [];
-      ai_entrypoint_fix mgr iai (fi, loc, fs, sl);
-    end
-      
 let ai_interprocedural mgr (fi, loc, fs, sl) =
   let iai = {
     jc_interai_manager = mgr;
-    jc_interai_function_preconditions = Hashtbl.create 0
+    jc_interai_function_preconditions = Hashtbl.create 0;
+    jc_interai_function_pre_has_changed = Hashtbl.create 0;
+    jc_interai_function_nb_iterations = Hashtbl.create 0;
+    jc_interai_function_init_pre = Hashtbl.create 0;
   } in
   let time = Unix.gettimeofday () in
-    ai_entrypoint_fix mgr iai (fi, loc, fs, sl);
+    ai_entrypoint mgr (Some iai) (fi, loc, fs, sl);
     inspected_functions := [];
     record_ai_inter_preconditions mgr iai fi fs;
     inspected_functions := [];
@@ -3991,10 +4040,9 @@ let ai_interprocedural mgr (fi, loc, fs, sl) =
                @.    %d function exceptional postconditions inferred \
                @.    %d loop invariants inferred \
                @.    %d conjonction atoms inferred \
-               @.    %d iterations \
                @.    %f seconds@." 
 	  !nb_fun_pre !nb_fun_post !nb_fun_excep_post !nb_loop_inv
-	  !nb_conj_atoms_inferred !nb_iterations time
+	  !nb_conj_atoms_inferred time
     
     
 let main_function = function
@@ -4012,7 +4060,22 @@ let main_function = function
 	      ai_interprocedural mgr (fi, loc, fs, sl)
 	| AbsNone -> assert false
       end
-	
+
+let rec is_recursive_rec fi fil =
+  List.exists 
+    (fun fi' -> 
+       inspected_functions := fi'.jc_fun_info_tag :: !inspected_functions;
+       fi.jc_fun_info_tag = fi'.jc_fun_info_tag || 
+	(not (List.mem fi'.jc_fun_info_tag !inspected_functions) &&
+	   is_recursive_rec fi fi'.jc_fun_info_calls))
+    fil
+
+let is_recursive fi =
+  inspected_functions := [];
+  let r = is_recursive_rec fi fi.jc_fun_info_calls in
+  inspected_functions := [];
+    r
+
 	
 (*
   Local Variables: 

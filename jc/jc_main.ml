@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.100 2008-02-05 14:00:04 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.101 2008-02-12 18:51:40 nrousset Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -76,23 +76,23 @@ let main () =
 	       Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
 	    Jc_typing.functions_table;
 
-	  (* phase 4: computation of call graph *)
-	  Jc_options.lprintf "Computation of call graph@.";
-	  Hashtbl.iter 
-	    (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
-	    Jc_typing.logic_functions_table;
-	  Hashtbl.iter 
-	    (fun _ (f,loc,s,b) -> 
-	       Option_misc.iter (Jc_callgraph.compute_calls f s) b)
-	    Jc_norm.functions_table;
-	  let logic_components = 
-	    Jc_callgraph.compute_logic_components
-	      Jc_typing.logic_functions_table
-	  in
-	  let components = 
-	    Jc_callgraph.compute_components Jc_norm.functions_table
-	  in
-
+	    (* phase 4: computation of call graph *)
+	    Jc_options.lprintf "Computation of call graph@.";
+	    Hashtbl.iter 
+	      (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
+	      Jc_typing.logic_functions_table;
+	    Hashtbl.iter 
+	      (fun _ (f,loc,s,b) -> 
+		 Option_misc.iter (Jc_callgraph.compute_calls f s) b)
+	      Jc_norm.functions_table;
+	    let logic_components = 
+	      Jc_callgraph.compute_logic_components
+		Jc_typing.logic_functions_table
+	    in
+	    let components = 
+	      Jc_callgraph.compute_components Jc_norm.functions_table
+	    in
+	      
 	  (* phase 5: computation of regions *)
 	  if !Jc_options.separation_sem = SepRegions then begin
 	    Jc_options.lprintf "Computation of regions@.";
@@ -109,21 +109,28 @@ let main () =
 	    begin
 	      Jc_options.lprintf "Inference of annotations@.";
 	      if Jc_options.interprocedural then
-		(* interprocedural analysis over the call graph +
-		   intraprocedural analysis of each function called *)
-		Hashtbl.iter
-		  (fun _ (fi, loc, fs, sl) ->
-		    if fi.jc_fun_info_name = Jc_options.main then
-		      Jc_ai.main_function (fi, loc, fs, sl)
-		  ) Jc_norm.functions_table
+		begin
+		  (* record recursive functions *)
+		  Hashtbl.iter
+		    (fun _ (fi, _, _, _) ->
+		       fi.jc_fun_info_is_recursive <- Jc_ai.is_recursive fi) 
+		    Jc_norm.functions_table;
+		  (* interprocedural analysis over the call graph +
+		     intraprocedural analysis of each function called *)
+		  Hashtbl.iter
+		    (fun _ (fi, loc, fs, sl) ->
+		       if fi.jc_fun_info_name = Jc_options.main then
+			 Jc_ai.main_function (fi, loc, fs, sl)
+		    ) Jc_norm.functions_table;
+		end
 	      else
 		(* intraprocedural inference of annotations otherwise *)
 		Hashtbl.iter 
 		  (fun _ (f, loc, s, b) -> 
-		    Jc_ai.code_function (f, loc, s, b) 
+		     Jc_ai.code_function (f, loc, s, b) 
 		  ) Jc_norm.functions_table
 	    end;
-
+	  
 	  (* phase 7: computation of effects *)
 	  Jc_options.lprintf
 	    "\nstarting computation of effects of logic functions.@.";

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.26 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_fenv.mli,v 1.27 2008-02-12 18:51:40 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -70,23 +70,24 @@ type logic_info =
       mutable jc_logic_info_labels : logic_label list;
     }
 
-type fun_info = {
-    jc_fun_info_tag : int;
-    jc_fun_info_name : string;
-    jc_fun_info_final_name : string;
-    jc_fun_info_result : var_info;
-    jc_fun_info_return_region : region;
-    mutable jc_fun_info_parameters : var_info list;
-    mutable jc_fun_info_param_regions : region list;
-    mutable jc_fun_info_calls : fun_info list;
-    mutable jc_fun_info_logic_apps : logic_info list;
-    mutable jc_fun_info_effects : fun_effect;
-  }
-
-
-
+type fun_info = 
+    {
+      jc_fun_info_tag : int;
+      jc_fun_info_name : string;
+      jc_fun_info_final_name : string;
+      jc_fun_info_result : var_info;
+      jc_fun_info_return_region : region;
+      mutable jc_fun_info_parameters : var_info list;
+      mutable jc_fun_info_param_regions : region list;
+      mutable jc_fun_info_calls : fun_info list;
+      mutable jc_fun_info_is_recursive : bool;
+      mutable jc_fun_info_logic_apps : logic_info list;
+      mutable jc_fun_info_effects : fun_effect;
+    }
+      
+      
 (*
   Local Variables: 
   compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
   End: 
- *)
+*)

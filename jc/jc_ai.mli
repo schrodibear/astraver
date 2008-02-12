@@ -39,6 +39,10 @@ val code_function : fun_info * Loc.position * fun_spec * statement list option -
 (* interprocedural analysis *)
 val main_function : fun_info * Loc.position * fun_spec * statement list option -> unit
 
+
+val is_recursive : fun_info -> bool
+
+
 (*
 Local Variables: 
 compile-command: "make -C .. bin/jessie.byte"

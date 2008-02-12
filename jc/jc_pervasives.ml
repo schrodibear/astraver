@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.89 2008-02-11 20:58:30 nrousset Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.90 2008-02-12 18:51:40 nrousset Exp $ *)
 
 open Format
 open Jc_env
@@ -294,16 +294,17 @@ let make_fun_info name ty =
   incr fun_tag_counter;
   let vi = var ty "\\result" in
   vi.jc_var_info_final_name <- "result";
-  { jc_fun_info_tag = !fun_tag_counter;
-    jc_fun_info_name = name;
-    jc_fun_info_final_name = Jc_envset.get_unique_name name;
-    jc_fun_info_parameters = [];
-    jc_fun_info_result = vi;
-    jc_fun_info_return_region = Region.make_var ty name;
-    jc_fun_info_param_regions = [];
-    jc_fun_info_calls = [];
-    jc_fun_info_logic_apps = [];
-    jc_fun_info_effects = empty_fun_effect;
+    { jc_fun_info_tag = !fun_tag_counter;
+      jc_fun_info_name = name;
+      jc_fun_info_final_name = Jc_envset.get_unique_name name;
+      jc_fun_info_parameters = [];
+      jc_fun_info_result = vi;
+      jc_fun_info_return_region = Region.make_var ty name;
+      jc_fun_info_param_regions = [];
+      jc_fun_info_calls = [];
+      jc_fun_info_is_recursive = false;
+      jc_fun_info_logic_apps = [];
+      jc_fun_info_effects = empty_fun_effect;
  }
 
 
