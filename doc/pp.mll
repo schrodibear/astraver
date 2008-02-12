@@ -93,7 +93,7 @@
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
       [ 
-	"valid"; "forall"; "exists" ; "old" ; "fresh" ; "nothing" ; "result"
+	"valid"; "forall"; "exists" ; "old" ; "at" ; "fresh" ; "nothing" ; "result"
       ];
     h
 
@@ -185,6 +185,7 @@ rule ktt = parse
   | "'a" { print_string "\\ensuremath{\\alpha}"; ktt lexbuf }
   | "::" { print_string ":\\hspace*{-0.1em}:"; ktt lexbuf }
   | " "  { print_string "~"; ktt lexbuf }
+  | "\t"  { print_string "~~~~~~~~"; ktt lexbuf }
   | "[" (ident as s) "]" 
       { if !in_comment then print_string "{\\ttfamily " else print_string "[";
 	print_ident s;

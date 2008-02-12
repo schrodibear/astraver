@@ -16,7 +16,8 @@ KFILES=Lesson1_max.pp \
 	Purse_withdraw2.pp \
 	Flag1.pp Flag_inv.pp Flag_isMonochrome.pp Flag_flag.pp \
 	Flag_swap.pp Flag_body.pp \
-	contracts.bnf lexpr.bnf
+	contracts.bnf lexpr.bnf \
+	Gcd-nospec.pp Gcd-spec.pp Gcd.pp Gcd-lemmas.pp
 
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
@@ -58,6 +59,9 @@ caduceus.html: caduceus.tex
 
 krakatoa.pdf: $(KFILES) 
 	pdflatex krakatoa.tex
+
+february2008.pdf: $(KFILES) 
+	pdflatex february2008.tex
 
 krakatoa.html: krakatoa.tex
 	rm -f krakatoa.aux
