@@ -8,3 +8,4 @@ tmp
 gmon.out
 bench-caduceus-16-11-06.log
 autom4te.cache
+configure

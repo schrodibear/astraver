@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.24 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.25 2008-02-12 09:32:26 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -815,7 +815,12 @@ let rec get_abstract_clauses p =
 	AbstractClauseSet.singleton 
 	  (compute_clause 
 	     p {num=0; pos=StringSet.empty; neg=StringSet.empty})
-    | _ -> assert false 
+    | _ -> assert false  (* Cas manquants :  
+                               (Pnamed (_, _)|Pfpi (_, _, _)|
+                                Forallb (_, _, _)|Piff (_, _)|
+                                Pif (_, _, _)|Pimplies (_, _, _)|Pvar _|
+                                Pfalse|Ptrue)
+                         *)
     
 
 let build_pred_graph decl = 
