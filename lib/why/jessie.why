@@ -394,7 +394,7 @@ axiom full_separated_shift4 :
 typeof gives the dynamic type of an object.
 
 parenttag is defined by axioms in jc_interp, and defines the hierarchy.
-  parenttag(a, t1, t2) <-> t2 is the immediate superclass of t1
+  parenttag(t1, t2) <-> t2 is the immediate superclass of t1
 
 subtag is axiomatized from parenttag, and is the reflexive, transitive
   closure of parenttag.
@@ -402,11 +402,15 @@ subtag is axiomatized from parenttag, and is the reflexive, transitive
 subtag_ is the same as subtag but for booleans.
 
 instanceof is defined from typeof and subtag.
+
+int_of_tag gives a different integer to each tags to differenciate them.
 *****)
 
 type 't tag_table
 
 type 't tag_id
+
+logic int_of_tag: 't tag_id -> int
 
 logic typeof: 't tag_table, 't pointer -> 't tag_id
 
@@ -460,6 +464,13 @@ axiom bottom_tag_axiom:
   forall t: 't tag_id.
     subtag(t, bottom_tag)
 
+predicate root_tag(t: 't tag_id) = parenttag(t, bottom_tag)
+
+axiom root_subtag :
+  forall a: 't tag_id.
+  forall b: 't tag_id.
+  forall c: 't tag_id.
+    root_tag(a) -> root_tag(b) -> a <> b -> subtag(c, a) -> not subtag(c, b)
 
 (*****************************************************************************)
 (* structure invariants                                                      *)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.12 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_name.ml,v 1.13 2008-02-12 13:52:29 bardou Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -57,6 +57,8 @@ let variant_alloc_table_name vi = vi.jc_variant_info_name ^ "_alloc_table"
 let variant_tag_table_name vi = vi.jc_variant_info_name ^ "_tag_table"
 
 let variant_axiom_on_tags_name vi = vi.jc_variant_info_name ^ "_tags"
+
+let axiom_int_of_tag_name st = st.jc_struct_info_name ^ "_int"
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 

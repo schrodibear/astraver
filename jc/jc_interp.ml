@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.236 2008-02-11 20:58:30 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.237 2008-02-12 13:52:29 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2568,7 +2568,8 @@ let tr_variant vi acc =
 	}))
   in
   let type_def = Type(variant_type_name vi, []) in
-  let axiom_on_tags =
+  (* Axiom: the variant can only have the given tags *)
+  let axiom_variant_has_tag =
     let v = "x" in
     let tag_table = tag_table_name_vi vi in
     Axiom(
@@ -2585,7 +2586,21 @@ let tr_variant vi acc =
 	       vi.jc_variant_info_roots)
       )))
   in
-  let acc = type_def::alloc_table::tag_table::axiom_on_tags::acc in
+  (* Axioms: int_of_tag(T1) = 1, ... *)
+  let (acc, _) = List.fold_left
+    (fun (acc, index) st ->
+       let axiom =
+	 Axiom(
+	   axiom_int_of_tag_name st,
+	   make_eq
+	     (make_int_of_tag st)
+	     (LConst(Prim_int(string_of_int index)))
+	 )
+       in axiom::acc, index+1)
+    (acc, 1)
+    vi.jc_variant_info_roots
+  in
+  let acc = type_def::alloc_table::tag_table::axiom_variant_has_tag::acc in
   (make_valid_pred (JCvariant vi)) :: acc
 
 (*

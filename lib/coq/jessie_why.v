@@ -110,7 +110,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A508:Set) (a:(alloc_table A508)) (p:(pointer A508))
+(*Why predicate*) Definition valid (A517:Set) (a:(alloc_table A517)) (p:(pointer A517))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -680,8 +680,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A552:Set) (A551:Set) (a:(alloc_table A551)) (m1:(memory A551 A552)) (m2:(memory A551 A552)) (l:(pset A551))
-  := (forall (p:(pointer A551)),
+(*Why predicate*) Definition not_assigns (A561:Set) (A560:Set) (a:(alloc_table A560)) (m1:(memory A560 A561)) (m2:(memory A560 A561)) (l:(pset A560))
+  := (forall (p:(pointer A560)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -724,6 +724,10 @@ Admitted.
 (*Why type*) Definition tag_id: Set ->Set.
 Admitted.
 
+(*Why logic*) Definition int_of_tag : forall (A1:Set), (tag_id A1) -> Z.
+Admitted.
+Implicit Arguments int_of_tag.
+
 (*Why logic*) Definition typeof :
   forall (A1:Set), (tag_table A1) -> (pointer A1) -> (tag_id A1).
 Admitted.
@@ -762,7 +766,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A566:Set) (a:(tag_table A566)) (p:(pointer A566)) (t:(tag_id A566))
+(*Why predicate*) Definition instanceof (A576:Set) (a:(tag_table A576)) (p:(pointer A576)) (t:(tag_id A576))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -790,7 +794,20 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A571:Set) (tag_table:(tag_table A571)) (mutable:(memory A571 (tag_id A571))) (this:(pointer A571))
+(*Why predicate*) Definition root_tag (A581:Set) (t:(tag_id A581))
+  := (parenttag t (@bottom_tag A581)).
+Implicit Arguments root_tag.
+
+(*Why axiom*) Lemma root_subtag :
+  forall (A1:Set),
+  (forall (a:(tag_id A1)),
+   (forall (b:(tag_id A1)),
+    (forall (c:(tag_id A1)),
+     ((root_tag a) ->
+      ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
+Admitted.
+
+(*Why predicate*) Definition fully_packed (A583:Set) (tag_table:(tag_table A583)) (mutable:(memory A583 (tag_id A583))) (this:(pointer A583))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

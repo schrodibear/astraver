@@ -1046,24 +1046,15 @@ include .depend.coq
 # Building the Why platform with ocamlbuild (OCaml 3.10 needed) #
 #################################################################
 
-# This part does not depend on the rest of the Makefile, except for the
-# automatically generated files such as module Version.
+# There used to be targets here but they are no longer useful.
 
-# Just compiling the Makefile is enough to pollute the source tree
-# (with lexers and parsers). So for now, we need the -no-hygiene option.
-OCAMLBUILD=ocamlbuild -no-hygiene
+# To build using Ocamlbuild:
+# 1) Run "make Makefile" to ensure that the generated files (version.ml, ...)
+# are generated.
+# 2) Run Ocamlbuild with any target to generate the sanitization script.
+# 3) Run ./sanitize to delete the generated files that shouldn't be generated
+# (i.e. all lexers and parsers).
+# 4) Run Ocamlbuild with the target you need, for example:
+# ocamlbuild jc/jc_main.native
 
-all.build:
-	$(OCAMLBUILD) -libs unix,str,nums,graph -Is src,tools,jc,java,ml \
-		src/main.byte src/main.native \
-		jc/jc_main.byte jc/jc_main.native \
-		java/java_main.byte java/java_main.native \
-		ml/ml_main.byte ml/ml_main.native
-	cp _build/src/main.byte bin/why.byte
-	cp _build/jc/jc_main.byte bin/jessie.byte
-	cp _build/java/java_main.byte bin/krakatoa.byte
-	cp _build/ml/ml_main.byte bin/jessica.byte
-	cp _build/src/main.native bin/why.opt
-	cp _build/jc/jc_main.native bin/jessie.opt
-	cp _build/java/java_main.native bin/krakatoa.opt
-	cp _build/ml/ml_main.native bin/jessica.opt
+# You can also use the Makefile ./build.makefile which has some handy targets.

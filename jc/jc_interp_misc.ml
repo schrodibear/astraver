@@ -403,6 +403,9 @@ let make_offset_min tov p =
 let make_offset_max tov p =
   LApp("offset_max", [LVar(alloc_table_name tov); p])
 
+let make_int_of_tag st =
+  LApp("int_of_tag", [LVar(tag_name st)])
+
 let any_value ty = 
   match ty with
   | JCTnative t -> 
