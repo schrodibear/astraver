@@ -47,4 +47,3 @@ Local Variables:
 compile-command: "unset LANG; make -C .. sort_insert.gui"
 End: 
 *)
-

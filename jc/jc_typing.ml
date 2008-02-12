@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.179 2008-02-11 20:58:30 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.180 2008-02-12 14:17:57 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -637,66 +637,61 @@ let rec term label_env logic_label env e =
       | JCPEapp (id, labs, args) ->
 	  List.iter
 	    (fun l -> if List.mem l label_env then () else
-	       typing_error e.jc_pexpr_loc "label `%a' not found" Jc_output.label l)
+	       typing_error e.jc_pexpr_loc "label `%a' not found"
+		 Jc_output.label l)
 	    labs;
-(*
-	  begin
-	    match e1.jc_pexpr_node with
-	      | JCPEvar id ->
-*)
-		  if List.length args = 0 then
-		    let vi = Hashtbl.find logic_constants_env id in
-		    vi.jc_var_info_type,vi.jc_var_info_region,JCTvar vi
-		  else begin
-		    try
-		      let pi = find_logic_info id in
-		      let tl =
-			try
-			  List.map2
-			    (fun vi e ->
-			       let ty = vi.jc_var_info_type in
-			       let te = ft e in
-			       if subtype_strict te.jc_term_type ty then te
-			       else
-				 typing_error e.jc_pexpr_loc 
-				   "type %a expected instead of %a" 
-				   print_type ty print_type te.jc_term_type) 
-			    pi.jc_logic_info_parameters args
-			with  Invalid_argument _ ->
-			  typing_error e.jc_pexpr_loc 
-			    "wrong number of arguments for %s" id
-		      in
-		      let ty = match pi.jc_logic_info_result_type with
-			| None -> assert false | Some ty -> ty
-		      in
-		      let label_assoc = 
-			match logic_label, pi.jc_logic_info_labels, labs with
-			  | Some l, [lf], [] -> [lf,l]
-			  | _ ->
-			      try
-				List.map2
-				  (fun l1 l2 -> (l1,l2))
-				  pi.jc_logic_info_labels labs
-			      with Invalid_argument _ ->
-				typing_error e.jc_pexpr_loc 
-				  "wrong number of labels for %s" id
-		      in
-		      let app = {
-			jc_app_fun = pi;
-			jc_app_args = tl;
-			jc_app_region_assoc = [];
-			jc_app_label_assoc = label_assoc;
-		      } in
-		      ty,Region.make_var ty pi.jc_logic_info_name,JCTapp app
-		    with Not_found ->
-		      typing_error e.jc_pexpr_loc 
-			"unbound logic function identifier %s" id
-		  end
-(*
-	      | _ -> 
-		  typing_error e.jc_pexpr_loc "unsupported logic function application"
+	  if List.length args = 0 then
+	    let vi = Hashtbl.find logic_constants_env id in
+	    vi.jc_var_info_type,vi.jc_var_info_region,JCTvar vi
+	  else begin
+	    try
+	      let pi = find_logic_info id in
+	      let tl =
+		try
+		  List.map2
+		    (fun vi e ->
+		       let ty = vi.jc_var_info_type in
+		       let te = ft e in
+		       if subtype_strict te.jc_term_type ty then te
+		       else
+			 typing_error e.jc_pexpr_loc 
+			   "type %a expected instead of %a" 
+			   print_type ty print_type te.jc_term_type) 
+		    pi.jc_logic_info_parameters args
+		with  Invalid_argument _ ->
+		  typing_error e.jc_pexpr_loc 
+		    "wrong number of arguments for %s" id
+	      in
+	      let ty = match pi.jc_logic_info_result_type with
+		| None ->
+		    typing_error e.jc_pexpr_loc
+		      "the logic info %s is a predicate; it should be \
+used as an assertion, not as a term" pi.jc_logic_info_name
+		| Some ty -> ty
+	      in
+	      let label_assoc = 
+		match logic_label, pi.jc_logic_info_labels, labs with
+		  | Some l, [lf], [] -> [lf,l]
+		  | _ ->
+		      try
+			List.map2
+			  (fun l1 l2 -> (l1,l2))
+			  pi.jc_logic_info_labels labs
+		      with Invalid_argument _ ->
+			typing_error e.jc_pexpr_loc 
+			  "wrong number of labels for %s" id
+	      in
+	      let app = {
+		jc_app_fun = pi;
+		jc_app_args = tl;
+		jc_app_region_assoc = [];
+		jc_app_label_assoc = label_assoc;
+	      } in
+	      ty,Region.make_var ty pi.jc_logic_info_name,JCTapp app
+	    with Not_found ->
+	      typing_error e.jc_pexpr_loc 
+		"unbound logic function identifier %s" id
 	  end
-*)
       | JCPEderef (e1, f) -> 
 	  let te = ft e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_term_type f true in
