@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.45 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.46 2008-02-12 13:41:29 marche Exp $ i*)
 
 open Printf
 open Options
@@ -259,7 +259,7 @@ let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
       if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
 	Valid t
       else if Sys.command (sprintf "grep -q -w sat %s" out) = 0 then
-	Invalid (t, None)
+	CannotDecide (t, None)
       else if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
 	CannotDecide (t, None)
       else

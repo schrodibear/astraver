@@ -31,12 +31,6 @@
 
 /* complements for non-linear integer arithmetic */
 
-//@ lemma zero_right: \forall integer x; x*0 == 0;  
-//@ lemma zero_left: \forall integer x; 0*x == 0; 
-//@ lemma one_right: \forall integer x; x*1 == x; 
-//@ lemma one_left: \forall integer x; 1*x == x; 
-//@ lemma two_right: \forall integer x; x*2 == x+x; 
-//@ lemma two_left: \forall integer x; 2*x == x+x; 
 
 /*@ lemma distr_right: 
   @   \forall integer x,y,z; x*(y+z) == (x*y)+(x*z); 
