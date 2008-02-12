@@ -35,6 +35,24 @@ opt:
 %.opt:
 	$(OCAMLBUILD) $*.opt
 
+# Bench
+
+ml-bench:
+	$(OCAMLBUILD) $(JESSICA).opt $(JESSIE).opt $(WHY).opt
+	make -C bench/ml good.bench
+
+ml-bench-retry:
+	$(OCAMLBUILD) $(JESSICA).opt $(JESSIE).opt $(WHY).opt
+	make -C bench/ml retry
+
+jc-bench:
+	$(OCAMLBUILD) $(JESSIE).opt $(WHY).opt
+	make -C bench/jc good.bench
+
+jc-bench-retry:
+	$(OCAMLBUILD) $(JESSIE).opt $(WHY).opt
+	make -C bench/jc retry
+
 # Cleaning
 
 clean:

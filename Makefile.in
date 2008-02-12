@@ -603,7 +603,7 @@ JAVABENCHLOG=krakatoa-bench-`date +%d-%m-%y`.log
 java-bench:: $(KRAKATOA) bin/cadlog.opt
 	(cd bench/java; sh ./bench 2>&1) | bin/cadlog.opt -java $(JAVABENCHLOG)
 
-ml-bench::
+ml-bench:: $(JESSICA) $(JESSIE)
 	make -C bench/ml -f Makefile good.bench
 
 BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log

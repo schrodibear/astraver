@@ -1,6 +1,7 @@
 WHYDIR=../../
-JESSIE=$(WHYDIR)bin/jessie
-JESSICA=$(WHYDIR)bin/jessica
+BINDIR=$(WHYDIR)bin/
+JESSIE=$(BINDIR)jessie
+JESSICA=$(BINDIR)jessica
 
 TMPDIR=tmp
 
@@ -16,13 +17,10 @@ default: good.bench
 #   (the file must be in the "good" directory)
 # %.coq, same but for Coq
 
-$(WHYDIR)%.force:
-	make -j -C $(WHYDIR) $*
-
-%.gui: good/%.ml $(JESSICA).byte.force $(JESSIE).byte.force
+%.gui:
 	./test-gui.sh $*
 
-%.coq: good/%.ml $(JESSICA).byte.force $(JESSIE).byte.force
+%.coq:
 	./test-coq.sh $*
 
 %.bench-file:
@@ -33,7 +31,7 @@ bench-start: *.ml
 =================="
 	make -j -s -f ../Makefile $(^:.ml=.bench-file)
 
-%.bench: $(JESSICA).opt.force $(JESSIE).opt.force
+%.bench:
 	rm -rf $(TMPDIR)
 	mkdir -p $(TMPDIR)
 	cp $*/*.ml $(TMPDIR)

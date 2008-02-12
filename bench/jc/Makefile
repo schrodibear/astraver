@@ -11,9 +11,6 @@ SPLIT=-why-opt --split-user-conj
 # Special, preferred targets:
 # %.bench, ex: good.bench, to test all files in directory "good"
 
-$(WHYDIR)%.force:
-	make -j -C $(WHYDIR) $*
-
 %.bench-file:
 	../bench.sh $*
 
@@ -22,7 +19,7 @@ bench-start: *.jc
 =================="
 	make -j -s -f ../Makefile $(^:.jc=.bench-file)
 
-%.bench: $(JESSIE).force
+%.bench:
 	rm -rf $(TMPDIR)
 	mkdir -p $(TMPDIR)
 	cp $*/*.jc $(TMPDIR)
