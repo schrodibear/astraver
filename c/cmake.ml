@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.55 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cmake.ml,v 1.56 2008-02-12 12:54:06 stoulsn Exp $ i*)
 
 open Format
 open Pp
@@ -73,8 +73,8 @@ let generic f targets =
 
        fprintf fmt "coq: coq.depend %a@\n@\n" (print_files coq_vo) targets;
 
-       fprintf fmt "coq/%%_spec_why.v: why/%%_spec.why@\n";
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export Caduceus.\" $(CADULIB)/why/$(CADULIBFILE) why/$*_spec.why@\n@\n";
+       fprintf fmt "coq/%s_spec_why.v: why/%s_spec.why@\n" f f;
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/%s_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export Caduceus.\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why@\n@\n" f f;
 
        fprintf fmt "coq/%%_why.v: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export %s_spec_why.\" -coq-tactic \"$(COQTACTIC)\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f f;
