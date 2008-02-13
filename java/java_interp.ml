@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.113 2008-02-11 20:58:30 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.114 2008-02-13 09:09:33 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -663,8 +663,8 @@ let rec term_of_expr e =
       | JElit l -> JTlit l
       | JEvar vi -> JTvar vi
       | JEbin (e1, op, e2) -> 
-	  JTbin (term_of_expr e1, Tint, op, term_of_expr e2)
-      | JEun (op, e) -> JTun (Tint, op, term_of_expr e)
+	  JTbin (term_of_expr e1, Tinteger, op, term_of_expr e2)
+      | JEun (op, e) -> JTun (Tinteger, op, term_of_expr e)
       | JEfield_access (e, fi) -> JTfield_access (term_of_expr e, fi)
       | JEstatic_field_access (ty, fi) -> JTstatic_field_access (ty, fi)
       | JEarray_access (e1, e2) ->
@@ -987,7 +987,7 @@ let incr_op op =
 let int_cast loc t e =
   if !Java_options.ignore_overflow || 
     match t with
-      | JTYbase (Tinteger | Tint) -> false
+      | JTYbase Tint -> false
       | _ -> true
   then e 
   else     
@@ -1040,7 +1040,7 @@ let rec expr ?(reg=false) e =
 	  end
       | JEun (op, e1) -> 
 	  let e1 = expr e1 in
-	  reg := true;
+	  reg := true;	  
 	  int_cast e.java_expr_loc e.java_expr_type (JCTEunary(un_op op,e1))
       | JEbin (e1, op, e2) (* case e1 == null *)
 	  when op = Beq && e2.java_expr_node = JElit Null ->
@@ -1075,6 +1075,9 @@ let rec expr ?(reg=false) e =
       | JEbin (e1, op, e2) ->
 	  let e1 = expr e1 and e2 = expr e2 in
 	    reg := true;
+	    eprintf "%a: result type is %a@." 
+	      Loc.gen_report_position e.java_expr_loc 
+	      print_type e.java_expr_type;
 	    int_cast e.java_expr_loc e.java_expr_type (JCTEbinary(e1,bin_op op,e2))
       | JEif (e1,e2,e3) -> 
 	  JCTEif(expr e1, expr e2, expr e3)

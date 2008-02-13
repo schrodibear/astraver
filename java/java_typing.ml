@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.98 2008-02-11 20:58:30 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.99 2008-02-13 09:09:33 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1794,21 +1794,29 @@ let unary_numeric_promotion t =
     | _ -> assert false
 
 (* JLS 5.6.2: Binary Numeric Promotion *)
-let binary_numeric_promotion t1 t2 =
+let binary_numeric_promotion ~ghost t1 t2 =
   match t1,t2 with
     | JTYbase t1,JTYbase t2 -> 
 	begin
-	  match t1,t2 with
-	    | (Treal | Tinteger), _ 
-	    | _, (Treal | Tinteger) -> assert false
-	    | (Tboolean | Tunit),_
-	    | _, (Tboolean | Tunit) -> raise Not_found
-	    | Tdouble,_ | _, Tdouble -> Tdouble
-	    | Tfloat,_ | _, Tfloat -> Tfloat
-	    | Tlong,_ | _, Tlong -> Tlong
+	  if ghost then
+	    match t1,t2 with
+	      | (Tboolean | Tunit),_
+	      | _, (Tboolean | Tunit) -> raise Not_found
+	      | (Treal | Tdouble | Tfloat), _ 
+	      | _, (Treal | Tdouble | Tfloat) -> Treal
+	      | _ -> Tinteger
+	  else
+	    match t1,t2 with
+	      | (Tboolean | Tunit),_
+	      | _, (Tboolean | Tunit) -> raise Not_found
+	      | (Treal | Tinteger), _ 
+	      | _, (Treal | Tinteger) -> assert false
+	      | Tdouble,_ | _, Tdouble -> Tdouble
+	      | Tfloat,_ | _, Tfloat -> Tfloat
+	      | Tlong,_ | _, Tlong -> Tlong
 	    | (Tshort | Tbyte | Tint | Tchar),
-		(Tshort | Tbyte | Tint | Tchar) -> Tint		
-	end
+		  (Tshort | Tbyte | Tint | Tchar) -> Tint		
+	  end
     | _ -> raise Not_found
 
 let lub_object_types t1 t2 = JTYnull
@@ -1988,27 +1996,29 @@ let rec eval_const_expression const e =
     | JEincr_local_var (_, _)
     | JEincr_array _ -> raise Not_found
 
-let is_assignment_convertible ?(const=false) tfrom efrom tto =
+let is_assignment_convertible ?(const=false) ~ghost tfrom efrom tto =
   is_identity_convertible tfrom tto ||
   match tfrom,tto with
     | JTYbase t1, JTYbase t2 -> 
-	is_widening_primitive_convertible t1 t2 ||
-	  begin
-	    match t2 with
-	      | Tbyte | Tshort | Tchar ->		  
-		  begin
-		    try
- 		      let n = eval_const_expression const efrom in
-		      match t2 with
-			| Tbyte -> in_byte_range n
-			| Tshort -> in_short_range n
-			| Tchar -> in_char_range n
-			| _ -> assert false
-		    with Not_found -> 
-		      if const then raise Not_found else false
-		  end
-	      | _ -> false
-	  end
+	if ghost then is_logic_widening_primitive_convertible t1 t2
+	else
+	  is_widening_primitive_convertible t1 t2 ||
+	    begin
+	      match t2 with
+		| Tbyte | Tshort | Tchar ->		  
+		    begin
+		      try
+ 			let n = eval_const_expression const efrom in
+			match t2 with
+			  | Tbyte -> in_byte_range n
+			  | Tshort -> in_short_range n
+			  | Tchar -> in_char_range n
+			  | _ -> assert false
+		      with Not_found -> 
+			if const then raise Not_found else false
+		    end
+		| _ -> false
+	    end
     | _ -> is_widening_reference_convertible tfrom tto
 
 (* JLS 5.3: Method invocation conversion  *)
@@ -2042,12 +2052,12 @@ let cast_convertible tfrom tto =
 
 (* expressions *)
 	  
-let make_bin_op loc op t1 e1 t2 e2 =
+let make_bin_op ~ghost loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble ->
 	begin
 	  try
-	    let _t = binary_numeric_promotion t1 t2 in
+	    let _t = binary_numeric_promotion ~ghost t1 t2 in
 	      Tboolean, JEbin(e1, op, e2)
 	  with Not_found ->
 	    typing_error loc "numeric types expected"
@@ -2067,8 +2077,9 @@ let make_bin_op loc op t1 e1 t2 e2 =
     | Badd | Bsub | Bmul | Bdiv | Bmod ->
 	begin
 	  try
-	    let t = binary_numeric_promotion t1 t2 in
-	      t,JEbin(e1, op, e2)
+	    let t = binary_numeric_promotion ~ghost t1 t2 in
+	    eprintf "make_bin_op: result type is %a@." print_type (JTYbase t);
+	    t,JEbin(e1, op, e2)
 	  with Not_found ->
 	    typing_error loc "numeric types expected for +, -, *, / and %%"
 	end
@@ -2324,8 +2335,8 @@ let lookup_constructor ci arg_types =
       | [ci] -> ci
       | _ -> assert false
 	  
-let rec expr env e =
-  let exprt = expr env in
+let rec expr ~ghost env e =
+  let exprt = expr ~ghost env in
   let ty, te = 
     match e.java_pexpr_node with
       | JPElit l -> 
@@ -2577,7 +2588,7 @@ let rec expr env e =
 		      match unary_numeric_promotion te2.java_expr_type with
 			| Tint ->
 			    if op = Beq then
-			      if is_assignment_convertible 
+			      if is_assignment_convertible ~ghost
 				te3.java_expr_type te3 t 
 			      then
 				t, JEassign_array(te1,te2,te3)
@@ -2610,7 +2621,7 @@ let rec expr env e =
 	      (type_expr_field_access (exprt e1) loc id).java_expr_node 
 	    with
 	      | JEfield_access(t,fi) ->
-		  type_assign_field t fi op te2
+		  type_assign_field ~ghost t fi op te2
 	      | _ -> assert false
 	  end
       | JPEassign_name (n, op, e1)-> 
@@ -2622,7 +2633,7 @@ let rec expr env e =
 		      match t.java_term_node with
 			| JTvar vi ->
 			    if op = Beq then
-			      if is_assignment_convertible te.java_expr_type te 
+			      if is_assignment_convertible ~ghost te.java_expr_type te 
 				vi.java_var_info_type
 			      then 
 				(vi.java_var_info_type,
@@ -2644,9 +2655,9 @@ let rec expr env e =
 				  print_type vi.java_var_info_type 
 				  print_type te.java_expr_type
 			| JTfield_access (t, fi) ->
-			    type_assign_field (expr_of_term t) fi op te
+			    type_assign_field ~ghost (expr_of_term t) fi op te
 			| JTstatic_field_access (_, fi) ->
-			    type_assign_static_field fi op te
+			    type_assign_static_field ~ghost fi op te
 			| _ -> assert false (* TODO *)
 		    end
 		| TypeName _ ->
@@ -2676,7 +2687,7 @@ let rec expr env e =
 
       | JPEbin (e1, op, e2) -> 
 	  let te1 = exprt e1 and te2 = exprt e2 in 
-	  let t, e = make_bin_op e.java_pexpr_loc op
+	  let t, e = make_bin_op ~ghost e.java_pexpr_loc op
 	    te1.java_expr_type te1 te2.java_expr_type te2 in
 	    JTYbase t, e
 	      (* only in terms *)
@@ -2691,9 +2702,9 @@ let rec expr env e =
 	java_expr_type = ty;
 	java_expr_node = te; }
 
-and type_assign_field t fi op te =
+and type_assign_field ~ghost t fi op te =
   if op = Beq then
-    if is_assignment_convertible te.java_expr_type te
+    if is_assignment_convertible ~ghost te.java_expr_type te
       fi.java_field_info_type
     then 
       (fi.java_field_info_type, JEassign_field (t, fi, te))
@@ -2713,9 +2724,9 @@ and type_assign_field t fi op te =
 	print_type fi.java_field_info_type 
 	print_type te.java_expr_type
 	
-and type_assign_static_field fi op te =
+and type_assign_static_field ~ghost fi op te =
   if op = Beq then
-    if is_assignment_convertible te.java_expr_type te
+    if is_assignment_convertible ~ghost te.java_expr_type te
       fi.java_field_info_type
     then 
       (fi.java_field_info_type, JEassign_static_field (fi, te))
@@ -2741,11 +2752,11 @@ let rec initializer_loc i =
     | Array_initializer (x::_) -> initializer_loc x
     | Array_initializer [] -> assert false (* TODO *)
 			   
-let rec type_initializer env ty i =
+let rec type_initializer ~ghost env ty i =
   match ty, i with
     | _, Simple_initializer e ->
-	let te = expr env e in	
-	  if is_assignment_convertible ~const:true te.java_expr_type te ty 
+	let te = expr ~ghost env e in	
+	  if is_assignment_convertible ~const:true ~ghost te.java_expr_type te ty 
 	  then JIexpr te
 	  else
 	    typing_error e.java_pexpr_loc "type %a expected, got %a"
@@ -2754,7 +2765,7 @@ let rec type_initializer env ty i =
 	let il =
 	  List.map
 	    (fun vi -> match vi with
-	       | Simple_initializer e -> type_initializer env t vi
+	       | Simple_initializer e -> type_initializer ~ghost env t vi
 	       | Array_initializer vil -> assert false (* TODO *))
 	    vil
 	in JIlist il
@@ -2764,7 +2775,7 @@ let rec type_initializer env ty i =
 
 (* statements *)
 
-let variable_declaration env vd =
+let variable_declaration ~ghost env vd =
   let ty = type_type env.package_env env.type_env false vd.variable_type in
   let l =
     List.map
@@ -2773,7 +2784,7 @@ let variable_declaration env vd =
 	 match vd.variable_initializer with
 	   | None -> (id,ty',None)
 	   | Some e -> 
-	       let i = type_initializer env ty' e in
+	       let i = type_initializer ~ghost env ty' e in
 	       (id,ty',Some i))
       vd.variable_decls
   in
@@ -2785,7 +2796,7 @@ let variable_declaration env vd =
 
 let rec statement env s =
   let assertiont = assertion env in
-  let exprt = expr env in
+  let exprt = expr ~ghost:false env in
   let statementt = statement env in
   let s' =
     match s.java_pstatement_node with
@@ -2801,7 +2812,8 @@ let rec statement env s =
       | JPSloop_annot (inv, dec) -> assert false
       | JPSannot (_, _)-> assert false (* TODO *)
       | JPSghost_local_decls d -> assert false (* TODO *)
-      | JPSghost_statement e
+      | JPSghost_statement e ->
+	  let te = expr ~ghost:true env e in JSexpr te
       | JPSexpr e -> 
 	  let te = exprt e in JSexpr te
       | JPSassert(id,a) ->
@@ -2860,7 +2872,7 @@ let rec statement env s =
 	    try
 	      let te = exprt e in 
 	      let vi = List.assoc "\\result" env.env in
-	      if is_assignment_convertible te.java_expr_type te vi.java_var_info_type then
+	      if is_assignment_convertible ~ghost:false te.java_expr_type te vi.java_var_info_type then
 		JSreturn te
 	      else
 		typing_error e.java_pexpr_loc "type %a expected, got %a"
@@ -2878,25 +2890,28 @@ let rec statement env s =
   { java_statement_loc = s.java_pstatement_loc ;
     java_statement_node = s' }
 
-
+and local_decl ~ghost env loc vd rem =
+  let e,decls = variable_declaration ~ghost env vd in
+  let r = block { env with env = e } rem in
+  let s =
+    List.fold_right
+      (fun (vi, i) acc -> 
+	 { java_statement_loc = loc ;
+	   java_statement_node =
+	     JSvar_decl(vi,i,acc); })
+      decls r in
+  [s]
+  
 and statements env b =
   match b with
     | [] -> []
     | s :: rem ->
 	match s.java_pstatement_node with
 	  | JPSskip -> statements env rem
-	  | JPSghost_local_decls vd 
-	  | JPSvar_decl vd ->
-	      let e,decls = variable_declaration env vd in
-	      let r = block { env with env = e } rem in
-	      let s =
-		List.fold_right
-		  (fun (vi, i) acc -> 
-		     { java_statement_loc = s.java_pstatement_loc ;
-		       java_statement_node =
-			 JSvar_decl(vi,i,acc); })
-		  decls r in
-		[s]
+	  | JPSghost_local_decls vd -> 
+	      local_decl ~ghost:true env s.java_pstatement_loc vd rem
+	  | JPSvar_decl vd -> 
+	      local_decl ~ghost:false env s.java_pstatement_loc vd rem
 	  | JPSloop_annot (inv, dec) ->
 	      begin
 		match rem with
@@ -2940,26 +2955,26 @@ and statements env b =
 and add_Pre_Here e = { e with label_env = LabelPre::LabelHere::e.label_env }
 	  	  
 and type_for env loc el1 inv dec e el2 s =
-  let el1 = List.map (expr env) el1 in
+  let el1 = List.map (expr ~ghost:false env) el1 in
   let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
   let dec = 
     Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
   in
-  let e = expr env e in
-  let el2 = List.map (expr env) el2 in
+  let e = expr ~ghost:false env e in
+  let el2 = List.map (expr ~ghost:false env) el2 in
   let s = statement env s in
     { java_statement_node = JSfor (el1, e, inv, dec, el2, s);
       java_statement_loc = loc }
 
 and type_for_decl env loc vd inv dec e sl s =
-  let env',decls = variable_declaration env vd in
+  let env',decls = variable_declaration ~ghost:false env vd in
   let env = { env with env = env'} in
   let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
   let dec = 
     Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
   in
-  let e = expr env e in
-  let sl = List.map (expr env) sl in
+  let e = expr ~ghost:false env e in
+  let sl = List.map (expr ~ghost:false env) sl in
   let s = statement env s in
   { java_statement_node = JSfor_decl(decls,e,inv,dec,sl,s);
     java_statement_loc = loc }
@@ -2969,7 +2984,7 @@ and type_while env loc inv dec e s =
   let dec = 
     Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
   in
-  let e = expr env e in
+  let e = expr ~ghost:false env e in
   let s = statement env s in
   { java_statement_node = JSwhile(e,inv,dec,s);
     java_statement_loc = loc } 
@@ -2990,9 +3005,9 @@ and switch_case env t (labels,b) =
 and switch_label env t = function
   | Default -> Default
   | Case e ->
-      let te = expr env e in
+      let te = expr ~ghost:false env e in
       match te.java_expr_type with
-	| JTYbase _ as t' when is_assignment_convertible t' te (JTYbase t) -> Case te 
+	| JTYbase _ as t' when is_assignment_convertible ~ghost:false t' te (JTYbase t) -> Case te 
 	| _ ->
 	     typing_error e.java_pexpr_loc "type `%s' expected, got `%a'"
 		(string_of_base_type t) print_type te.java_expr_type
@@ -3243,7 +3258,7 @@ let type_constr_spec_and_body ?(dobody=true)
 	      ct_behaviors = behs;
 	      ct_body = body } 
       | Invoke_this el -> 
-	  let tel = List.map (expr env) el in
+	  let tel = List.map (expr ~ghost:false env) el in
 	  let arg_types = List.map (fun te -> te.java_expr_type) tel in
 	  let this_ci = lookup_constructor ci.constr_info_class arg_types in
 	  let this_call_s =
@@ -3263,7 +3278,7 @@ let type_constr_spec_and_body ?(dobody=true)
 	      ct_behaviors = behs;
 	      ct_body = this_call_s :: body }
       | Invoke_super el ->
-	  let tel = List.map (expr env) el in
+	  let tel = List.map (expr ~ghost:false env) el in
 	  let super_class_info = 
 	    match ci.constr_info_class.class_info_extends with
 	      | None -> assert false
@@ -3314,7 +3329,7 @@ let type_field_initializer package_env type_env ci fi =
       | None -> None
       | Some i ->
 	  let ti = 
-	    type_initializer env fi.java_field_info_type i
+	    type_initializer ~ghost:false env fi.java_field_info_type i
 	  in
 	    if fi.java_field_info_is_final then
 	      begin
