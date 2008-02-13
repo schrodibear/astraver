@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.117 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.118 2008-02-13 12:50:02 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -317,7 +317,7 @@ type assertion_node =
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
   | JCAtagequality of tag * tag * string option
-(*  | JCAmatch of term * (pattern * assertion) list*)
+  | JCAmatch of term * (pattern * assertion) list
 	
 and assertion =
     {

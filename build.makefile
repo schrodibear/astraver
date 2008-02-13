@@ -1,6 +1,10 @@
 # This Makefile compiles the Why platform using Ocamlbuild.
 
-OCAMLBUILD=ocamlbuild -build-dir bin -no-hygiene
+ifeq ($(EMACS), yes)
+  OCAMLBUILD=ocamlbuild -build-dir bin -no-hygiene -classic-display
+else
+  OCAMLBUILD=ocamlbuild -build-dir bin -no-hygiene
+endif
 
 # Binaries of the Why platform (with no extension)
 WHY=why

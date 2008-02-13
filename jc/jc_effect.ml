@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.94 2008-02-06 16:50:44 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.95 2008-02-13 12:50:02 bardou Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -366,10 +366,9 @@ let rec assertion ef a =
 	  | Some h -> Some (tov_of_name h)
 	in
 	tag (tag ef t1 h) t2 h
-(*    | JCAmatch (t, pal) ->
-	term 
-	  (List.fold_left (fun acc (_, a) -> assertion acc a) ef pal)
-	  t*)
+    | JCAmatch (t, pal) ->
+	let ef = List.fold_left pattern ef (List.map fst pal) in
+	term (List.fold_left assertion ef (List.map snd pal)) t
 
 (********************
 

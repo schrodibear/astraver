@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.14 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.15 2008-02-13 12:50:03 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -89,7 +89,7 @@ let assertion rresult a =
       | JCAapp _ -> () (* TODO *)
       | JCAtrue | JCAfalse | JCArelation _  | JCAtagequality _ 
       | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
-      | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ (*| JCAmatch _*)
+      | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ | JCAmatch _
       | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ ->
 	  ()
     ) a

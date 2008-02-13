@@ -63,8 +63,8 @@ let rec assertion acc p =
   | JCAbool_term t -> term acc t
   | JCAtagequality(t1, t2, _) ->
       tag (tag acc t1) t2
-(*  | JCAmatch(t, pal) ->
-      term (List.fold_left (fun acc (_, a) -> assertion acc a) acc pal) t*)
+  | JCAmatch(t, pal) ->
+      term (List.fold_left (fun acc (_, a) -> assertion acc a) acc pal) t
 
 (*
 let spec s = 

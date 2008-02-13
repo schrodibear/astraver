@@ -166,8 +166,25 @@ let pattern_list_term translate_body arg ty pbl default =
     (default, [])
     (List.rev pbl)
 
+let pattern_list_assertion translate_body arg ty pbl default =
+  List.fold_left
+    (fun (accbody, accnotcond) (pat, body) ->
+       (* not previous case => (forall vars, arg matches pattern => body) *)
+       let notcond, cond, vars = PatternAssertion.pattern arg ty pat in
+       let body = translate_body body in
+       let case =
+	 List.fold_left
+	   (fun acc (n, ty) -> LForall(n, tr_base_type ty, acc))
+	   (LImpl(cond, body))
+	   vars
+       in
+       let full_case = LImpl(accnotcond, case) in
+       LAnd(accbody, full_case), LAnd(accnotcond, notcond))
+    (default, LTrue)
+    (List.rev pbl)
+
 (*
   Local Variables: 
   compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
-  End: 
+  End:
 *)

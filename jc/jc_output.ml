@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.96 2008-02-07 19:22:03 nrousset Exp $ *)
+(* $Id: jc_output.ml,v 1.97 2008-02-13 12:50:03 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -280,12 +280,12 @@ let rec assertion fmt a =
     | JCAfalse -> fprintf fmt "false"
     | JCAmutable _ -> assert false (* TODO *)
     | JCAtagequality _ -> assert false (* TODO *)
-(*    | JCAmatch (t, pal) ->
+    | JCAmatch (t, pal) ->
 	fprintf fmt "@[<v 2>match %a with@ " term t;
 	List.iter
 	  (fun (p, a) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
 	     pattern p assertion a) pal;
-	fprintf fmt "end@]"*)
+	fprintf fmt "end@]"
 
 let rec location_set fmt = function
   | JCLSvar vi-> 

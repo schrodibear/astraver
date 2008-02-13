@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.90 2008-02-12 18:51:40 nrousset Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.91 2008-02-13 12:50:03 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -518,7 +518,7 @@ let assertion_num a = match a.jc_assertion_node with
   | JCAmutable _ -> 49
   | JCAtagequality _ -> 51
   | JCAat _ -> 53
-(*  | JCAmatch _ -> 59*)
+  | JCAmatch _ -> 59
 
 (* Comparison based only on assertion structure, not locations. *)
 let rec raw_assertion_compare a1 a2 =
@@ -639,10 +639,10 @@ let rec is_constant_assertion a =
 	is_constant_term t &&
 	  is_constant_assertion a1 &&
 	  is_constant_assertion a2
-(*    | JCAmatch (t, pal) ->
+    | JCAmatch (t, pal) ->
 	is_constant_term t &&
 	  (List.fold_left (fun acc (_, a) -> acc && is_constant_assertion a)
-	     true pal)*)
+	     true pal)
 
 (* fun specs *)
 

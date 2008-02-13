@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.238 2008-02-13 09:12:36 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.239 2008-02-13 12:50:02 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -578,7 +578,7 @@ let rec assertion ~global_assertion label oldlabel a =
 	  let t1', lets1 = ftag t1.jc_tag_node in
 	  let t2', lets2 = ftag t2.jc_tag_node in
 	  LPred("eq", [ t1'; t2' ]), lets1@lets2
-(*      | JCAmatch _ -> assert false *)
+      | JCAmatch _ -> assert false
   in
   let a' = make_pred_binds lets a' in
   if a.jc_assertion_label <> "" then

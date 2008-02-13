@@ -4,6 +4,8 @@ TMPDIR=tmp
 
 mkdir -p $TMPDIR/why
 cp good/$*.ml $TMPDIR
+
+echo "Entering directory \`../$TMPDIR'"
 cd $TMPDIR
 
 if ocamlrun -bt ../../../bin/jessica.byte ../pervasives.mli $1.ml
