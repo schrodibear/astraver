@@ -181,7 +181,7 @@ let pattern_list_assertion translate_body arg ty pbl default =
        let full_case = LImpl(accnotcond, case) in
        LAnd(accbody, full_case), LAnd(accnotcond, notcond))
     (default, LTrue)
-    (List.rev pbl)
+    pbl
 
 (*
   Local Variables: 

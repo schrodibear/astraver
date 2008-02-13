@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.180 2008-02-12 14:17:57 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.181 2008-02-13 17:11:13 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -329,8 +329,8 @@ let valid_pointer_type st =
 (* ety = expected type *)
 (* env: the variables already bound *)
 (* vars: the var_info to use if encountering a given variable *)
-(* Return: (env, pat) where:
-     env is the new environment (i.e. the union of the old env and of vars)
+(* Return: (vars, pat) where:
+     vars is the environment of the binders of the pattern
      pat is the typed pattern. *)
 let rec pattern env vars pat ety =
   let get_var ety id =
@@ -804,7 +804,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		     maxtype e.jc_pexpr_loc accrty te2.jc_term_type,
 		     (tp, te2)::acctpel)
 		  (te1.jc_term_type, [tp1, te1])
-		  rem
+		  (List.rev rem)
 	  in
 	  rty, targ.jc_term_region, JCTmatch(targ, List.rev tpel)
 	    
@@ -1139,12 +1139,22 @@ different"
 	  in
 	  JCAtagequality(
 	    ttag1, ttag2, st)
-      | JCPEmatch _ ->
-	  let te = ft e in
+      | JCPEmatch(arg, pel) ->
+	  let targ = ft arg in
+	  let tpal = List.map
+	    (fun (pat, body) ->
+	       let vars, tpat = pattern pat targ.jc_term_type in
+	       let benv = vars @ env in
+	       let tbody = assertion label_env logic_label benv body in
+	       tpat, tbody)
+	    pel
+	  in
+	  JCAmatch(targ, tpal)
+	  (*let te = ft e in
 	  if te.jc_term_type = JCTnative Tboolean then
 	    JCAbool_term(ft e)
 	  else
-	    typing_error e.jc_pexpr_loc "This term should have type bool"
+	    typing_error e.jc_pexpr_loc "This term should have type bool"*)
 
   in { jc_assertion_node = te;
        jc_assertion_label = !lab;

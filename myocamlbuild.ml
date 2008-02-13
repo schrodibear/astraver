@@ -7,7 +7,7 @@ let targets = [
   "caduceus", "c/cmain";
 ]
 
-(* List of external libraries *)
+(* List of external libraries (the .cma / .cmxa files) *)
 (* Don't forget to update the _tags file(s) too *)
 let libraries = [
   "graph";
@@ -59,7 +59,7 @@ let _ = dispatch begin function
       List.iter
 	(fun (target, dep) ->
 	   rule (dep^" -> "^target)
-	     ~insert:`top (* doesn't seem to be needed *)
+	     ~insert:`top
 	     ~prod:target
 	     begin fun env _build ->
 	       build_dep _build dep;
