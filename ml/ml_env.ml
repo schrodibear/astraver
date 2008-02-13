@@ -81,6 +81,7 @@ let add_fun name params return_type env =
     jc_fun_info_effects = Jc_pervasives.empty_fun_effect; (* ! *)
     jc_fun_info_return_region = default_region;
     jc_fun_info_param_regions = [];
+    jc_fun_info_is_recursive = false;
   } in
   { env with funs = StringMap.add name fi env.funs }
 
