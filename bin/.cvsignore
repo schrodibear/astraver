@@ -22,3 +22,13 @@ simplify2why.opt
 why-stat.opt
 demixify.byte
 demixify.opt
+tools
+src
+ocamlc.where
+myocamlbuild.ml
+myocamlbuild
+ml
+jc
+java
+c
+_digests
