@@ -74,7 +74,8 @@ OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
 INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ml
-BFLAGS   = -w Aelyz -warn-error A -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+BFLAGS   = -w Aelyz -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+# no -warn-error because some do not compile all files (e.g. those linked to APRON)
 OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
@@ -249,6 +250,8 @@ JCCML_EXPORT = src/lib.ml src/rc.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_name.ml 
 JCCMO_EXPORT = $(JCCML_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCML_EXPORT:.ml=.cmx)
+JCCMI_EXPORT = $(JCCML_EXPORT:.ml=.cmi) \
+	jc/jc_ast.cmi jc/jc_env.cmi jc/jc_fenv.cmi
 
 JCCMO = @ATPCMO@ $(JCCMO_EXPORT) \
 	jc/jc_options.cmo \
@@ -665,7 +668,7 @@ install-lib: $(JCLIB)
 	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/jessie/why
-	cp -f jc/jc.cmo jc/jc.cmx $(LIBDIR)/jessie
+	cp -f jc/jc.cmo jc/jc.cmx $(JCCMI_EXPORT) $(LIBDIR)/jessie
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/jessie.why $(LIBDIR)/jessie/why
