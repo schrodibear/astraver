@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.237 2008-02-12 13:52:29 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.238 2008-02-13 09:12:36 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -310,7 +310,7 @@ let term_coerce loc tdest tsrc e =
 	  end
     | JCTenum ri, JCTnative Tinteger ->
 	assert false (* a explicit cast should be required by jc_typing *)
-	  (* LApp(logic_enum_of_int ri,[e]) *)
+	(* LApp(logic_enum_of_int ri,[e]) *)
     | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
     | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
 	when Jc_typing.substruct st2 st1 -> e
