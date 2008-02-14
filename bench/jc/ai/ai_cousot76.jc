@@ -13,7 +13,6 @@ integer cousot76() {
     while (i <= 100) {
 	i++;
     }
-    assert i == 101;
     return i;
 }
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.101 2008-02-12 18:51:40 nrousset Exp $ *)
+(* $Id: jc_main.ml,v 1.102 2008-02-14 20:50:42 nrousset Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -104,41 +104,41 @@ let main () =
 	    Array.iter Jc_separation.code_component components
 	  end;
 
-          (* (optional) phase 6: inference of annotations *)
-	  if !Jc_options.annotation_sem <> AnnotNone then
-	    begin
-	      Jc_options.lprintf "Inference of annotations@.";
-	      if Jc_options.interprocedural then
+	      (* phase 6: computation of effects *)
+	      Jc_options.lprintf
+		"\nstarting computation of effects of logic functions.@.";
+	      Array.iter Jc_effect.logic_effects logic_components;
+	      Jc_options.lprintf
+		"\nstarting computation of effects of functions.@.";
+	      Array.iter Jc_effect.function_effects components;
+	      
+              (* (optional) phase 7: inference of annotations *)
+	      if !Jc_options.annotation_sem <> AnnotNone then
 		begin
-		  (* record recursive functions *)
-		  Hashtbl.iter
-		    (fun _ (fi, _, _, _) ->
-		       fi.jc_fun_info_is_recursive <- Jc_ai.is_recursive fi) 
-		    Jc_norm.functions_table;
-		  (* interprocedural analysis over the call graph +
-		     intraprocedural analysis of each function called *)
-		  Hashtbl.iter
-		    (fun _ (fi, loc, fs, sl) ->
-		       if fi.jc_fun_info_name = Jc_options.main then
-			 Jc_ai.main_function (fi, loc, fs, sl)
-		    ) Jc_norm.functions_table;
-		end
+		  Jc_options.lprintf "Inference of annotations@.";
+		  if Jc_options.interprocedural then
+		    begin
+		      (* record recursive functions *)
+		      Hashtbl.iter
+			(fun _ (fi, _, _, _) ->
+			   fi.jc_fun_info_is_recursive <- Jc_ai.is_recursive fi) 
+			Jc_norm.functions_table;
+		      (* interprocedural analysis over the call graph +
+			 intraprocedural analysis of each function called *)
+		      Hashtbl.iter
+			(fun _ (fi, loc, fs, sl) ->
+			   if fi.jc_fun_info_name = Jc_options.main then
+			     Jc_ai.main_function (fi, loc, fs, sl)
+			) Jc_norm.functions_table;
+		    end
 	      else
 		(* intraprocedural inference of annotations otherwise *)
 		Hashtbl.iter 
 		  (fun _ (f, loc, s, b) -> 
 		     Jc_ai.code_function (f, loc, s, b) 
 		  ) Jc_norm.functions_table
-	    end;
+		end;
 	  
-	  (* phase 7: computation of effects *)
-	  Jc_options.lprintf
-	    "\nstarting computation of effects of logic functions.@.";
-	  Array.iter Jc_effect.logic_effects logic_components;
-	  Jc_options.lprintf
-	    "\nstarting computation of effects of functions.@.";
-	  Array.iter Jc_effect.function_effects components;
-	  	  
 	  (* phase 8: checking structure invariants *)
 	  begin
 	    match !Jc_options.inv_sem with
