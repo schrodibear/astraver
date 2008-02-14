@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.47 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.48 2008-02-14 08:55:51 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -351,14 +351,16 @@ let output_file f =
   fprintf fmt "  :extrafuns ((div_int Int Int Int))@\n";
   if not modulo then begin 
     fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
+(* Claude: Why adding such an axiom here ??? --> prelude_why.why ?
     fprintf fmt "  :assumption
                    (forall (?x Int) (?y Int) 
-                              (and (<= 0 (modulo ?x ?y))
+                              (and (implies (not (= ?y 0)) (<= 0 (modulo ?x ?y)))
                                    (implies (< 0 ?y ) (<   (modulo ?x ?y) ?y))
                                    (implies (< ?y 0) 
                                       (< (modulo ?x ?y) (- 0 ?y)))
                                    (implies (not (= ?y 0)) (exists (?t Int)
                                       (= ?x (+ (* ?t ?y) (modulo ?x ?y )))))))@\n";
+*)
   end;
   iter (output_elem fmt);
   

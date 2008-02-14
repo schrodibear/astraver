@@ -67,7 +67,8 @@
 
 /*@ lemma mod_property:
   @  \forall integer x,y; 
-  @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
+  @    // x >=0 && y > 0 ==> 
+ 0 <= x%y && x%y < y; 
   @*/
 
 /*@ predicate isGcd(integer a, integer b, integer d) {

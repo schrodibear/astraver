@@ -129,10 +129,10 @@ show that \verb|x%y| is greater than \verb|min_int|.
 The complete ``proof card'' is given below. The first screenshot
 displays VCs for the user lemmas and for the safety if the \verb|gcd|
 method. The focus is on the goal for proving that the operation
-\verb|x%y| do not overflow, only Z3 is able to discharge it. The
+\verb|x%y| do not overflow, only Erg(o) and Z3 are able to discharge it. The
 second screenshot displays VCs for the two given behaviors. The focus
 is on the preservation of the invariant
-\verb|c*\at(x,Pre)+d*\at(y,Pre) == y|, only Simplify is able to
+\verb|c*\at(x,Pre)+d*\at(y,Pre) == y|, only Erg(o) and Simplify are able to
 discharge it.
 
 \clearpage

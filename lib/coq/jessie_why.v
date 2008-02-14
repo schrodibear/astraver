@@ -12,13 +12,6 @@ Set Implicit Arguments.
 
 Require Import Map. (* dans Map.v (temporairement) *)
 
-(*Why axiom*) Lemma div_int_euclid :
-  (forall (i:Z),
-   (forall (j:Z),
-    (i >= 0 /\ j > 0 -> (i - j + 1) <= (j * ((Zdiv i j))) /\
-     (j * ((Zdiv i j))) <= i))).
-Admitted.
-
 (*Why type*) Definition alloc_table: Set ->Set.
 exact (fun _ => Map Z).
 Defined.
