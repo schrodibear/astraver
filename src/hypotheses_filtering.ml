@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.26 2008-02-14 08:55:51 marche Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.27 2008-02-14 13:12:21 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -314,8 +314,28 @@ let cnf  fm =
     | (Pand (p1,p2, x2, x3), y) -> Pand (p1,p2, distr (x2, y), distr (x3, y))
     | (x, Pand (p1,p2, y2, y3)) -> Pand (p1,p2, distr (x, y2), distr (x, y3))
     | (x, y) -> Por(x, y) 
+
+    (* all hypothesis functions are defined without Pnamed case.
+       It is then removed before selection. It does not have any implication 
+       on produced code. *)
+  and rm_pnamed par = match par with 
+    | Pnamed(_,p) -> rm_pnamed p
+    | Pfpi (a, b, c) -> Pfpi (a ,b, c)
+    | Exists (a, b, c, d) -> Exists (a ,b, c, (rm_pnamed d))
+    | Forallb (a, b, c) -> Forallb (a, (rm_pnamed b), (rm_pnamed c))
+    | Forall (a, b, c, d, e, f) -> Forall (a, b, c, d, e, (rm_pnamed f))
+    | Pnot a -> rm_pnamed a
+    | Piff (a, b) -> Piff (rm_pnamed a, rm_pnamed b)
+    | Por (c, d) -> Por (rm_pnamed c, rm_pnamed d)
+    | Pand (a, b, c, d) -> Pand (a, b, rm_pnamed c, rm_pnamed d)
+    | Pif (a, b, c) -> Pif (a, rm_pnamed b, rm_pnamed c)
+    | Pimplies (a, b, c) -> Pimplies (a, rm_pnamed b, rm_pnamed c)
+    | Papp (a , b, c) -> Papp (a, b, c)
+    | Pvar a -> Pvar a
+    | Pfalse -> Pfalse
+    | Ptrue -> Ptrue
   in
-  cnfp (miniscoping  fm)
+  cnfp (miniscoping (rm_pnamed fm))
 
 
 (** avoided vars **)
@@ -815,16 +835,20 @@ let rec get_abstract_clauses p =
 	AbstractClauseSet.singleton 
 	  (compute_clause 
 	     p {num=0; pos=StringSet.empty; neg=StringSet.empty})
-    | Pnamed(_,p) -> get_abstract_clauses p 
-    | Pfpi (_, _, _) 
-    | Forallb (_, _, _)
-    | Piff (_, _)
-    | Pif (_, _, _)
-    | Pimplies (_, _, _)
-    | Pvar _
-    | Pfalse
-    | Ptrue -> assert false  
-    
+    | Pfalse -> 
+	AbstractClauseSet.singleton 
+	  (add_atom Pfalse {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
+    | Ptrue -> 
+	AbstractClauseSet.singleton 
+	  (add_atom Ptrue {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
+    | Pnamed(_,_) 
+    | Pfpi (_, _, _)  
+    | Forallb (_, _, _) 
+    | Piff (_, _)  
+    | Pif (_, _, _)  
+    | Pimplies (_, _, _)    
+    | Pvar _ -> assert false
+
 
 let build_pred_graph decl = 
   let compute_pred_graph = function  
