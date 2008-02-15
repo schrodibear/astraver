@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.27 2008-02-14 13:12:21 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.28 2008-02-15 14:44:49 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -945,7 +945,13 @@ let get_preds_of p =
     | Pand (_,_,p1,p2) |  Por (p1,p2) ->
 	get polarity p1 ;
 	get polarity p2 
-    | Piff (p1,p2) -> assert false 
+    | Piff (p1,p2) ->
+	(*get polarity Pimplies (_,p1,p2) ;*)
+	get (-1*polarity) p1 ;
+	get polarity p2 ;
+	(*get polarity Pimplies (_,p2,p1)*)
+	get (-1*polarity) p2 ;
+	get polarity p1 
     | Pnot p1 -> 
 	get (-1*polarity) p1 ;
     | Pvar _ | Ptrue | Pfalse -> ()
