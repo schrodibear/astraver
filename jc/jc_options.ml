@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.22 2008-02-05 20:24:05 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.23 2008-02-16 21:53:30 nrousset Exp $ i*)
 
 open Format
 open Jc_env
@@ -79,6 +79,7 @@ let ai_domain = ref AbsNone
 let interprocedural = ref false
 let main = ref ""
 let trust_ai = ref false
+let fast_ai = ref false
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -125,6 +126,8 @@ let _ =
 (*           ^ " or Polyhedron domain, or with weakest preconditions or with both"; *)
 	"-main", Arg.Tuple [Arg.Set interprocedural; Arg.Set_string main],
 	  "  main function for interprocedural abstract interpretation (needs -ai <domain>)";
+	"-fast-ai", Arg.Set fast_ai,
+	  "  fast ai (needs -ai <domain> and -main <function>)";
 	"-trust-ai", Arg.Set trust_ai,
 	  "  verify inferred annotations (needs -ai <domain>)";
 	"--werror", Arg.Set werror,
@@ -160,6 +163,7 @@ let why_opt = !why_opt
 let inv_sem = inv_sem
 let separation_sem = separation_sem
 let trust_ai = !trust_ai
+let fast_ai = !fast_ai
 
 let verify = !verify
 let interprocedural = !interprocedural

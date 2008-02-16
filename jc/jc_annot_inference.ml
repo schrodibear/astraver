@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.109 2008-02-16 17:16:35 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.110 2008-02-16 21:53:30 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -488,6 +488,7 @@ type 'a interprocedural_ai = {
   jc_interai_function_pre_has_changed : (int, bool) Hashtbl.t;
   jc_interai_function_nb_iterations : (int, int) Hashtbl.t;
   jc_interai_function_init_pre : (int, 'a Abstract1.t) Hashtbl.t;
+  jc_interai_function_abs : (int, 'a abstract_interpreter) Hashtbl.t;
 }
     
 (* Type of current postcondition in weakest precondition computation:
@@ -2237,14 +2238,14 @@ let keep_extern mgr fi post =
 
 
 let ai_inter_function_call mgr iai abs pre fi el =
-(*  let formal_vars =
+  let formal_vars =
     List.fold_left2
       (fun (acc) vi e ->
 	 let t = term_var_no_loc vi in
 	 let acc = if Vai.has_variable t then 
 	   (Vai.variable t)::acc else acc in
 	 let acc = if Vai.has_offset_min_variable t then
-	  (Vai.offset_min_variable t)::acc else acc in
+	   (Vai.offset_min_variable t)::acc else acc in
 	 let acc = if Vai.has_offset_max_variable t then
 	   (Vai.offset_max_variable t)::acc else acc in
            assign_expr mgr pre t e; acc)
@@ -2252,13 +2253,14 @@ let ai_inter_function_call mgr iai abs pre fi el =
   in
   let formal_vars = Array.of_list formal_vars in
   let env = try Environment.make formal_vars [||] with _ -> assert false in
-  let pre = try 
-    Abstract1.change_environment mgr pre env false 
-  with _ -> assert false in *)
-  List.iter2
-    (fun vi e -> let t = term_var_no_loc vi in
-       assign_expr mgr pre t e)
-    fi.jc_fun_info_parameters el;
+  let pre = 
+    if Jc_options.fast_ai then
+      try 
+	Abstract1.change_environment mgr pre env false 
+      with _ -> assert false
+    else
+      keep_extern mgr fi pre
+  in
   let function_preconditions = iai.jc_interai_function_preconditions in
   let function_pre = 
     try Hashtbl.find function_preconditions fi.jc_fun_info_tag 
@@ -2302,7 +2304,6 @@ let ai_inter_function_call mgr iai abs pre fi el =
 	    function_pre;
 	  end
       in
-      let function_pre = keep_extern mgr fi function_pre in
 	if not (is_eq mgr old_pre function_pre) then
 	  begin
 	    annotation_inferred := true;
@@ -2749,22 +2750,19 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
       jc_absinv_exceptional = [];
       jc_absinv_return = ref (bottom_abstract_value mgr env);
     } in
-    List.iter (ai_statement iaio abs invs) sl;
-    (* [iaio] is equal to [None] in two cases:
-       1) intraprocedural analysis
-       2) second iteration of interprocedural analysis
-       (i.e. inference of loop invariant once preconditions have been inferred) *)
-    if iaio = None then
-      List.iter (record_ai_invariants abs) sl;
-    List.iter 
-      (fun target -> 
-	if Jc_options.verbose then
-	  printf 
-	    "%a@[<v 2>Inferring assert invariant@\n%a@]@."
-	    Loc.report_position target.jc_target_location
-	    Jc_output.assertion target.jc_target_regular_invariant 
-      ) targets;
-
+      List.iter (ai_statement iaio abs invs) sl;
+      (match iaio with
+	 | None -> List.iter (record_ai_invariants abs) sl 
+	 | Some iai -> Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
+      List.iter 
+	(fun target -> 
+	   if Jc_options.verbose then
+	     printf 
+	       "%a@[<v 2>Inferring assert invariant@\n%a@]@."
+	       Loc.report_position target.jc_target_location
+	       Jc_output.assertion target.jc_target_regular_invariant 
+	) targets;
+      
     (* Require isolation of parameters written through. *)
 (*     let write_params =  *)
 (*       fi.jc_fun_info_effects.jc_writes.jc_effect_through_params *)
@@ -3996,7 +3994,7 @@ let rec ai_entrypoint mgr iaio (fi, loc, fs, sl) =
     fi.jc_fun_info_calls
     
 
-let rec record_ai_inter_annotations mgr iai fi loc fs =
+let rec record_ai_inter_annotations mgr iai fi loc fs sl =
   let env = Environment.make [||] [||] in
     inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
     (* record inferred precondition for [fi] *)
@@ -4014,63 +4012,70 @@ let rec record_ai_inter_annotations mgr iai fi loc fs =
 	"@[<v 2>Inferring precondition for function %s@\n%a@]@."
 	fi.jc_fun_info_name Jc_output.assertion a;
     fs.jc_fun_free_requires <- make_and [fs.jc_fun_free_requires; a];
-    (* record inferred postconditions for [fi] *)
-  let post = 
-    try 
-      Hashtbl.find iai.jc_interai_function_postconditions fi.jc_fun_info_tag 
-    with Not_found -> Abstract1.top mgr env
-  in
-  let returna = mkinvariant mgr post in
-  let vi_result = fi.jc_fun_info_result in
-  let post = make_and 
-    [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type 
-       (term_var_no_loc vi_result)] 
-  in
-  let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
-  let exceptional = 
-    try 
-      Hashtbl.find iai.jc_interai_function_exceptional fi.jc_fun_info_tag 
-    with Not_found -> []
-  in
-  let excl, excabsl =
-    List.fold_left
-      (fun (acc1, acc2) (exc, va) -> (exc :: acc1, va :: acc2))
-      ([], []) exceptional in
-  let excabsl = List.map (fun va -> keep_extern mgr fi va) excabsl in
-  let excabsl = List.map
-    (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
-       Abstract1.top mgr env else va) excabsl in
-  let excal = List.map (mkinvariant mgr) excabsl in
-
-  let post = reg_annot ~loc ~anchor:fi.jc_fun_info_name post in
-    nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms post;
-    nb_fun_post := !nb_fun_post + 1;
-    let excal = List.map (reg_annot ~loc ~anchor:fi.jc_fun_info_name) excal in
-      
-    let exc_behaviors = 
-      List.map2 
-	(fun exc va ->
-	   (Loc.dummy_position, "inferred",
-	    { default_behavior with 
-		jc_behavior_throws = Some exc; 
-		jc_behavior_ensures = va }))
-	excl excal 
+    (* record loop invariants for [fi] *)
+    let abs = 
+      try 
+	Hashtbl.find iai.jc_interai_function_abs fi.jc_fun_info_tag
+      with Not_found -> assert false 
     in
-      if Jc_options.verbose then
-	    begin
-	      printf
-		"@[<v 2>Inferring postcondition for function %s@\n%a@]@."
-		fi.jc_fun_info_name
-		Jc_output.assertion post;
-	      List.iter2
-		(fun exc exca -> 
-		   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms exca;
-		   nb_fun_excep_post := !nb_fun_excep_post + 1;
-		   printf
-		     "@[<v 2>Inferring exceptional postcondition (for exception %s) for function %s@\n%a@]@."
-		     exc.jc_exception_info_name
-		     fi.jc_fun_info_name
-		     Jc_output.assertion exca) excl excal;
+      List.iter (record_ai_invariants abs) sl;
+      (* record inferred postconditions for [fi] *)
+    let post = 
+      try 
+	Hashtbl.find iai.jc_interai_function_postconditions fi.jc_fun_info_tag 
+      with Not_found -> Abstract1.top mgr env
+    in
+    let returna = mkinvariant mgr post in
+    let vi_result = fi.jc_fun_info_result in
+    let post = make_and 
+      [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type 
+	 (term_var_no_loc vi_result)] 
+    in
+    let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
+    let exceptional = 
+      try 
+	Hashtbl.find iai.jc_interai_function_exceptional fi.jc_fun_info_tag 
+      with Not_found -> []
+    in
+    let excl, excabsl =
+      List.fold_left
+	(fun (acc1, acc2) (exc, va) -> (exc :: acc1, va :: acc2))
+	([], []) exceptional in
+    let excabsl = List.map (fun va -> keep_extern mgr fi va) excabsl in
+    let excabsl = List.map
+      (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
+	 Abstract1.top mgr env else va) excabsl in
+    let excal = List.map (mkinvariant mgr) excabsl in
+      
+    let post = reg_annot ~loc ~anchor:fi.jc_fun_info_name post in
+      nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms post;
+      nb_fun_post := !nb_fun_post + 1;
+      let excal = List.map (reg_annot ~loc ~anchor:fi.jc_fun_info_name) excal in
+	
+      let exc_behaviors = 
+	List.map2 
+	  (fun exc va ->
+	     (Loc.dummy_position, "inferred",
+	      { default_behavior with 
+		  jc_behavior_throws = Some exc; 
+		jc_behavior_ensures = va }))
+	  excl excal 
+      in
+	if Jc_options.verbose then
+	  begin
+	    printf
+	      "@[<v 2>Inferring postcondition for function %s@\n%a@]@."
+	      fi.jc_fun_info_name
+	      Jc_output.assertion post;
+	    List.iter2
+	      (fun exc exca -> 
+		 nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms exca;
+		 nb_fun_excep_post := !nb_fun_excep_post + 1;
+		 printf
+		   "@[<v 2>Inferring exceptional postcondition (for exception %s) for function %s@\n%a@]@."
+		   exc.jc_exception_info_name
+		   fi.jc_fun_info_name
+		   Jc_output.assertion exca) excl excal;
 	    end;
 	begin
 	  if is_purely_exceptional_fun fs then () else
@@ -4090,14 +4095,15 @@ let rec record_ai_inter_annotations mgr iai fi loc fs =
 	     | None -> ()
 	     | Some _ ->
 		 if not (List.mem fi.jc_fun_info_tag !inspected_functions) then
-		   record_ai_inter_annotations mgr iai fi loc fs)
+		   record_ai_inter_annotations mgr iai fi loc fs sl)
 	  fi.jc_fun_info_calls
 	  
 	  
 let rec ai_entrypoint_fix mgr iai (fi, loc, fs, sl) =
   incr nb_iterations;
+  printf "iteration %d@." !nb_iterations;
   ai_entrypoint mgr (Some iai) (fi, loc, fs, sl);
-  if !annotation_inferred then
+  if not Jc_options.fast_ai && !annotation_inferred then
     begin
       annotation_inferred := false;
       inspected_functions := [];
@@ -4113,13 +4119,12 @@ let ai_interprocedural mgr (fi, loc, fs, sl) =
     jc_interai_function_pre_has_changed = Hashtbl.create 0;
     jc_interai_function_nb_iterations = Hashtbl.create 0;
     jc_interai_function_init_pre = Hashtbl.create 0;
+    jc_interai_function_abs = Hashtbl.create 0;
   } in
   let time = Unix.gettimeofday () in
     ai_entrypoint_fix mgr iai (fi, loc, fs, sl);
     inspected_functions := [];
-    record_ai_inter_annotations mgr iai fi loc fs;
-    inspected_functions := [];
-    ai_entrypoint mgr None (fi, loc, fs, sl);
+    record_ai_inter_annotations mgr iai fi loc fs sl;
     let time = Unix.gettimeofday () -. time in
       if Jc_options.verbose then 
 	printf "Interprocedural analysis stats: \
