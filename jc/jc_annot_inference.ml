@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.107 2008-02-14 20:50:42 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.108 2008-02-16 17:07:07 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -949,13 +949,13 @@ module Dnf = struct
     if debug then printf "[Dnf.test] %a@." Abstract1.print pre;
     if debug then printf "[Dnf.test] %a@." print dnf;
     let env = Abstract1.env pre in
-    if is_false dnf then
-      (* Make [pre] be the bottom abstract value. *)
-      let bot = Abstract1.bottom mgr env in
-	Abstract1.meet_with mgr pre bot
-    else if is_true dnf then
-      ()
-    else
+      if is_false dnf then
+	(* Make [pre] be the bottom abstract value. *)
+	let bot = Abstract1.bottom mgr env in
+	  Abstract1.meet_with mgr pre bot
+      else if is_true dnf then
+	()
+      else
       let test_conj copy_pre conj =
 	let lincons =
 	  try Parser.lincons1_of_lstring env conj
@@ -2214,9 +2214,7 @@ let keep_extern mgr fi post =
   with Failure msg -> printf "%s@." msg; assert false in
     Abstract1.change_environment_with mgr post env false;
     let lincons = Parser.lincons1_of_lstring env strl in
-    let post = Abstract1.meet mgr post 
-      (Abstract1.of_lincons_array mgr env lincons) 
-    in
+      meet mgr post (Abstract1.of_lincons_array mgr env lincons);
     let term_has_local_var t =
       fold_term 
 	(fun acc t -> match t.jc_term_node with
@@ -2619,7 +2617,7 @@ and intern_ai_statement iaio abs curinvs s =
 			   Hashtbl.find iai.jc_interai_function_postconditions fi.jc_fun_info_tag
 			with Not_found -> Abstract1.top mgr (Abstract1.env pre)
 		       in
-			 Abstract1.meet_with mgr pre inferred_post);
+			 meet mgr pre inferred_post);
 		ai_statement iaio abs curinvs s;
 		(* To keep information on variable [vi], declaration should be turned
 		 * into assignment before analysis.
@@ -3999,6 +3997,7 @@ let rec ai_entrypoint mgr iaio (fi, loc, fs, sl) =
 
 let rec record_ai_inter_annotations mgr iai fi loc fs =
   let env = Environment.make [||] [||] in
+    inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
     (* record inferred precondition for [fi] *)
   let pre = 
     try 
