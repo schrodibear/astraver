@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.108 2008-02-16 17:07:07 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.109 2008-02-16 17:16:35 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -2302,6 +2302,7 @@ let ai_inter_function_call mgr iai abs pre fi el =
 	    function_pre;
 	  end
       in
+      let function_pre = keep_extern mgr fi function_pre in
 	if not (is_eq mgr old_pre function_pre) then
 	  begin
 	    annotation_inferred := true;
