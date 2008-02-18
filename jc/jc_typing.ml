@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.181 2008-02-13 17:11:13 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.182 2008-02-18 10:00:43 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -161,8 +161,8 @@ let comparable_types t1 t2 =
     | JCTenum _, JCTnative Tinteger -> true
     | JCTnative Tinteger, JCTenum _ -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
-    | JCTpointer(JCtag s1,_,_), JCTpointer(JCtag s2,_,_) -> 
-	s1.jc_struct_info_root == s2.jc_struct_info_root
+    | JCTpointer(tov1,_,_), JCTpointer(tov2,_,_) -> 
+	tag_or_variant_variant tov1 == tag_or_variant_variant tov2
     | JCTnull, JCTnull -> true
     | JCTnull, JCTpointer _
     | JCTpointer _, JCTnull -> true

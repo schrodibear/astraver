@@ -79,6 +79,7 @@ val field_bounds : Jc_env.field_info -> Num.num * Num.num
 val root_name : Jc_env.struct_info -> string
 val field_root_name : Jc_env.field_info -> string
 val struct_variant : Jc_env.struct_info -> Jc_env.variant_info
+val tag_or_variant_variant : Jc_env.tag_or_variant -> Jc_env.variant_info
 val tag_or_variant_name : Jc_env.tag_or_variant -> string
 
 (* predefined functions *)

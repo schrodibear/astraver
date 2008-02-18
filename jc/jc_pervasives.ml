@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.91 2008-02-13 12:50:03 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.92 2008-02-18 10:00:43 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -758,6 +758,10 @@ let struct_variant st =
 		  ^st.jc_struct_info_root.jc_struct_info_name^")"))
 	(* don't use struct_variant before checking that every tag is used
          * in a type *)
+
+let tag_or_variant_variant = function
+  | JCtag st -> struct_variant st
+  | JCvariant vi -> vi
   
 let tag_or_variant_name = function
   | JCtag st -> "tag "^st.jc_struct_info_name
