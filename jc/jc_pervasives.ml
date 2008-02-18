@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.93 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.94 2008-02-18 14:52:52 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -222,7 +222,7 @@ let exception_info ty id =
 
 let empty_effects = 
   { jc_effect_alloc_table = StringRegionSet.empty;
-    jc_effect_tag_table = StringSet.empty;
+    jc_effect_tag_table = VariantSet.empty;
     jc_effect_memories = FieldRegionMap.empty;
     jc_effect_globals = VarSet.empty;
     jc_effect_through_params = VarSet.empty;

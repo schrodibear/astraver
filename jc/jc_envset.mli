@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.17 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_envset.mli,v 1.18 2008-02-18 14:52:52 bardou Exp $ *)
 
 module type OrderedHashedType =
 sig
@@ -53,11 +53,19 @@ module VarSet : Set.S with type elt = var_info
 
 module StructSet : Set.S with type elt = struct_info
 
+module StructMap : Map.S with type key = struct_info
+
+module VariantSet : Set.S with type elt = variant_info
+
+module VariantMap : Map.S with type key = variant_info
+
 module ExceptionSet : Set.S with type elt = exception_info
 
 module ExceptionMap : Map.S with type key = exception_info
 
 module StructOrd : OrderedHashedType with type t = struct_info
+
+module VariantOrd : OrderedHashedType with type t = variant_info
 
 module FieldOrd : OrderedHashedType with type t = field_info
 

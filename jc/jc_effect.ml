@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.96 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.97 2008-02-18 14:52:52 bardou Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -65,7 +65,7 @@ let ef_union ef1 ef2 =
       StringRegionSet.union
 	ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table;
     jc_effect_tag_table = 
-      StringSet.union
+      VariantSet.union
 	ef1.jc_effect_tag_table ef2.jc_effect_tag_table;
     jc_effect_memories = 
 (*     
@@ -175,8 +175,8 @@ let add_alloc_effect ef (tov, r) =
       StringRegionSet.add (a,r) ef.jc_effect_alloc_table } 
   
 let add_tag_effect ef tov =
-  let a = tag_or_variant_type_name tov in
-  { ef with jc_effect_tag_table = StringSet.add a ef.jc_effect_tag_table } 
+  let a = tag_or_variant_variant tov in
+  { ef with jc_effect_tag_table = VariantSet.add a ef.jc_effect_tag_table } 
 
 let add_mutable_effect ef tov =
   { ef with jc_effect_mutable = StringSet.add
@@ -244,7 +244,7 @@ let add_committed_writes fef tov =
 
 let same_effects ef1 ef2 =
   StringRegionSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
-  && StringSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
+  && VariantSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && FieldRegionMap.equal (fun x y -> true) ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
   && VarSet.equal ef1.jc_effect_through_params ef2.jc_effect_through_params
@@ -691,8 +691,8 @@ let logic_effects funs =
 	 (print_list comma (fun fmt (a,r) ->
 			      fprintf fmt "%s,%s" a r.jc_reg_name))
 	 (StringRegionSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
-	 (print_list comma (fun fmt v -> fprintf fmt "%s" v))
-	 (StringSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
+	 (print_list comma (fun fmt v -> fprintf fmt "%s" v.jc_variant_info_name))
+	 (VariantSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
 	 (print_list comma (fun fmt ((fi,r),labels) ->
 			      fprintf fmt "%s,%s (%a)" fi.jc_field_info_name
 				r.jc_reg_name

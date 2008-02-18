@@ -171,12 +171,12 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
-  StringSet.fold
+  VariantSet.fold
     (fun v acc -> 
-       let t = { logic_type_args = [simple_logic_type v];
+       let t = { logic_type_args = [variant_model_type v];
 		 logic_type_name = "tag_table" }
        in
-       (v ^ "_tag_table", t)::acc)
+       (tag_table_name_vi v, t)::acc)
     li.jc_logic_info_effects.jc_effect_tag_table
     l	    
 
@@ -211,8 +211,8 @@ let logic_info_reads acc li =
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
-  StringSet.fold
-    (fun v acc -> StringSet.add (v^"_tag_table") acc)
+  VariantSet.fold
+    (fun v acc -> StringSet.add (tag_table_name_vi v) acc)
     li.jc_logic_info_effects.jc_effect_tag_table
     acc
 (* *)
@@ -326,8 +326,8 @@ let all_effects ef =
       res
   in
   let res =
-    StringSet.fold
-      (fun v acc -> (tag_table_name2 v)::acc)
+    VariantSet.fold
+      (fun v acc -> (tag_table_name_vi v)::acc)
       ef.jc_effect_tag_table
       res
   in

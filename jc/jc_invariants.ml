@@ -351,6 +351,7 @@ let struct_inv_memories acc st =
     invs
 
 (* Returns the parameters needed by an invariant, "this" not included *)
+(* TODO: factorize using Jc_interp_misc.logic_params *)
 let invariant_params acc li =
   let acc =
     FieldRegionMap.fold
@@ -369,12 +370,12 @@ let invariant_params acc li =
       acc
   in
   let acc =
-    StringSet.fold
+    VariantSet.fold
       (fun v acc -> 
-	 let t = { logic_type_args = [simple_logic_type v];
+	 let t = { logic_type_args = [variant_model_type v];
 		   logic_type_name = "tag_table" }
 	 in
-	 (v ^ "_tag_table", t)::acc)
+	 (tag_table_name_vi v, t)::acc)
       li.jc_logic_info_effects.jc_effect_tag_table
       acc
   in

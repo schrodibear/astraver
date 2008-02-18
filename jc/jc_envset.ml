@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.19 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_envset.ml,v 1.20 2008-02-18 14:52:52 bardou Exp $ *)
 
 open Jc_env
 
@@ -113,6 +113,22 @@ module StructOrd =
   end
 
 module StructSet = Set.Make(StructOrd)
+
+module StructMap = Map.Make(StructOrd)
+
+module VariantOrd = struct
+  type t = variant_info
+  let compare v1 v2 = 
+    Pervasives.compare v1.jc_variant_info_name v2.jc_variant_info_name
+  let equal v1 v2 =
+    v1.jc_variant_info_name = v2.jc_variant_info_name
+  let hash v =
+    Hashtbl.hash v.jc_variant_info_name 
+end
+
+module VariantSet = Set.Make(VariantOrd)
+
+module VariantMap = Map.Make(VariantOrd)
 
 module FieldOrd =
   struct type t = field_info

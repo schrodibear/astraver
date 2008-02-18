@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.241 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.242 2008-02-18 14:52:52 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2083,8 +2083,8 @@ let tr_fun f loc spec body acc =
       reads
   in
   let reads =
-    StringSet.fold
-      (fun v acc -> (tag_table_name2 v)::acc)
+    VariantSet.fold
+      (fun v acc -> (tag_table_name_vi v)::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_tag_table
       reads
   in
@@ -2127,8 +2127,8 @@ let tr_fun f loc spec body acc =
       writes
   in
   let writes =
-    StringSet.fold
-      (fun v acc -> (tag_table_name2 v)::acc)
+    VariantSet.fold
+      (fun v acc -> (tag_table_name_vi v)::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_tag_table
       writes
   in
@@ -2487,7 +2487,17 @@ let tr_axiom id is_axiom p acc =
       LForall (alloc_region_table_name2(alloc,r), alloc_table_type2 alloc, a)
     ) ef.jc_effect_alloc_table a 
   in
-  (* How to add quantification on other effects (alloc, tag) without knowing 
+  let a =
+    VariantSet.fold
+      (fun vi a ->
+	 LForall(
+	   tag_table_name_vi vi,
+	   tag_table_type (JCvariant vi),
+	   a
+	 ))
+      ef.jc_effect_tag_table a
+  in
+  (* How to add quantification on other effects (alloc) without knowing 
    * their type ? *)
   if is_axiom then Axiom(id,a)::acc else Goal(id,a)::Axiom(id ^ "_as_axiom",a)::acc
 
