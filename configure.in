@@ -280,17 +280,17 @@ else
      AC_MSG_RESULT(ok)
 fi
 
-AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
-if test "CAMLP4OOPT" != no ; then
-     AC_MSG_CHECKING(camlp4o.opt version)
-     TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
-     if test "$TMPVERSION" != $CAMLP4VERSION ; then
-	  AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
-     else
- 	  AC_MSG_RESULT(ok)
- 	  CAMLP4O=$CAMLP4OOPT
-     fi
-fi
+dnl AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
+dnl if test "CAMLP4OOPT" != no ; then
+dnl      AC_MSG_CHECKING(camlp4o.opt version)
+dnl      TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
+dnl      if test "$TMPVERSION" != $CAMLP4VERSION ; then
+dnl 	  AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
+dnl      else
+dnl  	  AC_MSG_RESULT(ok)
+dnl  	  CAMLP4O=$CAMLP4OOPT
+dnl      fi
+dnl fi
 
 WHYFLOATS=
 

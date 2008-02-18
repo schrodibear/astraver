@@ -113,7 +113,8 @@ V8FILES=$(VO8:.vo=.v)
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
-GENERATED = src/version.ml src/rc.ml src/xml.ml src/lexer.ml src/parser.mli \
+GENERATED = src/version.ml src/rc.ml src/xml.ml \
+	    src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
             jc/jc_version.ml jc/numconst.ml \
 	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
@@ -213,12 +214,8 @@ WWEBCMO = src/version.cmo src/rc.cmo src/xml.cmo \
 	src/wserver.cmo src/pp.cmo src/whyweb.cmo
 WWEBCMX = $(WWEBCMO:.cmo=.cmx)
 
-CAMLPP="camlp4r pa_ifdef.cmo -DUNIX -DNOFORK -impl"
-
-src/wserver.cmo: src/wserver.ml4
-	$(OCAMLC) -c $(BFLAGS) -pp $(CAMLPP) -impl $^
-src/wserver.o src/wserver.cmx: src/wserver.ml4
-	$(OCAMLOPT) -c $(OFLAGS) -pp $(CAMLPP) -impl $<
+src/wserver.ml: src/wserver.ml4
+	camlp4r pa_ifdef.cmo pr_o.cmo -DUNIX -DNOFORK  -impl $^ -o $@
 
 bin/whyweb.opt: $(WWEBCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
