@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.111 2008-02-18 07:47:30 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.112 2008-02-18 11:06:35 moy Exp $ *)
 
 open Pp
 open Format
@@ -335,6 +335,13 @@ let rec term_name =
 	  (term_name t) ^ "_instanceof_" ^ st.jc_struct_info_name
       | JCTcast(t,_,st) ->
 	  (term_name t) ^ "_cast_" ^ st.jc_struct_info_name
+      | JCTrange_cast(t,_,ei) ->
+	  (term_name t) ^ "_cast_" ^ ei.jc_enum_info_name
+      | JCTreal_cast(t,_,rc) ->
+	  (term_name t) ^ "_cast_" ^ 
+	    (match rc with 
+	      | Integer_to_real -> "integer_to_real"
+	      | Real_to_integer -> "real_to_integer")
       | JCTif(t1,t2,t3) ->
 	  "if_" ^ (term_name t1) ^ "_then_" ^ (term_name t2) 
 	  ^ "_else_" ^ (term_name t3)
@@ -394,7 +401,7 @@ let rec destruct_pointer t =
 	      let offt = full_term_no_loc tnode integer_type dummy_region in
 	      topt,Some offt
 	end
-    | JCTcast(t,_,_) -> 
+    | JCTcast(t,_,_) | JCTrange_cast(t,_,_) | JCTreal_cast(t,_,_) -> 
         (* Pointer arithmetic in Jessie is not related to the size of 
 	 * the underlying type, like in C. This makes it possible to commute
 	 * cast and arithmetic.
@@ -579,7 +586,7 @@ let term_of_expr e =
       | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
       | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
       | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
-      | JCErange_cast(_,e1) -> 
+      | JCErange_cast(e1,_) | JCEreal_cast(e1,_) -> 
 	  (* range does not modify term value *)
 	  (term e1).jc_term_node 
       | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
@@ -644,7 +651,7 @@ let rec asrt_of_expr e =
 	  | Some t -> JCAbool_term t
 	  | None -> JCAtrue 
 	end
-    | JCEcast _ | JCErange_cast _ | JCEshift _ | JCEsub_pointer _ 
+    | JCEcast _ | JCErange_cast _ | JCEreal_cast _ | JCEshift _ | JCEsub_pointer _ 
     | JCEoffset _ | JCEalloc _ | JCEfree _ -> assert false
 (*     | JCEmatch (e, pel) -> assert false *)
 (*
@@ -768,6 +775,8 @@ let rec switch_vis_in_term srcvi targetvi t =
     | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
     | JCTinstanceof (t, lab, si) -> JCTinstanceof (term t, lab, si)
     | JCTcast (t, lab, si) -> JCTcast (term t, lab, si)
+    | JCTrange_cast (t, lab, si) -> JCTrange_cast (term t, lab, si)
+    | JCTreal_cast (t, lab, si) -> JCTreal_cast (term t, lab, si)
     | JCTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
     | JCTrange (to1, to2) -> JCTrange (Option_misc.map term to1, Option_misc.map term to2)
     | JCTmatch _ -> assert false (* TODO *)
@@ -1138,7 +1147,8 @@ let rec linearize t =
     | JCTapp _ | JCTsub_pointer _ -> (TermMap.add t 1 TermMap.empty,0)
     | JCTshift _ | JCTinstanceof _
     | JCTmatch _
-    | JCTold _ | JCTat _ | JCTcast _ | JCTrange _ | JCTif _ -> 
+    | JCTold _ | JCTat _ | JCTcast _  | JCTrange_cast _ | JCTreal_cast _ 
+    | JCTrange _ | JCTif _ -> 
 	failwith "Not linear"
 
 type zero_bounds = {
@@ -1253,7 +1263,8 @@ let rec zero_bounds_term t =
 	else auto_bounds t
     | JCTconst _ | JCTvar _ | JCTderef _ | JCToffset _
     | JCTapp _ | JCTshift _ | JCTsub_pointer _ | JCTinstanceof _
-    | JCTold _ | JCTat _ | JCTcast _ | JCTrange _ | JCTif _ | JCTmatch _ ->
+    | JCTold _ | JCTat _ | JCTcast _  | JCTrange_cast _ | JCTreal_cast _
+    | JCTrange _ | JCTif _ | JCTmatch _ ->
 	auto_bounds t
 	  
 let linstr_of_term env t =
@@ -1609,9 +1620,8 @@ let presentify a =
 	  end
       | JCAtrue | JCAfalse | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _
       | JCAapp _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAtagequality _ -> a
-      | JCAmatch _ -> assert false (* TODO *)
-  in
+      | JCAif _ | JCAmutable _ | JCAtagequality _ | JCAmatch _ -> a
+ in
   linasrt_of_assertion a
 
 let mkinvariant mgr absval =
@@ -1684,7 +1694,7 @@ let collect_expr_asserts e =
   let collect e = 
     match e.jc_expr_node with
       | JCEderef(e1,fi) -> collect_memory_access e1 fi
-      | JCErange_cast(ei,e1) -> collect_integer_overflow ei e1
+      | JCErange_cast(e1,ei) -> collect_integer_overflow ei e1
       | JCEbinary(_,Bdiv_int,e2) -> collect_zero_division e2
       | _ -> []
   in
@@ -1860,8 +1870,7 @@ let rec test_assertion mgr pre a =
 	    end
       | JCAimplies _ | JCAiff _
       | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAtagequality _ -> env,Dnf.true_
-      | JCAmatch _ -> assert false (* TODO ? *)
+      | JCAif _ | JCAmutable _ | JCAtagequality _ | JCAmatch _ -> env,Dnf.true_
   in
   let env, dnf = extract_environment_and_dnf env a in
   Abstract1.change_environment_with mgr pre env false;
@@ -2955,7 +2964,8 @@ let rec atp_of_term t =
     | JCTvar _ | JCTderef _ | JCTapp _ | JCTsub_pointer _ ->
 	Atp.Var (Vwp.variable t)
     | JCTshift _ | JCTold _ | JCTat _ | JCTmatch _ 
-    | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTrange _ ->
+    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _
+    | JCTif _ | JCTrange _ ->
         failwith "Atp alien"
 (*	assert false*)
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.182 2008-02-18 10:00:43 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.183 2008-02-18 11:06:36 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1338,7 +1338,7 @@ let rec expr env e =
 	    try
 	      let ri = Hashtbl.find enum_types_table t in
 	      if is_numeric te1.jc_texpr_type then
-		JCTenum ri,te1.jc_texpr_region, JCTErange_cast(ri,te1)
+		JCTenum ri,te1.jc_texpr_region, JCTErange_cast(te1,ri)
 	      else
 		typing_error e.jc_pexpr_loc "numeric type expected"
 	    with Not_found ->

@@ -27,10 +27,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.27 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: zenon.ml,v 1.28 2008-02-18 11:06:36 moy Exp $ i*)
 
 (*s Zenon output *)
 
+open Pp
 open Ident
 open Options
 open Misc
@@ -40,7 +41,6 @@ open Logic_decl
 open Vcg
 open Format
 open Cc
-open Pp
 open Ltyping
 open Env
 open Report

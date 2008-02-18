@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.97 2008-02-13 12:50:03 bardou Exp $ *)
+(* $Id: jc_output.ml,v 1.98 2008-02-18 11:06:36 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -59,14 +59,7 @@ type jc_decl =
   | JCannotation_policy of Jc_env.annotation_sem
   | JCabstract_domain of Jc_env.abstract_domain 
       
-let const fmt c =
-  match c with
-    | JCCinteger s -> fprintf fmt "%s" s
-    | JCCreal s -> fprintf fmt "%s" s
-    | JCCboolean b -> fprintf fmt "%B" b
-    | JCCnull -> fprintf fmt "null"
-    | JCCvoid -> fprintf fmt "()"
-
+let const = Jc_poutput.const
 
 (*
 let lbin_op op =
@@ -114,24 +107,11 @@ let unary_op = function
   | Unot -> "!"
   | Ubw_not -> "~"
 
-let offset_kind fmt k =
-  match k with
-    | Offset_max -> fprintf fmt "ax"
-    | Offset_min -> fprintf fmt "in"
+let offset_kind = Jc_poutput.offset_kind
 
-let label fmt l =
-  match l with
-(*
-    | LabelNone -> fprintf fmt "None"
-*)
-    | LabelName s -> fprintf fmt "%s" s
-    | LabelHere -> fprintf fmt "Here" 
-    | LabelPre -> fprintf fmt "Pre" 
-    | LabelOld -> fprintf fmt "Old" 
-    | LabelPost -> fprintf fmt "Post" 
-(*
-    | LabelInit -> fprintf fmt "Init" 
-*)
+let real_conversion = Jc_poutput.real_conversion
+
+let label = Jc_poutput.label
 
 let rec pattern fmt p =
   match p.jc_pattern_node with
@@ -168,6 +148,10 @@ let rec term fmt t =
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
     | JCTcast (t, _, si) ->
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
+    | JCTrange_cast (t, _, ei) ->
+	fprintf fmt "(%a :> %s)" term t ei.jc_enum_info_name
+    | JCTreal_cast (t, _, rc) ->
+	fprintf fmt "(%a :> %a)" term t real_conversion rc
     | JCTinstanceof (t, _, si) ->
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
     | JCToffset (k,t,_)->
@@ -217,9 +201,7 @@ let rec term fmt t =
 	     pattern p term t) ptl;
 	fprintf fmt "end@]"
 
-let quantifier fmt = function
-  | Forall -> fprintf fmt "forall"
-  | Exists -> fprintf fmt "exists"
+let quantifier = Jc_poutput.quantifier
 
 let rec assertion fmt a =
   if a.jc_assertion_label <> "" then
@@ -381,8 +363,10 @@ let rec expr fmt e =
 	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
     | JCTEcast (e, si) ->
 	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
-    | JCTErange_cast (ri, e) ->
+    | JCTErange_cast (e, ri) ->
 	fprintf fmt "(%a :> %s)" expr e ri.jc_enum_info_name
+    | JCTEreal_cast (e, rc) ->
+	fprintf fmt "(%a :> %a)" expr e real_conversion rc
     | JCTEalloc (e, si) ->
 	fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e 
     | JCTEfree (e) ->

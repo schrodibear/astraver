@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.240 2008-02-13 17:11:13 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.241 2008-02-18 11:06:36 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -468,6 +468,19 @@ let rec term ~global_assertion label oldlabel t =
 	let tag = tag_table_name (JCtag ty) in
 	LApp("downcast",
 	     [lvar label tag; t';LVar (tag_name ty)]), lets
+    | JCTrange_cast(t,label,ei) -> (* TODO: use label *)
+	let t', lets = ft t in
+	let t' = term_coerce t.jc_term_loc (JCTenum ei) t.jc_term_type t' in
+	t', lets
+    | JCTreal_cast(t,label,rc) -> (* TODO: use label *)
+	let t', lets = ft t in
+	let t' = match rc with
+	  | Integer_to_real ->
+	      term_coerce t.jc_term_loc real_type integer_type t'
+	  | Real_to_integer ->
+	      term_coerce t.jc_term_loc integer_type real_type t'
+	in
+	t', lets
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
     | JCTmatch(t, ptl) ->
 	let t', lets1 = ft t in
@@ -1003,10 +1016,20 @@ and expr ~infunction ~threats e : expr =
 	    [Deref tag; e; Var (tag_name si)]
 	in
 	  if typea = LTrue then call else Assert (typea, call)
-    | JCErange_cast(ri,e1) ->
+    | JCErange_cast(e1,ri) ->
 	let e1' = expr e1 in
 	coerce ~no_int_overflow:(not threats)
 	  e.jc_expr_label e.jc_expr_loc (JCTenum ri) e1.jc_expr_type e1'
+    | JCEreal_cast(e1,rc) ->
+	let e1' = expr e1 in
+	begin match rc with
+	  | Integer_to_real ->
+	      coerce ~no_int_overflow:(not threats)
+		e.jc_expr_label e.jc_expr_loc real_type integer_type e1'
+	  | Real_to_integer ->
+	      coerce ~no_int_overflow:(not threats)
+		e.jc_expr_label e.jc_expr_loc integer_type real_type e1'
+	end
     | JCEderef(e,fi) ->
 	let mem = field_region_memory_name(fi,e.jc_expr_region) in
 	let mem = 

@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.95 2008-02-13 12:50:02 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.96 2008-02-18 11:06:36 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -306,7 +306,7 @@ let rec term ef t =
 	add_memory_effect lab ef (fi,t.jc_term_region)
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTcast (t1, _, ty) ->  term ef t1
+    | JCTcast (t1, _, _) | JCTrange_cast(t1,_,_) | JCTreal_cast(t1,_,_) ->  term ef t1
     | JCTinstanceof (_, _, _) -> assert false (* TODO *)
     | JCTat (t1, lab) -> term ef t1
     | JCTold t1 -> term ef t1
@@ -398,7 +398,8 @@ let rec expr ef e =
 	if vi.jc_var_info_static then
 	  add_global_reads ef vi
 	else ef
-    | JCErange_cast(_,e1)
+    | JCErange_cast(e1,_)
+    | JCEreal_cast(e1,_)
     | JCEunary(_,e1) -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) ->

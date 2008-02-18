@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.13 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: pp.mli,v 1.14 2008-02-18 11:06:36 moy Exp $ i*)
 
 open Format
 
@@ -51,6 +51,7 @@ val semi : formatter -> unit -> unit
 val underscore : formatter -> unit -> unit
 val arrow : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
+val string : formatter -> string -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 
 val open_formatter : ?margin:int -> out_channel -> formatter

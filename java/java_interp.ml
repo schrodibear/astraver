@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.114 2008-02-13 09:09:33 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.115 2008-02-18 11:06:35 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -991,11 +991,11 @@ let int_cast loc t e =
       | _ -> true
   then e 
   else     
-    JCTErange_cast(int_range, { jc_texpr_loc = loc;
-				jc_texpr_type = Jc_pervasives.integer_type;
-				jc_texpr_region = Jc_region.dummy_region;
-				jc_texpr_label = "";
-				jc_texpr_node = e })
+    JCTErange_cast({ jc_texpr_loc = loc;
+		     jc_texpr_type = Jc_pervasives.integer_type;
+		     jc_texpr_region = Jc_region.dummy_region;
+		     jc_texpr_label = "";
+		     jc_texpr_node = e },int_range)
 
 let dummy_loc_expr ty e =
   { jc_texpr_loc = Loc.dummy_position; 
@@ -1208,7 +1208,7 @@ let rec expr ?(reg=false) e =
 		  else
 		    begin
 		      reg := true;	    
-		      JCTErange_cast(get_enum_info t, expr e1)
+		      JCTErange_cast(expr e1,get_enum_info t)
 		    end
 	      | JTYclass(_,ci) ->
 		  let st = get_class ci.class_info_name in

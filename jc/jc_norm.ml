@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.80 2008-02-08 18:26:52 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.81 2008-02-18 11:06:36 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -373,9 +373,12 @@ let rec expr e =
     | JCTEcast (e, s) ->
 	let (l, tl), e = expr e in
 	(l, tl), JCEcast (e, s)
-    | JCTErange_cast (r, e) ->
+    | JCTErange_cast (e,r) ->
 	let (l, tl), e = expr e in
-	(l, tl), JCErange_cast (r, e)
+	(l, tl), JCErange_cast (e,r)
+    | JCTEreal_cast (e,rc) ->
+	let (l, tl), e = expr e in
+	(l, tl), JCEreal_cast (e,rc)
     | JCTEalloc (e, s) ->
 	let (l, tl), e = expr e in
 	(l, tl), JCEalloc (e, s)

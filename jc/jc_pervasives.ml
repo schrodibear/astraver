@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.92 2008-02-18 10:00:43 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.93 2008-02-18 11:06:36 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -352,7 +352,7 @@ let rec term_of_expr e =
 (*    | JCEmatch (e, pel) ->
 	let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in
 	JCTmatch (term_of_expr e, ptl)*)
-    | JCErange_cast _ -> assert false
+    | JCErange_cast _ | JCEreal_cast _ -> assert false
     | JCEalloc _ -> assert false
     | JCEfree _ -> assert false
   in
@@ -388,7 +388,8 @@ let rec is_constant_term t =
     | JCTconst _ -> true
     | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
     | JCTapp _ | JCTold _ | JCTat _ | JCToffset _
-    | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTmatch _ -> false
+    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _
+    | JCTreal_cast _ | JCTif _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
 	is_constant_term t1 && is_constant_term t2
     | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
@@ -411,6 +412,8 @@ let term_num t = match t.jc_term_node with
   | JCTif _ -> 47
   | JCTat _ -> 53
   | JCTmatch _ -> 59
+  | JCTrange_cast _ -> 61
+  | JCTreal_cast _ -> 67
 
 (* Comparison based only on term structure, not types not locations. *)
 let rec raw_term_compare t1 t2 =
@@ -592,7 +595,8 @@ let rec is_numeric_term t =
     | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
     | JCToffset _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
-    | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) -> is_numeric_term t
+    | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) 
+    | JCTrange_cast (t, _, _) | JCTreal_cast (t, _, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ | JCTmatch _ -> false (* TODO ? *)
 

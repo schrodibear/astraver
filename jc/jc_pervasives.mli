@@ -40,6 +40,7 @@ val boolean_type : Jc_env.jc_type
 val real_type : Jc_env.jc_type
 val unit_type : Jc_env.jc_type
 
+val string_of_native: Jc_env.native_type -> string
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
 
 (* constants *)

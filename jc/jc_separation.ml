@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.15 2008-02-13 12:50:03 bardou Exp $ *)
+(* $Id: jc_separation.ml,v 1.16 2008-02-18 11:06:36 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -79,7 +79,7 @@ let term rresult t =
 	Region.unify result_region t.jc_term_region
     | JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
     | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ | JCToffset _
-    | JCTinstanceof _ | JCTcast _ ->
+    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _ ->
 	()
   ) t
 
@@ -106,7 +106,7 @@ let expr e =
 	()*)
     | JCEconst _ | JCEvar _ | JCEbinary _ | JCEshift _ | JCEunary _
     | JCEderef _ | JCEoffset _ | JCEinstanceof _ | JCEcast _ 
-    | JCErange_cast _ | JCEalloc _ | JCEfree _ ->
+    | JCErange_cast _ | JCEreal_cast _ | JCEalloc _ | JCEfree _ ->
 	()
   ) e
 
@@ -212,7 +212,7 @@ let regionalize_assertion a assoc =
 	  { t with jc_term_node = tnode; }
       | JCTconst _ | JCTvar _ | JCTshift _ | JCTsub_pointer _ 
       | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
-      | JCTinstanceof _ | JCTcast _ | JCTif _ | JCTmatch _ | JCTrange _ ->
+      | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTmatch _ | JCTrange _ ->
 	  t
     in
     try { t with jc_term_region = RegionList.assoc t.jc_term_region assoc; }

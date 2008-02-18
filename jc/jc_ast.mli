@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.118 2008-02-13 12:50:02 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.119 2008-02-18 11:06:36 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -78,6 +78,8 @@ type punary_op =
 type offset_kind = Offset_max | Offset_min
 
 type quantifier = Forall | Exists
+
+type real_conversion = Integer_to_real | Real_to_integer
 
 type ppattern_node =
   | JCPPstruct of identifier * (identifier * ppattern) list
@@ -265,6 +267,8 @@ and term_node =
   | JCToffset of offset_kind * term * struct_info 
   | JCTinstanceof of term * logic_label * struct_info
   | JCTcast of term * logic_label * struct_info
+  | JCTrange_cast of term * logic_label * enum_info
+  | JCTreal_cast of term * logic_label * real_conversion
   | JCTif of term * term * term
   | JCTrange of term option * term option
   | JCTmatch of term * (pattern * term) list
@@ -345,7 +349,8 @@ type texpr_node =
   | JCTEoffset of offset_kind * texpr * struct_info 
   | JCTEinstanceof of texpr * struct_info
   | JCTEcast of texpr * struct_info
-  | JCTErange_cast of enum_info * texpr
+  | JCTErange_cast of texpr * enum_info
+  | JCTEreal_cast of texpr * real_conversion
   | JCTEassign_var of var_info * texpr
   | JCTEassign_var_op of var_info * bin_op * texpr
   | JCTEassign_heap of texpr * field_info * texpr
@@ -443,7 +448,8 @@ type expr_node =
   | JCEderef of expr * field_info
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info
-  | JCErange_cast of enum_info * expr
+  | JCErange_cast of expr * enum_info
+  | JCEreal_cast of expr * real_conversion
   | JCEif of expr * expr * expr
   | JCEoffset of offset_kind * expr * struct_info
   | JCEalloc of expr * struct_info
