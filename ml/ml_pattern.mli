@@ -47,6 +47,14 @@ val pattern_term: Ml_env.t -> (Ml_env.t -> Jc_ast.term) ->
 val pattern_list_term: Ml_env.t -> (Ml_env.t -> Jc_ast.term) ->
   Ml_ocaml.Typedtree.pattern list -> Jc_env.var_info list * Jc_ast.term
 
+(** Same as [pattern_term] but for assertions. *)
+val pattern_assertion: Ml_env.t -> (Ml_env.t -> Jc_ast.assertion) ->
+  Ml_ocaml.Typedtree.pattern -> Jc_env.var_info * Jc_ast.assertion
+
+(** Same as [pattern_list_term] but for assertions. *)
+val pattern_list_assertion: Ml_env.t -> (Ml_env.t -> Jc_ast.assertion) ->
+  Ml_ocaml.Typedtree.pattern list -> Jc_env.var_info list * Jc_ast.assertion
+
 (*
 Local Variables: 
 compile-command: "unset LANG; make -j -C .. bin/jessica.opt"

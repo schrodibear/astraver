@@ -44,7 +44,10 @@ integer perimeter(shape[0] S)
   behavior ok: ensures match S with
     Circle{radius = r;} -> \result == 3*r*r;
     _ -> \result >= 0;
-    end;
+  end;
+  behavior bla: ensures match S with
+    Circle{radius = r;} -> 0 == 0 <==> 1 == 1;
+  end;
 {
   return match S with
     Parallelogram{} as P ->

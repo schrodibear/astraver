@@ -611,11 +611,10 @@ let behavior env b =
 let invariants env spec =
   list_fold_map
     (fun env i ->
-       let arg_vi, body = pattern_term env
-	 (fun env -> make_bool_term (term env i.ti_body))
+       let arg_vi, body = pattern_assertion env
+	 (fun env -> make_assertion (assertion env i.ti_body))
 	 i.ti_argument
        in
-       let body = make_assertion (JCAbool_term body) in
        let final_env, _ =
 	 Ml_env.add_logic_fun (name i.ti_name) [ arg_vi ] None env
        in
@@ -760,11 +759,10 @@ let structure_item env = function
       declare id td true;
       [], env
   | Tstr_axiom_spec axs ->
-      let args, body = pattern_list_term env
-	(fun env -> make_bool_term (term env axs.as_body))
+      let args, body = pattern_list_assertion env
+	(fun env -> make_assertion (assertion env axs.as_body))
 	axs.as_arguments
       in
-      let body = make_assertion (JCAbool_term body) in
       let body = quantify_list Forall args body in
       [ JClemma_def(axs.as_name, true, [LabelName "L"], body) ], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"

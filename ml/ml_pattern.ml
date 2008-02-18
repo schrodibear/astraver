@@ -91,7 +91,7 @@ let rec pattern env pat =
     jc_pattern_type = JCTnull;
   }
 
-let pattern_list_term env body pats =
+let pattern_list make env body pats =
   let benv, pats = list_fold_map pattern env pats in
   let args = List.map
     (fun pat -> match pat.jc_pattern_node with
@@ -103,28 +103,40 @@ let pattern_list_term env body pats =
   let result = List.fold_right2
     (fun pat vi body ->
        match pat.jc_pattern_node with
-	 | JCPvar _ ->
-	     (* Special case to avoid having "match x with y -> ..." *)
-	     (* Actually, x=y thanks to how args is built *)
-	     body
-	 | _ ->
-	     make_term
-	       (JCTmatch(
-		  make_var_term vi,
-		  [ pat, body ]
-		))
-	       body.jc_term_type)
+	 | JCPvar _ -> body
+	 | _ -> make pat vi body)
     pats args (body benv)
   in
   args, result
 
-let pattern_term env body pat =
-  let args, result = pattern_list_term env body [pat] in
+let pattern_list_term =
+  pattern_list
+    (fun pat vi body -> make_term
+       (JCTmatch(
+	  make_var_term vi,
+	  [ pat, body ]
+	))
+       body.jc_term_type)
+
+let pattern_list_assertion =
+  pattern_list
+    (fun pat vi body -> make_assertion
+       (JCAmatch(
+	  make_var_term vi,
+	  [ pat, body ]
+	)))
+
+let pattern_ make env body pat =
+  let args, result = make env body [pat] in
   let arg = match args with
     | [vi] -> vi
     | _ -> assert false (* impossible *)
   in
   arg, result
+
+let pattern_term = pattern_ pattern_list_term
+
+let pattern_assertion = pattern_ pattern_list_assertion
 
 (*
 Local Variables: 
