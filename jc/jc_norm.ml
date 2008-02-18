@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.81 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.82 2008-02-18 16:12:02 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -908,7 +908,7 @@ let code_function (fi, fs, sl) vil =
 			     jc_app_label_assoc = [];
 			     jc_app_region_assoc = [] }
 		   in
-		   (raw_asrt (JCAapp a)) :: acc)
+		     (raw_asrt (JCAapp a)) :: acc)
 		Jc_typing.global_invariants_table []
 	    in
 	    let global_invariants = make_and global_invariants in
@@ -929,7 +929,6 @@ let code_function (fi, fs, sl) vil =
 	  in
 	    (* add invariants to the function precondition *)
 	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
-	    fs.jc_fun_free_requires <- make_and [fs.jc_fun_free_requires; invariants];
 	    (* add invariants to the function postcondition *)
 	    if is_purely_exceptional_fun fs then () else
 	      let safety_exists = ref false in
