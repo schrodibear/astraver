@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.67 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: util.mli,v 1.68 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -184,7 +184,8 @@ val print_logic_type : formatter -> logic_type -> unit
 
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
-val print_explanation : formatter -> (Loc.floc * Logic_decl.expl_kind) -> unit
+val raw_loc : ?pref:string -> formatter -> Loc.floc -> unit
+val print_explanation : formatter -> (Loc.floc * Logic_decl.expl) -> unit
 val print_assertion : formatter -> assertion -> unit
 val print_wp : formatter -> assertion option -> unit
 

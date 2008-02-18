@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.106 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: options.ml,v 1.107 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Format
 
@@ -103,6 +103,7 @@ let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | MultiWhy | Dispatcher
+  | WhyProject
 
 let prover_ = ref (Coq coq_version)
 
@@ -228,6 +229,7 @@ Prover selection:
 
   --why       selects the Why pretty-printer
   --multi-why selects the Why pretty-printer, with one file per goal
+  --project   selects the Why project format, with one file per goal
 
 Coq-specific options:
   --valid, 
@@ -302,6 +304,7 @@ let files =
     | ("-zenon" | "--zenon") :: args -> prover_ := Zenon; parse args
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-multi-why" | "--multi-why") :: args -> prover_ := MultiWhy; parse args
+    | ("-project" | "--project") :: args -> prover_ := WhyProject; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-fp" | "--fp") :: args -> floats_ := true; parse args
     | ("-show-time" | "--show-time") :: args -> show_time_ := true; parse args

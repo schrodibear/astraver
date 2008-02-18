@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.72 2008-02-06 16:50:44 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.73 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Printf
 open Options
@@ -210,7 +210,7 @@ let msg_of_kind =
     | EKLoopInvInit s -> "initialization" ^ msg_of_loopinv s
     | EKLoopInvPreserv s -> "preservation" ^ msg_of_loopinv s
 
-let show_xpl (loc,k) (tv:GText.view) =
+let show_xpl (loc,xpl) (tv:GText.view) =
   match loc with
     | (s,l,b,e) ->
 	let loc = 
@@ -219,7 +219,12 @@ let show_xpl (loc,k) (tv:GText.view) =
 	    Tags.sp = string_of_int b; 
 	    Tags.ep = string_of_int e} in
 	Pprinter.move_to_loc loc;
-	!display_info ("file: " ^ (Filename.basename s) ^ " VC: " ^ msg_of_kind k)
+	let msg =
+	  match xpl with
+	    | VC e -> "VC: " ^ msg_of_kind e.kind
+	    | Lemma _ -> "Lemma"
+	in
+	!display_info ("file: " ^ (Filename.basename s) ^ msg ^" ")
 let select_obligs (model:GTree.tree_store) (tv:GText.view) 
                   (tv_s:GText.view) selected_rows = 
   List.iter

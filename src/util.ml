@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.146 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: util.ml,v 1.147 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -1083,16 +1083,16 @@ let print_formula fmt s =
   if String.length s > 0 then
     fprintf fmt "formula = \"%s\"@\n" s
 
-let print_explanation fmt (loc,k) =
+let print_kind fmt (loc,k) =
   (* 
      Option_misc.iter (fun lab ->  fprintf fmt "label = %s@\n" lab) labopt; 
   *)
   raw_loc fmt loc;
   match k with
-    | EKOther s -> fprintf fmt "kind = Other@\ntext = %s@\n" s
+    | EKOther s -> fprintf fmt "kind = Other@\ntext = \"%s\"@\n" s
     | EKAbsurd -> fprintf fmt "kind = Absurd@\n"
     | EKAssert -> fprintf fmt "kind = Assert@\n"
-    | EKPre s -> fprintf fmt "kind = Pre@\ntext = %s@\n" s
+    | EKPre s -> fprintf fmt "kind = Pre@\ntext = \"%s\"@\n" s
     | EKPost -> fprintf fmt "kind = Post@\n"
     | EKWfRel -> fprintf fmt "kind = WfRel@\n"
     | EKVarDecr -> fprintf fmt "kind = VarDecr@\n" 
@@ -1102,6 +1102,13 @@ let print_explanation fmt (loc,k) =
     | EKLoopInvPreserv s -> 
 	fprintf fmt "kind = LoopInvPreserv@\n";
 	print_formula fmt s
+
+let print_explanation fmt (loc,e) = 
+  match e with 
+  | Lemma _ -> 
+      raw_loc fmt loc; 
+      fprintf fmt "kind = Lemma@\n"
+  | VC vc -> print_kind fmt (loc,vc.kind)
 
 let explanation_table = Hashtbl.create 97
 let explanation_counter = ref 0

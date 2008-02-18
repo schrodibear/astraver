@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.144 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: main.ml,v 1.145 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -62,7 +62,7 @@ let reset () =
     | Hol4 -> Hol4.reset ()
     | SmtLib ->  ()
     | Harvey | Simplify | Zenon | CVCLite  | Gappa 
-    | Why | MultiWhy | Dispatcher -> ()
+    | Why | MultiWhy | Dispatcher | WhyProject -> ()
 
 let add_loc = function
   | Dtype (loc, _, s)
@@ -79,7 +79,7 @@ let store_decl_into_a_queue d  =
 (** push the declarations  in the corresponding 
     prover and stores them (or their expansed version) into 
     declarationQueue **)
-let push_decl d = 
+let push_decl vloc d = 
   add_loc d;
   if (not pruning) then
     begin 
@@ -92,7 +92,7 @@ let push_decl d =
 	  | Isabelle -> Isabelle.push_decl
 	  | Hol4 -> Hol4.push_decl
 	  | Gappa -> Gappa.push_decl 
-	  | Why | MultiWhy -> Pretty.push_decl
+	  | Why | MultiWhy | WhyProject -> Pretty.push_decl 
 	  | Dispatcher ->Dispatcher.push_decl
 	  | Harvey -> Harvey.push_decl
 	  | Simplify -> Simplify.push_decl
@@ -118,7 +118,7 @@ let push_decl d =
 	
 	
 	
-let push_obligations = 
+let push_obligations vloc = 
   List.iter 
     (fun (loc,expl,id,s) -> 
        let dg = Dgoal (loc, expl, id, generalize_sequent s) in
@@ -128,7 +128,7 @@ let push_obligations =
 	 else
 	   dg 
        in
-       push_decl dg) 
+       push_decl vloc dg) 
 
 let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 
@@ -142,7 +142,7 @@ let push_parameter id v tv = match prover () with
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
   | Harvey | Simplify | Zenon | SmtLib | Gappa 
-  | CVCLite | Why | MultiWhy | Dispatcher -> 
+  | CVCLite | Why | MultiWhy | Dispatcher | WhyProject -> 
       ()
 
 let output fwe = 
@@ -168,6 +168,7 @@ let output fwe =
     | Dispatcher -> ()
     | Why -> Pretty.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
+    | WhyProject -> Pretty.output_project fwe
   end
 
 
@@ -185,7 +186,7 @@ let encode q =
     | Isabelle -> Isabelle.push_decl d
     | Hol4 -> Hol4.push_decl d
     | Gappa -> Gappa.push_decl d  
-    | Why | MultiWhy -> Pretty.push_decl d
+    | Why | MultiWhy | WhyProject -> Pretty.push_decl d
     | Dispatcher -> Dispatcher.push_decl d      
     | Harvey -> Harvey.push_decl d
     | Simplify -> Simplify.push_decl d
@@ -246,7 +247,7 @@ let interp_program loc id p =
   if_debug eprintf "* generating obligations@.";
   let ids = Ident.string id in
 
-  let vloc =
+  let (name,beh,loc) as vloc =
     try 
       let (f,l,b,e,o) = 
 	Hashtbl.find locs_table ids 
@@ -274,9 +275,9 @@ let interp_program loc id p =
 	if_debug eprintf "no WP => no obligation@."
     | Some wp -> 
 	if_debug eprintf "VCs from WP...@?";
-	let ol,pr = Vcg.vcg_from_wp ids wp in
+	let ol,pr = Vcg.vcg_from_wp loc name beh wp in
 	if_debug eprintf "done@.";
-	push_obligations ol;
+	push_obligations vloc ol;
 	push_validation (ids ^ "_wp") (TTpred wp.a_value) (CC_hole pr)
   end;
 
@@ -366,7 +367,7 @@ let interp_decl ?(prelude=false) d =
 	    end
 	  else
 	    begin
-	      push_decl (Dlogic (Loc.extract loc, Ident.string id, t));
+	      push_decl ("","",Loc.dummy_floc) (Dlogic (Loc.extract loc, Ident.string id, t));
 	    end 
 	in
 	List.iter add ids
@@ -379,7 +380,7 @@ let interp_decl ?(prelude=false) d =
 	let p = Ltyping.predicate lab env' p in
 	add_global_logic id (generalize_logic_type t);
 	let p = generalize_predicate_def (pl,p) in
-	push_decl (Dpredicate_def (Loc.extract loc, Ident.string id, p))
+	push_decl ("","",Loc.dummy_floc) (Dpredicate_def (Loc.extract loc, Ident.string id, p))
     | Function_def (loc, id, pl, ty, e) ->
 	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);
@@ -392,19 +393,19 @@ let interp_decl ?(prelude=false) d =
 	  Ltyping.expected_type loc (PureType ty);
 	add_global_logic id (generalize_logic_type t);
 	let f = generalize_function_def (pl,ty,e) in
-	push_decl (Dfunction_def (Loc.extract loc, Ident.string id, f))
+	push_decl ("","",Loc.dummy_floc) (Dfunction_def (Loc.extract loc, Ident.string id, f))
     | Axiom (loc, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let p = generalize_predicate p in
-	push_decl (Daxiom (Loc.extract loc, Ident.string id, p))
+	push_decl ("","",Loc.dummy_floc) (Daxiom (Loc.extract loc, Ident.string id, p))
     | Goal (loc, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
 	let l = Loc.extract loc in
 	let dg = 
-	  Dgoal (l, EKOther "user goal", Ident.string id, s) 
+	  Dgoal (l, Lemma (Ident.string id,Loc.extract loc), Ident.string id, s) 
 	in
 	let ids = Ident.string id in
 	let vloc =
@@ -428,14 +429,14 @@ let interp_decl ?(prelude=false) d =
 	in
 	Hashtbl.add program_locs ids vloc;
 	if Options.pruning_hyp_v != -1 then
-	  push_decl (Hypotheses_filtering.reduce dg declarationQueue)
+	  push_decl ("","",Loc.dummy_floc) (Hypotheses_filtering.reduce dg declarationQueue)
 	else	  
-	  push_decl (dg)
+	  push_decl ("","",Loc.dummy_floc) dg
     | TypeDecl (loc, ext, vl, id) ->
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in
 	if not ext then 
-	  push_decl (Dtype (Loc.extract loc, vl, Ident.string id))
+	  push_decl ("","",Loc.dummy_floc) (Dtype (Loc.extract loc, vl, Ident.string id))
 	    
 (*s Prelude *)
 
@@ -469,7 +470,7 @@ let deal_channel parsef cin =
 
 let single_file () = match prover () with
   | Simplify | Harvey | Zenon | CVCLite | Gappa | Dispatcher 
-  | SmtLib | Why | MultiWhy -> true
+  | SmtLib | Why | MultiWhy | WhyProject -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 
 let deal_file f =

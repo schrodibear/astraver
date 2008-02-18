@@ -893,17 +893,23 @@ let rec explain_for_pred internal user = function
 	      
 (* Proof obligations from the WP *)
 
-let vcg_from_wp base w =
+let vcg_from_wp loc name beh w =
   let po = ref [] in
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
     let formula_userlab, raw_explain = explain_for_pred None None concl in	
-    let explain,loc =  Util.cook_explanation formula_userlab raw_explain in
+    let kind,loc =  Util.cook_explanation formula_userlab raw_explain in
+    let explain = Logic_decl.VC
+      { Logic_decl.fun_name = name ;
+	Logic_decl.behavior = beh;
+	Logic_decl.fun_loc = loc ;
+	Logic_decl.kind = kind }
+    in
     try
       discharge loc ctx concl
     with Exit -> begin
       incr cpt;
-      let id = base ^ "_po_" ^ string_of_int !cpt in
+      let id = name ^ "_" ^ beh ^ "_po_" ^ string_of_int !cpt in
       let ctx' = clean_sequent (List.rev ctx) concl in
       let sq = (ctx', concl) in
       log loc sq (Some id);

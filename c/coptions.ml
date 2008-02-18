@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.47 2008-02-08 09:24:24 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.48 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Format
 
@@ -148,7 +148,7 @@ let files () = List.rev !files_
 
 let version () = 
   Printf.printf "This is Caduceus version %s, compiled on %s
-Copyright (c) 2003-2006 - Jean-Christophe Filliâtre, Thierry Hubert and Claude Marché
+Copyright (c) 2003-2008 - Jean-Christophe Filliâtre, Thierry Hubert and Claude Marché
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Cversion.version Cversion.date;
   exit 0

@@ -28,13 +28,12 @@
 (**************************************************************************)
 
 
-type rc_value =
-  | RCint of int
-  | RCbool of bool
-  | RCfloat of float
-  | RCstring of string
-  | RCident of string
+type element =
+    { name : string;
+      attributes : (string * Rc.rc_value) list;
+      elements : element list;
+    }
 
-val from_file : string -> (string * (string * rc_value) list) list
+val from_file : string -> element list
 
 

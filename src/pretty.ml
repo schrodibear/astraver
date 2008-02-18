@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.18 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.19 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Format
 open Pp
@@ -195,7 +195,8 @@ let type_parameters fmt l =
   | [id] -> fprintf fmt "%a " type_var id
   | l -> fprintf fmt "(%a) " (print_list comma type_var) l
 
-let decl fmt = function
+let decl fmt d = 
+  match d with
   | Dtype (_, pl, id) ->
       fprintf fmt "@[type %a%s@]" type_parameters pl id
   | Dlogic (_, id, lt) ->
@@ -243,7 +244,7 @@ let output_files f =
        Queue.iter 
 	 (function 
 	    | Dgoal (loc,expl,id,_) as d -> 
-		incr po;
+		incr po;		
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
 		if explain_vc then
@@ -253,3 +254,74 @@ let output_files f =
 		decl ctxfmt d)
 	 queue)
     (f ^ "_ctx.why")
+
+module SMap = Map.Make(String)
+
+let output_project f =
+  let po = ref 0 in
+  let ch = open_out (f ^ ".wpr") in
+  let lemmas = ref SMap.empty in
+  let functions = ref SMap.empty in
+  print_in_file
+    (fun ctxfmt ->
+       Queue.iter 
+	 (function 
+	    | Dgoal (loc,expl,id,_) as d -> 
+		incr po;
+		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
+		print_in_file (fun fmt -> decl fmt d) fpo;
+		begin
+		  match expl with
+		    | Lemma (name, floc) -> 
+			lemmas :=
+			  SMap.add name (floc,loc,expl,fpo) !lemmas;
+		    | VC e ->
+			let fn = e.fun_name in
+			let behs =
+			  try snd(SMap.find fn !functions)
+			  with Not_found -> SMap.empty
+			in
+			let vcs =
+			  try SMap.find e.behavior behs 
+			  with Not_found -> []
+			in
+			let behs =
+			  SMap.add e.behavior ((loc,expl,fpo)::vcs) behs
+			in
+			functions := SMap.add fn (e.fun_loc,behs) !functions;
+		end
+	    | d -> 
+		decl ctxfmt d)
+	 queue)
+    (f ^ "_ctx.why");
+
+  let fpr = formatter_of_out_channel ch in
+  fprintf fpr "<project name=\"%s\" context=\"%s_ctx.why\">@." f f;
+  SMap.iter
+    (fun name (floc,loc,expl,fpo) ->
+       fprintf fpr "  <lemma name=\"%s\" %a>@." 
+	 name (Util.raw_loc ~pref:"") floc;
+       fprintf fpr "    <goal %a why_file=\"%s\">@." 
+	 Util.print_explanation (loc,expl) fpo;
+       fprintf fpr "    </goal>@.";
+       fprintf fpr "  </lemma>@.")
+    !lemmas;
+  SMap.iter
+    (fun name (floc,behs) ->
+       fprintf fpr "  <function name=\"%s\" %a>@." 
+	 name (Util.raw_loc ~pref:"") floc;
+       SMap.iter
+	 (fun beh vcs ->
+	    fprintf fpr "    <behavior name=\"%s\">@." beh;
+	    List.iter
+	      (fun (loc,expl,fpo) ->
+		 fprintf fpr "      <goal %a why_file=\"%s\">@." Util.print_explanation (loc,expl) fpo;
+		 fprintf fpr "      </goal>@.")
+	      vcs;
+	    fprintf fpr "    </behavior>@.")
+	 behs;
+       fprintf fpr "  </function>@.")
+    !functions;
+  fprintf fpr "</project>@.";
+  close_out ch
+  

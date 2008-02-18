@@ -27,14 +27,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.mli,v 1.22 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.23 2008-02-18 09:10:04 marche Exp $ i*)
 
 open Cc
 
 val push_decl : Logic_decl.t -> unit
 
 val iter : 
-    (Loc.floc * Logic_decl.expl_kind * string * sequent Env.scheme -> unit) 
+    (Loc.floc * Logic_decl.expl * string * sequent Env.scheme -> unit) 
     -> unit
 
 type prover = 
