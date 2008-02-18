@@ -27,14 +27,14 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: SCID.java,v 1.11 2008-02-16 17:07:07 nrousset Exp $ */
+/* $Id: SCID.java,v 1.12 2008-02-18 07:47:30 nrousset Exp $ */
 
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
 //@+ AnnotationPolicy = Invariants
-//@+ AbstractDomain = Box
+// @+ AbstractDomain = Box
 // @+ AbstractDomain = Oct
-// @+ AbstractDomain = Pol
+//@+ AbstractDomain = Pol
 
 // Smart Card ID - Example for a Smart Card based Identification and Authentication Application
 // File: SCID.java
@@ -257,18 +257,18 @@ public class SCID extends Applet {
     final static short   SIZE_AUTHCNTR  = (short)  2;     // size of the authentication counter in byte
     static byte[]        scid;                            // the smart card ID
     final static short   SIZE_SCID      = (short)  4;     // size of the unique smart card identifier in byte
-    // @ static invariant scid_inv: scid != null && scid.length == SIZE_SCID;
+    //@ static invariant scid_inv: scid != null && scid.length == SIZE_SCID;
 
     static byte[]        workarray;                       // workarray
     final static short   SIZE_WORKARRAY = (short) 30;     // size of the workarray 
-    // @ static invariant workarray_inv: workarray != null && workarray.length == SIZE_WORKARRAY;
+    //@ static invariant workarray_inv: workarray != null && workarray.length == SIZE_WORKARRAY;
     
     static DESKey        authkey;                         // authentication key
-    // @ static invariant authkey_inv: authkey != null;
+    //@ static invariant authkey_inv: authkey != null;
 
     final static short   SIZE_AUTHKEY   = (short)  8;     // authentication key is a 8 byte long DES key
     static Signature     mac;                             // MAC (message authentication code)
-    // @ static invariant mac_inv: mac != null;
+    //@ static invariant mac_inv: mac != null;
 
     // definitions for the storage of the data elements
     final static short TAG_USERPIN  = (short) 0x51;   // tag for the user PIN
@@ -284,7 +284,7 @@ public class SCID extends Applet {
     final static byte    DEFAULT_ADMINPIN_MAXEC = (byte) 2;   // default value of the PIN error counter
     final static byte    ADMINPIN_ID            = (byte) 2;   // PIN identifier, PIN 2 = admin PIN
     static OwnerPIN      adminpin;                            // the PIN object
-    // @ static invariant adminpin_inv: adminpin != null;
+    //@ static invariant adminpin_inv: adminpin != null;
     
     // constants and variables for the user PIN management
     final static byte[]  DEFAULT_USERPIN                      // default user PIN value
@@ -293,7 +293,7 @@ public class SCID extends Applet {
     final static byte    DEFAULT_USERPIN_MAXEC = (byte) 3;    // default value of the PIN error counter
     final static byte    USERPIN_ID            = (byte) 1;    // PIN identifier, PIN 1 = user PIN
     static OwnerPIN      userpin;                             // the PIN object
-    // @ static invariant userpin_inv: userpin != null;
+    //@ static invariant userpin_inv: userpin != null;
 
     // constants and variables for the key management
     final static byte[]  DEFAULT_AUTHKEY            // default authentication key

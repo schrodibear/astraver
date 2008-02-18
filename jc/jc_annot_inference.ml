@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.110 2008-02-16 21:53:30 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.111 2008-02-18 07:47:30 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -77,6 +77,7 @@ let inspected_functions = ref []
 let annotation_inferred = ref false
 let nb_conj_atoms_inferred = ref 0
 let nb_iterations = ref 0
+let nb_nodes = ref 0
 let nb_loop_inv = ref 0
 let nb_fun_pre = ref 0
 let nb_fun_post = ref 0
@@ -2660,7 +2661,7 @@ let rec record_ai_invariants abs s =
 	      else
 		let a = mkinvariant mgr loopinv in
 		  nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a;
-		  nb_loop_inv := !nb_loop_inv + 1;
+		  incr nb_loop_inv;
 		  if Jc_options.verbose then
 		    printf 
 		      "%a@[<v 2>Inferring loop invariant@\n%a@]@."
@@ -3963,9 +3964,10 @@ let code_function = function
 (* Interprocedural analysis.                                                 *)
 (*****************************************************************************)
 
-let rec ai_entrypoint mgr iaio (fi, loc, fs, sl) =
-  ai_function mgr iaio [] (fi, loc, fs, sl);
+let rec ai_entrypoint mgr iai (fi, loc, fs, sl) =
+  ai_function mgr (Some iai) [] (fi, loc, fs, sl);
   inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
+  incr nb_nodes;
   List.iter
     (fun fi ->
        let fi, _, fs, slo = 
@@ -3976,21 +3978,15 @@ let rec ai_entrypoint mgr iaio (fi, loc, fs, sl) =
 	   | None -> ()
 	   | Some sl ->
 	       let inspected = List.mem fi.jc_fun_info_tag !inspected_functions in
-	       let pre_has_changed = 
-		 match iaio with
-		   | None -> false
-		   | Some iai ->
-		       let pre_has_changed =
-			 try Hashtbl.find iai.jc_interai_function_pre_has_changed 
-			   fi.jc_fun_info_tag
-			 with Not_found -> false
-		       in
-			 Hashtbl.replace iai.jc_interai_function_pre_has_changed
-			   fi.jc_fun_info_tag false;
-			 pre_has_changed
+	       let pre_has_changed =
+		 try Hashtbl.find iai.jc_interai_function_pre_has_changed 
+		   fi.jc_fun_info_tag
+		 with Not_found -> false
 	       in
-		 if (not inspected) || (iaio <> None && pre_has_changed) then
-		   ai_entrypoint mgr iaio (fi, loc, fs, sl))
+		 Hashtbl.replace iai.jc_interai_function_pre_has_changed
+		   fi.jc_fun_info_tag false;
+		 if not inspected || pre_has_changed then
+		   ai_entrypoint mgr iai (fi, loc, fs, sl))
     fi.jc_fun_info_calls
     
 
@@ -4006,7 +4002,7 @@ let rec record_ai_inter_annotations mgr iai fi loc fs sl =
   let a = mkinvariant mgr pre in
   let a = reg_annot ~loc ~anchor:fi.jc_fun_info_name a in
     nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a;
-    nb_fun_pre := !nb_fun_pre + 1;
+    incr nb_fun_pre;
     if Jc_options.verbose then
       printf 
 	"@[<v 2>Inferring precondition for function %s@\n%a@]@."
@@ -4049,7 +4045,7 @@ let rec record_ai_inter_annotations mgr iai fi loc fs sl =
       
     let post = reg_annot ~loc ~anchor:fi.jc_fun_info_name post in
       nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms post;
-      nb_fun_post := !nb_fun_post + 1;
+      incr nb_fun_post;
       let excal = List.map (reg_annot ~loc ~anchor:fi.jc_fun_info_name) excal in
 	
       let exc_behaviors = 
@@ -4070,7 +4066,7 @@ let rec record_ai_inter_annotations mgr iai fi loc fs sl =
 	    List.iter2
 	      (fun exc exca -> 
 		 nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms exca;
-		 nb_fun_excep_post := !nb_fun_excep_post + 1;
+		 incr nb_fun_excep_post;
 		 printf
 		   "@[<v 2>Inferring exceptional postcondition (for exception %s) for function %s@\n%a@]@."
 		   exc.jc_exception_info_name
@@ -4102,7 +4098,7 @@ let rec record_ai_inter_annotations mgr iai fi loc fs sl =
 let rec ai_entrypoint_fix mgr iai (fi, loc, fs, sl) =
   incr nb_iterations;
   printf "iteration %d@." !nb_iterations;
-  ai_entrypoint mgr (Some iai) (fi, loc, fs, sl);
+  ai_entrypoint mgr iai (fi, loc, fs, sl);
   if not Jc_options.fast_ai && !annotation_inferred then
     begin
       annotation_inferred := false;
@@ -4134,9 +4130,10 @@ let ai_interprocedural mgr (fi, loc, fs, sl) =
                @.    %d loop invariants inferred \
                @.    %d conjonction atoms inferred \
                @.    %d iterations \
+               @.    %d nodes \
                @.    %f seconds@." 
 	  !nb_fun_pre !nb_fun_post !nb_fun_excep_post !nb_loop_inv
-	  !nb_conj_atoms_inferred !nb_iterations time
+	  !nb_conj_atoms_inferred !nb_iterations !nb_nodes time
     
     
 let main_function = function
