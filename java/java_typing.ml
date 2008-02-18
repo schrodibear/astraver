@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.99 2008-02-13 09:09:33 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.100 2008-02-18 16:46:10 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1052,8 +1052,8 @@ and get_field_prototypes package_env type_env ci acc d =
 	let is_non_null = List.mem Non_null vd.variable_modifiers in
 	let is_nullable = List.mem Nullable vd.variable_modifiers in
 	let non_null = 
-	  (not !Java_options.non_null && is_non_null) ||
-	    (!Java_options.non_null && not is_nullable)
+	  (!Java_options.non_null = NonNullNone && is_non_null) ||
+	    (!Java_options.non_null <> NonNullNone && not is_nullable)
 	in
 	let ty = type_type package_env type_env non_null vd.variable_type in
 	let ty = match ty, ci with
@@ -1067,10 +1067,10 @@ and get_field_prototypes package_env type_env ci acc d =
 	List.fold_left
 	  (fun acc vd -> 
 	     let ty', (loc, id) = var_type_and_id ty vd.variable_id in
-	       if is_non_null && !Java_options.non_null then
+	       if is_non_null && !Java_options.non_null <> NonNullNone then
 		 typing_error loc 
 		   "'non_null' modifier is not allowed in 'non_null by default' mode";	    
-	       if is_nullable && not !Java_options.non_null then
+	       if is_nullable && !Java_options.non_null = NonNullNone then
 		 typing_error loc 
 		   "'nullable' modifier is only allowed in 'non_null by default' mode";	    
 	     let fi = new_field ~is_static ~is_final ~is_nullable ci ty' id in	     
@@ -1088,17 +1088,17 @@ and type_param package_env type_env p =
 	  let non_null = 
 	    match mo with
 	      | None -> 
-		  nullable := not !Java_options.non_null;
-		  !Java_options.non_null
+		  nullable := !Java_options.non_null <> NonNullAll;
+		  !Java_options.non_null = NonNullAll
 	      | Some Non_null -> 
 		  nullable := false;
-		  if !Java_options.non_null then
+		  if !Java_options.non_null = NonNullAll then
 		    typing_error loc
 		      "'non_null' modifier is not allowed in 'non_null by default' mode";
 		  true;
 	      | Some Nullable -> 
 		  nullable := true;
-		  if not !Java_options.non_null then
+		  if !Java_options.non_null <> NonNullAll then
 		    typing_error loc 
 		      "'nullable' modifier is only allowed in 'non_null by default' mode";
 		  false
@@ -1116,15 +1116,15 @@ and method_header package_env type_env modifiers retty mdecl =
     | Simple_method_declarator (id, l) ->
 	let is_non_null = List.mem Non_null modifiers in
 	let is_nullable = List.mem Nullable modifiers in
-	  if is_non_null && !Java_options.non_null then
+	  if is_non_null && !Java_options.non_null = NonNullAll then
 	    typing_error (fst id) 
 	      "'non_null' modifier is not allowed in 'non_null by default' mode";	    
-	  if is_nullable && not !Java_options.non_null then
+	  if is_nullable && !Java_options.non_null <> NonNullAll then
 	    typing_error (fst id)
 	      "'nullable' modifier is only allowed in 'non_null by default' mode";	    
 	  let non_null =
-	    (not !Java_options.non_null && is_non_null) ||
-	      (!Java_options.non_null && not is_nullable)
+	    (!Java_options.non_null <> NonNullAll && is_non_null) ||
+	      (!Java_options.non_null = NonNullAll && not is_nullable)
 	  in
 	    id, (Option_misc.map (type_type package_env type_env non_null) retty), 
 	List.map (type_param package_env type_env) l
@@ -3292,7 +3292,7 @@ let type_constr_spec_and_body ?(dobody=true)
 		 make_expr_no_loc unit_type
 		   (JEconstr_call
 		      (make_expr_no_loc
-			 (JTYclass (!Java_options.non_null, super_class_info)) 
+			 (JTYclass (!Java_options.non_null = NonNullAll, super_class_info)) 
 			 (JEvar this_vi), 
 		       super_ci, tel))))
 	  in

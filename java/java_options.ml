@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.13 2008-02-07 19:22:03 nrousset Exp $ i*)
+(*i $Id: java_options.ml,v 1.14 2008-02-18 16:46:10 nrousset Exp $ i*)
 
 open Format
 
@@ -97,7 +97,7 @@ let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
 let ignore_overflow = ref false
-let non_null = ref false
+let non_null = ref Java_env.NonNullNone
 
 (* Jessie options *)
 let inv_sem = ref Jc_env.InvArguments
@@ -143,8 +143,8 @@ let _ =
 	"-ignore-overflow", Arg.Set ignore_overflow,
 	  "  ignore arithmetic overflow threats" ;
 *)
-	"-non-null", Arg.Set non_null,
-	  "  non-null by default" ;
+(*	"-non-null", Arg.Set non_null,
+	  "  non-null by default" ; *)
       ]
       add_file usage
 

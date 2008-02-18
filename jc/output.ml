@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.26 2008-02-06 16:50:44 marche Exp $ i*)
+(*i $Id: output.ml,v 1.27 2008-02-18 16:46:10 nrousset Exp $ i*)
 
 open Lexing
 open Format
@@ -123,7 +123,7 @@ let make_or a1 a2 =
 
 let make_and a1 a2 =
   match (a1,a2) with
-    | (LTrue,_) -> a2
+    | (LTrue, _) -> a2
     | (_,LTrue) -> a1
     | (LFalse,_) -> LFalse
     | (_,LFalse) -> LFalse

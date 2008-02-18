@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.112 2008-02-18 11:06:35 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.113 2008-02-18 16:46:10 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -3975,6 +3975,7 @@ let code_function = function
 (*****************************************************************************)
 
 let rec ai_entrypoint mgr iai (fi, loc, fs, sl) =
+  printf "ai %s@." fi.jc_fun_info_name;
   ai_function mgr (Some iai) [] (fi, loc, fs, sl);
   inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
   incr nb_nodes;

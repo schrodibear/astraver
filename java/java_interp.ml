@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.115 2008-02-18 11:06:35 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.116 2008-02-18 16:46:10 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1417,7 +1417,7 @@ let tr_method mi req behs b acc =
   let java_params = mi.method_info_parameters in
   let params = List.map (fun (p, _) -> create_var Loc.dummy_position p) java_params in
   let params_pre =
-    if !Java_options.non_null then
+    if !Java_options.non_null = NonNullAll then
       List.fold_left2
 	(fun acc vi (java_vi, nullable) -> 
 	   if nullable then acc else
@@ -1442,7 +1442,7 @@ let tr_method mi req behs b acc =
 	let ty = vi.java_var_info_type in
 	let _nvi = create_var Loc.dummy_position vi in 
 	let ao = 
-	  if !Java_options.non_null & not mi.method_info_result_is_nullable then
+	  if !Java_options.non_null = NonNullAll & not mi.method_info_result_is_nullable then
 	    match _nvi.jc_var_info_type with
 	      | JCTpointer _ ->
 		  let vit = term_no_loc (JCTvar _nvi) _nvi.jc_var_info_type in
@@ -1732,7 +1732,9 @@ let tr_field type_name acc fi =
       in
       let acc = JCvar_def (vi_ty, vi.jc_var_info_final_name, e) :: acc in
       let acc =
-	if !Java_options.non_null && not fi.java_field_info_is_nullable then
+	if (!Java_options.non_null = NonNullAll || 
+	    !Java_options.non_null = NonNullFields) && 
+	  not fi.java_field_info_is_nullable then
 	  match vi_ty with
 	    | JCTpointer _ -> 
 		let a = get_non_null_assertion fi_ty (term_no_loc (JCTvar vi) vi_ty) in
@@ -1790,7 +1792,9 @@ let tr_class ci acc0 acc =
 	  [(ci.class_info_name ^ "_non_null_inv", this, a)]
     in
     let inv = 
-      if !Java_options.non_null & !Java_options.inv_sem = Jc_env.InvArguments then 
+      if (!Java_options.non_null = NonNullAll ||
+	  !Java_options.non_null = NonNullFields) && 
+	!Java_options.inv_sem = Jc_env.InvArguments then 
 	non_null_inv else [] in
     let acc = 
       if ci.class_info_name = "Object" then
