@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.113 2008-02-18 16:46:10 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.114 2008-02-19 18:44:28 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -1064,9 +1064,9 @@ let rec linearize t =
     | JCTvar _ | JCTderef _ ->
 	(TermMap.add t 1 TermMap.empty, 0)
     | JCTbinary (t1, bop, t2) ->
-	if is_arithmetic_binary_op bop then
-	  let coeffs1, cst1 = linearize t1 in
-	  let coeffs2, cst2 = linearize t2 in
+	let coeffs1, cst1 = linearize t1 in
+	let coeffs2, cst2 = linearize t2 in
+	  if is_arithmetic_binary_op bop then
             begin match bop with
 	      | Badd_int ->
 		  let coeffs = TermMap.fold 
@@ -1122,8 +1122,15 @@ let rec linearize t =
 	      | _ -> assert false
 	    end
 	else if is_bitwise_binary_op bop then
-	  (* Consider non-linear term as abstract variable. *)
-	  (TermMap.add t 1 TermMap.empty, 0)	  
+	  if coeffs1 = TermMap.empty && cst1 = 0 then
+	    match bop with
+	      | Bbw_and | Bshift_left | Blogical_shift_right | Barith_shift_right 
+		  -> TermMap.empty, 0 
+	      | Bbw_or | Bbw_xor -> linearize t2
+	      | _ -> assert false (* should never happen *)
+	  else 
+	    (* Consider non-linear term as abstract variable. *)
+	    (TermMap.add t 1 TermMap.empty, 0)
 	else failwith "Not linear"
     | JCTunary(uop,t1) ->
 	if is_arithmetic_unary_op uop then
@@ -1355,55 +1362,55 @@ let rec linstr_of_assertion env a =
     | JCAfalse -> env, Dnf.false_
     | JCArelation (t1, bop, t2) ->
 	let subt = term_no_loc (JCTbinary (t1, Bsub_int, t2)) integer_type in
-	begin match linstr_of_term env subt with
-	  | Some (env,str,cst) ->
-	      let cstr = string_of_int (- cst) in
-	      (* Do not use < and > with APRON. Convert to equivalent non-strict. *)
-	      let str = match bop with
-		| Blt_int -> [[str ^ " <= " ^ (string_of_int ((- cst) - 1))]]
-		| Bgt_int -> [[str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
-		| Ble_int -> [[str ^ " <= " ^ cstr]]
-		| Bge_int -> [[str ^ " >= " ^ cstr]]
-		| Beq_int -> [[str ^ " = " ^ cstr]]
-		| Bneq_int ->
-		    [[str ^ " <= " ^ (string_of_int ((- cst) - 1))];
-		    [str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
-		| Blt_real | Bgt_real | Ble_real | Bge_real
-		| Beq_bool | Bneq_bool | Beq_real | Beq_pointer
-		| Bneq_real | Bneq_pointer -> Dnf.true_
-		| _ -> assert false
-	      in
-	      env, str
-	  | None -> 
-	      let zbs = zero_bounds_term subt in
-	      let zero = term_no_loc (JCTconst(JCCinteger "0")) integer_type in
-	      if List.length zbs <= 1 then 
-		(* If [zero_bounds_term] found an integer division on which 
-		   to split, length of resulting list must be pair, 
-		   and thus >= 2. *)
-		env, Dnf.true_
-	      else
-		let str_of_conjunct env conj =
-		  List.fold_left (fun (env,strconj) a -> 
-		    let env,dnf = linstr_of_assertion env a in
-		    if Dnf.is_false dnf then
-		      assert false (* TODO *)
-		    else if Dnf.is_true dnf then
-		      env,strconj
-		    else if Dnf.is_singleton_disjunct dnf then
-		      env,Dnf.get_singleton_disjunct dnf :: strconj (* base case *)
-		    else assert false (* TODO *)
-		  ) (env,[]) conj
+	  begin match linstr_of_term env subt with
+	    | Some (env,str,cst) ->
+		let cstr = string_of_int (- cst) in
+		  (* Do not use < and > with APRON. Convert to equivalent non-strict. *)
+		let str = match bop with
+		  | Blt_int -> [[str ^ " <= " ^ (string_of_int ((- cst) - 1))]]
+		  | Bgt_int -> [[str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
+		  | Ble_int -> [[str ^ " <= " ^ cstr]]
+		  | Bge_int -> [[str ^ " >= " ^ cstr]]
+		  | Beq_int -> [[str ^ " = " ^ cstr]]
+		  | Bneq_int -> 
+		      [[str ^ " <= " ^ (string_of_int ((- cst) - 1))];
+		       [str ^ " >= " ^ (string_of_int ((- cst) + 1))]]
+		  | Blt_real | Bgt_real | Ble_real | Bge_real
+		  | Beq_bool | Bneq_bool | Beq_real | Beq_pointer
+		  | Bneq_real | Bneq_pointer -> Dnf.true_
+		  | _ -> assert false
 		in
-		let strdnf_of_dnf env adnf =
-		  let env,strdnf = 
-		    List.fold_left (fun (env,strdnf) conj ->
-		      let env,strconj = str_of_conjunct env conj in
+		  env, str
+	    | None -> 
+		let zbs = zero_bounds_term subt in
+		let zero = term_no_loc (JCTconst(JCCinteger "0")) integer_type in
+		  if List.length zbs <= 1 then 
+		    (* If [zero_bounds_term] found an integer division on which 
+		       to split, length of resulting list must be pair, 
+		       and thus >= 2. *)
+		    env, Dnf.true_
+		  else
+		    let str_of_conjunct env conj =
+		      List.fold_left (fun (env,strconj) a -> 
+					let env,dnf = linstr_of_assertion env a in
+					  if Dnf.is_false dnf then
+					    assert false (* TODO *)
+					  else if Dnf.is_true dnf then
+					    env,strconj
+					  else if Dnf.is_singleton_disjunct dnf then
+					    env,Dnf.get_singleton_disjunct dnf :: strconj (* base case *)
+					  else assert false (* TODO *)
+				     ) (env,[]) conj
+		    in
+		    let strdnf_of_dnf env adnf =
+		      let env,strdnf = 
+			List.fold_left (fun (env,strdnf) conj ->
+					  let env,strconj = str_of_conjunct env conj in
 		      match strconj with
 			| [] -> env, strdnf
 			| _ -> env, strconj :: strdnf
-		    ) (env,[]) adnf
-		  in
+				       ) (env,[]) adnf
+		      in
 		  let strdnf = match strdnf with
 		    | [] -> Dnf.true_
 		    | dnf -> dnf
@@ -1807,10 +1814,6 @@ let set_equivalent_terms t1 t2 =
 (*****************************************************************************)
     
 let rec test_assertion mgr pre a =
-  begin 
-    match a.jc_assertion_node with
-      | _ -> () 
-  end;
   let env = Abstract1.env pre in
   let rec extract_environment_and_dnf env a =
     match a.jc_assertion_node with
@@ -1825,28 +1828,28 @@ let rec test_assertion mgr pre a =
 	  let supa = raw_asrt(JCArelation(t1,Bgt_int,t2)) in
 	  let env,dnf1 = extract_environment_and_dnf env infa in
 	  let env,dnf2 = extract_environment_and_dnf env supa in
-	  env,Dnf.make_or [dnf1; dnf2]
+	    env,Dnf.make_or [dnf1; dnf2]
       | JCArelation (t1, bop, t2) ->
 	  if bop = Beq_pointer then set_equivalent_terms t1 t2;
 	  let env, be = linstr_of_assertion env a in
 	  let env, bemin = offset_min_linstr_of_assertion env a in
 	  let env, bemax = offset_max_linstr_of_assertion env a in
 	  let dnf = Dnf.make_and [be; bemin; bemax] in
-	  env,dnf
+	    env, dnf
       | JCAand al ->
 	  List.fold_left (fun (env,dnf1) a ->
-	    let env,dnf2 = extract_environment_and_dnf env a in
-	    env,Dnf.make_and [dnf1;dnf2]
-	  ) (env,Dnf.true_) al
+			    let env,dnf2 = extract_environment_and_dnf env a in
+			      env,Dnf.make_and [dnf1;dnf2]
+			 ) (env,Dnf.true_) al
       | JCAor al ->
 	  List.fold_left (fun (env,dnf1) a ->
-	    let env,dnf2 = extract_environment_and_dnf env a in
-	    env,Dnf.make_or [dnf1;dnf2]
-	  ) (env,Dnf.false_) al
+			    let env,dnf2 = extract_environment_and_dnf env a in
+			      env,Dnf.make_or [dnf1;dnf2]
+			 ) (env,Dnf.false_) al
       | JCAnot a ->
 	  let nota = not_asrt a in
-	  begin match nota.jc_assertion_node with
-	    | JCAnot _ -> env, Dnf.true_
+	    begin match nota.jc_assertion_node with
+	      | JCAnot _ -> env, Dnf.true_
 	    | _ -> extract_environment_and_dnf env nota
 	  end
       | JCAapp app ->
@@ -2620,7 +2623,7 @@ and intern_ai_statement iaio abs curinvs s =
 		    fi_writes [] 
 		in
 		  Abstract1.forget_array_with mgr pre (Array.of_list vars_writes) false;
-		test_assertion mgr pre normal_behavior;
+		  test_assertion mgr pre normal_behavior;
 		(match iaio with
 		   | None -> ()
 		   | Some iai ->
@@ -2642,6 +2645,7 @@ and intern_ai_statement iaio abs curinvs s =
   let prop = normal.jc_absval_propagated in
   let asrts = collect_statement_asserts s in
     List.iter (test_assertion mgr prop) asrts
+
 
 let rec record_ai_invariants abs s =
   let mgr = abs.jc_absint_manager in

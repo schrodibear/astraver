@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.100 2008-02-18 16:46:10 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.101 2008-02-19 18:44:28 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -579,7 +579,23 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
 	assert false (* TODO *)
-    | Basr | Blsr | Blsl | Bimpl | Bor | Band | Biff ->
+    | Basr | Blsr | Blsl ->
+	begin
+	  try
+	    match logic_unary_numeric_promotion t1 with
+	      | Tinteger as t1 ->
+		  begin
+		    try
+		      match logic_unary_numeric_promotion t2 with
+			| Tinteger ->
+			    JTYbase t1, JTbin (e1, t1, op, e2)
+			| _ -> raise Not_found
+		    with Not_found -> int_expected loc t2
+		  end
+	      | _ -> raise Not_found
+	  with Not_found -> int_expected loc t1
+	end
+    | Bimpl | Bor | Band | Biff ->
 	assert false (* TODO *)
     | Bbwxor | Bbwor | Bbwand -> 	
 	if is_boolean t1 && is_boolean t2 then
@@ -2088,7 +2104,7 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	  Tboolean,JEbin(e1,op,e2)
 	else
 	  typing_error loc "booleans expected"
-    | Basr|Blsr|Blsl -> 
+    | Basr | Blsr | Blsl -> 
 	(* JLS 15.19: Shift Operators *)
 	begin
 	  try
