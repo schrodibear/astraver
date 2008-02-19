@@ -10,9 +10,9 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: outcometree.mli,v 1.1 2007-11-30 10:16:43 bardou Exp $ *)
+(* $Id: outcometree2.mli,v 1.1 2008-02-19 15:53:36 bardou Exp $ *)
 
-(* Module [Outcometree]: results displayed by the toplevel *)
+(* Module [Outcometree2]: results displayed by the toplevel *)
 
 (* These types represent messages that the toplevel displays as normal
    results or errors. The real displaying is customisable using the hooks:

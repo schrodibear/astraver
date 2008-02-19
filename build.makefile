@@ -1,9 +1,9 @@
 # This Makefile compiles the Why platform using Ocamlbuild.
 
 ifeq ($(EMACS), yes)
-  OCAMLBUILD=ocamlbuild -build-dir bin -no-hygiene -classic-display
+  OCAMLBUILD=ocamlbuild -build-dir bin -classic-display
 else
-  OCAMLBUILD=ocamlbuild -build-dir bin -no-hygiene
+  OCAMLBUILD=ocamlbuild -build-dir bin
 endif
 
 # Binaries of the Why platform (with no extension)

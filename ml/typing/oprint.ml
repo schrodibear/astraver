@@ -10,10 +10,10 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: oprint.ml,v 1.1 2007-11-30 10:16:43 bardou Exp $ *)
+(* $Id: oprint.ml,v 1.2 2008-02-19 15:53:36 bardou Exp $ *)
 
 open Format
-open Outcometree
+open Outcometree2
 
 exception Ellipsis
 

@@ -7,15 +7,36 @@ let targets = [
   "caduceus", "c/cmain";
 ]
 
-(* List of external libraries (the .cma / .cmxa files) *)
-(* Don't forget to update the _tags file(s) too *)
+(* Some directories "see" some other directories *)
+let contexts = [
+  "src", ["tools"];
+  "tools", ["src"];
+  "jc", ["src"];
+  "java", ["src"; "jc"];
+  "c", ["jc"; "src"];
+  "ml", ["jc"; "src"];
+  "ml/parsing", ["ml/utils"];
+  "ml/typing", ["ml/parsing"; "ml/utils"];
+]
+
+(* List of libraries (for findlib) *)
 let libraries = [
-  "graph";
+  "unix";
+  "num";
+  "str";
+  "ocamlgraph";
 ]
 
 (******************************************************************************)
 
 open Ocamlbuild_plugin
+
+let ocamlfind x = S [
+  A "ocamlfind";
+  x;
+  A "-package";
+  A (String.concat "," libraries);
+]
 
 let targets =
   let targets_byte = List.map
@@ -28,43 +49,34 @@ let targets =
   in
   targets_byte @ targets_native
 
-let find_dep target targets =
-  try
-    List.assoc target targets
-  with Not_found ->
-    Printf.printf "No rule for Why binary: %s\n%!" target;
-    exit 1
-
-let build_dep _build dep =
-  match _build [[dep]] with
-    | [Outcome.Good path] -> ()
-    | [Outcome.Bad e] -> raise e
-    | _ -> failwith "myocamlbuild.ml: build_dep"
-
 let _ = dispatch begin function
+  | Before_hygiene ->
+      (* Declare contexts *)
+      List.iter (fun (a, b) -> Pathname.define_context a b) contexts
+
+  | After_options ->
+      (* Use findlib *)
+      Options.ocamlc := ocamlfind & A "ocamlc";
+      Options.ocamlopt := ocamlfind & A "ocamlopt";
+
   | After_rules ->
-      (* Special rules for Jessica because of potential name clashes *)
-      Pathname.define_context "ml/parsing"
-	["ml/parsing"; "ml/utils"];
-      Pathname.define_context "ml/typing"
-	["ml/typing"; "ml/parsing"; "ml/utils"];
-
-      (* External libraries *)
-      List.iter (ocaml_lib ~extern:true) libraries;
-
-      (* Remove the "ocaml" tag from our targets *)
-      List.iter	(fun (f, _) -> tag_file f ["-ocaml"]) targets;
-
       (* Rules for our targets *)
       List.iter
 	(fun (target, dep) ->
 	   rule (dep^" -> "^target)
 	     ~insert:`top
+	     ~dep:dep
 	     ~prod:target
-	     begin fun env _build ->
-	       build_dep _build dep;
-	       cp dep target
-	     end)
-	targets
+	     (fun env _build -> cp dep target))
+	targets;
+
+      (* Use the -linkpkg option when linking *)
+      flag ["ocaml"; "link"] (A "-linkpkg")
   | _ -> ()
 end
+
+(*
+  Local Variables:
+  compile-command: "unset LANG; EMACS=yes make -f build.makefile"
+  End:
+*)

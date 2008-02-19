@@ -10,7 +10,7 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: printtyp.ml,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: printtyp.ml,v 1.2 2008-02-19 15:53:36 bardou Exp $ *)
 
 (* Printing functions *)
 
@@ -22,7 +22,7 @@ open Path
 open Asttypes
 open Types
 open Btype
-open Outcometree
+open Outcometree2
 
 (* Print a long identifier *)
 

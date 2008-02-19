@@ -10,13 +10,13 @@
 (*                                                                     *)
 (***********************************************************************)
 
-(* $Id: printtyp.mli,v 1.1 2007-11-30 10:16:44 bardou Exp $ *)
+(* $Id: printtyp.mli,v 1.2 2008-02-19 15:53:36 bardou Exp $ *)
 
 (* Printing functions *)
 
 open Format
 open Types
-open Outcometree
+open Outcometree2
 
 val longident: formatter -> Longident.t -> unit
 val ident: formatter -> Ident.t -> unit

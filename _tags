@@ -1,2 +1,0 @@
-<src> or <jc> or <java> or <ml> or <tools>: include
-<**/*.*>: use_unix, use_nums, use_str, use_graph
