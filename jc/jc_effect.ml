@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.97 2008-02-18 14:52:52 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.98 2008-02-20 17:21:20 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -312,9 +312,9 @@ let rec term ef t =
     | JCTold t1 -> term ef t1
     | JCTunary (_, t1) -> term ef t1
     | JCTshift (t1, t2) 
-    | JCTbinary (t1, _, t2) -> 
+    | JCTbinary (t1, _, t2)
+    | JCTsub_pointer (t1, t2) ->
 	term (term ef t1) t2
-    | JCTsub_pointer (_, _) -> assert false (* TODO *)
     | JCTconst _ -> ef
     | JCTmatch (t, ptl) ->
 	let ef = List.fold_left pattern ef (List.map fst ptl) in
