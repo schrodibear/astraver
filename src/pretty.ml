@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.19 2008-02-18 09:10:04 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.20 2008-02-20 14:34:26 marche Exp $ i*)
 
 open Format
 open Pp
@@ -223,13 +223,13 @@ let print_file fmt = Queue.iter (decl fmt) queue
 
 let print_trace fmt id expl =
   fprintf fmt "[%s]@\n" id;
-  Util.print_explanation fmt expl;
+  Explain.print fmt expl;
   fprintf fmt "@\n"
 
 let print_traces fmt =
   Queue.iter
     (function
-       | Dgoal (loc, expl, id, _) -> print_trace fmt id (loc,expl)
+       | Dgoal (loc, expl, id, _) -> print_trace fmt id ((*loc,*)expl)
        | _ -> ())
     queue
 
@@ -249,7 +249,7 @@ let output_files f =
 		print_in_file (fun fmt -> decl fmt d) fpo;
 		if explain_vc then
 		  let ftr = f ^ "_po" ^ string_of_int !po ^ ".xpl" in
-		  print_in_file (fun fmt -> print_trace fmt id (loc,expl)) ftr
+		  print_in_file (fun fmt -> print_trace fmt id ((*loc,*)expl)) ftr
 	    | d -> 
 		decl ctxfmt d)
 	 queue)
@@ -259,26 +259,24 @@ module SMap = Map.Make(String)
 
 let output_project f =
   let po = ref 0 in
-  let ch = open_out (f ^ ".wpr") in
-  let lemmas = ref SMap.empty in
+  let lemmas = ref [] in
   let functions = ref SMap.empty in
   print_in_file
     (fun ctxfmt ->
        Queue.iter 
 	 (function 
-	    | Dgoal (loc,expl,id,_) as d -> 
+	    | Dgoal (_,e,id,_) as d -> 
 		incr po;
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
 		begin
-		  match expl with
-		    | Lemma (name, floc) -> 
-			lemmas :=
-			  SMap.add name (floc,loc,expl,fpo) !lemmas;
-		    | VC e ->
-			let fn = e.fun_name in
+		  match e.vc_kind with
+		    | EKLemma -> 
+			lemmas := (e,fpo) :: !lemmas;
+		    | _ ->
+			let fn = e.lemma_or_fun_name in
 			let behs =
-			  try snd(SMap.find fn !functions)
+			  try SMap.find fn !functions
 			  with Not_found -> SMap.empty
 			in
 			let vcs =
@@ -286,42 +284,38 @@ let output_project f =
 			  with Not_found -> []
 			in
 			let behs =
-			  SMap.add e.behavior ((loc,expl,fpo)::vcs) behs
+			  SMap.add e.behavior ((e,fpo)::vcs) behs
 			in
-			functions := SMap.add fn (e.fun_loc,behs) !functions;
+			functions := SMap.add fn behs !functions;
 		end
 	    | d -> 
 		decl ctxfmt d)
 	 queue)
     (f ^ "_ctx.why");
 
-  let fpr = formatter_of_out_channel ch in
-  fprintf fpr "<project name=\"%s\" context=\"%s_ctx.why\">@." f f;
-  SMap.iter
-    (fun name (floc,loc,expl,fpo) ->
-       fprintf fpr "  <lemma name=\"%s\" %a>@." 
-	 name (Util.raw_loc ~pref:"") floc;
-       fprintf fpr "    <goal %a why_file=\"%s\">@." 
-	 Util.print_explanation (loc,expl) fpo;
-       fprintf fpr "    </goal>@.";
-       fprintf fpr "  </lemma>@.")
+  let p = Project.create f in
+  Project.set_project_context_file p (f ^ "_ctx.why");      
+  List.iter
+    (fun (expl,fpo) ->      
+       let n = expl.lemma_or_fun_name in
+       let l = Project.add_lemma p n expl fpo in ())
     !lemmas;
   SMap.iter
-    (fun name (floc,behs) ->
-       fprintf fpr "  <function name=\"%s\" %a>@." 
-	 name (Util.raw_loc ~pref:"") floc;
+    (fun fname behs ->
+       let floc =
+	 try 
+	   let (_,_,floc) = Hashtbl.find Util.program_locs fname in
+	   floc
+	 with Not_found -> Loc.dummy_floc
+       in
+       let f = Project.add_function p fname floc in
        SMap.iter
 	 (fun beh vcs ->
-	    fprintf fpr "    <behavior name=\"%s\">@." beh;
+	    let be = Project.add_behavior f beh in
 	    List.iter
-	      (fun (loc,expl,fpo) ->
-		 fprintf fpr "      <goal %a why_file=\"%s\">@." Util.print_explanation (loc,expl) fpo;
-		 fprintf fpr "      </goal>@.")
-	      vcs;
-	    fprintf fpr "    </behavior>@.")
-	 behs;
-       fprintf fpr "  </function>@.")
+	      (fun (expl,fpo) ->
+		 let g = Project.add_goal be expl fpo in ())
+	      vcs)
+	 behs)
     !functions;
-  fprintf fpr "</project>@.";
-  close_out ch
-  
+  Project.save p (f ^ ".wpr")

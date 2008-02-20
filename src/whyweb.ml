@@ -29,50 +29,19 @@ let file = match !file with
   | None -> ()
   | Some f -> Arg.usage spec usage; exit 1
 
+let proj = ref (Project.create "")
 
-let get_name_attr e =
-  match List.assoc "name" e.Xml.attributes with
-    | Rc.RCstring s -> s
-    | _ -> raise Not_found
+open Project
 
-let get_behavior e =
-    match e.Xml.name with
-      | "behavior" ->
-	  let n = get_name_attr e in
-	  (n,()) 
-      | _ -> assert false
-
- 
-let lemmas = ref []
-
-let functions = ref []
-
-let get_lemma_or_function e =
-    match e.Xml.name with
-      | "lemma" ->
-	  let n = get_name_attr e in
-	  lemmas := n :: !lemmas
-      | "function" ->
-	  let n = get_name_attr e in
-	  let behs = List.map get_behavior e.Xml.elements in
-	  functions := (n,behs) :: !functions	  
-      | _ -> assert false
-
-let project_name = ref ""
-
-(* read XML file *)
-let read_file f = 
-  let xml = Xml.from_file (f ^ ".wpr") in
-  match xml with
-    | [p] when p.Xml.name = "project" ->
-	project_name := get_name_attr p; 
-	if !project_name <> f then
-	  eprintf "Warning! project name `%s' does match file name `%s'@." 
-	    !project_name f;
-	lemmas := [];
-	functions := [];
-	List.iter get_lemma_or_function p.Xml.elements
-    | _ -> failwith "unique <project> element expected"
+let interp_com c =
+  List.iter
+    (fun f ->
+       if true (* f.function_name = c*) then toggle_function f)
+    !proj.project_functions
+(*
+  let l = List.assoc c !proj.project_lemmas in
+  Project.toggle_lemma l
+*)
 
 (* main *)
 
@@ -102,33 +71,38 @@ let () =
 	 end
        else
 	 begin
-	   if !project_name <> script then
+	   if !proj.project_name <> script then
 	     begin
 	       (* TODO: save previous project *)
-	       eprintf "Previous project: `%s'@." !project_name;
+	       eprintf "Previous project: `%s'@." !proj.project_name;
 	       eprintf "Reading file %s.wpr@." script;
-	       read_file script
-	     end;
-	   wprint "<h1 align=center> Project name: %s</h1>" !project_name;
+	       proj := Project.load (script ^ ".wpr")
+	     end
+	   else
+	     interp_com cont;
+	   wprint "<h1 align=center> Project name: %s</h1>" !proj.project_name;
 	   
 	   wprint "<h2>Lemmas</h2>";
 	   wprint "<ol>";
 	   List.iter
-	     (fun n -> wprint "<li> <a href=\"?%s\">%s</a> </li>" n n)
-	     !lemmas;
+	     (fun l -> wprint "<li> <a href=\"?%s\">%s</a> </li>" l.lemma_name l.lemma_name)
+	     !proj.project_lemmas;
 	   wprint "</ol>";
 	   
 	   wprint "<h2>Functions</h2>";
 	   wprint "<ol>";
 	   List.iter
-	     (fun (n,behs) -> 
-		wprint "<li> %s </li>" n;
-		wprint "<ol>";
-		List.iter
-		  (fun (n,_) -> wprint "<li> %s </li>" n)
-		  behs;
-		wprint "</ol>")
-	     !functions;
+	     (fun f -> 
+		wprint "<li> <a href=\"?%s\">%s</a> </li>" f.function_name f.function_name;
+		if f.function_visible then
+		  begin
+		    wprint "<ol>";
+		    List.iter
+		      (fun b -> wprint "<li> %s </li>" b.behavior_name)
+		      f.function_behaviors;
+		    wprint "</ol>"
+		  end)
+	     !proj.project_functions;
 	   wprint "</ol>";
 	 end;
        wprint "</body>")

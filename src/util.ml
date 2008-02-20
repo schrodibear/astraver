@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.147 2008-02-18 09:10:04 marche Exp $ i*)
+(*i $Id: util.ml,v 1.148 2008-02-20 14:34:26 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -958,12 +958,6 @@ let read_in_file f l b e =
   Buffer.contents buf
  
 
-let raw_loc ?(pref="") fmt (f,l,b,e) =
-  fprintf fmt "%sfile = \"%s\"@\n" pref f;
-  fprintf fmt "%sline = %d@\n" pref l;
-  fprintf fmt "%sbegin = %d@\n" pref b;
-  fprintf fmt "%send = %d@\n" pref e
-
 let loc_of_label n =
   let (f,l,b,e,_) = Hashtbl.find locs_table n in
   (f,l,b,e)
@@ -1079,37 +1073,6 @@ let cook_explanation (userlab : string option) e =
 		l)
 
     
-let print_formula fmt s =
-  if String.length s > 0 then
-    fprintf fmt "formula = \"%s\"@\n" s
-
-let print_kind fmt (loc,k) =
-  (* 
-     Option_misc.iter (fun lab ->  fprintf fmt "label = %s@\n" lab) labopt; 
-  *)
-  raw_loc fmt loc;
-  match k with
-    | EKOther s -> fprintf fmt "kind = Other@\ntext = \"%s\"@\n" s
-    | EKAbsurd -> fprintf fmt "kind = Absurd@\n"
-    | EKAssert -> fprintf fmt "kind = Assert@\n"
-    | EKPre s -> fprintf fmt "kind = Pre@\ntext = \"%s\"@\n" s
-    | EKPost -> fprintf fmt "kind = Post@\n"
-    | EKWfRel -> fprintf fmt "kind = WfRel@\n"
-    | EKVarDecr -> fprintf fmt "kind = VarDecr@\n" 
-    | EKLoopInvInit s -> 
-	fprintf fmt "kind = LoopInvInit@\n";
-	print_formula fmt s
-    | EKLoopInvPreserv s -> 
-	fprintf fmt "kind = LoopInvPreserv@\n";
-	print_formula fmt s
-
-let print_explanation fmt (loc,e) = 
-  match e with 
-  | Lemma _ -> 
-      raw_loc fmt loc; 
-      fprintf fmt "kind = Lemma@\n"
-  | VC vc -> print_kind fmt (loc,vc.kind)
-
 let explanation_table = Hashtbl.create 97
 let explanation_counter = ref 0
 
@@ -1120,6 +1083,7 @@ let reg_explanation e =
   Hashtbl.add explanation_table id e;
   Internal id
 
+(*
 let print_loc_predicate fmt (loc,p) =
   match p with
     | Pnamed(User s,p) -> 
@@ -1135,6 +1099,8 @@ let print_loc_predicate fmt (loc,p) =
     | _ -> 
 	fprintf fmt "(located %a) %a" 
 	  Loc.gen_report_position loc print_predicate p
+*)
+  
 
 let print_decl fmt = function
     Dtype (_, sl, s) -> 
@@ -1165,7 +1131,7 @@ let print_decl fmt = function
 	   | Cc.Spred (id, pred) -> 
 	       fprintf fmt "%a <=> %a" Ident.print id print_predicate pred)) cel
 	print_predicate pred;
-      fprintf fmt "(* %a *)@\n" print_explanation (loc,expl)
+      fprintf fmt "(* %a *)@\n" Explain.print ((*loc,*)expl)
 
 (* debug *)
 

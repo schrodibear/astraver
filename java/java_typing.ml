@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.101 2008-02-19 18:44:28 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.102 2008-02-20 14:34:26 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -2094,7 +2094,6 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	begin
 	  try
 	    let t = binary_numeric_promotion ~ghost t1 t2 in
-	    eprintf "make_bin_op: result type is %a@." print_type (JTYbase t);
 	    t,JEbin(e1, op, e2)
 	  with Not_found ->
 	    typing_error loc "numeric types expected for +, -, *, / and %%"

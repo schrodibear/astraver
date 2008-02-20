@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.145 2008-02-18 09:10:04 marche Exp $ i*)
+(*i $Id: main.ml,v 1.146 2008-02-20 14:34:26 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -404,8 +404,15 @@ let interp_decl ?(prelude=false) d =
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
 	let l = Loc.extract loc in
+	let xpl =
+	  { lemma_or_fun_name = Ident.string id;
+	    behavior = "";
+	    vc_loc = l;
+	    vc_kind = EKLemma;
+	  }
+	in
 	let dg = 
-	  Dgoal (l, Lemma (Ident.string id,Loc.extract loc), Ident.string id, s) 
+	  Dgoal (l, xpl, Ident.string id, s) 
 	in
 	let ids = Ident.string id in
 	let vloc =

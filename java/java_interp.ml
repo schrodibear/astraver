@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.116 2008-02-18 16:46:10 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.117 2008-02-20 14:34:26 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1075,9 +1075,11 @@ let rec expr ?(reg=false) e =
       | JEbin (e1, op, e2) ->
 	  let e1 = expr e1 and e2 = expr e2 in
 	    reg := true;
+(*
 	    eprintf "%a: result type is %a@." 
 	      Loc.gen_report_position e.java_expr_loc 
 	      print_type e.java_expr_type;
+*)
 	    int_cast e.java_expr_loc e.java_expr_type (JCTEbinary(e1,bin_op op,e2))
       | JEif (e1,e2,e3) -> 
 	  JCTEif(expr e1, expr e2, expr e3)

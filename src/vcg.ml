@@ -899,11 +899,11 @@ let vcg_from_wp loc name beh w =
   let push_one (ctx, concl) = 
     let formula_userlab, raw_explain = explain_for_pred None None concl in	
     let kind,loc =  Util.cook_explanation formula_userlab raw_explain in
-    let explain = Logic_decl.VC
-      { Logic_decl.fun_name = name ;
+    let explain = (*Logic_decl.ExplVC*)
+      { Logic_decl.lemma_or_fun_name = name ;
 	Logic_decl.behavior = beh;
-	Logic_decl.fun_loc = loc ;
-	Logic_decl.kind = kind }
+	Logic_decl.vc_loc = loc ;
+	Logic_decl.vc_kind = kind }
     in
     try
       discharge loc ctx concl

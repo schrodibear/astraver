@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.87 2008-02-18 09:10:04 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.88 2008-02-20 14:34:26 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -416,7 +416,7 @@ type pvs_theories = {
   decls : (string * logic_type scheme) ArMap.t;
   defs : (string * def) Queue.t;
   axioms : (string * predicate scheme) ArMap.t;
-  goals : (loc * Logic_decl.expl * string * sequent scheme) Queue.t;
+  goals : (loc * Logic_decl.vc_expl * string * sequent scheme) Queue.t;
   mutable poly : bool;
 }
 
