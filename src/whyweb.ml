@@ -31,17 +31,29 @@ let file = match !file with
 
 let proj = ref (Project.create "")
 
+let proj_file = ref ""
+
 open Project
 
+let coms = Hashtbl.create 1023
+
 let interp_com c =
-  List.iter
-    (fun f ->
-       if true (* f.function_name = c*) then toggle_function f)
-    !proj.project_functions
-(*
-  let l = List.assoc c !proj.project_lemmas in
-  Project.toggle_lemma l
-*)
+  try
+    let c = Hashtbl.find coms c in
+    match c with
+      | `ToggleFunction f -> toggle_function f
+      | `ToggleLemma l -> toggle_lemma l
+      | `ToggleBehavior b -> toggle_behavior b
+  with Not_found -> ()
+
+let com_count = ref 0
+
+let reg_com c =
+  incr com_count;
+  let n = string_of_int !com_count in
+  Hashtbl.add coms n c;
+  n
+  
 
 (* main *)
 
@@ -67,25 +79,32 @@ let () =
 	   wprint "<h2>List of current projects</h2>";
 	   wprint "<ol>";
 	   wprint "<li> <a href=\"test\">test</a>";
+	   wprint "<li> <a href=\"Gcd\">Gcd</a>";
+	   wprint "<li> <a href=\"Lesson1\">Lesson1</a>";
 	   wprint "</ol>";
 	 end
        else
 	 begin
-	   if !proj.project_name <> script then
+	   if !proj_file <> script then
 	     begin
 	       (* TODO: save previous project *)
 	       eprintf "Previous project: `%s'@." !proj.project_name;
 	       eprintf "Reading file %s.wpr@." script;
+	       proj_file := script;
 	       proj := Project.load (script ^ ".wpr")
 	     end
 	   else
 	     interp_com cont;
+	   Hashtbl.clear coms;
+	   com_count := 0;
 	   wprint "<h1 align=center> Project name: %s</h1>" !proj.project_name;
 	   
 	   wprint "<h2>Lemmas</h2>";
 	   wprint "<ol>";
 	   List.iter
-	     (fun l -> wprint "<li> <a href=\"?%s\">%s</a> </li>" l.lemma_name l.lemma_name)
+	     (fun l -> 
+		let n = reg_com (`ToggleLemma l) in 
+		wprint "<li> <a href=\"?%s\">%s</a> </li>" n l.lemma_name)
 	     !proj.project_lemmas;
 	   wprint "</ol>";
 	   
@@ -93,12 +112,28 @@ let () =
 	   wprint "<ol>";
 	   List.iter
 	     (fun f -> 
-		wprint "<li> <a href=\"?%s\">%s</a> </li>" f.function_name f.function_name;
-		if f.function_visible then
+		let n = reg_com (`ToggleFunction f) in 
+		wprint "<li> <a href=\"?%s\">%s</a> </li>" n f.function_name;
+		if f.function_open then
 		  begin
 		    wprint "<ol>";
 		    List.iter
-		      (fun b -> wprint "<li> %s </li>" b.behavior_name)
+		      (fun b ->
+			 let n = reg_com (`ToggleBehavior b) in 
+			 wprint "<li> <a href=\"?%s\">%s</a> </li>" n b.behavior_name;
+			 if b.behavior_open then
+			   begin
+			     wprint "<ol>";
+			     List.iter
+			       (fun g ->
+				  let s =
+				    fprintf str_formatter "%a" Explain.print g.goal_expl;
+				    flush_str_formatter ()
+				  in
+				  wprint "<li> %s </li>" s)
+			       b.behavior_goals;
+			     wprint "</ol>"
+			   end)
 		      f.function_behaviors;
 		    wprint "</ol>"
 		  end)

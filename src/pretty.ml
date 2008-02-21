@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.20 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.21 2008-02-21 09:06:25 marche Exp $ i*)
 
 open Format
 open Pp
@@ -318,4 +318,4 @@ let output_project f =
 	      vcs)
 	 behs)
     !functions;
-  Project.save p (f ^ ".wpr")
+  Project.save p f

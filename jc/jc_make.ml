@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.20 2008-02-05 16:57:14 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.21 2008-02-21 09:06:25 marche Exp $ i*)
 
 open Format
 open Pp
@@ -50,6 +50,7 @@ let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
 let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
 let ergo fmt f = fprintf fmt "why/%s_why.why" f
 let why_goals fmt f = fprintf fmt "why/%s_ctx.why" f
+let wpr fmt f = fprintf fmt "why/%s.wpr" f
 let isabelle fmt f = fprintf fmt "isabelle/%s_why.thy" f 
 
 let print_files = print_list (fun fmt () -> fprintf fmt "\\@\n  ")
@@ -69,6 +70,10 @@ let generic f targets =
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
+
+       fprintf fmt "project: %a@\n@\n" (print_files wpr) targets;
+       fprintf fmt "why/%%.wpr: why/%%.why@\n";
+       fprintf fmt "\t@@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
 
        fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
        fprintf fmt "why/%%_ctx.why: why/%%.why@\n";

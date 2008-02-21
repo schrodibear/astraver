@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.74 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.75 2008-02-21 09:06:25 marche Exp $ i*)
 
 open Printf
 open Options
@@ -197,6 +197,7 @@ let msg_of_kind =
     | EKPre "PointerDeref" -> "pointer dereferencing"
     | EKPre "IndexBounds" -> "index bounds"
     | EKPre "ArithOverflow" -> "arithmetic overflow"
+    | EKPre "DivByZero" -> "division by zero"
     | EKPre "AllocSize" -> "allocation size nonnegative"
     | EKPre "UserCall" -> "precondition for user call"
     | EKPre "" -> "precondition"

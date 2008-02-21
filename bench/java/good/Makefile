@@ -3,7 +3,7 @@ JESSIE=../../../bin/jessie.byte
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
-EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt --debug -why-opt -split-user-conj 
+EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE)  
 
 KRAKATOA=ocamlrun -bt ../../../bin/krakatoa.byte
 KRAKATOALIB=$(shell pwd)/../../../lib
@@ -89,6 +89,12 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	make $*.jcio
 	make why/$*.whyai
 	make -f $*.makefile gui
+
+%.pr: %.java
+	rm -f $*.jc
+	make $*.jc
+	make why/$*.why
+	make -f $*.makefile project
 
 %.goals: %.jc
 	mkdir -p why

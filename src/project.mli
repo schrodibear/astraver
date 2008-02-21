@@ -14,13 +14,14 @@ type lemma = private {
 type behavior = {
   behavior_name : string;
   mutable behavior_goals : goal list;
+  mutable behavior_open : bool;
 }
 
 type funct = private {
   function_name : string;
   function_loc : Loc.floc;
   mutable function_behaviors : behavior list;
-  mutable function_visible : bool;
+  mutable function_open : bool;
 }
   
 
@@ -43,6 +44,7 @@ val add_goal : behavior -> Logic_decl.vc_expl -> string -> goal
 
 val toggle_lemma : lemma -> unit
 val toggle_function : funct -> unit
+val toggle_behavior : behavior -> unit
 
 (* save/load *)
 

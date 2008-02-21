@@ -14,13 +14,14 @@ type lemma = {
 type behavior = {
   behavior_name : string;
   mutable behavior_goals : goal list;
+  mutable behavior_open : bool;
 }
 
 type funct = {
   function_name : string;
   function_loc : Loc.floc;
   mutable function_behaviors : behavior list;
-  mutable function_visible : bool;
+  mutable function_open : bool;
 }
   
 
@@ -69,6 +70,7 @@ let add_behavior f be =
   let b = {
     behavior_name = be;
     behavior_goals = [];
+    behavior_open = false;
   }
   in
   f.function_behaviors <- b :: f.function_behaviors;
@@ -79,7 +81,7 @@ let add_function p fname floc =
     function_name = fname;
     function_loc = floc;
     function_behaviors = [];
-    function_visible = false;
+    function_open = false;
   }
   in
   p.project_functions <- f :: p.project_functions;
@@ -90,7 +92,9 @@ let add_function p fname floc =
 
 let toggle_lemma l = ()
 
-let toggle_function f = f.function_visible <- not f.function_visible
+let toggle_function f = f.function_open <- not f.function_open
+
+let toggle_behavior b = b.behavior_open <- not b.behavior_open
 
 (* saving *)
 
@@ -215,6 +219,7 @@ let get_behavior lf e =
 	let n = get_name_attr e in
 	{ behavior_name = n;
 	  behavior_goals = List.map (get_goal lf n) e.Xml.elements;
+	  behavior_open = get_bool_attr "open" e;
 	}
     | _ -> assert false
 	
@@ -248,7 +253,7 @@ let get_lemma_or_function e =
 	  { function_name = n;
 	    function_loc = loc;
 	    function_behaviors = behs;
-	    function_visible = get_bool_attr "opened" e;
+	    function_open = get_bool_attr "open" e;
 	  }
 	in
 	functions := f :: !functions	  
