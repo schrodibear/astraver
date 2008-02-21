@@ -160,10 +160,15 @@ and string_val = parse
 
   let from_file f =
       let c = 
-	try open_in f 
+(*
+	try 
+*)
+	open_in f 
+(*
 	with Sys_error _ -> 
 	  Format.eprintf "Cannot open file %s@." f;
 	  exit 1
+*)
       in
       let lb = from_channel c in
       let l = elements [] [] lb in

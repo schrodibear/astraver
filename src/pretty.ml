@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.21 2008-02-21 09:06:25 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.22 2008-02-21 09:59:42 marche Exp $ i*)
 
 open Format
 open Pp
@@ -293,7 +293,7 @@ let output_project f =
 	 queue)
     (f ^ "_ctx.why");
 
-  let p = Project.create f in
+  let p = Project.create (Filename.basename f) in
   Project.set_project_context_file p (f ^ "_ctx.why");      
   List.iter
     (fun (expl,fpo) ->      

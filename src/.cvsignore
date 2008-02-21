@@ -13,3 +13,4 @@ compat.ml
 lexer.ml
 parser.mli
 rc.ml
+xml.ml
