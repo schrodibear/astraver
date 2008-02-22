@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: report.ml,v 1.21 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: report.ml,v 1.22 2008-02-22 11:20:26 stoulsn Exp $ i*)
 
 open Ident
 open Logic
@@ -50,6 +50,8 @@ let report fmt = function
       fprintf fmt "Unbound array %s" (Ident.string id)
   | UnboundLabel s ->
       fprintf fmt "Unbound label '%s'" s
+  | ReboundLabel s ->
+      fprintf fmt "Rebound label '%s'" s
   | UnboundException id ->
       fprintf fmt "Unbound exception '%s'" (Ident.string id)
   | UnboundType id ->

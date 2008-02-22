@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: error.mli,v 1.30 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: error.mli,v 1.31 2008-02-22 11:20:26 stoulsn Exp $ i*)
 
 (*s Errors. *)
 
@@ -38,6 +38,7 @@ type t =
   | UnboundReference of Ident.t
   | UnboundArray of Ident.t
   | UnboundLabel of string
+  | ReboundLabel of string
   | UnboundException of Ident.t
   | UnboundType of Ident.t
   | Clash of Ident.t

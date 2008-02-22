@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.134 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: typing.ml,v 1.135 2008-02-22 11:20:26 stoulsn Exp $ i*)
 
 (*s Typing. *)
 
@@ -789,6 +789,7 @@ let rec typef ?(userlabel="") lab env expr =
       make_node toplabel (Assertion (`ASSERT,p, t_e)) (result_type t_e) ef
 
   | Slabel (s, e) ->
+      if (Label.mem s lab) then raise_located loc (ReboundLabel s);
       let lab' = Label.add s lab in
       let t_e = typef ~userlabel:s lab' env e in
       make_node toplabel (Label (s, t_e)) (result_type t_e) (effect t_e)
