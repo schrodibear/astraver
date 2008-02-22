@@ -893,7 +893,7 @@ let rec explain_for_pred internal user = function
 	      
 (* Proof obligations from the WP *)
 
-let vcg_from_wp loc name beh w =
+let vcg_from_wp loc ids name beh w =
   let po = ref [] in
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
@@ -909,7 +909,7 @@ let vcg_from_wp loc name beh w =
       discharge loc ctx concl
     with Exit -> begin
       incr cpt;
-      let id = name ^ "_" ^ beh ^ "_po_" ^ string_of_int !cpt in
+      let id = ids (* name ^ "_" ^ beh *) ^ "_po_" ^ string_of_int !cpt in
       let ctx' = clean_sequent (List.rev ctx) concl in
       let sq = (ctx', concl) in
       log loc sq (Some id);

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.147 2008-02-22 16:50:41 marche Exp $ i*)
+(*i $Id: main.ml,v 1.148 2008-02-22 16:56:45 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -264,7 +264,7 @@ let interp_program loc id p =
 	  | _ -> raise Not_found		  
       in
       (name,beh,(f,l,b,e))
-    with Not_found -> ((*"function "^*)ids,"Correctness", Loc.extract loc)
+    with Not_found -> ("function "^ids,"Correctness", Loc.extract loc)
       
   in
   Hashtbl.add program_locs ids vloc;
@@ -275,7 +275,7 @@ let interp_program loc id p =
 	if_debug eprintf "no WP => no obligation@."
     | Some wp -> 
 	if_debug eprintf "VCs from WP...@?";
-	let ol,pr = Vcg.vcg_from_wp loc name beh wp in
+	let ol,pr = Vcg.vcg_from_wp loc ids name beh wp in
 	if_debug eprintf "done@.";
 	push_obligations vloc ol;
 	push_validation (ids ^ "_wp") (TTpred wp.a_value) (CC_hole pr)

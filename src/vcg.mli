@@ -44,8 +44,8 @@ val log_print_function : (Format.formatter -> sequent -> unit) ref
 (* obligations from the WP *)
 
 val vcg_from_wp : 
-  (* fun loc, fun name, fun behavior, wp *)
-  Loc.floc -> string -> string -> Ast.assertion -> Logic_decl.obligation list * proof
+  (* fun loc, fun ids fun name, fun behavior, wp *)
+  Loc.floc -> string -> string -> string -> Ast.assertion -> Logic_decl.obligation list * proof
 
 (* functions to be reused in module [Coq] *)
 
