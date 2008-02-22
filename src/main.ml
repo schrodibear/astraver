@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.146 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: main.ml,v 1.147 2008-02-22 16:50:41 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -264,7 +264,7 @@ let interp_program loc id p =
 	  | _ -> raise Not_found		  
       in
       (name,beh,(f,l,b,e))
-    with Not_found -> ("function "^ids,"Correctness", Loc.extract loc)
+    with Not_found -> ((*"function "^*)ids,"Correctness", Loc.extract loc)
       
   in
   Hashtbl.add program_locs ids vloc;
