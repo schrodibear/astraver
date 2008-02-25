@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.185 2008-02-25 12:24:04 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.186 2008-02-25 14:25:49 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2730,6 +2730,16 @@ let declare_struct_info d = match d.jc_pdecl_node with
 	create_mutable_field si
   | _ -> ()
 
+let declare_function d = match d.jc_pdecl_node with
+  | JCPDfun(ty,id,pl,_specs,_body) ->
+      ignore 
+	(add_fundecl (ty,id.jc_identifier_loc,id.jc_identifier_name,pl))
+  | JCPDlogic(Some ty,id,labels,[],_body) ->
+      ignore (add_logic_constdecl (ty,id))
+  | JCPDlogic(ty,id,labels,pl,_body) ->
+      ignore (add_logic_fundecl (ty,id,labels,pl))
+  | _ -> ()
+
 let compute_struct_info_parent d = match d.jc_pdecl_node with
   | JCPDtag(id, Some parent, _, _) ->
       let si, _ = Hashtbl.find structs_table id in
@@ -2799,13 +2809,20 @@ let check_struct d = match d.jc_pdecl_node with
 
 (* type declarations in the right order *)
 let type_file ast =
-  (* TODO: type enums before *)
+  (* Type enumerations first *)
+  let is_enum d = 
+    match d.jc_pdecl_node with JCPDenumtype _ -> true | _ -> false
+  in
+  let enums,ast = List.partition is_enum ast in
+  List.iter decl enums;
   (* records and variants *)
   List.iter declare_struct_info ast;
   List.iter compute_struct_info_parent ast;
   while fixpoint_struct_info_roots () do () done;
   List.iter type_variant ast;
   List.iter check_struct ast;
+  (* Declare coding and logic functions *)
+  List.iter declare_function ast;
   (* remaining declarations *)
   List.iter decl ast
 
