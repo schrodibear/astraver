@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.244 2008-02-25 07:16:51 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.245 2008-02-25 12:24:04 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -665,7 +665,7 @@ let rec assertion ~global_assertion label oldlabel a =
 
 let named_jc_assertion loc a =
   match a with
-      | LTrue | LNamed _ -> 
+      (* | LTrue *) | LNamed _ -> 
 	(*
 	  eprintf "Assertion already named %s@." lab;
 	*)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.114 2008-02-19 18:44:28 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.115 2008-02-25 12:24:04 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -967,29 +967,29 @@ module Dnf = struct
       else if is_true dnf then
 	()
       else
-      let test_conj copy_pre conj =
-	let lincons =
-	  try Parser.lincons1_of_lstring env conj
-	  with Parser.Error msg -> printf "%s@." msg; assert false
+	let test_conj copy_pre conj =
+	  let lincons =
+	    try Parser.lincons1_of_lstring env conj
+	    with Parser.Error msg -> printf "%s@." msg; assert false
+	  in
+	    Abstract1.meet_lincons_array_with mgr copy_pre lincons;
+	    if debug then printf "[Dnf.test_conj] %a@." print [conj];
+	    if debug then printf "[Dnf.test_conj] %a@." Abstract1.print copy_pre
 	in
-	  Abstract1.meet_lincons_array_with mgr copy_pre lincons;
-	  if debug then printf "[Dnf.test_conj] %a@." print [conj];
-	  if debug then printf "[Dnf.test_conj] %a@." Abstract1.print copy_pre
-      in
-	(* Test each disjunct separately and then join them. *)
-      let copy_array = 
-	Array.init (num_disjuncts dnf)
-	  (fun i -> if i = 0 then pre else Abstract1.copy mgr pre)
-      in
-      let copy_list = Array.to_list copy_array in
-      List.iter2 test_conj copy_list dnf;
-      begin match copy_list with
-	| first::rest ->
-	    assert (first == pre);
-	    List.iter (fun absval -> Abstract1.join_with mgr pre absval) rest
-	| _ -> assert false
-      end
-
+	  (* Test each disjunct separately and then join them. *)
+	let copy_array = 
+	  Array.init (num_disjuncts dnf)
+	    (fun i -> if i = 0 then pre else Abstract1.copy mgr pre)
+	in
+	let copy_list = Array.to_list copy_array in
+	  List.iter2 test_conj copy_list dnf;
+	  begin match copy_list with
+	    | first::rest ->
+		assert (first == pre);
+		List.iter (fun absval -> Abstract1.join_with mgr pre absval) rest
+	    | _ -> assert false
+	  end
+	    
 end
 
 let assertion_of_dnf dnf = 
@@ -1824,11 +1824,11 @@ let rec test_assertion mgr pre a =
 	     (Nicolas) *)
 	  env,Dnf.true_ 
       | JCArelation (t1, Bneq_int, t2) ->
-	  let infa = raw_asrt(JCArelation(t1,Blt_int,t2)) in
-	  let supa = raw_asrt(JCArelation(t1,Bgt_int,t2)) in
-	  let env,dnf1 = extract_environment_and_dnf env infa in
-	  let env,dnf2 = extract_environment_and_dnf env supa in
-	    env,Dnf.make_or [dnf1; dnf2]
+	  let infa = raw_asrt (JCArelation(t1, Blt_int, t2)) in
+	  let supa = raw_asrt (JCArelation(t1, Bgt_int, t2)) in
+	  let env, dnf1 = extract_environment_and_dnf env infa in
+	  let env, dnf2 = extract_environment_and_dnf env supa in
+	    env, Dnf.make_or [dnf1; dnf2]
       | JCArelation (t1, bop, t2) ->
 	  if bop = Beq_pointer then set_equivalent_terms t1 t2;
 	  let env, be = linstr_of_assertion env a in

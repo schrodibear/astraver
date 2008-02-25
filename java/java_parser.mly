@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.35 2008-02-06 16:53:56 marche Exp $
+$Id: java_parser.mly,v 1.36 2008-02-25 12:24:04 nrousset Exp $
 
 */
 
@@ -999,7 +999,7 @@ kml_type_decl:
     { JPTlemma($2,false,$3,$5) }
 
 label_binders:
-| /* epsilon */ { [] }
+| /* epsilon */ { [LabelHere] }
 | LEFTBRACE ident label_list_end RIGHTBRACE { (label $2)::$3 }
 ;
 

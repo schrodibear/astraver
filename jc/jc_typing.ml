@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.184 2008-02-25 07:16:51 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.185 2008-02-25 12:24:04 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -695,15 +695,15 @@ used as an assertion, not as a term" pi.jc_logic_info_name
       | JCPEderef (e1, f) -> 
 	  let te = ft e1 in
 	  let fi = find_field e.jc_pexpr_loc te.jc_term_type f true in
-	  begin
-	    match logic_label with
-	      | None ->
-		  typing_error e.jc_pexpr_loc "No memory state for this dereferenciation (\\at missing ?)"
-	      | Some l ->
-		  fi.jc_field_info_type, 
-		  Region.make_field te.jc_term_region fi,
-		  JCTderef(te,l,fi)	  
-	  end
+	    begin
+	      match logic_label with
+		| None ->
+		    typing_error e.jc_pexpr_loc "No memory state for this dereferenciation (\\at missing ?)"
+		| Some l ->
+		    fi.jc_field_info_type, 
+		    Region.make_field te.jc_term_region fi,
+		    JCTderef(te,l,fi)	  
+	    end
       | JCPEconst c -> 
 	  let t, tr, c = const c in t, tr, JCTconst c
       | JCPEold e -> 

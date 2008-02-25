@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.51 2008-02-07 19:22:03 nrousset Exp $ *)
+(* $Id: java_main.ml,v 1.52 2008-02-25 12:24:04 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -182,8 +182,8 @@ let main () =
 	       Java_interp.tr_invariants ci id invs acc)
 	    Java_typing.invariants_table acc
 	in
-	let decls = decls_fun @ decls_structs @ 
-	  (Jc_output.JCrec_struct_defs acc :: decls_range)
+	let decls = decls_fun @ 
+	  (Jc_output.JCrec_struct_defs acc :: decls_range) @ decls_structs
 	in
 	let decls = decls @ non_null_preds in
 	  
@@ -213,6 +213,7 @@ let main () =
 	    Java_typing.axioms_table
 	    decls
 	in	       
+
 	(* production phase 4 : generation of Jessie functions *)
 	let decls =
 	  Array.fold_left

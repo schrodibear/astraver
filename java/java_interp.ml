@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.117 2008-02-20 14:34:26 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.118 2008-02-25 12:24:04 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1612,7 +1612,7 @@ let tr_field type_name acc fi =
 	    | JTYarray (JTYbase t) | JTYbase t -> 
 		begin match t with
 		  | Tshort | Tbyte | Tchar | Tint 
-		    | Tlong | Tdouble | Tinteger -> 
+		  | Tlong | Tdouble | Tinteger -> 
 		      JCCinteger (Num.string_of_num value)
 		  | Tboolean -> 
 		      let b = match Num.string_of_num value with
@@ -1797,7 +1797,7 @@ let tr_class ci acc0 acc =
       if (!Java_options.non_null = NonNullAll ||
 	  !Java_options.non_null = NonNullFields) && 
 	!Java_options.inv_sem = Jc_env.InvArguments then 
-	non_null_inv else [] in
+	  non_null_inv else [] in
     let acc = 
       if ci.class_info_name = "Object" then
 	let non_null_fi = create_non_null_fun si in

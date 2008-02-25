@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.102 2008-02-20 14:34:26 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.103 2008-02-25 12:24:04 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -3484,22 +3484,21 @@ let type_decl package_env type_env d =
 	    env = env;
 	  }
 	in
-	begin match ret_type with
-	  | None ->
-	      let fi = logic_info id None labels pl in
-	      let a = assertion env None body in
-	      Hashtbl.add logics_env id fi;
-	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
-	  | Some t -> 
-	      let fi = 
-		logic_info id 
-		  (Some (type_type package_env type_env false t)) labels pl 
-	      in
-	      let a = term env None body in
-	      Hashtbl.add logics_env id fi;
-	      Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
-	end
-
+	  begin match ret_type with
+	    | None ->
+		let fi = logic_info id None labels pl in
+		let a = assertion env None body in
+		  Hashtbl.add logics_env id fi;
+		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
+	    | Some t -> 
+		let fi = 
+		  logic_info id 
+		    (Some (type_type package_env type_env false t)) labels pl 
+		in
+		let a = term env None body in
+		  Hashtbl.add logics_env id fi;
+		  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
+	  end
 
 let get_bodies package_env type_env cu =
   List.iter (type_decl package_env type_env) cu.cu_type_decls
