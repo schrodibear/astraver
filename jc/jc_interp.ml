@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.245 2008-02-25 12:24:04 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.246 2008-02-25 21:01:11 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -569,7 +569,7 @@ let rec assertion ~global_assertion label oldlabel a =
       | JCAfalse -> LFalse, []
       | JCAif(t1,p2,p3) ->
 	  let t1', lets = ft t1 in
-	  LIf(t1', fa p2, fa p3), lets
+	    LIf(t1', fa p2, fa p3), lets
       | JCAand l -> make_and_list (List.map fa l), []
       | JCAor l -> make_or_list (List.map fa l), []
       | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2), []
@@ -578,16 +578,16 @@ let rec assertion ~global_assertion label oldlabel a =
       | JCArelation(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
 	  let t1', lets1 = ft t1 in
 	  let t2', lets2 = ft t2 in
-	  LPred (pred_bin_op op, [ t1'; t2']), lets1@lets2
+	    LPred (pred_bin_op op, [ t1'; t2']), lets1@lets2
       | JCArelation(t1,op,t2) ->
 	  let t1', lets1 = ft t1 in
 	  let t2', lets2 = ft t2 in
 	  let t = bin_arg_type a.jc_assertion_loc op in
-	  LPred(pred_bin_op op, 
-		[ term_coerce t1.jc_term_loc t
-		    t1.jc_term_type t1'; 
-		  term_coerce t2.jc_term_loc t 
-		    t2.jc_term_type t2']), lets1@lets2
+	    LPred(pred_bin_op op, 
+		  [ term_coerce t1.jc_term_loc t
+		      t1.jc_term_type t1'; 
+		    term_coerce t2.jc_term_loc t 
+		      t2.jc_term_type t2']), lets1@lets2
       | JCAapp app -> 
 	  let f = app.jc_app_fun in
 	  let l = app.jc_app_args in
@@ -612,10 +612,10 @@ let rec assertion ~global_assertion label oldlabel a =
 	      app.jc_app_label_assoc, lets
 	  with Invalid_argument _ -> assert false
 	  end
-      | JCAquantifier(Forall,v,p) -> 
-	LForall(v.jc_var_info_final_name,
-		tr_base_type v.jc_var_info_type,
-		fa p), []
+      | JCAquantifier (Forall, v, p) -> 
+	  LForall (v.jc_var_info_final_name,
+		   tr_base_type v.jc_var_info_type,
+		   fa p), []
       | JCAquantifier(Exists,v,p) -> 
 	  LExists(v.jc_var_info_final_name,
 		  tr_base_type v.jc_var_info_type,

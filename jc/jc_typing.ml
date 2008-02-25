@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.186 2008-02-25 14:25:49 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.187 2008-02-25 21:01:11 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1074,9 +1074,9 @@ dereferenciation (\\at missing ?)"
 	      | _ ->
 		  typing_error e.jc_pexpr_loc "non propositional constant"
 	  end
-      | JCPEquantifier(q,ty,idl,e1) -> 
+      | JCPEquantifier (q, ty, idl, e1) -> 
 	  let ty = type_type ty in
-	  (make_quantifier q e.jc_pexpr_loc ty idl label_env logic_label env e1).jc_assertion_node
+	    (make_quantifier q e.jc_pexpr_loc ty idl label_env logic_label env e1).jc_assertion_node
       | JCPEold e -> 
 	  if List.mem LabelOld label_env then
 	    JCAold(assertion label_env (Some LabelOld) env e)
@@ -1163,10 +1163,11 @@ different"
 and make_quantifier q loc ty idl label_env logic_label env e : assertion =
   match idl with
     | [] -> assertion label_env logic_label env e
-    | id::r ->
+    | id :: r ->
 	let vi = var ty id in
+	let env = (id, vi) :: env in
 	let f = 
-	  JCAquantifier(q,vi,make_quantifier q loc ty r label_env logic_label ((id,vi)::env) e) 
+	  JCAquantifier (q, vi, make_quantifier q loc ty r label_env logic_label env e) 
 	in
 	{ jc_assertion_loc = loc ; 
 	  jc_assertion_label = ""; 

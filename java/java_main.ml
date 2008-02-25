@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.52 2008-02-25 12:24:04 nrousset Exp $ *)
+(* $Id: java_main.ml,v 1.53 2008-02-25 21:01:11 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -158,12 +158,12 @@ let main () =
 	(* production phase 1.3 : generation of Jessie struct types *)
 	let non_null_preds, acc, decls_arrays = Java_interp.array_types [] in
 	let non_null_preds = Java_interp.tr_non_null_logic_fun () :: non_null_preds in
-	let acc, decls_structs =
+	let acc0, decls_structs =
 	  Hashtbl.fold 
 	    (fun _ id (acc0, acc) ->
 	       Java_interp.tr_class_or_interface id acc0 acc)
 	    Java_typing.type_table
-	    (acc, decls_arrays)
+	    ([], decls_arrays)
 	in
 
 	(* production phase 1.4 : generation of Jessie logic functions *)
@@ -176,14 +176,14 @@ let main () =
 	in
 
 	(* class invariants *)
-	let acc = 
+	let acc0 = 
 	  Hashtbl.fold
 	    (fun _ (ci, id, invs) acc ->
 	       Java_interp.tr_invariants ci id invs acc)
-	    Java_typing.invariants_table acc
+	    Java_typing.invariants_table acc0
 	in
-	let decls = decls_fun @ 
-	  (Jc_output.JCrec_struct_defs acc :: decls_range) @ decls_structs
+	let decls = decls_fun @ acc0 @ decls_structs @ acc @ decls_range
+	  (* (Jc_output.JCrec_struct_defs (acc @ acc0) :: decls_range) *)
 	in
 	let decls = decls @ non_null_preds in
 	  
