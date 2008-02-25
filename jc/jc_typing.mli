@@ -88,6 +88,8 @@ val find_struct_variant : Jc_env.struct_info -> Jc_env.variant_info
 
 val type_file : pdecl list -> unit
 
+val print_file : Format.formatter -> unit -> unit
+
 (*
 Local Variables: 
 compile-command: "make -C .. bin/jessie.byte"

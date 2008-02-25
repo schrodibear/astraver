@@ -1,0 +1,15 @@
+
+integer f() 
+{
+  integer ret;
+  goto lab;
+lab:
+  return ret;
+}
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make goto"
+End: 
+*/

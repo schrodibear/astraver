@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.82 2008-02-18 16:12:02 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.83 2008-02-25 07:16:51 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -239,6 +239,17 @@ let make_tblock loc sl =
   match sl with 
     | [s] -> s
     | _ -> make_tnode loc (JCTSblock sl)
+
+let make_tassign_var loc vi e =
+  let node = JCTEassign_var(vi, e) in
+  let assign = 
+    { jc_texpr_loc = loc; 
+    jc_texpr_type = unit_type; 
+    jc_texpr_region = dummy_region; 
+    jc_texpr_label = "";
+    jc_texpr_node = node; }
+  in
+  make_tnode loc (JCTSexpr assign)
 
 let make_tthrow loc exc e =
   make_tnode loc (JCTSthrow (exc,e))
@@ -539,7 +550,7 @@ and statement s =
   let ns = 
     match s.jc_tstatement_node with
       | JCTSblock sl ->
-	  JCSblock (List.map (fun s -> statement s) sl)
+	  JCSblock [block_statement sl]
       | JCTSexpr e ->
 	  let prefix op = match op with 
 	    | Prefix_inc | Postfix_inc -> Prefix_inc
@@ -725,8 +736,7 @@ and statement s =
 	  let rec fold_case (previous_c,statl) = 
 	    function [] -> List.rev statl | (c,sl) :: next_cases ->
 	      (* statement list in case considered *)
-	      let sl = List.map statement sl in
-	      let block_stat = make_block loc sl in
+	      let block_stat = block_statement sl in
 	      let has_default = List.exists (fun c -> c = None) c in
 	      let current_c = if has_default then c else previous_c @ c in
 	      let etest = test_case_or_default current_c in
@@ -761,29 +771,60 @@ and statement s =
        jc_statement_loc = loc }
 
 and block_statement statements =
+  let add_var_decl v (f,l,vs) = (f,l,VarSet.add v vs) in
   let rec block = function
-    | [] -> 
-	[],[]
-    | { jc_tstatement_node = JCTSlabel(lab,st) } as s :: bl ->
-	let loc = s.jc_tstatement_loc in
-	let (be,bl) = block (st::bl) in
-	let name_exc = "Goto_" ^ lab.label_info_name in
-	let goto_exc = exception_info None name_exc in
-	Hashtbl.add exceptions_table name_exc goto_exc;
-	[make_throw loc goto_exc None],(goto_exc,make_block loc be)::bl
+    | [] -> [],[],VarSet.empty
     | s :: bl ->
-	let append_block e (f,l) = (e :: f,l) in
-	append_block (statement s) (block bl)
+	match s.jc_tstatement_node with
+	  | JCTSlabel(lab,st) ->
+	      let loc = s.jc_tstatement_loc in
+	      let (be,bl,vs) = block (st::bl) in
+	      let be = 
+		VarSet.fold (fun vi s -> 
+		  make_decl s.jc_statement_loc vi None s) vs (make_block loc be)
+	      in
+	      let name_exc = "Goto_" ^ lab.label_info_name in
+	      let goto_exc = exception_info None name_exc in
+	      Hashtbl.add exceptions_table name_exc goto_exc;
+	      [make_throw loc goto_exc None],
+	      (goto_exc,be)::bl,
+	      VarSet.empty
+	  | JCTSdecl(vi,None,s) ->
+	      let b = match s.jc_tstatement_node with
+		| JCTSblock sl -> block (sl @ bl)
+		| _ -> block (s :: bl)
+	      in
+	      add_var_decl vi b
+	  | JCTSdecl(vi,Some e,s) ->
+	      let set = make_tassign_var s.jc_tstatement_loc vi e in
+	      vi.jc_var_info_assigned <- true;
+	      let b = match s.jc_tstatement_node with
+		| JCTSblock sl -> block (set :: sl @ bl)
+		| _ -> block (set :: s :: bl)
+	      in
+	      add_var_decl vi b
+	  | JCTSblock sl ->
+	      block (sl @ bl)
+	  | _ ->
+	      let append_block e (f,l,vs) = (e :: f,l,vs) in
+	      append_block (statement s) (block bl)
   in
-  let be,bl = block statements in
-  List.fold_left 
-    (fun acc (goto_exc,s) ->
-       let loc = s.jc_statement_loc in
-       let catch_goto =
-	 [(goto_exc, None, make_block loc [])] in
-       make_try loc acc catch_goto (make_block loc [])
-    ) (make_block Loc.dummy_position be) bl
-       
+  let be,bl,vs = block statements in
+  let s = 
+    List.fold_left 
+      (fun acc (goto_exc,s) ->
+	let loc = s.jc_statement_loc in
+	let catch_goto =
+	  [(goto_exc, None, make_block loc [])] in
+	make_try loc acc catch_goto (make_block loc [])
+      ) (make_block Loc.dummy_position be) bl
+  in
+  let s = 
+    VarSet.fold (fun vi s -> make_decl s.jc_statement_loc vi None s) vs s
+  in
+  match s.jc_statement_node with
+    | JCSblock [s] -> s
+    | _ -> s
 
 
 let statement s =
@@ -946,7 +987,11 @@ let code_function (fi, fs, sl) vil =
       | _ -> ()
   end;
     (* normalization of the function body *)
-    (fs, Option_misc.map (List.map statement) sl)
+  let bs = Option_misc.map (make_tblock Loc.dummy_position) sl in
+(*   begin match bs with None -> ()  *)
+(*     | Some bs -> Format.printf "%a@." Jc_output.statement bs  *)
+(*   end; *)
+  (fs, Option_misc.map (fun bs -> [statement bs]) bs)
     
 let static_variable (vi, eo) =
   match eo with

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.243 2008-02-18 16:46:10 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.244 2008-02-25 07:16:51 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -43,6 +43,8 @@ open Jc_separation
 open Jc_interp_misc
 open Jc_struct_tools
 open Jc_pattern
+
+open Num
 
 (* locs table *)
 
@@ -331,14 +333,60 @@ let make_guarded_app ~name (k : kind) loc f l =
   in
   Label (lab, make_app f l)
 
-let coerce ~no_int_overflow lab loc tdest tsrc e =
+let eval_integral_const e =
+  let rec eval e =
+    match e.jc_expr_node with
+      | JCEconst(JCCinteger s) -> num_of_string s
+      | JCErange_cast(e,_ri2) -> eval e
+      | JCEunary(op,e) ->
+	  let v = eval e in
+	  begin match op with
+	    | Uplus_int -> v
+	    | Uminus_int -> minus_num v
+	    | Uplus_real | Uminus_real | Unot | Ubw_not -> 
+		failwith "Not integral const"
+	  end
+      | JCEbinary(e1,op,e2) ->
+	  let v1 = eval e1 in
+	  let v2 = eval e2 in
+	  begin match op with
+	    | Badd_int -> v1 +/ v2
+	    | Bsub_int -> v1 -/ v2
+	    | Bmul_int -> v1 */ v2
+	    | Bdiv_int -> v1 // v2 (* TODO: or quo_num? *)
+	    | Bmod_int -> mod_num v1 v2
+	    | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
+	    | Blt_real | Bgt_real | Ble_real | Bge_real | Beq_real | Bneq_real 
+	    | Badd_real | Bsub_real | Bmul_real | Bdiv_real
+	    | Beq_bool | Bneq_bool | Bland | Blor | Bimplies | Biff
+	    | Beq_pointer | Bneq_pointer
+	    | Bbw_and | Bbw_or | Bbw_xor 
+	    | Bshift_left | Blogical_shift_right | Barith_shift_right ->
+		failwith "Not integral const"
+	  end
+      | JCEif(e1,e2,e3) ->
+	  (* TODO: write [eval_boolean_const] *)
+	  failwith "Not integral const"
+      | JCEconst _ | JCEvar _ | JCEshift _ | JCEsub_pointer _ | JCEderef _ 
+      | JCEinstanceof _ | JCEcast _ | JCEreal_cast _ | JCEoffset _ 
+      | JCEalloc _ | JCEfree _ ->
+	  failwith "Not integral const"
+  in
+  try Some(eval e) with Failure "Not integral const" -> None
+
+let rec fits_in_enum ri e = 
+  match eval_integral_const e with
+    | Some v -> ri.jc_enum_info_min </ v && v </ ri.jc_enum_info_max
+    | None -> false
+
+let coerce ~no_int_overflow lab loc tdest tsrc orig e =
   match tdest, tsrc with
     | JCTnative t, JCTnative u when t=u -> e
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTenum ri1, JCTenum ri2 -> 
 	let e' = make_app (logic_int_of_enum ri2) [e] in
-	if no_int_overflow then 
+	if no_int_overflow || fits_in_enum ri1 orig then 
 	  make_app (safe_fun_enum_of_int ri1) [e']
 	else
 	  make_guarded_app ~name:lab ArithOverflow loc 
@@ -346,7 +394,7 @@ let coerce ~no_int_overflow lab loc tdest tsrc e =
     | JCTnative Tinteger, JCTenum ri ->
 	make_app (logic_int_of_enum ri) [e]
     | JCTenum ri, JCTnative Tinteger ->
-	if no_int_overflow then 
+	if no_int_overflow || fits_in_enum ri orig then 
 	  make_app (safe_fun_enum_of_int ri) [e]
 	else
 	  make_guarded_app ~name:lab ArithOverflow loc (fun_enum_of_int ri) [e]
@@ -912,7 +960,7 @@ and offset ~infunction ~threats = function
   | Int_offset s -> Cte (Prim_int s)
   | Expr_offset e -> 
       coerce ~no_int_overflow:(not threats) 
-	e.jc_expr_label e.jc_expr_loc integer_type e.jc_expr_type 
+	e.jc_expr_label e.jc_expr_loc integer_type e.jc_expr_type e
 	(expr ~infunction ~threats e)
 
 and expr ~infunction ~threats e : expr =
@@ -931,7 +979,7 @@ and expr ~infunction ~threats e : expr =
 	let e1' = expr e1 in
 	make_app (unary_op op) 
 	  [coerce ~no_int_overflow:(not threats) 
-	     lab loc (unary_arg_type op) e1.jc_expr_type e1' ]
+	     lab loc (unary_arg_type op) e1.jc_expr_type e1 e1' ]
     | JCEbinary(e1,((Beq_pointer | Bneq_pointer) as op),e2) ->
 	let e1' = expr e1 in
 	let e2' = expr e2 in
@@ -956,9 +1004,9 @@ and expr ~infunction ~threats e : expr =
 	   | _ -> make_app)
 	  (bin_op op) 
 	  [ coerce ~no_int_overflow:(not threats) 
-	      e1.jc_expr_label e1.jc_expr_loc t e1.jc_expr_type e1'; 
+	      e1.jc_expr_label e1.jc_expr_loc t e1.jc_expr_type e1 e1'; 
 	    coerce ~no_int_overflow:(not threats) 
-	      e2.jc_expr_label e2.jc_expr_loc t e2.jc_expr_type e2']	
+	      e2.jc_expr_label e2.jc_expr_loc t e2.jc_expr_type e2 e2']	
     | JCEif(e1,e2,e3) -> 
 	let e1 = expr e1 in
 	let e2 = expr e2 in
@@ -970,7 +1018,7 @@ and expr ~infunction ~threats e : expr =
 	make_app "shift" 
 	  [e1'; 
 	   coerce ~no_int_overflow:(not threats) 
-	     e2.jc_expr_label e2.jc_expr_loc integer_type e2.jc_expr_type e2']
+	     e2.jc_expr_label e2.jc_expr_loc integer_type e2.jc_expr_type e2 e2']
     | JCEsub_pointer(e1,e2) -> 
 	let e1' = expr e1 in
 	let e2' = expr e2 in
@@ -1019,16 +1067,16 @@ and expr ~infunction ~threats e : expr =
     | JCErange_cast(e1,ri) ->
 	let e1' = expr e1 in
 	coerce ~no_int_overflow:(not threats)
-	  e.jc_expr_label e.jc_expr_loc (JCTenum ri) e1.jc_expr_type e1'
+	  e.jc_expr_label e.jc_expr_loc (JCTenum ri) e1.jc_expr_type e1 e1'
     | JCEreal_cast(e1,rc) ->
 	let e1' = expr e1 in
 	begin match rc with
 	  | Integer_to_real ->
 	      coerce ~no_int_overflow:(not threats)
-		e.jc_expr_label e.jc_expr_loc real_type integer_type e1'
+		e.jc_expr_label e.jc_expr_loc real_type integer_type e1 e1'
 	  | Real_to_integer ->
 	      coerce ~no_int_overflow:(not threats)
-		e.jc_expr_label e.jc_expr_loc integer_type real_type e1'
+		e.jc_expr_label e.jc_expr_loc integer_type real_type e1 e1'
 	end
     | JCEderef(e,fi) ->
 	let mem = field_region_memory_name(fi,e.jc_expr_region) in
@@ -1117,7 +1165,7 @@ and expr ~infunction ~threats e : expr =
 		  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
 		   coerce ~no_int_overflow:(not threats) 
 		     siz.jc_expr_label siz.jc_expr_loc integer_type 
-		     siz.jc_expr_type (expr siz)]
+		     siz.jc_expr_type siz (expr siz)]
 	    | InvArguments | InvNone ->
 	      (* Claude : pourquoi un cas particulier pour taille 1 ?? *)
 		begin match siz.jc_expr_node with 
@@ -1132,7 +1180,7 @@ and expr ~infunction ~threats e : expr =
 			(alloc_param_name st)
 			([coerce ~no_int_overflow:(not threats) 
 			  siz.jc_expr_label siz.jc_expr_loc integer_type 
-			  siz.jc_expr_type (expr siz); Var alloc]
+			  siz.jc_expr_type siz (expr siz); Var alloc]
 			@ (List.map (var ** alloc_region_table_name) roots)
 			@ (List.map (var ** field_region_memory_name) fields))
 
@@ -1232,7 +1280,7 @@ let type_assert vi e =
 let expr_coerce ~infunction ~threats vi e =
   coerce ~no_int_overflow:(not threats)
     e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type 
-    e.jc_expr_type (expr ~infunction ~threats e)
+    e.jc_expr_type e (expr ~infunction ~threats e)
     
 let rec statement ~infunction ~threats s = 
   (* reset_tmp_var(); *)
@@ -1426,7 +1474,7 @@ let rec statement ~infunction ~threats s =
 	  let n = vi.jc_var_info_final_name in
 	  Assign(n, coerce ~no_int_overflow:(not threats) 
 		   e2.jc_expr_label e2.jc_expr_loc vi.jc_var_info_type 
-		   e2.jc_expr_type e2')
+		   e2.jc_expr_type e2 e2')
       | JCSassign_heap(e1,fi,e2) -> 
 	let e1' = expr e1 in
 	let e2' = expr e2 in
@@ -1446,7 +1494,7 @@ let rec statement ~infunction ~threats s =
 	     ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
 				 e2.jc_expr_label e2.jc_expr_loc 
 				 fi.jc_field_info_type 
-				 e2.jc_expr_type e2') ])
+				 e2.jc_expr_type e2 e2') ])
 	     upd)
 	in
 	if !Jc_options.inv_sem = InvOwnership then
@@ -1515,7 +1563,7 @@ let rec statement ~infunction ~threats s =
 *)
 		coerce ~no_int_overflow:(not threats) 
 		  e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type e.jc_expr_type 
-		  (expr e)
+		  e (expr e)
 	  in
 	  if vi.jc_var_info_assigned then 
 	    Let_ref(vi.jc_var_info_final_name, e', statement s)
@@ -1527,7 +1575,7 @@ let rec statement ~infunction ~threats s =
 	append
 	  (Assign(jessie_return_variable,
 		  coerce ~no_int_overflow:(not threats) 
-		    e.jc_expr_label e.jc_expr_loc t e.jc_expr_type (expr e)))
+		    e.jc_expr_label e.jc_expr_loc t e.jc_expr_type e (expr e)))
 	  (Raise (jessie_return_exception, None))
     | JCSunpack(st, e, as_t) ->
 	let e = expr e in 
@@ -1543,7 +1591,7 @@ let rec statement ~infunction ~threats s =
     | JCSthrow (ei, None) -> 
 	Raise(exception_name ei,None)
     | JCStry (s, catches, finally) -> 
-	assert (finally.jc_statement_node = JCSblock []); (* TODO *)
+(* 	assert (finally.jc_statement_node = JCSblock []); (\* TODO *\) *)
 	let catch (s,excs) (ei,v_opt,st) =
 	  if ExceptionSet.mem ei excs then
 	    (Try(s, 

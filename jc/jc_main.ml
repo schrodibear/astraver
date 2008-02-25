@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.102 2008-02-14 20:50:42 nrousset Exp $ *)
+(* $Id: jc_main.ml,v 1.103 2008-02-25 07:16:51 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -59,6 +59,9 @@ let main () =
           (* phase 2: typing *)
 	  Jc_options.lprintf "Typing@.";
 	  Jc_typing.type_file ast;
+
+	  if Jc_options.debug then
+	    Format.printf "%a@." Jc_typing.print_file ();
 
 	  (* phase 3: normalization *)
 	  Jc_options.lprintf "Normalization@.";

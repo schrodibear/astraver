@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.1 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.2 2008-02-25 07:16:51 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -316,7 +316,7 @@ let reads_or_expr fmt = function
   | JCPReads el -> 
       fprintf fmt "reads %a;" (print_list comma pexpr) el
   | JCPExpr e -> 
-      fprintf fmt "=@\n%a;" pexpr e
+      fprintf fmt "=@\n%a" pexpr e
 
 let rec pdecl fmt d =
   match d.jc_pdecl_node with

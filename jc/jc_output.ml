@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.98 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.99 2008-02-25 07:16:51 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -627,6 +627,7 @@ let rec print_decls fmt d =
   match d with
     | [] -> ()
     | d::r -> print_decl fmt d; print_decls fmt r
+
 
 (*
 Local Variables: 

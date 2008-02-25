@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.183 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.184 2008-02-25 07:16:51 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2007,7 +2007,7 @@ let rec statement label_env env lz s =
  * statement_list ? *)
 and statement_list label_env env lz l : tstatement list =
   let rec block label_env env lz = function
-    | [] -> [], []
+    | [] -> [], [],VarSet.empty
     | s :: r -> 
 	match s.jc_pstatement_node with
 	  | JCPSskip -> block label_env env lz r
@@ -2026,13 +2026,22 @@ and statement_list label_env env lz l : tstatement list =
 			 print_type ty print_type te.jc_texpr_type)
 		  e
 	      in
-	      let tr,bl = block label_env ((id,vi)::env) lz r in
-	      let tr = { jc_tstatement_loc = s.jc_pstatement_loc;
-			 jc_tstatement_node = make_block tr } 
-	      in
-	      [ { jc_tstatement_loc = s.jc_pstatement_loc;
-		  jc_tstatement_node = JCTSdecl(vi, te, tr); } ], bl
-
+	      let tr,bl,vs = block label_env ((id,vi)::env) lz r in
+	      begin match te with
+		| None -> tr,bl,VarSet.add vi vs
+		| Some te ->
+		    let assign =
+		      { jc_texpr_loc = s.jc_pstatement_loc; 
+		      jc_texpr_type = unit_type; 
+		      jc_texpr_region = dummy_region; 
+		      jc_texpr_label = "";
+		      jc_texpr_node = JCTEassign_var(vi,te); }
+		    in
+		    vi.jc_var_info_assigned <- true;
+		    { jc_tstatement_loc = s.jc_pstatement_loc;
+	            jc_tstatement_node = JCTSexpr(assign); } :: tr, bl, 
+		    VarSet.add vi vs
+	      end
 	  | JCPSlabel (lab,s) ->
 	      let lab_info,lz1 = match lz with
 		| before,LabelItem lab'::after ->
@@ -2040,15 +2049,20 @@ and statement_list label_env env lz l : tstatement list =
 		    lab',(LabelItem lab'::before,after)
 		| _ -> assert false
 	      in
-	      let (bs,bl) = block (LabelName lab::label_env) env lz1 (s::r) in
+	      let (bs,bl,vs) = block (LabelName lab::label_env) env lz1 (s::r) in
 	      let bs = { jc_tstatement_node = make_block bs;
 			 jc_tstatement_loc = s.jc_pstatement_loc } 
+	      in
+	      let bs = 
+		VarSet.fold (fun vi s -> 
+		  { jc_tstatement_node = JCTSdecl(vi,None,s);
+		  jc_tstatement_loc = Loc.dummy_position }) vs bs
 	      in
 	      if lab_info.times_used = 0 then
 		begin		  
 		  (* unused label *)
 		  [{ jc_tstatement_loc = s.jc_pstatement_loc;
-		    jc_tstatement_node = JCTSlabel (lab_info,bs)}], bl
+		    jc_tstatement_node = JCTSlabel (lab_info,bs)}], bl,VarSet.empty
 		end
 	      else
 		let id = "Goto_" ^ lab in
@@ -2060,13 +2074,15 @@ and statement_list label_env env lz l : tstatement list =
 		    ei
 		in
 		[ { jc_tstatement_loc = s.jc_pstatement_loc;
-		    jc_tstatement_node = JCTSthrow(ei, None); } ], (lab,bs)::bl
+		    jc_tstatement_node = JCTSthrow(ei, None); } ], 
+	      (lab,bs)::bl, VarSet.empty
+	      
 	  | _ -> 
 	      let s,lz' = statement label_env env lz s in
-	      let r,bl = block label_env env lz' r in
-	      s :: r, bl
+	      let r,bl,vs = block label_env env lz' r in
+	      s :: r, bl,vs
   in
-  let bs,bl = block label_env env lz l in
+  let bs,bl,vs = block label_env env lz l in
   let bs = { jc_tstatement_node = make_block bs;
 	     jc_tstatement_loc = Loc.dummy_position } in
   let ts = List.fold_left 
@@ -2085,6 +2101,11 @@ and statement_list label_env env lz l : tstatement list =
        { jc_tstatement_node = sn;
 	 jc_tstatement_loc = Loc.dummy_position }
     ) bs bl
+  in
+  let ts = 
+    VarSet.fold (fun vi s -> 
+      { jc_tstatement_node = JCTSdecl(vi,None,s);
+      jc_tstatement_loc = Loc.dummy_position }) vs ts
   in [ts]
 
 (* Push labels of loops inside the loop structure, so that no program 
@@ -2787,6 +2808,120 @@ let type_file ast =
   List.iter check_struct ast;
   (* remaining declarations *)
   List.iter decl ast
+
+let print_file fmt () =
+  let functions =
+    Hashtbl.fold
+      (fun _ (finfo,_,fspec,slist) f ->
+	 Jc_output.JCfun_def
+	   (finfo.jc_fun_info_result.jc_var_info_type,finfo.jc_fun_info_name,
+	    finfo.jc_fun_info_parameters,fspec,slist)
+	 :: f
+      ) functions_table []
+  in
+  let logic_functions =
+    Hashtbl.fold
+      (fun _ (linfo,tora) f ->
+	 Jc_output.JClogic_fun_def
+	   (linfo.jc_logic_info_result_type,linfo.jc_logic_info_name,
+	    linfo.jc_logic_info_labels,
+	    linfo.jc_logic_info_parameters, tora)
+	 :: f
+      ) logic_functions_table []
+  in
+  let logic_constants =
+    Hashtbl.fold
+      (fun _ (vi,t) f ->
+	 Jc_output.JClogic_const_def
+	   (vi.jc_var_info_type, vi.jc_var_info_name, t)
+	:: f
+      ) logic_constants_table []
+  in
+  let logic_types =
+    Hashtbl.fold
+      (fun _ (s) f ->
+	Jc_output.JClogic_type_def s
+	:: f
+      ) logic_type_table []
+  in
+  let variables =
+    Hashtbl.fold
+      (fun _ (vinfo,vinit) f ->
+	 Jc_output.JCvar_def
+	   (vinfo.jc_var_info_type,vinfo.jc_var_info_name,vinit)
+	 :: f
+      ) variables_table []
+  in
+  let structs =
+    Hashtbl.fold
+      (fun name (sinfo,_) f ->
+	 let super = match sinfo.jc_struct_info_parent with
+	   | None -> None
+	   | Some st -> Some st.jc_struct_info_name
+	 in
+	 Jc_output.JCstruct_def
+	   (name,super,sinfo.jc_struct_info_fields,[])
+	 :: f
+      ) structs_table []
+  in
+  let variants =
+    Hashtbl.fold
+      (fun name vinfo f ->
+	let tags =
+	  List.map (fun sinfo -> sinfo.jc_struct_info_name)
+	    vinfo.jc_variant_info_roots
+	in
+	Jc_output.JCvariant_type_def (name,tags)
+	:: f
+      ) variants_table []
+  in
+  let enums =
+    Hashtbl.fold
+      (fun name rinfo f ->
+	 Jc_output.JCenum_type_def
+	   (name,rinfo.jc_enum_info_min,rinfo.jc_enum_info_max)
+	 :: f
+      ) enum_types_table []
+  in
+  let axioms =
+    Hashtbl.fold
+      (fun name (is_axiom,labels, a) f ->
+	 Jc_output.JClemma_def (name,is_axiom, labels,a)
+	 :: f
+      ) axioms_table []
+  in
+  let global_invariants =
+    Hashtbl.fold
+      (fun li a f ->
+	 Jc_output.JCglobinv_def (li.jc_logic_info_name,a)
+	 :: f
+      ) global_invariants_table []
+  in
+  let exceptions =
+    Hashtbl.fold
+      (fun name ei f ->
+	 Jc_output.JCexception_def (name,ei)
+	 :: f
+      ) exceptions_table []
+  in
+  (* make all structured types mutually recursive.
+     make all functions mutually recursive.
+     make all logic functions and constants mutually recursive.
+  *)
+  let tfile =
+    (List.rev enums)
+    @ (List.rev structs)
+    @ (List.rev variants)
+    @ (List.rev exceptions)
+    @ (List.rev variables)
+    @ (List.rev logic_types)
+    @ (Jc_output.JCrec_fun_defs
+      (List.rev logic_constants @ (List.rev logic_functions)))
+    :: (List.rev axioms)
+    @ (List.rev global_invariants)
+    @ [Jc_output.JCrec_fun_defs (List.rev functions)]
+  in
+  Jc_output.print_decls fmt tfile;
 
 (*
 Local Variables: 
