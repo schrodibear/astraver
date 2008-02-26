@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.187 2008-02-25 21:01:11 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.188 2008-02-26 12:04:56 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2810,21 +2810,27 @@ let check_struct d = match d.jc_pdecl_node with
 
 (* type declarations in the right order *)
 let type_file ast =
-  (* Type enumerations first *)
+  (* 1. logic types *)
+  let is_logic_type d = 
+    match d.jc_pdecl_node with JCPDlogictype _ -> true | _ -> false
+  in
+  let logic_types,ast = List.partition is_logic_type ast in
+  List.iter decl logic_types;
+  (* 2. enumerations *)
   let is_enum d = 
     match d.jc_pdecl_node with JCPDenumtype _ -> true | _ -> false
   in
   let enums,ast = List.partition is_enum ast in
   List.iter decl enums;
-  (* records and variants *)
+  (* 3. records and variants *)
   List.iter declare_struct_info ast;
   List.iter compute_struct_info_parent ast;
   while fixpoint_struct_info_roots () do () done;
   List.iter type_variant ast;
   List.iter check_struct ast;
-  (* Declare coding and logic functions *)
+  (* 4. declaring coding and logic functions *)
   List.iter declare_function ast;
-  (* remaining declarations *)
+  (* 5. remaining declarations *)
   List.iter decl ast
 
 let print_file fmt () =
