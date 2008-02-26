@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.246 2008-02-25 21:01:11 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.247 2008-02-26 08:36:17 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -330,6 +330,13 @@ let make_guarded_app ~name (k : kind) loc f l =
     match name with
       | "" -> reg_loc ~kind:k loc
       | n -> reg_loc ~id:n ~kind:k loc
+  in
+  let l = match l with
+    | [Label(namelab,e)] when name = namelab ->
+	(* YM: same label used twice. See with Claude for semantics of labels.
+	   Current patch: remove label in inner expression. *)
+	[e]
+    | _ -> l
   in
   Label (lab, make_app f l)
 
