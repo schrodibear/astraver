@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.94 2008-02-18 14:52:52 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.95 2008-02-26 17:05:24 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -596,7 +596,7 @@ let rec is_numeric_term t =
     | JCToffset _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
     | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) 
-    | JCTrange_cast (t, _, _) | JCTreal_cast (t, _, _) -> is_numeric_term t
+    | JCTrange_cast (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ | JCTmatch _ -> false (* TODO ? *)
 

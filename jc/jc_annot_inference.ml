@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.115 2008-02-25 12:24:04 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.116 2008-02-26 17:05:24 moy Exp $ *)
 
 open Pp
 open Format
@@ -335,9 +335,9 @@ let rec term_name =
 	  (term_name t) ^ "_instanceof_" ^ st.jc_struct_info_name
       | JCTcast(t,_,st) ->
 	  (term_name t) ^ "_cast_" ^ st.jc_struct_info_name
-      | JCTrange_cast(t,_,ei) ->
+      | JCTrange_cast(t,ei) ->
 	  (term_name t) ^ "_cast_" ^ ei.jc_enum_info_name
-      | JCTreal_cast(t,_,rc) ->
+      | JCTreal_cast(t,rc) ->
 	  (term_name t) ^ "_cast_" ^ 
 	    (match rc with 
 	      | Integer_to_real -> "integer_to_real"
@@ -401,7 +401,7 @@ let rec destruct_pointer t =
 	      let offt = full_term_no_loc tnode integer_type dummy_region in
 	      topt,Some offt
 	end
-    | JCTcast(t,_,_) | JCTrange_cast(t,_,_) | JCTreal_cast(t,_,_) -> 
+    | JCTcast(t,_,_) | JCTrange_cast(t,_) | JCTreal_cast(t,_) -> 
         (* Pointer arithmetic in Jessie is not related to the size of 
 	 * the underlying type, like in C. This makes it possible to commute
 	 * cast and arithmetic.
@@ -775,8 +775,8 @@ let rec switch_vis_in_term srcvi targetvi t =
     | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
     | JCTinstanceof (t, lab, si) -> JCTinstanceof (term t, lab, si)
     | JCTcast (t, lab, si) -> JCTcast (term t, lab, si)
-    | JCTrange_cast (t, lab, si) -> JCTrange_cast (term t, lab, si)
-    | JCTreal_cast (t, lab, si) -> JCTreal_cast (term t, lab, si)
+    | JCTrange_cast (t, si) -> JCTrange_cast (term t, si)
+    | JCTreal_cast (t, si) -> JCTreal_cast (term t, si)
     | JCTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
     | JCTrange (to1, to2) -> JCTrange (Option_misc.map term to1, Option_misc.map term to2)
     | JCTmatch _ -> assert false (* TODO *)

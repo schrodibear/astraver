@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.188 2008-02-26 12:04:56 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.189 2008-02-26 17:05:24 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -103,6 +103,9 @@ let is_integer t =
     | JCTnative Tinteger -> true
     | JCTenum _ -> true
     | _ -> false
+
+let integer_or_real t =
+  if is_integer t then integer_type else real_type
 
 let is_root_struct st = 
   match st.jc_struct_info_parent with None -> true | Some _ -> false
@@ -521,7 +524,7 @@ let make_logic_bin_op loc op e1 e2 =
 	  t1,e1.jc_term_region,JCTshift(e1, term_coerce t2 Tinteger e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t,dummy_region, JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
+	  integer_or_real t1,dummy_region, JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
 	                         term_coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for +"
@@ -538,7 +541,7 @@ let make_logic_bin_op loc op e1 e2 =
 	  integer_type,dummy_region, JCTsub_pointer(e1, e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t,dummy_region, JCTbinary(term_coerce t1 t e1, logic_bin_op t op, 
+	  integer_or_real t1,dummy_region, JCTbinary(term_coerce t1 t e1, logic_bin_op t op, 
 	                         term_coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for -"
@@ -546,7 +549,7 @@ let make_logic_bin_op loc op e1 e2 =
     | BPlogical_shift_right | BParith_shift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  (JCTnative t,dummy_region,
+	  (integer_or_real t1,dummy_region,
 	   JCTbinary(term_coerce t1 t e1, logic_bin_op t op,
 		      term_coerce t2 t e2))
 	else typing_error loc "numeric types expected for *, / and %%"
@@ -608,7 +611,7 @@ let rec term label_env logic_label env e =
 	    try
 	      let ri = Hashtbl.find enum_types_table t in
 	      if is_numeric te1.jc_term_type then
-		JCTenum ri,dummy_region, te1.jc_term_node
+		JCTenum ri,dummy_region, JCTrange_cast(te1,ri)
 	      else
 		typing_error e.jc_pexpr_loc "numeric type expected"
 	    with Not_found ->
@@ -1187,12 +1190,13 @@ let make_unary_op loc (op : Jc_ast.punary_op) e2 =
   match op with
     | UPprefix_inc | UPpostfix_inc | UPprefix_dec | UPpostfix_dec ->
 	begin
+	  let t = if is_pointer_type t2 then t2 else integer_or_real t2 in
 	  match e2.jc_texpr_node with
 	    | JCTEvar v ->
 		set_assigned v;
-		t2,v.jc_var_info_region,JCTEincr_local(incr_op op,v)
+		t,v.jc_var_info_region,JCTEincr_local(incr_op op,v)
 	    | JCTEderef(e,f) ->
-		t2,e2.jc_texpr_region,JCTEincr_heap(incr_op op, e, f)
+		t,e2.jc_texpr_region,JCTEincr_heap(incr_op op, e, f)
 	    | _ -> typing_error e2.jc_texpr_loc "not an lvalue"
 	end
     | UPnot -> 
@@ -1210,7 +1214,7 @@ let make_unary_op loc (op : Jc_ast.punary_op) e2 =
     | UPplus | UPminus | UPbw_not -> 
 	if is_numeric t2 then
 	  let t = lub_numeric_types t2 t2 in
-	  JCTnative t,dummy_region,JCTEunary(unary_op t op, e2)
+	  integer_or_real t2,dummy_region,JCTEunary(unary_op t op, e2)
 	else
 	  typing_error loc "numeric type expected"
 
@@ -1260,7 +1264,7 @@ let make_bin_op loc op e1 e2 =
 	  t1,e1.jc_texpr_region,JCTEshift(e1, coerce t2 Tinteger e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t,dummy_region,JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
+	  integer_or_real t1,dummy_region,JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for +"
     | BPsub ->
@@ -1276,14 +1280,14 @@ let make_bin_op loc op e1 e2 =
 	  integer_type,dummy_region,JCTEsub_pointer(e1, e2)
 	else if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t,dummy_region,JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
+	  integer_or_real t1,dummy_region,JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "unexpected types for -"
     | BPmul | BPdiv | BPmod | BPbw_and | BPbw_or | BPbw_xor 
     | BPlogical_shift_right | BParith_shift_right | BPshift_left ->
 	if is_numeric t1 && is_numeric t2 then
 	  let t = lub_numeric_types t1 t2 in
-	  JCTnative t,dummy_region,
+	  integer_or_real t1,dummy_region,
 	  JCTEbinary(coerce t1 t e1, bin_op t op, coerce t2 t e2)
 	else
 	  typing_error loc "numeric types expected for bitwaise operators"

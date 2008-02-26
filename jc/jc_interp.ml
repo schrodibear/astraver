@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.247 2008-02-26 08:36:17 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.248 2008-02-26 17:05:24 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -290,9 +290,7 @@ let equality_op_for_type = function
   | JCTpointer _
   | JCTnull ->  "eq_pointer"
 
-(*
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
-*)
 let safe_fun_enum_of_int n = "safe_" ^ n.jc_enum_info_name ^ "_of_integer_"
 let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
 let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
@@ -523,11 +521,12 @@ let rec term ~global_assertion label oldlabel t =
 	let tag = tag_table_name (JCtag ty) in
 	LApp("downcast",
 	     [lvar label tag; t';LVar (tag_name ty)]), lets
-    | JCTrange_cast(t,label,ei) -> (* TODO: use label *)
+    | JCTrange_cast(t,ri) ->
 	let t', lets = ft t in
-	let t' = term_coerce t.jc_term_loc (JCTenum ei) t.jc_term_type t' in
+	let t' = LApp(logic_enum_of_int ri,[t']) in
+(* 	let t' = term_coerce t.jc_term_loc (JCTenum ei) t.jc_term_type t' in *)
 	t', lets
-    | JCTreal_cast(t,label,rc) -> (* TODO: use label *)
+    | JCTreal_cast(t,rc) ->
 	let t', lets = ft t in
 	let t' = match rc with
 	  | Integer_to_real ->
@@ -2598,10 +2597,8 @@ let tr_enum_type ri (* to_int of_int *) acc =
   Type(n,[]) ::
     Logic(false,logic_int_of_enum ri,
 	  [("",simple_logic_type n)],why_integer_type) :: 
-(*
     Logic(false,logic_enum_of_int ri,
 	  [("",why_integer_type)],simple_logic_type n) :: 
-*)
     Param(false,fun_enum_of_int ri,of_int_type) ::
     Param(false,safe_fun_enum_of_int ri,safe_of_int_type) ::
     Param(false,fun_any_enum ri,any_type) ::

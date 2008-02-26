@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.103 2008-02-25 07:16:51 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.104 2008-02-26 17:05:24 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -55,6 +55,9 @@ let main () =
 	  (* phase 1: parsing *)
 	  Jc_options.lprintf "Parsing@.";
 	  let ast = parse_file file in
+
+	  if Jc_options.debug then
+	    Format.printf "%a@." Jc_poutput.pdecls ast;
 
           (* phase 2: typing *)
 	  Jc_options.lprintf "Typing@.";

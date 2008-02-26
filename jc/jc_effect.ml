@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.98 2008-02-20 17:21:20 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.99 2008-02-26 17:05:24 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -306,7 +306,7 @@ let rec term ef t =
 	add_memory_effect lab ef (fi,t.jc_term_region)
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTcast (t1, _, _) | JCTrange_cast(t1,_,_) | JCTreal_cast(t1,_,_) ->  term ef t1
+    | JCTcast (t1, _, _) | JCTrange_cast(t1,_) | JCTreal_cast(t1,_) ->  term ef t1
     | JCTinstanceof (_, _, _) -> assert false (* TODO *)
     | JCTat (t1, lab) -> term ef t1
     | JCTold t1 -> term ef t1

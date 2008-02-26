@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.100 2008-02-26 10:16:36 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.101 2008-02-26 17:05:24 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -148,9 +148,9 @@ let rec term fmt t =
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
     | JCTcast (t, _, si) ->
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
-    | JCTrange_cast (t, _, ei) ->
+    | JCTrange_cast (t, ei) ->
 	fprintf fmt "(%a :> %s)" term t ei.jc_enum_info_name
-    | JCTreal_cast (t, _, rc) ->
+    | JCTreal_cast (t, rc) ->
 	fprintf fmt "(%a :> %a)" term t real_conversion rc
     | JCTinstanceof (t, _, si) ->
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name

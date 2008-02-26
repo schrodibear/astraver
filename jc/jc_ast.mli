@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.119 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.120 2008-02-26 17:05:24 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -267,8 +267,8 @@ and term_node =
   | JCToffset of offset_kind * term * struct_info 
   | JCTinstanceof of term * logic_label * struct_info
   | JCTcast of term * logic_label * struct_info
-  | JCTrange_cast of term * logic_label * enum_info
-  | JCTreal_cast of term * logic_label * real_conversion
+  | JCTrange_cast of term * enum_info
+  | JCTreal_cast of term * real_conversion
   | JCTif of term * term * term
   | JCTrange of term option * term option
   | JCTmatch of term * (pattern * term) list
