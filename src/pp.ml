@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.14 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: pp.ml,v 1.15 2008-02-26 10:16:36 moy Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -53,6 +53,10 @@ let print_list_or_default default sep print fmt = function
 let print_list_par sep pr fmt l =
   print_list sep (fun fmt x -> fprintf fmt "(%a)" pr x) fmt l
 
+let print_list_delim start stop sep pr fmt = function
+  | [] -> ()
+  | l -> fprintf fmt "%a%a%a" start () (print_list sep pr) l stop ()
+
 let comma fmt () = fprintf fmt ",@ "
 let underscore fmt () = fprintf fmt "_"
 let semi fmt () = fprintf fmt ";@ "
@@ -60,6 +64,8 @@ let space fmt () = fprintf fmt " "
 let alt fmt () = fprintf fmt "|@ "
 let newline fmt () = fprintf fmt "@\n"
 let arrow fmt () = fprintf fmt "@ -> "
+let lbrace fmt () = fprintf fmt "{"
+let rbrace fmt () = fprintf fmt "}"
 let nothing fmt () = ()
 let string fmt s = fprintf fmt "%s" s
 

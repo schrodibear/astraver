@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.2 2008-02-25 07:16:51 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.3 2008-02-26 10:16:36 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -183,7 +183,7 @@ let rec pexpr fmt e =
     | JCPEapp(f,labs,args) ->
 	fprintf fmt "%s%a(@[%a@])" f
 	  (fun fmt labs -> if List.length labs = 0 then () else
-	    fprintf fmt "{%a}" (print_list comma label) labs) labs
+	    fprintf fmt "%a" (print_list_delim lbrace rbrace comma label) labs) labs
 	  (print_list comma pexpr) args 
     | JCPErange(t1,t2) -> 
 	fprintf fmt "@[[%a..%a]@]" (print_option pexpr) t1 (print_option pexpr) t2
@@ -345,7 +345,9 @@ let rec pdecl fmt d =
 	  (print_option (fun fmt e -> fprintf fmt " = %a" pexpr e)) init
     | JCPDlemma(id,is_axiom,lab,a) ->
 	fprintf fmt "@\n@[%s %s" (if is_axiom then "axiom" else "lemma") id;
-	if lab <> [] then fprintf fmt "{%a}" (print_list comma label) lab;
+	if lab <> [] then 
+	  fprintf fmt "%a" 
+	    (print_list_delim lbrace rbrace comma label) lab;
 	fprintf fmt " :@\n%a@]@." pexpr a
     | JCPDglobinv(id,a) ->
 	fprintf fmt "@\n@[invariant %s :@\n%a@]@." id pexpr a
@@ -353,13 +355,15 @@ let rec pdecl fmt d =
 	fprintf fmt "@\n@[exception %s of %a@]@." id
 	  ptype ty
     | JCPDlogic (None, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %s{%a}(@[%a@]) %a@]@." 
-	  id (print_list comma label) labels (print_list comma param) params
+	fprintf fmt "@\n@[logic %s%a(@[%a@]) %a@]@." 
+	  id (print_list_delim lbrace rbrace comma label) labels
+	  (print_list comma param) params
 	  reads_or_expr body 
     | JCPDlogic (Some ty, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %a %s{%a}(@[%a@]) %a@]@." 
+	fprintf fmt "@\n@[logic %a %s%a(@[%a@]) %a@]@." 
 	  ptype ty 
-	  id (print_list comma label) labels (print_list comma param) params
+	  id (print_list_delim lbrace rbrace comma label) labels
+	  (print_list comma param) params
 	  reads_or_expr body 
     | JCPDlogictype id ->
 	fprintf fmt "@\n@[logic type %s@]@." id

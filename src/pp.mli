@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.14 2008-02-18 11:06:36 moy Exp $ i*)
+(*i $Id: pp.mli,v 1.15 2008-02-26 10:16:36 moy Exp $ i*)
 
 open Format
 
@@ -43,6 +43,11 @@ val print_list_or_default :
 val print_list_par :
   (Format.formatter -> unit -> 'a) ->
   (Format.formatter -> 'b -> unit) -> Format.formatter -> 'b list -> unit
+val print_list_delim :
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> 'b -> unit) -> Format.formatter -> 'b list -> unit
 val space : formatter -> unit -> unit
 val alt : formatter -> unit -> unit
 val newline : formatter -> unit -> unit
@@ -50,6 +55,8 @@ val comma : formatter -> unit -> unit
 val semi : formatter -> unit -> unit
 val underscore : formatter -> unit -> unit
 val arrow : formatter -> unit -> unit
+val lbrace : formatter -> unit -> unit
+val rbrace : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
 val string : formatter -> string -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit

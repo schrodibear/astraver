@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.99 2008-02-25 07:16:51 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.100 2008-02-26 10:16:36 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -584,7 +584,8 @@ let rec print_decl fmt d =
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
     | JClemma_def(id,is_axiom,lab,a) ->
 	fprintf fmt "@\n@[%s %s" (if is_axiom then "axiom" else "lemma") id;
-	if lab <> [] then fprintf fmt "{%a}" (print_list comma label) lab;
+	if lab <> [] then
+	  fprintf fmt "%a" (print_list_delim lbrace rbrace comma label) lab;
 	fprintf fmt " :@\n%a@]@." assertion a
     | JCglobinv_def(id,a) ->
 	fprintf fmt "@\n@[invariant %s :@\n%a@]@." id assertion a
@@ -612,13 +613,15 @@ let rec print_decl fmt d =
 	  id (print_list comma param) params
 	  term_or_assertion body 
     | JClogic_fun_def (None, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %s{%a}(@[%a@]) %a@]@." 
-	  id (print_list comma label) labels (print_list comma param) params
+	fprintf fmt "@\n@[logic %s%a(@[%a@]) %a@]@." 
+	  id (print_list_delim lbrace rbrace comma label) labels
+	  (print_list comma param) params
 	  term_or_assertion body 
     | JClogic_fun_def (Some ty, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %a %s{%a}(@[%a@]) %a@]@." 
+	fprintf fmt "@\n@[logic %a %s%a(@[%a@]) %a@]@." 
 	  print_type ty 
-	  id (print_list comma label) labels (print_list comma param) params
+	  id (print_list_delim lbrace rbrace comma label) labels
+	  (print_list comma param) params
 	  term_or_assertion body 
     | JClogic_type_def id ->
 	fprintf fmt "@\n@[logic type %s@]@." id
