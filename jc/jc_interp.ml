@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.250 2008-02-27 14:07:57 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.251 2008-02-27 17:42:04 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -334,6 +334,9 @@ let make_guarded_app ~name (k : kind) loc f l =
 	(* YM: same label used twice. See with Claude for semantics of labels.
 	   Current patch: remove label in inner expression. *)
 	[e]
+    | [App(f,Label(namelab,e))] when name = namelab ->
+	(* Occurs on test [band.c] in FramaC *)
+	[App(f,e)]
     | _ -> l
   in
   Label (lab, make_app f l)
