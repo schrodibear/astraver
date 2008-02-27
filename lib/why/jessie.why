@@ -71,6 +71,10 @@ axiom eq_pointer_bool_def :
 axiom sub_pointer_self :
   forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
 
+axiom sub_pointer_zero :
+  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
+    sub_pointer(p,q) = 0 -> p = q
+
 axiom sub_pointer_shift_left :
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(shift(p,i),q)].

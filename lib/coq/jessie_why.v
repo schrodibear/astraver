@@ -103,7 +103,7 @@ Defined.
 exact (fun A1 t p => -snd p).
 Defined.
 
-(*Why predicate*) Definition valid (A517:Set) (a:(alloc_table A517)) (p:(pointer A517))
+(*Why predicate*) Definition valid (A521:Set) (a:(alloc_table A521)) (p:(pointer A521))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 
 (*Why logic*) Definition shift :
@@ -219,6 +219,12 @@ Admitted.
 
 (*Why axiom*) Lemma sub_pointer_self :
   forall (A1:Set), (forall (p:(pointer A1)), (sub_pointer p p) = 0).
+Admitted.
+
+(*Why axiom*) Lemma sub_pointer_zero :
+  forall (A1:Set),
+  (forall (p:(pointer A1)),
+   (forall (q:(pointer A1)), ((sub_pointer p q) = 0 -> p = q))).
 Admitted.
 
 (*Why axiom*) Lemma sub_pointer_shift_left :
@@ -673,8 +679,8 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition not_assigns (A561:Set) (A560:Set) (a:(alloc_table A560)) (m1:(memory A560 A561)) (m2:(memory A560 A561)) (l:(pset A560))
-  := (forall (p:(pointer A560)),
+(*Why predicate*) Definition not_assigns (A566:Set) (A565:Set) (a:(alloc_table A565)) (m1:(memory A565 A566)) (m2:(memory A565 A566)) (l:(pset A565))
+  := (forall (p:(pointer A565)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 
 
@@ -759,7 +765,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A576:Set) (a:(tag_table A576)) (p:(pointer A576)) (t:(tag_id A576))
+(*Why predicate*) Definition instanceof (A581:Set) (a:(tag_table A581)) (p:(pointer A581)) (t:(tag_id A581))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -787,8 +793,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A581:Set) (t:(tag_id A581))
-  := (parenttag t (@bottom_tag A581)).
+(*Why predicate*) Definition root_tag (A586:Set) (t:(tag_id A586))
+  := (parenttag t (@bottom_tag A586)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -800,7 +806,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A583:Set) (tag_table:(tag_table A583)) (mutable:(memory A583 (tag_id A583))) (this:(pointer A583))
+(*Why predicate*) Definition fully_packed (A588:Set) (tag_table:(tag_table A588)) (mutable:(memory A588 (tag_id A588))) (this:(pointer A588))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
