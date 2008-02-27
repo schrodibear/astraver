@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.119 2008-02-25 21:01:11 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.120 2008-02-27 11:53:10 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -319,7 +319,12 @@ let tr_logic_label = function
   | LabelPre -> Jc_env.LabelPre
   | LabelHere -> Jc_env.LabelHere
   | LabelOld -> Jc_env.LabelOld
-  | LabelName s -> Jc_env.LabelName s
+  | LabelName s -> 
+      Jc_env.LabelName { 
+	label_info_name = s; 
+	label_info_final_name = s;
+	times_used = 0;
+      }
 
 let create_logic_fun loc fi =
   let nfi =
@@ -1292,8 +1297,18 @@ let rec statement s =
   let s' =
     match s.java_statement_node with
       | JSskip -> JCTSblock []
-      | JSbreak None -> JCTSbreak { label_info_name = ""; times_used = 0 }
-      | JSbreak (Some l) -> JCTSbreak { label_info_name = l ; times_used = 0 }
+      | JSbreak None -> 
+	  JCTSbreak { 
+	    label_info_name = ""; 
+	    label_info_final_name = ""; 
+	    times_used = 0;
+	  }
+      | JSbreak (Some l) -> 
+	  JCTSbreak {
+	    label_info_name = l;
+	    label_info_final_name = l;
+	    times_used = 0;
+	  }
       | JSreturn_void -> JCTSreturn_void
       | JSreturn e -> 
 	  JCTSreturn (tr_type e.java_expr_loc e.java_expr_type,expr e)

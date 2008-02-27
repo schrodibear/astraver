@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.3 2008-02-26 10:16:36 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.4 2008-02-27 11:52:57 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -107,7 +107,7 @@ let real_conversion fmt rc =
 
 let label fmt l =
   match l with
-    | LabelName s -> fprintf fmt "%s" s
+    | LabelName s -> fprintf fmt "%s" s.label_info_name
     | LabelHere -> fprintf fmt "Here" 
     | LabelPre -> fprintf fmt "Pre" 
     | LabelOld -> fprintf fmt "Old" 

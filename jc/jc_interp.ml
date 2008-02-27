@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.248 2008-02-26 17:05:24 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.249 2008-02-27 11:52:57 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -433,7 +433,7 @@ let lvar ?(assigned=true) ?(label_in_name=false) label v =
 	| LabelOld -> LVarAtLabel(v,"")
 	| LabelPre -> LVarAtLabel(v,"init")
 	| LabelPost -> LVar v
-	| LabelName l -> LVarAtLabel(v,l)
+	| LabelName l -> LVarAtLabel(v,l.label_info_final_name)
     else LVar v
 
 let var v = Var v
@@ -1510,7 +1510,7 @@ let rec statement ~infunction ~threats s =
 (*	if !Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCSblock l -> statement_list ~infunction ~threats l
     | JCSlabel(lab,s) ->
-	Label(lab.label_info_name, statement s)
+	Label(lab.label_info_final_name, statement s)
     | JCSif (e, s1, s2) -> 
 	let e = expr e in
 	If(e, statement s1, statement s2)

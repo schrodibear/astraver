@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.95 2008-02-26 17:05:24 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.96 2008-02-27 11:52:57 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -50,7 +50,7 @@ let label_var lab name =
     | LabelInit -> name ^ "_at_Init"
 *)
     | LabelPost -> name ^ "_at_Post"
-    | LabelName l -> name ^ "_at_" ^ l
+    | LabelName l -> name ^ "_at_" ^ l.label_info_final_name
 
 let root_name st =
   st.jc_struct_info_root.jc_struct_info_name

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.20 2008-02-18 14:52:52 bardou Exp $ *)
+(* $Id: jc_envset.ml,v 1.21 2008-02-27 11:52:57 moy Exp $ *)
 
 open Jc_env
 
@@ -58,7 +58,7 @@ let () =
       "if"; "in"; "int"; "invariant"; "label"; "let"; "logic"; "not";
       "of"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
       "reads"; "real"; "rec"; "ref"; "result"; "returns"; "then"; "true"; "try";
-      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes" ;
+      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes"; "init";
       (* jessie generated names *)
       (* "global" ; "alloc"  *)
     ]

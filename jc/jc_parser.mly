@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.87 2008-02-06 16:50:44 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.88 2008-02-27 11:52:57 moy Exp $ */
 
 %{
 
@@ -65,7 +65,12 @@
     | "Pre" -> LabelPre
     | "Old" -> LabelOld
     | "Here" -> LabelHere
-    | _ -> LabelName s
+    | _ -> 
+	LabelName { 
+	  label_info_name = s; 
+	  label_info_final_name = s;
+	  times_used = 0;
+	}
 
 %}
 

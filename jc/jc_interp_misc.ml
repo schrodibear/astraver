@@ -145,7 +145,7 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 		    | LabelPost -> name
 		    | LabelPre -> name ^ "@init"
 		    | LabelOld -> name ^ "@"
-		    | LabelName l -> name ^ "@" ^ l
+		    | LabelName l -> name ^ "@" ^ l.label_info_final_name
 	      in
 	      (name, field_memory_type fi)::acc)
 	   labs acc)

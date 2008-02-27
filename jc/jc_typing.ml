@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.189 2008-02-26 17:05:24 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.190 2008-02-27 11:52:57 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1664,7 +1664,11 @@ let build_label_tree s : label_tree list =
 	    (acc, fwdacc)
 	    psl
       | JCPSlabel (lab, s) ->
-	  let info = { label_info_name = lab; times_used = 0 } in
+	  let info = { 
+	    label_info_name = lab; 
+	    label_info_final_name = Jc_envset.get_unique_name lab;
+	    times_used = 0 
+	  } in
 	  let l,fwdl = build_bwd s (acc,fwdacc) in
 	  (LabelItem info) :: l, (LabelItem info) :: fwdl
       | JCPSblock sl ->
@@ -1807,7 +1811,12 @@ let rec statement label_env env lz s =
 	  if info.times_used = 0 then
 	    begin
 	      (* unused label *)
-	      let ts,lz2 = statement (LabelName lab::label_env) env lz1 s in
+	      let labinfo = LabelName { 
+		label_info_name = lab; 
+		label_info_final_name = lab; 
+		times_used = 0;
+	      } in
+	      let ts,lz2 = statement (labinfo::label_env) env lz1 s in
 	      ts.jc_tstatement_node, lz2
 	    end
 	  else
@@ -1822,7 +1831,12 @@ let rec statement label_env env lz s =
 	    JCTSthrow(ei, None), lz1
       | JCPScontinue _ -> assert false
       | JCPSbreak l -> (* TODO: check l exists, check enclosing loop exists, *)
-	  let li = { label_info_name = l ; times_used = 0 } in
+	  let li = 
+	    if l = "" then 
+	      { label_info_name = l ; label_info_final_name = l; times_used = 0 }
+	    else 
+	      assert false (* TODO *)
+	  in
 	  JCTSbreak li, lz 
       | JCPSreturn None ->
 	  JCTSreturn_void, lz
@@ -2054,7 +2068,12 @@ and statement_list label_env env lz l : tstatement list =
 		    lab',(LabelItem lab'::before,after)
 		| _ -> assert false
 	      in
-	      let (bs,bl,vs) = block (LabelName lab::label_env) env lz1 (s::r) in
+	      let labinfo = LabelName { 
+		label_info_name = lab; 
+		label_info_final_name = lab; 
+		times_used = 0;
+	      } in
+	      let (bs,bl,vs) = block (labinfo::label_env) env lz1 (s::r) in
 	      let bs = { jc_tstatement_node = make_block bs;
 			 jc_tstatement_loc = s.jc_pstatement_loc } 
 	      in
