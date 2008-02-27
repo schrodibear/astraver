@@ -268,8 +268,8 @@ JCCMI_EXPORT = $(JCCML_EXPORT:.ml=.cmi) \
 	jc/jc_ast.cmi jc/jc_env.cmi jc/jc_fenv.cmi
 
 JCCMO = @ATPCMO@ $(JCCMO_EXPORT) \
-	jc/jc_output.cmo jc/jc_typing.cmo jc/jc_norm.cmo \
-	jc/jc_name.cmo jc/jc_options.cmo \
+	jc/jc_output.cmo jc/jc_typing.cmo jc/jc_options.cmo jc/jc_norm.cmo \
+	jc/jc_name.cmo \
 	jc/numconst.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_separation.cmo \

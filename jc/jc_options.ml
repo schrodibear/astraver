@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.23 2008-02-16 21:53:30 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.24 2008-02-27 14:07:57 nrousset Exp $ i*)
 
 open Format
 open Jc_env
@@ -70,6 +70,7 @@ let user_annot_only = ref false
 let print_graph = ref false
 let why_opt = ref ""
 
+let verify_invariants_only = ref false
 let verify = ref []
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
@@ -143,6 +144,8 @@ let _ =
 	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
 	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
 *)
+	"-invariants-only", Arg.Set verify_invariants_only, 
+	  "verify invariants only (Arguments policy)";
 	"-verify", Arg.String (function s -> verify := s::!verify), 
 	  "verify only these functions";
       ]
@@ -165,6 +168,7 @@ let separation_sem = separation_sem
 let trust_ai = !trust_ai
 let fast_ai = !fast_ai
 
+let verify_invariants_only = !verify_invariants_only
 let verify = !verify
 let interprocedural = !interprocedural
 let main = !main

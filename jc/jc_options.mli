@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.22 2008-02-16 21:53:30 nrousset Exp $ *)
+(* $Id: jc_options.mli,v 1.23 2008-02-27 14:07:57 nrousset Exp $ *)
 
 (*s environment variables *)
 
@@ -44,6 +44,7 @@ val verbose : bool
 val werror : bool
 val why_opt : string
 
+val verify_invariants_only : bool
 val verify : string list
 
 val interprocedural : bool

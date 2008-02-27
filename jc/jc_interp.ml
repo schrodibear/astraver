@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.249 2008-02-27 11:52:57 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.250 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1303,8 +1303,8 @@ let rec statement ~infunction ~threats s =
 	  *)
 	  let loc = s.jc_statement_loc in
 	  let arg_types_assert = 
-	    List.fold_left2 (fun acc vi e -> make_and (type_assert vi e) acc) 
-	      LTrue f.jc_fun_info_parameters l 
+	      List.fold_left2 (fun acc vi e -> make_and (type_assert vi e) acc) 
+		LTrue f.jc_fun_info_parameters l 
 	  in
 	  let el =
 	    try match f.jc_fun_info_parameters with
@@ -1457,7 +1457,7 @@ let rec statement ~infunction ~threats s =
 	      f.jc_fun_info_final_name el 
 	  in
 	  let call = 
-	    if arg_types_assert = LTrue then call else
+	    if arg_types_assert = LTrue || not threats then call else
 	      Assert (arg_types_assert, call) 
 	  in
 	    begin
@@ -2410,6 +2410,7 @@ let tr_fun f loc spec body acc =
 	      in
 	      let acc = 
 		if is_purely_exceptional_fun spec then acc else
+		  if Jc_options.verify_invariants_only then acc else
 		  Def(
 		    newid,
 		    Fun(

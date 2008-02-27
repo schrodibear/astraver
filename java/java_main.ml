@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.53 2008-02-25 21:01:11 nrousset Exp $ *)
+(* $Id: java_main.ml,v 1.54 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -182,8 +182,8 @@ let main () =
 	       Java_interp.tr_invariants ci id invs acc)
 	    Java_typing.invariants_table acc0
 	in
-	let decls = decls_fun @ acc0 @ decls_structs @ acc @ decls_range
-	  (* (Jc_output.JCrec_struct_defs (acc @ acc0) :: decls_range) *)
+	let decls = decls_fun @ decls_structs @
+	  (Jc_output.JCrec_struct_defs (acc @ acc0) :: decls_range)
 	in
 	let decls = decls @ non_null_preds in
 	  

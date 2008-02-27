@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.99 2008-02-26 17:05:24 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.100 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -470,7 +470,7 @@ let rec statement ef s =
 	    jc_writes = through_param efcall.jc_writes;
 	} in
 	let ef = fef_union efcall (List.fold_left expr ef le) in
-	statement ef s
+	  statement ef s
     | JCSassign_heap (e1, fi, e2) ->
 	let ef = expr (expr (add_field_alloc_writes LabelHere ef (fi,e1.jc_expr_region)) e1) e2 in
 	begin match (skip_shifts e1).jc_expr_node with

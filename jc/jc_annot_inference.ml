@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.116 2008-02-26 17:05:24 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.117 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -2470,6 +2470,7 @@ and intern_ai_statement iaio abs curinvs s =
 	(* BAD: ai_statement abs curinvs fs *)
 	begin match fs.jc_statement_node with 
 	  | JCSblock [] -> ()
+	  | JCSblock [s] when s.jc_statement_node = JCSblock [] -> ()
 	  | _ -> assert false (* TODO: apply finally stmt to all paths. *)
 	end
     | JCSloop (la, ls) ->
@@ -2556,6 +2557,17 @@ and intern_ai_statement iaio abs curinvs s =
 	      true_assertion
 	      fs.jc_fun_behavior
 	  in
+	  let normal_behavior =
+	    match iaio with
+	      | None -> normal_behavior
+	      | Some iai -> 
+		  let inferred_post =
+		    try
+		      Hashtbl.find iai.jc_interai_function_postconditions fi.jc_fun_info_tag
+		    with Not_found -> Abstract1.top mgr (Abstract1.env pre)
+		  in
+		    make_and [normal_behavior; (mkinvariant mgr inferred_post)]
+	  in
 	  let normal_behavior = 
 	    match vio with
 		| None -> normal_behavior
@@ -2570,6 +2582,7 @@ and intern_ai_statement iaio abs curinvs s =
 		    in
 		      make_and [normal_behavior; cstrs];
 	  in
+	    (* replace formal by actual parameters in [fi] post *)
 	  let normal_behavior =
 	    List.fold_left2 
 	      (fun a e vi -> 
@@ -2624,15 +2637,6 @@ and intern_ai_statement iaio abs curinvs s =
 		in
 		  Abstract1.forget_array_with mgr pre (Array.of_list vars_writes) false;
 		  test_assertion mgr pre normal_behavior;
-		(match iaio with
-		   | None -> ()
-		   | Some iai ->
-		       let inferred_post =
-			 try
-			   Hashtbl.find iai.jc_interai_function_postconditions fi.jc_fun_info_tag
-			with Not_found -> Abstract1.top mgr (Abstract1.env pre)
-		       in
-			 meet mgr pre inferred_post);
 		ai_statement iaio abs curinvs s;
 		(* To keep information on variable [vi], declaration should be turned
 		 * into assignment before analysis.
@@ -2767,7 +2771,8 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
       List.iter (ai_statement iaio abs invs) sl;
       (match iaio with
 	 | None -> List.iter (record_ai_invariants abs) sl 
-	 | Some iai -> Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
+	 | Some iai -> fi.jc_fun_info_name; 
+	     Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
       List.iter 
 	(fun target -> 
 	   if Jc_options.verbose then
@@ -4104,9 +4109,9 @@ let rec record_ai_inter_annotations mgr iai fi loc fs sl =
 	 in
 	   match slo with
 	     | None -> ()
-	     | Some _ ->
+	     | Some b ->
 		 if not (List.mem fi.jc_fun_info_tag !inspected_functions) then
-		   record_ai_inter_annotations mgr iai fi loc fs sl)
+		   record_ai_inter_annotations mgr iai fi loc fs b)
 	  fi.jc_fun_info_calls
 	  
 	  

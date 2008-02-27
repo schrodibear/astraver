@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.103 2008-02-25 12:24:04 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.104 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1059,7 +1059,7 @@ and type_type package_env type_env non_null ty =
 
 and get_field_prototypes package_env type_env ci acc d =
   match d with
-    | JPFvariable vd -> 
+    | JPFvariable vd | JPFghost_variable vd -> 
 	(*
 	  vd.variable_modifiers : modifiers ;
 	  vd.variable_type : type_expr ;
@@ -1221,7 +1221,7 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	  current_type (mis, cis) env rem 
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
     | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
-    | (JPFmodel_variable _ | JPFvariable _) :: rem -> 
+    | (JPFmodel_variable _ | JPFvariable _ | JPFghost_variable _) :: rem -> 
 	get_method_prototypes package_env type_env 
 	  current_type (mis,cis) env rem 
 

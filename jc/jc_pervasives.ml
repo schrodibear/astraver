@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.97 2008-02-27 12:54:37 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.98 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Format
 open Jc_env
@@ -419,10 +419,10 @@ let term_num t = match t.jc_term_node with
 (* Comparison based only on term structure, not types not locations. *)
 let rec raw_term_compare t1 t2 =
   match t1.jc_term_node, t2.jc_term_node with
-  | JCTconst c1,JCTconst c2 -> 
-      Pervasives.compare c1 c2
-  | JCTvar v1,JCTvar v2 -> 
-      Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
+    | JCTconst c1,JCTconst c2 -> 
+	Pervasives.compare c1 c2
+    | JCTvar v1,JCTvar v2 -> 
+	Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
   | JCTbinary(t11,op1,t12),JCTbinary(t21,op2,t22) -> 
       let compop = Pervasives.compare op1 op2 in
       if compop = 0 then 

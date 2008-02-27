@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.190 2008-02-27 11:52:57 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.191 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2337,8 +2337,14 @@ let clause env vi_result c acc =
 *)
 	let assigns = 
 	  Option_misc.map 
-	    (fun (loc,l) -> 
-	      (loc,List.map (fun a -> let _,_,tl = location [LabelOld] (Some LabelHere) env a in tl) l)) 
+	    (fun (loc, l) -> 
+	      (loc, List.map 
+		 (fun a -> let _,_,tl = location [LabelOld] (Some LabelHere) env a in 
+		    (match tl with
+		      | JCLvar vi -> vi.jc_var_info_assigned <- true
+		      | _ -> ());
+		    tl) 
+		 l)) 
 	    assigns 
 	in
 	let b = {

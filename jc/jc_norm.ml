@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.83 2008-02-25 07:16:51 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.84 2008-02-27 14:07:57 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -979,11 +979,17 @@ let code_function (fi, fs, sl) vil =
 		     if s = "safety" then safety_exists := true;
 		     b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; post])
 		  fs.jc_fun_behavior;
-		(* add the 'safety' spec if it does not exist (e.g. from Krakatoa) *)
-		if not !safety_exists then 
-		  let safety_b = { default_behavior with jc_behavior_ensures = post } in
-		    fs.jc_fun_behavior <- 
-		      (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
+		(* add the 'safety' spec if it does not exist 
+		   (it could exist e.g. from Krakatoa) *)
+		if not !safety_exists then
+		  if Jc_options.verify_invariants_only then
+		    let invariants_b = { default_behavior with jc_behavior_ensures = post } in
+		      fs.jc_fun_behavior <- 
+			(Loc.dummy_position, "invariants", invariants_b) :: fs.jc_fun_behavior;
+		  else
+		    let safety_b = { default_behavior with jc_behavior_ensures = post } in
+		      fs.jc_fun_behavior <- 
+			(Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
       | _ -> ()
   end;
     (* normalization of the function body *)

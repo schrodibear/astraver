@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.36 2008-02-25 12:24:04 nrousset Exp $
+$Id: java_parser.mly,v 1.37 2008-02-27 14:07:57 nrousset Exp $
 
 */
 
@@ -989,6 +989,8 @@ ident:
 kml_type_decl:
 | PREDICATE ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
     { JPTlogic_def($2,None,$3,$4,$6) }
+| PREDICATE ident label_binders method_parameters SEMICOLON EOF
+    { JPTlogic_reads ($2, None, $3, $4, []) }
 | LOGIC type_expr ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
     { JPTlogic_def($3,Some $2,$4, $5,$7) }
 | LOGIC type_expr ident label_binders method_parameters READS expr_comma_list SEMICOLON EOF
@@ -1017,7 +1019,9 @@ kml_field_decl:
 | STATIC INVARIANT ident COLON expr SEMICOLON EOF
     { JPFstatic_invariant($3,$5) } 
 | MODEL variable_declaration
-    { JPFmodel_variable($2) }
+    { JPFmodel_variable $2 }
+| GHOST variable_declaration
+    { JPFghost_variable $2 }
 ;
 
 kml_modifier:
