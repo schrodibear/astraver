@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.96 2008-02-27 11:52:57 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.97 2008-02-27 12:54:37 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -352,7 +352,8 @@ let rec term_of_expr e =
 (*    | JCEmatch (e, pel) ->
 	let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in
 	JCTmatch (term_of_expr e, ptl)*)
-    | JCErange_cast _ | JCEreal_cast _ -> assert false
+    | JCErange_cast (e, ri) -> JCTrange_cast (term_of_expr e, ri)
+    | JCEreal_cast (e, rc) -> JCTreal_cast (term_of_expr e, rc)
     | JCEalloc _ -> assert false
     | JCEfree _ -> assert false
   in
