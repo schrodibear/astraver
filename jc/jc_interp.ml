@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.252 2008-02-28 12:42:04 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.253 2008-02-28 13:05:49 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -296,11 +296,15 @@ let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
 let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
 let fun_any_enum n = "any_" ^ n.jc_enum_info_name
 
-let term_coerce loc tdest tsrc e =
+let term_coerce ?(cast=false) loc tdest tsrc e =
   match tdest, tsrc with
     | JCTnative t, JCTnative u when t=u -> e
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
+    | JCTenum ri1, JCTenum ri2 ->
+	assert cast; (* Typing should have inserted an explicit cast *)
+	let e' = LApp(logic_int_of_enum ri2,[e]) in
+	LApp(logic_enum_of_int ri1,[e'])
     | JCTnative Tinteger, JCTenum ri ->
 	let e' = LApp(logic_int_of_enum ri,[e]) in
 	  begin
@@ -309,8 +313,8 @@ let term_coerce loc tdest tsrc e =
 	      | _ -> e'
 	  end
     | JCTenum ri, JCTnative Tinteger ->
-	assert false (* a explicit cast should be required by jc_typing *)
-	(* LApp(logic_enum_of_int ri,[e]) *)
+	assert cast; (* Typing should have inserted an explicit cast *)
+	LApp(logic_enum_of_int ri,[e])
     | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
     | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
 	when Jc_typing.substruct st2 st1 -> e
@@ -534,8 +538,7 @@ let rec term ~global_assertion label oldlabel t =
 	     [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTrange_cast(t,ri) ->
 	let t', lets = ft t in
-	let t' = LApp(logic_enum_of_int ri,[t']) in
-(* 	let t' = term_coerce t.jc_term_loc (JCTenum ei) t.jc_term_type t' in *)
+ 	let t' = term_coerce ~cast:true t.jc_term_loc (JCTenum ri) t.jc_term_type t' in
 	t', lets
     | JCTreal_cast(t,rc) ->
 	let t', lets = ft t in
