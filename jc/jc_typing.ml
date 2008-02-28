@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.192 2008-02-27 18:37:20 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.193 2008-02-28 17:18:44 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2197,7 +2197,7 @@ let rec location_set label_env logic_label env e =
 	let ti = term label_env logic_label env i in
 	begin
 	  match ty,ti.jc_term_type with 
-	    | JCTpointer(st,_,_), JCTnative Tinteger ->
+	    | JCTpointer(st,_,_), t2 when is_integer t2 ->
 		begin match ti.jc_term_node with
 		  | JCTrange(t1,t2) -> ty,tr,JCLSrange(te,t1,t2)
 		  | _ -> ty,tr,JCLSrange(te,Some ti,Some ti)
