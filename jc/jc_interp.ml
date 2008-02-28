@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.251 2008-02-27 17:42:04 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.252 2008-02-28 12:42:04 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -500,8 +500,16 @@ let rec term ~global_assertion label oldlabel t =
 	     arg'::args, arglets@lets)
 	  l ([], [])
 	in
+	let args' = List.map2 (fun x y -> x, y) l args in
+	let args =
+	  (List.map2 
+	    (fun vi (t, t') -> 
+	      term_coerce t.jc_term_loc 
+		vi.jc_var_info_type t.jc_term_type t')
+	    f.jc_logic_info_parameters args')
+	in
 	make_logic_fun_call ~label_in_name:global_assertion f args
-	  app.jc_app_region_assoc app.jc_app_label_assoc, []
+	  app.jc_app_region_assoc app.jc_app_label_assoc, lets
     | JCTold(t) -> term ~global_assertion oldlabel oldlabel t
     | JCTat(t,lab) -> term ~global_assertion lab oldlabel t
     | JCToffset(k,t,st) -> 
