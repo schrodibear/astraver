@@ -27,6 +27,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_norm.mli,v 1.16 2008-03-02 20:53:24 nrousset Exp $ *)
+
 open Jc_env
 open Jc_fenv
 open Jc_ast
@@ -38,7 +40,7 @@ val variables_table :
   (int, var_info * expr option) Hashtbl.t
 
 val code_function : fun_info * fun_spec * tstatement list option 
-  -> var_info list -> fun_spec * statement list option
+  -> var_info list -> fun_info * fun_spec * statement list option
 
 val static_variable : Jc_env.var_info * Jc_ast.texpr option -> var_info * Jc_ast.expr option
 

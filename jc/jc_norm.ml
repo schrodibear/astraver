@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.84 2008-02-27 14:07:57 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.85 2008-03-02 20:53:24 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -992,12 +992,39 @@ let code_function (fi, fs, sl) vil =
 			(Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
       | _ -> ()
   end;
-    (* normalization of the function body *)
+
+  (* normalization of the function body *)
   let bs = Option_misc.map (make_tblock Loc.dummy_position) sl in
-(*   begin match bs with None -> ()  *)
-(*     | Some bs -> Format.printf "%a@." Jc_output.statement bs  *)
-(*   end; *)
-  (fs, Option_misc.map (fun bs -> [statement bs]) bs)
+  let bs = Option_misc.map (fun bs -> statement bs) bs in
+
+
+  (* rename formals assigned in the body *)
+(*  let bs =
+    Option_misc.map
+      (fun sl ->
+	 let params, sl =
+	   List.fold_right
+	     (fun vi (acc, sl) ->
+		if vi.jc_var_info_assigned then
+		  let new_n = "mutable_" ^ vi.jc_var_info_name in
+		  let copy_vi = var ~unique:false ~formal:true vi.jc_var_info_type vi.jc_var_info_name in
+		  let loc = Loc.dummy_position in
+		  let e = make_var loc copy_vi in
+		    vi.jc_var_info_final_name <- new_n;
+		    vi.jc_var_info_formal <- false;
+		    vi.jc_var_info_region <- Region.make_var vi.jc_var_info_type new_n;
+		    copy_vi :: acc, make_decl loc vi (Some e) sl
+		else 
+		  vi :: acc, sl)
+	     fi.jc_fun_info_parameters ([], sl)
+	 in 
+	   fi.jc_fun_info_parameters <- params; sl) bs
+  in*)
+	
+    (*   begin match bs with None -> ()  *)
+    (*     | Some bs -> Format.printf "%a@." Jc_output.statement bs  *)
+    (*   end; *)
+    (fi, fs, Option_misc.map (fun bs -> [bs]) bs)
     
 let static_variable (vi, eo) =
   match eo with

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.253 2008-02-28 13:05:49 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.254 2008-03-02 20:53:24 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2347,7 +2347,7 @@ let tr_fun f loc spec body acc =
 	    in
 	    let params = params @ write_mems @ read_mems in
 	      (* rename formals just before body is treated *)
-	    let list_of_refs =
+	     let list_of_refs =
 	      List.fold_right
 		(fun id bl ->
 		   if id.jc_var_info_assigned

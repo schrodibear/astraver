@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.104 2008-02-26 17:05:24 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.105 2008-03-02 20:53:24 nrousset Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -78,7 +78,7 @@ let main () =
 	  in
 	  Hashtbl.iter
 	    (fun tag (f,loc,s,b) -> 
-	       let (s,b) = Jc_norm.code_function (f, s, b) vil in
+	       let (f, s, b) = Jc_norm.code_function (f, s, b) vil in
 	       Hashtbl.add Jc_norm.functions_table tag (f, loc, s, b))
 	    Jc_typing.functions_table;
 

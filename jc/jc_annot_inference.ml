@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.117 2008-02-27 14:07:57 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.118 2008-03-02 20:53:24 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -619,7 +619,7 @@ let rec asrt_of_expr e =
 	end
     | JCEbinary (e1, bop, e2) ->
 	if is_relation_binary_op bop then
-	  match term_of_expr e1,term_of_expr e2 with
+	  match term_of_expr e1, term_of_expr e2 with
 	    | Some t1, Some t2 -> JCArelation (t1, bop, t2)
 	    | _ -> JCAtrue
 	else if is_logical_binary_op bop then
@@ -641,9 +641,9 @@ let rec asrt_of_expr e =
 	  | Some t1 -> JCAinstanceof(t1,LabelHere,st)
 	  | None -> JCAtrue 
 	end
-    | JCEif(e1,e2,e3) -> 
+    | JCEif (e1, e2, e3) -> 
 	begin match term_of_expr e1 with
-	  | Some t1 -> JCAif(t1,asrt_of_expr e2,asrt_of_expr e3)
+	  | Some t1 -> JCAif (t1, asrt_of_expr e2, asrt_of_expr e3)
 	  | None -> JCAtrue 
 	end
     | JCEderef _ -> 
@@ -1363,7 +1363,7 @@ let rec linstr_of_assertion env a =
     | JCArelation (t1, bop, t2) ->
 	let subt = term_no_loc (JCTbinary (t1, Bsub_int, t2)) integer_type in
 	  begin match linstr_of_term env subt with
-	    | Some (env,str,cst) ->
+	    | Some (env, str, cst) ->
 		let cstr = string_of_int (- cst) in
 		  (* Do not use < and > with APRON. Convert to equivalent non-strict. *)
 		let str = match bop with
@@ -1882,7 +1882,7 @@ let rec test_assertion mgr pre a =
 let test_expr ~(neg:bool) mgr pre e =
   let a = asrt_of_expr e in
   let a = if neg then not_asrt a else a in
-  test_assertion mgr pre a
+    test_assertion mgr pre a
 
 (* Assigns expression [e] to abstract variable [va] in abstract value [pre]. *)
 let assign_variable mgr pre va e =
@@ -2055,23 +2055,26 @@ let join_invariants mgr invs1 invs2 =
     printf "@[<v 2>[join]@\n%a@\nand@\n%a@]@." 
       print_abstract_invariants invs1 print_abstract_invariants invs2;
   let join_exclists postexcl1 postexcl2 =
-    let join1 = List.fold_right (fun (ei,post1) acc ->
-      try
-	let post2 = List.assoc ei postexcl2 in
-	join_abstract_value mgr post1 post2;
-	(ei, post1) :: acc
-      with Not_found -> (ei,post1) :: acc
-    ) postexcl1 []
+    let join1 = 
+      List.fold_right 
+	(fun (ei, post1) acc ->
+	   try
+	     let post2 = List.assoc ei postexcl2 in
+	       join_abstract_value mgr post1 post2;
+	       (ei, post1) :: acc
+	   with Not_found -> (ei, post1) :: acc
+	) postexcl1 []
     in
-    List.fold_right (fun (ei,post2) acc ->
-      if List.mem_assoc ei join1 then acc 
-      else (ei, post2) :: acc
-    ) postexcl2 join1
+      List.fold_right 
+	(fun (ei, post2) acc ->
+	   if List.mem_assoc ei join1 then acc 
+	   else (ei, post2) :: acc
+	) postexcl2 join1
   in
-  assert (invs1.jc_absinv_return == invs2.jc_absinv_return);
-  join_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
-  invs1.jc_absinv_exceptional <-
-    join_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
+    assert (invs1.jc_absinv_return == invs2.jc_absinv_return);
+    join_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
+    invs1.jc_absinv_exceptional <-
+      join_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
 
 (* Returns the widened value as there is no destructive version of [widening]
  * in [Abstract1]. *)
@@ -2255,34 +2258,34 @@ let ai_inter_function_call mgr iai abs pre fi el =
     List.fold_left2
       (fun (acc) vi e ->
 	 let t = term_var_no_loc vi in
-	 let acc = if Vai.has_variable t then 
-	   (Vai.variable t)::acc else acc in
+	 let acc = if Vai.has_variable t then
+	   let va = Vai.variable t in
+	     assign_variable mgr pre va e;
+	     va :: acc else acc in
 	 let acc = if Vai.has_offset_min_variable t then
-	   (Vai.offset_min_variable t)::acc else acc in
+	   let va = Vai.offset_min_variable t in
+	     assign_offset_variable mgr pre va Offset_min_kind e;
+	       va :: acc else acc in
 	 let acc = if Vai.has_offset_max_variable t then
-	   (Vai.offset_max_variable t)::acc else acc in
-           assign_expr mgr pre t e; acc)
+	   let va = Vai.offset_max_variable t in
+	     assign_offset_variable mgr pre va Offset_max_kind e;
+	     va :: acc else acc in
+           acc)
       [] fi.jc_fun_info_parameters el
   in
+  let formal_vars = List.filter (fun v -> not (Environment.mem_var (Abstract1.env pre) v)) formal_vars in
   let formal_vars = Array.of_list formal_vars in
-  let env = try Environment.make formal_vars [||] with _ -> assert false in
-  let pre = 
-    if Jc_options.fast_ai then
-      try 
-	Abstract1.change_environment mgr pre env false 
-      with _ -> assert false
-    else
-      keep_extern mgr fi pre
-  in
-  let function_preconditions = iai.jc_interai_function_preconditions in
+  let env = try Environment.add (Abstract1.env pre) formal_vars [||] with _ -> assert false in
+  let pre = keep_extern mgr fi pre in
+  let pre = try Abstract1.change_environment mgr pre env false with _ -> assert false in
   let function_pre = 
-    try Hashtbl.find function_preconditions fi.jc_fun_info_tag 
+    try Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag 
     with Not_found -> Abstract1.bottom mgr (Abstract1.env pre) 
   in
     begin
       let old_pre = Abstract1.copy mgr function_pre in
-      let function_pre = 
-	if fi.jc_fun_info_is_recursive then 
+      let function_pre, fixpoint_reached = 
+	if fi.jc_fun_info_is_recursive then
 	  let num = 
 	    try Hashtbl.find iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag
 	    with Not_found -> 0
@@ -2295,33 +2298,34 @@ let ai_inter_function_call mgr iai abs pre fi el =
 		if num = 0 then 
 		  Hashtbl.replace iai.jc_interai_function_init_pre 
 		    fi.jc_fun_info_tag function_pre;
-		function_pre
+		function_pre, false
 	      end
 	    else
 	      begin
 		let copy_pre = Abstract1.copy mgr pre in
-		let function_pre = widening mgr function_pre pre in
-		    if is_eq mgr old_pre function_pre then
-		      begin
-			let init_pre = 
-			  Hashtbl.find iai.jc_interai_function_init_pre fi.jc_fun_info_tag in
-			  join mgr copy_pre init_pre;
-			  copy_pre
-		      end
-		    else
-		      function_pre
+		let function_pre = widening mgr function_pre copy_pre in
+		  if is_eq mgr old_pre function_pre then
+		    begin
+		      let init_pre = 
+			Hashtbl.find iai.jc_interai_function_init_pre fi.jc_fun_info_tag in
+			join mgr function_pre init_pre;			  
+			(* Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre;*)
+			function_pre, true
+		    end
+		  else
+		      function_pre, false
 	      end
 	else
 	  begin
 	    join mgr function_pre pre;
-	    function_pre;
+	    function_pre, false;
 	  end
       in
 	if not (is_eq mgr old_pre function_pre) then
 	  begin
 	    annotation_inferred := true;
 	    Hashtbl.replace iai.jc_interai_function_pre_has_changed fi.jc_fun_info_tag true;
-	    Hashtbl.replace function_preconditions fi.jc_fun_info_tag function_pre;
+	    Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre;
 	  end;
     end
       
@@ -2387,7 +2391,7 @@ and intern_ai_statement iaio abs curinvs s =
 	   into assignment before analysis. *)
         forget_invariants mgr curinvs (Vai.all_variables (term_var_no_loc vi))
     | JCSassign_var (vi, e) ->
-	assign_expr mgr pre (term_var_no_loc vi) e
+	assign_expr mgr pre (term_var_no_loc vi) e; (* TODO : le probleme est la (l est supprimé de l'env)*)
     | JCSassign_heap (e1, fi, e2) ->
 	assign_heap mgr pre e1.jc_expr_region fi;
 	begin match term_of_expr e1 with
@@ -2406,14 +2410,14 @@ and intern_ai_statement iaio abs curinvs s =
 	  List.iter (test_assertion mgr prop) asrts;
 	  let copyinvs = copy_invariants mgr curinvs in
 	    (* Treat "then" branch. *)
-	    test_expr ~neg:false mgr pre e;
+	      test_expr ~neg:false mgr pre e;
 	    ai_statement iaio abs curinvs ts;
 	    (* Treat "else" branch. *)
 	    let copy_pre = copyinvs.jc_absinv_normal.jc_absval_regular in
 	      test_expr ~neg:true mgr copy_pre e;
 	      ai_statement iaio abs copyinvs fs;
 	      (* Join both branches. *)
-	      join_invariants mgr curinvs copyinvs
+	      join_invariants mgr curinvs copyinvs;
     | JCSreturn_void ->
 	join_abstract_value mgr !postret normal;
 	empty_abstract_value mgr normal
@@ -2440,7 +2444,7 @@ and intern_ai_statement iaio abs curinvs s =
 	let copy_normal = copy_abstract_value mgr normal in
 	let postexcl = (ei, copy_normal) :: (List.remove_assoc ei postexcl) in
 	  curinvs.jc_absinv_exceptional <- postexcl;
-	  empty_abstract_value mgr normal
+	  empty_abstract_value mgr normal;
     | JCSpack _ | JCSunpack _ ->
 	()
     | JCStry(s,hl,fs) ->
@@ -2464,7 +2468,7 @@ and intern_ai_statement iaio abs curinvs s =
 		jc_absinv_return = postret;
 	      } in
 	      ai_statement iaio abs excinvs s;
-	      join_invariants mgr curinvs excinvs
+		join_invariants mgr curinvs excinvs;
 	    with Not_found -> ()
 	  ) hl;
 	(* BAD: ai_statement abs curinvs fs *)
@@ -2537,7 +2541,10 @@ and intern_ai_statement iaio abs curinvs s =
     | JCScall (vio, call, s) ->
 	let fi = call.jc_call_fun in
 	let el = call.jc_call_args in
-	  if Jc_options.interprocedural then
+	let _, _, fs, slo = 
+          Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
+        in
+	  if Jc_options.interprocedural && slo <> None then
 	    begin match iaio with
 	      | None -> () (* intraprocedural analysis only *)
 	      | Some iai -> 
@@ -2545,9 +2552,6 @@ and intern_ai_statement iaio abs curinvs s =
 		    ai_inter_function_call mgr iai abs copy_pre fi el;
 	    end;
 	  (* add postcondition of [fi] to pre *)
-	  let _, _, fs, _ = 
-            Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
-          in
 	  let normal_behavior =
 	    List.fold_left
 	      (fun acc (_, _, b) ->
@@ -2724,7 +2728,7 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
     in
     
     let env = Environment.add env (Array.of_list params) [||] in
-    
+      
     let abs = { 
       jc_absint_manager = mgr;
       jc_absint_function_environment = env;
@@ -2736,7 +2740,7 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
       jc_absint_loop_entry_invs = Hashtbl.create 0;
       jc_absint_target_assertions = targets;
     } in
-    
+      
     (* Add parameters specs to the function (free) precondition *)
     let cstrs =
       List.fold_left
@@ -2744,73 +2748,71 @@ let ai_function mgr iaio targets (fi, loc, fs, sl) =
 	   vi.jc_var_info_type (term_var_no_loc vi) :: acc) 
 	[] fi.jc_fun_info_parameters
     in
-    fs.jc_fun_free_requires <- 
-      make_and (fs.jc_fun_requires :: fs.jc_fun_free_requires :: cstrs);
-
-    (* Take the function precondition as init pre *)
-    let initpre = top_abstract_value mgr env in
-    test_assertion mgr initpre.jc_absval_regular fs.jc_fun_free_requires;
-
-    (* Add the currently inferred pre for [fi] in pre *)
-    (match iaio with
-      | None -> ()
-      | Some iai ->
-	  let inferred_pre =
-	    try Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag 
-	    with Not_found -> Abstract1.top mgr env (* for main function *) in
-	  meet mgr initpre.jc_absval_regular inferred_pre);
-
-    pointer_terms_table := Hashtbl.create 0;
-
-    (* Annotation inference on the function body. *)
-    let invs = {
-      jc_absinv_normal = initpre;
-      jc_absinv_exceptional = [];
-      jc_absinv_return = ref (bottom_abstract_value mgr env);
-    } in
-      List.iter (ai_statement iaio abs invs) sl;
-      (match iaio with
-	 | None -> List.iter (record_ai_invariants abs) sl 
-	 | Some iai -> fi.jc_fun_info_name; 
-	     Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
-      List.iter 
-	(fun target -> 
-	   if Jc_options.verbose then
-	     printf 
-	       "%a@[<v 2>Inferring assert invariant@\n%a@]@."
-	       Loc.report_position target.jc_target_location
-	       Jc_output.assertion target.jc_target_regular_invariant 
-	) targets;
+      fs.jc_fun_free_requires <- 
+	make_and (fs.jc_fun_requires :: fs.jc_fun_free_requires :: cstrs);
       
-    (* Require isolation of parameters written through. *)
-(*     let write_params =  *)
-(*       fi.jc_fun_info_effects.jc_writes.jc_effect_through_params *)
-(*     in *)
-(*     let read_params =  *)
-(*       fi.jc_fun_info_effects.jc_reads.jc_effect_through_params *)
-(*     in *)
-(*     let read_params = VarSet.diff read_params write_params in *)
-(*     let write_params = VarSet.fold (fun v acc -> v::acc) write_params [] in *)
-(*     let read_params = VarSet.fold (fun v acc -> v::acc) read_params [] in *)
-(*     let rec write_sep_pred acc = function *)
-(*       | v::r -> *)
-(* 	  List.fold_left (fun acc v2 -> *)
-(* 	    raw_asrt(JCAapp( *)
-(* 	      full_separated,[term_var_no_loc v;term_var_no_loc v2])) *)
-(* 	    :: acc *)
-(* 	  ) acc (r @ read_params) *)
-(*       | [] -> acc *)
-(*     in *)
-(*     let sep_preds = write_sep_pred [] write_params in *)
-(*     fs.jc_fun_requires <- make_and(fs.jc_fun_requires :: sep_preds); *)
-    
-      (* Update the return postcondition for procedure with no last return. *)
-      if return_type = JCTnative Tunit then
-	join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
-      (* record the inferred postcondition *)
-      match iaio with 
-	| None -> ()
-	| Some iai ->
+      let initpre = top_abstract_value mgr env in
+	test_assertion mgr initpre.jc_absval_regular fs.jc_fun_free_requires;
+	(match iaio with
+	   | None -> ()
+	   | Some iai -> (* Take the currently inferred pre for [fi] if any *)
+	       try
+		 let inferred_pre = 
+		   Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag
+		 in
+		   initpre.jc_absval_regular <- Abstract1.copy mgr inferred_pre
+	       with Not_found -> ());
+	pointer_terms_table := Hashtbl.create 0;
+
+	(* Annotation inference on the function body. *)
+	let invs = {
+	  jc_absinv_normal = initpre;
+	  jc_absinv_exceptional = [];
+	  jc_absinv_return = ref (bottom_abstract_value mgr env);
+	} in
+	  List.iter (ai_statement iaio abs invs) sl;
+	  (match iaio with
+	     | None -> List.iter (record_ai_invariants abs) sl 
+	     | Some iai -> 
+		 Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
+	  List.iter 
+	    (fun target -> 
+	       if Jc_options.verbose then
+		 printf 
+		   "%a@[<v 2>Inferring assert invariant@\n%a@]@."
+		   Loc.report_position target.jc_target_location
+		   Jc_output.assertion target.jc_target_regular_invariant 
+	    ) targets;
+	  
+	  (* Require isolation of parameters written through. *)
+	  (*     let write_params =  *)
+	  (*       fi.jc_fun_info_effects.jc_writes.jc_effect_through_params *)
+	  (*     in *)
+	  (*     let read_params =  *)
+	  (*       fi.jc_fun_info_effects.jc_reads.jc_effect_through_params *)
+	  (*     in *)
+	  (*     let read_params = VarSet.diff read_params write_params in *)
+	  (*     let write_params = VarSet.fold (fun v acc -> v::acc) write_params [] in *)
+	  (*     let read_params = VarSet.fold (fun v acc -> v::acc) read_params [] in *)
+	  (*     let rec write_sep_pred acc = function *)
+	  (*       | v::r -> *)
+	  (* 	  List.fold_left (fun acc v2 -> *)
+	  (* 	    raw_asrt(JCAapp( *)
+	  (* 	      full_separated,[term_var_no_loc v;term_var_no_loc v2])) *)
+	  (* 	    :: acc *)
+	  (* 	  ) acc (r @ read_params) *)
+	  (*       | [] -> acc *)
+	  (*     in *)
+	  (*     let sep_preds = write_sep_pred [] write_params in *)
+	  (*     fs.jc_fun_requires <- make_and(fs.jc_fun_requires :: sep_preds); *)
+	  
+	  (* Update the return postcondition for procedure with no last return. *)
+	  if return_type = JCTnative Tunit then
+	    join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
+	  (* record the inferred postcondition *)
+	  match iaio with 
+	    | None -> ()
+	    | Some iai ->
 	    let old_post = 
 	      try
 		Hashtbl.find iai.jc_interai_function_postconditions fi.jc_fun_info_tag
@@ -4119,7 +4121,7 @@ let rec ai_entrypoint_fix mgr iai (fi, loc, fs, sl) =
   incr nb_iterations;
   printf "iteration %d@." !nb_iterations;
   ai_entrypoint mgr iai (fi, loc, fs, sl);
-  if not Jc_options.fast_ai && !annotation_inferred then
+  if (not Jc_options.fast_ai) && !annotation_inferred then
     begin
       annotation_inferred := false;
       inspected_functions := [];
