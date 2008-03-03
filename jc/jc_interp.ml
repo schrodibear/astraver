@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.256 2008-03-03 09:08:35 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.257 2008-03-03 14:30:07 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1170,7 +1170,7 @@ and expr ~infunction ~threats e : expr =
 	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
 	let roots = embedded_struct_roots st in
 	let roots = List.map find_tag_or_variant roots in
-	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in
+ 	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in
 *)
 	let fields = all_memories ~select:fully_allocated (JCtag st) in
 	let fields = List.map (fun fi -> (fi, e.jc_expr_region)) fields in

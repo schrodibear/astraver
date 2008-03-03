@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.194 2008-03-03 11:22:25 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.195 2008-03-03 14:30:07 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2420,6 +2420,14 @@ let global_invariants_table = Hashtbl.create 17
   in
   root, struct_info*)
 
+let add_vardecl (ty,id) =
+  let ty = type_type ty in
+  let vi = var ~static:true ty id in
+  Hashtbl.add variables_env id vi
+
+let get_vardecl id =
+  Hashtbl.find variables_env id
+
 let add_fundecl (ty,loc,id,pl) =
   try
     let fi = Hashtbl.find functions_env id in
@@ -2554,11 +2562,9 @@ let default_label l =
 let rec decl d =
   match d.jc_pdecl_node with
     | JCPDvar (ty, id, init) ->
-	let ty = type_type ty in
-	let vi = var ~static:true ty id in
 	let e = Option_misc.map (expr []) init in
-	  Hashtbl.add variables_env id vi;
-	  Hashtbl.add variables_table vi.jc_var_info_tag (vi, e);
+	let vi = get_vardecl id in
+	Hashtbl.add variables_table vi.jc_var_info_tag (vi, e)
     | JCPDfun (ty, id, pl, specs, body) -> 
 	let loc = id.jc_identifier_loc in
 	let param_env, fi = get_fundecl id.jc_identifier_name in
@@ -2766,6 +2772,11 @@ let declare_function d = match d.jc_pdecl_node with
       ignore (add_logic_fundecl (ty,id,labels,pl))
   | _ -> ()
 
+let declare_variable d = match d.jc_pdecl_node with
+  | JCPDvar(ty,id,_init) ->
+      add_vardecl (ty,id)
+  | _ -> ()
+
 let compute_struct_info_parent d = match d.jc_pdecl_node with
   | JCPDtag(id, Some parent, _, _) ->
       let si, _ = Hashtbl.find structs_table id in
@@ -2853,9 +2864,11 @@ let type_file ast =
   while fixpoint_struct_info_roots () do () done;
   List.iter type_variant ast;
   List.iter check_struct ast;
-  (* 4. declaring coding and logic functions *)
+  (* 4. declaring global variables *)
+  List.iter declare_variable ast;
+  (* 5. declaring coding and logic functions *)
   List.iter declare_function ast;
-  (* 5. remaining declarations *)
+  (* 6. remaining declarations *)
   List.iter decl ast
 
 let print_file fmt () =
