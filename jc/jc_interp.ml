@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.254 2008-03-02 20:53:24 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.255 2008-03-03 07:37:42 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2051,12 +2051,12 @@ let tr_fun f loc spec body acc =
 		   b.jc_behavior_ensures.jc_assertion_label
 		   Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
 		 *)
-		 (named_assertion ~global_assertion:false LabelPost LabelPre 
+		 (named_assertion ~global_assertion:false LabelPost LabelOld 
 		    b.jc_behavior_ensures)		
 	     | Some (locassigns, a) ->
 		 named_jc_assertion loc
 		   (make_and
-		      (named_assertion ~global_assertion:false LabelPost LabelPre 
+		      (named_assertion ~global_assertion:false LabelPost LabelOld
 			 b.jc_behavior_ensures)		
 		      (named_jc_assertion
 			 locassigns

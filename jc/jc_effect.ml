@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.100 2008-02-27 14:07:57 nrousset Exp $ *)
+(* $Id: jc_effect.ml,v 1.101 2008-03-03 07:37:42 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -303,7 +303,8 @@ let rec term ef t =
 	in
 	ef_union efapp (List.fold_left term ef tls)
     | JCTderef (t, lab, fi) ->
-	add_memory_effect lab ef (fi,t.jc_term_region)
+	let ef = add_memory_effect lab ef (fi,t.jc_term_region) in
+	term ef t
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
     | JCTcast (t1, _, _) | JCTrange_cast(t1,_) | JCTreal_cast(t1,_) ->  term ef t1

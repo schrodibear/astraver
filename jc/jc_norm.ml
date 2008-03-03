@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.85 2008-03-02 20:53:24 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.86 2008-03-03 07:37:42 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -352,7 +352,18 @@ let rec expr e =
 	let e1,e2 = match e1.jc_expr_node with
 	  | JCEshift(e3,e4) -> 
 	      let adde = JCEbinary(e4,Badd_int,e2) in
-	      e3, { e4 with jc_expr_node = adde; }
+	      let adde = { e4 with 
+		jc_expr_node = adde; jc_expr_type = integer_type;
+	      } in
+	      let adde = match e4.jc_expr_type with
+		| JCTnative Tinteger -> adde
+		| JCTenum ri ->
+		    let caste = JCErange_cast(adde,ri) in
+		    { e4 with jc_expr_node = caste; }
+		| JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull -> 
+		    assert false
+	      in
+	      e3, adde
 	  | _ -> e1,e2
 	in
 	(l1@l2, tl1@tl2), JCEshift (e1, e2)
