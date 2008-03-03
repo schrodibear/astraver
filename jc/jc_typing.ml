@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.193 2008-02-28 17:18:44 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.194 2008-03-03 11:22:25 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2437,6 +2437,13 @@ let add_fundecl (ty,loc,id,pl) =
       Hashtbl.replace functions_env id fi;
       param_env, fi
 
+let get_fundecl id =
+  let fi = Hashtbl.find functions_env id in
+  let param_env =
+    List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
+  in
+  param_env, fi
+
 let add_logic_fundecl (ty,id,labels,pl) =
   try
     let pi = Hashtbl.find logic_functions_env id in
@@ -2554,9 +2561,7 @@ let rec decl d =
 	  Hashtbl.add variables_table vi.jc_var_info_tag (vi, e);
     | JCPDfun (ty, id, pl, specs, body) -> 
 	let loc = id.jc_identifier_loc in
-	let param_env, fi = 
-	  add_fundecl (ty, loc, id.jc_identifier_name, pl) 
-	in
+	let param_env, fi = get_fundecl id.jc_identifier_name in
 	let vi = fi.jc_fun_info_result in
 	let s = List.fold_right 
 		  (clause param_env vi) specs 
