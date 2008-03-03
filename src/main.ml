@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.148 2008-02-22 16:56:45 marche Exp $ i*)
+(*i $Id: main.ml,v 1.149 2008-03-03 16:37:03 stoulsn Exp $ i*)
 
 open Options
 open Ptree
@@ -121,6 +121,20 @@ let push_decl vloc d =
 let push_obligations vloc = 
   List.iter 
     (fun (loc,expl,id,s) -> 
+      let (loc,expl,id,s) = 
+	if pruning_hyp_v != -1 then 
+	  Hypotheses_filtering.reduce (loc, expl, id, s) declarationQueue
+	else
+	  (loc, expl, id, s)
+      in
+      push_decl vloc (Dgoal(loc, expl, id, generalize_sequent s))
+    ) 
+
+
+(* 
+let push_obligations vloc =  
+  List.iter  
+    (fun (loc,expl,id,s) -> 
        let dg = Dgoal (loc, expl, id, generalize_sequent s) in
        let dg = 
 	 if pruning_hyp_v != -1 then 
@@ -128,7 +142,10 @@ let push_obligations vloc =
 	 else
 	   dg 
        in
-       push_decl vloc dg) 
+	     push_decl vloc dg
+    ) 
+  *)
+
 
 let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 
@@ -399,7 +416,7 @@ let interp_decl ?(prelude=false) d =
 	let p = Ltyping.predicate lab env p in
 	let p = generalize_predicate p in
 	push_decl ("","",Loc.dummy_floc) (Daxiom (Loc.extract loc, Ident.string id, p))
-    | Goal (loc, id, p) ->
+(*    | Goal (loc, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
@@ -424,13 +441,13 @@ let interp_decl ?(prelude=false) d =
 		| Rc.RCstring s -> s
 		| _ -> raise Not_found		  
 	    in
-(*
+( *
 	    let beh = 
 	      match List.assoc "behavior" o with
 		| Rc.RCstring s -> s
 		| _ -> raise Not_found		  
 	    in
-*)
+* )
 	    (name,"Validity",(f,l,b,e))
 	  with Not_found -> ("goal "^ids,"Validity", Loc.extract loc)
 	in
@@ -438,7 +455,57 @@ let interp_decl ?(prelude=false) d =
 	if Options.pruning_hyp_v != -1 then
 	  push_decl ("","",Loc.dummy_floc) (Hypotheses_filtering.reduce dg declarationQueue)
 	else	  
-	  push_decl ("","",Loc.dummy_floc) dg
+	  push_decl ("","",Loc.dummy_floc) dg*)
+
+
+    | Goal (loc, id, p) ->
+	let env = Env.empty_logic () in
+	let p = Ltyping.predicate lab env p in
+	let s = ([], p) in
+	let l = Loc.extract loc in
+	let xpl =
+	  { lemma_or_fun_name = Ident.string id;
+	    behavior = "";
+	    vc_loc = l;
+	    vc_kind = EKLemma;
+	  }
+	in
+	let (l,xpl,id,s) = 
+	  if Options.pruning_hyp_v != -1 then
+	    (Hypotheses_filtering.reduce (l, xpl, Ident.string id, s) declarationQueue)
+	  else	  
+	    (l, xpl, Ident.string id, s) 
+	in
+	let s= generalize_sequent s in 
+	let dg = 
+	  Dgoal (l, xpl, id, s) 
+	in
+	let ids = id in
+	let vloc =
+	  try 
+	    let (f,l,b,e,o) = Hashtbl.find locs_table ids in 
+	    let name = 
+	      match List.assoc "name" o with
+		| Rc.RCident s -> s
+		| Rc.RCstring s -> s
+		| _ -> raise Not_found		  
+	    in
+	    (name,"Validity",(f,l,b,e))
+	  with Not_found -> ("goal "^ids,"Validity", Loc.extract loc)
+	in
+	Hashtbl.add program_locs ids vloc;
+	push_decl ("","",Loc.dummy_floc) dg
+
+
+
+
+
+
+
+
+
+
+
     | TypeDecl (loc, ext, vl, id) ->
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in

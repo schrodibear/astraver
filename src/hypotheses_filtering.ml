@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.28 2008-02-15 14:44:49 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.29 2008-03-03 16:37:03 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1062,13 +1062,13 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   let rec filter = function  
     | [] -> []
     | Svar (id, v) :: q -> 
-	if 
+	(*if 
 	  ( member_of (Ident.string id)  concl_rep ||
 	      member_of (Ident.string id) avoided_vars) 
-	then
+	then*)
 	  Svar (id, v) ::filter q 
-	else
-	  filter q
+	(*else
+	  filter q*)
     | Spred (t,p) :: q -> 
 	let vars =  	  
 	  try Hashtbl.find hash_hyp_vars p
@@ -1097,7 +1097,7 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 
 let managesGoal id ax (hyps,concl) =
   match ax with 
-      Dgoal(loc,expl,id,_) -> 
+(*      Dgoal*) (loc,expl,id,_) -> 
 	(** retrieves the list of variables in the conclusion **)
 	let v = free_vars_of concl in 
 	let v = VarStringSet.diff v avoided_vars in 
@@ -1120,8 +1120,8 @@ let managesGoal id ax (hyps,concl) =
 	    let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
 	    DotVG.output_graph oc !vg     
 	  end;
-	Dgoal (loc,expl,id, Env.empty_scheme (l',concl))	  
-    | _ -> ax 
+	(*Dgoal*)(loc,expl,id, (*Env.empty_scheme*) (l',concl))	  
+    | _ -> (*ax*) assert false
 
 
 
@@ -1141,7 +1141,7 @@ let reduce q decl=
   
 
   (** manages goal **)
-  let q' =   match q with
+(*  let q' =   match q with
       Dgoal (loc, expl, id, s)  as ax ->
         let (l,g) = s.Env.scheme_type in
         let (l',g') = Util.intros [] g my_fresh_hyp in 
@@ -1156,5 +1156,22 @@ let reduce q decl=
 
 
     | _ -> failwith "goal awaited" in
-  q' 
+  q' *)
     
+  (** manages goal **)
+  let q' =   match q with
+       (loc, expl, id, s)  as ax ->
+        let (l,g) = s in
+        let (l',g') = Util.intros [] g my_fresh_hyp in 
+	let l' = List.append l l' in 
+	
+	let (l',g') = reduce_subst (l',g')  in 
+	(** memorize hypotheses as a graph of variables**) 
+	build_var_graph (l',g');
+  
+	(** focus on goal **)
+	managesGoal id ax (l',g');
+
+
+    | _ -> failwith "goal awaited" in
+  q' 
