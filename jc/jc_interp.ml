@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.255 2008-03-03 07:37:42 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.256 2008-03-03 09:08:35 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -716,7 +716,7 @@ logic functions
 
 let tr_logic_const vi init acc =
   let decl =
-    Logic (false, vi.jc_var_info_name, [], tr_base_type vi.jc_var_info_type) :: acc
+    Logic (false, vi.jc_var_info_final_name, [], tr_base_type vi.jc_var_info_type) :: acc
   in
     match init with
       | None -> decl
@@ -727,12 +727,12 @@ let tr_logic_const vi init acc =
 	  let pred =
 	    LPred (
 	      "eq",
-	      [term_coerce Loc.dummy_position vi_ty t_ty (LVar vi.jc_var_info_name); 
+	      [term_coerce Loc.dummy_position vi_ty t_ty (LVar vi.jc_var_info_final_name); 
 	       term_coerce t.jc_term_loc vi_ty t_ty t'])
 	  in
 	let ax =
 	  Axiom(
-	    vi.jc_var_info_name ^ "_value_axiom",
+	    vi.jc_var_info_final_name ^ "_value_axiom",
 	    make_pred_binds lets pred
 	  )
 	in
@@ -2625,10 +2625,10 @@ let tr_enum_type ri (* to_int of_int *) acc =
 let tr_variable vi e acc =
   if vi.jc_var_info_assigned then
     let t = Ref_type(tr_type vi.jc_var_info_type) in
-      Param(false,vi.jc_var_info_name,t)::acc
+      Param(false,vi.jc_var_info_final_name,t)::acc
   else
     let t = tr_base_type vi.jc_var_info_type in
-      Logic(false,vi.jc_var_info_name,[],t)::acc
+      Logic(false,vi.jc_var_info_final_name,[],t)::acc
 
 let tr_region r acc =
   Type(r.jc_reg_final_name,[]) :: acc
