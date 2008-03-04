@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.27 2008-02-18 16:46:10 nrousset Exp $ i*)
+(*i $Id: output.ml,v 1.28 2008-03-04 14:14:33 moy Exp $ i*)
 
 open Lexing
 open Format
@@ -705,20 +705,16 @@ let fprintf_why_decl form d =
 	  fprintf_assertion p
     | Def(id,e) ->
 	fprintf form "@[<hv 1>let %s =@ %a@]@.@." id fprintf_expr e
-    | Predicate (b, id, [], p) -> assert false
-    | Predicate (b, id, a::args, p) ->
-	fprintf form "@[<hv 1>%spredicate %s(%a"
+    | Predicate (b, id, args, p) ->
+	fprintf form "@[<hv 1>%spredicate %s(%a) =@ %a@]@.@."
 	  (if b then "external " else "") id 
-	  fprint_logic_arg a;
-	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
-	fprintf form ") =@ %a@]@.@." fprintf_assertion p
-    | Function(b,id,[],t,e) -> assert false 
-    | Function(b,id,a::args,t,e) ->
-	fprintf form "@[<hv 1>%sfunction %s(%a"
+	  (print_list comma fprint_logic_arg) args
+	  fprintf_assertion p
+    | Function(b,id,args,t,e) ->
+	fprintf form "@[<hv 1>%sfunction %s(%a) : %a =@ %a@]@.@."
 	  (if b then "external " else "") id 
-	  fprint_logic_arg a;
-	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
-	fprintf form ") : %a =@ %a@]@.@." fprintf_logic_type t 
+	  (print_list comma fprint_logic_arg) args
+	  fprintf_logic_type t 
 	  fprintf_term e
     | Type (id, []) ->
 	fprintf form "@[type %s@]@.@." id
