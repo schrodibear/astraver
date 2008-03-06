@@ -936,6 +936,10 @@ export/$(NAME).tar.gz:
 	cd $(EXPORT); rm -f $(GENERATED)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
 
+tarball-for-framac: 
+	make tarball
+	cp export/$(NAME).tar.gz export/why-for-framac.tar.gz
+
 tarball: 
 	cd export; rm -rf $(NAME) $(NAME).tar.gz
 	make export/$(NAME).tar.gz
