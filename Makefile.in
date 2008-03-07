@@ -561,26 +561,8 @@ coq-v8: $(VO8)
 
 include Version
 
-src/version.ml: Version Makefile
-	echo "let coqversion = \""@COQVER@"\"" > $@
-	echo "let version = \""$(VERSION)"\"" >> $@
-	echo "let date = \""`date`"\"" >> $@
-	echo "let libdir = \""$(LIBDIR)/why"\"" >> $@
-
-jc/jc_version.ml: Version Makefile
-	echo "let version = \""$(JCVERSION)"\"" > $@
-	echo "let date = \""`date`"\"" >> $@
-	echo "let libdir = \""$(LIBDIR)/jessie"\"" >> $@
-
-java/java_version.ml: Version Makefile
-	echo "let version = \""$(KVERSION)"\"" > $@
-	echo "let date = \""`date`"\"" >> $@
-	echo "let libdir = \""$(LIBDIR)/krakatoa"\"" >> $@
-
-c/cversion.ml: Version Makefile
-	echo "let version = \""$(CVERSION)"\"" > $@
-	echo "let date = \""`date`"\"" >> $@
-	echo "let libdir = \""$(LIBDIR)/caduceus"\"" >> $@
+src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version Makefile
+	LIBDIR=$(LIBDIR) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why

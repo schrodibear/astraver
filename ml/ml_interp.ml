@@ -764,7 +764,12 @@ let structure_item env = function
 	axs.as_arguments
       in
       let body = quantify_list Forall args body in
-      [ JClemma_def(axs.as_name, true, [LabelName "L"], body) ], env
+      let li = {
+	label_info_name = "L";
+	label_info_final_name = "L";
+	times_used = 0;
+      } in
+      [ JClemma_def(axs.as_name, true, [LabelName li], body) ], env
   | x -> not_implemented Ml_ocaml.Location.none "ml_interp.ml.structure_item"
 
 let rec structure env = function

@@ -7,6 +7,21 @@ let targets = [
   "caduceus", "c/cmain";
 ]
 
+(* List of scripts that generate files, their dependencies,
+and the files they generate. *)
+let generating_scripts = [
+  "version.sh",
+  [ "Version" ],
+  [ "src/version.ml";
+    "jc/jc_version.ml";
+    "java/java_version.ml";
+    "c/cversion.ml" ];
+  "jc_ai.sh",
+  [ "jc/jc_annot_inference.ml";
+    "jc/jc_annot_fail.ml" ],
+  [ "jc/jc_ai.ml" ];
+]
+
 (* Some directories "see" some other directories *)
 let contexts = [
   "src", ["tools"];
@@ -49,6 +64,12 @@ let targets =
   in
   targets_byte @ targets_native
 
+let execute_script x =
+  Seq[
+    Cmd(Sh("chmod u+x "^x));
+    Cmd(Sh("./"^x));
+  ]
+
 let _ = dispatch begin function
   | Before_hygiene ->
       (* Declare contexts *)
@@ -58,6 +79,8 @@ let _ = dispatch begin function
       (* Use findlib *)
       Options.ocamlc := ocamlfind & A "ocamlc";
       Options.ocamlopt := ocamlfind & A "ocamlopt";
+      Options.ocamldep := ocamlfind & A "ocamldep";
+      Options.ocamldoc := ocamlfind & A "ocamldoc";
 
   | After_rules ->
       (* Rules for our targets *)
@@ -67,8 +90,21 @@ let _ = dispatch begin function
 	     ~insert:`top
 	     ~dep:dep
 	     ~prod:target
-	     (fun env _build -> cp dep target))
+	     (fun _ _ -> Seq [
+		cp dep target;
+		cp target ("../bin/"^target);
+	      ]))
 	targets;
+
+      (* Rules for scripts that generate files *)
+      List.iter
+	(fun (script, deps, files) ->
+	   rule (script^" -> "^String.concat ", " files)
+	     ~insert:`top
+	     ~deps:(script::deps)
+	     ~prods:files
+	     (fun _ _ -> execute_script script))
+	generating_scripts;
 
       (* Use the -linkpkg option when linking *)
       flag ["ocaml"; "link"] (A "-linkpkg")

@@ -1,10 +1,20 @@
 # This Makefile compiles the Why platform using Ocamlbuild.
 
+OCAMLBUILD1=ocamlbuild
+
 ifeq ($(EMACS), yes)
-  OCAMLBUILD=ocamlbuild -build-dir bin -classic-display
+  OCAMLBUILD2=$(OCAMLBUILD1) -classic-display
 else
-  OCAMLBUILD=ocamlbuild -build-dir bin
+  OCAMLBUILD2=$(OCAMLBUILD1)
 endif
+
+ifeq ($(VERBOSE), yes)
+  OCAMLBUILD3=$(OCAMLBUILD2) -verbose 10
+else
+  OCAMLBUILD3=$(OCAMLBUILD2)
+endif
+
+OCAMLBUILD=$(OCAMLBUILD3)
 
 # Binaries of the Why platform (with no extension)
 WHY=why
