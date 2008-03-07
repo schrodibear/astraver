@@ -22,9 +22,19 @@ JESSIE=jessie
 KRAKATOA=krakatoa
 JESSICA=jessica
 CADUCEUS=caduceus
+WHY2HTML=why2html
+DP=dp
+RV_MERGE=rv_merge
+WHY_OBFUSCATOR=why-obfuscator
+SIMPLIFY2WHY=simplify2why
+WHY_STAT=why-stat
+DEMIXIFY=demixify
 
 BYTES=$(WHY).byte $(JESSIE).byte $(KRAKATOA).byte $(JESSICA).byte \
-	$(CADUCEUS).byte
+	$(CADUCEUS).byte $(WHY2HTML).byte $(DP).byte $(RV_MERGE).byte \
+	$(WHY_OBFUSCATOR).byte $(SIMPLIFY2WHY).byte $(WHY_STAT).byte \
+	$(DEMIXIFY).byte
+
 OPTS=$(BYTES:.byte=.opt)
 
 # Default target

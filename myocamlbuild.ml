@@ -1,10 +1,18 @@
 (* List of projects in the Why platform, with their main target *)
 let targets = [
   "why", "src/main";
+  "caduceus", "c/cmain";
   "jessie", "jc/jc_main";
   "krakatoa", "java/java_main";
   "jessica", "ml/ml_main";
-  "caduceus", "c/cmain";
+  "demixify", "mix/mix_main";
+  (* tools *)
+  "why2html", "tools/why2html";
+  "dp", "tools/dp";
+  "rv_merge", "tools/rv_merge";
+  "why-obfuscator", "tools/obfuscator";
+  "simplify2why", "tools/simplify_towhy";
+  "why-stat", "tools/whystat";
 ]
 
 (* List of scripts that generate files, their dependencies,
@@ -32,6 +40,7 @@ let contexts = [
   "ml", ["jc"; "src"];
   "ml/parsing", ["ml/utils"];
   "ml/typing", ["ml/parsing"; "ml/utils"];
+  "mix", ["src"];
 ]
 
 (* List of libraries (for findlib) *)
