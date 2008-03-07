@@ -759,10 +759,10 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
 doc/version.tex: Version Makefile.in
-	echo '\\newcommand{\\whyversion}'"{$(VERSION)}" > $@
-	echo '\\newcommand{\\caduceusversion}'"{$(CVERSION)}" >> $@
-	echo '\\newcommand{\\jessieversion}'"{$(JCVERSION)}" >> $@
-	echo '\\newcommand{\\krakatoaversion}'"{$(KVERSION)}" >> $@
+	echo '\newcommand{\whyversion}'"{$(VERSION)}" > $@
+	echo '\newcommand{\caduceusversion}'"{$(CVERSION)}" >> $@
+	echo '\newcommand{\jessieversion}'"{$(JCVERSION)}" >> $@
+	echo '\newcommand{\krakatoaversion}'"{$(KVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
@@ -880,7 +880,7 @@ WWWKRAKATOA = /users/demons/marche/WWW/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tools/*.ml* tools/*.c bin/gwhy.sh \
        mix/*.ml* \
-       Version Makefile.in configure.in configure .depend .depend.coq \
+       version.sh Version Makefile.in configure.in configure .depend .depend.coq \
        config/check_ocamlgraph.ml \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \

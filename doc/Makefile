@@ -33,48 +33,48 @@ logo-why.png: logo-why.pdf
 
 logo-why-small.png:
 
-manual.ps: manual.tex
+manual.ps: manual.tex version.tex
 	latex manual
 	latex manual
 	makeindex manual
 	latex manual
 	dvips manual.dvi -o manual.ps
 
-manual.html: manual.tex
+manual.html: manual.tex version.tex
 	rm -f manual.aux
 	$(HEVEA) manual.tex
 	$(HEVEA) manual.tex
 
-caduceus.ps: caduceus.tex
+caduceus.ps: caduceus.tex version.tex
 	latex caduceus
 	latex caduceus
 	makeindex caduceus
 	latex caduceus
 	dvips caduceus.dvi -o caduceus.ps
 
-caduceus.html: caduceus.tex
+caduceus.html: caduceus.tex version.tex
 	rm -f caduceus.aux
 	$(HEVEA) caduceus.tex
 	$(HEVEA) caduceus.tex
 
-krakatoa.pdf: $(KFILES) 
+krakatoa.pdf: $(KFILES) version.tex
 	pdflatex krakatoa.tex
 
-february2008.pdf: $(KFILES) 
+february2008.pdf: $(KFILES) version.tex
 	pdflatex february2008.tex
 
-krakatoa.html: krakatoa.tex
+krakatoa.html: krakatoa.tex version.tex
 	rm -f krakatoa.aux
 	$(HEVEA) krakatoa.tex
 	$(HEVEA) krakatoa.tex
 
-main.html: main.tex
+main.html: main.tex version.tex
 	rm -f main.aux
 	$(HEVEA) main.tex
 	$(HEVEA) main.tex
 
 
-main.pdf: 
+main.pdf: main.tex version.tex
 	pdflatex main.tex
 
 
