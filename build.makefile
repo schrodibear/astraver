@@ -29,11 +29,12 @@ WHY_OBFUSCATOR=why-obfuscator
 SIMPLIFY2WHY=simplify2why
 WHY_STAT=why-stat
 DEMIXIFY=demixify
+GWHY=gwhy
 
 BYTES=$(WHY).byte $(JESSIE).byte $(KRAKATOA).byte $(JESSICA).byte \
 	$(CADUCEUS).byte $(WHY2HTML).byte $(DP).byte $(RV_MERGE).byte \
 	$(WHY_OBFUSCATOR).byte $(SIMPLIFY2WHY).byte $(WHY_STAT).byte \
-	$(DEMIXIFY).byte
+	$(DEMIXIFY).byte $(GWHY).byte
 
 OPTS=$(BYTES:.byte=.opt)
 

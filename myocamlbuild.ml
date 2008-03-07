@@ -6,6 +6,7 @@ let targets = [
   "krakatoa", "java/java_main";
   "jessica", "ml/ml_main";
   "demixify", "mix/mix_main";
+  "gwhy", "intf/stat";
   (* tools *)
   "why2html", "tools/why2html";
   "dp", "tools/dp";
@@ -41,14 +42,21 @@ let contexts = [
   "ml/parsing", ["ml/utils"];
   "ml/typing", ["ml/parsing"; "ml/utils"];
   "mix", ["src"];
+  "intf", ["src"; "tools"];
 ]
 
-(* List of libraries (for findlib) *)
-let libraries = [
+(* List of findlib packages that are automatically used *)
+let default_packages = [
   "unix";
   "num";
   "str";
   "ocamlgraph";
+]
+
+(* List of packages that are not automatically used (use the pkg_* tag) *)
+let other_packages = [
+  "threads";
+  "lablgtk2";
 ]
 
 (******************************************************************************)
@@ -59,7 +67,7 @@ let ocamlfind x = S [
   A "ocamlfind";
   x;
   A "-package";
-  A (String.concat "," libraries);
+  A (String.concat "," default_packages);
 ]
 
 let targets =
@@ -114,6 +122,18 @@ let _ = dispatch begin function
 	     ~prods:files
 	     (fun _ _ -> execute_script script))
 	generating_scripts;
+
+      (* Declare pkg_* tags *)
+      List.iter
+	(fun pkg ->
+	   flag ["ocaml"; "pkg_"^pkg; "compile"] & S[A "-package"; A pkg];
+	   flag ["ocaml"; "pkg_"^pkg; "link"] & S[A "-package"; A pkg])
+	other_packages;
+
+      (* Special flag for threads *)
+      (* (don't use the "thread" tag which doesn't work well with findlib) *)
+      flag ["ocaml"; "pkg_threads"; "compile"] (S[A "-thread"]);
+      flag ["ocaml"; "pkg_threads"; "link"] (S[A "-thread"]);
 
       (* Use the -linkpkg option when linking *)
       flag ["ocaml"; "link"] (A "-linkpkg")
