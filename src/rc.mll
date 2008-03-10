@@ -37,6 +37,19 @@ type rc_value =
   | RCfloat of float
   | RCstring of string
   | RCident of string
+  | RCkind of Output.kind
+
+let kind_of_ident = function
+  | "ArithOverflow" -> RCkind Output.ArithOverflow
+  | "DownCast" -> RCkind Output.DownCast
+  | "IndexBounds" -> RCkind Output.IndexBounds
+  | "PointerDeref" -> RCkind Output.PointerDeref
+  | "UserCall" -> RCkind Output.UserCall
+  | "DivByZero" -> RCkind Output.DivByZero
+  | "AllocSize" -> RCkind Output.AllocSize
+  | "Pack" -> RCkind Output.Pack
+  | "Unpack" -> RCkind Output.Unpack
+  | id -> RCident id
 
 let buf = Buffer.create 17
 
@@ -97,7 +110,7 @@ and value key = parse
       { push_field key (RCbool false);
         record lexbuf }
   | ident as id
-      { push_field key (RCident id);
+      { push_field key (kind_of_ident id);
         record lexbuf }
   | _ as c
       { failwith ("Rc: invalid value starting with " ^ String.make 1 c) }

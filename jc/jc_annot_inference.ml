@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.118 2008-03-02 20:53:24 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.119 2008-03-10 23:16:01 moy Exp $ *)
 
 open Pp
 open Format
@@ -550,7 +550,7 @@ let print_modified_vars fmt posts =
 let reg_annot ?id ?kind ?name ~loc ~anchor a = 
   let (f,l,b,e) =
     try
-      let (f,l,b,e,_) = Hashtbl.find Jc_options.locs_table anchor in
+      let (f,l,b,e,_,_) = Hashtbl.find Jc_options.locs_table anchor in
       (f,l,b,e)
     with Not_found -> Loc.extract loc
   in

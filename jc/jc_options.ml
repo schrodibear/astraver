@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.24 2008-02-27 14:07:57 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.25 2008-03-10 23:16:02 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -191,18 +191,19 @@ let () =
        let l = Rc.from_file f in
        List.iter
 	 (fun (id,fs) ->
-	    let (f,l,b,e,o) =
+	    let (f,l,b,e,k,o) =
 	      List.fold_left
-		(fun (f,l,b,e,o) v ->
+		(fun (f,l,b,e,k,o) v ->
 		   match v with
-		     | "file", Rc.RCstring f -> (f,l,b,e,o)
-		     | "line", Rc.RCint l -> (f,l,b,e,o)
-		     | "begin", Rc.RCint b -> (f,l,b,e,o)
-		     | "end", Rc.RCint e -> (f,l,b,e,o)
-		     | _ -> (f,l,b,e,v::o))
-		("",0,0,0,[]) fs
+		     | "file", Rc.RCstring f -> (f,l,b,e,k,o)
+		     | "line", Rc.RCint l -> (f,l,b,e,k,o)
+		     | "begin", Rc.RCint b -> (f,l,b,e,k,o)
+		     | "end", Rc.RCint e -> (f,l,b,e,k,o)
+		     | "kind", Rc.RCkind k -> (f,l,b,e,Some k,o)
+		     | _ -> (f,l,b,e,k,v::o))
+		("",0,0,0,None,[]) fs
 	    in
-	    Hashtbl.add locs_table id (f,l,b,e,o))
+	    Hashtbl.add locs_table id (f,l,b,e,k,o))
 	 l)
     !locs_files
 

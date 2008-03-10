@@ -520,12 +520,47 @@ logic bw_xor : int,int -> int
 
 logic bw_or : int,int -> int
 
+(* logical left shift *)
+
 logic lsl : int,int -> int
+
+axiom lsl_left_positive_returns_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= lsl(a,b)
+
+axiom lsl_left_positive_monotone:
+  forall a1:int. forall a2:int. forall b:int. 
+    0 <= a1 and a1 <= a2 and 0 <= b -> lsl(a1,b) <= lsl(a2,b)
+
+(* logical right shift *)
 
 logic lsr : int,int -> int
 
+axiom lsr_left_positive_returns_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= lsr(a,b)
+
+axiom lsr_left_positive_decreases:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> lsr(a,b) <= a
+
+(* arithmetic right shift *)
+
 logic asr : int,int -> int
 
+axiom asr_positive_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= asr(a,b)
+
+axiom asr_decreases_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> asr(a,b) <= a
+
+(* combining shifts *)
+
+axiom asr_lsr_same_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> asr(a,b) = lsr(a,b)
+
+axiom lsl_of_lsr_decreases_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> lsl(lsr(a,b),b) <= a
+
+axiom lsr_of_lsl_identity_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> lsr(lsl(a,b),b) = a
 
 (*****************************************************************************)
 (* dynamic allocation/deallocation                                           *)

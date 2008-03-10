@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.23 2008-02-27 14:07:57 nrousset Exp $ *)
+(* $Id: jc_options.mli,v 1.24 2008-03-10 23:16:02 moy Exp $ *)
 
 (*s environment variables *)
 
@@ -73,7 +73,7 @@ exception Jc_error of Loc.position * string
 val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
 
 val locs_table : 
-  (string, (string * int * int * int * (string * Rc.rc_value) list)) 
+  (string, (string * int * int * int * Output.kind option * (string * Rc.rc_value) list)) 
      Hashtbl.t
 
 

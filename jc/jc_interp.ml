@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.257 2008-03-03 14:30:07 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.258 2008-03-10 23:16:02 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -48,17 +48,6 @@ open Num
 
 (* locs table *)
 
-
-type kind =
-  | ArithOverflow
-  | DownCast
-  | IndexBounds
-  | PointerDeref
-  | AllocSize
-  | UserCall
-  | DivByZero
-  | Pack
-  | Unpack
 
 let locs_table = Hashtbl.create 97
 let name_counter = ref 0
@@ -88,13 +77,13 @@ let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =
 (*
   Format.eprintf "Jc_interp: reg_loc id = '%s'@." id;
 *)
-  let (name,f,l,b,e) = 
+  let (name,f,l,b,e,kind2) = 
     try
       match oldid with
 	| None -> 
 	    raise Not_found
 	| Some n -> 
-	    let (f,l,b,e,o) = Hashtbl.find Jc_options.locs_table n in
+	    let (f,l,b,e,k,o) = Hashtbl.find Jc_options.locs_table n in
 (*
 	    Format.eprintf "Jc_interp: reg_loc id '%s' found@." oldid;
 *)
@@ -106,7 +95,7 @@ let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =
 		  | _ -> raise Not_found
 	      with Not_found -> name
 	    in
-	    (n,f,l,b,e)
+	    (n,f,l,b,e,k)
     with Not_found ->
 (*
       Format.eprintf "Jc_interp: reg_loc id '%s' not found@." id;
@@ -115,8 +104,9 @@ let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =
       let l = b.Lexing.pos_lnum in
       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
-      (name,f,l,fc,lc)
+      (name,f,l,fc,lc,None)
   in
+  let kind = match kind with None -> kind2 | _ -> kind in
   Jc_options.lprintf "recording location for id '%s'@." id;
   Hashtbl.replace locs_table id (kind,name,beh,f,l,b,e);
   id
