@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.120 2008-02-27 11:53:10 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.121 2008-03-12 16:01:10 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -732,7 +732,10 @@ let array_types decls =
 	 st.jc_struct_info_fields <- [fi];
 	 Java_options.lprintf "%s@." st.jc_struct_info_name;
 	 Hashtbl.add array_struct_table t st;
-	 
+
+	 (* predicate non_null *)
+	 let non_null_pred = create_non_null_pred st in
+
 	 (* java_array_length fun *)
 	 let fi = create_java_array_length_fun st in
 	 let vi = Jc_pervasives.var 
@@ -746,10 +749,21 @@ let array_types decls =
 	 let offset_maxt = dummy_loc_term Jc_pervasives.integer_type 
 	   (JCToffset (Offset_max, vit, st))
 	 in
+	 let app = {
+	   jc_app_fun = non_null_pred;
+	   jc_app_args = [vit];
+	   jc_app_region_assoc = [];
+	   jc_app_label_assoc = [];
+	 }
+	 in
 	 let spec =
-	   { jc_fun_requires = (* \offset_max(x) >= -1 *)
+	   { jc_fun_requires = (* non_null_<typename>(x) *)
+(*
 	       dummy_loc_assertion 
-		 (JCArelation (offset_maxt, Bge_int, minusonet));
+		 (JCArelation (offset_maxt, Bge_int, minusonet))
+*)
+	       dummy_loc_assertion(JCAapp app) 
+;
 	     jc_fun_free_requires = dummy_loc_assertion JCAtrue;
 	     jc_fun_behavior = (* result == \offset_max(x)+1 *)
 	       let result_var = 
@@ -804,15 +818,14 @@ let array_types decls =
 		    jc_behavior_throws = None }]
 	   }
 	 in
-	 let non_null_pred = create_non_null_pred st in
-	   (JClogic_fun_def (None, non_null_pred.jc_logic_info_name, [Jc_env.LabelHere],
-			     [vi], JCAssertion offset_maxa) :: acc0,
-	    JCstruct_def (st.jc_struct_info_name, Some "Object",
-			  st.jc_struct_info_fields, []) :: acc,
-	    JCfun_def (fi.jc_fun_info_result.jc_var_info_type,
-		       fi.jc_fun_info_name, [vi], spec, None) :: 
-	      JCfun_def (non_null_fi.jc_fun_info_result.jc_var_info_type,
-			 non_null_fi.jc_fun_info_name, [vi], non_null_spec, None) :: decls))
+	 (JClogic_fun_def (None, non_null_pred.jc_logic_info_name, [Jc_env.LabelHere],
+			   [vi], JCAssertion offset_maxa) :: acc0,
+	  JCstruct_def (st.jc_struct_info_name, Some "Object",
+			st.jc_struct_info_fields, []) :: acc,
+	  JCfun_def (fi.jc_fun_info_result.jc_var_info_type,
+		     fi.jc_fun_info_name, [vi], spec, None) :: 
+	    JCfun_def (non_null_fi.jc_fun_info_result.jc_var_info_type,
+		       non_null_fi.jc_fun_info_name, [vi], non_null_spec, None) :: decls))
     Java_analysis.array_struct_table
     ([], [
        JCstruct_def("interface", None, [], []);

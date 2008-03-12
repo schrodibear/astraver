@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.260 2008-03-12 11:03:45 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.261 2008-03-12 16:01:10 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2090,7 +2090,7 @@ let tr_fun f loc spec body acc =
 			 b.jc_behavior_ensures)		
 		      (named_jc_assertion
 			 locassigns
-			 (assigns LabelHere f.jc_fun_info_effects (Some a))))
+			 (assigns LabelOld f.jc_fun_info_effects (Some a))))
 	 in
 	 let a =
 	   match b.jc_behavior_assumes with

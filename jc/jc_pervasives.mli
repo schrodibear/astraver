@@ -98,9 +98,7 @@ val empty_effects : Jc_fenv.effect
 (* terms *)
 
 val term_no_loc :  Jc_ast.term_node -> Jc_env.jc_type -> Jc_ast.term
-(*
 val term_of_expr : Jc_ast.expr -> Jc_ast.term
-*)
 val term_var : Loc.position -> Jc_env.var_info -> Jc_ast.term
 val term_var_no_loc : Jc_env.var_info -> Jc_ast.term
 val raw_term_equal : Jc_ast.term -> Jc_ast.term -> bool
