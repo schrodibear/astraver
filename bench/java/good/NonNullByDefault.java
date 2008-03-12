@@ -2,7 +2,7 @@
 
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
-//@+ NonNullByDefault = yes
+//@+ NonNullByDefault = all
 
 class C { int x; }
 

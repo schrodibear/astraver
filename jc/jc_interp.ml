@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.258 2008-03-10 23:16:02 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.259 2008-03-12 09:42:36 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -303,8 +303,14 @@ let term_coerce ?(cast=false) loc tdest tsrc e =
 	      | _ -> e'
 	  end
     | JCTenum ri, JCTnative Tinteger ->
-	assert cast; (* Typing should have inserted an explicit cast *)
-	LApp(logic_enum_of_int ri,[e])
+(*
+	Jc_typing.typing_error loc 
+	  "can't coerce type %a to type %a" 
+	  print_type tsrc print_type tdest
+;
+	assert false (* a explicit cast should be required by jc_typing *)
+*)
+	LApp(logic_enum_of_int ri,[e]) 
     | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
     | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
 	when Jc_typing.substruct st2 st1 -> e
@@ -338,7 +344,7 @@ let make_guarded_app ~name (k : kind) loc f l =
 let eval_integral_const e =
   let rec eval e =
     match e.jc_expr_node with
-      | JCEconst(JCCinteger s) -> num_of_string s
+      | JCEconst(JCCinteger s) -> Numconst.integer s 
       | JCErange_cast(e,_ri2) -> eval e
       | JCEunary(op,e) ->
 	  let v = eval e in
@@ -378,7 +384,7 @@ let eval_integral_const e =
 
 let rec fits_in_enum ri e = 
   match eval_integral_const e with
-    | Some v -> ri.jc_enum_info_min </ v && v </ ri.jc_enum_info_max
+    | Some v -> ri.jc_enum_info_min <=/ v && v <=/ ri.jc_enum_info_max
     | None -> false
 
 let coerce ~no_int_overflow lab loc tdest tsrc orig e =
@@ -526,7 +532,9 @@ let rec term ~global_assertion label oldlabel t =
 	let tag = tag_table_name (JCtag ty) in
 	LApp("downcast",
 	     [lvar label tag; t';LVar (tag_name ty)]), lets
-    | JCTrange_cast(t,ri) ->
+    | JCTrange_cast(t,ri) -> 
+	eprintf "range_cast in term: from %a to %a@." 
+	  print_type t.jc_term_type print_type (JCTenum ri);
 	let t', lets = ft t in
  	let t' = term_coerce ~cast:true t.jc_term_loc (JCTenum ri) t.jc_term_type t' in
 	t', lets
@@ -710,15 +718,16 @@ let tr_logic_const vi init acc =
   in
     match init with
       | None -> decl
-      | Some t ->
+      | Some(t,ty) ->
 	  let t', lets = term ~global_assertion:true LabelHere LabelHere t in
 	  let vi_ty = vi.jc_var_info_type in
 	  let t_ty = t.jc_term_type in
+	  eprintf "logic const: max type = %a@." print_type ty;
 	  let pred =
 	    LPred (
 	      "eq",
-	      [term_coerce Loc.dummy_position vi_ty t_ty (LVar vi.jc_var_info_final_name); 
-	       term_coerce t.jc_term_loc vi_ty t_ty t'])
+	      [term_coerce Loc.dummy_position vi_ty ty (LVar vi.jc_var_info_name); 
+	       term_coerce t.jc_term_loc t_ty ty t'])
 	  in
 	let ax =
 	  Axiom(
@@ -726,7 +735,7 @@ let tr_logic_const vi init acc =
 	    make_pred_binds lets pred
 	  )
 	in
-	ax::decl
+	(* bugs ax::*) decl
 
 let tr_logic_fun li ta acc =
   let params =
@@ -881,13 +890,13 @@ let incr_call op =
 type shift_offset = Int_offset of string | Expr_offset of Jc_ast.expr 
 
 let bounded lb rb s =
-  let n = Num.num_of_string s in Num.le_num lb n && Num.le_num n rb
+  let n = Numconst.integer s in Num.le_num lb n && Num.le_num n rb
 
 let lbounded lb s =
-  let n = Num.num_of_string s in Num.le_num lb n
+  let n = Numconst.integer s in Num.le_num lb n
 
 let rbounded rb s =
-  let n = Num.num_of_string s in Num.le_num n rb
+  let n = Numconst.integer s in Num.le_num n rb
 
 let destruct_pointer e = 
   let ptre,off = match e.jc_expr_node with
@@ -1058,22 +1067,28 @@ and expr ~infunction ~threats e : expr =
     | JCEcast (e, si) ->
 	let tag = tag_table_name (JCtag si) in
 	(* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
+(*
 	let et, _ = term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in
+*)
+	let tmp = tmp_var_name () in
 	let typea = 
 	  match e.jc_expr_type with
 	    | JCTpointer (JCtag si', _, _) -> 
 		if is_substruct si' si then LTrue else
-		  LPred ("instanceof", [LVar tag; et; LVar (tag_name si)])
+		  LPred ("instanceof", [LVar tag; LVar tmp; LVar (tag_name si)])
 	    | JCTpointer (JCvariant _, _, _) -> assert false (* TODO *)
 	    | _ -> LTrue
 	in
-	let e = expr e in
 	let tag = tag_table_name (JCtag si) in
 	let call = 
 	  make_guarded_app ~name:lab DownCast loc "downcast_" 
-	    [Deref tag; e; Var (tag_name si)]
+	    [Deref tag; Var tmp; Var (tag_name si)]
 	in
+	let guarded_call =
 	  if typea = LTrue then call else Assert (typea, call)
+	in
+	Let(tmp, expr e, guarded_call)
+
     | JCErange_cast(e1,ri) ->
 	let e1' = expr e1 in
 	coerce ~no_int_overflow:(not threats)
@@ -1229,69 +1244,75 @@ let invariant_for_struct this st =
 
 let return_void = ref false
 
-let type_assert vi e =
-  match vi.jc_var_info_type, e.jc_expr_type with
-    | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
-	let et, lets =
-	  term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in
-	let alloc = alloc_table_name si in
-	  begin
-	    match n1o, n2o with
-	      | None, None -> LTrue
-	      | Some n, None -> 
-		  begin match n1o' with
-		    | Some n' when Num.le_num n' n -> LTrue
-		    | _ -> 
-			let pred =
-			  LPred ("le_int",
-				 [LApp ("offset_min", [LVar alloc; et]);
-				  LConst (Prim_int (Num.string_of_num n))])
-			in
-			make_pred_binds lets pred
-		  end
-	      | None, Some n -> 
-		  begin match n2o' with
-		    | Some n' when Num.le_num n n' -> LTrue
-		    | _ -> 
-			let pred =
-			  LPred ("ge_int",
-				 [LApp ("offset_max", [LVar alloc; et]);
-				  LConst (Prim_int (Num.string_of_num n))])
-			in
-			make_pred_binds lets pred
-		  end
-	      | Some n1, Some n2 
-		  when Num.eq_num n1 (Num.num_of_int 0)
-		    && Num.eq_num n2 (Num.num_of_int 0) ->
-		  begin match n1o', n2o' with
-		    | Some n1', Some n2'
-			when Num.eq_num n1' (Num.num_of_int 0)
-			  && Num.eq_num n2' (Num.num_of_int 0) -> LTrue
-		    | Some n1', None when Num.eq_num n1' (Num.num_of_int 0) ->
-			let pred =
-			  LPred ("eq_int",
-				 [LApp ("offset_max", [LVar alloc; et]);
-				  LConst (Prim_int "0")])
-			in
-			make_pred_binds lets pred
-		    | None, Some n2' when Num.eq_num n2' (Num.num_of_int 0) ->
-			let pred =
-			  LPred ("eq_int",
-				 [LApp ("offset_min", [LVar alloc; et]);
-				  LConst (Prim_int "0")])
-			in
-			make_pred_binds lets pred
-		    | _ -> LTrue
-		  end
-	      | Some n1, Some n2 -> LTrue
-	  end
-  | _ -> LTrue
-	
 let expr_coerce ~infunction ~threats vi e =
   coerce ~no_int_overflow:(not threats)
     e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type 
     e.jc_expr_type e (expr ~infunction ~threats e)
     
+let type_assert ~infunction ~threats vi e (lets,params) =
+  let opt =
+  match vi.jc_var_info_type, e.jc_expr_type with
+    | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
+(*
+	let et, lets =
+	  term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in
+*)
+	let tmp = tmp_var_name () in
+	let alloc = alloc_table_name si in
+	  begin
+	    match n1o, n2o with
+	      | None, None -> None
+	      | Some n, None -> 
+		  begin match n1o' with
+		    | Some n' when Num.le_num n' n -> None
+		    | _ -> 
+			Some(tmp,
+			     LPred ("le_int",
+				    [LApp ("offset_min", 
+					   [LVar alloc; LVar tmp]);
+				     LConst (Prim_int (Num.string_of_num n))]))
+		  end
+	      | None, Some n -> 
+		  begin match n2o' with
+		    | Some n' when Num.le_num n n' -> None
+		    | _ -> 
+			Some(tmp,
+			     LPred ("ge_int",
+				    [LApp ("offset_max", 
+					   [LVar alloc; LVar tmp]);
+				     LConst (Prim_int (Num.string_of_num n))]))
+		  end
+	      | Some n1, Some n2 
+		  when Num.eq_num n1 Jc_pervasives.zero
+		    && Num.eq_num n2 Jc_pervasives.zero ->
+		  begin match n1o', n2o' with
+		    | Some n1', Some n2'
+			when Num.eq_num n1' Jc_pervasives.zero
+			  && Num.eq_num n2' Jc_pervasives.zero -> None
+		    | Some n1', None when Num.eq_num n1' Jc_pervasives.zero ->
+			Some(tmp,
+			     LPred ("eq_int",
+				    [LApp ("offset_max", 
+					   [LVar alloc; LVar tmp]);
+				     LConst (Prim_int "0")]))
+		    | None, Some n2' when Num.eq_num n2' Jc_pervasives.zero ->
+			Some(tmp,
+			     LPred ("eq_int",
+				    [LApp ("offset_min", 
+					   [LVar alloc; LVar tmp]);
+				     LConst (Prim_int "0")]))
+		    | _ -> None
+		  end
+	      | Some n1, Some n2 -> None
+	  end
+  | _ -> None
+	
+  in
+  let e = expr_coerce ~infunction ~threats vi e in
+  match opt with
+    | None -> None::lets , e::params
+    | Some(tmp,a) -> Some(tmp,e,a)::lets , (Var tmp)::params
+
 let rec statement ~infunction ~threats s = 
   (* reset_tmp_var(); *)
   let statement = statement ~infunction ~threats in
@@ -1306,16 +1327,19 @@ let rec statement ~infunction ~threats s =
 	    s.jc_statement_label;
 	  *)
 	  let loc = s.jc_statement_loc in
-	  let arg_types_assert = 
-	      List.fold_left2 (fun acc vi e -> make_and (type_assert vi e) acc) 
-		LTrue f.jc_fun_info_parameters l 
+	  let arg_types_asserts,el = 
+	    try match f.jc_fun_info_parameters with
+	      | [] -> [],[Void] (* pourquoi [Void] ?? -> cf separation_plus *)
+	      | p -> List.fold_right2 (type_assert ~infunction ~threats) p l ([],[])
+	    with Invalid_argument _ -> assert false
 	  in
+(*
 	  let el =
 	    try match f.jc_fun_info_parameters with
 	      | [] -> [Void]
 	      | params -> List.map2 (expr_coerce ~infunction ~threats) params l 
-	    with Invalid_argument _ -> assert false
 	  in
+*)
 	  let write_mems =
 	    FieldRegionMap.fold
 	      (fun (fi,distr) labels acc ->
@@ -1460,9 +1484,25 @@ let rec statement ~infunction ~threats s =
 	    make_guarded_app ~name:lab UserCall loc 
 	      f.jc_fun_info_final_name el 
 	  in
+	  let arg_types_assert =
+	    List.fold_right
+	      (fun opt acc -> 
+		 match opt with
+		   | None -> acc
+		   | Some(tmp,e,a) -> make_and a acc)
+	      arg_types_asserts LTrue
+	  in
 	  let call = 
 	    if arg_types_assert = LTrue || not threats then call else
 	      Assert (arg_types_assert, call) 
+	  in
+	  let call =
+	    List.fold_right
+	      (fun opt c -> 
+		 match opt with
+		   | None -> c
+		   | Some(tmp,e,ass) -> Let(tmp,e,c))
+	      arg_types_asserts call
 	  in
 	    begin
 	      match vio with
@@ -2607,9 +2647,17 @@ let tr_enum_type ri (* to_int of_int *) acc =
     Param(false,fun_enum_of_int ri,of_int_type) ::
     Param(false,safe_fun_enum_of_int ri,safe_of_int_type) ::
     Param(false,fun_any_enum ri,any_type) ::
-    Axiom(n^"_enum",
+    Axiom(n^"_range",
 	  LForall("x",simple_logic_type n,enum_pred 
 		    (LApp(logic_int_of_enum ri,[LVar "x"])))) ::
+    Axiom(n^"_coerce",
+	  LForall("x",why_integer_type,
+		  LImpl(enum_pred (LVar "x"),
+			LPred("eq_int",
+			      [LApp(logic_int_of_enum ri,
+				    [LApp(logic_enum_of_int ri, 
+					  [LVar "x"])]) ; 
+			       LVar "x"])))) ::
     acc
 
 let tr_variable vi e acc =

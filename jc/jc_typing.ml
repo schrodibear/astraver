@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.195 2008-03-03 14:30:07 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.196 2008-03-12 09:42:36 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2711,7 +2711,7 @@ of an invariant policy";
 		if not (subtype t.jc_term_type ty) then 
 		  typing_error d.jc_pdecl_loc 
 		    "inferred type differs from declared type" 
-		else Some t
+		else Some(t,maxtype t.jc_term_loc t.jc_term_type ty)
 	in
 	  Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t)
     | JCPDlogic(None, id, labels, pl, body) ->
@@ -2740,7 +2740,7 @@ of an invariant policy";
 		      in tl)) reads)
 	  | JCPExpr body ->
               let t = term labels (default_label labels) param_env body in
-              if not (subtype t.jc_term_type ty) then 
+              if not (subtype_strict t.jc_term_type ty) then 
 		typing_error d.jc_pdecl_loc 
 		  "inferred type differs from declared type" 
 	      else JCTerm t
@@ -2895,7 +2895,7 @@ let print_file fmt () =
     Hashtbl.fold
       (fun _ (vi,t) f ->
 	 Jc_output.JClogic_const_def
-	   (vi.jc_var_info_type, vi.jc_var_info_name, t)
+	   (vi.jc_var_info_type, vi.jc_var_info_name, Option_misc.map fst t)
 	:: f
       ) logic_constants_table []
   in

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.98 2008-02-27 14:07:57 nrousset Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.99 2008-03-12 09:42:36 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -92,7 +92,9 @@ let print_type fmt t =
 
 let num_of_constant loc c =
     match c with
-      | JCCinteger n -> Num.num_of_string n
+      | JCCinteger n -> 
+	  (try Num.num_of_string n
+	   with _ -> assert false)
       | _ -> invalid_arg ""
 	  
 let zero = Num.num_of_int 0
