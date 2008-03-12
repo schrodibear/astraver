@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.22 2008-02-21 09:59:42 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.23 2008-03-12 11:03:45 bardou Exp $ i*)
 
 open Format
 open Pp
@@ -298,7 +298,7 @@ let output_project f =
   List.iter
     (fun (expl,fpo) ->      
        let n = expl.lemma_or_fun_name in
-       let l = Project.add_lemma p n expl fpo in ())
+       let _ = Project.add_lemma p n expl fpo in ())
     !lemmas;
   SMap.iter
     (fun fname behs ->
@@ -314,7 +314,7 @@ let output_project f =
 	    let be = Project.add_behavior f beh in
 	    List.iter
 	      (fun (expl,fpo) ->
-		 let g = Project.add_goal be expl fpo in ())
+		 let _ = Project.add_goal be expl fpo in ())
 	      vcs)
 	 behs)
     !functions;

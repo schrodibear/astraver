@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.29 2008-03-03 16:37:03 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.30 2008-03-12 11:03:45 bardou Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1121,7 +1121,7 @@ let managesGoal id ax (hyps,concl) =
 	    DotVG.output_graph oc !vg     
 	  end;
 	(*Dgoal*)(loc,expl,id, (*Env.empty_scheme*) (l',concl))	  
-    | _ -> (*ax*) assert false
+(*    | _ -> (*ax*) assert false*)
 
 
 
@@ -1173,5 +1173,5 @@ let reduce q decl=
 	managesGoal id ax (l',g');
 
 
-    | _ -> failwith "goal awaited" in
+    (*| _ -> failwith "goal awaited"*) in
   q' 

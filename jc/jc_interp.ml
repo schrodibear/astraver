@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.259 2008-03-12 09:42:36 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.260 2008-03-12 11:03:45 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -729,7 +729,7 @@ let tr_logic_const vi init acc =
 	      [term_coerce Loc.dummy_position vi_ty ty (LVar vi.jc_var_info_name); 
 	       term_coerce t.jc_term_loc t_ty ty t'])
 	  in
-	let ax =
+	let _ =
 	  Axiom(
 	    vi.jc_var_info_final_name ^ "_value_axiom",
 	    make_pred_binds lets pred

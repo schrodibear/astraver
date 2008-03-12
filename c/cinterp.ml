@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.256 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.257 2008-03-12 11:03:45 bardou Exp $ i*)
 
 open Format
 open Coptions
@@ -1491,7 +1491,7 @@ and interp_address e = match e.nexpr_node with
       assert false (* not a left value *)
 
 and interp_statement_expr e =
-  let loc = e.nexpr_loc in
+(*  let loc = e.nexpr_loc in*)
   match e.nexpr_node with
     | NEseq(e1,e2) ->
 	append (interp_statement_expr e1) (interp_statement_expr e2)

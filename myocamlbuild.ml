@@ -33,7 +33,7 @@ let generating_scripts = [
 
 (* Some directories "see" some other directories *)
 let contexts = [
-  "src", ["tools"];
+  "src", ["tools"; "jc"];
   "tools", ["src"];
   "jc", ["src"];
   "java", ["src"; "jc"];
