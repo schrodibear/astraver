@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.86 2008-03-03 07:37:42 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.87 2008-03-13 13:43:49 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -87,6 +87,7 @@ let make_deref loc e fi =
     jc_expr_region = Region.make_field e.jc_expr_region fi;
     jc_expr_label = "";
     jc_expr_node = node; }
+
 
 let rec make_or_list_test loc = function
   | [] -> false_const loc
@@ -269,22 +270,6 @@ let make_binary lab loc e1 t op e2 =
 let make_int_binary lab loc e1 op e2 = make_binary lab loc e1 integer_type op e2
 
 
-let make_incr_local lab loc op vi =
-  make_assign_var loc vi
-    (make_int_binary lab loc (make_var loc vi) op (one_const loc))
-
-let make_incr_heap lab loc op e fi = 
-  let d =
-    { jc_expr_loc = loc;
-      jc_expr_type = fi.jc_field_info_type;
-      jc_expr_region = Region.make_field e.jc_expr_region fi;
-      jc_expr_label = "";
-      jc_expr_node = JCEderef(e,fi) ;
-    }
-  in
-  make_assign_heap loc e fi
-    (make_int_binary lab loc d op (one_const loc))
-  
 
 let op_of_incdec = function
   | Prefix_inc | Postfix_inc -> Badd_int 
@@ -462,30 +447,50 @@ let rec expr e =
 	in
 	(l1@stat1::l2@[stat2; stat], tl1@tmp1::tl2@[tmp2]), JCEvar tmp2
     | JCTEincr_local (op, vi) ->
+	let tmp = newrefvar integer_type (* vi.jc_var_info_type *) in
 	begin match op with
 	| Prefix_inc | Prefix_dec ->
-	    ([make_incr_local lab loc (op_of_incdec op) vi], []), JCEvar vi
-	| Postfix_inc | Postfix_dec ->
-	    let tmp = newrefvar vi.jc_var_info_type in
-	    let stat0 = 
-	      make_assign_var loc tmp (make_var loc vi) 
+	    (* integer tmp := vi +/- 1; vi := (cast)tmp; tmp *)
+	    let add = 
+	      make_int_binary lab loc 
+		(make_var loc vi) (op_of_incdec op) (one_const loc)
 	    in
-	    ([stat0; make_incr_local lab loc (op_of_incdec op) vi], [tmp]), 
+	    let stat0 = make_assign_var loc tmp add in
+	    ([stat0; make_assign_var loc vi (make_var loc tmp)], [tmp]), 
+	    JCEvar tmp
+	| Postfix_inc | Postfix_dec ->
+	    (* integer tmp := vi; vi := (cast)(tmp +/- 1); tmp *)
+	    let stat0 = make_assign_var loc tmp (make_var loc vi) in
+	    let add = 
+	      make_int_binary lab loc 
+		(make_var loc tmp) (op_of_incdec op) (one_const loc)
+	    in
+	    ([stat0; make_assign_var loc vi add], [tmp]), 
 	    JCEvar tmp
 	end
     | JCTEincr_heap (op, e, fi) ->
+	let tmp = newrefvar integer_type (* fi.jc_field_info_type *) in
 	begin match op with
 	| Prefix_inc | Prefix_dec ->
+	    (* integer tmp := e.fi +/- 1; e.fi := (cast)tmp; tmp *)
 	    let (l, tl), e = expr e in
-	    (l@[make_incr_heap lab loc (op_of_incdec op) e fi], tl), 
-	    JCEderef (e, fi)
-	| Postfix_inc | Postfix_dec ->
-	    let (l, tl), e = expr e in
-	    let tmp = newrefvar fi.jc_field_info_type in
-	    let stat0 = 
-	      make_assign_var loc tmp (make_deref loc e fi) 
+	    let add = 
+	      make_int_binary lab loc 
+		(make_deref loc e fi) (op_of_incdec op) (one_const loc)
 	    in
-	    (l@stat0::[make_incr_heap lab loc Badd_int e fi], tl@[tmp]), 
+	    let stat0 = make_assign_var loc tmp add in
+	    (l@[stat0 ; make_assign_heap loc e fi (make_var loc tmp)], 
+	     tl@[tmp]), 
+	    JCEvar tmp
+	| Postfix_inc | Postfix_dec ->
+	    (* integer tmp := e.fi; e.fi := (cast)(tmp +/- 1); tmp *)
+	    let (l, tl), e = expr e in
+	    let stat0 = make_assign_var loc tmp (make_deref loc e fi) in
+	    let add = 
+	      make_int_binary lab loc 
+		(make_var loc tmp) (op_of_incdec op) (one_const loc)
+	    in
+	    (l@[stat0 ; make_assign_heap loc e fi add], tl@[tmp]), 
 	    JCEvar tmp
 	end
     | JCTEif (e1, e2, e3) ->
