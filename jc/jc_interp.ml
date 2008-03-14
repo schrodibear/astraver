@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.261 2008-03-12 16:01:10 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.262 2008-03-14 12:10:28 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -500,13 +500,24 @@ let rec term ~global_assertion label oldlabel t =
 	     arg'::args, arglets@lets)
 	  l ([], [])
 	in
-	let args' = List.map2 (fun x y -> x, y) l args in
+	let args' = 
+	  try
+	    List.map2 (fun x y -> x, y) l args 
+	  with Invalid_argument _ -> assert false
+	in
 	let args =
-	  (List.map2 
-	    (fun vi (t, t') -> 
-	      term_coerce t.jc_term_loc 
-		vi.jc_var_info_type t.jc_term_type t')
-	    f.jc_logic_info_parameters args')
+	  try
+	    List.map2 
+	      (fun vi (t, t') -> 
+		 term_coerce t.jc_term_loc 
+		   vi.jc_var_info_type t.jc_term_type t')
+	      f.jc_logic_info_parameters args'
+	  with Invalid_argument _ -> 
+	    eprintf "fun = %s, len pars = %d, len args' = %d@." 
+	      f.jc_logic_info_name 
+	      (List.length f.jc_logic_info_parameters)
+	      (List.length args');
+	    assert false
 	in
 	make_logic_fun_call ~label_in_name:global_assertion f args
 	  app.jc_app_region_assoc app.jc_app_label_assoc, lets
@@ -615,17 +626,23 @@ let rec assertion ~global_assertion label oldlabel a =
 	       arg'::args, arglets@lets)
 	    l ([], [])
 	  in
-	  let args' = List.map2 (fun x y -> x, y) l args in
+	  let args' = 
+	    try
+	      List.map2 (fun x y -> x, y) l args 
+	    with Invalid_argument _ -> assert false
+	  in
 	  (* No type verification for full_separated for the moment. *)
 	  if f.jc_logic_info_name = "full_separated" then
 	    make_logic_pred_call ~label_in_name:false f args [] [], lets
 	  else begin try
 	    make_logic_pred_call ~label_in_name:global_assertion f  
-	      (List.map2 
-		 (fun vi (t, t') -> 
-		    term_coerce t.jc_term_loc 
-		      vi.jc_var_info_type t.jc_term_type t')
-		 f.jc_logic_info_parameters args')
+	      (try
+		 List.map2 
+		   (fun vi (t, t') -> 
+		      term_coerce t.jc_term_loc 
+			vi.jc_var_info_type t.jc_term_type t')
+		   f.jc_logic_info_parameters args'
+	       with Invalid_argument _ -> assert false)
 	      app.jc_app_region_assoc
 	      app.jc_app_label_assoc, lets
 	  with Invalid_argument _ -> assert false
@@ -1333,13 +1350,6 @@ let rec statement ~infunction ~threats s =
 	      | p -> List.fold_right2 (type_assert ~infunction ~threats) p l ([],[])
 	    with Invalid_argument _ -> assert false
 	  in
-(*
-	  let el =
-	    try match f.jc_fun_info_parameters with
-	      | [] -> [Void]
-	      | params -> List.map2 (expr_coerce ~infunction ~threats) params l 
-	  in
-*)
 	  let write_mems =
 	    FieldRegionMap.fold
 	      (fun (fi,distr) labels acc ->

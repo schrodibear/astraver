@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.99 2008-03-12 09:42:36 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.100 2008-03-14 12:10:28 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -263,6 +263,10 @@ let make_logic_fun name ty =
   }
 
 let real_of_integer = make_logic_fun "real_of_int" real_type
+let () = 
+  let vi = var ~formal:true integer_type "n" in
+  real_of_integer.jc_logic_info_parameters <- [vi]
+
 let full_separated = make_logic_fun "full_separated" null_type
 
 (* logic predicates *)
