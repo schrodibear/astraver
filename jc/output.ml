@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.28 2008-03-04 14:14:33 moy Exp $ i*)
+(*i $Id: output.ml,v 1.29 2008-03-14 16:41:58 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -113,8 +113,13 @@ type assertion =
   | LNamed of string * assertion
 ;;
 
+let rec unname a =
+  match a with
+    | LNamed(_,a) -> unname a
+    | _ -> a
+
 let make_or a1 a2 =
-  match (a1,a2) with
+  match (unname a1,unname a2) with
     | (LTrue,_) -> LTrue
     | (_,LTrue) -> LTrue
     | (LFalse,_) -> a2
@@ -122,7 +127,7 @@ let make_or a1 a2 =
     | (_,_) -> LOr(a1,a2)
 
 let make_and a1 a2 =
-  match (a1,a2) with
+  match (unname a1,unname a2) with
     | (LTrue, _) -> a2
     | (_,LTrue) -> a1
     | (LFalse,_) -> LFalse
@@ -140,7 +145,7 @@ let rec make_or_list l =
     | f::r -> make_or f (make_or_list r)
 
 let make_impl a1 a2 =
-  match (a1,a2) with
+  match (unname a1,unname a2) with
     | (LTrue,_) -> a2
     | (_,LTrue) -> LTrue
     | (LFalse,_) -> LTrue
@@ -148,7 +153,7 @@ let make_impl a1 a2 =
     | (_,_) -> LImpl(a1,a2)
 
 let make_equiv a1 a2 =
-  match (a1,a2) with
+  match (unname a1,unname a2) with
     | (LTrue,_) -> a2
     | (_,LTrue) -> a1
     | (_,_) -> LIff(a1,a2)

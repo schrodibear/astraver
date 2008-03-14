@@ -1,3 +1,6 @@
+
+//@+ CheckArithOverflow = no
+
 public class Lesson1 {
 
     /*@ ensures \result >= x && \result >= y &&
