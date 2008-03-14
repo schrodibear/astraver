@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.119 2008-03-10 23:16:01 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.120 2008-03-14 14:21:37 moy Exp $ *)
 
 open Pp
 open Format
@@ -3621,7 +3621,7 @@ let rec wp_statement weakpre =
       | JCStry(s,hl,fs) ->
 	  begin match fs.jc_statement_node with 
 	    | JCSblock [] -> ()
-	    | _ -> assert false (* TODO: apply finally stmt to all paths. *)
+	    | _ -> () (* assert false (\* TODO: apply finally stmt to all paths. *\) *)
 	  end;
 	  let handlpostexcl,handlvs = 
 	    List.fold_left 
