@@ -43,6 +43,7 @@
 \makeindex
 \input{./version.tex}
 \input{./macros.tex}
+\definecolor{darkgreen}{rgb}{0, 0.5, 0}
 
 \setlength{\textheight}{240mm}
 \setlength{\topmargin}{-10mm}
@@ -158,7 +159,7 @@ The left sub-window displays a table where each row corresponds to a
 VC for method \texttt{max}. Each column corresponds to a theorem
 prover. Running a given prover on the VCs can be acheived by clicking
 in its name in the first row. On the figure, the first three provers
-have been run: Ergo, Simplify and Z3. Their answers are exactly the
+have been run: Alt-Ergo, Simplify and Z3. Their answers are exactly the
 same: all VCs are valid except the fifth. On the figure, the user has
 clickde on the corresponding fifth row, whioch is then highlighted in
 blue. On the upper right part of thw window, the VC is displayed, and
@@ -1109,8 +1110,8 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 Compiling from sources requires Objective Caml
 compiler, version 3.09 or higher. 
 
-External theorem provers must be installed. Ergo is available from
-\url{http://ergo.lri.fr}, simplify is available from \url{} (see why
+External theorem provers must be installed. Alt-Ergo is available from
+\url{http://alt-ergo.lri.fr}, simplify is available from \url{} (see why
 web page), Z3 ia available from ..., Yices from ..., CVS3 from ...
 
 For using the Coq intereactive prover, you need \Coq{} version 8.0 or

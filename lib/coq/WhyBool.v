@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyBool.v,v 1.12 2006-11-02 09:18:20 hubert Exp $ *)
+(* $Id: WhyBool.v,v 1.13 2008-03-17 09:30:05 filliatr Exp $ *)
 
 Require Import ZArith.
 Require Import Sumbool.
@@ -92,8 +92,8 @@ Qed.
 Definition btest (q:bool -> Prop) (b:bool) (p:q b) :
   {q true} + {q false} :=
   match b return q b -> {q true} + {q false} with
-  | true => fun p => left (q false) p
-  | false => fun p => right (q true) p
+  | true => fun p => @left _ (q false) p
+  | false => fun p => @right _ (q false) p
   end p.
 
 

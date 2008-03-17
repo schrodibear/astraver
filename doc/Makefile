@@ -1,6 +1,6 @@
 HEVEA=hevea -charset ISO-8859-1
 
-all: main.pdf manual.ps doc.ps caduceus.ps $(KFILES) krakatoa.pdf
+all: main.pdf manual.ps caduceus.ps $(KFILES) krakatoa.pdf
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 
@@ -49,8 +49,9 @@ manual.html: manual.tex version.tex
 
 caduceus.ps: caduceus.tex version.tex
 	latex caduceus
-	latex caduceus
+	bibtex caduceus
 	makeindex caduceus
+	latex caduceus
 	latex caduceus
 	dvips caduceus.dvi -o caduceus.ps
 
@@ -59,7 +60,11 @@ caduceus.html: caduceus.tex version.tex
 	$(HEVEA) caduceus.tex
 	$(HEVEA) caduceus.tex
 
-krakatoa.pdf: $(KFILES) version.tex
+krakatoa.pdf: $(KFILES) krakatoa.tex version.tex
+	pdflatex krakatoa.tex
+	bibtex krakatoa
+	makeindex krakatoa
+	pdflatex krakatoa.tex
 	pdflatex krakatoa.tex
 
 february2008.pdf: $(KFILES) version.tex

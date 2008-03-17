@@ -1,4 +1,8 @@
 
+version 2.11, March 17th, 2008
+==============================
+  o fixed bug with --prune-hyp
+
 version 2.10b, January 31st, 2008
 =================================
   o CVC3: now called with options +arith-new +quant-polarity -quant-new

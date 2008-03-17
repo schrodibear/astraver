@@ -759,10 +759,10 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
 doc/version.tex: Version Makefile.in
-	echo '\newcommand{\whyversion}'"{$(VERSION)}" > $@
-	echo '\newcommand{\caduceusversion}'"{$(CVERSION)}" >> $@
-	echo '\newcommand{\jessieversion}'"{$(JCVERSION)}" >> $@
-	echo '\newcommand{\krakatoaversion}'"{$(KVERSION)}" >> $@
+	echo '\\newcommand{\\whyversion}'"{$(VERSION)}" > $@
+	echo '\\newcommand{\\caduceusversion}'"{$(CVERSION)}" >> $@
+	echo '\\newcommand{\\jessieversion}'"{$(JCVERSION)}" >> $@
+	echo '\\newcommand{\\krakatoaversion}'"{$(KVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
@@ -876,7 +876,7 @@ EXPORT=export/$(NAME)
 
 WWW = /users/www-perso/projets/why
 FTP = $(WWW)/download
-WWWKRAKATOA = /users/demons/marche/WWW/krakatoa
+WWWKRAKATOA = /users/www-perso/projets/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tools/*.ml* tools/*.c bin/gwhy.sh \
        mix/*.ml* \
@@ -905,13 +905,13 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 distrib export: source export-doc export-examples export-examples-c linux
 	make -C $(HOME)/www/why install
 
-source: doc/manual.ps export/$(NAME).tar.gz
+source: export/$(NAME).tar.gz
 	cp CHANGES CHANGES.caduceus export/$(NAME).tar.gz $(FTP)
 	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
 	echo "<#def cversion>$(CVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
 	echo "<#def jcversion>$(JCVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
 
-export/$(NAME).tar.gz:
+export/$(NAME).tar.gz: $(FILES)
 	rm -rf $(EXPORT)
 	mkdir -p $(EXPORT)/bin
 	cp --parents $(FILES) $(EXPORT)
