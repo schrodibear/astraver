@@ -1,4 +1,7 @@
-/*@ predicate is_max(int[] t,int i,int l) {
+
+//@+ CheckArithOverflow = no
+
+/*@ predicate is_max(int[] t,integer i,integer l) {
   @   0 <= i && i < l &&
   @      \forall integer j; 0 <= j && j < l ==> t[j] <= t[i] }
   @*/
@@ -49,18 +52,16 @@ public class Arrays {
     }
 
 
-    /*@ requires t != null ;
+    /*@ requires t != null;
       @ ensures 
-      @   \forall integer i; 0 < i && i < t.length ==> t[i] == \old(t[i-1]);
+      @   \forall integer i; 0 < i < t.length ==> t[i] == \old(t[i-1]);
       @*/
     public static void shift(int[] t) {
 	/*@ loop_invariant 
 	  @   j < t.length &&
-	  @   (t.length > 0 ==>
-	  @    0 <= j && 
-	  @    \forall integer i; 0 <= i && i <= j ==> t[i] == \old(t[i]) &&
-	  @    \forall integer i; 
-	  @         j < i && i < t.length ==> t[i] == \old(t[i-1]));
+	  @   (\forall integer i; 0 <= i <= j ==> t[i] == \at(t[i],Pre)) &&
+	  @   (\forall integer i; 
+	  @         j < i < t.length ==> t[i] == \at(t[i-1],Pre));
 	  @ decreases j;
 	  @*/
 	for (int j=t.length-1 ; j > 0 ; j--) {

@@ -1,27 +1,29 @@
+# InvariantPolicy = Arguments
 
 /* Dijkstra's dutch flag */
 
 
 type color = 1..3
    
-logic color BLUE = 1 
-logic color WHITE = 2 
+logic color BLUE = 1
+logic color WHITE = 2
 logic color RED = 3 
 
 type colorT = {
+    integer colorT_length;
     color colorM;
 }
 
-    logic isMonochrome{L}(colorT[..] t, integer i, integer j, color c) =
+logic isMonochrome{L}(colorT[..] t, integer i, integer j, color c) =
     //    \offset_min(t) <= i && i <= j && j <= \offset_max(t) &&
-    \forall integer k; i <= k && k <= j ==> (t+k).colorM == c
+  \forall integer k; i <= k && k <= j ==> (t+k).colorM == c
 
 
 
 unit swap(colorT[..] t, integer i, integer j) 
   requires
     \offset_min(t) <= i && i <= \offset_max(t) &&
-    \offset_min(t) <= j && j <= \offset_max(t)  ;
+    \offset_min(t) <= j && j <= \offset_max(t) ;    
   behavior swaps_i_and_j:
     assigns (t+i).colorM,(t+j).colorM;
     ensures (t+i).colorM == \old((t+j).colorM) && 
@@ -33,8 +35,8 @@ unit swap(colorT[..] t, integer i, integer j)
 }
 
 unit flag(colorT[0..] t, integer length) 
-    requires \offset_min(t) == 0 && // devrait etre inutile
-      0 <= length && length <= \offset_max(t)+1;
+    requires \offset_min(t) == 0; // Bug: should be implicit
+    requires 0 <= length && length <= \offset_max(t)+1;
     behavior sorts_t:
       ensures 
         \exists integer b,r; 

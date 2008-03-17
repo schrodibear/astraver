@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.28 2008-02-27 14:07:57 nrousset Exp $
+$Id: java_ast.mli,v 1.29 2008-03-17 08:38:42 marche Exp $
 
 ***************************************************************************)
 
@@ -192,7 +192,7 @@ and pstatement_node =
   | JPSghost_local_decls of variable_declaration
   | JPSghost_statement of pexpr
   | JPSannot of Lexing.position * string
-  | JPSloop_annot of pexpr * pexpr
+  | JPSloop_annot of pexpr * pexpr option
 
 and block = pstatement list
 ;;

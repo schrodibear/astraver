@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.37 2008-02-27 14:07:57 nrousset Exp $
+$Id: java_parser.mly,v 1.38 2008-03-17 08:38:42 marche Exp $
 
 */
 
@@ -1092,10 +1092,10 @@ assigns:
 ;
 
 kml_statement_annot:
-| LOOP_INVARIANT expr SEMICOLON DECREASES expr SEMICOLON EOF
-    { JPSloop_annot($2,$5) }
-| DECREASES expr SEMICOLON EOF
-    { JPSloop_annot(locate_lit (Bool true),$2) }
+| LOOP_INVARIANT expr SEMICOLON decreases EOF
+    { JPSloop_annot($2,$4) }
+| decreases EOF
+    { JPSloop_annot(locate_lit (Bool true),$1) }
 | ASSERT expr SEMICOLON EOF
     { JPSassert(None,$2) }
 | ASSERT ident COLON expr SEMICOLON EOF
@@ -1105,6 +1105,13 @@ kml_statement_annot:
 | GHOST expr SEMICOLON EOF
     { JPSghost_statement($2) }
 ;
+
+decreases:
+| /* $\varepsilon$ */
+    { None }
+| DECREASES expr SEMICOLON 
+    { Some $2 }
+
 
 /*
 Local Variables: 

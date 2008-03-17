@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.196 2008-03-12 09:42:36 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.197 2008-03-17 08:38:42 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -126,12 +126,11 @@ let subtype ?(allow_implicit_cast=true) t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 ->
 	t1=t2
+       (* TODO: integer is subtype of real *)
     | JCTenum ri1, JCTenum ri2 -> 
-	true
-	  (*
-	Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min 	&&
-	Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max
-	  *)
+	allow_implicit_cast ||
+	  (Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min &&
+	     Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max)
     | JCTenum _, JCTnative Tinteger ->
 	true
     | JCTnative Tinteger, JCTenum _ -> 
@@ -149,10 +148,30 @@ let subtype ?(allow_implicit_cast=true) t1 t2 =
 
 let subtype_strict = subtype ~allow_implicit_cast:false
 
-let maxtype loc t u =
-  if subtype t u then u else
-    if subtype u t then t else
-      typing_error loc "incompatible result types"
+let maxtype loc t1 t2 =
+  try
+    match t1,t2 with
+      | JCTnative n1, JCTnative n2 ->
+	  if n1=n2 then t1 else raise Not_found
+	    (* TODO: integer is subtype of real *)
+      | (JCTenum _ | JCTnative Tinteger), (JCTenum _| JCTnative Tinteger) ->
+	  Jc_pervasives.integer_type
+      | JCTlogic s1, JCTlogic s2 ->
+	  if s1=s2 then t1 else raise Not_found
+      | JCTpointer(JCtag s1, _, _), JCTpointer(tov, _, _) when substruct s1 tov ->
+	  t2
+      | JCTpointer(tov, _, _), JCTpointer(JCtag s1, _, _) when substruct s1 tov ->
+	  t1
+      | JCTpointer(JCvariant v1, _, _), JCTpointer(JCvariant v2, _, _) ->
+	  if v1 == v2 then t1 else raise Not_found
+      | JCTnull, JCTnull -> JCTnull
+      | JCTnull, JCTpointer _ -> t2
+      | JCTpointer _, JCTnull -> t1	  
+      | _ -> raise Not_found
+
+  with Not_found ->
+    typing_error loc "incompatible result types"
+
 
 let comparable_types t1 t2 =
   match t1,t2 with
@@ -2201,6 +2220,9 @@ let rec location_set label_env logic_label env e =
 		begin match ti.jc_term_node with
 		  | JCTrange(t1,t2) -> ty,tr,JCLSrange(te,t1,t2)
 		  | _ -> ty,tr,JCLSrange(te,Some ti,Some ti)
+(* TODO ?
+		  | _ -> ty,tr,JCLSshift(te,ti)
+*)
 		end
 	    | JCTpointer _, _ -> 
 		typing_error i.jc_pexpr_loc "integer expected, got %a" print_type ti.jc_term_type

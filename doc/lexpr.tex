@@ -27,6 +27,9 @@
 %                                                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%       | "\let" id "=" lexpr ";" lexpr ; local binding
+%       | id ":" lexpr ; syntactic naming
+
 \begin{syntax}
   rel-op ::= "==" | "!=" | "<=" | ">=" | ">" | "<"
        \
@@ -53,10 +56,8 @@
        | id "(" lexpr ("," lexpr)* ")" ; function application
        | "(" lexpr ")" ; parentheses
        | lexpr "?" lexpr ":" lexpr ;
-       | "\let" id "=" lexpr ";" lexpr ; local binding
        | "\forall" binders ";" lexpr ; universal quantification
        | "\exists" binders ";" lexpr ; existential quantification
-       | id ":" lexpr ; syntactic naming
        \
   binders ::= type-expr variable-ident ;
   ("," type-expr variable-ident)*

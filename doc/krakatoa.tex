@@ -36,7 +36,7 @@
 \usepackage{times}
 \usepackage{amssymb}
 \usepackage{graphicx}
-%\usepackage{color}
+\usepackage{color}
 %\usepackage{mathptm}
 %\usepackage{xspace}
 \usepackage{makeidx}
@@ -114,34 +114,305 @@ following \Java{} program
 %of Figure~\ref{java:max} 
 into a new file \verb|Lesson1.java|.
 \input{Lesson1_max.pp}
+The comment starting with \verb|/*@| just before the method
+\texttt{max} is a \emph{contract} specifying a intended behavior for
+\texttt{max}. \index{postcondition}
+\index{ensures clause@\texttt{ensures} clause}
+The \texttt{ensures} clause introduce a
+\emph{postcondition}, which is a formula supposed to hold at end of
+execution of that method, for any value of its arguments. In that
+formula, \texttt{\\result} denotes the returned value for that method,
+hence that formula means three things: (i) the result is greater than or
+equal to x, (ii) the result is also greater than or
+equal to y, and (iii) the result is the least of all integers both
+greater than \texttt{x} and \texttt{y}.
+
 Our aim is to verify that the body of method \texttt{max} is a correct
-implementation, in the sense that it satisfies the specification
-given.
+implementation, in the sense that it satisfies the contract
+given. Indeed, we intentionally made a mistake: the second
+\texttt{return} should return \texttt{y} instead of \texttt{x}.
 
 Running the verification process can be done by executing the
 following command, in the directory \verb|tutorial|: 
 \begin{verbatim}
 gwhy Lesson1.java
 \end{verbatim}
+\index{GWhy}
+\index{gwhy command@\texttt{gwhy} command}
 The command will read the given file, and generate a set of logic
-formulas call \emph{verification conditions}, which express the
-validity of the program. The generated formulas are then displayed
-into the common graphical VC viewer of the Why platform, as shown in
-Figure~\ref{fig:gwhy}
+formulas call \emph{verification conditions} (abbreviated as VC),
+which express the validity of the program. The generated formulas are
+then displayed into the common graphical VC viewer of the Why
+platform, as shown in Figure~\ref{fig:gwhy}
 
-\begin{figure}[p]
+\begin{figure}[t]
   \begin{center}
-    \includegraphics{}
+    \includegraphics[width=\textwidth]{Lesson1_max.png}
   \end{center}
   \caption{Verification conditions displayed in GWhy}
 \label{fig:gwhy}
+\hrulefill
+\end{figure}
+
+The left sub-window displays a table where each row corresponds to a
+VC for method \texttt{max}. Each column corresponds to a theorem
+prover. Running a given prover on the VCs can be acheived by clicking
+in its name in the first row. On the figure, the first three provers
+have been run: Ergo, Simplify and Z3. Their answers are exactly the
+same: all VCs are valid except the fifth. On the figure, the user has
+clickde on the corresponding fifth row, whioch is then highlighted in
+blue. On the upper right part of thw window, the VC is displayed, and
+in the lower right part, the source code is displayed, with a block
+highlighted in orange: this block is where the VC originates. On that
+example, it means that the system is unable to verify that the result
+of the method is necessarily greater than or equal to
+\texttt{y}. Indeed, this comes from our intentional mistake. If you
+modify the source code, replacing the last \texttt{x} by \texttt{y},
+then rerun the \texttt{gwhy command}, you can run all provers and
+check that all VCs are true. This means that the method implementation
+now satisfies its specification.
+
+
+\section{Loop invariants}
+\index{loop invariant}
+\index{loop invariant clause@\texttt{loop\_invariant} clause}
+
+Methods get a bit harder to prove in presence of loops. Below is a
+contract of a method for computing the square root of an 
+integer (rounded towards zero).
+\input{Lesson1_sqrt.pp}
+\index{precondition}
+\index{requires clause@\texttt{requires} clause}
+The new \texttt{requires} introduce a \texttt{precondition}. This is
+formula that is supposed to hold at the beginning of the method call,
+here we ask for the parameter \texttt{x} to be non-negative, otherwise
+computing its square root would not be possible. The precondition is
+not something guaranted by the method itself: it has to be checked by
+the caller of the method.
+
+The \texttt{ensures} clause given states now that (i) the result is
+non-negative, (i) the square of the result is lessthan or equal to
+\texttt{x}, and (iii) the successor of the result has a square which
+is greater than \texttt{x}. This ensures that the result is indeed the
+square root rounded towards zero.
+
+To implement such a method, we propose an algorithm based on the
+following remark: we know that
+\[
+\sum_{i=0}^{k-1} 2i+1 = k^2
+\]
+so the square root of $n$ is the smallest integer $k$ such that
+\[
+\sum_{i=0}^{k} 2i+1  
+\]
+is greater than $n$.
+
+Now, add the following to your class \texttt{Lesson1}.
+\input{Lesson1_sqrtbody.pp}
+If you generate the VCs now, using
+\begin{verbatim}
+gwhy Lesson1.java
+\end{verbatim}
+you will see that almost nothing is provable, as shown on
+Figure~\ref{fig:sqrt}: the three parts of the postcondition are
+unproved. (Please ignore the third section ``Safety of Method sqrt''
+for the moment.)
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\textwidth]{Lesson1_sqrt.png}
+  \end{center}
+  \caption{Verification conditions for \texttt{sqrt}}
+\label{fig:sqrt}
+\hrulefill
 \end{figure}
 
 
+Indeed, as usual in Floyd-Hoare logic, to prove a program with a loop
+it is required to add a loop invariant to have enough
+information. 
+%More specifically to \Krakatoa{}, you also need to add a
+%loop \emph{variant}\index{variant}, an integer expression whose value
+%decreases at each loop.
+%In that particular example, the variant is not difficult to find: the
+%value of \texttt{sum} increases at each loop, until it reaches the
+%value of \texttt{x}: so \texttt{x-sum} is a good variant.
+Finding the right invariant is usually hard, and usually follows from the
+principle of the algorithm. Here, \texttt{count} will increase one by
+one, whereas \texttt{sum} will always be the sum of odd integers
+between \texttt{1} and \texttt{2*count+1}, that is
+\texttt{(count+1)*(count+1)}. So we suggest the following
+\input{Lesson1_sqrtloopinv.pp}
 
+If you rerun the GWhy tool and the provers, you will see that the
+sixth VC, which amounts to show that the property \texttt{sum == count
+  * count} is preserved by the loop, is not proved by any provers. It
+does not mean it is not true: in that case, it illustrates the
+incompleteness of the method, since checking validity of first-order
+formulas is undecidable. Showing that \texttt{sum == count * count} is
+preserver by a loop iteration means to prove that assuming \texttt{sum
+  == count * count} then \texttt{sum'
+  == count' * count'} if  \texttt{count' == count+1}  (instruction
+\texttt{count++}) and \texttt{sum' == sum + 2*count' + 1}. Proving this
+requires to simplify the formulas by applying property of
+distributivity of multiplication over addition. It appears that
+automatic provers are usually quite dumb with multiplication. To help
+them, it is possible to introduce \emph{lemmas} as hints. This is done
+as follows:
+\input{Lesson1_lemmas.pp}
+\index{lemmas}
+\index{lemma declaration@\texttt{lemma} declaration}
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\textwidth]{Lesson1_sqrt2.png}
+  \end{center}
+  \caption{Loop invariant VCs for \texttt{sqrt}}
+\label{fig:sqrt2}
+\hrulefill
+\end{figure}
+
+Rerunning again GWhy and the provers results in
+Figure~\ref{fig:sqrt2}. No prover is able to prove every VCs, but
+combining results of the three provers, each VCs is proved.
+
+\subsection*{Safety}
+\index{safety}
+\index{arithmetic overflow}
+
+Let's now look at the ``Safety'' section of VCs. This section contains
+VCs for checking that no runtime error may occur during
+execution. These includes:
+\begin{itemize}
+\item Division by zero
+\item Arithmetic Overflow
+\item Null pointer dereferencing
+\item Out-of-bounds arry access
+\end{itemize}
+
+On this example, arithmetic overflow is the concern. On
+Figure~\ref{fig:sqrt2}, the focus is put on VCs 7, located at
+expression \texttt{2*count} in the source code. Looking at the upper
+right, below the red line is the goal to prove, which is \texttt{ 2 *
+  integer\_of\_int32(count1) <= 2147483647}. The last constant is
+$2^{31}-1$, which is the maximal integer representable in the
+\texttt{int} type. So this goal amounts to prove that \texttt{count},
+since as a mathematical integer, multiplied by 2, does not exceed
+$2^{31}-1$. Indeed it is not provable, because it is not always true:
+if the value of $x$ is too large, arithmetic overflow may occur.
+
+It is possible to find a bound for \texttt{x}, to be added in the
+precondition, together with appropriate bounds for \texttt{sum} and
+\texttt{count} to be added as loop invariants, to prove the absence of
+arithmetic overflow. This is left as an exercice. In some situation,
+one may want to simply ignore possible arithmetic overflow. This is
+done by added the following \emph{pragma} at the beginning of the
+file:
+\input{Lesson1_pragma.pp}
+
+You may try this now, and checks that all remaining VCs are proved.
+
+\subsection*{Termination}
+\index{termination}
+\index{decreases clause@\texttt{decreases} clause}
+
+Since the \texttt{sqrt} method body contains a \texttt{while} loop, it
+is possible that the method execution does not terminate for some of
+the input. This is not check by default, but if you want to check
+termination, you can add another clause to the loop annotation: a
+\texttt{decreases} clause. An integer expression must follow, whic is
+supposed to decreases at each loop iteration, and remaining
+nonnegative. On the \texttt{sqrt} example, that \texttt{x-sum} is
+decreasing, so you can add:
+\input{Lesson1_sqrtdecr.pp}
+
+You can check again that this is porved automatically.
+
+\section{Array accesses}
+
+In this lesson, we now consider arrays. You should now create a new
+file \verb|Arrays.java|. Here is the specification of a method for computing 
+the maximum element of an array of ints, given as argument:
+\input{Arrays_findMax.pp}
+The precondition is necessary to ensure that \verb|t| is a non-empty
+array, so that the maximum exists. An alternative would have been to
+raise an exception in that case, but exceptions will be considered
+later. We also add the pragma for avoiding arithmetic overflow
+checking for simplicity, although in that case there will be no
+overflow problem.
+
+We propose the following code for that method:
+\input{Arrays_findMaxbody.pp}
+The loop invariant ensures that \verb|r| is always the index of the maximum
+element of \verb|t| between \verb|0| and \verb|i-1|. We put also as
+invariant the facts that \verb|r| and \verb|i| remain in the bounds of
+\verb|t|. 
+
+
+\section{Logic predicates}
+
+\index{logic predicates}
+\index{predicate declaration@\texttt{predicate} declaration}
+
+The following example is the same is the previous one. We just
+introduce a logic predicate to avoid the writing of similar formulas.
+ 
+\input{Arrays_findMax2.pp}
+
+
+\section{Array updates}
+
+\index{old construct@\bskw{old} construct}
+\index{at construct@\bskw{at} construct}
+
+The following method shifts for one cell to the right the contents of
+an array. It illustrates the \verb|\old| and the \verb|\at|
+constructs.
+\input{Arrays_shift.pp}
+
+\section{Objects and constructors}
+
+It is time to consider true \Java{} objects. Let's consider the
+following class that implements a very simple electronic purse.
+\input{Purse0.pp}
+
+
+\section{Calling subprograms, \texttt{assigns} clauses}
+
+\index{assigns clause@\texttt{assigns} clause}
+
+\input{Purse_test1.pp}
+\input{Purse_test2.pp}
+
+These tests cannot be proved, the \texttt{credit} and
+\texttt{withdraw} methods must be given \texttt{assigns} clauses as
+follows: 
+\input{Purse2.pp}
+
+\section{Programs with exceptions}
+
+\index{behavior}
+\index{behavior declaration@\texttt{behavior} declaration}
+\index{throws clause@\texttt{throws} clause}
+
+\input{Purse_withdraw2.pp}
+
+\section{The Dutch National Flag problem}
+
+\input{Flag.pp}
+
+\section{Ghost variables}
+
+\index{ghost variables}
+\index{ghost declaration@\texttt{ghost} declaration}
+
+The following example illustrates code instrumentation using ghost
+variables.
+
+\input{Gcd.pp}
 
 \chapter{Specification Language: Reference}
-
+\label{chap:reference} 
 
 \section{Logic expressions}
 \label{sec:expressions}
@@ -173,7 +444,7 @@ In essence, terms correspond to pure Java expressions, with additional
 constructs that we will introduce progressively, except that method
 and constructor calls are not allowed.
 
-Figure~\ref{fig:gram:term} presents the grammar for the basic
+Figure~\ref{fig:gram:lexpr} presents the grammar for the basic
 construction of logic expressions.  
 
 \begin{figure}[p]
@@ -185,9 +456,9 @@ construction of logic expressions.
 
 Basic additional constructs are as follows:
 \begin{description}
-\item[Local binding] $\bskw{let} x = e_1 ; e_2$
-  introduces the name $x$ for
-  expression $e_1$ which can be used in expression $e_2$.
+% \item[Local binding] $\bskw{let} x = e_1 ; e_2$
+%   introduces the name $x$ for
+%   expression $e_1$ which can be used in expression $e_2$.
 
 \item[Conditional] $c ? e_1 : e_2$. There is a subtlety
   here: the condition may be either a boolean term or a proposition.  In
@@ -196,10 +467,10 @@ Basic additional constructs are as follows:
   semantics: $ c ? e_1 : e_2$ is equivalent to $(c
   \verb|==>| e_1) \verb|&&| (\verb|!| c \verb|==>| e_2)$
 
-\item[Syntactic naming] $id \verb|:| e$ is a term or a proposition
-  equivalent to $e$. It is different from local naming with $\bskw{let}$:
-  the name cannot be reused in other terms or proposition. It is only
-  for readibility purposes.
+% \item[Syntactic naming] $id \verb|:| e$ is a term or a proposition
+%   equivalent to $e$. It is different from local naming with $\bskw{let}$:
+%   the name cannot be reused in other terms or proposition. It is only
+%   for readibility purposes.
 
 \item[Consecutive comparison operators] the construct $t_1~relop_1~t_2~relop_2~t_3 \cdots t_k$ with
   several consecutive comparison operators is a shortcut for
@@ -242,8 +513,9 @@ of same priority are presented on the same line.
       connective implies & right & \verb|==>| \\
       connective equiv & left & \verb|<==>| \\
       ternary connective & right & $\cdots\verb|?|\cdots\verb|:|\cdots$ \\
-      binding & left & \bskw{forall} \bskw{exists} \bskw{let} \\
-      naming & right & \verb|:| \\
+      binding & left & \bskw{forall} \bskw{exists} %\bskw{let} 
+      \\
+%      naming & right & \verb|:| \\
       \hline
     \end{tabular}
   \end{center}
@@ -251,12 +523,12 @@ of same priority are presented on the same line.
 \label{fig:precedence}
 \end{figure}
 
-There is an additional ambiguity between the connective
-\verb|..?..:..| and the naming with \verb|:|. For example, in the
-expression \verb|x?y:z:t|, the precedence table does not enforce
-whether this should be seen as \verb|x?(y:z):t| or \verb|x?y:(z:t)|. 
-Such a case must considered as a syntax error, and should be fixed
-by explicitly using parentheses.
+% There is an additional ambiguity between the connective
+% \verb|..?..:..| and the naming with \verb|:|. For example, in the
+% expression \verb|x?y:z:t|, the precedence table does not enforce
+% whether this should be seen as \verb|x?(y:z):t| or \verb|x?y:(z:t)|. 
+% Such a case must considered as a syntax error, and should be fixed
+% by explicitly using parentheses.
 
 \subsection{Semantics}
 \label{sec:twovaluedlogic}
@@ -289,12 +561,13 @@ consistent assertions.
 \subsection{Typing}
 
 The language of logic expressions is typed (as for \emph{multi-sorted}
-first-order logic). Types are either C types or \emph{logic types}
+first-order logic). Types are either Java types or \emph{logic types}
 defined as follows:
 \begin{itemize}
 \item ``Mathematical'' types: \verb|integer| for unbounded,
-  mathematical integers; \verb|real| for real numbers, \verb|boolean|
-  for booleans (with values written as \verb|\true| and \verb|\false|).
+  mathematical integers; \verb|real| for real numbers.
+%, \verb|boolean|
+%  for booleans (with values written as \verb|\true| and \verb|\false|).
 \item Logic types introduced by specification writer (see
   Section~\ref{sec:logicspec}).
 \end{itemize}
@@ -317,8 +590,7 @@ Notes:
   Section~\ref{sec:logicalstates}.
 \end{itemize}
 
-Formal typing rules for terms are given in appendix~\ref{sec:typingrules}
-
+% Formal typing rules for terms are given in appendix~\ref{sec:typingrules}
 
 \subsection{Integer arithmetic and machine integers}
 
@@ -364,7 +636,7 @@ allowed, and is interpreted as follows: the result is the unique value
 of the corresponding type that is congruent to the mathematical result
 modulo the cardinal of this type.
 \begin{example}
-  \texttt{(byte)1000} is $1000 \bmod 256$ \emph{i.e.} $232$.
+  \texttt{(byte)1000} is $1000 \bmod 256$ \emph{i.e.} $-24$.
 \end{example}
 
 If one wants to express, in the logic, the result of the Java
@@ -372,18 +644,18 @@ computations of an expression, one should add all necessary casts. For
 example, the logic expression which denotes the result of Java
 computation of $x*y+z$ is \texttt{(int)((int)(x*y)+z)}.
 
-TODO Si la conjecture suivante est vraie, alors il
-  faudrait en parler: Si e1 et e2 sont des expressions d'un type
-  entier de C, quels qu'ils soient et si op est une operation binaire
-  sur entiers, alors l'operation C $e1~op~e2$ (de type $\tau$),donne
-  le meme resultat que l'expression logique $(\tau)(e_1~op~e_2)$ ou
-  $op$ est l'operation logique sur $Z$. Ce cast permet donc a
-  l'utilisateur de parler du resultat du calcul C d'une expressions
-  dans la logique
+% TODO Si la conjecture suivante est vraie, alors il
+%   faudrait en parler: Si e1 et e2 sont des expressions d'un type
+%   entier de C, quels qu'ils soient et si op est une operation binaire
+%   sur entiers, alors l'operation C $e1~op~e2$ (de type $\tau$),donne
+%   le meme resultat que l'expression logique $(\tau)(e_1~op~e_2)$ ou
+%   $op$ est l'operation logique sur $Z$. Ce cast permet donc a
+%   l'utilisateur de parler du resultat du calcul C d'une expressions
+%   dans la logique
 
 
-Important: implicit casts from integers to Java integer type are forbidden.
-input{integer-cast.pp}
+Remark: implicit casts from integers to Java integer type are forbidden.
+%input{integer-cast.pp}
 
 
 
@@ -437,50 +709,50 @@ $2 * 3.5$ denotes the real number 7
 \end{example}
 Comparisons operators are interpreted as real operators too.
 
-TODO  syntaxe pour abs et power ? a priori non, on peut
-  fournir une library pour les reels avec abs(), power(), mais
-  proposer des syntaxes speciales parait difficile
+% TODO  syntaxe pour abs et power ? a priori non, on peut
+%   fournir une library pour les reels avec abs(), power(), mais
+%   proposer des syntaxes speciales parait difficile
 
-  mais: on pourrait permettre des definition d'operateurs infixes
-
-
-\subsubsection{Casts, infinity and NaNs}
-
-Casting from an integer type or a float type to a float or a double is
-as in Java: same conversion operations applies.
-
-Casting a real number $x$ to a float (resp. a double) results in a
-float value $y$ with the nearest-even rounding mode (see IEEE 754
-norm), which is the closest to $x$ real number which is representable
-in the float (resp. double) type. If the source real number is too
-large, this may also result into one of the special values +infinity
-and -infinity. This semantics ensures that the float result of a Java
-operation $e_1 op e_2$ on floats, if the default rounding mode is not
-changed in the program, might be obtained in the logic under the form
-$(float)(e_1 op e_2)$.
-
-\begin{example}
-  We have
-  \verb|(float)0.1| = $13421773 \times 2 ^{-27}$ which is equal to
-  $0.10000000149006473916$
-\end{example}
-
-Rounding of real number towards a float with other rounding modes
-might be obtained via specific logic functions given in external
-libraries. As well, classical mathematical operations like
-exponential, sine, cosine, etc. are supposed to be available in some
-library (see Section~\ref{sec:libreal}).
+%   mais: on pourrait permettre des definition d'operateurs infixes
 
 
-\subsubsection{Quantification}
+% \subsubsection{Casts, infinity and NaNs}
 
-Quantification over a variable of type \verb|real| is of course usual
-quantification over real numbers.
+% Casting from an integer type or a float type to a float or a double is
+% as in Java: same conversion operations applies.
 
-Quantification over float (resp. double) types is allowed too, and are
-supposed to range over all real numbers representable as floats (resp
-doubles). In particular, this does not include NaN, +infinity and
--infinity in the considered range.
+% Casting a real number $x$ to a float (resp. a double) results in a
+% float value $y$ with the nearest-even rounding mode (see IEEE 754
+% norm), which is the closest to $x$ real number which is representable
+% in the float (resp. double) type. If the source real number is too
+% large, this may also result into one of the special values +infinity
+% and -infinity. This semantics ensures that the float result of a Java
+% operation $e_1 op e_2$ on floats, if the default rounding mode is not
+% changed in the program, might be obtained in the logic under the form
+% $(float)(e_1 op e_2)$.
+
+% \begin{example}
+%   We have
+%   \verb|(float)0.1| = $13421773 \times 2 ^{-27}$ which is equal to
+%   $0.10000000149006473916$
+% \end{example}
+
+% Rounding of real number towards a float with other rounding modes
+% might be obtained via specific logic functions given in external
+% libraries. As well, classical mathematical operations like
+% exponential, sine, cosine, etc. are supposed to be available in some
+% library (see Section~\ref{sec:libreal}).
+
+
+% \subsubsection{Quantification}
+
+% Quantification over a variable of type \verb|real| is of course usual
+% quantification over real numbers.
+
+% Quantification over float (resp. double) types is allowed too, and are
+% supposed to range over all real numbers representable as floats (resp
+% doubles). In particular, this does not include NaN, +infinity and
+% -infinity in the considered range.
 
 \section{Simple contracts}
 
@@ -530,7 +802,7 @@ generic form:
 \end{flushleft}
 the semantics of such a contract can be rephrased as follows:
 \begin{itemize}
-\item The caller must guarantee that the callee it is called in a
+\item The caller must guarantee that the callee is called in a
   state (called \emph{prestate})  where the property $P_1 \verb|&&| P_2$ holds.
 \item When the callee returns normally, the property
   $E_1 \verb|&&| E_2$ must hold in the corresponding \emph{poststate}.
@@ -554,6 +826,7 @@ potentially modifies everything.
 
 
 \section{Behavior clauses}
+\label{sec:behaviors}
 
 A simple contract can be augmented with \emph{behaviors}.
 
@@ -602,25 +875,25 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
     \begin{flushleft}\ttfamily\color{blue}
       //@ assert \textsl{prop}
     \end{flushleft}
-  \item Specify that the given property is true at the corresponding
+  specify that the given property is true at the corresponding
     program point
-  \item Assertions can be associated to behaviors, as:
-    \begin{flushleft}\ttfamily\color{blue}
-      //@ for $b_1,\ldots,b_n$: assert \textsl{prop}
-    \end{flushleft}
+%   \item Assertions can be associated to behaviors, as:
+%     \begin{flushleft}\ttfamily\color{blue}
+%       //@ for $b_1,\ldots,b_n$: assert \textsl{prop}
+%    \end{flushleft}
 
   \end{itemize}
 
 \subsection{Loop annotations}
 
   \begin{itemize}
-  \item Additional clauses for loops:
+  \item Additional clause for loops:
     \begin{flushleft}\ttfamily\color{blue}
-      /*@ loop invariant \textsl{prop} \\
-      ~~@ loop assigns \textsl{tset} \\
+      /*@ loop\_invariant \textsl{prop} \\
+      ~~@ loop\_assigns \textsl{tset} \\
       ~~@*/
     \end{flushleft}
-  \item Specify that
+    specify that
     \begin{itemize}
     \item the given property is an inductive loop invariant for the
       loop: 
@@ -630,78 +903,83 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
       \end{itemize}
     \item side-effect of the loop are included in the given tset
     \end{itemize}
-  \item Can be associated to behaviors too
+%  \item Can be associated to behaviors too
   \end{itemize}
 
-\subsection{Statement contracts}
+% \subsection{Statement contracts}
   
-  \begin{itemize}
-  \item Same as function contracts, associated to statements
-  \item Acts as embedding the corresponding statement in a black box,
-    as if it was a function call 
-  \item May have additional clauses in behaviors, to be used in place
-    of the throws clause:
-    \begin{flushleft}\ttfamily\color{blue}
-      /*@ breaks \textsl{prop} \\
-      ~~@ continues \textsl{prop} \\
-      ~~@ returns \textsl{prop} \\
-      ~~@*/
-    \end{flushleft}
-    to deal with corresponding abrupt termination
+%   \begin{itemize}
+%   \item Same as function contracts, associated to statements
+%   \item Acts as embedding the corresponding statement in a black box,
+%     as if it was a function call 
+%   \item May have additional clauses in behaviors, to be used in place
+%     of the throws clause:
+%     \begin{flushleft}\ttfamily\color{blue}
+%       /*@ breaks \textsl{prop} \\
+%       ~~@ continues \textsl{prop} \\
+%       ~~@ returns \textsl{prop} \\
+%       ~~@*/
+%     \end{flushleft}
+%     to deal with corresponding abrupt termination
       
-  \item Can be associated to behaviors too
-  \end{itemize}
+%   \item Can be associated to behaviors too
+%   \end{itemize}
 
 
-\subsection{Code Invariants}
+% \subsection{Code Invariants}
 
-  \begin{itemize}
-  \item Purpose: support for arbitrary \texttt{goto}s    
-  \item Similar to assertions, but acts as inductive properties like
-    loop invariants.
-  \item Inductive scheme is guided by the control flow graph
-    \cite{Filliatre07mix}
-  \end{itemize}
+%   \begin{itemize}
+%   \item Purpose: support for arbitrary \texttt{goto}s    
+%   \item Similar to assertions, but acts as inductive properties like
+%     loop invariants.
+%   \item Inductive scheme is guided by the control flow graph
+%     \cite{Filliatre07mix}
+%   \end{itemize}
 
 
 
 \section{Data invariants}
 
 
-  Are properties on data supposed to hold ``permanently''.
+  A class invariant is a property attached to a class. This property
+  is supposed to hold on any object of that class. More precisely, it
+  holds at method entrance and exit, and at the exit of constructor.
+%  satisfy ata supposed to hold ``permanently''.
 
-  An invariant may be either
-  \begin{itemize}
-  \item a \emph{global} invariant: on global variables
-  \item or a \emph{type} invariant: apply on any variable of this type.
-  \end{itemize}
-  Independently, it can be either
-  \begin{itemize}
-  \item a \emph{strong} invariant: true at execution step
-  \item a \emph{weak} invariant: true at function boundaries
-  \end{itemize}
+%   An invariant may be either
+%   \begin{itemize}
+%   \item a \emph{global} invariant: on global variables
+%   \item or a \emph{type} invariant: apply on any variable of this type.
+%   \end{itemize}
+%   Independently, it can be either
+%   \begin{itemize}
+%   \item a \emph{strong} invariant: true at execution step
+%   \item a \emph{weak} invariant: true at function boundaries
+%   \end{itemize}
 
 
 
 \section{Advanced modeling language}
+\label{sec:logicspec}
 
 \subsection{Logic definitions}
 
   \begin{itemize}
-  \item New logic functions and predicates can be defined
-  input{module.c.pp}
-  \item Arbitrary recursion is allowed
-  input{fib.c.pp} 
+  \item New logic functions and predicates can be defined 
+%  input{.pp}
+%  \item Arbitrary recursion is allowed
+%  input{fib.c.pp} 
   \end{itemize}
 
 \subsection{Hybrid predicates}
+\label{sec:logicalstates}
 
   \begin{itemize}
-  \item Logic functions and predicates may depend on C heap
+  \item Logic functions and predicates may depend on memory heap
   \item In such a case, logic labels are required:
-    input{max\_index.c.pp}
+%    input{max\_index.c.pp}
   \item Indeed, with only one label, the following is allowed too:
-    input{max\_index2.c.pp}
+%    input{max\_index2.c.pp}
   \end{itemize}
 
 \subsection{Abstract data types}
@@ -715,43 +993,43 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
   \end{itemize}
 
 
-\subsection{Concrete data types}
+% \subsection{Concrete data types}
 
-  \begin{itemize}
-  \item logic types may be defined using
-    \begin{itemize}
-    \item sum types
-    \item record types
-    \end{itemize}
-  \item For sum types: pattern matching
-  \item For record types: $t.f$ notation
-  \item Also built-in: pairs
-  \end{itemize}
+%   \begin{itemize}
+%   \item logic types may be defined using
+%     \begin{itemize}
+%     \item sum types
+%     \item record types
+%     \end{itemize}
+%   \item For sum types: pattern matching
+%   \item For record types: $t.f$ notation
+%   \item Also built-in: pairs
+%   \end{itemize}
 
-\subsection{Parametric polymorphism}
+% \subsection{Parametric polymorphism}
 
-  \begin{itemize}
-  \item Parametric polymorphism is proposed, with a C++-like syntax
+%   \begin{itemize}
+%   \item Parametric polymorphism is proposed, with a C++-like syntax
 
-  \end{itemize}
+%   \end{itemize}
 
-\subsection{Higher-order functions}
+% \subsection{Higher-order functions}
 
-  \begin{itemize}
-  \item The term $\bskw{lambda} ~\textsl{type}~ \textsl{x} ~;~
-    \textsl{t}$
-  stands for the function mapping $x$ to $t$
-  \item Special constructs:
-\begin{eqnarray*}
-    \bskw{max}(i,j,f) &=& \max \{ f(i),f(i+1), \ldots, f(j) \} \\
-    \bskw{min}(i,j,f) &=& \min \{ f(i),f(i+1), \ldots, f(j) \} \\
-    \bskw{sum}(i,j,f) &=& f(i)+f(i+1)+\cdots+f(j) \\
-    \bskw{product}(i,j,f) &=& f(i)\times f(i+1) \times \cdots \times f(j) \\
-    \bskw{numof}(i,j,f) &=& \# \{ k \mid i \leq k \leq j ~\land~ f(k) \} \\
-&=& \bskw{sum}(i,j,\bskw{lambda}~\kw{integer}~k ; \\
-&& \hspace*{20mm} f(k) ? 1 : 0)
-  \end{eqnarray*}
-  \end{itemize}
+%   \begin{itemize}
+%   \item The term $\bskw{lambda} ~\textsl{type}~ \textsl{x} ~;~
+%     \textsl{t}$
+%   stands for the function mapping $x$ to $t$
+%   \item Special constructs:
+% \begin{eqnarray*}
+%     \bskw{max}(i,j,f) &=& \max \{ f(i),f(i+1), \ldots, f(j) \} \\
+%     \bskw{min}(i,j,f) &=& \min \{ f(i),f(i+1), \ldots, f(j) \} \\
+%     \bskw{sum}(i,j,f) &=& f(i)+f(i+1)+\cdots+f(j) \\
+%     \bskw{product}(i,j,f) &=& f(i)\times f(i+1) \times \cdots \times f(j) \\
+%     \bskw{numof}(i,j,f) &=& \# \{ k \mid i \leq k \leq j ~\land~ f(k) \} \\
+% &=& \bskw{sum}(i,j,\bskw{lambda}~\kw{integer}~k ; \\
+% && \hspace*{20mm} f(k) ? 1 : 0)
+%   \end{eqnarray*}
+%   \end{itemize}
   
 \section{Termination}
 
@@ -760,63 +1038,66 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
   \begin{itemize}
   \item A loop can be annotated with a \emph{variant}: an integer
     expression that decreases at each iteration
-  \item Example:
-    input{bsearchvariant.c.pp}
+%  \item Example:
+%    input{bsearchvariant.c.pp}
   \end{itemize}
 
 
-\subsection{Recursive functions}
+% \subsection{Recursive functions}
 
-  \begin{itemize}
-  \item A recursive function can be also annotated with a variant
+%   \begin{itemize}
+%   \item A recursive function can be also annotated with a variant
 
-    input{fact.c.pp}
+%     input{fact.c.pp}
 
-  \item Mutual recursion supported too 
-  \end{itemize}
+%   \item Mutual recursion supported too 
+%   \end{itemize}
 
-\subsection{Arbitrary termination order}
+% \subsection{Arbitrary termination order}
 
-  \begin{itemize}
-  \item Termination order can different from the default
-  \item Order introduced as:
-    \begin{flushleft}\ttfamily\color{blue}
-      //@ predicate $R(\tau x,\tau y)$
-    \end{flushleft}
-  \item Loop variants:
-    \begin{flushleft}\ttfamily\color{blue}
-      //@ loop variant \textsl{term} \kw{for} $R$
-    \end{flushleft}
-  \item Recursive functions:
-    \begin{flushleft}\ttfamily\color{blue}
-      //@ decreases \textsl{term} \kw{for} $R$
-    \end{flushleft}
-  \item For mutual recursion: the same $R$ is required
-  \end{itemize}
-
-
-\section{Ghost code}
-
-  \begin{itemize}
-  \item Goal: code instrumentation
-  \item Code is augmented with
-    \begin{itemize}
-    \item global ghost declarations of variables and functions
-    \item In regular function code:
-      \begin{itemize}
-      \item ghost parameters
-      \item local ghost variables
-      \item ghost statements (include ghost \kw{else})
-      \end{itemize}
-    \end{itemize}
-  \item Semantics:
-    \begin{center}\color{red}
-      ghost statements must not change the regular program execution
-    \end{center}
-  \end{itemize}
+%   \begin{itemize}
+%   \item Termination order can different from the default
+%   \item Order introduced as:
+%     \begin{flushleft}\ttfamily\color{blue}
+%       //@ predicate $R(\tau x,\tau y)$
+%     \end{flushleft}
+%   \item Loop variants:
+%     \begin{flushleft}\ttfamily\color{blue}
+%       //@ loop variant \textsl{term} \kw{for} $R$
+%     \end{flushleft}
+%   \item Recursive functions:
+%     \begin{flushleft}\ttfamily\color{blue}
+%       //@ decreases \textsl{term} \kw{for} $R$
+%     \end{flushleft}
+%   \item For mutual recursion: the same $R$ is required
+%   \end{itemize}
 
 
-\section{Model variables}
+\section{Ghost variables}
+
+
+% \section{Ghost code}
+
+%   \begin{itemize}
+%   \item Goal: code instrumentation
+%   \item Code is augmented with
+%     \begin{itemize}
+%     \item global ghost declarations of variables and functions
+%     \item In regular function code:
+%       \begin{itemize}
+%       \item ghost parameters
+%       \item local ghost variables
+%       \item ghost statements (include ghost \kw{else})
+%       \end{itemize}
+%     \end{itemize}
+%   \item Semantics:
+%     \begin{center}\color{red}
+%       ghost statements must not change the regular program execution
+%     \end{center}
+%   \end{itemize}
+
+
+% \section{Model variables}
 
 
 \chapter{Appendices}
@@ -824,14 +1105,16 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 \section{Requirements}
 \label{app:requirements}
 
-NEED UPDATE
 
-User requirements: knowing how to perform proofs using the Coq
-system. Knowing how to write JML specifications.
+Compiling from sources requires Objective Caml
+compiler, version 3.09 or higher. 
 
-System requirements: \Coq{} version 8.0, \Why{} version 1.32 or higher. For
-compiling \Krakatoa{} from sources, you need also the Objective Caml
-compiler, version 3.04 or higher.
+External theorem provers must be installed. Ergo is available from
+\url{http://ergo.lri.fr}, simplify is available from \url{} (see why
+web page), Z3 ia available from ..., Yices from ..., CVS3 from ...
+
+For using the Coq intereactive prover, you need \Coq{} version 8.0 or
+higher.
 
 \section{Installation procedure}
 
@@ -920,93 +1203,6 @@ the authors directly at the following address: \url{mailto:Claude dot
 
 
 
-
-
-
-
-
-
-
-The next step is the generation of proof obligations, for that purpose
-we use the \Why{} tool. This can be done using the generated
-\texttt{makefile}, you simply need to type
-\begin{verbatim}
-make -C tutorial coq
-\end{verbatim}
-This calls the \Why{} tool with the necessary arguments, and start
-compilation of several \Coq{} files. When it is done, please open the file
-\verb|tutorial/Lesson1_max_why.v|, for example with \texttt{coqide},
-the integrated development environment of \Coq{}. This is the file where \Why{} put the
-proof obligations, it should look like the following:
-\begin{small}
-\begin{verbatim}
-(* This file was originally generated by why.
-   It can be modified; only the generated parts will be overwritten. *)
-
-Require Export Krak_spec_why.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma Lesson1_max_body_po_1 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_1: x > y),
-  (x >= x /\ x >= y) /\ (forall (z:Z), (z >= x /\ z >= y -> z >= x)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma Lesson1_max_body_po_2 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_2: x <= y),
-  (y >= x /\ y >= y) /\ (forall (z:Z), (z >= x /\ z >= y -> z >= y)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-\end{verbatim}
-\end{small}
-After the \texttt{Require} command loading some module importations, this
-file contains two lemmas with uncomplete proofs. You
-essentially have to prove that the post-condition is valid, for each
-of the cases $x>y$ and $x\leq y$, coming from the original conditional
-statement of the Java program.  
-
-The next step is up to you: you need to fill the proofs of the lemmas.
-Notice that in fact, this file compiled entirely without errors,
-because in this first lesson, the default tactics \verb|intuition| is
-enough to prove the two lemmas. You should anyway remove the comments
-\texttt{(* FILL PROOF HERE *)}.
-
-Congratulations! You've made your first \Krakatoa{}-certified program!
-
-% \paragraph{Validation}
-
-% After the proof obligations have been proved, it is possible to
-% perform an additional verification step called the \emph{validation}. 
-% It is a definition of a \Coq{} function which is a
-% functional translation of the original Java method. Its type
-% should corresponds quite naturally to the JML specification of that
-% method.
-
-% You may ask for generation of this validation by running again
-% krakatoa with the additional option \verb|-valid|. This will generate
-% a file \verb|Lesson1_max_valid.v| starting as: 
-% \begin{small}
-% \begin{verbatim}
-% Definition Lesson1_max_body (* validation *)
-%   : forall (x: Z), forall (y: Z),
-%     (sig_1 Z
-%      (fun (result: Z)  => ((result >= x /\ result >= y) /\
-%       (forall (z:Z), (z >= x /\ z >= y -> z >= result)))))
-%   := <body>
-% \end{verbatim}
-% \end{small}
-% that is, a function whose type is the specification of
-% \verb|Lesson1.max|. The whole compilation of all the files generated
-% will check that this type is actually the type of \verb|<body>|.
 
 
 

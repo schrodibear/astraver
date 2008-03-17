@@ -11,10 +11,12 @@ SRCFILES=../src/loc.mli ../src/logic.mli ../src/types.mli \
 
 KFILES=Lesson1_max.pp \
 	Lesson1_sqrt.pp Lesson1_sqrtbody.pp Lesson1_sqrtloopinv.pp \
-	Arrays_findMax.pp Arrays_findMax2.pp Arrays_shift.pp \
-	Purse.pp Purse_test1.pp Purse_test2.pp Purse2.pp \
+	Lesson1_lemmas.pp Lesson1_pragma.pp Lesson1_sqrtdecr.pp \
+	Arrays_findMax.pp Arrays_findMaxbody.pp \
+	Arrays_findMax2.pp Arrays_shift.pp \
+	Purse.pp Purse0.pp Purse_test1.pp Purse_test2.pp Purse2.pp \
 	Purse_withdraw2.pp \
-	Flag1.pp Flag_inv.pp Flag_isMonochrome.pp Flag_flag.pp \
+	Flag.pp Flag1.pp Flag_inv.pp Flag_isMonochrome.pp Flag_flag.pp \
 	Flag_swap.pp Flag_body.pp \
 	contracts.bnf lexpr.bnf \
 	Gcd-nospec.pp Gcd-spec.pp Gcd.pp Gcd-lemmas.pp

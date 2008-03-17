@@ -27,94 +27,86 @@
 /*                                                                        */
 /**************************************************************************/
 
+class NoCreditException0 extends Exception {
 
-//@+ CheckArithOverflow = no
+    static final long serialVersionUID = 0;
 
-/* is_max(t,i,l) is true whenever t[i] is the maximum of t[0]..t[l-1]
- * l is an integer and not an int, because used as t.length which 
- * (in the logic) returns an integer and not an int 
- */
-/*@ predicate is_max{L}(int[] t,int i,integer l) {
-  @   t != null && 0 <= i < l <= t.length &&
-  @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i])
-  @ }
-  @*/
+    NoCreditException0();
 
-public class Arrays {
+}
 
-    /*@ requires t != null && 1 <= t.length <= 32767;
-      @ behavior max_found:
-      @   ensures 
-      @      0 <= \result < t.length && 
-      @      (\forall integer i; 
-      @           0 <= i < t.length ==> t[i] <= t[\result]);
+public class Purse0 {
+    
+    public int balance;
+
+    //@ invariant balance_non_negative: balance >= 0;
+
+    /*@ behavior created:
+      @   ensures balance == 0;
       @*/
-    public static short findMax(int[] t) {
-	int m = t[0];
-	short r = 0;
-        /*@ loop_invariant 
-          @   1 <= i <= t.length && 0 <= r < t.length &&
-          @   m == t[r] && (\forall integer j; 0 <= j < i ==> t[j] <= m);
-          @ decreases t.length-i;
-          @*/
-	for (short i=1; i < t.length; i++) {
-	    if (t[i] > m) {
-		r = i; 
-		m = t[i];
-	    }
-	}
-	return r;
+    public Purse0() {
+	balance = 0;
     }
 
-    /*@ requires t != null && t.length >= 1;
-      @ behavior max_found:
-      @  ensures 
-      @      0 <= \result < t.length && 
-      @      is_max(t,\result,t.length) ;
+    /*@ requires s >= 0;
+      @ behavior done:
+      @   assigns balance;
+      @   ensures balance == \old(balance)+s;
       @*/
-    public static int findMax2(int[] t) {
-	int m = t[0];
-	int r = 0; 
-	/*@ loop_invariant 
-	  @   1 <= i <= t.length && 0 <= r < t.length &&
-          @   m == t[r] && is_max(t,r,i) ;
-	  @ decreases t.length-i;
-	  @*/
-	for (int i=1; i < t.length; i++) {
-	    if (t[i] > m) {
-		r = i; 
-		m = t[i];
-	    }
-	}
-	return r;
+    public void credit(int s) {
+	balance += s;
     }
 
-
-    /*@ requires t != null ;
-      @ ensures 
-      @   \forall integer i; 0 < i < t.length ==> t[i] == \old(t[i-1]);
+    /*@ requires s >= 0;
+      @ behavior done:
+      @   assigns balance;
+      @   ensures s <= \old(balance) && balance == \old(balance) - s;
+      @ behavior amount_too_large:
+      @   assigns \nothing;
+      @   signals (NoCreditException0) s > \old(balance) ;
       @*/
-    public static void arrayShift(int[] t) {
-	/*@ loop_invariant 
-	  @   j < t.length &&
-	  @   (t.length > 0 ==>
-	  @     (0 <= j && 
-          @     (\forall integer i; 0 <= i <= j ==> t[i] == \at(t[i],Pre)) &&
-          @     (\forall integer i; j < i < t.length ==> t[i] == \at(t[i-1],Pre))));
-	  @ decreases j;
-	  @*/
-      for (int j = t.length-1 ; j > 0 ; j--) {
-	  t[j] = t[j-1];
+    public void withdraw(int s) throws NoCreditException0 {
+	if (balance >= s) {
+	    balance = balance - s;
+	}
+	else {
+	    throw new NoCreditException0();
 	}
     }
 
+    /*@ // requires p1 != null && p2 != null && p1 != p2;
+      @ behavior ok:
+      @   assigns p1.balance,p2.balance;
+      @   ensures \result == 0;
+      @*/
+    public static int test(Purse0 p1, Purse0 p2) {
+	p1.balance = 0;
+	p2.credit(100);
+	return p1.balance;
+    }
 
+
+    /*@ requires p != null;
+      @ behavior ok:
+      @   assigns p.balance ;
+      @   ensures \result <==> (\old(p.balance) >= 1000);
+      @*/
+    public static boolean test2(Purse0 p) {
+	try {
+	    p.withdraw(1000);
+	    return true;
+	}
+	catch (NoCreditException0 e) { 
+	    return false; 
+	}
+    }
+
+    
 }
 
 
 /*
 Local Variables: 
-compile-command: "make Arrays"
+compile-command: "make Purse0.io"
 End: 
 */
-

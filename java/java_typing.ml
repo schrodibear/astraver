@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.104 2008-02-27 14:07:57 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.105 2008-03-17 08:38:42 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -2933,13 +2933,13 @@ and statements env b =
 		  | { java_pstatement_node = JPSwhile(e,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
 		      let twhile =
-			type_while env s.java_pstatement_loc inv (Some dec) e s
+			type_while env s.java_pstatement_loc inv dec e s
 		      in
 			twhile :: statements env rem
 		  | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
 		      java_pstatement_loc = loc } :: rem -> 
 		      let tfor =
-			type_for_decl env loc vd inv (Some dec) e sl s
+			type_for_decl env loc vd inv dec e sl s
 		      in
 			tfor :: statements env rem
 		  | _ -> assert false

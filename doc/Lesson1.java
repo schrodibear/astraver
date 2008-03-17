@@ -1,4 +1,4 @@
-//@+ ArithOverflow = no
+// @+ CheckArithOverflow = no
 
 /*@ lemma distr_right: 
   @   \forall integer x,y,z; x*(y+z) == (x*y)+(x*z);

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.262 2008-03-14 12:10:28 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.263 2008-03-17 08:38:42 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -739,20 +739,20 @@ let tr_logic_const vi init acc =
 	  let t', lets = term ~global_assertion:true LabelHere LabelHere t in
 	  let vi_ty = vi.jc_var_info_type in
 	  let t_ty = t.jc_term_type in
-	  eprintf "logic const: max type = %a@." print_type ty;
+	  (* eprintf "logic const: max type = %a@." print_type ty; *)
 	  let pred =
 	    LPred (
 	      "eq",
-	      [term_coerce Loc.dummy_position vi_ty ty (LVar vi.jc_var_info_name); 
-	       term_coerce t.jc_term_loc t_ty ty t'])
+	      [term_coerce Loc.dummy_position ty vi_ty (LVar vi.jc_var_info_name); 
+	       term_coerce t.jc_term_loc ty t_ty t'])
 	  in
-	let _ =
+	let ax =
 	  Axiom(
 	    vi.jc_var_info_final_name ^ "_value_axiom",
 	    make_pred_binds lets pred
 	  )
 	in
-	(* bugs ax::*) decl
+	ax::decl
 
 let tr_logic_fun li ta acc =
   let params =
@@ -765,32 +765,6 @@ let tr_logic_fun li ta acc =
   let params_reads = 
     Jc_interp_misc.logic_params ~label_in_name:true li @ params 
   in
-(*
-    FieldRegionSet.fold
-      (fun (fi,r) acc -> 
-	 (field_region_memory_name(fi,r), memory_field fi)::acc)
-      li.jc_logic_info_effects.jc_effect_memories
-      params
-  in
-  let params_reads =
-    StringRegionSet.fold
-      (fun (a,r) acc -> 
-	 (alloc_region_table_name(a,r),alloc_table_type a)::acc)
-      li.jc_logic_info_effects.jc_effect_alloc_table
-      params_reads
-  in
-  let params_reads =
-    StringSet.fold
-      (fun v acc ->
-	 let st, _ = Hashtbl.find Jc_typing.structs_table v in
-	 let t = { logic_type_args = [struct_model_type st];
-		   logic_type_name = tag_table_type_name }
-	 in
-	 (tag_table_name st, t)::acc)
-      li.jc_logic_info_effects.jc_effect_tag_table
-      params_reads
-  in
-*)
   let decl =
     match li.jc_logic_info_result_type, ta with
 	(* Predicate *)
@@ -865,18 +839,6 @@ let tr_logic_fun li ta acc =
 	a) :: acc
     ) li.jc_logic_info_effects.jc_effect_memories acc
   
-(*
-let tr_predicate li p acc =
-  let params =
-    List.map
-      (fun vi ->
-	 (vi.jc_var_info_final_name,
-	   tr_base_type vi.jc_var_info_type))
-      li.jc_logic_info_parameters
-  in
-  Predicate(false,li.jc_logic_info_final_name,params,
-	    assertion None "" p) :: acc
-*)  
 
 (****************************
 
@@ -896,13 +858,6 @@ type interp_lvalue =
   | HeapRef of field_info * expr
 
 let const_un = Cte(Prim_int "1")
-
-(*
-let incr_call op =
-  match op with
-    | Stat_inc -> Jc_pervasives.add_int_.jc_fun_info_name
-    | Stat_dec -> Jc_pervasives.sub_int_.jc_fun_info_name
-*)
 
 type shift_offset = Int_offset of string | Expr_offset of Jc_ast.expr 
 

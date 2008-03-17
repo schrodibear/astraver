@@ -4,9 +4,9 @@
 
 type color = 1..3
    
-logic color BLUE = 1 :> color
-logic color WHITE = 2 :> color
-logic color RED = 3 :> color
+logic color BLUE = 1 
+logic color WHITE = 2 
+logic color RED = 3 
 
 type colorT = {
     color colorM;

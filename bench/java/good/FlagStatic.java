@@ -29,7 +29,12 @@
 
 /* Dijkstra's dutch flag */
 
-//@ predicate is_color(int c) { FlagStatic.BLUE <= c && c <= FlagStatic.RED }
+//@+ CheckArithOverflow = no
+
+/*@ predicate is_color(int c) { 
+  @     c == FlagStatic.BLUE || c == FlagStatic.WHITE || c == FlagStatic.RED 
+  @ }
+  @*/
 
 /*@ predicate is_color_array{L}(int t[]) { 
   @   t != null && 
