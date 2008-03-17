@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.18 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: gappa.ml,v 1.19 2008-03-17 08:56:17 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -276,11 +276,11 @@ let add_ctx_vars =
     (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
 
 let rec intros ctx = function
-  | Forall (true, id, n, t, _, p) ->
+  | Forall (_, id, n, t, _, p) ->
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
       intros (Svar (id', t) :: ctx) p'
-  | Pimplies (true, a, b) -> 
+  | Pimplies (_, a, b) -> 
       let h = fresh_hyp () in 
       intros (Spred (h, a) :: ctx) b
   | Pnamed (_, p) ->

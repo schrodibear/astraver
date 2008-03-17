@@ -1,16 +1,9 @@
 
-goal g1 : 4 = 2 * 2
+parameter dst, src : int array
 
-goal g1f : 4. = 2. * 2.
-
-parameter x : real ref
-
-let g2 () =
-  x := 2. * 2.
-  { x = 4. }
-
-parameter y : int ref
-
-let g3 () =
-  y := 2 * 2
-  { y = 4 }
+let p (i:int) = 
+  begin
+    dst[i] := src[i];
+    src[i] := 0
+  end
+  { dst[i] = src@[i] }
