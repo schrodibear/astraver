@@ -1,5 +1,16 @@
 
+Note: These are the changes for Krakatoa.
 
+version 1.11, March 17th, 2008
+=================================
 
-  bug fix: value axiom for logic constants
+o documentation is now is reasonable shape, although still incomplete
+o loop annotations: having an invariant but no decreases clause is allowed
+o bug fix: value axiom for logic constants
+o many improvements in generation of memory safety VCs
+
+version 1.10, December 20th, 2007
+=================================
+
+o first release officially replacing version 0.67
  
