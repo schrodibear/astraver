@@ -7,91 +7,121 @@
  **/
 //@ logic logic_tab create_logic_tab(n: integer, x:double);
 
-interface PersistentArray {
+/*
+
+interface PersistentArrayInterface {
 
     //@ model logic_tab model_tab;
   
     /*@ requires n >= 0;
       @ ensures \result.model_tab == create_logic(n,0.0);
-      @*/
-    static PersistantArray create(int n);
+      @* /
+    static PersistentArray create(int n);
 
     
     /*@ requires 0 <= i < length(model_tab);
       @ assigns \nothing;
       @ ensures \result == select(this.model_tab,i);
-      @*/
+      @* /
     double get(int i);
 
     /*@ requires 0 <= i < length(model_tab);
       @ assigns \nothing;
       @ ensures \fresh(\result); 
       @ ensures \result.model_tab == store(this.model_tab,i,x);
-      @*/
-    PersistantArray set(int i, double x);
+      @* /
+    PersistentArray set(int i, double x);
 
 }
 
+*/
 
 abstract class Data {
 
-    double get(int i);
+    abstract double get(int i);
+    
+    abstract PersistentArray set(int i, double x, PersistentArray parent);
 
 }
 
 class Arr extends Data {
 
-    double t[];
+    double table[];
 
-    //@ invariant t != null;
+    //@ invariant table != null;
 
-    double Arr(int n) {
-	t = new double[n];
+    Arr(int n) {
+	table = new double[n];
     }
 
     double get(int i) {
-	return t[i];
+	return table[i];
     }
 
+    PersistentArray set(int i, double x, PersistentArray parent) {
+	double old = table[i];
+	table[i] = x;
+	PersistentArray tmp1 = new PersistentArray(this);
+	Data tmp2 = new Diff(i,old,tmp1);
+	parent.contents = tmp2;
+	return tmp1;
+    }
 }
 
 class Diff extends Data {
 
     int index;
     double value;
-    Data remaining;
+    PersistentArray remaining;
 
     //@ invariant remaining != null;
+
+    Diff(int i, double x, PersistentArray rem) {
+	index = i;
+	value = x;
+	remaining = rem;
+    }
 
     double get(int i) {
 	if (i == index) return value;
 	return remaining.get(i);
     }
 
+    PersistentArray set(int i, double x, PersistentArray t) {
+	Data tmp = new Diff(i,x,t);
+	return new PersistentArray(tmp);
+    }
 }
 
-
-class PersistantArrayImpl {
+public class PersistentArray // implements PersistentArrayInterface 
+ {
 
     Data contents;
 
     //@ invariant contents != null;
 
-    PersistantArrayImpl(int n) {
-	contents = new Arr(n);
+    PersistentArray(Data d) {
+	contents = d;
     }
 
-
-    static PersistantArrayImpl create(int n) {
-	return new PersistantArrayImpl(n);
+    static PersistentArray create(int n) {
+	return new PersistentArray(new Arr(n));
     }
 
     double get(int i) {
-	contents.get(i);
+	return contents.get(i);
     }
 
-    PersistantArrayImpl set(int i, double x) {
+    PersistentArray set(int i, double x) {
+	return contents.set(i,x,this);
+    }
 
+    public static void main(String argv[]) {
+
+	PersistentArray t1 = PersistentArray.create(10);
+	PersistentArray t2 = t1.set(5,0.2);
+	System.out.println("t1[5] = " + t1.get(5));
+	System.out.println("t2[5] = " + t2.get(5));
     }
 
 }
@@ -100,28 +130,7 @@ class PersistantArrayImpl {
 
 
 
-implantation:
 
-   type data = Arr of int array 
-    | Diff of int * int * tab  
-
-   and tab = data ref   
-
-   logic repr (t:tab) (tt:tab_logic) =
-       repr_data !t tt
-
-   and repr_data (d:data) (tt:tab_logic) =
-       match d with
-        | Arr a ->   
-           forall i, 0 <= i < Array.length a ==>
-              Array.get a i == logic_array_get tt i
-        | Diff (i,v,t') ->
-              (* conditions sur indice i ? *)
-              forall tt', repr t' tt' ==>
-                repr_data d (logic_array_update tt' i v)        
-
-   let create n = ref (Arr (Array.create n 0)) 
-
-  val set : (t:tab) -> TODO
-
-  val get : (t:tab) -> TODO
+	
+	
+	
