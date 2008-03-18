@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.263 2008-03-17 08:38:42 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.264 2008-03-18 15:29:52 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -284,6 +284,7 @@ let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
 let safe_fun_enum_of_int n = "safe_" ^ n.jc_enum_info_name ^ "_of_integer_"
 let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
 let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
+let mod_of_enum n = "mod_" ^ n.jc_enum_info_name ^ "_of_integer"
 let fun_any_enum n = "any_" ^ n.jc_enum_info_name
 
 let term_coerce ?(cast=false) loc tdest tsrc e =
@@ -2574,56 +2575,94 @@ let tr_exception ei acc =
   Exception(exception_name ei, typ) :: acc
 
 let tr_enum_type ri (* to_int of_int *) acc =
-  let n = ri.jc_enum_info_name in
-  let enum_pred x =
-    LAnd(LPred("le_int",[LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_min))); x]),
-	       LPred("le_int",[x; LConst(Prim_int(Num.string_of_num(ri.jc_enum_info_max)))]))
+  let name = ri.jc_enum_info_name in
+  let min = Num.string_of_num ri.jc_enum_info_min in
+  let max = Num.string_of_num ri.jc_enum_info_max in
+  let max_sub_min = 
+    Num.string_of_num 
+      (Num.add_num
+	 (Num.sub_num ri.jc_enum_info_max ri.jc_enum_info_min) (Num.Int 1))
+  in
+  let lt = simple_logic_type name in
+  let in_bounds x =
+    LAnd(LPred("le_int",[LConst(Prim_int min); x]),
+         LPred("le_int",[x; LConst(Prim_int max)]))
   in
   let safe_of_int_type =
     Prod_type("x", Base_type(why_integer_type),
 	      Annot_type(LTrue,
-			 Base_type(simple_logic_type n),
+			 Base_type lt,
 			 [],[],
 			 LPred("eq_int",
 			       [LVar "x";LApp(logic_int_of_enum ri,
 					      [LVar "result"])]),[]))
   in
   let of_int_type =
+    let pre = 
+      if !Jc_options.int_model = IMbounded then in_bounds (LVar "x") else LTrue 
+    in
+    let post =
+      LPred("eq_int",
+	    [LApp(logic_int_of_enum ri,[LVar "result"]);
+	     if !Jc_options.int_model = IMbounded then LVar "x"
+	     else LApp(mod_of_enum ri,[LVar "x"])])
+    in
     Prod_type("x", Base_type(why_integer_type),
-	      Annot_type(enum_pred (LVar "x"),
-			 Base_type(simple_logic_type n),
-			 [],[],
-			 LPred("eq_int",
-			       [LVar "x";LApp(logic_int_of_enum ri,
-					      [LVar "result"])]),[]))
+	      Annot_type(pre,Base_type lt,[],[],post,[]))
   in
   let any_type =
     Prod_type("", Base_type(simple_logic_type "unit"),
-	      Annot_type(LTrue,
-			 Base_type(simple_logic_type n),
-			 [],[],
-			 LTrue,[]))
+	      Annot_type(LTrue,Base_type lt,[],[],LTrue,[]))
   in
-  Type(n,[]) ::
-    Logic(false,logic_int_of_enum ri,
-	  [("",simple_logic_type n)],why_integer_type) :: 
-    Logic(false,logic_enum_of_int ri,
-	  [("",why_integer_type)],simple_logic_type n) :: 
-    Param(false,fun_enum_of_int ri,of_int_type) ::
-    Param(false,safe_fun_enum_of_int ri,safe_of_int_type) ::
-    Param(false,fun_any_enum ri,any_type) ::
-    Axiom(n^"_range",
-	  LForall("x",simple_logic_type n,enum_pred 
-		    (LApp(logic_int_of_enum ri,[LVar "x"])))) ::
-    Axiom(n^"_coerce",
-	  LForall("x",why_integer_type,
-		  LImpl(enum_pred (LVar "x"),
-			LPred("eq_int",
-			      [LApp(logic_int_of_enum ri,
-				    [LApp(logic_enum_of_int ri, 
-					  [LVar "x"])]) ; 
-			       LVar "x"])))) ::
-    acc
+  Type(name,[])
+  :: Logic(false,logic_int_of_enum ri,
+	   [("",lt)],why_integer_type)
+  :: Logic(false,logic_enum_of_int ri,
+	   [("",why_integer_type)],lt)
+  :: (if !Jc_options.int_model = IMmodulo then
+	let width = LConst (Prim_int max_sub_min) in
+	let fmod t = LApp (mod_of_enum ri, [t]) in
+	[Logic (false, mod_of_enum ri, 
+		["x", simple_logic_type "int"], simple_logic_type "int");
+	 Axiom (name ^ "_mod_id",
+		LForall ("x", simple_logic_type "int",
+			 LImpl (in_bounds (LVar "x"), 
+				LPred ("eq_int", [LApp (mod_of_enum ri, 
+							[LVar "x"]);
+						  LVar "x"]))));
+	 Axiom (name ^ "_mod_lt",
+		LForall ("x", simple_logic_type "int",
+			 LImpl (LPred ("lt_int", [LVar "x"; 
+						  LConst (Prim_int min)]), 
+				LPred ("eq_int", [fmod (LVar "x");
+						  fmod (LApp ("add_int", 
+							      [LVar "x"; 
+							       width]))]))));
+	 Axiom (name ^ "_mod_gt",
+		LForall ("x", simple_logic_type "int",
+			 LImpl (LPred ("gt_int", [LVar "x"; 
+						  LConst (Prim_int max)]), 
+				LPred ("eq_int", [fmod (LVar "x");
+						  fmod (LApp ("sub_int", 
+							      [LVar "x"; 
+							       width]))]))));
+	]
+      else [])
+  @ Param(false,fun_enum_of_int ri,of_int_type)
+  :: Param(false,safe_fun_enum_of_int ri,safe_of_int_type)
+  :: Param(false,fun_any_enum ri,any_type)
+  :: Axiom(name^"_range",
+	   LForall("x",lt,in_bounds 
+		     (LApp(logic_int_of_enum ri,[LVar "x"]))))
+  :: Axiom(name^"_coerce",
+	   LForall("x",why_integer_type,
+		   LImpl(in_bounds (LVar "x"),
+			 LPred("eq_int",
+			       [LApp(logic_int_of_enum ri,
+				     [LApp(logic_enum_of_int ri, 
+					   [LVar "x"])]) ; 
+				LVar "x"]))))
+  :: acc
 
 let tr_variable vi e acc =
   if vi.jc_var_info_assigned then

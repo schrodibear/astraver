@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.101 2008-02-26 17:05:24 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.102 2008-03-18 15:29:52 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -58,7 +58,8 @@ type jc_decl =
   | JCseparation_policy of Jc_env.separation_sem
   | JCannotation_policy of Jc_env.annotation_sem
   | JCabstract_domain of Jc_env.abstract_domain 
-      
+  | JCint_model of Jc_env.int_model      
+
 let const = Jc_poutput.const
 
 (*
@@ -547,6 +548,11 @@ let string_of_abstract_domain p =
     | Jc_env.AbsOct -> "Oct"
     | Jc_env.AbsPol -> "Pol"
 
+let string_of_int_model p =
+  match p with
+    | Jc_env.IMbounded -> "bounded"
+    | Jc_env.IMmodulo -> "modulo"
+
 let rec print_decl fmt d =
   match d with
     | JCinvariant_policy p ->
@@ -557,6 +563,8 @@ let rec print_decl fmt d =
         fprintf fmt "# AnnotationPolicy = %s@\n" (string_of_annotation_policy p)
     | JCabstract_domain p ->
         fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
+    | JCint_model p ->
+        fprintf fmt "# IntModel = %s@\n" (string_of_int_model p)
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
 	  (print_list comma param) params 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.48 2008-02-27 11:52:57 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.49 2008-03-18 15:29:52 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
@@ -39,6 +39,8 @@ type annotation_sem =
     AnnotNone | AnnotInvariants | AnnotWeakPre | AnnotStrongPre
 
 type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
+
+type int_model = IMbounded | IMmodulo
 
 type jc_type =
   | JCTnative of native_type

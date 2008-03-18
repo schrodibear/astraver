@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.25 2008-03-10 23:16:02 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.26 2008-03-18 15:29:52 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -77,6 +77,7 @@ let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let annotation_sem = ref AnnotNone
 let ai_domain = ref AbsNone
+let int_model = ref IMbounded
 let interprocedural = ref false
 let main = ref ""
 let trust_ai = ref false

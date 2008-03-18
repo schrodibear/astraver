@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.55 2008-02-05 12:10:48 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.56 2008-03-18 15:29:52 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -107,6 +107,14 @@
 		| "Oct" -> Jc_env.AbsOct 
 		| "Pol" -> Jc_env.AbsPol 
 		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
+	  end  
+      | "IntModel" ->
+	  begin
+	    Jc_options.int_model :=
+	      match v with
+		| "bounded" -> Jc_env.IMbounded
+		| "modulo" -> Jc_env.IMmodulo 
+		| _ -> lex_error lexbuf ("unknown int model " ^ v)
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 }

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.24 2008-03-10 23:16:02 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.25 2008-03-18 15:29:52 moy Exp $ *)
 
 (*s environment variables *)
 
@@ -57,6 +57,7 @@ val inv_sem: Jc_env.inv_sem ref
 val separation_sem : Jc_env.separation_sem ref
 val annotation_sem : Jc_env.annotation_sem ref
 val ai_domain : Jc_env.abstract_domain ref
+val int_model : Jc_env.int_model ref
 val trust_ai : bool
 val fast_ai : bool
 
