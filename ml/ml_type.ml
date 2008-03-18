@@ -30,7 +30,9 @@
 (* Interpretation of Ocaml types to Jessie *)
 
 open Ml_misc
+open Jc_ast
 open Jc_env
+open Jc_fenv
 open Jc_output
 open Ml_ocaml.Types
 open Ml_ocaml.Ident
@@ -89,6 +91,12 @@ type ml_constructor_info = {
   ml_ci_arguments: Jc_env.field_info list;
 }
 
+type ml_array_info = {
+  ml_ai_struct: Jc_env.struct_info;
+  ml_ai_data_field: Jc_env.field_info;
+  ml_ai_make: Jc_fenv.fun_info;
+}
+
 type ml_jessie_type =
   | MLTnot_closed
   | MLTnative of native_type
@@ -96,6 +104,7 @@ type ml_jessie_type =
   | MLTvariant of Jc_env.variant_info * (string * ml_constructor_info) list
   | MLTtuple of Jc_env.struct_info
   | MLTlogic of string
+  | MLTarray of ml_array_info
 
 module ComparableCamlTypeList = struct
   type t = type_expr list
@@ -134,7 +143,8 @@ type ml_caml_type = {
 }
 
 let ml_types = Hashtbl.create 11 (* string -> ml_caml_type *)
-let ml_tuples = ref ParamMap.empty (* Ml_env.struct_info *)
+let ml_tuples: Jc_env.struct_info ParamMap.t ref = ref ParamMap.empty
+let ml_arrays: ml_array_info ParamMap.t ref = ref ParamMap.empty
 
 let declare_str n td logic =
   Hashtbl.add ml_types n {
@@ -176,6 +186,35 @@ let rec make_type mlt =
 	  | "int" -> MLTnative Tinteger
 	  | "float" -> MLTnative Treal
 	  | "bool" -> MLTnative Tboolean
+	  | "array" ->
+	      begin try
+		MLTarray(ParamMap.find args !ml_arrays)
+	      with Not_found ->
+		let vi = make_variant (fresh_ident "jessica_array") in
+		let si = make_root_struct vi (fresh_ident "jessica_array") in
+		let fi, argty = match args with
+		  | [ty] ->
+		      let argty = make ty in
+		      make_field si "t" argty, argty
+		  | _ -> assert false (* array with #arguments <> 1 ?? *)
+		in
+		let make = make_fun_info
+		  ~name:(fresh_ident "jessica_array_make")
+		  ~return_type:(make_pointer ~min:0 (JCtag si))
+		  ~params:[
+		    make_var_info ~name:"n" ~ty:(JCTnative Tinteger);
+		    make_var_info ~name:"v" ~ty:argty;
+		  ]
+		  ()
+		in
+		let ai = {
+		  ml_ai_struct = si;
+		  ml_ai_data_field = fi;
+		  ml_ai_make = make;
+		} in
+		ml_arrays := ParamMap.add args ai !ml_arrays;
+		MLTarray ai
+	      end
 	  | name ->
 	      let ty = try
 		Hashtbl.find ml_types name
@@ -216,6 +255,8 @@ and make mlt =
 	make_valid_pointer (JCvariant vi)
     | MLTlogic x ->
 	JCTlogic x
+    | MLTarray ai ->
+	make_pointer ~min:0 (JCtag ai.ml_ai_struct)
 
 and instance args ty =
   log "Instanciate type %s with %d/%d arguments." ty.ml_ty_name
@@ -283,7 +324,8 @@ and tuple tl =
 let structure ty =
   match make_type ty with
     | MLTrecord(si, _)
-    | MLTtuple si -> si
+    | MLTtuple si
+    | MLTarray{ml_ai_struct = si} -> si
     | _ -> failwith "ml_type.ml: structure: not translated to a structure type"
 
 let label recty ld =
@@ -299,13 +341,17 @@ let constructor varty cd =
 let proj tty index =
   match make_type tty with
     | MLTtuple si -> List.nth si.jc_struct_info_fields index
-    | _ -> failwith "ml_type.ml: constructor: not a tuple type"
+    | _ -> failwith "ml_type.ml: proj: not a tuple type"
+
+let array aty =
+  match make_type aty with
+    | MLTarray ai -> ai
+    | _ -> failwith "ml_type.ml: array: not an array type"
 
 let get_variant si = match si.jc_struct_info_variant with
   | None -> raise (Invalid_argument "ml_type.ml, get_variant")
   | Some vi -> vi
 
-(** Type interpretation *)
 let jc_decl mlty = function
   | MLTnot_closed ->
       assert false
@@ -334,33 +380,87 @@ let jc_decl mlty = function
 	constrs
       in
       (make_variant_def vi)::c_defs
-  | MLTtuple si ->
-      [ make_variant_def (get_variant si);
-	make_struct_def si mlty.ml_ty_invariants]
   | MLTlogic x ->
-      [ JClogic_type_def x]
+      [ JClogic_type_def x ]
+  | MLTarray _ | MLTtuple _ ->
+      (* declarations are made in jc_tuple_decl or jc_array_decl *)
+      []
+
+let jc_tuple_decl _ si acc = [
+  make_variant_def (get_variant si);
+  make_struct_def si [];
+] @ acc
+
+let jc_array_decl _ ai acc =
+  let n, v = couple_of_list ai.ml_ai_make.jc_fun_info_parameters in
+  let req = make_assertion
+    (JCArelation(
+       make_int_term (JCTvar n),
+       Bge_int,
+       term_of_int 0))
+  in
+  let rty = ai.ml_ai_make.jc_fun_info_result.jc_var_info_type in
+  let result = result_term rty in
+  let i = make_var_info ~name:"i" ~ty:(JCTnative Tinteger) in
+  let ens = make_and_list [
+    (*make_assertion
+      (JCArelation(
+	 make_offset_min result ai.ml_ai_struct,
+	 Beq_int,
+	 term_of_int 0));*) (* no need: included in return type *)
+    make_assertion
+      (JCArelation(
+	 make_offset_max result ai.ml_ai_struct,
+	 Beq_int,
+	 make_int_term
+	   (JCTbinary(
+	      make_var_term n,
+	      Bsub_int,
+	      term_of_int 1))));
+    make_assertion
+      (JCAquantifier(
+	 Forall, i,
+	 make_assertion
+	   (JCArelation(
+	      make_deref_term
+		(make_shift_term result (make_var_term i))
+		ai.ml_ai_data_field,
+	      Beq_int, (* hack *)
+	      make_var_term v))))
+  ] in
+(*  let ass =
+    [make_deref_location
+       (JCLSvar (result_var rty))
+       ai.ml_ai_data_field]
+  in*)
+  [
+    make_variant_def (get_variant ai.ml_ai_struct);
+    make_struct_def ai.ml_ai_struct [];
+    make_fun_def
+      ~name:ai.ml_ai_make.jc_fun_info_final_name
+      ~return_type:rty
+      ~params:ai.ml_ai_make.jc_fun_info_parameters
+      ~spec:(make_fun_spec ~requires:req(* ~assigns:ass*) ~ensures:ens ())
+      ()
+  ] @ acc
 
 let jc_decls () =
-  let decls1 = ParamMap.fold
-    (fun _ si acc ->
-       (make_variant_def (get_variant si)::
-	 (make_struct_def si [])::acc))
-    !ml_tuples
-    []
-  in
-  let decls2 = Hashtbl.fold
+  let decls = [] in
+  let decls = ParamMap.fold jc_tuple_decl !ml_tuples decls in
+  let decls = ParamMap.fold jc_array_decl !ml_arrays decls in
+  let decls = Hashtbl.fold
     (fun _ ty acc ->
        ParamMap.fold
-	 (fun _ ity acc -> (jc_decl ty ity)@acc)
+	 (fun _ ity acc -> jc_decl ty ity @ acc)
 	 ty.ml_ty_instances
 	 acc)
     ml_types
-    []
+    decls
   in
-  decls1 @ List.rev decls2
+  decls
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
+compile-command: "unset LANG; make -C .. -f build.makefile jessica.all"
 End: 
 *)

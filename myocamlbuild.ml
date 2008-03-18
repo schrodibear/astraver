@@ -92,6 +92,11 @@ let _ = dispatch begin function
       (* Declare contexts *)
       List.iter (fun (a, b) -> Pathname.define_context a b) contexts
 
+  | Before_options ->
+      (* Sense if we're in a terminal or not *)
+      if Sys.getenv "TERM" = "dumb" then
+	Ocamlbuild_pack.Log.classic_display := true
+
   | After_options ->
       (* Use findlib *)
       Options.ocamlc := ocamlfind & A "ocamlc";

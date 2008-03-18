@@ -61,6 +61,9 @@ let binary_op_of_string = function
   | "<=>" -> Biff
   | _ -> raise Not_found
 
+let unary_op_of_string = function
+  | _ -> raise Not_found
+
 let binary_op_type = function
   | Bge_int
   | Bgt_int
@@ -94,6 +97,36 @@ let apply_op_expr id args binary_op not_found =
     make_expr (binary_op op args) (binary_op_type op)
   with Not_found ->
     not_found (name id)
+
+(******************************************************************************)
+
+type find_function_result =
+  | MLFbinary of Jc_ast.bin_op
+  | MLFunary of Jc_ast.unary_op
+  | MLFfun_info of Jc_fenv.fun_info
+  | MLFarray_make
+
+let find_function env loc path =
+  let name = Ml_ocaml.Path.name path in
+  try MLFbinary (binary_op_of_string name) with Not_found ->
+    try MLFunary (unary_op_of_string name) with Not_found ->
+      match name with
+	| "Array.make" -> MLFarray_make
+	| _ -> try MLFfun_info(Ml_env.find_fun name env) with Not_found ->
+	    not_implemented loc "%s" name
+
+let make_apply_expr env loc path rty args =
+  match find_function env loc path with
+    | MLFbinary op ->
+	let x, y = couple_of_list ~loc:loc args in JCTEbinary(x, op, y)
+    | MLFunary op ->
+	JCTEunary(op, singleton_of_list ~loc:loc args)
+    | MLFfun_info fi ->
+	JCTEcall(fi, args)
+    | MLFarray_make ->
+	JCTEcall((array rty).ml_ai_make, args)
+  
+(******************************************************************************)
 
 exception Not_an_expression
 
@@ -135,7 +168,8 @@ let rec expression env e =
 			"unknown function: %s" x
 		  in
 		  JCTEcall(fi, args'))
-	  | _ -> not_implemented e.exp_loc "unsupported application (expression)"
+	  | _ ->
+	      not_implemented e.exp_loc "unsupported application (expression)"
 	end
     | Texp_match(e, pel, partial) ->
 	assert false (* TODO *)
@@ -697,14 +731,13 @@ let structure_item env = function
 	jc_fun_behavior = behaviors;
 	jc_fun_free_requires = make_assertion JCAtrue;
       } in
-      let jc_fun_def =
-	JCfun_def(
-	  return_type,
-	  fun_name,
-	  params',
-	  jc_spec,
-	  Some [ body' ]
-	)
+      let jc_fun_def = make_fun_def
+	~name:fun_name
+	~return_type:return_type
+	~params:params'
+	~body:[body']
+	~spec:jc_spec
+	()
       in
       [ jc_fun_def ], Ml_env.add_fun (name id) params' return_type env
   | Tstr_type l ->

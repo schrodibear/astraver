@@ -53,7 +53,7 @@ let parse f file_name =
     | Parsing.Parse_error ->
 	locate_error (Ml_ocaml.Location.curr lexbuf) "Parse error"
 
-let file env (file_kind, file_name) =
+let file (mlenv, env) (file_kind, file_name) =
   match file_kind with
     | Ml_options.Ml ->
 	log "Implementation %s:" file_name;
@@ -74,8 +74,8 @@ let file env (file_kind, file_name) =
 
 	(* Add specifications to the environment *)
 	log "  Listing function specifications...";
-	let spec_env =
-	  Ml_interp.add_structure_specs Ml_env.empty typed_tree
+	let mlenv =
+	  Ml_interp.add_structure_specs mlenv typed_tree
 	in
 	(*log "  Listing type specifications...";
 	let spec_env =
@@ -84,7 +84,7 @@ let file env (file_kind, file_name) =
   
         (* Interpret to a Jessie typed AST *)
 	log "  Interpreting...";
-        let code_decls, _ = Ml_interp.structure spec_env typed_tree in
+        let code_decls, mlenv = Ml_interp.structure mlenv typed_tree in
 	let type_decls = Ml_type.jc_decls () in
 	let jessie_ast = Ml_interp.base_decls @ type_decls @ code_decls in
 
@@ -102,7 +102,7 @@ let file env (file_kind, file_name) =
 
 	(* Return the new environment *)
 	log "  Done.";
-	new_env
+	mlenv, new_env
     | Ml_options.Mli ->
 	log "Interface %s:" file_name;
 	let parse_tree = parse Ml_ocaml.Parser.interface file_name in
@@ -120,9 +120,13 @@ let file env (file_kind, file_name) =
 	in
 
 	(* Return the new environment *)
-	Ml_ocaml.Env.add_signature typed_tree env
+	mlenv, Ml_ocaml.Env.add_signature typed_tree env
 
-let _ = List.fold_left file Ml_pervasives.default_env Ml_options.input_files
+let _ =
+  List.fold_left
+    file
+    (Ml_pervasives.default_mlenv, Ml_pervasives.default_env)
+    Ml_options.input_files
 
 (*
 Local Variables: 

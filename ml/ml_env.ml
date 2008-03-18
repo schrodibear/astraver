@@ -70,19 +70,7 @@ let add_var name ty env =
 
 let add_fun name params return_type env =
   let jc_name = identifier_of_symbol name in
-  let fi = {
-    jc_fun_info_tag = fresh_int ();
-    jc_fun_info_name = jc_name;
-    jc_fun_info_final_name = jc_name; (* ? *)
-    jc_fun_info_result = make_var ("jessica_"^name^"_result") return_type;
-    jc_fun_info_parameters = params;
-    jc_fun_info_calls = []; (* ? *)
-    jc_fun_info_logic_apps = []; (* ? *)
-    jc_fun_info_effects = Jc_pervasives.empty_fun_effect; (* ! *)
-    jc_fun_info_return_region = default_region;
-    jc_fun_info_param_regions = [];
-    jc_fun_info_is_recursive = false;
-  } in
+  let fi = make_fun_info jc_name return_type params () in
   { env with funs = StringMap.add name fi env.funs }
 
 (*let add_field name ty si env =
@@ -173,6 +161,6 @@ let find_fun_spec id env =
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
+compile-command: "unset LANG; make -C .. -f build.makefile jessica.all"
 End: 
 *)

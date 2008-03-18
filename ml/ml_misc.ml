@@ -109,6 +109,14 @@ let rec list_fold_lefti f i acc = function
       list_fold_lefti f (i+1) (f i acc x) rem
 let list_fold_lefti f = list_fold_lefti f 0
 
+let couple_of_list ?(loc = Ml_ocaml.Location.none) = function
+  | [x; y] -> x, y
+  | args -> locate_error loc "2 arguments needed, %d found" (List.length args)
+
+let singleton_of_list ?(loc = Ml_ocaml.Location.none) = function
+  | [x] -> x
+  | args -> locate_error loc "1 argument needed, %d found" (List.length args)
+
 (******************************************************************************)
 
 let identifier_of_symbol_char = function
@@ -144,6 +152,7 @@ let fresh_ident base =
 
 open Jc_ast
 open Jc_env
+open Jc_fenv
 open Jc_output
 
 let default_region = Jc_region.dummy_region
@@ -259,10 +268,20 @@ let make_or_list_expr = List.fold_left make_or_expr
 let make_or_list_term = List.fold_left make_or_term
   (make_bool_term (JCTconst(JCCboolean false)))
 
-let make_pointer_type si =
-  JCTpointer(si, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
-
 let expr_of_int i = make_int_expr(JCTEconst(JCCinteger(string_of_int i)))
+
+let term_of_int i = make_int_term(JCTconst(JCCinteger(string_of_int i)))
+
+let make_var_info ~name ~ty = {
+    jc_var_info_tag = fresh_int ();
+    jc_var_info_name = name;
+    jc_var_info_final_name = name;
+    jc_var_info_type = ty;
+    jc_var_info_formal = false;
+    jc_var_info_assigned = false;
+    jc_var_info_static = false;
+    jc_var_info_region = default_region;
+  }
 
 (* Jc_pervasives produces names that will be used by Jessie too, which is bad *)
 let new_var = let var_cnt = ref 0 in fun ?add ty ->
@@ -272,27 +291,9 @@ let new_var = let var_cnt = ref 0 in fun ?add ty ->
   in
   incr var_cnt;
   let id = "jessica"^add^(string_of_int !var_cnt) in
-  {
-    jc_var_info_tag = fresh_int ();
-    jc_var_info_name = id;
-    jc_var_info_final_name = id;
-    jc_var_info_type = ty;
-    jc_var_info_formal = false;
-    jc_var_info_assigned = false;
-    jc_var_info_static = false;
-    jc_var_info_region = default_region;
-  }
+  make_var_info ~name:id ~ty:ty
 
-let ignored_var ty = {
-  jc_var_info_tag = fresh_int ();
-  jc_var_info_name = "jessica_ignored";
-  jc_var_info_final_name = "jessica_ignored";
-  jc_var_info_type = ty;
-  jc_var_info_formal = false;
-  jc_var_info_assigned = false;
-  jc_var_info_static = false;
-  jc_var_info_region = default_region;
-}
+let ignored_var ty = make_var_info ~name:"jessica_ignored" ~ty:ty
 
 let expr_seq_to_let =
   List.fold_right
@@ -360,9 +361,17 @@ let make_let_tmp ty f =
   let a, b = f vi ve in
   JCTElet(vi, a, b)
 
-let make_let_alloc_tmp si f =
-  let ty = make_pointer_type (JCtag si) in
-  let init = make_expr (JCTEalloc(expr_of_int 1, si)) ty in
+let make_pointer ?min ?max tov =
+  JCTpointer(tov,
+	     (match min with None -> None | Some i -> Some(Num.num_of_int i)),
+	     (match max with None -> None | Some i -> Some(Num.num_of_int i)))
+
+let make_valid_pointer tov =
+  make_pointer ~min:0 ~max:0 tov
+
+let make_let_alloc_tmp ?(count=expr_of_int 1) si f =
+  let ty = make_valid_pointer (JCtag si) in
+  let init = make_expr (JCTEalloc(count, si)) ty in
   make_let_tmp ty (fun vi ve -> init, f vi ve)
 
 let make_seq_expr el acc =
@@ -373,7 +382,7 @@ let make_seq_expr el acc =
     (List.rev el)
 
 let make_alloc_tmp si =
-  let ty = make_pointer_type (JCtag si) in
+  let ty = make_valid_pointer (JCtag si) in
   let init = make_expr (JCTEalloc(expr_of_int 1, si)) ty in
   make_var_tmp ty (Some init)
 
@@ -457,17 +466,88 @@ let make_app li args = {
 
 let make_app_term_node li args = JCTapp (make_app li args)
 
-let make_valid_pointer tov =
-  JCTpointer(tov, Some(Num.num_of_int 0), Some(Num.num_of_int 0))
-
 let quantify q vi body =
   make_assertion (JCAquantifier(q, vi, body))
 
 let quantify_list q =
   List.fold_right (quantify q)
 
+let make_fun_info ~name ~return_type ~params () = {
+  jc_fun_info_tag = fresh_int ();
+  jc_fun_info_name = name;
+  jc_fun_info_final_name = name;
+  jc_fun_info_result = make_var ("jessica_"^name^"_result") return_type;
+  jc_fun_info_parameters = params;
+  jc_fun_info_calls = [];
+  jc_fun_info_logic_apps = [];
+  jc_fun_info_effects = Jc_pervasives.empty_fun_effect;
+  jc_fun_info_return_region = default_region;
+  jc_fun_info_param_regions = [];
+  jc_fun_info_is_recursive = false;
+}
+
+let make_fun_def ~name ~return_type ~params ?body ~spec () =
+  JCfun_def(
+    return_type,
+    name,
+    params,
+    spec,
+    body
+  )
+
+let make_behavior ?throws ?assumes ?assigns
+    ?(ensures=make_assertion JCAtrue) () =
+  {
+    jc_behavior_throws = throws;
+    jc_behavior_assumes = assumes;
+    jc_behavior_assigns = begin match assigns with
+      | None -> None
+      | Some l -> Some(Loc.dummy_position, l)
+    end;
+    jc_behavior_ensures = ensures;
+  }
+
+let make_fun_spec ?(requires=make_assertion JCAtrue)
+    ?(free_requires=make_assertion JCAtrue)
+    ?ensures ?assigns ?(behaviors=[]) () =
+  {
+    jc_fun_requires = requires;
+    jc_fun_free_requires = free_requires;
+    jc_fun_behavior =
+      let b = match ensures, assigns with
+	| None, None -> None
+	| Some e, None -> Some (make_behavior ~ensures:e ())
+	| None, Some a -> Some (make_behavior ~assigns:a ())
+	| Some e, Some a -> Some (make_behavior ~ensures:e ~assigns:a ())
+      in
+      match b with
+	| None -> behaviors
+	| Some b -> (Loc.dummy_position, "default", b)::behaviors
+  }
+
+let make_offset_min term si =
+  make_int_term (JCToffset(Offset_min, term, si))
+
+let make_offset_max term si =
+  make_int_term (JCToffset(Offset_max, term, si))
+
+let result_var ty =
+  make_var_info "\\result" ty
+
+let result_term ty =
+  make_var_term (result_var ty)
+
+let make_deref_term a b =
+  make_term (JCTderef(a, LabelHere, b)) b.jc_field_info_type
+
+let make_shift_term a b =
+  make_term (JCTshift(a, b)) a.jc_term_type
+
+let make_deref_location a b =
+  JCLderef(a, LabelHere, b, default_region)
+
 (*
 Local Variables: 
-compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
+compile-command: "unset LANG; make -C .. -f build.makefile jessica.all"
 End: 
 *)

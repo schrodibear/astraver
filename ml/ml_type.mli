@@ -68,11 +68,21 @@ val constructor: Ml_ocaml.Types.type_expr ->
 (** Return the field associated to some tuple projection. *)
 val proj: Ml_ocaml.Types.type_expr -> int -> Jc_env.field_info
 
+type ml_array_info = {
+  ml_ai_struct: Jc_env.struct_info;
+  ml_ai_data_field: Jc_env.field_info;
+  ml_ai_make: Jc_fenv.fun_info;
+}
+
+(** Given the argument type of an array, instantiate the array if needed and
+return the array info. *)
+val array: Ml_ocaml.Types.type_expr -> ml_array_info
+
 (** Return the declarations for all type instantiations. *)
 val jc_decls: unit -> Jc_output.jc_decl list
 
 (*
 Local Variables: 
-compile-command: "unset LANG; make -j -C .. bin/jessica.opt"
+compile-command: "unset LANG; make -C .. -f build.makefile jessica.all"
 End: 
 *)
