@@ -105,6 +105,8 @@ type find_function_result =
   | MLFunary of Jc_ast.unary_op
   | MLFfun_info of Jc_fenv.fun_info
   | MLFarray_make
+  | MLFarray_get
+  | MLFarray_set
 
 let find_function env loc path =
   let name = Ml_ocaml.Path.name path in
@@ -112,26 +114,45 @@ let find_function env loc path =
     try MLFunary (unary_op_of_string name) with Not_found ->
       match name with
 	| "Array.make" -> MLFarray_make
-	| _ -> try MLFfun_info(Ml_env.find_fun name env) with Not_found ->
-	    not_implemented loc "%s" name
+	| "Array.get" -> MLFarray_get
+	| "Array.set" -> MLFarray_set
+	| _ -> try MLFfun_info(Ml_env.find_fun name env) with
+	    | Ml_env.Not_found_str s -> not_implemented loc "%s" s
 
 let make_apply_expr env loc path rty args =
-  match find_function env loc path with
-    | MLFbinary op ->
-	let x, y = couple_of_list ~loc:loc args in JCTEbinary(x, op, y)
-    | MLFunary op ->
-	JCTEunary(op, singleton_of_list ~loc:loc args)
-    | MLFfun_info fi ->
-	JCTEcall(fi, args)
-    | MLFarray_make ->
-	JCTEcall((array rty).ml_ai_make, args)
+  make_expr begin
+    match find_function env loc path with
+      | MLFbinary op ->
+	  let (x, _), (y, _) = couple_of_list ~loc:loc args in
+	  JCTEbinary(x, op, y)
+      | MLFunary op ->
+	  JCTEunary(op, fst (singleton_of_list ~loc:loc args))
+      | MLFfun_info fi ->
+	  JCTEcall(fi, List.map fst args)
+      | MLFarray_make ->
+	  JCTEcall((array rty).ml_ai_make, List.map fst args)
+      | MLFarray_get ->
+	  let (x, xty), (y, _) = couple_of_list ~loc:loc args in
+	  let ai = array xty in
+	  JCTEderef(
+	    make_expr (JCTEshift(x, y))
+	      (make_valid_pointer (JCtag ai.ml_ai_struct)),
+	    ai.ml_ai_data_field)
+      | MLFarray_set ->
+	  let (x, xty), (y, _), (z, _) = triple_of_list args in
+	  let ai = array xty in
+	  JCTEassign_heap(
+	    make_expr (JCTEshift(x, y))
+	      (make_valid_pointer (JCtag ai.ml_ai_struct)),
+	    ai.ml_ai_data_field,
+	    z)
+  end (make rty)
   
-(******************************************************************************)
+(*******************************************************************************)
 
 exception Not_an_expression
 
 let rec expression env e =
-  let binary_op = binary_op_expr e.exp_loc in
   match e.exp_desc with
     | Texp_ident(Pident id, { val_kind = Val_reg }) ->
 	JCTEvar(Ml_env.find_var (name id) env)
@@ -154,20 +175,14 @@ let rec expression env e =
 	let args' = List.map
 	  (function
 	     | Some arg, Required ->
-		 make_expr (expression env arg) (make arg.exp_type)
+		 make_expr (expression env arg) (make arg.exp_type), arg.exp_type
 	     | _ -> not_implemented e.exp_loc "apply with optional arguments")
 	  args
 	in
 	begin match f.exp_desc with
-	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
-	      apply_op id args' binary_op
-		(fun x -> let fi = try
-		    Ml_env.find_fun x env
-		  with
-		    | Ml_env.Not_found_str x -> locate_error e.exp_loc
-			"unknown function: %s" x
-		  in
-		  JCTEcall(fi, args'))
+	  | Texp_ident(path, { val_kind = Val_reg }) ->
+	      (make_apply_expr env e.exp_loc path e.exp_type args').
+		jc_texpr_node
 	  | _ ->
 	      not_implemented e.exp_loc "unsupported application (expression)"
 	end
@@ -442,17 +457,22 @@ let rec statement env e cont =
 (*    | Texp_function of (pattern * expression) list * partial*)
     | Texp_apply(f, args) ->
 	let args = list_filter_option (List.map fst args) in
-	let args_try = List.map (try_expression env) args in
+	let args_try =
+	  List.combine
+	    (List.map (try_expression env) args)
+	    (List.map (fun e -> e.exp_type) args)
+	in
 	let args_final = List.map
 	  (function
-	     | Jessie_expr e -> e
-	     | Caml_expr e -> not_implemented e.exp_loc
+	     | Jessie_expr e, ty -> e, ty
+	     | Caml_expr e, _ -> not_implemented e.exp_loc
 		 "while loop in argument")
 	  args_try
 	in
 	cont (match f.exp_desc with
-	  | Texp_ident(Pident id, { val_kind = Val_reg }) ->
-	      apply_op_expr id args_final (binary_op_expr e.exp_loc)
+	  | Texp_ident(path, { val_kind = Val_reg }) ->
+	      make_apply_expr env e.exp_loc path e.exp_type args_final
+(*	      apply_op_expr id args_final (binary_op_expr e.exp_loc)
 		(fun x -> let fi = try
 		   Ml_env.find_fun x env
 		 with
@@ -460,7 +480,7 @@ let rec statement env e cont =
 		       "unknown function: %s" x
 		 in
 		 make_expr (JCTEcall(fi, args_final))
-		   fi.jc_fun_info_result.jc_var_info_type)
+		   fi.jc_fun_info_result.jc_var_info_type)*)
 	  | _ -> not_implemented e.exp_loc "unsupported application (statement)"
 	)
     | Texp_match(me, pel, _) ->

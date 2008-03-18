@@ -109,6 +109,10 @@ let rec list_fold_lefti f i acc = function
       list_fold_lefti f (i+1) (f i acc x) rem
 let list_fold_lefti f = list_fold_lefti f 0
 
+let triple_of_list ?(loc = Ml_ocaml.Location.none) = function
+  | [x; y; z] -> x, y, z
+  | args -> locate_error loc "3 arguments needed, %d found" (List.length args)
+
 let couple_of_list ?(loc = Ml_ocaml.Location.none) = function
   | [x; y] -> x, y
   | args -> locate_error loc "2 arguments needed, %d found" (List.length args)
@@ -125,6 +129,7 @@ let identifier_of_symbol_char = function
   | '=' -> "equal"
   | '[' -> "lsquare"
   | ']' -> "rsquare"
+  | '\'' -> "prime"
   | c -> String.make 1 c
 
 let identifier_of_symbol = function
@@ -427,16 +432,18 @@ let make_field si name jcty =
   si.jc_struct_info_fields <- fi::si.jc_struct_info_fields;
   fi
 
-let make_var name ty = {
-  jc_var_info_tag = fresh_int ();
-  jc_var_info_name = name;
-  jc_var_info_final_name = name;
-  jc_var_info_type = ty;
-  jc_var_info_region = default_region;
-  jc_var_info_formal = false;
-  jc_var_info_assigned = false;
-  jc_var_info_static = false;
-}
+let make_var name ty =
+  let name = identifier_of_symbol name in
+  {
+    jc_var_info_tag = fresh_int ();
+    jc_var_info_name = name;
+    jc_var_info_final_name = name;
+    jc_var_info_type = ty;
+    jc_var_info_region = default_region;
+    jc_var_info_formal = false;
+    jc_var_info_assigned = false;
+    jc_var_info_static = false;
+  }
 
 let dummy_variant = make_variant "dummy_variant"
 let dummy_struct = make_root_struct dummy_variant "dummy_struct"
