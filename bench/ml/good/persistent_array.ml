@@ -6,7 +6,7 @@ and data =
   | A of int array
   | D of int * int * t
 
-let create n v = A(Array.make n v)
+let create n v = { data = A(Array.make n v)}
 
 let rec get i t =
   match t.data with
@@ -16,7 +16,7 @@ let rec get i t =
 let set i v t =
   match t.data with
     | A a ->
-	let r = { data = A a } in
+	let r = { data = t.data } in
 	t.data <- D(i, a.(i), r);
 	a.(i) <- v;
 	r
