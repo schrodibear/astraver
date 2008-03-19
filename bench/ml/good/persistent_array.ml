@@ -6,7 +6,13 @@ and data =
   | A of int array
   | D of int * int * t
 
-let create n v = { data = A(Array.make n v)}
+(*@ logic type parray *)
+
+(*@ logic function pa_get (a: parray) (i: int): int *)
+
+(*@ logic function pa_set (a: parray) (i: int) (v: int): parray *)
+
+let create n v = { data = A(Array.make n v) }
 
 let rec get i t =
   match t.data with
