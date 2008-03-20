@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.101 2008-03-03 07:37:42 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.102 2008-03-20 16:05:13 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -46,18 +46,18 @@ open Jc_struct_tools
 (* Constant memories. Their region should be declared in Why. 
  * They should be passed to Why as global parameters. 
  *)
-let constant_memories_set = ref FieldRegionSet.empty
+let constant_memories_set = ref FieldOrVariantRegionSet.empty
 
 let alloc_region_table_set = ref StringRegionSet.empty
 
 let mergeRegionMap m1 m2 =
-  FieldRegionMap.fold
+  FieldOrVariantRegionMap.fold
     (fun v labs acc ->
        try
-	 let l = FieldRegionMap.find v m2 in
-	 FieldRegionMap.add v (LogicLabelSet.union labs l) acc
+	 let l = FieldOrVariantRegionMap.find v m2 in
+	 FieldOrVariantRegionMap.add v (LogicLabelSet.union labs l) acc
        with Not_found ->
-	   FieldRegionMap.add v labs acc)
+	   FieldOrVariantRegionMap.add v labs acc)
     m1 m2
 
 let ef_union ef1 ef2 =
@@ -90,8 +90,8 @@ let ef_union ef1 ef2 =
 let ef_assoc ?label_assoc ef assoc =
   { ef with 
     jc_effect_memories =
-      FieldRegionMap.fold 
-	(fun (fi,r) labels acc ->
+      FieldOrVariantRegionMap.fold 
+	(fun (fvi,r) labels acc ->
 	   let labels =
 	     match label_assoc with
 	       | None -> labels
@@ -111,12 +111,12 @@ let ef_assoc ?label_assoc ef assoc =
 		     labels LogicLabelSet.empty
 	   in
 	   if Region.polymorphic r then
-	     try FieldRegionMap.add (fi,RegionList.assoc r assoc) labels acc 
+	     try FieldOrVariantRegionMap.add (fvi,RegionList.assoc r assoc) labels acc 
 	     with Not_found -> 
 	       (* Local memory. Not counted as effect for the caller. *)
 	       acc
-	   else FieldRegionMap.add (fi,r) labels acc 
-	) ef.jc_effect_memories FieldRegionMap.empty;
+	   else FieldOrVariantRegionMap.add (fvi,r) labels acc 
+	) ef.jc_effect_memories FieldOrVariantRegionMap.empty;
     jc_effect_alloc_table =
       StringRegionSet.fold (fun (a,r) acc ->
 	if Region.polymorphic r then
@@ -149,15 +149,15 @@ let fef_assoc fef assoc =
 let fieldRegionMap_add key lab m =
   let s = 
     try
-      let s = FieldRegionMap.find key m in
+      let s = FieldOrVariantRegionMap.find key m in
       LogicLabelSet.add lab s
     with Not_found -> LogicLabelSet.singleton lab
-  in FieldRegionMap.add key s m
+  in FieldOrVariantRegionMap.add key s m
     
 let add_memory_effect label ef (fi,r) =
   (* If region is constant, add memory for [fi] to constant memories. *)
   if not(Region.polymorphic r) then
-    constant_memories_set := FieldRegionSet.add (fi,r) !constant_memories_set;
+    constant_memories_set := FieldOrVariantRegionSet.add (fi,r) !constant_memories_set;
   { ef with jc_effect_memories = fieldRegionMap_add (fi,r) label ef.jc_effect_memories } 
   
 let add_global_effect ef vi =
@@ -192,9 +192,13 @@ let add_exception_effect ef a =
 let add_field_reads label fef (fi,r) =
   { fef with jc_reads = add_memory_effect label fef.jc_reads (fi,r) }
 
-let add_field_alloc_reads label fef (fi,r) =
-  let ef = add_memory_effect label fef.jc_reads (fi,r) in
-  let ef = add_alloc_effect ef (JCtag fi.jc_field_info_root, r) in
+let add_field_alloc_reads label fef (fvi,r) =
+  let ef = add_memory_effect label fef.jc_reads (fvi,r) in
+  let root = match fvi with 
+    | FVfield fi -> JCtag fi.jc_field_info_root
+    | FVvariant vi -> JCvariant vi
+  in
+  let ef = add_alloc_effect ef (root, r) in
   { fef with jc_reads = ef }
 
 let add_global_reads fef vi =
@@ -218,10 +222,13 @@ let add_committed_reads fef tov =
 let add_field_writes label fef (fi,r) =
   { fef with jc_writes = add_memory_effect label fef.jc_writes (fi,r) }
 
-let add_field_alloc_writes label fef (fi,r) =
-  let efw = add_memory_effect label fef.jc_writes (fi,r) in
-  let efr = add_alloc_effect fef.jc_reads
-    (JCtag fi.jc_field_info_root, r) in
+let add_field_alloc_writes label fef (fvi,r) =
+  let efw = add_memory_effect label fef.jc_writes (fvi,r) in
+  let root = match fvi with 
+    | FVfield fi -> JCtag fi.jc_field_info_root
+    | FVvariant vi -> JCvariant vi
+  in
+  let efr = add_alloc_effect fef.jc_reads (root, r) in
   { fef with jc_reads = efr; jc_writes = efw; }
 
 let add_global_writes fef vi =
@@ -245,7 +252,7 @@ let add_committed_writes fef tov =
 let same_effects ef1 ef2 =
   StringRegionSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
   && VariantSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
-  && FieldRegionMap.equal (fun x y -> true) ef1.jc_effect_memories ef2.jc_effect_memories
+  && FieldOrVariantRegionMap.equal (fun x y -> true) ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
   && VarSet.equal ef1.jc_effect_through_params ef2.jc_effect_through_params
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
@@ -268,7 +275,7 @@ let rec pattern ef (*label r*) p =
 	let ef = add_tag_effect ef (JCtag st) in
 	List.fold_left
 	  (fun ef (fi, pat) ->
-	     let ef = add_memory_effect (*label*)LabelHere ef (fi, r) in
+	     let ef = add_memory_effect (*label*)LabelHere ef (FVfield fi, r) in
 	     pattern ef (*label r*) pat)
 	  ef fpl
     | JCPor(p1, p2) ->
@@ -303,7 +310,10 @@ let rec term ef t =
 	in
 	ef_union efapp (List.fold_left term ef tls)
     | JCTderef (t, lab, fi) ->
-	let ef = add_memory_effect lab ef (fi,t.jc_term_region) in
+	let fvi = 
+	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
+	in
+	let ef = add_memory_effect lab ef (fvi,t.jc_term_region) in
 	term ef t
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
@@ -383,8 +393,11 @@ let rec expr ef e =
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
 	add_tag_reads (expr ef e) (JCtag st)
-    | JCEderef (e, f) -> 
-	let ef = add_field_alloc_reads LabelHere (expr ef e) (f,e.jc_expr_region) in
+    | JCEderef (e, fi) -> 
+	let fvi = 
+	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
+	in
+	let ef = add_field_alloc_reads LabelHere (expr ef e) (fvi,e.jc_expr_region) in
 	begin match (skip_shifts e).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -414,7 +427,7 @@ let rec expr ef e =
 	let roots = List.map (fun x -> JCvariant x) roots in
 	let ef = 
 	  List.fold_left 
-	    (fun ef fi -> add_field_writes LabelHere ef (fi,e.jc_expr_region))
+	    (fun ef fi -> add_field_writes LabelHere ef (FVfield fi,e.jc_expr_region))
 	    ef fields
 	in
 	let ef = 
@@ -473,7 +486,10 @@ let rec statement ef s =
 	let ef = fef_union efcall (List.fold_left expr ef le) in
 	  statement ef s
     | JCSassign_heap (e1, fi, e2) ->
-	let ef = expr (expr (add_field_alloc_writes LabelHere ef (fi,e1.jc_expr_region)) e1) e2 in
+	let fvi = 
+	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
+	in
+	let ef = expr (expr (add_field_alloc_writes LabelHere ef (fvi,e1.jc_expr_region)) e1) e2 in
 	begin match (skip_shifts e1).jc_expr_node with
 	  | JCEvar vi ->
 	      if vi.jc_var_info_formal then 
@@ -510,7 +526,7 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef tov in
 		   let ef = add_committed_writes ef tov in
 		   (* ...and field as reads *)
-		   add_field_reads LabelHere ef (fi,e.jc_expr_region)
+		   add_field_reads LabelHere ef (FVfield fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
@@ -533,7 +549,7 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef st in
 		   let ef = add_committed_writes ef st in
 		   (* ...and field as reads *)
-		   add_field_reads LabelHere ef (fi,e.jc_expr_region)
+		   add_field_reads LabelHere ef (FVfield fi,e.jc_expr_region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
@@ -575,8 +591,11 @@ let rec location ef l =
   match l with
     | JCLderef(t,lab,fi,r) ->
 	begin
-	  let ef = add_field_writes lab ef (fi,location_set_region t) in
-	  let ef = add_field_reads lab ef (fi,location_set_region t) in
+	  let fvi = 
+	    if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
+	  in
+	  let ef = add_field_writes lab ef (fvi,location_set_region t) in
+	  let ef = add_field_reads lab ef (fvi,location_set_region t) in
 	  begin match skip_tloc_range t with
 	    | JCLSvar vi ->
 		if vi.jc_var_info_formal then 
@@ -674,7 +693,7 @@ let fun_effects fi =
     end
 
 let mapElements m =
-  FieldRegionMap.fold (fun key labels acc -> (key,labels)::acc) m []
+  FieldOrVariantRegionMap.fold (fun key labels acc -> (key,labels)::acc) m []
       
 let logic_effects funs =
   fixpoint_reached := false;
@@ -694,8 +713,11 @@ let logic_effects funs =
 	 (StringRegionSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
 	 (print_list comma (fun fmt v -> fprintf fmt "%s" v.jc_variant_info_name))
 	 (VariantSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
-	 (print_list comma (fun fmt ((fi,r),labels) ->
-			      fprintf fmt "%s,%s (%a)" fi.jc_field_info_name
+	 (print_list comma (fun fmt ((fvi,r),labels) ->
+			      fprintf fmt "%s,%s (%a)" 
+				(match fvi with 
+				   | FVfield fi -> fi.jc_field_info_name
+				   | FVvariant vi -> vi.jc_variant_info_name)
 				r.jc_reg_name
 				(print_list comma Jc_output.label) (LogicLabelSet.elements labels)  
 			   ))
@@ -727,12 +749,18 @@ let function_effects funs =
        Jc_options.lprintf
 	 "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@\n@[ raises: %a@]@." 
 	 f.jc_fun_info_name
-	 (print_list comma (fun fmt ((fi,r),_) ->
-			      fprintf fmt "%s,%s" fi.jc_field_info_name
+	 (print_list comma (fun fmt ((fvi,r),_) ->
+			      fprintf fmt "%s,%s"
+				(match fvi with 
+				   | FVfield fi -> fi.jc_field_info_name
+				   | FVvariant vi -> vi.jc_variant_info_name)
 				r.jc_reg_name))
 	 (mapElements f.jc_fun_info_effects.jc_reads.jc_effect_memories)
-	 (print_list comma (fun fmt ((fi,r),_) ->
-			      fprintf fmt "%s,%s" fi.jc_field_info_name
+	 (print_list comma (fun fmt ((fvi,r),_) ->
+			      fprintf fmt "%s,%s"
+				(match fvi with 
+				   | FVfield fi -> fi.jc_field_info_name
+				   | FVvariant vi -> vi.jc_variant_info_name)
 				r.jc_reg_name))
 	 (mapElements f.jc_fun_info_effects.jc_writes.jc_effect_memories)
 	 (print_list comma 

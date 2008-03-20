@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.100 2008-03-14 12:10:28 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.101 2008-03-20 16:05:13 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -72,7 +72,8 @@ let print_type fmt t =
     | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
     | JCTpointer (
 	( JCtag { jc_struct_info_name = name }
-	| JCvariant { jc_variant_info_name = name }),
+	| JCvariant { jc_variant_info_name = name }
+	| JCunion { jc_variant_info_name = name }),
 	ao, bo) ->
 	begin match ao, bo with
 	  | None, None ->
@@ -225,7 +226,7 @@ let exception_info ty id =
 let empty_effects = 
   { jc_effect_alloc_table = StringRegionSet.empty;
     jc_effect_tag_table = VariantSet.empty;
-    jc_effect_memories = FieldRegionMap.empty;
+    jc_effect_memories = FieldOrVariantRegionMap.empty;
     jc_effect_globals = VarSet.empty;
     jc_effect_through_params = VarSet.empty;
     jc_effect_mutable = StringSet.empty;
@@ -744,6 +745,7 @@ let field_bounds fi =
 
 let map_elements map =
   StringMap.fold (fun _ i acc -> i::acc) map []
+
 (*
 let embedded_struct_roots st =
   let fields = embedded_struct_fields st in
@@ -773,10 +775,12 @@ let struct_variant st =
 let tag_or_variant_variant = function
   | JCtag st -> struct_variant st
   | JCvariant vi -> vi
+  | JCunion vi -> vi
   
 let tag_or_variant_name = function
   | JCtag st -> "tag "^st.jc_struct_info_name
   | JCvariant vi -> "variant "^vi.jc_variant_info_name
+  | JCunion vi -> "union "^vi.jc_variant_info_name
 
 let rec pattern_vars acc pat =
   match pat.jc_pattern_node with
@@ -792,6 +796,32 @@ let rec pattern_vars acc pat =
 	pattern_vars (StringMap.add vi.jc_var_info_name vi acc) pat
     | JCPany | JCPconst _ ->
 	acc
+
+let struct_of_union st =
+  (struct_variant st).jc_variant_info_is_union 
+  
+let field_of_union fi =
+  struct_of_union fi.jc_field_info_struct 
+
+let union_of_field fi =
+  let st = fi.jc_field_info_struct in
+  let vi = struct_variant st in
+  assert vi.jc_variant_info_is_union;
+  vi
+
+let integral_type = function
+  | JCTnative Tinteger -> true
+  | JCTenum _ -> true 
+  | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull -> false
+
+let integral_union vi =
+  assert vi.jc_variant_info_is_union;
+  List.fold_left (fun acc st -> acc &&
+		    match st.jc_struct_info_fields with
+		      | [fi] -> integral_type fi.jc_field_info_type
+		      | _ -> false
+		 ) true vi.jc_variant_info_roots
+
 
 (*
 Local Variables: 

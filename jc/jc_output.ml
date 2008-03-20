@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.102 2008-03-18 15:29:52 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.103 2008-03-20 16:05:13 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -41,6 +41,7 @@ type jc_decl =
       fun_spec * tstatement list option
   | JCenum_type_def of string * Num.num * Num.num
   | JCvariant_type_def of string * string list
+  | JCunion_type_def of string * string list
   | JCstruct_def of string * string option * field_info list *
       (string * var_info * assertion) list
   | JCrec_struct_defs of jc_decl list
@@ -577,6 +578,13 @@ let rec print_decl fmt d =
 	fprintf fmt "@\n@[type %s = [" id;
 	print_list
 	  (fun fmt () -> fprintf fmt " | ")
+	  (fun fmt tag -> fprintf fmt "%s" tag)
+	  fmt tags;
+	fprintf fmt "]@]@."
+    | JCunion_type_def(id, tags) ->
+	fprintf fmt "@\n@[type %s = [" id;
+	print_list
+	  (fun fmt () -> fprintf fmt " & ")
 	  (fun fmt tag -> fprintf fmt "%s" tag)
 	  fmt tags;
 	fprintf fmt "]@]@."

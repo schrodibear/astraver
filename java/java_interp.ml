@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.122 2008-03-20 15:33:58 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.123 2008-03-20 16:05:13 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -145,6 +145,7 @@ let tr_base_type t =
 let rec object_variant = {
   jc_variant_info_name = "Object";
   jc_variant_info_roots = [ object_root ];
+  jc_variant_info_is_union = false;
 }
 
 and object_root = {

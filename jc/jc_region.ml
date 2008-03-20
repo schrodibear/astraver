@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.9 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_region.ml,v 1.10 2008-03-20 16:05:13 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -132,7 +132,7 @@ end
 
 module RegionUF = UnionFind(InternalRegion)(RegionTable)
 
-module FieldRegion = PairOrd(FieldOrd)(InternalRegion)
+module FieldOrVariantRegion = PairOrd(FieldOrVariantOrd)(InternalRegion)
 
 module StringRegion = PairOrd(String)(InternalRegion)
 
@@ -154,7 +154,8 @@ struct
     S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
 end
 
-module FieldRegionSet = PairRegionSet(FieldOrd)(FieldRegion)
+module FieldOrVariantRegionSet = 
+  PairRegionSet(FieldOrVariantOrd)(FieldOrVariantRegion)
 
 module StringRegionSet = PairRegionSet(String)(StringRegion)
 
@@ -172,7 +173,8 @@ struct
   let mem (fi,r) s = M.mem (fi,RegionUF.repr r) s
 end
 
-module FieldRegionMap = PairRegionMap(FieldOrd)(FieldRegion)
+module FieldOrVariantRegionMap = 
+  PairRegionMap(FieldOrVariantOrd)(FieldOrVariantRegion)
 
 module StringRegionMap = PairRegionMap(String)(StringRegion)
 
@@ -334,13 +336,13 @@ struct
 
 end
 
-module FieldRegionList =
+module FieldOrVariantRegionList =
 struct
 
   let rec mem (fi,r) = function
     | [] -> false
     | (fi',r')::rest -> 
-	FieldOrd.equal fi fi' && Region.equal r r' || mem (fi,r) rest
+	FieldOrVariantOrd.equal fi fi' && Region.equal r r' || mem (fi,r) rest
 
 end
 

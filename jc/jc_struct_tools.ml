@@ -40,7 +40,7 @@ let fields_tov = List.flatten **
 	| _ -> []))
 
 let rec all_fields acc = function
-  | JCvariant vi -> acc
+  | JCvariant vi | JCunion vi -> acc
   | JCtag ({ jc_struct_info_parent = Some p } as st) ->
       all_fields (acc @ st.jc_struct_info_fields) (JCtag p)
   | JCtag ({ jc_struct_info_parent = None } as st) ->
@@ -68,7 +68,7 @@ let rec all_memories select forbidden acc tov =
 	    (all_memories select forbidden)
 	    acc
 	    (fields_tov fields)
-    | JCvariant vi ->
+    | JCvariant vi | JCunion vi ->
 	acc
 
 let all_memories ?(select = fun _ -> true) tov =
@@ -91,7 +91,7 @@ let rec all_types select forbidden acc tov =
 	    (all_types select forbidden)
 	    (StringMap.add vi.jc_variant_info_name vi acc)
 	    (fields_tov (List.filter select (all_fields tov)))
-    | JCvariant vi ->
+    | JCvariant vi | JCunion vi ->
 	StringMap.add vi.jc_variant_info_name vi acc
 
 let all_types ?(select = fun _ -> true) tov =

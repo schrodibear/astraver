@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.13 2008-02-12 13:52:29 bardou Exp $ *)
+(* $Id: jc_name.ml,v 1.14 2008-03-20 16:05:13 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -51,6 +51,7 @@ let struct_type_name st = variant_type_name (struct_variant st)
 let tag_or_variant_type_name = function
   | JCtag st -> struct_type_name st
   | JCvariant vi -> variant_type_name vi
+  | JCunion vi -> variant_type_name vi
 
 let variant_alloc_table_name vi = vi.jc_variant_info_name ^ "_alloc_table"
 
@@ -67,7 +68,7 @@ let tag_table_name_vi vi =
 
 let tag_table_name = function
   | JCtag st -> tag_table_name_vi (struct_variant st)
-  | JCvariant vi -> tag_table_name_vi vi
+  | JCvariant vi | JCunion vi -> tag_table_name_vi vi
 
 let alloc_table_name tov =
   (tag_or_variant_type_name tov) ^ "_alloc_table"
@@ -77,16 +78,37 @@ let alloc_region_table_name (tov, r) =
     (tag_or_variant_type_name tov) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else alloc_table_name tov
 
-let field_memory_name fi = fi.jc_field_info_final_name
+let field_memory_name fi = 
+  if field_of_union fi then
+    (union_of_field fi).jc_variant_info_name ^ "_fields"
+  else
+    fi.jc_field_info_final_name
 
 let field_region_memory_name (fi,r) = 
   if !Jc_common_options.separation_sem = SepRegions then 
-    fi.jc_field_info_final_name ^ "_" ^ (Region.name r)
+    (field_memory_name fi) ^ "_" ^ (Region.name r)
   else field_memory_name fi
+
+let union_memory_name vi =
+  vi.jc_variant_info_name ^ "_fields"
+
+let union_region_memory_name (vi,r) = 
+  if !Jc_common_options.separation_sem = SepRegions then 
+    (union_memory_name vi) ^ "_" ^ (Region.name r)
+  else union_memory_name vi
+
+let union_memory_type_name vi = 
+  vi.jc_variant_info_name ^ "_union"
+
+let field_or_variant_region_memory_name (fvi,r) =
+  match fvi with
+    | FVfield fi -> field_region_memory_name (fi,r)
+    | FVvariant vi -> union_region_memory_name (vi,r)
 
 let valid_pred_name = function
   | JCtag st -> "valid_struct_" ^ st.jc_struct_info_name
   | JCvariant vi -> "valid_variant_" ^ vi.jc_variant_info_name
+  | JCunion vi -> "valid_union_" ^ vi.jc_variant_info_name
 (*
 let valid_one_pred_name = function
   | JCtag st -> "valid_one_" ^ st.jc_struct_info_name

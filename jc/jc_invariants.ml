@@ -195,7 +195,7 @@ let term this t =
     (fun t -> match t.jc_term_node with
        | JCTapp app ->
 	   let id = app.jc_app_fun in
-	   if not (FieldRegionMap.is_empty
+	   if not (FieldOrVariantRegionMap.is_empty
 		     id.jc_logic_info_effects.jc_effect_memories) then
 	     Jc_typing.typing_error t.jc_term_loc
 	       "this call is not allowed in structure invariant"
@@ -261,7 +261,7 @@ let rec assertion this p =
     | JCAquantifier(_,id, p) -> assertion this p
     | JCAapp app ->
 	let id = app.jc_app_fun in
-	if FieldRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories
+	if FieldOrVariantRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) app.jc_app_args
 	else
 	  Jc_typing.typing_error p.jc_assertion_loc
@@ -354,9 +354,9 @@ let struct_inv_memories acc st =
 (* TODO: factorize using Jc_interp_misc.logic_params *)
 let invariant_params acc li =
   let acc =
-    FieldRegionMap.fold
-      (fun (fi,r) labels acc -> 
-	 (field_region_memory_name(fi,r), field_memory_type fi)::acc)
+    FieldOrVariantRegionMap.fold
+      (fun (fvi,r) labels acc -> 
+	 (field_or_variant_region_memory_name(fvi,r), field_or_variant_memory_type fvi)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in

@@ -43,6 +43,11 @@ val unit_type : Jc_env.jc_type
 val string_of_native: Jc_env.native_type -> string
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
 
+val struct_of_union: Jc_env.struct_info -> bool
+val field_of_union: Jc_env.field_info -> bool
+val union_of_field: Jc_env.field_info -> Jc_env.variant_info
+val integral_union: Jc_env.variant_info -> bool
+
 (* constants *)
 
 val zero: Num.num

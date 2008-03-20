@@ -54,6 +54,7 @@ let struct_model_type st = variant_model_type (struct_variant st)
 let tag_or_variant_model_type = function
   | JCtag st -> struct_model_type st
   | JCvariant vi -> variant_model_type vi
+  | JCunion vi -> variant_model_type vi
 
 let struct_model_type2 name =
   let st, _ = Hashtbl.find Jc_typing.structs_table name in
@@ -99,10 +100,14 @@ let tr_base_type t =
     | JCTpointer (JCtag st, _, _) ->
 	{ logic_type_name = pointer_type_name;
 	  logic_type_args = [struct_model_type st] }
-    | JCTpointer (JCvariant vi, _, _) ->
+    | JCTpointer ((JCvariant vi | JCunion vi), _, _) ->
 	{ logic_type_name = pointer_type_name;
 	  logic_type_args = [variant_model_type vi] }
     | JCTnull -> assert false
+
+let why_integer_type = simple_logic_type "int"
+  
+let tr_type t = Base_type (tr_base_type t)
 
 let memory_type t v =
   { logic_type_name = memory_type_name;
@@ -112,11 +117,22 @@ let field_memory_type fi =
   memory_type 
     (struct_model_type fi.jc_field_info_root)
     (tr_base_type fi.jc_field_info_type)
+
+let union_memory_type vi =
+  memory_type 
+    (variant_model_type vi)
+    (if integral_union vi then why_integer_type 
+     else simple_logic_type (union_memory_type_name vi))
 	
+let field_or_variant_memory_type fvi =
+  match fvi with
+    | FVfield fi -> field_memory_type fi
+    | FVvariant vi -> union_memory_type vi
+
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
   let l =
-    FieldRegionMap.fold
-      (fun (fi,r) labs acc ->
+    FieldOrVariantRegionMap.fold
+      (fun (fvi,r) labs acc ->
 	 let r =
 	   match region_assoc with 
 	     | Some region_assoc when Region.polymorphic r ->
@@ -127,7 +143,7 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 		 end
 	     | _ -> r
 	 in
-	 let name = field_region_memory_name(fi,r) in
+	 let name = field_or_variant_region_memory_name(fvi,r) in
 	 LogicLabelSet.fold
 	   (fun lab acc ->
 	      let label =
@@ -147,7 +163,7 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 		    | LabelOld -> name ^ "@"
 		    | LabelName l -> name ^ "@" ^ l.label_info_final_name
 	      in
-	      (name, field_memory_type fi)::acc)
+	      (name, field_or_variant_memory_type fvi)::acc)
 	   labs acc)
       li.jc_logic_info_effects.jc_effect_memories
       []
@@ -198,8 +214,9 @@ let make_logic_pred_call ~label_in_name li l region_assoc label_assoc =
 (* *)
 let logic_info_reads acc li = 
   let acc =
-    FieldRegionMap.fold
-      (fun (fi,r) _ acc -> StringSet.add (field_region_memory_name(fi,r)) acc)
+    FieldOrVariantRegionMap.fold
+      (fun (fvi,r) _ acc -> 
+	 StringSet.add (field_or_variant_region_memory_name(fvi,r)) acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
@@ -288,9 +305,9 @@ let alloc_table_type2 a =
 (* fold all effects into a list *)
 let all_effects ef =
   let res =
-    FieldRegionMap.fold
-      (fun (fi,r) labels acc -> 
-	let mem = field_region_memory_name(fi,r) in
+    FieldOrVariantRegionMap.fold
+      (fun (fvi,r) labels acc -> 
+	let mem = field_or_variant_region_memory_name(fvi,r) in
 	if Region.polymorphic r then
 (*	  if RegionList.mem r f.jc_fun_info_param_regions then
 	    if FieldRegionMap.mem (fi,r) 

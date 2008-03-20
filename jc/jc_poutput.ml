@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.4 2008-02-27 11:52:57 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.5 2008-03-20 16:05:13 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -333,6 +333,13 @@ let rec pdecl fmt d =
 	fprintf fmt "@\n@[type %s = [" id;
 	print_list
 	  (fun fmt () -> fprintf fmt " | ")
+	  (fun fmt tag -> fprintf fmt "%s" tag.jc_identifier_name)
+	  fmt tags;
+	fprintf fmt "]@]@."
+    | JCPDuniontype(id, tags) ->
+	fprintf fmt "@\n@[type %s = [" id;
+	print_list
+	  (fun fmt () -> fprintf fmt " & ")
 	  (fun fmt tag -> fprintf fmt "%s" tag.jc_identifier_name)
 	  fmt tags;
 	fprintf fmt "]@]@."

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.121 2008-03-20 15:33:58 nrousset Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.122 2008-03-20 16:05:13 moy Exp $ *)
 
 open Pp
 open Format
@@ -147,6 +147,7 @@ let struct_of_term t =
 	begin match st with 
 	  | JCtag st -> st
 	  | JCvariant _ -> assert false (* TODO *)
+	  | JCunion _ -> assert false (* TODO *)
  	end
     | _ -> 
       if debug then printf "[struct_of_term] %a@." Jc_output.term t;

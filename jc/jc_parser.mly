@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.88 2008-02-27 11:52:57 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.89 2008-03-20 16:05:13 moy Exp $ */
 
 %{
 
@@ -234,8 +234,10 @@ type_definition:
     { locate_decl (JCPDenumtype($2,$4,$6)) }
 | LOGIC TYPE IDENTIFIER
     { locate_decl (JCPDlogictype($3)) }
-| TYPE IDENTIFIER EQ LSQUARE tag_list RSQUARE
+| TYPE IDENTIFIER EQ LSQUARE variant_tag_list RSQUARE
     { locate_decl (JCPDvarianttype($2, $5)) }
+| TYPE IDENTIFIER EQ LSQUARE union_tag_list RSQUARE
+    { locate_decl (JCPDuniontype($2, $5)) }
 ;
 
 int_constant:
@@ -245,11 +247,18 @@ int_constant:
     { Num.minus_num (num_of_constant (loc_i 2) $2) }
 ;
 
-tag_list:
-| identifier PIPE tag_list
+variant_tag_list:
+| identifier PIPE variant_tag_list
     { $1::$3 }
 | identifier
     { [ $1 ] }
+;
+
+union_tag_list:
+| identifier AMP union_tag_list
+    { $1::$3 }
+| identifier AMP identifier
+    { [ $1; $3 ] }
 ;
 
 /******************/

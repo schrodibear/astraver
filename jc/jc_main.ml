@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.105 2008-03-02 20:53:24 nrousset Exp $ *)
+(* $Id: jc_main.ml,v 1.106 2008-03-20 16:05:13 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -202,14 +202,14 @@ let main () =
 	  Jc_options.lprintf
 	    "production phase 1.2.3: translate regions and memories@.";
 	  let d_memories,regions =
-	    FieldRegionSet.fold 
+	    FieldOrVariantRegionSet.fold 
 	      (fun (fi,r) (acc,regions) -> 
 		let acc = 
 		  if RegionSet.mem r regions then acc else
 		    Jc_interp.tr_region r acc 
 		in
 		Jc_interp.tr_memory (fi,r) acc,RegionSet.add r regions)
-	      (FieldRegionSet.map_repr !Jc_effect.constant_memories_set)
+	      (FieldOrVariantRegionSet.map_repr !Jc_effect.constant_memories_set)
 	      (d_memories,RegionSet.singleton dummy_region)
 	  in	       	  
 	  Jc_options.lprintf
@@ -249,6 +249,21 @@ let main () =
 	      Jc_typing.enum_types_table
 	      d_exc
 	  in	       	  
+	  let enumlist = 
+	    Hashtbl.fold (fun _ ri acc -> ri::acc) Jc_typing.enum_types_table []
+	  in
+	  let rec treat_enum_pairs acc = function
+	    | [] -> acc
+	    | ri1 :: rest ->
+		let acc = 
+		  List.fold_left 
+		    (fun acc ri2 ->
+		       Jc_interp.tr_enum_type_pair ri1 ri2 acc) acc rest
+		in
+		treat_enum_pairs acc rest
+	  in
+	  let d = treat_enum_pairs d enumlist in
+
 	  (* production phase x.x : generation of Why logic constants *)
 	  Jc_options.lprintf "Generation of Why logic constants@.";
 	  let d =

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.21 2008-02-27 11:52:57 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.22 2008-03-20 16:05:13 moy Exp $ *)
 
 open Jc_env
 
@@ -37,6 +37,23 @@ sig
   val equal : t -> t -> bool
   val compare : t -> t -> int
   val hash : t -> int
+end
+
+module ChoiceOrd(A : OrderedHashedType)(B : OrderedHashedType) =
+struct
+  type t = A of A.t | B of B.t
+  let equal = function
+    | A a1,A a2 -> A.equal a1 a2
+    | B b1,B b2 -> B.equal b1 b2
+    | _ -> false
+  let compare = function
+    | A a1,A a2 -> A.compare a1 a2
+    | B b1,B b2 -> B.compare b1 b2
+    | A _,_ -> 1
+    | B _,_ -> -1
+  let hash = function
+    | A a -> A.hash a
+    | B b -> B.hash b
 end
 
 module StringSet = Set.Make(String)
@@ -145,6 +162,23 @@ module FieldSet = Set.Make(FieldOrd)
 module FieldMap = Map.Make(FieldOrd)
 
 module FieldTable = Hashtbl.Make(FieldOrd)
+
+module FieldOrVariantOrd = 
+struct
+  type t = field_or_variant_info
+  let equal fv1 fv2 = match fv1,fv2 with
+    | FVfield a1,FVfield a2 -> FieldOrd.equal a1 a2
+    | FVvariant b1,FVvariant b2 -> VariantOrd.equal b1 b2
+    | _ -> false
+  let compare fv1 fv2 = match fv1,fv2 with
+    | FVfield a1,FVfield a2 -> FieldOrd.compare a1 a2
+    | FVvariant b1,FVvariant b2 -> VariantOrd.compare b1 b2
+    | FVfield _,_ -> 1
+    | FVvariant _,_ -> -1
+  let hash = function
+    | FVfield a -> FieldOrd.hash a
+    | FVvariant b -> VariantOrd.hash b
+end
 
 module ExceptionOrd =   
   struct type t = exception_info

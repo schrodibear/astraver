@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.197 2008-03-17 08:38:42 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.198 2008-03-20 16:05:13 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -115,12 +115,17 @@ let lub_numeric_types t1 t2 =
 let rec substruct st = function
   | (JCtag st') as tov ->
       if st == st' then true else
+	let vi = struct_variant st and vi' = struct_variant st' in
+	(vi == vi' && vi.jc_variant_info_is_union)
+	|| 
 	begin match st.jc_struct_info_parent with
 	  | None -> false
 	  | Some p -> substruct p tov
 	end
   | JCvariant vi ->
       struct_variant st == vi
+  | JCunion ui ->
+      struct_variant st == ui
 
 let subtype ?(allow_implicit_cast=true) t1 t2 =
   match t1,t2 with
@@ -221,6 +226,7 @@ let find_field loc ty f allow_mutable =
   match ty with
     | JCTpointer(JCtag st, _, _) -> find_field_struct loc st allow_mutable f
     | JCTpointer(JCvariant _, _, _)
+    | JCTpointer(JCunion _, _, _)
     | JCTnative _ 
     | JCTenum _
     | JCTlogic _
@@ -2680,6 +2686,7 @@ of an invariant policy";
 	Hashtbl.replace structs_table id (struct_info, invariants)
 
     | JCPDvarianttype(id, tags) -> ()
+    | JCPDuniontype(id, tags) -> ()
 
 (*    | JCPDrectypes(pdecls) ->
         (* first pass: adding structure names *)
@@ -2821,11 +2828,13 @@ let fixpoint_struct_info_roots () =
   !modified
 
 let type_variant d = match d.jc_pdecl_node with
-  | JCPDvarianttype(id, tags) ->
+  | JCPDvarianttype(id, tags) | JCPDuniontype(id, tags) ->
       (* declare the variant *)
       let vi = {
 	jc_variant_info_name = id;
 	jc_variant_info_roots = [];
+	jc_variant_info_is_union = 
+	  match d.jc_pdecl_node with JCPDvarianttype _ -> false | _ -> true;
       } in
       Hashtbl.add variants_table id vi;
       (* tags *)
