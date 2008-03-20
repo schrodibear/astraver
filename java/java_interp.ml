@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.121 2008-03-12 16:01:10 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.122 2008-03-20 15:33:58 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1745,7 +1745,7 @@ let tr_field type_name acc fi =
       in
       let decl = match axiom_body with
 	| None -> [decl]
-	| Some a -> 
+	| Some a ->
 	    [JClemma_def (fi.java_field_info_name ^ "_values", 
 			  true, [Jc_env.LabelHere], a); 
 	     decl]

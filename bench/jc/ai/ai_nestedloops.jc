@@ -2,6 +2,7 @@
 # AnnotationPolicy = Invariants
 # AbstractDomain = Oct
 
+
 /* two levels of loops */
 
 
@@ -38,9 +39,10 @@ unit f1() {
   //@ assert x == 10;
 }
 
+
 /*
-Local Variables: 
-mode: java
-compile-command: "make ai_nestedloops"
-End: 
+  Local Variables: 
+  mode: java
+  compile-command: "make ai_nestedloops"
+  End: 
 */
