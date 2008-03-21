@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.265 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.266 2008-03-21 14:55:19 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -265,22 +265,26 @@ let bin_arg_type loc = function
   | Beq_bool | Bneq_bool -> boolean_type
   | Bneq_pointer | Beq_pointer -> assert false
 
-let equality_op_for_type = function
-  | JCTnative Tunit -> assert false
-  | JCTnative Tboolean -> "eq_bool"
-  | JCTnative Tinteger -> "eq_int"
-  | JCTnative Treal -> "eq_real"
-  | JCTlogic s -> (* TODO *) assert false
-  | JCTenum ei -> "eq_int"
-  | JCTpointer _
-  | JCTnull ->  "eq_pointer"
-
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
 let safe_fun_enum_of_int n = "safe_" ^ n.jc_enum_info_name ^ "_of_integer_"
 let fun_enum_of_int n = n.jc_enum_info_name ^ "_of_integer_"
 let logic_int_of_enum n = "integer_of_" ^ n.jc_enum_info_name
 let mod_of_enum n = "mod_" ^ n.jc_enum_info_name ^ "_of_integer"
 let fun_any_enum n = "any_" ^ n.jc_enum_info_name
+let eq_of_enum n = "eq_" ^ n.jc_enum_info_name
+
+let logic_union_of_field fi = "union_of_" ^ fi.jc_field_info_name
+let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_union"
+  
+let equality_op_for_type = function
+  | JCTnative Tunit -> assert false
+  | JCTnative Tboolean -> "eq_bool"
+  | JCTnative Tinteger -> "eq_int"
+  | JCTnative Treal -> "eq_real"
+  | JCTlogic s -> (* TODO *) assert false
+  | JCTenum ei -> eq_of_enum ei
+  | JCTpointer _
+  | JCTnull ->  "eq_pointer"
 
 let term_coerce ?(cast=false) loc tdest tsrc e =
   match tdest, tsrc with
@@ -499,7 +503,7 @@ let rec term ~global_assertion label oldlabel t =
 		| JCTnative Tinteger -> deref
 		| JCTenum ri -> LApp(logic_enum_of_int ri,[deref])
 		| _ -> assert false
-	    else assert false (* TODO *)
+	    else LApp(logic_field_of_union fi,[deref])
 	  else deref
 	in
 	deref, lets
@@ -550,10 +554,11 @@ let rec term ~global_assertion label oldlabel t =
 	LApp("instanceof_bool",
 	     [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTcast(t,label,ty) ->
-	let t', lets = ft t in
-	let tag = tag_table_name (JCtag ty) in
-	LApp("downcast",
-	     [lvar label tag; t';LVar (tag_name ty)]), lets
+	if struct_of_union ty then ft t else
+	  let t', lets = ft t in
+	  let tag = tag_table_name (JCtag ty) in
+	  LApp("downcast",
+	       [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTrange_cast(t,ri) -> 
 	eprintf "range_cast in term: from %a to %a@." 
 	  print_type t.jc_term_type print_type (JCTenum ri);
@@ -942,7 +947,7 @@ let rec make_upd lab loc ~infunction ~threats fi e1 v =
 	  | JCTnative Tinteger -> v
 	  | JCTenum ri -> make_app (logic_int_of_enum ri) [v]
 	  | _ -> assert false
-      else assert false (* TODO *)
+      else make_app (logic_union_of_field fi) [v]
     else v
   in
   if threats then
@@ -1200,7 +1205,7 @@ and expr ~infunction ~threats e : expr =
 		    make_guarded_app ~name:lab ArithOverflow loc 
 		      (fun_enum_of_int ri) [deref]
 	      | _ -> assert false
-	  else assert false (* TODO *)
+	  else make_app (logic_field_of_union fi) [deref]
 	else deref
     | JCEalloc (siz, st) ->
 	let alloc = alloc_region_table_name (JCtag st, e.jc_expr_region) in
@@ -1793,6 +1798,28 @@ let tr_struct st acc =
 	       false,
 	       field_memory_name fi,
 	       Ref_type(Base_type mem))::acc)
+	  acc st.jc_struct_info_fields
+  in
+  (* Declarations of translation functions for union *)
+  let vi = struct_variant st in
+  let acc = 
+    if not vi.jc_variant_info_is_union then acc else
+      if integral_union vi then acc else
+	let uty = simple_logic_type (union_memory_type_name (struct_variant st)) in
+	List.fold_left
+	  (fun acc fi ->
+	     Logic(false,logic_field_of_union fi,
+		   [("",uty)],tr_base_type fi.jc_field_info_type)
+	     :: Logic(false,logic_union_of_field fi,
+		      [("",tr_base_type fi.jc_field_info_type)],uty)
+	     :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
+		      LForall("x",tr_base_type fi.jc_field_info_type,
+			      LPred(equality_op_for_type fi.jc_field_info_type,
+				    [LApp(logic_field_of_union fi,
+					  [LApp(logic_union_of_field fi, 
+						[LVar "x"])]);
+				     LVar "x"]))) 
+	     :: acc)
 	  acc st.jc_struct_info_fields
   in
   (* declaration of the tag_id *)
@@ -2694,6 +2721,9 @@ let tr_enum_type ri (* to_int of_int *) acc =
 	   [("",lt)],why_integer_type)
   :: Logic(false,logic_enum_of_int ri,
 	   [("",why_integer_type)],lt)
+  :: Predicate(false,eq_of_enum ri,[("x",lt);("y",lt)],
+	      LPred("eq_int",[LApp(logic_int_of_enum ri,[LVar "x"]);
+			     LApp(logic_int_of_enum ri,[LVar "y"])]))
   :: (if !Jc_options.int_model = IMmodulo then
 	let width = LConst (Prim_int max_sub_min) in
 	let fmod t = LApp (mod_of_enum ri, [t]) in

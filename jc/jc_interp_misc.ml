@@ -270,6 +270,7 @@ let stringmap_elements map =
  * Jc_typing. *)
 
 let find_struct a =
+  Format.printf "[find_struct] %s@." a;
   fst (Hashtbl.find Jc_typing.structs_table a)
 
 let find_variant a =
@@ -299,7 +300,7 @@ let committed_name2 a =
 let alloc_table_type2 a =
   {
     logic_type_name = alloc_table_type_name;
-    logic_type_args = [struct_model_type (find_struct a)];
+    logic_type_args = [variant_model_type (find_variant a)];
   }
 
 (* fold all effects into a list *)
