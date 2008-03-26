@@ -99,12 +99,17 @@ let toggle_behavior b = b.behavior_open <- not b.behavior_open
 (* saving *)
 
 open Format
+open Logic
+open Logic_decl
 
 let pr_goal fmt g =
-  fprintf fmt "    <goal %a why_file=\"%s\">@." 
-    Explain.print ((*g.goal_loc,*)g.goal_expl) g.goal_file;
+  fprintf fmt "    <goal why_file=\"%s\">@." g.goal_file;
+  fprintf fmt "      <location %a/>@."
+    (fun fmt -> Explain.raw_loc ~quote:true fmt) (g.goal_expl.vc_loc);
+  fprintf fmt "      <explain %a/>@."
+    (fun fmt -> Explain.print ~quote:true fmt) (g.goal_expl);
   fprintf fmt "    </goal>@."
-  
+
 let save p file =
   let ch = open_out (file ^ ".wpr") in
   let fpr = formatter_of_out_channel ch in
@@ -112,26 +117,27 @@ let save p file =
     p.project_name p.project_context_file;
   List.iter
     (fun l -> (* name (floc,loc,expl,fpo) -> *)
-       fprintf fpr "  <lemma name=\"%s\" %a>@." 
-	 l.lemma_name (Explain.raw_loc ~pref:"") l.lemma_loc;
+       fprintf fpr "  <lemma name=\"%s\">@." l.lemma_name;
+       fprintf fpr "    <location %a/>@." 
+	 (fun fmt -> Explain.raw_loc ~quote:true fmt) l.lemma_loc;
        pr_goal fpr l.lemma_goal;
-       fprintf fpr "  </lemma>@.")
+    fprintf fpr "  </lemma>@.")
     p.project_lemmas;
   List.iter
     (fun f -> (* name (floc,behs) -> *)
-       fprintf fpr "  <function name=\"%s\" %a>@." 
-	 f.function_name (Explain.raw_loc ~pref:"") f.function_loc;
+       fprintf fpr "  <function name=\"%s\">@."  f.function_name;
+       fprintf fpr "    <location %a/>@." 
+	 (fun fmt -> Explain.raw_loc ~quote:true fmt) f.function_loc;
        List.iter
 	 (fun b -> (*vcs -> *)
-	    fprintf fpr "    <behavior name=\"%s\">@." b.behavior_name;
-	    List.iter (pr_goal fpr) b.behavior_goals;
-	    fprintf fpr "    </behavior>@.")
+	    (*	  fprintf fpr "    <behavior name=\"%s\">@." b.behavior_name;*)
+	    List.iter (pr_goal fpr) b.behavior_goals)
 	 f.function_behaviors;
-       fprintf fpr "  </function>@.")
+    fprintf fpr "  </function>@.")
     p.project_functions;
   fprintf fpr "</project>@.";
   close_out ch
-
+      
 (* loading *)
 
 let get_string_attr a e =

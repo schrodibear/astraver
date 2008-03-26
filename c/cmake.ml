@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.56 2008-02-12 12:54:06 stoulsn Exp $ i*)
+(*i $Id: cmake.ml,v 1.57 2008-03-26 15:34:22 hubert Exp $ i*)
 
 open Format
 open Pp
@@ -40,6 +40,8 @@ let add ~file ~f =
 
 let simplify fmt f = fprintf fmt "simplify/%s_why.sx" f
 let ergo fmt f = fprintf fmt "why/%s_why.why" f
+let cvc3 fmt f = fprintf fmt "cvc3/%s_why.smt" f
+let z3 fmt f = fprintf fmt "z3/%s_why.smt" f
 let coq_v fmt f = fprintf fmt "coq/%s_why.v" f
 let coq_vo fmt f = fprintf fmt "coq/%s_why.vo" f
 let pvs fmt f = fprintf fmt "pvs/%s_why.pvs" f
@@ -48,6 +50,7 @@ let harvey fmt f = fprintf fmt "harvey/%s_why.rv" f
 let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
 let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
 let why_goals fmt f = fprintf fmt "why/%s_ctx.why" f
+let project fmt f = fprintf fmt "why/%s.wpr" f
 let isabelle fmt f = 
   fprintf fmt "isabelle/%s_why.thy isabelle/%s_spec_why.thy" f f
 
@@ -67,7 +70,7 @@ let generic f targets =
        fprintf fmt "CADULIBFILE=%s@\n@\n" Coptions.libfile;
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
        fprintf fmt "COQDEP=coqdep -I `coqc -where`/user-contrib@\n@\n";	    
-       fprintf fmt ".PHONY: all coq pvs simplify ergo cvcl harvey smtlib zenon@\n@\n";
+       fprintf fmt ".PHONY: all coq pvs simplify ergo cvcl harvey smtlib cvc3 z3 zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
 
@@ -113,6 +116,9 @@ let generic f targets =
        fprintf fmt "why/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -why [...] why/$*.why' && $(WHY) -why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
 
+       fprintf fmt "project: %a@\n@\n" (print_files project) targets;
+       fprintf fmt "why/%%.wpr: why/%s_ctx.why@\n" f;
+       fprintf fmt "\t@@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;       
 
        fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
        fprintf fmt "why/%%_ctx.why: why/%s_spec.why why/%%.why@\n" f;
@@ -120,7 +126,8 @@ let generic f targets =
 
        fprintf fmt "why/%%_why.why: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -why [...] why/$*.why' && $(WHY) -why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
-       
+
+
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "cvcl/%%_why.cvc: why/%s_spec.why why/%%.why@\n" f;
@@ -141,6 +148,16 @@ let generic f targets =
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -exp all   -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
+       fprintf fmt "z3: %a@\n" (print_files z3) targets;
+       fprintf fmt "\t@@echo 'Running Z3 on proof obligations' && (dp -smt-solver z3 -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "z3/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -exp all   -dir z3 $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+
+       fprintf fmt "cvc3: %a@\n" (print_files cvc3) targets;
+       fprintf fmt "\t@@echo 'Running CVC3 on proof obligations' && (dp -smt-solver cvc3 -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "cvc3/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -exp all   -dir cvc3 $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        fprintf fmt "@\n";

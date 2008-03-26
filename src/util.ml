@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.148 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: util.ml,v 1.149 2008-03-26 15:34:22 hubert Exp $ i*)
 
 open Logic
 open Ident
@@ -1131,7 +1131,7 @@ let print_decl fmt = function
 	   | Cc.Spred (id, pred) -> 
 	       fprintf fmt "%a <=> %a" Ident.print id print_predicate pred)) cel
 	print_predicate pred;
-      fprintf fmt "(* %a *)@\n" Explain.print ((*loc,*)expl)
+      fprintf fmt "(* %a *)@\n" (fun fmt -> Explain.print fmt) ((*loc,*)expl)
 
 (* debug *)
 

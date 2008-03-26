@@ -609,9 +609,12 @@ Implicit Arguments separation1.
   := (forall (p:(pointer A781)),
       (forall (a:alloc_table),
        ((valid a p) ->
-        (forall (i:Z),
-         (0 <= i /\ i < size ->
-          ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p)))))))).
+        (forall (i1:Z),
+         (forall (i2:Z),
+          (0 <= i1 /\ i1 < size ->
+           (0 <= i2 /\ i2 < size ->
+            ~((base_addr (acc m1 (shift p i1))) =
+            (base_addr (acc m2 (shift p i2))))))))))).
 Implicit Arguments separation1_range1.
 
 (*Why predicate*) Definition separation1_range (A783:Set) (A782:Set) (m:(memory (pointer A782) A783)) (size:Z)
@@ -619,12 +622,8 @@ Implicit Arguments separation1_range1.
       (forall (a:alloc_table),
        ((valid a p) ->
         (forall (i1:Z),
-         (forall (i2:Z),
-          (0 <= i1 /\ i1 < size ->
-           (0 <= i2 /\ i2 < size ->
-            (i1 <> i2 ->
-             ~((base_addr (acc m (shift p i1))) =
-             (base_addr (acc m (shift p i2)))))))))))).
+         (0 <= i1 /\ i1 < size ->
+          ~((base_addr (acc m (shift p i1))) = (base_addr (acc m p)))))))).
 Implicit Arguments separation1_range.
 
 (*Why predicate*) Definition separation2 (A785:Set) (A784:Set) (m1:(memory (pointer A784) A785)) (m2:(memory (pointer A784) A785))

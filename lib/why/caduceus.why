@@ -579,14 +579,15 @@ predicate separation1(m1:('y pointer,'z) memory, m2:('y pointer,'z) memory) =
 predicate separation1_range1(m1:('y pointer,'z) memory,
 	m2:('y pointer,'z) memory, size : int) =
 	forall p : 'z pointer.forall a : alloc_table.
-	valid(a,p) -> forall i : int . 0 <= i < size ->
-	base_addr(acc(m1,(shift (p,i)))) <> base_addr(acc(m2, p))	
+	valid(a,p) -> forall i1 : int . forall i2 : int. 
+	0 <= i1 < size -> 0 <= i2 < size ->
+	base_addr(acc(m1,(shift (p,i1)))) <> base_addr(acc(m2, (shift (p,i2))))
 
 predicate separation1_range(m:('y pointer,'z) memory, size:int) =
 	forall p : 'z pointer.forall a : alloc_table.
-	valid(a,p) -> forall i1 : int. forall i2 : int. 
-	0 <= i1 < size -> 0 <= i2 < size -> i1 <> i2 -> 
-	base_addr(acc(m,(shift (p,i1)))) <> base_addr(acc(m,shift (p,i2)))  
+	valid(a,p) -> forall i1 : int. 
+	0 <= i1 < size -> 
+	base_addr(acc(m,(shift (p,i1)))) <> base_addr(acc(m,p))  
 
 
 predicate separation2(m1:('y pointer,'z) memory, m2:('y pointer,'z) memory) =
