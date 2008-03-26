@@ -6,7 +6,7 @@
 <!ATTLIST tag key CDATA #REQUIRED>
 <!ATTLIST tag value CDATA #REQUIRED>
 
-<!ELEMENT function (tag*, location, goal*)>
+<!ELEMENT function (tag*, location, behavior*)>
 <!ATTLIST function name CDATA #REQUIRED>
 
 <!ELEMENT location EMPTY>
@@ -14,6 +14,9 @@
 <!ATTLIST location line CDATA #REQUIRED>
 <!ATTLIST location begin CDATA #REQUIRED>
 <!ATTLIST location end CDATA #REQUIRED>
+
+<!ELEMENT behavior (tag*, goal*)>
+<!ATTLIST behavior name CDATA #REQUIRED>
 
 <!ELEMENT goal (tag*, location, explain, proof*, goal*)>
 <!ATTLIST goal why_file CDATA #REQUIRED>

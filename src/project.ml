@@ -130,8 +130,9 @@ let save p file =
 	 (fun fmt -> Explain.raw_loc ~quote:true fmt) f.function_loc;
        List.iter
 	 (fun b -> (*vcs -> *)
-	    (*	  fprintf fpr "    <behavior name=\"%s\">@." b.behavior_name;*)
-	    List.iter (pr_goal fpr) b.behavior_goals)
+	  fprintf fpr "    <behavior name=\"%s\">@." b.behavior_name;
+	    List.iter (pr_goal fpr) b.behavior_goals;
+	      fprintf fpr "    </behavior>@." )
 	 f.function_behaviors;
     fprintf fpr "  </function>@.")
     p.project_functions;
