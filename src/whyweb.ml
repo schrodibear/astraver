@@ -145,7 +145,7 @@ let () =
 			   List.iter
 			     (fun g ->
 				let s =
-				  fprintf str_formatter "%a" Explain.print g.goal_expl;
+				  fprintf str_formatter "%a" (fun fmt -> Explain.print fmt) g.goal_expl;
 				  flush_str_formatter ()
 				in
 				wprint "<li> %s </li>" s)

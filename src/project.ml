@@ -198,19 +198,18 @@ let get_bool_attr a e =
   with Not_found -> false
 
 let get_tags l = 
+  let ww_open = ref false in
   let rec get_tag tags l =
     match l with 
       | e::l when e.Xml.name = "tag" -> 
 	  let key = get_string_attr "key" e in
 	  let value = get_string_attr "value" e in
+	  if key = "ww_open" then ww_open := true else ();
 	  get_tag ((key,value)::tags) l
       | _ -> tags,l
   in
   let (tags,l) = get_tag [] l in
-  try let _ = List.find (fun (key,value) -> key = "ww_open") tags in
-    tags,l
-  with Not_found -> 
-    (("ww_open","false")::tags,l)
+  if !ww_open then  tags,l else (("ww_open","false")::tags,l)
 
 let get_loc e =
   let file = get_string_attr "file" e in
