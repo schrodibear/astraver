@@ -3,25 +3,28 @@
 type goal = {
   goal_expl : Logic_decl.vc_expl;
   goal_file : string;
+  sub_goal : goal list;
+  proof : (string*string*string*string*string) list
 }
 
 type lemma = {
   lemma_name : string;
   lemma_loc : Loc.floc;
   lemma_goal : goal;
+  mutable lemma_tags : (string*string) list; 
 }
 
 type behavior = {
   behavior_name : string;
   mutable behavior_goals : goal list;
-  mutable behavior_open : bool;
+  mutable behavior_tags : (string*string) list;
 }
 
 type funct = {
   function_name : string;
   function_loc : Loc.floc;
   mutable function_behaviors : behavior list;
-  mutable function_open : bool;
+  mutable function_tags : (string*string) list;
 }
   
 
@@ -47,12 +50,15 @@ let add_lemma p n e f =
   let g = {
     goal_expl = e; 
     goal_file = f;
+    sub_goal = [];
+    proof = [];
   }
   in
   let l = {
     lemma_name = n;
     lemma_loc = Loc.dummy_floc;
     lemma_goal = g;
+    lemma_tags = [];
   }
   in p.project_lemmas <- l :: p.project_lemmas;
   l
@@ -61,6 +67,8 @@ let add_goal b e f =
   let g = {
     goal_expl = e; 
     goal_file = f;
+    sub_goal = [];
+    proof = [];
   }
   in
   b.behavior_goals <- g :: b.behavior_goals;
@@ -70,7 +78,7 @@ let add_behavior f be =
   let b = {
     behavior_name = be;
     behavior_goals = [];
-    behavior_open = false;
+    behavior_tags = [];
   }
   in
   f.function_behaviors <- b :: f.function_behaviors;
@@ -81,7 +89,7 @@ let add_function p fname floc =
     function_name = fname;
     function_loc = floc;
     function_behaviors = [];
-    function_open = false;
+    function_tags = [];
   }
   in
   p.project_functions <- f :: p.project_functions;
@@ -92,10 +100,16 @@ let add_function p fname floc =
 
 let toggle_lemma l = ()
 
+let toggle_function f = ()
+
+let toggle_behavior b = ()
+
+(*
+
 let toggle_function f = f.function_open <- not f.function_open
 
 let toggle_behavior b = b.behavior_open <- not b.behavior_open
-
+*)
 (* saving *)
 
 open Format
@@ -170,6 +184,17 @@ let get_bool_attr a e =
       | _ -> false
   with Not_found -> false
 
+let get_tags l = 
+  let rec get_tag tags l=
+    match l with 
+      | e::l when e.Xml.name = "tag" -> 
+	  let key = get_string_attr "key" e in
+	  let value = get_string_attr "value" e in
+	  get_tag ((key,value)::tags) l
+      | _ -> tags,l
+  in
+  (get_tag [] l)
+
 let get_loc e =
   let file = get_string_attr "file" e in
   let line = get_int_attr "line" e in
@@ -202,21 +227,43 @@ let get_kind e =
 	Logic_decl.EKLoopInvPreserv f
     | _ -> Logic_decl.EKOther ("Project: unrecognized kind " ^ k)
 
-let get_goal lf beh e =
+
+let get_proof elements =
+  let rec get_proofs proofs l =
+    match l with 
+      | e::l when e.Xml.name = "proof" -> 
+	  let prover = get_string_attr "prover" e in
+	  let status = get_string_attr "status" e in
+	  let timelimit = get_string_attr "timelimit" e in
+	  let date = get_string_attr "date" e in
+	  let scriptfile = get_string_attr "scriptfile" e in
+	  get_proofs ((prover,status,timelimit,date,scriptfile)::proofs) l
+      | _ -> proofs,l
+  in
+  (get_proofs [] elements)
+
+let rec get_goal lf beh e =
   match e.Xml.name with
     | "goal" ->
-	let loc = get_loc e in
-	let k = get_kind e in 
+	let (tags, elements) = get_tags e.Xml.elements in
+	let loc = List.hd elements in
+	let elements = List.tl elements in
+	let loc = get_loc loc in
+	let k = get_kind (List.hd elements) in 
 	let expl =
 	  {
 	    Logic_decl.lemma_or_fun_name = lf;
 	    Logic_decl.behavior = beh;
 	    Logic_decl.vc_loc = loc;
-	    Logic_decl.vc_kind = k; 
+	    Logic_decl.vc_kind = k;
 	  }
 	in
+	let (proofs,elements) = get_proof (List.tl elements) in
+	let sub_goals =  List.map (get_goal lf beh) elements in
 	{ goal_expl = expl;
-	  goal_file = get_string_attr "file" e;
+	  goal_file = get_string_attr "why_file" e;
+	  sub_goal = sub_goals;
+	  proof = proofs;
 	}
     | _ -> assert false
 	
@@ -224,9 +271,10 @@ let get_behavior lf e =
   match e.Xml.name with
     | "behavior" ->
 	let n = get_name_attr e in
+	let (tags,elements) = get_tags e.Xml.elements in
 	{ behavior_name = n;
-	  behavior_goals = List.map (get_goal lf n) e.Xml.elements;
-	  behavior_open = get_bool_attr "open" e;
+	  behavior_goals = List.map (get_goal lf n) elements;
+	  behavior_tags = tags;
 	}
     | _ -> assert false
 	
@@ -238,8 +286,9 @@ let get_lemma_or_function e =
   match e.Xml.name with
     | "lemma" ->
 	let n = get_name_attr e in
-	let g = List.map (get_goal n "") e.Xml.elements in
-	let loc = get_loc e in
+	let (tags,elements) = get_tags e.Xml.elements in	
+	let loc = get_loc (List.hd elements) in
+	let g = List.map (get_goal n "")  (List.tl elements) in
 	begin
 	  match g with
 	    |	[g] ->
@@ -247,6 +296,7 @@ let get_lemma_or_function e =
 		    { lemma_name = n;
 		      lemma_loc = loc;
 		      lemma_goal = g;
+		      lemma_tags = tags;
 		    }
 		  in
 		  lemmas := l :: !lemmas
@@ -254,16 +304,18 @@ let get_lemma_or_function e =
 	end
     | "function" ->
 	let n = get_name_attr e in
-	let loc = get_loc e in
-	let behs = List.map (get_behavior n) e.Xml.elements in
+	let (tags,elements) = get_tags e.Xml.elements in
+	let loc = get_loc (List.hd elements) in
+	let behs = List.map (get_behavior n)  (List.tl elements) in
 	let f =
 	  { function_name = n;
 	    function_loc = loc;
 	    function_behaviors = behs;
-	    function_open = get_bool_attr "open" e;
+	    function_tags = tags;
 	  }
 	in
-	functions := f :: !functions	  
+	functions := f :: !functions
+    | "tags" -> ()
     | _ -> assert false
 
 (* read XML file *)

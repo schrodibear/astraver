@@ -132,14 +132,14 @@ let () =
 	   (fun f -> 
 	      let n = reg_com (`ToggleFunction f) in 
 	      wprint "<li> <a href=\"%s\">%s</a> </li>" n f.function_name;
-	      if f.function_open then
+	      if List.assoc "ww_open" f.function_tags = "true" then
 		begin
 		  wprint "<ol>";
 		  List.iter
 		    (fun b ->
 		       let n = reg_com (`ToggleBehavior b) in 
 		       wprint "<li> <a href=\"%s\">%s</a> </li>" n b.behavior_name;
-		       if b.behavior_open then
+		       if List.assoc "ww_open" b.behavior_tags = "true" then
 			 begin
 			   wprint "<ol>";
 			   List.iter

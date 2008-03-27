@@ -3,25 +3,28 @@
 type goal = private {
   goal_expl : Logic_decl.vc_expl;
   goal_file : string;
+  sub_goal : goal list;
+  proof : (string*string*string*string*string) list;
 }
 
 type lemma = private {
   lemma_name : string;
   lemma_loc : Loc.floc;
-  lemma_goal : goal;
+  lemma_goal : goal; 
+  mutable lemma_tags : (string*string) list; 
 }
 
 type behavior = {
   behavior_name : string;
   mutable behavior_goals : goal list;
-  mutable behavior_open : bool;
+  mutable behavior_tags : (string*string) list; 
 }
 
 type funct = private {
   function_name : string;
   function_loc : Loc.floc;
   mutable function_behaviors : behavior list;
-  mutable function_open : bool;
+  mutable function_tags : (string*string) list; 
 }
   
 
