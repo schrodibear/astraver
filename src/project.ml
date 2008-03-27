@@ -98,18 +98,31 @@ let add_function p fname floc =
 
 (* toggle *)
 
-let toggle_lemma l = ()
+let toggle_lemma l = l.lemma_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value)) l.lemma_tags
 
-let toggle_function f = ()
+let toggle_function f = f.function_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value)) f.function_tags
 
-let toggle_behavior b = ()
+let toggle_behavior b = b.behavior_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value))  b.behavior_tags
 
-(*
 
-let toggle_function f = f.function_open <- not f.function_open
-
-let toggle_behavior b = b.behavior_open <- not b.behavior_open
-*)
 (* saving *)
 
 open Format
@@ -185,7 +198,7 @@ let get_bool_attr a e =
   with Not_found -> false
 
 let get_tags l = 
-  let rec get_tag tags l=
+  let rec get_tag tags l =
     match l with 
       | e::l when e.Xml.name = "tag" -> 
 	  let key = get_string_attr "key" e in
@@ -193,7 +206,11 @@ let get_tags l =
 	  get_tag ((key,value)::tags) l
       | _ -> tags,l
   in
-  (get_tag [] l)
+  let (tags,l) = get_tag [] l in
+  try let _ = List.find (fun (key,value) -> key = "ww_open") tags in
+    tags,l
+  with Not_found -> 
+    (("ww_open","false")::tags,l)
 
 let get_loc e =
   let file = get_string_attr "file" e in
@@ -234,9 +251,15 @@ let get_proof elements =
       | e::l when e.Xml.name = "proof" -> 
 	  let prover = get_string_attr "prover" e in
 	  let status = get_string_attr "status" e in
-	  let timelimit = get_string_attr "timelimit" e in
-	  let date = get_string_attr "date" e in
-	  let scriptfile = get_string_attr "scriptfile" e in
+	  let timelimit = 
+	    try get_string_attr "timelimit" e with Not_found -> "no timeout"
+	  in
+	  let date =  
+	    try get_string_attr "date" e  with Not_found -> "no date" 
+	  in
+	  let scriptfile = 
+	    try get_string_attr "scriptfile" e with Not_found -> "no script" 
+	  in
 	  get_proofs ((prover,status,timelimit,date,scriptfile)::proofs) l
       | _ -> proofs,l
   in
