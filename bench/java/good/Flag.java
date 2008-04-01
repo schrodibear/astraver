@@ -80,7 +80,7 @@ class Flag {
     /*@ behavior sorts:
       @   // assigns t[..];
       @   ensures 
-      @     (\exists int b,r; is_monochrome(t,0,b,BLUE) &&
+      @     (\exists int b r; is_monochrome(t,0,b,BLUE) &&
       @                       is_monochrome(t,b,r,WHITE) &&
       @                       is_monochrome(t,r,t.length,RED));
       @*/

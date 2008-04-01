@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.39 2008-04-01 11:16:25 marche Exp $
+$Id: java_parser.mly,v 1.40 2008-04-01 15:28:29 marche Exp $
 
 */
 
@@ -927,19 +927,17 @@ expr_no_name:
 ;
 
 quantified_variables_decl:
-| type_expr quantified_variable quantified_variables
-    { (Some $1,$2)::$3 }
+| type_expr quantified_variables
+    { [($1,$2)] }
+| type_expr quantified_variables COMMA quantified_variables_decl
+    { ($1,$2)::$4 }
 ;
 
 quantified_variables:
-| /* \epsilon */
-    { [] }
-/* conflicts
-| COMMA type_expr quantified_variable quantified_variables
-    { (Some $2,$3)::$4 }
-*/
-| COMMA quantified_variable quantified_variables
-    { (None, $2)::$3 }
+| quantified_variable 
+    { [$1] }
+| quantified_variable quantified_variables
+    { $1::$2 }
 ;
 
 quantified_variable:

@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.30 2008-04-01 11:16:25 marche Exp $
+$Id: java_ast.mli,v 1.31 2008-04-01 15:28:29 marche Exp $
 
 ***************************************************************************)
 
@@ -123,7 +123,7 @@ and pexpr_node =
   | Type of type_expr 
   | Typeof of expr 
 *)
-  | JPEquantifier of quantifier * (type_expr option * variable_id) list * pexpr   
+  | JPEquantifier of quantifier * (type_expr * variable_id list) list * pexpr   
 
 
 (*

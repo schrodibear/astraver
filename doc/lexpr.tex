@@ -59,8 +59,8 @@
        | "\forall" binders ";" lexpr ; universal quantification
        | "\exists" binders ";" lexpr ; existential quantification
        \
-  binders ::= type-expr variable-ident ;
-  ("," variable-ident)*
+  binders ::= type-expr variable-ident+ ;
+  ("," variable-ident+)*
   \
   type-expr ::= logic-type-expr | Java-type-expr
   \

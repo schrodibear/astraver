@@ -13,12 +13,12 @@
   @*/
 
 /*@ axiom select_store_eq:
-  @  \forall larray t; \forall integer i; \forall double x;
+  @  \forall larray t, integer i, double x;
   @   select(store(t,i,x),i) == x;
   @*/
 
 /*@ axiom select_store_neq:
-  @  \forall larray t; \forall integer i, j;
+  @  \forall larray t, integer i j;
   @   \forall double x;
   @    i != j ==> 
   @     select(store(t,i,x),j) == select(x,j);
@@ -175,8 +175,7 @@ public class PArray implements PArrayInterface
   @*/
  
 /*@ axiom arr_repr :
-  @   \forall integer model_length; \forall larray model_arrayl;
-  @    \forall Arr a ;
+  @   \forall integer model_length, larray model_arrayl, Arr a ;
   @     data_repr(model_length, model_array,a) 
   @     <==>
   @     model_length == a.table.length &&
@@ -185,9 +184,8 @@ public class PArray implements PArrayInterface
   @*/
 
 /*@ axiom diff_repr_1 :
-  @   \forall integer model_length; \forall larray model_array;
-  @   \forall Diff d ;
-  @   \forall integer i; \forall double x; 
+  @   \forall integer model_length, larray model_array, Diff d; 
+  @   \forall integer i, double x; 
   @     data_repr(model_length, model_array, d.remaining) &&
   @     i == d.index && x == d.value  
   @     ==> 
@@ -195,8 +193,7 @@ public class PArray implements PArrayInterface
   @*/
 
 /*@ axiom diff_repr_2 :
-  @   \forall integer model_length; \forall larray model_array;
-  @    \forall Diff d ;
+  @   \forall integer model_length, larray model_array, Diff d ;
   @     data_repr(model_length, model_array, d) &&
   @     \exists larray a; 
   @     model_array == store(d.index,d.value,a)

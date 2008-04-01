@@ -1,23 +1,23 @@
 //@+ CheckArithOverflow = no
 
 /*@ lemma real_add_int : 
-  @   (\forall integer x, y; (real) (x + y) == (real) x + (real) y);
+  @   (\forall integer x y; (real) (x + y) == (real) x + (real) y);
   @*/
 
 /*@ lemma real_mul_int : 
-  @   (\forall integer x, y; (real) (x * y) == (real) x * (real) y);
+  @   (\forall integer x y; (real) (x * y) == (real) x * (real) y);
   @*/
 
 /*@ lemma mul_add_distr1 : 
-  @   (\forall real x, y, z; x * (y + z) == (x * y) + (x * z));
+  @   (\forall real x y z; x * (y + z) == (x * y) + (x * z));
   @*/
 
 /*@ lemma add_comm : 
-  @   (\forall real x, y; x + y == y + x);
+  @   (\forall real x y; x + y == y + x);
   @*/
 
 /*@ lemma add_assoc : 
-  @   (\forall real x, y, z; x + (y + z) == (x + y) + z);
+  @   (\forall real x y z; x + (y + z) == (x + y) + z);
   @*/
 
 /* @ lemma PRECISION_property : 

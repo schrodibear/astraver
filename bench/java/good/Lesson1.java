@@ -37,11 +37,11 @@
 //@ lemma two_left: \forall integer x; 2*x == x+x;
 
 /*@ lemma distr_right: 
-  @   \forall integer x,y,z; x*(y+z) == (x*y)+(x*z);
+  @   \forall integer x y z; x*(y+z) == (x*y)+(x*z);
   @*/
 
 /*@ lemma distr_left: 
-  @   \forall integer x,y,z; (x+y)*z == (x*z)+(y*z);
+  @   \forall integer x y z; (x+y)*z == (x*z)+(y*z);
   @*/
 
 /*@ lemma sqr_short_elim: 

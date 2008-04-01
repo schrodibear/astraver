@@ -30,7 +30,7 @@
 //@+ CheckArithOverflow = yes
 
 /*@ lemma mean_1 : 
-      \forall integer x, y; x <= y ==> x <= x+(y-x)/2 <= y; */
+      \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; */
 
 class BinarySearch {
 
@@ -43,7 +43,7 @@ class BinarySearch {
     
     /*@ requires 
       @   0 <= n <= t.length &&
-      @   \forall integer k1, k2; 
+      @   \forall integer k1 k2; 
       @       0 <= k1 <= k2 <= n-1 ==> t[k1] <= t[k2];
       @ behavior correctness:
       @ ensures
@@ -71,7 +71,7 @@ class BinarySearch {
 
     /*@ requires 
       @   t != null &&
-      @   \forall integer k1, k2; 
+      @   \forall integer k1 k2; 
       @       0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
       @ behavior correctness:
       @ ensures

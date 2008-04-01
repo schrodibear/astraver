@@ -28,11 +28,11 @@
 /**************************************************************************/
 
 /*@ lemma mean_property : 
-  @   \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y; */
+  @   \forall integer x y; x <= y ==> x <= (x+y)/2 <= y; */
 
 
 /*@ predicate sorted{L}(long t[]) {
-  @   \forall integer i,j; 0 <= i && i <= j && j < t.length ==>
+  @   \forall integer i j; 0 <= i && i <= j && j < t.length ==>
   @          t[i] <= t[j] } */
 
 public class Search {

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.106 2008-04-01 11:16:26 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.107 2008-04-01 15:28:29 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1668,7 +1668,7 @@ and assertion env current_label e =
 	    te1.java_term_type te1 te2.java_term_type te2
     | JPEquantifier (q, idl, e)-> 
 	let a = make_quantified_formula 
-	  e.java_pexpr_loc q idl env None current_label e 
+	  e.java_pexpr_loc q idl env current_label e 
 	in
 	a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
@@ -1751,25 +1751,28 @@ and assertion env current_label e =
   in { java_assertion_node = ta;
        java_assertion_loc = e.java_pexpr_loc }
 
-and make_quantified_formula loc q idl env current_type current_label e : assertion =
+and make_quantified_formula loc q idl env current_label e : assertion =
   match idl with
     | [] -> assertion env current_label e
-    | (ty,id)::r ->	
-	let tty = 
-	  match ty,current_type with
-	    | Some ty,_ ->
-		type_type env.package_env env.type_env true ty 
-	    | None, Some ty -> ty
-	    | None,None -> assert false (* forbidden by parsing *)
+    | (ty,idl)::r ->	
+	let tty = type_type env.package_env env.type_env true ty in
+	let env_local =
+	  List.map
+	    (fun id ->
+	       let tyv, (loc,n) = var_type_and_id tty id in
+	       let vi = new_var loc tyv n in
+	       (n,vi))
+	    idl
 	in
-	let tyv, (loc,n) = var_type_and_id tty id in
-	let vi = new_var loc tyv n in
 	let f = 
-	  make_quantified_formula loc q r { env with env = (n,vi)::env.env } 
-	    (Some tty) current_label e 
+	  make_quantified_formula loc q r { env with env = env_local@env.env } 
+	    current_label e 
 	in
-	{ java_assertion_loc = loc ; 
-	  java_assertion_node = JAquantifier(q,vi,f) }
+	List.fold_right
+	  (fun (_,vi) acc ->
+	     { java_assertion_loc = loc ; 
+	       java_assertion_node = JAquantifier(q,vi,acc) })
+	  env_local f
 	
 
 

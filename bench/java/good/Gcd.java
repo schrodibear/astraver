@@ -32,27 +32,27 @@
 /* complements for non-linear integer arithmetic */
 
 /*@ lemma distr_right: 
-  @   \forall integer x,y,z; x*(y+z) == (x*y)+(x*z); 
+  @   \forall integer x y z; x*(y+z) == (x*y)+(x*z); 
   @*/
 
 /*@ lemma distr_left: 
-  @   \forall integer x,y,z; (x+y)*z == (x*z)+(y*z);
+  @   \forall integer x y z; (x+y)*z == (x*z)+(y*z);
   @*/
 
 /*@ lemma distr_right_minus: 
-  @   \forall integer x,y,z; x*(y-z) == (x*y)-(x*z); 
+  @   \forall integer x y z; x*(y-z) == (x*y)-(x*z); 
   @*/
 
 /*@ lemma distr_left_minus: 
-  @   \forall integer x,y,z; (x-y)*z == (x*z)-(y*z);
+  @   \forall integer x y z; (x-y)*z == (x*z)-(y*z);
   @*/
 
 /*@ lemma mul_comm: 
-  @   \forall integer x,y; x*y == y*x; 
+  @   \forall integer x y; x*y == y*x; 
   @*/
 
 /*@ lemma mul_assoc: 
-  @   \forall integer x,y,z; x*(y*z) == (x*y)*z; 
+  @   \forall integer x y z; x*(y*z) == (x*y)*z; 
   @*/
 
 /*@ predicate divides(integer x, integer y) {
@@ -61,12 +61,12 @@
   @*/
 
 /*@ lemma div_mod_property:
-  @  \forall integer x,y; 
+  @  \forall integer x y; 
   @    x >=0 && y > 0 ==> x%y  == x - y*(x/y);  
   @*/
 
 /*@ lemma mod_property:
-  @  \forall integer x,y; 
+  @  \forall integer x y; 
   @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
   @*/
 
@@ -81,7 +81,7 @@
   @*/
 
 /*@ lemma gcd_property :
-  @   \forall integer a, b, d, q;
+  @   \forall integer a b d q;
   @      b > 0 && isGcd(b,a % b,d) ==> isGcd(a,b,d) ;
   @*/
 
@@ -91,7 +91,7 @@ class Gcd {
       @ behavior resultIsGcd: 
       @   ensures isGcd(x,y,\result) ;
       @ behavior bezoutProperty:
-      @   ensures \exists integer a,b; a*x+b*y == \result;
+      @   ensures \exists integer a b; a*x+b*y == \result;
       @*/
     static int gcd(int x, int y) {
         //@ ghost integer a = 1, b = 0, c = 0, d = 1;
