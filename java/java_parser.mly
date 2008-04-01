@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.38 2008-03-17 08:38:42 marche Exp $
+$Id: java_parser.mly,v 1.39 2008-04-01 11:16:25 marche Exp $
 
 */
 
@@ -917,11 +917,9 @@ expr_no_name:
     { locate_expr (JPEinstanceof($1,$3)) }
 /* annotations only operators */
 | BSFORALL quantified_variables_decl SEMICOLON expr %prec BSFORALL
-    { let (t,v)=$2 in
-      locate_expr (JPEquantifier(Forall,t,v,$4)) }
+    { locate_expr (JPEquantifier(Forall,$2,$4)) }
 | BSEXISTS quantified_variables_decl SEMICOLON expr %prec BSFORALL
-    { let (t,v)=$2 in
-      locate_expr (JPEquantifier(Exists,t,v,$4)) }
+    { locate_expr (JPEquantifier(Exists,$2,$4)) }
 | expr EQEQGT expr
     { locate_expr (JPEbin($1,Bimpl,$3)) }
 | expr LTEQEQGT expr
@@ -929,15 +927,19 @@ expr_no_name:
 ;
 
 quantified_variables_decl:
-| type_expr quantified_variables
-    { ($1,$2) }
+| type_expr quantified_variable quantified_variables
+    { (Some $1,$2)::$3 }
 ;
 
 quantified_variables:
-| quantified_variable
-    { [$1] }
-| quantified_variable COMMA quantified_variables
-    { $1::$3 }
+| /* \epsilon */
+    { [] }
+/* conflicts
+| COMMA type_expr quantified_variable quantified_variables
+    { (Some $2,$3)::$4 }
+*/
+| COMMA quantified_variable quantified_variables
+    { (None, $2)::$3 }
 ;
 
 quantified_variable:
@@ -987,19 +989,28 @@ ident:
 /*s parsing of annotations: KML */
 
 kml_type_decl:
+| TYPE ident
+    { JPTlogic_type_decl $2 }
 | PREDICATE ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
     { JPTlogic_def($2,None,$3,$4,$6) }
-| PREDICATE ident label_binders method_parameters SEMICOLON EOF
-    { JPTlogic_reads ($2, None, $3, $4, []) }
+| PREDICATE ident label_binders method_parameters reads_clause SEMICOLON EOF
+    { JPTlogic_reads ($2, None, $3, $4, $5) }
 | LOGIC type_expr ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
     { JPTlogic_def($3,Some $2,$4, $5,$7) }
-| LOGIC type_expr ident label_binders method_parameters READS expr_comma_list SEMICOLON EOF
-    { JPTlogic_reads($3,Some $2,$4,$5,$7) }
+| LOGIC type_expr ident label_binders method_parameters reads_clause SEMICOLON EOF
+    { JPTlogic_reads($3,Some $2,$4,$5,$6) }
 | AXIOM ident label_binders COLON expr SEMICOLON EOF
     { JPTlemma($2,true,$3,$5) }
 | LEMMA ident label_binders COLON expr SEMICOLON EOF
     { JPTlemma($2,false,$3,$5) }
 
+reads_clause:
+| READS expr_comma_list
+    { $2 }
+| /* epsilon */ 
+    { [] }
+;
+ 
 label_binders:
 | /* epsilon */ { [LabelHere] }
 | LEFTBRACE ident label_list_end RIGHTBRACE { (label $2)::$3 }

@@ -13,12 +13,12 @@
   @*/
 
 /*@ axiom select_store_eq:
-  @  \forall larray t, integer i, double x;
+  @  \forall larray t; \forall integer i; \forall double x;
   @   select(store(t,i,x),i) == x;
   @*/
 
 /*@ axiom select_store_neq:
-  @  \forall larray t, integer i, integer j;
+  @  \forall larray t; \forall integer i, j;
   @   \forall double x;
   @    i != j ==> 
   @     select(store(t,i,x),j) == select(x,j);
@@ -31,9 +31,10 @@ interface PArrayInterface {
     //@ model larray model_array;
     //@ model integer model_length;
   
-    /* @ requires n >= 0;
-      @ ensures this.model_array == create(0.0);
-      @ ensures this.model_length == n;
+    /*@ requires n >= 0;
+      @ ensures 
+      @   this.model_array == create(0.0)
+      @   && this.model_length == n;
       @*/
     // PArrayInterface(int n);
     
@@ -45,13 +46,14 @@ interface PArrayInterface {
 
     /*@ requires 0 <= i < this.model_length;
       @ assigns \nothing;
-      @ ensures \fresh(\result); 
-      @ ensures \result.model_array == store(this.model_array,i,x);
-      @ ensures \result.model_length == this.model_length;
+      @ // ensures \fresh(\result); 
+      @ ensures \result.model_array == store(this.model_array,i,x)
+      @   && \result.model_length == this.model_length;
       @*/
     PArrayInterface set(int i, double x);
 
 }
+
 
 
 abstract class Data {
@@ -66,7 +68,7 @@ class Arr extends Data {
 
     double table[];
 
-    //@ invariant table != null;
+    //@ invariant table_non_null: table != null;
 
     Arr(int n) {
 	table = new double[n];
@@ -99,8 +101,10 @@ class Diff extends Data {
     private double value;
     private PArray remaining;
 
-    //@ invariant remaining != null;
-    //@ invariant repr(model_length,store(index,value,remaining.model_array),this)
+    //@ invariant remaining_non_null: remaining != null;
+    /*@ invariant diff_repr: 
+      @   repr(model_length,store(index,value,remaining.model_array),this);
+      @*/
 
     Diff(int i, double x, PArray rem) {
 	index = i;
@@ -128,8 +132,10 @@ public class PArray implements PArrayInterface
     
     protected Data contents;
     
-    //@ invariant contents != null;
-    //@ invariant data_repr(model_length,model_array,contents);
+    //@ invariant contents_non_null: contents != null;
+    /*@ invariant data_repr:
+      @    data_repr(model_length,model_array,contents);
+      @*/
     
     protected PArray(Data d) {
 	contents = d;
@@ -164,10 +170,13 @@ public class PArray implements PArrayInterface
 }
 
 
-//@ predicate data_repr(integer model_length, larray model_array, Data contents);
+/*@ predicate data_repr(integer model_length, 
+  @                     larray model_array, Data contents);
+  @*/
  
 /*@ axiom arr_repr :
-  @   \forall integer model_length, larray model_array,Arr a ;
+  @   \forall integer model_length; \forall larray model_arrayl;
+  @    \forall Arr a ;
   @     data_repr(model_length, model_array,a) 
   @     <==>
   @     model_length == a.table.length &&
@@ -176,21 +185,23 @@ public class PArray implements PArrayInterface
   @*/
 
 /*@ axiom diff_repr_1 :
-  @   \forall integer model_length, larray model_array, Diff d ;
-  @   \forall integer i, double x; 
+  @   \forall integer model_length; \forall larray model_array;
+  @   \forall Diff d ;
+  @   \forall integer i; \forall double x; 
   @     data_repr(model_length, model_array, d.remaining) &&
   @     i == d.index && x == d.value  
   @     ==> 
-  @     data_repr(model_length, store(i,x,model_array),d) 
+  @     data_repr(model_length, store(i,x,model_array),d) ;
   @*/
 
 /*@ axiom diff_repr_2 :
-  @   \forall integer model_length, larray model_array, Diff d ;
+  @   \forall integer model_length; \forall larray model_array;
+  @    \forall Diff d ;
   @     data_repr(model_length, model_array, d) &&
   @     \exists larray a; 
   @     model_array == store(d.index,d.value,a)
   @     &&
-  @     data_repr(model_length, a, d.remaining) 
+  @     data_repr(model_length, a, d.remaining) ;
   @*/
 
 

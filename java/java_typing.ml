@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.105 2008-03-17 08:38:42 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.106 2008-04-01 11:16:26 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -53,7 +53,9 @@ let print_type_name fmt t =
   match t with
     | TypeClass ci -> fprintf fmt "class %s" ci.class_info_name
     | TypeInterface ii -> fprintf fmt "interface %s" ii.interface_info_name
-
+(*
+    | TypeLogic s -> fprintf fmt "logic type %s" s
+*)
 
 let string_of_base_type t =
   match t with
@@ -236,6 +238,7 @@ and interface_type_env_table :
     = Hashtbl.create 97
 
 
+
 let class_decl_table : 
     (int, (package_info list * 
 	     Java_ast.class_declaration)) Hashtbl.t
@@ -247,8 +250,21 @@ let interface_decl_table :
 	     Java_ast.interface_declaration)) Hashtbl.t
     = Hashtbl.create 97
 
-let invariants_env = Hashtbl.create 97
-let invariants_table = Hashtbl.create 97
+let invariants_env : 
+    (int, (* class tag *) 
+     Java_env.java_type_info (* class or interface *)
+     * (string * Java_env.java_var_info) list (* env [this,this_info]*)
+     * Java_env.java_var_info (* this_info *)
+     * (Java_ast.identifier * Java_ast.pexpr) list (* (inv_name,inv_pred) list *)
+    ) Hashtbl.t 
+    = Hashtbl.create 97
+let invariants_table :
+    ( int, (* class tag *)
+      Java_env.java_class_info (* class_info *)
+      * Java_env.java_var_info (* this_info *)
+      * (Java_ast.identifier * Java_tast.assertion) list (* (inv_name, typed pred) list *)
+      ) Hashtbl.t
+    = Hashtbl.create 97
 
 let static_invariants_env = Hashtbl.create 97
 let static_invariants_table = Hashtbl.create 97
@@ -470,7 +486,13 @@ let get_type_decl package package_env acc d =
 	(id,TypeInterface ii)::acc
     | JPTannot(loc,s) -> assert false
     | JPTlemma((loc,id),is_axiom, labels,e) -> acc
-    | JPTlogic_type_decl _ -> assert false (* TODO *)
+    | JPTlogic_type_decl id ->
+	let (_,id) = id in
+ 	(* TODO check if exists *)
+(*
+	(id,TypeLogic id)::acc
+*)
+	assert false (* TODO *)
     | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> acc 
     | JPTlogic_def((loc,id),ret_type,labels,params,body) -> acc
 
@@ -727,45 +749,6 @@ and get_import (packages, types) imp =
 	    | _ -> typing_error (fst (List.hd qid))
 		"type name expected"
 	end
-	  
-(*
-and get_types cu =
-  let pi = 
-    match cu.cu_package with
-      | [] -> anonymous_package
-      | qid ->
-	  match classify_name [] [] None [] qid with
-	    | PackageName pi -> pi
-	    | _ -> assert false
-  in
-  let package_env,type_env = 
-    List.fold_left get_import ([],[])
-      (Import_package javalang_qid::cu.cu_imports) 
-  in
-  let package_env = add_in_package_list pi package_env in    
-  let local_type_env =
-    List.fold_left (get_type_decl pi package_env) 
-      [] cu.cu_type_decls 
-  in
-  let full_type_env = local_type_env @ type_env in
-  List.iter
-    (fun (_,ti) ->
-       match ti with
-	 | TypeClass ci ->
-(*
-	     eprintf "setting type env for class '%s' as:@\n" ci.class_info_name;
-	     List.iter
-	       (fun (id,_) -> eprintf "  %s@\n" id)
-	       type_env;
-*)
-	     Hashtbl.add class_type_env_table ci.class_info_tag 
-	       full_type_env
-	 | TypeInterface ii ->
-	     Hashtbl.add interface_type_env_table ii.interface_info_tag 
-	       full_type_env)
-    local_type_env;
-  package_env,local_type_env
-*)
 
 and get_types package_env cus =
   let pil =
@@ -1421,6 +1404,21 @@ let object_class =
 	eprintf "%a: %s@." Loc.gen_report_position l s;
 	  exit 1
 
+let string_class =
+  try				
+    match classify_name [] [] None [] 
+      ((Loc.dummy_position,"String") :: javalang_qid)
+    with
+      | TypeName (TypeClass ci) -> ci
+      | _ -> assert false
+  with
+    | Java_options.Java_error(l,s) ->
+	eprintf "%a: %s@." Loc.gen_report_position l s;
+	  exit 1
+
+let string_type ~valid = JTYclass(valid,string_class)
+
+
 type typing_env =
     {
       package_env : Java_env.package_info list;
@@ -1496,7 +1494,7 @@ and term env current_label e =
 	  let te1 = termt e1 and te2 = termt e2 in 
 	  make_logic_bin_op e.java_pexpr_loc op 
 	    te1.java_term_type te1 te2.java_term_type te2
-      | JPEquantifier (q, ty, idl, e)-> 
+      | JPEquantifier (q, idl, e)-> 
 	  typing_error e.java_pexpr_loc
 	    "quantified formulas not allowed in term position"
       | JPEold e1 -> 
@@ -1668,10 +1666,9 @@ and assertion env current_label e =
 	let te1 = termt e1 and te2 = termt e2 in 
 	  make_predicate_bin_op e.java_pexpr_loc op 
 	    te1.java_term_type te1 te2.java_term_type te2
-    | JPEquantifier (q, ty, idl, e)-> 
-	let tty = type_type env.package_env env.type_env true ty in
+    | JPEquantifier (q, idl, e)-> 
 	let a = make_quantified_formula 
-	  e.java_pexpr_loc q tty idl env current_label e 
+	  e.java_pexpr_loc q idl env None current_label e 
 	in
 	a.java_assertion_node
     | JPEold _-> assert false (* TODO *)
@@ -1754,18 +1751,26 @@ and assertion env current_label e =
   in { java_assertion_node = ta;
        java_assertion_loc = e.java_pexpr_loc }
 
-and make_quantified_formula loc q ty idl env current_label e : assertion =
+and make_quantified_formula loc q idl env current_type current_label e : assertion =
   match idl with
     | [] -> assertion env current_label e
-    | id::r ->
-	let tyv, (loc,n) = var_type_and_id ty id in
+    | (ty,id)::r ->	
+	let tty = 
+	  match ty,current_type with
+	    | Some ty,_ ->
+		type_type env.package_env env.type_env true ty 
+	    | None, Some ty -> ty
+	    | None,None -> assert false (* forbidden by parsing *)
+	in
+	let tyv, (loc,n) = var_type_and_id tty id in
 	let vi = new_var loc tyv n in
 	let f = 
-	  make_quantified_formula loc q ty r { env with env = (n,vi)::env.env } 
-	    current_label e 
+	  make_quantified_formula loc q r { env with env = (n,vi)::env.env } 
+	    (Some tty) current_label e 
 	in
 	{ java_assertion_loc = loc ; 
 	  java_assertion_node = JAquantifier(q,vi,f) }
+	
 
 
 (*
@@ -2074,7 +2079,7 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	begin
 	  try
 	    let _t = binary_numeric_promotion ~ghost t1 t2 in
-	      Tboolean, JEbin(e1, op, e2)
+	      boolean_type, JEbin(e1, op, e2)
 	  with Not_found ->
 	    typing_error loc "numeric types expected"
 	end
@@ -2082,25 +2087,37 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	begin
 	  try
 	    let _t = binary_numeric_promotion t1 t2 in
-	      Tboolean, JEbin(e1, op, e2)
+	      boolean_type, JEbin(e1, op, e2)
 	  with Not_found ->
 	    if (is_boolean t1 && is_boolean t2) ||
 	      (is_reference_type t1 && is_reference_type t2) then
-		Tboolean, JEbin (e1, op, e2)
+		boolean_type, JEbin (e1, op, e2)
 	    else
 	      typing_error loc "numeric or object types expected for == and !="
 	end
-    | Badd | Bsub | Bmul | Bdiv | Bmod ->
+    | Bsub | Bmul | Bdiv | Bmod ->
 	begin
 	  try
 	    let t = binary_numeric_promotion ~ghost t1 t2 in
-	    t,JEbin(e1, op, e2)
+	    JTYbase t,JEbin(e1, op, e2)
 	  with Not_found ->
-	    typing_error loc "numeric types expected for +, -, *, / and %%"
+	    typing_error loc "numeric types expected for -, *, / and %%"
+	end
+    | Badd ->
+	begin
+	  try
+	    let t = binary_numeric_promotion ~ghost t1 t2 in
+	    JTYbase t,JEbin(e1, op, e2)
+	  with Not_found ->
+	    match t1,t2 with
+	      | (_,JTYclass(_,c))|(JTYclass(_,c),_) when c==string_class ->
+		  (string_type ~valid:true),JEbin(e1,op,e2)
+	      | _ ->
+		  typing_error loc "numeric types or String expected for +, got %a + %a" print_type t1 print_type t2
 	end
     | Band | Bor -> 
 	if is_boolean t1 && is_boolean t2 then
-	  Tboolean,JEbin(e1,op,e2)
+	  boolean_type,JEbin(e1,op,e2)
 	else
 	  typing_error loc "booleans expected"
     | Basr | Blsr | Blsl -> 
@@ -2113,7 +2130,7 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 		    try
 		      match unary_numeric_promotion t2 with
 			| Tint | Tlong ->
-			    t1, JEbin(e1, op, e2)
+			    JTYbase t1, JEbin(e1, op, e2)
 			| _ -> raise Not_found
 		    with Not_found -> int_expected loc t2
 		  end
@@ -2122,13 +2139,13 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	end
     | Bbwxor|Bbwor|Bbwand -> 	
 	if is_boolean t1 && is_boolean t2 then
-	  Tboolean,JEbin(e1,op,e2)
+	  boolean_type,JEbin(e1,op,e2)
 	else
 	  begin
 	    try
 	      let t1 = unary_numeric_promotion t1 in
 	      let _t2 = unary_numeric_promotion t2 in
-		t1, JEbin(e1, op, e2)
+		JTYbase t1, JEbin(e1, op, e2)
 	    with Not_found ->
 	      typing_error loc "booleans or integers expected"
 	  end	  
@@ -2358,7 +2375,7 @@ let rec expr ~ghost env e =
 	  let t, l = 
 	    match l with
 	      | Integer s | Char s -> int_type, l
-	      | String s -> assert false (* TODO *)
+	      | String s -> (string_type ~valid:true), l
 	      | Bool b -> boolean_type, l
 	      | Float s -> double_type, l
 	      | Null -> null_type, l
@@ -2702,12 +2719,12 @@ let rec expr ~ghost env e =
 
       | JPEbin (e1, op, e2) -> 
 	  let te1 = exprt e1 and te2 = exprt e2 in 
-	  let t, e = make_bin_op ~ghost e.java_pexpr_loc op
-	    te1.java_expr_type te1 te2.java_expr_type te2 in
-	    JTYbase t, e
+	  make_bin_op ~ghost e.java_pexpr_loc op
+	    te1.java_expr_type te1 te2.java_expr_type te2
+
 	      (* only in terms *)
       | JPEarray_range _ 
-      | JPEquantifier (_, _, _, _)
+      | JPEquantifier (_, _, _)
       | JPEat _
       | JPEold _
       | JPEresult -> 

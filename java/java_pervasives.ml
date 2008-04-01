@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_pervasives.ml,v 1.14 2008-02-11 20:58:30 nrousset Exp $ *)
+(* $Id: java_pervasives.ml,v 1.15 2008-04-01 11:16:25 marche Exp $ *)
 
 (*** Utility functions ***)
 
@@ -40,7 +40,9 @@ let get_method_info_class_or_interface_name mi =
   match mi.method_info_class_or_interface with
     | TypeClass ci -> ci.class_info_name
     | TypeInterface ii -> ii.interface_info_name
-
+(*
+    | TypeLogic _ -> assert false
+*)
 
 open Java_ast
 

@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.22 2008-02-18 16:46:10 nrousset Exp $
+$Id: java_lexer.mll,v 1.23 2008-04-01 11:16:25 marche Exp $
 
 ***************************************************************************)
 
@@ -139,6 +139,7 @@ $Id: java_lexer.mll,v 1.22 2008-02-18 16:46:10 nrousset Exp $
 	  "transient", TRANSIENT;
 	  "true", TRUE;
 	  "try", TRY;
+	  "type", TYPE;
 	  "var", VAR;
 	  "void", VOID;
 	  "volatile", VOLATILE;

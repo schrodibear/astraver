@@ -30,7 +30,7 @@
 //@+ CheckArithOverflow = yes
 
 /*@ lemma mean_1 : 
-      \forall int x, y; x <= y ==> x <= x+(y-x)/2 <= y; */
+      \forall integer x, y; x <= y ==> x <= x+(y-x)/2 <= y; */
 
 class BinarySearch {
 
@@ -43,11 +43,12 @@ class BinarySearch {
     
     /*@ requires 
       @   0 <= n <= t.length &&
-      @   \forall int k1, k2; 0 <= k1 <= k2 <= n-1 ==> t[k1] <= t[k2];
+      @   \forall integer k1, k2; 
+      @       0 <= k1 <= k2 <= n-1 ==> t[k1] <= t[k2];
       @ behavior correctness:
       @ ensures
       @   (\result >= 0 && t[\result] == v) ||
-      @   (\result == -1 && \forall int k; 0 <= k < n ==> t[k] != v);
+      @   (\result == -1 && \forall integer k; 0 <= k < n ==> t[k] != v);
       @*/
     int binary_search(int t[], int n, int v) {
 	int l = 0, u = n-1;
@@ -70,11 +71,12 @@ class BinarySearch {
 
     /*@ requires 
       @   t != null &&
-      @   \forall int k1, k2; 0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
+      @   \forall integer k1, k2; 
+      @       0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
       @ behavior correctness:
       @ ensures
       @   (\result >= 0 && t[\result] == v) ||
-      @   (\result == -1 && \forall int k; 0 <= k < t.length ==> t[k] != v);
+      @   (\result == -1 && \forall integer k; 0 <= k < t.length ==> t[k] != v);
       @*/
     int binary_search2(int t[], int v) {
 	int l = 0, u = t.length - 1;

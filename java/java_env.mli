@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.31 2008-02-18 16:46:10 nrousset Exp $ *)
+(* $Id: java_env.mli,v 1.32 2008-04-01 11:16:25 marche Exp $ *)
 
 (*s types and environments *)
 
@@ -175,6 +175,9 @@ and interface_info =
 and java_type_info =
   | TypeClass of java_class_info
   | TypeInterface of interface_info
+(*
+  | TypeLogic of string
+*)
 
 (*s literals, shared between ASTs and typed ASTs *)
 
