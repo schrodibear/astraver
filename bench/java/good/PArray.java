@@ -28,23 +28,23 @@
 // public Interface for PArray
 interface PArrayInterface {
 
-    //@ model larray model_array;
-    //@ model integer model_length;
+    // @ model larray model_array;
+    // @ model integer model_length;
   
-    /*@ requires n >= 0;
+    /* @ requires n >= 0;
       @ ensures 
       @   this.model_array == create(0.0)
       @   && this.model_length == n;
       @*/
     // PArrayInterface(int n);
     
-    /*@ requires 0 <= i < this.model_length;
+    /* @ requires 0 <= i < this.model_length;
       @ assigns \nothing;
       @ ensures \result == select(this.model_array,i);
       @*/
     double get(int i);
 
-    /*@ requires 0 <= i < this.model_length;
+    /* @ requires 0 <= i < this.model_length;
       @ assigns \nothing;
       @ // ensures \fresh(\result); 
       @ ensures \result.model_array == store(this.model_array,i,x)

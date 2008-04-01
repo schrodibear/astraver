@@ -2,6 +2,9 @@ package java.lang;
 
 public class System {
 
+
+    // static PrintStream 	out;
+
     /**Copies an array from the specified source array, beginning at the
  specified position, to the specified position of the destination array.
  A subsequence of array components are copied from the source

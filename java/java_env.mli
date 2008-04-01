@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.32 2008-04-01 11:16:25 marche Exp $ *)
+(* $Id: java_env.mli,v 1.33 2008-04-01 16:01:09 marche Exp $ *)
 
 (*s types and environments *)
 
@@ -50,8 +50,11 @@ type java_type =
     | JTYclass of bool * java_class_info (*r first arg true if non_null *)
     | JTYinterface of interface_info 
     | JTYarray of java_type
+    | JTYlogic of logic_type_info
 
-   
+and logic_type_info = string
+
+
 and java_var_info =
     {
       java_var_info_tag : int;
@@ -175,9 +178,6 @@ and interface_info =
 and java_type_info =
   | TypeClass of java_class_info
   | TypeInterface of interface_info
-(*
-  | TypeLogic of string
-*)
 
 (*s literals, shared between ASTs and typed ASTs *)
 

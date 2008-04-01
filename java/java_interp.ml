@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.123 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.124 2008-04-01 16:01:09 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -226,6 +226,7 @@ and tr_type loc t =
     | JTYarray t ->
 	let st = get_array_struct loc t in
 	JCTpointer(JCtag st,Some num_zero,None)
+    | JTYlogic i -> JCTlogic i
 
 let tr_type_option loc t =
   match t with
@@ -589,7 +590,7 @@ let rec assertion ?(reg=0) a =
 	  if op = Bne && e2.java_term_node = JTlit Null then
 	    let t1 = term e1 in
 	      match e1.java_term_type with
-		| JTYbase _ | JTYnull -> assert false
+		| JTYbase _ | JTYnull | JTYlogic _ -> assert false
 		| JTYclass (_, ci) ->
 		    let app = {
 		      jc_app_fun = non_null_pred "Object";
@@ -1250,7 +1251,7 @@ let rec expr ?(reg=false) e =
 		  let st = get_array_struct e.java_expr_loc ty in
 		  reg := true;	    
 		  JCTEcast(expr e1,st)		  
-	      | JTYnull -> assert false 
+	      | JTYnull | JTYlogic _ -> assert false 
 	  end
       | JEinstanceof(e,ty) ->
 	  begin
@@ -1419,7 +1420,7 @@ let behavior (id,assumes,throws,assigns,ensures) =
 let get_non_null_assertion ty t =
   let node = 
     match ty with
-      | JTYbase _ | JTYnull -> assert false
+      | JTYbase _ | JTYnull | JTYlogic _ -> assert false
       | JTYclass (_, ci) ->
 	  let app = {
 	    jc_app_fun = non_null_pred "Object";
@@ -1651,7 +1652,7 @@ let tr_field type_name acc fi =
 		  | Tfloat | Treal -> assert false (* TODO *) 
 		  | Tunit -> assert false
 		end
-	    | JTYnull | JTYclass _ | JTYinterface _ | JTYarray _ -> 
+	    | JTYnull | JTYclass _ | JTYinterface _ | JTYarray _ | JTYlogic _ -> 
 		assert false
 	  in
 	    match e with
@@ -1698,10 +1699,13 @@ let tr_field type_name acc fi =
 			      | Tlong | Tdouble | Tinteger) -> Beq_int
 			    | JTYbase Tboolean -> Beq_bool 
 			    | JTYbase (Tfloat | Treal) -> Beq_real 
-			    | JTYbase Tunit | JTYnull -> assert false 
-			    | JTYclass _ | JTYinterface _ | JTYarray _ -> Beq_pointer
+			    | JTYbase Tunit | JTYnull 
+			    | JTYlogic _ -> assert false 
+			    | JTYclass _ | JTYinterface _ 
+			    | JTYarray _ -> Beq_pointer
 			  end
-		      | JTYbase _ | JTYnull | JTYclass _ | JTYinterface _ -> 
+		      | JTYbase _ | JTYnull | JTYclass _ 
+		      | JTYinterface _ | JTYlogic _ -> 
 			  assert false
 		    in
 		    let fi' = List.hd si.jc_struct_info_fields in 

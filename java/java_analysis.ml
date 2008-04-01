@@ -71,6 +71,7 @@ let rec name_type t =
     | JTYinterface i -> i.interface_info_name
     | JTYarray ty -> name_type ty ^ "A"
     | JTYnull -> assert false
+    | JTYlogic _ -> assert false
 
 let rec intro_array_struct t =
   try

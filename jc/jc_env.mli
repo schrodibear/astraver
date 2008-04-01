@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.50 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.51 2008-04-01 16:01:09 marche Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal
 
@@ -139,6 +139,6 @@ type logic_label =
 
 (*
 Local Variables: 
-compile-command: "unset LANG ; make -C .. bin/jessie.byte"
+compile-command: "unset LANG ; make -C .. byte"
 End: 
 *)

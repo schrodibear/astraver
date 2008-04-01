@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.107 2008-04-01 15:28:29 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.108 2008-04-01 16:01:09 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -80,6 +80,7 @@ let rec print_type fmt t =
     | JTYclass (non_null, c) -> fprintf fmt "%s%s" 
 	(if non_null then "" else "!") c.class_info_name
     | JTYinterface ii -> fprintf fmt "%s" ii.interface_info_name
+    | JTYlogic i ->fprintf fmt "%s" i
 
 (***********************
 
@@ -467,6 +468,10 @@ let new_class_info (p:package_info) (id:string) c =
       ci
 
 
+let logic_type_table = Hashtbl.create 97
+
+let new_logic_type id = id
+
 let get_type_decl package package_env acc d = 
     match d with
     | JPTclass c -> 
@@ -486,13 +491,17 @@ let get_type_decl package package_env acc d =
 	(id,TypeInterface ii)::acc
     | JPTannot(loc,s) -> assert false
     | JPTlemma((loc,id),is_axiom, labels,e) -> acc
-    | JPTlogic_type_decl id ->
-	let (_,id) = id in
- 	(* TODO check if exists *)
-(*
-	(id,TypeLogic id)::acc
-*)
-	assert false (* TODO *)
+    | JPTlogic_type_decl (loc,id) ->
+	begin
+	  try
+	    let _ = Hashtbl.find logic_type_table id in
+	    typing_error loc "logic type already defined"
+	  with
+	      Not_found ->
+		let i = new_logic_type id in
+		Hashtbl.add logic_type_table id i;
+		acc
+	end
     | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> acc 
     | JPTlogic_def((loc,id),ret_type,labels,params,body) -> acc
 
@@ -500,6 +509,7 @@ let get_type_decl package package_env acc d =
 type classified_name =
   | TermName of term
   | TypeName of java_type_info
+  | LogicTypeName of logic_type_info
   | PackageName of package_info
 
 let rec add_in_package_list pi l =
@@ -910,8 +920,14 @@ and classify_name
 				    eprintf "Internal error: got file %s in place of a package@." f;
 				    assert false
 			    with Not_found ->
-			      typing_error loc "unknown identifier %s" id
-			      			      
+			      (* otherwise look for a logic type 
+				 of that name *)
+			      try
+				let i = Hashtbl.find logic_type_table id in
+				LogicTypeName i
+			      with Not_found ->
+				typing_error loc "unknown identifier %s" id
+			      	  
 	end		
 	  
     | (loc,id)::n ->
@@ -959,6 +975,8 @@ and classify_name
 	      end
 	  | TermName t -> 
 	      type_term_field_access t loc id 
+	  | LogicTypeName i -> 
+	      typing_error loc "logic type unexpected"
 
 and type_term_field_access t loc id = 
   match t.java_term_type with
@@ -987,7 +1005,7 @@ and type_term_field_access t loc id =
 	else
 	  typing_error loc 
 	    "no such field in array type"
-    | JTYnull | JTYbase _ ->
+    | JTYnull | JTYbase _ | JTYlogic _ ->
 	class_or_interface_expected t.java_term_loc 
 	  t.java_term_type
 
@@ -1018,7 +1036,7 @@ and type_expr_field_access e loc id =
 	else
 	  typing_error loc 
 	    "no such field in array type"
-    | JTYnull | JTYbase _ ->
+    | JTYnull | JTYbase _ | JTYlogic _ ->
 	class_or_interface_expected e.java_expr_loc 
 	  e.java_expr_type
 
@@ -1034,6 +1052,7 @@ and type_type package_env type_env non_null ty =
 		    | TypeClass ci -> JTYclass (non_null, ci)
 		    | TypeInterface ii -> JTYinterface(ii)
 		end
+	    | LogicTypeName i -> JTYlogic i
 	    | _ -> assert false (* TODO *)
 	end
     | Array_type_expr t -> 
@@ -1195,7 +1214,7 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	get_method_prototypes package_env type_env 
 	  current_type (mis,ci::cis) env rem 
     | JPFmethod_spec _ :: _ ->
-	typing_error (assert false) "out of place method specification"
+	typing_error Loc.dummy_position "out of place method specification"
     | JPFinvariant (id, e) :: rem ->
 	get_method_prototypes package_env type_env
 	  current_type (mis, cis) env rem 
@@ -1477,6 +1496,9 @@ and term env current_label e =
 	      | PackageName _ ->
 		  typing_error e.java_pexpr_loc
 		    "term expected, got a package name"
+	      | LogicTypeName _ ->
+		  typing_error e.java_pexpr_loc
+		    "term expected, got a logic type"
 	  end
 
       | JPEresult -> 
@@ -1944,7 +1966,8 @@ let rec eval_const_expression const e =
 			| Tunit | Treal | Tinteger | Tdouble | Tlong 
 			| Tfloat | Tint | Tchar | Tboolean -> assert false (* TODO *)
 		    end
-	      | JTYarray _ | JTYinterface _ | JTYclass (_, _) |JTYnull
+	      | JTYarray _ | JTYinterface _ | JTYclass (_, _) 
+	      | JTYnull | JTYlogic _
 		  -> raise Not_found
 	  end
     | JEbin(e1,op,e2) -> 
@@ -2059,6 +2082,7 @@ let cast_convertible tfrom tto =
     match tfrom,tto with
       | JTYbase t1, JTYbase t2 -> true (* correct ? TODO *)
       | JTYbase _,_ | _, JTYbase _ -> false
+      | JTYlogic _,_ | _,JTYlogic _ -> false
       | JTYclass(_,cfrom), JTYclass(_,cto) ->
 	  is_subclass cfrom cto || is_subclass cto cfrom
       | JTYclass _, JTYinterface _ -> assert false (* TODO *)
@@ -2113,7 +2137,9 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	    JTYbase t,JEbin(e1, op, e2)
 	  with Not_found ->
 	    match t1,t2 with
-	      | (_,JTYclass(_,c))|(JTYclass(_,c),_) when c==string_class ->
+	      | (_,JTYclass(_,c)) when c==string_class ->
+		  (string_type ~valid:true),JEbin(e1,op,e2)
+	      | (JTYclass(_,c),_) when c==string_class ->
 		  (string_type ~valid:true),JEbin(e1,op,e2)
 	      | _ ->
 		  typing_error loc "numeric types or String expected for +, got %a + %a" print_type t1 print_type t2
@@ -2395,6 +2421,9 @@ let rec expr ~ghost env e =
 	      | PackageName _ ->
 		  typing_error e.java_pexpr_loc
 		    "expression expected, got a package name"
+	      | LogicTypeName _ ->
+		  typing_error e.java_pexpr_loc
+		    "expression expected, got a logic type"
 	  end
       | JPEthis -> 
 	  let vi = get_this e.java_pexpr_loc env.env in
@@ -2526,7 +2555,7 @@ let rec expr ~ghost env e =
 			      | _ -> typing_error e.java_pexpr_loc 
 				  "not a class or interface type"
 			  in ti,id,Some (expr_of_term te)
-		      | PackageName _ ->
+		      | PackageName _ | LogicTypeName _ ->
 			  typing_error (fst (List.hd n)) 
 			    "expr or class or interface expected"
 		  end
@@ -2699,6 +2728,9 @@ let rec expr ~ghost env e =
 		    typing_error e.java_pexpr_loc
 		      "lvalue expected, got a class or interface"
 		| PackageName _ ->
+		    typing_error e.java_pexpr_loc
+		      "lvalue expected, got a package name"
+		| LogicTypeName _ ->
 		    typing_error e.java_pexpr_loc
 		      "lvalue expected, got a package name"
 	  end
@@ -3089,7 +3121,7 @@ let behavior env pre_state_env post_state_env (id, b) =
 	      | TermName _ ->
 		  typing_error (fst (List.hd c))
 		    "class type expected"
-	      | PackageName _ ->
+	      | PackageName _ | LogicTypeName _ ->
 		  typing_error (fst (List.hd c))
 		    "class type expected"
 	  end
@@ -3439,7 +3471,33 @@ let type_decl package_env type_env d =
 		  List.iter (type_constr_spec_and_body package_env full_type_env ti) 
 		    ci.class_info_constructors;
 	end
-    | JPTinterface i -> assert false (* TODO *)
+    | JPTinterface i -> 
+	begin
+	  let ty = 
+	    try
+	      List.assoc (snd i.interface_name) type_env
+	    with
+		Not_found -> 
+		  eprintf "Java_typing anomaly: interface '%s' not found in type_env@."  
+		    (snd i.interface_name);		 
+		  List.iter
+		    (fun (id,_) -> eprintf "  '%s'@\n" id)
+		    type_env;
+		  assert false
+	  in
+	  match ty with	  
+	    | TypeClass _ -> assert false
+	    | TypeInterface ii as ti ->
+		check_if_interface_complete ii;
+		let full_type_env =
+		  try Hashtbl.find interface_type_env_table ii.interface_info_tag
+		  with Not_found -> assert false
+		in
+		  List.iter (type_field_initializer package_env full_type_env ti) 
+		    ii.interface_info_fields;
+		  List.iter (type_method_spec_and_body package_env full_type_env ti) 
+		    ii.interface_info_methods;
+	end
     | JPTannot(loc,s) -> assert false
     | JPTlemma((loc,id),is_axiom, labels,e) -> 
 	let env =
@@ -3453,7 +3511,7 @@ let type_decl package_env type_env d =
 	(* TODO: si un seul label, c'est celui par defaut *)
 	let te = assertion env None e in
 	Hashtbl.add axioms_table id (is_axiom,labels,te)
-    | JPTlogic_type_decl _ -> assert false (* TODO *)
+    | JPTlogic_type_decl _ -> ()
     | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
 	let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
 	let env = 
