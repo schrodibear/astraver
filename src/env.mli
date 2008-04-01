@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.50 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: env.mli,v 1.51 2008-04-01 14:46:05 hubert Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -72,6 +72,7 @@ type typed_expr = typing_info Ast.t
 val add_global : Ident.t -> type_v -> typed_expr option -> unit
 val add_global_gen : Ident.t -> type_v scheme -> typed_expr option -> unit
 val is_global : Ident.t -> bool
+val iter_global : (Ident.t * Types.type_v scheme -> unit) -> unit
 val lookup_global : Ident.t -> type_v
 
 (*s types (only global) *)

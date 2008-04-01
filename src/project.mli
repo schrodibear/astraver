@@ -5,6 +5,7 @@ type goal = private {
   goal_file : string;
   sub_goal : goal list;
   proof : (string*string*string*string*string) list;
+  mutable goal_tags : (string*string) list;
 }
 
 type lemma = private {
@@ -16,6 +17,7 @@ type lemma = private {
 
 type behavior = {
   behavior_name : string;
+  behavior_loc : Loc.floc;
   mutable behavior_goals : goal list;
   mutable behavior_tags : (string*string) list; 
 }
@@ -40,7 +42,7 @@ val create : string -> t
 val set_project_context_file : t -> string -> unit
 val add_lemma : t -> string -> Logic_decl.vc_expl -> string -> lemma
 val add_function : t -> string -> Loc.floc -> funct
-val add_behavior : funct -> string -> behavior
+val add_behavior : funct -> string -> Loc.floc -> behavior
 val add_goal : behavior -> Logic_decl.vc_expl -> string -> goal
 
 (* toggle visibility *)
@@ -48,6 +50,7 @@ val add_goal : behavior -> Logic_decl.vc_expl -> string -> goal
 val toggle_lemma : lemma -> unit
 val toggle_function : funct -> unit
 val toggle_behavior : behavior -> unit
+val toggle_goal : goal -> unit
 
 (* save/load *)
 

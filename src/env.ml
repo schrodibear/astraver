@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.75 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: env.ml,v 1.76 2008-04-01 14:46:05 hubert Exp $ i*)
 
 open Ident
 open Misc
@@ -572,6 +572,8 @@ let is_global id = Penv.mem id !env
 let lookup_global id = 
   let s = Penv.find id !env in
   snd (specialize_type_scheme s)
+
+let iter_global id =  Penv.iter id !env
 
 let find_pgm id = Idmap.find id !pgm_table
 

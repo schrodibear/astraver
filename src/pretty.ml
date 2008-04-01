@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.23 2008-03-12 11:03:45 bardou Exp $ i*)
+(*i $Id: pretty.ml,v 1.24 2008-04-01 14:46:05 hubert Exp $ i*)
 
 open Format
 open Pp
@@ -292,7 +292,29 @@ let output_project f =
 		decl ctxfmt d)
 	 queue)
     (f ^ "_ctx.why");
-
+(*  Env.iter_global
+    (fun (x,ty) -> 
+       let fn = "function "^Ident.string x in
+       let size = String.length fn in
+       try 
+	 if (String.sub fn (size-5) 4 = "_imp")
+	 then
+	   begin
+	     eprintf "function %s@." fn;
+	     try
+	       let _ = SMap.find fn !functions in ()
+	     with Not_found ->
+	       functions := SMap.add fn SMap.empty !functions 
+	   end
+	 else ()
+       with Invalid_argument _ -> ());*)
+  Hashtbl.iter 
+    (fun key (fn,beh,loc) -> 
+       try
+	 let _ = SMap.find fn !functions in ()
+       with Not_found ->
+	 functions := SMap.add fn SMap.empty !functions)  
+    Util.program_locs ;
   let p = Project.create (Filename.basename f) in
   Project.set_project_context_file p (f ^ "_ctx.why");      
   List.iter
@@ -311,7 +333,7 @@ let output_project f =
        let f = Project.add_function p fname floc in
        SMap.iter
 	 (fun beh vcs ->
-	    let be = Project.add_behavior f beh in
+	    let be = Project.add_behavior f beh floc in
 	    List.iter
 	      (fun (expl,fpo) ->
 		 let _ = Project.add_goal be expl fpo in ())

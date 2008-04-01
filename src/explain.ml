@@ -90,3 +90,26 @@ let print_kind ?(quote=false) fmt (loc,k) =
 let print ?(quote=false) fmt  ((*loc,*)e) = 
   print_kind ~quote fmt (e.vc_loc,e.vc_kind)
 
+let msg_of_loopinv = function
+  | "" -> " of loop invariant"
+  | s -> " of generated loop inv.: " ^ s
+
+let msg_of_kind = 
+  function
+    | EKPre "PointerDeref" -> "pointer dereferencing"
+    | EKPre "IndexBounds" -> "index bounds"
+    | EKPre "ArithOverflow" -> "arithmetic overflow"
+    | EKPre "DivByZero" -> "division by zero"
+    | EKPre "AllocSize" -> "allocation size nonnegative"
+    | EKPre "UserCall" -> "precondition for user call"
+    | EKPre "" -> "precondition"
+    | EKPre s -> "unclassified precondition `" ^ s ^ "'"
+    | EKOther s -> "unclassified obligation `" ^ s ^ "'"
+    | EKAbsurd -> "unreachable code"
+    | EKAssert -> "assertion"
+    | EKPost -> "postcondition"
+    | EKWfRel -> "well-foundness of relation"
+    | EKVarDecr -> "variant decrease" 
+    | EKLoopInvInit s -> "initialization" ^ msg_of_loopinv s
+    | EKLoopInvPreserv s -> "preservation" ^ msg_of_loopinv s
+    | EKLemma -> "lemma"

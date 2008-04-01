@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.69 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: util.mli,v 1.70 2008-04-01 14:46:05 hubert Exp $ i*)
 
 open Cc
 open Logic
@@ -35,7 +35,6 @@ open Misc
 open Types
 open Ast
 open Env
-
 
 val erase_label : string -> predicate -> predicate
 val change_label : string -> string -> predicate -> predicate

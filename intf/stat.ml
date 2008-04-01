@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.75 2008-02-21 09:06:25 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.76 2008-04-01 14:46:04 hubert Exp $ i*)
 
 open Printf
 open Options
@@ -188,30 +188,6 @@ let update_buffer tv =
 
 open Logic_decl
 
-let msg_of_loopinv = function
-  | "" -> " of loop invariant"
-  | s -> " of generated loop inv.: " ^ s
-
-let msg_of_kind = 
-  function
-    | EKPre "PointerDeref" -> "pointer dereferencing"
-    | EKPre "IndexBounds" -> "index bounds"
-    | EKPre "ArithOverflow" -> "arithmetic overflow"
-    | EKPre "DivByZero" -> "division by zero"
-    | EKPre "AllocSize" -> "allocation size nonnegative"
-    | EKPre "UserCall" -> "precondition for user call"
-    | EKPre "" -> "precondition"
-    | EKPre s -> "unclassified precondition `" ^ s ^ "'"
-    | EKOther s -> "unclassified obligation `" ^ s ^ "'"
-    | EKAbsurd -> "unreachable code"
-    | EKAssert -> "assertion"
-    | EKPost -> "postcondition"
-    | EKWfRel -> "well-foundness of relation"
-    | EKVarDecr -> "variant decrease" 
-    | EKLoopInvInit s -> "initialization" ^ msg_of_loopinv s
-    | EKLoopInvPreserv s -> "preservation" ^ msg_of_loopinv s
-    | EKLemma -> "lemma"
-
 let show_xpl (loc,xpl) (tv:GText.view) =
   match loc with
     | (s,l,b,e) ->
@@ -224,9 +200,10 @@ let show_xpl (loc,xpl) (tv:GText.view) =
 	let msg =
 	  match xpl.vc_kind with
 	    | EKLemma -> "Lemma"
-	    | k -> "VC: " ^ msg_of_kind k
+	    | k -> "VC: " ^ Explain.msg_of_kind k
 	in
 	!display_info ("file: " ^ (Filename.basename s) ^ " " ^ msg)
+
 let select_obligs (model:GTree.tree_store) (tv:GText.view) 
                   (tv_s:GText.view) selected_rows = 
   List.iter

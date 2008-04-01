@@ -4,7 +4,8 @@ type goal = {
   goal_expl : Logic_decl.vc_expl;
   goal_file : string;
   sub_goal : goal list;
-  proof : (string*string*string*string*string) list
+  proof : (string*string*string*string*string) list ;
+  mutable goal_tags : (string*string) list; 
 }
 
 type lemma = {
@@ -16,6 +17,7 @@ type lemma = {
 
 type behavior = {
   behavior_name : string;
+  behavior_loc : Loc.floc;
   mutable behavior_goals : goal list;
   mutable behavior_tags : (string*string) list;
 }
@@ -52,6 +54,7 @@ let add_lemma p n e f =
     goal_file = f;
     sub_goal = [];
     proof = [];
+    goal_tags = [];
   }
   in
   let l = {
@@ -69,14 +72,16 @@ let add_goal b e f =
     goal_file = f;
     sub_goal = [];
     proof = [];
+    goal_tags = [];
   }
   in
   b.behavior_goals <- g :: b.behavior_goals;
   g
 
-let add_behavior f be =
+let add_behavior f be floc =
   let b = {
     behavior_name = be;
+    behavior_loc = floc;
     behavior_goals = [];
     behavior_tags = [];
   }
@@ -122,6 +127,13 @@ let toggle_behavior b = b.behavior_tags <-
 	      else
 		(key,value))  b.behavior_tags
 
+let toggle_goal g = g.goal_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value))  g.goal_tags
 
 (* saving *)
 
@@ -286,15 +298,17 @@ let rec get_goal lf beh e =
 	  goal_file = get_string_attr "why_file" e;
 	  sub_goal = sub_goals;
 	  proof = proofs;
+	  goal_tags = tags;
 	}
     | _ -> assert false
 	
-let get_behavior lf e =
+let get_behavior lf loc e  =
   match e.Xml.name with
     | "behavior" ->
 	let n = get_name_attr e in
 	let (tags,elements) = get_tags e.Xml.elements in
 	{ behavior_name = n;
+	  behavior_loc = loc;
 	  behavior_goals = List.map (get_goal lf n) elements;
 	  behavior_tags = tags;
 	}
@@ -328,7 +342,7 @@ let get_lemma_or_function e =
 	let n = get_name_attr e in
 	let (tags,elements) = get_tags e.Xml.elements in
 	let loc = get_loc (List.hd elements) in
-	let behs = List.map (get_behavior n)  (List.tl elements) in
+	let behs = List.map (get_behavior n loc)  (List.tl elements) in
 	let f =
 	  { function_name = n;
 	    function_loc = loc;
