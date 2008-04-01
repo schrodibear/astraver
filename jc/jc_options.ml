@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.26 2008-03-18 15:29:52 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.27 2008-04-01 21:23:23 nrousset Exp $ i*)
 
 open Format
 open Jc_env
@@ -70,6 +70,7 @@ let user_annot_only = ref false
 let print_graph = ref false
 let why_opt = ref ""
 
+let verify_all_offsets = ref false
 let verify_invariants_only = ref false
 let verify = ref []
 
@@ -145,10 +146,12 @@ let _ =
 	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
 	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
 *)
+	"-all-offsets", Arg.Set verify_all_offsets, 
+	  "  generate vcs for all pointer offsets";
 	"-invariants-only", Arg.Set verify_invariants_only, 
-	  "verify invariants only (Arguments policy)";
+	  "  verify invariants only (Arguments policy)";
 	"-verify", Arg.String (function s -> verify := s::!verify), 
-	  "verify only these functions";
+	  "  verify only these functions";
       ]
       add_file usage
 
@@ -169,6 +172,7 @@ let separation_sem = separation_sem
 let trust_ai = !trust_ai
 let fast_ai = !fast_ai
 
+let verify_all_offsets = !verify_all_offsets
 let verify_invariants_only = !verify_invariants_only
 let verify = !verify
 let interprocedural = !interprocedural

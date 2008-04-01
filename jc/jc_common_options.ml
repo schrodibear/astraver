@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_common_options.ml,v 1.6 2008-02-05 12:10:48 marche Exp $ i*)
+(*i $Id: jc_common_options.ml,v 1.7 2008-04-01 21:23:23 nrousset Exp $ i*)
 
 (*s command-line options *)
 
@@ -41,7 +41,7 @@ let inv_sem = ref InvNone
 let separation_sem = ref SepNone
 
 (*
-Local Variables: 
-compile-command: "unset LANG; make -C .. bin/jessie.byte"
-End: 
+  Local Variables: 
+  compile-command: "unset LANG; make -C .. bin/jessie.byte"
+  End: 
 *)

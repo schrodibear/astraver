@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.266 2008-03-21 14:55:19 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.267 2008-04-01 21:23:23 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1362,10 +1362,10 @@ let rec statement ~infunction ~threats s =
       | JCScall (vio, call, block) -> 
 	  let f = call.jc_call_fun in
 	  let l = call.jc_call_args in
-	  (*
-	    Format.eprintf "Jc_interp: lab for call = '%s'@."
-	    s.jc_statement_label;
-	  *)
+	    (*
+	      Format.eprintf "Jc_interp: lab for call = '%s'@."
+	      s.jc_statement_label;
+	    *)
 	  let loc = s.jc_statement_loc in
 	  let arg_types_asserts,el = 
 	    try match f.jc_fun_info_parameters with
@@ -1526,8 +1526,10 @@ let rec statement ~infunction ~threats s =
 	      arg_types_asserts LTrue
 	  in
 	  let call = 
-	    if arg_types_assert = LTrue || not threats then call else
-	      Assert (arg_types_assert, call) 
+	    if arg_types_assert = LTrue || 
+	      not threats || 
+	      not Jc_options.verify_all_offsets then call else
+		Assert (arg_types_assert, call)
 	  in
 	  let call =
 	    List.fold_right

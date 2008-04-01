@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.122 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.123 2008-04-01 21:23:23 nrousset Exp $ *)
 
 open Pp
 open Format
@@ -2748,8 +2748,43 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 	   vi.jc_var_info_type (term_var_no_loc vi) :: acc) 
 	[] fi.jc_fun_info_parameters
     in
-      fs.jc_fun_free_requires <- 
-	make_and (fs.jc_fun_requires :: fs.jc_fun_free_requires :: cstrs);
+    fs.jc_fun_free_requires <- 
+      make_and (fs.jc_fun_requires :: fs.jc_fun_free_requires :: cstrs);
+
+    (* Take the function precondition as init pre *)
+    let initpre = top_abstract_value mgr env in
+    test_assertion mgr initpre.jc_absval_regular fs.jc_fun_free_requires;
+
+    (* Add the currently inferred pre for [fi] in pre *)
+    (match iaio with
+      | None -> ()
+      | Some iai ->
+	  let inferred_pre =
+	    try Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag 
+	    with Not_found -> Abstract1.top mgr env (* for main function *) in
+	  meet mgr initpre.jc_absval_regular inferred_pre);
+
+    pointer_terms_table := Hashtbl.create 0;
+
+    (* Annotation inference on the function body. *)
+    let invs = {
+      jc_absinv_normal = initpre;
+      jc_absinv_exceptional = [];
+      jc_absinv_return = ref (bottom_abstract_value mgr env);
+    } in
+      List.iter (ai_statement iaio abs invs) sl;
+      (match iaio with
+	 | None -> List.iter (record_ai_invariants abs) sl 
+	 | Some iai -> fi.jc_fun_info_name; 
+	     Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
+      List.iter 
+	(fun target -> 
+	   if Jc_options.verbose then
+	     printf 
+	       "%a@[<v 2>Inferring assert invariant@\n%a@]@."
+	       Loc.report_position target.jc_target_location
+	       Jc_output.assertion target.jc_target_regular_invariant 
+	) targets;
       
       let initpre = top_abstract_value mgr env in
 	test_assertion mgr initpre.jc_absval_regular fs.jc_fun_free_requires;

@@ -27,14 +27,14 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: SCID.java,v 1.12 2008-02-18 07:47:30 nrousset Exp $ */
+/* $Id: SCID.java,v 1.13 2008-04-01 21:23:23 nrousset Exp $ */
 
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
-//@+ AnnotationPolicy = Invariants
+// @+ AnnotationPolicy = Invariants
 // @+ AbstractDomain = Box
-// @+ AbstractDomain = Oct
-//@+ AbstractDomain = Pol
+//@+ AbstractDomain = Oct
+// @+ AbstractDomain = Pol
 
 // Smart Card ID - Example for a Smart Card based Identification and Authentication Application
 // File: SCID.java
