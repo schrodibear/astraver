@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.198 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.199 2008-04-02 08:17:09 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -585,6 +585,18 @@ let make_logic_bin_op loc op e1 e2 =
 	(* not allowed as term op *)
     | BPimplies | BPiff -> assert false
 
+
+let label_assoc loc id cur_label fun_labels effective_labels =
+  match cur_label, fun_labels, effective_labels with
+    | Some l, [lf], [] -> [lf,l]
+    | _ ->
+	try
+	  List.map2
+	    (fun l1 l2 -> (l1,l2))
+	    fun_labels effective_labels
+	with Invalid_argument _ ->
+	  typing_error loc 
+	    "wrong number of labels for %s" id
 	  
 let rec term label_env logic_label env e =
   let ft = term label_env logic_label env in
@@ -689,16 +701,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		| Some ty -> ty
 	      in
 	      let label_assoc = 
-		match logic_label, pi.jc_logic_info_labels, labs with
-		  | Some l, [lf], [] -> [lf,l]
-		  | _ ->
-		      try
-			List.map2
-			  (fun l1 l2 -> (l1,l2))
-			  pi.jc_logic_info_labels labs
-		      with Invalid_argument _ ->
-			typing_error e.jc_pexpr_loc 
-			  "wrong number of labels for %s" id
+		label_assoc e.jc_pexpr_loc id logic_label pi.jc_logic_info_labels labs 
 	      in
 	      let app = {
 		jc_app_fun = pi;
@@ -1034,17 +1037,7 @@ let rec assertion label_env logic_label env e =
 		    "wrong number of arguments for %s" id
 	      in
 	      let label_assoc =
-		match logic_label, pi.jc_logic_info_labels, labs with
-		  | None, [lf], [] -> [lf,lf] (* CORRECT ? *)
-		  | Some l, [lf], [] -> [lf,l]
-		  | _ ->
-		      try
-			List.map2
-			  (fun l1 l2 -> (l1,l2))
-			  pi.jc_logic_info_labels labs
-		      with Invalid_argument _ ->
-			typing_error e.jc_pexpr_loc 
-			  "wrong number of labels for %s" id
+		label_assoc e.jc_pexpr_loc id logic_label  pi.jc_logic_info_labels labs
 	      in
 	      let app = {
 		jc_app_fun = pi;
