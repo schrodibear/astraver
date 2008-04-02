@@ -3,7 +3,7 @@ package java.lang;
 public class System {
 
 
-    // static PrintStream 	out;
+    static java.io.PrintStream out;
 
     /**Copies an array from the specified source array, beginning at the
  specified position, to the specified position of the destination array.

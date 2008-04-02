@@ -120,6 +120,8 @@ class Gcd {
 }
 
 
+
+
 /*
 Local Variables: 
 compile-command: "make Gcd"

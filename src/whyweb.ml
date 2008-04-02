@@ -121,6 +121,9 @@ let load_prj file =
 	main_page msg;
 	raise Exit
 	
+let toogletooltip b s =
+  (if b then "close" else "open") ^ s
+  
 let goal g =
   let s =fprintf str_formatter "%s" 
     (Explain.msg_of_kind g.goal_expl.Logic_decl.vc_kind);

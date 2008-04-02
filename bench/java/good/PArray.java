@@ -28,8 +28,8 @@
 // public Interface for PArray
 interface PArrayInterface {
 
-    // @ model larray model_array;
-    // @ model integer model_length;
+    //@ model larray model_array;
+    //@ model integer model_length;
   
     /* @ requires n >= 0;
       @ ensures 
@@ -38,13 +38,13 @@ interface PArrayInterface {
       @*/
     // PArrayInterface(int n);
     
-    /* @ requires 0 <= i < this.model_length;
+    /*@ requires 0 <= i < this.model_length;
       @ assigns \nothing;
       @ ensures \result == select(this.model_array,i);
       @*/
     double get(int i);
 
-    /* @ requires 0 <= i < this.model_length;
+    /*@ requires 0 <= i < this.model_length;
       @ assigns \nothing;
       @ // ensures \fresh(\result); 
       @ ensures \result.model_array == store(this.model_array,i,x)
@@ -103,7 +103,7 @@ class Diff extends Data {
 
     //@ invariant remaining_non_null: remaining != null;
     /*@ invariant diff_repr: 
-      @   repr(model_length,store(index,value,remaining.model_array),this);
+      @   data_repr(this.remaining.model_length,store(index,value,this.remaining.model_array),this);
       @*/
 
     Diff(int i, double x, PArray rem) {
@@ -173,20 +173,24 @@ public class PArray implements PArrayInterface
 /*@ predicate data_repr(integer model_length, 
   @                     larray model_array, Data contents);
   @*/
+
+/*@ predicate repr(integer model_length, 
+  @                larray model_array, PArray p);
+  @*/
  
 /*@ axiom arr_repr :
-  @   \forall integer model_length, larray model_arrayl, Arr a ;
+  @   \forall integer model_length, larray model_array, Arr a ;
   @     data_repr(model_length, model_array,a) 
   @     <==>
   @     model_length == a.table.length &&
   @     \forall integer i; 
-  @       0 <= i < a.table.length ==> table[i] == select(model_array,i) ;
+  @       0 <= i < a.table.length ==> a.table[i] == select(model_array,i) ;
   @*/
 
 /*@ axiom diff_repr_1 :
   @   \forall integer model_length, larray model_array, Diff d; 
   @   \forall integer i, double x; 
-  @     data_repr(model_length, model_array, d.remaining) &&
+  @     repr(model_length, model_array, d.remaining) &&
   @     i == d.index && x == d.value  
   @     ==> 
   @     data_repr(model_length, store(i,x,model_array),d) ;
@@ -198,7 +202,7 @@ public class PArray implements PArrayInterface
   @     \exists larray a; 
   @     model_array == store(d.index,d.value,a)
   @     &&
-  @     data_repr(model_length, a, d.remaining) ;
+  @     repr(model_length, a, d.remaining) ;
   @*/
 
 

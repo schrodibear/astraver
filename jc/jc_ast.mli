@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.122 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.123 2008-04-02 08:38:13 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -40,6 +40,7 @@ type const =
   | JCCboolean of bool
   | JCCinteger of string
   | JCCreal of string
+  | JCCstring of string
 
 type identifier = 
     { jc_identifier_loc : Loc.position;

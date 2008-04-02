@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.101 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.102 2008-04-02 08:38:13 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -64,6 +64,7 @@ let string_of_native t =
     | Tinteger -> "integer"
     | Treal -> "real"
     | Tboolean -> "boolean"
+    | Tstring -> "string"
 
 let print_type fmt t =
   match t with
@@ -152,6 +153,7 @@ let boolean_type = JCTnative Tboolean
 let integer_type = JCTnative Tinteger
 let real_type = JCTnative Treal
 let null_type = JCTnull
+let string_type = JCTnative Tstring
 
 (* temporary variables *)
 
@@ -169,6 +171,7 @@ let const c =
     | JCCreal _ -> real_type,dummy_region,c
     | JCCboolean _ -> boolean_type, dummy_region, c
     | JCCnull -> null_type,Region.make_var JCTnull "null",c
+    | JCCstring _ -> string_type,dummy_region,c
 
 (* variables *)
 

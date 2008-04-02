@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.33 2008-04-01 16:01:09 marche Exp $ *)
+(* $Id: java_env.mli,v 1.34 2008-04-02 08:38:12 marche Exp $ *)
 
 (*s types and environments *)
 
@@ -78,10 +78,8 @@ and java_field_info =
       java_field_info_is_final : bool;
       java_field_info_is_nullable : bool;
       java_field_info_type : java_type;
-(*
       java_field_info_is_ghost : bool;
       java_field_info_is_model : bool;
-*)
     }
     
 

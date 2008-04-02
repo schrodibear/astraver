@@ -27,14 +27,16 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.19 2008-02-06 16:50:44 marche Exp $ i*)
+(*i $Id: output.mli,v 1.20 2008-04-02 08:38:13 marche Exp $ i*)
 
 type constant =
   | Prim_void
   | Prim_int of string
   | Prim_real of string
   | Prim_bool of bool
-;;
+(*
+  | Prim_string of string
+*)
 
 type logic_type = 
     { logic_type_name : string;

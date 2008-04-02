@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.31 2008-04-01 15:28:29 marche Exp $
+$Id: java_ast.mli,v 1.32 2008-04-02 08:38:12 marche Exp $
 
 ***************************************************************************)
 
@@ -46,8 +46,9 @@ type qualified_ident = identifier list
 (*s Modifiers *)
  
 type modifier =
-  | Static | Final | Ghost | Public | Private | Protected | Native 
+  | Static | Final  | Public | Private | Protected | Native 
   | Synchronized | Abstract | Transient (* "threadsafe" ? *)
+  | Ghost | Model
   | Non_null | Nullable | Annot_modifier of Lexing.position * string
 
 type modifiers = modifier list
@@ -249,8 +250,10 @@ type field_declaration =
   | JPFinvariant of identifier * pexpr
   | JPFstatic_invariant of identifier * pexpr
   | JPFmethod_spec of pexpr option * (identifier * pbehavior) list
+(*
   | JPFmodel_variable of variable_declaration
   | JPFghost_variable of variable_declaration
+*)
 
 type class_declaration =
     { 

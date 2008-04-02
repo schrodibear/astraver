@@ -90,6 +90,7 @@ let tr_native_type t =
     | Tboolean -> "bool"
     | Tinteger -> "int"
     | Treal -> "real"
+    | Tstring -> "string"
 
 let tr_base_type t =
   match t with
@@ -376,6 +377,7 @@ let make_eq_term ty a b =
     | JCTnative Tboolean -> "eq_bool_bool"
     | JCTnative Tinteger -> "eq_int_bool"
     | JCTnative Treal -> "eq_real_bool"
+    | JCTnative Tstring -> "eq_string_bool"
   in
   LApp(eq, [a; b])
 
@@ -432,6 +434,7 @@ let any_value ty =
 	| Tboolean -> App (Var "any_bool", Void)
 	| Tinteger -> App (Var "any_int", Void)
 	| Treal -> App (Var "any_real", Void)
+	| Tstring -> App (Var "any_string", Void)
       end
   | JCTnull 
   | JCTpointer _ -> App (Var "any_pointer", Void)
@@ -489,6 +492,7 @@ let const c =
     | JCCreal s -> Prim_real s
     | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
     | JCCboolean b -> Prim_bool b
+    | JCCstring s -> assert false (* TODO *)
 
 (*
 Local Variables: 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.199 2008-04-02 08:17:09 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.200 2008-04-02 08:38:13 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -281,6 +281,7 @@ let unary_op t op =
     | _, UPnot -> assert false
     | Tunit,_ -> assert false
     | Tboolean,_ -> assert false
+    | Tstring,_ -> assert false
 
 
 let bin_op t op =
@@ -334,7 +335,7 @@ let bin_op t op =
     | _,BPimplies -> assert false
     | Tunit,_ -> assert false
     | Tboolean, _ -> assert false
-
+    | Tstring, _ -> assert false
 
 let incr_op op =
   match op with

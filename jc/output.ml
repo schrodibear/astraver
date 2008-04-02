@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.29 2008-03-14 16:41:58 marche Exp $ i*)
+(*i $Id: output.ml,v 1.30 2008-04-02 08:38:13 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -38,7 +38,9 @@ type constant =
   | Prim_int of string
   | Prim_real of string
   | Prim_bool of bool
-;;
+(*
+  | Prim_string of string
+*)
 
 let fprintf_constant form e =
   match e with
@@ -46,7 +48,9 @@ let fprintf_constant form e =
     | Prim_int(n) -> fprintf form "%s" n
     | Prim_real(f) -> fprintf form "%s" f
     | Prim_bool(b) -> fprintf form "%b" b
-;;
+(*
+    | Prim_string s -> fprintf form "\"%s\"" s
+*)
 
 type term = 
   | LConst of constant

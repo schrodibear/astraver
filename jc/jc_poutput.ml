@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.5 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.6 2008-04-02 08:38:13 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -63,7 +63,8 @@ let const fmt c =
     | JCCboolean b -> fprintf fmt "%B" b
     | JCCnull -> fprintf fmt "null"
     | JCCvoid -> fprintf fmt "()"
-
+    | JCCstring s -> fprintf fmt "\"%s\"" s
+ 
 let pbin_op = function
   | BPlt -> "<"
   | BPgt -> ">"

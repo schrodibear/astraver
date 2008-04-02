@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.40 2008-04-01 15:28:29 marche Exp $
+$Id: java_parser.mly,v 1.41 2008-04-02 08:38:12 marche Exp $
 
 */
 
@@ -1028,9 +1028,11 @@ kml_field_decl:
 | STATIC INVARIANT ident COLON expr SEMICOLON EOF
     { JPFstatic_invariant($3,$5) } 
 | MODEL variable_declaration
-    { JPFmodel_variable $2 }
+    { let vd = $2 in 
+      JPFvariable {vd with variable_modifiers = Model::vd.variable_modifiers} }
 | GHOST variable_declaration
-    { JPFghost_variable $2 }
+    { let vd = $2 in 
+      JPFvariable {vd with variable_modifiers = Ghost::vd.variable_modifiers} }
 ;
 
 kml_modifier:

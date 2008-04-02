@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.108 2008-04-01 16:01:09 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.109 2008-04-02 08:38:12 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -339,7 +339,7 @@ let field_prototypes_table : (int, variable_initializer option) Hashtbl.t
 
 let field_tag_counter = ref 0
   
-let new_field ~is_static ~is_final ~is_nullable ti ty id =
+let new_field ~is_static ~is_final ~is_nullable ~is_model ~is_ghost ti ty id =
   incr field_tag_counter;
   let fi = {
     java_field_info_tag = !field_tag_counter;
@@ -349,23 +349,14 @@ let new_field ~is_static ~is_final ~is_nullable ti ty id =
     java_field_info_is_static = is_static;
     java_field_info_is_final = is_final;
     java_field_info_is_nullable = is_nullable;
+    java_field_info_is_model = is_model;
+    java_field_info_is_ghost = is_ghost;
   } in fi
 	 
 
 let new_model_field ii ty id =
-(*
-  incr field_tag_counter;
-  let fi = {
-    java_field_info_tag = !field_tag_counter;
-    java_field_info_name = id;
-    java_field_info_type = ty;
-    java_field_info_class = ci;
-    java_field_info_is_static = is_static;
-    java_field_info_is_final = is_final;
-  }
-  in fi
-*)
-assert false (* TODO *)
+  new_field ~is_static:false ~is_final:false ~is_nullable:false
+    ~is_model:true (TypeInterface ii) ty id
 
 (* methods *)
 
@@ -1061,7 +1052,7 @@ and type_type package_env type_env non_null ty =
 
 and get_field_prototypes package_env type_env ci acc d =
   match d with
-    | JPFvariable vd | JPFghost_variable vd -> 
+    | JPFvariable vd -> 
 	(*
 	  vd.variable_modifiers : modifiers ;
 	  vd.variable_type : type_expr ;
@@ -1082,6 +1073,8 @@ and get_field_prototypes package_env type_env ci acc d =
 	in
 	let is_static = List.mem Static vd.variable_modifiers in
 	let is_final = List.mem Final vd.variable_modifiers in
+	let is_ghost = List.mem Ghost vd.variable_modifiers in
+	let is_model = List.mem Model vd.variable_modifiers in
 	List.fold_left
 	  (fun acc vd -> 
 	     let ty', (loc, id) = var_type_and_id ty vd.variable_id in
@@ -1091,7 +1084,8 @@ and get_field_prototypes package_env type_env ci acc d =
 	       if is_nullable && !Java_options.non_null = NonNullNone then
 		 typing_error loc 
 		   "'nullable' modifier is only allowed in 'non_null by default' mode";	    
-	     let fi = new_field ~is_static ~is_final ~is_nullable ci ty' id in	     
+	     let fi = new_field ~is_static ~is_final ~is_nullable 
+	       ~is_model ~is_ghost ci ty' id in	     
 	     Hashtbl.add field_prototypes_table fi.java_field_info_tag 
 	       vd.variable_initializer;
 	     fi::acc
@@ -1223,7 +1217,7 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	  current_type (mis, cis) env rem 
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
     | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
-    | (JPFmodel_variable _ | JPFvariable _ | JPFghost_variable _) :: rem -> 
+    | JPFvariable _ :: rem -> 
 	get_method_prototypes package_env type_env 
 	  current_type (mis,cis) env rem 
 
@@ -1295,37 +1289,23 @@ and get_class_prototypes package_env type_env ci d =
 	  
 and get_interface_field_prototypes package_env type_env ii acc d =
   match d with
-    | JPFmodel_variable vd -> 
-	(*
-	vd.variable_modifiers : modifiers ;
-	vd.variable_type : type_expr ;
-	vd.variable_decls : variable_declarator list }
-	*)
-	let ty = type_type package_env type_env true vd.variable_type in
-	List.fold_left
-	  (fun acc vd -> 
-	     let ty',(loc,id) = var_type_and_id ty vd.variable_id in
-	     let fi = new_model_field ii ty' id in	     
-(*
-	     Hashtbl.add model_field_prototypes_table fi.java_field_info_tag 
-	       (fi,vd.variable_initializer);
-*)
-	     fi::acc
-	  ) acc vd.variable_decls
     | JPFvariable vd -> 
-	(*
-	  vd.variable_modifiers : modifiers ;
-	  vd.variable_type : type_expr ;
-	  vd.variable_decls : variable_declarator list }
-	*)
+	let is_model = List.mem Model vd.variable_modifiers in
 	let ty = type_type package_env type_env true vd.variable_type in
-	  (* Note: no need to check if it is static and final, because 
-	     it is implicitly the case (JLS,9.3, p 203) *)
 	  List.fold_left
 	    (fun acc vd -> 
 	       let ty',(loc,id) = var_type_and_id ty vd.variable_id in
-	       let fi = new_field ~is_static:true ~is_final:true ~is_nullable:true 
-		 (TypeInterface ii) ty' id 
+	       (* Note: no need to check if it is static and final, because 
+		  it is implicitly the case (JLS,9.3, p 203) *)
+	       let fi = 
+		 if is_model then
+		   new_field ~is_static:false ~is_final:false ~is_nullable:true
+		     ~is_model:true ~is_ghost:false
+		     (TypeInterface ii) ty' id 
+		 else
+		   new_field ~is_static:true ~is_final:true ~is_nullable:true 
+		     ~is_model:false ~is_ghost:false
+		     (TypeInterface ii) ty' id 
 	       in
 		 Hashtbl.add field_prototypes_table fi.java_field_info_tag 
 		   vd.variable_initializer;
@@ -1468,6 +1448,7 @@ and is_logic_call_convertible tfrom tto =
   is_identity_convertible tfrom tto ||
   match tfrom,tto with
     | JTYbase t1, JTYbase t2 -> is_logic_widening_primitive_convertible t1 t2
+    | JTYlogic s1, JTYlogic s2 -> s1==s2
     | _ -> is_widening_reference_convertible tfrom tto
 
 and term env current_label e =
@@ -1619,6 +1600,16 @@ and term env current_label e =
 			    begin
 			      try
 				let fi = lookup_field (TypeClass ci) (snd f) in
+				  fi.java_field_info_type,JTfield_access(te1,fi)
+			      with
+				  Not_found ->
+				    typing_error e1.java_pexpr_loc
+				      "not such field"
+			    end
+			| JTYinterface ii ->
+			    begin
+			      try
+				let fi = lookup_field (TypeInterface ii) (snd f) in
 				  fi.java_field_info_type,JTfield_access(te1,fi)
 			      with
 				  Not_found ->

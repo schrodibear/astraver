@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.87 2008-03-13 13:43:49 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.88 2008-04-02 08:38:13 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -211,6 +211,7 @@ let make_decls loc sl tl =
 		   | Tunit -> unit_type, JCCvoid
 		   | Tinteger -> integer_type, JCCinteger "0"
 		   | Treal -> real_type, JCCreal "0.0"
+		   | Tstring -> string_type, JCCstring "\"\""
 	       end
 	   | JCTenum _ ->  integer_type, JCCinteger "0"
 	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull

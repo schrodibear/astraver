@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.267 2008-04-01 21:23:23 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.268 2008-04-02 08:38:13 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -281,6 +281,7 @@ let equality_op_for_type = function
   | JCTnative Tboolean -> "eq_bool"
   | JCTnative Tinteger -> "eq_int"
   | JCTnative Treal -> "eq_real"
+  | JCTnative Tstring -> "eq"
   | JCTlogic s -> (* TODO *) assert false
   | JCTenum ei -> eq_of_enum ei
   | JCTpointer _

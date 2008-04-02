@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.124 2008-04-01 16:01:09 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.125 2008-04-02 08:38:12 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -137,8 +137,8 @@ let tr_base_type t =
 	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	byte_type
     | Treal -> Jc_pervasives.real_type
-    | Tfloat -> assert false (* TODO *)
-    | Tdouble -> assert false (* TODO *)
+    | Tfloat -> Jc_pervasives.real_type (* TODO *)
+    | Tdouble -> Jc_pervasives.real_type (* TODO *)
 
 (*s class types *)
 
@@ -252,7 +252,7 @@ let create_field loc fi =
   let ci = 
     match fi.java_field_info_class_or_interface with
       | TypeClass ci -> get_class ci.class_info_name
-      | TypeInterface _ -> assert false
+      | TypeInterface ii -> get_class ii.interface_info_name
   in
   let nfi =
     { jc_field_info_name = fi.java_field_info_name;
@@ -408,7 +408,7 @@ let lit l =
   | Integer s | Char s -> JCCinteger s
   | Float s -> JCCreal s
   | Bool b -> JCCboolean b
-  | String s -> assert false (* TODO *)
+  | String s -> JCCstring s
   | Null  -> JCCnull
 
 let lun_op t op =
@@ -1795,88 +1795,95 @@ let tr_class ci acc0 acc =
 	| _ -> superclass
   in
   let acc = List.fold_left (tr_field ci.class_info_name) acc static_fields in
-    (* create exceptions if subclass of Exception *)
-    begin
-      if ci.class_info_is_exception then
-	ignore (create_exception 
-		  (Some (tr_type Loc.dummy_position (JTYclass (false, ci))))
-		  ci.class_info_name);
-    end;
-    let jc_fields = List.map (create_field Loc.dummy_position) fields in
-      (* non_null fun & pred *)
-    let si = get_class ci.class_info_name in
-    let non_null_inv = 
-      let this_ty = JCTpointer (JCtag si, Some num_zero, Some num_zero) in
-      let this = Jc_pervasives.var ~formal:true this_ty "this" in
-      let thist = term_no_loc (JCTvar this) this_ty in
-      let a = 
-	List.fold_left2
-	  (fun acc fi jc_fi ->
-	     let ty = jc_fi.jc_field_info_type in
-	     let fit = term_no_loc (JCTderef (thist, Jc_env.LabelHere, jc_fi)) ty in
-	       match ty with
-		 | JCTpointer _ -> 
-		     if fi.java_field_info_is_nullable then acc else
-		       let a = get_non_null_assertion fi.java_field_info_type fit in 
-			 make_and [acc; a] 
-		 | _ -> acc)
-	  true_assertion fields jc_fields
+  (* create exceptions if subclass of Exception *)
+  begin
+    if ci.class_info_is_exception then
+      ignore (create_exception 
+		(Some (tr_type Loc.dummy_position (JTYclass (false, ci))))
+		ci.class_info_name);
+  end;
+  let jc_fields = List.map (create_field Loc.dummy_position) fields in
+  (* non_null fun & pred *)
+  let si = get_class ci.class_info_name in
+  let non_null_inv = 
+    let this_ty = JCTpointer (JCtag si, Some num_zero, Some num_zero) in
+    let this = Jc_pervasives.var ~formal:true this_ty "this" in
+    let thist = term_no_loc (JCTvar this) this_ty in
+    let a = 
+      List.fold_left2
+	(fun acc fi jc_fi ->
+	   let ty = jc_fi.jc_field_info_type in
+	   let fit = term_no_loc (JCTderef (thist, Jc_env.LabelHere, jc_fi)) ty in
+	   match ty with
+	     | JCTpointer _ -> 
+		 if fi.java_field_info_is_nullable then acc else
+		   let a = get_non_null_assertion fi.java_field_info_type fit in 
+		   make_and [acc; a] 
+	     | _ -> acc)
+	true_assertion fields jc_fields
+    in
+    if a = true_assertion then [] else
+      [(ci.class_info_name ^ "_non_null_inv", this, a)]
+  in
+  let inv = 
+    if (!Java_options.non_null = NonNullAll ||
+	!Java_options.non_null = NonNullFields) && 
+      !Java_options.inv_sem = Jc_env.InvArguments then 
+	non_null_inv else [] in
+  let acc = 
+    if ci.class_info_name = "Object" then
+      let non_null_fi = create_non_null_fun si in
+      let vi = Jc_pervasives.var
+	(JCTpointer (JCtag si, Some num_zero, None)) "x" in
+      let result = Jc_pervasives.var Jc_pervasives.boolean_type "\\result" in
+      let vit = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
+      let offset_maxt = dummy_loc_term Jc_pervasives.integer_type
+	(JCToffset (Offset_max, vit, si)) in
+      let offset_maxa = dummy_loc_assertion
+	(JCArelation (offset_maxt, Beq_int, zerot)) in
+      let non_null_spec =
+	{ jc_fun_requires = dummy_loc_assertion JCAtrue;
+	  jc_fun_free_requires = dummy_loc_assertion JCAtrue;
+	  jc_fun_behavior = 
+	    (* result ? \offset_min(x) == 0 && \offset_max(x) == 0 : x = null *)
+	    let resultt = dummy_loc_term vi.jc_var_info_type (JCTvar result) in
+	    (*	      let offset_mint = dummy_loc_term Jc_pervasives.integer_type 
+		      (JCToffset (Offset_min, vit, si)) in*)
+	    (*	      let offset_mina = dummy_loc_assertion
+		      (JCArelation (offset_mint, Beq_int, zerot)) in *)
+	    [Loc.dummy_position, "normal",
+	     { jc_behavior_assumes = None;
+	       jc_behavior_assigns = None;
+ 	       jc_behavior_ensures =
+		 dummy_loc_assertion
+		   (JCAif
+		      (resultt,
+		       (* dummy_loc_assertion (JCAand [offset_mina;*) offset_maxa(*])*),
+		       dummy_loc_assertion
+			 (JCArelation (vit, Beq_pointer, nullt))));
+	       jc_behavior_throws = None }] 
+	}
       in
-	if a = true_assertion then [] else
-	  [(ci.class_info_name ^ "_non_null_inv", this, a)]
-    in
-    let inv = 
-      if (!Java_options.non_null = NonNullAll ||
-	  !Java_options.non_null = NonNullFields) && 
-	!Java_options.inv_sem = Jc_env.InvArguments then 
-	  non_null_inv else [] in
-    let acc = 
-      if ci.class_info_name = "Object" then
-	let non_null_fi = create_non_null_fun si in
-	let vi = Jc_pervasives.var
-	  (JCTpointer (JCtag si, Some num_zero, None)) "x" in
-	let result = Jc_pervasives.var Jc_pervasives.boolean_type "\\result" in
-	let vit = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
-	let offset_maxt = dummy_loc_term Jc_pervasives.integer_type
-	  (JCToffset (Offset_max, vit, si)) in
-	let offset_maxa = dummy_loc_assertion
-	  (JCArelation (offset_maxt, Beq_int, zerot)) in
-	let non_null_spec =
-	  { jc_fun_requires = dummy_loc_assertion JCAtrue;
-	    jc_fun_free_requires = dummy_loc_assertion JCAtrue;
-	    jc_fun_behavior = 
-	      (* result ? \offset_min(x) == 0 && \offset_max(x) == 0 : x = null *)
-	      let resultt = dummy_loc_term vi.jc_var_info_type (JCTvar result) in
-		(*	      let offset_mint = dummy_loc_term Jc_pervasives.integer_type 
-			      (JCToffset (Offset_min, vit, si)) in*)
-		(*	      let offset_mina = dummy_loc_assertion
-			      (JCArelation (offset_mint, Beq_int, zerot)) in *)
-		[Loc.dummy_position, "normal",
-		 { jc_behavior_assumes = None;
-		   jc_behavior_assigns = None;
- 		   jc_behavior_ensures =
-		     dummy_loc_assertion
-		       (JCAif
-			  (resultt,
-			   (* dummy_loc_assertion (JCAand [offset_mina;*) offset_maxa(*])*),
-			   dummy_loc_assertion
-			     (JCArelation (vit, Beq_pointer, nullt))));
-		   jc_behavior_throws = None }] 
-	  }
-	in
-	  JCfun_def (Jc_pervasives.boolean_type,
-		     non_null_fi.jc_fun_info_name, [vi], non_null_spec, None) :: acc
-      else acc
-    in
-      JCstruct_def (ci.class_info_name, super, jc_fields, inv) :: acc0, acc
+      JCfun_def (Jc_pervasives.boolean_type,
+		 non_null_fi.jc_fun_info_name, [vi], non_null_spec, None) :: acc
+    else acc
+  in
+  JCstruct_def (ci.class_info_name, super, jc_fields, inv) :: acc0, acc
 	
 	
 (* interfaces *)
 
 let tr_interface ii acc = 
-  let fields = ii.interface_info_fields in
-  let acc = List.fold_left (tr_field ii.interface_info_name) acc fields in
-    acc
+  let (static_fields, fields) = 
+    List.partition 
+      (fun fi -> fi.java_field_info_is_static)
+      ii.interface_info_fields
+  in
+  let acc = 
+    List.fold_left (tr_field ii.interface_info_name) acc static_fields 
+  in
+  let model_fields = List.map (create_field Loc.dummy_position) fields in
+  acc
 
 let tr_class_or_interface ti acc0 acc =
   match ti with
