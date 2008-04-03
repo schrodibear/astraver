@@ -91,6 +91,8 @@ val logics_table :
 
 exception Typing_error of Loc.position * string
 
+val catch_typing_errors : ('a -> 'b) -> 'a -> 'b
+
 (*
 val get_types : 
   Java_ast.compilation_unit -> 

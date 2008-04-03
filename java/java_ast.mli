@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.32 2008-04-02 08:38:12 marche Exp $
+$Id: java_ast.mli,v 1.33 2008-04-03 12:45:34 marche Exp $
 
 ***************************************************************************)
 
@@ -47,7 +47,8 @@ type qualified_ident = identifier list
  
 type modifier =
   | Static | Final  | Public | Private | Protected | Native 
-  | Synchronized | Abstract | Transient (* "threadsafe" ? *)
+  | Synchronized | Abstract | Transient (* "threadsafe" ? *) | Volatile
+  | Strictfp 
   | Ghost | Model
   | Non_null | Nullable | Annot_modifier of Lexing.position * string
 
@@ -254,8 +255,10 @@ type field_declaration =
   | JPFmodel_variable of variable_declaration
   | JPFghost_variable of variable_declaration
 *)
+  | JPFclass of class_declaration
+  | JPFinterface of interface_declaration
 
-type class_declaration =
+and class_declaration =
     { 
       class_modifiers : modifiers;
       class_name : identifier;
@@ -266,23 +269,13 @@ type class_declaration =
 
 (*s interface declarations *)
 
-(*
-type interface_member_declaration =
-  | JPIMconstant of variable_declaration
-  | JPIMmethod of method_declaration
-  | JPIMmodel_variable of variable_declaration
-  | JPIMannot of Lexing.position * string
-  | JPIMmethod_spec of pexpr option * (identifier * pbehavior) list
-;;
-*)
-
-type interface_declaration =
+and interface_declaration =
     { interface_modifiers : modifiers;
       interface_name : identifier;
       interface_extends : qualified_ident list;
       interface_members : field_declaration list
     }
-;;
+
 
 (*s compilation units *)
 

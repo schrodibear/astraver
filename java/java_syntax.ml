@@ -109,7 +109,7 @@ let method_declaration md =
       method_modifiers = List.map modifier md.method_modifiers;
       method_declarator = method_declarator md.method_declarator; } 
     
-let field_decl f = 
+let rec field_decl f = 
   match f with
     | JPFmethod (md, None) -> JPFmethod (method_declaration md, None)
     | JPFmethod (md, Some b) -> JPFmethod (method_declaration md, Some (statements b))
@@ -119,12 +119,13 @@ let field_decl f =
     | JPFannot (loc,s) -> parse_annot loc s Java_parser.kml_field_decl
     | JPFinvariant _ | JPFstatic_invariant _ 
     | JPFmethod_spec _ -> assert false
-
+    | JPFclass c -> JPFclass (class_decl c)
+    | JPFinterface i -> JPFinterface (interface_decl i)
   
-let class_decl c = 
+and class_decl c = 
   { c with class_fields = List.map field_decl c.class_fields }
 
-let interface_decl i = 
+and interface_decl i = 
   { i with interface_members = List.map field_decl i.interface_members }
 
 let type_decl d =

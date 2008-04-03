@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.23 2008-04-01 11:16:25 marche Exp $
+$Id: java_lexer.mll,v 1.24 2008-04-03 12:45:34 marche Exp $
 
 ***************************************************************************)
 
@@ -71,9 +71,9 @@ $Id: java_lexer.mll,v 1.23 2008-04-01 11:16:25 marche Exp $
 	  "boolean", BOOLEAN;
 	  "break", BREAK;
 	  "byte", BYTE;
-	  "byvalue", BYVALUE;
+	  (* "byvalue", BYVALUE; ??? *)
 	  "case", CASE;
-	  "cast", CAST;
+	  (* "cast", CAST; ??? *)
 	  "catch", CATCH;
 	  "char", CHAR;
 	  "class", CLASS;
@@ -91,14 +91,14 @@ $Id: java_lexer.mll,v 1.23 2008-04-01 11:16:25 marche Exp $
 	  "finally", FINALLY;
 	  "float", FLOAT;
 	  "for", FOR;
-	  "future", FUTURE;
-	  "generic", GENERIC;
+	  (* "future", FUTURE; ?? *)
+	  (* "generic", GENERIC; ?? *)
 	  "ghost", GHOST;
 	  "goto", GOTO;
 	  "if", IF;
 	  "implements", IMPLEMENTS;
 	  "import", IMPORT;
-	  "inner", INNER;
+	  (* "inner", INNER; ?? *)
 	  "instanceof", INSTANCEOF;
 	  "int", INT;
 	  "integer", INTEGER;
@@ -114,8 +114,8 @@ $Id: java_lexer.mll,v 1.23 2008-04-01 11:16:25 marche Exp $
 	  "non_null", NON_NULL;
 	  "null", NULL;
 	  "nullable", NULLABLE;
-	  "operator", OPERATOR;
-	  "outer", OUTER;
+	  (* "operator", OPERATOR; ?? *)
+	  (* "outer", OUTER; ?? *)
 	  "package", PACKAGE;
 	  "predicate", PREDICATE;
 	  "private", PRIVATE;
@@ -124,11 +124,12 @@ $Id: java_lexer.mll,v 1.23 2008-04-01 11:16:25 marche Exp $
 	  "reads", READS;
 	  "real", REAL;
 	  "requires", REQUIRES;
-	  "rest", REST;
+	  (* "rest", REST; ?? *)
 	  "return", RETURN;
 	  "short", SHORT;
 	  "signals", SIGNALS;
 	  "static", STATIC;
+	  "strictfp", STRICTFP;
 	  "super", SUPER;
 	  "switch", SWITCH;
 	  "synchronized", SYNCHRONIZED;
@@ -140,7 +141,7 @@ $Id: java_lexer.mll,v 1.23 2008-04-01 11:16:25 marche Exp $
 	  "true", TRUE;
 	  "try", TRY;
 	  "type", TYPE;
-	  "var", VAR;
+	  (* "var", VAR; *)
 	  "void", VOID;
 	  "volatile", VOLATILE;
 	  "while", WHILE;	
@@ -269,7 +270,7 @@ i*)
 
 }
 
-let space = [' ' '\t' '\r']
+let space = [' ' '\t' '\r' '']
 let backslash_escapes =
   ['\\' '"' '\'' 'n' 't' 'b' 'r' 'f' (* octal manque ! *)]
 let rD = ['0'-'9']

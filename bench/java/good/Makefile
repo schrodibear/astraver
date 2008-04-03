@@ -5,7 +5,8 @@ WHYLIB=$(shell pwd)/../../../lib
 
 EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE)  
 
-KRAKATOA=ocamlrun -bt ../../../bin/krakatoa.byte
+# KRAKATOA=ocamlrun -bt ../../../bin/krakatoa.byte
+KRAKATOA=../../../bin/krakatoa.byte
 KRAKATOALIB=$(shell pwd)/../../../lib
 
 EXECKRAKATOA=KRAKATOALIB=$(KRAKATOALIB) $(KRAKATOA)

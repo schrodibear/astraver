@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.109 2008-04-02 08:38:12 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.110 2008-04-03 12:45:34 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -106,6 +106,25 @@ let int_expected l t =
 
 let class_or_interface_expected l t =
   typing_error l "class or interface expected, got %a" print_type t
+
+
+
+let catch_typing_errors f a =    
+ try
+   f a
+ with
+   | Typing_error(l,s) ->
+       eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
+       exit 1
+   | Java_options.Java_error(l,s) ->
+       eprintf "%a: %s@." Loc.gen_report_position l s;
+       exit 1
+   | Assert_failure(f,l,c) as exn -> 
+       eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
+       raise exn
+   | Match_failure(f,l,c) as exn -> 
+       eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
+       raise exn
 
 
 (**********************
@@ -1216,8 +1235,17 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	get_method_prototypes package_env type_env
 	  current_type (mis, cis) env rem 
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
-    | JPFstatic_initializer _ ::rem -> assert false (* TODO *)
+    | JPFstatic_initializer _ ::rem -> 
+	(* TODO ? *)
+	get_method_prototypes package_env type_env 
+	  current_type (mis,cis) env rem 	
     | JPFvariable _ :: rem -> 
+	get_method_prototypes package_env type_env 
+	  current_type (mis,cis) env rem 
+    | JPFclass _ :: rem -> (* TODO *)
+	get_method_prototypes package_env type_env 
+	  current_type (mis,cis) env rem 
+    | JPFinterface _ :: rem -> (* TODO *)
 	get_method_prototypes package_env type_env 
 	  current_type (mis,cis) env rem 
 
@@ -1392,28 +1420,24 @@ and lookup_field ti id =
 
 
 let object_class =
-  try				
-    match classify_name [] [] None [] 
-      ((Loc.dummy_position,"Object") :: javalang_qid)
-    with
-      | TypeName (TypeClass ci) -> ci
-      | _ -> assert false
-  with
-    | Java_options.Java_error(l,s) ->
-	eprintf "%a: %s@." Loc.gen_report_position l s;
-	  exit 1
-
+  catch_typing_errors
+    (fun () ->
+       match classify_name [] [] None [] 
+	 ((Loc.dummy_position,"Object") :: javalang_qid)
+       with
+	 | TypeName (TypeClass ci) -> ci
+	 | _ -> assert false)
+    ()
+    
 let string_class =
-  try				
-    match classify_name [] [] None [] 
-      ((Loc.dummy_position,"String") :: javalang_qid)
-    with
-      | TypeName (TypeClass ci) -> ci
-      | _ -> assert false
-  with
-    | Java_options.Java_error(l,s) ->
-	eprintf "%a: %s@." Loc.gen_report_position l s;
-	  exit 1
+  catch_typing_errors
+    (fun () ->
+       match classify_name [] [] None [] 
+	 ((Loc.dummy_position,"String") :: javalang_qid)
+       with
+	 | TypeName (TypeClass ci) -> ci
+	 | _ -> assert false)
+    ()
 
 let string_type ~valid = JTYclass(valid,string_class)
 

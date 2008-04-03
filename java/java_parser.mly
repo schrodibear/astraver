@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.41 2008-04-02 08:38:12 marche Exp $
+$Id: java_parser.mly,v 1.42 2008-04-03 12:45:34 marche Exp $
 
 */
 
@@ -124,13 +124,14 @@ $Id: java_parser.mly,v 1.41 2008-04-02 08:38:12 marche Exp $
 /* Keywords */
 
 %token NEW SUPER
-%token ABSTRACT BOOLEAN BYTE BYVALUE CASE CAST CATCH
+%token ABSTRACT BOOLEAN BYTE CASE CATCH
 %token CHAR CLASS CONST DEFAULT DOUBLE ELSE EXTENDS
-%token FALSE FINAL FINALLY FLOAT FUTURE GENERIC GHOST GOTO 
-%token IMPLEMENTS IMPORT INNER INSTANCEOF INT INTEGER INTERFACE LONG
-%token MODEL NATIVE OPERATOR OUTER PACKAGE PRIVATE PROTECTED
-%token PUBLIC REST REAL SHORT STATIC 
-%token THROWS TRANSIENT TRUE VAR VOID VOLATILE
+%token FALSE FINAL FINALLY FLOAT GHOST GOTO 
+/* ??? %token FUTURE BYVALUE GENERIC INNER OPERATOR OUTER REST VAR */
+%token IMPLEMENTS IMPORT INSTANCEOF INT INTEGER INTERFACE LONG
+%token MODEL NATIVE PACKAGE PRIVATE PROTECTED
+%token PUBLIC REAL SHORT STATIC STRICTFP
+%token THROWS TRANSIENT TRUE VOID VOLATILE
 %token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW 
 
 %token REQUIRES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
@@ -245,14 +246,17 @@ type_declaration:
 /*s Class declarations */
 
 class_declaration:
-| modifiers CLASS ident extends_decl implements_decl 
-    LEFTBRACE field_declarations RIGHTBRACE
+| modifiers_class ident extends_decl implements_decl class_body
     { { class_modifiers = $1;
-	class_name = $3;
-	class_extends = $4;
-	class_implements = $5;
-	class_fields = $7 }}
+	class_name = $2;
+	class_extends = $3;
+	class_implements = $4;
+	class_fields = $5 }}
 ;
+
+class_body:
+  LEFTBRACE field_declarations RIGHTBRACE
+    { $2 }
 
 extends_decl:
 | /* $\varepsilon$ */
@@ -286,6 +290,11 @@ field_declaration:
     { JPFstatic_initializer($1) }
 | ANNOT
     { let (loc,s)=$1 in JPFannot(loc,s) }
+/* Java 1.4 */
+| class_declaration
+    { JPFclass $1 }
+| interface_declaration
+    { JPFinterface $1 }
 ;
 
 /*s variable declarations */
@@ -335,8 +344,13 @@ variable_declarator_id:
 variable_initializer:
 | expr
     { Simple_initializer($1) }
+| array_initializer
+    { Array_initializer($1) }
+;
+
+array_initializer:
 | LEFTBRACE variable_initializers RIGHTBRACE
-    { Array_initializer($2) }
+    { $2 }
 ;
 
 variable_initializers:
@@ -409,14 +423,21 @@ parameter_comma_list:
 ;
 
 parameter:
-| type_expr ident 
-    { Simple_parameter (None, $1, $2) }
-| type_expr ANNOT ident
-    { let loc, s = $2 in 
-      Simple_parameter (Some (Annot_modifier (loc, s)), $1, $3) } 
+/* final modifier allowed since 1.4 (JLS 3.0) */
+| final_opt type_expr ident 
+    { Simple_parameter (None, $2, $3) }
+| final_opt type_expr ANNOT ident
+    { let loc, s = $3 in 
+      Simple_parameter (Some (Annot_modifier (loc, s)), $2, $4) } 
 | parameter LEFTBRACKET RIGHTBRACKET
     { Array_parameter($1) }
 ;
+
+final_opt:
+| /* \epsilon */ { false}
+| FINAL { true }
+;
+
 
 throws_decl:
 | /* $\varepsilon$ */
@@ -477,12 +498,12 @@ argument_list:
 /*s interface declarations */
 
 interface_declaration:
-| modifiers INTERFACE ident extends_interfaces_decl 
+| modifiers_interface ident extends_interfaces_decl 
     LEFTBRACE interface_member_declarations RIGHTBRACE
     { { interface_modifiers = $1;
-	interface_name = $3;
-	interface_extends = $4;
-	interface_members = $6 }}
+	interface_name = $2;
+	interface_extends = $3;
+	interface_members = $5 }}
 ;
 
 extends_interfaces_decl:
@@ -557,12 +578,21 @@ array_type_expr:
 
 /*s modifiers */
 
-modifiers:
-| /* $\varepsilon$ */
+modifiers_class:
+| CLASS 
     { [] }
-| modifier modifiers
+| modifier modifiers_class
     { $1::$2 }
 ;
+
+modifiers_interface:
+| INTERFACE
+    { [] }
+| modifier modifiers_interface
+    { $1::$2 }
+;
+
+
 modifier:
 | STATIC
     { Static }
@@ -583,6 +613,10 @@ modifier:
 /* "threadsafe" ? */
 | TRANSIENT
     { Transient }
+| VOLATILE
+    { Volatile }
+| STRICTFP
+    { Strictfp }
 ;
 
 modifiers_type_expr:
@@ -763,6 +797,10 @@ primary_no_new_array:
     { locate_expr (JPEcall_expr($1,$3,$5)) } 
 | NEW name LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEnew($2,$4)) }
+/* new in java 1.4 (see JLS 3.0) */
+| NEW name LEFTPAR argument_list RIGHTPAR class_body
+    { (* TODO: incorporate class body *)
+      locate_expr (JPEnew($2,$4)) }
 | array_access
     { let (a,b)=$1 in locate_expr (JPEarray_access(a,b)) }
 | array_range
@@ -788,14 +826,23 @@ array_range:
 ;
 
 array_creation_expression:
-| NEW base_type array_dims
+| NEW base_type array_dims 
     { let (a,b) = $3 in 
       let t = build_array_type (Base_type($2)) b in
       locate_expr (JPEnew_array(t,a)) }
-| NEW name array_dims
+| NEW name array_dims 
     { let (a,b) = $3 in 
       let t = build_array_type (Type_name($2)) b in
       locate_expr (JPEnew_array(t,a)) }
+/* array_initializer allowed in 1.4 (JLS 3.0) */
+| NEW base_type implicit_dims array_initializer
+    { let b = $3 in 
+      let t = build_array_type (Base_type($2)) b in
+      locate_expr (JPEnew_array(t,[])) }
+| NEW name implicit_dims array_initializer
+    { let b = $3 in 
+      let t = build_array_type (Type_name($2)) b in
+      locate_expr (JPEnew_array(t,[])) }
 ;
 
 array_dims:
@@ -981,6 +1028,10 @@ name_comma_list:
 ident:
 | ID
     { (loc(),$1) }
+| MODEL
+    { (loc(), "model") }
+| TYPE
+    { (loc(), "type") }
 ;
 
 /****************************************************/
