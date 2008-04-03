@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.14 2008-02-18 16:46:10 nrousset Exp $ i*)
+(*i $Id: java_options.ml,v 1.15 2008-04-03 13:44:36 marche Exp $ i*)
 
 open Format
 
@@ -73,20 +73,7 @@ let libfile = "krakatoa.why"
 
 let javacard = ref false
 
-let classpath = 
-  let p =
-    try
-      let v = Sys.getenv "KRAKATOACLASSPATH" in
-	lprintf "KRAKATOACLASSPATH is set to %s@." v;
-	split ':' v
-    with Not_found ->
-      let p = Filename.concat libdir "java_api" in
-	lprintf "KRAKATOACLASSPATH is not set, using %s as default@." p;
-	[p]
-  in
-    "." :: p 
       
-
 (*s command-line options *)
       
 let parse_only = ref false
@@ -139,12 +126,8 @@ let _ =
           "  treats warnings as errors";
 	"-version", Arg.Unit version,
           "  prints version and exit";
-(*
-	"-ignore-overflow", Arg.Set ignore_overflow,
-	  "  ignore arithmetic overflow threats" ;
-*)
-(*	"-non-null", Arg.Set non_null,
-	  "  non-null by default" ; *)
+	"-javacard", Arg.Set javacard,
+	  "  source is Java Card"
       ]
       add_file usage
 
@@ -159,6 +142,22 @@ let debug = !debug
 let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
+
+let classpath = 
+  let p =
+    try
+      let v = Sys.getenv "KRAKATOACLASSPATH" in
+	lprintf "KRAKATOACLASSPATH is set to %s@." v;
+	split ':' v
+    with Not_found ->      
+      let p = Filename.concat libdir 
+	(if !javacard then "javacard_api" else "java_api") 
+      in
+	lprintf "KRAKATOACLASSPATH is not set, using %s as default@." p;
+	[p]
+  in
+    "." :: p 
+
 
 (*s error handling *)
 

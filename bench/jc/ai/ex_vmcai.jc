@@ -6,7 +6,7 @@ integer foo(integer s, integer n)
     requires n >= 0;
 {
     integer i = 0;
-    while true ; {
+    while (true) {
         assert (0 <= i && i < s);
         i = i + 1;
 	if (i >= n) return i;

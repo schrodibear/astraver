@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.110 2008-04-03 12:45:34 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.111 2008-04-03 13:44:36 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1430,14 +1430,15 @@ let object_class =
     ()
     
 let string_class =
-  catch_typing_errors
-    (fun () ->
-       match classify_name [] [] None [] 
-	 ((Loc.dummy_position,"String") :: javalang_qid)
-       with
-	 | TypeName (TypeClass ci) -> ci
-	 | _ -> assert false)
-    ()
+  if !Java_options.javacard then object_class else
+    catch_typing_errors
+      (fun () ->
+	 match classify_name [] [] None [] 
+	   ((Loc.dummy_position,"String") :: javalang_qid)
+	 with
+	   | TypeName (TypeClass ci) -> ci
+	   | _ -> assert false)
+      ()
 
 let string_type ~valid = JTYclass(valid,string_class)
 

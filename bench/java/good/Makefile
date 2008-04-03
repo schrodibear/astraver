@@ -85,6 +85,12 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	make why/$*.why
 	make -f $*.makefile gui
 
+%.javacard: %.java
+	rm -f $*.jc
+	$(EXECKRAKATOA) -javacard $<
+	make why/$*.why
+	make -f $*.makefile gui
+
 %.ai: %.java
 	rm -f $*.jc
 	make $*.jcio
