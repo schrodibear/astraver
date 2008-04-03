@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.89 2008-03-20 16:05:13 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.90 2008-04-03 15:16:31 marche Exp $ */
 
 %{
 
@@ -502,10 +502,8 @@ primary_expression:
     { locate_expr (JCPEconst JCCvoid) }
 | NULL 
     { locate_expr (JCPEconst JCCnull) }
-/*
 | STRING_LITERAL 
-    { locate (CEstring_literal $1) }
-*/
+    { locate_expr (JCPEconst (JCCstring $1)) }
 | LPAR expression RPAR 
     { $2 }
 | LPAR IDENTIFIER COLON expression RPAR

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.56 2008-03-18 15:29:52 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.57 2008-04-03 15:16:31 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -120,7 +120,8 @@
 }
 
 let space = [' ' '\t' '\012' '\r']
-
+let backslash_escapes =
+  ['\\' '"' '\'' 'n' 't' 'b' 'r' 'f' ]
 let rD = ['0'-'9']
 let rL = ['a'-'z' 'A'-'Z' '_']
 let rH = ['a'-'f' 'A'-'F' '0'-'9']
@@ -238,7 +239,7 @@ rule token = parse
 
       (* character constants *)
 
-  | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
+  | '"'                     { Buffer.clear buf; STRING_LITERAL(string lexbuf) }
 
 (*
   | ">>="                   { RIGHT_ASSIGN }
@@ -305,6 +306,23 @@ and comment = parse
   | eof  { lex_error lexbuf "unterminated comment" }
   | '\n' { newline lexbuf; comment lexbuf }
   | _    { comment lexbuf }
+
+and string = parse
+  | '"'
+      { Buffer.contents buf }
+  | '\\' backslash_escapes
+      { Buffer.add_string buf (lexeme lexbuf);
+	string lexbuf }
+  | '\\' _ 
+      { lex_error lexbuf "unknown escape sequence in string" }
+  | ['\n' '\r']
+      { (* no \n anymore in strings since java 1.4 *)
+	lex_error lexbuf "string not terminated"; }
+  | [^ '\n' '\\' '"']+ 
+      { Buffer.add_string buf (lexeme lexbuf); string lexbuf }
+  | eof
+      { lex_error lexbuf "string not terminated" }
+
       
 {
 

@@ -86,6 +86,8 @@ type logic_body =
   | JTerm of Java_tast.term
   | JReads of Java_tast.term list
 
+val logic_types_table : (string, Java_env.logic_type_info) Hashtbl.t
+
 val logics_table : 
   (int,Java_env.java_logic_info * logic_body) Hashtbl.t
 

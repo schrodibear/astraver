@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.111 2008-04-03 13:44:36 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.112 2008-04-03 15:16:31 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -303,7 +303,7 @@ let mark_as_used x =
 let () = 
   List.iter mark_as_used 
     (* Jessie reserved names *)
-    [ "tag"; "type" ]
+    [ "tag"; "type" ; "end" ; "begin"]
 
 let is_used_name n = Hashtbl.mem used_names n
 
@@ -478,7 +478,7 @@ let new_class_info (p:package_info) (id:string) c =
       ci
 
 
-let logic_type_table = Hashtbl.create 97
+let logic_types_table = Hashtbl.create 97
 
 let new_logic_type id = id
 
@@ -504,12 +504,12 @@ let get_type_decl package package_env acc d =
     | JPTlogic_type_decl (loc,id) ->
 	begin
 	  try
-	    let _ = Hashtbl.find logic_type_table id in
+	    let _ = Hashtbl.find logic_types_table id in
 	    typing_error loc "logic type already defined"
 	  with
 	      Not_found ->
 		let i = new_logic_type id in
-		Hashtbl.add logic_type_table id i;
+		Hashtbl.add logic_types_table id i;
 		acc
 	end
     | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> acc 
@@ -933,7 +933,7 @@ and classify_name
 			      (* otherwise look for a logic type 
 				 of that name *)
 			      try
-				let i = Hashtbl.find logic_type_table id in
+				let i = Hashtbl.find logic_types_table id in
 				LogicTypeName i
 			      with Not_found ->
 				typing_error loc "unknown identifier %s" id
@@ -1709,7 +1709,10 @@ and assertion env current_label e =
 	  e.java_pexpr_loc q idl env current_label e 
 	in
 	a.java_assertion_node
-    | JPEold _-> assert false (* TODO *)
+    | JPEold a -> 
+	  (* TODO : check label Old exists *)
+	  let ta = assertiont a in 
+	  JAat(ta,LabelOld)
     | JPEat _-> assert false (* TODO *)
     | JPEinstanceof (e, ty) ->
 	begin
@@ -2232,7 +2235,9 @@ let rec expr_of_term t =
   let n =
     match t.java_term_node with
       | JTvar vi -> JEvar vi
+(*
       | JTold _ -> assert false (* TODO *)
+*)
       | JTat _ -> assert false (* TODO *)
       | JTfield_access(t, fi) -> 
 	  JEfield_access(expr_of_term t,fi)

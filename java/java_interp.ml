@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.125 2008-04-02 08:38:12 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.126 2008-04-03 15:16:31 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -305,6 +305,11 @@ let create_var ?(formal=false) loc vi =
   Hashtbl.add vi_table vi.java_var_info_tag nvi;
   nvi
 
+(*s logic types *)
+
+let tr_logic_type id acc =
+  JClogic_type_def id :: acc
+
 (*s logic funs *)
 
 let logics_table = Hashtbl.create 97
@@ -557,7 +562,9 @@ let rec term t =
 	      | _ -> assert false
 	  end
       | JTarray_range _ -> assert false
+(*
       | JTold t -> JCTold(term t)
+*)
       | JTat(t,lab) -> JCTat(term t,tr_logic_label lab)
       | JTcast(ty,(*lab,*)t) ->
 	  begin
@@ -584,6 +591,7 @@ let rec assertion ?(reg=0) a =
     match a.java_assertion_node with
       | JAtrue -> JCAtrue
       | JAfalse -> JCAfalse
+      | JAat(a,lab) -> JCAat(assertion a,tr_logic_label lab)
       | JAnot a -> JCAnot (assertion a)
       | JAbin (e1, t, op, e2) -> JCArelation(term e1, lbin_op t op, term e2)
       | JAbin_obj (e1, op, e2) -> (* case e1 != null *) 
@@ -897,7 +905,9 @@ let rec location_set logic_label t =
 		  end
 	      | _ -> assert false
 	  end
+(*
       | JTold t -> assert false (* TODO *)
+*)
       | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
       | JTcast(ty,t) -> assert false (* TODO *)
 
@@ -960,7 +970,9 @@ let location logic_label t =
 		  end
 	      | _ -> assert false
 	  end
+(*
       | JTold t -> assert false (* TODO *)
+*)
       | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
       | JTcast(ty,t) -> assert false (* TODO *)
   

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.34 2008-02-06 08:40:59 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.35 2008-04-03 15:16:31 marche Exp $ *)
 
 open Java_env
 
@@ -38,7 +38,9 @@ type incr_decr_op = Java_ast.incr_decr_op
 type term_node =
     | JTlit of literal
     | JTvar of java_var_info
+(*
     | JTold of term
+*)
     | JTat of term * logic_label
     | JTbin of term * base_type * bin_op * term   
     | JTun of base_type * un_op * term
@@ -62,6 +64,7 @@ type quantifier = Java_ast.quantifier
 type assertion_node =
   | JAtrue
   | JAfalse
+  | JAat of assertion * logic_label
   | JAnot of assertion 
   | JAand of assertion * assertion
   | JAor of assertion * assertion

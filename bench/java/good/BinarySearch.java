@@ -29,8 +29,21 @@
 
 //@+ CheckArithOverflow = yes
 
-/*@ lemma mean_1 : 
-      \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; */
+/*@ lemma mean_property : 
+  @   \forall integer x y; x <= y ==> x <= (x+y)/2 <= y ;
+  @*/
+
+/*@ lemma mean_property_2 : 
+  @   \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; 
+  @*/
+
+/*@ predicate is_sorted{L}(int[] t) {
+  @   t != null && 
+  @   \forall integer i j; 
+  @     0 <= i && i <= j && j < t.length ==> t[i] <= t[j]
+  @ }
+  @*/
+
 
 class BinarySearch {
 
@@ -50,7 +63,7 @@ class BinarySearch {
       @   (\result >= 0 && t[\result] == v) ||
       @   (\result == -1 && \forall integer k; 0 <= k < n ==> t[k] != v);
       @*/
-    int binary_search(int t[], int n, int v) {
+    static int binary_search(int t[], int n, int v) {
 	int l = 0, u = n-1;
 	/*@ loop_invariant 
 	  @   0 <= l && u <= n-1 && 
@@ -78,7 +91,7 @@ class BinarySearch {
       @   (\result >= 0 && t[\result] == v) ||
       @   (\result == -1 && \forall integer k; 0 <= k < t.length ==> t[k] != v);
       @*/
-    int binary_search2(int t[], int v) {
+    static int binary_search2(int t[], int v) {
 	int l = 0, u = t.length - 1;
 	/*@ loop_invariant 
 	  @   0 <= l && u <= t.length - 1 && 
@@ -94,6 +107,38 @@ class BinarySearch {
 	}
 	return -1;
     }
+
+    /* search in a field */
+
+    public int t[];
+    // pb with recursive def of type and logic in Jessie
+    // @ invariant t_is_sorted: is_sorted(t);
+    
+    /*@	requires t.length <= 2147483647 && is_sorted(t);
+      @ behavior search_success:
+      @   ensures
+      @   \result >= 0 ==> t[\result] == v;
+      @ behavior search_failure:
+      @   ensures \result < 0 ==> (\forall integer k; 
+      @     0 <= k < t.length ==> t[k] != v);
+      @*/
+    public int binary_search(int v) {
+	int l = 0, u = t.length-1;
+	/*@ loop_invariant 
+	  @   0 <= l && u <= t.length-1 && 
+	  @   \forall integer k; 
+	  @     0 <= k < t.length && t[k] == v ==> l <= k <= u;
+	  @ decreases u-l ;
+	  @*/
+	while (l <= u ) {
+	    int m = (l + (u-l)) / 2;
+	    if (t[m] < v) l = m + 1; 
+	    else if (t[m] > v) u = m - 1;
+	    else return m;
+	}
+	return -1;
+    }
+
 
 }
     

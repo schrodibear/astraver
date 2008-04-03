@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.55 2008-04-03 12:45:34 marche Exp $ *)
+(* $Id: java_main.ml,v 1.56 2008-04-03 15:16:31 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -139,18 +139,17 @@ let main () =
   (* production of jessie output *)
   (*******************************)
   
-  (*
   (* production phase 1.1 : generation of Jessie logic types *)
-    let decls_types =
+  let decls_types =
     Hashtbl.fold 
-    (fun _ id acc ->
-    Jc_interp.tr_logic_type id acc)
-    Jc_typing.logic_type_table
-    []
-    in	       	  
-  *)
+      (fun _ id acc ->
+	 Java_interp.tr_logic_type id acc)
+      Java_typing.logic_types_table
+      []
+  in	       	  
+
   (* production phase 1.2 : generation of Jessie range_types *)
-  let decls_range = Java_interp.range_types [] in
+  let decls_range = Java_interp.range_types decls_types in
   
   (* production phase 1.3 : generation of Jessie struct types *)
   let non_null_preds, acc, decls_arrays = Java_interp.array_types [] in
