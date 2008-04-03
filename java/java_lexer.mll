@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.24 2008-04-03 12:45:34 marche Exp $
+$Id: java_lexer.mll,v 1.25 2008-04-03 13:09:56 marche Exp $
 
 ***************************************************************************)
 
@@ -141,7 +141,7 @@ $Id: java_lexer.mll,v 1.24 2008-04-03 12:45:34 marche Exp $
 	  "true", TRUE;
 	  "try", TRY;
 	  "type", TYPE;
-	  (* "var", VAR; *)
+	  (* "var", VAR; ??? *)
 	  "void", VOID;
 	  "volatile", VOLATILE;
 	  "while", WHILE;	
@@ -272,7 +272,7 @@ i*)
 
 let space = [' ' '\t' '\r' '']
 let backslash_escapes =
-  ['\\' '"' '\'' 'n' 't' 'b' 'r' 'f' (* octal manque ! *)]
+  ['\\' '"' '\'' 'n' 't' 'b' 'r' 'f' ]
 let rD = ['0'-'9']
 let rL = ['a'-'z' 'A'-'Z' '_']
 let rH = ['a'-'f' 'A'-'F' '0'-'9']
@@ -426,6 +426,15 @@ rule token = parse
       { CHARACTER s }
 
   | "'\\" backslash_escapes "'" as s
+      { CHARACTER s }
+
+  | "'\\" ['0'-'3'] ['0'-'7'] ['0'-'7'] "'" as s
+      { CHARACTER s }
+
+  | "'\\" ['0'-'7'] ['0'-'7'] "'" as s
+      { CHARACTER s }
+
+  | "'\\" ['0'-'7'] "'" as s
       { CHARACTER s }
 
   | "'\\u" ['0'-'9''A'-'F'] ['0'-'9''A'-'F'] 

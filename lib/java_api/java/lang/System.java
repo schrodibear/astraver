@@ -8,15 +8,15 @@
 package java.lang;
 
 import java.io.*;
-import java.util.Properties;
-import java.util.PropertyPermission;
-import java.util.StringTokenizer;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.AllPermission;
-import sun.net.InetAddressCachePolicy;
-import sun.reflect.Reflection;
-import sun.security.util.SecurityConstants;
+//KML import java.util.Properties;
+//KML import java.util.PropertyPermission;
+//KML import java.util.StringTokenizer;
+//KML import java.security.AccessController;
+//KML import java.security.PrivilegedAction;
+//KML import java.security.AllPermission;
+//KML import sun.net.InetAddressCachePolicy;
+//KML import sun.reflect.Reflection;
+//KML import sun.security.util.SecurityConstants;
 
 /**
  * The <code>System</code> class contains several useful class fields
@@ -50,7 +50,9 @@ public final class System {
      * corresponds to keyboard input or another input source specified by
      * the host environment or user.
      */
+    /*KML
     public final static InputStream in = nullInputStream();
+    KML*/
 
     /**
      * The "standard" output stream. This stream is already
@@ -95,7 +97,7 @@ public final class System {
 
     /* The security manager for the system.
      */
-    private static SecurityManager security = null;
+    //KML private static SecurityManager security = null;
 
     /**
      * Reassigns the "standard" input stream.
@@ -117,10 +119,12 @@ public final class System {
      *
      * @since   JDK1.1
      */
+    /*KML
     public static void setIn(InputStream in) {
 	checkIO();
 	setIn0(in);
     }
+    KML*/
 
     /**
      * Reassigns the "standard" output stream.
@@ -175,7 +179,7 @@ public final class System {
 	    security.checkPermission(new RuntimePermission("setIO"));
     }
 
-    private static native void setIn0(InputStream in);
+    //KML private static native void setIn0(InputStream in);
     private static native void setOut0(PrintStream out);
     private static native void setErr0(PrintStream err);
 
@@ -202,6 +206,7 @@ public final class System {
      * @see SecurityManager#checkPermission
      * @see java.lang.RuntimePermission
      */
+    /*KML
     public static
     void setSecurityManager(final SecurityManager s) {
         try {
@@ -242,6 +247,7 @@ public final class System {
 	security = s;
 	InetAddressCachePolicy.setIfNotSet(InetAddressCachePolicy.FOREVER);
     }
+    KML*/
 
     /**
      * Gets the system security interface.
@@ -251,9 +257,11 @@ public final class System {
      *          otherwise, <code>null</code> is returned.
      * @see     #setSecurityManager
      */
+    /*KML
     public static SecurityManager getSecurityManager() {
 	return security;
     }
+    KML*/
 
     /**
      * Returns the current time in milliseconds.  Note that
@@ -403,8 +411,8 @@ public final class System {
      * </dl>
      */
 
-    private static Properties props;
-    private static native Properties initProperties(Properties props);
+    //KML private static Properties props;
+    //KML private static native Properties initProperties(Properties props);
 
     /**
      * Determines the current system properties.
@@ -496,12 +504,14 @@ public final class System {
      * @see        java.lang.SecurityManager#checkPropertiesAccess()
      * @see        java.util.Properties
      */
+    /*KML
     public static Properties getProperties() {
 	if (security != null) {
 	    security.checkPropertiesAccess();
 	}
 	return props;
     }
+    KML*/
 
     /**
      * Sets the system properties to the <code>Properties</code>
@@ -525,6 +535,7 @@ public final class System {
      * @see        java.lang.SecurityException
      * @see        java.lang.SecurityManager#checkPropertiesAccess()
      */
+    /*KML
     public static void setProperties(Properties props) {
 	if (security != null) {
 	    security.checkPropertiesAccess();
@@ -535,6 +546,7 @@ public final class System {
         }
 	System.props = props;
     }
+    KML*/
 
     /**
      * Gets the system property indicated by the specified key.
@@ -852,11 +864,13 @@ public final class System {
      * inline access to them, since they are later set to more sensible values
      * by initializeSystemClass().
      */
+    /*KML
     private static InputStream nullInputStream() throws NullPointerException {
 	if (currentTimeMillis() > 0)
 	    return null;
 	throw new NullPointerException();
     }
+    KML*/
 
     private static PrintStream nullPrintStream() throws NullPointerException {
 	if (currentTimeMillis() > 0)
@@ -902,8 +916,10 @@ public final class System {
     }
 
     /* returns the class of the caller. */
+    /*KML
     static Class getCallerClass() {
         // NOTE use of more generic Reflection.getCallerClass()
         return Reflection.getCallerClass(3);
     }
+    KML*/
 }

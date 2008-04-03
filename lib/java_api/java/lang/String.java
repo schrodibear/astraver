@@ -116,8 +116,10 @@ public final class String
      * A new handle is generated to  refer to all future references to the
      * string instance within the stream.
      */
+    /*KML
     private static final ObjectStreamField[] serialPersistentFields =
         new ObjectStreamField[0];
+    KML*/
 
     /**
      * Initializes a newly created <code>String</code> object so that it
@@ -789,9 +791,9 @@ public final class String
      * @see     java.text.Collator#compare(String, String)
      * @since   1.2
      */
+    /* KML
     public static final Comparator CASE_INSENSITIVE_ORDER
                                          = new CaseInsensitiveComparator();
-    /* KML
     private static class CaseInsensitiveComparator
                          implements Comparator, java.io.Serializable {
 	// use serialVersionUID from JDK 1.2.2 for interoperability
@@ -1843,6 +1845,7 @@ public final class String
      * @see     java.lang.String#toUpperCase(Locale)
      * @since   1.1
      */
+    /*KML
     public String toLowerCase(Locale locale) {
 	if (locale == null)
 	    throw new NullPointerException();
@@ -1852,7 +1855,7 @@ public final class String
         char[]  val        = value;
         int     firstUpper;
 
-	/* Now check if there are any characters that need to be changed. */
+	/* Now check if there are any characters that need to be changed. *KML/
 	scan: {
 	    for (firstUpper = 0 ; firstUpper < len ; firstUpper++) {
 		char c = value[off+firstUpper];
@@ -1863,7 +1866,7 @@ public final class String
 
         char[]  result = new char[count];
 
-        /* Just copy the first few lowerCase characters. */
+        /* Just copy the first few lowerCase characters. *KML/
         System.arraycopy(val, off, result, 0, firstUpper);
 
         if (locale.getLanguage().equals("tr")) {
@@ -1888,6 +1891,7 @@ public final class String
         }
         return new String(0, result.length, result);
     }
+    KML*/
 
     /**
      * Converts all of the characters in this <code>String</code> to lower
@@ -1949,13 +1953,14 @@ public final class String
      * @see     java.lang.String#toLowerCase(Locale)
      * @since   1.1
      */
+    /*KML
     public String toUpperCase(Locale locale) {
         int     len        = count;
         int     off        = offset;
         char[]  val        = value;
         int     firstLower;
 
-        /* Now check if there are any characters that need changing. */
+        /* Now check if there are any characters that need changing. *KML/
         scan: {
             char upperCaseChar;
             char c;
@@ -1969,11 +1974,11 @@ public final class String
             return this;
         }
 
-        char[]  result       = new char[len]; /* might grow! */
+        char[]  result       = new char[len]; /* might grow! *KML/
 	int     resultOffset = 0;  /* result grows, so i+resultOffset
-				    * is the write location in result */
+				    * is the write location in result *KML/
 
-	/* Just copy the first few upperCase characters. */
+	/* Just copy the first few upperCase characters. *KML/
 	System.arraycopy(val, off, result, 0, firstLower);
 
         if (locale.getLanguage().equals("tr")) {
@@ -1995,7 +2000,7 @@ public final class String
                 upperChar = Character.toUpperCaseEx(ch);
                 if (upperChar == Character.CHAR_ERROR) {
                     upperCharArray = Character.toUpperCaseCharArray(ch);
-                    /* Grow result. */
+                    /* Grow result. *KML/
                     int mapLen = upperCharArray.length;
                     char[] result2 = new char[result.length + mapLen - 1];
                     System.arraycopy(result, 0, result2, 0,
@@ -2020,7 +2025,7 @@ public final class String
                 upperChar = Character.toUpperCaseEx(ch);
                 if (upperChar == Character.CHAR_ERROR) {
                     upperCharArray = Character.toUpperCaseCharArray(ch);
-                    /* Grow result. */
+                    /* Grow result. *KML/
                     int mapLen = upperCharArray.length;
                     char[] result2 = new char[result.length + mapLen - 1];
                     System.arraycopy(result, 0, result2, 0,
@@ -2038,6 +2043,7 @@ public final class String
         }
         return new String(0, result.length, result);
     }
+    KML*/
 
     /**
      * Converts all of the characters in this <code>String</code> to upper
