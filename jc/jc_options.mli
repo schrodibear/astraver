@@ -27,7 +27,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.26 2008-04-01 21:23:23 nrousset Exp $ *)
+(* $Id: jc_options.mli,v 1.27 2008-04-04 16:10:32 nrousset Exp $ *)
+
 
 
 (*s environment variables *)

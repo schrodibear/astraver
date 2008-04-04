@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.33 2008-04-03 12:45:34 marche Exp $
+$Id: java_ast.mli,v 1.34 2008-04-04 16:10:32 nrousset Exp $
 
 ***************************************************************************)
 
@@ -66,9 +66,9 @@ type type_expr =
 type quantifier = Forall | Exists
 
 type variable_id =
-    | Simple_id of identifier
-    | Array_id of variable_id
-
+  | Simple_id of identifier
+  | Array_id of variable_id
+      
 
 type incr_decr_op = Preincr | Predecr | Postincr | Postdecr 
 

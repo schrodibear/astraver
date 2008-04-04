@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.34 2008-04-02 08:38:12 marche Exp $ *)
+(* $Id: java_env.mli,v 1.35 2008-04-04 16:10:32 nrousset Exp $ *)
 
 (*s types and environments *)
 
@@ -45,13 +45,13 @@ type logic_label =
   | LabelPre
 
 type java_type =
-    | JTYbase of base_type
-    | JTYnull (*r type of 'null' *)
-    | JTYclass of bool * java_class_info (*r first arg true if non_null *)
-    | JTYinterface of interface_info 
-    | JTYarray of java_type
-    | JTYlogic of logic_type_info
-
+  | JTYbase of base_type
+  | JTYnull (*r type of 'null' *)
+  | JTYclass of bool * java_class_info (*r first arg true if non_null *)
+  | JTYinterface of interface_info 
+  | JTYarray of bool * java_type (*r first arg true if non_null *)
+  | JTYlogic of logic_type_info
+      
 and logic_type_info = string
 
 
@@ -188,14 +188,8 @@ type literal =
     | Null
 
 
-type non_null_policy =
-  | NonNullNone
-  | NonNullFields
-  | NonNullAll
-
-
 (*
-Local Variables: 
-compile-command: "make -C .. bin/krakatoa.byte"
-End: 
+  Local Variables: 
+  compile-command: "make -C .. bin/krakatoa.byte"
+  End: 
 *)

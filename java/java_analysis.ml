@@ -69,7 +69,7 @@ let rec name_type t =
     | JTYbase t -> name_base_type t
     | JTYclass(_,c) -> c.class_info_name
     | JTYinterface i -> i.interface_info_name
-    | JTYarray ty -> name_type ty ^ "A"
+    | JTYarray (_, ty) -> name_type ty ^ "A"
     | JTYnull -> assert false
     | JTYlogic _ -> assert false
 
@@ -95,17 +95,17 @@ let rec expr e =
     | JEvar vi -> ()
     | JEstatic_field_access(ci,fi) -> ()
     | JEfield_access(e1,fi) -> expr e1
-    | JEarray_length(e) -> 
+    | JEarray_length e -> 
 	begin
 	  match e.java_expr_type with
-	    | JTYarray ty -> intro_array_struct ty 
+	    | JTYarray (_, ty) -> intro_array_struct ty 
 	    | _ -> assert false
 	end
     | JEarray_access(e1,e2) -> 
 	expr e1; expr e2;
 	begin
 	  match e1.java_expr_type with
-	    | JTYarray ty -> intro_array_struct ty
+	    | JTYarray (_, ty) -> intro_array_struct ty
 	    | _ -> assert false
 	end
     | JEassign_local_var (_, e)
@@ -120,7 +120,7 @@ let rec expr e =
 	expr e1; expr e2; expr e3;
 	begin
 	  match e1.java_expr_type with
-	    | JTYarray ty -> intro_array_struct ty
+	    | JTYarray (_, ty) -> intro_array_struct ty
 	    | _ -> 
 		eprintf "unexpected type: e1:%a e2:%a e3:%a@." 
 		  Java_typing.print_type e1.java_expr_type
@@ -195,7 +195,7 @@ let rec statement s =
 
 let param vi =
   match vi.java_var_info_type with
-    | JTYarray ty -> intro_array_struct ty
+    | JTYarray (_, ty) -> intro_array_struct ty
     | _ -> ()
 
 let string_of_parameters vil =
@@ -267,7 +267,7 @@ let do_constructor ci req behs body =
 
 let do_field fi =
   match fi.java_field_info_type with
-    | JTYarray ty -> intro_array_struct ty
+    | JTYarray (_, ty) -> intro_array_struct ty
     | _ -> ()
 
 let do_type ty =

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.114 2008-04-04 15:51:03 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.115 2008-04-04 16:10:32 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -76,9 +76,10 @@ let rec print_type fmt t =
   match t with
     | JTYbase t -> fprintf fmt "%s" (string_of_base_type t)
     | JTYnull -> fprintf fmt "(nulltype)"
-    | JTYarray t -> fprintf fmt "%a[]" print_type t
-    | JTYclass (non_null, c) -> fprintf fmt "%s%s" 
-	(if non_null then "" else "!") c.class_info_name
+    | JTYarray (non_null, t) -> 
+	fprintf fmt "%s%a[]" (if non_null then "" else "!") print_type t
+    | JTYclass (non_null, c) -> 
+	fprintf fmt "%s%s" (if non_null then "" else "!") c.class_info_name
     | JTYinterface ii -> fprintf fmt "%s" ii.interface_info_name
     | JTYlogic i ->fprintf fmt "%s" i
 
@@ -344,15 +345,16 @@ let new_var loc ty id =
   }
   in vi
 
-let rec var_type_and_id ty id =
+let rec var_type_and_id non_null ty id =
   match id with
-    | Simple_id id -> ty,id
+    | Simple_id id -> ty, id
     | Array_id id -> 
-	let ty,id = var_type_and_id ty id in
-	JTYarray(ty),id
+	let ty, id = var_type_and_id non_null ty id in
+	  JTYarray (non_null, ty), id
+
 
 (* fields *)
-
+	    
 let field_prototypes_table : (int, variable_initializer option) Hashtbl.t 
     = Hashtbl.create 97
 
@@ -556,7 +558,7 @@ let rec is_identity_convertible tfrom tto =
     | JTYbase t1, JTYbase t2 -> t1=t2
     | JTYclass(_,c1), JTYclass(_,c2) -> c1 == c2
     | JTYinterface i1, JTYinterface i2 -> i1 == i2
-    | JTYarray t1, JTYarray t2 -> is_identity_convertible t1 t2
+    | JTYarray (_, t1), JTYarray (_, t2) -> is_identity_convertible t1 t2
     | JTYnull, JTYnull -> true
     | _ -> false
 
@@ -1069,7 +1071,7 @@ and type_type package_env type_env non_null ty =
 	end
     | Array_type_expr t -> 
 	let ty = type_type package_env type_env non_null t in
-	JTYarray ty
+	JTYarray (non_null, ty)
 
 and get_field_prototypes package_env type_env ci acc d =
   match d with
@@ -1082,8 +1084,8 @@ and get_field_prototypes package_env type_env ci acc d =
 	let is_non_null = List.mem Non_null vd.variable_modifiers in
 	let is_nullable = List.mem Nullable vd.variable_modifiers in
 	let non_null = 
-	  (!Java_options.non_null = NonNullNone && is_non_null) ||
-	    (!Java_options.non_null <> NonNullNone && not is_nullable)
+	  (not !Java_options.non_null && is_non_null) ||
+	    (!Java_options.non_null && not is_nullable)
 	in
 	let ty = type_type package_env type_env non_null vd.variable_type in
 	let ty = match ty, ci with
@@ -1098,11 +1100,11 @@ and get_field_prototypes package_env type_env ci acc d =
 	let is_model = List.mem Model vd.variable_modifiers in
 	List.fold_left
 	  (fun acc vd -> 
-	     let ty', (loc, id) = var_type_and_id ty vd.variable_id in
-	       if is_non_null && !Java_options.non_null <> NonNullNone then
+	     let ty', (loc, id) = var_type_and_id non_null ty vd.variable_id in
+	       if is_non_null && !Java_options.non_null then
 		 typing_error loc 
 		   "'non_null' modifier is not allowed in 'non_null by default' mode";	    
-	       if is_nullable && !Java_options.non_null = NonNullNone then
+	       if is_nullable && not !Java_options.non_null then
 		 typing_error loc 
 		   "'nullable' modifier is only allowed in 'non_null by default' mode";	    
 	     let fi = new_field ~is_static ~is_final ~is_nullable 
@@ -1121,54 +1123,54 @@ and type_param package_env type_env p =
 	  let non_null = 
 	    match mo with
 	      | None -> 
-		  nullable := !Java_options.non_null <> NonNullAll;
-		  !Java_options.non_null = NonNullAll
+		  nullable := not !Java_options.non_null;
+		  !Java_options.non_null
 	      | Some Non_null -> 
 		  nullable := false;
-		  if !Java_options.non_null = NonNullAll then
+		  if !Java_options.non_null then
 		    typing_error loc
 		      "'non_null' modifier is not allowed in 'non_null by default' mode";
 		  true;
 	      | Some Nullable -> 
 		  nullable := true;
-		  if !Java_options.non_null <> NonNullAll then
+		  if not !Java_options.non_null then
 		    typing_error loc 
 		      "'nullable' modifier is only allowed in 'non_null by default' mode";
 		  false
 	      | _ -> assert false
 	  in
-	    (type_type package_env type_env non_null ty, loc, id)
+	    (non_null, type_type package_env type_env non_null ty, loc, id)
       | Array_parameter x -> 
-	  let (t,loc,i) = get_type x in
-	  (JTYarray t,loc,i)
+	  let (non_null, t, loc, i) = get_type x in
+	    non_null, JTYarray (non_null, t), loc, i
   in
-  let (t,loc,i) = get_type p in (new_var loc t i, !nullable)
+  let (_, t,loc,i) = get_type p in (new_var loc t i, !nullable)
 
 and method_header package_env type_env modifiers retty mdecl =
   match mdecl with
     | Simple_method_declarator (id, l) ->
 	let is_non_null = List.mem Non_null modifiers in
 	let is_nullable = List.mem Nullable modifiers in
-	  if is_non_null && !Java_options.non_null = NonNullAll then
+	  if is_non_null && !Java_options.non_null then
 	    typing_error (fst id) 
 	      "'non_null' modifier is not allowed in 'non_null by default' mode";	    
-	  if is_nullable && !Java_options.non_null <> NonNullAll then
+	  if is_nullable && not !Java_options.non_null then
 	    typing_error (fst id)
 	      "'nullable' modifier is only allowed in 'non_null by default' mode";	    
 	  let non_null =
-	    (!Java_options.non_null <> NonNullAll && is_non_null) ||
-	      (!Java_options.non_null = NonNullAll && not is_nullable)
+	    (not !Java_options.non_null && is_non_null) ||
+	      (!Java_options.non_null && not is_nullable)
 	  in
-	    id, (Option_misc.map (type_type package_env type_env non_null) retty), 
+	    non_null, id, (Option_misc.map (type_type package_env type_env non_null) retty), 
 	List.map (type_param package_env type_env) l
     | Array_method_declarator d -> 
-	let id,t,l = 
+	let non_null, id, t, l = 
 	  method_header package_env type_env modifiers retty d 
 	in
-	match t with
-	  | Some t -> id,Some (JTYarray t),l
-	  | None -> typing_error (fst id) "invalid type void array"
-
+	  match t with
+	    | Some t -> non_null, id, Some (JTYarray (non_null, t)),l
+	    | None -> typing_error (fst id) "invalid type void array"
+		
 and get_constructor_prototype 
     package_env type_env current_type req behs head eci body =
   match current_type with
@@ -1188,12 +1190,12 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
   match l with
     | [] -> (mis,cis)
     | JPFmethod(head,body) :: rem -> 
-	let (loc,id), ret_ty, params = 
+	let non_null, (loc,id), ret_ty, params = 
 	  method_header package_env type_env 
 	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let result_is_nullable = List.mem Nullable head.method_modifiers in
+	let result_is_nullable = not non_null in
 	let mi = new_method_info 
 	  ~is_static ~result_is_nullable loc id current_type ret_ty params 
 	in
@@ -1201,12 +1203,12 @@ and get_method_prototypes package_env type_env current_type (mis,cis) env l =
 	get_method_prototypes package_env type_env 
 	  current_type (mi::mis,cis) env rem 
     | JPFmethod_spec(req,behs) :: JPFmethod(head,body) :: rem ->
-	let (loc,id), ret_ty, params = 
+	let non_null, (loc,id), ret_ty, params = 
 	  method_header package_env type_env 
 	    head.method_modifiers head.method_return_type head.method_declarator 
 	in
 	let is_static = List.mem Static head.method_modifiers in
-	let result_is_nullable = List.mem Nullable head.method_modifiers in
+	let result_is_nullable = not non_null in
 	let mi = new_method_info 
 	  ~is_static ~result_is_nullable loc id current_type ret_ty params 
 	in
@@ -1324,7 +1326,7 @@ and get_interface_field_prototypes package_env type_env ii acc d =
 	let ty = type_type package_env type_env true vd.variable_type in
 	  List.fold_left
 	    (fun acc vd -> 
-	       let ty',(loc,id) = var_type_and_id ty vd.variable_id in
+	       let ty',(loc,id) = var_type_and_id false ty vd.variable_id in
 	       (* Note: no need to check if it is static and final, because 
 		  it is implicitly the case (JLS,9.3, p 203) *)
 	       let fi = 
@@ -1467,7 +1469,7 @@ let rec is_widening_reference_convertible tfrom tto =
     | JTYarray _ , JTYinterface i when i==cloneable_interface -> true
     | JTYarray _ , JTYinterface i when i==serializable_interface -> true
 *)
-    | JTYarray t1, JTYarray t2 -> 
+    | JTYarray (_, t1), JTYarray (_, t2) -> 
 	is_widening_reference_convertible t1 t2
     | _ -> false
 
@@ -1545,7 +1547,7 @@ and term env current_label e =
 	  let te1 = termt e1 and te2 = termt e2 in 
 	  begin
 	    match te1.java_term_type with
-	      | JTYarray t ->
+	      | JTYarray (_, t) ->
 		  begin
 		    try 
 		      match 
@@ -1563,7 +1565,7 @@ and term env current_label e =
 	  let te1 = termt e1 and te2 = termt e2 and te3 = termt e3 in 
 	  begin
 	    match te1.java_term_type with
-	      | JTYarray t ->
+	      | JTYarray (_, t) ->
 		  begin
 		    try
 		      match  
@@ -1802,7 +1804,7 @@ and make_quantified_formula loc q idl env current_label e : assertion =
 	let env_local =
 	  List.map
 	    (fun id ->
-	       let tyv, (loc,n) = var_type_and_id tty id in
+	       let tyv, (loc,n) = var_type_and_id false tty id in
 	       let vi = new_var loc tyv n in
 	       (n,vi))
 	    idl
@@ -2158,12 +2160,14 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	    JTYbase t,JEbin(e1, op, e2)
 	  with Not_found ->
 	    match t1,t2 with
-	      | (_,JTYclass(_,c)) when c==string_class ->
+	      | (_,JTYclass(_,c)) when c == string_class ->
 		  (string_type ~valid:true),JEbin(e1,op,e2)
-	      | (JTYclass(_,c),_) when c==string_class ->
+	      | (JTYclass(_,c),_) when c == string_class ->
 		  (string_type ~valid:true),JEbin(e1,op,e2)
 	      | _ ->
-		  typing_error loc "numeric types or String expected for +, got %a + %a" print_type t1 print_type t2
+		  typing_error loc 
+		    "numeric types or String expected for +, got %a + %a" 
+		    print_type t1 print_type t2
 	end
     | Band | Bor -> 
 	if is_boolean t1 && is_boolean t2 then
@@ -2473,7 +2477,7 @@ let rec expr ~ghost env e =
 	  let te1 = exprt e1 and te2 = exprt e2 in 
 	  begin
 	    match te1.java_expr_type with
-	      | JTYarray t ->
+	      | JTYarray (_, t) ->
 		  begin
 		    try
 		      match
@@ -2500,7 +2504,7 @@ let rec expr ~ghost env e =
 			      int_expected e.java_pexpr_loc te.java_expr_type)
 	      dims
 	  in
-	  JTYarray ty, JEnew_array(ty,l)
+	  JTYarray (true, ty), JEnew_array(ty,l)
       | JPEnew (n, args) -> 
 	  let args = List.map exprt args in
 	  let arg_types = List.map (fun e -> e.java_expr_type) args in	    
@@ -2672,7 +2676,7 @@ let rec expr ~ghost env e =
 	  in 
 	  begin
 	    match te1.java_expr_type with
-	      | JTYarray t ->
+	      | JTYarray (_, t) ->
 		  begin
 		    try 
 		      match unary_numeric_promotion te2.java_expr_type with
@@ -2854,7 +2858,7 @@ let rec type_initializer ~ghost env ty i =
 	  else
 	    typing_error e.java_pexpr_loc "type %a expected, got %a"
 	      print_type ty print_type te.java_expr_type
-    | JTYarray t, Array_initializer vil ->
+    | JTYarray (_, t), Array_initializer vil ->
 	let il =
 	  List.map
 	    (fun vi -> match vi with
@@ -2873,7 +2877,7 @@ let variable_declaration ~ghost env vd =
   let l =
     List.map
       (fun vd ->
-	 let ty',id = var_type_and_id ty vd.variable_id in
+	 let ty',id = var_type_and_id false ty vd.variable_id in
 	 match vd.variable_initializer with
 	   | None -> (id,ty',None)
 	   | Some e -> 
@@ -3385,7 +3389,7 @@ let type_constr_spec_and_body ?(dobody=true)
 		 make_expr_no_loc unit_type
 		   (JEconstr_call
 		      (make_expr_no_loc
-			 (JTYclass (!Java_options.non_null = NonNullAll, super_class_info)) 
+			 (JTYclass (!Java_options.non_null, super_class_info)) 
 			 (JEvar this_vi), 
 		       super_ci, tel))))
 	  in

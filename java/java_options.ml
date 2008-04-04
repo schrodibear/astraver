@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.15 2008-04-03 13:44:36 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.16 2008-04-04 16:10:32 nrousset Exp $ i*)
 
 open Format
 
@@ -84,7 +84,7 @@ let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
 let ignore_overflow = ref false
-let non_null = ref Java_env.NonNullNone
+let non_null = ref false
 
 (* Jessie options *)
 let inv_sem = ref Jc_env.InvArguments
@@ -116,6 +116,8 @@ let _ =
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
           "  debugging mode";
+	"-javacard", Arg.Set javacard,
+          "  Java Card mode (no String type)";
         "-why-opt", Arg.String add_why_opt,
 	  " <why options>  passes options to Why";
 	"-v", Arg.Set verbose,

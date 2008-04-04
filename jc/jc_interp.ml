@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.268 2008-04-02 08:38:13 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.269 2008-04-04 16:10:32 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1294,60 +1294,50 @@ let type_assert ~infunction ~threats vi e (lets,params) =
   let opt =
   match vi.jc_var_info_type, e.jc_expr_type with
     | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
-(*
-	let et, lets =
-	  term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in
-*)
 	let tmp = tmp_var_name () in
 	let alloc = alloc_table_name si in
-	  begin
-	    match n1o, n2o with
-	      | None, None -> None
-	      | Some n, None -> 
-		  begin match n1o' with
-		    | Some n' when Num.le_num n' n -> None
-		    | _ -> 
-			Some(tmp,
-			     LPred ("le_int",
-				    [LApp ("offset_min", 
-					   [LVar alloc; LVar tmp]);
-				     LConst (Prim_int (Num.string_of_num n))]))
-		  end
-	      | None, Some n -> 
-		  begin match n2o' with
-		    | Some n' when Num.le_num n n' -> None
-		    | _ -> 
-			Some(tmp,
-			     LPred ("ge_int",
-				    [LApp ("offset_max", 
-					   [LVar alloc; LVar tmp]);
-				     LConst (Prim_int (Num.string_of_num n))]))
-		  end
-	      | Some n1, Some n2 
-		  when Num.eq_num n1 Jc_pervasives.zero
-		    && Num.eq_num n2 Jc_pervasives.zero ->
-		  begin match n1o', n2o' with
-		    | Some n1', Some n2'
-			when Num.eq_num n1' Jc_pervasives.zero
-			  && Num.eq_num n2' Jc_pervasives.zero -> None
-		    | Some n1', None when Num.eq_num n1' Jc_pervasives.zero ->
-			Some(tmp,
-			     LPred ("eq_int",
-				    [LApp ("offset_max", 
-					   [LVar alloc; LVar tmp]);
-				     LConst (Prim_int "0")]))
-		    | None, Some n2' when Num.eq_num n2' Jc_pervasives.zero ->
-			Some(tmp,
-			     LPred ("eq_int",
-				    [LApp ("offset_min", 
-					   [LVar alloc; LVar tmp]);
-				     LConst (Prim_int "0")]))
-		    | _ -> None
-		  end
-	      | Some n1, Some n2 -> None
+	let offset_mina n = 
+	  LPred ("le_int",
+		 [LApp ("offset_min", 
+			[LVar alloc; LVar tmp]);
+		  LConst (Prim_int (Num.string_of_num n))]) 
+	in
+	let offset_maxa n =
+	  LPred ("ge_int",
+		 [LApp ("offset_max", 
+			[LVar alloc; LVar tmp]);
+		  LConst (Prim_int (Num.string_of_num n))])
+	in
+	  begin match n1o, n2o with
+	    | None, None -> None
+	    | Some n, None ->
+		begin match n1o' with
+		  | Some n' when Num.le_num n' n -> None
+		  | _ -> Some (tmp, offset_mina n)
+		end
+	    | None, Some n -> 
+		begin match n2o' with
+		  | Some n' when Num.ge_num n' n -> None
+		  | _ -> Some (tmp, offset_maxa n)
+		end
+	    | Some n1, Some n2 ->
+		begin match n1o', n2o' with
+		  | None, None -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		  | Some n1', None ->
+		      if Num.le_num n1' n1 then Some (tmp, offset_maxa n2) else
+			Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		  | None, Some n2' ->
+		      if Num.ge_num n2' n2 then Some (tmp, offset_mina n1) else
+			Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		  | Some n1', Some n2' ->
+		      if Num.le_num n1' n1 then 
+			if Num.ge_num n2' n2 then None else Some (tmp, offset_maxa n2)
+		      else
+			if Num.ge_num n2' n2 then Some (tmp, offset_mina n1) else
+			  Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		end
 	  end
-  | _ -> None
-	
+    | _ -> None
   in
   let e = expr_coerce ~infunction ~threats vi e in
   match opt with

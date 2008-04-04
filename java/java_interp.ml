@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.126 2008-04-03 15:16:31 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.127 2008-04-04 16:10:32 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -223,9 +223,9 @@ and tr_type loc t =
 	           (* if non_null then Some num_zero else *) None)
 *)
 	
-    | JTYarray t ->
+    | JTYarray (non_null, t) ->
 	let st = get_array_struct loc t in
-	JCTpointer(JCtag st,Some num_zero,None)
+	  JCTpointer (JCtag st, Some num_zero, if non_null then Some num_minus_one else None)
     | JTYlogic i -> JCTlogic i
 
 let tr_type_option loc t =
@@ -537,7 +537,7 @@ let rec term t =
       | JTarray_length(t) -> 
 	  begin
 	    match t.java_term_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t.java_term_loc ty in
 		  let t = term t in
 		  term_plus_one
@@ -547,7 +547,7 @@ let rec term t =
       | JTarray_access(t1,t2) -> 
 	  begin
 	    match t1.java_term_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t.java_term_loc ty in
 		  let t1' = term t1 in
 		  let shift = {
@@ -612,7 +612,7 @@ let rec assertion ?(reg=0) a =
 		    let offset_maxt = term_no_loc 
 		      (JCToffset (Offset_max, t1, si)) Jc_pervasives.integer_type in
 		      JCArelation (offset_maxt, Beq_int, zerot)
-		| JTYarray t ->
+		| JTYarray (_, t) ->
 		    let si = get_array_struct Loc.dummy_position t in
 		    let app = {
 		      jc_app_fun = non_null_pred si.jc_struct_info_name;
@@ -748,34 +748,16 @@ let array_types decls =
 
 	 (* java_array_length fun *)
 	 let fi = create_java_array_length_fun st in
-	 let vi = Jc_pervasives.var 
-	   (JCTpointer(JCtag st,Some num_zero,None)) "x" 
-	 in
+	 let vi = Jc_pervasives.var (JCTpointer (JCtag st, Some num_zero, Some num_minus_one)) "x" in
 	 let result = Jc_pervasives.var Jc_pervasives.integer_type "\\result" in
 	 let vit = dummy_loc_term vi.jc_var_info_type (JCTvar vi) in
-	   (*       let offset_mint = dummy_loc_term Jc_pervasives.integer_type 
-		    (JCToffset (Offset_min, vit, st))
-		    in *)
 	 let offset_maxt = dummy_loc_term Jc_pervasives.integer_type 
 	   (JCToffset (Offset_max, vit, st))
 	 in
-	 let app = {
-	   jc_app_fun = non_null_pred;
-	   jc_app_args = [vit];
-	   jc_app_region_assoc = [];
-	   jc_app_label_assoc = [];
-	 }
-	 in
 	 let spec =
-	   { jc_fun_requires = (* non_null_<typename>(x) *)
-(*
-	       dummy_loc_assertion 
-		 (JCArelation (offset_maxt, Bge_int, minusonet))
-*)
-	       dummy_loc_assertion(JCAapp app) 
-;
+	   { jc_fun_requires = dummy_loc_assertion JCAtrue;
 	     jc_fun_free_requires = dummy_loc_assertion JCAtrue;
-	     jc_fun_behavior = (* result == \offset_max(x)+1 *)
+	     jc_fun_behavior = (* result == \offset_max(x) + 1 *)
 	       let result_var = 
 		 dummy_loc_term vi.jc_var_info_type 
 		   (JCTvar result)
@@ -800,6 +782,7 @@ let array_types decls =
 		    jc_behavior_throws = None } ] 
 	   }
 	 in
+
 	   (* non_null fun & pred *)
 	 let non_null_fi = create_non_null_fun st in
 	 let result = Jc_pervasives.var Jc_pervasives.boolean_type "\\result" in
@@ -871,7 +854,7 @@ let rec location_set logic_label t =
       | JTarray_access(t1,t2) -> 
 	  begin
 	    match t1.java_term_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
@@ -889,7 +872,7 @@ let rec location_set logic_label t =
       | JTarray_range(t1,t2,t3) -> 
 	  begin
 	    match t1.java_term_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
@@ -934,7 +917,7 @@ let location logic_label t =
       | JTarray_access(t1,t2) -> 
 	  begin
 	    match t1.java_term_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
@@ -953,7 +936,7 @@ let location logic_label t =
       | JTarray_range(t1,t2,t3) -> 
 	  begin
 	    match t1.java_term_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set logic_label t1 in
 		  let t2' = term t2 in
@@ -1054,7 +1037,7 @@ let rec expr ?(reg=false) e =
       | JEincr_array (op, e1, e2) ->
 	  begin
 	    match e1.java_expr_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = {
@@ -1083,7 +1066,7 @@ let rec expr ?(reg=false) e =
 		    JCTEunary (Jc_ast.Unot, 
 			       dummy_loc_expr Jc_pervasives.boolean_type 
 				 (JCTEcall (non_null_fun st, [e])))
-		| JTYarray t ->
+		| JTYarray (_, t) ->
 		    let st = get_array_struct e1.java_expr_loc t in
 		      JCTEunary (Jc_ast.Unot, 
 				 dummy_loc_expr Jc_pervasives.boolean_type 
@@ -1098,7 +1081,7 @@ let rec expr ?(reg=false) e =
 		| JTYclass _ | JTYinterface _ -> 
 		    let st = object_root in
 		    JCTEcall (non_null_fun st, [e])
-		| JTYarray t ->
+		| JTYarray (_, t) ->
 		    let st = get_array_struct e1.java_expr_loc t in
 		      JCTEcall (non_null_fun st, [e])
 		| _ -> assert false
@@ -1123,7 +1106,7 @@ let rec expr ?(reg=false) e =
       | JEarray_length e -> 
 	  begin
 	    match e.java_expr_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct e.java_expr_loc ty in
 		  reg := true;
 		  JCTEcall (java_array_length_fun st, [expr e])
@@ -1132,7 +1115,7 @@ let rec expr ?(reg=false) e =
       | JEarray_access(e1,e2) -> 
 	  begin
 	    match e1.java_expr_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = {
@@ -1167,7 +1150,7 @@ let rec expr ?(reg=false) e =
 	  reg := true;
 	  begin
 	    match e1.java_expr_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = {
@@ -1186,7 +1169,7 @@ let rec expr ?(reg=false) e =
       | JEassign_array_op(e1,e2,op,e3) ->
 	  begin
 	    match e1.java_expr_type with
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = {
@@ -1259,7 +1242,7 @@ let rec expr ?(reg=false) e =
 		    (expr e1).jc_texpr_node
 *)
 		  end
-	      | JTYarray ty ->
+	      | JTYarray (_, ty) ->
 		  let st = get_array_struct e.java_expr_loc ty in
 		  reg := true;	    
 		  JCTEcast(expr e1,st)		  
@@ -1429,6 +1412,7 @@ let behavior (id,assumes,throws,assigns,ensures) =
   })
 
 
+(*
 let get_non_null_assertion ty t =
   let node = 
     match ty with
@@ -1445,7 +1429,7 @@ let get_non_null_assertion ty t =
 	  let offset_maxt = term_no_loc 
 	    (JCToffset (Offset_max, t, st_interface)) Jc_pervasives.integer_type in
 	    JCArelation (offset_maxt, Beq_int, zerot)
-      | JTYarray ty ->
+      | JTYarray (_, ty) ->
 	  let si = get_array_struct Loc.dummy_position ty in
 	  let app = {
 	    jc_app_fun = non_null_pred si.jc_struct_info_name;
@@ -1454,14 +1438,14 @@ let get_non_null_assertion ty t =
 	    jc_app_label_assoc = [] ;
 	  } in JCAapp app
   in dummy_loc_assertion node
-
+*)
 
 let tr_method mi req behs b acc =
   let java_params = mi.method_info_parameters in
   let params = List.map (fun (p, _) -> create_var Loc.dummy_position p) java_params in
-  let params_pre =
-    if !Java_options.non_null = NonNullAll then
-      List.fold_left2
+(*  let params_pre =
+     if !Java_options.non_null = NonNullAll then
+       List.fold_left2
 	(fun acc vi (java_vi, nullable) -> 
 	   if nullable then acc else
 	     match vi.jc_var_info_type with
@@ -1472,39 +1456,24 @@ let tr_method mi req behs b acc =
 	true_assertion params java_params
     else 
       true_assertion
-  in
+  in *)
   let params =
     match mi.method_info_has_this with
       | None -> params
       | Some vi -> 
 	  (create_var Loc.dummy_position vi) :: params
   in
-  let t, result_post = match mi.method_info_result with
-    | None -> None, None
-    | Some vi ->
-	let ty = vi.java_var_info_type in
-	let _nvi = create_var Loc.dummy_position vi in 
-	let ao = 
-	  if !Java_options.non_null = NonNullAll & not mi.method_info_result_is_nullable then
-	    match _nvi.jc_var_info_type with
-	      | JCTpointer _ ->
-		  let vit = term_no_loc (JCTvar _nvi) _nvi.jc_var_info_type in
-		    Some (get_non_null_assertion ty vit)
-	      | _ -> None
-	  else None
-	in
-	  Some ty, ao
-  in
-  let result_behavior = match result_post with
+  let return_type = Option_misc.map (fun vi -> vi.java_var_info_type) mi.method_info_result in
+(*  let result_behavior = match result_post with
     | None -> None
     | Some a -> Some
 	{ jc_behavior_throws = None;
 	  jc_behavior_assumes = None;
 	  jc_behavior_assigns = None;
 	  jc_behavior_ensures = a }
-  in
+  in *)
   let behaviors = List.map behavior behs in
-  let behaviors = match result_post with
+(*  let behaviors = match result_post with
     | None -> behaviors
     | Some a ->
 	List.map 
@@ -1517,7 +1486,7 @@ let tr_method mi req behs b acc =
   let behaviors = match result_behavior with
     | None -> behaviors
     | Some b -> (Loc.dummy_position, "safety", b) :: behaviors
-  in
+  in *)
   let nfi = 
     create_fun Loc.dummy_position 
       mi.method_info_tag mi.method_info_result 
@@ -1529,10 +1498,10 @@ let tr_method mi req behs b acc =
       ~name:("Method " ^ mi.method_info_name)
       mi.method_info_loc
   in
-    JCfun_def (tr_type_option Loc.dummy_position t,
+    JCfun_def (tr_type_option Loc.dummy_position return_type,
 	       nfi.jc_fun_info_name,
 	       params,
-	       { jc_fun_requires = make_and [reg_assertion_option req; params_pre];
+	       { jc_fun_requires = reg_assertion_option req;
 		 jc_fun_free_requires = dummy_loc_assertion JCAtrue;
 		 jc_fun_behavior = behaviors },
 	       body)::acc
@@ -1650,7 +1619,7 @@ let tr_field type_name acc fi =
 	    Hashtbl.find Java_typing.final_field_values_table fi.java_field_info_tag
 	  in
 	  let get_value value = match fi_ty with
-	    | JTYarray (JTYbase t) | JTYbase t -> 
+	    | JTYarray (_, JTYbase t) | JTYbase t -> 
 		begin match t with
 		  | Tshort | Tbyte | Tchar | Tint 
 		  | Tlong | Tdouble | Tinteger -> 
@@ -1705,7 +1674,7 @@ let tr_field type_name acc fi =
 				(JCTconst (JCCinteger (string_of_int (n - 1))))))]
 		    in
 		    let beq = match fi_ty with
-		      | JTYarray jt -> 
+		      | JTYarray (_, jt) -> 
 			  begin match jt with
 			    | JTYbase (Tshort | Tbyte | Tchar | Tint 
 			      | Tlong | Tdouble | Tinteger) -> Beq_int
@@ -1777,17 +1746,6 @@ let tr_field type_name acc fi =
 	with Not_found -> None
       in
       let acc = JCvar_def (vi_ty, vi.jc_var_info_final_name, e) :: acc in
-      let acc =
-	if (!Java_options.non_null = NonNullAll || 
-	    !Java_options.non_null = NonNullFields) && 
-	  not fi.java_field_info_is_nullable then
-	  match vi_ty with
-	    | JCTpointer _ -> 
-		let a = get_non_null_assertion fi_ty (term_no_loc (JCTvar vi) vi_ty) in
-		  JCglobinv_def (vi.jc_var_info_name ^ "_non_null_inv", a) :: acc
-	    | _ -> acc
-	else acc
-      in
 	acc
 	  
 
@@ -1817,31 +1775,6 @@ let tr_class ci acc0 acc =
   let jc_fields = List.map (create_field Loc.dummy_position) fields in
   (* non_null fun & pred *)
   let si = get_class ci.class_info_name in
-  let non_null_inv = 
-    let this_ty = JCTpointer (JCtag si, Some num_zero, Some num_zero) in
-    let this = Jc_pervasives.var ~formal:true this_ty "this" in
-    let thist = term_no_loc (JCTvar this) this_ty in
-    let a = 
-      List.fold_left2
-	(fun acc fi jc_fi ->
-	   let ty = jc_fi.jc_field_info_type in
-	   let fit = term_no_loc (JCTderef (thist, Jc_env.LabelHere, jc_fi)) ty in
-	   match ty with
-	     | JCTpointer _ -> 
-		 if fi.java_field_info_is_nullable then acc else
-		   let a = get_non_null_assertion fi.java_field_info_type fit in 
-		   make_and [acc; a] 
-	     | _ -> acc)
-	true_assertion fields jc_fields
-    in
-    if a = true_assertion then [] else
-      [(ci.class_info_name ^ "_non_null_inv", this, a)]
-  in
-  let inv = 
-    if (!Java_options.non_null = NonNullAll ||
-	!Java_options.non_null = NonNullFields) && 
-      !Java_options.inv_sem = Jc_env.InvArguments then 
-	non_null_inv else [] in
   let acc = 
     if ci.class_info_name = "Object" then
       let non_null_fi = create_non_null_fun si in
@@ -1880,7 +1813,7 @@ let tr_class ci acc0 acc =
 		 non_null_fi.jc_fun_info_name, [vi], non_null_spec, None) :: acc
     else acc
   in
-  JCstruct_def (ci.class_info_name, super, jc_fields, inv) :: acc0, acc
+  JCstruct_def (ci.class_info_name, super, jc_fields, []) :: acc0, acc
 	
 	
 (* interfaces *)

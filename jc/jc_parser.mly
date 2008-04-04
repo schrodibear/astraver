@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.90 2008-04-03 15:16:31 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.91 2008-04-04 16:10:32 nrousset Exp $ */
 
 %{
 
@@ -353,18 +353,17 @@ type_expr:
     { locate_type (JCPTidentifier $1) }
 | IDENTIFIER LSQUARE DOTDOT RSQUARE
     { locate_type (JCPTpointer($1,None,None)) }
-| IDENTIFIER LSQUARE CONSTANT RSQUARE
-    { let n = num_of_constant (loc_i 3) $3 in
+| IDENTIFIER LSQUARE int_constant RSQUARE
+    { let n = $3 in
       locate_type (JCPTpointer($1,Some n,Some n)) }
-| IDENTIFIER LSQUARE CONSTANT DOTDOT RSQUARE
-    { let n = num_of_constant (loc_i 3) $3 in
+| IDENTIFIER LSQUARE int_constant DOTDOT RSQUARE
+    { let n = $3 in
       locate_type (JCPTpointer($1,Some n,None)) }
-| IDENTIFIER LSQUARE CONSTANT DOTDOT CONSTANT RSQUARE
-    { let n = num_of_constant (loc_i 3) $3 in
-      let m = num_of_constant (loc_i 5) $5 in
+| IDENTIFIER LSQUARE int_constant DOTDOT int_constant RSQUARE
+    { let n, m = $3, $5 in
       locate_type (JCPTpointer($1,Some n,Some m)) }
-| IDENTIFIER LSQUARE DOTDOT CONSTANT RSQUARE
-    { let m = num_of_constant (loc_i 4) $4 in
+| IDENTIFIER LSQUARE DOTDOT int_constant RSQUARE
+    { let m = $4 in
       locate_type (JCPTpointer($1,None,Some m)) }
 ;
 

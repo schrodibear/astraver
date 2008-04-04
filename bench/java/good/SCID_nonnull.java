@@ -27,12 +27,12 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: SCID_nonnull.java,v 1.4 2008-04-03 13:44:36 marche Exp $ */
+/* $Id: SCID_nonnull.java,v 1.5 2008-04-04 16:10:32 nrousset Exp $ */
 
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
-//@+ NonNullByDefault = all
-//@+ AnnotationPolicy = Invariants
+//@+ NonNullByDefault = yes
+// @+ AnnotationPolicy = Invariants
 // @+ AbstractDomain = Box
 // @+ AbstractDomain = Oct
 //@+ AbstractDomain = Pol
