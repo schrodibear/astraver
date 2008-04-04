@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.113 2008-04-04 15:49:21 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.114 2008-04-04 15:51:03 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -2274,13 +2274,13 @@ let is_accessible_and_applicable_method mi id arg_types =
   (* check args number *) 
   List.length arg_types = List.length mi.method_info_parameters &&
   (* check args types *)
-  eprintf "check applicability of [%a] to [%a]@."
-    (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) arg_types;
-    (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) (List.map fst mi.method_info_parameters);
+  (eprintf "check applicability of [%a] to [%a]@."
+    (Pp.print_list Pp.comma (fun fmt t -> print_type fmt t)) arg_types
+    (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) mi.method_info_parameters;
   List.for_all2
    (fun vi t -> 
       is_method_invocation_convertible t vi.java_var_info_type)
-  (List.map fst mi.method_info_parameters) arg_types 
+  (List.map fst mi.method_info_parameters) arg_types )
   
 let is_accessible_and_applicable_constructor ci arg_types =
   (* check args number *) 
