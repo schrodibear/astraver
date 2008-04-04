@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.112 2008-04-03 15:16:31 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.113 2008-04-04 15:49:21 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -912,7 +912,9 @@ and classify_name
 					  let ti = List.assoc id t in
 					    Hashtbl.replace h id (Type ti);
 					    TypeName ti
-					with Not_found -> assert false
+					with Not_found -> 
+					  eprintf "Anomaly: `%s' not found" id; 
+					  assert false
 			      end
 			| (pi1,_,_)::(pi2,_,_)::_ ->
 			    typing_error loc 
@@ -2272,6 +2274,9 @@ let is_accessible_and_applicable_method mi id arg_types =
   (* check args number *) 
   List.length arg_types = List.length mi.method_info_parameters &&
   (* check args types *)
+  eprintf "check applicability of [%a] to [%a]@."
+    (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) arg_types;
+    (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) (List.map fst mi.method_info_parameters);
   List.for_all2
    (fun vi t -> 
       is_method_invocation_convertible t vi.java_var_info_type)
@@ -2375,27 +2380,27 @@ let lookup_method ti (loc,id) arg_types =
     | [] -> raise Not_found
     | [mi] -> mi
     | _ -> 
-(*
+(**)
 	eprintf "possible calls:@.";
 	List.iter (fun mi ->
 		     eprintf "%a.%s(%a)@." 
 		       print_type_name mi.method_info_class_or_interface
 		       mi.method_info_name
-		       (Pp.print_list Pp.comma (fun fmt vi -> print_type fmt vi.java_var_info_type)) 
+		       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) 
 		       mi.method_info_parameters)
 	  meths;
-*)
+(**)
 	let meths = get_maximally_specific_signatures [] meths in
-(*
+(**)
 	eprintf "maximally specific calls:@.";
 	List.iter (fun mi ->
 		     eprintf "%a.%s(%a)@." 
 		       print_type_name mi.method_info_class_or_interface
 		       mi.method_info_name
-		       (Pp.print_list Pp.comma (fun fmt vi -> print_type fmt vi.java_var_info_type)) 
+		       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) 
 		       mi.method_info_parameters)
 	  meths;
-*)
+(**)
 	match meths with
 	  | [] -> assert false
 	  | [mi] -> mi
