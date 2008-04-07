@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.127 2008-04-04 16:10:32 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.128 2008-04-07 09:17:06 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1463,7 +1463,13 @@ let tr_method mi req behs b acc =
       | Some vi -> 
 	  (create_var Loc.dummy_position vi) :: params
   in
-  let return_type = Option_misc.map (fun vi -> vi.java_var_info_type) mi.method_info_result in
+  let return_type = 
+    Option_misc.map 
+      (fun vi ->  
+	 let _nvi = create_var Loc.dummy_position vi in 
+	 vi.java_var_info_type) 
+      mi.method_info_result 
+  in
 (*  let result_behavior = match result_post with
     | None -> None
     | Some a -> Some
