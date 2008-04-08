@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.128 2008-04-07 09:17:06 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.129 2008-04-08 20:35:27 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1412,51 +1412,9 @@ let behavior (id,assumes,throws,assigns,ensures) =
   })
 
 
-(*
-let get_non_null_assertion ty t =
-  let node = 
-    match ty with
-      | JTYbase _ | JTYnull | JTYlogic _ -> assert false
-      | JTYclass (_, ci) ->
-	  let app = {
-	    jc_app_fun = non_null_pred "Object";
-	    jc_app_args = [t];
-	    jc_app_region_assoc = [];
-	    jc_app_label_assoc = [] ;
-	  } in
-	    JCAapp app
-      | JTYinterface ii ->
-	  let offset_maxt = term_no_loc 
-	    (JCToffset (Offset_max, t, st_interface)) Jc_pervasives.integer_type in
-	    JCArelation (offset_maxt, Beq_int, zerot)
-      | JTYarray (_, ty) ->
-	  let si = get_array_struct Loc.dummy_position ty in
-	  let app = {
-	    jc_app_fun = non_null_pred si.jc_struct_info_name;
-	    jc_app_args = [t];
-	    jc_app_region_assoc = [];
-	    jc_app_label_assoc = [] ;
-	  } in JCAapp app
-  in dummy_loc_assertion node
-*)
-
 let tr_method mi req behs b acc =
   let java_params = mi.method_info_parameters in
   let params = List.map (fun (p, _) -> create_var Loc.dummy_position p) java_params in
-(*  let params_pre =
-     if !Java_options.non_null = NonNullAll then
-       List.fold_left2
-	(fun acc vi (java_vi, nullable) -> 
-	   if nullable then acc else
-	     match vi.jc_var_info_type with
-	       | JCTpointer _ ->
-		   let vit = term_no_loc (JCTvar vi) vi.jc_var_info_type in
-		     make_and [acc; get_non_null_assertion java_vi.java_var_info_type vit]
-	       | _ -> acc)
-	true_assertion params java_params
-    else 
-      true_assertion
-  in *)
   let params =
     match mi.method_info_has_this with
       | None -> params
@@ -1465,34 +1423,12 @@ let tr_method mi req behs b acc =
   in
   let return_type = 
     Option_misc.map 
-      (fun vi ->  
+      (fun vi -> 	
 	 let _nvi = create_var Loc.dummy_position vi in 
-	 vi.java_var_info_type) 
+	   vi.java_var_info_type) 
       mi.method_info_result 
   in
-(*  let result_behavior = match result_post with
-    | None -> None
-    | Some a -> Some
-	{ jc_behavior_throws = None;
-	  jc_behavior_assumes = None;
-	  jc_behavior_assigns = None;
-	  jc_behavior_ensures = a }
-  in *)
   let behaviors = List.map behavior behs in
-(*  let behaviors = match result_post with
-    | None -> behaviors
-    | Some a ->
-	List.map 
-	  (fun (loc, s, b) -> 
-	     (loc, s, 
-	      { b with jc_behavior_ensures = 
-		  make_and [b.jc_behavior_ensures; a]; })) 
-	  behaviors
-  in
-  let behaviors = match result_behavior with
-    | None -> behaviors
-    | Some b -> (Loc.dummy_position, "safety", b) :: behaviors
-  in *)
   let nfi = 
     create_fun Loc.dummy_position 
       mi.method_info_tag mi.method_info_result 
@@ -1521,13 +1457,6 @@ let tr_constr ci req behs b acc =
       | None -> assert false
       | Some vi -> (create_var Loc.dummy_position vi) 
   in
-(*
-  let _result =
-    match ci.constr_info_result with
-      | None -> assert false
-      | Some vi -> (create_var Loc.dummy_position vi) 
-  in
-*)
   let nfi = 
     create_fun Loc.dummy_position ci.constr_info_tag None
       ci.constr_info_trans_name ci.constr_info_parameters

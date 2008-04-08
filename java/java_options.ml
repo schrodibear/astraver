@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.16 2008-04-04 16:10:32 nrousset Exp $ i*)
+(*i $Id: java_options.ml,v 1.17 2008-04-08 20:35:27 nrousset Exp $ i*)
 
 open Format
 
@@ -84,7 +84,7 @@ let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
 let ignore_overflow = ref false
-let non_null = ref false
+let nonnull_sem = ref Java_env.NonNullNone
 
 (* Jessie options *)
 let inv_sem = ref Jc_env.InvArguments
@@ -129,7 +129,14 @@ let _ =
 	"-version", Arg.Unit version,
           "  prints version and exit";
 	"-javacard", Arg.Set javacard,
-	  "  source is Java Card"
+	  "  source is Java Card";
+	"-nonnull-sem", Arg.String
+	  (function 
+	     | "none" -> nonnull_sem := Java_env.NonNullNone
+	     | "fields" -> nonnull_sem := Java_env.NonNullFields
+	     | "all" -> nonnull_sem := Java_env.NonNullAll
+	     | s -> raise (Arg.Bad ("Unknown nonnull_sem: " ^ s))),
+	"  <kind> nonnull-by-default semantics: none (default), fields, all"
       ]
       add_file usage
 

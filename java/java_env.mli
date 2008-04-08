@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.35 2008-04-04 16:10:32 nrousset Exp $ *)
+(* $Id: java_env.mli,v 1.36 2008-04-08 20:35:27 nrousset Exp $ *)
 
 (*s types and environments *)
 
@@ -186,6 +186,11 @@ type literal =
     | String of string
     | Char of string
     | Null
+
+type nonnull_policy =
+  | NonNullNone
+  | NonNullAll
+  | NonNullFields
 
 
 (*

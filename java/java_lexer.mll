@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.26 2008-04-04 16:10:32 nrousset Exp $
+$Id: java_lexer.mll,v 1.27 2008-04-08 20:35:27 nrousset Exp $
 
 ***************************************************************************)
 
@@ -259,10 +259,12 @@ i*)
 	  end  
       | "NonNullByDefault" ->
 	  begin
-	    match String.lowercase v with	  
-	      | "yes" -> Java_options.non_null := true
-	      | "no" -> Java_options.non_null := false
-	      | _ -> lex_error lexbuf "yes or no expected"
+	    Java_options.nonnull_sem :=
+	    match v with
+	      | "none" -> Java_env.NonNullNone
+	      | "fields" -> Java_env.NonNullFields
+	      | "all" -> Java_env.NonNullAll
+	      | _ -> lex_error lexbuf ("unknown nonnull policy" ^ v)
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 
