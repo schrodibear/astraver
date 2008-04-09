@@ -45,13 +45,14 @@ parameter pq_is_empty :
 parameter pq_add :
   x:int_int -> {} unit writes pq { pq = set_add(x, pq@) }
 
+predicate Min(e:int_int, pq:int_int set) =
+  In(e, pq) and forall x:int_int. In(x, pq) -> snd(e) <= snd(x)
+
 parameter pq_extract_min :
   unit ->
     { not Is_empty(pq) } 
     int_int writes pq 
-    { In(result, pq@) and
-      (forall x:int_int. In(x, pq@) -> snd(result) <= snd(x)) and
-      pq = set_rmv(result, pq@) }
+    { Min(result, pq@) and pq = set_rmv(result, pq@) }
 
 (* visited vertices *)
 
@@ -73,16 +74,26 @@ logic N : int (* vertex = 0..N-1 *)
 logic g : int, int -> bool
 logic weight : int, int -> int (* edge weight, if there is an edge *)
 
-(* paths and shortest paths *)
+axiom weight_nonneg : forall x,y:int. weight(x,y) >= 0
+
+(* paths and shortest paths 
+   path(x,y,d) = 
+	there is a path from x to y of length d
+   shortest_path(x,y,d) = 
+	there is a path from x to y of length d, and to shorter path *)
 
 logic path : int, int, int -> prop 
-  (* path(x,y,d) = there is a path from x to y of length d *)
 
 axiom path_nil : forall x:int. path(x,x,0)
 axiom path_cons : 
   forall x,y,z,d:int. path(x,y,d) -> g(y,z)=true -> path(x,z,d+weight(y,z))
 
-(* termination = *)
+axiom length_nonneg : forall x,y,d:int. path(x,y,d) -> d >= 0
+
+predicate shortest_path(x:int, y:int, d:int) =
+  path(x,y,d) and forall d':int. path(x,y,d') -> d <= d'
+
+(* termination uses a lexicographic order *)
 
 predicate lex2(x:int_int, y:int_int) =
   fst(x) < fst(y) or (fst(x) = fst(y) and snd(x) < snd(y))
@@ -95,7 +106,19 @@ let shortest_path (src:int) (dst:int) =
   { 0 <= src < N and 0 <= dst < N and Is_empty(visited) and Is_empty(pq) }
   pq_add (pair src 0);
   while not (pq_is_empty void) do
-    { invariant forall e:int_int. In(e,pq) -> path(src,fst(e),snd(e)) 
+    { invariant 
+	(* there are paths for the vertices in pq *)
+        (forall e:int_int. In(e,pq) -> path(src,fst(e),snd(e))) and
+	(* dst is not yet visited *)
+	not In(dst,visited) and
+        (* we already visited all vertices at distance < min(pq) *)
+        (forall m:int_int. Min(m,pq) -> 
+          forall x,d:int. shortest_path(src,x,d) -> d < snd(m) -> 
+           In(x,visited)) and
+	(* we didn't visited any vertex at distance > min(pq) *)
+        (forall m:int_int. Min(m,pq) -> 
+          forall x,d:int. shortest_path(src,x,d) -> d > snd(m) -> 
+           not In(x,visited)) 
       variant pair(N - set_card(visited), set_card(pq)) for lex2 }
     let m = pq_extract_min void in
     let v = fst m in
@@ -113,7 +136,7 @@ let shortest_path (src:int) (dst:int) =
       done
     end
   done
-  { true | Found => path(src,dst,result) }
+  { true | Found => shortest_path(src,dst,result) }
     
 (*
 Local Variables: 
