@@ -17,6 +17,14 @@ axiom set_rmv_def :
   forall x:'a. forall y:'a. forall s:'a set. 
   In(x, set_rmv(y,s)) <-> (x <> y and In(x, s))
 
+logic set_card : 'a set -> int
+axiom card_set_add : 
+  forall x:'a. forall s:'a set. 
+  not In(x,s) -> set_card(set_add(x,s)) = 1 + set_card(s)
+axiom card_set_rmv : 
+  forall x:'a. forall s:'a set. 
+  In(x,s) -> set_card(s) = 1 + set_card(set_rmv(x, s))
+
 (* integer pairs *)
 
 type int_int 
@@ -74,6 +82,11 @@ axiom path_nil : forall x:int. path(x,x,0)
 axiom path_cons : 
   forall x,y,z,d:int. path(x,y,d) -> g(y,z)=true -> path(x,z,d+weight(y,z))
 
+(* termination = *)
+
+predicate lex2(x:int_int, y:int_int) =
+  fst(x) < fst(y) or (fst(x) = fst(y) and snd(x) < snd(y))
+
 (* code *)
 
 exception Found of int
@@ -82,7 +95,8 @@ let shortest_path (src:int) (dst:int) =
   { 0 <= src < N and 0 <= dst < N and Is_empty(visited) and Is_empty(pq) }
   pq_add (pair src 0);
   while not (pq_is_empty void) do
-    { invariant forall e:int_int. In(e,pq) -> path(src,fst(e),snd(e)) }
+    { invariant forall e:int_int. In(e,pq) -> path(src,fst(e),snd(e)) 
+      variant pair(N - set_card(visited), set_card(pq)) for lex2 }
     let m = pq_extract_min void in
     let v = fst m in
     let d = snd m in
