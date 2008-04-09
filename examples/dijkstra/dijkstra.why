@@ -1,0 +1,108 @@
+
+(* finite sets *)
+
+type 'a set
+logic set_empty : 'a set
+logic set_add : 'a, 'a set -> 'a set
+logic set_rmv : 'a, 'a set -> 'a set
+
+logic In : 'a, 'a set -> prop
+predicate Is_empty(s : 'a set) = forall x:'a. not In(x, s)
+
+axiom set_empty_def : Is_empty(set_empty)
+axiom set_add_def : 
+  forall x:'a. forall y:'a. forall s:'a set. 
+  In(x, set_add(y,s)) <-> (x = y or In(x, s))
+axiom set_rmv_def :
+  forall x:'a. forall y:'a. forall s:'a set. 
+  In(x, set_rmv(y,s)) <-> (x <> y and In(x, s))
+
+(* integer pairs *)
+
+type int_int 
+logic pair : int, int -> int_int
+logic fst, snd : int_int -> int
+
+axiom pair_1 : forall x,y:int. fst(pair(x,y)) = x
+axiom pair_2 : forall x,y:int. snd(pair(x,y)) = y
+
+(* priority queue *)
+
+parameter pq : int_int set ref
+
+parameter pq_is_empty : 
+  unit -> 
+    {} bool reads pq { if result then Is_empty(pq) else not Is_empty(pq) }
+
+parameter pq_add :
+  x:int_int -> {} unit writes pq { pq = set_add(x, pq@) }
+
+parameter pq_extract_min :
+  unit ->
+    { not Is_empty(pq) } 
+    int_int writes pq 
+    { In(result, pq@) and
+      (forall x:int_int. In(x, pq@) -> snd(result) <= snd(x)) and
+      pq = set_rmv(result, pq@) }
+
+(* visited vertices *)
+
+parameter visited : int set ref
+
+parameter visited_add : 
+  x:int -> {} unit writes visited { visited = set_add(x, visited@) }
+
+parameter visited_mem : 
+  x:int -> 
+    {} 
+    bool reads visited 
+    { if result then In(x, visited) else not In(x, visited) }
+
+(* graph *)
+
+logic N : int (* vertex = 0..N-1 *)
+
+logic g : int, int -> bool
+logic weight : int, int -> int (* edge weight, if there is an edge *)
+
+(* paths and shortest paths *)
+
+logic path : int, int, int -> prop 
+  (* path(x,y,d) = there is a path from x to y of length d *)
+
+axiom path_nil : forall x:int. path(x,x,0)
+axiom path_cons : 
+  forall x,y,z,d:int. path(x,y,d) -> g(y,z)=true -> path(x,z,d+weight(y,z))
+
+(* code *)
+
+exception Found of int
+
+let shortest_path (src:int) (dst:int) =
+  { 0 <= src < N and 0 <= dst < N and Is_empty(visited) and Is_empty(pq) }
+  pq_add (pair src 0);
+  while not (pq_is_empty void) do
+    { invariant forall e:int_int. In(e,pq) -> path(src,fst(e),snd(e)) }
+    let m = pq_extract_min void in
+    let v = fst m in
+    let d = snd m in
+    if not (visited_mem v) then begin
+      visited_add v;
+      if v = dst then raise (Found d);
+      let w = ref 0 in
+      while !w < N do 
+        { invariant forall e:int_int. In(e,pq) -> path(src,fst(e),snd(e)) 
+          variant N - w }
+	if g v !w && not (visited_mem !w) then
+	  pq_add (pair !w (d + weight v !w));
+        w := !w + 1
+      done
+    end
+  done
+  { true | Found => path(src,dst,result) }
+    
+(*
+Local Variables: 
+compile-command: "gwhy dijkstra.why"
+End: 
+*)
