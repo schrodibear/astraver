@@ -76,9 +76,11 @@ fi
 AC_MSG_CHECKING(executable suffix)
 if uname -s | grep -q CYGWIN ; then
   EXE=.exe
+  STRIP=echo "no strip "
   AC_MSG_RESULT(.exe) 
 else
   EXE=
+  STRIP=strip
   AC_MSG_RESULT(<none>)
 fi
 
@@ -388,6 +390,7 @@ fi
 # substitutions to perform
 AC_SUBST(VERBOSEMAKE)
 AC_SUBST(EXE)
+AC_SUBST(STRIP)
 
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)

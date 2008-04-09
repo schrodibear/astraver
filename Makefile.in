@@ -58,6 +58,7 @@ BINDIR=@bindir@
 LIBDIR=@libdir@
 
 EXE=@EXE@
+STRIP=@STRIP@
 
 # where to install the man page
 MANDIR=@mandir@
@@ -198,14 +199,14 @@ CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa nums.cmxa graph.cmxa $^
-	strip $@
+	$(STRIP) $@
 
 bin/why.byte: $(CMO) src/why.cmo
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa nums.cmxa graph.cmxa $^ 
-	strip $@
+	$(STRIP) $@
 
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ str.cma $^
@@ -221,7 +222,7 @@ src/wserver.ml: src/wserver.ml4
 bin/whyweb.opt: $(WWEBCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
 	      $(OFLAGS) -o $@ unix.cmxa $^
-	strip    $@
+	$(STRIP)    $@
 
 # caduceus
 CCMO = src/lib.cmo src/linenum.cmo \
@@ -244,7 +245,7 @@ CCMXA = $(CCMA:.cma=.cmxa)
 bin/caduceus.opt: $(CCMXA) $(CCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
 	      $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
-	strip    $@
+	$(STRIP)    $@
 
 bin/caduceus.byte: $(CCMA) $(CCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) \
@@ -252,7 +253,7 @@ bin/caduceus.byte: $(CCMA) $(CCMO)
 
 bin/caduceus.static: $(CCMXA) $(CCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
-	strip    $@
+	$(STRIP)    $@
 
 
 # jessie
@@ -301,7 +302,7 @@ ppc: jc/jc.cmo jc/jc.cmx
 bin/jessie.opt: $(JCCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
-	strip    $@
+	$(STRIP)    $@
 
 bin/jessie.byte: $(JCCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) $(ATPLIB) -o $@ \
@@ -327,7 +328,7 @@ KCMX = $(KCMO:.cmo=.cmx)
 bin/krakatoa.opt: $(KCMX) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
-	strip    $@
+	$(STRIP)    $@
 
 bin/krakatoa.byte: $(KCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
@@ -441,7 +442,7 @@ ml/ml_ocaml.cmo: $(OCAMLCMINOIMPL) $(OCAMLCMO)
 bin/jessica.opt: ml/ml_ocaml.cmx $(MLCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
 		unix.cmxa nums.cmxa graph.cmxa $^
-	strip    $@
+	$(STRIP)    $@
 
 bin/jessica.byte: ml/ml_ocaml.cmo $(MLCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
@@ -456,7 +457,7 @@ MIXCMX = $(MIXCMO:.cmo=.cmx)
 
 bin/demixify.opt: $(MIXCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ $^
-	strip    $@
+	$(STRIP)    $@
 
 bin/demixify.byte: $(MIXCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ $^
@@ -467,7 +468,7 @@ WVCMX = $(WVCMO:.cmo=.cmx)
 
 bin/why-viewer.opt: $(WVCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa $^
-	strip $@
+	$(STRIP) $@
 
 bin/why-viewer.byte: $(WVCMO)
 	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
@@ -485,7 +486,7 @@ gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa nums.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
-	strip    $@
+	$(STRIP)    $@
 
 bin/gwhy.byte: $(GCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^

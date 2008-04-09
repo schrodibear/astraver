@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.116 2008-04-08 20:35:27 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.117 2008-04-09 15:18:56 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1717,7 +1717,10 @@ and assertion env current_label e =
 	  (* TODO : check label Old exists *)
 	  let ta = assertiont a in 
 	  JAat(ta,LabelOld)
-    | JPEat _-> assert false (* TODO *)
+    | JPEat(a,lab) -> 
+	let ta = assertiont a in 
+	(* TODO : check label exists *)
+	JAat(ta,LabelName (snd lab))	
     | JPEinstanceof (e, ty) ->
 	begin
 	  match current_label with

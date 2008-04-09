@@ -98,7 +98,7 @@ class Gcd {
         /*@ loop_invariant 
           @    x >= 0 && y >= 0 &&  
 	  @    (\forall integer d ;  isGcd(x,y,d) ==> 
-	  @        isGcd(\at(x,Pre),\at(y,Pre),d)) && 
+	  @        \at(isGcd(x,y,d),Pre)) && 
           @    a*\at(x,Pre)+b*\at(y,Pre) == x && 
           @    c*\at(x,Pre)+d*\at(y,Pre) == y ;
           @ decreases y;
