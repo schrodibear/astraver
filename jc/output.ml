@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.30 2008-04-02 08:38:13 marche Exp $ i*)
+(*i $Id: output.ml,v 1.31 2008-04-09 14:32:34 nrousset Exp $ i*)
 
 open Lexing
 open Format
@@ -45,7 +45,7 @@ type constant =
 let fprintf_constant form e =
   match e with
     | Prim_void -> fprintf form "void"
-    | Prim_int(n) -> fprintf form "%s" n
+    | Prim_int(n) -> fprintf form "(%s)" n
     | Prim_real(f) -> fprintf form "%s" f
     | Prim_bool(b) -> fprintf form "%b" b
 (*
@@ -871,6 +871,8 @@ let print_locs fmt =
        fprintf fmt "end = %d@\n@\n" lc)
     locs_table
 
-
-
-
+(*
+  Local Variables: 
+  compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
+  End: 
+*)

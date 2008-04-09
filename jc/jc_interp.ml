@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.269 2008-04-04 16:10:32 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.270 2008-04-09 14:32:34 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1287,62 +1287,82 @@ let return_void = ref false
 
 let expr_coerce ~infunction ~threats vi e =
   coerce ~no_int_overflow:(not threats)
-    e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type 
+    e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type
     e.jc_expr_type e (expr ~infunction ~threats e)
     
-let type_assert ~infunction ~threats vi e (lets,params) =
+let type_assert ~infunction ~threats vi e (lets, params) =
   let opt =
-  match vi.jc_var_info_type, e.jc_expr_type with
-    | JCTpointer (si, n1o, n2o), JCTpointer (si', n1o', n2o') ->
-	let tmp = tmp_var_name () in
-	let alloc = alloc_table_name si in
-	let offset_mina n = 
-	  LPred ("le_int",
-		 [LApp ("offset_min", 
-			[LVar alloc; LVar tmp]);
-		  LConst (Prim_int (Num.string_of_num n))]) 
-	in
-	let offset_maxa n =
-	  LPred ("ge_int",
-		 [LApp ("offset_max", 
-			[LVar alloc; LVar tmp]);
-		  LConst (Prim_int (Num.string_of_num n))])
-	in
-	  begin match n1o, n2o with
-	    | None, None -> None
-	    | Some n, None ->
-		begin match n1o' with
-		  | Some n' when Num.le_num n' n -> None
-		  | _ -> Some (tmp, offset_mina n)
-		end
-	    | None, Some n -> 
+    match vi.jc_var_info_type with
+      | JCTpointer (si, n1o, n2o) ->
+	  let tmp = tmp_var_name () in
+	  let alloc = alloc_table_name si in
+	  let offset_mina n = 
+	    LPred ("le_int",
+		   [LApp ("offset_min", 
+			  [LVar alloc; LVar tmp]);
+		    LConst (Prim_int (Num.string_of_num n))]) 
+	  in
+	  let offset_maxa n =
+	    LPred ("ge_int",
+		   [LApp ("offset_max", 
+			  [LVar alloc; LVar tmp]);
+		    LConst (Prim_int (Num.string_of_num n))])
+	  in
+	    begin match e.jc_expr_type with 
+	      | JCTpointer (si', n1o', n2o') ->
+		  begin match n1o, n2o with
+		    | None, None -> None
+		    | Some n, None ->
+			begin match n1o' with
+			  | Some n' when Num.le_num n' n && not Jc_options.verify_all_offsets -> None
+			  | _ -> Some (tmp, offset_mina n)
+			end
+		    | None, Some n -> 
 		begin match n2o' with
-		  | Some n' when Num.ge_num n' n -> None
+		  | Some n' when Num.ge_num n' n && not Jc_options.verify_all_offsets -> None
 		  | _ -> Some (tmp, offset_maxa n)
 		end
-	    | Some n1, Some n2 ->
-		begin match n1o', n2o' with
-		  | None, None -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-		  | Some n1', None ->
-		      if Num.le_num n1' n1 then Some (tmp, offset_maxa n2) else
-			Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-		  | None, Some n2' ->
-		      if Num.ge_num n2' n2 then Some (tmp, offset_mina n1) else
-			Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-		  | Some n1', Some n2' ->
-		      if Num.le_num n1' n1 then 
-			if Num.ge_num n2' n2 then None else Some (tmp, offset_maxa n2)
-		      else
-			if Num.ge_num n2' n2 then Some (tmp, offset_mina n1) else
-			  Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-		end
-	  end
-    | _ -> None
+		    | Some n1, Some n2 ->
+			begin match n1o', n2o' with
+			  | None, None -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			  | Some n1', None ->
+			      if Num.le_num n1' n1 && not Jc_options.verify_all_offsets then 
+				Some (tmp, offset_maxa n2) 
+			      else
+				Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			  | None, Some n2' ->
+			      if Num.ge_num n2' n2 && not Jc_options.verify_all_offsets then 
+				Some (tmp, offset_mina n1) 
+			      else
+				Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			  | Some n1', Some n2' ->
+			      if Jc_options.verify_all_offsets then
+				Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			      else
+				if Num.le_num n1' n1 then 
+				  if Num.ge_num n2' n2 then None else 
+				    Some (tmp, offset_maxa n2)
+				else
+				  if Num.ge_num n2' n2 then 
+				    Some (tmp, offset_mina n1) else
+				      Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			end
+		  end
+	      | JCTnull ->
+		  begin match n1o, n2o with
+		    | None, None -> None
+		    | Some n, None -> Some (tmp, offset_mina n)
+		    | None, Some n -> Some (tmp, offset_maxa n)
+		    | Some n1, Some n2 -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		  end
+	      | _ -> None
+	    end
+      | _ -> None
   in
   let e = expr_coerce ~infunction ~threats vi e in
-  match opt with
-    | None -> None::lets , e::params
-    | Some(tmp,a) -> Some(tmp,e,a)::lets , (Var tmp)::params
+    match opt with
+      | None -> None::lets , e::params
+      | Some(tmp,a) -> Some(tmp,e,a)::lets , (Var tmp)::params
 
 let rec statement ~infunction ~threats s = 
   (* reset_tmp_var(); *)
@@ -1517,10 +1537,8 @@ let rec statement ~infunction ~threats s =
 	      arg_types_asserts LTrue
 	  in
 	  let call = 
-	    if arg_types_assert = LTrue || 
-	      not threats || 
-	      not Jc_options.verify_all_offsets then call else
-		Assert (arg_types_assert, call)
+	    if arg_types_assert = LTrue || not threats then call else
+	      Assert (arg_types_assert, call)
 	  in
 	  let call =
 	    List.fold_right
@@ -1647,12 +1665,36 @@ let rec statement ~infunction ~threats s =
 	    Let(vi.jc_var_info_final_name, e', statement s)
 	end
     | JCSreturn_void -> Raise(jessie_return_exception,None)	
-    | JCSreturn(t,e) -> 
-	append
-	  (Assign(jessie_return_variable,
-		  coerce ~no_int_overflow:(not threats) 
-		    e.jc_expr_label e.jc_expr_loc t e.jc_expr_type e (expr e)))
-	  (Raise (jessie_return_exception, None))
+    | JCSreturn (t, e) ->	
+	let return_type_asserts, _ = 
+	  type_assert ~infunction ~threats infunction.jc_fun_info_result e ([], []) in
+	let return_type_assert =
+	  List.fold_right
+	    (fun opt acc -> 
+	       match opt with
+		 | None -> acc
+		 | Some (_, _, a) -> make_and a acc)
+	    return_type_asserts LTrue
+	in
+	let assign = 
+	    Assign 
+	      (jessie_return_variable,
+	       coerce ~no_int_overflow:(not threats) 
+		 e.jc_expr_label e.jc_expr_loc t e.jc_expr_type e (expr e))
+	in
+	let assign = 
+	  if return_type_assert = LTrue || not threats then assign else
+	    Assert (return_type_assert, assign)
+	in
+	let assign =
+	  List.fold_right
+	    (fun opt assign -> 
+	       match opt with
+		 | None -> assign
+		 | Some (tmp, e, _) -> Let (tmp, e, assign))
+	    return_type_asserts assign
+	in
+	  append assign (Raise (jessie_return_exception, None))
     | JCSunpack(st, e, as_t) ->
 	let e = expr e in 
 	make_guarded_app ~name:lab Unpack s.jc_statement_loc
@@ -2123,7 +2165,7 @@ let tr_fun f loc spec body acc =
   in
   (* partition behaviors as follows:
      - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)
-     - (optional) 'inferred' behaviors (calculated by analysis)
+     - (optional) 'inferred' behaviors (computed by analysis)
      - user defined behaviors *)
   let (safety_behavior,
        normal_behaviors_inferred, normal_behaviors, 
