@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.17 2008-04-08 20:35:27 nrousset Exp $ i*)
+(*i $Id: java_options.ml,v 1.18 2008-04-09 06:17:12 nrousset Exp $ i*)
 
 open Format
 
@@ -116,8 +116,6 @@ let _ =
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
           "  debugging mode";
-	"-javacard", Arg.Set javacard,
-          "  Java Card mode (no String type)";
         "-why-opt", Arg.String add_why_opt,
 	  " <why options>  passes options to Why";
 	"-v", Arg.Set verbose,

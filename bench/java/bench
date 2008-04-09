@@ -94,7 +94,7 @@ bench_java_good () {
     for file in *.java; do
 	echo -n "  Generating VCs for $file... "
 	f=`basename $file .java`
-	options="-nonnull-sem fields"
+	options=""
 	if [ $f = "SCID" ]; then 
 	    options="-javacard" 
 	fi
