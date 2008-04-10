@@ -23,7 +23,7 @@
 
 <!ELEMENT proof (tag*)>
 <!ATTLIST proof prover CDATA #REQUIRED>
-<!ATTLIST proof status CDATA #REQUIRED>
+<!ATTLIST proof status (valid|invalid|unknown|timeout|failure|running) #REQUIRED>
 <!ATTLIST proof timelimit CDATA #IMPLIED>
 <!ATTLIST proof date CDATA #IMPLIED>
 <!ATTLIST proof scriptfile CDATA #IMPLIED>

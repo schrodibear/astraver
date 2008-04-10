@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.mli,v 1.24 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.25 2008-04-10 13:30:41 hubert Exp $ i*)
 
 open Cc
 
@@ -40,6 +40,8 @@ val iter :
 type prover = 
   | Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo 
   | Cvc3 | Graph | Z3
+
+val prover_name : prover -> string
 
 val call_prover : 
   ?debug:bool -> ?timeout:int -> ?encoding:Options.encoding ->

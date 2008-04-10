@@ -4,7 +4,7 @@ type goal = {
   goal_expl : Logic_decl.vc_expl;
   goal_file : string;
   sub_goal : goal list;
-  proof : (string*string*string*string*string) list ;
+  mutable proof : (string*(string*string*string*string)) list;
   mutable goal_tags : (string*string) list; 
 }
 
@@ -101,40 +101,8 @@ let add_function p fname floc =
   f
 
 
-(* toggle *)
 
-let toggle_lemma l = l.lemma_tags <- 
-  List.map (fun (key,value) ->  
-	      if key = "ww_open" then 
-		if value = "true" then (key,"false") 
-		else (key,"true") 
-	      else
-		(key,value)) l.lemma_tags
-
-let toggle_function f = f.function_tags <- 
-  List.map (fun (key,value) ->  
-	      if key = "ww_open" then 
-		if value = "true" then (key,"false") 
-		else (key,"true") 
-	      else
-		(key,value)) f.function_tags
-
-let toggle_behavior b = b.behavior_tags <- 
-  List.map (fun (key,value) ->  
-	      if key = "ww_open" then 
-		if value = "true" then (key,"false") 
-		else (key,"true") 
-	      else
-		(key,value))  b.behavior_tags
-
-let toggle_goal g = g.goal_tags <- 
-  List.map (fun (key,value) ->  
-	      if key = "ww_open" then 
-		if value = "true" then (key,"false") 
-		else (key,"true") 
-	      else
-		(key,value))  g.goal_tags
-
+  
 (* saving *)
 
 open Format
@@ -271,7 +239,7 @@ let get_proof elements =
 	  let scriptfile = 
 	    try get_string_attr "scriptfile" e with Not_found -> "no script" 
 	  in
-	  get_proofs ((prover,status,timelimit,date,scriptfile)::proofs) l
+	  get_proofs ((prover,(status,timelimit,date,scriptfile))::proofs) l
       | _ -> proofs,l
   in
   (get_proofs [] elements)
