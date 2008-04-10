@@ -84,7 +84,8 @@ axiom weight_nonneg : forall x,y:int. weight(x,y) >= 0
 
 logic path : int, int, int -> prop 
 
-axiom path_nil : forall x:int. path(x,x,0)
+axiom path_nil : 
+  forall x:int. path(x,x,0)
 axiom path_cons : 
   forall x,y,z,d:int. path(x,y,d) -> g(y,z)=true -> path(x,z,d+weight(y,z))
 
@@ -115,7 +116,7 @@ let shortest_path (src:int) (dst:int) =
         (forall m:int_int. Min(m,pq) -> 
           forall x,d:int. shortest_path(src,x,d) -> d < snd(m) -> 
            In(x,visited)) and
-	(* we didn't visited any vertex at distance > min(pq) *)
+	(* we didn't visit any vertex at distance > min(pq) *)
         (forall m:int_int. Min(m,pq) -> 
           forall x,d:int. shortest_path(src,x,d) -> d > snd(m) -> 
            not In(x,visited)) 
