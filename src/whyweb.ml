@@ -2,6 +2,14 @@ open Format
 open Project
 (* toggle *)
 
+let valid_color = "#00FF00"
+let invalid_color = "#FF0033"
+let failed_color = "#330000"
+let unknown_color = "#FFFF00"
+let cannotdecide_color = "#FF00FF"
+let running_color = "#0000FF"
+let timeout_color = "#990033"
+
 let toggle_lemma l = l.lemma_tags <- 
   List.map (fun (key,value) ->  
 	      if key = "ww_open" then 
@@ -242,20 +250,33 @@ let rec find_prover l =
     | (prover,(status,_,_,_))::l -> (prover,status)::(find_prover l)
     | [] -> []
 
-let goal_validity prover g =   
-  let list_prover = find_prover g.proof in
-  try 
-    match List.assoc prover list_prover with
-      | "valid" -> "Valid" 
-      | "timeout" -> "TimeOut"
-      | "cannotdecide" -> "CannotDecide"
-      | "invalid" ->  "Invalid"
-      | "failure"-> "Failed"
-      | "running" -> "Running"
-      | _ -> assert false
-  with Not_found -> "Invalid" 
+let validity nl valid = 
+  let(valid,color) =
+    match valid with 
+    | "valid" -> "Valid", valid_color
+    | "timeout" -> "TimeOut", timeout_color
+    | "cannotdecide" -> "CannotDecide", cannotdecide_color
+    | "invalid" ->  "Invalid", invalid_color
+    | "failure"-> "Failed", failed_color
+    | "running" -> "Running", running_color
+    | _ -> assert false 
+  in
+  wprint "</td><td bgcolor=\"%s\"><a href=\"%s\">%s</a></td></tr>" 
+   color nl valid
 
-let goal_is_valid prover g = goal_validity prover g = "Valid" 
+let goal_validity prover g nl =   
+  let list_prover = find_prover g.proof in
+  let valid =  try 
+      List.assoc prover list_prover 
+    with Not_found -> "invalid" 
+  in 
+  validity nl valid
+
+let goal_is_valid prover g = 
+  let (v,_,_,_) = try List.assoc prover g.proof  
+    with Not_found -> ("invalid","","","")
+  in
+  v = "valid"
 
 let behavior_validity prover b =
   List.for_all (goal_is_valid prover)  b.behavior_goals 
@@ -295,7 +316,7 @@ let goal g indice indent =
       with Sys_error _ -> 
 	wprint "File %s don't exist" g.goal_file;
     end;
-  wprint "</td><td><a href=\"%s\">%s</a></td></tr>" nl (goal_validity "ergo" g)
+  goal_validity "ergo" g nl
 
 let string_of_addr addr = 
   match addr with 
@@ -376,10 +397,8 @@ h1 {
 				  let (_,(status,_,_,_)) = pr  in 
 				  status = "valid") l.lemma_goal.proof) 
 	       !proj.project_lemmas) 
-	 then wprint "<td><a href=\"%s\">Valid</td></tr>
-" nl
-	 else wprint "<td><a href=\"%s\">Invalid</td></tr>
-" nl
+	 then validity nl "valid"
+	 else validity nl "invalid" 
 	 ;
 	 let indice = ref 1 in
 	 List.iter
@@ -407,10 +426,8 @@ h1 {
 ";
 	 let nl = reg_com (`LaunchErgoFunctions) in 
 	 if (List.for_all (function_validity "ergo") !proj.project_functions) 
-	 then wprint "<td><a href=\"%s\">Valid</td></tr>
-" nl
-	 else wprint "<td><a href=\"%s\">Invalid</td></tr>
-" nl
+	 then validity nl "valid" 
+	 else validity nl "invalid"
 	 ;
 	 let indice = ref 1 in
 	 List.iter
@@ -425,10 +442,8 @@ h1 {
 	      wprint "%d : <a href=\"%s#%d\">%s</a></td>
 " !indice nt !current_line f.function_name;
 	      if (function_validity "ergo" f)
-	      then wprint "<td><a href=\"%s\">Valid</td></tr>
-" nl
-	      else wprint "<td><a href=\"%s\">Invalid</td></tr>
-" nl
+	      then validity nl "valid"
+	      else validity nl "invalid"
 		;
 	      indice := !indice +1;
 	      if op then
@@ -449,11 +464,9 @@ h1 {
 		       wprint "%d : <a href=\"%s#%d\">%s</a></td>>
 " !indice nt !current_line b.behavior_name;
 		       if (behavior_validity "ergo" b)
-		       then wprint "<td><a href=\"%s\">Valid</td></tr>
-" nl
-		       else wprint "<td><a href=\"%s\">Invalid</td></tr>
-" nl
-	 ;
+		       then validity nl "valid"
+		       else validity nl "invalid"
+		       ;
 		       indice := !indice +1;
 		       if op then
 			 begin
