@@ -79,11 +79,11 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	$(EXECJESSIE) $<
 	make -f $*.makefile $@
 
-SCID: SCID.java
-	rm -f SCID.jc
-	$(EXECKRAKATOA) -javacard SCID.java
-	$(EXECJESSIE) -why-opt -fast-wp -main SCID_process SCID.jc
-	make -f SCID.makefile gui
+# SCID: SCID.java
+# 	rm -f SCID.jc
+# 	$(EXECKRAKATOA) -javacard SCID.java
+# 	$(EXECJESSIE) -why-opt -fast-wp -main SCID_process SCID.jc
+# 	make -f SCID.makefile gui
 
 %: %.java
 	rm -f $*.jc
