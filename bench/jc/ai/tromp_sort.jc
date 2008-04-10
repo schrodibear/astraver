@@ -25,36 +25,37 @@ unit sort(integerT[0..] t, integer j)
   behavior sort:
     ensures true;
 {
-    integer k = 0;
-    integer l = 0;
-    integer m = 0;
+    var integer k = 0;
+    var integer l = 0;
+    var integer m = 0;
 
-    integer i = j / 2;
+    var integer i = j / 2;
     invariant true;
     variant 0;
     while (j > 1)
     {
-	if (i < 0) {
+	if (i < 0) then {
 	    k = (t + i--).integerM; 
 	} else
-	    if (i > 0) { 	 
+	    if (i > 0) then { 	 
 	    k = (t + i--).integerM; 
 	} else {
 	    k = (t + j).integerM; 
 	    (t + j--).integerM = (t + 1).integerM; 
-	}
+	};
         l = i + 1;
 	invariant true;
 	variant 0;
 	while ((m = 2 * l) <= j)
         {
-	   if (m < j && (t + m).integerM < (t + m + 1).integerM)
-	       m++;
-	   if ((t + m).integerM <= k)
+	   if (m < j && (t + m).integerM < (t + m + 1).integerM) then
+	       m++
+	   ;
+	   if ((t + m).integerM <= k) then
 	     break;
 	   (t + l).integerM = (t + m).integerM;
            l = m;
-	}
+	};
 	(t + l).integerM = k;
     }
 }

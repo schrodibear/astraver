@@ -15,8 +15,8 @@ unit g(integer j) {
 }
 
 unit wrapper() {
-    integer k = 0;
-    while (k < 10) ; {
+    var integer k = 0;
+    while (k < 10) {
         g(k);
 	k++;
     }

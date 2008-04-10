@@ -11,7 +11,7 @@ integer max(integer x, integer y)
   behavior result_is_lub:
     ensures \forall integer z ; z >= x && z >= y ==> z >= \result;
 {
-  if (x >= y) return x; 
+  if x >= y then return x;
   return y;
 } 
 

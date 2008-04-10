@@ -5,7 +5,7 @@ type list = {
 }
 
 unit sum(list[0] l) {
-    integer s = 0;
+    var integer s = 0;
     invariant true;
     variant 0;
     while (l != null) 

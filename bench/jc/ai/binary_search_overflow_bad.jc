@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Pol
 
 type intP = {
@@ -9,18 +10,18 @@ type intP = {
 type int16 = -32768..32767
 
 integer binary_search(intP[..] t, integer n, integer v) {
-    integer low = 0;
-    integer up = (n-1) :> int16;
-    while (low <= up ) ; {
-	integer m = (((low + up) :> int16) / 2) :> int16;
-	if ((t + m).intM < v)
-	    low = (m + 1) :> int16;
-	else if ((t + m).intM > v)
-	    up = (m - 1) :> int16;
+    var integer low = 0;
+    var integer up = (n-1) :> int16;
+    while (low <= up ) {
+	var integer m = (((low + up) :> int16) / 2) :> int16;
+	if ((t + m).intM < v) then
+	    low = (m + 1) :> int16
+	else if ((t + m).intM > v) then
+	    up = (m - 1) :> int16
 	else {
 	    return m;
 	}
-    }
+    };
     return -1;
 }
 

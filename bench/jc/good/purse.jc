@@ -53,7 +53,7 @@ unit withdraw2(purse[0] this, integer s)
      assigns \nothing;
      ensures s > \old(this.balance);
 {
-    if (this.balance >= s) {
+    if this.balance >= s then {
 	this.balance -= s;
     }
     else {
@@ -73,6 +73,7 @@ boolean test2(purse[0] p)
     catch NoCreditException e { 
 	return false; 
     }
+    end
 }
 
 /* introducing dynamic memory allocation */

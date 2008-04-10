@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Oct
 
 type intP = {
@@ -7,13 +8,13 @@ type intP = {
 }
 
 integer bar(intP[..] p, integer n) {
-    integer i = 0;
+    var integer i = 0;
     while (true) {
-        if (i < n) {
+        if (i < n) then {
 	    (p + i).intM = 0;
-        }
+        };
         i = i + 1;
-    }
+    };
     return i;
 }
 

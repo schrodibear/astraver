@@ -17,7 +17,7 @@ integer test()
   behavior default:
     ensures \result == 0;
 {
-    T[0] t = new T[1];
+    var T[0] t = new T[1];
     t.p = new intM[1];
     return m(t.p);
 }

@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Oct
 
 exception Goto__L of unit
@@ -7,39 +8,41 @@ exception Goto__L of unit
 integer foo(integer s, integer n)
   requires true;
 {  
-   integer i;
-   integer tmp;
+   var integer i;
+   var integer tmp;
    {  
       i = 0;
       invariant true;
       while (true)
       {  
          {  
-            if ((i < n)) 
+            if ((i < n)) then
               try 
                 {  
-                   if ((0 <= i)) 
-                     if ((i < s)) 
-                       tmp = 1;
+                   if ((0 <= i)) then
+                     if ((i < s)) then
+                       tmp = 1
                      else 
-                       tmp = 0;
+                       tmp = 0
                    else 
                      tmp = 0;
                    throw Goto__L ();
                    tmp = 0;
                    throw Goto__L ();
                 }
-              catch Goto__L __dummy 
+              catch Goto__L __dummy {
                 assert (tmp != 0);
+	      }
               finally
-                {  
+		  {  ()
                 }
+	      end
             else 
-              {  
-              }
+		{  ()
+              };
             i = (i + 1);
          }
-      }
+      };
       return i;
    }
 }

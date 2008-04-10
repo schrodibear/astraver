@@ -10,19 +10,19 @@ unit n(integer k) {
     m(k);
 }
 
-and unit f(integer i) {
+unit f(integer i) {
   assert (0 <= i && i <= 4);
 }
 
-and unit g(integer j) {
+unit g(integer j) {
     f(j);
 }
 
-and unit h(integer k) {
+unit h(integer k) {
     g(k);
 }
 
-and unit m(integer k) {
+unit m(integer k) {
     h(k);
 }
 

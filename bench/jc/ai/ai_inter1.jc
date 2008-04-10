@@ -12,7 +12,7 @@ integer f(integer a, integer b) {
 }
 
 unit main() {
-     integer i = f(10, 1 + 1);
+     var integer i = f(10, 1 + 1);
 }
 
 /*

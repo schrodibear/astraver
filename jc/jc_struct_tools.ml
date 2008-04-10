@@ -33,7 +33,7 @@ open Jc_env
 open Jc_envset
 
 (* keep the pointers only and return their tag_or_variant *)
-let fields_tov = List.flatten **
+let fields_tov = List.flatten $
   (List.map
      (fun fi -> match fi.jc_field_info_type with
 	| JCTpointer(tov, _, _) -> [tov]

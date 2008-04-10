@@ -15,9 +15,9 @@ unit f(intM[0..] t) {
 }
 
 unit main() {
-   intM[0..] t1 = new intM[5];
+   var intM[0..] t1 = new intM[5];
    f(t1);
-   intM[0..] t2 = new intM[10];
+   var intM[0..] t2 = new intM[10];
    f(t2);
 }
 

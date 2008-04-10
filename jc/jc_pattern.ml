@@ -55,7 +55,7 @@ module Pattern(AM: TAssertionMaker) = struct
     [vars] is a list of [name, user_name, ty] where [user_name] is a variable
       binded by the pattern, [name] its unique name used in [cond], and
       [ty] its [jc_type]. *)
-  let rec pattern arg ty pat = match pat.jc_pattern_node with
+  let rec pattern arg ty pat = match pat#node with
     | JCPstruct(st, fpl) ->
 	let subtag = AM.make_subtag arg st in
 	List.fold_left

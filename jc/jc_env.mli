@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.52 2008-04-02 08:38:13 marche Exp $ *)
+(* $Id: jc_env.mli,v 1.53 2008-04-10 16:05:55 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -48,6 +48,7 @@ type jc_type =
   | JCTenum of enum_info
   | JCTpointer of tag_or_variant * Num.num option * Num.num option
   | JCTnull
+  | JCTany
 
 and tag_or_variant =
   | JCtag of struct_info

@@ -25,8 +25,8 @@ integer getN()
 ;
 
 unit f0() {
-   integer tmp = getN();
-   if (n < 0) g();
+   var integer tmp = getN();
+   if (n < 0) then g();
 }
 
 
@@ -35,9 +35,9 @@ type intM = { integer intP; }
 intM[0..] buffer;
 
 unit f1() requires \offset_max(buffer) >= 1; {
-   intM[0..] tmp = buffer;
-   integer n = (tmp + 1).intP;
-   if (n != h()) g();
+   var intM[0..] tmp = buffer;
+   var integer n = (tmp + 1).intP;
+   if (n != h()) then g();
 }
 
 
@@ -48,15 +48,15 @@ intM[0..] getBuffer()
 ;
 
 unit f2() requires \offset_max(buffer) >= 1; {
-   intM[0..] tmp = getBuffer();
-   integer n = (tmp + 1).intP;
-   if (n != h()) g();
+   var intM[0..] tmp = getBuffer();
+   var integer n = (tmp + 1).intP;
+   if (n != h()) then g();
 }
 
 unit f3() requires \offset_max(buffer) >= 1; {
-   intM[0..] tmp = getBuffer();
-   integer n = ((tmp + 1).intP & 0xFF);
-   if (n != h()) g();
+   var intM[0..] tmp = getBuffer();
+   var integer n = ((tmp + 1).intP & 0xFF);
+   if (n != h()) then g();
 }
 
 
@@ -83,7 +83,7 @@ integer i(APDU[0] this_33)
 ;
 
 unit f4(APDU[0] this_33) requires \offset_max(this_33._buffer) >= 1; {
-   intM[0..] tmp = APDU_getBuffer(this_33);
-   integer n = ((tmp + 1).intP & 0xFF);
-   if (n != i(this_33)) g();
+   var intM[0..] tmp = APDU_getBuffer(this_33);
+   var integer n = ((tmp + 1).intP & 0xFF);
+   if (n != i(this_33)) then g();
 }

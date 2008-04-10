@@ -30,7 +30,7 @@ type T = {
 
 unit add(T[0] res, T[0] n1, T[0] n2) 
 {
-    if (n1.my_tag == 0 && n2.my_tag == 0) {
+    if n1.my_tag == 0 && n2.my_tag == 0 then {
 	res.my_tag = 0;
 	(res.v :> U_x).x = (n1.v :> U_x).x + (n2.v :> U_x).x;
     }

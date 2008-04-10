@@ -33,7 +33,7 @@ unit push(queue[0] q, char[0] c)
     ensures !q.empty && (q.contents+\old(q.last)).charM == c;
 {
   (q.contents+q.last++).charM = c;
-  if (q.last == q.length) q.last = 0;
+  if q.last == q.length then q.last = 0;
   q.empty = false;
   q.full = q.first == q.last;
 }
@@ -44,8 +44,8 @@ char[0] pop(queue[0] q)
     assigns q.empty, q.full, q.first;
     ensures !q.full && \result == (q.contents+\old(q.first)).charM;
 {
-  char[0] r = (q.contents+q.first++).charM;
-  if (q.first == q.length) q.first = 0;
+  var char[0] r = (q.contents+q.first++).charM;
+  if q.first == q.length then q.first = 0;
   q.full = false;
   q.empty = q.last == (q.first + 1) % q.length;
   return r;
@@ -56,7 +56,7 @@ boolean test(queue[0] q, queue[0] q1)
   behavior q1_unchanged:
    ensures \result == \old(q1.empty); 
 {
-  char[0] c = pop(q);
+  var char[0] c = pop(q);
   return q1.empty;
 }
 

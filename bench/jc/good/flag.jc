@@ -27,7 +27,7 @@ unit swap(colorT[..] t, integer i, integer j)
     ensures (t+i).colorM == \old((t+j).colorM) && 
 	(t+j).colorM == \old((t+i).colorM);
 {
-    color z = (t+i).colorM;
+    var color z = (t+i).colorM;
     (t+i).colorM = (t+j).colorM;
     (t+j).colorM = z;
 }
@@ -42,9 +42,9 @@ unit flag(colorT[0..] t, integer length)
 	   isMonochrome(t,b,r-1,WHITE) &&
 	   isMonochrome(t,r,length-1,RED);
 {
-    integer b = 0;
-    integer i = 0;
-    integer r = length;
+    var integer b = 0;
+    var integer i = 0;
+    var integer r = length;
     invariant
 	0 <= b && b <= i && i <= r && r <= length &&
 	isMonochrome(t,0,b-1,BLUE) &&

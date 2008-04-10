@@ -27,12 +27,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.270 2008-04-09 14:32:34 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.271 2008-04-10 16:05:55 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_pervasives
+open Jc_constructors
 open Jc_ast
 open Jc_invariants
 open Output
@@ -69,8 +70,8 @@ let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =
 
   let id,oldid = match id,oldid with
     | None,_ ->  
-	incr name_counter;
-	"JC_" ^ string_of_int !name_counter, oldid
+        incr name_counter;
+        "JC_" ^ string_of_int !name_counter, oldid
     | Some n, None -> n,Some n
     | Some n, Some o -> n, Some o
   in
@@ -80,22 +81,22 @@ let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =
   let (name,f,l,b,e,kind2) = 
     try
       match oldid with
-	| None -> 
-	    raise Not_found
-	| Some n -> 
-	    let (f,l,b,e,k,o) = Hashtbl.find Jc_options.locs_table n in
+        | None -> 
+            raise Not_found
+        | Some n -> 
+            let (f,l,b,e,k,o) = Hashtbl.find Jc_options.locs_table n in
 (*
-	    Format.eprintf "Jc_interp: reg_loc id '%s' found@." oldid;
+            Format.eprintf "Jc_interp: reg_loc id '%s' found@." oldid;
 *)
-	    Jc_options.lprintf "keeping old location for id '%s'@." n;
-	    let n =
-	      try 
-		match List.assoc "name" o with
-		  | Rc.RCident s | Rc.RCstring s -> Some s
-		  | _ -> raise Not_found
-	      with Not_found -> name
-	    in
-	    (n,f,l,b,e,k)
+            Jc_options.lprintf "keeping old location for id '%s'@." n;
+            let n =
+              try 
+                match List.assoc "name" o with
+                  | Rc.RCident s | Rc.RCstring s -> Some s
+                  | _ -> raise Not_found
+              with Not_found -> name
+            in
+            (n,f,l,b,e,k)
     with Not_found ->
 (*
       Format.eprintf "Jc_interp: reg_loc id '%s' not found@." id;
@@ -130,140 +131,151 @@ let print_locs fmt =
     (fun id (kind,name,beh,f,l,b,e) ->
        fprintf fmt "[%s]@\n" id;
        Option_misc.iter
-	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
+         (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
        Option_misc.iter
-	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
+         (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
        Option_misc.iter
-	 (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
+         (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
        fprintf fmt "file = \"%s\"@\n" f;
        fprintf fmt "line = %d@\n" l;
        fprintf fmt "begin = %d@\n" b;
        fprintf fmt "end = %d@\n@\n" e)
     locs_table
 
-(* consts *)
 
+(*******************************************************************************)
+(*                                  Operators                                  *)
+(*******************************************************************************)
 
-(*
-  match t with
-    | JCTnative _ | JCTlogic _ -> Base_type(tr_base_type t)
-    | JCTpointer _ -> Base_type(tr_base_type t)	
-*)
+let native_operator_type op = match snd op with
+  | `Unit -> Jc_pervasives.unit_type
+  | `Boolean -> Jc_pervasives.boolean_type
+  | `Integer -> Jc_pervasives.integer_type
+  | `Real -> Jc_pervasives.real_type
 
-let unary_op = function
-  | Uplus_int -> "uplus_int"
-  | Uminus_int -> "neg_int"
-  | Uplus_real -> "uplus_real"
-  | Uminus_real -> "uminus_real"
-  | Unot -> "not"
-  | Ubw_not -> "bw_compl"
+let unary_op: expr_unary_op -> string = function
+  | `Uminus, `Integer -> "neg_int"
+  | `Uminus, `Real -> "uminus_real"
+  | `Unot, `Boolean -> "not"
+  | `Ubw_not, `Integer -> "bw_compl"
+  | _ -> assert false (* not proper type *)
 
-let unary_arg_type = function
-  | Uplus_int 
-  | Uminus_int
-  | Ubw_not -> integer_type
-  | Uplus_real 
-  | Uminus_real -> real_type
-  | Unot -> boolean_type
+let term_unary_op = unary_op
 
-let bin_op = function
-  | Bgt_int -> "gt_int_"
-  | Blt_int -> "lt_int_"
-  | Bge_int -> "ge_int_"
-  | Ble_int -> "le_int_"
-  | Beq_int -> "eq_int_"
-  | Bneq_int -> "neq_int_"
-  | Badd_int -> "add_int"
-  | Bsub_int -> "sub_int"
-  | Bmul_int -> "mul_int"
-  | Bdiv_int -> "div_int_"
-  | Bmod_int -> "mod_int_"
-  | Beq_pointer -> "eq_pointer"
-  | Bneq_pointer -> "neq_pointer"
-  | Badd_real -> "add_real"
-  | Bsub_real -> "sub_real"
-  | Bmul_real -> "mul_real"
-  | Bdiv_real -> "div_real"
-  | Bneq_real -> "neq_real_"
-  | Beq_real -> "eq_real_"
-  | Bge_real -> "ge_real_"
-  | Ble_real -> "le_real_"
-  | Bgt_real -> "gt_real_"
-  | Blt_real -> "lt_real_"
-  | Beq_bool -> "eq_bool_"
-  | Bneq_bool -> "neq_bool_"
-  | Bbw_and -> "bw_and"
-  | Bbw_or -> "bw_or"
-  | Bbw_xor -> "bw_xor"
-  | Bshift_left -> "lsl"
-  | Blogical_shift_right -> "lsr"
-  | Barith_shift_right -> "asr"
-  | Blor | Bland -> assert false (* should be handled before for laziness *)
-  | Biff | Bimplies -> assert false (* never in expressions *)
+let bin_op: expr_bin_op -> string = function
+    (* integer *)
+  | `Bgt, `Integer -> "gt_int_"
+  | `Blt, `Integer -> "lt_int_"
+  | `Bge, `Integer -> "ge_int_"
+  | `Ble, `Integer -> "le_int_"
+  | `Beq, `Integer -> "eq_int_"
+  | `Bneq, `Integer -> "neq_int_"
+  | `Badd, `Integer -> "add_int"
+  | `Bsub, `Integer -> "sub_int"
+  | `Bmul, `Integer -> "mul_int"
+  | `Bdiv, `Integer -> "div_int_"
+  | `Bmod, `Integer -> "mod_int_"
+      (* pointer *)
+  | `Beq, `Pointer -> "eq_pointer"
+  | `Bneq, `Pointer -> "neq_pointer"
+      (* real *)
+  | `Bgt, `Real -> "gt_real_"
+  | `Blt, `Real -> "lt_real_"
+  | `Bge, `Real -> "ge_real_"
+  | `Ble, `Real -> "le_real_"
+  | `Beq, `Real -> "eq_real_"
+  | `Bneq, `Real -> "neq_real_"
+  | `Badd, `Real -> "add_real"
+  | `Bsub, `Real -> "sub_real"
+  | `Bmul, `Real -> "mul_real"
+  | `Bdiv, `Real -> "div_real_"
+      (* bool *)
+  | `Beq, `Boolean -> "eq_bool_"
+  | `Bneq, `Boolean -> "neq_bool_"
+      (* bitwise *)
+  | `Bbw_and, `Integer -> "bw_and"
+  | `Bbw_or, `Integer -> "bw_or"
+  | `Bbw_xor, `Integer -> "bw_xor"
+  | `Bshift_left, `Integer -> "lsl"
+  | `Blogical_shift_right, `Integer -> "lsr"
+  | `Barith_shift_right, `Integer -> "asr"
+  | _ -> assert false (* not proper type *)
 
-let term_bin_op = function
-  | Bgt_int -> "gt_int_bool"
-  | Blt_int -> "lt_int_bool"
-  | Bge_int -> "ge_int_bool"
-  | Ble_int -> "le_int_bool"
-  | Beq_int -> "eq_int_bool"
-  | Bneq_int -> "neq_int_bool"
-  | Badd_int -> "add_int"
-  | Bsub_int -> "sub_int"
-  | Bmul_int -> "mul_int"
-  | Bdiv_int -> "div_int"
-  | Bmod_int -> "mod_int"
-  | Beq_pointer -> "eq_pointer"
-  | Bneq_pointer -> "neq_pointer"
-  | Badd_real -> "add_real"
-  | Bsub_real -> "sub_real"
-  | Bmul_real -> "mul_real"
-  | Bdiv_real -> "div_real"
-  | Bneq_real -> "neq_real"
-  | Beq_real -> "eq_real"
-  | Bge_real -> "ge_real"
-  | Ble_real -> "le_real"
-  | Bgt_real -> "gt_real"
-  | Blt_real -> "lt_real"
-  | Beq_bool -> "eq_bool"
-  | Bneq_bool -> "neq_bool"
-  | Bbw_and -> "bw_and"
-  | Bbw_or -> "bw_or"
-  | Bbw_xor -> "bw_xor"
-  | Bshift_left -> "lsl"
-  | Blogical_shift_right -> "lsr"
-  | Barith_shift_right -> "asr"
-  | Blor | Bland -> assert false (* should be handled before for laziness *)
-  | Biff | Bimplies -> assert false (* never in terms *)
+let term_bin_op: term_bin_op -> string = function
+    (* integer *)
+  | `Bgt, `Integer -> "gt_int_bool"
+  | `Blt, `Integer -> "lt_int_bool"
+  | `Bge, `Integer -> "ge_int_bool"
+  | `Ble, `Integer -> "le_int_bool"
+  | `Beq, `Integer -> "eq_int_bool"
+  | `Bneq, `Integer -> "neq_int_bool"
+  | `Badd, `Integer -> "add_int"
+  | `Bsub, `Integer -> "sub_int"
+  | `Bmul, `Integer -> "mul_int"
+  | `Bdiv, `Integer -> "div_int"
+  | `Bmod, `Integer -> "mod_int"
+      (* pointer *)
+  | `Beq, `Pointer -> "eq_pointer"
+  | `Bneq, `Pointer -> "neq_pointer"
+  | `Bsub, `Pointer -> "sub_pointer"
+      (* real *)
+  | `Bgt, `Real -> "gt_real"
+  | `Blt, `Real -> "lt_real"
+  | `Bge, `Real -> "ge_real"
+  | `Ble, `Real -> "le_real"
+  | `Beq, `Real -> "eq_real"
+  | `Bneq, `Real -> "neq_real"
+  | `Badd, `Real -> "add_real"
+  | `Bsub, `Real -> "sub_real"
+  | `Bmul, `Real -> "mul_real"
+  | `Bdiv, `Real -> "div_real"
+      (* bool *)
+(*  | `Beq_bool, `Boolean -> "eq_bool"
+  | `Bneq_bool, `Boolean -> "neq_bool"*)
+      (* bitwise *)
+  | `Bbw_and, `Integer -> "bw_and"
+  | `Bbw_or, `Integer -> "bw_or"
+  | `Bbw_xor, `Integer -> "bw_xor"
+  | `Bshift_left, `Integer -> "lsl"
+  | `Blogical_shift_right, `Integer -> "lsr"
+  | `Barith_shift_right, `Integer -> "asr"
+      (* logical *)
+  | `Blor, _ | `Bland, _ -> 
+      assert false (* should be handled before for laziness *)
+  | `Biff, _ | `Bimplies, _ -> 
+      assert false (* never in terms *)
+  | _ -> assert false (* not proper type *)
 
-let pred_bin_op = function
-  | Bgt_int -> "gt_int"
-  | Blt_int -> "lt_int"
-  | Bge_int -> "ge_int"
-  | Ble_int -> "le_int"
-  | Beq_int -> "eq"
-  | Bneq_int -> "neq"
-  | Beq_pointer -> "eq"
-  | Bneq_pointer -> "neq"
-  | Bneq_real -> "neq"
-  | Beq_real -> "eq"
-  | Blor -> "bor"
-  | Bland -> "band"
-  | Biff | Bimplies -> assert false (* TODO *)
-  | _ -> assert false (* TODO *)
+let pred_bin_op: pred_bin_op -> string = function
+    (* integer *)
+  | `Bgt, `Integer -> "gt_int"
+  | `Blt, `Integer -> "lt_int"
+  | `Bge, `Integer -> "ge_int"
+  | `Ble, `Integer -> "le_int"
+  | `Beq, `Integer -> "eq_int"
+  | `Bneq, `Integer -> "neq_int"
+      (* pointer *)
+  | `Beq, `Pointer -> "eq"
+  | `Bneq, `Pointer -> "neq"
+      (* real *)
+  | `Beq, `Real -> "eq_real"
+  | `Bneq, `Real -> "neq_real"
+      (* logical *)
+  | `Blor, `Boolean -> "bor"
+  | `Bland, `Boolean -> "band"
+  | `Biff, `Boolean
+  | `Bimplies, `Boolean -> assert false (* TODO *)
+      (* boolean *)
+  | `Beq, `Boolean -> "eq_bool"
+  | `Bneq, `Boolean -> "eq_bool"
+  | op, opty ->
+      Jc_typing.typing_error Loc.dummy_position
+        "Can't use operator %s with type %s in assertions"
+        (string_of_op op) (string_of_op_type opty)
 
-let bin_arg_type loc = function
-  | Bgt_int | Blt_int | Bge_int | Ble_int 
-  | Beq_int | Bneq_int 
-  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
-  | Bbw_and | Bbw_or | Bbw_xor 
-  | Blogical_shift_right | Barith_shift_right | Bshift_left -> integer_type
-  | Biff|Bimplies|Blor|Bland -> boolean_type
-  | Bdiv_real | Bmul_real | Bsub_real | Badd_real
-  | Bneq_real | Beq_real | Bge_real
-  | Ble_real | Bgt_real | Blt_real -> real_type
-  | Beq_bool | Bneq_bool -> boolean_type
-  | Bneq_pointer | Beq_pointer -> assert false
+(*******************************************************************************)
+(*                                  Coercions                                  *)
+(*******************************************************************************)
 
 let logic_enum_of_int n = n.jc_enum_info_name ^ "_of_integer"
 let safe_fun_enum_of_int n = "safe_" ^ n.jc_enum_info_name ^ "_of_integer_"
@@ -286,6 +298,7 @@ let equality_op_for_type = function
   | JCTenum ei -> eq_of_enum ei
   | JCTpointer _
   | JCTnull ->  "eq_pointer"
+  | JCTany -> assert false
 
 let term_coerce ?(cast=false) loc tdest tsrc e =
   match tdest, tsrc with
@@ -293,37 +306,37 @@ let term_coerce ?(cast=false) loc tdest tsrc e =
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTenum ri1, JCTenum ri2 ->
-	assert cast; (* Typing should have inserted an explicit cast *)
-	let e' = LApp(logic_int_of_enum ri2,[e]) in
-	LApp(logic_enum_of_int ri1,[e'])
+        assert cast; (* Typing should have inserted an explicit cast *)
+        let e' = LApp(logic_int_of_enum ri2,[e]) in
+        LApp(logic_enum_of_int ri1,[e'])
     | JCTnative Tinteger, JCTenum ri ->
-	let e' = LApp(logic_int_of_enum ri,[e]) in
-	  begin
-	    match e with
-	      | Tnamed(n,_) -> Tnamed(n,e')
-	      | _ -> e'
-	  end
+        let e' = LApp(logic_int_of_enum ri,[e]) in
+          begin
+            match e with
+              | Tnamed(n,_) -> Tnamed(n,e')
+              | _ -> e'
+          end
     | JCTenum ri, JCTnative Tinteger ->
 (*
-	Jc_typing.typing_error loc 
-	  "can't coerce type %a to type %a" 
-	  print_type tsrc print_type tdest
+        Jc_typing.typing_error loc 
+          "can't coerce type %a to type %a" 
+          print_type tsrc print_type tdest
 ;
-	assert false (* a explicit cast should be required by jc_typing *)
+        assert false (* a explicit cast should be required by jc_typing *)
 *)
-	LApp(logic_enum_of_int ri,[e]) 
+        LApp(logic_enum_of_int ri,[e]) 
     | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
     | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
-	when Jc_typing.substruct st2 st1 -> e
+        when Jc_typing.substruct st2 st1 -> e
     | JCTpointer (JCtag st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
-	LApp("downcast", 
-	     [ LVar (tag_table_name (JCtag st)) ; e ;
-	       LVar (tag_name st) ])	
+        LApp("downcast", 
+             [ LVar (tag_table_name (JCtag st)) ; e ;
+               LVar (tag_name st) ])    
     |  _ -> 
-	 Jc_typing.typing_error loc 
-	   "can't coerce type %a to type %a" 
-	   print_type tsrc print_type tdest
-	   
+         Jc_typing.typing_error loc 
+           "can't coerce type %a to type %a" 
+           print_type tsrc print_type tdest
+           
 let make_guarded_app ~name (k : kind) loc f l =
   let lab =
     match name with
@@ -332,54 +345,54 @@ let make_guarded_app ~name (k : kind) loc f l =
   in
   let l = match l with
     | [Label(namelab,e)] when name = namelab ->
-	(* YM: same label used twice. See with Claude for semantics of labels.
-	   Current patch: remove label in inner expression. *)
-	[e]
+        (* YM: same label used twice. See with Claude for semantics of labels.
+           Current patch: remove label in inner expression. *)
+        [e]
     | [App(f,Label(namelab,e))] when name = namelab ->
-	(* Occurs on test [band.c] in FramaC *)
-	[App(f,e)]
+        (* Occurs on test [band.c] in FramaC *)
+        [App(f,e)]
     | _ -> l
   in
   Label (lab, make_app f l)
 
 let eval_integral_const e =
   let rec eval e =
-    match e.jc_expr_node with
+    match e#node with
       | JCEconst(JCCinteger s) -> Numconst.integer s 
       | JCErange_cast(e,_ri2) -> eval e
       | JCEunary(op,e) ->
-	  let v = eval e in
-	  begin match op with
-	    | Uplus_int -> v
-	    | Uminus_int -> minus_num v
-	    | Uplus_real | Uminus_real | Unot | Ubw_not -> 
-		failwith "Not integral const"
-	  end
+          let v = eval e in
+          begin match op with
+            | `Uminus, `Integer -> minus_num v
+            | `Uminus, (`Real | `Boolean | `Unit)
+            | `Unot, _
+            | `Ubw_not, _ ->
+                failwith "Not integral const"
+          end
       | JCEbinary(e1,op,e2) ->
-	  let v1 = eval e1 in
-	  let v2 = eval e2 in
-	  begin match op with
-	    | Badd_int -> v1 +/ v2
-	    | Bsub_int -> v1 -/ v2
-	    | Bmul_int -> v1 */ v2
-	    | Bdiv_int -> v1 // v2 (* TODO: or quo_num? *)
-	    | Bmod_int -> mod_num v1 v2
-	    | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
-	    | Blt_real | Bgt_real | Ble_real | Bge_real | Beq_real | Bneq_real 
-	    | Badd_real | Bsub_real | Bmul_real | Bdiv_real
-	    | Beq_bool | Bneq_bool | Bland | Blor | Bimplies | Biff
-	    | Beq_pointer | Bneq_pointer
-	    | Bbw_and | Bbw_or | Bbw_xor 
-	    | Bshift_left | Blogical_shift_right | Barith_shift_right ->
-		failwith "Not integral const"
-	  end
+          let v1 = eval e1 in
+          let v2 = eval e2 in
+          begin match op with
+            | `Badd, `Integer -> v1 +/ v2
+            | `Bsub, `Integer -> v1 -/ v2
+            | `Bmul, `Integer -> v1 */ v2
+            | `Bdiv, `Integer -> v1 // v2 (* TODO: or quo_num? *)
+            | `Bmod, `Integer -> mod_num v1 v2
+            | (`Badd | `Barith_shift_right | `Bbw_and | `Bbw_or | `Bbw_xor
+              | `Bdiv | `Beq | `Bge | `Bgt | `Ble | `Blogical_shift_right
+              | `Blt | `Bmod | `Bmul | `Bneq | `Bshift_left | `Bsub), _ ->
+                failwith "Not integral const"
+          end
       | JCEif(e1,e2,e3) ->
-	  (* TODO: write [eval_boolean_const] *)
-	  failwith "Not integral const"
-      | JCEconst _ | JCEvar _ | JCEshift _ | JCEsub_pointer _ | JCEderef _ 
+          (* TODO: write [eval_boolean_const] *)
+          failwith "Not integral const"
+      | JCEconst _ | JCEvar _ | JCEshift _ | JCEderef _ 
       | JCEinstanceof _ | JCEcast _ | JCEreal_cast _ | JCEoffset _ 
-      | JCEalloc _ | JCEfree _ ->
-	  failwith "Not integral const"
+      | JCEalloc _ | JCEfree _ | JCEmatch _ |JCEunpack _ |JCEpack _
+      | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
+      | JCEassert _ | JCElet _ | JCEassign_heap _ | JCEassign_var _ | JCEapp _
+      | JCEreturn_void ->
+          failwith "Not integral const"
   in
   try Some(eval e) with Failure "Not integral const" -> None
 
@@ -394,38 +407,36 @@ let coerce ~no_int_overflow lab loc tdest tsrc orig e =
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTenum ri1, JCTenum ri2 -> 
-	let e' = make_app (logic_int_of_enum ri2) [e] in
-	if no_int_overflow || fits_in_enum ri1 orig then 
-	  make_app (safe_fun_enum_of_int ri1) [e']
-	else
-	  make_guarded_app ~name:lab ArithOverflow loc 
-	    (fun_enum_of_int ri1) [e']
+        let e' = make_app (logic_int_of_enum ri2) [e] in
+        if no_int_overflow || fits_in_enum ri1 orig then 
+          make_app (safe_fun_enum_of_int ri1) [e']
+        else
+          make_guarded_app ~name:lab ArithOverflow loc 
+            (fun_enum_of_int ri1) [e']
     | JCTnative Tinteger, JCTenum ri ->
-	make_app (logic_int_of_enum ri) [e]
+        make_app (logic_int_of_enum ri) [e]
     | JCTenum ri, JCTnative Tinteger ->
-	if no_int_overflow || fits_in_enum ri orig then 
-	  make_app (safe_fun_enum_of_int ri) [e]
-	else
-	  make_guarded_app ~name:lab ArithOverflow loc (fun_enum_of_int ri) [e]
+        if no_int_overflow || fits_in_enum ri orig then 
+          make_app (safe_fun_enum_of_int ri) [e]
+        else
+          make_guarded_app ~name:lab ArithOverflow loc (fun_enum_of_int ri) [e]
     | _ , JCTnull -> e
     | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
     | JCTpointer (st1,_,_), JCTpointer (JCtag st2,_,_) 
-	when Jc_typing.substruct st2 st1 -> e
+        when Jc_typing.substruct st2 st1 -> e
     | JCTpointer (JCtag st,_,_), _  -> 
-	make_guarded_app ~name:lab DownCast loc "downcast_" 
-	  [ Deref (tag_table_name (JCtag st)) ; e ;
-	    Var (tag_name st) ]	
+        make_guarded_app ~name:lab DownCast loc "downcast_" 
+          [ Deref (tag_table_name (JCtag st)) ; e ;
+            Var (tag_name st) ] 
+    | JCTany, JCTany -> e
     | _ -> 
-	Jc_typing.typing_error loc 
-	  "can't coerce type %a to type %a" 
-	  print_type tsrc print_type tdest
+        Jc_typing.typing_error loc 
+          "can't coerce type %a to type %a" 
+          print_type tsrc print_type tdest
 
-(**************************
-
-terms and assertions 
-
-*************************)
-
+(*******************************************************************************)
+(*                                    Terms                                    *)
+(*******************************************************************************)
 
 let lvar ?(assigned=true) ?(label_in_name=false) label v =
   if label_in_name then
@@ -433,14 +444,19 @@ let lvar ?(assigned=true) ?(label_in_name=false) label v =
   else
     if assigned then
       match label with 
-	| LabelHere -> LVar v
-	| LabelOld -> LVarAtLabel(v,"")
-	| LabelPre -> LVarAtLabel(v,"init")
-	| LabelPost -> LVar v
-	| LabelName l -> LVarAtLabel(v,l.label_info_final_name)
+        | LabelHere -> LVar v
+        | LabelOld -> LVarAtLabel(v,"")
+        | LabelPre -> LVarAtLabel(v,"init")
+        | LabelPost -> LVar v
+        | LabelName l -> LVarAtLabel(v,l.label_info_final_name)
     else LVar v
 
-let var v = Var v
+let nvar v = Var v
+
+let var v =
+  if v.jc_var_info_assigned 
+  then Deref v.jc_var_info_final_name
+  else Var v.jc_var_info_final_name
 
 let lvar_info label v = 
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
@@ -452,140 +468,133 @@ let lvar_info label v =
 let rec term ~global_assertion label oldlabel t =
   let ft = term ~global_assertion label oldlabel in
   let t', lets =
-  match t.jc_term_node with
+  match t#node with
     | JCTconst JCCnull -> LVar "null", []
     | JCTvar v -> lvar_info label v, []
     | JCTconst c -> LConst(const c), []
-    | JCTunary(op,t1) ->
-	let t1', lets = ft t1 in
-	LApp (unary_op op, 
-	      [term_coerce t.jc_term_loc 
-		 (unary_arg_type op) t1.jc_term_type t1' ]), lets
-    | JCTbinary(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-	let t1', lets1 = ft t1 in
-	let t2', lets2 = ft t2 in
-	LApp (term_bin_op op, [ t1'; t2']), lets1@lets2
-    | JCTbinary(t1,Bland,t2) ->
-	assert false (* should be an assertion *)
-    | JCTbinary(t1,Blor,t2) ->
-	assert false (* should be an assertion *)
-    | JCTbinary(t1,op,t2) ->
-	let t1', lets1 = ft t1 in
-	let t2', lets2 = ft t2 in
-	let t = bin_arg_type t.jc_term_loc op in
-	LApp (term_bin_op op, 
-	      [ term_coerce t1.jc_term_loc t 
-		  t1.jc_term_type t1'; 
-		term_coerce t2.jc_term_loc t 
-		  t2.jc_term_type t2']), lets1@lets2
+    | JCTunary(op, t1) ->
+        let t1', lets = ft t1 in
+        let opty = native_operator_type op in
+        LApp(unary_op op, [term_coerce t#loc opty t1#typ t1']),
+        lets
+    (* binary operators on pointers (no coercion) *)
+    | JCTbinary(t1, (_, `Pointer as op), t2) ->
+        let t1', lets1 = ft t1 in
+        let t2', lets2 = ft t2 in
+        LApp (term_bin_op op, [ t1'; t2']), lets1@lets2
+    (* binary operators on native types *)
+    | JCTbinary(t1, (_, #native_operator_type as op), t2) ->
+        let t1', lets1 = ft t1 in
+        let t2', lets2 = ft t2 in
+        let t = native_operator_type op in
+        LApp (term_bin_op op,
+              [ term_coerce t1#loc t t1#typ t1'; 
+                term_coerce t2#loc t t2#typ t2']),
+        lets1@lets2
     | JCTshift(t1,t2) -> 
-	let t1', lets1 = ft t1 in
-	let t2', lets2 = ft t2 in
-	LApp("shift",[t1'; 
-		      term_coerce t2.jc_term_loc integer_type 
-			t2.jc_term_type t2']), lets1@lets2
-    | JCTsub_pointer(t1,t2) -> 
-	let t1', lets1 = ft t1 in
-	let t2', lets2 = ft t2 in
-	LApp("sub_pointer",[t1'; t2']), lets1@lets2
+        let t1', lets1 = ft t1 in
+        let t2', lets2 = ft t2 in
+        LApp("shift",[t1'; 
+                      term_coerce t2#loc integer_type 
+                        t2#typ t2']), lets1@lets2
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,lab,fi) -> 
-	let t', lets = ft t in
-	let mem = field_region_memory_name(fi,t.jc_term_region) in
-	let deref = 
-	  LApp("select",[lvar ~label_in_name:global_assertion lab mem; t'])
-	in
-	let deref =
-	  if field_of_union fi then
-	    (* Translate back access to union type to field type *)
-	    if integral_union (union_of_field fi) then
-	      (* Type of union is integer, and type of field an integral type *)
-	      match fi.jc_field_info_type with
-		| JCTnative Tinteger -> deref
-		| JCTenum ri -> LApp(logic_enum_of_int ri,[deref])
-		| _ -> assert false
-	    else LApp(logic_field_of_union fi,[deref])
-	  else deref
-	in
-	deref, lets
+        let t', lets = ft t in
+        let mem = field_region_memory_name(fi,t#region) in
+        let deref = 
+          LApp("select",[lvar ~label_in_name:global_assertion lab mem; t'])
+        in
+        let deref =
+          if field_of_union fi then
+            (* Translate back access to union type to field type *)
+            if integral_union (union_of_field fi) then
+              (* Type of union is integer, and type of field an integral type *)
+              match fi.jc_field_info_type with
+                | JCTnative Tinteger -> deref
+                | JCTenum ri -> LApp(logic_enum_of_int ri,[deref])
+                | _ -> assert false
+            else LApp(logic_field_of_union fi,[deref])
+          else deref
+        in
+        deref, lets
     | JCTapp app ->
-	let f = app.jc_app_fun and l = app.jc_app_args in
-	let args, lets = List.fold_right
-	  (fun arg (args, lets) ->
-	     let arg', arglets = ft arg in
-	     arg'::args, arglets@lets)
-	  l ([], [])
-	in
-	let args' = 
-	  try
-	    List.map2 (fun x y -> x, y) l args 
-	  with Invalid_argument _ -> assert false
-	in
-	let args =
-	  try
-	    List.map2 
-	      (fun vi (t, t') -> 
-		 term_coerce t.jc_term_loc 
-		   vi.jc_var_info_type t.jc_term_type t')
-	      f.jc_logic_info_parameters args'
-	  with Invalid_argument _ -> 
-	    eprintf "fun = %s, len pars = %d, len args' = %d@." 
-	      f.jc_logic_info_name 
-	      (List.length f.jc_logic_info_parameters)
-	      (List.length args');
-	    assert false
-	in
-	make_logic_fun_call ~label_in_name:global_assertion f args
-	  app.jc_app_region_assoc app.jc_app_label_assoc, lets
+        let f = app.jc_app_fun and l = app.jc_app_args in
+        let args, lets = List.fold_right
+          (fun arg (args, lets) ->
+             let arg', arglets = ft arg in
+             arg'::args, arglets@lets)
+          l ([], [])
+        in
+        let args' = 
+          try
+            List.map2 (fun x y -> x, y) l args 
+          with Invalid_argument _ -> assert false
+        in
+        let args =
+          try
+            List.map2 
+              (fun vi (t, t') -> 
+                 term_coerce t#loc 
+                   vi.jc_var_info_type t#typ t')
+              f.jc_logic_info_parameters args'
+          with Invalid_argument _ -> 
+            eprintf "fun = %s, len pars = %d, len args' = %d@." 
+              f.jc_logic_info_name 
+              (List.length f.jc_logic_info_parameters)
+              (List.length args');
+            assert false
+        in
+        make_logic_fun_call ~label_in_name:global_assertion f args
+          app.jc_app_region_assoc app.jc_app_label_assoc, lets
     | JCTold(t) -> term ~global_assertion oldlabel oldlabel t
     | JCTat(t,lab) -> term ~global_assertion lab oldlabel t
     | JCToffset(k,t,st) -> 
-	let alloc = 
-	  alloc_region_table_name (JCtag st, t.jc_term_region)
-	in
-	let f = match k with
-	  | Offset_min -> "offset_min"
-	  | Offset_max -> "offset_max"
-	in
-	let t', lets = ft t in
-	LApp(f,[LVar alloc; t']), lets
+        let alloc = 
+          alloc_region_table_name (JCtag st, t#region)
+        in
+        let f = match k with
+          | Offset_min -> "offset_min"
+          | Offset_max -> "offset_max"
+        in
+        let t', lets = ft t in
+        LApp(f,[LVar alloc; t']), lets
     | JCTinstanceof(t,label,ty) ->
-	let t', lets = ft t in
-	let tag = tag_table_name (JCtag ty) in
-	LApp("instanceof_bool",
-	     [lvar label tag; t';LVar (tag_name ty)]), lets
+        let t', lets = ft t in
+        let tag = tag_table_name (JCtag ty) in
+        LApp("instanceof_bool",
+             [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTcast(t,label,ty) ->
-	if struct_of_union ty then ft t else
-	  let t', lets = ft t in
-	  let tag = tag_table_name (JCtag ty) in
-	  LApp("downcast",
-	       [lvar label tag; t';LVar (tag_name ty)]), lets
+        if struct_of_union ty then ft t else
+          let t', lets = ft t in
+          let tag = tag_table_name (JCtag ty) in
+          LApp("downcast",
+               [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTrange_cast(t,ri) -> 
-	eprintf "range_cast in term: from %a to %a@." 
-	  print_type t.jc_term_type print_type (JCTenum ri);
-	let t', lets = ft t in
- 	let t' = term_coerce ~cast:true t.jc_term_loc (JCTenum ri) t.jc_term_type t' in
-	t', lets
+        eprintf "range_cast in term: from %a to %a@." 
+          print_type t#typ print_type (JCTenum ri);
+        let t', lets = ft t in
+        let t' = term_coerce ~cast:true t#loc (JCTenum ri) t#typ t' in
+        t', lets
     | JCTreal_cast(t,rc) ->
-	let t', lets = ft t in
-	let t' = match rc with
-	  | Integer_to_real ->
-	      term_coerce t.jc_term_loc real_type integer_type t'
-	  | Real_to_integer ->
-	      term_coerce t.jc_term_loc integer_type real_type t'
-	in
-	t', lets
+        let t', lets = ft t in
+        let t' = match rc with
+          | Integer_to_real ->
+              term_coerce t#loc real_type integer_type t'
+          | Real_to_integer ->
+              term_coerce t#loc integer_type real_type t'
+        in
+        t', lets
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
     | JCTmatch(t, ptl) ->
-	let t', lets1 = ft t in
-	(* TODO: use a temporary variable for t' *)
-	(* if the pattern-matching is incomplete, default value is true *)
-	let ptl', lets2 =
-	  pattern_list_term ft t' t.jc_term_type ptl (LConst(Prim_bool true)) in
-	ptl', lets1@lets2
+        let t', lets1 = ft t in
+        (* TODO: use a temporary variable for t' *)
+        (* if the pattern-matching is incomplete, default value is true *)
+        let ptl', lets2 =
+          pattern_list_term ft t' t#typ ptl (LConst(Prim_bool true)) in
+        ptl', lets1@lets2
   in
-  (if t.jc_term_label <> "" then
-     Tnamed(reg_loc ~id:t.jc_term_label t.jc_term_loc,t')
+  (if t#name_label <> "" then
+     Tnamed(reg_loc ~id:t#name_label t#loc,t')
    else
      t'), lets
 
@@ -594,8 +603,12 @@ let named_term ~global_assertion label oldlabel t =
   match t' with
     | Tnamed _ -> t', lets
     | _ -> 
-	let n = reg_loc t.jc_term_loc in
-	Tnamed(n,t'), lets
+        let n = reg_loc t#loc in
+        Tnamed(n,t'), lets
+
+(*******************************************************************************)
+(*                                  Assertions                                 *)
+(*******************************************************************************)
 
 let tag ~global_assertion label oldlabel = function
   | JCTtag st -> LVar (tag_name st), []
@@ -610,106 +623,108 @@ let rec assertion ~global_assertion label oldlabel a =
   and ftag = tag ~global_assertion label oldlabel
   in
   let a', lets =
-    match a.jc_assertion_node with
+    match a#node with
       | JCAtrue -> LTrue, []
       | JCAfalse -> LFalse, []
       | JCAif(t1,p2,p3) ->
-	  let t1', lets = ft t1 in
-	    LIf(t1', fa p2, fa p3), lets
+          let t1', lets = ft t1 in
+            LIf(t1', fa p2, fa p3), lets
       | JCAand l -> make_and_list (List.map fa l), []
       | JCAor l -> make_or_list (List.map fa l), []
       | JCAimplies(a1,a2) -> make_impl (fa a1) (fa a2), []
       | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2), []
       | JCAnot(a) -> LNot(fa a), []
-      | JCArelation(t1,((Beq_pointer | Bneq_pointer) as op),t2) ->
-	  let t1', lets1 = ft t1 in
-	  let t2', lets2 = ft t2 in
-	    LPred (pred_bin_op op, [ t1'; t2']), lets1@lets2
-      | JCArelation(t1,op,t2) ->
-	  let t1', lets1 = ft t1 in
-	  let t2', lets2 = ft t2 in
-	  let t = bin_arg_type a.jc_assertion_loc op in
-	    LPred(pred_bin_op op, 
-		  [ term_coerce t1.jc_term_loc t
-		      t1.jc_term_type t1'; 
-		    term_coerce t2.jc_term_loc t 
-		      t2.jc_term_type t2']), lets1@lets2
+      (* pointer relation (no coercion) *)
+      | JCArelation(t1, (_, `Pointer as op),t2) ->
+          let t1', lets1 = ft t1 in
+          let t2', lets2 = ft t2 in
+          LPred (pred_bin_op (op :> pred_bin_op), [ t1'; t2']), lets1@lets2
+      (* native type relation *)
+      | JCArelation(t1, (_, #native_operator_type as op), t2) ->
+          let t1', lets1 = ft t1 in
+          let t2', lets2 = ft t2 in
+          let t = native_operator_type op in
+            LPred(pred_bin_op (op :> pred_bin_op), 
+                  [ term_coerce t1#loc t
+                      t1#typ t1'; 
+                    term_coerce t2#loc t 
+                      t2#typ t2']), lets1@lets2
       | JCAapp app -> 
-	  let f = app.jc_app_fun in
-	  let l = app.jc_app_args in
-	  let args, lets = List.fold_right
-	    (fun arg (args, lets) ->
-	       let arg', arglets = ft arg in
-	       arg'::args, arglets@lets)
-	    l ([], [])
-	  in
-	  let args' = 
-	    try
-	      List.map2 (fun x y -> x, y) l args 
-	    with Invalid_argument _ -> assert false
-	  in
-	  (* No type verification for full_separated for the moment. *)
-	  if f.jc_logic_info_name = "full_separated" then
-	    make_logic_pred_call ~label_in_name:false f args [] [], lets
-	  else begin try
-	    make_logic_pred_call ~label_in_name:global_assertion f  
-	      (try
-		 List.map2 
-		   (fun vi (t, t') -> 
-		      term_coerce t.jc_term_loc 
-			vi.jc_var_info_type t.jc_term_type t')
-		   f.jc_logic_info_parameters args'
-	       with Invalid_argument _ -> assert false)
-	      app.jc_app_region_assoc
-	      app.jc_app_label_assoc, lets
-	  with Invalid_argument _ -> assert false
-	  end
+          let f = app.jc_app_fun in
+          let l = app.jc_app_args in
+          let args, lets = List.fold_right
+            (fun arg (args, lets) ->
+               let arg', arglets = ft arg in
+               arg'::args, arglets@lets)
+            l ([], [])
+          in
+          let args' = 
+            try
+              List.map2 (fun x y -> x, y) l args 
+            with Invalid_argument _ -> assert false
+          in
+          (* No type verification for full_separated for the moment. *)
+          if f.jc_logic_info_name = "full_separated" then
+            make_logic_pred_call ~label_in_name:false f args [] [], lets
+          else begin try
+            make_logic_pred_call ~label_in_name:global_assertion f  
+              (try
+                 List.map2 
+                   (fun vi (t, t') -> 
+                      term_coerce t#loc 
+                        vi.jc_var_info_type t#typ t')
+                   f.jc_logic_info_parameters args'
+               with Invalid_argument _ -> assert false)
+              app.jc_app_region_assoc
+              app.jc_app_label_assoc, lets
+          with Invalid_argument _ -> assert false
+          end
       | JCAquantifier (Forall, v, p) -> 
-	  LForall (v.jc_var_info_final_name,
-		   tr_base_type v.jc_var_info_type,
-		   fa p), []
+          LForall (v.jc_var_info_final_name,
+                   tr_base_type v.jc_var_info_type,
+                   fa p), []
       | JCAquantifier(Exists,v,p) -> 
-	  LExists(v.jc_var_info_final_name,
-		  tr_base_type v.jc_var_info_type,
-		  fa p), []
+          LExists(v.jc_var_info_final_name,
+                  tr_base_type v.jc_var_info_type,
+                  fa p), []
       | JCAold a -> assertion ~global_assertion oldlabel oldlabel a, []
       | JCAat(a,lab) -> assertion ~global_assertion lab oldlabel a, []
       | JCAbool_term(t) ->
-	  let t', lets = ft t in
-	  LPred("eq",[t'; LConst(Prim_bool true)]), lets
+          let t', lets = ft t in
+          LPred("eq",[t'; LConst(Prim_bool true)]), lets
       | JCAinstanceof(t,lab,ty) -> 
-	  let t', lets = ft t in
-	  let tag = tag_table_name (JCtag ty) in
-	  LPred("instanceof", [lvar lab tag; t'; LVar (tag_name ty)]), lets
+          let t', lets = ft t in
+          let tag = tag_table_name (JCtag ty) in
+          LPred("instanceof", [lvar lab tag; t'; LVar (tag_name ty)]), lets
       | JCAmutable(te, st, ta) ->
-	  let te', lets1 = ft te in
-	  let tag, lets2 = ftag ta.jc_tag_node in
-	  let mutable_field = LVar (mutable_name (JCtag st)) in
-	  LPred("eq", [ LApp("select", [ mutable_field; te' ]); tag ]),
-	  lets1@lets2
+          let te', lets1 = ft te in
+          let tag, lets2 = ftag ta#node in
+          let mutable_field = LVar (mutable_name (JCtag st)) in
+          LPred("eq", [ LApp("select", [ mutable_field; te' ]); tag ]),
+          lets1@lets2
       | JCAtagequality(t1, t2, h) ->
-	  let t1', lets1 = ftag t1.jc_tag_node in
-	  let t2', lets2 = ftag t2.jc_tag_node in
-	  LPred("eq", [ t1'; t2' ]), lets1@lets2
+          let t1', lets1 = ftag t1#node in
+          let t2', lets2 = ftag t2#node in
+          LPred("eq", [ t1'; t2' ]), lets1@lets2
       | JCAmatch(arg, pal) ->
-	  let arg', lets = ft arg in
-	  (* TODO: use a temporary variable for arg' *)
-	  let pal', _ = pattern_list_assertion fa arg' arg.jc_term_type
-	    pal LTrue in
-	  pal', lets
+          let arg', lets = ft arg in
+          (* TODO: use a temporary variable for arg' *)
+          let pal', _ = pattern_list_assertion fa arg' arg#typ
+            pal LTrue in
+          pal', lets
   in
   let a' = make_pred_binds lets a' in
-  if a.jc_assertion_label <> "" then
+  if a#name_label <> "" then
     begin
 (*
-      eprintf "Assertion has label %s@." a.jc_assertion_label;
+      eprintf "Assertion has label %s@." a#name_label;
 *)
-      LNamed(reg_loc ~id:a.jc_assertion_label a.jc_assertion_loc,a')
+      LNamed(reg_loc ~id:a#name_label a#loc,a')
     end
   else
     begin
       (*
-	eprintf "Assertion has no label@.";
+        eprintf "Assertion has no label@.";
       *)
       a'
     end
@@ -718,21 +733,21 @@ let rec assertion ~global_assertion label oldlabel a =
 let named_jc_assertion loc a =
   match a with
       (* | LTrue *) | LNamed _ -> 
-	(*
-	  eprintf "Assertion already named %s@." lab;
-	*)
-	a
+        (*
+          eprintf "Assertion already named %s@." lab;
+        *)
+        a
     | _ -> 
-	let n = reg_loc loc in 
-	  (*
-	    eprintf "Registering new name %s for assertion@." n;
-	  *)
-	  LNamed(n,a)
-	    
-	    
+        let n = reg_loc loc in 
+          (*
+            eprintf "Registering new name %s for assertion@." n;
+          *)
+          LNamed(n,a)
+            
+            
 let named_assertion ~global_assertion label oldlabel a =
   let a' = assertion ~global_assertion label oldlabel a in
-  named_jc_assertion a.jc_assertion_loc a'
+  named_jc_assertion a#loc a'
 
 let struct_alloc_arg a =
   alloc_table_name a, alloc_table_type a
@@ -740,11 +755,9 @@ let struct_alloc_arg a =
 let field_memory_arg fi =
   field_memory_name fi, field_memory_type fi
 
-(****************************
-
-logic functions
-
-****************************)
+(*******************************************************************************)
+(*                                Logic functions                              *)
+(*******************************************************************************)
 
 let tr_logic_const vi init acc =
   let decl =
@@ -753,30 +766,30 @@ let tr_logic_const vi init acc =
     match init with
       | None -> decl
       | Some(t,ty) ->
-	  let t', lets = term ~global_assertion:true LabelHere LabelHere t in
-	  let vi_ty = vi.jc_var_info_type in
-	  let t_ty = t.jc_term_type in
-	  (* eprintf "logic const: max type = %a@." print_type ty; *)
-	  let pred =
-	    LPred (
-	      "eq",
-	      [term_coerce Loc.dummy_position ty vi_ty (LVar vi.jc_var_info_name); 
-	       term_coerce t.jc_term_loc ty t_ty t'])
-	  in
-	let ax =
-	  Axiom(
-	    vi.jc_var_info_final_name ^ "_value_axiom",
-	    make_pred_binds lets pred
-	  )
-	in
-	ax::decl
+          let t', lets = term ~global_assertion:true LabelHere LabelHere t in
+          let vi_ty = vi.jc_var_info_type in
+          let t_ty = t#typ in
+          (* eprintf "logic const: max type = %a@." print_type ty; *)
+          let pred =
+            LPred (
+              "eq",
+              [term_coerce Loc.dummy_position ty vi_ty (LVar vi.jc_var_info_name); 
+               term_coerce t#loc ty t_ty t'])
+          in
+        let ax =
+          Axiom(
+            vi.jc_var_info_final_name ^ "_value_axiom",
+            make_pred_binds lets pred
+          )
+        in
+        ax::decl
 
 let tr_logic_fun li ta acc =
   let params =
     List.map
       (fun vi ->
-	 (vi.jc_var_info_final_name,
-	   tr_base_type vi.jc_var_info_type))
+         (vi.jc_var_info_final_name,
+           tr_base_type vi.jc_var_info_type))
       li.jc_logic_info_parameters
   in  
   let params_reads = 
@@ -784,23 +797,23 @@ let tr_logic_fun li ta acc =
   in
   let decl =
     match li.jc_logic_info_result_type, ta with
-	(* Predicate *)
+        (* Predicate *)
       | None, JCAssertion a -> 
-	  let a = assertion ~global_assertion:true LabelHere LabelHere a in
-	    Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
-	      (* Function *)
+          let a = assertion ~global_assertion:true LabelHere LabelHere a in
+            Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
+              (* Function *)
       | Some ty, JCTerm t -> 
-	  let ret = tr_base_type ty in
-	  let t, lets = term ~global_assertion:true LabelHere LabelHere t in
-	  assert (lets = []);
-	  Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
+          let ret = tr_base_type ty in
+          let t, lets = term ~global_assertion:true LabelHere LabelHere t in
+          assert (lets = []);
+          Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
       (* Logic *)
       | tyo, JCReads r ->
-	  let ret = match tyo with
-	    | None -> simple_logic_type "prop"
-	    | Some ty -> tr_base_type ty
-	  in
-	  Logic(false, li.jc_logic_info_final_name, params_reads, ret)
+          let ret = match tyo with
+            | None -> simple_logic_type "prop"
+            | Some ty -> tr_base_type ty
+          in
+          Logic(false, li.jc_logic_info_final_name, params_reads, ret)
       (* Other *)
       | _ -> assert false
   in 
@@ -809,10 +822,10 @@ let tr_logic_fun li ta acc =
   let sep_preds = 
     List.fold_left (fun acc vi ->
       match vi.jc_var_info_type with
-	| JCTpointer(st,_,_) -> 
-	    LPred("full_separated",[LVar "tmp"; LVar vi.jc_var_info_final_name])
-	    :: acc
-	| _ -> acc
+        | JCTpointer(st,_,_) -> 
+            LPred("full_separated",[LVar "tmp"; LVar vi.jc_var_info_final_name])
+            :: acc
+        | _ -> acc
     ) [] li.jc_logic_info_parameters
   in
   if List.length sep_preds = 0 then acc else
@@ -820,63 +833,59 @@ let tr_logic_fun li ta acc =
     let normal_params = List.map (fun name -> LVar name) params_names in
     FieldOrVariantRegionMap.fold (fun (fvi,r) labels acc ->
       let update_params = 
-	List.map (fun name ->
-	  if name = field_or_variant_region_memory_name(fvi,r) then
-	    LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
-	  else LVar name
-	) params_names
+        List.map (fun name ->
+          if name = field_or_variant_region_memory_name(fvi,r) then
+            LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
+          else LVar name
+        ) params_names
       in
       let a = 
-	match li.jc_logic_info_result_type with
-	  | None ->
-	      LImpl(
-		make_and_list sep_preds,
-		LIff(
-		  LPred(li.jc_logic_info_final_name,normal_params),
-		  LPred(li.jc_logic_info_final_name,update_params)))
-	  | Some rety ->
-	      LImpl(
-		make_and_list sep_preds,
-		LPred("eq",[
-		  LApp(li.jc_logic_info_final_name,normal_params);
-		  LApp(li.jc_logic_info_final_name,update_params)]))
+        match li.jc_logic_info_result_type with
+          | None ->
+              LImpl(
+                make_and_list sep_preds,
+                LIff(
+                  LPred(li.jc_logic_info_final_name,normal_params),
+                  LPred(li.jc_logic_info_final_name,update_params)))
+          | Some rety ->
+              LImpl(
+                make_and_list sep_preds,
+                LPred("eq",[
+                  LApp(li.jc_logic_info_final_name,normal_params);
+                  LApp(li.jc_logic_info_final_name,update_params)]))
       in
       let a = 
-	List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+        List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
       in
       let structty = match fvi with 
-	| FVfield fi -> JCtag fi.jc_field_info_struct
-	| FVvariant vi -> JCvariant vi
+        | FVfield fi -> JCtag fi.jc_field_info_struct
+        | FVvariant vi -> JCvariant vi
       in
       let basety = match fvi with
-	| FVfield fi -> tr_base_type fi.jc_field_info_type
-	| FVvariant vi -> 
-	    if integral_union vi then why_integer_type else
-	      simple_logic_type (union_memory_type_name vi)
+        | FVfield fi -> tr_base_type fi.jc_field_info_type
+        | FVvariant vi -> 
+            if integral_union vi then why_integer_type else
+              simple_logic_type (union_memory_type_name vi)
       in
       let a = 
-	LForall(
-	  "tmp",pointer_type structty,
-	  LForall(
-	    "tmpval",basety,
-	    a))
+        LForall(
+          "tmp",pointer_type structty,
+          LForall(
+            "tmpval",basety,
+            a))
       in
       let fviname = match fvi with
-	| FVfield fi -> fi.jc_field_info_name
-	| FVvariant vi -> vi.jc_variant_info_name
+        | FVfield fi -> fi.jc_field_info_name
+        | FVvariant vi -> vi.jc_variant_info_name
       in
       Axiom(
-	"full_separated_" ^ li.jc_logic_info_name ^ "_" ^ fviname,
-	a) :: acc
+        "full_separated_" ^ li.jc_logic_info_name ^ "_" ^ fviname,
+        a) :: acc
     ) li.jc_logic_info_effects.jc_effect_memories acc
   
-
-(****************************
-
-expressions and statements
-
-****************************)
-
+(*******************************************************************************)
+(*                                 Expressions                                 *)
+(*******************************************************************************)
 
 let rec is_substruct si1 si2 =
   if si1.jc_struct_info_name = si2.jc_struct_info_name then true else
@@ -905,18 +914,18 @@ let rbounded rb s =
   let n = Numconst.integer s in Num.le_num n rb
 
 let destruct_pointer e = 
-  let ptre,off = match e.jc_expr_node with
+  let ptre,off = match e#node with
     | JCEshift(e1,e2) -> 
-	begin match e2.jc_expr_node with
-	| JCEconst (JCCinteger s) -> 
-	    e1,Int_offset s
-	| JCEconst _ -> assert false
-	| _ ->
-	    e1,Expr_offset e2
-	end
+        begin match e2#node with
+        | JCEconst (JCCinteger s) -> 
+            e1,Int_offset s
+        | JCEconst _ -> assert false
+        | _ ->
+            e1,Expr_offset e2
+        end
     | _ -> e,Int_offset "0"
   in
-  match ptre.jc_expr_type with
+  match ptre#typ with
   | JCTpointer(_,lb,rb) -> ptre,off,lb,rb
   | _ -> assert false
 
@@ -925,16 +934,143 @@ let rec make_lets l e =
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
 
+let return_void = ref false
+
+
+let write_mems ~callee_writes ~regions =
+  FieldOrVariantRegionMap.fold
+    (fun (fi,distr) labels acc ->
+       if Region.polymorphic distr then
+         try 
+           let locr = RegionList.assoc distr regions in
+           (* Check that we do not pass a same memory twice as 
+            * a pointer.
+            *)
+           begin
+(*             assert(not(FieldOrVariantRegionList.mem (fi,locr) acc));*)
+             (Var(field_or_variant_region_memory_name (fi,locr)))::acc 
+           end
+         with Not_found -> 
+           (* Local memory. Not passed in argument by the caller. *)
+           acc
+       else acc)
+    callee_writes.jc_effect_memories
+    []
+
+let read_mems ~caller_writes ~callee_reads ~callee_writes ~regions =
+  FieldOrVariantRegionMap.fold
+    (fun (fi,distr) labels acc ->
+       if FieldOrVariantRegionMap.mem (fi,distr)
+         callee_writes.jc_effect_memories then acc
+       else
+         if Region.polymorphic distr then
+                  (* Distant region is polymorphic. It should be passed as
+                   * argument to the function. 
+                   *)
+           try 
+             let locr = RegionList.assoc distr regions in
+             if Region.polymorphic locr then
+               if FieldOrVariantRegionMap.mem (fi,locr) 
+                 caller_writes.jc_effect_memories
+               then
+                 (Deref(field_or_variant_region_memory_name(fi,locr)))::acc 
+               else (Var(field_or_variant_region_memory_name(fi,locr)))::acc 
+             else begin
+               (* Check that we do not pass in argument a constant 
+                * memory that is also read/written directly by 
+                * the function called.
+                *)
+               assert(not(FieldOrVariantRegionMap.mem (fi,locr)
+                            callee_reads.jc_effect_memories
+                         ));
+               assert(not(FieldOrVariantRegionMap.mem (fi,locr)
+                            callee_writes.jc_effect_memories
+                         ));
+               if FieldOrVariantRegionMap.mem (fi,locr) 
+                 caller_writes.jc_effect_memories
+               then (Var(field_or_variant_region_memory_name(fi,locr)))::acc 
+               else (Deref(field_or_variant_region_memory_name(fi,locr)))::acc 
+             end
+           with Not_found -> 
+             (* Local memory. Not passed in argument by the caller. *)
+             acc
+         else acc)
+    callee_reads.jc_effect_memories
+    []
+
+let write_allocs ~callee_writes ~regions =
+  StringRegionSet.fold
+    (fun (a,distr) acc ->
+       if Region.polymorphic distr then
+         try 
+           let locr = RegionList.assoc distr regions in
+           (* Check that we do not pass a same allocation table 
+            * twice as a pointer.
+            *)
+           begin
+(*             assert(not(StringRegionList.mem (a,locr) acc));*)
+             (Var(alloc_region_table_name2(a,locr)))::acc 
+           end
+         with Not_found -> 
+                    (* Local allocation table. 
+                     * Not passed in argument by the caller. 
+                     *)
+           acc
+       else acc)
+    callee_writes.jc_effect_alloc_table
+    []
+
+let read_allocs ~caller_writes ~callee_writes ~callee_reads ~regions =
+  StringRegionSet.fold
+    (fun (a,distr) acc ->
+       if Region.polymorphic distr then
+                  (* Distant region is polymorphic. It should be passed as
+                   * argument to the function. 
+                   *)
+         try 
+           let locr = RegionList.assoc distr regions in
+           if Region.polymorphic locr then
+             if StringRegionSet.mem (a,locr) 
+               caller_writes.jc_effect_alloc_table
+             then
+               (Deref(alloc_region_table_name2(a,locr)))::acc 
+             else (Var(alloc_region_table_name2(a,locr)))::acc 
+           else
+             begin
+                        (* Check that we do not pass in argument a constant 
+                         * allocation table that is also read/written directly
+                         * by the function called.
+                         *)
+               let fallocs = StringRegionSet.union
+                 callee_reads.jc_effect_alloc_table
+                 callee_writes.jc_effect_alloc_table
+               in
+               assert(not(StringRegionSet.mem (a,locr) fallocs));
+               if StringRegionSet.mem (a,locr) 
+                 callee_writes.jc_effect_alloc_table
+               then (Var(alloc_region_table_name2(a,locr)))::acc 
+               else (Deref(alloc_region_table_name2(a,locr)))::acc 
+             end
+         with Not_found -> 
+                    (* Local allocation table.
+                     * Not passed in argument by the caller. *)
+           acc
+       else acc)
+    (StringRegionSet.diff
+       callee_reads.jc_effect_alloc_table
+       callee_writes.jc_effect_alloc_table)
+    []
+
 let rec make_upd lab loc ~infunction ~threats fi e1 v =
   let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
-  let mem = Var(field_region_memory_name(fi,e1.jc_expr_region)) in
+  let mem = Var(field_region_memory_name(fi,e1#region)) in
   let alloc = 
-    alloc_region_table_name (JCtag fi.jc_field_info_root, e1.jc_expr_region)
+    alloc_region_table_name (JCtag fi.jc_field_info_root, e1#region)
   in
   let alloc = 
-    if Region.polymorphic e1.jc_expr_region then
-      if StringRegionSet.mem (field_root_name fi, e1.jc_expr_region)
-	infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+    if Region.polymorphic e1#region then
+      if StringRegionSet.mem (field_root_name fi, e1#region)
+        infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
       then Deref alloc
       else Var alloc
     else Deref alloc
@@ -943,354 +1079,152 @@ let rec make_upd lab loc ~infunction ~threats fi e1 v =
     if field_of_union fi then
       (* Translate back value of field type to union type *)
       if integral_union (union_of_field fi) then
-	(* Type of union is integer, and type of field an integral type *)
-	match fi.jc_field_info_type with
-	  | JCTnative Tinteger -> v
-	  | JCTenum ri -> make_app (logic_int_of_enum ri) [v]
-	  | _ -> assert false
+        (* Type of union is integer, and type of field an integral type *)
+        match fi.jc_field_info_type with
+          | JCTnative Tinteger -> v
+          | JCTenum ri -> make_app (logic_int_of_enum ri) [v]
+          | _ -> assert false
       else make_app (logic_union_of_field fi) [v]
     else v
   in
   if threats then
     match destruct_pointer e1 with
-    | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
-	make_app "safe_upd_" 
-	  [ mem ; expr e1; v ]
-    | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-	make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
-	  [ mem ; expr p; offset off;
-	    Cte (Prim_int (Num.string_of_num rb)); v ]
-    | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-	make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
-	  [ mem ; expr p; offset off;
-	    Cte (Prim_int (Num.string_of_num lb)); v ]
-    | p,off,Some lb,Some rb ->
-	make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
-	  [ mem ; expr p; offset off; 
-	    Cte (Prim_int (Num.string_of_num lb)); 
-	    Cte (Prim_int (Num.string_of_num rb)); v ]
-    | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-	make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
-	  [ alloc; mem; expr p; offset off; v ]
-    | p,off,Some lb,None ->
-	make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
-	  [ alloc; mem; expr p; offset off;
-	    Cte (Prim_int (Num.string_of_num lb)); v ]
-    | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-	make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
-	  [ alloc; mem; expr p; offset off; v ]
-    | p,off,None,Some rb ->
-	make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
-	  [ alloc; mem; expr p; offset off;
-	    Cte (Prim_int (Num.string_of_num rb)); v ]
-    | p,Int_offset s,None,None when int_of_string s = 0 ->
-	make_guarded_app ~name:lab PointerDeref loc "upd_" 
-	  [ alloc; mem ; expr p; v ]
-    | p,off,None,None ->
-	make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
-	  [ alloc; mem ; expr p; offset off; v ]
+      | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
+          make_app "safe_upd_" 
+            [ mem ; expr e1; v ]
+      | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
+          make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
+            [ mem ; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num rb)); v ]
+      | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
+          make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
+            [ mem ; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num lb)); v ]
+      | p,off,Some lb,Some rb ->
+          make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
+            [ mem ; expr p; offset off; 
+              Cte (Prim_int (Num.string_of_num lb)); 
+              Cte (Prim_int (Num.string_of_num rb)); v ]
+      | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
+          make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
+            [ alloc; mem; expr p; offset off; v ]
+      | p,off,Some lb,None ->
+          make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
+            [ alloc; mem; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num lb)); v ]
+      | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
+          make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
+            [ alloc; mem; expr p; offset off; v ]
+      | p,off,None,Some rb ->
+          make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
+            [ alloc; mem; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num rb)); v ]
+      | p,Int_offset s,None,None when int_of_string s = 0 ->
+          make_guarded_app ~name:lab PointerDeref loc "upd_" 
+            [ alloc; mem ; expr p; v ]
+      | p,off,None,None ->
+          make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
+            [ alloc; mem ; expr p; offset off; v ]
   else
     make_app "safe_upd_"
       [ mem ; expr e1 ; v ]
 
+and make_deref lab loc ~infunction ~threats fi e =
+  let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
+  let mem = field_region_memory_name(fi,e#region) in
+  let mem = 
+    if Region.polymorphic e#region then
+      if field_of_union fi && 
+        FieldOrVariantRegionMap.mem 
+        (FVvariant (union_of_field fi),e#region)
+        infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+        || 
+        not (field_of_union fi) &&
+        FieldOrVariantRegionMap.mem (FVfield fi,e#region)
+        infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+      then Deref mem
+      else Var mem
+    else Deref mem
+  in
+  let alloc = 
+    alloc_region_table_name (JCtag fi.jc_field_info_root,
+                             e#region)
+  in
+  let alloc = 
+    if Region.polymorphic e#region then
+      if StringRegionSet.mem (field_root_name fi, e#region)
+        infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+      then Deref alloc
+      else Var alloc
+    else Deref alloc
+  in
+  let deref = if threats then
+    match destruct_pointer e with
+      | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
+          make_app "safe_acc_" 
+            [ mem ; expr e ]
+      | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
+          make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_acc_" 
+            [ mem ; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num rb)) ]
+      | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
+          make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_acc_" 
+            [ mem ; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num lb)) ]
+      | p,off,Some lb,Some rb ->
+          make_guarded_app ~name:lab IndexBounds loc "bound_acc_" 
+            [ mem ; expr p; offset off; 
+              Cte (Prim_int (Num.string_of_num lb)); 
+              Cte (Prim_int (Num.string_of_num rb)) ]
+      | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
+          make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_acc_" 
+            [ alloc; mem; expr p; offset off ]
+      | p,off,Some lb,None ->
+          make_guarded_app ~name:lab IndexBounds loc "lbound_acc_" 
+            [ alloc; mem; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num lb)) ]
+      | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
+          make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_acc_" 
+            [ alloc; mem; expr p; offset off ]
+      | p,off,None,Some rb ->
+          make_guarded_app ~name:lab IndexBounds loc "rbound_acc_" 
+            [ alloc; mem; expr p; offset off;
+              Cte (Prim_int (Num.string_of_num rb)) ]
+      | p,Int_offset s,None,None when int_of_string s = 0 ->
+          make_guarded_app ~name:lab PointerDeref loc "acc_" 
+            [ alloc; mem ; expr p ]
+      | p,off,None,None ->
+          make_guarded_app ~name:lab PointerDeref loc "offset_acc_" 
+            [ alloc; mem ; expr p; offset off ]
+  else
+    make_app "safe_acc_"
+      [ mem ; 
+        (* coerce e#loc integer_type e#typ *) (expr e) ]
+  in
+  if field_of_union fi then
+    (* Translate back access to union type to field type *)
+    if integral_union (union_of_field fi) then
+      (* Type of union is integer, and type of field an integral type *)
+      match fi.jc_field_info_type with
+        | JCTnative Tinteger -> deref
+        | JCTenum ri ->
+            if not threats then 
+              make_app (safe_fun_enum_of_int ri) [deref]
+            else
+              make_guarded_app ~name:lab ArithOverflow loc 
+                (fun_enum_of_int ri) [deref]
+        | _ -> assert false
+    else make_app (logic_field_of_union fi) [deref]
+  else deref
+
 and offset ~infunction ~threats = function
   | Int_offset s -> Cte (Prim_int s)
   | Expr_offset e -> 
-      coerce ~no_int_overflow:(not threats) 
-	e.jc_expr_label e.jc_expr_loc integer_type e.jc_expr_type e
-	(expr ~infunction ~threats e)
+      coerce ~no_int_overflow:(not threats)
+        e#name_label e#loc integer_type e#typ e
+        (expr ~infunction ~threats e)
 
-and expr ~infunction ~threats e : expr =
-  let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
-  let loc = e.jc_expr_loc in
-  let lab = e.jc_expr_label in
-  let e' =
-  match e.jc_expr_node with
-    | JCEconst JCCnull -> Var "null"
-    | JCEconst c -> Cte(const c)
-    | JCEvar v ->
-	if v.jc_var_info_assigned 
-	then Deref v.jc_var_info_final_name
-	else Var v.jc_var_info_final_name
-    | JCEunary(op,e1) ->
-	let e1' = expr e1 in
-	make_app (unary_op op) 
-	  [coerce ~no_int_overflow:(not threats) 
-	     lab loc (unary_arg_type op) e1.jc_expr_type e1 e1' ]
-    | JCEbinary(e1,((Beq_pointer | Bneq_pointer) as op),e2) ->
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	make_app (bin_op op) [ e1'; e2']	
-    | JCEbinary(e1,Bland,e2) ->
-	(* lazy conjunction *)
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	And(e1',e2')	
-    | JCEbinary(e1,Blor,e2) ->
-	(* lazy disjunction *)
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	Or(e1',e2')	
-    | JCEbinary(e1,op,e2) ->
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	let t = bin_arg_type loc op in
-	(match op with
-	   | Bdiv_int | Bdiv_real | Bmod_int ->
-	       make_guarded_app ~name:lab DivByZero loc
-	   | _ -> make_app)
-	  (bin_op op) 
-	  [ coerce ~no_int_overflow:(not threats) 
-	      e1.jc_expr_label e1.jc_expr_loc t e1.jc_expr_type e1 e1'; 
-	    coerce ~no_int_overflow:(not threats) 
-	      e2.jc_expr_label e2.jc_expr_loc t e2.jc_expr_type e2 e2']	
-    | JCEif(e1,e2,e3) -> 
-	let e1 = expr e1 in
-	let e2 = expr e2 in
-	let e3 = expr e3 in
-	If(e1,e2,e3)
-    | JCEshift(e1,e2) -> 
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	make_app "shift" 
-	  [e1'; 
-	   coerce ~no_int_overflow:(not threats) 
-	     e2.jc_expr_label e2.jc_expr_loc integer_type e2.jc_expr_type e2 e2']
-    | JCEsub_pointer(e1,e2) -> 
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	(* FIXME: need to check that are in the same block *)
-	make_app "sub_pointer" [ e1'; e2']
-    | JCEoffset(k,e,st) -> 
-	let alloc = 
-	  alloc_region_table_name (JCtag st, e.jc_expr_region) in
-	let alloc = 
-	  if Region.polymorphic e.jc_expr_region then
-	    if StringRegionSet.mem (root_name st, e.jc_expr_region)
-	      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-	    then Deref alloc
-	    else Var alloc
-	  else Deref alloc
-	in
-	let f = match k with
-	  | Offset_min -> "offset_min"
-	  | Offset_max -> "offset_max"
-	in
-	make_app f [alloc; expr e] 
-    | JCEinstanceof(e,t) ->
-	let e = expr e in
-	let tag = tag_table_name (JCtag t) in
-	(* always safe *)
-	make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
-    | JCEcast (e, si) ->
-	if struct_of_union si then expr e else
-	let tag = tag_table_name (JCtag si) in
-	(* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
-(*
-	let et, _ = term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in
-*)
-	let tmp = tmp_var_name () in
-	let typea = 
-	  match e.jc_expr_type with
-	    | JCTpointer (JCtag si', _, _) -> 
-		if is_substruct si' si then LTrue else
-		  LPred ("instanceof", [LVar tag; LVar tmp; LVar (tag_name si)])
-	    | JCTpointer (JCvariant _, _, _) -> assert false (* TODO *)
-	    | _ -> LTrue
-	in
-	let tag = tag_table_name (JCtag si) in
-	let call = 
-	  make_guarded_app ~name:lab DownCast loc "downcast_" 
-	    [Deref tag; Var tmp; Var (tag_name si)]
-	in
-	let guarded_call =
-	  if typea = LTrue then call else Assert (typea, call)
-	in
-	Let(tmp, expr e, guarded_call)
-
-    | JCErange_cast(e1,ri) ->
-	let e1' = expr e1 in
-	coerce ~no_int_overflow:(not threats)
-	  e.jc_expr_label e.jc_expr_loc (JCTenum ri) e1.jc_expr_type e1 e1'
-    | JCEreal_cast(e1,rc) ->
-	let e1' = expr e1 in
-	begin match rc with
-	  | Integer_to_real ->
-	      coerce ~no_int_overflow:(not threats)
-		e.jc_expr_label e.jc_expr_loc real_type integer_type e1 e1'
-	  | Real_to_integer ->
-	      coerce ~no_int_overflow:(not threats)
-		e.jc_expr_label e.jc_expr_loc integer_type real_type e1 e1'
-	end
-    | JCEderef(e,fi) ->
-	let mem = field_region_memory_name(fi,e.jc_expr_region) in
-	let mem = 
-	  if Region.polymorphic e.jc_expr_region then
-	    if field_of_union fi && 
-	      FieldOrVariantRegionMap.mem 
-	      (FVvariant (union_of_field fi),e.jc_expr_region)
-	      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-	      || 
-	      not (field_of_union fi) &&
-	      FieldOrVariantRegionMap.mem (FVfield fi,e.jc_expr_region)
-	      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-	    then Deref mem
-	    else Var mem
-	  else Deref mem
-	in
-	let alloc = 
-	  alloc_region_table_name (JCtag fi.jc_field_info_root,
-				   e.jc_expr_region)
-	in
-	let alloc = 
-	  if Region.polymorphic e.jc_expr_region then
-	    if StringRegionSet.mem (field_root_name fi, e.jc_expr_region)
-	      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-	    then Deref alloc
-	    else Var alloc
-	  else Deref alloc
-	in
-	let deref = if threats then
-	  match destruct_pointer e with
-	  | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
-	      make_app "safe_acc_" 
-		[ mem ; expr e ]
-	  | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-	      make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_acc_" 
-		[ mem ; expr p; offset off;
-		  Cte (Prim_int (Num.string_of_num rb)) ]
-	  | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-	      make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_acc_" 
-		[ mem ; expr p; offset off;
-		  Cte (Prim_int (Num.string_of_num lb)) ]
-	  | p,off,Some lb,Some rb ->
-	      make_guarded_app ~name:lab IndexBounds loc "bound_acc_" 
-		[ mem ; expr p; offset off; 
-		  Cte (Prim_int (Num.string_of_num lb)); 
-		  Cte (Prim_int (Num.string_of_num rb)) ]
-	  | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-	      make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_acc_" 
-		[ alloc; mem; expr p; offset off ]
-	  | p,off,Some lb,None ->
-	      make_guarded_app ~name:lab IndexBounds loc "lbound_acc_" 
-		[ alloc; mem; expr p; offset off;
-		  Cte (Prim_int (Num.string_of_num lb)) ]
-	  | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-	      make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_acc_" 
-		[ alloc; mem; expr p; offset off ]
-	  | p,off,None,Some rb ->
-	      make_guarded_app ~name:lab IndexBounds loc "rbound_acc_" 
-		[ alloc; mem; expr p; offset off;
-		  Cte (Prim_int (Num.string_of_num rb)) ]
-	  | p,Int_offset s,None,None when int_of_string s = 0 ->
-	      make_guarded_app ~name:lab PointerDeref loc "acc_" 
-		[ alloc; mem ; expr p ]
-	  | p,off,None,None ->
-	      make_guarded_app ~name:lab PointerDeref loc "offset_acc_" 
-		[ alloc; mem ; expr p; offset off ]
-	else
-	  make_app "safe_acc_"
-	    [ mem ; 
-	      (* coerce e.jc_expr_loc integer_type e.jc_expr_type *) (expr e) ]
-	in
-	if field_of_union fi then
-	  (* Translate back access to union type to field type *)
-	  if integral_union (union_of_field fi) then
-	    (* Type of union is integer, and type of field an integral type *)
-	    match fi.jc_field_info_type with
-	      | JCTnative Tinteger -> deref
-	      | JCTenum ri ->
-		  if not threats then 
-		    make_app (safe_fun_enum_of_int ri) [deref]
-		  else
-		    make_guarded_app ~name:lab ArithOverflow loc 
-		      (fun_enum_of_int ri) [deref]
-	      | _ -> assert false
-	  else make_app (logic_field_of_union fi) [deref]
-	else deref
-    | JCEalloc (siz, st) ->
-	let alloc = alloc_region_table_name (JCtag st, e.jc_expr_region) in
-	let tag = tag_table_name (JCtag st) in
-(*	
-	let fields = embedded_struct_fields st in
-	let fields = List.map (fun fi -> (fi,e.jc_expr_region)) fields in
-	let roots = embedded_struct_roots st in
-	let roots = List.map find_tag_or_variant roots in
- 	let roots = List.map (fun a -> (a, e.jc_expr_region)) roots in
-*)
-	let fields = all_memories ~select:fully_allocated (JCtag st) in
-	let fields = List.map (fun fi -> (fi, e.jc_expr_region)) fields in
-	let roots = all_types ~select:fully_allocated (JCtag st) in
-	let roots = List.map (fun a -> (JCvariant a, e.jc_expr_region)) roots in
-	begin
-	  match !Jc_options.inv_sem with
-	    | InvOwnership ->
-		let mut = mutable_name (JCtag st) in
-		let com = committed_name (JCtag st) in
-		make_app "alloc_parameter_ownership" 
-		  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
-		   coerce ~no_int_overflow:(not threats) 
-		     siz.jc_expr_label siz.jc_expr_loc integer_type 
-		     siz.jc_expr_type siz (expr siz)]
-	    | InvArguments | InvNone ->
-	      (* Claude : pourquoi un cas particulier pour taille 1 ?? *)
-		begin match siz.jc_expr_node with 
-		  | JCEconst(JCCinteger "1") ->
-		      make_app (alloc_one_param_name st) 
-			([Void; Var alloc]
-			@ (List.map (var ** alloc_region_table_name) roots)
-			@ (List.map (var ** field_region_memory_name) fields))
-		  | _ ->
-		      make_guarded_app 
-			~name:lab AllocSize loc
-			(alloc_param_name st)
-			([coerce ~no_int_overflow:(not threats) 
-			  siz.jc_expr_label siz.jc_expr_loc integer_type 
-			  siz.jc_expr_type siz (expr siz); Var alloc]
-			@ (List.map (var ** alloc_region_table_name) roots)
-			@ (List.map (var ** field_region_memory_name) fields))
-
-		end
-	end
-    | JCEfree e ->
-	let st = match e.jc_expr_type with
-	  | JCTpointer(JCtag st, _, _) -> st
-	  | JCTpointer(JCvariant vi, _, _) -> assert false (* TODO *)
-	  | _ -> assert false
-	in	
-	let alloc = 
-	  alloc_region_table_name (JCtag st, e.jc_expr_region) in
-	if !Jc_options.inv_sem = InvOwnership then
-	  let com = committed_name (JCtag st) in
-	  make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
-	else
-	  make_app "free_parameter" [Var alloc; expr e]
-(*    | JCEmatch _ -> assert false *)
-  in
-(*
-  if lab <> "" then
-    Label(reg_loc ~name:lab loc,e')
-  else
-*)
-    e'
-
-(*
-let invariant_for_struct this st =
-  let (_, invs) = 
-    Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name 
-  in
-  make_and_list
-    (List.map (fun (li, _) -> make_logic_pred_call li [this]) invs)
-*)
-
-let return_void = ref false
-
-let expr_coerce ~infunction ~threats vi e =
-  coerce ~no_int_overflow:(not threats)
-    e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type
-    e.jc_expr_type e (expr ~infunction ~threats e)
-    
-let type_assert ~infunction ~threats vi e (lets, params) =
+and type_assert ~infunction ~threats vi e (lets,params) =
   let opt =
     match vi.jc_var_info_type with
       | JCTpointer (si, n1o, n2o) ->
@@ -1308,8 +1242,8 @@ let type_assert ~infunction ~threats vi e (lets, params) =
 			  [LVar alloc; LVar tmp]);
 		    LConst (Prim_int (Num.string_of_num n))])
 	  in
-	    begin match e.jc_expr_type with 
-	      | JCTpointer (si', n1o', n2o') ->
+	  begin match e#typ with
+	    | JCTpointer (si', n1o', n2o') ->
 		  begin match n1o, n2o with
 		    | None, None -> None
 		    | Some n, None ->
@@ -1360,312 +1294,369 @@ let type_assert ~infunction ~threats vi e (lets, params) =
       | _ -> None
   in
   let e = expr_coerce ~infunction ~threats vi e in
-    match opt with
-      | None -> None::lets , e::params
-      | Some(tmp,a) -> Some(tmp,e,a)::lets , (Var tmp)::params
+  match opt with
+    | None -> None::lets , e::params
+    | Some(tmp,a) -> Some(tmp,e,a)::lets , (Var tmp)::params
 
-let rec statement ~infunction ~threats s = 
-  (* reset_tmp_var(); *)
-  let statement = statement ~infunction ~threats in
+and expr ~infunction ~threats e : expr =
   let expr = expr ~infunction ~threats in
-  let lab = s.jc_statement_label in
-    match s.jc_statement_node with
-      | JCScall (vio, call, block) -> 
-	  let f = call.jc_call_fun in
-	  let l = call.jc_call_args in
-	    (*
-	      Format.eprintf "Jc_interp: lab for call = '%s'@."
-	      s.jc_statement_label;
-	    *)
-	  let loc = s.jc_statement_loc in
-	  let arg_types_asserts,el = 
-	    try match f.jc_fun_info_parameters with
-	      | [] -> [],[Void] (* pourquoi [Void] ?? -> cf separation_plus *)
-	      | p -> List.fold_right2 (type_assert ~infunction ~threats) p l ([],[])
-	    with Invalid_argument _ -> assert false
-	  in
-	  let write_mems =
-	    FieldOrVariantRegionMap.fold
-	      (fun (fi,distr) labels acc ->
-		if Region.polymorphic distr then
-		  try 
-		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
-		    (* Check that we do not pass a same memory twice as 
-		     * a pointer.
-		     *)
-		    begin
-		      assert(not(FieldOrVariantRegionList.mem (fi,locr) acc));
-	      	      (fi,locr)::acc 
-		    end
-		  with Not_found -> 
-		    (* Local memory. Not passed in argument by the caller. *)
-		    acc
-		else acc)
-	      f.jc_fun_info_effects.jc_writes.jc_effect_memories
-	      []
-	  in
-	  let read_mems =
-	    FieldOrVariantRegionMap.fold
-	      (fun (fi,distr) labels acc ->
-		 if FieldOrVariantRegionMap.mem (fi,distr) f.jc_fun_info_effects.jc_writes.jc_effect_memories then acc else
-		if Region.polymorphic distr then
-		  (* Distant region is polymorphic. It should be passed as
-		   * argument to the function. 
-		   *)
-		  try 
-		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
-		    if Region.polymorphic locr then
-		      if FieldOrVariantRegionMap.mem (fi,locr) 
-			infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-		      then 
-			begin
-			  (* Check that we do not pass a same memory as 
-			   * a pointer and a dereference. 
-			   *)
-			  assert(not(FieldOrVariantRegionList.mem (fi,locr) write_mems));
-			  (Deref(field_or_variant_region_memory_name(fi,locr)))::acc 
-			end
-		      else (Var(field_or_variant_region_memory_name(fi,locr)))::acc 
-		    else
-		      begin
-			(* Check that we do not pass in argument a constant 
-			 * memory that is also read/written directly by 
-			 * the function called.
-			 *)
-			assert(not(FieldOrVariantRegionMap.mem (fi,locr) f.jc_fun_info_effects.jc_reads.jc_effect_memories
-			  ));
-			assert(not(FieldOrVariantRegionMap.mem (fi,locr) f.jc_fun_info_effects.jc_writes.jc_effect_memories
-			));
-			if FieldOrVariantRegionMap.mem (fi,locr) 
-			  f.jc_fun_info_effects.jc_writes.jc_effect_memories
-			then (Var(field_or_variant_region_memory_name(fi,locr)))::acc 
-			else (Deref(field_or_variant_region_memory_name(fi,locr)))::acc 
-		      end
-		  with Not_found -> 
-		    (* Local memory. Not passed in argument by the caller. *)
-		    acc
-		else acc)
-	      f.jc_fun_info_effects.jc_reads.jc_effect_memories
-	      []
-	  in
-	  let write_mems = 
-	    List.map (fun (fi,r) -> Var(field_or_variant_region_memory_name(fi,r))) 
-	      write_mems in
-	  let write_allocs =
-	    StringRegionSet.fold
-	      (fun (a,distr) acc ->
-		if Region.polymorphic distr then
-		  try 
-		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
-		    (* Check that we do not pass a same allocation table 
-		     * twice as a pointer.
-		     *)
-		    begin
-		      assert(not(StringRegionList.mem (a,locr) acc));
-	      	      (a,locr)::acc 
-		    end
-		  with Not_found -> 
-		    (* Local allocation table. 
-		     * Not passed in argument by the caller. 
-		     *)
-		    acc
-		else acc)
-	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-	      []
-	  in
-	  let read_allocs =
-	    StringRegionSet.fold
-	      (fun (a,distr) acc ->
-		if Region.polymorphic distr then
-		  (* Distant region is polymorphic. It should be passed as
-		   * argument to the function. 
-		   *)
-		  try 
-		    let locr = RegionList.assoc distr call.jc_call_region_assoc in
-		    if Region.polymorphic locr then
-		      if StringRegionSet.mem (a,locr) 
-			infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-		      then 
-			begin
-			  (* Check that we do not pass a same allocation table
-			   * as a pointer and a dereference. 
-			   *)
-			  assert(not(StringRegionList.mem (a,locr) write_allocs));
-			  (Deref(alloc_region_table_name2(a,locr)))::acc 
-			end
-		      else (Var(alloc_region_table_name2(a,locr)))::acc 
-		    else
-		      begin
-			(* Check that we do not pass in argument a constant 
-			 * allocation table that is also read/written directly
-			 * by the function called.
-			 *)
-			let fallocs = StringRegionSet.union
-			  f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
-			  f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-			in
-			assert(not(StringRegionSet.mem (a,locr) fallocs));
-			if StringRegionSet.mem (a,locr) 
-			  f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-			then (Var(alloc_region_table_name2(a,locr)))::acc 
-			else (Deref(alloc_region_table_name2(a,locr)))::acc 
-		      end
-		  with Not_found -> 
-		    (* Local allocation table.
-		     * Not passed in argument by the caller. *)
-		    acc
-		else acc)
-	      (StringRegionSet.diff
-		f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
-		f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)
-	      []
-	  in
-	  let write_allocs = 
-	    List.map (fun (a,r) -> Var(alloc_region_table_name2(a,r))) 
-	      write_allocs in
-	  let el = el @ write_allocs @ write_mems @ read_allocs @ read_mems in
-	  let call = 
-	    make_guarded_app ~name:lab UserCall loc 
-	      f.jc_fun_info_final_name el 
-	  in
-	  let arg_types_assert =
-	    List.fold_right
-	      (fun opt acc -> 
-		 match opt with
-		   | None -> acc
-		   | Some(tmp,e,a) -> make_and a acc)
-	      arg_types_asserts LTrue
-	  in
-	  let call = 
-	    if arg_types_assert = LTrue || not threats then call else
-	      Assert (arg_types_assert, call)
-	  in
-	  let call =
-	    List.fold_right
-	      (fun opt c -> 
-		 match opt with
-		   | None -> c
-		   | Some(tmp,e,ass) -> Let(tmp,e,c))
-	      arg_types_asserts call
-	  in
-	    begin
-	      match vio with
-		| None -> 
-		    (* check that associated statement is empty *)
-		    begin match block.jc_statement_node with
-		      | JCSblock [] -> () (* ok *)
-		      | _ -> assert false
-		    end;
-		    begin match f.jc_fun_info_result.jc_var_info_type with
-		      | JCTnative Tunit -> call
-		      | _ -> let tmp = tmp_var_name () in Let(tmp,call,Void)
-		    end
-		| Some vi ->
-		    Let(vi.jc_var_info_final_name,call, statement block)
-	    end
-      | JCSassign_var (vi, e2) -> 
-	  let e2' = expr e2 in
-	  let n = vi.jc_var_info_final_name in
-	  Assign(n, coerce ~no_int_overflow:(not threats) 
-		   e2.jc_expr_label e2.jc_expr_loc vi.jc_var_info_type 
-		   e2.jc_expr_type e2 e2')
-      | JCSassign_heap(e1,fi,e2) -> 
-	let e1' = expr e1 in
-	let e2' = expr e2 in
-	let tmp1 = tmp_var_name () in
-	let tmp2 = tmp_var_name () in
-	let upd = make_upd ~infunction ~threats lab s.jc_statement_loc 
-	  fi e1 (Var tmp2) 
+  let loc = e#loc in
+  let lab = e#name_label in
+  let ie = match e#node with
+    | JCEconst JCCnull -> Var "null"
+    | JCEconst c -> Cte(const c)
+    | JCEvar v ->
+        if v.jc_var_info_assigned 
+        then Deref v.jc_var_info_final_name
+        else Var v.jc_var_info_final_name
+    | JCEunary(op, e1) ->
+        let e1' = expr e1 in
+        make_app (unary_op op) 
+          [coerce ~no_int_overflow:(not threats) 
+             lab loc (native_operator_type op) e1#typ e1 e1' ]
+    | JCEbinary(e1, (_, `Pointer as op), e2) ->
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+        make_app (bin_op op) [ e1'; e2']        
+(*    | JCEbinary(e1, (`Bland, _), e2) ->
+        (* lazy conjunction *)
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+        And(e1',e2')    
+    | JCEbinary(e1,Blor,e2) ->
+        (* lazy disjunction *)
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+        Or(e1',e2')     *)
+    | JCEbinary(e1, (_, #native_operator_type as op), e2) ->
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+        let t = native_operator_type op in
+        (match fst op with
+           | `Bdiv | `Bmod ->
+               make_guarded_app ~name:lab DivByZero loc
+           | _ -> make_app)
+          (bin_op op) 
+          [ coerce ~no_int_overflow:(not threats) 
+              e1#name_label e1#loc t e1#typ e1 e1'; 
+            coerce ~no_int_overflow:(not threats) 
+              e2#name_label e2#loc t e2#typ e2 e2'] 
+    | JCEif(e1,e2,e3) -> 
+        let e1 = expr e1 in
+        let e2 = expr e2 in
+        let e3 = expr e3 in
+        If(e1,e2,e3)
+    | JCEshift(e1,e2) -> 
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+        make_app "shift" 
+          [e1'; 
+           coerce ~no_int_overflow:(not threats) 
+             e2#name_label e2#loc integer_type e2#typ e2 e2']
+(*    | JCEsub_pointer(e1,e2) -> 
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+        (* FIXME: need to check that are in the same block *)
+        make_app "sub_pointer" [ e1'; e2']*)
+    | JCEoffset(k,e,st) -> 
+        let alloc = 
+          alloc_region_table_name (JCtag st, e#region) in
+        let alloc = 
+          if Region.polymorphic e#region then
+            if StringRegionSet.mem (root_name st, e#region)
+              infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+            then Deref alloc
+            else Var alloc
+          else Deref alloc
+        in
+        let f = match k with
+          | Offset_min -> "offset_min"
+          | Offset_max -> "offset_max"
+        in
+        make_app f [alloc; expr e] 
+    | JCEinstanceof(e,t) ->
+        let e = expr e in
+        let tag = tag_table_name (JCtag t) in
+        (* always safe *)
+        make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
+    | JCEcast (e, si) ->
+        if struct_of_union si then expr e else
+          let tag = tag_table_name (JCtag si) in
+        (* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
+(*
+        let et, _ = term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in*)
+          let tmp = tmp_var_name () in
+          let typea = 
+            match e#typ with
+              | JCTpointer (JCtag si', _, _) -> 
+                  if is_substruct si' si then LTrue else
+                    LPred ("instanceof", [LVar tag; LVar tmp; LVar (tag_name si)])
+              | JCTpointer (JCvariant _, _, _) -> assert false (* TODO *)
+              | _ -> LTrue
+          in
+          let tag = tag_table_name (JCtag si) in
+          let call = 
+            make_guarded_app ~name:lab DownCast loc "downcast_" 
+              [Deref tag; Var tmp; Var (tag_name si)]
+          in
+          let guarded_call =
+            if typea = LTrue then call else Assert (typea, call)
+          in
+          Let(tmp, expr e, guarded_call)
+    | JCErange_cast(e1,ri) ->
+        let e1' = expr e1 in
+        coerce ~no_int_overflow:(not threats)
+          e#name_label e#loc (JCTenum ri) e1#typ e1 e1'
+    | JCEreal_cast(e1,rc) ->
+        let e1' = expr e1 in
+        begin match rc with
+          | Integer_to_real ->
+              coerce ~no_int_overflow:(not threats)
+                e#name_label e#loc real_type integer_type e1 e1'
+          | Real_to_integer ->
+              coerce ~no_int_overflow:(not threats)
+                e#name_label e#loc integer_type real_type e1 e1'
+        end
+    | JCEderef(e,fi) ->
+	make_deref lab loc ~infunction ~threats fi e
+    | JCEalloc (siz, st) ->
+        let alloc = alloc_region_table_name (JCtag st, e#region) in
+        let tag = tag_table_name (JCtag st) in
+(*      
+        let fields = embedded_struct_fields st in
+        let fields = List.map (fun fi -> (fi,e#region)) fields in
+        let roots = embedded_struct_roots st in
+        let roots = List.map find_tag_or_variant roots in
+        let roots = List.map (fun a -> (a, e#region)) roots i*)
+        let fields = all_memories ~select:fully_allocated (JCtag st) in
+        let fields = List.map (fun fi -> (fi, e#region)) fields in
+        let roots = all_types ~select:fully_allocated (JCtag st) in
+        let roots = List.map (fun a -> (JCvariant a, e#region)) roots in
+        begin
+          match !Jc_options.inv_sem with
+            | InvOwnership ->
+                let mut = mutable_name (JCtag st) in
+                let com = committed_name (JCtag st) in
+                make_app "alloc_parameter_ownership" 
+                  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
+                   coerce ~no_int_overflow:(not threats) 
+                     siz#name_label siz#loc integer_type 
+                     siz#typ siz (expr siz)]
+            | InvArguments | InvNone ->
+              (* Claude : pourquoi un cas particulier pour taille 1 ?? *)
+                begin match siz#node with 
+                  | JCEconst(JCCinteger "1") ->
+                      make_app (alloc_one_param_name st) 
+                        ([Void; Var alloc]
+                         @ (List.map (nvar $ alloc_region_table_name) roots)
+                         @ (List.map (nvar $ field_region_memory_name) fields))
+                  | _ ->
+                      make_guarded_app 
+                        ~name:lab AllocSize loc
+                        (alloc_param_name st)
+                        ([coerce ~no_int_overflow:(not threats) 
+                            siz#name_label siz#loc integer_type 
+                            siz#typ siz (expr siz); Var alloc]
+                         @ (List.map (nvar $ alloc_region_table_name) roots)
+                         @ (List.map (nvar $ field_region_memory_name) fields))
+                end
+        end
+    | JCEfree e ->
+        let st = match e#typ with
+          | JCTpointer(JCtag st, _, _) -> st
+          | JCTpointer(JCvariant vi, _, _) -> assert false (* TODO *)
+          | _ -> assert false
+        in      
+        let alloc = 
+          alloc_region_table_name (JCtag st, e#region) in
+        if !Jc_options.inv_sem = InvOwnership then
+          let com = committed_name (JCtag st) in
+          make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
+        else
+          make_app "free_parameter" [Var alloc; expr e]
+    | JCEapp call ->
+        let params = match call.jc_call_fun with
+          | JClogic_fun f -> f.jc_logic_info_parameters
+          | JCfun f -> f.jc_fun_info_parameters
+        in
+        let l = call.jc_call_args in
+        let arg_types_asserts, el =
+          try match params with
+            | [] -> [], [Void]
+            | p ->
+                List.fold_right2 (type_assert ~infunction ~threats) p l ([],[])
+	  with Invalid_argument _ -> assert false
+        in
+        let write_mems, read_mems, write_allocs, read_allocs =
+          match call.jc_call_fun with
+            | JClogic_fun f ->
+                [],
+                read_mems
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_logic_info_effects
+                  ~callee_writes: empty_effects
+                  ~regions: call.jc_call_region_assoc,
+                [],
+                read_allocs
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_logic_info_effects
+                  ~callee_writes: empty_effects
+                  ~regions: call.jc_call_region_assoc
+            | JCfun f ->
+                write_mems
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~regions: call.jc_call_region_assoc,
+                read_mems
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_fun_info_effects.jc_reads
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~regions: call.jc_call_region_assoc,
+                write_allocs
+                  ~regions: call.jc_call_region_assoc
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes,
+                read_allocs
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_fun_info_effects.jc_reads
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~regions: call.jc_call_region_assoc
+        in
+        let el = el @ write_allocs @ write_mems @ read_allocs @ read_mems in
+        let name = match call.jc_call_fun with
+          | JCfun f -> f.jc_fun_info_final_name
+          | JClogic_fun f -> f.jc_logic_info_final_name
+        in
+        let call = make_guarded_app ~name:lab UserCall loc name el in
+        let arg_types_assert =
+          List.fold_right
+            (fun opt acc -> 
+               match opt with
+                 | None -> acc
+                 | Some(tmp,e,a) -> make_and a acc)
+            arg_types_asserts LTrue
+        in
+        let call = 
+          if arg_types_assert = LTrue || not threats then call else
+            Assert (arg_types_assert, call) 
+        in
+        let call =
+          List.fold_right
+            (fun opt c -> 
+               match opt with
+                 | None -> c
+                 | Some(tmp,e,ass) -> Let(tmp,e,c))
+            arg_types_asserts call
+        in
+        call
+    | JCEassign_var (vi, e2) -> 
+        let e2' = expr e2 in
+        let n = vi.jc_var_info_final_name in
+        let ie = Assign(n, coerce ~no_int_overflow:(not threats) 
+			  e2#name_label e2#loc vi.jc_var_info_type 
+			  e2#typ e2 e2')
 	in
-(* Yannick: ignore variables to be able to refine update function used. *)	
-(* 	let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
+	if e#typ = Jc_pervasives.unit_type then ie else append ie (var vi)
+    | JCEassign_heap(e1,fi,e2) -> 
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+        let tmp1 = tmp_var_name () in
+        let tmp2 = tmp_var_name () in
+        let upd = make_upd ~infunction ~threats lab e#loc
+          fi e1 (Var tmp2) 
+        in
+(* Yannick: ignore variables to be able to refine update function used. *)      
+(*      let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
 (* Claude: do not ignore variable tmp2, since it may involve a coercion. 
    Anyway, safety of the update do not depend on e2 *)
-	let upd = if threats && !Jc_options.inv_sem = InvOwnership then
-	  append (assert_mutable (LVar tmp1) fi) upd else upd in
-	let lets =
-	  (make_lets
-	     ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
-				 e2.jc_expr_label e2.jc_expr_loc 
-				 fi.jc_field_info_type 
-				 e2.jc_expr_type e2 e2') ])
-	     upd)
+        let upd = 
+	  if threats && !Jc_options.inv_sem = InvOwnership then
+            append (assert_mutable (LVar tmp1) fi) upd else upd 
 	in
-	if !Jc_options.inv_sem = InvOwnership then
-	  append lets (assume_field_invariants fi)
-	else
-	  lets
-(*	if !Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
-    | JCSblock l -> statement_list ~infunction ~threats l
-    | JCSlabel(lab,s) ->
-	Label(lab.label_info_final_name, statement s)
-    | JCSif (e, s1, s2) -> 
-	let e = expr e in
-	If(e, statement s1, statement s2)
-    | JCSloop (la, s) ->
-	let inv = named_assertion
-	  ~global_assertion:false
-	  LabelHere
-	  LabelPre
-	  la.jc_loop_invariant
-	in 
-	let free_inv = named_assertion 
-	  ~global_assertion:false 
-	  LabelHere 
-	  LabelPre 
-	  la.jc_free_loop_invariant 
+	let upd =
+	  if e#typ = Jc_pervasives.unit_type then upd else 
+	    let tmp1var = 
+	      new expr ~typ:e1#typ ~region:e1#region
+		(JCEvar(Jc_pervasives.var e1#typ tmp1)) 
+	    in
+	    append upd
+	      (make_deref "" loc ~infunction ~threats:false fi tmp1var)
 	in
-	let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
-	let body = [statement s] in
-	let body = 
-	  if Jc_options.trust_ai then
-	    BlackBox (Annot_type (LTrue, unit_type, [], [], free_inv, [])) :: body 
-	  else body
-	in
-	  begin 
-	    match la.jc_loop_variant with
-	      | Some t when threats ->
-		  let variant, lets = named_term
-		    ~global_assertion:false
-		    LabelHere
-		    LabelPre
-		    t
-		  in
-		    assert (lets = []);
-		    While(Cte(Prim_bool true), inv,
-			  Some (term_coerce t.jc_term_loc integer_type 
-				  t.jc_term_type variant,None), body)
-	      | _ ->
-		  While(Cte(Prim_bool true), inv,
-			None, body)
-	  end
-    | JCSassert a -> 
-	Assert(named_assertion
-		 ~global_assertion:false
-		 LabelHere
-		 LabelPre
-		 a,
-	       Void)
-    | JCSdecl(vi,e,s) -> 
-	begin
-	  let e' = match e with
-	    | None -> 
-		any_value vi.jc_var_info_type
-	    | Some e -> 
-(*
-		eprintf "decl of vi=%s@." vi.jc_var_info_name;
-*)
-		coerce ~no_int_overflow:(not threats) 
-		  e.jc_expr_label e.jc_expr_loc vi.jc_var_info_type e.jc_expr_type 
-		  e (expr e)
-	  in
-	  if vi.jc_var_info_assigned then 
-	    Let_ref(vi.jc_var_info_final_name, e', statement s)
-	  else 
-	    Let(vi.jc_var_info_final_name, e', statement s)
-	end
-    | JCSreturn_void -> Raise(jessie_return_exception,None)	
-    | JCSreturn (t, e) ->	
+        let lets =
+          (make_lets
+             ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
+                                 e2#name_label e2#loc 
+                                 fi.jc_field_info_type 
+                                 e2#typ e2 e2') ])
+             upd)
+        in
+        if !Jc_options.inv_sem = InvOwnership then
+          append lets (assume_field_invariants fi)
+        else
+          lets
+(*      if !Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
+    | JCEblock l ->
+        List.fold_right append (List.map expr l) Void
+    | JCEloop (la, s) ->
+        let inv = named_assertion
+          ~global_assertion:false
+          LabelHere
+          LabelPre
+          la.jc_loop_invariant
+        in 
+        let free_inv = named_assertion 
+          ~global_assertion:false 
+          LabelHere 
+          LabelPre 
+          la.jc_free_loop_invariant 
+        in
+        let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
+        let body = [expr s] in
+        let body = 
+          if Jc_options.trust_ai then
+            BlackBox (Annot_type (LTrue, unit_type, [], [], free_inv, [])) :: body 
+          else body
+        in
+        begin 
+          match la.jc_loop_variant with
+            | Some t when threats ->
+                let variant, lets = named_term
+                  ~global_assertion:false
+                  LabelHere
+                  LabelPre
+                  t
+                in
+                assert (lets = []);
+                While(Cte(Prim_bool true), inv,
+                      Some (term_coerce t#loc integer_type 
+                              t#typ variant,None), body)
+            | _ ->
+                While(Cte(Prim_bool true), inv,
+                      None, body)
+        end
+    | JCEassert a -> 
+        Assert(named_assertion
+                 ~global_assertion:false
+                 LabelHere
+                 LabelPre
+                 a,
+               Void)
+    | JCElet(vi,e,s) -> 
+        begin
+          let e' = match e with
+            | None -> 
+                any_value vi.jc_var_info_type
+            | Some e -> 
+(*                eprintf "decl of vi=%s@." vi.jc_var_info_name;*)
+                coerce ~no_int_overflow:(not threats) 
+                  e#name_label e#loc vi.jc_var_info_type e#typ 
+                  e (expr e)
+          in
+          if vi.jc_var_info_assigned then 
+            Let_ref(vi.jc_var_info_final_name, e', expr s)
+          else 
+            Let(vi.jc_var_info_final_name, e', expr s)
+        end
+    | JCEreturn_void -> Raise(jessie_return_exception,None)     
+    | JCEreturn(t,e) -> 
 	let return_type_asserts, _ = 
 	  type_assert ~infunction ~threats infunction.jc_fun_info_result e ([], []) in
 	let return_type_assert =
@@ -1680,7 +1671,7 @@ let rec statement ~infunction ~threats s =
 	    Assign 
 	      (jessie_return_variable,
 	       coerce ~no_int_overflow:(not threats) 
-		 e.jc_expr_label e.jc_expr_loc t e.jc_expr_type e (expr e))
+		 e#name_label e#loc t e#typ e (expr e))
 	in
 	let assign = 
 	  if return_type_assert = LTrue || not threats then assign else
@@ -1694,53 +1685,66 @@ let rec statement ~infunction ~threats s =
 		 | Some (tmp, e, _) -> Let (tmp, e, assign))
 	    return_type_asserts assign
 	in
-	  append assign (Raise (jessie_return_exception, None))
-    | JCSunpack(st, e, as_t) ->
-	let e = expr e in 
-	make_guarded_app ~name:lab Unpack s.jc_statement_loc
-	  (unpack_name st) [e; Var (tag_name as_t)]
-    | JCSpack(st, e, from_t) ->
-	let e = expr e in 
-	make_guarded_app ~name:lab Pack s.jc_statement_loc
-	  (pack_name st) [e; Var (tag_name from_t)]
-    | JCSthrow (ei, Some e) -> 
-	let e = expr e in
-	Raise(exception_name ei,Some e)
-    | JCSthrow (ei, None) -> 
-	Raise(exception_name ei,None)
-    | JCStry (s, catches, finally) -> 
-(* 	assert (finally.jc_statement_node = JCSblock []); (\* TODO *\) *)
-	let catch (s,excs) (ei,v_opt,st) =
-	  if ExceptionSet.mem ei excs then
-	    (Try(s, 
-		 exception_name ei, 
-		 Option_misc.map (fun v -> v.jc_var_info_final_name) v_opt,
-		 statement st),
-	     ExceptionSet.remove ei excs)
-	  else
-	    begin
-	      eprintf "Warning: exception %s cannot be thrown@."
-		ei.jc_exception_info_name;
-	      (s,excs)
-	    end
-	in
-	let ef = Jc_effect.statement empty_fun_effect s in
-	let (s,_) =
-	  List.fold_left catch (statement s,ef.jc_raises) catches
-	in s
-    | JCSmatch (e, psl) ->
+	append assign (Raise (jessie_return_exception, None))
+    | JCEunpack(st, e1, as_t) ->
+        let e1 = expr e1 in 
+        make_guarded_app ~name:lab Unpack e#loc
+          (unpack_name st) [e1; Var (tag_name as_t)]
+    | JCEpack(st, e1, from_t) ->
+        let e1 = expr e1 in 
+        make_guarded_app ~name:lab Pack e#loc
+          (pack_name st) [e1; Var (tag_name from_t)]
+    | JCEthrow (ei, Some e) -> 
+        let e = expr e in
+        Raise(exception_name ei,Some e)
+    | JCEthrow (ei, None) -> 
+        Raise(exception_name ei,None)
+    | JCEtry (s, catches, finally) -> 
+(*      assert (finally.jc_statement_node = JCEblock []); (\* TODO *\) *)
+        let catch (s,excs) (ei,v_opt,st) =
+          if ExceptionSet.mem ei excs then
+            (Try(s, 
+                 exception_name ei, 
+                 Option_misc.map (fun v -> v.jc_var_info_final_name) v_opt,
+                 expr st),
+             ExceptionSet.remove ei excs)
+          else
+            begin
+              eprintf "Warning: exception %s cannot be thrown@."
+                ei.jc_exception_info_name;
+              (s,excs)
+            end
+        in
+        let ef = Jc_effect.expr empty_fun_effect s in
+        let (s,_) =
+          List.fold_left catch (expr s,ef.jc_raises) catches
+        in s
+    | JCEmatch (e, psl) ->
+        let tmp = tmp_var_name () in
+        let body = pattern_list_expr expr (LVar tmp) e#region
+          e#typ psl in
+        Let(tmp, expr e, body)
+  in
+  let ie = 
+    if e#typ = Jc_pervasives.unit_type 
+      && e#original_type <> Jc_pervasives.unit_type then
+	(* Create dummy temporary *)
 	let tmp = tmp_var_name () in
-	let body = pattern_list_expr statement (LVar tmp) e.jc_expr_region
-	  e.jc_expr_type psl in
-	Let(tmp, expr e, body)
+	Let(tmp,ie,Void)
+    else ie
+  in
+  match lab with
+    | "" -> ie
+    | _ -> Label(lab, ie)
 
-and statement_list ~infunction ~threats l = 
-  List.fold_right 
-    (fun s acc -> append (statement ~infunction ~threats s) acc) l Void
+and expr_coerce ~infunction ~threats vi e =
+  coerce ~no_int_overflow:(not threats)
+    e#name_label e#loc vi.jc_var_info_type 
+    e#typ e (expr ~infunction ~threats e)
 
-(******************
- structures
-******************)
+(*******************************************************************************)
+(*                                  Structures                                 *)
+(*******************************************************************************)
 
 (*
 If T is a structure:
@@ -1761,15 +1765,15 @@ let make_valid_pred tov =
   let params =
     let allocs = List.map
       (fun vi ->
-	 let tov = JCvariant vi in
-	   alloc_table_name tov,
-	 alloc_table_type tov)
+         let tov = JCvariant vi in
+           alloc_table_name tov,
+         alloc_table_type tov)
       (Jc_struct_tools.all_types ~select:fully_allocated tov)
     in
     let memories = List.map
       (fun fi ->
-	 field_memory_name fi,
-	 field_memory_type fi)
+         field_memory_name fi,
+         field_memory_type fi)
       (Jc_struct_tools.all_memories ~select:fully_allocated tov)
     in
     let p = p, pointer_type tov in
@@ -1780,31 +1784,31 @@ let make_valid_pred tov =
   let validity =
     let omin, omax, super_valid = match tov with
       | JCtag { jc_struct_info_parent = Some st } ->
-	  LTrue,
-	  LTrue,
-	  make_valid_pred_app (JCtag st) (LVar p) (LVar a) (LVar b)
+          LTrue,
+          LTrue,
+          make_valid_pred_app (JCtag st) (LVar p) (LVar a) (LVar b)
       | JCtag { jc_struct_info_parent = None }
       | JCvariant _ 
       | JCunion _ ->
-	  make_eq (make_offset_min tov (LVar p)) (LVar a),
-	  make_eq (make_offset_max tov (LVar p)) (LVar b),
-	  LTrue
+          make_eq (make_offset_min tov (LVar p)) (LVar a),
+          make_eq (make_offset_max tov (LVar p)) (LVar b),
+          LTrue
     in
     let fields_valid = match tov with
       | JCtag st ->
-	  List.map
-	    (function
-	       | { jc_field_info_type =
-		     JCTpointer(ftov, Some fa, Some fb) } as fi ->
-		   make_valid_pred_app ftov
-		     (make_select_fi fi (LVar p))
-		     (const_of_num fa)
-		     (const_of_num fb)
-	       | _ ->
-		   LTrue)
-	    st.jc_struct_info_fields
+          List.map
+            (function
+               | { jc_field_info_type =
+                     JCTpointer(ftov, Some fa, Some fb) } as fi ->
+                   make_valid_pred_app ftov
+                     (make_select_fi fi (LVar p))
+                     (const_of_num fa)
+                     (const_of_num fb)
+               | _ ->
+                   LTrue)
+            st.jc_struct_info_fields
       | JCvariant _ | JCunion _ ->
-	  [LTrue]
+          [LTrue]
     in
     make_and_list (omin::omax::super_valid::fields_valid)
   in
@@ -1826,36 +1830,36 @@ let tr_struct st acc =
   let acc =
     if !Jc_options.separation_sem = SepRegions then acc else
       if (struct_variant st).jc_variant_info_is_union then acc else
-	List.fold_left
-	  (fun acc fi ->
-	     let mem = field_memory_type fi in
-	     Param(
-	       false,
-	       field_memory_name fi,
-	       Ref_type(Base_type mem))::acc)
-	  acc st.jc_struct_info_fields
+        List.fold_left
+          (fun acc fi ->
+             let mem = field_memory_type fi in
+             Param(
+               false,
+               field_memory_name fi,
+               Ref_type(Base_type mem))::acc)
+          acc st.jc_struct_info_fields
   in
   (* Declarations of translation functions for union *)
   let vi = struct_variant st in
   let acc = 
     if not vi.jc_variant_info_is_union then acc else
       if integral_union vi then acc else
-	let uty = simple_logic_type (union_memory_type_name (struct_variant st)) in
-	List.fold_left
-	  (fun acc fi ->
-	     Logic(false,logic_field_of_union fi,
-		   [("",uty)],tr_base_type fi.jc_field_info_type)
-	     :: Logic(false,logic_union_of_field fi,
-		      [("",tr_base_type fi.jc_field_info_type)],uty)
-	     :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
-		      LForall("x",tr_base_type fi.jc_field_info_type,
-			      LPred(equality_op_for_type fi.jc_field_info_type,
-				    [LApp(logic_field_of_union fi,
-					  [LApp(logic_union_of_field fi, 
-						[LVar "x"])]);
-				     LVar "x"]))) 
-	     :: acc)
-	  acc st.jc_struct_info_fields
+        let uty = simple_logic_type (union_memory_type_name (struct_variant st)) in
+        List.fold_left
+          (fun acc fi ->
+             Logic(false,logic_field_of_union fi,
+                   [("",uty)],tr_base_type fi.jc_field_info_type)
+             :: Logic(false,logic_union_of_field fi,
+                      [("",tr_base_type fi.jc_field_info_type)],uty)
+             :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
+                      LForall("x",tr_base_type fi.jc_field_info_type,
+                              LPred(equality_op_for_type fi.jc_field_info_type,
+                                    [LApp(logic_field_of_union fi,
+                                          [LApp(logic_union_of_field fi, 
+                                                [LVar "x"])]);
+                                     LVar "x"]))) 
+             :: acc)
+          acc st.jc_struct_info_fields
   in
   (* declaration of the tag_id *)
   let acc =
@@ -1873,17 +1877,17 @@ let tr_struct st acc =
       Base_type ptr_type,
       (* [reads all_fields writes alloc,tagtab] *)
       (List.map alloc_table_name all_tovs
-	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields),[alloc;tagtab],
+        @ List.map (fun fi -> fi.jc_field_info_final_name) all_fields),[alloc;tagtab],
       (* normal post *)
       make_and_list [
-	(* [valid_one_st(result,alloc...)] *)
-	make_valid_one_pred_app (JCtag st) (LVar "result");
-	(* [instanceof(tagtab,result,tag_st)] *)
-	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
-	(* [alloc_extends(old(alloc),alloc)] *)
-	LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-	(* [alloc_extern(old(alloc),result)] *)
-	LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
+        (* [valid_one_st(result,alloc...)] *)
+        make_valid_one_pred_app (JCtag st) (LVar "result");
+        (* [instanceof(tagtab,result,tag_st)] *)
+        LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
+        (* [alloc_extends(old(alloc),alloc)] *)
+        LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
+        (* [alloc_extern(old(alloc),result)] *)
+        LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
       ],
       (* no exceptional post *)
       [])
@@ -1891,8 +1895,8 @@ let tr_struct st acc =
   let alloc_type =
     List.fold_right (fun fi acc ->
       Prod_type(field_memory_name fi,
-		Ref_type(Base_type(field_memory_type fi)),
-		acc)
+                Ref_type(Base_type(field_memory_type fi)),
+                acc)
     ) all_fields alloc_type 
   in
   let alloc_type =
@@ -1915,20 +1919,20 @@ let tr_struct st acc =
       Base_type ptr_type,
       (* [reads all_fields; writes alloc,tagtab] *)
       (List.map alloc_table_name all_tovs
-	@ List.map (fun fi -> fi.jc_field_info_final_name) all_fields), [alloc; tagtab],
+        @ List.map (fun fi -> fi.jc_field_info_final_name) all_fields), [alloc; tagtab],
       (* normal post *)
       make_and_list [
-	(* [valid_st(result,0,n-1,alloc...)] *)
-	make_valid_pred_app (JCtag st)
-	  (LVar "result")
-	  (LConst(Prim_int "0"))
-	  (LApp("sub_int",[LVar "n"; LConst(Prim_int "1")]));
-	(* [instanceof(tagtab,result,tag_st)] *)
-	LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
-	(* [alloc_extends(old(alloc),alloc)] *)
-	LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-	(* [alloc_extern(old(alloc),result)] *)
-	LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
+        (* [valid_st(result,0,n-1,alloc...)] *)
+        make_valid_pred_app (JCtag st)
+          (LVar "result")
+          (LConst(Prim_int "0"))
+          (LApp("sub_int",[LVar "n"; LConst(Prim_int "1")]));
+        (* [instanceof(tagtab,result,tag_st)] *)
+        LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
+        (* [alloc_extends(old(alloc),alloc)] *)
+        LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
+        (* [alloc_extern(old(alloc),result)] *)
+        LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
       ],
       (* no exceptional post *)
       [])
@@ -1936,8 +1940,8 @@ let tr_struct st acc =
   let alloc_type =
     List.fold_right (fun fi acc ->
       Prod_type(field_memory_name fi,
-		Ref_type(Base_type(field_memory_type fi)),
-		acc)
+                Ref_type(Base_type(field_memory_type fi)),
+                acc)
     ) all_fields alloc_type
   in
   let alloc_type =
@@ -1953,80 +1957,79 @@ let tr_struct st acc =
 
   match st.jc_struct_info_parent with
     | None ->
-	(* axiom for parenttag *)
-	let name = st.jc_struct_info_name ^ "_parenttag_bottom" in
-	let p = LPred("parenttag", [ LVar (tag_name st); LVar "bottom_tag" ]) in
-	Axiom(name, p)::acc
+        (* axiom for parenttag *)
+        let name = st.jc_struct_info_name ^ "_parenttag_bottom" in
+        let p = LPred("parenttag", [ LVar (tag_name st); LVar "bottom_tag" ]) in
+        Axiom(name, p)::acc
     | Some p ->
-	(* axiom for parenttag *)
-	let name =
-	  st.jc_struct_info_name ^ "_parenttag_" ^ p.jc_struct_info_name
-	in
-	let p =
-	  LPred("parenttag", [ LVar (tag_name st); LVar (tag_name p) ])
-	in
-	Axiom(name, p)::acc
+        (* axiom for parenttag *)
+        let name =
+          st.jc_struct_info_name ^ "_parenttag_" ^ p.jc_struct_info_name
+        in
+        let p =
+          LPred("parenttag", [ LVar (tag_name st); LVar (tag_name p) ])
+        in
+        Axiom(name, p)::acc
 
-
-(*************
-locations
-*********)
+(*******************************************************************************)
+(*                                  Locations                                  *)
+(*******************************************************************************)
 
 let rec pset ~global_assertion before loc = 
   let fpset = pset ~global_assertion before in
   match loc with
     | JCLSderef(ls,lab,fi,r) ->
-	let m = lvar ~label_in_name:global_assertion lab (field_region_memory_name(fi,r)) in
-	LApp("pset_deref", [m;fpset ls])
+        let m = lvar ~label_in_name:global_assertion lab (field_region_memory_name(fi,r)) in
+        LApp("pset_deref", [m;fpset ls])
     | JCLSvar vi -> 
-	let m = lvar_info before vi in
-	LApp("pset_singleton", [m])
+        let m = lvar_info before vi in
+        LApp("pset_singleton", [m])
     | JCLSrange(ls,None,None) ->
-	let ls = fpset ls in
-	LApp("pset_all", [ls])
+        let ls = fpset ls in
+        LApp("pset_all", [ls])
     | JCLSrange(ls,None,Some b) ->
-	let ls = fpset ls in
-	let b', lets = term ~global_assertion before before b in
-	assert (lets = []);
-	LApp("pset_range_left", 
-	     [ls; 
-	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
+        let ls = fpset ls in
+        let b', lets = term ~global_assertion before before b in
+        assert (lets = []);
+        LApp("pset_range_left", 
+             [ls; 
+              term_coerce b#loc integer_type b#typ b'])
     | JCLSrange(ls,Some a,None) ->
-	let ls = fpset ls in
-	let a', lets = term ~global_assertion before before a in
-	assert (lets = []);
-	LApp("pset_range_right", 
-	     [ls; 
-	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'])
+        let ls = fpset ls in
+        let a', lets = term ~global_assertion before before a in
+        assert (lets = []);
+        LApp("pset_range_right", 
+             [ls; 
+              term_coerce a#loc integer_type a#typ a'])
     | JCLSrange(ls,Some a,Some b) ->
-	let ls = fpset ls in
-	let a', lets1 = term ~global_assertion before before a in
-	let b', lets2 = term ~global_assertion before before b in
-	assert (lets1 = [] && lets2 = []);
-	LApp("pset_range", 
-	     [ls; 
-	      term_coerce a.jc_term_loc integer_type a.jc_term_type a'; 
-	      term_coerce b.jc_term_loc integer_type b.jc_term_type b'])
-	
+        let ls = fpset ls in
+        let a', lets1 = term ~global_assertion before before a in
+        let b', lets2 = term ~global_assertion before before b in
+        assert (lets1 = [] && lets2 = []);
+        LApp("pset_range", 
+             [ls; 
+              term_coerce a#loc integer_type a#typ a'; 
+              term_coerce b#loc integer_type b#typ b'])
+        
 let rec collect_locations ~global_assertion before (refs,mems) loc =
   match loc with
     | JCLderef(e,lab,fi,fr) -> 
-	let iloc = pset ~global_assertion lab e in
-	let fvi = 
-	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
-	in
-	let l =
-	  try
-	    let l = FieldOrVariantRegionMap.find (fvi,location_set_region e) mems in
-	    iloc::l
-	  with Not_found -> [iloc]
-	in
-	(refs, FieldOrVariantRegionMap.add (fvi,location_set_region e) l mems)
+        let iloc = pset ~global_assertion lab e in
+        let fvi = 
+          if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
+        in
+        let l =
+          try
+            let l = FieldOrVariantRegionMap.find (fvi,location_set_region e) mems in
+            iloc::l
+          with Not_found -> [iloc]
+        in
+        (refs, FieldOrVariantRegionMap.add (fvi,location_set_region e) l mems)
     | JCLvar vi -> 
-	let var = vi.jc_var_info_final_name in
-	(StringMap.add var true refs,mems)
+        let var = vi.jc_var_info_final_name in
+        (StringMap.add var true refs,mems)
     | JCLat(loc,lab) ->
-	collect_locations ~global_assertion before (refs,mems) loc
+        collect_locations ~global_assertion before (refs,mems) loc
 
 let rec make_union_loc = function
   | [] -> LVar "pset_empty"
@@ -2035,20 +2038,20 @@ let rec make_union_loc = function
 
 let assigns before ef locs =
   match locs with
-    | None -> LTrue	
+    | None -> LTrue     
     | Some locs ->
   let refs = 
     (* HeapVarSet.fold
-	    (fun v m -> 
-	       if Ceffect.is_alloc v then m 
-	       else StringMap.add (heap_var_name v) (Reference false) m)
-	    assigns.Ceffect.assigns_var 
+            (fun v m -> 
+               if Ceffect.is_alloc v then m 
+               else StringMap.add (heap_var_name v) (Reference false) m)
+            assigns.Ceffect.assigns_var 
     *) StringMap.empty 
   in
   let mems = 
     FieldOrVariantRegionMap.fold
       (fun (fi,r) labels m -> 
-	 FieldOrVariantRegionMap.add (fi,r) [] m)
+         FieldOrVariantRegionMap.add (fi,r) [] m)
       ef.jc_writes.jc_effect_memories FieldOrVariantRegionMap.empty 
   in
   let refs,mems = 
@@ -2057,28 +2060,28 @@ let assigns before ef locs =
   let a =
     StringMap.fold
       (fun v p acc -> 
-	if p then acc else
-	  make_and acc (LPred("eq", [LVar v; lvar before v])))
+        if p then acc else
+          make_and acc (LPred("eq", [LVar v; lvar before v])))
       refs LTrue
   in
   FieldOrVariantRegionMap.fold
     (fun (fvi,r) p acc -> 
        let v = field_or_variant_region_memory_name(fvi,r) in
        let root = match fvi with 
-	 | FVfield fi -> JCtag fi.jc_field_info_root
-	 | FVvariant vi -> JCvariant vi
+         | FVfield fi -> JCtag fi.jc_field_info_root
+         | FVvariant vi -> JCvariant vi
        in
        let alloc = alloc_region_table_name(root,r) in
        make_and acc
-	 (LPred("not_assigns",
-		[lvar before alloc; 
-		 lvar before v;
-		 LVar v; make_union_loc p])))
+         (LPred("not_assigns",
+                [lvar before alloc; 
+                 lvar before v;
+                 LVar v; make_union_loc p])))
     mems a
 
-(*****************
- functions
-**************)
+(*******************************************************************************)
+(*                                  Functions                                  *)
+(*******************************************************************************)
 
 let parameter v =
   (v.jc_var_info_final_name,tr_type v.jc_var_info_type)
@@ -2087,33 +2090,33 @@ let excep_posts_for_others eopt excep_posts =
   ExceptionMap.fold
     (fun ei l acc ->
        match eopt with 
-	 | Some ei -> acc
-	 | None -> (exception_name ei, LTrue)::acc)
+         | Some ei -> acc
+         | None -> (exception_name ei, LTrue)::acc)
     excep_posts []
     
 let interp_fun_params f write_mems read_mems annot_type =
   let annot_type = 
     if !Jc_options.separation_sem = SepNone then annot_type else
       List.fold_right (fun (name,ty) acc ->
-	Prod_type(name,Base_type ty,acc)
+        Prod_type(name,Base_type ty,acc)
       ) read_mems annot_type
   in
   let annot_type = 
     if !Jc_options.separation_sem = SepNone then annot_type else
       List.fold_right (fun (name,ty) acc ->
-	Prod_type(name,Ref_type(Base_type ty),acc)
+        Prod_type(name,Ref_type(Base_type ty),acc)
       ) write_mems annot_type
   in
   match f.jc_fun_info_parameters with
     | [] ->
-	Prod_type("tt",unit_type, annot_type)
+        Prod_type("tt",unit_type, annot_type)
     | l ->
-	List.fold_right
-	  (fun v acc ->
-	     Prod_type(v.jc_var_info_final_name,
-		       tr_type v.jc_var_info_type,
-		       acc))
-	  l annot_type
+        List.fold_right
+          (fun v acc ->
+             Prod_type(v.jc_var_info_final_name,
+                       tr_type v.jc_var_info_type,
+                       acc))
+          l annot_type
        
   
 let tr_fun f loc spec body acc =
@@ -2140,26 +2143,26 @@ let tr_fun f loc spec body acc =
   let requires =
     List.fold_left 
       (fun acc vi ->
-	 make_and
-	   (match vi.jc_var_info_type with
-	      | JCTpointer (tov, n1o, n2o) ->
-		  let vit, lets = 
-		    term ~global_assertion:false LabelHere LabelHere
-		      (term_var_no_loc vi) 
-		  in
-		  begin match n1o, n2o with
-		    | None, _ | _, None -> LTrue
-		    | Some n1, Some n2 ->
-			let pred =
-			  make_valid_pred_app tov
-			    vit
-			    (const_of_num n1)
-			    (const_of_num n2)
-			in
-			make_pred_binds lets pred
-		  end
-	      | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull -> LTrue)
-	   acc)
+         make_and
+           (match vi.jc_var_info_type with
+              | JCTpointer (tov, n1o, n2o) ->
+                  let vit, lets = 
+                    term ~global_assertion:false LabelHere LabelHere
+                      (new term_var vi) 
+                  in
+                  begin match n1o, n2o with
+                    | None, _ | _, None -> LTrue
+                    | Some n1, Some n2 ->
+                        let pred =
+                          make_valid_pred_app tov
+                            vit
+                            (const_of_num n1)
+                            (const_of_num n2)
+                        in
+                        make_pred_binds lets pred
+                  end
+              | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany -> LTrue)
+           acc)
       requires
       f.jc_fun_info_parameters
   in
@@ -2172,61 +2175,61 @@ let tr_fun f loc spec body acc =
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
       (fun (safety, normal_inferred, normal, excep_inferred, excep) (loc, id, b) ->
-	 let post =
-	   match b.jc_behavior_assigns with
-	     | None ->
-		 (*
-		   eprintf "lab,loc for ensures: \"%s\", %a@."
-		   b.jc_behavior_ensures.jc_assertion_label
-		   Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
-		 *)
-		 (named_assertion ~global_assertion:false LabelPost LabelOld 
-		    b.jc_behavior_ensures)		
-	     | Some (locassigns, a) ->
-		 named_jc_assertion loc
-		   (make_and
-		      (named_assertion ~global_assertion:false LabelPost LabelOld
-			 b.jc_behavior_ensures)		
-		      (named_jc_assertion
-			 locassigns
-			 (assigns LabelOld f.jc_fun_info_effects (Some a))))
-	 in
-	 let a =
-	   match b.jc_behavior_assumes with
-	     | None -> post
-	     | Some e -> 
-		 make_impl (assertion ~global_assertion:false LabelHere LabelHere e) post
-	 in
-	   match b.jc_behavior_throws with
-	     | None -> 
-		 begin match id with
-		   | "safety" ->
-		       ((id, b, a) :: safety, 
-			normal_inferred, normal, excep_inferred, excep)
-		   | "inferred" -> 
-		       (safety,
-			(id, b, a) :: normal_inferred, 
-			(if Jc_options.trust_ai then normal else (id, b, a) :: normal), 
-			excep_inferred, excep)
-		   | _ -> 
-		       (safety, 
-			normal_inferred, (id, b, a) :: normal, 
-			excep_inferred, excep)
-		 end
-	     | Some ei ->
-		 let eb =
-		   try
-		     ExceptionMap.find ei excep
-		   with Not_found -> []
-		 in
-		   if id = "inferred" then 
-		     (safety, normal_inferred, normal, 
-		      ExceptionMap.add ei ((id, b, a) :: eb) excep_inferred, 
-		      if Jc_options.trust_ai then excep else 
-			ExceptionMap.add ei ((id, b, a) :: eb) excep)
-		   else
-		     (safety, normal_inferred, normal, excep_inferred, 
-		      ExceptionMap.add ei ((id, b, a) :: eb) excep))
+         let post =
+           match b.jc_behavior_assigns with
+             | None ->
+                 (*
+                   eprintf "lab,loc for ensures: \"%s\", %a@."
+                   b.jc_behavior_ensures#name_label
+                   Loc.gen_report_position b.jc_behavior_ensures#loc;
+                 *)
+                 (named_assertion ~global_assertion:false LabelPost LabelOld 
+                    b.jc_behavior_ensures)              
+             | Some (locassigns, a) ->
+                 named_jc_assertion loc
+                   (make_and
+                      (named_assertion ~global_assertion:false LabelPost LabelOld
+                         b.jc_behavior_ensures)         
+                      (named_jc_assertion
+                         locassigns
+                         (assigns LabelOld f.jc_fun_info_effects (Some a))))
+         in
+         let a =
+           match b.jc_behavior_assumes with
+             | None -> post
+             | Some e -> 
+                 make_impl (assertion ~global_assertion:false LabelHere LabelHere e) post
+         in
+           match b.jc_behavior_throws with
+             | None -> 
+                 begin match id with
+                   | "safety" ->
+                       ((id, b, a) :: safety, 
+                        normal_inferred, normal, excep_inferred, excep)
+                   | "inferred" -> 
+                       (safety,
+                        (id, b, a) :: normal_inferred, 
+                        (if Jc_options.trust_ai then normal else (id, b, a) :: normal), 
+                        excep_inferred, excep)
+                   | _ -> 
+                       (safety, 
+                        normal_inferred, (id, b, a) :: normal, 
+                        excep_inferred, excep)
+                 end
+             | Some ei ->
+                 let eb =
+                   try
+                     ExceptionMap.find ei excep
+                   with Not_found -> []
+                 in
+                   if id = "inferred" then 
+                     (safety, normal_inferred, normal, 
+                      ExceptionMap.add ei ((id, b, a) :: eb) excep_inferred, 
+                      if Jc_options.trust_ai then excep else 
+                        ExceptionMap.add ei ((id, b, a) :: eb) excep)
+                   else
+                     (safety, normal_inferred, normal, excep_inferred, 
+                      ExceptionMap.add ei ((id, b, a) :: eb) excep))
       ([], [], [], ExceptionMap.empty, ExceptionMap.empty)
       spec.jc_fun_behavior
   in
@@ -2234,27 +2237,27 @@ let tr_fun f loc spec body acc =
   let excep_behaviors = 
     ExceptionSet.fold
       (fun ei acc -> 
-	 if ExceptionMap.mem ei acc then acc else
-	   let b = 
-	     { default_behavior with 
-		 jc_behavior_throws = Some ei; jc_behavior_ensures = (raw_asrt JCAtrue); } 
-	   in
-	     ExceptionMap.add ei [ei.jc_exception_info_name ^ "_b", b, LTrue] acc)
+         if ExceptionMap.mem ei acc then acc else
+           let b = 
+             { default_behavior with 
+                 jc_behavior_throws = Some ei; jc_behavior_ensures = (new assertion JCAtrue); } 
+           in
+             ExceptionMap.add ei [ei.jc_exception_info_name ^ "_b", b, LTrue] acc)
       f.jc_fun_info_effects.jc_raises
       excep_behaviors
   in
   let reads =
     FieldOrVariantRegionMap.fold
       (fun (fi,r) labels acc -> 
-	let mem = field_or_variant_region_memory_name(fi,r) in
-	if Region.polymorphic r then
-	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    if FieldOrVariantRegionMap.mem (fi,r) 
-	      f.jc_fun_info_effects.jc_writes.jc_effect_memories 
-	    then mem::acc 
-	    else acc
-	  else acc
-	else mem::acc)
+        let mem = field_or_variant_region_memory_name(fi,r) in
+        if Region.polymorphic r then
+          if RegionList.mem r f.jc_fun_info_param_regions then
+            if FieldOrVariantRegionMap.mem (fi,r) 
+              f.jc_fun_info_effects.jc_writes.jc_effect_memories 
+            then mem::acc 
+            else acc
+          else acc
+        else mem::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_memories
       []
   in
@@ -2267,15 +2270,15 @@ let tr_fun f loc spec body acc =
   let reads =
     StringRegionSet.fold
       (fun (a,r) acc -> 
-	let alloc = alloc_region_table_name2(a,r) in
-	if Region.polymorphic r then
-	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    if StringRegionSet.mem (a,r) 
-	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table 
-	    then alloc::acc 
-	    else acc
-	  else acc
-	else alloc::acc)
+        let alloc = alloc_region_table_name2(a,r) in
+        if Region.polymorphic r then
+          if RegionList.mem r f.jc_fun_info_param_regions then
+            if StringRegionSet.mem (a,r) 
+              f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table 
+            then alloc::acc 
+            else acc
+          else acc
+        else alloc::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
       reads
   in
@@ -2300,10 +2303,10 @@ let tr_fun f loc spec body acc =
   let writes =
     FieldOrVariantRegionMap.fold
       (fun (fi,r) labels acc ->
-	let mem = field_or_variant_region_memory_name(fi,r) in
-	if Region.polymorphic r then
-	  if RegionList.mem r f.jc_fun_info_param_regions then mem::acc else acc
-	else mem::acc)
+        let mem = field_or_variant_region_memory_name(fi,r) in
+        if Region.polymorphic r then
+          if RegionList.mem r f.jc_fun_info_param_regions then mem::acc else acc
+        else mem::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       []
   in
@@ -2316,10 +2319,10 @@ let tr_fun f loc spec body acc =
   let writes =
     StringRegionSet.fold
       (fun (a,r) acc ->
-	let alloc = alloc_region_table_name2(a,r) in
-	if Region.polymorphic r then
-	  if RegionList.mem r f.jc_fun_info_param_regions then alloc::acc else acc
-	else alloc::acc)
+        let alloc = alloc_region_table_name2(a,r) in
+        if Region.polymorphic r then
+          if RegionList.mem r f.jc_fun_info_param_regions then alloc::acc else acc
+        else alloc::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
       writes
   in
@@ -2344,60 +2347,60 @@ let tr_fun f loc spec body acc =
   let param_write_mems,local_write_mems =
     FieldOrVariantRegionMap.fold
       (fun (fi,r) labels (param_acc,local_acc) ->
-	if Region.polymorphic r then
-	  let mem = field_or_variant_region_memory_name(fi,r),
-	    field_or_variant_memory_type fi in
-	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    mem::param_acc,local_acc
-	  else
-	    param_acc,mem::local_acc
-	else param_acc,local_acc)
+        if Region.polymorphic r then
+          let mem = field_or_variant_region_memory_name(fi,r),
+            field_or_variant_memory_type fi in
+          if RegionList.mem r f.jc_fun_info_param_regions then
+            mem::param_acc,local_acc
+          else
+            param_acc,mem::local_acc
+        else param_acc,local_acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_memories
       ([],[])
   in
   let param_read_mems,local_read_mems =
     FieldOrVariantRegionMap.fold
       (fun (fi,r) labels ((param_acc,local_acc) as acc) ->
-	 if FieldOrVariantRegionMap.mem (fi,r) 
-	   f.jc_fun_info_effects.jc_writes.jc_effect_memories
-	 then acc else
-	   if Region.polymorphic r then
-	  let mem = field_or_variant_region_memory_name(fi,r),
-	    field_or_variant_memory_type fi in
-	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    mem::param_acc,local_acc
-	  else
-	    param_acc,mem::local_acc
-	else param_acc,local_acc)
+         if FieldOrVariantRegionMap.mem (fi,r) 
+           f.jc_fun_info_effects.jc_writes.jc_effect_memories
+         then acc else
+           if Region.polymorphic r then
+          let mem = field_or_variant_region_memory_name(fi,r),
+            field_or_variant_memory_type fi in
+          if RegionList.mem r f.jc_fun_info_param_regions then
+            mem::param_acc,local_acc
+          else
+            param_acc,mem::local_acc
+        else param_acc,local_acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_memories
       ([],[])
   in
   let param_write_allocs,local_write_allocs =
     StringRegionSet.fold
       (fun (a,r) (param_acc,local_acc) ->
-	if Region.polymorphic r then
-	  let alloc = alloc_region_table_name2(a,r),alloc_table_type2 a in
-	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    alloc::param_acc,local_acc
-	  else
-	    param_acc,alloc::local_acc
-	else param_acc,local_acc)
+        if Region.polymorphic r then
+          let alloc = alloc_region_table_name2(a,r),alloc_table_type2 a in
+          if RegionList.mem r f.jc_fun_info_param_regions then
+            alloc::param_acc,local_acc
+          else
+            param_acc,alloc::local_acc
+        else param_acc,local_acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
       ([],[])
   in
   let param_read_allocs,local_read_allocs =
     StringRegionSet.fold
       (fun (a,r) (param_acc,local_acc) ->
-	if Region.polymorphic r then
-	  let alloc = alloc_region_table_name2(a,r),alloc_table_type2 a in
-	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    alloc::param_acc,local_acc
-	  else
-	    param_acc,alloc::local_acc
-	else param_acc,local_acc)
+        if Region.polymorphic r then
+          let alloc = alloc_region_table_name2(a,r),alloc_table_type2 a in
+          if RegionList.mem r f.jc_fun_info_param_regions then
+            alloc::param_acc,local_acc
+          else
+            param_acc,alloc::local_acc
+        else param_acc,local_acc)
       (StringRegionSet.diff 
-	f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
-	f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)
+        f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
+        f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)
       ([],[])
   in
   let safety_post =
@@ -2418,17 +2421,17 @@ let tr_fun f loc spec body acc =
   let excep_posts =
     ExceptionMap.fold
       (fun ei l acc ->
-	 let p = 
-	   List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
-	 in (exception_name ei,p)::acc) 
+         let p = 
+           List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
+         in (exception_name ei,p)::acc) 
       excep_behaviors []
   in
   let excep_posts_inferred =
     ExceptionMap.fold
       (fun ei l acc ->
-	 let p = 
-	   List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
-	 in (exception_name ei,p)::acc) 
+         let p = 
+           List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
+         in (exception_name ei,p)::acc) 
       excep_behaviors_inferred []
   in
     (* DEBUG *)
@@ -2443,229 +2446,229 @@ let tr_fun f loc spec body acc =
   let why_param = 
     let annot_type =
       Annot_type(requires_param, ret_type,
-		 reads,writes, param_normal_post, param_excep_posts)
+                 reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = 
       interp_fun_params f 
-	(param_write_allocs @ param_write_mems) 
-	(param_read_allocs @ param_read_mems) 
-	annot_type 
+        (param_write_allocs @ param_write_mems) 
+        (param_read_allocs @ param_read_mems) 
+        annot_type 
     in
       Param (false, f.jc_fun_info_final_name, fun_type)
   in
   match body with
     | None -> 
-	(* function was only declared *)
-	why_param :: acc
+        (* function was only declared *)
+        why_param :: acc
     | Some body ->
-	if Jc_options.verify <> [] && 
-	  not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) 
-	then 
-	  why_param :: acc 
-	else
-	  (* why functions for each behaviors *)
-	    let write_mems = 
-	      List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) 
-		(param_write_mems @ param_write_allocs)
-	    in
-	    let read_mems = 
-	      List.map (fun (name,ty) -> name,Base_type ty) 
-		(param_read_mems @ param_read_allocs)
-	    in
-	    let params = match f.jc_fun_info_parameters with
-	      | [] -> ["tt", unit_type]
-	      | l -> List.map parameter l
-	    in
-	    let params = params @ write_mems @ read_mems in
-	      (* rename formals just before body is treated *)
-	     let list_of_refs =
-	      List.fold_right
-		(fun id bl ->
-		   if id.jc_var_info_assigned
-		   then 
-		     let n = id.jc_var_info_final_name in
-		     let newn = "mutable_" ^ n in
-		       id.jc_var_info_final_name <- newn;
-		       (newn, n) :: bl
-		   else bl) 
-		f.jc_fun_info_parameters [] 
-	    in
-	      return_void := 
-		(match f.jc_fun_info_result.jc_var_info_type with
-		   | JCTnative Tunit -> true
-		   | _ -> false);		
-	      printf "Generating Why function %s@."
-		f.Jc_fenv.jc_fun_info_final_name;
-	      (* default behavior *)
-	      let body_safety = 
-		statement_list ~infunction:f ~threats:true body in
-	      let tblock =
-		if !Jc_options.inv_sem = InvOwnership then
-		  append
-		    (* (make_assume_all_assocs (fresh_program_point ()) 
-		       f.jc_fun_info_parameters)*)
-		    (assume_all_invariants f.jc_fun_info_parameters)
-		    body_safety
-		else
-		  body_safety
-	      in
-	      let tblock =
-		List.fold_left (fun acc (mem_name,_) ->
-		  Let(mem_name,App(Var "any_memory",Void),acc)
-		) tblock local_read_mems
-	      in
-	      let tblock =
-		List.fold_left (fun acc (mem_name,_) ->
-		  Let_ref(mem_name,App(Var "any_memory",Void),acc)
-		) tblock local_write_mems
-	      in
-	      let tblock =
-		List.fold_left (fun acc (alloc_name,_) ->
-		  Let(alloc_name,App(Var "any_alloc_table",Void),acc)
-		) tblock local_read_allocs
-	      in
-	      let tblock =
-		List.fold_left (fun acc (alloc_name,_) ->
-		  Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
-		) tblock local_write_allocs
-	      in
-	      let tblock = 
-		if !return_void then
-		  Try(append tblock (Raise(jessie_return_exception,None)),
-		      jessie_return_exception,None,Void)
-		else
-		  let e = any_value f.jc_fun_info_result.jc_var_info_type in
-		    Let_ref(jessie_return_variable,e,
-			    Try(append tblock Absurd,
-				jessie_return_exception,None,
-				Deref(jessie_return_variable)))
-	      in
-	      let tblock = make_label "init" tblock in
-	      let tblock_safety =
-		List.fold_right
-		  (fun (mut_id,id) bl ->
-		     Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-	      in
-	      let newid = f.jc_fun_info_name ^ "_safety" in
-	      let _ = reg_loc 
-		~id:newid
-		~oldid:f.jc_fun_info_name
-		~name:("function " ^ f.jc_fun_info_name)
-		~beh:"Safety" loc 
-	      in
-	      let acc = 
-		if is_purely_exceptional_fun spec then acc else
-		  if Jc_options.verify_invariants_only then acc else
-		  Def(
-		    newid,
-		    Fun(
-		      params,
-		      requires,
-		      tblock_safety,
-		      safety_post,
-		      excep_posts_for_others None excep_behaviors
-		    ))::acc
-	      in
-		(* user behaviors *)
-	      let acc = 
-		if spec.jc_fun_behavior = [] then
-		  acc
-		else
-		  let body = statement_list ~infunction:f ~threats:false body in
-		  let tblock =
-		    if !Jc_options.inv_sem = InvOwnership then
-		      append
-			(*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-			(assume_all_invariants f.jc_fun_info_parameters)
-			body
-		    else
-		      body
-		  in
-		  let tblock = 
-		    if !return_void then
-		      Try(append tblock (Raise(jessie_return_exception,None)),
-			  jessie_return_exception,None,Void)
-		    else
-		      let e = any_value f.jc_fun_info_result.jc_var_info_type in
-			Let_ref(jessie_return_variable,e,
-				Try(append tblock Absurd,
-				    jessie_return_exception,None,
-				    Deref(jessie_return_variable)))
-		  in
-		  let tblock = make_label "init" tblock in
-		  let tblock =
-		    List.fold_right
-		      (fun (mut_id,id) bl ->
-			 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-		  in
-		    (* normal behaviors *)
-		  let acc =
-		    List.fold_right
-		      (fun (id,b,e) acc ->
-			 let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
-			 let beh = 
-			   if id="default" then "Behavior" else
-			     "Normal behavior `"^id^"'"
-			 in
-			 let _ = reg_loc 
-			   ~id:newid
-			   ~oldid:f.jc_fun_info_name
-			   ~name:("function "^f.jc_fun_info_name)
-			   ~beh  
-			   loc 
-			 in
-			 let d =
-			   Def(
-			     newid,
-			     Fun(
-			       params,
-			       requires,
-			       tblock,
-			       e,
-			       excep_posts_for_others None excep_behaviors
-			     )
-			   )
-			 in d::acc)
-		      normal_behaviors acc
-		  in 
-		    (* redefine [tblock] for use in exception functions *)
-		    (* CLAUDE: pourquoi ??????
-		       let tblock = make_label "init" tblock in
-		       let tblock =
-		       List.fold_right
-		       (fun (mut_id,id) bl ->
-		       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-		       in
-		    *)
-		    (* exceptional behaviors *)
-		  let acc =
-		    ExceptionMap.fold
-		      (fun ei l acc ->
-			 List.fold_right
-			   (fun (id,b,e) acc ->
-			      let newid = 
-				f.jc_fun_info_name ^ "_exsures_" ^ id 
-			      in
-			      let _ = reg_loc 
-				~id:newid
-				~oldid:f.jc_fun_info_name
-				~name:("function "^f.jc_fun_info_name)
-				~beh:("Exceptional behavior `"^id^"'")  
-				loc in
-			      let d =
-				Def(newid,
-				    Fun(params,
-					requires,
-					tblock,
-					LTrue,
-					(exception_name ei,e) :: 
-					  excep_posts_for_others (Some ei) excep_behaviors)) in
-				d::acc)
-			   l acc)
-		      user_excep_behaviors acc
-		  in
-		    acc 
-	in why_param::acc
+        if Jc_options.verify <> [] && 
+          not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) 
+        then 
+          why_param :: acc 
+        else
+          (* why functions for each behaviors *)
+            let write_mems = 
+              List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) 
+                (param_write_mems @ param_write_allocs)
+            in
+            let read_mems = 
+              List.map (fun (name,ty) -> name,Base_type ty) 
+                (param_read_mems @ param_read_allocs)
+            in
+            let params = match f.jc_fun_info_parameters with
+              | [] -> ["tt", unit_type]
+              | l -> List.map parameter l
+            in
+            let params = params @ write_mems @ read_mems in
+              (* rename formals just before body is treated *)
+             let list_of_refs =
+              List.fold_right
+                (fun id bl ->
+                   if id.jc_var_info_assigned
+                   then 
+                     let n = id.jc_var_info_final_name in
+                     let newn = "mutable_" ^ n in
+                       id.jc_var_info_final_name <- newn;
+                       (newn, n) :: bl
+                   else bl) 
+                f.jc_fun_info_parameters [] 
+            in
+              return_void := 
+                (match f.jc_fun_info_result.jc_var_info_type with
+                   | JCTnative Tunit -> true
+                   | _ -> false);               
+              printf "Generating Why function %s@."
+                f.Jc_fenv.jc_fun_info_final_name;
+              (* default behavior *)
+              let body_safety = 
+                expr ~infunction:f ~threats:true body in
+              let tblock =
+                if !Jc_options.inv_sem = InvOwnership then
+                  append
+                    (* (make_assume_all_assocs (fresh_program_point ()) 
+                       f.jc_fun_info_parameters)*)
+                    (assume_all_invariants f.jc_fun_info_parameters)
+                    body_safety
+                else
+                  body_safety
+              in
+              let tblock =
+                List.fold_left (fun acc (mem_name,_) ->
+                  Let(mem_name,App(Var "any_memory",Void),acc)
+                ) tblock local_read_mems
+              in
+              let tblock =
+                List.fold_left (fun acc (mem_name,_) ->
+                  Let_ref(mem_name,App(Var "any_memory",Void),acc)
+                ) tblock local_write_mems
+              in
+              let tblock =
+                List.fold_left (fun acc (alloc_name,_) ->
+                  Let(alloc_name,App(Var "any_alloc_table",Void),acc)
+                ) tblock local_read_allocs
+              in
+              let tblock =
+                List.fold_left (fun acc (alloc_name,_) ->
+                  Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
+                ) tblock local_write_allocs
+              in
+              let tblock = 
+                if !return_void then
+                  Try(append tblock (Raise(jessie_return_exception,None)),
+                      jessie_return_exception,None,Void)
+                else
+                  let e = any_value f.jc_fun_info_result.jc_var_info_type in
+                    Let_ref(jessie_return_variable,e,
+                            Try(append tblock Absurd,
+                                jessie_return_exception,None,
+                                Deref(jessie_return_variable)))
+              in
+              let tblock = make_label "init" tblock in
+              let tblock_safety =
+                List.fold_right
+                  (fun (mut_id,id) bl ->
+                     Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+              in
+              let newid = f.jc_fun_info_name ^ "_safety" in
+              let _ = reg_loc 
+                ~id:newid
+                ~oldid:f.jc_fun_info_name
+                ~name:("function " ^ f.jc_fun_info_name)
+                ~beh:"Safety" loc 
+              in
+              let acc = 
+                if is_purely_exceptional_fun spec then acc else
+                  if Jc_options.verify_invariants_only then acc else
+                  Def(
+                    newid,
+                    Fun(
+                      params,
+                      requires,
+                      tblock_safety,
+                      safety_post,
+                      excep_posts_for_others None excep_behaviors
+                    ))::acc
+              in
+                (* user behaviors *)
+              let acc = 
+                if spec.jc_fun_behavior = [] then
+                  acc
+                else
+                  let body = expr ~infunction:f ~threats:false body in
+                  let tblock =
+                    if !Jc_options.inv_sem = InvOwnership then
+                      append
+                        (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+                        (assume_all_invariants f.jc_fun_info_parameters)
+                        body
+                    else
+                      body
+                  in
+                  let tblock = 
+                    if !return_void then
+                      Try(append tblock (Raise(jessie_return_exception,None)),
+                          jessie_return_exception,None,Void)
+                    else
+                      let e = any_value f.jc_fun_info_result.jc_var_info_type in
+                        Let_ref(jessie_return_variable,e,
+                                Try(append tblock Absurd,
+                                    jessie_return_exception,None,
+                                    Deref(jessie_return_variable)))
+                  in
+                  let tblock = make_label "init" tblock in
+                  let tblock =
+                    List.fold_right
+                      (fun (mut_id,id) bl ->
+                         Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+                  in
+                    (* normal behaviors *)
+                  let acc =
+                    List.fold_right
+                      (fun (id,b,e) acc ->
+                         let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
+                         let beh = 
+                           if id="default" then "Behavior" else
+                             "Normal behavior `"^id^"'"
+                         in
+                         let _ = reg_loc 
+                           ~id:newid
+                           ~oldid:f.jc_fun_info_name
+                           ~name:("function "^f.jc_fun_info_name)
+                           ~beh  
+                           loc 
+                         in
+                         let d =
+                           Def(
+                             newid,
+                             Fun(
+                               params,
+                               requires,
+                               tblock,
+                               e,
+                               excep_posts_for_others None excep_behaviors
+                             )
+                           )
+                         in d::acc)
+                      normal_behaviors acc
+                  in 
+                    (* redefine [tblock] for use in exception functions *)
+                    (* CLAUDE: pourquoi ??????
+                       let tblock = make_label "init" tblock in
+                       let tblock =
+                       List.fold_right
+                       (fun (mut_id,id) bl ->
+                       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+                       in
+                    *)
+                    (* exceptional behaviors *)
+                  let acc =
+                    ExceptionMap.fold
+                      (fun ei l acc ->
+                         List.fold_right
+                           (fun (id,b,e) acc ->
+                              let newid = 
+                                f.jc_fun_info_name ^ "_exsures_" ^ id 
+                              in
+                              let _ = reg_loc 
+                                ~id:newid
+                                ~oldid:f.jc_fun_info_name
+                                ~name:("function "^f.jc_fun_info_name)
+                                ~beh:("Exceptional behavior `"^id^"'")  
+                                loc in
+                              let d =
+                                Def(newid,
+                                    Fun(params,
+                                        requires,
+                                        tblock,
+                                        LTrue,
+                                        (exception_name ei,e) :: 
+                                          excep_posts_for_others (Some ei) excep_behaviors)) in
+                                d::acc)
+                           l acc)
+                      user_excep_behaviors acc
+                  in
+                    acc 
+        in why_param::acc
 
 let tr_logic_type id acc = Type(id,[])::acc
 
@@ -2675,11 +2678,11 @@ let tr_axiom id is_axiom p acc =
   let a =
     FieldOrVariantRegionMap.fold 
       (fun (fi,r) labels a -> 
-	 LogicLabelSet.fold
-	   (fun lab a ->
-	      LForall (label_var lab (field_or_variant_region_memory_name(fi,r)), 
-		       field_or_variant_memory_type fi, a))
-	   labels a)
+         LogicLabelSet.fold
+           (fun lab a ->
+              LForall (label_var lab (field_or_variant_region_memory_name(fi,r)), 
+                       field_or_variant_memory_type fi, a))
+           labels a)
       ef.jc_effect_memories a 
   in
   let a =
@@ -2690,11 +2693,11 @@ let tr_axiom id is_axiom p acc =
   let a =
     VariantSet.fold
       (fun vi a ->
-	 LForall(
-	   tag_table_name_vi vi,
-	   tag_table_type (JCvariant vi),
-	   a
-	 ))
+         LForall(
+           tag_table_name_vi vi,
+           tag_table_type (JCvariant vi),
+           a
+         ))
       ef.jc_effect_tag_table a
   in
   (* How to add quantification on other effects (alloc) without knowing 
@@ -2725,14 +2728,14 @@ let tr_enum_type ri (* to_int of_int *) acc =
   let safe_of_int_type =
     let post =
       LPred("eq_int",
-	    [LApp(logic_int_of_enum ri,[LVar "result"]);
-	     if !Jc_options.int_model = IMbounded then LVar "x"
-	     else LApp(mod_of_enum ri,[LVar "x"])])
+            [LApp(logic_int_of_enum ri,[LVar "result"]);
+             if !Jc_options.int_model = IMbounded then LVar "x"
+             else LApp(mod_of_enum ri,[LVar "x"])])
     in
     Prod_type("x", Base_type(why_integer_type),
-	      Annot_type(LTrue,
-			 Base_type lt,
-			 [],[],post,[]))
+              Annot_type(LTrue,
+                         Base_type lt,
+                         [],[],post,[]))
   in
   let of_int_type =
     let pre = 
@@ -2740,82 +2743,82 @@ let tr_enum_type ri (* to_int of_int *) acc =
     in
     let post =
       LPred("eq_int",
-	    [LApp(logic_int_of_enum ri,[LVar "result"]);
-	     if !Jc_options.int_model = IMbounded then LVar "x"
-	     else LApp(mod_of_enum ri,[LVar "x"])])
+            [LApp(logic_int_of_enum ri,[LVar "result"]);
+             if !Jc_options.int_model = IMbounded then LVar "x"
+             else LApp(mod_of_enum ri,[LVar "x"])])
     in
     Prod_type("x", Base_type(why_integer_type),
-	      Annot_type(pre,Base_type lt,[],[],post,[]))
+              Annot_type(pre,Base_type lt,[],[],post,[]))
   in
   let any_type =
     Prod_type("", Base_type(simple_logic_type "unit"),
-	      Annot_type(LTrue,Base_type lt,[],[],LTrue,[]))
+              Annot_type(LTrue,Base_type lt,[],[],LTrue,[]))
   in
   Type(name,[])
   :: Logic(false,logic_int_of_enum ri,
-	   [("",lt)],why_integer_type)
+           [("",lt)],why_integer_type)
   :: Logic(false,logic_enum_of_int ri,
-	   [("",why_integer_type)],lt)
+           [("",why_integer_type)],lt)
   :: Predicate(false,eq_of_enum ri,[("x",lt);("y",lt)],
-	      LPred("eq_int",[LApp(logic_int_of_enum ri,[LVar "x"]);
-			     LApp(logic_int_of_enum ri,[LVar "y"])]))
+              LPred("eq_int",[LApp(logic_int_of_enum ri,[LVar "x"]);
+                             LApp(logic_int_of_enum ri,[LVar "y"])]))
   :: (if !Jc_options.int_model = IMmodulo then
-	let width = LConst (Prim_int max_sub_min) in
-	let fmod t = LApp (mod_of_enum ri, [t]) in
-	[Logic (false, mod_of_enum ri, 
-		["x", simple_logic_type "int"], simple_logic_type "int");
-	 Axiom (name ^ "_mod_def",
-		LForall ("x", simple_logic_type "int",
-			 LPred ("eq_int", [LApp (mod_of_enum ri, [LVar "x"]);
-					   LApp (logic_int_of_enum ri, 
-						 [LApp (logic_enum_of_int ri,
-							[LVar "x"])])])));
-	 Axiom (name ^ "_mod_lb",
-		LForall ("x", simple_logic_type "int",
-			 LPred ("ge_int", [LApp (mod_of_enum ri, [LVar "x"]);
-					   LConst (Prim_int min)])));
-	 Axiom (name ^ "_mod_gb",
-		LForall ("x", simple_logic_type "int",
-			 LPred ("le_int", [LApp (mod_of_enum ri, [LVar "x"]);
-					   LConst (Prim_int max)])));
-	 Axiom (name ^ "_mod_id",
-		LForall ("x", simple_logic_type "int",
-			 LImpl (in_bounds (LVar "x"), 
-				LPred ("eq_int", [LApp (mod_of_enum ri, 
-							[LVar "x"]);
-						  LVar "x"]))));
-	 Axiom (name ^ "_mod_lt",
-		LForall ("x", simple_logic_type "int",
-			 LImpl (LPred ("lt_int", [LVar "x"; 
-						  LConst (Prim_int min)]), 
-				LPred ("eq_int", [fmod (LVar "x");
-						  fmod (LApp ("add_int", 
-							      [LVar "x"; 
-							       width]))]))));
-	 Axiom (name ^ "_mod_gt",
-		LForall ("x", simple_logic_type "int",
-			 LImpl (LPred ("gt_int", [LVar "x"; 
-						  LConst (Prim_int max)]), 
-				LPred ("eq_int", [fmod (LVar "x");
-						  fmod (LApp ("sub_int", 
-							      [LVar "x"; 
-							       width]))]))));
-	]
+        let width = LConst (Prim_int max_sub_min) in
+        let fmod t = LApp (mod_of_enum ri, [t]) in
+        [Logic (false, mod_of_enum ri, 
+                ["x", simple_logic_type "int"], simple_logic_type "int");
+         Axiom (name ^ "_mod_def",
+                LForall ("x", simple_logic_type "int",
+                         LPred ("eq_int", [LApp (mod_of_enum ri, [LVar "x"]);
+                                           LApp (logic_int_of_enum ri, 
+                                                 [LApp (logic_enum_of_int ri,
+                                                        [LVar "x"])])])));
+         Axiom (name ^ "_mod_lb",
+                LForall ("x", simple_logic_type "int",
+                         LPred ("ge_int", [LApp (mod_of_enum ri, [LVar "x"]);
+                                           LConst (Prim_int min)])));
+         Axiom (name ^ "_mod_gb",
+                LForall ("x", simple_logic_type "int",
+                         LPred ("le_int", [LApp (mod_of_enum ri, [LVar "x"]);
+                                           LConst (Prim_int max)])));
+         Axiom (name ^ "_mod_id",
+                LForall ("x", simple_logic_type "int",
+                         LImpl (in_bounds (LVar "x"), 
+                                LPred ("eq_int", [LApp (mod_of_enum ri, 
+                                                        [LVar "x"]);
+                                                  LVar "x"]))));
+         Axiom (name ^ "_mod_lt",
+                LForall ("x", simple_logic_type "int",
+                         LImpl (LPred ("lt_int", [LVar "x"; 
+                                                  LConst (Prim_int min)]), 
+                                LPred ("eq_int", [fmod (LVar "x");
+                                                  fmod (LApp ("add_int", 
+                                                              [LVar "x"; 
+                                                               width]))]))));
+         Axiom (name ^ "_mod_gt",
+                LForall ("x", simple_logic_type "int",
+                         LImpl (LPred ("gt_int", [LVar "x"; 
+                                                  LConst (Prim_int max)]), 
+                                LPred ("eq_int", [fmod (LVar "x");
+                                                  fmod (LApp ("sub_int", 
+                                                              [LVar "x"; 
+                                                               width]))]))));
+        ]
       else [])
   @ Param(false,fun_enum_of_int ri,of_int_type)
   :: Param(false,safe_fun_enum_of_int ri,safe_of_int_type)
   :: Param(false,fun_any_enum ri,any_type)
   :: Axiom(name^"_range",
-	   LForall("x",lt,in_bounds 
-		     (LApp(logic_int_of_enum ri,[LVar "x"]))))
+           LForall("x",lt,in_bounds 
+                     (LApp(logic_int_of_enum ri,[LVar "x"]))))
   :: Axiom(name^"_coerce",
-	   LForall("x",why_integer_type,
-		   LImpl(in_bounds (LVar "x"),
-			 LPred("eq_int",
-			       [LApp(logic_int_of_enum ri,
-				     [LApp(logic_enum_of_int ri, 
-					   [LVar "x"])]) ; 
-				LVar "x"]))))
+           LForall("x",why_integer_type,
+                   LImpl(in_bounds (LVar "x"),
+                         LPred("eq_int",
+                               [LApp(logic_int_of_enum ri,
+                                     [LApp(logic_enum_of_int ri, 
+                                           [LVar "x"])]) ; 
+                                LVar "x"]))))
   :: acc
 
 let tr_enum_type_pair ri1 ri2 acc =
@@ -2833,7 +2836,7 @@ let tr_enum_type_pair ri1 ri2 acc =
       let min = if min1 <=/ min2 && min2 <=/ max1 then min2 else min1 in
       let max = if min1 <=/ max2 && max2 <=/ max1 then max2 else max1 in
       let in_bounds x =
-	LAnd(LPred("le_int",[LConst(Prim_int (Num.string_of_num min)); x]),
+        LAnd(LPred("le_int",[LConst(Prim_int (Num.string_of_num min)); x]),
              LPred("le_int",[x; LConst(Prim_int (Num.string_of_num max))]))
       in
       (* Integer model is modulo and enum ranges intersect. Produce useful
@@ -2842,23 +2845,23 @@ let tr_enum_type_pair ri1 ri2 acc =
       let range1 = range_of_enum ri1 in
       let range2 = range_of_enum ri2 in
       let mod_coincide smallri bigri smallname bigname =
-	(* When modulo the big range is in the intersection of the ranges, 
-	 * both modulos coincide.
-	 *)
-	let modsmall = LApp(mod_of_enum smallri,[LVar "x"]) in
-	let modbig = LApp(mod_of_enum bigri,[LVar "x"]) in
-	Axiom(smallname ^ "_" ^ bigname ^ "_mod_coincide",
-	      LForall("x",why_integer_type,
-		      LImpl(in_bounds modbig,
-			    LPred("eq_int",[modsmall;modbig]))))
+        (* When modulo the big range is in the intersection of the ranges, 
+         * both modulos coincide.
+         *)
+        let modsmall = LApp(mod_of_enum smallri,[LVar "x"]) in
+        let modbig = LApp(mod_of_enum bigri,[LVar "x"]) in
+        Axiom(smallname ^ "_" ^ bigname ^ "_mod_coincide",
+              LForall("x",why_integer_type,
+                      LImpl(in_bounds modbig,
+                            LPred("eq_int",[modsmall;modbig]))))
       in
       if range1 </ range2 then
-	mod_coincide ri1 ri2 name1 name2 :: acc
+        mod_coincide ri1 ri2 name1 name2 :: acc
       else if range2 </ range1 then
-	mod_coincide ri2 ri1 name2 name1 :: acc
+        mod_coincide ri2 ri1 name2 name1 :: acc
       else
-	mod_coincide ri1 ri2 name1 name2
-	:: mod_coincide ri2 ri1 name2 name1 :: acc
+        mod_coincide ri1 ri2 name1 name2
+        :: mod_coincide ri2 ri1 name2 name1 :: acc
 
 let tr_variable vi e acc =
   if vi.jc_var_info_assigned then
@@ -2885,44 +2888,44 @@ let tr_alloc_table2 (a,r) acc =
   Jc_options.lprintf "Looking for %s in Jc_interp.tr_alloc_table2@." a;
   tr_alloc_table (find_tag_or_variant a, r) acc
 
-(*************************
-        Variants
-*************************)
+(*******************************************************************************)
+(*                                   Variants                                  *)
+(*******************************************************************************)
 
 let tr_variant vi acc =
   let acc =
     if not vi.jc_variant_info_is_union then acc else
       (* Declaration of abstract type for union if not integer *)
       let acc = 
-	if integral_union vi then acc else
-	  Type(union_memory_type_name vi,[]) :: acc 
+        if integral_union vi then acc else
+          Type(union_memory_type_name vi,[]) :: acc 
       in
       (* Declarations of field memories. *)
       if !Jc_options.separation_sem = SepRegions then acc else
-	let mem = union_memory_type vi in
-	Param(false,
-	      union_memory_name vi,
-	      Ref_type(Base_type mem))::acc
+        let mem = union_memory_type vi in
+        Param(false,
+              union_memory_name vi,
+              Ref_type(Base_type mem))::acc
   in
   let tag_table =
     Param(
       false,
       variant_tag_table_name vi,
       Ref_type(
-	Base_type {
-	  logic_type_name = tag_table_type_name;
-	  logic_type_args = [variant_model_type vi];
-	}))
+        Base_type {
+          logic_type_name = tag_table_type_name;
+          logic_type_args = [variant_model_type vi];
+        }))
   in
   let alloc_table =
     Param(
       false,
       variant_alloc_table_name vi,
       Ref_type(
-	Base_type {
-	  logic_type_name = alloc_table_type_name;
-	  logic_type_args = [variant_model_type vi];
-	}))
+        Base_type {
+          logic_type_name = alloc_table_type_name;
+          logic_type_args = [variant_model_type vi];
+        }))
   in
   let type_def = Type(variant_type_name vi, []) in
   (* Axiom: the variant can only have the given tags *)
@@ -2932,27 +2935,27 @@ let tr_variant vi acc =
     Axiom(
       variant_axiom_on_tags_name vi,
       LForall(
-	v,
-	pointer_type (JCvariant vi),
-	LForall(
-	  tag_table,
-	  tag_table_type (JCvariant vi),
-	  make_or_list
-	    (List.map
-	       (make_instanceof (LVar tag_table) (LVar v))
-	       vi.jc_variant_info_roots)
+        v,
+        pointer_type (JCvariant vi),
+        LForall(
+          tag_table,
+          tag_table_type (JCvariant vi),
+          make_or_list
+            (List.map
+               (make_instanceof (LVar tag_table) (LVar v))
+               vi.jc_variant_info_roots)
       )))
   in
   (* Axioms: int_of_tag(T1) = 1, ... *)
   let (acc, _) = List.fold_left
     (fun (acc, index) st ->
        let axiom =
-	 Axiom(
-	   axiom_int_of_tag_name st,
-	   make_eq
-	     (make_int_of_tag st)
-	     (LConst(Prim_int(string_of_int index)))
-	 )
+         Axiom(
+           axiom_int_of_tag_name st,
+           make_eq
+             (make_int_of_tag st)
+             (LConst(Prim_int(string_of_int index)))
+         )
        in axiom::acc, index+1)
     (acc, 1)
     vi.jc_variant_info_roots

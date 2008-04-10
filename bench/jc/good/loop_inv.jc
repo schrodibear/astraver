@@ -18,22 +18,20 @@ unit f()
       while (true)
       {
         {
-          if ((i > 0)) {
-                         
-                       } else goto while_0_break;
+          if i > 0 then () else goto while_0_break;
           
-          if ((i >= c)) i = (i - c);
+          if i >= c then i = (i - c)
            else i = (i - 1);
           
           
         }
-      }
-      while_0_break:
+      };
+      (while_0_break:
       {
-        
-      }
+        ()
+      })
       
-    }return;
+    };return ();
     
   }
 }

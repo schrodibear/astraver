@@ -121,7 +121,7 @@ type T_CompositionPage = {
 //@ requires 0
 unit DeclarerPanneRobustesse(integer codeErr)
 {
-    /* Fonction non implantée ici */
+    /* Fonction non implantée ici */()
 }
 
 
@@ -129,14 +129,14 @@ unit DeclarerPanneRobustesse(integer codeErr)
 unit ComposerMsg(STR_MESSAGE[0] Msg, T_CompositionPage[0] Page)
 {
     /* Ecriture du message sur la page */
-    if (Msg.PTR.NATURE == 0) 
+    if Msg.PTR.NATURE == 0 then
     {	
-	T_1MSG16C[0] Ligne1Etat = Msg.PTR :> T_1MSG16C;
+	var T_1MSG16C[0] Ligne1Etat = Msg.PTR :> T_1MSG16C;
 	Page.Texte = Ligne1Etat.TEXTE;
     }
-    else if (Msg.PTR.NATURE == 1)
+    else if Msg.PTR.NATURE == 1 then
     {
-	T_2MSG41C[0] Ligne2Etats = Msg.PTR :> T_2MSG41C;
+	var T_2MSG41C[0] Ligne2Etats = Msg.PTR :> T_2MSG41C;
 	Page.Texte = Ligne2Etats.TEXTE2;
     }
     else

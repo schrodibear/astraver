@@ -21,7 +21,7 @@ unit g(A[0] a)
 {
     unpack(a);
     a.x -= 1;
-    integer r = f(a); // erreur
+    var integer r = f(a); // erreur
     a.x += 1;
     pack(a, A);
 }

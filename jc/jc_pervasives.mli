@@ -27,7 +27,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-val ( ** ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+open Jc_ast
+open Jc_env
+
+val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+
+val error: Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
 (* labels *)
 
@@ -35,11 +40,15 @@ val label_var : Jc_env.logic_label -> string -> string
 
 (* types *)
 
+val operator_of_native: native_type -> [> native_operator_type]
+val operator_of_type: jc_type -> [> operator_type]
+
 val integer_type : Jc_env.jc_type
 val boolean_type : Jc_env.jc_type
 val real_type : Jc_env.jc_type
 val unit_type : Jc_env.jc_type
 val string_type : Jc_env.jc_type
+val any_type: jc_type
 
 val string_of_native: Jc_env.native_type -> string
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
@@ -103,19 +112,11 @@ val empty_effects : Jc_fenv.effect
 
 (* terms *)
 
-val term_no_loc :  Jc_ast.term_node -> Jc_env.jc_type -> Jc_ast.term
-val term_of_expr : Jc_ast.expr -> Jc_ast.term
-val term_var : Loc.position -> Jc_env.var_info -> Jc_ast.term
-val term_var_no_loc : Jc_env.var_info -> Jc_ast.term
 val raw_term_equal : Jc_ast.term -> Jc_ast.term -> bool
 val raw_term_compare : Jc_ast.term -> Jc_ast.term -> int
-val zerot : Jc_ast.term
-val minusonet : Jc_ast.term
-val nullt : Jc_ast.term
 
 (* assertions *)
 
-val raw_asrt : Jc_ast.assertion_node -> Jc_ast.assertion
 val raw_assertion_equal : Jc_ast.assertion -> Jc_ast.assertion -> bool
 val make_and : Jc_ast.assertion list -> Jc_ast.assertion
 
@@ -125,12 +126,7 @@ val skip_tloc_range : Jc_ast.tlocation_set -> Jc_ast.tlocation_set
 val is_true : Jc_ast.assertion -> bool
 
 val select_option : 'a option -> 'a -> 'a
-val is_relation_binary_op : Jc_ast.bin_op -> bool
-val is_logical_binary_op : Jc_ast.bin_op -> bool
-val is_arithmetic_binary_op : Jc_ast.bin_op -> bool
-val is_bitwise_binary_op : Jc_ast.bin_op -> bool
-val is_logical_unary_op : Jc_ast.unary_op -> bool
-val is_arithmetic_unary_op : Jc_ast.unary_op -> bool
+val apply_option: ('a -> 'b) -> 'a option -> 'b option
 val is_constant_assertion : Jc_ast.assertion -> bool
 
 (* fun specs *)
@@ -144,6 +140,11 @@ val is_purely_exceptional_fun : Jc_ast.fun_spec -> bool
 (** The set of variables bound by a pattern. *)
 val pattern_vars : Jc_env.var_info Jc_envset.StringMap.t -> Jc_ast.pattern ->
   Jc_env.var_info Jc_envset.StringMap.t
+
+(* operators *)
+
+val string_of_op: [< bin_op | unary_op] -> string
+val string_of_op_type: [< operator_type] -> string
 
 (*
 Local Variables: 

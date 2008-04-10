@@ -11,20 +11,20 @@ type intM = { integer val; }
 
 
 unit g(integer n) {
-     integer j = 1 / (3 - n);
+     var integer j = 1 / (3 - n);
 }
 
 unit f(intM[0..] t, integer offset) {
-    integer i = offset;
+    var integer i = offset;
     variant 4 - i ;	
     while (i <= 4) {
         (t + i).val = 0;
 	i++;
-    }
+    };
     g(i);
 }
 
 unit main() {
-   intM[0..] t1 = new intM[5];
+   var intM[0..] t1 = new intM[5];
    f(t1, 0);
 }

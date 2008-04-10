@@ -27,7 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_lexer.mli,v 1.7 2008-02-05 12:10:48 marche Exp $ *)
+(* $Id: jc_lexer.mli,v 1.8 2008-04-10 16:05:55 moy Exp $ *)
+
+open Jc_ast
 
 exception Lexical_error of Loc.position * string
 
@@ -35,6 +37,6 @@ exception Syntax_error of Loc.position
 
 val token : Lexing.lexbuf -> Jc_parser.token
 
-val parse  : string -> in_channel -> Jc_ast.pdecl list
+val parse  : string -> in_channel -> pexpr decl list
 
 

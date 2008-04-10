@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Oct
 
 type charP = {
@@ -10,12 +11,12 @@ logic integer strlen{L}(charP[..] p) reads (p+[0..]).charM;
 
 unit strcpy(charP[..] dest, charP[..] src) {  
     assert (0 <= strlen(src));
-    integer i = 0;
-    while ((src + i).charM != 0) ; {
+    var integer i = 0;
+    while ((src + i).charM != 0) {
 	assert (i < strlen(src));
 	(dest + i).charM = (src + i).charM;
 	i = i + 1;
-    }
+    };
     assert (i == strlen(src));
     (dest + i).charM = 0;
 }

@@ -30,6 +30,7 @@
 open Jc_env
 open Jc_envset
 open Jc_fenv
+open Jc_constructors
 open Jc_ast
 open Jc_pervasives
 open Jc_iterators
@@ -180,9 +181,9 @@ let field this loc fi =
 (* A pattern may hide some dereferencing. *)
 let pattern this p =
   iter_pattern
-    (fun p -> match p.jc_pattern_node with
+    (fun p -> match p#node with
        | JCPstruct(_, fipl) ->
-	   List.iter (field this p.jc_pattern_loc) (List.map fst fipl)
+	   List.iter (field this p#loc) (List.map fst fipl)
        | _ -> ())
     p
 
@@ -191,16 +192,16 @@ is the argument of the pointer. Thus, it is sufficient to check that all
 dereferencing is done on a rep field AND that all applications do not read
 any memory (else one could hide dereferencing in logic functions). *)
 let term this t =
-  iter_term
-    (fun t -> match t.jc_term_node with
+  ITerm.iter
+    (fun t -> match t#node with
        | JCTapp app ->
 	   let id = app.jc_app_fun in
 	   if not (FieldOrVariantRegionMap.is_empty
 		     id.jc_logic_info_effects.jc_effect_memories) then
-	     Jc_typing.typing_error t.jc_term_loc
+	     Jc_typing.typing_error t#loc
 	       "this call is not allowed in structure invariant"
        | JCTderef(_, _, fi) ->
-	   field this t.jc_term_loc fi
+	   field this t#loc fi
        | JCTmatch(_, ptl) ->
 	   List.iter (pattern this) (List.map fst ptl)
        | _ -> ())
@@ -245,13 +246,13 @@ let term this t =
     ) t*)
 
 let tag this t =
-  match t.jc_tag_node with
+  match t#node with
     | JCTtag _
     | JCTbottom -> ()
     | JCTtypeof(t, _) -> term this t
 
 let rec assertion this p =
-  match p.jc_assertion_node with
+  match p#node with
     | JCAtrue | JCAfalse -> ()
     | JCAif (_, _, _) -> assert false (* TODO *)
     | JCAinstanceof(t,_,_)
@@ -264,7 +265,7 @@ let rec assertion this p =
 	if FieldOrVariantRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) app.jc_app_args
 	else
-	  Jc_typing.typing_error p.jc_assertion_loc
+	  Jc_typing.typing_error p#loc
 	    "this call is not allowed in structure invariant"
     | JCAnot p -> assertion this p
     | JCAiff (p1, p2)
@@ -272,7 +273,7 @@ let rec assertion this p =
     | JCArelation (t1,_, t2) -> term this t1; term this t2
     | JCAand l | JCAor l -> List.iter (assertion this) l
     | JCAmutable _ ->
-	Jc_typing.typing_error p.jc_assertion_loc
+	Jc_typing.typing_error p#loc
 	  "\\mutable is not allowed in structure invariant"
     | JCAtagequality(t1, t2, _) ->
 	tag this t1;
@@ -297,18 +298,18 @@ let check invs =
 
 let rec term_memories aux t = 
   fold_term 
-    (fun aux t -> match t.jc_term_node with
+    (fun aux t -> match t#node with
     | JCTderef(t, lab, fi) ->
 	let m = fi.jc_field_info_final_name in
 	StringSet.add m aux
     | _ -> aux
     ) aux t
 
-let tag_memories aux t = match t.jc_tag_node with
+let tag_memories aux t = match t#node with
   | JCTtag _ | JCTbottom -> aux
   | JCTtypeof(t, _) -> term_memories aux t
 
-let rec assertion_memories aux a = match a.jc_assertion_node with
+let rec assertion_memories aux a = match a#node with
   | JCAtrue
   | JCAfalse -> aux
   | JCAand l
@@ -1363,6 +1364,106 @@ let tr_valid_inv st acc =
   let sem = List.fold_left (fun acc (id, ty) ->
     LForall(id, ty, acc)) sem ((this, this_ty)::params) in
   Axiom(valid_inv_axiom_name st, sem)::acc*)
+
+let rec invariant_for_struct this si =
+  let (_, invs) = 
+    Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
+  in
+  let invs = Assertion.mkand
+    ~conjuncts:(List.map 
+       (fun (li, _) -> 
+	  let a = { jc_app_fun = li;
+		    jc_app_args = [this];
+		    jc_app_label_assoc = [];
+		    jc_app_region_assoc = [] }
+	  in
+	  new assertion (JCAapp a)) invs) 
+    ()
+  in
+    match si.jc_struct_info_parent with
+      | None -> invs
+      | Some si -> (* add invariants from the type hierarchy *)
+	  let this =
+	    match this#typ with
+	      | JCTpointer (_, a, b) ->
+		  new term_with ~typ:(JCTpointer (JCtag si, a, b)) this
+	      | _ -> assert false (* never happen *)
+	  in
+	  Assertion.mkand 
+	      ~conjuncts:[invs; (invariant_for_struct this si)]
+	    ()
+	    
+
+let code_function (fi, fs, sl) vil =
+  begin
+    match !Jc_common_options.inv_sem with
+      | InvArguments ->
+	  (* apply arguments invariant policy *)
+	  let invariants =
+	    (* Calculate global invariants. *)
+	    let vitl = 
+	      List.map 
+		(fun vi -> Term.mkvar ~var:vi ()) vil 
+	    in
+	    let global_invariants =
+	      Hashtbl.fold
+		(fun li _ acc -> 
+		   li.jc_logic_info_parameters <- vil;
+		   let a = { jc_app_fun = li;
+			     jc_app_args = vitl;
+			     jc_app_label_assoc = [];
+			     jc_app_region_assoc = [] }
+		   in
+		   (new assertion (JCAapp a)) :: acc)
+		Jc_typing.global_invariants_table []
+	    in
+	    let global_invariants = 
+	      Assertion.mkand ~conjuncts:global_invariants ()
+	    in
+	      (* Calculate invariants for each parameter. *)
+	    let invariants =
+	      List.fold_left
+		(fun acc vi ->
+		   match vi.jc_var_info_type with
+		     | JCTpointer (JCtag st, _, _) ->
+			 Assertion.mkand 
+			   ~conjuncts:
+			   [acc; (invariant_for_struct 
+				    (Term.mkvar ~var:vi ()) st)]
+			   ()
+		     | _ -> acc)
+		(Assertion.mktrue ())
+		fi.jc_fun_info_parameters
+	    in
+	    Assertion.mkand ~conjuncts:[global_invariants; invariants] ()
+	  in
+	    (* add invariants to the function precondition *)
+	  fs.jc_fun_requires <- 
+	    Assertion.mkand ~conjuncts:[fs.jc_fun_requires; invariants] ();
+	    (* add invariants to the function postcondition *)
+	    if is_purely_exceptional_fun fs then () else
+	      let safety_exists = ref false in
+	      let post = invariants in
+		List.iter
+		  (fun (_, s, b) ->
+		     if s = "safety" then safety_exists := true;
+		     b.jc_behavior_ensures <- 
+		       Assertion.mkand ~conjuncts:[b.jc_behavior_ensures; post] ())
+		  fs.jc_fun_behavior;
+		(* add the 'safety' spec if it does not exist 
+		   (it could exist e.g. from Krakatoa) *)
+		if not !safety_exists then
+		  if Jc_options.verify_invariants_only then
+		    let invariants_b = { default_behavior with jc_behavior_ensures = post } in
+		      fs.jc_fun_behavior <- 
+			(Loc.dummy_position, "invariants", invariants_b) :: fs.jc_fun_behavior;
+		  else
+		    let safety_b = { default_behavior with jc_behavior_ensures = post } in
+		      fs.jc_fun_behavior <- 
+			(Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
+      | _ -> ()
+  end;
+
 
 (*
 Local Variables: 

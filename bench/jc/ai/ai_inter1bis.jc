@@ -16,5 +16,5 @@ integer g(integer a, integer b) {
 }
 
 unit main() {
-     integer i = g(10, 2);
+     var integer i = g(10, 2);
 }

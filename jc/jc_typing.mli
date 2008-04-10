@@ -50,10 +50,10 @@ val logic_functions_table :
   (int, logic_info * term_or_assertion) Hashtbl.t
 
 val functions_table : 
-  (int, fun_info * Loc.position * fun_spec * tstatement list option) Hashtbl.t
+  (int, fun_info * Loc.position * fun_spec * expr option) Hashtbl.t
 
 val variables_table : 
-  (int, var_info * texpr option) Hashtbl.t
+  (int, var_info * expr option) Hashtbl.t
 
 val structs_table : 
   (string, (struct_info * (logic_info * assertion) list)) Hashtbl.t
@@ -80,15 +80,17 @@ val exceptions_table :
 
 exception Typing_error of Loc.position * string
 
-val coerce : jc_type -> native_type -> texpr -> texpr
+val coerce : jc_type -> native_type -> expr -> expr
 
 val type_range_of_term : jc_type -> term -> assertion
 
 val find_struct_variant : Jc_env.struct_info -> Jc_env.variant_info
 
-val type_file : pdecl list -> unit
+val type_file : nexpr decl list -> unit
 
 val print_file : Format.formatter -> unit -> unit
+
+val type_logic_labels_in_decl : nexpr decl -> unit
 
 (*
 Local Variables: 

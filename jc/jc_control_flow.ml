@@ -33,7 +33,7 @@
 open Jc_ast
 
 type node_info =
-    | Statement of statement
+    | Statement of expr
     | FunctionExit
 
 type node =
@@ -128,6 +128,6 @@ let make l =
   
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

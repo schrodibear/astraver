@@ -21,6 +21,6 @@ unit f1(byteM[0..] t) {
 }
 
 unit main() {
-   byteM[0..] p = new byteM[5];
+   var byteM[0..] p = new byteM[5];
    f1(p);
 }

@@ -27,18 +27,20 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.103 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.104 2008-04-10 16:05:55 moy Exp $ *)
 
 open Format
 open Jc_env
 open Jc_fenv
 open Jc_pervasives
+open Jc_constructors
+open Jc_output_misc
 open Jc_ast
 open Pp
 
 type jc_decl =
   | JCfun_def of jc_type * string * var_info list *
-      fun_spec * tstatement list option
+      fun_spec * expr option
   | JCenum_type_def of string * Num.num * Num.num
   | JCvariant_type_def of string * string list
   | JCunion_type_def of string * string list
@@ -47,7 +49,7 @@ type jc_decl =
   | JCrec_struct_defs of jc_decl list
       (* deprecated, all tag definitions of a file are mutually recursive *)
   | JCrec_fun_defs of jc_decl list
-  | JCvar_def of jc_type * string * texpr option
+  | JCvar_def of jc_type * string * expr option
   | JClemma_def of string * bool * logic_label list * assertion
   | JClogic_fun_def of jc_type option * string * logic_label list 
       * var_info list * term_or_assertion      
@@ -60,8 +62,6 @@ type jc_decl =
   | JCannotation_policy of Jc_env.annotation_sem
   | JCabstract_domain of Jc_env.abstract_domain 
   | JCint_model of Jc_env.int_model      
-
-let const = Jc_poutput.const
 
 (*
 let lbin_op op =
@@ -80,43 +80,38 @@ let lbin_op op =
   raise Not_found
 *)
 
-let bin_op = function
-  | Blt_int | Blt_real -> "<"
-  | Bgt_int | Bgt_real -> ">"
-  | Ble_int | Ble_real -> "<="
-  | Bge_int | Bge_real -> ">="
-  | Beq_int | Beq_real | Beq_bool | Beq_pointer -> "=="
-  | Bneq_int | Bneq_real | Bneq_bool | Bneq_pointer -> "!="
-  | Badd_int | Badd_real -> "+"
-  | Bsub_int | Bsub_real -> "-"
-  | Bmul_int | Bmul_real -> "*"
-  | Bdiv_int | Bdiv_real -> "/"
-  | Bmod_int -> "%"
-  | Bland -> "&&"
-  | Blor -> "||"
-  | Bimplies -> "==>"
-  | Biff -> "<==>"
-  | Bbw_and -> "&"
-  | Bbw_or -> "|"
-  | Bbw_xor -> "^"
-  | Blogical_shift_right -> ">>"
-  | Barith_shift_right -> ">>>"
-  | Bshift_left -> "<<"
+let bin_op (op, _) = match op with
+  | `Blt -> "<"
+  | `Bgt -> ">"
+  | `Ble -> "<="
+  | `Bge -> ">="
+  | `Beq -> "=="
+  | `Bneq -> "!="
+  | `Badd -> "+"
+  | `Bsub -> "-"
+  | `Bmul -> "*"
+  | `Bdiv -> "/"
+  | `Bmod -> "%"
+  | `Bland -> "&&"
+  | `Blor -> "||"
+  | `Bimplies -> "==>"
+  | `Biff -> "<==>"
+  | `Bbw_and -> "&"
+  | `Bbw_or -> "|"
+  | `Bbw_xor -> "^"
+  | `Blogical_shift_right -> ">>"
+  | `Barith_shift_right -> ">>>"
+  | `Bshift_left -> "<<"
 
-let unary_op = function
-  | Uplus_int | Uplus_real -> "+"
-  | Uminus_int | Uminus_real -> "-"
-  | Unot -> "!"
-  | Ubw_not -> "~"
-
-let offset_kind = Jc_poutput.offset_kind
+let unary_op (op, _) = match op with
+  | `Uminus -> "-"
+  | `Unot -> "!"
+  | `Ubw_not -> "~"
 
 let real_conversion = Jc_poutput.real_conversion
 
-let label = Jc_poutput.label
-
 let rec pattern fmt p =
-  match p.jc_pattern_node with
+  match p#node with
     | JCPstruct(st, lbls) ->
 	fprintf fmt "@[<hv 2>%s{@ " st.jc_struct_info_name;
 	List.iter
@@ -136,11 +131,11 @@ let rec pattern fmt p =
 	fprintf fmt "%a" const c
 
 let rec term fmt t =
-  if t.jc_term_label <> "" then
+  if t#name_label <> "" then
     fprintf fmt "@[(%s : %a)@]" 
-      t.jc_term_label term {t with jc_term_label =""}
+      t#name_label term (new term_with ~name_label:"" t)
   else
-  match t.jc_term_node with
+  match t#node with
     | JCTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
     | JCTbinary(t1,op,t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
@@ -191,8 +186,6 @@ let rec term fmt t =
 	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
     | JCTshift (t1, t2) -> 
 	fprintf fmt "@[(%a + %a)@]" term t1 term t2
-    | JCTsub_pointer (t1, t2) -> 
-	fprintf fmt "@[(%a - %a)@]" term t1 term t2
     | JCTconst c -> const fmt c
     | JCTrange (t1,t2) -> 
 	fprintf fmt "@[[%a..%a]@]" (print_option term) t1 (print_option term) t2
@@ -206,11 +199,12 @@ let rec term fmt t =
 let quantifier = Jc_poutput.quantifier
 
 let rec assertion fmt a =
-  if a.jc_assertion_label <> "" then
+  if a#name_label <> "" then
     fprintf fmt "@[(%s : %a)@]" 
-      a.jc_assertion_label assertion {a with jc_assertion_label =""}
+      (a#name_label) assertion
+      (new assertion_with ~name_label:"" a)
   else
-  match a.jc_assertion_node with
+  match a#node with
     | JCAtrue -> fprintf fmt "true"
     | JCAif (t, a1, a2) ->
 	fprintf fmt "@[(%a ? %a : %a)@]" term t assertion a1 assertion a2
@@ -314,163 +308,85 @@ let call_bin_op _op =
   raise Not_found
 
 let rec expr fmt e =
-  if e.jc_texpr_label <> "" then
+  if e#name_label <> "" then
     fprintf fmt "@[(%s : %a)@]" 
-      e.jc_texpr_label expr {e with jc_texpr_label =""}
+      e#name_label expr (new expr_with ~name_label:"" e)
   else
-  match e.jc_texpr_node with
-    | JCTEvar vi -> 
-	fprintf fmt "%s" vi.jc_var_info_name
-    | JCTEbinary (e1, op, e2) ->
-	fprintf fmt "@[(%a %s %a)@]" expr e1 (bin_op op) expr e2
-    | JCTEunary(op,e1) ->
-	fprintf fmt "@[(%s %a)@]" (unary_op op) expr e1
-    | JCTEif (e1,e2,e3) -> 
-	fprintf fmt "@[(%a ? %a : %a)@]" expr e1 expr e2 expr e3
-    | JCTElet(vi,e1,e2) -> 
-	fprintf fmt "@[(let %s =@ %a@ in %a)@]" 
-	  vi.jc_var_info_name expr e1 expr e2 
-    | JCTEincr_heap (op, e, fi) -> 
-	begin
-	  match op with
-	    | Prefix_inc ->
-		fprintf fmt "++(%a.%s)" expr e fi.jc_field_info_name
-	    | Prefix_dec ->
-		fprintf fmt "--(%a.%s)" expr e fi.jc_field_info_name
-	    | Postfix_inc ->
-		fprintf fmt "(%a.%s)++" expr e fi.jc_field_info_name
-	    | Postfix_dec ->
-		fprintf fmt "(%a.%s)--" expr e fi.jc_field_info_name
-	end
-    | JCTEincr_local (op, v) -> 
-	begin
-	  match op with
-	    | Prefix_inc ->
-		fprintf fmt "++%s" v.jc_var_info_name
-	    | Prefix_dec ->
-		fprintf fmt "--%s" v.jc_var_info_name
-	    | Postfix_inc ->
-		fprintf fmt "%s++" v.jc_var_info_name
-	    | Postfix_dec ->
-		fprintf fmt "%s--" v.jc_var_info_name
-	end
-    | JCTEassign_heap (e1, fi, e2) -> 
-	fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
-    | JCTEassign_heap_op (e1, fi, op, e2) -> 
-	fprintf fmt "%a.%s %s= %a" expr e1 fi.jc_field_info_name 
-	  (bin_op op) expr e2
-    | JCTEassign_var (v, e) -> 
-	fprintf fmt "(%s = %a)" v.jc_var_info_name expr e
-    | JCTEassign_var_op (v, op, e) -> 
-	fprintf fmt "%s %s= %a" v.jc_var_info_name (bin_op op) expr e
-    | JCTEcast (e, si) ->
-	fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
-    | JCTErange_cast (e, ri) ->
-	fprintf fmt "(%a :> %s)" expr e ri.jc_enum_info_name
-    | JCTEreal_cast (e, rc) ->
-	fprintf fmt "(%a :> %a)" expr e real_conversion rc
-    | JCTEalloc (e, si) ->
-	fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e 
-    | JCTEfree (e) ->
-	fprintf fmt "(free(%a))" expr e 
-    | JCTEoffset(k,e, _) ->
-	fprintf fmt "\\offset_m%a(%a)" offset_kind k expr e 
-    | JCTEinstanceof (e, si) ->
-	fprintf fmt "(%a <: %s)" expr e si.jc_struct_info_name
-    | JCTEcall (op, ([t1;t2] as l)) ->
-	begin
-	  try
-	    let s = call_bin_op op in
-	    fprintf fmt "@[(%a %s %a)@]" expr t1 s expr t2
-	  with Not_found ->
-	    fprintf fmt "@[%s(%a)@]" op.jc_fun_info_name
-	      (print_list comma expr) l 
-	end
-    | JCTEcall (op, l) -> 
-	fprintf fmt "@[%s(%a)@]" op.jc_fun_info_name
-	  (print_list comma expr) l 
-    | JCTEderef (e, fi) -> 
-	fprintf fmt "%a.%s" expr e fi.jc_field_info_name 
-    | JCTEshift (e1, e2) -> 
-	fprintf fmt "@[(%a + %a)@]" expr e1 expr e2
-    | JCTEsub_pointer (e1, e2) -> 
-	fprintf fmt "@[(%a - %a)@]" expr e1 expr e2
-    | JCTEconst c -> const fmt c
-    | JCTEmatch (e, pel) ->
-	fprintf fmt "@[<v 2>match %a with@ " expr e;
-	List.iter
-	  (fun (p, e) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
-	     pattern p expr e) pel;
-	fprintf fmt "end@]"
-
-let rec statement fmt s =
-  match s.jc_tstatement_node with
-    | JCTSreturn (_t,e) ->
-	fprintf fmt "@\nreturn %a;" expr e
-    | JCTSreturn_void ->
-	fprintf fmt "@\nreturn;"
-    | JCTSunpack (_, _, _) -> assert false (* TODO *) 
-    | JCTSpack (_, _, _) -> assert false (* TODO *) 
-    | JCTSthrow (ei, eo) ->
-	fprintf fmt "@\nthrow %s %a;" 
-	  ei.jc_exception_info_name 
-	  (print_option_or_default "()" expr) eo
-    | JCTStry (s, hl, fs) ->
-	fprintf fmt 
-	  "@\n@[<v 2>try %a@]%a@\n@[<v 2>finally%a@]"
-	  statement s 
-	  (print_list nothing handler) hl
-	  statement fs
-    | JCTSgoto lab -> 
-	fprintf fmt "@\ngoto %s;" lab.label_info_name
-    | JCTSlabel (lab, s) -> 
-	fprintf fmt "@\n%s:%a" lab.label_info_name statement s
-    | JCTScontinue lab -> 
-	fprintf fmt "@\ncontinue %s;" lab.label_info_name
-    | JCTSbreak lab -> 
-	fprintf fmt "@\nbreak %s;" lab.label_info_name
-    | JCTSwhile (lab, e, la, s)-> 
-	fprintf fmt "@\n@[%s@\ninvariant %a;%a@\nwhile (%a)%a@]"
-	  (if lab = "" then "" else lab ^ ": ")
-	  assertion la.jc_loop_invariant 
-	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
-	  la.jc_loop_variant
-	  expr e block [s]
-    | JCTSfor (lab,cond, updates, loop_annot, body)-> 
-	fprintf fmt "@\n@[%s@\ninvariant %a;%a@\nfor ( ; %a ; %a)%a@]"
-	  (if lab = "" then "" else lab ^ ": ")
-	  assertion loop_annot.jc_loop_invariant 
-	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
-	  loop_annot.jc_loop_variant
-	  expr cond (print_list comma expr) updates
-	  block [body]
-    | JCTSif (e, s1, s2) ->
-	fprintf fmt "@\n@[<v 2>if (%a) %a@]@\n@[<v 2>else %a@]"
-	  expr e statement s1 statement s2
-    | JCTSdecl (vi, None, s)-> 
-	fprintf fmt "{@\n%a %s;%a}" print_type vi.jc_var_info_type
-	  vi.jc_var_info_name statement s
-    | JCTSdecl (vi, Some e, s)-> 
-	fprintf fmt "{@\n%a %s = %a;%a}" 
-	  print_type vi.jc_var_info_type 
-	  vi.jc_var_info_name expr e statement s
-    | JCTSassert((*None,*)a)-> 
-	fprintf fmt "@\nassert %a;" assertion a
-(*
-    | JCTSassert(Some n,a)-> 
-	fprintf fmt "@\nassert %s: %a;" n assertion a
-*)
-    | JCTSexpr e -> fprintf fmt "@\n%a;" expr e
-    | JCTSblock l -> block fmt l
-    | JCTSswitch (e, csl) ->
-	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
-	  expr e (print_list nothing case) csl
-    | JCTSmatch (e, psl) ->
-	fprintf fmt "@[<v 2>match %a with@ " expr e;
-	List.iter
-	  (fun (p, s) -> fprintf fmt "  @[<v 2>%a -> {@ %a@ @]}@ "
-	     pattern p statements s) psl;
-	fprintf fmt "end@]"
+    match e#node with
+      | JCEconst c -> const fmt c
+      | JCEvar vi -> 
+	  fprintf fmt "%s" vi.jc_var_info_name
+      | JCEderef(e, fi) -> 
+	  fprintf fmt "%a.%s" expr e fi.jc_field_info_name 
+      | JCEbinary(e1, op, e2) ->
+	  fprintf fmt "@[(%a %s %a)@]" expr e1 (bin_op op) expr e2
+      | JCEunary(op,e1) ->
+	  fprintf fmt "@[(%s %a)@]" (unary_op op) expr e1
+      | JCEassign_var(v, e) -> 
+	  fprintf fmt "(%s = %a)" v.jc_var_info_name expr e
+      | JCEassign_heap(e1, fi, e2) -> 
+	  fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
+      | JCEinstanceof(e, si) ->
+	  fprintf fmt "(%a <: %s)" expr e si.jc_struct_info_name
+      | JCEcast(e, si) ->
+	  fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
+      | JCErange_cast(e, ri) ->
+	  fprintf fmt "(%a :> %s)" expr e ri.jc_enum_info_name
+      | JCEreal_cast(e, rc) ->
+	  fprintf fmt "(%a :> %a)" expr e real_conversion rc
+      | JCEif(e1,e2,e3) -> 
+	  fprintf fmt "@[(%a ? %a : %a)@]" expr e1 expr e2 expr e3
+      | JCEoffset(k,e, _) ->
+	  fprintf fmt "\\offset_m%a(%a)" offset_kind k expr e
+      | JCEalloc(e, si) ->
+	  fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e
+      | JCEfree e ->
+	  fprintf fmt "(free(%a))" expr e
+      | JCElet(vi,Some e1,e2) -> 
+	  fprintf fmt "@[(let %s =@ %a@ in %a)@]" 
+	    vi.jc_var_info_name expr e1 expr e2
+      | JCElet(vi,None,e2) -> 
+	  fprintf fmt "@[%a %s; %a@]"  
+	    print_type vi.jc_var_info_type vi.jc_var_info_name expr e2
+      | JCEassert a -> 
+	  fprintf fmt "@\nassert %a;" assertion a
+      | JCEblock l ->
+          block fmt l
+      | JCEreturn_void ->
+	  fprintf fmt "@\nreturn;"
+      | JCEreturn(_, e) ->
+	  fprintf fmt "@\nreturn %a;" expr e
+      | JCEtry(s, hl, fs) ->
+	  fprintf fmt
+	    "@\n@[<v 2>try %a@]%a@\n@[<v 2>finally%a@]"
+	    expr s
+	    (print_list nothing handler) hl
+	    expr fs
+      | JCEthrow(ei, eo) ->
+	  fprintf fmt "@\nthrow %s %a;"
+	    ei.jc_exception_info_name
+	    (print_option_or_default "()" expr) eo
+      | JCEpack _ | JCEunpack _ ->
+          assert false (* TODO *)
+      | JCEmatch(e, pel) ->
+	  fprintf fmt "@[<v 2>match %a with@ " expr e;
+	  List.iter
+	    (fun (p, e) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
+	       pattern p expr e) pel;
+	  fprintf fmt "end@]"
+      | JCEshift(e1, e2) -> 
+	  fprintf fmt "@[(%a + %a)@]" expr e1 expr e2
+      | JCEloop(la, e) ->
+          fprintf fmt "@\n@[invariant %a; %a@\nwhile (true)%a@]"
+            assertion la.jc_loop_invariant
+            (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
+            la.jc_loop_variant
+            expr e
+      | JCEapp{ jc_call_fun = (JClogic_fun{ jc_logic_info_final_name = name }
+                | JCfun{ jc_fun_info_final_name = name });
+                jc_call_args = args } ->
+          fprintf fmt "@[%s(%a)@]" name
+            (print_list comma expr) args
 	
 and case fmt (c,sl) =
   let onecase fmt = function
@@ -486,9 +402,9 @@ and handler fmt (ei,vio,s) =
     ei.jc_exception_info_name 
     (print_option_or_default "__dummy"
       (fun fmt vi -> fprintf fmt "%s" vi.jc_var_info_name)) vio
-    statement s
+    expr s
 
-and statements fmt l = List.iter (statement fmt) l
+and statements fmt l = List.iter (expr fmt) l
 
 and block fmt b =
   fprintf fmt "@\n@[<v 0>{@[<v 2>  ";
@@ -570,7 +486,7 @@ let rec print_decl fmt d =
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
 	  (print_list comma param) params 
 	  print_spec spec 
-	  (print_option_or_default "\n;" block) body
+	  (print_option_or_default "\n;" expr) body
     | JCenum_type_def(id,min,max) ->
 	fprintf fmt "@\n@[type %s = %s..%s@]@."
 	  id (Num.string_of_num min) (Num.string_of_num max)

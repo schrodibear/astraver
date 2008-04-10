@@ -35,17 +35,17 @@ open Jc_iterators
 
 let rec term acc t =
   fold_term 
-    (fun acc t -> match t.jc_term_node with
+    (fun acc t -> match t#node with
     | JCTapp app -> app.jc_app_fun::acc
     | _ -> acc
     ) acc t
 
-let tag acc t = match t.jc_tag_node with
+let tag acc t = match t#node with
   | JCTtag _ | JCTbottom -> acc
   | JCTtypeof(t, _) -> term acc t
 
 let rec assertion acc p =
-  match p.jc_assertion_node with
+  match p#node with
   | JCAtrue 
   | JCAfalse -> acc
   | JCArelation(t1,op,t2) ->
@@ -97,32 +97,20 @@ let loop_annot acc la =
   | None -> acc
   | Some t -> term acc t
 
-let rec statement acc s = 
-  match s.jc_statement_node with  
-    | JCScall (_, call, s) ->
-	let f = call.jc_call_fun in
-	let (a,b)=acc in statement (a,f::b) s
-    | JCSassign_var _ | JCSassign_heap _ -> acc
-    | JCSreturn _ | JCSpack _ | JCSunpack _ | JCSthrow _ -> acc
-    | JCSif(_, s1, s2) ->
-	statement (statement acc s1) s2
-    | JCSloop(spec,s) ->
-	let (a,b) = statement acc s in (loop_annot a spec,b)
-    | JCSblock sl -> 
-	List.fold_left statement acc sl
-    | JCSlabel(lab,s) -> statement acc s
-    | JCStry (s, catches, finally) -> 
-	let acc =
-	  List.fold_left 
-	    (fun acc (_,_,s) -> statement acc s) 
-	    (statement acc s) catches
-	in statement acc finally
-    | JCSdecl(vi,_,s) -> 
-	statement acc s
-    | JCSassert _ -> acc
-    | JCSreturn_void -> acc
-    | JCSmatch(_, psl) ->
-	List.fold_left (fun acc (_, s) -> statement acc s) acc psl
+let expr = 
+  IExpr.fold_left 
+    (fun acc e -> match e#node with  
+       | JCEapp call ->
+	   let f = call.jc_call_fun in
+	   let (a,b)=acc in
+	   begin match f with
+	     | JCfun f -> (a,f::b)
+	     | JClogic_fun f -> (f::a,b)
+	   end
+       | JCEloop(spec,s) ->
+	   let (a,b) = acc in (loop_annot a spec,b)
+       | _ -> acc
+    )
 
 let compute_logic_calls f t = 
   let calls =
@@ -134,7 +122,7 @@ let compute_logic_calls f t =
   f.jc_logic_info_calls <- calls
 
 let compute_calls f s b = 
-  let (a,b) = List.fold_left statement ([],[]) b in
+  let (a,b) = expr ([],[]) b in
   f.jc_fun_info_calls <- b
       
 module LogicCallGraph = struct 
@@ -154,7 +142,7 @@ module LogicCallGraph = struct
 module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
 
 module CallGraph = struct 
-  type t = (int, (fun_info * Loc.position * fun_spec * statement list option)) Hashtbl.t
+  type t = (int, (fun_info * Loc.position * fun_spec * expr option)) Hashtbl.t
   module V = struct
     type t = fun_info
     let compare f1 f2 = Pervasives.compare f1.jc_fun_info_tag f2.jc_fun_info_tag

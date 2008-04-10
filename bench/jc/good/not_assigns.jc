@@ -16,7 +16,7 @@ unit f(integer n, T[0] t)
     assigns t.y;
     ensures t.y == n;
 {
-  if (n > 0) t.x = n; else t.y = n;
+  if n > 0 then t.x = n else t.y = n;
 }
 
 unit test1(T[0] t)

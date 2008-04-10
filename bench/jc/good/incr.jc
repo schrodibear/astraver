@@ -6,18 +6,19 @@ type short = -32768..32767
 
 unit f(short m)
   requires true;
-{  
+{
+      ()
 }
 
 unit g1()
   requires true;
-{  byte b = 127;
+{  var byte b = 127;
    f(b++);
 }
 
 unit g2()
   requires true;
-{  byte b = 127;
+{  var byte b = 127;
    f(++b);
 }
 
@@ -34,4 +35,11 @@ unit g4(T[0] x)
 }
 
 
+
+/*
+Local Variables: 
+mode: java
+compile-command: "make incr"
+End: 
+*/
 

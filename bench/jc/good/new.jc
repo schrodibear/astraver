@@ -15,10 +15,10 @@ type PointSet = {
 PointSet[1] createPointSet(integer n) 
     requires n > 0;
     behavior normal:
-	ensures \result.committed == false && \mutable(\result, PointSet);
+      ensures \result.committed == false && \mutable(\result, PointSet);
 {
-    Point[..] p = new Point[n];
-    PointSet[1] ps = new PointSet[1];
+    var Point[..] p = new Point[n];
+    var PointSet[1] ps = new PointSet[1];
     ps.num = n;
     ps.set = p;
     pack(p);
@@ -31,7 +31,7 @@ unit deletePointSet(PointSet[1] ps)
     behavior normal:
 	ensures \offset_max(ps) < \offset_min(ps);
 {
-    integer i;
+    var integer i;
     //    unpack(ps);
     //    unpack(ps.set);
     free(ps.set);

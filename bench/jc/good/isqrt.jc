@@ -18,8 +18,8 @@ integer isqrt(integer x)
 	\result >=0 && \result * \result <= x && 
 	x < (\result + 1) * (\result + 1);
 {
-    integer count = 0;
-    integer sum = 1;
+    var integer count = 0;
+    var integer sum = 1;
     invariant 
         count >= 0 && x >= count*count && sum == (count+1)*(count+1);
     variant x - sum;
@@ -27,7 +27,7 @@ integer isqrt(integer x)
     { 
 	count++;
 	sum = sum + 2*count+1;
-    }
+    };
     return count;
 }   
 

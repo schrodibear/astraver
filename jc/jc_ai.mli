@@ -31,13 +31,14 @@
 open Jc_ast
 open Jc_fenv
 
+val normalize_expr: expr -> expr
 
 (* intraprocedural analysis *)
-val code_function : fun_info * Loc.position * fun_spec * statement list option -> unit
+val code_function : fun_info * Loc.position * fun_spec * expr option -> unit
 
 
 (* interprocedural analysis *)
-val main_function : fun_info * Loc.position * fun_spec * statement list option -> unit
+val main_function : fun_info * Loc.position * fun_spec * expr option -> unit
 
 
 val is_recursive : fun_info -> bool
@@ -45,6 +46,6 @@ val is_recursive : fun_info -> bool
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

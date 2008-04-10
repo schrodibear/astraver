@@ -3,7 +3,7 @@ integer main(integer i)
   behavior safety: 
     ensures i == 1 || \result == 1;
 {
-  integer j = i + 1;
+  var integer j = i + 1;
   switch (j) {
     case 0:
       ++j;
@@ -14,7 +14,7 @@ integer main(integer i)
       break;
     case 2:
       j = 2;
-  }
+  };
   return j;
 }
 
@@ -22,7 +22,7 @@ integer main2(integer i)
   behavior switchok:
     ensures \old(i == 0) ==> \result == 1;
 {
-  integer j = i;
+  var integer j = i;
   switch (j) {
     case 0:
       j += 4;
@@ -32,7 +32,7 @@ integer main2(integer i)
       break;
     case 2:
       j = 2;
-  }
+  };
   return j;
 }
 

@@ -26,17 +26,17 @@ real power(real x, integer n)
   behavior result_is_power:
     ensures \result == lpower(x, n);
 {
-  real r = 1.;
-  real t = x;
-  integer i = n;
+  var real r = 1.;
+  var real t = x;
+  var integer i = n;
     invariant r * lpower(t, i) == lpower(x, n) && i >= 0;
     variant i;
   while (i > 0)
   {
-    if (i % 2 == 1) r = r * t;
+    if i % 2 == 1 then r = r * t;
     t = t * t;
     i = i / 2;
-  }
+  };
   return r;
 }
 

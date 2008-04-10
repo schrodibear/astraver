@@ -27,32 +27,16 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.mli,v 1.16 2008-03-02 20:53:24 nrousset Exp $ *)
+(* $Id: jc_norm.mli,v 1.17 2008-04-10 16:05:55 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
 open Jc_ast
 
-val functions_table : 
-  (int, fun_info * Loc.position * fun_spec * statement list option) Hashtbl.t
-
-val variables_table : 
-  (int, var_info * expr option) Hashtbl.t
-
-val code_function : fun_info * fun_spec * tstatement list option 
-  -> var_info list -> fun_info * fun_spec * statement list option
-
-val static_variable : Jc_env.var_info * Jc_ast.texpr option -> var_info * Jc_ast.expr option
-
-(*
-val make_int_binary : string -> Loc.position -> expr -> bin_op -> expr -> expr
-*)
-
-val one_const : Loc.position -> expr
-
+val decls : pexpr decl list -> nexpr decl list
 
 (*
 Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
 End: 
 *)

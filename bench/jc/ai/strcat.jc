@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Pol
 
 type charP = {
@@ -11,19 +12,19 @@ logic integer strlen{L}(charP[..] p) reads (p+[0..]).charM;
 unit strcat(charP[..] dest, charP[..] src) {  
     assert (0 <= strlen(src));
     assert (0 <= strlen(dest));
-    integer i = 0;
-    integer j = 0;
+    var integer i = 0;
+    var integer j = 0;
     while ((dest + i).charM != 0) {
 	assert (i < strlen(dest));
 	i = i + 1;
-    }
+    };
     assert (i == strlen(dest));
     while (true) {
-        if ((src + j).charM != 0) {
+        if ((src + j).charM != 0) then {
 	    assert (j < strlen(src));
 	    (dest + i + j).charM = (src + j).charM;
 	    j = j + 1;
-	}
+	};
 	assert (j == strlen(src));
     }
 }

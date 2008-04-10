@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Box
 
 /* The goal of this test is to check that no excessively strong loop invariant
@@ -13,18 +14,18 @@ boolean rand();
 integer rand_int();
 
 unit f(integer n) {
-    integer m = 0;
-    if (n < 0) return;
+    var integer m = 0;
+    if (n < 0) then return ();
     m = rand_int();
     assert (m < 10);
 }
 
 unit f2(integer n2) {
-    integer m2 = 0;
-    while (rand()) ; {
+    var integer m2 = 0;
+    while (rand()) {
         m2++;
-    }
-    if (n2 < 0) return;
+    };
+    if (n2 < 0) then return ();
     assert (m2 < 10);
 }
 

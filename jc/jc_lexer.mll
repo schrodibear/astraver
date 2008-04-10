@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.57 2008-04-03 15:16:31 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.58 2008-04-10 16:05:55 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -186,6 +186,7 @@ rule token = parse
   | "return"                { RETURN }
   | "switch"                { SWITCH }
   | "tag"                   { TAG }
+  | "then"                  { THEN }
   | "throw"                 { THROW }
   | "throws"                { THROWS }
   | "true"                  { CONSTANT (JCCboolean true) }
@@ -194,6 +195,7 @@ rule token = parse
   | "unit"                  { UNIT }
   | "unpack"                { UNPACK }
   | "variant"               { VARIANT }
+  | "var"                   { VAR }
   | "while"                 { WHILE }
   | "with"                  { WITH }
   | "\\at"                  { BSAT }
@@ -267,6 +269,7 @@ rule token = parse
   | "=="                    { EQEQ }
   | "!="                    { BANGEQ }
   | ";"                     { SEMICOLON }
+  | ";;"                     { SEMISEMI }
   | "{"                     { LBRACE }
   | "}"                     { RBRACE }
   | ","                     { COMMA }

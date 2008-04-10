@@ -29,9 +29,9 @@ integer f2 (integer x)
   behavior default:
     ensures \result != 0 && \result > 10;  
 {
-  integer y;
-  if (x<50) 
-     return x+1;
+  var integer y;
+  if x<50 then
+     return x+1
   else 
      y = x-1;
   return y;
@@ -58,7 +58,7 @@ integer f3 (integer x)
 
 unit f4 (integer x) 
 { 
- integer y = x;
+ var integer y = x;
  invariant 0 <= y && y <= x;
  variant y;
  while (y > 0)
@@ -76,7 +76,7 @@ unit f4 (integer x)
 
 unit f5 (integer x)  
 {
- integer y = x;
+ var integer y = x;
  invariant y == x;
  while (y > 0)
  {
@@ -92,8 +92,8 @@ unit f5 (integer x)
 type byte = 0..255
 byte f6(byte x)
 {
-    byte y = x+1;
-    byte z = (x+y) :> byte; 
+    var byte y = x+1;
+    var byte z = (x+y) :> byte; 
     return y+z;
 }
 

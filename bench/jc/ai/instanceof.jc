@@ -10,7 +10,7 @@ charP[..] r_strncpy(charP[0..2] dest, integer n);
 
 unit test(sockaddr_un[0] serv_adr)
 {
-    charP[..] p = serv_adr.sun_path;
+    var charP[..] p = serv_adr.sun_path;
     r_strncpy(serv_adr.sun_path, 2);
     (serv_adr.sun_path + 2).charM = 1;
     

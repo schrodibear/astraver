@@ -27,1032 +27,627 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.88 2008-04-02 08:38:13 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.89 2008-04-10 16:05:55 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
 open Jc_fenv
 open Jc_pervasives
+open Jc_constructors
 open Jc_ast
 open Format
-open Jc_region
-
-let functions_table = Hashtbl.create 97
-let variables_table = Hashtbl.create 97
-
-(* result of test, to be used during translation of lazy boolean operators
-   to instructions *)
-
-let true_output = exception_info None "True"
-let false_output = exception_info None "False"
-let loop_exit = exception_info None "Loop_exit"
-let loop_continue = exception_info None "Loop_continue"
-
-let exceptions_table = Jc_typing.exceptions_table
-
-let () = Hashtbl.add exceptions_table "True" true_output
-let () = Hashtbl.add exceptions_table "False" false_output
-let () = Hashtbl.add exceptions_table "Loop_exit" loop_exit
-let () = Hashtbl.add exceptions_table "Loop_continue" loop_continue
+open Jc_iterators
+open Jc_constructors.PExpr
 
 
-(* expressions *)
-
-let make_const loc c =
-  let t,tr,c = Jc_pervasives.const c in
-  let node = JCEconst c in
-  { jc_expr_loc = loc; 
-    jc_expr_type = t;
-    jc_expr_region = tr;
-    jc_expr_label = "";
-    jc_expr_node = node; }
-
-let void_const loc = make_const loc JCCvoid
-let true_const loc = make_const loc (JCCboolean true)
-let false_const loc = make_const loc (JCCboolean false)
-let one_const loc = make_const loc (JCCinteger "1")
-
-let make_var loc vi =
-  let node = JCEvar vi in
-  { jc_expr_loc = loc; 
-    jc_expr_type = vi.jc_var_info_type;
-    jc_expr_region = vi.jc_var_info_region;
-    jc_expr_label = "";
-    jc_expr_node = node; } 
-
-let make_deref loc e fi =
-  let node = JCEderef (e, fi) in
-  { jc_expr_loc = loc; 
-    jc_expr_type = fi.jc_field_info_type;
-    jc_expr_region = Region.make_field e.jc_expr_region fi;
-    jc_expr_label = "";
-    jc_expr_node = node; }
+(** Normalization: transforms the parsed AST in order to reduce the number of
+    constructs. As it works on untyped expressions, the transformations are
+    all syntax-oriented:
+    - transform switch into sequence of ifs with exceptions
+    - transform while and for into loop with gotos
+    - transform op-assign into normal assign and op
+    - transform gotos into exceptions *)
 
 
-let rec make_or_list_test loc = function
-  | [] -> false_const loc
-  | [e] -> e
-  | e :: r -> 
-      let node = JCEbinary (e, Blor, make_or_list_test loc r) in
-      { jc_expr_loc = loc; 
-        jc_expr_type = boolean_type;
-        jc_expr_region = dummy_region;
-	jc_expr_label = "";
-	jc_expr_node = node; } 
+(**************************************************************************)
+(* Globals to add to the list of declarations                             *)
+(**************************************************************************)
 
-let rec make_and_list_test loc = function
-  | [] -> true_const loc
-  | [e] -> e
-  | e :: r -> 
-      let node = JCEbinary (e, Bland, make_and_list_test loc r) in
-      { jc_expr_loc = loc; 
-        jc_expr_type = boolean_type;
-	jc_expr_region = dummy_region;
-	jc_expr_label = "";
-	jc_expr_node = node; } 
+let name_for_loop_exit = Jc_envset.get_unique_name "Loop_exit"
+let name_for_loop_continue = Jc_envset.get_unique_name "Loop_continue"
 
-(* expressions on the typed AST, not the normalized AST *)
+let loop_exit = new identifier name_for_loop_exit
+let loop_continue = new identifier name_for_loop_continue
 
-let make_tconst loc c =
-  let t,tr,c = Jc_pervasives.const c in
-  let node = JCTEconst c in
-  { jc_texpr_loc = loc; 
-    jc_texpr_type = t; 
-    jc_texpr_region = tr; 
-    jc_texpr_label = "";
-    jc_texpr_node = node; }
+let label_to_exception = Hashtbl.create 17
 
-let make_tincr_local lab loc t op vi =
-  let node =  JCTEincr_local (op, vi) in
-  { jc_texpr_loc = loc; 
-    jc_texpr_type = t; 
-    jc_texpr_region = vi.jc_var_info_region; 
-    jc_texpr_label = lab;
-    jc_texpr_node = node; }
+let goto_exception_for_label lab =
+  try
+    Hashtbl.find label_to_exception lab 
+  with Not_found ->
+    let excname = Jc_envset.get_unique_name ("Goto_" ^ lab) in
+    let exc = new identifier excname in
+    Hashtbl.add label_to_exception lab exc;
+    exc
 
-let make_tincr_heap lab loc t op e fi =
-  let node = JCTEincr_heap (op, e, fi) in
-  { jc_texpr_loc = loc; 
-    jc_texpr_type = t; 
-    jc_texpr_region = Region.make_field e.jc_texpr_region fi; 
-    jc_texpr_label = lab;
-    jc_texpr_node = node; }
 
-(* statements *)
+(**************************************************************************)
+(* Transformations                                                        *)
+(**************************************************************************)
 
-let make_node lab loc node = 
-(*
-  Format.eprintf "Jc_norm.make_node: lab = '%s'@." lab;
-*)
-  { jc_statement_loc = loc; 
-    jc_statement_label = lab;
-    jc_statement_node = node; }
-
-let make_assign_var loc vi e =
-  make_node "Lassign_var" loc (JCSassign_var (vi, e))
-
-let make_assign_heap loc e1 fi e2 =
-  make_node "Lassign_heap" loc (JCSassign_heap (e1, fi, e2))
-
-let make_block loc sl =
-  match sl with 
-    | [s] -> s
-    | s :: l -> 
-	make_node s.jc_statement_label s.jc_statement_loc (JCSblock sl)
-    | [] -> 
-	make_node "Lempty_block" loc (JCSblock sl)
-	
-
-let make_block_node lab loc sl snode =
-  match sl with
-    | [] -> snode
-    | _ -> JCSblock (sl @ [make_node lab loc snode])
-
-let make_call lab loc vio f el s =
-(*
-  Format.eprintf "Jc_norm.make_call: lab for call = '%s'@."
-    lab;
-*)
-  let call = {
-    jc_call_fun = f;
-    jc_call_args = el;
-    jc_call_region_assoc = [];
-  } in
-  make_node lab loc (JCScall (vio, call, s)) 
-
-let make_if loc e ts es =
-  make_node "Lif" loc (JCSif (e,ts,es))
-
-let make_match loc e psl =
-  make_node "Lmatch" loc (JCSmatch (e, psl))
-
-let make_throw loc exc e =
-  make_node "Lthrow" loc (JCSthrow (exc,e))
-
-let make_loop lab loc la s =
-  make_node lab loc (JCSloop (la,s))
-
-let make_try loc s exl fs =
-  make_node "Ltry" loc (JCStry (s, exl, fs))
-
-let make_decl loc vi eo s =
-  make_node "Ldecl" loc (JCSdecl (vi, eo, s))
-
-let make_decls loc sl tl =
-  List.fold_right 
-    (fun vi acc -> 
-       (* real initial value does not matter *)
-       let t, cst =
-	 match vi.jc_var_info_type with
-	   | JCTnative t ->
-	       begin
-		 match t with
-		   | Tboolean -> boolean_type, JCCboolean false
-		   | Tunit -> unit_type, JCCvoid
-		   | Tinteger -> integer_type, JCCinteger "0"
-		   | Treal -> real_type, JCCreal "0.0"
-		   | Tstring -> string_type, JCCstring "\"\""
-	       end
-	   | JCTenum _ ->  integer_type, JCCinteger "0"
-	   | JCTnull | JCTpointer _ -> JCTnull, JCCnull
-	   | JCTlogic _ -> assert false
-       in
-	 make_decl loc vi (Some (make_const loc cst)) acc)
-    tl (make_block loc sl)
-
-let make_return loc t e =
-  make_node "Lreturn" loc (JCSreturn (t,e))
-
-let make_pack loc si e as_t =
-  make_node "Lpack" loc (JCSpack (si, e, as_t))
-
-let make_unpack loc si e from_t =
-  make_node "Lunpack" loc (JCSunpack (si, e, from_t))
-
-(* statements on the typed AST, not the normalized AST *)
-
-let make_tnode loc node = 
-  { jc_tstatement_loc = loc; jc_tstatement_node = node; }
-
-let make_tif loc e ts es =
-  make_tnode loc (JCTSif (e,ts,es))
-
-let make_tblock loc sl =
-  match sl with 
-    | [s] -> s
-    | _ -> make_tnode loc (JCTSblock sl)
-
-let make_tassign_var loc vi e =
-  let node = JCTEassign_var(vi, e) in
-  let assign = 
-    { jc_texpr_loc = loc; 
-    jc_texpr_type = unit_type; 
-    jc_texpr_region = dummy_region; 
-    jc_texpr_label = "";
-    jc_texpr_node = node; }
+(** Transform switch *)
+let normalize_switch loc e caselist =
+  (* Give a temporary name to the switch expression, so that modifying
+   * a variable on which this expression depends does not interfere 
+   * with the control-flow, when its value is tested.
+   *)
+  let eloc = e#loc in
+  let tmpname = tmp_var_name () in
+  let tmpvar = mkvar ~loc:eloc ~name:tmpname () in
+  let has_default c = List.exists (fun c -> c = None) c in
+  (* Test for case considered *)
+  let test_one_case ~(neg:bool) c = 
+    let op = if neg then `Bneq else `Beq in
+    mkbinary ~loc:eloc ~expr1:tmpvar ~op ~expr2:c ()
   in
-  make_tnode loc (JCTSexpr assign)
-
-let make_tthrow loc exc e =
-  make_tnode loc (JCTSthrow (exc,e))
-
-let make_binary lab loc e1 t op e2 =
-  let t = match t with
-    | JCTenum _ -> integer_type
-    | _ -> t
+  (* Collect negative tests for [default] case *)
+  let all_neg_cases () = 
+    let collect_neg_case c = 
+      List.fold_right (fun c l -> match c with
+			 | Some c -> test_one_case ~neg:true c :: l
+			 | None -> l) c []
+    in
+    fst (List.fold_left (fun (l,after_default) (c,_)  -> 
+			   if after_default then
+			     collect_neg_case c @ l,after_default
+			   else		
+			     l,has_default c
+			) ([],false) caselist)
   in
-  assert(not(is_pointer_type t));
-    { jc_expr_node = JCEbinary(e1, op, e2);
-      jc_expr_type = t;
-      jc_expr_region = dummy_region;
-      jc_expr_label = lab;
-      jc_expr_loc = loc }
+  let test_one_case_or_default = function
+    | Some c -> test_one_case ~neg:false c
+    | None -> mkand ~loc:eloc ~list:(all_neg_cases ()) ()
+  in
+  let test_case_or_default c = 
+    mkor ~loc:eloc ~list:(List.map test_one_case_or_default c) ()
+  in
+  let rec cannot_fall_trough e = 
+    match e#node with
+      | JCPEblock [] -> 
+	  false
+      | JCPEblock elist -> 
+	  cannot_fall_trough (List.hd (List.rev elist))
+      | JCPEthrow _ | JCPEreturn _ | JCPEwhile _ | JCPEfor _ -> 
+	  true
+      | JCPEif(_,te,fe) ->
+	  cannot_fall_trough te && cannot_fall_trough fe
+      | _ -> false
+  in
+  let rec fold_case (previous_c,acc) = 
+    function [] -> List.rev acc | (c,e) :: next_cases ->
+      (* No need to test on previous values if default present *)
+      let current_c = if has_default c then c else previous_c @ c in
+      let teste = test_case_or_default current_c in
+      (* Case translated into if-statement *)
+      if cannot_fall_trough e then
+	let nexte = start_fold_case next_cases in
+	let ife =
+          mkif ~loc:eloc ~condition:teste ~expr_then:e ~expr_else:nexte () in
+	List.rev (ife :: acc)
+      else
+	let ife = mkif ~loc:eloc ~condition:teste ~expr_then:e () in
+	fold_case (current_c, ife :: acc) next_cases
+  and start_fold_case caselist = 
+    let iflist = fold_case ([],[]) caselist in
+    mkblock ~loc ~exprs:iflist ()
+  in
+  let iflist = fold_case ([],[]) caselist in
+  let switche = mkblock ~loc ~exprs:iflist () in
+  let catche = [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_exit ()] in
+  let trye = mktry ~loc ~expr:switche ~catches:catche () in
+  mklet_nodecl ~var:tmpname ~init:e ~body:trye ()
 
-let make_int_binary lab loc e1 op e2 = make_binary lab loc e1 integer_type op e2
+(** Transform while-loop *)
+let normalize_while loc test inv var body =
+  let body = match test#node with
+    | JCPEconst(JCCboolean true) -> body
+	(* Special case of an infinite loop [while(true)].
+	 * Then, no condition needs to be tested. This form is expected
+	 * for some assertions to be recognized as loop invariants
+	 * later on, in annotation inference. *)
+    | _ ->
+	let exit_ = mkthrow ~loc ~exn:loop_exit () in
+	mkif ~loc ~condition:test ~expr_then:body ~expr_else:exit_ ()
+  in
+  mktry ~loc
+    ~expr:
+    (mkwhile ~loc ~invariant:inv ?variant:var 
+       ~body:
+       (mktry ~loc 
+          ~expr:
+          (mkblock ~loc ~exprs:[body; mkthrow ~loc ~exn:loop_continue ()] ())
+	  ~catches: [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_continue ()]
+          ())
+       ())
+    ~catches:
+    [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_exit ()]
+    ()
 
+(** Transform for-loop *)
+let normalize_for loc inits test updates inv var body =
+  mkblock ~loc
+    ~exprs:(inits 
+	    @ [mktry ~loc
+                 ~expr:
+		 (mkwhile ~loc ~invariant:inv ?variant:var 
+                    ~body:
+		    (mktry ~loc 
+                       ~expr:
+		       (mkblock ~loc ~exprs:[
+			  mkif ~loc ~condition:test ~expr_then:body 
+                            ~expr_else:(mkthrow ~loc ~exn:loop_exit ()) ();
+			  mkthrow ~loc ~exn:loop_continue ()] ())
+                       ~catches:
+		       [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_continue
+                          ~body:(mkblock ~loc ~exprs:updates ()) ()] ())
+                    ())
+                 ~catches:
+		 [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_exit ()]
+                 ()
+	      ])
+    ()
 
+let duplicable =
+  IPExpr.fold_left 
+    (fun acc e -> acc && match e#node with
+       | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _
+       | JCPEunary _ | JCPEoffset _ | JCPEold _ | JCPEat _
+       | JCPEbinary _ | JCPEcast _ ->
+	   true
+       | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEtagequality _  
+       | JCPEbreak _ | JCPEcontinue _  | JCPEgoto _  | JCPEdecl _
+       | JCPElabel _ | JCPEinstanceof _ | JCPEalloc _ 
+       | JCPEfree _ | JCPElet _ | JCPEpack _ | JCPEunpack _ 
+       | JCPEquantifier _ | JCPEmutable _ | JCPEassign _ 
+       | JCPEassign_op _ | JCPEif _ | JCPEwhile _ | JCPEblock _
+       | JCPEapp _ | JCPEtry _ | JCPEmatch _ | JCPEfor _
+       | JCPEswitch _ ->
+	   false
+    ) true
 
-let op_of_incdec = function
-  | Prefix_inc | Postfix_inc -> Badd_int 
-  | Prefix_dec | Postfix_dec -> Bsub_int
-
-
-(*
-  
-  expr e : returns ((sl, tl), ne) where
-  
-   ne = normalized expression for e, without side-effect
-   sl = sequences of statements to execute before e
-   tl = sequences of fresh variables needed
-
-  in other words, if tl = x1..xn, e is normalized into :
-
-     t1 x1 = <default value for type t1>;
-     ...
-     tn xn = <default value for type tn>;
-     sl;
-     ...ne...
-
-*)
-
-let rec expr e =
-  let lab = e.jc_texpr_label in
-  let loc = e.jc_texpr_loc in
-  let (sl, tl), ne =
-    match e.jc_texpr_node with
-    | JCTEconst c -> ([], []), JCEconst c
-    | JCTEvar vi -> ([], []), JCEvar vi
-    | JCTEunary(op,e1) ->
-	let (l1, tl1), e1 = expr e1 in
-	(l1, tl1), JCEunary (op, e1)
-    | JCTEbinary (e1, op, e2) ->
-	let (l1, tl1), e1 = expr e1 in
-	let (l2, tl2), e2 = expr e2 in
-	  begin
-	    match op with
-	      | Bland ->
-		  let tmp = newrefvar boolean_type in
-		  let e1_false_stat = make_assign_var loc tmp (false_const loc) in
-		  let e2_false_stat = make_assign_var loc tmp (false_const loc) in
-		  let true_stat = make_assign_var loc tmp (true_const loc) in
-		  let if_e2_stat = make_if loc e2 true_stat e2_false_stat in
-		  let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
-		  let if_e1_stat = make_if loc e1 block_e2 e1_false_stat in
-		    (l1 @ [if_e1_stat], [tmp] @ tl1 @ tl2), JCEvar tmp
-	      | Blor ->
-		  let tmp = newrefvar boolean_type in
-		  let e1_true_stat = make_assign_var loc tmp (true_const loc) in
-		  let e2_true_stat = make_assign_var loc tmp (true_const loc) in
-		  let false_stat = make_assign_var loc tmp (false_const loc) in
-		  let if_e2_stat = make_if loc e2 e2_true_stat false_stat in
-		  let block_e2 = make_block loc (l2 @ [if_e2_stat]) in
-		  let if_e1_stat = make_if loc e1 e1_true_stat block_e2 in
-		    (l1 @ [if_e1_stat], [tmp] @ tl1 @ tl2), JCEvar tmp
-	      | _ -> (* Note: no special case for Unot *)
-		  (l1 @ l2, tl1 @ tl2), JCEbinary (e1, op, e2)
-	  end
-    | JCTEshift (e1, e2) ->
-	let (l1, tl1), e1 = expr e1 in
-	let (l2, tl2), e2 = expr e2 in
-	(* Translate recursive shifts into single shift. *)
-	let e1,e2 = match e1.jc_expr_node with
-	  | JCEshift(e3,e4) -> 
-	      let adde = JCEbinary(e4,Badd_int,e2) in
-	      let adde = { e4 with 
-		jc_expr_node = adde; jc_expr_type = integer_type;
-	      } in
-	      let adde = match e4.jc_expr_type with
-		| JCTnative Tinteger -> adde
-		| JCTenum ri ->
-		    let caste = JCErange_cast(adde,ri) in
-		    { e4 with jc_expr_node = caste; }
-		| JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull -> 
-		    assert false
-	      in
-	      e3, adde
-	  | _ -> e1,e2
-	in
-	(l1@l2, tl1@tl2), JCEshift (e1, e2)
-    | JCTEsub_pointer (e1, e2) ->
-	let (l1, tl1), e1 = expr e1 in
-	let (l2, tl2), e2 = expr e2 in
-	(l1@l2, tl1@tl2), JCEsub_pointer (e1, e2)
-    | JCTEderef (e, f) ->
-	let (l, tl), e = expr e in
-	(l, tl), JCEderef (e, f)
-    | JCTEcall (f, el) ->
-	let ltl, el = List.split (List.map expr el) in
-	let ll, tll = List.split ltl in
-(*
-	Format.eprintf "Jc_norm.expr: lab for call = '%s'@." lab;
-*)
-	let (l, tl), ecall = call lab loc f el ~binder:true ll in
-	let ecall = match ecall with
-	| Some b -> JCEvar b
-	| None -> assert false
-	in
-	(l, tl@(List.flatten tll)), ecall
-    | JCTEoffset (k, e, si) -> 
-	let (l, tl), e = expr e in
-	(l, tl), JCEoffset (k, e, si)
-    | JCTEinstanceof (e, s) ->
-	let (l, tl), e = expr e in
-	(l, tl), JCEinstanceof (e, s)
-    | JCTEcast (e, s) ->
-	let (l, tl), e = expr e in
-	(l, tl), JCEcast (e, s)
-    | JCTErange_cast (e,r) ->
-	let (l, tl), e = expr e in
-	(l, tl), JCErange_cast (e,r)
-    | JCTEreal_cast (e,rc) ->
-	let (l, tl), e = expr e in
-	(l, tl), JCEreal_cast (e,rc)
-    | JCTEalloc (e, s) ->
-	let (l, tl), e = expr e in
-	(l, tl), JCEalloc (e, s)
-    | JCTEfree e ->
-	let (l, tl), e = expr e in
-	(l, tl), JCEfree e
-    | JCTEassign_var (vi, e) ->
-	let (l, tl), e = expr e in
-	let stat = make_assign_var loc vi e in
-	(l@[stat], tl), JCEvar vi
-    | JCTEassign_var_op (vi,op, e) -> 
-	(* 
-	   vi op= e becomes:
-	   
-	   stat0: tmp <- vi
-	   <e effects>
-           stat: vi <- tmp op e
-           ... vi ...
-	 *)             
-	let tmp = newrefvar vi.jc_var_info_type in
-	let stat0 = 
-	  make_assign_var loc tmp (make_var loc vi) 
-	in
-	let (l, tl), e = expr e in
-	let e = 
-	  make_binary lab loc (make_var loc tmp) vi.jc_var_info_type op e 
-	in
-	let stat = make_assign_var loc vi e in
-	(stat0::l@[stat], tmp::tl), JCEvar vi
-    | JCTEassign_heap (e1, fi, e2) ->
-	let (l1, tl1), e1 = expr e1 in
-	let (l2, tl2), e2 = expr e2 in
-	let stat = make_assign_heap loc e1 fi e2 in
-	(l1@l2@[stat], tl1@tl2), JCEderef (e1, fi)
-    | JCTEassign_heap_op (e1, fi, op, e2) -> 
-	(* 
-	   e1.fi op= e2 becomes:
-	   
-	   <e1 effects>
-           stat1: tmp1 <- e1
-           <e2 effects>
-           stat2: tmp2 <- tmp1.fi op e2
-	   stat: tmp1.fi <- tmp2
-           ... tmp2 ...
-	 *)             
-	let (l1, tl1), e1 = expr e1 in
-	let tmp1 = newrefvar e1.jc_expr_type in
-	let stat1 = make_assign_var loc tmp1 e1 in
-	let (l2, tl2), e2 = expr e2 in
-	let e3 = 
-	  make_binary lab loc 
-	    (make_deref loc (make_var loc tmp1) fi) 
-	    fi.jc_field_info_type op e2
-	in
-	let tmp2 = newrefvar fi.jc_field_info_type in
-	let stat2 = make_assign_var loc tmp2 e3 in
-	let stat = 
-	  make_assign_heap loc (make_var loc tmp1) fi (make_var loc tmp2) 
-	in
-	(l1@stat1::l2@[stat2; stat], tl1@tmp1::tl2@[tmp2]), JCEvar tmp2
-    | JCTEincr_local (op, vi) ->
-	let tmp = newrefvar integer_type (* vi.jc_var_info_type *) in
-	begin match op with
-	| Prefix_inc | Prefix_dec ->
-	    (* integer tmp := vi +/- 1; vi := (cast)tmp; tmp *)
-	    let add = 
-	      make_int_binary lab loc 
-		(make_var loc vi) (op_of_incdec op) (one_const loc)
-	    in
-	    let stat0 = make_assign_var loc tmp add in
-	    ([stat0; make_assign_var loc vi (make_var loc tmp)], [tmp]), 
-	    JCEvar tmp
-	| Postfix_inc | Postfix_dec ->
-	    (* integer tmp := vi; vi := (cast)(tmp +/- 1); tmp *)
-	    let stat0 = make_assign_var loc tmp (make_var loc vi) in
-	    let add = 
-	      make_int_binary lab loc 
-		(make_var loc tmp) (op_of_incdec op) (one_const loc)
-	    in
-	    ([stat0; make_assign_var loc vi add], [tmp]), 
-	    JCEvar tmp
-	end
-    | JCTEincr_heap (op, e, fi) ->
-	let tmp = newrefvar integer_type (* fi.jc_field_info_type *) in
-	begin match op with
-	| Prefix_inc | Prefix_dec ->
-	    (* integer tmp := e.fi +/- 1; e.fi := (cast)tmp; tmp *)
-	    let (l, tl), e = expr e in
-	    let add = 
-	      make_int_binary lab loc 
-		(make_deref loc e fi) (op_of_incdec op) (one_const loc)
-	    in
-	    let stat0 = make_assign_var loc tmp add in
-	    (l@[stat0 ; make_assign_heap loc e fi (make_var loc tmp)], 
-	     tl@[tmp]), 
-	    JCEvar tmp
-	| Postfix_inc | Postfix_dec ->
-	    (* integer tmp := e.fi; e.fi := (cast)(tmp +/- 1); tmp *)
-	    let (l, tl), e = expr e in
-	    let stat0 = make_assign_var loc tmp (make_deref loc e fi) in
-	    let add = 
-	      make_int_binary lab loc 
-		(make_var loc tmp) (op_of_incdec op) (one_const loc)
-	    in
-	    (l@[stat0 ; make_assign_heap loc e fi add], tl@[tmp]), 
-	    JCEvar tmp
-	end
-    | JCTEif (e1, e2, e3) ->
-	let (l1, tl1), e1 = expr e1 in
-	let (l2, tl2), e2 = expr e2 in
-	let (l3, tl3), e3 = expr e3 in
-	let tmp = newrefvar e.jc_texpr_type in
-	let assign2 = make_assign_var loc tmp e2 in
-	let assign3 = make_assign_var loc tmp e3 in
-	let if_e1_stat = 
-	  make_if loc e1 
-	    (make_block loc (l2 @ [assign2]))
-	    (make_block loc (l3 @ [assign3]))
-	in
-	  (l1@[if_e1_stat], tl1@tl2@tl3@[tmp]), JCEvar tmp
-    | JCTElet(vi,e1,e2) -> 
-	let (l1, tl1), e1' = expr e1 in
-	let (l2, tl2), e2' = expr e2 in
-	vi.jc_var_info_assigned <- true;
-	let assign = make_assign_var loc vi e1' in
-	(l1@[assign]@l2, tl1@[vi]@tl2), e2'.jc_expr_node
-    | JCTEmatch(e1, pel) ->
-	let (l1, tl1), e1 = expr e1 in
-	let tmp = newrefvar e.jc_texpr_type in
-	let pel_tl, psl = List.fold_left
-	  (fun (acctl, accpsl) (p, e) ->
-	     let (l, tl), e = expr e in
-	     let assign = make_assign_var loc tmp e in
-	     let block = make_block loc (l@[assign]) in
-	     tl@acctl, (p, block)::accpsl)
-	  ([], [])
-	  (List.rev pel)
-	in
-	let match_st = make_match loc e1 psl in
-	(l1@[match_st], tl1@pel_tl@[tmp]), JCEvar tmp
-  in 
-(*
-  Format.eprintf "Jc_norm.expr: lab for returned expr = '%s'@." lab;
-*)
-  (sl, tl), 
-  { jc_expr_node = ne;
-    jc_expr_type = e.jc_texpr_type;
-    jc_expr_region = e.jc_texpr_region;
-    jc_expr_label = lab;
-    jc_expr_loc = loc }
-    
-and call lab loc f el ~binder ll = 
-  if binder then
-    let tmp = newvar f.jc_fun_info_result.jc_var_info_type in
-    let stat = make_call lab loc (Some tmp) f el (make_block loc []) in
-      (* [tmp] will be declared in a post-treatement of the calls generated *)
-      ((List.flatten ll)@[stat], []), Some tmp
+(** Transform assign-op *)
+let normalize_assign_op loc e1 op e2 =
+  if duplicable e1 then
+    mkassign
+      ~loc
+      ~location:e1
+      ~value:(mkbinary ~loc ~expr1:e1 ~op ~expr2:e2 ())
+      ()
   else
-    let stat = make_call lab loc None f el (make_block loc []) in
-      ((List.flatten ll)@[stat], []), None
-	
-(* [el] is the only part not yet translated *)
+    match e1#node with
+      | JCPEderef(e3,f) ->
+	  let tmpname = tmp_var_name () in
+	  let tmpvar = mkvar ~loc ~name:tmpname () in
+	  let e4 = mkderef ~loc ~expr:tmpvar ~field:f () in
+	  mklet_nodecl
+            ~var:tmpname
+            ~init:e3
+	    ~body:
+            (mkassign
+               ~loc
+               ~location:e4
+               ~value:(mkbinary ~loc ~expr1:e4 ~op ~expr2:e2 ())
+               ())
+            ()
+      | _ -> error loc "Not an lvalue in assignment"
 
-and if_statement lab loc f el st sf =
-  let ltl, el = List.split (List.map expr el) in
-  let ll, tl = List.split ltl in
-  let (l, etl), ecall = call lab loc f el ~binder:true ll in
-  let ecall = match ecall with
-    | Some b -> make_var loc b
-    | None -> assert false
+(** Transform unary increment and decrement *)
+let normalize_pmunary loc op e =
+  let op_of_incdec = function
+    | `Uprefix_inc | `Upostfix_inc -> `Badd 
+    | `Uprefix_dec | `Upostfix_dec -> `Bsub
+    | `Uplus -> assert false
   in
-  let if_stat = make_if loc ecall st sf in
-    make_decls loc (l @ [if_stat]) ((List.flatten tl) @ etl)
-
-and statement s =
-  let loc = s.jc_tstatement_loc in
-  let lab = ref "" in
-  let ns = 
-    match s.jc_tstatement_node with
-      | JCTSblock sl ->
-	  JCSblock [block_statement sl]
-      | JCTSexpr e ->
-	  let prefix op = match op with 
-	    | Prefix_inc | Postfix_inc -> Prefix_inc
-	    | Prefix_dec | Postfix_dec -> Prefix_dec
-	  in
-	  let sl, tl = 
-	    match e.jc_texpr_node with
-	      | JCTEcall (f, el) ->
-		  let ltl,el = List.split (List.map expr el) in
-		  let ll,tl = List.split ltl in
-		  let sl,etl = fst (call e.jc_texpr_label loc 
-				      f el ~binder:false ll) in
-		  sl, etl @ (List.flatten tl)
-	      | JCTEincr_local (op, vi) ->
-		  (* avoid creating a useless temporary for postfix version *)
-		  let typ = e.jc_texpr_type in
-		  let e = make_tincr_local e.jc_texpr_label loc typ (prefix op) vi in
-		  fst (expr e)
-	      | JCTEincr_heap (op, se, fi) ->
-		  (* avoid creating a useless temporary for postfix version *)
-		  let typ = e.jc_texpr_type in
-		  let e = make_tincr_heap e.jc_texpr_label loc typ (prefix op) se fi in
-		  fst (expr e)
-	      | _ -> fst (expr e)
-	  in
-	  (make_decls loc sl tl).jc_statement_node
-      | JCTSassert a -> JCSassert a
-      | JCTSdecl (vi, Some e, s) ->
-	  let (sl,tl),e = expr e in
-	  let decl_stat = make_decl loc vi (Some e) (statement s) in
-	  (make_decls loc (sl @ [decl_stat]) tl).jc_statement_node
-      | JCTSdecl (vi, None, s) ->
-	  JCSdecl (vi, None, statement s)
-      | JCTSif (e, st, sf) ->
-	  let st = statement st in
-	  let sf = statement sf in
-	    begin match e.jc_texpr_node with
-	      | JCTEcall (f, el) ->
-		  (if_statement e.jc_texpr_label loc f el st sf).jc_statement_node
-	      | _ -> 
-		  let (sl, tl), e = expr e in
-		  let if_stat = make_if loc e st sf in
-		    (make_decls loc (sl @ [if_stat]) tl).jc_statement_node
-	    end
-      | JCTSwhile (lab, e, la, body) ->
-	  let body = match e.jc_texpr_node with
-	    | JCTEconst(JCCboolean true) ->
-		(* Special case of an infinite loop [while(true)].
-		 * Then, no condition needs to be tested. This form is expected
-		 * for some assertions to be recognized as loop invariants
-		 * later on, in annotation inference.
-		 *)
-		let body_stat = statement body in
-		let continue_stat = make_throw loc loop_continue None in
-		make_block loc [body_stat;continue_stat] 
-	    | _ ->
-		let exit_stat = make_tthrow loc loop_exit None in
-		let if_stat = statement (make_tif loc e body exit_stat) in
-		let continue_stat = make_throw loc loop_continue None in
-		make_block loc [if_stat;continue_stat] 
-	  in
-	  let catch_continue = 
-	    [(loop_continue, None, make_block loc [])] in
-	  let try_continue = 
-	    make_try loc body catch_continue (make_block loc []) in
-	  let while_stat = make_loop lab loc la try_continue in
-	  let catch_exit =
-	    [(loop_exit, None, make_block loc [])] in
-	  let try_exit = 
-	    make_try loc while_stat catch_exit (make_block loc []) in
-	  try_exit.jc_statement_node
-      | JCTSfor (lab, cond, updates, la, body) ->
-	  let exit_stat = make_tthrow loc loop_exit None in
-	  let if_stat = statement (make_tif loc cond body exit_stat) in
-	  let continue_stat = make_throw loc loop_continue None in
-	  let body = make_block loc [if_stat;continue_stat] in
-	  let updates =
-	    List.fold_right
-	      (fun e acc -> statement {
-		 jc_tstatement_loc = e.jc_texpr_loc;
-		 jc_tstatement_node = JCTSexpr e;} :: acc)
-	      updates
-	      []
-	  in		 
-	  let catch_continue = 
-	    [(loop_continue, None, make_block loc updates)] in
-	  let try_continue = 
-	    make_try loc body catch_continue (make_block loc []) in
-	  let for_stat = make_loop lab loc la try_continue in
-	  let catch_exit =
-	    [(loop_exit, None, make_block loc [])] in
-	  let try_exit = 
-	    make_try loc for_stat catch_exit (make_block loc []) in
-	  try_exit.jc_statement_node
-	  
-      | JCTSreturn_void -> JCSreturn_void  
-      | JCTSreturn (t, e) ->
-	  let (sl, tl), e = expr e in
-	  let return_stat = make_return loc t e in
-	  (make_decls loc (sl @ [return_stat]) tl).jc_statement_node
-      | JCTSbreak { label_info_name = "" } -> 
-	  JCSthrow (loop_exit, None)
-      | JCTSbreak lab -> assert false (* TODO: see Claude *)
-      | JCTScontinue lab -> assert false (* TODO: see Claude *)
-      | JCTSgoto lab ->
-	  let name_exc = "Goto_" ^ lab.label_info_name in
-	  let goto_exc = exception_info None name_exc in
-	  Hashtbl.add exceptions_table name_exc goto_exc;
-	  JCSthrow (goto_exc, None)
-      | JCTSlabel (l,s) -> 
-	  lab := l.label_info_name;
-	  JCSlabel(l,statement s)
-      | JCTStry (s, cl, fs) ->
-	  let cl = 
-	    List.map (fun (ei, vi, s) -> (ei, vi, statement s)) cl in
-	  JCStry (statement s, cl, statement fs)
-      | JCTSthrow (ei, Some e) -> 
-	  let (sl,tl),e = expr e in
-	  let throw_stat = make_throw loc ei (Some e) in
-	  (make_decls loc (sl @ [throw_stat]) tl).jc_statement_node
-      | JCTSthrow (ei, None) ->
-	  JCSthrow (ei, None)
-      | JCTSpack (si, e, as_t) ->
-	  let (sl,tl),e = expr e in
-	  let pack_stat = make_pack loc si e as_t in
-	  (make_decls loc (sl @ [pack_stat]) tl).jc_statement_node
-      | JCTSunpack (si, e, from_t) ->
-	  let (sl,tl),e = expr e in
-	  let unpack_stat = make_unpack loc si e from_t in
-	  (make_decls loc (sl @ [unpack_stat]) tl).jc_statement_node
-      | JCTSswitch (e, csl) ->
-	  let (sl,tl),e = expr e in
-	  (* Give a temporary name to the switch expression, so that modifying
-	   * a variable on which this expression depends does not interfere 
-	   * with the control-flow. 
-	   *)
-	  let tmp = newvar e.jc_expr_type in
-	  let tmpe = make_var loc tmp in
-	  let test_one_case ~(neg:bool) c = 
-	    (* test for case considered *)
-	    let (slc,tlc),c = expr c in
-	    assert (slc = [] && tlc = []); 
-	    if neg then
-	      make_int_binary "" loc tmpe Bneq_int c
-	    else
-	      make_int_binary "" loc tmpe Beq_int c
-	  in
-	  let collect_neg_case c = 
-	    List.fold_right (fun c l -> match c with
-	    | Some c -> test_one_case ~neg:true c :: l
-	    | None -> l) c []
-	  in
-	  (* Collect negative tests for [default] case. *)
-	  let all_neg_cases csl = 
-	    fst (List.fold_left (fun (l,after_default) (c,_)  -> 
-	      if after_default then
-		collect_neg_case c @ l,after_default
-	      else		
-		let has_default = List.exists (fun c -> c = None) c in
-		l,has_default
-	    ) ([],false) csl)
-	  in
-	  let test_one_case_or_default = function
-	    | Some c -> test_one_case ~neg:false c
-	    | None -> make_and_list_test loc (all_neg_cases csl)
-	  in
-	  let test_case_or_default c = 
-	    let el = List.map test_one_case_or_default c in
-	    make_or_list_test loc el
-	  in
-	  let rec cannot_fall_trough s = 
-	    match s.jc_statement_node with
-	      | JCSblock [] -> 
-		  false
-	      | JCSblock sl -> 
-		  cannot_fall_trough (List.hd (List.rev sl))
-	      | JCSthrow _ | JCSreturn_void | JCSreturn _ | JCSloop _ -> 
-		  true
-	      | JCSif(_,st,sf) ->
-		  cannot_fall_trough st && cannot_fall_trough sf
-	      | _ -> false
-	  in
-	  let rec fold_case (previous_c,statl) = 
-	    function [] -> List.rev statl | (c,sl) :: next_cases ->
-	      (* statement list in case considered *)
-	      let block_stat = block_statement sl in
-	      let has_default = List.exists (fun c -> c = None) c in
-	      let current_c = if has_default then c else previous_c @ c in
-	      let etest = test_case_or_default current_c in
-	      (* case translated into if-statement *)
-	      if cannot_fall_trough block_stat then
-		let next_statl = fold_case ([],[]) next_cases in
-		let next_block = make_block loc next_statl in
-		let if_stat = make_if loc etest block_stat next_block in
-		List.rev (if_stat :: statl)
-	      else
-		let empty_block = make_block loc [] in
-		let if_stat = make_if loc etest block_stat empty_block in
-		fold_case (current_c, if_stat :: statl) next_cases
-	  in
-	  let ncsl = fold_case ([],[]) csl in
-	  let dummy_throw = make_throw loc loop_exit None in
-	  let switch_stat = make_block loc (ncsl @ [dummy_throw]) in
-	  let catch_exit =
-	    [(loop_exit, None, make_block loc [])] in
-	  let try_exit = 
-	    make_try loc switch_stat catch_exit (make_block loc []) in
-	  let tmp_assign = make_decl loc tmp (Some e) (make_block loc []) in
-	  (make_decls loc (sl @ [tmp_assign;try_exit]) tl).jc_statement_node
-      | JCTSmatch (e, psl) ->
-	  let (sl, tl), e = expr e in
-	  let psl = List.map (fun (p, sl) -> p, block_statement sl) psl in
-	  let match_node = make_match loc e psl in
-	  (make_decls loc (sl @ [match_node]) tl).jc_statement_node
-
-  in { jc_statement_node = ns;
-       jc_statement_label = !lab;
-       jc_statement_loc = loc }
-
-and block_statement statements =
-  let add_var_decl v (f,l,vs) = (f,l,VarSet.add v vs) in
-  let rec block = function
-    | [] -> [],[],VarSet.empty
-    | s :: bl ->
-	match s.jc_tstatement_node with
-	  | JCTSlabel(lab,st) ->
-	      let loc = s.jc_tstatement_loc in
-	      let (be,bl,vs) = block (st::bl) in
-	      let be = 
-		VarSet.fold (fun vi s -> 
-		  make_decl s.jc_statement_loc vi None s) vs (make_block loc be)
-	      in
-	      let name_exc = "Goto_" ^ lab.label_info_name in
-	      let goto_exc = exception_info None name_exc in
-	      Hashtbl.add exceptions_table name_exc goto_exc;
-	      [make_throw loc goto_exc None],
-	      (goto_exc,be)::bl,
-	      VarSet.empty
-	  | JCTSdecl(vi,None,s) ->
-	      let b = match s.jc_tstatement_node with
-		| JCTSblock sl -> block (sl @ bl)
-		| _ -> block (s :: bl)
-	      in
-	      add_var_decl vi b
-	  | JCTSdecl(vi,Some e,s) ->
-	      let set = make_tassign_var s.jc_tstatement_loc vi e in
-	      vi.jc_var_info_assigned <- true;
-	      let b = match s.jc_tstatement_node with
-		| JCTSblock sl -> block (set :: sl @ bl)
-		| _ -> block (set :: s :: bl)
-	      in
-	      add_var_decl vi b
-	  | JCTSblock sl ->
-	      block (sl @ bl)
-	  | _ ->
-	      let append_block e (f,l,vs) = (e :: f,l,vs) in
-	      append_block (statement s) (block bl)
+  let on_duplicable e =
+    match op with
+      | `Uprefix_inc | `Uprefix_dec ->
+	  (* e = e +/- 1 } *)
+	  mkassign
+            ~loc
+            ~location: e
+            ~value:
+            (mkbinary
+               ~loc
+               ~expr1: e
+               ~op: (op_of_incdec op)
+               ~expr2: (mkint ~loc ~value:1 ())
+               ())
+            ()
+      | `Upostfix_inc | `Upostfix_dec ->
+	  let tmpname = tmp_var_name () in
+	  let tmpvar = mkvar ~loc ~name:tmpname () in
+	  (* let tmp = e in { e = tmp +/- 1; tmp } *)
+	  mklet_nodecl
+            ~var: tmpname
+            ~init: e
+            ~body:
+	    (mkblock ~loc ~exprs:[
+	       mkassign ~loc ~location:e
+		 ~value:
+                 (mkbinary
+                    ~loc
+                    ~expr1:tmpvar
+                    ~op:(op_of_incdec op)
+                    ~expr2:(mkint ~loc ~value:1 ())
+                    ())
+                 ();
+	       tmpvar
+	     ] ())
+            ()
+      | `Uplus -> assert false
   in
-  let be,bl,vs = block statements in
-  let s = 
-    List.fold_left 
-      (fun acc (goto_exc,s) ->
-	let loc = s.jc_statement_loc in
-	let catch_goto =
-	  [(goto_exc, None, make_block loc [])] in
-	make_try loc acc catch_goto (make_block loc [])
-      ) (make_block Loc.dummy_position be) bl
+  match op with `Uplus -> e | _ ->
+    if duplicable e then on_duplicable e else 
+      match e#node with
+	| JCPEderef(e1,f) ->
+	    let tmpname = tmp_var_name () in
+	    let tmpvar = mkvar ~loc ~name:tmpname () in
+	    let e2 = mkderef ~loc ~expr:tmpvar ~field:f () in
+	    mklet_nodecl ~var:tmpname ~init:e1 ~body:(on_duplicable e2) ()
+	| _ -> error loc "Not an lvalue in assignment"
+
+(** Transform local variable declarations *)
+let normalize_locvardecl loc elist = 
+  mkblock ~loc
+    ~exprs:
+    (List.fold_right
+       (fun e acc ->
+	  match e#node with
+	    | JCPEdecl(ty,name,initopt) ->
+		[mklet_nodecl ~loc:e#loc ~typ:ty ~var:name ?init:initopt
+                   ~body:(mkblock ~loc ~exprs:acc ()) ()]
+	    | JCPElabel(lab, e1) ->
+                begin match e1#node with
+                  | JCPEdecl(ty,name,initopt) ->
+                      [mklabel
+                         ~loc:e#loc
+                         ~label:lab (*(mkskip e#loc);*)
+                         ~expr:
+                         (mklet_nodecl
+                            ~loc: e#loc
+                            ~typ: ty
+                            ~var: name
+                            ?init: initopt
+                            ~body: (mkblock ~loc ~exprs:acc ())
+                            ())
+                         ()]
+                  | _ -> e::acc
+                end
+	    | _ -> e::acc
+       ) elist []
+    )
+    ()
+
+let normalize_postaction loc elist =
+  let pre_of_post = function
+    | `Upostfix_inc -> `Uprefix_inc
+    | `Upostfix_dec -> `Uprefix_dec
   in
-  let s = 
-    VarSet.fold (fun vi s -> make_decl s.jc_statement_loc vi None s) vs s
-  in
-  match s.jc_statement_node with
-    | JCSblock [s] -> s
-    | _ -> s
+  mkblock ~loc 
+    ~exprs:
+    (match List.rev elist with [] -> elist | last::elist' ->
+       (* Only transform into pre increment/decrement those post increment/
+	* decrement whose value is discarded, like all expressions in a block
+	* but the last one.
+	*)
+       (List.fold_left (fun acc e -> match e#node with
+			  | JCPEunary(#post_unary_op as op,e') -> 
+			      new pexpr_with 
+				~node:(JCPEunary(pre_of_post op,e')) e
+			      :: acc
+			  | _ -> e :: acc
+		       ) [last] elist'
+       ))
+    ()
 
+(** Apply normalizations recursively *)
+let normalize = 
+  map_pexpr 
+    ~before:(fun e -> match e#node with
+	       | JCPEblock elist ->
+		   normalize_postaction e#loc elist
+	       | _ -> e
+	    )
+    ~after:(fun e -> match e#node with
+	      | JCPEassign_op(e1,op,e2) -> 
+		  normalize_assign_op e#loc e1 op e2
+	      | JCPEunary(#pm_unary_op as op,e') -> 
+		  normalize_pmunary e#loc op e'
+	      | JCPEswitch(e',caselist) -> 
+		  normalize_switch e#loc e' caselist
+	      | JCPEwhile(test,inv,var,body) ->
+		  normalize_while e#loc test inv var body
+	      | JCPEfor(inits,test,updates,inv,var,body) ->
+		  normalize_for e#loc inits test updates inv var body
+	      | JCPEbreak lab ->
+		  assert (lab = ""); (* TODO for Java *)
+		  mkthrow ~loc:e#loc ~exn:loop_exit ()
+	      | JCPEcontinue lab ->
+		  assert (lab = ""); (* TODO for Java *)
+		  mkthrow ~loc:e#loc ~exn:loop_continue ()
+	      | JCPEblock elist ->
+		  normalize_locvardecl e#loc elist
+	      | _ -> e
+	   )
 
-let statement s =
-
-  let rec link_call s slnext =
-    let loc = s.jc_statement_loc in
-    match s.jc_statement_node with
-      | JCScall (Some vi, call, s') -> 
-	  begin match s'.jc_statement_node with 
-	    | JCSblock [] ->
-		(* call may be created as the result of an
-		   intermediate computation. In any case, moving the
-		   statements that follow is correct. *)
-(*
-		Format.eprintf "Jc_interp.link_call(1): lab for call = '%s'@."
-		  s.jc_statement_label;
+(** Transform gotos *)
+(* Build the structure of labels in a function body, using Huet's
+   zipper, so as to identify 'structured' gotos, i.e., those gotos that
+   go forward and do not enter scopes.
 *)
-		[make_call s.jc_statement_label loc (Some vi) 
-		   call.jc_call_fun call.jc_call_args (make_block loc slnext)]
-	    | _ -> 
-(*
-		Format.eprintf "Jc_interp.link_call(2): lab for call = '%s'@."
-		  s.jc_statement_label;
-*)
-		(make_call s.jc_statement_label loc (Some vi) 
-		  call.jc_call_fun call.jc_call_args (link_stat s')) :: slnext
-	  end
-      | JCSdecl (vi, eo, s') ->
-	  begin match s'.jc_statement_node with 
-	    | JCSblock [] ->
-		(* declaration may be created as the result of an
-		   intermediate computation. In any case, moving the
-		   statements that follow is correct. *)
-		[make_decl loc vi eo (make_block loc slnext)]
-	    | _ -> 
-		(make_decl loc vi eo (link_stat s')) :: slnext
-	  end
-      | _ -> (link_stat s) :: slnext
 
-  and link_stat s =
-    let loc = s.jc_statement_loc in
-    let ns =
-      match s.jc_statement_node with
-	| JCScall (vio, call, s) ->
-	    JCScall (vio, call, link_stat s)
-	| JCSblock sl ->
-	    JCSblock (List.fold_right link_call sl [])
-	| JCSassign_var (_, _)
-	| JCSassign_heap (_, _, _)
-	| JCSassert _ 
-	| JCSreturn_void  
-	| JCSreturn _ 
-	| JCSthrow (_, _)
-	| JCSpack (_, _, _)
-	| JCSunpack (_, _, _) as node -> node
-	| JCSdecl (vi, eo, s) ->
-	    JCSdecl (vi, eo, link_stat s)
-	| JCSif (e, st, sf) ->
-	    JCSif (e, link_stat st, link_stat sf)
-	| JCSloop (la, s) ->
-	    JCSloop (la, link_stat s)
-	| JCSlabel(lab,s) ->
-	    JCSlabel(lab,link_stat s)
-	| JCStry (s, cl, fs) ->
-	    let cl = 
-	      List.map (fun (ei, vio, s) -> (ei, vio, link_stat s)) cl in
-	    JCStry (link_stat s, cl, link_stat fs)
-	| JCSmatch (e, psl) ->
-	    JCSmatch (e, List.map (fun (p, s) -> p, link_stat s) psl)
+let label_used = Hashtbl.create 17
 
-    in { jc_statement_node = ns;
-	 jc_statement_label = s.jc_statement_label;
-	 jc_statement_loc = loc }
+type label_tree =
+  | LabelItem of string
+  | LabelBlock of label_tree list
 
-  in link_stat (statement s)
+let rec printf_label_tree fmt lt =
+  match lt with 
+    | LabelItem s -> fprintf fmt "%s" s
+    | LabelBlock l -> 
+	fprintf fmt "{ %a }" (Pp.print_list Pp.space printf_label_tree ) l
 
+let rec in_label_tree lab = function
+  | LabelItem l -> if l=lab then true else false
+  | LabelBlock l -> in_label_tree_list lab l
 
-let rec invariant_for_struct this si =
-  let (_, invs) = 
-    Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
+and in_label_tree_list lab = function
+  | [] -> raise Not_found
+  | h::r -> 
+      try in_label_tree lab h
+      with Not_found -> in_label_tree_list lab r
+
+let rec in_label_upper_tree_list lab = function
+  | [] -> raise Not_found
+  | LabelItem l :: _ when l=lab -> true
+  | _ :: r -> in_label_upper_tree_list lab r
+
+let build_label_tree e : label_tree list =
+  (* [acc] is the tree of labels for the list of statements that follow 
+     the current one, in the same block.
+     [fwdacc] is the tree of labels for all the statements that follow 
+     the current one to the end of the function. It is used to identify
+     unused labels.
+  *)
+  let rec build_bwd e (acc,fwdacc) =
+    match e#node with
+      | JCPEgoto lab ->
+	  (* Count number of forward gotos. Labels with 0 count will
+	     not be considered in generated try-catch. *)
+	  if in_label_upper_tree_list lab fwdacc then
+	    Hashtbl.add label_used lab ()
+	  else 
+	    error e#loc "unsupported goto";
+	  acc,fwdacc
+      | JCPElabel (lab, e) ->
+	  let l,fwdl = build_bwd e ([],fwdacc) in
+	  (LabelItem lab) :: (LabelBlock l) :: acc, (LabelItem lab) :: fwdl
+      | JCPEblock sl ->
+	  let l,fwdl = List.fold_right build_bwd sl ([],fwdacc) in
+	  (LabelBlock l) :: acc, fwdl
+      | _ ->
+	  let elist = IPExpr.subs e in
+	  LabelBlock 
+	    (List.map (fun e -> LabelBlock(fst (build_bwd e ([],fwdacc)))) elist)
+	  :: acc, fwdacc
   in
-  let invs = make_and
-    (List.map 
-       (fun (li, _) -> 
-	  let a = { jc_app_fun = li;
-		    jc_app_args = [this];
-		    jc_app_label_assoc = [];
-		    jc_app_region_assoc = [] }
-	  in
-	  raw_asrt (JCAapp a)) invs) 
+  fst (build_bwd e ([],[]))
+
+let goto_block loc el =
+  let rec label_block el = 
+    match el with [] -> [],[] | e1::r ->
+      let elr,labelr = label_block r in
+      match e1#node with
+	| JCPElabel(lab,e2) ->
+	    let e3 = mkblock ~loc ~exprs:(e2::elr) () in
+	    let e4 = mklabel ~loc ~label:lab ~expr:e3 () in
+	    if Hashtbl.mem label_used lab then
+	      [],(lab,[e4])::labelr
+	    else 
+	      [e4],labelr
+	| _ -> e1::elr,labelr
   in
-    match si.jc_struct_info_parent with
-      | None -> invs
-      | Some si -> (* add invariants from the type hierarchy *)
-	  let this =
-	    match this.jc_term_type with
-	      | JCTpointer (_, a, b) ->
-		  { this with jc_term_type = JCTpointer (JCtag si, a, b) }
-	      | _ -> assert false (* never happen *)
-	  in
-	    make_and [invs; (invariant_for_struct this si)]
+  let el,labels = label_block el in
+  List.fold_left (fun acc (lab,el) ->
+		    let id = goto_exception_for_label lab in
+		    mktry ~loc
+                      ~expr:acc 
+		      ~catches:
+                      [mkcatch ~loc ~name:(tmp_var_name()) ~exn:id 
+			 ~body:(mkblock ~loc ~exprs:el ()) ()]
+                      ()
+		 ) (mkblock ~loc ~exprs:el ()) labels
+
+let rec goto e lz =
+  let loc = e#loc in
+  let enode,lz2 = match e#node with
+    | JCPEgoto lab -> 
+	let id = goto_exception_for_label lab in
+	JCPEthrow(id, mkvoid ()), lz
+    | JCPElabel (lab,e1) -> 
+	let lz1 = match lz with
+	  | LabelItem lab'::LabelBlock b1::after ->
+	      assert (lab=lab');
+	      b1@after
+	  | _ -> assert false
+	in
+	let e2, lz2 = goto e1 lz1 in
+	JCPElabel(lab,e2), lz2
+    | JCPEblock el -> 
+	let lz1,lz2 = match lz with
+	  | LabelBlock b1::after ->
+	      b1@after,after
+	  | _ -> assert false
+	in
+	let el,_ = 
+	  List.fold_left (fun (acc,lz1) e1 ->
+			    let e2,lz2 = goto e1 lz1 in e2::acc,lz2
+			 ) ([],lz1) el
+	in
+	let el = List.rev el in
+	(goto_block loc el)#node, lz2
+    | _ ->
+	let elist = IPExpr.subs e in
+	let lz1list,lz2 = match lz with
+	  | LabelBlock b1::after ->
+	      List.map
+		(function LabelBlock b -> b@after | _ -> assert false) b1,
+	      after
+	  | _ -> assert false
+	in
+	let elist,_ = List.split (List.map2 goto elist lz1list) in
+	(replace_sub_pexpr e elist)#node, lz2
+  in new pexpr_with ~node:enode e, lz2
 
 
-let code_function (fi, fs, sl) vil =
-  begin
-    match !Jc_common_options.inv_sem with
-      | InvArguments ->
-	  (* apply arguments invariant policy *)
-	  let invariants =
-	    (* Calculate global invariants. *)
-	    let vitl = 
-	      List.map 
-		(fun vi -> term_no_loc (JCTvar vi) 
-		   vi.jc_var_info_type) vil 
-	    in
-	    let global_invariants =
-	      Hashtbl.fold
-		(fun li _ acc -> 
-		   li.jc_logic_info_parameters <- vil;
-		   let a = { jc_app_fun = li;
-			     jc_app_args = vitl;
-			     jc_app_label_assoc = [];
-			     jc_app_region_assoc = [] }
-		   in
-		     (raw_asrt (JCAapp a)) :: acc)
-		Jc_typing.global_invariants_table []
-	    in
-	    let global_invariants = make_and global_invariants in
-	      (* Calculate invariants for each parameter. *)
-	    let invariants =
-	      List.fold_left
-		(fun acc vi ->
-		   match vi.jc_var_info_type with
-		     | JCTpointer (JCtag st, _, _) ->
-			 make_and 
-			   [acc; (invariant_for_struct 
-				    (term_no_loc (JCTvar vi) vi.jc_var_info_type) st)]
-		     | _ -> acc)
-		(raw_asrt JCAtrue)
-		fi.jc_fun_info_parameters
-	    in
-	      make_and [global_invariants; invariants]
-	  in
-	    (* add invariants to the function precondition *)
-	    fs.jc_fun_requires <- make_and [fs.jc_fun_requires; invariants];
-	    (* add invariants to the function postcondition *)
-	    if is_purely_exceptional_fun fs then () else
-	      let safety_exists = ref false in
-	      let post = invariants in
-		List.iter
-		  (fun (_, s, b) ->
-		     if s = "safety" then safety_exists := true;
-		     b.jc_behavior_ensures <- make_and [b.jc_behavior_ensures; post])
-		  fs.jc_fun_behavior;
-		(* add the 'safety' spec if it does not exist 
-		   (it could exist e.g. from Krakatoa) *)
-		if not !safety_exists then
-		  if Jc_options.verify_invariants_only then
-		    let invariants_b = { default_behavior with jc_behavior_ensures = post } in
-		      fs.jc_fun_behavior <- 
-			(Loc.dummy_position, "invariants", invariants_b) :: fs.jc_fun_behavior;
-		  else
-		    let safety_b = { default_behavior with jc_behavior_ensures = post } in
-		      fs.jc_fun_behavior <- 
-			(Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
-      | _ -> ()
-  end;
+(**************************************************************************)
+(* Translation                                                            *)
+(**************************************************************************)
 
-  (* normalization of the function body *)
-  let bs = Option_misc.map (make_tblock Loc.dummy_position) sl in
-  let bs = Option_misc.map (fun bs -> statement bs) bs in
+(** From parsed expression to normalized expression *)
+let rec expr e =
+  let enode = match e#node with
+    | JCPEconst c -> JCNEconst c
+    | JCPElabel(id,e) -> JCNElabel(id,expr e)
+    | JCPEvar id -> JCNEvar id
+    | JCPEderef(e,id) -> JCNEderef(expr e,id)
+    | JCPEbinary(e1,op,e2) -> JCNEbinary(expr e1,op,expr e2)
+    | JCPEunary(#unary_op as op,e) -> JCNEunary(op,expr e)
+    | JCPEunary _ -> assert false
+    | JCPEapp(id,lablist,elist) -> JCNEapp(id,lablist,List.map expr elist)
+    | JCPEassign(e1,e2) -> JCNEassign(expr e1,expr e2)
+    | JCPEassign_op _ -> assert false
+    | JCPEinstanceof(e,id) -> JCNEinstanceof(expr e,id)
+    | JCPEcast(e,id) -> JCNEcast(expr e,id)
+    | JCPEquantifier(q,ty,idlist,e) -> JCNEquantifier(q,ty,idlist,expr e)
+    | JCPEold e -> JCNEold(expr e)
+    | JCPEat(e,lab) -> JCNEat(expr e,lab)
+    | JCPEoffset(off,e) -> JCNEoffset(off,expr e)
+    | JCPEif(e1,e2,e3) -> JCNEif(expr e1,expr e2,expr e3)
+    | JCPElet(tyopt,id,e1,e2) -> 
+	JCNElet(tyopt,id,Option_misc.map expr e1,expr e2)
+    | JCPEdecl _ ->
+	assert false
+	(* (ty,name,initopt) ->  *)
+(* 	JCNElet(Some ty,name,Option_misc.map expr initopt,expr (mkvoid())) *)
+    | JCPErange(e1opt,e2opt) -> 
+	JCNErange(Option_misc.map expr e1opt,Option_misc.map expr e2opt)
+    | JCPEalloc(e,id) -> JCNEalloc(expr e,id)
+    | JCPEfree e -> JCNEfree(expr e)
+    | JCPEmutable(e,tag) -> JCNEmutable(expr e,tag_ tag)
+    | JCPEtagequality(tag1,tag2) -> JCNEtagequality(tag_ tag1,tag_ tag2)
+    | JCPEmatch(e,pelist) ->
+	JCNEmatch(expr e,List.map (fun (pat,e) -> (pat,expr e)) pelist)  
+    | JCPEblock elist -> JCNEblock(List.map expr elist)
+    | JCPEassert e -> JCNEassert(expr e)
+    | JCPEwhile(_,inve,vareopt,e) ->
+	JCNEloop(expr inve,Option_misc.map expr vareopt,expr e)
+    | JCPEfor _ -> assert false
+    | JCPEreturn e ->
+        begin match e#node with
+          | JCPEconst JCCvoid -> JCNEreturn None
+          | _ -> JCNEreturn(Some(expr e))
+        end
+    | JCPEbreak _ -> assert false
+    | JCPEcontinue _ -> assert false
+    | JCPEgoto _ -> assert false
+    | JCPEtry(e,hlist,fe) ->
+	let hlist = List.map (fun (id1,id2,e) -> (id1,id2,expr e)) hlist in
+	JCNEtry(expr e,hlist,expr fe)
+    | JCPEthrow(id, e) ->
+	JCNEthrow(id, Some(expr e))
+    | JCPEpack(e,idopt) -> JCNEpack(expr e,idopt)
+    | JCPEunpack(e,idopt) -> JCNEunpack(expr e,idopt)
+    | JCPEswitch _ -> assert false
+  in
+  new nexpr ~loc:e#loc enode
 
+and tag_ tag = 
+  let tagnode = match tag#node with
+    | JCPTtypeof e -> JCPTtypeof (expr e)
+    | JCPTtag _ | JCPTbottom as tagnode -> tagnode
+  in
+  new ptag ~loc:tag#loc tagnode
 
-  (* rename formals assigned in the body *)
-(*  let bs =
-    Option_misc.map
-      (fun sl ->
-	 let params, sl =
-	   List.fold_right
-	     (fun vi (acc, sl) ->
-		if vi.jc_var_info_assigned then
-		  let new_n = "mutable_" ^ vi.jc_var_info_name in
-		  let copy_vi = var ~unique:false ~formal:true vi.jc_var_info_type vi.jc_var_info_name in
-		  let loc = Loc.dummy_position in
-		  let e = make_var loc copy_vi in
-		    vi.jc_var_info_final_name <- new_n;
-		    vi.jc_var_info_formal <- false;
-		    vi.jc_var_info_region <- Region.make_var vi.jc_var_info_type new_n;
-		    copy_vi :: acc, make_decl loc vi (Some e) sl
-		else 
-		  vi :: acc, sl)
-	     fi.jc_fun_info_parameters ([], sl)
-	 in 
-	   fi.jc_fun_info_parameters <- params; sl) bs
-  in*)
-	
-    (*   begin match bs with None -> ()  *)
-    (*     | Some bs -> Format.printf "%a@." Jc_output.statement bs  *)
-    (*   end; *)
-    (fi, fs, Option_misc.map (fun bs -> [bs]) bs)
+let expr e =
+  let e,_ = goto e (build_label_tree e) in
+  let e = expr (normalize e) in
+  let fmt = Format.std_formatter in
+  Format.fprintf fmt "Normalized expression:@\n%a@\n@."
+    Jc_noutput.expr e;
+  e
+
+(** From parsed clause to normalized clause *)
+let clause = function
+  | JCCrequires e -> JCCrequires(expr e)
+  | JCCbehavior(loc,id,idopt,e1opt,e2opt,asslist,e3) ->
+      JCCbehavior(loc,id,idopt,
+		   Option_misc.map expr e1opt,
+		   Option_misc.map expr e2opt,
+		   Option_misc.map (fun (loc,elist) -> loc,List.map expr elist) asslist,
+		   expr e3)
     
-let static_variable (vi, eo) =
-  match eo with
-    | None -> vi, None
-    | Some e ->
-	let (sl, tl), e = expr e in
-	  match sl, tl with
-	    | [], [] -> vi, Some e
-	    | _ -> assert false (* TODO *)
-		  
-		  
+(** From parsed reads-or-expr to normalized reads-or-expr *)
+let reads_or_expr = function
+  | JCreads elist -> JCreads(List.map expr elist)
+  | JCexpr e -> JCexpr(expr e)
+    
+(** From parsed declaration to normalized declaration *)
+let decl d = 
+  let dnode = match d#node with
+    | JCDfun(ty,id,params,clauses,body) ->
+	JCDfun(ty,id,params,List.map clause clauses,Option_misc.map expr body)
+    | JCDenum_type(id,min,max) ->
+	JCDenum_type(id,min,max)
+    | JCDvariant_type(id, tags) ->
+	JCDvariant_type(id, tags)
+    | JCDunion_type(id, tags) ->
+	JCDunion_type(id, tags)
+    | JCDtag (id, extends, fields, invs) ->
+	JCDtag (id, extends, fields, 
+		List.map (fun (id,name,e) -> id,name,expr e) invs)
+    | JCDvar(ty,id,init) ->
+	JCDvar(ty,id,Option_misc.map expr init)
+    | JCDlemma(id,is_axiom,lab,a) ->
+	JCDlemma(id,is_axiom,lab,expr a)
+    | JCDglobal_inv(id,a) ->
+	JCDglobal_inv(id,expr a)
+    | JCDexception(id,ty) ->
+	JCDexception(id,ty)
+    | JCDlogic (ty, id, labels, params, body) ->
+	JCDlogic (ty, id, labels, params, reads_or_expr body)
+    | JCDlogic_type id ->
+	JCDlogic_type id
+    | JCDint_model x -> JCDint_model x
+    | JCDabstract_domain x -> JCDabstract_domain x
+    | JCDannotation_policy x -> JCDannotation_policy x
+    | JCDseparation_policy x -> JCDseparation_policy x
+    | JCDinvariant_policy x -> JCDinvariant_policy x
+  in new decl ~loc:d#loc dnode
+	  
+let decls dlist =
+  let unit_type = new ptype (JCPTnative Tunit) in
+  [
+    new decl (JCDexception(name_for_loop_exit,Some unit_type));
+    new decl (JCDexception(name_for_loop_continue,Some unit_type))
+  ]
+  @ Hashtbl.fold (fun _ exc acc ->
+		    new decl (JCDexception(exc#name,Some unit_type))
+		    :: acc
+		 ) label_to_exception []
+  @ List.map decl dlist
+
 (*
   Local Variables: 
   compile-command: "LC_ALL=C make -C .. bin/jessie.byte"

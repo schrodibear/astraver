@@ -11,3 +11,11 @@ autom4te.cache
 configure
 config.status.lineno
 configure.lineno
+*.cmo
+*.cmx
+*.cmi
+*.cma
+*.cmxa
+config.log
+a.out
+_build

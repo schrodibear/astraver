@@ -50,7 +50,7 @@ unit ColoredPoint_move(ColoredPoint[0] this, integer dx, integer dy)
     assumes this.col > 0;
     ensures this.col == \old(this.col) - 1;
 {
-    this.col = (this.col > 0 ? this.col-1 : 0);
+    this.col = (if this.col > 0 then this.col-1 else 0);
     Point_move(this,dx,dy);
 }
 
@@ -65,8 +65,8 @@ unit move(Point[0] this, integer dx, integer dy)
     ensures 
       (this :> ColoredPoint).col == \old((this :> ColoredPoint).col) - 1;
 {
-    if (this <: ColoredPoint) 
-	ColoredPoint_move(this :> ColoredPoint,dx,dy);
+    if this <: ColoredPoint then
+	ColoredPoint_move(this :> ColoredPoint,dx,dy)
     else Point_move(this,dx,dy);
 }
 	

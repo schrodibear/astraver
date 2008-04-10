@@ -27,11 +27,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.16 2008-02-18 11:06:36 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.17 2008-04-10 16:05:55 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
 open Jc_fenv
+open Jc_constructors
 open Jc_ast
 open Format
 open Jc_iterators
@@ -40,15 +41,15 @@ open Jc_pervasives
 open Pp
 
 let term rresult t =
-  iter_term (fun t -> match t.jc_term_node with
+  ITerm.iter (fun t -> match t#node with
     | JCTvar vi ->	
 	if vi.jc_var_info_name = "\\result" then 
 	  Region.unify rresult vi.jc_var_info_region
-    | JCTsub_pointer(t1,t2) | JCTif(_,t1,t2) ->
-	Region.unify t1.jc_term_region t2.jc_term_region
+    | JCTbinary(t1,(_,`Pointer),t2) | JCTif(_,t1,t2) ->
+	Region.unify t1#region t2#region
     | JCTmatch(_, (_, t1)::rem) ->
 	List.iter
-	  (fun (_, t2) -> Region.unify t1.jc_term_region t2.jc_term_region)
+	  (fun (_, t2) -> Region.unify t1#region t2#region)
 	  rem
     | JCTmatch(_, []) ->
 	()
@@ -65,7 +66,7 @@ let term rresult t =
 	    li.jc_logic_info_parameters
 	in
 	let arg_regions = 
-	  List.map (fun t -> t.jc_term_region) app.jc_app_args
+	  List.map (fun t -> t#region) app.jc_app_args
 	in
 	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
 	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
@@ -75,8 +76,8 @@ let term rresult t =
 	  with Not_found -> assert false
 	in
 	Jc_options.lprintf "param:%a@." Region.print result_region;
-	Jc_options.lprintf "arg:%a@." Region.print t.jc_term_region;
-	Region.unify result_region t.jc_term_region
+	Jc_options.lprintf "arg:%a@." Region.print t#region;
+	Region.unify result_region t#region
     | JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
     | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ | JCToffset _
     | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _ ->
@@ -85,7 +86,7 @@ let term rresult t =
 
 let assertion rresult a =
   iter_term_and_assertion (term rresult) 
-    (fun a -> match a.jc_assertion_node with
+    (fun a -> match a#node with
       | JCAapp _ -> () (* TODO *)
       | JCAtrue | JCAfalse | JCArelation _  | JCAtagequality _ 
       | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
@@ -94,36 +95,41 @@ let assertion rresult a =
 	  ()
     ) a
 
-let expr e = 
-  iter_expr (fun e -> match e.jc_expr_node with
-    | JCEsub_pointer(e1,e2) | JCEif(_,e1,e2) ->
-	Region.unify e1.jc_expr_region e2.jc_expr_region
-(*    | JCEmatch(_, (_, e1)::rem) ->
-	List.iter
-	  (fun (_, e2) -> Region.unify e1.jc_expr_region e2.jc_expr_region)
-	  rem
-    | JCEmatch(_, []) ->
-	()*)
-    | JCEconst _ | JCEvar _ | JCEbinary _ | JCEshift _ | JCEunary _
-    | JCEderef _ | JCEoffset _ | JCEinstanceof _ | JCEcast _ 
-    | JCErange_cast _ | JCEreal_cast _ | JCEalloc _ | JCEfree _ ->
-	()
-  ) e
-
-let statement rresult s =
-  iter_expr_and_statement expr (fun s -> match s.jc_statement_node with
-    | JCSdecl(vi,Some e,_) | JCSassign_var(vi,e) ->
-	Region.unify vi.jc_var_info_region e.jc_expr_region
-    | JCSassign_heap(e1,fi,e2) ->
-	let fr = Region.make_field e1.jc_expr_region fi in
-	Region.unify fr e2.jc_expr_region
-    | JCSthrow(ei,_) ->
+let expr rresult e = 
+  IExpr.iter 
+    (fun e -> match e#node with
+       | JCEbinary(e1,_,e2) | JCEif(_,e1,e2) ->
+	   Region.unify e1#region e2#region
+       | JCEmatch(_, (_, e1)::rem) ->
+	   List.iter
+	     (fun (_, e2) -> Region.unify e1#region e2#region)
+	     rem
+       | JCEmatch(_, []) ->
+	   ()
+       | JCEconst _ | JCEvar _ | JCEshift _ | JCEunary _
+       | JCEderef _ | JCEoffset _ | JCEinstanceof _ | JCEcast _ 
+       | JCErange_cast _ | JCEreal_cast _ | JCEalloc _ | JCEfree _ 
+       | JCElet(_,None,_) ->
+	   ()
+       | JCElet(vi,Some e,_) | JCEassign_var(vi,e) ->
+	Region.unify vi.jc_var_info_region e#region
+    | JCEassign_heap(e1,fi,e2) ->
+	let fr = Region.make_field e1#region fi in
+	Region.unify fr e2#region
+    | JCEthrow(ei,_) ->
 	begin match ei.jc_exception_info_type with None -> () | Some ty ->
 	  assert(not(is_pointer_type ty)) (* TODO *)
 	end
-    | JCScall(vio,call,s) -> 
-	let f = call.jc_call_fun in
-	let regions = f.jc_fun_info_param_regions in
+    | JCEapp call -> 
+(*	let f = call.jc_call_fun in*)
+	let regions = match call.jc_call_fun with
+	  | JClogic_fun f -> f.jc_logic_info_param_regions 
+	  | JCfun f -> f.jc_fun_info_param_regions 
+	in
+	let params = match call.jc_call_fun with
+	  | JClogic_fun f -> f.jc_logic_info_parameters 
+	  | JCfun f -> f.jc_fun_info_parameters
+	in
 	let assoc = RegionList.duplicate regions in
 	call.jc_call_region_assoc <- assoc;
 	let param_regions =
@@ -131,37 +137,38 @@ let statement rresult s =
 	    if is_dummy_region vi.jc_var_info_region then dummy_region else
 	      try RegionList.assoc vi.jc_var_info_region assoc
 	      with Not_found -> assert false)
-	    f.jc_fun_info_parameters
+	    params
 	in
 	let arg_regions = 
-	  List.map (fun e -> e.jc_expr_region) call.jc_call_args
+	  List.map (fun e -> e#region) call.jc_call_args
 	in
 	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
 	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
 	List.iter2 Region.unify param_regions arg_regions;
-	begin match vio with None -> () | Some vi ->
-	  let result_region = 
-	    if is_dummy_region f.jc_fun_info_return_region then dummy_region
-	    else
-	      try RegionList.assoc f.jc_fun_info_return_region assoc
-	      with Not_found -> assert false
-	  in
-	  Jc_options.lprintf "param:%a@." Region.print result_region;
-	  Jc_options.lprintf "arg:%a@." Region.print vi.jc_var_info_region;
-	  Region.unify result_region vi.jc_var_info_region
-	end
-    | JCSreturn(ty,e) ->
-	Region.unify rresult e.jc_expr_region
-    | JCSlabel(lab,s) -> ()
-    | JCSassert a ->
+	let rregion = match call.jc_call_fun with
+	  | JClogic_fun f -> f.jc_logic_info_result_region 
+	  | JCfun f -> f.jc_fun_info_return_region
+	in
+	let result_region = 
+	  if is_dummy_region rregion then dummy_region
+	  else
+	    try RegionList.assoc rregion assoc
+	    with Not_found -> assert false
+	in
+	Jc_options.lprintf "param:%a@." Region.print result_region;
+	Jc_options.lprintf "arg:%a@." Region.print e#region;
+	Region.unify result_region e#region
+    | JCEreturn(ty,e) ->
+	Region.unify rresult e#region
+    | JCEassert a ->
 	assertion rresult a
-    | JCSloop(la,_) ->
+    | JCEloop(la,_) ->
 	iter_term_and_assertion_in_loop_annot 
 	  (term rresult) (assertion rresult) la
-    | JCSdecl _ | JCSblock _ | JCSif _ | JCSmatch _ | JCStry _ 
-    | JCSreturn_void | JCSpack _ | JCSunpack _ -> 
+    | JCEblock _ | JCEtry _ 
+    | JCEreturn_void | JCEpack _ | JCEunpack _ -> 
 	()
-  ) s
+  ) e
 
 let logic_function f =
   let (f, ta) = 
@@ -183,12 +190,12 @@ let logic_component fls =
 
 let code_function f =
   let (f, _, spec, body) = 
-    Hashtbl.find Jc_norm.functions_table f.jc_fun_info_tag 
+    Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag 
   in
   Jc_options.lprintf "Separation: treating function %s@." f.jc_fun_info_name;
   let rresult = f.jc_fun_info_return_region in
   iter_term_and_assertion_in_fun_spec (term rresult) (assertion rresult) spec;
-  Option_misc.iter (List.iter (statement rresult)) body;
+  Option_misc.iter ((*List.iter*) (expr rresult)) body;
   let param_regions =
     List.map (fun vi -> vi.jc_var_info_region) f.jc_fun_info_parameters in
   let fun_regions = f.jc_fun_info_return_region :: param_regions in
@@ -201,7 +208,7 @@ let axiom id (is_axiom,labels,a) = assertion (* labels *) dummy_region a
 
 let regionalize_assertion a assoc =
   map_term_in_assertion (fun t ->
-    let t = match t.jc_term_node with
+    let t = match t#node with
       | JCTapp app ->
 	  let app_assoc = 
 	    List.map (fun (rdist,rloc) -> 
@@ -209,13 +216,13 @@ let regionalize_assertion a assoc =
 	    ) app.jc_app_region_assoc
 	  in
 	  let tnode = JCTapp { app with jc_app_region_assoc = app_assoc; } in
-	  { t with jc_term_node = tnode; }
-      | JCTconst _ | JCTvar _ | JCTshift _ | JCTsub_pointer _ 
+	  new term_with ~node:tnode t
+      | JCTconst _ | JCTvar _ | JCTshift _ 
       | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
       | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTmatch _ | JCTrange _ ->
 	  t
     in
-    try { t with jc_term_region = RegionList.assoc t.jc_term_region assoc; }
+    try new term_with ~region:(RegionList.assoc t#region assoc) t
     with Not_found -> t
   ) a
   

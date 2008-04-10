@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Oct
 
 type intP = {
@@ -7,14 +8,14 @@ type intP = {
 }
 
 integer foo(integer s, intP[..] n) {
-    intP[0] i = new intP[1];
+    var intP[0] i = new intP[1];
     i.intM = 0;
     while (true) {
-        if (i.intM < n.intM) {
+        if (i.intM < n.intM) then {
             assert (0 <= i.intM && i.intM < s);
-        }
+	};
         i.intM = i.intM + 1;
-    }
+    };
     return i.intM;
 }
 

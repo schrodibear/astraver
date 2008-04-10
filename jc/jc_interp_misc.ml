@@ -104,7 +104,7 @@ let tr_base_type t =
     | JCTpointer ((JCvariant vi | JCunion vi), _, _) ->
 	{ logic_type_name = pointer_type_name;
 	  logic_type_args = [variant_model_type vi] }
-    | JCTnull -> assert false
+    | JCTnull | JCTany -> assert false
 
 let why_integer_type = simple_logic_type "int"
   
@@ -188,14 +188,21 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
-  VariantSet.fold
+  let l = 
+    VariantSet.fold
+      (fun v acc -> 
+	 let t = { logic_type_args = [variant_model_type v];
+		   logic_type_name = "tag_table" }
+	 in
+	 (tag_table_name_vi v, t)::acc)
+      li.jc_logic_info_effects.jc_effect_tag_table
+      l	    
+  in
+  VarSet.fold
     (fun v acc -> 
-       let t = { logic_type_args = [variant_model_type v];
-		 logic_type_name = "tag_table" }
-       in
-       (tag_table_name_vi v, t)::acc)
-    li.jc_logic_info_effects.jc_effect_tag_table
-    l	    
+       (v.jc_var_info_final_name, tr_base_type v.jc_var_info_type) :: acc
+    ) li.jc_logic_info_effects.jc_effect_globals
+    l
 
 let logic_params_call ~label_in_name li l region_assoc label_assoc =
   List.map 
@@ -372,7 +379,7 @@ let make_if_term cond a b =
 let make_eq_term ty a b =
   let eq = match ty with
     | JCTpointer _ | JCTnull -> "eq_pointer_bool"
-    | JCTenum _ | JCTlogic _ -> assert false
+    | JCTenum _ | JCTlogic _ | JCTany -> assert false
     | JCTnative Tunit -> "eq_unit_bool"
     | JCTnative Tboolean -> "eq_bool_bool"
     | JCTnative Tinteger -> "eq_int_bool"
@@ -440,7 +447,7 @@ let any_value ty =
   | JCTpointer _ -> App (Var "any_pointer", Void)
   | JCTenum ri -> 
       App (Var ("any_" ^ ri.jc_enum_info_name), Void)
-  | JCTlogic _ -> assert false
+  | JCTlogic _ | JCTany -> assert false
 
 let tov_of_name name = JCtag (find_struct name)
 
@@ -453,7 +460,8 @@ let fully_allocated fi =
     | JCTnull
     | JCTenum _
     | JCTlogic _
-    | JCTnative _ -> false
+    | JCTnative _
+    | JCTany -> false
 
 (* see make_valid_pred in jc_interp.ml *)
 let make_valid_pred_app tov p a b =

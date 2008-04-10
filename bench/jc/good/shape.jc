@@ -31,9 +31,9 @@ real rect_area(Rectangle[0] s) {
 
 real area(Shape[0] s)
 {
-    if (s.kind == 0) {
+    if s.kind == 0 then {
     return circ_area(s:>Circle);
-    } else if (s.kind == 1) {
+    } else if s.kind == 1 then {
     return rect_area(s:>Rectangle);
   }
   else return 0.;

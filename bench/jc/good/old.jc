@@ -11,6 +11,6 @@ unit f()
 /*
 Local Variables: 
 mode: java
-compile-command: "make goto"
+compile-command: "make old"
 End: 
 */

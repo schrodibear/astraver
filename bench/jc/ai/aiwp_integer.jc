@@ -1,15 +1,16 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Oct
 
 integer foo(integer s, integer n) {
-    integer i = 0;
+    var integer i = 0;
     while (true) {
-        if (i < n) {
+        if (i < n) then {
             assert (0 <= i && i < s);
-        }
+	};
         i = i + 1;
-    }
+    };
     return i;
 }
 

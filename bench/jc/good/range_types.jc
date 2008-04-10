@@ -22,7 +22,7 @@ shortint max(shortint x, shortint y)
   behavior result_is_lub:
     ensures \forall integer z ; z >= x && z >= y ==> z >= \result;
 {
-  if (x >= y) return (x+1)-1; else return y;
+  if x >= y then return (x+1)-1 else return y;
 } 
 
 
@@ -47,8 +47,8 @@ shortint isqrt(shortint x)
 	\result >= 0 && \result * \result <= x && 
 	x < (\result + 1) * (\result + 1);
 {
-    shortint count = 0;
-    shortint sum = 1;
+    var shortint count = 0;
+    var shortint sum = 1;
     invariant 
         count >= 0 && x >= count*count && sum == (count+1)*(count+1) &&
         count <= 180 && sum <= 32761;
@@ -58,7 +58,7 @@ shortint isqrt(shortint x)
 	count++; 
 	assert (count+2 <= 181);
 	sum += 2*count + 1;
-    }
+    };
     assert 1==0;
     return count;
     

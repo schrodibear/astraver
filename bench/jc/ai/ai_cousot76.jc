@@ -9,10 +9,10 @@
  */
 
 integer cousot76() {
-    integer i = 1;
+    var integer i = 1;
     while (i <= 100) {
 	i++;
-    }
+    };
     return i;
 }
 

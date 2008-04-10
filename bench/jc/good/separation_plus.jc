@@ -6,7 +6,7 @@ type intP = {
 }
 
 integer f() {
-    intP[..] tab = new intP[10];
+    var intP[..] tab = new intP[10];
     return tab.intM;
 }
 
@@ -15,8 +15,8 @@ intP[0] myalloc() {
 }
 
 unit g() {
-    intP[0] p = myalloc();
-    intP[0] q = myalloc();
+    var intP[0] p = myalloc();
+    var intP[0] q = myalloc();
     p.intM = 0;
     q.intM = 1;
     assert(p.intM == 0 && q.intM == 1);

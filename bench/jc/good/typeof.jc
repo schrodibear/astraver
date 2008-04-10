@@ -14,7 +14,7 @@ tag B = A with {
 boolean equal(A[0] a, A[0] b)
     requires \typeeq(\typeof(a), \typeof(b));
 {
-    if (a.is_b) {
+    if a.is_b then {
 	return a.i == b.i && (a :> B).j == (b :> B).j;
     } else {
 	return a.i == b.i;

@@ -7,8 +7,8 @@ exception E of unit
 logic integer i
 
 unit f0() {
-  integer tmp = i;
-  if (i < 0) throw E (); 
+  var integer tmp = i;
+  if (i < 0) then throw E (); 
 }
 
 
@@ -19,8 +19,8 @@ unit g()
 ;
 
 unit f1() {
-  integer tmp = i;
-  if (i < 0) g(); 
+  var integer tmp = i;
+  if (i < 0) then g(); 
 }
 
 
@@ -30,8 +30,8 @@ integer h()
 ;
 
 unit f2() {
-  integer tmp = i;
-  if (tmp != h()) g();
+  var integer tmp = i;
+  if (tmp != h()) then g();
 }
 
 

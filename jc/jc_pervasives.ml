@@ -27,16 +27,38 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.102 2008-04-02 08:38:13 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.103 2008-04-10 16:05:55 moy Exp $ *)
 
 open Format
 open Jc_env
 open Jc_envset
 open Jc_fenv
+open Jc_constructors
 open Jc_ast
 open Jc_region
 
-let ( ** ) = fun f g x -> f(g x)
+let ( $ ) = fun f g x -> f(g x)
+
+exception Error of Loc.position * string
+
+let error l = 
+  Format.kfprintf 
+    (fun fmt -> raise (Error(l, flush_str_formatter()))) 
+    str_formatter
+
+let operator_of_native = function
+  | Tunit -> `Unit
+  | Tboolean -> `Boolean
+  | Tinteger -> `Integer
+  | Treal -> `Real
+  | Tstring -> assert false
+
+let operator_of_type = function
+  | JCTnative n -> operator_of_native n
+  | JCTlogic _
+  | JCTenum _
+  | JCTany -> assert false (* TODO? *)
+  | JCTnull | JCTpointer _ -> `Pointer
 
 let label_var lab name =
   match lab with
@@ -91,6 +113,7 @@ let print_type fmt t =
 		  (Num.string_of_num a) (Num.string_of_num b)
 	end
     | JCTnull -> fprintf fmt "(nulltype)"  
+    | JCTany -> fprintf fmt "(anytype)"  
 
 let num_of_constant loc c =
     match c with
@@ -114,36 +137,32 @@ type tlocation =
 (* operators *)
 
 let is_relation_binary_op = function
-  | Blt_int | Blt_real | Bgt_int | Bgt_real
-  | Ble_int | Ble_real | Bge_int | Bge_real
-  | Beq_int | Beq_real | Beq_pointer | Beq_bool
-  | Bneq_int | Bneq_real | Bneq_pointer | Bneq_bool -> true
+  | `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq -> true
   | _ -> false
 
 let is_logical_binary_op = function
-  | Bland | Blor | Bimplies | Biff -> true
+  | `Bland | `Blor | `Bimplies | `Biff -> true
   | _ -> false
 
 let is_arithmetic_binary_op = function
-  | Badd_int | Badd_real | Bsub_int | Bsub_real
-  | Bmul_int | Bmul_real | Bdiv_int | Bdiv_real | Bmod_int -> true
+  | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod -> true
   | _ -> false
 
 let is_bitwise_binary_op = function
-  | Bbw_and | Bbw_or | Bbw_xor 
-  | Bshift_left | Blogical_shift_right | Barith_shift_right -> true
+  | `Bbw_and | `Bbw_or | `Bbw_xor 
+  | `Bshift_left | `Blogical_shift_right | `Barith_shift_right -> true
   | _ -> false
 
 let is_logical_unary_op = function
-  | Unot -> true
+  | `Unot -> true
   | _ -> false
 
 let is_arithmetic_unary_op = function
-  | Uplus_int | Uminus_int | Uplus_real | Uminus_real -> true
+  | `Uminus -> true
   | _ -> false
 
 let is_bitwise_unary_op = function
-  | Ubw_not -> true
+  | `Ubw_not -> true
   | _ -> false
 
 (* native types *)
@@ -154,6 +173,7 @@ let integer_type = JCTnative Tinteger
 let real_type = JCTnative Treal
 let null_type = JCTnull
 let string_type = JCTnative Tstring
+let any_type = JCTany
 
 (* temporary variables *)
 
@@ -231,7 +251,6 @@ let empty_effects =
     jc_effect_tag_table = VariantSet.empty;
     jc_effect_memories = FieldOrVariantRegionMap.empty;
     jc_effect_globals = VarSet.empty;
-    jc_effect_through_params = VarSet.empty;
     jc_effect_mutable = StringSet.empty;
     jc_effect_committed = StringSet.empty;
   }
@@ -338,66 +357,12 @@ let rec list_compare comp ls1 ls2 = match ls1,ls2 with
 
 (* terms *)
 
-let term_no_loc t ty = {
-  jc_term_node = t;
-  jc_term_type = ty;
-  jc_term_region = dummy_region; (* TODO *)
-  jc_term_loc = Loc.dummy_position;
-  jc_term_label = "";
-}
-
-let rec term_of_expr e =
-  let node = match e.jc_expr_node with
-    | JCEconst c -> JCTconst c
-    | JCEvar vi -> JCTvar vi
-    | JCEbinary (e1, op, e2) -> JCTbinary (term_of_expr e1, op, term_of_expr e2) 
-    | JCEunary (op, e) -> JCTunary (op, term_of_expr e)
-    | JCEshift (e1, e2) -> JCTshift (term_of_expr e1, term_of_expr e2)
-    | JCEsub_pointer (e1, e2) -> JCTsub_pointer (term_of_expr e1, term_of_expr e2)
-    | JCEderef (e, fi) -> JCTderef (term_of_expr e, LabelHere, fi)
-    | JCEinstanceof (e, si) -> JCTinstanceof (term_of_expr e, LabelHere, si)
-    | JCEcast (e, si) -> JCTcast (term_of_expr e, LabelHere, si)
-    | JCEif (e1, e2, e3) -> JCTif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
-    | JCEoffset (ok, e, si) -> JCToffset (ok, term_of_expr e, si)
-(*    | JCEmatch (e, pel) ->
-	let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in
-	JCTmatch (term_of_expr e, ptl)*)
-    | JCErange_cast (e, ri) -> JCTrange_cast (term_of_expr e, ri)
-    | JCEreal_cast (e, rc) -> JCTreal_cast (term_of_expr e, rc)
-    | JCEalloc _ -> assert false
-    | JCEfree _ -> assert false
-  in
-    { jc_term_node = node;
-      jc_term_type = e.jc_expr_type;
-      jc_term_region = e.jc_expr_region;
-      jc_term_loc = e.jc_expr_loc;
-      jc_term_label = "" }
-
-let term_var loc vi = {
-  jc_term_node = JCTvar vi;
-  jc_term_type = vi.jc_var_info_type;
-  jc_term_region = vi.jc_var_info_region;
-  jc_term_loc = loc;
-  jc_term_label = "";
-}
-
-let term_var_no_loc vi = {
-  jc_term_node = JCTvar vi;
-  jc_term_type = vi.jc_var_info_type;
-  jc_term_region = vi.jc_var_info_region;
-  jc_term_loc = Loc.dummy_position;
-  jc_term_label = "";
-}
-
-let zerot = term_no_loc (JCTconst (JCCinteger "0")) integer_type
-let minusonet = term_no_loc (JCTconst (JCCinteger "-1")) integer_type
-let nullt = term_no_loc (JCTconst (JCCnull)) JCTnull
 
 let rec is_constant_term t =
-  match t.jc_term_node with
+  match t#node with
     | JCTrange (None, None) (* CORRECT ? *)
     | JCTconst _ -> true
-    | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
+    | JCTvar _ | JCTshift _ | JCTderef _
     | JCTapp _ | JCTold _ | JCTat _ | JCToffset _
     | JCTinstanceof _ | JCTcast _ | JCTrange_cast _
     | JCTreal_cast _ | JCTif _ | JCTmatch _ -> false
@@ -406,12 +371,11 @@ let rec is_constant_term t =
     | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
 	is_constant_term t
 
-let term_num t = match t.jc_term_node with
+let term_num t = match t#node with
   | JCTconst _ -> 1
   | JCTvar _ -> 3
   | JCTbinary _ -> 5
   | JCTshift _ -> 7
-  | JCTsub_pointer _ -> 11
   | JCTunary _ -> 13
   | JCTderef _ -> 17
   | JCTold _ -> 19
@@ -428,7 +392,7 @@ let term_num t = match t.jc_term_node with
 
 (* Comparison based only on term structure, not types not locations. *)
 let rec raw_term_compare t1 t2 =
-  match t1.jc_term_node, t2.jc_term_node with
+  match t1#node, t2#node with
     | JCTconst c1,JCTconst c2 -> 
 	Pervasives.compare c1 c2
     | JCTvar v1,JCTvar v2 -> 
@@ -439,8 +403,7 @@ let rec raw_term_compare t1 t2 =
 	let comp1 = raw_term_compare t11 t21 in
 	if comp1 = 0 then raw_term_compare t12 t22 else comp1
       else compop
-  | JCTshift(t11,t12),JCTshift(t21,t22)
-  | JCTsub_pointer(t11,t12),JCTshift(t21,t22) ->
+  | JCTshift(t11,t12),JCTshift(t21,t22) ->
       let comp1 = raw_term_compare t11 t21 in
       if comp1 = 0 then raw_term_compare t12 t22 else comp1
   | JCTunary(op1,t11),JCTunary(op2,t21) ->
@@ -496,13 +459,13 @@ let rec raw_term_compare t1 t2 =
 
 let raw_term_equal t1 t2 = raw_term_compare t1 t2 = 0
 
-let tag_num tag = match tag.jc_tag_node with
+let tag_num tag = match tag#node with
   | JCTtag _ -> 1
   | JCTbottom -> 3
   | JCTtypeof _ -> 5
 
 let raw_tag_compare tag1 tag2 =
-  match tag1.jc_tag_node,tag2.jc_tag_node with
+  match tag1#node,tag2#node with
     | JCTtag st1,JCTtag st2 ->
         Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
     | JCTbottom,JCTbottom -> 0
@@ -513,7 +476,7 @@ let raw_tag_compare tag1 tag2 =
         if compst = 0 then raw_term_compare t1 t2 else compst
   | _ -> tag_num tag2 - tag_num tag1
 
-let assertion_num a = match a.jc_assertion_node with
+let assertion_num a = match a#node with
   | JCAtrue -> 1
   | JCAfalse -> 3
   | JCArelation _ -> 5
@@ -536,7 +499,7 @@ let assertion_num a = match a.jc_assertion_node with
 
 (* Comparison based only on assertion structure, not locations. *)
 let rec raw_assertion_compare a1 a2 =
-  match a1.jc_assertion_node, a2.jc_assertion_node with
+  match a1#node, a2#node with
     | JCAtrue,JCAtrue | JCAfalse,JCAfalse -> 0
     | JCArelation(t11,op1,t12),JCArelation(t21,op2,t22) ->
         let compop = Pervasives.compare op1 op2 in
@@ -601,9 +564,9 @@ let rec raw_assertion_compare a1 a2 =
 let raw_assertion_equal a1 a2 = raw_assertion_compare a1 a2 = 0
 
 let rec is_numeric_term t =
-  match t.jc_term_node with
+  match t#node with
     | JCTconst _ -> true
-    | JCTvar _ | JCTshift _ | JCTsub_pointer _ | JCTderef _
+    | JCTvar _ | JCTshift _ | JCTderef _
     | JCToffset _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
     | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) 
@@ -614,19 +577,8 @@ let rec is_numeric_term t =
 
 (* assertions *)
 
-let raw_asrt a = 
-(*
-  eprintf "Warning: calling raw_asrt may lose tracability@.";
-*)
-{
-  jc_assertion_node = a;
-  jc_assertion_loc = Loc.dummy_position;
-  jc_assertion_label = "";
-}
-
-
-let true_assertion = raw_asrt JCAtrue
-let is_true a = (a.jc_assertion_node = JCAtrue)
+let true_assertion = new assertion JCAtrue
+let is_true a = (a#node = JCAtrue)
 
 let make_and al = 
   (* optimization *)
@@ -634,10 +586,10 @@ let make_and al =
   match al with
     | [] -> true_assertion
     | [a] -> a
-    | a::tl -> raw_asrt (JCAand al)
+    | a::tl -> new assertion (JCAand al)
 
 let rec is_constant_assertion a =
-  match a.jc_assertion_node with
+  match a#node with
     | JCAtrue | JCAfalse -> true
     | JCArelation (t1, _, t2) -> 
 	is_constant_term t1 && is_constant_term t2
@@ -665,7 +617,7 @@ let default_behavior = {
   jc_behavior_throws = None;
   jc_behavior_assumes = None;
   jc_behavior_assigns = None;
-  jc_behavior_ensures = raw_asrt JCAtrue
+  jc_behavior_ensures = new assertion JCAtrue
 }
 
 let contains_normal_behavior fs =
@@ -683,11 +635,11 @@ let is_purely_exceptional_fun fs =
     contains_exceptional_behavior fs
 
 
-let rec skip_shifts e = match e.jc_expr_node with
+let rec skip_shifts e = match e#node with
   | JCEshift(e,_) -> skip_shifts e
   | _ -> e
 
-let rec skip_term_shifts t = match t.jc_term_node with
+let rec skip_term_shifts t = match t#node with
   | JCTshift(t,_) -> skip_term_shifts t
   | _ -> t
 
@@ -698,6 +650,7 @@ let rec skip_tloc_range t = match t with
 (* option *)
 
 let select_option opt default = match opt with Some v -> v | None -> default
+let apply_option f opt = match opt with None -> None | Some x -> Some(f x)
 
 (*
 let direct_embedded_struct_fields st =
@@ -786,7 +739,7 @@ let tag_or_variant_name = function
   | JCunion vi -> "union "^vi.jc_variant_info_name
 
 let rec pattern_vars acc pat =
-  match pat.jc_pattern_node with
+  match pat#node with
     | JCPstruct(_, fpl) ->
 	List.fold_left
 	  (fun acc (_, pat) -> pattern_vars acc pat)
@@ -815,7 +768,7 @@ let union_of_field fi =
 let integral_type = function
   | JCTnative Tinteger -> true
   | JCTenum _ -> true 
-  | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull -> false
+  | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull | JCTany -> false
 
 let integral_union vi =
   assert vi.jc_variant_info_is_union;
@@ -825,6 +778,44 @@ let integral_union vi =
 		      | _ -> false
 		 ) true vi.jc_variant_info_roots
 
+(* These are only used by error messages, so feel free to change the strings. *)
+let string_of_op = function
+  | `Blt -> ">"
+  | `Bgt -> "<"
+  | `Ble -> "<="
+  | `Bge -> ">="
+  | `Beq -> "=="
+  | `Bneq -> "!="
+  | `Badd -> "+"
+  | `Bsub -> "-"
+  | `Bmul -> "*"
+  | `Bdiv -> "/"
+  | `Bmod -> "%"
+  | `Bland -> "&&"
+  | `Blor -> "||"
+  | `Bimplies -> "==>"
+  | `Biff -> "<=>"
+  | `Bbw_and -> "&"
+  | `Bbw_or -> "|"
+  | `Bbw_xor -> "xor"
+  | `Bshift_left -> "shift_left"
+  | `Blogical_shift_right -> "logical_shift_right"
+  | `Barith_shift_right -> "arith_shift_right"
+  | `Uprefix_inc -> "prefix ++"
+  | `Uprefix_dec -> "prefix --"
+  | `Upostfix_inc -> "postfix ++"
+  | `Upostfix_dec -> "prefix --"
+  | `Uplus -> "unary +"
+  | `Uminus -> "unary -"
+  | `Unot -> "not"
+  | `Ubw_not -> "bw not"
+
+let string_of_op_type = function
+  | `Integer -> "integer"
+  | `Unit -> "unit"
+  | `Real -> "real"
+  | `Boolean -> "boolean"
+  | `Pointer -> "pointer"
 
 (*
 Local Variables: 

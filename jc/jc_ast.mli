@@ -27,12 +27,38 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.123 2008-04-02 08:38:13 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.124 2008-04-10 16:05:55 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
+open Jc_region
 
+class type located =
+object
+  method loc: Loc.position
+end
 
+class type typed =
+object
+  method typ: jc_type
+end
+
+class type logic_labeled =
+object
+  method logic_label: logic_label option
+  method set_logic_label: logic_label option -> unit
+end
+
+class type name_labeled =
+object
+  method name_label: string
+end
+
+class type regioned =
+object
+  method region: region
+  method set_region: region -> unit
+end
 
 type const =
   | JCCvoid
@@ -42,10 +68,17 @@ type const =
   | JCCreal of string
   | JCCstring of string
 
-type identifier = 
-    { jc_identifier_loc : Loc.position;
-      jc_identifier_name : string;
-    }
+class type identifier = 
+object
+  inherit located
+  method name: string
+end
+
+class type ['a] node_located = 
+object
+  inherit located
+  method node: 'a
+end
 
 (***************)
 (* parse trees *)
@@ -56,25 +89,34 @@ type ptype_node =
   | JCPTidentifier of string
   | JCPTpointer of string * Num.num option * Num.num option
 
-and ptype =
-    {
-      jc_ptype_loc : Loc.position;
-      jc_ptype_node : ptype_node;
-    }
+type ptype = ptype_node node_located
 
-type pbin_op =
-  | BPlt | BPgt | BPle | BPge | BPeq | BPneq 
-  | BPadd | BPsub | BPmul | BPdiv | BPmod
-  | BPland | BPlor | BPimplies | BPiff
-  (* bitwise operators *)
-  | BPbw_and | BPbw_or | BPbw_xor 
-  | BPshift_left | BPlogical_shift_right | BParith_shift_right
+type comparison_op = [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq ]
+type arithmetic_op = [ `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ]
+type logical_op = [ `Bland | `Blor | `Bimplies | `Biff ]
+type bitwise_op = 
+    [ `Bbw_and | `Bbw_or | `Bbw_xor 
+    | `Bshift_left | `Blogical_shift_right | `Barith_shift_right ]
 
-type punary_op =
-  | UPplus | UPminus | UPnot 
-  | UPpostfix_inc | UPpostfix_dec | UPprefix_inc | UPprefix_dec
-  (* bitwise operator *)
-  | UPbw_not
+type operational_op = [ comparison_op | arithmetic_op | bitwise_op ]
+type bin_op = [ operational_op | logical_op ]
+      
+type pre_unary_op = [ `Uprefix_inc | `Uprefix_dec ]
+type post_unary_op = [ `Upostfix_inc | `Upostfix_dec ]
+type pm_unary_op = [ pre_unary_op | post_unary_op | `Uplus ]
+type unary_op = [ `Uminus | `Unot | `Ubw_not ]
+
+type pexpr_unary_op = [ pm_unary_op | unary_op ]
+
+type native_operator_type = [ `Unit | `Boolean | `Integer | `Real ]
+type operator_type = [ native_operator_type | `Pointer ]
+
+type pred_bin_op = [comparison_op | logical_op] * operator_type
+type expr_unary_op = unary_op * native_operator_type
+type term_unary_op = expr_unary_op
+type expr_bin_op = operational_op * operator_type
+type term_bin_op = bin_op * operator_type
+type pred_rel_op = comparison_op * operator_type
 
 type offset_kind = Offset_max | Offset_min
 
@@ -90,21 +132,18 @@ type ppattern_node =
   | JCPPany
   | JCPPconst of const
 
-and ppattern = {
-  jc_ppattern_node: ppattern_node;
-  jc_ppattern_loc: Loc.position;
-}
+and ppattern = ppattern_node node_located
 
 type pexpr_node =
-  | JCPElabel of string * pexpr
   | JCPEconst of const
+  | JCPElabel of string * pexpr
   | JCPEvar of string
   | JCPEderef of pexpr * string
+  | JCPEbinary of pexpr * bin_op * pexpr
+  | JCPEunary of pexpr_unary_op * pexpr
   | JCPEapp of string * logic_label list * pexpr list
   | JCPEassign of pexpr * pexpr
-  | JCPEassign_op of pexpr * pbin_op * pexpr
-  | JCPEbinary of pexpr * pbin_op * pexpr
-  | JCPEunary of punary_op * pexpr
+  | JCPEassign_op of pexpr * bin_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * string
   | JCPEquantifier of quantifier * ptype * string list * pexpr
@@ -112,126 +151,136 @@ type pexpr_node =
   | JCPEat of pexpr * logic_label
   | JCPEoffset of offset_kind * pexpr 
   | JCPEif of pexpr * pexpr * pexpr
-  | JCPElet of string * pexpr * pexpr
+  | JCPElet of ptype option * string * pexpr option * pexpr
+  | JCPEdecl of ptype * string * pexpr option
   | JCPErange of pexpr option * pexpr option
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
-  | JCPEmutable of pexpr * ptag
-  | JCPEtagequality of ptag * ptag
+  | JCPEmutable of pexpr * pexpr ptag
+  | JCPEtagequality of pexpr ptag * pexpr ptag
   | JCPEmatch of pexpr * (ppattern * pexpr) list
+(*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
+  | JCPEblock of pexpr list
+  | JCPEassert of (* identifier option * *) pexpr
+  | JCPEwhile of pexpr * pexpr * pexpr option * pexpr
+      (*r condition, invariant, variant, body *)
+  | JCPEfor of pexpr list * pexpr * pexpr list * pexpr 
+      * pexpr option * pexpr
+      (*r inits, condition, updates, invariant, variant, body *)
+  | JCPEreturn of pexpr
+  | JCPEbreak of string
+  | JCPEcontinue of string
+  | JCPEgoto of string
+  | JCPEtry of pexpr * (identifier * string * pexpr) list * pexpr
+  | JCPEthrow of identifier * pexpr
+  | JCPEpack of pexpr * identifier option
+  | JCPEunpack of pexpr * identifier option
+  | JCPEswitch of pexpr * (pexpr option list * pexpr) list
 
-and pexpr =
-    {
-      jc_pexpr_node : pexpr_node;
-      jc_pexpr_loc : Loc.position;
-    }
+and pexpr = pexpr_node node_located
 
-and ptag_node =
+and 'a ptag_node =
   | JCPTtag of identifier
   | JCPTbottom
-  | JCPTtypeof of pexpr
+  | JCPTtypeof of 'a
 
-and ptag =
-    {
-      jc_ptag_node : ptag_node;
-      jc_ptag_loc : Loc.position;
-    }
+and 'a ptag = 'a ptag_node node_located
 
-     
-type pclause =
-  | JCPCrequires of pexpr
-  | JCPCbehavior of Loc.position * string 
+type 'expr clause =
+  | JCCrequires of 'expr
+  | JCCbehavior of Loc.position * string 
       * identifier option 
-      * pexpr option 
-      * pexpr option 
-      * (Loc.position * pexpr list) option 
-      * pexpr
+      * 'expr option 
+      * 'expr option 
+      * (Loc.position * 'expr list) option 
+      * 'expr
       (*r loc, name, throws, assumes,requires,assigns,ensures *)
 
+type 'expr reads_or_expr =
+  | JCreads of 'expr list
+  | JCexpr of 'expr
 
-type pstatement_node =
-  | JCPSskip
-  | JCPSblock of pstatement list
-  | JCPSexpr of pexpr
-  | JCPSassert of (* identifier option * *) pexpr
-  | JCPSdecl of ptype * string * pexpr option
-  | JCPSif of pexpr * pstatement * pstatement
-  | JCPSwhile of string * pexpr * pexpr * pexpr option * pstatement
-      (*r label, condition, invariant, variant, body *)
-  | JCPSfor of string * pexpr list * pexpr * pexpr list * pexpr 
-      * pexpr option * pstatement
-      (*r label, inits, condition, updates, invariant, variant, body *)
-  | JCPSreturn of pexpr option
-  | JCPSbreak of string
-  | JCPScontinue of string
-  | JCPSgoto of string
-  | JCPSlabel of string * pstatement
-  | JCPStry of pstatement * (identifier * string * pstatement) list * pstatement
-  | JCPSthrow of identifier * pexpr option
-  | JCPSpack of pexpr * identifier option
-  | JCPSunpack of pexpr * identifier option
-  | JCPSswitch of pexpr * (pexpr option list * pstatement list) list
-  | JCPSmatch of pexpr * (ppattern * pstatement list) list
-
-and pstatement = 
-    {
-      jc_pstatement_node : pstatement_node;
-      jc_pstatement_loc : Loc.position;
-    }
-
-type preads_or_pexpr =
-  | JCPReads of pexpr list
-  | JCPExpr of pexpr
-
-type pdecl_node =
-  | JCPDvar of ptype * string * pexpr option
-  | JCPDfun of ptype * identifier * (ptype * string) list * pclause list
-      * pstatement list option
-  | JCPDtag of string * string option * (bool * ptype * string) list
-      * (identifier * string * pexpr) list
-  | JCPDvarianttype of string * identifier list
-  | JCPDuniontype of string * identifier list
-(*  (* use to define recursively a set of types *)
-  | JCPDrectypes of pdecl list*)
-  (* use to define recursively a set of functions *)
-  | JCPDrecfuns of pdecl list
-  | JCPDenumtype of string * Num.num * Num.num
-  | JCPDlogictype of string 
-  | JCPDlemma of string * bool * logic_label list * pexpr
+type 'expr decl_node =
+  | JCDvar of ptype * string * 'expr option
+  | JCDfun of ptype * identifier * (ptype * string) list * 'expr clause list
+      * 'expr option
+  | JCDtag of string * string option * (bool * ptype * string) list
+      * (identifier * string * 'expr) list
+  | JCDvariant_type of string * identifier list
+  | JCDunion_type of string * identifier list
+  | JCDenum_type of string * Num.num * Num.num
+  | JCDlogic_type of string 
+  | JCDlemma of string * bool * logic_label list * 'expr
       (* 2nd arg is true if it is an axiom *)
-  | JCPDexception of string * ptype
+  | JCDexception of string * ptype option
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCPDlogic of ptype option * string * logic_label list * (ptype * string) list 
-      * preads_or_pexpr
+  | JCDlogic of ptype option * string * logic_label list * (ptype * string) list 
+      * 'expr reads_or_expr
   (* global invariant *)
-  | JCPDglobinv of string * pexpr
+  | JCDglobal_inv of string * 'expr
+  (* "pragma" options and policies *)
+  | JCDinvariant_policy of Jc_env.inv_sem
+  | JCDseparation_policy of Jc_env.separation_sem
+  | JCDannotation_policy of Jc_env.annotation_sem
+  | JCDabstract_domain of Jc_env.abstract_domain 
+  | JCDint_model of Jc_env.int_model
 
-and pdecl =
-    {
-      jc_pdecl_node : pdecl_node;
-      jc_pdecl_loc : Loc.position;
-    }
+and 'expr decl = 'expr decl_node node_located
 
+class type ['expr_node] c_nexpr =
+object
+  inherit logic_labeled
+  inherit ['expr_node] node_located
+end
+
+(** Normalized expressions. Not typed yet, but without gotos. *)
+type nexpr_node =
+  | JCNEconst of const
+  | JCNElabel of string * nexpr
+  | JCNEvar of string
+  | JCNEderef of nexpr * string
+  | JCNEbinary of nexpr * bin_op * nexpr
+  | JCNEunary of unary_op * nexpr
+  | JCNEapp of string * logic_label list * nexpr list
+  | JCNEassign of nexpr * nexpr
+  | JCNEinstanceof of nexpr * string
+  | JCNEcast of nexpr * string
+  | JCNEif of nexpr * nexpr * nexpr
+  | JCNEoffset of offset_kind * nexpr 
+  | JCNEalloc of nexpr * string
+  | JCNEfree of nexpr
+  | JCNElet of ptype option * string * nexpr option * nexpr
+  | JCNEassert of (* identifier option * *) nexpr
+  | JCNEblock of nexpr list
+  | JCNEloop of nexpr * nexpr option * nexpr
+      (*r invariant, variant, body *)
+  | JCNEreturn of nexpr option
+  | JCNEtry of nexpr * (identifier * string * nexpr) list * nexpr
+  | JCNEthrow of identifier * nexpr option
+  | JCNEpack of nexpr * identifier option
+  | JCNEunpack of nexpr * identifier option
+  | JCNEmatch of nexpr * (ppattern * nexpr) list
+  (* Assertions only *)
+  | JCNEquantifier of quantifier * ptype * string list * nexpr
+  | JCNEold of nexpr
+  | JCNEat of nexpr * logic_label
+  | JCNEmutable of nexpr * nexpr ptag
+  | JCNEtagequality of nexpr ptag * nexpr ptag
+  (* Locations only *)
+  | JCNErange of nexpr option * nexpr option
+
+and nexpr = nexpr_node c_nexpr
+
+     
 (*************)
 (* typed ast *)
 (*************)
 
-type bin_op =
-  | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
-  | Blt_real | Bgt_real | Ble_real | Bge_real | Beq_real | Bneq_real 
-  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int
-  | Badd_real | Bsub_real | Bmul_real | Bdiv_real
-  | Beq_bool | Bneq_bool
-  | Bland | Blor | Bimplies | Biff
-  | Beq_pointer | Bneq_pointer
-  (* bitwise operators *)
-  | Bbw_and | Bbw_or | Bbw_xor 
-  | Bshift_left | Blogical_shift_right | Barith_shift_right 
-  
-type unary_op =
-  | Uplus_int | Uminus_int | Uplus_real | Uminus_real | Unot 
-  (* bitwise operator *)
-  | Ubw_not
+class type ['pattern_node] c_pattern =
+object
+  inherit typed
+  inherit ['pattern_node] node_located
+end
 
 type pattern_node =
   | JCPstruct of struct_info * (field_info * pattern) list
@@ -241,11 +290,15 @@ type pattern_node =
   | JCPany
   | JCPconst of const
 
-and pattern = {
-  jc_pattern_node: pattern_node;
-  jc_pattern_loc: Loc.position;
-  jc_pattern_type: jc_type;
-}
+and pattern = pattern_node c_pattern
+
+class type ['node] c_term =
+object
+  inherit typed
+  inherit regioned
+  inherit name_labeled
+  inherit ['node] node_located
+end
 
 type app = 
     {
@@ -259,10 +312,9 @@ and term_node =
   | JCTconst of const
   | JCTvar of var_info
   | JCTshift of term * term
-  | JCTsub_pointer of term * term
   | JCTderef of term * logic_label * field_info
-  | JCTbinary of term * bin_op * term
-  | JCTunary of unary_op * term
+  | JCTbinary of term * term_bin_op * term
+  | JCTunary of term_unary_op * term
   | JCTapp of app
   | JCTold of term
   | JCTat of term * logic_label
@@ -275,20 +327,9 @@ and term_node =
   | JCTrange of term option * term option
   | JCTmatch of term * (pattern * term) list
 
-and term =
-    {
-      jc_term_node : term_node;
-      jc_term_type : jc_type;
-      jc_term_region : region;
-      jc_term_loc : Loc.position;
-      jc_term_label : string;
-    }
+and term = term_node c_term
 
-type tag =
-    {
-      jc_tag_node : tag_node;
-      jc_tag_loc : Loc.position;
-    }
+type tag = tag_node node_located
 
 and tag_node =
   | JCTtag of struct_info
@@ -308,10 +349,16 @@ type tlocation =
   | JCLderef of tlocation_set * logic_label * field_info * region
   | JCLat of tlocation * logic_label
 
+class type ['assertion_node] c_assertion =
+object
+  inherit name_labeled
+  inherit ['assertion_node] node_located
+end
+
 type assertion_node =
   | JCAtrue
   | JCAfalse
-  | JCArelation of term * bin_op * term
+  | JCArelation of term * pred_rel_op * term
   | JCAand of assertion list
   | JCAor of assertion list
   | JCAimplies of assertion * assertion
@@ -327,55 +374,13 @@ type assertion_node =
   | JCAmutable of term * struct_info * tag
   | JCAtagequality of tag * tag * string option
   | JCAmatch of term * (pattern * assertion) list
-	
-and assertion =
-    {
-     jc_assertion_node : assertion_node;
-     jc_assertion_loc : Loc.position;
-     jc_assertion_label : string;
-   }
-      
+
+and assertion = assertion_node c_assertion
+
 type term_or_assertion =
   | JCAssertion of assertion
   | JCTerm of term
   | JCReads of tlocation list
-
-type tincr_op = Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec
-
-type texpr_node =
-  | JCTEconst of const
-  | JCTEvar of var_info
-  | JCTEshift of texpr * texpr
-  | JCTEsub_pointer of texpr * texpr
-  | JCTEderef of texpr * field_info
-  | JCTEbinary of texpr * bin_op * texpr
-  | JCTEunary of unary_op * texpr
-  | JCTEcall of fun_info * texpr list
-  | JCTEoffset of offset_kind * texpr * struct_info 
-  | JCTEinstanceof of texpr * struct_info
-  | JCTEcast of texpr * struct_info
-  | JCTErange_cast of texpr * enum_info
-  | JCTEreal_cast of texpr * real_conversion
-  | JCTEassign_var of var_info * texpr
-  | JCTEassign_var_op of var_info * bin_op * texpr
-  | JCTEassign_heap of texpr * field_info * texpr
-  | JCTEassign_heap_op of texpr * field_info * bin_op * texpr
-  | JCTEincr_local of tincr_op * var_info 
-  | JCTEincr_heap of tincr_op * texpr * field_info 
-  | JCTEif of texpr * texpr * texpr
-  | JCTElet of var_info * texpr * texpr
-  | JCTEalloc of texpr * struct_info
-  | JCTEfree of texpr
-  | JCTEmatch of texpr * (pattern * texpr) list
-
-and texpr =
-    {
-      jc_texpr_node : texpr_node;
-      jc_texpr_type : jc_type;
-      jc_texpr_region : region;
-      jc_texpr_label : string;
-      jc_texpr_loc : Loc.position;
-    }
 
 type loop_annot =
     {
@@ -383,36 +388,6 @@ type loop_annot =
       mutable jc_loop_invariant : assertion;
       mutable jc_free_loop_invariant : assertion;
       jc_loop_variant : term option;
-    }
-
-type tstatement_node =
-  | JCTSblock of tstatement list
-  | JCTSexpr of texpr
-  | JCTSassert of (* string option * *) assertion
-  | JCTSdecl of var_info * texpr option * tstatement
-  | JCTSif of texpr * tstatement * tstatement
-  | JCTSwhile of string * texpr * loop_annot * tstatement
-  | JCTSfor of string * texpr * texpr list * loop_annot  * tstatement
-      (*r condition, updates, loop annotations, body *)
-      (*r inits must be given before using JCTSexpr or JCTSdecl *)
-  | JCTSreturn_void 
-  | JCTSreturn of jc_type * texpr
-  | JCTSbreak of label_info
-  | JCTScontinue of label_info
-  | JCTSgoto of label_info
-  | JCTSlabel of label_info * tstatement
-  | JCTStry of tstatement 
-      * (exception_info * var_info option * tstatement) list * tstatement
-  | JCTSthrow of exception_info * texpr option
-  | JCTSpack of struct_info * texpr * struct_info
-  | JCTSunpack of struct_info * texpr * struct_info
-  | JCTSswitch of texpr * (texpr option list * tstatement list) list
-  | JCTSmatch of texpr * (pattern * tstatement list) list
-
-and tstatement = 
-    {
-      jc_tstatement_node : tstatement_node;
-      jc_tstatement_loc : Loc.position;
     }
 
 
@@ -437,8 +412,17 @@ type fun_spec =
 
 
 (******************)
-(* normalized ast *)
+(*    typed ast   *)
 (******************)
+
+class type ['node] c_expr =
+object
+  inherit typed
+  inherit regioned
+  inherit name_labeled
+  inherit ['node] node_located
+  method original_type: jc_type
+end
 
 (* application, increment and assignment are statements.
    special assignment with operation disappears.
@@ -446,11 +430,12 @@ type fun_spec =
 type expr_node =
   | JCEconst of const
   | JCEvar of var_info
-  | JCEbinary of expr * bin_op * expr
-  | JCEunary of unary_op * expr
-  | JCEshift of expr * expr
-  | JCEsub_pointer of expr * expr
   | JCEderef of expr * field_info
+  | JCEbinary of expr * expr_bin_op * expr
+  | JCEunary of expr_unary_op * expr
+  | JCEapp of call
+  | JCEassign_var of var_info * expr
+  | JCEassign_heap of expr * field_info * expr
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info
   | JCErange_cast of expr * enum_info
@@ -459,21 +444,30 @@ type expr_node =
   | JCEoffset of offset_kind * expr * struct_info
   | JCEalloc of expr * struct_info
   | JCEfree of expr
-      (*  | JCEmatch of expr * (pattern * expr) list*)
-      (*
-	- enlever JCEif et le mettre au niveau des statements comme
-	l'appel de fonction : A VOIR
-	Remarque : JCEif est toujours dans l'ast mais n'est jamais produit,
-	on peut l'enlever ?
-      *)
+  | JCElet of var_info * expr option * expr
+  | JCEassert of (* string option * *) assertion
+  | JCEblock of expr list
+  | JCEloop of loop_annot * expr
+  | JCEreturn_void 
+  | JCEreturn of jc_type * expr (*r expected return type *) 
+  | JCEtry of expr 
+      * (exception_info * var_info option * expr) list * expr
+  | JCEthrow of exception_info * expr option
+  | JCEpack of struct_info * expr * struct_info
+  | JCEunpack of struct_info * expr * struct_info
+  | JCEmatch of expr * (pattern * expr) list
+  | JCEshift of expr * expr
       
-and expr =
+and expr = expr_node c_expr
+
+and callee = JClogic_fun of logic_info | JCfun of fun_info
+
+and call = 
     {
-      jc_expr_node : expr_node;
-      jc_expr_type : jc_type;
-      jc_expr_region : region;
-      jc_expr_label : string;
-      jc_expr_loc : Loc.position;
+      jc_call_fun : callee;
+      jc_call_args : expr list;
+      mutable jc_call_region_assoc : (region * region) list;
+      jc_call_label_assoc : (logic_label * logic_label) list;
     }
 
 (*
@@ -484,47 +478,12 @@ type loop_annot =
     }
 *)
 
-type incr_op = Stat_inc | Stat_dec
+(*type incr_op = Stat_inc | Stat_dec*)
 
-(* application, increment and assignment are statements. 
-   expressions (without any of the above) are not statements anymore.
+(* application, increment and assignment are exprs. 
+   expressions (without any of the above) are not exprs anymore.
    break, continue, goto are translated with exceptions.
 *)
-
-type call = 
-    {
-      jc_call_fun : fun_info;
-      jc_call_args : expr list;
-      mutable jc_call_region_assoc : (region * region) list;
-    }
-
-type statement_node =
-    (* instructions *)
-  | JCScall of var_info option * call * statement
-  | JCSassign_var of var_info * expr
-  | JCSassign_heap of expr * field_info * expr
-    (* statements *)
-  | JCSassert of (* string option * *) assertion
-  | JCSblock of statement list
-  | JCSdecl of var_info * expr option * statement
-  | JCSif of expr * statement * statement
-  | JCSloop of loop_annot * statement
-  | JCSreturn_void 
-  | JCSreturn of jc_type * expr (*r expected return type *) 
-  | JCSlabel of label_info * statement
-  | JCStry of statement 
-      * (exception_info * var_info option * statement) list * statement
-  | JCSthrow of exception_info * expr option
-  | JCSpack of struct_info * expr * struct_info
-  | JCSunpack of struct_info * expr * struct_info
-  | JCSmatch of expr * (pattern * statement) list
-
-and statement = 
-    {
-      jc_statement_node : statement_node;
-      jc_statement_label : string;
-      jc_statement_loc : Loc.position;
-    }
 
 
 (*

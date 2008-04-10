@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.29 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_fenv.mli,v 1.30 2008-04-10 16:05:55 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -41,7 +41,6 @@ type effect =
       jc_effect_tag_table : VariantSet.t;
       jc_effect_memories : LogicLabelSet.t FieldOrVariantRegionMap.t;
       jc_effect_globals : VarSet.t;
-      jc_effect_through_params : VarSet.t;
       jc_effect_mutable : StringSet.t;
       jc_effect_committed : StringSet.t;
     }

@@ -12,7 +12,7 @@ integer i;
 
 
 // OK: infer post <true>
-unit f0() { }
+unit f0() { () }
 
 // OK: infer exceptional post <E true>
 unit f1()
@@ -24,7 +24,7 @@ unit f1()
 unit f2() {
     variant 0; 
     while (true)
-      { 
+	{ ()
     }
 }
 
@@ -36,10 +36,10 @@ unit f3() { i = 0; }
 integer f3_return() { i = 0; return i; }
 
 // OK: infer post <true>
-unit f3_local() { integer n = 0; }
+unit f3_local() { var integer n = 0; }
 
 // OK: infer post <\result == 1>
-integer f3_local_return() { integer n = 0; return 1; }
+integer f3_local_return() { var integer n = 0; return 1; }
 
 // OK: infer post <true>
 unit f3_param(integer n) { n = 0; }
@@ -49,7 +49,7 @@ integer f3_param_return(integer n) { n = 0; return n; }
 
 // OK infer post <\result == 1>
 integer f4() {
-    integer m = 1;
+    var integer m = 1;
     f3_param(m);
     return m;
 }

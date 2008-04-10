@@ -7,7 +7,7 @@
  */
 
 
-unit h(integer n) { }
+unit h(integer n) { () }
 
 unit f(integer n) { h(n); }
 

@@ -15,12 +15,12 @@ tag ColorPoint = Point with {
 }
 
 unit translateX(Point[0] p, integer dx) {
-  p.x += dx;
+  p.x += dx
 }
 
 unit main(Point[0] pt, ColorPoint[0] cpt) {
   translateX(pt, 1);
-  translateX(cpt, 1);
+  translateX(cpt, 1)
 }
 
 

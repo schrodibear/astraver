@@ -41,15 +41,15 @@ unit swap(realP[0..] t, integer i, integer j)
     ensures 
 	permut{Old,Here}(t,t,\offset_max(t)+1);
 {
-    L:
-     real tmp = (t+i).realM;
+    (L:
+     var real tmp = (t+i).realM);
      (t+i).realM = (t+j).realM;
      (t+j).realM = tmp;
      assert (t+i).realM == \at((t+j).realM,L) &&
 	 (t+j).realM == \at((t+i).realM,L) &&
        \forall integer k; 
           0 <= k && k <= \offset_max(t) && k != i && k != j ==>
-	      (t+k).realM == \at((t+k).realM,L) ;
+	      (t+k).realM == \at((t+k).realM,L);
 }
 
 

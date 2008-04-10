@@ -17,8 +17,8 @@ byte binary_search(shortT[0..] t, byte n, short v)
       (\result >= 0 && (t+\result).shortM == v) ||
       (\result == -1 && (\forall byte k; 0 <= k && k < n ==> (t+k).shortM != v));
 {
-  byte l = 0;
-  byte u = n-1;
+  var byte l = 0;
+  var byte u = n-1;
   invariant 
       0 <= l && u <= n-1 &&  
       \forall byte k; 0 <= k && k < n ==> 
@@ -26,13 +26,13 @@ byte binary_search(shortT[0..] t, byte n, short v)
   variant u-l; 
   while (l <= u ) 
   {
-    byte m = (l + u :> byte) / 2;
+    var byte m = (l + u :> byte) / 2;
     // @ assert l <= m <= u
-    if ((t+m).shortM < v) l = m + 1;
-    else if ((t+m).shortM > v) u = m - 1;
-    else return m;
-  }
-  return -1;
+    if (t+m).shortM < v then l = m + 1
+    else if (t+m).shortM > v then u = m - 1
+    else return m
+  };
+  return -1
 }
 
 

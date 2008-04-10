@@ -7,7 +7,7 @@ type T = {
 
 
 unit f() {
-     T[0] t1 = new T[1];
-     T[0] t2 = new T[1];
+     var T[0] t1 = new T[1];
+     var T[0] t2 = new T[1];
      assert t1 != t2;
 }

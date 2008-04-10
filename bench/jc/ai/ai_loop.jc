@@ -6,7 +6,7 @@ type integerT = { integer integerM; }
 
 
 unit test0(integerT[0..10] t) {
-  integer x = 0;
+  var integer x = 0;
   invariant true;
   variant 10 - x;
   while (x <= 9) 
@@ -17,7 +17,7 @@ unit test0(integerT[0..10] t) {
 }
 
 unit test0bis(integerT[0..10] t) {
-  integer x = 0;
+  var integer x = 0;
   invariant true;
   variant 10 - x;
   while (x < 10) 
@@ -40,7 +40,7 @@ unit test0ter() {
 }
 
 unit test1(integerT[0..] t, integer max) requires \offset_max(t) == max; {
-  integer x = 0;
+  var integer x = 0;
   invariant true;
   variant max - x;
   while (x < max) 

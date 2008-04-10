@@ -69,7 +69,7 @@ why/%.why: %.jc
 	$(EXECJESSIE) -locs $*.jloc $<
 
 why/%.whyai: %.jc 
-	$(EXECJESSIE) -ai pol -main main $<
+	$(EXECJESSIE) -main main $<
 
 simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	$(EXECJESSIE) $<
@@ -78,6 +78,12 @@ simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	$(EXECJESSIE) $<
 	make -f $*.makefile $@
+
+SCID: SCID.java
+	rm -f SCID.jc
+	$(EXECKRAKATOA) -javacard SCID.java
+	$(EXECJESSIE) -why-opt -fast-wp -main SCID_process SCID.jc
+	make -f SCID.makefile gui
 
 %: %.java
 	rm -f $*.jc
@@ -88,7 +94,7 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 %.javacard: %.java
 	rm -f $*.jc
 	$(EXECKRAKATOA) -javacard $<
-	make why/$*.why
+	make why/$*.whyai
 	make -f $*.makefile gui
 
 %.ai: %.java

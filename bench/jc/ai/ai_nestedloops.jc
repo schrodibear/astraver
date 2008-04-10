@@ -7,14 +7,14 @@
 
 
 unit f0() {
-    integer x = 0;
+    var integer x = 0;
     variant 10 - x; 
     while (x < 10) {
-        integer y = 0;
+        var integer y = 0;
 	variant 5 - y; 
 	while (y < 5) {
 	    y++;
-	}
+	};
 	//@ assert y == 5;
 	x++;
     }
@@ -23,16 +23,16 @@ unit f0() {
 
 
 unit f1() {
-  integer x = 0;
+  var integer x = 0;
   variant 10 - x;
   while(x < 10) 
   {
-    integer y = 0;
+    var integer y = 0;
     variant x - y;
     while(y < x) 
     {
       y++;
-    }
+    };
     //@ assert y == x;
     x++;
   }

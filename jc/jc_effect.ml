@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.102 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.103 2008-04-10 16:05:55 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -76,9 +76,6 @@ let ef_union ef1 ef2 =
     jc_effect_globals = 
       VarSet.union 
 	ef1.jc_effect_globals ef2.jc_effect_globals;
-    jc_effect_through_params = 
-      VarSet.union 
-	ef1.jc_effect_through_params ef2.jc_effect_through_params;
     jc_effect_mutable =
       StringSet.union
 	ef1.jc_effect_mutable ef2.jc_effect_mutable;
@@ -128,6 +125,12 @@ let ef_assoc ?label_assoc ef assoc =
       ) ef.jc_effect_alloc_table StringRegionSet.empty;
   }
 
+let fef_reads ef =
+  { jc_reads = ef;
+    jc_writes = empty_effects;
+    jc_raises = ExceptionSet.empty;
+  }
+
 let fef_union fef1 fef2 =
   { jc_reads = ef_union fef1.jc_reads fef2.jc_reads ;
     jc_writes = ef_union fef1.jc_writes fef2.jc_writes ;
@@ -163,10 +166,6 @@ let add_memory_effect label ef (fi,r) =
 let add_global_effect ef vi =
   { ef with jc_effect_globals = VarSet.add vi ef.jc_effect_globals } 
 
-let add_through_param_effect ef vi =
-  { ef with jc_effect_through_params = 
-      VarSet.add vi ef.jc_effect_through_params } 
-  
 let add_alloc_effect ef (tov, r) =
   let a = tag_or_variant_type_name tov in
   if not(Region.polymorphic r) then
@@ -204,9 +203,6 @@ let add_field_alloc_reads label fef (fvi,r) =
 let add_global_reads fef vi =
   { fef with jc_reads = add_global_effect fef.jc_reads vi }
 
-let add_through_param_reads fef vi =
-  { fef with jc_reads = add_through_param_effect fef.jc_reads vi }
-
 let add_alloc_reads fef (a,r) =
   { fef with jc_reads = add_alloc_effect fef.jc_reads (a,r) }
 
@@ -234,9 +230,6 @@ let add_field_alloc_writes label fef (fvi,r) =
 let add_global_writes fef vi =
   { fef with jc_writes = add_global_effect fef.jc_writes vi }
 
-let add_through_param_writes fef vi =
-  { fef with jc_writes = add_through_param_effect fef.jc_writes vi }
-
 let add_alloc_writes fef (a,r) =
   { fef with jc_writes = add_alloc_effect fef.jc_writes (a,r) }
 
@@ -254,7 +247,6 @@ let same_effects ef1 ef2 =
   && VariantSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && FieldOrVariantRegionMap.equal (fun x y -> true) ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
-  && VarSet.equal ef1.jc_effect_through_params ef2.jc_effect_through_params
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
   && StringSet.equal ef1.jc_effect_committed ef2.jc_effect_committed
     
@@ -270,7 +262,7 @@ let same_feffects fef1 fef2 =
 (* TODO: check the use of "label" and "r" *)
 let rec pattern ef (*label r*) p =
   let r = dummy_region in
-  match p.jc_pattern_node with
+  match p#node with
     | JCPstruct(st, fpl) ->
 	let ef = add_tag_effect ef (JCtag st) in
 	List.fold_left
@@ -294,7 +286,7 @@ terms and assertions
 **************************)
 
 let rec term ef t =
-  match t.jc_term_node with
+  match t#node with
     | JCTvar vi ->
 	if vi.jc_var_info_static then
 	  add_global_effect ef vi
@@ -302,7 +294,7 @@ let rec term ef t =
     | JCToffset(_,t,st) ->
 	add_alloc_effect
 	  (term ef t)
-	  (JCtag st, t.jc_term_region)
+	  (JCtag st, t#region)
     | JCTapp app -> 
 	let li = app.jc_app_fun and tls = app.jc_app_args in
 	let efapp = 
@@ -313,7 +305,7 @@ let rec term ef t =
 	let fvi = 
 	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
 	in
-	let ef = add_memory_effect lab ef (fvi,t.jc_term_region) in
+	let ef = add_memory_effect lab ef (fvi,t#region) in
 	term ef t
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
@@ -323,8 +315,7 @@ let rec term ef t =
     | JCTold t1 -> term ef t1
     | JCTunary (_, t1) -> term ef t1
     | JCTshift (t1, t2) 
-    | JCTbinary (t1, _, t2)
-    | JCTsub_pointer (t1, t2) ->
+    | JCTbinary (t1, _, t2) ->
 	term (term ef t1) t2
     | JCTconst _ -> ef
     | JCTmatch (t, ptl) ->
@@ -336,13 +327,13 @@ let tag ef t h =
     | None -> ef
     | Some h -> add_tag_effect ef h
   in
-  match t.jc_tag_node with
+  match t#node with
     | JCTtag _
     | JCTbottom -> ef
     | JCTtypeof(t, _) -> term ef t
 
 let rec assertion ef a =
-  match a.jc_assertion_node with
+  match a#node with
     | JCAtrue | JCAfalse -> ef
     | JCAif (t, a1, a2) -> 
 	assertion (assertion (term ef t) a1) a2
@@ -388,7 +379,7 @@ expressions and statements
 ***********************)
 
 let rec expr ef e =
-  match e.jc_expr_node with
+  match e#node with
     | JCEconst _ -> ef
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
@@ -397,16 +388,8 @@ let rec expr ef e =
 	let fvi = 
 	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
 	in
-	let ef = add_field_alloc_reads LabelHere (expr ef e) (fvi,e.jc_expr_region) in
-	begin match (skip_shifts e).jc_expr_node with
-	  | JCEvar vi ->
-	      if vi.jc_var_info_formal then 
-		add_through_param_reads ef vi 
-	      else ef
-	  | _ -> ef
-	end
-    | JCEshift (e1, e2)
-    | JCEsub_pointer (e1, e2) -> expr (expr ef e1) e2
+	add_field_alloc_reads LabelHere (expr ef e) (fvi,e#region)
+    | JCEshift (e1, e2) -> expr (expr ef e1) e2
     | JCEif(e1,e2,e3) -> expr (expr (expr ef e1) e2) e3
     | JCEvar vi -> 
 	if vi.jc_var_info_static then
@@ -418,7 +401,7 @@ let rec expr ef e =
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) ->
 	add_alloc_reads (expr ef e)
-	  (JCtag st, e.jc_expr_region)
+	  (JCtag st, e#region)
     | JCEalloc(_,st) ->
 (*	let fields = embedded_struct_fields st in 
 	let roots = embedded_struct_roots st in*)
@@ -427,12 +410,12 @@ let rec expr ef e =
 	let roots = List.map (fun x -> JCvariant x) roots in
 	let ef = 
 	  List.fold_left 
-	    (fun ef fi -> add_field_writes LabelHere ef (FVfield fi,e.jc_expr_region))
+	    (fun ef fi -> add_field_writes LabelHere ef (FVfield fi,e#region))
 	    ef fields
 	in
 	let ef = 
 	  List.fold_left
-	    (fun ef a -> add_alloc_writes ef (a,e.jc_expr_region))
+	    (fun ef a -> add_alloc_writes ef (a,e#region))
 	    ef ((JCtag st)::roots)
 	in
 	List.fold_left add_tag_writes ef ((JCtag st)::roots)
@@ -442,69 +425,39 @@ let rec expr ef e =
 	add_global_writes ef mut
 *)
     | JCEfree e ->
-	begin match e.jc_expr_type with
+	begin match e#typ with
 	  | JCTpointer(tov, _, _) ->
 	      (* write tag table ? *)
-	      add_alloc_writes (add_tag_writes ef tov) (tov,e.jc_expr_region)
+	      add_alloc_writes (add_tag_writes ef tov) (tov,e#region)
 	  | _ -> assert false
 	end
 (*    | JCEmatch(e, pel) ->
 	expr (List.fold_left expr ef (List.map snd pel)) e*)
-
-let rec loop_annot ef la = 
-  let ef = assertion ef la.jc_loop_invariant in
-  match la.jc_loop_variant with
-  | None -> ef
-  | Some t -> term ef t
-
-let rec statement ef s =
-  match s.jc_statement_node with
-    | JCSreturn_void -> ef
-    | JCScall (_, call, s) -> 
-	let fi = call.jc_call_fun in
-	let le = call.jc_call_args in
-	let efcall = 
-	  fef_assoc fi.jc_fun_info_effects call.jc_call_region_assoc in
-	let through_param ef =
-	  let efno = { ef with jc_effect_through_params = VarSet.empty; } in
-	  List.fold_left2 (fun ef param arg ->
-	    if VarSet.mem param ef.jc_effect_through_params then
-	      match (skip_shifts arg).jc_expr_node with
-		| JCEvar vi ->
-		    if vi.jc_var_info_formal then
-		      add_through_param_effect ef vi
-		    else ef
-		| _ -> ef
-	    else ef
-	  ) efno fi.jc_fun_info_parameters le
+    | JCEapp app -> 
+	let fi = app.jc_call_fun in
+	let le = app.jc_call_args in
+	let efcall = match fi with
+	  | JClogic_fun f -> 
+	      fef_reads 
+		(ef_assoc f.jc_logic_info_effects 
+		   ~label_assoc:app.jc_call_label_assoc app.jc_call_region_assoc)
+	  | JCfun f -> 
+	      fef_assoc f.jc_fun_info_effects app.jc_call_region_assoc 
 	in
-	let efcall = {
-	  efcall with
-	    jc_reads = through_param efcall.jc_reads;
-	    jc_writes = through_param efcall.jc_writes;
-	} in
-	let ef = fef_union efcall (List.fold_left expr ef le) in
-	  statement ef s
-    | JCSassign_heap (e1, fi, e2) ->
+	fef_union efcall (List.fold_left expr ef le)
+    | JCEassign_heap (e1, fi, e2) ->
 	let fvi = 
 	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
 	in
-	let ef = expr (expr (add_field_alloc_writes LabelHere ef (fvi,e1.jc_expr_region)) e1) e2 in
-	begin match (skip_shifts e1).jc_expr_node with
-	  | JCEvar vi ->
-	      if vi.jc_var_info_formal then 
-		add_through_param_writes ef vi 
-	      else ef	
-	  | _ -> ef
-	end
-    | JCSassign_var (vi, e) ->
+	expr (expr (add_field_alloc_writes LabelHere ef (fvi,e1#region)) e1) e2
+    | JCEassign_var (vi, e) ->
 	if vi.jc_var_info_static then
 	  add_global_writes (expr ef e) vi
 	else 
 	  expr ef e
-    | JCSreturn(_,e) -> expr ef e
-    | JCSlabel(_,s) -> statement ef s
-    | JCSpack(st, e, _) ->
+    | JCEreturn_void -> ef
+    | JCEreturn(_,e) -> expr ef e
+    | JCEpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Assert the invariants of the structure => need the reads of the invariants *)
 	let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
@@ -526,7 +479,7 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef tov in
 		   let ef = add_committed_writes ef tov in
 		   (* ...and field as reads *)
-		   add_field_reads LabelHere ef (FVfield fi,e.jc_expr_region)
+		   add_field_reads LabelHere ef (FVfield fi,e#region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
@@ -535,7 +488,7 @@ let rec statement ef s =
 	let ef = add_mutable_writes ef (JCtag st) in
         (* And that's all *)
 	ef
-    | JCSunpack(st, e, _) ->
+    | JCEunpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Change structure mutable => need mutable as reads and writes *)
 	let ef = add_mutable_reads ef (JCtag st) in
@@ -549,17 +502,17 @@ let rec statement ef s =
 		   let ef = add_committed_reads ef st in
 		   let ef = add_committed_writes ef st in
 		   (* ...and field as reads *)
-		   add_field_reads LabelHere ef (FVfield fi,e.jc_expr_region)
+		   add_field_reads LabelHere ef (FVfield fi,e#region)
 	       | _ -> ef)
 	  ef
 	  st.jc_struct_info_fields in
 	(* And that's all *)
 	ef
-    | JCSthrow (ei, Some e) -> 
+    | JCEthrow (ei, Some e) -> 
 	add_exception_effect (expr ef e) ei
-    | JCSthrow (ei, None) -> 
+    | JCEthrow (ei, None) -> 
 	add_exception_effect ef ei
-    | JCStry (s, catches, finally) -> 
+    | JCEtry (s, catches, finally) -> 
 	let ef = 
 	  List.fold_left 
 	    (fun ef (excep,_,s) -> 
@@ -567,24 +520,28 @@ let rec statement ef s =
 		 { ef with 
 		     jc_raises = ExceptionSet.remove excep ef.jc_raises }
 	       in
-	       statement ef s)
-	    (statement ef s) catches
+	       expr ef s)
+	    (expr ef s) catches
 	in
-	statement ef finally
-    | JCSloop (la, s) -> 
+	expr ef finally
+    | JCEloop (la, s) -> 
 	let ef = {ef with jc_reads = loop_annot ef.jc_reads la } in
-	statement ef s
-    | JCSif (e, s1, s2) -> 
-	statement (statement (expr ef e) s1) s2
-    | JCSdecl(vi,e,s) -> 
-	statement (Option_misc.fold_left expr ef e) s
-    | JCSassert((*_,*)a) -> 
+	expr ef s
+    | JCElet(vi,e,s) -> 
+	expr (Option_misc.fold_left expr ef e) s
+    | JCEassert((*_,*)a) -> 
 	{ ef with jc_reads = assertion ef.jc_reads a; }
-    | JCSblock l -> List.fold_left statement ef l
-    | JCSmatch(e, psl) ->
+    | JCEblock l -> List.fold_left expr ef l
+    | JCEmatch(e, psl) ->
 	let pef = List.fold_left pattern empty_effects (List.map fst psl) in
-	let ef = expr (List.fold_left statement ef (List.map snd psl)) e in
+	let ef = expr (List.fold_left expr ef (List.map snd psl)) e in
 	{ ef with jc_reads = ef_union ef.jc_reads pef }
+
+and loop_annot ef la = 
+  let ef = assertion ef la.jc_loop_invariant in
+  match la.jc_loop_variant with
+  | None -> ef
+  | Some t -> term ef t
 
 (* Conservatively consider location is both read and written. *)
 let rec location ef l =
@@ -595,14 +552,7 @@ let rec location ef l =
 	    if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
 	  in
 	  let ef = add_field_writes lab ef (fvi,location_set_region t) in
-	  let ef = add_field_reads lab ef (fvi,location_set_region t) in
-	  begin match skip_tloc_range t with
-	    | JCLSvar vi ->
-		if vi.jc_var_info_formal then 
-		  add_through_param_reads ef vi 
-		else ef
-	    | _ -> ef
-	  end
+	  add_field_reads lab ef (fvi,location_set_region t)
 	end
     | JCLvar vi ->
 	if vi.jc_var_info_static then
@@ -680,11 +630,11 @@ let logic_fun_effects f =
 
 let fun_effects fi =
   let (f, _, s, b) = 
-    Hashtbl.find Jc_norm.functions_table fi.jc_fun_info_tag 
+    Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag 
   in
   let ef = f.jc_fun_info_effects in
   let ef = spec ef s in
-  let ef = Option_misc.fold_left (List.fold_left statement) ef b in
+  let ef = Option_misc.fold_left ((*List.fold_left*) expr) ef b in
   let ef = List.fold_left parameter ef f.jc_fun_info_parameters in
     if same_feffects ef f.jc_fun_info_effects then ()
     else begin
@@ -719,7 +669,7 @@ let logic_effects funs =
 				   | FVfield fi -> fi.jc_field_info_name
 				   | FVvariant vi -> vi.jc_variant_info_name)
 				r.jc_reg_name
-				(print_list comma Jc_output.label) (LogicLabelSet.elements labels)  
+				(print_list comma Jc_output_misc.label) (LogicLabelSet.elements labels)  
 			   ))
 	 (mapElements f.jc_logic_info_effects.jc_effect_memories))
     funs

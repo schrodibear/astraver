@@ -1,5 +1,6 @@
 
-# AnnotationPolicy = WeakPre
+//# AnnotationPolicy = WeakPre
+# AnnotationPolicy = Invariants
 # AbstractDomain = Pol
 
 type char = {
@@ -7,8 +8,8 @@ type char = {
 }
 
 unit f(char[0..10] p) {
-  char[..] q = p;
-  integer i = 0;
+  var char[..] q = p;
+  var integer i = 0;
   invariant true; 
   // 0 <= i && i <= 10 && \offset_min(q) <= 0 && \offset_max(q) >= 10 - i;
   variant 10 - i;
