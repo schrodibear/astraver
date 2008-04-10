@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.30 2008-03-12 11:03:45 bardou Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.31 2008-04-10 11:43:11 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -415,6 +415,7 @@ let sets_of_vars f  =
 	      | (Tvar (v1), Tapp (_, tl, _)) ->
 		  let l' = Tvar(v1)::tl in 
 		  let v = vars_of_list qvars l' in
+		    (** TODO modifier mettre pure var ? **)
 		  vars := SS_set.union v !vars
 	      | (Tapp (_, tl,_), Tvar(v1)) ->
 		  let l' = Tvar(v1)::tl in 
@@ -428,6 +429,20 @@ let sets_of_vars f  =
 		  let v' = vars_of_list qvars tl' in
 		  vars := SS_set.union v !vars ; 
 		  vars := SS_set.union v' !vars ; 
+	      | (Tapp (_, tl, _), _) ->
+		  let v = vars_of_list qvars tl in
+		  vars := SS_set.union v !vars ; 	      
+	      | (Tvar(v1), _) -> 
+		  vars :=  SS_set.add
+		    (VarStringSet.singleton (PureVar (Ident.string v1)))
+		    !vars;
+	      | (_,Tapp (_, tl, _)) ->
+			let v = vars_of_list qvars tl in
+		  vars := SS_set.union v !vars ; 	      
+	      | (_,Tvar(v1)) -> 
+		  vars :=  SS_set.add
+		    (VarStringSet.singleton (PureVar (Ident.string v1)))
+		    !vars;
 	      | _ -> ()
 	  end  
       | Papp (_,tl,_) ->
@@ -580,17 +595,22 @@ let build_var_graph (l,c)=
     | Svar (id, v) :: q ->  mem  q 
     | Spred (_,p) :: q -> 
 	let v = sets_of_vars p in 	
-	(** for each set of variables, build the SCC
-	   of the set and computes the union of all the variables **)
+	  (** for each set of variables, build the SCC
+	      of the set and computes the union of all the variables **)
 	let v' = 
 	  SS_set.fold (fun s  t -> 
 			 update_v_g s ; 
 			 VarStringSet.union s t) v VarStringSet.empty in    
-	(** v' is the union of all the variables **)
+	  (** v' is the union of all the variables **)
 	let v' = VarStringSet.diff v' avoided_vars in
-	(** associates v' to the hypothesis **) 
-	Hashtbl.add hash_hyp_vars  p v';
-	mem  q   
+	  (** associates v' to the hypothesis **) 
+	  Hashtbl.add hash_hyp_vars  p v';
+	  if debug then 
+	    begin
+	      Format.printf " In hyps %a" Util.print_predicate p ; 
+	      display_str "vars " v';
+	    end;
+	  mem  q   
   in
   mem l 
     
@@ -1031,9 +1051,14 @@ let reduce_subst (l',g') =
 		Papp (id, [el1;el2], _) when is_eq id ->
 		  begin
 		    match (el1,el2) with 
-			(Tvar (v1), t2) ->
+			(Tvar (v1), t2)  | (t2, Tvar (v1)) ->
 			  let subst = subst_one v1 t2 in 			
-			  (subst::sl,fl)
+			    begin
+			      if debug then 
+				Format.printf "Removed  pred %a" Util.print_predicate p; 
+			    end;
+			    (subst::sl,fl)
+			      
 		      | _ -> 			  
 			  (sl, Spred(id,(many_substs_in_context sl p))::fl) 
 		  end 
@@ -1075,24 +1100,34 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	  with Not_found -> assert false 
 	in
 	let condition = match selection_strategy with
-	    All -> 
+	    All ->
+	      let v' = (removes_fresh_vars vars) in 
 	      VarStringSet.subset 
-		(removes_fresh_vars vars)
+		v'	
 		concl_rep 
+		(*** TODO UPDATE THIS ***)
+
 	  | One -> not (VarStringSet.is_empty 
 			  (VarStringSet.inter 
 			     (removes_fresh_vars vars)
 			     concl_rep))
 	in if condition then 
-	  (* the predicate symbols has to be in the list of symbols *)
-	  let preds_of_p  = get_preds_of p in 
-	  if abstr_subset_of_pdl preds_of_p pred_symb then 
-	    Spred (t,p):: filter q
-	  else 
-	    filter q
-	else
-	  filter q in  
-  filter l
+	    begin
+	      if debug then begin
+		display_str  "vars" vars;
+		display_str  "concl_rep" concl_rep;
+	      end;
+	      
+	      (* the predicate symbols has to be in the list of symbols *)
+	      let preds_of_p  = get_preds_of p in 
+		if abstr_subset_of_pdl preds_of_p pred_symb then 
+		  Spred (t,p):: filter q
+		else 
+		  filter q
+	    end
+	  else
+	    filter q in  
+    filter l
 
 
 let managesGoal id ax (hyps,concl) =
@@ -1139,24 +1174,6 @@ let reduce q decl=
   (** memorize the theory as a graph of predicate symbols **)
   build_pred_graph decl ;
   
-
-  (** manages goal **)
-(*  let q' =   match q with
-      Dgoal (loc, expl, id, s)  as ax ->
-        let (l,g) = s.Env.scheme_type in
-        let (l',g') = Util.intros [] g my_fresh_hyp in 
-	let l' = List.append l l' in 
-	
-	let (l',g') = reduce_subst (l',g')  in 
-	(** memorize hypotheses as a graph of variables**) 
-	build_var_graph (l',g');
-  
-	(** focus on goal **)
-	managesGoal id ax (l',g');
-
-
-    | _ -> failwith "goal awaited" in
-  q' *)
     
   (** manages goal **)
   let q' =   match q with
