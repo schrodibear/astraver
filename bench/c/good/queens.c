@@ -275,13 +275,13 @@ int t3(int a, int b, int c){
       @*/
     for (f=0; d=e&-e; e-=d) {
       //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(a)) 
-      col[k] = min_elt(d);            // ghost code 
-      k++;                            // ghost code
+      //@ ghost col[k] = min_elt(d);            // ghost code 
+      //@ ghost k++;                            // ghost code
       f += t3(a-d, (b+d)*2, (c+d)/2);
-      k--;                            // ghost code
+      //@ ghost k--;                            // ghost code
     }
-  else 
-    store_solution(); // ghost code
+  //@ ghost else 
+  //@ ghost   store_solution(); // ghost code
   return f;
 }
 

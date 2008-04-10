@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.mli,v 1.27 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: ltyping.mli,v 1.28 2008-04-10 14:43:57 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -65,6 +65,8 @@ val binders :
   Loc.position -> Label.t -> local_env -> 
   ptype_v binder list -> 
   type_v binder list * local_env
+
+val instance : Ident.t -> var_subst -> pure_type list
 
 (* errors *)
 

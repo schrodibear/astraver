@@ -13,6 +13,5 @@ Admitted.
 
 
 (*Why predicate*) Definition purse_inv  (balance_global:(memory Z global)) (alloc:alloc_table) (p:(pointer global))
-  := (* File "purse.c", line 6, characters 36-64 *) ((valid alloc p) /\
-     (acc balance_global p) >= 0).
+  := (* CADUCEUS_1 *) ((valid alloc p) /\ (acc balance_global p) >= 0).
 

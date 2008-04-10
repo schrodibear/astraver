@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.24 2008-04-01 14:46:05 hubert Exp $ i*)
+(*i $Id: pretty.ml,v 1.25 2008-04-10 14:43:57 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -41,6 +41,14 @@ let queue = Queue.create ()
 let reset () = Queue.clear queue
 
 let push_decl d = Queue.add d queue
+
+let iter f = Queue.iter f queue
+
+(****)
+let reset = Encoding.reset
+let push_decl = Encoding.push
+let iter = Encoding.iter
+(****)
 
 let ident = Ident.print
 
@@ -219,7 +227,7 @@ let decl fmt d =
 
 let decl fmt d = fprintf fmt "@[%a@]@\n@\n" decl d
 
-let print_file fmt = Queue.iter (decl fmt) queue
+let print_file fmt = iter (decl fmt) 
 
 let print_trace fmt id expl =
   fprintf fmt "[%s]@\n" id;

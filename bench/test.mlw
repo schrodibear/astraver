@@ -1,9 +1,11 @@
 
 parameter dst, src : int array
 
-let p (i:int) = 
+let p (src:int farray)  (dst:int array) (i : int) =
   begin
-    dst[i] := src[i];
-    src[i] := 0
+    dst[i] := access src i
   end
-  { dst[i] = src@[i] }
+  { dst[i] = access(src, i) }
+
+let f (t : int array) = 
+  p !t t

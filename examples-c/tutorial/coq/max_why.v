@@ -3,24 +3,24 @@
 
 Require Export max_spec_why.
 
-(* Why obligation from file "why/max.why", line 15, characters 4-184: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/max.c", line 2, characters 4-87: *)
 (*Why goal*) Lemma max_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
   forall (HW_1: x > y),
-  (* File "max.c", line 2, characters 4-87 *) ((x >= x /\ x >= y) /\
+  (* CADUCEUS_1 *) ((x >= x /\ x >= y) /\
   (forall (z:Z), (z >= x /\ z >= y -> z >= x))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/max.why", line 15, characters 4-184: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/max.c", line 2, characters 4-87: *)
 (*Why goal*) Lemma max_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
   forall (HW_2: x <= y),
-  (* File "max.c", line 2, characters 4-87 *) ((y >= x /\ y >= y) /\
+  (* CADUCEUS_1 *) ((y >= x /\ y >= y) /\
   (forall (z:Z), (z >= x /\ z >= y -> z >= y))).
 Proof.
 intuition.

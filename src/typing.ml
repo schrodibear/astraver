@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.135 2008-02-22 11:20:26 stoulsn Exp $ i*)
+(*i $Id: typing.ml,v 1.136 2008-04-10 14:43:57 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -500,9 +500,16 @@ let rec typef ?(userlabel="") lab env expr =
       (* 2. typing the function f *)
       let t_f, tyf = match f.pdesc with
 	| Svar x when is_logic_function x && not (is_local env x) ->
-	    let v = type_in_env env x in
-	    (* TODO: check number of args *)
-	    make_node toplabel (Expression (Tvar x)) v Effect.bottom, v
+	    begin match find_global_logic x with
+	      | vars, Function (tl,tr) ->
+		  (* TODO: check number of args *)
+		  let v = type_v_of_logic tl tr in
+		  let i = instance x vars in
+		  make_node 
+		    toplabel (Expression (Tapp (x, [], i))) v Effect.bottom, v
+	      | _, Predicate _ ->
+		  assert false
+	    end
 	| _ ->
 	    let tf = typef lab env f in
 	    tf, result_type tf

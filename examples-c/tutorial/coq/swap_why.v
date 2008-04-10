@@ -3,14 +3,14 @@
 
 Require Export swap_spec_why.
 
-(* Why obligation from file "why/swap.why", line 6, characters 14-113: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 5, characters 12-16: *)
 (*Why goal*) Lemma swap_impl_po_1 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
-                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (HW_1: (* CADUCEUS_1 *) ((valid_index alloc t i) /\
+                (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   (valid alloc result).
@@ -19,15 +19,15 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/swap.why", line 11, characters 40-165: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 6, characters 9-13: *)
 (*Why goal*) Lemma swap_impl_po_2 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
-                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (HW_1: (* CADUCEUS_1 *) ((valid_index alloc t i) /\
+                (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
@@ -42,15 +42,15 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/swap.why", line 11, characters 7-166: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 6, characters 2-6: *)
 (*Why goal*) Lemma swap_impl_po_3 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
-                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (HW_1: (* CADUCEUS_1 *) ((valid_index alloc t i) /\
+                (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
@@ -68,15 +68,15 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/swap.why", line 14, characters 6-41: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 7, characters 2-6: *)
 (*Why goal*) Lemma swap_impl_po_4 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
-                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (HW_1: (* CADUCEUS_1 *) ((valid_index alloc t i) /\
+                (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
@@ -100,15 +100,15 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/swap.why", line 17, characters 4-204: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 2, characters 12-52: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
   forall (t: (pointer global)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "swap.c", line 1, characters 13-51 *)
-                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (HW_1: (* CADUCEUS_1 *) ((valid_index alloc t i) /\
+                (valid_index alloc t j))),
   forall (result: (pointer global)),
   forall (HW_2: result = (shift t i)),
   forall (HW_3: (valid alloc result)),
@@ -129,9 +129,9 @@ Save.
   forall (HW_12: (valid alloc result4)),
   forall (intM_global1: (memory Z global)),
   forall (HW_13: intM_global1 = (upd intM_global0 result4 result0)),
-  (* File "swap.c", line 2, characters 12-52 *)
-  ((acc intM_global1 (shift t i)) = (acc intM_global (shift t j)) /\
-  (acc intM_global1 (shift t j)) = (acc intM_global (shift t i))).
+  (* CADUCEUS_2 *) ((acc intM_global1 (shift t i)) =
+  (acc intM_global (shift t j)) /\ (acc intM_global1 (shift t j)) =
+  (acc intM_global (shift t i))).
 Proof.
 (*
 intuition.

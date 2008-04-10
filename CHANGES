@@ -1,4 +1,7 @@
 
+  o fixed typing bug with polymorphic logic constants/functions used
+    in programs (resulted in bugs in -encoding sstrat)
+
 version 2.11, March 17th, 2008
 ==============================
   o fixed bug with --prune-hyp

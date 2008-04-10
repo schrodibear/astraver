@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.120 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: misc.ml,v 1.121 2008-04-10 14:43:57 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -254,7 +254,7 @@ let optasst_app f = option_app (asst_app f)
 let rec applist f l = match (f,l) with
   | f, [] -> f
   | Tvar id, l -> Tapp (id, l, [])
-  | Tapp (id, l, il), l' -> assert (il = []); Tapp (id, l @ l', [])
+  | Tapp (id, l, il), l' -> Tapp (id, l @ l', il)
   | (Tconst _ | Tderef _), _ -> assert false
   | Tnamed(lab,t),l -> Tnamed(lab,applist t l)
 

@@ -4,70 +4,69 @@
 
 Require Export purse_spec_why.
 
-(* Why obligation from file "why/purse.why", line 7, characters 57-80: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 12, characters 15-25: *)
 (*Why goal*) Lemma credit0_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 8, characters 13-35 *)
-                ((purse_inv balance_global alloc p) /\ s >= 0)),
+  forall (HW_1: (* CADUCEUS_14 *) ((purse_inv balance_global alloc p) /\ s >=
+                0)),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 9, characters 4-169: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 10, characters 12-62: *)
 (*Why goal*) Lemma credit0_impl_po_2 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 8, characters 13-35 *)
-                ((purse_inv balance_global alloc p) /\ s >= 0)),
+  forall (HW_1: (* CADUCEUS_14 *) ((purse_inv balance_global alloc p) /\ s >=
+                0)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result + s))),
-  (* File "purse.c", line 9, characters 12-62 *)
-  ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
-  ((acc balance_global p) + s)).
+  (* CADUCEUS_15 *) ((purse_inv balance_global0 alloc p) /\
+  (acc balance_global0 p) = ((acc balance_global p) + s)).
 Proof.
 unfold purse_inv; intuition; subst; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", line 19, characters 57-80: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 41, characters 15-25: *)
 (*Why goal*) Lemma credit_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc p) /\ s >= 0)),
+  forall (HW_1: (* CADUCEUS_4 *) ((purse_inv balance_global alloc p) /\ s >=
+                0)),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 21, characters 4-261: *)
+(* Why obligation from file "why/purse.why", line 21, characters 4-248: *)
 (*Why goal*) Lemma credit_impl_po_2 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc p) /\ s >= 0)),
+  forall (HW_1: (* CADUCEUS_4 *) ((purse_inv balance_global alloc p) /\ s >=
+                0)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result + s))),
-  ((* File "purse.c", line 38, characters 12-62 *)
-   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
-   ((acc balance_global p) + s)) /\
+  ((* CADUCEUS_6 *) ((purse_inv balance_global0 alloc p) /\
+   (acc balance_global0 p) = ((acc balance_global p) + s)) /\
+  (* CADUCEUS_5 *)
   (not_assigns alloc balance_global balance_global0 (pset_singleton p))).
 Proof.
 unfold purse_inv; intuition.
@@ -80,65 +79,61 @@ subst; intuition.
 apply (@pset_singleton_elim _ p0 p0); trivial.
 Save.
 
-(* Why obligation from file "why/purse.why", line 37, characters 32-68: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 57, characters 4-15: *)
 (*Why goal*) Lemma test1_impl_po_1 : 
   forall (p1: (pointer global)),
   forall (p2: (pointer global)),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 53, characters 13-55 *)
-                (((purse_inv balance_global alloc p1) /\
+  forall (HW_1: (* CADUCEUS_22 *) (((purse_inv balance_global alloc p1) /\
                 (purse_inv balance_global alloc p2)) /\ ~(p1 = p2))),
   (valid alloc p1).
 Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 38, characters 31-64: *)
+(* Why obligation from file "why/purse.why", line 39, characters 31-64: *)
 (*Why goal*) Lemma test1_impl_po_2 : 
   forall (p1: (pointer global)),
   forall (p2: (pointer global)),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 53, characters 13-55 *)
-                (((purse_inv balance_global alloc p1) /\
+  forall (HW_1: (* CADUCEUS_22 *) (((purse_inv balance_global alloc p1) /\
                 (purse_inv balance_global alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
   forall (balance_global0: (memory Z global)),
   forall (HW_3: balance_global0 = (upd balance_global p1 0)),
-  (* File "purse.c", line 36, characters 13-35 *)
-  (* File "purse.c", line 36, characters 13-35 *)
-  ((purse_inv balance_global0 alloc p2) /\ 100 >= 0).
+  (* CADUCEUS_4 *)
+  (* CADUCEUS_4 *) ((purse_inv balance_global0 alloc p2) /\ 100 >= 0).
 Proof.
 unfold purse_inv; intuition.
 subst.
 caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", line 46, characters 4-70: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 55, characters 12-24: *)
 (*Why goal*) Lemma test1_impl_po_3 : 
   forall (p1: (pointer global)),
   forall (p2: (pointer global)),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 53, characters 13-55 *)
-                (((purse_inv balance_global alloc p1) /\
+  forall (HW_1: (* CADUCEUS_22 *) (((purse_inv balance_global alloc p1) /\
                 (purse_inv balance_global alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
   forall (balance_global0: (memory Z global)),
   forall (HW_3: balance_global0 = (upd balance_global p1 0)),
-  forall (HW_4: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global0 alloc p2) /\ 100 >= 0)),
+  forall (HW_4: (* CADUCEUS_4 *) ((purse_inv balance_global0 alloc p2) /\
+                100 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_5: (* File "purse.c", line 38, characters 12-62 *)
-                ((purse_inv balance_global1 alloc p2) /\
+  forall (HW_5: (* CADUCEUS_6 *) ((purse_inv balance_global1 alloc p2) /\
                 (acc balance_global1 p2) = ((acc balance_global0 p2) + 100)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc balance_global0 balance_global1 (pset_singleton p2))),
   forall (HW_6: (valid alloc p1)),
   forall (result: Z),
   forall (HW_7: result = (acc balance_global1 p1)),
-  (* File "purse.c", line 54, characters 12-24 *) result = 0.
+  (* CADUCEUS_23 *) result = 0.
 Proof.
 unfold purse_inv; intuition.
 unfold purse_inv; intuition.
@@ -147,25 +142,22 @@ rewrite H8; intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", line 59, characters 36-69: *)
+(* Why obligation from file "why/purse.why", line 60, characters 36-69: *)
 (*Why goal*) Lemma test2_impl_po_1 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
   forall (result: (pointer global)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc0 result) /\
+  forall (HW_1: (* CADUCEUS_3 *) ((fresh alloc0 result) /\
                 (purse_inv balance_global alloc result)) /\
                 (alloc_extends alloc0 alloc)),
   forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
-  forall (HW_2: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc result0) /\
+  forall (HW_2: (* CADUCEUS_3 *) ((fresh alloc result0) /\
                 (purse_inv balance_global alloc1 result0)) /\
                 (alloc_extends alloc alloc1)),
-  (* File "purse.c", line 36, characters 13-35 *)
-  (* File "purse.c", line 36, characters 13-35 *)
-  ((purse_inv balance_global alloc1 result) /\ 100 >= 0).
+  (* CADUCEUS_4 *)
+  (* CADUCEUS_4 *) ((purse_inv balance_global alloc1 result) /\ 100 >= 0).
 Proof.
 intuition.
 red.
@@ -174,34 +166,32 @@ intuition.
 apply alloc_extends_valid with alloc0;auto.
 Save.
 
-(* Why obligation from file "why/purse.why", line 60, characters 35-68: *)
+(* Why obligation from file "why/purse.why", line 61, characters 35-68: *)
 (*Why goal*) Lemma test2_impl_po_2 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
   forall (result: (pointer global)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc0 result) /\
+  forall (HW_1: (* CADUCEUS_3 *) ((fresh alloc0 result) /\
                 (purse_inv balance_global alloc result)) /\
                 (alloc_extends alloc0 alloc)),
   forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
-  forall (HW_2: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc result0) /\
+  forall (HW_2: (* CADUCEUS_3 *) ((fresh alloc result0) /\
                 (purse_inv balance_global alloc1 result0)) /\
                 (alloc_extends alloc alloc1)),
-  forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
+  forall (HW_3: (* CADUCEUS_4 *) ((purse_inv balance_global alloc1 result) /\
+                100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_4: (* CADUCEUS_6 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global balance_global0 (pset_singleton result))),
-  (* File "purse.c", line 36, characters 13-35 *)
-  (* File "purse.c", line 36, characters 13-35 *)
-  ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0).
+  (* CADUCEUS_4 *)
+  (* CADUCEUS_4 *) ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0).
 Proof.
 unfold purse_inv; intuition.
 rewrite H11; intuition.
@@ -220,45 +210,44 @@ which contradicts H0.
 
 Save.
 
-(* Why obligation from file "why/purse.why", line 61, characters 35-69: *)
+(* Why obligation from file "why/purse.why", line 62, characters 35-69: *)
 (*Why goal*) Lemma test2_impl_po_3 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
   forall (result: (pointer global)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc0 result) /\
+  forall (HW_1: (* CADUCEUS_3 *) ((fresh alloc0 result) /\
                 (purse_inv balance_global alloc result)) /\
                 (alloc_extends alloc0 alloc)),
   forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
-  forall (HW_2: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc result0) /\
+  forall (HW_2: (* CADUCEUS_3 *) ((fresh alloc result0) /\
                 (purse_inv balance_global alloc1 result0)) /\
                 (alloc_extends alloc alloc1)),
-  forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
+  forall (HW_3: (* CADUCEUS_4 *) ((purse_inv balance_global alloc1 result) /\
+                100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_4: (* CADUCEUS_6 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global balance_global0 (pset_singleton result))),
-  forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
+  forall (HW_5: (* CADUCEUS_4 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_6: (* CADUCEUS_6 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global0 balance_global1 (pset_singleton
                                                          result0))),
-  (* File "purse.c", line 44, characters 13-49 *)
-  (* File "purse.c", line 44, characters 13-49 *)
-  ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\ 50 <=
-  (acc balance_global1 result)).
+  (* CADUCEUS_9 *)
+  (* CADUCEUS_9 *) ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
+  50 <= (acc balance_global1 result)).
 Proof.
 unfold purse_inv; intuition.
 rewrite H18; intuition.
@@ -273,114 +262,116 @@ generalize (fresh_not_valid _ _ _ H7);intuition.
 (* again we need p1 <> p2 *)
 Save.
 
-(* Why obligation from file "why/purse.why", line 62, characters 35-70: *)
+(* Why obligation from file "why/purse.why", line 63, characters 35-70: *)
 (*Why goal*) Lemma test2_impl_po_4 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
   forall (result: (pointer global)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc0 result) /\
+  forall (HW_1: (* CADUCEUS_3 *) ((fresh alloc0 result) /\
                 (purse_inv balance_global alloc result)) /\
                 (alloc_extends alloc0 alloc)),
   forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
-  forall (HW_2: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc result0) /\
+  forall (HW_2: (* CADUCEUS_3 *) ((fresh alloc result0) /\
                 (purse_inv balance_global alloc1 result0)) /\
                 (alloc_extends alloc alloc1)),
-  forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
+  forall (HW_3: (* CADUCEUS_4 *) ((purse_inv balance_global alloc1 result) /\
+                100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_4: (* CADUCEUS_6 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global balance_global0 (pset_singleton result))),
-  forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
+  forall (HW_5: (* CADUCEUS_4 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_6: (* CADUCEUS_6 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global0 balance_global1 (pset_singleton
                                                          result0))),
-  forall (HW_7: (* File "purse.c", line 44, characters 13-49 *)
+  forall (HW_7: (* CADUCEUS_9 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
+  forall (HW_8: (* CADUCEUS_11 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
+                (* CADUCEUS_10 *)
                 (not_assigns
                  alloc1 balance_global1 balance_global2 (pset_singleton
                                                          result))),
-  (* File "purse.c", line 44, characters 13-49 *)
-  (* File "purse.c", line 44, characters 13-49 *)
-  ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\ 100 <=
-  (acc balance_global2 result0)).
+  (* CADUCEUS_9 *)
+  (* CADUCEUS_9 *) ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
+  100 <= (acc balance_global2 result0)).
 Proof.
 unfold purse_inv; intuition.
 Admitted.
 
-(* Why obligation from file "why/purse.why", line 65, characters 30-54: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 77, characters 11-22: *)
 (*Why goal*) Lemma test2_impl_po_5 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
   forall (result: (pointer global)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc0 result) /\
+  forall (HW_1: (* CADUCEUS_3 *) ((fresh alloc0 result) /\
                 (purse_inv balance_global alloc result)) /\
                 (alloc_extends alloc0 alloc)),
   forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
-  forall (HW_2: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc result0) /\
+  forall (HW_2: (* CADUCEUS_3 *) ((fresh alloc result0) /\
                 (purse_inv balance_global alloc1 result0)) /\
                 (alloc_extends alloc alloc1)),
-  forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
+  forall (HW_3: (* CADUCEUS_4 *) ((purse_inv balance_global alloc1 result) /\
+                100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_4: (* CADUCEUS_6 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global balance_global0 (pset_singleton result))),
-  forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
+  forall (HW_5: (* CADUCEUS_4 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_6: (* CADUCEUS_6 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global0 balance_global1 (pset_singleton
                                                          result0))),
-  forall (HW_7: (* File "purse.c", line 44, characters 13-49 *)
+  forall (HW_7: (* CADUCEUS_9 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
+  forall (HW_8: (* CADUCEUS_11 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
+                (* CADUCEUS_10 *)
                 (not_assigns
                  alloc1 balance_global1 balance_global2 (pset_singleton
                                                          result))),
-  forall (HW_9: (* File "purse.c", line 44, characters 13-49 *)
+  forall (HW_9: (* CADUCEUS_9 *)
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
   forall (balance_global3: (memory Z global)),
-  forall (HW_10: (* File "purse.c", line 46, characters 12-62 *)
+  forall (HW_10: (* CADUCEUS_11 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
                  ((acc balance_global2 result0) - 100)) /\
+                 (* CADUCEUS_10 *)
                  (not_assigns
                   alloc1 balance_global2 balance_global3 (pset_singleton
                                                           result0))),
@@ -389,60 +380,62 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 66, characters 34-58: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 77, characters 25-36: *)
 (*Why goal*) Lemma test2_impl_po_6 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
   forall (result: (pointer global)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc0 result) /\
+  forall (HW_1: (* CADUCEUS_3 *) ((fresh alloc0 result) /\
                 (purse_inv balance_global alloc result)) /\
                 (alloc_extends alloc0 alloc)),
   forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
-  forall (HW_2: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc result0) /\
+  forall (HW_2: (* CADUCEUS_3 *) ((fresh alloc result0) /\
                 (purse_inv balance_global alloc1 result0)) /\
                 (alloc_extends alloc alloc1)),
-  forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
+  forall (HW_3: (* CADUCEUS_4 *) ((purse_inv balance_global alloc1 result) /\
+                100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_4: (* CADUCEUS_6 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global balance_global0 (pset_singleton result))),
-  forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
+  forall (HW_5: (* CADUCEUS_4 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_6: (* CADUCEUS_6 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global0 balance_global1 (pset_singleton
                                                          result0))),
-  forall (HW_7: (* File "purse.c", line 44, characters 13-49 *)
+  forall (HW_7: (* CADUCEUS_9 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
+  forall (HW_8: (* CADUCEUS_11 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
+                (* CADUCEUS_10 *)
                 (not_assigns
                  alloc1 balance_global1 balance_global2 (pset_singleton
                                                          result))),
-  forall (HW_9: (* File "purse.c", line 44, characters 13-49 *)
+  forall (HW_9: (* CADUCEUS_9 *)
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
   forall (balance_global3: (memory Z global)),
-  forall (HW_10: (* File "purse.c", line 46, characters 12-62 *)
+  forall (HW_10: (* CADUCEUS_11 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
                  ((acc balance_global2 result0) - 100)) /\
+                 (* CADUCEUS_10 *)
                  (not_assigns
                   alloc1 balance_global2 balance_global3 (pset_singleton
                                                           result0))),
@@ -454,60 +447,62 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 75, characters 4-111: *)
+(* Why obligation from file "why/purse.why", line 76, characters 4-73: *)
 (*Why goal*) Lemma test2_impl_po_7 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
   forall (result: (pointer global)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc0 result) /\
+  forall (HW_1: (* CADUCEUS_3 *) ((fresh alloc0 result) /\
                 (purse_inv balance_global alloc result)) /\
                 (alloc_extends alloc0 alloc)),
   forall (result0: (pointer global)),
   forall (alloc1: alloc_table),
-  forall (HW_2: (* File "purse.c", line 65, characters 29-66 *)
-                ((fresh alloc result0) /\
+  forall (HW_2: (* CADUCEUS_3 *) ((fresh alloc result0) /\
                 (purse_inv balance_global alloc1 result0)) /\
                 (alloc_extends alloc alloc1)),
-  forall (HW_3: (* File "purse.c", line 36, characters 13-35 *)
-                ((purse_inv balance_global alloc1 result) /\ 100 >= 0)),
+  forall (HW_3: (* CADUCEUS_4 *) ((purse_inv balance_global alloc1 result) /\
+                100 >= 0)),
   forall (balance_global0: (memory Z global)),
-  forall (HW_4: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_4: (* CADUCEUS_6 *)
                 ((purse_inv balance_global0 alloc1 result) /\
                 (acc balance_global0 result) =
                 ((acc balance_global result) + 100)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global balance_global0 (pset_singleton result))),
-  forall (HW_5: (* File "purse.c", line 36, characters 13-35 *)
+  forall (HW_5: (* CADUCEUS_4 *)
                 ((purse_inv balance_global0 alloc1 result0) /\ 200 >= 0)),
   forall (balance_global1: (memory Z global)),
-  forall (HW_6: (* File "purse.c", line 38, characters 12-62 *)
+  forall (HW_6: (* CADUCEUS_6 *)
                 ((purse_inv balance_global1 alloc1 result0) /\
                 (acc balance_global1 result0) =
                 ((acc balance_global0 result0) + 200)) /\
+                (* CADUCEUS_5 *)
                 (not_assigns
                  alloc1 balance_global0 balance_global1 (pset_singleton
                                                          result0))),
-  forall (HW_7: (* File "purse.c", line 44, characters 13-49 *)
+  forall (HW_7: (* CADUCEUS_9 *)
                 ((purse_inv balance_global1 alloc1 result) /\ 0 <= 50 /\
                 50 <= (acc balance_global1 result))),
   forall (balance_global2: (memory Z global)),
-  forall (HW_8: (* File "purse.c", line 46, characters 12-62 *)
+  forall (HW_8: (* CADUCEUS_11 *)
                 ((purse_inv balance_global2 alloc1 result) /\
                 (acc balance_global2 result) =
                 ((acc balance_global1 result) - 50)) /\
+                (* CADUCEUS_10 *)
                 (not_assigns
                  alloc1 balance_global1 balance_global2 (pset_singleton
                                                          result))),
-  forall (HW_9: (* File "purse.c", line 44, characters 13-49 *)
+  forall (HW_9: (* CADUCEUS_9 *)
                 ((purse_inv balance_global2 alloc1 result0) /\ 0 <= 100 /\
                 100 <= (acc balance_global2 result0))),
   forall (balance_global3: (memory Z global)),
-  forall (HW_10: (* File "purse.c", line 46, characters 12-62 *)
+  forall (HW_10: (* CADUCEUS_11 *)
                  ((purse_inv balance_global3 alloc1 result0) /\
                  (acc balance_global3 result0) =
                  ((acc balance_global2 result0) - 100)) /\
+                 (* CADUCEUS_10 *)
                  (not_assigns
                   alloc1 balance_global2 balance_global3 (pset_singleton
                                                           result0))),
@@ -517,7 +512,7 @@ Save.
   forall (HW_13: (valid alloc1 result0)),
   forall (result2: Z),
   forall (HW_14: result2 = (acc balance_global3 result0)),
-  ((* File "purse.c", line 69, characters 12-26 *) (result1 + result2) = 150 /\
+  ((* CADUCEUS_26 *) (result1 + result2) = 150 /\
   (alloc_extends alloc0 alloc1)).
 Proof.
 intuition.
@@ -536,76 +531,71 @@ rewrite H12.
 rewrite H8;intuition.
 Admitted.
 
-(* Why obligation from file "why/purse.why", line 85, characters 57-80: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 19, characters 15-25: *)
 (*Why goal*) Lemma withdraw0_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 15, characters 13-49 *)
-                ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
-                (acc balance_global p))),
+  forall (HW_1: (* CADUCEUS_18 *) ((purse_inv balance_global alloc p) /\ 0 <=
+                s /\ s <= (acc balance_global p))),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 87, characters 4-170: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 17, characters 12-62: *)
 (*Why goal*) Lemma withdraw0_impl_po_2 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 15, characters 13-49 *)
-                ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
-                (acc balance_global p))),
+  forall (HW_1: (* CADUCEUS_18 *) ((purse_inv balance_global alloc p) /\ 0 <=
+                s /\ s <= (acc balance_global p))),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result - s))),
-  (* File "purse.c", line 16, characters 12-62 *)
-  ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
-  ((acc balance_global p) - s)).
+  (* CADUCEUS_19 *) ((purse_inv balance_global0 alloc p) /\
+  (acc balance_global0 p) = ((acc balance_global p) - s)).
 Proof.
 unfold purse_inv; intuition.
 subst; caduceus.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", line 98, characters 57-80: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 49, characters 15-25: *)
 (*Why goal*) Lemma withdraw_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 44, characters 13-49 *)
-                ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
-                (acc balance_global p))),
+  forall (HW_1: (* CADUCEUS_9 *) ((purse_inv balance_global alloc p) /\ 0 <=
+                s /\ s <= (acc balance_global p))),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 100, characters 4-261: *)
+(* Why obligation from file "why/purse.why", line 102, characters 4-250: *)
 (*Why goal*) Lemma withdraw_impl_po_2 : 
   forall (p: (pointer global)),
   forall (s: Z),
   forall (alloc: alloc_table),
   forall (balance_global: (memory Z global)),
-  forall (HW_1: (* File "purse.c", line 44, characters 13-49 *)
-                ((purse_inv balance_global alloc p) /\ 0 <= s /\ s <=
-                (acc balance_global p))),
+  forall (HW_1: (* CADUCEUS_9 *) ((purse_inv balance_global alloc p) /\ 0 <=
+                s /\ s <= (acc balance_global p))),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
   forall (HW_3: result = (acc balance_global p)),
   forall (HW_4: (valid alloc p)),
   forall (balance_global0: (memory Z global)),
   forall (HW_5: balance_global0 = (upd balance_global p (result - s))),
-  ((* File "purse.c", line 46, characters 12-62 *)
-   ((purse_inv balance_global0 alloc p) /\ (acc balance_global0 p) =
-   ((acc balance_global p) - s)) /\
+  ((* CADUCEUS_11 *) ((purse_inv balance_global0 alloc p) /\
+   (acc balance_global0 p) = ((acc balance_global p) - s)) /\
+  (* CADUCEUS_10 *)
   (not_assigns alloc balance_global balance_global0 (pset_singleton p))).
 Proof.
 unfold purse_inv; intuition.

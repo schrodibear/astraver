@@ -3,5 +3,6 @@ load_printer "ident.cmo"
 install_printer Ident.dbprint
 load_printer "effect.cmo"
 install_printer Effect.print
-set arguments --coq -fast-wp ../bench/test.mlw
+set arguments -no-prelude -smtlib ../bug.why
+
 

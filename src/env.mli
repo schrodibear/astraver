@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.51 2008-04-01 14:46:05 hubert Exp $ i*)
+(*i $Id: env.mli,v 1.52 2008-04-10 14:43:57 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -127,6 +127,8 @@ val is_rec : Ident.t -> local_env -> bool
 
 val add_logic : Ident.t -> pure_type -> local_env -> local_env
 val find_logic : Ident.t -> local_env -> pure_type
+
+val type_v_of_logic : pure_type list -> pure_type -> type_v
 
 (* type variables and generalization/specialization *)
 

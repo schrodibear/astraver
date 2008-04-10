@@ -3,22 +3,22 @@
 
 Require Export binary_search_spec_why.
 
-(* Why obligation from file "why/binary_search.why", line 24, characters 18-606: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
 (*Why goal*) Lemma binary_search_impl_po_1 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
                    (acc intM_global (shift t k1)) <=
                    (acc intM_global (shift t k2))))))),
-  (* File "binary_search.c", line 14, characters 6-147 *) ((((0 <= 0 /\
-  (n - 1) <= (n - 1)) /\ (Zopp 1) <= (Zopp 1) /\ (Zopp 1) <= (n - 1)) /\
+  (* CADUCEUS_4 *) ((((0 <= 0 /\ (n - 1) <= (n - 1)) /\ (Zopp 1) <= (Zopp
+  1) /\ (Zopp 1) <= (n - 1)) /\
   (((Zopp 1) = (Zopp 1) ->
     (forall (k:Z),
      (0 <= k /\ k < n ->
@@ -36,8 +36,8 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -46,9 +46,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -60,15 +59,15 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 41, characters 21-130: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 21, characters 15-26: *)
 (*Why goal*) Lemma binary_search_impl_po_3 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -77,9 +76,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -89,23 +87,21 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  (* File "binary_search.c", line 21, characters 15-26 *)
-  (* File "binary_search.c", line 21, characters 15-26 *) (l <= result /\
-  result <= u).
+  (* CADUCEUS_7 *) (* CADUCEUS_7 *) (l <= result /\ result <= u).
 Proof.
 intros.
 generalize (mean_1 l u); intuition.
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 44, characters 41-167: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 22, characters 8-12: *)
 (*Why goal*) Lemma binary_search_impl_po_4 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -114,9 +110,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -126,8 +121,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
-                result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   (valid alloc result0).
@@ -137,15 +131,15 @@ subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 24, characters 18-606: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
 (*Why goal*) Lemma binary_search_impl_po_5 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -154,9 +148,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -166,8 +159,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
-                result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -176,8 +168,8 @@ Save.
   forall (HW_10: result1 < v),
   forall (l0: Z),
   forall (HW_11: l0 = (result + 1)),
-  (* File "binary_search.c", line 14, characters 6-147 *) ((((0 <= l0 /\ u <=
-  (n - 1)) /\ (Zopp 1) <= p /\ p <= (n - 1)) /\
+  (* CADUCEUS_4 *) ((((0 <= l0 /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
+  (n - 1)) /\
   ((p = (Zopp 1) ->
     (forall (k:Z),
      (0 <= k /\ k < n ->
@@ -201,8 +193,8 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -211,9 +203,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -223,8 +214,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
-                result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -240,15 +230,15 @@ subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 50, characters 42-169: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 24, characters 13-17: *)
 (*Why goal*) Lemma binary_search_impl_po_7 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -257,9 +247,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -269,8 +258,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
-                result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -284,15 +272,15 @@ Proof.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 24, characters 18-606: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
 (*Why goal*) Lemma binary_search_impl_po_8 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -301,9 +289,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -313,8 +300,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
-                result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -329,8 +315,8 @@ Save.
   forall (HW_16: result3 > v),
   forall (u0: Z),
   forall (HW_17: u0 = (result - 1)),
-  (* File "binary_search.c", line 14, characters 6-147 *) ((((0 <= l /\ u0 <=
-  (n - 1)) /\ (Zopp 1) <= p /\ p <= (n - 1)) /\
+  (* CADUCEUS_4 *) ((((0 <= l /\ u0 <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
+  (n - 1)) /\
   ((p = (Zopp 1) ->
     (forall (k:Z),
      (0 <= k /\ k < n ->
@@ -348,8 +334,8 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -358,9 +344,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -370,8 +355,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
-                result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -392,15 +376,15 @@ intuition.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 72, characters 4-302: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 8, characters 4-102: *)
 (*Why goal*) Lemma binary_search_impl_po_10 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -409,9 +393,8 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
@@ -421,8 +404,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* File "binary_search.c", line 21, characters 15-26 *) (l <=
-                result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -437,23 +419,23 @@ Save.
   forall (HW_18: result3 <= v),
   forall (p0: Z),
   forall (HW_19: p0 = result),
-  (* File "binary_search.c", line 8, characters 4-102 *) (p0 >= 0 /\
-  (acc intM_global (shift t p0)) = v \/ p0 = (Zopp 1) /\
+  (* CADUCEUS_3 *) (p0 >= 0 /\ (acc intM_global (shift t p0)) = v \/ p0 =
+  (Zopp 1) /\
   (forall (k:Z), (0 <= k /\ k < n -> (acc intM_global (shift t k)) <> v))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 72, characters 4-302: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 8, characters 4-102: *)
 (*Why goal*) Lemma binary_search_impl_po_11 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "binary_search.c", line 5, characters 4-105 *) ((n >=
-                0 /\ (valid_range alloc t 0 (n - 1))) /\
+  forall (HW_1: (* CADUCEUS_2 *) ((n >= 0 /\
+                (valid_range alloc t 0 (n - 1))) /\
                 (forall (k1:Z),
                  (forall (k2:Z),
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
@@ -462,17 +444,16 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* File "binary_search.c", line 14, characters 6-147 *)
-                ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
-                (n - 1)) /\
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
+                p /\ p <= (n - 1)) /\
                 ((p = (Zopp 1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
                 ((p >= 0 -> (acc intM_global (shift t p)) = v)))),
   forall (HW_20: l > u),
-  (* File "binary_search.c", line 8, characters 4-102 *) (p >= 0 /\
-  (acc intM_global (shift t p)) = v \/ p = (Zopp 1) /\
+  (* CADUCEUS_3 *) (p >= 0 /\ (acc intM_global (shift t p)) = v \/ p = (Zopp
+  1) /\
   (forall (k:Z), (0 <= k /\ k < n -> (acc intM_global (shift t k)) <> v))).
 Proof.
 intuition.

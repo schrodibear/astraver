@@ -160,7 +160,9 @@ let plunge fv term pt =
 	    try List.assoc var.tag fv
 	    with Not_found ->
 	      let s = string_of_int var.tag in
-		(print_endline ("[plunge] unknown vartype : "^s); s)
+		(print_endline ("[plunge] unknown vartype : "^s); 
+		 Format.eprintf "term = %a@." Util.print_term term;
+		 s)
 	  in
 	    Tvar (Ident.create t)
       | PTvar {type_val = Some pt} -> leftt pt
@@ -339,7 +341,9 @@ let rec push d =
       if debug then Printf.printf "Encoding goal %s, %s...\n" ident (f2s loc);
       let cpt = ref 0 in
       let fv = Env.Vset.fold
-	(fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
+	(fun tv acc -> 
+	  cpt := !cpt + 1; 
+	  (tv.tag, tvar^(string_of_int !cpt))::acc)
 	(s_sch.Env.scheme_vars) [] in
 	if debug then
 	  (Printf.printf "Goal environment :\n";

@@ -3,32 +3,30 @@
 
 Require Export search_spec_why.
 
-(* Why obligation from file "why/search.why", line 15, characters 14-243: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 8, characters 16-64: *)
 (*Why goal*) Lemma index_impl_po_1 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "search.c", line 1, characters 13-34 *)
-                (valid_range alloc t 0 (n - 1))),
-  (* File "search.c", line 8, characters 16-64 *) (0 <= 0 /\
+  forall (HW_1: (* CADUCEUS_1 *) (valid_range alloc t 0 (n - 1))),
+  (* CADUCEUS_3 *) (0 <= 0 /\
   (forall (k:Z), (0 <= k /\ k < 0 -> (acc intM_global (shift t k)) <> v))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", line 21, characters 34-154: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 11, characters 8-12: *)
 (*Why goal*) Lemma index_impl_po_2 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "search.c", line 1, characters 13-34 *)
-                (valid_range alloc t 0 (n - 1))),
+  forall (HW_1: (* CADUCEUS_1 *) (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (HW_2: (* File "search.c", line 8, characters 16-64 *) (0 <= i /\
+  forall (HW_2: (* CADUCEUS_3 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc intM_global (shift t k)) <> v)))),
   forall (HW_3: i < n),
@@ -39,17 +37,16 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 38, characters 4-313: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 3, characters 4-105: *)
 (*Why goal*) Lemma index_impl_po_3 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "search.c", line 1, characters 13-34 *)
-                (valid_range alloc t 0 (n - 1))),
+  forall (HW_1: (* CADUCEUS_1 *) (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (HW_2: (* File "search.c", line 8, characters 16-64 *) (0 <= i /\
+  forall (HW_2: (* CADUCEUS_3 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc intM_global (shift t k)) <> v)))),
   forall (HW_3: i < n),
@@ -59,7 +56,7 @@ Save.
   forall (result0: Z),
   forall (HW_6: result0 = (acc intM_global result)),
   forall (HW_7: result0 = v),
-  (* File "search.c", line 3, characters 4-105 *)
+  (* CADUCEUS_2 *)
   (((0 <= i /\ i < n -> (acc intM_global (shift t i)) = v)) /\
   ((i = n ->
     (forall (i:Z), (0 <= i /\ i < n -> (acc intM_global (shift t i)) <> v))))).
@@ -68,17 +65,16 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 15, characters 14-243: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 8, characters 16-64: *)
 (*Why goal*) Lemma index_impl_po_4 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "search.c", line 1, characters 13-34 *)
-                (valid_range alloc t 0 (n - 1))),
+  forall (HW_1: (* CADUCEUS_1 *) (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (HW_2: (* File "search.c", line 8, characters 16-64 *) (0 <= i /\
+  forall (HW_2: (* CADUCEUS_3 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc intM_global (shift t k)) <> v)))),
   forall (HW_3: i < n),
@@ -90,7 +86,7 @@ Save.
   forall (HW_8: result0 <> v),
   forall (i0: Z),
   forall (HW_9: i0 = (i + 1)),
-  (* File "search.c", line 8, characters 16-64 *) (0 <= i0 /\
+  (* CADUCEUS_3 *) (0 <= i0 /\
   (forall (k:Z), (0 <= k /\ k < i0 -> (acc intM_global (shift t k)) <> v))).
 Proof.
 intuition.
@@ -101,17 +97,16 @@ apply (H0 k); auto.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 20, characters 20-33: *)
+(* Why obligation from file "why/search.why", line 19, characters 20-33: *)
 (*Why goal*) Lemma index_impl_po_5 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "search.c", line 1, characters 13-34 *)
-                (valid_range alloc t 0 (n - 1))),
+  forall (HW_1: (* CADUCEUS_1 *) (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (HW_2: (* File "search.c", line 8, characters 16-64 *) (0 <= i /\
+  forall (HW_2: (* CADUCEUS_3 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc intM_global (shift t k)) <> v)))),
   forall (HW_3: i < n),
@@ -128,21 +123,20 @@ Proof.
 intuition.
 apply H0 with i0; auto with *.
 Save.
-(* Why obligation from file "why/search.why", line 38, characters 4-313: *)
+(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 3, characters 4-105: *)
 (*Why goal*) Lemma index_impl_po_6 : 
   forall (t: (pointer global)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intM_global: (memory Z global)),
-  forall (HW_1: (* File "search.c", line 1, characters 13-34 *)
-                (valid_range alloc t 0 (n - 1))),
+  forall (HW_1: (* CADUCEUS_1 *) (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (HW_2: (* File "search.c", line 8, characters 16-64 *) (0 <= i /\
+  forall (HW_2: (* CADUCEUS_3 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc intM_global (shift t k)) <> v)))),
   forall (HW_10: i >= n),
-  (* File "search.c", line 3, characters 4-105 *)
+  (* CADUCEUS_2 *)
   (((0 <= i /\ i < n -> (acc intM_global (shift t i)) = v)) /\
   ((i = n ->
     (forall (i:Z), (0 <= i /\ i < n -> (acc intM_global (shift t i)) <> v))))).
