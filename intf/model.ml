@@ -186,7 +186,7 @@ let z3SS = {
   }
 
 let provers = [
-  ergo; ergoSS; simplify; z3SS ; yicesSStrat; cvc3; graph; 
+  ergo; (*ergoSS;*) simplify; z3SS ; yicesSStrat; cvc3; graph; 
   (*simplify_sstrat;*) simplify_strat; yices; rvsat; 
   zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
   harvey; cvcl]

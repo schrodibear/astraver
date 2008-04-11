@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.25 2008-04-10 14:43:57 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.26 2008-04-11 13:31:54 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -44,11 +44,11 @@ let push_decl d = Queue.add d queue
 
 let iter f = Queue.iter f queue
 
-(****)
+(*
 let reset = Encoding.reset
 let push_decl = Encoding.push
 let iter = Encoding.iter
-(****)
+*)
 
 let ident = Ident.print
 
