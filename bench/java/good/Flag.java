@@ -78,7 +78,7 @@ class Flag {
     }
 
     /*@ behavior sorts:
-      @   // assigns t[..];
+      @   assigns t[..];
       @   ensures 
       @     (\exists int b r; is_monochrome(t,0,b,BLUE) &&
       @                       is_monochrome(t,b,r,WHITE) &&

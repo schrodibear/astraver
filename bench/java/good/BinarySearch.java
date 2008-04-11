@@ -67,7 +67,7 @@ class BinarySearch {
 	int l = 0, u = n-1;
 	/*@ loop_invariant 
 	  @   0 <= l && u <= n-1 && 
-	  @   \forall int k; 0 <= k < n ==> t[k] == v ==> l <= k <= u;
+	  @   \forall integer k; 0 <= k < n ==> t[k] == v ==> l <= k <= u;
 	  @ decreases 
 	  @   u-l ;
 	  @*/
@@ -95,7 +95,7 @@ class BinarySearch {
 	int l = 0, u = t.length - 1;
 	/*@ loop_invariant 
 	  @   0 <= l && u <= t.length - 1 && 
-	  @   \forall int k; 0 <= k < t.length ==> t[k] == v ==> l <= k <= u;
+	  @   \forall integer k; 0 <= k < t.length ==> t[k] == v ==> l <= k <= u;
 	  @ decreases 
 	  @   u-l ;
 	  @*/
@@ -122,7 +122,7 @@ class BinarySearch {
       @   ensures \result < 0 ==> (\forall integer k; 
       @     0 <= k < t.length ==> t[k] != v);
       @*/
-    public int binary_search(int v) {
+    public int binary_search3(int v) {
 	int l = 0, u = t.length-1;
 	/*@ loop_invariant 
 	  @   0 <= l && u <= t.length-1 && 
@@ -131,7 +131,7 @@ class BinarySearch {
 	  @ decreases u-l ;
 	  @*/
 	while (l <= u ) {
-	    int m = (l + (u-l)) / 2;
+	    int m = l + (u-l) / 2;
 	    if (t[m] < v) l = m + 1; 
 	    else if (t[m] > v) u = m - 1;
 	    else return m;
