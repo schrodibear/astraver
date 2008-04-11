@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.130 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.131 2008-04-11 12:38:34 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -952,9 +952,9 @@ let rec location_set logic_label t =
 	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set logic_label t1 in
-		  let t2' = term t2 in
-		  let t3' = term t3 in
-		  let shift = mkrange ~locations:t1' ~left:t2' ~right:t3' () in
+		  let t2' = Option_misc.map term t2 in
+		  let t3' = Option_misc.map term t3 in
+		  let shift = mkrange ~locations:t1' ?left:t2' ?right:t3' () in
 		  begin match logic_label with
 		    | None -> assert false
 		    | Some lab ->
@@ -1020,9 +1020,9 @@ let location logic_label t =
 	      | JTYarray (_, ty) ->
 		  let st = get_array_struct t1.java_term_loc ty in
 		  let t1' = location_set logic_label t1 in
-		  let t2' = term t2 in
-		  let t3' = term t3 in
-		  let shift = mkrange ~locations:t1' ~left:t2' ~right:t3' () in
+		  let t2' = Option_misc.map term t2 in
+		  let t3' = Option_misc.map term t3 in
+		  let shift = mkrange ~locations:t1' ?left:t2' ?right:t3' () in
 		  begin match logic_label with
 		    | None -> assert false
 		    | Some lab ->

@@ -2,6 +2,8 @@
 
 Note: These are the changes for Krakatoa.
 
+o assigns clause now correctly typed in the post-state
+o array ranges in assigns clause: now correctly parse [..], [..n] and [n..]
 o support for model fields (in interfaces)
 o support for user-defined logic types
 o partial support for Strings

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.35 2008-04-03 15:16:31 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.36 2008-04-11 12:38:34 marche Exp $ *)
 
 open Java_env
 
@@ -49,7 +49,7 @@ type term_node =
     | JTstatic_field_access of java_type_info * java_field_info
     | JTarray_length of term 
     | JTarray_access of term * term
-    | JTarray_range of term * term * term
+    | JTarray_range of term * term option * term option
     | JTcast of java_type * term
 
 and term =

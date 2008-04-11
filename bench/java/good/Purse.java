@@ -42,7 +42,7 @@ public class Purse {
     //@ invariant balance_non_negative: balance >= 0;
 
     /*@ requires true;
-      @ assigns \nothing;
+      @ assigns balance;
       @ ensures balance == 0;
       @*/
     public Purse() {

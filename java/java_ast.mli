@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.34 2008-04-04 16:10:32 nrousset Exp $
+$Id: java_ast.mli,v 1.35 2008-04-11 12:38:34 marche Exp $
 
 ***************************************************************************)
 
@@ -113,7 +113,7 @@ and pexpr_node =
   | JPEnew_array of type_expr * pexpr list 
       (*r type, explicit dimensions *)
   | JPEarray_access of pexpr * pexpr
-  | JPEarray_range of pexpr * pexpr * pexpr
+  | JPEarray_range of pexpr * pexpr option * pexpr option
   | JPEcast of type_expr * pexpr
   | JPEinstanceof of pexpr * type_expr
       (* in annotations only *)
@@ -250,11 +250,8 @@ type field_declaration =
   | JPFannot of Lexing.position * string
   | JPFinvariant of identifier * pexpr
   | JPFstatic_invariant of identifier * pexpr
-  | JPFmethod_spec of pexpr option * (identifier * pbehavior) list
-(*
-  | JPFmodel_variable of variable_declaration
-  | JPFghost_variable of variable_declaration
-*)
+  | JPFmethod_spec of 
+      pexpr option * pexpr option * (identifier * pbehavior) list
   | JPFclass of class_declaration
   | JPFinterface of interface_declaration
 

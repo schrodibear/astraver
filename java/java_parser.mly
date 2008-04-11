@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.42 2008-04-03 12:45:34 marche Exp $
+$Id: java_parser.mly,v 1.43 2008-04-11 12:38:34 marche Exp $
 
 */
 
@@ -819,10 +819,17 @@ array_access:
 ;
 
 array_range:
-| primary_no_new_array LEFTBRACKET expr DOTDOT expr RIGHTBRACKET
+| primary_no_new_array LEFTBRACKET expr_opt DOTDOT expr_opt RIGHTBRACKET
     { ($1,$3,$5) }
-| name LEFTBRACKET expr DOTDOT expr RIGHTBRACKET
+| name LEFTBRACKET expr_opt DOTDOT expr_opt RIGHTBRACKET
     { (locate_expr (JPEname $1),$3,$5) }
+;
+
+expr_opt:
+| /* epsilon */
+    { None }
+| expr
+    { Some $1 }
 ;
 
 array_creation_expression:
@@ -1072,8 +1079,8 @@ label_list_end:
 
 
 kml_field_decl:
-| requires assigns ensures behaviors EOF
-    { JPFmethod_spec($1,default_behavior $2 $3 $4) }
+| requires decreases assigns ensures behaviors EOF
+    { JPFmethod_spec($1,$2,default_behavior $3 $4 $5) }
 | INVARIANT ident COLON expr SEMICOLON EOF
     { JPFinvariant($2,$4) } 
 | STATIC INVARIANT ident COLON expr SEMICOLON EOF

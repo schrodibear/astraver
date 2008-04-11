@@ -1,5 +1,5 @@
 
-JESSIE=../../../bin/jessie.byte
+JESSIE=../../../bin/jessie.byte -why-opt -split-user-conj
 JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 

@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.27 2008-04-08 20:35:27 nrousset Exp $
+$Id: java_lexer.mll,v 1.28 2008-04-11 12:38:34 marche Exp $
 
 ***************************************************************************)
 
@@ -66,6 +66,7 @@ $Id: java_lexer.mll,v 1.27 2008-04-08 20:35:27 nrousset Exp $
 	[ "abstract", ABSTRACT;
 	  "assert", ASSERT;
 	  "assigns", ASSIGNS;
+	  "assumes", ASSUMES;
 	  "axiom", AXIOM;
 	  "behavior", BEHAVIOR;
 	  "boolean", BOOLEAN;
