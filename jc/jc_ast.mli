@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.124 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.125 2008-04-11 06:47:03 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -226,6 +226,8 @@ type 'expr decl_node =
   | JCDint_model of Jc_env.int_model
 
 and 'expr decl = 'expr decl_node node_located
+
+type pdecl = pexpr decl
 
 class type ['expr_node] c_nexpr =
 object
