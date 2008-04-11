@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.31 2008-04-10 11:43:11 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.32 2008-04-11 10:31:55 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -362,17 +362,20 @@ let my_fresh_hyp ()=
 
 
 (**
-   @return vars which is a set of set of  variables 
+   @return vars which is a set of sets of  variables 
    (either pure or fresh) contained in tl 
    @param qvars is a set of quantified variables 
-   @tl is the list of term
+   @tl is the list of terms
 **)
 let vars_of_list qvars tl  = 
   let vars = ref SS_set.empty in
   let rec collect l ac_fv_set = 
+    let lp = ref l in 
     let inner_vars = ref VarStringSet.empty in 
     let f t =
       match t with 
+	| Tapp (id, tl, _) when is_arith_binop id ->
+	    lp := !lp@tl
 	| Tapp (id, tl, _) ->
 	    let id' = (bound_variable id) in 
 	    let bv = (FreshVar (Ident.string id')) in
@@ -388,7 +391,7 @@ let vars_of_list qvars tl  =
 		inner_vars := VarStringSet.add (FreshVar (Ident.string id)) !inner_vars
 	| _ -> ()
     in
-    List.iter f l ;
+    List.iter f !lp ;
     vars := SS_set.add (VarStringSet.diff !inner_vars avoided_vars) !vars 
   in
   collect tl VarStringSet.empty ; 
@@ -813,16 +816,16 @@ let update_pdlg acs =
 let add_atom atome cl = 
   match atome with 
     | Pnot (Papp (id, l, i)) 
-	when not (is_comparison id or  
+	(* when not (is_comparison id or  
 		    is_int_comparison id or 
-		    is_real_comparison id) -> 
+		    is_real_comparison id) *) -> 
 	{num = cl.num + 1;
 	 pos = cl.pos;
 	 neg = StringSet.add (Ident.string id) cl.neg}
     | Papp (id, l, i) 
-	when not (is_comparison id or  
+	(*when not (is_comparison id or  
 		    is_int_comparison id or 
-		    is_real_comparison id) -> 
+		    is_real_comparison id)*) -> 
 	  {num = cl.num + 1;
 	 neg = cl.neg;
 	 pos = StringSet.add (Ident.string id) cl.pos}
@@ -949,10 +952,10 @@ let set_of_pred_p vs  =
 let get_preds_of p =
   let s = ref PdlSet.empty in 
   let rec get polarity = function 
-    | Papp (id, l, i) when not 
+    | Papp (id, l, i) (* when not 
 	(is_comparison id or  
 	   is_int_comparison id or 
-	   is_real_comparison id)-> 
+	   is_real_comparison id) *)-> 
 	s := PdlSet.add {l=Ident.string id ;
 			 pol= if polarity == 1 then Pos else Neg} !s
     | Forall (w, id, b, v, tl, p) -> 
@@ -1138,6 +1141,7 @@ let managesGoal id ax (hyps,concl) =
 	let v = VarStringSet.diff v avoided_vars in 
 
 	let concl_preds = get_preds_of concl    in 
+
 	let relevant_preds = get_predecessor_pred concl_preds !pb  in 
 
 	let reachable_vars = VarStringSet.diff 
