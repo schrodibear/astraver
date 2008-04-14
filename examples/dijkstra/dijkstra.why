@@ -135,6 +135,16 @@ axiom main_lemma :
     exists v':vertex. exists d':int. 
       shortest_path(src,v',d') and In(v,g_succ(v')) and d' + weight(v',v) < d
 
+axiom completeness_lemma :
+  forall s:vertex set. forall src:vertex. forall dst:vertex. forall d:int. 
+    (* if s is closed under g_succ *)
+    (forall v:vertex. In(v,s) -> forall w:vertex. In(w,g_succ(v)) -> In(w,s))
+    ->
+    (* and if s contains src *)
+    In(src, s) -> 
+    (* then any vertex reachable from s is also in s *)
+    path(src, dst, d) -> In(dst, s)
+
 (* termination uses a lexicographic order *)
 
 predicate lex2(x:(int, int) pair, y:(int, int) pair) =
@@ -143,7 +153,7 @@ predicate lex2(x:(int, int) pair, y:(int, int) pair) =
 (* code *)
 
 predicate Inv(src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
-  (forall d:int. In(pair(src,d),pq) -> (In(src,visited) or d=0)) 
+  (In(src,visited) or In(pair(src,0),pq)) 
   (* there are paths for the vertices in pq *)
   and
   (forall e:(vertex, int) pair. In(e,pq) -> path(src,fst(e),snd(e))) 
@@ -154,10 +164,10 @@ predicate Inv(src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
        In(x,visited)) 
   (* successors of visited vertices are either visited or in pq *)
   and
-  (forall x,y:vertex. In(x, visited) -> In(y,g_succ(x)) ->
-     In(y, visited) or 
-     (forall d:int. 
-	shortest_path(src, x, d) -> In(pair(y, d+weight(x,y)), pq)))
+  (forall x:vertex. In(x, visited) -> 
+     exists d:int. path(src, x, d) and
+       forall y:vertex. In(y,g_succ(x)) ->
+         In(y, visited) or In(pair(y, d+weight(x,y)), pq))
 
 exception Found of int
 
@@ -186,8 +196,12 @@ let shortest_path (src:vertex) (dst:vertex) =
         vs := set_rmv w !vs
       done
     end
-  done
-  { true | Found => shortest_path(src,dst,result) }
+  done;
+  assert { forall v:vertex. In(v,visited) -> 
+           forall w:vertex. In(w,g_succ(v)) -> In(w,visited) };
+  void
+  { forall d:int. not path(src,dst,d) 
+  | Found => shortest_path(src,dst,result) }
     
 (*
 Local Variables: 
