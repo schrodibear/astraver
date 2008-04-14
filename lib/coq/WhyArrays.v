@@ -14,14 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.13 2006-11-02 09:18:20 hubert Exp $ *)
+(* $Id: WhyArrays.v,v 1.14 2008-04-14 13:53:04 regisgia Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
 (**************************************)
 
-(* This is an axiomatization of arrays.
- *
+(* 
  * The type (array N T) is the type of arrays ranging from 0 to N-1 
  * which elements are of type T.
  *
@@ -38,36 +37,76 @@ Require Export WhyInt.
 Set Implicit Arguments.
 Unset Strict Implicit.
 
+Require Import Coq.FSets.FMapIntMap.
+Import MapIntMap.
+Require Import Coq.FSets.FMapFacts. 
+Module F := Coq.FSets.FMapFacts.Facts (MapIntMap).
+Import F.
 
-(* The type of arrays *)
+(* The type of arrays 
 
-Parameter raw_array : Set -> Set.
+   Arrays are implemented using functional maps of the standard library. *)
+
+Record raw_array (T:Set) : Set := mk_raw_array { 
+  default: T;
+  carrier: Coq.FSets.FMapIntMap.MapIntMap.t T
+}.
 
 Definition array (T:Set) := prod Z (raw_array T).
-
 
 (* Array length *)
 
 Definition array_length (T:Set) (t:array T) : Z := let (n, _) := t in n.
+Definition array_length_ := array_length.
 
 
 (* Functions to create, access and modify arrays *)
 
-Parameter raw_new : forall T:Set, T -> raw_array T.
+Definition raw_new (T:Set) (x:T) : raw_array T := mk_raw_array x (empty T).
 
 Definition new (T:Set) (n:Z) (a:T) : array T := (n, raw_new a).
 
-Parameter raw_access : forall T:Set, raw_array T -> Z -> T.
+Definition set_carrier T x c := mk_raw_array (T:=T) (default x) c.
+
+Definition raw_access (T:Set) (x:raw_array T) (n:Z) : T := 
+  match n with
+    | Z0 => 
+        match MapIntMap.find N0 (carrier x) with
+          | Some y => y
+          | None => default x
+        end
+    | Zpos n => 
+        match MapIntMap.find (Npos n) (carrier x) with
+          | Some y => y
+          | None => default x
+        end
+    | _ => default x
+  end.
 
 Definition access (T:Set) (t:array T) (i:Z) : T :=
   let (_, r) := t in raw_access r i.
 
-Parameter
-  raw_update : forall T:Set, raw_array T -> Z -> T -> raw_array T.
+Definition raw_update : forall T:Set, raw_array T -> Z -> T -> raw_array T :=
+ fun T x n v => 
+   match n with
+     | Z0 => set_carrier (T:=T) x (add N0 v (carrier x))
+     | Zpos k => set_carrier (T:=T) x (add (Npos k) v (carrier x))
+     | _ => x
+   end.
 
 Definition update (T:Set) (t:array T) (i:Z) (v:T) : array T :=
   (array_length t, let (_, r) := t in raw_update r i v).
 
+Definition elements (T:Set) (x:array T) := elements (carrier (snd x)).
+
+Require Import List.
+
+Definition from_list (T:Set) (default: T) (l: list T) := 
+  let n := List.length l in
+  let a := new (Z_of_nat n) default in
+    snd (List.fold_left (fun (accu : (Z * array T)) => fun x => 
+      let (i, a) := accu in 
+        ((i + 1)%Z, update a i x)) l (0%Z, a)).
 
 (* Update does not change length *)
 
@@ -78,28 +117,66 @@ Proof.
 trivial.
 Qed.
 
+(* Properties *)
 
-(* Axioms *)
+Lemma new_def : forall (T:Set) (n:Z) (v0:T) (i:Z), 
+(0 <= i < n)%Z ->
+access (new n v0) i = v0.
+Proof.
+intros T n v0 i H.
+destruct i; auto.
+Qed.
 
-Axiom
-  new_def :
-    forall (T:Set) (n:Z) (v0:T) (i:Z),
-      (0 <= i < n)%Z -> access (new n v0) i = v0.
+Lemma update_def_0 : 
+  forall (T:Set) (t:array T) (v:T) (i:Z), 
+  default (snd (update t i v)) = default (snd t).
+Proof.
+intros T u v i. case_eq u; destruct i; auto.
+Qed.
 
-Axiom
-  update_def_1 :
-    forall (T:Set) (t:array T) (v:T) (i:Z),
-      (0 <= i < array_length t)%Z -> access (update t i v) i = v.
+Lemma update_def_1 :
+  forall (T:Set) (t:array T) (v:T) (i:Z),
+    (0 <= i < array_length t)%Z -> access (update t i v) i = v.
+Proof.
+intros T a v i H.
+destruct i; simpl; case_eq a; intros z r Ha; simpl; [
+  rewrite (find_1 (A:=T) (x:=0%N) (e:=v) (m := (add 0%N v (carrier r))))
+| rewrite 
+  (find_1 (A:=T) (x:=Npos p) (e := v) (m := (add (Npos p) v (carrier r))))
+| assert False; intuition
+]; auto; red; apply add_1; unfold E.eq; auto.
+Qed.
 
-Axiom
-  update_def_2 :
-    forall (T:Set) (t:array T) (v:T) (i j:Z),
-      (0 <= i < array_length t)%Z ->
-      (0 <= j < array_length t)%Z ->
-      i <> j -> access (update t i v) j = access t j.
+Lemma aux_find: forall T (t:MapIntMap.t T) (i j: N) (v: T), 
+  i <> j -> MapIntMap.find i t = MapIntMap.find i (add j v t).
+Proof.
+intros T a i j v Hdiff.
+generalize (find_mapsto_iff a i).
+generalize (find_mapsto_iff (add j v a) i).
+intros H1 H2.
+destruct (MapIntMap.find i a) as [ u | ]; [
+  generalize (add_neq_mapsto_iff a (x:=j) (y:=i) v u)
+| destruct (MapIntMap.find i (add j v a)) as [ u | ]; 
+  [ generalize (add_neq_mapsto_iff a (x:=j) (y:=i) v u) | ]
+]; intuition; firstorder.
+Qed.
 
+Lemma update_def_2 :
+  forall (T:Set) (t:array T) (v:T) (i j:Z),
+    (0 <= i < array_length t)%Z ->
+    (0 <= j < array_length t)%Z ->
+    i <> j -> access (update t i v) j = access t j.
+Proof.
+intros T a v i j Hi Hj diff.
+destruct i; destruct j; destruct Hi; destruct Hj; 
+case_eq a; intros z r eq_a; simpl; (congruence; auto with zarith) || idtac;
+[ rewrite <- (aux_find (carrier r) v (i := Npos p) (j := N0))
+| rewrite -> (aux_find (carrier r) v (i := N0) (j := Npos p))
+| rewrite -> (aux_find (carrier r) v (i := Npos p0) (j := Npos p)) ]; 
+congruence.
+Qed.
+  
 Hint Resolve new_def update_def_1 update_def_2 : datatypes v62.
-
 
 (* A tactic to simplify access in arrays *)
 
