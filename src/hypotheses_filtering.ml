@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.32 2008-04-11 10:31:55 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.33 2008-04-14 11:43:12 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -812,23 +812,70 @@ let update_pdlg acs =
       DotPdlGraph.output_graph oc !pdlg 
     end
 
+
+
+
+  (* To take account comparison operators as predicates, we consider each operator suffixed by each of its closed identifier *)
+  (* @params i1 : ident of the comparison *)
+  (* @params i2 : ident of the closed operator  *)
+  (* @result : i1 suffixed by i2 *)
+let get_suffixed_ident i1 i2 = 
+  ((Ident.string i1)^"_"^(Ident.string i2))
+
+
+
+(* Construction of the Preds dependence graph *)
 (* suppose the clause cl is in nnf *) 
 let add_atom atome cl = 
   match atome with 
     | Pnot (Papp (id, l, i)) 
-	(* when not (is_comparison id or  
-		    is_int_comparison id or 
-		    is_real_comparison id) *) -> 
+	when not (is_comparison id or 
+		     is_int_comparison id or 
+		     is_real_comparison id) -> 
 	{num = cl.num + 1;
 	 pos = cl.pos;
 	 neg = StringSet.add (Ident.string id) cl.neg}
     | Papp (id, l, i) 
-	(*when not (is_comparison id or  
-		    is_int_comparison id or 
-		    is_real_comparison id)*) -> 
+	when not (is_comparison id or
+		     is_int_comparison id or 
+		     is_real_comparison id) -> 
 	  {num = cl.num + 1;
-	 neg = cl.neg;
-	 pos = StringSet.add (Ident.string id) cl.pos}
+	   neg = cl.neg;
+	   pos = StringSet.add (Ident.string id) cl.pos}
+	    
+
+
+    | Pnot (Papp (id, l, i)) 
+	when (id == t_eq || id == t_neq || 
+		 id == t_eq_int || id == t_neq_int || 
+		 id == t_eq_real || id == t_neq_real ) ->
+	(List.fold_left (fun cl t -> match t with 
+	  | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
+	      {num = cl.num;
+	       pos = cl.pos;
+	       neg = StringSet.add (get_suffixed_ident id ti) cl.neg} 
+	  (*| Tapp (_ , _ , _)*)
+	  | Tconst (_) -> 
+	      cl (* We do not consider cases with literal constants in the suffix *)	
+	  | Tnamed (_,_) ->  
+	      assert false (* Currently, no label is present close to a comparison predicate *)
+	) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
+ 
+    | Papp (id, l, i) 
+	when (id == t_eq || id == t_neq || 
+		 id == t_eq_int || id == t_neq_int || 
+		 id == t_eq_real || id == t_neq_real) ->
+	(List.fold_left (fun cl t -> match t with  
+	  | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
+	      {num = cl.num;
+	       neg = cl.neg;
+	       pos = StringSet.add (get_suffixed_ident id ti) cl.pos}
+	  (* | Tapp (_ , _ , _) *)
+	  | Tconst (_) -> 
+	      cl (* We do not consider cases with literal constants in the suffix *)	
+	  | Tnamed (_,_) ->  
+	      assert false (* Currently, no label is present close to a comparison predicate *)
+	) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
     | _ -> 
 	{num = cl.num + 1;
 	 neg = cl.neg;
@@ -907,6 +954,32 @@ let build_pred_graph decl =
 
 (** End of graph of predicates**)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (**
    ************** 
    PdlSet 
@@ -949,15 +1022,40 @@ let set_of_pred_p vs  =
     PdlSet.empty
 
 
+(* USe of the preds dependence graph to filter hypothesis *)
 let get_preds_of p =
   let s = ref PdlSet.empty in 
+
+  (* @params i : ident of the comparison *)
+  (* @params ref s : list of predicates where i has to be added *)
+  (* @params polarity : polarity to set up *)
+  (* @aprams t : term to add as suffixe *)
+  (* @result : s including i suffixed with t *)
+  let add_suffixed_comparison i polarity = function 
+    | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
+	s:=(PdlSet.add {l= (get_suffixed_ident i ti);
+			pol= if polarity == 1 then Pos else Neg} !s)
+    (*| Tapp (_ , _ , _)*)
+    | Tconst (_) -> 
+	() (* We do not consider cases with literal constants in the suffix *)	
+    | Tnamed (_,_) ->  
+	assert false (* Currently, no label is present close to a comparison predicate *)
+  in
   let rec get polarity = function 
-    | Papp (id, l, i) (* when not 
-	(is_comparison id or  
-	   is_int_comparison id or 
-	   is_real_comparison id) *)-> 
+    (* Treatment of each predicates cases, expect comparison predicates *)
+    | Papp (id, l, i) when not 
+	  (is_comparison id or   
+	      is_int_comparison id or  
+	      is_real_comparison id) -> 
 	s := PdlSet.add {l=Ident.string id ;
 			 pol= if polarity == 1 then Pos else Neg} !s
+	  (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
+    | Papp (id, l, i) when 
+	  (id == t_eq || id == t_neq || 
+	      id == t_eq_int || id == t_neq_int || 
+	      id == t_eq_real || id == t_neq_real) -> 
+	(List.iter (add_suffixed_comparison id polarity) l)
+	  
     | Forall (w, id, b, v, tl, p) -> 
 	get polarity p 
     | Exists (id, b, v, p) ->
@@ -1008,6 +1106,25 @@ let display_symb_of_pdl_set set =
   Format.printf "@\n@." 
     
 (** end of PdlSet **)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1154,7 +1271,9 @@ let managesGoal id ax (hyps,concl) =
 	if debug then 
 	  begin
 	    display_str "Relevant  vars " relevant_vars ;
-	    Format.printf "Relevant  preds ";
+	    Format.printf "Concl preds ";
+	    display_symb_of_pdl_set concl_preds;
+	    Format.printf "Relevant preds ";
 	    display_symb_of_pdl_set relevant_preds;
 	    let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
 	    DotVG.output_graph oc !vg     
