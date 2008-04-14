@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: red.ml,v 1.42 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: red.ml,v 1.43 2008-04-14 13:40:46 regisgia Exp $ i*)
 
 open Ast
 open Logic
@@ -194,7 +194,7 @@ let is_eta_redex bl al =
   with Invalid_argument "List.for_all2" -> 
     false
 
-let is_term = function CC_term _ -> true | _ -> false
+let is_term = function CC_term _ -> true | CC_var _ -> true | _ -> false
 
 let is_iota_redex l1 l2 = 
   (List.length l1 = List.length l2) && List.for_all is_term l2
