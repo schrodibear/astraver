@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.271 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.272 2008-04-14 07:29:04 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1301,7 +1301,10 @@ and type_assert ~infunction ~threats vi e (lets,params) =
 and expr ~infunction ~threats e : expr =
   let expr = expr ~infunction ~threats in
   let loc = e#loc in
-  let lab = e#name_label in
+  let lab = (* Only use label once *)
+    let used = ref false in fun () ->
+      if !used then "" else (used := true; e#name_label)
+  in
   let ie = match e#node with
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
@@ -1313,7 +1316,7 @@ and expr ~infunction ~threats e : expr =
         let e1' = expr e1 in
         make_app (unary_op op) 
           [coerce ~no_int_overflow:(not threats) 
-             lab loc (native_operator_type op) e1#typ e1 e1' ]
+             (lab()) loc (native_operator_type op) e1#typ e1 e1' ]
     | JCEbinary(e1, (_, `Pointer as op), e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
@@ -1334,7 +1337,7 @@ and expr ~infunction ~threats e : expr =
         let t = native_operator_type op in
         (match fst op with
            | `Bdiv | `Bmod ->
-               make_guarded_app ~name:lab DivByZero loc
+               make_guarded_app ~name:(lab()) DivByZero loc
            | _ -> make_app)
           (bin_op op) 
           [ coerce ~no_int_overflow:(not threats) 
@@ -1396,7 +1399,7 @@ and expr ~infunction ~threats e : expr =
           in
           let tag = tag_table_name (JCtag si) in
           let call = 
-            make_guarded_app ~name:lab DownCast loc "downcast_" 
+            make_guarded_app ~name:(lab()) DownCast loc "downcast_" 
               [Deref tag; Var tmp; Var (tag_name si)]
           in
           let guarded_call =
@@ -1406,19 +1409,19 @@ and expr ~infunction ~threats e : expr =
     | JCErange_cast(e1,ri) ->
         let e1' = expr e1 in
         coerce ~no_int_overflow:(not threats)
-          e#name_label e#loc (JCTenum ri) e1#typ e1 e1'
+          (lab()) e#loc (JCTenum ri) e1#typ e1 e1'
     | JCEreal_cast(e1,rc) ->
         let e1' = expr e1 in
         begin match rc with
           | Integer_to_real ->
               coerce ~no_int_overflow:(not threats)
-                e#name_label e#loc real_type integer_type e1 e1'
+                (lab()) e#loc real_type integer_type e1 e1'
           | Real_to_integer ->
               coerce ~no_int_overflow:(not threats)
-                e#name_label e#loc integer_type real_type e1 e1'
+                (lab()) e#loc integer_type real_type e1 e1'
         end
     | JCEderef(e,fi) ->
-	make_deref lab loc ~infunction ~threats fi e
+	make_deref (lab()) loc ~infunction ~threats fi e
     | JCEalloc (siz, st) ->
         let alloc = alloc_region_table_name (JCtag st, e#region) in
         let tag = tag_table_name (JCtag st) in
@@ -1452,7 +1455,7 @@ and expr ~infunction ~threats e : expr =
                          @ (List.map (nvar $ field_region_memory_name) fields))
                   | _ ->
                       make_guarded_app 
-                        ~name:lab AllocSize loc
+                        ~name:(lab()) AllocSize loc
                         (alloc_param_name st)
                         ([coerce ~no_int_overflow:(not threats) 
                             siz#name_label siz#loc integer_type 
@@ -1525,7 +1528,7 @@ and expr ~infunction ~threats e : expr =
           | JCfun f -> f.jc_fun_info_final_name
           | JClogic_fun f -> f.jc_logic_info_final_name
         in
-        let call = make_guarded_app ~name:lab UserCall loc name el in
+        let call = make_guarded_app ~name:(lab()) UserCall loc name el in
         let arg_types_assert =
           List.fold_right
             (fun opt acc -> 
@@ -1560,7 +1563,7 @@ and expr ~infunction ~threats e : expr =
         let e2' = expr e2 in
         let tmp1 = tmp_var_name () in
         let tmp2 = tmp_var_name () in
-        let upd = make_upd ~infunction ~threats lab e#loc
+        let upd = make_upd ~infunction ~threats (lab()) e#loc
           fi e1 (Var tmp2) 
         in
 (* Yannick: ignore variables to be able to refine update function used. *)      
@@ -1647,7 +1650,7 @@ and expr ~infunction ~threats e : expr =
             | Some e -> 
 (*                eprintf "decl of vi=%s@." vi.jc_var_info_name;*)
                 coerce ~no_int_overflow:(not threats) 
-                  e#name_label e#loc vi.jc_var_info_type e#typ 
+                  (lab()) e#loc vi.jc_var_info_type e#typ 
                   e (expr e)
           in
           if vi.jc_var_info_assigned then 
@@ -1671,7 +1674,7 @@ and expr ~infunction ~threats e : expr =
 	    Assign 
 	      (jessie_return_variable,
 	       coerce ~no_int_overflow:(not threats) 
-		 e#name_label e#loc t e#typ e (expr e))
+		  (lab()) e#loc t e#typ e (expr e))
 	in
 	let assign = 
 	  if return_type_assert = LTrue || not threats then assign else
@@ -1688,11 +1691,11 @@ and expr ~infunction ~threats e : expr =
 	append assign (Raise (jessie_return_exception, None))
     | JCEunpack(st, e1, as_t) ->
         let e1 = expr e1 in 
-        make_guarded_app ~name:lab Unpack e#loc
+        make_guarded_app ~name:(lab()) Unpack e#loc
           (unpack_name st) [e1; Var (tag_name as_t)]
     | JCEpack(st, e1, from_t) ->
         let e1 = expr e1 in 
-        make_guarded_app ~name:lab Pack e#loc
+        make_guarded_app ~name:(lab()) Pack e#loc
           (pack_name st) [e1; Var (tag_name from_t)]
     | JCEthrow (ei, Some e) -> 
         let e = expr e in
@@ -1733,9 +1736,9 @@ and expr ~infunction ~threats e : expr =
 	Let(tmp,ie,Void)
     else ie
   in
-  match lab with
+  match lab() with
     | "" -> ie
-    | _ -> Label(lab, ie)
+    | lab -> Label(lab, ie)
 
 and expr_coerce ~infunction ~threats vi e =
   coerce ~no_int_overflow:(not threats)
