@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.272 2008-04-14 07:29:04 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.273 2008-04-14 10:17:38 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -178,6 +178,7 @@ let bin_op: expr_bin_op -> string = function
       (* pointer *)
   | `Beq, `Pointer -> "eq_pointer"
   | `Bneq, `Pointer -> "neq_pointer"
+  | `Bsub, `Pointer -> "sub_pointer" (* TODO: require same block *)
       (* real *)
   | `Bgt, `Real -> "gt_real_"
   | `Blt, `Real -> "lt_real_"
@@ -199,7 +200,10 @@ let bin_op: expr_bin_op -> string = function
   | `Bshift_left, `Integer -> "lsl"
   | `Blogical_shift_right, `Integer -> "lsr"
   | `Barith_shift_right, `Integer -> "asr"
-  | _ -> assert false (* not proper type *)
+  | op, opty ->
+      Jc_typing.typing_error Loc.dummy_position
+        "Can't use operator %s with type %s in expressions"
+        (string_of_op op) (string_of_op_type opty)
 
 let term_bin_op: term_bin_op -> string = function
     (* integer *)
@@ -244,7 +248,10 @@ let term_bin_op: term_bin_op -> string = function
       assert false (* should be handled before for laziness *)
   | `Biff, _ | `Bimplies, _ -> 
       assert false (* never in terms *)
-  | _ -> assert false (* not proper type *)
+  | op, opty ->
+      Jc_typing.typing_error Loc.dummy_position
+        "Can't use operator %s with type %s in terms"
+        (string_of_op op) (string_of_op_type opty)
 
 let pred_bin_op: pred_bin_op -> string = function
     (* integer *)

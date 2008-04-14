@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.103 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.104 2008-04-14 10:17:38 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -55,8 +55,8 @@ let operator_of_native = function
 
 let operator_of_type = function
   | JCTnative n -> operator_of_native n
+  | JCTenum _ -> `Integer
   | JCTlogic _
-  | JCTenum _
   | JCTany -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
 

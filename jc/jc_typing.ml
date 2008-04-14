@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.201 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.202 2008-04-14 10:17:38 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1468,8 +1468,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           typing_error e#loc "type `%a' expected in return instead of `%a'"
             print_type vi.jc_var_info_type print_type te1#typ
     | JCNEtry(body, catches, finally) ->
-        let tbody = fe body in
-        let tfinally = fe finally in
+        let tbody = unit_expr (fe body) in
+        let tfinally = unit_expr (fe finally) in
         let tcatches = List.map begin function (id, v, cbody) ->
           let ei = try
             Hashtbl.find exceptions_table id#name
@@ -1480,7 +1480,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
             | Some tei -> Some (var tei v)
             | None -> None
           in
-          ei, vei, fe cbody
+          ei, vei, unit_expr (fe cbody)
         end catches in
         tbody#typ,
         tbody#region,
