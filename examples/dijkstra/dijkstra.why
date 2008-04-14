@@ -8,6 +8,7 @@ logic set_rmv : 'a, 'a set -> 'a set
 
 logic In : 'a, 'a set -> prop
 predicate Is_empty(s : 'a set) = forall x:'a. not In(x, s)
+predicate Incl(s1 : 'a set, s2 : 'a set) = forall x:'a. In(x, s1) -> In(x, s2)
 
 axiom set_empty_def : Is_empty(set_empty)
 axiom set_add_def : 
@@ -18,68 +19,85 @@ axiom set_rmv_def :
   In(x, set_rmv(y,s)) <-> (x <> y and In(x, s))
 
 logic set_card : 'a set -> int
+
+axiom card_nonneg : 
+  forall s:'a set. set_card(s) >= 0
+
 axiom card_set_add : 
   forall x:'a. forall s:'a set. 
   not In(x,s) -> set_card(set_add(x,s)) = 1 + set_card(s)
+
 axiom card_set_rmv : 
   forall x:'a. forall s:'a set. 
   In(x,s) -> set_card(s) = 1 + set_card(set_rmv(x, s))
 
-(* integer pairs *)
+parameter set_is_empty : 
+  s:'a set -> {} bool { if result then Is_empty(s) else not Is_empty(s) }
 
-type int_int 
-logic pair : int, int -> int_int
-logic fst, snd : int_int -> int
+parameter set_choose :
+  s:'a set -> { not Is_empty(s) } 'a { In(result, s) }
 
-axiom pair_1 : forall x,y:int. fst(pair(x,y)) = x
-axiom pair_2 : forall x,y:int. snd(pair(x,y)) = y
-axiom pair_e : forall x:int_int. x = pair(fst(x), snd(x))
+(* pairs *)
+
+type ('a,'b) pair
+logic pair : 'a, 'b -> ('a, 'b) pair
+logic fst : ('a, 'b) pair -> 'a
+logic snd : ('a, 'b) pair -> 'b
+
+axiom pair_1 : forall x:'a. forall y:'b. fst(pair(x,y)) = x
+axiom pair_2 : forall x:'a. forall y:'b. snd(pair(x,y)) = y
+axiom pair_e : forall p:('a,'b) pair. p = pair(fst(p), snd(p))
+
+(* graph *)
+
+type vertex
+
+logic g_vertices : vertex set
+
+logic g_succ : vertex -> vertex set
+
+axiom g_succ_sound : 
+  forall x:vertex. Incl(g_succ(x), g_vertices)
+
+logic weight : vertex, vertex -> int (* edge weight, if there is an edge *)
+
+axiom weight_nonneg : forall x,y:vertex. weight(x,y) >= 0
+
+parameter eq_vertex : 
+  x:vertex -> y:vertex -> {} bool { if result then x=y else x<>y }
 
 (* priority queue *)
 
-parameter pq : int_int set ref
+parameter pq : (vertex,int) pair set ref
 
 parameter pq_is_empty : 
   unit -> 
     {} bool reads pq { if result then Is_empty(pq) else not Is_empty(pq) }
 
 parameter pq_add :
-  x:int_int -> {} unit writes pq { pq = set_add(x, pq@) }
+  x:(vertex,int) pair -> {} unit writes pq { pq = set_add(x, pq@) }
 
-predicate Min(e:int_int, pq:int_int set) =
-  In(e, pq) and forall x:int_int. In(x, pq) -> snd(e) <= snd(x)
+predicate Min(e:(vertex,int) pair, pq:(vertex, int) pair set) =
+  In(e, pq) and forall x:(vertex, int) pair. In(x, pq) -> snd(e) <= snd(x)
 
 parameter pq_extract_min :
   unit ->
     { not Is_empty(pq) } 
-    int_int writes pq 
+    (vertex, int) pair writes pq 
     { Min(result, pq@) and pq = set_rmv(result, pq@) }
 
 (* visited vertices *)
 
-parameter visited : int set ref
+parameter visited : vertex set ref
 
 parameter visited_add : 
-  x:int -> {} unit writes visited { visited = set_add(x, visited@) }
+  x:vertex -> {} unit writes visited { visited = set_add(x, visited@) }
 
 parameter visited_mem : 
-  x:int -> 
+  x:vertex -> 
     {} 
     bool reads visited 
     { if result then In(x, visited) else not In(x, visited) }
-
-(* graph *)
-
-logic N : int (* vertex = 0..N-1 *)
-
-logic g : int, int -> bool
-
-axiom g_finite : 
-  forall x,y:int. g(x,y)=true -> (0 <= x < N and 0 <= y < N)
-
-logic weight : int, int -> int (* edge weight, if there is an edge *)
-
-axiom weight_nonneg : forall x,y:int. weight(x,y) >= 0
 
 (* paths and shortest paths 
    path(x,y,d) = 
@@ -87,80 +105,85 @@ axiom weight_nonneg : forall x,y:int. weight(x,y) >= 0
    shortest_path(x,y,d) = 
 	there is a path from x to y of length d, and to shorter path *)
 
-logic path : int, int, int -> prop 
+logic path : vertex, vertex, int -> prop 
 
 axiom path_nil : 
-  forall x:int. path(x,x,0)
+  forall x:vertex. path(x,x,0)
 axiom path_cons : 
-  forall x,y,z,d:int. path(x,y,d) -> g(y,z)=true -> path(x,z,d+weight(y,z))
+  forall x,y,z:vertex. forall d:int. 
+    path(x,y,d) -> In(z,g_succ(y)) -> path(x,z,d+weight(y,z))
 
-axiom length_nonneg : forall x,y,d:int. path(x,y,d) -> d >= 0
+axiom length_nonneg : forall x,y:vertex. forall d:int. path(x,y,d) -> d >= 0
 
-predicate shortest_path(x:int, y:int, d:int) =
+predicate shortest_path(x:vertex, y:vertex, d:int) =
   path(x,y,d) and forall d':int. path(x,y,d') -> d <= d'
 
 axiom path_inversion :
-  forall src,v,d:int. path(src,v,d) ->
+  forall src,v:vertex. forall d:int. path(src,v,d) ->
     (v = src and d = 0) or
-    (exists v':int. path(src,v',d - weight(v',v)) and g(v',v)=true)
+    (exists v':vertex. path(src,v',d - weight(v',v)) and In(v,g_succ(v')))
 
 axiom path_shortest_path :
-  forall src,v,d:int. path(src,v,d) ->
+  forall src,v:vertex. forall d:int. path(src,v,d) ->
     exists d':int. shortest_path(src,v,d') and d' <= d
 
 (* lemmas *)
 
 axiom main_lemma :
-  forall src,v,d:int. path(src,v,d) -> not shortest_path(src,v,d) ->
-    exists v':int. exists d':int. 
-      shortest_path(src,v',d') and g(v',v)=true and d' + weight(v',v) < d
+  forall src,v:vertex. forall d:int. 
+  path(src,v,d) -> not shortest_path(src,v,d) ->
+    exists v':vertex. exists d':int. 
+      shortest_path(src,v',d') and In(v,g_succ(v')) and d' + weight(v',v) < d
 
 (* termination uses a lexicographic order *)
 
-predicate lex2(x:int_int, y:int_int) =
+predicate lex2(x:(int, int) pair, y:(int, int) pair) =
   fst(x) < fst(y) or (fst(x) = fst(y) and snd(x) < snd(y))
 
 (* code *)
 
-predicate Inv(src:int, visited:int set, pq: int_int set) =
+predicate Inv(src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
   (forall d:int. In(pair(src,d),pq) -> (In(src,visited) or d=0)) 
   (* there are paths for the vertices in pq *)
   and
-  (forall e:int_int. In(e,pq) -> path(src,fst(e),snd(e))) 
+  (forall e:(vertex, int) pair. In(e,pq) -> path(src,fst(e),snd(e))) 
   (* we already visited all vertices at distance < min(pq) *)
   and
-  (forall m:int_int. Min(m,pq) -> 
-     forall x,d:int. shortest_path(src,x,d) -> d < snd(m) -> 
+  (forall m:(vertex, int) pair. Min(m,pq) -> 
+     forall x:vertex. forall d:int. shortest_path(src,x,d) -> d < snd(m) -> 
        In(x,visited)) 
   (* successors of visited vertices are either visited or in pq *)
   and
-  (forall x,y:int. In(x, visited) -> g(x,y)=true ->
+  (forall x,y:vertex. In(x, visited) -> In(y,g_succ(x)) ->
      In(y, visited) or 
      (forall d:int. 
 	shortest_path(src, x, d) -> In(pair(y, d+weight(x,y)), pq)))
 
 exception Found of int
 
-let shortest_path (src:int) (dst:int) =
-  { 0 <= src < N and 0 <= dst < N and Is_empty(visited) and Is_empty(pq) }
+let shortest_path (src:vertex) (dst:vertex) =
+  { In(src,g_vertices) and In(dst,g_vertices) and 
+    Is_empty(visited) and Is_empty(pq) }
   pq_add (pair src 0);
   while not (pq_is_empty void) do
     { invariant Inv(src, visited, pq) and not In(dst,visited) 
-      variant pair(N - set_card(visited), set_card(pq)) for lex2 }
+      variant pair(set_card(g_vertices) - set_card(visited), set_card(pq)) 
+	for lex2 }
     let m = pq_extract_min void in
     let v = fst m in
     let d = snd m in
     if not (visited_mem v) then begin
       assert { shortest_path(src, v, d) };
       visited_add v;
-      if v = dst then raise (Found d);
-      let w = ref 0 in
-      while !w < N do 
+      if eq_vertex v dst then raise (Found d);
+      let vs = ref (g_succ v) in
+      while not (set_is_empty !vs) do 
         { invariant Inv(src, visited, pq)
-          variant N - w }
-	if g v !w && not (visited_mem !w) then
-	  pq_add (pair !w (d + weight v !w));
-        w := !w + 1
+          variant set_card(vs) }
+	let w = set_choose !vs in
+	if not (visited_mem w) then
+	  pq_add (pair w (d + weight v w));
+        vs := set_rmv w !vs
       done
     end
   done
