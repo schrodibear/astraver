@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.33 2008-04-14 11:43:12 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.34 2008-04-14 15:14:09 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -114,7 +114,7 @@ let display_var_set set =
        Format.printf "%s " (string_of_var s)) set ;
   Format.printf "@\n@." 
 
-(** returns the free variable of a term that are not outer quantified **)
+(** returns the free variables of a term that are not outer quantified **)
 let free_vars_of qvars t  = 
   let vars = ref VarStringSet.empty in
   let rec collect formula  = 
@@ -122,6 +122,16 @@ let free_vars_of qvars t  =
       | Tapp (id, tl , _)  -> 
 	  List.iter collect tl 
       | Tvar (id) ->
+	  (*begin
+	    if debug then 
+	    begin
+	    Format.printf "%s -> " (Ident.string id);
+	    if not (VarStringSet.mem (PureVar (Ident.string id)) qvars) then 
+	    Format.printf "OK\n@." 
+	    else
+	    Format.printf "KO\n@." 
+	    end
+	  end;*)
 	  if not (VarStringSet.mem (PureVar (Ident.string id)) qvars) 
 	  then
 	    vars := VarStringSet.add (PureVar (Ident.string id)) !vars 
@@ -129,7 +139,7 @@ let free_vars_of qvars t  =
   collect t ; 
   !vars
 
-(** returns the free variable of a term that are not outer quantified **)
+(** returns the free variables of a term that are not outer quantified **)
 let free_vars_of  p  =
   let vars = ref VarStringSet.empty in
   let rec collect qvars formula  = 
@@ -156,6 +166,10 @@ let free_vars_of  p  =
       | Pnamed (_, p) ->  collect qvars p 
       | Pvar _ | Pfalse |Ptrue -> ()
   in
+  begin
+    if debug then
+      Format.printf "Free vars of predicate : %a \n" Util.print_predicate p
+  end;
   collect VarStringSet.empty p ; 
   !vars
     
@@ -824,103 +838,180 @@ let get_suffixed_ident i1 i2 =
 
 
 
-(* Construction of the Preds dependence graph *)
-(* suppose the clause cl is in nnf *) 
-let add_atom atome cl = 
-  match atome with 
-    | Pnot (Papp (id, l, i)) 
-	when not (is_comparison id or 
-		     is_int_comparison id or 
-		     is_real_comparison id) -> 
-	{num = cl.num + 1;
-	 pos = cl.pos;
-	 neg = StringSet.add (Ident.string id) cl.neg}
-    | Papp (id, l, i) 
-	when not (is_comparison id or
-		     is_int_comparison id or 
-		     is_real_comparison id) -> 
+let comparison_to_consider id =  
+  (* (is_comparison id or is_int_comparison id or is_real_comparison id) *)
+  (id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int || id == t_eq_real || id == t_neq_real )
+
+let is_negative_comparison id = 
+  (id == t_neq || id == t_neq_int || id == t_neq_real )
+
+let inv_comparison id = 
+  if id == t_eq then t_neq
+  else if id == t_neq then t_eq
+  else if id == t_eq_int then t_neq_int
+  else if id == t_neq_int then t_eq_int
+  else if id == t_eq_real then t_neq_real
+  else if id == t_neq_real then t_eq_real
+  else assert false (* cases have to match with cases from comparison_to_consider *)
+  (*
+  match id with  
+    | t_eq -> t_neq 
+    | t_neq -> t_eq 
+    | t_eq_int -> t_neq_int 
+    | t_neq_int -> t_eq_int 
+    | t_eq_real -> t_neq_real 
+    | t_neq_real -> t_eq_real 
+    | _ -> assert false ( * cases have to match with cases from comparison_to_consider * )
+  *)
+
+let build_pred_graph decl = 
+  let eq_link = ref AbstractClauseSet.empty in
+  (* Construction of the Preds dependence graph *)
+  (* suppose the clause cl is in nnf *) 
+  let add_atom atome cl = 
+    match atome with 
+      | Pnot (Papp (id, l, i)) 
+	  when not (is_comparison id or 
+		       is_int_comparison id or 
+		       is_real_comparison id) -> 
+	  {num = cl.num + 1;
+	   pos = cl.pos;
+	   neg = StringSet.add (Ident.string id) cl.neg}
+      | Papp (id, l, i) 
+	  when not (is_comparison id or
+		       is_int_comparison id or 
+		       is_real_comparison id) -> 
 	  {num = cl.num + 1;
 	   neg = cl.neg;
 	   pos = StringSet.add (Ident.string id) cl.pos}
 	    
+	    
+	    
+      | Pnot (Papp (id, l, i)) 
+	  when (comparison_to_consider id) ->
+	  (List.fold_left (fun cl t -> match t with 
+	    | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
+		begin
+		  if is_negative_comparison id then
+		    (eq_link:=AbstractClauseSet.add
+			({num=1; 
+			  neg=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti); 
+			  pos=StringSet.singleton (Ident.string (inv_comparison id)) })
+			(AbstractClauseSet.add
+			    ({num=1; 
+			      neg=StringSet.singleton (Ident.string (inv_comparison id)); 
+			      pos=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti)  })
+			    !eq_link))
+		  else	
+		    (eq_link:=AbstractClauseSet.add
+			({num=1; 
+			  neg=StringSet.singleton (get_suffixed_ident id ti); 
+			  pos=StringSet.singleton (Ident.string id) })
+			(AbstractClauseSet.add
+			    ({num=1; 
+			      neg=StringSet.singleton (Ident.string id); 
+			      pos=StringSet.singleton (get_suffixed_ident id ti)  })
+			    !eq_link))
+		end;
+		if is_negative_comparison id then
+		  {num = cl.num;
+		   neg = cl.neg;
+		   pos = StringSet.add (get_suffixed_ident (inv_comparison id) ti) cl.pos} 
+		else
+		  {num = cl.num;
+		   neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
+		   pos = cl.pos} 
 
-
-    | Pnot (Papp (id, l, i)) 
-	when (id == t_eq || id == t_neq || 
-		 id == t_eq_int || id == t_neq_int || 
-		 id == t_eq_real || id == t_neq_real ) ->
-	(List.fold_left (fun cl t -> match t with 
-	  | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
-	      {num = cl.num;
-	       pos = cl.pos;
-	       neg = StringSet.add (get_suffixed_ident id ti) cl.neg} 
-	  (*| Tapp (_ , _ , _)*)
-	  | Tconst (_) -> 
-	      cl (* We do not consider cases with literal constants in the suffix *)	
-	  | Tnamed (_,_) ->  
-	      assert false (* Currently, no label is present close to a comparison predicate *)
-	) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
- 
-    | Papp (id, l, i) 
-	when (id == t_eq || id == t_neq || 
-		 id == t_eq_int || id == t_neq_int || 
-		 id == t_eq_real || id == t_neq_real) ->
-	(List.fold_left (fun cl t -> match t with  
-	  | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
-	      {num = cl.num;
-	       neg = cl.neg;
-	       pos = StringSet.add (get_suffixed_ident id ti) cl.pos}
-	  (* | Tapp (_ , _ , _) *)
-	  | Tconst (_) -> 
-	      cl (* We do not consider cases with literal constants in the suffix *)	
-	  | Tnamed (_,_) ->  
-	      assert false (* Currently, no label is present close to a comparison predicate *)
-	) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
-    | _ -> 
-	{num = cl.num + 1;
-	 neg = cl.neg;
-	 pos = cl.pos }
-
-let rec get_abstract_clauses p = 
-  let rec compute_clause p ac = 
+		  (*| Tapp (_ , _ , _)*)
+	    | Tconst (_) -> 
+		cl (* We do not consider cases with literal constants in the suffix *)	
+	    | Tnamed (_,_) ->  
+		assert false (* Currently, no label is present close to a comparison predicate *)
+	  ) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
+	    
+      | Papp (id, l, i) 
+	  when (comparison_to_consider id) ->
+	  (List.fold_left (fun cl t -> match t with  
+	    | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
+		begin
+		  if is_negative_comparison id then
+		    (eq_link:=AbstractClauseSet.add
+			({num=1; 
+			  neg=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti); 
+			  pos=StringSet.singleton (Ident.string (inv_comparison id))  })
+			(AbstractClauseSet.add
+			    ({num=1; 
+			      neg=StringSet.singleton (Ident.string (inv_comparison id)); 
+			      pos=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti)  }) 
+			    !eq_link))
+		  else
+		    (eq_link:=AbstractClauseSet.add
+			({num=1; 
+			  neg=StringSet.singleton (Ident.string id); 
+			  pos=StringSet.singleton (get_suffixed_ident id ti)  })
+			(AbstractClauseSet.add
+			    ({num=1; 
+			      neg=StringSet.singleton (get_suffixed_ident id ti); 
+			      pos=StringSet.singleton (Ident.string id)  }) 
+			    !eq_link))
+		end;
+		if is_negative_comparison id then
+		  {num = cl.num;
+		   neg = StringSet.add (get_suffixed_ident (inv_comparison id) ti) cl.neg;
+		   pos = cl.pos}
+		else
+		  {num = cl.num;
+		   neg = cl.neg;
+		   pos = StringSet.add (get_suffixed_ident id ti) cl.pos}
+		  (* | Tapp (_ , _ , _) *)
+	    | Tconst (_) -> 
+		cl (* We do not consider cases with literal constants in the suffix *)	
+	    | Tnamed (_,_) ->  
+		assert false (* Currently, no label is present close to a comparison predicate *)
+	  ) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
+      | _ -> 
+	  {num = cl.num + 1;
+	   neg = cl.neg;
+	   pos = cl.pos }
+  in
+  let rec get_abstract_clauses p = 
+    let rec compute_clause p ac = 
+      match p with
+	| Forall (_,_,_,_,_,p) -> compute_clause p ac 
+	| Exists (_,_,_,p) -> compute_clause p ac   
+	| Por (p1,p2) -> compute_clause p1 (compute_clause p2 ac)
+	| _ as p -> add_atom p ac in
     match p with
-      | Forall (_,_,_,_,_,p) -> compute_clause p ac 
-      | Exists (_,_,_,p) -> compute_clause p ac   
-      | Por (p1,p2) -> compute_clause p1 (compute_clause p2 ac)
-      | _ as p -> add_atom p ac in
-  match p with
-    | Forall (_,_,_,_,_,p) -> get_abstract_clauses p 
-    | Exists (_,_,_,p) ->   get_abstract_clauses p 
-    | Pand (_,_,p1,p2) -> 
-	AbstractClauseSet.union 
-	  (get_abstract_clauses p1)
-	  (get_abstract_clauses p2)
-    | Papp(_) as p -> 
-	AbstractClauseSet.singleton 
-	  (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
-    | Pnot(_) as p -> 
-	AbstractClauseSet.singleton 
-	  (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
-    | Por (_) as p -> 
-	AbstractClauseSet.singleton 
-	  (compute_clause 
-	     p {num=0; pos=StringSet.empty; neg=StringSet.empty})
-    | Pfalse -> 
-	AbstractClauseSet.singleton 
-	  (add_atom Pfalse {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
-    | Ptrue -> 
-	AbstractClauseSet.singleton 
-	  (add_atom Ptrue {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
-    | Pnamed(_,_) 
-    | Pfpi (_, _, _)  
-    | Forallb (_, _, _) 
-    | Piff (_, _)  
-    | Pif (_, _, _)  
-    | Pimplies (_, _, _)    
-    | Pvar _ -> assert false
-
-
-let build_pred_graph decl = 
+      | Forall (_,_,_,_,_,p) -> get_abstract_clauses p 
+      | Exists (_,_,_,p) ->   get_abstract_clauses p 
+      | Pand (_,_,p1,p2) -> 
+	  AbstractClauseSet.union 
+	    (get_abstract_clauses p1)
+	    (get_abstract_clauses p2)
+      | Papp(_) as p -> 
+	  AbstractClauseSet.singleton 
+	    (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
+      | Pnot(_) as p -> 
+	  AbstractClauseSet.singleton 
+	    (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
+      | Por (_) as p -> 
+	  AbstractClauseSet.singleton 
+	    (compute_clause 
+		p {num=0; pos=StringSet.empty; neg=StringSet.empty})
+      | Pfalse -> 
+	  AbstractClauseSet.singleton 
+	    (add_atom Pfalse {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
+      | Ptrue -> 
+	  AbstractClauseSet.singleton 
+	    (add_atom Ptrue {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
+      | Pnamed(_,_) 
+      | Pfpi (_, _, _)  
+      | Forallb (_, _, _) 
+      | Piff (_, _)  
+      | Pif (_, _, _)  
+      | Pimplies (_, _, _)    
+      | Pvar _ -> assert false
+  in
   let compute_pred_graph = function  
     | Dpredicate_def (loc, ident, def) ->
 	let bl,p = def.scheme_type in
@@ -933,6 +1024,7 @@ let build_pred_graph decl =
 	  bl piff in 
 	let p' = cnf pforall in 
 	let cls = get_abstract_clauses p' in
+	let cls = AbstractClauseSet.union cls !eq_link in
 	if debug then 
 	  begin 
 	    Format.printf "%a" Util.print_predicate p;
@@ -943,6 +1035,7 @@ let build_pred_graph decl =
 	let p= ps.scheme_type in 
 	let p' = cnf p in
 	let cls = get_abstract_clauses p' in 
+	let cls = AbstractClauseSet.union cls !eq_link in
 	if debug then 
 	  begin 
 	    Format.printf "%a" Util.print_predicate p;
@@ -1033,8 +1126,12 @@ let get_preds_of p =
   (* @result : s including i suffixed with t *)
   let add_suffixed_comparison i polarity = function 
     | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
-	s:=(PdlSet.add {l= (get_suffixed_ident i ti);
-			pol= if polarity == 1 then Pos else Neg} !s)
+	if is_negative_comparison i then (* negative comparaisons are traducted as negative in the graph *)
+	  s:=(PdlSet.add {l= (get_suffixed_ident (inv_comparison i) ti);
+			  pol= if polarity == 1 then Neg else Pos} !s)	  
+	else
+	  s:=(PdlSet.add {l= (get_suffixed_ident i ti);
+			  pol= if polarity == 1 then Pos else Neg} !s)
     (*| Tapp (_ , _ , _)*)
     | Tconst (_) -> 
 	() (* We do not consider cases with literal constants in the suffix *)	
@@ -1050,10 +1147,7 @@ let get_preds_of p =
 	s := PdlSet.add {l=Ident.string id ;
 			 pol= if polarity == 1 then Pos else Neg} !s
 	  (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
-    | Papp (id, l, i) when 
-	  (id == t_eq || id == t_neq || 
-	      id == t_eq_int || id == t_neq_int || 
-	      id == t_eq_real || id == t_neq_real) -> 
+    | Papp (id, l, i) when (comparison_to_consider id) -> 
 	(List.iter (add_suffixed_comparison id polarity) l)
 	  
     | Forall (w, id, b, v, tl, p) -> 
@@ -1255,6 +1349,11 @@ let managesGoal id ax (hyps,concl) =
 (*      Dgoal*) (loc,expl,id,_) -> 
 	(** retrieves the list of variables in the conclusion **)
 	let v = free_vars_of concl in 
+	if debug then 
+	  begin
+	    display_str "Vars in conlusion" v ;
+	    Format.printf "Concl preds ";
+	  end;
 	let v = VarStringSet.diff v avoided_vars in 
 
 	let concl_preds = get_preds_of concl    in 
@@ -1270,7 +1369,7 @@ let managesGoal id ax (hyps,concl) =
 	
 	if debug then 
 	  begin
-	    display_str "Relevant  vars " relevant_vars ;
+	    display_str "Relevant vars " relevant_vars ;
 	    Format.printf "Concl preds ";
 	    display_symb_of_pdl_set concl_preds;
 	    Format.printf "Relevant preds ";
