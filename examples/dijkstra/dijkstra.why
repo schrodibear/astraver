@@ -162,12 +162,23 @@ predicate Inv(src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
   (forall m:(vertex, int) pair. Min(m,pq) -> 
      forall x:vertex. forall d:int. shortest_path(src,x,d) -> d < snd(m) -> 
        In(x,visited)) 
+
+predicate InvSucc(src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
   (* successors of visited vertices are either visited or in pq *)
-  and
   (forall x:vertex. In(x, visited) -> 
      exists d:int. path(src, x, d) and
        forall y:vertex. In(y,g_succ(x)) ->
          In(y, visited) or In(pair(y, d+weight(x,y)), pq))
+
+(*** TODO
+predicate InvSucc2
+  (src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
+  (* successors of visited vertices are either visited or in pq *)
+  (forall x:vertex. In(x, visited) -> 
+     exists d:int. path(src, x, d) and
+       forall y:vertex. In(y,g_succ(x)) ->
+         In(y, visited) or In(pair(y, d+weight(x,y)), pq))
+***)
 
 exception Found of int
 
@@ -176,8 +187,11 @@ let shortest_path (src:vertex) (dst:vertex) =
     Is_empty(visited) and Is_empty(pq) }
   pq_add (pair src 0);
   while not (pq_is_empty void) do
-    { invariant Inv(src, visited, pq) and not In(dst,visited) 
-      variant pair(set_card(g_vertices) - set_card(visited), set_card(pq)) 
+    { invariant 
+	Inv(src, visited, pq) and not In(dst,visited) and
+	InvSucc(src, visited, pq)
+      variant 
+	pair(set_card(g_vertices) - set_card(visited), set_card(pq)) 
 	for lex2 }
     let m = pq_extract_min void in
     let v = fst m in
