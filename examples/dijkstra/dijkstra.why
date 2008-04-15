@@ -205,15 +205,12 @@ predicate InvSucc(src:vertex, S:vertex set, Q: vertex set) =
   (forall x:vertex. In(x, S) -> 
      forall y:vertex. In(y,g_succ(x)) -> In(y, S) or In(y, Q))
 
-(*
-predicate InvSucc2
-  (src:vertex, S:vertex set, Q: (vertex, int) prod set) =
-  (* successors of S vertices are either S or in Q *)
+predicate InvSucc2(src:vertex, S:vertex set, Q: vertex set,
+	           u:vertex, su:vertex set) =
+  (* successors of vertices in S are either in S or in Q *)
   (forall x:vertex. In(x, S) -> 
-     exists d:int. path(src, x, d) and
-       forall y:vertex. In(y,g_succ(x)) ->
-         In(y, S) or In(pair(y, d+weight(x,y)), Q))
-*)
+     forall y:vertex. In(y,g_succ(x)) -> 
+       (x<>u or (x=u and not In(x,su))) -> In(y, S) or In(y, Q))
 
 (* code *)
 
@@ -232,8 +229,11 @@ let shortest_path (src:vertex) (dst:vertex) =
     S_add u;
     let su = ref (g_succ u) in
     while not (set_has_next su) do 
-      { invariant Inv(src, S, Q, d)
-        variant set_card(su) }
+      { invariant 
+	  Incl(su,g_succ(u)) and 
+	  Inv(src, S, Q, d) and InvSucc2(src, S, Q, u, su)
+        variant 
+	  set_card(su) }
       let v = set_next su in
       relax u v
     done
