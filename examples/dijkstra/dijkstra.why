@@ -31,22 +31,18 @@ axiom card_set_rmv :
   forall x:'a. forall s:'a set. 
   In(x,s) -> set_card(s) = 1 + set_card(set_rmv(x, s))
 
-parameter set_is_empty : 
-  s:'a set -> {} bool { if result then Is_empty(s) else not Is_empty(s) }
+axiom card_Incl :
+  forall s1,s2 : 'a set. Incl(s1,s2) -> set_card(s1) <= set_card(s2)
 
-parameter set_choose :
-  s:'a set -> { not Is_empty(s) } 'a { In(result, s) }
+(* iteration on a set *)
 
-(* pairs *)
+parameter set_has_next : 
+  s:'a set ref -> 
+    {} bool reads s { if result then Is_empty(s) else not Is_empty(s) }
 
-type ('a,'b) prod
-logic pair : 'a, 'b -> ('a, 'b) prod
-logic fst : ('a, 'b) prod -> 'a
-logic snd : ('a, 'b) prod -> 'b
-
-axiom pair_1 : forall x:'a. forall y:'b. fst(pair(x,y)) = x
-axiom pair_2 : forall x:'a. forall y:'b. snd(pair(x,y)) = y
-axiom pair_e : forall p:('a,'b) prod. p = pair(fst(p), snd(p))
+parameter set_next :
+  s:'a set ref -> 
+  { not Is_empty(s) } 'a writes s { In(result,s@) and s = set_rmv(result,s@) }
 
 (* maps *)
 
@@ -67,12 +63,12 @@ axiom map_get_set_neq :
 
 type vertex
 
-logic g_vertices : vertex set
+logic V : vertex set
 
 logic g_succ : vertex -> vertex set
 
 axiom g_succ_sound : 
-  forall x:vertex. Incl(g_succ(x), g_vertices)
+  forall x:vertex. Incl(g_succ(x), V)
 
 logic weight : vertex, vertex -> int (* edge weight, if there is an edge *)
 
@@ -83,44 +79,54 @@ parameter eq_vertex :
 
 (* visited vertices *)
 
-parameter visited : vertex set ref
+parameter S : vertex set ref
 
-parameter visited_add : 
-  x:vertex -> {} unit writes visited { visited = set_add(x, visited@) }
+parameter S_add : 
+  x:vertex -> {} unit writes S { S = set_add(x, S@) }
 
 (* current distances *)
 
-parameter dist : (vertex, int) map ref
+parameter d : (vertex, int) map ref
 
 (* priority queue *)
 
-parameter pq : vertex set ref
+parameter Q : vertex set ref
 
-parameter pq_is_empty : 
+parameter Q_is_empty : 
   unit -> 
-    {} bool reads pq { if result then Is_empty(pq) else not Is_empty(pq) }
+    {} bool reads Q { if result then Is_empty(Q) else not Is_empty(Q) }
+
+parameter init :
+  src:vertex ->
+    {} 
+    unit writes S,Q,d 
+    { S = set_empty and 
+      Q = set_add(src, set_empty) and 
+      d = map_set(d@, src, 0)  }
 
 parameter relax :
   u:vertex -> v:vertex -> 
     {} 
-    unit reads visited writes dist,pq 
-    { (In(v,visited) and pq = pq@ and dist = dist@) 
+    unit reads S writes d,Q 
+    { (In(v,S) and Q = Q@ and d = d@) 
       or
-      (In(v,pq) and map_get(dist,u) + weight(u,v) >= map_get(dist,v) and 		pq = pq@ and dist = dist@)
+      (In(v,Q) and map_get(d,u) + weight(u,v) >= map_get(d,v) and 
+        Q = Q@ and d = d@) 
       or	
-      (In(v,pq) and map_get(dist,u) + weight(u,v) < map_get(dist,v) and 		pq = pq@ and dist = map_set(dist@, v, map_get(dist,u) + weight(u,v)))
+      (In(v,Q) and map_get(d,u) + weight(u,v) < map_get(d,v) and 
+        Q = Q@ and d = map_set(d@, v, map_get(d,u) + weight(u,v)))
       or
-      (not In(v,visited) and not In(v,pq) and pq = set_add(v,pq@) and
-       dist = map_set(dist@, v, map_get(dist,u) + weight(u,v))) }	
+      (not In(v,S) and not In(v,Q) and Q = set_add(v,Q@) and
+        d = map_set(d@, v, map_get(d,u) + weight(u,v))) }	
 
-predicate Min(m:vertex, pq:vertex set, visited:vertex set) =
-  In(m, pq) and forall x:vertex. In(x, pq) -> snd(e) <= snd(x)
+predicate Min(m:vertex, Q:vertex set, d:(vertex, int) map) =
+  In(m, Q) and forall x:vertex. In(x, Q) -> map_get(d,x) <= map_get(d,m)
 
-parameter pq_extract_min :
+parameter Q_extract_min :
   unit ->
-    { not Is_empty(pq) } 
-    vertex writes pq 
-    { Min(result, pq@) and pq = set_rmv(result, pq@) }
+    { not Is_empty(Q) } 
+    vertex reads d writes Q 
+    { Min(result, Q@, d) and Q = set_rmv(result, Q@) }
 
 (* paths and shortest paths 
    path(x,y,d) = 
@@ -132,6 +138,7 @@ logic path : vertex, vertex, int -> prop
 
 axiom path_nil : 
   forall x:vertex. path(x,x,0)
+
 axiom path_cons : 
   forall x,y,z:vertex. forall d:int. 
     path(x,y,d) -> In(z,g_succ(y)) -> path(x,z,d+weight(y,z))
@@ -168,86 +175,69 @@ axiom completeness_lemma :
     (* then any vertex reachable from s is also in s *)
     path(src, dst, d) -> In(dst, s)
 
-(* termination uses a lexicographic order *)
-
-predicate lex2(x:(int, int) prod, y:(int, int) prod) =
-  fst(x) < fst(y) or (fst(x) = fst(y) and snd(x) < snd(y))
-
 (* definitions used in loop invariants *)
 
-predicate MinNotVisited
-  (e:(vertex,int) prod, pq:(vertex, int) prod set, visited:vertex set) =
-  In(e, pq) and not In(fst(e), visited) and
-  forall x:(vertex, int) prod. 
-    (In(x, pq) and not In(fst(x), visited)) -> snd(e) <= snd(x)
+predicate Inv_src(src:vertex, S:vertex set, Q:vertex set) =
+  In(src,S) or In(src,Q)
 
-predicate Inv_src(src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
-  In(src,visited) or In(pair(src,0),pq)
-
-predicate Inv(src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
-  Inv_src(src, visited, pq)
-  (* there are paths for the vertices in pq *)
+predicate Inv(src:vertex, S:vertex set, Q:vertex set, d:(vertex,int) map) =
+  Inv_src(src, S, Q)
+  (* S,Q are contained in V *)
+  and Incl(S,V) and Incl(Q,V)
+  (* S and Q are disjoint *)
+  and 
+  (forall v:vertex. In(v,Q) -> In(v,S) -> false)
+  (* we already found the shortest paths for vertices in S *)
   and
-  (forall e:(vertex, int) prod. In(e,pq) -> path(src,fst(e),snd(e))) 
-  (* we already visited all vertices at distance < min(pq) *)
+  (forall v:vertex. In(v,S) -> shortest_path(src,v,map_get(d,v)))
+  (* there are paths for vertices in Q *)
   and
-  (forall m:(vertex, int) prod. MinNotVisited(m,pq,visited) -> 
-     forall x:vertex. forall d:int. shortest_path(src,x,d) -> d < snd(m) -> 
-       In(x,visited)) 
+  (forall v:vertex. In(v,Q) -> path(src,v,map_get(d,v)))
+  (* vertices at distance < min(Q) are already in S *)
+  and
+  (forall m:vertex. Min(m,Q,d) -> 
+     forall x:vertex. forall dx:int. shortest_path(src,x,dx) -> 
+       dx < map_get(d,x) -> In(x,S)) 
 
-predicate InvSucc(src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
-  (* successors of visited vertices are either visited or in pq *)
-  (forall x:vertex. In(x, visited) -> 
-     exists d:int. shortest_path(src, x, d) and
-       forall y:vertex. In(y,g_succ(x)) ->
-         In(y, visited) or In(pair(y, d+weight(x,y)), pq))
+predicate InvSucc(src:vertex, S:vertex set, Q: vertex set) =
+  (* successors of vertices in S are either in S or in Q *)
+  (forall x:vertex. In(x, S) -> 
+     forall y:vertex. In(y,g_succ(x)) -> In(y, S) or In(y, Q))
 
+(*
 predicate InvSucc2
-  (src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
-  (* successors of visited vertices are either visited or in pq *)
-  (forall x:vertex. In(x, visited) -> 
+  (src:vertex, S:vertex set, Q: (vertex, int) prod set) =
+  (* successors of S vertices are either S or in Q *)
+  (forall x:vertex. In(x, S) -> 
      exists d:int. path(src, x, d) and
        forall y:vertex. In(y,g_succ(x)) ->
-         In(y, visited) or In(pair(y, d+weight(x,y)), pq))
+         In(y, S) or In(pair(y, d+weight(x,y)), Q))
+*)
 
 (* code *)
 
 exception Found of int
 
 let shortest_path (src:vertex) (dst:vertex) =
-  { In(src,g_vertices) and In(dst,g_vertices) and 
-    Is_empty(visited) and Is_empty(pq) }
-  pq_add (pair src 0);
-  while not (pq_is_empty void) do
+  { In(src,V) and In(dst,V) }
+  init src;
+  while not (Q_is_empty void) do
     { invariant 
-	Inv(src, visited, pq) and not In(dst,visited) and
-	InvSucc(src, visited, pq)
+	Inv(src, S, Q, d) and InvSucc(src, S, Q)
       variant 
-	pair(set_card(g_vertices) - set_card(visited), set_card(pq)) 
-	for lex2 }
-    let m = pq_extract_min void in
-    let v = fst m in
-    let d = snd m in
-    if not (visited_mem v) then begin
-      assert { shortest_path(src, v, d) };
-      visited_add v;
-      if eq_vertex v dst then raise (Found d);
-      let vs = ref (g_succ v) in
-      while not (set_is_empty !vs) do 
-        { invariant Inv(src, visited, pq)
-          variant set_card(vs) }
-	let w = set_choose !vs in
-	if not (visited_mem w) then
-	  pq_add (pair w (d + weight v w));
-        vs := set_rmv w !vs
-      done
-    end
-  done;
-  assert { forall v:vertex. In(v,visited) -> 
-           forall w:vertex. In(w,g_succ(v)) -> In(w,visited) };
-  void
-  { forall d:int. not path(src,dst,d) 
-  | Found => shortest_path(src,dst,result) }
+	set_card(V) - set_card(S) }
+    let u = Q_extract_min void in
+    assert { shortest_path(src, u, map_get(d,u)) };
+    S_add u;
+    let su = ref (g_succ u) in
+    while not (set_has_next su) do 
+      { invariant Inv(src, S, Q, d)
+        variant set_card(su) }
+      let v = set_next su in
+      relax u v
+    done
+  done
+  { forall v:vertex. In(v,S) -> shortest_path(src,v,map_get(d,v)) }
     
 (*
 Local Variables: 
