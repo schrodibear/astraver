@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monad.ml,v 1.77 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: monad.ml,v 1.78 2008-04-15 08:12:50 regisgia Exp $ i*)
 
 open Format
 open Misc
@@ -92,7 +92,7 @@ let trad_exn_type =
 
 let rec trad_type_c ren env k = 
   let ((_,v),e,p,q) = decomp_type_c k in
-  let i,o,x = get_repr e in
+  let i,o,x,_ = get_repr e in
   let before = label_name () in
   let ren' = next (push_date ren before) o in
   let lo = output ren' env (v,o,x) in
@@ -121,6 +121,7 @@ and trad_type_v ren env = function
  	  ([],ren,env) bl 
       in
       arrow_vars (List.rev bl') (trad_type_c ren' env' c)
+
   | PureType c ->
       TTpure c
 
@@ -263,14 +264,14 @@ let unit info r ren =
 	  in
 	  (* type of the obligation: [y1]...[yn][res]Q *)
 	  let ht = 
-	    let _,o,xs = get_repr ef in
+	    let _,o,xs,_ = get_repr ef in
 	    let ren' = Rename.next ren (result :: o) in
 	    let result' = current_var ren' result in
 	    let q = a_apply_post info.t_label ren' env q in
 	    let c = a_make_post ren' env result' info q in
 	    let bl = 
 	      List.map (fun id -> (current_var ren' id, 
-				   trad_type_in_env ren env id)) o
+				trad_type_in_env ren env id)) o
 	    in
 	    lambda_vars bl c
 	  in
@@ -336,7 +337,7 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
   let env = info1.t_env in
   let (res1,v1),ef1,q1 = decomp_kappa info1 in
   let ren = push_date ren info1.t_label in
-  let r1,w1,x1 = get_repr ef1 in
+  let r1,w1,x1,_ = get_repr ef1 in
   let ren' = next ren w1 in
   let res1,ren' = fresh ren' res1 in
   let tv1 = trad_type_v ren env v1 in
@@ -410,6 +411,9 @@ let compose info1 e1 info2 e2 =
 
 let apply info1 e1 info2 e2 = 
   gen_compose true (reraise info2) info1 e1 info2 e2
+
+let lift x = 
+  fun _ -> CC_var x
 
 let handle info1 e1 info hl = 
   let handler x res = 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.69 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.70 2008-04-15 08:12:50 regisgia Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -445,10 +445,11 @@ let check_effect loc env e =
   let check_exn id =
     if not (Env.is_exception id) then raise_located loc (UnboundException id)
   in
-  let r,w,x = Effect.get_repr e in
+  let r,w,x,_ = Effect.get_repr e in
   List.iter check_ref r;
   List.iter check_ref w;
   List.iter check_exn x
+
 
 (* warns if a ref occuring in a predicate is not mentioned in the effect,
    and adds it as read to the effect *)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: effect.mli,v 1.18 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: effect.mli,v 1.19 2008-04-15 08:12:50 regisgia Exp $ i*)
 
 (*s The abstract type of effects. *)
 
@@ -41,20 +41,23 @@ val add_write : Ident.t -> t -> t
 val add_writes : Ident.set -> t -> t
 val add_exn : Ident.t -> t -> t
 val add_exns : Ident.set -> t -> t
+val add_nontermination : t -> t
 
 val get_reads : t -> Ident.t list
 val get_writes : t -> Ident.t list
 val get_exns : t -> Ident.t list
-val get_repr : t -> Ident.t list * Ident.t list * Ident.t list
+val get_repr : t -> Ident.t list * Ident.t list * Ident.t list * bool
 
 val is_read  : t -> Ident.t -> bool    (* read-only *)
 val is_write : t -> Ident.t -> bool    (* read-write *)
 val is_exn : t -> Ident.t -> bool
+val is_nonterminating : t -> bool
 
 val union : t -> t -> t
 
 val remove : Ident.t -> t -> t
 val remove_exn : Ident.t -> t -> t
+val remove_nontermination : t -> t
 
 val keep_writes : t -> t
 val erase_exns : t -> t

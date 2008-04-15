@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: effect.ml,v 1.24 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: effect.ml,v 1.25 2008-04-15 08:12:50 regisgia Exp $ i*)
 
 (*s Effects. *)
 
@@ -50,11 +50,13 @@ open Ident
 type t = { 
   input : Ident.set;
   output : Ident.set;
-  exns : Ident.set }
+  exns : Ident.set;
+  nt : bool
+}
 
 (*s the empty effect *)
 
-let bottom = { input = Idset.empty; output = Idset.empty; exns = Idset.empty }
+let bottom = { input = Idset.empty; output = Idset.empty; exns = Idset.empty; nt = false }
 
 (*s basic operations *)
 
@@ -91,7 +93,7 @@ let add_read x e = { e with input = Idset.add x e.input }
 let add_reads = Idset.fold add_read
 
 let add_write x e = 
-  { input = Idset.add x e.input; output = Idset.add x e.output; exns = e.exns }
+  { e with input = Idset.add x e.input; output = Idset.add x e.output }
 
 let add_writes = Idset.fold add_write
 
@@ -99,19 +101,23 @@ let add_exn x e = { e with exns = Idset.add x e.exns }
 
 let add_exns = Idset.fold add_exn
 
+let add_nontermination e = { e with nt = true }
+
 (*s access *)
 
 let get_reads e = Idset.elements e.input
 let get_writes e = Idset.elements e.output
 let get_exns e = Idset.elements e.exns
 let get_repr e = 
-  Idset.elements e.input, Idset.elements e.output, Idset.elements e.exns
+  Idset.elements e.input, Idset.elements e.output, Idset.elements e.exns, e.nt
 
 (*s tests *)
 
 let is_read  e id = Idset.mem id e.input
 let is_write e id = Idset.mem id e.output
 let is_exn e id = Idset.mem id e.exns
+let is_nonterminating e = e.nt
+
 
 let keep_writes e = { e with input = e.output }
 
@@ -120,7 +126,9 @@ let keep_writes e = { e with input = e.output }
 let union e1 e2 =
   { input = Idset.union e1.input e2.input;
     output = Idset.union e1.output e2.output;
-    exns = Idset.union e1.exns e2.exns }
+    exns = Idset.union e1.exns e2.exns;
+    nt = e1.nt || e2.nt
+  }
 
 (*s comparison relation *)
 
@@ -136,6 +144,8 @@ let remove x e =
       output = Idset.remove x e.output }
 
 let remove_exn x e = { e with exns = Idset.remove x e.exns }
+
+let remove_nontermination e = { e with nt = false }
 
 let erase_exns e = { e with exns = Idset.empty }
 
@@ -178,7 +188,7 @@ let rec print_list sep print fmt = function
   | [x] -> print fmt x
   | x :: r -> print fmt x; sep fmt (); print_list sep print fmt r
 
-let print fmt { input = r; output = w; exns = e } =
+let print fmt { input = r; output = w; exns = e; nt = nt } =
   let r = Idset.elements r in
   let w = Idset.elements w in
   fprintf fmt "@[";
@@ -198,5 +208,6 @@ let print fmt { input = r; output = w; exns = e } =
     print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt e;
   end;
   if r <> [] || w <> [] || e <> [] then fprintf fmt "@ ";
+  if nt then fprintf fmt ",@ nt";
   fprintf fmt "@]"
 

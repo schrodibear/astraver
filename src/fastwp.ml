@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.28 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: fastwp.ml,v 1.29 2008-04-15 08:12:50 regisgia Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -75,7 +75,7 @@ module Subst = struct
 	all_vars = Idset.add x s.all_vars }
 
   let frame env ef s =
-    let r,w,_ = Effect.get_repr ef in
+    let r,w,_,_ = Effect.get_repr ef in
     List.fold_left 
       (fun s x -> 
 	 try 
