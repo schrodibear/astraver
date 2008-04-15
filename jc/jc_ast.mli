@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.125 2008-04-11 06:47:03 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.126 2008-04-15 09:00:08 filliatr Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -109,7 +109,7 @@ type unary_op = [ `Uminus | `Unot | `Ubw_not ]
 type pexpr_unary_op = [ pm_unary_op | unary_op ]
 
 type native_operator_type = [ `Unit | `Boolean | `Integer | `Real ]
-type operator_type = [ native_operator_type | `Pointer ]
+type operator_type = [ native_operator_type | `Pointer | `Logic ]
 
 type pred_bin_op = [comparison_op | logical_op] * operator_type
 type expr_unary_op = unary_op * native_operator_type

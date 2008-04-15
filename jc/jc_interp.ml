@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.273 2008-04-14 10:17:38 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.274 2008-04-15 09:00:08 filliatr Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -222,6 +222,9 @@ let term_bin_op: term_bin_op -> string = function
   | `Beq, `Pointer -> "eq_pointer"
   | `Bneq, `Pointer -> "neq_pointer"
   | `Bsub, `Pointer -> "sub_pointer"
+      (* logic *)
+  | `Beq, `Logic -> "eq"
+  | `Bneq, `Logic -> "neq"
       (* real *)
   | `Bgt, `Real -> "gt_real"
   | `Blt, `Real -> "lt_real"
@@ -262,8 +265,8 @@ let pred_bin_op: pred_bin_op -> string = function
   | `Beq, `Integer -> "eq_int"
   | `Bneq, `Integer -> "neq_int"
       (* pointer *)
-  | `Beq, `Pointer -> "eq"
-  | `Bneq, `Pointer -> "neq"
+  | `Beq, (`Pointer | `Logic) -> "eq"
+  | `Bneq, (`Pointer | `Logic) -> "neq"
       (* real *)
   | `Beq, `Real -> "eq_real"
   | `Bneq, `Real -> "neq_real"
@@ -485,7 +488,7 @@ let rec term ~global_assertion label oldlabel t =
         LApp(unary_op op, [term_coerce t#loc opty t1#typ t1']),
         lets
     (* binary operators on pointers (no coercion) *)
-    | JCTbinary(t1, (_, `Pointer as op), t2) ->
+    | JCTbinary(t1, (_, (`Pointer | `Logic) as op), t2) ->
         let t1', lets1 = ft t1 in
         let t2', lets2 = ft t2 in
         LApp (term_bin_op op, [ t1'; t2']), lets1@lets2
@@ -642,7 +645,7 @@ let rec assertion ~global_assertion label oldlabel a =
       | JCAiff(a1,a2) -> make_equiv (fa a1) (fa a2), []
       | JCAnot(a) -> LNot(fa a), []
       (* pointer relation (no coercion) *)
-      | JCArelation(t1, (_, `Pointer as op),t2) ->
+      | JCArelation(t1, (_, (`Pointer | `Logic) as op),t2) ->
           let t1', lets1 = ft t1 in
           let t2', lets2 = ft t2 in
           LPred (pred_bin_op (op :> pred_bin_op), [ t1'; t2']), lets1@lets2
@@ -1324,7 +1327,7 @@ and expr ~infunction ~threats e : expr =
         make_app (unary_op op) 
           [coerce ~no_int_overflow:(not threats) 
              (lab()) loc (native_operator_type op) e1#typ e1 e1' ]
-    | JCEbinary(e1, (_, `Pointer as op), e2) ->
+    | JCEbinary(e1, (_, (`Pointer | `Logic) as op), e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
         make_app (bin_op op) [ e1'; e2']        

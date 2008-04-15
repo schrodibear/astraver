@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.77 2008-04-10 13:30:41 hubert Exp $ i*)
+(*i $Id: stat.ml,v 1.78 2008-04-15 09:00:07 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -347,7 +347,7 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store)
 	  raise Exit
       in
       model#set ~row ~column:column_p `EXECUTE;
-      Format.eprintf "oblig : %s@." oblig;
+      if !debug then Format.eprintf "oblig : %s@." oblig;
       let r = 
 	Dispatcher.call_prover 
 	  ~debug:!debug ~encoding:p.Model.pr_enc
