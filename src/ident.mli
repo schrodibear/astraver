@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.56 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: ident.mli,v 1.57 2008-04-15 07:50:19 regisgia Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -81,6 +81,18 @@ val decomp : int -> t
 val exit_exn : t
 
 val is_index : string -> bool
+
+(*s Non termination monad. *)
+
+val non_termination_monad : t
+val nt_unit : t
+val nt_bind : t
+val nt_fix : t
+val nt_lift : t
+
+(*s Identifiers for the functional validation. *)
+
+val fun_id : t -> t
 
 (*s Some pre-defined identifiers. *)
 
@@ -181,6 +193,7 @@ val store : t
 val annot_bool : t
 val well_founded : t
 val well_founded_induction : t
+val wfix : t
 val false_rec : t
 
 val any_int : t

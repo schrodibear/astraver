@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.64 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: ident.ml,v 1.65 2008-04-15 07:50:19 regisgia Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -112,6 +112,18 @@ let exist = create "exist"
 let decomp n = create ("decomp" ^ string_of_int n)
 
 let exit_exn = create "Exit"
+
+(*s Non termination monad. *)
+
+let non_termination_monad = create "nt_m"
+let nt_unit : t = create "nt_unit"
+let nt_bind : t = create "nt_bind"
+let nt_fix : t = create "nt_fix"
+let nt_lift : t = create "nt_lift"
+
+(*s Identifiers for the functional validation. *)
+
+let fun_id x = create (string x ^ "_fun")
 
 (*s Pre-defined. *)
 
@@ -214,6 +226,7 @@ let well_founded = create "well_founded"
 let well_founded_induction = create "well_founded_induction"
 let if_then_else = create "ite"
 let false_rec = create "False_rec"
+let wfix = create "wfix"
 
 let any_int = create "why_any_int"
 let any_unit = create "why_any_unit"
