@@ -39,14 +39,29 @@ parameter set_choose :
 
 (* pairs *)
 
-type ('a,'b) pair
-logic pair : 'a, 'b -> ('a, 'b) pair
-logic fst : ('a, 'b) pair -> 'a
-logic snd : ('a, 'b) pair -> 'b
+type ('a,'b) prod
+logic pair : 'a, 'b -> ('a, 'b) prod
+logic fst : ('a, 'b) prod -> 'a
+logic snd : ('a, 'b) prod -> 'b
 
 axiom pair_1 : forall x:'a. forall y:'b. fst(pair(x,y)) = x
 axiom pair_2 : forall x:'a. forall y:'b. snd(pair(x,y)) = y
-axiom pair_e : forall p:('a,'b) pair. p = pair(fst(p), snd(p))
+axiom pair_e : forall p:('a,'b) prod. p = pair(fst(p), snd(p))
+
+(* maps *)
+
+type ('a, 'b) map
+
+logic map_get : ('a,'b) map, 'a -> 'b
+logic map_set : ('a,'b) map, 'a, 'b -> ('a, 'b) map
+
+axiom map_get_set_eq :
+  forall m : ('a,'b) map . forall i : 'a. forall v : 'b.
+  map_get(map_set(m,i,v), i) = v
+
+axiom map_get_set_neq : 
+  forall m : ('a, 'b) map. forall i : 'a. forall j : 'a. forall v : 'b.
+  i <> j -> map_get(map_set(m,i,v), j) = map_get(m,j)
 
 (* graph *)
 
@@ -66,26 +81,6 @@ axiom weight_nonneg : forall x,y:vertex. weight(x,y) >= 0
 parameter eq_vertex : 
   x:vertex -> y:vertex -> {} bool { if result then x=y else x<>y }
 
-(* priority queue *)
-
-parameter pq : (vertex,int) pair set ref
-
-parameter pq_is_empty : 
-  unit -> 
-    {} bool reads pq { if result then Is_empty(pq) else not Is_empty(pq) }
-
-parameter pq_add :
-  x:(vertex,int) pair -> {} unit writes pq { pq = set_add(x, pq@) }
-
-predicate Min(e:(vertex,int) pair, pq:(vertex, int) pair set) =
-  In(e, pq) and forall x:(vertex, int) pair. In(x, pq) -> snd(e) <= snd(x)
-
-parameter pq_extract_min :
-  unit ->
-    { not Is_empty(pq) } 
-    (vertex, int) pair writes pq 
-    { Min(result, pq@) and pq = set_rmv(result, pq@) }
-
 (* visited vertices *)
 
 parameter visited : vertex set ref
@@ -93,11 +88,39 @@ parameter visited : vertex set ref
 parameter visited_add : 
   x:vertex -> {} unit writes visited { visited = set_add(x, visited@) }
 
-parameter visited_mem : 
-  x:vertex -> 
+(* current distances *)
+
+parameter dist : (vertex, int) map ref
+
+(* priority queue *)
+
+parameter pq : vertex set ref
+
+parameter pq_is_empty : 
+  unit -> 
+    {} bool reads pq { if result then Is_empty(pq) else not Is_empty(pq) }
+
+parameter relax :
+  u:vertex -> v:vertex -> 
     {} 
-    bool reads visited 
-    { if result then In(x, visited) else not In(x, visited) }
+    unit reads visited writes dist,pq 
+    { (In(v,visited) and pq = pq@ and dist = dist@) 
+      or
+      (In(v,pq) and map_get(dist,u) + weight(u,v) >= map_get(dist,v) and 		pq = pq@ and dist = dist@)
+      or	
+      (In(v,pq) and map_get(dist,u) + weight(u,v) < map_get(dist,v) and 		pq = pq@ and dist = map_set(dist@, v, map_get(dist,u) + weight(u,v)))
+      or
+      (not In(v,visited) and not In(v,pq) and pq = set_add(v,pq@) and
+       dist = map_set(dist@, v, map_get(dist,u) + weight(u,v))) }	
+
+predicate Min(m:vertex, pq:vertex set, visited:vertex set) =
+  In(m, pq) and forall x:vertex. In(x, pq) -> snd(e) <= snd(x)
+
+parameter pq_extract_min :
+  unit ->
+    { not Is_empty(pq) } 
+    vertex writes pq 
+    { Min(result, pq@) and pq = set_rmv(result, pq@) }
 
 (* paths and shortest paths 
    path(x,y,d) = 
@@ -147,38 +170,47 @@ axiom completeness_lemma :
 
 (* termination uses a lexicographic order *)
 
-predicate lex2(x:(int, int) pair, y:(int, int) pair) =
+predicate lex2(x:(int, int) prod, y:(int, int) prod) =
   fst(x) < fst(y) or (fst(x) = fst(y) and snd(x) < snd(y))
 
-(* code *)
+(* definitions used in loop invariants *)
 
-predicate Inv(src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
-  (In(src,visited) or In(pair(src,0),pq)) 
+predicate MinNotVisited
+  (e:(vertex,int) prod, pq:(vertex, int) prod set, visited:vertex set) =
+  In(e, pq) and not In(fst(e), visited) and
+  forall x:(vertex, int) prod. 
+    (In(x, pq) and not In(fst(x), visited)) -> snd(e) <= snd(x)
+
+predicate Inv_src(src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
+  In(src,visited) or In(pair(src,0),pq)
+
+predicate Inv(src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
+  Inv_src(src, visited, pq)
   (* there are paths for the vertices in pq *)
   and
-  (forall e:(vertex, int) pair. In(e,pq) -> path(src,fst(e),snd(e))) 
+  (forall e:(vertex, int) prod. In(e,pq) -> path(src,fst(e),snd(e))) 
   (* we already visited all vertices at distance < min(pq) *)
   and
-  (forall m:(vertex, int) pair. Min(m,pq) -> 
+  (forall m:(vertex, int) prod. MinNotVisited(m,pq,visited) -> 
      forall x:vertex. forall d:int. shortest_path(src,x,d) -> d < snd(m) -> 
        In(x,visited)) 
 
-predicate InvSucc(src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
+predicate InvSucc(src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
+  (* successors of visited vertices are either visited or in pq *)
+  (forall x:vertex. In(x, visited) -> 
+     exists d:int. shortest_path(src, x, d) and
+       forall y:vertex. In(y,g_succ(x)) ->
+         In(y, visited) or In(pair(y, d+weight(x,y)), pq))
+
+predicate InvSucc2
+  (src:vertex, visited:vertex set, pq: (vertex, int) prod set) =
   (* successors of visited vertices are either visited or in pq *)
   (forall x:vertex. In(x, visited) -> 
      exists d:int. path(src, x, d) and
        forall y:vertex. In(y,g_succ(x)) ->
          In(y, visited) or In(pair(y, d+weight(x,y)), pq))
 
-(*** TODO
-predicate InvSucc2
-  (src:vertex, visited:vertex set, pq: (vertex, int) pair set) =
-  (* successors of visited vertices are either visited or in pq *)
-  (forall x:vertex. In(x, visited) -> 
-     exists d:int. path(src, x, d) and
-       forall y:vertex. In(y,g_succ(x)) ->
-         In(y, visited) or In(pair(y, d+weight(x,y)), pq))
-***)
+(* code *)
 
 exception Found of int
 
