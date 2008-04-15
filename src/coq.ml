@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.168 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.169 2008-04-15 08:06:40 regisgia Exp $ i*)
 
 open Options
 open Logic
@@ -663,8 +663,19 @@ let rec print_gen_cc_term_v8 print_hole fmt t =
 	      print_lambdas_v8 bl print_cc_term_v8 c
       | CC_app (f,a) ->
 	  let tl = collect_app [a] f in
-	    fprintf fmt "@[<hov 2>(%a)@]" 
-	      (print_list_par space print_cc_term_v8) tl
+	    (match tl with
+	       | [CC_term (Tapp (f, [t], _)); CC_lam (x, u)] when f = nt_bind ->
+		   fprintf fmt "@[<hov 2>@[do %s <- @[(%a);@] @ @] @\n %a @]"
+		     (Ident.string (fst x)) print_cc_term_v8 
+		     (CC_term t) print_cc_term_v8 u
+	       | [CC_term (Tvar f); t; CC_lam (x, u) ]
+	       | [CC_var f; t; CC_lam (x, u) ] when f = nt_bind ->
+		   fprintf fmt "@[<hov 2>@[do %s <- @[(%a);@] @ @] @\n %a @]"
+		     (Ident.string (fst x)) print_cc_term_v8 
+		     t print_cc_term_v8 u
+	       | tl -> 
+		   fprintf fmt "@[<hov 2>(%a)@]" 
+		     (print_list_par space print_cc_term_v8) tl)
       | CC_tuple (cl, None) ->
 	  fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
 	    (print_list_par space print_cc_term_v8) cl
