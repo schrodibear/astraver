@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArraysFMap.v,v 1.1 2008-04-15 08:41:44 filliatr Exp $ *)
+(* $Id: WhyArraysFMap.v,v 1.2 2008-04-15 15:02:37 regisgia Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -37,19 +37,19 @@ Require Export WhyInt.
 Set Implicit Arguments.
 Unset Strict Implicit.
 
-Require Import Coq.FSets.FMapIntMap.
-Import MapIntMap.
+Require Import Coq.FSets.FMapPositive.
+Import FMapPositive.PositiveMap.
 Require Import Coq.FSets.FMapFacts. 
-Module F := Coq.FSets.FMapFacts.Facts (MapIntMap).
-Import F.
+Module F := Coq.FSets.FMapFacts.Facts (FMapPositive.PositiveMap).
+Import F.  
 
 (* The type of arrays 
 
    Arrays are implemented using functional maps of the standard library. *)
 
-Record raw_array (T:Set) : Set := mk_raw_array { 
+Record raw_array (T:Set) : Type := mk_raw_array { 
   default: T;
-  carrier: Coq.FSets.FMapIntMap.MapIntMap.t T
+  carrier: FMapPositive.PositiveMap.t T
 }.
 
 Definition array (T:Set) := prod Z (raw_array T).
@@ -67,35 +67,38 @@ Definition raw_new (T:Set) (x:T) : raw_array T := mk_raw_array x (empty T).
 Definition new (T:Set) (n:Z) (a:T) : array T := (n, raw_new a).
 
 Definition set_carrier T x c := mk_raw_array (T:=T) (default x) c.
+Hint Unfold set_carrier.
 
 Definition raw_access (T:Set) (x:raw_array T) (n:Z) : T := 
   match n with
     | Z0 => 
-        match MapIntMap.find N0 (carrier x) with
-          | Some y => y
-          | None => default x
-        end
+      match PositiveMap.find xH (carrier x) with
+        | Some v => v
+        | None => default x
+      end
     | Zpos n => 
-        match MapIntMap.find (Npos n) (carrier x) with
-          | Some y => y
-          | None => default x
-        end
+      match PositiveMap.find (Psucc n) (carrier x) with
+        | Some v => v
+        | None => default x
+      end
     | _ => default x
   end.
 
 Definition access (T:Set) (t:array T) (i:Z) : T :=
   let (_, r) := t in raw_access r i.
+Hint Unfold access.
 
 Definition raw_update : forall T:Set, raw_array T -> Z -> T -> raw_array T :=
  fun T x n v => 
    match n with
-     | Z0 => set_carrier (T:=T) x (add N0 v (carrier x))
-     | Zpos k => set_carrier (T:=T) x (add (Npos k) v (carrier x))
+     | Z0 => set_carrier (T:=T) x (add xH v (carrier x))
+     | Zpos k => set_carrier (T:=T) x (add (Psucc k) v (carrier x))
      | _ => x
    end.
 
 Definition update (T:Set) (t:array T) (i:Z) (v:T) : array T :=
   (array_length t, let (_, r) := t in raw_update r i v).
+Hint Unfold update.
 
 Definition elements (T:Set) (x:array T) := elements (carrier (snd x)).
 
@@ -113,9 +116,7 @@ Definition from_list (T:Set) (default: T) (l: list T) :=
 Lemma array_length_update :
  forall (T:Set) (t:array T) (i:Z) (v:T),
    array_length (update t i v) = array_length t.
-Proof.
-trivial.
-Qed.
+Proof. trivial. Qed.
 
 (* Properties *)
 
@@ -123,42 +124,45 @@ Lemma new_def : forall (T:Set) (n:Z) (v0:T) (i:Z),
 (0 <= i < n)%Z ->
 access (new n v0) i = v0.
 Proof.
-intros T n v0 i H.
-destruct i; auto.
+  intros T n v0 i H;
+  destruct i; [|simpl; rewrite (gempty T)|]; auto.
 Qed.
 
 Lemma update_def_0 : 
   forall (T:Set) (t:array T) (v:T) (i:Z), 
   default (snd (update t i v)) = default (snd t).
 Proof.
-intros T u v i. case_eq u; destruct i; auto.
+  intros T u v i. case_eq u; destruct i; auto.
 Qed.
+
+Opaque find add.
 
 Lemma update_def_1 :
   forall (T:Set) (t:array T) (v:T) (i:Z),
     (0 <= i < array_length t)%Z -> access (update t i v) i = v.
 Proof.
-intros T a v i H.
-destruct i; simpl; case_eq a; intros z r Ha; simpl; [
-  rewrite (find_1 (A:=T) (x:=0%N) (e:=v) (m := (add 0%N v (carrier r))))
-| rewrite 
-  (find_1 (A:=T) (x:=Npos p) (e := v) (m := (add (Npos p) v (carrier r))))
-| assert False; intuition
-]; auto; red; apply add_1; unfold E.eq; auto.
+  intros T a v i H.
+  destruct i; simpl; case_eq a; intros z r Ha;
+  simpl;
+  [ rewrite (find_1 (A:=T) (x:=xH) (e:=v) (m := (add xH v (carrier r))))
+  | rewrite 
+    (find_1 (A:=T) (x:=Psucc p) (e := v) (m := (add (Psucc p) v (carrier r))))
+  | assert False; intuition
+  ]; auto; red; apply add_1; unfold E.eq; auto.
 Qed.
 
-Lemma aux_find: forall T (t:MapIntMap.t T) (i j: N) (v: T), 
-  i <> j -> MapIntMap.find i t = MapIntMap.find i (add j v t).
+Lemma aux_find: forall T (t:t T) (i j: positive) (v: T), 
+  i <> j -> PositiveMap.find i t = PositiveMap.find i (add j v t).
 Proof.
-intros T a i j v Hdiff.
-generalize (find_mapsto_iff a i).
-generalize (find_mapsto_iff (add j v a) i).
-intros H1 H2.
-destruct (MapIntMap.find i a) as [ u | ]; [
-  generalize (add_neq_mapsto_iff a (x:=j) (y:=i) v u)
-| destruct (MapIntMap.find i (add j v a)) as [ u | ]; 
-  [ generalize (add_neq_mapsto_iff a (x:=j) (y:=i) v u) | ]
-]; intuition; firstorder.
+  intros T a i j v Hdiff.
+  generalize (find_mapsto_iff a i).
+  generalize (find_mapsto_iff (add j v a) i).
+  intros H1 H2.
+  destruct (PositiveMap.find i a) as [ u | ]; [
+    generalize (add_neq_mapsto_iff a (x:=j) (y:=i) v u)
+  | destruct (PositiveMap.find i (add j v a)) as [ u | ]; 
+    [ generalize (add_neq_mapsto_iff a (x:=j) (y:=i) v u) | ]
+  ]; intuition; firstorder.
 Qed.
 
 Lemma update_def_2 :
@@ -167,13 +171,16 @@ Lemma update_def_2 :
     (0 <= j < array_length t)%Z ->
     i <> j -> access (update t i v) j = access t j.
 Proof.
-intros T a v i j Hi Hj diff.
-destruct i; destruct j; destruct Hi; destruct Hj; 
-case_eq a; intros z r eq_a; simpl; (congruence; auto with zarith) || idtac;
-[ rewrite <- (aux_find (carrier r) v (i := Npos p) (j := N0))
-| rewrite -> (aux_find (carrier r) v (i := N0) (j := Npos p))
-| rewrite -> (aux_find (carrier r) v (i := Npos p0) (j := Npos p)) ]; 
-congruence.
+  intros T a v i j Hi Hj diff; 
+  generalize Psucc_not_one; intros;
+  destruct i; destruct j; destruct Hi; destruct Hj; 
+  case_eq a; intros z r eq_a; simpl; (congruence; auto with zarith) || idtac;
+  [ rewrite <- (aux_find (carrier r) v (i := Psucc p) (j := xH))
+  | rewrite -> (aux_find (carrier r) v (i := xH) (j := Psucc p))
+  | rewrite -> (aux_find (carrier r) v (i := Psucc p0) (j := Psucc p)) ];
+  trivial; (congruence || idtac); assert (p <> p0); [ congruence |
+  intro He; generalize (Psucc_inj _ _ He); congruence
+  ].
 Qed.
   
 Hint Resolve new_def update_def_1 update_def_2 : datatypes v62.
