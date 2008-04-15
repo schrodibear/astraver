@@ -1,10 +1,13 @@
 
+type prover = Ergo | Simplify | Z3 | Yices | Cvc3 | Other
+
+val provers_name : prover -> string
 
 type goal = {
   goal_expl : Logic_decl.vc_expl;
   goal_file : string;
   sub_goal : goal list;
-  mutable proof : (string*(string*string*string*string)) list;
+  mutable proof : (prover*(string*string*string*string)) list;
   mutable goal_tags : (string*string) list;
 }
 

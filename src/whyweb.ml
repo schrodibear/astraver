@@ -1,7 +1,10 @@
 open Format
 open Project
-(* toggle *)
 
+(*prover*)
+let provers = [Ergo ; Simplify ; Z3 ; Yices ; Cvc3]
+
+(*color*)
 let valid_color = "#00FF00"
 let invalid_color = "#FF0033"
 let failed_color = "#330000"
@@ -10,6 +13,7 @@ let cannotdecide_color = "#FF00FF"
 let running_color = "#0000FF"
 let timeout_color = "#990033"
 
+(* toggle *)
 let toggle_lemma l = l.lemma_tags <- 
   List.map (fun (key,value) ->  
 	      if key = "ww_open" then 
@@ -44,47 +48,63 @@ let toggle_goal g = g.goal_tags <-
 
 let use_prover p =
   match p with 
-    | "ergo" -> ("--why",".why") 
-    | _ -> assert false
+    | Ergo -> ("--why",".why","",67) 
+    | Simplify -> ("--simplify", ".sx","",66)
+    | Z3 -> ("--smtlib",".smt","z3",67)
+    | Yices -> ("--smtlib",".smt","",67)
+    | Cvc3 -> ("--smtlib",".smt","cvc3",67)
+    | Other -> assert false
 
 open Wserver
 
-let nb_thread = ref 0
-
 let launch_goal  prover context g =  
-  let (option,endoffile) = use_prover prover in
+  let (option,endoffile,opt,size) = use_prover prover in
   let (reademe,writeme) = Unix.pipe () in
-    let _ = Unix.create_process
-      "why" [| "why"; "-no-prelude"; option; context; g.goal_file  |]
-      Unix.stdin Unix.stdout Unix.stderr in
-    let _ = Unix.wait() in
-    let _ = Unix.create_process
-      "dp" 
-      [| "dp"; "-timeout"; "10"; 
-	 (String.sub g.goal_file 0 
-	    (String.length g.goal_file  - 4))^"_why"^endoffile  |]
-      Unix.stdin writeme Unix.stderr in  
-    let _ = Unix.wait() in
-    let size = 7+(String.length g.goal_file) in
-    let buff = String.make 60 '0' in
-    let _ = Unix.read reademe buff 0 60 in
-    let buff = String.make size '0' in
-    let _ = Unix.read reademe buff 0 size in
-    eprintf "%s@." buff;
-    Unix.close writeme;
-    Unix.close reademe;
-    let proof = List.filter (fun (s,_) -> s=prover) g.proof in
-    (g.proof <-
-       match String.get buff ((String.length buff)-1) with 
-	 | '.' -> (prover,("valid","10","",""))::proof
-	 | '*' -> (prover,("invalid","10","",""))::proof  
-	 | '?' -> (prover,("unknown","10","",""))::proof  
-	 | '#' -> (prover,("timeout","10","",""))::proof  
-	 | '!' -> (prover,("failure","10","",""))::proof 
-	 | c -> Format.eprintf "erreur : %c@." c;
-	     assert false);
-    nb_thread := !nb_thread-1;
-    Thread.exit()
+  eprintf "why -no-prelude %s %s %s@." option context g.goal_file;
+  let _ = Unix.create_process
+    "why" [| "why"; "-no-prelude"; option; context; g.goal_file  |]
+    Unix.stdin Unix.stdout Unix.stderr in
+  let _ = Unix.wait() in
+  eprintf "dp %s -timeout 10 %s@." opt ((String.sub g.goal_file 0 
+	  (String.length g.goal_file  - 4))^"_why"^endoffile) ;
+  let _ = 
+    if opt = "" 
+    then 
+      Unix.create_process
+	"dp" 
+	[| "dp" ; "-timeout" ; "10" ; 
+	   (String.sub g.goal_file 0 
+	      (String.length g.goal_file  - 4))^"_why"^endoffile  |]
+	Unix.stdin writeme Unix.stderr 
+    else
+      Unix.create_process
+	"dp" 
+	[| "dp" ; "-smt-solver" ; opt  ;"-timeout" ; "10" ; 
+	   (String.sub g.goal_file 0 
+	      (String.length g.goal_file  - 4))^"_why"^endoffile  |]
+	Unix.stdin writeme Unix.stderr 
+  in  
+  let _ = Unix.wait() in
+  let size = size+(String.length g.goal_file) in
+  let buff = String.make size  '!' in
+  let _ = Unix.read reademe buff 0 size in
+  eprintf "%s@." buff;
+  (*    let buff = String.make size '?' in
+	let _ = Unix.read reademe buff 0 size in
+    eprintf "%s@." buff;*)
+  Unix.close writeme;
+  Unix.close reademe;
+  let proof = List.filter (fun (s,_) -> s!=prover) g.proof in
+  (g.proof <-
+     match String.get buff ((String.length buff)-1) with 
+       | '.' -> (prover,("valid","10","",""))::proof
+       | '*' -> (prover,("invalid","10","",""))::proof  
+       | '?' -> (prover,("cannotdecide","10","",""))::proof  
+       | '#' -> (prover,("timeout","10","",""))::proof  
+       | '!' -> (prover,("failure","10","",""))::proof 
+       | c -> Format.eprintf "erreur : %c@." c;
+	   assert false);
+  Thread.exit()
    
 let version () = 
   printf "This is WhyWeb version %s, compiled on %s
@@ -131,10 +151,6 @@ let current_page = ref ""
 let launch_goal prover g =
   let proof = g.proof in
   g.proof <- (prover,("running","10","",""))::proof;
-(*  while !nb_thread > 5 do
-    Unix.sleep (10);
-  done;    
-  nb_thread := !nb_thread+1;*)
   let pid =  Thread.create (launch_goal prover !proj.project_context_file) g in
   Thread.join pid 
 
@@ -163,15 +179,55 @@ let interp_com c =
       | `OpenLemma l -> toggle_lemma l
       | `OpenBehavior b -> toggle_behavior b
       | `OpenGoal g -> toggle_goal g
-      | `LaunchErgo g -> let _ =  Thread.create (launch_goal "ergo") g in ()
+      | `LaunchErgo g -> let _ =  Thread.create (launch_goal Ergo) g in ()
       | `LaunchErgoLemma -> let _ =  
-	    Thread.create (launch_lemmas "ergo") !proj.project_lemmas in ()
+	    Thread.create (launch_lemmas Ergo) !proj.project_lemmas in ()
       | `LaunchErgoFunctions -> let _ =  
-	  Thread.create (launch_functions "ergo") !proj.project_functions in ()
+	  Thread.create (launch_functions Ergo) !proj.project_functions in ()
       | `LaunchErgoBehavior b -> 
-	  let _ =  Thread.create (launch_behavior "ergo")  b in ()
+	  let _ =  Thread.create (launch_behavior Ergo)  b in ()
       | `LaunchErgoFunction f -> 
-	  let _ =  Thread.create (launch_function "ergo") f  in ()
+	  let _ =  Thread.create (launch_function Ergo) f  in ()
+      | `LaunchSimplify g -> 
+	  let _ = Thread.create (launch_goal Simplify) g in ()
+      | `LaunchSimplifyLemma -> let _ =  
+	    Thread.create (launch_lemmas Simplify) !proj.project_lemmas in ()
+      | `LaunchSimplifyFunctions -> let _ =  
+	  Thread.create (launch_functions Simplify) !proj.project_functions 
+	in ()
+      | `LaunchSimplifyBehavior b -> 
+	  let _ =  Thread.create (launch_behavior Simplify)  b in ()
+      | `LaunchSimplifyFunction f -> 
+	  let _ =  Thread.create (launch_function Simplify) f  in ()
+      | `LaunchZ3 g -> let _ =  Thread.create (launch_goal Z3) g in ()
+      | `LaunchZ3Lemma -> let _ =  
+	    Thread.create (launch_lemmas Z3) !proj.project_lemmas in ()
+      | `LaunchZ3Functions -> let _ =  
+	  Thread.create (launch_functions Z3) !proj.project_functions in ()
+      | `LaunchZ3Behavior b -> 
+	  let _ =  Thread.create (launch_behavior Z3)  b in ()
+      | `LaunchZ3Function f -> 
+	  let _ =  Thread.create (launch_function Z3) f  in ()
+      | `LaunchYices g -> let _ =  Thread.create (launch_goal Yices) g in ()
+      | `LaunchYicesLemma -> let _ =  
+	    Thread.create (launch_lemmas Yices) !proj.project_lemmas in ()
+      | `LaunchYicesFunctions -> let _ =  
+	  Thread.create (launch_functions Yices) !proj.project_functions 
+	in ()
+      | `LaunchYicesBehavior b -> 
+	  let _ =  Thread.create (launch_behavior Yices)  b in ()
+      | `LaunchYicesFunction f -> 
+	  let _ =  Thread.create (launch_function Yices) f  in ()
+      | `LaunchCvc3 g -> let _ =  Thread.create (launch_goal Cvc3) g in ()
+      | `LaunchCvc3Lemma -> let _ =  
+	    Thread.create (launch_lemmas Cvc3) !proj.project_lemmas in ()
+      | `LaunchCvc3Functions -> let _ =  
+	  Thread.create (launch_functions Cvc3) !proj.project_functions in ()
+      | `LaunchCvc3Behavior b -> 
+	  let _ =  Thread.create (launch_behavior Cvc3)  b in ()
+      | `LaunchCvc3Function f -> 
+	  let _ =  Thread.create (launch_function Cvc3) f  in ()
+      | `Save -> Project.save !proj !proj.project_name
     end;
     loc
   with Not_found -> ("",0,0,0)
@@ -206,6 +262,27 @@ let reg_com c =
     | `LaunchErgoFunctions -> (!file,!line,!beginning,!ending)
     | `LaunchErgoBehavior  _ -> (!file,!line,!beginning,!ending)
     | `LaunchErgoFunction  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchSimplify _ -> (!file,!line,!beginning,!ending) 
+    | `LaunchSimplifyLemma -> (!file,!line,!beginning,!ending)
+    | `LaunchSimplifyFunctions -> (!file,!line,!beginning,!ending)
+    | `LaunchSimplifyBehavior  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchSimplifyFunction  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchZ3 _ -> (!file,!line,!beginning,!ending) 
+    | `LaunchZ3Lemma -> (!file,!line,!beginning,!ending)
+    | `LaunchZ3Functions -> (!file,!line,!beginning,!ending)
+    | `LaunchZ3Behavior  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchZ3Function  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchYices _ -> (!file,!line,!beginning,!ending) 
+    | `LaunchYicesLemma -> (!file,!line,!beginning,!ending)
+    | `LaunchYicesFunctions -> (!file,!line,!beginning,!ending)
+    | `LaunchYicesBehavior  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchYicesFunction  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchCvc3 _ -> (!file,!line,!beginning,!ending) 
+    | `LaunchCvc3Lemma -> (!file,!line,!beginning,!ending)
+    | `LaunchCvc3Functions -> (!file,!line,!beginning,!ending)
+    | `LaunchCvc3Behavior  _ -> (!file,!line,!beginning,!ending)
+    | `LaunchCvc3Function  _ -> (!file,!line,!beginning,!ending)
+    | `Save -> (!file,!line,!beginning,!ending)
   in
   let n = string_of_int !com_count in
   Hashtbl.add coms n (c,loc);
@@ -255,22 +332,24 @@ let validity nl valid =
     match valid with 
     | "valid" -> "Valid", valid_color
     | "timeout" -> "TimeOut", timeout_color
-    | "cannotdecide" -> "CannotDecide", cannotdecide_color
+    | "cannotdecide" -> "Unknown", cannotdecide_color
     | "invalid" ->  "Invalid", invalid_color
     | "failure"-> "Failed", failed_color
     | "running" -> "Running", running_color
     | _ -> assert false 
   in
-  wprint "</td><td bgcolor=\"%s\"><a href=\"%s\">%s</a></td></tr>" 
+  wprint "</td><td bgcolor=\"%s\"><a href=\"%s\">%s</a></td>" 
    color nl valid
 
-let goal_validity prover g nl =   
+let goal_validity_bool prover g = 
   let list_prover = find_prover g.proof in
   let valid =  try 
       List.assoc prover list_prover 
     with Not_found -> "invalid" 
   in 
-  validity nl valid
+  valid
+
+let goal_validity prover g nl = validity nl (goal_validity_bool prover g)
 
 let goal_is_valid prover g = 
   let (v,_,_,_) = try List.assoc prover g.proof  
@@ -284,6 +363,7 @@ let behavior_validity prover b =
 let function_validity prover f =
   List.for_all (behavior_validity prover) f.function_behaviors
 
+
 let goal g indice indent =
   let s =fprintf str_formatter "%s" 
     (Explain.msg_of_kind g.goal_expl.Logic_decl.vc_kind);
@@ -291,7 +371,15 @@ let goal g indice indent =
   in
   let nt = reg_com (`ToggleGoal g) in 
   let no = reg_com (`OpenGoal g) in 
-  let nl = reg_com (`LaunchErgo g) in 
+  let call_provers = 
+    List.map (fun prover -> (prover,
+			     match prover with 
+			       | Ergo -> reg_com (`LaunchErgo g)
+			       | Simplify -> reg_com (`LaunchSimplify g)
+			       | Z3 -> reg_com (`LaunchZ3 g) 
+			       | Yices -> reg_com (`LaunchYices g) 
+			       | Cvc3 -> reg_com (`LaunchCvc3 g)
+			       | _ -> assert false)) provers in
   let op = List.assoc "ww_open" g.goal_tags = "true" in
   if op 
   then wprint "<tr><td>&nbsp &nbsp %s<a href=\"%s#%d\">-</a>" indent no !current_line
@@ -316,7 +404,10 @@ let goal g indice indent =
       with Sys_error _ -> 
 	wprint "File %s don't exist" g.goal_file;
     end;
-  goal_validity "ergo" g nl
+  List.iter (fun (prover,launcher) -> goal_validity prover g launcher ) 
+    call_provers;
+  wprint "</tr>
+"
 
 let string_of_addr addr = 
   match addr with 
@@ -385,21 +476,37 @@ h1 {
 	 com_count := 0;
 	 wprint "<h1 align=center> Project name: %s</h1>
 
-<div class=\"lemenu\">
-<table border=\"1\"  cellpadding=\"0\" cellspacing=\"0\">" !proj.project_name;
-	 wprint "<tr><th></th><th>Alt-Ergo</th></tr>
+<div class=\"lemenu\">" !proj.project_name;
+     let ns = reg_com (`Save) in
+wprint "<center><a href=\"%s\">Save Project</a></center>
+<table border=\"1\"  cellpadding=\"0\" cellspacing=\"0\">" ns;
+	 wprint "<tr><th></th>";
+	 List.iter (fun prover -> 
+		      wprint "<th>%s</th>" (Project.provers_name prover)) 
+	   provers;
+	 wprint "</tr>
 ";
 	 wprint "<tr><th>Lemmas</th>"; 
-	 let nl = reg_com (`LaunchErgoLemma) in 
-	 if (List.for_all (fun l -> 
-			     List.for_all 
-			       (fun pr ->
-				  let (_,(status,_,_,_)) = pr  in 
-				  status = "valid") l.lemma_goal.proof) 
-	       !proj.project_lemmas) 
-	 then validity nl "valid"
-	 else validity nl "invalid" 
-	 ;
+	 let call_provers = 
+	   List.map (fun prover -> 
+		       (prover,
+			match prover with 
+			  | Ergo -> reg_com (`LaunchErgoLemma)
+			  | Simplify -> reg_com (`LaunchSimplifyLemma)
+			  | Z3 -> reg_com (`LaunchZ3Lemma) 
+			  | Yices -> reg_com (`LaunchYicesLemma) 
+			  | Cvc3 -> reg_com (`LaunchCvc3Lemma)
+			  | Other -> assert false)) provers in
+	 List.iter (fun (prover,launch) ->
+		     if (List.for_all 
+			   (fun l -> 
+			      "valid" = 
+			       (goal_validity_bool prover l.lemma_goal)) 
+			   !proj.project_lemmas) 
+		     then validity launch "valid"
+		     else validity launch "invalid" ) call_provers;
+	 wprint "</tr>
+";
 	 let indice = ref 1 in
 	 List.iter
 	   (fun l -> 
@@ -411,7 +518,10 @@ h1 {
 	      else wprint "<tr><td><a href=\"%s#%d\">+</a>" no !current_line;
 	      wprint "%d : <a href=\"%s#%d\">%s</a></td>" !indice nt 
 		!current_line l.lemma_name;
-	      wprint "<td>Ergo</td></tr>
+	 List.iter (fun prover -> 
+		      wprint "<tr><th></th><th>%s</th>" (provers_name prover)) 
+	   provers;
+	 wprint "</tr>
 ";
 	      indice := !indice +1;
 	      if op then 
@@ -423,28 +533,53 @@ h1 {
 	 wprint "<tr><td></td><td></td></tr>
 ";
 	 wprint "<tr><th>Functions</th>
+"; 
+	 let call_provers = 
+	   List.map (fun prover -> 
+		       (prover,
+			match prover with 
+			  | Ergo -> reg_com(`LaunchErgoFunctions)
+			  | Simplify -> reg_com(`LaunchSimplifyFunctions)
+			  | Z3 -> reg_com(`LaunchZ3Functions) 
+			  | Yices -> reg_com(`LaunchYicesFunctions) 
+			  | Cvc3 -> reg_com(`LaunchCvc3Functions)
+			  | Other -> assert false)) provers
+	 in
+	 List.iter (fun (prover,launch) ->
+		      if (List.for_all (function_validity prover) 
+			    !proj.project_functions) 
+	 then validity launch "valid" 
+	 else validity launch "invalid") call_provers;
+	 wprint "</tr>
 ";
-	 let nl = reg_com (`LaunchErgoFunctions) in 
-	 if (List.for_all (function_validity "ergo") !proj.project_functions) 
-	 then validity nl "valid" 
-	 else validity nl "invalid"
-	 ;
 	 let indice = ref 1 in
 	 List.iter
 	   (fun f -> 
 	      let nt = reg_com (`ToggleFunction f) in 
-	      let no = reg_com (`OpenFunction f) in 
-	      let nl = reg_com (`LaunchErgoFunction f) in
+	      let no = reg_com (`OpenFunction f) in
+	      let call_provers = 
+		List.map (fun prover -> 
+			    (prover,
+			     match prover with 
+			       | Ergo -> reg_com (`LaunchErgoFunction f)
+			       | Simplify -> 
+				   reg_com (`LaunchSimplifyFunction f)
+			       | Z3 -> reg_com (`LaunchZ3Function f) 
+			       | Yices -> reg_com (`LaunchYicesFunction f) 
+			       | Cvc3 -> reg_com (`LaunchCvc3Function f)
+			       | Other -> assert false)) 
+		  provers in	 
 	      let op = List.assoc "ww_open" f.function_tags = "true" in
 	      if op
 	      then wprint "<tr><td><a href=\"%s#%d\">-</a>" no !current_line
 	      else wprint "<tr><td><a href=\"%s#%d\">+</a>" no !current_line;
-	      wprint "%d : <a href=\"%s#%d\">%s</a></td>
-" !indice nt !current_line f.function_name;
-	      if (function_validity "ergo" f)
-	      then validity nl "valid"
-	      else validity nl "invalid"
-		;
+	      wprint "%d : <a href=\"%s#%d\">%s</a></td>" !indice nt !current_line f.function_name;
+	      List.iter (fun (prover,launch) ->
+			   if (function_validity prover f)
+			   then validity launch "valid"
+			   else validity launch "invalid") call_provers;
+	      wprint "</tr>
+";
 	      indice := !indice +1;
 	      if op then
 		begin
@@ -453,20 +588,40 @@ h1 {
 		    (fun b ->
 		       let nt = reg_com (`ToggleBehavior b) in 
 		       let no = reg_com (`OpenBehavior b) in 
-		       let nl = reg_com (`LaunchErgoBehavior b) in
+		       let call_provers = 
+			 List.map (fun prover -> 
+				     (prover,
+				      match prover with 
+					| Ergo -> 
+					    reg_com (`LaunchErgoBehavior b)
+					| Simplify -> 
+					    reg_com (`LaunchSimplifyBehavior b)
+					| Z3 -> 
+					    reg_com (`LaunchZ3Behavior b) 
+					| Yices -> 
+					    reg_com (`LaunchYicesBehavior b) 
+					| Cvc3 -> 
+					    reg_com (`LaunchCvc3Behavior b)
+					| Other -> assert false))
+			   provers in
 		       let op = 
 			 List.assoc "ww_open" b.behavior_tags = "true" in
 		       if op 
 		       then 
-			 wprint "<tr><td>&nbsp &nbsp<a href=\"%s#%d\">-</a>" no !current_line
+			 wprint "<tr><td>&nbsp &nbsp<a href=\"%s#%d\">-</a>" no
+			   !current_line
 		       else 
-			 wprint "<tr><td>&nbsp &nbsp<a href=\"%s#%d\">+</a>" no !current_line;
-		       wprint "%d : <a href=\"%s#%d\">%s</a></td>>
-" !indice nt !current_line b.behavior_name;
-		       if (behavior_validity "ergo" b)
-		       then validity nl "valid"
-		       else validity nl "invalid"
-		       ;
+			 wprint "<tr><td>&nbsp &nbsp<a href=\"%s#%d\">+</a>" no
+			   !current_line;
+		       wprint "%d : <a href=\"%s#%d\">%s</a></td>" 
+			 !indice nt !current_line b.behavior_name;
+		       List.iter (fun (prover,launch) ->
+				    if (behavior_validity prover b)
+				    then validity launch "valid"
+				    else validity launch "invalid") 
+			 call_provers;
+		       wprint "</tr>
+";
 		       indice := !indice +1;
 		       if op then
 			 begin
@@ -482,6 +637,8 @@ h1 {
 	     begin
 	       wprint "
 </table>
+
+
 </div>
 
 <div class=\"content\"> <pre>
