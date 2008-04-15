@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.202 2008-04-14 10:17:38 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.203 2008-04-15 13:09:53 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -624,10 +624,12 @@ let rec term env e =
         make_logic_unary_op e#loc op (ft e1)
     | JCNEapp(id, labs, args) ->
         begin try
-          if List.length args = 0 then
-            let vi = Hashtbl.find logic_constants_env id in
-            vi.jc_var_info_type, vi.jc_var_info_region, JCTvar vi
-          else begin
+(* Yannick: no need for different rule for const logic *)
+(*           if List.length args = 0 then *)
+(*             let vi = Hashtbl.find logic_constants_env id in *)
+(*             vi.jc_var_info_type, vi.jc_var_info_region, JCTvar vi *)
+(*           else *)
+	    begin
             let pi = find_logic_info id in
             let tl =
               try
@@ -1286,10 +1288,12 @@ let rec expr env e =
             jc_call_label_assoc = [];
           }
         with Not_found -> try
-          if List.length args = 0 then
-            let vi = Hashtbl.find logic_constants_env id in
-            vi.jc_var_info_type, vi.jc_var_info_region, JCEvar vi
-          else begin
+(* Yannick: no need for different rule for const logic *)
+(*           if List.length args = 0 then *)
+(*             let vi = Hashtbl.find logic_constants_env id in *)
+(*             vi.jc_var_info_type, vi.jc_var_info_region, JCEvar vi *)
+(*           else *)
+	  begin
             let pi = find_logic_info id in
             let tl =
               try
@@ -1690,7 +1694,8 @@ let type_logic_labels_in_decl d = match d#node with
       type_logic_labels [LabelHere] (Some LabelHere) body
   | JCDvariant_type _ | JCDunion_type _ | JCDenum_type _ | JCDlogic_type _
   | JCDexception _ | JCDinvariant_policy _ | JCDseparation_policy _
-  | JCDannotation_policy _ | JCDabstract_domain _ | JCDint_model _ ->
+  | JCDannotation_policy _ | JCDabstract_domain _ | JCDint_model _ 
+  | JCDlogic_var _ ->
       ()
 
 
@@ -2076,20 +2081,18 @@ of an invariant policy";
     | JCDexception(id,tyopt) ->
         let tt = Option_misc.map type_type tyopt in
         Hashtbl.add exceptions_table id (exception_info tt id)
-    | JCDlogic (Some ty, id, labels, [], body) ->
+    | JCDlogic_var (ty, id, body) ->
         let ty, vi = add_logic_constdecl (ty, id) in
-        let t = match body with
-          | JCreads reads -> 
-              assert (reads = []);
-              None
-          | JCexpr body ->
-              let t = term [] body in
-                if not (subtype t#typ ty) then 
-                  typing_error d#loc
-                    "inferred type differs from declared type" 
-                else Some(t,mintype t#loc t#typ ty)
+        let t = Option_misc.map 
+	  (function body ->
+	     let t = term [] body in
+             if not (subtype t#typ ty) then
+               typing_error d#loc
+                 "inferred type differs from declared type"
+             else (t,mintype t#loc t#typ ty)
+	  ) body
         in
-          Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t)
+        Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t)
     | JCDlogic(None, id, labels, pl, body) ->
         let param_env,ty,pi = add_logic_fundecl (None,id,labels,pl) in
         let p = match body with

@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.92 2008-04-10 16:05:55 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.93 2008-04-15 13:09:53 moy Exp $ */
 
 %{
 
@@ -890,10 +890,10 @@ exception_expression:
 logic_definition:
 /* constants def */
 | LOGIC type_expr IDENTIFIER EQ expression
-    { locate (JCDlogic(Some $2, $3, [], [], JCexpr $5)) }
+    { locate (JCDlogic_var($2, $3, Some $5)) }
 /* constants no def */
 | LOGIC type_expr IDENTIFIER 
-    { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
+    { locate (JCDlogic_var($2, $3, None)) }
 /* logic fun def */
 | LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
     { locate (JCDlogic(Some $2, $3, $4, $5, JCexpr $7)) }

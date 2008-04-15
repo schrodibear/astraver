@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.2 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.3 2008-04-15 13:09:53 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -358,6 +358,8 @@ module PDecl = struct
     mk ~node:(JCDfun(result_type, name, params, clauses, body))
   let mklemma_def ~name ?(axiom = false) ?(labels = []) ~body =
     mk ~node:(JCDlemma(name, axiom, labels, body))
+  let mklogic_var_def ~typ ~name ?body =
+    mk ~node:(JCDlogic_var(typ, name, body))
   let mklogic_def ?typ ~name ?(labels = []) ?(params = []) ?reads ?body =
     let roe = match reads, body with
       | Some r, None -> JCreads r

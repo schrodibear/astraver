@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.7 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.8 2008-04-15 13:09:53 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -312,6 +312,10 @@ let rec pdecl fmt d =
     | JCDexception(id,tyopt) ->
 	fprintf fmt "@\n@[exception %s of %a@]@." id
 	  (print_option ptype) tyopt
+    | JCDlogic_var (ty, id, body) ->
+	fprintf fmt "@\n@[logic %a %s %a@]@." 
+	  ptype ty id
+	  (print_option (fun fmt e -> fprintf fmt "=@\n%a" pexpr e)) body 
     | JCDlogic (None, id, labels, params, body) ->
 	fprintf fmt "@\n@[logic %s%a(@[%a@]) %a@]@." 
 	  id (print_list_delim lbrace rbrace comma label) labels

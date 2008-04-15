@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.104 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.105 2008-04-15 13:09:53 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -535,10 +535,11 @@ let rec print_decl fmt d =
 	assert (labels=[]);
 	fprintf fmt "@\n@[logic %a %s@]@." 
 	  (print_option print_type) ty id
-    | JClogic_fun_def(ty,id,labels,[],JCTerm t) ->
-	assert (labels=[]);
-	fprintf fmt "@\n@[logic %a %s = %a@]@." 
-	  (print_option print_type) ty id term t
+(* Yannick: no need for different rule for const logic *)
+(*     | JClogic_fun_def(ty,id,labels,[],JCTerm t) -> *)
+(* 	assert (labels=[]); *)
+(* 	fprintf fmt "@\n@[logic %a %s = %a@]@."  *)
+(* 	  (print_option print_type) ty id term t *)
     | JClogic_fun_def(ty,id,[],params,body) ->
 	fprintf fmt "@\n@[logic %a %s(@[%a@]) %a@]@." 
 	  (print_option print_type) ty 

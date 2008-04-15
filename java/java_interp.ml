@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.131 2008-04-11 12:38:34 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.132 2008-04-15 13:09:53 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -1783,12 +1783,12 @@ let tr_field type_name acc fi =
       in
       match e with
 	| None ->
-            JCreads [], None
+            None, None
 	| Some (JIexpr e) ->
 	    assert (List.length values = 1);
 	    (* evaluated constant expressions are translated *)
             let t = term (term_of_expr e) in
-	    JCexpr (mkconst ~const:(get_value (List.hd values)) ~loc:t#loc ()),
+	    Some (mkconst ~const:(get_value (List.hd values)) ~loc:t#loc ()),
 	    None
 	| Some (JIlist il) ->
 	    let n = List.length il in
@@ -1839,24 +1839,21 @@ let tr_field type_name acc fi =
 		    cpt + 1
 		| JIlist _ -> assert false (* TODO / Not supported *)
             end (a, 0) il values in
-	    JCreads [], Some a
+	    None, Some a
     with Not_found ->
       Java_options.lprintf
         "Warning: final field '%s' of %a has no known value@."
 	fi.java_field_info_name 
 	Java_typing.print_type_name 
 	fi.java_field_info_class_or_interface;
-      JCreads [], None
+      None, None
     in
     let def1 =
-      let def_ = 
-        mklogic_def
-          ~typ: (ptype_of_type vi_ty)
-          ~name: (var_name vi)
-      in
-      match logic_body with
-        | JCexpr body -> def_ ~body ()
-        | JCreads reads -> def_ ~reads ()
+      mklogic_var_def
+        ~typ: (ptype_of_type vi_ty)
+        ~name: (var_name vi) 
+	?body:logic_body 
+	()
     in
     let def2 = match axiom_body with
       | None -> []

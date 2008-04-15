@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.274 2008-04-15 09:00:08 filliatr Exp $ *)
+(* $Id: jc_interp.ml,v 1.275 2008-04-15 13:09:53 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -892,7 +892,7 @@ let tr_logic_fun li ta acc =
         "full_separated_" ^ li.jc_logic_info_name ^ "_" ^ fviname,
         a) :: acc
     ) li.jc_logic_info_effects.jc_effect_memories acc
-  
+
 (*******************************************************************************)
 (*                                 Expressions                                 *)
 (*******************************************************************************)

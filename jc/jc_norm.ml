@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.89 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.90 2008-04-15 13:09:53 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -625,6 +625,8 @@ let decl d =
 	JCDglobal_inv(id,expr a)
     | JCDexception(id,ty) ->
 	JCDexception(id,ty)
+    | JCDlogic_var (ty, id, body) ->
+	JCDlogic_var (ty, id, Option_misc.map expr body)
     | JCDlogic (ty, id, labels, params, body) ->
 	JCDlogic (ty, id, labels, params, reads_or_expr body)
     | JCDlogic_type id ->

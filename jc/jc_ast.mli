@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.126 2008-04-15 09:00:08 filliatr Exp $ *)
+(* $Id: jc_ast.mli,v 1.127 2008-04-15 13:09:53 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -216,6 +216,7 @@ type 'expr decl_node =
   (* logic functions and predicates (return type: None if predicate) *)
   | JCDlogic of ptype option * string * logic_label list * (ptype * string) list 
       * 'expr reads_or_expr
+  | JCDlogic_var of ptype * string * 'expr option
   (* global invariant *)
   | JCDglobal_inv of string * 'expr
   (* "pragma" options and policies *)
