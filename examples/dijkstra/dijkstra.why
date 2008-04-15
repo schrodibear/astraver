@@ -11,6 +11,7 @@ predicate Is_empty(s : 'a set) = forall x:'a. not In(x, s)
 predicate Incl(s1 : 'a set, s2 : 'a set) = forall x:'a. In(x, s1) -> In(x, s2)
 
 axiom set_empty_def : Is_empty(set_empty)
+
 axiom set_add_def : 
   forall x:'a. forall y:'a. forall s:'a set. 
   In(x, set_add(y,s)) <-> (x = y or In(x, s))
@@ -197,7 +198,7 @@ predicate Inv(src:vertex, S:vertex set, Q:vertex set, d:(vertex,int) map) =
   and
   (forall m:vertex. Min(m,Q,d) -> 
      forall x:vertex. forall dx:int. shortest_path(src,x,dx) -> 
-       dx < map_get(d,x) -> In(x,S)) 
+       dx < map_get(d,m) -> In(x,S)) 
 
 predicate InvSucc(src:vertex, S:vertex set, Q: vertex set) =
   (* successors of vertices in S are either in S or in Q *)

@@ -25,12 +25,12 @@ Implicit Arguments set_rmv.
 Admitted.
 Implicit Arguments In.
 
-(*Why predicate*) Definition Is_empty (A226:Set) (s:(set A226))
-  := (forall (x:A226), ~(In x s)).
+(*Why predicate*) Definition Is_empty (A203:Set) (s:(set A203))
+  := (forall (x:A203), ~(In x s)).
 Implicit Arguments Is_empty.
 
-(*Why predicate*) Definition Incl (A227:Set) (s1:(set A227)) (s2:(set A227))
-  := (forall (x:A227), ((In x s1) -> (In x s2))).
+(*Why predicate*) Definition Incl (A204:Set) (s1:(set A204)) (s2:(set A204))
+  := (forall (x:A204), ((In x s1) -> (In x s2))).
 Implicit Arguments Incl.
 
 (*Why axiom*) Lemma set_empty_def :
@@ -73,60 +73,53 @@ Admitted.
     ((In x s) -> (set_card s) = (1 + (set_card (set_rmv x s)))))).
 Admitted.
 
-(*Why type*) Definition prod: Set -> Set ->Set.
-exact prod.
-Defined.
 
-(*Why logic*) Definition pair :
-  forall (A1:Set), forall (A2:Set), A1 -> A2 -> (prod A1 A2).
-exact pair.
-Defined.
+(*Why axiom*) Lemma card_Incl :
+  forall (A1:Set),
+  (forall (s1:(set A1)),
+   (forall (s2:(set A1)), ((Incl s1 s2) -> (set_card s1) <= (set_card s2)))).
+Admitted.
 
-(*Why logic*) Definition fst :
-  forall (A1:Set), forall (A2:Set), (prod A1 A2) -> A1.
-exact fst.
-Defined.
+(*Why type*) Definition map: Set -> Set ->Set.
+Admitted.
 
-(*Why logic*) Definition snd :
-  forall (A1:Set), forall (A2:Set), (prod A2 A1) -> A1.
-exact (fun A1 A2 => @snd A2 A1).
-Defined.
+(*Why logic*) Definition map_get :
+  forall (A1:Set), forall (A2:Set), (map A2 A1) -> A2 -> A1.
+Admitted.
+Implicit Arguments map_get.
 
-Implicit Arguments pair.
-Implicit Arguments fst.
-Implicit Arguments snd.
+(*Why logic*) Definition map_set :
+  forall (A1:Set), forall (A2:Set), (map A1 A2) -> A1 -> A2 -> (map A1 A2).
+Admitted.
+Implicit Arguments map_set.
 
-(*Why axiom*) Lemma pair_1 :
+(*Why axiom*) Lemma map_get_set_eq :
   forall (A1:Set), forall (A2:Set),
-  (forall (x:A1), (forall (y:A2), (fst (pair x y)) = x)).
-auto.
-Qed.
+  (forall (m:(map A1 A2)),
+   (forall (i:A1), (forall (v:A2), (map_get (map_set m i v) i) = v))).
+Admitted.
 
-(*Why axiom*) Lemma pair_2 :
+(*Why axiom*) Lemma map_get_set_neq :
   forall (A1:Set), forall (A2:Set),
-  (forall (x:A1), (forall (y:A2), (snd (pair x y)) = y)).
-auto.
-Qed.
-
-(*Why axiom*) Lemma pair_e :
-  forall (A1:Set), forall (A2:Set),
-  (forall (p:(prod A1 A2)), p = (pair (fst p) (snd p))).
-destruct p; auto.
-Qed.
+  (forall (m:(map A1 A2)),
+   (forall (i:A1),
+    (forall (j:A1),
+     (forall (v:A2),
+      (~(i = j) -> (map_get (map_set m i v) j) = (map_get m j)))))).
+Admitted.
 
 (*Why type*) Definition vertex: Set.
 Admitted.
 
 Axiom vertex_eq_dec : forall x y : vertex, {x=y}+{~x=y}.
 
-(*Why logic*) Definition g_vertices : (set vertex).
+(*Why logic*) Definition V : (set vertex).
 Admitted.
 
 (*Why logic*) Definition g_succ : vertex -> (set vertex).
 Admitted.
 
-(*Why axiom*) Lemma g_succ_sound :
-  (forall (x:vertex), (Incl (g_succ x) g_vertices)).
+(*Why axiom*) Lemma g_succ_sound : (forall (x:vertex), (Incl (g_succ x) V)).
 Admitted.
 
 (*Why logic*) Definition weight : vertex -> vertex -> Z.
@@ -136,9 +129,9 @@ Admitted.
   (forall (x:vertex), (forall (y:vertex), (weight x y) >= 0)).
 Admitted.
 
-(*Why predicate*) Definition Min  (e:(prod vertex Z)) (pq:(set (prod vertex Z)))
-  := (In e pq) /\
-     (forall (x:(prod vertex Z)), ((In x pq) -> (snd e) <= (snd x))).
+(*Why predicate*) Definition Min  (m:vertex) (Q:(set vertex)) (d:(map vertex Z))
+  := (In m Q) /\
+     (forall (x:vertex), ((In x Q) -> (map_get d x) <= (map_get d m))).
 
 (*Why logic*) Definition path : vertex -> vertex -> Z -> Prop.
 Admitted.
@@ -199,122 +192,169 @@ Admitted.
        ((In src s) -> ((path src dst d) -> (In dst s)))))))).
 Admitted.
 
-(*Why predicate*) Definition lex2  (x:(prod Z Z)) (y:(prod Z Z))
-  := (fst x) < (fst y) \/ (fst x) = (fst y) /\ (snd x) < (snd y).
 
-(*Why predicate*) Definition MinNotVisited  (e:(prod vertex Z)) (pq:(set (prod vertex Z))) (visited:(set vertex))
-  := (In e pq) /\ ~(In (fst e) visited) /\
-     (forall (x:(prod vertex Z)),
-      ((In x pq) /\ ~(In (fst x) visited) -> (snd e) <= (snd x))).
 
-(*Why predicate*) Definition Inv_src  (src:vertex) (visited:(set vertex)) (pq:(set (prod vertex Z)))
-  := (In src visited) \/ (In (pair src 0) pq).
+(*Why predicate*) Definition Inv_src  (src:vertex) (S:(set vertex)) (Q:(set vertex))
+  := (In src S) \/ (In src Q).
 
-(*Why predicate*) Definition Inv  (src:vertex) (visited:(set vertex)) (pq:(set (prod vertex Z)))
-  := (Inv_src src visited pq) /\
-     (forall (e:(prod vertex Z)), ((In e pq) -> (path src (fst e) (snd e)))) /\
-     (forall (m:(prod vertex Z)),
-      ((MinNotVisited m pq visited) ->
+(*Why predicate*) Definition Inv  (src:vertex) (S:(set vertex)) (Q:(set vertex)) (d:(map vertex Z))
+  := (Inv_src src S Q) /\ (Incl S V) /\ (Incl Q V) /\
+     (forall (v:vertex), ((In v Q) -> ((In v S) -> False))) /\
+     (forall (v:vertex), ((In v S) -> (shortest_path src v (map_get d v)))) /\
+     (forall (v:vertex), ((In v Q) -> (path src v (map_get d v)))) /\
+     (forall (m:vertex),
+      ((Min m Q d) ->
        (forall (x:vertex),
-        (forall (d:Z),
-         ((shortest_path src x d) -> (d < (snd m) -> (In x visited))))))).
+        (forall (dx:Z),
+         ((shortest_path src x dx) -> (dx < (map_get d m) -> (In x S))))))).
 
-(*Why predicate*) Definition InvSucc  (src:vertex) (visited:(set vertex)) (pq:(set (prod vertex Z)))
+(*Why predicate*) Definition InvSucc  (src:vertex) (S:(set vertex)) (Q:(set vertex))
   := (forall (x:vertex),
-      ((In x visited) ->
-       (exists d:Z, (shortest_path src x d) /\
-        (forall (y:vertex),
-         ((In y (g_succ x)) -> (In y visited) \/
-          (In (pair y (d + (weight x y))) pq)))))).
+      ((In x S) ->
+       (forall (y:vertex), ((In y (g_succ x)) -> (In y S) \/ (In y Q))))).
 
-(*Why predicate*) Definition InvSucc2  (src:vertex) (visited:(set vertex)) (pq:(set (prod vertex Z)))
-  := (forall (x:vertex),
-      ((In x visited) ->
-       (exists d:Z, (path src x d) /\
-        (forall (y:vertex),
-         ((In y (g_succ x)) -> (In y visited) \/
-          (In (pair y (d + (weight x y))) pq)))))).
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "dijkstra.why", line 227, characters 1-41: *)
 (*Why goal*) Lemma shortest_path_po_1 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  (well_founded lex2).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  (Inv src S Q d0).
 Proof.
-(* FILL PROOF HERE *)
-Admitted.
+unfold Inv,Inv_src; intuition.
+right; subst Q.
+generalize (set_add_def _ src src set_empty); intuition.
+unfold Incl; intros.
+subst S; generalize (set_empty_def _ x); unfold Is_empty; intuition.
+unfold Incl; intros.
+subst Q; generalize (set_add_def _ x src set_empty); intuition.
+subst x; auto.
+generalize (set_empty_def _ x); unfold Is_empty; intuition.
+subst S; generalize (set_empty_def _ v); unfold Is_empty; intuition.
+(* sp *)
+subst d0.
+assert (v = src).
+subst S; generalize (set_add_def _ v src set_empty); intuition.
+generalize (set_empty_def _ v); unfold Is_empty; intuition.
+subst v; rewrite map_get_set_eq.
+unfold shortest_path; intuition.
+apply path_nil.
+apply Zge_le.
+apply length_nonneg with src src; auto.
+subst Q; generalize (set_add_def _ v src set_empty); intuition.
+subst d0 v; rewrite map_get_set_eq.
+apply path_nil.
+generalize (set_empty_def _ v); unfold Is_empty; intuition.
+unfold Min in H2; destruct H2.
+(* In x S *)
+assert (m = src).
+subst Q; generalize (set_add_def _ m src set_empty); intuition.
+generalize (set_empty_def _ m); unfold Is_empty; intuition.
+subst m.
+assert (dx >= 0).
+apply length_nonneg with src x.
+red in H5; intuition.
+subst d0; rewrite map_get_set_eq in H6.
+absurd (dx < 0); omega.
+Qed.
 
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
+(* Why obligation from file "dijkstra.why", line 227, characters 1-41: *)
 (*Why goal*) Lemma shortest_path_po_2 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  (Inv src visited pq0).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  (InvSucc src S Q).
 Proof.
 (* FILL PROOF HERE *)
 Admitted.
 
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
+(* Why obligation from file "dijkstra.why", line 241, characters 4-65: *)
 (*Why goal*) Lemma shortest_path_po_3 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  ~(In dst visited).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_4: (Is_empty Q0)),
+  forall (v: vertex),
+  forall (HW_5: (In v S0)),
+  (shortest_path src v (map_get d1 v)).
 Proof.
 (* FILL PROOF HERE *)
 Admitted.
 
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
+(* Why obligation from file "dijkstra.why", line 231, characters 13-48: *)
 (*Why goal*) Lemma shortest_path_po_4 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  (InvSucc src visited pq0).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  (shortest_path src result (map_get d1 result)).
 Proof.
 (* FILL PROOF HERE *)
 Admitted.
 
-(* Why obligation from file "dijkstra.why", line 223, characters 11-106: *)
+(* Why obligation from file "dijkstra.why", line 235, characters 18-35: *)
 (*Why goal*) Lemma shortest_path_po_5 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_4: (Is_empty pq1)),
-  forall (v: vertex),
-  forall (HW_5: (In v visited0)),
-  forall (w: vertex),
-  forall (HW_6: (In w (g_succ v))),
-  (In w visited0).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  forall (HW_9: (shortest_path src result (map_get d1 result))),
+  forall (S1: (set vertex)),
+  forall (HW_10: S1 = (set_add result S0)),
+  (Inv src S1 Q1 d1).
 Proof.
 (****
   unfold Inv; intuition.
@@ -346,26 +386,35 @@ Save.
 ***)
 Admitted.
 
-(* Why obligation from file "dijkstra.why", line 226, characters 4-37: *)
+(* Why obligation from file "dijkstra.why", line 227, characters 1-41: *)
 (*Why goal*) Lemma shortest_path_po_6 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_4: (Is_empty pq1)),
-  forall (HW_7: (forall (v:vertex),
-                 ((In v visited0) ->
-                  (forall (w:vertex), ((In w (g_succ v)) -> (In w visited0)))))),
-  forall (d: Z),
-  ~(path src dst d).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  forall (HW_9: (shortest_path src result (map_get d1 result))),
+  forall (S1: (set vertex)),
+  forall (HW_10: S1 = (set_add result S0)),
+  forall (Q2: (set vertex)),
+  forall (d2: (map vertex Z)),
+  forall (su: (set vertex)),
+  forall (HW_11: (Inv src S1 Q2 d2)),
+  forall (HW_12: (Is_empty su)),
+  (InvSucc src S1 Q2).
 Proof.
 (***
   unfold Inv; intuition; subst dst.
@@ -374,26 +423,35 @@ Save.
 ***)
 Admitted.
 
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
+(* Why obligation from file "dijkstra.why", line 229, characters 1-26: *)
 (*Why goal*) Lemma shortest_path_po_7 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_11: (In (fst result) visited0)),
-  (Inv src visited0 pq2).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  forall (HW_9: (shortest_path src result (map_get d1 result))),
+  forall (S1: (set vertex)),
+  forall (HW_10: S1 = (set_add result S0)),
+  forall (Q2: (set vertex)),
+  forall (d2: (map vertex Z)),
+  forall (su: (set vertex)),
+  forall (HW_11: (Inv src S1 Q2 d2)),
+  forall (HW_12: (Is_empty su)),
+  0 <= ((set_card V) - (set_card S0)).
 Proof.
   unfold Inv, Min, MinNotVisited; intuition.
   unfold Inv_src in *|-*; intuition.
@@ -418,459 +476,234 @@ Proof.
 Save.
 
 
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
+(* Why obligation from file "dijkstra.why", line 229, characters 1-26: *)
 (*Why goal*) Lemma shortest_path_po_8 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_11: (In (fst result) visited0)),
-  ~(In dst visited0).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  forall (HW_9: (shortest_path src result (map_get d1 result))),
+  forall (S1: (set vertex)),
+  forall (HW_10: S1 = (set_add result S0)),
+  forall (Q2: (set vertex)),
+  forall (d2: (map vertex Z)),
+  forall (su: (set vertex)),
+  forall (HW_11: (Inv src S1 Q2 d2)),
+  forall (HW_12: (Is_empty su)),
+  ((set_card V) - (set_card S1)) < ((set_card V) - (set_card S0)).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
+(* Why obligation from file "dijkstra.why", line 235, characters 18-35: *)
 (*Why goal*) Lemma shortest_path_po_9 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_11: (In (fst result) visited0)),
-  (InvSucc src visited0 pq2).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  forall (HW_9: (shortest_path src result (map_get d1 result))),
+  forall (S1: (set vertex)),
+  forall (HW_10: S1 = (set_add result S0)),
+  forall (Q2: (set vertex)),
+  forall (d2: (map vertex Z)),
+  forall (su: (set vertex)),
+  forall (HW_11: (Inv src S1 Q2 d2)),
+  forall (HW_13: ~(Is_empty su)),
+  forall (HW_14: ~(Is_empty su)),
+  forall (result0: vertex),
+  forall (su0: (set vertex)),
+  forall (HW_15: (In result0 su) /\ su0 = (set_rmv result0 su)),
+  forall (Q3: (set vertex)),
+  forall (d3: (map vertex Z)),
+  forall (HW_16: (In result0 S1) /\ Q3 = Q2 /\ d3 = d2 \/ (In result0 Q3) /\
+                 ((map_get d3 result) + (weight result result0)) >=
+                 (map_get d3 result0) /\ Q3 = Q2 /\ d3 = d2 \/
+                 (In result0 Q3) /\
+                 ((map_get d3 result) + (weight result result0)) <
+                 (map_get d3 result0) /\ Q3 = Q2 /\
+                 d3 =
+                 (map_set
+                  d2 result0 ((map_get d3 result) + (weight result result0))) \/
+                 ~(In result0 S1) /\ ~(In result0 Q3) /\
+                 Q3 = (set_add result0 Q2) /\
+                 d3 =
+                 (map_set
+                  d2 result0 ((map_get d3 result) + (weight result result0)))),
+  (Inv src S1 Q3 d3).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "dijkstra.why", line 203, characters 1-61: *)
+(* Why obligation from file "dijkstra.why", line 236, characters 16-28: *)
 (*Why goal*) Lemma shortest_path_po_10 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_11: (In (fst result) visited0)),
-  (lex2
-   (pair ((set_card g_vertices) - (set_card visited0)) (set_card pq2)) (
-   pair ((set_card g_vertices) - (set_card visited0)) (set_card pq1))).
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  forall (HW_9: (shortest_path src result (map_get d1 result))),
+  forall (S1: (set vertex)),
+  forall (HW_10: S1 = (set_add result S0)),
+  forall (Q2: (set vertex)),
+  forall (d2: (map vertex Z)),
+  forall (su: (set vertex)),
+  forall (HW_11: (Inv src S1 Q2 d2)),
+  forall (HW_13: ~(Is_empty su)),
+  forall (HW_14: ~(Is_empty su)),
+  forall (result0: vertex),
+  forall (su0: (set vertex)),
+  forall (HW_15: (In result0 su) /\ su0 = (set_rmv result0 su)),
+  forall (Q3: (set vertex)),
+  forall (d3: (map vertex Z)),
+  forall (HW_16: (In result0 S1) /\ Q3 = Q2 /\ d3 = d2 \/ (In result0 Q3) /\
+                 ((map_get d3 result) + (weight result result0)) >=
+                 (map_get d3 result0) /\ Q3 = Q2 /\ d3 = d2 \/
+                 (In result0 Q3) /\
+                 ((map_get d3 result) + (weight result result0)) <
+                 (map_get d3 result0) /\ Q3 = Q2 /\
+                 d3 =
+                 (map_set
+                  d2 result0 ((map_get d3 result) + (weight result result0))) \/
+                 ~(In result0 S1) /\ ~(In result0 Q3) /\
+                 Q3 = (set_add result0 Q2) /\
+                 d3 =
+                 (map_set
+                  d2 result0 ((map_get d3 result) + (weight result result0)))),
+  0 <= (set_card su).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "dijkstra.why", line 209, characters 15-39: *)
+(* Why obligation from file "dijkstra.why", line 236, characters 16-28: *)
 (*Why goal*) Lemma shortest_path_po_11 : 
   forall (src: vertex),
   forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  (shortest_path src (fst result) (snd result)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "dijkstra.why", line 227, characters 13-42: *)
-(*Why goal*) Lemma shortest_path_po_12 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_15: (fst result) = dst),
-  (shortest_path src dst (snd result)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "dijkstra.why", line 214, characters 20-41: *)
-(*Why goal*) Lemma shortest_path_po_13 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  (Inv src visited1 pq2).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
-(*Why goal*) Lemma shortest_path_po_14 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_18: (Is_empty vs)),
-  ~(In dst visited1).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "dijkstra.why", line 200, characters 1-77: *)
-(*Why goal*) Lemma shortest_path_po_15 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_18: (Is_empty vs)),
-  (InvSucc src visited1 pq3).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "dijkstra.why", line 203, characters 1-61: *)
-(*Why goal*) Lemma shortest_path_po_16 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_18: (Is_empty vs)),
-  (lex2
-   (pair ((set_card g_vertices) - (set_card visited1)) (set_card pq3)) (
-   pair ((set_card g_vertices) - (set_card visited0)) (set_card pq1))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "dijkstra.why", line 215, characters 18-30: *)
-(*Why goal*) Lemma shortest_path_po_17 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_19: ~(Is_empty vs)),
-  forall (HW_20: ~(Is_empty vs)),
+  forall (d: (map vertex Z)),
+  forall (HW_1: (In src V) /\ (In dst V)),
+  forall (Q: (set vertex)),
+  forall (S: (set vertex)),
+  forall (d0: (map vertex Z)),
+  forall (HW_2: S = (@set_empty vertex) /\
+                Q = (set_add src (@set_empty vertex)) /\
+                d0 = (map_set d src 0)),
+  forall (Q0: (set vertex)),
+  forall (S0: (set vertex)),
+  forall (d1: (map vertex Z)),
+  forall (HW_3: (Inv src S0 Q0 d1) /\ (InvSucc src S0 Q0)),
+  forall (HW_7: ~(Is_empty Q0)),
+  forall (result: vertex),
+  forall (Q1: (set vertex)),
+  forall (HW_8: (Min result Q0 d1) /\ Q1 = (set_rmv result Q0)),
+  forall (HW_9: (shortest_path src result (map_get d1 result))),
+  forall (S1: (set vertex)),
+  forall (HW_10: S1 = (set_add result S0)),
+  forall (Q2: (set vertex)),
+  forall (d2: (map vertex Z)),
+  forall (su: (set vertex)),
+  forall (HW_11: (Inv src S1 Q2 d2)),
+  forall (HW_13: ~(Is_empty su)),
+  forall (HW_14: ~(Is_empty su)),
   forall (result0: vertex),
-  forall (HW_21: (In result0 vs)),
-  forall (HW_22: (In result0 visited1)),
-  forall (vs0: (set vertex)),
-  forall (HW_23: vs0 = (set_rmv result0 vs)),
-  0 <= (set_card vs).
+  forall (su0: (set vertex)),
+  forall (HW_15: (In result0 su) /\ su0 = (set_rmv result0 su)),
+  forall (Q3: (set vertex)),
+  forall (d3: (map vertex Z)),
+  forall (HW_16: (In result0 S1) /\ Q3 = Q2 /\ d3 = d2 \/ (In result0 Q3) /\
+                 ((map_get d3 result) + (weight result result0)) >=
+                 (map_get d3 result0) /\ Q3 = Q2 /\ d3 = d2 \/
+                 (In result0 Q3) /\
+                 ((map_get d3 result) + (weight result result0)) <
+                 (map_get d3 result0) /\ Q3 = Q2 /\
+                 d3 =
+                 (map_set
+                  d2 result0 ((map_get d3 result) + (weight result result0))) \/
+                 ~(In result0 S1) /\ ~(In result0 Q3) /\
+                 Q3 = (set_add result0 Q2) /\
+                 d3 =
+                 (map_set
+                  d2 result0 ((map_get d3 result) + (weight result result0)))),
+  (set_card su0) < (set_card su).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "dijkstra.why", line 215, characters 18-30: *)
-(*Why goal*) Lemma shortest_path_po_18 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_19: ~(Is_empty vs)),
-  forall (HW_20: ~(Is_empty vs)),
-  forall (result0: vertex),
-  forall (HW_21: (In result0 vs)),
-  forall (HW_22: (In result0 visited1)),
-  forall (vs0: (set vertex)),
-  forall (HW_23: vs0 = (set_rmv result0 vs)),
-  (set_card vs0) < (set_card vs).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "dijkstra.why", line 214, characters 20-41: *)
-(*Why goal*) Lemma shortest_path_po_19 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_19: ~(Is_empty vs)),
-  forall (HW_20: ~(Is_empty vs)),
-  forall (result0: vertex),
-  forall (HW_21: (In result0 vs)),
-  forall (HW_24: ~(In result0 visited1)),
-  forall (pq4: (set (prod vertex Z))),
-  forall (HW_25: pq4 =
-                 (set_add
-                  (pair
-                   result0 ((snd result) + (weight (fst result) result0))) pq3)),
-  forall (vs0: (set vertex)),
-  forall (HW_26: vs0 = (set_rmv result0 vs)),
-  (Inv src visited1 pq4).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "dijkstra.why", line 215, characters 18-30: *)
-(*Why goal*) Lemma shortest_path_po_20 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_19: ~(Is_empty vs)),
-  forall (HW_20: ~(Is_empty vs)),
-  forall (result0: vertex),
-  forall (HW_21: (In result0 vs)),
-  forall (HW_24: ~(In result0 visited1)),
-  forall (pq4: (set (prod vertex Z))),
-  forall (HW_25: pq4 =
-                 (set_add
-                  (pair
-                   result0 ((snd result) + (weight (fst result) result0))) pq3)),
-  forall (vs0: (set vertex)),
-  forall (HW_26: vs0 = (set_rmv result0 vs)),
-  0 <= (set_card vs).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "dijkstra.why", line 215, characters 18-30: *)
-(*Why goal*) Lemma shortest_path_po_21 : 
-  forall (src: vertex),
-  forall (dst: vertex),
-  forall (pq: (set (prod vertex Z))),
-  forall (visited: (set vertex)),
-  forall (HW_1: (In src g_vertices) /\ (In dst g_vertices) /\
-                (Is_empty visited) /\ (Is_empty pq)),
-  forall (pq0: (set (prod vertex Z))),
-  forall (HW_2: pq0 = (set_add (pair src 0) pq)),
-  forall (pq1: (set (prod vertex Z))),
-  forall (visited0: (set vertex)),
-  forall (HW_3: (Inv src visited0 pq1) /\ ~(In dst visited0) /\
-                (InvSucc src visited0 pq1)),
-  forall (HW_9: ~(Is_empty pq1)),
-  forall (result: (prod vertex Z)),
-  forall (pq2: (set (prod vertex Z))),
-  forall (HW_10: (Min result pq1) /\ pq2 = (set_rmv result pq1)),
-  forall (HW_12: ~(In (fst result) visited0)),
-  forall (HW_13: (shortest_path src (fst result) (snd result))),
-  forall (visited1: (set vertex)),
-  forall (HW_14: visited1 = (set_add (fst result) visited0)),
-  forall (HW_16: ~((fst result) = dst)),
-  forall (pq3: (set (prod vertex Z))),
-  forall (vs: (set vertex)),
-  forall (HW_17: (Inv src visited1 pq3)),
-  forall (HW_19: ~(Is_empty vs)),
-  forall (HW_20: ~(Is_empty vs)),
-  forall (result0: vertex),
-  forall (HW_21: (In result0 vs)),
-  forall (HW_24: ~(In result0 visited1)),
-  forall (pq4: (set (prod vertex Z))),
-  forall (HW_25: pq4 =
-                 (set_add
-                  (pair
-                   result0 ((snd result) + (weight (fst result) result0))) pq3)),
-  forall (vs0: (set vertex)),
-  forall (HW_26: vs0 = (set_rmv result0 vs)),
-  (set_card vs0) < (set_card vs).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
 Proof.
 (* FILL PROOF HERE *)
 Save.
