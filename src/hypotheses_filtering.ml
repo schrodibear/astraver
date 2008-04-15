@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.34 2008-04-14 15:14:09 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.35 2008-04-15 14:53:56 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -70,6 +70,7 @@ open Util
 open Graph.Graphviz 
 
 
+let use_equality_as_criteria = ref 1
 let pb = ref Options.pruning_hyp_p   
 let vb = ref Options.pruning_hyp_v   
 let v_count = ref 0
@@ -864,6 +865,9 @@ let inv_comparison id =
     | _ -> assert false ( * cases have to match with cases from comparison_to_consider * )
   *)
 
+
+
+
 let build_pred_graph decl = 
   let eq_link = ref AbstractClauseSet.empty in
   (* Construction of the Preds dependence graph *)
@@ -1115,7 +1119,7 @@ let set_of_pred_p vs  =
     PdlSet.empty
 
 
-(* USe of the preds dependence graph to filter hypothesis *)
+(* Use of the preds dependence graph to filter hypothesis *)
 let get_preds_of p =
   let s = ref PdlSet.empty in 
 
@@ -1147,7 +1151,7 @@ let get_preds_of p =
 	s := PdlSet.add {l=Ident.string id ;
 			 pol= if polarity == 1 then Pos else Neg} !s
 	  (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
-    | Papp (id, l, i) when (comparison_to_consider id) -> 
+    | Papp (id, l, i) when (comparison_to_consider id) && (!use_equality_as_criteria==1) -> 
 	(List.iter (add_suffixed_comparison id polarity) l)
 	  
     | Forall (w, id, b, v, tl, p) -> 
@@ -1346,7 +1350,7 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 
 let managesGoal id ax (hyps,concl) =
   match ax with 
-(*      Dgoal*) (loc,expl,id,_) -> 
+      (loc,expl,id,_) -> 
 	(** retrieves the list of variables in the conclusion **)
 	let v = free_vars_of concl in 
 	if debug then 
@@ -1355,7 +1359,7 @@ let managesGoal id ax (hyps,concl) =
 	    Format.printf "Concl preds ";
 	  end;
 	let v = VarStringSet.diff v avoided_vars in 
-
+	
 	let concl_preds = get_preds_of concl    in 
 
 	let relevant_preds = get_predecessor_pred concl_preds !pb  in 
@@ -1374,11 +1378,11 @@ let managesGoal id ax (hyps,concl) =
 	    display_symb_of_pdl_set concl_preds;
 	    Format.printf "Relevant preds ";
 	    display_symb_of_pdl_set relevant_preds;
+	    Format.printf "eds ";
 	    let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
-	    DotVG.output_graph oc !vg     
+	    DotVG.output_graph oc !vg 
 	  end;
-	(*Dgoal*)(loc,expl,id, (*Env.empty_scheme*) (l',concl))	  
-(*    | _ -> (*ax*) assert false*)
+	(loc,expl,id, (l',concl))
 
 
 
@@ -1387,14 +1391,14 @@ let reset () =
   pdlg := PdlGraph.create() ;
   Hashtbl.clear hash_hyp_vars;
   v_count := 0 ; 
-  hyp_count := 0 
+  hyp_count := 0
 
 
 let reduce q decl= 
   reset();
   
   (** memorize the theory as a graph of predicate symbols **)
-  build_pred_graph decl ;
+  build_pred_graph decl ; 
   
     
   (** manages goal **)
@@ -1409,6 +1413,7 @@ let reduce q decl=
 	build_var_graph (l',g');
   
 	(** focus on goal **)
+	use_equality_as_criteria:=0;
 	managesGoal id ax (l',g');
 
 
