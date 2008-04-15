@@ -133,7 +133,7 @@ parameter Q_extract_min :
    path(x,y,d) = 
 	there is a path from x to y of length d
    shortest_path(x,y,d) = 
-	there is a path from x to y of length d, and to shorter path *)
+	there is a path from x to y of length d, and no shorter path *)
 
 logic path : vertex, vertex, int -> prop 
 
@@ -158,7 +158,7 @@ axiom path_shortest_path :
   forall src,v:vertex. forall d:int. path(src,v,d) ->
     exists d':int. shortest_path(src,v,d') and d' <= d
 
-(* lemmas *)
+(* lemmas (those requiring induction) *)
 
 axiom main_lemma :
   forall src,v:vertex. forall d:int. 
@@ -214,8 +214,6 @@ predicate InvSucc2(src:vertex, S:vertex set, Q: vertex set,
        (x<>u or (x=u and not In(y,su))) -> In(y, S) or In(y, Q))
 
 (* code *)
-
-exception Found of int
 
 let shortest_path (src:vertex) (dst:vertex) =
   { In(src,V) and In(dst,V) }
