@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.107 2008-02-18 09:10:04 marche Exp $ i*)
+(*i $Id: options.ml,v 1.108 2008-04-17 11:13:30 stoulsn Exp $ i*)
 
 open Format
 
@@ -195,7 +195,7 @@ VC transformation options:
   --all-vc           outputs all verification conditions (no auto discharge)
   --eval-goals       evaluate constant expressions in goals
   --prune-theory     prunes the theory 
-  --prune-hyp k1 k2  prunes the hypotheses according to the depths k1 and k2  
+  --prune-hyp P V    prunes the hypotheses according to the depths P and V  
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
 

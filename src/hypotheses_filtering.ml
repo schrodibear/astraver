@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.35 2008-04-15 14:53:56 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.36 2008-04-17 11:13:30 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -70,7 +70,11 @@ open Util
 open Graph.Graphviz 
 
 
-let use_equality_as_criteria = ref 1
+let use_equality_as_criteria_for_graph_construction = false
+let use_equality_as_criteria_for_hypothesis_filtering = false
+let keep_quantification_link_beween_vars = false
+
+
 let pb = ref Options.pruning_hyp_p   
 let vb = ref Options.pruning_hyp_v   
 let v_count = ref 0
@@ -367,6 +371,7 @@ let display_str str set  =
 
 module SS_set = Set.Make(struct type t=VarStringSet.t let compare= compare end)
 
+(* Provide a fresh variable identifier from an identifier *)
 let bound_variable id = 
   v_count := !v_count+1 ;
   Ident.create ((Ident.string id)^"_"^ (string_of_int !v_count))
@@ -376,13 +381,25 @@ let my_fresh_hyp ()=
   Ident.create (string_of_int !hyp_count)
 
 
+
+
+let get_flaged_var v ac_fv_set = 
+  if not (member_of (Ident.string v) ac_fv_set)
+  then
+    (PureVar (Ident.string v))
+  else
+    (FreshVar (Ident.string v))
+
+
+
 (**
    @return vars which is a set of sets of  variables 
    (either pure or fresh) contained in tl 
    @param qvars is a set of quantified variables 
    @tl is the list of terms
+   @param ac : accumulateur des variables fraiches de l'appelant 
 **)
-let vars_of_list qvars tl  = 
+let vars_of_list qvars tl ac = 
   let vars = ref SS_set.empty in
   let rec collect l ac_fv_set = 
     let lp = ref l in 
@@ -398,12 +415,15 @@ let vars_of_list qvars tl  =
 	    let l' = Tvar(id')::tl in 
 	    collect l' (VarStringSet.add bv ac_fv_set)
 	| Tvar (id) ->
-	    if not (member_of (Ident.string id) qvars) then
-	      if not (member_of (Ident.string id) ac_fv_set)
-	      then
-		inner_vars := VarStringSet.add (PureVar (Ident.string id)) !inner_vars 
-	      else
-		inner_vars := VarStringSet.add (FreshVar (Ident.string id)) !inner_vars
+	    if not (member_of (Ident.string id) qvars)  then
+	      inner_vars := VarStringSet.add (get_flaged_var id (VarStringSet.union ac_fv_set ac)) !inner_vars 
+(*
+  if not (member_of (Ident.string id) ac_fv_set)
+  then
+  inner_vars := VarStringSet.add (PureVar (Ident.string id)) !inner_vars 
+  else
+  inner_vars := VarStringSet.add (FreshVar (Ident.string id)) !inner_vars
+*)
 	| _ -> ()
     in
     List.iter f !lp ;
@@ -414,12 +434,58 @@ let vars_of_list qvars tl  =
 
 
 
+
+
+
+
+
+
+
+
+
+
 (**
    @return vars which is a set of sets of variables
    @param f the formula to be analyzed
 **)
 let sets_of_vars f  =
+
+  let rec local_subst_in_term id1 id2 = function
+    | Tvar x  as t ->
+	if debug then 
+	  begin
+	    Format.printf "\nTvar found : %s Tvar seeked : %s to substitute with %s status = " (Ident.string x) (Ident.string id1) (Ident.string id2);  
+	    if id1==x then Format.printf "OK\n" else  Format.printf "KO\n"
+	  end;
+	if (Ident.string id1)==(Ident.string x) then (Tvar id2) else t
+    | Tderef x as t ->
+	if (Ident.string id1)==(Ident.string x) then (Tderef id2) else t
+    | Tapp (x,l,i) -> 
+	Tapp (x, List.map (local_subst_in_term id1 id2) l, i)
+    | Tconst _ as t -> 
+	t
+    | Tnamed(lab,t) -> Tnamed(lab,local_subst_in_term id1 id2 t)
+	
+	
+  in let rec local_subst_in_predicate id1 id2 = function
+    | Papp (id, l, i) -> Papp (id, List.map (local_subst_in_term id1 id2) l, i)
+    | Pif (a, b ,c) -> Pif (local_subst_in_term id1 id2 a, 
+			   local_subst_in_predicate id1 id2 b, 
+			   local_subst_in_predicate id1 id2 c)
+    | Pfpi (t, f1, f2) -> Pfpi (local_subst_in_term id1 id2 t, f1, f2)
+    | Forall (w, id, b, v, tl, p) -> 
+	Forall (w, id, b, v, List.map (List.map (
+	  (fun id1 id2 -> function
+	    | TPat t -> TPat (local_subst_in_term id1 id2 t)
+	    | PPat p -> PPat (local_subst_in_predicate id1 id2 p) ) id1 id2)) tl,
+	       local_subst_in_predicate id1 id2 p)
+    | p -> map_predicate (local_subst_in_predicate id1 id2) p
+  in
+     
+     
+     
   let vars = ref SS_set.empty  in
+  let ac_fv_set = ref VarStringSet.empty in
   let rec collect qvars formula  = 
     match formula with 
       | Papp (id, [el1;el2], _) when is_eq id ->
@@ -427,44 +493,44 @@ let sets_of_vars f  =
 	    match (el1,el2) with 
 	      |	(Tvar (v1), Tvar(v2)) ->
 		  vars :=  SS_set.add
-		    (VarStringSet.add (PureVar (Ident.string v1)) 
-		       (VarStringSet.singleton (PureVar (Ident.string v2))) )
+		    ((VarStringSet.add (get_flaged_var v1 !ac_fv_set)) (* (PureVar (Ident.string v1))  *)
+			(VarStringSet.singleton (get_flaged_var v1 !ac_fv_set)))    (* (PureVar (Ident.string v2))) )*) 
 		    !vars
 	      | (Tvar (v1), Tapp (_, tl, _)) ->
 		  let l' = Tvar(v1)::tl in 
-		  let v = vars_of_list qvars l' in
+		  let v = vars_of_list qvars l' !ac_fv_set  in
 		    (** TODO modifier mettre pure var ? **)
 		  vars := SS_set.union v !vars
 	      | (Tapp (_, tl,_), Tvar(v1)) ->
 		  let l' = Tvar(v1)::tl in 
-		  let v = vars_of_list qvars l' in
+		  let v = vars_of_list qvars l' !ac_fv_set in
 		  vars := SS_set.union v !vars
 	      | (Tapp (id, tl, _), Tapp (_, tl', _)) ->
 		  let id' = bound_variable id in
 		  let tl = Tvar(id')::tl in 
 		  let tl' = Tvar(id')::tl' in
-		  let v = vars_of_list qvars tl in
-		  let v' = vars_of_list qvars tl' in
+		  let v = vars_of_list qvars tl !ac_fv_set in
+		  let v' = vars_of_list qvars tl' !ac_fv_set in
 		  vars := SS_set.union v !vars ; 
 		  vars := SS_set.union v' !vars ; 
 	      | (Tapp (_, tl, _), _) ->
-		  let v = vars_of_list qvars tl in
+		  let v = vars_of_list qvars tl !ac_fv_set in
 		  vars := SS_set.union v !vars ; 	      
 	      | (Tvar(v1), _) -> 
 		  vars :=  SS_set.add
-		    (VarStringSet.singleton (PureVar (Ident.string v1)))
+		    (VarStringSet.singleton (get_flaged_var v1 !ac_fv_set) (*(PureVar (Ident.string v1))*) )
 		    !vars;
 	      | (_,Tapp (_, tl, _)) ->
-			let v = vars_of_list qvars tl in
-		  vars := SS_set.union v !vars ; 	      
+		  let v = vars_of_list qvars tl !ac_fv_set in
+		  vars := SS_set.union v !vars
 	      | (_,Tvar(v1)) -> 
 		  vars :=  SS_set.add
-		    (VarStringSet.singleton (PureVar (Ident.string v1)))
-		    !vars;
+		    (VarStringSet.singleton (get_flaged_var v1 !ac_fv_set) (*(PureVar (Ident.string v1))*)  )
+		    !vars
 	      | _ -> ()
 	  end  
       | Papp (_,tl,_) ->
-	  let v = vars_of_list qvars tl in 
+	  let v = vars_of_list qvars tl !ac_fv_set in 
 	  vars := SS_set.union v !vars 
       | Pand (_, _, a, b) | Forallb (_, a, b)  | Por (a, b) | Piff (a, b) | 
 	    Pimplies (_, a, b) ->
@@ -472,14 +538,32 @@ let sets_of_vars f  =
 	      collect qvars b
       | Pif (a, b, c) ->
 	  let l = a::[] in 
-	  let v' = vars_of_list qvars l in 
+	  let v' = vars_of_list qvars l !ac_fv_set in 
 	  vars := SS_set.union v' !vars ;
 	  collect qvars b;
 	  collect qvars c
       | Pnot a ->
 	  collect qvars a;
       | Forall (_,id,_,_,_,p) | Exists (id,_,_,p) ->    
-	  collect (VarStringSet.add (PureVar (Ident.string id)) qvars) p
+	  if (keep_quantification_link_beween_vars) then
+	    begin
+	      (* The quatified variable id is modified as a fresh one and is substituted in P, before collecting *)
+	      let id' = (bound_variable id) in 
+	      let bv = (FreshVar (Ident.string id')) in
+	      (* inner_vars := VarStringSet.add bv !inner_vars; 
+		 let l' = Tvar(id')::tl in *)
+	      ac_fv_set:=(VarStringSet.add bv !ac_fv_set);  (* Mise à jour de la liste des variables fraiches *)
+              let p'= (local_subst_in_predicate id id' p) in   (*  substitutes id with id' in P *) 
+              (*let p'= (subst_in_predicate (subst_onev id id') p) in*)	 
+	      if debug then
+		begin
+		  Format.printf "\nVar : %s subst by %s\n" (Ident.string id) (Ident.string id');  
+		  Format.printf "Predicate : %a \n Substituted in : %a \n\n" Util.print_predicate p Util.print_predicate p'
+		end;
+	      collect qvars p'
+	    end
+	  else
+	    collect (VarStringSet.add (PureVar (Ident.string id)) qvars) p
       | Pfpi _ ->
 	  failwith "fpi not yet suported "
       | Pnamed (_, p) -> 
@@ -625,8 +709,8 @@ let build_var_graph (l,c)=
 	  Hashtbl.add hash_hyp_vars  p v';
 	  if debug then 
 	    begin
-	      Format.printf " In hyps %a" Util.print_predicate p ; 
-	      display_str "vars " v';
+	      (* Format.printf " In hyps %a" Util.print_predicate p ; 
+	         display_str "vars " v'; *)
 	    end;
 	  mem  q   
   in
@@ -888,11 +972,9 @@ let build_pred_graph decl =
 	  {num = cl.num + 1;
 	   neg = cl.neg;
 	   pos = StringSet.add (Ident.string id) cl.pos}
-	    
-	    
-	    
+	    	    
       | Pnot (Papp (id, l, i)) 
-	  when (comparison_to_consider id) ->
+	  when (comparison_to_consider id) && use_equality_as_criteria_for_graph_construction ->
 	  (List.fold_left (fun cl t -> match t with 
 	    | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
 		begin
@@ -932,9 +1014,10 @@ let build_pred_graph decl =
 	    | Tnamed (_,_) ->  
 		assert false (* Currently, no label is present close to a comparison predicate *)
 	  ) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
-	    
+	 
+   
       | Papp (id, l, i) 
-	  when (comparison_to_consider id) ->
+	  when (comparison_to_consider id) && use_equality_as_criteria_for_graph_construction ->
 	  (List.fold_left (fun cl t -> match t with  
 	    | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
 		begin
@@ -1031,8 +1114,8 @@ let build_pred_graph decl =
 	let cls = AbstractClauseSet.union cls !eq_link in
 	if debug then 
 	  begin 
-	    Format.printf "%a" Util.print_predicate p;
-	    display_cl_set cls
+	    (* Format.printf "%a" Util.print_predicate p;
+	       display_cl_set cls *)
 	  end;
 	update_pdlg cls 
     | Daxiom (loc, ident, ps) -> 
@@ -1042,8 +1125,8 @@ let build_pred_graph decl =
 	let cls = AbstractClauseSet.union cls !eq_link in
 	if debug then 
 	  begin 
-	    Format.printf "%a" Util.print_predicate p;
-	    display_cl_set cls
+	    (* Format.printf "%a" Util.print_predicate p;
+	       display_cl_set cls *)
 	  end;
 	update_pdlg cls 
     | _  -> () in
@@ -1150,8 +1233,9 @@ let get_preds_of p =
 	      is_real_comparison id) -> 
 	s := PdlSet.add {l=Ident.string id ;
 			 pol= if polarity == 1 then Pos else Neg} !s
-	  (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
-    | Papp (id, l, i) when (comparison_to_consider id) && (!use_equality_as_criteria==1) -> 
+
+    (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
+    | Papp (id, l, i) when (comparison_to_consider id) && use_equality_as_criteria_for_hypothesis_filtering && use_equality_as_criteria_for_graph_construction -> 
 	(List.iter (add_suffixed_comparison id polarity) l)
 	  
     | Forall (w, id, b, v, tl, p) -> 
@@ -1178,7 +1262,7 @@ let get_preds_of p =
   get 1 p ;
   !s
 
-    
+
 
 let get_predecessor_pred p n = 
   (** av stands for tha already visited preds
@@ -1413,9 +1497,10 @@ let reduce q decl=
 	build_var_graph (l',g');
   
 	(** focus on goal **)
-	use_equality_as_criteria:=0;
 	managesGoal id ax (l',g');
 
 
     (*| _ -> failwith "goal awaited"*) in
   q' 
+
+
