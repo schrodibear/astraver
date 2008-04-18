@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.37 2008-04-18 08:33:22 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.38 2008-04-18 15:30:03 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -171,8 +171,8 @@ let free_vars_of  p  =
       | Pvar _ | Pfalse |Ptrue -> ()
   in
   begin
-    if debug then
-      Format.printf "Free vars of predicate : %a \n" Util.print_predicate p
+   (* if debug then
+      Format.printf "Free vars of predicate : %a \n" Util.print_predicate p*)
   end;
   collect VarStringSet.empty p ; 
   !vars
@@ -1202,7 +1202,7 @@ let set_of_pred_p vs  =
 
 
 (* Use of the preds dependence graph to filter hypothesis *)
-let get_preds_of p =
+let get_preds_of p filter_eq =
   let s = ref PdlSet.empty in 
 
   (* @params i : ident of the comparison *)
@@ -1234,7 +1234,7 @@ let get_preds_of p =
 			 pol= if polarity == 1 then Pos else Neg} !s
 
     (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
-    | Papp (id, l, i) when (comparison_to_consider id) && use_equality_as_criteria_for_hypothesis_filtering && use_equality_as_criteria_for_graph_construction -> 
+    | Papp (id, l, i) when (comparison_to_consider id) && filter_eq && use_equality_as_criteria_for_graph_construction -> 
 	(List.iter (add_suffixed_comparison id polarity) l)
 	  
     | Forall (w, id, b, v, tl, p) -> 
@@ -1412,24 +1412,52 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 			  (VarStringSet.inter 
 			     (removes_fresh_vars vars)
 			     concl_rep))
-	in if condition then 
+	in 
+	if debug then begin
+	  Format.printf "\nHyp :\n %a \n\n" Util.print_predicate p; 
+	  display_str  "vars" vars; 
+	  display_str  "concl_rep" concl_rep;
+	end;
+	if condition then 
+	  begin
 	    begin
-	      if debug then begin
-		display_str  "vars" vars;
-		display_str  "concl_rep" concl_rep;
-	      end;
-	      
-	      (* the predicate symbols has to be in the list of symbols *)
-	      let preds_of_p  = get_preds_of p in 
-		if abstr_subset_of_pdl preds_of_p pred_symb then 
-		  Spred (t,p):: filter q
-		else 
-		  filter q
-	    end
-	  else
-	    filter q in  
-    filter l
-
+	      if debug then
+		Format.printf "Keeped #1 (Vars)\n\n"
+	    end;
+	    
+	    (* the predicate symbols has to be in the list of symbols *)
+	    let preds_of_p  = get_preds_of p use_equality_as_criteria_for_hypothesis_filtering in 
+	    begin
+	      if debug then
+		begin
+		  Format.printf "Hyp Preds : \n";
+		  display_symb_of_pdl_set preds_of_p;
+		  Format.printf "Relevent Preds : \n";
+		  display_symb_of_pdl_set pred_symb;
+		end
+	    end;
+	    if abstr_subset_of_pdl preds_of_p pred_symb then 
+	      begin
+		if debug then
+		  Format.printf "Keeped #2 (Preds)\n\n";
+		Spred (t,p):: filter q
+	      end
+	    else 
+	      begin
+		if debug then 
+		  Format.printf "Dropped (Preds)\n\n";
+		filter q
+	      end
+	  end
+	else
+	  begin 
+	    if debug then 
+	      Format.printf "Dropped (Vars)\n\n";
+	    filter q
+	  end;
+  in  
+  filter l
+    
 
 let managesGoal id ax (hyps,concl) =
   match ax with 
@@ -1443,7 +1471,7 @@ let managesGoal id ax (hyps,concl) =
 	  end;
 	let v = VarStringSet.diff v avoided_vars in 
 	
-	let concl_preds = get_preds_of concl    in 
+	let concl_preds = get_preds_of concl true    in 
 
 	let relevant_preds = get_predecessor_pred concl_preds !pb  in 
 
