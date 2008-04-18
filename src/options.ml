@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.108 2008-04-17 11:13:30 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.109 2008-04-18 08:33:22 stoulsn Exp $ i*)
 
 open Format
 
@@ -65,6 +65,11 @@ let eval_goals_ = ref false
 let pruning_ = ref false 
 let pruning_hyp_v_ = {contents = -1}
 let pruning_hyp_p_ = {contents = -1}
+(* Heuristiques en test *)
+let pruning_hyp_EqDansGraph_ = ref false
+let pruning_hyp_EqDansFiltrage_ = ref false
+let pruning_hyp_LienVarsQuantif_ = ref false
+(* FIN de Heuristiques en test *)
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
@@ -198,6 +203,11 @@ VC transformation options:
   --prune-hyp P V    prunes the hypotheses according to the depths P and V  
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
+
+Heuristics under test of pruning (needs --prun-hyp to be used) :
+  --prune-with-eq           uses suffixed equality as a predicate 
+  --prune-with-eq-full      as previous and uses also equality as filter
+  --prune-keep-local-links  insert quantified variables in variables graphe
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -417,6 +427,18 @@ let files =
 	pruning_hyp_p_ := int_of_string tp ; 
 	pruning_hyp_v_ := int_of_string tv ; 
 	parse args
+(* Heuristiques en test *)
+    | ("--prune-with-eq" | "-prune-with-eq"):: args ->
+	pruning_hyp_EqDansGraph_ := true ; 
+	parse args
+    | ("--prune-with-eq-full" | "-prune-with-eq-full"):: args ->
+	pruning_hyp_EqDansGraph_ := true ; 
+	pruning_hyp_EqDansFiltrage_ := true ;
+	parse args
+    | ("--prune-keep-local-links" | "-prune-keep-local-links"):: args ->
+	pruning_hyp_LienVarsQuantif_ := true ; 
+	parse args
+(* FIN de Heuristiques en test *)
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
     | ("-exp" | "--exp") :: s :: args ->
@@ -490,6 +512,11 @@ let eval_goals = !eval_goals_
 let pruning = !pruning_
 let pruning_hyp_p = !pruning_hyp_p_
 let pruning_hyp_v = !pruning_hyp_v_
+(* Heuristiques en test *)
+let pruning_hyp_EqDansGraph = !pruning_hyp_EqDansGraph_
+let pruning_hyp_EqDansFiltrage = !pruning_hyp_EqDansFiltrage_
+let pruning_hyp_LienVarsQuantif = !pruning_hyp_LienVarsQuantif_
+(* FIN de Heuristiques en test *)
 let modulo = !modulo_
 let defExpanding = !defExpanding_
 let explain_vc = !explain_vc

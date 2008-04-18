@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.36 2008-04-17 11:13:30 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.37 2008-04-18 08:33:22 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -70,10 +70,9 @@ open Util
 open Graph.Graphviz 
 
 
-let use_equality_as_criteria_for_graph_construction = false
-let use_equality_as_criteria_for_hypothesis_filtering = false
-let keep_quantification_link_beween_vars = false
-
+let use_equality_as_criteria_for_graph_construction = Options.pruning_hyp_EqDansGraph
+let use_equality_as_criteria_for_hypothesis_filtering = Options.pruning_hyp_EqDansFiltrage
+let keep_quantification_link_beween_vars = Options.pruning_hyp_LienVarsQuantif
 
 let pb = ref Options.pruning_hyp_p   
 let vb = ref Options.pruning_hyp_v   

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.82 2008-02-18 09:10:04 marche Exp $ i*)
+(*i $Id: options.mli,v 1.83 2008-04-18 08:33:22 stoulsn Exp $ i*)
 
 (*s General options *)
 
@@ -73,6 +73,11 @@ val eval_goals : bool
 val pruning : bool
 val pruning_hyp_v : int
 val pruning_hyp_p : int
+(* Heuristiques en test *)
+val pruning_hyp_EqDansGraph : bool
+val pruning_hyp_EqDansFiltrage : bool
+val pruning_hyp_LienVarsQuantif : bool
+(* FIN de Heuristiques en test *)
 val modulo : bool
 
 type expanding = All | Goal | NoExpanding
