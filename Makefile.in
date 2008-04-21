@@ -133,7 +133,8 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    tools/zenon_split.ml tools/ergo_split.ml \
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
 	    tools/simplify_parser.ml \
-	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml 
+	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml \
+	    c/cint.ml
 
 # main targets
 ##############
