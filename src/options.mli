@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.83 2008-04-18 08:33:22 stoulsn Exp $ i*)
+(*i $Id: options.mli,v 1.84 2008-04-21 10:19:36 stoulsn Exp $ i*)
 
 (*s General options *)
 
@@ -74,9 +74,12 @@ val pruning : bool
 val pruning_hyp_v : int
 val pruning_hyp_p : int
 (* Heuristiques en test *)
-val pruning_hyp_EqDansGraph : bool
-val pruning_hyp_EqDansFiltrage : bool
-val pruning_hyp_LienVarsQuantif : bool
+val pruning_hyp_CompInGraph : bool
+val pruning_hyp_CompInFiltering : bool
+val pruning_hyp_LinkVarsQuantif : bool
+val pruning_hyp_keep_single_comparison_representation : bool
+val pruning_hyp_comparison_eqOnly : bool
+val pruning_hyp_suffixed_comparison : bool
 (* FIN de Heuristiques en test *)
 val modulo : bool
 

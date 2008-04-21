@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.38 2008-04-18 15:30:03 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.39 2008-04-21 10:19:36 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -70,9 +70,15 @@ open Util
 open Graph.Graphviz 
 
 
-let use_equality_as_criteria_for_graph_construction = Options.pruning_hyp_EqDansGraph
-let use_equality_as_criteria_for_hypothesis_filtering = Options.pruning_hyp_EqDansFiltrage
-let keep_quantification_link_beween_vars = Options.pruning_hyp_LienVarsQuantif
+let use_comparison_as_criteria_for_graph_construction = Options.pruning_hyp_CompInGraph
+let use_comparison_as_criteria_for_hypothesis_filtering = Options.pruning_hyp_CompInFiltering
+let keep_quantification_link_beween_vars = Options.pruning_hyp_LinkVarsQuantif
+(* Setup of comparison management *)
+let keep_single_comparison_representation =Options.pruning_hyp_keep_single_comparison_representation
+let comparison_eqOnly = Options.pruning_hyp_comparison_eqOnly
+let suffixed_comparison = Options.pruning_hyp_suffixed_comparison
+
+
 
 let pb = ref Options.pruning_hyp_p   
 let vb = ref Options.pruning_hyp_v   
@@ -913,21 +919,40 @@ let update_pdlg acs =
 
 
 
+
+let rec remove_percents s =
+  try 
+    let i=String.index s '%' in 
+    (String.set s i '_');
+    (remove_percents s)
+  with Not_found -> s
+    
+
   (* To take account comparison operators as predicates, we consider each operator suffixed by each of its closed identifier *)
   (* @params i1 : ident of the comparison *)
   (* @params i2 : ident of the closed operator  *)
   (* @result : i1 suffixed by i2 *)
-let get_suffixed_ident i1 i2 = 
-  ((Ident.string i1)^"_"^(Ident.string i2))
-
+let get_suffixed_ident i1 i2 =
+  let s=
+    if suffixed_comparison then 
+      ((Ident.string i1)^"_"^(Ident.string i2))
+    else
+      (Ident.string i1)
+  in
+  (remove_percents s)
 
 
 let comparison_to_consider id =  
-  (* (is_comparison id or is_int_comparison id or is_real_comparison id) *)
-  (id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int || id == t_eq_real || id == t_neq_real )
+  use_comparison_as_criteria_for_graph_construction && (
+    ((not comparison_eqOnly) && (is_comparison id or is_int_comparison id or is_real_comparison id))
+    || (id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int || id == t_eq_real || id == t_neq_real )
+  )
 
 let is_negative_comparison id = 
   (id == t_neq || id == t_neq_int || id == t_neq_real )
+  || (id == t_gt || id == t_ge)
+  || (id == t_gt_int || id == t_ge_int)
+  || (id == t_gt_real || id == t_ge_real)
 
 let inv_comparison id = 
   if id == t_eq then t_neq
@@ -936,17 +961,23 @@ let inv_comparison id =
   else if id == t_neq_int then t_eq_int
   else if id == t_eq_real then t_neq_real
   else if id == t_neq_real then t_eq_real
+    
+  else if id == t_lt then t_ge
+  else if id == t_le then t_gt
+  else if id == t_gt then t_le 
+  else if id == t_ge then t_lt
+
+  else if id == t_lt_int then t_ge_int
+  else if id == t_le_int then t_gt_int
+  else if id == t_gt_int then t_le_int
+  else if id == t_ge_int then t_lt_int
+
+  else if id == t_lt_real then t_ge_real
+  else if id == t_le_real then t_gt_real
+  else if id == t_gt_real then t_le_real
+  else if id == t_ge_real then t_lt_real
+
   else assert false (* cases have to match with cases from comparison_to_consider *)
-  (*
-  match id with  
-    | t_eq -> t_neq 
-    | t_neq -> t_eq 
-    | t_eq_int -> t_neq_int 
-    | t_neq_int -> t_eq_int 
-    | t_eq_real -> t_neq_real 
-    | t_neq_real -> t_eq_real 
-    | _ -> assert false ( * cases have to match with cases from comparison_to_consider * )
-  *)
 
 
 
@@ -971,34 +1002,36 @@ let build_pred_graph decl =
 	  {num = cl.num + 1;
 	   neg = cl.neg;
 	   pos = StringSet.add (Ident.string id) cl.pos}
-	    	    
+	    
+	    
       | Pnot (Papp (id, l, i)) 
-	  when (comparison_to_consider id) && use_equality_as_criteria_for_graph_construction ->
+	  when (comparison_to_consider id) ->
 	  (List.fold_left (fun cl t -> match t with 
 	    | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
 		begin
-		  if is_negative_comparison id then
-		    (eq_link:=AbstractClauseSet.add
-			({num=1; 
-			  neg=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti); 
-			  pos=StringSet.singleton (Ident.string (inv_comparison id)) })
-			(AbstractClauseSet.add
-			    ({num=1; 
-			      neg=StringSet.singleton (Ident.string (inv_comparison id)); 
-			      pos=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti)  })
-			    !eq_link))
-		  else	
-		    (eq_link:=AbstractClauseSet.add
-			({num=1; 
-			  neg=StringSet.singleton (get_suffixed_ident id ti); 
-			  pos=StringSet.singleton (Ident.string id) })
-			(AbstractClauseSet.add
-			    ({num=1; 
-			      neg=StringSet.singleton (Ident.string id); 
-			      pos=StringSet.singleton (get_suffixed_ident id ti)  })
-			    !eq_link))
+		  if suffixed_comparison then
+		    if (is_negative_comparison id) && (not keep_single_comparison_representation) then
+		      (eq_link:=AbstractClauseSet.add
+			  ({num=1; 
+			    neg=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti); 
+			    pos=StringSet.singleton (Ident.string (inv_comparison id)) })
+			  (AbstractClauseSet.add
+			      ({num=1; 
+				neg=StringSet.singleton (Ident.string (inv_comparison id)); 
+				pos=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti)  })
+			      !eq_link))
+		    else	
+		      (eq_link:=AbstractClauseSet.add
+			  ({num=1; 
+			    neg=StringSet.singleton (get_suffixed_ident id ti); 
+			    pos=StringSet.singleton (Ident.string id) })
+			  (AbstractClauseSet.add
+			      ({num=1; 
+				neg=StringSet.singleton (Ident.string id); 
+				pos=StringSet.singleton (get_suffixed_ident id ti)  })
+			      !eq_link))
 		end;
-		if is_negative_comparison id then
+		if (is_negative_comparison id) && (not keep_single_comparison_representation)  then
 		  {num = cl.num;
 		   neg = cl.neg;
 		   pos = StringSet.add (get_suffixed_ident (inv_comparison id) ti) cl.pos} 
@@ -1016,32 +1049,33 @@ let build_pred_graph decl =
 	 
    
       | Papp (id, l, i) 
-	  when (comparison_to_consider id) && use_equality_as_criteria_for_graph_construction ->
+	  when (comparison_to_consider id) ->
 	  (List.fold_left (fun cl t -> match t with  
 	    | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
 		begin
-		  if is_negative_comparison id then
-		    (eq_link:=AbstractClauseSet.add
-			({num=1; 
-			  neg=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti); 
-			  pos=StringSet.singleton (Ident.string (inv_comparison id))  })
-			(AbstractClauseSet.add
-			    ({num=1; 
-			      neg=StringSet.singleton (Ident.string (inv_comparison id)); 
-			      pos=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti)  }) 
-			    !eq_link))
-		  else
-		    (eq_link:=AbstractClauseSet.add
-			({num=1; 
-			  neg=StringSet.singleton (Ident.string id); 
-			  pos=StringSet.singleton (get_suffixed_ident id ti)  })
-			(AbstractClauseSet.add
-			    ({num=1; 
-			      neg=StringSet.singleton (get_suffixed_ident id ti); 
-			      pos=StringSet.singleton (Ident.string id)  }) 
-			    !eq_link))
+		  if suffixed_comparison then
+		    if (is_negative_comparison id) && (not keep_single_comparison_representation) then
+		      (eq_link:=AbstractClauseSet.add
+			  ({num=1; 
+			    neg=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti); 
+			    pos=StringSet.singleton (Ident.string (inv_comparison id))  })
+			  (AbstractClauseSet.add
+			      ({num=1; 
+				neg=StringSet.singleton (Ident.string (inv_comparison id)); 
+				pos=StringSet.singleton (get_suffixed_ident (inv_comparison id) ti)  }) 
+			      !eq_link))
+		    else
+		      (eq_link:=AbstractClauseSet.add
+			  ({num=1; 
+			    neg=StringSet.singleton (Ident.string id); 
+			    pos=StringSet.singleton (get_suffixed_ident id ti)  })
+			  (AbstractClauseSet.add
+			      ({num=1; 
+				neg=StringSet.singleton (get_suffixed_ident id ti); 
+				pos=StringSet.singleton (Ident.string id)  }) 
+			      !eq_link))
 		end;
-		if is_negative_comparison id then
+		if (is_negative_comparison id) && (not keep_single_comparison_representation) then
 		  {num = cl.num;
 		   neg = StringSet.add (get_suffixed_ident (inv_comparison id) ti) cl.neg;
 		   pos = cl.pos}
@@ -1202,7 +1236,7 @@ let set_of_pred_p vs  =
 
 
 (* Use of the preds dependence graph to filter hypothesis *)
-let get_preds_of p filter_eq =
+let get_preds_of p filter_comparison =
   let s = ref PdlSet.empty in 
 
   (* @params i : ident of the comparison *)
@@ -1212,7 +1246,7 @@ let get_preds_of p filter_eq =
   (* @result : s including i suffixed with t *)
   let add_suffixed_comparison i polarity = function 
     | Tvar (ti) | Tderef (ti) | Tapp (ti , _ , _) ->  
-	if is_negative_comparison i then (* negative comparaisons are traducted as negative in the graph *)
+	if (is_negative_comparison i) && (not keep_single_comparison_representation) then (* negative comparaisons are traducted as negative in the graph *)
 	  s:=(PdlSet.add {l= (get_suffixed_ident (inv_comparison i) ti);
 			  pol= if polarity == 1 then Neg else Pos} !s)	  
 	else
@@ -1233,8 +1267,14 @@ let get_preds_of p filter_eq =
 	s := PdlSet.add {l=Ident.string id ;
 			 pol= if polarity == 1 then Pos else Neg} !s
 
+
+    (* | Papp (id, l, i) when use_arith_comp_as_direct_criteria -> 
+	s := PdlSet.add {l=Ident.string id ;
+			 pol= if polarity == 1 then Pos else Neg} !s
+    *)
+
     (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
-    | Papp (id, l, i) when (comparison_to_consider id) && filter_eq && use_equality_as_criteria_for_graph_construction -> 
+    | Papp (id, l, i) when (comparison_to_consider id) && filter_comparison -> 
 	(List.iter (add_suffixed_comparison id polarity) l)
 	  
     | Forall (w, id, b, v, tl, p) -> 
@@ -1426,7 +1466,7 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	    end;
 	    
 	    (* the predicate symbols has to be in the list of symbols *)
-	    let preds_of_p  = get_preds_of p use_equality_as_criteria_for_hypothesis_filtering in 
+	    let preds_of_p  = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in 
 	    begin
 	      if debug then
 		begin
@@ -1471,7 +1511,7 @@ let managesGoal id ax (hyps,concl) =
 	  end;
 	let v = VarStringSet.diff v avoided_vars in 
 	
-	let concl_preds = get_preds_of concl true    in 
+	let concl_preds = get_preds_of concl true in 
 
 	let relevant_preds = get_predecessor_pred concl_preds !pb  in 
 
@@ -1489,7 +1529,6 @@ let managesGoal id ax (hyps,concl) =
 	    display_symb_of_pdl_set concl_preds;
 	    Format.printf "Relevant preds ";
 	    display_symb_of_pdl_set relevant_preds;
-	    Format.printf "eds ";
 	    let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
 	    DotVG.output_graph oc !vg 
 	  end;

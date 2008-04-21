@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.109 2008-04-18 08:33:22 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.110 2008-04-21 10:19:36 stoulsn Exp $ i*)
 
 open Format
 
@@ -66,9 +66,12 @@ let pruning_ = ref false
 let pruning_hyp_v_ = {contents = -1}
 let pruning_hyp_p_ = {contents = -1}
 (* Heuristiques en test *)
-let pruning_hyp_EqDansGraph_ = ref false
-let pruning_hyp_EqDansFiltrage_ = ref false
-let pruning_hyp_LienVarsQuantif_ = ref false
+let pruning_hyp_CompInGraph_ = ref false
+let pruning_hyp_CompInFiltering_ = ref false
+let pruning_hyp_LinkVarsQuantif_ = ref false
+let pruning_hyp_keep_single_comparison_representation_ = ref true
+let pruning_hyp_comparison_eqOnly_ = ref false
+let pruning_hyp_suffixed_comparison_ = ref false
 (* FIN de Heuristiques en test *)
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
@@ -204,10 +207,13 @@ VC transformation options:
   --exp all          expands the predicate definitions in both theory and goal 
   --exp goal         expands the predicate definitions only in goal 
 
-Heuristics under test of pruning (needs --prun-hyp to be used) :
-  --prune-with-eq           uses suffixed equality as a predicate 
-  --prune-with-eq-full      as previous and uses also equality as filter
-  --prune-keep-local-links  insert quantified variables in variables graphe
+Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
+  --prune-with-comp           uses comparisons as a predicates
+  --prune-with-comp-filter    as previous and uses also comparisons as filters
+  --prune-keep-local-links    insert quantified variables in variables graphe
+  --prune-comp-dual-encoding  do not inverse negative comparisons
+  --prune-eq-only             consider only equality as a comparison
+  --prune-suffixed-comp       suffix produced predicates
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -428,15 +434,27 @@ let files =
 	pruning_hyp_v_ := int_of_string tv ; 
 	parse args
 (* Heuristiques en test *)
-    | ("--prune-with-eq" | "-prune-with-eq"):: args ->
-	pruning_hyp_EqDansGraph_ := true ; 
+    | ("--prune-with-comp" | "-prune-with-comp"):: args ->
+	pruning_hyp_CompInGraph_ := true ; 
 	parse args
-    | ("--prune-with-eq-full" | "-prune-with-eq-full"):: args ->
-	pruning_hyp_EqDansGraph_ := true ; 
-	pruning_hyp_EqDansFiltrage_ := true ;
+    | ("--prune-with-comp-filter" | "-prune-with-comp-filter"):: args ->
+	pruning_hyp_CompInGraph_ := true ; 
+	pruning_hyp_CompInFiltering_ := true ;
 	parse args
     | ("--prune-keep-local-links" | "-prune-keep-local-links"):: args ->
-	pruning_hyp_LienVarsQuantif_ := true ; 
+	pruning_hyp_LinkVarsQuantif_ := true ; 
+	parse args
+    | ("--prune-comp-dual-encoding" | "-prune-comp-dual-encoding"):: args ->
+	pruning_hyp_CompInGraph_ := true ; 
+	pruning_hyp_keep_single_comparison_representation_ := false ; 
+	parse args
+    | ("--prune-eq-only" | "-prune-eq-only"):: args ->
+	pruning_hyp_CompInGraph_ := true ; 
+	pruning_hyp_comparison_eqOnly_ := true ; 
+	parse args
+    | ("--prune-suffixed-comp" | "-prune-suffixed-comp"):: args ->
+	pruning_hyp_CompInGraph_ := true ; 
+	pruning_hyp_suffixed_comparison_ := true ; 
 	parse args
 (* FIN de Heuristiques en test *)
     | ("-modulo" | "--modulo") :: args ->
@@ -513,9 +531,12 @@ let pruning = !pruning_
 let pruning_hyp_p = !pruning_hyp_p_
 let pruning_hyp_v = !pruning_hyp_v_
 (* Heuristiques en test *)
-let pruning_hyp_EqDansGraph = !pruning_hyp_EqDansGraph_
-let pruning_hyp_EqDansFiltrage = !pruning_hyp_EqDansFiltrage_
-let pruning_hyp_LienVarsQuantif = !pruning_hyp_LienVarsQuantif_
+let pruning_hyp_CompInGraph = !pruning_hyp_CompInGraph_
+let pruning_hyp_CompInFiltering = !pruning_hyp_CompInFiltering_
+let pruning_hyp_LinkVarsQuantif = !pruning_hyp_LinkVarsQuantif_
+let pruning_hyp_keep_single_comparison_representation = !pruning_hyp_keep_single_comparison_representation_
+let pruning_hyp_comparison_eqOnly = !pruning_hyp_comparison_eqOnly_
+let pruning_hyp_suffixed_comparison = !pruning_hyp_suffixed_comparison_
 (* FIN de Heuristiques en test *)
 let modulo = !modulo_
 let defExpanding = !defExpanding_
