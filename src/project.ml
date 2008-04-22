@@ -1,21 +1,10 @@
 
-(*prover*)
-type prover = Ergo | Simplify | Z3 | Yices | Cvc3 | Other
-
-let provers_name prover = 
-  match prover with 
-    | Ergo -> "ergo"
-    | Simplify -> "simplify"
-    | Z3 -> "z3"
-    | Yices -> "yices"
-    | Cvc3  -> "cvc3"
-    | Other -> "other"
 
 type goal = {
   goal_expl : Logic_decl.vc_expl;
   goal_file : string;
   sub_goal : goal list;
-  mutable proof : (prover*(string*string*string*string)) list;
+  proof : (string*string*string*string*string) list ;
   mutable goal_tags : (string*string) list; 
 }
 
@@ -112,28 +101,52 @@ let add_function p fname floc =
   f
 
 
+(* toggle *)
 
-  
+let toggle_lemma l = l.lemma_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value)) l.lemma_tags
+
+let toggle_function f = f.function_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value)) f.function_tags
+
+let toggle_behavior b = b.behavior_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value))  b.behavior_tags
+
+let toggle_goal g = g.goal_tags <- 
+  List.map (fun (key,value) ->  
+	      if key = "ww_open" then 
+		if value = "true" then (key,"false") 
+		else (key,"true") 
+	      else
+		(key,value))  g.goal_tags
+
 (* saving *)
 
 open Format
 open Logic
 open Logic_decl
 
-let pr_tags fmt (key,value)  =
-  fprintf fmt "<tag key=\"%s\" value=\"%s\"/>"  key value
-
 let pr_goal fmt g =
   fprintf fmt "    <goal why_file=\"%s\">@." g.goal_file;
-  List.iter (pr_tags fmt) g.goal_tags;
   fprintf fmt "      <location %a/>@."
     (fun fmt -> Explain.raw_loc ~quote:true fmt) (g.goal_expl.vc_loc);
   fprintf fmt "      <explain %a/>@."
     (fun fmt -> Explain.print ~quote:true fmt) (g.goal_expl);
-  List.iter (fun proof ->
-	       let (prover,(status,timeout,_,_)) = proof in
-	       fprintf fmt "      <proof prover=\"%s\" status=\"%s\" timelimit=\"%s\"/>" (provers_name prover) 
-		 status timeout) g.proof;
   fprintf fmt "    </goal>@."
 
 let save p file =
@@ -144,7 +157,6 @@ let save p file =
   List.iter
     (fun l -> (* name (floc,loc,expl,fpo) -> *)
        fprintf fpr "  <lemma name=\"%s\">@." l.lemma_name;
-       List.iter (pr_tags fpr) l.lemma_tags;
        fprintf fpr "    <location %a/>@." 
 	 (fun fmt -> Explain.raw_loc ~quote:true fmt) l.lemma_loc;
        pr_goal fpr l.lemma_goal;
@@ -153,13 +165,11 @@ let save p file =
   List.iter
     (fun f -> (* name (floc,behs) -> *)
        fprintf fpr "  <function name=\"%s\">@."  f.function_name;
-       List.iter (pr_tags fpr) f.function_tags;
        fprintf fpr "    <location %a/>@." 
 	 (fun fmt -> Explain.raw_loc ~quote:true fmt) f.function_loc;
        List.iter
 	 (fun b -> (*vcs -> *)
 	  fprintf fpr "    <behavior name=\"%s\">@." b.behavior_name;
-	    List.iter (pr_tags fpr) b.behavior_tags;
 	    List.iter (pr_goal fpr) b.behavior_goals;
 	      fprintf fpr "    </behavior>@." )
 	 f.function_behaviors;
@@ -246,20 +256,11 @@ let get_kind e =
     | _ -> Logic_decl.EKOther ("Project: unrecognized kind " ^ k)
 
 
-let get_prover e =
-  match get_string_attr "prover" e with 
-    | "ergo" -> Ergo
-    | "simplify" -> Simplify  
-    | "z3" -> Z3
-    | "yices" -> Yices
-    | "cvc3" -> Cvc3 
-    | _ -> Other
-
 let get_proof elements =
   let rec get_proofs proofs l =
     match l with 
       | e::l when e.Xml.name = "proof" -> 
-	  let prover = get_prover e in
+	  let prover = get_string_attr "prover" e in
 	  let status = get_string_attr "status" e in
 	  let timelimit = 
 	    try get_string_attr "timelimit" e with Not_found -> "no timeout"
@@ -270,7 +271,7 @@ let get_proof elements =
 	  let scriptfile = 
 	    try get_string_attr "scriptfile" e with Not_found -> "no script" 
 	  in
-	  get_proofs ((prover,(status,timelimit,date,scriptfile))::proofs) l
+	  get_proofs ((prover,status,timelimit,date,scriptfile)::proofs) l
       | _ -> proofs,l
   in
   (get_proofs [] elements)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.90 2008-04-15 13:09:53 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.91 2008-04-22 17:41:24 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -196,7 +196,7 @@ let normalize_for loc inits test updates inv var body =
                  ()
 	      ])
     ()
-
+    
 let duplicable =
   IPExpr.fold_left 
     (fun acc e -> acc && match e#node with

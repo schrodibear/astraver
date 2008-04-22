@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.119 2008-04-22 06:53:45 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.120 2008-04-22 17:41:24 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1149,19 +1149,13 @@ and type_param package_env type_env p =
 and method_header package_env type_env modifiers retty mdecl =
   match mdecl with
     | Simple_method_declarator (id, l) ->
-	let is_non_null = List.mem Non_null modifiers in
 	let is_nullable = List.mem Nullable modifiers in
-	  if is_non_null && !Java_options.nonnull_sem = NonNullAll then
-	    typing_error (fst id) 
-	      "'non_null' modifier is not allowed in 'non_null by default' mode";	    
-	  if is_nullable && !Java_options.nonnull_sem <> NonNullAll then
-	    typing_error (fst id)
-	      "'nullable' modifier is only allowed in 'non_null by default' mode";	    
-	  let non_null =
-	    if !Java_options.nonnull_sem = NonNullAll then not is_nullable else 
-	      is_non_null
-	  in
-	    non_null, id, (Option_misc.map (type_type package_env type_env non_null) retty), 
+	let non_null =
+	  (!Java_options.nonnull_sem = NonNullAll ||
+	      !Java_options.nonnull_sem = NonNullAllLocal) &&
+	    not is_nullable
+	in
+	  non_null, id, (Option_misc.map (type_type package_env type_env non_null) retty), 
 	List.map (type_param package_env type_env) l
     | Array_method_declarator d -> 
 	let non_null, id, t, l = 

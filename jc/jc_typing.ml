@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.203 2008-04-15 13:09:53 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.204 2008-04-22 17:41:24 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1480,13 +1480,13 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           with Not_found ->
             typing_error id#loc "undeclared exception: %s" id#name
           in
-          let vei = match ei.jc_exception_info_type with
-            | Some tei -> Some (var tei v)
-            | None -> None
-          in
-          ei, vei, unit_expr (fe cbody)
+            match ei.jc_exception_info_type with
+              | Some tei -> 
+		  let vi = var tei v in
+		    ei, Some vi, unit_expr (expr ((v, vi) :: env) cbody)
+             | None -> ei, None, unit_expr (fe cbody)
         end catches in
-        tbody#typ,
+          tbody#typ,
         tbody#region,
         JCEtry(tbody, tcatches, tfinally)
     | JCNEthrow(id, e1o) ->

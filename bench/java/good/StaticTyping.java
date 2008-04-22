@@ -8,11 +8,13 @@ class C {
 class StaticTyping {
 
     C a;
+    int[] t;
 
     void m1(C c) {
 	a = null; // bug jessie : OP non generee
-	// C b = c; // b pas marque "non null"...
-	a.x = 0; // ..du coup : PO inutile
+	C b = c; // b pas marque "non null"...
+	b.x = 0; // ..du coup : PO inutile
+	int[] tmp = t;
     }
 
 

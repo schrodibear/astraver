@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.276 2008-04-22 06:53:45 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.277 2008-04-22 17:41:24 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1680,21 +1680,32 @@ and expr ~infunction ~threats e : expr =
                  LabelPre
                  a,
                Void)
-    | JCElet(vi,e,s) -> 
+    | JCElet (vi, e, s) -> 
         begin
           let e' = match e with
             | None -> 
                 any_value vi.jc_var_info_type
             | Some e -> 
-(*                eprintf "decl of vi=%s@." vi.jc_var_info_name;*)
-                coerce ~no_int_overflow:(not threats) 
+		(* eprintf "decl of vi=%s@." vi.jc_var_info_name; *)
+                let e' = coerce ~no_int_overflow:(not threats) 
                   (lab()) e#loc vi.jc_var_info_type e#typ 
                   e (expr e)
+		in
+		let assign_var_assert = fst 
+		  (type_assert ~infunction ~threats vi.jc_var_info_type e ([], []))
+		in
+		  assert (List.length assign_var_assert = 1);
+		  let assign_var_assert = List.hd assign_var_assert in
+		    match assign_var_assert with
+		      | None -> e'
+		      | Some (tmp, e, a) ->
+			  let e' = if not threats then e' else Assert (a, e') in
+			    Let (tmp, e, e')
           in
-          if vi.jc_var_info_assigned then 
-            Let_ref(vi.jc_var_info_final_name, e', expr s)
-          else 
-            Let(vi.jc_var_info_final_name, e', expr s)
+            if vi.jc_var_info_assigned then 
+              Let_ref(vi.jc_var_info_final_name, e', expr s)
+            else 
+              Let(vi.jc_var_info_final_name, e', expr s)
         end
     | JCEreturn_void -> Raise(jessie_return_exception,None)     
     | JCEreturn (t,e) -> 

@@ -1,17 +1,14 @@
 
-type prover = Ergo | Simplify | Z3 | Yices | Cvc3 | Other
 
-val provers_name : prover -> string
-
-type goal = {
+type goal = private {
   goal_expl : Logic_decl.vc_expl;
   goal_file : string;
   sub_goal : goal list;
-  mutable proof : (prover*(string*string*string*string)) list;
+  proof : (string*string*string*string*string) list;
   mutable goal_tags : (string*string) list;
 }
 
-type lemma = {
+type lemma = private {
   lemma_name : string;
   lemma_loc : Loc.floc;
   lemma_goal : goal; 
@@ -25,7 +22,7 @@ type behavior = {
   mutable behavior_tags : (string*string) list; 
 }
 
-type funct = {
+type funct = private {
   function_name : string;
   function_loc : Loc.floc;
   mutable function_behaviors : behavior list;
@@ -33,7 +30,7 @@ type funct = {
 }
   
 
-type t = {
+type t = private {
   project_name : string;
   mutable project_context_file : string;
   mutable project_lemmas : lemma list;
@@ -48,13 +45,13 @@ val add_function : t -> string -> Loc.floc -> funct
 val add_behavior : funct -> string -> Loc.floc -> behavior
 val add_goal : behavior -> Logic_decl.vc_expl -> string -> goal
 
-(* toggle visibility 
+(* toggle visibility *)
 
 val toggle_lemma : lemma -> unit
 val toggle_function : funct -> unit
 val toggle_behavior : behavior -> unit
 val toggle_goal : goal -> unit
-*)
+
 (* save/load *)
 
 val save : t -> string -> unit

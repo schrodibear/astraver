@@ -60,9 +60,6 @@ opt:
 %.opt:
 	$(OCAMLBUILD) $*.opt
 
-%.cmo:
-	$(OCAMLBUILD) $*.cmo
-
 # Bench
 
 ml-bench:
