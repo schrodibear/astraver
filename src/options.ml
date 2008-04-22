@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.110 2008-04-21 10:19:36 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.111 2008-04-22 14:51:09 stoulsn Exp $ i*)
 
 open Format
 
@@ -72,6 +72,8 @@ let pruning_hyp_LinkVarsQuantif_ = ref false
 let pruning_hyp_keep_single_comparison_representation_ = ref true
 let pruning_hyp_comparison_eqOnly_ = ref false
 let pruning_hyp_suffixed_comparison_ = ref false
+let pruning_hyp_equalities_linked_ = ref false
+let pruning_hyp_arithmetic_tactic_ = ref false
 (* FIN de Heuristiques en test *)
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
@@ -208,12 +210,15 @@ VC transformation options:
   --exp goal         expands the predicate definitions only in goal 
 
 Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
-  --prune-with-comp           uses comparisons as a predicates
+  --prune-with-comp           uses comparisons as predicates
   --prune-with-comp-filter    as previous and uses also comparisons as filters
-  --prune-keep-local-links    insert quantified variables in variables graphe
+  --prune-keep-local-links    insert quantified variables in variables graph
   --prune-comp-dual-encoding  do not inverse negative comparisons
-  --prune-eq-only             consider only equality as a comparison
-  --prune-suffixed-comp       suffix produced predicates
+  --prune-eq-only             consider only equality comparison as a predicate
+  --prune-suffixed-comp       suffixes comparison predicates
+  --prune-link-eqs            link each suffixed equalitie to the unsuffixed
+  --prune-arith-tactic        statically link arithmetic operators (=, < & <=)
+
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -456,6 +461,12 @@ let files =
 	pruning_hyp_CompInGraph_ := true ; 
 	pruning_hyp_suffixed_comparison_ := true ; 
 	parse args
+    | ("--prune-link-eqs" | "-prune-link-eqs"):: args ->
+	pruning_hyp_equalities_linked_ := true ; 
+	parse args
+    | ("--prune-arith-tactic" | "-prune-arith-tactic"):: args ->
+	pruning_hyp_arithmetic_tactic_ := true ; 
+	parse args
 (* FIN de Heuristiques en test *)
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
@@ -537,6 +548,8 @@ let pruning_hyp_LinkVarsQuantif = !pruning_hyp_LinkVarsQuantif_
 let pruning_hyp_keep_single_comparison_representation = !pruning_hyp_keep_single_comparison_representation_
 let pruning_hyp_comparison_eqOnly = !pruning_hyp_comparison_eqOnly_
 let pruning_hyp_suffixed_comparison = !pruning_hyp_suffixed_comparison_
+let pruning_hyp_equalities_linked = !pruning_hyp_equalities_linked_
+let pruning_hyp_arithmetic_tactic = !pruning_hyp_arithmetic_tactic_
 (* FIN de Heuristiques en test *)
 let modulo = !modulo_
 let defExpanding = !defExpanding_
