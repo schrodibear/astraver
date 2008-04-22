@@ -1,5 +1,5 @@
 
-//@+ NonNullByDefault = all
+//@+ NonNullByDefault = alllocal
 
 class C { 
     public int x;

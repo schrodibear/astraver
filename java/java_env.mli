@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.36 2008-04-08 20:35:27 nrousset Exp $ *)
+(* $Id: java_env.mli,v 1.37 2008-04-22 06:53:45 nrousset Exp $ *)
 
 (*s types and environments *)
 
@@ -188,9 +188,10 @@ type literal =
     | Null
 
 type nonnull_policy =
-  | NonNullNone
-  | NonNullAll
-  | NonNullFields
+  | NonNullNone     (* Java semantics *)
+  | NonNullFields   (* class fields non-null by default *)
+  | NonNullAll      (* class fields and methods parameters & return value non-null by default *)
+  | NonNullAllLocal (* class fields, methods parameters & return value, and local variables non-null by default *)
 
 
 (*

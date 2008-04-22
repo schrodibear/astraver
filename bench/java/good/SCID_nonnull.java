@@ -27,15 +27,15 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: SCID_nonnull.java,v 1.5 2008-04-04 16:10:32 nrousset Exp $ */
+/* $Id: SCID_nonnull.java,v 1.6 2008-04-22 06:53:45 nrousset Exp $ */
 
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
-//@+ NonNullByDefault = yes
+//@+ NonNullByDefault = alllocal
 // @+ AnnotationPolicy = Invariants
 // @+ AbstractDomain = Box
 // @+ AbstractDomain = Oct
-//@+ AbstractDomain = Pol
+// @+ AbstractDomain = Pol
 
 // Smart Card ID - Example for a Smart Card based Identification and Authentication Application
 // File: SCID.java
@@ -225,7 +225,7 @@ import  javacard.security.*;     // import all neccessary packages for the java 
 
 // Bug with lemma ? : gwhy blocked ?
 // @ lemma a1: \forall int b; 0 <= b <= 127 ==> (b & 0x00FF) == b;
-//@ axiom a1: \forall int b; 0 <= b <= 127 ==> (b & 0x00FF) == b;
+// @ axiom a1: \forall int b; 0 <= b <= 127 ==> (b & 0x00FF) == b;
 
 public class SCID extends Applet {
     // definitions for the classes and commands

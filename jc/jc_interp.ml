@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.275 2008-04-15 13:09:53 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.276 2008-04-22 06:53:45 nrousset Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1234,9 +1234,9 @@ and offset ~infunction ~threats = function
         e#name_label e#loc integer_type e#typ e
         (expr ~infunction ~threats e)
 
-and type_assert ~infunction ~threats vi e (lets,params) =
+and type_assert ~infunction ~threats ty e (lets, params) =
   let opt =
-    match vi.jc_var_info_type with
+    match ty with
       | JCTpointer (si, n1o, n2o) ->
 	  let tmp = tmp_var_name () in
 	  let alloc = alloc_table_name si in
@@ -1303,10 +1303,10 @@ and type_assert ~infunction ~threats vi e (lets,params) =
 	    end
       | _ -> None
   in
-  let e = expr_coerce ~infunction ~threats vi e in
+  let e = expr_coerce ~infunction ~threats ty e in
   match opt with
-    | None -> None::lets , e::params
-    | Some(tmp,a) -> Some(tmp,e,a)::lets , (Var tmp)::params
+    | None -> None :: lets, e :: params
+    | Some (tmp,a) -> Some (tmp, e, a) :: lets , (Var tmp) :: params
 
 and expr ~infunction ~threats e : expr =
   let expr = expr ~infunction ~threats in
@@ -1496,8 +1496,11 @@ and expr ~infunction ~threats e : expr =
         let arg_types_asserts, el =
           try match params with
             | [] -> [], [Void]
-            | p ->
-                List.fold_right2 (type_assert ~infunction ~threats) p l ([],[])
+            | p -> 
+		let tyl = List.map (fun p -> p.jc_var_info_type) p in
+		  List.fold_right2 
+		    (type_assert ~infunction ~threats)
+		    tyl l ([],[])
 	  with Invalid_argument _ -> assert false
         in
         let write_mems, read_mems, write_allocs, read_allocs =
@@ -1563,12 +1566,24 @@ and expr ~infunction ~threats e : expr =
     | JCEassign_var (vi, e2) -> 
         let e2' = expr e2 in
         let n = vi.jc_var_info_final_name in
-        let ie = Assign(n, coerce ~no_int_overflow:(not threats) 
-			  e2#name_label e2#loc vi.jc_var_info_type 
-			  e2#typ e2 e2')
+        let ie = Assign (n, coerce ~no_int_overflow:(not threats) 
+			   e2#name_label e2#loc vi.jc_var_info_type 
+			   e2#typ e2 e2')
 	in
-	if e#typ = Jc_pervasives.unit_type then ie else append ie (var vi)
-    | JCEassign_heap(e1,fi,e2) -> 
+	let assign_var_assert = fst 
+	  (type_assert ~infunction ~threats vi.jc_var_info_type e2 ([], []))
+	in
+	  assert (List.length assign_var_assert = 1);
+	  let assign_var_assert = List.hd assign_var_assert in
+	  let ie =
+	    match assign_var_assert with
+	      | None -> ie
+	      | Some (tmp, e, a) ->
+		  let ie = if not threats then ie else Assert (a, ie) in
+		    Let (tmp, e, ie)
+	  in
+	    if e#typ = Jc_pervasives.unit_type then ie else append ie (var vi)
+    | JCEassign_heap (e1, fi, e2) -> 
         let e1' = expr e1 in
         let e2' = expr e2 in
         let tmp1 = tmp_var_name () in
@@ -1576,36 +1591,49 @@ and expr ~infunction ~threats e : expr =
         let upd = make_upd ~infunction ~threats (lab()) e#loc
           fi e1 (Var tmp2) 
         in
-(* Yannick: ignore variables to be able to refine update function used. *)      
-(*      let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
-(* Claude: do not ignore variable tmp2, since it may involve a coercion. 
-   Anyway, safety of the update do not depend on e2 *)
-        let upd = 
-	  if threats && !Jc_options.inv_sem = InvOwnership then
-            append (assert_mutable (LVar tmp1) fi) upd else upd 
+	let assign_heap_assert = fst 
+	  (type_assert ~infunction ~threats fi.jc_field_info_type e2 ([], []))
 	in
-	let upd =
-	  if e#typ = Jc_pervasives.unit_type then upd else 
-	    let tmp1var = 
-	      new expr ~typ:e1#typ ~region:e1#region
-		(JCEvar(Jc_pervasives.var e1#typ tmp1)) 
-	    in
-	    append upd
-	      (make_deref "" loc ~infunction ~threats:false fi tmp1var)
-	in
-        let lets =
-          (make_lets
-             ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
-                                 e2#name_label e2#loc 
-                                 fi.jc_field_info_type 
-                                 e2#typ e2 e2') ])
-             upd)
-        in
-        if !Jc_options.inv_sem = InvOwnership then
-          append lets (assume_field_invariants fi)
-        else
-          lets
-(*      if !Jc_options.inv_sem = Jc_options.InvOwnership then   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
+	  assert (List.length assign_heap_assert = 1);
+	  let assign_heap_assert = List.hd assign_heap_assert in
+	  let upd =
+	    match assign_heap_assert with
+	      | None -> upd
+	      | Some (tmp, e, a) ->
+		  let upd = if not threats then upd else Assert (a, upd) in
+		    Let (tmp, e, upd)
+	  in	  
+	    (* Yannick: ignore variables to be able to refine update function used. *)      
+	    (*      let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
+	    (* Claude: do not ignore variable tmp2, since it may involve a coercion. 
+	       Anyway, safety of the update do not depend on e2 *)
+          let upd = 
+	    if threats && !Jc_options.inv_sem = InvOwnership then
+              append (assert_mutable (LVar tmp1) fi) upd else upd 
+	  in
+	  let upd =
+	    if e#typ = Jc_pervasives.unit_type then upd else 
+	      let tmp1var = 
+		new expr ~typ:e1#typ ~region:e1#region
+		  (JCEvar(Jc_pervasives.var e1#typ tmp1)) 
+	      in
+		append upd
+		  (make_deref "" loc ~infunction ~threats:false fi tmp1var)
+	  in
+          let lets =
+            (make_lets
+               ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
+                                   e2#name_label e2#loc 
+                                   fi.jc_field_info_type 
+                                   e2#typ e2 e2') ])
+               upd)
+          in
+            if !Jc_options.inv_sem = InvOwnership then
+              append lets (assume_field_invariants fi)
+            else
+              lets
+		(* if !Jc_options.inv_sem = Jc_options.InvOwnership then   
+		   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCEblock l ->
         List.fold_right append (List.map expr l) Void
     | JCEloop (la, s) ->
@@ -1669,9 +1697,9 @@ and expr ~infunction ~threats e : expr =
             Let(vi.jc_var_info_final_name, e', expr s)
         end
     | JCEreturn_void -> Raise(jessie_return_exception,None)     
-    | JCEreturn(t,e) -> 
+    | JCEreturn (t,e) -> 
 	let return_type_asserts, _ = 
-	  type_assert ~infunction ~threats infunction.jc_fun_info_result e ([], []) in
+	  type_assert ~infunction ~threats infunction.jc_fun_info_result.jc_var_info_type e ([], []) in
 	let return_type_assert =
 	  List.fold_right
 	    (fun opt acc -> 
@@ -1750,9 +1778,9 @@ and expr ~infunction ~threats e : expr =
     | "" -> ie
     | lab -> Label(lab, ie)
 
-and expr_coerce ~infunction ~threats vi e =
+and expr_coerce ~infunction ~threats ty e =
   coerce ~no_int_overflow:(not threats)
-    e#name_label e#loc vi.jc_var_info_type 
+    e#name_label e#loc ty
     e#typ e (expr ~infunction ~threats e)
 
 (*******************************************************************************)

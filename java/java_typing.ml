@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.118 2008-04-11 12:38:34 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.119 2008-04-22 06:53:45 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1120,25 +1120,25 @@ and type_param package_env type_env p =
   let rec get_type p =
     match p with
       | Simple_parameter (mo, ty, (loc, id)) ->
-	  let non_null = 
-	    match mo with
-	      | None -> 
-		  nullable := !Java_options.nonnull_sem <> NonNullAll;
-		  !Java_options.nonnull_sem = NonNullAll
-	      | Some Non_null ->
-		  nullable := false;
-		  if !Java_options.nonnull_sem = NonNullAll then
-		    typing_error loc
-		      "'non_null' modifier is not allowed in 'non_null by default' mode";
-		  true;
-	      | Some Nullable -> 
-		  nullable := true;
-		  if !Java_options.nonnull_sem <> NonNullAll then
-		    typing_error loc 
-		      "'nullable' modifier is only allowed in 'non_null by default' mode";
-		  false
-	      | _ -> assert false
-	  in
+	  (match mo with
+	     | None -> 
+		 nullable := 
+		   !Java_options.nonnull_sem <> NonNullAll && 
+		     !Java_options.nonnull_sem <> NonNullAllLocal;
+	     | Some Non_null ->
+		 nullable := false;
+		 if !Java_options.nonnull_sem = NonNullAll ||
+		   !Java_options.nonnull_sem = NonNullAllLocal then
+		     typing_error loc
+		       "'non_null' modifier is not allowed in 'non_null by default' mode";
+	     | Some Nullable -> 
+		 nullable := true;
+		 if !Java_options.nonnull_sem <> NonNullAll &&
+		   !Java_options.nonnull_sem <> NonNullAllLocal then
+		     typing_error loc 
+		       "'nullable' modifier is only allowed in 'non_null by default' mode";
+	     | _ -> assert false);
+	  let non_null = not !nullable in
 	    (non_null, type_type package_env type_env non_null ty, loc, id)
       | Array_parameter x -> 
 	  let (non_null, t, loc, i) = get_type x in
@@ -2868,7 +2868,9 @@ let rec type_initializer ~ghost env ty i =
 (* statements *)
 
 let variable_declaration ~ghost env vd =
-  let ty = type_type env.package_env env.type_env false vd.variable_type in
+  let is_nullable = List.mem Nullable vd.variable_modifiers in
+  let non_null = !Java_options.nonnull_sem = NonNullAllLocal && not is_nullable in
+  let ty = type_type env.package_env env.type_env non_null vd.variable_type in
   let l =
     List.map
       (fun vd ->
@@ -2983,7 +2985,7 @@ let rec statement env s =
     java_statement_node = s' }
 
 and local_decl ~ghost env loc vd rem =
-  let e,decls = variable_declaration ~ghost env vd in
+  let e, decls = variable_declaration ~ghost env vd in
   let r = block { env with env = e } rem in
   let s =
     List.fold_right
@@ -2992,8 +2994,8 @@ and local_decl ~ghost env loc vd rem =
 	   java_statement_node =
 	     JSvar_decl(vi,i,acc); })
       decls r in
-  [s]
-  
+    [s]
+      
 and statements env b =
   match b with
     | [] -> []

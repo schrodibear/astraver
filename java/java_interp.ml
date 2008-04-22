@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.132 2008-04-15 13:09:53 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.133 2008-04-22 06:53:45 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -1577,25 +1577,6 @@ let behavior (id,assumes,throws,assigns,ensures) =
     ~ensures: (reg_assertion ensures)
     ()
 
-let get_non_null_assertion ty t = match ty with
-  | JTYbase _ | JTYnull | JTYlogic _ -> assert false
-  | JTYclass (_, ci) ->
-      mkapp
-        ~fun_name: (non_null_pred "Object").jc_logic_info_name
-        ~args: [t]
-        ()
-  | JTYinterface ii ->
-      mkeq
-        ~expr1: (mkoffset_max ~expr:t ())
-        ~expr2: zero
-        ()
-  | JTYarray (_,ty) ->
-      let si = get_array_struct Loc.dummy_position ty in
-      mkapp
-        ~fun_name: (non_null_pred si.jc_struct_info_name).jc_logic_info_name
-        ~args: [t]
-        ()
-
 let true_assertion = mkboolean ~value:true ()
 
 let tr_method mi req behs b acc =
@@ -1855,6 +1836,7 @@ let tr_field type_name acc fi =
 	?body:logic_body 
 	()
     in
+    let acc = def1 :: acc in
     let def2 = match axiom_body with
       | None -> []
       | Some a -> [
@@ -1866,7 +1848,7 @@ let tr_field type_name acc fi =
             ()
         ]
     in
-    def1 :: def2 @ acc
+    def2 @ acc
   else
     let e = 
       try match Hashtbl.find Java_typing.field_initializer_table 
@@ -1881,21 +1863,6 @@ let tr_field type_name acc fi =
          ~name: (var_name vi)
          ?init: e
          ())::acc
-    in
-    let acc =
-      if (!Java_options.nonnull_sem = NonNullAll || 
-	  !Java_options.nonnull_sem = NonNullFields) && 
-	not fi.java_field_info_is_nullable
-      then match vi_ty with
-	| JCTpointer _ -> 
-	    let a =
-              get_non_null_assertion fi_ty (mkvar ~name:(var_name vi) ()) in
-            (mkglobal_inv_def
-               ~name: (var_name vi^"_non_null_inv")
-               ~body: a
-               ()) :: acc
-	| _ -> acc
-      else acc
     in
     acc
 
