@@ -85,6 +85,12 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 # 	$(EXECJESSIE) -why-opt -fast-wp -main SCID_process SCID.jc
 # 	make -f SCID.makefile gui
 
+SCID_noannot: SCID_noannot.java
+	rm -f SCID_noannot.jc
+	$(EXECKRAKATOA) -javacard SCID_noannot.java
+	$(EXECJESSIE) SCID_noannot.jc
+	make -f SCID_noannot.makefile gui
+
 %: %.java
 	rm -f $*.jc
 	make $*.jc

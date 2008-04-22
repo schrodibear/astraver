@@ -278,7 +278,9 @@ let stringmap_elements map =
  * Jc_typing. *)
 
 let find_struct a =
+(*
   Format.printf "[find_struct] %s@." a;
+*)
   fst (Hashtbl.find Jc_typing.structs_table a)
 
 let find_variant a =
