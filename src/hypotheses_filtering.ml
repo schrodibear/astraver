@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.40 2008-04-22 14:51:09 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.41 2008-04-25 08:08:33 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -69,6 +69,11 @@ open Set
 open Util
 open Graph.Graphviz 
 
+type var_strat =
+    AllVars
+  | One 
+  | AllInABranch 
+    
 
 let use_comparison_as_criteria_for_graph_construction = Options.pruning_hyp_CompInGraph
 let use_comparison_as_criteria_for_hypothesis_filtering = Options.pruning_hyp_CompInFiltering
@@ -79,8 +84,12 @@ let comparison_eqOnly = Options.pruning_hyp_comparison_eqOnly
 let suffixed_comparison = Options.pruning_hyp_suffixed_comparison
 let equalities_linked = Options.pruning_hyp_equalities_linked
 let arith_tactic = Options.pruning_hyp_arithmetic_tactic
-
-
+let var_filter_tactic = match Options.pruning_hyp_var_tactic with 
+  | 0 -> AllVars
+  | 1 -> One 
+  | 2 -> AllInABranch 
+  | _ -> failwith "Heuristic failed."
+      
 let pb = ref Options.pruning_hyp_p   
 let vb = ref Options.pruning_hyp_v   
 let v_count = ref 0
@@ -125,7 +134,7 @@ let display_var_set set =
        Format.printf "%s " (string_of_var s)) set ;
   Format.printf "@\n@." 
 
-(** returns the free variables of a term that are not outer quantified **)
+(** returns the free variables of a term that are not outer quantified (in qvars) **)
 let free_vars_of qvars t  = 
   let vars = ref VarStringSet.empty in
   let rec collect formula  = 
@@ -133,24 +142,13 @@ let free_vars_of qvars t  =
       | Tapp (id, tl , _)  -> 
 	  List.iter collect tl 
       | Tvar (id) ->
-	  (*begin
-	    if debug then 
-	    begin
-	    Format.printf "%s -> " (Ident.string id);
-	    if not (VarStringSet.mem (PureVar (Ident.string id)) qvars) then 
-	    Format.printf "OK\n@." 
-	    else
-	    Format.printf "KO\n@." 
-	    end
-	  end;*)
-	  if not (VarStringSet.mem (PureVar (Ident.string id)) qvars) 
-	  then
+	  if not (VarStringSet.mem (PureVar (Ident.string id)) qvars) then
 	    vars := VarStringSet.add (PureVar (Ident.string id)) !vars 
       |  _ -> () in
   collect t ; 
   !vars
 
-(** returns the free variables of a term that are not outer quantified **)
+(** returns the free variables of a predicate that are not inner quantified **)
 let free_vars_of  p  =
   let vars = ref VarStringSet.empty in
   let rec collect qvars formula  = 
@@ -177,10 +175,6 @@ let free_vars_of  p  =
       | Pnamed (_, p) ->  collect qvars p 
       | Pvar _ | Pfalse |Ptrue -> ()
   in
-  begin
-   (* if debug then
-      Format.printf "Free vars of predicate : %a \n" Util.print_predicate p*)
-  end;
   collect VarStringSet.empty p ; 
   !vars
     
@@ -234,41 +228,43 @@ let miniscoping pr =
 	    if not (member_of  
 		      (Ident.string t2) 
 		      (free_vars_of fm)) then 
-	      fm 
+	      fm
 	    else 		
-	      match fm with 
-		| Pand (p1,p2,p,q) -> 
-		    if not (member_of  
-			      (Ident.string t2) 
-			      (free_vars_of p)) then 
-		      let q' = mq (Forall(t1,t2,p3,p4,p5,q)) q in
-		      Pand (p1,p2,p,q')
-		    else
+	      begin
+		match fm with 
+		  | Pand (p1,p2,p,q) -> 
 		      if not (member_of  
-				(Ident.string t2) 
-				(free_vars_of q)) then 
-			let p' =  mq (Forall(t1,t2,p3,p4,p5,p)) p in
-			Pand (p1,p2,p',q)
+				 (Ident.string t2) 
+				 (free_vars_of p)) then 
+			let q' = mq (Forall(t1,t2,p3,p4,p5,q)) q in
+			Pand (p1,p2,p,q')
+		      else
+			if not (member_of  
+				   (Ident.string t2) 
+				   (free_vars_of q)) then 
+			  let p' =  mq (Forall(t1,t2,p3,p4,p5,p)) p in
+			  Pand (p1,p2,p',q)
 		      else
 			Pand (p1,p2, 
-			      mq (Forall (t1,t2,p3,p4,p5,p)) p,
-			      mq (Forall (t1,t2,p3,p4,p5,q)) q)
-		| Por (p,q) -> 
-		    if not (member_of  
-			      (Ident.string t2) 
-			      (free_vars_of p)) then 
-		      let q' = mq (Forall(t1,t2,p3,p4,p5,q)) q in
-		      Por (p,q')
-		    else
+			     mq (Forall (t1,t2,p3,p4,p5,p)) p,
+			     mq (Forall (t1,t2,p3,p4,p5,q)) q)
+		  | Por (p,q) -> 
 		      if not (member_of  
-				(Ident.string t2) 
-				(free_vars_of q)) then 
-			let p' = mq (Forall (t1,t2,p3,p4,p5,p)) p in
-			Por (p',q)
+				 (Ident.string t2) 
+				 (free_vars_of p)) then 
+			let q' = mq (Forall(t1,t2,p3,p4,p5,q)) q in
+			Por (p,q')
+		      else
+			if not (member_of  
+				   (Ident.string t2) 
+				   (free_vars_of q)) then 
+			  let p' = mq (Forall (t1,t2,p3,p4,p5,p)) p in
+			  Por (p',q)
 		      else
 			Forall (t1,t2,p3,p4,p5, fm)
-		| _ -> Forall (t1,t2,p3,p4,p5, fm)
-	  end
+		  | _ -> Forall (t1,t2,p3,p4,p5, fm)
+	      end
+	  end 
       | Exists (t1,t2,pt,p) -> 
 	  begin
 	    if not (member_of  
@@ -311,6 +307,7 @@ let miniscoping pr =
 	  end
       |_ -> assert false 
   in
+  (** rewrites Forallb into Forall and call mq to reduce scoping of quantifiers **)
   let rec minib fm = 
     match fm with 
       | Pand (p1,p2,p,q) -> Pand(p1,p2, minib p, minib q)
@@ -587,11 +584,6 @@ let sets_of_vars f  =
     basic strategy type 
     ***********************
 **)
-type var_strat =
-    All
-  | One 
-      
-
 
 
 
@@ -1067,27 +1059,38 @@ let build_pred_graph decl =
   (* Construction of the Preds dependence graph *)
   (* suppose the clause cl is in nnf *) 
   (** @result : a set of clauses **)
-  let add_atom atome cl = 
+  let add_atom atome cl = 	  
     match atome with 
       | Pnot (Papp (id, l, i)) 
 	  when not (is_comparison id or 
 		       is_int_comparison id or 
 		       is_real_comparison id) -> 
-	  AbstractClauseSet.singleton  
-	    {num = cl.num + 1;
-	     pos = cl.pos;
-	     neg = StringSet.add (Ident.string id) cl.neg}
+	  begin
+	    if debug then 
+	      begin 
+        	(*Format.printf "\nOperation non suffixee : %a\n" Util.print_predicate (Papp (id, l, i));*)
+	      end; 	  
+	    AbstractClauseSet.singleton  
+	      {num = cl.num + 1;
+	       pos = cl.pos;
+	       neg = StringSet.add (Ident.string id) cl.neg}
+	  end
 	    
 	  
       | Papp (id, l, i) 
 	  when not (is_comparison id or
 		       is_int_comparison id or 
 		       is_real_comparison id) -> 
-	  AbstractClauseSet.singleton 
-	    {num = cl.num + 1;
-	     neg = cl.neg;
-	     pos = StringSet.add (Ident.string id) cl.pos}
-	   
+	  begin
+	    if debug then 
+	      begin 
+        	(*Format.printf "\nOperation non suffixee : %a\n" Util.print_predicate (Papp (id, l, i));*)
+	      end; 	  
+	    AbstractClauseSet.singleton 
+	      {num = cl.num + 1;
+	       neg = cl.neg;
+	       pos = StringSet.add (Ident.string id) cl.pos}
+	  end
 
       | Pnot (Papp (id, [el1;el2], i)) 
 	  when (comparison_to_consider id) ->
@@ -1290,11 +1293,12 @@ let build_pred_graph decl =
 	    | Tnamed (_,_) ->  
 		assert false ( * Currently, no label is present close to a comparison predicate * )
 	  ) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l) *)
-      | _ -> 
+      | _  -> 
 	  AbstractClauseSet.singleton 
 	    {num = cl.num + 1;
 	     neg = cl.neg;
 	     pos = cl.pos }
+	    
   in
   let rec get_abstract_clauses p = 
     let rec compute_clause p acs = 
@@ -1639,6 +1643,98 @@ let reduce_subst (l',g') =
 **)
 let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   (** UPDATE THIS ACCORDING TO THE ARRTICLE **)
+
+    (** 
+	@param pred : a predicate
+	@result : true if and only if all variables of at least a branch of the predicate are in the set vars
+    **)
+  let all_vars_of_a_branch pred vars = 
+    let rec all_vars_from_term qvars = function 
+      | Tvar v | Tderef v ->
+	  (member_of (Ident.string v) vars) || List.mem v qvars
+      | Tapp (_,lt,_) -> 
+	  List.for_all (all_vars_from_term qvars) lt
+      | Tconst _  -> 
+	  true
+      | Tnamed(lab,t) -> 
+	  all_vars_from_term qvars t
+    in
+    let rec branch_or pred qvars = match pred with
+      | Forall (_,id,_,_,_,p) -> 
+	  branch_and p (id::qvars)
+	    
+      | Exists (id,_,_,p) -> 
+	  branch_or p (id::qvars)
+	    
+      | Pand (_, _, p1, p2) -> 
+	  (branch_and p1 qvars) && (branch_and p2 qvars)
+	    
+      | Por (p1, p2) -> 
+	  (branch_and p1 qvars) || (branch_and p2 qvars)
+	    
+      | Pnot (p) -> 
+	  branch_and p qvars
+      | Papp (_ ,lt , _) -> 
+	  List.for_all (all_vars_from_term qvars) lt
+	    
+      | Pvar (v) ->  
+	  (member_of (Ident.string v) vars) || (List.mem v qvars)
+      | Pfalse 
+      | Ptrue -> true
+      | Pfpi _ ->
+	  failwith "fpi not yet suported "
+      | Pnamed (_, _) -> 
+	  failwith "Pnamed has to be not found there (nnf has to remove it)"
+      | Forallb (_, _, _)  -> 
+	  failwith "Forallb has to be not found there (nnf has to remove it)"
+      | Piff (_, _) -> 
+	  failwith "Piff has to be not found there (nnf has to remove it)"
+      | Pimplies (_, a, b) ->
+	  failwith "Pimplies has to be not found there (nnf has to remove it)"
+      | Pif (a, b, c) ->
+	  failwith "Pif has to be not found there (nnf has to remove it)"
+	    
+    and branch_and pred qvars = match pred with
+      | Forall (_,id,_,_,_,p) -> 
+	  branch_and p (id::qvars)
+	      
+      | Exists (id,_,_,p) -> 
+	  branch_or p (id::qvars)
+	    
+      | Pand (_, _, p1, p2) -> 
+	  (branch_and p1 qvars) || (branch_and p2 qvars)
+	    
+      | Por (p1, p2) -> 
+	  (branch_and p1 qvars) && (branch_and p2 qvars)
+	    
+      | Pnot (p) -> 
+	  branch_and p qvars
+      | Papp (_ ,lt , _) -> 
+	  List.for_all (all_vars_from_term qvars) lt
+	    
+      | Pvar (v) ->  
+	  (member_of (Ident.string v) vars) || (List.mem v qvars)
+      | Pfalse 
+      | Ptrue -> true
+	  
+      | Pfpi _ ->
+	  failwith "fpi not yet suported "
+      | Pnamed (_, _) -> 
+	  failwith "Pnamed has to be not found there (nnf has to remove it)"
+      | Forallb (_, _, _)  -> 
+	  failwith "Forallb has to be not found there (nnf has to remove it)"
+      | Piff (_, _) ->
+	  failwith "Piff has to be not found there (nnf has to remove it)"
+      | Pimplies (_, _,_) ->
+	  failwith "Pimplies has to be not found there (nnf has to remove it)"
+      | Pif (_, _, _) ->
+	  failwith "Pif has to be not found there (nnf has to remove it)"
+    in
+    branch_and (cnf pred) []
+
+
+
+  in
   let rec filter = function  
     | [] -> []
     | Svar (id, v) :: q -> 
@@ -1654,18 +1750,22 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	  try Hashtbl.find hash_hyp_vars p
 	  with Not_found -> assert false 
 	in
+	let v' = (removes_fresh_vars vars) in 
 	let condition = match selection_strategy with
-	    All ->
-	      let v' = (removes_fresh_vars vars) in 
+	    AllVars ->
 	      VarStringSet.subset 
-		v'	
+		v'	 
 		concl_rep 
 		(*** TODO UPDATE THIS ***)
 
 	  | One -> not (VarStringSet.is_empty 
-			  (VarStringSet.inter 
-			     (removes_fresh_vars vars)
-			     concl_rep))
+			   (VarStringSet.inter 
+			       v'
+			       concl_rep))
+
+	  | AllInABranch -> 
+	      all_vars_of_a_branch p concl_rep
+
 	in 
 	if debug then begin
 	  Format.printf "\nHyp :\n %a \n\n" Util.print_predicate p; 
@@ -1713,32 +1813,32 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   filter l
     
 
-let managesGoal id ax (hyps,concl) =
+let managesGoal ax (hyps,concl) =
   match ax with 
       (loc,expl,id,_) -> 
-	(** retrieves the list of variables in the conclusion **)
-	let v = free_vars_of concl in 
-	if debug then 
-	  begin
-	    display_str "Vars in conlusion" v ;
-	    Format.printf "Concl preds ";
-	  end;
-	let v = VarStringSet.diff v avoided_vars in 
-	
+	(** retrieves the list of predicates in the conclusion **)
 	let concl_preds = get_preds_of concl true in 
-
 	let relevant_preds = get_predecessor_pred concl_preds !pb  in 
 
+	(** retrieves the list of variables in the conclusion **)
+	let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in 
 	let reachable_vars = VarStringSet.diff 
-	  (get_reachable_vars v !vb)
+	  (get_reachable_vars vars_of_concl !vb)
 	  avoided_vars in 	
-	let relevant_vars = VarStringSet.union reachable_vars v in 
+	let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in (* Traitement fait 2 fois pour l'optimisation *)
 
-	let l' = filter_acc_variables hyps relevant_vars  All relevant_preds in
-	
+
+	let l' = filter_acc_variables hyps relevant_vars  var_filter_tactic (*All  AllInABranch*)  relevant_preds in 
+
+
 	if debug then 
 	  begin
 	    display_str "Relevant vars " relevant_vars ;
+	    display_str "Reachable vars " reachable_vars ;
+	    
+	    if VarStringSet.subset relevant_vars reachable_vars then Format.printf "Relevant <: Reachable\n" else  Format.printf "Relevant /<: Reachable\n";
+	    if VarStringSet.subset reachable_vars relevant_vars then Format.printf "Reachable <: Relevant\n" else  Format.printf "Reachable /<: Relevant\n";
+
 	    Format.printf "Concl preds ";
 	    display_symb_of_pdl_set concl_preds;
 	    Format.printf "Relevant preds ";
@@ -1746,7 +1846,7 @@ let managesGoal id ax (hyps,concl) =
 	    let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
 	    DotVG.output_graph oc !vg 
 	  end;
-	(loc,expl,id, (l',concl))
+	(loc,expl,id, (l',concl)) 
 
 
 
@@ -1764,23 +1864,20 @@ let reduce q decl=
   (** memorize the theory as a graph of predicate symbols **)
   build_pred_graph decl ; 
   
-    
+  
   (** manages goal **)
   let q' =   match q with
-       (loc, expl, id, s)  as ax ->
+      (loc, expl, id, s)  as ax ->
         let (l,g) = s in (* l : liste d'hypothèses (contexte) et g : le but*)
-        let (l',g') = Util.intros [] g my_fresh_hyp in 
+	let (l',g') = Util.intros [] g my_fresh_hyp in 
 	let l' = List.append l l' in 
-	
 	let (l',g') = reduce_subst (l',g')  in 
-	(** memorize hypotheses as a graph of variables**) 
+	
+	(** memorize hypotheses as a graph of variables**)  
 	build_var_graph (l',g');
-  
+	
 	(** focus on goal **)
-	managesGoal id ax (l',g');
+	managesGoal ax (l',g') 
 
-
-    (*| _ -> failwith "goal awaited"*) in
+  in
   q' 
-
-
