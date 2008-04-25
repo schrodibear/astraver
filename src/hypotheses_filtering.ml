@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.41 2008-04-25 08:08:33 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.42 2008-04-25 12:08:20 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -73,6 +73,7 @@ type var_strat =
     AllVars
   | One 
   | AllInABranch 
+  | SplitHyps
     
 
 let use_comparison_as_criteria_for_graph_construction = Options.pruning_hyp_CompInGraph
@@ -88,6 +89,7 @@ let var_filter_tactic = match Options.pruning_hyp_var_tactic with
   | 0 -> AllVars
   | 1 -> One 
   | 2 -> AllInABranch 
+  | 3 -> SplitHyps
   | _ -> failwith "Heuristic failed."
       
 let pb = ref Options.pruning_hyp_p   
@@ -1733,7 +1735,6 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
     branch_and (cnf pred) []
 
 
-
   in
   let rec filter = function  
     | [] -> []
@@ -1752,7 +1753,8 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	in
 	let v' = (removes_fresh_vars vars) in 
 	let condition = match selection_strategy with
-	    AllVars ->
+	  | AllVars 
+	  | SplitHyps ->
 	      VarStringSet.subset 
 		v'	 
 		concl_rep 
@@ -1864,12 +1866,11 @@ let reduce q decl=
   (** memorize the theory as a graph of predicate symbols **)
   build_pred_graph decl ; 
   
-  
   (** manages goal **)
   let q' =   match q with
       (loc, expl, id, s)  as ax ->
         let (l,g) = s in (* l : liste d'hypothèses (contexte) et g : le but*)
-	let (l',g') = Util.intros [] g my_fresh_hyp in 
+	let (l',g') = Util.intros [] g my_fresh_hyp (var_filter_tactic==SplitHyps)  in 
 	let l' = List.append l l' in 
 	let (l',g') = reduce_subst (l',g')  in 
 	

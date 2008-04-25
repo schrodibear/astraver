@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.112 2008-04-25 08:08:33 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.113 2008-04-25 12:08:20 stoulsn Exp $ i*)
 
 open Format
 
@@ -219,7 +219,7 @@ Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-suffixed-comp       suffixes comparison predicates
   --prune-link-eqs            link each suffixed equalitie to the unsuffixed
   --prune-arith-tactic        statically link arithmetic operators (=, < & <=)
-  --prune-vars-filter T       T can be All, One-var or One-Branch         
+  --prune-vars-filter T       T can be All, One-var, One-branch or Split-hyps        
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -476,7 +476,8 @@ let files =
 	(match t with 
 	  "All" -> pruning_hyp_var_tactic_:=0; parse args
 	| "One-var" -> pruning_hyp_var_tactic_:=1; parse args 
-	| "One-Branch" -> pruning_hyp_var_tactic_:=2; parse args
+	| "One-branch" -> pruning_hyp_var_tactic_:=2; parse args
+	| "Split-hyps" -> pruning_hyp_var_tactic_:=3; parse args
 	| _ -> usage (); exit 1);
 (* FIN de Heuristiques en test *)
     | ("-modulo" | "--modulo") :: args ->
