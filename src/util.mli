@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.71 2008-04-25 12:08:20 stoulsn Exp $ i*)
+(*i $Id: util.mli,v 1.72 2008-04-25 14:38:01 stoulsn Exp $ i*)
 
 open Cc
 open Logic
@@ -79,6 +79,11 @@ val tequality : type_v -> term -> term -> predicate
 
 val distinct : term list -> predicate
 
+
+val  split_one : Logic.predicate list ->
+  int -> Logic.predicate -> Logic.predicate list
+val  split : context_element list ->
+  (unit -> Ident.t) -> context_element list -> context_element list
 val  intros : context_element list ->
   predicate -> (unit -> Ident.t) -> bool -> context_element list * Logic.predicate
   

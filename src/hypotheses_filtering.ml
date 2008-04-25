@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.42 2008-04-25 12:08:20 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.43 2008-04-25 14:38:01 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -457,11 +457,11 @@ let sets_of_vars f  =
 
   let rec local_subst_in_term id1 id2 = function
     | Tvar x  as t ->
-	if debug then 
-	  begin
-	    Format.printf "\nTvar found : %s Tvar seeked : %s to substitute with %s status = " (Ident.string x) (Ident.string id1) (Ident.string id2);  
-	    if id1==x then Format.printf "OK\n" else  Format.printf "KO\n"
-	  end;
+	(*if debug then 
+	   begin
+	     Format.printf "\nTvar found : %s Tvar seeked : %s to substitute with %s status = " (Ident.string x) (Ident.string id1) (Ident.string id2);  
+	     if id1==x then Format.printf "OK\n" else  Format.printf "KO\n"
+	   end;*)
 	if (Ident.string id1)==(Ident.string x) then (Tvar id2) else t
     | Tderef x as t ->
 	if (Ident.string id1)==(Ident.string x) then (Tderef id2) else t
@@ -560,11 +560,11 @@ let sets_of_vars f  =
 	      ac_fv_set:=(VarStringSet.add bv !ac_fv_set);  (* Mise à jour de la liste des variables fraiches *)
               let p'= (local_subst_in_predicate id id' p) in   (*  substitutes id with id' in P *) 
               (*let p'= (subst_in_predicate (subst_onev id id') p) in*)	 
-	      if debug then
+	      (*if debug then
 		begin
-		  Format.printf "\nVar : %s subst by %s\n" (Ident.string id) (Ident.string id');  
-		  Format.printf "Predicate : %a \n Substituted in : %a \n\n" Util.print_predicate p Util.print_predicate p'
-		end;
+		   Format.printf "\nVar : %s subst by %s\n" (Ident.string id) (Ident.string id');  
+		   Format.printf "Predicate : %a \n Substituted in : %a \n\n" Util.print_predicate p Util.print_predicate p'
+		end;*)
 	      collect qvars p'
 	    end
 	  else
@@ -1633,6 +1633,9 @@ let reduce_subst (l',g') =
     
 
 
+
+
+
   
 (**
    @param concl_rep the representative variable of the conclusion
@@ -1646,41 +1649,76 @@ let reduce_subst (l',g') =
 let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   (** UPDATE THIS ACCORDING TO THE ARRTICLE **)
 
-    (** 
-	@param pred : a predicate
-	@result : true if and only if all variables of at least a branch of the predicate are in the set vars
-    **)
-  let all_vars_of_a_branch pred vars = 
-    let rec all_vars_from_term qvars = function 
-      | Tvar v | Tderef v ->
-	  (member_of (Ident.string v) vars) || List.mem v qvars
-      | Tapp (_,lt,_) -> 
-	  List.for_all (all_vars_from_term qvars) lt
-      | Tconst _  -> 
-	  true
-      | Tnamed(lab,t) -> 
-	  all_vars_from_term qvars t
-    in
-    let rec branch_or pred qvars = match pred with
-      | Forall (_,id,_,_,_,p) -> 
-	  branch_and p (id::qvars)
-	    
+  let rec all_vars_from_term vars qvars = function 
+    | Tvar v | Tderef v ->
+	let r=(member_of (Ident.string v) vars) || (List.mem (Ident.string v) qvars) in 
+	if debug then 
+	  if r then 
+	    Format.printf "   ->  Tvar %s OK\n" (Ident.string v) 
+	  else
+	    begin
+	      Format.printf "   ->  Tvar %s NON PRESENTE\n" (Ident.string v) ;
+	      Format.printf "       qvars :" ;
+	      List.iter(fun v -> Format.printf ", %s" v) qvars;
+	      Format.printf "\n" ;
+	      
+	    end;
+	r
+    | Tapp (_,lt,_) -> 
+	begin 
+	  if debug then Format.printf "      -> Tapp -->\n" 
+	end; 
+	List.for_all (all_vars_from_term vars qvars) lt
+    | Tconst _  -> 
+	true
+    | Tnamed(lab,t) -> 
+	all_vars_from_term vars qvars t
+  in
+  
+  let rec all_vars_in_one_branch lp vars = 
+    let rec all_v pred qvars = 
+      match pred with 
+      | Forall (_,id,_,_,_,p)  
       | Exists (id,_,_,p) -> 
-	  branch_or p (id::qvars)
+	  begin 
+	    if debug then Format.printf "   -> Quantif %s \n" (Ident.string id) 
+	  end; 
+	  all_v p ((Ident.string id)::qvars)
 	    
-      | Pand (_, _, p1, p2) -> 
-	  (branch_and p1 qvars) && (branch_and p2 qvars)
-	    
-      | Por (p1, p2) -> 
-	  (branch_and p1 qvars) || (branch_and p2 qvars)
+      | Piff (p1, p2) 
+      | Pand (_, _, p1, p2) 
+      | Por (p1, p2) 
+      | Pimplies (_, p1, p2) -> 
+	  begin 
+	    if debug then Format.printf "   -> And / Or / Implies %a %a \n" Util.print_predicate p1  Util.print_predicate p2 
+          end;
+	  if all_v p1 qvars then (all_v p2 qvars) else false 
+
 	    
       | Pnot (p) -> 
-	  branch_and p qvars
+	  begin 
+	    if debug then Format.printf "   ->  Pnot %a \n" Util.print_predicate p 
+	  end; 
+	  all_v p qvars
+
+
       | Papp (_ ,lt , _) -> 
-	  List.for_all (all_vars_from_term qvars) lt
+	  begin 
+	    if debug then Format.printf "   ->  Papp --> \n" 
+	  end; 
+	  List.for_all (all_vars_from_term vars qvars) lt
 	    
       | Pvar (v) ->  
-	  (member_of (Ident.string v) vars) || (List.mem v qvars)
+	  begin 
+	    let r=(member_of (Ident.string v) vars) || (List.mem (Ident.string v) qvars) in 
+	    if debug then 
+	      if r then 
+		Format.printf "   ->  Pvar %s OK\n" (Ident.string v) 
+	      else
+		Format.printf "   ->  Pvar %s NON PRESENTE\n" (Ident.string v) ;
+	    r
+	  end; 
+
       | Pfalse 
       | Ptrue -> true
       | Pfpi _ ->
@@ -1689,53 +1727,29 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	  failwith "Pnamed has to be not found there (nnf has to remove it)"
       | Forallb (_, _, _)  -> 
 	  failwith "Forallb has to be not found there (nnf has to remove it)"
-      | Piff (_, _) -> 
-	  failwith "Piff has to be not found there (nnf has to remove it)"
-      | Pimplies (_, a, b) ->
-	  failwith "Pimplies has to be not found there (nnf has to remove it)"
       | Pif (a, b, c) ->
 	  failwith "Pif has to be not found there (nnf has to remove it)"
 	    
-    and branch_and pred qvars = match pred with
-      | Forall (_,id,_,_,_,p) -> 
-	  branch_and p (id::qvars)
-	      
-      | Exists (id,_,_,p) -> 
-	  branch_or p (id::qvars)
-	    
-      | Pand (_, _, p1, p2) -> 
-	  (branch_and p1 qvars) || (branch_and p2 qvars)
-	    
-      | Por (p1, p2) -> 
-	  (branch_and p1 qvars) && (branch_and p2 qvars)
-	    
-      | Pnot (p) -> 
-	  branch_and p qvars
-      | Papp (_ ,lt , _) -> 
-	  List.for_all (all_vars_from_term qvars) lt
-	    
-      | Pvar (v) ->  
-	  (member_of (Ident.string v) vars) || (List.mem v qvars)
-      | Pfalse 
-      | Ptrue -> true
-	  
-      | Pfpi _ ->
-	  failwith "fpi not yet suported "
-      | Pnamed (_, _) -> 
-	  failwith "Pnamed has to be not found there (nnf has to remove it)"
-      | Forallb (_, _, _)  -> 
-	  failwith "Forallb has to be not found there (nnf has to remove it)"
-      | Piff (_, _) ->
-	  failwith "Piff has to be not found there (nnf has to remove it)"
-      | Pimplies (_, _,_) ->
-	  failwith "Pimplies has to be not found there (nnf has to remove it)"
-      | Pif (_, _, _) ->
-	  failwith "Pif has to be not found there (nnf has to remove it)"
+
     in
-    branch_and (cnf pred) []
-
-
+    match lp with
+      | [] -> false
+      | p::l -> 
+	  if all_v p [] then 
+	    begin 
+	      if debug then Format.printf " Branche retenue : %a \n"  Util.print_predicate p ;
+	      true
+            end
+	  else 
+	    begin 
+	      if debug then Format.printf " Branche rejetee : %a \n" Util.print_predicate p ;
+	      (all_vars_in_one_branch l vars) 
+            end
+	    
   in
+  
+
+
   let rec filter = function  
     | [] -> []
     | Svar (id, v) :: q -> 
@@ -1766,7 +1780,7 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 			       concl_rep))
 
 	  | AllInABranch -> 
-	      all_vars_of_a_branch p concl_rep
+	      all_vars_in_one_branch (Util.split_one [] 1 p) concl_rep
 
 	in 
 	if debug then begin

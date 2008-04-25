@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.151 2008-04-25 12:08:20 stoulsn Exp $ i*)
+(*i $Id: util.ml,v 1.152 2008-04-25 14:38:01 stoulsn Exp $ i*)
 
 open Logic
 open Ident
@@ -390,6 +390,69 @@ let add_ctx_vars =
     (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
 
 
+
+
+
+
+
+
+
+
+
+
+(**
+   split : split predicate into a list of smaller predicates
+   @param ctx : list of already split hypothesis (empty at first call)
+   @param pol : polarity of the current predicate (1 at first call)
+   @param matched : predicate to split
+   @result l : l : list of split predicates 
+**)
+let rec split_one ctx pol = function
+  | Pimplies (i, Por(h1,h2), c) when pol > 0-> (* split(h1 \/ h2 -> c) ~~~> split(h1->c) U split(h2->) *)
+      let imp1=(split_one ctx pol (Pimplies (i, h1, c))) in 
+      let imp2=(split_one imp1 pol (Pimplies (i, h2, c))) in 
+      (*(List.append (List.append imp1 imp2) ctx)*)
+      imp2
+	
+  | Pimplies (i, a, c) when pol > 0->          (* split( h -> c) ~~~> U_c':split(c) {h->c'}  *)
+      let lc=split_one [] pol c in
+      List.fold_left (fun ct c' -> Pimplies(i,a,c')::ct)  ctx lc
+	
+  | Pand (_,_, a, b) when pol > 0->            (* split(c1 /\ c2)  ~~~> split(c1) U split(c2)  *)
+      let l1 = split_one ctx pol a in   
+      (split_one l1 pol b)
+	
+  | Forall (a, id, n, t, b, c) when pol>0 ->   (* split(forall x.c)  ~~~>  U_c':split(c) {forall x.c'}   *)
+      let lc'=split_one [] pol c in
+      List.fold_left (fun ct c' -> Forall (a, id, n, t, b, c')::ct)  ctx lc'
+	
+  | Exists (a, b, t, c) when pol>0 ->          (* split(exists x.c)  ~~~> U_c':split-(c) {exists x.c'} *)
+      let lc'=split_one [] (-pol) c in
+      List.fold_left (fun ct c' -> Exists (a, b, t, c')::ct)  ctx lc'
+	
+  | Por (a, b) when pol < 0->                  (* split-(c1 \/ c2)  ~~~> split-(c1) U split-(c2)  *)
+      let l1 = split_one ctx pol a in   
+      (split_one l1 pol b)
+	
+  | c ->                                       (* split(c)  ~~~> {c}  *)
+      c::ctx
+	  
+
+(**
+   split : split each predicate of a list into a smaller predicates
+   @param ctx : list of already split hypothesis
+   @param pol : polarity of the current predicate
+   @param matched : list of CC_context predicates to split
+   @result l : l : list of split hypothesis 
+**)
+let rec split ctx my_fresh_hyp =
+  function
+    | [] -> ctx
+    | Spred (h,p):: l -> split (List.fold_left (fun lp p -> Spred(my_fresh_hyp (),p)::lp ) ctx (split_one [] 1 p)) my_fresh_hyp l
+    | c :: l -> c :: (split (c::ctx) my_fresh_hyp l)
+
+
+
 (**
    intro : split a predicate into a list of hypothesis and a goal
    @param ctx : empty list
@@ -398,53 +461,6 @@ let add_ctx_vars =
    @result (l,g) : l : list of hypothesis / g : goal
 **)
 let intros ctx p my_fresh_hyp split_res =   
-
-  (**
-     split : split each predicate of a list into a smaller predicates
-     @param ctx : list of already split hypothesis
-     @param pol : polarity of the current predicate
-     @param matched : list of predicates to split
-     @result l : l : list of split hypothesis 
-  **)
-  let rec split_one ctx pol = function
-    | Pimplies (i, Por(h1,h2), c) when pol > 0-> (* split(h1 \/ h2 -> c) ~~~> split(h1->c) U split(h2->) *)
-	let imp1=(split_one ctx pol (Pimplies (i, h1, c))) in 
-	let imp2=(split_one imp1 pol (Pimplies (i, h2, c))) in 
-	(*(List.append (List.append imp1 imp2) ctx)*)
-	imp2
-	
-    | Pimplies (i, a, c) when pol > 0->          (* split( h -> c) ~~~> U_c':split(c) {h->c'}  *)
-	let lc=split_one [] pol c in
-	List.fold_left (fun ct c' -> Pimplies(i,a,c')::ct)  ctx lc
-
-    | Pand (_,_, a, b) when pol > 0->            (* split(c1 /\ c2)  ~~~> split(c1) U split(c2)  *)
-	let l1 = split_one ctx pol a in   
-	(split_one l1 pol b)
-
-    | Forall (a, id, n, t, b, c) when pol>0 ->   (* split(forall x.c)  ~~~>  U_c':split(c) {forall x.c'}   *)
-	let lc'=split_one [] pol c in
-	List.fold_left (fun ct c' -> Forall (a, id, n, t, b, c')::ct)  ctx lc'
-
-    | Exists (a, b, t, c) when pol>0 ->          (* split(exists x.c)  ~~~> U_c':split-(c) {exists x.c'} *)
-	let lc'=split_one [] (-pol) c in
-	List.fold_left (fun ct c' -> Exists (a, b, t, c')::ct)  ctx lc'
-	
-    | Por (a, b) when pol < 0->             (* split-(c1 \/ c2)  ~~~> split-(c1) U split-(c2)  *)
-	let l1 = split_one ctx pol a in   
-	(split_one l1 pol b)
-
-
-    | c ->                                       (* split(c)  ~~~> {c}  *)
-	c::ctx
-	
-  in
-  let rec split ctx = function
-    | [] -> ctx
-    | Spred (h,p):: l -> split (List.fold_left (fun lp p -> Spred(my_fresh_hyp (),p)::lp ) ctx (split_one [] 1 p)) l
-    | c :: l -> c :: (split (c::ctx) l)
-  
-  in 
-
   (**
      introb : split a predicate into a list of hypothesis and a goal
      @param ctx : list of already split hypothesis
@@ -476,7 +492,7 @@ let intros ctx p my_fresh_hyp split_res =
   in 
   let l,g = introb ctx 1 p in 
   if split_res then
-    (split [] l), g
+    (split [] my_fresh_hyp l ), g
   else
     List.rev l, g   
 
