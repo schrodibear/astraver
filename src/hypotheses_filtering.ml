@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.43 2008-04-25 14:38:01 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.44 2008-05-05 16:44:21 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -74,6 +74,7 @@ type var_strat =
   | One 
   | AllInABranch 
   | SplitHyps
+  | CNFHyps
     
 
 let use_comparison_as_criteria_for_graph_construction = Options.pruning_hyp_CompInGraph
@@ -90,7 +91,9 @@ let var_filter_tactic = match Options.pruning_hyp_var_tactic with
   | 1 -> One 
   | 2 -> AllInABranch 
   | 3 -> SplitHyps
+  | 4 -> CNFHyps
   | _ -> failwith "Heuristic failed."
+let polarized_preds = Options.pruning_hyp_polarized_preds
       
 let pb = ref Options.pruning_hyp_p   
 let vb = ref Options.pruning_hyp_v   
@@ -1419,9 +1422,41 @@ let abstr_mem_of el pdl_set =
   PdlSet.mem {l=el.l;pol=Pos} pdl_set or 
     PdlSet.mem {l=el.l;pol=Neg} pdl_set 
 
+
+let is_positive  el  = 
+  el.pol==Pos
+let is_negative  el  = 
+  el.pol==Neg
+
+let mem_of el pdl_set = 
+  (PdlSet.mem {l=el.l;pol=el.pol} pdl_set )
+
+let mem_of_or_pos el pdl_set = 
+  (PdlSet.mem {l=el.l;pol=el.pol} pdl_set ) or el.pol==Pos
+
+let mem_of_or_neg el pdl_set = 
+  (PdlSet.mem {l=el.l;pol=el.pol} pdl_set ) or el.pol==Neg
+
+
 let  abstr_subset_of_pdl set1 set2 = 
-  PdlSet.for_all 
-    (fun el -> abstr_mem_of el set2) set1       
+  if polarized_preds then 
+    let test_pos =  PdlSet.exists(fun el -> is_positive el) set2 in
+    let test_neg =  PdlSet.exists(fun el -> is_negative el) set2 in
+    begin 
+      if test_pos && test_neg then 
+	PdlSet.for_all (fun el -> mem_of el set2) set1       
+      else
+	begin
+	  if test_pos then 
+	    (PdlSet.for_all (fun el -> mem_of_or_neg el set2) set1)
+	  else 
+	    PdlSet.for_all (fun el -> mem_of_or_pos el set2) set1
+	end
+    end
+  else
+    PdlSet.for_all 
+      (fun el -> abstr_mem_of el set2) set1       
+
 
 let set_of_pred_p vs  = 
   PdlSet.fold 
@@ -1768,7 +1803,8 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	let v' = (removes_fresh_vars vars) in 
 	let condition = match selection_strategy with
 	  | AllVars 
-	  | SplitHyps ->
+	  | SplitHyps 
+	  | CNFHyps->
 	      VarStringSet.subset 
 		v'	 
 		concl_rep 
@@ -1866,6 +1902,23 @@ let managesGoal ax (hyps,concl) =
 
 
 
+
+
+
+let hyps_to_cnf lh = 
+  let lh_cnf = 
+    List.fold_left (fun l h -> 
+      match h with
+	| Svar (id, v) as var_def ->  var_def::l 
+	| Spred (id, p) ->
+	    let p'=cnf p in (* p' est une CNF de P mais on veut 1 hypothèse par clause alors on coupe selon les and. On fera appelle à split à la fin du traitement de toutes les hypothèses*)
+	    Spred(id, p')::l 
+	      
+    ) [] lh 
+  in
+  Util.split [] my_fresh_hyp lh_cnf
+  
+
 let reset () = 
   vg := Var_graph.create();
   pdlg := PdlGraph.create() ;
@@ -1885,6 +1938,7 @@ let reduce q decl=
       (loc, expl, id, s)  as ax ->
         let (l,g) = s in (* l : liste d'hypothèses (contexte) et g : le but*)
 	let (l',g') = Util.intros [] g my_fresh_hyp (var_filter_tactic==SplitHyps)  in 
+        let l' = if (var_filter_tactic==CNFHyps) then hyps_to_cnf l' else l' in
 	let l' = List.append l l' in 
 	let (l',g') = reduce_subst (l',g')  in 
 	

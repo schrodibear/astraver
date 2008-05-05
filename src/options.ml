@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.113 2008-04-25 12:08:20 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.114 2008-05-05 16:44:21 stoulsn Exp $ i*)
 
 open Format
 
@@ -75,6 +75,7 @@ let pruning_hyp_suffixed_comparison_ = ref false
 let pruning_hyp_equalities_linked_ = ref false
 let pruning_hyp_arithmetic_tactic_ = ref false
 let pruning_hyp_var_tactic_ = ref 0
+let pruning_hyp_polarized_preds_ = ref false
 (* FIN de Heuristiques en test *)
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
@@ -219,7 +220,8 @@ Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-suffixed-comp       suffixes comparison predicates
   --prune-link-eqs            link each suffixed equalitie to the unsuffixed
   --prune-arith-tactic        statically link arithmetic operators (=, < & <=)
-  --prune-vars-filter T       T can be All, One-var, One-branch or Split-hyps        
+  --prune-vars-filter T       T in {All, One-var, One-branch, Split-hyps, CNF}        
+  --prune-polarized-preds     Consider polarity on predicates 
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -478,7 +480,12 @@ let files =
 	| "One-var" -> pruning_hyp_var_tactic_:=1; parse args 
 	| "One-branch" -> pruning_hyp_var_tactic_:=2; parse args
 	| "Split-hyps" -> pruning_hyp_var_tactic_:=3; parse args
+	| "CNF" ->  pruning_hyp_var_tactic_:=4; parse args
 	| _ -> usage (); exit 1);
+
+    | ("--prune-polarized-preds" | "-prune-polarized-preds"):: args ->
+	pruning_hyp_polarized_preds_ := true ; parse args
+
 (* FIN de Heuristiques en test *)
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
@@ -563,6 +570,7 @@ let pruning_hyp_suffixed_comparison = !pruning_hyp_suffixed_comparison_
 let pruning_hyp_equalities_linked = !pruning_hyp_equalities_linked_
 let pruning_hyp_arithmetic_tactic = !pruning_hyp_arithmetic_tactic_
 let pruning_hyp_var_tactic = !pruning_hyp_var_tactic_
+let pruning_hyp_polarized_preds = !pruning_hyp_polarized_preds_
 (* FIN de Heuristiques en test *)
 let modulo = !modulo_
 let defExpanding = !defExpanding_
