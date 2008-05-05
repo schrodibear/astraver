@@ -156,7 +156,10 @@ SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT)
 
-JCLIB=jc/jc.cmo jc/jc.cmx
+JCLIB=jc/jc.cmo 
+if [ "$(OCAMLBEST)" = "opt" ]; then \
+       JCLIB+=jc/jc.cmx;           \
+fi
 
 all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB)
 
@@ -672,7 +675,7 @@ install-lib: $(JCLIB)
 	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/jessie/why
-	cp -f jc/jc.cmo jc/jc.cmx $(JCCMI_EXPORT) $(LIBDIR)/jessie
+	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/jessie.why $(LIBDIR)/jessie/why
