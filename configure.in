@@ -59,6 +59,7 @@
 #   LABLGTK2	  "yes" is available, "no" otherwise
 #   OCAMLWEB      "ocamlweb" (not mandatory)
 
+
 # check for one particular file of the sources 
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
 AC_INIT(src/monad.mli)
@@ -76,7 +77,7 @@ fi
 AC_MSG_CHECKING(executable suffix)
 if uname -s | grep -q CYGWIN ; then
   EXE=.exe
-  STRIP=echo "no strip "
+  STRIP='echo "no strip "'
   AC_MSG_RESULT(.exe) 
 else
   EXE=
@@ -95,7 +96,7 @@ fi
 # we extract Ocaml version number and library path
 OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
 echo "ocaml version is $OCAMLVERSION"
-OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d " "`
+OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d ' ' | sed -e 's/\\r//'`
 echo "ocaml library path is $OCAMLLIB"
 
 case $OCAMLVERSION in

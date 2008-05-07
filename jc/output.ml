@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.31 2008-04-09 14:32:34 nrousset Exp $ i*)
+(*i $Id: output.ml,v 1.32 2008-05-07 09:54:00 filliatr Exp $ i*)
 
 open Lexing
 open Format
@@ -862,7 +862,7 @@ let print_locs fmt =
 	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
        Option_misc.iter
 	 (fun n -> fprintf fmt "formula = \"%s\"@\n" n) formula;
-       fprintf fmt "file = \"%s\"@\n" (abs_fname b.Lexing.pos_fname);
+       fprintf fmt "file = \"%s\"@\n" (String.escaped (abs_fname b.Lexing.pos_fname));
        let l = b.Lexing.pos_lnum in
        let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
        let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in

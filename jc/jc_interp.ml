@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.277 2008-04-22 17:41:24 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.278 2008-05-07 09:54:00 filliatr Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -135,8 +135,8 @@ let print_locs fmt =
        Option_misc.iter
          (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
        Option_misc.iter
-         (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
-       fprintf fmt "file = \"%s\"@\n" f;
+	 (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
+       fprintf fmt "file = \"%s\"@\n" (String.escaped f);
        fprintf fmt "line = %d@\n" l;
        fprintf fmt "begin = %d@\n" b;
        fprintf fmt "end = %d@\n@\n" e)
