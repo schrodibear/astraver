@@ -156,10 +156,11 @@ SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT)
 
-JCLIB=jc/jc.cmo 
-if [ "$(OCAMLBEST)" = "opt" ]; then \
-       JCLIB+=jc/jc.cmx;           \
-fi
+ifeq ($(OCAMLBEST),opt)
+JCLIB=jc/jc.cmo jc/jc.cmx
+else
+JCLIB=jc/jc.cmo
+endif
 
 all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB)
 

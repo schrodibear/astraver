@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.112 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: wp.ml,v 1.113 2008-05-14 14:27:26 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -195,12 +195,47 @@ let pand_wp info w1 w2 = match w1, w2 with
   | None, Some _ -> w2
   | None, None -> None
 
+(* explanations *)
 
 let explain_assertion e a = 
   let id = reg_explanation e in 
   { a with a_value = Pnamed(id, a.a_value) }
 
 let explain_wp e = Option_misc.map (explain_assertion e)
+
+(* subtyping: a VC expressing that a specification is stronger than another *)
+
+(*** EN COURS NE PAS EFFACER SVP
+let rec subtyping env v1 v2 = match v1, v2 with
+  | PureType _, PureType _
+  | Ref _, Ref _ -> 
+      Ptrue
+  | Arrow ((x1,t1) :: bl1, k1), Arrow ((x2,t2) :: bl2, k2) ->
+      let p = subtyping env (Arrow (bl1,k1)) (Arrow (bl2,k2)) in
+      let p = subst_in_predicate (subst_onev x2 x1) p in
+      if Typing.is_pure_type t1 then pforall ~is_wp:true x1 t1 p else p
+  | Arrow ([], k1), Arrow ([], k2) ->
+      subtyping_k env k1 k2
+  | Arrow _, Arrow ([], k2) ->
+      subtyping_k env (type_c_of_v v1) k2
+  | Arrow ([], k1), Arrow _ ->
+      subtyping_k env k1 (type_c_of_v v2)
+  | _ ->
+      assert false
+
+and subtyping_k env k1 k2 =
+  let p = wpimplies (wpands k2.c_pre) (wpands k1.c_pre) in
+  let res = k1.c_result_name, k1.c_result_type in
+  let out = 
+    List.map (fun id -> (id, type_in_env env id)) (get_writes k1.c_effect)
+  in
+  let q = match k1.c_post, k2.c_post with
+    | _, None -> Ptrue
+    | None, Some q2 -> abstract_wp_0 q2 res out 
+    | Some q1, Some q2 -> abstract_wp Loc.dummy q1 q2 res out
+  in
+  pforall (input k1.c_effect) (wpand p q)
+***)
 
 (*s function binders *)
 

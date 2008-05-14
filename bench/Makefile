@@ -124,7 +124,7 @@ byte:
 	-coqc -I ../lib/coq test_valid.v
 
 gwhy:
-	../bin/gwhy.opt -d test.mlw
+	../bin/gwhy.opt -d -all-vc test.mlw
 
 zenon:
 	../bin/why.opt -d -V --zenon test.mlw

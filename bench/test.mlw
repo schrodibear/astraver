@@ -1,11 +1,10 @@
 
-parameter dst, src : int array
+(* higher-order *)
 
-let p (src:int farray)  (dst:int array) (i : int) =
-  begin
-    dst[i] := access src i
-  end
-  { dst[i] = access(src, i) }
+parameter r : int ref
 
-let f (t : int array) = 
-  p !t t
+let h0 (f: x:int -> {} int {result=1}) =
+  f 0 { result = 1 }
+
+let test0 () =
+  h0 (fun (y:int) -> 0) { result = 1 }

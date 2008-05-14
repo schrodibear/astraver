@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.mli,v 1.21 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: typing.mli,v 1.22 2008-05-14 14:27:26 filliatr Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 
@@ -40,6 +40,7 @@ val typef : Label.t -> local_env -> parsed_program -> typed_expr
 
 val check_for_not_mutable : Loc.position -> type_v -> unit
 
+val is_pure_type : type_v -> bool
 val is_pure_type_v : type_v -> bool
 
 val type_c_of_typing_info : assertion list -> typing_info -> type_c
