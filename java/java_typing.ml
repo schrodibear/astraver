@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.120 2008-04-22 17:41:24 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.121 2008-05-16 07:54:19 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -51,8 +51,8 @@ let rec print_qualified_ident fmt id =
 	
 let print_type_name fmt t =
   match t with
-    | TypeClass ci -> fprintf fmt "class %s" ci.class_info_name
-    | TypeInterface ii -> fprintf fmt "interface %s" ii.interface_info_name
+    | TypeClass ci -> fprintf fmt "%s" ci.class_info_name
+    | TypeInterface ii -> fprintf fmt "%s" ii.interface_info_name
 (*
     | TypeLogic s -> fprintf fmt "logic type %s" s
 *)
@@ -2585,7 +2585,9 @@ let rec expr ~ghost env e =
 	  let mi = 
 	    try lookup_method ti id arg_types 
 	    with Not_found ->
-	      typing_error e.java_pexpr_loc "Cannot find method '%s'" (snd id)
+	      typing_error e.java_pexpr_loc "Cannot find method @['%a.%s(%a)'@]" print_type_name ti (snd id)
+		(Pp.print_list Pp.comma print_type) arg_types
+
 	  in
 	  let ty = 
 	    match mi.method_info_result with

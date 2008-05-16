@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.43 2008-04-11 12:38:34 marche Exp $
+$Id: java_parser.mly,v 1.44 2008-05-16 07:54:19 marche Exp $
 
 */
 
@@ -527,6 +527,9 @@ interface_member_declaration:
     { JPFmethod($1,None) }
 | ANNOT
     { let (loc,s)=$1 in JPFannot(loc,s) }
+/* Java 1.4 */
+| interface_declaration
+    { JPFinterface $1 }
 ;
 
 

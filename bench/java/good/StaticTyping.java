@@ -29,7 +29,7 @@ class StaticTyping {
     void m3() {
 	byte[] cmd_apdu = getBuffer();
 	
-	if (cmd_apdu.length >= 10) cmd_apdu[9] = 0;
+	if (cmd_apdu.length >= 3) cmd_apdu[9] = 0;
     }
 
 }
