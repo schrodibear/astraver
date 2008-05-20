@@ -124,7 +124,7 @@ let load_cache source =
   is_full := fool ()
     
 let save () = 
-  let out_channel = open_out !source_file in
+  let out_channel = open_out_bin !source_file in
   to_channel out_channel !cache flags;
   close_out out_channel
 

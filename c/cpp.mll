@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cpp.mll,v 1.17 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cpp.mll,v 1.18 2008-05-20 15:57:42 filliatr Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -93,14 +93,15 @@ and after = parse
      returns the preprocessed file. *)
   let external_cpp f = 
     let ppf = local_temp_file (Filename.basename f) ".i" in
-    ignore (Sys.command (sprintf "%s %s > %s" cpp_command f ppf));
+    let cmd = sprintf "%s %s > %s" cpp_command f ppf in
+    ignore (Sys.command cmd);
     ppf
 
   (* [first_cpp f] runs an external C preprocessor on file [f] and preserves the definitions in trace;
      returns the preprocessed file. *)
   let first_cpp f = 
     let ppf = local_temp_file (Filename.basename f) ".c" in
-    ignore (Sys.command (sprintf "LANG=en ; %s -dD %s > %s" cpp_command f ppf));
+    ignore (Sys.command (sprintf "%s -dD %s > %s" cpp_command f ppf));
     ppf
 
 

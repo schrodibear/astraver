@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.25 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.26 2008-05-20 15:57:42 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -172,6 +172,6 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
     | Graph -> 
 	Calldp.graph  ~debug ?timeout ~filename ()
   in
-  if not debug then begin try Sys.remove filename with _ -> () end;
+  if not debug then begin try Sys.remove filename with _ -> () end; 
   r
 
