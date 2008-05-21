@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.114 2008-05-05 16:44:21 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.115 2008-05-21 14:46:19 stoulsn Exp $ i*)
 
 open Format
 
@@ -453,7 +453,6 @@ let files =
 	pruning_hyp_LinkVarsQuantif_ := true ; 
 	parse args
     | ("--prune-comp-dual-encoding" | "-prune-comp-dual-encoding"):: args ->
-	pruning_hyp_CompInGraph_ := true ; 
 	pruning_hyp_keep_single_comparison_representation_ := false ; 
 	parse args
     | ("--prune-eq-only" | "-prune-eq-only"):: args ->
