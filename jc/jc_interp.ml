@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.278 2008-05-07 09:54:00 filliatr Exp $ *)
+(* $Id: jc_interp.ml,v 1.279 2008-05-21 16:10:30 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -338,10 +338,12 @@ let term_coerce ?(cast=false) loc tdest tsrc e =
     | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
     | JCTpointer (st1, _, _), JCTpointer(JCtag st2,_,_) 
         when Jc_typing.substruct st2 st1 -> e
-    | JCTpointer (JCtag st, a, b), (JCTpointer(_,_,_) | JCTnull)  -> 
+    | JCTpointer (JCtag st, a, b), (JCTpointer(_,_,_) (* YMo, why null? | JCTnull*))  -> 
         LApp("downcast", 
              [ LVar (tag_table_name (JCtag st)) ; e ;
                LVar (tag_name st) ])    
+    | JCTpointer _, JCTnull  -> 
+	e
     |  _ -> 
          Jc_typing.typing_error loc 
            "can't coerce type %a to type %a" 
