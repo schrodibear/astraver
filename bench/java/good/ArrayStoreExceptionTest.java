@@ -33,7 +33,8 @@ class Point { int x,y; }
 
 class ColoredPoint extends Point { int color; }
 
-class Test {
+class ArrayStoreExceptionTest {
+
     public static void main(String[] args) {
 	ColoredPoint[] cpa = new ColoredPoint[10];
 	Point[] pa = cpa;
@@ -44,5 +45,10 @@ class Test {
 	catch (ArrayStoreException e) {
 	    System.out.println(""+e);
 	}
+
+	int[][] t = new int[10][];
+	Object[] u = t;
+	u[0] = new int[5]; // OK
+	u[1] = new Object(); // ArrayStoreException
     }
 }

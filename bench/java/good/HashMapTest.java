@@ -61,11 +61,16 @@ class HashMapTest {
 
 	HashMap m = new HashMap();
 
-	m.put(0,1);
+	Integer zero = new Integer(0);
 
-	Object o = m.get(0);
+	Integer one = new Integer(1);
 
-	//@ assert o instanceof Integer && o == 1;
+	m.put(zero,one);
+
+	Object o = m.get(zero);
+
+	//@ assert o instanceof Integer ; 
+	// && o == 1;
 	
 	System.out.println("o = " + o);
 

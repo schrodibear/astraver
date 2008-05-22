@@ -36,3 +36,21 @@ void f(int *p) {
   @ assigns *p
   @*/
 void f(int *p);
+
+
+int x;
+void h();
+
+//@ assigns x
+void g();
+
+void h();
+
+void g() { h(); }
+
+int x = 0;
+
+void h() {
+  x = 1;
+}
+
