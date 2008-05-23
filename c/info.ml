@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.ml,v 1.45 2008-02-05 12:10:48 marche Exp $ i*)
+(*i $Id: info.ml,v 1.46 2008-05-23 08:56:15 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -46,7 +46,6 @@ and zone =
       number : int;
       mutable repr : zone option;
       name : string;
-(*      mutable type_why_zone : why_type;*)
     }
 
 

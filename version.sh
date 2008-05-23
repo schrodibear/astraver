@@ -38,7 +38,7 @@ echo "let libdir = \""$LIBDIR/caduceus"\"" >> $CADUCEUSVF
 # Doc
 DOCF=doc/version.tex
 mkdir -p doc
-echo \\newcommand{\\whyversion}{$VERSION} > $DOCF
-echo \\newcommand{\\caduceusversion}{$CVERSION} >> $DOCF
-echo \\newcommand{\\jessieversion}{$JCVERSION} >> $DOCF
-echo \\newcommand{\\krakatoaversion}{$KVERSION} >> $DOCF
+printf '\\newcommand{\\whyversion}{'$VERSION'}\n' > $DOCF
+printf '\\newcommand{\\caduceusversion}{'$CVERSION'}\n' >> $DOCF
+printf '\\newcommand{\\jessieversion}{'$JCVERSION'}\n' >> $DOCF
+printf '\\newcommand{\\krakatoaversion}{'$KVERSION'}\n' >> $DOCF
