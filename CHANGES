@@ -1,4 +1,6 @@
 
+version 2.12, May 23rd, 2008
+============================
   o fixed typing bug with polymorphic logic constants/functions used
     in programs (resulted in bugs in -encoding sstrat)
 
