@@ -572,7 +572,7 @@ coq-v8: $(VO8)
 
 include Version
 
-doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version Makefile
+doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version Makefile.in version.sh
 	LIBDIR=$(LIBDIR) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
@@ -912,7 +912,6 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/javacard_api/java/lang/*.java \
 	lib/javacard_api/javacard/*/*.java \
 	lib/javacard_api/javacardx/crypto/*.java \
-	lib/javacard_api/visa/openplatform/*.java \
 	lib/javacard_api/com/sun/javacard/impl/*.java \
 	lib/*.png \
 	atp/cooper.ml atp/fol.ml atp/formulas.ml atp/intro.ml atp/lib.ml \
