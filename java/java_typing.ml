@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.121 2008-05-16 07:54:19 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.122 2008-05-23 07:26:11 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -719,12 +719,27 @@ let connective a1 op a2 =
     | Biff -> JAiff(a1,a2)
     | _ -> assert false
 
+let dummy_class =
+  { class_info_tag = (-1);
+    class_info_name = "";
+    class_info_package_env = [];
+    class_info_incomplete = false;
+    class_info_extends = None;
+    class_info_is_exception = false;
+    class_info_implements = [];
+    class_info_fields = [];
+    class_info_methods = [];
+    class_info_constructors = [];
+  }
+
+let object_class = ref dummy_class
+
 
 let rec is_subclass c1 c2 =
   c1 == c2 ||
     (check_if_class_complete c1;
      match c1.class_info_extends with
-      | None -> false
+      | None -> c2 == !object_class
       | Some c -> is_subclass c c2)
 
 and is_subinterface i1 i2 =
@@ -1416,19 +1431,21 @@ and lookup_field ti id =
     | TypeClass ci -> lookup_class_field ci id
     | TypeInterface ii -> lookup_interface_field ii id
 
+let () = 
+  object_class :=
+    catch_typing_errors
+      (fun () ->
+	 match classify_name [] [] None [] 
+	   ((Loc.dummy_position,"Object") :: javalang_qid)
+	 with
+	   | TypeName (TypeClass ci) -> ci
+	   | _ -> assert false)
+      ()
 
-let object_class =
-  catch_typing_errors
-    (fun () ->
-       match classify_name [] [] None [] 
-	 ((Loc.dummy_position,"Object") :: javalang_qid)
-       with
-	 | TypeName (TypeClass ci) -> ci
-	 | _ -> assert false)
-    ()
+
     
 let string_class =
-  if !Java_options.javacard then object_class else
+  if !Java_options.javacard then dummy_class else
     catch_typing_errors
       (fun () ->
 	 match classify_name [] [] None [] 
@@ -1457,8 +1474,8 @@ let rec is_widening_reference_convertible tfrom tto =
     | JTYclass(_,c), JTYinterface i -> implements c i
     | JTYnull, (JTYclass _ | JTYinterface _ | JTYarray _ ) -> true
     | JTYinterface i1, JTYinterface i2 -> is_subinterface i1 i2
-    | JTYinterface _ , JTYclass(_,c) when c==object_class -> true
-    | JTYarray _ , JTYclass(_,c) when c==object_class -> true
+    | JTYinterface _ , JTYclass(_,c) when c == !object_class -> true
+    | JTYarray _ , JTYclass(_,c) when  c== !object_class -> true
 (* TODO
     | JTYarray _ , JTYinterface i when i==cloneable_interface -> true
     | JTYarray _ , JTYinterface i when i==serializable_interface -> true
@@ -2096,7 +2113,7 @@ let cast_convertible tfrom tto =
 	  is_subclass cfrom cto || is_subclass cto cfrom
       | JTYclass _, JTYinterface _ -> assert false (* TODO *)
       | JTYclass(_,c), JTYarray _ -> 
-	  c == object_class
+	  c == !object_class
       | JTYinterface _,JTYclass _ -> assert false (* TODO *)
       | JTYinterface ifrom, JTYinterface ito -> 
 	  is_subinterface ifrom ito || is_subinterface ito ifrom
@@ -2373,7 +2390,7 @@ let lookup_method ti (loc,id) arg_types =
     | [] -> raise Not_found
     | [mi] -> mi
     | _ -> 
-(**)
+(*
 	eprintf "possible calls:@.";
 	List.iter (fun mi ->
 		     eprintf "%a.%s(%a)@." 
@@ -2382,9 +2399,9 @@ let lookup_method ti (loc,id) arg_types =
 		       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) 
 		       mi.method_info_parameters)
 	  meths;
-(**)
+*)
 	let meths = get_maximally_specific_signatures [] meths in
-(**)
+(*
 	eprintf "maximally specific calls:@.";
 	List.iter (fun mi ->
 		     eprintf "%a.%s(%a)@." 
@@ -2393,7 +2410,7 @@ let lookup_method ti (loc,id) arg_types =
 		       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) 
 		       mi.method_info_parameters)
 	  meths;
-(**)
+*)
 	match meths with
 	  | [] -> assert false
 	  | [mi] -> mi
@@ -2514,7 +2531,7 @@ let rec expr ~ghost env e =
 	  let ci =
 	    match env.current_type with
 	      | Some (TypeClass ci) ->
-		  if ci == object_class then 
+		  if ci == !object_class then 
 		    typing_error e.java_pexpr_loc "cannot resolve variable super"
 		  else
 		    begin

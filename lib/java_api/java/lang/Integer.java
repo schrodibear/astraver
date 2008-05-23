@@ -316,11 +316,11 @@ public final class Integer extends Number implements Comparable {
     }
 
     // Per-thread buffer for string/stringbuffer conversion
-    private static ThreadLocal perThreadBuffer = new ThreadLocal() {
-        protected synchronized Object initialValue() {
-            return new char[12];
-        }
-    };
+    // private static ThreadLocal perThreadBuffer = new ThreadLocal() {
+    //    protected synchronized Object initialValue() {
+    //        return new char[12];
+    //    }
+    //};
 
     private static int getChars(int i, char[] buf) {
         int q, r;

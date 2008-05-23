@@ -389,11 +389,11 @@ public abstract class AbstractMap implements Map {
 		}
 
 		public int size() {
-		    //KML return AbstractMap.this.size();
+		    return AbstractMap.this.size();
 		}
 
 		public boolean contains(Object k) {
-		    //KML return AbstractMap.this.containsKey(k);
+		    return AbstractMap.this.containsKey(k);
 		}
 	    };
 	}
@@ -446,11 +446,11 @@ public abstract class AbstractMap implements Map {
                 }
 
 		public int size() {
-		    // return AbstractMap.this.size();
+		    return AbstractMap.this.size();
 		}
 
 		public boolean contains(Object v) {
-		    // return AbstractMap.this.containsValue(v);
+		    return AbstractMap.this.containsValue(v);
 		}
 	    };
 	}

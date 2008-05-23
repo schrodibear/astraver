@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.44 2008-05-16 07:54:19 marche Exp $
+$Id: java_parser.mly,v 1.45 2008-05-23 07:26:11 marche Exp $
 
 */
 
@@ -1026,6 +1026,10 @@ name:
     { [$1] }
 | name DOT ident
     { $3::$1 }
+| name DOT CLASS
+    { (loc_i 3,"class")::$1 }
+| name DOT THIS
+    { (loc_i 3,"this")::$1 }
 ;
 
 name_comma_list:

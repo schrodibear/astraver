@@ -72,7 +72,7 @@ class HashMapTest {
 	//@ assert o instanceof Integer ; 
 	// && o == 1;
 	
-	System.out.println("o = " + o);
+	// System.out.println("o = " + o);
 
     }
 

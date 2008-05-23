@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.91 2008-04-22 17:41:24 nrousset Exp $ *)
+(* $Id: jc_norm.ml,v 1.92 2008-05-23 07:26:11 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -583,9 +583,11 @@ and tag_ tag =
 let expr e =
   let e,_ = goto e (build_label_tree e) in
   let e = expr (normalize e) in
-  let fmt = Format.std_formatter in
-  Format.fprintf fmt "Normalized expression:@\n%a@\n@."
+  (*
+    let fmt = Format.std_formatter in
+    Format.fprintf fmt "Normalized expression:@\n%a@\n@."
     Jc_noutput.expr e;
+  *)
   e
 
 (** From parsed clause to normalized clause *)

@@ -809,7 +809,7 @@ public class HashMap extends AbstractMap implements Map, Cloneable,
                 throw new ConcurrentModificationException();
             Object k = current.key;
             current = null;
-            //KML HashMap.this.removeEntryForKey(k);
+            HashMap.this.removeEntryForKey(k);
             expectedModCount = modCount;
         }
 
@@ -876,10 +876,10 @@ public class HashMap extends AbstractMap implements Map, Cloneable,
             return containsKey(o);
         }
         public boolean remove(Object o) {
-            //KML return HashMap.this.removeEntryForKey(o) != null;
+            return HashMap.this.removeEntryForKey(o) != null;
         }
         public void clear() {
-            //KML HashMap.this.clear();
+            HashMap.this.clear();
         }
     }
 
@@ -910,7 +910,7 @@ public class HashMap extends AbstractMap implements Map, Cloneable,
             return containsValue(o);
         }
         public void clear() {
-            //KML HashMap.this.clear();
+            HashMap.this.clear();
         }
     }
 
@@ -950,7 +950,7 @@ public class HashMap extends AbstractMap implements Map, Cloneable,
             return size;
         }
         public void clear() {
-            //KML HashMap.this.clear();
+            HashMap.this.clear();
         }
     }
 
