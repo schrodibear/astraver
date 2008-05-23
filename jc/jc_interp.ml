@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.280 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.281 2008-05-23 16:00:32 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -313,6 +313,10 @@ let equality_op_for_type = function
 let term_coerce ?(cast=false) loc tdest tsrc e =
   match tdest, tsrc with
     | JCTnative t, JCTnative u when t=u -> e
+    | JCTnative Treal, JCTnative Tinteger -> 
+	LApp("real_of_int",[e])
+    | JCTnative Tinteger, JCTnative Treal -> 
+	LApp("int_of_real",[e])
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTenum ri1, JCTenum ri2 ->
@@ -417,6 +421,10 @@ let rec fits_in_enum ri e =
 let coerce ~no_int_overflow lab loc tdest tsrc orig e =
   match tdest, tsrc with
     | JCTnative t, JCTnative u when t=u -> e
+    | JCTnative Treal, JCTnative Tinteger -> 
+	make_app "real_of_int" [e]
+    | JCTnative Tinteger, JCTnative Treal -> 
+	make_app "int_of_real" [e]
     | JCTlogic t, JCTlogic u when t=u -> e
     | JCTenum ri1, JCTenum ri2 when ri1==ri2 -> e
     | JCTenum ri1, JCTenum ri2 -> 

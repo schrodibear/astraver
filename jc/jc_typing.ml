@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.205 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.206 2008-05-23 16:00:32 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -93,6 +93,11 @@ let find_struct_variant st =
   match st.jc_struct_info_root.jc_struct_info_variant with
     | None -> raise Not_found
     | Some vi -> vi
+
+let is_real t =
+  match t with
+    | JCTnative Treal -> true
+    | _ -> false
 
 let is_numeric t =
   match t with
@@ -676,7 +681,21 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         JCTinstanceof(ft e1, label (), find_struct_info e#loc t)
     | JCNEcast(e1, t) ->
         let te1 = ft e1 in
-        begin try
+	if t = "integer" then
+	  if is_real te1#typ then
+	    integer_type, te1#region, JCTreal_cast(te1,Real_to_integer)
+	  else if is_integer te1#typ then
+	    integer_type, te1#region, te1#node
+	  else
+	    typing_error e#loc "bad cast to integer"
+	else if t = "real" then
+	  if is_integer te1#typ then
+	    real_type, te1#region, JCTreal_cast(te1,Integer_to_real)
+	  else if is_real te1#typ then 
+	    real_type, te1#region, te1#node
+	  else
+	    typing_error e#loc "bad cast to real"
+        else begin try
           let ri = Hashtbl.find enum_types_table t in
           if is_numeric te1#typ then
             JCTenum ri, dummy_region, JCTrange_cast(te1, ri)
@@ -1365,7 +1384,21 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         boolean_type, dummy_region, JCEinstanceof(te1, st)
     | JCNEcast(e1, t) -> 
         let te1 = fe e1 in
-        begin try
+	if t = "integer" then
+	  if is_real te1#typ then
+	    integer_type, te1#region, JCEreal_cast(te1,Real_to_integer)
+	  else if is_integer te1#typ then
+	    integer_type, te1#region, te1#node
+	  else
+	    typing_error e#loc "bad cast to integer"
+	else if t = "real" then
+	  if is_integer te1#typ then
+	    real_type, te1#region, JCEreal_cast(te1,Integer_to_real)
+	  else if is_real te1#typ then 
+	    real_type, te1#region, te1#node
+	  else
+	    typing_error e#loc "bad cast to real"
+        else begin try
           let ri = Hashtbl.find enum_types_table t in
           if is_numeric te1#typ then
             JCTenum ri, te1#region, JCErange_cast(te1, ri)

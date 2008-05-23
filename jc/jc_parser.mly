@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.93 2008-04-15 13:09:53 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.94 2008-05-23 16:00:32 moy Exp $ */
 
 %{
 
@@ -652,6 +652,10 @@ expression:
     { locate (JCPEinstanceof($1, $3)) }
 | expression COLONGT IDENTIFIER
     { locate (JCPEcast($1, $3)) }
+| expression COLONGT REAL
+    { locate (JCPEcast($1, "real")) }
+| expression COLONGT INTEGER
+    { locate (JCPEcast($1, "integer")) }
 | expression EQEQ expression 
     { locate (JCPEbinary ($1, `Beq, $3)) }
 | expression BANGEQ expression 
