@@ -134,7 +134,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/linked-lists/reverse.c", line 14, characters 8-193: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/reverse.c", line 14, characters 8-193: *)
 (*Why goal*) Lemma rev_impl_po_2 : 
   forall (p0: (pointer global)),
   forall (alloc: alloc_table),
@@ -151,7 +151,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/linked-lists/reverse.c", line 21, characters 8-13: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/reverse.c", line 21, characters 8-13: *)
 (*Why goal*) Lemma rev_impl_po_3 : 
   forall (p0: (pointer global)),
   forall (alloc: alloc_table),
@@ -174,7 +174,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/linked-lists/reverse.c", line 14, characters 8-193: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/reverse.c", line 14, characters 8-193: *)
 (*Why goal*) Lemma rev_impl_po_4 : 
   forall (p0: (pointer global)),
   forall (alloc: alloc_table),
@@ -245,7 +245,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/linked-lists/reverse.c", line 8, characters 12-76: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/reverse.c", line 8, characters 12-76: *)
 (*Why goal*) Lemma rev_impl_po_6 : 
   forall (p0: (pointer global)),
   forall (alloc: alloc_table),

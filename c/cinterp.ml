@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.257 2008-03-12 11:03:45 bardou Exp $ i*)
+(*i $Id: cinterp.ml,v 1.258 2008-05-23 15:24:16 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -267,6 +267,7 @@ let zoned_name (f : string) (ty : Info.why_type) =
     | Pointer z -> f ^ "_" ^ (found_repr ~quote_var:false z)
     | Addr _ 
     | Info.Int -> assert false
+    | Info.Real -> assert false
     | Unit -> assert false
     | Why_Logic s ->  assert false
     | Memory(t,z) -> assert false
@@ -1927,7 +1928,7 @@ let interp_spec add_inv effect s =
    make_and
      (interp_predicate_opt None "" s.ensures)
      (make_and 
-	(interp_assigns (Some "") "" effect s.assigns)
+	(interp_assigns None "" effect s.assigns)
 	(make_and
 	   (if add_inv then weak_invariants_for effect else LTrue)
 	   (if Ceffect.assigns_alloc effect then alloc_extends () else LTrue)))

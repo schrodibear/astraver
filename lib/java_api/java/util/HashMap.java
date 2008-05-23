@@ -100,6 +100,9 @@ import  java.io.*;
 public class HashMap extends AbstractMap implements Map, Cloneable,
     Serializable
 {
+    //@ model Class key_type;
+    //@ model Class value_type;
+
     /**
      * The default initial capacity - MUST be a power of two.
      */
@@ -312,6 +315,9 @@ public class HashMap extends AbstractMap implements Map, Cloneable,
      *          <tt>null</tt> if the map contains no mapping for this key.
      * @see #put(Object, Object)
      */
+    /*@
+      @ ensures \result instanceof value_type;
+      @*/
     public Object get(Object key) {
         Object k = maskNull(key);
         int hash = hash(k);

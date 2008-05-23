@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.ml,v 1.46 2008-05-23 08:56:15 marche Exp $ i*)
+(*i $Id: info.ml,v 1.47 2008-05-23 15:24:16 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -37,6 +37,7 @@ type why_type =
   | Pointer of zone
   | Addr of zone
   | Int
+  | Real
   | Unit 
   | Why_Logic of string
 
@@ -105,6 +106,7 @@ let rec output_why_type ?(quote_var=true) ty=
   let rec output ty =
     match ty with
     | Int -> [], "int"
+    | Real -> [], "real"
     | Pointer z -> [output_zone_name ~quote_var z] , "pointer"    
     | Addr z -> [output_zone_name ~quote_var z] , "addr"
     | Memory(t,z) -> 

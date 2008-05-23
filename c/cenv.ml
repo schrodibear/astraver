@@ -294,6 +294,13 @@ let declare_int_size ((s,i) as is) =
 let all_int_sizes () = SI.elements !int_sizes
 let is_int_type s = StringSet.mem s !int_types
 
+let real_types =
+  StringSet.add "single" 
+    (StringSet.add "quad" 
+       (StringSet.singleton "double"))
+
+let is_real_type s = StringSet.mem s real_types
+
 let int_size = function
   | Char -> char_size
   | Short -> short_size
@@ -320,11 +327,11 @@ let rec type_type_why ?name ty zone_is_var =
     | Tenum _ when not Coptions.enum_check -> Int
     | Tint ik -> Why_Logic (int_type_for ik)
     | Tenum e -> Why_Logic (enum_type_for e)
-    | Tfloat _ when not Coptions.floats -> Why_Logic "real"
+    | Tfloat _ when not Coptions.floats -> Real
     | Tfloat Float -> Why_Logic "single"
     | Tfloat Double -> Why_Logic "double"
     | Tfloat LongDouble -> Why_Logic "quad"
-    | Tfloat Real -> Why_Logic "real"
+    | Tfloat Ctypes.Real -> Real
     | Tarray (_,ty,_)  
     | Tpointer (_,ty) -> 
 	begin match ty.ctype_node with 

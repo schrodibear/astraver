@@ -4,6 +4,10 @@ Note: These are the changes for Caduceus.
 version 2.12, May 23rd, 2008
 ============================
 
+ o bug in separation analysis with floats/double
+ o assigns clauses are now interpreted in the post-state: you can use 
+   \old to recover previous behavior.
+
 version 2.11, March 17th, 2008
 ==============================
 

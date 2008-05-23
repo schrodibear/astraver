@@ -36,7 +36,9 @@ C test file
 int x;
 /* int t[]; */
 
-/*@ requires y == ddd assigns \nothing ensures \result == z */ 
+/*@ requires y == ddd 
+  @ assigns \nothing 
+  @ ensures \result == z */ 
 int f(int y, int ddd, int z) 
 {
   int u = z;

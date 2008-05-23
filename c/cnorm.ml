@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.110 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.111 2008-05-23 15:24:16 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -154,6 +154,33 @@ let why_type_for_int t = match t.Ctypes.ctype_node with
   | Tenum _ -> Info.Int (*TODO*)
   | _ -> assert false
 
+let why_type_op op =
+  match op with
+    | Bsub_pointer 
+    | Blt_pointer | Bgt_pointer | Ble_pointer 
+    | Bge_pointer | Beq_pointer | Bneq_pointer
+	-> Info.Int
+    | Bneq_float _ | Beq_float _ | Bge_float _
+    | Ble_float _ | Bgt_float _ | Blt_float _ 
+	-> Info.Int
+    | Bdiv_float _ | Bmul_float _ | Bsub_float _ | Badd_float _
+	-> Info.Real
+    | Bmod_int _|Bdiv_int _| Bmul_int _|Bsub_int _|Badd_int _
+	  -> Info.Int
+    | Badd_pointer_int -> assert false
+    | Bneq_int | Beq_int | Bge_int
+    | Ble_int | Bgt_int | Blt_int
+	  -> Info.Int
+    | Bshift_right | Bshift_left 
+	  -> Info.Int
+    | Bor | Band | Bbw_or | Bbw_xor| Bbw_and
+	  -> Info.Int
+    | Bneq | Beq | Bge | Ble | Bgt | Blt 
+	  -> Info.Int
+    | Bmod | Bdiv | Bmul | Bsub | Badd
+	  -> assert false
+
+
 let rec type_why e =
   match e.nexpr_node with
     | NEvar e -> get_why_type e 
@@ -184,11 +211,8 @@ let rec type_why e =
 	type_why e
     | NEassign_op (l,op,e) -> 
 	type_why e
-    | NEbinary (e1,Bsub_pointer,e2) | NEbinary (e1,Blt_pointer,e2) 
-    | NEbinary (e1,Bgt_pointer,e2) | NEbinary (e1,Ble_pointer,e2)     
-    | NEbinary (e1,Bge_pointer,e2) | NEbinary (e1,Beq_pointer,e2)     
-    | NEbinary (e1,Bneq_pointer,e2) -> 
-	Info.Int
+    | NEbinary (e, Badd_pointer_int, _) -> type_why e
+    | NEbinary (_, op, _) -> why_type_op op
     | NEunary ((Ufloat_conversion | Ufloat_of_int), _) 
     | NEcast ({Ctypes.ctype_node = Tfloat _}, _) -> 
 	Why_Logic (why_type_for_float e.nexpr_type)
@@ -205,9 +229,7 @@ let rec type_why e =
 	end
     | NEunary (_,e) 
     | NEincr (_,e) 
-    | NEbinary (e,_,_) 
-    | NEcond (_,_,e) -> 
-	type_why e
+    | NEcond (_,_,e) -> type_why e
     | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
 	let tw = type_why e in
 	rename_zone assoc tw 

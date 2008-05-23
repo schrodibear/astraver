@@ -54,6 +54,7 @@ val int_type_for_size : Ctypes.sign -> int -> string
 val int_type_for : Ctypes.sign * Ctypes.cinteger -> string
 val all_int_sizes : unit -> (Ctypes.sign * int) list
 val is_int_type : string -> bool
+val is_real_type : string -> bool
 
 val enum_type_for : string -> string
 

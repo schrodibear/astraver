@@ -27,13 +27,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.mli,v 1.40 2008-02-05 12:10:48 marche Exp $ i*)
+(*i $Id: info.mli,v 1.41 2008-05-23 15:24:16 marche Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
   | Pointer of zone
   | Addr of zone
   | Int
+  | Real
   | Unit 
   | Why_Logic of string 
 

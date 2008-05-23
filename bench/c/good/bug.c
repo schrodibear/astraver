@@ -42,3 +42,17 @@ las2 y2[10];
 
 /*@ requires \valid(x) */
 void f(struct U *x) { x->t2[0] = 1; *u.p1 = 1; *z.p2 = 2; }
+
+int ff(double a,double b)
+{
+int x;
+x=(a<b);
+return x;
+}
+
+typedef int toto;
+/* ... */
+typedef int toto;
+
+double f2(double a) { return (a - 1.2e-3); }
+ 
