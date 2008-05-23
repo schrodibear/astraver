@@ -63,6 +63,7 @@ let name_base_type t =
     | Tfloat -> "float"
     | Treal -> "real"
     | Tdouble -> "double"
+    | Tstring -> "string"
 
 let rec name_type t =
   match t with

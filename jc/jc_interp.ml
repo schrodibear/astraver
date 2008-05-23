@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.279 2008-05-21 16:10:30 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.280 2008-05-23 13:51:39 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -394,6 +394,7 @@ let eval_integral_const e =
               | `Bdiv | `Beq | `Bge | `Bgt | `Ble | `Blogical_shift_right
               | `Blt | `Bmod | `Bmul | `Bneq | `Bshift_left | `Bsub), _ ->
                 failwith "Not integral const"
+	    | `Bconcat, _ -> assert false (* TODO *)
           end
       | JCEif(e1,e2,e3) ->
           (* TODO: write [eval_boolean_const] *)
@@ -1442,7 +1443,8 @@ and expr ~infunction ~threats e : expr =
         let fields = List.map (fun fi -> (fi,e#region)) fields in
         let roots = embedded_struct_roots st in
         let roots = List.map find_tag_or_variant roots in
-        let roots = List.map (fun a -> (a, e#region)) roots i*)
+        let roots = List.map (fun a -> (a, e#region)) roots 
+*)
         let fields = all_memories ~select:fully_allocated (JCtag st) in
         let fields = List.map (fun fi -> (fi, e#region)) fields in
         let roots = all_types ~select:fully_allocated (JCtag st) in

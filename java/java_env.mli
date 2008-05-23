@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.37 2008-04-22 06:53:45 nrousset Exp $ *)
+(* $Id: java_env.mli,v 1.38 2008-05-23 13:51:39 marche Exp $ *)
 
 (*s types and environments *)
 
@@ -36,7 +36,7 @@ type accessibility = Apublic | Aprotected | Aprivate | Anone
 type base_type =
     | Tshort | Tboolean | Tbyte | Tchar | Tint | Tfloat | Tlong | Tdouble 
 	  (* native logic types *)
-    | Tinteger | Treal | Tunit
+    | Tinteger | Treal | Tunit | Tstring
 
 type logic_label = 
   | LabelName of string

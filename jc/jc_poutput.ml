@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.8 2008-04-15 13:09:53 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.9 2008-05-23 13:51:39 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -59,6 +59,7 @@ let bin_op = function
   | `Blogical_shift_right -> ">>"
   | `Barith_shift_right -> ">>>"
   | `Bshift_left -> "<<"
+  | `Bconcat -> "@"
 
 let unary_op = function
   | `Uplus -> "+"

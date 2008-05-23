@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_pervasives.ml,v 1.15 2008-04-01 11:16:25 marche Exp $ *)
+(* $Id: java_pervasives.ml,v 1.16 2008-05-23 13:51:39 marche Exp $ *)
 
 (*** Utility functions ***)
 
@@ -94,6 +94,7 @@ let integer_type = JTYbase Tinteger
 let int_type = JTYbase Tint
 let real_type = JTYbase Treal
 let double_type = JTYbase Tdouble
+let logic_string_type = JTYbase Tstring
 
 let min_byte = Num.num_of_string "-128"
 let max_byte = Num.num_of_string "127"

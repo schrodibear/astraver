@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.35 2008-04-11 12:38:34 marche Exp $
+$Id: java_ast.mli,v 1.36 2008-05-23 13:51:39 marche Exp $
 
 ***************************************************************************)
 
@@ -78,6 +78,7 @@ type bin_op =
     | Bbwand | Bbwor | Bbwxor
     | Blsl | Blsr | Basr
     | Beq | Bne | Bgt | Blt | Ble | Bge
+    | Bconcat (* + for Strings *)
 
 type un_op = Uplus | Uminus | Unot | Ucompl
 

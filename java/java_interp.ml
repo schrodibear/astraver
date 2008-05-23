@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.133 2008-04-22 06:53:45 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.134 2008-05-23 13:51:39 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -127,6 +127,7 @@ let get_enum_info t =
 
 let tr_base_type t =
   match t with
+    | Tstring -> Jc_pervasives.string_type
     | Tunit -> Jc_pervasives.unit_type
     | Tboolean -> Jc_pervasives.boolean_type
     | Tinteger -> Jc_pervasives.integer_type
@@ -426,6 +427,7 @@ let lun_op t op: [> Jc_ast.unary_op] =
     | Uminus when (t = Tinteger || t = Tint) -> `Uminus
     | Uminus -> 
 	begin match t with
+	  | Tstring -> assert false 
 	  | Tshort  -> assert false (* TODO *)
 	  | Tboolean  -> assert false (* TODO *)
 	  | Tbyte  -> assert false (* TODO *)
@@ -463,6 +465,7 @@ let lbin_op t op: [> Jc_ast.operational_op] =
     | Bmul -> `Bmul
     | Bsub -> `Bsub
     | Badd -> `Badd
+    | Bconcat -> `Bconcat
 
 let lobj_op op: [> comparison_op] =
   match op with
@@ -1072,6 +1075,7 @@ let bin_op op: [> Jc_ast.bin_op] =
     | Bbwxor -> `Bbw_xor
     | Bbwor -> `Bbw_or
     | Bbwand -> `Bbw_and
+    | Bconcat -> `Bconcat
 
 let incr_op op: [> pm_unary_op] =
   match op with
@@ -1757,6 +1761,7 @@ let tr_field type_name acc fi =
 		    | _ -> assert false (* should never happen *)
 		  in JCCboolean b
 	      | Tfloat | Treal -> assert false (* TODO *) 
+	      | Tstring -> assert false (* TODO *)
 	      | Tunit -> assert false
 	    end
 	| JTYnull | JTYclass _ | JTYinterface _ | JTYarray _ | JTYlogic _ -> 

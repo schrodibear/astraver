@@ -2,7 +2,7 @@
 
 Note: These are the changes for Krakatoa.
 
-version 2.12, May 23rd, 2008
+version 1.12, May 23rd, 2008
 ============================
 o assigns clause now correctly typed in the post-state
 o array ranges in assigns clause: now correctly parse [..], [..n] and [n..]

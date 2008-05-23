@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.105 2008-04-15 09:00:08 filliatr Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.106 2008-05-23 13:51:39 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -809,6 +809,7 @@ let string_of_op = function
   | `Uminus -> "unary -"
   | `Unot -> "not"
   | `Ubw_not -> "bw not"
+  | `Bconcat -> "strcat"
 
 let string_of_op_type = function
   | `Integer -> "integer"

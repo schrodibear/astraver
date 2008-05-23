@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.123 2008-05-23 08:16:10 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.124 2008-05-23 13:51:39 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -70,6 +70,7 @@ let string_of_base_type t =
     | Tchar -> "char"
     | Tbyte -> "byte"
     | Tshort -> "short"
+    | Tstring -> "string"
 
 
 let rec print_type fmt t =
@@ -621,6 +622,7 @@ let logic_binary_numeric_promotion t1 t2 =
 
 let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
+    | Bconcat -> assert false
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
 	assert false (* TODO *)
     | Basr | Blsr | Blsl ->
@@ -687,6 +689,7 @@ let make_logic_un_op loc op t1 e1 =
 
 let make_predicate_bin_op loc op t1 e1 t2 e2 =
   match op with
+    | Bconcat -> assert false
     | Bgt | Blt | Bge | Ble ->
 	begin
 	  try 
@@ -1472,7 +1475,9 @@ type typing_env =
 let rec is_widening_reference_convertible tfrom tto =
   match tfrom,tto with
     | JTYclass(_,c1), JTYclass(_,c2) -> is_subclass c1 c2
+    | JTYbase Tstring, JTYclass(_,c) -> is_subclass string_class c
     | JTYclass(_,c), JTYinterface i -> implements c i
+    | JTYbase Tstring, JTYinterface i -> implements string_class i
     | JTYnull, (JTYclass _ | JTYinterface _ | JTYarray _ ) -> true
     | JTYinterface i1, JTYinterface i2 -> is_subinterface i1 i2
     | JTYinterface _ , JTYclass(_,c) when c == !object_class -> true
@@ -1501,7 +1506,7 @@ and term env current_label e =
 	    match l with
 	      | Integer s -> integer_type,l
 	      | Char s -> assert false (* TODO *)
-	      | String s -> assert false (* TODO *)
+	      | String s -> logic_string_type,l
 	      | Bool b -> boolean_type,l
 	      | Float s -> real_type,l
 	      | Null -> null_type,l
@@ -1873,15 +1878,15 @@ let binary_numeric_promotion ~ghost t1 t2 =
 	begin
 	  if ghost then
 	    match t1,t2 with
-	      | (Tboolean | Tunit),_
-	      | _, (Tboolean | Tunit) -> raise Not_found
+	      | (Tboolean | Tunit| Tstring),_
+	      | _, (Tboolean | Tunit| Tstring) -> raise Not_found
 	      | (Treal | Tdouble | Tfloat), _ 
 	      | _, (Treal | Tdouble | Tfloat) -> Treal
 	      | _ -> Tinteger
 	  else
 	    match t1,t2 with
-	      | (Tboolean | Tunit),_
-	      | _, (Tboolean | Tunit) -> raise Not_found
+	      | (Tboolean | Tunit | Tstring),_
+	      | _, (Tboolean | Tunit | Tstring) -> raise Not_found
 	      | (Treal | Tinteger), _ 
 	      | _, (Treal | Tinteger) -> assert false
 	      | Tdouble,_ | _, Tdouble -> Tdouble
@@ -1991,7 +1996,7 @@ let rec eval_const_expression const e =
 			      typing_error e.java_expr_loc
 				"outside the short range: %s" (Num.string_of_num n)
 			| Tunit | Treal | Tinteger | Tdouble | Tlong 
-			| Tfloat | Tint | Tchar | Tboolean -> assert false (* TODO *)
+			| Tfloat | Tint | Tchar | Tboolean | Tstring -> assert false (* TODO *)
 		    end
 	      | JTYarray _ | JTYinterface _ | JTYclass (_, _) 
 	      | JTYnull | JTYlogic _
@@ -2002,6 +2007,7 @@ let rec eval_const_expression const e =
 	let n2 = eval_const_expression const e2 in
 	begin
 	  match op with
+	    | Bconcat -> assert false
 	    | Badd -> Num.add_num n1 n2
 	    | Bbwxor -> assert false (* TODO *)
 	    | Bbwor -> bwor_num n1 n2
@@ -2126,9 +2132,17 @@ let cast_convertible tfrom tto =
 (**********************)
 
 (* expressions *)
+
+let string_promotion e =
+  match e.java_expr_type with
+    | JTYclass(_,c) when c == string_class -> e
+    | JTYbase Tstring -> assert false (* TODO *)
+    | JTYbase Tinteger -> assert false (* TODO *)
+    | _ -> assert false (* TODO *)
 	  
 let make_bin_op ~ghost loc op t1 e1 t2 e2 =
   match op with
+    | Bconcat -> assert false
     | Bgt | Blt | Bge | Ble ->
 	begin
 	  try
@@ -2164,10 +2178,13 @@ let make_bin_op ~ghost loc op t1 e1 t2 e2 =
 	    JTYbase t,JEbin(e1, op, e2)
 	  with Not_found ->
 	    match t1,t2 with
-	      | (_,JTYclass(_,c)) when c == string_class ->
-		  (string_type ~valid:true),JEbin(e1,op,e2)
-	      | (JTYclass(_,c),_) when c == string_class ->
-		  (string_type ~valid:true),JEbin(e1,op,e2)
+	      | (_,JTYclass(_,c)) | (JTYclass(_,c),_) 
+		    when c == string_class ->
+		  (string_type ~valid:true),
+		      JEbin(string_promotion e1,Bconcat,string_promotion e2)
+	      | (_,JTYbase Tstring) | (JTYbase Tstring,_) ->
+		  (string_type ~valid:true),
+		  JEbin(string_promotion e1,Bconcat,string_promotion e2)
 	      | _ ->
 		  typing_error loc 
 		    "numeric types or String expected for +, got %a + %a" 
@@ -2441,7 +2458,7 @@ let rec expr ~ghost env e =
 	  let t, l = 
 	    match l with
 	      | Integer s | Char s -> int_type, l
-	      | String s -> (string_type ~valid:true), l
+	      | String s -> logic_string_type, l
 	      | Bool b -> boolean_type, l
 	      | Float s -> double_type, l
 	      | Null -> null_type, l

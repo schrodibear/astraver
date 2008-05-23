@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.204 2008-04-22 17:41:24 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.205 2008-05-23 13:51:39 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -418,7 +418,7 @@ let term_coerce t1 t2 e =
           (JCTapp app)
     | _ -> e_int
 
-let logic_bin_op (t : [< operator_type ]) op =
+let logic_bin_op (t : [< operator_type ]) (op : [< bin_op]) : term_bin_op =
   bin_op t op
 (*
   match t,op with
@@ -442,7 +442,7 @@ let logic_bin_op (t : [< operator_type ]) op =
     | _ -> assert false
 *)
 
-let make_logic_bin_op loc (op: [< bin_op]) e1 e2 =
+let make_logic_bin_op loc (op: bin_op) e1 e2 =
   let t1 = e1#typ and t2 = e2#typ in
   match op with
     | `Bgt | `Blt | `Bge | `Ble ->
@@ -523,6 +523,8 @@ let make_logic_bin_op loc (op: [< bin_op]) e1 e2 =
 
         (* not allowed as term op *)
     | `Bimplies | `Biff -> assert false
+    | `Bconcat -> assert false (* TODO *)
+
 
 (** Check that used logic labels appear in the environment,
 and add the current [logic_label] to the node in [jc_nexpr_label].
@@ -1131,7 +1133,7 @@ let coerce t1 t2 e =
 let make_bin_op loc (op: operational_op) e1 e2 =
   let t1 = e1#typ and t2 = e2#typ in
   match op with
-    | `Bgt | `Blt | `Bge | `Ble as op ->
+    | `Bgt | `Blt | `Bge | `Ble ->
         if is_numeric t1 && is_numeric t2 then
           let t = lub_numeric_types t1 t2 in
           (boolean_type, dummy_region,
@@ -1212,6 +1214,7 @@ let make_bin_op loc (op: operational_op) e1 e2 =
          JCEbinary(e1, bin_op (operator_of_native t) op, e2))*)
     (* not allowed as expression op *)
 (*    | `Bimplies | `Biff -> assert false*)
+    | `Bconcat -> assert false (* TODO *)
 
 let rec expr env e =
   let fe = expr env in
