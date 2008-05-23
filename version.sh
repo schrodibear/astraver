@@ -33,3 +33,12 @@ mkdir -p c
 echo "let version = \""$CVERSION"\"" > $CADUCEUSVF
 echo "let date = \""`date`"\"" >> $CADUCEUSVF
 echo "let libdir = \""$LIBDIR/caduceus"\"" >> $CADUCEUSVF
+
+
+# Doc
+DOCF=doc/version.tex
+mkdir -p doc
+echo '\\newcommand{\\whyversion}{'$VERSION"}" > $DOCF
+echo '\\newcommand{\\caduceusversion}{'$CVERSION"}" >> $DOCF
+echo '\\newcommand{\\jessieversion}{'$JCVERSION"}" >> $DOCF
+echo '\\newcommand{\\krakatoaversion}{'$KVERSION"}" >> $DOCF

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.122 2008-05-23 07:26:11 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.123 2008-05-23 08:16:10 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -976,8 +976,9 @@ and classify_name
 			  let ti = List.assoc id t in
 			  Hashtbl.replace contents id (Type ti);
 			  TypeName ti
-			with Not_found -> assert false
-			
+			with Not_found -> 
+			  typing_error loc "type `%s' not found in file `%s'@."
+			    id f
 		with
 		    Not_found ->
 		      typing_error loc "unknown identifier %s" id

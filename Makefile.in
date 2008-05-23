@@ -572,7 +572,7 @@ coq-v8: $(VO8)
 
 include Version
 
-src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version Makefile
+doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version Makefile
 	LIBDIR=$(LIBDIR) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
@@ -769,11 +769,11 @@ doc:: $(DOC)
 doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
-doc/version.tex: Version Makefile.in
-	echo '\newcommand{\whyversion}'"{$(VERSION)}" > $@
-	echo '\newcommand{\caduceusversion}'"{$(CVERSION)}" >> $@
-	echo '\newcommand{\jessieversion}'"{$(JCVERSION)}" >> $@
-	echo '\newcommand{\krakatoaversion}'"{$(KVERSION)}" >> $@
+# doc/version.tex: Version Makefile.in
+#	echo '\newcommand{\whyversion}'"{$(VERSION)}" > $@
+#	echo '\newcommand{\caduceusversion}'"{$(CVERSION)}" >> $@
+#	echo '\newcommand{\jessieversion}'"{$(JCVERSION)}" >> $@
+#	echo '\newcommand{\krakatoaversion}'"{$(KVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
