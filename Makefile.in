@@ -693,7 +693,8 @@ install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/caduceus/harvey
 	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
 	mkdir -p $(LIBDIR)/krakatoa
-	cd lib; cp --parents java_api/java/*/*.java $(LIBDIR)/krakatoa
+	cd lib; cp -r java_api $(LIBDIR)/krakatoa
+	cd lib; cp -r javacard_api $(LIBDIR)/krakatoa
 	cp -f lib/why-logo-*.png $(LIBDIR)/why
 
 install-man:
@@ -906,7 +907,13 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	bench/java/bench bench/java/*/*.java bench/provers/*.mlw \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
-	lib/java_api/java/*/*.java lib/*.png \
+	lib/java_api/java/*/*.java \
+	lib/javacard_api/java/lang/*.java \
+	lib/javacard_api/javacard/*/*.java \
+	lib/javacard_api/javacardx/crypto/*.java \
+	lib/javacard_api/visa/openplatform/*.java \
+	lib/javacard_api/com/sun/javacard/impl/*.java \
+	lib/*.png \
 	atp/cooper.ml atp/fol.ml atp/formulas.ml atp/intro.ml atp/lib.ml \
 	atp/LICENSE.txt atp/Makefile atp/Mk_ml_file atp/prop.ml \
 	atp/qelim.ml atp/Quotexpander.ml atp/skolem.ml \
