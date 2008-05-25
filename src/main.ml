@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.150 2008-04-15 14:53:56 stoulsn Exp $ i*)
+(*i $Id: main.ml,v 1.151 2008-05-25 12:11:28 stoulsn Exp $ i*)
 
 open Options
 open Ptree
@@ -81,7 +81,7 @@ let store_decl_into_a_queue d  =
     declarationQueue **)
 let push_decl vloc d = 
   add_loc d;
-  if (not pruning) then
+  if (not pruning) && (Options.pruning_hyp_v = -1) then
     begin 
       let pushing = 
 	match prover () with
@@ -498,7 +498,7 @@ let main () =
     output (Options.out_file "out")
   end else begin
     List.iter deal_file files;
-    if pruning then
+    if (pruning) or (Options.pruning_hyp_v != -1) then
       begin
 	let q =  declarationQueue in 
 	encode q ;

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.44 2008-05-05 16:44:21 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.45 2008-05-25 12:11:28 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -77,6 +77,7 @@ type var_strat =
   | CNFHyps
     
 
+let prune_context = Options.prune_context
 let use_comparison_as_criteria_for_graph_construction = Options.pruning_hyp_CompInGraph
 let use_comparison_as_criteria_for_hypothesis_filtering = Options.pruning_hyp_CompInFiltering
 let keep_quantification_link_beween_vars = Options.pruning_hyp_LinkVarsQuantif
@@ -105,6 +106,9 @@ let set_pb  n =
 
 let set_vb  n = 
   vb := n 
+
+let context = ref []
+
 
 (** 
     ***********************
@@ -1361,26 +1365,34 @@ let build_pred_graph decl =
 	  (fun (var,tvar) pred  -> Forall(false,var,var,tvar,[],pred)) 
 	  bl piff in 
 	let p' = cnf pforall in 
-	let cls = get_abstract_clauses p' in
-	let cls = AbstractClauseSet.union cls !eq_link in
-	if debug then 
-	  begin 
-	    (* Format.printf "%a" Util.print_predicate p;
-	       display_cl_set cls *)
-	  end;
-	update_pdlg (remove_percent_from_abstractclauseset cls )
+	  begin
+	    context := (p',Dpredicate_def (loc, ident, def))::!context ;
+	    let cls = get_abstract_clauses p' in
+	    let cls = AbstractClauseSet.union cls !eq_link in
+	      if debug then 
+		begin 
+		  (* Format.printf "%a" Util.print_predicate p;
+		     display_cl_set cls *)
+		end;
+	      update_pdlg (remove_percent_from_abstractclauseset cls )
+	  end
     | Daxiom (loc, ident, ps) -> 
 	let p= ps.scheme_type in 
 	let p' = cnf p in
-	let cls = get_abstract_clauses p' in 
-	let cls = AbstractClauseSet.union cls !eq_link  in
-	if debug then 
-	  begin 
-	    (* Format.printf "%a" Util.print_predicate p;
-	       display_cl_set cls *)
-	  end;
-	update_pdlg (remove_percent_from_abstractclauseset cls)
-    | _  -> () in
+	  begin
+	    context := (p',Daxiom (loc, ident, ps))::!context ;
+	    let cls = get_abstract_clauses p' in 
+	    let cls = AbstractClauseSet.union cls !eq_link  in
+	      if debug then 
+		begin 
+		  (* Format.printf "%a" Util.print_predicate p;
+		     display_cl_set cls *)
+		end;
+	      update_pdlg (remove_percent_from_abstractclauseset cls)
+	  end
+    | a  -> 
+	context := (Ptrue,a)::!context ;
+  in
   Queue.iter compute_pred_graph decl   
 
 (** End of graph of predicates**)
@@ -1826,10 +1838,8 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	end;
 	if condition then 
 	  begin
-	    begin
-	      if debug then
-		Format.printf "Keeped #1 (Vars)\n\n"
-	    end;
+	    if debug then
+	      Format.printf "Keeped #1 (Vars)\n\n";
 	    
 	    (* the predicate symbols has to be in the list of symbols *)
 	    let preds_of_p  = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in 
@@ -1840,20 +1850,20 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 		  display_symb_of_pdl_set preds_of_p;
 		  Format.printf "Relevent Preds : \n";
 		  display_symb_of_pdl_set pred_symb;
+		end;
+	      if abstr_subset_of_pdl preds_of_p pred_symb then 
+		begin
+		  if debug then
+		    Format.printf "Keeped #2 (Preds)\n\n";
+		  Spred (t,p):: filter q
 		end
-	    end;
-	    if abstr_subset_of_pdl preds_of_p pred_symb then 
-	      begin
-		if debug then
-		  Format.printf "Keeped #2 (Preds)\n\n";
-		Spred (t,p):: filter q
-	      end
-	    else 
-	      begin
-		if debug then 
-		  Format.printf "Dropped (Preds)\n\n";
-		filter q
-	      end
+	      else 
+		begin
+		  if debug then 
+		    Format.printf "Dropped (Preds)\n\n";
+		  filter q
+		end
+	    end
 	  end
 	else
 	  begin 
@@ -1865,40 +1875,131 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   filter l
     
 
-let managesGoal ax (hyps,concl) =
-  match ax with 
-      (loc,expl,id,_) -> 
-	(** retrieves the list of predicates in the conclusion **)
-	let concl_preds = get_preds_of concl true in 
-	let relevant_preds = get_predecessor_pred concl_preds !pb  in 
-
-	(** retrieves the list of variables in the conclusion **)
-	let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in 
-	let reachable_vars = VarStringSet.diff 
-	  (get_reachable_vars vars_of_concl !vb)
-	  avoided_vars in 	
-	let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in (* Traitement fait 2 fois pour l'optimisation *)
 
 
-	let l' = filter_acc_variables hyps relevant_vars  var_filter_tactic (*All  AllInABranch*)  relevant_preds in 
 
 
-	if debug then 
-	  begin
-	    display_str "Relevant vars " relevant_vars ;
-	    display_str "Reachable vars " reachable_vars ;
-	    
-	    if VarStringSet.subset relevant_vars reachable_vars then Format.printf "Relevant <: Reachable\n" else  Format.printf "Relevant /<: Reachable\n";
-	    if VarStringSet.subset reachable_vars relevant_vars then Format.printf "Reachable <: Relevant\n" else  Format.printf "Reachable /<: Relevant\n";
 
-	    Format.printf "Concl preds ";
-	    display_symb_of_pdl_set concl_preds;
-	    Format.printf "Relevant preds ";
-	    display_symb_of_pdl_set relevant_preds;
-	    let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
-	    DotVG.output_graph oc !vg 
-	  end;
-	(loc,expl,id, (l',concl)) 
+
+(** Filter the context global variable according to preserved preds **)
+let managesContext relevantPreds decl =
+  (*Seulement si pruning axiomes*)
+  if prune_context then
+    begin
+      Queue.clear decl ;
+      let rec filter ctx =
+	match ctx with
+	  | [] -> ()
+	      
+	  | (p_cnf,Dpredicate_def (loc, ident, def)) :: l ->
+	      let preds_of_p_cnf  = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in 
+		begin
+		  if debug then
+		    begin
+		      Format.printf "Ctx (Dpred %s): \n" ident;
+		      Format.printf "%a \n" print_decl (Dpredicate_def (loc, ident, def));
+		      Format.printf "Ctx Preds : \n";
+		      display_symb_of_pdl_set preds_of_p_cnf;
+		      Format.printf "Relevent Preds : \n";
+		      display_symb_of_pdl_set relevantPreds;
+		    end;
+		  if abstr_subset_of_pdl preds_of_p_cnf relevantPreds then 
+		    begin
+		      if debug then
+			Format.printf "Ctx Keeped\n\n";
+		      Queue.push (Dpredicate_def (loc, ident, def)) decl;
+		      filter l
+		    end
+		  else 
+		    begin
+		      (* Lorsqu'un Prédicat est retiré, sa signature est laissée sous la forme d'un logic *)
+		      let bl,_ = def.scheme_type in
+			Queue.push (Dlogic(loc,ident, generalize_logic_type (Predicate(List.map snd bl)))) decl;		
+			if debug then 
+			  Format.printf "Ctx Dropped\n\n";
+			filter l
+		    end
+		end
+		  
+	  | (p_cnf,Daxiom (loc, ident, ps)) :: l-> 
+	      let preds_of_p_cnf  = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in 
+		begin
+		  if debug then
+		    begin
+		      Format.printf "Ctx (Daxiom %s): \n"  ident;
+		      Format.printf "%a \n" print_decl (Daxiom (loc, ident, ps));
+		      Format.printf "Ctx Preds : \n";
+		      display_symb_of_pdl_set preds_of_p_cnf;
+		      Format.printf "Relevent Preds : \n";
+		      display_symb_of_pdl_set relevantPreds;
+		    end;
+		  if abstr_subset_of_pdl preds_of_p_cnf relevantPreds then 
+		    begin
+		      if debug then
+			Format.printf "Ctx Keeped\n\n";
+		      Queue.push (Daxiom (loc, ident, ps)) decl;
+		      filter l
+		    end
+		  else 
+		    begin
+		      if debug then 
+			Format.printf "Ctx Dropped\n\n";
+		      filter l
+		    end
+		end
+		  
+		  
+	  | (p_cnf,c) :: l -> 
+	      if debug then 
+		begin  
+		  Format.printf "Ctx (Autre): \n";
+		  Format.printf "%a \n" print_decl c 
+		end; 
+	      Queue.push c decl;  
+	      filter l
+      in
+	filter (List.rev !context) 
+    end
+    (*Fin pruning des axiomes du context*)
+
+
+
+let managesGoal ax (hyps,concl) decl =
+  let (loc,expl,id,_) = ax in 
+    (** retrieves the list of predicates in the conclusion **)
+  let concl_preds = get_preds_of concl true in 
+  let relevant_preds = get_predecessor_pred concl_preds !pb  in 
+    
+  (** retrieves the list of variables in the conclusion **)
+  let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in 
+  let reachable_vars = VarStringSet.diff 
+    (get_reachable_vars vars_of_concl !vb)
+    avoided_vars in 	
+  let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in (* Traitement fait 2 fois pour l'optimisation *)
+    
+    
+  let l' = filter_acc_variables hyps relevant_vars  var_filter_tactic (*All  AllInABranch*)  relevant_preds in 
+    
+    
+    if debug then 
+      begin
+	display_str "Relevant vars " relevant_vars ;
+	display_str "Reachable vars " reachable_vars ;
+	
+	if VarStringSet.subset relevant_vars reachable_vars then Format.printf "Relevant <: Reachable\n" else  Format.printf "Relevant /<: Reachable\n";
+	if VarStringSet.subset reachable_vars relevant_vars then Format.printf "Reachable <: Relevant\n" else  Format.printf "Reachable /<: Relevant\n";
+	
+	Format.printf "Concl preds ";
+	display_symb_of_pdl_set concl_preds;
+	Format.printf "Relevant preds ";
+	display_symb_of_pdl_set relevant_preds;
+	let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
+	  DotVG.output_graph oc !vg 
+      end;
+
+    managesContext relevant_preds decl ; 
+
+    (loc,expl,id, (l',concl)) 
 
 
 
@@ -1936,7 +2037,7 @@ let reduce q decl=
   (** manages goal **)
   let q' =   match q with
       (loc, expl, id, s)  as ax ->
-        let (l,g) = s in (* l : liste d'hypothèses (contexte) et g : le but*)
+        let (l,g) = s in (* l : liste d'hypothèses (contexte local) et g : le but*)
 	let (l',g') = Util.intros [] g my_fresh_hyp (var_filter_tactic==SplitHyps)  in 
         let l' = if (var_filter_tactic==CNFHyps) then hyps_to_cnf l' else l' in
 	let l' = List.append l l' in 
@@ -1945,8 +2046,10 @@ let reduce q decl=
 	(** memorize hypotheses as a graph of variables**)  
 	build_var_graph (l',g');
 	
+
 	(** focus on goal **)
-	managesGoal ax (l',g') 
+	managesGoal ax (l',g') decl
 
   in
   q' 
+

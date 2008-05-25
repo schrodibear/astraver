@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.115 2008-05-21 14:46:19 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.116 2008-05-25 12:11:28 stoulsn Exp $ i*)
 
 open Format
 
@@ -76,6 +76,7 @@ let pruning_hyp_equalities_linked_ = ref false
 let pruning_hyp_arithmetic_tactic_ = ref false
 let pruning_hyp_var_tactic_ = ref 0
 let pruning_hyp_polarized_preds_ = ref false
+let prune_context_ = ref false
 (* FIN de Heuristiques en test *)
 let modulo_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
@@ -222,6 +223,7 @@ Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-arith-tactic        statically link arithmetic operators (=, < & <=)
   --prune-vars-filter T       T in {All, One-var, One-branch, Split-hyps, CNF}        
   --prune-polarized-preds     Consider polarity on predicates 
+  --prune-context             Filter axioms with Pred depth
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -485,7 +487,11 @@ let files =
     | ("--prune-polarized-preds" | "-prune-polarized-preds"):: args ->
 	pruning_hyp_polarized_preds_ := true ; parse args
 
+    | ("--prune-context" | "-prune-context") :: args ->
+	prune_context_ := true ; parse args
+
 (* FIN de Heuristiques en test *)
+
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
     | ("-exp" | "--exp") :: s :: args ->
@@ -570,6 +576,7 @@ let pruning_hyp_equalities_linked = !pruning_hyp_equalities_linked_
 let pruning_hyp_arithmetic_tactic = !pruning_hyp_arithmetic_tactic_
 let pruning_hyp_var_tactic = !pruning_hyp_var_tactic_
 let pruning_hyp_polarized_preds = !pruning_hyp_polarized_preds_
+let prune_context = !prune_context_
 (* FIN de Heuristiques en test *)
 let modulo = !modulo_
 let defExpanding = !defExpanding_
