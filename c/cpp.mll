@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cpp.mll,v 1.19 2008-05-21 13:42:26 stoulsn Exp $ i*)
+(*i $Id: cpp.mll,v 1.20 2008-05-25 11:53:34 stoulsn Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -55,6 +55,8 @@ rule before = parse
 (*  | "*/" { print end_of_comment_string; before lexbuf } *)
   | "//@" { print start_of_comment_string_one_line; before lexbuf }
   | "# 1 \"<" [^'\n''>']* ">\"\n#define" [^'\n']* '\n' { before lexbuf } 
+  | "#define __" [^'\n']* '\n' { before lexbuf } 
+
   | _    { print (lexeme lexbuf); before lexbuf }
   | eof  { () }
 
