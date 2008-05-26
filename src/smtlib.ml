@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.49 2008-04-21 13:32:10 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.50 2008-05-26 14:52:05 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -130,9 +130,14 @@ let rec print_term fmt = function
       fprintf fmt "tt" 
   | Tconst (ConstFloat (i,f,e)) ->
       let f = if f = "" then "0" else f in
-      fprintf fmt "%s.%s" i f ;
-      if not (e = "") then
-	failwith "exposant notation not yet suported "
+      let e = (if e = "" then 0 else int_of_string e) - String.length f in
+      if e = 0 then
+	fprintf fmt "(real_of_int %s%s)" i f
+      else if e > 0 then
+	fprintf fmt "(real_of_int %s%s%s)" i f (String.make e '0')
+      else
+	fprintf fmt "(div_real (real_of_int %s%s) (real_of_int 1%s))" 
+	  i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 

@@ -50,7 +50,6 @@ x=(a<b);
 return x;
 }
 
-
 //@ ensures \result < a
 double f2(double a) { return (a - 1.2e-3); }
  

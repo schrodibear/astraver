@@ -406,13 +406,13 @@ and unifier_type_why tw1 tw2 =
 	()
     (* int types *)
     | Info.Int, Info.Int -> ()
-    | Info.Real, Info.Real -> ()
     | Why_Logic s, Info.Int 
     | Info.Int, Why_Logic s when is_int_type s -> ()
-    | Why_Logic s, Info.Real 
-    | Info.Real, Why_Logic s when is_real_type s -> ()
     | Why_Logic s1, Why_Logic s2 when is_int_type s1 && is_int_type s2 -> ()
     (* float types *)
+    | Info.Real, Info.Real -> ()
+    | Why_Logic s, Info.Real 
+    | Info.Real, Why_Logic s when is_real_type s -> ()
     | Why_Logic "double", Why_Logic "real"
     | Why_Logic "single", Why_Logic "real" 
     | Why_Logic "real", Why_Logic "single"

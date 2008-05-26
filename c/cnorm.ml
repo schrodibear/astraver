@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.111 2008-05-23 15:24:16 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.112 2008-05-26 14:52:05 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -141,7 +141,8 @@ let why_type_for_float_kind fk =
     "real"
 
 let why_type_for_float t = match t.Ctypes.ctype_node with
-  | Tfloat fk -> why_type_for_float_kind fk
+  | Tfloat fk -> 
+      Why_Logic (why_type_for_float_kind fk)
   | _ -> assert false
 
 let why_type_for_int_kind = function
@@ -215,7 +216,7 @@ let rec type_why e =
     | NEbinary (_, op, _) -> why_type_op op
     | NEunary ((Ufloat_conversion | Ufloat_of_int), _) 
     | NEcast ({Ctypes.ctype_node = Tfloat _}, _) -> 
-	Why_Logic (why_type_for_float e.nexpr_type)
+	why_type_for_float e.nexpr_type
 (*
     | NEcast (ty,e') -> 
 	unsupported e.nexpr_loc "separation analysis do no support casts"
@@ -247,8 +248,7 @@ let rec type_why_for_term t =
     | NTconstant (RealConstant _)
     | NTunop ((Clogic.Usqrt_real | Clogic.Uabs_real 
 	      |Clogic.Uround_error | Clogic.Utotal_error
-	      |Clogic.Uexact | Clogic.Umodel), _) ->
-	Info.Why_Logic "real"
+	      |Clogic.Uexact | Clogic.Umodel), _) -> Info.Real
     | NTvar v -> v.var_why_type
     | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
 	rename_zone assoc f.logic_why_type
@@ -257,7 +257,7 @@ let rec type_why_for_term t =
 	type_why_for_term t
     | NTunop (Clogic.Ustar,_) | NTunop (Clogic.Uamp,_) -> assert false
     | NTunop ((Clogic.Ufloat_of_int | Clogic.Ufloat_conversion),_) -> 
-	Info.Why_Logic (why_type_for_float t.nterm_type)
+	why_type_for_float t.nterm_type
     | NTunop ((Clogic.Uint_of_float | Clogic.Uint_conversion),_) -> 
 	why_type_for_int t.nterm_type
     | NTbinop (t1,Clogic.Bsub,t2) -> 
