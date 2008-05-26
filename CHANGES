@@ -1,4 +1,7 @@
 
+  o fixed parsing of float constants with exponents
+  o fixed bug with floats and separation
+
 version 2.12, May 23rd, 2008
 ============================
   o fixed typing bug with polymorphic logic constants/functions used

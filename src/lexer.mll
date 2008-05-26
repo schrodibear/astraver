@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.13 2008-02-05 12:10:49 marche Exp $ *)
+(* $Id: lexer.mll,v 1.14 2008-05-26 13:39:53 marche Exp $ *)
 
 {
   open Lexing
@@ -120,6 +120,7 @@ let letter = alpha | '_'
 let digit = ['0'-'9']
 let ident = letter (letter | digit | '\'')*
 let float = digit+ '.' digit* | digit* '.' digit+
+let floatexp = float ['e' 'E'] ['-' '+']? digit+ 
 
 rule token = parse
   | "#" space* ("\"" ([^ '\010' '\013' '"' ]* as file) "\"")?
@@ -134,6 +135,8 @@ rule token = parse
   | digit+ as s
       { INTEGER s }
   | float as s
+      { FLOAT s }
+  | floatexp as s
       { FLOAT s }
   | "(*"
       { comment lexbuf; token lexbuf }

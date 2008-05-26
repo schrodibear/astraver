@@ -50,9 +50,7 @@ x=(a<b);
 return x;
 }
 
-typedef int toto;
-/* ... */
-typedef int toto;
 
+//@ ensures \result < a
 double f2(double a) { return (a - 1.2e-3); }
  
