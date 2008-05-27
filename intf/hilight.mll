@@ -61,6 +61,23 @@
 
   let comment = Buffer.create 1024
 
+
+  (* Try to convert a source file either as UTF-8 or as locale. 
+   * (borrowed from Frama-C sources src/gui/source_manager.ml) 
+   *)
+  let try_convert s =
+    try
+      if Glib.Utf8.validate s then s else
+	Glib.Convert.locale_to_utf8 s
+    with Glib.Convert.Error _ -> 
+      try 
+	Glib.Convert.convert_with_fallback 
+          ~fallback:"#neither UTF-8 nor locale nor ISO-8859-15#"
+          ~to_codeset:"UTF-8"
+          ~from_codeset:"ISO_8859-15"
+          s
+      with Glib.Convert.Error _ as e -> Printexc.to_string e
+
 }
 
 let alpha = ['a'-'z' 'A'-'Z']
@@ -93,7 +110,7 @@ rule token tbuf = parse
 and comment1 tbuf = parse
   | "*/" { Buffer.add_string comment "*/";
 	   let s = Buffer.contents comment in
-	   insert_text tbuf "comment" s; 
+	   insert_text tbuf "comment" (try_convert s);
 	   Buffer.clear comment }
   | '\r' 
          { comment1 tbuf lexbuf }
@@ -105,7 +122,7 @@ and comment2 tbuf = parse
   | "@*/" | "*/" as s 
 	{ Buffer.add_string comment s;
 	  let t = Buffer.contents comment in
-	  insert_text tbuf "predicate" t; 
+	  insert_text tbuf "predicate" (try_convert t); 
 	  Buffer.clear comment }
   | '\r' 
         { comment2 tbuf lexbuf }
@@ -116,7 +133,7 @@ and comment2 tbuf = parse
 and comment3 tbuf = parse 
   | "\n" { Buffer.add_string comment "\n";
 	   let t = Buffer.contents comment in
-	   insert_text tbuf "predicate" t; 
+	   insert_text tbuf "predicate" (try_convert t); 
 	   Buffer.clear comment }
   | '\r' 
          { comment3 tbuf lexbuf }
@@ -127,7 +144,7 @@ and comment3 tbuf = parse
 and comment4 tbuf = parse 
   | "\n" { Buffer.add_string comment "\n";
 	   let t = Buffer.contents comment in
-	   insert_text tbuf "comment" t; 
+	   insert_text tbuf "comment" (try_convert t); 
 	   Buffer.clear comment }
   | '\r' 
          { comment4 tbuf lexbuf }

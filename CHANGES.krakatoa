@@ -2,6 +2,11 @@
 
 Note: These are the changes for Krakatoa.
 
+version 1.13, May ?, 2008
+============================
+
+o if possible, avoid failure in constant expression evaluation
+
 version 1.12, May 23rd, 2008
 ============================
 o assigns clause now correctly typed in the post-state

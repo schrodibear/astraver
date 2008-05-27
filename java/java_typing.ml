@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.124 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.125 2008-05-27 14:12:19 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1966,12 +1966,12 @@ let rec eval_const_expression const e =
 	begin
 	  match c with
 	    | Integer s -> Numconst.integer s
-	    | Float _ -> assert false (* TODO *)
+	    | Float _ -> raise Not_found (* TODO *)
 	    | Bool false -> Num.Int 0
 	    | Bool true -> Num.Int 1
-	    | String _ -> assert false (* TODO *)
-	    | Char _ -> assert false (* TODO *) 
-	    | Null -> assert false (* TODO *)
+	    | String _ -> raise Not_found (* TODO *)
+	    | Char _ -> raise Not_found (* TODO *) 
+	    | Null -> raise Not_found (* TODO *)
 	end
     | JEcast (ty, e) ->
 	let n = eval_const_expression const e in
@@ -2028,7 +2028,8 @@ let rec eval_const_expression const e =
 		else
 		  typing_error e2.java_expr_loc "this expression is not in the rang 0-%d" max
 	    | Bge|Ble|Blt|Bgt|Bne|Beq
-	    |Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> assert false (* TODO *)
+	    |Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> 
+	       raise Not_found (* TODO *)
 
 	end
     | JEstatic_field_access (ty, fi) ->
