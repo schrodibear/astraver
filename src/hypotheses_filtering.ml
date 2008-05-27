@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.45 2008-05-25 12:11:28 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.46 2008-05-27 14:02:59 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -387,6 +387,10 @@ module SS_set = Set.Make(struct type t=VarStringSet.t let compare= compare end)
 let bound_variable id = 
   v_count := !v_count+1 ;
   Ident.create ((Ident.string id)^"_"^ (string_of_int !v_count))
+
+let my_fresh_hyp_str ()=
+  hyp_count := !hyp_count+1 ;
+  (string_of_int !hyp_count)
 
 let my_fresh_hyp ()=
   hyp_count := !hyp_count+1 ;
@@ -1922,32 +1926,46 @@ let managesContext relevantPreds decl =
 		end
 		  
 	  | (p_cnf,Daxiom (loc, ident, ps)) :: l-> 
-	      let preds_of_p_cnf  = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in 
-		begin
-		  if debug then
-		    begin
-		      Format.printf "Ctx (Daxiom %s): \n"  ident;
-		      Format.printf "%a \n" print_decl (Daxiom (loc, ident, ps));
-		      Format.printf "Ctx Preds : \n";
-		      display_symb_of_pdl_set preds_of_p_cnf;
-		      Format.printf "Relevent Preds : \n";
-		      display_symb_of_pdl_set relevantPreds;
-		    end;
-		  if abstr_subset_of_pdl preds_of_p_cnf relevantPreds then 
-		    begin
-		      if debug then
-			Format.printf "Ctx Keeped\n\n";
-		      Queue.push (Daxiom (loc, ident, ps)) decl;
-		      filter l
-		    end
-		  else 
-		    begin
-		      if debug then 
-			Format.printf "Ctx Dropped\n\n";
-		      filter l
-		    end
-		end
-		  
+	      (* Spliter le prédicat de définition en Clauses devenant autant d'axiomes *)
+	      let p_list=(split_one [] 1 p_cnf) in
+	      let ax_list=List.map (fun p -> 
+		let i=my_fresh_hyp_str () in
+		  (p,Daxiom (loc, ident^"_part_"^i, generalize_predicate p),Daxiom (loc, ident, ps))
+	      ) p_list in
+		
+	      (* Pour chaque "sous-axiome" introduit : regarder si on le garde ou pas *)
+	      let filter_one_axiom (p,ax,ax_original) =
+		let preds_of_p  = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in 
+		  begin
+		    if debug then
+		      begin
+			Format.printf "Ctx (Daxiom %s): \n"  ident;
+			Format.printf "%a \n" print_decl ax;
+			Format.printf "Ctx Preds : \n";
+			display_symb_of_pdl_set preds_of_p;
+			Format.printf "Relevent Preds : \n";
+			display_symb_of_pdl_set relevantPreds;
+		      end;
+		    if abstr_subset_of_pdl preds_of_p relevantPreds then 
+		      begin
+			if debug then
+			  Format.printf "Ctx Keeped\n\n";
+			if List.length ax_list = 1 then
+			  Queue.push ax decl
+			else
+			  Queue.push ax_original decl
+		      end
+		    else 
+		      begin
+			if debug then 
+			  Format.printf "Ctx Dropped\n\n";
+			(* Queue.push ax decl *)
+		      end
+		  end
+	      in
+		List.iter filter_one_axiom ax_list ;
+		filter l
+		
 		  
 	  | (p_cnf,c) :: l -> 
 	      if debug then 
