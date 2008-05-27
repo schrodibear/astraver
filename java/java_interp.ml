@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.134 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.135 2008-05-27 15:29:14 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -185,6 +185,7 @@ let get_interface ii =
   }
 *)
 
+(*
 let rec interface_root = {
   jc_struct_info_name = "interface";
   jc_struct_info_parent = None;
@@ -192,12 +193,13 @@ let rec interface_root = {
   jc_struct_info_fields = [];
   jc_struct_info_variant = Some object_variant;
 }
+*)
 
 let st_interface = 
   {
-    jc_struct_info_name = "interface";
+    jc_struct_info_name = "Object/*interface*/";
     jc_struct_info_parent = None;
-    jc_struct_info_root = interface_root;
+    jc_struct_info_root = object_root ; (* a la place de interface_root; *)
     jc_struct_info_fields = [];
     jc_struct_info_variant = Some object_variant;
   }

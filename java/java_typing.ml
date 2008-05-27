@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.126 2008-05-27 14:28:52 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.127 2008-05-27 15:29:14 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -2404,7 +2404,9 @@ let lookup_method ti (loc,id) arg_types =
   let meths = 
     match ti with
       | TypeClass ci -> collect_methods_from_class [] ci 
-      | TypeInterface ii -> collect_methods_from_interface [] ii 
+      | TypeInterface ii -> 
+	  let acc = collect_methods_from_interface [] ii in
+	  collect_methods_from_class acc !object_class
   in
   match meths with
     | [] -> 
