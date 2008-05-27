@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.125 2008-05-27 14:12:19 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.126 2008-05-27 14:28:52 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -2045,14 +2045,14 @@ let rec eval_const_expression const e =
 	    else
 	      raise Not_found
 	end
-    | JEif (_, _, _)-> assert false  (* TODO *)
+    | JEif (_, _, _)-> raise Not_found  (* TODO *)
     | JEun (op, e) -> 
 	let _n = eval_const_expression const e in
 	begin
 	  match op with
-	    | Uplus -> assert false  (* TODO *)
+	    | Uplus -> raise Not_found (* TODO *)
 	    | Uminus -> Num.minus_num _n
-	    | Unot -> assert false  (* TODO *)
+	    | Unot -> raise Not_found (* TODO *)
 	    | Ucompl -> raise Not_found (* TODO *)
 	end
     | JEinstanceof _
@@ -2394,7 +2394,8 @@ let lookup_method ti (loc,id) arg_types =
     in
     let acc =
       match ci.class_info_extends with
-	| None -> acc 
+	| None when ci == !object_class -> acc
+	| None -> collect_methods_from_class acc !object_class
 	| Some ci -> collect_methods_from_class acc ci
     in
     List.fold_left
@@ -2406,7 +2407,10 @@ let lookup_method ti (loc,id) arg_types =
       | TypeInterface ii -> collect_methods_from_interface [] ii 
   in
   match meths with
-    | [] -> raise Not_found
+    | [] -> 
+	typing_error loc "Cannot find method @['%a.%s(%a)'@]" print_type_name ti id
+	  (Pp.print_list Pp.comma print_type) arg_types
+
     | [mi] -> mi
     | _ -> 
 (*
@@ -2449,7 +2453,7 @@ let lookup_constructor ci arg_types =
   let constructors = collect_constructors_from_class [] ci in
     match constructors with
       | [ci] -> ci
-      | _ -> assert false
+      | _ -> assert false (* TODO *)
 	  
 let rec expr ~ghost env e =
   let exprt = expr ~ghost env in
@@ -2618,13 +2622,7 @@ let rec expr ~ghost env e =
 (*
 	  eprintf "looking up method '%s' in class %a @." (snd id) print_type_name ti;
 *)
-	  let mi = 
-	    try lookup_method ti id arg_types 
-	    with Not_found ->
-	      typing_error e.java_pexpr_loc "Cannot find method @['%a.%s(%a)'@]" print_type_name ti (snd id)
-		(Pp.print_list Pp.comma print_type) arg_types
-
-	  in
+	  let mi = lookup_method ti id arg_types in
 	  let ty = 
 	    match mi.method_info_result with
 	      | None -> unit_type
