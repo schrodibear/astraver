@@ -1,4 +1,5 @@
 
+  o fixed coq entry in jessie-generated makefile
   o why typing safely fails when duplicate parameter names in 
     logic definitions
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.22 2008-05-20 15:57:42 filliatr Exp $ i*)
+(*i $Id: jc_make.ml,v 1.23 2008-05-28 14:26:22 marche Exp $ i*)
 
 open Format
 open Pp
@@ -80,6 +80,9 @@ let generic f targets =
        fprintf fmt "\t@@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
 
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
+
+       fprintf fmt "coq/%s_why.v: why/%s.why@\n" f f;
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/%s.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" why/%s.why@\n@\n" f f;
 
 (*
        fprintf fmt "coq/%s_spec_why.v: coq/%s_ctx_why.v@\n" f f;
