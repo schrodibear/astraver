@@ -27,6 +27,8 @@
 /*                                                                        */
 /**************************************************************************/
 
+/*@ axiom A : \forall double t[]; \forall int i; \valid(t+i) => t[i]>0.0 => t[i]>=0.0 */
+
 typedef struct U { int t2[5]; int t2bis[5]; int *p2; } las2;
 typedef struct V { int t1[5]; int t1bis[5]; int *p1; las2 * pp; } las;
 las u,v,w;
@@ -61,3 +63,4 @@ void f3(double x)
 x = x * 2.0;
 /* ... */
 }
+

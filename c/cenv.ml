@@ -237,7 +237,6 @@ let get_fresh_name n = unique_name n
 
 let types = Hashtbl.create 17
 let add_type x = Hashtbl.add types x ()
-(*let () = add_type "real"*)
 let mem_type = Hashtbl.mem types
 let find_type = Hashtbl.find types
 let iter_types f = Hashtbl.iter (fun s _ -> f s) types

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.167 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.168 2008-05-28 14:53:34 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -128,17 +128,6 @@ let union = ZoneSet.union
 
 (* static variables *)
 
-(**
-let memorycell_name (ty : Info.why_type) =
-  match ty with
-    | Pointer z -> "pointer"
-    | Addr z -> assert false
-    | Info.Int -> "int" 
-    | Info.Float ->  "real"
-    | Unit -> assert false
-    | Why_Logic s ->  s
-    | Memory(t,z) -> assert false
-**)
 
 let add_var v (ty : Info.why_type) s =
   let info = declare_heap_var v v.var_unique_name in

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.113 2008-05-28 13:31:05 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.114 2008-05-28 14:53:34 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -86,7 +86,14 @@ let declare_arrow_var info =
   try  
     let info' = Hashtbl.find arrow_vars info.var_name in
     if not (same_why_type_no_zone info.var_why_type info'.var_why_type) then
-      assert false;
+      begin
+	let t1 = output_why_type info.var_why_type
+	and t2 = output_why_type info'.var_why_type
+	in
+	Format.eprintf "anomaly: unify why types `%a' and `%a'@."
+	  Output.fprintf_logic_type t1 Output.fprintf_logic_type t2;
+      assert false
+      end;
     info'
   with Not_found ->
     Hashtbl.add arrow_vars info.var_name info;

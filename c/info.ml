@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.ml,v 1.47 2008-05-23 15:24:16 marche Exp $ i*)
+(*i $Id: info.ml,v 1.48 2008-05-28 14:53:34 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -73,9 +73,11 @@ let rec same_why_type wt1 wt2 =
     | Memory(a1,z1), Memory(a2,z2) ->
 	same_zone z1 z2 && same_why_type a1 a2
     | Int, Int -> true
-(*    | Unit, Unit -> true *)
+    | Unit, Unit -> true 
+    | Real, Real -> true
     | Why_Logic s1, Why_Logic s2 -> s1=s2
-    | _, _ -> false
+    | Addr _, _ | _,Addr _ -> assert false
+    | _ -> false
 
 let rec same_why_type_no_zone wt1 wt2 =
   match wt1, wt2 with
@@ -83,9 +85,11 @@ let rec same_why_type_no_zone wt1 wt2 =
     | Memory (a1,_), Memory (a2,_) ->
 	same_why_type_no_zone a1 a2
     | Int, Int -> true
-(*     | Unit,Unit -> true *)
+    | Unit, Unit -> true 
+    | Real, Real -> true
     | Why_Logic s1, Why_Logic s2 -> s1=s2
-    | _, _ -> false
+    | Addr _, _ | _,Addr _ -> assert false
+    | _ -> false
 
 
 let found_repr ?(quote_var=true) z = 
