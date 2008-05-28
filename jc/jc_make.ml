@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.23 2008-05-28 14:26:22 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.24 2008-05-28 14:34:13 marche Exp $ i*)
 
 open Format
 open Pp
@@ -82,15 +82,8 @@ let generic f targets =
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
 
        fprintf fmt "coq/%s_why.v: why/%s.why@\n" f f;
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/%s.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" why/%s.why@\n@\n" f f;
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/%s.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" $(JESSIELIBFILE) why/%s.why@\n@\n" f f;
 
-(*
-       fprintf fmt "coq/%s_spec_why.v: coq/%s_ctx_why.v@\n" f f;
-       fprintf fmt "\tcp coq/%s_ctx_why.v coq/%s_spec_why.v@\n@\n" f f;
-
-       fprintf fmt "coq/%s_spec.why: coq/%s_ctx.why@\n" f f;
-       fprintf fmt "\tcp coq/%s_ctx.why coq/%s_spec.why@\n@\n" f f;
-*)
 
        fprintf fmt "coq-goals: goals coq/%s_ctx_why.vo@\n" f;
        fprintf fmt "\tfor f in why/%s_po*.why; do make -f %s.makefile coq/`basename $$f .why`_why.v ; done@\n@\n" f f;
