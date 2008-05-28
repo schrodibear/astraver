@@ -366,9 +366,9 @@ list1_logic_binder_sep_comma:
 
 logic_binder:
 | ident COLON primitive_type       
-    { ($1, $3) }
+    { (loc_i 1, $1, $3) }
 | ident COLON primitive_type ARRAY 
-    { ($1, PPTexternal ([$3], Ident.farray, loc_i 3)) }
+    { (loc_i 1, $1, PPTexternal ([$3], Ident.farray, loc_i 3)) }
 ;
 
 external_:

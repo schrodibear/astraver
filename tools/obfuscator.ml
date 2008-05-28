@@ -409,7 +409,7 @@ let type_parameters fmt = function
   | [id] -> fprintf fmt "%a "type_var id
   | l -> fprintf fmt "(%a) " (print_list comma type_var) l
 
-let logic_binder m fmt (id, pt) =
+let logic_binder m fmt (_, id, pt) =
   fprintf fmt "%a: %a" (ident m) id ppure_type pt
 
 let logic_type fmt = function
@@ -442,12 +442,12 @@ let decl fmt = function
       fprintf fmt "goal %a : %a" gident id (lexpr M.empty) p
   | Predicate_def (_, id, bl, p) ->
       rename_global id;
-      let m = List.fold_left rename M.empty (List.map fst bl) in
+      let m = List.fold_left rename M.empty (List.map (fun (_,x,_) -> x) bl) in
       fprintf fmt "@[<hov 2>predicate %a(%a) =@ %a@]" gident id 
 	(print_list comma (logic_binder m)) bl (lexpr m) p
   | Function_def (_, id, bl, pt, e) ->
       rename_global id;
-      let m = List.fold_left rename M.empty (List.map fst bl) in
+      let m = List.fold_left rename M.empty (List.map (fun (_,x,_) -> x) bl) in
       fprintf fmt "@[<hov 2>function %a(%a) : %a =@ %a@]" gident id
 	(print_list comma (logic_binder m)) bl ppure_type pt (lexpr m) e
   | TypeDecl (_, e, pl, id) ->

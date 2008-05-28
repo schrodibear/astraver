@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: report.ml,v 1.22 2008-02-22 11:20:26 stoulsn Exp $ i*)
+(*i $Id: report.ml,v 1.23 2008-05-28 13:51:26 marche Exp $ i*)
 
 open Ident
 open Logic
@@ -58,6 +58,8 @@ let report fmt = function
       fprintf fmt "Unbound type '%a'" Ident.print id
   | Clash id ->
       fprintf fmt "Clash with previous constant %s" (Ident.string id)
+  | ClashParam id ->
+      fprintf fmt "Clash with previous parameter %s" (Ident.string id)
   | ClashExn id ->
       fprintf fmt "Clash with previous exception %s" (Ident.string id)
   | ClashRef id ->

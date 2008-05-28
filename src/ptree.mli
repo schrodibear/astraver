@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ptree.mli,v 1.38 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: ptree.mli,v 1.39 2008-05-28 13:51:26 marche Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -150,9 +150,9 @@ type decl =
   | Parameter of loc * external_ * Ident.t list * ptype_v
   | Exception of loc * Ident.t * ppure_type option
   | Logic of loc * external_ * Ident.t list * plogic_type
-  | Predicate_def of loc * Ident.t * (Ident.t * ppure_type) list * lexpr
+  | Predicate_def of loc * Ident.t * (loc * Ident.t * ppure_type) list * lexpr
   | Function_def 
-      of loc * Ident.t * (Ident.t * ppure_type) list * ppure_type * lexpr
+      of loc * Ident.t * (loc * Ident.t * ppure_type) list * ppure_type * lexpr
   | Axiom of loc * Ident.t * lexpr
   | Goal of loc * Ident.t * lexpr
   | TypeDecl of loc * external_ * Ident.t list * Ident.t

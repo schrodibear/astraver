@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.151 2008-05-25 12:11:28 stoulsn Exp $ i*)
+(*i $Id: main.ml,v 1.152 2008-05-28 13:51:26 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -324,6 +324,17 @@ let logic_type_is_var = function
   | Function ([], pt) -> is_a_type_var pt
   | Function _ | Predicate _ -> false
 
+let check_duplicate_params l =
+  let rec loop l acc =
+    match l with
+      | [] -> ()
+      | (loc,x,_)::rem ->
+	  if Ident.Idset.mem x acc then
+	    raise_located loc (ClashParam x)
+	  else loop rem (Ident.Idset.add x acc)
+  in
+  loop l Ident.Idset.empty
+
 let interp_decl ?(prelude=false) d = 
   let lab = Label.empty in
   match d with 
@@ -376,7 +387,8 @@ let interp_decl ?(prelude=false) d =
     | Predicate_def (loc, id, pl, p) ->
 	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);
-	let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
+	check_duplicate_params pl;
+	let pl = List.map (fun (_,x,t) -> (x, Ltyping.pure_type env t)) pl in
 	let t = Predicate (List.map snd pl) in
 	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
 	let p = Ltyping.predicate lab env' p in
@@ -386,7 +398,8 @@ let interp_decl ?(prelude=false) d =
     | Function_def (loc, id, pl, ty, e) ->
 	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);
-	let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
+	check_duplicate_params pl;
+	let pl = List.map (fun (_,x,t) -> (x, Ltyping.pure_type env t)) pl in
 	let ty = Ltyping.pure_type env ty in
 	let t = Function (List.map snd pl, ty) in
 	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: error.mli,v 1.31 2008-02-22 11:20:26 stoulsn Exp $ i*)
+(*i $Id: error.mli,v 1.32 2008-05-28 13:51:26 marche Exp $ i*)
 
 (*s Errors. *)
 
@@ -42,6 +42,7 @@ type t =
   | UnboundException of Ident.t
   | UnboundType of Ident.t
   | Clash of Ident.t
+  | ClashParam of Ident.t
   | ClashExn of Ident.t
   | ClashRef of Ident.t
   | ClashType of Ident.t
