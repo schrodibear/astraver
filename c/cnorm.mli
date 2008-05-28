@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.mli,v 1.21 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cnorm.mli,v 1.22 2008-05-28 13:31:05 marche Exp $ i*)
 
 open Cast
 
@@ -54,7 +54,7 @@ val type_why_for_term : nterm -> Info.why_type
 
 val type_why : nexpr -> Info.why_type
 
-val why_type_for_float_kind : Ctypes.cfloat -> string
+val why_type_for_float_kind : Ctypes.cfloat -> Info.why_type
 
 val make_nstrlen_node_from_nterm : nterm -> nctype Clogic.nterm_node
 

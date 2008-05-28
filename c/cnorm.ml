@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.112 2008-05-26 14:52:05 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.113 2008-05-28 13:31:05 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -133,16 +133,15 @@ let type_why_table = Hashtbl.create 97
 
 let why_type_for_float_kind fk =
   if Coptions.floats then match fk with
-    | Float -> "single"
-    | Double -> "double"
-    | LongDouble -> "quad"
-    | Real -> "real"
+    | Float ->  Why_Logic "single"
+    | Double ->  Why_Logic "double"
+    | LongDouble ->  Why_Logic "quad"
+    | Real -> Info.Real
   else
-    "real"
+    Info.Real
 
 let why_type_for_float t = match t.Ctypes.ctype_node with
-  | Tfloat fk -> 
-      Why_Logic (why_type_for_float_kind fk)
+  | Tfloat fk -> why_type_for_float_kind fk
   | _ -> assert false
 
 let why_type_for_int_kind = function
@@ -204,7 +203,7 @@ let rec type_why e =
 	why_type_for_int_kind ik
     | NEconstant (RealConstant x) -> 
 	let _,fk = Ctyping.float_constant_type x in 
-	Why_Logic (why_type_for_float_kind fk)
+	why_type_for_float_kind fk
     | NEstring_literal s ->  Pointer (make_zone false)
     | NEseq (e1,e2) -> 
 	type_why e2 
@@ -810,15 +809,11 @@ let loop_annot a =
 let logic_symbol l =
   match l with
     | Predicate_reads(param_list,loc_list) ->
-	NPredicate_reads(List.map (fun (v,t) -> (v,t)) param_list,
-			List.map nlocation loc_list)
+	NPredicate_reads(param_list, List.map nlocation loc_list)
     | Predicate_def  (param_list , p ) ->
-	NPredicate_def(List.map (fun (v,t) -> (v,t)) param_list,
-		      predicate p)
-    | Function (l1 , c , l2) -> NFunction (
-	List.map (fun (var,c) -> (var,c)) l1,
-	c,
-	List.map nlocation l2)
+	NPredicate_def(param_list, predicate p)
+    | Function (l1 , c , l2) -> 
+	NFunction (l1,c,List.map nlocation l2)
     | Function_def (param_list, t, e) ->
 	NFunction_def (param_list, t, term e)
 

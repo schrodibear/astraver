@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.258 2008-05-23 15:24:16 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.259 2008-05-28 13:31:05 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -2413,6 +2413,8 @@ let cinterp_logic_symbol id ls =
 	Predicate(false,id.logic_name, args,a)
     | NFunction(args,ret,_) ->
 	let ret_type =
+	  Info.output_why_type (Cenv.type_type_why ret false) 
+(*
 	  match ret.Ctypes.ctype_node with
 	    | Tvar s -> s
 	    | Tint _ -> "int"
@@ -2426,6 +2428,7 @@ let cinterp_logic_symbol id ls =
 		    | _ -> assert false
 		end
 	    | _ -> assert false
+*)
 	in
 	let args =
 	  List.fold_right
@@ -2446,10 +2449,12 @@ let cinterp_logic_symbol id ls =
             (fun (z,_,ty) t ->
                ("",Info.output_why_type (Info.Memory(ty,z)))::t)
             id.logic_heap_zone args in
-	Logic(false,id.logic_name,args,simple_logic_type ret_type)
+	Logic(false,id.logic_name,args,(*simple_logic_type*) ret_type)
     | NFunction_def(args,ret,e) ->
 	let e = interp_term None "" e in
 	let ret_type = 
+	  Info.output_why_type (Cenv.type_type_why ret false) 
+(*
 	  match ret.Ctypes.ctype_node with
 	    | Tvar s -> s
 	    | Tint _ -> "int"
@@ -2463,9 +2468,9 @@ let cinterp_logic_symbol id ls =
 		    | _ -> assert false
 		end
 	    | _ -> assert false
-	in
+*)	in
 	let args = interp_predicate_args id args in
-	Output.Function(false,id.logic_name,args,simple_logic_type ret_type,e)
+	Output.Function(false,id.logic_name,args,(* simple_logic_type *) ret_type,e)
 	  
 let interp_axiom p =
   let a = interp_predicate None "" p

@@ -398,12 +398,9 @@ let rec rehash z1 z2 =
     
 and unifier_type_why tw1 tw2 =
   match tw1,tw2 with
-    | Pointer z1 , Pointer z2 ->
-	unifier_zone z1 z2     
-    | Addr z1 , Addr z2 ->
-	unifier_zone z1 z2
-    | Why_Logic s1, Why_Logic s2 when s1 = s2 -> 
-	()
+    | Pointer z1 , Pointer z2 -> unifier_zone z1 z2     
+    | Addr z1 , Addr z2 -> unifier_zone z1 z2
+    | Why_Logic s1, Why_Logic s2 when s1 = s2 -> ()
     (* int types *)
     | Info.Int, Info.Int -> ()
     | Why_Logic s, Info.Int 
@@ -413,10 +410,7 @@ and unifier_type_why tw1 tw2 =
     | Info.Real, Info.Real -> ()
     | Why_Logic s, Info.Real 
     | Info.Real, Why_Logic s when is_real_type s -> ()
-    | Why_Logic "double", Why_Logic "real"
-    | Why_Logic "single", Why_Logic "real" 
-    | Why_Logic "real", Why_Logic "single"
-    | Why_Logic "real", Why_Logic "double" -> ()
+    | Why_Logic s1, Why_Logic s2 when is_real_type s1 && is_real_type s2 -> ()
     (* errors *)
     | Memory _, _ | _, Memory _ -> assert false
     | _ ->
@@ -425,7 +419,7 @@ and unifier_type_why tw1 tw2 =
 	in
 	Format.eprintf "anomaly: unify why types `%a' and `%a'@."
 	  Output.fprintf_logic_type t1 Output.fprintf_logic_type t2;
-	raise Not_found
+	assert false
 	  
 
 and unifier_zone z1 z2 =

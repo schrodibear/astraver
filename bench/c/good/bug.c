@@ -53,3 +53,11 @@ return x;
 //@ ensures \result < a
 double f2(double a) { return (a - 1.2e-3); }
  
+/*@ requires 0.0 < x <= 1.0
+*/
+void f3(double x)
+{
+/* ... */
+x = x * 2.0;
+/* ... */
+}
