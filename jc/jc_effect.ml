@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.103 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.104 2008-05-28 15:16:58 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -656,7 +656,7 @@ let logic_effects funs =
   List.iter
     (fun f ->
        Jc_options.lprintf
-	 "Effects for logic function %s:@\n@[ reads alloc_table: %a@]@\n@[ reads tag_table: %a@]@\n@[ reads memories: %a@]@." 
+	 "Effects for logic function %s:@\n@[ reads alloc_table: %a@]@\n@[ reads tag_table: %a@]@\n@[ reads memories: %a@]@\n@[ reads globals: %a@]@." 
 	 f.jc_logic_info_name
 	 (print_list comma (fun fmt (a,r) ->
 			      fprintf fmt "%s,%s" a r.jc_reg_name))
@@ -671,7 +671,9 @@ let logic_effects funs =
 				r.jc_reg_name
 				(print_list comma Jc_output_misc.label) (LogicLabelSet.elements labels)  
 			   ))
-	 (mapElements f.jc_logic_info_effects.jc_effect_memories))
+	 (mapElements f.jc_logic_info_effects.jc_effect_memories)
+	 (print_list comma (fun fmt v -> fprintf fmt "%s" v.jc_var_info_name))
+	 (VarSet.elements f.jc_logic_info_effects.jc_effect_globals))
     funs
     
 let function_effects funs =

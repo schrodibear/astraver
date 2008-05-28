@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.17 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.18 2008-05-28 15:16:58 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -87,12 +87,29 @@ let term rresult t =
 let assertion rresult a =
   iter_term_and_assertion (term rresult) 
     (fun a -> match a#node with
-      | JCAapp _ -> () (* TODO *)
-      | JCAtrue | JCAfalse | JCArelation _  | JCAtagequality _ 
-      | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
-      | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ | JCAmatch _
-      | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ ->
-	  ()
+       | JCAapp app -> 
+	   let li = app.jc_app_fun in
+	   let regions = li.jc_logic_info_param_regions in
+	   let assoc = RegionList.duplicate regions in
+	   app.jc_app_region_assoc <- assoc;
+	   let param_regions =
+	     List.map (fun vi -> 
+			 if is_dummy_region vi.jc_var_info_region then dummy_region else
+			   try RegionList.assoc vi.jc_var_info_region assoc
+			   with Not_found -> assert false)
+	       li.jc_logic_info_parameters
+	   in
+	   let arg_regions = 
+	     List.map (fun t -> t#region) app.jc_app_args
+	   in
+	   Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
+	   Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
+	   List.iter2 Region.unify param_regions arg_regions
+       | JCAtrue | JCAfalse | JCArelation _  | JCAtagequality _ 
+       | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
+       | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ | JCAmatch _
+       | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ ->
+	   ()
     ) a
 
 let expr rresult e = 

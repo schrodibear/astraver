@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.281 2008-05-23 16:00:32 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.282 2008-05-28 15:16:58 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -998,12 +998,12 @@ let read_mems ~caller_writes ~callee_reads ~callee_writes ~regions =
                else (Var(field_or_variant_region_memory_name(fi,locr)))::acc 
              else begin
                (* Check that we do not pass in argument a constant 
-                * memory that is also read/written directly by 
+                * memory that is also written directly by 
                 * the function called.
                 *)
-               assert(not(FieldOrVariantRegionMap.mem (fi,locr)
-                            callee_reads.jc_effect_memories
-                         ));
+(*                assert(not(FieldOrVariantRegionMap.mem (fi,locr) *)
+(*                             callee_reads.jc_effect_memories *)
+(*                          )); *)
                assert(not(FieldOrVariantRegionMap.mem (fi,locr)
                             callee_writes.jc_effect_memories
                          ));
@@ -1058,12 +1058,12 @@ let read_allocs ~caller_writes ~callee_writes ~callee_reads ~regions =
              else (Var(alloc_region_table_name2(a,locr)))::acc 
            else
              begin
-                        (* Check that we do not pass in argument a constant 
-                         * allocation table that is also read/written directly
-                         * by the function called.
-                         *)
-               let fallocs = StringRegionSet.union
-                 callee_reads.jc_effect_alloc_table
+               (* Check that we do not pass in argument a constant 
+                * allocation table that is also written directly
+                * by the function called.
+                *)
+               let fallocs = (* StringRegionSet.union *)
+(*                  callee_reads.jc_effect_alloc_table *)
                  callee_writes.jc_effect_alloc_table
                in
                assert(not(StringRegionSet.mem (a,locr) fallocs));

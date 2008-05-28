@@ -1401,16 +1401,16 @@ let code_function (fi, fs, sl) vil =
 	  (* apply arguments invariant policy *)
 	  let invariants =
 	    (* Calculate global invariants. *)
-	    let vitl = 
+	    let _vitl = 
 	      List.map 
 		(fun vi -> Term.mkvar ~var:vi ()) vil 
 	    in
 	    let global_invariants =
 	      Hashtbl.fold
 		(fun li _ acc -> 
-		   li.jc_logic_info_parameters <- vil;
+(* 		   li.jc_logic_info_parameters <- vil; *)
 		   let a = { jc_app_fun = li;
-			     jc_app_args = vitl;
+			     jc_app_args = (* vitl *)[];
 			     jc_app_label_assoc = [];
 			     jc_app_region_assoc = [] }
 		   in

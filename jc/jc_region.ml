@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.10 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.11 2008-05-28 15:16:58 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -266,7 +266,8 @@ struct
 	    else if r.jc_reg_variable then
 	      make_var fi.jc_field_info_type fi.jc_field_info_name 
 	    else
-	      make_const fi.jc_field_info_type fi.jc_field_info_name
+	      make_const fi.jc_field_info_type (* fi.jc_field_info_name *)
+		r.jc_reg_name
 	  in
 	  FieldTable.replace t fi fr;
 	  fr
@@ -277,7 +278,8 @@ struct
 	  else if r.jc_reg_variable then
 	    make_var fi.jc_field_info_type fi.jc_field_info_name 
 	  else
-	    make_const fi.jc_field_info_type fi.jc_field_info_name
+	    make_const fi.jc_field_info_type (* fi.jc_field_info_name *)
+	      r.jc_reg_name
 	in
 	let t = FieldTable.create 5 in
 	FieldTable.replace t fi fr;
