@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.11 2008-05-28 15:16:58 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.12 2008-05-29 10:45:02 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -228,7 +228,7 @@ struct
   let equal r1 r2 =
     InternalRegion.equal (RegionUF.repr r1) (RegionUF.repr r2)
 
-  let rec unify r1 r2 = 
+  let rec unify ?(poly=true) r1 r2 = 
     if equal r1 r2 then () else
       let rep1 = RegionUF.repr r1 and rep2 = RegionUF.repr r2 in
       RegionUF.unify r1 r2;
@@ -241,15 +241,38 @@ struct
 	try RegionTable.find global_region_table rep2
 	with Not_found -> FieldTable.create 0 
       in
+      (* If polymorphic argument is false, then current unification is
+	 a field unification coming from parents being unified, with one
+	 parent being a constant region. Then its field region must be
+	 constant too. 
+      *)
+      assert (poly || not (polymorphic r1 && polymorphic r2));
+      let poly = 
+	poly && polymorphic r1 && polymorphic r2 
+      in
       FieldTable.iter 
 	(fun fi r1 ->
 	  try 
 	    begin 
 	      let r2 = FieldTable.find t2 fi in
-	      unify r1 r2
+	      unify ~poly r1 r2
 	    end
 	  with Not_found -> FieldTable.add t2 fi r1
 	) t1;
+      (* Recursively make field regions constant if top region is constant *)
+      let rec mkconst r = 
+	let rep = RegionUF.repr r in
+	if polymorphic rep then
+	  begin
+	    rep.jc_reg_variable <- false;
+	    try
+	      let t = RegionTable.find global_region_table rep in
+	      FieldTable.iter (fun _fi ri -> mkconst ri) t
+	    with Not_found -> ()
+	  end
+      in
+      if not poly then mkconst rep;
+      (* Update with correct field table *)
       RegionTable.replace global_region_table rep t2
 
   let make_field r fi =

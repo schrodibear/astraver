@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.282 2008-05-28 15:16:58 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.283 2008-05-29 10:45:02 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2455,13 +2455,15 @@ let tr_fun f loc spec body acc =
   let param_read_allocs,local_read_allocs =
     StringRegionSet.fold
       (fun (a,r) (param_acc,local_acc) ->
-        if Region.polymorphic r then
+	 
           let alloc = alloc_region_table_name2(a,r),alloc_table_type2 a in
+        if Region.polymorphic r then
           if RegionList.mem r f.jc_fun_info_param_regions then
             alloc::param_acc,local_acc
           else
             param_acc,alloc::local_acc
-        else param_acc,local_acc)
+        else
+	  param_acc,local_acc)
       (StringRegionSet.diff 
         f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
         f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)

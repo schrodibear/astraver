@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.53 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.54 2008-05-29 10:45:02 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -99,7 +99,7 @@ type field_or_variant_info =
 
 type region = 
     {
-      jc_reg_variable : bool;
+      mutable jc_reg_variable : bool;
       jc_reg_id : int;
       jc_reg_name : string;
       jc_reg_final_name : string;

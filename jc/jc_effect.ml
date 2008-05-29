@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.104 2008-05-28 15:16:58 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.105 2008-05-29 10:45:02 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -108,20 +108,40 @@ let ef_assoc ?label_assoc ef assoc =
 		     labels LogicLabelSet.empty
 	   in
 	   if Region.polymorphic r then
-	     try FieldOrVariantRegionMap.add (fvi,RegionList.assoc r assoc) labels acc 
+	     try 
+	       let rloc = RegionList.assoc r assoc in
+	       if not (Region.polymorphic rloc) then
+		 constant_memories_set := 
+		   FieldOrVariantRegionSet.add (fvi,rloc) !constant_memories_set;
+	       FieldOrVariantRegionMap.add (fvi,rloc) labels acc 
 	     with Not_found -> 
 	       (* Local memory. Not counted as effect for the caller. *)
 	       acc
-	   else FieldOrVariantRegionMap.add (fvi,r) labels acc 
+	   else 
+	     begin 
+	       constant_memories_set := 
+		 FieldOrVariantRegionSet.add (fvi,r) !constant_memories_set;
+	       FieldOrVariantRegionMap.add (fvi,r) labels acc 
+	     end
 	) ef.jc_effect_memories FieldOrVariantRegionMap.empty;
     jc_effect_alloc_table =
       StringRegionSet.fold (fun (a,r) acc ->
 	if Region.polymorphic r then
-	  try StringRegionSet.add (a,RegionList.assoc r assoc) acc 
+	  try 
+	    let rloc = RegionList.assoc r assoc in
+	    if not (Region.polymorphic rloc) then
+	      alloc_region_table_set := 
+		StringRegionSet.add (a,rloc) !alloc_region_table_set;
+	    StringRegionSet.add (a,rloc) acc 
 	  with Not_found -> 
 	    (* Local alloc table. Not counted as effect for the caller. *)
 	    acc
-	else StringRegionSet.add (a,r) acc
+	else 
+	  begin
+	    alloc_region_table_set := 
+	      StringRegionSet.add (a,r) !alloc_region_table_set;
+	    StringRegionSet.add (a,r) acc
+	  end
       ) ef.jc_effect_alloc_table StringRegionSet.empty;
   }
 
