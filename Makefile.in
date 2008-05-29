@@ -930,10 +930,10 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 distrib export: source export-doc export-www export-examples export-examples-c linux
 
 export-www:
-	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
-	echo "<#def cversion>$(CVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
-	echo "<#def jcversion>$(JCVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
-	make -C $(HOME)/www/why install
+	echo "<#def version>$(VERSION)</#def>" > /users/demons/filliatr/www/why/version.prehtml
+	echo "<#def cversion>$(CVERSION)</#def>" >> /users/demons/filliatr/www/why/version.prehtml
+	echo "<#def jcversion>$(JCVERSION)</#def>" >> /users/demons/filliatr/www/why/version.prehtml
+	make -C /users/demons/filliatr/www/why install
 
 source: export/$(NAME).tar.gz
 	cp CHANGES CHANGES.caduceus export/$(NAME).tar.gz $(FTP)
