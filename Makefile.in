@@ -927,14 +927,16 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
 	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml*
 
-distrib export: source export-doc export-examples export-examples-c linux
+distrib export: source export-doc export-www export-examples export-examples-c linux
+
+export-www:
+	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
+	echo "<#def cversion>$(CVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
+	echo "<#def jcversion>$(JCVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
 	make -C $(HOME)/www/why install
 
 source: export/$(NAME).tar.gz
 	cp CHANGES CHANGES.caduceus export/$(NAME).tar.gz $(FTP)
-	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
-	echo "<#def cversion>$(CVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
-	echo "<#def jcversion>$(JCVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
 
 export/$(NAME).tar.gz: $(FILES)
 	rm -rf $(EXPORT)
