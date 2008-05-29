@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.27 2008-04-01 21:23:23 nrousset Exp $ i*)
+(*i $Id: jc_options.ml,v 1.28 2008-05-29 17:59:06 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -133,6 +133,8 @@ let _ =
 	  "  fast ai (needs -ai <domain> and -main <function>)";
 	"-trust-ai", Arg.Set trust_ai,
 	  "  verify inferred annotations (needs -ai <domain>)";
+	"-separation", Arg.Unit (fun () -> separation_sem := SepRegions),
+	  "  apply region-based separation on pointers";
 	"--werror", Arg.Set werror,
           "  treats warnings as errors";
 	"--version", Arg.Unit version,
