@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.48 2008-06-02 10:14:28 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.49 2008-06-02 10:46:43 moy Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1174,7 +1174,7 @@ let build_pred_graph decl =
 			   neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg); 
 			   pos = cl.pos} )
 		  
-		      
+             else		      
 	      AbstractClauseSet.add
 		      {num = cl.num+2;
 		       neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
