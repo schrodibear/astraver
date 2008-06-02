@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.47 2008-06-02 09:15:15 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.48 2008-06-02 10:14:28 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1094,17 +1094,11 @@ let build_pred_graph decl =
 	  when not (is_comparison id or
 		       is_int_comparison id or 
 		       is_real_comparison id) -> 
-	  begin
-	    if debug then 
-	      begin 
-        	(*Format.printf "\nOperation non suffixee : %a\n" Util.print_predicate (Papp (id, l, i));*)
-	      end; 	  
-	    AbstractClauseSet.singleton 
-	      {num = cl.num + 1;
-	       neg = cl.neg;
-	       pos = StringSet.add (Ident.string id) cl.pos}
-	  end
-
+	  AbstractClauseSet.singleton 
+	    {num = cl.num + 1;
+	     neg = cl.neg;
+	     pos = StringSet.add (Ident.string id) cl.pos}
+	    
       | Pnot (Papp (id, [el1;el2], i)) 
 	  when (comparison_to_consider id) ->
 	  begin 
@@ -1113,15 +1107,8 @@ let build_pred_graph decl =
 		  (add_suffixed_depends id ti1) ;
 		  (add_suffixed_depends id ti2) ;
 		  if (is_negative_comparison id) && (keep_single_comparison_representation)  then
-		   (* AbstractClauseSet.add
-		      {num = cl.num+1;
-		       neg = StringSet.add (get_positive_suffixed_ident id ti2) cl.neg;
-		       pos = StringSet.add (get_positive_suffixed_ident id ti1) cl.pos} 
-		      (AbstractClauseSet.singleton 
-			  {num = cl.num+1;
-			   neg = StringSet.add (get_positive_suffixed_ident id ti1) cl.neg;
-			   pos = StringSet.add (get_positive_suffixed_ident id ti2) cl.pos} )*)
-		       AbstractClauseSet.add
+		 
+		    AbstractClauseSet.add
 		      {num = cl.num+1;
 		       neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg);
 		       pos = cl.pos} 
@@ -1130,15 +1117,8 @@ let build_pred_graph decl =
 			   neg = cl.neg;
 			   pos = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.pos)} )
 		  else
-		   (* AbstractClauseSet.add
-		      {num = cl.num+1;
-		       neg = StringSet.add (get_suffixed_ident id ti1) cl.neg;
-		       pos = StringSet.add (get_suffixed_ident id ti2) cl.pos} 
-		      (AbstractClauseSet.singleton 
-			  {num = cl.num+1;
-			   neg = StringSet.add (get_suffixed_ident id ti2) cl.neg;
-			   pos = StringSet.add (get_suffixed_ident id ti1) cl.pos} )*)
-		       AbstractClauseSet.add
+		    
+		    AbstractClauseSet.add
 		      {num = cl.num+1;
 		       neg = cl.neg;
 		       pos = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.pos)} 
@@ -1193,23 +1173,7 @@ let build_pred_graph decl =
 			  {num = cl.num+2;
 			   neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg); 
 			   pos = cl.pos} )
-		   (* AbstractClauseSet.add
-		      {num = cl.num+2;
-		       neg = StringSet.add (get_positive_suffixed_ident id ti1) cl.neg;
-		       pos = StringSet.add (get_positive_suffixed_ident id ti2) cl.pos} 
-		      (AbstractClauseSet.singleton 
-			  {num = cl.num+2;
-			   neg = StringSet.add (get_positive_suffixed_ident id ti2) cl.neg;
-			   pos = StringSet.add (get_positive_suffixed_ident id ti1) cl.pos} )*)
-		  else
-		  (*  AbstractClauseSet.add
-		      {num = cl.num+2;
-		       neg = StringSet.add (get_suffixed_ident id ti2) cl.neg;
-		       pos = StringSet.add (get_suffixed_ident id ti1) cl.pos} 
-		      (AbstractClauseSet.singleton 
-			  {num = cl.num+2;
-			   neg = StringSet.add (get_suffixed_ident id ti1) cl.neg;
-			   pos = StringSet.add (get_suffixed_ident id ti2) cl.pos} )*)
+		  
 		      
 	      AbstractClauseSet.add
 		      {num = cl.num+2;
@@ -1250,62 +1214,6 @@ let build_pred_graph decl =
 	  end
 
 
-
-
-	    (*
-      | Pnot (Papp (id, l, i)) 
-	  when (comparison_to_consider id) ->
-	  (List.fold_left (fun cl t -> match t with 
-	      ( *| Tvar (ti)  | Tderef (ti) * ) 
-	    | Tapp (ti , _ , _) ->  
-		(add_suffixed_depends id ti) ;
-		if (is_negative_comparison id) && (keep_single_comparison_representation)  then
-		  {num = cl.num+1;
-		   neg = cl.neg;
-		   pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos} 
-		else
-		  {num = cl.num+1;
-		   neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
-		   pos = cl.pos} 
-
-
-	    | Tderef (_) 
-	    | Tvar (_) 		    
-	    | Tconst (_) -> 
-		( * cl  * )
-		{num = cl.num + 1;
-		 neg = cl.neg;
-		 pos = cl.pos } ( * We do not consider cases with literal constants in the suffix * )	
-	    | Tnamed (_,_) ->  
-		assert false ( * Currently, no label is present close to a comparison predicate * )
-	  ) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l)
-	 
-   
-      | Papp (id, l, i) 
-	  when (comparison_to_consider id) ->
-	  (List.fold_left (fun cl t -> match t with  
-	      ( *| Tvar (ti) | Tderef (ti) * ) 
-	    | Tapp (ti , _ , _) ->  
-		(add_suffixed_depends id ti);
-		if (is_negative_comparison id) && (keep_single_comparison_representation) then
-		  {num = cl.num+1;
-		   neg = StringSet.add (get_suffixed_ident (inv_comparison id) ti) cl.neg;
-		   pos = cl.pos}
-		else
-		  {num = cl.num+1;
-		   neg = cl.neg;
-		   pos = StringSet.add (get_suffixed_ident id ti) cl.pos}
-
-
-	    | Tderef (_)
-	    | Tvar (_) 		    
-	    | Tconst (_) -> ( * cl * )
-		{num = cl.num + 1;
-		 neg = cl.neg;
-		 pos = cl.pos } ( * We do not consider cases with literal constants in the suffix * )	
-	    | Tnamed (_,_) ->  
-		assert false ( * Currently, no label is present close to a comparison predicate * )
-	  ) {num = cl.num + 1; pos = cl.pos; neg = cl.neg} l) *)
       | _  -> 
 	  AbstractClauseSet.singleton 
 	    {num = cl.num + 1;
@@ -1804,13 +1712,8 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   let rec filter = function  
     | [] -> []
     | Svar (id, v) :: q -> 
-	(*if 
-	  ( member_of (Ident.string id)  concl_rep ||
-	      member_of (Ident.string id) avoided_vars) 
-	then*)
 	  Svar (id, v) ::filter q 
-	(*else
-	  filter q*)
+
     | Spred (t,p) :: q -> 
 	let vars =  	  
 	  try Hashtbl.find hash_hyp_vars p
