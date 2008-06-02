@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.46 2008-05-27 14:02:59 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.47 2008-06-02 09:15:15 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1891,80 +1891,75 @@ let managesContext relevantPreds decl =
   if prune_context then
     begin
       Queue.clear decl ;
+      (* Pour chaque "sous-axiome" introduit : regarder si on le garde ou pas *)
+      let filter_one_axiom (p,ax) =
+	let preds_of_p  = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in 
+	  if abstr_subset_of_pdl preds_of_p relevantPreds then 
+	    Queue.push ax decl
+	  else 
+	    begin
+	      if debug then 
+		Format.printf "Ctx Dropped\n\n";
+	      (* Queue.push ax decl *)
+	    end
+      in
       let rec filter ctx =
 	match ctx with
 	  | [] -> ()
 	      
 	  | (p_cnf,Dpredicate_def (loc, ident, def)) :: l ->
 	      let preds_of_p_cnf  = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in 
-		begin
-		  if debug then
-		    begin
-		      Format.printf "Ctx (Dpred %s): \n" ident;
-		      Format.printf "%a \n" print_decl (Dpredicate_def (loc, ident, def));
-		      Format.printf "Ctx Preds : \n";
-		      display_symb_of_pdl_set preds_of_p_cnf;
-		      Format.printf "Relevent Preds : \n";
-		      display_symb_of_pdl_set relevantPreds;
-		    end;
-		  if abstr_subset_of_pdl preds_of_p_cnf relevantPreds then 
-		    begin
-		      if debug then
-			Format.printf "Ctx Keeped\n\n";
-		      Queue.push (Dpredicate_def (loc, ident, def)) decl;
-		      filter l
-		    end
-		  else 
-		    begin
-		      (* Lorsqu'un Prédicat est retiré, sa signature est laissée sous la forme d'un logic *)
-		      let bl,_ = def.scheme_type in
-			Queue.push (Dlogic(loc,ident, generalize_logic_type (Predicate(List.map snd bl)))) decl;		
-			if debug then 
-			  Format.printf "Ctx Dropped\n\n";
-			filter l
-		    end
-		end
-		  
-	  | (p_cnf,Daxiom (loc, ident, ps)) :: l-> 
-	      (* Spliter le prédicat de définition en Clauses devenant autant d'axiomes *)
-	      let p_list=(split_one [] 1 p_cnf) in
-	      let ax_list=List.map (fun p -> 
-		let i=my_fresh_hyp_str () in
-		  (p,Daxiom (loc, ident^"_part_"^i, generalize_predicate p),Daxiom (loc, ident, ps))
-	      ) p_list in
-		
-	      (* Pour chaque "sous-axiome" introduit : regarder si on le garde ou pas *)
-	      let filter_one_axiom (p,ax,ax_original) =
-		let preds_of_p  = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in 
+		if (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then 
 		  begin
+		    (* On garde tout le prédicat *)
 		    if debug then
-		      begin
-			Format.printf "Ctx (Daxiom %s): \n"  ident;
-			Format.printf "%a \n" print_decl ax;
-			Format.printf "Ctx Preds : \n";
-			display_symb_of_pdl_set preds_of_p;
-			Format.printf "Relevent Preds : \n";
-			display_symb_of_pdl_set relevantPreds;
-		      end;
-		    if abstr_subset_of_pdl preds_of_p relevantPreds then 
-		      begin
-			if debug then
-			  Format.printf "Ctx Keeped\n\n";
-			if List.length ax_list = 1 then
-			  Queue.push ax decl
-			else
-			  Queue.push ax_original decl
-		      end
-		    else 
-		      begin
-			if debug then 
-			  Format.printf "Ctx Dropped\n\n";
-			(* Queue.push ax decl *)
-		      end
+		      Format.printf "Ctx Keeped\n\n";
+		    Queue.push (Dpredicate_def (loc, ident, def)) decl;
+		    filter l
 		  end
-	      in
-		List.iter filter_one_axiom ax_list ;
-		filter l
+		else 
+		  begin
+		    (* Sinon on insère la sa signature du prédicat avec un logic *)
+		    (let bl,_ = def.scheme_type in
+		       Queue.push (Dlogic(loc,ident, generalize_logic_type (Predicate(List.map snd bl)))) decl);
+
+		    (* Ensuite, on test chacune des clauses pour éventuellement les préserver *)
+		    let p_list=(split_one [] 1 p_cnf) in
+		    let ax_list=List.map (fun p -> 
+		      let i=my_fresh_hyp_str () in
+			(p,Daxiom (loc, "axiom_from_"^ident^"_part_"^i, generalize_predicate p))
+		    ) p_list in
+		      
+		      
+		      List.iter filter_one_axiom ax_list ;
+		      filter l
+		  end
+
+
+	  | (p_cnf,Daxiom (loc, ident, ps)) :: l-> 
+	      let preds_of_p_cnf  = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in 
+		if (abstr_subset_of_pdl preds_of_p_cnf relevantPreds)  then 
+		  begin
+		    (* On garde tout l'axiome en forme originale *)
+		    if debug then
+		      Format.printf "Ctx Keeped\n\n";
+		    Queue.push (Daxiom (loc, ident, ps)) decl;
+		    filter l
+		  end
+		else 
+		  begin
+		    (* Sinon, on splite le prédicat de définition en Clauses devenant autant d'axiomes *)
+		    let p_list=(split_one [] 1 p_cnf) in
+		    let ax_list=List.map (fun p -> 
+		      let i=my_fresh_hyp_str () in
+			(p,Daxiom (loc, ident^"_part_"^i, generalize_predicate p))
+		    ) p_list in
+		      
+		      List.iter filter_one_axiom ax_list ;
+		      filter l
+		  end
+
+
 		
 		  
 	  | (p_cnf,c) :: l -> 
