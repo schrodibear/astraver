@@ -1,10 +1,12 @@
 
 Note: These are the changes for Caduceus.
 
+ o bug fix: typing &e when e is a *non-modifiable* lvalue
+
 version 2.13, May 27th, 2008
 ============================
 
- o bug in separation analysis with floats/double
+ o bug fix: separation analysis with floats/double
 
 version 2.12, May 23rd, 2008
 ============================

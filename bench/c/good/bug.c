@@ -64,3 +64,18 @@ x = x * 2.0;
 /* ... */
 }
 
+typedef double arr[5];
+
+/*@ requires \valid(d)
+  @
+  @*/
+void f4(arr * d)
+{
+int i=0;
+for(i=0;i<5;i++) (*d)[i]=i;
+}
+
+arr t;
+
+void g4()
+{ f4(&t); }

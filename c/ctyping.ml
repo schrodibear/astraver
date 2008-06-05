@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.155 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.156 2008-06-05 15:14:26 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -615,7 +615,7 @@ and type_expr_node loc env = function
       end
   | CEunary (Uamp, e) ->
       (* TODO: cas où e est une fonction *)
-      let e = type_lvalue env e in
+      let e = type_lvalue ~modifiable:false env e in
       let ty = e.texpr_type in
       if is_bitfield ty then error loc "cannot take address of bitfield";
       if ty.ctype_storage = Register then 
@@ -840,29 +840,30 @@ and type_expr_node loc env = function
       let n = sizeof loc ty in
       TEsizeof(ty,n), c_int
 
-and type_lvalue env e = 
+and type_lvalue ?(modifiable=true) env e = 
   let loc = e.loc in
   let e = type_expr env e in
-  check_lvalue loc e;
+  check_lvalue ~modifiable loc e;
   e
 
-and check_lvalue loc e = match e.texpr_node with
-  | TEvar v -> 
-      begin 
-	match (var_type v).ctype_node with
-	  | Tarray (_,_,Some _ ) -> error loc "not a lvalue"
-	  | _ -> ()
-      end
-  | TEunary (Ustar, _)
-  | TEarrget _ 
-  | TEarrow _ 
-  | TEdot _ ->
-      (* TODO: check that e is not of enum type *)
-      ()
-  | TEcast (_, e) ->
-      check_lvalue loc e
-  | _ -> 
-      error loc "invalid lvalue"
+and check_lvalue ?(modifiable=true) loc e = 
+  match e.texpr_node with
+    | TEvar v -> 
+	begin 
+	  match (var_type v).ctype_node with
+	    | Tarray (_,_,Some _ ) when modifiable -> error loc "not a lvalue"
+	    | _ -> ()
+	end
+    | TEunary (Ustar, _)
+    | TEarrget _ 
+    | TEarrow _ 
+    | TEdot _ ->
+	(* TODO: check that e is not of enum type *)
+	()
+    | TEcast (_, e) ->
+	check_lvalue loc e
+    | _ -> 
+	error loc "invalid lvalue"
 
 and type_expr_option env eo = Option_misc.map (type_expr env) eo
 
