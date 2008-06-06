@@ -101,7 +101,7 @@ parameter init :
   src:vertex ->
     {} 
     unit writes S,Q,d 
-    { S = set_empty and 
+    { Is_empty(S) and 
       Q = set_add(src, set_empty) and 
       d = map_set(d@, src, 0)  }
 

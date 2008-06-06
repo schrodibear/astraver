@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.78 2008-04-15 09:00:07 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.79 2008-06-06 08:18:23 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -217,7 +217,7 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
 	 Pprinter.text_of_obligation tv o;
 	 let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
 	 tv#scroll_to_mark ~use_align:true mark;
-	 show_xpl (loc,xpl) tv_s  
+	 show_xpl (loc,xpl) tv_s
        with Not_found -> 
 	 try
 	   let (id,beh,(f,l,b,e)) = Hashtbl.find Util.program_locs s in

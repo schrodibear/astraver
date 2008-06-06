@@ -81,6 +81,7 @@ and comment tbuf = parse
 	   comment tbuf lexbuf }
   | "*)" { insert_text tbuf "comment" "*)" }
   | eof  { () }
+  | [^ '*']*
   | _    { insert_text tbuf "comment" (lexeme lexbuf); 
 	   comment tbuf lexbuf }
 
