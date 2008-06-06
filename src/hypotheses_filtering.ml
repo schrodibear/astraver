@@ -3,14 +3,14 @@
 (*  The Why platform for program certification                            *)
 (*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
-(*    Jean-François COUCHOT                                               *)
+(*    Jean-Franï¿½ois COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
-(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Jean-Christophe FILLIï¿½TRE                                           *)
 (*    Thierry HUBERT                                                      *)
-(*    Claude MARCHÉ                                                       *)
+(*    Claude MARCHï¿½                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
-(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Yann Rï¿½GIS-GIANAS                                                   *)
 (*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.49 2008-06-02 10:46:43 moy Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.50 2008-06-06 14:29:56 couchot Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -75,14 +75,17 @@ type var_strat =
   | AllInABranch 
   | SplitHyps
   | CNFHyps
-    
-
+      
 let prune_context = Options.prune_context
-let use_comparison_as_criteria_for_graph_construction = Options.pruning_hyp_CompInGraph
-let use_comparison_as_criteria_for_hypothesis_filtering = Options.pruning_hyp_CompInFiltering
-let keep_quantification_link_beween_vars = Options.pruning_hyp_LinkVarsQuantif
-(* Setup of comparison management *)
-let keep_single_comparison_representation =Options.pruning_hyp_keep_single_comparison_representation
+let use_comparison_as_criteria_for_graph_construction = 
+  Options.pruning_hyp_CompInGraph
+let use_comparison_as_criteria_for_hypothesis_filtering = 
+  Options.pruning_hyp_CompInFiltering
+let keep_quantification_link_beween_vars = 
+  Options.pruning_hyp_LinkVarsQuantif
+  (* Setup of comparison management *)
+let keep_single_comparison_representation =
+  Options.pruning_hyp_keep_single_comparison_representation
 let comparison_eqOnly = Options.pruning_hyp_comparison_eqOnly
 let suffixed_comparison = Options.pruning_hyp_suffixed_comparison
 let equalities_linked = Options.pruning_hyp_equalities_linked
@@ -95,7 +98,7 @@ let var_filter_tactic = match Options.pruning_hyp_var_tactic with
   | 4 -> CNFHyps
   | _ -> failwith "Heuristic failed."
 let polarized_preds = Options.pruning_hyp_polarized_preds
-      
+  
 let pb = ref Options.pruning_hyp_p   
 let vb = ref Options.pruning_hyp_v   
 let v_count = ref 0
@@ -118,10 +121,11 @@ let context = ref []
 
 
 type var_string =
-  | PureVar of string (*already present*)
-  | FreshVar of string (*introduced by a flatening step*) 
+  | PureVar of string  (* already present *)
+  | FreshVar of string (* introduced by a flattening step *) 
 
-module VarStringSet = Set.Make(struct type t = var_string let compare = compare end)
+module VarStringSet = 
+  Set.Make(struct type t = var_string let compare = compare end)
 
 let member_of str st = 
   VarStringSet.mem (PureVar str) st || VarStringSet.mem (FreshVar str) st
@@ -131,7 +135,7 @@ let distinct_vars v1 v2 =
       (PureVar (id1), PureVar (id2)) ->
 	id1 <> id2 
     | _ -> assert false 
-	      
+	
 let string_of_var v = 
   match v with 
       PureVar(id)  -> id 
@@ -243,34 +247,34 @@ let miniscoping pr =
 		match fm with 
 		  | Pand (p1,p2,p,q) -> 
 		      if not (member_of  
-				 (Ident.string t2) 
-				 (free_vars_of p)) then 
+				(Ident.string t2) 
+				(free_vars_of p)) then 
 			let q' = mq (Forall(t1,t2,p3,p4,p5,q)) q in
 			Pand (p1,p2,p,q')
 		      else
 			if not (member_of  
-				   (Ident.string t2) 
-				   (free_vars_of q)) then 
+				  (Ident.string t2) 
+				  (free_vars_of q)) then 
 			  let p' =  mq (Forall(t1,t2,p3,p4,p5,p)) p in
 			  Pand (p1,p2,p',q)
-		      else
-			Pand (p1,p2, 
-			     mq (Forall (t1,t2,p3,p4,p5,p)) p,
-			     mq (Forall (t1,t2,p3,p4,p5,q)) q)
+			else
+			  Pand (p1,p2, 
+				mq (Forall (t1,t2,p3,p4,p5,p)) p,
+				mq (Forall (t1,t2,p3,p4,p5,q)) q)
 		  | Por (p,q) -> 
 		      if not (member_of  
-				 (Ident.string t2) 
-				 (free_vars_of p)) then 
+				(Ident.string t2) 
+				(free_vars_of p)) then 
 			let q' = mq (Forall(t1,t2,p3,p4,p5,q)) q in
 			Por (p,q')
 		      else
 			if not (member_of  
-				   (Ident.string t2) 
-				   (free_vars_of q)) then 
+				  (Ident.string t2) 
+				  (free_vars_of q)) then 
 			  let p' = mq (Forall (t1,t2,p3,p4,p5,p)) p in
 			  Por (p',q)
-		      else
-			Forall (t1,t2,p3,p4,p5, fm)
+			else
+			  Forall (t1,t2,p3,p4,p5, fm)
 		  | _ -> Forall (t1,t2,p3,p4,p5, fm)
 	      end
 	  end 
@@ -328,7 +332,7 @@ let miniscoping pr =
   in 
   minib (nnf pr)
     
-	    
+    
 (** compute the cnf of a predicate **)
 let cnf  fm =
   let rec cnfp p = match p with 
@@ -346,9 +350,9 @@ let cnf  fm =
     | (x, Pand (p1,p2, y2, y3)) -> Pand (p1,p2, distr (x, y2), distr (x, y3))
     | (x, y) -> Por(x, y) 
 
-    (* all hypothesis functions are defined without Pnamed case.
-       It is then removed before selection. It does not have any implication 
-       on produced code. *)
+  (* all hypothesis functions are defined without Pnamed case.
+     It is then removed before selection. It does not have any implication 
+     on produced code. *)
   and rm_pnamed par = match par with 
     | Pnamed(_,p) -> rm_pnamed p
     | Pfpi (a, b, c) -> Pfpi (a ,b, c)
@@ -433,13 +437,13 @@ let vars_of_list qvars tl ac =
 	| Tvar (id) ->
 	    if not (member_of (Ident.string id) qvars)  then
 	      inner_vars := VarStringSet.add (get_flaged_var id (VarStringSet.union ac_fv_set ac)) !inner_vars 
-(*
-  if not (member_of (Ident.string id) ac_fv_set)
-  then
-  inner_vars := VarStringSet.add (PureVar (Ident.string id)) !inner_vars 
-  else
-  inner_vars := VarStringSet.add (FreshVar (Ident.string id)) !inner_vars
-*)
+		(*
+		  if not (member_of (Ident.string id) ac_fv_set)
+		  then
+		  inner_vars := VarStringSet.add (PureVar (Ident.string id)) !inner_vars 
+		  else
+		  inner_vars := VarStringSet.add (FreshVar (Ident.string id)) !inner_vars
+		*)
 	| _ -> ()
     in
     List.iter f !lp ;
@@ -469,10 +473,10 @@ let sets_of_vars f  =
   let rec local_subst_in_term id1 id2 = function
     | Tvar x  as t ->
 	(*if debug then 
-	   begin
-	     Format.printf "\nTvar found : %s Tvar seeked : %s to substitute with %s status = " (Ident.string x) (Ident.string id1) (Ident.string id2);  
-	     if id1==x then Format.printf "OK\n" else  Format.printf "KO\n"
-	   end;*)
+	  begin
+	  Format.printf "\nTvar found : %s Tvar seeked : %s to substitute with %s status = " (Ident.string x) (Ident.string id1) (Ident.string id2);  
+	  if id1==x then Format.printf "OK\n" else  Format.printf "KO\n"
+	  end;*)
 	if (Ident.string id1)==(Ident.string x) then (Tvar id2) else t
     | Tderef x as t ->
 	if (Ident.string id1)==(Ident.string x) then (Tderef id2) else t
@@ -486,20 +490,20 @@ let sets_of_vars f  =
   in let rec local_subst_in_predicate id1 id2 = function
     | Papp (id, l, i) -> Papp (id, List.map (local_subst_in_term id1 id2) l, i)
     | Pif (a, b ,c) -> Pif (local_subst_in_term id1 id2 a, 
-			   local_subst_in_predicate id1 id2 b, 
-			   local_subst_in_predicate id1 id2 c)
+			    local_subst_in_predicate id1 id2 b, 
+			    local_subst_in_predicate id1 id2 c)
     | Pfpi (t, f1, f2) -> Pfpi (local_subst_in_term id1 id2 t, f1, f2)
     | Forall (w, id, b, v, tl, p) -> 
 	Forall (w, id, b, v, List.map (List.map (
-	  (fun id1 id2 -> function
-	    | TPat t -> TPat (local_subst_in_term id1 id2 t)
-	    | PPat p -> PPat (local_subst_in_predicate id1 id2 p) ) id1 id2)) tl,
-	       local_subst_in_predicate id1 id2 p)
+					 (fun id1 id2 -> function
+					    | TPat t -> TPat (local_subst_in_term id1 id2 t)
+					    | PPat p -> PPat (local_subst_in_predicate id1 id2 p) ) id1 id2)) tl,
+		local_subst_in_predicate id1 id2 p)
     | p -> map_predicate (local_subst_in_predicate id1 id2) p
   in
-     
-     
-     
+  
+  
+  
   let vars = ref SS_set.empty  in
   let ac_fv_set = ref VarStringSet.empty in
   let rec collect qvars formula  = 
@@ -510,12 +514,12 @@ let sets_of_vars f  =
 	      |	(Tvar (v1), Tvar(v2)) ->
 		  vars :=  SS_set.add
 		    ((VarStringSet.add (get_flaged_var v1 !ac_fv_set)) (* (PureVar (Ident.string v1))  *)
-			(VarStringSet.singleton (get_flaged_var v1 !ac_fv_set)))    (* (PureVar (Ident.string v2))) )*) 
+		       (VarStringSet.singleton (get_flaged_var v1 !ac_fv_set)))    (* (PureVar (Ident.string v2))) )*) 
 		    !vars
 	      | (Tvar (v1), Tapp (_, tl, _)) ->
 		  let l' = Tvar(v1)::tl in 
 		  let v = vars_of_list qvars l' !ac_fv_set  in
-		    (** TODO modifier mettre pure var ? **)
+		  (** TODO modifier mettre pure var ? **)
 		  vars := SS_set.union v !vars
 	      | (Tapp (_, tl,_), Tvar(v1)) ->
 		  let l' = Tvar(v1)::tl in 
@@ -568,13 +572,13 @@ let sets_of_vars f  =
 	      let bv = (FreshVar (Ident.string id')) in
 	      (* inner_vars := VarStringSet.add bv !inner_vars; 
 		 let l' = Tvar(id')::tl in *)
-	      ac_fv_set:=(VarStringSet.add bv !ac_fv_set);  (* Mise à jour de la liste des variables fraiches *)
+	      ac_fv_set:=(VarStringSet.add bv !ac_fv_set);  (* Mise ï¿½ jour de la liste des variables fraiches *)
               let p'= (local_subst_in_predicate id id' p) in   (*  substitutes id with id' in P *) 
               (*let p'= (subst_in_predicate (subst_onev id id') p) in*)	 
 	      (*if debug then
 		begin
-		   Format.printf "\nVar : %s subst by %s\n" (Ident.string id) (Ident.string id');  
-		   Format.printf "Predicate : %a \n Substituted in : %a \n\n" Util.print_predicate p Util.print_predicate p'
+		Format.printf "\nVar : %s subst by %s\n" (Ident.string id) (Ident.string id');  
+		Format.printf "Predicate : %a \n Substituted in : %a \n\n" Util.print_predicate p Util.print_predicate p'
 		end;*)
 	      collect qvars p'
 	    end
@@ -600,14 +604,24 @@ let sets_of_vars f  =
 
 
 
-(** An abstract clause only stores atomes number, the set of positive predicates symbols 
-    and the set of negative symbols.
-    Each predicate is represented as a string an the set of positive predicates 
-    is stored as a StringSet.t
+(** An abstract clause only stores its number of atoms,
+  the set of positive predicate symbols 
+  and the set of negative predicate symbols.
+  Each predicate is represented as a string.
+  Each set of predicate symbols is stored as a StringSet.t.
+  Predicate names prefixed with "diamond_" are reserved.
+  They are assumed absent from the input data. 
 **)
-module StringSet = Set.Make(struct type t=string let compare= compare end)
-type abstractClause = { num:int; pos : StringSet.t ; neg : StringSet.t}  
-module AbstractClauseSet = Set.Make(struct type t= abstractClause let compare= compare end)
+module StringSet = 
+  Set.Make(struct type t=string let compare= compare end)
+type abstractClause = {
+  num:int; 
+  pos:StringSet.t; 
+  neg:StringSet.t;
+  cmp:StringSet.t
+}  
+module AbstractClauseSet = 
+  Set.Make(struct type t=abstractClause let compare= compare end)
 
 let display_cl cl =
   let display_set_pr = 
@@ -708,22 +722,22 @@ let build_var_graph (l,c)=
     | Svar (id, v) :: q ->  mem  q 
     | Spred (_,p) :: q -> 
 	let v = sets_of_vars p in 	
-	  (** for each set of variables, build the SCC
-	      of the set and computes the union of all the variables **)
+	(** for each set of variables, build the SCC
+	    of the set and computes the union of all the variables **)
 	let v' = 
 	  SS_set.fold (fun s  t -> 
 			 update_v_g s ; 
 			 VarStringSet.union s t) v VarStringSet.empty in    
-	  (** v' is the union of all the variables **)
+	(** v' is the union of all the variables **)
 	let v' = VarStringSet.diff v' avoided_vars in
-	  (** associates v' to the hypothesis **) 
-	  Hashtbl.add hash_hyp_vars  p v';
-	  if debug then 
-	    begin
-	      (* Format.printf " In hyps %a" Util.print_predicate p ; 
-	         display_str "vars " v'; *)
-	    end;
-	  mem  q   
+	(** associates v' to the hypothesis **) 
+	Hashtbl.add hash_hyp_vars  p v';
+	if debug then 
+	  begin
+	    (* Format.printf " In hyps %a" Util.print_predicate p ; 
+	       display_str "vars " v'; *)
+	  end;
+	mem  q   
   in
   mem l 
     
@@ -782,7 +796,7 @@ let get_reachable_vars v n =
     VarStringSet.diff vret avoided_vars in 
   VarStringSet.diff 
     (get_vars_in_tree_b v n VarStringSet.empty) v 
-(** End of graph of variables **)
+    (** End of graph of variables **)
 
 
 (**
@@ -823,6 +837,11 @@ module PdlGraph =
   Graph.Imperative.Digraph.ConcreteLabeled(Vrtx)(Edg)
 let pdlg = ref (PdlGraph.create())
 
+(* Adds the oriented edge (v,oposite lp) -- we --> (v',rp)
+   to the predicate graph. lp and rp are left and right polarities. 
+
+   assigns pdlg;
+*)
 let add_edge lp rp we v v'=
   (*reverse the left since it is given as a disjunction*)
   let lp = oposite lp in 
@@ -840,16 +859,16 @@ let add_edge lp rp we v v'=
     try 
       let le = {l=v';pol=oposite rp} in 
       let re = {l=v;pol=oposite lp} in 
-      (* conterpart edge exists and weight is to big *)
+      (* conterpart edge exists and weight is too big *)
       let (_,w,_) = PdlGraph.find_edge !pdlg le re in 
-	  if w > we then  
-	    begin
-	      PdlGraph.remove_edge !pdlg le re ;
-	      PdlGraph.add_edge_e !pdlg (le,we,re) ;
-	  end
+      if w > we then  
+	begin
+	  PdlGraph.remove_edge !pdlg le re ;
+	  PdlGraph.add_edge_e !pdlg (le,we,re) ;
+	end
     with Not_found -> 
-	    (* none edge exists *)
-	    PdlGraph.add_edge_e !pdlg (le,we,re) 
+      (* none edge exists *)
+      PdlGraph.add_edge_e !pdlg (le,we,re) 
 
 
 
@@ -872,46 +891,59 @@ module DotPdlGraph = Graph.Graphviz.Dot(DisplayPdlGraph)
 
 
 
-(** 
-    updates the graph_of_predicates
-**)
+(** Updates the graph of predicates.
+    @param acs Abstract Clause Set;
+    @assigns pg;
+
+    Iterates update_pdlg_c on the clause set acs.
+ **)
 let update_pdlg acs = 
+  (* @param a_clause An abstract Clause.
+     @assigns pg; *)
   let update_pdlg_c a_clause = 
     if (StringSet.cardinal (StringSet.union a_clause.pos a_clause.neg))
       <= 1 then ()
     else
       begin
+        (* Number of literals minus one. *)
 	let nlab= a_clause.num-1 in 
+        (* Set of negated atoms in the clause, for marking. *)
 	let neg = ref a_clause.neg  in 
 	StringSet.iter 
 	  (fun n -> 
 	     (* dealing with (neg n or neg n')   
-		             <->   
-		             n -> neg n' (or equivalentely n'-> neg n) *)   
+		<->   
+		n -> neg n' (or equivalently n'-> neg n) *)   
 	     neg := StringSet.remove n !neg ;
-	     StringSet.iter  (fun n' -> 
-				if not(n = n') then 
-				  add_edge Neg Neg nlab n n'
-			     ) !neg ;
+	     StringSet.iter 
+               (fun n' -> 
+		  if not(n = n') then 
+                    (* [CGS08] Table 1 line 3. *)
+		    add_edge Neg Neg nlab n n'
+	       ) !neg ;
 	     (* dealing with (neg n or p)   
 		<->   
-		n -> p (or equivalentely neg p -> neg n) *)   
-	     	StringSet.iter  (fun p -> 
-				   if not(n = p) then 
-				     add_edge Neg Pos nlab n p
-				) a_clause.pos
+		n -> p (or equivalently neg p -> neg n) *)   
+	     StringSet.iter
+               (fun p -> 
+		  if not(n = p) then 
+                    (* [CGS08] Table 1 line 1. *)
+		    add_edge Neg Pos nlab n p
+	       ) a_clause.pos
 	  ) a_clause.neg; 
-	let pos = ref a_clause.pos  in 
+	let pos = ref a_clause.pos in 
 	StringSet.iter 
 	  (fun p -> 
 	     (* dealing with (p or p')   
-		             <->   
-		             neg p-> p' (or equivalentely neg p'-> p) *)   
+		<->   
+		neg p-> p' (or equivalentely neg p'-> p) *)   
 	     pos := StringSet.remove p !pos ;
-	     StringSet.iter  (fun p' -> 
-				if not(p = p') then 
-				  add_edge Pos Pos nlab p p'
-			     ) !pos 
+	     StringSet.iter  
+               (fun p' -> 
+		 if not(p = p') then 
+                   (* [CGS08] Table 1 line 2. *)
+		   add_edge Pos Pos nlab p p'
+	       ) !pos 
 	  ) a_clause.pos
       end
   in
@@ -925,7 +957,7 @@ let update_pdlg acs =
 
 
 
-
+(* Cleaning: Replace % with _. *)
 let rec remove_percents s =
   try 
     let i=String.index s '%' in 
@@ -933,38 +965,51 @@ let rec remove_percents s =
     (remove_percents s)
   with Not_found -> s
     
+(* Iterates remove_percents. *)
 let remove_percent_from_stringset sts =
   let r = ref StringSet.empty in
   (StringSet.iter 
-      (fun st -> r:=StringSet.add (remove_percents st) !r) 
-      sts);
+     (fun st -> r:=StringSet.add (remove_percents st) !r) 
+     sts);
   !r
 
+(* Iterates remove_percent_from_stringset. *)
 let remove_percent_from_abstractclauseset cls =
   let r = ref AbstractClauseSet.empty in
   (AbstractClauseSet.iter 
-      (fun cl -> r:=AbstractClauseSet.add {num=cl.num ; neg=remove_percent_from_stringset cl.neg ; pos=remove_percent_from_stringset cl.pos} !r) 
-      cls);
+     (fun cl ->
+        r:=AbstractClauseSet.add 
+        { num=cl.num; 
+          neg=remove_percent_from_stringset cl.neg;
+          pos=remove_percent_from_stringset cl.pos
+        } !r) 
+     cls);
   !r
 
-  (** To take account comparison operators as predicates, we consider each operator suffixed by each of its closed identifier **)
-  (** @params i1 : ident of the comparison **)
-  (** @params i2 : ident of the closed operator **)
-  (** @result : string i1 suffixed by i2 **)
+(** To take account comparison operators as predicates, we consider each operator suffixed by each of its closed identifier **)
+(** @params i1 : ident of the comparison **)
+(** @params i2 : ident of the closed operator **)
+(** @result : string i1 suffixed by i2 **)
 let get_suffixed_ident i1 i2 =
   (*let s=*)
-    if suffixed_comparison then 
-      ((Ident.string i1)^"_"^(Ident.string i2))
-    else
-      (Ident.string i1)
-  (*in
-  (remove_percents s)
-  *)
+  if suffixed_comparison then 
+    ((Ident.string i1)^"_"^(Ident.string i2))
+  else
+    (Ident.string i1)
+      (*in
+	(remove_percents s)
+      *)
 
+(* Supported comparison symbols *)
 let comparison_to_consider id =  
-  use_comparison_as_criteria_for_graph_construction && (
-    ((not comparison_eqOnly) && (is_comparison id or is_int_comparison id or is_real_comparison id))
-    || (id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int || id == t_eq_real || id == t_neq_real )
+  use_comparison_as_criteria_for_graph_construction && 
+  (
+    (
+      (not comparison_eqOnly) && 
+      (is_comparison id or is_int_comparison id or is_real_comparison id)
+    ) || 
+    (id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int || 
+     id == t_eq_real || id == t_neq_real)
   )
 
 let is_negative_comparison id = 
@@ -1017,26 +1062,31 @@ let get_positive_ident id =
   else
     (Ident.string id)
 
-
+(* Graph-Based Memorizing Predicate Dependency *)
 let build_pred_graph decl = 
+  (* Set of clauses defining the relationship between comparison 
+     predicates and suffixed comparison predicates *)
   let eq_link = ref AbstractClauseSet.empty in
   let treated_suffixes = ref StringSet.empty in
-
+   (* Create the suffixed comparison predicate compId_appId
+     and memorizes its relationship with the original predicate compId
+     in a local set of clauses eq_link. *)
   let add_suffixed_depends compId appId =
-    if suffixed_comparison && not (StringSet.mem (Ident.string appId) !treated_suffixes) then
+    if suffixed_comparison && 
+      not (StringSet.mem (Ident.string appId) !treated_suffixes) then
       begin
 	if equalities_linked then 
 	  begin
-	    (* Creation des liens  =_f -> =  et = -> =_f *)
+	    (* Creation of links =_f -> = and = -> =_f *)
 	    eq_link:=AbstractClauseSet.add
 	      ({num=1; 
 		neg=StringSet.singleton (get_positive_suffixed_ident compId appId); 
 		pos=StringSet.singleton (get_positive_ident compId) })
 	      (AbstractClauseSet.add
-		  ({num=1; 
-		    neg=StringSet.singleton (get_positive_ident compId); 
-		    pos=StringSet.singleton (get_positive_suffixed_ident compId appId) })
-		  !eq_link)
+		 ({num=1; 
+		   neg=StringSet.singleton (get_positive_ident compId); 
+		   pos=StringSet.singleton (get_positive_suffixed_ident compId appId) })
+		 !eq_link)
 	  end;
 	
 
@@ -1055,7 +1105,7 @@ let build_pred_graph decl =
 	      if is_int_comparison compId then (StringSet.singleton (get_suffixed_ident t_le_int appId))
 	      else if is_real_comparison compId then (StringSet.singleton (get_suffixed_ident t_le_real appId))
 	      else (StringSet.singleton (get_suffixed_ident t_le appId)) in
-	  
+	    
 	    let trio=ref AbstractClauseSet.empty in
 	    trio := AbstractClauseSet.add {num=1; neg=eq; pos=le} !trio;
 	    trio := AbstractClauseSet.add {num=2; neg=le; pos=eq} !trio;
@@ -1070,14 +1120,17 @@ let build_pred_graph decl =
   in
 
   (* Construction of the Preds dependence graph *)
-  (* suppose the clause cl is in nnf *) 
+
+  (* Add the parameter atome to the clause cl depending on a flag and 
+     whether it is a comparison or not. *)
+  (* TODO: explain this comment: suppose the clause cl is in nnf? *) 
   (** @result : a set of clauses **)
   let add_atom atome cl = 	  
     match atome with 
       | Pnot (Papp (id, l, i)) 
 	  when not (is_comparison id or 
-		       is_int_comparison id or 
-		       is_real_comparison id) -> 
+		      is_int_comparison id or 
+		      is_real_comparison id) -> 
 	  begin
 	    if debug then 
 	      begin 
@@ -1089,9 +1142,22 @@ let build_pred_graph decl =
 	       neg = StringSet.add (Ident.string id) cl.neg}
 	  end
 	    
-	  
+	    
       | Papp (id, l, i) 
 	  when not (is_comparison id or
+		      is_int_comparison id or 
+		      is_real_comparison id) -> 
+	  begin
+	    if debug then 
+	      begin 
+        	(*Format.printf "\nOperation non suffixee : %a\n" Util.print_predicate (Papp (id, l, i));*)
+	      end; 	  
+	    AbstractClauseSet.singleton 
+	      {num = cl.num + 1;
+	       neg = cl.neg;
+	       pos = StringSet.add (Ident.string id) cl.pos}
+	  end
+
 		       is_int_comparison id or 
 		       is_real_comparison id) -> 
 	  AbstractClauseSet.singleton 
@@ -1106,6 +1172,18 @@ let build_pred_graph decl =
 	      | (Tapp(ti1 , _ , _),Tapp(ti2 , _ , _ )) ->
 		  (add_suffixed_depends id ti1) ;
 		  (add_suffixed_depends id ti2) ;
+		  if (is_negative_comparison id)
+                       && (keep_single_comparison_representation)  then
+		    (* AbstractClauseSet.add
+		       {num = cl.num+1;
+		       neg = StringSet.add (get_positive_suffixed_ident id ti2) cl.neg;
+		       pos = StringSet.add (get_positive_suffixed_ident id ti1) cl.pos} 
+		       (AbstractClauseSet.singleton 
+		       {num = cl.num+1;
+		       neg = StringSet.add (get_positive_suffixed_ident id ti1) cl.neg;
+		       pos = StringSet.add (get_positive_suffixed_ident id ti2) cl.pos} )*)
+		    AbstractClauseSet.add
+		      {num = cl.num+1;
 		  if (is_negative_comparison id) && (keep_single_comparison_representation)  then
 		 
 		    AbstractClauseSet.add
@@ -1113,19 +1191,29 @@ let build_pred_graph decl =
 		       neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg);
 		       pos = cl.pos} 
 		      (AbstractClauseSet.singleton 
-			  {num = cl.num+1;
-			   neg = cl.neg;
-			   pos = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.pos)} )
+			 {num = cl.num+1;
+			  neg = cl.neg;
+			  pos = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.pos)} )
 		  else
+		    (* AbstractClauseSet.add
+		       {num = cl.num+1;
+		       neg = StringSet.add (get_suffixed_ident id ti1) cl.neg;
+		       pos = StringSet.add (get_suffixed_ident id ti2) cl.pos} 
+		       (AbstractClauseSet.singleton 
+		       {num = cl.num+1;
+		       neg = StringSet.add (get_suffixed_ident id ti2) cl.neg;
+		       pos = StringSet.add (get_suffixed_ident id ti1) cl.pos} )*)
+		    AbstractClauseSet.add
+		      {num = cl.num+1;
 		    
 		    AbstractClauseSet.add
 		      {num = cl.num+1;
 		       neg = cl.neg;
 		       pos = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.pos)} 
 		      (AbstractClauseSet.singleton 
-			  {num = cl.num+1;
-			   neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
-			   pos = cl.pos} )
+			 {num = cl.num+1;
+			  neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
+			  pos = cl.pos} )
 		      
 	      | (Tapp(ti , _ , _), _ )
 	      | ( _ , Tapp(ti , _ , _)) ->
@@ -1136,18 +1224,18 @@ let build_pred_graph decl =
 		       neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
 		       pos = cl.pos} 
 		      (AbstractClauseSet.singleton 
-			  {num = cl.num+1;
-			   neg = cl.neg;
-			   pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos} )
+			 {num = cl.num+1;
+			  neg = cl.neg;
+			  pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos} )
 		  else
 		    AbstractClauseSet.add
 		      {num = cl.num+1;
 		       neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
 		       pos = cl.pos} 
 		      (AbstractClauseSet.singleton 
-			  {num = cl.num+1;
-			   neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
-			   pos = cl.pos})
+			 {num = cl.num+1;
+			  neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
+			  pos = cl.pos})
 		      
 	      | ( _ , _ ) ->
 		  AbstractClauseSet.singleton 
@@ -1158,18 +1246,51 @@ let build_pred_graph decl =
 
 
       | Papp (id, [el1;el2], i) 
-	  when (comparison_to_consider id) ->
+	  when (comparison_to_consider id) -> (* positive case *)
+           (* Implements [CGS08], Sec. 4.3, Handling Comparison Predicates *)
 	  begin
 	    match (el1,el2) with 
 	      | (Tapp(ti1 , _ , _),Tapp(ti2 , _ , _ )) ->
+                    (* ti1 is f_1, ti2 is f_2 in [CGS08] *)
 		  (add_suffixed_depends id ti1) ;
 		  (add_suffixed_depends id ti2) ;
-		  if (is_negative_comparison id) && (keep_single_comparison_representation)  then
+                    (* If id is "=" then eq_link contains four clauses among which
+                       (neg =) or =_f. *)
+		  if (is_negative_comparison id)
+                    && (keep_single_comparison_representation)  then
+                      (* Former code *)
 		    AbstractClauseSet.add
 		      {num = cl.num+2;
 		       neg = cl.neg; 
-		       pos = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.pos)} 
+		       pos = StringSet.add (get_positive_suffixed_ident id ti1)
+                         (StringSet.add (get_positive_suffixed_ident id ti2) cl.pos)} 
 		      (AbstractClauseSet.singleton  
+			 {num = cl.num+2;
+			  neg = StringSet.add 
+                                  (get_positive_suffixed_ident id ti1)
+                                  (StringSet.add (get_positive_suffixed_ident id ti2)
+                                  cl.neg); 
+			  pos = cl.pos} )
+		      (* AbstractClauseSet.add
+			 {num = cl.num+2;
+			 neg = StringSet.add (get_positive_suffixed_ident id ti1) cl.neg;
+			 pos = StringSet.add (get_positive_suffixed_ident id ti2) cl.pos} 
+			 (AbstractClauseSet.singleton 
+			 {num = cl.num+2;
+			 neg = StringSet.add (get_positive_suffixed_ident id ti2) cl.neg;
+			 pos = StringSet.add (get_positive_suffixed_ident id ti1) cl.pos} )*)
+		  else
+		    (*  AbstractClauseSet.add
+			{num = cl.num+2;
+			neg = StringSet.add (get_suffixed_ident id ti2) cl.neg;
+			pos = StringSet.add (get_suffixed_ident id ti1) cl.pos} 
+			(AbstractClauseSet.singleton 
+			{num = cl.num+2;
+			neg = StringSet.add (get_suffixed_ident id ti1) cl.neg;
+			pos = StringSet.add (get_suffixed_ident id ti2) cl.pos} )*)
+		    
+		    AbstractClauseSet.add
+		      {num = cl.num+2;
 			  {num = cl.num+2;
 			   neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg); 
 			   pos = cl.pos} )
@@ -1180,9 +1301,9 @@ let build_pred_graph decl =
 		       neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
 		       pos = cl.pos} 
 		      (AbstractClauseSet.singleton 
-			  {num = cl.num+2;
-			   neg = cl.neg;
-			   pos = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.pos)} )		      
+			 {num = cl.num+2;
+			  neg = cl.neg;
+			  pos = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.pos)} )		      
 
 	      | (Tapp(ti , _ , _), _ )
 	      | ( _ , Tapp(ti , _ , _)) ->
@@ -1193,18 +1314,18 @@ let build_pred_graph decl =
 		       neg = cl.neg;
 	     	       pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos}
 		      (AbstractClauseSet.singleton 
-			  {num = cl.num+2;
-			   neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
-	     		   pos = cl.pos} )
+			 {num = cl.num+2;
+			  neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
+	     		  pos = cl.pos} )
 		  else
 		    AbstractClauseSet.add
 		      {num = cl.num+2;
 		       neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
 		       pos = cl.pos}
 		      (AbstractClauseSet.singleton 
-			  {num = cl.num+2;
-			   neg = cl.neg;
-			   pos = StringSet.add (get_suffixed_ident id ti) cl.pos})
+			 {num = cl.num+2;
+			  neg = cl.neg;
+			  pos = StringSet.add (get_suffixed_ident id ti) cl.pos})
 		      
 	      | ( _ , _ ) ->
 		  AbstractClauseSet.singleton 
@@ -1214,6 +1335,7 @@ let build_pred_graph decl =
 	  end
 
 
+
       | _  -> 
 	  AbstractClauseSet.singleton 
 	    {num = cl.num + 1;
@@ -1221,7 +1343,10 @@ let build_pred_graph decl =
 	     pos = cl.pos }
 	    
   in
+  (* Turns a clause p into a set of abstractClause. *)
   let rec get_abstract_clauses p = 
+    (* Requires that p is a quantified clause *)
+    (* Remove quantifiers and add p to each clause in acs *)
     let rec compute_clause p acs = 
       match p with
 	| Forall (_,_,_,_,_,p) -> compute_clause p acs 
@@ -1230,10 +1355,12 @@ let build_pred_graph decl =
 	| _ as p -> 
 	    let r = ref AbstractClauseSet.empty in
 	    (AbstractClauseSet.iter 
-		(fun ac -> r:=AbstractClauseSet.union (add_atom p ac) !r) 
-		acs);
+	       (fun ac -> r:=AbstractClauseSet.union (add_atom p ac) !r) 
+	       acs);
 	    !r
-	    (* AbstractClauseSet.fold_right (AbstractClauseSet.union (add_atom p)) acs AbstractClauseSet.empty  in*)
+	      (* TODO: remove? AbstractClauseSet.fold_right 
+                   (AbstractClauseSet.union (add_atom p)) acs AbstractClauseSet.empty  in*)
+    (* End of compute_clause *)
     in
     match p with
       | Forall (_,_,_,_,_,p) -> get_abstract_clauses p 
@@ -1244,20 +1371,20 @@ let build_pred_graph decl =
 	    (get_abstract_clauses p2)
       | Papp(_) as p -> 
 	  (* AbstractClauseSet.singleton *) 
-	    (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
+	  (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
       | Pnot(_) as p -> 
 	  (* AbstractClauseSet.singleton *)
-	    (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
+	  (add_atom p {num=0; pos=StringSet.empty; neg=StringSet.empty})
       | Por (_) as p -> 
 	  (* AbstractClauseSet.singleton *)
-	    (compute_clause 
-		p (AbstractClauseSet.singleton {num=0; pos=StringSet.empty; neg=StringSet.empty}))
+	  (compute_clause 
+	     p (AbstractClauseSet.singleton {num=0; pos=StringSet.empty; neg=StringSet.empty}))
       | Pfalse -> 
 	  (* AbstractClauseSet.singleton *)
-	    (add_atom  Pfalse {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
+	  (add_atom  Pfalse {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
       | Ptrue -> 
 	  (* AbstractClauseSet.singleton *)
-	    (add_atom Ptrue {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
+	  (add_atom Ptrue {num=0; pos=StringSet.empty; neg=StringSet.empty}) 
       | Pnamed(_,_) 
       | Pfpi (_, _, _)  
       | Forallb (_, _, _) 
@@ -1265,14 +1392,20 @@ let build_pred_graph decl =
       | Pif (_, _, _)  
       | Pimplies (_, _, _)    
       | Pvar _ -> assert false
+  (* end of get_abstract_clauses *)
   in
+  (* What is context for? Ignored. *)
   let compute_pred_graph = function  
     | Dpredicate_def (loc, ident, def) ->
+
 	let bl,p = def.scheme_type in
+
 	let rootexp = (Papp (
 			 Ident.create ident, 
 			 List.map (fun (i,_) -> Tvar i) bl, [])) in 
+        (* Definition transformed into an equivalence piff ... *)
 	let piff = Piff (rootexp,p) in
+        (* prenexed with univ. quantified variables in pforall *)
 	let pforall = List.fold_right 
 	  (fun (var,tvar) pred  -> Forall(false,var,var,tvar,[],pred)) 
 	  bl piff in 
@@ -1291,17 +1424,17 @@ let build_pred_graph decl =
     | Daxiom (loc, ident, ps) -> 
 	let p= ps.scheme_type in 
 	let p' = cnf p in
-	  begin
-	    context := (p',Daxiom (loc, ident, ps))::!context ;
-	    let cls = get_abstract_clauses p' in 
-	    let cls = AbstractClauseSet.union cls !eq_link  in
-	      if debug then 
-		begin 
-		  (* Format.printf "%a" Util.print_predicate p;
-		     display_cl_set cls *)
-		end;
-	      update_pdlg (remove_percent_from_abstractclauseset cls)
-	  end
+	begin
+	  context := (p',Daxiom (loc, ident, ps))::!context ;
+	  let cls = get_abstract_clauses p' in 
+	  let cls = AbstractClauseSet.union cls !eq_link  in
+	  if debug then 
+	    begin 
+	      (* Format.printf "%a" Util.print_predicate p;
+		 display_cl_set cls *)
+	    end;
+	  update_pdlg (remove_percent_from_abstractclauseset cls)
+	end
     | a  -> 
 	context := (Ptrue,a)::!context ;
   in
@@ -1326,22 +1459,13 @@ let build_pred_graph decl =
 
 
 
-
-
-
-
-
-
-
-
-
 (**
    ************** 
    PdlSet 
    **************
 **)
 module PdlSet = Set.Make(struct type t= vertexLabel
-				 let compare = compare end)
+				let compare = compare end)
 let abstr_mem_of el pdl_set = 
   PdlSet.mem {l=el.l;pol=Pos} pdl_set or 
     PdlSet.mem {l=el.l;pol=Neg} pdl_set 
@@ -1436,18 +1560,18 @@ let get_preds_of p filter_comparison =
 	assert false (* Currently, no label is present close to a comparison predicate *)
   in
   let rec get polarity = function 
-    (* Treatment of each predicates cases, expect comparison predicates *)
+      (* Treatment of each predicates cases, expect comparison predicates *)
     | Papp (id, l, i) when not 
-	  (is_comparison id or   
-	      is_int_comparison id or  
-	      is_real_comparison id) -> 
+	(is_comparison id or   
+	   is_int_comparison id or  
+	   is_real_comparison id) -> 
 	s := PdlSet.add {l=remove_percents (Ident.string id) ;
 			 pol= if polarity == 1 then Pos else Neg} !s
 
 
     (* | Papp (id, l, i) when use_arith_comp_as_direct_criteria -> 
-	s := PdlSet.add {l=Ident.string id ;
-			 pol= if polarity == 1 then Pos else Neg} !s
+       s := PdlSet.add {l=Ident.string id ;
+       pol= if polarity == 1 then Pos else Neg} !s
     *)
 
     (* Particular treatment for comparison predicates (only equality at this time). Each of them is added twice (with a suffix corresonding to each of parameters)  *)
@@ -1528,8 +1652,8 @@ let display_symb_of_pdl_set set =
 
 (**
    functions for the main function: reduce
-   @param l' : liste d'hypothèses
-   @param g' : prédicat du but
+   @param l' : liste d'hypothï¿½ses
+   @param g' : prï¿½dicat du but
 **)
 let reduce_subst (l',g') = 
   let many_substs_in_predicate sl p =
@@ -1573,12 +1697,12 @@ let reduce_subst (l',g') =
 		    match (el1,el2) with 
 			(Tvar (v1), t2)  | (t2, Tvar (v1)) ->
 			  let subst = subst_one v1 t2 in 			
-			    begin
-			      if debug then 
-				Format.printf "Removed  pred %a" Util.print_predicate p; 
-			    end;
-			    (subst::sl,fl)
-			      
+			  begin
+			    if debug then 
+			      Format.printf "Removed  pred %a" Util.print_predicate p; 
+			  end;
+			  (subst::sl,fl)
+			    
 		      | _ -> 			  
 			  (sl, Spred(id,(many_substs_in_context sl p))::fl) 
 		  end 
@@ -1595,7 +1719,7 @@ let reduce_subst (l',g') =
 
 
 
-  
+    
 (**
    @param concl_rep the representative variable of the conclusion
    @param l the list of hypothesis
@@ -1637,58 +1761,58 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   let rec all_vars_in_one_branch lp vars = 
     let rec all_v pred qvars = 
       match pred with 
-      | Forall (_,id,_,_,_,p)  
-      | Exists (id,_,_,p) -> 
-	  begin 
-	    if debug then Format.printf "   -> Quantif %s \n" (Ident.string id) 
-	  end; 
-	  all_v p ((Ident.string id)::qvars)
-	    
-      | Piff (p1, p2) 
-      | Pand (_, _, p1, p2) 
-      | Por (p1, p2) 
-      | Pimplies (_, p1, p2) -> 
-	  begin 
-	    if debug then Format.printf "   -> And / Or / Implies %a %a \n" Util.print_predicate p1  Util.print_predicate p2 
-          end;
-	  if all_v p1 qvars then (all_v p2 qvars) else false 
+	| Forall (_,id,_,_,_,p)  
+	| Exists (id,_,_,p) -> 
+	    begin 
+	      if debug then Format.printf "   -> Quantif %s \n" (Ident.string id) 
+	    end; 
+	    all_v p ((Ident.string id)::qvars)
+	      
+	| Piff (p1, p2) 
+	| Pand (_, _, p1, p2) 
+	| Por (p1, p2) 
+	| Pimplies (_, p1, p2) -> 
+	    begin 
+	      if debug then Format.printf "   -> And / Or / Implies %a %a \n" Util.print_predicate p1  Util.print_predicate p2 
+            end;
+	    if all_v p1 qvars then (all_v p2 qvars) else false 
 
-	    
-      | Pnot (p) -> 
-	  begin 
-	    if debug then Format.printf "   ->  Pnot %a \n" Util.print_predicate p 
-	  end; 
-	  all_v p qvars
+	      
+	| Pnot (p) -> 
+	    begin 
+	      if debug then Format.printf "   ->  Pnot %a \n" Util.print_predicate p 
+	    end; 
+	    all_v p qvars
 
 
-      | Papp (_ ,lt , _) -> 
-	  begin 
-	    if debug then Format.printf "   ->  Papp --> \n" 
-	  end; 
-	  List.for_all (all_vars_from_term vars qvars) lt
-	    
-      | Pvar (v) ->  
-	  begin 
-	    let r=(member_of (Ident.string v) vars) || (List.mem (Ident.string v) qvars) in 
-	    if debug then 
-	      if r then 
-		Format.printf "   ->  Pvar %s OK\n" (Ident.string v) 
-	      else
-		Format.printf "   ->  Pvar %s NON PRESENTE\n" (Ident.string v) ;
-	    r
-	  end; 
+	| Papp (_ ,lt , _) -> 
+	    begin 
+	      if debug then Format.printf "   ->  Papp --> \n" 
+	    end; 
+	    List.for_all (all_vars_from_term vars qvars) lt
+	      
+	| Pvar (v) ->  
+	    begin 
+	      let r=(member_of (Ident.string v) vars) || (List.mem (Ident.string v) qvars) in 
+	      if debug then 
+		if r then 
+		  Format.printf "   ->  Pvar %s OK\n" (Ident.string v) 
+		else
+		  Format.printf "   ->  Pvar %s NON PRESENTE\n" (Ident.string v) ;
+	      r
+	    end; 
 
-      | Pfalse 
-      | Ptrue -> true
-      | Pfpi _ ->
-	  failwith "fpi not yet suported "
-      | Pnamed (_, _) -> 
-	  failwith "Pnamed has to be not found there (nnf has to remove it)"
-      | Forallb (_, _, _)  -> 
-	  failwith "Forallb has to be not found there (nnf has to remove it)"
-      | Pif (a, b, c) ->
-	  failwith "Pif has to be not found there (nnf has to remove it)"
-	    
+	| Pfalse 
+	| Ptrue -> true
+	| Pfpi _ ->
+	    failwith "fpi not yet suported "
+	| Pnamed (_, _) -> 
+	    failwith "Pnamed has to be not found there (nnf has to remove it)"
+	| Forallb (_, _, _)  -> 
+	    failwith "Forallb has to be not found there (nnf has to remove it)"
+	| Pif (a, b, c) ->
+	    failwith "Pif has to be not found there (nnf has to remove it)"
+	      
 
     in
     match lp with
@@ -1704,7 +1828,7 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 	      if debug then Format.printf " Branche rejetee : %a \n" Util.print_predicate p ;
 	      (all_vars_in_one_branch l vars) 
             end
-	    
+	      
   in
   
 
@@ -1712,6 +1836,13 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
   let rec filter = function  
     | [] -> []
     | Svar (id, v) :: q -> 
+	(*if 
+	  ( member_of (Ident.string id)  concl_rep ||
+	  member_of (Ident.string id) avoided_vars) 
+	  then*)
+		  Svar (id, v) ::filter q 
+	  (*else
+	    filter q*)
 	  Svar (id, v) ::filter q 
 
     | Spred (t,p) :: q -> 
@@ -1730,9 +1861,9 @@ let filter_acc_variables l concl_rep selection_strategy  pred_symb =
 		(*** TODO UPDATE THIS ***)
 
 	  | One -> not (VarStringSet.is_empty 
-			   (VarStringSet.inter 
-			       v'
-			       concl_rep))
+			  (VarStringSet.inter 
+			     v'
+			     concl_rep))
 
 	  | AllInABranch -> 
 	      all_vars_in_one_branch (Util.split_one [] 1 p) concl_rep
@@ -1812,9 +1943,18 @@ let managesContext relevantPreds decl =
 	      
 	  | (p_cnf,Dpredicate_def (loc, ident, def)) :: l ->
 	      let preds_of_p_cnf  = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in 
-		if (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then 
+	      begin
+		if debug then
 		  begin
-		    (* On garde tout le prédicat *)
+		    Format.printf "Ctx (Dpred %s): \n" ident;
+		    Format.printf "%a \n" print_decl (Dpredicate_def (loc, ident, def));
+		    Format.printf "Ctx Preds : \n";
+		    display_symb_of_pdl_set preds_of_p_cnf;
+		    Format.printf "Relevent Preds : \n";
+		    display_symb_of_pdl_set relevantPreds;
+		  end;
+		if abstr_subset_of_pdl preds_of_p_cnf relevantPreds then 
+		  begin
 		    if debug then
 		      Format.printf "Ctx Keeped\n\n";
 		    Queue.push (Dpredicate_def (loc, ident, def)) decl;
@@ -1822,11 +1962,71 @@ let managesContext relevantPreds decl =
 		  end
 		else 
 		  begin
-		    (* Sinon on insère la sa signature du prédicat avec un logic *)
+		    (* Lorsqu'un Prï¿½dicat est retirï¿½, sa signature est laissï¿½e sous la forme d'un logic *)
+		    let bl,_ = def.scheme_type in
+		    Queue.push (Dlogic(loc,ident, generalize_logic_type (Predicate(List.map snd bl)))) decl;		
+		    if debug then 
+		      Format.printf "Ctx Dropped\n\n";
+		    filter l
+		  end
+(* Ajout else YM *)
+	      end
+(* A disparu dans v1.49 de YM *)		
+	  | (p_cnf,Daxiom (loc, ident, ps)) :: l-> 
+	      (* Spliter le prï¿½dicat de dï¿½finition en Clauses devenant autant d'axiomes *)
+	      let p_list=(split_one [] 1 p_cnf) in
+	      let ax_list=List.map (fun p -> 
+				      let i=my_fresh_hyp_str () in
+				      (p,Daxiom (loc, ident^"_part_"^i, generalize_predicate p),Daxiom (loc, ident, ps))
+				   ) p_list in
+	      
+	      (* Pour chaque "sous-axiome" introduit : regarder si on le garde ou pas *)
+	      let filter_one_axiom (p,ax,ax_original) =
+		let preds_of_p  = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in 
+		begin
+		  if debug then
+		    begin
+		      Format.printf "Ctx (Daxiom %s): \n"  ident;
+		      Format.printf "%a \n" print_decl ax;
+		      Format.printf "Ctx Preds : \n";
+		      display_symb_of_pdl_set preds_of_p;
+		      Format.printf "Relevent Preds : \n";
+		      display_symb_of_pdl_set relevantPreds;
+		    end;
+		  if abstr_subset_of_pdl preds_of_p relevantPreds then 
+		    begin
+		      if debug then
+			Format.printf "Ctx Keeped\n\n";
+		      if List.length ax_list = 1 then
+			Queue.push ax decl
+		      else
+			Queue.push ax_original decl
+		    end
+		  else 
+		    begin
+		      if debug then 
+			Format.printf "Ctx Dropped\n\n";
+		      (* Queue.push ax decl *)
+		    end
+		end
+	      in
+	      List.iter filter_one_axiom ax_list ;
+	      filter l
+		if (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then 
+		  begin
+		    (* On garde tout le prï¿½dicat *)
+		    if debug then
+		      Format.printf "Ctx Keeped\n\n";
+		    Queue.push (Dpredicate_def (loc, ident, def)) decl;
+		    filter l
+		  end
+		else 
+		  begin
+		    (* Sinon on insï¿½re la sa signature du prï¿½dicat avec un logic *)
 		    (let bl,_ = def.scheme_type in
 		       Queue.push (Dlogic(loc,ident, generalize_logic_type (Predicate(List.map snd bl)))) decl);
 
-		    (* Ensuite, on test chacune des clauses pour éventuellement les préserver *)
+		    (* Ensuite, on test chacune des clauses pour ï¿½ventuellement les prï¿½server *)
 		    let p_list=(split_one [] 1 p_cnf) in
 		    let ax_list=List.map (fun p -> 
 		      let i=my_fresh_hyp_str () in
@@ -1851,7 +2051,7 @@ let managesContext relevantPreds decl =
 		  end
 		else 
 		  begin
-		    (* Sinon, on splite le prédicat de définition en Clauses devenant autant d'axiomes *)
+		    (* Sinon, on splite le prï¿½dicat de dï¿½finition en Clauses devenant autant d'axiomes *)
 		    let p_list=(split_one [] 1 p_cnf) in
 		    let ax_list=List.map (fun p -> 
 		      let i=my_fresh_hyp_str () in
@@ -1864,7 +2064,7 @@ let managesContext relevantPreds decl =
 
 
 		
-		  
+		
 	  | (p_cnf,c) :: l -> 
 	      if debug then 
 		begin  
@@ -1874,48 +2074,48 @@ let managesContext relevantPreds decl =
 	      Queue.push c decl;  
 	      filter l
       in
-	filter (List.rev !context) 
+      filter (List.rev !context) 
     end
-    (*Fin pruning des axiomes du context*)
+      (*Fin pruning des axiomes du context*)
 
 
 
 let managesGoal ax (hyps,concl) decl =
   let (loc,expl,id,_) = ax in 
-    (** retrieves the list of predicates in the conclusion **)
+  (** retrieves the list of predicates in the conclusion **)
   let concl_preds = get_preds_of concl true in 
   let relevant_preds = get_predecessor_pred concl_preds !pb  in 
-    
+  
   (** retrieves the list of variables in the conclusion **)
   let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in 
   let reachable_vars = VarStringSet.diff 
     (get_reachable_vars vars_of_concl !vb)
     avoided_vars in 	
   let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in (* Traitement fait 2 fois pour l'optimisation *)
-    
-    
+  
+  
   let l' = filter_acc_variables hyps relevant_vars  var_filter_tactic (*All  AllInABranch*)  relevant_preds in 
-    
-    
-    if debug then 
-      begin
-	display_str "Relevant vars " relevant_vars ;
-	display_str "Reachable vars " reachable_vars ;
-	
-	if VarStringSet.subset relevant_vars reachable_vars then Format.printf "Relevant <: Reachable\n" else  Format.printf "Relevant /<: Reachable\n";
-	if VarStringSet.subset reachable_vars relevant_vars then Format.printf "Reachable <: Relevant\n" else  Format.printf "Reachable /<: Relevant\n";
-	
-	Format.printf "Concl preds ";
-	display_symb_of_pdl_set concl_preds;
-	Format.printf "Relevant preds ";
-	display_symb_of_pdl_set relevant_preds;
-	let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
-	  DotVG.output_graph oc !vg 
-      end;
+  
+  
+  if debug then 
+    begin
+      display_str "Relevant vars " relevant_vars ;
+      display_str "Reachable vars " reachable_vars ;
+      
+      if VarStringSet.subset relevant_vars reachable_vars then Format.printf "Relevant <: Reachable\n" else  Format.printf "Relevant /<: Reachable\n";
+      if VarStringSet.subset reachable_vars relevant_vars then Format.printf "Reachable <: Relevant\n" else  Format.printf "Reachable /<: Relevant\n";
+      
+      Format.printf "Concl preds ";
+      display_symb_of_pdl_set concl_preds;
+      Format.printf "Relevant preds ";
+      display_symb_of_pdl_set relevant_preds;
+      let oc  =  open_out "/tmp/gwhy_var_graph.dot" in 
+      DotVG.output_graph oc !vg 
+    end;
 
-    managesContext relevant_preds decl ; 
+  managesContext relevant_preds decl ; 
 
-    (loc,expl,id, (l',concl)) 
+  (loc,expl,id, (l',concl)) 
 
 
 
@@ -1925,16 +2125,16 @@ let managesGoal ax (hyps,concl) decl =
 let hyps_to_cnf lh = 
   let lh_cnf = 
     List.fold_left (fun l h -> 
-      match h with
-	| Svar (id, v) as var_def ->  var_def::l 
-	| Spred (id, p) ->
-	    let p'=cnf p in (* p' est une CNF de P mais on veut 1 hypothèse par clause alors on coupe selon les and. On fera appelle à split à la fin du traitement de toutes les hypothèses*)
-	    Spred(id, p')::l 
-	      
-    ) [] lh 
+		      match h with
+			| Svar (id, v) as var_def ->  var_def::l 
+			| Spred (id, p) ->
+			    let p'=cnf p in (* p' est une CNF de P mais on veut 1 hypothï¿½se par clause alors on coupe selon les and. On fera appelle ï¿½ split ï¿½ la fin du traitement de toutes les hypothï¿½ses*)
+			    Spred(id, p')::l 
+			      
+		   ) [] lh 
   in
   Util.split [] my_fresh_hyp lh_cnf
-  
+    
 
 let reset () = 
   vg := Var_graph.create();
@@ -1953,7 +2153,7 @@ let reduce q decl=
   (** manages goal **)
   let q' =   match q with
       (loc, expl, id, s)  as ax ->
-        let (l,g) = s in (* l : liste d'hypothèses (contexte local) et g : le but*)
+        let (l,g) = s in (* l : liste d'hypothï¿½ses (contexte local) et g : le but*)
 	let (l',g') = Util.intros [] g my_fresh_hyp (var_filter_tactic==SplitHyps)  in 
         let l' = if (var_filter_tactic==CNFHyps) then hyps_to_cnf l' else l' in
 	let l' = List.append l l' in 
@@ -1968,4 +2168,3 @@ let reduce q decl=
 
   in
   q' 
-
