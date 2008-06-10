@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.52 2008-06-10 07:52:43 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.53 2008-06-10 15:22:57 couchot Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -69,6 +69,7 @@ open Hashtbl
 open Set
 open Util
 open Graph.Graphviz
+open Graph.Path
 
 type var_strat =
     AllVars
@@ -762,6 +763,9 @@ struct
   let equal = (=)
 end
 
+
+
+
 module Edg =
 struct
   type t = int
@@ -773,33 +777,101 @@ module PdlGraph =
   Graph.Imperative.Digraph.ConcreteLabeled(Vrtx)(Edg)
 let pdlg = ref (PdlGraph.create())
 
+(**
+**************
+PdlSet
+**************
+**)
+module PdlSet = Set.Make(struct type t = vertexLabel
+    let compare = compare end)
+let abstr_mem_of el pdl_set =
+  PdlSet.mem { l = el.l; pol = Pos } pdl_set or
+  PdlSet.mem { l = el.l; pol = Neg } pdl_set
+
+let is_positive el =
+  el.pol == Pos
+let is_negative el =
+  el.pol == Neg
+
+let mem_of el pdl_set =
+  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set )
+
+let mem_of_or_pos el pdl_set =
+  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) or el.pol == Pos
+
+let mem_of_or_neg el pdl_set =
+  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) or el.pol == Neg
+
+let abstr_subset_of_pdl set1 set2 =
+  if polarized_preds then
+    let test_pos = PdlSet.exists(fun el -> is_positive el) set2 in
+    let test_neg = PdlSet.exists(fun el -> is_negative el) set2 in
+    begin
+      if test_pos && test_neg then
+        PdlSet.for_all (fun el -> mem_of el set2) set1
+      else
+        begin
+          if test_pos then
+            (PdlSet.for_all (fun el -> mem_of_or_neg el set2) set1)
+          else
+            PdlSet.for_all (fun el -> mem_of_or_pos el set2) set1
+        end
+    end
+  else
+    PdlSet.for_all
+      (fun el -> abstr_mem_of el set2) set1
+
+
+
+let display_symb_of_pdl_set set =
+  PdlSet.iter
+    (fun el ->
+          Format.printf "(%s,%s)" el.l (string_value_of el.pol)) set;
+  Format.printf "@\n@."
+
+let vSet = ref PdlSet.empty 
+
+
+(** end of PdlSet **)
+
+
+(**
+   computes the arcs from p to q 
+   (~p,q) : p->q and ~q->~p
+**)
 let add_edge lp rp we v v'=
   (* reverse the left since it is given as a disjunction *)
   let lp = oposite lp in
   let le = { l = v; pol = lp } in
   let re = { l = v'; pol = rp } in
+  let lep = { l = v'; pol = oposite rp } in
+  let rep = { l = v; pol = oposite lp } in
+
   try
-  (* edge exists and weight is too big *)
+  (* edge exists and weight is bigger *)
     let (_, w, _) = PdlGraph.find_edge !pdlg le re in
     if w > we then
       begin
         PdlGraph.remove_edge !pdlg le re;
         PdlGraph.add_edge_e !pdlg (le, we, re);
+        PdlGraph.remove_edge !pdlg lep rep;
+        PdlGraph.add_edge_e !pdlg (lep, we, rep);
       end
   with Not_found ->
-      try
-        let le = { l = v'; pol = oposite rp } in
-        let re = { l = v; pol = oposite lp } in
-        (* conterpart edge exists and weight is to big *)
-        let (_, w, _) = PdlGraph.find_edge !pdlg le re in
-        if w > we then
-          begin
-            PdlGraph.remove_edge !pdlg le re;
-            PdlGraph.add_edge_e !pdlg (le, we, re);
-          end
-      with Not_found ->
-      (* none edge exists *)
-          PdlGraph.add_edge_e !pdlg (le, we, re)
+    PdlGraph.add_edge_e !pdlg (le, we, re);
+    PdlGraph.add_edge_e !pdlg (lep, we, rep);
+    vSet := PdlSet.add 
+	       rep 
+	       (PdlSet.add 
+		  lep
+		  (PdlSet.add 
+		     re
+		     (PdlSet.add le !vSet)  
+		  ) 
+	       ) 
+	       
+      
+    
 
 module DisplayPdlGraph = struct
   let vertex_name v =
@@ -1232,49 +1304,6 @@ let build_pred_graph decl =
 
 (** End of graph of predicates**)
 
-(**
-**************
-PdlSet
-**************
-**)
-module PdlSet = Set.Make(struct type t = vertexLabel
-    let compare = compare end)
-let abstr_mem_of el pdl_set =
-  PdlSet.mem { l = el.l; pol = Pos } pdl_set or
-  PdlSet.mem { l = el.l; pol = Neg } pdl_set
-
-let is_positive el =
-  el.pol == Pos
-let is_negative el =
-  el.pol == Neg
-
-let mem_of el pdl_set =
-  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set )
-
-let mem_of_or_pos el pdl_set =
-  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) or el.pol == Pos
-
-let mem_of_or_neg el pdl_set =
-  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) or el.pol == Neg
-
-let abstr_subset_of_pdl set1 set2 =
-  if polarized_preds then
-    let test_pos = PdlSet.exists(fun el -> is_positive el) set2 in
-    let test_neg = PdlSet.exists(fun el -> is_negative el) set2 in
-    begin
-      if test_pos && test_neg then
-        PdlSet.for_all (fun el -> mem_of el set2) set1
-      else
-        begin
-          if test_pos then
-            (PdlSet.for_all (fun el -> mem_of_or_neg el set2) set1)
-          else
-            PdlSet.for_all (fun el -> mem_of_or_pos el set2) set1
-        end
-    end
-  else
-    PdlSet.for_all
-      (fun el -> abstr_mem_of el set2) set1
 
 let set_of_pred_p vs =
   PdlSet.fold
@@ -1301,6 +1330,101 @@ let set_of_pred_p vs =
     )
     vs
     PdlSet.empty
+
+
+(***************************************
+*********
+*******************)
+
+module W = struct 
+  type label = PdlGraph.E.label
+  type t = int
+  let weight x = x
+  let zero = 0
+  let add = (+)
+  let compare = compare
+end
+
+  
+
+module Dij = Dijkstra(PdlGraph)(W)
+
+let compute_sequence_of_predicates concl_preds = 
+  if debug then
+    begin
+      Format.printf "Conclusion preds :" ;
+      display_symb_of_pdl_set concl_preds
+    end;
+      
+  (* compute the weight of the shortest path from 
+     the node elem and nodes of the conclusion*)
+  let dij elem = 
+    let dij_and_comp v2 acc = 
+      try 
+	(* Dijkstra from elem to node v2 of the conclusion*)
+	let (_,d) = Dij.shortest_path !pdlg  elem v2 in
+	(* memorizing the sohortest path*)
+	if debug then
+	  begin
+	    Format.printf "From (%s,%s)" elem.l (string_value_of elem.pol);
+	    Format.printf "to (%s,%s)" v2.l (string_value_of v2.pol);
+	    Format.printf "dist is  %d \n" d;
+	  end;
+	if  (acc == (-1) ) || (d < acc) then 
+	  d
+	else
+	  acc
+      with Not_found->
+	if debug then
+	  begin
+	    Format.printf "From (%s,%s)" elem.l (string_value_of elem.pol);
+	    Format.printf "to (%s,%s)" v2.l (string_value_of v2.pol);
+	    Format.printf "dist is  infinity \n" ;
+	  end;
+	(-1)  
+    in
+    PdlSet.fold  dij_and_comp concl_preds (-1)
+  in
+  
+  let hash_lits : (int,'a) Hashtbl.t = Hashtbl.create 10 in 
+  (* adds into L[i] the node elem  where dijkstra result dij  is i *)
+  PdlSet.iter
+    (fun elem ->
+       let w = dij elem in
+       try 
+	 let l_i = Hashtbl.find hash_lits w in 
+	 Hashtbl.replace hash_lits w (PdlSet.add elem l_i) 
+       with Not_found ->
+	   Hashtbl.add hash_lits w (PdlSet.singleton elem )
+    ) !vSet ;
+    if debug then
+      begin
+	Format.printf "Liste of predicates \n";
+	for i = 0 to 10 do
+	  Format.printf "L[%d] is " i ;
+	  try 
+	    let l_i = Hashtbl.find hash_lits i in
+	    display_symb_of_pdl_set l_i
+	  with _ ->
+	    Format.printf " empty \n";
+	done; 
+      end;
+    hash_lits
+
+
+
+
+
+    
+ 
+	   
+	 
+    
+  
+
+
+
+
 
 (* Use of the preds dependence graph to filter hypothesis *)
 let get_preds_of p filter_comparison =
@@ -1386,13 +1510,6 @@ let get_predecessor_pred p n =
       av in
   get_preds_in_graph p p n
 
-let display_symb_of_pdl_set set =
-  PdlSet.iter
-    (fun el ->
-          Format.printf "(%s,%s)" el.l (string_value_of el.pol)) set;
-  Format.printf "@\n@."
-
-(** end of PdlSet **)
 
 (**
 functions for the main function: reduce
@@ -1730,7 +1847,10 @@ let managesGoal ax (hyps, concl) decl =
   (** retrieves the list of predicates in the conclusion **)
   let concl_preds = get_preds_of concl true in
   let relevant_preds = get_predecessor_pred concl_preds !pb in
-  
+  (* hl is a hash table that associates to each index w 
+     the set of predicate whose distance to the conclusion is w *)
+  let hl = compute_sequence_of_predicates concl_preds in 
+
   (** retrieves the list of variables in the conclusion **)
   let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in
   let reachable_vars = VarStringSet.diff
