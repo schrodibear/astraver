@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.135 2008-05-27 15:29:14 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.136 2008-06-10 15:52:46 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -49,6 +49,10 @@ let var_name v = v.jc_var_info_name
 let fi_name f = f.jc_field_info_name
 
 let reg_loc ?id ?kind ?name loc = Output.reg_loc "K" ?id ?kind ?name loc
+
+let locate ?id ?kind ?name loc e =
+  let lab = reg_loc ?id ?kind ?name loc in
+  new pexpr ~loc (JCPElabel(lab,e))
 
 (*s loop tags *)
 
@@ -1407,8 +1411,9 @@ let rec expr ?(reg=false) e =
 	  end
 
   in
-  let _ = if !reg then reg_loc e.java_expr_loc else "" in
-  new pexpr ~loc: e.java_expr_loc e'#node
+  let loc = e.java_expr_loc in
+  let e = new pexpr ~loc: e.java_expr_loc e'#node in
+  if !reg then locate loc e else e
 
 let initialiser e =
   match e with
@@ -1428,8 +1433,7 @@ let make_block l =
 
 let reg_assertion a = 
   let a' = assertion ~reg:1 a  in
-  let _ = reg_loc a.java_assertion_loc in
-  a'
+  locate a.java_assertion_loc a'
 
 let reg_assertion_option a =
   match a with
@@ -1440,8 +1444,7 @@ let loop_annot inv dec =
   let invariant = reg_assertion inv in
   let variant = Option_misc.map begin fun t ->
     let t' = term t in
-    let _ = reg_loc t.java_term_loc in
-    t'
+    locate t.java_term_loc t'
   end dec
   in
   invariant, variant
@@ -1521,13 +1524,10 @@ let rec statement s =
 	  in mkblock ~exprs:[res] ()
       | JSexpr e -> expr e
       | JSassert(id,e) -> 
-	  let _ = (* TODO: use it *)
-	    match id with
-	      | None -> reg_loc e.java_assertion_loc
-	      | Some id -> reg_loc ~id e.java_assertion_loc
-	  in
+	  let loc = e.java_assertion_loc in
 	  let e' = reg_assertion e in
-          mkassert ~expr:e' ()
+          let e = mkassert ~expr:e' () in
+	  locate ?id loc e
       | JSswitch(e,l) -> 
           mkswitch ~expr:(expr e) ~cases:(List.map switch_case l) ()
       | JStry(s1, catches, finally) ->
