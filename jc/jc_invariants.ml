@@ -1365,11 +1365,11 @@ let tr_valid_inv st acc =
     LForall(id, ty, acc)) sem ((this, this_ty)::params) in
   Axiom(valid_inv_axiom_name st, sem)::acc*)
 
-let rec invariant_for_struct this si =
+let rec invariant_for_struct ?loc this si =
   let (_, invs) = 
     Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
   in
-  let invs = Assertion.mkand
+  let invs = Assertion.mkand ?loc
     ~conjuncts:(List.map 
        (fun (li, _) -> 
 	  let a = { jc_app_fun = li;
@@ -1377,7 +1377,7 @@ let rec invariant_for_struct this si =
 		    jc_app_label_assoc = [];
 		    jc_app_region_assoc = [] }
 	  in
-	  new assertion (JCAapp a)) invs) 
+	  new assertion ?loc (JCAapp a)) invs) 
     ()
   in
     match si.jc_struct_info_parent with
@@ -1389,12 +1389,12 @@ let rec invariant_for_struct this si =
 		  new term_with ~typ:(JCTpointer (JCtag si, a, b)) this
 	      | _ -> assert false (* never happen *)
 	  in
-	  Assertion.mkand 
-	      ~conjuncts:[invs; (invariant_for_struct this si)]
+	  Assertion.mkand ?loc
+	      ~conjuncts:[invs; (invariant_for_struct ?loc this si)]
 	    ()
 	    
 
-let code_function (fi, fs, sl) vil =
+let code_function (fi, loc, fs, sl) vil =
   begin
     match !Jc_common_options.inv_sem with
       | InvArguments ->
@@ -1414,11 +1414,12 @@ let code_function (fi, fs, sl) vil =
 			     jc_app_label_assoc = [];
 			     jc_app_region_assoc = [] }
 		   in
-		   (new assertion (JCAapp a)) :: acc)
+		   (new assertion ~name_label:(Jc_pervasives.new_label_name ())
+~loc (JCAapp a)) :: acc)
 		Jc_typing.global_invariants_table []
 	    in
 	    let global_invariants = 
-	      Assertion.mkand ~conjuncts:global_invariants ()
+	      Assertion.mkand ~loc ~conjuncts:global_invariants ()
 	    in
 	      (* Calculate invariants for each parameter. *)
 	    let invariants =
@@ -1426,41 +1427,41 @@ let code_function (fi, fs, sl) vil =
 		(fun acc vi ->
 		   match vi.jc_var_info_type with
 		     | JCTpointer (JCtag st, _, _) ->
-			 Assertion.mkand 
+			 Assertion.mkand ~loc
 			   ~conjuncts:
-			   [acc; (invariant_for_struct 
+			   [acc; (invariant_for_struct ~loc
 				    (Term.mkvar ~var:vi ()) st)]
 			   ()
 		     | _ -> acc)
 		(Assertion.mktrue ())
 		fi.jc_fun_info_parameters
 	    in
-	    Assertion.mkand ~conjuncts:[global_invariants; invariants] ()
+	    Assertion.mkand ~loc ~conjuncts:[global_invariants; invariants] ()
 	  in
 	    (* add invariants to the function precondition *)
 	  fs.jc_fun_requires <- 
-	    Assertion.mkand ~conjuncts:[fs.jc_fun_requires; invariants] ();
+	    Assertion.mkand ~loc ~conjuncts:[fs.jc_fun_requires; invariants] ();
 	    (* add invariants to the function postcondition *)
-	    if is_purely_exceptional_fun fs then () else
-	      let safety_exists = ref false in
-	      let post = invariants in
-		List.iter
-		  (fun (_, s, b) ->
-		     if s = "safety" then safety_exists := true;
-		     b.jc_behavior_ensures <- 
-		       Assertion.mkand ~conjuncts:[b.jc_behavior_ensures; post] ())
-		  fs.jc_fun_behavior;
-		(* add the 'safety' spec if it does not exist 
-		   (it could exist e.g. from Krakatoa) *)
-		if not !safety_exists then
-		  if Jc_options.verify_invariants_only then
-		    let invariants_b = { default_behavior with jc_behavior_ensures = post } in
-		      fs.jc_fun_behavior <- 
-			(Loc.dummy_position, "invariants", invariants_b) :: fs.jc_fun_behavior;
-		  else
-		    let safety_b = { default_behavior with jc_behavior_ensures = post } in
-		      fs.jc_fun_behavior <- 
-			(Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
+	  if is_purely_exceptional_fun fs then () else
+	    let safety_exists = ref false in
+	    let post = invariants in
+	    List.iter
+	      (fun (_, s, b) ->
+		 if s = "safety" then safety_exists := true;
+		 b.jc_behavior_ensures <- 
+		   Assertion.mkand ~loc ~conjuncts:[b.jc_behavior_ensures; post] ())
+	      fs.jc_fun_behavior;
+	    (* add the 'safety' spec if it does not exist 
+	       (it could exist e.g. from Krakatoa) *)
+	    if not !safety_exists then
+	      if Jc_options.verify_invariants_only then
+		let invariants_b = { default_behavior with jc_behavior_ensures = post } in
+		fs.jc_fun_behavior <- 
+		  (Loc.dummy_position, "invariants", invariants_b) :: fs.jc_fun_behavior;
+	      else
+		let safety_b = { default_behavior with jc_behavior_ensures = post } in
+		fs.jc_fun_behavior <- 
+		  (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
       | _ -> ()
   end;
 

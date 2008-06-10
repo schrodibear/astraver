@@ -37,6 +37,7 @@ val error: Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 (* labels *)
 
 val label_var : Jc_env.logic_label -> string -> string
+val new_label_name: unit -> string
 
 (* types *)
 

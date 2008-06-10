@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.107 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.108 2008-06-10 13:43:10 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -80,8 +80,8 @@ let main () =
 	Jc_typing.variables_table []
     in
     Hashtbl.iter
-      (fun _tag (f,_loc,s,b) -> 
-	 Jc_invariants.code_function (f, s, b) vil)
+      (fun _tag (f,loc,s,b) -> 
+	 Jc_invariants.code_function (f, loc, s, b) vil)
       Jc_typing.functions_table;
 
     (* phase 4: computation of call graph *)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.28 2008-05-29 17:59:06 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.29 2008-06-10 13:43:10 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -213,6 +213,18 @@ let () =
 	    Hashtbl.add locs_table id (f,l,b,e,k,o))
 	 l)
     !locs_files
+
+let position_of_label name =
+  let position f l c = {
+    Lexing.pos_fname = f;
+    Lexing.pos_lnum = l;
+    Lexing.pos_bol = 0;
+    Lexing.pos_cnum = c;
+  } in
+  try
+    let (f,l,b,e,_k,_o) = Hashtbl.find locs_table name in
+    Some (position f l b, position f l e)
+  with Not_found -> None
 
 
 (*

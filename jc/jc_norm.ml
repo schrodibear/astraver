@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.92 2008-05-23 07:26:11 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.93 2008-06-10 13:43:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -449,13 +449,10 @@ let goto_block loc el =
     match el with [] -> [],[] | e1::r ->
       let elr,labelr = label_block r in
       match e1#node with
-	| JCPElabel(lab,e2) ->
+	| JCPElabel(lab,e2) when Hashtbl.mem label_used lab ->
 	    let e3 = mkblock ~loc ~exprs:(e2::elr) () in
 	    let e4 = mklabel ~loc ~label:lab ~expr:e3 () in
-	    if Hashtbl.mem label_used lab then
-	      [],(lab,[e4])::labelr
-	    else 
-	      [e4],labelr
+	    [],(lab,[e4])::labelr
 	| _ -> e1::elr,labelr
   in
   let el,labels = label_block el in
@@ -475,7 +472,7 @@ let rec goto e lz =
     | JCPEgoto lab -> 
 	let id = goto_exception_for_label lab in
 	JCPEthrow(id, mkvoid ()), lz
-    | JCPElabel (lab,e1) -> 
+    | JCPElabel (lab,e1) ->
 	let lz1 = match lz with
 	  | LabelItem lab'::LabelBlock b1::after ->
 	      assert (lab=lab');

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.27 2008-04-04 16:10:32 nrousset Exp $ *)
+(* $Id: jc_options.mli,v 1.28 2008-06-10 13:43:10 moy Exp $ *)
 
 
 
@@ -80,6 +80,7 @@ val locs_table :
   (string, (string * int * int * int * Output.kind option * (string * Rc.rc_value) list)) 
      Hashtbl.t
 
+val position_of_label: string -> Loc.position option
 
 (*
 Local Variables: 

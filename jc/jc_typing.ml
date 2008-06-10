@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.206 2008-05-23 16:00:32 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.207 2008-06-10 13:43:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2010,7 +2010,10 @@ let rec decl d =
         let vi = get_vardecl id in
         Hashtbl.add variables_table vi.jc_var_info_tag (vi, e)
     | JCDfun (ty, id, pl, specs, body) -> 
-        let loc = id#loc in
+        let loc = match Jc_options.position_of_label id#name with
+	  | Some loc -> loc
+	  | None -> id#loc 
+	in
         let param_env, fi = get_fundecl id#name in
         let vi = fi.jc_fun_info_result in
         let s = List.fold_right 

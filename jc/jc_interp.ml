@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.283 2008-05-29 10:45:02 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.284 2008-06-10 13:43:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -51,7 +51,6 @@ open Num
 
 
 let locs_table = Hashtbl.create 97
-let name_counter = ref 0
 
 let abs_fname f =
   if Filename.is_relative f then
@@ -69,9 +68,7 @@ let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =
   with Not_found ->
 
   let id,oldid = match id,oldid with
-    | None,_ ->  
-        incr name_counter;
-        "JC_" ^ string_of_int !name_counter, oldid
+    | None,_ -> Jc_pervasives.new_label_name (), oldid
     | Some n, None -> n,Some n
     | Some n, Some o -> n, Some o
   in
@@ -1405,28 +1402,16 @@ and expr ~infunction ~threats e : expr =
         make_app "instanceof_" [Deref tag; e; Var (tag_name t)]
     | JCEcast (e, si) ->
         if struct_of_union si then expr e else
-          let tag = tag_table_name (JCtag si) in
         (* ??? TODO faire ca correctement: on peut tres bien caster des expressions qui ne sont pas des termes !!! *)
 (*
         let et, _ = term ~global_assertion:false LabelHere LabelHere (term_of_expr e) in*)
           let tmp = tmp_var_name () in
-          let typea = 
-            match e#typ with
-              | JCTpointer (JCtag si', _, _) -> 
-                  if is_substruct si' si then LTrue else
-                    LPred ("instanceof", [LVar tag; LVar tmp; LVar (tag_name si)])
-              | JCTpointer (JCvariant _, _, _) -> assert false (* TODO *)
-              | _ -> LTrue
-          in
           let tag = tag_table_name (JCtag si) in
           let call = 
             make_guarded_app ~name:(lab()) DownCast loc "downcast_" 
               [Deref tag; Var tmp; Var (tag_name si)]
           in
-          let guarded_call =
-            if typea = LTrue then call else Assert (typea, call)
-          in
-          Let(tmp, expr e, guarded_call)
+          Let(tmp, expr e, call)
     | JCErange_cast(e1,ri) ->
         let e1' = expr e1 in
         coerce ~no_int_overflow:(not threats)
@@ -2100,7 +2085,7 @@ let rec make_union_loc = function
   | [l] -> l
   | l::r -> LApp("pset_union",[l;make_union_loc r])
 
-let assigns before ef locs =
+let assigns before ef locs loc =
   match locs with
     | None -> LTrue     
     | Some locs ->
@@ -2137,11 +2122,12 @@ let assigns before ef locs =
        in
        let alloc = alloc_region_table_name(root,r) in
        make_and acc
-         (LPred("not_assigns",
+	 (let a = LPred("not_assigns",
                 [lvar before alloc; 
                  lvar before v;
-                 LVar v; make_union_loc p])))
-    mems a
+                 LVar v; make_union_loc p]) in
+	  LNamed(reg_loc loc,a))
+    ) mems a
 
 (*******************************************************************************)
 (*                                  Functions                                  *)
@@ -2183,7 +2169,7 @@ let interp_fun_params f write_mems read_mems annot_type =
           l annot_type
        
   
-let tr_fun f loc spec body acc =
+let tr_fun f funloc spec body acc =
   let requires_param = 
     (named_assertion 
        ~global_assertion:false 
@@ -2256,7 +2242,7 @@ let tr_fun f loc spec body acc =
                          b.jc_behavior_ensures)         
                       (named_jc_assertion
                          locassigns
-                         (assigns LabelOld f.jc_fun_info_effects (Some a))))
+                         (assigns LabelOld f.jc_fun_info_effects (Some a) funloc)))
          in
          let a =
            match b.jc_behavior_assumes with
@@ -2620,7 +2606,7 @@ let tr_fun f loc spec body acc =
                 ~id:newid
                 ~oldid:f.jc_fun_info_name
                 ~name:("function " ^ f.jc_fun_info_name)
-                ~beh:"Safety" loc 
+                ~beh:"Safety" funloc 
               in
               let acc = 
                 if is_purely_exceptional_fun spec then acc else
@@ -2681,7 +2667,7 @@ let tr_fun f loc spec body acc =
                            ~oldid:f.jc_fun_info_name
                            ~name:("function "^f.jc_fun_info_name)
                            ~beh  
-                           loc 
+                           funloc 
                          in
                          let d =
                            Def(
@@ -2720,7 +2706,7 @@ let tr_fun f loc spec body acc =
                                 ~oldid:f.jc_fun_info_name
                                 ~name:("function "^f.jc_fun_info_name)
                                 ~beh:("Exceptional behavior `"^id^"'")  
-                                loc in
+                                funloc in
                               let d =
                                 Def(newid,
                                     Fun(params,
