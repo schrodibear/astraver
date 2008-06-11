@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.88 2008-05-25 12:11:28 stoulsn Exp $ i*)
+(*i $Id: options.mli,v 1.89 2008-06-11 07:44:32 stoulsn Exp $ i*)
 
 (*s General options *)
 
@@ -74,6 +74,7 @@ val pruning : bool
 val pruning_hyp_v : int
 val pruning_hyp_p : int
 (* Heuristiques en test *)
+val prune_coarse_pred_comp : bool
 val pruning_hyp_CompInGraph : bool
 val pruning_hyp_CompInFiltering : bool
 val pruning_hyp_LinkVarsQuantif : bool

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.53 2008-06-10 15:22:57 couchot Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.54 2008-06-11 07:44:31 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1350,53 +1350,43 @@ end
 module Dij = Dijkstra(PdlGraph)(W)
 
 let compute_sequence_of_predicates concl_preds = 
-  if debug then
-    begin
-      Format.printf "Conclusion preds :" ;
-      display_symb_of_pdl_set concl_preds
-    end;
-      
   (* compute the weight of the shortest path from 
      the node elem and nodes of the conclusion*)
+  let max = ref 0 in 
   let dij elem = 
     let dij_and_comp v2 acc = 
       try 
 	(* Dijkstra from elem to node v2 of the conclusion*)
 	let (_,d) = Dij.shortest_path !pdlg  elem v2 in
+	(*update max*)
+	max := if d > !max then d else !max ;
 	(* memorizing the sohortest path*)
-	if debug then
-	  begin
-	    Format.printf "From (%s,%s)" elem.l (string_value_of elem.pol);
-	    Format.printf "to (%s,%s)" v2.l (string_value_of v2.pol);
-	    Format.printf "dist is  %d \n" d;
-	  end;
 	if  (acc == (-1) ) || (d < acc) then 
 	  d
 	else
 	  acc
       with Not_found->
-	if debug then
-	  begin
-	    Format.printf "From (%s,%s)" elem.l (string_value_of elem.pol);
-	    Format.printf "to (%s,%s)" v2.l (string_value_of v2.pol);
-	    Format.printf "dist is  infinity \n" ;
-	  end;
 	(-1)  
     in
     PdlSet.fold  dij_and_comp concl_preds (-1)
   in
-  
+
   let hash_lits : (int,'a) Hashtbl.t = Hashtbl.create 10 in 
-  (* adds into L[i] the node elem  where dijkstra result dij  is i *)
+  (* adds into L[dij] the node elem  where dij is the dijkstra result.
+      If dij is -1, then we set L[max+1] *)
   PdlSet.iter
     (fun elem ->
        let w = dij elem in
        try 
 	 let l_i = Hashtbl.find hash_lits w in 
-	 Hashtbl.replace hash_lits w (PdlSet.add elem l_i) 
+	 if w != (-1) then 
+	   Hashtbl.replace hash_lits w (PdlSet.add elem l_i) 
+	 else
+	   Hashtbl.replace hash_lits (!max +1) (PdlSet.add elem l_i) 
        with Not_found ->
 	   Hashtbl.add hash_lits w (PdlSet.singleton elem )
     ) !vSet ;
+  
     if debug then
       begin
 	Format.printf "Liste of predicates \n";
@@ -1509,6 +1499,21 @@ let get_predecessor_pred p n =
     else
       av in
   get_preds_in_graph p p n
+
+let get_relevant_preds hl n =
+  let avs = ref PdlSet.empty in
+  for i = 0 to n do
+    try 
+      let l_i = Hashtbl.find hl i in
+      avs := PdlSet.union !avs l_i
+    with Not_found -> 
+      () (* TODO remove this *)
+  done; 
+  !avs
+ 
+
+
+ 
 
 
 (**
@@ -1846,19 +1851,26 @@ let managesGoal ax (hyps, concl) decl =
   let (loc, expl, id, _) = ax in
   (** retrieves the list of predicates in the conclusion **)
   let concl_preds = get_preds_of concl true in
-  let relevant_preds = get_predecessor_pred concl_preds !pb in
-  (* hl is a hash table that associates to each index w 
-     the set of predicate whose distance to the conclusion is w *)
-  let hl = compute_sequence_of_predicates concl_preds in 
+  (* if weights are not consider (as [FTP07] implementation)*)
+  let relevant_preds = 
+      if prune_coarse_pred_comp then 
+	get_predecessor_pred concl_preds !pb 
+      else
+	begin
+	  let hl = compute_sequence_of_predicates concl_preds in 
+	  get_relevant_preds hl !pb 
+	end in
 
   (** retrieves the list of variables in the conclusion **)
   let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in
   let reachable_vars = VarStringSet.diff
       (get_reachable_vars vars_of_concl !vb)
       avoided_vars in
-  let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in (* Traitement fait 2 fois pour l'optimisation *)
+  let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in 
+  (* Traitement fait 2 fois pour l'optimisation *)
   
-  let l' = filter_acc_variables hyps relevant_vars var_filter_tactic (*All  AllInABranch*) relevant_preds in
+  let l' = filter_acc_variables hyps relevant_vars var_filter_tactic 
+    (*All  AllInABranch*) relevant_preds in
   
   if debug then
     begin
@@ -1886,7 +1898,11 @@ let hyps_to_cnf lh =
             match h with
             | Svar (id, v) as var_def -> var_def:: l
             | Spred (id, p) ->
-                let p'= cnf p in (* p' est une CNF de P mais on veut 1 hypoth�se par clause alors on coupe selon les and. On fera appelle � split � la fin du traitement de toutes les hypoth�ses*)
+                let p'= cnf p in 
+		(* p' est une CNF de P mais on veut 1 hypothese par clause 
+		   alors on coupe selon les and. 
+		   On fera appelle au  split a la fin du traitement 
+		   de toutes les hypotheses*) 
                 Spred(id, p'):: l
         
       ) [] lh
