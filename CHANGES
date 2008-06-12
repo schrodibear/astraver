@@ -1,4 +1,6 @@
 
+  o fixed HOL4 output; contribution by Vladimir Timashov 
+    (vladimir.timashov@gmail.com)
   o gwhy: fixed efficiency issue with large comments
   o fixed coq entry in jessie-generated makefile
   o why typing safely fails when duplicate parameter names in 

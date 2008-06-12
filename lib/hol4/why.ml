@@ -1,7 +1,7 @@
 load "intLib";
 load "bossLib";
 
-(*ßwhy: THEORY *)
+(* why: THEORY *)
 
 (*
 BEGIN
@@ -71,6 +71,7 @@ Hol_datatype `warray = <| length:num;
 			  index:num->'a
 	                |>`;
 
+
 (* NOT needed: val array_length_def = Define `array_length(Arr l f ) = l`; *)
 (*  access(t:warray, i:below(proj_1(t))) : T = proj_2(t)(i)
 DEFINITION of proj_2()
@@ -78,7 +79,7 @@ DEFINITION of proj_2()
 
 (* NOT needed: val access_def = Define `access(Arr l f, i) = if i<l then f(i) else ARB`; *)
 
-val access_def = Define `access(A, i) = if i<A.length then A.index(i) else ARB`;
+val access_def = Define `access A i = if i<A.length then A.index(i) else ARB`;
 
 (*  store(t:warray, i:below(proj_1(t)), v): warray = 
     (proj_1(t), 
@@ -91,7 +92,7 @@ val access_def = Define `access(A, i) = if i<A.length then A.index(i) else ARB`;
 
 val store_def = 
  Define 
-   `store(A, i, v) = 
+   `store A i v =
       A with index := \j. if i<A.length /\ j<A.length
                             then (if i=j then v else A.index(j))
 	                    else ARB `;
@@ -120,8 +121,8 @@ BEGIN
 *)
 val sorted_array_def = 
  Define 
-   `sorted_array(t, i, j) = 
-	!k. i<=k /\ k<j ==> access(t, k) <= access(t, k+1)`; 
+   `sorted_array t i j =
+	!k. i<=k /\ k<j ==> access t k <= access t k+1`;
 
 
 (*
@@ -147,10 +148,10 @@ BEGIN
 *)
 val array_id_def = 
  Define 
-   `array_id(t, u, i, j) = 
+   `array_id t u i j =
       i < MIN t.length u.length /\
       j < MIN t.length u.length /\
-     !k. i<=k /\ k<=j ==> (access(t, k) = access(u, k))`;
+     !k. i<=k /\ k<=j ==> (access t k = access u k)`;
 
 (*  % swap of elements at i and j
   exchange(t, u, i, j) : bool = 
@@ -164,15 +165,15 @@ val array_id_def =
 
 val exchange_def = 
  Define 
-   `exchange(t, u, i, j) =
+   `exchange t u i j =
 	(t.length = u.length)  /\
 	0 <= i /\ i < t.length /\
         0 <= j /\ j < t.length /\
-	(access(t,i) = access(u,j)) /\
-	(access(t,j) = access(u,i)) /\
+	(access t i = access u j) /\
+	(access t j = access u i) /\
 	!k. 0 <= k /\ k < t.length /\
             ~(k=i) /\ ~(k=j) 
-          ==> (access(t, k) = access(u, k))`;
+          ==> (access t k = access u k)`;
 
 
 (*
@@ -180,7 +181,7 @@ val exchange_def =
   permut(t, u) : bool
 *)
 
-val permut_def = new_constant("permut", Type`:(('a) warray)#(('a) warray) -> bool`);
+val permut_def = new_constant("permut", Type`:(('a) warray) -> (('a) warray) -> bool`);
 
 
 (*  permut_exchange : 
@@ -188,21 +189,21 @@ val permut_def = new_constant("permut", Type`:(('a) warray)#(('a) warray) -> boo
 *)
 
 val permut_exchange_def = 
-    new_axiom("permut_exchange", Term `!t u i j. exchange(t, u, i, j) ==> permut(t, u)`);
+    new_axiom("permut_exchange", Term `!t u i j. exchange t u i j ==> permut t u`);
 
 (*  permut_refl     : 
     AXIOM forall t: permut(t,t)
 *)
 
 val permut_refl_def = 
-    new_axiom("permut_refl", Term `!t. permut(t, t)`);
+    new_axiom("permut_refl", Term `!t. permut t t`);
 
 (*  permut_sym      : 
     AXIOM forall t,u: permut(t,u) implies permut(u,t)
 *)
 
 val permut_sym_def = 
-    new_axiom("permut_sym", Term `!t u. permut(t, u) ==> permut(u, t)`);
+    new_axiom("permut_sym", Term `!t u. permut t u ==> permut u t`);
 
 (*  permut_trans    : 
     AXIOM forall t,u,v : permut(t,u) implies permut(u,v) implies permut(t,v)
@@ -210,7 +211,7 @@ val permut_sym_def =
 
 val permut_trans_def = 
     new_axiom("permut_trans", Term `!t u v. 
-		permut(t, u) ==> permut(u, v)==>permut(t, v)`);
+		permut t u ==> permut u v==>permut t v`);
 
 
 (*  % sub_permut(t,u,i,j) defines a permutation on the sub-array i..j,
@@ -218,7 +219,7 @@ val permut_trans_def =
   sub_permut(l, r, t, u) : bool
 *)
 
-val sub_permut_def = new_constant("sub_permut", Type`:(('a) warray) # (('a) warray -> bool`);
+val sub_permut_def = new_constant("sub_permut", Type`:(('a) warray) -> (('a) warray) -> num -> num -> bool`);
 
 (*  sub_permut_exchange : 
     AXIOM forall l,r,t,u,i,j: 
@@ -228,7 +229,7 @@ val sub_permut_def = new_constant("sub_permut", Type`:(('a) warray) # (('a) warr
 val sub_permut_exchange_def = 
     new_axiom("sub_permut_exchange", Term`!l r t u i j.
 	 l<=i /\ i<=r  ==>  l<=j /\ j<=r  
-	==> exchange t u i j ==> sub_permut l r t u`);
+	==> exchange t u i j ==> sub_permut t u l r`);
 
 (* 
   sub_permut_refl     : 
@@ -242,12 +243,12 @@ END why_array_pred
 *)
 
 val sub_permut_refl_def = 
-    new_axiom("sub_permut_refl", Term `!l r t. sub_permut(l, r, t, t)`);
+    new_axiom("sub_permut_refl", Term `!l r t. sub_permut l r t t`);
 
 val sub_permut_sym_def = 
     new_axiom("sub_permut_sym", Term `!l r t u. 
-	sub_permut(l, r, t, u) ==> sub_permut(l, r, u, t)`);
+	sub_permut l r t u ==> sub_permutl r u t`);
 
 val sub_permut_trans_def = 
     new_axiom("sub_permut_trans", Term `!l r t u v. 
-	sub_permut(l, r, t, u) ==> sub_permut(l, r, u, v) ==> sub_permut(l, r, t, v)`);
+	sub_permut l r t u ==> sub_permut l r u v ==> sub_permut l r t v`);

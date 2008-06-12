@@ -1,33 +1,5 @@
-(**************************************************************************)
-(*                                                                        *)
-(*  The Why platform for program certification                            *)
-(*  Copyright (C) 2002-2008                                               *)
-(*    Romain BARDOU                                                       *)
-(*    Jean-François COUCHOT                                               *)
-(*    Mehdi DOGGUY                                                        *)
-(*    Jean-Christophe FILLIÂTRE                                           *)
-(*    Thierry HUBERT                                                      *)
-(*    Claude MARCHÉ                                                       *)
-(*    Yannick MOY                                                         *)
-(*    Christine PAULIN                                                    *)
-(*    Yann RÉGIS-GIANAS                                                   *)
-(*    Nicolas ROUSSET                                                     *)
-(*    Xavier URBAIN                                                       *)
-(*                                                                        *)
-(*  This software is free software; you can redistribute it and/or        *)
-(*  modify it under the terms of the GNU General Public                   *)
-(*  License version 2, as published by the Free Software Foundation.      *)
-(*                                                                        *)
-(*  This software is distributed in the hope that it will be useful,      *)
-(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
-(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
-(*                                                                        *)
-(*  See the GNU General Public License version 2 for more details         *)
-(*  (enclosed in the file GPL).                                           *)
-(*                                                                        *)
-(**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.22 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: hol4.ml,v 1.23 2008-06-12 07:12:36 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -58,7 +30,7 @@ let push_decl = function
   | Dfunction_def _ -> assert false (*TODO*)
   | Dgoal (loc,expl,id,s) -> 
       Queue.add (Obligation (loc,expl,id,s.Env.scheme_type)) elem_q
-  | Dtype _ -> assert false (*TODO*)
+  | Dtype (_,_,id) -> () (* assert false *)
 
 (*s Pretty print *)
 
@@ -68,9 +40,10 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "one"
   | PTreal -> fprintf fmt "real"
   | PTexternal([v],id) when id==farray -> 
-      fprintf fmt "list(%a)" print_pure_type v (* TODO *)
+      fprintf fmt "%a warray" print_pure_type v
   | PTexternal([],id) -> Ident.print fmt id
-  | PTexternal(_,_) 
+  | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t
+  | PTexternal(_,_)
   | PTvar _ -> failwith "no polymorphism with HOL4 yet"
 
 let prefix_id id =
@@ -151,12 +124,12 @@ let rec print_term fmt = function
       fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
   (* arrays *)
   | Tapp (id, [a; b], _) when id == access ->
-      fprintf fmt "(@[EL (num_of_int %a) %a@])" print_term b print_term a
+      fprintf fmt "(@[access %a (num_of_int %a)@])" print_term a print_term b
   | Tapp (id, [a], _) when id == Ident.array_length ->
-      fprintf fmt "(@[LENGTH %a@])" print_term a
+      fprintf fmt "(@[%a.length@])" print_term a
   (* any other application *)
   | Tapp (id, tl, _) ->
-      fprintf fmt "@[(%a@ %a)@]" 
+      fprintf fmt "@[(%a@ %a)@]"
 	Ident.print id (print_list space print_term) tl
   | Tnamed (User n, t) ->
       fprintf fmt "@[(* %s: *) %a@]" n print_term t
