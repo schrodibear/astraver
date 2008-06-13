@@ -588,6 +588,8 @@ public final class Integer extends Number implements Comparable {
      * @param   value   the value to be represented by the 
      *			<code>Integer</code> object.
      */
+    /*@ ensures this.value == value;
+      @*/
     public Integer(int value) {
 	this.value = value;
     }
@@ -629,6 +631,8 @@ public final class Integer extends Number implements Comparable {
      * Returns the value of this <code>Integer</code> as an
      * <code>int</code>.
      */
+    /*@ ensures \result == this.value;
+      @*/
     public int intValue() {
 	return value;
     }

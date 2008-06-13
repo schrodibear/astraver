@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.106 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.107 2008-06-13 12:31:04 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -424,7 +424,7 @@ let field fmt fi =
     print_type fi.jc_field_info_type fi.jc_field_info_name
 
 let invariant fmt (id, vi, a) =
-  fprintf fmt "@\ninvariant %s(%s) = %a;"
+  fprintf fmt "@\n@[invariant %s(%s) =@ %a;@]"
     id vi.jc_var_info_name assertion a
 
 let term_or_assertion fmt = function
