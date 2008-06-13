@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.208 2008-06-13 14:37:36 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.209 2008-06-13 15:02:49 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -242,11 +242,15 @@ let rec find_field_struct loc st allow_mutable = function
       with Not_found ->
         match st.jc_struct_info_parent with
           | None -> 
-              typing_error loc "no field %s in structure %s" 
-                f st.jc_struct_info_name
+              raise Not_found
+(*              typing_error loc "no field %s in structure %s" 
+                f st.jc_struct_info_name*)
           | Some st -> find_field_struct loc st allow_mutable f
+let find_field_struct loc st allow_mutable f =
+  try find_field_struct loc st allow_mutable f
+  with Not_found ->
+    typing_error loc "no field %s in structure %s" f st.jc_struct_info_name
 
-  
 let find_field loc ty f allow_mutable =
   match ty with
     | JCTpointer(JCtag st, _, _) -> find_field_struct loc st allow_mutable f

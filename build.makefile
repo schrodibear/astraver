@@ -60,6 +60,12 @@ opt:
 %.opt:
 	$(OCAMLBUILD) $*.opt
 
+%.cmo:
+	$(OCAMLBUILD) $*.cmo
+
+%.cmi:
+	$(OCAMLBUILD) $*.cmi
+
 # Bench
 
 ml-bench:

@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: SCID.java,v 1.15 2008-04-22 06:53:45 nrousset Exp $ */
+/* $Id: SCID.java,v 1.16 2008-06-13 15:02:49 bardou Exp $ */
 
 //@+ CheckArithOverflow = no
 //@+ InvariantPolicy = Arguments
