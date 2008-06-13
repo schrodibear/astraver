@@ -1,4 +1,4 @@
-// @+ CheckArithOverflow = no
+//@+ CheckArithOverflow = no
 
 import java.util.HashMapIntegerInteger;
 
@@ -24,6 +24,24 @@ import java.util.HashMapIntegerInteger;
 
 //@ predicate containsKey(mappings m, Integer key);
 
+/*@ axiom containsKey_empty:
+  @   \forall Integer key; ! containsKey(empty_mappings(),key);
+  @*/
+
+/*@ axiom containsKey_update_any:
+  @   \forall mappings m, Integer key1 key2, Integer value; 
+  @      containsKey(m,key1) ==> containsKey(update(m,key2,value),key1);
+  @*/
+
+/*@ axiom containsKey_update_eq:
+  @   \forall mappings m, Integer key, Integer value; 
+  @      containsKey(update(m,key,value),key);
+  @*/
+
+/* @ axiom containsKey_update_discr:
+  @   \forall mappings m, Integer key, Integer value; 
+  @      containsKey(update(m,key1,value),key2) ==> key1==key2 || containsKey(m,key2);
+  @*/
 
 //@ logic integer math_fib(integer n);
 
