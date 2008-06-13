@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.209 2008-06-13 15:02:49 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.210 2008-06-13 15:13:49 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1814,6 +1814,7 @@ let param (t,id) =
 let assertion_true = new assertion JCAtrue
 
 let field st root (rep, t, id) =
+(*  Printf.printf "Adding %s in %s%!" id st.jc_struct_info_name;*)
   let ty = type_type t in
   incr field_tag_counter;
   let name = st.jc_struct_info_name ^ "_" ^ id in
@@ -2056,10 +2057,6 @@ let rec decl d =
 	end
     | JCDtag(id, parent, fields, inv) ->
         let struct_info, _ = Hashtbl.find structs_table id in
-        let root = struct_info.jc_struct_info_root in
-        (* fields *)
-        let env = List.map (field struct_info root) fields in
-        struct_info.jc_struct_info_fields <- env;
         (* declare invariants as logical functions *)
         let invariants =
           List.fold_left
@@ -2267,6 +2264,15 @@ let type_variant d = match d#node with
       vi.jc_variant_info_roots <- roots
   | _ -> ()
 
+let declare_tag_fields d = match d#node with
+  | JCDtag(id, parent, fields, inv) ->
+      let struct_info, _ = Hashtbl.find structs_table id in
+      let root = struct_info.jc_struct_info_root in
+      let fields = List.map (field struct_info root) fields in
+      struct_info.jc_struct_info_fields <- fields;
+      Hashtbl.replace structs_table id (struct_info, [])
+  | _ -> ()
+
 let check_struct d = match d#node with
   | JCDtag(id, _, _, _) ->
       let loc = d#loc in
@@ -2295,6 +2301,7 @@ let type_file ast =
   List.iter compute_struct_info_parent ast;
   while fixpoint_struct_info_roots () do () done;
   List.iter type_variant ast;
+  List.iter declare_tag_fields ast;
   List.iter check_struct ast;
   (* 4. declaring global variables *)
   List.iter declare_variable ast;
