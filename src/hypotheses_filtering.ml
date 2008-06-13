@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.54 2008-06-11 07:44:31 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.55 2008-06-13 12:31:04 giorgetti Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1922,7 +1922,7 @@ let reduce q decl =
   (** memorize the theory as a graph of predicate symbols **)
   build_pred_graph decl;
   
-  (** manages goal **)
+  (** manage goal **)
   let q' = match q with
       (loc, expl, id, s) as ax ->
         let (l, g) = s in (* l : liste d'hypoth�ses (contexte local) et g : le but*)
@@ -1931,12 +1931,10 @@ let reduce q decl =
         let l' = List.append l l' in
         let (l', g') = reduce_subst (l', g') in
         
-        (** memorize hypotheses as a graph of variables**)
+        (** memorize hypotheses as a graph of variables **)
         build_var_graph (l', g');
         
         (** focus on goal **)
         managesGoal ax (l', g') decl
-  
   in
   q'
-
