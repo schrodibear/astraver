@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.9 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.10 2008-06-13 14:37:36 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -107,7 +107,7 @@ let rec pexpr fmt e =
     | JCPEvar vi -> 
 	fprintf fmt "%s" vi
     | JCPEbinary (e1, op, e2) ->
-	fprintf fmt "@[(%a %s %a)@]" pexpr e1 (bin_op op) pexpr e2
+	fprintf fmt "@[<hv 2>(%a %s@ %a)@]" pexpr e1 (bin_op op) pexpr e2
     | JCPEunary((`Upostfix_dec | `Upostfix_inc) as op,e1) ->
 	fprintf fmt "@[(%a %s)@]" pexpr e1 (unary_op op) 
     | JCPEunary(op,e1) ->
@@ -153,7 +153,7 @@ let rec pexpr fmt e =
     | JCPErange(t1,t2) -> 
 	fprintf fmt "@[[%a..%a]@]" (print_option pexpr) t1 (print_option pexpr) t2
     | JCPEquantifier (q,ty,vil, a)-> 
-	fprintf fmt "@[<v 3>(\\%a %a %a;@\n%a)@]"
+	fprintf fmt "@[<hv 2>(\\%a %a %a;@\n%a)@]"
 	  quantifier q
 	  ptype ty
 	  (print_list comma string) vil
@@ -256,7 +256,7 @@ let field fmt (rep,ty,fi) =
     ptype ty fi
 
 let invariant fmt (id, vi, a) =
-  fprintf fmt "@\ninvariant %s(%s) = %a;"
+  fprintf fmt "@\n@[<hv 2>invariant %s(%s) =@ %a;@]"
     id#name vi pexpr a
 
 let reads_or_expr fmt = function

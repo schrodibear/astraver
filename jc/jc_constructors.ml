@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.3 2008-04-15 13:09:53 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.4 2008-06-13 14:37:36 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -370,6 +370,8 @@ module PDecl = struct
             (Invalid_argument "mklogic_def: cannot use both ~reads and ~body")
     in
     mk ~node:(JCDlogic(typ, name, labels, params, roe))
+  let mklogic_type ~name =
+    mk ~node:(JCDlogic_type(name))
   let mkvar_def ~typ ~name ?init =
     mk ~node:(JCDvar(typ, name, init))
   let mkglobal_inv_def ~name ~body =

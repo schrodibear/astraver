@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.207 2008-06-10 13:43:10 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.208 2008-06-13 14:37:36 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2027,24 +2027,29 @@ let rec decl d =
 	in
         Hashtbl.add functions_table fi.jc_fun_info_tag (fi,loc,s,b)
     | JCDenum_type(id,min,max) ->
-        let ri =
-          { jc_enum_info_name = id;
-            jc_enum_info_min = min;
-            jc_enum_info_max = max;
-          }
-        in
-(*
-        let to_int = make_logic_fun ("integer_of_"^id) integer_type in
-        let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
-        let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
-*)
-        Hashtbl.add enum_types_table id (ri (*,to_int,to_int_,of_int*));
-(*
-        Hashtbl.add enum_conversion_logic_functions_table to_int id;
-        Hashtbl.add enum_conversion_functions_table to_int_ id;
-        Hashtbl.add enum_conversion_functions_table of_int id
-*)
-
+	begin
+	  try
+	    let _ = Hashtbl.find enum_types_table id in
+	    typing_error d#loc "duplicate range type `%s'" id
+	  with Not_found ->
+            let ri =
+              { jc_enum_info_name = id;
+		jc_enum_info_min = min;
+		jc_enum_info_max = max;
+              }
+            in
+	    (*
+              let to_int = make_logic_fun ("integer_of_"^id) integer_type in
+              let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
+              let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
+	    *)
+            Hashtbl.add enum_types_table id (ri (*,to_int,to_int_,of_int*));
+	    (*
+              Hashtbl.add enum_conversion_logic_functions_table to_int id;
+              Hashtbl.add enum_conversion_functions_table to_int_ id;
+              Hashtbl.add enum_conversion_functions_table of_int id
+	    *)
+	end
     | JCDtag(id, parent, fields, inv) ->
         let struct_info, _ = Hashtbl.find structs_table id in
         let root = struct_info.jc_struct_info_root in
@@ -2103,7 +2108,7 @@ of an invariant policy";
         begin 
           try
             let _ = Hashtbl.find logic_type_table id in
-            assert false
+            typing_error d#loc "duplicate logic type `%s'" id 
           with Not_found ->
             Hashtbl.add logic_type_table id id
         end

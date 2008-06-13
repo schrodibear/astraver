@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.127 2008-05-27 15:29:14 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.128 2008-06-13 14:37:36 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -818,7 +818,6 @@ and get_types package_env cus =
 	 List.fold_left (get_type_decl pi package_env) 
 	   [] cu.cu_type_decls)
       (List.combine pil cus))
-
   in
   let full_type_env = local_type_env @ type_env in
   List.iter
@@ -2137,9 +2136,10 @@ let cast_convertible tfrom tto =
 let string_promotion e =
   match e.java_expr_type with
     | JTYclass(_,c) when c == string_class -> e
-    | JTYbase Tstring -> assert false (* TODO *)
-    | JTYbase Tinteger -> assert false (* TODO *)
-    | _ -> assert false (* TODO *)
+    | JTYbase Tstring -> e (* TODO: coercion ? *)
+    | JTYbase Tinteger -> e (* TODO: coercion ? *)
+    | JTYbase _ -> e  (* TODO: coercion ? *)
+    | _ -> assert false
 	  
 let make_bin_op ~ghost loc op t1 e1 t2 e2 =
   match op with

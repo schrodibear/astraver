@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.58 2008-04-10 16:05:55 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.59 2008-06-13 14:37:36 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -269,7 +269,7 @@ rule token = parse
   | "=="                    { EQEQ }
   | "!="                    { BANGEQ }
   | ";"                     { SEMICOLON }
-  | ";;"                     { SEMISEMI }
+  | ";;"                    { SEMISEMI }
   | "{"                     { LBRACE }
   | "}"                     { RBRACE }
   | ","                     { COMMA }
@@ -298,6 +298,9 @@ rule token = parse
   | "^"                     { HAT }
   | "|"                     { PIPE }
   | "?"                     { QUESTION }
+(*
+  | "@"                     { AT }
+*)
   | "->"                    { MINUSGT }
   | eof { EOF }
   | '"' { lex_error lexbuf "unterminated string" }

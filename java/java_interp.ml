@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.136 2008-06-10 15:52:46 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.137 2008-06-13 14:37:36 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -319,7 +319,7 @@ let create_var ?(formal=false) loc vi =
 (*s logic types *)
 
 let tr_logic_type id acc =
-  JClogic_type_def id :: acc
+  mklogic_type ~name:id () :: acc
 
 (*s logic funs *)
 

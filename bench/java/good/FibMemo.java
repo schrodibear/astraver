@@ -1,4 +1,4 @@
-//@+ CheckArithOverflow = no
+// @+ CheckArithOverflow = no
 
 import java.util.HashMapIntegerInteger;
 
