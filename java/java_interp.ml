@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.138 2008-06-23 14:15:56 bardou Exp $ *)
+(* $Id: java_interp.ml,v 1.139 2008-06-23 14:42:48 bardou Exp $ *)
 
 open Format
 open Jc_output
@@ -1953,7 +1953,7 @@ let tr_interface ii acc =
   let acc = 
     List.fold_left (tr_field ii.interface_info_name) acc static_fields 
   in
-  let model_fields = List.map (create_field Loc.dummy_position) fields in
+  let (*model_fields*)_ = List.map (create_field Loc.dummy_position) fields in
   acc
 
 let tr_class_or_interface ti acc0 acc =
