@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.105 2008-05-29 10:45:02 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.106 2008-06-23 14:15:56 bardou Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -214,7 +214,7 @@ let add_field_reads label fef (fi,r) =
 let add_field_alloc_reads label fef (fvi,r) =
   let ef = add_memory_effect label fef.jc_reads (fvi,r) in
   let root = match fvi with 
-    | FVfield fi -> JCtag fi.jc_field_info_root
+    | FVfield fi -> JCtag(fi.jc_field_info_root, [])
     | FVvariant vi -> JCvariant vi
   in
   let ef = add_alloc_effect ef (root, r) in
@@ -241,7 +241,7 @@ let add_field_writes label fef (fi,r) =
 let add_field_alloc_writes label fef (fvi,r) =
   let efw = add_memory_effect label fef.jc_writes (fvi,r) in
   let root = match fvi with 
-    | FVfield fi -> JCtag fi.jc_field_info_root
+    | FVfield fi -> JCtag(fi.jc_field_info_root, [])
     | FVvariant vi -> JCvariant vi
   in
   let efr = add_alloc_effect fef.jc_reads (root, r) in
@@ -284,7 +284,7 @@ let rec pattern ef (*label r*) p =
   let r = dummy_region in
   match p#node with
     | JCPstruct(st, fpl) ->
-	let ef = add_tag_effect ef (JCtag st) in
+	let ef = add_tag_effect ef (JCtag(st, [])) in
 	List.fold_left
 	  (fun ef (fi, pat) ->
 	     let ef = add_memory_effect (*label*)LabelHere ef (FVfield fi, r) in
@@ -314,7 +314,7 @@ let rec term ef t =
     | JCToffset(_,t,st) ->
 	add_alloc_effect
 	  (term ef t)
-	  (JCtag st, t#region)
+	  (JCtag(st, []), t#region)
     | JCTapp app -> 
 	let li = app.jc_app_fun and tls = app.jc_app_args in
 	let efapp = 
@@ -359,7 +359,7 @@ let rec assertion ef a =
 	assertion (assertion (term ef t) a1) a2
     | JCAbool_term t -> term ef t
     | JCAinstanceof (t, lab, st) -> 
-	add_tag_effect (term ef t) (JCtag st)
+	add_tag_effect (term ef t) (JCtag(st, []))
     | JCAnot a
     | JCAold a -> assertion ef a
     | JCAat(a,lab) -> assertion ef a
@@ -380,8 +380,8 @@ let rec assertion ef a =
 	term 
 	  (add_mutable_effect 
 	     (tag ef ta
-		(Some (JCtag st)))
-	     (JCtag st)) t
+		(Some (JCtag(st, []))))
+	     (JCtag(st, []))) t
     | JCAtagequality (t1, t2, h) ->
 	let h = match h with
 	  | None -> None
@@ -403,7 +403,7 @@ let rec expr ef e =
     | JCEconst _ -> ef
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
-	add_tag_reads (expr ef e) (JCtag st)
+	add_tag_reads (expr ef e) (JCtag(st, []))
     | JCEderef (e, fi) -> 
 	let fvi = 
 	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
@@ -421,12 +421,12 @@ let rec expr ef e =
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) ->
 	add_alloc_reads (expr ef e)
-	  (JCtag st, e#region)
+	  (JCtag(st, []), e#region)
     | JCEalloc(_,st) ->
 (*	let fields = embedded_struct_fields st in 
 	let roots = embedded_struct_roots st in*)
-	let fields = all_memories ~select:fully_allocated (JCtag st) in
-	let roots = all_types ~select:fully_allocated (JCtag st) in
+	let fields = all_memories ~select:fully_allocated (JCtag(st, [])) in
+	let roots = all_types ~select:fully_allocated (JCtag(st, [])) in
 	let roots = List.map (fun x -> JCvariant x) roots in
 	let ef = 
 	  List.fold_left 
@@ -436,9 +436,9 @@ let rec expr ef e =
 	let ef = 
 	  List.fold_left
 	    (fun ef a -> add_alloc_writes ef (a,e#region))
-	    ef ((JCtag st)::roots)
+	    ef ((JCtag(st, []))::roots)
 	in
-	List.fold_left add_tag_writes ef ((JCtag st)::roots)
+	List.fold_left add_tag_writes ef ((JCtag(st, []))::roots)
 	
 (*
 	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
@@ -504,15 +504,15 @@ let rec expr ef e =
 	  ef
 	  st.jc_struct_info_fields in
 	(* Change structure mutable => need mutable as reads and writes *)
-	let ef = add_mutable_reads ef (JCtag st) in
-	let ef = add_mutable_writes ef (JCtag st) in
+	let ef = add_mutable_reads ef (JCtag(st, [])) in
+	let ef = add_mutable_writes ef (JCtag(st, [])) in
         (* And that's all *)
 	ef
     | JCEunpack(st, e, _) ->
 	let ef = expr ef e in
 	(* Change structure mutable => need mutable as reads and writes *)
-	let ef = add_mutable_reads ef (JCtag st) in
-	let ef = add_mutable_writes ef (JCtag st) in
+	let ef = add_mutable_reads ef (JCtag(st, [])) in
+	let ef = add_mutable_writes ef (JCtag(st, [])) in
 	(* Fields *)
 	let ef = List.fold_left
 	  (fun ef fi ->

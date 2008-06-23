@@ -52,7 +52,7 @@ let variant_model_type vi =
 let struct_model_type st = variant_model_type (struct_variant st)
 
 let tag_or_variant_model_type = function
-  | JCtag st -> struct_model_type st
+  | JCtag(st, _) -> struct_model_type st
   | JCvariant vi -> variant_model_type vi
   | JCunion vi -> variant_model_type vi
 
@@ -98,13 +98,14 @@ let tr_base_type t =
     | JCTlogic s -> simple_logic_type s
     | JCTenum ri -> 
 	simple_logic_type ri.jc_enum_info_name
-    | JCTpointer (JCtag st, _, _) ->
+    | JCTpointer (JCtag(st, _ (* TODO ? *)), _, _) ->
 	{ logic_type_name = pointer_type_name;
 	  logic_type_args = [struct_model_type st] }
     | JCTpointer ((JCvariant vi | JCunion vi), _, _) ->
 	{ logic_type_name = pointer_type_name;
 	  logic_type_args = [variant_model_type vi] }
     | JCTnull | JCTany -> assert false
+    | JCTtype_var _ -> assert false (* TODO (need environment) *)
 
 let why_integer_type = simple_logic_type "int"
   
@@ -183,8 +184,8 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	    | _ -> r
 	in
 	let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	(alloc_region_table_name (JCtag st, r),
-	 alloc_table_type (JCtag st))::acc)
+	(alloc_region_table_name (JCtag(st, []), r),
+	 alloc_table_type (JCtag(st, [])))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in
@@ -232,7 +233,7 @@ let logic_info_reads acc li =
     StringRegionSet.fold
       (fun (a,r) acc ->
 	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 StringSet.add (alloc_region_table_name (JCtag st, r)) acc)
+	 StringSet.add (alloc_region_table_name (JCtag(st, []), r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -288,7 +289,7 @@ let find_variant a =
 
 let find_tag_or_variant a =
   try
-    JCtag (find_struct a)
+    JCtag (find_struct a, []) (* TODO: fill parameters ? *)
   with Not_found ->
     JCvariant (find_variant a)
 
@@ -302,10 +303,10 @@ let alloc_region_table_name2 (a, r) =
   alloc_region_table_name (find_tag_or_variant a, r)
 
 let mutable_name2 a =
-  mutable_name (JCtag (find_struct a))
+  mutable_name (JCtag (find_struct a, []))
 
 let committed_name2 a =
-  committed_name (JCtag (find_struct a))
+  committed_name (JCtag (find_struct a, []))
 
 let alloc_table_type2 a =
   {
@@ -387,6 +388,7 @@ let make_eq_term ty a b =
     | JCTnative Tinteger -> "eq_int_bool"
     | JCTnative Treal -> "eq_real_bool"
     | JCTnative Tstring -> "eq_string_bool"
+    | JCTtype_var _ -> assert false (* TODO: need environment *)
   in
   LApp(eq, [a; b])
 
@@ -450,8 +452,9 @@ let any_value ty =
   | JCTenum ri -> 
       App (Var ("any_" ^ ri.jc_enum_info_name), Void)
   | JCTlogic _ | JCTany -> assert false
+  | JCTtype_var _ -> assert false (* TODO: need environment *)
 
-let tov_of_name name = JCtag (find_struct name)
+let tov_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
 
 let fully_allocated fi =
   match fi.jc_field_info_type with
@@ -464,6 +467,7 @@ let fully_allocated fi =
     | JCTlogic _
     | JCTnative _
     | JCTany -> false
+    | JCTtype_var _ -> assert false (* TODO: need environment *)
 
 (* see make_valid_pred in jc_interp.ml *)
 let make_valid_pred_app tov p a b =

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.137 2008-06-13 14:37:36 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.138 2008-06-23 14:15:56 bardou Exp $ *)
 
 open Format
 open Jc_output
@@ -163,6 +163,7 @@ let rec object_variant = {
 }
 
 and object_root = {
+  jc_struct_info_params = [];
   jc_struct_info_name = "Object";
   jc_struct_info_parent = None;
   jc_struct_info_root = object_root;
@@ -172,6 +173,7 @@ and object_root = {
 
 let get_class name =
   {
+  jc_struct_info_params = [];
     jc_struct_info_name = name;
     jc_struct_info_parent = None;
     jc_struct_info_root = object_root;
@@ -201,6 +203,7 @@ let rec interface_root = {
 
 let st_interface = 
   {
+    jc_struct_info_params = [];
     jc_struct_info_name = "Object/*interface*/";
     jc_struct_info_parent = None;
     jc_struct_info_root = object_root ; (* a la place de interface_root; *)
@@ -230,9 +233,9 @@ and tr_type loc t =
     | JTYclass (non_null, ci) -> 
 	let st = get_class ci.class_info_name in
 	  JCTpointer 
-	    (JCtag st, Some num_zero, if non_null then Some num_zero else None)
+	    (JCtag(st, []), Some num_zero, if non_null then Some num_zero else None)
     | JTYinterface ii ->
-	JCTpointer(JCtag st_interface, Some num_zero,None)
+	JCTpointer(JCtag(st_interface, []), Some num_zero,None)
 (*
 	let st = get_interface ii in
 	JCTpointer(st,Some num_zero,
@@ -241,7 +244,7 @@ and tr_type loc t =
 	
     | JTYarray (non_null, t) ->
 	let st = get_array_struct loc t in
-	  JCTpointer (JCtag st, Some num_zero, if non_null then Some num_minus_one else None)
+	  JCTpointer (JCtag(st, []), Some num_zero, if non_null then Some num_minus_one else None)
     | JTYlogic i -> JCTlogic i
 
 (*s structure fields *)
@@ -622,11 +625,11 @@ let ptype_node_of_type = function
   | JCTnative n -> JCPTnative n
   | JCTlogic s -> JCPTidentifier s
   | JCTenum e -> JCPTidentifier e.jc_enum_info_name
-  | JCTpointer(JCtag st, l, r) -> JCPTpointer(st.jc_struct_info_name, l, r)
+  | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name, l, r)
   | JCTpointer((JCvariant v | JCunion v), l, r) ->
       JCPTpointer(v.jc_variant_info_name, l, r)
   | JCTnull
-  | JCTany -> assert false
+  | JCTany | JCTtype_var _ -> assert false
 let ptype_of_type t = new ptype (ptype_node_of_type t)
 
 let rec assertion ?(reg=0) a =
@@ -714,7 +717,7 @@ let rec assertion ?(reg=0) a =
       | JAinstanceof (t, lab, ty) ->
 	  let ty = tr_type Loc.dummy_position ty in
 	    match ty with
-	      | JCTpointer (JCtag si, _, _) ->
+	      | JCTpointer (JCtag(si, []), _, _) ->
                   mkinstanceof
                     ~expr: (term t)
                     ~typ: si.jc_struct_info_name
@@ -791,6 +794,7 @@ let array_types decls =
   Hashtbl.fold
     (fun t (s,f) (acc0, acc, decls) ->
        let st = {
+         jc_struct_info_params = [];
 	 jc_struct_info_name = s;
 	 jc_struct_info_parent = None;
 	 jc_struct_info_root = object_root;
@@ -818,7 +822,7 @@ let array_types decls =
        (* java_array_length fun *)
        let fi = create_java_array_length_fun st in
        let vi =
-         Jc_pervasives.var (JCTpointer(JCtag st,Some num_zero,Some num_minus_one)) "x" in
+         Jc_pervasives.var (JCTpointer(JCtag(st, []),Some num_zero,Some num_minus_one)) "x" in
        let vie = mkvar ~name:(var_name vi) () in
        let result_var = mkvar ~name:"\\result" () in
        let spec = [
@@ -1347,7 +1351,7 @@ let rec expr ?(reg=false) e =
 	  assert false (* TODO *)
       | JEnew_object(ci,args) ->
 	  let si = get_class ci.constr_info_class.class_info_name in
-	  let ty = JCTpointer(JCtag si, Some num_zero, Some num_zero) in
+	  let ty = JCTpointer(JCtag(si, []), Some num_zero, Some num_zero) in
 	  let this = Jc_pervasives.var ~formal:true ty "this" in
 	  let tt = Jc_pervasives.var ~formal:true Jc_pervasives.unit_type "tt" in
 	  let args =
@@ -1706,7 +1710,7 @@ let default_label l =
 let tr_non_null_logic_fun () =
   let si = get_class "Object" in
   let vi = Jc_pervasives.var
-    (JCTpointer (JCtag si, Some num_zero, None)) "x" in
+    (JCTpointer (JCtag(si, []), Some num_zero, None)) "x" in
   let vit = mkvar ~name:(var_name vi) () in
   let offset_maxt = mkoffset_max ~expr:vit () in
   let offset_maxa = mkeq ~expr1:offset_maxt ~expr2:zero () in
@@ -1782,7 +1786,7 @@ let tr_field type_name acc fi =
 	    let n = List.length il in
 	    assert (List.length values = n);
 	    let si = match vi_ty with
-	      | JCTpointer (JCtag si, _, _) -> si
+	      | JCTpointer (JCtag(si, []), _, _) -> si
 	      | _ -> assert false
 	    in
 	    let vit = mkvar ~name:(var_name vi) () in
@@ -1903,7 +1907,7 @@ let tr_class ci acc0 acc =
       if ci.class_info_name = "Object" then
 	let non_null_fi = create_non_null_fun si in
 	let vi = Jc_pervasives.var
-	  (JCTpointer (JCtag si, Some num_zero, None)) "x" in
+	  (JCTpointer (JCtag(si, []), Some num_zero, None)) "x" in
 	let result = Jc_pervasives.var Jc_pervasives.boolean_type "\\result" in
 	let vit = mkvar ~name:(var_name vi) () in
 	let offset_maxt = mkoffset_max ~expr:vit () in

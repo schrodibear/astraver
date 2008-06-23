@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.14 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.15 2008-06-23 14:15:56 bardou Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -49,7 +49,7 @@ let variant_type_name vi = vi.jc_variant_info_name
 let struct_type_name st = variant_type_name (struct_variant st)
 
 let tag_or_variant_type_name = function
-  | JCtag st -> struct_type_name st
+  | JCtag(st, _) -> struct_type_name st
   | JCvariant vi -> variant_type_name vi
   | JCunion vi -> variant_type_name vi
 
@@ -67,7 +67,7 @@ let tag_table_name_vi vi =
   (variant_type_name vi) ^ "_tag_table"
 
 let tag_table_name = function
-  | JCtag st -> tag_table_name_vi (struct_variant st)
+  | JCtag(st, _) -> tag_table_name_vi (struct_variant st)
   | JCvariant vi | JCunion vi -> tag_table_name_vi vi
 
 let alloc_table_name tov =
@@ -106,7 +106,7 @@ let field_or_variant_region_memory_name (fvi,r) =
     | FVvariant vi -> union_region_memory_name (vi,r)
 
 let valid_pred_name = function
-  | JCtag st -> "valid_struct_" ^ st.jc_struct_info_name
+  | JCtag(st, _) -> "valid_struct_" ^ st.jc_struct_info_name
   | JCvariant vi -> "valid_variant_" ^ vi.jc_variant_info_name
   | JCunion vi -> "valid_union_" ^ vi.jc_variant_info_name
 (*

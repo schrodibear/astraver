@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.54 2008-05-29 10:45:02 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.55 2008-06-23 14:15:56 bardou Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -48,10 +48,11 @@ type jc_type =
   | JCTenum of enum_info
   | JCTpointer of tag_or_variant * Num.num option * Num.num option
   | JCTnull
-  | JCTany
+  | JCTany (* used when typing (if ... then raise E else ...): raise E is any *)
+  | JCTtype_var of Jc_type_var.t
 
 and tag_or_variant =
-  | JCtag of struct_info
+  | JCtag of struct_info * jc_type list (* struct_info, type parameters *)
   | JCvariant of variant_info
   | JCunion of variant_info
 
@@ -64,8 +65,9 @@ and enum_info =
 
 and struct_info =
     { 
+              jc_struct_info_params : Jc_type_var.t list;
               jc_struct_info_name : string;
-      mutable jc_struct_info_parent : struct_info option;
+      mutable jc_struct_info_parent : (struct_info * jc_type list) option;
       mutable jc_struct_info_root : struct_info;
       mutable jc_struct_info_fields : field_info list;
       mutable jc_struct_info_variant : variant_info option;

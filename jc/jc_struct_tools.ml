@@ -41,17 +41,17 @@ let fields_tov = List.flatten $
 
 let rec all_fields acc = function
   | JCvariant vi | JCunion vi -> acc
-  | JCtag ({ jc_struct_info_parent = Some p } as st) ->
-      all_fields (acc @ st.jc_struct_info_fields) (JCtag p)
-  | JCtag ({ jc_struct_info_parent = None } as st) ->
-      acc @ st.jc_struct_info_fields
+  | JCtag ({ jc_struct_info_parent = Some(p, pp) } as st, _) ->
+      all_fields (st.jc_struct_info_fields @ acc) (JCtag(p, pp))
+  | JCtag ({ jc_struct_info_parent = None } as st, _) ->
+      st.jc_struct_info_fields @ acc
 
 let all_fields = all_fields []
 
 let rec all_memories select forbidden acc tov =
   Jc_options.lprintf "  all_memories(%s)@." (tag_or_variant_name tov);
   match tov with
-    | JCtag st as tov ->
+    | JCtag(st, _) as tov ->
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
 	else
@@ -81,7 +81,7 @@ let all_memories ?(select = fun _ -> true) tov =
 let rec all_types select forbidden acc tov =
   Jc_options.lprintf "  all_types(%s)@." (tag_or_variant_name tov);
   match tov with
-    | JCtag st as tov ->
+    | JCtag(st, _) as tov ->
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
 	else

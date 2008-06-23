@@ -338,7 +338,7 @@ let rec all_structures st acc =
     List.fold_left
       (fun acc fi ->
 	 match fi.jc_field_info_type with
-	   | JCTpointer(JCtag st, _, _) -> all_structures st acc
+	   | JCTpointer(JCtag(st, _), _, _) -> all_structures st acc
 	   | _ -> acc)
       (StringSet.add st.jc_struct_info_name acc)
       st.jc_struct_info_fields   
@@ -365,8 +365,8 @@ let invariant_params acc li =
     StringRegionSet.fold
       (fun (a,r) acc -> 
 	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 (alloc_region_table_name (JCtag st, r),
-	  alloc_table_type (JCtag st))::acc)
+	 (alloc_region_table_name (JCtag(st, []), r),
+	  alloc_table_type (JCtag(st, [])))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -391,7 +391,7 @@ let invariants_params acc st =
 let rec parents acc st =
   match st.jc_struct_info_parent with
     | None -> acc
-    | Some p -> parents (st::acc) p
+    | Some(p, _) -> parents (st::acc) p
 let parents = parents []
 
 (* Returns every structure (name) that can be used by a function,
@@ -400,7 +400,7 @@ let function_structures params =
   let structures = List.fold_left
     (fun acc vi ->
        match vi.jc_var_info_type with
-	 | JCTpointer(JCtag st, _, _) ->
+	 | JCTpointer(JCtag(st, _), _, _) ->
 	     all_structures st acc
 	 | JCTpointer(JCvariant vi, _, _) ->
 	     List.fold_right all_structures vi.jc_variant_info_roots acc
@@ -522,7 +522,7 @@ let committed_memory_type tov =
 
 let mutable_declaration st acc =
   if st.jc_struct_info_parent = None then
-    let st = JCtag st in
+    let st = JCtag(st, []) in
     (* mutable_T: T tag_id *)
     Param(
       false,
@@ -548,13 +548,13 @@ let assert_mutable e fi =
   if fi.jc_field_info_rep then
     begin
       let st = fi.jc_field_info_struct in
-      let mutable_name = mutable_name (JCtag st) in
+      let mutable_name = mutable_name (JCtag(st, [])) in
       (*let committed_name = committed_name st.jc_struct_info_root in*)
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
       (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
       let parent_tag = match st.jc_struct_info_parent with
 	| None -> LVar "bottom_tag"
-	| Some parent -> LVar (tag_name parent)
+	| Some(parent, _) -> LVar (tag_name parent)
       in
       let sub = make_subtag parent_tag e_mutable in
       (*let not_committed =
@@ -652,7 +652,7 @@ let not_mutable_implies_invariant this st (li, _) =
   let params = invariant_params [] li in
   
   (* this.mutable <: st *)
-  let mutable_name = mutable_name (JCtag st) in
+  let mutable_name = mutable_name (JCtag(st, [])) in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
@@ -667,8 +667,9 @@ let not_mutable_implies_invariant this st (li, _) =
   let impl = LImpl(mutable_io, invariant) in
 
   (* params *)
-  let params = (mutable_name, mutable_memory_type (JCtag st))::params in
-  let params = (tag_table_name (JCtag st), tag_table_type (JCtag st))::params in
+  let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
+  let params = (tag_table_name (JCtag(st, [])),
+                tag_table_type (JCtag(st, [])))::params in
 
   params, impl
 
@@ -677,7 +678,7 @@ let not_mutable_implies_fields_committed this st =
   let fields = rep_fields st in
 
   (* this.mutable <: st *)
-  let mutable_name = mutable_name (JCtag st) in
+  let mutable_name = mutable_name (JCtag(st, [])) in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
     (LVar (tag_name st))
@@ -717,8 +718,9 @@ let not_mutable_implies_fields_committed this st =
     make_and_list (List.map snd fields_pc) in
 
   (* additional params *)
-  let params = (mutable_name, mutable_memory_type (JCtag st))::params in
-  let params = (tag_table_name (JCtag st), tag_table_type (JCtag st))::params in
+  let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
+  let params = (tag_table_name (JCtag(st, [])),
+                tag_table_type (JCtag(st, [])))::params in
 
   (* implies *)
   let impl = LImpl(mutable_io, coms) in
@@ -775,7 +777,7 @@ let owner_unicity this root =
 
   (* x name and type *)
   let x_name = this^"_2" in
-  let x_type = pointer_type (JCtag root) in
+  let x_type = pointer_type (JCtag(root, [])) in
 
   (* shift indexes *)
   let index1 = "jc_index" in
@@ -835,10 +837,10 @@ let owner_unicity this root =
   let params = List.map
     (fun fi ->
        [ fi.jc_field_info_final_name, field_memory_type fi;
-	 committed_name (JCtag fi.jc_field_info_root),
-	 committed_memory_type (JCtag fi.jc_field_info_root);
-	 alloc_table_name (JCtag fi.jc_field_info_root),
-	 alloc_table_type (JCtag fi.jc_field_info_root) ])
+	 committed_name (JCtag(fi.jc_field_info_root, [])),
+	 committed_memory_type (JCtag(fi.jc_field_info_root, []));
+	 alloc_table_name (JCtag(fi.jc_field_info_root, [])),
+	 alloc_table_type (JCtag(fi.jc_field_info_root, [])) ])
     reps
   in
   let params = List.flatten params in
@@ -848,7 +850,7 @@ let owner_unicity this root =
 let make_hierarchy_global_invariant acc root =
   (* this *)
   let this = "this" in
-  let this_ty = pointer_type (JCtag root) in
+  let this_ty = pointer_type (JCtag(root, [])) in
 
   (* not mutable => invariant, and their parameters *)
   let structs = hierarchy_structures root in
@@ -873,7 +875,8 @@ let make_hierarchy_global_invariant acc root =
   in
 
   (* committed => fully packed *)
-  let params_cfp, com_fp = committed_implies_fully_packed this (JCtag root) in
+  let params_cfp, com_fp = committed_implies_fully_packed this
+    (JCtag(root, [])) in
   let params = params_cfp@params in
 
   (* unicity of the owner: x.f == y.f && x.f.committed ==> x == y *)
@@ -1150,10 +1153,10 @@ let make_components_precond this st reads =
 
 let pack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type (JCtag st) in
+  let this_type = pointer_type (JCtag(st, [])) in
   let tag = "tag" in
-  let tag_type = tag_id_type (JCtag st) in
-  let mutable_name = mutable_name (JCtag st) in
+  let tag_type = tag_id_type (JCtag(st, [])) in
+  let mutable_name = mutable_name (JCtag(st, [])) in
   let inv, reads = invariant_for_struct (LVar this) st in
   let writes = StringSet.empty in
   let components_post, reads, writes = make_components_postcond (LVar this) st reads writes true in
@@ -1212,11 +1215,11 @@ let pack_declaration st acc =
 (* Unlike Boogie, Jessie has "unpack to S" instead of "unpack from T" *)
 let unpack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type (JCtag st) in
+  let this_type = pointer_type (JCtag(st, [])) in
   let tag = "tag" in
-  let tag_type = tag_id_type (JCtag st) in
-  let mutable_name = mutable_name (JCtag st) in
-  let committed_name = committed_name (JCtag st) in
+  let tag_type = tag_id_type (JCtag(st, [])) in
+  let mutable_name = mutable_name (JCtag(st, [])) in
+  let committed_name = committed_name (JCtag(st, [])) in
   let reads = StringSet.singleton mutable_name in
   let writes = StringSet.singleton mutable_name in
   let reads = StringSet.add committed_name reads in
@@ -1382,11 +1385,11 @@ let rec invariant_for_struct ?loc this si =
   in
     match si.jc_struct_info_parent with
       | None -> invs
-      | Some si -> (* add invariants from the type hierarchy *)
+      | Some(si, _) -> (* add invariants from the type hierarchy *)
 	  let this =
 	    match this#typ with
 	      | JCTpointer (_, a, b) ->
-		  new term_with ~typ:(JCTpointer (JCtag si, a, b)) this
+		  new term_with ~typ:(JCTpointer (JCtag(si, []), a, b)) this
 	      | _ -> assert false (* never happen *)
 	  in
 	  Assertion.mkand ?loc
@@ -1426,7 +1429,7 @@ let code_function (fi, loc, fs, sl) vil =
 	      List.fold_left
 		(fun acc vi ->
 		   match vi.jc_var_info_type with
-		     | JCTpointer (JCtag st, _, _) ->
+		     | JCTpointer (JCtag(st, []), _, _) ->
 			 Assertion.mkand ~loc
 			   ~conjuncts:
 			   [acc; (invariant_for_struct ~loc

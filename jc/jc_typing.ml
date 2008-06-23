@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.210 2008-06-13 15:13:49 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.211 2008-06-23 14:15:56 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -120,14 +120,15 @@ let lub_numeric_types t1 t2 =
     | _ -> Tinteger
 
 let rec substruct st = function
-  | (JCtag st') as tov ->
+  | (JCtag(st', _)) as tov ->
       if st == st' then true else
         let vi = struct_variant st and vi' = struct_variant st' in
         (vi == vi' && vi.jc_variant_info_is_union)
         || 
         begin match st.jc_struct_info_parent with
           | None -> false
-          | Some p -> substruct p tov
+          | Some(p, []) -> substruct p tov
+          | Some(p, _) -> assert false (* TODO *)
         end
   | JCvariant vi ->
       struct_variant st == vi
@@ -149,7 +150,7 @@ let subtype ?(allow_implicit_cast=true) t1 t2 =
         allow_implicit_cast 
     | JCTlogic s1, JCTlogic s2 ->
         s1=s2
-    | JCTpointer(JCtag s1, _, _), JCTpointer(tov, _, _) -> 
+    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(tov, _, _) -> 
         substruct s1 tov
     | JCTpointer(JCvariant v1, _, _), JCTpointer(JCvariant v2, _, _) ->
         v1 == v2
@@ -172,9 +173,11 @@ let mintype loc t1 t2 =
         Jc_pervasives.integer_type
     | JCTlogic s1, JCTlogic s2 ->
         if s1=s2 then t1 else raise Not_found
-    | JCTpointer(JCtag s1, _, _), JCTpointer(tov, _, _) when substruct s1 tov ->
+    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(tov, _, _)
+        when substruct s1 tov ->
         t2
-    | JCTpointer(tov, _, _), JCTpointer(JCtag s1, _, _) when substruct s1 tov ->
+    | JCTpointer(tov, _, _), JCTpointer(JCtag(s1, []), _, _)
+        when substruct s1 tov ->
         t1
     | JCTpointer(JCvariant v1, _, _), JCTpointer(JCvariant v2, _, _) ->
         if v1 == v2 then t1 else raise Not_found
@@ -182,6 +185,9 @@ let mintype loc t1 t2 =
     | JCTnull, JCTpointer _ -> t2
     | JCTpointer _, JCTnull -> t1       
     | JCTany, t | t, JCTany -> t
+    | JCTpointer(JCtag(_, _::_), _, _), JCTpointer _
+    | JCTpointer _, JCTpointer(JCtag(_, _::_), _, _) -> assert false
+        (* TODO: parameterized type *)
     | _ -> raise Not_found
   with Not_found ->
     typing_error loc "incompatible types: %a and %a"
@@ -245,7 +251,7 @@ let rec find_field_struct loc st allow_mutable = function
               raise Not_found
 (*              typing_error loc "no field %s in structure %s" 
                 f st.jc_struct_info_name*)
-          | Some st -> find_field_struct loc st allow_mutable f
+          | Some(st, _) -> find_field_struct loc st allow_mutable f
 let find_field_struct loc st allow_mutable f =
   try find_field_struct loc st allow_mutable f
   with Not_found ->
@@ -253,14 +259,14 @@ let find_field_struct loc st allow_mutable f =
 
 let find_field loc ty f allow_mutable =
   match ty with
-    | JCTpointer(JCtag st, _, _) -> find_field_struct loc st allow_mutable f
+    | JCTpointer(JCtag(st, _), _, _) -> find_field_struct loc st allow_mutable f
     | JCTpointer(JCvariant _, _, _)
     | JCTpointer(JCunion _, _, _)
     | JCTnative _ 
     | JCTenum _
     | JCTlogic _
     | JCTnull
-    | JCTany ->
+    | JCTany | JCTtype_var _ ->
         typing_error loc "not a structure type"
 
 let find_fun_info id = Hashtbl.find functions_env id
@@ -276,7 +282,7 @@ let type_type t =
         (* first we try the most precise type (the tag) *)
         begin try
           let st, _ = Hashtbl.find structs_table id in
-          JCTpointer(JCtag st, a, b)
+          JCTpointer(JCtag(st, []), a, b)
         with Not_found ->
           try
             let vi = Hashtbl.find variants_table id in
@@ -329,7 +335,8 @@ let rec pattern env vars pat ety =
     | JCPPstruct(id, lpl) ->
         let tov = match ety with
           | JCTpointer(tov, _, _) -> tov
-          | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull | JCTany ->
+          | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull | JCTany
+          | JCTtype_var _ ->
               typing_error pat#loc
                 "this pattern doesn't match a structure nor a variant"
         in
@@ -347,7 +354,7 @@ let rec pattern env vars pat ety =
              env, (fi, tp)::acc)
           (env, []) lpl
         in
-        JCPstruct(st, List.rev tlpl), valid_pointer_type (JCtag st), env
+        JCPstruct(st, List.rev tlpl), valid_pointer_type (JCtag(st, [])), env
     | JCPPvar id ->
         let vi = get_var ety id in
         JCPvar vi, ety, (id#name, vi)::env
@@ -710,12 +717,13 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           match te1#typ with
             | JCTpointer(st1, a, b) ->
                 if substruct st st1 then
-                  (JCTpointer(JCtag st, a, b),
+                  (JCTpointer(JCtag(st, []), a, b),
                    te1#region,
                    JCTcast(te1, label (), st))
                 else
                   typing_error e#loc "invalid cast"
-            | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany ->
+            | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
+            | JCTtype_var _ ->
                 typing_error e#loc "only structures can be cast"
         end
     | JCNEif(e1, e2, e3) ->
@@ -734,11 +742,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEoffset(k, e1) ->
         let te1 = ft e1 in
         begin match te1#typ with
-          | JCTpointer(JCtag st, _, _) ->
+          | JCTpointer(JCtag(st, _), _, _) ->
               integer_type, dummy_region, JCToffset(k, te1, st)
           | JCTpointer((JCvariant _ | JCunion _), _, _) ->
               assert false (* TODO *)
-          | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany ->
+          | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
+          | JCTtype_var _ ->
               typing_error e#loc "pointer expected"
         end        
     | JCNElet(pty, id, Some e1, e2) ->
@@ -932,7 +941,7 @@ of %s"
     | JCPTtypeof tof ->
         let ttof = term env tof in
         match ttof#typ with
-          | JCTpointer(JCtag st, _, _) ->
+          | JCTpointer(JCtag(st, _), _, _) ->
               check_hierarchy tof#loc st;
               JCTtypeof (ttof, st)
           | _ -> typing_error tof#loc "tag pointer expression expected"
@@ -1025,7 +1034,7 @@ let rec assertion env e =
     | JCNEmutable(e, t) ->
         let te = ft e in
         let te_st = match te#typ with
-          | JCTpointer(JCtag st, _, _) -> st
+          | JCTpointer(JCtag(st, _), _, _) -> st
           | _ -> typing_error e#loc "tag pointer expression expected"
         in
         let tt = tag env (root_name te_st) t in
@@ -1413,7 +1422,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           match te1#typ with
             | JCTpointer(st1, a, b) ->
                 if substruct st st1 then
-                  (JCTpointer(JCtag st, a, b),
+                  (JCTpointer(JCtag(st, []), a, b),
                    te1#region,
                    JCEcast(te1, st))
                 else
@@ -1442,7 +1451,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEoffset(k, e1) ->
         let te1 = fe e1 in
         begin match te1#typ with 
-          | JCTpointer(JCtag st, _, _) ->
+          | JCTpointer(JCtag(st, _), _, _) ->
               integer_type, dummy_region, JCEoffset(k, te1, st)
           | JCTpointer((JCvariant _ | JCunion _), _, _) ->
               assert false (* TODO *)
@@ -1450,7 +1459,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         end
     | JCNEalloc(e1, t) ->
         let st = find_struct_info e#loc t in
-        let ty = JCTpointer(JCtag st, Some zero, None) in
+        let ty = JCTpointer(JCtag(st, []), Some zero, None) in
         ty, Region.make_var ty "alloc", JCEalloc (fe e1, st)
     | JCNEfree e1 ->
         unit_type, dummy_region, JCEfree (fe e1)
@@ -1553,7 +1562,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEpack(e1, t) ->
         let te1 = fe e1 in
         begin match te1#typ with
-          | JCTpointer(JCtag st, _, _) ->
+          | JCTpointer(JCtag(st, _), _, _) ->
               let as_t = match t with
                 | Some t -> find_struct_info t#loc t#name
                 | None -> st
@@ -1564,11 +1573,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEunpack(e1, t) ->
         let te1 = fe e1 in 
         begin match te1#typ with
-          | JCTpointer(JCtag st, _, _) ->
+          | JCTpointer(JCtag(st, []), _, _) ->
               let from_t = match t with
                 | Some t -> find_struct_info t#loc t#name
                 | None ->
                     let rec res = {
+                      jc_struct_info_params = [];
                       jc_struct_info_name = "bottom";
                       jc_struct_info_parent = None;
                       jc_struct_info_root = res;
@@ -1930,7 +1940,7 @@ let add_logic_constdecl (ty, id) =
         
 let type_range_of_term ty t =
   match ty with
-    | JCTpointer (JCtag st, n1opt, n2opt) ->
+    | JCTpointer (JCtag(st, _), n1opt, n2opt) ->
 (*      let instanceofcstr = new assertion (JCAinstanceof (t, st)) in *)
 (*      let mincstr = match n1opt with
           | None -> true_assertion
@@ -2066,7 +2076,8 @@ let rec decl d =
                    "use of structure invariants requires declaration \
 of an invariant policy";
                let vi =
-                 var (JCTpointer (JCtag struct_info, Some zero, Some zero)) x in
+                 var (JCTpointer (JCtag(struct_info, []), Some zero,
+                                  Some zero)) x in
                let p = assertion [(x, vi)] e in
                let pi = make_rel id#name in
                pi.jc_logic_info_parameters <- [vi];
@@ -2177,6 +2188,7 @@ of an invariant policy";
 let declare_struct_info d = match d#node with
   | JCDtag(id, parent, _, _) ->
       let rec si = {
+        jc_struct_info_params = [];
         jc_struct_info_name = id;
         jc_struct_info_fields = [];
         jc_struct_info_parent = None;
@@ -2208,7 +2220,7 @@ let compute_struct_info_parent d = match d#node with
   | JCDtag(id, Some parent, _, _) ->
       let si, _ = Hashtbl.find structs_table id in
       let psi = find_struct_info d#loc parent in
-      si.jc_struct_info_parent <- Some psi
+      si.jc_struct_info_parent <- Some(psi, [])
   | _ -> ()
 
 let fixpoint_struct_info_roots () =
@@ -2216,7 +2228,7 @@ let fixpoint_struct_info_roots () =
   Hashtbl.iter
     (fun _ (si, _) ->
        match si.jc_struct_info_parent with
-         | Some psi ->
+         | Some(psi, _) ->
              if si.jc_struct_info_root != psi.jc_struct_info_root then begin
                si.jc_struct_info_root <- psi.jc_struct_info_root;
                modified := true
@@ -2358,7 +2370,7 @@ let print_file fmt () =
       (fun name (sinfo,_) f ->
          let super = match sinfo.jc_struct_info_parent with
            | None -> None
-           | Some st -> Some st.jc_struct_info_name
+           | Some(st, _) -> Some st.jc_struct_info_name
          in
          Jc_output.JCstruct_def
            (name,super,sinfo.jc_struct_info_fields,[])

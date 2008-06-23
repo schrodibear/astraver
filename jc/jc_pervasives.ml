@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.107 2008-06-10 13:43:10 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.108 2008-06-23 14:15:56 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -57,7 +57,7 @@ let operator_of_type = function
   | JCTnative n -> operator_of_native n
   | JCTenum _ -> `Integer
   | JCTlogic _ -> `Logic
-  | JCTany -> assert false (* TODO? *)
+  | JCTany | JCTtype_var _ -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
 
 let label_var lab name =
@@ -93,32 +93,38 @@ let string_of_native t =
     | Tboolean -> "boolean"
     | Tstring -> "string"
 
-let print_type fmt t =
+let rec print_type fmt t =
   match t with
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
     | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
-    | JCTpointer (
-	( JCtag { jc_struct_info_name = name }
-	| JCvariant { jc_variant_info_name = name }
-	| JCunion { jc_variant_info_name = name }),
-	ao, bo) ->
+    | JCTpointer(tov, ao, bo) ->
+        begin match tov with
+          | JCtag({ jc_struct_info_name = name }, [])
+          | JCvariant { jc_variant_info_name = name }
+	  | JCunion { jc_variant_info_name = name } ->
+              fprintf fmt "%s" name
+          | JCtag({ jc_struct_info_name = name }, params) ->
+              fprintf fmt "%s<%a>" name
+                (Pp.print_list Pp.comma print_type) params
+        end;
 	begin match ao, bo with
 	  | None, None ->
-	      fprintf fmt "%s[..]" name
+	      fprintf fmt "[..]"
 	  | Some a, None ->
-	      fprintf fmt "%s[%s..]" name (Num.string_of_num a)
+	      fprintf fmt "[%s..]" (Num.string_of_num a)
 	  | None, Some b ->
-	      fprintf fmt "%s[..%s]" name (Num.string_of_num b)
+	      fprintf fmt "[..%s]" (Num.string_of_num b)
 	  | Some a, Some b ->
 	      if Num.eq_num a b then
-		fprintf fmt "%s[%s]" name (Num.string_of_num a)
+		fprintf fmt "[%s]" (Num.string_of_num a)
 	      else
-		fprintf fmt "%s[%s..%s]" name
+		fprintf fmt "[%s..%s]"
 		  (Num.string_of_num a) (Num.string_of_num b)
 	end
     | JCTnull -> fprintf fmt "(nulltype)"  
     | JCTany -> fprintf fmt "(anytype)"  
+    | JCTtype_var v -> fprintf fmt "(var%d)" (Jc_type_var.uid v)
 
 let num_of_constant loc c =
     match c with
@@ -697,7 +703,7 @@ let embedded_struct_fields st =
 *)
 let field_sinfo fi = 
   match fi.jc_field_info_type with
-    | JCTpointer(JCtag st, _, _) -> st
+    | JCTpointer(JCtag(st, _), _, _) -> st
     | _ -> assert false
 
 let field_bounds fi = 
@@ -734,12 +740,12 @@ let struct_variant st =
          * in a type *)
 
 let tag_or_variant_variant = function
-  | JCtag st -> struct_variant st
+  | JCtag(st, _) -> struct_variant st
   | JCvariant vi -> vi
   | JCunion vi -> vi
   
 let tag_or_variant_name = function
-  | JCtag st -> "tag "^st.jc_struct_info_name
+  | JCtag(st, _) -> "tag "^st.jc_struct_info_name
   | JCvariant vi -> "variant "^vi.jc_variant_info_name
   | JCunion vi -> "union "^vi.jc_variant_info_name
 
@@ -773,7 +779,8 @@ let union_of_field fi =
 let integral_type = function
   | JCTnative Tinteger -> true
   | JCTenum _ -> true 
-  | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull | JCTany -> false
+  | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull | JCTany
+  | JCTtype_var _ -> false
 
 let integral_union vi =
   assert vi.jc_variant_info_is_union;
