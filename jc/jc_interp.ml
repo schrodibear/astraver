@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.285 2008-06-23 14:15:56 bardou Exp $ *)
+(* $Id: jc_interp.ml,v 1.286 2008-06-25 14:17:30 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2250,7 +2250,7 @@ let tr_fun f funloc spec body acc =
            match b.jc_behavior_assumes with
              | None -> post
              | Some e -> 
-                 make_impl (assertion ~global_assertion:false LabelHere LabelHere e) post
+                 make_impl (assertion ~global_assertion:false LabelOld LabelOld e) post
          in
            match b.jc_behavior_throws with
              | None -> 
