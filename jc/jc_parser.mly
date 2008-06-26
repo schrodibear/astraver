@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.96 2008-06-26 14:52:12 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.97 2008-06-26 14:58:14 bardou Exp $ */
 
 %{
 
@@ -277,6 +277,8 @@ extends:
     { None }
 | IDENTIFIER WITH
     { Some($1, []) }
+| IDENTIFIER LT type_parameters GT WITH
+    { Some($1, $3) }
 ;
 
 field_declaration_list:

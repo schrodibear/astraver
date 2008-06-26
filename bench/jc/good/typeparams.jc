@@ -7,6 +7,10 @@ tag meganode<A,B> = list<A> with {
   B[0] meti;
 }
 
+int head(list<int>[0] l) {
+  return l.item;
+}
+
 /*
 Local Variables: 
 mode: java
