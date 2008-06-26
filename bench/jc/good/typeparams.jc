@@ -1,6 +1,6 @@
 type list<A> = {
-  A item;
-  list<A>[0] item;
+  A[0] item;
+  list<A>[0..] item;
 }
 
 /*

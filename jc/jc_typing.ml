@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.213 2008-06-26 14:19:59 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.214 2008-06-26 14:52:12 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -278,7 +278,7 @@ let find_logic_info id = Hashtbl.find logic_functions_env id
 let type_type t =
   match t#node with
     | JCPTnative n -> JCTnative n
-    | JCPTpointer (id, a, b) -> 
+    | JCPTpointer (id, _, a, b) -> 
         (* first we try the most precise type (the tag) *)
         begin try
           let st, _ = Hashtbl.find structs_table id in
