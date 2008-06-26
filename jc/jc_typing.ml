@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.212 2008-06-25 14:17:30 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.213 2008-06-26 14:19:59 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1731,7 +1731,7 @@ let type_logic_labels_in_decl d = match d#node with
         (type_logic_labels [LabelHere; LabelPre] (Some LabelHere))
         body;
       List.iter type_logic_labels_in_clause clauses
-  | JCDtag(_, _, _, invs) ->
+  | JCDtag(_, _, _, _, invs) ->
       List.iter
         (fun (_, _, e) -> type_logic_labels [LabelHere] (Some LabelHere) e) invs
   | JCDlemma(_, _, labels, body) ->
@@ -2065,7 +2065,7 @@ let rec decl d =
               Hashtbl.add enum_conversion_functions_table of_int id
 	    *)
 	end
-    | JCDtag(id, parent, fields, inv) ->
+    | JCDtag(id, _, parent, fields, inv) ->
         let struct_info, _ = Hashtbl.find structs_table id in
         (* declare invariants as logical functions *)
         let invariants =
@@ -2186,7 +2186,7 @@ of an invariant policy";
         assert false
 
 let declare_struct_info d = match d#node with
-  | JCDtag(id, parent, _, _) ->
+  | JCDtag(id, _, parent, _, _) ->
       let rec si = {
         jc_struct_info_params = [];
         jc_struct_info_name = id;
@@ -2217,7 +2217,7 @@ let declare_variable d = match d#node with
   | _ -> ()
 
 let compute_struct_info_parent d = match d#node with
-  | JCDtag(id, Some parent, _, _) ->
+  | JCDtag(id, _, Some(parent, _), _, _) ->
       let si, _ = Hashtbl.find structs_table id in
       let psi = find_struct_info d#loc parent in
       si.jc_struct_info_parent <- Some(psi, [])
@@ -2277,7 +2277,7 @@ let type_variant d = match d#node with
   | _ -> ()
 
 let declare_tag_fields d = match d#node with
-  | JCDtag(id, parent, fields, inv) ->
+  | JCDtag(id, _, _, fields, inv) ->
       let struct_info, _ = Hashtbl.find structs_table id in
       let root = struct_info.jc_struct_info_root in
       let fields = List.map (field struct_info root) fields in
@@ -2286,7 +2286,7 @@ let declare_tag_fields d = match d#node with
   | _ -> ()
 
 let check_struct d = match d#node with
-  | JCDtag(id, _, _, _) ->
+  | JCDtag(id, _, _, _, _) ->
       let loc = d#loc in
       let st = find_struct_info loc id in
       if st.jc_struct_info_root.jc_struct_info_variant = None then

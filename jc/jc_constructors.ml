@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.4 2008-06-13 14:37:36 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.5 2008-06-26 14:19:59 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -376,8 +376,8 @@ module PDecl = struct
     mk ~node:(JCDvar(typ, name, init))
   let mkglobal_inv_def ~name ~body =
     mk ~node:(JCDglobal_inv(name, body))
-  let mktag_def ~name ?super ?(fields = []) ?(invariants = []) =
-    mk ~node:(JCDtag(name, super, fields, invariants))
+  let mktag_def ~name ?(params = []) ?super ?(fields = []) ?(invariants = []) =
+    mk ~node:(JCDtag(name, params, super, fields, invariants))
   let mkenum_type_def ~name ~left ~right =
     mk ~node:(JCDenum_type(name, left, right))
   let mkexception_def ~name ?arg_type =

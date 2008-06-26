@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.10 2008-06-13 14:37:36 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.11 2008-06-26 14:19:59 bardou Exp $ *)
 
 open Format
 open Jc_env
@@ -267,6 +267,18 @@ let reads_or_expr fmt = function
   | JCexpr e -> 
       fprintf fmt "=@\n%a" pexpr e
 
+let type_params_decl fmt = function
+  | [] -> ()
+  | l -> fprintf fmt "<%a>" (print_list comma Pp.string) l
+
+let type_params fmt = function
+  | [] -> ()
+  | l -> fprintf fmt "<%a>" (print_list comma ptype) l
+
+let super_option fmt = function
+  | None -> ()
+  | Some(s, p) -> fprintf fmt "%s%a with " s type_params p
+
 let rec pdecl fmt d =
   match d#node with
     | JCDfun(ty,id,params,clauses,body) ->
@@ -291,13 +303,12 @@ let rec pdecl fmt d =
 	  (fun fmt tag -> fprintf fmt "%s" tag#name)
 	  fmt tags;
 	fprintf fmt "]@]@."
-    | JCDtag(id, Some super, fields, invs) ->
-	fprintf fmt "@\n@[<v 2>tag %s = %s with {%a%a@]@\n}@."
-	  id super (print_list space field) fields 
-	  (print_list space invariant) invs
-    | JCDtag(id, None, fields, invs) ->
-	fprintf fmt "@\n@[<v 2>tag %s = {%a%a@]@\n}@."
-	  id (print_list space field) fields 
+    | JCDtag(id, params, super, fields, invs) ->
+	fprintf fmt "@\n@[<v 2>tag %s%a = %a{%a%a@]@\n}@."
+          id
+          type_params_decl params
+          super_option super
+          (print_list space field) fields 
 	  (print_list space invariant) invs
     | JCDvar(ty,id,init) ->
 	fprintf fmt "@\n@[%a %s%a;@]@." ptype ty id

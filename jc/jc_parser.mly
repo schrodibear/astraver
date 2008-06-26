@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.94 2008-05-23 16:00:32 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.95 2008-06-26 14:19:59 bardou Exp $ */
 
 %{
 
@@ -258,14 +258,14 @@ union_tag_list:
 
 tag_definition:
 | TAG IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
-    { let (f,i) = $6 in locate (JCDtag($2,$4,f,i)) }
+    { let (f,i) = $6 in locate (JCDtag($2,[],$4,f,i)) }
 ; 
 
 extends:
 | /* epsilon */
     { None }
 | IDENTIFIER WITH
-    { Some $1 }
+    { Some($1, []) }
 ;
 
 field_declaration_list:
@@ -297,7 +297,7 @@ tag_and_type_decl:
 | TYPE IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
     { let (f,i) = $6 in
       let id = locate_identifier $2 in
-      locate (JCDtag($2, $4, f, i)),
+      locate (JCDtag($2, [], $4, f, i)),
       locate (JCDvariant_type($2, [id])) }
 ;
 

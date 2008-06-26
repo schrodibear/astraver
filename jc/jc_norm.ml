@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.93 2008-06-10 13:43:10 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.94 2008-06-26 14:19:59 bardou Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -613,8 +613,8 @@ let decl d =
 	JCDvariant_type(id, tags)
     | JCDunion_type(id, tags) ->
 	JCDunion_type(id, tags)
-    | JCDtag (id, extends, fields, invs) ->
-	JCDtag (id, extends, fields, 
+    | JCDtag (id, params, extends, fields, invs) ->
+	JCDtag (id, params, extends, fields, 
 		List.map (fun (id,name,e) -> id,name,expr e) invs)
     | JCDvar(ty,id,init) ->
 	JCDvar(ty,id,Option_misc.map expr init)

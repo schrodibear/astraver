@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.139 2008-06-23 14:42:48 bardou Exp $ *)
+(* $Id: java_interp.ml,v 1.140 2008-06-26 14:19:59 bardou Exp $ *)
 
 open Format
 open Jc_output
@@ -877,7 +877,7 @@ let array_types decls =
           ()) :: acc0,
        (mktag_def
           ~name:st.jc_struct_info_name
-          ~super:"Object"
+          ~super:("Object", [])
 	  ~fields:
           (List.map begin fun fi ->
              fi.jc_field_info_rep,
@@ -1886,10 +1886,11 @@ let tr_class ci acc0 acc =
       ci.class_info_fields
   in
   let super =
-    let superclass = Option_misc.map (fun ci -> ci.class_info_name)
+    let superclass = Option_misc.map (fun ci -> ci.class_info_name, [])
       ci.class_info_extends in
       match superclass with 
-	| None -> if ci.class_info_name = "Object" then None else Some "Object"
+	| None -> if ci.class_info_name = "Object" then None
+          else Some ("Object", [])
 	| _ -> superclass
   in
   let acc = List.fold_left (tr_field ci.class_info_name) acc static_fields in
@@ -1975,9 +1976,10 @@ let tr_invariants ci id invs decls =
       invs
   in
   List.map begin fun d -> match d#node with
-    | JCDtag (s, so, fil, struct_invs) when s = ci.class_info_name ->
+    | JCDtag (s, params, so, fil, struct_invs) when s = ci.class_info_name ->
 	mktag_def
           ~name:s
+          ~params
           ?super:so
           ~fields:fil
           ~invariants:(struct_invs @ invs)
