@@ -51,25 +51,32 @@ let label fmt l =
     | LabelOld -> fprintf fmt "Old" 
     | LabelPost -> fprintf fmt "Post" 
 
-let ptype fmt t =
+let rec ptype fmt t =
   match t#node with
     | JCPTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCPTidentifier s -> string fmt s
-    | JCPTpointer (name,ao, bo) ->
+    | JCPTpointer (name,params,ao, bo) ->
 	begin match ao, bo with
 	  | None, None ->
-	      fprintf fmt "%s[..]" name
+	      fprintf fmt "%s%a[..]" name ptype_params params
 	  | Some a, None ->
-	      fprintf fmt "%s[%s..]" name (Num.string_of_num a)
+	      fprintf fmt "%s%a[%s..]" name ptype_params params
+                (Num.string_of_num a)
 	  | None, Some b ->
-	      fprintf fmt "%s[..%s]" name (Num.string_of_num b)
+	      fprintf fmt "%s%a[..%s]" name ptype_params params
+                (Num.string_of_num b)
 	  | Some a, Some b ->
 	      if Num.eq_num a b then
-		fprintf fmt "%s[%s]" name (Num.string_of_num a)
+		fprintf fmt "%s%a[%s]" name ptype_params params
+                  (Num.string_of_num a)
 	      else
-		fprintf fmt "%s[%s..%s]" name
+		fprintf fmt "%s%a[%s..%s]" name ptype_params params
 		  (Num.string_of_num a) (Num.string_of_num b)
 	end
+
+and ptype_params fmt = function
+  | [] -> ()
+  | l -> fprintf fmt "<%a>" (print_list comma ptype) l
 
 let offset_kind fmt k =
   match k with

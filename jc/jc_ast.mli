@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.129 2008-06-26 14:19:59 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.130 2008-06-26 14:52:12 bardou Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -87,9 +87,9 @@ end
 type ptype_node = 
   | JCPTnative of native_type
   | JCPTidentifier of string
-  | JCPTpointer of string * Num.num option * Num.num option
+  | JCPTpointer of string * ptype list * Num.num option * Num.num option
 
-type ptype = ptype_node node_located
+and ptype = ptype_node node_located
 
 type comparison_op = [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq ]
 type arithmetic_op = [ `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ]

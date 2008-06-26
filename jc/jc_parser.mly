@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.95 2008-06-26 14:19:59 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.96 2008-06-26 14:52:12 bardou Exp $ */
 
 %{
 
@@ -257,9 +257,20 @@ union_tag_list:
 /******************/
 
 tag_definition:
-| TAG IDENTIFIER EQ extends LBRACE field_declaration_list RBRACE
+| TAG IDENTIFIER LT type_parameter_names GT EQ
+    extends LBRACE field_declaration_list RBRACE
+    { let (f,i) = $9 in locate (JCDtag($2,$4,$7,f,i)) }
+| TAG IDENTIFIER EQ
+    extends LBRACE field_declaration_list RBRACE
     { let (f,i) = $6 in locate (JCDtag($2,[],$4,f,i)) }
-; 
+;
+
+type_parameter_names:
+| IDENTIFIER COMMA type_parameter_names
+    { $1::$3 }
+| IDENTIFIER
+    { [$1] }
+;
 
 extends:
 | /* epsilon */
@@ -298,6 +309,12 @@ tag_and_type_decl:
     { let (f,i) = $6 in
       let id = locate_identifier $2 in
       locate (JCDtag($2, [], $4, f, i)),
+      locate (JCDvariant_type($2, [id])) }
+| TYPE IDENTIFIER LT type_parameter_names GT EQ
+    extends LBRACE field_declaration_list RBRACE
+    { let (f,i) = $9 in
+      let id = locate_identifier $2 in
+      locate (JCDtag($2, $4, $7, f, i)),
       locate (JCDvariant_type($2, [id])) }
 ;
 
@@ -339,20 +356,44 @@ type_expr:
     { locate (JCPTnative Tunit) }
 | IDENTIFIER
     { locate (JCPTidentifier $1) }
+
 | IDENTIFIER LSQUARE DOTDOT RSQUARE
-    { locate (JCPTpointer($1,None,None)) }
+    { locate (JCPTpointer($1,[],None,None)) }
 | IDENTIFIER LSQUARE int_constant RSQUARE
     { let n = $3 in
-      locate (JCPTpointer($1,Some n,Some n)) }
+      locate (JCPTpointer($1,[],Some n,Some n)) }
 | IDENTIFIER LSQUARE int_constant DOTDOT RSQUARE
     { let n = $3 in
-      locate (JCPTpointer($1,Some n,None)) }
+      locate (JCPTpointer($1,[],Some n,None)) }
 | IDENTIFIER LSQUARE int_constant DOTDOT int_constant RSQUARE
     { let n, m = $3, $5 in
-      locate (JCPTpointer($1,Some n,Some m)) }
+      locate (JCPTpointer($1,[],Some n,Some m)) }
 | IDENTIFIER LSQUARE DOTDOT int_constant RSQUARE
     { let m = $4 in
-      locate (JCPTpointer($1,None,Some m)) }
+      locate (JCPTpointer($1,[],None,Some m)) }
+
+| IDENTIFIER LT type_parameters GT LSQUARE DOTDOT RSQUARE
+    { locate (JCPTpointer($1,$3,None,None)) }
+| IDENTIFIER LT type_parameters GT LSQUARE int_constant RSQUARE
+    { let n = $6 in
+      locate (JCPTpointer($1,$3,Some n,Some n)) }
+| IDENTIFIER LT type_parameters GT LSQUARE int_constant DOTDOT RSQUARE
+    { let n = $6 in
+      locate (JCPTpointer($1,$3,Some n,None)) }
+| IDENTIFIER LT type_parameters GT
+    LSQUARE int_constant DOTDOT int_constant RSQUARE
+    { let n, m = $6, $8 in
+      locate (JCPTpointer($1,$3,Some n,Some m)) }
+| IDENTIFIER LT type_parameters GT LSQUARE DOTDOT int_constant RSQUARE
+    { let m = $7 in
+      locate (JCPTpointer($1,$3,None,Some m)) }
+;
+
+type_parameters:
+| type_expr COMMA type_parameters
+    { $1::$3 }
+| type_expr
+    { [$1] }
 ;
 
 function_specification:
