@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.286 2008-06-25 14:17:30 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.287 2008-06-26 16:16:17 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2096,7 +2096,10 @@ let assigns before ef locs loc =
                if Ceffect.is_alloc v then m 
                else StringMap.add (heap_var_name v) (Reference false) m)
             assigns.Ceffect.assigns_var 
-    *) StringMap.empty 
+    *)
+    VarSet.fold
+      (fun v m -> StringMap.add v.jc_var_info_final_name false m)
+      ef.jc_writes.jc_effect_globals StringMap.empty
   in
   let mems = 
     FieldOrVariantRegionMap.fold
