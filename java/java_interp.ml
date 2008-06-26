@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.140 2008-06-26 14:19:59 bardou Exp $ *)
+(* $Id: java_interp.ml,v 1.141 2008-06-26 15:06:10 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -625,9 +625,9 @@ let ptype_node_of_type = function
   | JCTnative n -> JCPTnative n
   | JCTlogic s -> JCPTidentifier s
   | JCTenum e -> JCPTidentifier e.jc_enum_info_name
-  | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name, l, r)
+  | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name,[], l, r)
   | JCTpointer((JCvariant v | JCunion v), l, r) ->
-      JCPTpointer(v.jc_variant_info_name, l, r)
+      JCPTpointer(v.jc_variant_info_name,[], l, r)
   | JCTnull
   | JCTany | JCTtype_var _ -> assert false
 let ptype_of_type t = new ptype (ptype_node_of_type t)
