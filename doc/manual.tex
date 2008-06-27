@@ -741,6 +741,13 @@ expression behaves like a call to a function parameter.
 \subsection{Graphical user interface (\texttt{gwhy})}
 \indextt{gwhy}\index{GUI}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\textwidth]{gwhy-screenshot.eps}
+  \caption{The \texttt{gwhy} graphical interface}
+  \label{fig:gwhy}
+\end{figure}
+
 The graphical user interface \texttt{gwhy} is a tool to help the user
 in the process of calling the various automatic provers on the goals
 (in order to analyze the failures and to determine what is wrong in
@@ -762,16 +769,68 @@ The top right window displays the currently selected goal.
 In this window, a right click on some identifier displays its location
 in the corresponding \why\ input file in the bottom right window.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.8\textwidth]{gwhy-screenshot.eps}
-  \caption{The \texttt{gwhy} graphical interface}
-  \label{fig:gwhy}
-\end{figure}
-
 % obsolete
 % Note that you need the Unix \texttt{timeout} command to be installed
 % on your system before running \texttt{gwhy}.
+
+\subsection{Graphical user interface (\texttt{WhyWeb})}
+
+The graphical user interface \texttt{WhyWeb} is a tool to help the user
+in the process of calling the various automatic provers on the goals
+(in order to analyze the failures and to determine what is wrong in
+the programs, the specifications, or sometimes the provers).
+Before use this tools we must use why with the -project option for
+generate the wpr file. 
+
+We launch the web server with the program whyweb.opt then we open a
+browser on the page \texttt{http://localhost:2372} with 2372 the port
+number. A screenshort is given Figure~\ref{fig:whyweb}.  On the left
+side appears the list of all goals (either from \texttt{goal} commands
+in the \why\ files or resulting from verification conditions
+generation).In front of each goal, the results for each automatic
+prover is displayed. Provers can be launched by clicking on their
+names at the top of their columns. We can see the goal by unfolding
+the goals. On the right side appears the program.
+
+\begin{example}
+We search to proof the file \texttt{Gcd.java} in the java bench. 
+\begin{enumerate}
+\item We launch the commande : ''krakataoa Gcd.java'' to obtain a file : \texttt{Gcd.jc}.
+\item We launch the commande : ''jessie Gcd.jc''
+\item We use the makefile with the commande : ''make -f Gcd.makefile
+project'' toobtain the POs and the file : \texttt{Gcd.wpr}.
+\item We launch the server web with the commande : ''whyweb.opt''
+\item We open a browser web and in url we enter :
+''http://localhost:2372/?bench/java/good/why/Gcd.wpr''
+\item We open the first lemma : ''mul\_comm'' by clicking on the ''+'' of this lemma.
+\item We open the lemma goal by clicking on the ''+'' of the goal.
+\item We launch ergo theorem prover on this goal by clicking on the
+  ''Invalid'' word in the ergo column.
+\item We open the first method : ''Method gcd'' by clicking on the
+  ''+'' of this method.
+\item We open the first behavior : ''Safety'' by clicking on the ''+'' of this behavior.
+\item We open the first PO : ''initialization of loop invariant'' by
+  clicking on the ''+'' of this PO.
+\item we launch the ergo theorem prover on this PO by clicking on the
+  ''Invalid'' word in the ergo column
+\end{enumerate}
+After all this action we obtain the Figure~\ref{fig:whyweb}. We can
+see the first lemma are proved by ergo but not the first PO.
+
+
+\end{example}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\textwidth]{WhyWeb.eps}
+  \caption{The \texttt{whyweb} interface}
+  \label{fig:whyweb}
+\end{figure}
+
+\subsection{Remaining Issues}
+\begin{itemize}
+\item select the project name when we save the project.
+\item give the complete location in Why
+\end{itemize}
 
 \subsection{Calling decision procedures (\texttt{dp})}
 \label{tool:dp}\indextt{dp}
@@ -2068,10 +2127,16 @@ Two other theories, \texttt{why\_int\_array\_pred} and
 \texttt{why\_array\_pred}, introduce the various predicates over
 arrays presented in Section~\ref{prelude}.
 
+\appendix
+\chapter{DTD of Why project files}
+
+\verbatiminput{../lib/why.dtd}
+
 
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{./biblio}
+
 
 
 \newpage

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.26 2008-04-11 13:31:54 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.27 2008-06-27 13:15:15 hubert Exp $ i*)
 
 open Format
 open Pp
@@ -300,22 +300,6 @@ let output_project f =
 		decl ctxfmt d)
 	 queue)
     (f ^ "_ctx.why");
-(*  Env.iter_global
-    (fun (x,ty) -> 
-       let fn = "function "^Ident.string x in
-       let size = String.length fn in
-       try 
-	 if (String.sub fn (size-5) 4 = "_imp")
-	 then
-	   begin
-	     eprintf "function %s@." fn;
-	     try
-	       let _ = SMap.find fn !functions in ()
-	     with Not_found ->
-	       functions := SMap.add fn SMap.empty !functions 
-	   end
-	 else ()
-       with Invalid_argument _ -> ());*)
   Hashtbl.iter 
     (fun key (fn,beh,loc) -> 
        try

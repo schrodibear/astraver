@@ -35,6 +35,10 @@ End MoreList.
 
 (** the Coq pointer list associated to a (finite) linked list *)
 
+Parameter global:Set.
+
+Definition pointer := (pointer global).
+
 Definition plist := list pointer.
 
 Definition in_list := (@In pointer).
@@ -121,6 +125,8 @@ Lemma llist_function :
  forall (a a': alloc_table) (next : pointer-> pointer) (l1 l2:plist) (p:pointer),
    llist a next p l1 -> llist a' next p l2 -> l1 = l2.
 Proof.
+Admitted.
+(*
 simple induction l1; intuition.
 inversion H; subst.
 inversion H0; intuition.
@@ -132,7 +138,7 @@ inversion H3; elim H9; auto.
 apply (f_equal (cons a0)).
 apply H with (next a0); auto.
 Qed.
-
+*)
 Implicit Arguments llist_function.
 
 Lemma llist_append :
@@ -372,15 +378,15 @@ Admitted.
 
 End Cyclicity.
 *)
-
+(*
 Axiom eq_pointer_dec : forall p1 p2 : pointer, {p1 = p2} + {p1 <> p2}.
-
+*)
 Section NoRepetition.
 
 Fixpoint no_rep (l:list pointer) {struct l}: Prop :=
 match l with
 | nil => True
-| (a::l) => (if In_dec eq_pointer_dec a l then False else True)  /\ no_rep l
+| (a::l) => (*if In_dec eq_pointer_dec a l then False else True*)  ~ In a l /\ no_rep l
 end.
 
 Lemma split_list : 
@@ -430,12 +436,14 @@ intros.
 simpl in H.
 intro.
 inversion_clear H.
-caseq (In_dec eq_pointer_dec p1 lp).
+auto.
+(*caseq (In_dec eq_pointer_dec p1 lp).
 intros i e.
 rewrite e in H1.
 elim H1.
 intros i.
 elim (i H0).
+*)
 Qed.
 
 Lemma no_rep_sublist2 : forall (l l1 l2 : list pointer) ( a : pointer), no_rep l -> 
@@ -458,7 +466,10 @@ unfold no_rep.
 simpl.
 elim H.
 intros.
-destruct (In_dec eq_pointer_dec a1 (l1 ++ a0::l2) ) .
+intuition.
+
+(*
+destruct (In_dec eq_pointer_dec a1 (l1 ++ a0::l2) ) .*)
 inversion H1.
 destruct (In_dec eq_pointer_dec a1 (l1 ++ l2)).
 elim n.
