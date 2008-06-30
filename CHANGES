@@ -1,4 +1,5 @@
 
+  o CVC3: no more options +arith-new +quant-polarity -quant-new
   o fixed HOL4 output; contribution by Vladimir Timashov 
     (vladimir.timashov@gmail.com)
   o gwhy: fixed efficiency issue with large comments

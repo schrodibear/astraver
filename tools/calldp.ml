@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.46 2008-02-12 13:41:29 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.47 2008-06-30 11:31:40 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -245,7 +245,7 @@ let yices ?(debug=false) ?(timeout=30) ~filename:f () =
 
 let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
   let cmd = 
-    sprintf "cvc3 +arith-new +quant-polarity -quant-new -lang smt < %s" f 
+    sprintf "cvc3 -lang smt < %s" f 
   in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> 0 then 
