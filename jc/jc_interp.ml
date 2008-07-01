@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.287 2008-06-26 16:16:17 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.288 2008-07-01 10:28:43 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -480,6 +480,33 @@ let var v =
 let lvar_info label v = 
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
+let current_function = ref None
+let set_current_function f = current_function := Some f
+let reset_current_function () = current_function := None
+
+let mutable_memory infunction (fi,r) =
+  if Region.polymorphic r then
+    field_of_union fi && 
+      FieldOrVariantRegionMap.mem 
+      (FVvariant (union_of_field fi),r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+    || 
+      not (field_of_union fi) &&
+      FieldOrVariantRegionMap.mem (FVfield fi,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+  else true
+
+let memvar ?assigned ?label_in_name label (fi,r) =
+  let mem = field_region_memory_name(fi,r) in
+  let mut = match !current_function with
+    | None -> true
+    | Some infunction -> mutable_memory infunction (fi,r) 
+  in
+  if mut then
+    lvar ?assigned ?label_in_name label mem
+  else
+    lvar ?assigned ?label_in_name LabelHere mem
+
 (* Return (t, lets) where:
  * t is the Why term
  * lets is a list of (id, value), which should be binded
@@ -519,10 +546,8 @@ let rec term ~global_assertion label oldlabel t =
     | JCTif(t1,t2,t3) -> assert false (* TODO *)
     | JCTderef(t,lab,fi) -> 
         let t', lets = ft t in
-        let mem = field_region_memory_name(fi,t#region) in
-        let deref = 
-          LApp("select",[lvar ~label_in_name:global_assertion lab mem; t'])
-        in
+        let mem = memvar ~label_in_name:global_assertion lab (fi,t#region) in
+        let deref = LApp("select",[mem; t']) in
         let deref =
           if field_of_union fi then
             (* Translate back access to union type to field type *)
@@ -2029,7 +2054,7 @@ let rec pset ~global_assertion before loc =
   let fpset = pset ~global_assertion before in
   match loc with
     | JCLSderef(ls,lab,fi,r) ->
-        let m = lvar ~label_in_name:global_assertion lab (field_region_memory_name(fi,r)) in
+        let m = memvar ~label_in_name:global_assertion lab (fi,r) in
         LApp("pset_deref", [m;fpset ls])
     | JCLSvar vi -> 
         let m = lvar_info before vi in
@@ -2641,6 +2666,26 @@ let tr_fun f funloc spec body acc =
                     else
                       body
                   in
+                  let tblock =
+                    List.fold_left (fun acc (mem_name,_) ->
+                      Let(mem_name,App(Var "any_memory",Void),acc)
+                    ) tblock local_read_mems
+                  in
+                  let tblock =
+                    List.fold_left (fun acc (mem_name,_) ->
+                      Let_ref(mem_name,App(Var "any_memory",Void),acc)
+                    ) tblock local_write_mems
+                  in
+                  let tblock =
+                    List.fold_left (fun acc (alloc_name,_) ->
+                      Let(alloc_name,App(Var "any_alloc_table",Void),acc)
+                    ) tblock local_read_allocs
+                  in
+                  let tblock =
+                    List.fold_left (fun acc (alloc_name,_) ->
+                      Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
+                    ) tblock local_write_allocs
+                  in
                   let tblock = 
                     if !return_void then
                       Try(append tblock (Raise(jessie_return_exception,None)),
@@ -2726,6 +2771,15 @@ let tr_fun f funloc spec body acc =
                   in
                     acc 
         in why_param::acc
+
+(* Store current function in global for appropriate translation of memories,
+ * depending on effects in current function.
+ *)
+let tr_fun f funloc spec body acc =
+  set_current_function f;
+  let acc = tr_fun f funloc spec body acc in
+  reset_current_function ();
+  acc
 
 let tr_logic_type id acc = Type(id,[])::acc
 
