@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.214 2008-06-26 14:52:12 bardou Exp $ *)
+(* $Id: jc_typing.ml,v 1.215 2008-07-01 16:49:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -134,6 +134,14 @@ let rec substruct st = function
       struct_variant st == vi
   | JCunion ui ->
       struct_variant st == ui
+
+let rec superstruct st = function
+  | (JCtag(st', _)) ->
+      substruct st' (JCtag(st,[]))
+  | JCvariant _vi ->
+      false
+  | JCunion _ui ->
+      false
 
 let subtype ?(allow_implicit_cast=true) t1 t2 =
   match t1,t2 with
@@ -716,7 +724,11 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           let st = find_struct_info e#loc t in
           match te1#typ with
             | JCTpointer(st1, a, b) ->
-                if substruct st st1 then
+                if superstruct st st1 then
+		  (te1#typ,
+                   te1#region,
+                   te1#node)
+                else if substruct st st1 then
                   (JCTpointer(JCtag(st, []), a, b),
                    te1#region,
                    JCTcast(te1, label (), st))
@@ -1421,7 +1433,11 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           let st = find_struct_info e#loc t in
           match te1#typ with
             | JCTpointer(st1, a, b) ->
-                if substruct st st1 then
+                if superstruct st st1 then
+		  (te1#typ,
+                   te1#region,
+                   te1#node)
+                else if substruct st st1 then
                   (JCTpointer(JCtag(st, []), a, b),
                    te1#region,
                    JCEcast(te1, st))

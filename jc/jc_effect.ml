@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.106 2008-06-23 14:15:56 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.107 2008-07-01 16:49:10 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -60,17 +60,24 @@ let mergeRegionMap m1 m2 =
 	   FieldOrVariantRegionMap.add v labs acc)
     m1 m2
 
+let mergeVariantMap m1 m2 =
+  VariantMap.fold
+    (fun v labs acc ->
+       try
+	 let l = VariantMap.find v m2 in
+	 VariantMap.add v (LogicLabelSet.union labs l) acc
+       with Not_found ->
+	   VariantMap.add v labs acc)
+    m1 m2
+
 let ef_union ef1 ef2 =
   { jc_effect_alloc_table = 
       StringRegionSet.union
 	ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table;
     jc_effect_tag_table = 
-      VariantSet.union
+      mergeVariantMap
 	ef1.jc_effect_tag_table ef2.jc_effect_tag_table;
     jc_effect_memories = 
-(*     
-      FieldRegionMap.union 
-*)
       mergeRegionMap
 	ef1.jc_effect_memories ef2.jc_effect_memories;
     jc_effect_globals = 
@@ -176,6 +183,14 @@ let fieldRegionMap_add key lab m =
       LogicLabelSet.add lab s
     with Not_found -> LogicLabelSet.singleton lab
   in FieldOrVariantRegionMap.add key s m
+
+let variantMap_add key lab m =
+  let s = 
+    try
+      let s = VariantMap.find key m in
+      LogicLabelSet.add lab s
+    with Not_found -> LogicLabelSet.singleton lab
+  in VariantMap.add key s m
     
 let add_memory_effect label ef (fi,r) =
   (* If region is constant, add memory for [fi] to constant memories. *)
@@ -193,9 +208,9 @@ let add_alloc_effect ef (tov, r) =
   { ef with jc_effect_alloc_table = 
       StringRegionSet.add (a,r) ef.jc_effect_alloc_table } 
   
-let add_tag_effect ef tov =
+let add_tag_effect label ef tov =
   let a = tag_or_variant_variant tov in
-  { ef with jc_effect_tag_table = VariantSet.add a ef.jc_effect_tag_table } 
+  { ef with jc_effect_tag_table = variantMap_add a label ef.jc_effect_tag_table } 
 
 let add_mutable_effect ef tov =
   { ef with jc_effect_mutable = StringSet.add
@@ -226,8 +241,8 @@ let add_global_reads fef vi =
 let add_alloc_reads fef (a,r) =
   { fef with jc_reads = add_alloc_effect fef.jc_reads (a,r) }
 
-let add_tag_reads fef a =
-  { fef with jc_reads = add_tag_effect fef.jc_reads a }
+let add_tag_reads label fef a =
+  { fef with jc_reads = add_tag_effect label fef.jc_reads a }
 
 let add_mutable_reads fef tov =
   { fef with jc_reads = add_mutable_effect fef.jc_reads tov }
@@ -253,8 +268,8 @@ let add_global_writes fef vi =
 let add_alloc_writes fef (a,r) =
   { fef with jc_writes = add_alloc_effect fef.jc_writes (a,r) }
 
-let add_tag_writes fef a =
-  { fef with jc_writes = add_tag_effect fef.jc_writes a }
+let add_tag_writes label fef a =
+  { fef with jc_writes = add_tag_effect label fef.jc_writes a }
 
 let add_mutable_writes fef tov =
   { fef with jc_writes = add_mutable_effect fef.jc_writes tov }
@@ -264,7 +279,7 @@ let add_committed_writes fef tov =
 
 let same_effects ef1 ef2 =
   StringRegionSet.equal ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
-  && VariantSet.equal ef1.jc_effect_tag_table ef2.jc_effect_tag_table
+  && VariantMap.equal (fun x y -> true) ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && FieldOrVariantRegionMap.equal (fun x y -> true) ef1.jc_effect_memories ef2.jc_effect_memories
   && VarSet.equal ef1.jc_effect_globals ef2.jc_effect_globals
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
@@ -284,7 +299,7 @@ let rec pattern ef (*label r*) p =
   let r = dummy_region in
   match p#node with
     | JCPstruct(st, fpl) ->
-	let ef = add_tag_effect ef (JCtag(st, [])) in
+	let ef = add_tag_effect (*label*)LabelHere ef (JCtag(st, [])) in
 	List.fold_left
 	  (fun ef (fi, pat) ->
 	     let ef = add_memory_effect (*label*)LabelHere ef (FVfield fi, r) in
@@ -329,7 +344,9 @@ let rec term ef t =
 	term ef t
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTcast (t1, _, _) | JCTrange_cast(t1,_) | JCTreal_cast(t1,_) ->  term ef t1
+    | JCTcast (t1, label, st) ->
+	add_tag_effect label (term ef t1) (JCtag(st, []))
+    | JCTrange_cast(t1,_) | JCTreal_cast(t1,_) ->  term ef t1
     | JCTinstanceof (_, _, _) -> assert false (* TODO *)
     | JCTat (t1, lab) -> term ef t1
     | JCTold t1 -> term ef t1
@@ -345,7 +362,7 @@ let rec term ef t =
 let tag ef t h =
   let ef = match h with
     | None -> ef
-    | Some h -> add_tag_effect ef h
+    | Some h -> add_tag_effect (*label*)LabelHere ef h
   in
   match t#node with
     | JCTtag _
@@ -359,7 +376,7 @@ let rec assertion ef a =
 	assertion (assertion (term ef t) a1) a2
     | JCAbool_term t -> term ef t
     | JCAinstanceof (t, lab, st) -> 
-	add_tag_effect (term ef t) (JCtag(st, []))
+	add_tag_effect lab (term ef t) (JCtag(st, []))
     | JCAnot a
     | JCAold a -> assertion ef a
     | JCAat(a,lab) -> assertion ef a
@@ -403,7 +420,7 @@ let rec expr ef e =
     | JCEconst _ -> ef
     | JCEcast(e,st)
     | JCEinstanceof(e,st) -> 
-	add_tag_reads (expr ef e) (JCtag(st, []))
+	add_tag_reads LabelHere (expr ef e) (JCtag(st, []))
     | JCEderef (e, fi) -> 
 	let fvi = 
 	  if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
@@ -438,7 +455,7 @@ let rec expr ef e =
 	    (fun ef a -> add_alloc_writes ef (a,e#region))
 	    ef ((JCtag(st, []))::roots)
 	in
-	List.fold_left add_tag_writes ef ((JCtag(st, []))::roots)
+	List.fold_left (add_tag_writes LabelHere) ef ((JCtag(st, []))::roots)
 	
 (*
 	let mut = Jc_invariants.mutable_name st.jc_struct_info_root in
@@ -448,7 +465,7 @@ let rec expr ef e =
 	begin match e#typ with
 	  | JCTpointer(tov, _, _) ->
 	      (* write tag table ? *)
-	      add_alloc_writes (add_tag_writes ef tov) (tov,e#region)
+	      add_alloc_writes (add_tag_writes LabelHere ef tov) (tov,e#region)
 	  | _ -> assert false
 	end
 (*    | JCEmatch(e, pel) ->
@@ -494,7 +511,7 @@ let rec expr ef e =
 	       | JCTpointer(tov, _, _) ->
 	           (* Assert fields fully mutable => need mutable and tag_table (of field) as reads *)
 		   let ef = add_mutable_reads ef tov in
-		   let ef = add_tag_reads ef tov in
+		   let ef = add_tag_reads LabelHere ef tov in
 	           (* Modify field's "committed" field => need committed (of field) as reads and writes *)
 		   let ef = add_committed_reads ef tov in
 		   let ef = add_committed_writes ef tov in
@@ -616,7 +633,7 @@ let spec ef s =
 let parameter ef vi =
   match vi.jc_var_info_type with
     | JCTpointer (tov, _, _) ->
-	add_alloc_reads (add_tag_reads ef tov) (tov,vi.jc_var_info_region)
+	add_alloc_reads (add_tag_reads LabelOld ef tov) (tov,vi.jc_var_info_region)
     | _ -> ef
 	
 (* computing the fixpoint *)
@@ -664,6 +681,9 @@ let fun_effects fi =
 
 let mapElements m =
   FieldOrVariantRegionMap.fold (fun key labels acc -> (key,labels)::acc) m []
+
+let mapVariantElements m =
+  VariantMap.fold (fun key labels acc -> (key,labels)::acc) m []
       
 let logic_effects funs =
   fixpoint_reached := false;
@@ -681,8 +701,11 @@ let logic_effects funs =
 	 (print_list comma (fun fmt (a,r) ->
 			      fprintf fmt "%s,%s" a r.jc_reg_name))
 	 (StringRegionSet.elements f.jc_logic_info_effects.jc_effect_alloc_table)
-	 (print_list comma (fun fmt v -> fprintf fmt "%s" v.jc_variant_info_name))
-	 (VariantSet.elements f.jc_logic_info_effects.jc_effect_tag_table)
+	 (print_list comma (fun fmt (a,labels) ->
+			      fprintf fmt "%s (%a)" a.jc_variant_info_name
+				(print_list comma Jc_output_misc.label) (LogicLabelSet.elements labels)  
+			   ))
+	 (mapVariantElements f.jc_logic_info_effects.jc_effect_tag_table)
 	 (print_list comma (fun fmt ((fvi,r),labels) ->
 			      fprintf fmt "%s,%s (%a)" 
 				(match fvi with 

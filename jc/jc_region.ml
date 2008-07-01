@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.12 2008-05-29 10:45:02 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.13 2008-07-01 16:49:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -62,8 +62,8 @@ module InternalRegion = struct
 
 end
 
-(* No ranking here, elements should become representant only if they are 
- * "preferred" according to function [prefer]. 
+(* By default, elements should become representant only if they are 
+ * "preferred" according to function [prefer]. Otherwise, decided by ranking.
  *)
 module UnionFind
   (Elem : 

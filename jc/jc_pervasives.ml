@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.108 2008-06-23 14:15:56 bardou Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.109 2008-07-01 16:49:10 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -60,19 +60,28 @@ let operator_of_type = function
   | JCTany | JCTtype_var _ -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
 
-let label_var lab name =
-  match lab with
-(*
-    | LabelNone -> assert false
-*)
-    | LabelHere -> name
-    | LabelPre -> name ^ "_at_Pre"
-    | LabelOld -> assert false (* name ^ "_at_Old" *)
-(*
-    | LabelInit -> name ^ "_at_Init"
-*)
-    | LabelPost -> name ^ "_at_Post"
-    | LabelName l -> name ^ "_at_" ^ l.label_info_final_name
+let label_var ?(label_in_name=true) ?label_assoc lab name =
+  let label =
+    match label_assoc with
+      | None -> lab 
+      | Some a ->
+	  try List.assoc lab a
+	  with Not_found -> lab
+  in			
+  if label_in_name then 
+    match label with
+      | LabelHere -> name
+      | LabelPre -> name ^ "_at_Pre"
+      | LabelOld -> assert false (* name ^ "_at_Old" *)
+      | LabelPost -> name ^ "_at_Post"
+      | LabelName l -> name ^ "_at_" ^ l.label_info_final_name
+  else
+    match label with (* hack ?? *)
+      | LabelHere -> name
+      | LabelPost -> name
+      | LabelPre -> name ^ "@init"
+      | LabelOld -> name ^ "@"
+      | LabelName l -> name ^ "@" ^ l.label_info_final_name
 
 let new_label_name =
   let label_name_counter = ref 0 in function () ->
@@ -259,7 +268,7 @@ let exception_info ty id =
 
 let empty_effects = 
   { jc_effect_alloc_table = StringRegionSet.empty;
-    jc_effect_tag_table = VariantSet.empty;
+    jc_effect_tag_table = VariantMap.empty;
     jc_effect_memories = FieldOrVariantRegionMap.empty;
     jc_effect_globals = VarSet.empty;
     jc_effect_mutable = StringSet.empty;

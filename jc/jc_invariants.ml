@@ -371,8 +371,8 @@ let invariant_params acc li =
       acc
   in
   let acc =
-    VariantSet.fold
-      (fun v acc -> 
+    VariantMap.fold
+      (fun v labels acc -> 
 	 let t = { logic_type_args = [variant_model_type v];
 		   logic_type_name = "tag_table" }
 	 in

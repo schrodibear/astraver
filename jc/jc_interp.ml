@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.288 2008-07-01 10:28:43 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.289 2008-07-01 16:49:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -612,7 +612,8 @@ let rec term ~global_assertion label oldlabel t =
           let t', lets = ft t in
           let tag = tag_table_name (JCtag(ty, [])) in
           LApp("downcast",
-               [lvar label tag; t';LVar (tag_name ty)]), lets
+               [lvar ~label_in_name:global_assertion label tag; 
+		t';LVar (tag_name ty)]), lets
     | JCTrange_cast(t,ri) -> 
         eprintf "range_cast in term: from %a to %a@." 
           print_type t#typ print_type (JCTenum ri);
@@ -2363,8 +2364,8 @@ let tr_fun f funloc spec body acc =
       reads
   in
   let reads =
-    VariantSet.fold
-      (fun v acc -> (tag_table_name_vi v)::acc)
+    VariantMap.fold
+      (fun v labels acc -> (tag_table_name_vi v)::acc)
       f.jc_fun_info_effects.jc_reads.jc_effect_tag_table
       reads
   in
@@ -2407,8 +2408,8 @@ let tr_fun f funloc spec body acc =
       writes
   in
   let writes =
-    VariantSet.fold
-      (fun v acc -> (tag_table_name_vi v)::acc)
+    VariantMap.fold
+      (fun v labels acc -> (tag_table_name_vi v)::acc)
       f.jc_fun_info_effects.jc_writes.jc_effect_tag_table
       writes
   in
@@ -2802,13 +2803,13 @@ let tr_axiom id is_axiom p acc =
     ) ef.jc_effect_alloc_table a 
   in
   let a =
-    VariantSet.fold
-      (fun vi a ->
-         LForall(
-           tag_table_name_vi vi,
-           tag_table_type (JCvariant vi),
-           a
-         ))
+    VariantMap.fold
+      (fun vi labels a ->
+         LogicLabelSet.fold
+           (fun lab a ->
+              LForall(label_var lab (tag_table_name_vi vi),
+		      tag_table_type (JCvariant vi), a))
+           labels a)
       ef.jc_effect_tag_table a
   in
   (* How to add quantification on other effects (alloc) without knowing 

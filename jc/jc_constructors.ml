@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.5 2008-06-26 14:19:59 bardou Exp $ *)
+(* $Id: jc_constructors.ml,v 1.6 2008-07-01 16:49:10 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -265,7 +265,7 @@ module PExpr = struct
       | _ -> failwith "Jc_constructors.PExpr.mkbinary_list should be used \
 either with (~expr1 AND ~expr2) OR ~list only."
   let mkand = mkbinary_list ~default:(mkboolean ~value:true ()) ~op:`Bland
-  let mkor = mkbinary_list ~default:(mkboolean ~value:true ()) ~op:`Blor
+  let mkor = mkbinary_list ~default:(mkboolean ~value:false ()) ~op:`Blor
   let mkadd = mkbinary_list ~default:(mkint ~value:0 ()) ~op:`Badd
 
   let mklabel ~label ~expr = mk ~node:(JCPElabel(label, expr))

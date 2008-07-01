@@ -148,23 +148,7 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	 let name = field_or_variant_region_memory_name(fvi,r) in
 	 LogicLabelSet.fold
 	   (fun lab acc ->
-	      let label =
-		match label_assoc with
-		  | None -> lab 
-		  | Some a ->
-		      try List.assoc lab a
-		      with Not_found -> lab
-	      in			
-	      let name =
-		if label_in_name then label_var label name
-		else
-		  match label with (* hack ?? *)
-		    | LabelHere -> name
-		    | LabelPost -> name
-		    | LabelPre -> name ^ "@init"
-		    | LabelOld -> name ^ "@"
-		    | LabelName l -> name ^ "@" ^ l.label_info_final_name
-	      in
+	      let name = label_var ~label_in_name ?label_assoc lab name in
 	      (name, field_or_variant_memory_type fvi)::acc)
 	   labs acc)
       li.jc_logic_info_effects.jc_effect_memories
@@ -190,12 +174,17 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
       l	    
   in
   let l = 
-    VariantSet.fold
-      (fun v acc -> 
+    VariantMap.fold
+      (fun v labs acc -> 
 	 let t = { logic_type_args = [variant_model_type v];
 		   logic_type_name = "tag_table" }
 	 in
-	 (tag_table_name_vi v, t)::acc)
+	 let name = tag_table_name_vi v in
+	 LogicLabelSet.fold
+	   (fun lab acc ->
+	      let name = label_var ~label_in_name ?label_assoc lab name in
+	      (name, t)::acc)
+	   labs acc)
       li.jc_logic_info_effects.jc_effect_tag_table
       l	    
   in
@@ -237,8 +226,8 @@ let logic_info_reads acc li =
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
-  VariantSet.fold
-    (fun v acc -> StringSet.add (tag_table_name_vi v) acc)
+  VariantMap.fold
+    (fun v _ acc -> StringSet.add (tag_table_name_vi v) acc)
     li.jc_logic_info_effects.jc_effect_tag_table
     acc
 (* *)
@@ -355,8 +344,8 @@ let all_effects ef =
       res
   in
   let res =
-    VariantSet.fold
-      (fun v acc -> (tag_table_name_vi v)::acc)
+    VariantMap.fold
+      (fun v _ acc -> (tag_table_name_vi v)::acc)
       ef.jc_effect_tag_table
       res
   in
