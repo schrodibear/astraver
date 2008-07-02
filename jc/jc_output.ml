@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.108 2008-07-02 08:04:15 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.109 2008-07-02 10:13:06 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -350,8 +350,8 @@ let rec expr fmt e =
 	  fprintf fmt "@[%a %s; %a@]"  
 	    print_type vi.jc_var_info_type vi.jc_var_info_name expr e2
       | JCEassert(behav,a) -> 
-	  fprintf fmt "@\n%aassert %a;" 
-	    (print_option (fun fmt behav -> fprintf fmt "for %s:" behav))
+	  fprintf fmt "@\nassert %a%a;" 
+	    (print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
 	    behav
 	    assertion a
       | JCEblock l ->
@@ -383,10 +383,10 @@ let rec expr fmt e =
       | JCEloop(la, e) ->
           fprintf fmt "@\n@[%a%a@\nwhile (true)%a@]"
 	  (print_list nothing 
-	     (fun fmt (behav,inv) -> fprintf fmt "%a%a"
-		(print_option (fun fmt behav -> fprintf fmt "@\nfor %s:" behav))
+	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
+		(print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
 		behav
-		(fun fmt inv -> fprintf fmt "@\ninvariant %a;" assertion inv) inv))
+		assertion inv))
 	    la.jc_loop_invariant
             (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
             la.jc_loop_variant

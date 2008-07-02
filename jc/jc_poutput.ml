@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.12 2008-07-02 08:04:16 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.13 2008-07-02 10:13:06 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -183,11 +183,11 @@ let rec pexpr fmt e =
     | JCPEwhile (e, invariant,variant, s)-> 
 	fprintf fmt "@\n@[%a%a@\nwhile (%a)%a@]"
 	  (print_list nothing 
-	     (fun fmt (behav,inv) -> fprintf fmt "%a%a"
-		(print_option (fun fmt behav -> fprintf fmt "@\nfor %s:" behav))
+	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
+		(print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
 		behav
-		(fun fmt inv -> fprintf fmt "@\ninvariant %a;" pexpr inv) inv))
-	     invariant
+		pexpr inv))
+	  invariant
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" pexpr t))
 	  variant
 	  pexpr e block [s]
@@ -205,8 +205,8 @@ let rec pexpr fmt e =
 	fprintf fmt "@\n(var %a %s = %a)" 
 	  ptype ty vi pexpr e
     | JCPEassert(behav,a)-> 
-	fprintf fmt "@\n(%aassert %a)" 
-	  (print_option (fun fmt behav -> fprintf fmt "for %s:" behav))
+	fprintf fmt "@\n(assert %a%a)" 
+	  (print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
 	  behav
 	  pexpr a
     | JCPEblock l -> block fmt l

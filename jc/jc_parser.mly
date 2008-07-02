@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.98 2008-07-02 08:04:16 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.99 2008-07-02 10:13:06 moy Exp $ */
 
 %{
 
@@ -126,6 +126,9 @@
 %start file
 
 /* precedences on expressions (from lowest to highest) */
+
+%nonassoc PRECLOOPANNOT
+%nonassoc FOR
 
 %nonassoc PRECIF THEN
 %nonassoc ELSE
@@ -661,9 +664,9 @@ assignment_operator:
 expression: 
 | compound_expr
     { $1 }
-| FOR IDENTIFIER COLON ASSERT expression
-    { locate (JCPEassert(Some $2,$5)) }
-| ASSERT expression
+| ASSERT FOR IDENTIFIER COLON expression %prec FOR
+    { locate (JCPEassert(Some $3,$5)) }
+| ASSERT expression 
     { locate (JCPEassert(None,$2)) }
 | iteration_expression 
     { $1 }
@@ -883,8 +886,8 @@ iteration_expression:
 ;
 
 loop_invariant:
-| FOR IDENTIFIER COLON INVARIANT expression SEMICOLON
-    { (Some $2, $5) }
+| INVARIANT FOR IDENTIFIER COLON expression SEMICOLON %prec FOR
+    { (Some $3, $5) }
 | INVARIANT expression SEMICOLON
     { (None, $2) }
 ;
@@ -892,8 +895,8 @@ loop_invariant:
 loop_invariant_list:
 | loop_invariant loop_invariant_list
     { $1 :: $2 }
-|
-    { [] }
+| loop_invariant
+    { [$1] }
 ;
 
 loop_annot:
@@ -903,7 +906,7 @@ loop_annot:
     { ($1, None) }
 | VARIANT expression SEMICOLON
     { ([], Some $2) }
-| 
+| %prec PRECLOOPANNOT
     { ([], None) }
 ;
 

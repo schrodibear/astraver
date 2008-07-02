@@ -76,8 +76,8 @@ let rec expr fmt e =
     | JCNElet(None, id, None, e1) ->
         out "(@[<hv 2>let %s in@ %a@])" id expr e1
     | JCNEassert (behav,e1) ->
-        out "(%aassert %a)" 
-	  (print_option (fun fmt behav -> out "for %s:" behav))
+        out "(assert %a%a)" 
+	  (print_option (fun fmt behav -> out "for %s: " behav))
 	  behav
 	  expr e1
     | JCNEblock el ->
@@ -85,10 +85,10 @@ let rec expr fmt e =
     | JCNEloop(inv, Some e2, e3) ->
         out "@[<hv 2>%a@ variant %a;@ %a done@]" 
 	  (print_list nothing 
-	     (fun fmt (behav,inv) -> out "%a%a"
-		(print_option (fun fmt behav -> out "@\nfor %s:" behav))
+	     (fun fmt (behav,inv) -> out "@\ninvariant %a%a;"
+		(print_option (fun fmt behav -> out "for %s: " behav))
 		behav
-		(fun fmt inv -> out "@\ninvariant %a;" expr inv) inv))
+		expr inv))
 	  inv
 	  expr e2
           expr e3
