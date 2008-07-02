@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.141 2008-06-26 15:06:10 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.142 2008-07-02 08:04:15 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -1488,7 +1488,8 @@ let rec statement s =
             ()
       | JSwhile(e,inv,dec,s) ->
 	  let (invariant, variant) = loop_annot inv dec in
-          mkwhile ~invariant ?variant ~condition:(expr e) ~body:(statement s) ()
+          mkwhile ~invariant:[None,invariant]
+	    ?variant ~condition:(expr e) ~body:(statement s) ()
       | JSfor (el1, e, inv, dec, el2, body) ->
 	  let (invariant, variant) = loop_annot inv dec in
           mkfor

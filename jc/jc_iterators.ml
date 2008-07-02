@@ -232,7 +232,7 @@ module NExprAst = struct
       | JCNEalloc(e, _)
       | JCNEfree e
       | JCNElet(_, _, None, e)
-      | JCNEassert e
+      | JCNEassert(_,e)
       | JCNEreturn(Some e)
       | JCNEthrow(_, Some e)
       | JCNEpack(e, _)
@@ -247,12 +247,16 @@ module NExprAst = struct
       | JCNEbinary(e1, _, e2)
       | JCNEassign(e1, e2)
       | JCNElet(_, _, Some e1, e2)
-      | JCNEloop(e1, None, e2)
       | JCNErange(Some e1, Some e2) ->
           [e1; e2]
-      | JCNEif(e1, e2, e3)
-      | JCNEloop(e1, Some e2, e3) ->
+      | JCNEif(e1, e2, e3) ->
           [e1; e2; e3]
+      | JCNEloop(inv, None, e2) ->
+	  let e1list = List.map (fun (_behav,e) -> e) inv in
+          e1list @ [e2]
+      | JCNEloop(inv, Some e2, e3) ->
+	  let e1list = List.map (fun (_behav,e) -> e) inv in
+          e1list @ [e2; e3]
       | JCNEapp(_, _, el)
       | JCNEblock el ->
           el
@@ -340,11 +344,12 @@ let replace_sub_pexpr e el =
     | JCPEblock elist ->
 	assert (List.length elist = List.length el);
 	JCPEblock el
-    | JCPEassert _e ->
-	let e1 = as1 el in JCPEassert e1
-    | JCPEwhile(_test,_inv,var,_body) ->
+    | JCPEassert(behav,_e) ->
+	let e1 = as1 el in JCPEassert(behav,e1)
+    | JCPEwhile(_test,inv1,var,_body) ->
 	let test,el = pop el in
-	let inv,el = pop el in
+	let inv2,el = popn (List.length inv1) el in
+	let inv = List.map2 (fun (behav,_) e -> behav,e) inv1 inv2 in
 	let var,el = popopt el var in
 	let body = as1 el in 
 	JCPEwhile(test,inv,var,body)
@@ -410,7 +415,7 @@ module PExprAst = struct
       | JCPErange(None,None)
       | JCPEdecl(_,_,None) ->
           []
-      | JCPEassert e
+      | JCPEassert(_,e)
       | JCPElabel(_, e)
       | JCPEderef(e, _)
       | JCPEunary(_, e)
@@ -438,11 +443,14 @@ module PExprAst = struct
       | JCPElet(_, _, Some e1, e2)
       | JCPErange(Some e1,Some e2) ->
           [e1; e2]
-      | JCPEif(e1, e2, e3)
-      | JCPEwhile(e1,e2,None,e3) ->
-          [e1; e2; e3]
-      | JCPEwhile(e1,e2,Some e3,e4) ->
-          [e1; e2; e3; e4]
+      | JCPEif(e1, e2, e3) ->
+	  [e1; e2; e3]
+      | JCPEwhile(e1,inv,None,e3) ->
+	  let e2list = List.map (fun (_behav,e) -> e) inv in
+          e1 :: e2list @ [e3]
+      | JCPEwhile(e1,inv,Some e3,e4) ->
+	  let e2list = List.map (fun (_behav,e) -> e) inv in
+          e1 :: e2list @ [e3; e4]
       | JCPEblock el
       | JCPEapp(_,_,el) ->
 	  el
@@ -613,7 +621,8 @@ let rec iter_term_and_assertion ft fa a =
 	List.iter (fun (_, a) -> iter_term_and_assertion ft fa a) pal
 
 let iter_term_and_assertion_in_loop_annot ft fa la =
-  iter_term_and_assertion ft fa la.jc_loop_invariant;
+  List.iter (fun (_behav,inv) ->
+	       iter_term_and_assertion ft fa inv) la.jc_loop_invariant;
   Option_misc.iter (ITerm.iter ft) la.jc_loop_variant
 
 let iter_term_and_assertion_in_behavior ft fa bv =

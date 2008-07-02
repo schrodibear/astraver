@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.97 2008-06-26 14:58:14 bardou Exp $ */
+/* $Id: jc_parser.mly,v 1.98 2008-07-02 08:04:16 moy Exp $ */
 
 %{
 
@@ -661,8 +661,10 @@ assignment_operator:
 expression: 
 | compound_expr
     { $1 }
+| FOR IDENTIFIER COLON ASSERT expression
+    { locate (JCPEassert(Some $2,$5)) }
 | ASSERT expression
-    { locate (JCPEassert((*None,*)$2)) }
+    { locate (JCPEassert(None,$2)) }
 | iteration_expression 
     { $1 }
 | jump_expression 
@@ -872,18 +874,37 @@ iteration_expression:
 | loop_annot FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
     argument_expression_list_opt RPAR expression %prec precwhile
     { let (i,v) = $1 in 
+      let i = match i with 
+	| [] -> locate (JCPEconst(JCCboolean true))
+	| [_,p] -> p
+	|  _ -> assert false
+      in
       locate (JCPEfor($4, $6, $8, i, v, $10)) }
 ;
 
-loop_annot:
-| INVARIANT expression SEMICOLON VARIANT expression SEMICOLON
-    { ($2, Some $5) }
+loop_invariant:
+| FOR IDENTIFIER COLON INVARIANT expression SEMICOLON
+    { (Some $2, $5) }
 | INVARIANT expression SEMICOLON
-    { ($2, None) }
+    { (None, $2) }
+;
+
+loop_invariant_list:
+| loop_invariant loop_invariant_list
+    { $1 :: $2 }
+|
+    { [] }
+;
+
+loop_annot:
+| loop_invariant_list VARIANT expression SEMICOLON
+    { ($1, Some $3) }
+| loop_invariant_list
+    { ($1, None) }
 | VARIANT expression SEMICOLON
-    { (locate (JCPEconst(JCCboolean true)), Some $2) }
+    { ([], Some $2) }
 | 
-    { (locate (JCPEconst(JCCboolean true)), None) }
+    { ([], None) }
 ;
 
 jump_expression: 

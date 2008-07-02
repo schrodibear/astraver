@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.13 2008-07-01 16:49:10 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.14 2008-07-02 08:04:16 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -250,15 +250,6 @@ struct
       let poly = 
 	poly && polymorphic r1 && polymorphic r2 
       in
-      FieldTable.iter 
-	(fun fi r1 ->
-	  try 
-	    begin 
-	      let r2 = FieldTable.find t2 fi in
-	      unify ~poly r1 r2
-	    end
-	  with Not_found -> FieldTable.add t2 fi r1
-	) t1;
       (* Recursively make field regions constant if top region is constant *)
       let rec mkconst r = 
 	let rep = RegionUF.repr r in
@@ -271,7 +262,23 @@ struct
 	    with Not_found -> ()
 	  end
       in
-      if not poly then mkconst rep;
+      FieldTable.iter 
+	(fun fi r1 ->
+	  try 
+	    begin 
+	      let r2 = FieldTable.find t2 fi in
+	      unify ~poly r1 r2
+	    end
+	  with Not_found -> 
+	    if not poly then mkconst r1;
+	    FieldTable.add t2 fi r1
+	) t1;
+      FieldTable.iter 
+	(fun fi r2 ->
+	  try ignore(FieldTable.find t1 fi)
+	  with Not_found -> 
+	    if not poly then mkconst r2
+	) t2;
       (* Update with correct field table *)
       RegionTable.replace global_region_table rep t2
 

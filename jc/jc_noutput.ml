@@ -75,15 +75,32 @@ let rec expr fmt e =
         out "(@[<hv 2>let %s = %a in@ %a@])" id expr e1 expr e2
     | JCNElet(None, id, None, e1) ->
         out "(@[<hv 2>let %s in@ %a@])" id expr e1
-    | JCNEassert e1 ->
-        out "(assert %a)" expr e1
+    | JCNEassert (behav,e1) ->
+        out "(%aassert %a)" 
+	  (print_option (fun fmt behav -> out "for %s:" behav))
+	  behav
+	  expr e1
     | JCNEblock el ->
         out "{@ @[<hv 2>%a@]@ }" (print_list semi expr) el
-    | JCNEloop(e1, Some e2, e3) ->
-        out "@[<hv 2>loop@ invariant %a;@ variant %a;@ %a done@]" expr e1 expr e2
+    | JCNEloop(inv, Some e2, e3) ->
+        out "@[<hv 2>%a@ variant %a;@ %a done@]" 
+	  (print_list nothing 
+	     (fun fmt (behav,inv) -> out "%a%a"
+		(print_option (fun fmt behav -> out "@\nfor %s:" behav))
+		behav
+		(fun fmt inv -> out "@\ninvariant %a;" expr inv) inv))
+	  inv
+	  expr e2
           expr e3
-    | JCNEloop(e1, None, e2) ->
-        out "@[<hv 2>loop@ invariant %a;@ %a done@]" expr e1 expr e2
+    | JCNEloop(inv, None, e2) ->
+        out "@[<hv 2>%a@ %a done@]" 
+	  (print_list nothing 
+	     (fun fmt (behav,inv) -> out "%a%a"
+		(print_option (fun fmt behav -> out "@\nfor %s:" behav))
+		behav
+		(fun fmt inv -> out "@\ninvariant %a;" expr inv) inv))
+	  inv
+	  expr e2
     | JCNEreturn(Some e1) ->
         out "(return %a)" expr e1
     | JCNEreturn None ->

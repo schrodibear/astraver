@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.215 2008-07-01 16:49:10 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.216 2008-07-02 08:04:16 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1503,8 +1503,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         te2#region,
         JCElet(vi, te1o, te2)
     (* old statements *)
-    | JCNEassert e1 ->
-        unit_type, dummy_region, JCEassert(assertion env e1)
+    | JCNEassert(behav,e1) ->
+        unit_type, dummy_region, JCEassert(behav,assertion env e1)
     | JCNEblock el ->
         (* No warning when a value is ignored. *)
         let tel = List.map fe el in
@@ -1520,7 +1520,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         dummy_region,
         JCEloop(
           loop_annot
-            ~invariant:(fa i)
+            ~invariant:(List.map (fun (behav,i) -> behav,fa i) i)
             ~free_invariant:true_assertion
             ~variant:(apply_option ft vo),
           fe body)

@@ -97,6 +97,10 @@ axiom eq_pointer_bool_def :
   forall p1: 't pointer. forall p2: 't pointer.
     eq_pointer_bool(p1, p2) = true <-> p1 = p2
 
+axiom sub_pointer_shift :
+  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,p)]. 
+    p = shift(q,sub_pointer(p,q))
+
 axiom sub_pointer_self :
   forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
 

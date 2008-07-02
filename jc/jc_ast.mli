@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.130 2008-06-26 14:52:12 bardou Exp $ *)
+(* $Id: jc_ast.mli,v 1.131 2008-07-02 08:04:15 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -161,8 +161,8 @@ type pexpr_node =
   | JCPEmatch of pexpr * (ppattern * pexpr) list
 (*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
   | JCPEblock of pexpr list
-  | JCPEassert of (* identifier option * *) pexpr
-  | JCPEwhile of pexpr * pexpr * pexpr option * pexpr
+  | JCPEassert of string option * pexpr
+  | JCPEwhile of pexpr * (string option * pexpr) list * pexpr option * pexpr
       (*r condition, invariant, variant, body *)
   | JCPEfor of pexpr list * pexpr * pexpr list * pexpr 
       * pexpr option * pexpr
@@ -257,9 +257,9 @@ type nexpr_node =
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
-  | JCNEassert of (* identifier option * *) nexpr
+  | JCNEassert of string option * nexpr
   | JCNEblock of nexpr list
-  | JCNEloop of nexpr * nexpr option * nexpr
+  | JCNEloop of (string option * nexpr) list * nexpr option * nexpr
       (*r invariant, variant, body *)
   | JCNEreturn of nexpr option
   | JCNEtry of nexpr * (identifier * string * nexpr) list * nexpr
@@ -392,7 +392,7 @@ type term_or_assertion =
 type loop_annot =
     {
       jc_loop_tag : int;
-      mutable jc_loop_invariant : assertion;
+      mutable jc_loop_invariant : (string option * assertion) list;
       mutable jc_free_loop_invariant : assertion;
       jc_loop_variant : term option;
     }
@@ -452,7 +452,7 @@ type expr_node =
   | JCEalloc of expr * struct_info
   | JCEfree of expr
   | JCElet of var_info * expr option * expr
-  | JCEassert of (* string option * *) assertion
+  | JCEassert of string option * assertion
   | JCEblock of expr list
   | JCEloop of loop_annot * expr
   | JCEreturn_void 

@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.107 2008-07-01 16:49:10 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.108 2008-07-02 08:04:15 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -566,7 +566,7 @@ let rec expr ef e =
 	expr ef s
     | JCElet(vi,e,s) -> 
 	expr (Option_misc.fold_left expr ef e) s
-    | JCEassert((*_,*)a) -> 
+    | JCEassert(_behav,a) -> 
 	{ ef with jc_reads = assertion ef.jc_reads a; }
     | JCEblock l -> List.fold_left expr ef l
     | JCEmatch(e, psl) ->
@@ -575,7 +575,9 @@ let rec expr ef e =
 	{ ef with jc_reads = ef_union ef.jc_reads pef }
 
 and loop_annot ef la = 
-  let ef = assertion ef la.jc_loop_invariant in
+  let ef = List.fold_left (fun ef (_behav,inv) -> assertion ef inv)
+    ef la.jc_loop_invariant 
+  in
   match la.jc_loop_variant with
   | None -> ef
   | Some t -> term ef t

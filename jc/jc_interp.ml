@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.289 2008-07-01 16:49:10 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.290 2008-07-02 08:04:15 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -480,22 +480,6 @@ let var v =
 let lvar_info label v = 
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
-let current_function = ref None
-let set_current_function f = current_function := Some f
-let reset_current_function () = current_function := None
-
-let mutable_memory infunction (fi,r) =
-  if Region.polymorphic r then
-    field_of_union fi && 
-      FieldOrVariantRegionMap.mem 
-      (FVvariant (union_of_field fi),r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-    || 
-      not (field_of_union fi) &&
-      FieldOrVariantRegionMap.mem (FVfield fi,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-  else true
-
 let memvar ?assigned ?label_in_name label (fi,r) =
   let mem = field_region_memory_name(fi,r) in
   let mut = match !current_function with
@@ -740,7 +724,8 @@ let rec assertion ~global_assertion label oldlabel a =
       | JCAinstanceof(t,lab,ty) -> 
           let t', lets = ft t in
           let tag = tag_table_name (JCtag(ty, [])) in
-          LPred("instanceof", [lvar lab tag; t'; LVar (tag_name ty)]), lets
+	  let tag = label_var ~label_in_name:global_assertion lab tag in
+          LPred("instanceof", [LVar tag; t'; LVar (tag_name ty)]), lets
       | JCAmutable(te, st, ta) ->
           let te', lets1 = ft te in
           let tag, lets2 = ftag ta#node in
@@ -1661,12 +1646,17 @@ and expr ~infunction ~threats e : expr =
     | JCEblock l ->
         List.fold_right append (List.map expr l) Void
     | JCEloop (la, s) ->
-        let inv = named_assertion
-          ~global_assertion:false
-          LabelHere
-          LabelPre
-          la.jc_loop_invariant
+	let inv = List.filter (compatible_with_current_behavior $ fst) 
+	  la.jc_loop_invariant
+	in
+	let inv = List.map snd inv in
+        let inv = List.map (named_assertion
+			      ~global_assertion:false
+			      LabelHere
+			      LabelPre
+			   ) inv
         in 
+	let inv = make_and_list inv in
         let free_inv = named_assertion 
           ~global_assertion:false 
           LabelHere 
@@ -1697,13 +1687,15 @@ and expr ~infunction ~threats e : expr =
                 While(Cte(Prim_bool true), inv,
                       None, body)
         end
-    | JCEassert a -> 
-        Assert(named_assertion
-                 ~global_assertion:false
-                 LabelHere
-                 LabelPre
-                 a,
-               Void)
+    | JCEassert(behav,a) -> 
+	if compatible_with_current_behavior behav then
+          Assert(named_assertion
+                   ~global_assertion:false
+                   LabelHere
+                   LabelPre
+                   a,
+		 Void)
+	else Void
     | JCElet (vi, e, s) -> 
         begin
           let e' = match e with
@@ -2198,6 +2190,11 @@ let interp_fun_params f write_mems read_mems annot_type =
                        acc))
           l annot_type
        
+let function_body f behav body =
+  set_current_behavior behav;
+  let e = expr ~infunction:f ~threats:(behav = "safety") body in
+  reset_current_behavior ();
+  e
   
 let tr_fun f funloc spec body acc =
   let requires_param = 
@@ -2583,8 +2580,7 @@ let tr_fun f funloc spec body acc =
               printf "Generating Why function %s@."
                 f.Jc_fenv.jc_fun_info_final_name;
               (* default behavior *)
-              let body_safety = 
-                expr ~infunction:f ~threats:true body in
+              let body_safety = function_body f "safety" body in
               let tblock =
                 if !Jc_options.inv_sem = InvOwnership then
                   append
@@ -2657,57 +2653,58 @@ let tr_fun f funloc spec body acc =
                 if spec.jc_fun_behavior = [] then
                   acc
                 else
-                  let body = expr ~infunction:f ~threats:false body in
-                  let tblock =
-                    if !Jc_options.inv_sem = InvOwnership then
-                      append
-                        (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-                        (assume_all_invariants f.jc_fun_info_parameters)
-                        body
-                    else
-                      body
-                  in
-                  let tblock =
-                    List.fold_left (fun acc (mem_name,_) ->
-                      Let(mem_name,App(Var "any_memory",Void),acc)
-                    ) tblock local_read_mems
-                  in
-                  let tblock =
-                    List.fold_left (fun acc (mem_name,_) ->
-                      Let_ref(mem_name,App(Var "any_memory",Void),acc)
-                    ) tblock local_write_mems
-                  in
-                  let tblock =
-                    List.fold_left (fun acc (alloc_name,_) ->
-                      Let(alloc_name,App(Var "any_alloc_table",Void),acc)
-                    ) tblock local_read_allocs
-                  in
-                  let tblock =
-                    List.fold_left (fun acc (alloc_name,_) ->
-                      Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
-                    ) tblock local_write_allocs
-                  in
-                  let tblock = 
-                    if !return_void then
-                      Try(append tblock (Raise(jessie_return_exception,None)),
-                          jessie_return_exception,None,Void)
-                    else
-                      let e = any_value f.jc_fun_info_result.jc_var_info_type in
-                        Let_ref(jessie_return_variable,e,
-                                Try(append tblock Absurd,
-                                    jessie_return_exception,None,
-                                    Deref(jessie_return_variable)))
-                  in
-                  let tblock = make_label "init" tblock in
-                  let tblock =
-                    List.fold_right
-                      (fun (mut_id,id) bl ->
-                         Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-                  in
                     (* normal behaviors *)
                   let acc =
                     List.fold_right
                       (fun (id,b,e) acc ->
+ 		          let body = function_body f id body in
+                          let tblock =
+                            if !Jc_options.inv_sem = InvOwnership then
+                              append
+                                (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
+                                (assume_all_invariants f.jc_fun_info_parameters)
+                                body
+                            else
+                              body
+                          in
+                          let tblock =
+                            List.fold_left (fun acc (mem_name,_) ->
+                              Let(mem_name,App(Var "any_memory",Void),acc)
+                            ) tblock local_read_mems
+                          in
+                          let tblock =
+                            List.fold_left (fun acc (mem_name,_) ->
+                              Let_ref(mem_name,App(Var "any_memory",Void),acc)
+                            ) tblock local_write_mems
+                          in
+                          let tblock =
+                            List.fold_left (fun acc (alloc_name,_) ->
+                              Let(alloc_name,App(Var "any_alloc_table",Void),acc)
+                            ) tblock local_read_allocs
+                          in
+                          let tblock =
+                            List.fold_left (fun acc (alloc_name,_) ->
+                              Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
+                            ) tblock local_write_allocs
+                          in
+                          let tblock = 
+                            if !return_void then
+                              Try(append tblock (Raise(jessie_return_exception,None)),
+                                  jessie_return_exception,None,Void)
+                            else
+                              let e = any_value f.jc_fun_info_result.jc_var_info_type in
+                                Let_ref(jessie_return_variable,e,
+                                        Try(append tblock Absurd,
+                                            jessie_return_exception,None,
+                                            Deref(jessie_return_variable)))
+                          in
+                          let tblock = make_label "init" tblock in
+                          let tblock =
+                            List.fold_right
+                              (fun (mut_id,id) bl ->
+                                 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
+                          in
+
                          let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
                          let beh = 
                            if id="default" then "Behavior" else

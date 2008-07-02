@@ -131,6 +131,38 @@ let field_or_variant_memory_type fvi =
     | FVfield fi -> field_memory_type fi
     | FVvariant vi -> union_memory_type vi
 
+let current_function = ref None
+let set_current_function f = current_function := Some f
+let reset_current_function () = current_function := None
+
+let current_behavior : string option ref = ref None
+let set_current_behavior behav = current_behavior := Some behav
+let reset_current_behavior () = current_behavior := None
+let get_current_behavior () = 
+  match !current_behavior with None -> assert false | Some behav -> behav
+let compatible_with_current_behavior = function
+  | None -> true
+  | Some behav -> behav = get_current_behavior ()
+
+let mutable_memory infunction (fi,r) =
+  if Region.polymorphic r then
+    field_of_union fi && 
+      FieldOrVariantRegionMap.mem 
+      (FVvariant (union_of_field fi),r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+    || 
+      not (field_of_union fi) &&
+      FieldOrVariantRegionMap.mem (FVfield fi,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+  else true
+
+let mutable_fvmemory infunction (fvi,r) =
+  if Region.polymorphic r then
+    FieldOrVariantRegionMap.mem 
+      (fvi,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+  else true
+
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
   let l =
     FieldOrVariantRegionMap.fold
@@ -146,9 +178,18 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	     | _ -> r
 	 in
 	 let name = field_or_variant_region_memory_name(fvi,r) in
+	 let mut = match !current_function with
+	   | None -> true
+	   | Some infunction -> mutable_fvmemory infunction (fvi,r) 
+	 in
 	 LogicLabelSet.fold
 	   (fun lab acc ->
-	      let name = label_var ~label_in_name ?label_assoc lab name in
+	      let name = 
+		if mut then 
+		  label_var ~label_in_name ?label_assoc lab name 
+		else 
+		  label_var ~label_in_name ?label_assoc LabelHere name 
+	      in
 	      (name, field_or_variant_memory_type fvi)::acc)
 	   labs acc)
       li.jc_logic_info_effects.jc_effect_memories

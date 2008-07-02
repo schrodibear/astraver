@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.94 2008-06-26 14:19:59 bardou Exp $ *)
+(* $Id: jc_norm.ml,v 1.95 2008-07-02 08:04:15 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -368,7 +368,7 @@ let normalize =
 	      | JCPEwhile(test,inv,var,body) ->
 		  normalize_while e#loc test inv var body
 	      | JCPEfor(inits,test,updates,inv,var,body) ->
-		  normalize_for e#loc inits test updates inv var body
+		  normalize_for e#loc inits test updates [None,inv] var body
 	      | JCPEbreak lab ->
 		  assert (lab = ""); (* TODO for Java *)
 		  mkthrow ~loc:e#loc ~exn:loop_exit ()
@@ -547,9 +547,10 @@ let rec expr e =
     | JCPEmatch(e,pelist) ->
 	JCNEmatch(expr e,List.map (fun (pat,e) -> (pat,expr e)) pelist)  
     | JCPEblock elist -> JCNEblock(List.map expr elist)
-    | JCPEassert e -> JCNEassert(expr e)
-    | JCPEwhile(_,inve,vareopt,e) ->
-	JCNEloop(expr inve,Option_misc.map expr vareopt,expr e)
+    | JCPEassert(behav,e) -> JCNEassert(behav,expr e)
+    | JCPEwhile(_,inv,vareopt,e) ->
+	let inv = List.map (fun (behav,e) -> behav,expr e) inv in
+	JCNEloop(inv,Option_misc.map expr vareopt,expr e)
     | JCPEfor _ -> assert false
     | JCPEreturn e ->
         begin match e#node with
