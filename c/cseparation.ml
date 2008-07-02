@@ -512,6 +512,10 @@ let rec term tyf t =
 	with Invalid_argument _ -> assert false
       end
   | NTunop (_,t) -> term tyf t 
+  | NTbinop(t1,Clogic.Bsub,t2) ->
+      term tyf t1; term tyf t2; 
+      unifier_type_why ~var_name:(loc_name t1.nterm_loc) (type_why_for_term t1)
+	(type_why_for_term t2)    
   | NTbinop (t1,_,t2)
   | NTmin (t1,t2)
   | NTmax (t1,t2) -> term tyf t1; term tyf t2 

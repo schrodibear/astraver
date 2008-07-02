@@ -1,0 +1,24 @@
+
+type list
+
+type ('a,'b) map
+
+logic select : ('a,'b) map, 'a -> 'b
+
+logic store : ('a,'b) map, 'a, 'b -> ('a, 'b) map
+
+parameter next: (list, list) map ref
+
+parameter val: (list, int) map ref
+
+predicate in_list(x:int, l:list, next:(list,list) map) =
+   select(val,l) = x or in_list(x,select(next,l))
+
+let test(l1:list)(l2:list) = 
+    { true }
+    begin
+      val := store !val l1 0;
+      val := store !val l2 1;
+      next := store !next l1 l2
+    end
+    { in_list(1,l1,next) }
