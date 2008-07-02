@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.19 2008-07-02 08:04:16 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.20 2008-07-02 09:49:46 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -39,6 +39,26 @@ open Jc_iterators
 open Jc_region
 open Jc_pervasives
 open Pp
+
+let current_logic_component = ref None
+let set_current_logic_component comp = current_logic_component := Some comp
+let reset_current_logic_component () = current_logic_component := None
+let in_current_logic_component f1 = 
+  match !current_logic_component with 
+    | None -> false 
+    | Some comp -> 
+	List.exists 
+	  (fun f2 -> f1.jc_logic_info_tag == f2.jc_logic_info_tag) comp
+
+let current_component = ref None
+let set_current_component comp = current_component := Some comp
+let reset_current_component () = current_component := None
+let in_current_component f1 = 
+  match !current_component with 
+    | None -> false 
+    | Some comp -> 
+	List.exists 
+	  (fun f2 -> f1.jc_fun_info_tag == f2.jc_fun_info_tag) comp
 
 let term rresult t =
   ITerm.iter (fun t -> match t#node with
@@ -55,15 +75,29 @@ let term rresult t =
 	()
     | JCTapp app ->
 	let li = app.jc_app_fun in
-	let regions = li.jc_logic_info_param_regions in
-	let assoc = RegionList.duplicate regions in
-	app.jc_app_region_assoc <- assoc;
-	let param_regions =
-	  List.map (fun vi -> 
-	    if is_dummy_region vi.jc_var_info_region then dummy_region else
-	      try RegionList.assoc vi.jc_var_info_region assoc
-	      with Not_found -> assert false)
-	    li.jc_logic_info_parameters
+	let param_regions,result_region =
+	  if in_current_logic_component li then
+	    (* No generalization here, plain unification *)
+	    List.map (fun vi -> vi.jc_var_info_region) 
+	      li.jc_logic_info_parameters,
+	    li.jc_logic_info_result_region 
+	  else
+	    (* Apply generalization before unification *)
+	    let regions = li.jc_logic_info_param_regions in
+	    let assoc = RegionList.duplicate regions in
+	    app.jc_app_region_assoc <- assoc;
+	    let param_regions = 
+	      List.map (fun vi -> 
+			  if is_dummy_region vi.jc_var_info_region then dummy_region else
+			    try RegionList.assoc vi.jc_var_info_region assoc
+			    with Not_found -> assert false)
+		li.jc_logic_info_parameters
+	    in
+	    let result_region = 
+	      try RegionList.assoc li.jc_logic_info_result_region assoc
+	      with Not_found -> assert false
+	    in
+	    param_regions,result_region
 	in
 	let arg_regions = 
 	  List.map (fun t -> t#region) app.jc_app_args
@@ -71,10 +105,6 @@ let term rresult t =
 	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
 	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
 	List.iter2 Region.unify param_regions arg_regions;
-	let result_region = 
-	  try RegionList.assoc li.jc_logic_info_result_region assoc
-	  with Not_found -> assert false
-	in
 	Jc_options.lprintf "param:%a@." Region.print result_region;
 	Jc_options.lprintf "arg:%a@." Region.print t#region;
 	Region.unify result_region t#region
@@ -89,15 +119,21 @@ let assertion rresult a =
     (fun a -> match a#node with
        | JCAapp app -> 
 	   let li = app.jc_app_fun in
-	   let regions = li.jc_logic_info_param_regions in
-	   let assoc = RegionList.duplicate regions in
-	   app.jc_app_region_assoc <- assoc;
 	   let param_regions =
-	     List.map (fun vi -> 
-			 if is_dummy_region vi.jc_var_info_region then dummy_region else
-			   try RegionList.assoc vi.jc_var_info_region assoc
-			   with Not_found -> assert false)
-	       li.jc_logic_info_parameters
+	     if in_current_logic_component li then
+	       (* No generalization here, plain unification *)
+	       List.map (fun vi -> vi.jc_var_info_region) 
+		 li.jc_logic_info_parameters 
+	     else
+	       (* Apply generalization before unification *)
+	       let regions = li.jc_logic_info_param_regions in
+	       let assoc = RegionList.duplicate regions in
+	       app.jc_app_region_assoc <- assoc;
+	       List.map (fun vi -> 
+			   if is_dummy_region vi.jc_var_info_region then dummy_region else
+			     try RegionList.assoc vi.jc_var_info_region assoc
+			     with Not_found -> assert false)
+		 li.jc_logic_info_parameters
 	   in
 	   let arg_regions = 
 	     List.map (fun t -> t#region) app.jc_app_args
@@ -139,22 +175,45 @@ let expr rresult e =
 	end
     | JCEapp call -> 
 (*	let f = call.jc_call_fun in*)
-	let regions = match call.jc_call_fun with
-	  | JClogic_fun f -> f.jc_logic_info_param_regions 
-	  | JCfun f -> f.jc_fun_info_param_regions 
+	let in_current_comp = match call.jc_call_fun with
+	  | JClogic_fun f -> false
+	  | JCfun f -> in_current_component f
 	in
 	let params = match call.jc_call_fun with
 	  | JClogic_fun f -> f.jc_logic_info_parameters 
 	  | JCfun f -> f.jc_fun_info_parameters
 	in
-	let assoc = RegionList.duplicate regions in
-	call.jc_call_region_assoc <- assoc;
-	let param_regions =
-	  List.map (fun vi -> 
-	    if is_dummy_region vi.jc_var_info_region then dummy_region else
-	      try RegionList.assoc vi.jc_var_info_region assoc
-	      with Not_found -> assert false)
-	    params
+	let rregion = match call.jc_call_fun with
+	  | JClogic_fun f -> f.jc_logic_info_result_region 
+	  | JCfun f -> f.jc_fun_info_return_region
+	in
+	let param_regions,result_region =	
+	  if in_current_comp then
+	    (* No generalization here, plain unification *)
+	    List.map (fun vi -> vi.jc_var_info_region) params,
+	    rregion
+	  else
+	    (* Apply generalization before unification *)
+	    let regions = match call.jc_call_fun with
+	      | JClogic_fun f -> f.jc_logic_info_param_regions 
+	      | JCfun f -> f.jc_fun_info_param_regions 
+	    in
+	    let assoc = RegionList.duplicate regions in
+	    call.jc_call_region_assoc <- assoc;
+	    let param_regions =
+	      List.map (fun vi -> 
+			  if is_dummy_region vi.jc_var_info_region then dummy_region else
+			    try RegionList.assoc vi.jc_var_info_region assoc
+			    with Not_found -> assert false)
+		params
+	    in
+	    let result_region = 
+	      if is_dummy_region rregion then dummy_region
+	      else
+		try RegionList.assoc rregion assoc
+		with Not_found -> assert false
+	    in
+	    param_regions,result_region
 	in
 	let arg_regions = 
 	  List.map (fun e -> e#region) call.jc_call_args
@@ -162,16 +221,6 @@ let expr rresult e =
 	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
 	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
 	List.iter2 Region.unify param_regions arg_regions;
-	let rregion = match call.jc_call_fun with
-	  | JClogic_fun f -> f.jc_logic_info_result_region 
-	  | JCfun f -> f.jc_fun_info_return_region
-	in
-	let result_region = 
-	  if is_dummy_region rregion then dummy_region
-	  else
-	    try RegionList.assoc rregion assoc
-	    with Not_found -> assert false
-	in
 	Jc_options.lprintf "param:%a@." Region.print result_region;
 	Jc_options.lprintf "arg:%a@." Region.print e#region;
 	Region.unify result_region e#region
@@ -196,13 +245,22 @@ let logic_function f =
     | JCTerm t -> term rresult t
     | JCAssertion a -> assertion rresult a
     | JCReads r -> () (* TODO *)
-  end;
+  end
+
+let generalize_logic_function f =
   let param_regions =
     List.map (fun vi -> vi.jc_var_info_region) f.jc_logic_info_parameters in
   let fun_regions = f.jc_logic_info_result_region :: param_regions in
   f.jc_logic_info_param_regions <- RegionList.reachable fun_regions
 
 let logic_component fls =
+  (* Perform plain unification on component *)
+  set_current_logic_component fls;
+  List.iter logic_function fls;
+  reset_current_logic_component ();
+  (* Generalize regions accessed *)
+  List.iter generalize_logic_function fls;
+  (* Fill in association table at each call site *)
   List.iter logic_function fls
 
 let code_function f =
@@ -212,13 +270,22 @@ let code_function f =
   Jc_options.lprintf "Separation: treating function %s@." f.jc_fun_info_name;
   let rresult = f.jc_fun_info_return_region in
   iter_term_and_assertion_in_fun_spec (term rresult) (assertion rresult) spec;
-  Option_misc.iter ((*List.iter*) (expr rresult)) body;
+  Option_misc.iter ((*List.iter*) (expr rresult)) body
+
+let generalize_code_function f =
   let param_regions =
     List.map (fun vi -> vi.jc_var_info_region) f.jc_fun_info_parameters in
   let fun_regions = f.jc_fun_info_return_region :: param_regions in
   f.jc_fun_info_param_regions <- RegionList.reachable fun_regions
 
 let code_component fls =
+  (* Perform plain unification on component *)
+  set_current_component fls;
+  List.iter code_function fls;
+  reset_current_component ();
+  (* Generalize regions accessed *)
+  List.iter generalize_code_function fls;
+  (* Fill in association table at each call site *)
   List.iter code_function fls
 
 let axiom id (is_axiom,labels,a) = assertion (* labels *) dummy_region a
