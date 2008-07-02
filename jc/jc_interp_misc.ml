@@ -60,11 +60,13 @@ let struct_model_type2 name =
   let st, _ = Hashtbl.find Jc_typing.structs_table name in
   struct_model_type st
 
-let pointer_type tov = 
+let raw_pointer_type ty =
   {
     logic_type_name = pointer_type_name;
-    logic_type_args = [tag_or_variant_model_type tov];
+    logic_type_args = [ty];
   }
+
+let pointer_type tov = raw_pointer_type (tag_or_variant_model_type tov)
 
 let tag_table_type tov = 
   {
@@ -115,6 +117,11 @@ let memory_type t v =
   { logic_type_name = memory_type_name;
     logic_type_args = [t;v] }
 
+let is_memory_type ty = ty.logic_type_name == memory_type_name
+
+let deconstruct_memory_type_args ty =
+  match ty.logic_type_args with [t;v] -> t,v | _ -> assert false
+
 let field_memory_type fi =
   memory_type 
     (struct_model_type fi.jc_field_info_root)
@@ -163,54 +170,57 @@ let mutable_fvmemory infunction (fvi,r) =
       infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
   else true
 
+let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
+  FieldOrVariantRegionMap.fold
+    (fun (fvi,r) labs acc ->
+       let r =
+	 match region_assoc with 
+	   | Some region_assoc when Region.polymorphic r ->
+	       begin
+		 Jc_options.lprintf "assoc:%a@." Region.print_assoc region_assoc;
+		 Jc_options.lprintf "r:%a@." Region.print r;
+		 try RegionList.assoc r region_assoc with Not_found -> assert false
+	       end
+	   | _ -> r
+       in
+       let name = field_or_variant_region_memory_name(fvi,r) in
+       let mut = match !current_function with
+	 | None -> true
+	 | Some infunction -> mutable_fvmemory infunction (fvi,r) 
+       in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let name = 
+	      if mut then 
+		label_var ~label_in_name ?label_assoc lab name 
+	      else 
+		label_var ~label_in_name ?label_assoc LabelHere name 
+	    in
+	    ((fvi,r),(name, field_or_variant_memory_type fvi))::acc)
+	 labs acc)
+    li.jc_logic_info_effects.jc_effect_memories
+    []
+
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
-  let l =
-    FieldOrVariantRegionMap.fold
-      (fun (fvi,r) labs acc ->
-	 let r =
-	   match region_assoc with 
-	     | Some region_assoc when Region.polymorphic r ->
-		 begin
-		   Jc_options.lprintf "assoc:%a@." Region.print_assoc region_assoc;
-		   Jc_options.lprintf "r:%a@." Region.print r;
-		   try RegionList.assoc r region_assoc with Not_found -> assert false
-		 end
-	     | _ -> r
-	 in
-	 let name = field_or_variant_region_memory_name(fvi,r) in
-	 let mut = match !current_function with
-	   | None -> true
-	   | Some infunction -> mutable_fvmemory infunction (fvi,r) 
-	 in
-	 LogicLabelSet.fold
-	   (fun lab acc ->
-	      let name = 
-		if mut then 
-		  label_var ~label_in_name ?label_assoc lab name 
-		else 
-		  label_var ~label_in_name ?label_assoc LabelHere name 
-	      in
-	      (name, field_or_variant_memory_type fvi)::acc)
-	   labs acc)
-      li.jc_logic_info_effects.jc_effect_memories
-      []
+  let l = List.map snd
+    (memory_logic_params ~label_in_name ?region_assoc ?label_assoc li)
   in
   let l = 
     StringRegionSet.fold
       (fun (a,r) acc ->
-	let r =
-	  match region_assoc with
-	    | Some assoc when Region.polymorphic r ->
-		begin
-		  Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
-		  Jc_options.lprintf "r:%a@." Region.print r;
-		  try RegionList.assoc r assoc with Not_found -> assert false
-		end
-	    | _ -> r
-	in
-	let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	(alloc_region_table_name (JCtag(st, []), r),
-	 alloc_table_type (JCtag(st, [])))::acc)
+	 let r =
+	   match region_assoc with
+	     | Some assoc when Region.polymorphic r ->
+		 begin
+		   Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
+		   Jc_options.lprintf "r:%a@." Region.print r;
+		   try RegionList.assoc r assoc with Not_found -> assert false
+		 end
+	     | _ -> r
+	 in
+	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
+	 (alloc_region_table_name (JCtag(st, []), r),
+	  alloc_table_type (JCtag(st, [])))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       l	    
   in

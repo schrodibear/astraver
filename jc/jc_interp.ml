@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.290 2008-07-02 08:04:15 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.291 2008-07-02 12:41:53 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -784,134 +784,6 @@ let struct_alloc_arg a =
 
 let field_memory_arg fi =
   field_memory_name fi, field_memory_type fi
-
-(*******************************************************************************)
-(*                                Logic functions                              *)
-(*******************************************************************************)
-
-let tr_logic_const vi init acc =
-  let decl =
-    Logic (false, vi.jc_var_info_final_name, [], tr_base_type vi.jc_var_info_type) :: acc
-  in
-    match init with
-      | None -> decl
-      | Some(t,ty) ->
-          let t', lets = term ~global_assertion:true LabelHere LabelHere t in
-          let vi_ty = vi.jc_var_info_type in
-          let t_ty = t#typ in
-          (* eprintf "logic const: max type = %a@." print_type ty; *)
-          let pred =
-            LPred (
-              "eq",
-              [term_coerce Loc.dummy_position ty vi_ty (LVar vi.jc_var_info_name); 
-               term_coerce t#loc ty t_ty t'])
-          in
-        let ax =
-          Axiom(
-            vi.jc_var_info_final_name ^ "_value_axiom",
-            make_pred_binds lets pred
-          )
-        in
-        ax::decl
-
-let tr_logic_fun li ta acc =
-  let params =
-    List.map
-      (fun vi ->
-         (vi.jc_var_info_final_name,
-           tr_base_type vi.jc_var_info_type))
-      li.jc_logic_info_parameters
-  in  
-  let params_reads = 
-    Jc_interp_misc.logic_params ~label_in_name:true li @ params 
-  in
-  let decl =
-    match li.jc_logic_info_result_type, ta with
-        (* Predicate *)
-      | None, JCAssertion a -> 
-          let a = assertion ~global_assertion:true LabelHere LabelHere a in
-            Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
-              (* Function *)
-      | Some ty, JCTerm t -> 
-          let ret = tr_base_type ty in
-          let t, lets = term ~global_assertion:true LabelHere LabelHere t in
-          assert (lets = []);
-          Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
-      (* Logic *)
-      | tyo, JCReads r ->
-          let ret = match tyo with
-            | None -> simple_logic_type "prop"
-            | Some ty -> tr_base_type ty
-          in
-          Logic(false, li.jc_logic_info_final_name, params_reads, ret)
-      (* Other *)
-      | _ -> assert false
-  in 
-  let acc = decl :: acc in
-  (* full_separated axioms. *)
-  let sep_preds = 
-    List.fold_left (fun acc vi ->
-      match vi.jc_var_info_type with
-        | JCTpointer(st,_,_) -> 
-            LPred("full_separated",[LVar "tmp"; LVar vi.jc_var_info_final_name])
-            :: acc
-        | _ -> acc
-    ) [] li.jc_logic_info_parameters
-  in
-  if List.length sep_preds = 0 then acc else
-    let params_names = List.map fst params_reads in
-    let normal_params = List.map (fun name -> LVar name) params_names in
-    FieldOrVariantRegionMap.fold (fun (fvi,r) labels acc ->
-      let update_params = 
-        List.map (fun name ->
-          if name = field_or_variant_region_memory_name(fvi,r) then
-            LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
-          else LVar name
-        ) params_names
-      in
-      let a = 
-        match li.jc_logic_info_result_type with
-          | None ->
-              LImpl(
-                make_and_list sep_preds,
-                LIff(
-                  LPred(li.jc_logic_info_final_name,normal_params),
-                  LPred(li.jc_logic_info_final_name,update_params)))
-          | Some rety ->
-              LImpl(
-                make_and_list sep_preds,
-                LPred("eq",[
-                  LApp(li.jc_logic_info_final_name,normal_params);
-                  LApp(li.jc_logic_info_final_name,update_params)]))
-      in
-      let a = 
-        List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
-      in
-      let structty = match fvi with 
-        | FVfield fi -> JCtag(fi.jc_field_info_struct, [])
-        | FVvariant vi -> JCvariant vi
-      in
-      let basety = match fvi with
-        | FVfield fi -> tr_base_type fi.jc_field_info_type
-        | FVvariant vi -> 
-            if integral_union vi then why_integer_type else
-              simple_logic_type (union_memory_type_name vi)
-      in
-      let a = 
-        LForall(
-          "tmp",pointer_type structty,
-          LForall(
-            "tmpval",basety,
-            a))
-      in
-      let fviname = match fvi with
-        | FVfield fi -> fi.jc_field_info_name
-        | FVvariant vi -> vi.jc_variant_info_name
-      in
-      Axiom(
-        "full_separated_" ^ li.jc_logic_info_name ^ "_" ^ fviname,
-        a) :: acc
-    ) li.jc_logic_info_effects.jc_effect_memories acc
 
 (*******************************************************************************)
 (*                                 Expressions                                 *)
@@ -2150,6 +2022,203 @@ let assigns before ef locs loc =
                  LVar v; make_union_loc p]) in
 	  LNamed(reg_loc loc,a))
     ) mems a
+
+let reads locs (fvi,r) =
+  let refs = StringMap.empty
+  in
+  let mems = FieldOrVariantRegionMap.empty 
+  in
+  let refs,mems = 
+    List.fold_left (collect_locations ~global_assertion:false LabelOld) (refs,mems) locs
+  in
+  let p = try FieldOrVariantRegionMap.find (fvi,r) mems with Not_found -> [] in
+  make_union_loc p
+  
+(*******************************************************************************)
+(*                                Logic functions                              *)
+(*******************************************************************************)
+
+let tr_logic_const vi init acc =
+  let decl =
+    Logic (false, vi.jc_var_info_final_name, [], tr_base_type vi.jc_var_info_type) :: acc
+  in
+    match init with
+      | None -> decl
+      | Some(t,ty) ->
+          let t', lets = term ~global_assertion:true LabelHere LabelHere t in
+          let vi_ty = vi.jc_var_info_type in
+          let t_ty = t#typ in
+          (* eprintf "logic const: max type = %a@." print_type ty; *)
+          let pred =
+            LPred (
+              "eq",
+              [term_coerce Loc.dummy_position ty vi_ty (LVar vi.jc_var_info_name); 
+               term_coerce t#loc ty t_ty t'])
+          in
+        let ax =
+          Axiom(
+            vi.jc_var_info_final_name ^ "_value_axiom",
+            make_pred_binds lets pred
+          )
+        in
+        ax::decl
+
+let tr_logic_fun li ta acc =
+  let params =
+    List.map
+      (fun vi ->
+         (vi.jc_var_info_final_name,
+           tr_base_type vi.jc_var_info_type))
+      li.jc_logic_info_parameters
+  in  
+  let params_reads = 
+    Jc_interp_misc.logic_params ~label_in_name:true li @ params 
+  in
+  let decl =
+    match li.jc_logic_info_result_type, ta with
+        (* Predicate *)
+      | None, JCAssertion a -> 
+          let a = assertion ~global_assertion:true LabelHere LabelHere a in
+            Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
+              (* Function *)
+      | Some ty, JCTerm t -> 
+          let ret = tr_base_type ty in
+          let t, lets = term ~global_assertion:true LabelHere LabelHere t in
+          assert (lets = []);
+          Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
+      (* Logic *)
+      | tyo, JCReads r ->
+          let ret = match tyo with
+            | None -> simple_logic_type "prop"
+            | Some ty -> tr_base_type ty
+          in
+          Logic(false, li.jc_logic_info_final_name, params_reads, ret)
+      (* Other *)
+      | _ -> assert false
+  in 
+  let acc = decl :: acc in
+
+  (* not_assign axioms *)
+  let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads pset ->
+    let memory_params_reads = 
+      Jc_interp_misc.memory_logic_params ~label_in_name:true li
+    in
+    let params_names = List.map fst params_reads in
+    let normal_params = List.map (fun name -> LVar name) params_names in
+    snd (List.fold_left
+      (fun (count,acc) param ->
+	 let paramty = snd param in
+	 if not (is_memory_type paramty) then count,acc else
+	   let (fvi,r),_ = (* Recover which memory it is exactly *)
+	     List.find (fun ((fvi,r),(n,_)) -> n = fst param) 
+	       memory_params_reads
+	   in
+	   let zonety,basety = deconstruct_memory_type_args paramty in
+	   let pset = reads pset (fvi,r) in
+	   let sepa = LNot(LPred("in_pset",[LVar "tmp";pset])) in
+	   let update_params = 
+             List.map (fun name ->
+			 if name = fst param then
+			   LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
+			 else LVar name
+		      ) params_names
+	   in
+	   let a = 
+             match li.jc_logic_info_result_type with
+	       | None ->
+		   LImpl(
+                     sepa,
+                     LIff(
+		       LPred(li.jc_logic_info_final_name,normal_params),
+		       LPred(li.jc_logic_info_final_name,update_params)))
+	       | Some rety ->
+		   LImpl(
+                     sepa,
+                     LPred("eq",[
+			     LApp(li.jc_logic_info_final_name,normal_params);
+			     LApp(li.jc_logic_info_final_name,update_params)]))
+	   in
+	   let a = 
+             List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+	   in
+	   let a = 
+             LForall(
+	       "tmp",raw_pointer_type zonety,
+	       LForall(
+		 "tmpval",basety,
+		 a))
+	   in
+	   let name = 
+	     "not_assigns_" ^ li.jc_logic_info_name ^ "_" ^ string_of_int count
+	   in
+	   count + 1, Axiom(name,a) :: acc
+      ) (0,acc) params_reads)
+  in
+
+  (* full_separated axioms. *)
+  let sep_preds = 
+    List.fold_left (fun acc vi ->
+      match vi.jc_var_info_type with
+        | JCTpointer(st,_,_) -> 
+            LPred("full_separated",[LVar "tmp"; LVar vi.jc_var_info_final_name])
+            :: acc
+        | _ -> acc
+    ) [] li.jc_logic_info_parameters
+  in
+  if List.length sep_preds = 0 then acc else
+    let params_names = List.map fst params_reads in
+    let normal_params = List.map (fun name -> LVar name) params_names in
+    FieldOrVariantRegionMap.fold (fun (fvi,r) labels acc ->
+      let update_params = 
+        List.map (fun name ->
+          if name = field_or_variant_region_memory_name(fvi,r) then
+            LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
+          else LVar name
+        ) params_names
+      in
+      let a = 
+        match li.jc_logic_info_result_type with
+          | None ->
+              LImpl(
+                make_and_list sep_preds,
+                LIff(
+                  LPred(li.jc_logic_info_final_name,normal_params),
+                  LPred(li.jc_logic_info_final_name,update_params)))
+          | Some rety ->
+              LImpl(
+                make_and_list sep_preds,
+                LPred("eq",[
+                  LApp(li.jc_logic_info_final_name,normal_params);
+                  LApp(li.jc_logic_info_final_name,update_params)]))
+      in
+      let a = 
+        List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+      in
+      let structty = match fvi with 
+        | FVfield fi -> JCtag(fi.jc_field_info_struct, [])
+        | FVvariant vi -> JCvariant vi
+      in
+      let basety = match fvi with
+        | FVfield fi -> tr_base_type fi.jc_field_info_type
+        | FVvariant vi -> 
+            if integral_union vi then why_integer_type else
+              simple_logic_type (union_memory_type_name vi)
+      in
+      let a = 
+        LForall(
+          "tmp",pointer_type structty,
+          LForall(
+            "tmpval",basety,
+            a))
+      in
+      let fviname = match fvi with
+        | FVfield fi -> fi.jc_field_info_name
+        | FVvariant vi -> vi.jc_variant_info_name
+      in
+      Axiom(
+        "full_separated_" ^ li.jc_logic_info_name ^ "_" ^ fviname,
+        a) :: acc
+    ) li.jc_logic_info_effects.jc_effect_memories acc
 
 (*******************************************************************************)
 (*                                  Functions                                  *)
