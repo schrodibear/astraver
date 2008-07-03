@@ -81,10 +81,10 @@ let () = Arg.parse
     "-add-options", Arg.Set_string additional_options,
     "add additional options to be passed to the toplevels \
      that will be launched";
-    "", Arg.Unit (fun () -> ()) ,"\nA test suite can be the name of a directory in ./tests or the path to a file.\n\nExamples:\nptests\nptests -diff \"echo diff\" -examine     # see again the list of tests that failed\nptests misc                           # for a single test suite\nptests tests/misc/alias.c             # for a single test\nptests -examine tests/misc/alias.c    # to see the differences again\nptests -v -j 1                        # to check the time taken by each test\n"
+    "", Arg.Unit (fun () -> ()) ,"\nA test suite can be the name of a directory in ./tests or the path to a file.\n\nExamples:\nregtest\nregtest -diff \"echo diff\" -examine     # see again the list of tests that failed\nregtest misc                           # for a single test suite\nregtest tests/misc/alias.c             # for a single test\nregtest -examine tests/misc/alias.c    # to see the differences again\nregtest -v -j 1                        # to check the time taken by each test\n"
   ]
   make_test_suite
-  "usage: ptests [options] [names of test suites]"
+  "usage: regtest [options] [names of test suites]"
 
 (* redefine config file if special configuration expected *)
 let dir_config_file = 
@@ -112,7 +112,7 @@ let make_result_file = gen_make_file result_dirname
 let make_oracle_file = gen_make_file oracle_dirname
 
 let toplevel_path =
-  make_toplevel_path (gen_make_file "bin" base_path "krakatoa.opt")
+  make_toplevel_path (gen_make_file "bin" base_path "regtest.sh")
 
 type execnow =
     {
@@ -149,7 +149,7 @@ let launch command_string =
   let result = Unix.system command_string in
   match result with
   | Unix.WEXITED 127 ->
-      lock_printf "%% Couldn't execute command. Retrying once.@.";
+      lock_printf "%% Couldn't execute command `%s'@.Retrying once.@." command_string;
       Thread.delay 0.1;
       ( match Unix.system command_string with
 	Unix.WEXITED r when r <> 127 -> r
@@ -772,6 +772,6 @@ let () =
 
 (*
 Local Variables: 
-compile-command: "make -j -C .. bin/ptests.byte"
+compile-command: "make -j -C .. bin/regtest.byte"
 End: 
 *)

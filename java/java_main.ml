@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.60 2008-06-13 14:37:36 marche Exp $ *)
+(* $Id: java_main.ml,v 1.61 2008-07-03 07:34:28 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -277,7 +277,7 @@ let main () =
   close_out cout;
   
   (* production phase 5.2 : produce locs file *)
-  Pp.print_in_file Output.print_locs (Lib.file "." (f ^ ".jloc"));
+  Pp.print_in_file Output.print_locs (f ^ ".jloc");
   
   printf "Done.@."
     

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.108 2008-06-10 13:43:10 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.109 2008-07-03 07:34:28 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -369,11 +369,11 @@ let main () =
     Jc_options.lprintf "production phase 6.1: produce Why file@.";
     Pp.print_in_file 
       (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d_inv)
-      (Lib.file "why" (filename ^ ".why"));
+      (Lib.file_subdir "why" (filename ^ ".why"));
     (* production phase 6.2 : produce locs file *)
     Jc_options.lprintf "production phase 6.2: produce locs file@.";
     let cout_locs,fmt_locs = 
-      Pp.open_file_and_formatter (Lib.file "." (filename ^ ".loc")) in
+      Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc")) in
     Jc_interp.print_locs fmt_locs;
     Output.print_locs fmt_locs; (* Generated annotations. *)
     Pp.close_file_and_formatter (cout_locs,fmt_locs);

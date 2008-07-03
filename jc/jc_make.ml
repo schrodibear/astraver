@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.24 2008-05-28 14:34:13 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.25 2008-07-03 07:34:28 marche Exp $ i*)
 
 open Format
 open Pp
@@ -55,12 +55,13 @@ let isabelle fmt f = fprintf fmt "isabelle/%s_why.thy" f
 
 let print_files = print_list (fun fmt () -> fprintf fmt "\\@\n  ")
 
-let generic f targets =
+let generic full f targets =
   print_in_file 
     (fun fmt -> 
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";	    
+       fprintf fmt "DP=dp $(DPOPT) -timeout $(TIMEOUT)@\n@\n";	    
        fprintf fmt "WHY=why --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
        fprintf fmt "GWHY=gwhy-bin --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
        fprintf fmt "JESSIELIBFILE=%s@\n@\n" 
@@ -112,32 +113,32 @@ let generic f targets =
 	 Jc_options.libdir;
 
        fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
-       fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && ($(DP) $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "ergo: %a@\n" (print_files ergo) targets;
-       fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && ($(DP) $^)@\n@\n";
        fprintf fmt "why/%%_why.why: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
-       fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)@\n@\n";
        fprintf fmt "cvcl/%%_why.cvc: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "harvey: %a@\n" (print_files harvey) targets;
-       fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && ($(DP) $^)@\n@\n";
        fprintf fmt "harvey/%%_why.rv: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "zenon: %a@\n" (print_files zenon) targets;
-       fprintf fmt "\t@@echo 'Running Zenon on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Zenon on proof obligations' && ($(DP) $^)@\n@\n";
        fprintf fmt "zenon/%%_why.znn: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
-       fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Yices on proof obligations' && ($(DP) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILE) why/$*.why@\n@\n";
        
@@ -153,9 +154,11 @@ let generic f targets =
        fprintf fmt "clean:@\n";
        fprintf fmt "\trm -f coq/*.vo@\n@\n";
     )
-    (f ^ ".makefile")
+    (full ^ ".makefile")
 
-let makefile f = generic f [f]
+let makefile f = 
+  let c = Filename.basename f in
+  generic f c [c]
 
 
 

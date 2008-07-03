@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: lib.ml,v 1.10 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: lib.ml,v 1.11 2008-07-03 07:34:28 marche Exp $ i*)
 
 module Sset = Set.Make(String)
 
@@ -43,6 +43,12 @@ let mkdir_p dir =
 let file ~dir ~file = 
   mkdir_p dir;
   Filename.concat dir (Filename.basename file)
+
+let file_subdir ~dir ~file = 
+  let d = Filename.dirname file in
+  let d = Filename.concat d dir in
+  mkdir_p d;
+  Filename.concat d (Filename.basename file)
 
 let file_copy src dest =
   let cin = open_in src

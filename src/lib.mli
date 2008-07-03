@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: lib.mli,v 1.10 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: lib.mli,v 1.11 2008-07-03 07:34:28 marche Exp $ i*)
 
 module Sset : Set.S with type elt = string
 
@@ -36,6 +36,10 @@ val mkdir_p : string -> unit
 (* [file dir file] returns "dir/basename" if [file] is "dirname/basename", 
    creating [dir] if necessary. *)
 val file : dir:string -> file:string -> string
+
+(* [file_subdir dir file] returns "dirname/dir/basename" if [file] is "dirname/basename", 
+   creating [dir] if necessary. *)
+val file_subdir : dir:string -> file:string -> string
 
 (* [file_copy_if_different f1 f2] copies [f1] into name [f2], unless
    [f2] already exists and is identical to [f1] (thus keeping the same
