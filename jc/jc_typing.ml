@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.216 2008-07-02 08:04:16 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.217 2008-07-03 09:14:35 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -146,8 +146,11 @@ let rec superstruct st = function
 let subtype ?(allow_implicit_cast=true) t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 ->
-        t1=t2
-       (* TODO: integer is subtype of real *)
+        t1=t2 ||
+         (* integer is subtype of real *)
+        (match t1,t2 with 
+           | Tinteger, Treal -> true
+	   | _ -> false)
     | JCTenum ri1, JCTenum ri2 -> 
         allow_implicit_cast ||
           (Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min &&

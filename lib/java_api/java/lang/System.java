@@ -50,9 +50,7 @@ public final class System {
      * corresponds to keyboard input or another input source specified by
      * the host environment or user.
      */
-    /*KML
     public final static InputStream in = nullInputStream();
-    KML*/
 
     /**
      * The "standard" output stream. This stream is already

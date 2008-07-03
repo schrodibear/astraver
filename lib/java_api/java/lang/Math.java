@@ -6,7 +6,7 @@
  */
 
 package java.lang;
-import java.util.Random;
+//KML import java.util.Random;
 
 
 /**
@@ -603,7 +603,7 @@ public final strictfp class Math {
 	return (long)floor(a + 0.5d);
     }
 
-    private static Random randomNumberGenerator;
+    //KML private static Random randomNumberGenerator;
 
     private static synchronized void initRNG() {
         if (randomNumberGenerator == null) 

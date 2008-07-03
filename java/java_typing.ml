@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.128 2008-06-13 14:37:36 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.129 2008-07-03 09:14:35 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -305,7 +305,7 @@ let mark_as_used x =
 let () = 
   List.iter mark_as_used 
     (* Jessie reserved names *)
-    [ "tag"; "type" ; "end" ; "begin"]
+    [ "tag"; "type" ; "end" ; "begin" ; "let" ; "in"]
 
 let is_used_name n = Hashtbl.mem used_names n
 

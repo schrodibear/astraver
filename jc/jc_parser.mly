@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.99 2008-07-02 10:13:06 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.100 2008-07-03 09:14:35 marche Exp $ */
 
 %{
 
@@ -116,6 +116,9 @@
 
 /* |= &= ^= */
 %token BAREQ AMPEQ CARETEQ
+
+/* @ (string concat) */
+%token AT
 
 /*
 %token FLOAT DOUBLE 
@@ -631,6 +634,8 @@ additive_expression:
     { locate (JCPEbinary ($1, `Badd, $3)) }
 | additive_expression MINUS multiplicative_expression 
     { locate (JCPEbinary ($1, `Bsub, $3)) }
+| additive_expression AT multiplicative_expression 
+    { locate (JCPEbinary ($1, `Bconcat, $3)) }
 ;
 
 shift_expression: 
