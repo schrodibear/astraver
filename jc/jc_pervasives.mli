@@ -102,6 +102,7 @@ val tag_or_variant_name : Jc_env.tag_or_variant -> string
 (* predefined functions *)
 
 val true_assertion : Jc_ast.assertion
+val any_string : Jc_fenv.logic_info
 val real_of_integer : Jc_fenv.logic_info
 val real_of_integer_ : Jc_fenv.fun_info
 val full_separated : Jc_fenv.logic_info

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.61 2008-07-03 07:34:28 marche Exp $ *)
+(* $Id: java_main.ml,v 1.62 2008-07-03 14:34:11 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -173,7 +173,8 @@ let main () =
       Java_typing.logics_table 
       decls
   in
-  
+  (* any_string function *)
+  (*  let decls = Java_interp.any_string_decl :: decls in *)
   (* class invariants *)
   let decls = 
     Hashtbl.fold

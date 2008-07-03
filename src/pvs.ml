@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.88 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.89 2008-07-03 14:34:11 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -114,8 +114,8 @@ let print_term fmt t =
 	fprintf fmt "unit" 
     | Tconst (ConstFloat f) -> 
 	print_real fmt f
-    | Tapp (id, [Tconst (ConstInt n)], _) when id == t_real_of_int ->
-	fprintf fmt "(%s :: real)" n
+    | Tapp (id, [t], _) when id == t_real_of_int ->
+	fprintf fmt "(%a :: real)" print3 t
     | Tderef _ ->
 	assert false
     | Tvar id when id == implicit ->

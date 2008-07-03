@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.109 2008-07-01 16:49:10 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.110 2008-07-03 14:34:11 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -306,6 +306,8 @@ let make_logic_fun name ty =
   }
 
 let real_of_integer = make_logic_fun "real_of_int" real_type
+let any_string = make_logic_fun "any_string" string_type
+
 let () = 
   let vi = var ~formal:true integer_type "n" in
   real_of_integer.jc_logic_info_parameters <- [vi]
@@ -343,21 +345,27 @@ let make_fun_info name ty =
   incr fun_tag_counter;
   let vi = var ty "\\result" in
   vi.jc_var_info_final_name <- "result";
-    { jc_fun_info_tag = !fun_tag_counter;
-      jc_fun_info_name = name;
-      jc_fun_info_final_name = Jc_envset.get_unique_name name;
-      jc_fun_info_parameters = [];
-      jc_fun_info_result = vi;
-      jc_fun_info_return_region = Region.make_var ty name;
-      jc_fun_info_param_regions = [];
-      jc_fun_info_calls = [];
-      jc_fun_info_is_recursive = false;
-      jc_fun_info_logic_apps = [];
-      jc_fun_info_effects = empty_fun_effect;
- }
+  { jc_fun_info_tag = !fun_tag_counter;
+    jc_fun_info_name = name;
+    jc_fun_info_final_name = Jc_envset.get_unique_name name;
+    jc_fun_info_parameters = [];
+    jc_fun_info_result = vi;
+    jc_fun_info_return_region = Region.make_var ty name;
+    jc_fun_info_param_regions = [];
+    jc_fun_info_calls = [];
+    jc_fun_info_is_recursive = false;
+    jc_fun_info_logic_apps = [];
+    jc_fun_info_effects = empty_fun_effect;
+  }
 
 
-let real_of_integer_ = make_fun_info "real_of_integer" real_type
+let real_of_integer_ = make_fun_info "real_of_int" real_type
+
+let () = 
+  let vi = var ~formal:true integer_type "n" in
+  real_of_integer_.jc_fun_info_final_name <- "real_of_int";
+  real_of_integer_.jc_fun_info_parameters <- [vi]
+
 
 let option_compare comp opt1 opt2 = match opt1,opt2 with
   | None,None -> 0

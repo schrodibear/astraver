@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.291 2008-07-02 12:41:53 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.292 2008-07-03 14:34:11 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -152,7 +152,7 @@ let native_operator_type op = match snd op with
 
 let unary_op: expr_unary_op -> string = function
   | `Uminus, `Integer -> "neg_int"
-  | `Uminus, `Real -> "uminus_real"
+  | `Uminus, `Real -> "neg_real"
   | `Unot, `Boolean -> "not"
   | `Ubw_not, `Integer -> "bw_compl"
   | _ -> assert false (* not proper type *)
@@ -267,6 +267,10 @@ let pred_bin_op: pred_bin_op -> string = function
       (* real *)
   | `Beq, `Real -> "eq_real"
   | `Bneq, `Real -> "neq_real"
+  | `Bgt, `Real -> "gt_real"
+  | `Blt, `Real -> "lt_real"
+  | `Bge, `Real -> "ge_real"
+  | `Ble, `Real -> "le_real"
       (* logical *)
   | `Blor, `Boolean -> "bor"
   | `Bland, `Boolean -> "band"

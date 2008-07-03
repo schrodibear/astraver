@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.142 2008-07-02 08:04:15 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.143 2008-07-03 14:34:10 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -422,6 +422,24 @@ let create_exception ty n =
 
 (*s terms *)
 
+
+let any_string = 
+  mkapp
+    ~fun_name: "any_string"
+    ~args: []
+    ()
+
+
+(*
+let any_string_decl =
+  mkfun_def
+    ~result_type: (new ptype (JCPTpointer("String",[],0,0)))
+    ~name: "any_string"
+    ~params: []
+    ~clauses: []
+    ()
+*)
+
 let lit l =
   match l with
   | Integer s | Char s -> JCCinteger s
@@ -540,8 +558,8 @@ let plus_one e =
 let rec term t =
   let t' =
     match t.java_term_node with
-      | JTlit l ->
-          mkconst ~const:(lit l) ()
+      | JTlit (String s) -> any_string
+      | JTlit l -> mkconst ~const:(lit l) ()
       | JTun (t,op,e1) ->
           mkunary
             ~op:(lun_op t op)
@@ -1110,6 +1128,7 @@ let rec expr ?(reg=false) e =
   let reg = ref reg in
   let e' =
     match e.java_expr_node with
+      | JElit (String s) -> any_string
       | JElit l ->
           mkconst ~const:(lit l) ()
       | JEincr_local_var(op,v) -> 
