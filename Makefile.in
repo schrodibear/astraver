@@ -306,7 +306,7 @@ jc/jc.cmi jc/jc.cmo: $(JCCMO_EXPORT)
 jc/jc.cmx: $(JCCMX_EXPORT)
 	$(OCAMLOPT) $(OFLAGS) -pack -o $@ $^
 
-ppc: jc/jc.cmo jc/jc.cmx
+ppc: jc/jc.cmi jc/jc.cmo jc/jc.cmx
 
 bin/jessie.opt: $(JCCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
