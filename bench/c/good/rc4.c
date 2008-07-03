@@ -13,9 +13,11 @@ typedef struct rc4_key_st
  /*@ axiom valid_range_ax1b:
    @	\forall unsigned long k; k>=0 => 0<=((k>>3L)*8)<=k
    @*/
- /* @ axiom valid_range_ax1c:
-   @	\forall unsigned long k; k>=0 => 0<= (k&0x07) <=k 
+
+ /*@ axiom valid_range_ax1c:
+   @	\forall unsigned long k; k>=0 => 0<= (k&0x07) <= 7 
    @*/
+
  /*@ axiom valid_range_ax1d:
    @	\forall unsigned long k; k>=0 => ((k>>3L)*8 + (k&0x07) == k)
    @*/
