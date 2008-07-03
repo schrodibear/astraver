@@ -1513,9 +1513,9 @@ let Lesson1_sqrt_safety =
 
 
 ========== make project execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --project [...] why/Lesson1.why
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== file tests/java/why/Lesson1.wpr ==========
 <project name="Lesson1" context="why/Lesson1_ctx.why">
   <lemma name="distr_left">
@@ -4654,7 +4654,7 @@ goal two_left:
   (forall x_4:int. ((2 * x_4) = (x_4 + x_4)))
 
 ========== simplify execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Entering directory `/home/cmarche/recherche/why/tests/java'
 why -simplify [...] why/Lesson1.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -4665,9 +4665,9 @@ invalid :   0 (  0%)
 unknown :   7 (  8%)
 timeout :   0 (  0%)
 failure :   9 ( 10%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== ergo execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --why [...] why/Lesson1.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -4678,4 +4678,4 @@ invalid :   0 (  0%)
 unknown :   6 (  7%)
 timeout :   4 (  5%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Leaving directory `/home/cmarche/recherche/why/tests/java'

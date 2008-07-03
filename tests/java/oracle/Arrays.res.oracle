@@ -1397,9 +1397,9 @@ let Arrays_findMax_safety =
 
 
 ========== make project execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --project [...] why/Arrays.why
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== file tests/java/why/Arrays.wpr ==========
 <project name="Arrays" context="why/Arrays_ctx.why">
   <function name="Method findMax2">
@@ -6266,7 +6266,7 @@ goal Arrays_findMax_safety_po_9:
   (0 <= i_5)
 
 ========== simplify execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Entering directory `/home/cmarche/recherche/why/tests/java'
 why -simplify [...] why/Arrays.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -6277,9 +6277,9 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== ergo execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --why [...] why/Arrays.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -6290,4 +6290,4 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
+make[1]: Leaving directory `/home/cmarche/recherche/why/tests/java'
