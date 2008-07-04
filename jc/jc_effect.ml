@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.108 2008-07-02 08:04:15 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.109 2008-07-04 13:12:43 bardou Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -342,7 +342,10 @@ let rec term ef t =
 	in
 	let ef = add_memory_effect lab ef (fvi,t#region) in
 	term ef t
-    | JCTrange (_, _) -> assert false (* TODO *)
+    | JCTrange(a, b) ->
+        let ef = Option_misc.fold_left term ef a in
+        let ef = Option_misc.fold_left term ef b in
+        ef
     | JCTif (_, _, _) -> assert false (* TODO *)
     | JCTcast (t1, label, st) ->
 	add_tag_effect label (term ef t1) (JCtag(st, []))
