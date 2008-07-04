@@ -1,29 +1,47 @@
 
+  o krakatoa/jessie: version number, and CHANGES files are now those of why
+  o krakatoa/jessie: added support for bitwise operator on booleans
+  o krakatoa/jessie/why/provers: better support of real numbers
   o CVC3: no more options +arith-new +quant-polarity -quant-new
   o fixed HOL4 output; contribution by Vladimir Timashov 
     (vladimir.timashov@gmail.com)
   o gwhy: fixed efficiency issue with large comments
-  o fixed coq entry in jessie-generated makefile
+  o jessie: fixed coq entry in jessie-generated makefile
   o why typing safely fails when duplicate parameter names in 
     logic definitions
 
 version 2.13, May 27th, 2008
 ============================
 
-  o better support of non-ascii input characters in GWhy
+  o krakatoa: bug fix: method lookup in class Object
+  o krakatoa: if possible, avoid failure in constant expression evaluation
+  o gwhy: better support of non-ascii input characters in GWhy
   o fixed parsing of float constants with exponents
 
 version 2.12, May 23rd, 2008
 ============================
+
+  o krakatoa: assigns clause now correctly typed in the post-state
+  o krakatoa: array ranges in assigns clause: now correctly parse [..], [..n] and [n..]
+  o krakatoa: support for model fields (in interfaces)
+  o krakatoa: support for user-defined logic types
+  o krakatoa: partial support for Strings
   o fixed typing bug with polymorphic logic constants/functions used
     in programs (resulted in bugs in -encoding sstrat)
 
 version 2.11, March 17th, 2008
 ==============================
+
+  o krakatoa: documentation is now is reasonable shape, although still incomplete
+  o krakatoa: loop annotations: having an invariant but no decreases clause is allowed
+  o krakatoa: bug fix: value axiom for logic constants
+  o krakatoa: many improvements in generation of memory safety VCs
   o fixed bug with --prune-hyp
 
 version 2.10b, January 31st, 2008
 =================================
+
+  o krakatoa: first release officially replacing version 0.67
   o CVC3: now called with options +arith-new +quant-polarity -quant-new
     (requires version 1.2.1)
   o SMT-lib output: fixed bug with reals

@@ -16,14 +16,14 @@ echo "let libdir = \""$LIBDIR/why"\"" >> $WHYVF
 # Jessie
 JESSIEVF=jc/jc_version.ml
 mkdir -p jc
-echo "let version = \""$JCVERSION"\"" > $JESSIEVF
+echo "let version = \""$VERSION"\"" > $JESSIEVF
 echo "let date = \""`date`"\"" >> $JESSIEVF
 echo "let libdir = \""$LIBDIR/jessie"\"" >> $JESSIEVF
 
 # Krakatoa
 KRAKATOAVF=java/java_version.ml
 mkdir -p java
-echo "let version = \""$KVERSION"\"" > $KRAKATOAVF
+echo "let version = \""$VERSION"\"" > $KRAKATOAVF
 echo "let date = \""`date`"\"" >> $KRAKATOAVF
 echo "let libdir = \""$LIBDIR/krakatoa"\"" >> $KRAKATOAVF
 
@@ -40,5 +40,3 @@ DOCF=doc/version.tex
 mkdir -p doc
 printf '\\newcommand{\\whyversion}{'$VERSION'}\n' > $DOCF
 printf '\\newcommand{\\caduceusversion}{'$CVERSION'}\n' >> $DOCF
-printf '\\newcommand{\\jessieversion}{'$JCVERSION'}\n' >> $DOCF
-printf '\\newcommand{\\krakatoaversion}{'$KVERSION'}\n' >> $DOCF

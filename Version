@@ -1,11 +1,7 @@
-# Why version
+# Why/Jessie/Krakatoa version
 VERSION=2.13
-# Jessie version
-JCVERSION=1.13
 # Caduceus version
 CVERSION=1.13
-# Krakatoa version
-KVERSION=1.13
 
 
 
