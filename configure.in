@@ -359,9 +359,11 @@ if test "$PVSC" = no ; then
     AC_MSG_WARN(Cannot find PVS.)
 else
     PVS=yes
-    PVSFILE=`which pvs`
-    PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`/lib
-    if test "$PVSLIB" = /lib; then PVS=no; fi
+    PVSLIB=`pvs -where`/lib
+    if test "$PVSLIB" = /lib; then 
+       AC_MSG_WARN(PVS found but pvs -where did not work)
+       PVS=no; 
+    fi
 fi
 
 # Mizar

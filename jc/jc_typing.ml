@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.217 2008-07-03 09:14:35 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.218 2008-07-04 11:44:58 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -414,36 +414,38 @@ let make_logic_unary_op loc (op : Jc_ast.unary_op) e2 =
         typing_error loc "pre/post incr/decr not allowed as logical term"*)
 
 let term_coerce t1 t2 e =
-  let tn1,e_int =
+  let tn1 =
     match t1 with
-      | JCTenum ri ->
-(*
-          let (_,to_int,_,_) = 
-            Hashtbl.find enum_types_table ri.jc_enum_info_name 
-          in
-          { jc_term_node = JCTapp(to_int,[e]) ;
-            jc_term_type = integer_type;
-            jc_term_loc = e.jc_term_loc }  
-*)
-          Tinteger, e
-      | JCTnative t -> t, e
+      | JCTenum ri -> Tinteger
+      | JCTnative t -> t
       | _ -> assert false
   in
   match tn1,t2 with
     | Tinteger, Treal -> 
-        let app = {
-          jc_app_fun = real_of_integer;
-          jc_app_args = [e_int];
-          jc_app_region_assoc = [];
-          jc_app_label_assoc = [];
-        } in
-        new term
-          ~typ:real_type
-          ~region:e#region
-          ~name_label:e#name_label
-          ~loc:e#loc
-          (JCTapp app)
-    | _ -> e_int
+	begin
+	  match e#node with
+	    | JCTconst (JCCinteger n) ->  
+		new term
+		  ~typ:real_type
+		  ~region:e#region
+		  ~name_label:e#name_label
+		  ~loc:e#loc
+		  (JCTconst(JCCreal (n^".0")))
+	    | _ ->
+		let app = {
+		  jc_app_fun = real_of_integer;
+		  jc_app_args = [e];
+		  jc_app_region_assoc = [];
+		  jc_app_label_assoc = [];
+		} in
+		new term
+		  ~typ:real_type
+		  ~region:e#region
+		  ~name_label:e#name_label
+		  ~loc:e#loc
+		  (JCTapp app)
+	end
+    | _ -> e
 
 let logic_bin_op (t : [< operator_type ]) (op : [< bin_op]) : term_bin_op =
   bin_op t op
@@ -1158,24 +1160,34 @@ let make_unary_op loc (op : Jc_ast.unary_op) e2 =
           typing_error loc "numeric type expected"
 
 let coerce t1 t2 e =
-  let tn1, e_int =
+  let tn1 =
     match t1 with
-      | JCTenum ri -> Tinteger, e
-      | JCTnative t -> t, e
+      | JCTenum ri -> Tinteger
+      | JCTnative t -> t
       | _ -> assert false
   in
   match tn1, t2 with
     | Tinteger,Treal ->
-        new expr
-          ~typ: real_type
-          ~loc: e#loc
-          (JCEapp{
-             jc_call_fun = JCfun real_of_integer_;
-             jc_call_args = [e_int];
-             jc_call_region_assoc = [];
-             jc_call_label_assoc = [];
-           })
-    | _ -> e_int
+	begin
+	  match e#node with
+	    | JCEconst (JCCinteger n) ->  
+		new expr
+		  ~typ:real_type
+		  ~region:e#region
+		  ~loc:e#loc
+		  (JCEconst(JCCreal (n^".0")))
+	    | _ ->
+		new expr
+		  ~typ: real_type
+		  ~loc: e#loc
+		  (JCEapp{
+		     jc_call_fun = JCfun real_of_integer_;
+		     jc_call_args = [e];
+		     jc_call_region_assoc = [];
+		     jc_call_label_assoc = [];
+		   })
+	end
+    | _ -> e
 
 let make_bin_op loc (op: operational_op) e1 e2 =
   let t1 = e1#typ and t2 = e2#typ in

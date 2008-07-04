@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.20 2008-04-02 08:38:13 marche Exp $ i*)
+(*i $Id: output.mli,v 1.21 2008-07-04 11:44:58 marche Exp $ i*)
 
 type constant =
   | Prim_void
@@ -132,6 +132,8 @@ type expr =
   | Absurd 
   | Loc of Lexing.position * expr
 ;;
+
+val fprintf_expr : Format.formatter -> expr -> unit
 
 val make_or_expr : expr -> expr -> expr
 val make_and_expr : expr -> expr -> expr

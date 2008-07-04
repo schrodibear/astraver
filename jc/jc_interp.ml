@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.292 2008-07-03 14:34:11 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.293 2008-07-04 11:44:58 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -316,7 +316,15 @@ let term_coerce ?(cast=false) loc tdest tsrc e =
   match tdest, tsrc with
     | JCTnative t, JCTnative u when t=u -> e
     | JCTnative Treal, JCTnative Tinteger -> 
-	LApp("real_of_int",[e])
+	begin
+	  match e with
+	    | LConst (Prim_int n) ->
+		LConst (Prim_real (n ^ ".0")) 
+	    | _ -> 
+		eprintf " e = %a@." Output.fprintf_term e;
+		assert false;
+		LApp("real_of_int",[e])
+	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[e])
     | JCTlogic t, JCTlogic u when t=u -> e
@@ -424,7 +432,15 @@ let coerce ~no_int_overflow lab loc tdest tsrc orig e =
   match tdest, tsrc with
     | JCTnative t, JCTnative u when t=u -> e
     | JCTnative Treal, JCTnative Tinteger -> 
-	make_app "real_of_int" [e]
+	begin
+	  match e with
+	    | Cte (Prim_int n) ->
+		Cte (Prim_real (n ^ ".0")) 
+	    | _ -> 
+		eprintf " e = %a@." Output.fprintf_expr e;
+		assert false;
+		make_app "real_of_int" [e]
+	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [e]
     | JCTlogic t, JCTlogic u when t=u -> e

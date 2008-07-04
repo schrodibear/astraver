@@ -63,14 +63,10 @@ let print_term fmt t =
     | Tconst ConstUnit -> 
 	fprintf fmt "tt" 
     | Tconst (ConstFloat (i,f,e)) -> 
-	let f = if f = "0" then "" else f in
-	let e = (if e = "" then 0 else int_of_string e) - String.length f in
-	if e = 0 then
-	  fprintf fmt "%s%s" i f
-	else if e > 0 then
-	  fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
-	else
-	  fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
+	if e = "" then
+	  fprintf fmt "%s.%s" i f
+	else 
+	  fprintf fmt "(%s.%se%s)" i f e  
     | Tvar id when id == implicit ->
 	fprintf fmt "<?>"
     | Tvar id when id == t_zwf_zero ->
